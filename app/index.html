@@ -1,382 +1,961 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Noetfield</title>
-
-<!-- Premium Clean Typography -->
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Noetfield — Cross-Border Payments for Canadian SMEs</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Mono:wght@300;400;500&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
 
 <style>
 :root {
-    --bg: #050505;
-    --panel: #0b0b0d;
-    --panel-inner: #121215;
-    --border: rgba(255, 255, 255, 0.04);
-    --border-active: rgba(255, 255, 255, 0.15);
-    --text: #ffffff;
-    --text-soft: #8a8a93;
-    --green: #34c759;
-    --font-main: 'Inter', sans-serif;
-    --font-mono: 'JetBrains Mono', monospace;
+  --bg:          #F5F3EE;
+  --bg2:         #EDEAE3;
+  --ink:         #1A1916;
+  --ink-soft:    #6B6860;
+  --ink-faint:   #B4B0A8;
+  --rule:        rgba(26,25,22,0.1);
+  --green:       #1A6B3C;
+  --green-bg:    #EAF4EE;
+  --blue:        #1C3F6E;
+  --blue-bg:     #EAF0F8;
+  --amber:       #92500A;
+  --card:        #FFFFFF;
+  --card-border: rgba(26,25,22,0.08);
+  --radius:      16px;
+  --radius-sm:   10px;
 }
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+*{margin:0;padding:0;box-sizing:border-box;}
+
+html { scroll-behavior: smooth; }
 
 body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: var(--font-main);
-    -webkit-font-smoothing: antialiased;
-    letter-spacing: -0.01em;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'DM Sans', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  font-size: 15px;
+  line-height: 1.6;
 }
 
-.container {
-    width: min(1140px, calc(100% - 48px));
-    margin: auto;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    padding-bottom: 32px;
+/* ── GRID NOISE TEXTURE ── */
+body::after {
+  content:"";
+  position:fixed;inset:0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events:none;
+  z-index:0;
 }
 
-/* TOP HEADER */
-.header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 40px 0;
+/* ── LAYOUT ── */
+.wrap { max-width:1140px; margin:auto; padding:0 24px; }
+
+/* ── NAV ── */
+nav {
+  position: sticky; top:0; z-index:100;
+  background: rgba(245,243,238,0.88);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--rule);
+  padding: 0 24px;
+}
+.nav-inner {
+  max-width:1140px; margin:auto;
+  display:flex; align-items:center; justify-content:space-between;
+  height: 64px;
+}
+.nav-logo {
+  font-family:'Syne',sans-serif;
+  font-weight:700; font-size:18px;
+  letter-spacing:-0.03em;
+  color:var(--ink);
+  text-decoration:none;
+}
+.nav-logo span { color:var(--green); }
+.nav-links {
+  display:flex; gap:32px; list-style:none;
+}
+.nav-links a {
+  font-size:13px; font-weight:500;
+  color:var(--ink-soft); text-decoration:none;
+  transition: color .2s;
+}
+.nav-links a:hover { color:var(--ink); }
+.nav-cta {
+  background:var(--ink);
+  color:#fff; border:none;
+  padding:10px 20px; border-radius:8px;
+  font-family:'DM Sans',sans-serif;
+  font-size:13px; font-weight:500;
+  cursor:pointer; transition:opacity .2s;
+  text-decoration:none;
+}
+.nav-cta:hover { opacity:0.85; }
+
+/* ── TRUST BAR ── */
+.trust-bar {
+  background: var(--green-bg);
+  border-bottom: 1px solid rgba(26,107,60,0.15);
+  padding: 10px 0;
+}
+.trust-bar-inner {
+  max-width:1140px; margin:auto; padding:0 24px;
+  display:flex; align-items:center; gap:24px;
+  flex-wrap:wrap;
+}
+.trust-item {
+  display:flex; align-items:center; gap:7px;
+  font-size:12px; font-weight:500;
+  color:var(--green);
+  font-family:'DM Mono',monospace;
+}
+.trust-dot {
+  width:6px; height:6px;
+  background:var(--green); border-radius:50%;
+}
+.trust-sep { color:var(--green); opacity:0.3; font-size:16px; }
+
+/* ── HERO ── */
+.hero {
+  padding: 80px 0 60px;
+  display:grid;
+  grid-template-columns: 1fr 440px;
+  gap:80px;
+  align-items:center;
 }
 
-.logo {
-    font-size: 20px;
-    font-weight: 600;
-    letter-spacing: -0.03em;
+.hero-eyebrow {
+  display:inline-flex; align-items:center; gap:8px;
+  background:var(--blue-bg);
+  border:1px solid rgba(28,63,110,0.15);
+  border-radius:100px;
+  padding:5px 12px;
+  font-size:11px; font-weight:500;
+  color:var(--blue);
+  font-family:'DM Mono',monospace;
+  letter-spacing:0.02em;
+  margin-bottom:24px;
 }
 
-.security-status {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 12px;
-    color: var(--text-soft);
+.hero h1 {
+  font-family:'Syne',sans-serif;
+  font-size:52px; font-weight:800;
+  line-height:1.1; letter-spacing:-0.04em;
+  color:var(--ink);
+  margin-bottom:20px;
+}
+.hero h1 em {
+  font-style:normal;
+  color:var(--green);
 }
 
-.status-dot {
-    width: 6px;
-    height: 6px;
-    background: var(--green);
-    border-radius: 50%;
+.hero-sub {
+  font-size:16px; color:var(--ink-soft);
+  line-height:1.7; max-width:440px;
+  margin-bottom:32px;
 }
 
-/* MAIN LAYOUT */
-.layout {
-    display: grid;
-    grid-template-columns: 1.1fr 0.9fr;
-    gap: 80px;
-    align-items: center;
-    margin: auto 0;
+.hero-features {
+  display:flex; flex-direction:column; gap:10px;
+  margin-bottom:36px;
+}
+.hero-feature {
+  display:flex; align-items:flex-start; gap:10px;
+  font-size:14px; color:var(--ink-soft);
+}
+.feature-check {
+  width:20px; height:20px; min-width:20px;
+  background:var(--green-bg);
+  border:1px solid rgba(26,107,60,0.2);
+  border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  margin-top:1px;
+}
+.feature-check svg { width:10px; height:10px; }
+
+.hero-actions { display:flex; gap:12px; align-items:center; }
+.btn-primary {
+  background:var(--ink); color:#fff;
+  padding:14px 28px; border-radius:10px;
+  font-family:'DM Sans',sans-serif;
+  font-size:14px; font-weight:500;
+  border:none; cursor:pointer;
+  transition:all .2s;
+  text-decoration:none; display:inline-block;
+}
+.btn-primary:hover { background:#2d2c29; transform:translateY(-1px); }
+
+.btn-ghost {
+  color:var(--ink-soft);
+  font-size:14px; font-weight:500;
+  text-decoration:none;
+  display:flex; align-items:center; gap:6px;
+  transition:color .2s;
+}
+.btn-ghost:hover { color:var(--ink); }
+
+.hero-note {
+  margin-top:20px;
+  font-size:12px; color:var(--ink-faint);
+  font-family:'DM Mono',monospace;
+  display:flex; gap:16px;
 }
 
-/* LEFT: CORE VALUE */
-.hero h2 {
-    font-size: 44px;
-    line-height: 1.15;
-    font-weight: 600;
-    letter-spacing: -0.03em;
-    margin-bottom: 20px;
-}
-
-.hero p {
-    color: var(--text-soft);
-    font-size: 16px;
-    line-height: 1.6;
-    margin-bottom: 32px;
-    max-width: 440px;
-}
-
-.features {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
-
-.feat-item {
-    display: flex;
-    gap: 12px;
-    font-size: 14px;
-}
-
-.feat-item span {
-    color: var(--green);
-}
-
-.feat-item p {
-    color: var(--text-soft);
-    margin: 0;
-}
-
-/* RIGHT: THE PREMIUM CONSOLE */
+/* ── TRANSFER WIDGET ── */
 .widget {
-    background: var(--panel);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 32px;
+  background: var(--card);
+  border:1px solid var(--card-border);
+  border-radius:20px;
+  padding:32px;
+  box-shadow: 0 2px 8px rgba(26,25,22,0.04), 0 16px 40px rgba(26,25,22,0.06);
+  position:relative;
+  z-index:1;
 }
 
-.widget-head {
-    font-size: 14px;
-    font-weight: 500;
-    margin-bottom: 24px;
-    display: flex;
-    justify-content: space-between;
+.widget-header {
+  display:flex; justify-content:space-between; align-items:center;
+  margin-bottom:24px;
+}
+.widget-title {
+  font-family:'Syne',sans-serif;
+  font-size:15px; font-weight:700;
+  letter-spacing:-0.02em;
+}
+.live-badge {
+  display:flex; align-items:center; gap:6px;
+  font-family:'DM Mono',monospace;
+  font-size:10px; color:var(--green);
+  background:var(--green-bg);
+  padding:4px 10px; border-radius:100px;
+  border:1px solid rgba(26,107,60,0.2);
+}
+.live-dot {
+  width:5px; height:5px;
+  background:var(--green); border-radius:50%;
+  animation: pulse 2s infinite;
+}
+@keyframes pulse {
+  0%,100%{ opacity:1; }
+  50%{ opacity:0.4; }
 }
 
-.widget-head span {
-    color: var(--text-soft);
-    font-size: 12px;
-    font-family: var(--font-mono);
+.field-group {
+  background:var(--bg);
+  border:1px solid var(--rule);
+  border-radius:var(--radius-sm);
+  padding:16px 18px;
+  margin-bottom:8px;
+  transition:border-color .2s, box-shadow .2s;
+}
+.field-group:focus-within {
+  border-color:rgba(26,25,22,0.25);
+  box-shadow:0 0 0 3px rgba(26,25,22,0.04);
+}
+.field-label {
+  font-size:10px; font-weight:500;
+  color:var(--ink-faint);
+  text-transform:uppercase; letter-spacing:0.08em;
+  font-family:'DM Mono',monospace;
+  margin-bottom:6px;
+}
+.field-row {
+  display:flex; align-items:center; justify-content:space-between;
+}
+.field-input {
+  background:transparent; border:none; outline:none;
+  font-family:'Syne',sans-serif;
+  font-size:26px; font-weight:700;
+  color:var(--ink);
+  letter-spacing:-0.03em;
+  width:60%;
+}
+.field-input::placeholder { color:var(--ink-faint); }
+.currency-select {
+  background:var(--card);
+  border:1px solid var(--rule);
+  border-radius:8px;
+  padding:7px 12px;
+  font-family:'DM Sans',sans-serif;
+  font-size:13px; font-weight:500;
+  color:var(--ink);
+  cursor:pointer; outline:none;
+  appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L6 6L11 1' stroke='%236B6860' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;
+  background-position:right 10px center;
+  padding-right:28px;
+  transition:border-color .2s;
+}
+.currency-select option { background:#fff; }
+.currency-select:hover { border-color:rgba(26,25,22,0.25); }
+
+/* swap arrow */
+.swap-arrow {
+  display:flex; justify-content:center; align-items:center;
+  margin:4px 0;
+  position:relative; z-index:2;
+}
+.swap-btn {
+  width:36px; height:36px;
+  background:var(--card);
+  border:1px solid var(--rule);
+  border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  cursor:pointer;
+  box-shadow:0 1px 4px rgba(26,25,22,0.06);
+  transition:transform .2s, box-shadow .2s;
+}
+.swap-btn:hover {
+  transform:rotate(180deg);
+  box-shadow:0 2px 8px rgba(26,25,22,0.12);
+}
+.swap-btn svg { width:14px; height:14px; }
+
+/* breakdown */
+.breakdown {
+  margin:16px 0;
+  display:flex; flex-direction:column; gap:1px;
+  border:1px solid var(--rule); border-radius:var(--radius-sm);
+  overflow:hidden;
+}
+.breakdown-row {
+  display:flex; justify-content:space-between; align-items:center;
+  padding:11px 16px;
+  background:var(--bg);
+  font-size:12px;
+  transition:background .2s;
+}
+.breakdown-row:hover { background:var(--bg2); }
+.breakdown-row + .breakdown-row { border-top:1px solid var(--rule); }
+.br-label { color:var(--ink-soft); font-weight:400; }
+.br-value {
+  font-family:'DM Mono',monospace;
+  font-size:12px; font-weight:500;
+  color:var(--ink);
+}
+.br-value.green { color:var(--green); }
+.br-value.faint { color:var(--ink-faint); }
+
+/* arrive box */
+.arrive-box {
+  background:var(--green-bg);
+  border:1px solid rgba(26,107,60,0.15);
+  border-radius:var(--radius-sm);
+  padding:16px 18px;
+  margin:16px 0;
+  display:flex; justify-content:space-between; align-items:center;
+}
+.arrive-label { font-size:11px; color:var(--green); font-weight:500; font-family:'DM Mono',monospace; }
+.arrive-amount {
+  font-family:'Syne',sans-serif;
+  font-size:22px; font-weight:700;
+  color:var(--green); letter-spacing:-0.03em;
 }
 
-.input-group {
-    background: var(--panel-inner);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 16px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+.cta-btn {
+  width:100%;
+  background:var(--ink);
+  color:#fff;
+  border:none; border-radius:10px;
+  padding:16px;
+  font-family:'DM Sans',sans-serif;
+  font-size:14px; font-weight:500;
+  cursor:pointer;
+  transition:all .2s;
+  display:flex; align-items:center; justify-content:center; gap:8px;
+  margin-bottom:12px;
+}
+.cta-btn:hover { background:#2d2c29; transform:translateY(-1px); }
+
+.widget-disclaimer {
+  text-align:center;
+  font-size:11px; color:var(--ink-faint);
+  font-family:'DM Mono',monospace;
+  line-height:1.5;
 }
 
-.input-group:focus-within {
-    border-color: var(--border-active);
+/* ── PARTNERS BAR ── */
+.partners {
+  padding:40px 0;
+  border-top:1px solid var(--rule);
+  border-bottom:1px solid var(--rule);
+  margin:60px 0;
+}
+.partners-label {
+  font-size:11px; font-weight:500;
+  color:var(--ink-faint);
+  text-transform:uppercase; letter-spacing:0.1em;
+  font-family:'DM Mono',monospace;
+  text-align:center; margin-bottom:24px;
+}
+.partners-logos {
+  display:flex; align-items:center; justify-content:center;
+  gap:40px; flex-wrap:wrap;
+}
+.partner-tag {
+  font-family:'DM Mono',monospace;
+  font-size:13px; font-weight:500;
+  color:var(--ink-soft);
+  padding:8px 16px;
+  border:1px solid var(--rule);
+  border-radius:8px;
+  background:var(--card);
+  letter-spacing:0.02em;
+  transition:all .2s;
+}
+.partner-tag:hover { border-color:var(--ink-soft); color:var(--ink); }
+
+/* ── HOW IT WORKS ── */
+.how { padding:80px 0; }
+.section-label {
+  font-size:11px; font-weight:500;
+  color:var(--ink-faint); text-transform:uppercase;
+  letter-spacing:0.1em; font-family:'DM Mono',monospace;
+  margin-bottom:12px;
+}
+.section-title {
+  font-family:'Syne',sans-serif;
+  font-size:36px; font-weight:800;
+  letter-spacing:-0.04em;
+  margin-bottom:8px;
+}
+.section-sub {
+  color:var(--ink-soft); font-size:15px; max-width:480px; margin-bottom:48px;
 }
 
-.input-group label {
-    display: block;
-    font-size: 11px;
-    color: var(--text-soft);
-    margin-bottom: 4px;
-    text-transform: uppercase;
+.steps {
+  display:grid; grid-template-columns:repeat(3,1fr); gap:24px;
+}
+.step {
+  background:var(--card);
+  border:1px solid var(--card-border);
+  border-radius:var(--radius);
+  padding:28px;
+  transition:transform .2s, box-shadow .2s;
+}
+.step:hover {
+  transform:translateY(-3px);
+  box-shadow:0 8px 24px rgba(26,25,22,0.08);
+}
+.step-num {
+  font-family:'DM Mono',monospace;
+  font-size:11px; color:var(--ink-faint); font-weight:500;
+  margin-bottom:16px;
+}
+.step-icon {
+  width:40px; height:40px;
+  border-radius:10px;
+  display:flex; align-items:center; justify-content:center;
+  margin-bottom:16px;
+  font-size:18px;
+}
+.step-icon.blue { background:var(--blue-bg); }
+.step-icon.green { background:var(--green-bg); }
+.step-icon.amber { background:#FFF8EE; }
+.step-title {
+  font-family:'Syne',sans-serif;
+  font-size:16px; font-weight:700; letter-spacing:-0.02em;
+  margin-bottom:8px;
+}
+.step p { font-size:13px; color:var(--ink-soft); line-height:1.6; }
+
+/* ── CORRIDORS ── */
+.corridors { padding:0 0 80px; }
+.corridor-grid {
+  display:grid; grid-template-columns:repeat(4,1fr); gap:12px;
+}
+.corridor-card {
+  background:var(--card);
+  border:1px solid var(--card-border);
+  border-radius:var(--radius-sm);
+  padding:20px;
+  transition:all .2s;
+  cursor:default;
+}
+.corridor-card:hover {
+  border-color:rgba(26,25,22,0.2);
+  box-shadow:0 4px 16px rgba(26,25,22,0.06);
+}
+.corridor-route {
+  font-family:'DM Mono',monospace;
+  font-size:12px; font-weight:500; color:var(--ink-soft);
+  margin-bottom:8px;
+}
+.corridor-pair {
+  font-family:'Syne',sans-serif;
+  font-size:20px; font-weight:800;
+  letter-spacing:-0.03em; color:var(--ink);
+  margin-bottom:12px;
+}
+.corridor-rate {
+  font-family:'DM Mono',monospace;
+  font-size:11px; color:var(--green); font-weight:500;
+}
+.corridor-status {
+  display:inline-flex; align-items:center; gap:5px;
+  font-size:10px; font-weight:500;
+  font-family:'DM Mono',monospace;
+  margin-top:10px;
+}
+.corridor-status.live { color:var(--green); }
+.corridor-status.pilot { color:var(--amber); }
+.cs-dot { width:5px; height:5px; border-radius:50%; }
+.live .cs-dot { background:var(--green); }
+.pilot .cs-dot { background:var(--amber); }
+
+/* ── COMPLIANCE BANNER ── */
+.compliance {
+  background:var(--blue-bg);
+  border:1px solid rgba(28,63,110,0.12);
+  border-radius:20px;
+  padding:48px;
+  margin:0 0 80px;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:48px;
+  align-items:center;
+}
+.compliance-title {
+  font-family:'Syne',sans-serif;
+  font-size:26px; font-weight:800;
+  letter-spacing:-0.04em; color:var(--blue);
+  margin-bottom:12px;
+}
+.compliance-sub {
+  font-size:14px; color:var(--ink-soft);
+  line-height:1.7; margin-bottom:24px;
+}
+.compliance-badges {
+  display:flex; flex-direction:column; gap:12px;
+}
+.compliance-badge {
+  background:var(--card);
+  border:1px solid rgba(28,63,110,0.1);
+  border-radius:10px;
+  padding:14px 18px;
+  display:flex; align-items:center; gap:12px;
+}
+.cb-icon {
+  width:32px; height:32px; min-width:32px;
+  background:var(--blue-bg);
+  border-radius:8px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:14px;
+}
+.cb-text { font-size:13px; }
+.cb-title { font-weight:600; color:var(--ink); margin-bottom:2px; }
+.cb-sub { font-size:11px; color:var(--ink-soft); font-family:'DM Mono',monospace; }
+
+/* ── FOOTER ── */
+footer {
+  border-top:1px solid var(--rule);
+  padding:32px 0;
+}
+.footer-inner {
+  max-width:1140px; margin:auto; padding:0 24px;
+  display:flex; justify-content:space-between; align-items:center;
+  flex-wrap:wrap; gap:16px;
+}
+.footer-brand {
+  font-family:'Syne',sans-serif;
+  font-weight:700; font-size:14px; letter-spacing:-0.03em;
+}
+.footer-brand span { color:var(--green); }
+.footer-links {
+  display:flex; gap:24px; list-style:none;
+}
+.footer-links a {
+  font-size:12px; color:var(--ink-faint);
+  text-decoration:none; font-family:'DM Mono',monospace;
+  transition:color .2s;
+}
+.footer-links a:hover { color:var(--ink-soft); }
+.footer-legal {
+  font-size:11px; color:var(--ink-faint);
+  font-family:'DM Mono',monospace;
 }
 
-.input-group input {
-    background: transparent;
-    border: none;
-    color: #fff;
-    font-size: 22px;
-    font-weight: 500;
-    width: 70%;
-    outline: none;
-    font-family: var(--font-mono);
+/* ── ANIMATIONS ── */
+@keyframes fadeUp {
+  from { opacity:0; transform:translateY(16px); }
+  to   { opacity:1; transform:translateY(0); }
 }
+.hero { animation:fadeUp .5s ease both; }
+.widget { animation:fadeUp .5s .1s ease both; }
 
-.select-box {
-    background: transparent;
-    border: none;
-    color: #fff;
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    outline: none;
+/* ── RESPONSIVE ── */
+@media (max-width:900px) {
+  .hero { grid-template-columns:1fr; gap:40px; }
+  .hero h1 { font-size:36px; }
+  .steps { grid-template-columns:1fr; }
+  .corridor-grid { grid-template-columns:repeat(2,1fr); }
+  .compliance { grid-template-columns:1fr; gap:32px; padding:32px; }
+  .nav-links { display:none; }
 }
-
-.select-box option {
-    background: var(--panel-inner);
-}
-
-/* DETAILS FLOW */
-.details-flow {
-    padding: 16px 8px;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-.flow-row {
-    display: flex;
-    justify-content: space-between;
-    font-size: 12px;
-    color: var(--text-soft);
-    font-family: var(--font-mono);
-}
-
-.flow-row .white {
-    color: #fff;
-}
-
-.action-btn {
-    width: 100%;
-    background: #fff;
-    color: #000;
-    border: none;
-    border-radius: 10px;
-    padding: 16px;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background 0.2s;
-    margin-top: 8px;
-}
-
-.action-btn:hover {
-    background: #e4e4e7;
-}
-
-/* FOOTER */
-.footer {
-    border-top: 1px solid var(--border);
-    padding-top: 24px;
-    display: flex;
-    justify-content: space-between;
-    font-size: 12px;
-    color: rgba(255, 255, 255, 0.2);
-}
-
-@media (max-width: 900px) {
-    .layout { grid-template-columns: 1fr; gap: 40px; }
-    .hero h2 { font-size: 34px; }
-    .header { padding: 24px 0; }
+@media (max-width:600px) {
+  .corridor-grid { grid-template-columns:1fr 1fr; }
+  .hero h1 { font-size:30px; }
+  .widget { padding:24px; }
+  .partners-logos { gap:12px; }
+  .partner-tag { font-size:11px; padding:6px 12px; }
 }
 </style>
 </head>
+
 <body>
 
-<div class="container">
+<!-- ── NAV ── -->
+<nav>
+  <div class="nav-inner">
+    <a href="#" class="nav-logo">Noet<span>field</span></a>
+    <ul class="nav-links">
+      <li><a href="#how">How it works</a></li>
+      <li><a href="#corridors">Corridors</a></li>
+      <li><a href="#compliance">Compliance</a></li>
+    </ul>
+    <a href="#" class="nav-cta">Start a Transfer</a>
+  </div>
+</nav>
 
-    <!-- HEADER -->
-    <header class="header">
-        <div class="logo">Noetfield</div>
-        <div class="security-status">
-            <span class="status-dot"></span>
-            End-to-end encrypted connection
-        </div>
-    </header>
-
-    <!-- MAIN INTERFACE -->
-    <main class="layout">
-        
-        <!-- CONTENT -->
-        <div class="hero">
-            <h2>Move capital globally without the overhead.</h2>
-            <p>
-                Direct cross-border settlements with automated routing, full custody protection, and zero hidden margins.
-            </p>
-            
-            <div class="features">
-                <div class="feat-item">
-                    <span>✓</span>
-                    <p>Direct live market pricing updated in real time.</p>
-                </div>
-                <div class="feat-item">
-                    <span>✓</span>
-                    <p>Non-custodial infrastructure ensuring absolute capital security.</p>
-                </div>
-                <div class="feat-item">
-                    <span>✓</span>
-                    <p>Instant corridor settlement bypassing intermediary banks.</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- CONSOLE CONVERTER -->
-        <div class="widget">
-            <div class="widget-head">
-                <span>Secure Transfer</span>
-                <span id="live-rate-badge">1 USD = 0.9200 EUR</span>
-            </div>
-
-            <!-- SEND -->
-            <div class="input-group">
-                <div>
-                    <label>You send</label>
-                    <input type="number" id="send-amount" value="100000" oninput="runConversion()">
-                </div>
-                <select class="select-box" id="send-curr" onchange="runConversion()">
-                    <option value="USD">USD</option>
-                    <option value="EUR">EUR</option>
-                    <option value="CAD">CAD</option>
-                </select>
-            </div>
-
-            <!-- MID FLOW INFOS -->
-            <div class="details-flow">
-                <div class="flow-row">
-                    <span>Exchange rate</span>
-                    <span class="white" id="rate-text">0.9200</span>
-                </div>
-                <div class="flow-row">
-                    <span>Transfer fee</span>
-                    <span class="white" style="color: var(--green);">0.00%</span>
-                </div>
-                <div class="flow-row">
-                    <span>Delivery speed</span>
-                    <span class="white">Instant</span>
-                </div>
-            </div>
-
-            <!-- RECEIVE -->
-            <div class="input-group" style="margin-bottom: 24px;">
-                <div>
-                    <label>They receive</label>
-                    <input type="text" id="receive-amount" readonly>
-                </div>
-                <select class="select-box" id="receive-curr" onchange="runConversion()">
-                    <option value="EUR">EUR</option>
-                    <option value="USD">USD</option>
-                    <option value="AED">AED</option>
-                    <option value="SGD">SGD</option>
-                </select>
-            </div>
-
-            <button class="action-btn">Continue</button>
-        </div>
-
-    </main>
-
-    <!-- FOOTER -->
-    <footer class="footer">
-        <span>© 2026 Noetfield Systems Inc. All rights reserved.</span>
-        <span>Client Portal v4.1</span>
-    </footer>
-
+<!-- ── TRUST BAR ── -->
+<div class="trust-bar">
+  <div class="trust-bar-inner">
+    <div class="trust-item">
+      <span class="trust-dot"></span>
+      FINTRAC Registered MSB
+    </div>
+    <span class="trust-sep">·</span>
+    <div class="trust-item">
+      <span class="trust-dot"></span>
+      RPAA-Aligned Infrastructure
+    </div>
+    <span class="trust-sep">·</span>
+    <div class="trust-item">
+      <span class="trust-dot"></span>
+      Peoples Group FBO Custody
+    </div>
+    <span class="trust-sep">·</span>
+    <div class="trust-item">
+      <span class="trust-dot"></span>
+      NDAX Execution Partner
+    </div>
+  </div>
 </div>
 
+<!-- ── HERO ── -->
+<div class="wrap">
+  <section class="hero">
+
+    <div class="hero-left">
+      <div class="hero-eyebrow">
+        🇨🇦 Built for Canadian SMEs
+      </div>
+      <h1>Cross-border payments, <em>fully reconciled.</em></h1>
+      <p class="hero-sub">
+        Noetfield routes your international payments with transparent pricing, automated reconciliation, and a complete compliance audit trail — so your accountant and your bank both sleep at night.
+      </p>
+
+      <div class="hero-features">
+        <div class="hero-feature">
+          <span class="feature-check">
+            <svg viewBox="0 0 10 10" fill="none"><path d="M2 5.5L4 7.5L8 3" stroke="#1A6B3C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+          Orchestration fee of 0.5% — fully disclosed, no hidden spread
+        </div>
+        <div class="hero-feature">
+          <span class="feature-check">
+            <svg viewBox="0 0 10 10" fill="none"><path d="M2 5.5L4 7.5L8 3" stroke="#1A6B3C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+          Regulator-readable audit trail for every transaction
+        </div>
+        <div class="hero-feature">
+          <span class="feature-check">
+            <svg viewBox="0 0 10 10" fill="none"><path d="M2 5.5L4 7.5L8 3" stroke="#1A6B3C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+          Funds held in segregated FBO accounts — never co-mingled
+        </div>
+        <div class="hero-feature">
+          <span class="feature-check">
+            <svg viewBox="0 0 10 10" fill="none"><path d="M2 5.5L4 7.5L8 3" stroke="#1A6B3C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+          FINTRAC-compliant reporting generated automatically
+        </div>
+      </div>
+
+      <div class="hero-actions">
+        <a href="#" class="btn-primary">Send a Payment →</a>
+        <a href="#how" class="btn-ghost">See how it works ↓</a>
+      </div>
+
+      <div class="hero-note">
+        <span>10 pilot clients active</span>
+        <span>·</span>
+        <span>CA→UAE · CA→IN · CA→EU · CA→PK</span>
+      </div>
+    </div>
+
+    <!-- ── WIDGET ── -->
+    <div class="widget">
+      <div class="widget-header">
+        <span class="widget-title">Send Payment</span>
+        <div class="live-badge">
+          <span class="live-dot"></span>
+          Live rates
+        </div>
+      </div>
+
+      <!-- You send -->
+      <div class="field-group">
+        <div class="field-label">You send</div>
+        <div class="field-row">
+          <input class="field-input" type="number" id="send-amt" value="50000" placeholder="0" oninput="calc()">
+          <select class="currency-select" id="send-cur" onchange="calc()">
+            <option value="CAD">🇨🇦 CAD</option>
+            <option value="USD">🇺🇸 USD</option>
+            <option value="EUR">🇪🇺 EUR</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="swap-arrow">
+        <button class="swap-btn" onclick="swapCurrencies()" title="Swap">
+          <svg viewBox="0 0 14 14" fill="none"><path d="M7 1V13M7 13L4 10M7 13L10 10" stroke="#6B6860" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+
+      <!-- Breakdown -->
+      <div class="breakdown">
+        <div class="breakdown-row">
+          <span class="br-label">Orchestration fee (0.5%)</span>
+          <span class="br-value" id="fee-val">–</span>
+        </div>
+        <div class="breakdown-row">
+          <span class="br-label">Live exchange rate</span>
+          <span class="br-value" id="rate-val">–</span>
+        </div>
+        <div class="breakdown-row">
+          <span class="br-label">Settlement window</span>
+          <span class="br-value faint" id="speed-val">T+1 business day</span>
+        </div>
+        <div class="breakdown-row">
+          <span class="br-label">Execution rail</span>
+          <span class="br-value faint" id="rail-val">–</span>
+        </div>
+      </div>
+
+      <!-- Recipient gets -->
+      <div class="arrive-box">
+        <div>
+          <div class="arrive-label">They receive</div>
+          <div class="arrive-amount" id="receive-amt">–</div>
+        </div>
+        <select class="currency-select" id="recv-cur" onchange="calc()" style="background:var(--card);">
+          <option value="AED">🇦🇪 AED</option>
+          <option value="USD">🇺🇸 USD</option>
+          <option value="INR">🇮🇳 INR</option>
+          <option value="EUR">🇪🇺 EUR</option>
+          <option value="PKR">🇵🇰 PKR</option>
+        </select>
+      </div>
+
+      <button class="cta-btn">Continue to Verify →</button>
+
+      <div class="widget-disclaimer">
+        Full audit trail generated. FINTRAC-compliant reporting included.<br>
+        Funds held in segregated FBO account at Peoples Group.
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ── PARTNERS ── -->
+  <div class="partners">
+    <div class="partners-label">Infrastructure & Execution Partners</div>
+    <div class="partners-logos">
+      <span class="partner-tag">Peoples Group</span>
+      <span class="partner-tag">NDAX</span>
+      <span class="partner-tag">Circle USDC</span>
+      <span class="partner-tag">VersaBank</span>
+      <span class="partner-tag">FINTRAC Registered</span>
+      <span class="partner-tag">RPAA Aligned</span>
+    </div>
+  </div>
+
+  <!-- ── HOW IT WORKS ── -->
+  <section class="how" id="how">
+    <div class="section-label">How it works</div>
+    <h2 class="section-title">Three steps, full visibility.</h2>
+    <p class="section-sub">From initiation to settlement, every step is logged, reconciled, and auditable.</p>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">01</div>
+        <div class="step-icon blue">🔍</div>
+        <div class="step-title">You initiate</div>
+        <p>Enter your payment details. Noetfield's routing engine selects the optimal execution path across bank wire, stablecoin, and MSB rails — showing you the exact fee before you confirm.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">02</div>
+        <div class="step-icon green">⚡</div>
+        <div class="step-title">We route & execute</div>
+        <p>TrustField Settlement executes via the selected rail. Your funds move through a segregated FBO account — fully separated from operating funds — with every state transition logged.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">03</div>
+        <div class="step-icon amber">📋</div>
+        <div class="step-title">You receive proof</div>
+        <p>Upon settlement you receive a complete Trust Brief: reconciliation report, FINTRAC-ready documentation, and a regulator-readable audit package. Your compliance team stays clean.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CORRIDORS ── -->
+  <section class="corridors" id="corridors">
+    <div class="section-label">Active corridors</div>
+    <h2 class="section-title">Where we route today.</h2>
+    <p class="section-sub" style="margin-bottom:32px;">Four corridors active. Every corridor has a licensed execution partner, defined FX liquidity arrangement, and FINTRAC-compliant reporting.</p>
+
+    <div class="corridor-grid">
+      <div class="corridor-card">
+        <div class="corridor-route">Canada → UAE</div>
+        <div class="corridor-pair">CAD → AED</div>
+        <div class="corridor-rate" id="cad-aed-rate">1 CAD = 2.69 AED</div>
+        <div class="corridor-status live"><span class="cs-dot"></span> Live</div>
+      </div>
+      <div class="corridor-card">
+        <div class="corridor-route">Canada → India</div>
+        <div class="corridor-pair">CAD → INR</div>
+        <div class="corridor-rate" id="cad-inr-rate">1 CAD = 61.4 INR</div>
+        <div class="corridor-status pilot"><span class="cs-dot"></span> Pilot</div>
+      </div>
+      <div class="corridor-card">
+        <div class="corridor-route">Canada → Europe</div>
+        <div class="corridor-pair">CAD → EUR</div>
+        <div class="corridor-rate" id="cad-eur-rate">1 CAD = 0.685 EUR</div>
+        <div class="corridor-status pilot"><span class="cs-dot"></span> Pilot</div>
+      </div>
+      <div class="corridor-card">
+        <div class="corridor-route">Canada → Pakistan</div>
+        <div class="corridor-pair">CAD → PKR</div>
+        <div class="corridor-rate" id="cad-pkr-rate">1 CAD = 204 PKR</div>
+        <div class="corridor-status pilot"><span class="cs-dot"></span> Pilot</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── COMPLIANCE ── -->
+  <section class="compliance" id="compliance">
+    <div>
+      <div class="section-label" style="color:var(--blue);opacity:.6;">Regulatory posture</div>
+      <div class="compliance-title">Built for Canadian compliance — not around it.</div>
+      <p class="compliance-sub">
+        Most cross-border fintechs treat regulation as a constraint. Noetfield treats it as infrastructure. Our architecture is designed to make your bank's compliance officer comfortable, not nervous.
+      </p>
+      <a href="#" class="btn-primary" style="background:var(--blue);">View Trust Brief sample →</a>
+    </div>
+    <div class="compliance-badges">
+      <div class="compliance-badge">
+        <div class="cb-icon">🏦</div>
+        <div class="cb-text">
+          <div class="cb-title">FINTRAC MSB Registration</div>
+          <div class="cb-sub">TrustField Settlement — AML/ATF framework</div>
+        </div>
+      </div>
+      <div class="compliance-badge">
+        <div class="cb-icon">🏛</div>
+        <div class="cb-text">
+          <div class="cb-title">RPAA-Aligned Infrastructure</div>
+          <div class="cb-sub">Bank of Canada operational risk framework</div>
+        </div>
+      </div>
+      <div class="compliance-badge">
+        <div class="cb-icon">🔒</div>
+        <div class="cb-text">
+          <div class="cb-title">Segregated FBO Custody</div>
+          <div class="cb-sub">Client funds separated at Peoples Group</div>
+        </div>
+      </div>
+      <div class="compliance-badge">
+        <div class="cb-icon">📋</div>
+        <div class="cb-text">
+          <div class="cb-title">Trust Brief — Audit Package</div>
+          <div class="cb-sub">Regulator-readable evidence on every transaction</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div><!-- /wrap -->
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">Noet<span>field</span> Systems Inc.</div>
+    <ul class="footer-links">
+      <li><a href="#">Platform</a></li>
+      <li><a href="#">Compliance</a></li>
+      <li><a href="#">Corridors</a></li>
+      <li><a href="#">Contact</a></li>
+    </ul>
+    <div class="footer-legal">© 2026 · FINTRAC Registered · RPAA-Aligned</div>
+  </div>
+</footer>
+
 <script>
-// Pure Market Conversion Rates
-const matrix = {
-    "USD_EUR": 0.92, "USD_AED": 3.67, "USD_SGD": 1.34, "USD_USD": 1.00,
-    "EUR_USD": 1.09, "EUR_AED": 3.99, "EUR_SGD": 1.46, "EUR_EUR": 1.00,
-    "CAD_USD": 0.73, "CAD_EUR": 0.67, "CAD_AED": 2.68, "CAD_SGD": 0.98
+// ── FX MATRIX (indicative, May 2026) ──
+const FX = {
+  CAD_AED:2.682, CAD_USD:0.732, CAD_EUR:0.685, CAD_INR:61.4, CAD_PKR:204, CAD_SGD:0.978, CAD_CAD:1,
+  USD_AED:3.672, USD_EUR:0.920, USD_CAD:1.366, USD_INR:83.9, USD_PKR:279, USD_SGD:1.338, USD_USD:1,
+  EUR_AED:3.992, EUR_USD:1.087, EUR_CAD:1.460, EUR_INR:91.2, EUR_PKR:303, EUR_SGD:1.454, EUR_EUR:1,
 };
 
-function runConversion() {
-    const amt = parseFloat(document.getElementById("send-amount").value) || 0;
-    const sCurr = document.getElementById("send-curr").value;
-    const rCurr = document.getElementById("receive-curr").value;
+const RAILS = {
+  CAD_AED:"NDAX / USDC → AED", CAD_USD:"MSB wire → USD",
+  CAD_EUR:"SWIFT → SEPA", CAD_INR:"MSB → INR partner",
+  CAD_PKR:"MSB → PKR partner", CAD_SGD:"SWIFT", USD_EUR:"SWIFT",
+};
 
-    const pair = `${sCurr}_${rCurr}`;
-    const rate = matrix[pair] || 1.00;
+function getRate(s,r){ return FX[`${s}_${r}`] || (1/(FX[`${r}_${s}`]||1)); }
 
-    document.getElementById("live-rate-badge").textContent = `1 ${sCurr} = ${rate.toFixed(4)} ${rCurr}`;
-    document.getElementById("rate-text").textContent = rate.toFixed(4);
+function calc(){
+  const amt   = parseFloat(document.getElementById('send-amt').value)||0;
+  const sCur  = document.getElementById('send-cur').value;
+  const rCur  = document.getElementById('recv-cur').value;
+  const fee   = amt * 0.005;
+  const net   = amt - fee;
+  const rate  = getRate(sCur, rCur);
+  const recv  = net * rate;
 
-    const total = amt * rate;
-    document.getElementById("receive-amount").value = total.toLocaleString("en-US", { 
-        minimumFractionDigits: 2, 
-        maximumFractionDigits: 2 
-    });
+  document.getElementById('fee-val').textContent    = `${sCur} ${fee.toLocaleString('en',{minimumFractionDigits:2,maximumFractionDigits:2})}`;
+  document.getElementById('rate-val').textContent   = `1 ${sCur} = ${rate.toFixed(4)} ${rCur}`;
+  document.getElementById('receive-amt').textContent = `${rCur} ${recv.toLocaleString('en',{minimumFractionDigits:2,maximumFractionDigits:2})}`;
+
+  const railKey = `${sCur}_${rCur}`;
+  document.getElementById('rail-val').textContent = RAILS[railKey] || 'Optimal rail selected';
+
+  // speed hint
+  const fast = ['CAD_AED','CAD_USD'];
+  document.getElementById('speed-val').textContent = fast.includes(railKey) ? 'Same day (USDC rail)' : 'T+1 business day';
 }
 
-runConversion();
+function swapCurrencies(){
+  const s = document.getElementById('send-cur');
+  const r = document.getElementById('recv-cur');
+  // match recv options to send options if possible
+  const tmp = s.value;
+  // try to set send to recv currency
+  const rVal = r.value;
+  const opts = [...s.options].map(o=>o.value);
+  if(opts.includes(rVal)) s.value = rVal;
+  // best effort swap back
+  const opts2 = [...r.options].map(o=>o.value);
+  if(opts2.includes(tmp)) r.value = tmp;
+  calc();
+}
+
+// Init
+calc();
 </script>
 
 </body>
