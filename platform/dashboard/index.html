@@ -2,9 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>Noetfield — Control Center</title>
-    
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700&family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;1,400&display=swap');
 
@@ -12,7 +11,6 @@
             margin: 0; 
             padding: 0; 
             box-sizing: border-box; 
-            -webkit-tap-highlight-color: transparent;
         }
         
         :root {
@@ -29,57 +27,47 @@
             --status-pending: #ffb703;
         }
 
-        /* 1. LOCK VIEWPORT TO PREVENT ANY HORIZONTAL DISTORTION */
-        html, body {
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
+        /* -----------------------------------------
+           1. BASE STYLES (Strictly Default / Mobile Portrait)
+           ----------------------------------------- */
+        body {
             background: var(--bg-main);
             color: var(--text-main);
             font-family: 'IBM Plex Mono', monospace;
+            min-height: 100vh;
+            display: flex !important;
+            flex-direction: column !important; /* Forces vertical stacking everywhere by default */
+            overflow-x: hidden;
         }
 
-        body {
-            display: flex;
-            position: relative;
-        }
-
-        /* 2. BASE SIDEBAR - HIDDEN BY DEFAULT ON MOBILE VIA FIXED ROUTING */
+        /* SIDEBAR IS STRICTLY HIDDEN BY DEFAULT */
         .sidebar {
+            display: none !important; 
+            position: fixed !important;
+            top: 0 !important;
+            left: -280px !important;
+            width: 280px !important;
+            height: 100vh !important;
             background: var(--bg-surface);
             border-right: 1px solid var(--border-color);
-            display: flex;
             flex-direction: column;
             justify-content: space-between;
             padding: 24px 16px;
-            position: fixed;
-            top: 0;
-            left: -280px;
-            width: 280px;
-            height: 100%;
-            z-index: 9999;
+            z-index: 9999 !important;
             transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        
+
+        /* When opened via hamburger menu button on mobile */
         .sidebar.open {
-            transform: translateX(280px);
+            display: flex !important;
+            transform: translateX(280px) !important;
         }
 
         .sidebar-top { display: flex; flex-direction: column; gap: 32px; }
         .nav-logo-wrapper { display: flex; align-items: center; justify-content: space-between; width: 100%; }
         .nav-logo { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 700; display: flex; align-items: center; gap: 10px; letter-spacing: -0.02em; padding-left: 8px; }
         .nav-dot { width: 7px; height: 7px; background: var(--accent); border-radius: 50%; box-shadow: 0 0 12px var(--accent); }
-        
-        .close-sidebar-btn { 
-            background: none; 
-            border: none; 
-            color: var(--text-muted); 
-            font-size: 22px; 
-            cursor: pointer; 
-            padding: 4px;
-            display: block;
-        }
-        
+        .close-sidebar-btn { background: none; border: none; color: var(--text-muted); font-size: 22px; cursor: pointer; padding: 4px; display: block; }
         .nav-menu { display: flex; flex-direction: column; gap: 4px; }
         .nav-item { display: flex; align-items: center; gap: 12px; padding: 12px 14px; color: var(--text-muted); text-decoration: none; font-size: 13px; font-weight: 500; border-radius: 6px; transition: all 0.2s ease; cursor: pointer; }
         .nav-item:hover, .nav-item.active { color: var(--text-main); background: rgba(255, 255, 255, 0.03); }
@@ -96,30 +84,23 @@
         .workspace-name { font-size: 12px; font-weight: 500; color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .workspace-tier { font-size: 10px; color: var(--text-muted); }
 
-        /* BACKDROP OVERLAY FOR CLOSING DRAWER */
         .sidebar-overlay {
+            display: none;
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
             background: rgba(0, 0, 0, 0.6);
             backdrop-filter: blur(4px);
             z-index: 9990;
-            display: none;
-            opacity: 0;
-            transition: opacity 0.25s ease;
         }
-        .sidebar-overlay.active { 
-            display: block; 
-            opacity: 1;
-        }
+        .sidebar-overlay.active { display: block; }
 
-        /* 3. INDEPENDENT SCROLLABLE VIEWPORT CONTAINER */
+        /* VIEWPORT TAKES 100% FULL WIDTH AT ALL TIMES ON PORTRAIT */
         .main-viewport {
-            width: 100%;
-            height: 100%;
+            width: 100% !important;
+            max-width: 100% !important;
             display: flex;
             flex-direction: column;
-            overflow-y: auto;
-            -webkit-overflow-scrolling: touch;
+            background: var(--bg-main);
         }
 
         header {
@@ -127,6 +108,7 @@
             border-bottom: 1px solid var(--border-color);
             display: flex;
             flex-direction: column;
+            align-items: flex-start;
             gap: 16px;
             background: var(--bg-main);
         }
@@ -134,13 +116,14 @@
         .header-top-row { display: flex; align-items: center; justify-content: space-between; width: 100%; }
         .header-left-block { display: flex; align-items: center; gap: 12px; }
         
+        /* HAMBURGER TRIGGER IS ALWAYS VISIBLE ON PORTRAIT */
         .menu-trigger {
             background: none;
             border: none;
             color: var(--text-main);
             cursor: pointer;
-            padding: 8px;
-            display: flex;
+            padding: 6px;
+            display: flex !important; 
             align-items: center;
             justify-content: center;
             border: 1px solid var(--border-color);
@@ -148,25 +131,23 @@
         }
         .menu-trigger svg { width: 20px; height: 20px; }
         .header-title h1 { font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 600; letter-spacing: -0.01em; }
-        #environment-indicator { font-size: 12px; color: var(--text-muted); line-height: 1.4; }
+        .header-title p { font-size: 12px; color: var(--text-muted); margin-top: 4px; line-height: 1.4; }
 
         .btn-action { background: var(--accent); color: var(--bg-main); border: none; padding: 12px 20px; font-family: 'IBM Plex Mono', monospace; font-size: 13px; font-weight: 600; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s ease; width: 100%; }
         .btn-action:hover { background: #00e896; box-shadow: 0 0 20px rgba(0, 208, 132, 0.2); }
-        
         .content-container { padding: 20px; display: flex; flex-direction: column; gap: 24px; width: 100%; }
-        .metrics-grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
+        .metrics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
         .metric-card { background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 8px; padding: 20px; display: flex; flex-direction: column; gap: 12px; }
         .metric-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); }
         .metric-value { font-size: 24px; font-weight: 500; color: var(--text-main); }
         .metric-sub { font-size: 11px; color: var(--text-dim); display: flex; align-items: center; gap: 6px; }
         .badge-live { background: rgba(0, 208, 132, 0.06); color: var(--accent); padding: 2px 6px; border-radius: 4px; font-size: 9px; font-weight: 600; border: 1px solid rgba(0, 208, 132, 0.15); }
-        
         .workspace-split { display: grid; grid-template-columns: 1fr; gap: 24px; }
         .block-card { background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 8px; padding: 20px; }
         .block-title { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 600; margin-bottom: 20px; display: flex; flex-direction: column; align-items: flex-start; gap: 6px; }
         .block-title span { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--text-muted); font-weight: 400; }
         .ledger-table-wrapper { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-        .ledger-table { width: 100%; border-collapse: collapse; text-align: left; font-size: 12px; min-width: 550px; }
+        .ledger-table { width: 100%; border-collapse: collapse; text-align: left; font-size: 12px; min-width: 650px; }
         .ledger-table th { padding: 12px 16px; color: var(--text-muted); font-weight: 400; text-transform: uppercase; font-size: 10px; letter-spacing: 0.05em; border-bottom: 1px solid var(--border-color); background: rgba(255,255,255,0.01); }
         .ledger-table td { padding: 16px; border-bottom: 1px solid var(--border-color); color: var(--text-main); }
         .ledger-table tr:last-child td { border-bottom: none; }
@@ -181,7 +162,7 @@
         .corridor-meta { font-size: 11px; color: var(--text-muted); }
         .rate-badge { font-size: 11px; color: var(--accent); background: rgba(0, 208, 132, 0.05); padding: 4px 8px; border-radius: 4px; border: 1px solid rgba(0, 208, 132, 0.1); flex-shrink: 0; }
 
-        /* MODALS */
+        /* Modals */
         .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center; z-index: 10000; opacity: 0; pointer-events: none; transition: all 0.2s ease; padding: 16px; }
         .modal-overlay.active { opacity: 1; pointer-events: auto; }
         .modal-card { background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 12px; width: 100%; max-width: 480px; padding: 24px; max-height: 90vh; overflow-y: auto; }
@@ -197,47 +178,50 @@
         .fee-row.total { border-top: 1px solid var(--border-color); padding-top: 8px; color: var(--accent); font-weight: 600; }
 
         /* -----------------------------------------
-           DESKTOP ADAPTATION MEDIA QUERY (>= 1024px)
+           2. DESKTOP/LANDSCAPE DOUBLE-LOCK RULE
+           (Strictly fires ONLY if width > 1024px AND screen is Landscape)
            ----------------------------------------- */
-        @media current-device-query, min-width: 1024px) {
+        @media screen and (min-width: 1024px) and (orientation: landscape) {
+            body {
+                flex-direction: row !important; /* Side-by-side splits allowed ONLY in real landscape */
+            }
+
             .sidebar {
+                display: flex !important; 
                 position: static !important;
                 width: 260px !important;
+                height: 100vh !important;
                 transform: none !important;
-                flex-shrink: 0 !important;
+                flex-shrink: 0;
             }
-            .close-sidebar-btn, .menu-trigger, .sidebar-overlay {
-                display: none !important;
+
+            .close-sidebar-btn, 
+            .menu-trigger, 
+            .sidebar-overlay {
+                display: none !important; /* Hide mobile toggles entirely */
             }
+
             .main-viewport {
+                flex: 1 !important;
                 width: calc(100% - 260px) !important;
+                height: 100vh;
+                overflow-y: auto;
             }
+
             header {
                 flex-direction: row !important;
                 justify-content: space-between !important;
                 align-items: center !important;
-                padding: 24px 40px !important;
+                padding: 24px 40px;
             }
-            .btn-action {
-                width: auto !important;
-            }
-            .content-container {
-                padding: 40px !important;
-                gap: 32px !important;
-                max-width: 1400px !important;
-                margin: 0 auto;
-            }
-            .metrics-grid {
-                grid-template-columns: repeat(3, 1fr) !important;
-            }
-            .workspace-split {
-                grid-template-columns: 2fr 1fr !important;
-            }
-            .block-title {
-                flex-direction: row !important;
-                justify-content: space-between !important;
-                align-items: center !important;
-            }
+
+            .header-top-row { width: auto; }
+            .header-title h1 { font-size: 22px; }
+            .btn-action { width: auto; }
+            .content-container { padding: 40px; gap: 32px; max-width: 1400px; margin: 0 auto; }
+            .workspace-split { grid-template-columns: 2fr 1fr; }
+            .block-card { padding: 24px; }
+            .block-title { flex-direction: row; justify-content: space-between; align-items: center; }
         }
     </style>
 </head>
@@ -248,18 +232,32 @@
     <div class="sidebar" id="dashboard-sidebar">
         <div class="sidebar-top">
             <div class="nav-logo-wrapper">
-                <div class="nav-logo"><div class="nav-dot"></div>Noetfield</div>
+                <div class="nav-logo">
+                    <div class="nav-dot"></div>
+                    Noetfield
+                </div>
                 <button class="close-sidebar-btn" onclick="toggleSidebar(false)">✕</button>
             </div>
             <div class="nav-menu">
                 <div class="nav-item active">
-                    <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>Overview
+                    <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+                    Overview
                 </div>
                 <div class="nav-item">
-                    <svg viewBox="0 0 24 24"><path d="M21 18v1c0 1.1-.9 2-2 2H5c-1.11 0-2-.9-2-2V5c0-1.1.89-2 2-2h14c1.1 0 2 .9 2 2v1h-9c-1.11 0-2-.9-2 2v8c0 1.1.89 2 2 2h9zm-9-2h10V8H12v8zm4-2.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5 0 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>Payments
+                    <svg viewBox="0 0 24 24"><path d="M21 18v1c0 1.1-.9 2-2 2H5c-1.11 0-2-.9-2-2V5c0-1.1.89-2 2-2h14c1.1 0 2 .9 2 2v1h-9c-1.11 0-2 .9-2 2v8c0 1.1.89 2 2 2h9zm-9-2h10V8H12v8zm4-2.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5 0 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
+                    Payments
                 </div>
                 <div class="nav-item">
-                    <svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 1.34 5 3s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V20h14v-3.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 2.01 1.97 3.45V20h6v-3.5c0-2.33-4.67-3.5-7-3.5z"/></svg>Beneficiaries
+                    <svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 1.34 5 3s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V20h14v-3.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 2.01 1.97 3.45V20h6v-3.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+                    Beneficiaries
+                </div>
+                <div class="nav-item">
+                    <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+                    Corridors
+                </div>
+                <div class="nav-item">
+                    <svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zm3.3 14.79L11 13.5V7h1.5v5.8l3.7 2.2-.7 1.29z"/></svg>
+                    Activity
                 </div>
             </div>
         </div>
@@ -284,14 +282,17 @@
             <div class="header-top-row">
                 <div class="header-left-block">
                     <button class="menu-trigger" onclick="toggleSidebar(true)">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
                     </button>
-                    <div class="header-title"><h1>Treasury Control Center</h1></div>
+                    <div class="header-title">
+                        <h1>Treasury Control Center</h1>
+                    </div>
                 </div>
             </div>
             <p id="environment-indicator">Currently operating in multi-currency isolated Sandbox mode</p>
             <button class="btn-action" onclick="toggleModal(true)">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>New Transfer
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                New Transfer
             </button>
         </header>
 
@@ -299,12 +300,12 @@
             <div class="metrics-grid">
                 <div class="metric-card">
                     <div class="metric-label">Total Volume (CAD Equiv.)</div>
-                    <div class="metric-value">$142,450.00</div>
+                    <div class="metric-value" id="balance-val">$142,450.00</div>
                     <div class="metric-sub">Across active global routing options</div>
                 </div>
                 <div class="metric-card">
                     <div class="metric-label">In-Flight Settlements</div>
-                    <div class="metric-value">$12,800.00</div>
+                    <div class="metric-value" id="inflight-val">$12,800.00</div>
                     <div class="metric-sub"><span class="badge-live">2 Transfers</span> queue execution</div>
                 </div>
                 <div class="metric-card">
@@ -316,17 +317,72 @@
 
             <div class="workspace-split">
                 <div class="block-card">
-                    <div class="block-title">Active Settlement Ledger <span>Real-time verification</span></div>
+                    <div class="block-title">
+                        Active Settlement Ledger
+                        <span>Real-time state verification</span>
+                    </div>
                     <div class="ledger-table-wrapper">
                         <table class="ledger-table">
                             <thead>
-                                <tr><th>Reference ID</th><th>Beneficiary Entity</th><th>Settlement Route</th><th>Gross Amount</th><th>Status</th></tr>
+                                <tr>
+                                    <th>Reference ID</th>
+                                    <th>Beneficiary Entity</th>
+                                    <th>Settlement Route</th>
+                                    <th>Gross Amount</th>
+                                    <th>Status</th>
+                                </tr>
                             </thead>
-                            <tbody>
-                                <tr><td class="tx-hash">0x7f...892a</td><td>Al-Mansoori Logistics</td><td>CAD → AED</td><td>$45,000.00</td><td><span class="status-pill settled">Settled</span></td></tr>
-                                <tr><td class="tx-hash">0x32...e411</td><td>TechIndia Solutions</td><td>CAD → INR</td><td>$12,800.00</td><td><span class="status-pill pending">In Flight</span></td></tr>
+                            <tbody id="ledger-body">
+                                <tr>
+                                    <td class="tx-hash">0x7f...892a</td>
+                                    <td>Al-Mansoori Logistics</td>
+                                    <td>CAD → AED (Dubai)</td>
+                                    <td>$45,000.00 CAD</td>
+                                    <td><span class="status-pill settled">Settled</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="tx-hash">0x32...e411</td>
+                                    <td>TechIndia Solutions Ltd</td>
+                                    <td>CAD → INR (Mumbai)</td>
+                                    <td>$12,800.00 CAD</td>
+                                    <td><span class="status-pill pending">In Flight</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="tx-hash">0x9a...711b</td>
+                                    <td>VouchBuild Operations</td>
+                                    <td>CAD → USD (Delaware)</td>
+                                    <td>$84,650.00 CAD</td>
+                                    <td><span class="status-pill settled">Settled</span></td>
+                                </tr>
                             </tbody>
                         </table>
+                    </div>
+                </div>
+
+                <div class="block-card">
+                    <div class="block-title">Active Corridors</div>
+                    <div class="corridor-list">
+                        <div class="corridor-item">
+                            <div class="corridor-info">
+                                <div class="corridor-title">CAD → AED</div>
+                                <div class="corridor-meta">Direct Treasury Route</div>
+                            </div>
+                            <div class="rate-badge">0.4% Fee</div>
+                        </div>
+                        <div class="corridor-item">
+                            <div class="corridor-info">
+                                <div class="corridor-title">CAD → INR</div>
+                                <div class="corridor-meta">Automated IMPS / NEFT</div>
+                            </div>
+                            <div class="rate-badge">0.4% Fee</div>
+                        </div>
+                        <div class="corridor-item">
+                            <div class="corridor-info">
+                                <div class="corridor-title">CAD → USD</div>
+                                <div class="corridor-meta">FedNow Settlement Layer</div>
+                            </div>
+                            <div class="rate-badge">0.4% Fee</div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -339,15 +395,44 @@
                 <h2>Initiate Treasury Routing</h2>
                 <button class="close-modal" onclick="toggleModal(false)">✕</button>
             </div>
+            
             <div class="form-group">
                 <label>Target Beneficiary Entity</label>
                 <input type="text" id="modal-beneficiary" placeholder="e.g. Acme International Holding" />
             </div>
+
+            <div class="form-group">
+                <label>Operational Corridor</label>
+                <select id="modal-corridor">
+                    <option value="CAD → AED (Dubai)">🇦🇪 CAD → AED (United Arab Emirates)</option>
+                    <option value="CAD → INR (Mumbai)">🇮🇳 CAD → INR (India)</option>
+                    <option value="CAD → USD (Delaware)">🇺🇸 CAD → USD (United States)</option>
+                </select>
+            </div>
+
             <div class="form-group">
                 <label>Funding Amount (CAD)</label>
-                <input type="number" id="modal-amount" placeholder="0.00" />
+                <input type="number" id="modal-amount" placeholder="0.00" oninput="calculatePlatformFees()" />
             </div>
-            <button class="btn-action" style="padding: 14px;" onclick="toggleModal(false)">Authorize Route Vector →</button>
+
+            <div class="fee-preview-box">
+                <div class="fee-row">
+                    <span>Interbank FX Margin Spread</span>
+                    <span>0.00% (Guaranteed)</span>
+                </div>
+                <div class="fee-row">
+                    <span>Noetfield Processing Fee (0.4%)</span>
+                    <span id="calculated-fee">$0.00 CAD</span>
+                </div>
+                <div class="fee-row total">
+                    <span>Total Settlement Deduction</span>
+                    <span id="calculated-total">$0.00 CAD</span>
+                </div>
+            </div>
+
+            <button class="btn-action" style="padding: 14px;" onclick="executeMockTransfer()">
+                Authorize Route Vector →
+            </button>
         </div>
     </div>
 
@@ -364,13 +449,84 @@
             }
         }
 
-        function toggleModal(show) {
-            const modal = document.getElementById('transfer-modal');
-            modal.classList.toggle('active', show);
+        function toggleEnv(mode) {
+            const sandboxBtn = document.getElementById('env-sandbox');
+            const liveBtn = document.getElementById('env-live');
+            const indicator = document.getElementById('environment-indicator');
+
+            if (mode === 'live') {
+                alert("🔒 Regulatory Protocol Notice:\n\nProduction environment onboarding requires verified Canadian FINTRAC documentation matching corporate legal entity registry identifiers.");
+                sandboxBtn.classList.remove('active');
+                sandboxBtn.classList.add('inactive');
+                liveBtn.classList.add('active');
+                liveBtn.classList.remove('inactive');
+                indicator.innerText = "Production rail active — Restricted access pending compliance sign-off";
+                indicator.style.color = "#ffb703";
+            } else {
+                liveBtn.classList.remove('active');
+                liveBtn.classList.add('inactive');
+                sandboxBtn.classList.add('active');
+                sandboxBtn.classList.remove('inactive');
+                indicator.innerText = "Currently operating in multi-currency isolated Sandbox mode";
+                indicator.style.color = "var(--text-muted)";
+            }
         }
 
-        function toggleEnv(mode) {
-            alert(mode === 'live' ? "🔒 Production rail requires FINTRAC verification." : "Switched to Sandbox mode.");
+        function toggleModal(show) {
+            const modal = document.getElementById('transfer-modal');
+            if (show) {
+                modal.classList.add('active');
+            } else {
+                modal.classList.remove('active');
+                document.getElementById('modal-beneficiary').value = '';
+                document.getElementById('modal-amount').value = '';
+                document.getElementById('calculated-fee').innerText = '$0.00 CAD';
+                document.getElementById('calculated-total').innerText = '$0.00 CAD';
+            }
+        }
+
+        function calculatePlatformFees() {
+            const amtInput = document.getElementById('modal-amount').value;
+            const amount = parseFloat(amtInput) || 0;
+            const fee = amount * 0.004;
+            const total = amount;
+
+            document.getElementById('calculated-fee').innerText = `$${fee.toFixed(2)} CAD`;
+            document.getElementById('calculated-total').innerText = `$${total.toFixed(2)} CAD`;
+        }
+
+        function executeMockTransfer() {
+            const beneficiary = document.getElementById('modal-beneficiary').value;
+            const corridor = document.getElementById('modal-corridor').value;
+            const amtInput = document.getElementById('modal-amount').value;
+            const amount = parseFloat(amtInput) || 0;
+
+            if (!beneficiary || amount <= 0) {
+                alert("Complete core parameters before authorization.");
+                return;
+            }
+
+            const randomHash = "0x" + Math.random().toString(16).substr(2, 4) + "..." + Math.random().toString(16).substr(2, 4);
+            const tableBody = document.getElementById('ledger-body');
+            const newRow = document.createElement('tr');
+            
+            newRow.innerHTML = `
+                <td class="tx-hash">${randomHash}</td>
+                <td>${beneficiary}</td>
+                <td>${corridor}</td>
+                <td>$${amount.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})} CAD</td>
+                <td><span class="status-pill pending">In Flight</span></td>
+            `;
+
+            tableBody.insertBefore(newRow, tableBody.firstChild);
+
+            const currentBalance = parseFloat(document.getElementById('balance-val').innerText.replace(/[^0-9.-]+/g,""));
+            const currentInflight = parseFloat(document.getElementById('inflight-val').innerText.replace(/[^0-9.-]+/g,""));
+
+            document.getElementById('balance-val').innerText = `$${(currentBalance + amount).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+            document.getElementById('inflight-val').innerText = `$${(currentInflight + amount).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+
+            toggleModal(false);
         }
     </script>
 </body>
