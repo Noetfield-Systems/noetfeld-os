@@ -3,1035 +3,782 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Noetfield — Cross-Border Capital Routing</title>
+<title>Noetfield — International Business Payments for Canadian SMEs</title>
+<meta name="description" content="Send cross-border business payments with transparent FX, real-time tracking, and regulated financial infrastructure. Built for Canadian businesses." />
 
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;1,400&display=swap');
 
-*, *::before, *::after {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-    --bg: #0a0c0f;
-    --surface: #111418;
-    --surface2: #161b22;
-    --border: rgba(255, 255, 255, 0.07);
-    --border2: rgba(255, 255, 255, 0.13);
-    --text: #e8eaed;
-    --muted: #6b7280;
-    --faint: #374151;
-    --green: #00d084;
-    --gdim: rgba(0, 208, 132, 0.15);
-    --glow: 0 0 24px rgba(0, 208, 132, 0.2);
-    --red: #f87171;
-    --sans: 'Syne', sans-serif;
-    --mono: 'IBM Plex Mono', monospace;
+  --bg:      #0a0c0f;
+  --s1:      #111418;
+  --s2:      #161b22;
+  --s3:      #1c2028;
+  --b1:      rgba(255,255,255,0.07);
+  --b2:      rgba(255,255,255,0.13);
+  --text:    #e8eaed;
+  --muted:   #6b7280;
+  --faint:   #374151;
+  --green:   #00d084;
+  --gdim:    rgba(0,208,132,0.12);
+  --gborder: rgba(0,208,132,0.25);
+  --glow:    0 0 28px rgba(0,208,132,0.18);
+  --red:     #f87171;
+  --amber:   #f59e0b;
+  --sans:    'Syne', sans-serif;
+  --mono:    'IBM Plex Mono', monospace;
 }
 
-html {
-    scroll-behavior: smooth;
-}
-
+html { scroll-behavior: smooth; }
 body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: var(--mono);
-    -webkit-font-smoothing: antialiased;
-    overflow-x: hidden;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--mono);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
 }
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--faint); border-radius: 2px; }
 
-/* NAVIGATION */
+/* ── NAV ── */
 .nav {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 36px;
-    height: 60px;
-    border-bottom: 1px solid var(--border);
-    background: rgba(10, 12, 15, 0.9);
-    backdrop-filter: blur(14px);
-    position: sticky;
-    top: 0;
-    z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 40px; height: 60px;
+  border-bottom: 1px solid var(--b1);
+  background: rgba(10,12,15,0.92);
+  backdrop-filter: blur(16px);
+  position: sticky; top: 0; z-index: 100;
 }
-
 .nav-logo {
-    font-family: var(--sans);
-    font-size: 17px;
-    font-weight: 700;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    letter-spacing: -0.02em;
+  font-family: var(--sans); font-size: 16px; font-weight: 700;
+  letter-spacing: -0.02em; display: flex; align-items: center; gap: 8px;
 }
-
 .nav-dot {
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    background: var(--green);
-    box-shadow: var(--glow);
-    animation: pulse 2.4s ease-in-out infinite;
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--green); box-shadow: var(--glow);
+  animation: pulse 2.4s ease-in-out infinite;
 }
-
-@keyframes pulse {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: .45; transform: scale(.75); }
-}
-
-.nav-links {
-    display: flex;
-    gap: 28px;
-}
-
+@keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.4;transform:scale(.75)} }
+.nav-links { display: flex; gap: 28px; }
 .nav-link {
-    font-size: 11px;
-    letter-spacing: .09em;
-    text-transform: uppercase;
-    color: var(--muted);
-    text-decoration: none;
-    transition: color .15s;
+  font-size: 11px; letter-spacing: .09em; text-transform: uppercase;
+  color: var(--muted); text-decoration: none; transition: color .15s;
 }
-
 .nav-link:hover { color: var(--text); }
-
-.nav-right {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
+.nav-right { display: flex; align-items: center; gap: 10px; }
 .btn-ghost {
-    font-family: var(--mono);
-    font-size: 11px;
-    letter-spacing: .06em;
-    text-transform: uppercase;
-    background: transparent;
-    color: var(--muted);
-    border: 1px solid var(--border2);
-    padding: 8px 18px;
-    cursor: pointer;
-    border-radius: 4px;
-    transition: all .2s;
+  font-family: var(--mono); font-size: 11px; letter-spacing: .06em;
+  text-transform: uppercase; background: transparent; color: var(--muted);
+  border: 1px solid var(--b2); padding: 8px 18px; cursor: pointer;
+  border-radius: 4px; transition: all .2s;
 }
-
 .btn-ghost:hover { color: var(--text); border-color: var(--faint); }
-
 .btn-primary {
-    font-family: var(--mono);
-    font-size: 11px;
-    letter-spacing: .06em;
-    text-transform: uppercase;
-    background: var(--green);
-    color: #000;
-    border: none;
-    padding: 9px 20px;
-    cursor: pointer;
-    font-weight: 500;
-    border-radius: 4px;
-    transition: all .2s;
+  font-family: var(--mono); font-size: 11px; letter-spacing: .06em;
+  text-transform: uppercase; background: var(--green); color: #000;
+  border: none; padding: 9px 20px; cursor: pointer; font-weight: 500;
+  border-radius: 4px; transition: all .2s;
 }
-
 .btn-primary:hover { background: #00e896; box-shadow: var(--glow); }
 
-/* TICKER MARQUEE */
+/* ── TICKER ── */
 .ticker {
-    background: var(--surface);
-    border-bottom: 1px solid var(--border);
-    overflow: hidden;
-    height: 34px;
-    display: flex;
-    align-items: center;
+  background: var(--s1); border-bottom: 1px solid var(--b1);
+  overflow: hidden; height: 34px; display: flex; align-items: center;
 }
-
 .ticker-track {
-    display: flex;
-    gap: 72px;
-    white-space: nowrap;
-    animation: tick 35s linear infinite;
+  display: flex; gap: 64px; white-space: nowrap;
+  animation: tick 32s linear infinite;
 }
+.ticker-item { font-size: 11px; color: var(--muted); letter-spacing: .05em; }
+.ticker-item em { color: var(--green); font-style: normal; margin-right: 8px; }
+@keyframes tick { from{transform:translateX(0)} to{transform:translateX(-50%)} }
 
-.ticker-item {
-    font-size: 11px;
-    color: var(--muted);
-    letter-spacing: .05em;
-}
-
-.ticker-item em {
-    color: var(--green);
-    font-style: normal;
-    margin-right: 8px;
-}
-
-@keyframes tick {
-    from { transform: translateX(0); }
-    to { transform: translateX(-50%); }
-}
-
-/* HERO GRID */
+/* ── HERO ── */
 .hero {
-    display: grid;
-    grid-template-columns: 1fr 460px;
-    gap: 56px;
-    align-items: start;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 80px 36px 64px;
-    width: 100%;
-    position: relative;
+  display: grid; grid-template-columns: 1fr 460px; gap: 56px;
+  align-items: start; max-width: 1200px; margin: 0 auto;
+  padding: 80px 40px 64px; width: 100%; position: relative;
 }
-
 .hero::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: radial-gradient(ellipse 60% 50% at 30% 40%, rgba(0,208,132,0.03) 0%, transparent 70%);
-    pointer-events: none;
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse 55% 45% at 28% 38%, rgba(0,208,132,0.04) 0%, transparent 70%);
+  pointer-events: none;
 }
-
 .hero-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    background: var(--gdim);
-    border: 1px solid rgba(0,208,132,0.28);
-    color: var(--green);
-    font-size: 10px;
-    letter-spacing: .1em;
-    text-transform: uppercase;
-    padding: 5px 12px;
-    border-radius: 20px;
-    margin-bottom: 28px;
+  display: inline-flex; align-items: center; gap: 6px;
+  background: var(--gdim); border: 1px solid var(--gborder);
+  color: var(--green); font-size: 10px; letter-spacing: .1em;
+  text-transform: uppercase; padding: 5px 12px; border-radius: 20px;
+  margin-bottom: 28px;
 }
-
 .hero-h1 {
-    font-family: var(--sans);
-    font-size: clamp(34px, 3.8vw, 52px);
-    font-weight: 800;
-    line-height: 1.1;
-    letter-spacing: -.03em;
-    margin-bottom: 20px;
+  font-family: var(--sans); font-size: clamp(32px,3.6vw,50px);
+  font-weight: 800; line-height: 1.1; letter-spacing: -.03em; margin-bottom: 20px;
 }
-
 .hero-h1 em { font-style: normal; color: var(--green); }
-
 .hero-sub {
-    font-size: 12px;
-    color: var(--muted);
-    line-height: 1.85;
-    max-width: 460px;
-    margin-bottom: 36px;
+  font-size: 13px; color: var(--muted); line-height: 1.85;
+  max-width: 440px; margin-bottom: 36px;
 }
-
-.hero-ctas {
-    display: flex;
-    gap: 12px;
-    margin-bottom: 44px;
-}
-
+.hero-ctas { display: flex; gap: 12px; margin-bottom: 44px; }
 .btn-hero {
-    font-family: var(--mono);
-    font-size: 12px;
-    letter-spacing: .06em;
-    text-transform: uppercase;
-    background: var(--green);
-    color: #000;
-    border: none;
-    padding: 13px 28px;
-    cursor: pointer;
-    font-weight: 500;
-    border-radius: 4px;
-    transition: all .2s;
+  font-family: var(--mono); font-size: 12px; letter-spacing: .06em;
+  text-transform: uppercase; background: var(--green); color: #000;
+  border: none; padding: 13px 28px; cursor: pointer; font-weight: 500;
+  border-radius: 4px; transition: all .2s;
 }
-
 .btn-hero:hover { background: #00e896; box-shadow: var(--glow); }
-
-.btn-hero-outline {
-    font-family: var(--mono);
-    font-size: 12px;
-    letter-spacing: .06em;
-    text-transform: uppercase;
-    background: transparent;
-    color: var(--text);
-    border: 1px solid var(--border2);
-    padding: 13px 28px;
-    cursor: pointer;
-    border-radius: 4px;
-    transition: all .2s;
+.btn-hero-ghost {
+  font-family: var(--mono); font-size: 12px; letter-spacing: .06em;
+  text-transform: uppercase; background: transparent; color: var(--text);
+  border: 1px solid var(--b2); padding: 13px 28px; cursor: pointer;
+  border-radius: 4px; transition: all .2s;
 }
-
-.btn-hero-outline:hover { border-color: var(--faint); }
-
-.hero-stats {
-    display: flex;
-    gap: 32px;
-}
-
+.btn-hero-ghost:hover { border-color: var(--faint); }
+.hero-stats { display: flex; gap: 36px; }
 .hstat-val {
-    font-family: var(--sans);
-    font-size: 26px;
-    font-weight: 700;
-    letter-spacing: -.02em;
+  font-family: var(--sans); font-size: 25px; font-weight: 700; letter-spacing: -.02em;
 }
+.hstat-val em { font-style: normal; color: var(--green); font-size: 15px; margin-left: 1px; }
+.hstat-key { font-size: 10px; color: var(--muted); letter-spacing: .08em; margin-top: 3px; text-transform: uppercase; }
 
-.hstat-val em { font-style: normal; color: var(--green); font-size: 16px; margin-left: 2px; }
-
-.hstat-key {
-    font-size: 10px;
-    color: var(--muted);
-    letter-spacing: .08em;
-    margin-top: 2px;
-    text-transform: uppercase;
-}
-
-/* FX CALCULATOR WIDGET */
+/* ── CALC CARD ── */
 .calc-card {
-    background: var(--surface);
-    border: 1px solid var(--border2);
-    border-radius: 12px;
-    padding: 24px;
-    position: relative;
-    overflow: hidden;
+  background: var(--s1); border: 1px solid var(--b2);
+  border-radius: 12px; padding: 24px; position: relative; overflow: hidden;
 }
-
 .calc-card::before {
-    content: '';
-    position: absolute;
-    top: -1px; left: 20px; right: 20px; height: 2px;
-    background: linear-gradient(90deg, transparent, var(--green), transparent);
+  content: ''; position: absolute; top: -1px; left: 20px; right: 20px; height: 2px;
+  background: linear-gradient(90deg, transparent, var(--green), transparent);
 }
-
-.calc-label {
-    font-size: 10px;
-    letter-spacing: .1em;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: 18px;
-}
-
-.calc-row {
-    display: flex;
-    gap: 10px;
-    align-items: flex-end;
-    margin-bottom: 14px;
-}
-
+.calc-label { font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-bottom: 18px; }
+.calc-row { display: flex; gap: 10px; align-items: flex-end; margin-bottom: 14px; }
 .calc-field { flex: 1; }
-
-.calc-field-label {
-    font-size: 9px;
-    letter-spacing: .1em;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: 6px;
-}
-
+.calc-field-label { font-size: 9px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
 .calc-input {
-    width: 100%;
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    padding: 11px 13px;
-    color: var(--text);
-    font-family: var(--mono);
-    font-size: 18px;
-    font-weight: 500;
-    outline: none;
-    transition: border-color .2s;
+  width: 100%; background: var(--s2); border: 1px solid var(--b1);
+  border-radius: 6px; padding: 11px 13px; color: var(--text);
+  font-family: var(--mono); font-size: 18px; font-weight: 500;
+  outline: none; transition: border-color .2s;
 }
-
 .calc-input:focus { border-color: var(--green); }
-
-.calc-arrow-div { color: var(--muted); font-size: 16px; padding-bottom: 12px; flex-shrink: 0; }
-
+.calc-arrow { color: var(--muted); font-size: 16px; padding-bottom: 12px; flex-shrink: 0; }
 .calc-select {
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    padding: 11px 12px;
-    color: var(--text);
-    font-family: var(--mono);
-    font-size: 12px;
-    outline: none;
-    cursor: pointer;
-    width: 110px;
-    transition: border-color .2s;
+  background: var(--s2); border: 1px solid var(--b1); border-radius: 6px;
+  padding: 11px 12px; color: var(--text); font-family: var(--mono);
+  font-size: 12px; outline: none; cursor: pointer; width: 110px; transition: border-color .2s;
 }
-
 .calc-select:focus { border-color: var(--green); }
-
 .calc-result {
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    padding: 14px 16px;
-    margin-bottom: 14px;
+  background: var(--s2); border: 1px solid var(--b1);
+  border-radius: 6px; padding: 14px 16px; margin-bottom: 14px;
 }
-
 .calc-res-label { font-size: 9px; color: var(--muted); letter-spacing: .1em; text-transform: uppercase; margin-bottom: 4px; }
-
-.calc-res-val { font-family: var(--sans); font-size: 30px; font-weight: 700; color: var(--green); }
-
+.calc-res-val { font-family: var(--sans); font-size: 28px; font-weight: 700; color: var(--green); }
 .calc-res-val span { font-size: 13px; font-family: var(--mono); color: var(--muted); margin-left: 5px; }
-
-.calc-meta {
-    display: flex;
-    justify-content: space-between;
-    font-size: 10px;
-    color: var(--muted);
-    margin-bottom: 14px;
-}
-
-.calc-meta-green { color: var(--green); }
-
+.calc-meta { display: flex; justify-content: space-between; font-size: 10px; color: var(--muted); margin-bottom: 14px; }
+.calc-g { color: var(--green); }
 .calc-submit {
-    width: 100%;
-    font-family: var(--mono);
-    font-size: 12px;
-    letter-spacing: .06em;
-    text-transform: uppercase;
-    background: var(--green);
-    color: #000;
-    border: none;
-    padding: 13px;
-    cursor: pointer;
-    border-radius: 6px;
-    font-weight: 500;
-    transition: all .2s;
+  width: 100%; font-family: var(--mono); font-size: 12px; letter-spacing: .06em;
+  text-transform: uppercase; background: var(--green); color: #000; border: none;
+  padding: 13px; cursor: pointer; border-radius: 6px; font-weight: 500; transition: all .2s;
 }
-
 .calc-submit:hover { background: #00e896; box-shadow: var(--glow); }
+.calc-footer { display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 10px; color: var(--muted); margin-top: 12px; }
+.calc-footer-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--green); }
 
-.calc-trust {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    font-size: 10px;
-    color: var(--muted);
-    margin-top: 12px;
+/* ── ACTIVITY FEED ── */
+.activity-bar {
+  max-width: 1200px; margin: 0 auto; padding: 0 40px 48px; width: 100%;
 }
-
-.calc-trust-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--green); }
-
-/* REGULATORY TRUST BAR */
-.trust-bar {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 36px 36px;
-    width: 100%;
-    border-bottom: 1px solid var(--border);
+.activity-label { font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--faint); margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+.activity-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--green); animation: pulse 1.8s infinite; }
+.activity-row { display: flex; gap: 8px; flex-wrap: wrap; }
+.activity-chip {
+  display: flex; align-items: center; gap: 8px;
+  background: var(--s1); border: 1px solid var(--b1); border-radius: 6px;
+  padding: 8px 14px; font-size: 11px; color: var(--muted);
+  animation: fadeIn .4s ease forwards; opacity: 0;
 }
+.activity-chip em { font-style: normal; color: var(--green); }
+.activity-chip .ago { color: var(--faint); font-size: 10px; }
+@keyframes fadeIn { to { opacity: 1; } }
 
-.trust-label {
-    font-size: 10px;
-    letter-spacing: .13em;
-    text-transform: uppercase;
-    color: var(--faint);
-    text-align: center;
-    margin-bottom: 22px;
+/* ── TRUST BAR ── */
+.trust-section {
+  border-top: 1px solid var(--b1); border-bottom: 1px solid var(--b1);
+  background: var(--s1);
 }
-
-.trust-row {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 36px;
-    flex-wrap: wrap;
+.trust-inner {
+  max-width: 1200px; margin: 0 auto; padding: 28px 40px;
+  display: flex; align-items: center; justify-content: space-between; width: 100%;
+  flex-wrap: wrap; gap: 16px;
 }
+.trust-attr { display: flex; align-items: center; gap: 8px; font-size: 11px; color: var(--muted); }
+.trust-check { color: var(--green); font-size: 13px; }
 
-.trust-item {
-    font-family: var(--sans);
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--faint);
-    letter-spacing: .04em;
-    transition: color .2s;
-    cursor: default;
-}
-
-.trust-item:hover { color: var(--muted); }
-
-.trust-sep { color: var(--border2); font-size: 12px; }
-
-/* ACTIVE CORRIDORS SECTION */
-.corridor-section {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 64px 36px;
-    width: 100%;
-}
-
-.section-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 24px;
-}
-
-.section-title {
-    font-family: var(--sans);
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: .07em;
-    text-transform: uppercase;
-    color: var(--muted);
-}
-
-.live-badge {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 10px;
-    color: var(--green);
-    letter-spacing: .07em;
-}
-
-.live-dot {
-    width: 5px;
-    height: 5px;
-    border-radius: 50%;
-    background: var(--green);
-    animation: pulse 1.8s infinite;
-}
-
+/* ── CORRIDORS ── */
+.corridor-section { max-width: 1200px; margin: 0 auto; padding: 64px 40px; width: 100%; }
+.section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+.section-title { font-family: var(--sans); font-size: 12px; font-weight: 600; letter-spacing: .07em; text-transform: uppercase; color: var(--muted); }
+.live-badge { display: flex; align-items: center; gap: 6px; font-size: 10px; color: var(--green); letter-spacing: .07em; }
+.live-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--green); animation: pulse 1.8s infinite; }
 .corridor-table { display: flex; flex-direction: column; gap: 6px; }
-
 .corridor-head {
-    display: grid;
-    grid-template-columns: 200px 1fr 100px 100px 90px 120px;
-    gap: 16px;
-    padding: 0 20px 10px;
-    font-size: 9px;
-    letter-spacing: .1em;
-    text-transform: uppercase;
-    color: var(--faint);
+  display: grid; grid-template-columns: 200px 1fr 100px 110px 88px 120px;
+  gap: 16px; padding: 0 20px 10px;
+  font-size: 9px; letter-spacing: .1em; text-transform: uppercase; color: var(--faint);
 }
-
 .corridor-row {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 16px 20px;
-    display: grid;
-    grid-template-columns: 200px 1fr 100px 100px 90px 120px;
-    align-items: center;
-    gap: 16px;
-    transition: border-color .2s, background .2s;
-    cursor: pointer;
+  background: var(--s1); border: 1px solid var(--b1); border-radius: 8px;
+  padding: 16px 20px; display: grid;
+  grid-template-columns: 200px 1fr 100px 110px 88px 120px;
+  align-items: center; gap: 16px;
+  transition: border-color .2s, background .2s; cursor: pointer;
 }
-
-.corridor-row:hover { border-color: var(--border2); background: var(--surface2); }
-
+.corridor-row:hover { border-color: var(--b2); background: var(--s2); }
 .corridor-pair { display: flex; align-items: center; gap: 10px; }
-
 .corridor-flags { font-size: 20px; letter-spacing: -5px; line-height: 1; }
-
 .corridor-name { font-family: var(--sans); font-size: 13px; font-weight: 600; }
-
 .corridor-sub { font-size: 10px; color: var(--muted); margin-top: 1px; }
-
 .corridor-chart { height: 32px; display: flex; align-items: center; }
-
 .corridor-rate { font-family: var(--mono); font-size: 13px; font-weight: 500; text-align: right; }
-
 .corridor-change { font-size: 11px; font-weight: 500; text-align: right; }
-
-.up { color: var(--green); }
-.down { color: var(--red); }
-
+.up { color: var(--green); } .down { color: var(--red); }
 .corridor-time {
-    font-size: 10px;
-    color: var(--muted);
-    text-align: center;
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 4px;
-    padding: 4px 8px;
+  font-size: 10px; color: var(--muted); text-align: center;
+  background: var(--s2); border: 1px solid var(--b1); border-radius: 4px; padding: 4px 8px;
 }
-
 .corridor-cta {
-    font-family: var(--mono);
-    font-size: 10px;
-    letter-spacing: .06em;
-    text-transform: uppercase;
-    background: transparent;
-    color: var(--green);
-    border: 1px solid rgba(0,208,132,.28);
-    padding: 8px 14px;
-    cursor: pointer;
-    border-radius: 4px;
-    transition: all .2s;
-    white-space: nowrap;
-    text-align: center;
+  font-family: var(--mono); font-size: 10px; letter-spacing: .06em; text-transform: uppercase;
+  background: transparent; color: var(--green); border: 1px solid var(--gborder);
+  padding: 8px 14px; cursor: pointer; border-radius: 4px; transition: all .2s; white-space: nowrap;
 }
-
 .corridor-cta:hover { background: var(--gdim); }
 
-/* STRUCTURAL STEPS SECTION */
-.how-section {
-    background: var(--surface);
-    border-top: 1px solid var(--border);
-    border-bottom: 1px solid var(--border);
-}
-
-.how-inner {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 72px 36px;
-    width: 100%;
-}
-
-.how-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 80px;
-    align-items: start;
-}
-
-.how-h {
-    font-family: var(--sans);
-    font-size: 34px;
-    font-weight: 800;
-    letter-spacing: -.03em;
-    line-height: 1.12;
-    margin-bottom: 16px;
-}
-
+/* ── HOW IT WORKS ── */
+.how-section { background: var(--s1); border-top: 1px solid var(--b1); border-bottom: 1px solid var(--b1); }
+.how-inner { max-width: 1200px; margin: 0 auto; padding: 72px 40px; width: 100%; }
+.how-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; }
+.how-h { font-family: var(--sans); font-size: 34px; font-weight: 800; letter-spacing: -.03em; line-height: 1.12; margin-bottom: 16px; }
 .how-h em { font-style: normal; color: var(--green); }
-
 .how-sub { font-size: 12px; color: var(--muted); line-height: 1.85; margin-bottom: 28px; }
-
 .how-badges { display: flex; flex-wrap: wrap; gap: 8px; }
-
-.how-badge { font-size: 10px; letter-spacing: .07em; text-transform: uppercase; color: var(--muted); border: 1px solid var(--border); padding: 5px 12px; border-radius: 3px; }
-
+.how-badge { font-size: 10px; letter-spacing: .07em; text-transform: uppercase; color: var(--muted); border: 1px solid var(--b1); padding: 5px 12px; border-radius: 3px; }
 .steps { display: flex; flex-direction: column; }
-
-.step { display: grid; grid-template-columns: 44px 1fr; gap: 20px; padding: 24px 0; border-bottom: 1px solid var(--border); }
-
-.step:first-child { border-top: 1px solid var(--border); }
-
+.step { display: grid; grid-template-columns: 44px 1fr; gap: 20px; padding: 24px 0; border-bottom: 1px solid var(--b1); }
+.step:first-child { border-top: 1px solid var(--b1); }
 .step-n { font-family: var(--sans); font-size: 11px; font-weight: 600; color: var(--faint); letter-spacing: .1em; padding-top: 3px; }
-
 .step-head { font-family: var(--sans); font-size: 15px; font-weight: 600; margin-bottom: 6px; }
-
 .step-body { font-size: 11px; color: var(--muted); line-height: 1.75; }
-
 .step-tag { display: inline-block; margin-top: 8px; font-size: 9px; letter-spacing: .08em; text-transform: uppercase; color: var(--green); background: var(--gdim); border: 1px solid rgba(0,208,132,.2); padding: 3px 9px; border-radius: 3px; }
 
-/* VALUE PROP CARDS */
-.props-section { max-width: 1200px; margin: 0 auto; padding: 72px 36px; width: 100%; }
-
-.props-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 36px; }
-
-.prop-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 28px 24px; transition: border-color .2s, box-shadow .2s; }
-
-.prop-card:hover { border-color: var(--border2); box-shadow: 0 8px 32px rgba(0,0,0,.3); }
-
-.prop-icon { font-size: 20px; width: 44px; height: 44px; background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; }
-
+/* ── PROPS ── */
+.props-section { max-width: 1200px; margin: 0 auto; padding: 72px 40px; width: 100%; }
+.props-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; margin-top: 36px; }
+.prop-card { background: var(--s1); border: 1px solid var(--b1); border-radius: 10px; padding: 28px 24px; transition: border-color .2s, box-shadow .2s; }
+.prop-card:hover { border-color: var(--b2); box-shadow: 0 8px 32px rgba(0,0,0,.35); }
+.prop-icon { font-size: 20px; width: 44px; height: 44px; background: var(--s2); border: 1px solid var(--b1); border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; }
 .prop-title { font-family: var(--sans); font-size: 15px; font-weight: 600; margin-bottom: 10px; }
-
 .prop-body { font-size: 11px; color: var(--muted); line-height: 1.75; }
 
-/* SOVEREIGN FOOTER */
-.footer { border-top: 1px solid var(--border); background: var(--bg); }
+/* ── PRICING ── */
+.pricing-section { background: var(--s1); border-top: 1px solid var(--b1); border-bottom: 1px solid var(--b1); }
+.pricing-inner { max-width: 1200px; margin: 0 auto; padding: 72px 40px; width: 100%; }
+.pricing-header { text-align: center; margin-bottom: 48px; }
+.pricing-h { font-family: var(--sans); font-size: 32px; font-weight: 800; letter-spacing: -.03em; margin-bottom: 12px; }
+.pricing-h em { font-style: normal; color: var(--green); }
+.pricing-sub { font-size: 12px; color: var(--muted); }
+.pricing-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; }
+.plan-card {
+  background: var(--bg); border: 1px solid var(--b1); border-radius: 12px;
+  padding: 32px 28px; position: relative; transition: border-color .2s;
+}
+.plan-card:hover { border-color: var(--b2); }
+.plan-card.featured {
+  border-color: var(--gborder);
+  background: var(--s2);
+}
+.plan-card.featured::before {
+  content: ''; position: absolute; top: -1px; left: 20px; right: 20px; height: 2px;
+  background: linear-gradient(90deg, transparent, var(--green), transparent);
+}
+.plan-badge {
+  display: inline-block; font-size: 9px; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--green); background: var(--gdim); border: 1px solid var(--gborder);
+  padding: 3px 10px; border-radius: 3px; margin-bottom: 20px;
+}
+.plan-name { font-family: var(--sans); font-size: 13px; font-weight: 600; letter-spacing: .05em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+.plan-price { font-family: var(--sans); font-size: 40px; font-weight: 800; letter-spacing: -.03em; margin-bottom: 4px; }
+.plan-price em { font-style: normal; color: var(--green); }
+.plan-price span { font-size: 14px; font-family: var(--mono); color: var(--muted); }
+.plan-vol { font-size: 11px; color: var(--muted); margin-bottom: 28px; padding-bottom: 28px; border-bottom: 1px solid var(--b1); }
+.plan-features { display: flex; flex-direction: column; gap: 10px; margin-bottom: 28px; }
+.plan-feat { display: flex; align-items: center; gap: 8px; font-size: 11px; color: var(--muted); }
+.plan-feat-check { color: var(--green); font-size: 12px; flex-shrink: 0; }
+.plan-cta {
+  width: 100%; font-family: var(--mono); font-size: 11px; letter-spacing: .06em; text-transform: uppercase;
+  background: transparent; color: var(--text); border: 1px solid var(--b2);
+  padding: 12px; cursor: pointer; border-radius: 5px; transition: all .2s;
+}
+.plan-cta:hover { border-color: var(--faint); }
+.plan-cta.featured-cta { background: var(--green); color: #000; border-color: var(--green); font-weight: 500; }
+.plan-cta.featured-cta:hover { background: #00e896; box-shadow: var(--glow); }
 
-.footer-inner { max-width: 1200px; margin: 0 auto; padding: 32px 36px; display: flex; justify-content: space-between; align-items: center; width: 100%; }
+/* ── CTA BANNER ── */
+.cta-section { max-width: 1200px; margin: 0 auto; padding: 80px 40px; width: 100%; text-align: center; }
+.cta-h { font-family: var(--sans); font-size: 38px; font-weight: 800; letter-spacing: -.03em; margin-bottom: 14px; }
+.cta-h em { font-style: normal; color: var(--green); }
+.cta-sub { font-size: 13px; color: var(--muted); line-height: 1.8; margin-bottom: 36px; max-width: 500px; margin-left: auto; margin-right: auto; }
+.cta-btns { display: flex; gap: 12px; justify-content: center; }
+.btn-cta { font-family: var(--mono); font-size: 12px; letter-spacing: .07em; text-transform: uppercase; background: var(--green); color: #000; border: none; padding: 14px 32px; cursor: pointer; border-radius: 5px; font-weight: 500; transition: all .2s; }
+.btn-cta:hover { background: #00e896; box-shadow: var(--glow); }
+.btn-cta-ghost { font-family: var(--mono); font-size: 12px; letter-spacing: .07em; text-transform: uppercase; background: transparent; color: var(--muted); border: 1px solid var(--b2); padding: 14px 32px; cursor: pointer; border-radius: 5px; transition: all .2s; }
+.btn-cta-ghost:hover { color: var(--text); border-color: var(--faint); }
 
+/* ── FOOTER ── */
+.footer { border-top: 1px solid var(--b1); background: var(--bg); }
+.footer-inner { max-width: 1200px; margin: 0 auto; padding: 32px 40px; display: flex; justify-content: space-between; align-items: center; width: 100%; flex-wrap: wrap; gap: 16px; }
 .footer-logo { font-family: var(--sans); font-size: 14px; font-weight: 700; color: var(--muted); }
+.footer-copy { font-size: 10px; color: var(--faint); margin-top: 3px; }
+.footer-links { display: flex; gap: 20px; }
+.footer-link { font-size: 10px; color: var(--faint); text-decoration: none; letter-spacing: .06em; transition: color .15s; }
+.footer-link:hover { color: var(--muted); }
 
-.footer-copy { font-size: 10px; color: var(--faint); }
+/* ── ANIMATIONS ── */
+@keyframes fadeUp { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:translateY(0)} }
+.a1{opacity:0;animation:fadeUp .5s ease .05s forwards}
+.a2{opacity:0;animation:fadeUp .5s ease .15s forwards}
+.a3{opacity:0;animation:fadeUp .5s ease .25s forwards}
+.a4{opacity:0;animation:fadeUp .5s ease .35s forwards}
+.a5{opacity:0;animation:fadeUp .5s ease .45s forwards}
 
-.footer-tags { display: flex; gap: 16px; }
-
-.footer-tag { font-size: 10px; color: var(--faint); letter-spacing: .06em; }
-
-/* ANIMATION ENTRIES */
-@keyframes fadeUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
-.a1 { opacity: 0; animation: fadeUp .5s ease .05s forwards; }
-.a2 { opacity: 0; animation: fadeUp .5s ease .15s forwards; }
-.a3 { opacity: 0; animation: fadeUp .5s ease .25s forwards; }
-.a4 { opacity: 0; animation: fadeUp .5s ease .35s forwards; }
-.a5 { opacity: 0; animation: fadeUp .5s ease .45s forwards; }
-
-/* RESPONSIVE LAYOUT */
-@media(max-width: 960px) {
-    .hero { grid-template-columns: 1fr; padding: 48px 20px; gap: 40px; }
-    .corridor-head { display: none; }
-    .corridor-row { grid-template-columns: 1fr 1fr; gap: 12px; padding: 16px; }
-    .corridor-chart, .corridor-cta { display: none; }
-    .how-grid { grid-template-columns: 1fr; gap: 40px; }
-    .props-grid { grid-template-columns: 1fr; }
-    .nav-links { display: none; }
-    .footer-inner { flex-direction: column; gap: 14px; text-align: center; }
-    .hero-stats { flex-wrap: wrap; gap: 20px; }
-    .trust-row { gap: 20px; }
+/* ── RESPONSIVE ── */
+@media(max-width:960px){
+  .nav{padding:0 20px}
+  .nav-links{display:none}
+  .hero{grid-template-columns:1fr;padding:48px 20px;gap:40px}
+  .corridor-head{display:none}
+  .corridor-row{grid-template-columns:1fr 1fr;gap:12px;padding:14px 16px}
+  .corridor-chart,.corridor-cta{display:none}
+  .how-grid{grid-template-columns:1fr;gap:40px}
+  .props-grid{grid-template-columns:1fr}
+  .pricing-grid{grid-template-columns:1fr}
+  .footer-inner{flex-direction:column;text-align:center}
+  .hero-stats{flex-wrap:wrap;gap:20px}
+  .trust-inner{justify-content:center;gap:20px}
+  .cta-btns{flex-direction:column;align-items:center}
+  .activity-row{gap:6px}
+  .corridor-section,.how-inner,.props-section,.pricing-inner,.cta-section{padding-left:20px;padding-right:20px}
 }
 </style>
 </head>
 <body>
 
-<div class="page">
+<!-- NAV -->
+<header class="nav">
+  <div class="nav-logo"><div class="nav-dot"></div>Noetfield</div>
+  <nav class="nav-links">
+    <a href="#corridors" class="nav-link">Corridors</a>
+    <a href="#how"       class="nav-link">How It Works</a>
+    <a href="#pricing"   class="nav-link">Pricing</a>
+    <a href="#"          class="nav-link">Docs</a>
+  </nav>
+  <div class="nav-right">
+    <button class="btn-ghost" onclick="location.href='/login'">Sign In</button>
+    <button class="btn-primary" onclick="location.href='/signup'">Get Started</button>
+  </div>
+</header>
 
-    <header class="nav">
-        <div class="nav-logo">
-            <div class="nav-dot"></div>
-            Noetfield
-        </div>
-        <nav class="nav-links">
-            <a href="#corridors" class="nav-link">Corridors</a>
-            <a href="#how" class="nav-link">How It Works</a>
-            <a href="#why" class="nav-link">Why Noetfield</a>
-        </nav>
-        <div class="nav-right">
-            <button class="btn-ghost">Sign In</button>
-            <button class="btn-primary">Get Started</button>
-        </div>
-    </header>
-
-    <div class="ticker">
-        <div class="ticker-track" id="ticker-track">
-            </div>
-    </div>
-
-    <section class="hero">
-        <div>
-            <div class="hero-badge a1"><span>●</span>&nbsp;Live — NDAX-Integrated</div>
-            <h1 class="hero-h1 a2">
-                Cross-Border Payments<br />
-                for <em>Canadian SMEs</em>.<br />
-                Structured. Fast. Auditable.
-            </h1>
-            <p class="hero-sub a3">
-                Noetfield normalizes your payment intent and routes execution through regulated rails — starting with NDAX. Non-custodial. No hidden spreads. Full audit trail built in.
-            </p>
-            <div class="hero-ctas a4">
-                <button class="btn-hero">Start Sending →</button>
-                <button class="btn-hero-outline">View Docs</button>
-            </div>
-            
-            <div class="hero-stats a5">
-                <div>
-                    <div class="hstat-val">5<em>+</em></div>
-                    <div class="hstat-key">Active Corridors</div>
-                </div>
-                <div>
-                    <div class="hstat-val">~4<em>min</em></div>
-                    <div class="hstat-key">Avg Settlement</div>
-                </div>
-                <div>
-                    <div class="hstat-val">0.4<em>%</em></div>
-                    <div class="hstat-key">Flat Fee</div>
-                </div>
-                <div>
-                    <div class="hstat-val">0<em>$</em></div>
-                    <div class="hstat-key">Custody Risk</div>
-                </div>
-            </div>
-        </div>
-
-        <div class="calc-card a3">
-            <div class="calc-label">FX Calculator — Live Rate</div>
-            <div class="calc-row">
-                <div class="calc-field">
-                    <div class="calc-field-label">You Send (CAD)</div>
-                    <input
-                        type="text"
-                        class="calc-input"
-                        id="calc-amount-input"
-                        value="10,000"
-                    />
-                </div>
-                <div class="calc-arrow-div">→</div>
-                <div>
-                    <div class="calc-field-label">To</div>
-                    <select class="calc-select" id="calc-currency-select">
-                        </select>
-                </div>
-            </div>
-
-            <div class="calc-result">
-                <div class="calc-res-label">Recipient Gets</div>
-                <div class="calc-res-val" id="calc-destination-output">0.00 <span id="calc-target-unit">AED</span></div>
-            </div>
-
-            <div class="calc-meta">
-                <span>Rate: <span class="calc-meta-green" id="calc-live-rate-label">1 CAD = --</span></span>
-                <span>Fee: <span id="calc-fee-label">$40.00 CAD</span></span>
-                <span class="calc-meta-green" id="calc-speed-label">⚡ ~4 min</span>
-            </div>
-
-            <button class="calc-submit">Submit Payment Intent →</button>
-            <div class="calc-trust">
-                <div class="calc-trust-dot"></div>
-                Non-custodial · Executed via NDAX · Audit-ready
-            </div>
-        </div>
-    </section>
-
-    <div class="trust-bar">
-        <div class="trust-label">Integrated with & regulated by</div>
-        <div class="trust-row">
-            <span class="trust-item">NDAX</span><span class="trust-sep">—</span>
-            <span class="trust-item">Circle CPN</span><span class="trust-sep">—</span>
-            <span class="trust-item">RBCx</span><span class="trust-sep">—</span>
-            <span class="trust-item">FINTRAC</span><span class="trust-sep">—</span>
-            <span class="trust-item">OSFI-Compliant</span>
-        </div>
-    </div>
-
-    <section id="corridors" class="corridor-section">
-        <div class="section-header">
-            <div class="section-title">Active Payment Corridors</div>
-            <div class="live-badge">
-                <div class="live-dot"></div> Live rates · updated every 30s
-            </div>
-        </div>
-        <div class="corridor-table" id="corridor-rows-container">
-            </div>
-    </section>
-
-    <section id="how" class="how-section">
-        <div class="how-inner">
-            <div class="how-grid">
-                <div>
-                    <h2 class="how-h">Structure First.<br /><em>Then Execute.</em></h2>
-                    <p class="how-sub">
-                        Noetfield doesn't touch your funds. We normalize payment intent and route structured instructions to regulated execution partners. NDAX handles settlement. You keep full visibility.
-                    </p>
-                    <div class="how-badges">
-                        <span class="how-badge">Non-Custodial</span>
-                        <span class="how-badge">NDAX-Executed</span>
-                        <span class="how-badge">Audit-Ready</span>
-                        <span class="how-badge">FINTRAC-Adjacent</span>
-                    </div>
-                </div>
-                <div class="steps">
-                    <div class="step">
-                        <div class="step-n">01</div>
-                        <div>
-                            <div class="step-head">Submit Intent</div>
-                            <p class="step-body">Send a payment request via API or UI. Include amount, corridor, and beneficiary. Noetfield never holds funds.</p>
-                            <span class="step-tag">Dashboard interface</span>
-                        </div>
-                    </div>
-                    <div class="step">
-                        <div class="step-n">02</div>
-                        <div>
-                            <div class="step-head">Normalize Instruction</div>
-                            <p class="step-body">We convert your request into a structured, execution-ready format — validated, enriched, and formatted for NDAX ingestion.</p>
-                            <span class="step-tag">Intent Engine</span>
-                        </div>
-                    </div>
-                    <div class="step">
-                        <div class="step-n">03</div>
-                        <div>
-                            <div class="step-head">Execute via NDAX</div>
-                            <p class="step-body">The normalized instruction is forwarded to NDAX's regulated infrastructure for FX execution and cross-border settlement.</p>
-                            <span class="step-tag">NDAX Rail Integration</span>
-                        </div>
-                    </div>
-                    <div class="step">
-                        <div class="step-n">04</div>
-                        <div>
-                            <div class="step-head">Track & Audit</div>
-                            <p class="step-body">Receive real-time status updates, settlement references, and a full execution log. Board-ready and audit-proof.</p>
-                            <span class="step-tag">Trust Brief Layer</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="why" class="props-section">
-        <div class="section-title">Why Noetfield</div>
-        <div class="props-grid">
-            <div class="prop-card">
-                <div class="prop-icon">⚡</div>
-                <div class="prop-title">Intent Layer, Not Custodian</div>
-                <p class="prop-body">We structure and route — never hold. Your funds move through NDAX, a regulated VASP. Zero custody risk on Noetfield's side.</p>
-            </div>
-            <div class="prop-card">
-                <div class="prop-icon">📡</div>
-                <div class="prop-title">Real-Time Execution Tracking</div>
-                <p class="prop-body">Every instruction gets a reference ID. Monitor status, settlement time, and rail confirmation dynamically.</p>
-            </div>
-            <div class="prop-card">
-                <div class="prop-icon">🗺️</div>
-                <div class="prop-title">Multi-Corridor Stability</div>
-                <p class="prop-body">CAD → AED, INR, EUR, PKR, USD. Built for the critical channels Canadian SMEs actually use for direct deployment.</p>
-            </div>
-            <div class="prop-card">
-                <div class="prop-icon">📋</div>
-                <div class="prop-title">Trust Brief — Audit Layer</div>
-                <p class="prop-body">Every transaction produces a structured audit artifact. Board-ready. OSFI-aware. Transparent compliance record indexing.</p>
-            </div>
-            <div class="prop-card">
-                <div class="prop-icon">🔌</div>
-                <div class="prop-title">Optimized Asset Architecture</div>
-                <p class="prop-body">Clean visual environment built natively to process heavy capital tasks instantly without human administrative overhead.</p>
-            </div>
-            <div class="prop-card">
-                <div class="prop-icon">💱</div>
-                <div class="prop-title">Upfront FX, No Hidden Spreads</div>
-                <p class="prop-body">Rate shown before confirmation. 0.4% flat fee architecture. No backend markup silently consuming your capital runway.</p>
-            </div>
-        </div>
-    </section>
-
-    <footer class="footer">
-        <div class="footer-inner">
-            <div>
-                <div class="footer-logo">Noetfield</div>
-                <div class="footer-copy">Payment Instruction Layer · Canada</div>
-            </div>
-            <div class="footer-tags">
-                <span class="footer-tag">Non-Custodial</span>
-                <span class="footer-tag">NDAX-Integrated</span>
-                <span class="footer-tag">Audit-Ready</span>
-            </div>
-        </div>
-    </footer>
-
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-track" id="ticker-track"></div>
 </div>
 
+<!-- HERO -->
+<section class="hero">
+  <div>
+    <div class="hero-badge a1">● &nbsp;5 corridors live</div>
+    <h1 class="hero-h1 a2">
+      International Payments<br/>
+      for <em>Canadian Businesses</em>.<br/>
+      Simple. Transparent. Fast.
+    </h1>
+    <p class="hero-sub a3">
+      Send cross-border payments in minutes. Transparent FX pricing, real-time tracking, and regulated financial infrastructure — built for how Canadian SMEs actually work.
+    </p>
+    <div class="hero-ctas a4">
+      <button class="btn-hero" onclick="location.href='/signup'">Start Sending →</button>
+      <button class="btn-hero-ghost" onclick="location.href='/ex'">See a Live Transfer</button>
+    </div>
+    <div class="hero-stats a5">
+      <div>
+        <div class="hstat-val">5<em>+</em></div>
+        <div class="hstat-key">Corridors</div>
+      </div>
+      <div>
+        <div class="hstat-val">~4<em>min</em></div>
+        <div class="hstat-key">Avg Settlement</div>
+      </div>
+      <div>
+        <div class="hstat-val">0.4<em>%</em></div>
+        <div class="hstat-key">Flat Fee</div>
+      </div>
+      <div>
+        <div class="hstat-val">$0</div>
+        <div class="hstat-key">Hidden Spreads</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FX CALCULATOR -->
+  <div class="calc-card a3">
+    <div class="calc-label">FX Calculator</div>
+    <div class="calc-row">
+      <div class="calc-field">
+        <div class="calc-field-label">You Send (CAD)</div>
+        <input type="text" class="calc-input" id="amount-input" value="10,000" />
+      </div>
+      <div class="calc-arrow">→</div>
+      <div>
+        <div class="calc-field-label">To</div>
+        <select class="calc-select" id="currency-select"></select>
+      </div>
+    </div>
+    <div class="calc-result">
+      <div class="calc-res-label">Recipient Gets</div>
+      <div class="calc-res-val" id="result-output">— <span id="result-unit">AED</span></div>
+    </div>
+    <div class="calc-meta">
+      <span>Rate: <span class="calc-g" id="rate-label">—</span></span>
+      <span>Fee: <span id="fee-label">—</span></span>
+      <span class="calc-g" id="speed-label">⚡ —</span>
+    </div>
+    <button class="calc-submit" onclick="location.href='/signup'">Start This Transfer →</button>
+    <div class="calc-footer">
+      <div class="calc-footer-dot"></div>
+      Non-custodial · Regulated rails · Audit-ready
+    </div>
+  </div>
+</section>
+
+<!-- LIVE ACTIVITY FEED -->
+<div class="activity-bar">
+  <div class="activity-label"><div class="activity-dot"></div>Recent transfers</div>
+  <div class="activity-row" id="activity-feed"></div>
+</div>
+
+<!-- TRUST / ATTRIBUTES BAR -->
+<div class="trust-section">
+  <div class="trust-inner">
+    <div class="trust-attr"><span class="trust-check">✓</span> Non-custodial — we never hold your funds</div>
+    <div class="trust-attr"><span class="trust-check">✓</span> Transparent FX — rate locked before you confirm</div>
+    <div class="trust-attr"><span class="trust-check">✓</span> Real-time tracking on every transfer</div>
+    <div class="trust-attr"><span class="trust-check">✓</span> Regulated financial infrastructure</div>
+    <div class="trust-attr"><span class="trust-check">✓</span> Canada-based · PIPEDA-compliant</div>
+  </div>
+</div>
+
+<!-- CORRIDORS -->
+<section id="corridors" class="corridor-section">
+  <div class="section-header">
+    <div class="section-title">Active Payment Corridors</div>
+    <div class="live-badge"><div class="live-dot"></div> Rates updated every 30s</div>
+  </div>
+  <div class="corridor-table" id="corridor-table"></div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="how" class="how-section">
+  <div class="how-inner">
+    <div class="how-grid">
+      <div>
+        <h2 class="how-h">Send money.<br/><em>Track everything.</em></h2>
+        <p class="how-sub">
+          You tell us how much to send and where. We handle the routing, execution, and confirmation — through regulated partners. You stay in control the whole way.
+        </p>
+        <div class="how-badges">
+          <span class="how-badge">Non-Custodial</span>
+          <span class="how-badge">Regulated Execution</span>
+          <span class="how-badge">Audit-Ready</span>
+          <span class="how-badge">API-First</span>
+        </div>
+      </div>
+      <div class="steps">
+        <div class="step">
+          <div class="step-n">01</div>
+          <div>
+            <div class="step-head">Enter Payment Details</div>
+            <p class="step-body">Tell us how much to send, to which corridor, and who the recipient is. Takes under a minute. No paperwork.</p>
+            <span class="step-tag">Dashboard or API</span>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-n">02</div>
+          <div>
+            <div class="step-head">FX Rate Locked</div>
+            <p class="step-body">We show you the exact rate and fee before you confirm. No surprises after the fact. What you see is what gets sent.</p>
+            <span class="step-tag">Transparent Pricing</span>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-n">03</div>
+          <div>
+            <div class="step-head">Routed to Regulated Infrastructure</div>
+            <p class="step-body">Your payment is routed through our regulated execution partner network for cross-border settlement. Funds never sit with Noetfield.</p>
+            <span class="step-tag">Regulated Rails</span>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-n">04</div>
+          <div>
+            <div class="step-head">Confirmed & Logged</div>
+            <p class="step-body">Get real-time status updates, a settlement reference, and a full transaction record — ready for your bookkeeping or compliance review.</p>
+            <span class="step-tag">Full Audit Trail</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY NOETFIELD -->
+<section id="why" class="props-section">
+  <div class="section-title">Why Noetfield</div>
+  <div class="props-grid">
+    <div class="prop-card">
+      <div class="prop-icon">💸</div>
+      <div class="prop-title">No Hidden FX Markup</div>
+      <p class="prop-body">Rate shown upfront, locked before confirmation. 0.4% flat fee. No backend spread silently eating into your transfer amount after the fact.</p>
+    </div>
+    <div class="prop-card">
+      <div class="prop-icon">📡</div>
+      <div class="prop-title">Track Every Transfer</div>
+      <p class="prop-body">Every payment gets a reference ID. Watch status in real time — from intent submitted to funds settled. Full visibility at each step.</p>
+    </div>
+    <div class="prop-card">
+      <div class="prop-icon">🔒</div>
+      <div class="prop-title">We Never Hold Your Funds</div>
+      <p class="prop-body">Noetfield is a routing layer. Your money moves through regulated financial infrastructure — not through our accounts. Zero custody exposure.</p>
+    </div>
+    <div class="prop-card">
+      <div class="prop-icon">🗺️</div>
+      <div class="prop-title">Built for Real Corridors</div>
+      <p class="prop-body">CAD → AED, INR, EUR, PKR, USD. These are the routes Canadian businesses actually use — not a generic global router with poor depth on specific pairs.</p>
+    </div>
+    <div class="prop-card">
+      <div class="prop-icon">🔌</div>
+      <div class="prop-title">API Access Included</div>
+      <p class="prop-body">Connect Noetfield to your billing system, payroll stack, or ERP via REST API. Structured intent in, structured status out. Sandbox available on request.</p>
+    </div>
+    <div class="prop-card">
+      <div class="prop-icon">📋</div>
+      <div class="prop-title">Built-In Audit Trail</div>
+      <p class="prop-body">Every transaction produces a structured log — reference ID, timestamps, FX rate applied, settlement confirmation. Ready for your accountant or compliance team.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="pricing" class="pricing-section">
+  <div class="pricing-inner">
+    <div class="pricing-header">
+      <h2 class="pricing-h">Simple, <em>Transparent</em> Pricing</h2>
+      <p class="pricing-sub">One flat fee. No FX markup. No setup costs. No monthly minimums.</p>
+    </div>
+    <div class="pricing-grid">
+
+      <div class="plan-card">
+        <div class="plan-name">Starter</div>
+        <div class="plan-price">0.6<em>%</em></div>
+        <div class="plan-vol">Up to $25,000 CAD / month</div>
+        <div class="plan-features">
+          <div class="plan-feat"><span class="plan-feat-check">✓</span> 5 active corridors</div>
+          <div class="plan-feat"><span class="plan-feat-check">✓</span> Dashboard access</div>
+          <div class="plan-feat"><span class="plan-feat-check">✓</span> Real-time tracking</div>
+          <div class="plan-feat"><span class="plan-feat-check">✓</span> Transaction audit log</div>
+          <div class="plan-feat"><span class="plan-feat-check">✓</span> Email support</div>
+        </div>
+        <button class="plan-cta" onclick="location.href='/signup'">Get Started →</button>
+      </div>
+
+      <div class="plan-card featured">
+        <div class="plan-badge">Most Popular</div>
+        <div class="plan-name">Growth</div>
+        <div class="plan-price">0.4<em>%</em></div>
+        <div class="plan-vol">$25,000 – $250,000 CAD / month</div>
+        <div class="plan-features">
+          <div class="plan-feat"><span class="plan-feat-check">✓</span> Everything in Starter</div>
+          <div class="plan-feat"><span class="plan-feat-check">✓</span> API access + webhooks</div>
+          <div class="plan-feat"><span class="plan-feat-check">✓</span> Sandbox environment</div>
+          <div class="plan-feat"><span class="plan-feat-check">✓</span> Priority processing</div>
+          <div class="plan-feat"><span class="plan-feat-check">✓</span> Dedicated onboarding</div>
+        </div>
+        <button class="plan-cta featured-cta" onclick="location.href='/signup'">Start Free Trial →</button>
+      </div>
+
+      <div class="plan-card">
+        <div class="plan-name">Enterprise</div>
+        <div class="plan-price" style="font-size:28px;padding-top:6px;">Custom</div>
+        <div class="plan-vol">$250,000+ CAD / month</div>
+        <div class="plan-features">
+          <div class="plan-feat"><span class="plan-feat-check">✓</span> Negotiated FX rates</div>
+          <div class="plan-feat"><span class="plan-feat-check">✓</span> Custom corridor access</div>
+          <div class="plan-feat"><span class="plan-feat-check">✓</span> SLA guarantees</div>
+          <div class="plan-feat"><span class="plan-feat-check">✓</span> White-glove integration</div>
+          <div class="plan-feat"><span class="plan-feat-check">✓</span> Compliance reporting</div>
+        </div>
+        <button class="plan-cta" onclick="location.href='mailto:hello@noetfield.com'">Contact Sales →</button>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- CTA BANNER -->
+<section class="cta-section">
+  <h2 class="cta-h">Ready to send your<br/><em>first payment?</em></h2>
+  <p class="cta-sub">Create a workspace in minutes. No lock-in, no setup fee. Your first transfer is on us.</p>
+  <div class="cta-btns">
+    <button class="btn-cta" onclick="location.href='/signup'">Create Free Workspace →</button>
+    <button class="btn-cta-ghost" onclick="location.href='mailto:hello@noetfield.com'">Talk to Us First</button>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div>
+      <div class="footer-logo">Noetfield</div>
+      <div class="footer-copy">Cross-Border Business Payments · Canada</div>
+    </div>
+    <div class="footer-links">
+      <a href="#" class="footer-link">Privacy</a>
+      <a href="#" class="footer-link">Terms</a>
+      <a href="#" class="footer-link">API Docs</a>
+      <a href="mailto:hello@noetfield.com" class="footer-link">Contact</a>
+    </div>
+  </div>
+</footer>
+
 <script>
-// Exact data model mirrored from source file
 const CORRIDORS = [
-    { id: "cad-aed", from: "CAD", to: "AED", flag_from: "🇨🇦", flag_to: "🇦🇪", rate: 2.7341, change: +0.12, label: "Canada → UAE",     time: "~4 min" },
-    { id: "cad-inr", from: "CAD", to: "INR", flag_from: "🇨🇦", flag_to: "🇮🇳", rate: 61.842, change: -0.08, label: "Canada → India",   time: "~6 min" },
-    { id: "cad-eur", from: "CAD", to: "EUR", flag_from: "🇨🇦", flag_to: "🇪🇺", rate: 0.6893, change: +0.03, label: "Canada → EU",      time: "~3 min" },
-    { id: "cad-pkr", from: "CAD", to: "PKR", flag_from: "🇨🇦", flag_to: "🇵🇰", rate: 196.44, change: +0.21, label: "Canada → Pakistan", time: "~5 min" },
-    { id: "cad-usd", from: "CAD", to: "USD", flag_from: "🇨🇦", flag_to: "🇺🇸", rate: 0.7381, change: -0.04, label: "Canada → USA",     time: "~2 min" }
+  { id:"cad-aed", from:"CAD", to:"AED", ff:"🇨🇦", ft:"🇦🇪", rate:2.7341, change:+0.12, label:"Canada → UAE",     time:"~4 min" },
+  { id:"cad-inr", from:"CAD", to:"INR", ff:"🇨🇦", ft:"🇮🇳", rate:61.842, change:-0.08, label:"Canada → India",   time:"~6 min" },
+  { id:"cad-eur", from:"CAD", to:"EUR", ff:"🇨🇦", ft:"🇪🇺", rate:0.6893, change:+0.03, label:"Canada → EU",      time:"~3 min" },
+  { id:"cad-pkr", from:"CAD", to:"PKR", ff:"🇨🇦", ft:"🇵🇰", rate:196.44, change:+0.21, label:"Canada → Pakistan",time:"~5 min" },
+  { id:"cad-usd", from:"CAD", to:"USD", ff:"🇨🇦", ft:"🇺🇸", rate:0.7381, change:-0.04, label:"Canada → USA",     time:"~2 min" }
 ];
 
 const TICKER_ITEMS = [
-    "CAD → AED settled in 3m 42s — $12,500 CAD",
-    "CAD → INR confirmed — $4,200 CAD",
-    "CAD → EUR pending execution via NDAX",
-    "CAD → PKR intent normalized — awaiting rail",
-    "CAD → USD completed — $8,750 CAD"
+  "CAD → AED settled in 3m 42s — $12,500 CAD",
+  "CAD → INR confirmed — $4,200 CAD",
+  "CAD → EUR processing — $7,800 CAD",
+  "CAD → PKR payment routed — $3,100 CAD",
+  "CAD → USD completed — $8,750 CAD"
 ];
 
-// Replicate the pure loop sequence for custom CSS performance
+const ACTIVITY = [
+  { pair:"CAD → AED", amount:"$12,500", ago:"2m ago",  status:"Settled" },
+  { pair:"CAD → INR", amount:"$4,200",  ago:"6m ago",  status:"Confirmed" },
+  { pair:"CAD → EUR", amount:"$7,800",  ago:"11m ago", status:"Settled" },
+  { pair:"CAD → USD", amount:"$9,100",  ago:"18m ago", status:"Settled" },
+];
+
+// Ticker
 const tickerTrack = document.getElementById("ticker-track");
-const finalTickerList = [...TICKER_ITEMS, ...TICKER_ITEMS, ...TICKER_ITEMS];
-tickerTrack.innerHTML = finalTickerList.map(item => `<span class="ticker-item"><em>●</em>${item}</span>`).join("");
+tickerTrack.innerHTML = [...TICKER_ITEMS, ...TICKER_ITEMS]
+  .map(t => `<span class="ticker-item"><em>●</em>${t}</span>`).join("");
 
-// Core elements selectors
-const calcAmountInput = document.getElementById("calc-amount-input");
-const calcCurrencySelect = document.getElementById("calc-currency-select");
-const calcDestinationOutput = document.getElementById("calc-destination-output");
-const calcTargetUnit = document.getElementById("calc-target-unit");
-const calcLiveRateLabel = document.getElementById("calc-live-rate-label");
-const calcFeeLabel = document.getElementById("calc-fee-label");
-const calcSpeedLabel = document.getElementById("calc-speed-label");
-const corridorRowsContainer = document.getElementById("corridor-rows-container");
-
-// Populate custom dropdown elements securely
-calcCurrencySelect.innerHTML = CORRIDORS.map(c => `<option value="${c.to}">${c.flag_to} ${c.to}</option>`).join("");
-
-// Generate static SVG mini sparklines to mirror Recharts style natively without libraries
-function generateSovereignSparkline(change) {
-    const isUp = change >= 0;
-    const color = isUp ? "#00d084" : "#f87171";
-    const points = isUp 
-        ? "0,25 15,22 30,28 45,15 60,18 75,10 90,14 105,5 120,8" 
-        : "0,5 15,12 30,8 45,18 60,14 75,22 90,18 105,28 120,25";
-    return `
-        <svg width="120" height="32" viewBox="0 0 120 32" style="display:block;">
-            <polyline fill="none" stroke="${color}" stroke-width="1.5" points="${points}"/>
-        </svg>
-    `;
-}
-
-// Ingest active nodes data into table components
-corridorRowsContainer.innerHTML = `
-    <div class="corridor-head">
-        <span>Corridor</span>
-        <span>Rate Chart</span>
-        <span style="text-align:right;">Change</span>
-        <span style="text-align:right;">Rate</span>
-        <span style="text-align:center;">Settlement</span>
-        <span></span>
-    </div>
-` + CORRIDORS.map(c => `
-    <div class="corridor-row" onclick="selectCorridor('${c.to}')">
-        <div class="corridor-pair">
-            <div class="corridor-flags">${c.flag_from}${c.flag_to}</div>
-            <div>
-                <div class="corridor-name">${c.from} → ${c.to}</div>
-                <div class="corridor-sub">${c.label}</div>
-            </div>
-        </div>
-        <div class="corridor-chart">
-            ${generateSovereignSparkline(c.change)}
-        </div>
-        <div class="corridor-change ${c.change >= 0 ? 'up' : 'down'}">
-            ${c.change >= 0 ? '▲' : '▼'} ${Math.abs(c.change)}%
-        </div>
-        <div class="corridor-rate">
-            1 ${c.from}<br/><strong>= ${c.rate} ${c.to}</strong>
-        </div>
-        <div class="corridor-time">⚡ ${c.time}</div>
-        <div style="text-align:right;">
-            <button class="corridor-cta">Send ${c.to} →</button>
-        </div>
-    </div>
+// Activity feed
+const feed = document.getElementById("activity-feed");
+feed.innerHTML = ACTIVITY.map((a,i) => `
+  <div class="activity-chip" style="animation-delay:${i*0.1}s">
+    <em>${a.pair}</em>
+    <span>${a.amount}</span>
+    <span style="color:var(--green);font-size:10px;">✓ ${a.status}</span>
+    <span class="ago">${a.ago}</span>
+  </div>
 `).join("");
 
-// Real-Time Reactive Core Logic
-function performDynamicCalculation() {
-    // Sanitize string and isolate raw numeric state
-    let basicRawValue = calcAmountInput.value.replace(/[^0-9.]/g, "");
-    
-    // Maintain cursor state and format values beautifully
-    if (document.activeElement === calcAmountInput) {
-        const parts = basicRawValue.split('.');
-        parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-        calcAmountInput.value = parts.join('.');
-    }
+// Corridor table
+const table = document.getElementById("corridor-table");
 
-    const numericalAmount = parseFloat(basicRawValue) || 0;
-    const selectedTarget = calcCurrencySelect.value;
-    const activeCorridor = CORRIDORS.find(c => c.to === selectedTarget) || CORRIDORS[0];
-
-    // Core Flat Architecture Fee Calculations (0.4%)
-    const processingFee = (numericalAmount * 0.004).toFixed(2);
-    const convertedDestinationCapital = (numericalAmount * activeCorridor.rate);
-
-    // Update View Tree elements instantly
-    calcTargetUnit.textContent = activeCorridor.to;
-    calcLiveRateLabel.textContent = `1 CAD = ${activeCorridor.rate} ${activeCorridor.to}`;
-    calcFeeLabel.textContent = `$${parseFloat(processingFee).toLocaleString("en-CA", { minimumFractionDigits: 2 })} CAD`;
-    calcSpeedLabel.textContent = `⚡ ${activeCorridor.time}`;
-    
-    calcDestinationOutput.innerHTML = `${convertedDestinationCapital.toLocaleString("en-CA", {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2
-    })} <span>${activeCorridor.to}</span>`;
+function sparkline(change) {
+  const up = change >= 0;
+  const color = up ? "#00d084" : "#f87171";
+  const pts = up
+    ? "0,26 15,22 30,27 45,14 60,18 75,9 90,13 105,4 120,7"
+    : "0,4  15,11 30,7  45,18 60,13 75,22 90,17 105,27 120,24";
+  return `<svg width="120" height="32" viewBox="0 0 120 32"><polyline fill="none" stroke="${color}" stroke-width="1.5" points="${pts}"/></svg>`;
 }
 
-// Global click-to-calculate routing bridge
-window.selectCorridor = function(targetCurrencyCode) {
-    calcCurrencySelect.value = targetCurrencyCode;
-    performDynamicCalculation();
-    document.querySelector('.calc-card').scrollIntoView({ behavior: 'smooth' });
+table.innerHTML = `
+  <div class="corridor-head">
+    <span>Corridor</span><span>Trend</span>
+    <span style="text-align:right">24h Change</span>
+    <span style="text-align:right">Rate</span>
+    <span style="text-align:center">Settlement</span>
+    <span></span>
+  </div>` +
+  CORRIDORS.map(c => `
+    <div class="corridor-row" onclick="pickCorridor('${c.to}')">
+      <div class="corridor-pair">
+        <div class="corridor-flags">${c.ff}${c.ft}</div>
+        <div>
+          <div class="corridor-name">${c.from} → ${c.to}</div>
+          <div class="corridor-sub">${c.label}</div>
+        </div>
+      </div>
+      <div class="corridor-chart">${sparkline(c.change)}</div>
+      <div class="corridor-change ${c.change>=0?'up':'down'}" style="text-align:right">
+        ${c.change>=0?'▲':'▼'} ${Math.abs(c.change)}%
+      </div>
+      <div class="corridor-rate" style="text-align:right">
+        1 ${c.from}<br><strong>= ${c.rate} ${c.to}</strong>
+      </div>
+      <div class="corridor-time">⚡ ${c.time}</div>
+      <div style="text-align:right">
+        <button class="corridor-cta">Send ${c.to} →</button>
+      </div>
+    </div>`).join("");
+
+// Calculator
+const amountInput  = document.getElementById("amount-input");
+const currSelect   = document.getElementById("currency-select");
+const resultOutput = document.getElementById("result-output");
+const resultUnit   = document.getElementById("result-unit");
+const rateLabel    = document.getElementById("rate-label");
+const feeLabel     = document.getElementById("fee-label");
+const speedLabel   = document.getElementById("speed-label");
+
+currSelect.innerHTML = CORRIDORS.map(c =>
+  `<option value="${c.to}">${c.ft} ${c.to}</option>`).join("");
+
+function calc() {
+  const raw = parseFloat(amountInput.value.replace(/[^0-9.]/g, "")) || 0;
+  const c   = CORRIDORS.find(x => x.to === currSelect.value) || CORRIDORS[0];
+  const converted = (raw * c.rate).toLocaleString("en-CA",{minimumFractionDigits:2,maximumFractionDigits:2});
+  const fee = (raw * 0.004).toLocaleString("en-CA",{minimumFractionDigits:2});
+  resultOutput.innerHTML = `${converted} <span>${c.to}</span>`;
+  rateLabel.textContent  = `1 CAD = ${c.rate} ${c.to}`;
+  feeLabel.textContent   = `$${fee} CAD`;
+  speedLabel.textContent = `⚡ ${c.time}`;
+}
+
+window.pickCorridor = function(to) {
+  currSelect.value = to;
+  calc();
+  document.querySelector('.calc-card').scrollIntoView({behavior:'smooth'});
 };
 
-// Event Matrix Ingestion listeners
-calcAmountInput.addEventListener("input", performDynamicCalculation);
-calcCurrencySelect.addEventListener("change", performDynamicCalculation);
-
-// Initialization sequence loop
-performDynamicCalculation();
+amountInput.addEventListener("input", calc);
+currSelect.addEventListener("change", calc);
+calc();
 </script>
-
 </body>
 </html>
