@@ -3,8 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-<title>Noetfield Terminal — Trust Abstraction & Governance Engine</title>
+<title>Noetfield — Institutional Transfer & Settlement</title>
 
 <!-- Premium Sovereign Typography -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -13,22 +12,16 @@
 
 <style>
 :root {
-    --bg: #020203;
-    --panel: #070709;
-    --panel-inner: #0d0d10;
-
-    --border: rgba(255, 255, 255, 0.04);
-    --border-active: rgba(91, 92, 240, 0.4);
-    --border-soft: rgba(255, 255, 255, 0.015);
-
+    --bg: #030303;
+    --panel: #09090b;
+    --panel-inner: #121216;
+    --border: rgba(255, 255, 255, 0.05);
+    --border-active: rgba(255, 255, 255, 0.2);
     --text: #ffffff;
-    --text-soft: #888890;
-    --text-muted: #44444a;
-
-    --brand: #5b5cf0;
-    --brand-glow: rgba(91, 92, 240, 0.12);
-    --green: #10b981;
-
+    --text-soft: #8e8e93;
+    --text-muted: #48484a;
+    --brand: #ffffff;
+    --green: #34c759;
     --font-main: 'Inter', sans-serif;
     --font-mono: 'JetBrains Mono', monospace;
 }
@@ -46,349 +39,239 @@ body {
     -webkit-font-smoothing: antialiased;
     letter-spacing: -0.02em;
     overflow-x: hidden;
-    padding-bottom: 60px;
 }
 
 body::before {
     content: "";
     position: fixed;
     inset: 0;
-    background: 
-    radial-gradient(circle at 50% 0%, rgba(91, 92, 240, 0.06), transparent 50%),
-    radial-gradient(circle at 100% 100%, rgba(16, 185, 129, 0.01), transparent 30%);
+    background: radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.03), transparent 60%);
     pointer-events: none;
 }
 
 .container {
-    width: min(1340px, calc(100% - 48px));
+    width: min(1200px, calc(100% - 48px));
     margin: auto;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding-bottom: 40px;
 }
 
-/* PREMIUM TERMINAL HEAD */
+/* NAVIGATION */
 .nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 32px 0;
-    border-bottom: 1px solid var(--border);
+    padding: 40px 0;
 }
 
-.nav-left {
+.logo-area {
     display: flex;
     align-items: center;
-    gap: 16px;
+    gap: 12px;
 }
 
-.logo {
-    width: 36px;
-    height: 36px;
-    border-radius: 6px;
-    background: #ffffff;
-    color: #000000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 700;
-    font-size: 14px;
+.logo-icon {
+    width: 24px;
+    height: 24px;
+    border-radius: 4px;
+    background: #fff;
 }
 
-.brand h1 {
-    font-size: 16px;
+.logo-text {
+    font-size: 18px;
     font-weight: 600;
-    letter-spacing: -0.02em;
+    letter-spacing: -0.03em;
 }
 
-.brand span {
-    font-size: 10px;
-    color: var(--text-soft);
-    font-family: var(--font-mono);
-    text-transform: uppercase;
-    letter-spacing: 0.02em;
-}
-
-.status-pill {
+.security-badge {
     display: flex;
     align-items: center;
     gap: 8px;
-    padding: 8px 14px;
-    border-radius: 100px;
-    border: 1px solid rgba(16, 185, 129, 0.12);
-    background: rgba(16, 185, 129, 0.02);
-    color: var(--green);
-    font-size: 11px;
-    font-family: var(--font-mono);
-}
-
-.dot {
-    width: 5px;
-    height: 5px;
-    border-radius: 50%;
-    background: var(--green);
-    box-shadow: 0 0 10px var(--green);
-}
-
-/* GOVERNANCE TELEMETRY RIBBON */
-.metrics-ribbon {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 16px;
-    margin: 40px 0;
-}
-
-.metric-card {
-    background: var(--panel);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 20px;
-}
-
-.metric-card label {
-    display: block;
-    font-size: 10px;
-    font-family: var(--font-mono);
+    font-size: 12px;
     color: var(--text-soft);
-    text-transform: uppercase;
-    margin-bottom: 6px;
+    font-family: var(--font-mono);
 }
 
-.metric-card div {
-    font-size: 14px;
-    font-weight: 500;
+.shield-icon {
+    width: 6px;
+    height: 6px;
+    background: var(--green);
+    border-radius: 50%;
+    box-shadow: 0 0 8px var(--green);
 }
 
-/* HIGH-VALUE ARCHITECTURE GRID */
-.hero-grid {
+/* MAIN INTERFACE GRID */
+.main-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 48px;
-    align-items: start;
-    margin-top: 20px;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 80px;
+    align-items: center;
+    margin: auto 0;
 }
 
-.hero-text h2 {
-    font-size: 54px;
-    line-height: 1.05;
+/* LEFT: VALUE PROPOSITION (SECURITY & PRICE) */
+.hero-content h2 {
+    font-size: 48px;
+    line-height: 1.1;
     font-weight: 600;
     letter-spacing: -0.04em;
     margin-bottom: 24px;
 }
 
-.hero-text p {
+.hero-content p {
     color: var(--text-soft);
     font-size: 16px;
-    line-height: 1.7;
-    max-width: 540px;
-    margin-bottom: 32px;
+    line-height: 1.6;
+    margin-bottom: 40px;
+    max-width: 480px;
 }
 
-.action-row {
-    display: flex;
-    gap: 12px;
+.pillars {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
 }
 
-.btn-premium {
-    background: #ffffff;
-    color: #000000;
-    border: none;
-    padding: 14px 24px;
-    border-radius: 8px;
-    font-size: 13px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background 0.2s;
+.pillar-item {
+    border-left: 1px solid var(--border);
+    padding-left: 20px;
 }
 
-.btn-premium:hover { background: #e4e4e7; }
-
-.btn-outline {
-    background: transparent;
-    color: #ffffff;
-    border: 1px solid var(--border);
-    padding: 14px 24px;
-    border-radius: 8px;
-    font-size: 13px;
+.pillar-item h4 {
+    font-size: 14px;
     font-weight: 500;
-    cursor: pointer;
-    transition: border 0.2s;
+    margin-bottom: 4px;
 }
 
-.btn-outline:hover { border-color: rgba(255,255,255,0.15); }
+.pillar-item p {
+    font-size: 13px;
+    color: var(--text-soft);
+    line-height: 1.4;
+    margin-bottom: 0;
+}
 
-/* API FIRST GATEWAY ENGINE */
-.api-terminal {
+/* RIGHT: THE PREMIUM CLIENT WIDGET */
+.transfer-widget {
     background: var(--panel);
     border: 1px solid var(--border);
-    border-radius: 14px;
-    overflow: hidden;
-    box-shadow: 0 40px 80px rgba(0,0,0,0.6);
+    border-radius: 20px;
+    padding: 32px;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.4);
 }
 
-.terminal-header {
-    background: rgba(255,255,255,0.01);
-    border-bottom: 1px solid var(--border);
-    padding: 14px 20px;
+.widget-title {
+    font-size: 15px;
+    font-weight: 500;
+    margin-bottom: 24px;
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-.terminal-header span {
-    font-size: 12px;
-    font-weight: 500;
-}
-
-.terminal-header code {
-    font-family: var(--font-mono);
+.widget-title span {
     font-size: 11px;
-    color: var(--brand);
-}
-
-.terminal-content {
-    padding: 24px;
-}
-
-.form-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-    margin-bottom: 20px;
-}
-
-.field-group label {
-    display: block;
-    font-size: 10px;
+    color: var(--green);
+    background: rgba(52, 199, 89, 0.06);
+    padding: 4px 8px;
+    border-radius: 4px;
     font-family: var(--font-mono);
-    color: var(--text-soft);
-    text-transform: uppercase;
-    margin-bottom: 8px;
 }
 
-.field-input {
-    width: 100%;
-    background: #000000;
+.input-box {
+    background: var(--panel-inner);
     border: 1px solid var(--border);
-    border-radius: 6px;
-    padding: 12px 14px;
-    color: #ffffff;
-    font-size: 14px;
-    font-family: var(--font-mono);
-    transition: border 0.2s;
+    border-radius: 12px;
+    padding: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: border-color 0.2s;
 }
 
-.field-input:focus {
-    outline: none;
+.input-box:focus-within {
     border-color: var(--border-active);
 }
 
-select.field-input {
-    cursor: pointer;
-}
-
-/* LIVE API PAYLOAD VIEW */
-.json-preview {
-    background: var(--panel-inner);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    padding: 16px;
-    margin-bottom: 20px;
+.input-box label {
+    display: block;
+    font-size: 11px;
+    color: var(--text-soft);
+    margin-bottom: 4px;
+    text-transform: uppercase;
     font-family: var(--font-mono);
-    font-size: 12px;
-    color: #a5b4fc;
-    line-height: 1.5;
-    white-space: pre-wrap;
 }
 
-.dispatch-btn {
-    width: 100%;
-    background: var(--brand);
-    color: #ffffff;
+.input-box input {
+    background: transparent;
     border: none;
-    border-radius: 6px;
-    padding: 14px;
-    font-size: 13px;
+    color: #fff;
+    font-size: 22px;
+    font-weight: 500;
+    width: 70%;
+    outline: none;
+    font-family: var(--font-mono);
+}
+
+.currency-select {
+    background: transparent;
+    border: none;
+    color: #fff;
+    font-size: 16px;
     font-weight: 600;
     cursor: pointer;
-    font-family: var(--font-mono);
-    text-transform: uppercase;
-    letter-spacing: 0.02em;
-    transition: opacity 0.2s;
+    outline: none;
 }
 
-.dispatch-btn:hover { opacity: 0.9; }
-
-/* IMMUTABLE GOVERNANCE MATRIX */
-.ledger-section {
-    margin-top: 80px;
+.currency-select option {
+    background: var(--panel-inner);
+    color: #fff;
 }
 
-.ledger-header {
+/* TRANSPARENT PRICING FLOW */
+.pricing-flow {
+    padding: 20px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    position: relative;
+}
+
+.flow-step {
     display: flex;
     justify-content: space-between;
-    align-items: flex-end;
-    margin-bottom: 24px;
-}
-
-.ledger-header h3 {
-    font-size: 20px;
-    font-weight: 600;
-    letter-spacing: -0.02em;
-}
-
-.ledger-header span {
-    font-size: 11px;
-    font-family: var(--font-mono);
+    font-size: 12px;
     color: var(--text-soft);
+    font-family: var(--font-mono);
 }
 
-.table-wrapper {
-    background: var(--panel);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    overflow: hidden;
+.flow-step .highlight {
+    color: #fff;
 }
 
-table {
+/* ACTION BUTTON */
+.submit-btn {
     width: 100%;
-    border-collapse: collapse;
+    background: #fff;
+    color: #000;
+    border: none;
+    border-radius: 12px;
+    padding: 16px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.2s;
+    margin-top: 8px;
 }
 
-th {
-    background: rgba(255,255,255,0.01);
-    padding: 16px 24px;
-    font-size: 10px;
-    font-family: var(--font-mono);
-    color: var(--text-soft);
-    text-transform: uppercase;
-    text-align: left;
-    font-weight: 500;
-    border-bottom: 1px solid var(--border);
+.submit-btn:hover {
+    opacity: 0.9;
 }
-
-td {
-    padding: 18px 24px;
-    border-bottom: 1px solid var(--border-soft);
-    font-size: 13px;
-}
-
-.mono { font-family: var(--font-mono); }
-
-.tag {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 4px 10px;
-    border-radius: 4px;
-    font-size: 10px;
-    font-family: var(--font-mono);
-    text-transform: uppercase;
-}
-
-.tag-audited { background: rgba(16, 185, 129, 0.05); color: var(--green); }
-.tag-routing { background: rgba(91, 92, 240, 0.06); color: #a5b4fc; }
 
 /* REFINED FOOTER */
 .footer {
-    margin-top: 100px;
     border-top: 1px solid var(--border);
     padding-top: 32px;
     display: flex;
@@ -397,249 +280,157 @@ td {
     color: var(--text-muted);
 }
 
-.footer span:last-child {
-    font-family: var(--font-mono);
-}
-
-/* RESPONSIVE STRUCTURE */
-@media(max-width: 1024px) {
-    .hero-grid { grid-template-columns: 1fr; gap: 40px; }
-    .metrics-ribbon { grid-template-columns: repeat(2, 1fr); }
-    .hero-text h2 { font-size: 42px; }
-}
-
-@media(max-width: 700px) {
-    .metrics-ribbon { grid-template-columns: 1fr; }
-    .form-row { grid-template-columns: 1fr; }
-    .nav { flex-direction: column; align-items: flex-start; gap: 16px; }
-    .footer { flex-direction: column; gap: 12px; }
+/* RESPONSIVE DESIGN */
+@media (max-width: 968px) {
+    .main-grid { grid-template-columns: 1fr; gap: 48px; }
+    .hero-content h2 { font-size: 38px; }
+    .nav { padding: 24px 0; }
 }
 </style>
 </head>
-
 <body>
 
 <div class="container">
 
-    <!-- NAV BAR -->
+    <!-- NAVIGATION HEADER -->
     <nav class="nav">
-        <div class="nav-left">
-            <div class="logo">N</div>
-            <div class="brand">
-                <h1>Noetfield</h1>
-                <span>Trust Abstraction & Governance Layer</span>
-            </div>
+        <div class="logo-area">
+            <div class="logo-icon"></div>
+            <div class="logo-text">Noetfield</div>
         </div>
-        <div class="status-pill">
-            <div class="dot"></div>
-            Sovereign API Node — Active
+        <div class="security-badge">
+            <span class="shield-icon"></span>
+            Institutional Grade Security Guaranteed
         </div>
     </nav>
 
-    <!-- SYSTEM METRICS INTERFACE -->
-    <div class="metrics-ribbon">
-        <div class="metric-card">
-            <label>Governance Latency</label>
-            <div style="color: var(--green);">&lt; 14ms Real-time Audit</div>
-        </div>
-        <div class="metric-card">
-            <label>Integration Architecture</label>
-            <div>Headless API-First</div>
-        </div>
-        <div class="metric-card">
-            <label>Risk Mitigation Mode</label>
-            <div>Zero-Custody Trust Abstraction</div>
-        </div>
-        <div class="metric-card">
-            <label>Routing Velocity</label>
-            <div>Instant Corridor Mapping</div>
-        </div>
-    </div>
-
-    <!-- MAIN CONTEXT INTERFACE -->
-    <section class="hero-grid">
+    <!-- MAIN CLIENT DASHBOARD -->
+    <main class="main-grid">
         
-        <!-- INTENTIONAL BRAND PROSE -->
-        <div class="hero-text">
-            <h2>Headless trust architecture for global enterprise capital.</h2>
+        <!-- LEFT AREA: BRAND STRENGTH & VALUE -->
+        <div class="hero-content">
+            <h2>Secure, institutional asset routing at optimal rates.</h2>
             <p>
-                Eliminate operational friction and structural compliance lag. Noetfield functions as a high-velocity abstraction and routing framework—auditing programmatic rules and clearing cross-border vectors instantly through unified institutional API endpoints.
+                Move capital across borders instantly with direct liquidity access, transparent zero-spread pricing, and ironclad compliance architecture.
             </p>
-            <div class="action-row">
-                <button class="btn-premium">Request API Access</button>
-                <button class="btn-outline">Documentation</button>
-            </div>
-        </div>
-
-        <!-- API DISPATCH GATEWAY GRAPHIC -->
-        <div class="api-terminal">
-            <div class="terminal-header">
-                <span>Core API Gateway Simulator</span>
-                <code>POST /v2/governance/verify_and_route</code>
-            </div>
             
-            <div class="terminal-content">
-                <form onsubmit="dispatchPayload(event)">
-                    
-                    <div class="form-row">
-                        <div class="field-group">
-                            <label>Payload Volume (USD)</label>
-                            <input type="number" id="payload-amt" class="field-input" value="500000" oninput="updateJsonView()" required>
-                        </div>
-                        <div class="field-group">
-                            <label>Target Corridor Node</label>
-                            <select id="payload-corridor" class="field-input" onchange="updateJsonView()">
-                                <option value="EUR" data-endpoint="sepa_premium_hub">Eurozone (EUR) Gateway</option>
-                                <option value="GBP" data-endpoint="uk_sovereign_payments">United Kingdom (GBP) Rail</option>
-                                <option value="AED" data-endpoint="uae_central_matrix">United Arab Emirates (AED) Node</option>
-                                <option value="SGD" data-endpoint="singapore_fast_core">Singapore (SGD) Link</option>
-                                <option value="CAD" data-endpoint="canada_rtp_pool">Canada (CAD) Infrastructure</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="field-group">
-                            <label>Audit Policy Framework</label>
-                            <input type="text" class="field-input" value="strict_institutional_governance_v4" readonly style="opacity: 0.4; background: #000;">
-                        </div>
-                        <div class="field-group">
-                            <label>Cryptography Status</label>
-                            <input type="text" class="field-input" value="verified_public_key_authorized" readonly style="opacity: 0.5; background: #000; color: var(--green);">
-                        </div>
-                    </div>
-
-                    <!-- RAW TELEMETRY JSON DATA -->
-                    <div class="json-preview" id="json-code"></div>
-
-                    <button type="submit" class="dispatch-btn">Transmit API Instruction</button>
-                </form>
+            <div class="pillars">
+                <div class="pillar-item">
+                    <h4>Guaranteed Institutional Pricing</h4>
+                    <p>Real-time optimal rates without hidden margins or intermediary banking fees.</p>
+                </div>
+                <div class="pillar-item">
+                    <h4>Sovereign Cryptographic Protection</h4>
+                    <p>Fully non-custodial capital flow ensures your assets remain under your exclusive control.</p>
+                </div>
+                <div class="pillar-item">
+                    <h4>Instant Global Settlements</h4>
+                    <p>Automated corridors bypass legacy banking delays for immediate execution.</p>
+                </div>
             </div>
         </div>
 
-    </section>
+        <!-- RIGHT AREA: KAVODAX-INSPIRED TRANSFER CONSOLE -->
+        <div class="transfer-widget">
+            <div class="widget-title">
+                Institutional Settlement
+                <span>Live Mid-Market Rate</span>
+            </div>
 
-    <!-- IMMUTABLE TRUST LOG -->
-    <section class="ledger-section">
-        <div class="ledger-header">
-            <h3>Live Telemetry Ledger</h3>
-            <span>Real-Time Audit & Routing Matrix Stream</span>
+            <!-- SOURCE INPUT -->
+            <div class="input-box">
+                <div>
+                    <label>You Allocate</label>
+                    <input type="number" id="source-amount" value="100000" oninput="calculateSettlement()">
+                </div>
+                <select class="currency-select" id="source-currency" onchange="calculateSettlement()">
+                    <option value="USD">USD</option>
+                    <option value="EUR">EUR</option>
+                    <option value="CAD">CAD</option>
+                </select>
+            </div>
+
+            <!-- PRICING DYNAMICS LINK -->
+            <div class="pricing-flow">
+                <div class="flow-step">
+                    <span>Guaranteed Exchange Rate</span>
+                    <span class="highlight" id="live-rate">1.0000</span>
+                </div>
+                <div class="flow-step">
+                    <span>Network & Settlement Fee</span>
+                    <span class="highlight" style="color: var(--green);">0.00% (Included)</span>
+                </div>
+                <div class="flow-step">
+                    <span>Execution Speed</span>
+                    <span class="highlight">Instant Corridor Routing</span>
+                </div>
+            </div>
+
+            <!-- DESTINATION INPUT -->
+            <div class="input-box" style="margin-bottom: 24px;">
+                <div>
+                    <label>They Receive (Estimated)</label>
+                    <input type="text" id="target-amount" readonly>
+                </div>
+                <select class="currency-select" id="target-currency" onchange="calculateSettlement()">
+                    <option value="EUR">EUR</option>
+                    <option value="USD">USD</option>
+                    <option value="AED">AED</option>
+                    <option value="SGD">SGD</option>
+                </select>
+            </div>
+
+            <button class="submit-btn">Initiate Secure Transfer</button>
         </div>
 
-        <div class="table-wrapper">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Instruction Hash</th>
-                        <th>Volume Abstracted</th>
-                        <th>Vector Route</th>
-                        <th>Target API Endpoint</th>
-                        <th>Governance Matrix Status</th>
-                    </tr>
-                </thead>
-                <tbody id="audit-ledger">
-                    <tr>
-                        <td class="mono" style="color: var(--text-soft);">0x9e12...f42c</td>
-                        <td class="mono" style="font-weight: 500;">$1,500,000</td>
-                        <td class="mono">USD → EUR</td>
-                        <td class="mono" style="color: var(--text-soft);">/v2/corridors/sepa_premium_hub</td>
-                        <td><span class="tag tag-audited"><span class="dot"></span> Audited & Routed</span></td>
-                    </tr>
-                    <tr>
-                        <td class="mono" style="color: var(--text-soft);">0x3ca4...811b</td>
-                        <td class="mono" style="font-weight: 500;">$620,000</td>
-                        <td class="mono">USD → AED</td>
-                        <td class="mono" style="color: var(--text-soft);">/v2/corridors/uae_central_matrix</td>
-                        <td><span class="tag tag-audited"><span class="dot"></span> Audited & Routed</span></td>
-                    </tr>
-                    <tr>
-                        <td class="mono" style="color: var(--text-soft);">0x7bf5...110e</td>
-                        <td class="mono" style="font-weight: 500;">$340,000</td>
-                        <td class="mono">USD → SGD</td>
-                        <td class="mono" style="color: var(--text-soft);">/v2/corridors/singapore_fast_core</td>
-                        <td><span class="tag tag-routing"><span class="dot" style="background: #a5b4fc;"></span> Auditing Compliance</span></td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </section>
+    </main>
 
-    <!-- FOOTER ARCHITECTURE -->
+    <!-- MINIMALIST FOOTER -->
     <footer class="footer">
-        <span>© 2026 Noetfield Systems Inc. Digital Trust Infrastructure & Capital Routing Systems.</span>
-        <span>Sovereign Trust Abstraction Rail.</span>
+        <span>© 2026 Noetfield Systems Inc. Global Digital Infrastructure.</span>
+        <span>Secure Vault Node Client v4.1</span>
     </footer>
 
 </div>
 
 <script>
-// Live Stream State Update
-function updateJsonView() {
-    const amount = document.getElementById("payload-amt").value || 0;
-    const corridorSelect = document.getElementById("payload-corridor");
-    const selected = corridorSelect.options[corridorSelect.selectedIndex];
-    
-    const currency = selected.value;
-    const endpoint = selected.getAttribute("data-endpoint");
+// Mock Real-Time Matrix Rates for Client Conversion
+const rates = {
+    "USD_EUR": 0.92,
+    "USD_AED": 3.67,
+    "USD_SGD": 1.34,
+    "USD_USD": 1.00,
+    "EUR_USD": 1.09,
+    "EUR_AED": 3.99,
+    "EUR_SGD": 1.46,
+    "EUR_EUR": 1.00,
+    "CAD_USD": 0.73,
+    "CAD_EUR": 0.67,
+    "CAD_AED": 2.68,
+    "CAD_SGD": 0.98
+};
 
-    const jsonStructure = {
-        "infrastructure_layer": "noetfield_trust_abstraction",
-        "telemetry_stream": {
-            "volume_usd": parseFloat(amount),
-            "routing_vector": `USD_TO_${currency}`,
-            "target_gateway_endpoint": `/v2/corridors/${endpoint}`
-        },
-        "governance_audit": "passed_compliance_check",
-        "custody_state": "zero_custody_pure_routing"
-    };
+function calculateSettlement() {
+    const sourceAmt = parseFloat(document.getElementById("source-amount").value) || 0;
+    const sourceCurr = document.getElementById("source-currency").value;
+    const targetCurr = document.getElementById("target-currency").value;
 
-    document.getElementById("json-code").textContent = JSON.stringify(jsonStructure, null, 4);
+    const rateKey = `${sourceCurr}_${targetCurr}`;
+    const currentRate = rates[rateKey] || 1.00;
+
+    // Update Live Rate Visual Indicator
+    document.getElementById("live-rate").textContent = `1 ${sourceCurr} = ${currentRate.toFixed(4)} ${targetCurr}`;
+
+    // Update Target Total Allocation
+    const totalReceived = sourceAmt * currentRate;
+    document.getElementById("target-amount").value = totalReceived.toLocaleString("en-US", { 
+        minimumFractionDigits: 2, 
+        maximumFractionDigits: 2 
+    });
 }
 
-// Emulate Secure Telemetry Execution via API
-function dispatchPayload(e) {
-    e.preventDefault();
-
-    const amount = document.getElementById("payload-amt").value;
-    const corridorSelect = document.getElementById("payload-corridor");
-    const selected = corridorSelect.options[corridorSelect.selectedIndex];
-    
-    const currency = selected.value;
-    const endpoint = selected.getAttribute("data-endpoint");
-
-    const txHash = "0x" + Math.random().toString(16).substring(2, 6) + "..." + Math.random().toString(16).substring(2, 6);
-    const formattedAmt = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 }).format(amount);
-
-    const ledger = document.getElementById("audit-ledger");
-    const row = document.createElement("tr");
-    row.style.background = "rgba(91, 92, 240, 0.02)";
-
-    row.innerHTML = `
-        <td class="mono" style="color: #fff;">${txHash}</td>
-        <td class="mono" style="font-weight: 600;">${formattedAmt}</td>
-        <td class="mono">USD → ${currency}</td>
-        <td class="mono" style="color: var(--brand);">/v2/corridors/${endpoint}</td>
-        <td><span class="tag tag-routing" id="hash-${txHash}"><span class="dot" style="background: #a5b4fc;"></span> Auditing</span></td>
-    `;
-
-    ledger.prepend(row);
-
-    // Near Zero-Latency Resolution
-    setTimeout(() => {
-        const tag = document.getElementById(`hash-${txHash}`);
-        if(tag) {
-            tag.className = "tag tag-audited";
-            tag.innerHTML = '<span class="dot"></span> Audited & Routed';
-            row.style.background = "transparent";
-        }
-    }, 1100);
-
-    document.getElementById("payload-amt").value = "";
-    updateJsonView();
-}
-
-// Global Launch
-updateJsonView();
+// Global Initialization
+calculateSettlement();
 </script>
 
 </body>
