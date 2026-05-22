@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Noetfield — Cross-Border Payments for Canadian Businesses</title>
+<title>Noetfield — Cross-Border Capital Routing</title>
 
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@300;400;500&display=swap');
@@ -14,268 +14,107 @@
   --bg:#0a0c0f;
   --surface:#111418;
   --surface2:#161b22;
-  --border:rgba(255,255,255,0.07);
-  --border2:rgba(255,255,255,0.12);
+  --border:rgba(255,255,255,0.08);
+  --border2:rgba(255,255,255,0.15);
   --text:#e8eaed;
-  --muted:#6b7280;
+  --muted:#9ca3af;
   --green:#00d084;
-  --glow:0 0 24px rgba(0,208,132,0.2);
+  --glow:0 0 24px rgba(0,208,132,0.15);
   --sans:'Syne',sans-serif;
   --mono:'IBM Plex Mono',monospace;
 }
 
-body{
-  background:var(--bg);
-  color:var(--text);
-  font-family:var(--mono);
-}
+body{ background:var(--bg); color:var(--text); font-family:var(--mono); line-height: 1.5; }
 
 /* NAV */
-.nav{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  padding:0 28px;
-  height:64px;
-  border-bottom:1px solid var(--border);
-  position:sticky;
-  top:0;
-  background:rgba(10,12,15,0.9);
-  backdrop-filter:blur(12px);
-}
-
-.logo{
-  display:flex;
-  align-items:center;
-  gap:8px;
-  font-family:var(--sans);
-  font-weight:700;
-}
-
-.dot{
-  width:7px;
-  height:7px;
-  background:var(--green);
-  border-radius:50%;
-  box-shadow:var(--glow);
-}
+.nav{ display:flex; justify-content:space-between; align-items:center; padding:0 32px; height:64px; border-bottom:1px solid var(--border); position:sticky; top:0; background:rgba(10,12,15,0.95); backdrop-filter:blur(12px); z-index:10; }
+.logo{ display:flex; align-items:center; gap:10px; font-family:var(--sans); font-weight:700; font-size: 18px; }
+.dot{ width:8px; height:8px; background:var(--green); border-radius:50%; box-shadow:var(--glow); }
 
 /* HERO */
-.hero{
-  max-width:1100px;
-  margin:0 auto;
-  padding:72px 28px 40px;
-  display:grid;
-  grid-template-columns:1.2fr 0.8fr;
-  gap:48px;
-}
-
-.h1{
-  font-family:var(--sans);
-  font-size:48px;
-  line-height:1.1;
-  font-weight:800;
-  letter-spacing:-0.03em;
-  margin-bottom:16px;
-}
-
+.hero{ max-width:1100px; margin:0 auto; padding:80px 32px 60px; display:grid; grid-template-columns:1fr 420px; gap:80px; align-items:start; }
+.h1{ font-family:var(--sans); font-size:52px; line-height:1; font-weight:800; letter-spacing:-0.03em; margin-bottom:20px; }
 .h1 span{ color:var(--green); }
-
-.sub{
-  color:var(--muted);
-  font-size:14px;
-  line-height:1.8;
-  margin-bottom:28px;
-  max-width:520px;
-}
+.sub{ color:var(--muted); font-size:15px; line-height:1.7; margin-bottom:32px; max-width:500px; }
 
 /* CTA */
-.cta-row{
-  display:flex;
-  gap:12px;
-}
-
-.btn-primary{
-  background:var(--green);
-  border:none;
-  padding:12px 18px;
-  font-weight:600;
-  cursor:pointer;
-  border-radius:6px;
-  font-size:13px;
-}
-
-.btn-secondary{
-  background:transparent;
-  border:1px solid var(--border2);
-  padding:12px 18px;
-  color:var(--text);
-  border-radius:6px;
-  font-size:13px;
-  cursor:pointer;
-}
+.btn-primary{ background:var(--green); border:none; padding:14px 24px; font-weight:600; cursor:pointer; border-radius:6px; font-size:13px; color:#000; transition: transform 0.1s; }
+.btn-primary:hover{ opacity: 0.9; }
+.btn-secondary{ background:transparent; border:1px solid var(--border2); padding:14px 24px; color:var(--text); border-radius:6px; font-size:13px; cursor:pointer; }
 
 /* CALCULATOR */
-.card{
-  background:var(--surface);
-  border:1px solid var(--border2);
-  border-radius:12px;
-  padding:20px;
-}
-
-.label{
-  font-size:10px;
-  text-transform:uppercase;
-  color:var(--muted);
-  margin-bottom:10px;
-}
-
-.input{
-  width:100%;
-  background:var(--surface2);
-  border:1px solid var(--border);
-  padding:12px;
-  border-radius:6px;
-  color:var(--text);
-  font-size:16px;
-  margin-bottom:12px;
-}
-
-.result{
-  font-size:13px;
-  color:var(--muted);
-  margin-bottom:14px;
-}
-
-.result strong{
-  color:var(--text);
-}
+.card{ background:var(--surface); border:1px solid var(--border2); border-radius:12px; padding:24px; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.3); }
+.label{ font-size:10px; text-transform:uppercase; color:var(--muted); margin-bottom:12px; letter-spacing: 0.05em; }
+.input{ width:100%; background:var(--surface2); border:1px solid var(--border); padding:14px; border-radius:6px; color:var(--text); font-size:16px; margin-bottom:16px; }
+.result{ font-size:14px; color:var(--muted); margin-bottom:20px; padding: 16px; background: var(--surface2); border-radius: 6px; }
+.result strong{ color:var(--text); font-size: 18px; }
 
 /* TRUST BAR */
-.trust{
-  max-width:1100px;
-  margin:0 auto;
-  padding:0 28px 24px;
-  color:var(--muted);
-  font-size:12px;
-  display:flex;
-  gap:18px;
-  flex-wrap:wrap;
-}
+.trust{ max-width:1100px; margin:0 auto; padding:0 32px 60px; display:flex; gap:32px; flex-wrap:wrap; border-bottom: 1px solid var(--border); margin-bottom: 40px; }
+.trust-item { font-size: 12px; color: var(--muted); border-left: 1px solid var(--border); padding-left: 16px; }
 
 /* CORRIDORS */
-.section{
-  max-width:1100px;
-  margin:0 auto;
-  padding:20px 28px 60px;
-}
+.section{ max-width:1100px; margin:0 auto; padding:0 32px 80px; }
+.title{ font-size:11px; text-transform:uppercase; color:var(--muted); margin-bottom:20px; letter-spacing: 0.1em; }
+.row{ display:grid; grid-template-columns:1fr 1fr auto; padding:20px; background:var(--surface); border:1px solid var(--border); border-radius:8px; margin-bottom:10px; align-items:center; }
+.status{ color:var(--green); font-size: 12px; font-weight: 600; background: rgba(0,208,132,0.1); padding: 4px 8px; border-radius: 4px; }
 
-.title{
-  font-size:11px;
-  text-transform:uppercase;
-  color:var(--muted);
-  margin-bottom:16px;
-}
-
-.row{
-  display:grid;
-  grid-template-columns:1fr 1fr auto;
-  padding:14px;
-  background:var(--surface);
-  border:1px solid var(--border);
-  border-radius:8px;
-  margin-bottom:8px;
-}
-
-.status{
-  color:var(--green);
-}
-
-@media(max-width:900px){
-  .hero{ grid-template-columns:1fr; }
-}
+@media(max-width:900px){ .hero{ grid-template-columns:1fr; gap: 40px; } }
 </style>
 </head>
 
 <body>
 
-<!-- NAV -->
 <header class="nav">
-  <div class="logo">
-    <div class="dot"></div>
-    Noetfield
-  </div>
+  <div class="logo"><div class="dot"></div>Noetfield</div>
   <button class="btn-secondary">Sign In</button>
 </header>
 
-<!-- HERO -->
 <section class="hero">
-
   <div>
-    <h1 class="h1">
-      Send Business Payments<br/>
-      <span>Across Borders</span>
-    </h1>
-
-    <p class="sub">
-      Fast, transparent international payments for Canadian businesses.
-      Track every transfer in real time with regulated financial partners.
-    </p>
-
-    <div class="cta-row">
-      <button class="btn-primary">Start Sending</button>
-      <button class="btn-secondary">See How It Works</button>
+    <h1 class="h1">Capital Routing for<br/><span>Canadian SMEs</span></h1>
+    <p class="sub">Noetfield normalizes your payment intent and routes execution through regulated rails. No hidden spreads. Full audit trail included.</p>
+    <div style="display:flex; gap:12px;">
+      <button class="btn-primary">Start Sending →</button>
+      <button class="btn-secondary">View Docs</button>
     </div>
   </div>
 
-  <!-- CALCULATOR -->
   <div class="card">
-    <div class="label">FX Calculator</div>
-
+    <div class="label">FX Calculator — Live Rate</div>
     <input class="input" value="10,000 CAD" />
-
     <div class="result">
-      Recipient receives: <strong>7,381.00 USD</strong>
+      Recipient receives:<br/>
+      <strong>7,381.00 USD</strong>
     </div>
-
-    <button class="btn-primary" style="width:100%;">
-      Submit Payment Intent
-    </button>
+    <button class="btn-primary" style="width:100%;">Execute Payment Intent</button>
   </div>
-
 </section>
 
-<!-- TRUST -->
 <div class="trust">
-  <div>✔ Regulated financial partners</div>
-  <div>✔ Real-time tracking</div>
-  <div>✔ Transparent FX pricing</div>
-  <div>✔ Canada-first onboarding</div>
+  <div class="trust-item">NDAX-Integrated</div>
+  <div class="trust-item">FINTRAC-Compliant</div>
+  <div class="trust-item">OSFI-Aware Architecture</div>
+  <div class="trust-item">Real-time settlement tracking</div>
 </div>
 
-<!-- CORRIDORS -->
 <section class="section">
-
-  <div class="title">Active Corridors</div>
-
+  <div class="title">Active Payment Corridors</div>
   <div class="row">
     <div><strong>CAD → USD</strong></div>
-    <div>~2–5 min processing</div>
-    <div class="status">Active</div>
+    <div style="color:var(--muted); font-size: 13px;">~2–5 min settlement</div>
+    <div class="status">LIVE</div>
   </div>
-
   <div class="row">
     <div><strong>CAD → EUR</strong></div>
-    <div>~3–8 min processing</div>
-    <div class="status">Active</div>
+    <div style="color:var(--muted); font-size: 13px;">~3–8 min settlement</div>
+    <div class="status">LIVE</div>
   </div>
-
   <div class="row">
     <div><strong>CAD → AED</strong></div>
-    <div>~5–15 min processing</div>
-    <div class="status">Active</div>
+    <div style="color:var(--muted); font-size: 13px;">~5–15 min settlement</div>
+    <div class="status">LIVE</div>
   </div>
-
 </section>
 
 </body>
