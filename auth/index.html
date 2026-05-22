@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Noetfield — Auth</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700&family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500&display=swap');
+
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body {
+            background: #0a0c0f;
+            color: #e8eaed;
+            font-family: 'IBM Plex Mono', monospace;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .auth-container {
+            width: 100%;
+            max-width: 460px;
+            background: #111418;
+            border: 1px solid rgba(255,255,255,0.07);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .nav-logo {
+            font-family: 'Syne', sans-serif;
+            font-size: 22px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            justify-content: center;
+            padding: 32px 0 20px;
+        }
+
+        .nav-dot {
+            width: 8px;
+            height: 8px;
+            background: #00d084;
+            border-radius: 50%;
+            box-shadow: 0 0 20px rgba(0, 208, 132, 0.4);
+        }
+
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid rgba(255,255,255,0.07);
+        }
+
+        .tab {
+            flex: 1;
+            padding: 16px;
+            text-align: center;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .tab.active {
+            color: #00d084;
+            border-bottom: 2px solid #00d084;
+        }
+
+        .form-content {
+            padding: 32px 36px;
+        }
+
+        .input-group {
+            margin-bottom: 16px;
+        }
+
+        label {
+            display: block;
+            font-size: 10px;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+            color: #6b7280;
+            margin-bottom: 6px;
+        }
+
+        input, select {
+            width: 100%;
+            background: #161b22;
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 14px 16px;
+            border-radius: 6px;
+            color: #e8eaed;
+            font-size: 15px;
+        }
+
+        input:focus, select:focus {
+            border-color: #00d084;
+            box-shadow: 0 0 0 3px rgba(0, 208, 132, 0.15);
+            outline: none;
+        }
+
+        .btn-primary {
+            width: 100%;
+            padding: 14px;
+            background: #00d084;
+            color: #000;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            margin-top: 8px;
+        }
+
+        .btn-primary:hover {
+            background: #00e896;
+            box-shadow: 0 0 24px rgba(0, 208, 132, 0.3);
+        }
+
+        .divider {
+            margin: 24px 0;
+            text-align: center;
+            color: #374151;
+            font-size: 11px;
+        }
+
+        .footer-link {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 12px;
+        }
+
+        .footer-link a {
+            color: #00d084;
+        }
+    </style>
+</head>
+<body>
+    <div class="auth-container">
+        <div class="nav-logo">
+            <div class="nav-dot"></div>
+            Noetfield
+        </div>
+
+        <!-- Tabs -->
+        <div class="tabs">
+            <div class="tab active" id="login-tab" onclick="switchTab(0)">Sign In</div>
+            <div class="tab" id="signup-tab" onclick="switchTab(1)">Create Workspace</div>
+        </div>
+
+        <!-- Login Form -->
+        <div class="form-content" id="login-form">
+            <div class="input-group">
+                <label>Work Email</label>
+                <input type="email" id="login-email" placeholder="you@company.com" />
+            </div>
+            <div class="input-group">
+                <label>Password</label>
+                <input type="password" id="login-password" placeholder="••••••••" />
+            </div>
+            <button class="btn-primary" onclick="handleLogin()">Sign In →</button>
+            
+            <div class="footer-link">
+                Forgot password? <a href="#">Reset</a>
+            </div>
+        </div>
+
+        <!-- Signup Form -->
+        <div class="form-content" id="signup-form" style="display: none;">
+            <div class="input-group">
+                <label>Business Name</label>
+                <input type="text" id="business" placeholder="Acme Corp Ltd." />
+            </div>
+            <div class="input-group">
+                <label>Work Email</label>
+                <input type="email" id="signup-email" placeholder="you@company.com" />
+            </div>
+            <div class="input-group">
+                <label>Country</label>
+                <select id="country">
+                    <option value="CA">🇨🇦 Canada</option>
+                    <option value="US">🇺🇸 United States</option>
+                    <option value="AE">🇦🇪 UAE</option>
+                    <option value="IN">🇮🇳 India</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label>Estimated Monthly Volume (CAD)</label>
+                <select id="volume">
+                    <option value="under50k">Under $50,000</option>
+                    <option value="50-200k">$50,000 – $200,000</option>
+                    <option value="200k+">$200,000+</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label>Password</label>
+                <input type="password" id="signup-password" placeholder="Create strong password" />
+            </div>
+            <button class="btn-primary" onclick="handleSignup()">Create Workspace →</button>
+        </div>
+    </div>
+
+    <script>
+        let currentTab = 0;
+
+        function switchTab(tab) {
+            currentTab = tab;
+            
+            document.getElementById('login-tab').classList.toggle('active', tab === 0);
+            document.getElementById('signup-tab').classList.toggle('active', tab === 1);
+            
+            document.getElementById('login-form').style.display = tab === 0 ? 'block' : 'none';
+            document.getElementById('signup-form').style.display = tab === 1 ? 'block' : 'none';
+        }
+
+        function handleLogin() {
+            const email = document.getElementById('login-email').value;
+            if (email) {
+                alert("✅ Demo Login Successful!\n\nRedirecting to Dashboard... (در نسخه واقعی فعال می‌شود)");
+                // window.location.href = "../platform/dashboard.html";
+            } else {
+                alert("لطفاً ایمیل خود را وارد کنید.");
+            }
+        }
+
+        function handleSignup() {
+            const business = document.getElementById('business').value;
+            const email = document.getElementById('signup-email').value;
+            
+            if (business && email) {
+                alert(`✅ Workspace "${business}" created successfully!\n\nWelcome to Noetfield.`);
+                // window.location.href = "../platform/dashboard.html";
+            } else {
+                alert("لطفاً نام کسب‌وکار و ایمیل را وارد کنید.");
+            }
+        }
+
+        // Default to Login tab
+        switchTab(0);
+    </script>
+</body>
+</html>
