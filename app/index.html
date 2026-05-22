@@ -1,350 +1,997 @@
-<!-- /app/index.html — Noetfield App v2.0 (Deal Room: scope → sign → pay → track → deliver) -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Noetfield App — secure deal room (scope, sign, pay, track, deliver)</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Noetfield — Non‑Custodial Payment Instruction Layer</title>
 
-  <meta name="description" content="A controlled deal room for Noetfield engagements: lock scope and acceptance, execute the agreement, route payment, track delivery, and receive board-ready outputs. No install required." />
-  <meta name="robots" content="index,follow" />
-  <meta name="author" content="Noetfield Systems Inc." />
-  <meta name="theme-color" content="#07070b" />
+<!-- Inter Font Engine -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 
-  <link rel="canonical" href="https://www.noetfield.com/app/" />
-
-  <link rel="icon" href="/noetfield-favicon-512.png" type="image/png" />
-  <link rel="apple-touch-icon" href="/noetfield-favicon-512.png" />
-
-  <meta property="og:type" content="website" />
-  <meta property="og:site_name" content="Noetfield" />
-  <meta property="og:title" content="Noetfield App — secure deal room" />
-  <meta property="og:description" content="Lock scope. Sign. Pay. Track. Receive board-ready outputs. No install required." />
-  <meta property="og:url" content="https://www.noetfield.com/app/" />
-  <meta property="og:image" content="https://www.noetfield.com/noetfield-og.png" />
-
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Noetfield App — secure deal room" />
-  <meta name="twitter:description" content="Lock scope. Sign. Pay. Track. Receive board-ready outputs. No install required." />
-  <meta name="twitter:image" content="https://www.noetfield.com/noetfield-og.png" />
-
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-
-  <!-- Locked shell -->
-  <link rel="stylesheet" href="/assets/noetfield-shell.css" />
-  <script src="/assets/noetfield-shell.js" defer></script>
-
-  <style>
-    .hero{padding:26px 0 10px}
-    .heroShell{
-      position:relative;
-      border-radius: calc(var(--radius) + 10px);
-      border: 1px solid rgba(255,255,255,.11);
-      background:
-        radial-gradient(1000px 420px at 16% 0%, rgba(200,163,73,.16), transparent 60%),
-        radial-gradient(1000px 420px at 86% 10%, rgba(122,167,255,.08), transparent 62%),
-        linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
-      box-shadow: var(--shadow);
-      overflow:hidden;
-    }
-    .heroShell::before{
-      content:"";
-      position:absolute; inset:-1px;
-      background: linear-gradient(120deg, rgba(200,163,73,.24), transparent 30%, rgba(255,255,255,.08) 68%, transparent);
-      opacity:.40;
-      pointer-events:none;
-      mask-image: linear-gradient(180deg, black 0%, black 58%, transparent 96%);
-    }
-    .heroInner{padding: 22px 20px}
-    .eyebrow{
-      display:inline-flex; gap:10px; align-items:center;
-      color:var(--muted);
-      font-size:13px;
-      padding:9px 12px;
-      border-radius:999px;
-      border:1px solid rgba(255,255,255,.13);
-      background: rgba(255,255,255,.035);
-    }
-    .dot{
-      width:8px; height:8px; border-radius:50%;
-      background: rgba(200,163,73,.97);
-      box-shadow: 0 0 0 3px rgba(200,163,73,.18);
-    }
-    h1{margin:14px 0 10px; font-size:36px; line-height:1.06; letter-spacing:-0.75px}
-    .lead{margin:0; color:var(--muted); font-size:15.5px; max-width: 980px; line-height:1.55}
-    .heroActions{display:flex; gap:12px; flex-wrap:wrap; margin-top:14px; align-items:center}
-
-    .chips{display:flex; gap:10px; flex-wrap:wrap; margin-top:12px}
-    .chip{
-      display:inline-flex; align-items:center; gap:8px;
-      padding:8px 10px;
-      border-radius:999px;
-      border:1px solid rgba(255,255,255,.12);
-      background: rgba(255,255,255,.03);
-      color:var(--muted);
-      font-size:12.5px;
-      text-decoration:none;
-      white-space:nowrap;
-    }
-    .chip:hover{border-color:rgba(255,255,255,.18); background: rgba(255,255,255,.04)}
-
-    .grid{
-      display:grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap:14px;
-      margin: 16px 0 16px;
-    }
-    .card{
-      border-radius:var(--radius);
-      border:1px solid rgba(255,255,255,.11);
-      background: linear-gradient(180deg, rgba(255,255,255,.055), rgba(255,255,255,.022));
-      box-shadow: var(--shadow2);
-      overflow:hidden;
-      min-width:0;
-    }
-    .card .bd{padding:16px}
-    .step{
-      display:flex; align-items:center; justify-content:space-between; gap:12px;
-      margin:0 0 8px;
-    }
-    .step b{letter-spacing:-.2px}
-    .pill{
-      font-size:12px;
-      color:var(--muted2);
-      border:1px solid rgba(255,255,255,.12);
-      padding:6px 8px;
-      border-radius:999px;
-      background: rgba(255,255,255,.02);
-      white-space:nowrap;
-      font-weight:700;
-    }
-    .card p{margin:0; color:var(--muted); line-height:1.55}
-    .list{margin:10px 0 0; padding-left:18px; color:var(--muted); line-height:1.65}
-
-    .section{
-      margin: 14px 0;
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.03);
-      border-radius:16px;
-      padding:14px;
-    }
-    .kicker{font-weight:900; letter-spacing:-.2px; margin:0 0 6px; font-size:14px}
-    .sub{margin:0; color:var(--muted2); font-size:12.5px; line-height:1.55}
-
-    .note{
-      border:1px dashed rgba(255,255,255,.16);
-      border-radius:16px;
-      padding:12px;
-      background: rgba(255,255,255,.015);
-      color:var(--muted2);
-      font-size:12.5px;
-      line-height:1.55;
-      margin-top:12px;
+<style>
+    :root {
+        --bg: #030303;
+        --canvas: #09090b;
+        --card: #121214;
+        --card-hover: #161619;
+        --border: rgba(255, 255, 255, 0.07);
+        --border-focus: rgba(99, 102, 241, 0.4);
+        
+        --text-primary: #f4f4f5;
+        --text-secondary: #a1a1aa;
+        --text-muted: #52525b;
+        
+        --accent: #514ef5;
+        --accent-glow: rgba(81, 78, 245, 0.15);
+        --emerald: #10b981;
+        
+        --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        --font-mono: 'JetBrains Mono', monospace;
+        --radius: 12px;
     }
 
-    details{
-      border: 1px solid rgba(255,255,255,.10);
-      border-radius: 14px;
-      background: rgba(255,255,255,.02);
-      overflow:hidden;
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
     }
-    summary{
-      cursor:pointer;
-      list-style:none;
-      padding:12px 12px;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-      font-weight:900;
-      letter-spacing:-.2px;
-    }
-    summary::-webkit-details-marker{display:none}
-    .detailsBd{padding:0 12px 12px}
 
-    @media (max-width: 980px){
-      .grid{grid-template-columns: 1fr}
-      h1{font-size:32px}
+    html {
+        scroll-behavior: smooth;
+        background-color: var(--bg);
     }
-  </style>
 
-  <script type="application/ld+json">
-  {
-    "@context":"https://schema.org",
-    "@type":"WebPage",
-    "name":"Noetfield App — secure deal room",
-    "url":"https://www.noetfield.com/app/",
-    "description":"A controlled deal room for Noetfield engagements: lock scope and acceptance, execute the agreement, route payment, track delivery, and receive board-ready outputs. No install required.",
-    "isPartOf":{"@type":"WebSite","name":"Noetfield","url":"https://www.noetfield.com/"},
-    "publisher":{"@type":"Organization","name":"Noetfield Systems Inc."}
-  }
-  </script>
+    body {
+        background: var(--bg);
+        background-image: 
+            linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+        background-size: 40px 40px;
+        background-position: center top;
+        color: var(--text-primary);
+        font-family: var(--font-sans);
+        letter-spacing: -0.01em;
+        -webkit-font-smoothing: antialiased;
+        padding-top: 100px; /* Accounts for fixed header */
+    }
+
+    /* GLOBAL BLUR DECORATIONS */
+    .glow-bg {
+        position: absolute;
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 100%;
+        max-width: 1200px;
+        height: 450px;
+        background: radial-gradient(circle at 50% 0%, var(--accent-glow) 0%, transparent 65%);
+        pointer-events: none;
+        z-index: -1;
+    }
+
+    /* TYPOGRAPHY */
+    h1, h2, h3, h4 {
+        font-weight: 600;
+        letter-spacing: -0.03em;
+        color: #ffffff;
+    }
+
+    p {
+        color: var(--text-secondary);
+        font-size: 15px;
+        line-height: 1.6;
+    }
+
+    /* HEADER STYLING */
+    header.navbar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 64px;
+        background: rgba(3, 3, 3, 0.75);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border-b: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 40px;
+        z-index: 1000;
+        border-bottom: 1px solid var(--border);
+    }
+
+    .brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        text-decoration: none;
+    }
+
+    .brand-logo {
+        width: 24px;
+        height: 24px;
+        background: linear-gradient(135deg, var(--accent), #a855f7);
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 12px;
+        color: #fff;
+    }
+
+    .brand-name {
+        color: #ffffff;
+        font-weight: 600;
+        font-size: 16px;
+    }
+
+    .brand-tag {
+        font-family: var(--font-mono);
+        font-size: 10px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid var(--border);
+        padding: 2px 6px;
+        border-radius: 4px;
+        color: var(--text-secondary);
+    }
+
+    nav.nav-links {
+        display: flex;
+        gap: 28px;
+    }
+
+    nav.nav-links a {
+        color: var(--text-secondary);
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 500;
+        transition: color 0.2s;
+    }
+
+    nav.nav-links a:hover {
+        color: #ffffff;
+    }
+
+    .nav-actions {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+    }
+
+    /* BUTTONS */
+    .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 10px 20px;
+        border-radius: var(--radius);
+        font-size: 14px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s;
+        text-decoration: none;
+        border: 1px solid transparent;
+    }
+
+    .btn-primary {
+        background: #ffffff;
+        color: #000000;
+    }
+
+    .btn-primary:hover {
+        background: #e4e4e7;
+    }
+
+    .btn-secondary {
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid var(--border);
+        color: #ffffff;
+    }
+
+    .btn-secondary:hover {
+        background: rgba(255, 255, 255, 0.08);
+        border-color: rgba(255, 255, 255, 0.15);
+    }
+
+    .btn-outline {
+        border: 1px solid var(--accent);
+        color: var(--text-primary);
+        background: rgba(81, 78, 245, 0.03);
+    }
+
+    .btn-outline:hover {
+        background: var(--accent);
+        color: #ffffff;
+        box-shadow: 0 0 20px rgba(81, 78, 245, 0.3);
+    }
+
+    /* HERO SECTION */
+    .hero {
+        text-align: center;
+        padding: 80px 20px 60px 20px;
+        max-width: 940px;
+        margin: auto;
+        position: relative;
+    }
+
+    .status-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: rgba(16, 185, 129, 0.06);
+        border: 1px solid rgba(16, 185, 129, 0.15);
+        padding: 6px 14px;
+        border-radius: 100px;
+        font-size: 12px;
+        font-weight: 500;
+        color: var(--emerald);
+        margin-bottom: 24px;
+    }
+
+    .status-dot {
+        width: 6px;
+        height: 6px;
+        background: var(--emerald);
+        border-radius: 50%;
+        animation: pulse 2s infinite;
+    }
+
+    .hero h1 {
+        font-size: 56px;
+        line-height: 1.1;
+        margin-bottom: 24px;
+        background: linear-gradient(180deg, #ffffff 0%, #a1a1aa 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .hero p.subtitle {
+        font-size: 19px;
+        color: var(--text-secondary);
+        max-width: 700px;
+        margin: 0 auto 40px auto;
+        line-height: 1.5;
+    }
+
+    /* APP METRICS BAR */
+    .metrics-bar {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        border-top: 1px solid var(--border);
+        border-bottom: 1px solid var(--border);
+        padding: 24px 0;
+        max-width: 800px;
+        margin: 40px auto 0 auto;
+        text-align: left;
+    }
+
+    .metric-item {
+        padding-left: 32px;
+        border-right: 1px solid var(--border);
+    }
+
+    .metric-item:last-child {
+        border-right: none;
+    }
+
+    .metric-label {
+        font-size: 11px;
+        text-transform: uppercase;
+        color: var(--text-muted);
+        font-family: var(--font-mono);
+        letter-spacing: 0.05em;
+    }
+
+    .metric-value {
+        font-size: 15px;
+        font-weight: 500;
+        color: var(--text-primary);
+        margin-top: 4px;
+    }
+
+    /* CONTAINERS & SECTIONS */
+    section {
+        padding: 90px 40px;
+        max-width: 1200px;
+        margin: auto;
+    }
+
+    .section-header {
+        max-width: 600px;
+        margin-bottom: 48px;
+    }
+
+    .section-header h2 {
+        font-size: 28px;
+        margin-bottom: 12px;
+    }
+
+    /* HOW IT WORKS TIMELINE */
+    .pipeline-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 20px;
+    }
+
+    .pipeline-card {
+        background: var(--canvas);
+        border: 1px solid var(--border);
+        padding: 28px;
+        border-radius: var(--radius);
+        position: relative;
+        transition: border-color 0.2s;
+    }
+
+    .pipeline-card:hover {
+        border-color: rgba(255, 255, 255, 0.15);
+    }
+
+    .step-num {
+        font-family: var(--font-mono);
+        font-size: 12px;
+        color: var(--accent);
+        font-weight: 500;
+        margin-bottom: 16px;
+        display: block;
+    }
+
+    .pipeline-card h3 {
+        font-size: 16px;
+        margin-bottom: 10px;
+    }
+
+    .pipeline-card p {
+        font-size: 13.5px;
+        color: var(--text-secondary);
+    }
+
+    /* INTERACTIVE PLAYGROUND & /KITS DESIGN */
+    .dashboard-layout {
+        display: grid;
+        grid-template-columns: 4fr 6fr;
+        gap: 32px;
+        background: var(--canvas);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        overflow: hidden;
+    }
+
+    .interactive-panel {
+        padding: 40px;
+        border-right: 1px solid var(--border);
+        display: flex;
+        flex-col: column;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .control-group {
+        margin-bottom: 24px;
+    }
+
+    .control-group label {
+        display: block;
+        font-size: 12px;
+        font-weight: 500;
+        color: var(--text-secondary);
+        margin-bottom: 8px;
+    }
+
+    .input-field {
+        width: 100%;
+        background: #000000;
+        border: 1px solid var(--border);
+        padding: 12px 16px;
+        border-radius: 8px;
+        color: #ffffff;
+        font-family: var(--font-mono);
+        font-size: 14px;
+        transition: border-color 0.2s;
+    }
+
+    .input-field:focus {
+        outline: none;
+        border-color: var(--accent);
+    }
+
+    .currency-select {
+        appearance: none;
+        background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='%23a1a1aa' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'></polyline></svg>");
+        background-repeat: no-repeat;
+        background-position: right 16px center;
+    }
+
+    /* CODE CONSOLE */
+    .code-console {
+        background: #050506;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .console-header {
+        background: #0b0b0d;
+        padding: 0 20px;
+        height: 48px;
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .console-tabs {
+        display: flex;
+        gap: 4px;
+    }
+
+    .tab-btn {
+        background: transparent;
+        border: none;
+        color: var(--text-muted);
+        font-family: var(--font-mono);
+        font-size: 12px;
+        padding: 6px 12px;
+        cursor: pointer;
+        border-radius: 6px;
+        transition: all 0.2s;
+    }
+
+    .tab-btn.active {
+        color: #ffffff;
+        background: rgba(255, 255, 255, 0.05);
+    }
+
+    .window-dots {
+        display: flex;
+        gap: 6px;
+    }
+
+    .dot-node {
+        width: 8px;
+        height: 8px;
+        background: var(--border);
+        border-radius: 50%;
+    }
+
+    .console-body {
+        padding: 24px;
+        flex-grow: 1;
+        overflow-x: auto;
+    }
+
+    pre, code {
+        font-family: var(--font-mono);
+        font-size: 13px;
+        line-height: 1.5;
+    }
+
+    .json-key { color: #f43f5e; }
+    .json-string { color: #34d399; }
+    .json-number { color: #38bdf8; }
+
+    /* DROP-IN UI COMPONENT KITS PREVIEW */
+    .kit-showcase {
+        margin-top: 32px;
+        background: radial-gradient(ellipse at bottom, rgba(81,78,245,0.05), transparent), var(--canvas);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 40px;
+        display: grid;
+        grid-template-columns: 5fr 5fr;
+        gap: 40px;
+        align-items: center;
+    }
+
+    .widget-preview {
+        background: #000000;
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 24px;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+    }
+
+    .widget-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 16px;
+        font-size: 13px;
+    }
+
+    .widget-amount {
+        font-size: 28px;
+        font-weight: 600;
+        margin: 8px 0 20px 0;
+    }
+
+    .widget-btn {
+        width: 100%;
+        background: linear-gradient(180deg, #514ef5 0%, #4338ca 100%);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: white;
+        padding: 12px;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 500;
+        cursor: pointer;
+        text-align: center;
+    }
+
+    /* GRID BENEFITS */
+    .grid-benefits {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 24px;
+    }
+
+    .benefit-card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        padding: 32px;
+        border-radius: var(--radius);
+        transition: all 0.2s;
+    }
+
+    .benefit-card:hover {
+        background: var(--card-hover);
+        border-color: rgba(255, 255, 255, 0.12);
+    }
+
+    .benefit-icon {
+        width: 36px;
+        height: 36px;
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 20px;
+        color: #ffffff;
+    }
+
+    .benefit-card h3 {
+        font-size: 18px;
+        margin-bottom: 8px;
+    }
+
+    .benefit-card p {
+        font-size: 14px;
+    }
+
+    /* FOOTER STYLING */
+    footer {
+        background: #050506;
+        border-top: 1px solid var(--border);
+        padding: 80px 40px 40px 40px;
+        margin-top: 100px;
+    }
+
+    .footer-layout {
+        max-width: 1200px;
+        margin: auto;
+        display: grid;
+        grid-template-columns: 5fr 2fr 2fr;
+        gap: 60px;
+        margin-bottom: 60px;
+    }
+
+    .disclosure {
+        font-size: 12px;
+        color: var(--text-muted);
+        line-height: 1.7;
+    }
+
+    .footer-col h4 {
+        font-size: 12px;
+        text-transform: uppercase;
+        color: var(--text-primary);
+        letter-spacing: 0.05em;
+        margin-bottom: 16px;
+        font-family: var(--font-mono);
+    }
+
+    .footer-col ul {
+        list-style: none;
+    }
+
+    .footer-col ul li {
+        margin-bottom: 10px;
+    }
+
+    .footer-col ul li a {
+        color: var(--text-secondary);
+        font-size: 13px;
+        text-decoration: none;
+        transition: color 0.2s;
+    }
+
+    .footer-col ul li a:hover {
+        color: white;
+    }
+
+    .footer-bottom {
+        max-width: 1200px;
+        margin: auto;
+        border-top: 1px solid rgba(255, 255, 255, 0.04);
+        padding-top: 32px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 12px;
+        color: var(--text-muted);
+    }
+
+    /* KEYFRAMES */
+    @keyframes pulse {
+        0% { opacity: 0.4; }
+        50% { opacity: 1; }
+        100% { opacity: 0.4; }
+    }
+
+    /* RESPONSIVE MEDIA QUERIES */
+    @media (max-width: 968px) {
+        .pipeline-grid, .grid-benefits, .dashboard-layout, .kit-showcase {
+            grid-template-columns: 1fr;
+        }
+        .footer-layout {
+            grid-template-columns: 1fr;
+            gap: 40px;
+        }
+        .interactive-panel {
+            border-right: none;
+            border-bottom: 1px solid var(--border);
+        }
+        .metrics-bar {
+            grid-template-columns: 1fr;
+            gap: 16px;
+        }
+        .metric-item {
+            border-right: none;
+            padding-left: 16px;
+        }
+        header.navbar nav.nav-links {
+            display: none;
+        }
+        .hero h1 {
+            font-size: 38px;
+        }
+    }
+</style>
 </head>
 
 <body>
-  <div class="bg" aria-hidden="true"></div>
-  <a class="skip" href="#main">Skip to content</a>
 
-  <header id="nfHeader"></header>
+<div class="glow-bg"></div>
 
-  <main id="main" class="wrap">
-    <!-- HERO -->
-    <section class="hero" aria-label="Noetfield App">
-      <div class="heroShell">
-        <div class="heroInner">
-          <div class="eyebrow"><span class="dot"></span> Deal room • Scope lock • Contracting • Payment • Delivery</div>
-          <h1>Noetfield App</h1>
-          <p class="lead">
-            A controlled workspace for approved engagements. The App turns “interested” into “executed”:
-            scope and acceptance are locked, agreement is executed, payment is routed, delivery is tracked, and board-ready artefacts are received.
-            No install required.
-          </p>
+<!-- NAVIGATION BAR -->
+<header class="navbar">
+    <a href="#" class="brand">
+        <div class="brand-logo">N</div>
+        <span class="brand-name">Noetfield</span>
+        <span class="brand-tag">v2.0</span>
+    </a>
+    
+    <nav class="nav-links">
+        <a href="#pipeline">Architecture</a>
+        <a href="#sandbox">Developer Sandbox</a>
+        <a href="#kits">SDK Kits</a>
+        <a href="#benefits">Infrastructure</a>
+    </nav>
 
-          <div class="heroActions">
-            <a class="btn" href="/gate/intake/" data-rid-link>Start via Gate</a>
-            <a class="btn secondary" href="/status/" data-rid-link>Open Status</a>
-            <a class="btn secondary" href="/vendor/" data-rid-link>Vendor pack</a>
-            <a class="btn secondary" href="/trust-ledger/output/" data-rid-link>Output spec</a>
-          </div>
+    <div class="nav-actions">
+        <button class="btn btn-secondary" style="padding: 8px 14px; font-size: 13px;">Sign In</button>
+        <button class="btn btn-primary" style="padding: 8px 14px; font-size: 13px;">Launch Console</button>
+    </div>
+</header>
 
-          <div class="chips" aria-label="App sections">
-            <a class="chip" href="#flow">What happens inside</a>
-            <a class="chip" href="#buyers">For buyers</a>
-            <a class="chip" href="#security">Security & privacy</a>
-            <a class="chip" href="#handoff">Handoff & delivery</a>
-          </div>
+<!-- HERO CONTAINER -->
+<header class="hero">
+    <div class="status-badge">
+        <span class="status-dot"></span>
+        Production Routing Layer Online via NDAX Execution Desks
+    </div>
+    <h1>The Non‑Custodial Instruction Layer for Cross‑Border Settlements</h1>
+    <p class="subtitle">
+        Standardize high-volume SME transactional intent. Programmatically route uniform payment payloads directly to regulated execution rails without balance-sheet custody.
+    </p>
 
-          <div class="note">
-            Public intake is non-confidential by design. Do not submit credentials, secrets, or regulated data via public forms.
-          </div>
+    <div class="cta-container">
+        <a href="#sandbox" class="btn btn-outline" style="margin-right: 12px;">Open Sandbox Playground</a>
+        <a href="#kits" class="btn btn-primary">Explore Embedded Kits</a>
+    </div>
+
+    <!-- PIPELINE APP METRICS METERS -->
+    <div class="metrics-bar">
+        <div class="metric-item">
+            <div class="metric-label">Avg Routing Latency</div>
+            <div class="metric-value">142 ms</div>
         </div>
-      </div>
-    </section>
-
-    <!-- FLOW -->
-    <section id="flow" class="grid" aria-label="What clients do inside the App">
-      <div class="card"><div class="bd">
-        <div class="step"><b>1) Confirm scope</b><span class="pill">SOW-ready</span></div>
-        <p>Deliverables and acceptance criteria are explicit, procurement-friendly, and aligned to the selected package.</p>
-        <ul class="list">
-          <li>Scope lock + exclusions</li>
-          <li>Acceptance criteria</li>
-          <li>Inputs and access plan</li>
-        </ul>
-      </div></div>
-
-      <div class="card"><div class="bd">
-        <div class="step"><b>2) Execute agreement</b><span class="pill">audit trail</span></div>
-        <p>E-sign workflow (or buyer-preferred contracting path) with a clear record of what was agreed.</p>
-        <ul class="list">
-          <li>SOW / Order form</li>
-          <li>DPA if applicable</li>
-          <li>Named buyer contacts</li>
-        </ul>
-      </div></div>
-
-      <div class="card"><div class="bd">
-        <div class="step"><b>3) Route payment</b><span class="pill">fast start</span></div>
-        <p>Card checkout for speed, with invoice/bank transfer paths available for selected enterprise buyers (by agreement).</p>
-        <ul class="list">
-          <li>Receipts and references</li>
-          <li>Invoice reference (if used)</li>
-          <li>Engagement ID continuity</li>
-        </ul>
-      </div></div>
-
-      <div class="card"><div class="bd">
-        <div class="step"><b>4) Track and receive outputs</b><span class="pill">delivery</span></div>
-        <p>Status continuity via Request ID, plus downloadable board-ready artefacts when delivery milestones complete.</p>
-        <ul class="list">
-          <li>Milestones and ETA</li>
-          <li>Review checkpoints</li>
-          <li>Final versioned pack</li>
-        </ul>
-      </div></div>
-    </section>
-
-    <!-- BUYER CLARITY -->
-    <section id="buyers" class="section" aria-label="Who the App is for">
-      <div class="kicker">Who uses the App</div>
-      <p class="sub">
-        Built for procurement-led buying: IT/Security reviewers, Legal, and the business owner all see the same scope, artefacts, and acceptance criteria.
-        Fewer emails, fewer ambiguities, faster approvals.
-      </p>
-      <div class="heroActions" style="margin-top:12px;">
-        <a class="btn secondary" href="/gate/" data-rid-link>Gate home</a>
-        <a class="btn secondary" href="/vendor/" data-rid-link>Vendor pack</a>
-        <a class="btn secondary" href="/trust-ledger/" data-rid-link>Trust Ledger</a>
-      </div>
-    </section>
-
-    <!-- SECURITY / PRIVACY -->
-    <section id="security" class="section" aria-label="Security and privacy posture">
-      <div class="kicker">Security & privacy posture (overview)</div>
-      <p class="sub">
-        The App is a controlled deal room. Sensitive materials move only after scope and a secure channel are agreed.
-        Public intake is routing-only.
-      </p>
-
-      <details style="margin-top:12px;">
-        <summary>What is allowed in public intake <span class="pill">routing-only</span></summary>
-        <div class="detailsBd">
-          <ul class="list">
-            <li>High-level need and preferred package</li>
-            <li>Business contact information</li>
-            <li>Non-sensitive context required to route the request</li>
-          </ul>
+        <div class="metric-item">
+            <div class="metric-label">Liquidity Depth Model</div>
+            <div class="metric-value">NDAX Institutional</div>
         </div>
-      </details>
-
-      <details style="margin-top:12px;">
-        <summary>What is not allowed in public intake <span class="pill">do not submit</span></summary>
-        <div class="detailsBd">
-          <ul class="list">
-            <li>Credentials, tokens, secrets, private keys</li>
-            <li>Regulated personal data or sensitive content</li>
-            <li>Production exports unless explicitly requested via a secure channel</li>
-          </ul>
+        <div class="metric-item">
+            <div class="metric-label">Framework Rule</div>
+            <div class="metric-value">Zero-Custody (Pure Data)</div>
         </div>
-      </details>
+    </div>
+</header>
 
-      <div class="heroActions" style="margin-top:12px;">
-        <a class="btn secondary" href="/privacy/">Privacy</a>
-        <a class="btn secondary" href="/terms/">Terms</a>
-        <a class="btn secondary" href="/policies/">Policies</a>
-      </div>
-    </section>
+<!-- DATA PIPELINE FLOW -->
+<section id="pipeline">
+    <div class="section-header">
+        <h2>Transactional Data Lifecycle</h2>
+        <p>How the Noetfield architecture transforms raw structural intent into clearing block settlements safely.</p>
+    </div>
 
-    <!-- HANDOFF / DELIVERY -->
-    <section id="handoff" class="section" aria-label="Outputs delivered and handoff">
-      <div class="kicker">Outputs delivered</div>
-      <p class="sub">
-        Typical delivery pack: Board memo + Trust Ledger snapshot + Controls map + Evidence index — scoped per engagement and delivered as versioned artefacts.
-      </p>
-
-      <details style="margin-top:12px;">
-        <summary>What “board-ready” means <span class="pill">acceptance-led</span></summary>
-        <div class="detailsBd">
-          <ul class="list">
-            <li>Executive summary stands alone (decision options + recommendation)</li>
-            <li>Evidence is linked or gaps are explicitly recorded</li>
-            <li>Owners are specified by role; next steps are actionable</li>
-            <li>Scope/exclusions/assumptions are explicit</li>
-          </ul>
+    <div class="pipeline-grid">
+        <div class="pipeline-card">
+            <span class="step-num">01 / CAPTURE</span>
+            <h3>SME Payload Origin</h3>
+            <p>Source platform drops structural recipient data and settlement requests into our ingestion endpoint.</p>
         </div>
-      </details>
 
-      <div class="heroActions" style="margin-top:12px;">
-        <a class="btn secondary" href="/trust-ledger/output/" data-rid-link>Output specification</a>
-        <a class="btn secondary" href="/trust-ledger/" data-rid-link>Trust Ledger</a>
-        <a class="btn secondary" href="/copilot/" data-rid-link>Copilot</a>
-        <a class="btn" href="/gate/intake/" data-rid-link>Start via Gate</a>
-      </div>
-    </section>
-  </main>
+        <div class="pipeline-card">
+            <span class="step-num">02 / NORMALIZATION</span>
+            <h3>Instruction Mapping</h3>
+            <p>Parameters are sanitized, signed, and structured into execution-ready JSON objects instantly.</p>
+        </div>
 
-  <footer id="nfFooter"></footer>
+        <div class="pipeline-card">
+            <span class="step-num">03 / HANDOFF</span>
+            <h3>NDAX Handoff</h3>
+            <p>Normalized instructions pass seamlessly to NDAX liquidity desks under strict security paradigms.</p>
+        </div>
+
+        <div class="pipeline-card">
+            <span class="step-num">04 / TRACKING</span>
+            <h3>Atomic States</h3>
+            <p>Webhooks trigger programmatic real-time settlement status updates back to the client ledger instantly.</p>
+        </div>
+    </div>
+</section>
+
+<!-- INTERACTIVE DEVELOPER SANDBOX -->
+<section id="sandbox">
+    <div class="section-header">
+        <h2>Interactive Playground</h2>
+        <p>Modify local parameters on the fly to see how the data engine normalizes structural instruction packages.</p>
+    </div>
+
+    <div class="dashboard-layout">
+        <!-- Control Panel Input Elements -->
+        <div class="interactive-panel">
+            <div>
+                <div class="control-group">
+                    <label for="param-amount">Transaction Volume</label>
+                    <input type="number" id="param-amount" class="input-field" value="12500" step="500">
+                </div>
+
+                <div class="control-group">
+                    <label for="param-currency">Base Currency Unit</label>
+                    <select id="param-currency" class="input-field currency-select">
+                        <option value="USD">USD — United States Dollar</option>
+                        <option value="EUR">EUR — Euro Block Currency</option>
+                        <option value="GBP">GBP — Great British Pound</option>
+                    </select>
+                </div>
+                
+                <div class="control-group">
+                    <label for="param-dest">Target Destination Settlement</label>
+                    <select id="param-dest" class="input-field currency-select">
+                        <option value="CAD">CAD — Canadian Dollar (NDAX Core)</option>
+                        <option value="USD">USD — US Digital Liquidity Desk</option>
+                    </select>
+                </div>
+            </div>
+
+            <p style="font-size: 12px; color: var(--text-muted); border-top: 1px solid var(--border); padding-top: 16px;">
+                💡 Changing values dynamically re-computes cryptography blocks inside the schema matrix.
+            </p>
+        </div>
+
+        <!-- Simulated Code Window Console -->
+        <div class="code-console">
+            <div class="console-header">
+                <div class="window-dots">
+                    <span class="dot-node"></span>
+                    <span class="dot-node"></span>
+                    <span class="dot-node"></span>
+                </div>
+                <div class="console-tabs">
+                    <button id="tab-req" class="tab-btn active" onclick="switchSandboxTab('REQ')">POST /intent</button>
+                    <button id="tab-res" class="tab-btn" onclick="switchSandboxTab('RES')">Response Payload</button>
+                </div>
+            </div>
+            <div class="console-body">
+                <pre><code id="console-code-block">/* Code loading... */</code></pre>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- DROP-IN INTERACTIVE /KITS SHOWCASE -->
+<section id="kits">
+    <div class="section-header">
+        <h2>Noetfield Drop-In UI Components (/kits)</h2>
+        <p>Integrate user-facing enterprise widgets with two lines of front-end framework script.</p>
+    </div>
+
+    <div class="kit-showcase">
+        <div>
+            <div class="console-header" style="border-radius: 8px 8px 0 0; background: #0f0f12; border: 1px solid var(--border); border-bottom: none;">
+                <span class="brand-tag">React Engine Fragment</span>
+                <div class="console-tabs">
+                    <button class="tab-btn active">WidgetComponent.tsx</button>
+                </div>
+            </div>
+            <pre style="border-radius: 0 0 8px 8px; border: 1px solid var(--border); margin: 0; background: #050506; padding: 20px;"><code style="color: #a1a1aa;"><span style="color:#514ef5">import</span> { InstructionWidget } <span style="color:#514ef5">from</span> <span style="color:#34d399">'@noetfield/react'</span>;
+
+<span style="color:#f43f5e">function</span> <span style="color:#38bdf8">SettlementPortal</span>() {
+  <span style="color:#514ef5">return</span> (
+    &lt;<span style="color:#f43f5e">InstructionWidget</span> 
+      apiKey=<span style="color:#34d399">"nof_live_77x89"</span>
+      defaultAmount={12500}
+      routingPartner=<span style="color:#34d399">"NDAX"</span>
+    /&gt;
+  );
+}</code></pre>
+        </div>
+
+        <!-- Live simulated UI Widget preview rendering -->
+        <div class="widget-preview">
+            <div class="widget-row" style="color: var(--text-muted); font-family: var(--font-mono); font-size: 11px;">
+                <span>SECURE INSTANT INTENT CHANNEL</span>
+                <span style="color: var(--emerald)">● ONLINE</span>
+            </div>
+            <div class="widget-row" style="margin-top: 14px;">
+                <span style="color: var(--text-secondary)">Settlement Value Mapping</span>
+                <span style="font-weight:600;" id="widget-currency-label">USD</span>
+            </div>
+            <div class="widget-amount" id="widget-amount-label">$12,500.00</div>
+            
+            <div class="widget-row" style="border-top: 1px dashed var(--border); padding-top: 14px; font-size: 12px;">
+                <span style="color: var(--text-muted)">Partner Destination Route</span>
+                <span style="color: white; font-family:var(--font-mono)" id="widget-dest-label">NDAX_FX_DESK (CAD)</span>
+            </div>
+            
+            <button class="widget-btn" style="margin-top: 18px;" onclick="alert('Instruction generated! Check Sandbox tab results.')">
+                Generate NDAX Route Object
+            </button>
+        </div>
+    </div>
+</section>
+
+<!-- ENTERPRISE CORE VALUES -->
+<section id="benefits">
+    <div class="section-header">
+        <h2>Engineers First. Security Always.</h2>
+        <p>Built explicitly for platforms requiring cross-border currency routes without localized treasury exposure.</p>
+    </div>
+
+    <div class="grid-benefits">
+        <div class="benefit-card">
+            <div class="benefit-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+            </div>
+            <h3>Atomic Intent Protocol</h3>
+            <p>Instantly map fragmented, unpredictable international client requests into clean, uniform transaction instructions optimized for financial processing queues.</p>
+        </div>
+
+        <div class="benefit-card">
+            <div class="benefit-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            </div>
+            <h3>Non-Custodial Architecture</h3>
+            <p>Eliminate security liabilities completely. Noetfield handles data translation streams, leaving balance sheets, custody, and settlement parameters securely to verified partners.</p>
+        </div>
+
+        <div class="benefit-card">
+            <div class="benefit-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11"/></svg>
+            </div>
+            <h3>Downstream Partner Alignment</h3>
+            <p>Direct platform links forward standard data objects right into specialized institutional providers like NDAX, offering high liquidity depth and regulatory clearing paths.</p>
+        </div>
+
+        <div class="benefit-card">
+            <div class="benefit-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+            </div>
+            <h3>Ledger Synchronization</h3>
+            <p>Avoid delivery exceptions with automated persistent webhook broadcast events mapped across all step milestones during cross-border operations.</p>
+        </div>
+    </div>
+</section>
+
+<!-- COMPLIANCE & LEGAL DISCLOSURE FOOTER -->
+<footer>
+    <div class="footer-layout">
+        <div class="disclosure">
+            <h4>Regulatory Infrastructure Architecture</h4>
+            <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 12px;">
+                Noetfield Technologies Inc. is a financial infrastructure technology provider offering non-custodial data mediation routing services. Noetfield does not function as a bank, licensed money services business (MSB), custodial wallet operator, or cryptocurrency exchange asset manager.
+            </p>
+            <p style="font-size: 12px; color: var(--text-muted);">
+                All payment conversions, fiat-to-digital currency clearing, asset settlement balances, and institutional vaulting pipelines are processed exclusively through registered downstream regulated financial service partners, including NDAX.
+            </p>
+        </div>
+        
+        <div class="footer-col">
+            <h4>System Rails</h4>
+            <ul>
+                <li><a href="#pipeline">Core Framework</a></li>
+                <li><a href="#sandbox">Developer Sandbox</a></li>
+                <li><a href="#kits">Drop-in UI Kits</a></li>
+                <li><a href="#">System Status</a></li>
+            </ul>
+        </div>
+
+        <div class="footer-col">
+            <h4>Governance</h4>
+            <ul>
+                <li><a href="#">Data Architecture Disclosures</a></li>
+                <li><a href="#">Routing Compliance Terms</a></li>
+                <li><a href="#">Partner Security Specifications</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="footer-bottom">
+        <span>© 2026 Noetfield Technologies Inc. All rights reserved.</span>
+        <span style="font-family: var(--font-mono);">Designed for strict instruction delivery automation.</span>
+    </div>
+</footer>
+
+<!-- DYNAMIC PLAYGROUND JAVASCRIPT LAYER -->
+<script>
+    let currentTab = 'REQ';
+
+    const inputAmount = document.getElementById('param-amount');
+    const inputCurrency = document.getElementById('param-currency');
+    const inputDest = document.getElementById('param-dest');
+
+    const codeBlock = document.getElementById('console-code-block');
+    const widgetAmountLabel = document.getElementById('widget-amount-label');
+    const widgetCurrencyLabel = document.getElementById('widget-currency-label');
+    const widgetDestLabel = document.getElementById('widget-dest-label');
+
+    function renderCode() {
+        const amt = parseFloat(inputAmount.value) || 0;
+        const cur = inputCurrency.value;
+        const dst = inputDest.value;
+        
+        // Update Interactive Widgets Real-time Text Values
+        widgetAmountLabel.innerText = new Intl.NumberFormat('en-US', { style: 'currency', currency: cur }).format(amt);
+        widgetCurrencyLabel.innerText = cur;
+        widgetDestLabel.innerText = `NDAX_CORE_POOL (${dst})`;
+
+        if (currentTab === 'REQ') {
+            codeBlock.innerHTML = `{\n  <span class="json-key">"intent"</span>: <span class="json-string">"cross_border_settlement"</span>,\n  <span class="json-key">"source_sme"</span>: <span class="json-string">"sme_auth_01hj8a"</span>,\n  <span class="json-key">"instruction"</span>: {\n    <span class="json-key">"amount"</span>: <span class="json-number">${amt}</span>,\n    <span class="json-key">"currency"</span>: <span class="json-string">"${cur}"</span>,\n    <span class="json-key">"destination"</span>: <span class="json-string">"${dst}"</span>,\n    <span class="json-key">"routing_partner"</span>: <span class="json-string">"NDAX_FX_DESK"</span>\n  },\n  <span class="json-key">"idempotency_key"</span>: <span class="json-string">"idemp_99a8b7c6d5e4"</span>\n}`;
+        } else {
+            const dateStr = new Date().toISOString();
+            codeBlock.innerHTML = `{\n  <span class="json-key">"instruction_id"</span>: <span class="json-string">"ins_nof_8832910X"</span>,\n  <span class="json-key">"status"</span>: <span class="json-string">"QUEUED_FOR_EXECUTION"</span>,\n  <span class="json-key">"partner_route"</span>: <span class="json-string">"NDAX_LIQUIDITY_POOL"</span>,\n  <span class="json-key">"execution_payload"</span>: {\n    <span class="json-key">"estimated_settlement"</span>: <span class="json-string">"Locked (under 4 mins)"</span>,\n    <span class="json-key">"partner_reference"</span>: <span class="json-string">"NDAX-TX-99012"</span>\n  },\n  <span class="json-key">"timestamp"</span>: <span class="json-string">"${dateStr}"</span>\n}`;
+        }
+    }
+
+    function switchSandboxTab(tab) {
+        currentTab = tab;
+        document.getElementById('tab-req').classList.toggle('active', tab === 'REQ');
+        document.getElementById('tab-res').classList.toggle('active', tab === 'RES');
+        renderCode();
+    }
+
+    // Attach Input Event Listeners
+    inputAmount.addEventListener('input', renderCode);
+    inputCurrency.addEventListener('change', renderCode);
+    inputDest.addEventListener('change', renderCode);
+
+    // Bootstrap initial execution render
+    renderCode();
+</script>
+
 </body>
 </html>
