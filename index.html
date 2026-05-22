@@ -1,620 +1,85 @@
-<!-- /index.html — Noetfield Home v7.3.2 (QuickScan-first • single safety bar • proof band (ledger wording) • noscript .nojs • schema @graph + contactPoint • rail adds Invoice/PO note • optional samples micro-CTA) -->
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <title>Noetfield — Trust and Stewardship in AI</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Noetfield — Cross-Border Payments for Canadian SMEs</title>
 
-  <meta name="description" content="Noetfield delivers board-ready AI governance artefacts: Copilot QuickScan (rapid snapshot), Microsoft 365 Copilot Readiness (2/4/6-week SKUs), and Trust Ledger (maintained governance register). Evidence-first. Procurement supported." />
-  <meta name="robots" content="index,follow" />
-  <meta name="author" content="Noetfield Systems Inc." />
-  <meta name="theme-color" content="#07070b" />
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;1,400&display=swap');
 
-  <!-- Canonical (LOCKED: www) -->
-  <link rel="canonical" href="https://www.noetfield.com/" />
-  <link rel="icon" href="/noetfield-favicon-512.png" type="image/png" />
-  <link rel="apple-touch-icon" href="/noetfield-favicon-512.png" />
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-  <meta property="og:type" content="website" />
-  <meta property="og:site_name" content="Noetfield" />
-  <meta property="og:title" content="Noetfield — Trust and Stewardship in AI" />
-  <meta property="og:description" content="Board-ready AI governance artefacts: QuickScan, Copilot Readiness, Trust Ledger. Evidence-first. Procurement supported." />
-  <meta property="og:url" content="https://www.noetfield.com/" />
-  <meta property="og:image" content="https://www.noetfield.com/noetfield-og.png" />
+:root {
+    --bg: #0a0c0f; --surface: #111418; --surface2: #161b22;
+    --border: rgba(255, 255, 255, 0.07); --border2: rgba(255, 255, 255, 0.13);
+    --text: #e8eaed; --muted: #6b7280; --faint: #374151;
+    --green: #00d084; --gdim: rgba(0, 208, 132, 0.15); --glow: 0 0 24px rgba(0, 208, 132, 0.2);
+    --sans: 'Syne', sans-serif; --mono: 'IBM Plex Mono', monospace;
+}
 
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Noetfield — Trust and Stewardship in AI" />
-  <meta name="twitter:description" content="Board-ready AI governance artefacts: QuickScan, Copilot Readiness, Trust Ledger." />
-  <meta name="twitter:image" content="https://www.noetfield.com/noetfield-og.png" />
+body { background: var(--bg); color: var(--text); font-family: var(--mono); -webkit-font-smoothing: antialiased; }
 
-  <!-- LOCKED SHELL -->
-  <link rel="stylesheet" href="/assets/noetfield-shell.css" />
-  <script src="/assets/noetfield-shell.js" defer></script>
+/* NAVIGATION */
+.nav { display: flex; align-items: center; justify-content: space-between; padding: 0 36px; height: 60px; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: rgba(10, 12, 15, 0.9); backdrop-filter: blur(14px); z-index: 100; }
+.nav-logo { font-family: var(--sans); font-size: 17px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
+.nav-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green); box-shadow: var(--glow); }
 
-  <style>
-    .hero{padding:18px 0 10px}
-    .grid{
-      display:grid;
-      grid-template-columns: 1.12fr .88fr;
-      gap:16px;
-      margin: 14px 0 72px;
-      align-items:start;
-    }
-    .card{
-      border-radius:var(--radius);
-      border:1px solid rgba(255,255,255,.11);
-      background: linear-gradient(180deg, rgba(255,255,255,.055), rgba(255,255,255,.022));
-      box-shadow: var(--shadow2);
-      overflow:hidden;
-      min-width:0;
-    }
-    .hd{ padding:18px 18px 0; }
-    .bd{ padding:18px; }
+/* HERO */
+.hero { display: grid; grid-template-columns: 1fr 460px; gap: 56px; max-width: 1200px; margin: 0 auto; padding: 80px 36px 64px; }
+.hero-h1 { font-family: var(--sans); font-size: 52px; font-weight: 800; line-height: 1.1; letter-spacing: -.03em; margin-bottom: 20px; }
+.hero-h1 em { font-style: normal; color: var(--green); }
+.hero-sub { font-size: 14px; color: var(--muted); line-height: 1.8; max-width: 460px; margin-bottom: 36px; }
 
-    .heroShell{
-      position:relative;
-      border-radius: calc(var(--radius) + 8px);
-      border: 1px solid rgba(255,255,255,.11);
-      background:
-        radial-gradient(1100px 420px at 16% 0%, rgba(200,163,73,.18), transparent 60%),
-        radial-gradient(1100px 420px at 92% 10%, rgba(122,167,255,.10), transparent 62%),
-        linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.022));
-      box-shadow: var(--shadow);
-      overflow:hidden;
-    }
-    .heroShell::before{
-      content:"";
-      position:absolute; inset:-1px;
-      background: linear-gradient(120deg, rgba(200,163,73,.26), transparent 30%, rgba(255,255,255,.08) 68%, transparent);
-      opacity:.44;
-      pointer-events:none;
-      mask-image: linear-gradient(180deg, black 0%, black 58%, transparent 96%);
-    }
-    .heroInner{padding: 22px 18px; position:relative; z-index:1}
+/* CALCULATOR */
+.calc-card { background: var(--surface); border: 1px solid var(--border2); border-radius: 12px; padding: 24px; }
+.calc-input { width: 100%; background: var(--surface2); border: 1px solid var(--border); border-radius: 6px; padding: 12px; color: var(--text); font-size: 18px; margin-bottom: 16px; }
+.calc-submit { width: 100%; background: var(--green); color: #000; border: none; padding: 14px; border-radius: 6px; font-weight: 600; cursor: pointer; text-transform: uppercase; letter-spacing: 0.05em; font-size: 12px; }
 
-    .eyebrow{
-      display:inline-flex; gap:10px; align-items:center;
-      color:var(--muted);
-      font-size:13px;
-      padding:9px 12px;
-      border-radius:999px;
-      border:1px solid rgba(255,255,255,.13);
-      background: rgba(255,255,255,.035);
-    }
-    .dot{
-      width:8px; height:8px; border-radius:50%;
-      background: rgba(200,163,73,.97);
-      box-shadow: 0 0 0 3px rgba(200,163,73,.18);
-    }
-    h1{margin:12px 0 10px; font-size:34px; line-height:1.07; letter-spacing:-0.75px}
-    .lead{margin:0; color:var(--muted); font-size:16px; max-width: 1040px; line-height:1.75}
-    .lead strong{color:var(--text); font-weight:950}
-    .lead a{border-bottom:1px solid rgba(255,255,255,.18)}
+/* CORRIDORS */
+.corridor-row { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 16px; margin-bottom: 8px; display: grid; grid-template-columns: 1fr 1fr auto; align-items: center; cursor: pointer; }
+.corridor-row:hover { border-color: var(--border2); }
 
-    .metaRow{display:flex; flex-wrap:wrap; gap:10px; margin-top:14px}
-    .pill{
-      display:inline-flex; align-items:center; gap:10px;
-      padding:9px 12px;
-      border-radius:999px;
-      border:1px solid rgba(255,255,255,.12);
-      background: rgba(255,255,255,.03);
-      color:var(--muted);
-      font-size:13px;
-      white-space:nowrap;
-    }
-    .pill strong{color:var(--text); font-weight:900}
-
-    .actions{display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-top:12px}
-    .btn.small{ min-height:40px; padding:9px 12px; font-size:13px; }
-
-    /* Safety bar (one-liner pattern) */
-    .safetyBar{
-      margin-top:12px;
-      padding:11px 12px;
-      border-radius:14px;
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.03);
-      color:var(--muted2);
-      font-size:12.8px;
-      line-height:1.55;
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      align-items:center;
-      justify-content:space-between;
-    }
-    .safetyBar strong{ color:var(--text); font-weight:900; }
-    .safetyLinks{display:flex; gap:10px; flex-wrap:wrap; align-items:center}
-    .safetyLinks a{border-bottom:1px solid rgba(255,255,255,.18)}
-    .safetyLinks code{font-size:12.2px; color:var(--muted)}
-
-    .cardTitle{ margin:0 0 8px; font-size:18px; letter-spacing:-0.2px; }
-    .muted{ color:var(--muted); line-height:1.7; margin:0; }
-
-    .groupTitle{
-      margin:18px 0 8px;
-      font-size:14px;
-      letter-spacing:.22em;
-      text-transform:uppercase;
-      color:var(--muted2);
-    }
-
-    .blocks{ display:grid; gap:12px; margin-top:12px; }
-    .block{
-      border-radius:16px;
-      border:1px solid rgba(255,255,255,.11);
-      background: rgba(255,255,255,.03);
-      padding:14px;
-      overflow:hidden;
-      transition: border-color .15s ease, background .15s ease, transform .06s ease;
-    }
-    .block:hover{border-color:rgba(255,255,255,.22); background:rgba(255,255,255,.05)}
-    .block:focus-within{outline:2px solid rgba(200,163,73,.32); outline-offset:2px}
-    .blockTop{ display:flex; gap:10px; align-items:flex-start; justify-content:space-between; flex-wrap:wrap; }
-    .block h3{ margin:0; font-size:16px; letter-spacing:-.2px; font-weight:950; }
-    .tag{
-      display:inline-flex; align-items:center; gap:8px;
-      padding:7px 10px;
-      border-radius:999px;
-      border:1px solid rgba(255,255,255,.12);
-      background: rgba(255,255,255,.03);
-      color:var(--muted2);
-      font-size:12.4px;
-      white-space:nowrap;
-    }
-    .block p{ margin:10px 0 0; color:var(--muted); line-height:1.7; }
-    .block ul{ margin:10px 0 0; padding-left:18px; color:var(--muted2); line-height:1.6; }
-    .block li{ margin:6px 0; }
-
-    /* Proof band (scannable) */
-    .proofBand{
-      margin-top:14px;
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap:10px;
-    }
-    .proof{
-      border-radius:14px;
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.03);
-      padding:12px;
-      color:var(--muted2);
-      font-size:12.8px;
-      line-height:1.55;
-    }
-    .proof strong{ color:var(--text); font-weight:900; }
-
-    /* JS-off helper (distinct from safety bar) */
-    .nojs{
-      margin-top:12px;
-      padding:12px 12px;
-      border-radius:14px;
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.03);
-      color:var(--muted2);
-      font-size:12.8px;
-      line-height:1.6;
-    }
-    .nojs strong{ color:var(--text); font-weight:900; }
-    .nojs a{border-bottom:1px solid rgba(255,255,255,.18)}
-    .nojs code{font-size:12.2px; color:var(--muted)}
-
-    /* Rail */
-    .rail{ position: sticky; top: 14px; }
-    .railIntro{
-      padding:14px;
-      border-radius:16px;
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.03);
-      color:var(--muted2);
-      font-size:12.8px;
-      line-height:1.6;
-    }
-    .railIntro strong{ color:var(--text); font-weight:900; }
-
-    .railBox{
-      border-radius:16px;
-      border:1px solid rgba(255,255,255,.11);
-      background: rgba(255,255,255,.03);
-      padding:14px;
-      margin-top:12px;
-    }
-    .railTop{
-      display:flex; align-items:flex-start; justify-content:space-between; gap:12px; flex-wrap:wrap;
-    }
-    .railName{
-      margin:0;
-      font-size:15px;
-      font-weight:950;
-      letter-spacing:-.15px;
-    }
-    .railPrice{
-      color:var(--text);
-      font-weight:950;
-      font-size:14px;
-      white-space:nowrap;
-    }
-    .railSub{ margin:8px 0 0; color:var(--muted); line-height:1.6; font-size:13px; }
-    .railActions{ display:flex; gap:10px; flex-wrap:wrap; margin-top:12px; }
-    .railNote{ margin:10px 0 0; color:var(--muted2); font-size:12.6px; line-height:1.5; }
-    .railNote a{border-bottom:1px solid rgba(255,255,255,.18)}
-
-    /* Sticky bottom CTA (QuickScan-first) */
-    .stickyCta{
-      position: sticky;
-      bottom: 0;
-      z-index: 20;
-      padding: 10px 0;
-      background: linear-gradient(180deg, rgba(7,7,11,0) 0%, rgba(7,7,11,.78) 22%, rgba(7,7,11,.92) 100%);
-      backdrop-filter: blur(10px);
-      border-top: 1px solid rgba(255,255,255,.08);
-    }
-    .stickyInner{
-      display:flex;
-      gap:12px;
-      align-items:center;
-      justify-content:space-between;
-      padding: 0 16px;
-      max-width: 1120px;
-      margin: 0 auto;
-    }
-    .stickyText{
-      min-width:0;
-      color:var(--muted);
-      font-size:12.6px;
-      line-height:1.4;
-    }
-    .stickyText strong{ color:var(--text); font-weight:950; }
-
-    @media (max-width: 980px){
-      .grid{ grid-template-columns: 1fr; }
-      .rail{ position: relative; top: 0; }
-      h1{ font-size: 30px; }
-      .proofBand{ grid-template-columns: 1fr; }
-    }
-    @media (max-width: 760px){
-      .stickyText{display:none}
-    }
-  </style>
-
-  <!-- Structured data (Organization + WebSite + WebPage + Services + contactPoint) -->
-  <script type="application/ld+json">
-  {
-    "@context":"https://schema.org",
-    "@graph":[
-      {
-        "@type":"Organization",
-        "@id":"https://www.noetfield.com/#org",
-        "name":"Noetfield Systems Inc.",
-        "url":"https://www.noetfield.com/",
-        "logo":"https://www.noetfield.com/noetfield-favicon-512.png",
-        "contactPoint":[
-          {
-            "@type":"ContactPoint",
-            "contactType":"procurement",
-            "email":"procurement@noetfield.com",
-            "availableLanguage":["en"]
-          },
-          {
-            "@type":"ContactPoint",
-            "contactType":"billing",
-            "email":"billing@noetfield.com",
-            "availableLanguage":["en"]
-          },
-          {
-            "@type":"ContactPoint",
-            "contactType":"customer support",
-            "email":"support@noetfield.com",
-            "availableLanguage":["en"]
-          },
-          {
-            "@type":"ContactPoint",
-            "contactType":"feedback",
-            "email":"feedback@noetfield.com",
-            "availableLanguage":["en"]
-          }
-        ]
-      },
-      {
-        "@type":"WebSite",
-        "@id":"https://www.noetfield.com/#website",
-        "name":"Noetfield",
-        "url":"https://www.noetfield.com/",
-        "publisher":{"@id":"https://www.noetfield.com/#org"}
-      },
-      {
-        "@type":"WebPage",
-        "@id":"https://www.noetfield.com/#webpage",
-        "name":"Noetfield — Trust and Stewardship in AI",
-        "url":"https://www.noetfield.com/",
-        "isPartOf":{"@id":"https://www.noetfield.com/#website"},
-        "about":{"@id":"https://www.noetfield.com/#org"},
-        "description":"Noetfield delivers board-ready AI governance artefacts: Copilot QuickScan (rapid snapshot), Copilot Readiness (2/4/6 weeks), and Trust Ledger (maintained register). Evidence-first. Procurement supported."
-      },
-      {
-        "@type":"Service",
-        "@id":"https://www.noetfield.com/#service-quickscan",
-        "name":"Copilot QuickScan",
-        "provider":{"@id":"https://www.noetfield.com/#org"},
-        "areaServed":["United States","Canada"],
-        "serviceType":"Rapid readiness snapshot",
-        "url":"https://www.noetfield.com/copilot/quickscan/"
-      },
-      {
-        "@type":"Service",
-        "@id":"https://www.noetfield.com/#service-copilot-readiness",
-        "name":"Microsoft 365 Copilot Readiness Assessment",
-        "provider":{"@id":"https://www.noetfield.com/#org"},
-        "areaServed":["United States","Canada"],
-        "serviceType":"AI governance readiness assessment",
-        "url":"https://www.noetfield.com/copilot/readiness/"
-      },
-      {
-        "@type":"Service",
-        "@id":"https://www.noetfield.com/#service-trust-ledger",
-        "name":"Trust Ledger",
-        "provider":{"@id":"https://www.noetfield.com/#org"},
-        "areaServed":["United States","Canada"],
-        "serviceType":"Maintained governance register",
-        "url":"https://www.noetfield.com/trust-ledger/"
-      }
-    ]
-  }
-  </script>
+@media(max-width: 960px) { .hero { grid-template-columns: 1fr; } }
+</style>
 </head>
-
 <body>
-  <div class="bg" aria-hidden="true"></div>
-  <a class="skip" href="#main">Skip to content</a>
 
-  <header id="nfHeader"></header>
+<header class="nav">
+    <div class="nav-logo"><div class="nav-dot"></div> Noetfield</div>
+    <div class="nav-right"><button style="background:transparent; color:#fff; border:none; cursor:pointer;">Sign In</button></div>
+</header>
 
-  <main id="main" class="wrap">
-    <section class="hero" aria-label="Home hero">
-      <div class="heroShell">
-        <div class="heroInner">
-          <div class="eyebrow"><span class="dot"></span> Trust & Stewardship • board-first • procurement-ready</div>
-
-          <h1>Governance-grade AI. Built for boards.</h1>
-
-          <p class="lead">
-            Noetfield turns scattered AI activity into an <strong>evidence-first</strong> posture:
-            <a href="/copilot/quickscan/"><strong>Copilot QuickScan</strong></a> (rapid snapshot),
-            <a href="/copilot/readiness/"><strong>Copilot Readiness</strong></a> (2 / 4 / 6-week SKUs),
-            and <a href="/trust-ledger/"><strong>Trust Ledger</strong></a> (maintained register).
-          </p>
-
-          <div class="metaRow" aria-label="Highlights">
-            <div class="pill"><strong>Evidence rule</strong> proofs linked to claims</div>
-            <div class="pill"><strong>Board memo</strong> + options</div>
-            <div class="pill"><strong>Control baseline</strong> minimum viable</div>
-            <div class="pill"><strong>Procurement-ready</strong> invoice / PO supported</div>
-            <div class="pill"><strong>Scrutiny-ready</strong> recurring review cycles</div>
-          </div>
-
-          <div class="actions" aria-label="Hero actions">
-            <a class="btn primary" href="/copilot/quickscan/" data-rid-link>Open QuickScan</a>
-            <a class="btn secondary" href="/trust-ledger/sample-report/online/" target="_blank" rel="nofollow noopener">View sample</a>
-            <a class="btn secondary" href="/copilot/readiness/?tier=standard" data-rid-link>Open Copilot Readiness (Standard)</a>
-            <a class="btn secondary" href="/gate/procurement/" data-rid-link>Procurement (Invoice / PO)</a>
-            <a class="btn secondary" href="/gate/" data-rid-link>Gate</a>
-          </div>
-
-          <!-- Single safety bar -->
-          <div class="safetyBar" role="note" aria-label="Public intake safety">
-            <div><strong>Public intake:</strong> non-confidential only. Secure sharing is confirmed after kickoff.</div>
-            <div class="safetyLinks">
-              <a href="/gate/procurement/" data-rid-link>Procurement start</a>
-              <span aria-hidden="true">•</span>
-              <a href="/vendor/" data-rid-link>Vendor profile</a>
-            </div>
-          </div>
-
-          <div class="proofBand" aria-label="Proof discipline">
-            <div class="proof"><strong>Claim → Evidence → Confidence:</strong> if a claim cannot be supported by evidence, it does not enter the ledger.</div>
-            <div class="proof"><strong>RID continuity:</strong> one Request ID threads intake → procurement → delivery → exports (no secrets required).</div>
-          </div>
-
-          <noscript>
-            <div class="nojs" role="note">
-              <strong>JavaScript is disabled.</strong> Request-ID continuity may not attach automatically.
-              Use <a href="/gate/procurement/">Procurement start</a> or email
-              <a href="mailto:procurement@noetfield.com"><code>procurement@noetfield.com</code></a>.
-            </div>
-          </noscript>
+<section class="hero">
+    <div>
+        <h1 class="hero-h1">Cross-Border Payments<br /> for <em>Canadian SMEs</em></h1>
+        <p class="hero-sub">Noetfield normalizes your payment intent and routes execution through regulated rails. Non-custodial. No hidden spreads. Fully auditable.</p>
+        <div style="display:flex; gap:12px;">
+            <button style="background:var(--green); border:none; padding:12px 24px; border-radius:4px; font-weight:600;">Start Sending →</button>
         </div>
-      </div>
-    </section>
+    </div>
+    
+    <div class="calc-card">
+        <div style="font-size:10px; color:var(--muted); text-transform:uppercase; margin-bottom:12px;">FX Calculator</div>
+        <input type="text" class="calc-input" value="10,000 CAD" />
+        <div style="font-size:12px; color:var(--muted); margin-bottom:20px;">Recipient gets: <strong style="color:#fff;">7,381.00 USD</strong></div>
+        <button class="calc-submit">Submit Payment Intent</button>
+    </div>
+</section>
 
-    <section class="grid" aria-label="Home layout">
-      <!-- LEFT -->
-      <div>
-        <section class="card" aria-label="Product ladder">
-          <div class="hd">
-            <h2 class="cardTitle">The Noetfield ladder</h2>
-            <p class="muted">Start clean, stay board-readable, and keep evidence discipline consistent.</p>
-          </div>
+<section style="max-width:1200px; margin:0 auto; padding:0 36px 64px;">
+    <div style="color:var(--muted); font-size:12px; margin-bottom:24px; text-transform:uppercase;">Active Corridors</div>
+    <div class="corridor-row">
+        <div><strong>CAD → USD</strong></div>
+        <div style="color:var(--muted);">~2 min settlement</div>
+        <div style="color:var(--green);">Active</div>
+    </div>
+    <div class="corridor-row">
+        <div><strong>CAD → EUR</strong></div>
+        <div style="color:var(--muted);">~3 min settlement</div>
+        <div style="color:var(--green);">Active</div>
+    </div>
+</section>
 
-          <div class="bd">
-            <div class="groupTitle">Start paths</div>
-            <div class="blocks">
-              <article class="block" aria-label="QuickScan">
-                <div class="blockTop"><h3>Copilot QuickScan</h3><span class="tag">5–7 business days</span></div>
-                <p>Urgent clarity before scaling: exposure paths, decision gaps, and a clean next step into Readiness SKUs.</p>
-                <ul>
-                  <li>Executive memo + immediate actions</li>
-                  <li>Boundary + oversharing map</li>
-                  <li>Lead-in path: Readiness → Trust Ledger</li>
-                </ul>
-                <div class="actions">
-                  <a class="btn primary" href="/copilot/quickscan/" data-rid-link>View QuickScan</a>
-                  <a class="btn secondary" href="/copilot/quickscan/intake/" data-rid-link>Start intake</a>
-                </div>
-              </article>
-
-              <article class="block" aria-label="Copilot Readiness">
-                <div class="blockTop"><h3>Microsoft 365 Copilot Readiness</h3><span class="tag">2 / 4 / 6 weeks</span></div>
-                <p>Market-standard readiness packaging for safe Copilot rollout: governance decisions, control baseline, evidence packaging, and delivery pack.</p>
-                <ul>
-                  <li>Starter / Standard / Extended SKUs</li>
-                  <li>Board/procurement-ready artefact pack</li>
-                  <li>Designed to reduce avoidable rollout back-and-forth</li>
-                </ul>
-                <div class="actions">
-                  <a class="btn primary" href="/copilot/readiness/" data-rid-link>View Readiness</a>
-                  <a class="btn secondary" href="/gate/sales/?offer=readiness_standard" data-rid-link>Start (Sales)</a>
-                  <a class="btn secondary" href="/gate/procurement/?focus=copilot-readiness-standard" data-rid-link>Invoice / PO</a>
-                </div>
-              </article>
-
-              <article class="block" aria-label="Trust Ledger">
-                <div class="blockTop"><h3>Trust Ledger</h3><span class="tag">Maintained register</span></div>
-                <p>A maintained governance register: systems, owners, controls, evidence, changes, exceptions, and board exports.</p>
-                <ul>
-                  <li>Retainer + cadence + export rhythm</li>
-                  <li>Change + exception discipline</li>
-                  <li>Built for recurring scrutiny cycles</li>
-                </ul>
-                <div class="actions">
-                  <a class="btn primary" href="/trust-ledger/" data-rid-link>View plans</a>
-                  <a class="btn secondary" href="/gate/procurement/?focus=trust_ledger" data-rid-link>Invoice / PO</a>
-                </div>
-              </article>
-            </div>
-
-            <div class="groupTitle">Proof discipline</div>
-            <div class="blocks">
-              <article class="block" aria-label="Output samples">
-                <div class="blockTop"><h3>Output style reference</h3><span class="tag">Samples</span></div>
-                <p>Board-safe formatting reference (PDF + online). Canonical URLs.</p>
-                <div class="actions">
-                  <a class="btn secondary" href="/trust-ledger/sample-report/board-memo.pdf" target="_blank" rel="nofollow noopener">Board memo (PDF)</a>
-                  <a class="btn secondary" href="/trust-ledger/sample-report/ledger-entry.pdf" target="_blank" rel="nofollow noopener">Ledger entry (PDF)</a>
-                  <a class="btn secondary" href="/trust-ledger/sample-report/online/" target="_blank" rel="nofollow noopener">Sample (Online)</a>
-                </div>
-              </article>
-
-              <article class="block" aria-label="Procurement lane">
-                <div class="blockTop"><h3>Procurement lane</h3><span class="tag">Invoice / PO</span></div>
-                <p>Short path for purchasing and onboarding: procurement pack, contracting options, and RID-threaded intake.</p>
-                <div class="actions">
-                  <a class="btn primary" href="/gate/procurement/" data-rid-link>Procurement start</a>
-                  <a class="btn secondary" href="/vendor/" data-rid-link>Vendor profile</a>
-                </div>
-              </article>
-            </div>
-
-            <!-- Only active routing emails -->
-            <div class="safetyBar" style="margin-top:14px;" aria-label="Email routing">
-              <div>
-                <strong>Routing:</strong>
-                <a href="mailto:procurement@noetfield.com"><code>procurement@noetfield.com</code></a>
-                <span aria-hidden="true">•</span>
-                <a href="mailto:billing@noetfield.com"><code>billing@noetfield.com</code></a>
-                <span aria-hidden="true">•</span>
-                <a href="mailto:support@noetfield.com"><code>support@noetfield.com</code></a>
-                <span aria-hidden="true">•</span>
-                <a href="mailto:feedback@noetfield.com"><code>feedback@noetfield.com</code></a>
-              </div>
-              <div class="safetyLinks">
-                <a href="mailto:ceo@noetfield.com"><code>ceo@noetfield.com</code></a>
-                <span aria-hidden="true">•</span>
-                <a href="mailto:founder@noetfield.com"><code>founder@noetfield.com</code></a>
-              </div>
-            </div>
-          </div>
-        </section>
-      </div>
-
-      <!-- RIGHT -->
-      <aside class="rail" aria-label="Start rail">
-        <section class="card" aria-label="Start here">
-          <div class="hd">
-            <h2 class="cardTitle">Start here</h2>
-            <div class="railIntro">
-              <strong>Default start:</strong> QuickScan for fast clarity, then Readiness (Standard) for board-ready baseline, then Trust Ledger for cadence.
-            </div>
-          </div>
-
-          <div class="bd">
-            <div class="railBox" aria-label="QuickScan pricing signal">
-              <div class="railTop">
-                <div>
-                  <div class="tag">QuickScan</div>
-                  <h3 class="railName">Rapid Readiness Snapshot</h3>
-                </div>
-                <div class="railPrice">5–7 business days</div>
-              </div>
-              <p class="railSub">Best for: urgent clarity + a clean next step into Readiness.</p>
-              <div class="railActions">
-                <a class="btn primary" href="/copilot/quickscan/" data-rid-link>Open QuickScan</a>
-                <a class="btn secondary" href="/copilot/quickscan/intake/" data-rid-link>Start intake</a>
-              </div>
-              <p class="railNote"><strong>Invoice / PO supported:</strong> use <a href="/gate/procurement/" data-rid-link>Procurement start</a> for purchasing and onboarding.</p>
-            </div>
-
-            <div class="railBox" aria-label="Readiness pricing signal">
-              <div class="railTop">
-                <div>
-                  <div class="tag">Copilot Readiness</div>
-                  <h3 class="railName">Standard (fixed scope)</h3>
-                </div>
-                <div class="railPrice">4 weeks · 15,000 CAD</div>
-              </div>
-              <p class="railSub">Best for: enterprise rollout baseline + procurement-safe artefact pack.</p>
-              <div class="railActions">
-                <a class="btn primary" href="/copilot/readiness/?tier=standard" data-rid-link>Open Standard</a>
-                <a class="btn secondary" href="/gate/procurement/?focus=copilot-readiness-standard" data-rid-link>Invoice / PO</a>
-              </div>
-            </div>
-
-            <div class="railBox" aria-label="Trust Ledger pricing signal">
-              <div class="railTop">
-                <div>
-                  <div class="tag">Trust Ledger</div>
-                  <h3 class="railName">Maintained register (subscription)</h3>
-                </div>
-                <div class="railPrice">from 1,500 CAD/mo</div>
-              </div>
-              <p class="railSub">Setup + cadence. Board export rhythm. Change + exception discipline.</p>
-              <div class="railActions">
-                <a class="btn primary" href="/trust-ledger/#pricing" data-rid-link>View plans</a>
-                <a class="btn secondary" href="/gate/procurement/?focus=trust_ledger" data-rid-link>Invoice / PO</a>
-              </div>
-            </div>
-
-            <div class="actions" style="margin-top:12px;">
-              <a class="btn secondary" href="/gate/sales/" data-rid-link>Open Purchase Hub</a>
-              <a class="btn secondary" href="/gate/" data-rid-link>Gate</a>
-            </div>
-          </div>
-        </section>
-      </aside>
-    </section>
-
-    <section class="stickyCta" aria-label="Sticky CTA">
-      <div class="stickyInner">
-        <div class="stickyText"><strong>Fastest clean start:</strong> QuickScan → Readiness (Standard) → Trust Ledger cadence.</div>
-        <div class="actions" style="margin-top:0">
-          <a class="btn primary" href="/copilot/quickscan/" data-rid-link>Open QuickScan</a>
-          <a class="btn secondary" href="/gate/procurement/" data-rid-link>Invoice / PO</a>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <footer id="nfFooter"></footer>
-
-  <!--
-    SMOKE TEST
-    - GET / returns 200
-    - /assets/noetfield-shell.css and /assets/noetfield-shell.js return 200
-    - header/footer injected into #nfHeader/#nfFooter
-    - CTAs route to /copilot/quickscan/, /copilot/readiness/, /trust-ledger/, /gate/procurement/
-    - Canonical/OG/Twitter URLs use https://www.noetfield.com/
-    - Emails shown are active: procurement@, billing@, support@, feedback@, ceo@, founder@
-    - JS-off fallback visible via <noscript>
-  -->
 </body>
 </html>
