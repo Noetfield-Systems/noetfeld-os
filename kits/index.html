@@ -1,497 +1,228 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- /kits/ — Noetfield Kits Catalog v1.0 -->
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <meta name="format-detection" content="telephone=no" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Noetfield — Non‑Custodial Instruction Layer</title>
 
-  <title>Noetfield Kits — Downloadable Governance & Procurement Packs</title>
-  <meta name="description" content="Downloadable, procurement-friendly packs: vendor security questionnaire fast pass (SIG/CAIQ), Trust Center Starter, and evidence kits. Built to reduce back-and-forth and accelerate approvals." />
-  <meta name="robots" content="index,follow" />
-  <meta name="author" content="Noetfield Systems Inc." />
-  <meta name="theme-color" content="#07070b" />
-
-  <link rel="canonical" href="https://www.noetfield.com/kits/" />
-  <link rel="icon" href="/noetfield-favicon-512.png" type="image/png" />
-  <link rel="apple-touch-icon" href="/noetfield-favicon-512.png" />
-
-  <!-- OG -->
-  <meta property="og:type" content="website" />
-  <meta property="og:site_name" content="Noetfield" />
-  <meta property="og:title" content="Noetfield Kits — Downloadable Governance & Procurement Packs" />
-  <meta property="og:description" content="Procurement-friendly packs designed to reduce back-and-forth: questionnaires, trust center starter, and evidence kits." />
-  <meta property="og:url" content="https://www.noetfield.com/kits/" />
-  <meta property="og:image" content="https://www.noetfield.com/noetfield-og.png" />
-
-  <!-- Twitter -->
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Noetfield Kits — Downloadable Packs" />
-  <meta name="twitter:description" content="Procurement-friendly packs designed to reduce back-and-forth: questionnaires, trust center starter, and evidence kits." />
-  <meta name="twitter:image" content="https://www.noetfield.com/noetfield-og.png" />
-
-  <!-- LOCKED SHELL -->
-  <link rel="stylesheet" href="/assets/noetfield-shell.css" />
-  <script src="/assets/noetfield-shell.js" defer></script>
-
-  <style>
-    /* Page */
-    .hero{padding:18px 0 12px}
-    .heroShell{
-      position:relative;
-      border-radius: calc(var(--radius) + 10px);
-      border: 1px solid rgba(255,255,255,.12);
-      background:
-        radial-gradient(1100px 520px at 16% 0%, rgba(200,163,73,.18), transparent 62%),
-        radial-gradient(980px 520px at 92% 10%, rgba(122,167,255,.10), transparent 64%),
-        linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.020));
-      box-shadow: var(--shadow);
-      overflow:hidden;
-    }
-    .heroShell::before{
-      content:"";
-      position:absolute; inset:-1px;
-      background: linear-gradient(120deg, rgba(200,163,73,.26), transparent 32%, rgba(255,255,255,.08) 68%, transparent);
-      opacity:.44;
-      pointer-events:none;
-      mask-image: linear-gradient(180deg, black 0%, black 62%, transparent 96%);
-    }
-    .heroInner{padding: 26px 22px; position:relative; z-index:1}
-    .eyebrow{
-      display:inline-flex; gap:10px; align-items:center;
-      color:var(--muted);
-      font-size:13px;
-      padding:9px 12px;
-      border-radius:999px;
-      border:1px solid rgba(255,255,255,.13);
-      background: rgba(255,255,255,.035);
-    }
-    .dot{
-      width:8px; height:8px; border-radius:50%;
-      background: rgba(200,163,73,.97);
-      box-shadow: 0 0 0 3px rgba(200,163,73,.18);
-    }
-    h1{margin:14px 0 10px; font-size: clamp(30px, 3.1vw, 46px); line-height:1.06; letter-spacing:-0.8px}
-    .lead{margin:0; color:var(--muted); font-size:16px; line-height:1.75; max-width: 980px}
-    .lead strong{color:var(--text); font-weight:950}
-    .actions{display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-top:14px}
-    .actions .btn{min-height:44px}
-    .metaRow{display:flex; flex-wrap:wrap; gap:10px; margin-top:14px}
-    .pill{
-      display:inline-flex; align-items:center; gap:10px;
-      padding:9px 12px;
-      border-radius:999px;
-      border:1px solid rgba(255,255,255,.12);
-      background: rgba(255,255,255,.03);
-      color:var(--muted);
-      font-size:13px;
-      white-space:nowrap;
-    }
-    .pill strong{color:var(--text); font-weight:950}
-    .notice{
-      margin-top:12px;
-      padding:12px 12px;
-      border-radius:14px;
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.03);
-      color:var(--muted2);
-      font-size:12.8px;
-      line-height:1.6;
-    }
-    .notice strong{ color:var(--text); font-weight:950; }
-    .notice a{ border-bottom:1px solid rgba(255,255,255,.18); }
-
-    /* Layout */
-    .grid{
-      display:grid;
-      grid-template-columns: 1fr .42fr;
-      gap:16px;
-      margin: 14px 0 36px;
-      align-items:start;
-    }
-    .card{
-      border-radius:var(--radius);
-      border:1px solid rgba(255,255,255,.11);
-      background: linear-gradient(180deg, rgba(255,255,255,.055), rgba(255,255,255,.022));
-      box-shadow: var(--shadow2);
-      overflow:hidden;
-      min-width:0;
-    }
-    .hd{ padding:18px 18px 0; }
-    .bd{ padding:18px; }
-    .cardTitle{ margin:0 0 8px; font-size:18px; letter-spacing:-0.2px; font-weight:950; }
-    .muted{ color:var(--muted); line-height:1.7; margin:0; }
-
-    /* Product cards */
-    .catalog{
-      display:grid;
-      grid-template-columns: repeat(12, minmax(0, 1fr));
-      gap:12px;
-    }
-    .sku{
-      grid-column: span 6;
-      border-radius:16px;
-      border:1px solid rgba(255,255,255,.11);
-      background: rgba(255,255,255,.03);
-      padding:14px;
-      position:relative;
-      overflow:hidden;
-    }
-    .sku::before{
-      content:"";
-      position:absolute; inset:-1px;
-      background: radial-gradient(880px 280px at 0% 0%, rgba(200,163,73,.12), transparent 58%);
-      opacity:.75;
-      pointer-events:none;
-      mask-image: linear-gradient(180deg, black 0%, transparent 78%);
-    }
-    .skuInner{position:relative; z-index:1}
-    .skuTop{display:flex; gap:10px; align-items:flex-start; justify-content:space-between; flex-wrap:wrap}
-    .skuName{margin:0; font-size:15px; letter-spacing:-.2px; font-weight:950}
-    .tagRow{display:flex; gap:8px; flex-wrap:wrap; margin-top:10px}
-    .tag{
-      display:inline-flex; align-items:center; gap:8px;
-      padding:7px 10px;
-      border-radius:999px;
-      border:1px solid rgba(255,255,255,.12);
-      background: rgba(255,255,255,.03);
-      color:var(--muted);
-      font-size:12.4px;
-      white-space:nowrap;
-    }
-    .skuDesc{margin:10px 0 0; color:var(--muted); line-height:1.75}
-    .bullets{margin:10px 0 0; padding-left:18px; color:var(--muted2); line-height:1.65}
-    .bullets li{margin:6px 0}
-    .skuActions{display:flex; gap:10px; flex-wrap:wrap; margin-top:12px}
-    .skuActions .btn{min-height:44px}
-
-    /* Right rail */
-    .rail{ position: sticky; top: 14px; }
-    .box{
-      margin-top:12px;
-      padding:12px 12px;
-      border-radius:14px;
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.03);
-      color:var(--muted2);
-      font-size:12.8px;
-      line-height:1.6;
-    }
-    .box strong{color:var(--text); font-weight:950}
-    .box a{border-bottom:1px solid rgba(255,255,255,.18)}
-    .railActions{display:grid; gap:10px; margin-top:12px}
-    .railActions .btn{min-height:46px}
-    .divider{ height:1px; background: rgba(255,255,255,.10); margin: 14px 0; }
-
-    /* FAQ */
-    details.faq{
-      margin-top:10px;
-      border-radius:14px;
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.02);
-      overflow:hidden;
-    }
-    details.faq summary{
-      list-style:none;
-      cursor:pointer;
-      padding:12px;
-      display:flex; align-items:center; justify-content:space-between; gap:12px;
-      color: var(--muted);
-      user-select:none;
-    }
-    details.faq summary::-webkit-details-marker{display:none}
-    details.faq summary .q{font-weight:950; color:var(--text); letter-spacing:-.2px}
-    details.faq summary .chev{
-      width:34px; height:34px; border-radius:999px;
-      border:1px solid rgba(255,255,255,.12);
-      background: rgba(255,255,255,.03);
-      display:flex; align-items:center; justify-content:center;
-      color: var(--muted2);
-      flex:0 0 auto;
-    }
-    details.faq[open] summary .chev{transform: rotate(180deg)}
-    details.faq .a{
-      padding:0 12px 12px;
-      border-top:1px solid rgba(255,255,255,.08);
-      color: var(--muted2);
-      font-size:12.8px;
-      line-height:1.6;
+<style>
+    :root {
+        --bg: #0d0d0f;
+        --card: #151518;
+        --text: #e6e6e6;
+        --sub: #9a9a9a;
+        --accent: #4da6ff;
+        --border: #2a2a2d;
+        --radius: 14px;
+        --font: "Inter", sans-serif;
     }
 
-    @media (max-width: 980px){
-      .grid{grid-template-columns:1fr}
-      .rail{position:relative; top:0}
-      .sku{grid-column: span 12}
+    body {
+        margin: 0;
+        padding: 0;
+        background: var(--bg);
+        color: var(--text);
+        font-family: var(--font);
+        line-height: 1.6;
     }
-    @media (max-width: 760px){
-      .heroInner{padding:18px 14px}
-      .hd,.bd{padding-left:14px; padding-right:14px}
+
+    header {
+        padding: 80px 20px;
+        text-align: center;
+        max-width: 900px;
+        margin: auto;
     }
-  </style>
 
-  <script type="application/ld+json">
-  {
-    "@context":"https://schema.org",
-    "@type":"WebPage",
-    "name":"Noetfield Kits — Downloadable Governance & Procurement Packs",
-    "url":"https://www.noetfield.com/kits/",
-    "description":"Downloadable, procurement-friendly packs: vendor security questionnaire fast pass (SIG/CAIQ), Trust Center Starter, and evidence kits.",
-    "isPartOf":{"@type":"WebSite","name":"Noetfield","url":"https://www.noetfield.com/"},
-    "publisher":{"@type":"Organization","name":"Noetfield Systems Inc."}
-  }
-  </script>
+    h1 {
+        font-size: 42px;
+        font-weight: 700;
+        margin-bottom: 20px;
+    }
 
-  <script type="application/ld+json">
-  {
-    "@context":"https://schema.org",
-    "@type":"ItemList",
-    "name":"Noetfield Kits",
-    "itemListOrder":"https://schema.org/ItemListOrderDescending",
-    "numberOfItems":4,
-    "itemListElement":[
-      {
-        "@type":"ListItem",
-        "position":1,
-        "name":"Vendor Security Questionnaire Fast Pass (SIG / CAIQ)",
-        "url":"https://www.noetfield.com/kits/k1/"
-      },
-      {
-        "@type":"ListItem",
-        "position":2,
-        "name":"Trust Center Starter Pack",
-        "url":"https://www.noetfield.com/kits/k2/"
-      },
-      {
-        "@type":"ListItem",
-        "position":3,
-        "name":"SOC2 / ISO Evidence Kit",
-        "url":"https://www.noetfield.com/kits/k3/"
-      },
-      {
-        "@type":"ListItem",
-        "position":4,
-        "name":"Compliance Starter Bundle",
-        "url":"https://www.noetfield.com/kits/bundle/"
-      }
-    ]
-  }
-  </script>
+    p.subtitle {
+        font-size: 20px;
+        color: var(--sub);
+        margin-bottom: 40px;
+    }
+
+    .cta-container {
+        display: flex;
+        justify-content: center;
+        gap: 16px;
+        margin-top: 20px;
+    }
+
+    .btn {
+        padding: 14px 28px;
+        border-radius: var(--radius);
+        border: 1px solid var(--accent);
+        color: var(--accent);
+        background: transparent;
+        cursor: pointer;
+        font-size: 16px;
+        transition: 0.2s;
+    }
+
+    .btn:hover {
+        background: var(--accent);
+        color: #000;
+    }
+
+    section {
+        padding: 80px 20px;
+        max-width: 1100px;
+        margin: auto;
+    }
+
+    .grid-4 {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 24px;
+        margin-top: 40px;
+    }
+
+    .card {
+        background: var(--card);
+        padding: 24px;
+        border-radius: var(--radius);
+        border: 1px solid var(--border);
+    }
+
+    .card h3 {
+        margin-top: 0;
+        font-size: 20px;
+    }
+
+    .sandbox {
+        background: var(--card);
+        padding: 32px;
+        border-radius: var(--radius);
+        border: 1px solid var(--border);
+        margin-top: 40px;
+    }
+
+    pre {
+        background: #0f0f12;
+        padding: 20px;
+        border-radius: var(--radius);
+        overflow-x: auto;
+        border: 1px solid var(--border);
+    }
+
+    footer {
+        padding: 60px 20px;
+        text-align: center;
+        color: var(--sub);
+        font-size: 14px;
+        border-top: 1px solid var(--border);
+        margin-top: 80px;
+    }
+
+</style>
 </head>
 
 <body>
-  <div class="bg" aria-hidden="true"></div>
-  <a class="skip" href="#main">Skip to content</a>
 
-  <!-- injected header -->
-  <header id="nfHeader"></header>
+<header>
+    <h1>The Non‑Custodial Instruction Layer for Cross‑Border Payments</h1>
+    <p class="subtitle">
+        Standardize SME payment intent and forward execution instructions to regulated partners—without ever holding client funds.
+    </p>
 
-  <main id="main" class="wrap">
-    <section class="hero" aria-label="Kits hero">
-      <div class="heroShell">
-        <div class="heroInner">
-          <div class="eyebrow"><span class="dot"></span> Downloadables • procurement-friendly • evidence-first</div>
+    <div class="cta-container">
+        <button class="btn">Request API Access</button>
+        <button class="btn">Open Interactive Sandbox</button>
+    </div>
 
-          <h1>Kits that keep procurement calm.</h1>
+    <p style="margin-top:20px; color:var(--sub); font-size:14px;">
+        Production routing active via NDAX infrastructure.
+    </p>
+</header>
 
-          <p class="lead">
-            Downloadable packs designed to reduce avoidable back-and-forth:
-            <strong>questionnaire fast passes</strong>, <strong>trust-center starter assets</strong>, and <strong>evidence kits</strong>.
-            Built for clean internal approvals and defensible vendor responses.
-          </p>
+<section>
+    <h2>How It Works</h2>
+    <p>Noetfield standardizes payment intent and hands off execution to licensed downstream partners.</p>
 
-          <div class="actions" aria-label="Primary actions">
-            <a class="btn primary" href="/kits/k1/" data-rid-link>Open K1 (Fast Pass)</a>
-            <a class="btn secondary" href="/gate/sales/?lane=kits" data-rid-link>Buy (Start)</a>
-            <a class="btn secondary" href="/gate/procurement/?focus=kits" data-rid-link>Procurement (Invoice / PO)</a>
-            <a class="btn secondary" href="/status/" data-rid-link>Status</a>
-          </div>
-
-          <div class="metaRow" aria-label="Highlights">
-            <div class="pill"><strong>Format</strong> ZIP download</div>
-            <div class="pill"><strong>Use</strong> vendor response + trust center</div>
-            <div class="pill"><strong>Design</strong> named artefacts</div>
-            <div class="pill"><strong>Lane</strong> card checkout + Invoice/PO</div>
-          </div>
-
-          <div class="notice" role="note">
-            <strong>Not legal advice.</strong> Kits are general-purpose templates and educational assets.
-            Do not include secrets, credentials, private keys, customer identifiers, or regulated personal data.
-            For procurement workflows, use <a href="/gate/procurement/" data-rid-link>Procurement</a>.
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="grid" aria-label="Kits layout">
-      <div class="card" aria-label="Catalog">
-        <div class="hd">
-          <h2 class="cardTitle">Catalog</h2>
-          <p class="muted">Four SKUs. Clean scope. Clear artefacts.</p>
-        </div>
-
-        <div class="bd">
-          <div class="catalog" aria-label="Kits list">
-            <!-- K1 -->
-            <article class="sku" aria-label="K1">
-              <div class="skuInner">
-                <div class="skuTop">
-                  <h3 class="skuName">K1 — Vendor Security Questionnaire Fast Pass (SIG / CAIQ)</h3>
-                  <span class="tag">99 CAD</span>
-                </div>
-                <div class="tagRow">
-                  <span class="tag">Fast response baseline</span>
-                  <span class="tag">Procurement-friendly</span>
-                  <span class="tag">Evidence mapping</span>
-                </div>
-                <p class="skuDesc">
-                  A practical response pack for common vendor questionnaires. Built to reduce repetitive drafting, stabilize language, and align answers with defensible evidence.
-                </p>
-                <ul class="bullets">
-                  <li>Answer library + response style guide</li>
-                  <li>Evidence index template + “where proof lives” mapping</li>
-                  <li>Customer-safe narrative (non-confidential by design)</li>
-                </ul>
-                <div class="skuActions">
-                  <a class="btn primary" href="/kits/k1/" data-rid-link>Open</a>
-                  <a class="btn secondary" href="/gate/sales/?sku=k1" data-rid-link>Buy (Start)</a>
-                  <a class="btn" href="/gate/procurement/?focus=k1" data-rid-link>Invoice/PO</a>
-                </div>
-              </div>
-            </article>
-
-            <!-- K2 -->
-            <article class="sku" aria-label="K2">
-              <div class="skuInner">
-                <div class="skuTop">
-                  <h3 class="skuName">K2 — Trust Center Starter Pack</h3>
-                  <span class="tag">TBD</span>
-                </div>
-                <div class="tagRow">
-                  <span class="tag">Trust-center basics</span>
-                  <span class="tag">Security page structure</span>
-                  <span class="tag">Policy placeholders</span>
-                </div>
-                <p class="skuDesc">
-                  A starter set for publishing a minimal trust center: standard sections, copy blocks, and a controlled way to present security posture without oversharing.
-                </p>
-                <ul class="bullets">
-                  <li>Trust center page outline + copy blocks</li>
-                  <li>Disclosure boundaries (what to say / not say)</li>
-                  <li>Evidence request routing template</li>
-                </ul>
-                <div class="skuActions">
-                  <a class="btn secondary" href="/gate/sales/?sku=k2" data-rid-link>Buy (Start)</a>
-                  <a class="btn" href="/gate/procurement/?focus=k2" data-rid-link>Invoice/PO</a>
-                </div>
-              </div>
-            </article>
-
-            <!-- K3 -->
-            <article class="sku" aria-label="K3">
-              <div class="skuInner">
-                <div class="skuTop">
-                  <h3 class="skuName">K3 — SOC2 / ISO Evidence Kit</h3>
-                  <span class="tag">TBD</span>
-                </div>
-                <div class="tagRow">
-                  <span class="tag">Evidence indexing</span>
-                  <span class="tag">Control mapping</span>
-                  <span class="tag">Audit-ready exports</span>
-                </div>
-                <p class="skuDesc">
-                  Evidence structure that makes responses repeatable: index, control map, ownership, and a disciplined packaging pattern for proofs.
-                </p>
-                <ul class="bullets">
-                  <li>Evidence index (CSV/XLSX)</li>
-                  <li>Control-to-evidence mapping template</li>
-                  <li>Export-ready naming conventions</li>
-                </ul>
-                <div class="skuActions">
-                  <a class="btn secondary" href="/gate/sales/?sku=k3" data-rid-link>Buy (Start)</a>
-                  <a class="btn" href="/gate/procurement/?focus=k3" data-rid-link>Invoice/PO</a>
-                </div>
-              </div>
-            </article>
-
-            <!-- Bundle -->
-            <article class="sku" aria-label="Bundle">
-              <div class="skuInner">
-                <div class="skuTop">
-                  <h3 class="skuName">Bundle — Compliance Starter Bundle</h3>
-                  <span class="tag">TBD</span>
-                </div>
-                <div class="tagRow">
-                  <span class="tag">K1 + K2 + K3</span>
-                  <span class="tag">Single purchase</span>
-                  <span class="tag">Best value</span>
-                </div>
-                <p class="skuDesc">
-                  Consolidated pack for teams that need questionnaire speed, trust-center structure, and evidence discipline in one purchase.
-                </p>
-                <ul class="bullets">
-                  <li>Standardize vendor responses</li>
-                  <li>Publish a minimal trust center</li>
-                  <li>Keep evidence organized for recurring scrutiny</li>
-                </ul>
-                <div class="skuActions">
-                  <a class="btn primary" href="/gate/sales/?sku=bundle" data-rid-link>Buy (Start)</a>
-                  <a class="btn" href="/gate/procurement/?focus=bundle" data-rid-link>Invoice/PO</a>
-                </div>
-              </div>
-            </article>
-          </div>
-
-          <div class="notice" style="margin-top:14px;">
-            <strong>Procurement rule:</strong> if invoice/PO is required, route via
-            <a href="/gate/procurement/" data-rid-link>Procurement</a> and attach the generated Request ID (RID).
-          </div>
-        </div>
-      </div>
-
-      <aside class="rail" aria-label="Kits rail">
+    <div class="grid-4">
         <div class="card">
-          <div class="hd">
-            <h2 class="cardTitle">Fast start</h2>
-            <p class="muted">Default path for immediate revenue.</p>
-          </div>
-          <div class="bd">
-            <div class="box">
-              <div><strong>Start with K1</strong></div>
-              <div style="margin-top:6px;">
-                K1 is the fastest conversion SKU: clear buyer intent (questionnaires) and immediate utility.
-              </div>
-            </div>
-
-            <div class="railActions" aria-label="Rail actions">
-              <a class="btn primary" href="/kits/k1/" data-rid-link>Open K1</a>
-              <a class="btn secondary" href="/gate/sales/?sku=k1" data-rid-link>Buy K1 (Start)</a>
-              <a class="btn" href="/gate/procurement/?focus=k1" data-rid-link>Invoice/PO</a>
-            </div>
-
-            <div class="divider"></div>
-
-            <div class="box">
-              <strong>FAQ</strong>
-              <details class="faq">
-                <summary><span class="q">How are kits delivered?</span><span class="chev" aria-hidden="true">⌄</span></summary>
-                <div class="a">Digital download (ZIP). A receipt and a Request ID (RID) are used for support and procurement tracing.</div>
-              </details>
-              <details class="faq">
-                <summary><span class="q">Are kits confidential?</span><span class="chev" aria-hidden="true">⌄</span></summary>
-                <div class="a">Kits are designed to stay non-confidential. Do not paste secrets, credentials, or regulated personal data into any public form.</div>
-              </details>
-              <details class="faq">
-                <summary><span class="q">Invoice / PO supported?</span><span class="chev" aria-hidden="true">⌄</span></summary>
-                <div class="a">Yes. Use <a href="/gate/procurement/" data-rid-link>Procurement</a> for invoice/PO routing.</div>
-              </details>
-            </div>
-          </div>
+            <h3>01 — Source</h3>
+            <p>SME platform sends payout amount, currency, and beneficiary metadata.</p>
         </div>
-      </aside>
-    </section>
-  </main>
 
-  <!-- injected footer -->
-  <footer id="nfFooter"></footer>
+        <div class="card">
+            <h3>02 — Noetfield Layer</h3>
+            <p>We validate parameters, normalize data, map compliance tags, and create immutable instruction state.</p>
+        </div>
+
+        <div class="card">
+            <h3>03 — Regulated Execution</h3>
+            <p>Licensed partners such as NDAX process FX and settlement under their regulatory permissions.</p>
+        </div>
+
+        <div class="card">
+            <h3>04 — End State</h3>
+            <p>Webhook updates synchronize delivery status back to the SME platform.</p>
+        </div>
+    </div>
+</section>
+
+<section>
+    <h2>Interactive API Sandbox</h2>
+    <p>See how raw SME requests are normalized into downstream execution packets.</p>
+
+    <div class="sandbox">
+        <pre>
+POST /intent
+{
+  "intent": "cross_border_settlement",
+  "source_sme": "sme_auth_01hj8a",
+  "instruction": {
+    "amount": 12500,
+    "currency": "USD",
+    "destination": "CAD"
+  },
+  "idempotency_key": "idemp_99a8b7c6d5e4"
+}
+        </pre>
+
+        <p style="color:var(--sub); font-size:14px; margin-top:10px;">
+            “Noetfield operates entirely as a data engine layer; zero liquidity ever touches our database architecture directly.”
+        </p>
+    </div>
+</section>
+
+<section>
+    <h2>Enterprise Benefits</h2>
+
+    <div class="grid-4">
+        <div class="card">
+            <h3>Atomic Intent Mapping</h3>
+            <p>Convert fragmented SME requests into globally uniform instruction objects.</p>
+        </div>
+
+        <div class="card">
+            <h3>Regulated Liquidity Offload</h3>
+            <p>Execution is fulfilled by licensed partners with institutional market depth.</p>
+        </div>
+
+        <div class="card">
+            <h3>End‑to‑End Status</h3>
+            <p>Webhook‑driven lifecycle tracking keeps SME ledgers fully synchronized.</p>
+        </div>
+
+        <div class="card">
+            <h3>Non‑Custodial by Design</h3>
+            <p>Noetfield never executes, settles, or holds funds—only routes instructions.</p>
+        </div>
+    </div>
+</section>
+
+<footer>
+    <p>
+        “All financial execution, settlement, currency translation, and asset custody are fulfilled natively by licensed and regulated downstream execution partners, including NDAX.”
+    </p>
+    <p>Noetfield Technologies Inc. — 2026</p>
+</footer>
+
 </body>
 </html>
