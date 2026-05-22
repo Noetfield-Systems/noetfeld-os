@@ -2,12 +2,16 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>Noetfield — Control Center</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700&family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;1,400&display=swap');
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+        }
         
         :root {
             --bg-main: #06080a;
@@ -27,29 +31,49 @@
             background: var(--bg-main);
             color: var(--text-main);
             font-family: 'IBM Plex Mono', monospace;
-            height: 100vh;
+            min-height: 100vh;
             display: flex;
-            overflow: hidden;
+            flex-direction: column;
+            overflow-x: hidden;
         }
 
-        /* --- SIDEBAR ARCHITECTURE (DESKTOP) --- */
+        /* ==========================================================================
+           CORE MOBILE-FIRST LAYOUT (Default for phones & tablets)
+           ========================================================================== */
+        
+        /* Sidebar is completely isolated off-screen on mobile */
         .sidebar {
-            width: 260px;
-            flex-shrink: 0;
+            position: fixed;
+            top: 0;
+            left: -280px; 
+            width: 280px;
+            height: 100vh;
             background: var(--bg-surface);
             border-right: 1px solid var(--border-color);
             display: flex;
             flex-direction: column;
             justify-content: space-between;
             padding: 24px 16px;
-            z-index: 100;
+            z-index: 9999;
             transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* State trigger via JavaScript */
+        .sidebar.open {
+            transform: translateX(280px);
         }
 
         .sidebar-top {
             display: flex;
             flex-direction: column;
             gap: 32px;
+        }
+
+        .nav-logo-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
         }
 
         .nav-logo {
@@ -63,28 +87,22 @@
             padding-left: 8px;
         }
 
-        .nav-logo-wrapper {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            width: 100%;
-        }
-
-        .close-sidebar-btn {
-            display: none;
-            background: none;
-            border: none;
-            color: var(--text-muted);
-            font-size: 20px;
-            cursor: pointer;
-        }
-
         .nav-dot {
             width: 7px;
             height: 7px;
             background: var(--accent);
             border-radius: 50%;
             box-shadow: 0 0 12px var(--accent);
+        }
+
+        .close-sidebar-btn {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 22px;
+            cursor: pointer;
+            padding: 4px;
+            display: block; /* Visible on mobile */
         }
 
         .nav-menu {
@@ -125,7 +143,6 @@
             flex-shrink: 0;
         }
 
-        /* Environment Pill Toggle */
         .sidebar-footer {
             display: flex;
             flex-direction: column;
@@ -196,60 +213,71 @@
         .workspace-name { font-size: 12px; font-weight: 500; color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .workspace-tier { font-size: 10px; color: var(--text-muted); }
 
-        /* Responsive Sidebar Backdrop overlay */
+        /* Dark overlay blur backdrop behind mobile drawer menu */
         .sidebar-overlay {
             display: none;
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
             background: rgba(0, 0, 0, 0.6);
             backdrop-filter: blur(4px);
-            z-index: 90;
+            z-index: 9990;
         }
+        .sidebar-overlay.active { display: block; }
 
-        /* --- MAIN VIEWPORT ARCHITECTURE --- */
+        /* Main viewport takes 100% full screen width on mobile */
         .main-viewport {
-            flex: 1;
+            width: 100%;
+            max-width: 100%;
             display: flex;
             flex-direction: column;
-            overflow-y: auto;
             background: var(--bg-main);
-            min-width: 0; /* Prevents layout distortion from un-wrapped content */
         }
 
         header {
-            padding: 24px 40px;
+            padding: 20px;
             border-bottom: 1px solid var(--border-color);
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: var(--bg-main);
+            flex-direction: column;
+            align-items: flex-start;
             gap: 16px;
+            background: var(--bg-main);
+        }
+
+        .header-top-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
         }
 
         .header-left-block {
             display: flex;
             align-items: center;
-            gap: 16px;
+            gap: 12px;
         }
 
+        /* Hamburger button layout */
         .menu-trigger {
-            display: none;
             background: none;
             border: none;
             color: var(--text-main);
             cursor: pointer;
-            padding: 4px;
+            padding: 6px;
+            display: flex; /* Visible on mobile */
+            align-items: center;
+            justify-content: center;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
         }
 
         .menu-trigger svg {
-            width: 22px;
-            height: 22px;
-            fill: stroke;
+            width: 20px;
+            height: 20px;
         }
 
         .header-title h1 {
             font-family: 'Syne', sans-serif;
-            font-size: 22px;
+            font-size: 20px;
             font-weight: 600;
             letter-spacing: -0.01em;
         }
@@ -257,14 +285,15 @@
         .header-title p {
             font-size: 12px;
             color: var(--text-muted);
-            margin-top: 2px;
+            margin-top: 4px;
+            line-height: 1.4;
         }
 
         .btn-action {
             background: var(--accent);
             color: var(--bg-main);
             border: none;
-            padding: 10px 18px;
+            padding: 12px 20px;
             font-family: 'IBM Plex Mono', monospace;
             font-size: 13px;
             font-weight: 600;
@@ -272,9 +301,10 @@
             cursor: pointer;
             display: flex;
             align-items: center;
+            justify-content: center;
             gap: 8px;
             transition: all 0.2s ease;
-            flex-shrink: 0;
+            width: 100%; 
         }
 
         .btn-action:hover {
@@ -283,16 +313,14 @@
         }
 
         .content-container {
-            padding: 40px;
+            padding: 20px;
             display: flex;
             flex-direction: column;
-            gap: 32px;
-            max-width: 1400px;
+            gap: 24px;
             width: 100%;
-            margin: 0 auto;
         }
 
-        /* --- TREASURY SNAPSHOT CARDS --- */
+        /* Metrics layout cards */
         .metrics-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -317,7 +345,7 @@
         }
 
         .metric-value {
-            font-size: 22px;
+            font-size: 24px;
             font-weight: 500;
             color: var(--text-main);
         }
@@ -340,10 +368,10 @@
             border: 1px solid rgba(0, 208, 132, 0.15);
         }
 
-        /* --- DASHBOARD WORKSPACE SPLIT BLOCK --- */
+        /* Structural responsive grid layout splits */
         .workspace-split {
             display: grid;
-            grid-template-columns: 2fr 1fr;
+            grid-template-columns: 1fr; 
             gap: 24px;
         }
 
@@ -351,7 +379,7 @@
             background: var(--bg-surface);
             border: 1px solid var(--border-color);
             border-radius: 8px;
-            padding: 24px;
+            padding: 20px;
         }
 
         .block-title {
@@ -360,9 +388,9 @@
             font-weight: 600;
             margin-bottom: 20px;
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 12px;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 6px;
         }
 
         .block-title span {
@@ -370,13 +398,11 @@
             font-size: 11px;
             color: var(--text-muted);
             font-weight: 400;
-            text-align: right;
         }
 
-        /* --- DATA TABLES --- */
         .ledger-table-wrapper {
             overflow-x: auto;
-            -webkit-overflow-scrolling: touch; /* Smooth mobile elastic scrolling */
+            -webkit-overflow-scrolling: touch;
         }
 
         .ledger-table {
@@ -384,7 +410,7 @@
             border-collapse: collapse;
             text-align: left;
             font-size: 12px;
-            min-width: 600px; /* Ensures data maintains table geometry on smaller views */
+            min-width: 650px; 
         }
 
         .ledger-table th {
@@ -405,7 +431,6 @@
         }
 
         .ledger-table tr:last-child td { border-bottom: none; }
-
         .tx-hash { color: var(--text-dim); font-family: monospace; }
         
         .status-pill {
@@ -417,17 +442,10 @@
             padding: 2px 8px;
             border-radius: 12px;
         }
-
         .status-pill.settled { background: rgba(0, 208, 132, 0.08); color: var(--status-success); }
         .status-pill.pending { background: rgba(255, 183, 3, 0.08); color: var(--status-pending); }
 
-        /* --- CORRIDORS & SIDE STRUCTURES --- */
-        .corridor-list {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
+        .corridor-list { display: flex; flex-direction: column; gap: 12px; }
         .corridor-item {
             background: var(--bg-main);
             border: 1px solid var(--border-color);
@@ -438,34 +456,16 @@
             align-items: center;
             gap: 12px;
         }
-
-        .corridor-info {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
-
-        .corridor-title {
-            font-size: 13px;
-            font-weight: 500;
-        }
-
-        .corridor-meta {
-            font-size: 11px;
-            color: var(--text-muted);
-        }
-
+        .corridor-info { display: flex; flex-direction: column; gap: 4px; }
+        .corridor-title { font-size: 13px; font-weight: 500; }
+        .corridor-meta { font-size: 11px; color: var(--text-muted); }
         .rate-badge {
-            font-size: 11px;
-            color: var(--accent);
-            background: rgba(0, 208, 132, 0.05);
-            padding: 4px 8px;
-            border-radius: 4px;
-            border: 1px solid rgba(0, 208, 132, 0.1);
+            font-size: 11px; color: var(--accent); background: rgba(0, 208, 132, 0.05);
+            padding: 4px 8px; border-radius: 4px; border: 1px solid rgba(0, 208, 132, 0.1);
             flex-shrink: 0;
         }
 
-        /* --- DYNAMIC TRANSFER MODAL CONTROL --- */
+        /* Action Flow Modals */
         .modal-overlay {
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
@@ -474,169 +474,113 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            z-index: 500;
+            z-index: 10000;
             opacity: 0; pointer-events: none;
             transition: all 0.2s ease;
             padding: 16px;
         }
-
         .modal-overlay.active { opacity: 1; pointer-events: auto; }
-
         .modal-card {
             background: var(--bg-surface);
             border: 1px solid var(--border-color);
             border-radius: 12px;
             width: 100%;
             max-width: 480px;
-            padding: 32px;
-            box-shadow: 0 24px 48px rgba(0,0,0,0.6);
-            transform: translateY(10px);
-            transition: all 0.2s ease;
+            padding: 24px;
             max-height: 90vh;
             overflow-y: auto;
         }
-
-        .modal-overlay.active .modal-card { transform: translateY(0); }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 24px;
-        }
-
-        .modal-header h2 {
-            font-family: 'Syne', sans-serif;
-            font-size: 18px;
-            font-weight: 600;
-        }
-
-        .close-modal {
-            background: none; border: none; color: var(--text-muted);
-            cursor: pointer; font-size: 16px;
-        }
-
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+        .modal-header h2 { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 600; }
+        .close-modal { background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 16px; }
         .form-group { margin-bottom: 18px; }
-        .form-group label {
-            display: block; font-size: 10px; text-transform: uppercase;
-            letter-spacing: 0.05em; color: var(--text-muted); margin-bottom: 8px;
-        }
-
+        .form-group label { display: block; font-size: 10px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px; }
         .form-group input, .form-group select {
             width: 100%; background: var(--bg-input); border: 1px solid var(--border-color);
-            padding: 12px 14px; border-radius: 6px; color: var(--text-main);
-            font-family: 'IBM Plex Mono', monospace; font-size: 13px;
+            padding: 12px 14px; border-radius: 6px; color: var(--text-main); font-family: 'IBM Plex Mono', monospace; font-size: 13px;
         }
-
-        .form-group input:focus, .form-group select:focus {
-            border-color: var(--accent); outline: none;
-        }
-
-        .fee-preview-box {
-            background: var(--bg-main);
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            padding: 14px;
-            margin-bottom: 24px;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            font-size: 11px;
-        }
-
+        .form-group input:focus, .form-group select:focus { border-color: var(--accent); outline: none; }
+        .fee-preview-box { background: var(--bg-main); border: 1px solid var(--border-color); border-radius: 6px; padding: 14px; margin-bottom: 24px; display: flex; flex-direction: column; gap: 8px; font-size: 11px; }
         .fee-row { display: flex; justify-content: space-between; gap: 8px; }
         .fee-row.total { border-top: 1px solid var(--border-color); padding-top: 8px; color: var(--accent); font-weight: 600; }
 
-        /* --- ADVANCED RESPONSIVE MEDIA QUERIES --- */
-        @media (max-width: 1024px) {
-            .workspace-split { grid-template-columns: 1fr; }
-        }
 
-        @media (max-width: 768px) {
+        /* ==========================================================================
+           DESKTOP PREMIUM LAYOUT BREAKPOINT (Laptops, Monitors & Large Displays)
+           ========================================================================== */
+        @media screen and (min-width: 1025px) {
+            body {
+                flex-direction: row; 
+            }
+
+            /* Reset fixed positions safely on desktop */
             .sidebar {
-                position: fixed;
-                top: 0;
-                left: -280px;
-                bottom: 0;
-                width: 270px;
+                position: static;
+                width: 260px;
                 height: 100vh;
-                transform: translateX(0);
-                box-shadow: 20px 0 40px rgba(0,0,0,0.6);
+                transform: none !important; 
+                flex-shrink: 0;
             }
 
-            .sidebar.open {
-                transform: translateX(280px);
+            /* Hide mobile utility mechanics */
+            .close-sidebar-btn, 
+            .menu-trigger, 
+            .sidebar-overlay {
+                display: none !important; 
             }
 
-            .sidebar-overlay.active {
-                display: block;
-            }
-
-            .close-sidebar-btn {
-                display: block;
-            }
-
-            .menu-trigger {
-                display: block;
+            .main-viewport {
+                flex: 1;
+                height: 100vh;
+                overflow-y: auto;
             }
 
             header {
-                padding: 16px 20px;
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+                padding: 24px 40px;
+            }
+
+            .header-top-row {
+                width: auto;
             }
 
             .header-title h1 {
-                font-size: 18px;
-            }
-
-            .header-title p {
-                font-size: 11px;
-            }
-
-            .content-container {
-                padding: 20px;
-                gap: 24px;
-            }
-
-            .modal-card {
-                padding: 24px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            header {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 16px;
+                font-size: 22px;
             }
 
             .btn-action {
-                width: 100%;
-                justify-content: center;
-                padding: 12px;
+                width: auto;
+            }
+
+            .content-container {
+                padding: 40px;
+                gap: 32px;
+                max-width: 1400px;
+                margin: 0 auto;
+            }
+
+            .workspace-split {
+                grid-template-columns: 2fr 1fr;
             }
 
             .block-card {
-                padding: 16px;
+                padding: 24px;
             }
 
             .block-title {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 4px;
-            }
-
-            .block-title span {
-                text-align: left;
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
             }
         }
     </style>
 </head>
 <body>
 
-    <!-- --- RESPONSIVE BACKDROP OVERLAY --- -->
     <div class="sidebar-overlay" id="sidebar-overlay" onclick="toggleSidebar(false)"></div>
 
-    <!-- --- SIDEBAR NAVIGATION --- -->
     <div class="sidebar" id="dashboard-sidebar">
         <div class="sidebar-top">
             <div class="nav-logo-wrapper">
@@ -685,18 +629,19 @@
         </div>
     </div>
 
-    <!-- --- MAIN VIEWPORT CONTAINER --- -->
     <div class="main-viewport">
         <header>
-            <div class="header-left-block">
-                <button class="menu-trigger" onclick="toggleSidebar(true)">
-                    <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
-                </button>
-                <div class="header-title">
-                    <h1>Treasury Control Center</h1>
-                    <p id="environment-indicator">Currently operating in multi-currency isolated Sandbox mode</p>
+            <div class="header-top-row">
+                <div class="header-left-block">
+                    <button class="menu-trigger" onclick="toggleSidebar(true)">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+                    </button>
+                    <div class="header-title">
+                        <h1>Treasury Control Center</h1>
+                    </div>
                 </div>
             </div>
+            <p id="environment-indicator">Currently operating in multi-currency isolated Sandbox mode</p>
             <button class="btn-action" onclick="toggleModal(true)">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
                 New Transfer
@@ -704,7 +649,6 @@
         </header>
 
         <div class="content-container">
-            <!-- Metrics Snapshot Block -->
             <div class="metrics-grid">
                 <div class="metric-card">
                     <div class="metric-label">Total Volume (CAD Equiv.)</div>
@@ -723,9 +667,7 @@
                 </div>
             </div>
 
-            <!-- Operational Ledger Grid -->
             <div class="workspace-split">
-                <!-- Left Block: Settlement Log -->
                 <div class="block-card">
                     <div class="block-title">
                         Active Settlement Ledger
@@ -769,32 +711,29 @@
                     </div>
                 </div>
 
-                <!-- Right Block: Active Telemetry Corridors -->
-                <div class="sidebar-blocks" style="display: flex; flex-direction: column; gap: 24px;">
-                    <div class="block-card">
-                        <div class="block-title">Active Corridors</div>
-                        <div class="corridor-list">
-                            <div class="corridor-item">
-                                <div class="corridor-info">
-                                    <div class="corridor-title">CAD → AED</div>
-                                    <div class="corridor-meta">Direct Treasury Route</div>
-                                </div>
-                                <div class="rate-badge">0.4% Fee</div>
+                <div class="block-card">
+                    <div class="block-title">Active Corridors</div>
+                    <div class="corridor-list">
+                        <div class="corridor-item">
+                            <div class="corridor-info">
+                                <div class="corridor-title">CAD → AED</div>
+                                <div class="corridor-meta">Direct Treasury Route</div>
                             </div>
-                            <div class="corridor-item">
-                                <div class="corridor-info">
-                                    <div class="corridor-title">CAD → INR</div>
-                                    <div class="corridor-meta">Automated IMPS / NEFT</div>
-                                </div>
-                                <div class="rate-badge">0.4% Fee</div>
+                            <div class="rate-badge">0.4% Fee</div>
+                        </div>
+                        <div class="corridor-item">
+                            <div class="corridor-info">
+                                <div class="corridor-title">CAD → INR</div>
+                                <div class="corridor-meta">Automated IMPS / NEFT</div>
                             </div>
-                            <div class="corridor-item">
-                                <div class="corridor-info">
-                                    <div class="corridor-title">CAD → USD</div>
-                                    <div class="corridor-meta">FedNow Settlement Layer</div>
-                                </div>
-                                <div class="rate-badge">0.4% Fee</div>
+                            <div class="rate-badge">0.4% Fee</div>
+                        </div>
+                        <div class="corridor-item">
+                            <div class="corridor-info">
+                                <div class="corridor-title">CAD → USD</div>
+                                <div class="corridor-meta">FedNow Settlement Layer</div>
                             </div>
+                            <div class="rate-badge">0.4% Fee</div>
                         </div>
                     </div>
                 </div>
@@ -802,7 +741,6 @@
         </div>
     </div>
 
-    <!-- --- INTERACTIVE MODAL OVERLAY --- -->
     <div class="modal-overlay" id="transfer-modal">
         <div class="modal-card">
             <div class="modal-header">
@@ -844,13 +782,12 @@
                 </div>
             </div>
 
-            <button class="btn-action" style="width: 100%; justify-content: center; padding: 14px;" onclick="executeMockTransfer()">
+            <button class="btn-action" style="padding: 14px;" onclick="executeMockTransfer()">
                 Authorize Route Vector →
             </button>
         </div>
     </div>
 
-    <!-- --- OPERATIONAL REALSIM CONTROLLER --- -->
     <script>
         function toggleSidebar(open) {
             const sidebar = document.getElementById('dashboard-sidebar');
