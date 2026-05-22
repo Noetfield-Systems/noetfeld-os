@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Noetfield — Create Workspace</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700&family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500&display=swap');
+
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body {
+            background: #0a0c0f;
+            color: #e8eaed;
+            font-family: 'IBM Plex Mono', monospace;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .signup-container {
+            width: 100%;
+            max-width: 460px;
+            padding: 40px 36px;
+            background: #111418;
+            border: 1px solid rgba(255,255,255,0.07);
+            border-radius: 12px;
+        }
+
+        .nav-logo {
+            font-family: 'Syne', sans-serif;
+            font-size: 22px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            justify-content: center;
+            margin-bottom: 32px;
+        }
+
+        .nav-dot {
+            width: 8px;
+            height: 8px;
+            background: #00d084;
+            border-radius: 50%;
+            box-shadow: 0 0 20px rgba(0, 208, 132, 0.4);
+        }
+
+        h1 {
+            font-family: 'Syne', sans-serif;
+            font-size: 26px;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #6b7280;
+            font-size: 13px;
+            margin-bottom: 32px;
+        }
+
+        .input-group {
+            margin-bottom: 16px;
+        }
+
+        label {
+            display: block;
+            font-size: 10px;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+            color: #6b7280;
+            margin-bottom: 6px;
+        }
+
+        input, select {
+            width: 100%;
+            background: #161b22;
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 14px 16px;
+            border-radius: 6px;
+            color: #e8eaed;
+            font-size: 15px;
+            transition: all 0.2s;
+        }
+
+        input:focus, select:focus {
+            border-color: #00d084;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(0, 208, 132, 0.15);
+        }
+
+        .btn-primary {
+            width: 100%;
+            padding: 14px;
+            background: #00d084;
+            color: #000;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            margin-top: 12px;
+            transition: all 0.2s;
+        }
+
+        .btn-primary:hover {
+            background: #00e896;
+            box-shadow: 0 0 24px rgba(0, 208, 132, 0.3);
+        }
+
+        .footer-link {
+            text-align: center;
+            margin-top: 28px;
+            font-size: 12px;
+        }
+
+        .footer-link a {
+            color: #00d084;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="signup-container">
+        <div class="nav-logo">
+            <div class="nav-dot"></div>
+            Noetfield
+        </div>
+
+        <h1>Create Workspace</h1>
+        <p class="subtitle">Start sending payments in minutes</p>
+
+        <div class="input-group">
+            <label>Business Name</label>
+            <input type="text" id="business" placeholder="Acme Corp Ltd." />
+        </div>
+
+        <div class="input-group">
+            <label>Work Email</label>
+            <input type="email" id="email" placeholder="you@company.com" />
+        </div>
+
+        <div class="input-group">
+            <label>Country</label>
+            <select id="country">
+                <option value="CA">🇨🇦 Canada</option>
+                <option value="US">🇺🇸 United States</option>
+                <option value="AE">🇦🇪 United Arab Emirates</option>
+                <option value="IN">🇮🇳 India</option>
+                <option value="GB">🇬🇧 United Kingdom</option>
+            </select>
+        </div>
+
+        <div class="input-group">
+            <label>Estimated Monthly Volume (CAD)</label>
+            <select id="volume">
+                <option value="under50k">Under $50,000</option>
+                <option value="50-200k">$50,000 – $200,000</option>
+                <option value="200-500k">$200,000 – $500,000</option>
+                <option value="500k+">$500,000+</option>
+            </select>
+        </div>
+
+        <div class="input-group">
+            <label>Password</label>
+            <input type="password" id="password" placeholder="Create a strong password" />
+        </div>
+
+        <button class="btn-primary" onclick="handleSignup()">Create Workspace →</button>
+
+        <div class="footer-link">
+            Already have a workspace? <a href="login.html">Sign in</a>
+        </div>
+    </div>
+
+    <script>
+        function handleSignup() {
+            const business = document.getElementById('business').value;
+            const email = document.getElementById('email').value;
+
+            if (business && email) {
+                alert(`✅ Workspace created successfully!\n\nBusiness: ${business}\nEmail: ${email}\n\n(در نسخه واقعی به داشبورد منتقل می‌شوی)`);
+                // window.location.href = "../platform/dashboard.html";
+            } else {
+                alert("لطفاً نام کسب‌وکار و ایمیل را وارد کنید.");
+            }
+        }
+    </script>
+</body>
+</html>
