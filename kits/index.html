@@ -3,30 +3,31 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Noetfield — Institutional Execution Layer</title>
+<title>Noetfield — Institutional Console</title>
 
-<!-- Premium Font Architecture -->
+<!-- Global Premium Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 
 <style>
     :root {
-        --bg: #000000;
-        --panel: #0a0a0c;
-        --panel-inner: #111114;
-        --border: rgba(255, 255, 255, 0.05);
-        --border-focus: rgba(81, 78, 245, 0.4);
+        --bg: #050507;
+        --panel: #0c0c0e;
+        --panel-card: #141417;
+        --border: rgba(255, 255, 255, 0.06);
+        --border-active: rgba(81, 78, 245, 0.4);
         
-        --text-main: #ffffff;
-        --text-sub: #71717a;
-        --text-muted: #3f3f46;
+        --text-main: #f4f4f5;
+        --text-sub: #8e8e93;
+        --text-muted: #48484a;
         
-        --brand: #514ef5;
+        --accent: #514ef5;
+        --accent-gradient: linear-gradient(135deg, #514ef5 0%, #7c3aed 100%);
         --emerald: #10b981;
-        --glow: rgba(81, 78, 245, 0.15);
+        --amber: #f59e0b;
         
-        --font-sans: 'Inter', -apple-system, sans-serif;
+        --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
         --font-mono: 'JetBrains Mono', monospace;
     }
 
@@ -35,108 +36,113 @@
         background-color: var(--bg);
         color: var(--text-main);
         font-family: var(--font-sans);
-        letter-spacing: -0.02em;
+        letter-spacing: -0.01em;
         -webkit-font-smoothing: antialiased;
-        padding: 40px;
+        padding: 32px;
     }
 
-    .container {
-        max-width: 1340px;
+    .app-container {
+        max-width: 1400px;
         margin: 0 auto;
     }
 
-    /* NAVIGATION HEAD */
-    .nav-header {
+    /* PREMIUM TOP NAVIGATION BAR */
+    .top-bar {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding-bottom: 32px;
+        padding-bottom: 24px;
         border-bottom: 1px solid var(--border);
-        margin-bottom: 40px;
+        margin-bottom: 32px;
     }
 
-    .brand-group {
+    .brand-section {
         display: flex;
         align-items: center;
-        gap: 16px;
+        gap: 14px;
     }
 
-    .logo {
-        width: 36px;
-        height: 36px;
-        background: var(--brand);
+    .logo-box {
+        width: 32px;
+        height: 32px;
+        background: var(--accent-gradient);
         border-radius: 8px;
         display: flex;
         align-items: center;
         justify-content: center;
         font-weight: 700;
-        font-size: 16px;
+        font-size: 15px;
         color: #fff;
-        box-shadow: 0 0 24px var(--glow);
+        box-shadow: 0 4px 12px rgba(81, 78, 245, 0.25);
     }
 
-    .title { font-size: 20px; font-weight: 600; letter-spacing: -0.03em; }
+    .brand-title { font-size: 18px; font-weight: 600; color: #ffffff; }
     
-    .badge-status {
+    .env-toggle {
         font-family: var(--font-mono);
         font-size: 10px;
         font-weight: 500;
         text-transform: uppercase;
-        background: rgba(16, 185, 129, 0.04);
-        border: 1px solid rgba(16, 185, 129, 0.15);
+        background: rgba(16, 185, 129, 0.06);
+        border: 1px solid rgba(16, 185, 129, 0.2);
         color: var(--emerald);
-        padding: 4px 12px;
+        padding: 4px 10px;
         border-radius: 100px;
     }
 
-    /* HIGH-VALUE NETWORK METRICS */
-    .network-ribbon {
+    /* COMMERCIAL MARKETING METRICS BAR */
+    .corridor-stats {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
-        gap: 20px;
-        margin-bottom: 40px;
+        gap: 16px;
+        margin-bottom: 32px;
     }
 
-    .metric-node {
+    .stat-card {
         background: var(--panel);
         border: 1px solid var(--border);
-        border-radius: 12px;
-        padding: 20px;
-    }
-
-    .metric-label { font-size: 11px; text-transform: uppercase; color: var(--text-sub); font-family: var(--font-mono); letter-spacing: 0.03em; }
-    .metric-value { font-size: 15px; font-weight: 500; margin-top: 6px; }
-
-    /* CORE INTERFACE GRID */
-    .interface-grid {
-        display: grid;
-        grid-template-columns: 4.5fr 7.5fr;
-        gap: 40px;
-        align-items: start;
-    }
-
-    .panel-box {
-        background: var(--panel);
-        border: 1px solid var(--border);
-        border-radius: 16px;
-        padding: 36px;
-    }
-
-    .panel-head {
-        font-size: 17px;
-        font-weight: 600;
-        margin-bottom: 28px;
+        border-radius: 10px;
+        padding: 16px 20px;
         display: flex;
         justify-content: space-between;
         align-items: center;
     }
 
-    /* ELITE FORM CONTROLS */
-    .input-wrapper {
-        margin-bottom: 24px;
+    .stat-label { font-size: 11px; text-transform: uppercase; color: var(--text-sub); font-family: var(--font-mono); }
+    .stat-value { font-size: 14px; font-weight: 500; margin-top: 4px; color: #ffffff; }
+    .stat-indicator { font-size: 12px; color: var(--emerald); font-family: var(--font-mono); display: flex; align-items: center; gap: 6px; }
+
+    /* DASHBOARD GRID SYSTEM */
+    .main-grid {
+        display: grid;
+        grid-template-columns: 4.5fr 7.5fr;
+        gap: 32px;
     }
 
-    .input-wrapper label {
+    .card-panel {
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 32px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .panel-title {
+        font-size: 16px;
+        font-weight: 600;
+        margin-bottom: 24px;
+        color: #ffffff;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    /* COMMERCIAL FORM CONTROLS */
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-group label {
         display: block;
         font-size: 11px;
         text-transform: uppercase;
@@ -144,58 +150,64 @@
         margin-bottom: 8px;
         font-weight: 600;
         font-family: var(--font-mono);
+        letter-spacing: 0.02em;
     }
 
-    .field-box {
+    .input-box {
         width: 100%;
         background: #000000;
         border: 1px solid var(--border);
         border-radius: 8px;
-        padding: 14px 18px;
+        padding: 12px 16px;
         color: #ffffff;
-        font-size: 15px;
-        transition: all 0.2s ease;
+        font-size: 14px;
+        font-family: var(--font-sans);
+        transition: all 0.15s;
     }
 
-    .field-box:focus {
+    .input-box:focus {
         outline: none;
-        border-color: var(--border-focus);
-        box-shadow: 0 0 20px var(--glow);
+        border-color: var(--accent);
+        box-shadow: 0 0 0 3px rgba(81, 78, 245, 0.15);
     }
 
-    select.field-box {
+    select.input-box {
         cursor: pointer;
         appearance: none;
-        background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='%2371717a' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='4 6 8 10 12 6'></polyline></svg>");
+        background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='%238e8e93' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='4 6 8 10 12 6'></polyline></svg>");
         background-repeat: no-repeat;
-        background-position: right 18px center;
+        background-position: right 16px center;
     }
 
-    .action-btn {
+    .submit-btn {
         width: 100%;
         background: #ffffff;
         color: #000000;
         border: none;
-        padding: 16px;
+        padding: 14px;
         border-radius: 8px;
         font-size: 14px;
         font-weight: 600;
         cursor: pointer;
-        transition: all 0.2s;
+        margin-top: 16px;
+        transition: all 0.15s;
     }
 
-    .action-btn:hover { background: #e4e4e7; transform: translateY(-1px); }
+    .submit-btn:hover { background: #e4e4e7; transform: translateY(-1px); }
 
-    /* CLEARING LEDGER TABLE */
-    .ledger-container { overflow-x: auto; }
-    .ledger-matrix {
+    /* COMMERCIAL LEDGER / TRANSACTION AUDIT */
+    .ledger-wrapper {
+        overflow-x: auto;
+    }
+
+    .ledger-table {
         width: 100%;
         border-collapse: collapse;
         text-align: left;
         font-size: 13px;
     }
 
-    .ledger-matrix th {
+    .ledger-table th {
         color: var(--text-sub);
         font-weight: 500;
         padding: 16px;
@@ -205,15 +217,19 @@
         font-family: var(--font-mono);
     }
 
-    .ledger-matrix td {
-        padding: 18px 16px;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.01);
+    .ledger-table td {
+        padding: 16px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.02);
+        color: var(--text-main);
     }
 
-    .mono-data { font-family: var(--font-mono); }
+    .font-code {
+        font-family: var(--font-mono);
+        color: #e4e4e7;
+    }
 
-    /* STATUS MARKERS */
-    .state-tag {
+    /* PREMIUM STATUS BADGES */
+    .badge {
         display: inline-flex;
         align-items: center;
         gap: 6px;
@@ -223,139 +239,154 @@
         font-family: var(--font-mono);
         font-weight: 500;
     }
-    .state-active { background: rgba(81, 78, 245, 0.08); color: #a5b4fc; }
-    .state-done { background: rgba(16, 185, 129, 0.06); color: var(--emerald); }
 
-    .pulse { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+    .badge-pending { background: rgba(245, 158, 11, 0.08); color: var(--amber); }
+    .badge-routed { background: rgba(81, 78, 245, 0.1); color: #a5b4fc; }
+    .badge-settled { background: rgba(16, 185, 129, 0.08); color: var(--emerald); }
 
-    /* MODERN SECURE FOOTER */
-    .footer-base {
-        margin-top: 80px;
-        border-top: 1px solid var(--border);
-        padding-top: 32px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        font-size: 12px;
-        color: var(--text-muted);
+    .pulse-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: currentColor;
     }
+    .badge-pending .pulse-dot { animation: blink 1.5s infinite; }
+
+    @keyframes blink { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; } }
 
     @media (max-width: 1024px) {
-        .interface-grid { grid-template-columns: 1fr; }
-        .network-ribbon { grid-template-columns: repeat(2, 1fr); }
+        .main-grid { grid-template-columns: 1fr; }
+        .corridor-stats { grid-template-columns: repeat(2, 1fr); }
     }
 </style>
 </head>
 <body>
 
-<div class="container">
+<div class="app-container">
     
-    <!-- UPPER NAVIGATION LAYER -->
-    <div class="nav-header">
-        <div class="brand-group">
-            <div class="logo">N</div>
-            <span class="title">Noetfield Terminal</span>
-            <span class="badge-status">Global Node Connected</span>
+    <!-- TOP CONTROL BAR -->
+    <div class="top-bar">
+        <div class="brand-section">
+            <div class="logo-box">N</div>
+            <span class="brand-title">Noetfield Hub</span>
+            <span class="env-toggle">Institutional API Active</span>
         </div>
-        <div style="font-size: 13px; color: var(--text-sub); font-family: var(--font-mono);">
-            Environment: <span style="color: #fff;">Mainnet-v2.EX</span>
-        </div>
-    </div>
-
-    <!-- ENTERPRISE OPERATIONS STATUS -->
-    <div class="network-ribbon">
-        <div class="metric-node">
-            <div class="metric-label">Liquidity Routing</div>
-            <div class="metric-value" style="color: var(--emerald);">Optimal Density</div>
-        </div>
-        <div class="metric-node">
-            <div class="metric-label">Cross-Border SLA</div>
-            <div class="metric-value">Instant Settlement</div>
-        </div>
-        <div class="metric-node">
-            <div class="metric-label">System Architecture</div>
-            <div class="metric-value">Zero-Custody Layer</div>
-        </div>
-        <div class="metric-node">
-            <div class="metric-label">API Health</div>
-            <div class="metric-value">100% Operational</div>
+        <div style="font-size: 13px; color: var(--text-sub);">
+            Downstream Infrastructure: <span style="color: #fff; font-weight: 500;">NDAX Clearing Rails</span>
         </div>
     </div>
 
-    <!-- INTERFACE LAYOUT -->
-    <div class="interface-grid">
+    <!-- MARKETING LIVE HEALTH MONITOR -->
+    <div class="corridor-stats">
+        <div class="stat-card">
+            <div>
+                <div class="stat-label">US-East Node</div>
+                <div class="stat-value">FedNow Link</div>
+            </div>
+            <div class="stat-indicator"><span class="pulse-dot" style="background:var(--emerald)"></span>99.98%</div>
+        </div>
+        <div class="stat-card">
+            <div>
+                <div class="stat-label">Europe Liquidity</div>
+                <div class="stat-value">SEPA Instant</div>
+            </div>
+            <div class="stat-indicator"><span class="pulse-dot" style="background:var(--emerald)"></span>Active</div>
+        </div>
+        <div class="stat-card">
+            <div>
+                <div class="stat-label">UK Settlement</div>
+                <div class="stat-value">FPS Protocol</div>
+            </div>
+            <div class="stat-indicator"><span class="pulse-dot" style="background:var(--emerald)"></span>Operational</div>
+        </div>
+        <div class="stat-card">
+            <div>
+                <div class="stat-label">APAC Routing</div>
+                <div class="stat-value">MAS / MEPS+</div>
+            </div>
+            <div class="stat-indicator"><span class="pulse-dot" style="background:var(--emerald)"></span>Nominal</div>
+        </div>
+    </div>
+
+    <!-- MAIN APP FLOW GRID -->
+    <div class="main-grid">
         
-        <!-- DISPATCH INTERFACE -->
-        <div class="panel-box">
-            <h2 class="panel-head">Instruction Dispatch</h2>
+        <!-- LEFT: DISPATCH FORM -->
+        <div class="card-panel">
+            <h2 class="panel-title">Instruction Dispatcher</h2>
             
-            <form onsubmit="executeRoute(event)">
-                <div class="input-wrapper">
-                    <label>Volume (USD)</label>
-                    <input type="number" id="tx-amount" class="field-box" value="50000" style="font-family: var(--font-mono); font-size: 16px;" required>
+            <form id="instruction-form" onsubmit="dispatchInstruction(event)">
+                <div class="form-group">
+                    <label for="ins-amount">Volume Target (USD)</label>
+                    <input type="number" id="ins-amount" class="input-box" value="25000" style="font-family: var(--font-mono); font-size: 16px;" required>
                 </div>
 
-                <div class="input-wrapper">
-                    <label>Target Settlement Corridor</label>
-                    <select id="tx-corridor" class="field-box">
-                        <option value="EUR" data-network="SEPA Premium Network">Eurozone (EUR) — Instant Clearing</option>
-                        <option value="GBP" data-network="UK Faster Payments">United Kingdom (GBP) — Sovereign Rail</option>
-                        <option value="AED" data-network="UAE Central Clearing">United Arab Emirates (AED) — Commercial Node</option>
-                        <option value="SGD" data-network="Singapore FAST Core">Singapore (SGD) — APAC Hub</option>
-                        <option value="HKD" data-network="HK CHATS Matrix">Hong Kong (HKD) — Settlement Node</option>
-                        <option value="CAD" data-network="Canada Real-Time Pool">Canada (CAD) — Institutional Rail</option>
+                <div class="form-group">
+                    <label for="ins-destination">Global Target Destination</label>
+                    <select id="ins-destination" class="input-box">
+                        <option value="EUR" data-rail="SEPA Inst" data-desk="NDAX_EUR_POOL">Eurozone (EUR) — SEPA Area</option>
+                        <option value="GBP" data-rail="FPS Rail" data-desk="CHAPS_UK_DESK">United Kingdom (GBP) — Faster Payments</option>
+                        <option value="AED" data-rail="UAETF System" data-desk="NDAX_MIDEAST_LIQ">United Arab Emirates (AED) — Central Bank Rail</option>
+                        <option value="SGD" data-rail="FAST Engine" data-desk="MAS_SINGAPORE_NODE">Singapore (SGD) — FAST Network</option>
+                        <option value="JPY" data-rail="Zengin Core" data-desk="NDAX_APAC_DESK">Japan (JPY) — Zengin System</option>
+                        <option value="CAD" data-rail="NDAX Internal" data-desk="NDAX_CAD_POOL">Canada (CAD) — EFT/Interac Rails</option>
+                        <option value="AUD" data-rail="NPP Network" data-desk="AUS_CLEARING_DESK">Australia (AUD) — New Payments Platform</option>
                     </select>
                 </div>
 
-                <div class="input-wrapper">
-                    <label>Client Reference ID</label>
-                    <input type="text" class="field-box" value="ext_corporate_ledger_ref" readonly style="color: var(--text-muted); background: #050507;">
+                <div class="form-group">
+                    <label for="ins-sme">Originator Sub-Entity</label>
+                    <input type="text" id="ins-sme" class="input-box" value="sme_global_distribution_ltd" readonly style="color: var(--text-sub); background: rgba(0,0,0,0.3)">
                 </div>
 
-                <button type="submit" class="action-btn">Initiate Settlement Route</button>
+                <button type="submit" class="submit-btn">Execute Settlement Route</button>
             </form>
         </div>
 
-        <!-- TRANSACTION LEDGER -->
-        <div class="panel-box">
-            <div class="panel-head">
-                <span>Global Liquidity Log</span>
-                <span style="font-family: var(--font-mono); font-size: 11px; color: var(--text-sub);">Persistent Streaming</span>
+        <!-- RIGHT: SIMPLIFIED LIVE LEDGER -->
+        <div class="card-panel">
+            <div class="panel-title">
+                <span>Global Clearing Ledger</span>
+                <span style="font-family: var(--font-mono); font-size: 11px; color: var(--text-sub);">Real-time Broadcast</span>
             </div>
             
-            <div class="ledger-container">
-                <table class="ledger-matrix">
+            <div class="ledger-wrapper">
+                <table class="ledger-table">
                     <thead>
                         <tr>
                             <th>Instruction ID</th>
                             <th>Volume</th>
-                            <th>Corridor Mapped</th>
-                            <th>Execution Network</th>
+                            <th>Corridor Mapping</th>
+                            <th>Assigned Rail</th>
+                            <th>Downstream Desk</th>
                             <th>State</th>
                         </tr>
                     </thead>
-                    <tbody id="ledger-rows">
-                        <!-- Premium Seed Data -->
+                    <tbody id="ledger-body">
+                        <!-- Premium High-Value Seed Data -->
                         <tr>
-                            <td class="mono-data" style="color: var(--text-sub);">tx_ntf_901A2</td>
-                            <td class="mono-data" style="font-weight: 500;">$250,000.00</td>
-                            <td class="mono-data">USD → EUR</td>
-                            <td>SEPA Premium Network</td>
-                            <td><span class="state-tag state-done"><span class="pulse"></span>Settled</span></td>
+                            <td class="font-code">ins_nof_E8912</td>
+                            <td class="font-code">$185,000.00</td>
+                            <td class="font-code">USD → EUR</td>
+                            <td><span style="color: #a5b4fc; font-family: var(--font-mono);">SEPA Inst</span></td>
+                            <td>NDAX_EUR_POOL</td>
+                            <td><span class="badge badge-settled"><span class="pulse-dot"></span>Settled</span></td>
                         </tr>
                         <tr>
-                            <td class="mono-data" style="color: var(--text-sub);">tx_ntf_773B1</td>
-                            <td class="mono-data" style="font-weight: 500;">$115,000.00</td>
-                            <td class="mono-data">USD → AED</td>
-                            <td>UAE Central Clearing</td>
-                            <td><span class="state-tag state-done"><span class="pulse"></span>Settled</span></td>
+                            <td class="font-code">ins_nof_B3310</td>
+                            <td class="font-code">$62,400.00</td>
+                            <td class="font-code">USD → AED</td>
+                            <td><span style="color: #a5b4fc; font-family: var(--font-mono);">UAETF System</span></td>
+                            <td>NDAX_MIDEAST_LIQ</td>
+                            <td><span class="badge badge-settled"><span class="pulse-dot"></span>Settled</span></td>
                         </tr>
                         <tr>
-                            <td class="mono-data" style="color: var(--text-sub);">tx_ntf_440E8</td>
-                            <td class="mono-data" style="font-weight: 500;">$85,000.00</td>
-                            <td class="mono-data">USD → SGD</td>
-                            <td>Singapore FAST Core</td>
-                            <td><span class="state-tag state-done"><span class="pulse"></span>Settled</span></td>
+                            <td class="font-code">ins_nof_A1104</td>
+                            <td class="font-code">$94,000.00</td>
+                            <td class="font-code">USD → GBP</td>
+                            <td><span style="color: #a5b4fc; font-family: var(--font-mono);">FPS Rail</span></td>
+                            <td>CHAPS_UK_DESK</td>
+                            <td><span class="badge badge-settled"><span class="pulse-dot"></span>Settled</span></td>
                         </tr>
                     </tbody>
                 </table>
@@ -363,55 +394,63 @@
         </div>
 
     </div>
-
-    <!-- TERMINAL FOOTER -->
-    <div class="footer-base">
-        <span>© 2026 Noetfield Technologies Inc. Global Financial Technology Architecture.</span>
-        <span style="font-family: var(--font-mono); color: var(--text-muted);">Secure Instruction Layer via Sovereign Infrastructure.</span>
-    </div>
 </div>
 
 <script>
-    function executeRoute(e) {
+    function dispatchInstruction(e) {
         e.preventDefault();
         
-        const amtInput = document.getElementById('tx-amount');
-        const corrSelect = document.getElementById('tx-corridor');
+        const amountInput = document.getElementById('ins-amount');
+        const destSelect = document.getElementById('ins-destination');
         
-        const amount = amtInput.value;
-        const selected = corrSelect.options[corrSelect.selectedIndex];
+        const amount = amountInput.value;
+        const selectedOption = destSelect.options[destSelect.selectedIndex];
         
-        const currency = selected.value;
-        const network = selected.getAttribute('data-network');
+        const currency = selectedOption.value;
+        const railName = selectedOption.getAttribute('data-rail');
+        const deskName = selectedOption.getAttribute('data-desk');
         
-        const txId = 'tx_ntf_' + Math.floor(10000 + Math.random() * 90000).toString(16).toUpperCase();
+        const randId = 'ins_nof_' + Math.floor(10000 + Math.random() * 90000).toString(16).toUpperCase();
         const formattedAmount = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(amount);
         
-        const tbody = document.getElementById('ledger-rows');
-        const row = document.createElement('tr');
+        const tbody = document.getElementById('ledger-body');
         
-        row.style.background = 'rgba(81, 78, 245, 0.03)';
+        // Create new dynamic ledger row
+        const row = document.createElement('tr');
+        row.style.background = 'rgba(81, 78, 245, 0.02)';
         row.innerHTML = `
-            <td class="mono-data" style="color: #fff;">${txId}</td>
-            <td class="mono-data" style="font-weight: 600; color: #fff;">${formattedAmount}</td>
-            <td class="mono-data">USD → ${currency}</td>
-            <td>${network}</td>
-            <td><span class="state-tag state-active" id="status-${txId}"><span class="pulse"></span>Routing</span></td>
+            <td class="font-code">${randId}</td>
+            <td class="font-code" style="font-weight: 500; color: #fff;">${formattedAmount}</td>
+            <td class="font-code">USD → ${currency}</td>
+            <td><span style="color: #a5b4fc; font-family: var(--font-mono);">${railName}</span></td>
+            <td>${deskName}</td>
+            <td><span class="badge badge-pending" id="badge-${randId}"><span class="pulse-dot"></span>Ingesting</span></td>
         `;
         
+        // Insert at the very top of the ledger for premium reactivity
         tbody.insertBefore(row, tbody.firstChild);
         
-        // Immediate Transition to Confirmed State
+        // Step 1: Simulated Handoff to Partner Desk
         setTimeout(() => {
-            const statusTag = document.getElementById(`status-${txId}`);
-            if(statusTag) {
-                statusTag.className = 'state-tag state-done';
-                statusTag.innerHTML = '<span class="pulse"></span>Settled';
+            const badge = document.getElementById(`badge-${randId}`);
+            if(badge) {
+                badge.className = 'badge badge-routed';
+                badge.innerHTML = '<span class="pulse-dot"></span>Clearing';
                 row.style.background = 'transparent';
             }
-        }, 2000);
+        }, 1500);
+
+        // Step 2: Settled State Confirmation
+        setTimeout(() => {
+            const badge = document.getElementById(`badge-${randId}`);
+            if(badge) {
+                badge.className = 'badge badge-settled';
+                badge.innerHTML = '<span class="pulse-dot"></span>Settled';
+            }
+        }, 3500);
         
-        amtInput.value = '';
+        // Clear input value for productivity flow
+        amountInput.value = '';
     }
 </script>
 
