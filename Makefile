@@ -1,6 +1,6 @@
 .PHONY: bootstrap validate api
 
-PYTHONPATH_VALUE := packages/types:packages/config:services/events:services/ledger:services/graph:services/governance:services/workflow:services/ai-runtime:services/inspectors:services/identity
+PYTHONPATH_VALUE := packages/types:packages/config:services/events:services/ledger:services/graph:services/governance:services/signals:services/workflow:services/ai-runtime:services/inspectors:services/identity
 
 bootstrap:
 	python3 -m venv .venv

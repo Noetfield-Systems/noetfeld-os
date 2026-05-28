@@ -6,21 +6,69 @@ events:
   ENTITY_CREATED:
     layer: normalized_intelligence
     description: Normalized entity created.
+  ENTITY_UPDATED:
+    layer: normalized_intelligence
+    description: Normalized entity changed.
   RELATIONSHIP_INFERRED:
     layer: living_knowledge_graph
     description: Relationship inferred with evidence and confidence.
-  POLICY_EVALUATED:
-    layer: governance_ledger
-    description: Governance policy evaluated.
-  HUMAN_OVERRIDE_TRIGGERED:
-    layer: governance_ledger
-    description: Human governance boundary interrupted automation.
-  WORKFLOW_APPROVED:
-    layer: governance_ledger
-    description: Workflow received a human approval.
+  RELATIONSHIP_CONFIDENCE_CHANGED:
+    layer: living_knowledge_graph
+    description: Relationship confidence evolved from new evidence.
   GRAPH_UPDATED:
     layer: living_knowledge_graph
     description: Knowledge graph projection changed.
+  GRAPH_REFLECTION_COMPLETED:
+    layer: living_knowledge_graph
+    description: Temporal graph reflection cycle completed.
+  POLICY_EVALUATED:
+    layer: governance_ledger
+    description: Governance policy evaluated.
+  GOVERNANCE_VETOED:
+    layer: governance_ledger
+    description: Governance boundary vetoed execution.
+  HUMAN_APPROVAL_REQUESTED:
+    layer: governance_ledger
+    description: Consequential action entered the human approval queue.
+  HUMAN_APPROVAL_GRANTED:
+    layer: governance_ledger
+    description: Human approval granted.
+  HUMAN_APPROVAL_DENIED:
+    layer: governance_ledger
+    description: Human approval denied.
+  HUMAN_OVERRIDE_TRIGGERED:
+    layer: governance_ledger
+    description: Human governance boundary interrupted automation.
+  WORKFLOW_STARTED:
+    layer: governance_ledger
+    description: Workflow execution started.
+  WORKFLOW_APPROVED:
+    layer: governance_ledger
+    description: Workflow received a human approval.
+  WORKFLOW_REJECTED:
+    layer: governance_ledger
+    description: Workflow was rejected.
+  INSPECTOR_STARTED:
+    layer: operational_runtime
+    description: Bounded inspector run started.
+  INSPECTOR_COLLABORATION_STARTED:
+    layer: operational_runtime
+    description: Bounded inspector collaboration started.
   INSPECTOR_COMPLETED:
     layer: operational_runtime
     description: Ambient inspector run completed.
+  AI_OUTPUT_GENERATED:
+    layer: governance_ledger
+    description: Governed AI output generated.
+  AI_OUTPUT_REVIEWED:
+    layer: governance_ledger
+    description: Governed AI output reviewed.
+  EVIDENCE_ATTACHED:
+    layer: governance_ledger
+    description: Evidence attached to a governed artifact.
+  MEMORY_REFLECTION_RECORDED:
+    layer: cognitive_memory
+    description: Cognitive memory reflection recorded.
+  DEAD_LETTER_RECORDED:
+    layer: operational_runtime
+    description: Subscriber failure captured for replay or recovery.

@@ -12,18 +12,26 @@ class EventType(StrEnum):
     ENTITY_CREATED = "ENTITY_CREATED"
     ENTITY_UPDATED = "ENTITY_UPDATED"
     RELATIONSHIP_INFERRED = "RELATIONSHIP_INFERRED"
+    RELATIONSHIP_CONFIDENCE_CHANGED = "RELATIONSHIP_CONFIDENCE_CHANGED"
     GRAPH_UPDATED = "GRAPH_UPDATED"
+    GRAPH_REFLECTION_COMPLETED = "GRAPH_REFLECTION_COMPLETED"
     POLICY_EVALUATED = "POLICY_EVALUATED"
+    GOVERNANCE_VETOED = "GOVERNANCE_VETOED"
+    HUMAN_APPROVAL_REQUESTED = "HUMAN_APPROVAL_REQUESTED"
+    HUMAN_APPROVAL_GRANTED = "HUMAN_APPROVAL_GRANTED"
+    HUMAN_APPROVAL_DENIED = "HUMAN_APPROVAL_DENIED"
     HUMAN_OVERRIDE_TRIGGERED = "HUMAN_OVERRIDE_TRIGGERED"
     WORKFLOW_STARTED = "WORKFLOW_STARTED"
     WORKFLOW_APPROVED = "WORKFLOW_APPROVED"
     WORKFLOW_REJECTED = "WORKFLOW_REJECTED"
     INSPECTOR_STARTED = "INSPECTOR_STARTED"
+    INSPECTOR_COLLABORATION_STARTED = "INSPECTOR_COLLABORATION_STARTED"
     INSPECTOR_COMPLETED = "INSPECTOR_COMPLETED"
     AI_OUTPUT_GENERATED = "AI_OUTPUT_GENERATED"
     AI_OUTPUT_REVIEWED = "AI_OUTPUT_REVIEWED"
     EVIDENCE_ATTACHED = "EVIDENCE_ATTACHED"
     MEMORY_REFLECTION_RECORDED = "MEMORY_REFLECTION_RECORDED"
+    DEAD_LETTER_RECORDED = "DEAD_LETTER_RECORDED"
 
 
 def event_catalog() -> dict[str, dict[str, str]]:
@@ -42,8 +50,24 @@ def event_catalog() -> dict[str, dict[str, str]]:
             "description": "The graph engine inferred a relationship with evidence.",
             "layer": "living_knowledge_graph",
         },
+        EventType.RELATIONSHIP_CONFIDENCE_CHANGED: {
+            "description": "A relationship confidence score evolved from new evidence.",
+            "layer": "living_knowledge_graph",
+        },
+        EventType.GRAPH_REFLECTION_COMPLETED: {
+            "description": "A temporal graph reflection cycle completed.",
+            "layer": "living_knowledge_graph",
+        },
         EventType.POLICY_EVALUATED: {
             "description": "OPA or an internal policy evaluator produced a decision.",
+            "layer": "governance_ledger",
+        },
+        EventType.GOVERNANCE_VETOED: {
+            "description": "A governance boundary vetoed execution.",
+            "layer": "governance_ledger",
+        },
+        EventType.HUMAN_APPROVAL_REQUESTED: {
+            "description": "A consequential action entered the human approval queue.",
             "layer": "governance_ledger",
         },
         EventType.HUMAN_OVERRIDE_TRIGGERED: {
@@ -58,8 +82,16 @@ def event_catalog() -> dict[str, dict[str, str]]:
             "description": "The living knowledge graph projection changed.",
             "layer": "living_knowledge_graph",
         },
+        EventType.INSPECTOR_COLLABORATION_STARTED: {
+            "description": "Multiple bounded inspectors began a collaborative run.",
+            "layer": "operational_runtime",
+        },
         EventType.INSPECTOR_COMPLETED: {
             "description": "A bounded ambient inspector completed a governed run.",
+            "layer": "operational_runtime",
+        },
+        EventType.DEAD_LETTER_RECORDED: {
+            "description": "A subscriber failure was captured for audit-safe recovery.",
             "layer": "operational_runtime",
         },
     }

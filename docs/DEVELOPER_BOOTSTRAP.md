@@ -30,8 +30,7 @@ make bootstrap
 Run backend API:
 
 ```bash
-PYTHONPATH=packages/types:packages/config:services/events:services/ledger:services/graph:services/governance:services/workflow:services/ai-runtime:services/inspectors:services/identity \
-  uvicorn noetfield_governance.api:app --reload --app-dir services/governance
+make api
 ```
 
 Run app shells:
@@ -41,6 +40,12 @@ npm run dev:web
 npm run dev:platform
 npm run dev:admin
 ```
+
+## Phase 3 runtime activation
+
+See [PHASE_3_RUNTIME_ACTIVATION.md](PHASE_3_RUNTIME_ACTIVATION.md) for the live
+event bus, signal ingestion, graph mutation, governance runtime, approval queue,
+and inspector collaboration endpoints.
 
 ## Validation
 
@@ -56,3 +61,5 @@ make validate
 - Treat AI outputs as governed artifacts with citations, confidence, and review
   state.
 - Add tenant boundaries to new data models from the beginning.
+- Use confidence thresholds and human approval queues for consequential runtime
+  actions.
