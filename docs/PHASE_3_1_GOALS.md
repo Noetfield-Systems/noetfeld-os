@@ -1,91 +1,123 @@
-# Phase 3.1 Goals: Durable Runtime and Live Governance Console
+# Phase 3.1 Goals: Backend Durability and Runtime Integrity
 
-Phase 3.1 upgrades Noetfield from an in-process executable runtime into a more
-durable, observable, and demo-ready governed intelligence system.
+Phase 3.1 is backend-only. Its purpose is to stabilize Noetfield's operational
+cognition before investing in live console UI polish.
 
-These goals are locked as the next implementation sequence.
+## Binding priorities
+
+- PostgreSQL is the system of record.
+- Supabase is optional tooling, not governance authority.
+- Runtime integrity comes before frontend experience.
+- Webhook and manual ingestion come first.
+- RSS/news connectors are deferred.
+- Copilot Governance is the first demo module, but it remains a use-case layer.
+- The platform foundation remains event-centric, workflow-first, and
+  audit-centric.
 
 ## Goal 1: Durable Runtime Persistence
 
-Persist the runtime memory that currently exists in-process:
+Persist operational memory in PostgreSQL-backed runtime stores:
 
 - governance events
 - event traces
 - dead-letter records
-- approval queue projections
+- raw/manual/webhook signals
 - graph relationship mutations
-- graph reflection cycles
-- signal ingestion records
+- relationship confidence evolution
+- workflow state transitions
+- inspector execution runs
+- audit ledger records
 
-The first implementation step is durable event, trace, and dead-letter storage
-behind stable runtime interfaces.
+## Goal 2: Event Bus Integrity
 
-## Goal 2: Realtime Operational Console
+The event bus must support:
 
-Expose live runtime behavior over a realtime transport:
+- typed event contracts
+- append-only publish flow
+- replay from PostgreSQL
+- dead-letter capture
+- subscriber dispatch isolation
+- tracing metadata
+- local in-memory mode for tests only
 
-- server-sent events or WebSocket stream
-- event bus metrics
-- recent governance events
-- dead-letter alerts
-- graph confidence changes
-- pending approvals
-- inspector run status
+## Goal 3: Webhook and Manual Ingestion
 
-## Goal 3: Human Approval UX
+Implement only:
 
-Turn the backend approval queue into a visible governance workflow:
-
-- pending approval list
-- approve and deny actions
-- rationale capture
-- approval event emission
-- audit-safe replay after decision
-
-## Goal 4: Durable Graph Repository
-
-Persist living graph state:
-
-- entities
-- relationships
-- confidence evolution
-- graph reflections
-- relationship evidence chains
-
-## Goal 5: Signal Source Connectors
-
-Add practical ingestion surfaces:
-
-- webhook ingestion
+- generic webhook ingestion
 - manual JSON signal ingestion
-- RSS/news connector
-- source provenance and payload hashing
+- payload hashing
+- provenance capture
+- governance event emission
 
-## Goal 6: Governance Policy Pack
+RSS/news connectors are explicitly deferred.
 
-Add executable governance policies for:
+## Goal 4: Durable Graph Mutation Engine
 
-- minimum confidence thresholds
-- required human review
-- blocked autonomous actions
-- inspector execution limits
-- report publishing approval
-- tenant isolation boundaries
+Persist graph runtime behavior:
 
-## Goal 7: End-to-End Copilot Governance Demo Flow
+- relationship upserts
+- confidence changes
+- evidence links
+- temporal reflection summaries
+- low-confidence detection
 
-Create a compelling runtime flow:
+## Goal 5: Audit Ledger Runtime
 
-1. Copilot governance signal enters the system.
-2. Entity and relationship graph changes.
-3. Confidence evolves from evidence.
-4. Temporal graph reflection runs.
-5. Governance runtime requires human approval.
-6. Human approves or denies with rationale.
-7. Audit trail can be replayed.
+Every consequential runtime action must be:
 
-## Implementation rule
+- attributable
+- timestamped
+- traceable
+- replayable
+- exportable later
 
-Build one goal at a time. Do not introduce unnecessary microservices,
-Kubernetes complexity, blockchain systems, autonomous swarms, or UI polish that
-does not improve governance runtime behavior.
+The audit ledger runtime should write append-only audit records and preserve
+event integrity boundaries.
+
+## Goal 6: Workflow State Machine
+
+Implement a backend workflow state machine for governed runtime execution:
+
+- deterministic state transitions
+- transition validation
+- workflow history
+- approval/waiting states
+- terminal states
+- event emission
+
+## Goal 7: Inspector Execution Loop
+
+Inspectors should run through a bounded execution loop:
+
+- objective input
+- inspector selection
+- execution state
+- findings persistence
+- confidence thresholds
+- human review boundary
+- audit events
+
+This is not an autonomous swarm.
+
+## Goal 8: Copilot Governance Demo Module
+
+Build Copilot Governance on top of the core runtime as the first use case:
+
+1. A Copilot governance signal is manually or webhook-ingested.
+2. Graph relationships mutate from the signal.
+3. Confidence evolves.
+4. Reflection runs.
+5. Governance workflow requires approval.
+6. Audit trail is replayable.
+
+The Copilot module must not become the platform foundation.
+
+## Deferred
+
+- Realtime console UI
+- RSS/news connectors
+- Kubernetes
+- microservice extraction
+- autonomous agent swarms
+- blockchain systems

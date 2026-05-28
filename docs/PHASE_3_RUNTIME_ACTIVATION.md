@@ -1,24 +1,38 @@
 # Phase 3 Runtime Activation
 
 Phase 3 turns the v3.1 foundation into a live governed intelligence runtime.
-It remains a modular monolith and avoids premature microservices, Kubernetes,
-blockchain, or autonomous swarm complexity.
+Phase 3.1 narrows the work to backend durability and runtime integrity.
 
-## Runtime capabilities
+## Backend-first runtime capabilities
 
-- Async in-process event bus
+- Async event bus
 - Publisher/subscriber dispatch
-- Replayable retained events
+- Replayable events
 - Dead-letter capture for subscriber failures
-- Signal ingestion with raw payload hashing
+- PostgreSQL-backed event, trace, and dead-letter adapters
+- Manual and webhook signal ingestion
 - Live graph relationship mutation
 - Relationship confidence evolution
 - Temporal graph reflection cycles
 - Governance policy evaluation
 - Governance veto boundaries
 - Human approval queue
-- Inspector collaboration runtime
-- Realtime operational console API
+- Deterministic workflow state machine
+- Inspector execution loop
+- Copilot Governance demo use-case layer
+
+## PostgreSQL authority
+
+PostgreSQL is the system of record for governance memory. Supabase may be used
+as tooling around PostgreSQL, but it is not the governance authority.
+
+Use:
+
+```env
+RUNTIME_EVENT_STORE=postgres
+```
+
+Use `memory` only for local tests and smoke validation.
 
 ## Runtime endpoints
 
@@ -33,48 +47,23 @@ Key endpoints:
 - `GET /health`
 - `GET /events/catalog`
 - `GET /events/replay?after_sequence=0&event_type=*`
-- `POST /signals/ingest`
+- `POST /ingestion/manual`
+- `POST /ingestion/webhook/{source_name}`
 - `POST /graph/relationships/mutate`
 - `POST /graph/reflections/run`
+- `POST /workflows/start`
+- `POST /workflows/transition`
 - `POST /governance/execute`
 - `GET /approvals`
 - `POST /approvals/decide`
-- `POST /inspectors/collaborate`
-- `GET /runtime/console`
+- `POST /inspectors/execute`
+- `POST /use-cases/copilot-governance/demo`
 
-## Governance guarantees
+## Deferred
 
-Phase 3 preserves the platform rules:
-
-- Events are typed and versioned.
-- Runtime events are replayable.
-- Failed subscriber execution is dead-lettered.
-- Confidence thresholds can force human review.
-- Governance boundaries can veto execution.
-- Consequential runtime actions emit audit events.
-- Inspectors coordinate through bounded collaboration, not uncontrolled
-  autonomy.
-
-## Current durability posture
-
-The runtime bus and stores are in-process for the first activation step. The
-database migrations define durable projections for event traces, dead letters,
-graph reflections, approval queues, and the existing append-only governance
-ledger. Future adapters should persist through those tables without changing
-the runtime contracts.
-
-## Operational console
-
-Backend console:
-
-```bash
-curl http://localhost:8000/runtime/console
-```
-
-Frontend shell:
-
-```bash
-npm run dev:platform
-```
-
-Then open `/console` in the platform app.
+- Realtime console UI
+- RSS/news connectors
+- Kubernetes
+- microservice extraction
+- autonomous swarms
+- blockchain systems

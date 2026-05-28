@@ -15,7 +15,7 @@ Copy the environment template:
 cp .env.example .env
 ```
 
-Start local dependencies:
+Start local PostgreSQL and supporting services:
 
 ```bash
 docker compose -f infrastructure/docker/docker-compose.yml up -d
@@ -33,19 +33,29 @@ Run backend API:
 make api
 ```
 
-Run app shells:
+## Phase 3.1 backend core
+
+Phase 3.1 prioritizes backend durability and runtime integrity. PostgreSQL is
+the system of record. Supabase is optional tooling only.
+
+Use `RUNTIME_EVENT_STORE=postgres` for operational runtime. Use `memory` only
+for test smoke flows that do not require a database.
+
+See:
+
+- [PHASE_3_1_GOALS.md](PHASE_3_1_GOALS.md)
+- [PHASE_3_RUNTIME_ACTIVATION.md](PHASE_3_RUNTIME_ACTIVATION.md)
+
+## Optional app shells
+
+The Next.js app shells remain available, but live console UI work is deferred
+until backend runtime stability is proven.
 
 ```bash
 npm run dev:web
 npm run dev:platform
 npm run dev:admin
 ```
-
-## Phase 3 runtime activation
-
-See [PHASE_3_RUNTIME_ACTIVATION.md](PHASE_3_RUNTIME_ACTIVATION.md) for the live
-event bus, signal ingestion, graph mutation, governance runtime, approval queue,
-and inspector collaboration endpoints.
 
 ## Validation
 

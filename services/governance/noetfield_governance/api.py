@@ -1,4 +1,4 @@
-"""FastAPI entrypoint for the Noetfield Phase 3 runtime."""
+"""FastAPI entrypoint for the Noetfield backend runtime core."""
 
 from uuid import UUID
 
@@ -6,6 +6,7 @@ from fastapi import FastAPI
 from pydantic import BaseModel, ConfigDict
 
 from noetfield_config import get_settings
+from noetfield_copilot_governance import CopilotGovernanceCommand, CopilotGovernanceDemoRuntime
 from noetfield_events import (
     AsyncEventBus,
     EventReplayCursor,
@@ -23,44 +24,78 @@ from noetfield_graph import (
     GraphMutationCommand,
     InMemoryGraphStore,
     LiveGraphMutationEngine,
+    PostgresGraphStore,
     TemporalGraphReflectionCycle,
 )
 from noetfield_inspectors import (
+    InMemoryInspectorRunStore,
     InspectorCollaborationCommand,
     InspectorCollaborationRuntime,
+    InspectorExecutionLoop,
     LeadScoutInspector,
     OpportunityHunterInspector,
+    PostgresInspectorRunStore,
     ThreatMonitorInspector,
 )
-from noetfield_signals import InMemorySignalStore, IngestSignalCommand, SignalIngestionPipeline
+from noetfield_ledger import AuditLedgerRuntime, InMemoryAuditLedgerStore, PostgresAuditLedgerStore
+from noetfield_signals import (
+    InMemorySignalStore,
+    IngestSignalCommand,
+    PostgresSignalStore,
+    SignalIngestionPipeline,
+)
+from noetfield_workflow import (
+    InMemoryWorkflowStore,
+    PostgresWorkflowStore,
+    WorkflowInstance,
+    WorkflowStateMachine,
+    WorkflowTransitionCommand,
+)
 
 settings = get_settings()
 
 app = FastAPI(
     title="Noetfield Platform API",
     version="0.3.1",
-    description="Runtime activation for governed ambient intelligence.",
+    description="Backend runtime core for governed ambient intelligence.",
 )
 
-event_store = None
-dead_letter_store = None
-if settings.runtime_event_store == "postgres":
-    event_store = PostgresEventStore(settings.database_url)
-    dead_letter_store = PostgresDeadLetterStore(settings.database_url)
+postgres_mode = settings.runtime_event_store == "postgres"
 
+event_store = PostgresEventStore(settings.database_url) if postgres_mode else None
+dead_letter_store = PostgresDeadLetterStore(settings.database_url) if postgres_mode else None
 event_bus = AsyncEventBus(event_store=event_store, dead_letter_store=dead_letter_store)
-signal_store = InMemorySignalStore()
-graph_store = InMemoryGraphStore()
+
+signal_store = PostgresSignalStore(settings.database_url) if postgres_mode else InMemorySignalStore()
+graph_store = PostgresGraphStore(settings.database_url) if postgres_mode else InMemoryGraphStore()
+audit_store = (
+    PostgresAuditLedgerStore(settings.database_url) if postgres_mode else InMemoryAuditLedgerStore()
+)
+workflow_store = PostgresWorkflowStore(settings.database_url) if postgres_mode else InMemoryWorkflowStore()
+inspector_store = (
+    PostgresInspectorRunStore(settings.database_url) if postgres_mode else InMemoryInspectorRunStore()
+)
 approval_queue = HumanApprovalQueue()
 
+audit_runtime = AuditLedgerRuntime(store=audit_store)
 signal_pipeline = SignalIngestionPipeline(event_bus=event_bus, store=signal_store)
 graph_mutations = LiveGraphMutationEngine(event_bus=event_bus, store=graph_store)
 graph_reflections = TemporalGraphReflectionCycle(event_bus=event_bus, store=graph_store)
 governance_runtime = GovernanceRuntime(event_bus=event_bus, approvals=approval_queue)
+workflow_state_machine = WorkflowStateMachine(store=workflow_store, event_bus=event_bus)
+
 inspector_runtime = InspectorCollaborationRuntime(event_bus=event_bus)
 inspector_runtime.register(OpportunityHunterInspector())
 inspector_runtime.register(ThreatMonitorInspector())
 inspector_runtime.register(LeadScoutInspector())
+inspector_execution_loop = InspectorExecutionLoop(runtime=inspector_runtime, store=inspector_store)
+
+copilot_demo_runtime = CopilotGovernanceDemoRuntime(
+    signal_pipeline=signal_pipeline,
+    graph_mutations=graph_mutations,
+    graph_reflections=graph_reflections,
+    workflow_state_machine=workflow_state_machine,
+)
 
 
 class ApprovalDecisionRequest(BaseModel):
@@ -78,9 +113,42 @@ class ReflectionRequest(BaseModel):
     organization_id: UUID
 
 
+class WebhookIngestionRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    tenant_id: UUID
+    organization_id: UUID
+    payload: dict[str, object]
+    actor_id: str = "webhook-ingestion"
+
+
+class ManualIngestionRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    tenant_id: UUID
+    organization_id: UUID
+    signal_type: str = "manual_signal"
+    payload: dict[str, object]
+    submitted_by: str
+
+
+@app.on_event("startup")
+async def subscribe_runtime_audit() -> None:
+    await event_bus.subscribe(name="audit-ledger-runtime", event_types={"*"}, handler=audit_runtime.record_event)
+
+
 @app.on_event("shutdown")
 async def shutdown_runtime() -> None:
-    for store in (event_store, dead_letter_store):
+    stores = [
+        event_store,
+        dead_letter_store,
+        signal_store,
+        graph_store,
+        audit_store,
+        workflow_store,
+        inspector_store,
+    ]
+    for store in stores:
         close = getattr(store, "close", None)
         if close is not None:
             await close()
@@ -91,8 +159,9 @@ async def health() -> dict[str, str]:
     return {
         "status": "ok",
         "service": "noetfield-platform",
-        "runtime": "phase-3.1",
-        "event_store": settings.runtime_event_store,
+        "runtime": "phase-3.1-backend-core",
+        "system_of_record": "postgresql" if postgres_mode else "memory-test-mode",
+        "supabase_authority": "optional-tooling-only",
     }
 
 
@@ -107,6 +176,36 @@ async def replay_events(after_sequence: int = 0, event_type: str = "*") -> list[
         EventReplayCursor(after_sequence=after_sequence, event_types=frozenset({event_type}))
     )
     return [event.model_dump(mode="json") for event in events]
+
+
+@app.post("/ingestion/manual", tags=["ingestion"])
+async def ingest_manual(request: ManualIngestionRequest) -> dict[str, object]:
+    signal, trace = await signal_pipeline.ingest(
+        IngestSignalCommand(
+            tenant_id=request.tenant_id,
+            organization_id=request.organization_id,
+            signal_type=request.signal_type,
+            payload=request.payload,
+            provenance={"ingestion": "manual"},
+            actor_id=request.submitted_by,
+        )
+    )
+    return {"signal": signal.model_dump(mode="json"), "trace": trace}
+
+
+@app.post("/ingestion/webhook/{source_name}", tags=["ingestion"])
+async def ingest_webhook(source_name: str, request: WebhookIngestionRequest) -> dict[str, object]:
+    signal, trace = await signal_pipeline.ingest(
+        IngestSignalCommand(
+            tenant_id=request.tenant_id,
+            organization_id=request.organization_id,
+            signal_type="webhook_signal",
+            payload=request.payload,
+            provenance={"ingestion": "webhook", "source_name": source_name},
+            actor_id=request.actor_id,
+        )
+    )
+    return {"signal": signal.model_dump(mode="json"), "trace": trace}
 
 
 @app.post("/signals/ingest", tags=["signals"])
@@ -124,6 +223,18 @@ async def mutate_relationship(command: GraphMutationCommand) -> dict[str, object
 @app.post("/graph/reflections/run", tags=["graph"])
 async def run_graph_reflection(request: ReflectionRequest) -> dict[str, object]:
     result = await graph_reflections.run(request.tenant_id, request.organization_id)
+    return result.model_dump(mode="json")
+
+
+@app.post("/workflows/start", tags=["workflow"])
+async def start_workflow(workflow: WorkflowInstance) -> dict[str, object]:
+    result = await workflow_state_machine.start(workflow)
+    return result.model_dump(mode="json")
+
+
+@app.post("/workflows/transition", tags=["workflow"])
+async def transition_workflow(command: WorkflowTransitionCommand) -> dict[str, object]:
+    result = await workflow_state_machine.transition(command)
     return result.model_dump(mode="json")
 
 
@@ -155,15 +266,28 @@ async def collaborate_inspectors(command: InspectorCollaborationCommand) -> dict
     return result.model_dump(mode="json")
 
 
+@app.post("/inspectors/execute", tags=["inspectors"])
+async def execute_inspectors(command: InspectorCollaborationCommand) -> dict[str, object]:
+    result = await inspector_execution_loop.run_once(command)
+    return result.model_dump(mode="json")
+
+
+@app.post("/use-cases/copilot-governance/demo", tags=["copilot-governance"])
+async def run_copilot_governance_demo(command: CopilotGovernanceCommand) -> dict[str, object]:
+    result = await copilot_demo_runtime.run(command)
+    return result.model_dump(mode="json")
+
+
 @app.get("/runtime/console", tags=["runtime"])
 async def runtime_console() -> dict[str, object]:
     event_snapshot = await event_bus.snapshot(limit=20)
     pending_approvals = await approval_queue.list_pending()
-    relationships = list(graph_store.relationships.values())
+    relationships = await graph_store.relationships_for_tenant(pending_approvals[0].tenant_id) if pending_approvals else []
     return {
         "runtime": {
-            "phase": "3.1",
-            "event_store": settings.runtime_event_store,
+            "phase": "3.1-backend-core",
+            "system_of_record": "postgresql" if postgres_mode else "memory-test-mode",
+            "ui_status": "deferred",
         },
         "events": {
             "metrics": event_snapshot.metrics,
@@ -185,14 +309,7 @@ async def runtime_console() -> dict[str, object]:
             "pending_approvals": [approval.model_dump(mode="json") for approval in pending_approvals],
         },
         "graph": {
-            "relationship_count": len(relationships),
-            "low_confidence_relationship_count": len(
-                [
-                    relationship
-                    for relationship in relationships
-                    if relationship.confidence.score < graph_reflections.low_confidence_threshold
-                ]
-            ),
+            "relationship_count_for_first_pending_tenant": len(relationships),
         },
         "inspectors": {
             "registered": sorted(inspector_runtime.inspectors.keys()),

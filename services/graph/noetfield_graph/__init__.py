@@ -7,6 +7,7 @@ from .mutation import (
     GraphReflectionResult,
     InMemoryGraphStore,
     LiveGraphMutationEngine,
+    PostgresGraphStore,
     RelationshipConfidenceEvolution,
     TemporalGraphReflectionCycle,
 )
@@ -18,6 +19,7 @@ __all__ = [
     "GraphReflectionResult",
     "InMemoryGraphStore",
     "LiveGraphMutationEngine",
+    "PostgresGraphStore",
     "RelationshipConfidenceEvolution",
     "TemporalGraphReflectionCycle",
 ]

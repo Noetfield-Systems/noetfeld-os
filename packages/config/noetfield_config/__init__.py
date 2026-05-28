@@ -38,7 +38,7 @@ class Settings(BaseSettings):
         default=SecretStr("replace-with-kms-managed-secret"),
         description="Use KMS or a secrets manager outside local development.",
     )
-    runtime_event_store: Literal["memory", "postgres"] = "memory"
+    runtime_event_store: Literal["memory", "postgres"] = "postgres"
 
 
 @lru_cache(maxsize=1)
