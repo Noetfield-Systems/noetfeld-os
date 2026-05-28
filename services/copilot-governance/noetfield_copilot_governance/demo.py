@@ -2,8 +2,12 @@
 
 from __future__ import annotations
 
+from dataclasses import dataclass, field
+import json
+from typing import Protocol
 from uuid import UUID, uuid4
 
+import asyncpg
 from pydantic import BaseModel, ConfigDict, Field
 
 from noetfield_graph import GraphMutationCommand, LiveGraphMutationEngine, TemporalGraphReflectionCycle
@@ -26,12 +30,81 @@ class CopilotGovernanceCommand(BaseModel):
 class CopilotGovernanceDemoResult(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
+    run_id: UUID = Field(default_factory=uuid4)
+    tenant_id: UUID
+    organization_id: UUID
     signal_id: UUID
     relationship_id: UUID
     reflection_id: UUID
     workflow_id: UUID
     workflow_state: WorkflowState
     replay_hint: str
+
+
+class CopilotGovernanceRunStore(Protocol):
+    async def append(self, result: CopilotGovernanceDemoResult, objective: str) -> CopilotGovernanceDemoResult:
+        ...
+
+
+@dataclass
+class InMemoryCopilotGovernanceRunStore:
+    records: list[CopilotGovernanceDemoResult] = field(default_factory=list)
+
+    async def append(
+        self, result: CopilotGovernanceDemoResult, objective: str
+    ) -> CopilotGovernanceDemoResult:
+        self.records.append(result)
+        return result
+
+
+class PostgresCopilotGovernanceRunStore:
+    """PostgreSQL-backed Copilot Governance use-case run store."""
+
+    def __init__(self, database_url: str) -> None:
+        self._database_url = database_url.replace("postgresql+asyncpg://", "postgresql://")
+        self._pool: asyncpg.Pool | None = None
+
+    async def connect(self) -> None:
+        if self._pool is None:
+            self._pool = await asyncpg.create_pool(self._database_url)
+
+    async def close(self) -> None:
+        if self._pool is not None:
+            await self._pool.close()
+            self._pool = None
+
+    async def append(
+        self, result: CopilotGovernanceDemoResult, objective: str
+    ) -> CopilotGovernanceDemoResult:
+        await self.connect()
+        assert self._pool is not None
+        async with self._pool.acquire() as connection:
+            await connection.execute(
+                """
+                insert into noetfield.copilot_governance_runs (
+                  id,
+                  tenant_id,
+                  organization_id,
+                  signal_id,
+                  workflow_id,
+                  objective,
+                  status,
+                  result
+                )
+                values ($1, $2, $3, $4, $5, $6, $7, $8::jsonb)
+                """,
+                result.run_id,
+                result.tenant_id,
+                result.organization_id,
+                result.signal_id,
+                result.workflow_id,
+                objective,
+                "waiting_for_approval"
+                if result.workflow_state == WorkflowState.PENDING_REVIEW
+                else "completed",
+                json.dumps(result.model_dump(mode="json"), default=str),
+            )
+        return result
 
 
 class CopilotGovernanceDemoRuntime:
@@ -48,11 +121,13 @@ class CopilotGovernanceDemoRuntime:
         graph_mutations: LiveGraphMutationEngine,
         graph_reflections: TemporalGraphReflectionCycle,
         workflow_state_machine: WorkflowStateMachine,
+        run_store: CopilotGovernanceRunStore | None = None,
     ) -> None:
         self._signal_pipeline = signal_pipeline
         self._graph_mutations = graph_mutations
         self._graph_reflections = graph_reflections
         self._workflow_state_machine = workflow_state_machine
+        self._run_store = run_store
 
     async def run(self, command: CopilotGovernanceCommand) -> CopilotGovernanceDemoResult:
         signal, _signal_trace = await self._signal_pipeline.ingest(
@@ -102,11 +177,16 @@ class CopilotGovernanceDemoRuntime:
                 reason="Copilot Governance requires human approval before publication.",
             )
         )
-        return CopilotGovernanceDemoResult(
+        result = CopilotGovernanceDemoResult(
+            tenant_id=command.tenant_id,
+            organization_id=command.organization_id,
             signal_id=signal.signal_id,
             relationship_id=mutation.relationship.relationship_id,
             reflection_id=reflection.reflection_id,
             workflow_id=workflow.workflow_id,
             workflow_state=workflow.state,
-            replay_hint=f"/events/replay?after_sequence=0&event_type=*",
+            replay_hint="/events/replay?after_sequence=0&event_type=*",
         )
+        if self._run_store is not None:
+            return await self._run_store.append(result, "Copilot Governance demo flow")
+        return result

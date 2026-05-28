@@ -5,6 +5,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 import json
+from typing import Protocol
 from uuid import UUID, uuid4
 
 import asyncpg
@@ -43,9 +44,11 @@ class GraphReflectionResult(BaseModel):
 
     reflection_id: UUID = Field(default_factory=uuid4)
     tenant_id: UUID
+    organization_id: UUID
     relationship_count: int
     inferred_count: int
     low_confidence_count: int
+    low_confidence_threshold: float
     generated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     trace: EventTrace
 
@@ -400,12 +403,73 @@ class LiveGraphMutationEngine:
         )
 
 
+class GraphReflectionStore(Protocol):
+    async def append(self, result: GraphReflectionResult) -> GraphReflectionResult:
+        ...
+
+
+@dataclass
+class InMemoryGraphReflectionStore:
+    records: list[GraphReflectionResult] = field(default_factory=list)
+
+    async def append(self, result: GraphReflectionResult) -> GraphReflectionResult:
+        self.records.append(result)
+        return result
+
+
+class PostgresGraphReflectionStore:
+    """PostgreSQL-backed graph reflection cycle store."""
+
+    def __init__(self, database_url: str) -> None:
+        self._database_url = database_url.replace("postgresql+asyncpg://", "postgresql://")
+        self._pool: asyncpg.Pool | None = None
+
+    async def connect(self) -> None:
+        if self._pool is None:
+            self._pool = await asyncpg.create_pool(self._database_url)
+
+    async def close(self) -> None:
+        if self._pool is not None:
+            await self._pool.close()
+            self._pool = None
+
+    async def append(self, result: GraphReflectionResult) -> GraphReflectionResult:
+        await self.connect()
+        assert self._pool is not None
+        async with self._pool.acquire() as connection:
+            await connection.execute(
+                """
+                insert into noetfield.graph_reflection_cycles (
+                  id,
+                  tenant_id,
+                  organization_id,
+                  relationship_count,
+                  inferred_count,
+                  low_confidence_count,
+                  low_confidence_threshold,
+                  generated_at
+                )
+                values ($1, $2, $3, $4, $5, $6, $7, $8)
+                """,
+                result.reflection_id,
+                result.tenant_id,
+                result.organization_id,
+                result.relationship_count,
+                result.inferred_count,
+                result.low_confidence_count,
+                result.low_confidence_threshold,
+                result.generated_at,
+            )
+        return result
+
+
 @dataclass
 class TemporalGraphReflectionCycle:
     """Periodic graph reflection that emits an audit-safe summary event."""
 
     event_bus: AsyncEventBus
     store: InMemoryGraphStore | PostgresGraphStore
+    reflection_store: GraphReflectionStore | None = None
     low_confidence_threshold: float = 0.65
 
     async def run(self, tenant_id: UUID, organization_id: UUID) -> GraphReflectionResult:
@@ -438,11 +502,16 @@ class TemporalGraphReflectionCycle:
             },
         )
         trace = await self.event_bus.publish(event)
-        return GraphReflectionResult(
+        result = GraphReflectionResult(
             reflection_id=reflection_id,
             tenant_id=tenant_id,
+            organization_id=organization_id,
             relationship_count=len(relationships),
             inferred_count=len(inferred),
             low_confidence_count=len(low_confidence),
+            low_confidence_threshold=self.low_confidence_threshold,
             trace=trace,
         )
+        if self.reflection_store is not None:
+            await self.reflection_store.append(result)
+        return result

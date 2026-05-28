@@ -6,7 +6,12 @@ from fastapi import FastAPI
 from pydantic import BaseModel, ConfigDict
 
 from noetfield_config import get_settings
-from noetfield_copilot_governance import CopilotGovernanceCommand, CopilotGovernanceDemoRuntime
+from noetfield_copilot_governance import (
+    CopilotGovernanceCommand,
+    CopilotGovernanceDemoRuntime,
+    InMemoryCopilotGovernanceRunStore,
+    PostgresCopilotGovernanceRunStore,
+)
 from noetfield_events import (
     AsyncEventBus,
     EventReplayCursor,
@@ -19,11 +24,14 @@ from noetfield_governance.runtime import (
     GovernanceActionCommand,
     GovernanceRuntime,
     HumanApprovalQueue,
+    PostgresApprovalQueueStore,
 )
 from noetfield_graph import (
     GraphMutationCommand,
+    InMemoryGraphReflectionStore,
     InMemoryGraphStore,
     LiveGraphMutationEngine,
+    PostgresGraphReflectionStore,
     PostgresGraphStore,
     TemporalGraphReflectionCycle,
 )
@@ -75,12 +83,22 @@ workflow_store = PostgresWorkflowStore(settings.database_url) if postgres_mode e
 inspector_store = (
     PostgresInspectorRunStore(settings.database_url) if postgres_mode else InMemoryInspectorRunStore()
 )
-approval_queue = HumanApprovalQueue()
+approval_queue = PostgresApprovalQueueStore(settings.database_url) if postgres_mode else HumanApprovalQueue()
+reflection_store = (
+    PostgresGraphReflectionStore(settings.database_url) if postgres_mode else InMemoryGraphReflectionStore()
+)
+copilot_run_store = (
+    PostgresCopilotGovernanceRunStore(settings.database_url)
+    if postgres_mode
+    else InMemoryCopilotGovernanceRunStore()
+)
 
 audit_runtime = AuditLedgerRuntime(store=audit_store)
 signal_pipeline = SignalIngestionPipeline(event_bus=event_bus, store=signal_store)
 graph_mutations = LiveGraphMutationEngine(event_bus=event_bus, store=graph_store)
-graph_reflections = TemporalGraphReflectionCycle(event_bus=event_bus, store=graph_store)
+graph_reflections = TemporalGraphReflectionCycle(
+    event_bus=event_bus, store=graph_store, reflection_store=reflection_store
+)
 governance_runtime = GovernanceRuntime(event_bus=event_bus, approvals=approval_queue)
 workflow_state_machine = WorkflowStateMachine(store=workflow_store, event_bus=event_bus)
 
@@ -95,6 +113,7 @@ copilot_demo_runtime = CopilotGovernanceDemoRuntime(
     graph_mutations=graph_mutations,
     graph_reflections=graph_reflections,
     workflow_state_machine=workflow_state_machine,
+    run_store=copilot_run_store,
 )
 
 
@@ -147,6 +166,9 @@ async def shutdown_runtime() -> None:
         audit_store,
         workflow_store,
         inspector_store,
+        approval_queue,
+        reflection_store,
+        copilot_run_store,
     ]
     for store in stores:
         close = getattr(store, "close", None)

@@ -5,8 +5,11 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from enum import StrEnum
+import json
+from typing import Protocol
 from uuid import UUID, uuid4
 
+import asyncpg
 from pydantic import BaseModel, ConfigDict, Field
 
 from noetfield_events import AsyncEventBus, EventTrace, EventType, build_event
@@ -69,9 +72,20 @@ class GovernanceExecutionResult(BaseModel):
     approval_id: UUID | None = None
 
 
+class ApprovalQueueStore(Protocol):
+    async def enqueue(self, request: ApprovalRequest) -> ApprovalRequest:
+        ...
+
+    async def decide(self, decision: ApprovalDecision) -> ApprovalDecision:
+        ...
+
+    async def list_pending(self, tenant_id: UUID | None = None) -> list[ApprovalRequest]:
+        ...
+
+
 @dataclass
 class HumanApprovalQueue:
-    """In-memory approval queue for audit-safe local runtime behavior."""
+    """In-memory approval queue for tests and local smoke flows."""
 
     pending: dict[UUID, ApprovalRequest] = field(default_factory=dict)
     decisions: list[ApprovalDecision] = field(default_factory=list)
@@ -92,12 +106,122 @@ class HumanApprovalQueue:
         return requests
 
 
+class PostgresApprovalQueueStore:
+    """PostgreSQL-backed human approval queue projection."""
+
+    def __init__(self, database_url: str) -> None:
+        self._database_url = database_url.replace("postgresql+asyncpg://", "postgresql://")
+        self._pool: asyncpg.Pool | None = None
+
+    async def connect(self) -> None:
+        if self._pool is None:
+            self._pool = await asyncpg.create_pool(self._database_url)
+
+    async def close(self) -> None:
+        if self._pool is not None:
+            await self._pool.close()
+            self._pool = None
+
+    async def enqueue(self, request: ApprovalRequest) -> ApprovalRequest:
+        await self.connect()
+        assert self._pool is not None
+        async with self._pool.acquire() as connection:
+            await connection.execute(
+                """
+                insert into noetfield.approval_queue_projection (
+                  tenant_id,
+                  organization_id,
+                  approval_id,
+                  requested_by,
+                  action,
+                  resource_type,
+                  resource_id,
+                  reason,
+                  status,
+                  payload,
+                  requested_at
+                )
+                values ($1, $2, $3, $4, $5, $6, $7, $8, 'pending', $9::jsonb, $10)
+                on conflict (approval_id) do nothing
+                """,
+                request.tenant_id,
+                request.organization_id,
+                request.approval_id,
+                request.requested_by,
+                request.action,
+                request.resource_type,
+                request.resource_id,
+                request.reason,
+                json.dumps(request.payload, default=str),
+                request.requested_at,
+            )
+        return request
+
+    async def decide(self, decision: ApprovalDecision) -> ApprovalDecision:
+        await self.connect()
+        assert self._pool is not None
+        async with self._pool.acquire() as connection:
+            await connection.execute(
+                """
+                update noetfield.approval_queue_projection
+                set status = $1,
+                    payload = payload || $2::jsonb,
+                    decided_at = $3
+                where approval_id = $4
+                """,
+                "approved" if decision.approved else "denied",
+                json.dumps(decision.model_dump(mode="json"), default=str),
+                decision.decided_at,
+                decision.approval_id,
+            )
+        return decision
+
+    async def list_pending(self, tenant_id: UUID | None = None) -> list[ApprovalRequest]:
+        await self.connect()
+        assert self._pool is not None
+        async with self._pool.acquire() as connection:
+            if tenant_id is None:
+                rows = await connection.fetch(
+                    """
+                    select *
+                    from noetfield.approval_queue_projection
+                    where status = 'pending'
+                    order by requested_at
+                    """
+                )
+            else:
+                rows = await connection.fetch(
+                    """
+                    select *
+                    from noetfield.approval_queue_projection
+                    where status = 'pending' and tenant_id = $1
+                    order by requested_at
+                    """,
+                    tenant_id,
+                )
+        return [
+            ApprovalRequest(
+                approval_id=row["approval_id"],
+                tenant_id=row["tenant_id"],
+                organization_id=row["organization_id"],
+                requested_by=row["requested_by"],
+                action=row["action"],
+                resource_type=row["resource_type"],
+                resource_id=row["resource_id"],
+                reason=row["reason"],
+                payload=dict(row["payload"] or {}),
+                requested_at=row["requested_at"],
+            )
+            for row in rows
+        ]
+
+
 @dataclass
 class GovernanceRuntime:
     """Policy-aware execution boundary with veto and approval support."""
 
     event_bus: AsyncEventBus
-    approvals: HumanApprovalQueue
+    approvals: ApprovalQueueStore
     policy_evaluator: PolicyEvaluator = field(default_factory=PolicyEvaluator)
 
     async def execute(self, command: GovernanceActionCommand) -> GovernanceExecutionResult:

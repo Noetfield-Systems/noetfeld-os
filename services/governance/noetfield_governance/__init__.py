@@ -9,6 +9,7 @@ from .runtime import (
     GovernanceExecutionState,
     GovernanceRuntime,
     HumanApprovalQueue,
+    PostgresApprovalQueueStore,
 )
 
 __all__ = [
@@ -19,6 +20,7 @@ __all__ = [
     "GovernanceExecutionState",
     "GovernanceRuntime",
     "HumanApprovalQueue",
+    "PostgresApprovalQueueStore",
     "PolicyEvaluation",
     "PolicyEvaluator",
     "PolicyInput",

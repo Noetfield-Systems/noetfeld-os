@@ -324,7 +324,54 @@ class PostgresDeadLetterStore:
             )
 
     async def recent(self, *, limit: int) -> list[DeadLetterRecord]:
-        # Durable dead-letter rows are persisted for operational recovery.
-        # Full hydration back into DeadLetterRecord will be added with the
-        # dedicated recovery UI so local runtime behavior remains unchanged.
-        return []
+        await self.connect()
+        assert self._pool is not None
+        async with self._pool.acquire() as connection:
+            rows = await connection.fetch(
+                """
+                select *
+                from noetfield.dead_letter_events
+                order by failed_at desc
+                limit $1
+                """,
+                limit,
+            )
+        records: list[DeadLetterRecord] = []
+        for row in reversed(rows):
+            trace_payload = dict(row["trace"] or {})
+            event = GovernanceEvent(
+                event_id=row["event_id"],
+                event_type=row["event_type"],
+                tenant_id=row["tenant_id"],
+                organization_id=row["organization_id"],
+                actor=Actor(
+                    actor_type=ActorType.SERVICE,
+                    actor_id="dead-letter-store",
+                    display_name="Dead Letter Store",
+                ),
+                source_service="dead-letter-store",
+                entity_type="event",
+                entity_id=str(row["event_id"]),
+                occurred_at=row["failed_at"],
+                payload=dict(row["payload"] or {}),
+            )
+            trace = EventTrace(
+                trace_id=trace_payload.get("trace_id"),
+                span_id=trace_payload.get("span_id"),
+                correlation_id=trace_payload.get("correlation_id"),
+                event_id=row["event_id"],
+                event_type=row["event_type"],
+                published_at=row["failed_at"],
+            )
+            records.append(
+                DeadLetterRecord(
+                    dead_letter_id=row["id"],
+                    event=event,
+                    subscriber_name=row["subscriber_name"],
+                    error_type=row["error_type"],
+                    error_message=row["error_message"],
+                    failed_at=row["failed_at"],
+                    trace=trace,
+                )
+            )
+        return records

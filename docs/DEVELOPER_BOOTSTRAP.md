@@ -61,6 +61,14 @@ npm run dev:admin
 
 ```bash
 make validate
+make phase32-smoke
+```
+
+For PostgreSQL-backed validation after starting Docker and applying migrations:
+
+```bash
+make apply-migrations
+make phase32-postgres-smoke
 ```
 
 ## Governance development rules
