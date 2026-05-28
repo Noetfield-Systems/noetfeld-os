@@ -1295,4 +1295,3 @@ The core platform thesis is:
 
 > Noetfield becomes valuable by building governance memory and an enterprise
 > trust graph, not by simply wrapping an LLM in a user interface.
-
