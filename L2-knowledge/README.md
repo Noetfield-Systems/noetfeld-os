@@ -9,11 +9,11 @@
 | `strategy/reference-products/` | POSA, AIE, SLF, PAIOS, theory — **must not drive Noetfield runtime** |
 | `perplexity-ai-native-development-guidelines.md` | Operator/dev guidelines (L2 root) |
 
-## Archived tooling (do not wire to Noetfield runtime)
+## Archived tooling (FINAL LOCK — must not influence Noetfield runtime)
 
-- **n8n** — workflow automation experiments (archived)
-- **Ollama** — local model dev only in docker-compose; not production authority
-- **PAIOS** — separate personal AI OS lineage; PAIOS-only reference
+- **n8n** — archived workflow experiments (no runtime wiring)
+- **Ollama** — local dev inference only in `docker-compose`; not production authority
+- **PAIOS** — `reference-products/` only; must not drive `services/governance` or Golden Edge v3
 
 ## Supremacy
 
