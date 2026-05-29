@@ -46,10 +46,10 @@ def test_ingestion_payload_summary_counts() -> None:
     summary = summarize_payload(payload)
 
     assert summary["batch_id"] == "2026-05-combined"
-    assert summary["batch_count"] == 7
-    assert summary["document_count"] == 66
-    assert summary["sot_decision_count"] == 34
-    assert summary["active_rule_candidate_count"] == 47
+    assert summary["batch_count"] == 8
+    assert summary["document_count"] == 79
+    assert summary["sot_decision_count"] == 39
+    assert summary["active_rule_candidate_count"] == 55
     assert "wp03-npl-formal-grammar-2026-05-npl-1" in summary["active_documents"]
     assert "wp01-context-graph-runtime-edition-v2" in summary["active_documents"]
 
@@ -168,7 +168,7 @@ def test_seventh_batch_slf_paios_and_noetfield_resources_are_classified() -> Non
     assert documents["slf-v2-system-logic-framework"]["superseded_by"] == "slf-v3-system-logic-framework-epistemic"
     assert documents["sot-creation-guidelines-practical"]["classification"] == "active_source_of_truth"
     assert documents["paios-source-of-truth-blueprint-v1"]["classification"] == "active_source_of_truth"
-    assert documents["noetfield-ai-organization-runtime-sot-v1"]["classification"] == "active_strategic_reference"
+    assert documents["noetfield-ai-organization-runtime-sot-v1"]["classification"] == "superseded_strategic_reference"
     assert documents["slf-v5-logic-extension-layer-execution-state-control"]["classification"] == "active_execution_layer_reference"
 
 
@@ -180,3 +180,23 @@ def test_seventh_batch_epistemic_and_noetfield_rule_candidates_are_present() -> 
     assert "slf-invariant-only-repeatable-behavior" in rule_keys
     assert "noetfield-bounded-autonomy" in rule_keys
     assert "noetfield-runtime-event-mediation" in rule_keys
+
+def test_eighth_batch_noetfield_v31_and_gie_resources_are_classified() -> None:
+    payload = build_payload()
+    documents = {document["document_key"]: document for document in payload.inventory["documents"]}
+
+    assert documents["noetfield-ambient-intelligence-nervous-system-sot-v31"]["classification"] == "active_source_of_truth"
+    assert documents["noetfield-gie-specification-supplement-v31"]["classification"] == "active_source_of_truth"
+    assert documents["noetfield-ambient-intelligence-sot-v30"]["superseded_by"] == "noetfield-ambient-intelligence-nervous-system-sot-v31"
+    assert documents["noetfield-ai-organization-runtime-sot-v1"]["classification"] == "superseded_strategic_reference"
+    assert documents["governed-execution-system-mvp-blueprint-v1"]["classification"] == "active_commercial_wedge_reference"
+    assert documents["noetfield-execution-consensus-vm-v40-blueprint"]["classification"] == "active_source_of_truth"
+
+
+def test_eighth_batch_gie_and_governance_rule_candidates_are_present() -> None:
+    payload = build_payload()
+    rule_keys = {rule["rule_key"] for rule in payload.rule_registry["active_rule_candidates"]}
+
+    assert "gie-min-confidence-threshold-055" in rule_keys
+    assert "governed-execution-deterministic-pipeline" in rule_keys
+    assert "noetfield-living-knowledge-graph-central" in rule_keys

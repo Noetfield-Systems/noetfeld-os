@@ -873,10 +873,10 @@
       "work_package": null,
       "version_label": "org-runtime-v1.0",
       "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-007/noetfield-ai-organization-runtime-sot-v1.md",
-      "classification": "active_strategic_reference",
+      "classification": "superseded_strategic_reference",
       "status": "reference",
       "supersedes": [],
-      "superseded_by": null,
+      "superseded_by": "noetfield-ambient-intelligence-nervous-system-sot-v31",
       "upload_batch": "2026-05-007"
     },
     {
@@ -891,6 +891,187 @@
       "supersedes": [],
       "superseded_by": null,
       "upload_batch": "2026-05-007"
+    },
+    {
+      "document_key": "noetfield-gie-cursor-master-prompt-v31",
+      "title": "Noetfield GIE v3.1 \u2014 Cursor Master Build Prompt",
+      "domain": "noetfield_gie",
+      "work_package": null,
+      "version_label": "cursor-prompt-v31",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-008/noetfield-gie-cursor-master-prompt-v31.md",
+      "classification": "active_implementation_prompt",
+      "status": "implementation_ready",
+      "supersedes": [],
+      "superseded_by": null,
+      "upload_batch": "2026-05-008"
+    },
+    {
+      "document_key": "noetfield-ambient-intelligence-nervous-system-sot-v31",
+      "title": "Noetfield Ambient Intelligence Nervous System \u2014 Source of Truth v3.1",
+      "domain": "noetfield_product_vision",
+      "work_package": null,
+      "version_label": "v3.1",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-008/noetfield-ambient-intelligence-nervous-system-sot-v31.md",
+      "classification": "active_source_of_truth",
+      "status": "reference",
+      "supersedes": [
+        "noetfield-ambient-intelligence-sot-v30",
+        "noetfield-ambient-intelligence-sot-v21",
+        "noetfield-ambient-intelligence-sot-v20",
+        "noetfield-ambient-lead-intelligence-sot-v11",
+        "noetfield-ai-organization-runtime-sot-v1"
+      ],
+      "superseded_by": null,
+      "upload_batch": "2026-05-008"
+    },
+    {
+      "document_key": "noetfield-gie-specification-supplement-v31",
+      "title": "Graph Inference Engine (GIE) \u2014 Technical Specification Supplement v3.1",
+      "domain": "noetfield_gie",
+      "work_package": null,
+      "version_label": "gie-spec-v31",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-008/noetfield-gie-specification-supplement-v31.md",
+      "classification": "active_source_of_truth",
+      "status": "implementation_ready",
+      "supersedes": [],
+      "superseded_by": null,
+      "upload_batch": "2026-05-008"
+    },
+    {
+      "document_key": "noetfield-ambient-intelligence-sot-v30",
+      "title": "Noetfield Ambient Intelligence \u2014 Source of Truth v3.0",
+      "domain": "noetfield_product_vision",
+      "work_package": null,
+      "version_label": "v3.0",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-008/noetfield-ambient-intelligence-sot-v30.md",
+      "classification": "superseded_product_reference",
+      "status": "superseded",
+      "supersedes": [
+        "noetfield-ambient-intelligence-sot-v21"
+      ],
+      "superseded_by": "noetfield-ambient-intelligence-nervous-system-sot-v31",
+      "upload_batch": "2026-05-008"
+    },
+    {
+      "document_key": "noetfield-ambient-intelligence-sot-v21",
+      "title": "Noetfield Ambient Intelligence Runtime \u2014 Source of Truth v2.1",
+      "domain": "noetfield_product_vision",
+      "work_package": null,
+      "version_label": "v2.1",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-008/noetfield-ambient-intelligence-sot-v21.md",
+      "classification": "superseded_product_reference",
+      "status": "superseded",
+      "supersedes": [
+        "noetfield-ambient-intelligence-sot-v20"
+      ],
+      "superseded_by": "noetfield-ambient-intelligence-nervous-system-sot-v31",
+      "upload_batch": "2026-05-008"
+    },
+    {
+      "document_key": "noetfield-ambient-intelligence-sot-v20",
+      "title": "Noetfield Ambient Intelligence Runtime \u2014 Source of Truth v2.0",
+      "domain": "noetfield_product_vision",
+      "work_package": null,
+      "version_label": "v2.0",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-008/noetfield-ambient-intelligence-sot-v20.md",
+      "classification": "superseded_product_reference",
+      "status": "superseded",
+      "supersedes": [],
+      "superseded_by": "noetfield-ambient-intelligence-nervous-system-sot-v31",
+      "upload_batch": "2026-05-008"
+    },
+    {
+      "document_key": "noetfield-autonomous-ambient-inspectors-ecosystem-fa",
+      "title": "Autonomous Ambient Intelligence \u2014 Inspectors Ecosystem (Persian)",
+      "domain": "noetfield_product_vision",
+      "work_package": null,
+      "version_label": "inspectors-ecosystem-v1",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-008/noetfield-autonomous-ambient-inspectors-ecosystem-fa.md",
+      "classification": "active_operational_reference",
+      "status": "reference",
+      "supersedes": [],
+      "superseded_by": null,
+      "upload_batch": "2026-05-008"
+    },
+    {
+      "document_key": "noetfield-ambient-lead-intelligence-sot-v11",
+      "title": "Noetfield Ambient Lead Intelligence \u2014 Source of Truth v1.1",
+      "domain": "noetfield_product_vision",
+      "work_package": null,
+      "version_label": "v1.1",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-008/noetfield-ambient-lead-intelligence-sot-v11.md",
+      "classification": "superseded_product_reference",
+      "status": "superseded",
+      "supersedes": [],
+      "superseded_by": "noetfield-ambient-intelligence-nervous-system-sot-v31",
+      "upload_batch": "2026-05-008"
+    },
+    {
+      "document_key": "noetfield-ai-native-lean-enterprise-blueprint-fa",
+      "title": "AI-Native Lean Enterprise \u2014 Technical Blueprint (Persian)",
+      "domain": "ai_native_enterprise_methodology",
+      "work_package": null,
+      "version_label": "blueprint-v1",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-008/noetfield-ai-native-lean-enterprise-blueprint-fa.md",
+      "classification": "reference_methodology",
+      "status": "reference",
+      "supersedes": [],
+      "superseded_by": null,
+      "upload_batch": "2026-05-008"
+    },
+    {
+      "document_key": "governed-execution-system-mvp-blueprint-v1",
+      "title": "Governed Execution System \u2014 MVP Blueprint v1",
+      "domain": "governed_execution_product",
+      "work_package": null,
+      "version_label": "mvp-v1",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-008/governed-execution-system-mvp-blueprint-v1.md",
+      "classification": "active_commercial_wedge_reference",
+      "status": "implementation_ready",
+      "supersedes": [],
+      "superseded_by": null,
+      "upload_batch": "2026-05-008"
+    },
+    {
+      "document_key": "notion-ai-brain-hybrid-architecture-guide-fa",
+      "title": "Notion + AI Brain Hybrid Architecture Guide (Persian)",
+      "domain": "operator_tooling",
+      "work_package": null,
+      "version_label": "guide-v1-fa",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-008/notion-ai-brain-hybrid-architecture-guide-fa.md",
+      "classification": "reference_only",
+      "status": "reference",
+      "supersedes": [],
+      "superseded_by": null,
+      "upload_batch": "2026-05-008"
+    },
+    {
+      "document_key": "noetfield-vm-execution-substrate-summary-fa",
+      "title": "NOETFIELD VM \u2014 Execution Substrate Summary (Persian)",
+      "domain": "noetfield_execution_vm",
+      "work_package": null,
+      "version_label": "vm-summary-v1-fa",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-008/noetfield-vm-execution-substrate-summary-fa.md",
+      "classification": "superseded_product_reference",
+      "status": "reference",
+      "supersedes": [],
+      "superseded_by": "noetfield-execution-consensus-vm-v40-blueprint",
+      "upload_batch": "2026-05-008"
+    },
+    {
+      "document_key": "noetfield-execution-consensus-vm-v40-blueprint",
+      "title": "NOETFIELD Execution Consensus VM v4.0 \u2014 Full System Blueprint",
+      "domain": "noetfield_execution_vm",
+      "work_package": null,
+      "version_label": "v4.0",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-008/noetfield-execution-consensus-vm-v40-blueprint.md",
+      "classification": "active_source_of_truth",
+      "status": "reference",
+      "supersedes": [
+        "noetfield-vm-execution-substrate-summary-fa"
+      ],
+      "superseded_by": null,
+      "upload_batch": "2026-05-008"
     }
   ],
   "batches": [
@@ -921,6 +1102,10 @@
     {
       "batch_id": "2026-05-007",
       "source_folder": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-007"
+    },
+    {
+      "batch_id": "2026-05-008",
+      "source_folder": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-008"
     }
   ]
 }

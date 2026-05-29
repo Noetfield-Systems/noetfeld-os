@@ -1,5 +1,5 @@
 {
-  "registry_version": "2026-05-29-rules-4",
+  "registry_version": "2026-05-29-rules-5",
   "active_rule_candidates": [
     {
       "rule_key": "npl-no-side-effects",
@@ -422,6 +422,78 @@
       "activation_status": "reference_only",
       "rule_type": "governance",
       "summary": "Autonomy without governance is chaos; governance without autonomy is stagnation.",
+      "implementation_target": null
+    },
+    {
+      "rule_key": "gie-min-confidence-threshold-055",
+      "domain": "noetfield_gie",
+      "source_document_key": "noetfield-gie-specification-supplement-v31",
+      "activation_status": "active_design_rule",
+      "rule_type": "graph_inference",
+      "summary": "Graph inferences below 0.55 confidence must not commit to the knowledge graph without review.",
+      "implementation_target": "graph_runtime"
+    },
+    {
+      "rule_key": "gie-full-audit-reasoning-chain",
+      "domain": "noetfield_gie",
+      "source_document_key": "noetfield-gie-specification-supplement-v31",
+      "activation_status": "active_design_rule",
+      "rule_type": "audit_governance",
+      "summary": "All GIE inferences log complete reasoning chains to the audit ledger.",
+      "implementation_target": "audit_ledger_runtime"
+    },
+    {
+      "rule_key": "noetfield-bounded-autonomy-human-approval",
+      "domain": "noetfield_product_vision",
+      "source_document_key": "noetfield-ambient-intelligence-nervous-system-sot-v31",
+      "activation_status": "active_design_rule",
+      "rule_type": "governance",
+      "summary": "High-risk external actions require human approval; inspectors default to report/suggest modes.",
+      "implementation_target": "governance_runtime"
+    },
+    {
+      "rule_key": "noetfield-living-knowledge-graph-central",
+      "domain": "noetfield_product_vision",
+      "source_document_key": "noetfield-ambient-intelligence-nervous-system-sot-v31",
+      "activation_status": "active_design_rule",
+      "rule_type": "graph_runtime",
+      "summary": "Entity relationships and graph updates are the central memory substrate for ambient intelligence.",
+      "implementation_target": "graph_runtime"
+    },
+    {
+      "rule_key": "governed-execution-deterministic-pipeline",
+      "domain": "governed_execution_product",
+      "source_document_key": "governed-execution-system-mvp-blueprint-v1",
+      "activation_status": "active_design_rule",
+      "rule_type": "workflow_governance",
+      "summary": "Every request follows classify \u2192 policy \u2192 risk \u2192 route \u2192 decision \u2192 audit with no exceptions.",
+      "implementation_target": "governance_policy_runtime"
+    },
+    {
+      "rule_key": "governed-execution-llm-assistive-only",
+      "domain": "governed_execution_product",
+      "source_document_key": "governed-execution-system-mvp-blueprint-v1",
+      "activation_status": "active_design_rule",
+      "rule_type": "ai_governance",
+      "summary": "LLM provides risk interpretation only; policy engine and router make final decisions.",
+      "implementation_target": "policy_engine"
+    },
+    {
+      "rule_key": "execution-vm-command-first",
+      "domain": "noetfield_execution_vm",
+      "source_document_key": "noetfield-execution-consensus-vm-v40-blueprint",
+      "activation_status": "reference_only",
+      "rule_type": "execution_substrate",
+      "summary": "Only commands enter execution; consensus orders globally; side effects are deferred.",
+      "implementation_target": null
+    },
+    {
+      "rule_key": "execution-vm-append-only-event-truth",
+      "domain": "noetfield_execution_vm",
+      "source_document_key": "noetfield-execution-consensus-vm-v40-blueprint",
+      "activation_status": "reference_only",
+      "rule_type": "audit_governance",
+      "summary": "State is derived from append-only event store; all execution must be replayable.",
       "implementation_target": null
     }
   ]

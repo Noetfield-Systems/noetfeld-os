@@ -1,5 +1,5 @@
 {
-  "registry_version": "2026-05-29-sot-4",
+  "registry_version": "2026-05-29-sot-5",
   "decisions": [
     {
       "domain": "context_graph",
@@ -258,20 +258,60 @@
       "confidence": 0.88
     },
     {
-      "domain": "noetfield_org_vision",
-      "active_document_key": "noetfield-ai-organization-runtime-sot-v1",
-      "active_version": "org-runtime-v1.0",
-      "decision": "active_strategic_reference",
-      "rationale": "2026 org-runtime vision informs scale path but does not replace current Noetfield WP and orchestration implementation SOT.",
-      "confidence": 0.86
-    },
-    {
       "domain": "noetfield_runtime_mvp",
       "active_document_key": "noetfield-strong-core-runtime-minimal-fa",
       "active_version": "core-runtime-v0.1",
       "decision": "active_mvp_reference",
       "rationale": "Minimal six-capability runtime kernel and v0.1 agent set for phased deployment.",
       "confidence": 0.84
+    },
+    {
+      "domain": "noetfield_product_vision",
+      "active_document_key": "noetfield-ambient-intelligence-nervous-system-sot-v31",
+      "active_version": "v3.1",
+      "decision": "active_source_of_truth",
+      "rationale": "v3.1 is the definitive ambient intelligence nervous system specification with living knowledge graph, inspectors, and governance layers. Supersedes v1.1 through v3.0 and batch-007 org-runtime draft.",
+      "confidence": 0.94
+    },
+    {
+      "domain": "noetfield_gie",
+      "active_document_key": "noetfield-gie-specification-supplement-v31",
+      "active_version": "gie-spec-v31",
+      "decision": "active_source_of_truth",
+      "rationale": "GIE supplement defines graph inference pipeline, schema, prompts, and integration points for the living knowledge graph.",
+      "confidence": 0.91
+    },
+    {
+      "domain": "governed_execution_product",
+      "active_document_key": "governed-execution-system-mvp-blueprint-v1",
+      "active_version": "mvp-v1",
+      "decision": "active_commercial_wedge_reference",
+      "rationale": "Deterministic approval workflow MVP aligns with Copilot Governance and Phase 3 policy runtime as first sellable wedge.",
+      "confidence": 0.88
+    },
+    {
+      "domain": "noetfield_execution_vm",
+      "active_document_key": "noetfield-execution-consensus-vm-v40-blueprint",
+      "active_version": "v4.0",
+      "decision": "active_source_of_truth",
+      "rationale": "Execution Consensus VM v4.0 is the implementation-grade blueprint for deterministic distributed execution substrate.",
+      "confidence": 0.87
+    },
+    {
+      "domain": "ai_native_enterprise_methodology",
+      "active_document_key": "noetfield-ai-native-lean-enterprise-blueprint-fa",
+      "active_version": "blueprint-v1",
+      "decision": "reference_methodology",
+      "rationale": "Free-max lean enterprise stack is operational methodology, not Noetfield product SOT.",
+      "confidence": 0.75
+    },
+    {
+      "domain": "operator_tooling",
+      "active_document_key": "notion-ai-brain-hybrid-architecture-guide-fa",
+      "active_version": "guide-v1-fa",
+      "decision": "reference_only",
+      "rationale": "Notion as control plane UI only; backend remains source of execution truth.",
+      "confidence": 0.7
     }
   ]
 }

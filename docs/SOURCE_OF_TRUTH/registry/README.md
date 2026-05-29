@@ -54,6 +54,11 @@ inventory.
 - PAIOS personal OS: `paios-source-of-truth-blueprint-v1`
 - Noetfield org vision: `noetfield-ai-organization-runtime-sot-v1` (strategic reference only)
 - Noetfield MVP kernel: `noetfield-strong-core-runtime-minimal-fa`
+- Noetfield product vision: `noetfield-ambient-intelligence-nervous-system-sot-v31`
+- Graph Inference Engine: `noetfield-gie-specification-supplement-v31`
+- Governed execution wedge: `governed-execution-system-mvp-blueprint-v1`
+- Execution VM substrate: `noetfield-execution-consensus-vm-v40-blueprint`
+
 
 
 
