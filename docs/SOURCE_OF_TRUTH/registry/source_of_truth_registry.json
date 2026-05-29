@@ -1,5 +1,5 @@
 {
-  "registry_version": "2026-05-29-sot-11",
+  "registry_version": "2026-05-29-sot-12",
   "decisions": [
     {
       "domain": "context_graph",
@@ -560,6 +560,30 @@
       "decision": "active_source_of_truth",
       "rationale": "Full RBC/TD vendor diligence pack with architecture annex and diagram.",
       "confidence": 0.9
+    },
+    {
+      "domain": "noetfield_constitution_lineage_analysis",
+      "active_document_key": "noetfield-constitution-comparative-analysis-fa",
+      "active_version": "compare-fa-v1",
+      "decision": "active_source_of_truth",
+      "rationale": "Authoritative v3.1/v3.2/v4 comparative analysis; confirms GCIP v4.0 as golden L0 choice for Canada 2026.",
+      "confidence": 0.9
+    },
+    {
+      "domain": "noetfield_commercial_gtm",
+      "active_document_key": "noetfield-cdl-pitch-deck-v3-1",
+      "active_version": "pitch-deck-v3.1",
+      "decision": "active_source_of_truth",
+      "rationale": "CDL-ready 10-slide deck with tightened legal perimeter and CDA product narrative.",
+      "confidence": 0.87
+    },
+    {
+      "domain": "noetfield_mvp_spec",
+      "active_document_key": "noetfield-mvp-system-spec-v3-0-hardened",
+      "active_version": "mvp-spec-v3.0",
+      "decision": "active_source_of_truth",
+      "rationale": "Hardened internal-coordination MVP spec; no financial instruction adjacency.",
+      "confidence": 0.88
     }
   ]
 }

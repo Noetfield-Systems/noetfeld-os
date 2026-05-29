@@ -46,10 +46,10 @@ def test_ingestion_payload_summary_counts() -> None:
     summary = summarize_payload(payload)
 
     assert summary["batch_id"] == "2026-05-combined"
-    assert summary["batch_count"] == 14
-    assert summary["document_count"] == 144
-    assert summary["sot_decision_count"] == 70
-    assert summary["active_rule_candidate_count"] == 103
+    assert summary["batch_count"] == 15
+    assert summary["document_count"] == 155
+    assert summary["sot_decision_count"] == 73
+    assert summary["active_rule_candidate_count"] == 107
     assert "wp03-npl-formal-grammar-2026-05-npl-1" in summary["active_documents"]
     assert "wp01-context-graph-runtime-edition-v2" in summary["active_documents"]
 
@@ -369,3 +369,34 @@ def test_fourteenth_batch_l0_l4_sot_domains_are_registered() -> None:
     assert domains["noetfield_mecr_l2"]["active_document_key"] == "noetfield-mecr-governance-kernel-l2-v1"
     assert domains["noetfield_unified_system_graph"]["active_document_key"] == "noetfield-unified-system-graph-v1"
     assert domains["noetfield_sot_registry_l4"]["active_document_key"] == "noetfield-sot-registry-l4-v3-2"
+
+def test_fifteenth_batch_constitution_lineage_resources_are_classified() -> None:
+    payload = build_payload()
+    documents = {document["document_key"]: document for document in payload.inventory["documents"]}
+
+    assert documents["noetfield-constitution-gcip-v3-1"]["classification"] == "superseded_constitution"
+    assert documents["noetfield-constitution-gcip-v3-2-golden"]["superseded_by"] == "noetfield-constitution-gcip-v4"
+    assert documents["noetfield-constitution-gip-v2-0"]["classification"] == "superseded_constitution"
+    assert documents["noetfield-constitution-product-kernel-combined-v3-0"]["classification"] == "superseded_mixed_layer_draft"
+    assert documents["noetfield-full-system-blueprint-decision-inbox-v1"]["classification"] == "alternative_product_framing_reference"
+
+
+def test_fifteenth_batch_lineage_rule_candidates_are_present() -> None:
+    payload = build_payload()
+    rule_keys = {rule["rule_key"] for rule in payload.rule_registry["active_rule_candidates"]}
+
+    assert "constitution-v4-golden-l0-sot" in rule_keys
+    assert "no-mvp-in-constitution-layer" in rule_keys
+    assert "gtm-rpaa-safe-wording-coordination-not-payments" in rule_keys
+    assert "mvp-no-financial-instruction-adjacency" in rule_keys
+
+
+def test_fifteenth_batch_new_sot_domains_are_registered() -> None:
+    payload = build_payload()
+    domains = {decision["domain"]: decision for decision in payload.sot_registry["decisions"]}
+
+    assert domains["noetfield_constitution_l0"]["active_document_key"] == "noetfield-constitution-gcip-v4"
+    assert domains["noetfield_constitution_lineage_analysis"]["active_document_key"] == "noetfield-constitution-comparative-analysis-fa"
+    assert domains["noetfield_commercial_gtm"]["active_document_key"] == "noetfield-cdl-pitch-deck-v3-1"
+    assert domains["noetfield_mvp_spec"]["active_document_key"] == "noetfield-mvp-system-spec-v3-0-hardened"
+

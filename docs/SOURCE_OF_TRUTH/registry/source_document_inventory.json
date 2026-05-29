@@ -1940,6 +1940,153 @@
       "supersedes": [],
       "superseded_by": "noetfield-constitutional-annex-product-kernel-v4-en",
       "upload_batch": "2026-05-014"
+    },
+    {
+      "document_key": "noetfield-constitution-gcip-v3-1",
+      "title": "Noetfield Constitution v3.1 (GCIP)",
+      "domain": "noetfield_constitution_l0",
+      "work_package": null,
+      "version_label": "gcip-v3.1",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-015/noetfield-constitution-gcip-v3-1.md",
+      "classification": "superseded_constitution",
+      "status": "superseded",
+      "supersedes": [
+        "noetfield-constitution-gip-v2-0"
+      ],
+      "superseded_by": "noetfield-constitution-gcip-v4",
+      "upload_batch": "2026-05-015"
+    },
+    {
+      "document_key": "noetfield-constitution-gcip-v3-2-golden",
+      "title": "Noetfield Constitution v3.2 \u2014 Golden Canada-Safe Edition",
+      "domain": "noetfield_constitution_l0",
+      "work_package": null,
+      "version_label": "gcip-v3.2-golden",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-015/noetfield-constitution-gcip-v3-2-golden.md",
+      "classification": "superseded_constitution",
+      "status": "superseded",
+      "supersedes": [
+        "noetfield-constitution-gcip-v3-1"
+      ],
+      "superseded_by": "noetfield-constitution-gcip-v4",
+      "upload_batch": "2026-05-015"
+    },
+    {
+      "document_key": "noetfield-constitution-gcip-v3-2-beta-duplicate",
+      "title": "Noetfield Constitution v3.2 \u2014 Beta Draft (Duplicate)",
+      "domain": "noetfield_constitution_l0",
+      "work_package": null,
+      "version_label": "gcip-v3.2-beta-dup",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-015/noetfield-constitution-gcip-v3-2-beta-duplicate.md",
+      "classification": "duplicate",
+      "status": "superseded",
+      "supersedes": [],
+      "superseded_by": "noetfield-constitution-gcip-v3-2-golden",
+      "upload_batch": "2026-05-015"
+    },
+    {
+      "document_key": "noetfield-constitution-gip-v2-0",
+      "title": "Noetfield Constitution v2.0 (GIP)",
+      "domain": "noetfield_constitution_l0",
+      "work_package": null,
+      "version_label": "gip-v2.0",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-015/noetfield-constitution-gip-v2-0.md",
+      "classification": "superseded_constitution",
+      "status": "superseded",
+      "supersedes": [],
+      "superseded_by": "noetfield-constitution-gcip-v4",
+      "upload_batch": "2026-05-015"
+    },
+    {
+      "document_key": "noetfield-constitution-comparative-analysis-fa",
+      "title": "Constitution v3.1 vs v3.2 vs v4.0 \u2014 Comparative Analysis (Persian)",
+      "domain": "noetfield_constitution_lineage_analysis",
+      "work_package": null,
+      "version_label": "compare-fa-v1",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-015/noetfield-constitution-comparative-analysis-fa.md",
+      "classification": "active_source_of_truth",
+      "status": "reference",
+      "supersedes": [],
+      "superseded_by": null,
+      "upload_batch": "2026-05-015"
+    },
+    {
+      "document_key": "noetfield-constitution-product-layer-separation-fa",
+      "title": "Constitution vs Product Kernel Layer Separation (Persian)",
+      "domain": "noetfield_constitution_lineage_analysis",
+      "work_package": null,
+      "version_label": "layer-separation-fa-v1",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-015/noetfield-constitution-product-layer-separation-fa.md",
+      "classification": "active_methodology_reference",
+      "status": "reference",
+      "supersedes": [],
+      "superseded_by": null,
+      "upload_batch": "2026-05-015"
+    },
+    {
+      "document_key": "noetfield-constitution-product-kernel-combined-v3-0",
+      "title": "Constitution & Product Kernel Combined v3.0",
+      "domain": "noetfield_constitution_l0",
+      "work_package": null,
+      "version_label": "combined-v3.0",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-015/noetfield-constitution-product-kernel-combined-v3-0.md",
+      "classification": "superseded_mixed_layer_draft",
+      "status": "superseded",
+      "supersedes": [],
+      "superseded_by": "noetfield-constitution-gcip-v4",
+      "upload_batch": "2026-05-015"
+    },
+    {
+      "document_key": "noetfield-cdl-pitch-deck-v3-1",
+      "title": "10-Slide Pitch Deck \u2014 CDL-Ready v3.1",
+      "domain": "noetfield_commercial_gtm",
+      "work_package": null,
+      "version_label": "pitch-deck-v3.1",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-015/noetfield-cdl-pitch-deck-v3-1.md",
+      "classification": "active_source_of_truth",
+      "status": "reference",
+      "supersedes": [],
+      "superseded_by": null,
+      "upload_batch": "2026-05-015"
+    },
+    {
+      "document_key": "noetfield-mvp-system-spec-v3-0-hardened",
+      "title": "MVP System Spec v3.0 (Hardened \u2014 Internal Coordination)",
+      "domain": "noetfield_mvp_spec",
+      "work_package": null,
+      "version_label": "mvp-spec-v3.0",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-015/noetfield-mvp-system-spec-v3-0-hardened.md",
+      "classification": "active_source_of_truth",
+      "status": "reference",
+      "supersedes": [],
+      "superseded_by": null,
+      "upload_batch": "2026-05-015"
+    },
+    {
+      "document_key": "noetfield-full-system-blueprint-decision-inbox-v1",
+      "title": "Full System Blueprint v1.0 \u2014 Decision Inbox Framing",
+      "domain": "noetfield_commercial_gtm",
+      "work_package": null,
+      "version_label": "blueprint-inbox-v1",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-015/noetfield-full-system-blueprint-decision-inbox-v1.md",
+      "classification": "alternative_product_framing_reference",
+      "status": "reference",
+      "supersedes": [],
+      "superseded_by": null,
+      "upload_batch": "2026-05-015"
+    },
+    {
+      "document_key": "noetfield-golden-constitution-recommendation-v4",
+      "title": "Golden Constitution Recommendation \u2014 GCIP v4.0 (Canada 2026)",
+      "domain": "noetfield_constitution_lineage_analysis",
+      "work_package": null,
+      "version_label": "golden-rec-v4",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-015/noetfield-golden-constitution-recommendation-v4.md",
+      "classification": "active_executive_reference",
+      "status": "reference",
+      "supersedes": [],
+      "superseded_by": null,
+      "upload_batch": "2026-05-015"
     }
   ],
   "batches": [
@@ -1998,6 +2145,10 @@
     {
       "batch_id": "2026-05-014",
       "source_folder": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-014"
+    },
+    {
+      "batch_id": "2026-05-015",
+      "source_folder": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-015"
     }
   ]
 }
