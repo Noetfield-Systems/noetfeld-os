@@ -27,8 +27,27 @@ def test_homepage_has_no_prohibited_payment_language() -> None:
 
 def test_homepage_states_governance_positioning() -> None:
     text = (ROOT / "index.html").read_text(encoding="utf-8").lower()
-    assert "pre-execution" in text
     assert "governance" in text
+    assert "request governance brief" in text
+
+
+def test_product_truth_single_sentence() -> None:
+    text = (ROOT / "PRODUCT_TRUTH.md").read_text(encoding="utf-8")
+    assert "Governance Execution & AI Policy Enforcement Infrastructure" in text
+
+
+def test_offerings_locked_three_tiers() -> None:
+    text = (ROOT / "OFFERINGS_LOCKED.md").read_text(encoding="utf-8")
+    assert "Trust Brief" in text
+    assert "$10,000" in text or "$10K" in text
+    assert "Copilot Governance Pack" in text
+    assert "Bank Pilot v6.1" in text
+
+
+def test_enterprise_page_exists() -> None:
+    text = (ROOT / "enterprise" / "index.html").read_text(encoding="utf-8")
+    assert "book governance assessment" in text.lower()
+    assert "10,000" in text
 
 
 def test_platform_dashboard_has_no_treasury_corridor_ui() -> None:

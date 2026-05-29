@@ -2,9 +2,11 @@
 
 **Status:** Production alignment constitution · **Supremacy:** GCIP v4 (L0) overrides all documents, code comments, marketing copy, and partner decks on conflict.
 
+**Public product sentence (locked):** see [PRODUCT_TRUTH.md](PRODUCT_TRUTH.md). **Revenue tiers:** [OFFERINGS_LOCKED.md](OFFERINGS_LOCKED.md). **Strategic boundaries:** [STRATEGIC_LOCK.md](STRATEGIC_LOCK.md).
+
 ## What Noetfield is
 
-Noetfield is **pre-execution governance infrastructure** for institutional AI systems and regulated enterprise workflows.
+Noetfield is **Governance Execution & AI Policy Enforcement Infrastructure** for regulated organizations (pre-execution layer for institutional AI systems and enterprise workflows).
 
 It is a **coordination and instruction layer** that:
 
