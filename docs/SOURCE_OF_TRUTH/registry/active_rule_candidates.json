@@ -1,5 +1,5 @@
 {
-  "registry_version": "2026-05-29-rules-3",
+  "registry_version": "2026-05-29-rules-4",
   "active_rule_candidates": [
     {
       "rule_key": "npl-no-side-effects",
@@ -350,6 +350,78 @@
       "activation_status": "reference_only",
       "rule_type": "governance",
       "summary": "Autonomy layer must be paired with governance gates, rollback, and integrity monitoring.",
+      "implementation_target": null
+    },
+    {
+      "rule_key": "slf-reality-dominance-law",
+      "domain": "slf_epistemic_core",
+      "source_document_key": "slf-v3-system-logic-framework-epistemic",
+      "activation_status": "active_design_rule",
+      "rule_type": "epistemic_governance",
+      "summary": "Execution overrides design assumptions; blueprint invalid if behavior contradicts it.",
+      "implementation_target": "governance_policy_runtime"
+    },
+    {
+      "rule_key": "slf-invariant-only-repeatable-behavior",
+      "domain": "slf_epistemic_core",
+      "source_document_key": "slf-v3-system-logic-framework-epistemic",
+      "activation_status": "active_design_rule",
+      "rule_type": "source_of_truth",
+      "summary": "Only patterns surviving multiple execution cycles under variation become truth.",
+      "implementation_target": "source_of_truth_registry"
+    },
+    {
+      "rule_key": "sot-tool-independent-minimal-rules",
+      "domain": "sot_epistemology",
+      "source_document_key": "sot-creation-guidelines-practical",
+      "activation_status": "active_design_rule",
+      "rule_type": "epistemic_governance",
+      "summary": "SoT must survive tool changes; describes roles, flow, and rules\u2014not APIs or schemas.",
+      "implementation_target": "source_of_truth_registry"
+    },
+    {
+      "rule_key": "paios-no-agent-role-overlap",
+      "domain": "paios_system",
+      "source_document_key": "paios-source-of-truth-blueprint-v1",
+      "activation_status": "reference_only",
+      "rule_type": "agent_coordination",
+      "summary": "Analyst, Brain, Chief of Staff, and Operator must not combine thinking, deciding, coordinating, and executing.",
+      "implementation_target": null
+    },
+    {
+      "rule_key": "paios-operator-execution-only",
+      "domain": "paios_system",
+      "source_document_key": "paios-source-of-truth-blueprint-v1",
+      "activation_status": "reference_only",
+      "rule_type": "agent_boundary",
+      "summary": "Operator executes approved tasks only; no reasoning or prioritization.",
+      "implementation_target": null
+    },
+    {
+      "rule_key": "noetfield-bounded-autonomy",
+      "domain": "noetfield_org_vision",
+      "source_document_key": "noetfield-ai-organization-runtime-sot-v1",
+      "activation_status": "active_design_rule",
+      "rule_type": "governance",
+      "summary": "Agents may observe, classify, infer, recommend, and draft; high-risk execution requires human approval.",
+      "implementation_target": "governance_runtime"
+    },
+    {
+      "rule_key": "noetfield-runtime-event-mediation",
+      "domain": "noetfield_org_vision",
+      "source_document_key": "noetfield-strong-core-runtime-minimal-fa",
+      "activation_status": "active_design_rule",
+      "rule_type": "event_runtime",
+      "summary": "Agents must not communicate directly; routing goes through runtime events and mediator.",
+      "implementation_target": "event_bus"
+    },
+    {
+      "rule_key": "slf-v5-autonomy-requires-governance-pair",
+      "domain": "slf_framework",
+      "source_document_key": "slf-v5-logic-extension-layer-execution-state-control",
+      "activation_status": "reference_only",
+      "rule_type": "governance",
+      "summary": "Autonomy without governance is chaos; governance without autonomy is stagnation.",
       "implementation_target": null
     }
   ]

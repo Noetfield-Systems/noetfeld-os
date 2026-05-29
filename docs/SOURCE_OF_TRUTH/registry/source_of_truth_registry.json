@@ -1,5 +1,5 @@
 {
-  "registry_version": "2026-05-29-sot-3",
+  "registry_version": "2026-05-29-sot-4",
   "decisions": [
     {
       "domain": "context_graph",
@@ -210,14 +210,6 @@
       "confidence": 0.88
     },
     {
-      "domain": "sot_epistemology",
-      "active_document_key": "sot-guidelines-vs-slf-relationship-fa",
-      "active_version": "v1",
-      "decision": "active_epistemic_reference",
-      "rationale": "Clarifies SoT as epistemic DNA versus SLF as engineering expansion.",
-      "confidence": 0.85
-    },
-    {
       "domain": "slf_framework",
       "active_document_key": "slf-v5-frozen-canonical-spec",
       "active_version": "v5.0-frozen",
@@ -240,6 +232,46 @@
       "decision": "reference_methodology",
       "rationale": "Chat archive deduplication pipeline is operational methodology, not platform runtime SOT.",
       "confidence": 0.8
+    },
+    {
+      "domain": "slf_epistemic_core",
+      "active_document_key": "slf-v3-system-logic-framework-epistemic",
+      "active_version": "v3.0",
+      "decision": "active_source_of_truth",
+      "rationale": "SLF v3 formalizes the epistemic loop and invariant compression engine. v2 and SLG v1 are historical predecessors.",
+      "confidence": 0.92
+    },
+    {
+      "domain": "sot_epistemology",
+      "active_document_key": "sot-creation-guidelines-practical",
+      "active_version": "guidelines-v1",
+      "decision": "active_source_of_truth",
+      "rationale": "Practical SoT creation guidelines define how truth is mined from execution. Complements auto-running engine and SLF relationship docs.",
+      "confidence": 0.9
+    },
+    {
+      "domain": "paios_system",
+      "active_document_key": "paios-source-of-truth-blueprint-v1",
+      "active_version": "sot-v1.0",
+      "decision": "active_source_of_truth",
+      "rationale": "PAIOS blueprint is the normative four-agent personal OS spec with governance and memory contracts.",
+      "confidence": 0.88
+    },
+    {
+      "domain": "noetfield_org_vision",
+      "active_document_key": "noetfield-ai-organization-runtime-sot-v1",
+      "active_version": "org-runtime-v1.0",
+      "decision": "active_strategic_reference",
+      "rationale": "2026 org-runtime vision informs scale path but does not replace current Noetfield WP and orchestration implementation SOT.",
+      "confidence": 0.86
+    },
+    {
+      "domain": "noetfield_runtime_mvp",
+      "active_document_key": "noetfield-strong-core-runtime-minimal-fa",
+      "active_version": "core-runtime-v0.1",
+      "decision": "active_mvp_reference",
+      "rationale": "Minimal six-capability runtime kernel and v0.1 agent set for phased deployment.",
+      "confidence": 0.84
     }
   ]
 }

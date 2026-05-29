@@ -46,10 +46,10 @@ def test_ingestion_payload_summary_counts() -> None:
     summary = summarize_payload(payload)
 
     assert summary["batch_id"] == "2026-05-combined"
-    assert summary["batch_count"] == 6
-    assert summary["document_count"] == 56
-    assert summary["sot_decision_count"] == 30
-    assert summary["active_rule_candidate_count"] == 39
+    assert summary["batch_count"] == 7
+    assert summary["document_count"] == 66
+    assert summary["sot_decision_count"] == 34
+    assert summary["active_rule_candidate_count"] == 47
     assert "wp03-npl-formal-grammar-2026-05-npl-1" in summary["active_documents"]
     assert "wp01-context-graph-runtime-edition-v2" in summary["active_documents"]
 
@@ -159,3 +159,24 @@ def test_sixth_batch_event_and_sot_rule_candidates_are_present() -> None:
     assert "memory-write-requires-state-validation-event" in rule_keys
     assert "sot-mined-from-repetition-not-theory" in rule_keys
     assert "semantic-superconductivity-constraint-density" in rule_keys
+
+def test_seventh_batch_slf_paios_and_noetfield_resources_are_classified() -> None:
+    payload = build_payload()
+    documents = {document["document_key"]: document for document in payload.inventory["documents"]}
+
+    assert documents["slf-v3-system-logic-framework-epistemic"]["classification"] == "active_source_of_truth"
+    assert documents["slf-v2-system-logic-framework"]["superseded_by"] == "slf-v3-system-logic-framework-epistemic"
+    assert documents["sot-creation-guidelines-practical"]["classification"] == "active_source_of_truth"
+    assert documents["paios-source-of-truth-blueprint-v1"]["classification"] == "active_source_of_truth"
+    assert documents["noetfield-ai-organization-runtime-sot-v1"]["classification"] == "active_strategic_reference"
+    assert documents["slf-v5-logic-extension-layer-execution-state-control"]["classification"] == "active_execution_layer_reference"
+
+
+def test_seventh_batch_epistemic_and_noetfield_rule_candidates_are_present() -> None:
+    payload = build_payload()
+    rule_keys = {rule["rule_key"] for rule in payload.rule_registry["active_rule_candidates"]}
+
+    assert "slf-reality-dominance-law" in rule_keys
+    assert "slf-invariant-only-repeatable-behavior" in rule_keys
+    assert "noetfield-bounded-autonomy" in rule_keys
+    assert "noetfield-runtime-event-mediation" in rule_keys

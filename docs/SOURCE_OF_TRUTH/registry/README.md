@@ -49,6 +49,12 @@ inventory.
 - SoT engine loop: `sot-engine-auto-running-architecture-v1`
 - SLF framework: `slf-v5-frozen-canonical-spec` (frozen canonical, separate lineage)
 - System genealogy: `unified-system-genealogy-map`
+- SLF epistemic core: `slf-v3-system-logic-framework-epistemic`
+- SoT creation: `sot-creation-guidelines-practical`
+- PAIOS personal OS: `paios-source-of-truth-blueprint-v1`
+- Noetfield org vision: `noetfield-ai-organization-runtime-sot-v1` (strategic reference only)
+- Noetfield MVP kernel: `noetfield-strong-core-runtime-minimal-fa`
+
 
 
 

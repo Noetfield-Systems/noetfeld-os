@@ -682,7 +682,7 @@
       "work_package": null,
       "version_label": "v1",
       "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-006/sot-guidelines-vs-slf-relationship-fa.md",
-      "classification": "active_epistemic_reference",
+      "classification": "active_epistemic_supporting_reference",
       "status": "reference",
       "supersedes": [],
       "superseded_by": null,
@@ -754,6 +754,143 @@
       "supersedes": [],
       "superseded_by": null,
       "upload_batch": "2026-05-006"
+    },
+    {
+      "document_key": "slf-v5-logic-extension-layer-execution-state-control",
+      "title": "SLF v5.0 Logic Extension Layer \u2014 Execution, State, and Control",
+      "domain": "slf_framework",
+      "work_package": null,
+      "version_label": "v5.0-extension",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-007/slf-v5-logic-extension-layer-execution-state-control.md",
+      "classification": "active_execution_layer_reference",
+      "status": "reference",
+      "supersedes": [],
+      "superseded_by": null,
+      "upload_batch": "2026-05-007"
+    },
+    {
+      "document_key": "slf-v3-system-logic-framework-epistemic",
+      "title": "System Logic Framework SLF v3.0 \u2014 Epistemic Engineering Model",
+      "domain": "slf_epistemic_core",
+      "work_package": null,
+      "version_label": "v3.0",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-007/slf-v3-system-logic-framework-epistemic.md",
+      "classification": "active_source_of_truth",
+      "status": "reference",
+      "supersedes": [
+        "slf-v2-system-logic-framework",
+        "slg-v1-system-logic-source-generation"
+      ],
+      "superseded_by": null,
+      "upload_batch": "2026-05-007"
+    },
+    {
+      "document_key": "slf-v2-system-logic-framework",
+      "title": "System Logic Framework SLF v2.0 \u2014 Epistemic Build Loop",
+      "domain": "slf_epistemic_core",
+      "work_package": null,
+      "version_label": "v2.0",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-007/slf-v2-system-logic-framework.md",
+      "classification": "superseded_framework_reference",
+      "status": "superseded",
+      "supersedes": [
+        "slg-v1-system-logic-source-generation"
+      ],
+      "superseded_by": "slf-v3-system-logic-framework-epistemic",
+      "upload_batch": "2026-05-007"
+    },
+    {
+      "document_key": "slg-v1-system-logic-source-generation",
+      "title": "System Logic for Source Generation SLG v1.0",
+      "domain": "slf_epistemic_core",
+      "work_package": null,
+      "version_label": "v1.0",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-007/slg-v1-system-logic-source-generation.md",
+      "classification": "historical_predecessor",
+      "status": "superseded",
+      "supersedes": [],
+      "superseded_by": "slf-v3-system-logic-framework-epistemic",
+      "upload_batch": "2026-05-007"
+    },
+    {
+      "document_key": "sot-creation-guidelines-practical",
+      "title": "Source of Truth Creation Guidelines \u2014 Practical System Design Rules",
+      "domain": "sot_epistemology",
+      "work_package": null,
+      "version_label": "guidelines-v1",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-007/sot-creation-guidelines-practical.md",
+      "classification": "active_source_of_truth",
+      "status": "reference",
+      "supersedes": [],
+      "superseded_by": null,
+      "upload_batch": "2026-05-007"
+    },
+    {
+      "document_key": "personal-ai-operating-system-team-blueprint",
+      "title": "Personal AI Operating System \u2014 Full Team Blueprint v1",
+      "domain": "paios_system",
+      "work_package": null,
+      "version_label": "team-blueprint-v1",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-007/personal-ai-operating-system-team-blueprint.md",
+      "classification": "superseded_team_reference",
+      "status": "superseded",
+      "supersedes": [],
+      "superseded_by": "paios-source-of-truth-blueprint-v1",
+      "upload_batch": "2026-05-007"
+    },
+    {
+      "document_key": "sot-path-to-truth-methodology-fa",
+      "title": "Path to Source of Truth \u2014 Methodology (Persian)",
+      "domain": "sot_epistemology",
+      "work_package": null,
+      "version_label": "path-v1-fa",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-007/sot-path-to-truth-methodology-fa.md",
+      "classification": "active_methodology_reference",
+      "status": "reference",
+      "supersedes": [],
+      "superseded_by": null,
+      "upload_batch": "2026-05-007"
+    },
+    {
+      "document_key": "paios-source-of-truth-blueprint-v1",
+      "title": "PAIOS \u2014 Personal AI Operating System Source of Truth Blueprint v1.0",
+      "domain": "paios_system",
+      "work_package": null,
+      "version_label": "sot-v1.0",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-007/paios-source-of-truth-blueprint-v1.md",
+      "classification": "active_source_of_truth",
+      "status": "reference",
+      "supersedes": [
+        "personal-ai-operating-system-team-blueprint"
+      ],
+      "superseded_by": null,
+      "upload_batch": "2026-05-007"
+    },
+    {
+      "document_key": "noetfield-ai-organization-runtime-sot-v1",
+      "title": "Noetfield AI Organization Runtime \u2014 Source of Truth Blueprint v1.0 (2026)",
+      "domain": "noetfield_org_vision",
+      "work_package": null,
+      "version_label": "org-runtime-v1.0",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-007/noetfield-ai-organization-runtime-sot-v1.md",
+      "classification": "active_strategic_reference",
+      "status": "reference",
+      "supersedes": [],
+      "superseded_by": null,
+      "upload_batch": "2026-05-007"
+    },
+    {
+      "document_key": "noetfield-strong-core-runtime-minimal-fa",
+      "title": "Noetfield Strong Core Runtime \u2014 Minimal MVP (Persian)",
+      "domain": "noetfield_runtime_mvp",
+      "work_package": null,
+      "version_label": "core-runtime-v0.1",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-007/noetfield-strong-core-runtime-minimal-fa.md",
+      "classification": "active_mvp_reference",
+      "status": "reference",
+      "supersedes": [],
+      "superseded_by": null,
+      "upload_batch": "2026-05-007"
     }
   ],
   "batches": [
@@ -780,6 +917,10 @@
     {
       "batch_id": "2026-05-006",
       "source_folder": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-006"
+    },
+    {
+      "batch_id": "2026-05-007",
+      "source_folder": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-007"
     }
   ]
 }
