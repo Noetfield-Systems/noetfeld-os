@@ -3,8 +3,8 @@
 <head>
  <meta charset="UTF-8" />
  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
- <title>Noetfield — Partner &amp; Channel Hub</title>
- <meta name="description" content="Partner, channel, and investor intake paths for Noetfield governance offerings. Three contract products only." />
+ <title>Noetfield — Partner &amp; Ecosystem Gateway</title>
+ <meta name="description" content="Unified partner intake for integrators, institutional allocators, and regulated program operators. Non-custodial governance only." />
  <meta name="robots" content="index,follow" />
  <meta name="theme-color" content="#07070b" />
  <link rel="canonical" href="https://www.noetfield.com/gate/partners/" />
@@ -13,39 +13,108 @@
  <link rel="stylesheet" href="/assets/noetfield-sales.css" />
  <link rel="stylesheet" href="/assets/noetfield-institutional.css" />
  <script src="/assets/noetfield-shell.js" defer></script>
+ <style>
+ .nf-partner-form label { display:block; font-size:12px; color:var(--muted); margin:12px 0 6px; }
+ .nf-partner-form input, .nf-partner-form select, .nf-partner-form textarea {
+ width:100%; padding:12px; border-radius:10px; border:1px solid var(--line);
+ background:rgba(0,0,0,.25); color:var(--text); font:inherit; font-size:14px;
+ }
+ .nf-partner-form textarea { min-height:120px; resize:vertical; }
+ .nf-disclosure {
+ font-size:12px; color:var(--muted); line-height:1.6;
+ border:1px solid var(--line); border-radius:var(--radius); padding:14px; margin:16px 0;
+ }
+ .nf-disclosure label { display:flex; gap:10px; align-items:flex-start; cursor:pointer; }
+ .nf-disclosure input { margin-top:4px; width:auto; }
+ </style>
 </head>
 <body>
  <div class="bg" aria-hidden="true"></div>
  <a class="skip" href="#main">Skip to content</a>
  <header id="nfHeader"></header>
 
- <main id="main" class="wrap nf-dir">
- <nav class="nav-links nf-sales" style="margin-bottom:0;"><a href="/gate/">Bank Pilot</a><a href="/directory/">Site directory</a></nav>
+ <main id="main" class="wrap nf-sales">
+ <nav class="nav-links"><a href="/gate/">Bank Pilot</a><a href="/directory/">Directory</a></nav>
 
- <div class="nf-dir-hero">
- <p class="eyebrow" style="font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted2);margin:0 0 10px;">Partners &amp; channels</p>
- <h1>Work with Noetfield on governance — not payments or custody</h1>
- <p class="lead">Structured intake for partners, integrators, and programs. All routes align to our three contract offerings: Trust Brief, Copilot Governance Pack, and Bank Pilot v6.1.</p>
- </div>
+ <p class="eyebrow">Unified gateway · Partner &amp; ecosystem</p>
+ <h1>Partner &amp; ecosystem intake</h1>
+ <p class="lead">
+ One institutional front door for integrators, regulated program operators, and institutional reviewers.
+ Noetfield provides <strong>governance execution and policy enforcement</strong> — not custody, payments, or value movement.
+ </p>
 
- <section class="nf-dir-section">
- <h2>Partner paths</h2>
- <div class="nf-dir-grid">
- <article class="nf-dir-card"><h3>Apply</h3><p>Partner application intake.</p><a class="btn secondary" href="/gate/partners/apply/">Apply</a></article>
- <article class="nf-dir-card"><h3>Channel programs</h3><p>Delivery and channel structure.</p><a class="btn secondary" href="/gate/partners/channel/">Channel</a></article>
- <article class="nf-dir-card"><h3>Integration</h3><p>Technical integration intake.</p><a class="btn secondary" href="/gate/partners/integration/">Integration</a></article>
- <article class="nf-dir-card"><h3>Investors</h3><p>Non-confidential investor materials request.</p><a class="btn secondary" href="/gate/partners/investors/">Investors</a></article>
- <article class="nf-dir-card"><h3>Programs hub</h3><p>Portfolio and program offers.</p><a class="btn secondary" href="/gate/partners/programs/">Programs</a></article>
- <article class="nf-dir-card"><h3>Partner intake</h3><p>General partner intake forms.</p><a class="btn secondary" href="/gate/partners/intake/">Intake</a></article>
- </div>
+ <section class="block">
+ <h2>Integration vector</h2>
+ <p>Select the profile that best describes your organization. Legacy partner URLs route here with your category pre-selected.</p>
  </section>
 
- <div class="cta-bar nf-sales">
- <div><strong>Request Governance Brief</strong><p>For institutional engagements</p></div>
+ <form class="nf-partner-form nf-dir-card" id="partnerForm" method="get" action="/gate/intake/">
+ <input type="hidden" name="need" value="partner" />
+ <label for="vector">Primary vector</label>
+ <select id="vector" name="vector" required>
+ <option value="">Select…</option>
+ <option value="integrator">System integrator &amp; engineering partner</option>
+ <option value="allocator">Capital allocator &amp; institutional reviewer</option>
+ <option value="issuer">Regulated program &amp; asset operator (non-custodial scope)</option>
+ <option value="other">Other / multi-vector</option>
+ </select>
+
+ <label for="org">Organization name</label>
+ <input id="org" name="org" type="text" required autocomplete="organization" />
+
+ <label for="domain">Corporate email domain</label>
+ <input id="domain" name="domain" type="text" placeholder="example.com" />
+
+ <label for="summary">Architecture &amp; compliance summary</label>
+ <textarea id="summary" name="summary" placeholder="Jurisdiction, integration scope, governance latency requirements, and intended use of Noetfield (no confidential credentials)."></textarea>
+
+ <div class="nf-disclosure" role="group" aria-labelledby="disc-title">
+ <p id="disc-title"><strong>Non-custodial disclosure (required)</strong></p>
+ <label>
+ <input type="checkbox" id="disclosure" required />
+ <span>I understand Noetfield does not execute payments, hold custody, or route financial value. The platform produces pre-execution policy decisions, audits, and compliance traces only.</span>
+ </label>
+ </div>
+
+ <button type="submit" class="btn btn-primary" style="margin-top:16px;border:none;cursor:pointer;">Continue to governed intake</button>
+ <p style="font-size:12px;color:var(--muted);margin-top:12px;">
+ Urgent or existing integrations: <a href="mailto:contact@noetfield.com">contact@noetfield.com</a>
+ </p>
+ </form>
+
+ <section class="block">
+ <h2>Gateway protocol</h2>
+ <ol style="color:var(--muted);line-height:1.7;padding-left:1.2rem;">
+ <li><strong>Classification</strong> — vector and scope confirmed</li>
+ <li><strong>Telemetry</strong> — non-confidential architecture summary via Gate intake (Request ID issued)</li>
+ <li><strong>Review</strong> — Noetfield Operations responds within business days for approved staging access</li>
+ </ol>
+ </section>
+
+ <div class="cta-bar">
+ <div><strong>Request Governance Brief</strong><p>For institutional engagements outside partner programs</p></div>
  <a class="btn btn-primary" href="/trust-brief/intake/?interest=partner">Request Governance Brief</a>
  </div>
  </main>
 
  <footer id="nfFooter"></footer>
+ <script>
+ (function () {
+   var params = new URLSearchParams(window.location.search);
+   var v = params.get("vector");
+   if (v) {
+     var sel = document.getElementById("vector");
+     for (var i = 0; i < sel.options.length; i++) {
+       if (sel.options[i].value === v) { sel.selectedIndex = i; break; }
+     }
+   }
+   document.getElementById("partnerForm").addEventListener("submit", function (e) {
+     if (!document.getElementById("disclosure").checked) {
+       e.preventDefault();
+       alert("Please confirm the non-custodial disclosure.");
+     }
+   });
+ })();
+ </script>
 </body>
 </html>

@@ -1,773 +1,107 @@
-<!-- /trust-ledger/index.html — Noetfield Trust Ledger v6.3 (Stripe Buy Buttons wired • Enterprise polish • Plan comparison • Engagement intake governance flow • Setup→Cadence clarity) -->
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
- <meta charset="utf-8" />
- <meta name="viewport" content="width=device-width, initial-scale=1" />
-
- <title>Noetfield — Trust Ledger</title>
- <meta name="description" content="Trust Ledger is a maintained AI governance register: systems, owners, controls, evidence, changes, exceptions, and board exports—kept ready for recurring scrutiny. Subscription plans available." />
+ <meta charset="UTF-8" />
+ <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+ <title>Noetfield — Trust Ledger (Reference)</title>
+ <meta name="description" content="Trust Ledger reference: continuous governance telemetry and immutable decision lineage for regulated organizations. Included in contract offerings — not a public subscription product." />
  <meta name="robots" content="index,follow" />
- <meta name="author" content="Noetfield Systems Inc." />
  <meta name="theme-color" content="#07070b" />
-
  <link rel="canonical" href="https://www.noetfield.com/trust-ledger/" />
  <link rel="icon" href="/noetfield-favicon-512.png" type="image/png" />
- <link rel="apple-touch-icon" href="/noetfield-favicon-512.png" />
-
- <meta property="og:type" content="website" />
- <meta property="og:site_name" content="Noetfield" />
- <meta property="og:title" content="Noetfield — Trust Ledger" />
- <meta property="og:description" content="A maintained AI governance register with evidence discipline and board exports. Subscription plans available." />
- <meta property="og:url" content="https://www.noetfield.com/trust-ledger/" />
- <meta property="og:image" content="https://www.noetfield.com/noetfield-og.png" />
-
- <meta name="twitter:card" content="summary_large_image" />
- <meta name="twitter:title" content="Noetfield — Trust Ledger" />
- <meta name="twitter:description" content="A maintained AI governance register with evidence discipline and board exports. Subscription plans available." />
- <meta name="twitter:image" content="https://www.noetfield.com/noetfield-og.png" />
-
- <!-- LOCKED SHELL -->
  <link rel="stylesheet" href="/assets/noetfield-shell.css" />
+ <link rel="stylesheet" href="/assets/noetfield-sales.css" />
+ <link rel="stylesheet" href="/assets/noetfield-institutional.css" />
  <script src="/assets/noetfield-shell.js" defer></script>
-
- <!-- Stripe Buy Button (load once) -->
- <script async src="https://js.stripe.com/v3/buy-button.js"></script>
-
- <style>
- /* Layout */
- .hero{padding:18px 0 10px}
- .grid{
- display:grid;
- grid-template-columns: 1.12fr .88fr;
- gap:16px;
- margin: 14px 0 64px;
- align-items:start;
- }
- .card{
- border-radius:var(--radius);
- border:1px solid rgba(255,255,255,.11);
- background: linear-gradient(180deg, rgba(255,255,255,.055), rgba(255,255,255,.022));
- box-shadow: var(--shadow2);
- overflow:hidden;
- min-width:0;
- }
- .hd{ padding:18px 18px 0; }
- .bd{ padding:18px; }
-
- /* Hero */
- .heroShell{
- position:relative;
- border-radius: calc(var(--radius) + 8px);
- border: 1px solid rgba(255,255,255,.11);
- background:
- radial-gradient(1100px 420px at 16% 0%, rgba(200,163,73,.18), transparent 60%),
- radial-gradient(1100px 420px at 92% 10%, rgba(122,167,255,.10), transparent 62%),
- linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.022));
- box-shadow: var(--shadow);
- overflow:hidden;
- }
- .heroShell::before{
- content:"";
- position:absolute; inset:-1px;
- background: linear-gradient(120deg, rgba(200,163,73,.26), transparent 30%, rgba(255,255,255,.08) 68%, transparent);
- opacity:.44;
- pointer-events:none;
- mask-image: linear-gradient(180deg, black 0%, black 58%, transparent 96%);
- }
- .heroInner{padding: 22px 18px; position:relative; z-index:1}
-
- .eyebrow{
- display:inline-flex; gap:10px; align-items:center;
- color:var(--muted);
- font-size:13px;
- padding:9px 12px;
- border-radius:999px;
- border:1px solid rgba(255,255,255,.13);
- background: rgba(255,255,255,.035);
- }
- .dot{
- width:8px; height:8px; border-radius:50%;
- background: rgba(200,163,73,.97);
- box-shadow: 0 0 0 3px rgba(200,163,73,.18);
- }
- h1{margin:12px 0 10px; font-size:34px; line-height:1.07; letter-spacing:-0.75px}
- .lead{margin:0; color:var(--muted); font-size:16px; max-width: 1040px; line-height:1.75}
- .lead strong{color:var(--text); font-weight:950}
-
- .metaRow{display:flex; flex-wrap:wrap; gap:10px; margin-top:14px}
- .pill{
- display:inline-flex; align-items:center; gap:10px;
- padding:9px 12px;
- border-radius:999px;
- border:1px solid rgba(255,255,255,.12);
- background: rgba(255,255,255,.03);
- color:var(--muted);
- font-size:13px;
- white-space:nowrap;
- }
- .pill strong{color:var(--text); font-weight:900}
-
- .actions{display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-top:12px}
- .btn.small{ min-height:40px; padding:9px 12px; font-size:13px; }
-
- .notice{
- margin-top:12px;
- padding:12px 12px;
- border-radius:14px;
- border:1px solid rgba(255,255,255,.10);
- background: rgba(255,255,255,.03);
- color:var(--muted2);
- font-size:12.8px;
- line-height:1.6;
- }
- .notice strong{ color:var(--text); font-weight:900; }
-
- /* Content blocks */
- .cardTitle{ margin:0 0 8px; font-size:18px; letter-spacing:-0.2px; }
- .muted{ color:var(--muted); line-height:1.7; margin:0; }
-
- .groupTitle{
- margin:18px 0 8px;
- font-size:14px;
- letter-spacing:.22em;
- text-transform:uppercase;
- color:var(--muted2);
- }
- .blocks{ display:grid; gap:12px; margin-top:12px; }
- .block{
- border-radius:16px;
- border:1px solid rgba(255,255,255,.11);
- background: rgba(255,255,255,.03);
- padding:14px;
- overflow:hidden;
- transition: border-color .15s ease, background .15s ease, transform .06s ease;
- }
- .block:hover{border-color:rgba(255,255,255,.22); background:rgba(255,255,255,.05)}
- .block:active{transform: translateY(1px)}
- .blockTop{ display:flex; gap:10px; align-items:flex-start; justify-content:space-between; flex-wrap:wrap; }
- .block h3{ margin:0; font-size:16px; letter-spacing:-.2px; font-weight:950; }
- .tag{
- display:inline-flex; align-items:center; gap:8px;
- padding:7px 10px;
- border-radius:999px;
- border:1px solid rgba(255,255,255,.12);
- background: rgba(255,255,255,.03);
- color:var(--muted2);
- font-size:12.4px;
- white-space:nowrap;
- }
- .block p{ margin:10px 0 0; color:var(--muted); line-height:1.7; }
- .block ul{ margin:10px 0 0; padding-left:18px; color:var(--muted2); line-height:1.6; }
- .block li{ margin:6px 0; }
- .kvRow{ display:flex; flex-wrap:wrap; gap:10px; margin-top:10px; }
- .kv{
- display:inline-flex; gap:8px; align-items:center;
- padding:8px 10px;
- border-radius:999px;
- border:1px solid rgba(255,255,255,.10);
- background: rgba(255,255,255,.02);
- color:var(--muted2);
- font-size:12.4px;
- white-space:nowrap;
- }
- .kv strong{ color:var(--text); font-weight:900; }
-
- /* Tables */
- .tableWrap{ overflow:auto; border-radius:16px; border:1px solid rgba(255,255,255,.10); background: rgba(255,255,255,.02); }
- table{ width:100%; border-collapse:collapse; min-width: 620px; }
- th, td{
- padding:12px 12px;
- border-bottom:1px solid rgba(255,255,255,.08);
- text-align:left;
- vertical-align:top;
- color:var(--muted2);
- font-size:13px;
- line-height:1.55;
- }
- th{
- color:var(--text);
- font-weight:950;
- background: rgba(255,255,255,.03);
- position: sticky;
- top: 0;
- z-index: 1;
- }
- td strong{ color:var(--text); font-weight:900; }
- .yes{ color: var(--text); font-weight:900; }
- .nowrap{ white-space:nowrap; }
-
- /* Pricing rail */
- .rail{ position: sticky; top: 14px; }
- .pricingIntro{
- padding:14px;
- border-radius:16px;
- border:1px solid rgba(255,255,255,.10);
- background: rgba(255,255,255,.03);
- color:var(--muted2);
- font-size:12.8px;
- line-height:1.6;
- }
- .pricingIntro strong{ color:var(--text); font-weight:900; }
-
- .plan{
- border-radius:16px;
- border:1px solid rgba(255,255,255,.11);
- background: rgba(255,255,255,.03);
- padding:14px;
- margin-top:12px;
- }
- .planTop{
- display:flex; align-items:flex-start; justify-content:space-between; gap:12px; flex-wrap:wrap;
- }
- .planName{
- margin:0;
- font-size:15px;
- font-weight:950;
- letter-spacing:-.15px;
- }
- .price{
- color:var(--text);
- font-weight:950;
- font-size:14px;
- white-space:nowrap;
- }
- .planSub{ margin:8px 0 0; color:var(--muted); line-height:1.6; font-size:13px; }
- .planBullets{ margin:10px 0 0; padding-left:18px; color:var(--muted2); line-height:1.6; font-size:12.8px; }
- .planBullets li{ margin:6px 0; }
- .planActions{ display:grid; gap:10px; margin-top:12px; }
-
- .ctaRow{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
- .ctaRow .btn{ min-height:44px; }
- .ctaRow .btn{ flex: 1 1 180px; }
-
- /* Stripe Buy Button wrapper (keeps it clean + responsive) */
- .stripeWrap{
- border-radius:14px;
- border:1px solid rgba(255,255,255,.10);
- background: rgba(255,255,255,.02);
- padding:10px;
- overflow:hidden;
- }
- .stripeLabel{
- color: var(--muted2);
- font-size: 11px;
- letter-spacing: .22em;
- text-transform: uppercase;
- margin: 0 0 8px;
- }
- /* Stripe injects an iframe/shadow DOM; keep width sane */
- stripe-buy-button{ display:block; width:100%; }
- .fallbackRow{
- display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-top:10px;
- }
- .fallbackRow a{ flex:1 1 200px; }
-
- .fineprint{
- margin-top:12px;
- padding:12px;
- border-radius:14px;
- border:1px solid rgba(255,255,255,.10);
- background: rgba(255,255,255,.02);
- color:var(--muted2);
- font-size:12.4px;
- line-height:1.6;
- }
- .fineprint code{
- font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
- color: var(--text);
- font-weight: 900;
- font-size: 12.6px;
- }
-
- /* Details */
- details.block{ padding:14px; }
- details.block summary{
- cursor:pointer;
- font-weight:950;
- color:var(--text);
- list-style:none;
- outline:none;
- }
- details.block summary::-webkit-details-marker{ display:none; }
- details.block p{ margin-top:10px; }
-
- /* Sticky bottom CTA */
- .stickyCta{
- position: sticky;
- bottom: 0;
- z-index: 20;
- padding: 10px 0;
- background: linear-gradient(180deg, rgba(7,7,11,0) 0%, rgba(7,7,11,.78) 22%, rgba(7,7,11,.92) 100%);
- backdrop-filter: blur(10px);
- border-top: 1px solid rgba(255,255,255,.08);
- }
- .stickyInner{
- display:flex;
- gap:12px;
- align-items:center;
- justify-content:space-between;
- padding: 0 16px;
- max-width: 1120px;
- margin: 0 auto;
- }
- .stickyText{
- min-width:0;
- color:var(--muted);
- font-size:12.6px;
- line-height:1.4;
- }
- .stickyText strong{ color:var(--text); font-weight:950; }
-
- /* A11y + motion */
- :focus-visible{ outline: 2px solid rgba(200,163,73,.55); outline-offset: 2px; border-radius: 12px; }
- @media (prefers-reduced-motion: reduce){
- .block{ transition:none; }
- .block:active{ transform:none; }
- }
-
- @media (max-width: 980px){
- .grid{ grid-template-columns: 1fr; }
- .rail{ position: relative; top: 0; }
- h1{ font-size: 30px; }
- table{ min-width: 720px; }
- }
- @media (max-width: 760px){
- .stickyText{display:none}
- .ctaRow .btn{ flex: 1 1 100%; }
- .fallbackRow a{ flex: 1 1 100%; }
- }
- </style>
-
- <script type="application/ld+json">
- {
- "@context":"https://schema.org",
- "@graph":[
- {
- "@type":"WebPage",
- "name":"Noetfield — Trust Ledger",
- "url":"https://www.noetfield.com/trust-ledger/",
- "description":"A maintained AI governance register with evidence discipline and board exports. Subscription plans available.",
- "isPartOf":{"@type":"WebSite","name":"Noetfield","url":"https://www.noetfield.com/"},
- "publisher":{"@type":"Organization","name":"Noetfield Systems Inc."}
- },
- {
- "@type":"Service",
- "name":"Trust Ledger",
- "provider":{"@type":"Organization","name":"Noetfield Systems Inc."},
- "areaServed":"CA",
- "serviceType":"AI governance register and board export cadence",
- "description":"Maintained AI governance register: systems, owners, controls, evidence, changes, exceptions, and recurring board-ready exports."
- },
- {
- "@type":"OfferCatalog",
- "name":"Trust Ledger plans",
- "itemListElement":[
- {"@type":"Offer","name":"TL — Maintain (Monthly)","priceCurrency":"CAD","price":"1500","description":"Monthly subscription. Up to 5 active entries. Setup via engagement intake or kickoff."},
- {"@type":"Offer","name":"TL — Govern (Monthly)","priceCurrency":"CAD","price":"2750","description":"Monthly subscription. Up to 10 active entries. Setup via engagement intake or kickoff."},
- {"@type":"Offer","name":"TL — Assure (Monthly)","priceCurrency":"CAD","price":"4750","description":"Monthly subscription. Up to 20 active entries. Setup via engagement intake or kickoff."}
- ]
- }
- ]
- }
- </script>
 </head>
-
 <body>
  <div class="bg" aria-hidden="true"></div>
  <a class="skip" href="#main">Skip to content</a>
-
  <header id="nfHeader"></header>
 
- <main id="main" class="wrap">
- <!-- HERO -->
- <section class="hero" aria-label="Trust Ledger hero">
- <div class="heroShell">
- <div class="heroInner">
- <div class="eyebrow"><span class="dot"></span> Trust Ledger • visible pricing • Stripe subscription • engagement intake supported</div>
+ <main id="main" class="wrap nf-sales">
+ <nav class="nav-links"><a href="/">Home</a><a href="/directory/">Directory</a></nav>
 
- <h1>Trust Ledger: maintained governance. Answer-ready exports.</h1>
-
+ <p class="eyebrow">Reference infrastructure · Not a retail subscription</p>
+ <h1>Continuous trust telemetry for institutional governance</h1>
  <p class="lead">
- Trust Ledger is a maintained register of <strong>AI systems, owners, controls, evidence, changes, and exceptions</strong>,
- designed for <strong>board clarity</strong> and <strong>recurring scrutiny</strong>.
- Plans are fixed. Card subscription is available. Engagement intake (Engagement artifact) is supported.
+ Move from retrospective audits to <strong>pre-execution policy checks</strong> and immutable decision records.
+ Trust Ledger is a <strong>reference capability</strong> delivered inside Noetfield contract engagements — not a self-serve checkout product.
  </p>
 
- <div class="metaRow" aria-label="Trust Ledger outcomes">
- <div class="pill"><strong>Board clarity</strong> what exists + who owns it</div>
- <div class="pill"><strong>Evidence discipline</strong> proofs linked to claims</div>
- <div class="pill"><strong>Change control</strong> what changed + why + approval</div>
- <div class="pill"><strong>Exceptions</strong> expiry + mitigation</div>
- </div>
+ <section class="block">
+ <h2>The problem</h2>
+ <p>Boards and regulators need to know what was allowed, under which policy, and who approved it — before external systems act.</p>
+ </section>
 
- <div class="actions" aria-label="Hero actions">
- <a class="btn primary" href="#pricing">View plans & pricing</a>
- <a class="btn secondary" href="#comparison">Compare plans</a>
- <a class="btn secondary" href="/gate/procurement/?focus=trust_ledger" data-rid-link>Engagement artifact start</a>
- <a class="btn secondary" href="/copilot/quickscan/" data-rid-link>Copilot-first baseline</a>
- </div>
+ <section class="block">
+ <h2>The risk</h2>
+ <p>Spreadsheet governance and ad-hoc Copilot rollouts leave no defensible lineage when scrutiny arrives.</p>
+ </section>
 
- <div class="notice" role="note">
- <strong>Operating model:</strong> subscription keeps the ledger current (changes, exceptions, evidence discipline, exports).
- Setup/kickoff is confirmed via engagement intake or call governance flow.
- <br />
- <strong>Public intake:</strong> non-confidential only. Secure sharing protocol is confirmed after kickoff.
- </div>
- </div>
+ <section class="block">
+ <h2>The solution</h2>
+ <p>Trust Ledger models the governance register your organization needs: systems, controls, evidence expectations, and decision traces aligned to GCIP-class policy enforcement.</p>
+ </section>
+
+ <section class="block" aria-labelledby="alignment">
+ <h2 id="alignment">Aligned to contract offerings (three tiers only)</h2>
+ <div class="nf-dir-grid">
+ <article class="nf-dir-card featured">
+ <p class="meta">Maps to Tier 1</p>
+ <h3>Trust Brief</h3>
+ <p>Baseline register design, gap analysis, and board-ready evidence framing (6 weeks · from $10,000).</p>
+ <a class="btn btn-secondary" href="/trust-brief/">Trust Brief</a>
+ </article>
+ <article class="nf-dir-card featured">
+ <p class="meta">Maps to Tier 2</p>
+ <h3>Copilot Governance Pack</h3>
+ <p>Policy validation and rollout gating with traceability for Microsoft 365 Copilot environments.</p>
+ <a class="btn btn-secondary" href="/copilot/">Copilot Governance</a>
+ </article>
+ <article class="nf-dir-card featured">
+ <p class="meta">Maps to Tier 3</p>
+ <h3>Bank Pilot v6.1</h3>
+ <p>Read-only overlay and compliance simulation — zero execution rights for Noetfield.</p>
+ <a class="btn btn-secondary" href="/gate/">Bank Pilot</a>
+ </article>
  </div>
  </section>
 
- <!-- MAIN GRID -->
- <section class="grid" aria-label="Trust Ledger layout">
- <!-- LEFT -->
- <div>
- <section class="card" aria-label="What Trust Ledger is">
- <div class="hd">
- <h2 class="cardTitle">What Trust Ledger is</h2>
- <p class="muted">
- A maintained governance surface: what AI does, where it runs, who owns it, which controls apply, and where proof lives.
- Built to stay readable under recurring scrutiny.
+ <section class="block" aria-labelledby="reference">
+ <h2 id="reference">Developer sandbox &amp; reference node</h2>
+ <p>
+ Organizations operating a <strong>legacy sandbox or reference node</strong> may retain prior endpoint configuration.
+ Public subscription checkout is <strong>deprecated</strong>; provisioning is through engagement intake or operations desk only.
  </p>
- </div>
-
- <div class="bd">
- <div class="groupTitle">How it works (setup → cadence)</div>
- <div class="blocks">
- <article class="block" aria-label="Setup baseline">
- <div class="blockTop"><h3>1) Setup baseline</h3><span class="tag">Kickoff</span></div>
- <p>Ledger schema, inventory alignment, evidence reference conventions, and cadence confirmation.</p>
- <div class="kvRow">
- <div class="kv"><strong>Output:</strong> first operating baseline</div>
- <div class="kv"><strong>Includes:</strong> register + rules</div>
- </div>
- </article>
-
- <article class="block" aria-label="Maintain cadence">
- <div class="blockTop"><h3>2) Maintain cadence</h3><span class="tag">Monthly</span></div>
- <p>Changes, exceptions, and evidence updates maintained on an agreed rhythm. Board export cadence per plan.</p>
- <div class="kvRow">
- <div class="kv"><strong>Output:</strong> answer-ready posture</div>
- <div class="kv"><strong>Includes:</strong> change trail + expiry</div>
- </div>
- </article>
-
- <article class="block" aria-label="Board exports">
- <div class="blockTop"><h3>3) Board-ready exports</h3><span class="tag">PDF / Online</span></div>
- <p>Recurring posture summary, major changes, open exceptions, and decisions requested. Format remains board-safe.</p>
- <div class="kvRow">
- <div class="kv"><strong>Output:</strong> board memo + highlights</div>
- <div class="kv"><strong>Discipline:</strong> evidence linked</div>
- </div>
- </article>
- </div>
-
- <div class="groupTitle">Security & confidentiality</div>
- <div class="blocks">
- <article class="block" aria-label="Non-confidential intake">
- <div class="blockTop"><h3>Public intake remains non-confidential</h3><span class="tag">Policy</span></div>
- <p>Public forms capture non-sensitive, non-confidential details only. Secure sharing protocol is confirmed after kickoff.</p>
  <ul>
- <li>No secrets or credentials in public intake</li>
- <li>Evidence references can be sanitized</li>
- <li>Sharing channel and access model confirmed after kickoff</li>
+ <li>No payment initiation, custody, or value movement by Noetfield</li>
+ <li>Decisions and audit traces only — pre-execution governance layer</li>
+ <li>Sandbox keys and billing reconciliation: <a href="mailto:operations@noetfield.com">operations@noetfield.com</a></li>
  </ul>
- </article>
+ <p class="muted" style="font-size:13px;color:var(--muted);">
+ Former public card-checkout lanes (Stripe) are retired from this page as of 2026. Commercial software licensing, when applicable, is scoped in contract — not self-serve retail tiers.
+ </p>
+ </section>
 
- <article class="block" aria-label="Engagement intake routing">
- <div class="blockTop"><h3>Engagement intake governance flow</h3><span class="tag">Engagement artifact</span></div>
- <p>Engagement artifact start supports internal approvals and vendor onboarding. Scope confirmation follows intake.</p>
- <div class="actions" style="margin-top:10px;">
- <a class="btn secondary" href="/gate/procurement/?focus=trust_ledger" data-rid-link>Open engagement intake start</a>
- <a class="btn secondary" href="/gate/sales/" data-rid-link>Purchase hub</a>
- <a class="btn secondary" href="/contact/" data-rid-link>Contact</a>
- </div>
- </article>
- </div>
-
- <div class="groupTitle">Samples (locked URLs)</div>
- <div class="blocks">
- <article class="block" aria-label="Samples output">
- <div class="blockTop"><h3>Output style reference</h3><span class="tag">PDF / Online</span></div>
- <p>Board-safe formatting reference. URLs remain canonical and should not change.</p>
- <div class="actions">
- <a class="btn secondary" href="/trust-ledger/sample-report/board-memo.pdf" target="_blank" rel="nofollow noopener">Board memo (PDF)</a>
- <a class="btn secondary" href="/trust-ledger/sample-report/ledger-entry.pdf" target="_blank" rel="nofollow noopener">Ledger entry (PDF)</a>
- <a class="btn secondary" href="/trust-ledger/sample-report/online/" target="_blank" rel="nofollow noopener">Sample (Online)</a>
- </div>
- </article>
- </div>
-
- <div class="notice" style="margin-top:14px;">
- <strong>Lane assignment:</strong> sales@noetfield.com • procurement@noetfield.com • billing@noetfield.com
- <br />
- <strong>Trust & governance:</strong> trust@noetfield.com • legal@noetfield.com
- </div>
+ <section class="block">
+ <h2>Samples</h2>
+ <div class="nf-dir-list">
+ <a href="/trust-ledger/sample-report/">Sample board report</a>
+ <a href="/trust-ledger/intake/">Trust Ledger intake (reference)</a>
+ <a href="/trust-ledger/online-report/">Online report example</a>
  </div>
  </section>
 
- <section id="comparison" class="card" aria-label="Plan comparison" style="margin-top:16px;">
- <div class="hd">
- <h2 class="cardTitle">Plan comparison</h2>
- <p class="muted">
- Plan selection is driven by surface size (active entries) and cadence needs (response targets, board rhythm, evidence depth).
- </p>
- </div>
- <div class="bd">
- <div class="tableWrap" role="region" aria-label="Plan comparison table" tabindex="0">
- <table>
- <thead>
- <tr>
- <th scope="col">Capability</th>
- <th scope="col" class="nowrap">TL — Maintain</th>
- <th scope="col" class="nowrap">TL — Govern</th>
- <th scope="col" class="nowrap">TL — Assure</th>
- </tr>
- </thead>
- <tbody>
- <tr>
- <td><strong>Active entries</strong> (tracked systems / workflows)</td>
- <td>Up to 5</td>
- <td>Up to 10</td>
- <td>Up to 20</td>
- </tr>
- <tr>
- <td><strong>SLA target</strong> (updates / responses)</td>
- <td>5 business days</td>
- <td>3 business days</td>
- <td>2 business days</td>
- </tr>
- <tr>
- <td><strong>Change trail</strong> maintained</td>
- <td class="yes">Yes</td>
- <td class="yes">Yes</td>
- <td class="yes">Yes</td>
- </tr>
- <tr>
- <td><strong>Exception register</strong> + expiry</td>
- <td>Optional / light</td>
- <td class="yes">Yes</td>
- <td class="yes">Yes</td>
- </tr>
- <tr>
- <td><strong>Board export cadence</strong></td>
- <td>As agreed</td>
- <td>Quarterly</td>
- <td>Monthly or quarterly</td>
- </tr>
- <tr>
- <td><strong>Evidence depth</strong></td>
- <td>Light / standard</td>
- <td>Standard</td>
- <td>Stronger reference discipline</td>
- </tr>
- <tr>
- <td><strong>Engagement intake support</strong> (engagement artifact)</td>
- <td class="yes">Yes</td>
- <td class="yes">Yes</td>
- <td class="yes">Yes</td>
- </tr>
- <tr>
- <td><strong>Expansion</strong> beyond plan limits</td>
- <td colspan="3">Additional surface and cadence adjustments are confirmed by scope (Gate intake).</td>
- </tr>
- </tbody>
- </table>
- </div>
-
- <div class="notice" style="margin-top:12px;">
- <strong>Definition:</strong> an “active entry” is a tracked AI system or AI-enabled workflow with owners, controls, evidence hooks, and a change trail.
- </div>
- </div>
- </section>
-
- <section class="card" aria-label="FAQ" style="margin-top:16px;">
- <div class="hd">
- <h2 class="cardTitle">FAQ</h2>
- <p class="muted">Short answers for purchasing and internal governance flow.</p>
- </div>
- <div class="bd">
- <details class="block">
- <summary>What is an “active entry”?</summary>
- <p class="muted">
- One tracked AI system or AI-enabled workflow with defined owners, controls, evidence hooks, and a maintained change trail.
- </p>
- </details>
-
- <details class="block">
- <summary>Card subscription vs engagement artifact: what is different?</summary>
- <p class="muted">
- Card subscription supports direct purchase via Stripe.
- Engagement intake supports engagement artifact and vendor onboarding.
- Final scope and kickoff are confirmed after governance flow.
- </p>
- </details>
-
- <details class="block">
- <summary>Is sensitive data required in public forms?</summary>
- <p class="muted">
- No. Public intake is for non-confidential details only. Secure sharing protocol is confirmed after kickoff.
- </p>
- </details>
-
- <details class="block">
- <summary>How does Trust Ledger relate to Copilot QuickScan and Trust Brief?</summary>
- <p class="muted">
- QuickScan establishes a rapid baseline for Copilot adoption exposure themes.
- Trust Brief establishes a deeper assessment baseline.
- Trust Ledger maintains posture over time with change control, exceptions, evidence discipline, and recurring exports.
- </p>
- </details>
- </div>
- </section>
- </div>
-
- <!-- RIGHT: PRICING RAIL (Stripe buttons embedded) -->
- <aside class="rail" aria-label="Plans and pricing rail">
- <section id="pricing" class="card" aria-label="Plans & pricing">
- <div class="hd">
- <h2 class="cardTitle">Plans & pricing</h2>
- <div class="pricingIntro">
- <strong>Monthly subscription</strong> via Stripe Buy Button.<br/>
- Engagement intake (Engagement artifact) is supported for internal approvals and vendor onboarding.
- </div>
- </div>
-
- <div class="bd">
- <!-- TL — Maintain -->
- <div class="plan" aria-label="TL Maintain plan">
- <div class="planTop">
+ <div class="cta-bar">
  <div>
- <div class="tag">TL — Maintain</div>
- <h3 class="planName">Maintain cadence for a small surface</h3>
+ <strong>Request Governance Brief</strong>
+ <p>Scope Trust Ledger as part of your institutional engagement</p>
  </div>
- <div class="price">1,500 CAD / mo</div>
+ <a class="btn btn-primary" href="/trust-brief/intake/?interest=trust-ledger">Request Governance Brief</a>
  </div>
-
- <p class="planSub">Up to 5 active entries • Maintain change trail • Light/standard evidence discipline.</p>
-
- <ul class="planBullets">
- <li><strong>Response target:</strong> 5 business days</li>
- <li><strong>Board export:</strong> as agreed</li>
- <li><strong>Engagement intake:</strong> engagement artifact supported</li>
- </ul>
-
- <div class="planActions">
- <div class="stripeWrap" aria-label="Stripe checkout (Maintain)">
- <div class="stripeLabel">Card subscription</div>
- <stripe-buy-button
- buy-button-id="buy_btn_1SgI5ZJ03eJkL57JEYpsEmWi"
- publishable-key="pk_live_51SfSseJ03eJkL57JNU4voCGfUjjK4WDew62tPBWesZAejr03HX8uTonznYoWDVcpXwLATZpTvWSDfSU4zJbRIB6900xlpPcGSz">
- </stripe-buy-button>
-
- <div class="fallbackRow" aria-label="Fallback links (Maintain)">
- <a class="btn secondary" href="https://buy.stripe.com/5kQdRa6v64PGg0WfPu1Nu05" target="_blank" rel="nofollow noopener">Commercial checkout (Stripe)</a>
- <a class="btn secondary" href="/gate/procurement/?focus=tl_maintain" data-rid-link>Engagement artifact</a>
- </div>
- </div>
- </div>
- </div>
-
- <!-- TL — Govern -->
- <div class="plan" aria-label="TL Govern plan">
- <div class="planTop">
- <div>
- <div class="tag">TL — Govern</div>
- <h3 class="planName">Board rhythm + due diligence support</h3>
- </div>
- <div class="price">2,750 CAD / mo</div>
- </div>
-
- <p class="planSub">Up to 10 active entries • Exceptions register + expiry • Quarterly board export.</p>
-
- <ul class="planBullets">
- <li><strong>Response target:</strong> 3 business days</li>
- <li><strong>Board export:</strong> quarterly</li>
- <li><strong>Engagement intake:</strong> engagement artifact supported</li>
- </ul>
-
- <div class="planActions">
- <div class="stripeWrap" aria-label="Stripe checkout (Govern)">
- <div class="stripeLabel">Card subscription</div>
- <stripe-buy-button
- buy-button-id="buy_btn_1SgQtSJ03eJkL57JkNN1aB58"
- publishable-key="pk_live_51SfSseJ03eJkL57JNU4voCGfUjjK4WDew62tPBWesZAejr03HX8uTonznYoWDVcpXwLATZpTvWSDfSU4zJbRIB6900xlpPcGSz">
- </stripe-buy-button>
-
- <div class="fallbackRow" aria-label="Fallback links (Govern)">
- <a class="btn secondary" href="https://buy.stripe.com/6oU4gA8De81S4ie9r61Nu06" target="_blank" rel="nofollow noopener">Commercial checkout (Stripe)</a>
- <a class="btn secondary" href="/gate/procurement/?focus=tl_govern" data-rid-link>Engagement artifact</a>
- </div>
- </div>
- </div>
- </div>
-
- <!-- TL — Assure -->
- <div class="plan" aria-label="TL Assure plan">
- <div class="planTop">
- <div>
- <div class="tag">TL — Assure</div>
- <h3 class="planName">Deep evidence discipline for broader surface</h3>
- </div>
- <div class="price">4,750 CAD / mo</div>
- </div>
-
- <p class="planSub">Up to 20 active entries • Stronger reference discipline • Monthly or quarterly board export.</p>
-
- <ul class="planBullets">
- <li><strong>Response target:</strong> 2 business days</li>
- <li><strong>Board export:</strong> monthly or quarterly</li>
- <li><strong>Engagement intake:</strong> engagement artifact supported</li>
- </ul>
-
- <div class="planActions">
- <div class="stripeWrap" aria-label="Stripe checkout (Assure)">
- <div class="stripeLabel">Card subscription</div>
- <stripe-buy-button
- buy-button-id="buy_btn_1SgQx0J03eJkL57JXZhUrhXc"
- publishable-key="pk_live_51SfSseJ03eJkL57JNU4voCGfUjjK4WDew62tPBWesZAejr03HX8uTonznYoWDVcpXwLATZpTvWSDfSU4zJbRIB6900xlpPcGSz">
- </stripe-buy-button>
-
- <div class="fallbackRow" aria-label="Fallback links (Assure)">
- <a class="btn secondary" href="https://buy.stripe.com/6oUdRa8Dedmc8yucDi1Nu07" target="_blank" rel="nofollow noopener">Commercial checkout (Stripe)</a>
- <a class="btn secondary" href="/gate/procurement/?focus=tl_assure" data-rid-link>Engagement artifact</a>
- </div>
- </div>
- </div>
- </div>
-
- <div class="fineprint" role="note">
- <strong>Notes:</strong>
- Subscription is monthly. Taxes may apply. Cancellation and start date are confirmed in the Stripe receipt / invoice.
- Public intake is non-confidential only. Secure sharing protocol is confirmed after kickoff.
- </div>
-
- <div class="actions" style="margin-top:12px;">
- <a class="btn secondary" href="/gate/sales/" data-rid-link>Open Purchase Hub</a>
- <a class="btn secondary" href="/gate/procurement/?focus=trust_ledger" data-rid-link>Engagement artifact start</a>
- </div>
- </div>
- </section>
- </aside>
- </section>
-
- <section class="stickyCta" aria-label="Sticky CTA">
- <div class="stickyInner">
- <div class="stickyText"><strong>Trust Ledger</strong> is available — subscribe by card or route engagement intake (engagement artifact).</div>
- <div class="actions" style="margin-top:0">
- <a class="btn primary" href="#pricing">View pricing</a>
- <a class="btn secondary" href="/gate/procurement/?focus=trust_ledger" data-rid-link>Engagement artifact</a>
- </div>
- </div>
- </section>
  </main>
 
  <footer id="nfFooter"></footer>
-
-<p class="nf-stripe-disclaimer" style="font-size:12px;line-height:1.6;opacity:.88;margin-top:14px;max-width:52rem;">
-  <strong>Commercial software licensing only.</strong> Stripe checkout purchases Noetfield professional services and software access.
-  No financial custody, payment routing, or money transmission is performed by Noetfield Systems Inc.
-</p>
-
 </body>
 </html>

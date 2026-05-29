@@ -56,6 +56,25 @@ def test_directory_page_exists() -> None:
     assert "nfHeader" in text
 
 
+def test_trust_ledger_has_no_public_stripe_checkout() -> None:
+    text = (ROOT / "trust-ledger" / "index.html").read_text(encoding="utf-8").lower()
+    assert "stripe-buy-button" not in text
+    assert "buy.stripe.com" not in text
+    assert "request governance brief" in text
+
+
+def test_resources_page_exists() -> None:
+    text = (ROOT / "resources" / "index.html").read_text(encoding="utf-8")
+    assert "Framework specifications" in text
+    assert "Request Governance Brief" in text
+
+
+def test_partner_hub_has_disclosure() -> None:
+    text = (ROOT / "gate" / "partners" / "index.html").read_text(encoding="utf-8")
+    assert "non-custodial" in text.lower()
+    assert "vector" in text
+
+
 def test_offerings_strip_partial_exists() -> None:
     text = (ROOT / "assets" / "partials" / "offerings-strip.html").read_text(encoding="utf-8")
     assert "Request Governance Brief" in text

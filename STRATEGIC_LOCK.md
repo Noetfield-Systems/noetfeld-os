@@ -32,6 +32,15 @@
 
 ---
 
+## Brand palettes
+
+| Mode | Use |
+|------|-----|
+| **Digital shell** | Gold + dark (`noetfield-shell.css`) — public site, simulation UI |
+| **Institutional print** | White / navy / charcoal (`noetfield-print.css`) — Trust Brief PDFs, board packs, audit exports |
+
+---
+
 ## Verification
 
 ```bash

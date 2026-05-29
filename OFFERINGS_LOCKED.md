@@ -51,10 +51,19 @@ Aligned with [PRODUCT_TRUTH.md](PRODUCT_TRUTH.md) and [STRATEGIC_LOCK.md](STRATE
 
 ---
 
+## Reference layer (not fourth products)
+
+| Surface | Public role |
+|---------|-------------|
+| **Trust Ledger** (`/trust-ledger/`) | Reference / sandbox telemetry — maps to contract tiers; **no public Stripe checkout** |
+| **Framework specifications** (`/resources/`) | Playbook modules & blueprint kits — de-emphasized; not primary nav |
+| **Partner gateway** (`/gate/partners/`) | Unified intake; legacy partner URLs redirect here |
+
 ## Explicitly does not exist
 
 - Payment products · custody · settlement orchestration  
 - Cross-border routing · PSP / MSB positioning  
+- Public retail subscription tiers for Trust Ledger  
 - Additional product tiers beyond the three above  
 
-Commercial card checkout (Stripe), where present, is **software licensing and professional services only** — not financial value movement.
+Legacy Stripe infrastructure may remain for sandbox/licensing back-office only — not marketed on the institutional site.

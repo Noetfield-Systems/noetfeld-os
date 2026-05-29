@@ -1,0 +1,38 @@
+/* Institutional print / PDF co-brand palette — boardroom & audit artefacts */
+:root {
+  --print-bg: #ffffff;
+  --print-text: #1a2332;
+  --print-muted: #4a5568;
+  --print-navy: #0f2744;
+  --print-slate: #2d3748;
+  --print-rule: #cbd5e0;
+  --print-accent: #0f2744;
+}
+
+@media print {
+  body {
+    background: var(--print-bg) !important;
+    color: var(--print-text) !important;
+  }
+  .bg, .nfOfferStrip, .feedbackTab, #nfHeader, #nfFooter { display: none !important; }
+  .wrap, .nf-print-doc { max-width: 100% !important; padding: 0 !important; }
+}
+
+.nf-print-doc {
+  background: var(--print-bg);
+  color: var(--print-text);
+  padding: 48px;
+  max-width: 800px;
+  margin: 0 auto;
+  font-family: "Inter", Georgia, serif;
+  line-height: 1.55;
+}
+.nf-print-doc h1 {
+  color: var(--print-navy);
+  font-size: 1.75rem;
+  border-bottom: 2px solid var(--print-navy);
+  padding-bottom: 12px;
+}
+.nf-print-doc h2 { color: var(--print-slate); font-size: 1.1rem; margin-top: 28px; }
+.nf-print-doc p, .nf-print-doc li { color: var(--print-text); }
+.nf-print-doc .muted { color: var(--print-muted); font-size: 0.9rem; }
