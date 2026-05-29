@@ -3,6 +3,7 @@
 import asyncio
 import logging
 from pathlib import Path
+from typing import Literal
 from uuid import UUID
 
 from noetfield_config import CANONICAL_INTAKE_EMAIL, COMPLIANCE_REMEDIATION_TIP
@@ -14,6 +15,7 @@ from pydantic import BaseModel, ConfigDict, Field, SecretStr
 
 from noetfield_governance.chat_errors import ChatAPIError, ChatConfigurationError
 from noetfield_governance.public_chat import answer_public_question, resolve_chat_provider
+from noetfield_governance.public_intake import submit_intake
 from noetfield_governance.telegram_client import (
     TelegramAPIError,
     TelegramConfigurationError,
@@ -457,6 +459,30 @@ class PublicChatResponse(BaseModel):
     intake_email: str = CANONICAL_INTAKE_EMAIL
 
 
+class PublicIntakeRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    organization: str = Field(..., min_length=1, max_length=200)
+    contact_email: str = Field(..., min_length=3, max_length=254)
+    message: str = Field(..., min_length=1, max_length=8000)
+    contact_name: str | None = Field(default=None, max_length=120)
+    request_id: str | None = Field(default=None, max_length=64)
+    sku: Literal["trust_brief", "copilot", "bank_pilot", "general"] = "trust_brief"
+    vector: str = Field(default="web-intake", max_length=120)
+    source: Literal["web", "telegram", "api"] = "web"
+    metadata: dict[str, object] = Field(default_factory=dict)
+
+
+class PublicIntakeResponse(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    ok: bool = True
+    intake_id: str
+    request_id: str | None
+    intake_email: str = CANONICAL_INTAKE_EMAIL
+    message: str = "Intake recorded. Operations will follow up via email."
+
+
 def _secret(value: SecretStr | None) -> str:
     return value.get_secret_value().strip() if value else ""
 
@@ -511,6 +537,68 @@ async def public_chat(body: PublicChatRequest, request: Request) -> PublicChatRe
         logger.warning("public_chat_llm_error %s", exc)
         raise HTTPException(status_code=502, detail="Assistant temporarily unavailable") from exc
     return PublicChatResponse(reply=reply, provider=provider)
+
+
+@app.get("/api/intake/health", tags=["intake"])
+async def intake_health() -> dict[str, object]:
+    return {
+        "enabled": settings.public_intake_enabled,
+        "intake_email": CANONICAL_INTAKE_EMAIL,
+        "storage": "in-memory-recent-500",
+    }
+
+
+@app.post("/api/intake", tags=["intake"], response_model=PublicIntakeResponse)
+async def public_intake(body: PublicIntakeRequest, request: Request) -> PublicIntakeResponse:
+    if not settings.public_intake_enabled:
+        raise HTTPException(status_code=503, detail="Public intake API is disabled")
+    client_host = request.client.host if request.client else "unknown"
+    client_key = f"{client_host}:{body.contact_email}"
+    try:
+        rec = submit_intake(
+            organization=body.organization,
+            contact_email=body.contact_email,
+            message=body.message,
+            request_id=body.request_id,
+            contact_name=body.contact_name,
+            sku=body.sku,
+            vector=body.vector,
+            source=body.source,
+            client_key=client_key,
+            metadata=body.metadata,
+        )
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+    except PermissionError as exc:
+        raise HTTPException(status_code=429, detail=str(exc)) from exc
+    logger.info(
+        "public_intake_recorded intake_id=%s rid=%s org=%s",
+        rec.intake_id,
+        rec.request_id or "",
+        rec.organization[:80],
+    )
+    return PublicIntakeResponse(
+        intake_id=rec.intake_id,
+        request_id=rec.request_id,
+    )
+
+
+@app.get("/api/intake/recent", tags=["intake"])
+async def intake_recent(request: Request, limit: int = 20) -> dict[str, object]:
+    """Operations view — requires TELEGRAM_WEBHOOK_SECRET as X-Admin-Secret when configured."""
+    admin_secret = _secret(settings.telegram_webhook_secret)
+    if admin_secret:
+        auth = request.headers.get("X-Admin-Secret", "")
+        if auth != admin_secret:
+            raise HTTPException(status_code=403, detail="Invalid admin secret")
+    if not settings.public_intake_enabled:
+        raise HTTPException(status_code=503, detail="Public intake API is disabled")
+    from noetfield_governance.intake_store import list_recent
+
+    return {
+        "intake_email": CANONICAL_INTAKE_EMAIL,
+        "records": list_recent(limit=limit),
+    }
 
 
 class TelegramWebhookBody(BaseModel):
@@ -591,7 +679,9 @@ async def ecosystem_health() -> dict[str, object]:
     """Combined status for website chat + Telegram + LLM providers."""
     chat = await public_chat_health()
     telegram = await telegram_health()
+    intake = await intake_health()
     chat_ok = bool(chat.get("configured")) and settings.public_chat_enabled
+    intake_ok = bool(intake.get("enabled"))
     telegram_ready = telegram.get("ready")
     if telegram_ready is not None:
         telegram_ok = bool(telegram_ready)
@@ -601,7 +691,8 @@ async def ecosystem_health() -> dict[str, object]:
         "intake_email": CANONICAL_INTAKE_EMAIL,
         "website_chat": chat,
         "telegram": telegram,
-        "ok": chat_ok or telegram_ok,
+        "intake_api": intake,
+        "ok": chat_ok or telegram_ok or intake_ok,
     }
 
 

@@ -70,6 +70,17 @@ def test_public_chat_returns_reply_when_configured() -> None:
     asyncio.run(run())
 
 
+def test_ecosystem_health_includes_intake() -> None:
+    async def run() -> None:
+        transport = ASGITransport(app=app)
+        async with AsyncClient(transport=transport, base_url="http://test") as client:
+            response = await client.get("/api/ecosystem/health")
+        assert response.status_code == 200
+        assert "intake_api" in response.json()
+
+    asyncio.run(run())
+
+
 def test_public_chat_rejects_empty_message() -> None:
     async def run() -> None:
         transport = ASGITransport(app=app)

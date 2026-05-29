@@ -132,13 +132,54 @@ async def answer_public_question(
         openrouter_api_key=openrouter_api_key,
     )
 
-    reply = await asyncio.to_thread(
-        _generate_sync,
-        provider=resolved,
-        api_key=api_key,
-        gemini_model=gemini_model,
-        openrouter_model=openrouter_model,
-        system_instruction=system,
-        user_message=text,
-    )
-    return reply, resolved
+    try:
+        reply = await asyncio.to_thread(
+            _generate_sync,
+            provider=resolved,
+            api_key=api_key,
+            gemini_model=gemini_model,
+            openrouter_model=openrouter_model,
+            system_instruction=system,
+            user_message=text,
+        )
+        return reply, resolved
+    except ChatAPIError as primary_exc:
+        fallback = _fallback_provider(
+            resolved,
+            gemini_api_key=gemini_api_key,
+            openrouter_api_key=openrouter_api_key,
+        )
+        if fallback is None:
+            raise primary_exc
+        fb_provider, fb_key = fallback
+        try:
+            reply = await asyncio.to_thread(
+                _generate_sync,
+                provider=fb_provider,
+                api_key=fb_key,
+                gemini_model=gemini_model,
+                openrouter_model=openrouter_model,
+                system_instruction=system,
+                user_message=text,
+            )
+            return reply, fb_provider
+        except ChatAPIError:
+            raise primary_exc from None
+
+
+def _fallback_provider(
+    current: ChatProvider,
+    *,
+    gemini_api_key: str | None,
+    openrouter_api_key: str | None,
+) -> tuple[ChatProvider, str] | None:
+    """If primary LLM fails, try the other configured provider."""
+    g = (gemini_api_key or "").strip()
+    o = (openrouter_api_key or "").strip()
+    if current == "openrouter" and g:
+        return "gemini", g
+    if current == "gemini" and o:
+        return "openrouter", o
+    if current == "auto":
+        return None
+    return None

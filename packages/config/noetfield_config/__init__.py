@@ -56,6 +56,8 @@ class Settings(BaseSettings):
         "https://www.noetfield.com,https://noetfield.com,http://localhost:8080,http://127.0.0.1:8080"
     )
 
+    public_intake_enabled: bool = True
+
     telegram_bot_enabled: bool = True
     telegram_bot_token: SecretStr | None = Field(
         default=None,

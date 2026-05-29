@@ -34,7 +34,8 @@ Setup: [TELEGRAM_BOT_SETUP.md](./TELEGRAM_BOT_SETUP.md)
 
 | Source | What you receive |
 |--------|------------------|
-| Web intake | Formspree + `mailto:` fallback with `[vector:…]` and `RID-…` |
+| Web intake | Formspree + `POST /api/intake` mirror (in-memory queue) + `mailto:` with `[vector:…]` and `RID-…` |
+| Ops API view | `GET /api/intake/recent` with `X-Admin-Secret` (same as Telegram admin secret when set) |
 | Email | `operations@noetfield.com` — subject should include vector + RID |
 | Chat / Telegram | Users directed to intake or email; no auto-ticket yet |
 
@@ -71,8 +72,10 @@ TELEGRAM_BOT_USERNAME=YourBotName PUBLIC_CHAT_API_BASE=https://platform.noetfiel
 | Check | Endpoint |
 |-------|----------|
 | Chat + LLM | `GET /api/public/chat/health` |
+| Intake API | `GET /api/intake/health` · `POST /api/intake` |
 | Telegram | `GET /api/telegram/health` → `ready: true` |
 | Combined | `GET /api/ecosystem/health` |
+| Verify all | `make verify-platform-health` or `PLATFORM_HEALTH_BASE=https://platform.noetfield.com python3 scripts/verify_platform_health.py` |
 
 Chat widget reads `assets/noetfield-ecosystem.json` → `chat_api_base` (override via `PUBLIC_CHAT_API_BASE` at publish time).
 

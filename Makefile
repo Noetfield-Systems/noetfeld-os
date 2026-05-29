@@ -63,7 +63,10 @@ site-health:
 
 ecosystem-health:
 	python3 scripts/audit_no_secrets_in_repo.py
-	PYTHONPATH=$(PYTHONPATH_VALUE) RUNTIME_EVENT_STORE=memory python3 -m pytest tests/unit/test_public_chat.py tests/unit/test_openrouter_client.py tests/unit/test_telegram_webhook.py -q
+	PYTHONPATH=$(PYTHONPATH_VALUE) RUNTIME_EVENT_STORE=memory python3 -m pytest tests/unit/test_public_chat.py tests/unit/test_openrouter_client.py tests/unit/test_telegram_webhook.py tests/unit/test_public_intake.py tests/unit/test_practical_ecosystem.py -q
+
+verify-platform-health:
+	PYTHONPATH=$(PYTHONPATH_VALUE) python3 scripts/verify_platform_health.py
 
 collapse-public:
 	python3 scripts/collapse_public_routes.py
