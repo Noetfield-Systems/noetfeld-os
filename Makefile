@@ -54,3 +54,7 @@ verify-final-lock: final-lock-audit
 
 console-smoke:
 	PYTHONPATH=$(PYTHONPATH_VALUE) RUNTIME_EVENT_STORE=memory python3 -m pytest tests/unit/test_governance_console_v3.py -q
+
+site-health:
+	python3 scripts/audit_public_site_health.py
+	python3 -m pytest tests/unit/test_public_gtm_alignment.py -q

@@ -1,26 +1,110 @@
-/* Shared sales-page layout (institutional site only) */
-.nf-sales { max-width: 1080px; margin: 0 auto; padding: 40px 24px 88px; }
-.nf-sales .eyebrow { font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted, #8b949e); margin-bottom: 10px; }
-.nf-sales h1 { font-size: clamp(1.85rem, 4vw, 2.75rem); font-weight: 800; line-height: 1.12; margin: 0 0 14px; letter-spacing: -0.02em; }
-.nf-sales .lead { font-size: 1.05rem; line-height: 1.7; color: var(--muted, #8b949e); max-width: 720px; margin-bottom: 28px; }
-.nf-sales .block { margin: 36px 0; padding: 22px 0; border-top: 1px solid rgba(255,255,255,0.08); }
-.nf-sales .block h2 { font-size: 1.15rem; margin: 0 0 10px; }
-.nf-sales .block p { color: var(--muted, #8b949e); line-height: 1.65; margin: 0 0 12px; max-width: 680px; }
-.nf-sales ul { color: var(--muted, #8b949e); line-height: 1.65; padding-left: 1.2rem; max-width: 640px; }
-.nf-sales .tier { border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 18px; margin: 12px 0; background: rgba(255,255,255,0.02); }
-.nf-sales .tier strong { color: inherit; }
-.nf-sales .price { font-size: 1.35rem; font-weight: 700; color: #00d084; margin: 8px 0; }
+/* Sales pages — GTM lock layout (works inside .wrap + shell) */
+.nf-sales {
+  max-width: 100%;
+  padding: 8px 0 96px;
+}
+.nf-sales .eyebrow {
+  font-size: clamp(11px, 2.5vw, 12px);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+.nf-sales h1 {
+  font-size: clamp(1.65rem, 5vw, 2.75rem);
+  font-weight: 800;
+  line-height: 1.12;
+  margin: 0 0 14px;
+  letter-spacing: -0.02em;
+}
+.nf-sales .lead {
+  font-size: clamp(0.95rem, 2.8vw, 1.05rem);
+  line-height: 1.7;
+  color: var(--muted);
+  max-width: 720px;
+  margin-bottom: 28px;
+}
+.nf-sales .block {
+  margin: 32px 0;
+  padding: 20px 0;
+  border-top: 1px solid var(--line);
+}
+.nf-sales .block h2 {
+  font-size: clamp(1rem, 3vw, 1.15rem);
+  margin: 0 0 10px;
+}
+.nf-sales .block p,
+.nf-sales .block li {
+  color: var(--muted);
+  line-height: 1.65;
+  margin: 0 0 12px;
+  max-width: 680px;
+}
+.nf-sales ul {
+  padding-left: 1.2rem;
+}
+.nf-sales .tier {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: clamp(14px, 3vw, 18px);
+  margin: 12px 0;
+  background: var(--panel2);
+}
+.nf-sales .tier strong { color: var(--text); }
+.nf-sales .price {
+  font-size: clamp(1.15rem, 4vw, 1.35rem);
+  font-weight: 700;
+  color: var(--ok);
+  margin: 8px 0;
+}
 .nf-sales .cta-bar {
-  margin-top: 48px; padding: 24px; border-radius: 12px;
-  border: 1px solid rgba(0,208,132,0.35);
-  background: rgba(0,208,132,0.06);
-  display: flex; flex-wrap: wrap; gap: 14px; align-items: center; justify-content: space-between;
+  margin-top: 40px;
+  padding: clamp(16px, 4vw, 24px);
+  border-radius: var(--radius);
+  border: 1px solid rgba(45, 227, 138, 0.35);
+  background: var(--okGlow);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  align-items: center;
+  justify-content: space-between;
 }
+.nf-sales .cta-bar p { margin: 6px 0 0; font-size: 0.9rem; color: var(--muted); max-width: none; }
 .nf-sales .btn {
-  display: inline-block; padding: 12px 20px; border-radius: 8px; font-weight: 600;
-  font-size: 0.9rem; text-decoration: none;
+  display: inline-block;
+  padding: 12px 20px;
+  border-radius: 10px;
+  font-weight: 650;
+  font-size: 0.9rem;
+  text-decoration: none;
+  white-space: nowrap;
 }
-.nf-sales .btn-primary { background: #00d084; color: #0a0c0f; }
-.nf-sales .btn-secondary { border: 1px solid rgba(255,255,255,0.2); color: inherit; }
-.nf-sales .nav-links { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 24px; font-size: 0.85rem; }
-.nf-sales .nav-links a { color: var(--muted, #8b949e); }
+.nf-sales .btn-primary {
+  background: linear-gradient(180deg, rgba(45,227,138,1), rgba(45,227,138,.86));
+  color: #06110c;
+  border: 1px solid rgba(45,227,138,.55);
+}
+.nf-sales .btn-secondary {
+  border: 1px solid var(--line);
+  color: var(--text);
+  background: rgba(255,255,255,.03);
+}
+.nf-sales .nav-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 16px;
+  margin-bottom: 20px;
+  font-size: 0.85rem;
+}
+.nf-sales .nav-links a {
+  color: var(--muted);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.nf-sales .nav-links a:hover { color: var(--text); }
+
+@media (max-width: 640px) {
+  .nf-sales .cta-bar { flex-direction: column; align-items: stretch; }
+  .nf-sales .cta-bar .btn { text-align: center; width: 100%; }
+  .nf-sales .btn-secondary { margin-left: 0 !important; margin-top: 8px; }
+}

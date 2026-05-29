@@ -1,71 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
- <meta charset="UTF-8">
- <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <meta charset="UTF-8" />
+ <meta name="viewport" content="width=device-width, initial-scale=1.0" />
  <title>Noetfield — Governance Platform Hub</title>
- <meta name="description" content="Internal and pilot-facing hub for Noetfield pre-execution governance infrastructure. Policy validation, audit lineage, and workflow signals—not financial execution." />
+ <meta name="description" content="Pilot hub for governance simulation and institutional offerings. Pre-execution policy validation — not financial execution." />
  <link rel="canonical" href="https://www.noetfield.com/platform/" />
- <style>
- @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap');
- * { margin: 0; padding: 0; box-sizing: border-box; }
- :root {
- --bg: #06080a;
- --surface: #0d1117;
- --text: #e8eaed;
- --muted: #8b949e;
- --accent: #00d084;
- --border: rgba(255,255,255,0.08);
- }
- body { background: var(--bg); color: var(--text); font-family: 'IBM Plex Mono', monospace; min-height: 100vh; }
- .wrap { max-width: 900px; margin: 0 auto; padding: 48px 24px; }
- h1 { font-family: Syne, sans-serif; font-size: 2rem; margin-bottom: 12px; }
- p { color: var(--muted); line-height: 1.7; margin-bottom: 24px; }
- .grid { display: grid; gap: 12px; }
- a.card {
- display: block;
- padding: 18px;
- border: 1px solid var(--border);
- border-radius: 10px;
- background: var(--surface);
- color: var(--text);
- text-decoration: none;
- }
- a.card:hover { border-color: var(--accent); }
- a.card strong { display: block; margin-bottom: 6px; font-family: Syne, sans-serif; }
- .note { font-size: 0.85rem; margin-top: 32px; padding: 16px; border-left: 3px solid var(--accent); background: rgba(0,208,132,0.06); }
- </style>
+ <link rel="icon" href="/noetfield-favicon-512.png" type="image/png" />
+ <link rel="stylesheet" href="/assets/noetfield-shell.css" />
+ <link rel="stylesheet" href="/assets/noetfield-sales.css" />
+ <script src="/assets/noetfield-shell.js" defer></script>
 </head>
 <body>
- <div class="wrap">
- <h1>Governance platform hub</h1>
- <p>
- Pre-execution policy validation, compliance signals, and audit-ready decision traces.
- This hub does not initiate payments, settlement, or financial governance flow.
- </p>
- <div class="grid">
- <a class="card" href="/platform/dashboard/">
- <strong>Governance console (pilot)</strong>
- Workflow status, policy events, and audit lineage views for institutional pilots.
- </a>
- <a class="card" href="/trust-ledger/">
+ <div class="bg" aria-hidden="true"></div>
+ <a class="skip" href="#main">Skip to content</a>
+ <header id="nfHeader"></header>
+
+ <main id="main" class="wrap nf-sales">
+ <p class="eyebrow">Platform hub · pilots &amp; simulation</p>
+ <h1>Governance platform connections</h1>
+ <p class="lead">Pre-execution policy validation and immutable audit traces. This hub does not execute payments, custody, or financial value movement.</p>
+
+ <div class="tier">
+ <strong>Governance Simulation Interface</strong>
+ <p>Product demonstration: submit intent, view policy decision, inspect audit trail (hosted on runtime API in pilot environments).</p>
+ <a class="btn btn-secondary" href="/platform/dashboard/">Simulation access notes</a>
+ </div>
+ <div class="tier">
+ <strong>Institutional offerings</strong>
+ <p>Trust Brief · Copilot Governance Pack · Bank Pilot v6.1</p>
+ <a class="btn btn-secondary" href="/">View offerings</a>
+ </div>
+ <div class="tier">
  <strong>Trust Ledger samples</strong>
- Board-ready reporting examples and intake paths.
- </a>
- <a class="card" href="/gate/">
- <strong>Gate intake</strong>
- Institution-safe engagement governance flow with Request ID continuity.
- </a>
- <a class="card" href="/">
- <strong>Public site</strong>
- Institutional narrative and contractable offerings.
- </a>
+ <p>Board-ready reporting examples (reference artefacts).</p>
+ <a class="btn btn-secondary" href="/trust-ledger/">Trust Ledger</a>
  </div>
- <p class="note">
-            <strong>Deploy target:</strong> <code>platform.noetfield.com</code> (or <code>console.noetfield.com</code>) —
-            not the institutional homepage at <code>noetfield.com</code>.
-            Runtime API: Golden Edge v3 on port 8001 (<code>make api-v3</code>).
- </p>
+
+ <div class="cta-bar">
+ <div><strong>Request Governance Brief</strong><p>For production engagements and assessments</p></div>
+ <a class="btn btn-primary" href="/trust-brief/intake/">Request Governance Brief</a>
  </div>
+ </main>
+
+ <footer id="nfFooter"></footer>
 </body>
 </html>

@@ -50,6 +50,33 @@ def test_enterprise_page_exists() -> None:
     assert "10,000" in text
 
 
+def test_tier_pages_have_shell_and_cta() -> None:
+    for rel in (
+        "index.html",
+        "enterprise/index.html",
+        "trust-brief/index.html",
+        "copilot/index.html",
+        "gate/index.html",
+    ):
+        text = (ROOT / rel).read_text(encoding="utf-8")
+        assert "nfHeader" in text, rel
+        assert "Request Governance Brief" in text, rel
+        assert 'name="viewport"' in text, rel
+
+
+def test_public_site_health_script() -> None:
+    import subprocess
+    import sys
+
+    result = subprocess.run(
+        [sys.executable, str(ROOT / "scripts" / "audit_public_site_health.py")],
+        cwd=ROOT,
+        capture_output=True,
+        text=True,
+    )
+    assert result.returncode == 0, result.stdout + result.stderr
+
+
 def test_platform_dashboard_has_no_treasury_corridor_ui() -> None:
     text = (ROOT / "platform" / "dashboard" / "index.html").read_text(encoding="utf-8")
     assert "Treasury Routing" not in text

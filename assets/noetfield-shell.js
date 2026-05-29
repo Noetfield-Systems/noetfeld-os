@@ -308,7 +308,12 @@
     var cta = document.querySelector("#nfFooter .ctaRow");
     if (!cta) return;
 
-    var keepPaths = { "/gate/sales": true, "/gate": true, "/portal": true };
+    var keepPaths = {
+      "/trust-brief/intake": true,
+      "/enterprise": true,
+      "/gate/procurement": true,
+      "/gate": true
+    };
 
     Array.prototype.slice.call(cta.querySelectorAll("a")).forEach(function (a) {
       var hrefRaw = (a.getAttribute("href") || "").trim();
