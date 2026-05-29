@@ -94,3 +94,8 @@ PYTHONPATH=packages/types:packages/config:services/events:services/ledger:servic
   python3 scripts/ingest_source_inventory.py
 ```
 
+
+
+## Batch 010 (2026-05-29)
+
+Documentation standard, RFC governance, LangGraph integration, Postgres-first stack blueprint, 5-year roadmap.

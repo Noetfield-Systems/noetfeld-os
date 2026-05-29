@@ -1245,6 +1245,165 @@
       "supersedes": [],
       "superseded_by": "master-strategic-context-engine-v37-efficient",
       "upload_batch": "2026-05-009"
+    },
+    {
+      "document_key": "noetfield-dual-layer-documentation-standard-v1",
+      "title": "Noetfield Dual-Layer Documentation Standard v1.0",
+      "domain": "noetfield_documentation_standard",
+      "work_package": null,
+      "version_label": "dual-layer-v1.0",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-010/noetfield-dual-layer-documentation-standard-v1.md",
+      "classification": "active_source_of_truth",
+      "status": "reference",
+      "supersedes": [],
+      "superseded_by": null,
+      "upload_batch": "2026-05-010"
+    },
+    {
+      "document_key": "noetfield-rfc-standard-v1-github-ci",
+      "title": "Noetfield RFC Standard v1.0 (GitHub-Ready + CI-Enforced)",
+      "domain": "noetfield_rfc_governance",
+      "work_package": null,
+      "version_label": "rfc-standard-v1.0",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-010/noetfield-rfc-standard-v1-github-ci.md",
+      "classification": "active_source_of_truth",
+      "status": "reference",
+      "supersedes": [],
+      "superseded_by": null,
+      "upload_batch": "2026-05-010"
+    },
+    {
+      "document_key": "noetfield-langgraph-rfc-execution-integration-v1",
+      "title": "Noetfield LangGraph Execution Kernel Integration v1.0",
+      "domain": "noetfield_langgraph_integration",
+      "work_package": null,
+      "version_label": "langgraph-integration-v1.0",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-010/noetfield-langgraph-rfc-execution-integration-v1.md",
+      "classification": "active_source_of_truth",
+      "status": "reference",
+      "supersedes": [],
+      "superseded_by": null,
+      "upload_batch": "2026-05-010"
+    },
+    {
+      "document_key": "noetfield-execution-kernel-full-stack-blueprint-v1",
+      "title": "Noetfield Execution Kernel \u2014 Full Stack Blueprint v1.0",
+      "domain": "noetfield_execution_kernel_architecture",
+      "work_package": null,
+      "version_label": "kernel-blueprint-v1.0",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-010/noetfield-execution-kernel-full-stack-blueprint-v1.md",
+      "classification": "superseded_implementation_reference",
+      "status": "superseded",
+      "supersedes": [],
+      "superseded_by": "noetfield-stack-blueprint-v1-refined-final",
+      "upload_batch": "2026-05-010"
+    },
+    {
+      "document_key": "noetfield-stack-blueprint-v1-refined-final",
+      "title": "Noetfield Stack Blueprint v1 \u2014 Refined Final Architecture",
+      "domain": "noetfield_execution_kernel_architecture",
+      "work_package": null,
+      "version_label": "stack-refined-v1",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-010/noetfield-stack-blueprint-v1-refined-final.md",
+      "classification": "active_source_of_truth",
+      "status": "reference",
+      "supersedes": [
+        "noetfield-data-stack-kafka-qdrant-alternative",
+        "noetfield-execution-kernel-full-stack-blueprint-v1"
+      ],
+      "superseded_by": null,
+      "upload_batch": "2026-05-010"
+    },
+    {
+      "document_key": "noetfield-data-stack-kafka-qdrant-alternative",
+      "title": "Noetfield Data Stack \u2014 Kafka/Qdrant Multi-DB Alternative",
+      "domain": "noetfield_execution_kernel_architecture",
+      "work_package": null,
+      "version_label": "multi-db-stack-draft",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-010/noetfield-data-stack-kafka-qdrant-alternative.md",
+      "classification": "superseded_architecture_draft",
+      "status": "superseded",
+      "supersedes": [],
+      "superseded_by": "noetfield-stack-blueprint-v1-refined-final",
+      "upload_batch": "2026-05-010"
+    },
+    {
+      "document_key": "noetfield-architecture-verdict-postgres-first-fa",
+      "title": "Architecture Verdict \u2014 Postgres-First Stack (Persian)",
+      "domain": "noetfield_execution_kernel_architecture",
+      "work_package": null,
+      "version_label": "verdict-fa-v1",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-010/noetfield-architecture-verdict-postgres-first-fa.md",
+      "classification": "reference_methodology",
+      "status": "reference",
+      "supersedes": [],
+      "superseded_by": null,
+      "upload_batch": "2026-05-010"
+    },
+    {
+      "document_key": "noetfield-enterprise-framing-sor-vs-computation-fa",
+      "title": "Enterprise Framing \u2014 SoR vs System of Computation (Persian)",
+      "domain": "noetfield_execution_kernel_architecture",
+      "work_package": null,
+      "version_label": "sor-framing-fa-v1",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-010/noetfield-enterprise-framing-sor-vs-computation-fa.md",
+      "classification": "reference_methodology",
+      "status": "reference",
+      "supersedes": [],
+      "superseded_by": null,
+      "upload_batch": "2026-05-010"
+    },
+    {
+      "document_key": "noetfield-5-year-vision-enterprise-ai-os",
+      "title": "5-Year Vision \u2014 Noetfield as Enterprise AI Operating System",
+      "domain": "noetfield_execution_roadmap",
+      "work_package": null,
+      "version_label": "5yr-vision-narrative-v1",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-010/noetfield-5-year-vision-enterprise-ai-os.md",
+      "classification": "active_source_of_truth",
+      "status": "reference",
+      "supersedes": [],
+      "superseded_by": null,
+      "upload_batch": "2026-05-010"
+    },
+    {
+      "document_key": "noetfield-5-year-vision-roadmap-table",
+      "title": "5-Year Vision \u2014 Full Stack Roadmap Table",
+      "domain": "noetfield_execution_roadmap",
+      "work_package": null,
+      "version_label": "5yr-vision-table-v1",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-010/noetfield-5-year-vision-roadmap-table.md",
+      "classification": "active_operational_reference",
+      "status": "reference",
+      "supersedes": [],
+      "superseded_by": null,
+      "upload_batch": "2026-05-010"
+    },
+    {
+      "document_key": "noetfield-5-year-master-plan-compressed",
+      "title": "5-Year Master Plan \u2014 Ultra-Compressed",
+      "domain": "noetfield_execution_roadmap",
+      "work_package": null,
+      "version_label": "5yr-master-plan-v1",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-010/noetfield-5-year-master-plan-compressed.md",
+      "classification": "active_executive_reference",
+      "status": "reference",
+      "supersedes": [],
+      "superseded_by": null,
+      "upload_batch": "2026-05-010"
+    },
+    {
+      "document_key": "noetfield-conversation-kernel-maturity-report",
+      "title": "Conversation Performance Report \u2014 Kernel Maturity Assessment",
+      "domain": "noetfield_execution_kernel_architecture",
+      "work_package": null,
+      "version_label": "maturity-report-v1",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-010/noetfield-conversation-kernel-maturity-report.md",
+      "classification": "reference_only",
+      "status": "reference",
+      "supersedes": [],
+      "superseded_by": null,
+      "upload_batch": "2026-05-010"
     }
   ],
   "batches": [
@@ -1283,6 +1442,10 @@
     {
       "batch_id": "2026-05-009",
       "source_folder": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-009"
+    },
+    {
+      "batch_id": "2026-05-010",
+      "source_folder": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-010"
     }
   ]
 }

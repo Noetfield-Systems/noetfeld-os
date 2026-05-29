@@ -1,5 +1,5 @@
 {
-  "registry_version": "2026-05-29-sot-6",
+  "registry_version": "2026-05-29-sot-7",
   "decisions": [
     {
       "domain": "context_graph",
@@ -368,6 +368,46 @@
       "decision": "active_source_of_truth",
       "rationale": "Locked strategic architecture defines Governance Latency thesis, Audit Evidence Layer wedge, and 14-day execution plan.",
       "confidence": 0.89
+    },
+    {
+      "domain": "noetfield_documentation_standard",
+      "active_document_key": "noetfield-dual-layer-documentation-standard-v1",
+      "active_version": "dual-layer-v1.0",
+      "decision": "active_source_of_truth",
+      "rationale": "Canonical A/B/C/D document contract for all Noetfield specs; engineering layer authoritative at runtime.",
+      "confidence": 0.93
+    },
+    {
+      "domain": "noetfield_rfc_governance",
+      "active_document_key": "noetfield-rfc-standard-v1-github-ci",
+      "active_version": "rfc-standard-v1.0",
+      "decision": "active_source_of_truth",
+      "rationale": "4-file RFC units with CI validation, traceability, and replay-safety gates before merge.",
+      "confidence": 0.92
+    },
+    {
+      "domain": "noetfield_langgraph_integration",
+      "active_document_key": "noetfield-langgraph-rfc-execution-integration-v1",
+      "active_version": "langgraph-integration-v1.0",
+      "decision": "active_source_of_truth",
+      "rationale": "Defines RFC\u2192compiler\u2192LangGraph\u2192ledger pipeline and runtime binding invariants.",
+      "confidence": 0.9
+    },
+    {
+      "domain": "noetfield_execution_kernel_architecture",
+      "active_document_key": "noetfield-stack-blueprint-v1-refined-final",
+      "active_version": "stack-refined-v1",
+      "decision": "active_source_of_truth",
+      "rationale": "Postgres-only truth with pgvector/Redis/S3 as projections; supersedes Kafka/Qdrant multi-DB draft.",
+      "confidence": 0.94
+    },
+    {
+      "domain": "noetfield_execution_roadmap",
+      "active_document_key": "noetfield-5-year-vision-enterprise-ai-os",
+      "active_version": "5yr-vision-narrative-v1",
+      "decision": "active_source_of_truth",
+      "rationale": "Five-phase enterprise AI OS roadmap from kernel to protocol layer.",
+      "confidence": 0.88
     }
   ]
 }

@@ -1,5 +1,5 @@
 {
-  "registry_version": "2026-05-29-rules-6",
+  "registry_version": "2026-05-29-rules-7",
   "active_rule_candidates": [
     {
       "rule_key": "npl-no-side-effects",
@@ -549,6 +549,96 @@
       "rule_type": "gtm",
       "summary": "First sellable unit is Continuous Audit Evidence API / Evidence Pack in one real cycle.",
       "implementation_target": null
+    },
+    {
+      "rule_key": "engineering-layer-overrides-vision",
+      "domain": "noetfield_documentation_standard",
+      "source_document_key": "noetfield-dual-layer-documentation-standard-v1",
+      "activation_status": "active_design_rule",
+      "rule_type": "documentation_governance",
+      "summary": "On execution conflicts, Engineering Layer overrides Vision Layer.",
+      "implementation_target": "source_of_truth_registry"
+    },
+    {
+      "rule_key": "vision-engineering-traceability-required",
+      "domain": "noetfield_documentation_standard",
+      "source_document_key": "noetfield-dual-layer-documentation-standard-v1",
+      "activation_status": "active_design_rule",
+      "rule_type": "documentation_governance",
+      "summary": "Every vision element must map to engineering; unmapped claims invalidate the document.",
+      "implementation_target": "rfc_validator"
+    },
+    {
+      "rule_key": "rfc-ci-validation-before-merge",
+      "domain": "noetfield_rfc_governance",
+      "source_document_key": "noetfield-rfc-standard-v1-github-ci",
+      "activation_status": "active_design_rule",
+      "rule_type": "rfc_governance",
+      "summary": "RFC changes under rfc/ must pass schema, traceability, and replay-safety CI gates.",
+      "implementation_target": "github_workflows"
+    },
+    {
+      "rule_key": "rfc-four-file-contract-unit",
+      "domain": "noetfield_rfc_governance",
+      "source_document_key": "noetfield-rfc-standard-v1-github-ci",
+      "activation_status": "active_design_rule",
+      "rule_type": "rfc_governance",
+      "summary": "Each RFC requires vision.md, engineering.md, traceability.json, metadata.yaml.",
+      "implementation_target": "rfc_validator"
+    },
+    {
+      "rule_key": "langgraph-cannot-bypass-event-ledger",
+      "domain": "noetfield_langgraph_integration",
+      "source_document_key": "noetfield-langgraph-rfc-execution-integration-v1",
+      "activation_status": "active_design_rule",
+      "rule_type": "runtime_governance",
+      "summary": "All graph node outputs must commit through the event ledger; no implicit paths.",
+      "implementation_target": "workflow_runtime"
+    },
+    {
+      "rule_key": "llm-sandboxed-proposal-only",
+      "domain": "noetfield_langgraph_integration",
+      "source_document_key": "noetfield-langgraph-rfc-execution-integration-v1",
+      "activation_status": "active_design_rule",
+      "rule_type": "runtime_governance",
+      "summary": "LLM nodes generate proposals only; they cannot mutate authoritative state directly.",
+      "implementation_target": "workflow_runtime"
+    },
+    {
+      "rule_key": "postgres-single-source-of-truth",
+      "domain": "noetfield_execution_kernel_architecture",
+      "source_document_key": "noetfield-stack-blueprint-v1-refined-final",
+      "activation_status": "active_design_rule",
+      "rule_type": "data_architecture",
+      "summary": "PostgreSQL is the only system of record; secondary DBs cannot hold canonical truth.",
+      "implementation_target": "postgres_runtime"
+    },
+    {
+      "rule_key": "semantic-layer-advisory-only",
+      "domain": "noetfield_execution_kernel_architecture",
+      "source_document_key": "noetfield-stack-blueprint-v1-refined-final",
+      "activation_status": "active_design_rule",
+      "rule_type": "data_architecture",
+      "summary": "pgvector and risk scoring inform decisions but never define or mutate truth.",
+      "implementation_target": "policy_runtime"
+    },
+    {
+      "rule_key": "timescale-extension-not-separate-truth",
+      "domain": "noetfield_execution_kernel_architecture",
+      "source_document_key": "noetfield-stack-blueprint-v1-refined-final",
+      "activation_status": "active_design_rule",
+      "rule_type": "data_architecture",
+      "summary": "TimescaleDB is a Postgres extension for partitioning only, not a parallel logical ledger.",
+      "implementation_target": "postgres_runtime"
+    },
+    {
+      "rule_key": "mvp-stack-postgres-redis-s3",
+      "domain": "noetfield_execution_kernel_architecture",
+      "source_document_key": "noetfield-stack-blueprint-v1-refined-final",
+      "activation_status": "candidate_requires_formalization",
+      "rule_type": "deployment",
+      "summary": "Minimum production stack: PostgreSQL + Redis + S3; defer Kafka and external vector DB.",
+      "implementation_target": "infrastructure"
     }
   ]
 }

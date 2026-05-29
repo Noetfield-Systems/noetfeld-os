@@ -46,10 +46,10 @@ def test_ingestion_payload_summary_counts() -> None:
     summary = summarize_payload(payload)
 
     assert summary["batch_id"] == "2026-05-combined"
-    assert summary["batch_count"] == 9
-    assert summary["document_count"] == 92
-    assert summary["sot_decision_count"] == 46
-    assert summary["active_rule_candidate_count"] == 61
+    assert summary["batch_count"] == 10
+    assert summary["document_count"] == 104
+    assert summary["sot_decision_count"] == 51
+    assert summary["active_rule_candidate_count"] == 71
     assert "wp03-npl-formal-grammar-2026-05-npl-1" in summary["active_documents"]
     assert "wp01-context-graph-runtime-edition-v2" in summary["active_documents"]
 
@@ -219,3 +219,35 @@ def test_ninth_batch_prompt_pipeline_rule_candidates_are_present() -> None:
     assert "prompt-pipeline-strict-stage-sequencing" in rule_keys
     assert "prompt-stage3-golden-execution-command" in rule_keys
     assert "prompt-mvp-action-first-two-step" in rule_keys
+
+def test_tenth_batch_documentation_and_kernel_resources_are_classified() -> None:
+    payload = build_payload()
+    documents = {document["document_key"]: document for document in payload.inventory["documents"]}
+
+    assert documents["noetfield-dual-layer-documentation-standard-v1"]["classification"] == "active_source_of_truth"
+    assert documents["noetfield-rfc-standard-v1-github-ci"]["classification"] == "active_source_of_truth"
+    assert documents["noetfield-stack-blueprint-v1-refined-final"]["classification"] == "active_source_of_truth"
+    assert documents["noetfield-data-stack-kafka-qdrant-alternative"]["classification"] == "superseded_architecture_draft"
+    assert documents["noetfield-data-stack-kafka-qdrant-alternative"]["superseded_by"] == "noetfield-stack-blueprint-v1-refined-final"
+    assert documents["noetfield-execution-kernel-full-stack-blueprint-v1"]["superseded_by"] == "noetfield-stack-blueprint-v1-refined-final"
+    assert documents["noetfield-conversation-kernel-maturity-report"]["classification"] == "reference_only"
+
+
+def test_tenth_batch_execution_kernel_rule_candidates_are_present() -> None:
+    payload = build_payload()
+    rule_keys = {rule["rule_key"] for rule in payload.rule_registry["active_rule_candidates"]}
+
+    assert "postgres-single-source-of-truth" in rule_keys
+    assert "langgraph-cannot-bypass-event-ledger" in rule_keys
+    assert "vision-engineering-traceability-required" in rule_keys
+    assert "semantic-layer-advisory-only" in rule_keys
+
+
+def test_tenth_batch_sot_domains_are_registered() -> None:
+    payload = build_payload()
+    domains = {decision["domain"]: decision for decision in payload.sot_registry["decisions"]}
+
+    assert domains["noetfield_documentation_standard"]["active_document_key"] == "noetfield-dual-layer-documentation-standard-v1"
+    assert domains["noetfield_rfc_governance"]["active_document_key"] == "noetfield-rfc-standard-v1-github-ci"
+    assert domains["noetfield_execution_kernel_architecture"]["active_document_key"] == "noetfield-stack-blueprint-v1-refined-final"
+    assert domains["noetfield_execution_roadmap"]["active_document_key"] == "noetfield-5-year-vision-enterprise-ai-os"
