@@ -36,9 +36,19 @@ def build_knowledge_context() -> str:
     return "\n\n---\n\n".join(chunks)
 
 
+def _pinned_offerings() -> str:
+    body = _read(_REPO_ROOT / "OFFERINGS_LOCKED.md")
+    if not body:
+        return ""
+    return f"## Source: OFFERINGS_LOCKED.md (authoritative)\n{body}"
+
+
 def select_relevant_excerpt(question: str, *, max_chars: int = 24_000) -> str:
-    """Lightweight keyword filter to keep prompts within model limits."""
+    """Keyword-ranked excerpts with pinned offerings (RAG-lite)."""
+    pinned = _pinned_offerings()
     full = build_knowledge_context()
+    if pinned and pinned not in full:
+        full = pinned + "\n\n---\n\n" + full
     if len(full) <= max_chars:
         return full
     tokens = {t.lower() for t in question.split() if len(t) > 2}

@@ -15,6 +15,8 @@ from pydantic import BaseModel, ConfigDict, Field, SecretStr
 
 from noetfield_governance.chat_errors import ChatAPIError, ChatConfigurationError
 from noetfield_governance.public_chat import answer_public_question, resolve_chat_provider
+from noetfield_governance import intake_repository, redis_runtime
+from noetfield_governance.intake_notify import notify_ops_webhook
 from noetfield_governance.public_intake import submit_intake
 from noetfield_governance.telegram_client import (
     TelegramAPIError,
@@ -200,12 +202,19 @@ class ManualIngestionRequest(BaseModel):
 
 
 @app.on_event("startup")
-async def subscribe_runtime_audit() -> None:
+async def startup_platform() -> None:
+    await intake_repository.init_intake_repository(settings)
+    await redis_runtime.connect(
+        settings.redis_url,
+        enabled=settings.redis_sessions_enabled,
+    )
     await event_bus.subscribe(name="audit-ledger-runtime", event_types={"*"}, handler=audit_runtime.record_event)
 
 
 @app.on_event("shutdown")
 async def shutdown_runtime() -> None:
+    await intake_repository.close_intake_repository()
+    await redis_runtime.close()
     stores = [
         event_store,
         dead_letter_store,
@@ -225,7 +234,7 @@ async def shutdown_runtime() -> None:
 
 
 @app.get("/health", tags=["system"])
-async def health() -> dict[str, str]:
+async def health() -> dict[str, object]:
     return {
         "status": "ok",
         "service": "noetfield-platform",
@@ -233,6 +242,8 @@ async def health() -> dict[str, str]:
         "golden_edge": "v3",
         "system_of_record": "postgresql" if postgres_mode else "memory-test-mode",
         "supabase_authority": "optional-tooling-only",
+        "intake_storage": intake_repository.storage_label(),
+        "redis_sessions": redis_runtime.is_enabled(),
     }
 
 
@@ -544,18 +555,34 @@ async def intake_health() -> dict[str, object]:
     return {
         "enabled": settings.public_intake_enabled,
         "intake_email": CANONICAL_INTAKE_EMAIL,
-        "storage": "in-memory-recent-500",
+        "storage": intake_repository.storage_label(),
+        "ops_webhook_configured": bool((settings.intake_ops_webhook_url or "").strip()),
+        "redis_rate_limit": redis_runtime.is_enabled(),
     }
 
 
+async def _notify_intake_background(record: object) -> None:
+    from noetfield_governance.intake_store import IntakeRecord
+
+    if not isinstance(record, IntakeRecord):
+        return
+    url = (settings.intake_ops_webhook_url or "").strip()
+    if url:
+        await asyncio.to_thread(notify_ops_webhook, url, record)
+
+
 @app.post("/api/intake", tags=["intake"], response_model=PublicIntakeResponse)
-async def public_intake(body: PublicIntakeRequest, request: Request) -> PublicIntakeResponse:
+async def public_intake(
+    body: PublicIntakeRequest,
+    request: Request,
+    background_tasks: BackgroundTasks,
+) -> PublicIntakeResponse:
     if not settings.public_intake_enabled:
         raise HTTPException(status_code=503, detail="Public intake API is disabled")
     client_host = request.client.host if request.client else "unknown"
     client_key = f"{client_host}:{body.contact_email}"
     try:
-        rec = submit_intake(
+        rec = await submit_intake(
             organization=body.organization,
             contact_email=body.contact_email,
             message=body.message,
@@ -577,6 +604,7 @@ async def public_intake(body: PublicIntakeRequest, request: Request) -> PublicIn
         rec.request_id or "",
         rec.organization[:80],
     )
+    background_tasks.add_task(_notify_intake_background, rec)
     return PublicIntakeResponse(
         intake_id=rec.intake_id,
         request_id=rec.request_id,
@@ -593,11 +621,28 @@ async def intake_recent(request: Request, limit: int = 20) -> dict[str, object]:
             raise HTTPException(status_code=403, detail="Invalid admin secret")
     if not settings.public_intake_enabled:
         raise HTTPException(status_code=503, detail="Public intake API is disabled")
-    from noetfield_governance.intake_store import list_recent
 
     return {
         "intake_email": CANONICAL_INTAKE_EMAIL,
-        "records": list_recent(limit=limit),
+        "storage": intake_repository.storage_label(),
+        "records": await intake_repository.list_recent(limit=limit),
+    }
+
+
+@app.get("/api/ecosystem/public", tags=["ecosystem"])
+async def ecosystem_public() -> dict[str, object]:
+    """Non-secret config for www (also in assets/noetfield-ecosystem.json)."""
+    import json
+    from pathlib import Path
+
+    path = Path(__file__).resolve().parents[3] / "assets" / "noetfield-ecosystem.json"
+    if path.is_file():
+        return json.loads(path.read_text(encoding="utf-8"))
+    base = (settings.telegram_webhook_base_url or "https://platform.noetfield.com").strip().rstrip("/")
+    return {
+        "intake_email": CANONICAL_INTAKE_EMAIL,
+        "intake_url": "https://www.noetfield.com/trust-brief/intake/",
+        "chat_api_base": base,
     }
 
 

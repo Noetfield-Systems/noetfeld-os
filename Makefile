@@ -63,10 +63,19 @@ site-health:
 
 ecosystem-health:
 	python3 scripts/audit_no_secrets_in_repo.py
-	PYTHONPATH=$(PYTHONPATH_VALUE) RUNTIME_EVENT_STORE=memory python3 -m pytest tests/unit/test_public_chat.py tests/unit/test_openrouter_client.py tests/unit/test_telegram_webhook.py tests/unit/test_public_intake.py tests/unit/test_practical_ecosystem.py -q
+	PYTHONPATH=$(PYTHONPATH_VALUE) RUNTIME_EVENT_STORE=memory python3 -m pytest tests/unit/test_public_chat.py tests/unit/test_openrouter_client.py tests/unit/test_telegram_webhook.py tests/unit/test_public_intake.py tests/unit/test_practical_ecosystem.py tests/unit/test_chat_quality.py -q
 
 verify-platform-health:
 	PYTHONPATH=$(PYTHONPATH_VALUE) python3 scripts/verify_platform_health.py
+
+platform-up:
+	docker compose -f infrastructure/docker/docker-compose.yml -f infrastructure/docker/docker-compose.platform.yml up -d --build
+
+platform-migrate:
+	PYTHONPATH=$(PYTHONPATH_VALUE) python3 scripts/apply_postgres_migrations.py
+
+platform-sync-knowledge:
+	PYTHONPATH=$(PYTHONPATH_VALUE) python3 scripts/sync_knowledge_chunks.py
 
 collapse-public:
 	python3 scripts/collapse_public_routes.py

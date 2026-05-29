@@ -8,7 +8,8 @@ from collections import defaultdict, deque
 from typing import Literal
 
 from noetfield_config import CANONICAL_INTAKE_EMAIL
-from noetfield_governance.intake_store import IntakeRecord, list_recent, record_intake
+from noetfield_governance import intake_repository, redis_runtime
+from noetfield_governance.intake_store import IntakeRecord
 
 _MAX_ORG_LEN = 200
 _MAX_MESSAGE_LEN = 8000
@@ -25,7 +26,14 @@ IntakeSource = Literal["web", "telegram", "api"]
 _buckets: defaultdict[str, deque[float]] = defaultdict(deque)
 
 
-def _check_rate_limit(client_key: str) -> None:
+async def _check_rate_limit(client_key: str) -> None:
+    if redis_runtime.is_enabled():
+        await redis_runtime.check_rate_limit(
+            f"intake:{client_key}",
+            max_calls=_RATE_LIMIT_MAX_PER_WINDOW,
+            window_sec=_RATE_LIMIT_WINDOW_SEC,
+        )
+        return
     now = time.monotonic()
     bucket = _buckets[client_key]
     while bucket and now - bucket[0] > _RATE_LIMIT_WINDOW_SEC:
@@ -35,7 +43,7 @@ def _check_rate_limit(client_key: str) -> None:
     bucket.append(now)
 
 
-def submit_intake(
+async def submit_intake(
     *,
     organization: str,
     contact_email: str,
@@ -67,9 +75,9 @@ def submit_intake(
     if name and len(name) > _MAX_NAME_LEN:
         raise ValueError("contact_name is too long")
 
-    _check_rate_limit(client_key or "anonymous")
+    await _check_rate_limit(client_key or "anonymous")
 
-    return record_intake(
+    return await intake_repository.record_intake(
         organization=org,
         contact_email=email,
         message=body,
@@ -82,10 +90,11 @@ def submit_intake(
     )
 
 
-def intake_ops_summary() -> dict[str, object]:
-    recent = list_recent(limit=5)
+async def intake_ops_summary() -> dict[str, object]:
+    recent = await intake_repository.list_recent(limit=5)
     return {
         "intake_email": CANONICAL_INTAKE_EMAIL,
-        "stored_recent_count": len(list_recent(limit=100)),
+        "storage": intake_repository.storage_label(),
+        "stored_recent_count": len(await intake_repository.list_recent(limit=100)),
         "latest": recent,
     }

@@ -37,6 +37,32 @@ def get_history(session_key: str) -> list[tuple[str, str]]:
         return [(t.role, t.content) for t in fresh]
 
 
+async def get_history_async(session_key: str) -> list[tuple[str, str]]:
+    from noetfield_governance import redis_runtime
+
+    if redis_runtime.is_enabled():
+        hist = await redis_runtime.get_session_history(session_key)
+        if hist:
+            return hist
+    return get_history(session_key)
+
+
+async def append_turn_async(session_key: str, role: str, content: str) -> None:
+    append_turn(session_key, role, content)
+    from noetfield_governance import redis_runtime
+
+    if redis_runtime.is_enabled():
+        await redis_runtime.append_session_turn(session_key, role, content, max_turns=_MAX_TURNS)
+
+
+async def clear_session_async(session_key: str) -> None:
+    clear_session(session_key)
+    from noetfield_governance import redis_runtime
+
+    if redis_runtime.is_enabled():
+        await redis_runtime.clear_session(session_key)
+
+
 def clear_session(session_key: str) -> None:
     with _lock:
         _store.pop(session_key, None)

@@ -57,6 +57,12 @@ class Settings(BaseSettings):
     )
 
     public_intake_enabled: bool = True
+    intake_persistence: Literal["auto", "memory", "postgres"] = "auto"
+    intake_ops_webhook_url: str | None = Field(
+        default=None,
+        description="Slack-compatible webhook URL for new intake notifications.",
+    )
+    redis_sessions_enabled: bool = True
 
     telegram_bot_enabled: bool = True
     telegram_bot_token: SecretStr | None = Field(

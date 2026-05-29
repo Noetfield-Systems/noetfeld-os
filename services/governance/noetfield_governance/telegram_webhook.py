@@ -22,10 +22,10 @@ from noetfield_governance.telegram_commands import (
 )
 from noetfield_governance.telegram_format import escape_html, split_telegram_chunks
 from noetfield_governance.telegram_session import (
-    append_turn,
-    clear_session,
+    append_turn_async,
+    clear_session_async,
     format_history_for_prompt,
-    get_history,
+    get_history_async,
 )
 
 logger = logging.getLogger("noetfield.governance.telegram.webhook")
@@ -204,7 +204,7 @@ async def _handle_command(
         await _send_canned(token=token, chat_id=chat_id, html=human_message(), keyboard=after_reply_keyboard())
         return True
     if cmd == "/reset":
-        clear_session(_session_key(chat_id))
+        await clear_session_async(_session_key(chat_id))
         await _send_canned(
             token=token,
             chat_id=chat_id,
@@ -249,7 +249,7 @@ async def _answer_with_llm(
     openrouter_model: str,
 ) -> None:
     session = _session_key(chat_id)
-    history = get_history(session)
+    history = await get_history_async(session)
     prompt = format_history_for_prompt(history, text)
 
     await asyncio.to_thread(send_chat_action, token=token, chat_id=chat_id, action="typing")
@@ -264,8 +264,8 @@ async def _answer_with_llm(
         client_key=session,
     )
 
-    append_turn(session, "user", text)
-    append_turn(session, "assistant", reply)
+    await append_turn_async(session, "user", text)
+    await append_turn_async(session, "assistant", reply)
 
     body = escape_html(reply)
     body += f"\n\n<i>Noetfield · Governance assistant</i>"

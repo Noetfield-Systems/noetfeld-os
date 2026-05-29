@@ -14,4 +14,6 @@ RUN pip install --no-cache-dir --upgrade pip \
 
 ENV PYTHONPATH=/app/packages/types:/app/packages/config:/app/services/events:/app/services/ledger:/app/services/graph:/app/services/governance:/app/services/signals:/app/services/workflow:/app/services/ai-runtime:/app/services/inspectors:/app/services/identity:/app/services/copilot-governance
 
-CMD ["uvicorn", "noetfield_governance.api:app", "--host", "0.0.0.0", "--port", "8000", "--app-dir", "services/governance"]
+EXPOSE 8001
+
+CMD ["uvicorn", "noetfield_governance.api:app", "--host", "0.0.0.0", "--port", "8001", "--app-dir", "services/governance"]

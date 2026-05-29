@@ -1,0 +1,28 @@
+# Full platform stack: Postgres + Redis + API (port 8001).
+# Usage: docker compose -f infrastructure/docker/docker-compose.yml \
+#   -f infrastructure/docker/docker-compose.platform.yml up -d --build
+
+services:
+  platform-api:
+    build:
+      context: ../..
+      dockerfile: infrastructure/docker/Dockerfile.api
+    ports:
+      - "8001:8001"
+    environment:
+      RUNTIME_EVENT_STORE: postgres
+      INTAKE_PERSISTENCE: postgres
+      DATABASE_URL: postgresql+asyncpg://postgres:postgres@postgres:5432/noetfield
+      REDIS_URL: redis://redis:6379/0
+      REDIS_SESSIONS_ENABLED: "true"
+      PUBLIC_CHAT_ENABLED: "true"
+      PUBLIC_INTAKE_ENABLED: "true"
+      TELEGRAM_WEBHOOK_BASE_URL: http://localhost:8001
+    env_file:
+      - ../../.env
+    depends_on:
+      postgres:
+        condition: service_started
+      redis:
+        condition: service_started
+    restart: unless-stopped

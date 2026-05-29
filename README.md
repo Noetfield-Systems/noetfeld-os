@@ -23,3 +23,5 @@ Autonomous Governed Intelligence Nervous System:
 Start with [docs/DEVELOPER_BOOTSTRAP.md](docs/DEVELOPER_BOOTSTRAP.md).
 
 **Go live (roles):** [docs/PRACTICAL_PLAYBOOK.md](docs/PRACTICAL_PLAYBOOK.md) — visitor, Telegram, ops intake, DevOps.
+
+**Platform deploy:** [docs/RUNBOOK.md](docs/RUNBOOK.md) — Docker compose, migrations, health checks, Redis, Postgres intake.

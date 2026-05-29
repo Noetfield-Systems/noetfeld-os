@@ -25,6 +25,9 @@ def test_intake_health() -> None:
 
 def test_intake_submit() -> None:
     async def run() -> None:
+        from noetfield_governance import intake_repository
+
+        await intake_repository.init_intake_repository()
         transport = ASGITransport(app=app)
         async with AsyncClient(transport=transport, base_url="http://test") as client:
             response = await client.post(

@@ -15,6 +15,7 @@ ENDPOINTS = (
     "/api/intake/health",
     "/api/telegram/health",
     "/api/ecosystem/health",
+    "/api/ecosystem/public",
 )
 
 

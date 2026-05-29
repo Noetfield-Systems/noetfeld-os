@@ -69,5 +69,20 @@ jobs:
           RUNTIME_EVENT_STORE: memory
         run: pytest tests/unit -q
 
+      - name: Ecosystem smoke (chat, telegram, intake)
+        env:
+          RUNTIME_EVENT_STORE: memory
+        run: make ecosystem-health
+
+      - name: Verify health endpoints (ephemeral API)
+        env:
+          RUNTIME_EVENT_STORE: memory
+          PYTHONPATH: .:packages/types:packages/config:services/events:services/ledger:services/graph:services/governance:services/signals:services/workflow:services/ai-runtime:services/inspectors:services/identity:services/copilot-governance
+        run: |
+          uvicorn noetfield_governance.api:app --host 127.0.0.1 --port 8001 --app-dir services/governance &
+          sleep 4
+          PLATFORM_HEALTH_BASE=http://127.0.0.1:8001 python3 scripts/verify_platform_health.py
+          kill %1 || true
+
       - name: Run PostgreSQL integration verification
         run: pytest tests/integration/test_phase_3_3_postgres_runtime.py -q
