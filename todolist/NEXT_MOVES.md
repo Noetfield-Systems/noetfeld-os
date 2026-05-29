@@ -2,8 +2,6 @@
 
 **Last reviewed:** 2026-05-29 · **Scope:** This file is **only** for the Noetfield repository (`noetfield.com` / platform API).
 
-**VIRLUX** (payments fintech) is a **separate project** — do not mix deploys or code. VIRLUX notes: [external/virlux/README.md](./external/virlux/README.md).
-
 ---
 
 ## Roadmap (Noetfield)
@@ -65,9 +63,3 @@
 ```bash
 PLATFORM_HEALTH_BASE=https://platform.noetfield.com ./scripts/deploy_platform_smoke.sh
 ```
-
----
-
-## Not in this list
-
-**VIRLUX** (Interac, KYC UI, Circle, httpOnly auth, `:3100` marketing) → [external/virlux/fintech.md](./external/virlux/fintech.md)
