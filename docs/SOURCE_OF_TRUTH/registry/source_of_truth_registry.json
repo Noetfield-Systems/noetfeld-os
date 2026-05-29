@@ -1,5 +1,5 @@
 {
-  "registry_version": "2026-05-29-sot-7",
+  "registry_version": "2026-05-29-sot-8",
   "decisions": [
     {
       "domain": "context_graph",
@@ -407,6 +407,62 @@
       "active_version": "5yr-vision-narrative-v1",
       "decision": "active_source_of_truth",
       "rationale": "Five-phase enterprise AI OS roadmap from kernel to protocol layer.",
+      "confidence": 0.88
+    },
+    {
+      "domain": "noetfield_execution_kernel_spec",
+      "active_document_key": "noetfield-execution-kernel-temporal-v1-canonical",
+      "active_version": "temporal-kernel-v1.0",
+      "decision": "active_source_of_truth",
+      "rationale": "Canonical temporal event-sourced kernel: derived state, LLM proposal-only, arbitration, saga, cached replay.",
+      "confidence": 0.93
+    },
+    {
+      "domain": "noetfield_temporal_governance_v2",
+      "active_document_key": "noetfield-v2-temporal-governance-os-bank-grade",
+      "active_version": "temporal-governance-v2.0",
+      "decision": "active_source_of_truth",
+      "rationale": "Bank-grade v2 Temporal Governance OS: event core, drift, evidence packs, human gatekeeper; distinct from v3.1 ambient SOT.",
+      "confidence": 0.9
+    },
+    {
+      "domain": "noetfield_evidence_pack_schema",
+      "active_document_key": "noetfield-evidence-pack-json-schema-v1",
+      "active_version": "evidence-pack-schema-v1",
+      "decision": "active_source_of_truth",
+      "rationale": "Signed portable Evidence Pack JSON schema for auditors; aligns with Trust Ledger / Copilot wedge.",
+      "confidence": 0.92
+    },
+    {
+      "domain": "noetfield_agent_catalog",
+      "active_document_key": "noetfield-agent-catalog-bank-grade-v1",
+      "active_version": "agent-catalog-v1",
+      "decision": "active_source_of_truth",
+      "rationale": "Scoped agent roster with least privilege; Executor disabled by default; human-only production authority.",
+      "confidence": 0.91
+    },
+    {
+      "domain": "noetfield_human_gatekeeper_ui",
+      "active_document_key": "noetfield-human-gatekeeper-ui-wireframe-v1",
+      "active_version": "gatekeeper-ui-v1",
+      "decision": "active_operational_reference",
+      "rationale": "Triage queue, diff viewer, HSM approval modal, replay/export flows for steward decisions.",
+      "confidence": 0.86
+    },
+    {
+      "domain": "noetfield_pilot_delivery_plan",
+      "active_document_key": "noetfield-6-week-sprint-plan-solo-founder-v1",
+      "active_version": "sprint-6wk-v1",
+      "decision": "active_operational_reference",
+      "rationale": "Week-by-week pilot build plan for agent platform through Gatekeeper UI and hardening.",
+      "confidence": 0.85
+    },
+    {
+      "domain": "noetfield_operating_discipline",
+      "active_document_key": "noetfield-directory-enforced-consistency-spec-fa",
+      "active_version": "directory-discipline-fa-v1",
+      "decision": "active_source_of_truth",
+      "rationale": "Directory/SOT-first responses, drift tracking, value basket for uncertain rankings, founder approval loop.",
       "confidence": 0.88
     }
   ]

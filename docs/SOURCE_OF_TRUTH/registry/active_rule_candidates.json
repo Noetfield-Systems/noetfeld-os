@@ -1,5 +1,5 @@
 {
-  "registry_version": "2026-05-29-rules-7",
+  "registry_version": "2026-05-29-rules-8",
   "active_rule_candidates": [
     {
       "rule_key": "npl-no-side-effects",
@@ -639,6 +639,96 @@
       "rule_type": "deployment",
       "summary": "Minimum production stack: PostgreSQL + Redis + S3; defer Kafka and external vector DB.",
       "implementation_target": "infrastructure"
+    },
+    {
+      "rule_key": "state-derived-from-event-log-only",
+      "domain": "noetfield_execution_kernel_spec",
+      "source_document_key": "noetfield-execution-kernel-temporal-v1-canonical",
+      "activation_status": "active_design_rule",
+      "rule_type": "runtime_governance",
+      "summary": "Authoritative state is REDUCE(events); no direct state persistence as truth.",
+      "implementation_target": "postgres_runtime"
+    },
+    {
+      "rule_key": "replay-cached-llm-outputs-only",
+      "domain": "noetfield_execution_kernel_spec",
+      "source_document_key": "noetfield-execution-kernel-temporal-v1-canonical",
+      "activation_status": "active_design_rule",
+      "rule_type": "runtime_governance",
+      "summary": "Exact audit replay uses cached LLM tokens; no regeneration on replay path.",
+      "implementation_target": "workflow_runtime"
+    },
+    {
+      "rule_key": "no-autonomous-production-execution",
+      "domain": "noetfield_agent_catalog",
+      "source_document_key": "noetfield-agent-catalog-bank-grade-v1",
+      "activation_status": "active_design_rule",
+      "rule_type": "agent_governance",
+      "summary": "Agents propose and package evidence; production changes require signed human approval in audit log.",
+      "implementation_target": "policy_runtime"
+    },
+    {
+      "rule_key": "executor-agent-disabled-by-default",
+      "domain": "noetfield_agent_catalog",
+      "source_document_key": "noetfield-agent-catalog-bank-grade-v1",
+      "activation_status": "active_design_rule",
+      "rule_type": "agent_governance",
+      "summary": "Executor Agent locked off unless multi-sig human approval enables safe-zone automation.",
+      "implementation_target": "policy_runtime"
+    },
+    {
+      "rule_key": "evidence-pack-hsm-signed-manifest",
+      "domain": "noetfield_evidence_pack_schema",
+      "source_document_key": "noetfield-evidence-pack-json-schema-v1",
+      "activation_status": "active_design_rule",
+      "rule_type": "audit_governance",
+      "summary": "Evidence Packs require manifest SHA-256 and detached HSM signatures with verify.sh path.",
+      "implementation_target": "trust_ledger"
+    },
+    {
+      "rule_key": "critical-drift-triage-sla-4h",
+      "domain": "noetfield_temporal_governance_v2",
+      "source_document_key": "noetfield-v2-temporal-governance-os-bank-grade",
+      "activation_status": "candidate_requires_formalization",
+      "rule_type": "operational_sla",
+      "summary": "drift_score \u2265 0.7 or slope > 0.05/day triggers human triage within 4 hours.",
+      "implementation_target": "monitoring"
+    },
+    {
+      "rule_key": "directory-sot-consult-before-response",
+      "domain": "noetfield_operating_discipline",
+      "source_document_key": "noetfield-directory-enforced-consistency-spec-fa",
+      "activation_status": "active_design_rule",
+      "rule_type": "operating_discipline",
+      "summary": "Prompts and commands must consult governed SOT registry/directory before answering or acting.",
+      "implementation_target": "source_of_truth_registry"
+    },
+    {
+      "rule_key": "value-basket-on-uncertain-ranking",
+      "domain": "noetfield_operating_discipline",
+      "source_document_key": "noetfield-directory-enforced-consistency-spec-fa",
+      "activation_status": "active_design_rule",
+      "rule_type": "operating_discipline",
+      "summary": "When top options tie, aggregate document value into proposition basket for founder accept/reject.",
+      "implementation_target": "workflow_runtime"
+    },
+    {
+      "rule_key": "agent-least-privilege-scoped-identity",
+      "domain": "noetfield_agent_catalog",
+      "source_document_key": "noetfield-agent-catalog-bank-grade-v1",
+      "activation_status": "active_design_rule",
+      "rule_type": "agent_governance",
+      "summary": "Each agent runs minimal IAM scope; violations quarantine agent and generate Evidence Pack.",
+      "implementation_target": "policy_runtime"
+    },
+    {
+      "rule_key": "human-gatekeeper-hsm-sign-approval",
+      "domain": "noetfield_human_gatekeeper_ui",
+      "source_document_key": "noetfield-human-gatekeeper-ui-wireframe-v1",
+      "activation_status": "active_design_rule",
+      "rule_type": "ui_governance",
+      "summary": "Production approvals flow through Gatekeeper UI with HSM signing and append to event store.",
+      "implementation_target": "copilot_governance"
     }
   ]
 }

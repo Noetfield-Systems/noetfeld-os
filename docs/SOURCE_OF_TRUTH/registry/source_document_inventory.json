@@ -1404,6 +1404,125 @@
       "supersedes": [],
       "superseded_by": null,
       "upload_batch": "2026-05-010"
+    },
+    {
+      "document_key": "noetfield-execution-kernel-temporal-v1-canonical",
+      "title": "Noetfield Execution Kernel v1.0 \u2014 Temporal Event-Sourced Canonical",
+      "domain": "noetfield_execution_kernel_spec",
+      "work_package": null,
+      "version_label": "temporal-kernel-v1.0",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-011/noetfield-execution-kernel-temporal-v1-canonical.md",
+      "classification": "active_source_of_truth",
+      "status": "reference",
+      "supersedes": [],
+      "superseded_by": null,
+      "upload_batch": "2026-05-011"
+    },
+    {
+      "document_key": "noetfield-agent-catalog-bank-grade-v1",
+      "title": "Noetfield Agent Catalog \u2014 Bank-Grade Solo-Founder Ready",
+      "domain": "noetfield_agent_catalog",
+      "work_package": null,
+      "version_label": "agent-catalog-v1",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-011/noetfield-agent-catalog-bank-grade-v1.md",
+      "classification": "active_source_of_truth",
+      "status": "reference",
+      "supersedes": [],
+      "superseded_by": null,
+      "upload_batch": "2026-05-011"
+    },
+    {
+      "document_key": "noetfield-evidence-pack-json-schema-v1",
+      "title": "Evidence Pack JSON Schema v1 \u2014 Signed Audit-Ready",
+      "domain": "noetfield_evidence_pack_schema",
+      "work_package": null,
+      "version_label": "evidence-pack-schema-v1",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-011/noetfield-evidence-pack-json-schema-v1.md",
+      "classification": "active_source_of_truth",
+      "status": "reference",
+      "supersedes": [],
+      "superseded_by": null,
+      "upload_batch": "2026-05-011"
+    },
+    {
+      "document_key": "noetfield-human-gatekeeper-ui-wireframe-v1",
+      "title": "Human Gatekeeper UI Wireframe v1",
+      "domain": "noetfield_human_gatekeeper_ui",
+      "work_package": null,
+      "version_label": "gatekeeper-ui-v1",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-011/noetfield-human-gatekeeper-ui-wireframe-v1.md",
+      "classification": "active_operational_reference",
+      "status": "reference",
+      "supersedes": [],
+      "superseded_by": null,
+      "upload_batch": "2026-05-011"
+    },
+    {
+      "document_key": "noetfield-6-week-sprint-plan-solo-founder-v1",
+      "title": "6-Week Sprint Plan \u2014 Solo Founder Pilot Delivery",
+      "domain": "noetfield_pilot_delivery_plan",
+      "work_package": null,
+      "version_label": "sprint-6wk-v1",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-011/noetfield-6-week-sprint-plan-solo-founder-v1.md",
+      "classification": "active_operational_reference",
+      "status": "reference",
+      "supersedes": [],
+      "superseded_by": null,
+      "upload_batch": "2026-05-011"
+    },
+    {
+      "document_key": "noetfield-v2-temporal-governance-os-bank-grade",
+      "title": "Noetfield v2.0 \u2014 Temporal Governance OS (Bank-Grade Design)",
+      "domain": "noetfield_temporal_governance_v2",
+      "work_package": null,
+      "version_label": "temporal-governance-v2.0",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-011/noetfield-v2-temporal-governance-os-bank-grade.md",
+      "classification": "active_source_of_truth",
+      "status": "reference",
+      "supersedes": [
+        "noetfield-v2-agentic-architecture-summary-duplicate"
+      ],
+      "superseded_by": null,
+      "upload_batch": "2026-05-011"
+    },
+    {
+      "document_key": "noetfield-v2-agentic-architecture-summary-duplicate",
+      "title": "Noetfield v2.0 Agentic Architecture \u2014 Executive Summary (Duplicate)",
+      "domain": "noetfield_temporal_governance_v2",
+      "work_package": null,
+      "version_label": "agentic-summary-dup-v1",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-011/noetfield-v2-agentic-architecture-summary-duplicate.md",
+      "classification": "duplicate",
+      "status": "superseded",
+      "supersedes": [],
+      "superseded_by": "noetfield-v2-temporal-governance-os-bank-grade",
+      "upload_batch": "2026-05-011"
+    },
+    {
+      "document_key": "noetfield-directory-enforced-consistency-spec-fa",
+      "title": "Directory-Enforced Response Discipline & Value Basket (Persian)",
+      "domain": "noetfield_operating_discipline",
+      "work_package": null,
+      "version_label": "directory-discipline-fa-v1",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-011/noetfield-directory-enforced-consistency-spec-fa.md",
+      "classification": "active_source_of_truth",
+      "status": "reference",
+      "supersedes": [],
+      "superseded_by": null,
+      "upload_batch": "2026-05-011"
+    },
+    {
+      "document_key": "noetfield-governance-rollout-checklist-v1",
+      "title": "Governance Rollout & Pilot Success Checklist v1",
+      "domain": "noetfield_temporal_governance_v2",
+      "work_package": null,
+      "version_label": "rollout-checklist-v1",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-011/noetfield-governance-rollout-checklist-v1.md",
+      "classification": "active_compliance_reference",
+      "status": "reference",
+      "supersedes": [],
+      "superseded_by": null,
+      "upload_batch": "2026-05-011"
     }
   ],
   "batches": [
@@ -1446,6 +1565,10 @@
     {
       "batch_id": "2026-05-010",
       "source_folder": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-010"
+    },
+    {
+      "batch_id": "2026-05-011",
+      "source_folder": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-011"
     }
   ]
 }
