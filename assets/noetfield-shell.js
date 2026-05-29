@@ -324,15 +324,87 @@
     });
   }
 
-  function ensureFeedbackTab() {
+  async function loadEcosystem() {
+    try {
+      var url =
+        "/assets/noetfield-ecosystem.json?v=" + encodeURIComponent(SHELL_VERSION);
+      var res = await fetch(url, { credentials: "same-origin", cache: "no-store" });
+      if (!res.ok) return {};
+      return await res.json();
+    } catch (_) {
+      return {};
+    }
+  }
+
+  function applyChatApiMeta(eco) {
+    var base = eco && eco.chat_api_base;
+    if (!base) return;
+    var meta =
+      document.querySelector('meta[name="nf-chat-api-base"]') ||
+      document.createElement("meta");
+    meta.setAttribute("name", "nf-chat-api-base");
+    meta.setAttribute("content", String(base).replace(/\/$/, ""));
+    if (!meta.parentNode) document.head.appendChild(meta);
+  }
+
+  function enhanceFooterChannels(eco) {
+    var footer = document.getElementById("nfFooter");
+    if (!footer || footer.querySelector(".nfConnectCol")) return;
+
+    var email = (eco && eco.intake_email) || "operations@noetfield.com";
+    var tg = eco && eco.telegram_bot_username;
+    var tgUser = tg ? String(tg).replace(/^@/, "") : "";
+
+    var col = document.createElement("div");
+    col.className = "fcol nfConnectCol";
+    var title = document.createElement("div");
+    title.className = "fTitle";
+    title.textContent = "Assistant";
+    var links = document.createElement("div");
+    links.className = "fLinks";
+
+    var chatBtn = document.createElement("button");
+    chatBtn.type = "button";
+    chatBtn.className = "nfLinkBtn";
+    chatBtn.textContent = "Web chat";
+    chatBtn.addEventListener("click", function () {
+      var fab = document.getElementById("nfChatFab");
+      if (fab) fab.click();
+      else window.location.href = "/faq/#assistant";
+    });
+    links.appendChild(chatBtn);
+
+    if (tgUser) {
+      var tgA = document.createElement("a");
+      tgA.href = "https://t.me/" + encodeURIComponent(tgUser);
+      tgA.target = "_blank";
+      tgA.rel = "noopener";
+      tgA.textContent = "Telegram @" + tgUser;
+      links.appendChild(tgA);
+    }
+
+    var mail = document.createElement("a");
+    mail.href = "mailto:" + email;
+    mail.textContent = email;
+    links.appendChild(mail);
+
+    col.appendChild(title);
+    col.appendChild(links);
+    var top = footer.querySelector(".footerTop");
+    if (top) top.appendChild(col);
+  }
+
+  function ensureFeedbackTab(rid, eco) {
     var p = normPath(window.location.pathname);
     if (p === "/feedback" || p.startsWith("/feedback/")) return;
     if (document.querySelector(".feedbackTab")) return;
 
+    var email = (eco && eco.intake_email) || "operations@noetfield.com";
+    var subject = encodeURIComponent("[feedback] Noetfield — RID " + (rid || ""));
     var a = document.createElement("a");
     a.className = "feedbackTab";
-    a.href = "/feedback/";
-    a.setAttribute("aria-label", "Open feedback");
+    a.href = "mailto:" + email + "?subject=" + subject;
+    a.setAttribute("aria-label", "Send feedback by email");
 
     var spark = document.createElement("span");
     spark.className = "spark";
@@ -401,16 +473,21 @@
   }
 
   async function boot() {
+    var eco = await loadEcosystem();
+    window.__nfEcosystem = eco;
+
     await injectShell();
 
     var rid = getOrCreateRID();
     applyRID(rid);
 
+    applyChatApiMeta(eco);
+    enhanceFooterChannels(eco);
     setYear();
     setActiveLinks();
     initBurger();
     normalizeFooterCTA();
-    ensureFeedbackTab();
+    ensureFeedbackTab(rid, eco);
     loadPublicChat();
 
     emitReady(rid);

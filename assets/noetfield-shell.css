@@ -446,6 +446,19 @@ footer{
   transition: background .15s ease, border-color .15s ease, color .15s ease;
   display:flex; align-items:center;
 }
+.fLinks .nfLinkBtn{
+  display:block;
+  width:100%;
+  text-align:left;
+  padding:0;
+  border:0;
+  background:transparent;
+  font:inherit;
+  color:inherit;
+  cursor:pointer;
+  text-decoration:none;
+}
+.fLinks .nfLinkBtn:hover{text-decoration:underline;}
 .fLinks a:hover{
   color:var(--text);
   border-color:rgba(255,255,255,.16);

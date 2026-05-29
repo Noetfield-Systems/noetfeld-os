@@ -274,6 +274,7 @@
  <div class="eyebrow"><span class="dot"></span> Trust Brief • Intake • public (non-confidential)</div>
 
  <h1>Confirm scope. Get a board-ready baseline.</h1>
+ <p class="muted" style="margin-top:10px;"><strong>Trust Brief list price: $10,000 CAD</strong> (six weeks, fixed engagement). The scope estimator below is for planning only—not a checkout or contract.</p>
 
  <p class="lead">
  This intake confirms scope signals (use-case band, teams, engagement intake path) so delivery can stay <strong>defensible</strong>:
@@ -610,7 +611,7 @@
  function ridNew(){
  var ts = Date.now().toString(36);
  var rnd = Math.random().toString(36).slice(2, 8);
- return ("NF-" + ts + "-" + rnd).toUpperCase();
+ return ("RID-" + ts + "-" + rnd).toUpperCase();
  }
  function ridGet(){
  try { return localStorage.getItem("nf_rid") || ""; } catch(e){ return ""; }
@@ -660,7 +661,7 @@
  }
 
  function baseFromBand(band){
- if (band === "1-3") return { name:"TB — Base", price:12500, ucIncluded:3, teamsIncluded:1 };
+ if (band === "1-3") return { name:"TB — Base (Trust Brief $10,000)", price:10000, ucIncluded:3, teamsIncluded:1 };
  if (band === "4-8") return { name:"TB — Pro", price:18500, ucIncluded:8, teamsIncluded:3 };
  if (band === "9-15") return { name:"TB — Enterprise", price:27500, ucIncluded:15, teamsIncluded:4 };
  return { name:"TB — Enterprise (custom)", price:27500, ucIncluded:15, teamsIncluded:4, custom:true };
@@ -715,7 +716,7 @@
  if (!band || !teamsSel || !risk || !evidence) return null;
 
  var base = baseFromBand(band);
- if (prefTier === "base") base = { name:"TB — Base", price:12500, ucIncluded:3, teamsIncluded:1 };
+ if (prefTier === "base") base = { name:"TB — Base (Trust Brief $10,000)", price:10000, ucIncluded:3, teamsIncluded:1 };
  if (prefTier === "pro") base = { name:"TB — Pro", price:18500, ucIncluded:8, teamsIncluded:3 };
  if (prefTier === "enterprise") base = { name:"TB — Enterprise", price:27500, ucIncluded:15, teamsIncluded:4 };
 

@@ -21,3 +21,5 @@ Autonomous Governed Intelligence Nervous System:
 - `docs/SOURCE_OF_TRUTH/` records the v3.1 constitutional source layer.
 
 Start with [docs/DEVELOPER_BOOTSTRAP.md](docs/DEVELOPER_BOOTSTRAP.md).
+
+**Go live (roles):** [docs/PRACTICAL_PLAYBOOK.md](docs/PRACTICAL_PLAYBOOK.md) — visitor, Telegram, ops intake, DevOps.

@@ -12,7 +12,13 @@ Noetfield is governance execution infrastructure for regulated organizations. We
 
 ## How do I engage?
 
-Request a Governance Brief at `/trust-brief/intake/`. All operational intake routes to **operations@noetfield.com**.
+Request a Governance Brief at `/trust-brief/intake/`. All operational intake routes to **operations@noetfield.com**. Include your site **Request ID** (`RID-…` in the footer) in email subjects.
+
+## Web assistant and Telegram
+
+- **Website:** bottom-right assistant on www (calls the platform API; same knowledge as this bot).
+- **Telegram:** when deployed, link appears in the site footer (`@username`). Use `/start`, `/offerings`, `/intake`. Free-text Q&A requires the platform LLM keys to be configured.
+- Neither channel executes payments or replaces signed contracts.
 
 ## What is the Governance Console?
 
