@@ -1,4 +1,4 @@
-"""Process Telegram updates through the same grounded chat pipeline as the website."""
+"""Professional Telegram bot — commands, menus, typing, session memory."""
 
 from __future__ import annotations
 
@@ -9,23 +9,58 @@ from typing import Any
 from noetfield_config import CANONICAL_INTAKE_EMAIL
 from noetfield_governance.chat_errors import ChatAPIError, ChatConfigurationError
 from noetfield_governance.public_chat import ChatProvider, answer_public_question
-from noetfield_governance.telegram_client import (
-    TelegramAPIError,
-    TelegramConfigurationError,
-    send_message,
+from noetfield_governance.telegram_client import TelegramAPIError, send_chat_action, send_message
+from noetfield_governance.telegram_commands import (
+    BOT_COMMANDS,
+    after_reply_keyboard,
+    human_message,
+    intake_message,
+    main_menu_keyboard,
+    offerings_message,
+    trustbrief_message,
+    welcome_message,
+)
+from noetfield_governance.telegram_format import escape_html, split_telegram_chunks
+from noetfield_governance.telegram_session import (
+    append_turn,
+    clear_session,
+    format_history_for_prompt,
+    get_history,
 )
 
 logger = logging.getLogger("noetfield.governance.telegram.webhook")
 
-_WELCOME = (
-    "Noetfield assistant — governance offerings, Trust Brief ($10,000), "
-    "Copilot Governance Pack, and Bank Pilot (read-only simulation).\n\n"
-    "Ask a question in plain language.\n"
-    f"For engagements: {CANONICAL_INTAKE_EMAIL} or https://www.noetfield.com/trust-brief/intake/"
+_COPILOT_MSG = (
+    "<b>Copilot Governance Pack</b>\n"
+    "Enterprise AI compliance and policy validation for Microsoft 365 Copilot.\n\n"
+    "Rollout gating, policy alignment, and defensible compliance logging.\n\n"
+    '<a href="https://www.noetfield.com/copilot/">Learn more</a> · '
+    '<a href="https://www.noetfield.com/trust-brief/intake/">Request Brief</a>'
+)
+
+_BANK_PILOT_MSG = (
+    "<b>Bank Pilot</b>\n"
+    "Read-only governance simulation in shadow mode.\n"
+    "No execution rights · compliance evaluation only.\n\n"
+    '<a href="https://www.noetfield.com/enterprise/">Enterprise</a> · '
+    '<a href="https://www.noetfield.com/console/">Governance Console</a>'
+)
+
+_HELP_MSG = (
+    "<b>Noetfield assistant</b>\n\n"
+    "Institutional Q&amp;A grounded in public product information.\n\n"
+    "<b>Commands</b>\n"
+    "/offerings · /trustbrief · /copilot · /pilot\n"
+    "/intake · /human · /reset\n\n"
+    "Type a question or use the menu below."
 )
 
 
-def extract_message(update: dict[str, Any]) -> tuple[int, str] | None:
+def _session_key(chat_id: int) -> str:
+    return f"telegram:{chat_id}"
+
+
+def extract_message(update: dict[str, Any]) -> tuple[int, str, str | None, int | None] | None:
     message = update.get("message") or update.get("edited_message")
     if not isinstance(message, dict):
         return None
@@ -36,7 +71,173 @@ def extract_message(update: dict[str, Any]) -> tuple[int, str] | None:
     text = message.get("text")
     if chat_id is None or not isinstance(text, str) or not text.strip():
         return None
-    return int(chat_id), text.strip()
+    from_user = message.get("from") if isinstance(message.get("from"), dict) else {}
+    first_name = from_user.get("first_name") if isinstance(from_user.get("first_name"), str) else None
+    message_id = message.get("message_id")
+    return int(chat_id), text.strip(), first_name, int(message_id) if message_id is not None else None
+
+
+def extract_callback(update: dict[str, Any]) -> tuple[int, str, str, int] | None:
+    cb = update.get("callback_query")
+    if not isinstance(cb, dict):
+        return None
+    cb_id = cb.get("id")
+    data = cb.get("data")
+    message = cb.get("message")
+    if not isinstance(message, dict):
+        return None
+    chat = message.get("chat")
+    if cb_id is None or not isinstance(data, str) or not isinstance(chat, dict):
+        return None
+    chat_id = chat.get("id")
+    message_id = message.get("message_id")
+    if chat_id is None or message_id is None:
+        return None
+    return int(chat_id), str(cb_id), data, int(message_id)
+
+
+async def _send_html_chunks(
+    *,
+    token: str,
+    chat_id: int,
+    text: str,
+    reply_markup: dict | None = None,
+) -> None:
+    chunks = split_telegram_chunks(text)
+    for i, chunk in enumerate(chunks):
+        markup = reply_markup if i == len(chunks) - 1 else None
+        try:
+            await asyncio.to_thread(
+                send_message,
+                token=token,
+                chat_id=chat_id,
+                text=chunk,
+                parse_mode="HTML",
+                reply_markup=markup,
+            )
+        except TelegramAPIError:
+            await asyncio.to_thread(
+                send_message,
+                token=token,
+                chat_id=chat_id,
+                text=chunk.replace("<b>", "").replace("</b>", "").replace("<i>", "").replace("</i>", ""),
+                parse_mode=None,
+                reply_markup=markup,
+            )
+
+
+async def _send_canned(
+    *,
+    token: str,
+    chat_id: int,
+    html: str,
+    keyboard: dict | None = None,
+) -> None:
+    await _send_html_chunks(token=token, chat_id=chat_id, text=html, reply_markup=keyboard)
+
+
+async def _handle_command(
+    command: str,
+    *,
+    token: str,
+    chat_id: int,
+    first_name: str | None,
+) -> bool:
+    cmd = command.split()[0].split("@")[0].lower()
+    if cmd in ("/start", "/help"):
+        text = welcome_message(first_name) if cmd == "/start" else _HELP_MSG
+        await _send_canned(token=token, chat_id=chat_id, html=text, keyboard=main_menu_keyboard())
+        return True
+    if cmd == "/offerings":
+        await _send_canned(token=token, chat_id=chat_id, html=offerings_message(), keyboard=main_menu_keyboard())
+        return True
+    if cmd == "/trustbrief":
+        await _send_canned(token=token, chat_id=chat_id, html=trustbrief_message(), keyboard=after_reply_keyboard())
+        return True
+    if cmd == "/copilot":
+        await _send_canned(token=token, chat_id=chat_id, html=_COPILOT_MSG, keyboard=after_reply_keyboard())
+        return True
+    if cmd == "/pilot":
+        await _send_canned(token=token, chat_id=chat_id, html=_BANK_PILOT_MSG, keyboard=after_reply_keyboard())
+        return True
+    if cmd == "/intake":
+        await _send_canned(token=token, chat_id=chat_id, html=intake_message(), keyboard=after_reply_keyboard())
+        return True
+    if cmd == "/human":
+        await _send_canned(token=token, chat_id=chat_id, html=human_message(), keyboard=after_reply_keyboard())
+        return True
+    if cmd == "/reset":
+        clear_session(_session_key(chat_id))
+        await _send_canned(
+            token=token,
+            chat_id=chat_id,
+            html="Conversation context cleared. How can I help you?",
+            keyboard=main_menu_keyboard(),
+        )
+        return True
+    return False
+
+
+async def _handle_menu_callback(
+    data: str,
+    *,
+    token: str,
+    chat_id: int,
+) -> str | None:
+    if not data.startswith("menu:"):
+        return None
+    key = data.split(":", 1)[1]
+    mapping = {
+        "offerings": offerings_message(),
+        "trustbrief": trustbrief_message(),
+        "copilot": _COPILOT_MSG,
+        "bankpilot": _BANK_PILOT_MSG,
+        "human": human_message(),
+    }
+    html = mapping.get(key)
+    if html:
+        await _send_canned(token=token, chat_id=chat_id, html=html, keyboard=after_reply_keyboard())
+    return "ok"
+
+
+async def _answer_with_llm(
+    *,
+    token: str,
+    chat_id: int,
+    text: str,
+    chat_provider: ChatProvider,
+    gemini_api_key: str | None,
+    gemini_model: str,
+    openrouter_api_key: str | None,
+    openrouter_model: str,
+) -> None:
+    session = _session_key(chat_id)
+    history = get_history(session)
+    prompt = format_history_for_prompt(history, text)
+
+    await asyncio.to_thread(send_chat_action, token=token, chat_id=chat_id, action="typing")
+
+    reply, _provider = await answer_public_question(
+        message=prompt,
+        provider=chat_provider,
+        gemini_api_key=gemini_api_key,
+        gemini_model=gemini_model,
+        openrouter_api_key=openrouter_api_key,
+        openrouter_model=openrouter_model,
+        client_key=session,
+    )
+
+    append_turn(session, "user", text)
+    append_turn(session, "assistant", reply)
+
+    body = escape_html(reply)
+    body += f"\n\n<i>Noetfield · Governance assistant</i>"
+    await _send_html_chunks(
+        token=token,
+        chat_id=chat_id,
+        text=body,
+        reply_markup=after_reply_keyboard(),
+    )
 
 
 async def handle_telegram_update(
@@ -49,82 +250,76 @@ async def handle_telegram_update(
     openrouter_api_key: str | None,
     openrouter_model: str,
 ) -> bool:
-    """Return True if a reply was sent."""
+    """Return True if the update was handled."""
+    callback = extract_callback(update)
+    if callback is not None:
+        chat_id, cb_id, data, _msg_id = callback
+        from noetfield_governance.telegram_client import answer_callback_query
+
+        try:
+            await asyncio.to_thread(
+                answer_callback_query,
+                token=bot_token,
+                callback_query_id=cb_id,
+                text="Opening…",
+            )
+            await _handle_menu_callback(data, token=bot_token, chat_id=chat_id)
+            return True
+        except TelegramAPIError as exc:
+            logger.warning("callback_failed %s", exc)
+            return False
+
     parsed = extract_message(update)
     if parsed is None:
         return False
-    chat_id, text = parsed
+    chat_id, text, first_name, _ = parsed
 
-    if text.startswith("/start"):
-        await asyncio.to_thread(
-            send_message,
-            token=bot_token,
-            chat_id=chat_id,
-            text=_WELCOME,
-        )
-        return True
+    if text.startswith("/"):
+        try:
+            return await _handle_command(text, token=bot_token, chat_id=chat_id, first_name=first_name)
+        except TelegramAPIError as exc:
+            logger.warning("command_failed chat_id=%s %s", chat_id, exc)
+            return False
 
-    if text.startswith("/help"):
-        await asyncio.to_thread(
-            send_message,
-            token=bot_token,
-            chat_id=chat_id,
-            text=_WELCOME,
-        )
-        return True
-
-    client_key = f"telegram:{chat_id}"
     try:
-        reply, provider = await answer_public_question(
-            message=text,
-            provider=chat_provider,
+        await _answer_with_llm(
+            token=bot_token,
+            chat_id=chat_id,
+            text=text,
+            chat_provider=chat_provider,
             gemini_api_key=gemini_api_key,
             gemini_model=gemini_model,
             openrouter_api_key=openrouter_api_key,
             openrouter_model=openrouter_model,
-            client_key=client_key,
-        )
-        footer = f"\n\n— Noetfield ({provider})"
-        if len(reply) + len(footer) > 4090:
-            reply = reply[: 4090 - len(footer)] + "…"
-        await asyncio.to_thread(
-            send_message,
-            token=bot_token,
-            chat_id=chat_id,
-            text=reply + footer,
         )
         return True
     except ValueError as exc:
-        await asyncio.to_thread(
-            send_message, token=bot_token, chat_id=chat_id, text=f"Invalid message: {exc}"
-        )
+        await _send_canned(token=bot_token, chat_id=chat_id, html=f"Invalid message: {escape_html(str(exc))}")
         return True
     except PermissionError:
-        await asyncio.to_thread(
-            send_message,
+        await _send_canned(
             token=bot_token,
             chat_id=chat_id,
-            text="Too many messages. Please wait a minute and try again.",
+            html="Too many messages. Please wait a minute and try again.",
         )
         return True
     except ChatConfigurationError:
-        await asyncio.to_thread(
-            send_message,
+        await _send_canned(
             token=bot_token,
             chat_id=chat_id,
-            text=(
+            html=(
                 "Assistant is not configured on the server. "
-                f"Email {CANONICAL_INTAKE_EMAIL} or visit https://www.noetfield.com/trust-brief/intake/"
+                f"Email {CANONICAL_INTAKE_EMAIL} or visit "
+                '<a href="https://www.noetfield.com/trust-brief/intake/">intake</a>.'
             ),
         )
         return True
     except ChatAPIError:
-        await asyncio.to_thread(
-            send_message,
+        await _send_canned(
             token=bot_token,
             chat_id=chat_id,
-            text=(
-                "Assistant temporarily unavailable. Please try again later or email "
+            html=(
+                "Assistant temporarily unavailable. Please try again or email "
                 f"{CANONICAL_INTAKE_EMAIL}."
             ),
         )

@@ -6,7 +6,8 @@ from __future__ import annotations
 import os
 import sys
 
-from noetfield_governance.telegram_client import set_webhook, get_webhook_info
+from noetfield_governance.telegram_client import get_webhook_info, set_my_commands, set_webhook
+from noetfield_governance.telegram_commands import BOT_COMMANDS
 
 
 def main() -> int:
@@ -21,8 +22,10 @@ def main() -> int:
         return 1
     url = f"{base}/api/telegram/webhook"
     result = set_webhook(token=token, webhook_url=url, secret_token=secret)
+    commands = set_my_commands(token=token, commands=BOT_COMMANDS)
     info = get_webhook_info(token=token)
     print("setWebhook:", result)
+    print("setMyCommands:", commands)
     print("webhookInfo:", info)
     return 0
 

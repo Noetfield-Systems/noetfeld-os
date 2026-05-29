@@ -50,8 +50,20 @@ TELEGRAM_BOT_TOKEN=... TELEGRAM_WEBHOOK_BASE_URL=https://platform.noetfield.com 
 - `GET /api/telegram/health`
 - `GET /api/ecosystem/health` — website chat + Telegram + providers
 
-## Commands
+## Commands (registered in BotFather menu)
 
-- `/start` — welcome + intake links
-- `/help` — same as start
-- Any other text — grounded assistant reply
+| Command | Description |
+|---------|-------------|
+| `/start` | Welcome + inline menu |
+| `/help` | Usage guide |
+| `/offerings` | All three SKUs |
+| `/trustbrief` | Trust Brief $10,000 |
+| `/copilot` | Copilot Governance Pack |
+| `/pilot` | Bank Pilot (read-only) |
+| `/intake` | Request Governance Brief |
+| `/human` | operations@noetfield.com |
+| `/reset` | Clear conversation memory |
+
+Free-text questions use the same LLM + FAQ knowledge as the website, with **typing indicator** and **session memory** (last 8 turns).
+
+**Inline buttons:** Trust Brief, Copilot, Bank Pilot, Request Brief (URL), FAQ.

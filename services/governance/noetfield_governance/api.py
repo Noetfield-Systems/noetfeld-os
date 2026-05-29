@@ -18,8 +18,10 @@ from noetfield_governance.telegram_client import (
     TelegramAPIError,
     TelegramConfigurationError,
     get_webhook_info,
+    set_my_commands,
     set_webhook,
 )
+from noetfield_governance.telegram_commands import BOT_COMMANDS
 from noetfield_governance.telegram_webhook import handle_telegram_update
 
 from noetfield_events import EventType, build_event
@@ -602,12 +604,17 @@ async def telegram_register_webhook(request: Request) -> dict[str, object]:
             webhook_url=webhook_url,
             secret_token=secret_token,
         )
+        commands = await asyncio.to_thread(
+            set_my_commands,
+            token=token,
+            commands=BOT_COMMANDS,
+        )
         info = await asyncio.to_thread(get_webhook_info, token=token)
     except TelegramConfigurationError as exc:
         raise HTTPException(status_code=503, detail=str(exc)) from exc
     except TelegramAPIError as exc:
         raise HTTPException(status_code=502, detail=str(exc)) from exc
-    return {"setWebhook": result, "webhookInfo": info, "url": webhook_url}
+    return {"setWebhook": result, "setMyCommands": commands, "webhookInfo": info, "url": webhook_url}
 
 
 @app.get("/runtime/console", tags=["runtime"])
