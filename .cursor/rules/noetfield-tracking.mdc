@@ -1,0 +1,14 @@
+---
+description: Where agents read tasks and what never to commit
+globs:
+  - "**/*"
+alwaysApply: true
+---
+
+# Noetfield tracking (agents)
+
+Follow [.cursor/AGENT_TRACKING.md](../AGENT_TRACKING.md).
+
+- **Tasks:** `ops/private/todolist/` if it exists locally; otherwise **GitHub Issues**.
+- **Never commit:** `ops/private/`, root `todolist/`, or founder checklists under `docs/`.
+- **Public updates only:** [docs/ROADMAP.md](../../docs/ROADMAP.md), code, tests.

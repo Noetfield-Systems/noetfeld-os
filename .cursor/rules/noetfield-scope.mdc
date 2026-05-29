@@ -7,9 +7,8 @@ globs:
 # Noetfield agent scope
 
 - **This repo = Noetfield product only.** Do not implement TrustField (`TF-*`) or VIRLUX (`VL-*`) here.
-- **Do not** recreate `todolist/` at the repository root.
-- **Tracking:** GitHub Issues (labels `launch`, `legal`, `engineering`) and [docs/ROADMAP.md](docs/ROADMAP.md).
-- **Founder detail:** `ops/private/` is gitignored — never commit it.
+- **Tracking:** [.cursor/AGENT_TRACKING.md](../AGENT_TRACKING.md) — `ops/private/todolist/` locally, else GitHub Issues.
+- **Do not** recreate `todolist/` at repo root or commit `ops/private/`.
 - **Boundaries:** [PROJECT_BOUNDARIES_LOCKED.md](PROJECT_BOUNDARIES_LOCKED.md)
 - **Deploy:** [docs/GO_LIVE.md](docs/GO_LIVE.md), [docs/RUNBOOK.md](docs/RUNBOOK.md)
 
