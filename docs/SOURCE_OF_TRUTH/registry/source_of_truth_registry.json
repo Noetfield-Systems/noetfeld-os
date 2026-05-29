@@ -1,5 +1,5 @@
 {
-  "registry_version": "2026-05-29-sot-15",
+  "registry_version": "2026-05-29-sot-16",
   "decisions": [
     {
       "domain": "context_graph",
@@ -720,6 +720,46 @@
       "decision": "active_methodology_reference",
       "rationale": "Safest CAD\u2192INR corridor framing as instruction interface; routing variant prohibited.",
       "confidence": 0.87
+    },
+    {
+      "domain": "noetfield_corporate_api_definition",
+      "active_document_key": "noetfield-corporate-definition-governance-v2-1",
+      "active_version": "gov-v2.1",
+      "decision": "active_source_of_truth",
+      "rationale": "Canonical non-payment corporate definition for partners, grants, and banks; subordinate to GCIP v4 L0.",
+      "confidence": 0.93
+    },
+    {
+      "domain": "noetfield_government_funding_bc",
+      "active_document_key": "noetfield-innovate-bc-investment-narrative-v6-1",
+      "active_version": "innovate-bc-v6.1",
+      "decision": "active_source_of_truth",
+      "rationale": "Innovate BC / PacifiCan / Vancouver ecosystem investment narrative.",
+      "confidence": 0.9
+    },
+    {
+      "domain": "noetfield_government_funding_ontario",
+      "active_document_key": "noetfield-oci-investment-narrative-v6-1",
+      "active_version": "oci-v6.1",
+      "decision": "active_source_of_truth",
+      "rationale": "OCI / Ontario commercialization and IPON funding stack narrative.",
+      "confidence": 0.9
+    },
+    {
+      "domain": "noetfield_government_funding_irap",
+      "active_document_key": "noetfield-nrc-irap-technical-prospectus-v6-1",
+      "active_version": "irap-v6.1",
+      "decision": "active_source_of_truth",
+      "rationale": "NRC-IRAP technical validation and R&D prospectus for ITA engagement.",
+      "confidence": 0.91
+    },
+    {
+      "domain": "noetfield_bank_enterprise_pilot",
+      "active_document_key": "noetfield-enterprise-bank-pilot-brief-v6-1",
+      "active_version": "bank-pilot-v6.1",
+      "decision": "active_source_of_truth",
+      "rationale": "12-week bank innovation/risk committee pilot brief; read-validate overlay model.",
+      "confidence": 0.92
     }
   ]
 }

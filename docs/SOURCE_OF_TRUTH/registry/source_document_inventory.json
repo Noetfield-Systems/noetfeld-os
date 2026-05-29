@@ -2783,6 +2783,139 @@
       "supersedes": [],
       "superseded_by": "noetfield-corridor-architecture-stablecoin-mvp-v1",
       "upload_batch": "2026-05-018"
+    },
+    {
+      "document_key": "noetfield-cross-border-architecture-routing-refined-v1",
+      "title": "Cross-Border Architecture \u2014 Routing & Orchestration (Refined)",
+      "domain": "noetfield_corridor_architecture_lineage",
+      "work_package": null,
+      "version_label": "corridor-routing-refined-v1",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-019/noetfield-cross-border-architecture-routing-refined-v1.md",
+      "classification": "prohibited_positioning_draft",
+      "status": "superseded",
+      "supersedes": [],
+      "superseded_by": "noetfield-corporate-definition-governance-v2-1",
+      "upload_batch": "2026-05-019"
+    },
+    {
+      "document_key": "noetfield-corporate-definition-clean-no-msb-fa-v1",
+      "title": "Corporate Definition \u2014 Clean No-MSB (Persian)",
+      "domain": "noetfield_corporate_api_definition",
+      "work_package": null,
+      "version_label": "def-clean-fa-v1",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-019/noetfield-corporate-definition-clean-no-msb-fa-v1.md",
+      "classification": "superseded_gtm_draft",
+      "status": "superseded",
+      "supersedes": [],
+      "superseded_by": "noetfield-corporate-definition-governance-v2-1",
+      "upload_batch": "2026-05-019"
+    },
+    {
+      "document_key": "noetfield-corporate-definition-strict-instruction-fa-v1",
+      "title": "Corporate Definition \u2014 Strict Instruction Layer (Persian)",
+      "domain": "noetfield_corporate_api_definition",
+      "work_package": null,
+      "version_label": "def-strict-fa-v1",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-019/noetfield-corporate-definition-strict-instruction-fa-v1.md",
+      "classification": "active_methodology_reference",
+      "status": "reference",
+      "supersedes": [],
+      "superseded_by": null,
+      "upload_batch": "2026-05-019"
+    },
+    {
+      "document_key": "noetfield-corporate-definition-governance-v2-1",
+      "title": "Corporate Definition \u2014 Governance Infrastructure v2.1 (Canonical)",
+      "domain": "noetfield_corporate_api_definition",
+      "work_package": null,
+      "version_label": "gov-v2.1",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-019/noetfield-corporate-definition-governance-v2-1.md",
+      "classification": "active_source_of_truth",
+      "status": "reference",
+      "supersedes": [
+        "noetfield-corporate-definition-governance-v2",
+        "noetfield-corporate-definition-clean-no-msb-fa-v1"
+      ],
+      "superseded_by": null,
+      "upload_batch": "2026-05-019"
+    },
+    {
+      "document_key": "noetfield-corporate-definition-governance-v2",
+      "title": "Corporate Definition \u2014 Workflow Coordination v2",
+      "domain": "noetfield_corporate_api_definition",
+      "work_package": null,
+      "version_label": "gov-v2",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-019/noetfield-corporate-definition-governance-v2.md",
+      "classification": "superseded_gtm_draft",
+      "status": "superseded",
+      "supersedes": [],
+      "superseded_by": "noetfield-corporate-definition-governance-v2-1",
+      "upload_batch": "2026-05-019"
+    },
+    {
+      "document_key": "noetfield-psp-rpaa-lane-analysis-fa-v1",
+      "title": "PSP / RPAA Lane Analysis \u2014 Execution-Adjacent (Persian)",
+      "domain": "noetfield_corporate_api_definition",
+      "work_package": null,
+      "version_label": "psp-lane-fa-v1",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-019/noetfield-psp-rpaa-lane-analysis-fa-v1.md",
+      "classification": "active_methodology_reference",
+      "status": "reference",
+      "supersedes": [],
+      "superseded_by": null,
+      "upload_batch": "2026-05-019"
+    },
+    {
+      "document_key": "noetfield-innovate-bc-investment-narrative-v6-1",
+      "title": "Innovate BC Investment Narrative & Strategic Brief v6.1",
+      "domain": "noetfield_government_funding_bc",
+      "work_package": null,
+      "version_label": "innovate-bc-v6.1",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-019/noetfield-innovate-bc-investment-narrative-v6-1.md",
+      "classification": "active_source_of_truth",
+      "status": "reference",
+      "supersedes": [],
+      "superseded_by": null,
+      "upload_batch": "2026-05-019"
+    },
+    {
+      "document_key": "noetfield-enterprise-bank-pilot-brief-v6-1",
+      "title": "Enterprise Bank Pilot Brief \u2014 Pre-Execution Coordination v6.1",
+      "domain": "noetfield_bank_enterprise_pilot",
+      "work_package": null,
+      "version_label": "bank-pilot-v6.1",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-019/noetfield-enterprise-bank-pilot-brief-v6-1.md",
+      "classification": "active_source_of_truth",
+      "status": "reference",
+      "supersedes": [],
+      "superseded_by": null,
+      "upload_batch": "2026-05-019"
+    },
+    {
+      "document_key": "noetfield-nrc-irap-technical-prospectus-v6-1",
+      "title": "NRC-IRAP Technical Validation & R&D Prospectus v6.1",
+      "domain": "noetfield_government_funding_irap",
+      "work_package": null,
+      "version_label": "irap-v6.1",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-019/noetfield-nrc-irap-technical-prospectus-v6-1.md",
+      "classification": "active_source_of_truth",
+      "status": "reference",
+      "supersedes": [],
+      "superseded_by": null,
+      "upload_batch": "2026-05-019"
+    },
+    {
+      "document_key": "noetfield-oci-investment-narrative-v6-1",
+      "title": "OCI Investment Narrative & Strategic Brief v6.1",
+      "domain": "noetfield_government_funding_ontario",
+      "work_package": null,
+      "version_label": "oci-v6.1",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-019/noetfield-oci-investment-narrative-v6-1.md",
+      "classification": "active_source_of_truth",
+      "status": "reference",
+      "supersedes": [],
+      "superseded_by": null,
+      "upload_batch": "2026-05-019"
     }
   ],
   "batches": [
@@ -2857,6 +2990,10 @@
     {
       "batch_id": "2026-05-018",
       "source_folder": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-018"
+    },
+    {
+      "batch_id": "2026-05-019",
+      "source_folder": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-019"
     }
   ]
 }

@@ -46,10 +46,10 @@ def test_ingestion_payload_summary_counts() -> None:
     summary = summarize_payload(payload)
 
     assert summary["batch_id"] == "2026-05-combined"
-    assert summary["batch_count"] == 18
-    assert summary["document_count"] == 208
-    assert summary["sot_decision_count"] == 90
-    assert summary["active_rule_candidate_count"] == 123
+    assert summary["batch_count"] == 19
+    assert summary["document_count"] == 218
+    assert summary["sot_decision_count"] == 95
+    assert summary["active_rule_candidate_count"] == 127
     assert "wp03-npl-formal-grammar-2026-05-npl-1" in summary["active_documents"]
     assert "wp01-context-graph-runtime-edition-v2" in summary["active_documents"]
 
@@ -492,4 +492,34 @@ def test_eighteenth_batch_multi_track_domains_are_registered() -> None:
     assert domains["noetfield_ai_company_os_lineage"]["active_document_key"] == "noetfield-control-plane-spec-v1"
     assert domains["noetfield_msb_partner_narrative"]["active_document_key"] == "noetfield-master-blueprint-sme-visibility-readonly-v1"
     assert domains["noetfield_founder_capital_positioning"]["active_document_key"] == "noetfield-two-layer-positioning-refined-v1-1"
+
+def test_nineteenth_batch_corporate_and_funding_resources_are_classified() -> None:
+    payload = build_payload()
+    documents = {document["document_key"]: document for document in payload.inventory["documents"]}
+
+    assert documents["noetfield-cross-border-architecture-routing-refined-v1"]["classification"] == "prohibited_positioning_draft"
+    assert documents["noetfield-corporate-definition-governance-v2-1"]["classification"] == "active_source_of_truth"
+    assert documents["noetfield-innovate-bc-investment-narrative-v6-1"]["classification"] == "active_source_of_truth"
+    assert documents["noetfield-enterprise-bank-pilot-brief-v6-1"]["classification"] == "active_source_of_truth"
+
+
+def test_nineteenth_batch_rule_candidates_are_present() -> None:
+    payload = build_payload()
+    rule_keys = {rule["rule_key"] for rule in payload.rule_registry["active_rule_candidates"]}
+
+    assert "corporate-definition-v2-1-external-default" in rule_keys
+    assert "prohibit-corridor-routing-refined-architecture" in rule_keys
+    assert "government-narratives-execution-adjacent-only" in rule_keys
+    assert "bank-pilot-brief-v6-1-enterprise-default" in rule_keys
+
+
+def test_nineteenth_batch_government_and_bank_sot_domains_are_registered() -> None:
+    payload = build_payload()
+    domains = {decision["domain"]: decision for decision in payload.sot_registry["decisions"]}
+
+    assert domains["noetfield_corporate_api_definition"]["active_document_key"] == "noetfield-corporate-definition-governance-v2-1"
+    assert domains["noetfield_government_funding_bc"]["active_document_key"] == "noetfield-innovate-bc-investment-narrative-v6-1"
+    assert domains["noetfield_government_funding_ontario"]["active_document_key"] == "noetfield-oci-investment-narrative-v6-1"
+    assert domains["noetfield_government_funding_irap"]["active_document_key"] == "noetfield-nrc-irap-technical-prospectus-v6-1"
+    assert domains["noetfield_bank_enterprise_pilot"]["active_document_key"] == "noetfield-enterprise-bank-pilot-brief-v6-1"
 

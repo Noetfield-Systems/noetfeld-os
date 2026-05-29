@@ -1,5 +1,5 @@
 {
-  "registry_version": "2026-05-29-rules-15",
+  "registry_version": "2026-05-29-rules-16",
   "active_rule_candidates": [
     {
       "rule_key": "npl-no-side-effects",
@@ -1107,6 +1107,42 @@
       "rule_type": "legal_positioning",
       "summary": "Corridor docs: instruction formatting and status aggregation only; no routing intelligence claims.",
       "implementation_target": "gtm_policy"
+    },
+    {
+      "rule_key": "corporate-definition-v2-1-external-default",
+      "domain": "noetfield_corporate_api_definition",
+      "source_document_key": "noetfield-corporate-definition-governance-v2-1",
+      "activation_status": "active_design_rule",
+      "rule_type": "gtm",
+      "summary": "Use governance v2.1 for partner/grant copy; subordinate to Constitution GCIP v4.",
+      "implementation_target": "gtm_policy"
+    },
+    {
+      "rule_key": "prohibit-corridor-routing-refined-architecture",
+      "domain": "noetfield_corridor_architecture_lineage",
+      "source_document_key": "noetfield-cross-border-architecture-routing-refined-v1",
+      "activation_status": "active_design_rule",
+      "rule_type": "legal_positioning",
+      "summary": "Do not use routing-engine or selects-how-money-moves corridor architecture externally.",
+      "implementation_target": "gtm_policy"
+    },
+    {
+      "rule_key": "government-narratives-execution-adjacent-only",
+      "domain": "noetfield_government_funding_bc",
+      "source_document_key": "noetfield-innovate-bc-investment-narrative-v6-1",
+      "activation_status": "active_design_rule",
+      "rule_type": "gtm",
+      "summary": "BC/Ontario/IRAP narratives must state no payment initiation, routing, or execution authority.",
+      "implementation_target": "gtm_policy"
+    },
+    {
+      "rule_key": "bank-pilot-brief-v6-1-enterprise-default",
+      "domain": "noetfield_bank_enterprise_pilot",
+      "source_document_key": "noetfield-enterprise-bank-pilot-brief-v6-1",
+      "activation_status": "active_design_rule",
+      "rule_type": "bank_pilot",
+      "summary": "Tier-1 bank committee pilots use v6.1 enterprise brief; SME wedge uses visibility read-only pilot.",
+      "implementation_target": "bank_integration"
     }
   ]
 }
