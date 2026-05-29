@@ -1,0 +1,29 @@
+name: Legal review
+description: privacy, terms, SKU alignment (NF-WWW-02 / NF-WWW-05)
+title: "[legal] "
+labels: ["legal"]
+body:
+  - type: checkboxes
+    id: pages
+    attributes:
+      label: Pages reviewed
+      options:
+        - label: privacy/
+        - label: terms/
+        - label: trust-brief/intake/
+        - label: enterprise/ + copilot/
+    validations:
+      required: true
+  - type: checkboxes
+    id: claims
+    attributes:
+      label: Claims check
+      options:
+        - label: No custody / payment execution on Noetfield surfaces
+        - label: No MSB/PSP claims unless registered
+        - label: Three SKUs only per OFFERINGS_LOCKED.md
+  - type: textarea
+    id: notes
+    attributes:
+      label: Counsel notes
+      description: Store sensitive counsel feedback in private ops notes, not in this issue if public repo.

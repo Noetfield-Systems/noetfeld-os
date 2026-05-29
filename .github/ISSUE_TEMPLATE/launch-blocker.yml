@@ -1,0 +1,31 @@
+name: Launch blocker (NF-P0)
+description: DNS, deploy, secrets, production smoke
+title: "[launch] "
+labels: ["launch", "NF-P0"]
+body:
+  - type: input
+    id: nf_id
+    attributes:
+      label: NF ID
+      placeholder: "NF-DEPLOY-02"
+    validations:
+      required: true
+  - type: textarea
+    id: task
+    attributes:
+      label: Task
+      description: What must be true for go-live?
+    validations:
+      required: true
+  - type: dropdown
+    id: owner
+    attributes:
+      label: Owner
+      options: ["founder", "ops", "engineering"]
+  - type: checkboxes
+    id: verify
+    attributes:
+      label: Verification
+      options:
+        - label: "PLATFORM_HEALTH_BASE smoke script exit 0"
+        - label: "Documented in private ops notes (not committed)"

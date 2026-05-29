@@ -1,0 +1,16 @@
+---
+description: Noetfield-only scope, tracking via Issues and private ops
+globs:
+  - "**/*"
+---
+
+# Noetfield agent scope
+
+- **This repo = Noetfield product only.** Do not implement TrustField (`TF-*`) or VIRLUX (`VL-*`) here.
+- **Do not** recreate `todolist/` at the repository root.
+- **Tracking:** GitHub Issues (labels `launch`, `legal`, `engineering`) and [docs/ROADMAP.md](docs/ROADMAP.md).
+- **Founder detail:** `ops/private/` is gitignored — never commit it.
+- **Boundaries:** [PROJECT_BOUNDARIES_LOCKED.md](PROJECT_BOUNDARIES_LOCKED.md)
+- **Deploy:** [docs/GO_LIVE.md](docs/GO_LIVE.md), [docs/RUNBOOK.md](docs/RUNBOOK.md)
+
+When asked for next moves, use [docs/strategy/noetfield-future-path.md](docs/strategy/noetfield-future-path.md) and open/update Issues — not a public markdown backlog.

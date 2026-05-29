@@ -1,6 +1,6 @@
 # Deferred product work (Tier 3)
 
-Implement **after** production go-live and first paid brief or pilot LOI ([GO_LIVE_CHECKLIST.md](./GO_LIVE_CHECKLIST.md)).
+Implement **after** production go-live and first paid brief or pilot LOI ([GO_LIVE.md](./GO_LIVE.md)).
 
 | ID | Item | Trigger |
 |----|------|---------|

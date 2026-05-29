@@ -18,7 +18,7 @@ Design partner at a bank or credit union evaluating pre-execution governance bef
 
 ## Technical prerequisites
 
-- Platform deployed per [GO_LIVE_CHECKLIST.md](./GO_LIVE_CHECKLIST.md)
+- Platform deployed per [GO_LIVE.md](./GO_LIVE.md)
 - `RUNTIME_EVENT_STORE=postgres` for credible audit lineage in pilot
 
 ## What not to demo

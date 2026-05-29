@@ -3,7 +3,7 @@
 **Status:** Active product strategy · **Scope:** Noetfield only  
 **Locked boundaries:** [PROJECT_BOUNDARIES_LOCKED.md](../../PROJECT_BOUNDARIES_LOCKED.md)
 
-TrustField Technologies and VIRLUX are **not** part of this document — see [external trackers](../../todolist/external/README.md).
+TrustField Technologies and VIRLUX are **not** part of this document — separate entities ([PROJECT_BOUNDARIES_LOCKED.md](../../PROJECT_BOUNDARIES_LOCKED.md)).
 
 ---
 
@@ -52,7 +52,7 @@ flowchart LR
 
 ### Now — go live and trust surface
 
-Execute [NEXT_MOVES.md](../../todolist/NEXT_MOVES.md) P0:
+Execute go-live P0 ([GO_LIVE.md](../GO_LIVE.md), GitHub Issues labeled `launch`):
 
 - Deploy `www` + `platform` (DNS, TLS, secrets rotation)
 - LLM stack (OpenRouter + fallback), `POST /api/intake`, optional Telegram
@@ -62,7 +62,7 @@ Execute [NEXT_MOVES.md](../../todolist/NEXT_MOVES.md) P0:
 
 ### Next — operational product (2026)
 
-From [noetfield-platform.md](../../todolist/noetfield-platform.md) and [noetfield-public-site.md](../../todolist/noetfield-public-site.md):
+From engineering and www work tracked in **GitHub Issues** (see [ROADMAP.md](../ROADMAP.md)):
 
 | Theme | Examples |
 |-------|----------|
@@ -122,7 +122,8 @@ From [noetfield-platform.md](../../todolist/noetfield-platform.md) and [noetfiel
 
 | Doc | Use |
 |-----|-----|
-| [todolist/NEXT_MOVES.md](../../todolist/NEXT_MOVES.md) | P0/P1/P2 execution |
+| [docs/ROADMAP.md](../ROADMAP.md) | Public horizons + shipped summary |
+| [ops/README.md](../../ops/README.md) | Issues + private `ops/private/` |
 | [PLATFORM_BLUEPRINT.md](../../PLATFORM_BLUEPRINT.md) | Architecture constitution |
 | [docs/RUNBOOK.md](../RUNBOOK.md) | Deploy and health |
 | [docs/PRACTICAL_PLAYBOOK.md](../PRACTICAL_PLAYBOOK.md) | Roles at go-live |

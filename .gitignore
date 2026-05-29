@@ -23,3 +23,6 @@ coverage/
 
 tmp/
 logs/
+
+# Founder/agent internal tracking (not public — see ops/README.md)
+ops/private/

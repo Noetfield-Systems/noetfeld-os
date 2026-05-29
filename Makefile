@@ -65,7 +65,7 @@ sitemap:
 	python3 scripts/generate_sitemap.py
 
 go-live-check:
-	@echo "See docs/GO_LIVE_CHECKLIST.md — run deploy_platform_smoke.sh against production when DNS is ready."
+	@echo "See docs/GO_LIVE.md — run deploy_platform_smoke.sh against production when DNS is ready."
 
 ecosystem-health:
 	python3 scripts/audit_no_secrets_in_repo.py

@@ -1,0 +1,21 @@
+name: Engineering task (NF-ENG)
+description: Code, CI, platform, www
+title: "[engineering] "
+labels: ["engineering"]
+body:
+  - type: input
+    id: nf_id
+    attributes:
+      label: NF ID
+      placeholder: "NF-ENG-14"
+  - type: textarea
+    id: task
+    attributes:
+      label: Description
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      placeholder: "Tests pass, PR merged, ..."
