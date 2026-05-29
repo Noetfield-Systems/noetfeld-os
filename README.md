@@ -1,6 +1,8 @@
 # Noetfield Systems
 Infrastructure for AI trust and stewardship
 
+**This repository is Noetfield only.** VIRLUX is a separate project — see [PROJECTS.md](PROJECTS.md).
+
 ## Platform blueprint
 
 See [PLATFORM_BLUEPRINT.md](PLATFORM_BLUEPRINT.md) for the architecture
