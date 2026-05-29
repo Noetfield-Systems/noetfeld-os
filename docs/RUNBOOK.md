@@ -52,4 +52,4 @@ curl -sS http://127.0.0.1:8001/api/ecosystem/health | python3 -m json.tool
 - Sessions: Redis when `REDIS_SESSIONS_ENABLED=true`.
 - Knowledge: `scripts/sync_knowledge_chunks.py` for DB index; pinned `OFFERINGS_LOCKED.md` in prompts.
 
-See also: [PRACTICAL_PLAYBOOK.md](./PRACTICAL_PLAYBOOK.md), [TELEGRAM_BOT_SETUP.md](./TELEGRAM_BOT_SETUP.md), [CHATBOT_SETUP.md](./CHATBOT_SETUP.md).
+See also: [GO_LIVE_CHECKLIST.md](./GO_LIVE_CHECKLIST.md), [PRACTICAL_PLAYBOOK.md](./PRACTICAL_PLAYBOOK.md), [STAGING.md](./STAGING.md), [INTAKE_BACKUP_RETENTION.md](./INTAKE_BACKUP_RETENTION.md), [TELEGRAM_BOT_SETUP.md](./TELEGRAM_BOT_SETUP.md), [CHATBOT_SETUP.md](./CHATBOT_SETUP.md).

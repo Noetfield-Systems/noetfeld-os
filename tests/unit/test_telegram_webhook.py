@@ -76,6 +76,33 @@ def test_telegram_health_endpoint() -> None:
     asyncio.run(run())
 
 
+def test_structured_intake_message() -> None:
+    async def run() -> None:
+        from noetfield_governance import intake_repository
+
+        await intake_repository.init_intake_repository()
+        with patch("noetfield_governance.telegram_webhook.send_message") as send:
+            handled = await handle_telegram_update(
+                {
+                    "message": {
+                        "chat": {"id": 99},
+                        "text": "INTAKE: Acme CU | lead@acme.example | Bank pilot interest",
+                    }
+                },
+                bot_token="fake-token",
+                chat_provider="auto",
+                gemini_api_key=None,
+                gemini_model="gemini-2.0-flash",
+                openrouter_api_key=None,
+                openrouter_model="google/gemini-2.0-flash-001",
+            )
+        assert handled is True
+        text = send.call_args.kwargs.get("text", "")
+        assert "Intake recorded" in text or "intake" in text.lower()
+
+    asyncio.run(run())
+
+
 def test_handle_non_text_message() -> None:
     async def run() -> None:
         with patch("noetfield_governance.telegram_webhook.send_message") as send:

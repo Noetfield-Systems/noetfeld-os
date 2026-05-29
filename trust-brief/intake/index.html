@@ -12,6 +12,7 @@
  <meta name="theme-color" content="#07070b" />
 
  <link rel="canonical" href="https://www.noetfield.com/trust-brief/intake/" />
+ <meta name="nf-chat-api-base" content="https://platform.noetfield.com" />
  <link rel="icon" href="/noetfield-favicon-512.png" type="image/png" />
  <link rel="apple-touch-icon" href="/noetfield-favicon-512.png" />
 
@@ -293,7 +294,7 @@
  <div class="actions" aria-label="Hero actions">
  <a class="btn primary" href="#intake">Start intake</a>
  <a class="btn secondary" href="/trust-brief/#pricing" data-rid-link>View pricing</a>
- <a class="btn secondary" href="/gate/procurement/?focus=trust_brief" data-rid-link>Engagement artifact</a>
+ <a class="btn secondary" href="/gate/intake/?vector=trust-brief" data-rid-link>Engagement gateway</a>
  <a class="btn secondary" href="/gate/sales/" data-rid-link>Purchase hub</a>
  </div>
 
@@ -318,9 +319,10 @@
 
  <div class="bd">
  <form class="form" id="tbIntakeForm"
- action="https://formspree.io/xyzrdrpv"
- method="POST"
- accept-charset="UTF-8">
+ action="#"
+ method="post"
+ accept-charset="UTF-8"
+ novalidate>
 
  <!-- governance flow -->
  <input type="hidden" name="package" value="trust-brief" />
@@ -480,7 +482,7 @@
  <div class="actions" aria-label="Form actions">
  <button class="btn primary" type="submit">Send intake</button>
  <a class="btn secondary" id="tbEmailInstead" href="mailto:operations@noetfield.com">Email operations</a>
- <a class="btn secondary" href="/gate/procurement/?focus=trust_brief" data-rid-link>Engagement artifact</a>
+ <a class="btn secondary" href="/gate/intake/?vector=trust-brief" data-rid-link>Engagement gateway</a>
  <a class="btn secondary" href="/status/" data-rid-link>Status</a>
  </div>
 
@@ -497,9 +499,10 @@
  <strong>Operational intake:</strong> operations@noetfield.com (all SKUs and validation brief kickoffs)
  </div>
 
+ <div id="tbIntakeErr" class="notice" style="display:none;color:var(--warn,#e8b84a);" role="alert"></div>
  <div id="tbOk" style="display:none;">
  <div class="notice">
- <strong>Received.</strong> Next step is scope confirmation and kickoff scheduling.
+ <strong>Received.</strong> Your intake was recorded. Next step is scope confirmation and kickoff scheduling (Request ID above).
  </div>
  </div>
  </form>
@@ -586,7 +589,7 @@
  </div>
  <div class="actions" style="margin-top:12px;">
  <a class="btn primary" href="/gate/sales/" data-rid-link>Open purchase hub</a>
- <a class="btn secondary" href="/gate/procurement/?focus=trust_brief" data-rid-link>Engagement artifact</a>
+ <a class="btn secondary" href="/gate/intake/?vector=trust-brief" data-rid-link>Engagement gateway</a>
  </div>
  </div>
  </div>
@@ -599,7 +602,7 @@
  <div class="stickyText"><strong>Trust Brief intake</strong> — non-confidential. Confirm scope signals and route via engagement intake if needed.</div>
  <div class="actions" style="margin-top:0">
  <a class="btn primary" href="#intake">Start intake</a>
- <a class="btn secondary" href="/gate/procurement/?focus=trust_brief" data-rid-link>Engagement artifact</a>
+ <a class="btn secondary" href="/gate/intake/?vector=trust-brief" data-rid-link>Engagement gateway</a>
  </div>
  </div>
  </section>
@@ -839,20 +842,13 @@
  var copyBtn = document.getElementById("tbCopySummary");
  if (copyBtn) copyBtn.addEventListener("click", copySummary);
 
- var form = document.getElementById("tbIntakeForm");
- var okWrap = document.getElementById("tbOk");
- if (form && okWrap){
- form.addEventListener("submit", function(){
- try { okWrap.style.display = "block"; } catch(e){}
- });
- }
+ /* Submit handled by noetfield-intake-api.js (POST /api/intake) */
  })();
  </script>
 
  <!--
  CONFIG
- - Replace Formspree endpoint with Trust Brief-specific endpoint.
- - Optional: create /trust-brief/thanks/ and configure redirect.
+ - Intake: POST /api/intake via noetfield-intake-api.js (see docs/GO_LIVE_CHECKLIST.md).
 
  SMOKE TEST
  - GET /trust-brief/intake/ returns 200

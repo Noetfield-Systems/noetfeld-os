@@ -61,6 +61,12 @@ site-health:
 	python3 scripts/audit_no_secrets_in_repo.py
 	python3 -m pytest tests/unit/test_public_gtm_alignment.py tests/unit/test_public_simplification.py -q
 
+sitemap:
+	python3 scripts/generate_sitemap.py
+
+go-live-check:
+	@echo "See docs/GO_LIVE_CHECKLIST.md — run deploy_platform_smoke.sh against production when DNS is ready."
+
 ecosystem-health:
 	python3 scripts/audit_no_secrets_in_repo.py
 	PYTHONPATH=$(PYTHONPATH_VALUE) RUNTIME_EVENT_STORE=memory python3 -m pytest tests/unit/test_public_chat.py tests/unit/test_openrouter_client.py tests/unit/test_telegram_webhook.py tests/unit/test_public_intake.py tests/unit/test_practical_ecosystem.py tests/unit/test_chat_quality.py -q

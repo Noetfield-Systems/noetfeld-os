@@ -18,6 +18,8 @@
 
 ## P0 — Noetfield launch blockers
 
+> **Founder/ops runbook:** [docs/GO_LIVE_CHECKLIST.md](../docs/GO_LIVE_CHECKLIST.md)
+
 ### Founder / ops
 
 - [ ] **NF-SECRET-01** — Rotate keys pasted in chat; platform env only
@@ -42,15 +44,15 @@
 
 | # | ID | Task |
 |---|-----|------|
-| 1 | NF-WWW-04 | Regenerate `sitemap.xml` + CI |
-| 2 | NF-WWW-03 | Formspree env or API-only intake |
-| 3 | NF-WWW-14 | `/gate/intake/` Copilot + Bank Pilot cards |
-| 4 | NF-ENG-10 | Intake Postgres backup/retention docs |
-| 5 | NF-ENG-14 | CI/CD deploy platform on `main` |
-| 6 | NF-ENG-15 | Staging + CORS |
-| 7 | NF-WWW-02 | Remove “procurement” on intake pages |
-| 8 | NF-ENG-17 | Telegram `/intake` → `POST /api/intake` |
-| 9 | NF-WWW-13 | Align or deprecate `apps/web` vs static HTML |
+| 1 | NF-WWW-04 | Regenerate `sitemap.xml` + CI | done — `scripts/generate_sitemap.py`, www CI |
+| 2 | NF-WWW-03 | API-only intake (Formspree removed) | done — `noetfield-intake-api.js` |
+| 3 | NF-WWW-14 | `/gate/intake/` Copilot + Bank Pilot cards | done |
+| 4 | NF-ENG-10 | Intake Postgres backup/retention docs | done — `docs/INTAKE_BACKUP_RETENTION.md` |
+| 5 | NF-ENG-14 | CI/CD deploy platform on `main` | done — `platform-deploy.yml` (validate + smoke) |
+| 6 | NF-ENG-15 | Staging + CORS | done — `docs/STAGING.md` |
+| 7 | NF-WWW-02 | Remove “procurement” on intake pages | done — gate/intake + trust-brief links |
+| 8 | NF-ENG-17 | Telegram structured intake → API | done — `INTAKE: org \| email \| msg` |
+| 9 | NF-WWW-13 | Static www canonical | done — `docs/CANONICAL_WWW.md` |
 
 ---
 

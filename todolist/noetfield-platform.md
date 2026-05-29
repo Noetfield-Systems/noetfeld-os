@@ -32,14 +32,14 @@ Repo: this monolith · Host: `platform.noetfield.com` · Port: **8001**
 
 | ID | Item | Status | Owner | Type | Notes |
 |----|------|--------|-------|------|-------|
-| NF-ENG-10 | Postgres **persistent** intake + backup/retention policy | todo | engineering | code | In-memory fallback when not on postgres |
+| NF-ENG-10 | Postgres **persistent** intake + backup/retention policy | done | engineering | code | `docs/INTAKE_BACKUP_RETENTION.md` |
 | NF-ENG-11 | CRM sync (HubSpot/Salesforce) from `/api/intake` | todo | engineering | nice_to_have | |
 | NF-ENG-12 | pgvector RAG over `knowledge_chunks` + embeddings job | todo | engineering | code | `scripts/sync_knowledge_chunks.py` seeds table |
 | NF-ENG-13 | Langfuse dashboards in prod | todo | ops | ops | Set `LANGFUSE_*` env |
-| NF-ENG-14 | API service in default CI deploy pipeline | todo | engineering | ops | Not only manual `make api-v3` |
-| NF-ENG-15 | Staging environment + `PUBLIC_CHAT_API_BASE` for preview www | todo | engineering | ops | |
+| NF-ENG-14 | API service in default CI deploy pipeline | done | engineering | ops | `.github/workflows/platform-deploy.yml` |
+| NF-ENG-15 | Staging environment + `PUBLIC_CHAT_API_BASE` for preview www | done | engineering | ops | `docs/STAGING.md` |
 | NF-ENG-16 | WAF / edge rate limit on `/api/public/chat` and webhook | todo | engineering | nice_to_have | |
-| NF-ENG-17 | Telegram → `POST /api/intake` for structured leads | todo | engineering | code | Today: web form + commands |
+| NF-ENG-17 | Telegram → `POST /api/intake` for structured leads | done | engineering | code | `INTAKE: org \| email \| message` |
 | NF-ENG-18 | Formal **Supabase Auth** for pilot console only | todo | engineering | nice_to_have | Postgres remains SoR; Supabase optional |
 | NF-ENG-19 | Email worker (Gmail monitor) for `operations@` — spec only today | todo | engineering | code | Mentioned in intake.js comments |
 

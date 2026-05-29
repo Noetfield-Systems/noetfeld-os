@@ -8,13 +8,13 @@ from typing import AsyncIterator
 
 from httpx import ASGITransport, AsyncClient
 
-from noetfield_governance.api import app, subscribe_runtime_audit
+from noetfield_governance.api import app, startup_platform
 
 
 @asynccontextmanager
 async def governance_test_client() -> AsyncIterator[AsyncClient]:
-    """HTTPX ASGI transport does not run FastAPI startup; wire audit subscriber explicitly."""
-    await subscribe_runtime_audit()
+    """HTTPX ASGI transport does not run FastAPI startup; wire platform startup explicitly."""
+    await startup_platform()
     transport = ASGITransport(app=app)
     async with AsyncClient(transport=transport, base_url="http://test") as client:
         yield client

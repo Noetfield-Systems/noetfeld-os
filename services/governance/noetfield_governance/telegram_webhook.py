@@ -9,6 +9,7 @@ from typing import Any
 from noetfield_config import CANONICAL_INTAKE_EMAIL
 from noetfield_governance.chat_errors import ChatAPIError, ChatConfigurationError
 from noetfield_governance.public_chat import ChatProvider, answer_public_question
+from noetfield_governance.public_intake import submit_intake
 from noetfield_governance.telegram_client import TelegramAPIError, send_chat_action, send_message
 from noetfield_governance.telegram_commands import (
     BOT_COMMANDS,
@@ -51,7 +52,8 @@ _HELP_MSG = (
     "Institutional Q&amp;A grounded in public product information.\n\n"
     "<b>Commands</b>\n"
     "/offerings · /trustbrief · /copilot · /pilot\n"
-    "/intake · /human · /reset\n\n"
+    "/intake · /human · /reset\n"
+    "Structured lead: <code>INTAKE: Org | email@example.com | message</code>\n\n"
     "Type a question or use the menu below."
 )
 
@@ -237,6 +239,65 @@ async def _handle_menu_callback(
     return "ok"
 
 
+async def _try_structured_intake(text: str, *, token: str, chat_id: int) -> bool:
+    """NF-ENG-17: INTAKE: Org | email | message → POST /api/intake pipeline."""
+    raw = text.strip()
+    if not raw.upper().startswith("INTAKE:"):
+        return False
+    rest = raw.split(":", 1)[1].strip()
+    parts = [p.strip() for p in rest.split("|")]
+    if len(parts) < 3:
+        await _send_canned(
+            token=token,
+            chat_id=chat_id,
+            html=(
+                "Use: <code>INTAKE: Organization | email@example.com | Your message</code>\n\n"
+                f'Or use <a href="https://www.noetfield.com/trust-brief/intake/">web intake</a>.'
+            ),
+            keyboard=after_reply_keyboard(),
+        )
+        return True
+    org, email, message = parts[0], parts[1], "|".join(parts[2:]).strip()
+    try:
+        rec = await submit_intake(
+            organization=org,
+            contact_email=email,
+            message=message,
+            request_id=None,
+            contact_name=None,
+            sku="general",
+            vector="telegram-intake",
+            source="telegram",
+            client_key=f"telegram:{chat_id}:{email}",
+            metadata={"chat_id": chat_id},
+        )
+        rid = rec.request_id or "—"
+        await _send_canned(
+            token=token,
+            chat_id=chat_id,
+            html=(
+                f"<b>Intake recorded.</b> ID <code>{escape_html(rec.intake_id)}</code>\n"
+                f"Request ID: <code>{escape_html(rid)}</code>\n"
+                f"Ops: {CANONICAL_INTAKE_EMAIL}"
+            ),
+            keyboard=after_reply_keyboard(),
+        )
+    except ValueError as exc:
+        await _send_canned(
+            token=token,
+            chat_id=chat_id,
+            html=f"Intake invalid: {escape_html(str(exc))}",
+            keyboard=after_reply_keyboard(),
+        )
+    except PermissionError:
+        await _send_canned(
+            token=token,
+            chat_id=chat_id,
+            html="Too many intake submissions. Try again in a minute.",
+        )
+    return True
+
+
 async def _answer_with_llm(
     *,
     token: str,
@@ -315,6 +376,9 @@ async def handle_telegram_update(
     if parsed is None:
         return await handle_unrecognized_update(update, bot_token=bot_token)
     chat_id, text, first_name, _ = parsed
+
+    if await _try_structured_intake(text, token=bot_token, chat_id=chat_id):
+        return True
 
     if text.startswith("/"):
         try:

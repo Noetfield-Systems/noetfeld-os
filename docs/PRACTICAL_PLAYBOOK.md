@@ -34,7 +34,7 @@ Setup: [TELEGRAM_BOT_SETUP.md](./TELEGRAM_BOT_SETUP.md)
 
 | Source | What you receive |
 |--------|------------------|
-| Web intake | Formspree + `POST /api/intake` (Postgres when `INTAKE_PERSISTENCE=auto`) + `mailto:` with `RID-…` |
+| Web intake | **`POST /api/intake`** primary (`noetfield-intake-api.js`) + `mailto:` fallback with `RID-…` |
 | Ops API view | `GET /api/intake/recent` with `X-Admin-Secret`; optional `INTAKE_OPS_WEBHOOK_URL` (Slack) |
 | Idempotency | Same `RID-…` returns existing intake row |
 | Email | `operations@noetfield.com` — subject should include vector + RID |

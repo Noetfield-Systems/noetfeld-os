@@ -1,0 +1,42 @@
+name: Noetfield WWW CI
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "**/*.html"
+      - "assets/**"
+      - "scripts/generate_sitemap.py"
+      - "scripts/audit_public_site_health.py"
+      - "sitemap.xml"
+      - ".github/workflows/noetfield-www-ci.yml"
+  pull_request:
+    paths:
+      - "**/*.html"
+      - "assets/**"
+      - "scripts/generate_sitemap.py"
+      - "scripts/audit_public_site_health.py"
+      - "sitemap.xml"
+
+jobs:
+  www-health:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Regenerate sitemap
+        run: python3 scripts/generate_sitemap.py
+
+      - name: Check sitemap committed
+        run: |
+          git diff --exit-code sitemap.xml || (
+            echo "sitemap.xml is out of date — run: python3 scripts/generate_sitemap.py"
+            exit 1
+          )
+
+      - name: Public site health
+        run: make site-health

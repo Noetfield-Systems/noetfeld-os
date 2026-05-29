@@ -33,12 +33,17 @@
  <a class="btn btn-secondary" id="giTrustBrief" href="/trust-brief/intake/?vector=trust-brief">Trust Brief intake</a>
  </article>
  <article class="nf-dir-card featured">
+ <h3>Copilot Governance Pack</h3>
+ <p>Microsoft 365 Copilot policy alignment and compliance layer.</p>
+ <a class="btn btn-secondary" id="giCopilot" href="/trust-brief/intake/?vector=copilot-governance&amp;interest=copilot">Copilot intake</a>
+ </article>
+ <article class="nf-dir-card featured">
  <h3>Bank Pilot</h3>
  <p>Read-only governance simulation (shadow mode).</p>
  <a class="btn btn-secondary" id="giBankPilot" href="/trust-brief/intake/?vector=bank-pilot&amp;interest=bank-pilot">Bank Pilot intake</a>
  </article>
- <article class="nf-dir-card featured">
- <h3>Partner / procurement</h3>
+ <article class="nf-dir-card">
+ <h3>Partner programs</h3>
  <p>Channel, integration, or vendor onboarding.</p>
  <a class="btn btn-secondary" id="giPartner" href="/trust-brief/intake/?vector=partner-gateway">Partner intake</a>
  </article>
@@ -67,7 +72,7 @@
        vector || "gate-intake"
      );
    }
-   ["giTrustBrief", "giBankPilot", "giPartner"].forEach(function (id) {
+   ["giTrustBrief", "giCopilot", "giBankPilot", "giPartner"].forEach(function (id) {
      var el = document.getElementById(id);
      if (!el || !vector) return;
      try {

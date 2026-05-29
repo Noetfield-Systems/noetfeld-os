@@ -1,0 +1,63 @@
+name: Platform CI (deploy-ready)
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "services/**"
+      - "packages/**"
+      - "infrastructure/**"
+      - "scripts/**"
+      - "tests/**"
+      - "pyproject.toml"
+      - ".github/workflows/platform-deploy.yml"
+  pull_request:
+    paths:
+      - "services/**"
+      - "packages/**"
+      - "infrastructure/**"
+      - "scripts/**"
+      - "tests/**"
+      - "pyproject.toml"
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e ".[dev]"
+
+      - name: Compile and ecosystem health
+        env:
+          RUNTIME_EVENT_STORE: memory
+          PYTHONPATH: .:packages/types:packages/config:services/events:services/ledger:services/graph:services/governance:services/signals:services/workflow:services/ai-runtime:services/inspectors:services/identity:services/copilot-governance
+        run: |
+          python -m compileall packages services scripts
+          make ecosystem-health
+
+      - name: Deploy smoke (ephemeral API)
+        env:
+          RUNTIME_EVENT_STORE: memory
+          PYTHONPATH: .:packages/types:packages/config:services/events:services/ledger:services/graph:services/governance:services/signals:services/workflow:services/ai-runtime:services/inspectors:services/identity:services/copilot-governance
+        run: |
+          uvicorn noetfield_governance.api:app --host 127.0.0.1 --port 8001 --app-dir services/governance &
+          sleep 4
+          PLATFORM_HEALTH_BASE=http://127.0.0.1:8001 ./scripts/deploy_platform_smoke.sh
+          kill %1 || true
+
+  # Production deploy: wire your host (Fly, ECS, VM) here when secrets are available.
+  # deploy:
+  #   needs: validate
+  #   if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - run: echo "Add docker push / SSH deploy using repository secrets"
