@@ -1,5 +1,5 @@
 {
-  "registry_version": "2026-05-29-rules-8",
+  "registry_version": "2026-05-29-rules-9",
   "active_rule_candidates": [
     {
       "rule_key": "npl-no-side-effects",
@@ -729,6 +729,87 @@
       "rule_type": "ui_governance",
       "summary": "Production approvals flow through Gatekeeper UI with HSM signing and append to event store.",
       "implementation_target": "copilot_governance"
+    },
+    {
+      "rule_key": "noetfield-never-executes-payments",
+      "domain": "noetfield_bank_governance_integration",
+      "source_document_key": "noetfield-bank-integration-pack-v2",
+      "activation_status": "active_design_rule",
+      "rule_type": "regulatory_boundary",
+      "summary": "Noetfield must not move funds, initiate payments, settle, hold custody, or route transactions.",
+      "implementation_target": "policy_runtime"
+    },
+    {
+      "rule_key": "ghp-no-execution-instructions",
+      "domain": "noetfield_bank_governance_integration",
+      "source_document_key": "noetfield-bank-integration-pack-v2",
+      "activation_status": "active_design_rule",
+      "rule_type": "data_contract",
+      "summary": "GHP must never contain account numbers, routing, amounts, execution triggers, or settlement logic.",
+      "implementation_target": "schema_validator"
+    },
+    {
+      "rule_key": "cda-no-payment-routing-fields",
+      "domain": "noetfield_bank_governance_integration",
+      "source_document_key": "noetfield-bank-integration-pack-v2",
+      "activation_status": "active_design_rule",
+      "rule_type": "data_contract",
+      "summary": "CDA must not include payment instructions, settlement parameters, or custody semantics.",
+      "implementation_target": "schema_validator"
+    },
+    {
+      "rule_key": "nig-translation-boundary-only",
+      "domain": "noetfield_bank_governance_integration",
+      "source_document_key": "noetfield-bank-integration-pack-v2",
+      "activation_status": "active_design_rule",
+      "rule_type": "integration_boundary",
+      "summary": "NIG may normalize schema and compliance metadata only; forbidden to trigger transactions or settlement.",
+      "implementation_target": "integration_gateway"
+    },
+    {
+      "rule_key": "nf-chain-lock-integrity-gate",
+      "domain": "noetfield_bank_governance_integration",
+      "source_document_key": "noetfield-bank-integration-pack-v2",
+      "activation_status": "active_design_rule",
+      "rule_type": "integrity",
+      "summary": "If H_current != H_manifest then C3 HARD STOP; SHA-256 over L0+L4+version.",
+      "implementation_target": "workflow_runtime"
+    },
+    {
+      "rule_key": "l3-external-execution-authority-only",
+      "domain": "noetfield_l3_egs_runtime",
+      "source_document_key": "noetfield-l3-execution-engine-egs-v2",
+      "activation_status": "active_design_rule",
+      "rule_type": "runtime_governance",
+      "summary": "L3 forwards approved decisions to external institutions only; cannot override L2 REJECT.",
+      "implementation_target": "workflow_runtime"
+    },
+    {
+      "rule_key": "sot-registry-reference-only",
+      "domain": "noetfield_gcip_document_hierarchy",
+      "source_document_key": "noetfield-master-document-directory-l0-l5-v1",
+      "activation_status": "active_design_rule",
+      "rule_type": "architecture",
+      "summary": "L4 SoT indexes definitions and lineage; no decisions, policy execution, or analysis.",
+      "implementation_target": "source_of_truth_registry"
+    },
+    {
+      "rule_key": "bank-pack-overrides-conflicting-execution-specs",
+      "domain": "noetfield_bank_governance_integration",
+      "source_document_key": "noetfield-bank-integration-pack-v2",
+      "activation_status": "active_design_rule",
+      "rule_type": "precedence",
+      "summary": "On conflict, bank integration pack v2 overrides any document implying Noetfield payment execution.",
+      "implementation_target": "source_of_truth_registry"
+    },
+    {
+      "rule_key": "l2-mecr-final-governance-gate",
+      "domain": "noetfield_gcip_document_hierarchy",
+      "source_document_key": "noetfield-master-document-directory-l0-l5-v1",
+      "activation_status": "active_design_rule",
+      "rule_type": "architecture",
+      "summary": "Only L2 MECR may emit APPROVE/REJECT/REWRITE/FLAG; L1 structures only.",
+      "implementation_target": "policy_runtime"
     }
   ]
 }

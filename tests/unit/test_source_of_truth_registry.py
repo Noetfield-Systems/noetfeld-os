@@ -46,10 +46,10 @@ def test_ingestion_payload_summary_counts() -> None:
     summary = summarize_payload(payload)
 
     assert summary["batch_id"] == "2026-05-combined"
-    assert summary["batch_count"] == 11
-    assert summary["document_count"] == 113
-    assert summary["sot_decision_count"] == 58
-    assert summary["active_rule_candidate_count"] == 81
+    assert summary["batch_count"] == 12
+    assert summary["document_count"] == 125
+    assert summary["sot_decision_count"] == 63
+    assert summary["active_rule_candidate_count"] == 90
     assert "wp03-npl-formal-grammar-2026-05-npl-1" in summary["active_documents"]
     assert "wp01-context-graph-runtime-edition-v2" in summary["active_documents"]
 
@@ -281,3 +281,31 @@ def test_eleventh_batch_sot_domains_are_registered() -> None:
     assert domains["noetfield_temporal_governance_v2"]["active_document_key"] == "noetfield-v2-temporal-governance-os-bank-grade"
     assert domains["noetfield_evidence_pack_schema"]["active_document_key"] == "noetfield-evidence-pack-json-schema-v1"
     assert domains["noetfield_operating_discipline"]["active_document_key"] == "noetfield-directory-enforced-consistency-spec-fa"
+
+def test_twelfth_batch_bank_governance_resources_are_classified() -> None:
+    payload = build_payload()
+    documents = {document["document_key"]: document for document in payload.inventory["documents"]}
+
+    assert documents["noetfield-bank-integration-pack-v2"]["classification"] == "active_source_of_truth"
+    assert documents["noetfield-cross-layer-integration-spec-v1"]["superseded_by"] == "noetfield-bank-integration-pack-v2"
+    assert documents["noetfield-master-document-directory-l0-l5-v1"]["classification"] == "active_source_of_truth"
+    assert documents["noetfield-agent-governance-executive-bundle-duplicate"]["classification"] == "duplicate"
+
+
+def test_twelfth_batch_bank_governance_rule_candidates_are_present() -> None:
+    payload = build_payload()
+    rule_keys = {rule["rule_key"] for rule in payload.rule_registry["active_rule_candidates"]}
+
+    assert "noetfield-never-executes-payments" in rule_keys
+    assert "ghp-no-execution-instructions" in rule_keys
+    assert "bank-pack-overrides-conflicting-execution-specs" in rule_keys
+    assert "sot-registry-reference-only" in rule_keys
+
+
+def test_twelfth_batch_bank_sot_domains_are_registered() -> None:
+    payload = build_payload()
+    domains = {decision["domain"]: decision for decision in payload.sot_registry["decisions"]}
+
+    assert domains["noetfield_bank_governance_integration"]["active_document_key"] == "noetfield-bank-integration-pack-v2"
+    assert domains["noetfield_gcip_document_hierarchy"]["active_document_key"] == "noetfield-master-document-directory-l0-l5-v1"
+    assert domains["noetfield_l3_egs_runtime"]["active_document_key"] == "noetfield-l3-execution-engine-egs-v2"

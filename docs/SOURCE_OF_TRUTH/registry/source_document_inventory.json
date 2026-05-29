@@ -1523,6 +1523,164 @@
       "supersedes": [],
       "superseded_by": null,
       "upload_batch": "2026-05-011"
+    },
+    {
+      "document_key": "noetfield-bank-integration-pack-v2",
+      "title": "Noetfield Bank Integration Pack v2.0 (Canada-Safe)",
+      "domain": "noetfield_bank_governance_integration",
+      "work_package": null,
+      "version_label": "bank-integration-v2.0",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-012/noetfield-bank-integration-pack-v2.md",
+      "classification": "active_source_of_truth",
+      "status": "reference",
+      "supersedes": [
+        "noetfield-cross-layer-integration-spec-v1"
+      ],
+      "superseded_by": null,
+      "upload_batch": "2026-05-012"
+    },
+    {
+      "document_key": "noetfield-governance-infrastructure-positioning-v1",
+      "title": "Noetfield \u2014 Deterministic Governance Infrastructure (Institutional Positioning)",
+      "domain": "noetfield_bank_governance_integration",
+      "work_package": null,
+      "version_label": "institutional-positioning-v1",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-012/noetfield-governance-infrastructure-positioning-v1.md",
+      "classification": "active_commercial_reference",
+      "status": "reference",
+      "supersedes": [],
+      "superseded_by": null,
+      "upload_batch": "2026-05-012"
+    },
+    {
+      "document_key": "noetfield-bank-due-diligence-deck-v1",
+      "title": "Noetfield Bank Due Diligence Deck v1.0 (RBC/OSFI Format)",
+      "domain": "noetfield_bank_due_diligence",
+      "work_package": null,
+      "version_label": "due-diligence-v1.0",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-012/noetfield-bank-due-diligence-deck-v1.md",
+      "classification": "active_source_of_truth",
+      "status": "reference",
+      "supersedes": [],
+      "superseded_by": null,
+      "upload_batch": "2026-05-012"
+    },
+    {
+      "document_key": "noetfield-bank-grade-implementation-design-v1",
+      "title": "Noetfield Bank-Grade Implementation Design v1.0",
+      "domain": "noetfield_bank_production_architecture",
+      "work_package": null,
+      "version_label": "bank-impl-design-v1.0",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-012/noetfield-bank-grade-implementation-design-v1.md",
+      "classification": "active_source_of_truth",
+      "status": "reference",
+      "supersedes": [],
+      "superseded_by": null,
+      "upload_batch": "2026-05-012"
+    },
+    {
+      "document_key": "noetfield-master-document-directory-l0-l5-v1",
+      "title": "Noetfield Master Document Directory \u2014 L0\u2013L5 Final Stack v1.0",
+      "domain": "noetfield_gcip_document_hierarchy",
+      "work_package": null,
+      "version_label": "master-directory-v1.0",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-012/noetfield-master-document-directory-l0-l5-v1.md",
+      "classification": "active_source_of_truth",
+      "status": "reference",
+      "supersedes": [],
+      "superseded_by": null,
+      "upload_batch": "2026-05-012"
+    },
+    {
+      "document_key": "noetfield-l3-execution-engine-egs-v2",
+      "title": "Noetfield L3 Execution Engine (EGS v2.0) \u2014 Enforcement-Only",
+      "domain": "noetfield_l3_egs_runtime",
+      "work_package": null,
+      "version_label": "egs-v2.0",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-012/noetfield-l3-execution-engine-egs-v2.md",
+      "classification": "active_source_of_truth",
+      "status": "reference",
+      "supersedes": [],
+      "superseded_by": null,
+      "upload_batch": "2026-05-012"
+    },
+    {
+      "document_key": "noetfield-cross-layer-integration-spec-v1",
+      "title": "Noetfield Cross-Layer Integration Spec v1.0 (L0\u2013L4)",
+      "domain": "noetfield_gcip_document_hierarchy",
+      "work_package": null,
+      "version_label": "cross-layer-v1.0",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-012/noetfield-cross-layer-integration-spec-v1.md",
+      "classification": "superseded_for_regulated_execution",
+      "status": "superseded",
+      "supersedes": [],
+      "superseded_by": "noetfield-bank-integration-pack-v2",
+      "upload_batch": "2026-05-012"
+    },
+    {
+      "document_key": "noetfield-document-hierarchy-structural-stack-fa",
+      "title": "Noetfield Document Hierarchy \u2014 Full Structural Stack (Persian)",
+      "domain": "noetfield_gcip_document_hierarchy",
+      "work_package": null,
+      "version_label": "hierarchy-stack-fa-v1",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-012/noetfield-document-hierarchy-structural-stack-fa.md",
+      "classification": "active_operational_reference",
+      "status": "reference",
+      "supersedes": [],
+      "superseded_by": null,
+      "upload_batch": "2026-05-012"
+    },
+    {
+      "document_key": "noetfield-sot-vs-layers-clarification-fa",
+      "title": "SoT vs L0\u2013L3 Layer Clarification (Persian)",
+      "domain": "noetfield_gcip_document_hierarchy",
+      "work_package": null,
+      "version_label": "sot-layers-fa-v1",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-012/noetfield-sot-vs-layers-clarification-fa.md",
+      "classification": "reference_methodology",
+      "status": "reference",
+      "supersedes": [],
+      "superseded_by": null,
+      "upload_batch": "2026-05-012"
+    },
+    {
+      "document_key": "noetfield-layer-architecture-unified-map-fa",
+      "title": "Unified Layer Architecture Map \u2014 Runtime vs Law (Persian)",
+      "domain": "noetfield_gcip_document_hierarchy",
+      "work_package": null,
+      "version_label": "unified-map-fa-v1",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-012/noetfield-layer-architecture-unified-map-fa.md",
+      "classification": "reference_methodology",
+      "status": "reference",
+      "supersedes": [],
+      "superseded_by": null,
+      "upload_batch": "2026-05-012"
+    },
+    {
+      "document_key": "noetfield-agent-governance-executive-bundle-duplicate",
+      "title": "Agent Catalog + Evidence Pack Executive Bundle (Duplicate)",
+      "domain": "noetfield_agent_catalog",
+      "work_package": null,
+      "version_label": "exec-bundle-dup",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-012/noetfield-agent-governance-executive-bundle-duplicate.md",
+      "classification": "duplicate",
+      "status": "superseded",
+      "supersedes": [],
+      "superseded_by": "noetfield-agent-catalog-bank-grade-v1",
+      "upload_batch": "2026-05-012"
+    },
+    {
+      "document_key": "noetfield-v2-temporal-governance-duplicate-bundle",
+      "title": "v2 Temporal Governance OS Executive Bundle (Duplicate)",
+      "domain": "noetfield_temporal_governance_v2",
+      "work_package": null,
+      "version_label": "v2-bundle-dup",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-012/noetfield-v2-temporal-governance-duplicate-bundle.md",
+      "classification": "duplicate",
+      "status": "superseded",
+      "supersedes": [],
+      "superseded_by": "noetfield-v2-temporal-governance-os-bank-grade",
+      "upload_batch": "2026-05-012"
     }
   ],
   "batches": [
@@ -1569,6 +1727,10 @@
     {
       "batch_id": "2026-05-011",
       "source_folder": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-011"
+    },
+    {
+      "batch_id": "2026-05-012",
+      "source_folder": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-012"
     }
   ]
 }

@@ -1,5 +1,5 @@
 {
-  "registry_version": "2026-05-29-sot-8",
+  "registry_version": "2026-05-29-sot-9",
   "decisions": [
     {
       "domain": "context_graph",
@@ -464,6 +464,46 @@
       "decision": "active_source_of_truth",
       "rationale": "Directory/SOT-first responses, drift tracking, value basket for uncertain rankings, founder approval loop.",
       "confidence": 0.88
+    },
+    {
+      "domain": "noetfield_bank_governance_integration",
+      "active_document_key": "noetfield-bank-integration-pack-v2",
+      "active_version": "bank-integration-v2.0",
+      "decision": "active_source_of_truth",
+      "rationale": "Canonical Canada-safe CDA/GHP/NIG/SEOP model; non-custodial pre-execution governance only; supersedes conflicting L3 execution semantics.",
+      "confidence": 0.95
+    },
+    {
+      "domain": "noetfield_bank_due_diligence",
+      "active_document_key": "noetfield-bank-due-diligence-deck-v1",
+      "active_version": "due-diligence-v1.0",
+      "decision": "active_source_of_truth",
+      "rationale": "Institutional diligence deck for OSFI/RBC-style review of non-execution governance boundary.",
+      "confidence": 0.9
+    },
+    {
+      "domain": "noetfield_bank_production_architecture",
+      "active_document_key": "noetfield-bank-grade-implementation-design-v1",
+      "active_version": "bank-impl-design-v1.0",
+      "decision": "active_source_of_truth",
+      "rationale": "Deployable multi-service topology: gateway, MECR cluster, EGS enforcement, SoT graph audit layer.",
+      "confidence": 0.91
+    },
+    {
+      "domain": "noetfield_gcip_document_hierarchy",
+      "active_document_key": "noetfield-master-document-directory-l0-l5-v1",
+      "active_version": "master-directory-v1.0",
+      "decision": "active_source_of_truth",
+      "rationale": "Master index of L0 Constitution through L5 NF-CHAIN-LOCK and layer responsibilities.",
+      "confidence": 0.92
+    },
+    {
+      "domain": "noetfield_l3_egs_runtime",
+      "active_document_key": "noetfield-l3-execution-engine-egs-v2",
+      "active_version": "egs-v2.0",
+      "decision": "active_source_of_truth",
+      "rationale": "L3 enforcement-only runtime; external execution trigger; subordinate to bank integration pack v2 boundaries.",
+      "confidence": 0.89
     }
   ]
 }
