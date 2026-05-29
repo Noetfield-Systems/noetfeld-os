@@ -184,7 +184,7 @@ class PostgresWorkflowStore:
                     where id = $4 and tenant_id = $5
                     """,
                     workflow.state.value,
-                    workflow.payload,
+                    json.dumps(workflow.payload, default=str),
                     workflow.updated_at,
                     workflow.workflow_id,
                     workflow.tenant_id,
