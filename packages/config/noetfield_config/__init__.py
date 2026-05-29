@@ -1,5 +1,11 @@
 """Runtime configuration for Noetfield services."""
 
+from noetfield_config.intake import (
+    CANONICAL_INTAKE_EMAIL,
+    COMPLIANCE_REMEDIATION_TIP,
+    LEGACY_INTAKE_ALIASES,
+)
+
 from functools import lru_cache
 from typing import Literal
 

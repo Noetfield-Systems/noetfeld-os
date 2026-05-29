@@ -15,6 +15,7 @@ ALLOWLIST = {
     ROOT / "trust-brief" / "intake" / "index.html",
     ROOT / "copilot" / "index.html",
     ROOT / "console" / "index.html",
+    ROOT / "gate" / "intake" / "index.html",
     ROOT / "privacy" / "index.html",
     ROOT / "terms" / "index.html",
 }

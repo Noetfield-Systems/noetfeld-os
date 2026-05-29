@@ -19,9 +19,8 @@ Consolidated from six strategic passes. **Supremacy:** [PRODUCT_TRUTH.md](../PRO
 
 | Role | Email |
 |------|-------|
-| Sandbox / billing reconciliation | operations@noetfield.com |
-| General / partner | contact@noetfield.com |
-| Procurement | procurement@noetfield.com (referenced on Playbook) |
+| All intake, partner, procurement, and validation brief kickoffs | operations@noetfield.com |
+| Legacy SMTP aliases (deliverability only, not in public UI) | contact@, procurement@, sales@ may forward to operations@ |
 
 ## Not in public narrative
 

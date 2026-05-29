@@ -41,11 +41,22 @@
 
 ---
 
+## Operational intake (locked)
+
+| Vector | Rule |
+|--------|------|
+| **Canonical inbox** | `operations@noetfield.com` — sole user-facing intake for Trust Brief purchases, validation brief kickoffs, Copilot/Bank Pilot, and partner engagement |
+| **Retired public aliases** | `contact@`, `procurement@`, `sales@` — replaced in all public `mailto:` and intake copy; legacy SMTP aliases may remain for deliverability only |
+| **Gateway** | `/gate/intake/?vector=<lane>` forwards metadata to unified intake; alert destination remains `operations@noetfield.com` |
+| **Runtime anomalies** | Governance evaluation `REJECT` / review-required paths log remediation tip referencing `operations@noetfield.com` |
+
+---
+
 ## Verification
 
 ```bash
-python3 scripts/audit_final_system_lock.py
-pytest tests/unit/test_public_gtm_alignment.py -q
+python3 scripts/audit_intake_email.py
+make verify-final-lock
 ```
 
 Report: [docs/PRODUCTION_READINESS_REPORT.md](docs/PRODUCTION_READINESS_REPORT.md)

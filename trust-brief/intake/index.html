@@ -29,6 +29,7 @@
 
  <!-- LOCKED SHELL -->
  <link rel="stylesheet" href="/assets/noetfield-shell.css" />
+ <script src="/assets/noetfield-intake-email.js" defer></script>
  <script src="/assets/noetfield-shell.js" defer></script>
 
  <style>
@@ -323,6 +324,8 @@
  <input type="hidden" name="package" value="trust-brief" />
  <input type="hidden" name="page" value="/trust-brief/intake/" />
  <input type="hidden" name="rid" value="" data-rid-field />
+ <input type="hidden" name="intake_vector" id="tb_intake_vector" value="trust-brief-intake" />
+ <input type="hidden" name="alert_destination" value="operations@noetfield.com" />
  <input type="hidden" name="prefill_tier" value="" data-prefill-tier />
 
  <div class="groupTitle">Contact</div>
@@ -474,7 +477,7 @@
 
  <div class="actions" aria-label="Form actions">
  <button class="btn primary" type="submit">Send intake</button>
- <a class="btn secondary" id="tbEmailInstead" href="mailto:sales@noetfield.com">Email instead</a>
+ <a class="btn secondary" id="tbEmailInstead" href="mailto:operations@noetfield.com">Email operations</a>
  <a class="btn secondary" href="/gate/procurement/?focus=trust_brief" data-rid-link>Engagement artifact</a>
  <a class="btn secondary" href="/status/" data-rid-link>Status</a>
  </div>
@@ -489,7 +492,7 @@
  <div class="notice">
  <strong>Next step:</strong> scope confirmation → kickoff scheduling (using Request ID) → week-by-week delivery → board memo + starter ledger pack.
  <br />
- <strong>Contact:</strong> sales@noetfield.com • procurement@noetfield.com • billing@noetfield.com • trust@noetfield.com • legal@noetfield.com
+ <strong>Operational intake:</strong> operations@noetfield.com (all SKUs and validation brief kickoffs)
  </div>
 
  <div id="tbOk" style="display:none;">
@@ -564,7 +567,7 @@
 
  <div class="actions" style="margin-top:12px;">
  <button class="btn secondary" type="button" id="tbCopySummary">Copy summary</button>
- <a class="btn secondary" id="tbEmailProc" href="mailto:procurement@noetfield.com">Email procurement</a>
+ <a class="btn secondary" id="tbEmailProc" href="mailto:operations@noetfield.com">Email operations</a>
  <a class="btn secondary" href="/trust-brief/#pricing" data-rid-link>Back to pricing</a>
  </div>
 
@@ -637,9 +640,23 @@
  }
  }
 
+ var INTAKE_EMAIL = (window.NOETFIELD_CANONICAL_INTAKE_EMAIL || "operations@noetfield.com");
+
+ function intakeVector(){
+ try{
+ var sp = new URLSearchParams(location.search);
+ return (sp.get("vector") || sp.get("interest") || sp.get("source") || "trust-brief-intake").trim();
+ }catch(e){ return "trust-brief-intake"; }
+ }
+
  function mailto(to, subject, body){
+ if (window.noetfieldIntakeMailto) return window.noetfieldIntakeMailto(subject, body, intakeVector());
  function enc(s){ return encodeURIComponent(s || ""); }
- return "mailto:" + enc(to) + "?subject=" + enc(subject) + "&body=" + enc(body);
+ var v = intakeVector();
+ var subj = subject || "Noetfield — Intake";
+ if (v && subj.indexOf("[vector:") === -1) subj = "[vector:" + v + "] " + subj;
+ var fullBody = (body || "") + "\n\nSource vector: " + v + "\nAlert destination: " + INTAKE_EMAIL + "\n";
+ return "mailto:" + enc(INTAKE_EMAIL) + "?subject=" + enc(subj) + "&body=" + enc(fullBody);
  }
 
  function baseFromBand(band){
@@ -677,6 +694,8 @@
  if (pre) pre.value = tier || "";
  var tierSel = document.getElementById("tb_tier");
  if (tierSel && (tier === "base" || tier === "pro" || tier === "enterprise")) tierSel.value = tier;
+ var vecEl = document.getElementById("tb_intake_vector");
+ if (vecEl) vecEl.value = intakeVector();
  }catch(e){}
  }
 
@@ -727,6 +746,8 @@
  "Tier direction: " + base.name + "\n" +
  "Inputs: Use cases " + band + ", Teams " + teamsSel + ", Risk " + risk + ", Evidence " + evidence + "\n" +
  "Typical fee guidance: " + fmtCAD(total) + "\n" +
+ "Source vector: " + intakeVector() + "\n" +
+ "Alert destination: " + INTAKE_EMAIL + "\n" +
  "Engagement intake path: " + (proc || "—") + "\n" +
  "Notes (high-level): " + (notes || "—") + "\n" +
  "Disclosure: Guidance only; final quote confirmed after kickoff. Public intake is non-confidential.\n";
@@ -746,8 +767,8 @@
  if (tierOut) tierOut.textContent = "—";
  if (priceOut) priceOut.textContent = "—";
  if (lineOut) lineOut.textContent = "Select form inputs to populate tier direction.";
- if (emailProc) emailProc.href = "mailto:procurement@noetfield.com";
- if (emailInstead) emailInstead.href = "mailto:sales@noetfield.com";
+ if (emailProc) emailProc.href = mailto(INTAKE_EMAIL, "Noetfield — Trust Brief | Engagement intake", "");
+ if (emailInstead) emailInstead.href = mailto(INTAKE_EMAIL, "Noetfield — Trust Brief Intake", "");
  return;
  }
 
@@ -755,8 +776,8 @@
  if (priceOut) priceOut.textContent = fmtCAD(s.total);
  if (lineOut) lineOut.textContent = s.line;
 
- if (emailProc) emailProc.href = mailto("procurement@noetfield.com", "Noetfield — Trust Brief | Engagement intake / Invoice Request (" + s.rid + ")", s.body);
- if (emailInstead) emailInstead.href = mailto("sales@noetfield.com", "Noetfield — Trust Brief Intake (" + s.rid + ")", s.body);
+ if (emailProc) emailProc.href = mailto(INTAKE_EMAIL, "Noetfield — Trust Brief | Engagement intake (" + s.rid + ")", s.body);
+ if (emailInstead) emailInstead.href = mailto(INTAKE_EMAIL, "Noetfield — Trust Brief Intake (" + s.rid + ")", s.body);
 
  try { window.__tbSummary = s.body; } catch(e){}
  }

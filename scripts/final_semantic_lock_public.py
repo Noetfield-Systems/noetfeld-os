@@ -44,7 +44,6 @@ PROTECT_PATTERNS = [
     r"#procurement\b",
     r'id=["\']procurement["\']',
     r"data-proc=",
-    r"procurement@noetfield\.com",
     r"engagements@noetfield\.com",
 ]
 

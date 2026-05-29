@@ -54,36 +54,8 @@ See [DEPLOYMENT_ARCHITECTURE.md](../DEPLOYMENT_ARCHITECTURE.md).
 
 ## 6. Warnings (review)
 
-- `about/index.html`: procurement label
-- `contact/index.html`: procurement label
-- `copilot/governance/index.html`: procurement label
-- `copilot/index.html`: procurement label
-- `copilot/quickscan/connectors/index.html`: procurement label
-- `copilot/quickscan/deliverables/index.html`: procurement label
-- `copilot/quickscan/evidence/index.html`: procurement label
-- `copilot/quickscan/index.html`: procurement label
-- `copilot/quickscan/intake/index.html`: procurement label
-- `copilot/quickscan/oversharing/index.html`: procurement label
-- `copilot/quickscan/procurement/index.html`: procurement label
-- `copilot/quickscan/thanks/index.html`: procurement label, invoice/PO label
-- `copilot/readiness/index.html`: procurement label
-- `copilot/readiness/intake/index.html`: procurement label
-- `faq/index.html`: procurement label
-- `for-whom/index.html`: procurement label
-- `gate/index.html`: procurement label
 - `gate/intake/index.html`: procurement label
-- `gate/offers/index.html`: procurement label
-- `gate/partners/apply/index.html`: procurement label
-- `gate/partners/case-bank-1/index.html`: procurement label
-- `gate/partners/deal/index.html`: procurement label
-- `gate/partners/delivery/index.html`: routing (residual)
-- `gate/partners/hub/index.html`: procurement label
-- `gate/partners/index.html`: procurement label
-- `gate/partners/investors/index.html`: procurement label
-- `gate/partners/notes/index.html`: procurement label
-- `gate/partners/programs/index.html`: procurement label
-- `gate/partners/programs/portfolio-offer/index.html`: procurement label
-- `gate/procurement/SOW/index.html`: procurement label
+- `trust-brief/intake/index.html`: procurement label
 
 ## 7. SOT ↔ Backend ↔ Public Site
 

@@ -25,3 +25,5 @@ Read-only governance simulation only. No execution rights. Audit and compliance 
 ---
 
 **Primary CTA:** Request Governance Brief → `/trust-brief/intake/`
+
+**Operational intake (all SKUs):** `operations@noetfield.com` — Trust Brief purchase confirmations, validation brief kickoffs, Copilot and Bank Pilot engagement, and partner programs. Alternate public aliases (`contact@`, `procurement@`, `sales@`) are retired from user-facing surfaces.

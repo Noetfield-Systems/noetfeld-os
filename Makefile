@@ -50,7 +50,8 @@ final-lock-audit:
 	python3 scripts/audit_final_system_lock.py
 
 verify-final-lock: final-lock-audit
-	pytest tests/unit/test_public_gtm_alignment.py tests/unit/test_golden_edge_v3.py -q
+	python3 scripts/audit_intake_email.py
+	PYTHONPATH=$(PYTHONPATH_VALUE) RUNTIME_EVENT_STORE=memory python3 -m pytest tests/unit -q
 
 console-smoke:
 	PYTHONPATH=$(PYTHONPATH_VALUE) RUNTIME_EVENT_STORE=memory python3 -m pytest tests/unit/test_governance_console_v3.py -q

@@ -1,7 +1,10 @@
 """FastAPI entrypoint for the Noetfield backend runtime core."""
 
+import logging
 from pathlib import Path
 from uuid import UUID
+
+from noetfield_config import CANONICAL_INTAKE_EMAIL, COMPLIANCE_REMEDIATION_TIP
 
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import FileResponse
@@ -70,6 +73,7 @@ from noetfield_workflow import (
 )
 
 settings = get_settings()
+logger = logging.getLogger("noetfield.governance.api")
 
 app = FastAPI(
     title="Noetfield Platform API",
@@ -228,6 +232,16 @@ async def golden_edge_evaluate(request: GoldenEdgeEvaluateRequest) -> dict[str, 
         )
     )
     if result.decision.value == "REJECT":
+        logger.warning(
+            "governance_evaluation_anomaly decision=REJECT tenant_id=%s action=%s resource=%s/%s reason_code=%s %s intake=%s",
+            request.tenant_id,
+            request.action,
+            request.resource_type,
+            request.resource_id,
+            result.reason_code,
+            COMPLIANCE_REMEDIATION_TIP,
+            CANONICAL_INTAKE_EMAIL,
+        )
         await event_bus.publish(
             build_event(
                 event_type=EventType.GOVERNANCE_VETOED,
@@ -237,8 +251,20 @@ async def golden_edge_evaluate(request: GoldenEdgeEvaluateRequest) -> dict[str, 
                 source_service="golden-edge-v3",
                 entity_type=request.resource_type,
                 entity_id=request.resource_id,
-                payload={"reason": result.reason, "reason_code": result.reason_code},
+                payload={
+                    "reason": result.reason,
+                    "reason_code": result.reason_code,
+                    "compliance_remediation_email": CANONICAL_INTAKE_EMAIL,
+                    "compliance_remediation_tip": COMPLIANCE_REMEDIATION_TIP,
+                },
             )
+        )
+    elif result.decision.value == "REQUIRE_HUMAN_REVIEW":
+        logger.info(
+            "governance_evaluation_review_required tenant_id=%s action=%s intake=%s",
+            request.tenant_id,
+            request.action,
+            CANONICAL_INTAKE_EMAIL,
         )
     return result.model_dump(mode="json")
 
