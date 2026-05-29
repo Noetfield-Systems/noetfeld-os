@@ -1681,6 +1681,142 @@
       "supersedes": [],
       "superseded_by": "noetfield-v2-temporal-governance-os-bank-grade",
       "upload_batch": "2026-05-012"
+    },
+    {
+      "document_key": "noetfield-rpaa-legal-opinion-letter-v1",
+      "title": "RPAA Legal Opinion Letter v1.0 (Bulletproof Draft)",
+      "domain": "noetfield_legal_regulatory_positioning",
+      "work_package": null,
+      "version_label": "rpaa-opinion-v1.0",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-013/noetfield-rpaa-legal-opinion-letter-v1.md",
+      "classification": "active_source_of_truth",
+      "status": "reference",
+      "supersedes": [
+        "noetfield-legal-counsel-memorandum-rpaa-draft"
+      ],
+      "superseded_by": null,
+      "upload_batch": "2026-05-013"
+    },
+    {
+      "document_key": "noetfield-legal-counsel-memorandum-rpaa-draft",
+      "title": "Legal Counsel Memorandum \u2014 RPAA/FINTRAC/OSFI (Draft)",
+      "domain": "noetfield_legal_regulatory_positioning",
+      "work_package": null,
+      "version_label": "counsel-memo-draft-v1",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-013/noetfield-legal-counsel-memorandum-rpaa-draft.md",
+      "classification": "superseded_legal_draft",
+      "status": "superseded",
+      "supersedes": [],
+      "superseded_by": "noetfield-rpaa-legal-opinion-letter-v1",
+      "upload_batch": "2026-05-013"
+    },
+    {
+      "document_key": "noetfield-constitutional-annex-product-kernel-v4-en",
+      "title": "Constitutional Annex \u2014 Product Kernel v4.0 (English)",
+      "domain": "noetfield_product_kernel_l1",
+      "work_package": null,
+      "version_label": "product-kernel-v4.0-en",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-013/noetfield-constitutional-annex-product-kernel-v4-en.md",
+      "classification": "active_source_of_truth",
+      "status": "reference",
+      "supersedes": [
+        "noetfield-product-kernel-schedule-v4-duplicate"
+      ],
+      "superseded_by": null,
+      "upload_batch": "2026-05-013"
+    },
+    {
+      "document_key": "noetfield-constitutional-annex-product-kernel-v4-fa",
+      "title": "Constitutional Annex \u2014 Product Kernel v4.0 (Persian)",
+      "domain": "noetfield_product_kernel_l1",
+      "work_package": null,
+      "version_label": "product-kernel-v4.0-fa",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-013/noetfield-constitutional-annex-product-kernel-v4-fa.md",
+      "classification": "active_operational_reference",
+      "status": "reference",
+      "supersedes": [],
+      "superseded_by": null,
+      "upload_batch": "2026-05-013"
+    },
+    {
+      "document_key": "noetfield-product-kernel-schedule-v4-duplicate",
+      "title": "Constitution Schedule v4.0 Product Kernel (Duplicate)",
+      "domain": "noetfield_product_kernel_l1",
+      "work_package": null,
+      "version_label": "schedule-v4-dup",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-013/noetfield-product-kernel-schedule-v4-duplicate.md",
+      "classification": "duplicate",
+      "status": "superseded",
+      "supersedes": [],
+      "superseded_by": "noetfield-constitutional-annex-product-kernel-v4-en",
+      "upload_batch": "2026-05-013"
+    },
+    {
+      "document_key": "noetfield-product-kernel-v4-design-assessment",
+      "title": "Product Kernel v4.0 \u2014 Design Strength Assessment",
+      "domain": "noetfield_product_kernel_l1",
+      "work_package": null,
+      "version_label": "v4-assessment-v1",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-013/noetfield-product-kernel-v4-design-assessment.md",
+      "classification": "reference_only",
+      "status": "reference",
+      "supersedes": [],
+      "superseded_by": null,
+      "upload_batch": "2026-05-013"
+    },
+    {
+      "document_key": "noetfield-bank-procurement-one-pager-rbc-td-v1",
+      "title": "Bank Procurement One-Pager (RBC/TD Format)",
+      "domain": "noetfield_bank_procurement",
+      "work_package": null,
+      "version_label": "procurement-one-pager-v1",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-013/noetfield-bank-procurement-one-pager-rbc-td-v1.md",
+      "classification": "active_source_of_truth",
+      "status": "reference",
+      "supersedes": [],
+      "superseded_by": null,
+      "upload_batch": "2026-05-013"
+    },
+    {
+      "document_key": "noetfield-bank-implementation-unified-canonical-v2",
+      "title": "Bank-Grade Implementation System v2.0 (Unified Canonical)",
+      "domain": "noetfield_bank_governance_integration",
+      "work_package": null,
+      "version_label": "unified-impl-v2.0",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-013/noetfield-bank-implementation-unified-canonical-v2.md",
+      "classification": "active_unified_reference",
+      "status": "reference",
+      "supersedes": [
+        "noetfield-bank-implementation-layer-mapping-v1"
+      ],
+      "superseded_by": null,
+      "upload_batch": "2026-05-013"
+    },
+    {
+      "document_key": "noetfield-bank-implementation-layer-mapping-v1",
+      "title": "Bank Implementation Layer Mapping v1.0",
+      "domain": "noetfield_bank_governance_integration",
+      "work_package": null,
+      "version_label": "layer-mapping-v1",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-013/noetfield-bank-implementation-layer-mapping-v1.md",
+      "classification": "superseded_implementation_reference",
+      "status": "superseded",
+      "supersedes": [],
+      "superseded_by": "noetfield-bank-implementation-unified-canonical-v2",
+      "upload_batch": "2026-05-013"
+    },
+    {
+      "document_key": "noetfield-nf-chain-lock-manifest-layer-spec-v1",
+      "title": "NF-CHAIN-LOCK Manifest Layer \u2014 Compile-Time Integrity Spec",
+      "domain": "noetfield_bank_governance_integration",
+      "work_package": null,
+      "version_label": "nf-chain-lock-manifest-v1",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-013/noetfield-nf-chain-lock-manifest-layer-spec-v1.md",
+      "classification": "active_compliance_reference",
+      "status": "reference",
+      "supersedes": [],
+      "superseded_by": null,
+      "upload_batch": "2026-05-013"
     }
   ],
   "batches": [
@@ -1731,6 +1867,10 @@
     {
       "batch_id": "2026-05-012",
       "source_folder": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-012"
+    },
+    {
+      "batch_id": "2026-05-013",
+      "source_folder": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-013"
     }
   ]
 }

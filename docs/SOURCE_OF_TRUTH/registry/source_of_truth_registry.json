@@ -1,5 +1,5 @@
 {
-  "registry_version": "2026-05-29-sot-9",
+  "registry_version": "2026-05-29-sot-10",
   "decisions": [
     {
       "domain": "context_graph",
@@ -504,6 +504,30 @@
       "decision": "active_source_of_truth",
       "rationale": "L3 enforcement-only runtime; external execution trigger; subordinate to bank integration pack v2 boundaries.",
       "confidence": 0.89
+    },
+    {
+      "domain": "noetfield_legal_regulatory_positioning",
+      "active_document_key": "noetfield-rpaa-legal-opinion-letter-v1",
+      "active_version": "rpaa-opinion-v1.0",
+      "decision": "active_source_of_truth",
+      "rationale": "Primary RPAA/FINTRAC/OSFI legal positioning; contingent on non-execution and non-actionable CDA/PHO.",
+      "confidence": 0.91
+    },
+    {
+      "domain": "noetfield_product_kernel_l1",
+      "active_document_key": "noetfield-constitutional-annex-product-kernel-v4-en",
+      "active_version": "product-kernel-v4.0-en",
+      "decision": "active_source_of_truth",
+      "rationale": "L1 behavior layer subordinate to Constitution v3.2; CDA/PHO, corridors, Canada-safe product rules.",
+      "confidence": 0.93
+    },
+    {
+      "domain": "noetfield_bank_procurement",
+      "active_document_key": "noetfield-bank-procurement-one-pager-rbc-td-v1",
+      "active_version": "procurement-one-pager-v1",
+      "decision": "active_source_of_truth",
+      "rationale": "RBC/TD vendor assessment one-pager for institutional procurement and diligence.",
+      "confidence": 0.9
     }
   ]
 }

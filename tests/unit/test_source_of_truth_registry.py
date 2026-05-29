@@ -46,10 +46,10 @@ def test_ingestion_payload_summary_counts() -> None:
     summary = summarize_payload(payload)
 
     assert summary["batch_id"] == "2026-05-combined"
-    assert summary["batch_count"] == 12
-    assert summary["document_count"] == 125
-    assert summary["sot_decision_count"] == 63
-    assert summary["active_rule_candidate_count"] == 90
+    assert summary["batch_count"] == 13
+    assert summary["document_count"] == 135
+    assert summary["sot_decision_count"] == 66
+    assert summary["active_rule_candidate_count"] == 97
     assert "wp03-npl-formal-grammar-2026-05-npl-1" in summary["active_documents"]
     assert "wp01-context-graph-runtime-edition-v2" in summary["active_documents"]
 
@@ -309,3 +309,32 @@ def test_twelfth_batch_bank_sot_domains_are_registered() -> None:
     assert domains["noetfield_bank_governance_integration"]["active_document_key"] == "noetfield-bank-integration-pack-v2"
     assert domains["noetfield_gcip_document_hierarchy"]["active_document_key"] == "noetfield-master-document-directory-l0-l5-v1"
     assert domains["noetfield_l3_egs_runtime"]["active_document_key"] == "noetfield-l3-execution-engine-egs-v2"
+
+def test_thirteenth_batch_legal_and_product_kernel_resources_are_classified() -> None:
+    payload = build_payload()
+    documents = {document["document_key"]: document for document in payload.inventory["documents"]}
+
+    assert documents["noetfield-rpaa-legal-opinion-letter-v1"]["classification"] == "active_source_of_truth"
+    assert documents["noetfield-constitutional-annex-product-kernel-v4-en"]["classification"] == "active_source_of_truth"
+    assert documents["noetfield-bank-procurement-one-pager-rbc-td-v1"]["classification"] == "active_source_of_truth"
+    assert documents["noetfield-product-kernel-schedule-v4-duplicate"]["classification"] == "duplicate"
+    assert documents["noetfield-legal-counsel-memorandum-rpaa-draft"]["superseded_by"] == "noetfield-rpaa-legal-opinion-letter-v1"
+
+
+def test_thirteenth_batch_legal_and_kernel_rule_candidates_are_present() -> None:
+    payload = build_payload()
+    rule_keys = {rule["rule_key"] for rule in payload.rule_registry["active_rule_candidates"]}
+
+    assert "constitution-v32-supremacy-over-annex" in rule_keys
+    assert "cda-non-actionable-governance-only" in rule_keys
+    assert "pho-zero-instruction-construction" in rule_keys
+    assert "no-transaction-based-revenue-model" in rule_keys
+
+
+def test_thirteenth_batch_legal_sot_domains_are_registered() -> None:
+    payload = build_payload()
+    domains = {decision["domain"]: decision for decision in payload.sot_registry["decisions"]}
+
+    assert domains["noetfield_legal_regulatory_positioning"]["active_document_key"] == "noetfield-rpaa-legal-opinion-letter-v1"
+    assert domains["noetfield_product_kernel_l1"]["active_document_key"] == "noetfield-constitutional-annex-product-kernel-v4-en"
+    assert domains["noetfield_bank_procurement"]["active_document_key"] == "noetfield-bank-procurement-one-pager-rbc-td-v1"

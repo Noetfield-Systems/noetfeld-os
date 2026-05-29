@@ -1,5 +1,5 @@
 {
-  "registry_version": "2026-05-29-rules-9",
+  "registry_version": "2026-05-29-rules-10",
   "active_rule_candidates": [
     {
       "rule_key": "npl-no-side-effects",
@@ -810,6 +810,69 @@
       "rule_type": "architecture",
       "summary": "Only L2 MECR may emit APPROVE/REJECT/REWRITE/FLAG; L1 structures only.",
       "implementation_target": "policy_runtime"
+    },
+    {
+      "rule_key": "constitution-v32-supremacy-over-annex",
+      "domain": "noetfield_product_kernel_l1",
+      "source_document_key": "noetfield-constitutional-annex-product-kernel-v4-en",
+      "activation_status": "active_design_rule",
+      "rule_type": "legal_hierarchy",
+      "summary": "Constitution v3.2 prevails absolutely over Product Kernel v4.0 annex on any conflict.",
+      "implementation_target": "policy_runtime"
+    },
+    {
+      "rule_key": "pho-zero-instruction-construction",
+      "domain": "noetfield_product_kernel_l1",
+      "source_document_key": "noetfield-constitutional-annex-product-kernel-v4-en",
+      "activation_status": "active_design_rule",
+      "rule_type": "data_contract",
+      "summary": "PHO must not contain account numbers, amounts, routing, or settlement instructions.",
+      "implementation_target": "schema_validator"
+    },
+    {
+      "rule_key": "cda-non-actionable-governance-only",
+      "domain": "noetfield_legal_regulatory_positioning",
+      "source_document_key": "noetfield-rpaa-legal-opinion-letter-v1",
+      "activation_status": "active_design_rule",
+      "rule_type": "regulatory_boundary",
+      "summary": "CDA must remain non-reconstructable into payment instructions to preserve non-PSP status.",
+      "implementation_target": "schema_validator"
+    },
+    {
+      "rule_key": "no-transaction-based-revenue-model",
+      "domain": "noetfield_product_kernel_l1",
+      "source_document_key": "noetfield-constitutional-annex-product-kernel-v4-en",
+      "activation_status": "active_design_rule",
+      "rule_type": "commercial_governance",
+      "summary": "Prohibited revenue: FX spread, transaction commission, settlement-linked fees.",
+      "implementation_target": "gtm_policy"
+    },
+    {
+      "rule_key": "user-explicit-pathway-approval-required",
+      "domain": "noetfield_product_kernel_l1",
+      "source_document_key": "noetfield-constitutional-annex-product-kernel-v4-en",
+      "activation_status": "active_design_rule",
+      "rule_type": "product_governance",
+      "summary": "Execution pathways require explicit user selection and confirmation; no auto-select.",
+      "implementation_target": "workflow_runtime"
+    },
+    {
+      "rule_key": "legal-position-contingent-on-non-execution",
+      "domain": "noetfield_legal_regulatory_positioning",
+      "source_document_key": "noetfield-rpaa-legal-opinion-letter-v1",
+      "activation_status": "active_design_rule",
+      "rule_type": "regulatory_boundary",
+      "summary": "Non-PSP/non-MSB opinion void if system introduces execution triggers or funds proximity.",
+      "implementation_target": "policy_runtime"
+    },
+    {
+      "rule_key": "nf-chain-lock-compile-time-manifest",
+      "domain": "noetfield_bank_governance_integration",
+      "source_document_key": "noetfield-nf-chain-lock-manifest-layer-spec-v1",
+      "activation_status": "active_design_rule",
+      "rule_type": "integrity",
+      "summary": "SOT manifest hash at compile-time; runtime drift vs manifest triggers C3 HARD STOP.",
+      "implementation_target": "workflow_runtime"
     }
   ]
 }
