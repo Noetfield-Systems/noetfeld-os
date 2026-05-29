@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Noetfield Governance Console v1</title>
+  <title>Noetfield — Governance Simulation Interface</title>
   <style>
     :root {
       --bg: #0a0c0f;
@@ -18,142 +18,141 @@
     * { box-sizing: border-box; }
     body {
       margin: 0;
-      font-family: ui-monospace, "IBM Plex Mono", monospace;
+      font-family: "Inter", system-ui, sans-serif;
       background: var(--bg);
       color: var(--text);
-      font-size: 13px;
-      line-height: 1.5;
+      font-size: 14px;
+      line-height: 1.55;
     }
     header {
-      padding: 16px 20px;
+      padding: 20px 24px;
       border-bottom: 1px solid var(--border);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 8px;
     }
-    h1 { font-size: 1rem; font-weight: 600; margin: 0; }
-    .sub { color: var(--muted); font-size: 12px; }
+    h1 { font-size: 1.15rem; font-weight: 700; margin: 0 0 6px; }
+    .sub { color: var(--muted); font-size: 13px; margin: 0; max-width: 560px; }
     main {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      padding: 16px;
-      max-width: 1400px;
+      gap: 16px;
+      padding: 20px 24px 48px;
+      max-width: 1200px;
       margin: 0 auto;
     }
     @media (max-width: 900px) { main { grid-template-columns: 1fr; } }
     section {
       background: var(--panel);
       border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 14px;
+      border-radius: 10px;
+      padding: 18px;
     }
     section.full { grid-column: 1 / -1; }
-    h2 { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin: 0 0 10px; }
+    h2 { font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); margin: 0 0 12px; font-weight: 600; }
     textarea {
       width: 100%;
-      min-height: 200px;
+      min-height: 180px;
       background: #0d1117;
       border: 1px solid var(--border);
       color: var(--text);
-      border-radius: 6px;
-      padding: 10px;
-      font-family: inherit;
+      border-radius: 8px;
+      padding: 12px;
+      font-family: ui-monospace, monospace;
       font-size: 12px;
       resize: vertical;
     }
+    .hint { font-size: 12px; color: var(--muted); margin: 0 0 10px; }
     button {
-      margin-top: 10px;
+      margin-top: 12px;
       background: var(--accent);
       color: #0a0c0f;
       border: none;
-      padding: 10px 16px;
-      border-radius: 6px;
+      padding: 11px 18px;
+      border-radius: 8px;
       font-weight: 600;
       cursor: pointer;
-      font-family: inherit;
+      font-size: 14px;
     }
     button:disabled { opacity: 0.5; cursor: not-allowed; }
     button.secondary {
       background: transparent;
       color: var(--text);
       border: 1px solid var(--border);
-    }
-    pre {
-      margin: 0;
-      white-space: pre-wrap;
-      word-break: break-word;
-      font-size: 12px;
+      margin-left: 8px;
     }
     .decision {
-      font-size: 1.25rem;
+      font-size: 1.5rem;
       font-weight: 700;
-      margin-bottom: 8px;
+      margin-bottom: 12px;
     }
     .decision.REJECT { color: var(--reject); }
     .decision.ALLOW { color: var(--accent); }
     .decision.REVIEW { color: var(--warn); }
-    .row { margin-bottom: 6px; }
-    .label { color: var(--muted); }
-    table { width: 100%; border-collapse: collapse; font-size: 11px; }
-    th, td { text-align: left; padding: 8px 6px; border-bottom: 1px solid var(--border); vertical-align: top; }
-    th { color: var(--muted); font-weight: 500; }
-    .err { color: var(--reject); margin-top: 8px; }
-    .toolbar { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+    .row { margin-bottom: 8px; }
+    .label { color: var(--muted); display: block; font-size: 12px; margin-bottom: 2px; }
+    .value { font-size: 14px; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    th, td { text-align: left; padding: 10px 8px; border-bottom: 1px solid var(--border); vertical-align: top; }
+    th { color: var(--muted); font-weight: 500; font-size: 12px; }
+    .err { color: var(--reject); margin-top: 10px; font-size: 13px; }
+    .toolbar { display: flex; flex-wrap: wrap; gap: 0; align-items: center; }
+    ul.policy-list { margin: 0; padding-left: 1.1rem; color: var(--muted); font-size: 13px; }
   </style>
 </head>
 <body>
   <header>
-    <div>
-      <h1>Noetfield Governance Console v1</h1>
-      <p class="sub">Thin client · Golden Edge v3 · no mock data</p>
-    </div>
-    <p class="sub" id="apiBase"></p>
+    <h1>Governance Simulation Interface</h1>
+    <p class="sub">Product demonstration only. Submit a scenario under review, see the policy decision, and inspect the immutable audit trail. For institutional evaluations — not a developer tool.</p>
   </header>
 
   <main>
     <section>
-      <h2>A) Evaluate panel</h2>
-      <p class="sub">JSON intent → POST /v3/evaluate</p>
-      <textarea id="intentInput" spellcheck="false"></textarea>
+      <h2>1 — Submit intent</h2>
+      <p class="hint">Describe the action your organization wants to perform (scenario format). Example: publish a board report or request a prohibited financial action.</p>
+      <textarea id="intentInput" spellcheck="false" aria-label="Scenario under review"></textarea>
       <div class="toolbar">
-        <button type="button" id="evaluateBtn">Evaluate</button>
-        <button type="button" class="secondary" id="refreshLedgerBtn">Refresh ledger</button>
+        <button type="button" id="submitIntentBtn">Submit Intent</button>
       </div>
-      <p class="err" id="evaluateError" hidden></p>
+      <p class="err" id="submitError" hidden></p>
     </section>
 
     <section>
-      <h2>B) Decision output</h2>
-      <div id="decisionEmpty" class="sub">Run evaluate to see engine response.</div>
+      <h2>2 — Decision</h2>
+      <div id="decisionEmpty" class="sub">Submit an intent to see the governance decision.</div>
       <div id="decisionBody" hidden>
         <div class="decision" id="decisionLabel"></div>
-        <div class="row"><span class="label">reason_code (rule id): </span><span id="reasonCode"></span></div>
-        <div class="row"><span class="label">reason: </span><span id="reasonText"></span></div>
-        <div class="row"><span class="label">allowed: </span><span id="allowedFlag"></span></div>
-        <div class="row"><span class="label">policy_refs: </span></div>
-        <pre id="policyRefs"></pre>
+        <div class="row">
+          <span class="label">Policy rule</span>
+          <span class="value" id="policyRule"></span>
+        </div>
+        <div class="row">
+          <span class="label">Decision reason</span>
+          <span class="value" id="decisionReason"></span>
+        </div>
+        <div class="row">
+          <span class="label">Policy references</span>
+          <ul class="policy-list" id="policyRefs"></ul>
+        </div>
+        <div class="toolbar" style="margin-top:16px;">
+          <button type="button" class="secondary" id="viewTrailBtn">View Decision + Audit Trail</button>
+        </div>
       </div>
     </section>
 
     <section class="full">
-      <h2>C) Ledger panel</h2>
-      <p class="sub">GET /v3/ledger — immutable audit log</p>
-      <p class="err" id="ledgerError" hidden></p>
+      <h2>Audit trail</h2>
+      <p class="hint">Immutable record of governance decisions for this scenario.</p>
+      <p class="err" id="trailError" hidden></p>
       <div style="overflow-x:auto;">
         <table>
           <thead>
             <tr>
-              <th>occurred_at</th>
-              <th>action</th>
-              <th>resource</th>
-              <th>actor</th>
-              <th>integrity_hash</th>
+              <th>Time</th>
+              <th>Event</th>
+              <th>Subject</th>
+              <th>Reviewer</th>
+              <th>Record seal</th>
             </tr>
           </thead>
-          <tbody id="ledgerBody"></tbody>
+          <tbody id="trailBody"></tbody>
         </table>
       </div>
     </section>
@@ -162,65 +161,97 @@
   <script>
     (function () {
       const API = window.location.origin;
-      document.getElementById("apiBase").textContent = API;
+      let lastDecision = null;
 
-      const DEFAULT_INTENT = {
+      const DEFAULT_SCENARIO = {
         tenant_id: "00000000-0000-4000-8000-000000000001",
         organization_id: "00000000-0000-4000-8000-000000000002",
         action: "publish_board_report",
         resource_type: "governance_artifact",
-        resource_id: "console-eval-1",
-        actor_id: "governance-console-v1",
+        resource_id: "simulation-demo-1",
+        actor_id: "governance-simulation",
         confidence: 0.9,
-        payload: { module: "copilot_governance", source: "console-v1" }
+        payload: { source: "governance-simulation-interface" }
       };
 
       const intentInput = document.getElementById("intentInput");
-      intentInput.value = JSON.stringify(DEFAULT_INTENT, null, 2);
+      intentInput.value = JSON.stringify(DEFAULT_SCENARIO, null, 2);
 
       function displayLabel(decision) {
-        if (decision === "PROCEED") return { cls: "ALLOW", text: "ALLOW" };
-        if (decision === "REJECT") return { cls: "REJECT", text: "REJECT" };
-        return { cls: "REVIEW", text: decision };
+        if (decision === "PROCEED") return { cls: "ALLOW", text: "ALLOWED" };
+        if (decision === "REJECT") return { cls: "REJECT", text: "NOT ALLOWED" };
+        return { cls: "REVIEW", text: "REQUIRES REVIEW" };
       }
 
-      async function loadLedger() {
-        const errEl = document.getElementById("ledgerError");
-        const body = document.getElementById("ledgerBody");
+      function renderPolicyRefs(refs) {
+        const ul = document.getElementById("policyRefs");
+        ul.innerHTML = "";
+        if (!refs || !refs.length) {
+          const li = document.createElement("li");
+          li.textContent = "None recorded";
+          ul.appendChild(li);
+          return;
+        }
+        for (const ref of refs) {
+          const li = document.createElement("li");
+          li.textContent = typeof ref === "string" ? ref : JSON.stringify(ref);
+          ul.appendChild(li);
+        }
+      }
+
+      function showDecision(data) {
+        lastDecision = data;
+        document.getElementById("decisionEmpty").hidden = true;
+        document.getElementById("decisionBody").hidden = false;
+        const label = displayLabel(data.decision);
+        const el = document.getElementById("decisionLabel");
+        el.textContent = label.text;
+        el.className = "decision " + label.cls;
+        document.getElementById("policyRule").textContent = data.reason_code || "—";
+        document.getElementById("decisionReason").textContent = data.reason || "—";
+        renderPolicyRefs(data.policy_refs);
+      }
+
+      async function loadAuditTrail() {
+        const errEl = document.getElementById("trailError");
+        const body = document.getElementById("trailBody");
         errEl.hidden = true;
         body.innerHTML = "";
         try {
-          const tenantId = JSON.parse(intentInput.value).tenant_id;
+          const scenario = JSON.parse(intentInput.value);
           const url = new URL(API + "/v3/ledger");
-          if (tenantId) url.searchParams.set("tenant_id", tenantId);
+          if (scenario.tenant_id) url.searchParams.set("tenant_id", scenario.tenant_id);
           url.searchParams.set("limit", "100");
           const res = await fetch(url);
-          if (!res.ok) throw new Error(res.status + " " + (await res.text()));
+          if (!res.ok) throw new Error("Unable to load audit trail.");
           const data = await res.json();
           const entries = data.entries || [];
           if (!entries.length) {
-            body.innerHTML = "<tr><td colspan=\"5\" class=\"sub\">No ledger entries yet.</td></tr>";
+            body.innerHTML = "<tr><td colspan=\"5\" class=\"sub\" style=\"color:#8b949e\">No audit entries yet for this scenario.</td></tr>";
             return;
           }
           for (const e of entries) {
             const tr = document.createElement("tr");
+            const subject = (e.resource_type || "item") + " · " + (e.resource_id || "");
+            const reviewer = (e.actor_type || "system") + " / " + (e.actor_id || "");
+            const seal = e.integrity_hash ? String(e.integrity_hash).slice(0, 12) + "…" : "—";
             tr.innerHTML =
               "<td>" + (e.occurred_at || "") + "</td>" +
-              "<td>" + (e.action || "") + "</td>" +
-              "<td>" + (e.resource_type || "") + ":" + (e.resource_id || "") + "</td>" +
-              "<td>" + (e.actor_type || "") + "/" + (e.actor_id || "") + "</td>" +
-              "<td>" + (e.integrity_hash ? String(e.integrity_hash).slice(0, 16) + "…" : "—") + "</td>";
+              "<td>" + (e.action || "").replace(/_/g, " ") + "</td>" +
+              "<td>" + subject + "</td>" +
+              "<td>" + reviewer + "</td>" +
+              "<td>" + seal + "</td>";
             body.appendChild(tr);
           }
         } catch (e) {
-          errEl.textContent = String(e);
+          errEl.textContent = e instanceof SyntaxError ? "Scenario format is invalid." : String(e);
           errEl.hidden = false;
         }
       }
 
-      async function runEvaluate() {
-        const errEl = document.getElementById("evaluateError");
-        const btn = document.getElementById("evaluateBtn");
+      async function submitIntent() {
+        const errEl = document.getElementById("submitError");
+        const btn = document.getElementById("submitIntentBtn");
         errEl.hidden = true;
         btn.disabled = true;
         try {
@@ -231,32 +262,26 @@
             body: JSON.stringify(body),
           });
           const text = await res.text();
-          if (!res.ok) throw new Error(res.status + " " + text);
-          const data = JSON.parse(text);
-
-          document.getElementById("decisionEmpty").hidden = true;
-          document.getElementById("decisionBody").hidden = false;
-          const label = displayLabel(data.decision);
-          const el = document.getElementById("decisionLabel");
-          el.textContent = label.text;
-          el.className = "decision " + label.cls;
-          document.getElementById("reasonCode").textContent = data.reason_code || "—";
-          document.getElementById("reasonText").textContent = data.reason || "—";
-          document.getElementById("allowedFlag").textContent = String(data.allowed);
-          document.getElementById("policyRefs").textContent = JSON.stringify(data.policy_refs || [], null, 2);
-
-          await loadLedger();
+          if (!res.ok) throw new Error("Simulation could not complete. Check scenario format.");
+          showDecision(JSON.parse(text));
+          await loadAuditTrail();
         } catch (e) {
-          errEl.textContent = e instanceof SyntaxError ? "Invalid JSON intent" : String(e);
+          errEl.textContent = e instanceof SyntaxError ? "Scenario format is invalid." : String(e);
           errEl.hidden = false;
         } finally {
           btn.disabled = false;
         }
       }
 
-      document.getElementById("evaluateBtn").addEventListener("click", runEvaluate);
-      document.getElementById("refreshLedgerBtn").addEventListener("click", loadLedger);
-      loadLedger();
+      async function viewDecisionAndTrail() {
+        if (lastDecision) showDecision(lastDecision);
+        await loadAuditTrail();
+        document.getElementById("decisionBody").hidden = false;
+        document.getElementById("decisionEmpty").hidden = true;
+      }
+
+      document.getElementById("submitIntentBtn").addEventListener("click", submitIntent);
+      document.getElementById("viewTrailBtn").addEventListener("click", viewDecisionAndTrail);
     })();
   </script>
 </body>

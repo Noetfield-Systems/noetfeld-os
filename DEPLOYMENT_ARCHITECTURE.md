@@ -27,14 +27,14 @@
 - **Persistence:** `RUNTIME_EVENT_STORE=postgres` (required production)
 - **Deploy target:** `platform.noetfield.com` (container or VM behind TLS)
 
-### Governance Console v1 (only product UI)
+### Governance Simulation Interface (only product UI)
 
-Thin client served by the API — **no mock data**, no Next.js product:
+Product demo served by the API — **no mock data**, no Next.js product, no developer jargon in UI:
 
 | Route | Purpose |
 |-------|---------|
-| `GET /console` or `GET /` | Minimal evaluate + decision + ledger UI |
-| `POST /v3/evaluate` | Golden Edge policy decision |
+| `GET /console` or `GET /` | Submit intent · decision · audit trail (sales / pilot demo) |
+| `POST /v3/evaluate` | Policy decision (backend) |
 | `GET /v3/ledger` | Immutable audit log entries |
 
 Local: http://127.0.0.1:8001/console

@@ -1,6 +1,8 @@
-# Noetfield — Revenue-Ready Offerings (FINAL LOCK)
+# Noetfield — Revenue-Ready Offerings
 
-**Only these three** contractable offerings. All other monetization structures are retired.
+**Superseded by [OFFERINGS_LOCKED.md](OFFERINGS_LOCKED.md)** (canonical revenue model).
+
+**Product sentence:** [PRODUCT_TRUTH.md](PRODUCT_TRUTH.md) · **Strategic lock:** [STRATEGIC_LOCK.md](STRATEGIC_LOCK.md)
 
 Aligned with [NORTH_STAR.md](NORTH_STAR.md) and GCIP v4.
 
