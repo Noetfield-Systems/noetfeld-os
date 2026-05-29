@@ -108,9 +108,15 @@ def build_event(
     entity_id: str,
     payload: dict[str, Any] | None = None,
     correlation_id: UUID | None = None,
+    source_request_id: str | None = None,
 ) -> GovernanceEvent:
     """Build a canonical event envelope before persistence in Trust Ledger."""
 
+    extra: dict[str, Any] = {}
+    if correlation_id is not None:
+        extra["correlation_id"] = correlation_id
+    if source_request_id is not None:
+        extra["source_request_id"] = source_request_id
     return GovernanceEvent(
         event_type=event_type.value,
         tenant_id=tenant_id,
@@ -120,5 +126,5 @@ def build_event(
         entity_type=entity_type,
         entity_id=entity_id,
         payload=payload or {},
-        **({"correlation_id": correlation_id} if correlation_id else {}),
+        **extra,
     )

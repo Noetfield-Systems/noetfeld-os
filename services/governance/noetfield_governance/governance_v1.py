@@ -1,0 +1,325 @@
+"""Institutional pilot API — /api/v1/governance/* (documented stable surface)."""
+
+from __future__ import annotations
+
+import logging
+from dataclasses import dataclass
+from datetime import datetime
+from typing import Literal
+from uuid import UUID
+
+from fastapi import APIRouter, Depends, HTTPException, Request
+from pydantic import BaseModel, ConfigDict, Field
+
+from noetfield_config import CANONICAL_INTAKE_EMAIL, COMPLIANCE_REMEDIATION_TIP, get_settings
+from noetfield_events import EventType, build_event
+from noetfield_governance.golden_edge_v3 import GoldenEdgeEvaluateRequest, GoldenEdgeV3Engine
+from noetfield_governance.governance_rid import generate_rid, normalize_rid
+from noetfield_governance.governance_webhooks import GovernanceWebhookDispatcher
+from noetfield_governance.pilot_auth import PilotAuthContext, assert_tenant_allowed, require_pilot_auth
+from noetfield_ledger import AuditLedgerStore
+from noetfield_types import Actor, ActorType
+
+logger = logging.getLogger("noetfield.governance.v1")
+
+router = APIRouter(prefix="/api/v1/governance", tags=["governance-v1"])
+
+
+@dataclass
+class GovernanceV1Deps:
+    engine: GoldenEdgeV3Engine
+    event_bus: object
+    audit_store: AuditLedgerStore
+    webhooks: GovernanceWebhookDispatcher
+
+
+def get_governance_v1_deps(request: Request) -> GovernanceV1Deps:
+    deps = getattr(request.app.state, "governance_v1_deps", None)
+    if deps is None:
+        raise HTTPException(status_code=503, detail="Governance API dependencies not initialized")
+    return deps
+
+
+class GovernanceEvaluateV1Request(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    tenant_id: UUID
+    organization_id: UUID
+    action: str
+    resource_type: str
+    resource_id: str
+    actor_id: str = "governance-api-v1"
+    actor_type: ActorType = ActorType.SERVICE
+    confidence: float = Field(default=1.0, ge=0.0, le=1.0)
+    payload: dict[str, object] = Field(default_factory=dict)
+    request_id: str | None = Field(
+        default=None,
+        description="RID-… lineage id; auto-generated when omitted.",
+    )
+    correlation_id: str | None = Field(
+        default=None,
+        max_length=128,
+        description="Bank orchestration correlation id (opaque string).",
+    )
+    mode: Literal["shadow", "enforce"] = Field(
+        default="shadow",
+        description="Bank Pilot uses shadow only — evaluate without execution side effects.",
+    )
+
+
+class GovernanceEvaluateV1Response(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    request_id: str
+    correlation_id: str | None = None
+    mode: Literal["shadow", "enforce"]
+    decision: str
+    allowed: bool
+    reason: str
+    reason_code: str
+    policy_refs: list[str] = Field(default_factory=list)
+    obligations: list[str] = Field(default_factory=list)
+    non_psp_boundary: str = (
+        "Noetfield does not execute payments, hold custody, or operate as a PSP/MSB."
+    )
+
+
+async def _publish_evaluate_events(
+    deps: GovernanceV1Deps,
+    request: GovernanceEvaluateV1Request,
+    result: object,
+    rid: str,
+) -> None:
+    from noetfield_events import AsyncEventBus
+
+    assert isinstance(deps.event_bus, AsyncEventBus)
+    actor = Actor(
+        actor_type=request.actor_type,
+        actor_id=request.actor_id,
+        display_name=request.actor_id,
+    )
+    result_dump = result.model_dump(mode="json") if hasattr(result, "model_dump") else dict(result)
+    payload = {
+        **result_dump,
+        "mode": request.mode,
+        "correlation_id": request.correlation_id,
+        "request_id": rid,
+        "console": "governance-api-v1",
+    }
+    await deps.event_bus.publish(
+        build_event(
+            event_type=EventType.POLICY_EVALUATED,
+            tenant_id=request.tenant_id,
+            organization_id=request.organization_id,
+            actor=actor,
+            source_service="governance-api-v1",
+            entity_type=request.resource_type,
+            entity_id=request.resource_id,
+            payload=payload,
+            source_request_id=rid,
+        )
+    )
+    if result_dump.get("decision") == "REJECT":
+        await deps.event_bus.publish(
+            build_event(
+                event_type=EventType.GOVERNANCE_VETOED,
+                tenant_id=request.tenant_id,
+                organization_id=request.organization_id,
+                actor=actor,
+                source_service="governance-api-v1",
+                entity_type=request.resource_type,
+                entity_id=request.resource_id,
+                payload={
+                    "reason": result_dump.get("reason"),
+                    "reason_code": result_dump.get("reason_code"),
+                    "request_id": rid,
+                    "compliance_remediation_email": CANONICAL_INTAKE_EMAIL,
+                    "compliance_remediation_tip": COMPLIANCE_REMEDIATION_TIP,
+                },
+                source_request_id=rid,
+            )
+        )
+
+
+@router.post("/evaluate", response_model=GovernanceEvaluateV1Response)
+async def governance_evaluate_v1(
+    body: GovernanceEvaluateV1Request,
+    auth: PilotAuthContext = Depends(require_pilot_auth),
+    deps: GovernanceV1Deps = Depends(get_governance_v1_deps),
+) -> GovernanceEvaluateV1Response:
+    assert_tenant_allowed(auth, body.tenant_id)
+    try:
+        rid = normalize_rid(body.request_id) if body.request_id else generate_rid()
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+
+    ge_request = GoldenEdgeEvaluateRequest(
+        tenant_id=body.tenant_id,
+        organization_id=body.organization_id,
+        action=body.action,
+        resource_type=body.resource_type,
+        resource_id=body.resource_id,
+        actor_id=body.actor_id,
+        actor_type=body.actor_type,
+        confidence=body.confidence,
+        payload={**body.payload, "governance_mode": body.mode, "request_id": rid},
+    )
+    result = await deps.engine.evaluate(ge_request)
+    await _publish_evaluate_events(deps, body, result, rid)
+
+    if result.decision.value == "REJECT":
+        logger.warning(
+            "governance_v1_anomaly decision=REJECT tenant_id=%s rid=%s action=%s",
+            body.tenant_id,
+            rid,
+            body.action,
+        )
+
+    webhook_payload = {
+        "request_id": rid,
+        "correlation_id": body.correlation_id,
+        "tenant_id": str(body.tenant_id),
+        "decision": result.decision.value,
+        "allowed": result.allowed,
+        "reason_code": result.reason_code,
+        "policy_refs": result.policy_refs,
+        "mode": body.mode,
+        "action": body.action,
+        "resource_type": body.resource_type,
+        "resource_id": body.resource_id,
+    }
+    await deps.webhooks.emit_decision_recorded(webhook_payload)
+
+    return GovernanceEvaluateV1Response(
+        request_id=rid,
+        correlation_id=body.correlation_id,
+        mode=body.mode,
+        decision=result.decision.value,
+        allowed=result.allowed,
+        reason=result.reason,
+        reason_code=result.reason_code,
+        policy_refs=result.policy_refs,
+        obligations=result.obligations,
+    )
+
+
+@router.get("/ledger")
+async def governance_ledger_v1(
+    tenant_id: UUID | None = None,
+    request_id: str | None = None,
+    limit: int = 100,
+    auth: PilotAuthContext = Depends(require_pilot_auth),
+    deps: GovernanceV1Deps = Depends(get_governance_v1_deps),
+) -> dict[str, object]:
+    if limit < 1 or limit > 500:
+        raise HTTPException(status_code=400, detail="limit must be between 1 and 500")
+    if auth.tenant_id is not None:
+        tenant_id = auth.tenant_id
+    if tenant_id is None and auth.tenant_id is not None:
+        tenant_id = auth.tenant_id
+
+    records = await deps.audit_store.list_entries(tenant_id=tenant_id, limit=limit)
+    if request_id:
+        try:
+            rid = normalize_rid(request_id)
+        except ValueError as exc:
+            raise HTTPException(status_code=400, detail=str(exc)) from exc
+        records = [r for r in records if (r.request_id or "").upper() == (rid or "")]
+    return {
+        "api_version": "v1",
+        "source": "audit_log",
+        "immutable": True,
+        "count": len(records),
+        "entries": [record.model_dump(mode="json") for record in records],
+    }
+
+
+@router.get("/audit-export")
+async def governance_audit_export_v1(
+    tenant_id: UUID | None = None,
+    request_id: str | None = None,
+    limit: int = 500,
+    format: Literal["json"] = "json",
+    auth: PilotAuthContext = Depends(require_pilot_auth),
+    deps: GovernanceV1Deps = Depends(get_governance_v1_deps),
+) -> dict[str, object]:
+    if limit < 1 or limit > 500:
+        raise HTTPException(status_code=400, detail="limit must be between 1 and 500")
+    if auth.tenant_id is not None:
+        tenant_id = auth.tenant_id
+
+    records = await deps.audit_store.list_entries(tenant_id=tenant_id, limit=limit)
+    rid: str | None = None
+    if request_id:
+        try:
+            rid = normalize_rid(request_id)
+        except ValueError as exc:
+            raise HTTPException(status_code=400, detail=str(exc)) from exc
+        records = [r for r in records if (r.request_id or "").upper() == (rid or "")]
+
+    settings = get_settings()
+    pack = {
+        "export_type": "governance_audit",
+        "format": format,
+        "generated_at": datetime.now().isoformat(),
+        "tenant_id": str(tenant_id) if tenant_id else None,
+        "request_id": rid,
+        "entry_count": len(records),
+        "entries": [record.model_dump(mode="json") for record in records],
+        "boundary_statement": (
+            "Noetfield is a pre-execution governance layer. "
+            "This export contains policy evaluation metadata only — not payment instructions or custody records."
+        ),
+        "status_page": settings.public_status_page_url,
+    }
+    return pack
+
+
+@router.get("/vendor-evidence")
+async def governance_vendor_evidence_v1(
+    auth: PilotAuthContext = Depends(require_pilot_auth),
+) -> dict[str, object]:
+    """E-23 / procurement starter pack (public-safe metadata; full pack via secure share)."""
+    _ = auth
+    return {
+        "pack": "e23-vendor-evidence-starter",
+        "version": "2026.05",
+        "scope": "third_party_ai_governance_adjacency",
+        "osfi_alignment": {
+            "framework": "OSFI E-23 (model risk, third-party AI)",
+            "pilot_mode": "shadow",
+            "artifacts": [
+                "POST /api/v1/governance/evaluate — pre-execution policy decision",
+                "GET /api/v1/governance/audit-export — immutable audit slice",
+                "GET /api/v1/governance/ledger — compliance log entries",
+            ],
+        },
+        "model_inventory_template": {
+            "fields": [
+                "model_id",
+                "provider",
+                "use_case",
+                "data_classification",
+                "human_review_required",
+                "policy_refs",
+            ],
+            "note": "Complete inventory maintained in pilot engagement — export feeds vendor DD.",
+        },
+        "b10_third_party_risk": {
+            "control_themes": [
+                "pre_execution_policy_gate",
+                "immutable_audit_lineage",
+                "separation_from_payment_execution",
+            ],
+        },
+        "canada_data_trust": {
+            "processing_region": "Canada-first (pilot contract defines residency)",
+            "subprocessors": "Provided in DPA / secure vendor pack",
+            "cdb_positioning": "Policy and consent governance adjacency — not open-banking write APIs",
+        },
+        "non_psp_statement": (
+            "Noetfield does not execute payments, hold customer funds, or operate as a PSP/MSB. "
+            "Partner execution layers remain outside this boundary."
+        ),
+        "contact": CANONICAL_INTAKE_EMAIL,
+    }

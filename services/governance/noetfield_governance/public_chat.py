@@ -127,7 +127,7 @@ async def answer_public_question(
     openrouter_api_key: str | None,
     openrouter_model: str,
     client_key: str,
-) -> tuple[str, ChatProvider]:
+) -> tuple[str, ChatProvider, list[str]]:
     text = (message or "").strip()
     if not text:
         raise ValueError("message is required")
@@ -137,6 +137,7 @@ async def answer_public_question(
     await _check_rate_limit(client_key or "anonymous")
 
     context = select_relevant_excerpt(text)
+    citations = _citations_from_context(context)
     system = _system_instruction(context)
 
     resolved, api_key = resolve_chat_provider(
@@ -175,7 +176,7 @@ async def answer_public_question(
                 system_instruction=system,
                 user_message=text,
             )
-            return reply, resolved
+            return reply, resolved, citations
         except ChatAPIError as primary_exc:
             fallback = _fallback_provider(
                 resolved,
@@ -195,9 +196,19 @@ async def answer_public_question(
                     system_instruction=system,
                     user_message=text,
                 )
-                return reply, fb_provider
+                return reply, fb_provider, citations
             except ChatAPIError:
                 raise primary_exc from None
+
+
+def _citations_from_context(context: str) -> list[str]:
+    """Surface knowledge doc labels used for the answer (institutional citations)."""
+    labels: list[str] = []
+    for line in context.splitlines():
+        stripped = line.strip()
+        if stripped.startswith("## Source:"):
+            labels.append(stripped.replace("## Source:", "", 1).strip())
+    return labels[:6]
 
 
 def _fallback_provider(

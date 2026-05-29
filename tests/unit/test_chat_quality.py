@@ -33,7 +33,7 @@ def test_canonical_answers_use_knowledge() -> None:
                 return "See operations@noetfield.com."
 
             with patch("noetfield_governance.public_chat._generate_sync", side_effect=fake_gen):
-                reply, _ = await answer_public_question(
+                reply, _, _citations = await answer_public_question(
                     message=question,
                     provider="auto",
                     gemini_api_key="g",

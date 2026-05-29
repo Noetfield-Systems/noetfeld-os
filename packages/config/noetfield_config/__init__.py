@@ -84,6 +84,30 @@ class Settings(BaseSettings):
     )
     runtime_event_store: Literal["memory", "postgres"] = "postgres"
 
+    governance_pilot_auth_required: bool = Field(
+        default=False,
+        description="When true, /api/v1/governance/* requires a pilot API key (set in production).",
+    )
+    governance_pilot_api_keys: str = Field(
+        default="",
+        description=(
+            "Comma-separated pilot keys. Optional tenant binding: "
+            "tenant_uuid:secret or bare secret (any tenant in body)."
+        ),
+    )
+    governance_webhook_urls: str = Field(
+        default="",
+        description="Comma-separated HTTPS URLs for governance.decision.recorded webhooks (pilot).",
+    )
+    governance_webhook_secret: SecretStr | None = Field(
+        default=None,
+        description="Optional HMAC secret for webhook signatures (X-Noetfield-Signature).",
+    )
+    public_status_page_url: str = Field(
+        default="https://www.noetfield.com/status/",
+        description="Canonical institutional status page linked from API health payloads.",
+    )
+
 
 @lru_cache(maxsize=1)
 def get_settings() -> Settings:

@@ -56,7 +56,7 @@ def test_public_chat_returns_reply_when_configured() -> None:
     async def run() -> None:
         with patch(
             "noetfield_governance.api.answer_public_question",
-            return_value=("Trust Brief is $10,000 for six weeks.", "openrouter"),
+            return_value=("Trust Brief is $10,000 for six weeks.", "openrouter", ["OFFERINGS_LOCKED.md"]),
         ):
             transport = ASGITransport(app=app)
             async with AsyncClient(transport=transport, base_url="http://test") as client:
