@@ -1,0 +1,103 @@
+/* Institutional hub & directory — bank-grade layout */
+.nf-dir { padding: 8px 0 88px; }
+.nf-dir-hero {
+  position: relative;
+  border-radius: calc(var(--radius) + 6px);
+  border: 1px solid rgba(200,163,73,.28);
+  background:
+    radial-gradient(900px 380px at 12% 0%, rgba(200,163,73,.16), transparent 58%),
+    linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+  box-shadow: var(--shadow2);
+  padding: clamp(20px, 4vw, 32px);
+  margin-bottom: 32px;
+}
+.nf-dir-hero h1 {
+  font-size: clamp(1.75rem, 4.5vw, 2.5rem);
+  font-weight: 850;
+  letter-spacing: -0.03em;
+  margin: 0 0 12px;
+  line-height: 1.1;
+}
+.nf-dir-hero .lead { color: var(--muted); max-width: 640px; line-height: 1.65; margin: 0; }
+
+.nf-dir-section { margin: 36px 0; }
+.nf-dir-section h2 {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--gold);
+  margin: 0 0 16px;
+  font-weight: 800;
+}
+.nf-dir-grid {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+}
+.nf-dir-card {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 18px;
+  background: var(--panel2);
+  transition: border-color .15s ease, transform .12s ease;
+}
+.nf-dir-card:hover {
+  border-color: rgba(200,163,73,.35);
+  transform: translateY(-2px);
+}
+.nf-dir-card h3 {
+  margin: 0 0 8px;
+  font-size: 1.05rem;
+  font-weight: 750;
+}
+.nf-dir-card p {
+  margin: 0 0 14px;
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.55;
+}
+.nf-dir-card .meta {
+  font-size: 11px;
+  color: var(--muted2);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 8px;
+}
+.nf-dir-card.featured {
+  border-color: rgba(200,163,73,.4);
+  background: linear-gradient(180deg, rgba(200,163,73,.08), rgba(255,255,255,.02));
+}
+.nf-dir-card .price-tag {
+  color: var(--gold);
+  font-weight: 800;
+  font-size: 1.1rem;
+  margin-bottom: 8px;
+}
+.nf-dir-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  margin-top: 12px;
+}
+.nf-dir-list a {
+  font-size: 12px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  color: var(--muted);
+}
+.nf-dir-list a:hover { color: var(--text); border-color: rgba(200,163,73,.4); }
+
+.nf-sales .btn-primary {
+  border: 1px solid rgba(200,163,73,.62) !important;
+  background:
+    radial-gradient(260px 100px at 35% 0%, rgba(255,255,255,.12), transparent 62%),
+    linear-gradient(180deg, rgba(200,163,73,.28), rgba(200,163,73,.12)) !important;
+  color: var(--text) !important;
+  font-weight: 800;
+}
+.nf-sales .price { color: var(--gold) !important; }
+.nf-sales .cta-bar {
+  border-color: rgba(200,163,73,.35) !important;
+  background: rgba(200,163,73,.06) !important;
+}

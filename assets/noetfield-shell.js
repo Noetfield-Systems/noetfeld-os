@@ -358,8 +358,24 @@
     } catch (_) {}
   }
 
+  async function injectOfferingsStrip() {
+    var header = document.getElementById("nfHeader");
+    if (!header || document.querySelector(".nfOfferStrip")) return;
+    var mount = document.createElement("div");
+    mount.id = "nfOfferStripMount";
+    header.insertAdjacentElement("afterend", mount);
+    await injectOne("nfOfferStripMount", "offerings-strip.html");
+    var inner = mount.querySelector(".nfOfferStrip");
+    if (inner) {
+      mount.replaceWith(inner);
+    } else {
+      mount.remove();
+    }
+  }
+
   async function injectShell() {
     await injectOne("nfHeader", "header.html");
+    await injectOfferingsStrip();
     await injectOne("nfFooter", "footer.html");
   }
 

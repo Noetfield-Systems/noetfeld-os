@@ -14,6 +14,13 @@ TIER_PAGES = (
     ROOT / "trust-brief" / "index.html",
     ROOT / "copilot" / "index.html",
     ROOT / "gate" / "index.html",
+    ROOT / "directory" / "index.html",
+)
+
+REQUIRED_SHELL_PARTIALS = (
+    ROOT / "assets" / "partials" / "header.html",
+    ROOT / "assets" / "partials" / "footer.html",
+    ROOT / "assets" / "partials" / "offerings-strip.html",
 )
 
 FORBIDDEN_HOME = (
@@ -38,6 +45,10 @@ def iter_html() -> list[Path]:
 def main() -> int:
     errors: list[str] = []
     warnings: list[str] = []
+
+    for path in REQUIRED_SHELL_PARTIALS:
+        if not path.is_file():
+            errors.append(f"missing shell partial: {path.relative_to(ROOT)}")
 
     for path in TIER_PAGES:
         if not path.is_file():

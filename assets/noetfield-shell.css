@@ -608,6 +608,58 @@ body.navOpen{ overflow:hidden; }
   #nfHeader .mobileGrid{grid-template-columns:1fr}
 }
 
+/* ===== Institutional offerings strip (injected) ===== */
+.nfOfferStrip{
+  border-bottom:1px solid rgba(200,163,73,.22);
+  background: linear-gradient(180deg, rgba(200,163,73,.08), rgba(200,163,73,.02));
+}
+.nfOfferStripInner{
+  max-width:var(--max);
+  margin:0 auto;
+  padding:10px 16px;
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  gap:8px 14px;
+  font-size:12px;
+}
+.nfOfferStripLabel{
+  color:var(--muted2);
+  text-transform:uppercase;
+  letter-spacing:.12em;
+  font-weight:700;
+  margin-right:4px;
+}
+.nfOfferStrip a{
+  color:var(--text);
+  text-decoration:none;
+  padding:4px 8px;
+  border-radius:999px;
+  border:1px solid transparent;
+}
+.nfOfferStrip a:hover{
+  border-color:rgba(255,255,255,.14);
+  background:rgba(255,255,255,.04);
+}
+.nfOfferStripSep{
+  width:1px;
+  height:16px;
+  background:rgba(255,255,255,.12);
+  margin:0 4px;
+}
+.nfOfferStripCta{
+  border:1px solid rgba(200,163,73,.55) !important;
+  background:rgba(200,163,73,.12) !important;
+  font-weight:750;
+}
+.nfOfferStripMuted{
+  color:var(--muted2) !important;
+  margin-left:auto;
+}
+@media (max-width:640px){
+  .nfOfferStripMuted{margin-left:0; width:100%;}
+}
+
 /* Reduced motion */
 @media (prefers-reduced-motion: reduce){
   *{scroll-behavior:auto !important;}

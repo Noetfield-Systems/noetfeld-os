@@ -50,6 +50,17 @@ def test_enterprise_page_exists() -> None:
     assert "10,000" in text
 
 
+def test_directory_page_exists() -> None:
+    text = (ROOT / "directory" / "index.html").read_text(encoding="utf-8")
+    assert "Contract offerings" in text
+    assert "nfHeader" in text
+
+
+def test_offerings_strip_partial_exists() -> None:
+    text = (ROOT / "assets" / "partials" / "offerings-strip.html").read_text(encoding="utf-8")
+    assert "Request Governance Brief" in text
+
+
 def test_tier_pages_have_shell_and_cta() -> None:
     for rel in (
         "index.html",
@@ -57,6 +68,7 @@ def test_tier_pages_have_shell_and_cta() -> None:
         "trust-brief/index.html",
         "copilot/index.html",
         "gate/index.html",
+        "directory/index.html",
     ):
         text = (ROOT / rel).read_text(encoding="utf-8")
         assert "nfHeader" in text, rel
