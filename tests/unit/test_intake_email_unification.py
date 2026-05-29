@@ -80,10 +80,7 @@ def test_intake_email_audit_script() -> None:
 def test_evaluate_reject_logs_remediation_tip(caplog) -> None:
     from uuid import uuid4
 
-    from httpx import ASGITransport, AsyncClient
-
     from noetfield_config import CANONICAL_INTAKE_EMAIL
-    from noetfield_governance.api import app
     from tests.unit.test_governance_console_v3 import governance_test_client
 
     caplog.set_level("WARNING", logger="noetfield.governance.api")
