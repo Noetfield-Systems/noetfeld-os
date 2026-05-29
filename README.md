@@ -1,13 +1,18 @@
 # Noetfield Systems
 Infrastructure for AI trust and stewardship
 
-**Repository contents:** Noetfield product monorepo on disk. **VIRLUX** and **Noetfield product work** are separate from **TrustField Technologies** chat scope — see [PROJECTS.md](PROJECTS.md).
+**This repository and Cursor chat are Noetfield only.** TrustField Technologies and VIRLUX are separate — see [PROJECT_BOUNDARIES_LOCKED.md](PROJECT_BOUNDARIES_LOCKED.md).
 
 ## Platform blueprint
 
 See [PLATFORM_BLUEPRINT.md](PLATFORM_BLUEPRINT.md) for the architecture
 constitution guiding Noetfield's transition from a static vision and branding
 site into an enterprise AI governance operating system.
+
+## Noetfield future path (2026–2027)
+
+[docs/strategy/noetfield-future-path.md](docs/strategy/noetfield-future-path.md) — product roadmap.  
+Execution tracker: [todolist/NEXT_MOVES.md](todolist/NEXT_MOVES.md).
 
 ## Noetfield v3.1 executable foundation
 
@@ -28,4 +33,4 @@ Start with [docs/DEVELOPER_BOOTSTRAP.md](docs/DEVELOPER_BOOTSTRAP.md).
 
 **Platform deploy:** [docs/RUNBOOK.md](docs/RUNBOOK.md) — Docker compose, migrations, health checks, Redis, Postgres intake.
 
-**Future work tracker:** [todolist/](todolist/) — **Noetfield only**. VIRLUX is a separate project (notes under [todolist/external/virlux/](todolist/external/virlux/), not implemented here).
+**Work tracker:** [todolist/](todolist/) — **Noetfield `NF-*` only**. External: [todolist/external/](todolist/external/).

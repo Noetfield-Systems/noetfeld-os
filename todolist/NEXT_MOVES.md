@@ -2,6 +2,8 @@
 
 **Last reviewed:** 2026-05-29 · **Scope:** This file is **only** for the Noetfield repository (`noetfield.com` / platform API).
 
+**Strategy:** [../docs/strategy/noetfield-future-path.md](../docs/strategy/noetfield-future-path.md) · **Boundaries:** [../PROJECT_BOUNDARIES_LOCKED.md](../PROJECT_BOUNDARIES_LOCKED.md) (TrustField and VIRLUX are external — do not mix).
+
 ---
 
 ## Roadmap (Noetfield)

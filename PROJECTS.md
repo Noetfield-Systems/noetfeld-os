@@ -1,27 +1,39 @@
-# Projects — do not mix
+# Projects — locked boundaries
+
+**Status:** Locked · **This repository and Cursor chat = Noetfield only.**
 
 | Project | What it is | This repo / chat? |
 |---------|------------|-------------------|
-| **TrustField Technologies** | Parent company — execution, partnerships, corporate ops | **This Cursor chat** — scope work here unless the user names another product |
-| **Noetfield** | Separate product — governance execution infrastructure | **No** — not in scope for this chat; own repo and deploy (`www.noetfield.com`, `platform.noetfield.com`) |
-| **VIRLUX** | Separate product — Canadian B2B FX / payments | **No** — separate codebase; notes only under [`todolist/external/virlux/`](todolist/external/virlux/) |
+| **Noetfield** | Governance execution infrastructure · `www.noetfield.com` · `platform.noetfield.com` | **Yes — build, deploy, and track here** |
+| **TrustField Technologies** | Separate parent / execution / corporate entity | **No** — reference only: [todolist/external/trustfield-technologies/](todolist/external/trustfield-technologies/) |
+| **VIRLUX** | Separate Canadian B2B FX / payments product | **No** — reference only: [todolist/external/virlux/](todolist/external/virlux/) |
 
-## TrustField Technologies (this chat)
+**Rule:** *Noetfield = this repo and this chat. TrustField and VIRLUX = other scopes — do not implement in Noetfield PRs.*
 
-- Corporate / execution / partnership work for **TrustField Technologies** only.
-- Do **not** implement Noetfield platform features, public-site GTM, Telegram, or intake APIs in this thread unless the user explicitly re-scopes to Noetfield.
-- Strategic reference docs (TrustField ↔ Noetfield split) live under `docs/SOURCE_OF_TRUTH/` and `Noetfield-All-Documents/` — read-only context, not a license to ship Noetfield code here.
+See also: [PROJECT_BOUNDARIES_LOCKED.md](PROJECT_BOUNDARIES_LOCKED.md)
 
-## Noetfield (separate — do not mix into TrustField chat)
+---
 
-- Different product and delivery surface from TrustField corporate work.
-- If work is Noetfield-specific, use a **Noetfield-scoped** chat/repo — not this one.
-- Historical tracker (Noetfield only): [`todolist/NEXT_MOVES.md`](todolist/NEXT_MOVES.md), [`todolist/noetfield-platform.md`](todolist/noetfield-platform.md)
+## Noetfield (this repo)
 
-## VIRLUX (separate)
+- Pre-execution governance: policy, compliance logic, audit traces — **no custody, no payments** ([STRATEGIC_LOCK.md](STRATEGIC_LOCK.md)).
+- **Future path:** [docs/strategy/noetfield-future-path.md](docs/strategy/noetfield-future-path.md)
+- **Work tracker:** [todolist/NEXT_MOVES.md](todolist/NEXT_MOVES.md) · [todolist/noetfield-platform.md](todolist/noetfield-platform.md) · [todolist/noetfield-public-site.md](todolist/noetfield-public-site.md)
 
-- **Different product:** Interac, Circle, dashboard, etc.
-- **Do not** add VIRLUX features, env vars, or payment logic to TrustField or Noetfield workstreams from this chat.
-- Backlog notes: [`todolist/external/virlux/`](todolist/external/virlux/) — implement in the VIRLUX codebase.
+---
 
-**Rule of thumb:** *This chat = TrustField. Noetfield = other project. VIRLUX = other project.*
+## TrustField Technologies (external — do not mix)
+
+- Corporate strategy, Trust Brief delivery ops, RPAA/MSB, E-23 **vendor** packs for TrustField engagements.
+- **Do not** add `TF-*` tasks to Noetfield code paths or Noetfield-focused chats.
+- Notes live under [todolist/external/trustfield-technologies/](todolist/external/trustfield-technologies/) until a dedicated TrustField repo exists.
+
+Historical SSOT mentioning both entities: `docs/SOURCE_OF_TRUTH/` — read-only context; **Noetfield product rules still governed by GCIP v4 and STRATEGIC_LOCK.**
+
+---
+
+## VIRLUX (external — do not mix)
+
+- Interac, Circle, B2B payments — **separate codebase**.
+- Tracker: [todolist/external/virlux/](todolist/external/virlux/)
+- Never copy VIRLUX env vars, payment flows, or MSB marketing into Noetfield.

@@ -1,19 +1,23 @@
-# External projects (not this repository)
+# External projects (not Noetfield)
 
-**Do not implement VIRLUX work in the Noetfield repo.**  
-These files are **founder notes only** — kept here so ideas from chat are not lost.
+**Do not implement TrustField or VIRLUX work in the Noetfield repo or Noetfield-scoped chat.**
 
-| Project | What it is | Where code lives | Tracker |
-|---------|------------|------------------|---------|
-| **VIRLUX** | Canadian B2B FX / payments fintech | **Separate repo** (e.g. local `Virlux` project) | [virlux/](./virlux/) |
-| **Noetfield** | Governance execution infrastructure (this repo) | `kazemnezhadsina144-dot/Noetfield` | [../noetfield-platform.md](../noetfield-platform.md) |
+These folders are **founder reference notes** until each entity has its own repository.
+
+| Project | What it is | Tracker | Noetfield repo? |
+|---------|------------|---------|-----------------|
+| **Noetfield** | Governance execution infrastructure | [../NEXT_MOVES.md](../NEXT_MOVES.md) | **Yes — this repo** |
+| **TrustField Technologies** | Corporate execution, partnerships, Trust Brief ops | [trustfield-technologies/](./trustfield-technologies/) | **No** |
+| **VIRLUX** | Canadian B2B FX / payments | [virlux/](./virlux/) | **No** |
 
 ## Rules for agents and humans
 
-1. **Noetfield PRs/commits** — only `NF-*` items and paths under this monolith.
-2. **VIRLUX** — track under `todolist/external/virlux/`; implement in the **VIRLUX repository**.
-3. **TrustField Technologies** — **default scope for this Cursor chat**; corporate/execution work. Not the same as shipping Noetfield product code unless the user explicitly re-scopes.
-4. **Noetfield** — separate product; do not implement in a TrustField-scoped chat.
-5. Never copy VIRLUX env vars, Interac, Circle, or payment flows into TrustField or Noetfield code from the wrong repo.
+1. **Noetfield PRs/commits** — only `NF-*` and Noetfield product paths.
+2. **TrustField** — [trustfield-technologies/](./trustfield-technologies/) only; use a **TrustField-scoped** chat/repo to implement.
+3. **VIRLUX** — [virlux/](./virlux/) only; implement in the **VIRLUX repository**.
+4. Never copy payment rails, MSB claims, or TrustField corporate strategy into Noetfield `services/` or www.
+5. Historical SSOT mentioning multiple entities (`docs/SOURCE_OF_TRUTH/`) is context only — [STRATEGIC_LOCK.md](../../STRATEGIC_LOCK.md) wins for Noetfield product.
 
-When starting work, ask: *“Is this TrustField, Noetfield, or VIRLUX?”* Use the matching chat/repo.
+When starting work, ask: *“Is this Noetfield, TrustField, or VIRLUX?”* Only **Noetfield** belongs here.
+
+**Noetfield future path:** [../../docs/strategy/noetfield-future-path.md](../../docs/strategy/noetfield-future-path.md)
