@@ -65,7 +65,7 @@ See [DEPLOYMENT_ARCHITECTURE.md](../DEPLOYMENT_ARCHITECTURE.md).
 - `copilot/quickscan/intake/index.html`: procurement label
 - `copilot/quickscan/oversharing/index.html`: procurement label
 - `copilot/quickscan/procurement/index.html`: procurement label
-- `copilot/quickscan/thanks/index.html`: invoice/PO label, procurement label
+- `copilot/quickscan/thanks/index.html`: procurement label, invoice/PO label
 - `copilot/readiness/index.html`: procurement label
 - `copilot/readiness/intake/index.html`: procurement label
 - `faq/index.html`: procurement label
