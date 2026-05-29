@@ -263,7 +263,7 @@ _CONSOLE_HTML = Path(__file__).resolve().parent / "static" / "governance-console
 @app.get("/", tags=["governance-console-v1"], include_in_schema=False)
 async def governance_console_v1() -> FileResponse:
     if not _CONSOLE_HTML.is_file():
-        raise HTTPException(status_code=503, detail="Governance Simulation Interface assets missing")
+        raise HTTPException(status_code=503, detail="Governance Evaluation Interface assets missing")
     return FileResponse(_CONSOLE_HTML, media_type="text/html")
 
 

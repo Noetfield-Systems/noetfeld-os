@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8" />
+ <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+ <title>Noetfield — Governance Console</title>
+ <meta name="description" content="Governance Evaluation Interface — submit intent, view decision and compliance log." />
+ <meta name="robots" content="noindex,follow" />
+ <meta name="theme-color" content="#07070b" />
+ <link rel="canonical" href="https://www.noetfield.com/console/" />
+ <link rel="icon" href="/noetfield-favicon-512.png" type="image/png" />
+ <link rel="stylesheet" href="/assets/noetfield-shell.css" />
+ <link rel="stylesheet" href="/assets/noetfield-sales.css" />
+ <script src="/assets/noetfield-shell.js" defer></script>
+</head>
+<body>
+ <div class="bg" aria-hidden="true"></div>
+ <a class="skip" href="#main">Skip to content</a>
+ <header id="nfHeader"></header>
+ <main id="main" class="wrap nf-sales">
+ <p class="eyebrow">Governance Console</p>
+ <h1>Governance Evaluation Interface</h1>
+ <p class="lead">
+ Submit operational intent, receive an allow or deny decision, and review the compliance log on your authorized pilot host.
+ </p>
+ <section class="block">
+ <h2>Two actions</h2>
+ <ul>
+ <li><strong>Submit Intent</strong> — describe the proposed action for governance evaluation.</li>
+ <li><strong>View Decision + Compliance Log</strong> — review outcomes and recorded evidence.</li>
+ </ul>
+ </section>
+ <div class="cta-bar">
+ <div><strong>Open console</strong><p>Runs on platform.noetfield.com or local pilot (development)</p></div>
+ <a class="btn btn-primary" id="go" href="/trust-brief/intake/">Open Governance Console</a>
+ </div>
+ <p style="margin-top:16px;font-size:13px;color:var(--muted);">
+ <a href="/trust-brief/intake/" data-rid-link>Request Governance Brief</a> for enterprise access.
+ </p>
+ </main>
+ <footer id="nfFooter"></footer>
+ <script>
+  (function () {
+    var host = window.location.hostname;
+    var target = "https://platform.noetfield.com/console";
+    if (host === "localhost" || host === "127.0.0.1") target = "http://127.0.0.1:8001/console";
+    else if (host.indexOf("platform.") === 0) target = window.location.protocol + "//" + host + "/console";
+    var a = document.getElementById("go");
+    a.href = target;
+    a.textContent = "Open Governance Console";
+    if (/[?&]go=1/.test(location.search)) location.replace(target);
+  })();
+ </script>
+</body>
+</html>

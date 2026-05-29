@@ -68,7 +68,8 @@ def test_governance_console_html_served() -> None:
         async with governance_test_client() as client:
             response = await client.get("/console")
             assert response.status_code == 200
-            assert "Governance Simulation Interface" in response.text
+            assert "Governance Evaluation Interface" in response.text
             assert "Submit Intent" in response.text
+            assert "Compliance log" in response.text
 
     asyncio.run(run())

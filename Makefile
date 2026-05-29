@@ -57,4 +57,7 @@ console-smoke:
 
 site-health:
 	python3 scripts/audit_public_site_health.py
-	python3 -m pytest tests/unit/test_public_gtm_alignment.py -q
+	python3 -m pytest tests/unit/test_public_gtm_alignment.py tests/unit/test_public_simplification.py -q
+
+collapse-public:
+	python3 scripts/collapse_public_routes.py

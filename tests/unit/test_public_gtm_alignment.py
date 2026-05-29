@@ -1,6 +1,8 @@
-"""Public HTML must not contain prohibited financial product language."""
+"""Public HTML must align with final GTM simplification (no legacy surfaces)."""
 
 from pathlib import Path
+import subprocess
+import sys
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -12,10 +14,12 @@ FORBIDDEN_IN_HOME = (
     "Submit Payment",
 )
 
-ALLOWED_PUBLIC = (
-    ROOT / "index.html",
-    ROOT / "platform" / "index.html",
-    ROOT / "platform" / "dashboard" / "index.html",
+TIER_PAGES = (
+    "index.html",
+    "enterprise/index.html",
+    "trust-brief/index.html",
+    "copilot/index.html",
+    "console/index.html",
 )
 
 
@@ -31,48 +35,51 @@ def test_homepage_states_governance_positioning() -> None:
     assert "request governance brief" in text
 
 
-def test_product_truth_single_sentence() -> None:
-    text = (ROOT / "PRODUCT_TRUTH.md").read_text(encoding="utf-8")
-    assert "Governance Execution & AI Policy Enforcement Infrastructure" in text
+def test_positioning_locked_sentence() -> None:
+    text = (ROOT / "POSITIONING.md").read_text(encoding="utf-8")
+    assert (
+        "Governance Execution Infrastructure that evaluates AI-driven operational intent before execution in regulated environments."
+        in text
+    )
 
 
 def test_offerings_locked_three_tiers() -> None:
     text = (ROOT / "OFFERINGS_LOCKED.md").read_text(encoding="utf-8")
     assert "Trust Brief" in text
-    assert "$10,000" in text or "$10K" in text
+    assert "$10,000" in text
     assert "Copilot Governance Pack" in text
-    assert "Bank Pilot v6.1" in text
+    assert "Bank Pilot" in text
+    assert "v6.1" not in text
 
 
-def test_enterprise_page_exists() -> None:
+def test_enterprise_page_structure() -> None:
     text = (ROOT / "enterprise" / "index.html").read_text(encoding="utf-8")
-    assert "book governance assessment" in text.lower()
-    assert "10,000" in text
-
-
-def test_directory_page_exists() -> None:
-    text = (ROOT / "directory" / "index.html").read_text(encoding="utf-8")
-    assert "Contract offerings" in text
-    assert "nfHeader" in text
-
-
-def test_trust_ledger_has_no_public_stripe_checkout() -> None:
-    text = (ROOT / "trust-ledger" / "index.html").read_text(encoding="utf-8").lower()
-    assert "stripe-buy-button" not in text
-    assert "buy.stripe.com" not in text
-    assert "request governance brief" in text
-
-
-def test_resources_page_exists() -> None:
-    text = (ROOT / "resources" / "index.html").read_text(encoding="utf-8")
-    assert "Framework specifications" in text
     assert "Request Governance Brief" in text
+    assert "10,000" in text
+    for heading in ("Problem", "Risk", "Solution"):
+        assert heading in text
+    assert "Golden Edge" not in text
 
 
-def test_partner_hub_has_disclosure() -> None:
-    text = (ROOT / "gate" / "partners" / "index.html").read_text(encoding="utf-8")
-    assert "non-custodial" in text.lower()
-    assert "vector" in text
+def test_directory_redirects_home() -> None:
+    text = (ROOT / "directory" / "index.html").read_text(encoding="utf-8")
+    assert 'url="/"' in text or 'url=/' in text
+
+
+def test_resources_redirects_enterprise() -> None:
+    text = (ROOT / "resources" / "index.html").read_text(encoding="utf-8")
+    assert "/enterprise/" in text
+
+
+def test_gate_index_redirects_enterprise() -> None:
+    text = (ROOT / "gate" / "index.html").read_text(encoding="utf-8")
+    assert "/enterprise/" in text
+
+
+def test_trust_ledger_redirects_enterprise() -> None:
+    text = (ROOT / "trust-ledger" / "index.html").read_text(encoding="utf-8")
+    assert "/enterprise/" in text
+    assert "stripe-buy-button" not in text.lower()
 
 
 def test_offerings_strip_partial_exists() -> None:
@@ -81,14 +88,7 @@ def test_offerings_strip_partial_exists() -> None:
 
 
 def test_tier_pages_have_shell_and_cta() -> None:
-    for rel in (
-        "index.html",
-        "enterprise/index.html",
-        "trust-brief/index.html",
-        "copilot/index.html",
-        "gate/index.html",
-        "directory/index.html",
-    ):
+    for rel in TIER_PAGES:
         text = (ROOT / rel).read_text(encoding="utf-8")
         assert "nfHeader" in text, rel
         assert "Request Governance Brief" in text, rel
@@ -96,9 +96,6 @@ def test_tier_pages_have_shell_and_cta() -> None:
 
 
 def test_public_site_health_script() -> None:
-    import subprocess
-    import sys
-
     result = subprocess.run(
         [sys.executable, str(ROOT / "scripts" / "audit_public_site_health.py")],
         cwd=ROOT,
@@ -108,13 +105,12 @@ def test_public_site_health_script() -> None:
     assert result.returncode == 0, result.stdout + result.stderr
 
 
-def test_platform_dashboard_has_no_treasury_corridor_ui() -> None:
-    text = (ROOT / "platform" / "dashboard" / "index.html").read_text(encoding="utf-8")
-    assert "Treasury Routing" not in text
-    assert "In-Flight Settlements" not in text
-    assert "Active Corridors" not in text
+def test_product_brief_external_only() -> None:
+    text = (ROOT / "PRODUCT_BRIEF.md").read_text(encoding="utf-8")
+    assert "Golden Edge" not in text
+    assert "GCIP" not in text
 
 
-def test_north_star_exists() -> None:
+def test_internal_docs_still_present_for_repo() -> None:
     assert (ROOT / "NORTH_STAR.md").is_file()
-    assert (ROOT / "OFFERINGS.md").is_file()
+    assert (ROOT / "PRODUCT_TRUTH.md").is_file()

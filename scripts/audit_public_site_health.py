@@ -13,8 +13,7 @@ TIER_PAGES = (
     ROOT / "enterprise" / "index.html",
     ROOT / "trust-brief" / "index.html",
     ROOT / "copilot" / "index.html",
-    ROOT / "gate" / "index.html",
-    ROOT / "directory" / "index.html",
+    ROOT / "console" / "index.html",
 )
 
 REQUIRED_SHELL_PARTIALS = (
@@ -65,8 +64,11 @@ def main() -> int:
         for phrase in FORBIDDEN_HOME:
             if phrase in ht:
                 errors.append(f"index.html contains forbidden: {phrase}")
-        if "Governance Execution" not in ht:
-            errors.append("index.html missing product truth positioning")
+        if "governance evaluation" not in ht.lower() and "governance execution" not in ht.lower():
+            errors.append("index.html missing governance positioning")
+        for bad in ("Golden Edge", "GCIP", "pre-execution", "audit ledger"):
+            if bad in ht:
+                errors.append(f"index.html contains internal term: {bad}")
 
     no_shell = []
     no_viewport = []

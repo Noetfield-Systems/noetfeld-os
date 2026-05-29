@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Noetfield — Governance Simulation Interface</title>
+  <title>Noetfield — Governance Evaluation Interface</title>
   <style>
     :root {
       --bg: #0a0c0f;
@@ -11,9 +11,9 @@
       --border: rgba(255,255,255,0.08);
       --text: #e8eaed;
       --muted: #8b949e;
-      --accent: #00d084;
+      --accent: #c8a349;
       --reject: #f85149;
-      --warn: #ffb703;
+      --allow: #2de38a;
     }
     * { box-sizing: border-box; }
     body {
@@ -27,8 +27,9 @@
     header {
       padding: 20px 24px;
       border-bottom: 1px solid var(--border);
+      background: linear-gradient(180deg, rgba(200,163,73,.06), transparent);
     }
-    h1 { font-size: 1.15rem; font-weight: 700; margin: 0 0 6px; }
+    h1 { font-size: 1.2rem; font-weight: 700; margin: 0 0 6px; }
     .sub { color: var(--muted); font-size: 13px; margin: 0; max-width: 560px; }
     main {
       display: grid;
@@ -62,9 +63,9 @@
     .hint { font-size: 12px; color: var(--muted); margin: 0 0 10px; }
     button {
       margin-top: 12px;
-      background: var(--accent);
-      color: #0a0c0f;
-      border: none;
+      background: linear-gradient(180deg, rgba(200,163,73,.35), rgba(200,163,73,.15));
+      color: var(--text);
+      border: 1px solid rgba(200,163,73,.5);
       padding: 11px 18px;
       border-radius: 8px;
       font-weight: 600;
@@ -74,43 +75,34 @@
     button:disabled { opacity: 0.5; cursor: not-allowed; }
     button.secondary {
       background: transparent;
-      color: var(--text);
       border: 1px solid var(--border);
       margin-left: 8px;
     }
-    .decision {
-      font-size: 1.5rem;
-      font-weight: 700;
-      margin-bottom: 12px;
-    }
+    .decision { font-size: 1.5rem; font-weight: 700; margin-bottom: 12px; }
     .decision.REJECT { color: var(--reject); }
-    .decision.ALLOW { color: var(--accent); }
-    .decision.REVIEW { color: var(--warn); }
+    .decision.ALLOW { color: var(--allow); }
     .row { margin-bottom: 8px; }
     .label { color: var(--muted); display: block; font-size: 12px; margin-bottom: 2px; }
     .value { font-size: 14px; }
     table { width: 100%; border-collapse: collapse; font-size: 13px; }
-    th, td { text-align: left; padding: 10px 8px; border-bottom: 1px solid var(--border); vertical-align: top; }
+    th, td { text-align: left; padding: 10px 8px; border-bottom: 1px solid var(--border); }
     th { color: var(--muted); font-weight: 500; font-size: 12px; }
     .err { color: var(--reject); margin-top: 10px; font-size: 13px; }
-    .toolbar { display: flex; flex-wrap: wrap; gap: 0; align-items: center; }
     ul.policy-list { margin: 0; padding-left: 1.1rem; color: var(--muted); font-size: 13px; }
   </style>
 </head>
 <body>
   <header>
-    <h1>Governance Simulation Interface</h1>
-    <p class="sub">Product demonstration only. Submit a scenario under review, see the policy decision, and inspect the immutable audit trail. For institutional evaluations — not a developer tool.</p>
+    <h1>Governance Evaluation Interface</h1>
+    <p class="sub">Submit operational intent for governance evaluation. View the decision and compliance log. For authorized evaluations only.</p>
   </header>
 
   <main>
     <section>
       <h2>1 — Submit intent</h2>
-      <p class="hint">Describe the action your organization wants to perform (scenario format). Example: publish a board report or request a prohibited financial action.</p>
-      <textarea id="intentInput" spellcheck="false" aria-label="Scenario under review"></textarea>
-      <div class="toolbar">
-        <button type="button" id="submitIntentBtn">Submit Intent</button>
-      </div>
+      <p class="hint">Describe the action under review (structured scenario).</p>
+      <textarea id="intentInput" spellcheck="false" aria-label="Intent under review"></textarea>
+      <button type="button" id="submitIntentBtn">Submit Intent</button>
       <p class="err" id="submitError" hidden></p>
     </section>
 
@@ -131,16 +123,14 @@
           <span class="label">Policy references</span>
           <ul class="policy-list" id="policyRefs"></ul>
         </div>
-        <div class="toolbar" style="margin-top:16px;">
-          <button type="button" class="secondary" id="viewTrailBtn">View Decision + Audit Trail</button>
-        </div>
+        <button type="button" class="secondary" id="viewLogBtn">View Decision + Compliance Log</button>
       </div>
     </section>
 
     <section class="full">
-      <h2>Audit trail</h2>
-      <p class="hint">Immutable record of governance decisions for this scenario.</p>
-      <p class="err" id="trailError" hidden></p>
+      <h2>Compliance log</h2>
+      <p class="hint">Immutable record of governance evaluations for this scenario.</p>
+      <p class="err" id="logError" hidden></p>
       <div style="overflow-x:auto;">
         <table>
           <thead>
@@ -148,11 +138,11 @@
               <th>Time</th>
               <th>Event</th>
               <th>Subject</th>
-              <th>Reviewer</th>
-              <th>Record seal</th>
+              <th>Owner</th>
+              <th>Record</th>
             </tr>
           </thead>
-          <tbody id="trailBody"></tbody>
+          <tbody id="logBody"></tbody>
         </table>
       </div>
     </section>
@@ -160,22 +150,21 @@
 
   <script>
     (function () {
-      const API = window.location.origin;
-      let lastDecision = null;
-
-      const DEFAULT_SCENARIO = {
+      var evaluatePath = "/v3/evaluate";
+      var logPath = "/v3/ledger";
+      var lastDecision = null;
+      var intentInput = document.getElementById("intentInput");
+      var defaultScenario = {
         tenant_id: "00000000-0000-4000-8000-000000000001",
         organization_id: "00000000-0000-4000-8000-000000000002",
         action: "publish_board_report",
         resource_type: "governance_artifact",
-        resource_id: "simulation-demo-1",
-        actor_id: "governance-simulation",
+        resource_id: "evaluation-demo-1",
+        actor_id: "governance-console",
         confidence: 0.9,
-        payload: { source: "governance-simulation-interface" }
+        payload: { source: "governance-evaluation-interface" }
       };
-
-      const intentInput = document.getElementById("intentInput");
-      intentInput.value = JSON.stringify(DEFAULT_SCENARIO, null, 2);
+      intentInput.value = JSON.stringify(defaultScenario, null, 2);
 
       function displayLabel(decision) {
         if (decision === "PROCEED") return { cls: "ALLOW", text: "ALLOWED" };
@@ -184,27 +173,25 @@
       }
 
       function renderPolicyRefs(refs) {
-        const ul = document.getElementById("policyRefs");
+        var ul = document.getElementById("policyRefs");
         ul.innerHTML = "";
         if (!refs || !refs.length) {
-          const li = document.createElement("li");
-          li.textContent = "None recorded";
-          ul.appendChild(li);
+          ul.innerHTML = "<li>None recorded</li>";
           return;
         }
-        for (const ref of refs) {
-          const li = document.createElement("li");
+        refs.forEach(function (ref) {
+          var li = document.createElement("li");
           li.textContent = typeof ref === "string" ? ref : JSON.stringify(ref);
           ul.appendChild(li);
-        }
+        });
       }
 
       function showDecision(data) {
         lastDecision = data;
         document.getElementById("decisionEmpty").hidden = true;
         document.getElementById("decisionBody").hidden = false;
-        const label = displayLabel(data.decision);
-        const el = document.getElementById("decisionLabel");
+        var label = displayLabel(data.decision);
+        var el = document.getElementById("decisionLabel");
         el.textContent = label.text;
         el.className = "decision " + label.cls;
         document.getElementById("policyRule").textContent = data.reason_code || "—";
@@ -212,37 +199,37 @@
         renderPolicyRefs(data.policy_refs);
       }
 
-      async function loadAuditTrail() {
-        const errEl = document.getElementById("trailError");
-        const body = document.getElementById("trailBody");
+      async function loadComplianceLog() {
+        var errEl = document.getElementById("logError");
+        var body = document.getElementById("logBody");
         errEl.hidden = true;
         body.innerHTML = "";
         try {
-          const scenario = JSON.parse(intentInput.value);
-          const url = new URL(API + "/v3/ledger");
+          var scenario = JSON.parse(intentInput.value);
+          var url = new URL(window.location.origin + logPath);
           if (scenario.tenant_id) url.searchParams.set("tenant_id", scenario.tenant_id);
           url.searchParams.set("limit", "100");
-          const res = await fetch(url);
-          if (!res.ok) throw new Error("Unable to load audit trail.");
-          const data = await res.json();
-          const entries = data.entries || [];
+          var res = await fetch(url);
+          if (!res.ok) throw new Error("Compliance log is unavailable.");
+          var data = await res.json();
+          var entries = data.entries || [];
           if (!entries.length) {
-            body.innerHTML = "<tr><td colspan=\"5\" class=\"sub\" style=\"color:#8b949e\">No audit entries yet for this scenario.</td></tr>";
+            body.innerHTML = "<tr><td colspan=\"5\" style=\"color:#8b949e\">No log entries yet.</td></tr>";
             return;
           }
-          for (const e of entries) {
-            const tr = document.createElement("tr");
-            const subject = (e.resource_type || "item") + " · " + (e.resource_id || "");
-            const reviewer = (e.actor_type || "system") + " / " + (e.actor_id || "");
-            const seal = e.integrity_hash ? String(e.integrity_hash).slice(0, 12) + "…" : "—";
+          entries.forEach(function (e) {
+            var tr = document.createElement("tr");
+            var subject = (e.resource_type || "item") + " · " + (e.resource_id || "");
+            var owner = (e.actor_type || "system") + " / " + (e.actor_id || "");
+            var seal = e.integrity_hash ? String(e.integrity_hash).slice(0, 12) + "…" : "—";
             tr.innerHTML =
               "<td>" + (e.occurred_at || "") + "</td>" +
               "<td>" + (e.action || "").replace(/_/g, " ") + "</td>" +
               "<td>" + subject + "</td>" +
-              "<td>" + reviewer + "</td>" +
+              "<td>" + owner + "</td>" +
               "<td>" + seal + "</td>";
             body.appendChild(tr);
-          }
+          });
         } catch (e) {
           errEl.textContent = e instanceof SyntaxError ? "Scenario format is invalid." : String(e);
           errEl.hidden = false;
@@ -250,21 +237,21 @@
       }
 
       async function submitIntent() {
-        const errEl = document.getElementById("submitError");
-        const btn = document.getElementById("submitIntentBtn");
+        var errEl = document.getElementById("submitError");
+        var btn = document.getElementById("submitIntentBtn");
         errEl.hidden = true;
         btn.disabled = true;
         try {
-          const body = JSON.parse(intentInput.value);
-          const res = await fetch(API + "/v3/evaluate", {
+          var body = JSON.parse(intentInput.value);
+          var res = await fetch(window.location.origin + evaluatePath, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(body),
+            body: JSON.stringify(body)
           });
-          const text = await res.text();
-          if (!res.ok) throw new Error("Simulation could not complete. Check scenario format.");
+          var text = await res.text();
+          if (!res.ok) throw new Error("Evaluation could not be completed.");
           showDecision(JSON.parse(text));
-          await loadAuditTrail();
+          await loadComplianceLog();
         } catch (e) {
           errEl.textContent = e instanceof SyntaxError ? "Scenario format is invalid." : String(e);
           errEl.hidden = false;
@@ -273,15 +260,15 @@
         }
       }
 
-      async function viewDecisionAndTrail() {
+      async function viewDecisionAndLog() {
         if (lastDecision) showDecision(lastDecision);
-        await loadAuditTrail();
+        await loadComplianceLog();
         document.getElementById("decisionBody").hidden = false;
         document.getElementById("decisionEmpty").hidden = true;
       }
 
       document.getElementById("submitIntentBtn").addEventListener("click", submitIntent);
-      document.getElementById("viewTrailBtn").addEventListener("click", viewDecisionAndTrail);
+      document.getElementById("viewLogBtn").addEventListener("click", viewDecisionAndLog);
     })();
   </script>
 </body>
