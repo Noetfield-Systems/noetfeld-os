@@ -34,7 +34,7 @@ phase32-postgres-smoke:
 	PYTHONPATH=$(PYTHONPATH_VALUE) RUNTIME_EVENT_STORE=postgres python3 scripts/phase_3_2_backend_smoke.py --postgres
 
 phase33-verify:
-	PYTHONPATH=$(PYTHONPATH_VALUE) RUNTIME_EVENT_STORE=memory pytest tests/unit
+	PYTHONPATH=$(PYTHONPATH_VALUE) RUNTIME_EVENT_STORE=memory python3 -m pytest tests/unit
 
 phase33-postgres-verify:
 	PYTHONPATH=$(PYTHONPATH_VALUE) RUNTIME_EVENT_STORE=postgres pytest tests/integration
@@ -51,3 +51,6 @@ final-lock-audit:
 
 verify-final-lock: final-lock-audit
 	pytest tests/unit/test_public_gtm_alignment.py tests/unit/test_golden_edge_v3.py -q
+
+console-smoke:
+	PYTHONPATH=$(PYTHONPATH_VALUE) RUNTIME_EVENT_STORE=memory python3 -m pytest tests/unit/test_governance_console_v3.py -q

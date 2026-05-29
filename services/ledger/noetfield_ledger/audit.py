@@ -38,6 +38,9 @@ class AuditLedgerStore(Protocol):
     async def recent(self, tenant_id: UUID, limit: int = 25) -> list[AuditRecord]:
         ...
 
+    async def list_entries(self, tenant_id: UUID | None = None, limit: int = 100) -> list[AuditRecord]:
+        ...
+
 
 @dataclass
 class InMemoryAuditLedgerStore:
@@ -49,6 +52,12 @@ class InMemoryAuditLedgerStore:
 
     async def recent(self, tenant_id: UUID, limit: int = 25) -> list[AuditRecord]:
         return [record for record in self.records if record.tenant_id == tenant_id][-limit:]
+
+    async def list_entries(self, tenant_id: UUID | None = None, limit: int = 100) -> list[AuditRecord]:
+        rows = self.records
+        if tenant_id is not None:
+            rows = [record for record in rows if record.tenant_id == tenant_id]
+        return rows[-limit:]
 
 
 class PostgresAuditLedgerStore:
@@ -119,6 +128,50 @@ class PostgresAuditLedgerStore:
                 tenant_id,
                 limit,
             )
+        return [
+            AuditRecord(
+                audit_id=row["id"],
+                tenant_id=row["tenant_id"],
+                organization_id=row["organization_id"],
+                actor_type=row["actor_type"],
+                actor_id=row["actor_id"],
+                action=row["action"],
+                resource_type=row["resource_type"],
+                resource_id=row["resource_id"],
+                occurred_at=row["occurred_at"],
+                request_id=row["request_id"],
+                metadata=dict(row["metadata"] or {}),
+                integrity_hash=row["integrity_hash"],
+            )
+            for row in reversed(rows)
+        ]
+
+    async def list_entries(self, tenant_id: UUID | None = None, limit: int = 100) -> list[AuditRecord]:
+        await self.connect()
+        assert self._pool is not None
+        async with self._pool.acquire() as connection:
+            if tenant_id is None:
+                rows = await connection.fetch(
+                    """
+                    select *
+                    from noetfield.audit_log
+                    order by occurred_at desc
+                    limit $1
+                    """,
+                    limit,
+                )
+            else:
+                rows = await connection.fetch(
+                    """
+                    select *
+                    from noetfield.audit_log
+                    where tenant_id = $1
+                    order by occurred_at desc
+                    limit $2
+                    """,
+                    tenant_id,
+                    limit,
+                )
         return [
             AuditRecord(
                 audit_id=row["id"],

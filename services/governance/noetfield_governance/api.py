@@ -1,9 +1,14 @@
 """FastAPI entrypoint for the Noetfield backend runtime core."""
 
+from pathlib import Path
 from uuid import UUID
 
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
+from fastapi.responses import FileResponse
 from pydantic import BaseModel, ConfigDict
+
+from noetfield_events import EventType, build_event
+from noetfield_types import Actor, ActorType
 
 from noetfield_config import get_settings
 from noetfield_copilot_governance import (
@@ -198,7 +203,68 @@ async def health() -> dict[str, str]:
 @app.post("/v3/evaluate", tags=["golden-edge-v3"])
 async def golden_edge_evaluate(request: GoldenEdgeEvaluateRequest) -> dict[str, object]:
     result = await golden_edge_v3.evaluate(request)
+    actor = Actor(
+        actor_type=request.actor_type,
+        actor_id=request.actor_id,
+        display_name=request.actor_id,
+    )
+    await event_bus.publish(
+        build_event(
+            event_type=EventType.POLICY_EVALUATED,
+            tenant_id=request.tenant_id,
+            organization_id=request.organization_id,
+            actor=actor,
+            source_service="golden-edge-v3",
+            entity_type=request.resource_type,
+            entity_id=request.resource_id,
+            payload={
+                "decision": result.decision.value,
+                "allowed": result.allowed,
+                "reason": result.reason,
+                "reason_code": result.reason_code,
+                "policy_refs": result.policy_refs,
+                "console": "governance-console-v1",
+            },
+        )
+    )
+    if result.decision.value == "REJECT":
+        await event_bus.publish(
+            build_event(
+                event_type=EventType.GOVERNANCE_VETOED,
+                tenant_id=request.tenant_id,
+                organization_id=request.organization_id,
+                actor=actor,
+                source_service="golden-edge-v3",
+                entity_type=request.resource_type,
+                entity_id=request.resource_id,
+                payload={"reason": result.reason, "reason_code": result.reason_code},
+            )
+        )
     return result.model_dump(mode="json")
+
+
+@app.get("/v3/ledger", tags=["golden-edge-v3"])
+async def golden_edge_ledger(tenant_id: UUID | None = None, limit: int = 100) -> dict[str, object]:
+    if limit < 1 or limit > 500:
+        raise HTTPException(status_code=400, detail="limit must be between 1 and 500")
+    records = await audit_store.list_entries(tenant_id=tenant_id, limit=limit)
+    return {
+        "source": "audit_log",
+        "immutable": True,
+        "count": len(records),
+        "entries": [record.model_dump(mode="json") for record in records],
+    }
+
+
+_CONSOLE_HTML = Path(__file__).resolve().parent / "static" / "governance-console-v1.html"
+
+
+@app.get("/console", tags=["governance-console-v1"], include_in_schema=True)
+@app.get("/", tags=["governance-console-v1"], include_in_schema=False)
+async def governance_console_v1() -> FileResponse:
+    if not _CONSOLE_HTML.is_file():
+        raise HTTPException(status_code=503, detail="Governance Console v1 static assets missing")
+    return FileResponse(_CONSOLE_HTML, media_type="text/html")
 
 
 @app.post("/v3/agent-loop", tags=["golden-edge-v3"])

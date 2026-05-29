@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Noetfield Governance Console v1</title>
+  <style>
+    :root {
+      --bg: #0a0c0f;
+      --panel: #111418;
+      --border: rgba(255,255,255,0.08);
+      --text: #e8eaed;
+      --muted: #8b949e;
+      --accent: #00d084;
+      --reject: #f85149;
+      --warn: #ffb703;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: ui-monospace, "IBM Plex Mono", monospace;
+      background: var(--bg);
+      color: var(--text);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+    header {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    h1 { font-size: 1rem; font-weight: 600; margin: 0; }
+    .sub { color: var(--muted); font-size: 12px; }
+    main {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      padding: 16px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    @media (max-width: 900px) { main { grid-template-columns: 1fr; } }
+    section {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px;
+    }
+    section.full { grid-column: 1 / -1; }
+    h2 { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin: 0 0 10px; }
+    textarea {
+      width: 100%;
+      min-height: 200px;
+      background: #0d1117;
+      border: 1px solid var(--border);
+      color: var(--text);
+      border-radius: 6px;
+      padding: 10px;
+      font-family: inherit;
+      font-size: 12px;
+      resize: vertical;
+    }
+    button {
+      margin-top: 10px;
+      background: var(--accent);
+      color: #0a0c0f;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 6px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+    }
+    button:disabled { opacity: 0.5; cursor: not-allowed; }
+    button.secondary {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+    pre {
+      margin: 0;
+      white-space: pre-wrap;
+      word-break: break-word;
+      font-size: 12px;
+    }
+    .decision {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .decision.REJECT { color: var(--reject); }
+    .decision.ALLOW { color: var(--accent); }
+    .decision.REVIEW { color: var(--warn); }
+    .row { margin-bottom: 6px; }
+    .label { color: var(--muted); }
+    table { width: 100%; border-collapse: collapse; font-size: 11px; }
+    th, td { text-align: left; padding: 8px 6px; border-bottom: 1px solid var(--border); vertical-align: top; }
+    th { color: var(--muted); font-weight: 500; }
+    .err { color: var(--reject); margin-top: 8px; }
+    .toolbar { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+  </style>
+</head>
+<body>
+  <header>
+    <div>
+      <h1>Noetfield Governance Console v1</h1>
+      <p class="sub">Thin client · Golden Edge v3 · no mock data</p>
+    </div>
+    <p class="sub" id="apiBase"></p>
+  </header>
+
+  <main>
+    <section>
+      <h2>A) Evaluate panel</h2>
+      <p class="sub">JSON intent → POST /v3/evaluate</p>
+      <textarea id="intentInput" spellcheck="false"></textarea>
+      <div class="toolbar">
+        <button type="button" id="evaluateBtn">Evaluate</button>
+        <button type="button" class="secondary" id="refreshLedgerBtn">Refresh ledger</button>
+      </div>
+      <p class="err" id="evaluateError" hidden></p>
+    </section>
+
+    <section>
+      <h2>B) Decision output</h2>
+      <div id="decisionEmpty" class="sub">Run evaluate to see engine response.</div>
+      <div id="decisionBody" hidden>
+        <div class="decision" id="decisionLabel"></div>
+        <div class="row"><span class="label">reason_code (rule id): </span><span id="reasonCode"></span></div>
+        <div class="row"><span class="label">reason: </span><span id="reasonText"></span></div>
+        <div class="row"><span class="label">allowed: </span><span id="allowedFlag"></span></div>
+        <div class="row"><span class="label">policy_refs: </span></div>
+        <pre id="policyRefs"></pre>
+      </div>
+    </section>
+
+    <section class="full">
+      <h2>C) Ledger panel</h2>
+      <p class="sub">GET /v3/ledger — immutable audit log</p>
+      <p class="err" id="ledgerError" hidden></p>
+      <div style="overflow-x:auto;">
+        <table>
+          <thead>
+            <tr>
+              <th>occurred_at</th>
+              <th>action</th>
+              <th>resource</th>
+              <th>actor</th>
+              <th>integrity_hash</th>
+            </tr>
+          </thead>
+          <tbody id="ledgerBody"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    (function () {
+      const API = window.location.origin;
+      document.getElementById("apiBase").textContent = API;
+
+      const DEFAULT_INTENT = {
+        tenant_id: "00000000-0000-4000-8000-000000000001",
+        organization_id: "00000000-0000-4000-8000-000000000002",
+        action: "publish_board_report",
+        resource_type: "governance_artifact",
+        resource_id: "console-eval-1",
+        actor_id: "governance-console-v1",
+        confidence: 0.9,
+        payload: { module: "copilot_governance", source: "console-v1" }
+      };
+
+      const intentInput = document.getElementById("intentInput");
+      intentInput.value = JSON.stringify(DEFAULT_INTENT, null, 2);
+
+      function displayLabel(decision) {
+        if (decision === "PROCEED") return { cls: "ALLOW", text: "ALLOW" };
+        if (decision === "REJECT") return { cls: "REJECT", text: "REJECT" };
+        return { cls: "REVIEW", text: decision };
+      }
+
+      async function loadLedger() {
+        const errEl = document.getElementById("ledgerError");
+        const body = document.getElementById("ledgerBody");
+        errEl.hidden = true;
+        body.innerHTML = "";
+        try {
+          const tenantId = JSON.parse(intentInput.value).tenant_id;
+          const url = new URL(API + "/v3/ledger");
+          if (tenantId) url.searchParams.set("tenant_id", tenantId);
+          url.searchParams.set("limit", "100");
+          const res = await fetch(url);
+          if (!res.ok) throw new Error(res.status + " " + (await res.text()));
+          const data = await res.json();
+          const entries = data.entries || [];
+          if (!entries.length) {
+            body.innerHTML = "<tr><td colspan=\"5\" class=\"sub\">No ledger entries yet.</td></tr>";
+            return;
+          }
+          for (const e of entries) {
+            const tr = document.createElement("tr");
+            tr.innerHTML =
+              "<td>" + (e.occurred_at || "") + "</td>" +
+              "<td>" + (e.action || "") + "</td>" +
+              "<td>" + (e.resource_type || "") + ":" + (e.resource_id || "") + "</td>" +
+              "<td>" + (e.actor_type || "") + "/" + (e.actor_id || "") + "</td>" +
+              "<td>" + (e.integrity_hash ? String(e.integrity_hash).slice(0, 16) + "…" : "—") + "</td>";
+            body.appendChild(tr);
+          }
+        } catch (e) {
+          errEl.textContent = String(e);
+          errEl.hidden = false;
+        }
+      }
+
+      async function runEvaluate() {
+        const errEl = document.getElementById("evaluateError");
+        const btn = document.getElementById("evaluateBtn");
+        errEl.hidden = true;
+        btn.disabled = true;
+        try {
+          const body = JSON.parse(intentInput.value);
+          const res = await fetch(API + "/v3/evaluate", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(body),
+          });
+          const text = await res.text();
+          if (!res.ok) throw new Error(res.status + " " + text);
+          const data = JSON.parse(text);
+
+          document.getElementById("decisionEmpty").hidden = true;
+          document.getElementById("decisionBody").hidden = false;
+          const label = displayLabel(data.decision);
+          const el = document.getElementById("decisionLabel");
+          el.textContent = label.text;
+          el.className = "decision " + label.cls;
+          document.getElementById("reasonCode").textContent = data.reason_code || "—";
+          document.getElementById("reasonText").textContent = data.reason || "—";
+          document.getElementById("allowedFlag").textContent = String(data.allowed);
+          document.getElementById("policyRefs").textContent = JSON.stringify(data.policy_refs || [], null, 2);
+
+          await loadLedger();
+        } catch (e) {
+          errEl.textContent = e instanceof SyntaxError ? "Invalid JSON intent" : String(e);
+          errEl.hidden = false;
+        } finally {
+          btn.disabled = false;
+        }
+      }
+
+      document.getElementById("evaluateBtn").addEventListener("click", runEvaluate);
+      document.getElementById("refreshLedgerBtn").addEventListener("click", loadLedger);
+      loadLedger();
+    })();
+  </script>
+</body>
+</html>

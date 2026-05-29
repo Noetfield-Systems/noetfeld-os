@@ -27,6 +27,18 @@
 - **Persistence:** `RUNTIME_EVENT_STORE=postgres` (required production)
 - **Deploy target:** `platform.noetfield.com` (container or VM behind TLS)
 
+### Governance Console v1 (only product UI)
+
+Thin client served by the API — **no mock data**, no Next.js product:
+
+| Route | Purpose |
+|-------|---------|
+| `GET /console` or `GET /` | Minimal evaluate + decision + ledger UI |
+| `POST /v3/evaluate` | Golden Edge policy decision |
+| `GET /v3/ledger` | Immutable audit log entries |
+
+Local: http://127.0.0.1:8001/console
+
 ```bash
 docker compose -f infrastructure/docker/docker-compose.yml up -d
 make apply-migrations
