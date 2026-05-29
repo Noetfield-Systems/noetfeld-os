@@ -1,5 +1,5 @@
 {
-  "registry_version": "2026-05-29-sot-14",
+  "registry_version": "2026-05-29-sot-15",
   "decisions": [
     {
       "domain": "context_graph",
@@ -680,6 +680,46 @@
       "decision": "active_methodology_reference",
       "rationale": "Explains why capital-execution and control-plane drafts are rejected in favor of governance-only GCIP.",
       "confidence": 0.9
+    },
+    {
+      "domain": "noetfield_ai_company_os_lineage",
+      "active_document_key": "noetfield-control-plane-spec-v1",
+      "active_version": "control-plane-v1",
+      "decision": "reference_index",
+      "rationale": "Index for full AI Company OS target stack; MVP build remains v3 linear production spec.",
+      "confidence": 0.88
+    },
+    {
+      "domain": "noetfield_founder_capital_positioning",
+      "active_document_key": "noetfield-two-layer-positioning-refined-v1-1",
+      "active_version": "two-layer-v1.1",
+      "decision": "active_source_of_truth",
+      "rationale": "Public vs private capital identity separation for founder LinkedIn and investor meetings.",
+      "confidence": 0.9
+    },
+    {
+      "domain": "noetfield_msb_partner_narrative",
+      "active_document_key": "noetfield-master-blueprint-sme-visibility-readonly-v1",
+      "active_version": "visibility-pilot-v1",
+      "decision": "active_source_of_truth",
+      "rationale": "MSB orchestration narrative superseded; read-only visibility pilot is bank-safe MSB story.",
+      "confidence": 0.92
+    },
+    {
+      "domain": "noetfield_ai_governance_methodology",
+      "active_document_key": "noetfield-ai-governance-system-v1",
+      "active_version": "ai-gov-v1",
+      "decision": "active_methodology_reference",
+      "rationale": "Propose/execute separation aligns with GCIP v4 and Copilot governance product.",
+      "confidence": 0.89
+    },
+    {
+      "domain": "noetfield_corridor_architecture_lineage",
+      "active_document_key": "noetfield-corridor-architecture-stablecoin-mvp-v1",
+      "active_version": "corridor-stablecoin-v1",
+      "decision": "active_methodology_reference",
+      "rationale": "Safest CAD\u2192INR corridor framing as instruction interface; routing variant prohibited.",
+      "confidence": 0.87
     }
   ]
 }

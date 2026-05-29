@@ -1,5 +1,5 @@
 {
-  "registry_version": "2026-05-29-rules-14",
+  "registry_version": "2026-05-29-rules-15",
   "active_rule_candidates": [
     {
       "rule_key": "npl-no-side-effects",
@@ -1062,6 +1062,51 @@
       "rule_type": "documentation_governance",
       "summary": "Chat compression prompts are operator tooling, not Noetfield product or regulatory SOT.",
       "implementation_target": "source_of_truth_registry"
+    },
+    {
+      "rule_key": "ai-company-os-target-not-mvp-default",
+      "domain": "noetfield_ai_company_os_lineage",
+      "source_document_key": "noetfield-system-architecture-v2",
+      "activation_status": "active_design_rule",
+      "rule_type": "architecture_governance",
+      "summary": "Architecture v2 / control plane stack is target reference; ship v3 linear MVP first.",
+      "implementation_target": "workflow_runtime"
+    },
+    {
+      "rule_key": "prohibit-msb-orchestration-routing-narrative",
+      "domain": "noetfield_msb_partner_narrative",
+      "source_document_key": "noetfield-msb-partnership-narrative-fa-v1",
+      "activation_status": "active_design_rule",
+      "rule_type": "gtm",
+      "summary": "Do not use settlement orchestration or routing-engine framing in MSB partner materials.",
+      "implementation_target": "gtm_policy"
+    },
+    {
+      "rule_key": "prohibit-settlement-orchestration-product-copy",
+      "domain": "noetfield_commercial_gtm",
+      "source_document_key": "noetfield-product-page-narrative-settlement-orchestration-fa-v1",
+      "activation_status": "active_design_rule",
+      "rule_type": "legal_positioning",
+      "summary": "Product/website copy must not claim settlement orchestration or payment routing.",
+      "implementation_target": "gtm_policy"
+    },
+    {
+      "rule_key": "two-layer-never-merge-public-private",
+      "domain": "noetfield_founder_capital_positioning",
+      "source_document_key": "noetfield-two-layer-positioning-refined-v1-1",
+      "activation_status": "active_design_rule",
+      "rule_type": "documentation_governance",
+      "summary": "LinkedIn/public layer must not include SPV, placement, or deal execution language.",
+      "implementation_target": "gtm_policy"
+    },
+    {
+      "rule_key": "corridor-no-routing-decision-authority",
+      "domain": "noetfield_corridor_architecture_lineage",
+      "source_document_key": "noetfield-corridor-architecture-stablecoin-mvp-v1",
+      "activation_status": "active_design_rule",
+      "rule_type": "legal_positioning",
+      "summary": "Corridor docs: instruction formatting and status aggregation only; no routing intelligence claims.",
+      "implementation_target": "gtm_policy"
     }
   ]
 }
