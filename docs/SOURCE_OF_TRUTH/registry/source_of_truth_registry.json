@@ -1,5 +1,5 @@
 {
-  "registry_version": "2026-05-29-sot-10",
+  "registry_version": "2026-05-29-sot-11",
   "decisions": [
     {
       "domain": "context_graph",
@@ -498,22 +498,6 @@
       "confidence": 0.92
     },
     {
-      "domain": "noetfield_l3_egs_runtime",
-      "active_document_key": "noetfield-l3-execution-engine-egs-v2",
-      "active_version": "egs-v2.0",
-      "decision": "active_source_of_truth",
-      "rationale": "L3 enforcement-only runtime; external execution trigger; subordinate to bank integration pack v2 boundaries.",
-      "confidence": 0.89
-    },
-    {
-      "domain": "noetfield_legal_regulatory_positioning",
-      "active_document_key": "noetfield-rpaa-legal-opinion-letter-v1",
-      "active_version": "rpaa-opinion-v1.0",
-      "decision": "active_source_of_truth",
-      "rationale": "Primary RPAA/FINTRAC/OSFI legal positioning; contingent on non-execution and non-actionable CDA/PHO.",
-      "confidence": 0.91
-    },
-    {
       "domain": "noetfield_product_kernel_l1",
       "active_document_key": "noetfield-constitutional-annex-product-kernel-v4-en",
       "active_version": "product-kernel-v4.0-en",
@@ -522,11 +506,59 @@
       "confidence": 0.93
     },
     {
-      "domain": "noetfield_bank_procurement",
-      "active_document_key": "noetfield-bank-procurement-one-pager-rbc-td-v1",
-      "active_version": "procurement-one-pager-v1",
+      "domain": "noetfield_constitution_l0",
+      "active_document_key": "noetfield-constitution-gcip-v4",
+      "active_version": "gcip-v4.0",
       "decision": "active_source_of_truth",
-      "rationale": "RBC/TD vendor assessment one-pager for institutional procurement and diligence.",
+      "rationale": "L0 GCIP Constitution v4.0 with A1\u2013A11 axioms; supersedes all prior constitution version references.",
+      "confidence": 0.96
+    },
+    {
+      "domain": "noetfield_unified_system_graph",
+      "active_document_key": "noetfield-unified-system-graph-v1",
+      "active_version": "system-graph-v1.0",
+      "decision": "active_source_of_truth",
+      "rationale": "Canonical L0\u2013L4 control/data flow, branching, and failure-mode graph.",
+      "confidence": 0.92
+    },
+    {
+      "domain": "noetfield_mecr_l2",
+      "active_document_key": "noetfield-mecr-governance-kernel-l2-v1",
+      "active_version": "mecr-v1.0",
+      "decision": "active_source_of_truth",
+      "rationale": "L2 deterministic governance decision engine with C0\u2013C3 and SoT binding validation.",
+      "confidence": 0.93
+    },
+    {
+      "domain": "noetfield_sot_registry_l4",
+      "active_document_key": "noetfield-sot-registry-l4-v3-2",
+      "active_version": "sot-l4-v3.2",
+      "decision": "active_source_of_truth",
+      "rationale": "L4 reference-only index rooted at NF-L0-01; no runtime logic.",
+      "confidence": 0.92
+    },
+    {
+      "domain": "noetfield_l3_egs_runtime",
+      "active_document_key": "noetfield-l3-egs-runtime-v3-2",
+      "active_version": "egs-v3.2",
+      "decision": "active_source_of_truth",
+      "rationale": "L3 constitutional enforcement runtime; supersedes EGS v2.0.",
+      "confidence": 0.91
+    },
+    {
+      "domain": "noetfield_legal_regulatory_positioning",
+      "active_document_key": "noetfield-rpaa-legal-opinion-letter-v1-1",
+      "active_version": "rpaa-opinion-v1.1",
+      "decision": "active_source_of_truth",
+      "rationale": "Updated RPAA/FINTRAC/OSFI opinion aligned to Constitution v4 and Annex v4.",
+      "confidence": 0.91
+    },
+    {
+      "domain": "noetfield_bank_procurement",
+      "active_document_key": "noetfield-rbc-td-procurement-diligence-pack-v1",
+      "active_version": "procurement-pack-v1.0",
+      "decision": "active_source_of_truth",
+      "rationale": "Full RBC/TD vendor diligence pack with architecture annex and diagram.",
       "confidence": 0.9
     }
   ]

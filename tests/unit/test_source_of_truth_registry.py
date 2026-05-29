@@ -46,10 +46,10 @@ def test_ingestion_payload_summary_counts() -> None:
     summary = summarize_payload(payload)
 
     assert summary["batch_id"] == "2026-05-combined"
-    assert summary["batch_count"] == 13
-    assert summary["document_count"] == 135
-    assert summary["sot_decision_count"] == 66
-    assert summary["active_rule_candidate_count"] == 97
+    assert summary["batch_count"] == 14
+    assert summary["document_count"] == 144
+    assert summary["sot_decision_count"] == 70
+    assert summary["active_rule_candidate_count"] == 103
     assert "wp03-npl-formal-grammar-2026-05-npl-1" in summary["active_documents"]
     assert "wp01-context-graph-runtime-edition-v2" in summary["active_documents"]
 
@@ -308,7 +308,7 @@ def test_twelfth_batch_bank_sot_domains_are_registered() -> None:
 
     assert domains["noetfield_bank_governance_integration"]["active_document_key"] == "noetfield-bank-integration-pack-v2"
     assert domains["noetfield_gcip_document_hierarchy"]["active_document_key"] == "noetfield-master-document-directory-l0-l5-v1"
-    assert domains["noetfield_l3_egs_runtime"]["active_document_key"] == "noetfield-l3-execution-engine-egs-v2"
+    assert domains["noetfield_l3_egs_runtime"]["active_document_key"] == "noetfield-l3-egs-runtime-v3-2"
 
 def test_thirteenth_batch_legal_and_product_kernel_resources_are_classified() -> None:
     payload = build_payload()
@@ -335,6 +335,37 @@ def test_thirteenth_batch_legal_sot_domains_are_registered() -> None:
     payload = build_payload()
     domains = {decision["domain"]: decision for decision in payload.sot_registry["decisions"]}
 
-    assert domains["noetfield_legal_regulatory_positioning"]["active_document_key"] == "noetfield-rpaa-legal-opinion-letter-v1"
+    assert domains["noetfield_legal_regulatory_positioning"]["active_document_key"] == "noetfield-rpaa-legal-opinion-letter-v1-1"
     assert domains["noetfield_product_kernel_l1"]["active_document_key"] == "noetfield-constitutional-annex-product-kernel-v4-en"
-    assert domains["noetfield_bank_procurement"]["active_document_key"] == "noetfield-bank-procurement-one-pager-rbc-td-v1"
+    assert domains["noetfield_bank_procurement"]["active_document_key"] == "noetfield-rbc-td-procurement-diligence-pack-v1"
+
+def test_fourteenth_batch_gcip_stack_resources_are_classified() -> None:
+    payload = build_payload()
+    documents = {document["document_key"]: document for document in payload.inventory["documents"]}
+
+    assert documents["noetfield-constitution-gcip-v4"]["classification"] == "active_source_of_truth"
+    assert documents["noetfield-mecr-governance-kernel-l2-v1"]["classification"] == "active_source_of_truth"
+    assert documents["noetfield-l3-egs-runtime-v3-2"]["classification"] == "active_source_of_truth"
+    assert documents["noetfield-sot-registry-l4-v3-2"]["classification"] == "active_source_of_truth"
+    assert documents["noetfield-rpaa-legal-opinion-letter-v1"]["superseded_by"] == "noetfield-rpaa-legal-opinion-letter-v1-1"
+    assert documents["noetfield-l3-execution-engine-egs-v2"]["superseded_by"] == "noetfield-l3-egs-runtime-v3-2"
+
+
+def test_fourteenth_batch_gcip_rule_candidates_are_present() -> None:
+    payload = build_payload()
+    rule_keys = {rule["rule_key"] for rule in payload.rule_registry["active_rule_candidates"]}
+
+    assert "constitution-gcip-v4-supremacy" in rule_keys
+    assert "mecr-deterministic-decision-only" in rule_keys
+    assert "egs-l0-supremacy-lock" in rule_keys
+    assert "user-approval-mandate-axiom-a11" in rule_keys
+
+
+def test_fourteenth_batch_l0_l4_sot_domains_are_registered() -> None:
+    payload = build_payload()
+    domains = {decision["domain"]: decision for decision in payload.sot_registry["decisions"]}
+
+    assert domains["noetfield_constitution_l0"]["active_document_key"] == "noetfield-constitution-gcip-v4"
+    assert domains["noetfield_mecr_l2"]["active_document_key"] == "noetfield-mecr-governance-kernel-l2-v1"
+    assert domains["noetfield_unified_system_graph"]["active_document_key"] == "noetfield-unified-system-graph-v1"
+    assert domains["noetfield_sot_registry_l4"]["active_document_key"] == "noetfield-sot-registry-l4-v3-2"

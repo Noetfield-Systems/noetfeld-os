@@ -1,5 +1,5 @@
 {
-  "registry_version": "2026-05-29-rules-10",
+  "registry_version": "2026-05-29-rules-11",
   "active_rule_candidates": [
     {
       "rule_key": "npl-no-side-effects",
@@ -872,6 +872,60 @@
       "activation_status": "active_design_rule",
       "rule_type": "integrity",
       "summary": "SOT manifest hash at compile-time; runtime drift vs manifest triggers C3 HARD STOP.",
+      "implementation_target": "workflow_runtime"
+    },
+    {
+      "rule_key": "constitution-gcip-v4-supremacy",
+      "domain": "noetfield_constitution_l0",
+      "source_document_key": "noetfield-constitution-gcip-v4",
+      "activation_status": "active_design_rule",
+      "rule_type": "legal_hierarchy",
+      "summary": "GCIP Constitution v4.0 axioms override all lower layers on conflict.",
+      "implementation_target": "policy_runtime"
+    },
+    {
+      "rule_key": "mecr-deterministic-decision-only",
+      "domain": "noetfield_mecr_l2",
+      "source_document_key": "noetfield-mecr-governance-kernel-l2-v1",
+      "activation_status": "active_design_rule",
+      "rule_type": "runtime_governance",
+      "summary": "L2 MECR emits governance decisions only; no content generation or execution triggers.",
+      "implementation_target": "workflow_runtime"
+    },
+    {
+      "rule_key": "mecr-contradiction-c0-c3-taxonomy",
+      "domain": "noetfield_mecr_l2",
+      "source_document_key": "noetfield-mecr-governance-kernel-l2-v1",
+      "activation_status": "active_design_rule",
+      "rule_type": "runtime_governance",
+      "summary": "C3 axiom violation hard-rejects; C1 rewrite; C2 reject; C0 proceed.",
+      "implementation_target": "workflow_runtime"
+    },
+    {
+      "rule_key": "egs-l0-supremacy-lock",
+      "domain": "noetfield_l3_egs_runtime",
+      "source_document_key": "noetfield-l3-egs-runtime-v3-2",
+      "activation_status": "active_design_rule",
+      "rule_type": "runtime_governance",
+      "summary": "EGS blocks immediately on L0/GCIP violation; cannot override MECR with execution.",
+      "implementation_target": "workflow_runtime"
+    },
+    {
+      "rule_key": "sot-l4-no-logic-no-output",
+      "domain": "noetfield_sot_registry_l4",
+      "source_document_key": "noetfield-sot-registry-l4-v3-2",
+      "activation_status": "active_design_rule",
+      "rule_type": "architecture",
+      "summary": "L4 may only map references; forbidden to run algorithms or emit CDAs/decisions.",
+      "implementation_target": "source_of_truth_registry"
+    },
+    {
+      "rule_key": "user-approval-mandate-axiom-a11",
+      "domain": "noetfield_constitution_l0",
+      "source_document_key": "noetfield-constitution-gcip-v4",
+      "activation_status": "active_design_rule",
+      "rule_type": "product_governance",
+      "summary": "Users must explicitly approve execution pathways; no autonomous pathway selection.",
       "implementation_target": "workflow_runtime"
     }
   ]

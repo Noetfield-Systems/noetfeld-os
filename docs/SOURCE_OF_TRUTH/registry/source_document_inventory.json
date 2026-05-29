@@ -1599,9 +1599,9 @@
       "version_label": "egs-v2.0",
       "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-012/noetfield-l3-execution-engine-egs-v2.md",
       "classification": "active_source_of_truth",
-      "status": "reference",
+      "status": "superseded",
       "supersedes": [],
-      "superseded_by": null,
+      "superseded_by": "noetfield-l3-egs-runtime-v3-2",
       "upload_batch": "2026-05-012"
     },
     {
@@ -1690,11 +1690,11 @@
       "version_label": "rpaa-opinion-v1.0",
       "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-013/noetfield-rpaa-legal-opinion-letter-v1.md",
       "classification": "active_source_of_truth",
-      "status": "reference",
+      "status": "superseded",
       "supersedes": [
         "noetfield-legal-counsel-memorandum-rpaa-draft"
       ],
-      "superseded_by": null,
+      "superseded_by": "noetfield-rpaa-legal-opinion-letter-v1-1",
       "upload_batch": "2026-05-013"
     },
     {
@@ -1772,9 +1772,9 @@
       "version_label": "procurement-one-pager-v1",
       "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-013/noetfield-bank-procurement-one-pager-rbc-td-v1.md",
       "classification": "active_source_of_truth",
-      "status": "reference",
+      "status": "superseded",
       "supersedes": [],
-      "superseded_by": null,
+      "superseded_by": "noetfield-rbc-td-procurement-diligence-pack-v1",
       "upload_batch": "2026-05-013"
     },
     {
@@ -1817,6 +1817,129 @@
       "supersedes": [],
       "superseded_by": null,
       "upload_batch": "2026-05-013"
+    },
+    {
+      "document_key": "noetfield-constitution-gcip-v4",
+      "title": "Noetfield Constitution v4.0 (GCIP \u2014 Canada-Safe)",
+      "domain": "noetfield_constitution_l0",
+      "work_package": null,
+      "version_label": "gcip-v4.0",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-014/noetfield-constitution-gcip-v4.md",
+      "classification": "active_source_of_truth",
+      "status": "reference",
+      "supersedes": [],
+      "superseded_by": null,
+      "upload_batch": "2026-05-014"
+    },
+    {
+      "document_key": "noetfield-unified-system-graph-v1",
+      "title": "Unified System Graph v1.0 (L0\u2013L4 + Dataflow)",
+      "domain": "noetfield_unified_system_graph",
+      "work_package": null,
+      "version_label": "system-graph-v1.0",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-014/noetfield-unified-system-graph-v1.md",
+      "classification": "active_source_of_truth",
+      "status": "reference",
+      "supersedes": [],
+      "superseded_by": null,
+      "upload_batch": "2026-05-014"
+    },
+    {
+      "document_key": "noetfield-mecr-governance-kernel-l2-v1",
+      "title": "L2 MECR Governance Kernel v1.0",
+      "domain": "noetfield_mecr_l2",
+      "work_package": null,
+      "version_label": "mecr-v1.0",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-014/noetfield-mecr-governance-kernel-l2-v1.md",
+      "classification": "active_source_of_truth",
+      "status": "reference",
+      "supersedes": [],
+      "superseded_by": null,
+      "upload_batch": "2026-05-014"
+    },
+    {
+      "document_key": "noetfield-l3-egs-runtime-v3-2",
+      "title": "L3 EGS Runtime v3.2 (Enforcement Layer)",
+      "domain": "noetfield_l3_egs_runtime",
+      "work_package": null,
+      "version_label": "egs-v3.2",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-014/noetfield-l3-egs-runtime-v3-2.md",
+      "classification": "active_source_of_truth",
+      "status": "reference",
+      "supersedes": [
+        "noetfield-l3-execution-engine-egs-v2"
+      ],
+      "superseded_by": null,
+      "upload_batch": "2026-05-014"
+    },
+    {
+      "document_key": "noetfield-sot-registry-l4-v3-2",
+      "title": "L4 SoT Registry v3.2 (Reference-Only Index)",
+      "domain": "noetfield_sot_registry_l4",
+      "work_package": null,
+      "version_label": "sot-l4-v3.2",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-014/noetfield-sot-registry-l4-v3-2.md",
+      "classification": "active_source_of_truth",
+      "status": "reference",
+      "supersedes": [],
+      "superseded_by": null,
+      "upload_batch": "2026-05-014"
+    },
+    {
+      "document_key": "noetfield-unified-tri-layer-architecture-v2",
+      "title": "Unified Tri-Layer Architecture v2.0 (SoT + Bank + Chain-Lock)",
+      "domain": "noetfield_bank_governance_integration",
+      "work_package": null,
+      "version_label": "tri-layer-v2.0",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-014/noetfield-unified-tri-layer-architecture-v2.md",
+      "classification": "active_architecture_reference",
+      "status": "reference",
+      "supersedes": [],
+      "superseded_by": null,
+      "upload_batch": "2026-05-014"
+    },
+    {
+      "document_key": "noetfield-rpaa-legal-opinion-letter-v1-1",
+      "title": "RPAA Legal Opinion Letter v1.1 (Bulletproof Draft)",
+      "domain": "noetfield_legal_regulatory_positioning",
+      "work_package": null,
+      "version_label": "rpaa-opinion-v1.1",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-014/noetfield-rpaa-legal-opinion-letter-v1-1.md",
+      "classification": "active_source_of_truth",
+      "status": "reference",
+      "supersedes": [
+        "noetfield-rpaa-legal-opinion-letter-v1"
+      ],
+      "superseded_by": null,
+      "upload_batch": "2026-05-014"
+    },
+    {
+      "document_key": "noetfield-rbc-td-procurement-diligence-pack-v1",
+      "title": "RBC/TD Procurement Due Diligence Pack v1.0",
+      "domain": "noetfield_bank_procurement",
+      "work_package": null,
+      "version_label": "procurement-pack-v1.0",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-014/noetfield-rbc-td-procurement-diligence-pack-v1.md",
+      "classification": "active_source_of_truth",
+      "status": "reference",
+      "supersedes": [
+        "noetfield-bank-procurement-one-pager-rbc-td-v1"
+      ],
+      "superseded_by": null,
+      "upload_batch": "2026-05-014"
+    },
+    {
+      "document_key": "noetfield-constitutional-annex-unified-final-duplicate",
+      "title": "Constitutional Annex Unified Final (Duplicate)",
+      "domain": "noetfield_product_kernel_l1",
+      "work_package": null,
+      "version_label": "annex-unified-dup",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-014/noetfield-constitutional-annex-unified-final-duplicate.md",
+      "classification": "duplicate",
+      "status": "superseded",
+      "supersedes": [],
+      "superseded_by": "noetfield-constitutional-annex-product-kernel-v4-en",
+      "upload_batch": "2026-05-014"
     }
   ],
   "batches": [
@@ -1871,6 +1994,10 @@
     {
       "batch_id": "2026-05-013",
       "source_folder": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-013"
+    },
+    {
+      "batch_id": "2026-05-014",
+      "source_folder": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-014"
     }
   ]
 }
