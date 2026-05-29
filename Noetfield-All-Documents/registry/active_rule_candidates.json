@@ -1,0 +1,1148 @@
+{
+  "registry_version": "2026-05-29-rules-16",
+  "active_rule_candidates": [
+    {
+      "rule_key": "npl-no-side-effects",
+      "domain": "npl",
+      "source_document_key": "wp03-npl-formal-grammar-2026-05-npl-1",
+      "activation_status": "active_design_rule",
+      "rule_type": "language_safety",
+      "summary": "NPL evaluation is declarative and side-effect-free.",
+      "implementation_target": "policy_engine"
+    },
+    {
+      "rule_key": "npl-conflict-resolution-order",
+      "domain": "npl",
+      "source_document_key": "wp03-npl-formal-grammar-2026-05-npl-1",
+      "activation_status": "active_design_rule",
+      "rule_type": "policy_semantics",
+      "summary": "Decision conflict priority is deny, then require_approval, then allow, then route/mask/degrade refinements.",
+      "implementation_target": "policy_engine"
+    },
+    {
+      "rule_key": "graph-snapshot-only-agent-reasoning",
+      "domain": "context_graph",
+      "source_document_key": "wp01-context-graph-runtime-edition-v2",
+      "activation_status": "active_design_rule",
+      "rule_type": "graph_runtime",
+      "summary": "All agent reasoning must derive from a consistent graph snapshot.",
+      "implementation_target": "graph_runtime"
+    },
+    {
+      "rule_key": "graph-no-cross-snapshot-execution",
+      "domain": "context_graph",
+      "source_document_key": "wp01-context-graph-runtime-edition-v2",
+      "activation_status": "active_design_rule",
+      "rule_type": "graph_runtime",
+      "summary": "Cross-snapshot mixing is forbidden in execution paths.",
+      "implementation_target": "graph_runtime"
+    },
+    {
+      "rule_key": "graph-policy-check-before-query",
+      "domain": "context_graph",
+      "source_document_key": "wp01-context-graph-runtime-edition-v2",
+      "activation_status": "active_design_rule",
+      "rule_type": "context_access",
+      "summary": "All graph queries are policy-checked before execution.",
+      "implementation_target": "context_contracts"
+    },
+    {
+      "rule_key": "security-agent-trust-boundary",
+      "domain": "security_agent",
+      "source_document_key": "security-agent-source-persian-normalized",
+      "activation_status": "candidate_requires_formalization",
+      "rule_type": "agent_monitoring",
+      "summary": "Security Agent monitors agent behavior and can block, throttle, or require approval.",
+      "implementation_target": "agent_monitoring"
+    },
+    {
+      "rule_key": "agents-must-not-act-on-stale-state",
+      "domain": "ai_native_development_guidelines",
+      "source_document_key": "perplexity-ai-native-development-guidelines",
+      "activation_status": "active_design_rule",
+      "rule_type": "state_integrity",
+      "summary": "Agents must not act on stale or partial state; runtime actions should derive from synchronized state snapshots.",
+      "implementation_target": "context_graph_runtime"
+    },
+    {
+      "rule_key": "trust-infrastructure-required-for-autonomy",
+      "domain": "ai_native_development_guidelines",
+      "source_document_key": "perplexity-ai-native-development-guidelines",
+      "activation_status": "active_design_rule",
+      "rule_type": "trust_runtime",
+      "summary": "Every agent action must be explainable, traceable, reproducible, auditable, and scoped before autonomy scales.",
+      "implementation_target": "audit_ledger_runtime"
+    },
+    {
+      "rule_key": "multi-agent-coordination-protocol-required",
+      "domain": "ai_native_development_guidelines",
+      "source_document_key": "perplexity-ai-native-development-guidelines",
+      "activation_status": "candidate_requires_formalization",
+      "rule_type": "agent_coordination",
+      "summary": "Specialized agents require task ownership, intent declaration, conflict detection, and priority hierarchy.",
+      "implementation_target": "agent_coordination_protocol"
+    },
+    {
+      "rule_key": "hybrid-model-routing-policy-required",
+      "domain": "ai_native_development_guidelines",
+      "source_document_key": "grok-ai-native-dev-system-2026",
+      "activation_status": "candidate_requires_formalization",
+      "rule_type": "model_routing",
+      "summary": "Use local models for speed/privacy and cloud models for deep reasoning; routing should be governed by risk, cost, latency, and capability.",
+      "implementation_target": "model_routing_policy_pack"
+    },
+    {
+      "rule_key": "posa-continuous-loop-required",
+      "domain": "posa_system",
+      "source_document_key": "posa-v3-0-source-of-truth",
+      "activation_status": "active_design_rule",
+      "rule_type": "posa_system_invariant",
+      "summary": "POSA behavior must follow Perception -> Interpretation -> Strategy -> Execution -> Outcome -> Learning -> Memory Update.",
+      "implementation_target": "posa_orchestration_runtime"
+    },
+    {
+      "rule_key": "posa-no-direct-execution-bypass",
+      "domain": "posa_system",
+      "source_document_key": "posa-v3-0-source-of-truth",
+      "activation_status": "active_design_rule",
+      "rule_type": "execution_governance",
+      "summary": "All POSA actions must pass through Plan -> Validate -> Execute -> Verify -> Log; no direct execution bypass is allowed.",
+      "implementation_target": "posa_execution_runtime"
+    },
+    {
+      "rule_key": "posa-memory-event-log-immutable",
+      "domain": "posa_memory_system",
+      "source_document_key": "posa-digital-twin-training-memory-implementation-v1",
+      "activation_status": "active_design_rule",
+      "rule_type": "memory_governance",
+      "summary": "POSA must never overwrite event logs or delete historical decisions; full traceability is required.",
+      "implementation_target": "posa_memory_runtime"
+    },
+    {
+      "rule_key": "posa-digital-twin-gates-economic-actions",
+      "domain": "posa_revenue_system",
+      "source_document_key": "posa-v3-1-autonomous-revenue-system",
+      "activation_status": "active_design_rule",
+      "rule_type": "revenue_governance",
+      "summary": "Every economic/revenue action must pass through the Digital Twin decision gate before execution.",
+      "implementation_target": "posa_revenue_runtime"
+    },
+    {
+      "rule_key": "posa-revenue-real-demand-only",
+      "domain": "posa_revenue_system",
+      "source_document_key": "posa-first-revenue-automation-system-v1",
+      "activation_status": "active_design_rule",
+      "rule_type": "revenue_strategy",
+      "summary": "POSA revenue system must operate on real market demand and convert intelligence into cashflow loops.",
+      "implementation_target": "posa_revenue_runtime"
+    },
+    {
+      "rule_key": "posa-high-impact-actions-require-approval",
+      "domain": "posa_system",
+      "source_document_key": "posa-v3-0-source-of-truth",
+      "activation_status": "active_design_rule",
+      "rule_type": "approval_governance",
+      "summary": "POSA must enforce approval thresholds for high-impact or irreversible actions.",
+      "implementation_target": "posa_governance_runtime"
+    },
+    {
+      "rule_key": "shopify-scraper-self-healing-required",
+      "domain": "shopify_price_intelligence",
+      "source_document_key": "shopify-price-intelligence-system-v1",
+      "activation_status": "candidate_requires_formalization",
+      "rule_type": "product_reliability",
+      "summary": "Shopify price scraper should include retry, proxy rotation, selector fallback, semantic extraction, graceful degradation, and partial success logging.",
+      "implementation_target": "shopify_price_intelligence_runtime"
+    },
+    {
+      "rule_key": "paas-telegram-primary-interface",
+      "domain": "personal_agent_system",
+      "source_document_key": "paas-v1-personal-autonomous-agent-system",
+      "activation_status": "reference_only",
+      "rule_type": "control_interface",
+      "summary": "Telegram is the single authorized human-machine interface in PAAS v1.0. Superseded by POSA control-layer rules but retained for lineage.",
+      "implementation_target": "posa_control_layer"
+    },
+    {
+      "rule_key": "posa-v2-identity-strategy-execution-loop",
+      "domain": "posa_system",
+      "source_document_key": "posa-v2-0-source-of-truth",
+      "activation_status": "reference_only",
+      "rule_type": "historical_invariant",
+      "summary": "POSA v2 used Identity -> Strategy -> Execution -> Feedback -> Memory Update as its fundamental loop. Superseded by POSA v3 continuous loop.",
+      "implementation_target": "posa_orchestration_runtime"
+    },
+    {
+      "rule_key": "crt-structured-constraints-reduce-entropy",
+      "domain": "context_resonance_theory",
+      "source_document_key": "context-resonance-theory-paper",
+      "activation_status": "candidate_requires_formalization",
+      "rule_type": "prompt_architecture",
+      "summary": "Structured constraints reduce output entropy and stabilize high-coherence inference trajectories.",
+      "implementation_target": "prompt_architecture_runtime"
+    },
+    {
+      "rule_key": "crt-intent-as-computational-primitive",
+      "domain": "context_resonance_theory",
+      "source_document_key": "context-resonance-theory-paper",
+      "activation_status": "candidate_requires_formalization",
+      "rule_type": "intent_modeling",
+      "summary": "Structured intent should be treated as a first-class computational primitive in future AI systems.",
+      "implementation_target": "intent_modeling"
+    },
+    {
+      "rule_key": "aie-dual-layer-execution-architecture",
+      "domain": "aie_protocol",
+      "source_document_key": "aie-protocol-smart-contract-cosmos-architecture",
+      "activation_status": "candidate_requires_formalization",
+      "rule_type": "protocol_architecture",
+      "summary": "AIE separates EVM economic truth from Cosmos cognitive execution and agent coordination.",
+      "implementation_target": "aie_protocol_design"
+    },
+    {
+      "rule_key": "aie-agent-stake-and-validation-required",
+      "domain": "aie_protocol",
+      "source_document_key": "aie-protocol-smart-contract-cosmos-architecture",
+      "activation_status": "candidate_requires_formalization",
+      "rule_type": "protocol_security",
+      "summary": "Agent participation requires stake, validation consensus, reputation tracking, and slashing for invalid work.",
+      "implementation_target": "aie_protocol_design"
+    },
+    {
+      "rule_key": "aie-cwu-as-economic-primitive",
+      "domain": "aie_protocol",
+      "source_document_key": "aie-protocol-decentralized-cognitive-execution-network-deck",
+      "activation_status": "reference_only",
+      "rule_type": "economic_primitive",
+      "summary": "Cognitive Work Units tie task DAG execution to verified output and token settlement.",
+      "implementation_target": null
+    },
+    {
+      "rule_key": "aie-validation-weighted-consensus",
+      "domain": "aie_protocol",
+      "source_document_key": "aie-protocol-full-technical-whitepaper",
+      "activation_status": "reference_only",
+      "rule_type": "validation_consensus",
+      "summary": "Results require weighted validator quorum; sub-threshold scores trigger re-execution.",
+      "implementation_target": null
+    },
+    {
+      "rule_key": "aie-supply-equilibrium-nsp-target",
+      "domain": "aie_tokenomics",
+      "source_document_key": "aie-protocol-tokenomics-mathematical-model-v1",
+      "activation_status": "reference_only",
+      "rule_type": "tokenomics",
+      "summary": "Protocol targets net supply pressure NSP_t = I_t - B_t approaching zero at steady state.",
+      "implementation_target": null
+    },
+    {
+      "rule_key": "aie-agent-stake-before-high-value-tasks",
+      "domain": "aie_protocol",
+      "source_document_key": "aie-tokenized-agentic-network-design",
+      "activation_status": "reference_only",
+      "rule_type": "staking",
+      "summary": "Agents stake AIE before high-value execution, validation, or elite pool participation.",
+      "implementation_target": null
+    },
+    {
+      "rule_key": "manifesto-intelligence-is-constraint-driven",
+      "domain": "agentic_systems_theory",
+      "source_document_key": "manifesto-agentic-systems-design",
+      "activation_status": "active_design_rule",
+      "rule_type": "cognitive_architecture",
+      "summary": "Structured constraints applied to probabilistic reasoning reduce entropy and hallucination risk.",
+      "implementation_target": "governance_policy_runtime"
+    },
+    {
+      "rule_key": "manifesto-agent-loop-fundamental-primitive",
+      "domain": "agentic_systems_theory",
+      "source_document_key": "manifesto-agentic-systems-design",
+      "activation_status": "active_design_rule",
+      "rule_type": "agent_runtime",
+      "summary": "Agent behavior is a closed loop over perception, planning, execution, evaluation, and memory \u2014 not a single inference call.",
+      "implementation_target": "inspector_runtime"
+    },
+    {
+      "rule_key": "manifesto-failure-first-class-signal",
+      "domain": "agentic_systems_theory",
+      "source_document_key": "manifesto-agentic-systems-design",
+      "activation_status": "active_design_rule",
+      "rule_type": "governance",
+      "summary": "Failures are constraint-violation signals that must feed audit and correction paths.",
+      "implementation_target": "audit_ledger_runtime"
+    },
+    {
+      "rule_key": "aiis-governance-layer-required-for-enterprise",
+      "domain": "aiis_platform",
+      "source_document_key": "aiis-investor-whitepaper-agentic-intelligence-infrastructure",
+      "activation_status": "reference_only",
+      "rule_type": "enterprise_governance",
+      "summary": "Enterprise agent deployment requires governance layer with permissions, audit logs, and rollback.",
+      "implementation_target": null
+    },
+    {
+      "rule_key": "no-action-without-canonical-event",
+      "domain": "event_driven_agentic_architecture",
+      "source_document_key": "architecture-md-v2-event-driven-agentic-system",
+      "activation_status": "active_design_rule",
+      "rule_type": "event_runtime",
+      "summary": "Every meaningful system action must be represented as a canonical event with trace_id.",
+      "implementation_target": "event_bus"
+    },
+    {
+      "rule_key": "halt-protocol-max-two-retries",
+      "domain": "event_driven_agentic_architecture",
+      "source_document_key": "architecture-md-v2-event-driven-agentic-system",
+      "activation_status": "active_design_rule",
+      "rule_type": "failure_governance",
+      "summary": "On two consecutive execution failures, emit RETRY_LIMIT_REACHED_EVENT and return control to human layer.",
+      "implementation_target": "governance_runtime"
+    },
+    {
+      "rule_key": "memory-write-requires-state-validation-event",
+      "domain": "event_driven_agentic_architecture",
+      "source_document_key": "architecture-md-v2-event-driven-agentic-system",
+      "activation_status": "active_design_rule",
+      "rule_type": "memory_governance",
+      "summary": "Persistent memory writes are forbidden without STATE_VALIDATION_EVENT.",
+      "implementation_target": "ledger_runtime"
+    },
+    {
+      "rule_key": "precision-of-context-over-model-power",
+      "domain": "operator_context_discipline",
+      "source_document_key": "cursor-token-efficiency-context-discipline-v1",
+      "activation_status": "active_design_rule",
+      "rule_type": "operator_discipline",
+      "summary": "Surgical context scope takes precedence over model scale for output quality and cost.",
+      "implementation_target": "developer_bootstrap"
+    },
+    {
+      "rule_key": "semantic-superconductivity-constraint-density",
+      "domain": "context_resonance_theory",
+      "source_document_key": "architecture-of-meaning-semantic-superconductivity-essay",
+      "activation_status": "active_design_rule",
+      "rule_type": "cognitive_architecture",
+      "summary": "High constraint density in context reduces entropy and moves inference toward deterministic execution paths.",
+      "implementation_target": "governance_policy_runtime"
+    },
+    {
+      "rule_key": "sot-mined-from-repetition-not-theory",
+      "domain": "sot_engine",
+      "source_document_key": "sot-extraction-routine-v1",
+      "activation_status": "active_design_rule",
+      "rule_type": "epistemic_governance",
+      "summary": "Rules enter SoT only after repeated observed behavior (\u22653) and validation, not from one-off theory.",
+      "implementation_target": "source_of_truth_registry"
+    },
+    {
+      "rule_key": "sot-no-log-no-truth",
+      "domain": "sot_engine",
+      "source_document_key": "sot-engine-auto-running-architecture-v1",
+      "activation_status": "active_design_rule",
+      "rule_type": "audit_governance",
+      "summary": "Execution without structured logging cannot produce source-of-truth candidates.",
+      "implementation_target": "audit_ledger_runtime"
+    },
+    {
+      "rule_key": "slf-autonomy-requires-governance",
+      "domain": "slf_framework",
+      "source_document_key": "slf-v5-frozen-canonical-spec",
+      "activation_status": "reference_only",
+      "rule_type": "governance",
+      "summary": "Autonomy layer must be paired with governance gates, rollback, and integrity monitoring.",
+      "implementation_target": null
+    },
+    {
+      "rule_key": "slf-reality-dominance-law",
+      "domain": "slf_epistemic_core",
+      "source_document_key": "slf-v3-system-logic-framework-epistemic",
+      "activation_status": "active_design_rule",
+      "rule_type": "epistemic_governance",
+      "summary": "Execution overrides design assumptions; blueprint invalid if behavior contradicts it.",
+      "implementation_target": "governance_policy_runtime"
+    },
+    {
+      "rule_key": "slf-invariant-only-repeatable-behavior",
+      "domain": "slf_epistemic_core",
+      "source_document_key": "slf-v3-system-logic-framework-epistemic",
+      "activation_status": "active_design_rule",
+      "rule_type": "source_of_truth",
+      "summary": "Only patterns surviving multiple execution cycles under variation become truth.",
+      "implementation_target": "source_of_truth_registry"
+    },
+    {
+      "rule_key": "sot-tool-independent-minimal-rules",
+      "domain": "sot_epistemology",
+      "source_document_key": "sot-creation-guidelines-practical",
+      "activation_status": "active_design_rule",
+      "rule_type": "epistemic_governance",
+      "summary": "SoT must survive tool changes; describes roles, flow, and rules\u2014not APIs or schemas.",
+      "implementation_target": "source_of_truth_registry"
+    },
+    {
+      "rule_key": "paios-no-agent-role-overlap",
+      "domain": "paios_system",
+      "source_document_key": "paios-source-of-truth-blueprint-v1",
+      "activation_status": "reference_only",
+      "rule_type": "agent_coordination",
+      "summary": "Analyst, Brain, Chief of Staff, and Operator must not combine thinking, deciding, coordinating, and executing.",
+      "implementation_target": null
+    },
+    {
+      "rule_key": "paios-operator-execution-only",
+      "domain": "paios_system",
+      "source_document_key": "paios-source-of-truth-blueprint-v1",
+      "activation_status": "reference_only",
+      "rule_type": "agent_boundary",
+      "summary": "Operator executes approved tasks only; no reasoning or prioritization.",
+      "implementation_target": null
+    },
+    {
+      "rule_key": "noetfield-bounded-autonomy",
+      "domain": "noetfield_org_vision",
+      "source_document_key": "noetfield-ai-organization-runtime-sot-v1",
+      "activation_status": "active_design_rule",
+      "rule_type": "governance",
+      "summary": "Agents may observe, classify, infer, recommend, and draft; high-risk execution requires human approval.",
+      "implementation_target": "governance_runtime"
+    },
+    {
+      "rule_key": "noetfield-runtime-event-mediation",
+      "domain": "noetfield_org_vision",
+      "source_document_key": "noetfield-strong-core-runtime-minimal-fa",
+      "activation_status": "active_design_rule",
+      "rule_type": "event_runtime",
+      "summary": "Agents must not communicate directly; routing goes through runtime events and mediator.",
+      "implementation_target": "event_bus"
+    },
+    {
+      "rule_key": "slf-v5-autonomy-requires-governance-pair",
+      "domain": "slf_framework",
+      "source_document_key": "slf-v5-logic-extension-layer-execution-state-control",
+      "activation_status": "reference_only",
+      "rule_type": "governance",
+      "summary": "Autonomy without governance is chaos; governance without autonomy is stagnation.",
+      "implementation_target": null
+    },
+    {
+      "rule_key": "gie-min-confidence-threshold-055",
+      "domain": "noetfield_gie",
+      "source_document_key": "noetfield-gie-specification-supplement-v31",
+      "activation_status": "active_design_rule",
+      "rule_type": "graph_inference",
+      "summary": "Graph inferences below 0.55 confidence must not commit to the knowledge graph without review.",
+      "implementation_target": "graph_runtime"
+    },
+    {
+      "rule_key": "gie-full-audit-reasoning-chain",
+      "domain": "noetfield_gie",
+      "source_document_key": "noetfield-gie-specification-supplement-v31",
+      "activation_status": "active_design_rule",
+      "rule_type": "audit_governance",
+      "summary": "All GIE inferences log complete reasoning chains to the audit ledger.",
+      "implementation_target": "audit_ledger_runtime"
+    },
+    {
+      "rule_key": "noetfield-bounded-autonomy-human-approval",
+      "domain": "noetfield_product_vision",
+      "source_document_key": "noetfield-ambient-intelligence-nervous-system-sot-v31",
+      "activation_status": "active_design_rule",
+      "rule_type": "governance",
+      "summary": "High-risk external actions require human approval; inspectors default to report/suggest modes.",
+      "implementation_target": "governance_runtime"
+    },
+    {
+      "rule_key": "noetfield-living-knowledge-graph-central",
+      "domain": "noetfield_product_vision",
+      "source_document_key": "noetfield-ambient-intelligence-nervous-system-sot-v31",
+      "activation_status": "active_design_rule",
+      "rule_type": "graph_runtime",
+      "summary": "Entity relationships and graph updates are the central memory substrate for ambient intelligence.",
+      "implementation_target": "graph_runtime"
+    },
+    {
+      "rule_key": "governed-execution-deterministic-pipeline",
+      "domain": "governed_execution_product",
+      "source_document_key": "governed-execution-system-mvp-blueprint-v1",
+      "activation_status": "active_design_rule",
+      "rule_type": "workflow_governance",
+      "summary": "Every request follows classify \u2192 policy \u2192 risk \u2192 route \u2192 decision \u2192 audit with no exceptions.",
+      "implementation_target": "governance_policy_runtime"
+    },
+    {
+      "rule_key": "governed-execution-llm-assistive-only",
+      "domain": "governed_execution_product",
+      "source_document_key": "governed-execution-system-mvp-blueprint-v1",
+      "activation_status": "active_design_rule",
+      "rule_type": "ai_governance",
+      "summary": "LLM provides risk interpretation only; policy engine and router make final decisions.",
+      "implementation_target": "policy_engine"
+    },
+    {
+      "rule_key": "execution-vm-command-first",
+      "domain": "noetfield_execution_vm",
+      "source_document_key": "noetfield-execution-consensus-vm-v40-blueprint",
+      "activation_status": "reference_only",
+      "rule_type": "execution_substrate",
+      "summary": "Only commands enter execution; consensus orders globally; side effects are deferred.",
+      "implementation_target": null
+    },
+    {
+      "rule_key": "execution-vm-append-only-event-truth",
+      "domain": "noetfield_execution_vm",
+      "source_document_key": "noetfield-execution-consensus-vm-v40-blueprint",
+      "activation_status": "reference_only",
+      "rule_type": "audit_governance",
+      "summary": "State is derived from append-only event store; all execution must be replayable.",
+      "implementation_target": null
+    },
+    {
+      "rule_key": "prompt-pipeline-strict-stage-sequencing",
+      "domain": "noetfield_prompt_os",
+      "source_document_key": "noetfield-prompt-constitution-blueprint-directory-v10",
+      "activation_status": "active_design_rule",
+      "rule_type": "prompt_governance",
+      "summary": "Long-form workflows must run Stage-1 \u2192 Stage-2 \u2192 Stage-3 without cross-role leakage.",
+      "implementation_target": "developer_bootstrap"
+    },
+    {
+      "rule_key": "prompt-mvp-action-first-two-step",
+      "domain": "noetfield_prompt_os",
+      "source_document_key": "noetfield-prompt-system-constitution-v02-mvp",
+      "activation_status": "active_design_rule",
+      "rule_type": "prompt_governance",
+      "summary": "MVP prompt cycles end in decision + 1-3 actions; mark unclear items as GAP not guesses.",
+      "implementation_target": "developer_bootstrap"
+    },
+    {
+      "rule_key": "prompt-stage1-no-hallucination-lossless",
+      "domain": "prompt_stage1_extraction",
+      "source_document_key": "master-strategic-context-engine-v37-efficient",
+      "activation_status": "active_design_rule",
+      "rule_type": "extraction_governance",
+      "summary": "Stage-1 extraction preserves contradictions and evolutions; no external assumptions.",
+      "implementation_target": "source_of_truth_registry"
+    },
+    {
+      "rule_key": "prompt-stage3-golden-execution-command",
+      "domain": "prompt_stage3_execution",
+      "source_document_key": "noetfield-execution-output-engine-v1-prompt",
+      "activation_status": "active_design_rule",
+      "rule_type": "execution_governance",
+      "summary": "Stage-3 must output a single golden execution command with 1-3 concrete actions.",
+      "implementation_target": "workflow_runtime"
+    },
+    {
+      "rule_key": "commercial-pre-execution-governance-narrative",
+      "domain": "noetfield_commercial_positioning",
+      "source_document_key": "linkedin-profile-hyper-commercial-v4",
+      "activation_status": "reference_only",
+      "rule_type": "gtm",
+      "summary": "Commercial narrative emphasizes pre-execution governance, no custody, and governance latency reduction.",
+      "implementation_target": null
+    },
+    {
+      "rule_key": "trust-audit-evidence-layer-wedge",
+      "domain": "noetfield_trust_gtm_strategy",
+      "source_document_key": "trustfield-noetfield-strategic-architecture-locked-fa",
+      "activation_status": "reference_only",
+      "rule_type": "gtm",
+      "summary": "First sellable unit is Continuous Audit Evidence API / Evidence Pack in one real cycle.",
+      "implementation_target": null
+    },
+    {
+      "rule_key": "engineering-layer-overrides-vision",
+      "domain": "noetfield_documentation_standard",
+      "source_document_key": "noetfield-dual-layer-documentation-standard-v1",
+      "activation_status": "active_design_rule",
+      "rule_type": "documentation_governance",
+      "summary": "On execution conflicts, Engineering Layer overrides Vision Layer.",
+      "implementation_target": "source_of_truth_registry"
+    },
+    {
+      "rule_key": "vision-engineering-traceability-required",
+      "domain": "noetfield_documentation_standard",
+      "source_document_key": "noetfield-dual-layer-documentation-standard-v1",
+      "activation_status": "active_design_rule",
+      "rule_type": "documentation_governance",
+      "summary": "Every vision element must map to engineering; unmapped claims invalidate the document.",
+      "implementation_target": "rfc_validator"
+    },
+    {
+      "rule_key": "rfc-ci-validation-before-merge",
+      "domain": "noetfield_rfc_governance",
+      "source_document_key": "noetfield-rfc-standard-v1-github-ci",
+      "activation_status": "active_design_rule",
+      "rule_type": "rfc_governance",
+      "summary": "RFC changes under rfc/ must pass schema, traceability, and replay-safety CI gates.",
+      "implementation_target": "github_workflows"
+    },
+    {
+      "rule_key": "rfc-four-file-contract-unit",
+      "domain": "noetfield_rfc_governance",
+      "source_document_key": "noetfield-rfc-standard-v1-github-ci",
+      "activation_status": "active_design_rule",
+      "rule_type": "rfc_governance",
+      "summary": "Each RFC requires vision.md, engineering.md, traceability.json, metadata.yaml.",
+      "implementation_target": "rfc_validator"
+    },
+    {
+      "rule_key": "langgraph-cannot-bypass-event-ledger",
+      "domain": "noetfield_langgraph_integration",
+      "source_document_key": "noetfield-langgraph-rfc-execution-integration-v1",
+      "activation_status": "active_design_rule",
+      "rule_type": "runtime_governance",
+      "summary": "All graph node outputs must commit through the event ledger; no implicit paths.",
+      "implementation_target": "workflow_runtime"
+    },
+    {
+      "rule_key": "llm-sandboxed-proposal-only",
+      "domain": "noetfield_langgraph_integration",
+      "source_document_key": "noetfield-langgraph-rfc-execution-integration-v1",
+      "activation_status": "active_design_rule",
+      "rule_type": "runtime_governance",
+      "summary": "LLM nodes generate proposals only; they cannot mutate authoritative state directly.",
+      "implementation_target": "workflow_runtime"
+    },
+    {
+      "rule_key": "postgres-single-source-of-truth",
+      "domain": "noetfield_execution_kernel_architecture",
+      "source_document_key": "noetfield-stack-blueprint-v1-refined-final",
+      "activation_status": "active_design_rule",
+      "rule_type": "data_architecture",
+      "summary": "PostgreSQL is the only system of record; secondary DBs cannot hold canonical truth.",
+      "implementation_target": "postgres_runtime"
+    },
+    {
+      "rule_key": "semantic-layer-advisory-only",
+      "domain": "noetfield_execution_kernel_architecture",
+      "source_document_key": "noetfield-stack-blueprint-v1-refined-final",
+      "activation_status": "active_design_rule",
+      "rule_type": "data_architecture",
+      "summary": "pgvector and risk scoring inform decisions but never define or mutate truth.",
+      "implementation_target": "policy_runtime"
+    },
+    {
+      "rule_key": "timescale-extension-not-separate-truth",
+      "domain": "noetfield_execution_kernel_architecture",
+      "source_document_key": "noetfield-stack-blueprint-v1-refined-final",
+      "activation_status": "active_design_rule",
+      "rule_type": "data_architecture",
+      "summary": "TimescaleDB is a Postgres extension for partitioning only, not a parallel logical ledger.",
+      "implementation_target": "postgres_runtime"
+    },
+    {
+      "rule_key": "mvp-stack-postgres-redis-s3",
+      "domain": "noetfield_execution_kernel_architecture",
+      "source_document_key": "noetfield-stack-blueprint-v1-refined-final",
+      "activation_status": "candidate_requires_formalization",
+      "rule_type": "deployment",
+      "summary": "Minimum production stack: PostgreSQL + Redis + S3; defer Kafka and external vector DB.",
+      "implementation_target": "infrastructure"
+    },
+    {
+      "rule_key": "state-derived-from-event-log-only",
+      "domain": "noetfield_execution_kernel_spec",
+      "source_document_key": "noetfield-execution-kernel-temporal-v1-canonical",
+      "activation_status": "active_design_rule",
+      "rule_type": "runtime_governance",
+      "summary": "Authoritative state is REDUCE(events); no direct state persistence as truth.",
+      "implementation_target": "postgres_runtime"
+    },
+    {
+      "rule_key": "replay-cached-llm-outputs-only",
+      "domain": "noetfield_execution_kernel_spec",
+      "source_document_key": "noetfield-execution-kernel-temporal-v1-canonical",
+      "activation_status": "active_design_rule",
+      "rule_type": "runtime_governance",
+      "summary": "Exact audit replay uses cached LLM tokens; no regeneration on replay path.",
+      "implementation_target": "workflow_runtime"
+    },
+    {
+      "rule_key": "no-autonomous-production-execution",
+      "domain": "noetfield_agent_catalog",
+      "source_document_key": "noetfield-agent-catalog-bank-grade-v1",
+      "activation_status": "active_design_rule",
+      "rule_type": "agent_governance",
+      "summary": "Agents propose and package evidence; production changes require signed human approval in audit log.",
+      "implementation_target": "policy_runtime"
+    },
+    {
+      "rule_key": "executor-agent-disabled-by-default",
+      "domain": "noetfield_agent_catalog",
+      "source_document_key": "noetfield-agent-catalog-bank-grade-v1",
+      "activation_status": "active_design_rule",
+      "rule_type": "agent_governance",
+      "summary": "Executor Agent locked off unless multi-sig human approval enables safe-zone automation.",
+      "implementation_target": "policy_runtime"
+    },
+    {
+      "rule_key": "evidence-pack-hsm-signed-manifest",
+      "domain": "noetfield_evidence_pack_schema",
+      "source_document_key": "noetfield-evidence-pack-json-schema-v1",
+      "activation_status": "active_design_rule",
+      "rule_type": "audit_governance",
+      "summary": "Evidence Packs require manifest SHA-256 and detached HSM signatures with verify.sh path.",
+      "implementation_target": "trust_ledger"
+    },
+    {
+      "rule_key": "critical-drift-triage-sla-4h",
+      "domain": "noetfield_temporal_governance_v2",
+      "source_document_key": "noetfield-v2-temporal-governance-os-bank-grade",
+      "activation_status": "candidate_requires_formalization",
+      "rule_type": "operational_sla",
+      "summary": "drift_score \u2265 0.7 or slope > 0.05/day triggers human triage within 4 hours.",
+      "implementation_target": "monitoring"
+    },
+    {
+      "rule_key": "directory-sot-consult-before-response",
+      "domain": "noetfield_operating_discipline",
+      "source_document_key": "noetfield-directory-enforced-consistency-spec-fa",
+      "activation_status": "active_design_rule",
+      "rule_type": "operating_discipline",
+      "summary": "Prompts and commands must consult governed SOT registry/directory before answering or acting.",
+      "implementation_target": "source_of_truth_registry"
+    },
+    {
+      "rule_key": "value-basket-on-uncertain-ranking",
+      "domain": "noetfield_operating_discipline",
+      "source_document_key": "noetfield-directory-enforced-consistency-spec-fa",
+      "activation_status": "active_design_rule",
+      "rule_type": "operating_discipline",
+      "summary": "When top options tie, aggregate document value into proposition basket for founder accept/reject.",
+      "implementation_target": "workflow_runtime"
+    },
+    {
+      "rule_key": "agent-least-privilege-scoped-identity",
+      "domain": "noetfield_agent_catalog",
+      "source_document_key": "noetfield-agent-catalog-bank-grade-v1",
+      "activation_status": "active_design_rule",
+      "rule_type": "agent_governance",
+      "summary": "Each agent runs minimal IAM scope; violations quarantine agent and generate Evidence Pack.",
+      "implementation_target": "policy_runtime"
+    },
+    {
+      "rule_key": "human-gatekeeper-hsm-sign-approval",
+      "domain": "noetfield_human_gatekeeper_ui",
+      "source_document_key": "noetfield-human-gatekeeper-ui-wireframe-v1",
+      "activation_status": "active_design_rule",
+      "rule_type": "ui_governance",
+      "summary": "Production approvals flow through Gatekeeper UI with HSM signing and append to event store.",
+      "implementation_target": "copilot_governance"
+    },
+    {
+      "rule_key": "noetfield-never-executes-payments",
+      "domain": "noetfield_bank_governance_integration",
+      "source_document_key": "noetfield-bank-integration-pack-v2",
+      "activation_status": "active_design_rule",
+      "rule_type": "regulatory_boundary",
+      "summary": "Noetfield must not move funds, initiate payments, settle, hold custody, or route transactions.",
+      "implementation_target": "policy_runtime"
+    },
+    {
+      "rule_key": "ghp-no-execution-instructions",
+      "domain": "noetfield_bank_governance_integration",
+      "source_document_key": "noetfield-bank-integration-pack-v2",
+      "activation_status": "active_design_rule",
+      "rule_type": "data_contract",
+      "summary": "GHP must never contain account numbers, routing, amounts, execution triggers, or settlement logic.",
+      "implementation_target": "schema_validator"
+    },
+    {
+      "rule_key": "cda-no-payment-routing-fields",
+      "domain": "noetfield_bank_governance_integration",
+      "source_document_key": "noetfield-bank-integration-pack-v2",
+      "activation_status": "active_design_rule",
+      "rule_type": "data_contract",
+      "summary": "CDA must not include payment instructions, settlement parameters, or custody semantics.",
+      "implementation_target": "schema_validator"
+    },
+    {
+      "rule_key": "nig-translation-boundary-only",
+      "domain": "noetfield_bank_governance_integration",
+      "source_document_key": "noetfield-bank-integration-pack-v2",
+      "activation_status": "active_design_rule",
+      "rule_type": "integration_boundary",
+      "summary": "NIG may normalize schema and compliance metadata only; forbidden to trigger transactions or settlement.",
+      "implementation_target": "integration_gateway"
+    },
+    {
+      "rule_key": "nf-chain-lock-integrity-gate",
+      "domain": "noetfield_bank_governance_integration",
+      "source_document_key": "noetfield-bank-integration-pack-v2",
+      "activation_status": "active_design_rule",
+      "rule_type": "integrity",
+      "summary": "If H_current != H_manifest then C3 HARD STOP; SHA-256 over L0+L4+version.",
+      "implementation_target": "workflow_runtime"
+    },
+    {
+      "rule_key": "l3-external-execution-authority-only",
+      "domain": "noetfield_l3_egs_runtime",
+      "source_document_key": "noetfield-l3-execution-engine-egs-v2",
+      "activation_status": "active_design_rule",
+      "rule_type": "runtime_governance",
+      "summary": "L3 forwards approved decisions to external institutions only; cannot override L2 REJECT.",
+      "implementation_target": "workflow_runtime"
+    },
+    {
+      "rule_key": "sot-registry-reference-only",
+      "domain": "noetfield_gcip_document_hierarchy",
+      "source_document_key": "noetfield-master-document-directory-l0-l5-v1",
+      "activation_status": "active_design_rule",
+      "rule_type": "architecture",
+      "summary": "L4 SoT indexes definitions and lineage; no decisions, policy execution, or analysis.",
+      "implementation_target": "source_of_truth_registry"
+    },
+    {
+      "rule_key": "bank-pack-overrides-conflicting-execution-specs",
+      "domain": "noetfield_bank_governance_integration",
+      "source_document_key": "noetfield-bank-integration-pack-v2",
+      "activation_status": "active_design_rule",
+      "rule_type": "precedence",
+      "summary": "On conflict, bank integration pack v2 overrides any document implying Noetfield payment execution.",
+      "implementation_target": "source_of_truth_registry"
+    },
+    {
+      "rule_key": "l2-mecr-final-governance-gate",
+      "domain": "noetfield_gcip_document_hierarchy",
+      "source_document_key": "noetfield-master-document-directory-l0-l5-v1",
+      "activation_status": "active_design_rule",
+      "rule_type": "architecture",
+      "summary": "Only L2 MECR may emit APPROVE/REJECT/REWRITE/FLAG; L1 structures only.",
+      "implementation_target": "policy_runtime"
+    },
+    {
+      "rule_key": "constitution-v32-supremacy-over-annex",
+      "domain": "noetfield_product_kernel_l1",
+      "source_document_key": "noetfield-constitutional-annex-product-kernel-v4-en",
+      "activation_status": "active_design_rule",
+      "rule_type": "legal_hierarchy",
+      "summary": "Constitution v3.2 prevails absolutely over Product Kernel v4.0 annex on any conflict.",
+      "implementation_target": "policy_runtime"
+    },
+    {
+      "rule_key": "pho-zero-instruction-construction",
+      "domain": "noetfield_product_kernel_l1",
+      "source_document_key": "noetfield-constitutional-annex-product-kernel-v4-en",
+      "activation_status": "active_design_rule",
+      "rule_type": "data_contract",
+      "summary": "PHO must not contain account numbers, amounts, routing, or settlement instructions.",
+      "implementation_target": "schema_validator"
+    },
+    {
+      "rule_key": "cda-non-actionable-governance-only",
+      "domain": "noetfield_legal_regulatory_positioning",
+      "source_document_key": "noetfield-rpaa-legal-opinion-letter-v1",
+      "activation_status": "active_design_rule",
+      "rule_type": "regulatory_boundary",
+      "summary": "CDA must remain non-reconstructable into payment instructions to preserve non-PSP status.",
+      "implementation_target": "schema_validator"
+    },
+    {
+      "rule_key": "no-transaction-based-revenue-model",
+      "domain": "noetfield_product_kernel_l1",
+      "source_document_key": "noetfield-constitutional-annex-product-kernel-v4-en",
+      "activation_status": "active_design_rule",
+      "rule_type": "commercial_governance",
+      "summary": "Prohibited revenue: FX spread, transaction commission, settlement-linked fees.",
+      "implementation_target": "gtm_policy"
+    },
+    {
+      "rule_key": "user-explicit-pathway-approval-required",
+      "domain": "noetfield_product_kernel_l1",
+      "source_document_key": "noetfield-constitutional-annex-product-kernel-v4-en",
+      "activation_status": "active_design_rule",
+      "rule_type": "product_governance",
+      "summary": "Execution pathways require explicit user selection and confirmation; no auto-select.",
+      "implementation_target": "workflow_runtime"
+    },
+    {
+      "rule_key": "legal-position-contingent-on-non-execution",
+      "domain": "noetfield_legal_regulatory_positioning",
+      "source_document_key": "noetfield-rpaa-legal-opinion-letter-v1",
+      "activation_status": "active_design_rule",
+      "rule_type": "regulatory_boundary",
+      "summary": "Non-PSP/non-MSB opinion void if system introduces execution triggers or funds proximity.",
+      "implementation_target": "policy_runtime"
+    },
+    {
+      "rule_key": "nf-chain-lock-compile-time-manifest",
+      "domain": "noetfield_bank_governance_integration",
+      "source_document_key": "noetfield-nf-chain-lock-manifest-layer-spec-v1",
+      "activation_status": "active_design_rule",
+      "rule_type": "integrity",
+      "summary": "SOT manifest hash at compile-time; runtime drift vs manifest triggers C3 HARD STOP.",
+      "implementation_target": "workflow_runtime"
+    },
+    {
+      "rule_key": "constitution-gcip-v4-supremacy",
+      "domain": "noetfield_constitution_l0",
+      "source_document_key": "noetfield-constitution-gcip-v4",
+      "activation_status": "active_design_rule",
+      "rule_type": "legal_hierarchy",
+      "summary": "GCIP Constitution v4.0 axioms override all lower layers on conflict.",
+      "implementation_target": "policy_runtime"
+    },
+    {
+      "rule_key": "mecr-deterministic-decision-only",
+      "domain": "noetfield_mecr_l2",
+      "source_document_key": "noetfield-mecr-governance-kernel-l2-v1",
+      "activation_status": "active_design_rule",
+      "rule_type": "runtime_governance",
+      "summary": "L2 MECR emits governance decisions only; no content generation or execution triggers.",
+      "implementation_target": "workflow_runtime"
+    },
+    {
+      "rule_key": "mecr-contradiction-c0-c3-taxonomy",
+      "domain": "noetfield_mecr_l2",
+      "source_document_key": "noetfield-mecr-governance-kernel-l2-v1",
+      "activation_status": "active_design_rule",
+      "rule_type": "runtime_governance",
+      "summary": "C3 axiom violation hard-rejects; C1 rewrite; C2 reject; C0 proceed.",
+      "implementation_target": "workflow_runtime"
+    },
+    {
+      "rule_key": "egs-l0-supremacy-lock",
+      "domain": "noetfield_l3_egs_runtime",
+      "source_document_key": "noetfield-l3-egs-runtime-v3-2",
+      "activation_status": "active_design_rule",
+      "rule_type": "runtime_governance",
+      "summary": "EGS blocks immediately on L0/GCIP violation; cannot override MECR with execution.",
+      "implementation_target": "workflow_runtime"
+    },
+    {
+      "rule_key": "sot-l4-no-logic-no-output",
+      "domain": "noetfield_sot_registry_l4",
+      "source_document_key": "noetfield-sot-registry-l4-v3-2",
+      "activation_status": "active_design_rule",
+      "rule_type": "architecture",
+      "summary": "L4 may only map references; forbidden to run algorithms or emit CDAs/decisions.",
+      "implementation_target": "source_of_truth_registry"
+    },
+    {
+      "rule_key": "user-approval-mandate-axiom-a11",
+      "domain": "noetfield_constitution_l0",
+      "source_document_key": "noetfield-constitution-gcip-v4",
+      "activation_status": "active_design_rule",
+      "rule_type": "product_governance",
+      "summary": "Users must explicitly approve execution pathways; no autonomous pathway selection.",
+      "implementation_target": "workflow_runtime"
+    },
+    {
+      "rule_key": "constitution-v4-golden-l0-sot",
+      "domain": "noetfield_constitution_lineage_analysis",
+      "source_document_key": "noetfield-golden-constitution-recommendation-v4",
+      "activation_status": "active_design_rule",
+      "rule_type": "legal_hierarchy",
+      "summary": "GCIP Constitution v4.0 is the golden L0 SOT; v3.2 and earlier are lineage only.",
+      "implementation_target": "source_of_truth_registry"
+    },
+    {
+      "rule_key": "no-mvp-in-constitution-layer",
+      "domain": "noetfield_constitution_lineage_analysis",
+      "source_document_key": "noetfield-constitution-product-layer-separation-fa",
+      "activation_status": "active_design_rule",
+      "rule_type": "documentation_governance",
+      "summary": "MVP, monetization, and deployment belong in Product Kernel or MVP spec, not Constitution.",
+      "implementation_target": "source_of_truth_registry"
+    },
+    {
+      "rule_key": "gtm-rpaa-safe-wording-coordination-not-payments",
+      "domain": "noetfield_commercial_gtm",
+      "source_document_key": "noetfield-cdl-pitch-deck-v3-1",
+      "activation_status": "active_design_rule",
+      "rule_type": "gtm",
+      "summary": "External copy uses coordination/governance language; avoid payment orchestration wording.",
+      "implementation_target": "gtm_policy"
+    },
+    {
+      "rule_key": "mvp-no-financial-instruction-adjacency",
+      "domain": "noetfield_mvp_spec",
+      "source_document_key": "noetfield-mvp-system-spec-v3-0-hardened",
+      "activation_status": "active_design_rule",
+      "rule_type": "product_governance",
+      "summary": "MVP outputs coordination objects only; no routing, payments, or PSP-facing instructions.",
+      "implementation_target": "workflow_runtime"
+    },
+    {
+      "rule_key": "prohibit-wallet-orchestration-positioning",
+      "domain": "noetfield_positioning_lineage_analysis",
+      "source_document_key": "noetfield-master-blueprint-kavodax-benchmark-v1",
+      "activation_status": "active_design_rule",
+      "rule_type": "legal_positioning",
+      "summary": "No Kavodax-class wallet, instruction, or settlement-orchestration positioning for Noetfield.",
+      "implementation_target": "gtm_policy"
+    },
+    {
+      "rule_key": "prohibit-meta-gateway-psp-framing",
+      "domain": "noetfield_positioning_lineage_analysis",
+      "source_document_key": "noetfield-payment-orchestration-meta-gateway-v1",
+      "activation_status": "active_design_rule",
+      "rule_type": "legal_positioning",
+      "summary": "No Stripe/Adyen meta-gateway or payment-orchestration category claims.",
+      "implementation_target": "gtm_policy"
+    },
+    {
+      "rule_key": "spark-centre-governance-only-narrative",
+      "domain": "noetfield_accelerator_spark",
+      "source_document_key": "noetfield-spark-centre-one-pager-v1",
+      "activation_status": "active_design_rule",
+      "rule_type": "gtm",
+      "summary": "Spark Centre materials use governance OS framing; no TrustField execution dependency in copy.",
+      "implementation_target": "gtm_policy"
+    },
+    {
+      "rule_key": "cdl-one-pager-locked-external-default",
+      "domain": "noetfield_accelerator_cdl",
+      "source_document_key": "noetfield-bc-tech-cdl-one-pager-locked-v1",
+      "activation_status": "active_design_rule",
+      "rule_type": "gtm",
+      "summary": "BC Tech/CDL external circulation uses locked one-pager, not venture or EGEL drafts.",
+      "implementation_target": "gtm_policy"
+    },
+    {
+      "rule_key": "investor-memo-no-execution-ready-instructions",
+      "domain": "noetfield_investor_positioning",
+      "source_document_key": "noetfield-bank-ready-institutional-document-v1",
+      "activation_status": "active_design_rule",
+      "rule_type": "legal_positioning",
+      "summary": "Tier-1 investor copy must not claim execution-ready instructions or routing layers.",
+      "implementation_target": "gtm_policy"
+    },
+    {
+      "rule_key": "hardware-docs-excluded-from-product-sot",
+      "domain": "operator_equipment",
+      "source_document_key": "noetfield-operator-hardware-selection-macbook-v1",
+      "activation_status": "reference_only",
+      "rule_type": "documentation_governance",
+      "summary": "Operator laptop selection docs are not product or regulatory SOT.",
+      "implementation_target": "source_of_truth_registry"
+    },
+    {
+      "rule_key": "v3-product-track-separate-from-gcip-l0",
+      "domain": "noetfield_v3_ai_orchestration_product",
+      "source_document_key": "noetfield-v3-mvp-production-spec-final",
+      "activation_status": "active_design_rule",
+      "rule_type": "architecture_governance",
+      "summary": "Noetfield v3 AI orchestration MVP is a distinct product track; GCIP v4 remains constitutional L0 for bank/regulatory identity.",
+      "implementation_target": "source_of_truth_registry"
+    },
+    {
+      "rule_key": "prohibit-capital-execution-control-plane-identity",
+      "domain": "noetfield_capital_execution_lineage",
+      "source_document_key": "noetfield-unified-master-control-plane-v9",
+      "activation_status": "active_design_rule",
+      "rule_type": "legal_positioning",
+      "summary": "No federated capital execution control plane, RWA settlement OS, or Samara-style execution positioning as Noetfield identity.",
+      "implementation_target": "gtm_policy"
+    },
+    {
+      "rule_key": "bank-pilot-readonly-no-routing-influence",
+      "domain": "noetfield_sme_visibility_pilot",
+      "source_document_key": "noetfield-master-blueprint-sme-visibility-readonly-v1",
+      "activation_status": "active_design_rule",
+      "rule_type": "bank_pilot",
+      "summary": "RBC/Circle pilot scope is read-only observability; no routing, execution control, or production dependency.",
+      "implementation_target": "bank_integration"
+    },
+    {
+      "rule_key": "v3-mvp-ship-linear-before-dag-ui",
+      "domain": "noetfield_v3_ai_orchestration_product",
+      "source_document_key": "noetfield-v3-mvp-production-spec-final",
+      "activation_status": "active_design_rule",
+      "rule_type": "product_governance",
+      "summary": "Ship sequential MVP per production spec before DAG animation, replay, or multi-agent timeline features.",
+      "implementation_target": "workflow_runtime"
+    },
+    {
+      "rule_key": "conversation-engine-not-product-sot",
+      "domain": "operator_prompt_tooling",
+      "source_document_key": "noetfield-lightweight-conversation-replacement-engine-v3",
+      "activation_status": "reference_only",
+      "rule_type": "documentation_governance",
+      "summary": "Chat compression prompts are operator tooling, not Noetfield product or regulatory SOT.",
+      "implementation_target": "source_of_truth_registry"
+    },
+    {
+      "rule_key": "ai-company-os-target-not-mvp-default",
+      "domain": "noetfield_ai_company_os_lineage",
+      "source_document_key": "noetfield-system-architecture-v2",
+      "activation_status": "active_design_rule",
+      "rule_type": "architecture_governance",
+      "summary": "Architecture v2 / control plane stack is target reference; ship v3 linear MVP first.",
+      "implementation_target": "workflow_runtime"
+    },
+    {
+      "rule_key": "prohibit-msb-orchestration-routing-narrative",
+      "domain": "noetfield_msb_partner_narrative",
+      "source_document_key": "noetfield-msb-partnership-narrative-fa-v1",
+      "activation_status": "active_design_rule",
+      "rule_type": "gtm",
+      "summary": "Do not use settlement orchestration or routing-engine framing in MSB partner materials.",
+      "implementation_target": "gtm_policy"
+    },
+    {
+      "rule_key": "prohibit-settlement-orchestration-product-copy",
+      "domain": "noetfield_commercial_gtm",
+      "source_document_key": "noetfield-product-page-narrative-settlement-orchestration-fa-v1",
+      "activation_status": "active_design_rule",
+      "rule_type": "legal_positioning",
+      "summary": "Product/website copy must not claim settlement orchestration or payment routing.",
+      "implementation_target": "gtm_policy"
+    },
+    {
+      "rule_key": "two-layer-never-merge-public-private",
+      "domain": "noetfield_founder_capital_positioning",
+      "source_document_key": "noetfield-two-layer-positioning-refined-v1-1",
+      "activation_status": "active_design_rule",
+      "rule_type": "documentation_governance",
+      "summary": "LinkedIn/public layer must not include SPV, placement, or deal execution language.",
+      "implementation_target": "gtm_policy"
+    },
+    {
+      "rule_key": "corridor-no-routing-decision-authority",
+      "domain": "noetfield_corridor_architecture_lineage",
+      "source_document_key": "noetfield-corridor-architecture-stablecoin-mvp-v1",
+      "activation_status": "active_design_rule",
+      "rule_type": "legal_positioning",
+      "summary": "Corridor docs: instruction formatting and status aggregation only; no routing intelligence claims.",
+      "implementation_target": "gtm_policy"
+    },
+    {
+      "rule_key": "corporate-definition-v2-1-external-default",
+      "domain": "noetfield_corporate_api_definition",
+      "source_document_key": "noetfield-corporate-definition-governance-v2-1",
+      "activation_status": "active_design_rule",
+      "rule_type": "gtm",
+      "summary": "Use governance v2.1 for partner/grant copy; subordinate to Constitution GCIP v4.",
+      "implementation_target": "gtm_policy"
+    },
+    {
+      "rule_key": "prohibit-corridor-routing-refined-architecture",
+      "domain": "noetfield_corridor_architecture_lineage",
+      "source_document_key": "noetfield-cross-border-architecture-routing-refined-v1",
+      "activation_status": "active_design_rule",
+      "rule_type": "legal_positioning",
+      "summary": "Do not use routing-engine or selects-how-money-moves corridor architecture externally.",
+      "implementation_target": "gtm_policy"
+    },
+    {
+      "rule_key": "government-narratives-execution-adjacent-only",
+      "domain": "noetfield_government_funding_bc",
+      "source_document_key": "noetfield-innovate-bc-investment-narrative-v6-1",
+      "activation_status": "active_design_rule",
+      "rule_type": "gtm",
+      "summary": "BC/Ontario/IRAP narratives must state no payment initiation, routing, or execution authority.",
+      "implementation_target": "gtm_policy"
+    },
+    {
+      "rule_key": "bank-pilot-brief-v6-1-enterprise-default",
+      "domain": "noetfield_bank_enterprise_pilot",
+      "source_document_key": "noetfield-enterprise-bank-pilot-brief-v6-1",
+      "activation_status": "active_design_rule",
+      "rule_type": "bank_pilot",
+      "summary": "Tier-1 bank committee pilots use v6.1 enterprise brief; SME wedge uses visibility read-only pilot.",
+      "implementation_target": "bank_integration"
+    }
+  ]
+}

@@ -1,0 +1,765 @@
+{
+  "registry_version": "2026-05-29-sot-16",
+  "decisions": [
+    {
+      "domain": "context_graph",
+      "active_document_key": "wp01-context-graph-runtime-edition-v2",
+      "active_version": "runtime-edition-v2-execution-hardened",
+      "decision": "active_source_of_truth",
+      "rationale": "This is the latest WP-01 document in the batch and explicitly hardens the Context Graph for execution determinism, snapshot semantics, policy-checked queries, and no-silent-mutation rules.",
+      "confidence": 0.92
+    },
+    {
+      "domain": "npl",
+      "active_document_key": "wp03-npl-formal-grammar-2026-05-npl-1",
+      "active_version": "2026-05-NPL-1",
+      "decision": "active_source_of_truth",
+      "rationale": "This document includes grammar, AST, type system, execution semantics, conflict resolution, policy packs, and security guarantees. It supersedes conceptual NPL guideline uploads.",
+      "confidence": 0.97
+    },
+    {
+      "domain": "developer_os_strategy",
+      "active_document_key": "orchestration-policy-layer-source-of-truth-2026",
+      "active_version": "2026-source-of-truth",
+      "decision": "active_source_of_truth",
+      "rationale": "This is the cleanest uploaded strategic blueprint for the Noetfield Developer OS orchestration and policy layer.",
+      "confidence": 0.88
+    },
+    {
+      "domain": "work_packages",
+      "active_document_key": "developer-os-addendum-work-packages-2026",
+      "active_version": "2026-addendum",
+      "decision": "active_planning_source",
+      "rationale": "This document is the clearest work-package dependency and roadmap registry for remaining Developer OS components.",
+      "confidence": 0.86
+    },
+    {
+      "domain": "security_agent",
+      "active_document_key": "security-agent-source-persian-normalized",
+      "active_version": "2026-security-agent-source",
+      "decision": "active_reference_needs_formal_spec",
+      "rationale": "This is the strongest uploaded Security Agent source, but it should be formalized into WP-05 Agent Behavior Monitoring and Security Agent specs before becoming executable.",
+      "confidence": 0.8
+    },
+    {
+      "domain": "ai_native_development_guidelines",
+      "active_document_key": "perplexity-ai-native-development-guidelines",
+      "active_version": "2026-guidelines-perplexity",
+      "decision": "active_reference",
+      "rationale": "Perplexity guidelines provide the strongest architecture-level framing around unified state, trust infrastructure, persistent memory, and policy-driven orchestration. Grok is retained as practical tooling reference.",
+      "confidence": 0.84
+    },
+    {
+      "domain": "operator_workflow",
+      "active_document_key": "cursor-ide-shortcuts-m5-pro-2026",
+      "active_version": "2026-cursor-shortcuts",
+      "decision": "reference_only",
+      "rationale": "Useful operator enablement reference for Cursor workflows, but not a platform governance source-of-truth.",
+      "confidence": 0.7
+    },
+    {
+      "domain": "posa_gtm",
+      "active_document_key": "posa-saas-first-100-users-launch-strategy-v1",
+      "active_version": "v1.0",
+      "decision": "external_product_reference",
+      "rationale": "POSA launch plan is a GTM reference for a separate product concept and should not affect Noetfield runtime governance unless explicitly scoped later.",
+      "confidence": 0.72
+    },
+    {
+      "domain": "posa_system",
+      "active_document_key": "posa-v3-0-source-of-truth",
+      "active_version": "v3.0",
+      "decision": "active_source_of_truth",
+      "rationale": "POSA v3.0 is the highest-level source-of-truth for the personal operating system agent architecture. POSA v3.1 revenue documents are subsystem sources under this root specification.",
+      "confidence": 0.91
+    },
+    {
+      "domain": "posa_revenue_system",
+      "active_document_key": "posa-v3-1-autonomous-revenue-system",
+      "active_version": "v3.1",
+      "decision": "active_subsystem_source_of_truth",
+      "rationale": "POSA v3.1 is the newest and most complete autonomous revenue subsystem specification and supersedes earlier revenue automation/playbook documents for revenue architecture.",
+      "confidence": 0.9
+    },
+    {
+      "domain": "posa_memory_system",
+      "active_document_key": "posa-digital-twin-training-memory-implementation-v1",
+      "active_version": "v1.0",
+      "decision": "active_subsystem_source_of_truth",
+      "rationale": "This is the strongest uploaded source for POSA digital twin and memory semantics, including memory governance and event-log rules.",
+      "confidence": 0.88
+    },
+    {
+      "domain": "posa_saas",
+      "active_document_key": "posa-saas-full-digital-twin-platform",
+      "active_version": "saas-evolution",
+      "decision": "active_reference",
+      "rationale": "Defines POSA multi-tenant SaaS evolution, but should remain separate from single-user POSA v3.0 source-of-truth until product line is explicitly selected.",
+      "confidence": 0.82
+    },
+    {
+      "domain": "posa_infrastructure",
+      "active_document_key": "posa-plug-and-play-deployment-architecture",
+      "active_version": "deployment-architecture",
+      "decision": "active_reference",
+      "rationale": "Defines deployable POSA Docker/cloud architecture; useful if POSA becomes implemented product line.",
+      "confidence": 0.8
+    },
+    {
+      "domain": "posa_mvp",
+      "active_document_key": "posa-first-working-mvp-blueprint",
+      "active_version": "7-10-day-mvp",
+      "decision": "active_reference",
+      "rationale": "Most concrete POSA MVP execution plan for a first working Telegram-controlled revenue loop.",
+      "confidence": 0.83
+    },
+    {
+      "domain": "shopify_price_intelligence",
+      "active_document_key": "shopify-price-intelligence-system-v1",
+      "active_version": "v1.0",
+      "decision": "separate_product_reference",
+      "rationale": "Separate Shopify product blueprint; does not govern POSA or Noetfield unless later adopted as a product module.",
+      "confidence": 0.76
+    },
+    {
+      "domain": "personal_agent_system_lineage",
+      "active_document_key": "posa-v3-0-source-of-truth",
+      "active_version": "v3.0",
+      "decision": "lineage_resolved_to_posa_v3",
+      "rationale": "PAAS v1, PAES v1, and POSA v2 are historical predecessors. POSA v3.0 remains the active POSA root SOT.",
+      "confidence": 0.93
+    },
+    {
+      "domain": "aie_protocol",
+      "active_document_key": "aie-protocol-full-technical-whitepaper",
+      "active_version": "whitepaper-v1",
+      "decision": "active_source_of_truth",
+      "rationale": "The full technical whitepaper is the normative DCEN specification. Batch 004 module architecture remains a supporting module reference.",
+      "confidence": 0.93
+    },
+    {
+      "domain": "aie_tokenomics",
+      "active_document_key": "aie-protocol-tokenomics-mathematical-model-v1",
+      "active_version": "mathematical-model-v1",
+      "decision": "active_source_of_truth",
+      "rationale": "The mathematical model document supersedes the earlier adaptive-supply tokenomics upload with staking yield equilibrium and stress scenarios.",
+      "confidence": 0.9
+    },
+    {
+      "domain": "aie_repo_layout",
+      "active_document_key": "aie-protocol-full-production-repo-structure",
+      "active_version": "production-repo-v1",
+      "decision": "active_implementation_scaffold_reference",
+      "rationale": "Monorepo structure defines where contracts, cosmos modules, agent-runtime, and infra live when AIE implementation is scoped.",
+      "confidence": 0.85
+    },
+    {
+      "domain": "aiis_platform",
+      "active_document_key": "aiis-investor-whitepaper-agentic-intelligence-infrastructure",
+      "active_version": "investor-whitepaper-v1",
+      "decision": "separate_product_lineage_reference",
+      "rationale": "AIIS is enterprise agent infrastructure positioning, distinct from Noetfield governance runtime and AIE tokenized agent economy.",
+      "confidence": 0.88
+    },
+    {
+      "domain": "agentic_systems_theory",
+      "active_document_key": "manifesto-agentic-systems-design",
+      "active_version": "manifesto-v1",
+      "decision": "active_theory_reference",
+      "rationale": "Manifesto encodes constraint-driven agent design doctrine that aligns with Noetfield governance posture without being executable policy.",
+      "confidence": 0.82
+    },
+    {
+      "domain": "context_resonance_theory",
+      "active_document_key": "context-resonance-ieee-research-paper-crt",
+      "active_version": "ieee-crt-v1",
+      "decision": "active_source_of_truth",
+      "rationale": "IEEE-style CRT paper is the formal active theory SOT. Earlier theory paper and ultimate guide remain supporting references.",
+      "confidence": 0.91
+    },
+    {
+      "domain": "cognitive_publishing",
+      "active_document_key": "architecture-of-meaning-semantic-superconductivity-essay",
+      "active_version": "full-essay-v1",
+      "decision": "active_source_of_truth",
+      "rationale": "Full Architecture of Meaning essay supersedes the book proposal as the authoritative knowledge-product manuscript.",
+      "confidence": 0.9
+    },
+    {
+      "domain": "event_driven_agentic_architecture",
+      "active_document_key": "architecture-md-v2-event-driven-agentic-system",
+      "active_version": "v2.0",
+      "decision": "active_implementation_reference",
+      "rationale": "Bank-grade event-driven blueprint aligns with Noetfield Phase 3 event bus, HALT, and audit posture without replacing WP-01 graph SOT.",
+      "confidence": 0.89
+    },
+    {
+      "domain": "operator_context_discipline",
+      "active_document_key": "cursor-token-efficiency-context-discipline-v1",
+      "active_version": "v1.0",
+      "decision": "active_operator_reference",
+      "rationale": "Defines surgical context, architecture locking, and token governance for Cursor workflows.",
+      "confidence": 0.87
+    },
+    {
+      "domain": "sot_engine",
+      "active_document_key": "sot-engine-auto-running-architecture-v1",
+      "active_version": "auto-arch-v1",
+      "decision": "active_source_of_truth",
+      "rationale": "Auto-running closed-loop SoT engine is the normative architecture over the repo scaffold alone.",
+      "confidence": 0.88
+    },
+    {
+      "domain": "slf_framework",
+      "active_document_key": "slf-v5-frozen-canonical-spec",
+      "active_version": "v5.0-frozen",
+      "decision": "active_source_of_truth",
+      "rationale": "SLF v5 frozen spec is the canonical cognitive OS stack definition for the SLF product lineage.",
+      "confidence": 0.92
+    },
+    {
+      "domain": "system_genealogy",
+      "active_document_key": "unified-system-genealogy-map",
+      "active_version": "v1",
+      "decision": "active_lineage_reference",
+      "rationale": "Maps Reality \u2192 SoT \u2192 SLF \u2192 Execution \u2192 feedback for cross-document comparison.",
+      "confidence": 0.86
+    },
+    {
+      "domain": "data_pipeline_methodology",
+      "active_document_key": "chat-corpora-deduplication-pipeline-methodology-fa",
+      "active_version": "v1",
+      "decision": "reference_methodology",
+      "rationale": "Chat archive deduplication pipeline is operational methodology, not platform runtime SOT.",
+      "confidence": 0.8
+    },
+    {
+      "domain": "slf_epistemic_core",
+      "active_document_key": "slf-v3-system-logic-framework-epistemic",
+      "active_version": "v3.0",
+      "decision": "active_source_of_truth",
+      "rationale": "SLF v3 formalizes the epistemic loop and invariant compression engine. v2 and SLG v1 are historical predecessors.",
+      "confidence": 0.92
+    },
+    {
+      "domain": "sot_epistemology",
+      "active_document_key": "sot-creation-guidelines-practical",
+      "active_version": "guidelines-v1",
+      "decision": "active_source_of_truth",
+      "rationale": "Practical SoT creation guidelines define how truth is mined from execution. Complements auto-running engine and SLF relationship docs.",
+      "confidence": 0.9
+    },
+    {
+      "domain": "paios_system",
+      "active_document_key": "paios-source-of-truth-blueprint-v1",
+      "active_version": "sot-v1.0",
+      "decision": "active_source_of_truth",
+      "rationale": "PAIOS blueprint is the normative four-agent personal OS spec with governance and memory contracts.",
+      "confidence": 0.88
+    },
+    {
+      "domain": "noetfield_runtime_mvp",
+      "active_document_key": "noetfield-strong-core-runtime-minimal-fa",
+      "active_version": "core-runtime-v0.1",
+      "decision": "active_mvp_reference",
+      "rationale": "Minimal six-capability runtime kernel and v0.1 agent set for phased deployment.",
+      "confidence": 0.84
+    },
+    {
+      "domain": "noetfield_product_vision",
+      "active_document_key": "noetfield-ambient-intelligence-nervous-system-sot-v31",
+      "active_version": "v3.1",
+      "decision": "active_source_of_truth",
+      "rationale": "v3.1 is the definitive ambient intelligence nervous system specification with living knowledge graph, inspectors, and governance layers. Supersedes v1.1 through v3.0 and batch-007 org-runtime draft.",
+      "confidence": 0.94
+    },
+    {
+      "domain": "noetfield_gie",
+      "active_document_key": "noetfield-gie-specification-supplement-v31",
+      "active_version": "gie-spec-v31",
+      "decision": "active_source_of_truth",
+      "rationale": "GIE supplement defines graph inference pipeline, schema, prompts, and integration points for the living knowledge graph.",
+      "confidence": 0.91
+    },
+    {
+      "domain": "governed_execution_product",
+      "active_document_key": "governed-execution-system-mvp-blueprint-v1",
+      "active_version": "mvp-v1",
+      "decision": "active_commercial_wedge_reference",
+      "rationale": "Deterministic approval workflow MVP aligns with Copilot Governance and Phase 3 policy runtime as first sellable wedge.",
+      "confidence": 0.88
+    },
+    {
+      "domain": "noetfield_execution_vm",
+      "active_document_key": "noetfield-execution-consensus-vm-v40-blueprint",
+      "active_version": "v4.0",
+      "decision": "active_source_of_truth",
+      "rationale": "Execution Consensus VM v4.0 is the implementation-grade blueprint for deterministic distributed execution substrate.",
+      "confidence": 0.87
+    },
+    {
+      "domain": "ai_native_enterprise_methodology",
+      "active_document_key": "noetfield-ai-native-lean-enterprise-blueprint-fa",
+      "active_version": "blueprint-v1",
+      "decision": "reference_methodology",
+      "rationale": "Free-max lean enterprise stack is operational methodology, not Noetfield product SOT.",
+      "confidence": 0.75
+    },
+    {
+      "domain": "operator_tooling",
+      "active_document_key": "notion-ai-brain-hybrid-architecture-guide-fa",
+      "active_version": "guide-v1-fa",
+      "decision": "reference_only",
+      "rationale": "Notion as control plane UI only; backend remains source of execution truth.",
+      "confidence": 0.7
+    },
+    {
+      "domain": "noetfield_prompt_os",
+      "active_document_key": "noetfield-prompt-system-constitution-v02-mvp",
+      "active_version": "constitution-v0.2-mvp",
+      "decision": "active_source_of_truth",
+      "rationale": "v0.2 MVP constitution governs fast intelligence-to-action cycles with 2-step pipeline for founders and operators.",
+      "confidence": 0.9
+    },
+    {
+      "domain": "noetfield_prompt_os_enterprise",
+      "active_document_key": "noetfield-prompt-constitution-blueprint-directory-v10",
+      "active_version": "constitution-v1.0",
+      "decision": "active_enterprise_pipeline_reference",
+      "rationale": "v1.0 directory defines mandatory 3-stage extraction \u2192 structuring \u2192 execution for long-form multi-chat workflows.",
+      "confidence": 0.88
+    },
+    {
+      "domain": "prompt_stage1_extraction",
+      "active_document_key": "master-strategic-context-engine-v37-efficient",
+      "active_version": "v3.7-efficient",
+      "decision": "active_source_of_truth",
+      "rationale": "v3.7 is the default high-efficiency Stage-1 extractor; v3.5 retained for elite deep extraction on complex chats.",
+      "confidence": 0.91
+    },
+    {
+      "domain": "prompt_stage2_structuring",
+      "active_document_key": "noetfield-strategic-structuring-reasoning-engine-stage2-v20",
+      "active_version": "stage2-v2.0-noetfield",
+      "decision": "active_source_of_truth",
+      "rationale": "Noetfield-specific Stage-2 adds rail-level and intent-to-execution tables plus institutional reasoning format.",
+      "confidence": 0.9
+    },
+    {
+      "domain": "prompt_stage3_execution",
+      "active_document_key": "noetfield-execution-output-engine-v1-prompt",
+      "active_version": "execution-v1",
+      "decision": "active_source_of_truth",
+      "rationale": "Execution Output Engine v1 is the Stage-3 decision compiler with golden execution command.",
+      "confidence": 0.92
+    },
+    {
+      "domain": "noetfield_commercial_positioning",
+      "active_document_key": "linkedin-profile-hyper-commercial-v4",
+      "active_version": "linkedin-v4",
+      "decision": "active_source_of_truth",
+      "rationale": "v4 LinkedIn copy is search-optimized for enterprise buyers and product-oriented governance narrative.",
+      "confidence": 0.87
+    },
+    {
+      "domain": "noetfield_trust_gtm_strategy",
+      "active_document_key": "trustfield-noetfield-strategic-architecture-locked-fa",
+      "active_version": "locked-ssot-v1-fa",
+      "decision": "active_source_of_truth",
+      "rationale": "Locked strategic architecture defines Governance Latency thesis, Audit Evidence Layer wedge, and 14-day execution plan.",
+      "confidence": 0.89
+    },
+    {
+      "domain": "noetfield_documentation_standard",
+      "active_document_key": "noetfield-dual-layer-documentation-standard-v1",
+      "active_version": "dual-layer-v1.0",
+      "decision": "active_source_of_truth",
+      "rationale": "Canonical A/B/C/D document contract for all Noetfield specs; engineering layer authoritative at runtime.",
+      "confidence": 0.93
+    },
+    {
+      "domain": "noetfield_rfc_governance",
+      "active_document_key": "noetfield-rfc-standard-v1-github-ci",
+      "active_version": "rfc-standard-v1.0",
+      "decision": "active_source_of_truth",
+      "rationale": "4-file RFC units with CI validation, traceability, and replay-safety gates before merge.",
+      "confidence": 0.92
+    },
+    {
+      "domain": "noetfield_langgraph_integration",
+      "active_document_key": "noetfield-langgraph-rfc-execution-integration-v1",
+      "active_version": "langgraph-integration-v1.0",
+      "decision": "active_source_of_truth",
+      "rationale": "Defines RFC\u2192compiler\u2192LangGraph\u2192ledger pipeline and runtime binding invariants.",
+      "confidence": 0.9
+    },
+    {
+      "domain": "noetfield_execution_kernel_architecture",
+      "active_document_key": "noetfield-stack-blueprint-v1-refined-final",
+      "active_version": "stack-refined-v1",
+      "decision": "active_source_of_truth",
+      "rationale": "Postgres-only truth with pgvector/Redis/S3 as projections; supersedes Kafka/Qdrant multi-DB draft.",
+      "confidence": 0.94
+    },
+    {
+      "domain": "noetfield_execution_roadmap",
+      "active_document_key": "noetfield-5-year-vision-enterprise-ai-os",
+      "active_version": "5yr-vision-narrative-v1",
+      "decision": "active_source_of_truth",
+      "rationale": "Five-phase enterprise AI OS roadmap from kernel to protocol layer.",
+      "confidence": 0.88
+    },
+    {
+      "domain": "noetfield_execution_kernel_spec",
+      "active_document_key": "noetfield-execution-kernel-temporal-v1-canonical",
+      "active_version": "temporal-kernel-v1.0",
+      "decision": "active_source_of_truth",
+      "rationale": "Canonical temporal event-sourced kernel: derived state, LLM proposal-only, arbitration, saga, cached replay.",
+      "confidence": 0.93
+    },
+    {
+      "domain": "noetfield_temporal_governance_v2",
+      "active_document_key": "noetfield-v2-temporal-governance-os-bank-grade",
+      "active_version": "temporal-governance-v2.0",
+      "decision": "active_source_of_truth",
+      "rationale": "Bank-grade v2 Temporal Governance OS: event core, drift, evidence packs, human gatekeeper; distinct from v3.1 ambient SOT.",
+      "confidence": 0.9
+    },
+    {
+      "domain": "noetfield_evidence_pack_schema",
+      "active_document_key": "noetfield-evidence-pack-json-schema-v1",
+      "active_version": "evidence-pack-schema-v1",
+      "decision": "active_source_of_truth",
+      "rationale": "Signed portable Evidence Pack JSON schema for auditors; aligns with Trust Ledger / Copilot wedge.",
+      "confidence": 0.92
+    },
+    {
+      "domain": "noetfield_agent_catalog",
+      "active_document_key": "noetfield-agent-catalog-bank-grade-v1",
+      "active_version": "agent-catalog-v1",
+      "decision": "active_source_of_truth",
+      "rationale": "Scoped agent roster with least privilege; Executor disabled by default; human-only production authority.",
+      "confidence": 0.91
+    },
+    {
+      "domain": "noetfield_human_gatekeeper_ui",
+      "active_document_key": "noetfield-human-gatekeeper-ui-wireframe-v1",
+      "active_version": "gatekeeper-ui-v1",
+      "decision": "active_operational_reference",
+      "rationale": "Triage queue, diff viewer, HSM approval modal, replay/export flows for steward decisions.",
+      "confidence": 0.86
+    },
+    {
+      "domain": "noetfield_pilot_delivery_plan",
+      "active_document_key": "noetfield-6-week-sprint-plan-solo-founder-v1",
+      "active_version": "sprint-6wk-v1",
+      "decision": "active_operational_reference",
+      "rationale": "Week-by-week pilot build plan for agent platform through Gatekeeper UI and hardening.",
+      "confidence": 0.85
+    },
+    {
+      "domain": "noetfield_operating_discipline",
+      "active_document_key": "noetfield-directory-enforced-consistency-spec-fa",
+      "active_version": "directory-discipline-fa-v1",
+      "decision": "active_source_of_truth",
+      "rationale": "Directory/SOT-first responses, drift tracking, value basket for uncertain rankings, founder approval loop.",
+      "confidence": 0.88
+    },
+    {
+      "domain": "noetfield_bank_governance_integration",
+      "active_document_key": "noetfield-bank-integration-pack-v2",
+      "active_version": "bank-integration-v2.0",
+      "decision": "active_source_of_truth",
+      "rationale": "Canonical Canada-safe CDA/GHP/NIG/SEOP model; non-custodial pre-execution governance only; supersedes conflicting L3 execution semantics.",
+      "confidence": 0.95
+    },
+    {
+      "domain": "noetfield_bank_due_diligence",
+      "active_document_key": "noetfield-bank-due-diligence-deck-v1",
+      "active_version": "due-diligence-v1.0",
+      "decision": "active_source_of_truth",
+      "rationale": "Institutional diligence deck for OSFI/RBC-style review of non-execution governance boundary.",
+      "confidence": 0.9
+    },
+    {
+      "domain": "noetfield_bank_production_architecture",
+      "active_document_key": "noetfield-bank-grade-implementation-design-v1",
+      "active_version": "bank-impl-design-v1.0",
+      "decision": "active_source_of_truth",
+      "rationale": "Deployable multi-service topology: gateway, MECR cluster, EGS enforcement, SoT graph audit layer.",
+      "confidence": 0.91
+    },
+    {
+      "domain": "noetfield_gcip_document_hierarchy",
+      "active_document_key": "noetfield-master-document-directory-l0-l5-v1",
+      "active_version": "master-directory-v1.0",
+      "decision": "active_source_of_truth",
+      "rationale": "Master index of L0 Constitution through L5 NF-CHAIN-LOCK and layer responsibilities.",
+      "confidence": 0.92
+    },
+    {
+      "domain": "noetfield_product_kernel_l1",
+      "active_document_key": "noetfield-constitutional-annex-product-kernel-v4-en",
+      "active_version": "product-kernel-v4.0-en",
+      "decision": "active_source_of_truth",
+      "rationale": "L1 behavior layer subordinate to Constitution v3.2; CDA/PHO, corridors, Canada-safe product rules.",
+      "confidence": 0.93
+    },
+    {
+      "domain": "noetfield_constitution_l0",
+      "active_document_key": "noetfield-constitution-gcip-v4",
+      "active_version": "gcip-v4.0",
+      "decision": "active_source_of_truth",
+      "rationale": "L0 GCIP Constitution v4.0 with A1\u2013A11 axioms; supersedes all prior constitution version references.",
+      "confidence": 0.96
+    },
+    {
+      "domain": "noetfield_unified_system_graph",
+      "active_document_key": "noetfield-unified-system-graph-v1",
+      "active_version": "system-graph-v1.0",
+      "decision": "active_source_of_truth",
+      "rationale": "Canonical L0\u2013L4 control/data flow, branching, and failure-mode graph.",
+      "confidence": 0.92
+    },
+    {
+      "domain": "noetfield_mecr_l2",
+      "active_document_key": "noetfield-mecr-governance-kernel-l2-v1",
+      "active_version": "mecr-v1.0",
+      "decision": "active_source_of_truth",
+      "rationale": "L2 deterministic governance decision engine with C0\u2013C3 and SoT binding validation.",
+      "confidence": 0.93
+    },
+    {
+      "domain": "noetfield_sot_registry_l4",
+      "active_document_key": "noetfield-sot-registry-l4-v3-2",
+      "active_version": "sot-l4-v3.2",
+      "decision": "active_source_of_truth",
+      "rationale": "L4 reference-only index rooted at NF-L0-01; no runtime logic.",
+      "confidence": 0.92
+    },
+    {
+      "domain": "noetfield_l3_egs_runtime",
+      "active_document_key": "noetfield-l3-egs-runtime-v3-2",
+      "active_version": "egs-v3.2",
+      "decision": "active_source_of_truth",
+      "rationale": "L3 constitutional enforcement runtime; supersedes EGS v2.0.",
+      "confidence": 0.91
+    },
+    {
+      "domain": "noetfield_legal_regulatory_positioning",
+      "active_document_key": "noetfield-rpaa-legal-opinion-letter-v1-1",
+      "active_version": "rpaa-opinion-v1.1",
+      "decision": "active_source_of_truth",
+      "rationale": "Updated RPAA/FINTRAC/OSFI opinion aligned to Constitution v4 and Annex v4.",
+      "confidence": 0.91
+    },
+    {
+      "domain": "noetfield_bank_procurement",
+      "active_document_key": "noetfield-rbc-td-procurement-diligence-pack-v1",
+      "active_version": "procurement-pack-v1.0",
+      "decision": "active_source_of_truth",
+      "rationale": "Full RBC/TD vendor diligence pack with architecture annex and diagram.",
+      "confidence": 0.9
+    },
+    {
+      "domain": "noetfield_constitution_lineage_analysis",
+      "active_document_key": "noetfield-constitution-comparative-analysis-fa",
+      "active_version": "compare-fa-v1",
+      "decision": "active_source_of_truth",
+      "rationale": "Authoritative v3.1/v3.2/v4 comparative analysis; confirms GCIP v4.0 as golden L0 choice for Canada 2026.",
+      "confidence": 0.9
+    },
+    {
+      "domain": "noetfield_commercial_gtm",
+      "active_document_key": "noetfield-cdl-pitch-deck-v3-1",
+      "active_version": "pitch-deck-v3.1",
+      "decision": "active_source_of_truth",
+      "rationale": "CDL-ready 10-slide deck with tightened legal perimeter and CDA product narrative.",
+      "confidence": 0.87
+    },
+    {
+      "domain": "noetfield_mvp_spec",
+      "active_document_key": "noetfield-mvp-system-spec-v3-0-hardened",
+      "active_version": "mvp-spec-v3.0",
+      "decision": "active_source_of_truth",
+      "rationale": "Hardened internal-coordination MVP spec; no financial instruction adjacency.",
+      "confidence": 0.88
+    },
+    {
+      "domain": "noetfield_investor_positioning",
+      "active_document_key": "noetfield-bank-ready-institutional-document-v1",
+      "active_version": "bank-ready-v1",
+      "decision": "active_source_of_truth",
+      "rationale": "Counsel-grade institutional narrative without execution-ready instruction language.",
+      "confidence": 0.9
+    },
+    {
+      "domain": "noetfield_internal_ic_assessment",
+      "active_document_key": "noetfield-ic-diligence-memo-blackrock-style-v1",
+      "active_version": "ic-memo-v1",
+      "decision": "active_source_of_truth",
+      "rationale": "Neutral IC diligence framing and de-risking checklist for fundraising readiness.",
+      "confidence": 0.88
+    },
+    {
+      "domain": "noetfield_accelerator_cdl",
+      "active_document_key": "noetfield-bc-tech-cdl-one-pager-locked-v1",
+      "active_version": "cdl-locked-v1",
+      "decision": "active_source_of_truth",
+      "rationale": "RPAA-safe CDL/BC Tech one-pager; supersedes venture and EGEL draft variants.",
+      "confidence": 0.91
+    },
+    {
+      "domain": "noetfield_accelerator_spark",
+      "active_document_key": "noetfield-spark-centre-one-pager-v1",
+      "active_version": "spark-v1",
+      "decision": "active_source_of_truth",
+      "rationale": "Locked Spark Centre accelerator narrative for Ontario SME governance wedge.",
+      "confidence": 0.9
+    },
+    {
+      "domain": "noetfield_positioning_lineage_analysis",
+      "active_document_key": "noetfield-master-blueprint-comparative-analysis-fa-v1",
+      "active_version": "blueprint-compare-fa-v1",
+      "decision": "active_source_of_truth",
+      "rationale": "Authoritative orchestration vs governance blueprint comparison for 2026 Canada strategy.",
+      "confidence": 0.92
+    },
+    {
+      "domain": "noetfield_regulatory_submissions",
+      "active_document_key": "noetfield-rbc-finsec-submission-v1",
+      "active_version": "submissions-index-v1",
+      "decision": "reference_index",
+      "rationale": "Historical RBC/BoC submission corpus; live legal SOT remains RPAA opinion v1.1.",
+      "confidence": 0.85
+    },
+    {
+      "domain": "noetfield_operating_model_reference",
+      "active_document_key": "noetfield-operating-model-2026-trustfield-v1",
+      "active_version": "operating-model-2026",
+      "decision": "historical_reference",
+      "rationale": "TrustField RACI operating model; bank pack v2 supersedes for external diligence.",
+      "confidence": 0.8
+    },
+    {
+      "domain": "noetfield_v3_ai_orchestration_product",
+      "active_document_key": "noetfield-v3-mvp-production-spec-final",
+      "active_version": "mvp-spec-final",
+      "decision": "active_source_of_truth",
+      "rationale": "Canonical build spec for Noetfield v3 deterministic multi-model workflow MVP (separate from GCIP L0).",
+      "confidence": 0.93
+    },
+    {
+      "domain": "noetfield_v3_investor_gtm",
+      "active_document_key": "noetfield-v3-investor-one-pager-rbc-v3",
+      "active_version": "one-pager-rbc-v3",
+      "decision": "active_source_of_truth",
+      "rationale": "Primary investor one-pager for v3 AI orchestration product track.",
+      "confidence": 0.88
+    },
+    {
+      "domain": "noetfield_v3_product_ux",
+      "active_document_key": "noetfield-v3-landing-page-spec",
+      "active_version": "landing-v3",
+      "decision": "active_source_of_truth",
+      "rationale": "Default product marketing surface for v3; streaming/DAG specs are roadmap references.",
+      "confidence": 0.86
+    },
+    {
+      "domain": "noetfield_sme_visibility_pilot",
+      "active_document_key": "noetfield-master-blueprint-sme-visibility-readonly-v1",
+      "active_version": "visibility-pilot-v1",
+      "decision": "active_source_of_truth",
+      "rationale": "Bank-safe read-only SME cross-border visibility pilot wedge for RBCx/FinSec/Circle.",
+      "confidence": 0.91
+    },
+    {
+      "domain": "noetfield_capital_execution_lineage",
+      "active_document_key": "noetfield-creation-governance-stack-separation-fa",
+      "active_version": "creation-gov-fa-v1",
+      "decision": "active_methodology_reference",
+      "rationale": "Explains why capital-execution and control-plane drafts are rejected in favor of governance-only GCIP.",
+      "confidence": 0.9
+    },
+    {
+      "domain": "noetfield_ai_company_os_lineage",
+      "active_document_key": "noetfield-control-plane-spec-v1",
+      "active_version": "control-plane-v1",
+      "decision": "reference_index",
+      "rationale": "Index for full AI Company OS target stack; MVP build remains v3 linear production spec.",
+      "confidence": 0.88
+    },
+    {
+      "domain": "noetfield_founder_capital_positioning",
+      "active_document_key": "noetfield-two-layer-positioning-refined-v1-1",
+      "active_version": "two-layer-v1.1",
+      "decision": "active_source_of_truth",
+      "rationale": "Public vs private capital identity separation for founder LinkedIn and investor meetings.",
+      "confidence": 0.9
+    },
+    {
+      "domain": "noetfield_msb_partner_narrative",
+      "active_document_key": "noetfield-master-blueprint-sme-visibility-readonly-v1",
+      "active_version": "visibility-pilot-v1",
+      "decision": "active_source_of_truth",
+      "rationale": "MSB orchestration narrative superseded; read-only visibility pilot is bank-safe MSB story.",
+      "confidence": 0.92
+    },
+    {
+      "domain": "noetfield_ai_governance_methodology",
+      "active_document_key": "noetfield-ai-governance-system-v1",
+      "active_version": "ai-gov-v1",
+      "decision": "active_methodology_reference",
+      "rationale": "Propose/execute separation aligns with GCIP v4 and Copilot governance product.",
+      "confidence": 0.89
+    },
+    {
+      "domain": "noetfield_corridor_architecture_lineage",
+      "active_document_key": "noetfield-corridor-architecture-stablecoin-mvp-v1",
+      "active_version": "corridor-stablecoin-v1",
+      "decision": "active_methodology_reference",
+      "rationale": "Safest CAD\u2192INR corridor framing as instruction interface; routing variant prohibited.",
+      "confidence": 0.87
+    },
+    {
+      "domain": "noetfield_corporate_api_definition",
+      "active_document_key": "noetfield-corporate-definition-governance-v2-1",
+      "active_version": "gov-v2.1",
+      "decision": "active_source_of_truth",
+      "rationale": "Canonical non-payment corporate definition for partners, grants, and banks; subordinate to GCIP v4 L0.",
+      "confidence": 0.93
+    },
+    {
+      "domain": "noetfield_government_funding_bc",
+      "active_document_key": "noetfield-innovate-bc-investment-narrative-v6-1",
+      "active_version": "innovate-bc-v6.1",
+      "decision": "active_source_of_truth",
+      "rationale": "Innovate BC / PacifiCan / Vancouver ecosystem investment narrative.",
+      "confidence": 0.9
+    },
+    {
+      "domain": "noetfield_government_funding_ontario",
+      "active_document_key": "noetfield-oci-investment-narrative-v6-1",
+      "active_version": "oci-v6.1",
+      "decision": "active_source_of_truth",
+      "rationale": "OCI / Ontario commercialization and IPON funding stack narrative.",
+      "confidence": 0.9
+    },
+    {
+      "domain": "noetfield_government_funding_irap",
+      "active_document_key": "noetfield-nrc-irap-technical-prospectus-v6-1",
+      "active_version": "irap-v6.1",
+      "decision": "active_source_of_truth",
+      "rationale": "NRC-IRAP technical validation and R&D prospectus for ITA engagement.",
+      "confidence": 0.91
+    },
+    {
+      "domain": "noetfield_bank_enterprise_pilot",
+      "active_document_key": "noetfield-enterprise-bank-pilot-brief-v6-1",
+      "active_version": "bank-pilot-v6.1",
+      "decision": "active_source_of_truth",
+      "rationale": "12-week bank innovation/risk committee pilot brief; read-validate overlay model.",
+      "confidence": 0.92
+    }
+  ]
+}
