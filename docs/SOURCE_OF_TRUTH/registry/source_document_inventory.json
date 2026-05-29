@@ -438,12 +438,12 @@
       "work_package": "reference",
       "version_label": "hybrid-evm-cosmos-architecture",
       "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-004/aie-protocol-smart-contract-cosmos-architecture.md",
-      "classification": "active_protocol_reference",
+      "classification": "active_protocol_module_reference",
       "status": "reference",
       "supersedes": [
         "aie-protocol-smart-contract-cosmos-architecture-duplicate"
       ],
-      "superseded_by": null,
+      "superseded_by": "aie-protocol-full-technical-whitepaper",
       "upload_batch": "2026-05-004"
     },
     {
@@ -458,6 +458,140 @@
       "supersedes": [],
       "superseded_by": "aie-protocol-smart-contract-cosmos-architecture",
       "upload_batch": "2026-05-004"
+    },
+    {
+      "document_key": "aie-protocol-full-production-repo-structure",
+      "title": "AIE Protocol \u2014 Full Production Monorepo Structure",
+      "domain": "aie_protocol",
+      "work_package": null,
+      "version_label": "production-repo-v1",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-005/aie-protocol-full-production-repo-structure.md",
+      "classification": "active_repo_layout_reference",
+      "status": "reference",
+      "supersedes": [],
+      "superseded_by": null,
+      "upload_batch": "2026-05-005"
+    },
+    {
+      "document_key": "aie-protocol-decentralized-cognitive-execution-network-deck",
+      "title": "AIE Protocol \u2014 Decentralized Cognitive Execution Network (Investor Deck)",
+      "domain": "aie_protocol",
+      "work_package": null,
+      "version_label": "investor-deck-v1",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-005/aie-protocol-decentralized-cognitive-execution-network-deck.md",
+      "classification": "superseded_investor_narrative",
+      "status": "superseded",
+      "supersedes": [],
+      "superseded_by": "aie-protocol-full-technical-whitepaper",
+      "upload_batch": "2026-05-005"
+    },
+    {
+      "document_key": "aie-protocol-tokenomics-adaptive-supply-model",
+      "title": "AIE Protocol Tokenomics \u2014 Adaptive Supply and Equilibrium Dynamics",
+      "domain": "aie_tokenomics",
+      "work_package": null,
+      "version_label": "adaptive-supply-v1",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-005/aie-protocol-tokenomics-adaptive-supply-model.md",
+      "classification": "superseded_tokenomics_reference",
+      "status": "superseded",
+      "supersedes": [],
+      "superseded_by": "aie-protocol-tokenomics-mathematical-model-v1",
+      "upload_batch": "2026-05-005"
+    },
+    {
+      "document_key": "aie-protocol-vc-technical-appendix",
+      "title": "AIE Protocol \u2014 VC Technical Appendix (Institutional Diligence)",
+      "domain": "aie_protocol",
+      "work_package": null,
+      "version_label": "vc-appendix-v1",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-005/aie-protocol-vc-technical-appendix.md",
+      "classification": "active_diligence_reference",
+      "status": "reference",
+      "supersedes": [],
+      "superseded_by": null,
+      "upload_batch": "2026-05-005"
+    },
+    {
+      "document_key": "aie-protocol-tokenomics-mathematical-model-v1",
+      "title": "AIE Protocol Tokenomics Mathematical Model",
+      "domain": "aie_tokenomics",
+      "work_package": null,
+      "version_label": "mathematical-model-v1",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-005/aie-protocol-tokenomics-mathematical-model-v1.md",
+      "classification": "active_source_of_truth",
+      "status": "reference",
+      "supersedes": [
+        "aie-protocol-tokenomics-adaptive-supply-model"
+      ],
+      "superseded_by": null,
+      "upload_batch": "2026-05-005"
+    },
+    {
+      "document_key": "aie-protocol-full-technical-whitepaper",
+      "title": "AIE Protocol \u2014 Full Technical Whitepaper (DCEN Specification)",
+      "domain": "aie_protocol",
+      "work_package": null,
+      "version_label": "whitepaper-v1",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-005/aie-protocol-full-technical-whitepaper.md",
+      "classification": "active_source_of_truth",
+      "status": "reference",
+      "supersedes": [
+        "aie-protocol-decentralized-cognitive-execution-network-deck"
+      ],
+      "superseded_by": null,
+      "upload_batch": "2026-05-005"
+    },
+    {
+      "document_key": "aie-tokenized-agentic-network-design",
+      "title": "Tokenized Agentic Network Design (AIE Protocol)",
+      "domain": "aie_protocol",
+      "work_package": null,
+      "version_label": "network-design-v1",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-005/aie-tokenized-agentic-network-design.md",
+      "classification": "active_product_design_reference",
+      "status": "reference",
+      "supersedes": [],
+      "superseded_by": null,
+      "upload_batch": "2026-05-005"
+    },
+    {
+      "document_key": "aiis-investor-whitepaper-agentic-intelligence-infrastructure",
+      "title": "AIIS \u2014 Agentic Intelligence Infrastructure Systems (Investor Whitepaper)",
+      "domain": "aiis_platform",
+      "work_package": null,
+      "version_label": "investor-whitepaper-v1",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-005/aiis-investor-whitepaper-agentic-intelligence-infrastructure.md",
+      "classification": "separate_product_lineage_reference",
+      "status": "reference",
+      "supersedes": [],
+      "superseded_by": null,
+      "upload_batch": "2026-05-005"
+    },
+    {
+      "document_key": "manifesto-agentic-systems-design",
+      "title": "Manifesto for Agentic Systems Design",
+      "domain": "agentic_systems_theory",
+      "work_package": null,
+      "version_label": "manifesto-v1",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-005/manifesto-agentic-systems-design.md",
+      "classification": "active_theory_reference",
+      "status": "reference",
+      "supersedes": [],
+      "superseded_by": null,
+      "upload_batch": "2026-05-005"
+    },
+    {
+      "document_key": "architecture-of-meaning-book-proposal",
+      "title": "The Architecture of Meaning \u2014 Book Proposal and Publishing Blueprint",
+      "domain": "cognitive_publishing",
+      "work_package": null,
+      "version_label": "book-proposal-v1",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-005/architecture-of-meaning-book-proposal.md",
+      "classification": "separate_knowledge_product_reference",
+      "status": "reference",
+      "supersedes": [],
+      "superseded_by": null,
+      "upload_batch": "2026-05-005"
     }
   ],
   "batches": [
@@ -476,6 +610,10 @@
     {
       "batch_id": "2026-05-004",
       "source_folder": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-004"
+    },
+    {
+      "batch_id": "2026-05-005",
+      "source_folder": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-005"
     }
   ]
 }

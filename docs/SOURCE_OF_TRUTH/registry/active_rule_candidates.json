@@ -1,5 +1,5 @@
 {
-  "registry_version": "2026-05-29-rules-1",
+  "registry_version": "2026-05-29-rules-2",
   "active_rule_candidates": [
     {
       "rule_key": "npl-no-side-effects",
@@ -207,6 +207,78 @@
       "rule_type": "protocol_security",
       "summary": "Agent participation requires stake, validation consensus, reputation tracking, and slashing for invalid work.",
       "implementation_target": "aie_protocol_design"
+    },
+    {
+      "rule_key": "aie-cwu-as-economic-primitive",
+      "domain": "aie_protocol",
+      "source_document_key": "aie-protocol-decentralized-cognitive-execution-network-deck",
+      "activation_status": "reference_only",
+      "rule_type": "economic_primitive",
+      "summary": "Cognitive Work Units tie task DAG execution to verified output and token settlement.",
+      "implementation_target": null
+    },
+    {
+      "rule_key": "aie-validation-weighted-consensus",
+      "domain": "aie_protocol",
+      "source_document_key": "aie-protocol-full-technical-whitepaper",
+      "activation_status": "reference_only",
+      "rule_type": "validation_consensus",
+      "summary": "Results require weighted validator quorum; sub-threshold scores trigger re-execution.",
+      "implementation_target": null
+    },
+    {
+      "rule_key": "aie-supply-equilibrium-nsp-target",
+      "domain": "aie_tokenomics",
+      "source_document_key": "aie-protocol-tokenomics-mathematical-model-v1",
+      "activation_status": "reference_only",
+      "rule_type": "tokenomics",
+      "summary": "Protocol targets net supply pressure NSP_t = I_t - B_t approaching zero at steady state.",
+      "implementation_target": null
+    },
+    {
+      "rule_key": "aie-agent-stake-before-high-value-tasks",
+      "domain": "aie_protocol",
+      "source_document_key": "aie-tokenized-agentic-network-design",
+      "activation_status": "reference_only",
+      "rule_type": "staking",
+      "summary": "Agents stake AIE before high-value execution, validation, or elite pool participation.",
+      "implementation_target": null
+    },
+    {
+      "rule_key": "manifesto-intelligence-is-constraint-driven",
+      "domain": "agentic_systems_theory",
+      "source_document_key": "manifesto-agentic-systems-design",
+      "activation_status": "active_design_rule",
+      "rule_type": "cognitive_architecture",
+      "summary": "Structured constraints applied to probabilistic reasoning reduce entropy and hallucination risk.",
+      "implementation_target": "governance_policy_runtime"
+    },
+    {
+      "rule_key": "manifesto-agent-loop-fundamental-primitive",
+      "domain": "agentic_systems_theory",
+      "source_document_key": "manifesto-agentic-systems-design",
+      "activation_status": "active_design_rule",
+      "rule_type": "agent_runtime",
+      "summary": "Agent behavior is a closed loop over perception, planning, execution, evaluation, and memory \u2014 not a single inference call.",
+      "implementation_target": "inspector_runtime"
+    },
+    {
+      "rule_key": "manifesto-failure-first-class-signal",
+      "domain": "agentic_systems_theory",
+      "source_document_key": "manifesto-agentic-systems-design",
+      "activation_status": "active_design_rule",
+      "rule_type": "governance",
+      "summary": "Failures are constraint-violation signals that must feed audit and correction paths.",
+      "implementation_target": "audit_ledger_runtime"
+    },
+    {
+      "rule_key": "aiis-governance-layer-required-for-enterprise",
+      "domain": "aiis_platform",
+      "source_document_key": "aiis-investor-whitepaper-agentic-intelligence-infrastructure",
+      "activation_status": "reference_only",
+      "rule_type": "enterprise_governance",
+      "summary": "Enterprise agent deployment requires governance layer with permissions, audit logs, and rollback.",
+      "implementation_target": null
     }
   ]
 }

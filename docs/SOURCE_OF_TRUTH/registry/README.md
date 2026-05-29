@@ -35,8 +35,14 @@ inventory.
   predecessors resolved to `posa-v3-0-source-of-truth`
 - Context Resonance Theory: `context-resonance-theory-paper` as active
   theoretical reference
-- AIE Protocol: `aie-protocol-smart-contract-cosmos-architecture` as separate
-  protocol reference only
+- AIE Protocol (normative): `aie-protocol-full-technical-whitepaper` as active protocol SOT
+- AIE tokenomics: `aie-protocol-tokenomics-mathematical-model-v1` as active tokenomics SOT
+- AIE repo layout: `aie-protocol-full-production-repo-structure` as implementation scaffold reference
+- AIE module detail: `aie-protocol-smart-contract-cosmos-architecture` as module reference under the whitepaper
+- AIIS platform: `aiis-investor-whitepaper-agentic-intelligence-infrastructure` as separate product lineage
+- Agentic systems manifesto: `manifesto-agentic-systems-design` as active theory reference
+- Architecture of Meaning book: `architecture-of-meaning-book-proposal` as separate knowledge product only
+
 
 ## Database loading
 

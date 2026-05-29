@@ -1,5 +1,5 @@
 {
-  "registry_version": "2026-05-29-sot-1",
+  "registry_version": "2026-05-29-sot-2",
   "decisions": [
     {
       "domain": "context_graph",
@@ -130,20 +130,60 @@
       "confidence": 0.78
     },
     {
-      "domain": "aie_protocol",
-      "active_document_key": "aie-protocol-smart-contract-cosmos-architecture",
-      "active_version": "hybrid-evm-cosmos-architecture",
-      "decision": "active_protocol_reference",
-      "rationale": "Defines a separate hybrid EVM/Cosmos protocol architecture for agentic intelligence economies. Keep separate from Noetfield runtime until explicitly scoped.",
-      "confidence": 0.82
-    },
-    {
       "domain": "personal_agent_system_lineage",
       "active_document_key": "posa-v3-0-source-of-truth",
       "active_version": "v3.0",
       "decision": "lineage_resolved_to_posa_v3",
       "rationale": "PAAS v1, PAES v1, and POSA v2 are historical predecessors. POSA v3.0 remains the active POSA root SOT.",
       "confidence": 0.93
+    },
+    {
+      "domain": "aie_protocol",
+      "active_document_key": "aie-protocol-full-technical-whitepaper",
+      "active_version": "whitepaper-v1",
+      "decision": "active_source_of_truth",
+      "rationale": "The full technical whitepaper is the normative DCEN specification. Batch 004 module architecture remains a supporting module reference.",
+      "confidence": 0.93
+    },
+    {
+      "domain": "aie_tokenomics",
+      "active_document_key": "aie-protocol-tokenomics-mathematical-model-v1",
+      "active_version": "mathematical-model-v1",
+      "decision": "active_source_of_truth",
+      "rationale": "The mathematical model document supersedes the earlier adaptive-supply tokenomics upload with staking yield equilibrium and stress scenarios.",
+      "confidence": 0.9
+    },
+    {
+      "domain": "aie_repo_layout",
+      "active_document_key": "aie-protocol-full-production-repo-structure",
+      "active_version": "production-repo-v1",
+      "decision": "active_implementation_scaffold_reference",
+      "rationale": "Monorepo structure defines where contracts, cosmos modules, agent-runtime, and infra live when AIE implementation is scoped.",
+      "confidence": 0.85
+    },
+    {
+      "domain": "aiis_platform",
+      "active_document_key": "aiis-investor-whitepaper-agentic-intelligence-infrastructure",
+      "active_version": "investor-whitepaper-v1",
+      "decision": "separate_product_lineage_reference",
+      "rationale": "AIIS is enterprise agent infrastructure positioning, distinct from Noetfield governance runtime and AIE tokenized agent economy.",
+      "confidence": 0.88
+    },
+    {
+      "domain": "agentic_systems_theory",
+      "active_document_key": "manifesto-agentic-systems-design",
+      "active_version": "manifesto-v1",
+      "decision": "active_theory_reference",
+      "rationale": "Manifesto encodes constraint-driven agent design doctrine that aligns with Noetfield governance posture without being executable policy.",
+      "confidence": 0.82
+    },
+    {
+      "domain": "cognitive_publishing",
+      "active_document_key": "architecture-of-meaning-book-proposal",
+      "active_version": "book-proposal-v1",
+      "decision": "separate_knowledge_product_reference",
+      "rationale": "Book proposal is a standalone publishing product about context engineering, not platform source-of-truth.",
+      "confidence": 0.95
     }
   ]
 }
