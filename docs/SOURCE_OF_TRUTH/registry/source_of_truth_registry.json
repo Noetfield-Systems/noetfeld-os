@@ -1,5 +1,5 @@
 {
-  "registry_version": "2026-05-29-sot-2",
+  "registry_version": "2026-05-29-sot-3",
   "decisions": [
     {
       "domain": "context_graph",
@@ -122,14 +122,6 @@
       "confidence": 0.76
     },
     {
-      "domain": "context_resonance_theory",
-      "active_document_key": "context-resonance-theory-paper",
-      "active_version": "theory-paper",
-      "decision": "active_theory_reference",
-      "rationale": "Provides theoretical framing for constraint architecture, co-cognitive alignment, and latent interaction. Useful for future prompt/intent architecture but not executable runtime authority.",
-      "confidence": 0.78
-    },
-    {
       "domain": "personal_agent_system_lineage",
       "active_document_key": "posa-v3-0-source-of-truth",
       "active_version": "v3.0",
@@ -178,12 +170,76 @@
       "confidence": 0.82
     },
     {
+      "domain": "context_resonance_theory",
+      "active_document_key": "context-resonance-ieee-research-paper-crt",
+      "active_version": "ieee-crt-v1",
+      "decision": "active_source_of_truth",
+      "rationale": "IEEE-style CRT paper is the formal active theory SOT. Earlier theory paper and ultimate guide remain supporting references.",
+      "confidence": 0.91
+    },
+    {
       "domain": "cognitive_publishing",
-      "active_document_key": "architecture-of-meaning-book-proposal",
-      "active_version": "book-proposal-v1",
-      "decision": "separate_knowledge_product_reference",
-      "rationale": "Book proposal is a standalone publishing product about context engineering, not platform source-of-truth.",
-      "confidence": 0.95
+      "active_document_key": "architecture-of-meaning-semantic-superconductivity-essay",
+      "active_version": "full-essay-v1",
+      "decision": "active_source_of_truth",
+      "rationale": "Full Architecture of Meaning essay supersedes the book proposal as the authoritative knowledge-product manuscript.",
+      "confidence": 0.9
+    },
+    {
+      "domain": "event_driven_agentic_architecture",
+      "active_document_key": "architecture-md-v2-event-driven-agentic-system",
+      "active_version": "v2.0",
+      "decision": "active_implementation_reference",
+      "rationale": "Bank-grade event-driven blueprint aligns with Noetfield Phase 3 event bus, HALT, and audit posture without replacing WP-01 graph SOT.",
+      "confidence": 0.89
+    },
+    {
+      "domain": "operator_context_discipline",
+      "active_document_key": "cursor-token-efficiency-context-discipline-v1",
+      "active_version": "v1.0",
+      "decision": "active_operator_reference",
+      "rationale": "Defines surgical context, architecture locking, and token governance for Cursor workflows.",
+      "confidence": 0.87
+    },
+    {
+      "domain": "sot_engine",
+      "active_document_key": "sot-engine-auto-running-architecture-v1",
+      "active_version": "auto-arch-v1",
+      "decision": "active_source_of_truth",
+      "rationale": "Auto-running closed-loop SoT engine is the normative architecture over the repo scaffold alone.",
+      "confidence": 0.88
+    },
+    {
+      "domain": "sot_epistemology",
+      "active_document_key": "sot-guidelines-vs-slf-relationship-fa",
+      "active_version": "v1",
+      "decision": "active_epistemic_reference",
+      "rationale": "Clarifies SoT as epistemic DNA versus SLF as engineering expansion.",
+      "confidence": 0.85
+    },
+    {
+      "domain": "slf_framework",
+      "active_document_key": "slf-v5-frozen-canonical-spec",
+      "active_version": "v5.0-frozen",
+      "decision": "active_source_of_truth",
+      "rationale": "SLF v5 frozen spec is the canonical cognitive OS stack definition for the SLF product lineage.",
+      "confidence": 0.92
+    },
+    {
+      "domain": "system_genealogy",
+      "active_document_key": "unified-system-genealogy-map",
+      "active_version": "v1",
+      "decision": "active_lineage_reference",
+      "rationale": "Maps Reality \u2192 SoT \u2192 SLF \u2192 Execution \u2192 feedback for cross-document comparison.",
+      "confidence": 0.86
+    },
+    {
+      "domain": "data_pipeline_methodology",
+      "active_document_key": "chat-corpora-deduplication-pipeline-methodology-fa",
+      "active_version": "v1",
+      "decision": "reference_methodology",
+      "rationale": "Chat archive deduplication pipeline is operational methodology, not platform runtime SOT.",
+      "confidence": 0.8
     }
   ]
 }

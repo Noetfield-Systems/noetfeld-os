@@ -46,10 +46,10 @@ def test_ingestion_payload_summary_counts() -> None:
     summary = summarize_payload(payload)
 
     assert summary["batch_id"] == "2026-05-combined"
-    assert summary["batch_count"] == 5
-    assert summary["document_count"] == 44
-    assert summary["sot_decision_count"] == 23
-    assert summary["active_rule_candidate_count"] == 31
+    assert summary["batch_count"] == 6
+    assert summary["document_count"] == 56
+    assert summary["sot_decision_count"] == 30
+    assert summary["active_rule_candidate_count"] == 39
     assert "wp03-npl-formal-grammar-2026-05-npl-1" in summary["active_documents"]
     assert "wp01-context-graph-runtime-edition-v2" in summary["active_documents"]
 
@@ -101,8 +101,9 @@ def test_fourth_batch_lineage_and_protocol_resources_are_classified() -> None:
     assert documents["posa-v2-0-source-of-truth"]["classification"] == "superseded_posa_root_sot"
     assert documents["paas-v1-personal-autonomous-agent-system"]["classification"] == "historical_predecessor"
     assert documents["paes-v1-personal-ai-execution-system"]["classification"] == "historical_predecessor"
-    assert documents["context-resonance-theory-paper"]["classification"] == "active_theory_reference"
+    assert documents["context-resonance-theory-paper"]["classification"] == "superseded_theory_reference"
     assert documents["aie-protocol-smart-contract-cosmos-architecture"]["classification"] == "active_protocol_module_reference"
+    assert documents["context-resonance-theory-paper"]["classification"] == "superseded_theory_reference"
     assert documents["aie-protocol-smart-contract-cosmos-architecture-duplicate"]["classification"] == "duplicate"
 
 
@@ -124,8 +125,9 @@ def test_fifth_batch_aie_and_aiis_resources_are_classified() -> None:
     assert documents["aie-protocol-tokenomics-mathematical-model-v1"]["classification"] == "active_source_of_truth"
     assert documents["aie-protocol-tokenomics-adaptive-supply-model"]["classification"] == "superseded_tokenomics_reference"
     assert documents["aie-protocol-smart-contract-cosmos-architecture"]["classification"] == "active_protocol_module_reference"
+    assert documents["context-resonance-theory-paper"]["classification"] == "superseded_theory_reference"
     assert documents["aiis-investor-whitepaper-agentic-intelligence-infrastructure"]["classification"] == "separate_product_lineage_reference"
-    assert documents["architecture-of-meaning-book-proposal"]["classification"] == "separate_knowledge_product_reference"
+    assert documents["architecture-of-meaning-book-proposal"]["classification"] == "superseded_knowledge_product_reference"
 
 
 def test_fifth_batch_rule_candidates_are_present() -> None:
@@ -135,3 +137,25 @@ def test_fifth_batch_rule_candidates_are_present() -> None:
     assert "manifesto-intelligence-is-constraint-driven" in rule_keys
     assert "manifesto-agent-loop-fundamental-primitive" in rule_keys
     assert "aie-supply-equilibrium-nsp-target" in rule_keys
+
+def test_sixth_batch_crt_architecture_and_slf_resources_are_classified() -> None:
+    payload = build_payload()
+    documents = {document["document_key"]: document for document in payload.inventory["documents"]}
+
+    assert documents["context-resonance-ieee-research-paper-crt"]["classification"] == "active_source_of_truth"
+    assert documents["context-resonance-theory-paper"]["superseded_by"] == "context-resonance-ieee-research-paper-crt"
+    assert documents["architecture-md-v2-event-driven-agentic-system"]["classification"] == "active_implementation_reference"
+    assert documents["architecture-of-meaning-semantic-superconductivity-essay"]["classification"] == "active_source_of_truth"
+    assert documents["slf-v5-frozen-canonical-spec"]["classification"] == "active_source_of_truth"
+    assert documents["sot-engine-auto-running-architecture-v1"]["classification"] == "active_source_of_truth"
+
+
+def test_sixth_batch_event_and_sot_rule_candidates_are_present() -> None:
+    payload = build_payload()
+    rule_keys = {rule["rule_key"] for rule in payload.rule_registry["active_rule_candidates"]}
+
+    assert "no-action-without-canonical-event" in rule_keys
+    assert "halt-protocol-max-two-retries" in rule_keys
+    assert "memory-write-requires-state-validation-event" in rule_keys
+    assert "sot-mined-from-repetition-not-theory" in rule_keys
+    assert "semantic-superconductivity-constraint-density" in rule_keys

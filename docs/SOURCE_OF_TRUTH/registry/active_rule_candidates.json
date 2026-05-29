@@ -1,5 +1,5 @@
 {
-  "registry_version": "2026-05-29-rules-2",
+  "registry_version": "2026-05-29-rules-3",
   "active_rule_candidates": [
     {
       "rule_key": "npl-no-side-effects",
@@ -278,6 +278,78 @@
       "activation_status": "reference_only",
       "rule_type": "enterprise_governance",
       "summary": "Enterprise agent deployment requires governance layer with permissions, audit logs, and rollback.",
+      "implementation_target": null
+    },
+    {
+      "rule_key": "no-action-without-canonical-event",
+      "domain": "event_driven_agentic_architecture",
+      "source_document_key": "architecture-md-v2-event-driven-agentic-system",
+      "activation_status": "active_design_rule",
+      "rule_type": "event_runtime",
+      "summary": "Every meaningful system action must be represented as a canonical event with trace_id.",
+      "implementation_target": "event_bus"
+    },
+    {
+      "rule_key": "halt-protocol-max-two-retries",
+      "domain": "event_driven_agentic_architecture",
+      "source_document_key": "architecture-md-v2-event-driven-agentic-system",
+      "activation_status": "active_design_rule",
+      "rule_type": "failure_governance",
+      "summary": "On two consecutive execution failures, emit RETRY_LIMIT_REACHED_EVENT and return control to human layer.",
+      "implementation_target": "governance_runtime"
+    },
+    {
+      "rule_key": "memory-write-requires-state-validation-event",
+      "domain": "event_driven_agentic_architecture",
+      "source_document_key": "architecture-md-v2-event-driven-agentic-system",
+      "activation_status": "active_design_rule",
+      "rule_type": "memory_governance",
+      "summary": "Persistent memory writes are forbidden without STATE_VALIDATION_EVENT.",
+      "implementation_target": "ledger_runtime"
+    },
+    {
+      "rule_key": "precision-of-context-over-model-power",
+      "domain": "operator_context_discipline",
+      "source_document_key": "cursor-token-efficiency-context-discipline-v1",
+      "activation_status": "active_design_rule",
+      "rule_type": "operator_discipline",
+      "summary": "Surgical context scope takes precedence over model scale for output quality and cost.",
+      "implementation_target": "developer_bootstrap"
+    },
+    {
+      "rule_key": "semantic-superconductivity-constraint-density",
+      "domain": "context_resonance_theory",
+      "source_document_key": "architecture-of-meaning-semantic-superconductivity-essay",
+      "activation_status": "active_design_rule",
+      "rule_type": "cognitive_architecture",
+      "summary": "High constraint density in context reduces entropy and moves inference toward deterministic execution paths.",
+      "implementation_target": "governance_policy_runtime"
+    },
+    {
+      "rule_key": "sot-mined-from-repetition-not-theory",
+      "domain": "sot_engine",
+      "source_document_key": "sot-extraction-routine-v1",
+      "activation_status": "active_design_rule",
+      "rule_type": "epistemic_governance",
+      "summary": "Rules enter SoT only after repeated observed behavior (\u22653) and validation, not from one-off theory.",
+      "implementation_target": "source_of_truth_registry"
+    },
+    {
+      "rule_key": "sot-no-log-no-truth",
+      "domain": "sot_engine",
+      "source_document_key": "sot-engine-auto-running-architecture-v1",
+      "activation_status": "active_design_rule",
+      "rule_type": "audit_governance",
+      "summary": "Execution without structured logging cannot produce source-of-truth candidates.",
+      "implementation_target": "audit_ledger_runtime"
+    },
+    {
+      "rule_key": "slf-autonomy-requires-governance",
+      "domain": "slf_framework",
+      "source_document_key": "slf-v5-frozen-canonical-spec",
+      "activation_status": "reference_only",
+      "rule_type": "governance",
+      "summary": "Autonomy layer must be paired with governance gates, rollback, and integrity monitoring.",
       "implementation_target": null
     }
   ]

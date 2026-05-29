@@ -425,10 +425,10 @@
       "work_package": "reference",
       "version_label": "theory-paper",
       "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-004/context-resonance-theory-paper.md",
-      "classification": "active_theory_reference",
+      "classification": "superseded_theory_reference",
       "status": "reference",
       "supersedes": [],
-      "superseded_by": null,
+      "superseded_by": "context-resonance-ieee-research-paper-crt",
       "upload_batch": "2026-05-004"
     },
     {
@@ -587,11 +587,173 @@
       "work_package": null,
       "version_label": "book-proposal-v1",
       "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-005/architecture-of-meaning-book-proposal.md",
-      "classification": "separate_knowledge_product_reference",
+      "classification": "superseded_knowledge_product_reference",
+      "status": "reference",
+      "supersedes": [],
+      "superseded_by": "architecture-of-meaning-semantic-superconductivity-essay",
+      "upload_batch": "2026-05-005"
+    },
+    {
+      "document_key": "architecture-of-meaning-semantic-superconductivity-essay",
+      "title": "The Architecture of Meaning: Semantic Superconductivity and the Cybernetic Noosphere",
+      "domain": "cognitive_publishing",
+      "work_package": null,
+      "version_label": "full-essay-v1",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-006/architecture-of-meaning-semantic-superconductivity-essay.md",
+      "classification": "active_source_of_truth",
+      "status": "reference",
+      "supersedes": [
+        "architecture-of-meaning-book-proposal"
+      ],
+      "superseded_by": null,
+      "upload_batch": "2026-05-006"
+    },
+    {
+      "document_key": "context-resonance-ultimate-guide-co-cognition",
+      "title": "Context Resonance, Latent Intelligence, and Human\u2013AI Co-Cognition (Ultimate Guide)",
+      "domain": "context_resonance_theory",
+      "work_package": null,
+      "version_label": "ultimate-guide-v1",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-006/context-resonance-ultimate-guide-co-cognition.md",
+      "classification": "active_practitioner_reference",
       "status": "reference",
       "supersedes": [],
       "superseded_by": null,
-      "upload_batch": "2026-05-005"
+      "upload_batch": "2026-05-006"
+    },
+    {
+      "document_key": "context-resonance-ieee-research-paper-crt",
+      "title": "Context Resonance and Co-Cognitive Alignment in LLMs (IEEE-Style CRT Paper)",
+      "domain": "context_resonance_theory",
+      "work_package": null,
+      "version_label": "ieee-crt-v1",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-006/context-resonance-ieee-research-paper-crt.md",
+      "classification": "active_source_of_truth",
+      "status": "reference",
+      "supersedes": [
+        "context-resonance-theory-paper"
+      ],
+      "superseded_by": null,
+      "upload_batch": "2026-05-006"
+    },
+    {
+      "document_key": "architecture-md-v2-event-driven-agentic-system",
+      "title": "ARCHITECTURE.md v2.0 \u2014 Event-Driven Agentic System Blueprint (Bank-Grade)",
+      "domain": "event_driven_agentic_architecture",
+      "work_package": null,
+      "version_label": "v2.0",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-006/architecture-md-v2-event-driven-agentic-system.md",
+      "classification": "active_implementation_reference",
+      "status": "implementation_ready",
+      "supersedes": [],
+      "superseded_by": null,
+      "upload_batch": "2026-05-006"
+    },
+    {
+      "document_key": "cursor-token-efficiency-context-discipline-v1",
+      "title": "Cursor Token Efficiency and Context Discipline \u2014 Source of Truth v1.0",
+      "domain": "operator_context_discipline",
+      "work_package": null,
+      "version_label": "v1.0",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-006/cursor-token-efficiency-context-discipline-v1.md",
+      "classification": "active_operator_reference",
+      "status": "reference",
+      "supersedes": [],
+      "superseded_by": null,
+      "upload_batch": "2026-05-006"
+    },
+    {
+      "document_key": "chat-corpora-deduplication-pipeline-methodology-fa",
+      "title": "Chat Corpora Deduplication and Contradiction Pipeline (Persian Methodology)",
+      "domain": "data_pipeline_methodology",
+      "work_package": null,
+      "version_label": "v1",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-006/chat-corpora-deduplication-pipeline-methodology-fa.md",
+      "classification": "reference_methodology",
+      "status": "reference",
+      "supersedes": [],
+      "superseded_by": null,
+      "upload_batch": "2026-05-006"
+    },
+    {
+      "document_key": "sot-guidelines-vs-slf-relationship-fa",
+      "title": "Source of Truth Guidelines vs SLF \u2014 Epistemic Layer Relationship (Persian)",
+      "domain": "sot_epistemology",
+      "work_package": null,
+      "version_label": "v1",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-006/sot-guidelines-vs-slf-relationship-fa.md",
+      "classification": "active_epistemic_reference",
+      "status": "reference",
+      "supersedes": [],
+      "superseded_by": null,
+      "upload_batch": "2026-05-006"
+    },
+    {
+      "document_key": "sot-engine-repo-v1",
+      "title": "SoT Engine Repository v1.0 \u2014 Self-Learning Execution System",
+      "domain": "sot_engine",
+      "work_package": null,
+      "version_label": "repo-v1",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-006/sot-engine-repo-v1.md",
+      "classification": "active_implementation_scaffold_reference",
+      "status": "reference",
+      "supersedes": [],
+      "superseded_by": "sot-engine-auto-running-architecture-v1",
+      "upload_batch": "2026-05-006"
+    },
+    {
+      "document_key": "sot-extraction-routine-v1",
+      "title": "SoT Extraction Routine v1.0 \u2014 Reality to Rule Mining Pipeline",
+      "domain": "sot_engine",
+      "work_package": null,
+      "version_label": "extraction-v1",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-006/sot-extraction-routine-v1.md",
+      "classification": "active_methodology_reference",
+      "status": "reference",
+      "supersedes": [],
+      "superseded_by": null,
+      "upload_batch": "2026-05-006"
+    },
+    {
+      "document_key": "sot-engine-auto-running-architecture-v1",
+      "title": "Auto-Running SoT Engine v1.0 \u2014 Closed-Loop Architecture",
+      "domain": "sot_engine",
+      "work_package": null,
+      "version_label": "auto-arch-v1",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-006/sot-engine-auto-running-architecture-v1.md",
+      "classification": "active_source_of_truth",
+      "status": "reference",
+      "supersedes": [
+        "sot-engine-repo-v1"
+      ],
+      "superseded_by": null,
+      "upload_batch": "2026-05-006"
+    },
+    {
+      "document_key": "unified-system-genealogy-map",
+      "title": "Unified System Genealogy Map \u2014 Reality to Learning Loop",
+      "domain": "system_genealogy",
+      "work_package": null,
+      "version_label": "v1",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-006/unified-system-genealogy-map.md",
+      "classification": "active_lineage_reference",
+      "status": "reference",
+      "supersedes": [],
+      "superseded_by": null,
+      "upload_batch": "2026-05-006"
+    },
+    {
+      "document_key": "slf-v5-frozen-canonical-spec",
+      "title": "SLF v5.0 \u2014 Frozen Canonical Specification",
+      "domain": "slf_framework",
+      "work_package": null,
+      "version_label": "v5.0-frozen",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-006/slf-v5-frozen-canonical-spec.md",
+      "classification": "active_source_of_truth",
+      "status": "frozen_canonical",
+      "supersedes": [],
+      "superseded_by": null,
+      "upload_batch": "2026-05-006"
     }
   ],
   "batches": [
@@ -614,6 +776,10 @@
     {
       "batch_id": "2026-05-005",
       "source_folder": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-005"
+    },
+    {
+      "batch_id": "2026-05-006",
+      "source_folder": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-006"
     }
   ]
 }

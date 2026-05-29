@@ -42,6 +42,14 @@ inventory.
 - AIIS platform: `aiis-investor-whitepaper-agentic-intelligence-infrastructure` as separate product lineage
 - Agentic systems manifesto: `manifesto-agentic-systems-design` as active theory reference
 - Architecture of Meaning book: `architecture-of-meaning-book-proposal` as separate knowledge product only
+- Context Resonance Theory: `context-resonance-ieee-research-paper-crt` (formal CRT SOT)
+- Architecture of Meaning: `architecture-of-meaning-semantic-superconductivity-essay` (full essay SOT)
+- Event-driven agentic blueprint: `architecture-md-v2-event-driven-agentic-system` (bank-grade reference)
+- Cursor context discipline: `cursor-token-efficiency-context-discipline-v1`
+- SoT engine loop: `sot-engine-auto-running-architecture-v1`
+- SLF framework: `slf-v5-frozen-canonical-spec` (frozen canonical, separate lineage)
+- System genealogy: `unified-system-genealogy-map`
+
 
 
 ## Database loading
