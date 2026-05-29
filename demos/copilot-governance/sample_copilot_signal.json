@@ -1,0 +1,39 @@
+{
+  "signal_type": "copilot_governance_readiness",
+  "customer": {
+    "name": "Northstar Financial Group",
+    "industry": "financial_services",
+    "region": "canada",
+    "employee_count": 4200,
+    "microsoft_365_tenant": "northstar.example"
+  },
+  "copilot_context": {
+    "deployment_stage": "pilot_expanding_to_business_units",
+    "active_users": 650,
+    "target_users_next_quarter": 1800,
+    "sensitive_data_domains": [
+      "client_records",
+      "deal_documents",
+      "board_materials",
+      "regulated_financial_reports"
+    ]
+  },
+  "observed_risks": [
+    {
+      "risk": "oversharing",
+      "severity": "high",
+      "evidence": "SharePoint sites with inherited access are available to broad employee groups."
+    },
+    {
+      "risk": "missing_human_review",
+      "severity": "medium",
+      "evidence": "No formal approval workflow exists for Copilot-generated board summaries."
+    },
+    {
+      "risk": "evidence_gap",
+      "severity": "medium",
+      "evidence": "Security, compliance, and business owners maintain separate readiness notes."
+    }
+  ],
+  "requested_outcome": "Create a governance-ready Trust Ledger trail for Copilot readiness review."
+}

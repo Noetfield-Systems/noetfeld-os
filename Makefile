@@ -1,4 +1,4 @@
-.PHONY: bootstrap validate api apply-migrations phase32-smoke phase32-postgres-smoke phase33-verify phase33-postgres-verify
+.PHONY: bootstrap validate api apply-migrations phase32-smoke phase32-postgres-smoke phase33-verify phase33-postgres-verify phase35-demo
 
 PYTHONPATH_VALUE := packages/types:packages/config:services/events:services/ledger:services/graph:services/governance:services/signals:services/workflow:services/ai-runtime:services/inspectors:services/identity:services/copilot-governance
 
@@ -29,3 +29,7 @@ phase33-verify:
 
 phase33-postgres-verify:
 	PYTHONPATH=$(PYTHONPATH_VALUE) RUNTIME_EVENT_STORE=postgres pytest tests/integration
+
+
+phase35-demo:
+	PYTHONPATH=$(PYTHONPATH_VALUE) RUNTIME_EVENT_STORE=memory python3 scripts/run_copilot_governance_demo.py --input demos/copilot-governance/sample_copilot_signal.json --output demos/copilot-governance/generated/demo_output.json
