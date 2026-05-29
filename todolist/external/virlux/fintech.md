@@ -1,6 +1,7 @@
-# VIRLUX — fintech / payments (separate repo)
+# VIRLUX — fintech / payments
 
-**Not in the Noetfield repo.** Track founder + engineering backlog here so chat suggestions are not lost.
+> **SEPARATE PROJECT — not Noetfield.** Implement only in the VIRLUX repository.  
+> This file lives in the Noetfield repo as **reference notes** so chat ideas are not lost.
 
 Product: Canadian B2B FX / payments · Demo: `demo@virlux.com` / `demo12345` (dev seed only)
 

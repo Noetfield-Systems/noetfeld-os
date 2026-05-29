@@ -1,38 +1,43 @@
 # Future work tracker (`todolist/`)
 
-Use this folder to capture **every** suggestion, launch blocker, and “do later” item so nothing lives only in chat.
+**This folder tracks work for the Noetfield repository.**  
+VIRLUX is a **different product** — see [external/virlux/](./external/virlux/) (notes only; code is elsewhere).
+
+## Project boundary
+
+| | Noetfield (this repo) | VIRLUX (separate) |
+|--|----------------------|-------------------|
+| **Product** | Governance execution infrastructure | B2B FX / payments |
+| **Domains** | `www.noetfield.com`, `platform.noetfield.com` | VIRLUX app hosts (not here) |
+| **IDs** | `NF-*` | `VL-*` in external tracker |
+| **Implement here?** | Yes | **No** |
+
+Full rules: [external/README.md](./external/README.md)
 
 ## How to add items
 
-1. Pick the right file (or create `todolist/<topic>.md`).
-2. Add one row to the table (or one checklist item) with:
-   - **ID** — short slug, e.g. `NF-TELEGRAM-01`
-   - **Status** — `blocked` | `todo` | `in_progress` | `done` | `wontfix`
-   - **Owner** — `founder` | `engineering` | `legal` | `ops`
-   - **Type** — `launch_blocker` | `code` | `ops` | `legal` | `nice_to_have`
-3. Link to code/docs when relevant.
-4. When done, set status to `done` and add **Completed** date in Notes.
+1. **Noetfield** → `noetfield-*.md` or [NEXT_MOVES.md](./NEXT_MOVES.md)
+2. **VIRLUX** → [external/virlux/](./external/virlux/) only (do not add VIRLUX tasks to Noetfield code)
+3. Use **ID**, **Status**, **Owner**, **Type** — see [_template.md](./_template.md)
 
-## Files
+## Files (Noetfield — start here)
 
 | File | Scope |
 |------|--------|
-| **[NEXT_MOVES.md](./NEXT_MOVES.md)** | **Start here** — prioritized P0/P1/P2 checklist + roadmap |
-| [noetfield-platform.md](./noetfield-platform.md) | This repo — API, chat, Telegram, intake, deploy |
-| [noetfield-public-site.md](./noetfield-public-site.md) | www, GTM, legal pages, SEO |
-| [virlux-fintech.md](./virlux-fintech.md) | VIRLUX / payments product (separate codebase — founder backlog) |
-| [virlux-ui-dev.md](./virlux-ui-dev.md) | VIRLUX marketing + dashboard UI, local dev |
-| [archive/](./archive/) | Completed or cancelled items moved here quarterly |
+| **[NEXT_MOVES.md](./NEXT_MOVES.md)** | Prioritized P0/P1/P2 for **Noetfield only** |
+| [noetfield-platform.md](./noetfield-platform.md) | API, chat, Telegram, intake, deploy |
+| [noetfield-public-site.md](./noetfield-public-site.md) | www, GTM, legal, SEO |
+| [archive/](./archive/) | Completed items |
 
-## Status legend
+## External (not this repo)
 
-- **launch_blocker** — Not a small bug; product cannot safely go live without it (founder, legal, or bank partner).
-- **todo** — Planned engineering or ops work in repo.
-- **blocked** — Waiting on external input (DNS, MSB registration, bank webhook, etc.).
+| File | Scope |
+|------|--------|
+| [external/virlux/](./external/virlux/) | VIRLUX backlog — **separate codebase** |
 
-## Quick index (open launch blockers)
+## Quick index (Noetfield launch blockers)
 
-See each file’s **Launch blockers** section. Update this line when closing items:
+- Platform deploy, secrets, DNS, Telegram, LLM — [noetfield-platform.md](./noetfield-platform.md)
+- www deploy, legal pages — [noetfield-public-site.md](./noetfield-public-site.md)
 
-- Noetfield: production deploy + Telegram token + platform DNS — [noetfield-platform.md](./noetfield-platform.md)
-- VIRLUX: Interac confirmation, KYC admin UI, httpOnly auth, legal, Circle prod — [virlux-fintech.md](./virlux-fintech.md)
+VIRLUX blockers are listed only under [external/virlux/fintech.md](./external/virlux/fintech.md).

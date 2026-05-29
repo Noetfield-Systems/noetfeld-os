@@ -1,4 +1,6 @@
-# VIRLUX — UI & local dev (separate repo)
+# VIRLUX — UI & local dev
+
+> **SEPARATE PROJECT — not Noetfield.** Ports `:3100` / `:3001` are VIRLUX only.
 
 Marketing: `http://localhost:3100` · Dashboard: `http://localhost:3001`
 

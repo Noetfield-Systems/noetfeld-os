@@ -1,5 +1,7 @@
 # Noetfield — public site (www)
 
+**Noetfield only** — not VIRLUX (separate product; see [external/virlux/](../external/virlux/)).
+
 Host: `www.noetfield.com` · Source: repo root HTML + `assets/`
 
 ## Launch blockers

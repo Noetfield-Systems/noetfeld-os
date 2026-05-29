@@ -1,5 +1,7 @@
 # Noetfield — platform API & assistant
 
+**Noetfield only** — not VIRLUX (payments is a separate repo; see [external/virlux/](../external/virlux/)).
+
 Repo: this monolith · Host: `platform.noetfield.com` · Port: **8001**
 
 ## Launch blockers (founder / ops — not always code)

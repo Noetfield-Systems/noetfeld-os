@@ -26,4 +26,4 @@ Start with [docs/DEVELOPER_BOOTSTRAP.md](docs/DEVELOPER_BOOTSTRAP.md).
 
 **Platform deploy:** [docs/RUNBOOK.md](docs/RUNBOOK.md) — Docker compose, migrations, health checks, Redis, Postgres intake.
 
-**Future work tracker:** [todolist/](todolist/) — launch blockers, suggestions, and cross-project backlog (add new items there, not only in chat).
+**Future work tracker:** [todolist/](todolist/) — **Noetfield only**. VIRLUX is a separate project (notes under [todolist/external/virlux/](todolist/external/virlux/), not implemented here).
