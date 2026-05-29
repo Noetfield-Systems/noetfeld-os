@@ -1,5 +1,5 @@
 {
-  "registry_version": "2026-05-29-sot-13",
+  "registry_version": "2026-05-29-sot-14",
   "decisions": [
     {
       "domain": "context_graph",
@@ -640,6 +640,46 @@
       "decision": "historical_reference",
       "rationale": "TrustField RACI operating model; bank pack v2 supersedes for external diligence.",
       "confidence": 0.8
+    },
+    {
+      "domain": "noetfield_v3_ai_orchestration_product",
+      "active_document_key": "noetfield-v3-mvp-production-spec-final",
+      "active_version": "mvp-spec-final",
+      "decision": "active_source_of_truth",
+      "rationale": "Canonical build spec for Noetfield v3 deterministic multi-model workflow MVP (separate from GCIP L0).",
+      "confidence": 0.93
+    },
+    {
+      "domain": "noetfield_v3_investor_gtm",
+      "active_document_key": "noetfield-v3-investor-one-pager-rbc-v3",
+      "active_version": "one-pager-rbc-v3",
+      "decision": "active_source_of_truth",
+      "rationale": "Primary investor one-pager for v3 AI orchestration product track.",
+      "confidence": 0.88
+    },
+    {
+      "domain": "noetfield_v3_product_ux",
+      "active_document_key": "noetfield-v3-landing-page-spec",
+      "active_version": "landing-v3",
+      "decision": "active_source_of_truth",
+      "rationale": "Default product marketing surface for v3; streaming/DAG specs are roadmap references.",
+      "confidence": 0.86
+    },
+    {
+      "domain": "noetfield_sme_visibility_pilot",
+      "active_document_key": "noetfield-master-blueprint-sme-visibility-readonly-v1",
+      "active_version": "visibility-pilot-v1",
+      "decision": "active_source_of_truth",
+      "rationale": "Bank-safe read-only SME cross-border visibility pilot wedge for RBCx/FinSec/Circle.",
+      "confidence": 0.91
+    },
+    {
+      "domain": "noetfield_capital_execution_lineage",
+      "active_document_key": "noetfield-creation-governance-stack-separation-fa",
+      "active_version": "creation-gov-fa-v1",
+      "decision": "active_methodology_reference",
+      "rationale": "Explains why capital-execution and control-plane drafts are rejected in favor of governance-only GCIP.",
+      "confidence": 0.9
     }
   ]
 }

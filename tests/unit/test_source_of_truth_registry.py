@@ -46,10 +46,10 @@ def test_ingestion_payload_summary_counts() -> None:
     summary = summarize_payload(payload)
 
     assert summary["batch_id"] == "2026-05-combined"
-    assert summary["batch_count"] == 16
-    assert summary["document_count"] == 170
-    assert summary["sot_decision_count"] == 80
-    assert summary["active_rule_candidate_count"] == 113
+    assert summary["batch_count"] == 17
+    assert summary["document_count"] == 189
+    assert summary["sot_decision_count"] == 85
+    assert summary["active_rule_candidate_count"] == 118
     assert "wp03-npl-formal-grammar-2026-05-npl-1" in summary["active_documents"]
     assert "wp01-context-graph-runtime-edition-v2" in summary["active_documents"]
 
@@ -431,4 +431,34 @@ def test_sixteenth_batch_audience_sot_domains_are_registered() -> None:
     assert domains["noetfield_accelerator_cdl"]["active_document_key"] == "noetfield-bc-tech-cdl-one-pager-locked-v1"
     assert domains["noetfield_accelerator_spark"]["active_document_key"] == "noetfield-spark-centre-one-pager-v1"
     assert domains["noetfield_constitution_l0"]["active_document_key"] == "noetfield-constitution-gcip-v4"
+
+def test_seventeenth_batch_v3_and_pilot_resources_are_classified() -> None:
+    payload = build_payload()
+    documents = {document["document_key"]: document for document in payload.inventory["documents"]}
+
+    assert documents["noetfield-v3-mvp-production-spec-final"]["classification"] == "active_source_of_truth"
+    assert documents["noetfield-master-blueprint-sme-visibility-readonly-v1"]["classification"] == "active_source_of_truth"
+    assert documents["noetfield-unified-master-control-plane-v9"]["classification"] == "prohibited_positioning_draft"
+    assert documents["noetfield-master-blueprint-capital-intelligence-execution-v1"]["classification"] == "prohibited_positioning_draft"
+    assert documents["noetfield-lightweight-conversation-replacement-engine-v3"]["classification"] == "active_operator_reference"
+
+
+def test_seventeenth_batch_v3_rule_candidates_are_present() -> None:
+    payload = build_payload()
+    rule_keys = {rule["rule_key"] for rule in payload.rule_registry["active_rule_candidates"]}
+
+    assert "v3-product-track-separate-from-gcip-l0" in rule_keys
+    assert "prohibit-capital-execution-control-plane-identity" in rule_keys
+    assert "bank-pilot-readonly-no-routing-influence" in rule_keys
+    assert "v3-mvp-ship-linear-before-dag-ui" in rule_keys
+
+
+def test_seventeenth_batch_dual_track_sot_domains_are_registered() -> None:
+    payload = build_payload()
+    domains = {decision["domain"]: decision for decision in payload.sot_registry["decisions"]}
+
+    assert domains["noetfield_constitution_l0"]["active_document_key"] == "noetfield-constitution-gcip-v4"
+    assert domains["noetfield_v3_ai_orchestration_product"]["active_document_key"] == "noetfield-v3-mvp-production-spec-final"
+    assert domains["noetfield_sme_visibility_pilot"]["active_document_key"] == "noetfield-master-blueprint-sme-visibility-readonly-v1"
+    assert domains["noetfield_v3_investor_gtm"]["active_document_key"] == "noetfield-v3-investor-one-pager-rbc-v3"
 

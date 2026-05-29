@@ -1,5 +1,5 @@
 {
-  "registry_version": "2026-05-29-rules-13",
+  "registry_version": "2026-05-29-rules-14",
   "active_rule_candidates": [
     {
       "rule_key": "npl-no-side-effects",
@@ -1016,6 +1016,51 @@
       "activation_status": "reference_only",
       "rule_type": "documentation_governance",
       "summary": "Operator laptop selection docs are not product or regulatory SOT.",
+      "implementation_target": "source_of_truth_registry"
+    },
+    {
+      "rule_key": "v3-product-track-separate-from-gcip-l0",
+      "domain": "noetfield_v3_ai_orchestration_product",
+      "source_document_key": "noetfield-v3-mvp-production-spec-final",
+      "activation_status": "active_design_rule",
+      "rule_type": "architecture_governance",
+      "summary": "Noetfield v3 AI orchestration MVP is a distinct product track; GCIP v4 remains constitutional L0 for bank/regulatory identity.",
+      "implementation_target": "source_of_truth_registry"
+    },
+    {
+      "rule_key": "prohibit-capital-execution-control-plane-identity",
+      "domain": "noetfield_capital_execution_lineage",
+      "source_document_key": "noetfield-unified-master-control-plane-v9",
+      "activation_status": "active_design_rule",
+      "rule_type": "legal_positioning",
+      "summary": "No federated capital execution control plane, RWA settlement OS, or Samara-style execution positioning as Noetfield identity.",
+      "implementation_target": "gtm_policy"
+    },
+    {
+      "rule_key": "bank-pilot-readonly-no-routing-influence",
+      "domain": "noetfield_sme_visibility_pilot",
+      "source_document_key": "noetfield-master-blueprint-sme-visibility-readonly-v1",
+      "activation_status": "active_design_rule",
+      "rule_type": "bank_pilot",
+      "summary": "RBC/Circle pilot scope is read-only observability; no routing, execution control, or production dependency.",
+      "implementation_target": "bank_integration"
+    },
+    {
+      "rule_key": "v3-mvp-ship-linear-before-dag-ui",
+      "domain": "noetfield_v3_ai_orchestration_product",
+      "source_document_key": "noetfield-v3-mvp-production-spec-final",
+      "activation_status": "active_design_rule",
+      "rule_type": "product_governance",
+      "summary": "Ship sequential MVP per production spec before DAG animation, replay, or multi-agent timeline features.",
+      "implementation_target": "workflow_runtime"
+    },
+    {
+      "rule_key": "conversation-engine-not-product-sot",
+      "domain": "operator_prompt_tooling",
+      "source_document_key": "noetfield-lightweight-conversation-replacement-engine-v3",
+      "activation_status": "reference_only",
+      "rule_type": "documentation_governance",
+      "summary": "Chat compression prompts are operator tooling, not Noetfield product or regulatory SOT.",
       "implementation_target": "source_of_truth_registry"
     }
   ]
