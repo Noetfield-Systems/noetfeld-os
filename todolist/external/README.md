@@ -12,7 +12,8 @@ These files are **founder notes only** — kept here so ideas from chat are not 
 
 1. **Noetfield PRs/commits** — only `NF-*` items and paths under this monolith.
 2. **VIRLUX** — track under `todolist/external/virlux/`; implement in the **VIRLUX repository**.
-3. **TrustField** — strategic docs only; not a deploy target in either product UI unless explicitly scoped.
-4. Never copy VIRLUX env vars, Interac, Circle, or payment flows into Noetfield platform code.
+3. **TrustField Technologies** — **default scope for this Cursor chat**; corporate/execution work. Not the same as shipping Noetfield product code unless the user explicitly re-scopes.
+4. **Noetfield** — separate product; do not implement in a TrustField-scoped chat.
+5. Never copy VIRLUX env vars, Interac, Circle, or payment flows into TrustField or Noetfield code from the wrong repo.
 
-When starting work, ask: *“Is this Noetfield or VIRLUX?”* If VIRLUX, stop and switch repos.
+When starting work, ask: *“Is this TrustField, Noetfield, or VIRLUX?”* Use the matching chat/repo.

@@ -1,43 +1,38 @@
 # Future work tracker (`todolist/`)
 
-**This folder tracks work for the Noetfield repository.**  
-VIRLUX is a **different product** — see [external/virlux/](./external/virlux/) (notes only; code is elsewhere).
+**Agent default for this chat: TrustField Technologies only.**  
+Do **not** treat items below as TrustField work unless the user explicitly re-scopes.
 
 ## Project boundary
 
-| | Noetfield (this repo) | VIRLUX (separate) |
-|--|----------------------|-------------------|
-| **Product** | Governance execution infrastructure | B2B FX / payments |
-| **Domains** | `www.noetfield.com`, `platform.noetfield.com` | VIRLUX app hosts (not here) |
-| **IDs** | `NF-*` | `VL-*` in external tracker |
-| **Implement here?** | Yes | **No** |
+| | TrustField (this chat) | Noetfield (separate) | VIRLUX (separate) |
+|--|------------------------|----------------------|-------------------|
+| **Scope** | Corporate / execution / partnerships | Governance product + www + platform | B2B FX / payments |
+| **Implement in this thread?** | Yes (when user asks) | **No** — use Noetfield-scoped chat/repo | **No** — VIRLUX repo |
+| **Tracker IDs** | `TF-*` (add when needed) | `NF-*` | `VL-*` in [external/virlux/](./external/virlux/) |
 
-Full rules: [external/README.md](./external/README.md)
+Full rules: [../PROJECTS.md](../PROJECTS.md), [external/README.md](./external/README.md)
+
+## Noetfield files (not TrustField chat scope)
+
+These files track **Noetfield only** — do not execute them in a TrustField-scoped conversation:
+
+| File | Scope |
+|------|--------|
+| [NEXT_MOVES.md](./NEXT_MOVES.md) | Noetfield P0/P1/P2 |
+| [noetfield-platform.md](./noetfield-platform.md) | API, chat, Telegram, intake |
+| [noetfield-public-site.md](./noetfield-public-site.md) | www, GTM, legal |
+
+## External (not TrustField, not Noetfield implementation here)
+
+| File | Scope |
+|------|--------|
+| [external/virlux/](./external/virlux/) | VIRLUX backlog — separate codebase |
 
 ## How to add items
 
-1. **Noetfield** → `noetfield-*.md` or [NEXT_MOVES.md](./NEXT_MOVES.md)
-2. **VIRLUX** → [external/virlux/](./external/virlux/) only (do not add VIRLUX tasks to Noetfield code)
-3. Use **ID**, **Status**, **Owner**, **Type** — see [_template.md](./_template.md)
+1. **TrustField** → new `trustfield-*.md` or user-directed task (this chat)
+2. **Noetfield** → only when user re-scopes; use `noetfield-*.md`
+3. **VIRLUX** → [external/virlux/](./external/virlux/) only
 
-## Files (Noetfield — start here)
-
-| File | Scope |
-|------|--------|
-| **[NEXT_MOVES.md](./NEXT_MOVES.md)** | Prioritized P0/P1/P2 for **Noetfield only** |
-| [noetfield-platform.md](./noetfield-platform.md) | API, chat, Telegram, intake, deploy |
-| [noetfield-public-site.md](./noetfield-public-site.md) | www, GTM, legal, SEO |
-| [archive/](./archive/) | Completed items |
-
-## External (not this repo)
-
-| File | Scope |
-|------|--------|
-| [external/virlux/](./external/virlux/) | VIRLUX backlog — **separate codebase** |
-
-## Quick index (Noetfield launch blockers)
-
-- Platform deploy, secrets, DNS, Telegram, LLM — [noetfield-platform.md](./noetfield-platform.md)
-- www deploy, legal pages — [noetfield-public-site.md](./noetfield-public-site.md)
-
-VIRLUX blockers are listed only under [external/virlux/fintech.md](./external/virlux/fintech.md).
+Template: [_template.md](./_template.md)

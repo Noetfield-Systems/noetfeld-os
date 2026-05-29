@@ -1,21 +1,27 @@
 # Projects — do not mix
 
-| Project | Repository | This folder? |
-|---------|------------|--------------|
-| **Noetfield** | `Noetfield` (you are here) | Yes — all code, CI, deploy |
-| **VIRLUX** | **Separate** VIRLUX repo | **No** — not built or deployed from here |
+| Project | What it is | This repo / chat? |
+|---------|------------|-------------------|
+| **TrustField Technologies** | Parent company — execution, partnerships, corporate ops | **This Cursor chat** — scope work here unless the user names another product |
+| **Noetfield** | Separate product — governance execution infrastructure | **No** — not in scope for this chat; own repo and deploy (`www.noetfield.com`, `platform.noetfield.com`) |
+| **VIRLUX** | Separate product — Canadian B2B FX / payments | **No** — separate codebase; notes only under [`todolist/external/virlux/`](todolist/external/virlux/) |
 
-## Noetfield
+## TrustField Technologies (this chat)
 
-- Governance execution infrastructure for regulated organizations.
-- `www.noetfield.com` + `platform.noetfield.com`
-- Work tracker: [`todolist/NEXT_MOVES.md`](todolist/NEXT_MOVES.md)
+- Corporate / execution / partnership work for **TrustField Technologies** only.
+- Do **not** implement Noetfield platform features, public-site GTM, Telegram, or intake APIs in this thread unless the user explicitly re-scopes to Noetfield.
+- Strategic reference docs (TrustField ↔ Noetfield split) live under `docs/SOURCE_OF_TRUTH/` and `Noetfield-All-Documents/` — read-only context, not a license to ship Noetfield code here.
 
-## VIRLUX
+## Noetfield (separate — do not mix into TrustField chat)
 
-- **Different product:** Canadian B2B FX / payments (Interac, Circle, dashboard, etc.).
-- **Do not** add VIRLUX features, env vars, or payment logic to this repository.
-- **Do not** deploy Noetfield changes to VIRLUX hosts (or vice versa).
-- If you need VIRLUX backlog notes stored here for convenience only: [`todolist/external/virlux/`](todolist/external/virlux/) — implement in the VIRLUX codebase.
+- Different product and delivery surface from TrustField corporate work.
+- If work is Noetfield-specific, use a **Noetfield-scoped** chat/repo — not this one.
+- Historical tracker (Noetfield only): [`todolist/NEXT_MOVES.md`](todolist/NEXT_MOVES.md), [`todolist/noetfield-platform.md`](todolist/noetfield-platform.md)
 
-When in doubt: **Noetfield = this repo. VIRLUX = other repo.**
+## VIRLUX (separate)
+
+- **Different product:** Interac, Circle, dashboard, etc.
+- **Do not** add VIRLUX features, env vars, or payment logic to TrustField or Noetfield workstreams from this chat.
+- Backlog notes: [`todolist/external/virlux/`](todolist/external/virlux/) — implement in the VIRLUX codebase.
+
+**Rule of thumb:** *This chat = TrustField. Noetfield = other project. VIRLUX = other project.*
