@@ -58,7 +58,12 @@ console-smoke:
 
 site-health:
 	python3 scripts/audit_public_site_health.py
+	python3 scripts/audit_no_secrets_in_repo.py
 	python3 -m pytest tests/unit/test_public_gtm_alignment.py tests/unit/test_public_simplification.py -q
+
+ecosystem-health:
+	python3 scripts/audit_no_secrets_in_repo.py
+	PYTHONPATH=$(PYTHONPATH_VALUE) RUNTIME_EVENT_STORE=memory python3 -m pytest tests/unit/test_public_chat.py tests/unit/test_openrouter_client.py tests/unit/test_telegram_webhook.py -q
 
 collapse-public:
 	python3 scripts/collapse_public_routes.py

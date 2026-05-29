@@ -1,5 +1,6 @@
 """FastAPI entrypoint for the Noetfield backend runtime core."""
 
+import asyncio
 import logging
 from pathlib import Path
 from uuid import UUID
@@ -13,6 +14,13 @@ from pydantic import BaseModel, ConfigDict, Field, SecretStr
 
 from noetfield_governance.chat_errors import ChatAPIError, ChatConfigurationError
 from noetfield_governance.public_chat import answer_public_question, resolve_chat_provider
+from noetfield_governance.telegram_client import (
+    TelegramAPIError,
+    TelegramConfigurationError,
+    get_webhook_info,
+    set_webhook,
+)
+from noetfield_governance.telegram_webhook import handle_telegram_update
 
 from noetfield_events import EventType, build_event
 from noetfield_types import Actor, ActorType
@@ -499,6 +507,107 @@ async def public_chat(body: PublicChatRequest, request: Request) -> PublicChatRe
         logger.warning("public_chat_llm_error %s", exc)
         raise HTTPException(status_code=502, detail="Assistant temporarily unavailable") from exc
     return PublicChatResponse(reply=reply, provider=provider)
+
+
+class TelegramWebhookBody(BaseModel):
+    model_config = ConfigDict(extra="allow")
+
+
+@app.get("/api/telegram/health", tags=["telegram"])
+async def telegram_health() -> dict[str, object]:
+    token = _secret(settings.telegram_bot_token)
+    webhook_url = None
+    if token and settings.telegram_webhook_base_url:
+        webhook_url = settings.telegram_webhook_base_url.rstrip("/") + "/api/telegram/webhook"
+    return {
+        "enabled": settings.telegram_bot_enabled,
+        "configured": bool(token),
+        "webhook_url": webhook_url,
+        "webhook_secret_configured": bool(_secret(settings.telegram_webhook_secret)),
+    }
+
+
+@app.get("/api/ecosystem/health", tags=["ecosystem"])
+async def ecosystem_health() -> dict[str, object]:
+    """Combined status for website chat + Telegram + LLM providers."""
+    chat = await public_chat_health()
+    telegram = await telegram_health()
+    chat_ok = bool(chat.get("configured")) and settings.public_chat_enabled
+    telegram_ok = bool(telegram.get("configured")) and settings.telegram_bot_enabled
+    return {
+        "intake_email": CANONICAL_INTAKE_EMAIL,
+        "website_chat": chat,
+        "telegram": telegram,
+        "ok": chat_ok or telegram_ok,
+    }
+
+
+@app.post("/api/telegram/webhook", tags=["telegram"])
+async def telegram_webhook(request: Request) -> dict[str, object]:
+    if not settings.telegram_bot_enabled:
+        raise HTTPException(status_code=503, detail="Telegram bot is disabled")
+    token = _secret(settings.telegram_bot_token)
+    if not token:
+        raise HTTPException(status_code=503, detail="Telegram bot token not configured")
+
+    expected_secret = _secret(settings.telegram_webhook_secret)
+    if expected_secret:
+        header_secret = request.headers.get("X-Telegram-Bot-Api-Secret-Token", "")
+        if header_secret != expected_secret:
+            raise HTTPException(status_code=403, detail="Invalid webhook secret")
+
+    try:
+        update = await request.json()
+    except Exception as exc:
+        raise HTTPException(status_code=400, detail="Invalid JSON") from exc
+    if not isinstance(update, dict):
+        raise HTTPException(status_code=400, detail="Invalid update payload")
+
+    handled = await handle_telegram_update(
+        update,
+        bot_token=token,
+        chat_provider=settings.public_chat_provider,
+        gemini_api_key=_secret(settings.gemini_api_key) or None,
+        gemini_model=settings.gemini_model,
+        openrouter_api_key=_secret(settings.openrouter_api_key) or None,
+        openrouter_model=settings.openrouter_model,
+    )
+    return {"ok": True, "handled": handled}
+
+
+@app.post("/api/telegram/register-webhook", tags=["telegram"])
+async def telegram_register_webhook(request: Request) -> dict[str, object]:
+    """Register Telegram webhook (requires TELEGRAM_WEBHOOK_SECRET header if configured)."""
+    if not settings.telegram_bot_enabled:
+        raise HTTPException(status_code=503, detail="Telegram bot is disabled")
+    token = _secret(settings.telegram_bot_token)
+    if not token:
+        raise HTTPException(status_code=503, detail="Telegram bot token not configured")
+    base = (settings.telegram_webhook_base_url or "").strip().rstrip("/")
+    if not base:
+        raise HTTPException(status_code=400, detail="TELEGRAM_WEBHOOK_BASE_URL is not set")
+
+    admin_secret = _secret(settings.telegram_webhook_secret)
+    if admin_secret:
+        auth = request.headers.get("X-Admin-Secret", "")
+        if auth != admin_secret:
+            raise HTTPException(status_code=403, detail="Invalid admin secret")
+
+    webhook_url = f"{base}/api/telegram/webhook"
+    secret_token = admin_secret or None
+    try:
+        result = await asyncio.to_thread(
+            set_webhook,
+            token=token,
+            webhook_url=webhook_url,
+            secret_token=secret_token,
+        )
+        info = await asyncio.to_thread(get_webhook_info, token=token)
+    except TelegramConfigurationError as exc:
+        raise HTTPException(status_code=503, detail=str(exc)) from exc
+    except TelegramAPIError as exc:
+        raise HTTPException(status_code=502, detail=str(exc)) from exc
+    return {"setWebhook": result, "webhookInfo": info, "url": webhook_url}
 
 
 @app.get("/runtime/console", tags=["runtime"])

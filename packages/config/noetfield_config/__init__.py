@@ -56,6 +56,20 @@ class Settings(BaseSettings):
         "https://www.noetfield.com,https://noetfield.com,http://localhost:8080,http://127.0.0.1:8080"
     )
 
+    telegram_bot_enabled: bool = True
+    telegram_bot_token: SecretStr | None = Field(
+        default=None,
+        description="Telegram Bot API token — server-side only; never expose to browsers.",
+    )
+    telegram_webhook_secret: SecretStr | None = Field(
+        default=None,
+        description="Optional secret_token for Telegram setWebhook (X-Telegram-Bot-Api-Secret-Token).",
+    )
+    telegram_webhook_base_url: str | None = Field(
+        default=None,
+        description="Public HTTPS base for webhook registration, e.g. https://platform.noetfield.com",
+    )
+
     event_integrity_secret: SecretStr = Field(
         default=SecretStr("replace-with-kms-managed-secret"),
         description="Use KMS or a secrets manager outside local development.",
