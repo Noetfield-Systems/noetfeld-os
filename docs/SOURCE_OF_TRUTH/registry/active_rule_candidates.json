@@ -1,5 +1,5 @@
 {
-  "registry_version": "2026-05-29-rules-12",
+  "registry_version": "2026-05-29-rules-13",
   "active_rule_candidates": [
     {
       "rule_key": "npl-no-side-effects",
@@ -963,6 +963,60 @@
       "rule_type": "product_governance",
       "summary": "MVP outputs coordination objects only; no routing, payments, or PSP-facing instructions.",
       "implementation_target": "workflow_runtime"
+    },
+    {
+      "rule_key": "prohibit-wallet-orchestration-positioning",
+      "domain": "noetfield_positioning_lineage_analysis",
+      "source_document_key": "noetfield-master-blueprint-kavodax-benchmark-v1",
+      "activation_status": "active_design_rule",
+      "rule_type": "legal_positioning",
+      "summary": "No Kavodax-class wallet, instruction, or settlement-orchestration positioning for Noetfield.",
+      "implementation_target": "gtm_policy"
+    },
+    {
+      "rule_key": "prohibit-meta-gateway-psp-framing",
+      "domain": "noetfield_positioning_lineage_analysis",
+      "source_document_key": "noetfield-payment-orchestration-meta-gateway-v1",
+      "activation_status": "active_design_rule",
+      "rule_type": "legal_positioning",
+      "summary": "No Stripe/Adyen meta-gateway or payment-orchestration category claims.",
+      "implementation_target": "gtm_policy"
+    },
+    {
+      "rule_key": "spark-centre-governance-only-narrative",
+      "domain": "noetfield_accelerator_spark",
+      "source_document_key": "noetfield-spark-centre-one-pager-v1",
+      "activation_status": "active_design_rule",
+      "rule_type": "gtm",
+      "summary": "Spark Centre materials use governance OS framing; no TrustField execution dependency in copy.",
+      "implementation_target": "gtm_policy"
+    },
+    {
+      "rule_key": "cdl-one-pager-locked-external-default",
+      "domain": "noetfield_accelerator_cdl",
+      "source_document_key": "noetfield-bc-tech-cdl-one-pager-locked-v1",
+      "activation_status": "active_design_rule",
+      "rule_type": "gtm",
+      "summary": "BC Tech/CDL external circulation uses locked one-pager, not venture or EGEL drafts.",
+      "implementation_target": "gtm_policy"
+    },
+    {
+      "rule_key": "investor-memo-no-execution-ready-instructions",
+      "domain": "noetfield_investor_positioning",
+      "source_document_key": "noetfield-bank-ready-institutional-document-v1",
+      "activation_status": "active_design_rule",
+      "rule_type": "legal_positioning",
+      "summary": "Tier-1 investor copy must not claim execution-ready instructions or routing layers.",
+      "implementation_target": "gtm_policy"
+    },
+    {
+      "rule_key": "hardware-docs-excluded-from-product-sot",
+      "domain": "operator_equipment",
+      "source_document_key": "noetfield-operator-hardware-selection-macbook-v1",
+      "activation_status": "reference_only",
+      "rule_type": "documentation_governance",
+      "summary": "Operator laptop selection docs are not product or regulatory SOT.",
+      "implementation_target": "source_of_truth_registry"
     }
   ]
 }

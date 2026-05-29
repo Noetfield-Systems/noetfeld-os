@@ -46,10 +46,10 @@ def test_ingestion_payload_summary_counts() -> None:
     summary = summarize_payload(payload)
 
     assert summary["batch_id"] == "2026-05-combined"
-    assert summary["batch_count"] == 15
-    assert summary["document_count"] == 155
-    assert summary["sot_decision_count"] == 73
-    assert summary["active_rule_candidate_count"] == 107
+    assert summary["batch_count"] == 16
+    assert summary["document_count"] == 170
+    assert summary["sot_decision_count"] == 80
+    assert summary["active_rule_candidate_count"] == 113
     assert "wp03-npl-formal-grammar-2026-05-npl-1" in summary["active_documents"]
     assert "wp01-context-graph-runtime-edition-v2" in summary["active_documents"]
 
@@ -399,4 +399,36 @@ def test_fifteenth_batch_new_sot_domains_are_registered() -> None:
     assert domains["noetfield_constitution_lineage_analysis"]["active_document_key"] == "noetfield-constitution-comparative-analysis-fa"
     assert domains["noetfield_commercial_gtm"]["active_document_key"] == "noetfield-cdl-pitch-deck-v3-1"
     assert domains["noetfield_mvp_spec"]["active_document_key"] == "noetfield-mvp-system-spec-v3-0-hardened"
+
+def test_sixteenth_batch_gtm_and_positioning_resources_are_classified() -> None:
+    payload = build_payload()
+    documents = {document["document_key"]: document for document in payload.inventory["documents"]}
+
+    assert documents["noetfield-institutional-investment-memo-1pager-v1"]["classification"] == "superseded_gtm_draft"
+    assert documents["noetfield-bc-tech-cdl-one-pager-locked-v1"]["classification"] == "active_source_of_truth"
+    assert documents["noetfield-spark-centre-one-pager-v1"]["classification"] == "active_source_of_truth"
+    assert documents["noetfield-master-blueprint-kavodax-benchmark-v1"]["classification"] == "prohibited_positioning_draft"
+    assert documents["noetfield-payment-orchestration-meta-gateway-v1"]["classification"] == "prohibited_positioning_draft"
+    assert documents["noetfield-operator-hardware-selection-macbook-v1"]["classification"] == "operator_reference_non_product"
+
+
+def test_sixteenth_batch_positioning_rule_candidates_are_present() -> None:
+    payload = build_payload()
+    rule_keys = {rule["rule_key"] for rule in payload.rule_registry["active_rule_candidates"]}
+
+    assert "prohibit-wallet-orchestration-positioning" in rule_keys
+    assert "prohibit-meta-gateway-psp-framing" in rule_keys
+    assert "spark-centre-governance-only-narrative" in rule_keys
+    assert "cdl-one-pager-locked-external-default" in rule_keys
+    assert "investor-memo-no-execution-ready-instructions" in rule_keys
+
+
+def test_sixteenth_batch_audience_sot_domains_are_registered() -> None:
+    payload = build_payload()
+    domains = {decision["domain"]: decision for decision in payload.sot_registry["decisions"]}
+
+    assert domains["noetfield_investor_positioning"]["active_document_key"] == "noetfield-bank-ready-institutional-document-v1"
+    assert domains["noetfield_accelerator_cdl"]["active_document_key"] == "noetfield-bc-tech-cdl-one-pager-locked-v1"
+    assert domains["noetfield_accelerator_spark"]["active_document_key"] == "noetfield-spark-centre-one-pager-v1"
+    assert domains["noetfield_constitution_l0"]["active_document_key"] == "noetfield-constitution-gcip-v4"
 

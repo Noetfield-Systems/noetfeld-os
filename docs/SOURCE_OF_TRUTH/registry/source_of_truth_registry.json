@@ -1,5 +1,5 @@
 {
-  "registry_version": "2026-05-29-sot-12",
+  "registry_version": "2026-05-29-sot-13",
   "decisions": [
     {
       "domain": "context_graph",
@@ -584,6 +584,62 @@
       "decision": "active_source_of_truth",
       "rationale": "Hardened internal-coordination MVP spec; no financial instruction adjacency.",
       "confidence": 0.88
+    },
+    {
+      "domain": "noetfield_investor_positioning",
+      "active_document_key": "noetfield-bank-ready-institutional-document-v1",
+      "active_version": "bank-ready-v1",
+      "decision": "active_source_of_truth",
+      "rationale": "Counsel-grade institutional narrative without execution-ready instruction language.",
+      "confidence": 0.9
+    },
+    {
+      "domain": "noetfield_internal_ic_assessment",
+      "active_document_key": "noetfield-ic-diligence-memo-blackrock-style-v1",
+      "active_version": "ic-memo-v1",
+      "decision": "active_source_of_truth",
+      "rationale": "Neutral IC diligence framing and de-risking checklist for fundraising readiness.",
+      "confidence": 0.88
+    },
+    {
+      "domain": "noetfield_accelerator_cdl",
+      "active_document_key": "noetfield-bc-tech-cdl-one-pager-locked-v1",
+      "active_version": "cdl-locked-v1",
+      "decision": "active_source_of_truth",
+      "rationale": "RPAA-safe CDL/BC Tech one-pager; supersedes venture and EGEL draft variants.",
+      "confidence": 0.91
+    },
+    {
+      "domain": "noetfield_accelerator_spark",
+      "active_document_key": "noetfield-spark-centre-one-pager-v1",
+      "active_version": "spark-v1",
+      "decision": "active_source_of_truth",
+      "rationale": "Locked Spark Centre accelerator narrative for Ontario SME governance wedge.",
+      "confidence": 0.9
+    },
+    {
+      "domain": "noetfield_positioning_lineage_analysis",
+      "active_document_key": "noetfield-master-blueprint-comparative-analysis-fa-v1",
+      "active_version": "blueprint-compare-fa-v1",
+      "decision": "active_source_of_truth",
+      "rationale": "Authoritative orchestration vs governance blueprint comparison for 2026 Canada strategy.",
+      "confidence": 0.92
+    },
+    {
+      "domain": "noetfield_regulatory_submissions",
+      "active_document_key": "noetfield-rbc-finsec-submission-v1",
+      "active_version": "submissions-index-v1",
+      "decision": "reference_index",
+      "rationale": "Historical RBC/BoC submission corpus; live legal SOT remains RPAA opinion v1.1.",
+      "confidence": 0.85
+    },
+    {
+      "domain": "noetfield_operating_model_reference",
+      "active_document_key": "noetfield-operating-model-2026-trustfield-v1",
+      "active_version": "operating-model-2026",
+      "decision": "historical_reference",
+      "rationale": "TrustField RACI operating model; bank pack v2 supersedes for external diligence.",
+      "confidence": 0.8
     }
   ]
 }

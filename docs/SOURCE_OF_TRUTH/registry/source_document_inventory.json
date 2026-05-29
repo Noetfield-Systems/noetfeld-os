@@ -2087,6 +2087,206 @@
       "supersedes": [],
       "superseded_by": null,
       "upload_batch": "2026-05-015"
+    },
+    {
+      "document_key": "noetfield-institutional-investment-memo-1pager-v1",
+      "title": "Institutional Investment Memo (1-Pager) \u2014 Tier-1 Strategics",
+      "domain": "noetfield_investor_positioning",
+      "work_package": null,
+      "version_label": "investor-memo-v1",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-016/noetfield-institutional-investment-memo-1pager-v1.md",
+      "classification": "superseded_gtm_draft",
+      "status": "superseded",
+      "supersedes": [],
+      "superseded_by": "noetfield-bank-ready-institutional-document-v1",
+      "upload_batch": "2026-05-016"
+    },
+    {
+      "document_key": "noetfield-ic-diligence-memo-blackrock-style-v1",
+      "title": "Internal IC Diligence Memo (BlackRock-Style)",
+      "domain": "noetfield_internal_ic_assessment",
+      "work_package": null,
+      "version_label": "ic-memo-v1",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-016/noetfield-ic-diligence-memo-blackrock-style-v1.md",
+      "classification": "active_source_of_truth",
+      "status": "reference",
+      "supersedes": [],
+      "superseded_by": null,
+      "upload_batch": "2026-05-016"
+    },
+    {
+      "document_key": "noetfield-bc-tech-cdl-one-pager-venture-v1",
+      "title": "BC Tech / CDL One-Pager \u2014 Venture-Scale Edition",
+      "domain": "noetfield_accelerator_cdl",
+      "work_package": null,
+      "version_label": "cdl-venture-v1",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-016/noetfield-bc-tech-cdl-one-pager-venture-v1.md",
+      "classification": "superseded_gtm_draft",
+      "status": "superseded",
+      "supersedes": [],
+      "superseded_by": "noetfield-bc-tech-cdl-one-pager-locked-v1",
+      "upload_batch": "2026-05-016"
+    },
+    {
+      "document_key": "noetfield-bc-tech-cdl-one-pager-egel-v1",
+      "title": "BC Tech / CDL One-Pager \u2014 EGEL Edition",
+      "domain": "noetfield_accelerator_cdl",
+      "work_package": null,
+      "version_label": "cdl-egel-v1",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-016/noetfield-bc-tech-cdl-one-pager-egel-v1.md",
+      "classification": "superseded_gtm_draft",
+      "status": "superseded",
+      "supersedes": [],
+      "superseded_by": "noetfield-bc-tech-cdl-one-pager-locked-v1",
+      "upload_batch": "2026-05-016"
+    },
+    {
+      "document_key": "noetfield-bc-tech-cdl-one-pager-locked-v1",
+      "title": "BC Tech / CDL One-Pager \u2014 Locked (RPAA-Safe Wording)",
+      "domain": "noetfield_accelerator_cdl",
+      "work_package": null,
+      "version_label": "cdl-locked-v1",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-016/noetfield-bc-tech-cdl-one-pager-locked-v1.md",
+      "classification": "active_source_of_truth",
+      "status": "reference",
+      "supersedes": [
+        "noetfield-bc-tech-cdl-one-pager-venture-v1",
+        "noetfield-bc-tech-cdl-one-pager-egel-v1"
+      ],
+      "superseded_by": null,
+      "upload_batch": "2026-05-016"
+    },
+    {
+      "document_key": "noetfield-spark-centre-one-pager-v1",
+      "title": "Spark Centre One-Pager \u2014 Ontario SME Governance OS",
+      "domain": "noetfield_accelerator_spark",
+      "work_package": null,
+      "version_label": "spark-v1",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-016/noetfield-spark-centre-one-pager-v1.md",
+      "classification": "active_source_of_truth",
+      "status": "reference",
+      "supersedes": [],
+      "superseded_by": null,
+      "upload_batch": "2026-05-016"
+    },
+    {
+      "document_key": "noetfield-operating-model-2026-trustfield-v1",
+      "title": "Full Operating Model 2026 \u2014 Noetfield / TrustField Split",
+      "domain": "noetfield_operating_model_reference",
+      "work_package": null,
+      "version_label": "operating-model-2026",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-016/noetfield-operating-model-2026-trustfield-v1.md",
+      "classification": "historical_operating_reference",
+      "status": "reference",
+      "supersedes": [],
+      "superseded_by": "noetfield-bank-integration-pack-v2",
+      "upload_batch": "2026-05-016"
+    },
+    {
+      "document_key": "noetfield-rbc-finsec-submission-v1",
+      "title": "Formal RBC FinSec Submission \u2014 RPAA Perimeter (2026)",
+      "domain": "noetfield_regulatory_submissions",
+      "work_package": null,
+      "version_label": "rbc-finsec-v1",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-016/noetfield-rbc-finsec-submission-v1.md",
+      "classification": "historical_bank_submission",
+      "status": "reference",
+      "supersedes": [],
+      "superseded_by": "noetfield-rpaa-legal-opinion-letter-v1-1",
+      "upload_batch": "2026-05-016"
+    },
+    {
+      "document_key": "noetfield-bank-of-canada-rpaa-submission-v1",
+      "title": "Bank of Canada RPAA Perimeter Clarification Request",
+      "domain": "noetfield_regulatory_submissions",
+      "work_package": null,
+      "version_label": "boc-rpaa-v1",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-016/noetfield-bank-of-canada-rpaa-submission-v1.md",
+      "classification": "historical_bank_submission",
+      "status": "reference",
+      "supersedes": [],
+      "superseded_by": "noetfield-rpaa-legal-opinion-letter-v1-1",
+      "upload_batch": "2026-05-016"
+    },
+    {
+      "document_key": "noetfield-bank-ready-institutional-document-v1",
+      "title": "Bank-Ready Institutional Document \u2014 RPAA/MSB-Safe (2026)",
+      "domain": "noetfield_investor_positioning",
+      "work_package": null,
+      "version_label": "bank-ready-v1",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-016/noetfield-bank-ready-institutional-document-v1.md",
+      "classification": "active_source_of_truth",
+      "status": "reference",
+      "supersedes": [
+        "noetfield-institutional-investment-memo-1pager-v1"
+      ],
+      "superseded_by": null,
+      "upload_batch": "2026-05-016"
+    },
+    {
+      "document_key": "noetfield-master-blueprint-comparative-analysis-fa-v1",
+      "title": "Master Blueprint Comparative Analysis (Persian) \u2014 Orchestration vs Governance",
+      "domain": "noetfield_positioning_lineage_analysis",
+      "work_package": null,
+      "version_label": "blueprint-compare-fa-v1",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-016/noetfield-master-blueprint-comparative-analysis-fa-v1.md",
+      "classification": "active_source_of_truth",
+      "status": "reference",
+      "supersedes": [],
+      "superseded_by": null,
+      "upload_batch": "2026-05-016"
+    },
+    {
+      "document_key": "noetfield-master-blueprint-kavodax-benchmark-v1",
+      "title": "Master Blueprint \u2014 Kavodax/BVNK Wallet-Orchestration Benchmark",
+      "domain": "noetfield_positioning_lineage_analysis",
+      "work_package": null,
+      "version_label": "kavodax-blueprint-v1",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-016/noetfield-master-blueprint-kavodax-benchmark-v1.md",
+      "classification": "prohibited_positioning_draft",
+      "status": "superseded",
+      "supersedes": [],
+      "superseded_by": "noetfield-constitution-gcip-v4",
+      "upload_batch": "2026-05-016"
+    },
+    {
+      "document_key": "noetfield-master-blueprint-non-custodial-governance-v1",
+      "title": "Master Blueprint \u2014 Non-Custodial Governance (Regulation-Safe)",
+      "domain": "noetfield_positioning_lineage_analysis",
+      "work_package": null,
+      "version_label": "governance-blueprint-v1",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-016/noetfield-master-blueprint-non-custodial-governance-v1.md",
+      "classification": "active_methodology_reference",
+      "status": "reference",
+      "supersedes": [],
+      "superseded_by": null,
+      "upload_batch": "2026-05-016"
+    },
+    {
+      "document_key": "noetfield-operator-hardware-selection-macbook-v1",
+      "title": "Operator Hardware Selection \u2014 MacBook M3/M4 Pro Blueprint",
+      "domain": "operator_equipment",
+      "work_package": null,
+      "version_label": "hardware-v1",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-016/noetfield-operator-hardware-selection-macbook-v1.md",
+      "classification": "operator_reference_non_product",
+      "status": "reference",
+      "supersedes": [],
+      "superseded_by": null,
+      "upload_batch": "2026-05-016"
+    },
+    {
+      "document_key": "noetfield-payment-orchestration-meta-gateway-v1",
+      "title": "Payment Orchestration & Meta-Gateway Blueprint (2026)",
+      "domain": "noetfield_positioning_lineage_analysis",
+      "work_package": null,
+      "version_label": "meta-gateway-v1",
+      "source_path": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-016/noetfield-payment-orchestration-meta-gateway-v1.md",
+      "classification": "prohibited_positioning_draft",
+      "status": "superseded",
+      "supersedes": [],
+      "superseded_by": "noetfield-constitution-gcip-v4",
+      "upload_batch": "2026-05-016"
     }
   ],
   "batches": [
@@ -2149,6 +2349,10 @@
     {
       "batch_id": "2026-05-015",
       "source_folder": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-015"
+    },
+    {
+      "batch_id": "2026-05-016",
+      "source_folder": "docs/SOURCE_OF_TRUTH/uploaded/2026-05-batch-016"
     }
   ]
 }
