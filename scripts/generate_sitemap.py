@@ -5,14 +5,12 @@ from __future__ import annotations
 
 import re
 import sys
-from datetime import date
+from datetime import date, datetime, timezone
 from pathlib import Path
 from xml.etree.ElementTree import Element, SubElement, tostring
 
 ROOT = Path(__file__).resolve().parents[1]
 BASE = "https://www.noetfield.com"
-TODAY = date.today().isoformat()
-
 SKIP_DIRS = {
     "_archive",
     "apps",
@@ -116,6 +114,12 @@ def priority(url: str) -> str:
     return f"{PRIORITY.get(url, 0.7):.1f}"
 
 
+def lastmod_for(index_path: Path) -> str:
+    """Use index.html mtime so CI does not fail when run on a different calendar day."""
+    mtime = index_path.stat().st_mtime
+    return datetime.fromtimestamp(mtime, tz=timezone.utc).date().isoformat()
+
+
 def main() -> int:
     urls: list[str] = []
     for index in sorted(ROOT.rglob("index.html")):
@@ -123,10 +127,15 @@ def main() -> int:
             urls.append(url_path(index))
 
     urlset = Element("urlset", xmlns="http://www.sitemaps.org/schemas/sitemap/0.9")
+    index_by_url = {}
+    for index in sorted(ROOT.rglob("index.html")):
+        if is_public_route(index):
+            index_by_url[url_path(index)] = index
+
     for loc_path in sorted(set(urls), key=lambda u: (u != "/", u)):
         url_el = SubElement(urlset, "url")
         SubElement(url_el, "loc").text = BASE + loc_path
-        SubElement(url_el, "lastmod").text = TODAY
+        SubElement(url_el, "lastmod").text = lastmod_for(index_by_url[loc_path])
         SubElement(url_el, "changefreq").text = changefreq(loc_path)
         SubElement(url_el, "priority").text = priority(loc_path)
 
