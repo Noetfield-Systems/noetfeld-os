@@ -26,9 +26,9 @@
  <section class="block">
  <h2>How it is produced</h2>
  <ol>
- <li><strong>Evaluate</strong> — <code>POST /api/v1/governance/evaluate</code> returns decision, <code>reason_code</code>, and <code>policy_refs</code></li>
+ <li><strong>Evaluate</strong> — policy decision with <code>reason_code</code> and <code>policy_refs</code> tied to a Request ID</li>
  <li><strong>Record</strong> — entries append to the governed audit log (integrity hash per event)</li>
- <li><strong>Export</strong> — <code>GET /api/v1/governance/audit-export?request_id=RID-…</code> for procurement</li>
+ <li><strong>Export</strong> — audit-export by RID for procurement (<a href="/docs/api/">Governance API reference</a>)</li>
  </ol>
  </section>
  <section class="block">
@@ -40,7 +40,6 @@
  <h2>See it live</h2>
  <p>Governance Console shows decisions and the compliance log table for authorized pilots.</p>
  <a class="btn btn-secondary" href="/console/">Governance Console</a>
- <a class="btn btn-secondary" href="/docs/api/">API docs</a>
  </section>
  <div class="cta-bar">
  <div><strong>Request Governance Brief</strong><p>From $10,000 — includes Trust Ledger starter format</p></div>

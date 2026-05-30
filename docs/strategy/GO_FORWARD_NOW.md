@@ -12,7 +12,7 @@
 
 Governance execution and **AI policy enforcement** for regulated organizations — evaluate intent, apply **risk intelligence** at the decision layer, record audit evidence. Partners and clients execute externally; Noetfield never touches value.
 
-**How you deliver (after the narrative lands):** documented evaluate API, console, SDK, Trust Ledger export — linked from [/partners/](/partners/) and [/docs/api/](/docs/api/), not from the homepage hero.
+**How you deliver (after the narrative lands):** one technical home at [/docs/api/](/docs/api/); each other page owns its slice ([public-surface-map.md](./public-surface-map.md)). API is in the footer, not the homepage hero.
 
 ---
 
