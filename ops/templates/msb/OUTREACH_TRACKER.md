@@ -1,7 +1,11 @@
 # MSB outreach tracker (90 days)
 
+**Primary ICP (30-day plan):** Licensed MSB / PSP · Canada · compliance + CTO pair  
+**Secondary:** Any serious buyer → Trust Brief $10k ([GO_FORWARD_NOW.md](../../../docs/strategy/GO_FORWARD_NOW.md))  
 **Started:** __________  
 **Goal:** 10 meetings · 2 Trust Brief and/or 1 Shadow Pack · 1 staging integration
+
+**Emails:** [OUTREACH_EMAILS.md](./OUTREACH_EMAILS.md) · **Intake replies:** [INTAKE_RESPONSE_TEMPLATES.md](./INTAKE_RESPONSE_TEMPLATES.md)
 
 | # | Organization | Contact | Role | Source | Contacted | Demo | Deal / notes |
 |---|--------------|---------|------|--------|-----------|------|--------------|

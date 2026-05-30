@@ -31,10 +31,12 @@ Governance execution and **AI policy enforcement** for regulated organizations �
 
 ## Ship this week (founder)
 
-1. Merge open PRs → deploy **www** + **platform.noetfield.com**
-2. Turn on pilot keys: `GOVERNANCE_PILOT_AUTH_REQUIRED=true`
+Full checklist: [MARKET_ENTRY_30_DAY.md](../MARKET_ENTRY_30_DAY.md) · bootstrap: `./scripts/market-entry-bootstrap.sh`
+
+1. Deploy **www** + **platform.noetfield.com** ([GO_LIVE.md](../GO_LIVE.md))
+2. Pilot keys: [PRODUCTION_PILOT_KEYS.md](../PRODUCTION_PILOT_KEYS.md)
 3. Run one **Shadow Week** demo ([SHADOW_WEEK_DEMO.md](../SHADOW_WEEK_DEMO.md))
-4. Send 10 outreaches ([msb-partner-playbook.md](./msb-partner-playbook.md))
+4. Send 5 outreaches from `ops/private/msb/OUTREACH_EMAILS.md` · track in `OUTREACH_TRACKER.md`
 
 ---
 

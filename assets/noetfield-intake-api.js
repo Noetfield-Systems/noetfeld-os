@@ -91,8 +91,14 @@
         source: "web",
         metadata: { page: window.location.pathname },
       })
-        .then(function () {
+        .then(function (data) {
           if (okWrap) okWrap.style.display = "block";
+          var idEl = document.getElementById("tbIntakeId");
+          if (idEl && data && data.intake_id) {
+            idEl.textContent = "ID " + data.intake_id;
+          } else if (idEl) {
+            idEl.textContent = "confirmation pending";
+          }
           if (submitBtn) submitBtn.textContent = "Sent";
           form.scrollIntoView({ behavior: "smooth", block: "end" });
         })
