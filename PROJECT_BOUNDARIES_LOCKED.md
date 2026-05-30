@@ -20,9 +20,9 @@
 
 ## Noetfield north star (one line)
 
-Client-facing governance platform and API **before** external execution — Noetfield never touches value ([PRODUCT_TRUTH.md](PRODUCT_TRUTH.md)). Other companies (TrustField, VIRLUX) are separate paths.
+Governance execution, AI policy enforcement, and risk intelligence **before** external execution — Noetfield never touches value ([PRODUCT_TRUTH.md](PRODUCT_TRUTH.md)). Other companies (TrustField, VIRLUX) are separate paths.
 
-**Go-forward (simple):** [docs/strategy/GO_FORWARD_NOW.md](docs/strategy/GO_FORWARD_NOW.md)
+**Internal go-forward:** [docs/strategy/GO_FORWARD_NOW.md](docs/strategy/GO_FORWARD_NOW.md)
 
 **Public roadmap:** [docs/ROADMAP.md](docs/ROADMAP.md) · [docs/strategy/noetfield-future-path.md](docs/strategy/noetfield-future-path.md)  
 **Execution:** [GitHub Issues](https://github.com/kazemnezhadsina144-dot/Noetfield/issues) · [ops/README.md](ops/README.md)
