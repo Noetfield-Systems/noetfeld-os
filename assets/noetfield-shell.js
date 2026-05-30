@@ -1,4 +1,4 @@
-/* /assets/noetfield-shell.js — v2.4
+/* /assets/noetfield-shell.js — v3.0
    Noetfield Shell:
    - Inject header/footer partials
    - Burger menu (with iOS-safe scroll lock + focus handling)
@@ -12,7 +12,7 @@
 (function () {
   "use strict";
 
-  var SHELL_VERSION = "2025.12.19.2";
+  var SHELL_VERSION = "2026.05.30.1";
   var PARTIALS_BASE = "/assets/partials";
   var RID_KEY = "nf_rid";
 

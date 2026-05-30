@@ -9,7 +9,9 @@
  <meta name="theme-color" content="#07070b" />
  <link rel="canonical" href="https://www.noetfield.com/console/" />
  <link rel="icon" href="/noetfield-favicon-512.png" type="image/png" />
+ <link rel="stylesheet" href="/assets/noetfield-tokens.css" />
  <link rel="stylesheet" href="/assets/noetfield-shell.css" />
+ <link rel="stylesheet" href="/assets/noetfield-components.css" />
  <link rel="stylesheet" href="/assets/noetfield-sales.css" />
  <script src="/assets/noetfield-shell.js" defer></script>
 </head>
@@ -17,28 +19,37 @@
  <div class="bg" aria-hidden="true"></div>
  <a class="skip" href="#main">Skip to content</a>
  <header id="nfHeader"></header>
- <main id="main" class="wrap nf-sales">
- <p class="eyebrow">Governance Console</p>
+ <main id="main" class="wrap nf-page">
+ <header class="nf-hero">
+ <p class="nf-eyebrow">Governance Console</p>
  <h1>Governance Evaluation Interface</h1>
- <p class="lead">
+ <p class="nf-lead">
  Submit operational intent, receive an allow or deny decision, and review the compliance log on your authorized pilot host.
  </p>
- <section class="block">
+ <div class="nf-hero-actions">
+ <a class="btn btn-primary" id="go" href="/trust-brief/intake/">Open Governance Console</a>
+ </div>
+ </header>
+
+ <section class="nf-section">
  <h2>What you get</h2>
  <ul>
  <li><strong>Submit Intent</strong> — describe proposed operational action (evaluate API or console).</li>
  <li><strong>Decision + RID</strong> — request id (<code>RID-…</code>) ties intake, evaluate, and audit export.</li>
  <li><strong>Compliance log</strong> — immutable ledger entries for procurement and E-23 evidence.</li>
  </ul>
- <p style="font-size:13px;color:var(--muted);">Pilot SSO: enterprise identity provider integration is configured per engagement (placeholder until IdP cutover).</p>
+ <p style="font-size:var(--text-sm);color:var(--muted2);">Pilot SSO: enterprise identity provider integration is configured per engagement (placeholder until IdP cutover).</p>
  </section>
- <div class="cta-bar">
- <div><strong>Open console</strong><p>Runs on platform.noetfield.com or local pilot (development)</p></div>
- <a class="btn btn-primary" id="go" href="/trust-brief/intake/">Open Governance Console</a>
+
+ <aside class="nf-cta-band">
+ <div>
+ <h2>Request Governance Brief</h2>
+ <p>Enterprise access to the evaluation interface</p>
  </div>
- <p style="margin-top:16px;font-size:13px;color:var(--muted);">
- <a href="/trust-brief/intake/" data-rid-link>Request Governance Brief</a> for enterprise access.
- </p>
+ <div class="nf-cta-actions">
+ <a class="btn btn-primary" href="/trust-brief/intake/" data-rid-link>Request Governance Brief</a>
+ </div>
+ </aside>
  </main>
  <footer id="nfFooter"></footer>
  <script>

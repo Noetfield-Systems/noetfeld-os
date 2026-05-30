@@ -1,0 +1,367 @@
+/* Noetfield components v3 — bank-grade GTM surfaces */
+
+.nf-page {
+  max-width: 100%;
+  padding: 12px 0 var(--section-y);
+}
+
+/* —— Hero —— */
+.nf-hero {
+  position: relative;
+  border-radius: calc(var(--radius) + 8px);
+  border: 1px solid var(--gold-dim);
+  background:
+    radial-gradient(1000px 420px at 8% 0%, rgba(200, 163, 73, 0.18), transparent 58%),
+    radial-gradient(800px 360px at 100% 0%, rgba(122, 167, 255, 0.08), transparent 55%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.065), rgba(255, 255, 255, 0.02));
+  box-shadow: var(--shadow2);
+  padding: clamp(28px, 5vw, 44px);
+  margin-bottom: var(--section-y);
+  overflow: hidden;
+}
+.nf-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(120deg, rgba(200, 163, 73, 0.12), transparent 42%, transparent);
+  pointer-events: none;
+  opacity: 0.7;
+}
+.nf-hero > * {
+  position: relative;
+  z-index: 1;
+}
+.nf-hero .nf-eyebrow {
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  color: var(--gold);
+  font-weight: 600;
+  margin: 0 0 14px;
+}
+.nf-hero h1 {
+  font-family: var(--font-serif);
+  font-size: var(--text-xl);
+  font-weight: 600;
+  line-height: var(--leading-tight);
+  letter-spacing: -0.02em;
+  margin: 0 0 16px;
+  max-width: 22ch;
+}
+.nf-hero .nf-lead {
+  font-size: clamp(0.95rem, 2.5vw, 1.08rem);
+  line-height: var(--leading-body);
+  color: var(--muted);
+  max-width: 65ch;
+  margin: 0;
+}
+.nf-hero .nf-hero-actions {
+  margin-top: 28px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
+
+/* —— PRS grid —— */
+.nf-section-label {
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  color: var(--gold);
+  font-weight: 700;
+  margin: 0 0 20px;
+}
+.nf-prs {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(3, 1fr);
+  margin-bottom: var(--section-y);
+}
+@media (max-width: 900px) {
+  .nf-prs {
+    grid-template-columns: 1fr;
+  }
+}
+.nf-prs-card {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 22px 20px;
+  background: var(--panel2);
+  transition: border-color var(--motion-fast) ease, transform var(--motion-fast) ease;
+}
+.nf-prs-card:hover {
+  border-color: var(--gold-dim);
+  transform: translateY(-2px);
+}
+.nf-prs-card .nf-prs-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  border: 1px solid var(--gold-dim);
+  color: var(--gold);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+.nf-prs-card h2 {
+  font-size: 1.05rem;
+  font-weight: 650;
+  margin: 0 0 10px;
+  font-family: var(--font-sans);
+}
+.nf-prs-card p {
+  margin: 0;
+  font-size: var(--text-sm);
+  color: var(--muted);
+  line-height: var(--leading-body);
+}
+
+/* —— Trust strip —— */
+.nf-trust {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(3, 1fr);
+  margin-bottom: var(--section-y);
+  padding: 20px 0;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+@media (max-width: 768px) {
+  .nf-trust {
+    grid-template-columns: 1fr;
+  }
+}
+.nf-trust-item {
+  text-align: center;
+  padding: 8px 12px;
+}
+.nf-trust-item strong {
+  display: block;
+  font-size: var(--text-sm);
+  color: var(--text);
+  margin-bottom: 4px;
+}
+.nf-trust-item span {
+  font-size: var(--text-xs);
+  color: var(--muted2);
+  letter-spacing: 0.04em;
+}
+
+/* —— Offerings —— */
+.nf-offerings {
+  margin-bottom: var(--section-y);
+}
+.nf-offerings .nf-dir-grid {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(3, 1fr);
+}
+@media (max-width: 900px) {
+  .nf-offerings .nf-dir-grid {
+    grid-template-columns: 1fr;
+  }
+}
+.nf-offerings .nf-dir-card {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 22px 20px;
+  background: var(--panel2);
+  display: flex;
+  flex-direction: column;
+  min-height: 200px;
+  transition: border-color var(--motion-fast) ease, transform var(--motion-fast) ease;
+}
+.nf-offerings .nf-dir-card:hover {
+  border-color: var(--gold-dim);
+  transform: translateY(-2px);
+}
+.nf-offerings .nf-dir-card.featured {
+  border-color: rgba(200, 163, 73, 0.42);
+  background: linear-gradient(180deg, rgba(200, 163, 73, 0.09), rgba(255, 255, 255, 0.02));
+}
+.nf-offerings .meta {
+  font-size: var(--text-xs);
+  color: var(--muted2);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-caps);
+  margin: 0 0 8px;
+}
+.nf-offerings .price {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--gold);
+  margin: 0 0 12px;
+}
+.nf-offerings .nf-dir-card p {
+  font-size: var(--text-sm);
+  color: var(--muted);
+  line-height: var(--leading-body);
+  margin: 0 0 auto;
+  flex: 1;
+}
+.nf-offerings .nf-badge {
+  display: inline-block;
+  font-size: var(--text-xs);
+  color: var(--muted2);
+  margin-bottom: 12px;
+}
+.nf-offerings .nf-dir-card .btn {
+  margin-top: 16px;
+  align-self: flex-start;
+}
+
+/* —— CTA band —— */
+.nf-cta-band {
+  margin-top: var(--section-y);
+  padding: clamp(22px, 4vw, 32px);
+  border-radius: var(--radius);
+  border: 1px solid rgba(200, 163, 73, 0.38);
+  background:
+    radial-gradient(600px 200px at 0% 0%, rgba(200, 163, 73, 0.12), transparent 60%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-items: center;
+  justify-content: space-between;
+}
+.nf-cta-band h2 {
+  font-size: 1.1rem;
+  margin: 0;
+  font-weight: 650;
+}
+.nf-cta-band p {
+  margin: 6px 0 0;
+  font-size: var(--text-sm);
+  color: var(--muted);
+}
+.nf-cta-band .nf-cta-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+/* —— Content section —— */
+.nf-section {
+  margin-bottom: var(--section-y);
+}
+.nf-section h2 {
+  font-size: 1.15rem;
+  font-weight: 650;
+  margin: 0 0 14px;
+}
+.nf-section p,
+.nf-section li {
+  color: var(--muted);
+  line-height: var(--leading-body);
+  font-size: var(--text-sm);
+  max-width: 72ch;
+}
+.nf-section ul {
+  padding-left: 1.25rem;
+  margin: 0 0 12px;
+}
+
+/* —— API table —— */
+.nf-api-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--text-sm);
+  margin: 16px 0;
+}
+.nf-api-table th,
+.nf-api-table td {
+  text-align: left;
+  padding: 12px 10px;
+  border-bottom: 1px solid var(--line);
+  vertical-align: top;
+}
+.nf-api-table th {
+  color: var(--gold);
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.nf-api-table code {
+  font-size: 0.85em;
+  color: var(--text);
+}
+
+/* —— Status panel —— */
+.nf-status-panel {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 20px;
+  background: var(--panel2);
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+}
+.nf-status-panel .ok {
+  color: var(--ok);
+}
+.nf-status-panel .warn {
+  color: var(--gold);
+}
+
+/* —— Prose / legal —— */
+.nf-prose h1 {
+  font-family: var(--font-serif);
+  font-size: clamp(1.5rem, 4vw, 2rem);
+  margin: 0 0 16px;
+}
+.nf-prose h2 {
+  font-size: 1.05rem;
+  margin: 28px 0 10px;
+}
+.nf-prose p {
+  color: var(--muted);
+  line-height: var(--leading-body);
+}
+
+.nf-code-block {
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  padding: 16px;
+  overflow: auto;
+  font-size: 12px;
+  line-height: 1.5;
+}
+.nf-code-block code {
+  font-family: ui-monospace, "IBM Plex Mono", monospace;
+  color: var(--text);
+}
+
+/* Backward compat with .nf-sales */
+.nf-sales .eyebrow {
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  color: var(--gold);
+}
+.nf-sales h1 {
+  font-family: var(--font-serif);
+  font-size: var(--text-xl);
+}
+.nf-sales .lead {
+  color: var(--muted);
+  max-width: 65ch;
+  line-height: var(--leading-body);
+}
+.nf-sales .cta-bar {
+  border-color: rgba(200, 163, 73, 0.35);
+  background: linear-gradient(180deg, rgba(200, 163, 73, 0.08), rgba(255, 255, 255, 0.02));
+}
+.nf-sales .btn-primary {
+  border: 1px solid rgba(200, 163, 73, 0.62);
+  background: linear-gradient(180deg, rgba(200, 163, 73, 0.28), rgba(200, 163, 73, 0.12));
+  color: var(--text);
+  font-weight: 650;
+}
+.nf-sales .price {
+  color: var(--gold);
+}
