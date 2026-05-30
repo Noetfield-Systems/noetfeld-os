@@ -39,6 +39,10 @@ curl -sS -X POST "$PLATFORM/api/v1/governance/evaluate" \
 
 Preset JSON also available: `GET /api/v1/governance/scenario-presets/exchange`
 
+## MSB / PSP variant
+
+Use `scenario-presets/msb` and [MSB_STAGING_INTEGRATION.md](./MSB_STAGING_INTEGRATION.md). Intake: `?vector=partner-msb`.
+
 ## Read-only signal example
 
 ```bash

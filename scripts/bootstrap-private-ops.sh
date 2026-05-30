@@ -57,3 +57,4 @@ done
 write_readme
 echo "No history to restore — created ops/private/README.md"
 echo "Add Issues from .github/ISSUE_TEMPLATE/ or copy trackers manually."
+echo "MSB partner pack: run ./scripts/seed-msb-partner-pack.sh"

@@ -113,7 +113,7 @@
 </head>
 <body>
   <div class="banner" role="status">
-    <strong>Shadow mode (Bank Pilot):</strong> evaluations are policy-only — Noetfield does not execute payments or hold custody.
+    <strong>Shadow mode:</strong> evaluations are policy-only — Noetfield does not execute payments or hold custody (Bank Pilot / MSB / exchange).
     Documented API: <code>POST /api/v1/governance/evaluate</code>
   </div>
   <header>
@@ -129,6 +129,10 @@
         <span class="label">Request ID (RID)</span>
         <input type="text" id="ridInput" placeholder="RID-… (auto-generated if empty)" aria-label="Request ID" />
       </div>
+      <p class="hint">Presets: <button type="button" class="secondary" data-preset="bank">Bank</button>
+        <button type="button" class="secondary" data-preset="exchange">Exchange</button>
+        <button type="button" class="secondary" data-preset="msb">MSB</button>
+        <button type="button" class="secondary" data-preset="copilot">Copilot</button></p>
       <textarea id="intentInput" spellcheck="false" aria-label="Intent under review"></textarea>
       <button type="button" id="submitIntentBtn">Submit Intent</button>
       <p class="err" id="submitError" hidden></p>
@@ -324,6 +328,21 @@
         url.searchParams.set("limit", "500");
         navigator.clipboard.writeText(url.toString()).catch(function () {
           prompt("Audit export URL:", url.toString());
+        });
+      });
+
+      async function loadPreset(name) {
+        try {
+          var res = await fetch(window.location.origin + "/api/v1/governance/scenario-presets/" + name);
+          if (!res.ok) throw new Error("Preset unavailable");
+          intentInput.value = JSON.stringify(await res.json(), null, 2);
+        } catch (e) {
+          alert("Could not load preset: " + name);
+        }
+      }
+      document.querySelectorAll("[data-preset]").forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          loadPreset(btn.getAttribute("data-preset"));
         });
       });
 

@@ -42,6 +42,28 @@ When `GOVERNANCE_WEBHOOK_URLS` is set, each evaluate emits:
 - **No PII** in the default payload.
 - Optional **HMAC** via `GOVERNANCE_WEBHOOK_SECRET` → header `X-Noetfield-Signature: sha256=…`.
 
+## Licensed MSB / PSP pattern
+
+MSBs and RPAA-supervised PSPs call evaluate **before** their own payment or remittance APIs. Noetfield never places orders or holds funds.
+
+```mermaid
+sequenceDiagram
+  participant App as MSB_application
+  participant NF as Noetfield_evaluate
+  participant Pay as MSB_payment_API
+
+  App->>NF: evaluate initiate_transfer_intent msb_payment shadow
+  NF-->>App: allowed + RID
+  alt allowed
+    App->>Pay: licensed_execution_only
+    App->>NF: partner-signals read_only
+  end
+```
+
+- Preset: `GET /api/v1/governance/scenario-presets/msb`
+- Guide: [MSB_STAGING_INTEGRATION.md](../MSB_STAGING_INTEGRATION.md)
+- Intake: `vector=partner-msb`
+
 ## SIEM / GRC
 
 Map `reason_code` and `policy_refs` to ServiceNow, Archer, or Splunk using `request_id` as the correlation key shared with intake (`POST /api/intake`) and ops email.

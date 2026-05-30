@@ -48,6 +48,11 @@
  <a class="btn btn-secondary" href="/partners/">Partners hub</a>
  <a class="btn btn-secondary" id="giPartner" href="/trust-brief/intake/?vector=partner-gateway">Partner intake</a>
  </article>
+ <article class="nf-dir-card featured">
+ <h3>Licensed MSB / PSP</h3>
+ <p>Control layer before your payment APIs — FINTRAC/RPAA execution stays with you.</p>
+ <a class="btn btn-secondary" id="giPartnerMsb" href="/trust-brief/intake/?vector=partner-msb&amp;interest=partner-msb">MSB partner intake</a>
+ </article>
  <article class="nf-dir-card">
  <h3>Licensed exchange / VASP</h3>
  <p>Shadow evaluate + read-only signals; partner executes.</p>
@@ -78,7 +83,7 @@
        vector || "gate-intake"
      );
    }
-   ["giTrustBrief", "giCopilot", "giBankPilot", "giPartner", "giPartnerExchange"].forEach(function (id) {
+   ["giTrustBrief", "giCopilot", "giBankPilot", "giPartner", "giPartnerMsb", "giPartnerExchange"].forEach(function (id) {
      var el = document.getElementById(id);
      if (!el || !vector) return;
      try {

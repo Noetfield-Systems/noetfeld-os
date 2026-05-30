@@ -67,6 +67,9 @@ sitemap:
 generate-openapi:
 	PYTHONPATH=$(PYTHONPATH_VALUE) python3 scripts/generate_public_openapi.py
 
+seed-msb-pack:
+	./scripts/seed-msb-partner-pack.sh
+
 go-live-check:
 	@echo "See docs/GO_LIVE.md — run deploy_platform_smoke.sh against production when DNS is ready."
 

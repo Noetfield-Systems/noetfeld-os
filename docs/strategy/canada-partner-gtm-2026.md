@@ -105,6 +105,12 @@ Public pages: [/partners/](../../partners/), [/trust-ledger/](../../trust-ledger
 
 ---
 
+## MSB channel (fast revenue)
+
+- [msb-partner-playbook.md](./msb-partner-playbook.md)
+- [MSB_DEPLOY_AND_PILOT.md](../MSB_DEPLOY_AND_PILOT.md)
+- [MSB_STAGING_INTEGRATION.md](../MSB_STAGING_INTEGRATION.md)
+
 ## Related docs
 
 - [docs/api/PARTNER_PRE_EXECUTION.md](../api/PARTNER_PRE_EXECUTION.md)

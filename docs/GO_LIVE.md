@@ -23,5 +23,6 @@ PLATFORM_HEALTH_BASE=https://platform.noetfield.com ./scripts/deploy_platform_sm
 Exit code **0** means health checks passed.
 
 8. **Pilot API** — set `GOVERNANCE_PILOT_API_KEYS` and `GOVERNANCE_PILOT_AUTH_REQUIRED=true` in production; publish [docs/api/](./api/)
+9. **MSB partners** — [MSB_DEPLOY_AND_PILOT.md](./MSB_DEPLOY_AND_PILOT.md) · seed pack: `./scripts/seed-msb-partner-pack.sh`
 
 Optional: Telegram ([TELEGRAM_BOT_SETUP.md](./TELEGRAM_BOT_SETUP.md)).

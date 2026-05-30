@@ -33,3 +33,10 @@ def test_exchange_preset_shadow() -> None:
     preset = partner_evaluate_scenario_preset("exchange")
     assert preset["mode"] == "shadow"
     assert preset["resource_type"] == "partner_exchange"
+
+
+def test_msb_preset_shadow() -> None:
+    preset = partner_evaluate_scenario_preset("msb")
+    assert preset["mode"] == "shadow"
+    assert preset["resource_type"] == "msb_payment"
+    assert preset["action"] == "initiate_transfer_intent"

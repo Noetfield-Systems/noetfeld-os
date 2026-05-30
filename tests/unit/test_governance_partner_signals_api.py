@@ -72,3 +72,13 @@ def test_scenario_preset_exchange() -> None:
             assert response.json()["resource_type"] == "partner_exchange"
 
     asyncio.run(run())
+
+
+def test_scenario_preset_msb() -> None:
+    async def run() -> None:
+        async with governance_test_client() as client:
+            response = await client.get("/api/v1/governance/scenario-presets/msb")
+            assert response.status_code == 200
+            assert response.json()["resource_type"] == "msb_payment"
+
+    asyncio.run(run())

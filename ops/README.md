@@ -23,9 +23,11 @@
 
 ```bash
 ./scripts/bootstrap-private-ops.sh
+./scripts/seed-msb-partner-pack.sh
 ```
 
-Creates `ops/private/todolist/` and `ops/private/docs/` from git history when available.
+Creates `ops/private/todolist/` and `ops/private/docs/` from git history when available.  
+MSB commercial templates (SOW, one-pager, outreach tracker) copy from [ops/templates/msb/](templates/msb/) → `ops/private/msb/`.
 
 ---
 

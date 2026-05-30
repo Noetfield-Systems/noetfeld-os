@@ -1,0 +1,37 @@
+name: MSB partner channel
+description: Track MSB outreach, Shadow Pack, or staging integration
+title: "[MSB] "
+labels:
+  - launch
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Playbook: docs/strategy/msb-partner-playbook.md
+        Private tracker: run `./scripts/seed-msb-partner-pack.sh` → ops/private/msb/
+  - type: input
+    id: msb_name
+    attributes:
+      label: MSB / PSP name
+  - type: dropdown
+    id: stage
+    attributes:
+      label: Stage
+      options:
+        - outreach
+        - shadow_week_demo
+        - shadow_pack_sow
+        - trust_brief_referral
+        - staging_integration
+        - api_license
+  - type: textarea
+    id: next_step
+    attributes:
+      label: Next step
+  - type: checkboxes
+    id: boundary
+    attributes:
+      label: Boundary confirmed
+      options:
+        - label: No payment execution or MSB registration claims for Noetfield
+          required: true

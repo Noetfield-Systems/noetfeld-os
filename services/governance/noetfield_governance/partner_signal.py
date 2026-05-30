@@ -106,6 +106,13 @@ def partner_evaluate_scenario_preset(preset: str) -> dict[str, Any]:
             "resource_id": "copilot-session-1",
             "payload": {"partner_program": "copilot"},
         },
+        "msb": {
+            **base,
+            "action": "initiate_transfer_intent",
+            "resource_type": "msb_payment",
+            "resource_id": "staging-transfer-001",
+            "payload": {"partner_program": "msb", "currency": "CAD", "read_only_signal": True},
+        },
     }
     if preset not in presets:
         raise ValueError(f"unknown preset: {preset}")
