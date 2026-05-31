@@ -23,9 +23,15 @@ services:
       - "8181:8181"
 
   ollama:
-    image: ollama/ollama:latest
+    # Pin matches docs/strategy/local-ollama-agent-runtime-blueprint.md (>= 0.24.0)
+    image: ollama/ollama:0.24.0
     ports:
       - "11434:11434"
+    environment:
+      OLLAMA_NUM_GPU: "20"
+      OLLAMA_NUM_PARALLEL: "1"
+      OLLAMA_NUM_CTX: "2048"
+      OLLAMA_KEEP_ALIVE: "5m"
     volumes:
       - noetfield_ollama:/root/.ollama
 

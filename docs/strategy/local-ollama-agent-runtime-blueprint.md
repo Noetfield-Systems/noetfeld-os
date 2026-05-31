@@ -1,200 +1,241 @@
-# Local Ollama & Agent Runtime Blueprint
+# Local Ollama & Agent Runtime Blueprint (LOCKED PLAN)
 
-**Status:** Active reference for founder workstation / local agent development  
-**Authority:** Supersedes ad-hoc chat notes on local LLM choice; **does not** override production chat (OpenRouter/Gemini on `platform.noetfield.com`).  
-**Scope:** Apple Silicon laptop (M5 Pro, 48 GB unified memory) · Ollama · Cursor/agent loops · **not** Noetfield public GTM.
+**Status:** LOCKED — founder workstation & local agent development only  
+**Supersedes:** Informal chat notes on model choice and Ollama tuning  
+**Does not override:** [PRODUCT_TRUTH.md](../../PRODUCT_TRUTH.md), [POSITIONING.md](../../POSITIONING.md), production chat ([CHATBOT_SETUP.md](../CHATBOT_SETUP.md))  
+**Scope:** Apple Silicon MacBook Pro (M5 Pro, 48 GB unified memory) · Ollama · Cursor/agent loops  
+**Not in scope:** Noetfield public GTM, payments, custody, settlement, or production `platform.noetfield.com` chat
 
-**Related:** [L3-external/README.md](../../L3-external/README.md) (Ollama = local dev only) · [docs/CHATBOT_SETUP.md](../CHATBOT_SETUP.md) (production keys) · `infrastructure/docker/docker-compose.yml` (optional Ollama service).
+**Companion files:** [ollama.env.example](./ollama.env.example) · [scripts/local-ollama-bootstrap.sh](../../scripts/local-ollama-bootstrap.sh)
 
 ---
 
-## 1. Design principle
+## 1. Purpose
+
+This document is the **single English source of truth** for how the founder runs local LLMs while building Noetfield:
+
+- Which models to pull and which to avoid for 24/7 agent use  
+- How to tune Ollama for thermals, RAM, and fan noise on 48 GB Apple Silicon  
+- When Ollama must be on vs off (on-demand, not always-on)  
+- How this relates to the **Noetfield repo stack** (cloud LLM in production, Ollama in local dev only)
+
+---
+
+## 2. Design principles (locked)
 
 | Rule | Rationale |
 |------|-----------|
 | **On-demand, not 24/7** | Always-on large models keep GPU/ANE busy → fan noise, heat, battery drain |
-| **Smallest model that passes agent tasks** | Agent OS loops amplify token volume; latency and RAM matter more than benchmark max |
-| **Production stays cloud** | Public chat, Telegram, and pilots use OpenRouter/Gemini with keys in env — not laptop Ollama |
-| **Unload when idle** | `OLLAMA_KEEP_ALIVE` + explicit `ollama stop` when agents finish |
+| **Smallest model that passes agent tasks** | Agent loops multiply tokens; latency and RAM beat benchmark maximums |
+| **Production stays cloud** | Public chat, Telegram, and pilots use OpenRouter/Gemini — not laptop Ollama |
+| **Unload when idle** | `OLLAMA_KEEP_ALIVE=5m` and/or `ollama stop` when agents finish |
+| **No financial execution narrative** | Local stack supports **governance/dev work**, not payments or routing products |
 
-> **One line:** Local Ollama is a **dev inference utility**, not a always-on “Agent OS brain.”
-
----
-
-## 2. Hardware profile (locked default)
-
-| Item | Value |
-|------|--------|
-| Machine | MacBook Pro, Apple M5 Pro |
-| RAM | 48 GB unified |
-| Role | Local Cursor agents, repo work, optional offline inference |
-| Not for | 24/7 datacenter substitute, production Noetfield traffic |
+> **One line:** Local Ollama is a **development inference utility**, not an always-on “Agent OS” production brain.
 
 ---
 
-## 3. Model matrix
+## 3. Target hardware (locked profile)
 
-### Recommended (daily driver)
-
-| Model | Quant | Role | RAM (~) | Speed (~) | Fan / thermals |
-|-------|-------|------|---------|-----------|----------------|
-| **Qwen3 14B** | `Q4_K_M` | **Sweet spot** — default local agent model | ~9 GB | ~30–40 tok/s | Low → medium |
-| **Phi-4** | (vendor default) | Fast, light, cool — quick edits & classification | Lower than 14B | High | Low |
-| **Gemma 3 12B** | `Q4_K_M` | Light, precise — structured tasks | ~8–10 GB | Good | Low |
-
-### Acceptable (heavier sessions, not 24/7)
-
-| Model | Quant | Role | RAM (~) | Speed (~) | Fan / thermals |
-|-------|-------|------|---------|-----------|----------------|
-| **Qwen3 32B** | `Q4_K_M` | Stronger reasoning when 14B fails a task | ~20 GB | ~15–20 tok/s | Medium |
-
-### Not recommended (local agent / 24/7)
-
-| Model | Why avoid |
-|-------|-----------|
-| **Qwen3 72B** | Too heavy; fan runs hot continuously |
-| **Llama 4 Scout** | Heavy for laptop sustained agent use |
-| **Llama 70B+** | RAM and thermals; poor fit for intermittent agent loops |
-| **Any model >40B** as **always-loaded** default | Leaves little headroom for IDE, browser, Postgres, Docker stack |
-
-**Note:** Large models can be run **occasionally** for one-off experiments; they are excluded from the **default operating policy**, not from the machine entirely.
+| Item | Locked value |
+|------|----------------|
+| Machine | MacBook Pro, Apple **M5 Pro** |
+| Unified memory | **48 GB** |
+| Role | Cursor agents, repo development, optional offline inference |
+| Explicitly not | 24/7 datacenter substitute; production Noetfield traffic |
 
 ---
 
-## 4. Ollama runtime tuning (48 GB, Qwen3 14B default)
+## 4. Ollama application version (install target)
 
-Copy into shell profile or `~/.ollama/env` (adjust if using Docker — pass env to `ollama` service):
+| Item | Locked recommendation |
+|------|------------------------|
+| **Ollama app** | **Latest stable ≥ 0.24.0** from [https://ollama.com/download/mac](https://ollama.com/download/mac) or `brew install ollama` |
+| **Verified upstream (May 2026)** | [v0.24.0](https://github.com/ollama/ollama/releases/tag/v0.24.0) — MLX sampler improvements on Apple Silicon |
+| **Docker (repo dev stack)** | Pin `ollama/ollama:0.24.0` in `infrastructure/docker/docker-compose.yml` — do not use unpinned `:latest` in locked environments |
+| **API endpoint** | `http://localhost:11434` (OpenAI-compatible: `http://localhost:11434/v1`) |
+
+**After install, verify:**
 
 ```bash
-# Cap GPU offload — avoid pinning entire model to GPU layers (reduces sustained heat)
+ollama --version          # expect 0.24.x or newer
+curl -s http://127.0.0.1:11434/api/version
+```
+
+**Install and bootstrap (Mac):**
+
+```bash
+./scripts/local-ollama-bootstrap.sh
+```
+
+---
+
+## 5. Default model (locked)
+
+| Field | Locked value |
+|-------|----------------|
+| **Primary model** | `qwen3:14b` (Ollama registry; quant defaults to **Q4_K_M**, ~9 GB) |
+| **Pull once** | `ollama pull qwen3:14b` |
+| **Warm run** | `ollama run qwen3:14b` (interactive) or HTTP API for Cursor |
+| **Expected on 48 GB M5 Pro** | ~30–40 tokens/sec · ~9 GB model RAM · low–medium fan |
+
+### Secondary models (optional, on-demand)
+
+| Model | When to use |
+|-------|-------------|
+| `phi4` | Fast, cool — classification, short rewrites |
+| `gemma3:12b` | Light, structured tasks |
+| `qwen3:32b` | Harder reasoning session only — ~20 GB, medium thermals — **not** 24/7 default |
+
+### Not recommended as always-loaded defaults
+
+| Model | Reason |
+|-------|--------|
+| `qwen3:72b` | Too heavy; sustained high fan |
+| `llama4-scout` (and similar large scouts) | Heavy for laptop agent loops |
+| Llama **70B+** | RAM/thermals; poor fit for intermittent agents |
+| Any **>40B** loaded 24/7 | Leaves insufficient headroom for IDE, Docker, browser |
+
+Occasional one-off runs for experiments are allowed; they are excluded from **default operating policy**, not from the machine.
+
+---
+
+## 6. Ollama runtime environment (locked)
+
+Apply via `~/.ollama/env`, shell profile, or [ollama.env.example](./ollama.env.example):
+
+```bash
 OLLAMA_NUM_GPU=20
-
-# One inference at a time — agents should not parallel-blast the daemon
 OLLAMA_NUM_PARALLEL=1
-
-# Smaller context — agent turns rarely need 8k+ locally; saves RAM and prefill time
 OLLAMA_NUM_CTX=2048
-
-# Unload model weights after idle (5 minutes)
 OLLAMA_KEEP_ALIVE=5m
 ```
 
-| Variable | Default tendency | Blueprint value | Effect |
-|----------|------------------|-------------------|--------|
-| `OLLAMA_NUM_GPU` | Full offload | `20` | Less aggressive GPU residency → cooler, more CPU/RAM mix |
-| `OLLAMA_NUM_PARALLEL` | >1 | `1` | Predictable latency; no queue spikes |
-| `OLLAMA_NUM_CTX` | 4096+ | `2048` | Lower KV cache footprint |
-| `OLLAMA_KEEP_ALIVE` | long / infinite | `5m` | Auto-unload after idle |
+| Variable | Locked value | Effect |
+|----------|--------------|--------|
+| `OLLAMA_NUM_GPU` | `20` | Cap GPU offload — reduces sustained heat vs full offload |
+| `OLLAMA_NUM_PARALLEL` | `1` | One inference at a time for predictable agent latency |
+| `OLLAMA_NUM_CTX` | `2048` | Smaller KV cache — enough for most agent turns |
+| `OLLAMA_KEEP_ALIVE` | `5m` | Unload weights after five minutes idle |
 
 ---
 
-## 5. Operating modes
+## 7. Operating schedule (locked)
 
-### Mode A — On-demand (recommended)
-
-```mermaid
-stateDiagram-v2
-  [*] --> Stopped: Ollama off
-  Stopped --> Running: Agent task starts
-  Running --> Inference: Model loaded
-  Inference --> Idle: Agent step done
-  Idle --> Stopped: keep_alive expired OR ollama stop
-```
+### Mode A — On-demand (default)
 
 | Phase | Action |
 |-------|--------|
-| **Agent starts work** | `ollama serve` (if not running) · `ollama run qwen3:14b` or API pull once |
-| **During work** | Cursor/agent calls `localhost:11434` |
-| **Agent session ends** | Rely on `OLLAMA_KEEP_ALIVE=5m` **or** `ollama stop` for full shutdown |
-| **Overnight** | **No** 24/7 daemon — laptop cool, silent |
+| Agent / Cursor session starts | Start Ollama if stopped: `ollama serve` or macOS app |
+| During work | Inference against `localhost:11434` |
+| Session ends | Wait for `OLLAMA_KEEP_ALIVE=5m` **or** run `ollama stop` |
+| Overnight | **No** 24/7 daemon |
 
-### Mode B — Scheduled (optional)
+### Mode B — Optional daily rhythm
 
 | Time | Action |
 |------|--------|
-| Morning | `ollama serve` + warm-load **Qwen3 14B Q4_K_M** |
-| Workday | On-demand inference per agent |
-| Evening | `ollama stop` (hard off) **or** trust `OLLAMA_KEEP_ALIVE=5m` |
+| Morning | `ollama serve` + optional `ollama run qwen3:14b` warm-up |
+| Workday | On-demand calls only |
+| Evening | `ollama stop` (full shutdown) |
 
-### Forbidden policy
+### Forbidden
 
-- **24/7 loaded Qwen3 32B/72B** on laptop as “Agent OS server”
-- Using local Ollama as **production** backend for `www` / `platform` chat (use OpenRouter per [CHATBOT_SETUP.md](../CHATBOT_SETUP.md))
-
----
-
-## 6. Resource budget (Qwen3 14B Q4_K_M on 48 GB)
-
-| Resource | Usage | Headroom |
-|----------|--------|----------|
-| Model weights + KV (ctx 2048) | ~9 GB | ~39 GB for macOS, IDE, Docker (Postgres, Redis), browser |
-| Qwen3 32B Q4_K_M (when used) | ~20 GB | ~28 GB — acceptable for focused sessions only |
+- 24/7 loaded **Qwen3 32B/72B** as laptop “Agent OS server”  
+- Pointing **production** Noetfield chat at laptop Ollama ([CHATBOT_SETUP.md](../CHATBOT_SETUP.md) forbids this pattern)
 
 ---
 
-## 7. Noetfield repo alignment
+## 8. Resource budget (48 GB, default `qwen3:14b`)
 
-| Environment | LLM authority |
-|-------------|----------------|
-| **Production** `platform.noetfield.com` | `OPENROUTER_API_KEY` / `GEMINI_API_KEY` · `PUBLIC_CHAT_PROVIDER=auto` |
-| **Local platform dev** | `.env` may set `AI_PROVIDER=ollama` + `OLLAMA_BASE_URL=http://localhost:11434` |
-| **Docker dev stack** | `infrastructure/docker/docker-compose.yml` → `ollama` service on `:11434` |
-| **Governance Console MVP** | No LLM required (deterministic v1 engine) |
-
-When testing **public chat behavior**, always validate against cloud provider keys — not laptop Ollama.
+| Configuration | RAM (approx.) | Headroom |
+|---------------|---------------|----------|
+| Qwen3 14B Q4_K_M + ctx 2048 | ~9 GB | ~39 GB for macOS, IDE, Docker, browser |
+| Qwen3 32B Q4_K_M (session) | ~20 GB | ~28 GB — acceptable for focused work only |
 
 ---
 
-## 8. Quick reference card (locked defaults)
+## 9. Noetfield repository stack (current)
+
+How local Ollama fits the **monorepo** today:
+
+| Layer | Technology | Ollama role |
+|-------|------------|-------------|
+| **Public www** | Static HTML + shell | None — chat uses platform API |
+| **Production platform** | FastAPI `noetfield_governance` | **OpenRouter / Gemini** (`PUBLIC_CHAT_PROVIDER`) |
+| **Local `.env`** | `AI_PROVIDER=ollama`, `OLLAMA_BASE_URL=http://localhost:11434` | Optional local platform dev |
+| **Docker dev** | `infrastructure/docker/docker-compose.yml` | `ollama` service on `:11434` (pinned image) |
+| **Governance Console MVP** | `governance-console/` | **No LLM** — deterministic rules v1 |
+| **Phase 3 CI** | Postgres + pytest | No Ollama in CI |
+| **L3 boundary** | [L3-external/README.md](../../L3-external/README.md) | Ollama = **local dev only**, not production authority |
+
+**Production LLM path (locked):** keys in env → OpenRouter/Gemini → never commit keys → never use laptop Ollama for `www` visitor chat.
+
+---
+
+## 10. Current environment snapshot
+
+Recorded for agents and founders comparing **cloud dev VMs** vs **target Mac**.
+
+| Environment | Where | Ollama | RAM | Notes |
+|-------------|-------|--------|-----|-------|
+| **Target workstation** | M5 Pro MacBook, 48 GB | Install **0.24.x** per §4 | 48 GB | This plan applies here |
+| **Typical cloud agent VM** (e.g. Cursor background) | Linux x86_64 | Often **not installed** | ~16 GB | Use cloud APIs for agents; do not assume Ollama |
+| **This repo clone (example)** | Linux CI/dev | Not running | ~15 GB | Run `local-ollama-bootstrap.sh` only on Mac target |
+
+Re-run snapshot on your Mac:
+
+```bash
+uname -m && sysctl hw.memsize 2>/dev/null
+command -v ollama && ollama --version
+curl -s http://127.0.0.1:11434/api/version || echo "Ollama not running"
+ollama list 2>/dev/null || true
+```
+
+---
+
+## 11. Quick reference card
 
 ```
-✅ Model:        Qwen3 14B Q4_K_M
-✅ Keep alive:   5m
-✅ Context:      2048
-✅ Parallel:     1
-✅ GPU layers:   20 (cap)
-✅ 24/7:         NO — on-demand YES
-✅ Hardware:     M5 Pro 48GB — comfortable at 14B default
+LOCKED PLAN — Local agent runtime (M5 Pro 48 GB)
+────────────────────────────────────────────────
+Ollama:     >= 0.24.0 (install from ollama.com or Homebrew)
+Model:      qwen3:14b  (Q4_K_M ~9 GB)
+GPU cap:    OLLAMA_NUM_GPU=20
+Parallel:   1
+Context:    2048
+Keep alive: 5m
+24/7:       NO — on-demand YES
+Production: OpenRouter/Gemini only (not Ollama)
 ```
 
 ---
 
-## 9. Original operator notes (Persian — preserved)
-
-Source notes consolidated into this blueprint:
-
-- ❌ Qwen3 72B — خیلی سنگین، فن دائم  
-- ❌ Llama 4 Scout — سنگین  
-- ✅ Qwen3 14B — شیرین‌ترین نقطه  
-- ✅ Qwen3 32B — قوی‌تر، کمی گرم‌تر (نه 24/7)  
-- ✅ Phi-4 — سبک، سریع، خنک  
-- ✅ Gemma3 12B — سبک و دقیق  
-- مدل‌های بالای 40B برای Agent OS دائمی روی لپ‌تاپ توصیه نمی‌شوند  
-
----
-
-## 10. Change control
+## 12. Change control
 
 | Change | Requires |
 |--------|----------|
-| New default local model | Update this file + note RAM/speed in §6 |
-| Production LLM switch | Update `CHATBOT_SETUP.md`, `.env.example`, RUNBOOK |
-| Enable Ollama in CI/production | **Rejected** unless explicit infra project — conflicts L3 lock |
+| New default local model | PR updating this file + §8 budget |
+| Ollama version pin (Docker) | Update `docker-compose.yml` + this §4 |
+| Production LLM provider | [CHATBOT_SETUP.md](../CHATBOT_SETUP.md), `.env.example`, RUNBOOK |
+| Ollama in production CI/deploy | **Rejected** unless new infra ADR — conflicts L3 lock |
 
-**Verification (local):**
+**Verification:**
 
 ```bash
-ollama ps                    # should be empty after idle + keep_alive
+ollama ps
 curl -s http://localhost:11434/api/tags
+make -C governance-console test-api   # unrelated API smoke; platform optional
 ```
 
 ---
 
-## Document hierarchy
+## 13. Document hierarchy
 
-| Layer | Doc |
-|-------|-----|
-| Public product | [PRODUCT_TRUTH.md](../../PRODUCT_TRUTH.md) |
-| Production chat | [CHATBOT_SETUP.md](../CHATBOT_SETUP.md) |
-| **Local agent / Ollama** | **This file** |
-| Long-range product vision | [noetfield-future-path.md](./noetfield-future-path.md) |
+| Topic | Authority |
+|-------|-----------|
+| Public product truth | [PRODUCT_TRUTH.md](../../PRODUCT_TRUTH.md) |
+| Production website chat | [CHATBOT_SETUP.md](../CHATBOT_SETUP.md) |
+| **Local Ollama + agent laptop** | **This file (LOCKED)** |
+| Product horizons | [noetfield-future-path.md](./noetfield-future-path.md) |
+| GTM copy | [GTM_COPYBOOK.md](./GTM_COPYBOOK.md) |
