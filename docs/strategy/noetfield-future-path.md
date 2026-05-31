@@ -26,6 +26,8 @@ TrustField Technologies and VIRLUX are **not** part of this document — separat
 
 Noetfield does **not** compete on open-banking TPP accreditation or retail wallets.
 
+**Partner-infra GTM (Canada 2026–27):** [canada-partner-gtm-2026.md](./canada-partner-gtm-2026.md) — licensed VASP/exchange adjacency, Trust Ledger brand, Partner Integration Program.
+
 ---
 
 ## Horizons

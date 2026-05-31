@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8" />
+ <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+ <title>Noetfield — Governance API</title>
+ <meta name="description" content="Institutional governance API: evaluate AI-driven intent, compliance log, audit export. OpenAPI and pilot authentication." />
+ <meta name="robots" content="index,follow" />
+ <link rel="canonical" href="https://www.noetfield.com/docs/api/" />
+ <link rel="icon" href="/noetfield-favicon-512.png" type="image/png" />
+ <link rel="stylesheet" href="/assets/noetfield-shell.css" />
+ <link rel="stylesheet" href="/assets/noetfield-sales.css" />
+ <link rel="stylesheet" href="/assets/noetfield-institutional.css" />
+ <script src="/assets/noetfield-shell.js" defer></script>
+</head>
+<body>
+ <div class="bg" aria-hidden="true"></div>
+ <a class="skip" href="#main">Skip to content</a>
+ <header id="nfHeader"></header>
+ <main id="main" class="wrap nf-sales">
+ <p class="eyebrow">Governance API · Technical reference</p>
+ <h1>Policy evaluate, compliance log, and audit export</h1>
+ <p class="lead">
+ This page is for engineering and procurement: HTTP contracts for governance evaluation, RID lineage, and Trust Ledger export. Product narrative and engagements live on the other surfaces — each with its own scope.
+ </p>
+ <section class="block">
+ <h2>Pilot surface (v1)</h2>
+ <table style="width:100%;font-size:14px;border-collapse:collapse;">
+ <thead>
+ <tr><th style="text-align:left;padding:8px 0;">Method</th><th style="text-align:left;">Route</th><th style="text-align:left;">Role</th></tr>
+ </thead>
+ <tbody>
+ <tr><td><code>POST</code></td><td><code>/api/v1/governance/evaluate</code></td><td>Allow, restrict, or block before external execution</td></tr>
+ <tr><td><code>GET</code></td><td><code>/api/v1/governance/ledger</code></td><td>Compliance log read</td></tr>
+ <tr><td><code>GET</code></td><td><code>/api/v1/governance/audit-export</code></td><td>Procurement / audit slice by RID</td></tr>
+ <tr><td><code>GET</code></td><td><code>/api/v1/governance/vendor-evidence</code></td><td>Vendor due diligence metadata</td></tr>
+ <tr><td><code>POST</code></td><td><code>/api/v1/governance/partner-signals</code></td><td>Read-only operational signals (pilots)</td></tr>
+ <tr><td><code>GET</code></td><td><code>/api/v1/governance/scenario-presets/{name}</code></td><td>Shadow demo payloads (exchange, bank, copilot, msb)</td></tr>
+ </tbody>
+ </table>
+ </section>
+ <section class="block">
+ <h2>Public intake</h2>
+ <ul>
+ <li><code>POST /api/intake</code> — governance brief and partner intakes (RID on every submission)</li>
+ <li><code>POST /api/public/chat</code> — site assistant (rate-limited)</li>
+ <li><code>GET /api/status</code> — platform summary · <a href="/status/">status page</a></li>
+ </ul>
+ </section>
+ <section class="block">
+ <h2>Artifacts</h2>
+ <ul>
+ <li><a href="./openapi.json">openapi.json</a> — machine-readable schema</li>
+ <li><a href="https://github.com/kazemnezhadsina144-dot/Noetfield/tree/main/docs/api">Repository docs</a> — README, Canada trust, partner integration notes</li>
+ <li><code>packages/sdk</code> — Python client for pilot integrations</li>
+ </ul>
+ </section>
+ <section class="block">
+ <h2>Related surfaces</h2>
+ <p style="font-size:14px;color:var(--muted);">
+ <a href="/">Home</a> — governance · AI · risk intelligence ·
+ <a href="/enterprise/">Enterprise</a> — institutional engagements ·
+ <a href="/partners/">Partners</a> — programs and intake ·
+ <a href="/trust-ledger/">Trust Ledger</a> — audit lineage ·
+ <a href="/console/">Governance Console</a> — evaluation UI ·
+ <a href="/bank-pilot/">Bank Pilot</a> — shadow simulation
+ </p>
+ </section>
+ <div class="cta-bar">
+ <div><strong>Pilot access</strong><p>Keys issued per engagement after Trust Brief or partner briefing</p></div>
+ <a class="btn btn-primary" href="/trust-brief/intake/?interest=api-pilot&amp;source=api-docs">Request Governance Brief</a>
+ <a class="btn btn-secondary" href="/status/">Status</a>
+ </div>
+ </main>
+ <footer id="nfFooter"></footer>
+</body>
+</html>

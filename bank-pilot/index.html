@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8" />
+ <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+ <title>Noetfield — Bank Pilot (Shadow Governance)</title>
+ <meta name="description" content="Read-only Bank Pilot: pre-execution policy evaluation in shadow mode for OSFI E-23 readiness." />
+ <link rel="canonical" href="https://www.noetfield.com/bank-pilot/" />
+ <link rel="icon" href="/noetfield-favicon-512.png" type="image/png" />
+ <link rel="stylesheet" href="/assets/noetfield-shell.css" />
+ <link rel="stylesheet" href="/assets/noetfield-sales.css" />
+ <link rel="stylesheet" href="/assets/noetfield-institutional.css" />
+ <script src="/assets/noetfield-shell.js" defer></script>
+</head>
+<body>
+ <div class="bg" aria-hidden="true"></div>
+ <a class="skip" href="#main">Skip to content</a>
+ <header id="nfHeader"></header>
+ <main id="main" class="wrap nf-sales">
+ <p class="eyebrow">Bank Pilot · Shadow mode</p>
+ <h1>Pre-execution governance simulation for FRFI buyers</h1>
+ <p class="lead">
+ Evaluate operational intent against policy <strong>before</strong> any partner or bank execution layer acts. Read-only pilot — no payment rails or custody inside Noetfield.
+ </p>
+ <section class="block">
+ <h2>Sample evaluate (curl)</h2>
+ <pre style="background:#111418;padding:14px;border-radius:8px;overflow:auto;font-size:12px;"><code id="sampleCurl">curl -sS -X POST "$PLATFORM/api/v1/governance/evaluate" \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer $PILOT_API_KEY" \
+  -d '{
+    "tenant_id": "00000000-0000-4000-8000-000000000001",
+    "organization_id": "00000000-0000-4000-8000-000000000002",
+    "action": "publish_board_report",
+    "resource_type": "governance_artifact",
+    "resource_id": "bank-pilot-demo",
+    "mode": "shadow",
+    "request_id": "RID-BANK-PILOT-DEMO"
+  }'</code></pre>
+ </section>
+ <section class="block">
+ <h2>Audit export</h2>
+ <p>Immutable compliance slice by Request ID for vendor due diligence. Full route reference: <a href="/docs/api/">Governance API</a>.</p>
+ </section>
+ <div class="cta-bar">
+ <div><strong>Request Bank Pilot access</strong><p>Engagements via operations intake with RID lineage</p></div>
+ <a class="btn btn-primary" href="/gate/intake/?vector=bank-pilot&amp;interest=bank-pilot">Discuss Bank Pilot</a>
+ </div>
+ <p style="margin-top:16px;">
+ <a class="btn btn-secondary" href="/console/">Governance Console</a>
+ <a class="btn btn-secondary" href="/docs/api/" style="margin-left:8px;">API docs</a>
+ <a class="btn btn-secondary" href="/partners/" style="margin-left:8px;">Exchange / VASP partners</a>
+ </p>
+ </main>
+ <footer id="nfFooter"></footer>
+ <script>
+  (function () {
+    var host = window.location.hostname;
+    var platform = "https://platform.noetfield.com";
+    if (host === "localhost" || host === "127.0.0.1") platform = "http://127.0.0.1:8001";
+    var el = document.getElementById("sampleCurl");
+    if (el) el.textContent = el.textContent.replace(/\$PLATFORM/g, platform);
+  })();
+ </script>
+</body>
+</html>

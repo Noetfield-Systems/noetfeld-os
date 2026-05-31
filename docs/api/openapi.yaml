@@ -1,0 +1,694 @@
+openapi: 3.1.0
+info:
+  title: Noetfield Institutional API
+  description: Public and pilot governance APIs for Noetfield. Pre-execution policy
+    evaluation only — not payments or custody.
+  version: 0.4.0
+  x-non-psp: Noetfield does not execute payments, hold custody, or operate as a PSP/MSB.
+paths:
+  /api/v1/governance/evaluate:
+    post:
+      tags:
+      - governance-v1
+      summary: Governance Evaluate V1
+      operationId: governance_evaluate_v1_api_v1_governance_evaluate_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GovernanceEvaluateV1Request'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GovernanceEvaluateV1Response'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/governance/ledger:
+    get:
+      tags:
+      - governance-v1
+      summary: Governance Ledger V1
+      operationId: governance_ledger_v1_api_v1_governance_ledger_get
+      parameters:
+      - name: tenant_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Tenant Id
+      - name: request_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Request Id
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          default: 100
+          title: Limit
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+                title: Response Governance Ledger V1 Api V1 Governance Ledger Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/governance/audit-export:
+    get:
+      tags:
+      - governance-v1
+      summary: Governance Audit Export V1
+      operationId: governance_audit_export_v1_api_v1_governance_audit_export_get
+      parameters:
+      - name: tenant_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Tenant Id
+      - name: request_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Request Id
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          default: 500
+          title: Limit
+      - name: format
+        in: query
+        required: false
+        schema:
+          const: json
+          type: string
+          default: json
+          title: Format
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+                title: Response Governance Audit Export V1 Api V1 Governance Audit
+                  Export Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/governance/vendor-evidence:
+    get:
+      tags:
+      - governance-v1
+      summary: Governance Vendor Evidence V1
+      description: E-23 / procurement starter pack (public-safe metadata; full pack
+        via secure share).
+      operationId: governance_vendor_evidence_v1_api_v1_governance_vendor_evidence_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                additionalProperties: true
+                type: object
+                title: Response Governance Vendor Evidence V1 Api V1 Governance Vendor
+                  Evidence Get
+  /api/v1/governance/partner-signals:
+    post:
+      tags:
+      - governance-v1
+      summary: Governance Partner Signals V1
+      description: Ingest read-only partner exchange/VASP signals (no order execution
+        from Noetfield).
+      operationId: governance_partner_signals_v1_api_v1_governance_partner_signals_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PartnerSignalIngestRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                additionalProperties: true
+                type: object
+                title: Response Governance Partner Signals V1 Api V1 Governance Partner
+                  Signals Post
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/governance/scenario-presets/{preset}:
+    get:
+      tags:
+      - governance-v1
+      summary: Governance Scenario Preset V1
+      description: 'Demo JSON presets for console: exchange, bank, copilot.'
+      operationId: governance_scenario_preset_v1_api_v1_governance_scenario_presets__preset__get
+      parameters:
+      - name: preset
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Preset
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+                title: Response Governance Scenario Preset V1 Api V1 Governance Scenario
+                  Presets  Preset  Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /health:
+    get:
+      tags:
+      - system
+      summary: Health
+      operationId: health_health_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                additionalProperties: true
+                type: object
+                title: Response Health Health Get
+  /api/status:
+    get:
+      tags:
+      - system
+      summary: Api Status
+      description: Institutional status summary for www status page and monitors.
+      operationId: api_status_api_status_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                additionalProperties: true
+                type: object
+                title: Response Api Status Api Status Get
+  /api/public/chat/health:
+    get:
+      tags:
+      - public-chat
+      summary: Public Chat Health
+      operationId: public_chat_health_api_public_chat_health_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                additionalProperties: true
+                type: object
+                title: Response Public Chat Health Api Public Chat Health Get
+  /api/public/chat:
+    post:
+      tags:
+      - public-chat
+      summary: Public Chat
+      operationId: public_chat_api_public_chat_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PublicChatRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicChatResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/intake/health:
+    get:
+      tags:
+      - intake
+      summary: Intake Health
+      operationId: intake_health_api_intake_health_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                additionalProperties: true
+                type: object
+                title: Response Intake Health Api Intake Health Get
+  /api/intake:
+    post:
+      tags:
+      - intake
+      summary: Public Intake
+      operationId: public_intake_api_intake_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PublicIntakeRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicIntakeResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/ecosystem/public:
+    get:
+      tags:
+      - ecosystem
+      summary: Ecosystem Public
+      description: Non-secret config for www (also in assets/noetfield-ecosystem.json).
+      operationId: ecosystem_public_api_ecosystem_public_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                additionalProperties: true
+                type: object
+                title: Response Ecosystem Public Api Ecosystem Public Get
+  /api/ecosystem/health:
+    get:
+      tags:
+      - ecosystem
+      summary: Ecosystem Health
+      description: Combined status for website chat + Telegram + LLM providers.
+      operationId: ecosystem_health_api_ecosystem_health_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                additionalProperties: true
+                type: object
+                title: Response Ecosystem Health Api Ecosystem Health Get
+components:
+  schemas:
+    ActorType:
+      type: string
+      enum:
+      - human
+      - service
+      - ai
+      - inspector
+      title: ActorType
+    GovernanceEvaluateV1Request:
+      properties:
+        tenant_id:
+          type: string
+          format: uuid
+          title: Tenant Id
+        organization_id:
+          type: string
+          format: uuid
+          title: Organization Id
+        action:
+          type: string
+          title: Action
+        resource_type:
+          type: string
+          title: Resource Type
+        resource_id:
+          type: string
+          title: Resource Id
+        actor_id:
+          type: string
+          title: Actor Id
+          default: governance-api-v1
+        actor_type:
+          $ref: '#/components/schemas/ActorType'
+          default: service
+        confidence:
+          type: number
+          maximum: 1.0
+          minimum: 0.0
+          title: Confidence
+          default: 1.0
+        payload:
+          additionalProperties: true
+          type: object
+          title: Payload
+        request_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Request Id
+          description: RID-… lineage id; auto-generated when omitted.
+        correlation_id:
+          anyOf:
+          - type: string
+            maxLength: 128
+          - type: 'null'
+          title: Correlation Id
+          description: Bank orchestration correlation id (opaque string).
+        mode:
+          type: string
+          enum:
+          - shadow
+          - enforce
+          title: Mode
+          description: Bank Pilot uses shadow only — evaluate without execution side
+            effects.
+          default: shadow
+      additionalProperties: false
+      type: object
+      required:
+      - tenant_id
+      - organization_id
+      - action
+      - resource_type
+      - resource_id
+      title: GovernanceEvaluateV1Request
+    GovernanceEvaluateV1Response:
+      properties:
+        request_id:
+          type: string
+          title: Request Id
+        correlation_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Correlation Id
+        mode:
+          type: string
+          enum:
+          - shadow
+          - enforce
+          title: Mode
+        decision:
+          type: string
+          title: Decision
+        allowed:
+          type: boolean
+          title: Allowed
+        reason:
+          type: string
+          title: Reason
+        reason_code:
+          type: string
+          title: Reason Code
+        policy_refs:
+          items:
+            type: string
+          type: array
+          title: Policy Refs
+        obligations:
+          items:
+            type: string
+          type: array
+          title: Obligations
+        non_psp_boundary:
+          type: string
+          title: Non Psp Boundary
+          default: Noetfield does not execute payments, hold custody, or operate as
+            a PSP/MSB.
+      additionalProperties: false
+      type: object
+      required:
+      - request_id
+      - mode
+      - decision
+      - allowed
+      - reason
+      - reason_code
+      title: GovernanceEvaluateV1Response
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    PartnerSignalIngestRequest:
+      properties:
+        tenant_id:
+          type: string
+          format: uuid
+          title: Tenant Id
+        organization_id:
+          type: string
+          format: uuid
+          title: Organization Id
+        partner_id:
+          type: string
+          maxLength: 120
+          minLength: 1
+          title: Partner Id
+        signal_kind:
+          type: string
+          maxLength: 64
+          title: Signal Kind
+          description: e.g. balance_snapshot, order_status, risk_flag, market_data
+        request_id:
+          anyOf:
+          - type: string
+            maxLength: 64
+          - type: 'null'
+          title: Request Id
+        payload:
+          additionalProperties: true
+          type: object
+          title: Payload
+        actor_id:
+          type: string
+          title: Actor Id
+          default: partner-signal-ingest
+      additionalProperties: false
+      type: object
+      required:
+      - tenant_id
+      - organization_id
+      - partner_id
+      - signal_kind
+      title: PartnerSignalIngestRequest
+      description: Read-only operational signal from a licensed partner (exchange/VASP/PSP).
+    PublicChatRequest:
+      properties:
+        message:
+          type: string
+          maxLength: 2000
+          minLength: 1
+          title: Message
+        session_id:
+          anyOf:
+          - type: string
+            maxLength: 64
+          - type: 'null'
+          title: Session Id
+      additionalProperties: false
+      type: object
+      required:
+      - message
+      title: PublicChatRequest
+    PublicChatResponse:
+      properties:
+        reply:
+          type: string
+          title: Reply
+        provider:
+          type: string
+          title: Provider
+        citations:
+          items:
+            type: string
+          type: array
+          title: Citations
+        intake_email:
+          type: string
+          title: Intake Email
+          default: operations@noetfield.com
+      additionalProperties: false
+      type: object
+      required:
+      - reply
+      - provider
+      title: PublicChatResponse
+    PublicIntakeRequest:
+      properties:
+        organization:
+          type: string
+          maxLength: 200
+          minLength: 1
+          title: Organization
+        contact_email:
+          type: string
+          maxLength: 254
+          minLength: 3
+          title: Contact Email
+        message:
+          type: string
+          maxLength: 8000
+          minLength: 1
+          title: Message
+        contact_name:
+          anyOf:
+          - type: string
+            maxLength: 120
+          - type: 'null'
+          title: Contact Name
+        request_id:
+          anyOf:
+          - type: string
+            maxLength: 64
+          - type: 'null'
+          title: Request Id
+        sku:
+          type: string
+          enum:
+          - trust_brief
+          - copilot
+          - bank_pilot
+          - general
+          title: Sku
+          default: trust_brief
+        vector:
+          type: string
+          maxLength: 120
+          title: Vector
+          default: web-intake
+        source:
+          type: string
+          enum:
+          - web
+          - telegram
+          - api
+          title: Source
+          default: web
+        metadata:
+          additionalProperties: true
+          type: object
+          title: Metadata
+      additionalProperties: false
+      type: object
+      required:
+      - organization
+      - contact_email
+      - message
+      title: PublicIntakeRequest
+    PublicIntakeResponse:
+      properties:
+        ok:
+          type: boolean
+          title: Ok
+          default: true
+        intake_id:
+          type: string
+          title: Intake Id
+        request_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Request Id
+        intake_email:
+          type: string
+          title: Intake Email
+          default: operations@noetfield.com
+        message:
+          type: string
+          title: Message
+          default: Intake recorded. Operations will follow up via email.
+      additionalProperties: false
+      type: object
+      required:
+      - intake_id
+      - request_id
+      title: PublicIntakeResponse
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError

@@ -50,6 +50,10 @@ PRIORITY = {
     "/copilot/": 0.9,
     "/trust-brief/intake/": 0.9,
     "/gate/intake/": 0.85,
+    "/bank-pilot/": 0.88,
+    "/partners/": 0.88,
+    "/trust-ledger/": 0.82,
+    "/status/": 0.75,
     "/faq/": 0.8,
     "/for-whom/": 0.8,
     "/trust-ledger/": 0.8,
@@ -59,8 +63,12 @@ PRIORITY = {
 # Top-level marketing paths (index.html at depth 1) included if indexable
 MARKETING_TOP = {
     "about",
+    "bank-pilot",
+    "partners",
+    "trust-ledger",
     "copilot",
     "enterprise",
+    "status",
     "faq",
     "for-whom",
     "privacy",

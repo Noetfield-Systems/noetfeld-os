@@ -29,7 +29,9 @@ Read in order:
 3. Use [docs/strategy/noetfield-future-path.md](../docs/strategy/noetfield-future-path.md) for strategy
 4. Do **not** recreate private markdown in the public tree
 
-Seed locally: `./scripts/bootstrap-private-ops.sh`
+Seed locally: `./scripts/bootstrap-private-ops.sh` · MSB pack: `./scripts/seed-msb-partner-pack.sh`
+
+**MSB partner channel:** [docs/strategy/msb-partner-playbook.md](../docs/strategy/msb-partner-playbook.md) · deploy [docs/MSB_DEPLOY_AND_PILOT.md](../docs/MSB_DEPLOY_AND_PILOT.md)
 
 ## Scope
 

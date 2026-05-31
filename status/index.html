@@ -3,11 +3,61 @@
 <head>
  <meta charset="UTF-8" />
  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
- <title>Noetfield</title>
- <meta http-equiv="refresh" content="0;url=/" />
- <link rel="canonical" href="https://www.noetfield.com/" />
+ <title>Noetfield — Platform Status</title>
+ <meta name="description" content="Operational status for Noetfield www and platform API." />
+ <meta name="robots" content="index,follow" />
+ <link rel="canonical" href="https://www.noetfield.com/status/" />
+ <link rel="icon" href="/noetfield-favicon-512.png" type="image/png" />
+ <link rel="stylesheet" href="/assets/noetfield-shell.css" />
+ <link rel="stylesheet" href="/assets/noetfield-sales.css" />
+ <script src="/assets/noetfield-shell.js" defer></script>
 </head>
 <body>
- <p><a href="/">Continue</a></p>
+ <div class="bg" aria-hidden="true"></div>
+ <a class="skip" href="#main">Skip to content</a>
+ <header id="nfHeader"></header>
+ <main id="main" class="wrap nf-sales">
+ <p class="eyebrow">Status</p>
+ <h1>Platform status</h1>
+ <p class="lead">Live checks against the Noetfield platform API. Pre-execution governance only — not payments or custody.</p>
+ <section class="block" id="statusPanel">
+ <p id="statusSummary">Loading…</p>
+ <ul id="statusChecks" style="margin-top:12px;font-size:14px;color:var(--muted);"></ul>
+ </section>
+ <p style="font-size:13px;color:var(--muted);">
+ <a href="/docs/api/">API documentation</a> ·
+ <a href="https://www.noetfield.com/legal/">Legal</a>
+ </p>
+ </main>
+ <footer id="nfFooter"></footer>
+ <script>
+  (function () {
+    function apiBase() {
+      var host = window.location.hostname;
+      if (host === "localhost" || host === "127.0.0.1") return "http://127.0.0.1:8001";
+      return "https://platform.noetfield.com";
+    }
+    var summary = document.getElementById("statusSummary");
+    var list = document.getElementById("statusChecks");
+    fetch(apiBase() + "/api/status", { credentials: "omit" })
+      .then(function (r) { return r.json(); })
+      .then(function (data) {
+        var ok = data.status === "operational";
+        summary.textContent = ok ? "All monitored services operational." : "One or more services degraded.";
+        summary.style.color = ok ? "var(--ok, #2de38a)" : "var(--warn, #c8a349)";
+        var items = [
+          "API: " + (data.service || "noetfield-platform"),
+          "Governance pilot auth: " + (data.governance_pilot_auth_required ? "required" : "open (dev)"),
+        ];
+        var eco = data.ecosystem || {};
+        if (eco.website_chat) items.push("Website chat: " + (eco.website_chat.configured ? "configured" : "not configured"));
+        if (eco.intake_api) items.push("Intake API: " + (eco.intake_api.enabled ? "enabled" : "disabled"));
+        list.innerHTML = items.map(function (t) { return "<li>" + t + "</li>"; }).join("");
+      })
+      .catch(function () {
+        summary.textContent = "Status API unreachable. Check platform.noetfield.com or try again later.";
+      });
+  })();
+ </script>
 </body>
 </html>

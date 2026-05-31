@@ -3,11 +3,49 @@
 <head>
  <meta charset="UTF-8" />
  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
- <title>Noetfield</title>
- <meta http-equiv="refresh" content="0;url=/enterprise/" />
- <link rel="canonical" href="https://www.noetfield.com/enterprise/" />
+ <title>Noetfield — Trust Ledger</title>
+ <meta name="description" content="Trust Ledger is Noetfield's immutable governance compliance log: policy decisions, RID lineage, and audit export for regulated buyers." />
+ <meta name="robots" content="index,follow" />
+ <link rel="canonical" href="https://www.noetfield.com/trust-ledger/" />
+ <link rel="icon" href="/noetfield-favicon-512.png" type="image/png" />
+ <link rel="stylesheet" href="/assets/noetfield-shell.css" />
+ <link rel="stylesheet" href="/assets/noetfield-sales.css" />
+ <link rel="stylesheet" href="/assets/noetfield-institutional.css" />
+ <script src="/assets/noetfield-shell.js" defer></script>
 </head>
 <body>
- <p><a href="/enterprise/">Continue</a></p>
+ <div class="bg" aria-hidden="true"></div>
+ <a class="skip" href="#main">Skip to content</a>
+ <header id="nfHeader"></header>
+ <main id="main" class="wrap nf-sales">
+ <p class="eyebrow">Trust Ledger</p>
+ <h1>Immutable compliance log for pre-execution governance</h1>
+ <p class="lead">
+ <strong>Trust Ledger</strong> is the audit lineage brand for Noetfield decisions: every evaluate, veto, and policy reference tied to a Request ID (RID) and exportable for boards, OSFI E-23 vendor packs, and partner due diligence. It is not a payment ledger, wallet, or custody product.
+ </p>
+ <section class="block">
+ <h2>How it is produced</h2>
+ <ol>
+ <li><strong>Evaluate</strong> — policy decision with <code>reason_code</code> and <code>policy_refs</code> tied to a Request ID</li>
+ <li><strong>Record</strong> — entries append to the governed audit log (integrity hash per event)</li>
+ <li><strong>Export</strong> — audit-export by RID for procurement (<a href="/docs/api/">Governance API reference</a>)</li>
+ </ol>
+ </section>
+ <section class="block">
+ <h2>Trust Brief starter entries</h2>
+ <p>Six-week Trust Brief engagements deliver board-ready outputs including <strong>starter Trust Ledger entries</strong>, control baseline, and evidence expectations — then pilots extend the same RID lineage on the platform.</p>
+ <a class="btn btn-secondary" href="/trust-brief/">Trust Brief</a>
+ </section>
+ <section class="block">
+ <h2>See it live</h2>
+ <p>Governance Console shows decisions and the compliance log table for authorized pilots.</p>
+ <a class="btn btn-secondary" href="/console/">Governance Console</a>
+ </section>
+ <div class="cta-bar">
+ <div><strong>Request Governance Brief</strong><p>From $10,000 — includes Trust Ledger starter format</p></div>
+ <a class="btn btn-primary" href="/trust-brief/intake/?vector=trust-brief&amp;source=trust-ledger">Request Governance Brief</a>
+ </div>
+ </main>
+ <footer id="nfFooter"></footer>
 </body>
 </html>

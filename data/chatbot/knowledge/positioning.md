@@ -1,6 +1,6 @@
 # Market positioning
 
-Governance Execution Infrastructure that evaluates AI-driven operational intent before execution in regulated environments.
+Governance Execution Infrastructure that evaluates AI-driven operational intent before execution in regulated environments. Public narrative: governance, AI systems, and risk intelligence — not API-first or fintech-vertical marketing on the homepage.
 
 ## Product definition
 

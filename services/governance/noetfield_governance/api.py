@@ -51,6 +51,10 @@ from noetfield_governance.golden_edge_v3 import (
     GoldenEdgeEvaluateRequest,
     GoldenEdgeV3Engine,
 )
+from noetfield_governance.governance_rid import generate_rid, normalize_rid
+from noetfield_governance.governance_v1 import GovernanceV1Deps, router as governance_v1_router
+from noetfield_governance.governance_webhooks import GovernanceWebhookDispatcher
+from noetfield_governance.public_openapi import install_public_openapi
 from noetfield_governance.runtime import (
     ApprovalDecision,
     GovernanceActionCommand,
@@ -97,9 +101,12 @@ logger = logging.getLogger("noetfield.governance.api")
 
 app = FastAPI(
     title="Noetfield Platform API",
-    version="0.3.1",
+    version="0.4.0",
     description="Backend runtime core for governed ambient intelligence.",
 )
+
+install_public_openapi(app)
+app.include_router(governance_v1_router)
 
 _cors_origins = [
     o.strip()
@@ -165,6 +172,18 @@ copilot_demo_runtime = CopilotGovernanceDemoRuntime(
 )
 
 golden_edge_v3 = GoldenEdgeV3Engine(governance_runtime=governance_runtime)
+
+governance_webhooks = GovernanceWebhookDispatcher.from_settings(
+    settings.governance_webhook_urls,
+    settings.governance_webhook_secret,
+)
+app.state.governance_v1_deps = GovernanceV1Deps(
+    engine=golden_edge_v3,
+    event_bus=event_bus,
+    audit_store=audit_store,
+    webhooks=governance_webhooks,
+    signal_pipeline=signal_pipeline,
+)
 
 
 class ApprovalDecisionRequest(BaseModel):
@@ -233,13 +252,14 @@ async def shutdown_runtime() -> None:
             await close()
 
 
-@app.get("/health", tags=["system"])
+@app.get("/health", tags=["system"], include_in_schema=True)
 async def health() -> dict[str, object]:
     return {
         "status": "ok",
         "service": "noetfield-platform",
         "runtime": "phase-3.1-backend-core",
         "golden_edge": "v3",
+        "governance_api": "/api/v1/governance",
         "system_of_record": "postgresql" if postgres_mode else "memory-test-mode",
         "supabase_authority": "optional-tooling-only",
         "intake_storage": intake_repository.storage_label(),
@@ -247,7 +267,23 @@ async def health() -> dict[str, object]:
     }
 
 
-@app.post("/v3/evaluate", tags=["golden-edge-v3"])
+@app.get("/api/status", tags=["system"], include_in_schema=True)
+async def api_status() -> dict[str, object]:
+    """Institutional status summary for www status page and monitors."""
+    eco = await ecosystem_health()
+    return {
+        "service": "noetfield-platform",
+        "status": "operational" if eco.get("ok") else "degraded",
+        "status_page": settings.public_status_page_url,
+        "legal": "https://www.noetfield.com/legal/",
+        "ecosystem": eco,
+        "governance_pilot_auth_required": settings.governance_pilot_auth_required,
+        "openapi": "/openapi.json",
+        "public_docs": "https://www.noetfield.com/docs/api/",
+    }
+
+
+@app.post("/v3/evaluate", tags=["golden-edge-v3"], include_in_schema=False)
 async def golden_edge_evaluate(request: GoldenEdgeEvaluateRequest) -> dict[str, object]:
     result = await golden_edge_v3.evaluate(request)
     actor = Actor(
@@ -312,7 +348,7 @@ async def golden_edge_evaluate(request: GoldenEdgeEvaluateRequest) -> dict[str, 
     return result.model_dump(mode="json")
 
 
-@app.get("/v3/ledger", tags=["golden-edge-v3"])
+@app.get("/v3/ledger", tags=["golden-edge-v3"], include_in_schema=False)
 async def golden_edge_ledger(tenant_id: UUID | None = None, limit: int = 100) -> dict[str, object]:
     if limit < 1 or limit > 500:
         raise HTTPException(status_code=400, detail="limit must be between 1 and 500")
@@ -328,7 +364,7 @@ async def golden_edge_ledger(tenant_id: UUID | None = None, limit: int = 100) ->
 _CONSOLE_HTML = Path(__file__).resolve().parent / "static" / "governance-console-v1.html"
 
 
-@app.get("/console", tags=["governance-console-v1"], include_in_schema=True)
+@app.get("/console", tags=["governance-console-v1"], include_in_schema=False)
 @app.get("/", tags=["governance-console-v1"], include_in_schema=False)
 async def governance_console_v1() -> FileResponse:
     if not _CONSOLE_HTML.is_file():
@@ -336,18 +372,18 @@ async def governance_console_v1() -> FileResponse:
     return FileResponse(_CONSOLE_HTML, media_type="text/html")
 
 
-@app.post("/v3/agent-loop", tags=["golden-edge-v3"])
+@app.post("/v3/agent-loop", tags=["golden-edge-v3"], include_in_schema=False)
 async def golden_edge_agent_loop(request: GoldenEdgeEvaluateRequest) -> dict[str, object]:
     result = await golden_edge_v3.agent_loop(request)
     return result.model_dump(mode="json")
 
 
-@app.get("/events/catalog", tags=["events"])
+@app.get("/events/catalog", tags=["events"], include_in_schema=False)
 async def events_catalog() -> dict[str, dict[str, str]]:
     return event_catalog()
 
 
-@app.get("/events/replay", tags=["events"])
+@app.get("/events/replay", tags=["events"], include_in_schema=False)
 async def replay_events(after_sequence: int = 0, event_type: str = "*") -> list[dict[str, object]]:
     events = await event_bus.replay(
         EventReplayCursor(after_sequence=after_sequence, event_types=frozenset({event_type}))
@@ -355,7 +391,7 @@ async def replay_events(after_sequence: int = 0, event_type: str = "*") -> list[
     return [event.model_dump(mode="json") for event in events]
 
 
-@app.post("/ingestion/manual", tags=["ingestion"])
+@app.post("/ingestion/manual", tags=["ingestion"], include_in_schema=False)
 async def ingest_manual(request: ManualIngestionRequest) -> dict[str, object]:
     signal, trace = await signal_pipeline.ingest(
         IngestSignalCommand(
@@ -370,7 +406,7 @@ async def ingest_manual(request: ManualIngestionRequest) -> dict[str, object]:
     return {"signal": signal.model_dump(mode="json"), "trace": trace}
 
 
-@app.post("/ingestion/webhook/{source_name}", tags=["ingestion"])
+@app.post("/ingestion/webhook/{source_name}", tags=["ingestion"], include_in_schema=False)
 async def ingest_webhook(source_name: str, request: WebhookIngestionRequest) -> dict[str, object]:
     signal, trace = await signal_pipeline.ingest(
         IngestSignalCommand(
@@ -385,49 +421,49 @@ async def ingest_webhook(source_name: str, request: WebhookIngestionRequest) -> 
     return {"signal": signal.model_dump(mode="json"), "trace": trace}
 
 
-@app.post("/signals/ingest", tags=["signals"])
+@app.post("/signals/ingest", tags=["signals"], include_in_schema=False)
 async def ingest_signal(command: IngestSignalCommand) -> dict[str, object]:
     signal, trace = await signal_pipeline.ingest(command)
     return {"signal": signal.model_dump(mode="json"), "trace": trace}
 
 
-@app.post("/graph/relationships/mutate", tags=["graph"])
+@app.post("/graph/relationships/mutate", tags=["graph"], include_in_schema=False)
 async def mutate_relationship(command: GraphMutationCommand) -> dict[str, object]:
     result = await graph_mutations.mutate_relationship(command)
     return result.model_dump(mode="json")
 
 
-@app.post("/graph/reflections/run", tags=["graph"])
+@app.post("/graph/reflections/run", tags=["graph"], include_in_schema=False)
 async def run_graph_reflection(request: ReflectionRequest) -> dict[str, object]:
     result = await graph_reflections.run(request.tenant_id, request.organization_id)
     return result.model_dump(mode="json")
 
 
-@app.post("/workflows/start", tags=["workflow"])
+@app.post("/workflows/start", tags=["workflow"], include_in_schema=False)
 async def start_workflow(workflow: WorkflowInstance) -> dict[str, object]:
     result = await workflow_state_machine.start(workflow)
     return result.model_dump(mode="json")
 
 
-@app.post("/workflows/transition", tags=["workflow"])
+@app.post("/workflows/transition", tags=["workflow"], include_in_schema=False)
 async def transition_workflow(command: WorkflowTransitionCommand) -> dict[str, object]:
     result = await workflow_state_machine.transition(command)
     return result.model_dump(mode="json")
 
 
-@app.post("/governance/execute", tags=["governance"])
+@app.post("/governance/execute", tags=["governance"], include_in_schema=False)
 async def execute_governance(command: GovernanceActionCommand) -> dict[str, object]:
     result = await governance_runtime.execute(command)
     return result.model_dump(mode="json")
 
 
-@app.get("/approvals", tags=["governance"])
+@app.get("/approvals", tags=["governance"], include_in_schema=False)
 async def list_approvals(tenant_id: UUID | None = None) -> list[dict[str, object]]:
     approvals = await approval_queue.list_pending(tenant_id)
     return [approval.model_dump(mode="json") for approval in approvals]
 
 
-@app.post("/approvals/decide", tags=["governance"])
+@app.post("/approvals/decide", tags=["governance"], include_in_schema=False)
 async def decide_approval(request: ApprovalDecisionRequest) -> dict[str, object]:
     trace = await governance_runtime.decide_approval(
         tenant_id=request.tenant_id,
@@ -437,19 +473,19 @@ async def decide_approval(request: ApprovalDecisionRequest) -> dict[str, object]
     return {"trace": trace}
 
 
-@app.post("/inspectors/collaborate", tags=["inspectors"])
+@app.post("/inspectors/collaborate", tags=["inspectors"], include_in_schema=False)
 async def collaborate_inspectors(command: InspectorCollaborationCommand) -> dict[str, object]:
     result = await inspector_runtime.run(command)
     return result.model_dump(mode="json")
 
 
-@app.post("/inspectors/execute", tags=["inspectors"])
+@app.post("/inspectors/execute", tags=["inspectors"], include_in_schema=False)
 async def execute_inspectors(command: InspectorCollaborationCommand) -> dict[str, object]:
     result = await inspector_execution_loop.run_once(command)
     return result.model_dump(mode="json")
 
 
-@app.post("/use-cases/copilot-governance/demo", tags=["copilot-governance"])
+@app.post("/use-cases/copilot-governance/demo", tags=["copilot-governance"], include_in_schema=False)
 async def run_copilot_governance_demo(command: CopilotGovernanceCommand) -> dict[str, object]:
     result = await copilot_demo_runtime.run(command)
     return result.model_dump(mode="json")
@@ -467,6 +503,7 @@ class PublicChatResponse(BaseModel):
 
     reply: str
     provider: str
+    citations: list[str] = Field(default_factory=list)
     intake_email: str = CANONICAL_INTAKE_EMAIL
 
 
@@ -529,7 +566,7 @@ async def public_chat(body: PublicChatRequest, request: Request) -> PublicChatRe
     client_host = request.client.host if request.client else "unknown"
     client_key = f"{client_host}:{body.session_id or 'anon'}"
     try:
-        reply, provider = await answer_public_question(
+        reply, provider, citations = await answer_public_question(
             message=body.message,
             provider=settings.public_chat_provider,
             gemini_api_key=_secret(settings.gemini_api_key) or None,
@@ -547,7 +584,7 @@ async def public_chat(body: PublicChatRequest, request: Request) -> PublicChatRe
     except ChatAPIError as exc:
         logger.warning("public_chat_llm_error %s", exc)
         raise HTTPException(status_code=502, detail="Assistant temporarily unavailable") from exc
-    return PublicChatResponse(reply=reply, provider=provider)
+    return PublicChatResponse(reply=reply, provider=provider, citations=citations)
 
 
 @app.get("/api/intake/health", tags=["intake"])
@@ -611,7 +648,7 @@ async def public_intake(
     )
 
 
-@app.get("/api/intake/recent", tags=["intake"])
+@app.get("/api/intake/recent", tags=["intake"], include_in_schema=False)
 async def intake_recent(request: Request, limit: int = 20) -> dict[str, object]:
     """Operations view — requires TELEGRAM_WEBHOOK_SECRET as X-Admin-Secret when configured."""
     admin_secret = _secret(settings.telegram_webhook_secret)
@@ -831,7 +868,7 @@ async def telegram_register_webhook(request: Request) -> dict[str, object]:
     return {"setWebhook": result, "setMyCommands": commands, "webhookInfo": info, "url": webhook_url}
 
 
-@app.get("/runtime/console", tags=["runtime"])
+@app.get("/runtime/console", tags=["runtime"], include_in_schema=False)
 async def runtime_console() -> dict[str, object]:
     event_snapshot = await event_bus.snapshot(limit=20)
     pending_approvals = await approval_queue.list_pending()

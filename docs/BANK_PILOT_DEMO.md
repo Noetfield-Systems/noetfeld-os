@@ -14,7 +14,8 @@ Design partner at a bank or credit union evaluating pre-execution governance bef
    - From [www `/console/`](/console/) → redirects to `platform.noetfield.com/console` (or local `:8001/console`)
    - Submit sample intent; show allow / review / reject and compliance log
    - Emphasize **shadow mode** — no payment or custody authority
-4. **Intake (5 min)** — Submit [trust-brief intake](/trust-brief/intake/?vector=bank-pilot) with RID; confirm `operations@noetfield.com` workflow.
+4. **Governance API (10 min)** — `POST /api/v1/governance/evaluate` with `mode: shadow`; export via `GET /api/v1/governance/audit-export?request_id=RID-…`
+5. **Intake (5 min)** — Submit [trust-brief intake](/trust-brief/intake/?vector=bank-pilot) with RID; confirm `operations@noetfield.com` workflow.
 
 ## Technical prerequisites
 

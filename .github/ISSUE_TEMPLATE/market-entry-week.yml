@@ -1,0 +1,33 @@
+name: Market entry — week checkpoint
+description: 30-day GTM checkpoint (outreach, demos, closes)
+title: "[market] Week "
+labels:
+  - launch
+body:
+  - type: dropdown
+    id: week
+    attributes:
+      label: Week
+      options:
+        - "1"
+        - "2"
+        - "3"
+        - "4"
+    validations:
+      required: true
+  - type: checkboxes
+    id: goals
+    attributes:
+      label: Goals
+      options:
+        - label: Outreach tracker has 10 named contacts
+        - label: 5+ emails sent (governance-first)
+        - label: 1+ Shadow Week demo completed (RID logged)
+        - label: All intakes answered <24h
+        - label: Trust Brief or Shadow Pack in negotiation
+        - label: Staging proof started (paid deal)
+  - type: textarea
+    id: notes
+    attributes:
+      label: Notes / blockers
+      description: Link private tracker in ops/private/msb/ — do not paste secrets

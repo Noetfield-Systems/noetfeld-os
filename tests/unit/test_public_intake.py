@@ -59,7 +59,7 @@ def test_llm_fallback_openrouter_to_gemini() -> None:
             return "Fallback answer from Gemini."
 
         with patch("noetfield_governance.public_chat._generate_sync", side_effect=fake_generate):
-            reply, provider = await answer_public_question(
+            reply, provider, _citations = await answer_public_question(
                 message="What is Trust Brief?",
                 provider="auto",
                 gemini_api_key="gem-key",

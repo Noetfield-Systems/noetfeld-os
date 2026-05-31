@@ -76,10 +76,12 @@ def test_gate_index_redirects_enterprise() -> None:
     assert "/enterprise/" in text
 
 
-def test_trust_ledger_redirects_enterprise() -> None:
+def test_trust_ledger_explainer_not_subscription() -> None:
     text = (ROOT / "trust-ledger" / "index.html").read_text(encoding="utf-8")
-    assert "/enterprise/" in text
+    assert "Trust Ledger" in text
+    assert "audit-export" in text or "audit export" in text.lower()
     assert "stripe-buy-button" not in text.lower()
+    assert 'http-equiv="refresh"' not in text
 
 
 def test_offerings_strip_partial_exists() -> None:

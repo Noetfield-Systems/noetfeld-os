@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8" />
+ <title>Noetfield — Canada Stack 2027 (control layer)</title>
+ <link rel="stylesheet" href="/assets/noetfield-print.css" />
+ <style>
+  body { max-width: 8.5in; margin: 0.75in auto; font-family: Georgia, serif; color: #1a1a2e; }
+  h1 { font-size: 22pt; margin-bottom: 0.25em; }
+  .sub { color: #444; font-size: 11pt; margin-bottom: 1.2em; }
+  table { width: 100%; border-collapse: collapse; font-size: 10pt; margin: 1em 0; }
+  th, td { border: 1px solid #ccc; padding: 8px; text-align: left; vertical-align: top; }
+  th { background: #f4f4f8; }
+  .footer { margin-top: 2em; font-size: 9pt; color: #666; }
+  @media print { .no-print { display: none; } }
+ </style>
+</head>
+<body>
+ <p class="no-print"><a href="javascript:window.print()">Print</a> · Board / vendor DD — May 2026</p>
+ <h1>Canada Stack 2027 — where Noetfield sits</h1>
+ <p class="sub">Pre-execution governance infrastructure · Not RPAA · Not MSB · Not stablecoin issuer</p>
+
+ <h2>Regulatory forces</h2>
+ <table>
+  <tr><th>Force</th><th>Timing</th><th>Licensed actors execute</th><th>Noetfield provides</th></tr>
+  <tr><td>OSFI E-23</td><td>May 2027</td><td>Banks, third-party AI users</td><td>Evaluate, Trust Ledger export, vendor evidence</td></tr>
+  <tr><td>CDB</td><td>2026–27</td><td>Accredited TPPs / PSPs</td><td>Policy gate before partner write</td></tr>
+  <tr><td>Stablecoin Act</td><td>~2027 in force</td><td>BoC-registered issuers</td><td>Audit evidence — not issuance</td></tr>
+  <tr><td>RPAA</td><td>Ongoing expansion</td><td>PSPs, wallets</td><td>Software vendor outside perimeter</td></tr>
+ </table>
+
+ <h2>Five layers</h2>
+ <table>
+  <tr><th>Layer</th><th>Owner</th><th>Noetfield</th></tr>
+  <tr><td>L5 UX</td><td>Bank / exchange app</td><td>Optional console</td></tr>
+  <tr><td>L4 Orchestration</td><td>Partner engineering</td><td>Decision webhooks</td></tr>
+  <tr><td>L3 Control</td><td><strong>Noetfield</strong></td><td>Evaluate + Trust Ledger</td></tr>
+  <tr><td>L2 Execution</td><td>FRFI, VASP, PSP</td><td>None</td></tr>
+  <tr><td>L1 Market</td><td>Exchanges, BoC</td><td>Read-only signals only</td></tr>
+ </table>
+
+ <h2>Evidence vs execution (Stablecoin Act adjacency)</h2>
+ <table>
+  <tr><th>Issuer / PSP duty</th><th>Issuer retains</th><th>Noetfield can evidence</th></tr>
+  <tr><td>1:1 reserves</td><td>Yes</td><td>Policy evaluate logs (adjacency)</td></tr>
+  <tr><td>At-par redemption</td><td>Yes</td><td>Pre-redemption intent evaluate (partner calls API)</td></tr>
+  <tr><td>BoC registration</td><td>Yes</td><td>RID + audit export for DD</td></tr>
+  <tr><td>Operational audit trail</td><td>Yes</td><td>Trust Ledger export</td></tr>
+ </table>
+
+ <p><strong>Wedge:</strong> Before your bank, exchange, or PSP executes — Noetfield evaluates intent, records Trust Ledger evidence, and returns allow/deny.</p>
+ <p class="footer">Noetfield Systems Inc. · operations@noetfield.com · www.noetfield.com/partners/ · Not payment execution or custody.</p>
+</body>
+</html>
