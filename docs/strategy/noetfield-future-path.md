@@ -124,6 +124,7 @@ From engineering and www work tracked in **GitHub Issues** (see [ROADMAP.md](../
 
 | Doc | Use |
 |-----|-----|
+| [local-ollama-agent-runtime-blueprint.md](./local-ollama-agent-runtime-blueprint.md) | Founder laptop: Ollama model choice, thermals, on-demand policy (not production) |
 | [docs/ROADMAP.md](../ROADMAP.md) | Public horizons + shipped summary |
 | [ops/README.md](../../ops/README.md) | Issues + private `ops/private/` |
 | [PLATFORM_BLUEPRINT.md](../../PLATFORM_BLUEPRINT.md) | Architecture constitution |

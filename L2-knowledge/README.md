@@ -12,7 +12,7 @@
 ## Archived tooling (FINAL LOCK — must not influence Noetfield runtime)
 
 - **n8n** — archived workflow experiments (no runtime wiring)
-- **Ollama** — local dev inference only in `docker-compose`; not production authority
+- **Ollama** — local dev inference only in `docker-compose`; not production authority · blueprint: [docs/strategy/local-ollama-agent-runtime-blueprint.md](../docs/strategy/local-ollama-agent-runtime-blueprint.md)
 - **PAIOS** — `reference-products/` only; must not drive `services/governance` or Golden Edge v3
 
 ## Supremacy
