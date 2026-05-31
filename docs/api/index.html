@@ -8,26 +8,31 @@
  <meta name="robots" content="index,follow" />
  <link rel="canonical" href="https://www.noetfield.com/docs/api/" />
  <link rel="icon" href="/noetfield-favicon-512.png" type="image/png" />
+ <link rel="stylesheet" href="/assets/noetfield-tokens.css" />
  <link rel="stylesheet" href="/assets/noetfield-shell.css" />
- <link rel="stylesheet" href="/assets/noetfield-sales.css" />
+ <link rel="stylesheet" href="/assets/noetfield-components.css" />
  <link rel="stylesheet" href="/assets/noetfield-institutional.css" />
+ <link rel="stylesheet" href="/assets/noetfield-sales.css" />
  <script src="/assets/noetfield-shell.js" defer></script>
 </head>
 <body>
  <div class="bg" aria-hidden="true"></div>
  <a class="skip" href="#main">Skip to content</a>
  <header id="nfHeader"></header>
- <main id="main" class="wrap nf-sales">
- <p class="eyebrow">Governance API · Technical reference</p>
+ <main id="main" class="wrap nf-page">
+ <header class="nf-hero">
+ <p class="nf-eyebrow">Governance API · Technical reference</p>
  <h1>Policy evaluate, compliance log, and audit export</h1>
- <p class="lead">
+ <p class="nf-lead">
  This page is for engineering and procurement: HTTP contracts for governance evaluation, RID lineage, and Trust Ledger export. Product narrative and engagements live on the other surfaces — each with its own scope.
  </p>
- <section class="block">
+ </header>
+
+ <section class="nf-section">
  <h2>Pilot surface (v1)</h2>
- <table style="width:100%;font-size:14px;border-collapse:collapse;">
+ <table class="nf-api-table">
  <thead>
- <tr><th style="text-align:left;padding:8px 0;">Method</th><th style="text-align:left;">Route</th><th style="text-align:left;">Role</th></tr>
+ <tr><th>Method</th><th>Route</th><th>Role</th></tr>
  </thead>
  <tbody>
  <tr><td><code>POST</code></td><td><code>/api/v1/governance/evaluate</code></td><td>Allow, restrict, or block before external execution</td></tr>
@@ -39,7 +44,8 @@
  </tbody>
  </table>
  </section>
- <section class="block">
+
+ <section class="nf-section">
  <h2>Public intake</h2>
  <ul>
  <li><code>POST /api/intake</code> — governance brief and partner intakes (RID on every submission)</li>
@@ -47,7 +53,8 @@
  <li><code>GET /api/status</code> — platform summary · <a href="/status/">status page</a></li>
  </ul>
  </section>
- <section class="block">
+
+ <section class="nf-section">
  <h2>Artifacts</h2>
  <ul>
  <li><a href="./openapi.json">openapi.json</a> — machine-readable schema</li>
@@ -55,22 +62,25 @@
  <li><code>packages/sdk</code> — Python client for pilot integrations</li>
  </ul>
  </section>
- <section class="block">
+
+ <section class="nf-section">
  <h2>Related surfaces</h2>
- <p style="font-size:14px;color:var(--muted);">
- <a href="/">Home</a> — governance · AI · risk intelligence ·
- <a href="/enterprise/">Enterprise</a> — institutional engagements ·
- <a href="/partners/">Partners</a> — programs and intake ·
- <a href="/trust-ledger/">Trust Ledger</a> — audit lineage ·
- <a href="/console/">Governance Console</a> — evaluation UI ·
- <a href="/bank-pilot/">Bank Pilot</a> — shadow simulation
+ <p>
+ <a href="/">Home</a> · <a href="/enterprise/">Enterprise</a> · <a href="/partners/">Partners</a> ·
+ <a href="/trust-ledger/">Trust Ledger</a> · <a href="/console/">Governance Console</a> · <a href="/bank-pilot/">Bank Pilot</a>
  </p>
  </section>
- <div class="cta-bar">
- <div><strong>Pilot access</strong><p>Keys issued per engagement after Trust Brief or partner briefing</p></div>
+
+ <aside class="nf-cta-band">
+ <div>
+ <h2>Pilot access</h2>
+ <p>Keys issued per engagement after Trust Brief or partner briefing</p>
+ </div>
+ <div class="nf-cta-actions">
  <a class="btn btn-primary" href="/trust-brief/intake/?interest=api-pilot&amp;source=api-docs">Request Governance Brief</a>
  <a class="btn btn-secondary" href="/status/">Status</a>
  </div>
+ </aside>
  </main>
  <footer id="nfFooter"></footer>
 </body>

@@ -1,24 +1,22 @@
-/* /assets/noetfield-shell.css — v2.4 (navOpen scroll lock + srOnly + minor hardening) */
+/* /assets/noetfield-shell.css — v3.0 (institutional shell; tokens in noetfield-tokens.css) */
 /* Noetfield Shell (Header + Mobile Nav + Footer) */
-/* Version: locked-2025.12.19+sales-cta+header-scope */
 
+/* Fallback tokens if tokens.css omitted on a legacy page */
 :root{
   --bg0:#07070b; --bg1:#0b0b14;
   --panel: rgba(255,255,255,.055);
   --panel2: rgba(255,255,255,.038);
-
   --text:#eff0f7; --muted:#b9bbcf; --muted2:#8e91ad;
   --line: rgba(255,255,255,.11);
-
   --gold:#c8a349;
   --ok:#2de38a; --okGlow: rgba(45,227,138,.18);
-
-  --radius:18px; --max:1120px;
+  --radius:18px; --max:1140px;
   --shadow: 0 28px 80px rgba(0,0,0,.62);
   --shadow2: 0 14px 50px rgba(0,0,0,.50);
-  --focus: 0 0 0 4px rgba(200,163,73,.18);
-
-  --navH: 68px;
+  --focus: 0 0 0 4px rgba(200,163,73,.22);
+  --navH: 72px;
+  --font-sans: "IBM Plex Sans", Inter, system-ui, sans-serif;
+  --font-serif: "IBM Plex Serif", Georgia, serif;
   color-scheme: dark;
 }
 
@@ -26,7 +24,7 @@
 html,body{height:100%}
 body{
   margin:0;
-  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  font-family: var(--font-sans);
   color: var(--text);
   background: linear-gradient(180deg, var(--bg0), var(--bg1));
   overflow-x:hidden;
@@ -251,6 +249,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
   background:
     radial-gradient(240px 90px at 50% 0%, rgba(255,255,255,.10), transparent 60%),
     linear-gradient(180deg, rgba(200,163,73,.22), rgba(200,163,73,.10));
+  box-shadow: inset 0 -2px 0 rgba(200,163,73,.55);
 }
 
 #nfHeader .menu a.pilltab{
@@ -422,6 +421,7 @@ footer{
 }
 
 .footBrand{display:flex; align-items:center; gap:10px; color:var(--muted)}
+.footBrand span{font-weight:850; color:var(--text)}
 .footBrand img{
   width:28px; height:28px; border-radius:10px;
   border:1px solid rgba(255,255,255,.12);

@@ -8,7 +8,9 @@
  <meta name="robots" content="index,follow" />
  <link rel="canonical" href="https://www.noetfield.com/status/" />
  <link rel="icon" href="/noetfield-favicon-512.png" type="image/png" />
+ <link rel="stylesheet" href="/assets/noetfield-tokens.css" />
  <link rel="stylesheet" href="/assets/noetfield-shell.css" />
+ <link rel="stylesheet" href="/assets/noetfield-components.css" />
  <link rel="stylesheet" href="/assets/noetfield-sales.css" />
  <script src="/assets/noetfield-shell.js" defer></script>
 </head>
@@ -16,17 +18,20 @@
  <div class="bg" aria-hidden="true"></div>
  <a class="skip" href="#main">Skip to content</a>
  <header id="nfHeader"></header>
- <main id="main" class="wrap nf-sales">
- <p class="eyebrow">Status</p>
+ <main id="main" class="wrap nf-page">
+ <header class="nf-hero">
+ <p class="nf-eyebrow">Status</p>
  <h1>Platform status</h1>
- <p class="lead">Live checks against the Noetfield platform API. Pre-execution governance only — not payments or custody.</p>
- <section class="block" id="statusPanel">
- <p id="statusSummary">Loading…</p>
- <ul id="statusChecks" style="margin-top:12px;font-size:14px;color:var(--muted);"></ul>
+ <p class="nf-lead">Live checks against the Noetfield platform API. Governance evaluation only — not payments or custody.</p>
+ </header>
+
+ <section class="nf-status-panel" id="statusPanel" aria-live="polite">
+ <p id="statusSummary" class="ok">Loading…</p>
+ <ul id="statusChecks" style="margin:16px 0 0;padding-left:1.2rem;color:var(--muted);"></ul>
  </section>
- <p style="font-size:13px;color:var(--muted);">
- <a href="/docs/api/">API documentation</a> ·
- <a href="https://www.noetfield.com/legal/">Legal</a>
+
+ <p style="font-size:var(--text-sm);color:var(--muted2);margin-top:24px;">
+ <a href="/docs/api/">Governance API</a> · <a href="/privacy/">Privacy</a> · <a href="/terms/">Terms</a>
  </p>
  </main>
  <footer id="nfFooter"></footer>
@@ -44,7 +49,7 @@
       .then(function (data) {
         var ok = data.status === "operational";
         summary.textContent = ok ? "All monitored services operational." : "One or more services degraded.";
-        summary.style.color = ok ? "var(--ok, #2de38a)" : "var(--warn, #c8a349)";
+        summary.className = ok ? "ok" : "warn";
         var items = [
           "API: " + (data.service || "noetfield-platform"),
           "Governance pilot auth: " + (data.governance_pilot_auth_required ? "required" : "open (dev)"),
@@ -56,6 +61,7 @@
       })
       .catch(function () {
         summary.textContent = "Status API unreachable. Check platform.noetfield.com or try again later.";
+        summary.className = "warn";
       });
   })();
  </script>

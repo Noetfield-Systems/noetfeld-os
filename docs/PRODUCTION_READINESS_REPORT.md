@@ -54,6 +54,7 @@ See [DEPLOYMENT_ARCHITECTURE.md](../DEPLOYMENT_ARCHITECTURE.md).
 
 ## 6. Warnings (review)
 
+- `index.html`: procurement label
 - `trust-brief/intake/index.html`: procurement label
 - `trust-ledger/index.html`: procurement label
 
