@@ -4,6 +4,36 @@ Pre-execution governance web app: submit operational intent, receive **allow / d
 
 **Not** a payments, trading, wallet, or exchange product.
 
+## Fully automated (one command)
+
+**Docker (recommended — full stack + E2E smoke):**
+
+```bash
+cd governance-console
+make e2e          # build postgres + api + web, run smoke, tear down
+make up           # start stack and keep running
+make down         # stop stack
+```
+
+From repo root:
+
+```bash
+make governance-console-e2e
+make governance-console-up
+```
+
+**Without Docker (API-only smoke):**
+
+```bash
+cd governance-console
+chmod +x scripts/e2e-local.sh
+./scripts/e2e-local.sh
+```
+
+CI runs on every PR touching `governance-console/` via [.github/workflows/governance-console-e2e.yml](../.github/workflows/governance-console-e2e.yml).
+
+---
+
 ## Stack
 
 | Layer | Tech |
@@ -11,44 +41,43 @@ Pre-execution governance web app: submit operational intent, receive **allow / d
 | Frontend | Next.js 15 (App Router), TypeScript, TailwindCSS |
 | Backend | FastAPI, SQLAlchemy |
 | Database | PostgreSQL |
+| E2E | httpx smoke (`e2e/smoke.py`) |
 
-## Quick start
+## Manual dev
 
-### 1. Database
+### Database
 
-**PostgreSQL (recommended):**
+**PostgreSQL:**
 
 ```bash
-cd governance-console
 docker compose up -d postgres
+export DATABASE_URL=postgresql+psycopg://postgres:postgres@localhost:5433/governance_console
 ```
 
-**Local dev without Docker:** use SQLite:
+**SQLite (no Docker):**
 
 ```bash
 export DATABASE_URL=sqlite:///./governance_console.db
 ```
 
-### 2. Backend (port 8000)
+### Backend (port 8000)
 
 ```bash
-cd governance-console/backend
-python3 -m venv .venv && source .venv/bin/activate
+cd backend
 pip install -r requirements.txt
-export DATABASE_URL=postgresql+psycopg://postgres:postgres@localhost:5433/governance_console
 uvicorn main:app --reload --port 8000
 ```
 
-### 3. Frontend (port 3000)
+### Frontend (port 3000)
 
 ```bash
-cd governance-console/frontend
+cd frontend
 npm install
 export NEXT_PUBLIC_API_URL=http://localhost:8000
 npm run dev
 ```
 
-Open http://localhost:3000 — submit intent, view result, browse `/audit`.
+Open http://localhost:3000
 
 ## API
 
@@ -57,15 +86,16 @@ Open http://localhost:3000 — submit intent, view result, browse `/audit`.
 | `POST` | `/evaluate` | Governance decision + persist audit row |
 | `GET` | `/audit` | List evaluations (`?q=RID` optional) |
 | `GET` | `/audit/{rid}` | Single record |
-| `GET` | `/health` | Health check |
+| `GET` | `/health` | Health + DB ping |
+| `GET` | `/docs` | OpenAPI UI |
 
 ## Relation to main Noetfield platform
 
-This folder is a **standalone MVP** for the Governance Console product spec. Production pilots on `platform.noetfield.com` also expose `/api/v1/governance/*` and `governance-console-v1.html` in the main `services/governance` package — merge or proxy when promoting to production.
+Standalone MVP under `governance-console/`. Production pilots on `platform.noetfield.com` also expose `/api/v1/governance/*` in `services/governance` — proxy or merge when promoting.
 
 ## Tests
 
 ```bash
-cd governance-console/backend
-PYTHONPATH=. pytest tests -q
+cd backend && PYTHONPATH=. python3 -m pytest tests -q
+make e2e   # full Docker E2E
 ```
