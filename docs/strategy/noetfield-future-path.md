@@ -124,6 +124,7 @@ From engineering and www work tracked in **GitHub Issues** (see [ROADMAP.md](../
 
 | Doc | Use |
 |-----|-----|
+| [auto-conflict-engine-v3.md](./auto-conflict-engine-v3.md) | **Baseline doctrine** — DESIGN / EXECUTION / DELIVERY sovereignty + binding contract |
 | [local-ollama-agent-runtime-blueprint.md](./local-ollama-agent-runtime-blueprint.md) | **LOCKED** founder laptop: Ollama ≥0.24, `qwen3:14b`, on-demand policy |
 | [LOCAL_AGENT_RUNTIME_LOCKED.md](./LOCAL_AGENT_RUNTIME_LOCKED.md) | Pointer to locked plan |
 | [docs/ROADMAP.md](../ROADMAP.md) | Public horizons + shipped summary |

@@ -35,6 +35,14 @@ Seed locally: `./scripts/bootstrap-private-ops.sh` · MSB pack: `./scripts/seed-
 
 **MSB partner channel:** [docs/strategy/msb-partner-playbook.md](../docs/strategy/msb-partner-playbook.md) · deploy [docs/MSB_DEPLOY_AND_PILOT.md](../docs/MSB_DEPLOY_AND_PILOT.md)
 
+## Layer sovereignty (v3)
+
+In this repo, **DELIVERY** is sovereign: [PRODUCT_TRUTH.md](../PRODUCT_TRUTH.md), locks, CI.  
+Read Desktop SSOT mirror only for **boundaries** — not as a merge veto. Registry **records** execution; it does not block PRs.
+
+Doctrine: [docs/strategy/auto-conflict-engine-v3.md](../docs/strategy/auto-conflict-engine-v3.md)  
+Cross-plane statements must use tags: `[DESIGN]` `[EXECUTION]` `[DELIVERY]` (rule R9).
+
 ## Scope
 
 [PROJECT_BOUNDARIES_LOCKED.md](../PROJECT_BOUNDARIES_LOCKED.md) — **Noetfield only** in this repo.
