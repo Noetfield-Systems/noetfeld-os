@@ -31,12 +31,19 @@ platform-console-down:
 	@. ./scripts/dev-ports.sh && lsof -tiTCP:$$PLATFORM_CONSOLE_PORT -sTCP:LISTEN 2>/dev/null | xargs -r kill -9 2>/dev/null || true
 
 dev-local:
-	@chmod +x scripts/dev-local-all.sh scripts/ensure-www.sh
+	@chmod +x scripts/dev-local-all.sh scripts/verify-local-dev.sh scripts/dev-local-down.sh
 	./scripts/dev-local-all.sh
 
+dev-local-down:
+	@chmod +x scripts/dev-local-down.sh
+	./scripts/dev-local-down.sh
+
+verify-local-dev:
+	@chmod +x scripts/verify-local-dev.sh
+	./scripts/verify-local-dev.sh
+
 www-dev:
-	@chmod +x scripts/ensure-www.sh
-	./scripts/ensure-www.sh
+	@echo "Use: make dev-local  (www is http://localhost:13080/)"
 
 apply-migrations:
 	PYTHONPATH=$(PYTHONPATH_VALUE) python3 scripts/apply_postgres_migrations.py

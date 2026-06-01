@@ -1,55 +1,41 @@
 #!/usr/bin/env python3
-"""Legacy port redirects so old bookmarks (8001, 3000) reach the unified dev server."""
+"""Legacy port 3000 → unified dev server (8001 is served directly by the platform API)."""
 
 from __future__ import annotations
 
 import http.server
 import os
 import sys
-import threading
 
 PUBLIC = os.environ.get("NF_DEV_PUBLIC_PORT", "13080")
 PUBLIC_BASE = f"http://127.0.0.1:{PUBLIC}"
-
-REDIRECTS: dict[int, str] = {
-    8001: f"{PUBLIC_BASE}/console",
-    3000: f"{PUBLIC_BASE}/cognitive-dashboard",
-}
+LEGACY_PORT = int(os.environ.get("NF_DEV_LEGACY_NEXT_PORT", "3000"))
 
 
 class RedirectHandler(http.server.BaseHTTPRequestHandler):
-    target: str = PUBLIC_BASE
-
     def do_GET(self) -> None:
-        loc = self.target + self.path
+        path = self.path if self.path.startswith("/") else f"/{self.path}"
+        loc = PUBLIC_BASE + path
         self.send_response(302)
         self.send_header("Location", loc)
-        self.send_header("Content-Length", "0")
+        self.send_header("Cache-Control", "no-store")
         self.end_headers()
 
     def do_HEAD(self) -> None:
         self.do_GET()
 
     def log_message(self, fmt: str, *args) -> None:
-        sys.stderr.write(f"[redirect:{self.server.server_port}] {fmt % args}\n")
-
-
-def serve(port: int, target: str) -> None:
-    handler = type("H", (RedirectHandler,), {"target": target})
-    httpd = http.server.ThreadingHTTPServer(("0.0.0.0", port), handler)
-    print(f"redirect :{port} -> {target}", flush=True)
-    httpd.serve_forever()
+        sys.stderr.write(f"[redirect:3000] {fmt % args}\n")
 
 
 def main() -> None:
-    threads = []
-    for port, target in REDIRECTS.items():
-        t = threading.Thread(target=serve, args=(port, target), daemon=True)
-        t.start()
-        threads.append(t)
-    print(f"Legacy redirects active (public site: {PUBLIC_BASE}/)", flush=True)
-    for t in threads:
-        t.join()
+    try:
+        httpd = http.server.ThreadingHTTPServer(("0.0.0.0", LEGACY_PORT), RedirectHandler)
+    except OSError as e:
+        print(f"redirect :{LEGACY_PORT} skipped ({e})", flush=True)
+        sys.exit(0)
+    print(f"redirect :{LEGACY_PORT} -> {PUBLIC_BASE}/*", flush=True)
+    httpd.serve_forever()
 
 
 if __name__ == "__main__":

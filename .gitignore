@@ -10,6 +10,9 @@
 .dev-proxy.log
 .dev-redirect.pid
 .dev-redirect.log
+.local-dev-urls.txt
+.cognitive-dashboard.log
+.cognitive-dashboard.pid
 !.env.example
 
 __pycache__/

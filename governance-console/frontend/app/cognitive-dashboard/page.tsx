@@ -71,13 +71,13 @@ export default function CognitiveDashboardPage() {
         <a
           href={
             process.env.NEXT_PUBLIC_PLATFORM_CONSOLE_URL ??
-            "http://127.0.0.1:18001/console"
+            "http://127.0.0.1:8001/console"
           }
           className="rounded-xl border border-border bg-panel p-4 transition hover:border-accent/40"
         >
           <p className="text-xs uppercase tracking-wide text-muted">Platform console</p>
           <p className="mt-2 text-lg font-medium text-white">Governance console</p>
-          <p className="mt-1 text-sm text-muted">Local port 18001 (make platform-console-dev)</p>
+          <p className="mt-1 text-sm text-muted">Local port 8001 or 13080/console (make dev-local)</p>
         </a>
       </div>
 

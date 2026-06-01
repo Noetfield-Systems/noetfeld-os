@@ -99,18 +99,30 @@ class UnifiedHandler(SimpleHTTPRequestHandler):
             return self._proxy(target)
         return super().do_HEAD()
 
-    def do_POST(self) -> None:
+    def _proxy_method(self) -> None:
         target = _proxy_target(self.path.split("?")[0])
         if target:
             return self._proxy(target)
+        if self.command == "OPTIONS":
+            self.send_response(204)
+            self.end_headers()
+            return
         self.send_error(405)
 
+    def do_POST(self) -> None:
+        self._proxy_method()
+
+    def do_PUT(self) -> None:
+        self._proxy_method()
+
+    def do_PATCH(self) -> None:
+        self._proxy_method()
+
+    def do_DELETE(self) -> None:
+        self._proxy_method()
+
     def do_OPTIONS(self) -> None:
-        target = _proxy_target(self.path.split("?")[0])
-        if target:
-            return self._proxy(target)
-        self.send_response(204)
-        self.end_headers()
+        self._proxy_method()
 
 
 def main() -> None:

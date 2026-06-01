@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 
 const DEFAULT_WEB_PORT = process.env.NEXT_PUBLIC_WEB_PORT ?? "13000";
-const DEFAULT_PLATFORM_PORT = process.env.NEXT_PUBLIC_PLATFORM_CONSOLE_PORT ?? "18001";
+const DEFAULT_PLATFORM_PORT = process.env.NEXT_PUBLIC_PLATFORM_CONSOLE_PORT ?? "8001";
 const apiEnv = process.env.NEXT_PUBLIC_API_URL ?? `http://127.0.0.1:18002`;
 
 export function DevPortBanner() {
