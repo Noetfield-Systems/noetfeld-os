@@ -18,6 +18,10 @@ PLATFORM = os.environ.get(
     f"http://127.0.0.1:{os.environ.get('NF_DEV_PLATFORM_PORT', '8001')}",
 )
 NEXT = os.environ.get("NF_DEV_NEXT_INTERNAL", "http://127.0.0.1:13000")
+GOV_API = os.environ.get(
+    "NF_DEV_GOV_API_INTERNAL",
+    f"http://127.0.0.1:{os.environ.get('NF_DEV_GOV_API_PORT', '18002')}",
+)
 
 PLATFORM_PREFIXES = (
     "/console",
@@ -29,18 +33,34 @@ PLATFORM_PREFIXES = (
 NEXT_PREFIXES = (
     "/cognitive-dashboard",
     "/_next/",
-    "/evaluate",
-    "/audit",
     "/result/",
 )
 
 
-def _proxy_target(path: str) -> str | None:
+def _gov_api_route(path: str, method: str, headers: dict[str, str]) -> bool:
+    """Governance-console FastAPI (18002) — must not be sent to Next for POST/API GET."""
+    if path == "/health":
+        return True
+    if path == "/evaluate" and method == "POST":
+        return True
+    if path.startswith("/audit/"):
+        return True
+    if path == "/audit" and method == "GET":
+        accept = headers.get("Accept", headers.get("accept", "*/*"))
+        if "text/html" in accept and "application/json" not in accept:
+            return False
+        return True
+    return False
+
+
+def _proxy_target(path: str, method: str = "GET", headers: dict[str, str] | None = None) -> str | None:
+    headers = headers or {}
+    if _gov_api_route(path, method, headers):
+        return GOV_API
     if any(path.startswith(p) for p in PLATFORM_PREFIXES):
         return PLATFORM
-    if any(path.startswith(p) for p in NEXT_PREFIXES):
+    if path in ("/evaluate", "/audit") or any(path.startswith(p) for p in NEXT_PREFIXES):
         return NEXT
-  # Next dev: root redirect goes to cognitive-dashboard
     if path == "/" and os.environ.get("PROXY_ROOT_TO_NEXT") == "1":
         return NEXT
     return None
@@ -87,20 +107,25 @@ class UnifiedHandler(SimpleHTTPRequestHandler):
         except Exception as e:
             self.send_error(502, f"Upstream error: {e}")
 
+    def _route(self) -> str | None:
+        path = self.path.split("?")[0]
+        hdrs = {k: v for k, v in self.headers.items()}
+        return _proxy_target(path, self.command, hdrs)
+
     def do_GET(self) -> None:
-        target = _proxy_target(self.path.split("?")[0])
+        target = self._route()
         if target:
             return self._proxy(target)
         return super().do_GET()
 
     def do_HEAD(self) -> None:
-        target = _proxy_target(self.path.split("?")[0])
+        target = self._route()
         if target:
             return self._proxy(target)
         return super().do_HEAD()
 
     def _proxy_method(self) -> None:
-        target = _proxy_target(self.path.split("?")[0])
+        target = self._route()
         if target:
             return self._proxy(target)
         if self.command == "OPTIONS":

@@ -29,7 +29,8 @@ kill_port "$WEB_PORT"
 kill_port "$API_PORT"
 sleep 1
 
-export NEXT_PUBLIC_API_URL="${NEXT_PUBLIC_API_URL:-http://127.0.0.1:${API_PORT}}"
+# Empty = same-origin through unified proxy (:13080). Override for dashboard-only on :13000.
+export NEXT_PUBLIC_API_URL="${NEXT_PUBLIC_API_URL:-}"
 export NEXT_PUBLIC_WEB_PORT="$WEB_PORT"
 export NEXT_PUBLIC_PLATFORM_CONSOLE_PORT="$PLATFORM_CONSOLE_PORT"
 export NEXT_PUBLIC_PLATFORM_CONSOLE_URL="http://127.0.0.1:${PLATFORM_CONSOLE_PORT}/console"

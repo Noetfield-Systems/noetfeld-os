@@ -1,4 +1,5 @@
-const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
+/** Empty = same-origin (required when using unified dev proxy on :13080). */
+const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? "";
 
 export type EvaluatePayload = {
   actor: string;

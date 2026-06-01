@@ -1,4 +1,4 @@
-const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
+const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? "";
 
 export type ApiHealth = {
   ok: boolean;
@@ -21,5 +21,5 @@ export async function fetchApiHealth(): Promise<ApiHealth> {
 }
 
 export function apiBaseLabel(): string {
-  return API_BASE;
+  return API_BASE || "(same-origin)";
 }

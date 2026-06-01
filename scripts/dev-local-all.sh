@@ -44,6 +44,7 @@ export COGNITIVE_DASHBOARD_PORT="$NF_DEV_WEB_PORT"
 export COGNITIVE_DASHBOARD_API_PORT="$NF_DEV_GOV_API_PORT"
 export NF_DEV_PLATFORM_INTERNAL="http://127.0.0.1:${NF_DEV_PLATFORM_PORT}"
 export NF_DEV_NEXT_INTERNAL="http://127.0.0.1:${NF_DEV_WEB_PORT}"
+export NF_DEV_GOV_API_INTERNAL="http://127.0.0.1:${NF_DEV_GOV_API_PORT}"
 
 "${ROOT}/scripts/ensure-platform-console.sh"
 
@@ -62,6 +63,7 @@ fi
 
 nohup env NF_DEV_PUBLIC_PORT="$PUBLIC_PORT" \
   NF_DEV_PLATFORM_PORT="$NF_DEV_PLATFORM_PORT" \
+  NF_DEV_GOV_API_INTERNAL="http://127.0.0.1:${NF_DEV_GOV_API_PORT}" \
   python3 "${ROOT}/scripts/dev-unified-proxy.py" >>"$PROXY_LOG" 2>&1 &
 echo $! >"$PROXY_PID_FILE"
 
