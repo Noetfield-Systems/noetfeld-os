@@ -4,8 +4,9 @@
 from __future__ import annotations
 
 import re
+import subprocess
 import sys
-from datetime import date, datetime, timezone
+from datetime import datetime, timezone
 from pathlib import Path
 from xml.etree.ElementTree import Element, SubElement, tostring
 
@@ -123,7 +124,21 @@ def priority(url: str) -> str:
 
 
 def lastmod_for(index_path: Path) -> str:
-    """Use index.html mtime so CI does not fail when run on a different calendar day."""
+    """Last commit date for the page (stable in CI); fallback to file mtime locally."""
+    rel = index_path.relative_to(ROOT).as_posix()
+    try:
+        proc = subprocess.run(
+            ["git", "log", "-1", "--format=%cs", "--", rel],
+            cwd=ROOT,
+            capture_output=True,
+            text=True,
+            check=False,
+            timeout=10,
+        )
+        if proc.returncode == 0 and proc.stdout.strip():
+            return proc.stdout.strip()[:10]
+    except (OSError, subprocess.TimeoutExpired):
+        pass
     mtime = index_path.stat().st_mtime
     return datetime.fromtimestamp(mtime, tz=timezone.utc).date().isoformat()
 
