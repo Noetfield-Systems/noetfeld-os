@@ -1,6 +1,15 @@
 import Link from "next/link";
 
-export function Shell({ children }: { children: React.ReactNode }) {
+type ShellProps = {
+  children: React.ReactNode;
+  active?: "dashboard" | "evaluate" | "audit";
+};
+
+function navClass(active: boolean): string {
+  return `rounded-md px-3 py-2 hover:bg-white/5${active ? " bg-white/10 text-white" : ""}`;
+}
+
+export function Shell({ children, active }: ShellProps) {
   return (
     <div className="min-h-screen">
       <header className="border-b border-border bg-panel/80 backdrop-blur">
@@ -10,11 +19,14 @@ export function Shell({ children }: { children: React.ReactNode }) {
             <h1 className="text-lg font-semibold text-white">Governance Console</h1>
             <p className="text-xs text-muted">Pre-execution intent evaluation · no custody or payments</p>
           </div>
-          <nav className="flex gap-3 text-sm">
-            <Link href="/" className="rounded-md px-3 py-2 hover:bg-white/5">
+          <nav className="flex flex-wrap gap-1 text-sm">
+            <Link href="/cognitive-dashboard" className={navClass(active === "dashboard")}>
+              Dashboard
+            </Link>
+            <Link href="/evaluate" className={navClass(active === "evaluate")}>
               Evaluate
             </Link>
-            <Link href="/audit" className="rounded-md px-3 py-2 hover:bg-white/5">
+            <Link href="/audit" className={navClass(active === "audit")}>
               Audit log
             </Link>
           </nav>

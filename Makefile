@@ -106,3 +106,7 @@ governance-console-e2e:
 
 governance-console-down:
 	cd governance-console && make down
+
+cognitive-dashboard-dev:
+	chmod +x scripts/dev-cognitive-dashboard.sh
+	./scripts/dev-cognitive-dashboard.sh

@@ -14,12 +14,12 @@ WEB_URL = os.getenv("WEB_URL", "http://localhost:3000").rstrip("/")
 MAX_WAIT_S = int(os.getenv("E2E_MAX_WAIT_S", "120"))
 
 
-def wait_ok(client: httpx.Client, url: str, label: str) -> None:
+def wait_ok(client: httpx.Client, url: str, label: str, *, follow_redirects: bool = False) -> None:
     deadline = time.time() + MAX_WAIT_S
     last_err: Exception | None = None
     while time.time() < deadline:
         try:
-            r = client.get(url, timeout=5.0)
+            r = client.get(url, timeout=5.0, follow_redirects=follow_redirects)
             if r.status_code == 200:
                 print(f"OK  {label} {url}")
                 return
@@ -34,7 +34,8 @@ def main() -> int:
     with httpx.Client() as client:
         wait_ok(client, f"{API_URL}/health", "api-health")
         if WEB_URL:
-            wait_ok(client, WEB_URL, "web-home")
+            wait_ok(client, f"{WEB_URL}/cognitive-dashboard", "web-cognitive-dashboard")
+            wait_ok(client, WEB_URL, "web-root-redirect", follow_redirects=True)
         else:
             print("SKIP web (WEB_URL unset)")
 
@@ -64,7 +65,7 @@ def main() -> int:
         print(f"OK  audit list ({len(rows)} rows)")
 
         if WEB_URL:
-            for path in ("/audit", f"/result/{rid}"):
+            for path in ("/cognitive-dashboard", "/audit", f"/result/{rid}"):
                 r = client.get(f"{WEB_URL}{path}", timeout=15.0)
                 if r.status_code != 200:
                     raise SystemExit(f"Web {path} returned {r.status_code}")

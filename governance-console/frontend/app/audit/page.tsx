@@ -29,7 +29,7 @@ export default function AuditPage() {
   }, []);
 
   return (
-    <Shell>
+    <Shell active="audit">
       <section className="mb-6">
         <h2 className="text-2xl font-semibold text-white">Audit log</h2>
         <p className="mt-2 text-sm text-muted">Every evaluation is stored with a unique RID for compliance traceability.</p>

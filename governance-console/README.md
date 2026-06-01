@@ -77,7 +77,13 @@ export NEXT_PUBLIC_API_URL=http://localhost:8000
 npm run dev
 ```
 
-Open http://localhost:3000
+Open http://localhost:3000/cognitive-dashboard
+
+From repo root (API + web, no Docker):
+
+```bash
+./scripts/dev-cognitive-dashboard.sh
+```
 
 ## API
 
