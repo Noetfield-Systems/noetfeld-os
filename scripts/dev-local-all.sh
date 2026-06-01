@@ -28,6 +28,15 @@ kill_stale() {
 echo "=== Noetfield local dev ==="
 kill_stale
 
+kill_port() {
+  if command -v lsof >/dev/null 2>&1; then
+    lsof -tiTCP:"$1" -sTCP:LISTEN 2>/dev/null | xargs -r kill -9 2>/dev/null || true
+  fi
+}
+# Free legacy 3000 (apps/web default, old Next docs) so redirect → 13080 works.
+kill_port 3000
+sleep 1
+
 export PLATFORM_CONSOLE_PORT="$NF_DEV_PLATFORM_PORT"
 export COGNITIVE_DASHBOARD_PORT="$NF_DEV_WEB_PORT"
 export COGNITIVE_DASHBOARD_API_PORT="$NF_DEV_GOV_API_PORT"
@@ -73,7 +82,14 @@ echo ""
 
 if "${ROOT}/scripts/verify-local-dev.sh"; then
   echo ""
-  echo "Cursor: Ports → forward ${PUBLIC_PORT} and ${NF_DEV_PLATFORM_PORT} → open globe links."
+  echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+  echo "  Servers are UP in this workspace (verified)."
+  echo "  Your Mac browser will NOT see them until you:"
+  echo "    • Cursor → Ports → forward ${PUBLIC_PORT} (+ ${NF_DEV_PLATFORM_PORT}) → globe"
+  echo "    • OR run make dev-local on your Mac"
+  echo "    • OR make dev-local-tunnel for a shareable HTTPS link"
+  echo "  Open: http://localhost:${PUBLIC_PORT}/  (after forwarding)"
+  echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 else
   echo "Some checks failed — see logs:" >&2
   echo "  $PROXY_LOG" >&2

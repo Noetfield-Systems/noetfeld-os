@@ -1,5 +1,22 @@
 # Local development (localhost)
 
+## Why your Mac shows “connection refused”
+
+`make dev-local` runs inside the **Cursor remote workspace** (a Linux VM), not on your Mac. When you type `http://localhost:8001` or `http://localhost:3000` in **Safari/Chrome on your Mac**, the browser talks to **your Mac’s** loopback — where nothing is listening — unless you bridge the VM.
+
+**Fix (pick one):**
+
+1. **Cursor Ports (recommended in Cloud)**  
+   Open the **Ports** panel → forward **13080** (and optionally **8001**) → click the **globe** icon. Use the forwarded URL Cursor gives you (often still labeled `localhost` but tunneled through Cursor).
+
+2. **Run on your Mac**  
+   Clone the repo locally, install deps, run `make dev-local` in a terminal on your machine. Then `http://localhost:13080/` works in your browser.
+
+3. **Public tunnel (fallback)**  
+   With dev already up in the workspace: `make dev-local-tunnel` — opens an HTTPS link you can paste in any browser.
+
+**Do not use port 3000** for the full site — use **13080** (unified proxy). Port 3000 only redirects to 13080 when the redirect service wins the port; an old Next process on 3000 will mislead you.
+
 ## One command
 
 ```bash

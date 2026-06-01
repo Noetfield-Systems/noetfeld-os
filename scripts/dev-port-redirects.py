@@ -32,8 +32,13 @@ def main() -> None:
     try:
         httpd = http.server.ThreadingHTTPServer(("0.0.0.0", LEGACY_PORT), RedirectHandler)
     except OSError as e:
-        print(f"redirect :{LEGACY_PORT} skipped ({e})", flush=True)
-        sys.exit(0)
+        print(f"redirect :{LEGACY_PORT} FAILED ({e})", file=sys.stderr, flush=True)
+        print(
+            f"Free port {LEGACY_PORT} (e.g. make dev-local-down) or use http://127.0.0.1:{PUBLIC}/",
+            file=sys.stderr,
+            flush=True,
+        )
+        sys.exit(1)
     print(f"redirect :{LEGACY_PORT} -> {PUBLIC_BASE}/*", flush=True)
     httpd.serve_forever()
 

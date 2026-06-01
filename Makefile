@@ -42,6 +42,10 @@ verify-local-dev:
 	@chmod +x scripts/verify-local-dev.sh
 	./scripts/verify-local-dev.sh
 
+dev-local-tunnel:
+	@chmod +x scripts/dev-local-tunnel.sh
+	./scripts/dev-local-tunnel.sh
+
 www-dev:
 	@echo "Use: make dev-local  (www is http://localhost:13080/)"
 
