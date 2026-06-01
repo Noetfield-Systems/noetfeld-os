@@ -17,6 +17,11 @@ export function DevPortBanner() {
     return null;
   }
 
+  const port =
+    portEnv ?? (typeof window !== "undefined" ? window.location.port || "3000" : "3000");
+  const pageUrl =
+    web ?? `http://localhost:${port}/cognitive-dashboard`;
+
   return (
     <div
       className="mb-6 rounded-lg border border-accent/30 bg-accent/10 px-4 py-3 font-mono text-xs text-white/90"
@@ -26,15 +31,28 @@ export function DevPortBanner() {
       <p className="text-[10px] uppercase tracking-widest text-accent">Local dev</p>
       <p className="mt-1">
         <span className="text-muted">Page: </span>
-        {web ?? `http://localhost:${portEnv ?? "3000"}/cognitive-dashboard`}
+        <a className="text-accent underline" href={pageUrl}>
+          {pageUrl}
+        </a>
       </p>
       <p className="mt-1">
         <span className="text-muted">Port: </span>
-        {portEnv ?? (typeof window !== "undefined" ? window.location.port || "3000" : "3000")}
+        {port}
       </p>
       <p className="mt-1">
         <span className="text-muted">API: </span>
         {apiEnv}
+      </p>
+      <p className="mt-2 text-[11px] leading-relaxed text-muted">
+        Cursor Cloud: open the <strong className="text-white/80">Ports</strong> tab and forward port{" "}
+        {port} — your Mac browser only sees localhost after forwarding.
+      </p>
+      <p className="mt-1 text-[11px] text-muted">
+        Platform console:{" "}
+        <a className="text-accent underline" href="http://127.0.0.1:8001/console">
+          http://127.0.0.1:8001/console
+        </a>{" "}
+        (forward port 8001)
       </p>
     </div>
   );
