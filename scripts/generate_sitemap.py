@@ -4,15 +4,15 @@
 from __future__ import annotations
 
 import re
+import subprocess
 import sys
-from datetime import date
+from datetime import datetime, timezone
 from pathlib import Path
+from xml.etree import ElementTree as ET
 from xml.etree.ElementTree import Element, SubElement, tostring
 
 ROOT = Path(__file__).resolve().parents[1]
 BASE = "https://www.noetfield.com"
-TODAY = date.today().isoformat()
-
 SKIP_DIRS = {
     "_archive",
     "apps",
@@ -124,17 +124,77 @@ def priority(url: str) -> str:
     return f"{PRIORITY.get(url, 0.7):.1f}"
 
 
+def load_committed_lastmods() -> dict[str, str]:
+    """Preserve lastmod from sitemap.xml when git history is shallow (CI checkout)."""
+    path = ROOT / "sitemap.xml"
+    if not path.exists():
+        return {}
+    try:
+        root = ET.parse(path).getroot()
+    except ET.ParseError:
+        return {}
+    ns = {"sm": "http://www.sitemaps.org/schemas/sitemap/0.9"}
+    out: dict[str, str] = {}
+    for url_el in root.findall("sm:url", ns) or root.findall("url"):
+        loc_el = url_el.find("sm:loc", ns)
+        if loc_el is None:
+            loc_el = url_el.find("loc")
+        mod_el = url_el.find("sm:lastmod", ns)
+        if mod_el is None:
+            mod_el = url_el.find("lastmod")
+        if loc_el is None or mod_el is None or not loc_el.text or not mod_el.text:
+            continue
+        loc = loc_el.text.removeprefix(BASE)
+        if not loc.startswith("/"):
+            loc = "/" + loc
+        if not loc.endswith("/"):
+            loc = loc + "/"
+        out[loc] = mod_el.text.strip()[:10]
+    return out
+
+
+def lastmod_for(index_path: Path, preserved: dict[str, str]) -> str:
+    """Git commit date when available; else keep committed sitemap; never checkout mtime."""
+    rel = index_path.relative_to(ROOT).as_posix()
+    try:
+        proc = subprocess.run(
+            ["git", "log", "-1", "--format=%cs", "--", rel],
+            cwd=ROOT,
+            capture_output=True,
+            text=True,
+            check=False,
+            timeout=10,
+        )
+        if proc.returncode == 0 and proc.stdout.strip():
+            return proc.stdout.strip()[:10]
+    except (OSError, subprocess.TimeoutExpired):
+        pass
+    route = url_path(index_path)
+    if route in preserved:
+        return preserved[route]
+    mtime = index_path.stat().st_mtime
+    return datetime.fromtimestamp(mtime, tz=timezone.utc).date().isoformat()
+
+
 def main() -> int:
+    preserved_lastmods = load_committed_lastmods()
     urls: list[str] = []
     for index in sorted(ROOT.rglob("index.html")):
         if is_public_route(index):
             urls.append(url_path(index))
 
     urlset = Element("urlset", xmlns="http://www.sitemaps.org/schemas/sitemap/0.9")
+    index_by_url = {}
+    for index in sorted(ROOT.rglob("index.html")):
+        if is_public_route(index):
+            index_by_url[url_path(index)] = index
+
     for loc_path in sorted(set(urls), key=lambda u: (u != "/", u)):
         url_el = SubElement(urlset, "url")
         SubElement(url_el, "loc").text = BASE + loc_path
-        SubElement(url_el, "lastmod").text = TODAY
+        SubElement(url_el, "lastmod").text = lastmod_for(
+            index_by_url[loc_path], preserved_lastmods
+        )
         SubElement(url_el, "changefreq").text = changefreq(loc_path)
         SubElement(url_el, "priority").text = priority(loc_path)
 

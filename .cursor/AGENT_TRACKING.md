@@ -22,6 +22,8 @@ Read in order:
 
 **Do not** copy TrustField or VIRLUX items from `ops/private/todolist/external/` into Noetfield code.
 
+**Sina MonoRepo SSOT (internal, gitignored):** Desktop `SourceA/SINA_OS_SSOT_LOCKED.md` and `PHASE1_UNIFIED_BLUEPRINT_v2_3.md` are **read-only for agents** — ASF edits on Mac only. After bootstrap, agents may read a local mirror under `ops/private/sourceA/` (founder sync) plus `NOETFIELD_REPO_ALIGNMENT.md`. Never commit `ops/private/`. Never modify Desktop SourceA files.
+
 ## If `ops/private/` is missing (cloud agent)
 
 1. Use **GitHub Issues** — labels: `launch`, `legal`, `engineering`, `NF-P0`
@@ -32,6 +34,15 @@ Read in order:
 Seed locally: `./scripts/bootstrap-private-ops.sh` · MSB pack: `./scripts/seed-msb-partner-pack.sh`
 
 **MSB partner channel:** [docs/strategy/msb-partner-playbook.md](../docs/strategy/msb-partner-playbook.md) · deploy [docs/MSB_DEPLOY_AND_PILOT.md](../docs/MSB_DEPLOY_AND_PILOT.md)
+
+## Internal doctrine (agents with `ops/private/` only)
+
+**Not in git.** Read only if present after founder bootstrap:
+
+- `ops/private/sourceA/AUTO_CONFLICT_ENGINE_V3_LOCKED.md` (mirror)
+- Desktop canonical: `~/Desktop/SourceA/AUTO_CONFLICT_ENGINE_V3_LOCKED.md`
+
+Do not copy this doctrine into `docs/`, www, or commits. Cross-plane notes use `[DESIGN]` `[EXECUTION]` `[DELIVERY]` when relevant.
 
 ## Scope
 

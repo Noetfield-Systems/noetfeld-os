@@ -34,7 +34,7 @@ jobs:
     env:
       DATABASE_URL: postgresql+asyncpg://postgres:postgres@localhost:5432/noetfield
       RUNTIME_EVENT_STORE: postgres
-      PYTHONPATH: .:packages/types:packages/config:services/events:services/ledger:services/graph:services/governance:services/signals:services/workflow:services/ai-runtime:services/inspectors:services/identity:services/copilot-governance
+      PYTHONPATH: .:packages/types:packages/config:packages/sdk:services/events:services/ledger:services/graph:services/governance:services/signals:services/workflow:services/ai-runtime:services/inspectors:services/identity:services/copilot-governance
 
     steps:
       - name: Checkout
@@ -77,7 +77,7 @@ jobs:
       - name: Verify health endpoints (ephemeral API)
         env:
           RUNTIME_EVENT_STORE: memory
-          PYTHONPATH: .:packages/types:packages/config:services/events:services/ledger:services/graph:services/governance:services/signals:services/workflow:services/ai-runtime:services/inspectors:services/identity:services/copilot-governance
+          PYTHONPATH: .:packages/types:packages/config:packages/sdk:services/events:services/ledger:services/graph:services/governance:services/signals:services/workflow:services/ai-runtime:services/inspectors:services/identity:services/copilot-governance
         run: |
           uvicorn noetfield_governance.api:app --host 127.0.0.1 --port 8001 --app-dir services/governance &
           sleep 4

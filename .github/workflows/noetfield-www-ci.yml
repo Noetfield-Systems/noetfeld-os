@@ -23,6 +23,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - uses: actions/setup-python@v5
         with:
@@ -33,15 +35,8 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install -e ".[dev]"
 
-      - name: Regenerate sitemap
-        run: python3 scripts/generate_sitemap.py
-
-      - name: Check sitemap committed
-        run: |
-          git diff --exit-code sitemap.xml || (
-            echo "sitemap.xml is out of date — run: python3 scripts/generate_sitemap.py"
-            exit 1
-          )
+      - name: Verify sitemap structure committed
+        run: python3 scripts/verify_sitemap_committed.py
 
       - name: Public site health
         run: make site-health

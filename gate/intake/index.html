@@ -8,7 +8,9 @@
  <meta name="robots" content="index,follow" />
  <link rel="canonical" href="https://www.noetfield.com/gate/intake/" />
  <link rel="icon" href="/noetfield-favicon-512.png" type="image/png" />
+ <link rel="stylesheet" href="/assets/noetfield-tokens.css" />
  <link rel="stylesheet" href="/assets/noetfield-shell.css" />
+ <link rel="stylesheet" href="/assets/noetfield-components.css" />
  <link rel="stylesheet" href="/assets/noetfield-sales.css" />
  <script src="/assets/noetfield-intake-email.js" defer></script>
  <script src="/assets/noetfield-shell.js" defer></script>
@@ -17,53 +19,66 @@
  <div class="bg" aria-hidden="true"></div>
  <a class="skip" href="#main">Skip to content</a>
  <header id="nfHeader"></header>
- <main id="main" class="wrap nf-sales">
- <p class="eyebrow">Engagement intake gateway</p>
+ <main id="main" class="wrap nf-page">
+ <header class="nf-hero">
+ <p class="nf-eyebrow">Engagement intake gateway</p>
  <h1>Request governance engagement</h1>
- <p class="lead">
+ <p class="nf-lead">
  All intake vectors—Trust Brief, Copilot, Bank Pilot, and partner programs—route through a single operational inbox:
- <strong>operations@noetfield.com</strong>.
+ <strong><a href="mailto:operations@noetfield.com">operations@noetfield.com</a></strong>.
+ Include your footer <strong>Request ID</strong> when you have one.
  </p>
- <section class="block">
- <h2>Choose your path</h2>
+ </header>
+
+ <section class="nf-offerings" aria-labelledby="gate-paths">
+ <p class="nf-section-label" id="gate-paths">Choose your path</p>
  <div class="nf-dir-grid">
  <article class="nf-dir-card featured">
- <h3>Trust Brief</h3>
+ <p class="meta">Trust Brief</p>
  <p>Six-week governance diagnostic — from $10,000.</p>
  <a class="btn btn-secondary" id="giTrustBrief" href="/trust-brief/intake/?vector=trust-brief">Trust Brief intake</a>
  </article>
  <article class="nf-dir-card featured">
- <h3>Copilot Governance Pack</h3>
+ <p class="meta">Copilot Governance Pack</p>
  <p>Microsoft 365 Copilot policy alignment and compliance layer.</p>
  <a class="btn btn-secondary" id="giCopilot" href="/trust-brief/intake/?vector=copilot-governance&amp;interest=copilot">Copilot intake</a>
  </article>
  <article class="nf-dir-card featured">
- <h3>Bank Pilot</h3>
- <p>Read-only governance simulation (shadow mode).</p>
+ <p class="meta">Bank Pilot</p>
+ <span class="nf-badge">Read-only simulation only</span>
+ <p>Shadow governance evaluation for institutional buyers.</p>
  <a class="btn btn-secondary" id="giBankPilot" href="/trust-brief/intake/?vector=bank-pilot&amp;interest=bank-pilot">Bank Pilot intake</a>
+ <a class="btn btn-secondary" href="/bank-pilot/">Bank Pilot overview</a>
  </article>
  <article class="nf-dir-card">
- <h3>Partner programs</h3>
- <p>Control layer for banks, VASPs, exchanges, and PSPs — not MSB/RPAA.</p>
+ <p class="meta">Partner programs</p>
+ <p>Control layer for banks, VASPs, exchanges, and PSPs.</p>
  <a class="btn btn-secondary" href="/partners/">Partners hub</a>
  <a class="btn btn-secondary" id="giPartner" href="/trust-brief/intake/?vector=partner-gateway">Partner intake</a>
  </article>
  <article class="nf-dir-card featured">
- <h3>Licensed MSB / PSP</h3>
- <p>Control layer before your payment APIs — FINTRAC/RPAA execution stays with you.</p>
+ <p class="meta">Licensed MSB / PSP</p>
+ <p>Control layer before your payment APIs — execution stays with you.</p>
  <a class="btn btn-secondary" id="giPartnerMsb" href="/trust-brief/intake/?vector=partner-msb&amp;interest=partner-msb">MSB partner intake</a>
  </article>
  <article class="nf-dir-card">
- <h3>Licensed exchange / VASP</h3>
+ <p class="meta">Licensed exchange / VASP</p>
  <p>Shadow evaluate + read-only signals; partner executes.</p>
  <a class="btn btn-secondary" id="giPartnerExchange" href="/trust-brief/intake/?vector=partner-exchange&amp;interest=partner-exchange">Exchange partner intake</a>
  </article>
  </div>
  </section>
- <div class="cta-bar">
- <div><strong>Email operations directly</strong><p>Include your Request ID if you have one.</p></div>
- <a class="btn btn-primary" id="giEmailOps" href="mailto:operations@noetfield.com">Email operations@noetfield.com</a>
+
+ <aside class="nf-cta-band">
+ <div>
+ <h2>Email operations directly</h2>
+ <p>Include your Request ID if you have one.</p>
  </div>
+ <div class="nf-cta-actions">
+ <a class="btn btn-primary" id="giEmailOps" href="mailto:operations@noetfield.com">operations@noetfield.com</a>
+ <a class="btn btn-secondary" href="/trust-brief/intake/" data-rid-link>Request Governance Brief</a>
+ </div>
+ </aside>
  </main>
  <footer id="nfFooter"></footer>
  <script>
