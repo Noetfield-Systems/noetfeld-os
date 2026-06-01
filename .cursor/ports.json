@@ -1,7 +1,12 @@
 [
   {
     "name": "Cognitive Dashboard",
-    "port": 3000,
+    "port": 13000,
     "path": "/cognitive-dashboard"
+  },
+  {
+    "name": "Platform Governance Console",
+    "port": 18001,
+    "path": "/console"
   }
 ]

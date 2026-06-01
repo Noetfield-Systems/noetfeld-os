@@ -16,7 +16,7 @@ api:
 	PYTHONPATH=$(PYTHONPATH_VALUE) RUNTIME_EVENT_STORE=memory python3 -m uvicorn noetfield_governance.api:app --reload --host 0.0.0.0 --port 8000 --app-dir services/governance
 
 api-v3:
-	PYTHONPATH=$(PYTHONPATH_VALUE) RUNTIME_EVENT_STORE=memory python3 -m uvicorn noetfield_governance.api:app --reload --host 0.0.0.0 --port 8001 --app-dir services/governance
+	@. ./scripts/dev-ports.sh && PYTHONPATH=$(PYTHONPATH_VALUE) RUNTIME_EVENT_STORE=memory python3 -m uvicorn noetfield_governance.api:app --reload --host 0.0.0.0 --port $$PLATFORM_CONSOLE_PORT --app-dir services/governance
 
 platform-console-dev:
 	@chmod +x scripts/dev-platform-console.sh
@@ -28,7 +28,7 @@ platform-console-up:
 
 platform-console-down:
 	@if [ -f .platform-console.pid ]; then kill $$(cat .platform-console.pid) 2>/dev/null || true; rm -f .platform-console.pid; fi
-	@lsof -tiTCP:8001 -sTCP:LISTEN 2>/dev/null | xargs -r kill -9 2>/dev/null || true
+	@. ./scripts/dev-ports.sh && lsof -tiTCP:$$PLATFORM_CONSOLE_PORT -sTCP:LISTEN 2>/dev/null | xargs -r kill -9 2>/dev/null || true
 
 dev-local:
 	@chmod +x scripts/dev-local-all.sh

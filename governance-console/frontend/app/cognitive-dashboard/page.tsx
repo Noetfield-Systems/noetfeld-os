@@ -69,12 +69,15 @@ export default function CognitiveDashboardPage() {
           <p className="mt-1 text-sm text-muted">Search evaluations by RID</p>
         </Link>
         <a
-          href="http://127.0.0.1:8001/console"
+          href={
+            process.env.NEXT_PUBLIC_PLATFORM_CONSOLE_URL ??
+            "http://127.0.0.1:18001/console"
+          }
           className="rounded-xl border border-border bg-panel p-4 transition hover:border-accent/40"
         >
-          <p className="text-xs uppercase tracking-wide text-muted">Production path</p>
-          <p className="mt-2 text-lg font-medium text-white">Platform console</p>
-          <p className="mt-1 text-sm text-muted">Local:8001 when api-v3 is running</p>
+          <p className="text-xs uppercase tracking-wide text-muted">Platform console</p>
+          <p className="mt-2 text-lg font-medium text-white">Governance console</p>
+          <p className="mt-1 text-sm text-muted">Local port 18001 (make platform-console-dev)</p>
         </a>
       </div>
 

@@ -1,16 +1,13 @@
 {
   "remote.autoForwardPorts": true,
   "remote.autoForwardPortsSource": "hybrid",
-  "remote.otherPortsAttributes": {
-    "onAutoForward": "notify"
-  },
   "remote.portsAttributes": {
-    "3000": {
+    "13000": {
       "label": "Cognitive Dashboard",
       "onAutoForward": "openBrowser",
       "uriFormat": "http://localhost:${port}/cognitive-dashboard"
     },
-    "8001": {
+    "18001": {
       "label": "Platform Console",
       "onAutoForward": "openBrowser",
       "uriFormat": "http://localhost:${port}/console"

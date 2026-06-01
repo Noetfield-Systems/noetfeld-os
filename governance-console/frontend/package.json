@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "node server.js",
-    "dev:3000": "PORT=3000 COGNITIVE_DASHBOARD_PORT=3000 node server.js",
+    "dev:13000": "PORT=13000 COGNITIVE_DASHBOARD_PORT=13000 node server.js",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"

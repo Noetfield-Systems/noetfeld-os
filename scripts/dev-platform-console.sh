@@ -1,7 +1,10 @@
 #!/usr/bin/env bash
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-PORT="${PLATFORM_CONSOLE_PORT:-8001}"
+# shellcheck source=dev-ports.sh
+source "${ROOT}/scripts/dev-ports.sh"
+
+PORT="$PLATFORM_CONSOLE_PORT"
 export PYTHONPATH="${ROOT}/packages/types:${ROOT}/packages/config:${ROOT}/packages/sdk:${ROOT}/services/events:${ROOT}/services/ledger:${ROOT}/services/graph:${ROOT}/services/governance:${ROOT}/services/signals:${ROOT}/services/workflow:${ROOT}/services/ai-runtime:${ROOT}/services/inspectors:${ROOT}/services/identity:${ROOT}/services/copilot-governance"
 export RUNTIME_EVENT_STORE="${RUNTIME_EVENT_STORE:-memory}"
 

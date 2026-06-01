@@ -2,10 +2,12 @@
 
 import { useEffect, useState } from "react";
 
+const DEFAULT_WEB_PORT = process.env.NEXT_PUBLIC_WEB_PORT ?? "13000";
+const DEFAULT_PLATFORM_PORT = process.env.NEXT_PUBLIC_PLATFORM_CONSOLE_PORT ?? "18001";
+const apiEnv = process.env.NEXT_PUBLIC_API_URL ?? `http://127.0.0.1:18002`;
+
 export function DevPortBanner() {
   const [web, setWeb] = useState<string | null>(null);
-  const apiEnv = process.env.NEXT_PUBLIC_API_URL ?? "http://127.0.0.1:8000";
-  const portEnv = process.env.NEXT_PUBLIC_WEB_PORT;
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -18,9 +20,9 @@ export function DevPortBanner() {
   }
 
   const port =
-    portEnv ?? (typeof window !== "undefined" ? window.location.port || "3000" : "3000");
-  const pageUrl =
-    web ?? `http://localhost:${port}/cognitive-dashboard`;
+    DEFAULT_WEB_PORT || (typeof window !== "undefined" ? window.location.port : "13000");
+  const pageUrl = web ?? `http://localhost:${port}/cognitive-dashboard`;
+  const consoleUrl = `http://localhost:${DEFAULT_PLATFORM_PORT}/console`;
 
   return (
     <div
@@ -30,29 +32,20 @@ export function DevPortBanner() {
     >
       <p className="text-[10px] uppercase tracking-widest text-accent">Local dev</p>
       <p className="mt-1">
-        <span className="text-muted">Page: </span>
+        <span className="text-muted">Dashboard: </span>
         <a className="text-accent underline" href={pageUrl}>
           {pageUrl}
         </a>
       </p>
       <p className="mt-1">
-        <span className="text-muted">Port: </span>
-        {port}
+        <span className="text-muted">Console: </span>
+        <a className="text-accent underline" href={consoleUrl}>
+          {consoleUrl}
+        </a>
       </p>
       <p className="mt-1">
-        <span className="text-muted">API: </span>
+        <span className="text-muted">Gov API: </span>
         {apiEnv}
-      </p>
-      <p className="mt-2 text-[11px] leading-relaxed text-muted">
-        Cursor Cloud: open the <strong className="text-white/80">Ports</strong> tab and forward port{" "}
-        {port} — your Mac browser only sees localhost after forwarding.
-      </p>
-      <p className="mt-1 text-[11px] text-muted">
-        Platform console:{" "}
-        <a className="text-accent underline" href="http://127.0.0.1:8001/console">
-          http://127.0.0.1:8001/console
-        </a>{" "}
-        (forward port 8001)
       </p>
     </div>
   );
