@@ -13,7 +13,7 @@
         "background": {
           "activeOnStart": true,
           "beginsPattern": "Noetfield local dev",
-          "endsPattern": "OK  website|forward port"
+          "endsPattern": "All checks passed|━━━"
         }
       },
       "presentation": { "reveal": "always", "panel": "dedicated" }

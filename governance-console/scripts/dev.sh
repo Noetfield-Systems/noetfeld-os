@@ -28,5 +28,5 @@ BACK_PID=$!
 FRONT_PID=$!
 
 trap 'kill $BACK_PID $FRONT_PID 2>/dev/null' EXIT
-echo "Backend: http://localhost:8000  Frontend: http://localhost:3000"
+echo "Use: make dev-local  →  http://localhost:13080/"
 wait

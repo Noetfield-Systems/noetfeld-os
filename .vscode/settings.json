@@ -1,6 +1,12 @@
 {
   "remote.autoForwardPorts": true,
   "remote.autoForwardPortsSource": "hybrid",
+  "remote.autoForwardPortsFallback": 0,
+  "remote.otherPortsAttributes": {
+    "3000": { "onAutoForward": "ignore" },
+    "13000": { "onAutoForward": "ignore" },
+    "18002": { "onAutoForward": "ignore" }
+  },
   "remote.portsAttributes": {
     "13080": {
       "label": "Noetfield (website + all apps)",

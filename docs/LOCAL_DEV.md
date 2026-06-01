@@ -26,8 +26,11 @@ make dev-local
 Stops stale processes, starts all backends, runs health checks.
 
 ```bash
-make dev-local-down   # stop everything
-make verify-local-dev # health check only
+make dev-local-down     # stop everything
+make dev-local-status   # ports + HTTP health summary
+make verify-local-dev   # health check only
+make dev-local-tunnel   # foreground public HTTPS URL
+make dev-local-tunnel-bg  # background tunnel → .dev-tunnel-url.txt
 ```
 
 ## URLs (use after Cursor **Ports** forward)

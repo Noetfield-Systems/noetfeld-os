@@ -46,6 +46,14 @@ dev-local-tunnel:
 	@chmod +x scripts/dev-local-tunnel.sh
 	./scripts/dev-local-tunnel.sh
 
+dev-local-status:
+	@chmod +x scripts/dev-local-status.sh scripts/dev-kill-port.sh
+	./scripts/dev-local-status.sh
+
+dev-local-tunnel-bg:
+	@chmod +x scripts/dev-local-tunnel-bg.sh
+	NF_DEV_AUTO_TUNNEL=1 ./scripts/dev-local-tunnel-bg.sh
+
 www-dev:
 	@echo "Use: make dev-local  (www is http://localhost:13080/)"
 

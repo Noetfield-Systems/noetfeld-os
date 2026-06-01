@@ -34,4 +34,14 @@ Autonomous Governed Intelligence Nervous System:
 
 Start with [docs/DEVELOPER_BOOTSTRAP.md](docs/DEVELOPER_BOOTSTRAP.md).
 
+## Local development
+
+```bash
+make dev-local          # start all services (website, console, dashboard)
+make dev-local-status   # health + URLs
+make verify-local-dev   # smoke checks only
+```
+
+**Cursor Cloud:** forward port **13080** in the **Ports** panel, then open the globe link. See [docs/LOCAL_DEV.md](docs/LOCAL_DEV.md).
+
 **Go live:** [docs/GO_LIVE.md](docs/GO_LIVE.md) · [docs/RUNBOOK.md](docs/RUNBOOK.md) · [docs/PRACTICAL_PLAYBOOK.md](docs/PRACTICAL_PLAYBOOK.md)

@@ -13,6 +13,8 @@ REDIRECT_LOG="${ROOT}/.dev-redirect.log"
 
 chmod +x "${ROOT}/scripts/ensure-platform-console.sh" \
   "${ROOT}/scripts/dev-cognitive-dashboard.sh" \
+  "${ROOT}/scripts/dev-kill-port.sh" \
+  "${ROOT}/scripts/dev-local-tunnel-bg.sh" \
   "${ROOT}/scripts/dev-unified-proxy.py" \
   "${ROOT}/scripts/dev-port-redirects.py" \
   "${ROOT}/scripts/verify-local-dev.sh" \
@@ -29,12 +31,12 @@ echo "=== Noetfield local dev ==="
 kill_stale
 
 kill_port() {
-  if command -v lsof >/dev/null 2>&1; then
-    lsof -tiTCP:"$1" -sTCP:LISTEN 2>/dev/null | xargs -r kill -9 2>/dev/null || true
-  fi
+  bash "${ROOT}/scripts/dev-kill-port.sh" "$1" 2>/dev/null || true
 }
-# Free legacy 3000 (apps/web default, old Next docs) so redirect → 13080 works.
-kill_port 3000
+LEGACY_PORT="${NF_DEV_LEGACY_NEXT_PORT:-3000}"
+# Free legacy port (apps/web default, orphan next-server) so redirect → 13080 works.
+kill_port "$LEGACY_PORT"
+pkill -9 -f "next-server \\(v" 2>/dev/null || true
 sleep 1
 
 export PLATFORM_CONSOLE_PORT="$NF_DEV_PLATFORM_PORT"
@@ -63,11 +65,20 @@ nohup env NF_DEV_PUBLIC_PORT="$PUBLIC_PORT" \
   python3 "${ROOT}/scripts/dev-unified-proxy.py" >>"$PROXY_LOG" 2>&1 &
 echo $! >"$PROXY_PID_FILE"
 
-nohup env NF_DEV_PUBLIC_PORT="$PUBLIC_PORT" \
+nohup env NF_DEV_PUBLIC_PORT="$PUBLIC_PORT" NF_DEV_LEGACY_NEXT_PORT="$LEGACY_PORT" \
   python3 "${ROOT}/scripts/dev-port-redirects.py" >>"$REDIRECT_LOG" 2>&1 &
 echo $! >"$REDIRECT_PID_FILE"
 
 sleep 2
+legacy_code="$(curl -sS -o /dev/null -w "%{http_code}" --max-redirs 0 --connect-timeout 2 \
+  "http://127.0.0.1:${LEGACY_PORT}/" 2>/dev/null || echo "000")"
+if [[ "$legacy_code" != "302" ]]; then
+  echo "WARN: :${LEGACY_PORT} redirect not active (${legacy_code}) — use http://localhost:${PUBLIC_PORT}/ only" >&2
+fi
+
+if [[ "${NF_DEV_AUTO_TUNNEL:-0}" == "1" ]]; then
+  bash "${ROOT}/scripts/dev-local-tunnel-bg.sh" || true
+fi
 
 cat >"$URLS_FILE" <<EOF
 WEBSITE=http://localhost:${PUBLIC_PORT}/
@@ -89,6 +100,9 @@ if "${ROOT}/scripts/verify-local-dev.sh"; then
   echo "    • OR run make dev-local on your Mac"
   echo "    • OR make dev-local-tunnel for a shareable HTTPS link"
   echo "  Open: http://localhost:${PUBLIC_PORT}/  (after forwarding)"
+  if [[ -f "${ROOT}/.dev-tunnel-url.txt" ]]; then
+    echo "  Public tunnel: $(cat "${ROOT}/.dev-tunnel-url.txt")"
+  fi
   echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 else
   echo "Some checks failed — see logs:" >&2

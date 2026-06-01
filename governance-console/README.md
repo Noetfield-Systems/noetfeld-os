@@ -68,7 +68,7 @@ pip install -r requirements.txt
 uvicorn main:app --reload --port 8000
 ```
 
-### Frontend (port 3000)
+### Frontend (port 13000 internal / 13080 via `make dev-local`)
 
 ```bash
 cd frontend
@@ -77,7 +77,7 @@ export NEXT_PUBLIC_API_URL=http://localhost:8000
 npm run dev
 ```
 
-Open http://localhost:3000/cognitive-dashboard
+Open http://localhost:13080/cognitive-dashboard (via `make dev-local`) or http://localhost:13000/cognitive-dashboard (dashboard only)
 
 From repo root (API + web, no Docker — **keeps running in the terminal**):
 
@@ -87,9 +87,9 @@ make cognitive-dashboard-dev
 bash scripts/dev-cognitive-dashboard.sh
 ```
 
-If port 3000 is busy, the script uses **3100** (see `.dev-cognitive-dashboard.env` for the actual URL).
+Ports are defined in `scripts/dev-ports.sh` (default dashboard **13000**, public site **13080**).
 
-Open the URL printed in the terminal, e.g. http://localhost:3000/cognitive-dashboard
+Open the URL printed in the terminal, e.g. http://localhost:13080/cognitive-dashboard
 
 ## API
 

@@ -10,6 +10,9 @@
 .dev-proxy.log
 .dev-redirect.pid
 .dev-redirect.log
+.dev-tunnel.pid
+.dev-tunnel.log
+.dev-tunnel-url.txt
 .local-dev-urls.txt
 .cognitive-dashboard.log
 .cognitive-dashboard.pid
@@ -38,3 +41,4 @@ logs/
 
 # Founder/agent internal tracking (not public — see ops/README.md)
 ops/private/
+.dev-tunnel-url.txt.tmp

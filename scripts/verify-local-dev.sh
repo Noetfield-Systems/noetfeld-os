@@ -29,6 +29,17 @@ check "http://127.0.0.1:${PUBLIC}/cognitive-dashboard" "dashboard (proxy)"
 check "http://127.0.0.1:${PLATFORM}/console" "console (direct)"
 check "http://127.0.0.1:${PUBLIC}/assets/noetfield-tokens.css" "www assets"
 
+LEGACY="${NF_DEV_LEGACY_NEXT_PORT:-3000}"
+legacy_code="$(curl -sS -o /dev/null -w "%{http_code}" --max-redirs 0 --connect-timeout 2 \
+  "http://127.0.0.1:${LEGACY}/" 2>/dev/null || echo "000")"
+if [[ "$legacy_code" == "302" ]]; then
+  echo "OK   legacy :${LEGACY} redirect (302)"
+elif [[ "$legacy_code" == "000" ]]; then
+  echo "OK   legacy :${LEGACY} (not in use)"
+else
+  echo "WARN legacy :${LEGACY} ($legacy_code) — use http://localhost:${PUBLIC}/" >&2
+fi
+
 # governance evaluate via proxy
 eval_code="$(curl -sS -o /dev/null -w "%{http_code}" --connect-timeout 5 \
   -X POST "http://127.0.0.1:${PUBLIC}/api/v1/governance/evaluate" \

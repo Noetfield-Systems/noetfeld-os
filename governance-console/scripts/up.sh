@@ -10,7 +10,7 @@ fi
 docker compose up -d --build --wait postgres api web
 echo ""
 echo "Governance Console ready:"
-echo "  Web   http://localhost:3000/cognitive-dashboard"
+echo "  Web   http://localhost:13080/cognitive-dashboard  (make dev-local)"
 echo "  API   http://localhost:8000"
 echo "  Docs  http://localhost:8000/docs"
 echo ""
