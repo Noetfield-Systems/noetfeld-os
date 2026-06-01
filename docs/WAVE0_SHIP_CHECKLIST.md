@@ -8,6 +8,8 @@
 ## Repo (done on `main`)
 
 - [x] Merge [PR #10](https://github.com/kazemnezhadsina144-dot/Noetfield/pull/10)
+- [x] Merge [PR #14](https://github.com/kazemnezhadsina144-dot/Noetfield/pull/14) — governance pilot runbook, rate limits, export script
+- [x] Bank-grade repo deliverables — [BANK_GRADE_CHECKLIST.md](./BANK_GRADE_CHECKLIST.md) · [diligence/](./diligence/)
 - [x] Procurement visible-copy warnings cleared (engagement intake wording)
 
 ---

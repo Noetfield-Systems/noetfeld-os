@@ -1,0 +1,37 @@
+# Bank Pilot — due diligence pack (internal)
+
+**Audience:** Regulated buyers (bank, MSB, enterprise) under NDA.  
+**Public positioning:** [PRODUCT_TRUTH.md](../PRODUCT_TRUTH.md) · [BANK_PILOT_DEMO.md](../BANK_PILOT_DEMO.md)
+
+---
+
+## Contents (this folder)
+
+| Artifact | Path |
+|----------|------|
+| Sample audit export (redacted) | [sample-audit-export.redacted.json](./sample-audit-export.redacted.json) |
+| OpenAPI (filtered, institutional) | [../api/openapi.json](../api/openapi.json) · live `/openapi.json` on platform |
+| RPAA-safe positioning | [rpaa-positioning-onepager.md](./rpaa-positioning-onepager.md) |
+| Print / board PDF styles | [../../assets/noetfield-print.css](../../assets/noetfield-print.css) · [../collateral/](../collateral/) |
+| MSB partner templates | [../../ops/templates/msb/](../../ops/templates/msb/) |
+| E-23 vendor evidence API | `GET /api/v1/governance/vendor-evidence` |
+
+---
+
+## Demo path (production)
+
+1. `POST /api/v1/governance/evaluate` with `mode: shadow` and pilot Bearer token.
+2. Note `request_id` (RID) in response.
+3. `GET /api/v1/governance/audit-export?request_id=RID-…` — or `make trust-brief-export RID=…`.
+
+Runbook: [GOVERNANCE_PILOT_RUNBOOK.md](../GOVERNANCE_PILOT_RUNBOOK.md).
+
+---
+
+## Regenerate OpenAPI
+
+```bash
+make generate-openapi
+```
+
+Commit `docs/api/openapi.json` when governance routes change.

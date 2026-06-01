@@ -1,0 +1,249 @@
+/* Governance Evaluation Interface — platform console (v3 tokens) */
+
+body.nf-console {
+  margin: 0;
+  min-height: 100vh;
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  line-height: var(--leading-body);
+  color: var(--text);
+  background: radial-gradient(1200px 600px at 20% -10%, rgba(200, 163, 73, 0.08), transparent 55%),
+    linear-gradient(180deg, var(--bg0), var(--bg1));
+}
+
+.nf-console .nf-console-banner {
+  margin: 16px 24px 0;
+  padding: 12px 16px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--gold-dim);
+  background: rgba(200, 163, 73, 0.08);
+  color: var(--muted);
+  font-size: var(--text-sm);
+  max-width: 1152px;
+}
+
+.nf-console header.nf-console-head {
+  padding: 20px 24px 16px;
+  border-bottom: 1px solid var(--line);
+}
+
+.nf-console header.nf-console-head h1 {
+  font-family: var(--font-serif);
+  font-size: var(--text-lg);
+  font-weight: 600;
+  margin: 0 0 6px;
+}
+
+.nf-console .nf-console-sub {
+  color: var(--muted);
+  font-size: var(--text-sm);
+  margin: 0;
+  max-width: 640px;
+}
+
+.nf-console .nf-pilot-auth {
+  margin: 12px 24px 0;
+  max-width: 1152px;
+  padding: 14px 16px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--line);
+  background: var(--panel);
+}
+
+.nf-console .nf-pilot-auth label {
+  display: block;
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-caps);
+  color: var(--muted2);
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+
+.nf-console .nf-pilot-auth input {
+  width: 100%;
+  max-width: 480px;
+  background: var(--bg1);
+  border: 1px solid var(--line);
+  color: var(--text);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  font-family: ui-monospace, monospace;
+  font-size: var(--text-sm);
+}
+
+.nf-console .nf-pilot-hint {
+  margin: 8px 0 0;
+  font-size: var(--text-xs);
+  color: var(--muted2);
+}
+
+.nf-console main {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  padding: 20px 24px 48px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+@media (max-width: 900px) {
+  .nf-console main {
+    grid-template-columns: 1fr;
+  }
+}
+
+.nf-console section {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  padding: 18px;
+  box-shadow: var(--shadow2);
+}
+
+.nf-console section.full {
+  grid-column: 1 / -1;
+}
+
+.nf-console h2 {
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-caps);
+  color: var(--muted2);
+  margin: 0 0 12px;
+  font-weight: 600;
+}
+
+.nf-console textarea {
+  width: 100%;
+  min-height: 180px;
+  background: var(--bg1);
+  border: 1px solid var(--line);
+  color: var(--text);
+  border-radius: var(--radius-sm);
+  padding: 12px;
+  font-family: ui-monospace, monospace;
+  font-size: 12px;
+  resize: vertical;
+}
+
+.nf-console .hint {
+  font-size: var(--text-xs);
+  color: var(--muted);
+  margin: 0 0 10px;
+}
+
+.nf-console button {
+  margin-top: 12px;
+  background: linear-gradient(180deg, rgba(200, 163, 73, 0.35), rgba(200, 163, 73, 0.12));
+  color: var(--text);
+  border: 1px solid var(--gold-dim);
+  padding: 11px 18px;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  cursor: pointer;
+  font-size: var(--text-sm);
+  font-family: inherit;
+}
+
+.nf-console button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.nf-console button.secondary {
+  background: transparent;
+  border: 1px solid var(--line);
+  margin-left: 8px;
+  margin-top: 8px;
+}
+
+.nf-console .decision {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 12px;
+  font-family: var(--font-serif);
+}
+
+.nf-console .decision.REJECT {
+  color: #f85149;
+}
+
+.nf-console .decision.ALLOW {
+  color: var(--ok);
+}
+
+.nf-console .decision.REVIEW {
+  color: var(--gold);
+}
+
+.nf-console .row {
+  margin-bottom: 8px;
+}
+
+.nf-console .label {
+  color: var(--muted2);
+  display: block;
+  font-size: var(--text-xs);
+  margin-bottom: 2px;
+}
+
+.nf-console .value {
+  font-size: var(--text-sm);
+  word-break: break-all;
+}
+
+.nf-console table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--text-sm);
+}
+
+.nf-console th,
+.nf-console td {
+  text-align: left;
+  padding: 10px 8px;
+  border-bottom: 1px solid var(--line);
+}
+
+.nf-console th {
+  color: var(--muted2);
+  font-weight: 500;
+  font-size: var(--text-xs);
+}
+
+.nf-console .err {
+  color: #f85149;
+  margin-top: 10px;
+  font-size: var(--text-sm);
+}
+
+.nf-console ul.policy-list {
+  margin: 0;
+  padding-left: 1.1rem;
+  color: var(--muted);
+  font-size: var(--text-sm);
+}
+
+.nf-console .rid-row input {
+  width: 100%;
+  background: var(--bg1);
+  border: 1px solid var(--line);
+  color: var(--text);
+  border-radius: var(--radius-sm);
+  padding: 8px 10px;
+  font-family: ui-monospace, monospace;
+  font-size: 12px;
+}
+
+.nf-console .rid-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.nf-console a.nf-link {
+  color: var(--gold);
+  font-size: var(--text-sm);
+}

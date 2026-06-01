@@ -11,6 +11,7 @@ from noetfield_config import CANONICAL_INTAKE_EMAIL, COMPLIANCE_REMEDIATION_TIP
 from fastapi import BackgroundTasks, FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
+from starlette.staticfiles import StaticFiles
 from pydantic import BaseModel, ConfigDict, Field, SecretStr
 
 from noetfield_governance.chat_errors import ChatAPIError, ChatConfigurationError
@@ -119,8 +120,13 @@ if _cors_origins:
         allow_origins=_cors_origins,
         allow_credentials=False,
         allow_methods=["GET", "POST", "OPTIONS"],
-        allow_headers=["Content-Type"],
+        allow_headers=["Content-Type", "Authorization"],
     )
+
+_REPO_ROOT = Path(__file__).resolve().parents[3]
+_ASSETS_DIR = _REPO_ROOT / "assets"
+if _ASSETS_DIR.is_dir():
+    app.mount("/assets", StaticFiles(directory=_ASSETS_DIR), name="noetfield-assets")
 
 postgres_mode = settings.runtime_event_store == "postgres"
 

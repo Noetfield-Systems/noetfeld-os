@@ -4,121 +4,25 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Noetfield — Governance Evaluation Interface</title>
-  <style>
-    :root {
-      --bg: #0a0c0f;
-      --panel: #111418;
-      --border: rgba(255,255,255,0.08);
-      --text: #e8eaed;
-      --muted: #8b949e;
-      --accent: #c8a349;
-      --reject: #f85149;
-      --allow: #2de38a;
-    }
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font-family: "Inter", system-ui, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      font-size: 14px;
-      line-height: 1.55;
-    }
-    header {
-      padding: 20px 24px;
-      border-bottom: 1px solid var(--border);
-      background: linear-gradient(180deg, rgba(200,163,73,.06), transparent);
-    }
-    h1 { font-size: 1.2rem; font-weight: 700; margin: 0 0 6px; }
-    .sub { color: var(--muted); font-size: 13px; margin: 0; max-width: 560px; }
-    main {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
-      padding: 20px 24px 48px;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-    @media (max-width: 900px) { main { grid-template-columns: 1fr; } }
-    section {
-      background: var(--panel);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 18px;
-    }
-    section.full { grid-column: 1 / -1; }
-    h2 { font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); margin: 0 0 12px; font-weight: 600; }
-    textarea {
-      width: 100%;
-      min-height: 180px;
-      background: #0d1117;
-      border: 1px solid var(--border);
-      color: var(--text);
-      border-radius: 8px;
-      padding: 12px;
-      font-family: ui-monospace, monospace;
-      font-size: 12px;
-      resize: vertical;
-    }
-    .hint { font-size: 12px; color: var(--muted); margin: 0 0 10px; }
-    button {
-      margin-top: 12px;
-      background: linear-gradient(180deg, rgba(200,163,73,.35), rgba(200,163,73,.15));
-      color: var(--text);
-      border: 1px solid rgba(200,163,73,.5);
-      padding: 11px 18px;
-      border-radius: 8px;
-      font-weight: 600;
-      cursor: pointer;
-      font-size: 14px;
-    }
-    button:disabled { opacity: 0.5; cursor: not-allowed; }
-    button.secondary {
-      background: transparent;
-      border: 1px solid var(--border);
-      margin-left: 8px;
-    }
-    .decision { font-size: 1.5rem; font-weight: 700; margin-bottom: 12px; }
-    .decision.REJECT { color: var(--reject); }
-    .decision.ALLOW { color: var(--allow); }
-    .row { margin-bottom: 8px; }
-    .label { color: var(--muted); display: block; font-size: 12px; margin-bottom: 2px; }
-    .value { font-size: 14px; }
-    table { width: 100%; border-collapse: collapse; font-size: 13px; }
-    th, td { text-align: left; padding: 10px 8px; border-bottom: 1px solid var(--border); }
-    th { color: var(--muted); font-weight: 500; font-size: 12px; }
-    .err { color: var(--reject); margin-top: 10px; font-size: 13px; }
-    ul.policy-list { margin: 0; padding-left: 1.1rem; color: var(--muted); font-size: 13px; }
-    .banner {
-      margin: 12px 24px 0;
-      padding: 10px 14px;
-      border-radius: 8px;
-      border: 1px solid rgba(200,163,73,.35);
-      background: rgba(200,163,73,.08);
-      color: var(--muted);
-      font-size: 13px;
-      max-width: 1152px;
-    }
-    .rid-row input {
-      width: 100%;
-      background: #0d1117;
-      border: 1px solid var(--border);
-      color: var(--text);
-      border-radius: 8px;
-      padding: 8px 10px;
-      font-family: ui-monospace, monospace;
-      font-size: 12px;
-    }
-  </style>
+  <link rel="icon" href="https://www.noetfield.com/noetfield-favicon-512.png" type="image/png" />
+  <link rel="stylesheet" href="/assets/noetfield-tokens.css" />
+  <link rel="stylesheet" href="/assets/noetfield-console.css" />
 </head>
-<body>
-  <div class="banner" role="status">
+<body class="nf-console">
+  <div class="nf-console-banner" role="status">
     <strong>Shadow mode:</strong> evaluations are policy-only — Noetfield does not execute payments or hold custody (Bank Pilot / MSB / exchange).
     Documented API: <code>POST /api/v1/governance/evaluate</code>
   </div>
-  <header>
+
+  <div class="nf-pilot-auth" id="pilotAuthPanel">
+    <label for="pilotKeyInput">Pilot API key (optional in dev)</label>
+    <input type="password" id="pilotKeyInput" autocomplete="off" placeholder="Bearer token for production pilots" aria-describedby="pilotKeyHint" />
+    <p class="nf-pilot-hint" id="pilotKeyHint">Stored in session only. Required when <code>GOVERNANCE_PILOT_AUTH_REQUIRED=true</code>. See <a class="nf-link" href="https://www.noetfield.com/docs/api/">Governance API</a>.</p>
+  </div>
+
+  <header class="nf-console-head">
     <h1>Governance Evaluation Interface</h1>
-    <p class="sub">Submit operational intent for governance evaluation. View the decision, RID lineage, and compliance log. For authorized evaluations only.</p>
+    <p class="nf-console-sub">Submit operational intent for governance evaluation. View the decision, RID lineage, and compliance log. For authorized evaluations only.</p>
   </header>
 
   <main>
@@ -128,11 +32,17 @@
       <div class="row rid-row">
         <span class="label">Request ID (RID)</span>
         <input type="text" id="ridInput" placeholder="RID-… (auto-generated if empty)" aria-label="Request ID" />
+        <div class="rid-actions">
+          <button type="button" class="secondary" id="copyRidBtn">Copy RID</button>
+          <button type="button" class="secondary" id="newRidBtn">New RID</button>
+        </div>
       </div>
-      <p class="hint">Presets: <button type="button" class="secondary" data-preset="bank">Bank</button>
+      <p class="hint">Presets:
+        <button type="button" class="secondary" data-preset="bank">Bank</button>
         <button type="button" class="secondary" data-preset="exchange">Exchange</button>
         <button type="button" class="secondary" data-preset="msb">MSB</button>
-        <button type="button" class="secondary" data-preset="copilot">Copilot</button></p>
+        <button type="button" class="secondary" data-preset="copilot">Copilot</button>
+      </p>
       <textarea id="intentInput" spellcheck="false" aria-label="Intent under review"></textarea>
       <button type="button" id="submitIntentBtn">Submit Intent</button>
       <p class="err" id="submitError" hidden></p>
@@ -140,7 +50,7 @@
 
     <section>
       <h2>2 — Decision</h2>
-      <div id="decisionEmpty" class="sub">Submit an intent to see the governance decision.</div>
+      <div id="decisionEmpty" class="nf-console-sub">Submit an intent to see the governance decision.</div>
       <div id="decisionBody" hidden>
         <div class="decision" id="decisionLabel"></div>
         <div class="row">
@@ -161,6 +71,7 @@
         </div>
         <button type="button" class="secondary" id="viewLogBtn">View Decision + Compliance Log</button>
         <button type="button" class="secondary" id="exportAuditBtn">Copy audit export URL</button>
+        <a class="nf-link" id="openAuditLink" href="#" target="_blank" rel="noopener" hidden>Open audit export</a>
       </div>
     </section>
 
@@ -187,12 +98,15 @@
 
   <script>
     (function () {
+      var PILOT_KEY_STORAGE = "noetfield_governance_pilot_api_key";
       var evaluatePath = "/api/v1/governance/evaluate";
       var logPath = "/api/v1/governance/ledger";
       var exportPath = "/api/v1/governance/audit-export";
       var lastRid = null;
       var lastDecision = null;
       var intentInput = document.getElementById("intentInput");
+      var pilotKeyInput = document.getElementById("pilotKeyInput");
+
       var defaultScenario = {
         tenant_id: "00000000-0000-4000-8000-000000000001",
         organization_id: "00000000-0000-4000-8000-000000000002",
@@ -205,6 +119,45 @@
         mode: "shadow"
       };
       intentInput.value = JSON.stringify(defaultScenario, null, 2);
+
+      function loadPilotKey() {
+        try {
+          var saved = sessionStorage.getItem(PILOT_KEY_STORAGE);
+          if (saved) pilotKeyInput.value = saved;
+        } catch (e) { /* private mode */ }
+      }
+
+      function savePilotKey() {
+        try {
+          var v = pilotKeyInput.value.trim();
+          if (v) sessionStorage.setItem(PILOT_KEY_STORAGE, v);
+          else sessionStorage.removeItem(PILOT_KEY_STORAGE);
+        } catch (e) { /* private mode */ }
+      }
+
+      pilotKeyInput.addEventListener("change", savePilotKey);
+      pilotKeyInput.addEventListener("blur", savePilotKey);
+      loadPilotKey();
+
+      function authHeaders(extra) {
+        var headers = extra || { "Content-Type": "application/json" };
+        var key = pilotKeyInput.value.trim();
+        if (key) headers.Authorization = "Bearer " + key;
+        return headers;
+      }
+
+      function generateRid() {
+        var ts = Date.now().toString(36).toUpperCase();
+        var rand = Math.random().toString(36).slice(2, 8).toUpperCase();
+        return "RID-" + ts + "-" + rand;
+      }
+
+      function auditExportUrl(rid) {
+        var url = new URL(window.location.origin + exportPath);
+        url.searchParams.set("request_id", rid);
+        url.searchParams.set("limit", "500");
+        return url.toString();
+      }
 
       function displayLabel(decision) {
         if (decision === "PROCEED") return { cls: "ALLOW", text: "ALLOWED" };
@@ -232,6 +185,9 @@
         if (lastRid) {
           document.getElementById("ridDisplay").textContent = lastRid;
           document.getElementById("ridInput").value = lastRid;
+          var openLink = document.getElementById("openAuditLink");
+          openLink.href = auditExportUrl(lastRid);
+          openLink.hidden = false;
         }
         document.getElementById("decisionEmpty").hidden = true;
         document.getElementById("decisionBody").hidden = false;
@@ -254,12 +210,13 @@
           var url = new URL(window.location.origin + logPath);
           if (scenario.tenant_id) url.searchParams.set("tenant_id", scenario.tenant_id);
           url.searchParams.set("limit", "100");
-          var res = await fetch(url);
+          var res = await fetch(url, { headers: authHeaders({}) });
+          if (res.status === 401) throw new Error("Pilot API key required. Enter your Bearer token above.");
           if (!res.ok) throw new Error("Compliance log is unavailable.");
           var data = await res.json();
           var entries = data.entries || [];
           if (!entries.length) {
-            body.innerHTML = "<tr><td colspan=\"5\" style=\"color:#8b949e\">No log entries yet.</td></tr>";
+            body.innerHTML = "<tr><td colspan=\"5\" style=\"color:var(--muted)\">No log entries yet.</td></tr>";
             return;
           }
           entries.forEach(function (e) {
@@ -286,6 +243,7 @@
         var btn = document.getElementById("submitIntentBtn");
         errEl.hidden = true;
         btn.disabled = true;
+        savePilotKey();
         try {
           var body = JSON.parse(intentInput.value);
           var ridField = document.getElementById("ridInput").value.trim();
@@ -293,13 +251,20 @@
           body.mode = body.mode || "shadow";
           var res = await fetch(window.location.origin + evaluatePath, {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: authHeaders({ "Content-Type": "application/json" }),
             body: JSON.stringify(body)
           });
           var text = await res.text();
           if (!res.ok) {
-            if (res.status === 401) throw new Error("Pilot API key required. Set Authorization: Bearer on the platform host.");
-            throw new Error("Evaluation could not be completed.");
+            if (res.status === 401) {
+              throw new Error("Pilot API key required. Enter your Bearer token in the field above.");
+            }
+            if (res.status === 429) {
+              throw new Error("Rate limit exceeded. Wait a minute or contact operations@noetfield.com.");
+            }
+            var detail = text;
+            try { detail = JSON.parse(text).detail || text; } catch (ignore) {}
+            throw new Error(typeof detail === "string" ? detail : "Evaluation could not be completed.");
           }
           showDecision(JSON.parse(text));
           await loadComplianceLog();
@@ -323,23 +288,39 @@
           alert("Submit an evaluation first to obtain a RID.");
           return;
         }
-        var url = new URL(window.location.origin + exportPath);
-        url.searchParams.set("request_id", lastRid);
-        url.searchParams.set("limit", "500");
-        navigator.clipboard.writeText(url.toString()).catch(function () {
-          prompt("Audit export URL:", url.toString());
+        var url = auditExportUrl(lastRid);
+        navigator.clipboard.writeText(url).catch(function () {
+          prompt("Audit export URL:", url);
         });
+      });
+
+      document.getElementById("copyRidBtn").addEventListener("click", function () {
+        var rid = document.getElementById("ridInput").value.trim() || lastRid;
+        if (!rid) {
+          rid = generateRid();
+          document.getElementById("ridInput").value = rid;
+        }
+        navigator.clipboard.writeText(rid).catch(function () {
+          prompt("RID:", rid);
+        });
+      });
+
+      document.getElementById("newRidBtn").addEventListener("click", function () {
+        document.getElementById("ridInput").value = generateRid();
       });
 
       async function loadPreset(name) {
         try {
-          var res = await fetch(window.location.origin + "/api/v1/governance/scenario-presets/" + name);
+          var res = await fetch(window.location.origin + "/api/v1/governance/scenario-presets/" + name, {
+            headers: authHeaders({})
+          });
           if (!res.ok) throw new Error("Preset unavailable");
           intentInput.value = JSON.stringify(await res.json(), null, 2);
         } catch (e) {
           alert("Could not load preset: " + name);
         }
       }
+
       document.querySelectorAll("[data-preset]").forEach(function (btn) {
         btn.addEventListener("click", function () {
           loadPreset(btn.getAttribute("data-preset"));

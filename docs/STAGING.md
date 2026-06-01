@@ -51,6 +51,24 @@ export PILOT_KEY="staging-pilot-key"
 
 After first paid deal, run `ops/private/msb/STAGING_PROOF_RUNBOOK.md` (from `./scripts/market-entry-bootstrap.sh`).
 
+## Postgres backup drill (staging)
+
+Quarterly restore exercise before bank diligence:
+
+1. `pg_dump` from production (see [POSTGRES_OPERATIONS.md](./POSTGRES_OPERATIONS.md)).
+2. Restore to staging database; run `make platform-migrate` if needed.
+3. Confirm `GET /api/v1/governance/ledger` returns entries on staging.
+4. Record date + operator in private ops log.
+
+## Status alignment
+
+- www: [status/index.html](../status/index.html) polls `GET /api/status` on platform host.
+- Staging status page should use `staging-platform.noetfield.com` when that host exists.
+
+## Edge / WAF (deferred)
+
+CDN WAF and edge rate limits: [PRODUCT_DEFERRED.md](./PRODUCT_DEFERRED.md) NF-ENG-16 — enable when traffic or abuse signals warrant.
+
 ## CI note
 
 Production deploy workflow is manual/`workflow_dispatch` until cloud credentials are wired ([.github/workflows/platform-deploy.yml](../.github/workflows/platform-deploy.yml)).

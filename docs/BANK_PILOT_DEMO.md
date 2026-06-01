@@ -29,4 +29,4 @@ Design partner at a bank or credit union evaluating pre-execution governance bef
 
 ## Follow-up artifact
 
-Send bank pack references from `docs/SOURCE_OF_TRUTH/` (institutional narrative) under NDA — not raw internal GCIP terms on public pages.
+Send [docs/diligence/](./diligence/) (sample audit export, OpenAPI pointer, RPAA one-pager) plus institutional narrative from `docs/SOURCE_OF_TRUTH/` under NDA — not raw internal GCIP terms on public pages.

@@ -37,7 +37,7 @@ Use parallel structure on Home, Enterprise, Trust Brief, Copilot, Bank Pilot:
 | `/copilot/` | Copilot Governance Pack | Request Governance Brief (`?interest=copilot`) | `/copilot/readiness/` optional |
 | `/bank-pilot/` | Bank Pilot · Shadow mode | Discuss Bank Pilot (`?vector=bank-pilot`) | Trust Brief |
 | `/partners/` | Partners · Channel | Partner intake (`?vector=partner-gateway`) | `/docs/api/` in footer only |
-| `/console/` | Governance Console | Open console / evaluate | Trust Brief for procurement |
+| `/console/` | Governance Console | Open console / evaluate | Trust Brief engagement intake |
 | `/docs/api/` | Governance API | OpenAPI / status | No sales hero |
 | `/trust-ledger/` | Trust Ledger | Request Governance Brief (`?source=trust-ledger`) | Console |
 

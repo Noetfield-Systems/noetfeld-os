@@ -1,0 +1,34 @@
+{
+  "export_type": "governance_audit",
+  "format": "json",
+  "generated_at": "2026-05-29T12:00:00",
+  "tenant_id": "00000000-0000-4000-8000-000000000001",
+  "request_id": "RID-REDACTED-SAMPLE",
+  "entry_count": 2,
+  "entries": [
+    {
+      "occurred_at": "2026-05-29T11:58:00Z",
+      "action": "POLICY_EVALUATED",
+      "tenant_id": "00000000-0000-4000-8000-000000000001",
+      "request_id": "RID-REDACTED-SAMPLE",
+      "resource_type": "governance_artifact",
+      "resource_id": "bank-pilot-demo",
+      "actor_id": "pilot-demo",
+      "actor_type": "human",
+      "integrity_hash": "sha256:redacted…"
+    },
+    {
+      "occurred_at": "2026-05-29T11:58:01Z",
+      "action": "GOVERNANCE_DECISION_RECORDED",
+      "tenant_id": "00000000-0000-4000-8000-000000000001",
+      "request_id": "RID-REDACTED-SAMPLE",
+      "resource_type": "governance_artifact",
+      "resource_id": "bank-pilot-demo",
+      "actor_id": "governance-v1",
+      "actor_type": "system",
+      "integrity_hash": "sha256:redacted…"
+    }
+  ],
+  "boundary_statement": "Noetfield is a pre-execution governance layer. This export contains policy evaluation metadata only — not payment instructions or custody records.",
+  "status_page": "https://www.noetfield.com/status/"
+}

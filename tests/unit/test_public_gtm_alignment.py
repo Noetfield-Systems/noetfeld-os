@@ -97,6 +97,24 @@ def test_tier_pages_have_shell_and_cta() -> None:
         assert 'name="viewport"' in text, rel
 
 
+def test_bank_grade_p0_pages_have_responsive_shell() -> None:
+    for rel in ("bank-pilot/index.html", "enterprise/index.html", "trust-brief/intake/index.html"):
+        text = (ROOT / rel).read_text(encoding="utf-8")
+        assert 'name="viewport"' in text, rel
+        assert "noetfield-tokens.css" in text, rel
+        assert "nfHeader" in text or "nf-page" in text or "wrap" in text, rel
+
+
+def test_bank_grade_html_smoke_script() -> None:
+    result = subprocess.run(
+        [sys.executable, str(ROOT / "scripts" / "smoke_bank_grade_html.py")],
+        cwd=ROOT,
+        capture_output=True,
+        text=True,
+    )
+    assert result.returncode == 0, result.stdout + result.stderr
+
+
 def test_public_site_health_script() -> None:
     result = subprocess.run(
         [sys.executable, str(ROOT / "scripts" / "audit_public_site_health.py")],

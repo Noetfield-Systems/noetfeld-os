@@ -76,6 +76,8 @@ def main() -> int:
         rel = path.relative_to(ROOT)
         if "node_modules" in rel.parts:
             continue
+        if rel.parts[:2] == ("assets", "partials"):
+            continue
         text = path.read_text(encoding="utf-8", errors="replace")
         if 'name="viewport"' not in text and "name='viewport'" not in text:
             no_viewport.append(str(rel))

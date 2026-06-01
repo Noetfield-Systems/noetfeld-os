@@ -68,8 +68,26 @@ def test_governance_console_html_served() -> None:
         async with governance_test_client() as client:
             response = await client.get("/console")
             assert response.status_code == 200
-            assert "Governance Evaluation Interface" in response.text
-            assert "Submit Intent" in response.text
-            assert "Compliance log" in response.text
+            text = response.text
+            assert "Governance Evaluation Interface" in text
+            assert "Submit Intent" in text
+            assert "Compliance log" in text
+            assert "noetfield-tokens.css" in text
+            assert "noetfield-console.css" in text
+            assert "pilotKeyInput" in text
+            assert "noetfield_governance_pilot_api_key" in text
+
+    asyncio.run(run())
+
+
+def test_governance_console_v3_assets_served() -> None:
+    async def run() -> None:
+        async with governance_test_client() as client:
+            tokens = await client.get("/assets/noetfield-tokens.css")
+            console_css = await client.get("/assets/noetfield-console.css")
+            assert tokens.status_code == 200
+            assert console_css.status_code == 200
+            assert "--gold" in tokens.text
+            assert ".nf-console" in console_css.text
 
     asyncio.run(run())

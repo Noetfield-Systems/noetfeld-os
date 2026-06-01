@@ -59,6 +59,7 @@ console-smoke:
 site-health:
 	python3 scripts/audit_public_site_health.py
 	python3 scripts/audit_no_secrets_in_repo.py
+	python3 scripts/smoke_bank_grade_html.py
 	python3 -m pytest tests/unit/test_public_gtm_alignment.py tests/unit/test_public_simplification.py -q
 
 sitemap:
