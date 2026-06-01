@@ -13,7 +13,7 @@
 | [.cursor/AGENT_TRACKING.md](../.cursor/AGENT_TRACKING.md) | **Public** | Agent workflow (no secrets) |
 | [docs/ROADMAP.md](../docs/ROADMAP.md) | **Public** | Horizons + shipped summary |
 | [GitHub Issues](https://github.com/kazemnezhadsina144-dot/Noetfield/issues) | **Team** | `NF-*` execution, PR links |
-| **`ops/private/`** | **Gitignored** | Full `todolist/`, go-live + legal checklists |
+| **`ops/private/`** | **Gitignored** | Full `todolist/`, go-live + legal checklists, **`sourceA/`** (Sina OS SSOT mirror) |
 
 **Never commit `ops/private/`.**
 

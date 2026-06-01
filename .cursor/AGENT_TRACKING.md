@@ -22,6 +22,8 @@ Read in order:
 
 **Do not** copy TrustField or VIRLUX items from `ops/private/todolist/external/` into Noetfield code.
 
+**Sina MonoRepo SSOT (internal, gitignored):** after `./scripts/bootstrap-private-ops.sh`, read `ops/private/sourceA/SINA_OS_SSOT_LOCKED.md` and `NOETFIELD_REPO_ALIGNMENT.md` if present. Desktop canonical; never commit `ops/private/`.
+
 ## If `ops/private/` is missing (cloud agent)
 
 1. Use **GitHub Issues** — labels: `launch`, `legal`, `engineering`, `NF-P0`
