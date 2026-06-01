@@ -11,7 +11,7 @@
     "dev:web": "npm --workspace apps/web run dev",
     "dev:platform": "npm --workspace apps/platform run dev",
     "dev:admin": "npm --workspace apps/admin run dev",
-    "dev:cognitive-dashboard": "npm --prefix governance-console/frontend run dev",
+    "dev:cognitive-dashboard": "bash scripts/dev-cognitive-dashboard.sh",
     "lint": "npm --workspaces --if-present run lint",
     "typecheck": "npm --workspaces --if-present run typecheck"
   },
