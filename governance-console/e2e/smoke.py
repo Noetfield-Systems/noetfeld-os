@@ -10,7 +10,7 @@ import time
 import httpx
 
 API_URL = os.getenv("API_URL", "http://localhost:8000").rstrip("/")
-WEB_URL = os.getenv("WEB_URL", os.getenv("COGNITIVE_DASHBOARD_URL", "http://localhost:3010")).rstrip("/")
+WEB_URL = os.getenv("WEB_URL", os.getenv("COGNITIVE_DASHBOARD_URL", "http://localhost:3000")).rstrip("/")
 MAX_WAIT_S = int(os.getenv("E2E_MAX_WAIT_S", "120"))
 
 

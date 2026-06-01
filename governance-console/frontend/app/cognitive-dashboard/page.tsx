@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Shell } from "@/components/Shell";
 import { EvaluateForm } from "@/components/EvaluateForm";
+import { DevPortBanner } from "@/components/DevPortBanner";
 import { ApiHealth, apiBaseLabel, fetchApiHealth } from "@/lib/health";
 
 export default function CognitiveDashboardPage() {
@@ -19,6 +20,7 @@ export default function CognitiveDashboardPage() {
 
   return (
     <Shell active="dashboard">
+      <DevPortBanner />
       <section className="mb-8">
         <p className="text-xs uppercase tracking-widest text-accent">Cognitive governance</p>
         <h2 className="mt-1 text-2xl font-semibold text-white">Cognitive dashboard</h2>
