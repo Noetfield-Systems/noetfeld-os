@@ -1,14 +1,16 @@
 {
   "remote.autoForwardPorts": true,
   "remote.autoForwardPortsSource": "hybrid",
-  "remote.otherPortsAttributes": {
-    "onAutoForward": "notify"
-  },
   "remote.portsAttributes": {
     "13080": {
-      "label": "Noetfield (website + console + dashboard)",
+      "label": "Noetfield (website + all apps)",
       "onAutoForward": "openBrowser",
       "uriFormat": "http://localhost:${port}/"
+    },
+    "8001": {
+      "label": "Governance console (legacy port)",
+      "onAutoForward": "notify",
+      "uriFormat": "http://localhost:${port}/console"
     }
   }
 }

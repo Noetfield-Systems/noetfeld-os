@@ -8,6 +8,8 @@ PUBLIC_PORT="${NF_DEV_PUBLIC_PORT:-13080}"
 URLS_FILE="${ROOT}/.local-dev-urls.txt"
 PROXY_PID_FILE="${ROOT}/.dev-proxy.pid"
 PROXY_LOG="${ROOT}/.dev-proxy.log"
+REDIRECT_PID_FILE="${ROOT}/.dev-redirect.pid"
+REDIRECT_LOG="${ROOT}/.dev-redirect.log"
 
 chmod +x "${ROOT}/scripts/ensure-platform-console.sh" \
   "${ROOT}/scripts/dev-cognitive-dashboard.sh" \
@@ -46,6 +48,11 @@ kill_port "$PUBLIC_PORT"
 [[ -f "$PROXY_PID_FILE" ]] && kill "$(cat "$PROXY_PID_FILE")" 2>/dev/null || true
 nohup python3 "${ROOT}/scripts/dev-unified-proxy.py" >>"$PROXY_LOG" 2>&1 &
 echo $! >"$PROXY_PID_FILE"
+
+# Legacy bookmarks: :8001/console :3000/cognitive-dashboard → :13080
+[[ -f "$REDIRECT_PID_FILE" ]] && kill "$(cat "$REDIRECT_PID_FILE")" 2>/dev/null || true
+nohup env NF_DEV_PUBLIC_PORT="$PUBLIC_PORT" python3 "${ROOT}/scripts/dev-port-redirects.py" >>"$REDIRECT_LOG" 2>&1 &
+echo $! >"$REDIRECT_PID_FILE"
 sleep 1
 
 check() {
@@ -64,9 +71,10 @@ for _ in $(seq 1 30); do
 done
 
 cat >"$URLS_FILE" <<EOF
-# >>> OPEN THIS IN YOUR BROWSER (forward port ${PUBLIC_PORT} in Cursor Ports) <<<
+# >>> Forward port ${PUBLIC_PORT} and/or 8001 in Cursor Ports <<<
 WEBSITE=http://localhost:${PUBLIC_PORT}/
 CONSOLE=http://localhost:${PUBLIC_PORT}/console
+CONSOLE_LEGACY=http://localhost:8001/console
 DASHBOARD=http://localhost:${PUBLIC_PORT}/cognitive-dashboard
 EOF
 
@@ -76,5 +84,11 @@ echo ""
 check "/" "website"
 check "/console" "platform console"
 check "/cognitive-dashboard" "cognitive dashboard"
+if curl -sf -o /dev/null --connect-timeout 3 -L "http://127.0.0.1:8001/console" 2>/dev/null; then
+  echo "OK  legacy :8001/console → redirects to :${PUBLIC_PORT}/console"
+else
+  echo "WARN legacy :8001 not up (use :${PUBLIC_PORT}/console)" >&2
+fi
 echo ""
-echo "If the browser is blank: Cursor → Ports → forward port ${PUBLIC_PORT} → click globe icon."
+echo "Bookmark OK: http://localhost:8001/console OR http://localhost:${PUBLIC_PORT}/console"
+echo "Cursor: forward ports ${PUBLIC_PORT} and 8001 → click globe icon."

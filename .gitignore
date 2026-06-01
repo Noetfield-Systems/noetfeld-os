@@ -8,6 +8,8 @@
 .www-dev.log
 .dev-proxy.pid
 .dev-proxy.log
+.dev-redirect.pid
+.dev-redirect.log
 !.env.example
 
 __pycache__/

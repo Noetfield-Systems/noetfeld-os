@@ -13,7 +13,10 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 PUBLIC_PORT = int(os.environ.get("NF_DEV_PUBLIC_PORT", "13080"))
-PLATFORM = os.environ.get("NF_DEV_PLATFORM_INTERNAL", "http://127.0.0.1:18001")
+PLATFORM = os.environ.get(
+    "NF_DEV_PLATFORM_INTERNAL",
+    f"http://127.0.0.1:{os.environ.get('NF_DEV_PLATFORM_PORT', '8001')}",
+)
 NEXT = os.environ.get("NF_DEV_NEXT_INTERNAL", "http://127.0.0.1:13000")
 
 PLATFORM_PREFIXES = (
