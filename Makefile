@@ -31,8 +31,12 @@ platform-console-down:
 	@. ./scripts/dev-ports.sh && lsof -tiTCP:$$PLATFORM_CONSOLE_PORT -sTCP:LISTEN 2>/dev/null | xargs -r kill -9 2>/dev/null || true
 
 dev-local:
-	@chmod +x scripts/dev-local-all.sh
+	@chmod +x scripts/dev-local-all.sh scripts/ensure-www.sh
 	./scripts/dev-local-all.sh
+
+www-dev:
+	@chmod +x scripts/ensure-www.sh
+	./scripts/ensure-www.sh
 
 apply-migrations:
 	PYTHONPATH=$(PYTHONPATH_VALUE) python3 scripts/apply_postgres_migrations.py

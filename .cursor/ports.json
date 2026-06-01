@@ -1,5 +1,10 @@
 [
   {
+    "name": "Noetfield Website",
+    "port": 13080,
+    "path": "/"
+  },
+  {
     "name": "Cognitive Dashboard",
     "port": 13000,
     "path": "/cognitive-dashboard"

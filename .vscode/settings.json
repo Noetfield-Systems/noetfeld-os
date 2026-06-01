@@ -2,6 +2,11 @@
   "remote.autoForwardPorts": true,
   "remote.autoForwardPortsSource": "hybrid",
   "remote.portsAttributes": {
+    "13080": {
+      "label": "Noetfield Website (www)",
+      "onAutoForward": "openBrowser",
+      "uriFormat": "http://localhost:${port}/"
+    },
     "13000": {
       "label": "Cognitive Dashboard",
       "onAutoForward": "openBrowser",

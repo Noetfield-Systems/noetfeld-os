@@ -4,6 +4,8 @@
 .dev-cognitive-dashboard.env
 .platform-console.pid
 .platform-console.log
+.www-dev.pid
+.www-dev.log
 !.env.example
 
 __pycache__/
