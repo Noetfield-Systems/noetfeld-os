@@ -22,6 +22,14 @@ platform-console-dev:
 	@chmod +x scripts/dev-platform-console.sh
 	./scripts/dev-platform-console.sh
 
+platform-console-up:
+	@chmod +x scripts/ensure-platform-console.sh
+	./scripts/ensure-platform-console.sh
+
+platform-console-down:
+	@if [ -f .platform-console.pid ]; then kill $$(cat .platform-console.pid) 2>/dev/null || true; rm -f .platform-console.pid; fi
+	@lsof -tiTCP:8001 -sTCP:LISTEN 2>/dev/null | xargs -r kill -9 2>/dev/null || true
+
 apply-migrations:
 	PYTHONPATH=$(PYTHONPATH_VALUE) python3 scripts/apply_postgres_migrations.py
 

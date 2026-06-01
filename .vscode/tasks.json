@@ -16,6 +16,14 @@
         }
       },
       "presentation": { "reveal": "always", "panel": "dedicated" }
+    },
+    {
+      "label": "Platform Console (port 8001)",
+      "type": "shell",
+      "command": "make platform-console-up",
+      "options": { "cwd": "${workspaceFolder}" },
+      "problemMatcher": [],
+      "presentation": { "reveal": "always", "panel": "dedicated" }
     }
   ]
 }
