@@ -22,7 +22,7 @@ Read in order:
 
 **Do not** copy TrustField or VIRLUX items from `ops/private/todolist/external/` into Noetfield code.
 
-**Sina MonoRepo SSOT (internal, gitignored):** after `./scripts/bootstrap-private-ops.sh`, read `ops/private/sourceA/SINA_OS_SSOT_LOCKED.md` and `NOETFIELD_REPO_ALIGNMENT.md` if present. Desktop canonical; never commit `ops/private/`.
+**Sina MonoRepo SSOT (internal, gitignored):** Desktop `SourceA/SINA_OS_SSOT_LOCKED.md` and `PHASE1_UNIFIED_BLUEPRINT_v2_3.md` are **read-only for agents** — ASF edits on Mac only. After bootstrap, agents may read a local mirror under `ops/private/sourceA/` (founder sync) plus `NOETFIELD_REPO_ALIGNMENT.md`. Never commit `ops/private/`. Never modify Desktop SourceA files.
 
 ## If `ops/private/` is missing (cloud agent)
 

@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-# Copy Desktop SourceA into gitignored ops/private/sourceA/ (founder Mac only).
+# One-way copy: Desktop SourceA → gitignored ops/private/sourceA/ (founder Mac only).
+# Agents have READ ONLY on Desktop SSOT files — do not run this to "update" Desktop from repo.
 set -euo pipefail
 SRC="${1:-/Users/sinakazemnezhad/Desktop/SourceA}"
 DEST="$(cd "$(dirname "$0")/.." && pwd)/ops/private/sourceA"
