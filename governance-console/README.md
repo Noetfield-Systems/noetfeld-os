@@ -91,7 +91,14 @@ Open http://localhost:3000
 
 ## Relation to main Noetfield platform
 
-Standalone MVP under `governance-console/`. Production pilots on `platform.noetfield.com` also expose `/api/v1/governance/*` in `services/governance` — proxy or merge when promoting.
+**Not the production pilot path.** This folder is a **local/dev sandbox** (Docker E2E in `.github/workflows/governance-console-e2e.yml`).
+
+| Environment | Use |
+|-------------|-----|
+| **Production pilots** | `https://platform.noetfield.com` — `/api/v1/governance/*` in `services/governance` |
+| **This repo app** | `make e2e` in `governance-console/` for UI/API experiments only |
+
+See [docs/GOVERNANCE_PILOT_RUNBOOK.md](../docs/GOVERNANCE_PILOT_RUNBOOK.md).
 
 ## Tests
 

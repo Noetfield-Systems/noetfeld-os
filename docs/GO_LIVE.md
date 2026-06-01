@@ -1,6 +1,6 @@
 # Production go-live (public summary)
 
-Engineering artifacts are on `main`. Use [RUNBOOK.md](./RUNBOOK.md) and [PRACTICAL_PLAYBOOK.md](./PRACTICAL_PLAYBOOK.md) for roles and endpoints.
+Engineering artifacts are on `main`. Use [WAVE0_SHIP_CHECKLIST.md](./WAVE0_SHIP_CHECKLIST.md) for the post-merge founder checklist, [RUNBOOK.md](./RUNBOOK.md), and [PRACTICAL_PLAYBOOK.md](./PRACTICAL_PLAYBOOK.md) for roles and endpoints.
 
 **Founder checklist (detailed, private):** copy [ops/README.md](../ops/README.md) → local `ops/private/` or use GitHub Issues labeled `launch`.
 

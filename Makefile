@@ -64,6 +64,11 @@ site-health:
 sitemap:
 	python3 scripts/generate_sitemap.py
 
+trust-brief-export:
+	chmod +x scripts/trust_brief_audit_export.sh
+	@test -n "$(RID)" || (echo "Usage: make trust-brief-export RID=RID-..." && exit 1)
+	./scripts/trust_brief_audit_export.sh --request-id "$(RID)" --out ./exports
+
 generate-openapi:
 	PYTHONPATH=$(PYTHONPATH_VALUE) python3 scripts/generate_public_openapi.py
 

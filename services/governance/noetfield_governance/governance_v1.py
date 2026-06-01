@@ -16,6 +16,7 @@ from noetfield_events import EventType, build_event
 from noetfield_governance.golden_edge_v3 import GoldenEdgeEvaluateRequest, GoldenEdgeV3Engine
 from noetfield_governance.governance_rid import generate_rid, normalize_rid
 from noetfield_governance.governance_webhooks import GovernanceWebhookDispatcher
+from noetfield_governance.governance_pilot_limits import check_governance_pilot_rate_limit
 from noetfield_governance.pilot_auth import PilotAuthContext, assert_tenant_allowed, require_pilot_auth
 from noetfield_governance.partner_signal import (
     PartnerSignalIngestRequest,
@@ -154,6 +155,7 @@ async def governance_evaluate_v1(
     auth: PilotAuthContext = Depends(require_pilot_auth),
     deps: GovernanceV1Deps = Depends(get_governance_v1_deps),
 ) -> GovernanceEvaluateV1Response:
+    await check_governance_pilot_rate_limit(auth, "evaluate")
     assert_tenant_allowed(auth, body.tenant_id)
     try:
         rid = normalize_rid(body.request_id) if body.request_id else generate_rid()
@@ -218,6 +220,7 @@ async def governance_ledger_v1(
     auth: PilotAuthContext = Depends(require_pilot_auth),
     deps: GovernanceV1Deps = Depends(get_governance_v1_deps),
 ) -> dict[str, object]:
+    await check_governance_pilot_rate_limit(auth, "ledger")
     if limit < 1 or limit > 500:
         raise HTTPException(status_code=400, detail="limit must be between 1 and 500")
     if auth.tenant_id is not None:
@@ -250,6 +253,7 @@ async def governance_audit_export_v1(
     auth: PilotAuthContext = Depends(require_pilot_auth),
     deps: GovernanceV1Deps = Depends(get_governance_v1_deps),
 ) -> dict[str, object]:
+    await check_governance_pilot_rate_limit(auth, "audit-export")
     if limit < 1 or limit > 500:
         raise HTTPException(status_code=400, detail="limit must be between 1 and 500")
     if auth.tenant_id is not None:

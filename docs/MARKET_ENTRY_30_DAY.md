@@ -8,9 +8,11 @@ This is the runnable checklist for the Real Market GTM plan. Founder actions are
 
 ## Phase 0 — Unblock (repo + founder)
 
+**Checklist:** [WAVE0_SHIP_CHECKLIST.md](./WAVE0_SHIP_CHECKLIST.md)
+
 | Step | Owner | Action |
 |------|-------|--------|
-| 0.1 | repo | `main` includes MSB channel, institutional API, public surfaces (merged from `cursor/msb-partner-revenue-37f0`) |
+| 0.1 | repo | `main` includes MSB channel, institutional API, public surfaces (merged PR #10) |
 | 0.2 | founder | Deploy www + platform per [GO_LIVE.md](./GO_LIVE.md) |
 | 0.3 | founder | Production env: `GOVERNANCE_PILOT_AUTH_REQUIRED=true`, `GOVERNANCE_PILOT_API_KEYS` — see [PRODUCTION_PILOT_KEYS.md](./PRODUCTION_PILOT_KEYS.md) |
 | 0.4 | repo | `make verify-final-lock` · `PLATFORM_HEALTH_BASE=https://platform.noetfield.com ./scripts/deploy_platform_smoke.sh` |

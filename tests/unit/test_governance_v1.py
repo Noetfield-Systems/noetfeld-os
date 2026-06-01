@@ -84,6 +84,34 @@ def test_api_status_endpoint() -> None:
     asyncio.run(run())
 
 
+def test_governance_v1_evaluate_deterministic_replay() -> None:
+    """Same payload twice yields the same decision (AN3-style guard)."""
+    tenant_id = uuid4()
+    org_id = uuid4()
+    payload = {
+        "tenant_id": str(tenant_id),
+        "organization_id": str(org_id),
+        "action": "submit_payment_intent",
+        "resource_type": "determinism-probe",
+        "resource_id": "replay-1",
+        "mode": "shadow",
+    }
+
+    async def run() -> None:
+        async with governance_test_client() as client:
+            first = await client.post("/api/v1/governance/evaluate", json=payload)
+            second = await client.post("/api/v1/governance/evaluate", json=payload)
+            assert first.status_code == 200
+            assert second.status_code == 200
+            a = first.json()
+            b = second.json()
+            assert a["decision"] == b["decision"]
+            assert a["allowed"] == b["allowed"]
+            assert a["reason_code"] == b["reason_code"]
+
+    asyncio.run(run())
+
+
 def test_public_openapi_filters_internal_paths() -> None:
     from noetfield_governance.api import app
 

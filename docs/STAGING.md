@@ -38,6 +38,19 @@ python3 scripts/publish_ecosystem_config.py
 PLATFORM_HEALTH_BASE=https://staging-platform.noetfield.com ./scripts/deploy_platform_smoke.sh
 ```
 
+## Governance pilot on staging
+
+Use the same `/api/v1/governance/*` surface as production ([GOVERNANCE_PILOT_RUNBOOK.md](./GOVERNANCE_PILOT_RUNBOOK.md)).
+
+```bash
+export PLATFORM=https://staging-platform.noetfield.com
+export PILOT_KEY="staging-pilot-key"
+# evaluate + audit-export per runbook
+./scripts/trust_brief_audit_export.sh --request-id RID-... --platform "$PLATFORM"
+```
+
+After first paid deal, run `ops/private/msb/STAGING_PROOF_RUNBOOK.md` (from `./scripts/market-entry-bootstrap.sh`).
+
 ## CI note
 
 Production deploy workflow is manual/`workflow_dispatch` until cloud credentials are wired ([.github/workflows/platform-deploy.yml](../.github/workflows/platform-deploy.yml)).

@@ -52,4 +52,16 @@ curl -sS http://127.0.0.1:8001/api/ecosystem/health | python3 -m json.tool
 - Sessions: Redis when `REDIS_SESSIONS_ENABLED=true`.
 - Knowledge: `scripts/sync_knowledge_chunks.py` for DB index; pinned `OFFERINGS_LOCKED.md` in prompts.
 
-See also: [GO_LIVE.md](./GO_LIVE.md), [PRACTICAL_PLAYBOOK.md](./PRACTICAL_PLAYBOOK.md), [STAGING.md](./STAGING.md), [INTAKE_BACKUP_RETENTION.md](./INTAKE_BACKUP_RETENTION.md), [TELEGRAM_BOT_SETUP.md](./TELEGRAM_BOT_SETUP.md), [CHATBOT_SETUP.md](./CHATBOT_SETUP.md).
+## Governance pilot (production)
+
+Full procedure: [GOVERNANCE_PILOT_RUNBOOK.md](./GOVERNANCE_PILOT_RUNBOOK.md) · Wave 0 checklist: [WAVE0_SHIP_CHECKLIST.md](./WAVE0_SHIP_CHECKLIST.md).
+
+| Endpoint | Purpose |
+|----------|---------|
+| `POST /api/v1/governance/evaluate` | Pre-execution decision + RID |
+| `GET /api/v1/governance/ledger` | Compliance log slice |
+| `GET /api/v1/governance/audit-export` | Trust Brief export by RID |
+
+Trust Brief export script: `./scripts/trust_brief_audit_export.sh --request-id RID-...`
+
+See also: [GO_LIVE.md](./GO_LIVE.md), [PRACTICAL_PLAYBOOK.md](./PRACTICAL_PLAYBOOK.md), [STAGING.md](./STAGING.md), [POSTGRES_OPERATIONS.md](./POSTGRES_OPERATIONS.md), [INTAKE_BACKUP_RETENTION.md](./INTAKE_BACKUP_RETENTION.md), [INTAKE_OPS.md](./INTAKE_OPS.md), [TELEGRAM_BOT_SETUP.md](./TELEGRAM_BOT_SETUP.md), [CHATBOT_SETUP.md](./CHATBOT_SETUP.md).
