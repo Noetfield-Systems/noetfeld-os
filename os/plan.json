@@ -52,6 +52,22 @@
         "docs/strategy/noetfield-future-path.md",
         "PROJECT_BOUNDARIES_LOCKED.md"
       ]
+    },
+    {
+      "id": "nf-agent-reply-reported-at-003",
+      "title": "Document and validate Execution Truth agent replies (reported_at required)",
+      "status": "done",
+      "done_criteria": [
+        "EXECUTION_TRUTH_AGENT_REPLY_LOCKED.md explains PASS + red partial ingest",
+        "agent-reply-ingest.yaml template includes reported_at",
+        "scripts/verify_agent_reply_yaml.py validates required fields"
+      ],
+      "evidence": [
+        "docs/spec/EXECUTION_TRUTH_AGENT_REPLY_LOCKED.md",
+        "docs/spec/templates/agent-reply-ingest.yaml",
+        "scripts/verify_agent_reply_yaml.py",
+        ".cursor/rules/noetfield-prompt-os-reply.mdc"
+      ]
     }
   ],
   "backlog_on_request": [
