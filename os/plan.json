@@ -3,28 +3,60 @@
   "plane": "DESIGN",
   "status": "active",
   "last_updated": "2026-06-02",
+  "locked_positioning": {
+    "headline": "AI Governance & Evidence layer for Copilot adoption",
+    "buyer_line": "We produce the audit trail your Copilot deployment will be asked for later.",
+    "mandate": "Every engagement must produce at least one signed Trust Ledger Entry (TLE v1).",
+    "blueprint": "docs/spec/TRUST_LEDGER_PRODUCT_BLUEPRINT_v1.2_LOCKED.md"
+  },
   "next_tasks": [
+    {
+      "id": "nf-trust-ledger-blueprint-lock-002",
+      "title": "Lock Trust Ledger v1.2 product blueprint and TLE examples as canonical spec",
+      "status": "done",
+      "done_criteria": [
+        "Blueprint locked at docs/spec/TRUST_LEDGER_PRODUCT_BLUEPRINT_v1.2_LOCKED.md",
+        "TLE v1 JSON Schema at docs/spec/schemas/tle-v1.schema.yaml",
+        "Three TLE examples: Go, Conditional, Rejected under docs/spec/examples/",
+        "OpenAPI skeleton at docs/spec/openapi/trust-ledger-v0.yaml",
+        "Alignment doc maps blueprint to os/plan.json MVP criteria"
+      ],
+      "evidence": [
+        "docs/spec/TRUST_LEDGER_PRODUCT_BLUEPRINT_v1.2_LOCKED.md",
+        "docs/spec/schemas/tle-v1.schema.yaml",
+        "docs/spec/examples/tle-v1-go.yaml",
+        "docs/spec/examples/tle-v1-conditional.yaml",
+        "docs/spec/examples/tle-v1-rejected.yaml",
+        "docs/spec/openapi/trust-ledger-v0.yaml",
+        "docs/spec/ALIGNMENT_WITH_MVP_v1.md"
+      ],
+      "verify": {
+        "method": "file-existence-and-example-count",
+        "command": "test -f docs/spec/TRUST_LEDGER_PRODUCT_BLUEPRINT_v1.2_LOCKED.md && ls docs/spec/examples/tle-v1-*.yaml | wc -l | grep -q 3"
+      }
+    },
     {
       "id": "nf-mvp-req-extract-001",
       "title": "Extract top 5 MVP requirements from existing noetfield markdown into os/plan.json done criteria",
       "status": "done",
       "done_criteria": [
-        "MVP requirement #1: Pre-execution governance evaluation must return a clear allow/deny/review decision before external execution (sources: PRODUCT_TRUTH.md, PRODUCT_BRIEF.md).",
-        "MVP requirement #2: Every evaluated intent must produce immutable audit-ready traceability with RID and exportable compliance evidence (sources: PRODUCT_TRUTH.md, docs/strategy/noetfield-future-path.md).",
-        "MVP requirement #3: Product scope must explicitly exclude payment initiation, custody, settlement, routing, FX, and money transmission claims (sources: PRODUCT_TRUTH.md, docs/strategy/noetfield-future-path.md).",
-        "MVP requirement #4: Pilot surface must support regulated-organization workflows (bank/copilot readiness) without execution rights, emphasizing policy checks and reviewability (source: docs/strategy/noetfield-future-path.md).",
-        "MVP requirement #5: Boundary integrity must be enforced in product narrative and verification, including zero TrustField/VIRLUX scope mixing in Noetfield delivery (sources: docs/strategy/noetfield-future-path.md, PROJECT_BOUNDARIES_LOCKED.md)."
+        "MVP requirement #1: Pre-execution governance evaluation must return a clear allow/deny/review decision before external execution",
+        "MVP requirement #2: Every evaluated intent must produce immutable audit-ready traceability with RID and exportable compliance evidence",
+        "MVP requirement #3: Product scope must explicitly exclude payment initiation, custody, settlement, routing, FX, and money transmission claims",
+        "MVP requirement #4: Pilot surface must support regulated-organization workflows without execution rights",
+        "MVP requirement #5: Boundary integrity must be enforced in product narrative and verification"
       ],
       "evidence": [
         "PRODUCT_TRUTH.md",
         "PRODUCT_BRIEF.md",
         "docs/strategy/noetfield-future-path.md",
         "PROJECT_BOUNDARIES_LOCKED.md"
-      ],
-      "verify": {
-        "method": "json-validation-and-criteria-count",
-        "command": "python3 - <<'PY'\\nimport json\\nfrom pathlib import Path\\np=Path('/workspace/os/plan.json')\\ndata=json.loads(p.read_text())\\nt=data['next_tasks'][0]\\nassert t['status']=='done'\\nassert len(t['done_criteria'])==5\\nprint('verify_passed: true')\\nprint('criteria_count:', len(t['done_criteria']))\\nPY"
-      }
+      ]
     }
+  ],
+  "backlog_on_request": [
+    "Evidence Intake Contract v1 (procurement doc)",
+    "Homepage copy (Webflow/Framer) from locked positioning",
+    "Sprint backlog Weeks 0-8 with user stories"
   ]
 }
