@@ -9,6 +9,7 @@
 
 | Artifact | Path |
 |----------|------|
+| **External governance sources (handbook)** | [../references/GOVERNANCE_SOURCES_HANDBOOK_v1.md](../references/GOVERNANCE_SOURCES_HANDBOOK_v1.md) |
 | Sample audit export (redacted) | [sample-audit-export.redacted.json](./sample-audit-export.redacted.json) |
 | OpenAPI (filtered, institutional) | [../api/openapi.json](../api/openapi.json) · live `/openapi.json` on platform |
 | RPAA-safe positioning | [rpaa-positioning-onepager.md](./rpaa-positioning-onepager.md) |

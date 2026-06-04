@@ -49,6 +49,7 @@
 | Lane A map | [lane_a_sprint_map.md](./lane_a_sprint_map.md) |
 | Ingest YAML | [docs/spec/EXECUTION_TRUTH_AGENT_REPLY_LOCKED.md](../spec/EXECUTION_TRUTH_AGENT_REPLY_LOCKED.md) |
 | TLE schema | [docs/spec/schemas/tle-v1.schema.yaml](../spec/schemas/tle-v1.schema.yaml) |
+| **Governance sources handbook** | [docs/references/README.md](../references/README.md) · [GOVERNANCE_SOURCES_HANDBOOK_v1.md](../references/GOVERNANCE_SOURCES_HANDBOOK_v1.md) |
 
 ### Verify (this week)
 
