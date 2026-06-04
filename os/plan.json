@@ -1,78 +1,70 @@
 {
   "repo": "noetfield",
-  "plane": "DESIGN",
-  "status": "active",
-  "last_updated": "2026-06-02",
+  "plane": "DELIVERY",
+  "status": "ship_now",
+  "authority": "ASF — Prompt OS does not block progress",
+  "last_updated": "2026-06-03",
+  "primary_direction": "docs/SHIP_NOW.md",
   "locked_positioning": {
     "headline": "AI Governance & Evidence layer for Copilot adoption",
     "buyer_line": "We produce the audit trail your Copilot deployment will be asked for later.",
     "mandate": "Every engagement must produce at least one signed Trust Ledger Entry (TLE v1).",
     "blueprint": "docs/spec/TRUST_LEDGER_PRODUCT_BLUEPRINT_v1.2_LOCKED.md"
   },
+  "active_sprint": "Week 0-2 P0",
   "next_tasks": [
     {
-      "id": "nf-trust-ledger-blueprint-lock-002",
-      "title": "Lock Trust Ledger v1.2 product blueprint and TLE examples as canonical spec",
-      "status": "done",
+      "id": "ship-p0-merge-001",
+      "title": "Merge bank-grade branch to main and run ship-verify",
+      "status": "in_progress",
+      "priority": "P0",
       "done_criteria": [
-        "Blueprint locked at docs/spec/TRUST_LEDGER_PRODUCT_BLUEPRINT_v1.2_LOCKED.md",
-        "TLE v1 JSON Schema at docs/spec/schemas/tle-v1.schema.yaml",
-        "Three TLE examples: Go, Conditional, Rejected under docs/spec/examples/",
-        "OpenAPI skeleton at docs/spec/openapi/trust-ledger-v0.yaml",
-        "Alignment doc maps blueprint to os/plan.json MVP criteria"
+        "PR #15 merged or approved for merge",
+        "make ship-verify exits 0 on main",
+        "Founder runs production smoke per WAVE0_SHIP_CHECKLIST"
       ],
-      "evidence": [
-        "docs/spec/TRUST_LEDGER_PRODUCT_BLUEPRINT_v1.2_LOCKED.md",
-        "docs/spec/schemas/tle-v1.schema.yaml",
-        "docs/spec/examples/tle-v1-go.yaml",
-        "docs/spec/examples/tle-v1-conditional.yaml",
-        "docs/spec/examples/tle-v1-rejected.yaml",
-        "docs/spec/openapi/trust-ledger-v0.yaml",
-        "docs/spec/ALIGNMENT_WITH_MVP_v1.md"
-      ],
-      "verify": {
-        "method": "file-existence-and-example-count",
-        "command": "test -f docs/spec/TRUST_LEDGER_PRODUCT_BLUEPRINT_v1.2_LOCKED.md && ls docs/spec/examples/tle-v1-*.yaml | wc -l | grep -q 3"
-      }
+      "verify": "make ship-verify"
     },
     {
-      "id": "nf-mvp-req-extract-001",
-      "title": "Extract top 5 MVP requirements from existing noetfield markdown into os/plan.json done criteria",
+      "id": "ship-p0-gtm-002",
+      "title": "Copilot positioning live on www + Trust Ledger + procurement contract",
       "status": "done",
+      "priority": "P0",
       "done_criteria": [
-        "MVP requirement #1: Pre-execution governance evaluation must return a clear allow/deny/review decision before external execution",
-        "MVP requirement #2: Every evaluated intent must produce immutable audit-ready traceability with RID and exportable compliance evidence",
-        "MVP requirement #3: Product scope must explicitly exclude payment initiation, custody, settlement, routing, FX, and money transmission claims",
-        "MVP requirement #4: Pilot surface must support regulated-organization workflows without execution rights",
-        "MVP requirement #5: Boundary integrity must be enforced in product narrative and verification"
+        "docs/SHIP_NOW.md is canonical ship authority",
+        "Homepage and /trust-ledger/ reflect Copilot audit-trail buyer line",
+        "docs/diligence/EVIDENCE_INTAKE_CONTRACT_v1.md published",
+        "docs/spec/SPRINT_BACKLOG_WEEKS_0-8.md active"
       ],
       "evidence": [
-        "PRODUCT_TRUTH.md",
-        "PRODUCT_BRIEF.md",
-        "docs/strategy/noetfield-future-path.md",
-        "PROJECT_BOUNDARIES_LOCKED.md"
+        "docs/SHIP_NOW.md",
+        "index.html",
+        "trust-ledger/index.html",
+        "docs/diligence/EVIDENCE_INTAKE_CONTRACT_v1.md",
+        "docs/spec/SPRINT_BACKLOG_WEEKS_0-8.md"
       ]
     },
     {
-      "id": "nf-agent-reply-reported-at-003",
-      "title": "Document and validate Execution Truth agent replies (reported_at required)",
-      "status": "done",
+      "id": "ship-p1-ledger-003",
+      "title": "Week 3-6: Trust Ledger Core + Evidence Index APIs",
+      "status": "todo",
+      "priority": "P1",
       "done_criteria": [
-        "EXECUTION_TRUTH_AGENT_REPLY_LOCKED.md explains PASS + red partial ingest",
-        "agent-reply-ingest.yaml template includes reported_at",
-        "scripts/verify_agent_reply_yaml.py validates required fields"
-      ],
-      "evidence": [
-        "docs/spec/EXECUTION_TRUTH_AGENT_REPLY_LOCKED.md",
-        "docs/spec/templates/agent-reply-ingest.yaml",
-        "scripts/verify_agent_reply_yaml.py",
-        ".cursor/rules/noetfield-prompt-os-reply.mdc"
+        "Implement OpenAPI paths from docs/spec/openapi/trust-ledger-v0.yaml",
+        "TLE draft + approve + immutable ledger write",
+        "Evidence ingest metadata-only"
       ]
     }
   ],
-  "backlog_on_request": [
-    "Evidence Intake Contract v1 (procurement doc)",
-    "Homepage copy (Webflow/Framer) from locked positioning",
-    "Sprint backlog Weeks 0-8 with user stories"
+  "deferred_non_blocking": [
+    "Prompt OS inbox ingest / reported_at YAML (optional)",
+    "MonoRepo Desktop path sync",
+    "777 Foundation deploy (separate repo)"
+  ],
+  "completed_foundation": [
+    "nf-mvp-req-extract-001",
+    "nf-trust-ledger-blueprint-lock-002",
+    "nf-agent-reply-reported-at-003",
+    "Local dev stack 13080 + proxy evaluate fix"
   ]
 }

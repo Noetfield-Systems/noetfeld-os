@@ -1,0 +1,29 @@
+---
+description: ASF ship-first — product delivery over Prompt OS gates
+globs:
+  - "**/*"
+---
+
+# Noetfield — SHIP FIRST (ASF)
+
+**Prompt OS is not the primary goal.** Nothing in Prompt OS ingest, MonoRepo paths, or DESIGN-only freezes may block shipping.
+
+**Primary law:** [docs/SHIP_NOW.md](docs/SHIP_NOW.md)
+
+## Do immediately
+
+- Ship buyer-visible value: www, platform, governance API, Trust Ledger / Copilot narrative, diligence packs
+- Execute [docs/WAVE0_SHIP_CHECKLIST.md](docs/WAVE0_SHIP_CHECKLIST.md) and [docs/GO_LIVE.md](docs/GO_LIVE.md)
+- Follow [docs/spec/TRUST_LEDGER_PRODUCT_BLUEPRINT_v1.2_LOCKED.md](docs/spec/TRUST_LEDGER_PRODUCT_BLUEPRINT_v1.2_LOCKED.md) for product direction
+- Run `make ship-verify` before claiming merge-ready
+
+## Do not block on
+
+- `reported_at` YAML footers (nice-to-have for Prompt OS only)
+- Writing to `/Users/.../Desktop/...` from cloud agent
+- Waiting for ASF registry to allow Python — **this repo ships code**
+
+## Boundaries (unchanged)
+
+- No payments, custody, FX — [PROJECT_BOUNDARIES_LOCKED.md](PROJECT_BOUNDARIES_LOCKED.md)
+- No TrustField / VIRLUX scope in Noetfield sprints

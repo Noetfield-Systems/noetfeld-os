@@ -34,6 +34,16 @@ Autonomous Governed Intelligence Nervous System:
 
 Start with [docs/DEVELOPER_BOOTSTRAP.md](docs/DEVELOPER_BOOTSTRAP.md).
 
+## Ship now (primary — ASF)
+
+**Prompt OS does not block progress.** Direction: [docs/SHIP_NOW.md](docs/SHIP_NOW.md)
+
+```bash
+make ship-verify        # merge/deploy readiness (local stack + www smoke)
+```
+
+Wave 0 production: [docs/WAVE0_SHIP_CHECKLIST.md](docs/WAVE0_SHIP_CHECKLIST.md) · Trust Ledger blueprint: [docs/spec/TRUST_LEDGER_PRODUCT_BLUEPRINT_v1.2_LOCKED.md](docs/spec/TRUST_LEDGER_PRODUCT_BLUEPRINT_v1.2_LOCKED.md)
+
 ## Local development
 
 ```bash
