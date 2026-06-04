@@ -14,9 +14,10 @@
 
 ### Common Noetfield ingest failure
 
-**Missing `reported_at`** in the trailing YAML block → Prompt OS / `ingest-inbox.sh noetfield` rejects or flags the reply.
+**Missing `reported_at`** in the trailing YAML block → Prompt OS / `ingest-inbox.sh noetfield` may reject that **reply**.
 
-**Fix:** Every IMPLEMENT-mode reply must end with the fenced YAML block below, including **`reported_at` in ISO8601 UTC** (e.g. `2026-06-03T09:09:00Z`).
+**Fix:** Add `reported_at` to the YAML footer and re-ingest.  
+**Do NOT:** stop shipping product work, wait for the next order, or treat ingest as the blocker — **ingest sends your answer to the system**; shipping continues in parallel.
 
 ---
 

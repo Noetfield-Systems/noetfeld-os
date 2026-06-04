@@ -1,9 +1,17 @@
 # SHIP NOW — Noetfield primary direction (ASF)
 
-**Authority:** ASF — Prompt OS does **not** block product progress.  
+**Authority:** ASF — **nothing may block Noetfield progress or shipping.**
+
+**What ASF meant:** Do **not** let Prompt OS gates, missing Desktop paths, or “wait for the next order” stop you from building and shipping the product.  
+**What ASF did NOT mean:** ingest is bad, or weaken Sina Prompt OS.
+
+**Ingest** = sending your agent reply **into** the Prompt OS / execution-truth system (so ASF sees what shipped). Ingest is **good**; a red line on one repo in a multi-repo run is **not** a reason to stop coding.
+
+**Agent rule:** Keep executing [SPRINT_BACKLOG](./spec/SPRINT_BACKLOG_WEEKS_0-8.md) and P0/P1 below **without pausing** until the product milestone is done — do not idle waiting for the next chat message.
+
 **Mode:** **DELIVERY** — ship what buyers can buy and pilots can run **this week**.
 
-Prompt OS / MonoRepo `os/plan.json` on Desktop is **optional telemetry**. This repo’s law is:
+This repo’s law is:
 
 1. [PRODUCT_TRUTH.md](../PRODUCT_TRUTH.md) · [PROJECT_BOUNDARIES_LOCKED.md](../PROJECT_BOUNDARIES_LOCKED.md)
 2. [TRUST_LEDGER_PRODUCT_BLUEPRINT_v1.2_LOCKED.md](./spec/TRUST_LEDGER_PRODUCT_BLUEPRINT_v1.2_LOCKED.md)
@@ -41,11 +49,16 @@ See [spec/SPRINT_BACKLOG_WEEKS_0-8.md](./spec/SPRINT_BACKLOG_WEEKS_0-8.md).
 
 ---
 
-## What we do NOT wait for
+## What must NOT block shipping
 
-- Prompt OS ingest YAML / `reported_at` on every reply
-- External MonoRepo file sync before shipping www + platform
-- Full TLE product code before Wave 0 revenue (sell Trust Brief + Bank Pilot + Copilot pack **now**)
+- Waiting for the **next user order** before continuing the sprint
+- DESIGN-only freezes that prevent code/API/www deploy
+- MonoRepo Desktop path unavailable in cloud (sync later; **keep shipping in git**)
+- One failed **ingest** line in a RUN SYSTEM log (fix YAML footer; **do not stop** the run or the product)
+
+## Ingest (Prompt OS) — still do it
+
+When you finish a task, **send** the reply to Sina Prompt OS (inbox / ingest scripts). Include `reported_at` in the YAML footer when possible ([EXECUTION_TRUTH_AGENT_REPLY_LOCKED.md](./spec/EXECUTION_TRUTH_AGENT_REPLY_LOCKED.md)). Missing `reported_at` = fix the reply, **not** stop shipping product work.
 
 ---
 

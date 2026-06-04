@@ -1,29 +1,28 @@
 ---
-description: ASF ship-first — product delivery over Prompt OS gates
+description: ASF — ship product continuously; ingest sends answers to system; do not idle
 globs:
   - "**/*"
 ---
 
-# Noetfield — SHIP FIRST (ASF)
+# Noetfield — SHIP CONTINUOUSLY (ASF)
 
-**Prompt OS is not the primary goal.** Nothing in Prompt OS ingest, MonoRepo paths, or DESIGN-only freezes may block shipping.
+**ASF:** Do not let anything block **progress** or **shipping**.  
+**Do NOT:** stop working until the next user message or next Prompt OS task arrives.
 
-**Primary law:** [docs/SHIP_NOW.md](docs/SHIP_NOW.md)
+## Ingest (clarified)
 
-## Do immediately
+**Ingest** = sending your answers **into** Sina Prompt OS / execution-truth (ASF visibility).  
+Ingest is **required hygiene**, not a blocker. A failed ingest on one repo ≠ stop the product sprint.
 
-- Ship buyer-visible value: www, platform, governance API, Trust Ledger / Copilot narrative, diligence packs
-- Execute [docs/WAVE0_SHIP_CHECKLIST.md](docs/WAVE0_SHIP_CHECKLIST.md) and [docs/GO_LIVE.md](docs/GO_LIVE.md)
-- Follow [docs/spec/TRUST_LEDGER_PRODUCT_BLUEPRINT_v1.2_LOCKED.md](docs/spec/TRUST_LEDGER_PRODUCT_BLUEPRINT_v1.2_LOCKED.md) for product direction
-- Run `make ship-verify` before claiming merge-ready
+When possible, end IMPLEMENT replies with YAML per [docs/spec/EXECUTION_TRUTH_AGENT_REPLY_LOCKED.md](docs/spec/EXECUTION_TRUTH_AGENT_REPLY_LOCKED.md) including `reported_at`.
 
-## Do not block on
+## Ship law
 
-- `reported_at` YAML footers (nice-to-have for Prompt OS only)
-- Writing to `/Users/.../Desktop/...` from cloud agent
-- Waiting for ASF registry to allow Python — **this repo ships code**
+[docs/SHIP_NOW.md](docs/SHIP_NOW.md) · [docs/spec/SPRINT_BACKLOG_WEEKS_0-8.md](docs/spec/SPRINT_BACKLOG_WEEKS_0-8.md)
 
-## Boundaries (unchanged)
+Keep executing P0 → P1 backlog: code, www, API, merge, GO_LIVE artifacts.  
+**Prompt OS is not weakened** — it coordinates; **Noetfield repo ships** without waiting for permission each step.
 
-- No payments, custody, FX — [PROJECT_BOUNDARIES_LOCKED.md](PROJECT_BOUNDARIES_LOCKED.md)
-- No TrustField / VIRLUX scope in Noetfield sprints
+## Boundaries
+
+[PROJECT_BOUNDARIES_LOCKED.md](PROJECT_BOUNDARIES_LOCKED.md) — no payments/custody; no TrustField/VIRLUX in Noetfield.

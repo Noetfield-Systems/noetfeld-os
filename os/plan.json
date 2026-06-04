@@ -2,7 +2,7 @@
   "repo": "noetfield",
   "plane": "DELIVERY",
   "status": "ship_now",
-  "authority": "ASF — Prompt OS does not block progress",
+  "authority": "ASF — do not block progress or shipping; do not idle for next order; ingest = send answers to system",
   "last_updated": "2026-06-03",
   "primary_direction": "docs/SHIP_NOW.md",
   "locked_positioning": {
@@ -56,9 +56,9 @@
       ]
     }
   ],
-  "deferred_non_blocking": [
-    "Prompt OS inbox ingest / reported_at YAML (optional)",
-    "MonoRepo Desktop path sync",
+  "ingest_note": "Finish tasks → send reply to Sina Prompt OS (ingest). reported_at required in YAML when ingesting; never stop shipping because ingest failed on one repo.",
+  "deferred_separate_repos": [
+    "MonoRepo Desktop path sync (cloud cannot write /Users/...)",
     "777 Foundation deploy (separate repo)"
   ],
   "completed_foundation": [
