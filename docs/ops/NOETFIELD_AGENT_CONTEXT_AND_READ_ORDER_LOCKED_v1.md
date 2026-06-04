@@ -26,7 +26,7 @@
 5. [os/sprint-trust-ledger-v1.2.md](../../os/sprint-trust-ledger-v1.2.md) or [lane_a_sprint_map.md](./lane_a_sprint_map.md)
 6. [PRODUCT_TRUTH.md](../../PRODUCT_TRUTH.md) · [POSITIONING.md](../../POSITIONING.md) · [OFFERINGS_LOCKED.md](../../OFFERINGS_LOCKED.md)
 7. [docs/spec/TRUST_LEDGER_PRODUCT_BLUEPRINT_v1.2_LOCKED.md](../spec/TRUST_LEDGER_PRODUCT_BLUEPRINT_v1.2_LOCKED.md)
-7b. **Diligence / external frameworks:** [docs/references/GOVERNANCE_SOURCES_HANDBOOK_v1.md](../references/GOVERNANCE_SOURCES_HANDBOOK_v1.md) (when mapping TLE, Trust Brief, or buyer controls)
+7b. **Diligence / external frameworks (LOCKED):** [docs/references/README.md](../references/README.md) — sources handbook + drift detection book (TLE, Trust Brief, monitoring)
 8. [PROJECT_BOUNDARIES_LOCKED.md](../../PROJECT_BOUNDARIES_LOCKED.md)
 9. [.cursor/AGENT_TRACKING.md](../../.cursor/AGENT_TRACKING.md)
 10. Active task (Issue / PR / Prompt OS task string)

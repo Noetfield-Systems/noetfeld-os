@@ -1,10 +1,13 @@
 # External governance references (agent index)
 
-**Primary handbook:** [GOVERNANCE_SOURCES_HANDBOOK_v1.md](./GOVERNANCE_SOURCES_HANDBOOK_v1.md) — curated, link-verified sources for AI governance, audit trails, Copilot compliance, and regulated buyers.
+**Status:** LOCKED index · Update only with ASF + product signoff when adding new reference books.
 
-**When to read:** Trust Brief / Bank Pilot diligence, TLE policy mapping, connector controls, buyer conversations, confidence-score rationale.
+| Book | Path | Use when |
+|------|------|----------|
+| **Governance sources** | [GOVERNANCE_SOURCES_HANDBOOK_LOCKED_v1.md](./GOVERNANCE_SOURCES_HANDBOOK_LOCKED_v1.md) | Frameworks, Copilot/Purview, SOC 2, FFIEC, EU AI Act, NIST, ISO 42001 |
+| **Drift detection** | [GOVERNANCE_DRIFT_DETECTION_SOURCES_LOCKED_v1.md](./GOVERNANCE_DRIFT_DETECTION_SOURCES_LOCKED_v1.md) | Policy/config/model/data/semantic drift, continuous monitoring, post-market surveillance |
 
-**Reliability rule:** Prefer **Tier 1** (official law/standards/government) and **Tier 2** (vendor primary docs). Use Tier 3–4 only for orientation, not as sole audit evidence.
+**Reliability rule:** Prefer **Tier 1** (official law/standards/government) and **Tier 2** (vendor primary docs). Tier 3–4 = orientation only.
 
 **Related in-repo:**
 
@@ -16,4 +19,6 @@
 | Trust Ledger blueprint | [docs/spec/TRUST_LEDGER_PRODUCT_BLUEPRINT_v1.2_LOCKED.md](../spec/TRUST_LEDGER_PRODUCT_BLUEPRINT_v1.2_LOCKED.md) |
 | TLE schema | [docs/spec/schemas/tle-v1.schema.yaml](../spec/schemas/tle-v1.schema.yaml) |
 
-**Maintenance:** Update handbook when major standards revise (NIST AI RMF, EU AI Act guidance, OWASP LLM Top 10). Bump version suffix in filename or add `v1.1` section with `last_reviewed` date.
+**Filename policy:** New reference books use `*_LOCKED_v1.md` suffix. Do not rename locked files without founder approval.
+
+**Maintenance:** Bump `Last reviewed` in each book; add changelog section. Regenerate links if primary URLs move (prefer DOI / standards body canonical URLs).

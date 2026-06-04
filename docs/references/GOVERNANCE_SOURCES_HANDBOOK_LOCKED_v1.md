@@ -1,9 +1,10 @@
-# Governance Sources Handbook v1
+# Governance Sources Handbook (LOCKED v1)
 
+**Status:** LOCKED · **Plane:** REFERENCE · **Do not override without ASF + product signoff**  
 **For:** Noetfield agents, founders, delivery, diligence  
 **Lane:** `noetfield_cloud` · Copilot governance & Trust Ledger (TLE v1)  
 **Last reviewed:** 2026-06-04  
-**Index:** [README.md](./README.md)
+**Index:** [README.md](./README.md) · **Companion:** [GOVERNANCE_DRIFT_DETECTION_SOURCES_LOCKED_v1.md](./GOVERNANCE_DRIFT_DETECTION_SOURCES_LOCKED_v1.md)
 
 This is a **small reference book** of **real, primary, reliable** governance sources on the public web—not blog opinions. Use it to justify controls, map TLE fields to industry language, and brief buyers in one sentence: *we help you produce the audit trail regulators and boards already expect, aligned to these frameworks.*
 
@@ -405,10 +406,16 @@ When adding new sources to v1.1, require: **named authority**, **stable URL**, *
 
 ---
 
-## 13. Version history
+## 13. Related locked reference
+
+**Governance drift detection** (policy drift, model/data/concept drift, semantic RAG drift, config drift): [GOVERNANCE_DRIFT_DETECTION_SOURCES_LOCKED_v1.md](./GOVERNANCE_DRIFT_DETECTION_SOURCES_LOCKED_v1.md)
+
+---
+
+## 14. Version history
 
 | Version | Date | Notes |
 |---------|------|-------|
-| v1 | 2026-06-04 | Initial handbook: 20+ primary sources, Copilot + bank + TLE mapping |
+| v1 LOCKED | 2026-06-04 | Initial handbook: 20+ primary sources; filename locked |
 
 **Next review triggers:** NIST AI RMF major revision · EU AI Act implementing acts · OWASP LLM Top 10 2026 · ISO 42001 amendment.
