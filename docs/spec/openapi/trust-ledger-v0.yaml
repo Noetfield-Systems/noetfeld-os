@@ -6,8 +6,10 @@ info:
     DESIGN skeleton — Trust Ledger v1.2 blueprint.
     Pre-execution governance & evidence; no payment or custody APIs.
 servers:
-  - url: https://api.noetfield.com/v1
-    description: Production (placeholder)
+  - url: https://platform.noetfield.com/api/v1
+    description: Production platform
+  - url: http://127.0.0.1:8001/api/v1
+    description: Local platform (make dev-local)
 paths:
   /connectors:
     post:

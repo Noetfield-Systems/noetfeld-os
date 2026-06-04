@@ -1,10 +1,23 @@
 #!/usr/bin/env bash
-# TLE v1 smoke: schema file present + example YAML parses (no API required).
+# TLE v1 smoke: YAML examples + optional live API (draft → approve).
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+# shellcheck source=dev-ports.sh
+source "${ROOT}/scripts/dev-ports.sh"
 SCHEMA="$ROOT/docs/spec/schemas/tle-v1.schema.yaml"
 EXAMPLES="$ROOT/docs/spec/examples"
 fail() { echo "tle-smoke: $*" >&2; exit 1; }
+
+API_BASE=""
+for arg in "$@"; do
+  case "$arg" in
+    --api=*) API_BASE="${arg#--api=}" ;;
+    --api) API_BASE="${TLE_SMOKE_API_BASE:-http://127.0.0.1:${NF_DEV_PLATFORM_PORT}/api/v1}" ;;
+  esac
+done
+if [[ "${1:-}" == "--api" && -z "$API_BASE" ]]; then
+  API_BASE="${TLE_SMOKE_API_BASE:-http://127.0.0.1:${NF_DEV_PLATFORM_PORT}/api/v1}"
+fi
 
 [[ -f "$SCHEMA" ]] || fail "missing $SCHEMA"
 shopt -s nullglob
@@ -36,4 +49,30 @@ PY
 else
   for f in "${yaml_files[@]}"; do [[ -s "$f" ]] || fail "empty $f"; done
   echo "tle-smoke: OK (${#yaml_files[@]} example(s), python3 unavailable — size check only)"
+fi
+
+if [[ -n "$API_BASE" ]]; then
+  EV_ID="ev-smoke-$(date +%s)"
+  code="$(curl -sS -o /tmp/tle-smoke-ingest.json -w "%{http_code}" \
+    -X POST "${API_BASE}/evidence/ingest" \
+    -H "Content-Type: application/json" \
+    -d "{\"evidence_id\":\"${EV_ID}\",\"source\":\"Smoke\",\"title\":\"TLE smoke evidence\",\"hash\":\"sha256:smoke0000000000000000000000000000000000000000000000000000000001\",\"ingest_mode\":\"metadata_only\"}" \
+    2>/dev/null || echo "000")"
+  [[ "$code" == "201" ]] || fail "API ingest failed ($code) at ${API_BASE}/evidence/ingest"
+
+  draft_code="$(curl -sS -o /tmp/tle-smoke-draft.json -w "%{http_code}" \
+    -X POST "${API_BASE}/tle/draft" \
+    -H "Content-Type: application/json" \
+    -d "{\"template_id\":\"copilot-go-no-go-v1\",\"evidence_ids\":[\"${EV_ID}\"],\"owner_id\":\"usr-smoke\",\"decision\":\"Smoke test\"}" \
+    2>/dev/null || echo "000")"
+  [[ "$draft_code" == "201" ]] || fail "API draft failed ($draft_code)"
+
+  tle_id="$(python3 -c "import json; print(json.load(open('/tmp/tle-smoke-draft.json'))['tle_id'])")"
+  appr_code="$(curl -sS -o /tmp/tle-smoke-approve.json -w "%{http_code}" \
+    -X POST "${API_BASE}/tle/${tle_id}/approve" \
+    -H "Content-Type: application/json" \
+    -d '{"approver_id":"usr-smoke","status":"Approved","signature_hash":"sig:smoke0000000000000000000000000000000000000000000000000000000001","key_id":"kms-smoke-01"}' \
+    2>/dev/null || echo "000")"
+  [[ "$appr_code" == "200" ]] || fail "API approve failed ($appr_code)"
+  echo "tle-smoke: API OK (${API_BASE}) tle_id=${tle_id}"
 fi

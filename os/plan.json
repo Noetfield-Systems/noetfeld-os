@@ -22,14 +22,19 @@
     {
       "id": "ship-p0-merge-001",
       "title": "Merge bank-grade branch to main and run ship-verify",
-      "status": "in_progress",
+      "status": "done",
       "priority": "P0",
       "done_criteria": [
         "PR #15 merged or approved for merge",
         "make ship-verify exits 0 on main",
         "Founder runs production smoke per WAVE0_SHIP_CHECKLIST"
       ],
-      "verify": "make ship-verify"
+      "verify": "make ship-verify",
+      "evidence": [
+        "https://github.com/kazemnezhadsina144-dot/Noetfield/pull/15",
+        "main @ c6c945c",
+        "make ship-verify: OK (tle-smoke, verify-local-dev, bank-grade HTML)"
+      ]
     },
     {
       "id": "ship-p0-gtm-002",
@@ -53,12 +58,26 @@
     {
       "id": "ship-p1-ledger-003",
       "title": "Week 3-6: Trust Ledger Core + Evidence Index APIs",
-      "status": "todo",
+      "status": "in_progress",
       "priority": "P1",
       "done_criteria": [
         "Implement OpenAPI paths from docs/spec/openapi/trust-ledger-v0.yaml",
         "TLE draft + approve + immutable ledger write",
         "Evidence ingest metadata-only"
+      ],
+      "completed_mvp": [
+        "POST /api/v1/evidence/ingest",
+        "POST /api/v1/tle/draft",
+        "GET /api/v1/tle/{id}",
+        "POST /api/v1/tle/{id}/approve",
+        "infrastructure/supabase/migrations/0006_trust_ledger_tle.sql",
+        "tests/unit/test_trust_ledger_v1.py",
+        "scripts/tle-smoke.sh --api"
+      ],
+      "deferred": [
+        "POST /connectors",
+        "GET /tle/{id}/export PDF",
+        "Workspace UI W56-*"
       ]
     }
   ],

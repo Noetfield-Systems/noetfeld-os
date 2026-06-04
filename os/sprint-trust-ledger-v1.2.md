@@ -17,6 +17,12 @@
 2. `make ship-verify` exit 0
 3. Evidence: `scripts/verify-local-dev.sh`, `scripts/tle-smoke.sh`, `docs/ops/lane_a_sprint_map.md`
 
-## Next (P1)
+## P1 MVP (shipped in repo)
 
-Implement paths in [docs/spec/openapi/trust-ledger-v0.yaml](../docs/spec/openapi/trust-ledger-v0.yaml) — task `ship-p1-ledger-003`.
+- `POST /api/v1/evidence/ingest` · `POST /api/v1/tle/draft` · `GET /api/v1/tle/{id}` · `POST /api/v1/tle/{id}/approve`
+- Migration: [infrastructure/supabase/migrations/0006_trust_ledger_tle.sql](../infrastructure/supabase/migrations/0006_trust_ledger_tle.sql)
+- Verify: `./scripts/tle-smoke.sh --api` (platform :8001 with `make dev-local`)
+
+## Next (P1 remainder)
+
+Connectors, PDF export, workspace UI — [docs/spec/openapi/trust-ledger-v0.yaml](../docs/spec/openapi/trust-ledger-v0.yaml).

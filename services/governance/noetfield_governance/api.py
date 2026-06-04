@@ -54,6 +54,12 @@ from noetfield_governance.golden_edge_v3 import (
 )
 from noetfield_governance.governance_rid import generate_rid, normalize_rid
 from noetfield_governance.governance_v1 import GovernanceV1Deps, router as governance_v1_router
+from noetfield_governance.trust_ledger import (
+    InMemoryTrustLedgerStore,
+    PostgresTrustLedgerStore,
+    TrustLedgerDeps,
+    router as trust_ledger_router,
+)
 from noetfield_governance.governance_webhooks import GovernanceWebhookDispatcher
 from noetfield_governance.public_openapi import install_public_openapi
 from noetfield_governance.runtime import (
@@ -108,6 +114,7 @@ app = FastAPI(
 
 install_public_openapi(app)
 app.include_router(governance_v1_router)
+app.include_router(trust_ledger_router)
 
 _cors_origins = [
     o.strip()
@@ -183,6 +190,11 @@ governance_webhooks = GovernanceWebhookDispatcher.from_settings(
     settings.governance_webhook_urls,
     settings.governance_webhook_secret,
 )
+trust_ledger_store: InMemoryTrustLedgerStore | PostgresTrustLedgerStore = (
+    PostgresTrustLedgerStore(settings.database_url)
+    if postgres_mode
+    else InMemoryTrustLedgerStore()
+)
 app.state.governance_v1_deps = GovernanceV1Deps(
     engine=golden_edge_v3,
     event_bus=event_bus,
@@ -190,6 +202,7 @@ app.state.governance_v1_deps = GovernanceV1Deps(
     webhooks=governance_webhooks,
     signal_pipeline=signal_pipeline,
 )
+app.state.trust_ledger_deps = TrustLedgerDeps(store=trust_ledger_store)
 
 
 class ApprovalDecisionRequest(BaseModel):
