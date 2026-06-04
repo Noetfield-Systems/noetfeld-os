@@ -1,13 +1,17 @@
 # SHIP NOW — Noetfield primary direction (ASF)
 
-**Authority:** ASF — **nothing may block Noetfield progress or shipping.**
+**Canonical short form:** [os/SHIP_NOW.md](../os/SHIP_NOW.md)
 
-**What ASF meant:** Do **not** let Prompt OS gates, missing Desktop paths, or “wait for the next order” stop you from building and shipping the product.  
-**What ASF did NOT mean:** ingest is bad, or weaken Sina Prompt OS.
+## Two different things
 
-**Ingest** = sending your agent reply **into** the Prompt OS / execution-truth system (so ASF sees what shipped). Ingest is **good**; a red line on one repo in a multi-repo run is **not** a reason to stop coding.
+| What it is | Blocks shipping? |
+|------------|------------------|
+| **Ingest** — send answer to system (YAML + reports / `noetfield-latest.txt`) | **No** — required reporting **after** you ship |
+| **Waiting for the next order** — stop until Prompt OS / M8 / dispatch sends another prompt | **Yes** — ASF said **not** to do this |
 
-**Agent rule:** Keep executing [SPRINT_BACKLOG](./spec/SPRINT_BACKLOG_WEEKS_0-8.md) and P0/P1 below **without pausing** until the product milestone is done — do not idle waiting for the next chat message.
+**Do not weaken Sina Prompt OS.** **Do not edit Prompt OS code.** Ingest stays **required**.
+
+**Ship** from [os/plan.json](../os/plan.json) immediately. **Do not idle** for the next order.
 
 **Mode:** **DELIVERY** — ship what buyers can buy and pilots can run **this week**.
 
@@ -51,14 +55,13 @@ See [spec/SPRINT_BACKLOG_WEEKS_0-8.md](./spec/SPRINT_BACKLOG_WEEKS_0-8.md).
 
 ## What must NOT block shipping
 
-- Waiting for the **next user order** before continuing the sprint
+- **Waiting for the next Prompt OS / M8 / dispatch order** before continuing the sprint
 - DESIGN-only freezes that prevent code/API/www deploy
 - MonoRepo Desktop path unavailable in cloud (sync later; **keep shipping in git**)
-- One failed **ingest** line in a RUN SYSTEM log (fix YAML footer; **do not stop** the run or the product)
 
-## Ingest (Prompt OS) — still do it
+## Ingest — required (does not block shipping)
 
-When you finish a task, **send** the reply to Sina Prompt OS (inbox / ingest scripts). Include `reported_at` in the YAML footer when possible ([EXECUTION_TRUTH_AGENT_REPLY_LOCKED.md](./spec/EXECUTION_TRUTH_AGENT_REPLY_LOCKED.md)). Missing `reported_at` = fix the reply, **not** stop shipping product work.
+When you finish a task, **send** the reply to Sina Prompt OS. See [EXECUTION_TRUTH_AGENT_REPLY_LOCKED.md](./spec/EXECUTION_TRUTH_AGENT_REPLY_LOCKED.md). A failed ingest on one repo = fix YAML and re-ingest; **keep shipping** Noetfield work.
 
 ---
 

@@ -1,0 +1,34 @@
+---
+description: Ingest = send completed agent answer to Sina Prompt OS (required, not blocking)
+globs:
+  - "**/*"
+---
+
+# Noetfield — ingest (required reporting)
+
+**Ingest** = sending your completed work **into** the system so ASF / Prompt OS can record it.
+
+## Required after you ship
+
+1. Finish the Noetfield task (code, docs, verify).
+2. End the reply with Execution Truth YAML: [docs/spec/EXECUTION_TRUTH_AGENT_REPLY_LOCKED.md](../../docs/spec/EXECUTION_TRUTH_AGENT_REPLY_LOCKED.md) — include **`reported_at`** (ISO8601 UTC).
+3. Founder/Mac sends to Prompt OS, e.g.:
+   - `~/Desktop/SinaPromptOS/outputs/inbox/noetfield-latest.txt` then `./scripts/ingest-inbox.sh noetfield`
+   - or `ingest-cursor-reply.sh` / clipboard ingest per SourceA law
+
+Cloud agents: provide full reply + YAML in chat; founder runs ingest on Mac if path unavailable.
+
+## Does ingest block shipping?
+
+| | |
+|-|-|
+| **Ingest** | **No** — report after shipping |
+| **Waiting for next Prompt OS order before continuing sprint** | **Yes** — do not do this |
+
+A **red ingest line** on one repo in a multi-repo RUN = fix YAML and re-ingest that reply; **keep shipping** Noetfield product work.
+
+## Do not
+
+- Edit Sina Prompt OS repository code from Noetfield agent
+- Skip ingest because you are “focused on shipping” — shipping **and** ingest both happen
+- Treat ingest failure as permission to idle until the next dispatch

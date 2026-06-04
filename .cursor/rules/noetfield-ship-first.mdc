@@ -1,28 +1,27 @@
 ---
-description: ASF — ship product continuously; ingest sends answers to system; do not idle
+description: ASF ship rule — two different things (ingest vs waiting for next order)
 globs:
   - "**/*"
 ---
 
-# Noetfield — SHIP CONTINUOUSLY (ASF)
+# Noetfield — SHIP FIRST (ASF)
 
-**ASF:** Do not let anything block **progress** or **shipping**.  
-**Do NOT:** stop working until the next user message or next Prompt OS task arrives.
+## Two different things
 
-## Ingest (clarified)
+| What it is | Blocks shipping? |
+|------------|------------------|
+| **Ingest** — send your answer to the system (YAML footer + inbox / `ingest-inbox.sh` / `cursor-reply-latest.txt`) | **No** — required reporting **after** you ship |
+| **Waiting for the next order** — stop after one task until Prompt OS / M8 / dispatch sends another prompt | **Yes** — ASF said **not** to do this |
 
-**Ingest** = sending your answers **into** Sina Prompt OS / execution-truth (ASF visibility).  
-Ingest is **required hygiene**, not a blocker. A failed ingest on one repo ≠ stop the product sprint.
+## What you must do
 
-When possible, end IMPLEMENT replies with YAML per [docs/spec/EXECUTION_TRUTH_AGENT_REPLY_LOCKED.md](docs/spec/EXECUTION_TRUTH_AGENT_REPLY_LOCKED.md) including `reported_at`.
+1. **Ship** from Noetfield’s own plan immediately: [os/plan.json](../../os/plan.json) · [os/SHIP_NOW.md](../../os/SHIP_NOW.md) · [docs/spec/SPRINT_BACKLOG_WEEKS_0-8.md](../../docs/spec/SPRINT_BACKLOG_WEEKS_0-8.md)
+2. **Do not** stop and idle until a new Prompt OS order arrives — continue P0 → P1 backlog in the same arc of work.
+3. **Do** send every completed session to the system via **ingest** (see [noetfield-ingest-yaml.mdc](noetfield-ingest-yaml.mdc)).
+4. **Do not** edit or weaken **Sina Prompt OS** code — Noetfield repo only.
 
-## Ship law
-
-[docs/SHIP_NOW.md](docs/SHIP_NOW.md) · [docs/spec/SPRINT_BACKLOG_WEEKS_0-8.md](docs/spec/SPRINT_BACKLOG_WEEKS_0-8.md)
-
-Keep executing P0 → P1 backlog: code, www, API, merge, GO_LIVE artifacts.  
-**Prompt OS is not weakened** — it coordinates; **Noetfield repo ships** without waiting for permission each step.
+**“Don’t block progress”** = do not wait for the next order. **Not** = skip ingest.
 
 ## Boundaries
 
-[PROJECT_BOUNDARIES_LOCKED.md](PROJECT_BOUNDARIES_LOCKED.md) — no payments/custody; no TrustField/VIRLUX in Noetfield.
+[PROJECT_BOUNDARIES_LOCKED.md](../../PROJECT_BOUNDARIES_LOCKED.md)
