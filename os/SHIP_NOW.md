@@ -4,7 +4,18 @@
 
 ## Active queue (`next_tasks`)
 
-Empty — Next Wave 023–027 shipped. Pull new tasks from sprint or founder order.
+Empty — Next Wave 023–027 shipped. Pull new tasks from sprint, founder order, or **`os/plans/`** (1000 future plans, NO ASF).
+
+## Future plans library
+
+| Resource | Path |
+|----------|------|
+| Index | `os/plans/REGISTRY.json` |
+| How-to | `os/plans/README.md` |
+| Cursor mirror | `~/.cursor/plans/noetfield-os/` |
+| Regenerate | `python3 scripts/generate-future-plans.py` |
+
+When planning **with no ASF**: pick from registry (T0→T1, by phase), implement, update plan `status`, ingest, commit — agent-owned.
 
 ## Latest wave (shipped 2026-06-04)
 

@@ -79,7 +79,8 @@ Read in order; skip only if path missing (note in reply).
 | B8 | TLE v1.2 pack | `docs/strategy/NOETFIELD_COPILOT_TLE_V12_LOCKED.md` (if present) |
 | B9 | SME design (Lane A/B/C) | `docs/strategy/NOETFIELD_COPILOT_SME_SYSTEM_DESIGN_LOCKED_v1.md` |
 | B10 | Agent tracking | `.cursor/AGENT_TRACKING.md` |
-| B11 | Cursor rules | `.cursor/rules/noetfield-ship-first.mdc`, `noetfield-ingest-yaml.mdc` |
+| B11 | Cursor rules | `.cursor/rules/noetfield-ship-first.mdc`, `noetfield-ingest-yaml.mdc`, `noetfield-no-asf-plans.mdc` |
+| B12 | **Future plans (1000, NO ASF)** | `os/plans/REGISTRY.json`, `os/plans/README.md` |
 
 ### C — Engineering handoff (when touching product)
 

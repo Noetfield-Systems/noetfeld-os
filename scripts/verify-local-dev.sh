@@ -118,6 +118,22 @@ else
 fi
 
 check "http://127.0.0.1:${PUBLIC}/trust-ledger/sample-report/" "TLE sample report"
+pilot_code="$(curl -sS -o /dev/null -w "%{http_code}" --connect-timeout 5 \
+  "http://127.0.0.1:${PUBLIC}/copilot/pilot/" 2>/dev/null || echo "000")"
+if [[ "$pilot_code" == "200" ]]; then
+  echo "OK   Copilot pilot page (200)"
+else
+  echo "FAIL Copilot pilot page ($pilot_code)" >&2
+  fail=1
+fi
+conn_code="$(curl -sS -o /dev/null -w "%{http_code}" --connect-timeout 5 \
+  "http://127.0.0.1:${PUBLIC}/workspace/connectors" 2>/dev/null || echo "000")"
+if [[ "$conn_code" == "200" ]]; then
+  echo "OK   Workspace connectors (200)"
+else
+  echo "FAIL Workspace connectors ($conn_code)" >&2
+  fail=1
+fi
 sample_yaml="$(curl -sS -o /dev/null -w "%{http_code}" --connect-timeout 3 \
   "http://127.0.0.1:${PUBLIC}/trust-ledger/sample-report/samples/tle-go-approved.yaml" 2>/dev/null || echo "000")"
 if [[ "$sample_yaml" == "200" ]]; then
