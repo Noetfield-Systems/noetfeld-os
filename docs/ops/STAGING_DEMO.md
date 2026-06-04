@@ -48,9 +48,19 @@ Public references (link only — no secrets in repo):
 2. Set env: `DATABASE_URL`, `NF_PUBLIC_BASE_URL`, `NF_M365_MOCK_TOKEN` (staging vault only).
 3. Build: governance-console backend + Next workspace per existing deploy doc.
 4. Health: `GET /health` returns 200.
-5. Smoke: `NF_STAGING_URL=https://… ./scripts/staging-smoke.sh`
+5. Smoke: `make staging-smoke` or `NF_STAGING_URL=https://… ./scripts/staging-smoke.sh`
 
-Agents: document code changes here; do not paste secrets. ASF runs vault + deploy scripts on Mac.
+Agents: document code changes here; do not paste secrets. Deploy secrets stay in founder vault only.
+
+## PR / pre-merge checklist (NO ASF)
+
+Before merging `cursor/bank-grade-fullstack-37f0` (or opening demo PR):
+
+- [ ] `pytest governance-console/backend/tests/test_tle_flow.py -q`
+- [ ] `make verify-local-dev && make tle-smoke && make copilot-pilot-e2e`
+- [ ] `reports/cursor-reply-latest.txt` ingested (`ingest-cursor-reply.sh noetfield`)
+- [ ] If staging URL available: `export NF_STAGING_URL=… && make staging-smoke`
+- [ ] No secrets in diff (`.env`, tokens, production `DATABASE_URL`)
 
 ## Smoke before demo
 
@@ -64,6 +74,5 @@ make verify-local-dev
 
 ```bash
 export NF_STAGING_URL="https://your-staging-host"
-chmod +x scripts/staging-smoke.sh
-./scripts/staging-smoke.sh
+make staging-smoke
 ```

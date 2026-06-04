@@ -128,7 +128,10 @@ def approve_tle(
     except LookupError as exc:
         raise HTTPException(status_code=404, detail=str(exc)) from exc
     except ValueError as exc:
-        raise HTTPException(status_code=400, detail=str(exc)) from exc
+        msg = str(exc)
+        if "Out-of-order approval" in msg:
+            raise HTTPException(status_code=403, detail=msg) from exc
+        raise HTTPException(status_code=400, detail=msg) from exc
     return _to_detail(row)
 
 
@@ -145,7 +148,7 @@ def export_tle(
         raise HTTPException(status_code=404, detail="TLE not found")
     pack = board_pack_export(row)
     if format == "pdf":
-        pdf_bytes = render_board_pack_pdf(row)
+        pdf_bytes = render_board_pack_pdf(row, pack)
         return Response(
             content=pdf_bytes,
             media_type="application/pdf",

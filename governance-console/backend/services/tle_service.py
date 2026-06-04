@@ -189,6 +189,13 @@ def approve_step(
 
     doc = dict(row.document_json)
     chain = list(doc.get("approval_chain") or [])
+    next_pending = next((s for s in chain if s.get("status") == "Pending"), None)
+    if next_pending is None:
+        raise ValueError("No pending approval step")
+    expected_id = (next_pending.get("approver") or {}).get("id")
+    if approver_id != expected_id:
+        raise ValueError("Out-of-order approval")
+
     matched = False
     for step in chain:
         approver = step.get("approver") or {}
@@ -254,5 +261,18 @@ def board_pack_export(row: TleEntry) -> dict[str, Any]:
         "approval_chain": doc.get("approval_chain"),
         "risk_summary": doc.get("risk_summary"),
         "controls": doc.get("controls"),
+        "signature_block": build_signature_block(doc),
         "document": doc,
+    }
+
+
+def build_signature_block(doc: dict[str, Any]) -> dict[str, Any]:
+    return {
+        "key_id": KMS_STUB_KEY_ID,
+        "digest_algorithm": "sha256",
+        "signatures": list(doc.get("signatures") or []),
+        "verify_hint": (
+            "Recompute sha256 over sorted JSON of {tle_id, approver_id, decision} per signature entry; "
+            "final audit_digest uses canonical document JSON excluding audit_digest field."
+        ),
     }

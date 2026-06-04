@@ -50,6 +50,10 @@ copilot-pilot-e2e:
 	@chmod +x scripts/copilot-pilot-e2e.sh scripts/seed-m365-evidence-stub.sh
 	./scripts/copilot-pilot-e2e.sh
 
+staging-smoke:
+	@chmod +x scripts/staging-smoke.sh
+	./scripts/staging-smoke.sh
+
 seed-m365-evidence:
 	@chmod +x scripts/seed-m365-evidence-stub.sh
 	./scripts/seed-m365-evidence-stub.sh

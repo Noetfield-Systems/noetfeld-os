@@ -157,3 +157,77 @@ def test_m365_oauth_mock_flow():
     assert cb.json()["oauth_connected"] is True
     st = client.get(f"/connectors/{cid}/status", headers=TENANT_HEADER)
     assert st.json()["oauth_connected"] is True
+
+
+def test_oauth_callback_ingests_evidence():
+    cid = f"m365-ingest-{uuid.uuid4().hex[:8]}"
+    client.post(
+        "/connectors",
+        headers=TENANT_HEADER,
+        json={
+            "connector_id": cid,
+            "connector_type": "m365_purview",
+            "required_scopes": ["Purview.Read"],
+        },
+    )
+    client.get(
+        f"/connectors/{cid}/oauth/callback",
+        headers=TENANT_HEADER,
+        params={"code": "dev-mock", "state": "ingest"},
+    )
+    draft = client.post(
+        "/tle/draft",
+        headers=TENANT_HEADER,
+        json={
+            "evidence_ids": [
+                "EV-PURVIEW-COPILOT-LABELS",
+                "EV-ENTRA-CA-COPILOT",
+                "EV-SPO-SITE-POLICY",
+            ],
+        },
+    )
+    assert draft.status_code == 201
+    assert len(draft.json()["document"]["evidence"]) == 3
+
+
+def test_out_of_order_approval_denied():
+    r = client.post(
+        "/tle/draft",
+        headers=TENANT_HEADER,
+        json={"evidence_ids": ["EV-PURVIEW-001", "EV-ENTRA-001", "EV-AUDIT-001"]},
+    )
+    tle_id = r.json()["tle_id"]
+    denied = client.post(
+        f"/tle/{tle_id}/approve",
+        headers=TENANT_HEADER,
+        json={"approver_id": "legal-001", "decision": "Approved"},
+    )
+    assert denied.status_code == 403
+    ok = client.post(
+        f"/tle/{tle_id}/approve",
+        headers=TENANT_HEADER,
+        json={"approver_id": "cio-001", "decision": "Approved"},
+    )
+    assert ok.status_code == 200
+
+
+def test_export_includes_signature_block():
+    r = client.post(
+        "/tle/draft",
+        headers=TENANT_HEADER,
+        json={"evidence_ids": ["EV-PURVIEW-001", "EV-ENTRA-001", "EV-AUDIT-001"]},
+    )
+    tle_id = r.json()["tle_id"]
+    for approver in ("cio-001", "legal-001", "sec-001"):
+        client.post(
+            f"/tle/{tle_id}/approve",
+            headers=TENANT_HEADER,
+            json={"approver_id": approver, "decision": "Approved"},
+        )
+    export = client.get(f"/tle/{tle_id}/export", headers=TENANT_HEADER).json()
+    assert "signature_block" in export
+    assert export["signature_block"]["key_id"]
+    assert len(export["signature_block"]["signatures"]) == 3
+    pdf = client.get(f"/tle/{tle_id}/export?format=pdf", headers=TENANT_HEADER)
+    assert pdf.status_code == 200
+    assert len(pdf.content) > 800

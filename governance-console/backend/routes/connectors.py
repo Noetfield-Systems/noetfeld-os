@@ -10,6 +10,7 @@ from sqlalchemy.orm import Session
 from db.models import ConnectorRecord
 from db.session import get_db
 from schemas import ConnectorRegisterRequest, ConnectorResponse, ConnectorStatusResponse
+from services.m365_connector_sync import ingest_m365_stub_evidence
 from services.m365_oauth_stub import complete_mock_oauth, oauth_start_url
 from services.tenant_service import resolve_tenant_id
 
@@ -117,6 +118,13 @@ def oauth_callback(
         raise HTTPException(status_code=404, detail="Connector not found")
     try:
         complete_mock_oauth(db, row, code)
+        evidence_ids = ingest_m365_stub_evidence(db, tenant_id=tenant_id, connector_id=connector_id)
+        oauth = dict(row.oauth_json or {})
+        oauth["last_ingested_evidence_ids"] = evidence_ids
+        row.oauth_json = oauth
+        db.add(row)
+        db.commit()
+        db.refresh(row)
     except ValueError as exc:
         raise HTTPException(status_code=400, detail=str(exc)) from exc
     return _to_response(row)

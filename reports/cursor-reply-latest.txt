@@ -1,34 +1,42 @@
-# Noetfield Next Wave — agent closeout re-verify (no ASF)
+# Noetfield Wave 028–033 — shipped (NO ASF)
 
-Next Wave **023–027** shipped in commit `4b00a23`. This session re-ran full acceptance verify and hardened `verify-local-dev.sh` (pilot + connectors URLs).
+All six tasks in `os/plan.json` next_tasks implemented and moved to `done`.
 
-## Verify (all passed)
+## Shipped
 
-- pytest `test_tle_flow.py` — 4 passed
-- `make verify-local-dev` — all checks including `/copilot/pilot/` and `/workspace/connectors`
-- `make tle-smoke` — passed
-- `make copilot-pilot-e2e` — passed
+| ID | Outcome |
+|----|---------|
+| 028 | OAuth callback auto-ingests M365 evidence via `m365_connector_sync.py`; pilot E2E uses connector path |
+| 029 | Print-grade PDF with evidence/approval tables + signature footer |
+| 030 | Sequential approval chain — out-of-order → 403 |
+| 031 | `signature_block` on JSON/PDF export |
+| 032 | `make staging-smoke` + PR checklist in STAGING_DEMO.md |
+| 033 | `phase-1b-postgres-migrations.md` + alembic skeleton |
 
-## Also on disk (pending commit)
+## Verify
 
-- `os/plans/` — 1000 future plans (phase × tier), `REGISTRY.json`, NO ASF workflow
-- `.cursor/rules/noetfield-no-asf-plans.mdc`
+- pytest `test_tle_flow.py` — 7 passed
+- `make verify-local-dev` — all OK
+- `make tle-smoke` + `make copilot-pilot-e2e` — passed
+- `alembic history` — `001_initial (head)`
 
 ```yaml
 schema_version: 1
 repo: noetfield
-task: "Next Wave agent closeout re-verify (023–027) + verify-local-dev hardening"
+task: "Wave 028–033 — M365 E2E ingest, PDF v2, RBAC chain, KMS export, staging make, alembic"
 status: done
 verify_passed: true
 verify_command: "pytest governance-console/backend/tests/test_tle_flow.py -q && make verify-local-dev && make tle-smoke && make copilot-pilot-e2e"
-verify_output_summary: "4 pytest passed; verify-local-dev all OK incl pilot/connectors; tle-smoke and copilot-pilot-e2e passed"
+verify_output_summary: "7 pytest passed; verify-local-dev OK; tle-smoke and copilot-pilot-e2e passed"
 blocked_reason: ""
 next_action: ""
 evidence_paths:
-  - scripts/verify-local-dev.sh
-  - scripts/copilot-pilot-e2e.sh
-  - os/plans/REGISTRY.json
-  - reports/cursor-reply-latest.txt
-reported_at: "2026-06-04T18:27:29Z"
+  - governance-console/backend/services/m365_connector_sync.py
+  - governance-console/backend/services/board_pack_pdf.py
+  - governance-console/backend/services/tle_service.py
+  - governance-console/backend/alembic/
+  - docs/spec/phase-1b-postgres-migrations.md
+  - Makefile
+reported_at: "2026-06-04T18:45:00Z"
 reporter: cursor
 ```

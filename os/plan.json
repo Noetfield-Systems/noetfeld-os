@@ -284,6 +284,55 @@
       "title": "P2: Staging demo path + staging-smoke.sh",
       "status": "done",
       "evidence": ["docs/ops/STAGING_DEMO.md", "scripts/staging-smoke.sh"]
+    },
+    {
+      "id": "nf-m365-connect-e2e-028",
+      "title": "P0: M365 connect → auto evidence ingest",
+      "status": "done",
+      "evidence": [
+        "governance-console/backend/services/m365_connector_sync.py",
+        "governance-console/backend/routes/connectors.py",
+        "scripts/copilot-pilot-e2e.sh"
+      ]
+    },
+    {
+      "id": "nf-pdf-board-pack-v2-029",
+      "title": "P0: Print-grade PDF board pack v2",
+      "status": "done",
+      "evidence": ["governance-console/backend/services/board_pack_pdf.py"]
+    },
+    {
+      "id": "nf-rbac-chain-enforce-030",
+      "title": "P1: Sequential approval chain enforcement",
+      "status": "done",
+      "evidence": [
+        "governance-console/backend/services/tle_service.py",
+        "governance-console/backend/routes/tle.py"
+      ]
+    },
+    {
+      "id": "nf-kms-digest-v2-031",
+      "title": "P1: signature_block in board pack export",
+      "status": "done",
+      "evidence": [
+        "governance-console/backend/services/tle_service.py",
+        "docs/LOCAL_DEV.md"
+      ]
+    },
+    {
+      "id": "nf-staging-ci-smoke-032",
+      "title": "P2: make staging-smoke + PR checklist",
+      "status": "done",
+      "evidence": ["Makefile", "docs/ops/STAGING_DEMO.md"]
+    },
+    {
+      "id": "nf-phase1b-postgres-033",
+      "title": "P2: Postgres migrations doc + alembic skeleton",
+      "status": "done",
+      "evidence": [
+        "docs/spec/phase-1b-postgres-migrations.md",
+        "governance-console/backend/alembic/"
+      ]
     }
   ]
 }

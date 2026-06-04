@@ -23,8 +23,12 @@ EVAL="$(curl -sS -X POST "${BASE}/evaluate" "${HDR[@]}" \
 RID="$(echo "$EVAL" | python3 -c "import sys,json; print(json.load(sys.stdin)['rid'])")"
 echo "OK   evaluate rid=${RID}"
 
-echo "Step 2: seed M365 evidence (stub)"
-"${ROOT}/scripts/seed-m365-evidence-stub.sh" >/dev/null
+echo "Step 2: M365 connector OAuth + auto evidence ingest"
+CONN_ID="pilot-m365-$(date +%s)"
+curl -sS "${BASE}/connectors" "${HDR[@]}" \
+  -d "{\"connector_id\":\"${CONN_ID}\",\"connector_type\":\"m365_purview\",\"required_scopes\":[\"Purview.Read\"]}" >/dev/null
+curl -sS "${BASE}/connectors/${CONN_ID}/oauth/callback?code=dev-mock&state=pilot" -H "${TENANT}" >/dev/null
+echo "OK   connector ${CONN_ID} connected + evidence ingested"
 
 echo "Step 3: TLE draft"
 DRAFT="$(curl -sS "${BASE}/tle/draft" "${HDR[@]}" \

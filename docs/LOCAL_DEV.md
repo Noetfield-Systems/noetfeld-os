@@ -72,9 +72,13 @@ Override via `scripts/dev-ports.sh`.
 | `NF_M365_MOCK_TOKEN` | Dev-only mock token reference (never commit real secrets) |
 | `NF_M365_ALLOW_ANY_CODE` | Set `1` to accept any OAuth callback code in dev |
 
-M365 connector flow: register at `/workspace/connectors` → mock OAuth → ingest via `scripts/seed-m365-evidence-stub.sh`.
+M365 connector flow: register at `/workspace/connectors` → mock OAuth → **auto-ingests** Purview/Entra/SharePoint evidence (OAuth callback). Fallback: `scripts/seed-m365-evidence-stub.sh`.
 
-Pilot E2E: `./scripts/copilot-pilot-e2e.sh` (requires `make dev-local`).
+### Verify TLE signatures (dev KMS stub)
+
+After full approval, `GET /tle/{id}/export` includes `signature_block`. Each entry signs `json.dumps({tle_id, approver_id, decision}, sort_keys=True)` with SHA-256. Final `audit_digest` hashes the document JSON excluding the `audit_digest` field (`services/integrity.py`).
+
+Pilot E2E: `make copilot-pilot-e2e` (requires `make dev-local`).
 
 ## Logs
 
