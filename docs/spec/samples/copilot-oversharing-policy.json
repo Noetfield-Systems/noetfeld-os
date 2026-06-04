@@ -1,0 +1,21 @@
+{
+  "policy_id": "copilot-oversharing-v1",
+  "version": "1.0.0",
+  "title": "Microsoft Copilot — Oversharing and Data Boundary",
+  "description": "Pre-execution controls for M365 Copilot tenants: scope, sharing, and PII exposure before agent or publish actions.",
+  "tenant_scope": "pilot",
+  "pack_type": "copilot-governance",
+  "controls": [
+    "COP-DLP-001",
+    "COP-SCOPE-002",
+    "COP-PII-003"
+  ],
+  "evidence_requirements": [
+    "m365_dlp_policy_export",
+    "sharepoint_site_permissions_snapshot",
+    "copilot_activity_report_30d"
+  ],
+  "effective_from": "2026-06-01",
+  "status": "active",
+  "metadata": { "vector": "copilot-governance", "lane": "A" }
+}

@@ -4,6 +4,8 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Shell } from "@/components/Shell";
 import { DecisionBadge } from "@/components/DecisionBadge";
+import { LoadingBlock } from "@/components/LoadingBlock";
+import { PageHero } from "@/components/PageHero";
 import { AuditRecord, listAudit } from "@/lib/api";
 
 export default function AuditPage() {
@@ -30,13 +32,14 @@ export default function AuditPage() {
 
   return (
     <Shell active="audit">
-      <section className="mb-6">
-        <h2 className="text-2xl font-semibold text-white">Audit log</h2>
-        <p className="mt-2 text-sm text-muted">Every evaluation is stored with a unique RID for compliance traceability.</p>
-      </section>
+      <PageHero
+        eyebrow="Compliance"
+        title="Audit log"
+        lead="Every evaluation is stored with a unique RID for immutable compliance traceability."
+      />
 
       <form
-        className="mb-6 flex flex-wrap gap-2"
+        className="nf-card mb-8 flex flex-wrap gap-3 p-4"
         onSubmit={(e) => {
           e.preventDefault();
           load(q);
@@ -45,13 +48,11 @@ export default function AuditPage() {
         <input
           value={q}
           onChange={(e) => setQ(e.target.value)}
-          placeholder="Search by RID…"
-          className="min-w-[240px] flex-1 rounded-lg border border-border bg-panel px-3 py-2 text-sm"
+          placeholder="Search by RID, actor, or action…"
+          className="nf-input min-w-[240px] flex-1"
+          aria-label="Search audit log"
         />
-        <button
-          type="submit"
-          className="rounded-lg border border-border px-4 py-2 text-sm hover:bg-white/5"
-        >
+        <button type="submit" className="nf-btn-primary">
           Search
         </button>
         <button
@@ -60,39 +61,46 @@ export default function AuditPage() {
             setQ("");
             load();
           }}
-          className="rounded-lg border border-border px-4 py-2 text-sm hover:bg-white/5"
+          className="nf-btn-secondary"
         >
           Reset
         </button>
       </form>
 
       {error && (
-        <p className="mb-4 rounded-lg border border-red-900 bg-red-950/50 px-3 py-2 text-sm text-red-300">
+        <p
+          className="mb-4 rounded-lg border border-red-900/80 bg-red-950/40 px-4 py-3 text-sm text-red-200"
+          role="alert"
+        >
           {error}
         </p>
       )}
 
-      {loading && <p className="text-sm text-muted">Loading…</p>}
+      {loading && <LoadingBlock label="Loading audit records…" />}
 
       {!loading && rows.length === 0 && (
-        <p className="text-sm text-muted">No evaluations yet. Submit intent from the Evaluate screen.</p>
+        <div className="nf-card p-8 text-center">
+          <p className="text-muted">No evaluations yet.</p>
+          <Link href="/evaluate" className="mt-3 inline-block text-sm text-accent hover:underline">
+            Submit your first intent →
+          </Link>
+        </div>
       )}
 
       <ul className="space-y-3">
         {rows.map((row) => (
           <li key={row.rid}>
-            <Link
-              href={`/result/${encodeURIComponent(row.rid)}`}
-              className="block rounded-xl border border-border bg-panel p-4 transition hover:border-accent/40"
-            >
-              <div className="flex flex-wrap items-center justify-between gap-2">
+            <Link href={`/result/${encodeURIComponent(row.rid)}`} className="nf-card-hover block p-5">
+              <div className="flex flex-wrap items-center justify-between gap-3">
                 <code className="font-mono text-sm text-accent">{row.rid}</code>
                 <DecisionBadge decision={row.decision} />
               </div>
-              <p className="mt-2 text-sm text-gray-300">
-                {row.actor} · {row.action}
+              <p className="mt-3 text-sm text-white/90">
+                {row.actor}
+                <span className="text-muted-2"> · </span>
+                {row.action}
               </p>
-              <p className="mt-1 text-xs text-muted">
+              <p className="mt-1 text-xs text-muted-2">
                 Risk {row.risk_score} · {new Date(row.timestamp).toLocaleString()}
               </p>
             </Link>

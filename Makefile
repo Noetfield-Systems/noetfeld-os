@@ -42,6 +42,30 @@ verify-local-dev:
 	@chmod +x scripts/verify-local-dev.sh
 	./scripts/verify-local-dev.sh
 
+tle-smoke:
+	@chmod +x scripts/tle-smoke.sh scripts/seed-m365-evidence-stub.sh
+	./scripts/tle-smoke.sh
+
+copilot-pilot-e2e:
+	@chmod +x scripts/copilot-pilot-e2e.sh scripts/seed-m365-evidence-stub.sh
+	./scripts/copilot-pilot-e2e.sh
+
+seed-m365-evidence:
+	@chmod +x scripts/seed-m365-evidence-stub.sh
+	./scripts/seed-m365-evidence-stub.sh
+
+validate-compliance-schemas:
+	@chmod +x scripts/validate-compliance-schemas.sh
+	./scripts/validate-compliance-schemas.sh
+
+validate-tle-schemas:
+	@chmod +x scripts/validate-tle-schemas.sh
+	./scripts/validate-tle-schemas.sh
+
+copilot-quickscan-e2e:
+	@chmod +x scripts/copilot-quickscan-e2e.sh
+	./scripts/copilot-quickscan-e2e.sh
+
 dev-local-tunnel:
 	@chmod +x scripts/dev-local-tunnel.sh
 	./scripts/dev-local-tunnel.sh

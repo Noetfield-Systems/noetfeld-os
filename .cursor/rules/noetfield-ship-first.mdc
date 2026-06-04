@@ -1,0 +1,60 @@
+---
+description: Ship from os/plan — do not wait for next Prompt OS order; ingest sends answers to system
+globs:
+  - "**/*"
+alwaysApply: true
+---
+
+# Noetfield: ship without waiting for the next order
+
+**Product plan (what to build):** `os/plan.json` · `os/SHIP_NOW.md` · `os/sprint-trust-ledger-v1.2.md`
+
+**North star:** Ship AI Governance & Evidence for Copilot — TLE v1, demo on `:13080`, buyer-ready product.
+
+---
+
+## What ASF means by “do not block progress”
+
+**BLOCKS shipping (never do this):**
+
+- **Stopping** after one task because you are **waiting for the next Prompt OS / M8 / dispatch order** before continuing Noetfield work.
+- Letting orchestration **choose the roadmap** instead of `os/plan.json`.
+- Idling with “say implement when ready” while `next_tasks` still has items you can execute.
+
+**DOES NOT block shipping (always do this):**
+
+- **Ingest** = **send your answer to the system** (execution truth). Required YAML footer + `reports/cursor-reply-latest.txt` after VERIFY. That is **reporting what you built**, not waiting for permission to build.
+
+**Ingest is not a gate on coding.** You ship from the plan, then you **report** via ingest so SourceA/SinaPromptOS has the log.
+
+---
+
+## Agent loop (every session)
+
+1. Pick next task from `os/plan.json` → `next_tasks` (or next wave in `os/SHIP_NOW.md`).
+2. **Build + VERIFY** in this repo.
+3. Mark `done` in `os/plan.json`.
+4. **Send answer to system:** YAML block (`noetfield-ingest-yaml.mdc`) + full reply in `reports/cursor-reply-latest.txt`.
+5. If more `next_tasks` remain and you can continue — **keep going**. Do **not** stop only because no new chat message arrived.
+
+---
+
+## SinaPromptOS
+
+- **Do not edit** `~/Desktop/SinaPromptOS/**` from Noetfield sessions (do not weaken or refactor it).
+- ASF runs ingest on Mac; agents **use** it by writing the reply file — they do not change Prompt OS code.
+
+---
+
+## Scope
+
+- No payments / custody / Lane C.
+- No other repos unless ASF asks.
+
+## VERIFY
+
+```bash
+make dev-local && make verify-local-dev
+make tle-smoke
+.venv/bin/python scripts/validate-tle-samples.py
+```

@@ -10,7 +10,7 @@
    Open the **Ports** panel → forward **13080** (and optionally **8001**) → click the **globe** icon. Use the forwarded URL Cursor gives you (often still labeled `localhost` but tunneled through Cursor).
 
 2. **Run on your Mac**  
-   Clone the repo locally, install deps, run `make dev-local` in a terminal on your machine. Then `http://localhost:13080/` works in your browser.
+   Check out the repo on your machine, install deps, run `make dev-local` in a terminal. Then `http://localhost:13080/` works in your browser.
 
 3. **Public tunnel (fallback)**  
    With dev already up in the workspace: `make dev-local-tunnel` — opens an HTTPS link you can paste in any browser.
@@ -61,6 +61,20 @@ The server runs in the **remote workspace**. Your Mac browser only sees `localho
 | 18002 | Governance-console dev API (internal) |
 
 Override via `scripts/dev-ports.sh`.
+
+## Trust Ledger dev options
+
+| Variable | Purpose |
+|----------|---------|
+| `NF_DEV_ROLE` | API role override: `viewer` \| `approver` (default approver) |
+| `NEXT_PUBLIC_NF_DEV_ROLE` | Next workspace UI role (mirrors API for approve buttons) |
+| `NF_PUBLIC_BASE_URL` | Base URL for M365 mock OAuth redirect (default `http://127.0.0.1:13080`) |
+| `NF_M365_MOCK_TOKEN` | Dev-only mock token reference (never commit real secrets) |
+| `NF_M365_ALLOW_ANY_CODE` | Set `1` to accept any OAuth callback code in dev |
+
+M365 connector flow: register at `/workspace/connectors` → mock OAuth → ingest via `scripts/seed-m365-evidence-stub.sh`.
+
+Pilot E2E: `./scripts/copilot-pilot-e2e.sh` (requires `make dev-local`).
 
 ## Logs
 

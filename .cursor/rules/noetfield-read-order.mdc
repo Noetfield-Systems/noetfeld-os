@@ -1,0 +1,23 @@
+---
+description: LOCKED read order — SourceA + Noetfield (read before implement)
+globs:
+  - "**/*"
+alwaysApply: true
+---
+
+# Read order (LOCKED)
+
+Before implement, read:
+
+1. **`docs/ops/AGENT_READ_LINKS_LOCKED_v1.md`** — full SourceA link index (hub :13020, chain 1–14, per-repo)
+2. **`docs/ops/NOETFIELD_AGENT_CONTEXT_AND_READ_ORDER_LOCKED_v1.md`**
+3. `os/SHIP_NOW.md` → `os/plan.json`
+2. `docs/strategy/NOETFIELD_TRUST_LEDGER_POSITIONING_LOCKED_v1.2.md`
+3. `~/Desktop/SourceA/ECOSYSTEM_STATUS.md` OR `ops/private/sourceA/` mirror after sync
+4. `.cursor/rules/noetfield-ship-first.mdc` + `noetfield-ingest-yaml.mdc`
+
+**Repo:** `~/Desktop/Noetfield` (noetfield_cloud) — not All-Documents for code.
+
+**Sync mirror (Mac):** `./scripts/bootstrap-private-ops.sh` && `./scripts/sync-sourceA-desktop.sh`
+
+Smarter = more sources read — not skipping the plan.

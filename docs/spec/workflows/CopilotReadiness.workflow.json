@@ -1,0 +1,32 @@
+{
+  "workflow_id": "copilot-readiness-v1",
+  "workflow_type": "copilot_readiness",
+  "version": "1.0.0",
+  "description": "QuickScan complete → readiness assessment → signoff → export bundle",
+  "sla_hours": 120,
+  "depends_on": "copilot-quickscan-v1",
+  "states": [
+    { "id": "draft", "label": "Draft" },
+    { "id": "pending_review", "label": "Pending review" },
+    { "id": "approved", "label": "Approved" },
+    { "id": "completed", "label": "Completed" },
+    { "id": "escalated", "label": "Escalated" }
+  ],
+  "transitions": [
+    { "from": "draft", "to": "pending_review", "trigger": "readiness_pack_generated" },
+    { "from": "pending_review", "to": "escalated", "trigger": "risk_score_gte_70" },
+    { "from": "pending_review", "to": "approved", "trigger": "dual_signoff", "requires": ["compliance_owner", "exec_sponsor"] },
+    { "from": "approved", "to": "completed", "trigger": "audit_export_delivered" }
+  ],
+  "steps": [
+    { "step_id": "bind_policy", "action": "policy_pack.bind", "pack": "copilot-oversharing-v1" },
+    { "step_id": "control_tests", "action": "run_control_catalog", "ref": "docs/spec/copilot-control-catalog.md" },
+    { "step_id": "evaluate", "action": "governance.evaluate", "mode": "shadow" },
+    { "step_id": "signoff", "action": "human.approve", "hitl": true },
+    { "step_id": "export", "action": "audit.export", "format": "json" }
+  ],
+  "kpi": {
+    "target_completion_days": 14,
+    "reconciliation_accuracy": "read_only_feeds_only"
+  }
+}

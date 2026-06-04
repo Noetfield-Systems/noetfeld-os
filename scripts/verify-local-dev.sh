@@ -60,8 +60,70 @@ dash_eval="$(curl -sS -o /tmp/nf-dash-eval.json -w "%{http_code}" --connect-time
   2>/dev/null || echo "000")"
 if [[ "$dash_eval" == "200" ]] && grep -q '"decision"' /tmp/nf-dash-eval.json 2>/dev/null; then
   echo "OK   dashboard API via proxy (200 JSON)"
+  if grep -q '"tenant_id"' /tmp/nf-dash-eval.json 2>/dev/null; then
+    echo "OK   evaluate response includes tenant_id"
+  else
+    echo "FAIL evaluate missing tenant_id" >&2
+    fail=1
+  fi
 else
   echo "FAIL dashboard API via proxy ($dash_eval) — POST /evaluate must hit gov API, not Next HTML" >&2
+  fail=1
+fi
+
+export_code="$(curl -sS -o /tmp/nf-audit-export.json -w "%{http_code}" --connect-timeout 5 \
+  "http://127.0.0.1:${PUBLIC}/audit/export" \
+  -H "X-Tenant-ID: copilot-pilot-01" \
+  2>/dev/null || echo "000")"
+if [[ "$export_code" == "200" ]] && grep -q '"event_count"' /tmp/nf-audit-export.json 2>/dev/null; then
+  echo "OK   audit export (200 JSON)"
+else
+  echo "FAIL audit export ($export_code)" >&2
+  fail=1
+fi
+
+# dashboard UI assets (production build serves stable /_next/static)
+html="$(curl -sS --connect-timeout 5 "http://127.0.0.1:${PUBLIC}/cognitive-dashboard" 2>/dev/null || true)"
+chunk="$(echo "$html" | grep -oE '/_next/static/[^"[:space:]]+\.js' | head -1)"
+if [[ -n "$chunk" ]]; then
+  chunk_code="$(curl -sS -o /dev/null -w "%{http_code}" --connect-timeout 5 "http://127.0.0.1:${PUBLIC}${chunk}" 2>/dev/null || echo "000")"
+  if [[ "$chunk_code" == "200" ]]; then
+    echo "OK   dashboard UI chunk (200) ${chunk}"
+  else
+    echo "FAIL dashboard UI chunk ($chunk_code) ${chunk} — run: NF_DEV_FORCE_DASHBOARD_BUILD=1 make dev-local" >&2
+    fail=1
+  fi
+else
+  echo "WARN dashboard UI chunk not found in HTML" >&2
+fi
+
+tle_code="$(curl -sS -o /tmp/nf-tle-list.json -w "%{http_code}" --connect-timeout 5 \
+  "http://127.0.0.1:${PUBLIC}/tle" \
+  -H "X-Tenant-ID: copilot-pilot-01" \
+  2>/dev/null || echo "000")"
+if [[ "$tle_code" == "200" ]]; then
+  echo "OK   TLE list API (200)"
+else
+  echo "FAIL TLE list API ($tle_code)" >&2
+  fail=1
+fi
+
+ws_code="$(curl -sS -o /dev/null -w "%{http_code}" --connect-timeout 5 \
+  "http://127.0.0.1:${PUBLIC}/workspace" 2>/dev/null || echo "000")"
+if [[ "$ws_code" == "200" ]]; then
+  echo "OK   Trust Ledger workspace (200)"
+else
+  echo "FAIL Trust Ledger workspace ($ws_code) — rebuild dashboard" >&2
+  fail=1
+fi
+
+check "http://127.0.0.1:${PUBLIC}/trust-ledger/sample-report/" "TLE sample report"
+sample_yaml="$(curl -sS -o /dev/null -w "%{http_code}" --connect-timeout 3 \
+  "http://127.0.0.1:${PUBLIC}/trust-ledger/sample-report/samples/tle-go-approved.yaml" 2>/dev/null || echo "000")"
+if [[ "$sample_yaml" == "200" ]]; then
+  echo "OK   TLE sample YAML download (200)"
+else
+  echo "FAIL TLE sample YAML ($sample_yaml)" >&2
   fail=1
 fi
 

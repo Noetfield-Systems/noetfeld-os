@@ -16,4 +16,4 @@ sleep 1
 echo ">>> http://127.0.0.1:${PORT}/console"
 echo ">>> http://localhost:${PORT}/console"
 
-exec python3 -m uvicorn noetfield_governance.api:app --reload --host 0.0.0.0 --port "$PORT" --app-dir "${ROOT}/services/governance"
+exec bash "${ROOT}/scripts/dev-python.sh" -m uvicorn noetfield_governance.api:app --reload --host 0.0.0.0 --port "$PORT" --app-dir "${ROOT}/services/governance"

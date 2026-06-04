@@ -1,0 +1,48 @@
+# Noetfield Next Wave — agent closeout (no ASF)
+
+Trust Ledger Next Wave tasks **023–027** are implemented and verified on `~/Desktop/Noetfield` branch `cursor/bank-grade-fullstack-37f0`.
+
+## Verify (all passed)
+
+- `pytest governance-console/backend/tests/test_tle_flow.py` — 4 passed
+- `make verify-local-dev` — all checks passed
+- `make tle-smoke` — passed
+- `make copilot-pilot-e2e` — passed (evaluate → seed → draft → approve → json/pdf export → audit)
+
+## Shipped
+
+| ID | Outcome |
+|----|---------|
+| nf-pilot-p1-9-023 | `scripts/copilot-pilot-e2e.sh`, `/copilot/pilot/`, copilot index CTA |
+| nf-pdf-board-pack-024 | `GET /tle/{id}/export?format=pdf`, workspace PDF link |
+| nf-m365-oauth-025 | Connector OAuth mock, `/workspace/connectors` |
+| nf-workspace-rbac-026 | `X-Role` / `NF_DEV_ROLE`, viewer 403 on approve |
+| nf-staging-deploy-027 | `docs/ops/STAGING_DEMO.md`, `scripts/staging-smoke.sh` |
+
+`os/plan.json` `next_tasks` empty; sprint P1-9 **Done**. Ingest + SourceA mirror + git commit in this closeout.
+
+```yaml
+schema_version: 1
+repo: noetfield
+task: "Trust Ledger Next Wave closeout — pilot E2E, PDF export, M365 OAuth stub, RBAC, staging (023–027)"
+status: done
+verify_passed: true
+verify_command: "pytest governance-console/backend/tests/test_tle_flow.py -q && make verify-local-dev && make tle-smoke && make copilot-pilot-e2e"
+verify_output_summary: "4 pytest passed; verify-local-dev all OK; tle-smoke passed; copilot-pilot-e2e passed"
+blocked_reason: ""
+next_action: ""
+evidence_paths:
+  - scripts/copilot-pilot-e2e.sh
+  - copilot/pilot/index.html
+  - governance-console/backend/services/board_pack_pdf.py
+  - governance-console/backend/routes/tle.py
+  - governance-console/backend/routes/connectors.py
+  - governance-console/backend/services/rbac.py
+  - governance-console/frontend/app/workspace/connectors/page.tsx
+  - docs/ops/STAGING_DEMO.md
+  - scripts/staging-smoke.sh
+  - os/plan.json
+  - os/SHIP_NOW.md
+reported_at: "2026-06-04T17:31:14Z"
+reporter: cursor
+```

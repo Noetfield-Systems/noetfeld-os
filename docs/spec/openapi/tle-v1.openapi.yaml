@@ -1,0 +1,382 @@
+openapi: 3.1.0
+info:
+  title: Noetfield Trust Ledger API
+  version: 1.0.0
+  description: |
+    TLE v1.2 API skeleton — evidence intake, connector registry, TLE draft/approve/export.
+    Pre-execution governance only; no payment or custody endpoints.
+  contact:
+    name: Noetfield Governance
+servers:
+  - url: http://localhost:18002
+    description: Local governance API (via unified proxy :13080)
+  - url: https://api.noetfield.com/v1
+    description: Production (future)
+
+tags:
+  - name: evidence
+    description: Metadata-only evidence index
+  - name: connectors
+    description: M365 connector registry
+  - name: tle
+    description: Trust Ledger Entry lifecycle
+
+paths:
+  /evidence/ingest:
+    post:
+      tags: [evidence]
+      operationId: ingestEvidence
+      summary: Ingest metadata-only evidence
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Evidence'
+      responses:
+        '201':
+          description: Evidence indexed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EvidenceIngestResponse'
+        '400':
+          description: Validation error
+        '409':
+          description: Duplicate evidence_id
+
+  /connectors:
+    post:
+      tags: [connectors]
+      operationId: registerConnector
+      summary: Register M365 connector manifest
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConnectorManifest'
+      responses:
+        '201':
+          description: Connector registered
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConnectorManifest'
+        '400':
+          description: Validation error
+
+    get:
+      tags: [connectors]
+      operationId: listConnectors
+      summary: List connectors for tenant
+      parameters:
+        - name: X-Tenant-Id
+          in: header
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Connector list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ConnectorManifest'
+
+  /tle/draft:
+    post:
+      tags: [tle]
+      operationId: draftTle
+      summary: Generate draft TLE from evidence and control results
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TleDraftRequest'
+      responses:
+        '201':
+          description: Draft TLE created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrustLedgerEntry'
+        '400':
+          description: Insufficient evidence or failed controls
+
+  /tle/{tle_id}:
+    get:
+      tags: [tle]
+      operationId: getTle
+      summary: Retrieve TLE by ID
+      parameters:
+        - name: tle_id
+          in: path
+          required: true
+          schema:
+            type: string
+            pattern: '^TLE-[A-Z0-9-]+$'
+      responses:
+        '200':
+          description: TLE record
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrustLedgerEntry'
+        '404':
+          description: Not found
+
+  /tle/{tle_id}/approve:
+    post:
+      tags: [tle]
+      operationId: approveTle
+      summary: Record approval step and signature
+      parameters:
+        - name: tle_id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TleApprovalRequest'
+      responses:
+        '200':
+          description: Approval recorded
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrustLedgerEntry'
+        '403':
+          description: Unauthorized approver role
+
+  /tle/{tle_id}/export:
+    get:
+      tags: [tle]
+      operationId: exportTle
+      summary: Export TLE as PDF Board Pack
+      parameters:
+        - name: tle_id
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: format
+          in: query
+          schema:
+            type: string
+            enum: [pdf, yaml, json]
+            default: pdf
+      responses:
+        '200':
+          description: Exported artifact
+          content:
+            application/pdf:
+              schema:
+                type: string
+                format: binary
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrustLedgerEntry'
+            application/x-yaml:
+              schema:
+                type: string
+
+components:
+  schemas:
+    Evidence:
+      type: object
+      required: [evidence_id, source, title, hash, ingest_mode]
+      properties:
+        evidence_id:
+          type: string
+          pattern: '^EV-[A-Z0-9-]+$'
+        tenant_id:
+          type: string
+          format: uuid
+        connector_id:
+          type: string
+        source:
+          type: string
+          enum: [Purview, EntraID, AuditLog, SharePoint, Endpoint, SaaS, Manual]
+        title:
+          type: string
+        hash:
+          type: string
+          pattern: '^sha256:[a-f0-9]{64}$'
+        ingested_at:
+          type: string
+          format: date-time
+        sensitivity:
+          type: string
+          enum: [Public, Internal, Confidential, HighlyConfidential]
+        ingest_mode:
+          type: string
+          enum: [metadata_only, full_capture]
+        link:
+          type: string
+          format: uri
+        metadata:
+          type: object
+
+    EvidenceIngestResponse:
+      type: object
+      required: [evidence_id, ingested_at, status]
+      properties:
+        evidence_id:
+          type: string
+        ingested_at:
+          type: string
+          format: date-time
+        status:
+          type: string
+          enum: [indexed]
+
+    ConnectorManifest:
+      type: object
+      required: [connector_id, type, required_scopes, ingest_mode, status]
+      properties:
+        connector_id:
+          type: string
+          pattern: '^CONN-[A-Z0-9-]+$'
+        tenant_id:
+          type: string
+          format: uuid
+        type:
+          type: string
+          enum: [Purview, EntraID, AuditLog, SharePoint, Endpoint, SaaS, ManualUpload]
+        display_name:
+          type: string
+        required_scopes:
+          type: array
+          items:
+            type: string
+        ingest_mode:
+          type: string
+          enum: [metadata_only, full_capture]
+        last_sync:
+          type: string
+          format: date-time
+        status:
+          type: string
+          enum: [pending, active, error, disabled]
+
+    TleDraftRequest:
+      type: object
+      required: [evidence_ids, control_results]
+      properties:
+        tenant_id:
+          type: string
+          format: uuid
+        source_rid:
+          type: string
+        evidence_ids:
+          type: array
+          items:
+            type: string
+        control_results:
+          type: array
+          items:
+            type: object
+            required: [control_id, passed]
+            properties:
+              control_id:
+                type: string
+              passed:
+                type: boolean
+              description:
+                type: string
+        owner:
+          type: object
+          properties:
+            id:
+              type: string
+            name:
+              type: string
+            role:
+              type: string
+
+    TleApprovalRequest:
+      type: object
+      required: [approver_id, status]
+      properties:
+        approver_id:
+          type: string
+        status:
+          type: string
+          enum: [Approved, Rejected, Conditional]
+        conditions:
+          type: string
+        signature_hash:
+          type: string
+        key_id:
+          type: string
+
+    TrustLedgerEntry:
+      description: TLE v1 — see packages/schemas/tle-v1.schema.json
+      type: object
+      required:
+        - tle_id
+        - decision
+        - date
+        - owner
+        - status
+        - confidence_score
+        - evidence
+        - risk_summary
+        - controls
+        - approval_chain
+        - signatures
+        - audit_digest
+      properties:
+        tle_id:
+          type: string
+        source_rid:
+          type: string
+        decision:
+          type: string
+        date:
+          type: string
+          format: date
+        owner:
+          type: object
+        status:
+          type: string
+          enum: [Approved, Conditional, Rejected, Draft]
+        confidence_score:
+          type: number
+          minimum: 0
+          maximum: 1
+        confidence_factors:
+          type: array
+          items:
+            type: object
+        evidence:
+          type: array
+          items:
+            type: object
+        risk_summary:
+          type: array
+          items:
+            type: object
+        controls:
+          type: array
+          items:
+            type: object
+        approval_chain:
+          type: array
+          items:
+            type: object
+        signatures:
+          type: array
+          items:
+            type: object
+        audit_digest:
+          type: string

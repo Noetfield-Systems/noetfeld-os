@@ -35,7 +35,7 @@ MSB commercial templates (SOW, one-pager, outreach tracker) copy from [ops/templ
 
 Labels: `launch`, `legal`, `engineering`, `NF-P0` — templates in `.github/ISSUE_TEMPLATE/`.
 
-Use Issues when agents run in cloud clones without `ops/private/`.
+Use Issues when agents run in ephemeral cloud workspaces without `ops/private/`.
 
 ---
 

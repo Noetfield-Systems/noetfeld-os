@@ -1,0 +1,171 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.noetfield.com/tle-v1.schema.json",
+  "title": "Noetfield Trust Ledger Entry v1",
+  "description": "Canonical procurement-grade authorization record for Copilot adoption.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "tle_id",
+    "decision",
+    "date",
+    "owner",
+    "status",
+    "confidence_score",
+    "evidence",
+    "risk_summary",
+    "controls",
+    "approval_chain",
+    "signatures",
+    "audit_digest"
+  ],
+  "properties": {
+    "tle_id": {
+      "type": "string",
+      "pattern": "^TLE-[A-Z0-9-]+$",
+      "description": "External Trust Ledger Entry identifier"
+    },
+    "source_rid": {
+      "type": "string",
+      "description": "Optional link to governance evaluate RID"
+    },
+    "decision": {
+      "type": "string",
+      "description": "Human-readable go/no-go headline"
+    },
+    "date": {
+      "type": "string",
+      "format": "date"
+    },
+    "owner": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name", "role"],
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "role": { "type": "string" }
+      }
+    },
+    "status": {
+      "type": "string",
+      "enum": ["Approved", "Conditional", "Rejected", "Draft"]
+    },
+    "confidence_score": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1,
+      "description": "Deterministic 0.00-1.00 score with auditable provenance"
+    },
+    "confidence_factors": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["factor", "weight", "value"],
+        "properties": {
+          "factor": { "type": "string" },
+          "weight": { "type": "number" },
+          "value": { "type": "number" }
+        }
+      }
+    },
+    "evidence": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/evidenceRef" }
+    },
+    "risk_summary": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/riskItem" }
+    },
+    "controls": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/controlRef" }
+    },
+    "approval_chain": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/approvalStep" }
+    },
+    "signatures": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/signature" }
+    },
+    "audit_digest": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$",
+      "description": "Signed digest of TLE + evidence refs"
+    },
+    "tenant_id": { "type": "string", "format": "uuid" },
+    "metadata": { "type": "object" }
+  },
+  "$defs": {
+    "evidenceRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["evidence_id", "source", "title", "metadata"],
+      "properties": {
+        "evidence_id": { "type": "string" },
+        "source": {
+          "type": "string",
+          "enum": ["Purview", "EntraID", "AuditLog", "SharePoint", "Endpoint", "SaaS", "Manual"]
+        },
+        "title": { "type": "string" },
+        "metadata": {
+          "type": "object",
+          "required": ["timestamp", "hash"],
+          "properties": {
+            "timestamp": { "type": "string", "format": "date-time" },
+            "hash": { "type": "string" },
+            "sensitivity_label": { "type": "string" }
+          }
+        },
+        "link": { "type": "string", "format": "uri" }
+      }
+    },
+    "riskItem": {
+      "type": "object",
+      "required": ["id", "description", "severity"],
+      "properties": {
+        "id": { "type": "string" },
+        "description": { "type": "string" },
+        "severity": { "type": "string", "enum": ["Low", "Medium", "High"] }
+      }
+    },
+    "controlRef": {
+      "type": "object",
+      "required": ["control_id", "description"],
+      "properties": {
+        "control_id": { "type": "string" },
+        "description": { "type": "string" }
+      }
+    },
+    "approvalStep": {
+      "type": "object",
+      "required": ["approver", "status"],
+      "properties": {
+        "approver": {
+          "type": "object",
+          "required": ["id", "name", "role"],
+          "properties": {
+            "id": { "type": "string" },
+            "name": { "type": "string" },
+            "role": { "type": "string", "enum": ["CIO", "Legal", "Security", "Auditor", "Operator"] }
+          }
+        },
+        "status": { "type": "string", "enum": ["Pending", "Approved", "Rejected", "Conditional"] },
+        "signed_at": { "type": "string", "format": "date-time" },
+        "conditions": { "type": "string" }
+      }
+    },
+    "signature": {
+      "type": "object",
+      "required": ["signer_id", "signature_hash", "key_id"],
+      "properties": {
+        "signer_id": { "type": "string" },
+        "signature_hash": { "type": "string" },
+        "key_id": { "type": "string" }
+      }
+    }
+  }
+}

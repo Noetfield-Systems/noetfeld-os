@@ -32,6 +32,7 @@ PLATFORM_PREFIXES = (
 )
 NEXT_PREFIXES = (
     "/cognitive-dashboard",
+    "/workspace",
     "/_next/",
     "/result/",
 )
@@ -49,6 +50,12 @@ def _gov_api_route(path: str, method: str, headers: dict[str, str]) -> bool:
         accept = headers.get("Accept", headers.get("accept", "*/*"))
         if "text/html" in accept and "application/json" not in accept:
             return False
+        return True
+    if path.startswith("/evidence"):
+        return True
+    if path.startswith("/connectors"):
+        return True
+    if path.startswith("/tle"):
         return True
     return False
 

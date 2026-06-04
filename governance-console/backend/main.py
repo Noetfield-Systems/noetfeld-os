@@ -9,16 +9,22 @@ from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import text
 from sqlalchemy.orm import Session
 
-from db.models import Base
+from db.bootstrap import init_schema, migrate_audit_logs_to_events, seed_pilot_evidence
 from db.session import SessionLocal, engine
-from routes import audit, evaluate
+from routes import audit, connectors, evaluate, evidence, tle
 
 load_dotenv()
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    Base.metadata.create_all(bind=engine)
+    init_schema()
+    db = SessionLocal()
+    try:
+        migrate_audit_logs_to_events(db)
+        seed_pilot_evidence(db)
+    finally:
+        db.close()
     yield
 
 
@@ -46,6 +52,9 @@ app.add_middleware(
 
 app.include_router(evaluate.router)
 app.include_router(audit.router)
+app.include_router(evidence.router)
+app.include_router(connectors.router)
+app.include_router(tle.router)
 
 
 @app.get("/health")

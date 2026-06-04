@@ -1,88 +1,76 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Shell } from "@/components/Shell";
 import { EvaluateForm } from "@/components/EvaluateForm";
 import { DevPortBanner } from "@/components/DevPortBanner";
+import { PageHero } from "@/components/PageHero";
+import { StatCard } from "@/components/StatCard";
 import { ApiHealth, apiBaseLabel, fetchApiHealth } from "@/lib/health";
+import { platformConsoleHref } from "@/lib/platform-console";
+
+function HealthStatus({ health }: { health: ApiHealth | null }) {
+  if (health === null) {
+    return <span className="text-sm text-muted">Checking…</span>;
+  }
+  if (health.ok) {
+    return (
+      <span className="inline-flex items-center gap-2 text-sm text-ok">
+        <span className="h-2 w-2 animate-pulse rounded-full bg-ok" aria-hidden />
+        Operational · {health.detail}
+      </span>
+    );
+  }
+  return <span className="text-sm text-red-300">Offline · {health.detail}</span>;
+}
 
 export default function CognitiveDashboardPage() {
   const [health, setHealth] = useState<ApiHealth | null>(null);
+  const [consoleHref, setConsoleHref] = useState("/console");
 
   useEffect(() => {
+    setConsoleHref(platformConsoleHref());
     fetchApiHealth().then(setHealth);
-    const id = setInterval(() => {
-      fetchApiHealth().then(setHealth);
-    }, 15000);
+    const id = setInterval(() => fetchApiHealth().then(setHealth), 15000);
     return () => clearInterval(id);
   }, []);
 
   return (
     <Shell active="dashboard">
       <DevPortBanner />
-      <section className="mb-8">
-        <p className="text-xs uppercase tracking-widest text-accent">Cognitive governance</p>
-        <h2 className="mt-1 text-2xl font-semibold text-white">Cognitive dashboard</h2>
-        <p className="mt-2 max-w-2xl text-sm text-muted">
-          Dev sandbox for pre-execution intent evaluation. Production pilots use{" "}
-          <a
-            className="text-accent underline"
-            href="https://platform.noetfield.com/console"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            platform console
-          </a>
-          .
-        </p>
-      </section>
+      <PageHero
+        eyebrow="Cognitive governance"
+        title="Cognitive dashboard"
+        lead="Dev sandbox for pre-execution intent evaluation. Production pilots use the platform console for regulated workflows."
+      />
 
-      <div className="mb-8 grid gap-4 sm:grid-cols-3">
-        <div className="rounded-xl border border-border bg-panel p-4">
-          <p className="text-xs uppercase tracking-wide text-muted">Governance API</p>
-          <p className="mt-2 font-mono text-xs text-white/90">{apiBaseLabel()}</p>
-          <p className="mt-2 text-sm">
-            {health === null ? (
-              <span className="text-muted">Checking…</span>
-            ) : health.ok ? (
-              <span className="text-emerald-400">Operational · {health.detail}</span>
-            ) : (
-              <span className="text-red-300">Offline · {health.detail}</span>
-            )}
-          </p>
+      <div className="mb-10 grid gap-4 sm:grid-cols-3">
+        <StatCard label="Governance API" title="Policy engine" description={apiBaseLabel()}>
+          <HealthStatus health={health} />
           {!health?.ok && health !== null && (
-            <p className="mt-2 text-xs text-muted">
-              Start API:{" "}
-              <code className="rounded bg-black/40 px-1">
-                cd governance-console/backend && uvicorn main:app --reload --port 8000
-              </code>
+            <p className="mt-3 text-xs text-muted-2">
+              Run <code className="rounded bg-black/40 px-1">make dev-local</code> from the Noetfield
+              repo root.
             </p>
           )}
-        </div>
-        <Link
+        </StatCard>
+        <StatCard
+          label="Compliance"
+          title="Audit log"
+          description="Search evaluations by RID"
           href="/audit"
-          className="rounded-xl border border-border bg-panel p-4 transition hover:border-accent/40"
-        >
-          <p className="text-xs uppercase tracking-wide text-muted">Compliance</p>
-          <p className="mt-2 text-lg font-medium text-white">Audit log</p>
-          <p className="mt-1 text-sm text-muted">Search evaluations by RID</p>
-        </Link>
-        <a
-          href={
-            process.env.NEXT_PUBLIC_PLATFORM_CONSOLE_URL ??
-            "http://127.0.0.1:8001/console"
-          }
-          className="rounded-xl border border-border bg-panel p-4 transition hover:border-accent/40"
-        >
-          <p className="text-xs uppercase tracking-wide text-muted">Platform console</p>
-          <p className="mt-2 text-lg font-medium text-white">Governance console</p>
-          <p className="mt-1 text-sm text-muted">Local port 8001 or 13080/console (make dev-local)</p>
-        </a>
+        />
+        <StatCard
+          label="Platform"
+          title="Governance console"
+          description="Institutional console · same-origin /console on :13080"
+          href={consoleHref}
+          external={consoleHref.startsWith("http")}
+        />
       </div>
 
       <section>
-        <h3 className="mb-3 text-lg font-semibold text-white">Submit operational intent</h3>
+        <h3 className="mb-4 font-serif text-xl font-semibold text-white">Submit operational intent</h3>
         <EvaluateForm />
       </section>
     </Shell>

@@ -1,0 +1,40 @@
+---
+description: INGEST = send your answer to the system (required after VERIFY)
+globs:
+  - "**/*"
+alwaysApply: true
+---
+
+# INGEST — send your answer to the system (required)
+
+**Ingest is how your Cursor reply enters SourceA / SinaPromptOS execution truth.** It is **not** “wait for the next order.” It is **reporting** completed work.
+
+After every VERIFY:
+
+1. End the chat reply with the fenced YAML below (all required fields, real `reported_at` UTC).
+2. Write the **full reply** (prose + YAML) to `reports/cursor-reply-latest.txt`.
+
+ASF (or automation) ingests on Mac — **do not modify** SinaPromptOS scripts:
+
+```bash
+~/Desktop/SinaPromptOS/scripts/ingest-cursor-reply.sh noetfield reports/cursor-reply-latest.txt
+```
+
+**Planning** still comes from Noetfield `os/plan.json` — not from waiting on dispatch.
+
+```yaml
+schema_version: 1
+repo: noetfield
+task: "<os/plan.json task you completed>"
+status: done | blocked | partial
+verify_passed: true | false
+verify_command: "<command you ran>"
+verify_output_summary: "<one line result>"
+blocked_reason: ""
+next_action: ""
+evidence_paths: []
+reported_at: "2026-06-04T12:00:00Z"
+reporter: cursor
+```
+
+Missing `reported_at` breaks ingest — include it every time.
