@@ -7,6 +7,7 @@
 | **`trust-ledger-positioning-v1.2`** | [docs/strategy/NOETFIELD_TRUST_LEDGER_POSITIONING_LOCKED_v1.2.md](../docs/strategy/NOETFIELD_TRUST_LEDGER_POSITIONING_LOCKED_v1.2.md) | **Primary GTM + product direction** — TLE mandate, 60-day sprint |
 | **`gtm-60-day-v1`** | [docs/strategy/NOETFIELD_GTM_60_DAY_LOCKED_v1.md](../docs/strategy/NOETFIELD_GTM_60_DAY_LOCKED_v1.md) | **CEO focus** — 1 customer, 5-min demo, 60-day fence, time allocation |
 | **`governance-sources-book-v1`** | [docs/reference/GOVERNANCE_SOURCES_BOOK_v1.md](../docs/reference/GOVERNANCE_SOURCES_BOOK_v1.md) | **Citable frameworks** — NIST, OECD, ISO, EU AI Act, Microsoft, OWASP |
+| **`governance-drift-sources-v1`** | [docs/reference/GOVERNANCE_DRIFT_DETECTION_SOURCES_v1.md](../docs/reference/GOVERNANCE_DRIFT_DETECTION_SOURCES_v1.md) | **Drift detection** — control/policy/config/model/agent drift, monitoring sources |
 | `copilot-sme-system-design-v1` | [docs/strategy/NOETFIELD_COPILOT_SME_SYSTEM_DESIGN_LOCKED_v1.md](../docs/strategy/NOETFIELD_COPILOT_SME_SYSTEM_DESIGN_LOCKED_v1.md) | SME Copilot full architecture; Lane A vs B/C boundary analysis at top |
 | Sprint backlog | [os/sprint-trust-ledger-v1.2.md](./sprint-trust-ledger-v1.2.md) | P0–P1 stories and dependency order |
 | TLE schema + samples | [packages/schemas/tle-v1.schema.json](../packages/schemas/tle-v1.schema.json) · [docs/spec/samples/](../docs/spec/samples/) | Engineering handoff |

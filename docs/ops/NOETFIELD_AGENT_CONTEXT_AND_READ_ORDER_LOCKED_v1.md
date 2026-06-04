@@ -78,6 +78,7 @@ Read in order; skip only if path missing (note in reply).
 | B7 | **Positioning v1.2** | `docs/strategy/NOETFIELD_TRUST_LEDGER_POSITIONING_LOCKED_v1.2.md` |
 | B7b | **GTM 60-day (CEO)** | `docs/strategy/NOETFIELD_GTM_60_DAY_LOCKED_v1.md` |
 | B7c | **Governance sources book** | `docs/reference/GOVERNANCE_SOURCES_BOOK_v1.md` |
+| B7d | **Governance drift detection** | `docs/reference/GOVERNANCE_DRIFT_DETECTION_SOURCES_v1.md` |
 | B8 | TLE v1.2 pack | `docs/strategy/NOETFIELD_COPILOT_TLE_V12_LOCKED.md` (if present) |
 | B9 | SME design (Lane A/B/C) | `docs/strategy/NOETFIELD_COPILOT_SME_SYSTEM_DESIGN_LOCKED_v1.md` |
 | B10 | Agent tracking | `.cursor/AGENT_TRACKING.md` |
@@ -93,7 +94,7 @@ Read in order; skip only if path missing (note in reply).
 | C3 | TLE samples | `docs/spec/samples/tle-*.yaml` |
 | C4 | Local dev | `docs/LOCAL_DEV.md`, `docs/ops/STAGING_DEMO.md` |
 | C5 | Tenant audit outline | `docs/spec/tenant-append-only-audit-schema-outline.md` |
-| C6 | Governance reference book | `docs/reference/README.md` → `GOVERNANCE_SOURCES_BOOK_v1.md` |
+| C6 | Governance reference books | `docs/reference/README.md` → `GOVERNANCE_SOURCES_BOOK_v1.md`, `GOVERNANCE_DRIFT_DETECTION_SOURCES_v1.md` |
 
 ---
 

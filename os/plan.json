@@ -46,6 +46,13 @@
       "mandate": "Agents cite primary sources (NIST, OECD, ISO, EU, Microsoft, OWASP) in buyer materials"
     },
     {
+      "id": "governance-drift-sources-v1",
+      "title": "Governance Drift Detection Sources v1 — monitoring & drift primary links",
+      "path": "docs/reference/GOVERNANCE_DRIFT_DETECTION_SOURCES_v1.md",
+      "locked_at": "2026-06-04",
+      "mandate": "Agents cite drift/monitoring sources (NIST Measure/Manage, EU Art 72, Purview, OPA, CA-7) when selling continuous governance"
+    },
+    {
       "id": "copilot-sme-system-design-v1",
       "title": "Noetfield Copilot for SMEs — full system design (5 domains + 90-day roadmap)",
       "path": "docs/strategy/NOETFIELD_COPILOT_SME_SYSTEM_DESIGN_LOCKED_v1.md",

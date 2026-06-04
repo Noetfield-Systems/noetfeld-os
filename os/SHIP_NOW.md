@@ -18,6 +18,7 @@ Empty — Wave 028–033 shipped. Pick next work from `os/plans/REGISTRY.json` (
 | Doc | Path |
 |-----|------|
 | Governance Sources Book | `docs/reference/GOVERNANCE_SOURCES_BOOK_v1.md` |
+| Governance Drift Detection | `docs/reference/GOVERNANCE_DRIFT_DETECTION_SOURCES_v1.md` |
 | GTM 60-day (CEO) | `docs/strategy/NOETFIELD_GTM_60_DAY_LOCKED_v1.md` |
 
 ## Verify

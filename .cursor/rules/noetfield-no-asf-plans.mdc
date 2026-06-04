@@ -21,4 +21,4 @@ Regenerate library: `python3 scripts/generate-future-plans.py`.
 
 Immediate queue remains `os/plan.json` `next_tasks` + `os/SHIP_NOW.md`.
 
-**GTM / buyer citations:** `docs/strategy/NOETFIELD_GTM_60_DAY_LOCKED_v1.md` and `docs/reference/GOVERNANCE_SOURCES_BOOK_v1.md`.
+**GTM / buyer citations:** `docs/strategy/NOETFIELD_GTM_60_DAY_LOCKED_v1.md`, `docs/reference/GOVERNANCE_SOURCES_BOOK_v1.md`, `docs/reference/GOVERNANCE_DRIFT_DETECTION_SOURCES_v1.md`.

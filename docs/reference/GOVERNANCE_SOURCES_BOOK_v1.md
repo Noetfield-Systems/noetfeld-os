@@ -20,6 +20,7 @@ This is a **curated handbook**, not legal advice. Verify URLs before customer-fa
 | Management-system language | Part E — ISO 42001, NIST AI RMF |
 | What Noetfield maps to | Part F — TLE / evidence mapping |
 | 5-minute demo talk track | [NOETFIELD_GTM_60_DAY_LOCKED_v1.md](../strategy/NOETFIELD_GTM_60_DAY_LOCKED_v1.md) |
+| Drift detection sources | [GOVERNANCE_DRIFT_DETECTION_SOURCES_v1.md](./GOVERNANCE_DRIFT_DETECTION_SOURCES_v1.md) |
 
 **Reliability key**
 
