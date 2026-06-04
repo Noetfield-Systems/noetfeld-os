@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: Noetfield Trust Ledger API
-  version: 0.1.0
+  version: 0.2.0
   description: |
     DESIGN skeleton — Trust Ledger v1.2 blueprint.
     Pre-execution governance & evidence; no payment or custody APIs.
