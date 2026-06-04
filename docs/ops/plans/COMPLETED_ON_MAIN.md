@@ -9,4 +9,8 @@ When these ship, mark matching **NF-PLAN-*** IDs `done` via `scripts/update-plan
 | Connectors + list + multi-approve + PDF | P1 · trust-ledger · T2 patterns |
 | trust-ledger-ci.yml | P0/P1 · ci-job |
 
-**Last synced IDs:** NF-PLAN-0001, 0016, 0022, 0023, 0101, 0116, 0121, 0136
+| Trust Ledger workspace UI (`/trust-ledger`) | P1 · NF-PLAN-0106 |
+| Connectors Controls diligence + connector sync API | P1 · NF-PLAN-0109, NF-PLAN-0301 |
+| WWW trust-ledger cross-links | P1 · NF-PLAN-0107 |
+
+**Last synced IDs:** NF-PLAN-0001, 0016, 0022, 0023, 0101, 0106, 0107, 0109, 0116, 0121, 0136, 0301

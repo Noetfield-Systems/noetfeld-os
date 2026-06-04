@@ -32,6 +32,7 @@ PLATFORM_PREFIXES = (
 )
 NEXT_PREFIXES = (
     "/cognitive-dashboard",
+    "/trust-ledger",
     "/_next/",
     "/result/",
 )

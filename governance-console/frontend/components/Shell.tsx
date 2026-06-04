@@ -2,7 +2,7 @@ import Link from "next/link";
 
 type ShellProps = {
   children: React.ReactNode;
-  active?: "dashboard" | "evaluate" | "audit";
+  active?: "dashboard" | "evaluate" | "audit" | "trust-ledger";
 };
 
 function navClass(active: boolean): string {
@@ -28,6 +28,9 @@ export function Shell({ children, active }: ShellProps) {
             </Link>
             <Link href="/audit" className={navClass(active === "audit")}>
               Audit log
+            </Link>
+            <Link href="/trust-ledger" className={navClass(active === "trust-ledger")}>
+              Trust Ledger
             </Link>
           </nav>
         </div>

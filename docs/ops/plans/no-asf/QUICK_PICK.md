@@ -14,12 +14,6 @@ When the founder says **PLAN WITH NO ASF**, start here. Pick the next **agent** 
    Verify: `pytest and/or make ship-verify; area=observability; pattern=migration-schema`
 1. **NF-PLAN-0105** · P1/T1 · Extend tle-smoke or ship-verify check for performance  
    Verify: `pytest and/or make ship-verify; area=performance; pattern=smoke-script`
-1. **NF-PLAN-0106** · P1/T1 · Governance console surface for trust ledger read-only v0  
-   Verify: `pytest and/or make ship-verify; area=trust-ledger; pattern=console-ui`
-1. **NF-PLAN-0107** · P1/T1 · WWW / trust-ledger copy block for governance api buyer line  
-   Verify: `pytest and/or make ship-verify; area=governance-api; pattern=www-copy`
-1. **NF-PLAN-0109** · P1/T1 · Diligence one-pager evidence for connectors controls  
-   Verify: `pytest and/or make ship-verify; area=connectors; pattern=diligence-doc`
 1. **NF-PLAN-0110** · P1/T1 · Pilot rate limits and auth scopes for workspace ui  
    Verify: `pytest and/or make ship-verify; area=workspace-ui; pattern=rate-limit`
 1. **NF-PLAN-0111** · P1/T1 · Webhook emission on www gtm state transitions  
@@ -56,6 +50,12 @@ When the founder says **PLAN WITH NO ASF**, start here. Pick the next **agent** 
    Verify: `pytest and/or make ship-verify; area=docs-diligence; pattern=www-copy`
 1. **NF-PLAN-0209** · P2/T1 · Diligence one-pager evidence for observability controls  
    Verify: `pytest and/or make ship-verify; area=observability; pattern=diligence-doc`
+1. **NF-PLAN-0210** · P2/T1 · Pilot rate limits and auth scopes for performance  
+   Verify: `pytest and/or make ship-verify; area=performance; pattern=rate-limit`
+1. **NF-PLAN-0211** · P2/T1 · Webhook emission on trust ledger state transitions  
+   Verify: `pytest and/or make ship-verify; area=trust-ledger; pattern=webhook-event`
+1. **NF-PLAN-0212** · P2/T1 · Audit-export field bundle for governance api decisions  
+   Verify: `pytest and/or make ship-verify; area=governance-api; pattern=audit-export`
 
 ## Recently completed (update via `scripts/update-plan-status.py`)
 

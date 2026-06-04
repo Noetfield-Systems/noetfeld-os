@@ -1718,7 +1718,7 @@
       "verify": "pytest and/or make ship-verify; area=trust-ledger; pattern=console-ui",
       "no_asf": true,
       "asf_only": false,
-      "status": "backlog",
+      "status": "done",
       "blocks": []
     },
     {
@@ -1734,7 +1734,7 @@
       "verify": "pytest and/or make ship-verify; area=governance-api; pattern=www-copy",
       "no_asf": true,
       "asf_only": false,
-      "status": "backlog",
+      "status": "done",
       "blocks": []
     },
     {
@@ -1766,7 +1766,7 @@
       "verify": "pytest and/or make ship-verify; area=connectors; pattern=diligence-doc",
       "no_asf": true,
       "asf_only": false,
-      "status": "backlog",
+      "status": "done",
       "blocks": []
     },
     {
@@ -4838,7 +4838,7 @@
       "verify": "pytest and/or make ship-verify; area=trust-ledger; pattern=api-endpoint",
       "no_asf": true,
       "asf_only": false,
-      "status": "backlog",
+      "status": "done",
       "blocks": []
     },
     {

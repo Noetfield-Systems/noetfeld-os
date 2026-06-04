@@ -12,6 +12,9 @@ PUBLIC_PATH_PREFIXES = (
     "/api/intake",
     "/api/ecosystem/",
     "/api/v1/governance/",
+    "/api/v1/tle",
+    "/api/v1/evidence",
+    "/api/v1/connectors",
 )
 
 PUBLIC_EXACT_PATHS = frozenset({"/api/intake"})

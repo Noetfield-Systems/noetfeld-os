@@ -26,6 +26,21 @@ def test_trust_ledger_connectors() -> None:
             got = await client.get(f"/api/v1/connectors/{cid}")
             assert got.status_code == 200
             assert got.json()["type"] == "Purview"
+            assert got.json()["status"] == "registered"
+            assert got.json()["last_sync"] is None
+
+            sync = await client.post(
+                f"/api/v1/connectors/{cid}/sync",
+                json={"status": "active", "records_synced": 3},
+            )
+            assert sync.status_code == 200
+            body = sync.json()
+            assert body["status"] == "active"
+            assert body["last_sync"] is not None
+
+            got2 = await client.get(f"/api/v1/connectors/{cid}")
+            assert got2.json()["status"] == "active"
+            assert got2.json()["last_sync"] is not None
 
     asyncio.run(run())
 

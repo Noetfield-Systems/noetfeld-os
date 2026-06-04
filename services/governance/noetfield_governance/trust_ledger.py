@@ -78,6 +78,13 @@ class ConnectorObject(BaseModel):
     last_sync: datetime | None = None
 
 
+class ConnectorSyncRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    status: Literal["active", "error"] = "active"
+    records_synced: int = Field(default=0, ge=0)
+
+
 class TleDraftRequest(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
@@ -192,6 +199,9 @@ class TrustLedgerStore(Protocol):
     async def get_connector(self, connector_id: str) -> ConnectorObject | None:
         ...
 
+    async def sync_connector(self, connector_id: str, payload: ConnectorSyncRequest) -> ConnectorObject:
+        ...
+
     async def create_draft(self, request: TleDraftRequest) -> TleRecord:
         ...
 
@@ -249,6 +259,23 @@ class InMemoryTrustLedgerStore:
 
     async def get_connector(self, connector_id: str) -> ConnectorObject | None:
         return self.connectors.get(connector_id)
+
+    async def sync_connector(self, connector_id: str, payload: ConnectorSyncRequest) -> ConnectorObject:
+        obj = self.connectors.get(connector_id)
+        if obj is None:
+            raise HTTPException(status_code=404, detail="Connector not found")
+        now = datetime.now(timezone.utc)
+        updated = ConnectorObject(
+            connector_id=obj.connector_id,
+            type=obj.type,
+            required_scopes=obj.required_scopes,
+            ingest_mode=obj.ingest_mode,
+            status=payload.status,
+            registered_at=obj.registered_at,
+            last_sync=now,
+        )
+        self.connectors[connector_id] = updated
+        return updated
 
     async def create_draft(self, request: TleDraftRequest) -> TleRecord:
         missing = [eid for eid in request.evidence_ids if eid not in self.evidence]
@@ -427,6 +454,34 @@ class PostgresTrustLedgerStore:
         if row is None:
             return None
         return ConnectorObject(**dict(row))
+
+    async def sync_connector(self, connector_id: str, payload: ConnectorSyncRequest) -> ConnectorObject:
+        existing = await self.get_connector(connector_id)
+        if existing is None:
+            raise HTTPException(status_code=404, detail="Connector not found")
+        now = datetime.now(timezone.utc)
+        await self.connect()
+        assert self._pool is not None
+        async with self._pool.acquire() as conn:
+            await conn.execute(
+                """
+                update noetfield.trust_ledger_connectors
+                set last_sync = $2, status = $3
+                where connector_id = $1
+                """,
+                connector_id,
+                now,
+                payload.status,
+            )
+        return ConnectorObject(
+            connector_id=existing.connector_id,
+            type=existing.type,
+            required_scopes=existing.required_scopes,
+            ingest_mode=existing.ingest_mode,
+            status=payload.status,
+            registered_at=existing.registered_at,
+            last_sync=now,
+        )
 
     async def create_draft(self, request: TleDraftRequest) -> TleRecord:
         evidence_rows: list[dict[str, object]] = []
@@ -620,6 +675,18 @@ async def get_connector(
     if row is None:
         raise HTTPException(status_code=404, detail="Connector not found")
     return row
+
+
+@router.post("/connectors/{connector_id}/sync")
+async def sync_connector(
+    connector_id: str,
+    payload: ConnectorSyncRequest,
+    request: Request,
+    auth: PilotAuthContext = Depends(require_pilot_auth),
+    deps: TrustLedgerDeps = Depends(get_trust_ledger_deps),
+) -> ConnectorObject:
+    await check_governance_pilot_rate_limit(auth, request.url.path)
+    return await deps.store.sync_connector(connector_id, payload)
 
 
 @router.post("/evidence/ingest", status_code=201)

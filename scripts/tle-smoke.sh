@@ -9,10 +9,12 @@ EXAMPLES="$ROOT/docs/spec/examples"
 fail() { echo "tle-smoke: $*" >&2; exit 1; }
 
 API_BASE=""
+CONNECTORS_SYNC=0
 for arg in "$@"; do
   case "$arg" in
     --api=*) API_BASE="${arg#--api=}" ;;
     --api) API_BASE="${TLE_SMOKE_API_BASE:-http://127.0.0.1:${NF_DEV_PLATFORM_PORT}/api/v1}" ;;
+    --connectors-sync) CONNECTORS_SYNC=1 ;;
   esac
 done
 if [[ "${1:-}" == "--api" && -z "$API_BASE" ]]; then
@@ -86,5 +88,15 @@ if [[ -n "$API_BASE" ]]; then
     -d '{"connector_id":"smoke-purview","type":"Purview","required_scopes":["Audit.Read"],"ingest_mode":"metadata_only"}' \
     2>/dev/null || echo "000")"
   [[ "$conn_code" == "201" ]] || fail "API connector register failed ($conn_code)"
+  if [[ "$CONNECTORS_SYNC" -eq 1 ]]; then
+    sync_code="$(curl -sS -o /tmp/tle-smoke-sync.json -w "%{http_code}" \
+      -X POST "${API_BASE}/connectors/smoke-purview/sync" \
+      -H "Content-Type: application/json" \
+      -d '{"status":"active","records_synced":1}' \
+      2>/dev/null || echo "000")"
+    [[ "$sync_code" == "200" ]] || fail "API connector sync failed ($sync_code)"
+    python3 -c "import json; d=json.load(open('/tmp/tle-smoke-sync.json')); assert d.get('status')=='active' and d.get('last_sync')"
+    echo "tle-smoke: connector sync OK"
+  fi
   echo "tle-smoke: API OK (${API_BASE}) tle_id=${tle_id}"
 fi
