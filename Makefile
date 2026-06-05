@@ -65,6 +65,7 @@ ship-verify:
 	@./scripts/verify-ui-endpoints.sh
 	@./scripts/verify-docs-diligence.sh
 	@./scripts/verify-msb-partner-openapi.sh
+	@./scripts/verify-observability-migration.sh
 	@python3 scripts/smoke_bank_grade_html.py
 	@python3 scripts/verify_sitemap_committed.py 2>/dev/null || true
 	@python3 -m compileall -q packages services 2>/dev/null || true
