@@ -2,6 +2,10 @@
 
 | Field | Value |
 |-------|--------|
+| **Agent tag** | `NF-CLOUD-AGENT` |
+| **Agent id** | `noetfield_cloud` |
+| **Doc trace** | `NF-CLOUD-BRIDGE-001` |
+| **Not** | `NF-LOCAL-AGENT` · `noetfield_local` |
 | Status | **LOCKED v1** — cloud-safe bridge (committed) |
 | Audience | `noetfield_cloud` + `noetfield_local` |
 | Full private canon | `ops/private/agent-reference/` (gitignored — on disk when workspace synced) |
@@ -112,6 +116,20 @@ ops/private/agent-reference/
 ```
 
 Founder checklists (stay separate): `ops/private/docs/GO_LIVE_CHECKLIST.md`, `LEGAL_REVIEW_CHECKLIST.md`.
+
+---
+
+## Agent document tags (do not mix agents)
+
+| Agent | Tag | Writes |
+|-------|-----|--------|
+| **Cloud / repo ship** | `NF-CLOUD-AGENT` | This file, `os/LOCKED_REFERENCE_INDEX.md`, cloud-pass private docs |
+| **Mac / local** | `NF-LOCAL-AGENT` | Mac-only private docs — local agent must tag |
+
+Every agent-authored doc includes **Agent tag**, **Agent id**, **Doc trace** (`NF-CLOUD-<AREA>-<NNN>`).  
+Private spec: `ops/private/agent-reference/AGENT_DOCUMENT_TAGGING_LOCKED.md` (when on disk).
+
+**Grep:** `rg 'NF-CLOUD-AGENT' docs/ops/ ops/private/agent-reference/`
 
 ---
 

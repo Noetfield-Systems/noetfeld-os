@@ -1,5 +1,13 @@
 # Locked reference index (Noetfield)
 
+| Field | Value |
+|-------|--------|
+| **Agent tag** | `NF-CLOUD-AGENT` |
+| **Agent id** | `noetfield_cloud` |
+| **Doc trace** | `NF-CLOUD-BRIDGE-002` |
+| **Not** | `NF-LOCAL-AGENT` · `noetfield_local` |
+| **Updated** | 2026-06-06 |
+
 **Purpose:** Single index of committed LOCKED docs agents must not override without ASF.
 
 | Layer | Document | Path |
