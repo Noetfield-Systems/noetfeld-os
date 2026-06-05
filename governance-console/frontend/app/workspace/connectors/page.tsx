@@ -12,6 +12,7 @@ export default function ConnectorsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [registering, setRegistering] = useState(false);
+  const [success, setSuccess] = useState<string | null>(null);
 
   async function load() {
     setLoading(true);
@@ -43,6 +44,9 @@ export default function ConnectorsPage() {
   }
 
   useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const connected = params.get("connected");
+    if (connected) setSuccess(connected);
     load();
   }, []);
 
@@ -58,6 +62,14 @@ export default function ConnectorsPage() {
         title="M365 evidence connectors"
         lead="Local dev uses mock OAuth (no production secrets). Set NF_M365_MOCK_TOKEN in the API environment."
       />
+      {success && (
+        <p
+          className="mb-4 rounded-lg border border-emerald-900/80 bg-emerald-950/40 px-4 py-3 text-sm text-emerald-200"
+          role="status"
+        >
+          Mock OAuth connected — <code>{success}</code>. M365 evidence ingested.
+        </p>
+      )}
       {error && (
         <p className="mb-4 rounded-lg border border-red-900/80 bg-red-950/40 px-4 py-3 text-sm text-red-200" role="alert">
           {error}

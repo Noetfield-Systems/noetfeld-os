@@ -1,8 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+
+const RESERVED_TLE_SLUGS = new Set(["connectors"]);
 import { Shell } from "@/components/Shell";
 import { LoadingBlock } from "@/components/LoadingBlock";
 import { PageHero } from "@/components/PageHero";
@@ -17,6 +19,7 @@ type ApprovalStep = {
 
 export default function TleViewerPage() {
   const params = useParams();
+  const router = useRouter();
   const tleId = String(params.tle_id ?? "");
   const [tle, setTle] = useState<TleDetail | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -48,8 +51,12 @@ export default function TleViewerPage() {
   }
 
   useEffect(() => {
+    if (RESERVED_TLE_SLUGS.has(tleId)) {
+      router.replace(`/workspace/${tleId}`);
+      return;
+    }
     if (tleId) load();
-  }, [tleId]);
+  }, [tleId, router]);
 
   const doc = (tle?.document ?? {}) as Record<string, unknown>;
   const chain = (doc.approval_chain as ApprovalStep[]) ?? [];

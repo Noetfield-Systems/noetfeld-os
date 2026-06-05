@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import os
 
-from fastapi import APIRouter, Depends, Header, HTTPException, Query
+from fastapi import APIRouter, Depends, Header, HTTPException, Query, Request
 from fastapi.responses import RedirectResponse
 from sqlalchemy import select
 from sqlalchemy.orm import Session
@@ -99,14 +99,15 @@ def oauth_start(
     return RedirectResponse(url=url, status_code=302)
 
 
-@router.get("/{connector_id}/oauth/callback")
+@router.get("/{connector_id}/oauth/callback", response_model=None)
 def oauth_callback(
     connector_id: str,
+    request: Request,
     db: Session = Depends(get_db),
     x_tenant_id: str | None = Header(default=None, alias="X-Tenant-ID"),
     code: str | None = Query(default=None),
     state: str | None = Query(default=None),
-) -> ConnectorResponse:
+):
     tenant_id = resolve_tenant_id(x_tenant_id, db)
     row = db.scalar(
         select(ConnectorRecord).where(
@@ -127,6 +128,12 @@ def oauth_callback(
         db.refresh(row)
     except ValueError as exc:
         raise HTTPException(status_code=400, detail=str(exc)) from exc
+    accept = (request.headers.get("accept") or "").lower()
+    if "text/html" in accept and "application/json" not in accept.split(",")[0].strip():
+        return RedirectResponse(
+            url=f"/workspace/connectors?connected={connector_id}",
+            status_code=302,
+        )
     return _to_response(row)
 
 

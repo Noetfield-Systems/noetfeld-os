@@ -1,43 +1,33 @@
-Wave 028–033 verified and closeout complete (NO ASF).
+Full UI E2E audit and fixes.
 
-## Summary
-- Re-verified all six wave items (028–033) already in repo; fixed two runtime gaps found during verify:
-  1. PDF export 500 on M365 evidence titles with Unicode em dash — `_pdf_safe()` in `board_pack_pdf.py`
-  2. Stale SQLite dev DB missing `connectors.oauth_json` — `migrate_dev_schema_patches()` on startup
+## Issues found & fixed
+1. **Stale Next build** — `/workspace/connectors` routed to `[tle_id]` (showed "Loading TLE…"). Rebuilt; added `verify-ui-e2e` + content check in `verify-local-dev`.
+2. **OAuth callback UX** — Browser mock OAuth returned JSON; now redirects to `/workspace/connectors?connected=…` when `Accept: text/html`.
+3. **Reserved slug guard** — `[tle_id]` page redirects `connectors` → `/workspace/connectors`.
+4. **Audit page curl** — `/audit` needs `Accept: text/html` (proxy serves API JSON otherwise); verify script updated.
 
 ## Verify (all green)
-- pytest `test_tle_flow.py`: 7 passed
-- `make verify-local-dev`: passed
-- `make tle-smoke`: passed
-- `make copilot-pilot-e2e`: passed (OAuth → evidence → TLE → PDF)
-- `alembic -c alembic.ini history`: OK
-
-## Wave deliverables (028–033)
-| ID | Status |
-|----|--------|
-| 028 M365 OAuth auto-ingest | `m365_connector_sync.py`, E2E, pytest |
-| 029 PDF v2 | tables, branding, signatures footer |
-| 030 RBAC chain | sequential approve → 403 |
-| 031 KMS export block | `signature_block` JSON + PDF |
-| 032 staging-smoke | Makefile target + STAGING_DEMO checklist |
-| 033 Postgres skeleton | `phase-1b-postgres-migrations.md` + alembic |
-
-`os/plan.json` next_tasks empty; 028–033 in done.
+- make verify-local-dev
+- make verify-ui-e2e (new)
+- make copilot-pilot-e2e
+- pytest test_tle_flow.py: 7 passed
+- Browser: evaluate form → result RID page OK
+- www spot-check: 12 paths OK
 
 ```yaml
 schema_version: 1
 repo: noetfield
-task: "Wave 028-033 verify + PDF/oauth_json fixes"
+task: "Full UI E2E audit and fixes"
 status: done
 verify_passed: true
-verify_command: "pytest test_tle_flow.py -q && make verify-local-dev && make tle-smoke && make copilot-pilot-e2e"
-verify_output_summary: "7 pytest passed; all make targets green"
+verify_command: "make verify-local-dev && make verify-ui-e2e && make copilot-pilot-e2e"
+verify_output_summary: "All UI content checks green; connectors page + PDF export + evaluate flow"
 blocked_reason: ""
-next_action: "GTM: 1 design partner; Tier A staging URL when ready"
+next_action: ""
 evidence_paths:
-  - governance-console/backend/services/board_pack_pdf.py
-  - governance-console/backend/db/bootstrap.py
-  - os/plan.json
-reported_at: "2026-06-04T12:30:00Z"
+  - scripts/verify-ui-e2e.sh
+  - governance-console/frontend/app/workspace/connectors/page.tsx
+  - governance-console/backend/routes/connectors.py
+reported_at: "2026-06-05T12:45:00Z"
 reporter: cursor
 ```

@@ -42,6 +42,10 @@ verify-local-dev:
 	@chmod +x scripts/verify-local-dev.sh
 	./scripts/verify-local-dev.sh
 
+verify-ui-e2e:
+	@chmod +x scripts/verify-ui-e2e.sh
+	./scripts/verify-ui-e2e.sh
+
 tle-smoke:
 	@chmod +x scripts/tle-smoke.sh scripts/seed-m365-evidence-stub.sh
 	./scripts/tle-smoke.sh

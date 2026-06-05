@@ -29,6 +29,7 @@ Stops stale processes, starts all backends, runs health checks.
 make dev-local-down     # stop everything
 make dev-local-status   # ports + HTTP health summary
 make verify-local-dev   # health check only
+make verify-ui-e2e      # UI page content (catches stale Next builds)
 make dev-local-tunnel   # foreground public HTTPS URL
 make dev-local-tunnel-bg  # background tunnel → .dev-tunnel-url.txt
 ```
@@ -79,6 +80,14 @@ M365 connector flow: register at `/workspace/connectors` → mock OAuth → **au
 After full approval, `GET /tle/{id}/export` includes `signature_block`. Each entry signs `json.dumps({tle_id, approver_id, decision}, sort_keys=True)` with SHA-256. Final `audit_digest` hashes the document JSON excluding the `audit_digest` field (`services/integrity.py`).
 
 Pilot E2E: `make copilot-pilot-e2e` (requires `make dev-local`).
+
+If `/workspace/connectors` shows “Loading TLE…” instead of the M365 connectors page, rebuild the dashboard:
+
+```bash
+NF_DEV_FORCE_DASHBOARD_BUILD=1 make dev-local
+```
+
+Browser OAuth from **Register + mock connect** returns to `/workspace/connectors?connected=…` (not raw JSON).
 
 ## Logs
 

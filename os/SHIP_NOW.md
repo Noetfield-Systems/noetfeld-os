@@ -24,6 +24,10 @@ Empty — Wave 028–033 shipped. Pick next work from `os/plans/REGISTRY.json` (
 ## Verify
 
 ```bash
+make verify-local-dev && make verify-ui-e2e && make copilot-pilot-e2e
+```
+
+```bash
 make dev-local && make verify-local-dev && make tle-smoke && make copilot-pilot-e2e
 pytest governance-console/backend/tests/test_tle_flow.py -q
 cd governance-console/backend && alembic -c alembic.ini history
