@@ -27,18 +27,21 @@
 ### Read order
 
 1. This file — § Cloud ship (below)
-2. [NOETFIELD_AGENT_CONTEXT_AND_READ_ORDER_LOCKED_v1.md](./NOETFIELD_AGENT_CONTEXT_AND_READ_ORDER_LOCKED_v1.md)
-3. [os/SHIP_NOW.md](../../os/SHIP_NOW.md) → [os/plan.json](../../os/plan.json)
-4. **PLAN WITH NO ASF:** [plans/no-asf/QUICK_PICK.md](./plans/no-asf/QUICK_PICK.md) · full bank [plans/README.md](./plans/README.md) (1000 plans)
-5. [os/sprint-trust-ledger-v1.2.md](../../os/sprint-trust-ledger-v1.2.md) or [lane_a_sprint_map.md](./lane_a_sprint_map.md)
-6. After founder sync: `ops/private/sourceA/founder/repo-agent-notices/SEMI_NOTICE_noetfield_cloud_v1.md`
+2. [NOETFIELD_AGENT_TEAM_SYNC_LOCKED_v1.md](./NOETFIELD_AGENT_TEAM_SYNC_LOCKED_v1.md) — local↔cloud bridge
+3. [NOETFIELD_AGENT_CONTEXT_AND_READ_ORDER_LOCKED_v1.md](./NOETFIELD_AGENT_CONTEXT_AND_READ_ORDER_LOCKED_v1.md)
+4. [os/SHIP_NOW.md](../../os/SHIP_NOW.md) → [os/plan.json](../../os/plan.json) · [os/LOCKED_REFERENCE_INDEX.md](../../os/LOCKED_REFERENCE_INDEX.md)
+5. **PLAN WITH NO ASF:** [plans/no-asf/QUICK_PICK.md](./plans/no-asf/QUICK_PICK.md) · full bank [plans/README.md](./plans/README.md) (1000 plans)
+6. [os/sprint-trust-ledger-v1.2.md](../../os/sprint-trust-ledger-v1.2.md) or [lane_a_sprint_map.md](./lane_a_sprint_map.md)
+7. After founder sync: `ops/private/agent-reference/IN_CHARGE_NOW.md` · `ops/private/sourceA/founder/repo-agent-notices/SEMI_NOTICE_noetfield_cloud_v1.md`
 
 ### In-repo links (`noetfield_cloud`)
 
 | What | Path |
 |------|------|
 | Paste pack | [ready_to_paste_noetfield_cloud.txt](./ready_to_paste_noetfield_cloud.txt) |
+| Team sync (cloud bridge) | [NOETFIELD_AGENT_TEAM_SYNC_LOCKED_v1.md](./NOETFIELD_AGENT_TEAM_SYNC_LOCKED_v1.md) |
 | Agent context | [NOETFIELD_AGENT_CONTEXT_AND_READ_ORDER_LOCKED_v1.md](./NOETFIELD_AGENT_CONTEXT_AND_READ_ORDER_LOCKED_v1.md) |
+| Locked index | [os/LOCKED_REFERENCE_INDEX.md](../../os/LOCKED_REFERENCE_INDEX.md) |
 | Ship now | [os/SHIP_NOW.md](../../os/SHIP_NOW.md) · [docs/SHIP_NOW.md](../SHIP_NOW.md) |
 | Ship plan | [os/plan.json](../../os/plan.json) |
 | Trust Ledger | [docs/spec/TRUST_LEDGER_PRODUCT_BLUEPRINT_v1.2_LOCKED.md](../spec/TRUST_LEDGER_PRODUCT_BLUEPRINT_v1.2_LOCKED.md) |

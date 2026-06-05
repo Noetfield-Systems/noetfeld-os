@@ -20,23 +20,25 @@
 ### A. Git (cloud-safe)
 
 1. [AGENT_READ_LINKS_LOCKED_v1.md](./AGENT_READ_LINKS_LOCKED_v1.md) — § Cloud ship
-2. This file
-3. [os/SHIP_NOW.md](../../os/SHIP_NOW.md) → [os/plan.json](../../os/plan.json)
-4. **Long-term plans (1000):** [plans/no-asf/QUICK_PICK.md](./plans/no-asf/QUICK_PICK.md) when user says **PLAN WITH NO ASF**
-5. [os/sprint-trust-ledger-v1.2.md](../../os/sprint-trust-ledger-v1.2.md) or [lane_a_sprint_map.md](./lane_a_sprint_map.md)
-6. [PRODUCT_TRUTH.md](../../PRODUCT_TRUTH.md) · [POSITIONING.md](../../POSITIONING.md) · [OFFERINGS_LOCKED.md](../../OFFERINGS_LOCKED.md)
-7. [docs/spec/TRUST_LEDGER_PRODUCT_BLUEPRINT_v1.2_LOCKED.md](../spec/TRUST_LEDGER_PRODUCT_BLUEPRINT_v1.2_LOCKED.md)
-7b. **Diligence / external frameworks (LOCKED):** [docs/references/README.md](../references/README.md) — sources handbook + drift detection book (TLE, Trust Brief, monitoring)
-8. [PROJECT_BOUNDARIES_LOCKED.md](../../PROJECT_BOUNDARIES_LOCKED.md)
-9. [.cursor/AGENT_TRACKING.md](../../.cursor/AGENT_TRACKING.md)
-10. Active task (Issue / PR / Prompt OS task string)
+2. [NOETFIELD_AGENT_TEAM_SYNC_LOCKED_v1.md](./NOETFIELD_AGENT_TEAM_SYNC_LOCKED_v1.md) — local↔cloud bridge (committed)
+3. This file
+4. [os/SHIP_NOW.md](../../os/SHIP_NOW.md) → [os/plan.json](../../os/plan.json) · [os/LOCKED_REFERENCE_INDEX.md](../../os/LOCKED_REFERENCE_INDEX.md)
+5. **Long-term plans (1000):** [plans/no-asf/QUICK_PICK.md](./plans/no-asf/QUICK_PICK.md) when user says **PLAN WITH NO ASF**
+6. [os/sprint-trust-ledger-v1.2.md](../../os/sprint-trust-ledger-v1.2.md) or [lane_a_sprint_map.md](./lane_a_sprint_map.md)
+7. [PRODUCT_TRUTH.md](../../PRODUCT_TRUTH.md) · [POSITIONING.md](../../POSITIONING.md) · [OFFERINGS_LOCKED.md](../../OFFERINGS_LOCKED.md)
+8. [docs/spec/TRUST_LEDGER_PRODUCT_BLUEPRINT_v1.2_LOCKED.md](../spec/TRUST_LEDGER_PRODUCT_BLUEPRINT_v1.2_LOCKED.md)
+8b. **Diligence / external frameworks (LOCKED):** [docs/references/README.md](../references/README.md) — sources handbook + drift detection book (TLE, Trust Brief, monitoring)
+9. [PROJECT_BOUNDARIES_LOCKED.md](../../PROJECT_BOUNDARIES_LOCKED.md)
+10. [.cursor/AGENT_TRACKING.md](../../.cursor/AGENT_TRACKING.md)
+11. Active task (Issue / PR / Prompt OS task string)
 
 ### B. After founder sync (`ops/private/`)
 
-11. `ops/private/sourceA/founder/repo-agent-notices/SEMI_NOTICE_noetfield_cloud_v1.md`
-12. `ops/private/sourceA/NOETFIELD_REPO_ALIGNMENT.md`
-13. `ops/private/sourceA/AUTO_CONFLICT_ENGINE_V3_LOCKED.md` (optional)
-14. `ops/private/todolist/NEXT_MOVES.md` (optional)
+12. `ops/private/agent-reference/IN_CHARGE_NOW.md` → `AGENT_TEAM_STATE.yaml` → `plans/LOCKED_PLANS_INTERNAL.yaml`
+13. `ops/private/sourceA/founder/repo-agent-notices/SEMI_NOTICE_noetfield_cloud_v1.md`
+14. `ops/private/sourceA/NOETFIELD_REPO_ALIGNMENT.md`
+15. `ops/private/sourceA/AUTO_CONFLICT_ENGINE_V3_LOCKED.md` (optional)
+16. `ops/private/todolist/NEXT_MOVES.md` (optional)
 
 ### C. Mac founder session only
 
