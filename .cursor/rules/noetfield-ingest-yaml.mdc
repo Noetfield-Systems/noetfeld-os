@@ -1,40 +1,34 @@
 ---
-description: INGEST = send your answer to the system (required after VERIFY)
+description: Ingest = send completed agent answer to Sina Prompt OS (required, not blocking)
 globs:
   - "**/*"
-alwaysApply: true
 ---
 
-# INGEST — send your answer to the system (required)
+# Noetfield — ingest (required reporting)
 
-**Ingest is how your Cursor reply enters SourceA / SinaPromptOS execution truth.** It is **not** “wait for the next order.” It is **reporting** completed work.
+**Ingest** = sending your completed work **into** the system so ASF / Prompt OS can record it.
 
-After every VERIFY:
+## Required after you ship
 
-1. End the chat reply with the fenced YAML below (all required fields, real `reported_at` UTC).
-2. Write the **full reply** (prose + YAML) to `reports/cursor-reply-latest.txt`.
+1. Finish the Noetfield task (code, docs, verify).
+2. End the reply with Execution Truth YAML: [docs/spec/EXECUTION_TRUTH_AGENT_REPLY_LOCKED.md](../../docs/spec/EXECUTION_TRUTH_AGENT_REPLY_LOCKED.md) — include **`reported_at`** (ISO8601 UTC).
+3. Founder/Mac sends to Prompt OS, e.g.:
+   - `~/Desktop/SinaPromptOS/outputs/inbox/noetfield-latest.txt` then `./scripts/ingest-inbox.sh noetfield`
+   - or `ingest-cursor-reply.sh` / clipboard ingest per SourceA law
 
-ASF (or automation) ingests on Mac — **do not modify** SinaPromptOS scripts:
+Cloud agents: provide full reply + YAML in chat; founder runs ingest on Mac if path unavailable.
 
-```bash
-~/Desktop/SinaPromptOS/scripts/ingest-cursor-reply.sh noetfield reports/cursor-reply-latest.txt
-```
+## Does ingest block shipping?
 
-**Planning** still comes from Noetfield `os/plan.json` — not from waiting on dispatch.
+| | |
+|-|-|
+| **Ingest** | **No** — report after shipping |
+| **Waiting for next Prompt OS order before continuing sprint** | **Yes** — do not do this |
 
-```yaml
-schema_version: 1
-repo: noetfield
-task: "<os/plan.json task you completed>"
-status: done | blocked | partial
-verify_passed: true | false
-verify_command: "<command you ran>"
-verify_output_summary: "<one line result>"
-blocked_reason: ""
-next_action: ""
-evidence_paths: []
-reported_at: "2026-06-04T12:00:00Z"
-reporter: cursor
-```
+A **red ingest line** on one repo in a multi-repo RUN = fix YAML and re-ingest that reply; **keep shipping** Noetfield product work.
 
-Missing `reported_at` breaks ingest — include it every time.
+## Do not
+
+- Edit Sina Prompt OS repository code from Noetfield agent
+- Skip ingest because you are “focused on shipping” — shipping **and** ingest both happen
+- Treat ingest failure as permission to idle until the next dispatch

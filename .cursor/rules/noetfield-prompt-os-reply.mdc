@@ -1,0 +1,18 @@
+---
+description: Prompt OS IMPLEMENT replies — required YAML footer with reported_at
+globs:
+  - "**/*"
+---
+
+# Noetfield — agent reply ingest (Execution Truth)
+
+When the user runs **IMPLEMENT MODE** for repo `noetfield`:
+
+1. End the reply with a fenced **`yaml`** block per [docs/spec/EXECUTION_TRUTH_AGENT_REPLY_LOCKED.md](docs/spec/EXECUTION_TRUTH_AGENT_REPLY_LOCKED.md).
+2. **`reported_at` is REQUIRED** — ISO8601 UTC (`YYYY-MM-DDTHH:MM:SSZ`), set at end of reply.
+3. If `status: done`, then `verify_passed: true` and a real `verify_command` must be present.
+4. Do not paste API keys or secrets in the reply.
+
+Partial multi-repo runs: overall **PASS** can coexist with a **red per-repo ingest** line (e.g. missing `reported_at`). Fix the YAML footer; do not claim total failure if the run summary is PASS.
+
+Validator: `python3 scripts/verify_agent_reply_yaml.py <reply.txt>`

@@ -1,0 +1,16 @@
+# Template — paste at end of Cursor IMPLEMENT-mode replies (Noetfield)
+# Replace placeholders; reported_at is REQUIRED (ISO8601 UTC).
+
+schema_version: 1
+repo: noetfield
+task: "REPLACE_WITH_EXACT_PROMPT_OS_TASK"
+status: done
+verify_passed: true
+verify_command: "REPLACE_WITH_VERIFY_COMMAND"
+verify_output_summary: "REPLACE_ONE_LINE_RESULT"
+blocked_reason: ""
+next_action: ""
+evidence_paths:
+  - "REPLACE/path/or/empty"
+reported_at: "2026-06-03T09:09:00Z"
+reporter: cursor

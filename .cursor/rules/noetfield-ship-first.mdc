@@ -1,60 +1,27 @@
 ---
-description: Ship from os/plan — do not wait for next Prompt OS order; ingest sends answers to system
+description: ASF ship rule — two different things (ingest vs waiting for next order)
 globs:
   - "**/*"
-alwaysApply: true
 ---
 
-# Noetfield: ship without waiting for the next order
+# Noetfield — SHIP FIRST (ASF)
 
-**Product plan (what to build):** `os/plan.json` · `os/SHIP_NOW.md` · `os/sprint-trust-ledger-v1.2.md`
+## Two different things
 
-**North star:** Ship AI Governance & Evidence for Copilot — TLE v1, demo on `:13080`, buyer-ready product.
+| What it is | Blocks shipping? |
+|------------|------------------|
+| **Ingest** — send your answer to the system (YAML footer + inbox / `ingest-inbox.sh` / `cursor-reply-latest.txt`) | **No** — required reporting **after** you ship |
+| **Waiting for the next order** — stop after one task until Prompt OS / M8 / dispatch sends another prompt | **Yes** — ASF said **not** to do this |
 
----
+## What you must do
 
-## What ASF means by “do not block progress”
+1. **Ship** from Noetfield’s own plan immediately: [os/plan.json](../../os/plan.json) · [os/SHIP_NOW.md](../../os/SHIP_NOW.md) · [docs/spec/SPRINT_BACKLOG_WEEKS_0-8.md](../../docs/spec/SPRINT_BACKLOG_WEEKS_0-8.md)
+2. **Do not** stop and idle until a new Prompt OS order arrives — continue P0 → P1 backlog in the same arc of work.
+3. **Do** send every completed session to the system via **ingest** (see [noetfield-ingest-yaml.mdc](noetfield-ingest-yaml.mdc)).
+4. **Do not** edit or weaken **Sina Prompt OS** code — Noetfield repo only.
 
-**BLOCKS shipping (never do this):**
+**“Don’t block progress”** = do not wait for the next order. **Not** = skip ingest.
 
-- **Stopping** after one task because you are **waiting for the next Prompt OS / M8 / dispatch order** before continuing Noetfield work.
-- Letting orchestration **choose the roadmap** instead of `os/plan.json`.
-- Idling with “say implement when ready” while `next_tasks` still has items you can execute.
+## Boundaries
 
-**DOES NOT block shipping (always do this):**
-
-- **Ingest** = **send your answer to the system** (execution truth). Required YAML footer + `reports/cursor-reply-latest.txt` after VERIFY. That is **reporting what you built**, not waiting for permission to build.
-
-**Ingest is not a gate on coding.** You ship from the plan, then you **report** via ingest so SourceA/SinaPromptOS has the log.
-
----
-
-## Agent loop (every session)
-
-1. Pick next task from `os/plan.json` → `next_tasks` (or next wave in `os/SHIP_NOW.md`).
-2. **Build + VERIFY** in this repo.
-3. Mark `done` in `os/plan.json`.
-4. **Send answer to system:** YAML block (`noetfield-ingest-yaml.mdc`) + full reply in `reports/cursor-reply-latest.txt`.
-5. If more `next_tasks` remain and you can continue — **keep going**. Do **not** stop only because no new chat message arrived.
-
----
-
-## SinaPromptOS
-
-- **Do not edit** `~/Desktop/SinaPromptOS/**` from Noetfield sessions (do not weaken or refactor it).
-- ASF runs ingest on Mac; agents **use** it by writing the reply file — they do not change Prompt OS code.
-
----
-
-## Scope
-
-- No payments / custody / Lane C.
-- No other repos unless ASF asks.
-
-## VERIFY
-
-```bash
-make dev-local && make verify-local-dev
-make tle-smoke
-.venv/bin/python scripts/validate-tle-samples.py
-```
+[PROJECT_BOUNDARIES_LOCKED.md](../../PROJECT_BOUNDARIES_LOCKED.md)

@@ -1,0 +1,25 @@
+NOETFIELD CLOUD — paste into agent chat (semi lane)
+
+Workspace: ~/Desktop/Noetfield (GitHub ship) — NOT All-Documents, NOT SourceA primary work.
+
+Agent id: noetfield_cloud
+Thread: THREAD-PORTFOLIO
+Plane: [DELIVERY]
+
+READ FIRST (in repo):
+1. docs/ops/AGENT_READ_LINKS_LOCKED_v1.md — section "Cloud ship"
+2. docs/ops/NOETFIELD_AGENT_CONTEXT_AND_READ_ORDER_LOCKED_v1.md
+3. os/SHIP_NOW.md + os/plan.json
+4. os/sprint-trust-ledger-v1.2.md or docs/ops/lane_a_sprint_map.md
+
+SEMI (after founder sync): ops/private/sourceA/founder/repo-agent-notices/SEMI_NOTICE_noetfield_cloud_v1.md
+NOT: REPO_NOTICE_noetfield_v1.md (that is noetfield_local / All-Documents only)
+
+RULES:
+- Ship from os/plan.json immediately. Do NOT idle for next Prompt OS order.
+- Do NOT edit Sina PromptOS. Do NOT use Noetfield-All-Documents as primary.
+- Ingest after ship: reported_at in YAML (docs/spec/EXECUTION_TRUTH_AGENT_REPLY_LOCKED.md).
+
+MAC ONLY (founder active session): Hub http://127.0.0.1:13020/ — do not assume in cloud VM.
+
+VERIFY: ./scripts/verify-local-dev.sh · ./scripts/tle-smoke.sh · make ship-verify

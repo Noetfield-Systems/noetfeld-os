@@ -2,6 +2,19 @@
 
 **Read this first** for task priority. Do not create `todolist/` at the repository root.
 
+**Noetfield cloud (`noetfield_cloud`):** [docs/ops/AGENT_READ_LINKS_LOCKED_v1.md](../docs/ops/AGENT_READ_LINKS_LOCKED_v1.md) (§ Cloud ship) · [docs/ops/NOETFIELD_AGENT_CONTEXT_AND_READ_ORDER_LOCKED_v1.md](../docs/ops/NOETFIELD_AGENT_CONTEXT_AND_READ_ORDER_LOCKED_v1.md) · paste: [docs/ops/ready_to_paste_noetfield_cloud.txt](../docs/ops/ready_to_paste_noetfield_cloud.txt). Canonical index: Desktop `SourceA/founder/repo-agent-notices/AGENT_READ_LINKS_INDEX.md` — never repo → SourceA.
+
+## Ship rule (ASF) — two different things
+
+| What it is | Blocks shipping? |
+|------------|------------------|
+| **Ingest** — send your answer to the system (YAML + Prompt OS inbox / ingest scripts) | **No** — required **after** you ship |
+| **Waiting for the next order** — pause until Prompt OS / M8 sends the next prompt | **Yes** — do **not** do this |
+
+- **Ship from:** [os/plan.json](../os/plan.json) · [os/SHIP_NOW.md](../os/SHIP_NOW.md) — execute `next_tasks` and sprint backlog **without waiting** for the next chat order.
+- **Ingest:** every completed session → system ([docs/spec/EXECUTION_TRUTH_AGENT_REPLY_LOCKED.md](../docs/spec/EXECUTION_TRUTH_AGENT_REPLY_LOCKED.md)).
+- **Do not edit** Sina Prompt OS code. **Do not weaken** Prompt OS — it coordinates; Noetfield repo delivers.
+
 ## Where work lives
 
 | Priority | Location | When |

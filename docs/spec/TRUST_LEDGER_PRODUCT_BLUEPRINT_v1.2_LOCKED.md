@@ -1,64 +1,185 @@
 ---
-id: trust-ledger-product-blueprint
-status: locked
-version: 1.2
-locked_at: 2026-06-06
 agent_tag: nf-local-repo-agent
 agent_display: "[NF-LOCAL-REPO-AGENT]"
+status: locked
+version: 1.2
+provenance: merged-cloud-ff24d56-plus-local-drift-links
 ---
 
-# Trust Ledger Product Blueprint (LOCKED v1.2)
+# Trust Ledger Product Blueprint v1.2 (LOCKED)
 
-**Status:** LOCKED — **product mandate** (L2). Architecture drift blueprints are supplements only.  
-**Full positioning:** [NOETFIELD_TRUST_LEDGER_POSITIONING_LOCKED_v1.2.md](../strategy/NOETFIELD_TRUST_LEDGER_POSITIONING_LOCKED_v1.2.md)  
-**Taxonomy:** [GOVERNANCE_DRIFT_DETECTION_SOURCES_v1.md](../references/GOVERNANCE_DRIFT_DETECTION_SOURCES_v1.md)
+**Status:** LOCKED · **Plane:** DESIGN · **Do not override without ASF + product signoff**
 
----
+## Final positioning (locked)
 
-## Mandate (one line)
+**Noetfield is an AI Governance & Evidence layer for Copilot adoption, delivered today as structured procurement-grade assessments and evolving into a continuous Trust Ledger system.**
 
-**evaluate → TLE → audit-export** — every engagement produces at least one signed Trust Ledger Entry (TLE v1).
+**Buyer line:** *We produce the audit trail your Copilot deployment will be asked for later.*
 
----
-
-## Core modules (shipped kernel)
-
-| Module | Responsibility |
-|--------|----------------|
-| Trust Ledger Core | Append-only TLE store; signed digests; board pack / procurement ZIP |
-| Evidence Index | Metadata catalog (sources, hashes, `ingested_at`) |
-| Connector layer | M365 OAuth stub; `last_sync` on connectors |
-| Workspace UI | TLE viewer, confidence badge, export links |
-| Evaluate path | Draft TLE from evaluation + `compute_confidence_score()` |
+**Operational mandate:** Every engagement must produce at least one signed **Trust Ledger Entry (TLE v1)** — the canonical authorization record for Copilot adoption.
 
 ---
 
-## Drift blueprints relationship
+## 1. System design (modules) — v1.2
 
-| Doc | Relationship to this mandate |
-|-----|------------------------------|
-| [TRUST_LEDGER_FOR_DRIFT_BLUEPRINT_LOCKED_v1.md](../references/TRUST_LEDGER_FOR_DRIFT_BLUEPRINT_LOCKED_v1.md) | **TLE v1.3 extension** — richer entries, optional `prev_tle_digest`; not a second ledger |
-| [GOVERNANCE_DRIFT_ENGINE_BLUEPRINT_LOCKED_v1.md](../references/GOVERNANCE_DRIFT_ENGINE_BLUEPRINT_LOCKED_v1.md) | Enterprise surround — trajectory + response narrative |
-| [LLM_DRIFT_DETECTION_ARCHITECTURE_LOCKED_v1.md](../references/LLM_DRIFT_DETECTION_ARCHITECTURE_LOCKED_v1.md) | Cite and record — customer observability; Noetfield records decision |
-| [GOVERNANCE_DRIFT_BLUEPRINTS_INDEX_LOCKED_v1.md](../references/GOVERNANCE_DRIFT_BLUEPRINTS_INDEX_LOCKED_v1.md) | Router — read after this doc |
+**Goal:** Minimal, decision-first product that produces canonical Trust Ledger Entries (TLEs) for procurement and governance signoff.
+
+### Core modules
+
+| Module | Purpose |
+|--------|---------|
+| **Trust Ledger Core** | Append-only store for TLEs; signed digests; exportable board packs |
+| **Evidence Index** | Metadata catalog of ingested evidence (sources, hashes, retention) |
+| **Evidence Intake Connector Layer** | Adapters: M365 Purview, Entra ID, M365 Audit Logs, SharePoint (+ optional) |
+| **Decision Log UI (Trust Ledger Workspace v0)** | Read-only navigation, search, TLE viewer, PDF/Board Pack export |
+| **TLE Generator** | Template engine: intake → TLE YAML/JSON + **Confidence Score** |
+| **Procurement Asset Manager** | Evidence Intake Contract generator + ingestion rules UI |
+| **Auth & Audit** | RBAC, signed approvals, immutable audit trail |
+
+### Supporting modules (light)
+
+- **Prompt Studio (templates only)** — structured JSON templates for TLE creation and evidence mapping
+- **Minimal Reporting** — Board-ready PDF export and one-page risk summary
 
 ---
 
-## GTM honesty
+## 2. Execution flow (end-to-end)
 
-Noetfield records governance drift **decisions** against signed TLE baseline — not a hosted ML observability platform.
+1. **Engagement kickoff** — procurement pack signed; Evidence Intake Contract issued and accepted
+2. **Connector onboarding** — metadata ingest per contract (metadata-only first)
+3. **Evidence harvest** — Evidence Index: hashes, sensitivity tags, references
+4. **TLE draft generation** — TLE Generator: template + evidence → TLE v1 + Confidence Score
+5. **Approval chain** — CIO → Legal → Security signoff; signed approvals recorded
+6. **Ledger write** — final TLE to Trust Ledger Core (signed digest, immutable)
+7. **Delivery** — Workspace read-only; PDF/Board Pack; Procurement Authorization Pack
+8. **Retention & audit** — retention rules enforced; audit logs exportable
 
 ---
 
-## P0 ship queue (from cloud + local review)
+## 3. Data objects (engineering-ready)
+
+See:
+
+- [schemas/tle-v1.schema.yaml](./schemas/tle-v1.schema.yaml)
+- [examples/tle-v1-go.yaml](./examples/tle-v1-go.yaml)
+- [examples/tle-v1-conditional.yaml](./examples/tle-v1-conditional.yaml)
+- [examples/tle-v1-rejected.yaml](./examples/tle-v1-rejected.yaml)
+
+### Evidence object (summary)
+
+`evidence_id`, `source`, `title`, `hash`, `ingested_at`, `sensitivity`, `retention_policy`, `storage_ref`, `ingest_mode` (`metadata_only` | `full_capture`)
+
+### Connector manifest (summary)
+
+`connector_id`, `type`, `required_scopes`, `ingest_mode`, `last_sync`, `status`
+
+### User / role (summary)
+
+`user_id`, `name`, `email`, `roles` (CIO, Legal, Security, Auditor, Operator), `permissions`
+
+---
+
+## 4. Agents, roles & permissions
+
+**Principles:** least privilege; read-only workspace; approvals signed and immutable.
+
+| Role | Capabilities |
+|------|----------------|
+| **CIO (Owner)** | View TLEs; approve / conditional / reject; final signoff |
+| **Legal** | Review evidence; approve / reject |
+| **Security** | Validate controls; approve / reject; remediation conditions |
+| **Operator (Noetfield)** | Onboarding, harvest, draft TLEs — **cannot sign** |
+| **Auditor** | Read-only Evidence Index + TLEs; export audit bundles |
+| **System Agent** | Confidence Score, connector sync, draft TLEs — **drafts only** |
+
+**Permission matrix:** Draft → Operator, System Agent · Approve/Sign → CIO, Legal, Security · Read/export → granted roles
+
+---
+
+## 5. Risks / controls (operational)
+
+| Risk | Control |
+|------|---------|
+| Evidence tampering / missing | Hash on ingest; references only; signed `audit_digest` per TLE |
+| Unauthorized approvals | 2FA + key-backed signatures; role mapping in Intake Contract |
+| Over-capture of sensitive data | metadata-only default; sensitivity exclusions; PII redaction |
+| Misleading Confidence Score | Deterministic, auditable algorithm; provenance in UI |
+| Perceived consulting vs product | Productize TLEs + workspace; public Intake Contract + TLE examples |
+
+---
+
+## 6. Implementation output (MVP)
+
+### APIs (OpenAPI-ready)
+
+Skeleton: [openapi/trust-ledger-v0.yaml](./openapi/trust-ledger-v0.yaml)
+
+| Method | Path | Purpose |
+|--------|------|---------|
+| POST | `/connectors` | Register connector |
+| POST | `/evidence/ingest` | Ingest evidence metadata |
+| GET | `/evidence/{id}` | Fetch metadata (no raw PII) |
+| POST | `/tle/draft` | Create TLE draft |
+| POST | `/tle/{id}/approve` | Approver signs TLE |
+| GET | `/tle/{id}` | Read TLE |
+| GET | `/tle/{id}/export` | PDF / Board Pack |
+
+### DB / storage (summary)
+
+Tables: `users`, `roles`, `connectors`, `evidence_index`, `tle_entries`, `approvals`, `audit_logs`  
+Storage: blob refs + hashes in DB; ledger digests via HSM/KMS
+
+### UI screens (MVP)
+
+Landing · Trust Ledger Workspace · Evidence Index · Connector Onboarding · Export
+
+### Acceptance criteria (MVP)
+
+- TLE draft from ingested evidence + template
+- Two+ approvers sign; signed TLE immutable
+- Purview + Entra ID metadata ingested and displayed
+- PDF export with evidence index + signatures
+- Hashes + `audit_digest` verifiable via KMS
+
+---
+
+## 7. 60-day sprint plan (executable)
+
+**Week 0–2 (P0)** — TLE schema + 3 examples; homepage rewrite; Evidence Intake Contract v1 template
+
+**Week 3–6 (P1)** — Ledger Core; Evidence Index + connectors; Workspace UI; TLE Generator + Confidence Score prototype
+
+**Week 7–8 (P1)** — Approval chain + KMS stub; PDF export; 1–2 pilot engagements
+
+---
+
+## Alignment with repo law
+
+- [PRODUCT_TRUTH.md](../../PRODUCT_TRUTH.md) — pre-execution governance, no payments
+- [PROJECT_BOUNDARIES_LOCKED.md](../../PROJECT_BOUNDARIES_LOCKED.md)
+- [os/plan.json](../../os/plan.json) — MVP done criteria
+- Prior MVP map: [ALIGNMENT_WITH_MVP_v1.md](./ALIGNMENT_WITH_MVP_v1.md)
+
+---
+
+## 8. Drift architecture supplements (L2 — defer to this mandate)
+
+| Doc | Relationship |
+|-----|--------------|
+| [GOVERNANCE_DRIFT_DETECTION_SOURCES_v1.md](../references/GOVERNANCE_DRIFT_DETECTION_SOURCES_v1.md) | Taxonomy boss |
+| [GOVERNANCE_DRIFT_BLUEPRINTS_INDEX_LOCKED_v1.md](../references/GOVERNANCE_DRIFT_BLUEPRINTS_INDEX_LOCKED_v1.md) | Router |
+| [TRUST_LEDGER_FOR_DRIFT_BLUEPRINT_LOCKED_v1.md](../references/TRUST_LEDGER_FOR_DRIFT_BLUEPRINT_LOCKED_v1.md) | TLE v1.3 extension — not a second ledger |
+
+**GTM honesty:** Noetfield records governance drift **decisions** against signed TLE baseline — not a hosted ML observability platform.
+
+### P0 drift ship queue (agreed local + cloud)
 
 | Priority | Work |
 |----------|------|
-| P0 | Drift Contract v0 — `drift_class`, `baseline_tle_id`, `delta_summary`, `severity` on evaluate/TLE paths |
+| P0 | Drift Contract v0 — `drift_class`, `baseline_tle_id`, `delta_summary`, `severity` |
 | P0 | Evaluate vs last TLE diff helper |
 | P0 | `risk_summary` + drift class in `confidence_factors` |
-| P1 | Optional `prev_tle_digest` in schema + migration |
-| P1 | Wire observability middleware → `observability_*` tables |
+| P1 | Optional `prev_tle_digest` in schema |
 | P2 | Link `GET /events/replay` to audit-export narrative |
 
-**Schema:** `packages/schemas/tle-v1.schema.json` · **Sprint:** `os/sprint-trust-ledger-v1.2.md`
+**Note:** This file existed on cloud/git before Mac merge (`ff24d56`); Mac added §8 links only.

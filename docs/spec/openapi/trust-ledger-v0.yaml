@@ -1,0 +1,167 @@
+openapi: 3.1.0
+info:
+  title: Noetfield Trust Ledger API
+  version: 0.1.0
+  description: |
+    DESIGN skeleton — Trust Ledger v1.2 blueprint.
+    Pre-execution governance & evidence; no payment or custody APIs.
+servers:
+  - url: https://api.noetfield.com/v1
+    description: Production (placeholder)
+paths:
+  /connectors:
+    post:
+      summary: Register connector
+      operationId: registerConnector
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConnectorRegister'
+      responses:
+        '201':
+          description: Connector registered
+  /evidence/ingest:
+    post:
+      summary: Ingest evidence metadata
+      operationId: ingestEvidence
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EvidenceIngest'
+      responses:
+        '201':
+          description: Evidence indexed
+  /evidence/{id}:
+    get:
+      summary: Fetch evidence metadata (no raw PII)
+      operationId: getEvidence
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: Evidence metadata
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EvidenceObject'
+  /tle/draft:
+    post:
+      summary: Create TLE draft from template + evidence refs
+      operationId: createTleDraft
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TleDraftRequest'
+      responses:
+        '201':
+          description: TLE draft created
+  /tle/{id}:
+    get:
+      summary: Read TLE (read-only)
+      operationId: getTle
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: Trust Ledger Entry
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrustLedgerEntry'
+  /tle/{id}/approve:
+    post:
+      summary: Approver signs TLE
+      operationId: approveTle
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TleApproveRequest'
+      responses:
+        '200':
+          description: Approval recorded
+  /tle/{id}/export:
+    get:
+      summary: Export PDF / Board Pack
+      operationId: exportTle
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: Export artifact
+          content:
+            application/pdf:
+              schema:
+                type: string
+                format: binary
+components:
+  schemas:
+    ConnectorRegister:
+      type: object
+      required: [connector_id, type, ingest_mode]
+      properties:
+        connector_id: { type: string }
+        type: { type: string }
+        required_scopes: { type: array, items: { type: string } }
+        ingest_mode: { type: string, enum: [metadata_only, full_capture] }
+    EvidenceIngest:
+      type: object
+      required: [evidence_id, source, title, hash]
+      properties:
+        evidence_id: { type: string }
+        source: { type: string }
+        title: { type: string }
+        hash: { type: string }
+        link: { type: string, format: uri }
+        sensitivity: { type: string }
+        ingest_mode: { type: string, enum: [metadata_only, full_capture] }
+    EvidenceObject:
+      type: object
+      properties:
+        evidence_id: { type: string }
+        source: { type: string }
+        title: { type: string }
+        hash: { type: string }
+        ingested_at: { type: string, format: date-time }
+        sensitivity: { type: string }
+        retention_policy: { type: string }
+        storage_ref: { type: string }
+    TleDraftRequest:
+      type: object
+      required: [template_id, evidence_ids]
+      properties:
+        template_id: { type: string }
+        evidence_ids: { type: array, items: { type: string } }
+        owner_id: { type: string }
+    TleApproveRequest:
+      type: object
+      required: [approver_id, status, signature_hash, key_id]
+      properties:
+        approver_id: { type: string }
+        status: { type: string, enum: [Approved, Rejected] }
+        signature_hash: { type: string }
+        key_id: { type: string }
+    TrustLedgerEntry:
+      type: object
+      description: See docs/spec/schemas/tle-v1.schema.yaml and examples/

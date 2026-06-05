@@ -1,0 +1,106 @@
+# Trust Ledger Entry (TLE) v1 — canonical schema (DESIGN)
+# OpenAPI / JSON Schema generation can derive from this file.
+$schema: https://json-schema.org/draft/2020-12/schema
+title: TrustLedgerEntryV1
+type: object
+required:
+  - tle_id
+  - decision
+  - date
+  - owner
+  - status
+  - confidence_score
+  - evidence
+  - risk_summary
+  - controls
+  - approval_chain
+  - signatures
+  - audit_digest
+properties:
+  tle_id:
+    type: string
+  decision:
+    type: string
+  date:
+    type: string
+    format: date
+  owner:
+    type: object
+    required: [id, name, role]
+    properties:
+      id: { type: string }
+      name: { type: string }
+      role: { type: string }
+  status:
+    type: string
+    enum: [Approved, Conditional, Rejected, Draft]
+  confidence_score:
+    type: number
+    minimum: 0
+    maximum: 1
+  evidence:
+    type: array
+    items:
+      type: object
+      required: [evidence_id, source, title, metadata]
+      properties:
+        evidence_id: { type: string }
+        source:
+          type: string
+          enum: [Purview, EntraID, AuditLog, SharePoint, Endpoint, SaaS]
+        title: { type: string }
+        metadata:
+          type: object
+          properties:
+            timestamp: { type: string, format: date-time }
+            hash: { type: string }
+            sensitivity_label: { type: string }
+        link: { type: string, format: uri }
+  risk_summary:
+    type: array
+    items:
+      type: object
+      required: [id, description, severity]
+      properties:
+        id: { type: string }
+        description: { type: string }
+        severity:
+          type: string
+          enum: [Low, Medium, High]
+  controls:
+    type: array
+    items:
+      type: object
+      required: [control_id, description]
+      properties:
+        control_id: { type: string }
+        description: { type: string }
+  approval_chain:
+    type: array
+    items:
+      type: object
+      required: [approver, status]
+      properties:
+        approver:
+          type: object
+          required: [id, name, role]
+          properties:
+            id: { type: string }
+            name: { type: string }
+            role: { type: string }
+        status:
+          type: string
+          enum: [Pending, Approved, Rejected]
+        signed_at: { type: string, format: date-time }
+  signatures:
+    type: array
+    items:
+      type: object
+      required: [signer_id, signature_hash, key_id]
+      properties:
+        signer_id: { type: string }
+        signature_hash: { type: string }
+        key_id: { type: string }
+  audit_digest:
+    type: string
+    description: Signed digest of TLE + evidence refs

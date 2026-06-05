@@ -1,0 +1,58 @@
+# TLE v1 example — Rejected
+tle_id: tle-2026-06-02-copilot-pilot-003
+decision: "Reject Copilot enablement for unlabeled external collaboration sites"
+date: 2026-06-02
+owner:
+  id: usr-cio-001
+  name: "Chief Information Officer"
+  role: CIO
+status: Rejected
+confidence_score: 0.41
+evidence:
+  - evidence_id: ev-purview-0199
+    source: Purview
+    title: "42% of external collaboration sites lack sensitivity labels"
+    metadata:
+      timestamp: "2026-06-01T12:00:00Z"
+      hash: "sha256:rejected-purview-hash-placeholder-001"
+      sensitivity_label: "Unknown"
+    link: "https://purview.example/reports/unlabeled-external"
+  - evidence_id: ev-entra-0144
+    source: EntraID
+    title: "Guest users present on 18 Copilot-enabled groups"
+    metadata:
+      timestamp: "2026-06-01T13:45:00Z"
+      hash: "sha256:rejected-entra-hash-placeholder-002"
+      sensitivity_label: "External"
+    link: "https://entra.example/groups/copilot-guest-exposure"
+risk_summary:
+  - id: risk-020
+    description: "Unlabeled data exposure to guest identities via Copilot retrieval"
+    severity: High
+  - id: risk-021
+    description: "Insufficient audit log retention for Copilot interactions"
+    severity: Medium
+controls:
+  - control_id: ctrl-block-01
+    description: "Maintain Copilot block policy until labeling coverage ≥ 95%"
+approval_chain:
+  - approver: { id: usr-legal-002, name: "General Counsel", role: Legal }
+    status: Rejected
+    signed_at: "2026-06-02T08:30:00Z"
+  - approver: { id: usr-sec-003, name: "CISO", role: Security }
+    status: Rejected
+    signed_at: "2026-06-02T09:15:00Z"
+  - approver: { id: usr-cio-001, name: "CIO", role: CIO }
+    status: Rejected
+    signed_at: "2026-06-02T09:45:00Z"
+signatures:
+  - signer_id: usr-legal-002
+    signature_hash: "sig:rejected-legal-001"
+    key_id: kms-key-legal-prod-01
+  - signer_id: usr-sec-003
+    signature_hash: "sig:rejected-security-001"
+    key_id: kms-key-security-prod-01
+  - signer_id: usr-cio-001
+    signature_hash: "sig:rejected-cio-001"
+    key_id: kms-key-cio-prod-01
+audit_digest: "digest:sha256:rejected-example-digest-placeholder"
