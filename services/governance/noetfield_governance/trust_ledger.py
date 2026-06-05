@@ -22,6 +22,80 @@ router = APIRouter(prefix="/api/v1", tags=["trust-ledger-v1"])
 
 TerminalStatus = Literal["Approved", "Rejected", "Conditional"]
 ACTIVE_TLE_STATUSES = ("Draft", "PendingApproval")
+TRUSTED_EVIDENCE_SOURCES = frozenset({"Purview", "EntraID", "AuditLog", "SharePoint"})
+KNOWN_TEMPLATE_BONUS = {"copilot-go-no-go-v1": 0.10}
+CONFIDENCE_METHOD = "deterministic-v0"
+
+
+def compute_confidence_score(
+    evidence_rows: list[dict[str, object]],
+    template_id: str,
+) -> tuple[float, list[dict[str, object]]]:
+    """Deterministic v0 score from evidence refs and template (auditable factors)."""
+    count = len(evidence_rows)
+    sources = {str(row.get("source", "")) for row in evidence_rows}
+    trusted = sources & TRUSTED_EVIDENCE_SOURCES
+    hashes_ok = count > 0 and all(
+        isinstance(row.get("metadata"), dict) and bool((row["metadata"] or {}).get("hash"))
+        for row in evidence_rows
+    )
+
+    factors: list[dict[str, object]] = []
+    score = 0.40
+
+    evidence_contrib = min(0.30, count * 0.10)
+    factors.append(
+        {
+            "factor": "evidence_coverage",
+            "contribution": round(evidence_contrib, 4),
+            "detail": f"{count} evidence ref(s)",
+        }
+    )
+    score += evidence_contrib
+
+    diversity_contrib = min(0.15, len(trusted) * 0.05)
+    factors.append(
+        {
+            "factor": "source_diversity",
+            "contribution": round(diversity_contrib, 4),
+            "detail": ", ".join(sorted(trusted)) if trusted else "no trusted M365 sources",
+        }
+    )
+    score += diversity_contrib
+
+    template_contrib = KNOWN_TEMPLATE_BONUS.get(template_id, 0.0)
+    if template_contrib:
+        factors.append(
+            {
+                "factor": "template_match",
+                "contribution": template_contrib,
+                "detail": template_id,
+            }
+        )
+        score += template_contrib
+
+    hash_contrib = 0.05 if hashes_ok else 0.0
+    factors.append(
+        {
+            "factor": "hash_integrity",
+            "contribution": hash_contrib,
+            "detail": "all evidence hashes present" if hash_contrib else "missing hash metadata",
+        }
+    )
+    score += hash_contrib
+
+    return round(min(1.0, max(0.0, score)), 2), factors
+
+
+def _attach_confidence(body: dict[str, object]) -> dict[str, object]:
+    evidence = body.get("evidence") or []
+    rows = [row for row in evidence if isinstance(row, dict)] if isinstance(evidence, list) else []
+    template_id = str(body.get("template_id") or "")
+    score, factors = compute_confidence_score(rows, template_id)
+    body["confidence_score"] = score
+    body["confidence_factors"] = factors
+    body["confidence_method"] = CONFIDENCE_METHOD
+    return body
 
 
 def required_approvals() -> int:
@@ -309,6 +383,7 @@ class InMemoryTrustLedgerStore:
             "approval_chain": [],
             "signatures": [],
         }
+        _attach_confidence(body)
         now = datetime.now(timezone.utc)
         record = TleRecord(tle_id=tle_id, status=initial, body=body, created_at=now)
         self.tles[tle_id] = record
@@ -511,6 +586,7 @@ class PostgresTrustLedgerStore:
             "approval_chain": [],
             "signatures": [],
         }
+        _attach_confidence(body)
         await self.connect()
         assert self._pool is not None
         async with self._pool.acquire() as conn:
@@ -629,7 +705,10 @@ def get_trust_ledger_deps(request: Request) -> TrustLedgerDeps:
 
 
 def _record_to_entry(record: TleRecord) -> TrustLedgerEntry:
-    return TrustLedgerEntry.model_validate(record.body)
+    body = dict(record.body)
+    if "confidence_score" not in body:
+        _attach_confidence(body)
+    return TrustLedgerEntry.model_validate(body)
 
 
 def _export_lines(record: TleRecord) -> list[str]:
@@ -638,6 +717,7 @@ def _export_lines(record: TleRecord) -> list[str]:
         f"TLE ID: {record.tle_id}",
         f"Status: {record.status}",
         f"Decision: {body.get('decision', '')}",
+        f"Confidence: {body.get('confidence_score', 'n/a')}",
     ]
     evidence = body.get("evidence") or []
     if isinstance(evidence, list):

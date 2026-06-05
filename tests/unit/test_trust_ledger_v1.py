@@ -163,6 +163,43 @@ def test_trust_ledger_missing_evidence() -> None:
     asyncio.run(run())
 
 
+def test_trust_ledger_draft_confidence_score() -> None:
+    async def run() -> None:
+        async with governance_test_client() as client:
+            ev_id = f"ev-conf-{uuid4().hex[:8]}"
+            await client.post(
+                "/api/v1/evidence/ingest",
+                json={
+                    "evidence_id": ev_id,
+                    "source": "Purview",
+                    "title": "Confidence test",
+                    "hash": "sha256:abcdef0123456789abcdef01",
+                    "ingest_mode": "metadata_only",
+                },
+            )
+            draft = await client.post(
+                "/api/v1/tle/draft",
+                json={
+                    "template_id": "copilot-go-no-go-v1",
+                    "evidence_ids": [ev_id],
+                    "decision": "Test confidence",
+                },
+            )
+            assert draft.status_code == 201
+            body = draft.json()
+            assert "confidence_score" in body
+            assert 0.0 <= body["confidence_score"] <= 1.0
+            factors = body.get("confidence_factors") or []
+            assert len(factors) >= 3
+            assert body.get("confidence_method") == "deterministic-v0"
+
+            got = await client.get(f"/api/v1/tle/{body['tle_id']}")
+            assert got.status_code == 200
+            assert got.json()["confidence_score"] == body["confidence_score"]
+
+    asyncio.run(run())
+
+
 def test_trust_ledger_list_evidence() -> None:
     async def run() -> None:
         async with governance_test_client() as client:

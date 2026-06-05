@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Shell } from "@/components/Shell";
-import { exportTlePdfUrl, getTle, TrustLedgerEntry } from "@/lib/trustLedger";
+import { exportTlePdfUrl, formatConfidence, getTle, TrustLedgerEntry } from "@/lib/trustLedger";
 
 export default function TrustLedgerDetailPage() {
   const params = useParams();
@@ -45,6 +45,30 @@ export default function TrustLedgerDetailPage() {
               {entry.date ? ` · ${entry.date}` : ""}
             </p>
           </header>
+
+          {entry.confidence_score !== undefined && (
+            <div className="rounded-lg border border-border bg-panel/60 p-4">
+              <h3 className="text-sm font-semibold text-white">Confidence score</h3>
+              <p className="mt-2 text-3xl font-semibold text-accent">
+                {formatConfidence(entry.confidence_score)}
+              </p>
+              {entry.confidence_method && (
+                <p className="mt-1 text-xs text-muted">Method: {entry.confidence_method}</p>
+              )}
+              {entry.confidence_factors && entry.confidence_factors.length > 0 && (
+                <ul className="mt-4 space-y-2 text-sm text-muted">
+                  {entry.confidence_factors.map((f) => (
+                    <li key={f.factor} className="flex flex-wrap justify-between gap-2 border-t border-border/60 pt-2">
+                      <span>
+                        <strong className="text-white">{f.factor}</strong> — {f.detail}
+                      </span>
+                      <span className="font-mono text-accent">+{Math.round(f.contribution * 100)}%</span>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          )}
 
           <div className="rounded-lg border border-border bg-panel/60 p-4">
             <h3 className="text-sm font-semibold text-white">Decision</h3>

@@ -49,7 +49,8 @@ echo "=== verify-ui-endpoints ==="
 check_html "http://127.0.0.1:${PUBLIC}/cognitive-dashboard" "dashboard" "Cognitive dashboard"
 check_html "http://127.0.0.1:${PUBLIC}/evaluate" "evaluate" "Submit operational intent"
 check_html "http://127.0.0.1:${PUBLIC}/audit" "audit page" "Audit log"
-check_html "http://127.0.0.1:${PUBLIC}/trust-ledger" "trust-ledger list" "Trust Ledger"
+check_html "http://127.0.0.1:${PUBLIC}/trust-ledger" "trust-ledger list" "New TLE draft"
+check_html "http://127.0.0.1:${PUBLIC}/trust-ledger/new" "tle generator" "TLE Generator"
 
 # Static www + docs (regression: /docs/api must not hit platform OpenAPI)
 check "http://127.0.0.1:${PUBLIC}/docs/api/" "docs/api index" "200"

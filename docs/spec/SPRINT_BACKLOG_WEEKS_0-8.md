@@ -26,8 +26,8 @@
 | ID | Story | Acceptance | Status |
 |----|-------|------------|--------|
 | W56-1 | Trust Ledger Workspace list/search | `GET /api/v1/tle` + evidence list | done (API) |
-| W56-2 | TLE Generator v0 | Template + evidence refs → draft TLE | done (draft API) |
-| W56-3 | Confidence Score v0 | Deterministic score + factors in UI | todo |
+| W56-2 | TLE Generator v0 | Template + evidence refs → draft TLE | done (API + `/trust-ledger/new`) |
+| W56-3 | Confidence Score v0 | Deterministic score + factors in UI | done |
 
 ## Week 7–8 (P1 — pilot)
 
