@@ -6,8 +6,6 @@ When the founder says **PLAN WITH NO ASF**, start here. Pick the next **agent** 
 
 ## Next 25 agent-ready plans
 
-1. **NF-PLAN-0105** · P1/T1 · Extend tle-smoke or ship-verify check for performance  
-   Verify: `pytest and/or make ship-verify; area=performance; pattern=smoke-script`
 1. **NF-PLAN-0110** · P1/T1 · Pilot rate limits and auth scopes for workspace ui  
    Verify: `pytest and/or make ship-verify; area=workspace-ui; pattern=rate-limit`
 1. **NF-PLAN-0111** · P1/T1 · Webhook emission on www gtm state transitions  
