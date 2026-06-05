@@ -39,7 +39,8 @@
 13. `ops/private/sourceA/founder/repo-agent-notices/SEMI_NOTICE_noetfield_cloud_v1.md`
 14. `ops/private/sourceA/NOETFIELD_REPO_ALIGNMENT.md`
 15. `ops/private/sourceA/AUTO_CONFLICT_ENGINE_V3_LOCKED.md` (optional)
-16. `ops/private/todolist/NEXT_MOVES.md` (optional)
+16. `docs/internal/AUTO_CONFIDENTIAL_PORTFOLIO_POSITIONING.md` — **[AUTO] confidential** (optional, gitignored) — **never quote publicly**; index `ops/private/agent-reference/AUTO_INDEX_LOCKED.md`
+17. `ops/private/todolist/NEXT_MOVES.md` (optional)
 
 ### C. Mac founder session only
 

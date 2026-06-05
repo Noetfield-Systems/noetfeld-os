@@ -57,6 +57,15 @@ Seed locally: `./scripts/bootstrap-private-ops.sh` · MSB pack: `./scripts/seed-
 
 Do not copy this doctrine into `docs/`, www, or commits. Cross-plane notes use `[DESIGN]` `[EXECUTION]` `[DELIVERY]` when relevant.
 
+## Confidential [AUTO] (gitignored — never quote publicly)
+
+**Path:** `docs/internal/AUTO_CONFIDENTIAL_PORTFOLIO_POSITIONING.md`  
+**Index:** `ops/private/agent-reference/AUTO_INDEX_LOCKED.md` (AUTO-002) when `ops/private/` on disk.
+
+- **Read** when present on founder machine — internal portfolio/entity positioning only.
+- **Never** commit, PR, www, Issues, buyer packs, or paste into public agent replies.
+- Public surfaces: `PRODUCT_TRUTH.md` · `OFFERINGS_LOCKED.md` · `POSITIONING.md` only.
+
 ## Scope
 
 [PROJECT_BOUNDARIES_LOCKED.md](../PROJECT_BOUNDARIES_LOCKED.md) — **Noetfield only** in this repo.
