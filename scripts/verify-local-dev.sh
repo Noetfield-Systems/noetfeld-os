@@ -26,6 +26,8 @@ echo "=== verify-local-dev ==="
 check "http://127.0.0.1:${PUBLIC}/" "website"
 check "http://127.0.0.1:${PUBLIC}/console" "console (proxy)"
 check "http://127.0.0.1:${PUBLIC}/cognitive-dashboard" "dashboard (proxy)"
+check "http://127.0.0.1:${PUBLIC}/trust-ledger" "trust-ledger (proxy)"
+check "http://127.0.0.1:${PUBLIC}/docs/api/" "docs/api (static)"
 check "http://127.0.0.1:${PLATFORM}/console" "console (direct)"
 check "http://127.0.0.1:${PUBLIC}/assets/noetfield-tokens.css" "www assets"
 

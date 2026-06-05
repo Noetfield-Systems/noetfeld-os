@@ -61,6 +61,8 @@ ship-verify:
 	@chmod +x scripts/tle-smoke.sh scripts/verify-local-dev.sh scripts/smoke_bank_grade_html.py 2>/dev/null || true
 	@./scripts/tle-smoke.sh
 	@./scripts/verify-local-dev.sh
+	@chmod +x scripts/verify-ui-endpoints.sh 2>/dev/null || true
+	@./scripts/verify-ui-endpoints.sh
 	@python3 scripts/smoke_bank_grade_html.py
 	@python3 scripts/verify_sitemap_committed.py 2>/dev/null || true
 	@python3 -m compileall -q packages services 2>/dev/null || true

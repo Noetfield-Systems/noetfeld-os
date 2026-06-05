@@ -27,9 +27,17 @@ PLATFORM_PREFIXES = (
     "/console",
     "/api/",
     "/openapi.json",
-    "/docs",
     "/redoc",
 )
+# Static www paths under /docs/ (must not hit platform OpenAPI /docs).
+STATIC_DOC_PREFIXES = (
+    "/docs/api",
+    "/docs/diligence",
+    "/docs/spec",
+    "/docs/collateral",
+    "/docs/references",
+)
+PLATFORM_SWAGGER_EXACT = frozenset({"/docs"})
 NEXT_PREFIXES = (
     "/cognitive-dashboard",
     "/trust-ledger",
@@ -58,6 +66,10 @@ def _proxy_target(path: str, method: str = "GET", headers: dict[str, str] | None
     headers = headers or {}
     if _gov_api_route(path, method, headers):
         return GOV_API
+    if any(path.startswith(p) for p in STATIC_DOC_PREFIXES):
+        return None
+    if path in PLATFORM_SWAGGER_EXACT or path.startswith("/docs/oauth2-redirect"):
+        return PLATFORM
     if any(path.startswith(p) for p in PLATFORM_PREFIXES):
         return PLATFORM
     if path in ("/evaluate", "/audit") or any(path.startswith(p) for p in NEXT_PREFIXES):

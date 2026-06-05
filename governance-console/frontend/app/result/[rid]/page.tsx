@@ -25,7 +25,7 @@ export default function ResultPage() {
     <Shell>
       <div className="mb-6 flex items-center justify-between gap-4">
         <h2 className="text-2xl font-semibold text-white">Governance decision</h2>
-        <Link href="/" className="text-sm text-accent hover:underline">
+        <Link href="/evaluate" className="text-sm text-accent hover:underline">
           New evaluation
         </Link>
       </div>
