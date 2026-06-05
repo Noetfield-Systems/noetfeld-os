@@ -83,22 +83,22 @@ CLAIM → VERIFY ON DISK → CORRECT → UPDATE REGISTRY → LOG INTAKE
 
 ---
 
-## Systems Operating Plan (Lane B — private L4)
+## Dual-agent merge — Lane A/B (private L4)
 
-Local ingested Desktop SOURCE. Cloud verified read-order; **do not duplicate L0–L3 prose**.
+**Status:** NF-LOCAL-REPO-AGENT + NF-CLOUD-AGENT merge complete. SOURCE verified (1464 lines, local). **Do not duplicate L0–L3.**
 
-| Order | Private path (when `ops/private/` on disk) |
-|-------|-------------------------------------------|
-| 1 | `agent-reference/plans/SYSTEMS_OPERATING_PLAN_ANALYSIS_LOCKED_2026.md` |
-| 2 | `agent-reference/plans/SYSTEMS_OPERATING_PLAN_LOCKED_2026.md` |
-| 3 | `intake/systems-operating-plan-desktop-2026-06-06/SOURCE.md` — detail only |
+| Order | Private path |
+|-------|--------------|
+| 1 | `agent-reference/plans/LANE_A_B_OPERATING_MODEL_LOCKED_2026.md` |
+| 2 | `agent-reference/plans/VANCOUVER_SMB_GOVERNANCE_GTM_LOCKED_2026.md` |
+| 3 | `agent-reference/plans/SYSTEMS_OPERATING_PLAN_LOCKED_2026.md` (rev2) |
 
-**NKUE (local):** kept 6 · merged 4 · split 2 · deferred 4 · rejected 3  
-**TrustField Phase 8:** `TRUSTFIELD_OPERATING_EXCERPT_POINTER.md` — separate entity  
-**Verified sources (private):** `SOURCES_VERIFIED_OPERATING_PLAN_2026.md` — StatCan · CMHC · Vancouver · www (6 URLs checked)  
-**Live 8-phase mirror:** https://www.noetfield.com/ai-automation/ (`ai-automation/index.html`)  
-**Verdict:** two engines (Lane A product + Lane B Vancouver services), one discipline (RID + metrics + governance artifact per engagement).
+**30-day ICP (locked):** healthcare **OR** legal/accounting Vancouver **Trust Brief**  
+**Lane B:** construction/PM = **private SOW P2** — not www hero  
+**Pending:** `/ai-automation/` governance-first reframe (local uncommitted)  
+**Verified sources:** `SOURCES_VERIFIED_OPERATING_PLAN_2026.md` (6 URLs)  
+**Verdict:** Lane A owns hero + 30-day revenue; Lane B via operations@ after proof.
 
 ---
 
-| v1.2 | 2026-06-06 | NF-CLOUD-AGENT Systems Operating Plan read-order |
+| v1.3 | 2026-06-06 | NF-CLOUD-AGENT dual-agent Lane A/B merge |
