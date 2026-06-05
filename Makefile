@@ -47,6 +47,10 @@ verify-local-dev:
 	@chmod +x scripts/verify-local-dev.sh
 	./scripts/verify-local-dev.sh
 
+verify-agent-scope:
+	@chmod +x scripts/verify-agent-scope.sh
+	./scripts/verify-agent-scope.sh
+
 verify-ui-e2e:
 	@chmod +x scripts/verify-ui-e2e.sh
 	./scripts/verify-ui-e2e.sh
@@ -73,6 +77,8 @@ verify-gtm:
 # Merge/deploy readiness (cloud canonical — superset of verify-gtm checks)
 ship-verify:
 	@echo "=== ship-verify (Noetfield merge/deploy readiness) ==="
+	@chmod +x scripts/verify-agent-scope.sh 2>/dev/null || true
+	@./scripts/verify-agent-scope.sh
 	@test -f docs/SHIP_NOW.md
 	@test -f docs/diligence/EVIDENCE_INTAKE_CONTRACT_v1.md
 	@test -f docs/spec/TRUST_LEDGER_PRODUCT_BLUEPRINT_v1.2_LOCKED.md

@@ -2,6 +2,16 @@
 
 **Read this first** for task priority. Do not create `todolist/` at the repository root.
 
+## Self-audit loop (mandatory)
+
+1. [docs/ops/AGENT_SELF_AUDIT_LOOP_LOCKED_v1.md](../docs/ops/AGENT_SELF_AUDIT_LOOP_LOCKED_v1.md)
+2. [.cursor/agent-memory/MEMORY_LOCKED.yaml](agent-memory/MEMORY_LOCKED.yaml) — **session memory**
+3. [.cursor/incidents/REGISTRY.md](incidents/REGISTRY.md) — **incident reports**
+4. [.cursor/skills/](skills/) — scope gate, pre-commit, session report, incident filing
+5. `./scripts/verify-agent-scope.sh` — run before every commit
+
+**Law:** Noetfield only. **Never** TrustField / trustfield.ca / VIRLUX. See [INCIDENT-2026-06-06-001](incidents/INCIDENT-2026-06-06-001-trustfield-scope-bleed.md).
+
 **Noetfield cloud (`noetfield_cloud`):** [docs/ops/AGENT_READ_LINKS_LOCKED_v1.md](../docs/ops/AGENT_READ_LINKS_LOCKED_v1.md) (§ Cloud ship) · [docs/ops/NOETFIELD_AGENT_CONTEXT_AND_READ_ORDER_LOCKED_v1.md](../docs/ops/NOETFIELD_AGENT_CONTEXT_AND_READ_ORDER_LOCKED_v1.md) · paste: [docs/ops/ready_to_paste_noetfield_cloud.txt](../docs/ops/ready_to_paste_noetfield_cloud.txt). Canonical index: Desktop `SourceA/founder/repo-agent-notices/AGENT_READ_LINKS_INDEX.md` — never repo → SourceA.
 
 ## Ship rule (ASF) — two different things

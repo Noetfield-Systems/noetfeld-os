@@ -27,12 +27,14 @@
 ### Read order
 
 1. This file — § Cloud ship (below)
-2. [NOETFIELD_AGENT_TEAM_SYNC_LOCKED_v1.md](./NOETFIELD_AGENT_TEAM_SYNC_LOCKED_v1.md) — local↔cloud bridge
-3. [NOETFIELD_AGENT_CONTEXT_AND_READ_ORDER_LOCKED_v1.md](./NOETFIELD_AGENT_CONTEXT_AND_READ_ORDER_LOCKED_v1.md)
-4. [os/SHIP_NOW.md](../../os/SHIP_NOW.md) → [os/plan.json](../../os/plan.json) · [os/LOCKED_REFERENCE_INDEX.md](../../os/LOCKED_REFERENCE_INDEX.md)
-5. **PLAN WITH NO ASF:** [plans/no-asf/QUICK_PICK.md](./plans/no-asf/QUICK_PICK.md) · full bank [plans/README.md](./plans/README.md) (1000 plans)
-6. [os/sprint-trust-ledger-v1.2.md](../../os/sprint-trust-ledger-v1.2.md) or [lane_a_sprint_map.md](./lane_a_sprint_map.md)
-7. After founder sync: `ops/private/agent-reference/IN_CHARGE_NOW.md` · `ops/private/sourceA/founder/repo-agent-notices/SEMI_NOTICE_noetfield_cloud_v1.md`
+2. [AGENT_SELF_AUDIT_LOOP_LOCKED_v1.md](./AGENT_SELF_AUDIT_LOOP_LOCKED_v1.md) — memory, incidents, scope gate
+3. [.cursor/agent-memory/MEMORY_LOCKED.yaml](../../.cursor/agent-memory/MEMORY_LOCKED.yaml)
+4. [NOETFIELD_AGENT_TEAM_SYNC_LOCKED_v1.md](./NOETFIELD_AGENT_TEAM_SYNC_LOCKED_v1.md) — local↔cloud bridge
+5. [NOETFIELD_AGENT_CONTEXT_AND_READ_ORDER_LOCKED_v1.md](./NOETFIELD_AGENT_CONTEXT_AND_READ_ORDER_LOCKED_v1.md)
+6. [os/SHIP_NOW.md](../../os/SHIP_NOW.md) → [os/plan.json](../../os/plan.json) · [os/LOCKED_REFERENCE_INDEX.md](../../os/LOCKED_REFERENCE_INDEX.md)
+7. **PLAN WITH NO ASF:** [plans/no-asf/QUICK_PICK.md](./plans/no-asf/QUICK_PICK.md) · full bank [plans/README.md](./plans/README.md) (1000 plans)
+8. [os/sprint-trust-ledger-v1.2.md](../../os/sprint-trust-ledger-v1.2.md) or [lane_a_sprint_map.md](./lane_a_sprint_map.md)
+9. After founder sync: `ops/private/agent-reference/IN_CHARGE_NOW.md` · `ops/private/sourceA/founder/repo-agent-notices/SEMI_NOTICE_noetfield_cloud_v1.md`
 
 ### In-repo links (`noetfield_cloud`)
 
@@ -49,6 +51,9 @@
 | Product locks | [PRODUCT_TRUTH.md](../../PRODUCT_TRUTH.md) · [POSITIONING.md](../../POSITIONING.md) · [OFFERINGS_LOCKED.md](../../OFFERINGS_LOCKED.md) |
 | Boundaries | [PROJECT_BOUNDARIES_LOCKED.md](../../PROJECT_BOUNDARIES_LOCKED.md) |
 | Agent workflow | [.cursor/AGENT_TRACKING.md](../../.cursor/AGENT_TRACKING.md) |
+| Self-audit loop | [AGENT_SELF_AUDIT_LOOP_LOCKED_v1.md](./AGENT_SELF_AUDIT_LOOP_LOCKED_v1.md) |
+| Agent memory | [.cursor/agent-memory/MEMORY_LOCKED.yaml](../../.cursor/agent-memory/MEMORY_LOCKED.yaml) |
+| Incidents | [.cursor/incidents/REGISTRY.md](../../.cursor/incidents/REGISTRY.md) |
 | Sprint backlog | [docs/spec/SPRINT_BACKLOG_WEEKS_0-8.md](../spec/SPRINT_BACKLOG_WEEKS_0-8.md) |
 | Lane A map | [lane_a_sprint_map.md](./lane_a_sprint_map.md) |
 | Ingest YAML | [docs/spec/EXECUTION_TRUTH_AGENT_REPLY_LOCKED.md](../spec/EXECUTION_TRUTH_AGENT_REPLY_LOCKED.md) |
