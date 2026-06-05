@@ -6,6 +6,11 @@
 |------|------|----------|
 | **Governance sources** | [GOVERNANCE_SOURCES_HANDBOOK_LOCKED_v1.md](./GOVERNANCE_SOURCES_HANDBOOK_LOCKED_v1.md) | Frameworks, Copilot/Purview, SOC 2, FFIEC, EU AI Act, NIST, ISO 42001 |
 | **Drift detection** | [GOVERNANCE_DRIFT_DETECTION_SOURCES_LOCKED_v1.md](./GOVERNANCE_DRIFT_DETECTION_SOURCES_LOCKED_v1.md) | Policy/config/model/data/semantic drift, continuous monitoring, post-market surveillance |
+| **Drift blueprints (hub)** | [GOVERNANCE_DRIFT_BLUEPRINTS_INDEX_LOCKED_v1.md](./GOVERNANCE_DRIFT_BLUEPRINTS_INDEX_LOCKED_v1.md) | Architecture supplements — defers to sources + TLE mandate (`NF-LOCAL-REPO-AGENT`) |
+
+**Blueprint supplements** (read via hub after push): engine · TLE-for-drift · LLM · enterprise framework.
+
+**Cloud read order:** [docs/ops/NOETFIELD_DRIFT_BLUEPRINTS_CLOUD_READ_ORDER_LOCKED_v1.md](../ops/NOETFIELD_DRIFT_BLUEPRINTS_CLOUD_READ_ORDER_LOCKED_v1.md) (`NF-CLOUD-AGENT`).
 
 **Reliability rule:** Prefer **Tier 1** (official law/standards/government) and **Tier 2** (vendor primary docs). Tier 3–4 = orientation only.
 

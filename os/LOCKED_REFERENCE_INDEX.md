@@ -22,6 +22,12 @@
 | Boundaries | PROJECT_BOUNDARIES_LOCKED | [PROJECT_BOUNDARIES_LOCKED.md](../PROJECT_BOUNDARIES_LOCKED.md) |
 | TLE blueprint | Trust Ledger LOCKED v1.2 | [docs/spec/TRUST_LEDGER_PRODUCT_BLUEPRINT_v1.2_LOCKED.md](../docs/spec/TRUST_LEDGER_PRODUCT_BLUEPRINT_v1.2_LOCKED.md) |
 | Drift sources | Governance drift LOCKED v1 | [docs/references/GOVERNANCE_DRIFT_DETECTION_SOURCES_LOCKED_v1.md](../docs/references/GOVERNANCE_DRIFT_DETECTION_SOURCES_LOCKED_v1.md) |
+| Drift blueprints hub | Blueprints index LOCKED v1 | [docs/references/GOVERNANCE_DRIFT_BLUEPRINTS_INDEX_LOCKED_v1.md](../docs/references/GOVERNANCE_DRIFT_BLUEPRINTS_INDEX_LOCKED_v1.md) |
+| Drift engine blueprint | Governance drift engine LOCKED v1 | [docs/references/GOVERNANCE_DRIFT_ENGINE_BLUEPRINT_LOCKED_v1.md](../docs/references/GOVERNANCE_DRIFT_ENGINE_BLUEPRINT_LOCKED_v1.md) |
+| TLE for drift | Trust Ledger for drift LOCKED v1 | [docs/references/TRUST_LEDGER_FOR_DRIFT_BLUEPRINT_LOCKED_v1.md](../docs/references/TRUST_LEDGER_FOR_DRIFT_BLUEPRINT_LOCKED_v1.md) |
+| LLM drift arch | LLM drift detection LOCKED v1 | [docs/references/LLM_DRIFT_DETECTION_ARCHITECTURE_LOCKED_v1.md](../docs/references/LLM_DRIFT_DETECTION_ARCHITECTURE_LOCKED_v1.md) |
+| Enterprise drift | Enterprise governance drift LOCKED v1 | [docs/references/ENTERPRISE_GOVERNANCE_DRIFT_FRAMEWORK_LOCKED_v1.md](../docs/references/ENTERPRISE_GOVERNANCE_DRIFT_FRAMEWORK_LOCKED_v1.md) |
+| Drift cloud read order | Cloud drift read order LOCKED v1 | [docs/ops/NOETFIELD_DRIFT_BLUEPRINTS_CLOUD_READ_ORDER_LOCKED_v1.md](../docs/ops/NOETFIELD_DRIFT_BLUEPRINTS_CLOUD_READ_ORDER_LOCKED_v1.md) |
 | Sources handbook | Governance handbook LOCKED v1 | [docs/references/GOVERNANCE_SOURCES_HANDBOOK_LOCKED_v1.md](../docs/references/GOVERNANCE_SOURCES_HANDBOOK_LOCKED_v1.md) |
 | Agent reply truth | Execution truth LOCKED | [docs/spec/EXECUTION_TRUTH_AGENT_REPLY_LOCKED.md](../docs/spec/EXECUTION_TRUTH_AGENT_REPLY_LOCKED.md) |
 | PLAN WITH NO ASF | QUICK_PICK | [docs/ops/plans/no-asf/QUICK_PICK.md](../docs/ops/plans/no-asf/QUICK_PICK.md) |

@@ -133,6 +133,20 @@ Private spec: `ops/private/agent-reference/AGENT_DOCUMENT_TAGGING_LOCKED.md` (wh
 
 ---
 
+## Drift blueprints (local + cloud)
+
+| Role | Doc | Tag |
+|------|-----|-----|
+| Taxonomy | `docs/references/GOVERNANCE_DRIFT_DETECTION_SOURCES_LOCKED_v1.md` | existing LOCKED |
+| Product | `docs/spec/TRUST_LEDGER_PRODUCT_BLUEPRINT_v1.2_LOCKED.md` | existing LOCKED |
+| Hub + 4 supplements | `docs/references/GOVERNANCE_DRIFT_*_BLUEPRINT_*` | `NF-LOCAL-REPO-AGENT` |
+| Cloud read order | `docs/ops/NOETFIELD_DRIFT_BLUEPRINTS_CLOUD_READ_ORDER_LOCKED_v1.md` | `NF-CLOUD-AGENT` |
+| Code truth | `ops/private/.../NOETFIELD_DRIFT_IMPLEMENTATION_MAP.md` | `NF-CLOUD-AGENT` |
+
+**Pull local blueprints:** `cursor/bank-grade-fullstack-37f0` after push. **Wrong path:** `docs/reference/` → redirect to `docs/references/`.
+
+---
+
 ## Knowledge intake (founder batches)
 
 When founder sends rules, essays, governance, or docs:
