@@ -5,6 +5,7 @@ import { Shell } from "@/components/Shell";
 import { EvaluateForm } from "@/components/EvaluateForm";
 import { DevPortBanner } from "@/components/DevPortBanner";
 import { apiBaseLabel } from "@/lib/health";
+import { platformConsoleHref } from "@/lib/platform-console";
 import { useApiHealth } from "@/lib/useApiHealth";
 
 export default function CognitiveDashboardPage() {
@@ -67,10 +68,7 @@ export default function CognitiveDashboardPage() {
           <p className="mt-1 text-sm text-muted">Read-only list, detail, PDF export</p>
         </Link>
         <a
-          href={
-            process.env.NEXT_PUBLIC_PLATFORM_CONSOLE_URL ??
-            "http://127.0.0.1:8001/console"
-          }
+          href={platformConsoleHref()}
           className="rounded-xl border border-border bg-panel p-4 transition hover:border-accent/40"
         >
           <p className="text-xs uppercase tracking-wide text-muted">Platform console</p>

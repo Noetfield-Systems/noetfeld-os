@@ -51,6 +51,8 @@ check_html "http://127.0.0.1:${PUBLIC}/evaluate" "evaluate" "Submit operational 
 check_html "http://127.0.0.1:${PUBLIC}/audit" "audit page" "Audit log"
 check_html "http://127.0.0.1:${PUBLIC}/trust-ledger" "trust-ledger list" "New TLE draft"
 check_html "http://127.0.0.1:${PUBLIC}/trust-ledger/new" "tle generator" "TLE Generator"
+check_html "http://127.0.0.1:${PUBLIC}/workspace" "workspace list" "Trust Ledger Workspace"
+check_html "http://127.0.0.1:${PUBLIC}/workspace/connectors" "workspace connectors" "M365 evidence connectors"
 
 # Static www + docs (regression: /docs/api must not hit platform OpenAPI)
 check "http://127.0.0.1:${PUBLIC}/docs/api/" "docs/api index" "200"
@@ -74,12 +76,28 @@ else
   echo "OK   evaluate flow rid=${rid}"
 fi
 
-# Trust ledger API
+# Trust ledger API (platform) + gov workspace API (proxy → 18002)
 tle_code="$(curl -sS -o /dev/null -w "%{http_code}" "http://127.0.0.1:${PUBLIC}/api/v1/tle?limit=5" 2>/dev/null || echo "000")"
 if [[ "$tle_code" == "200" ]]; then
   echo "OK   trust-ledger API ($tle_code)"
 else
   echo "FAIL trust-ledger API ($tle_code)" >&2
+  fail=1
+fi
+
+gov_tle_code="$(curl -sS -o /dev/null -w "%{http_code}" "http://127.0.0.1:${PUBLIC}/tle?limit=5" 2>/dev/null || echo "000")"
+if [[ "$gov_tle_code" == "200" ]]; then
+  echo "OK   gov TLE list API ($gov_tle_code)"
+else
+  echo "FAIL gov TLE list API ($gov_tle_code)" >&2
+  fail=1
+fi
+
+conn_code="$(curl -sS -o /dev/null -w "%{http_code}" "http://127.0.0.1:${PUBLIC}/connectors" 2>/dev/null || echo "000")"
+if [[ "$conn_code" == "200" ]]; then
+  echo "OK   gov connectors API ($conn_code)"
+else
+  echo "FAIL gov connectors API ($conn_code)" >&2
   fail=1
 fi
 

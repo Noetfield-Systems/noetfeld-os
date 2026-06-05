@@ -6,6 +6,7 @@ import { Shell } from "@/components/Shell";
 import { LoadingBlock } from "@/components/LoadingBlock";
 import { PageHero } from "@/components/PageHero";
 import { draftTle, listTles, TleSummary } from "@/lib/api";
+import { wwwHref } from "@/lib/www-links";
 
 function statusClass(status: string): string {
   if (status === "Approved") return "text-emerald-300";
@@ -68,13 +69,13 @@ export default function WorkspacePage() {
         <Link href="/workspace/connectors" className="text-accent hover:underline">
           M365 connectors (dev OAuth)
         </Link>
-        <Link href="/copilot/demo/" className="text-accent hover:underline">
+        <Link href={wwwHref("/copilot/demo/")} className="text-accent hover:underline">
           5-minute demo script
         </Link>
         <a href="/audit/export" className="text-accent hover:underline" download>
           Audit export (JSON)
         </a>
-        <Link href="/copilot/procurement/" className="text-accent hover:underline">
+        <Link href={wwwHref("/copilot/procurement/")} className="text-accent hover:underline">
           Procurement buyer pack
         </Link>
       </p>
@@ -125,7 +126,7 @@ export default function WorkspacePage() {
         <button type="button" className="nf-btn-primary" disabled={drafting} onClick={createDraft}>
           {drafting ? "Creating draft…" : "Create TLE draft from pilot evidence"}
         </button>
-        <Link href="/trust-ledger/sample-report/" className="nf-btn-secondary">
+        <Link href={wwwHref("/trust-ledger/sample-report/")} className="nf-btn-secondary">
           TLE v1 samples (YAML)
         </Link>
       </div>

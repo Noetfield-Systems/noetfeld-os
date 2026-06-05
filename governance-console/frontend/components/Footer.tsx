@@ -25,6 +25,12 @@ export function Footer() {
           <Link href="/audit" className="hover:text-accent">
             Audit
           </Link>
+          <Link href="/workspace" className="hover:text-accent">
+            Workspace
+          </Link>
+          <Link href="/trust-ledger" className="hover:text-accent">
+            Trust Ledger
+          </Link>
         </nav>
       </div>
     </footer>

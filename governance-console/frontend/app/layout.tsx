@@ -25,6 +25,10 @@ export const metadata: Metadata = {
   },
   description:
     "Pre-execution governance evaluation for operational intent — allow, deny, or review with full audit traceability.",
+  icons: {
+    icon: "/noetfield-favicon-512.png",
+    apple: "/noetfield-favicon-512.png",
+  },
 };
 
 export const viewport: Viewport = {

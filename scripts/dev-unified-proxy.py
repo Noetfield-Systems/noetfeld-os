@@ -40,9 +40,28 @@ STATIC_DOC_PREFIXES = (
 PLATFORM_SWAGGER_EXACT = frozenset({"/docs"})
 NEXT_PREFIXES = (
     "/cognitive-dashboard",
-    "/trust-ledger",
+    "/workspace",
     "/_next/",
     "/result/",
+)
+
+def _is_next_trust_ledger(path: str) -> bool:
+    """Next UI: /trust-ledger, /trust-ledger/new, /trust-ledger/{id} — not www YAML/HTML."""
+    if path == "/trust-ledger" or path.startswith("/trust-ledger/new"):
+        return True
+    if path in ("/trust-ledger/", "/trust-ledger/index.html"):
+        return False
+    if path.startswith("/trust-ledger/sample-report"):
+        return False
+    if path.startswith("/trust-ledger/") and not path.endswith((".html", ".yaml", ".yml", ".md")):
+        return True
+    return False
+
+# Gov API (18002) JSON/binary routes — must not hit Next or static www.
+_GOV_API_PREFIXES = (
+    "/tle",
+    "/connectors",
+    "/evidence/",
 )
 
 
@@ -59,6 +78,8 @@ def _gov_api_route(path: str, method: str, headers: dict[str, str]) -> bool:
         if "text/html" in accept and "application/json" not in accept:
             return False
         return True
+    if path in _GOV_API_PREFIXES or any(path.startswith(p) for p in _GOV_API_PREFIXES):
+        return True
     return False
 
 
@@ -72,7 +93,9 @@ def _proxy_target(path: str, method: str = "GET", headers: dict[str, str] | None
         return PLATFORM
     if any(path.startswith(p) for p in PLATFORM_PREFIXES):
         return PLATFORM
-    if path in ("/evaluate", "/audit") or any(path.startswith(p) for p in NEXT_PREFIXES):
+    if path in ("/evaluate", "/audit") or _is_next_trust_ledger(path):
+        return NEXT
+    if any(path.startswith(p) for p in NEXT_PREFIXES):
         return NEXT
     if path == "/" and os.environ.get("PROXY_ROOT_TO_NEXT") == "1":
         return NEXT
@@ -170,6 +193,7 @@ def main() -> None:
     print(f"  website:  http://localhost:{PUBLIC_PORT}/", flush=True)
     print(f"  console:  http://localhost:{PUBLIC_PORT}/console", flush=True)
     print(f"  dashboard: http://localhost:{PUBLIC_PORT}/cognitive-dashboard", flush=True)
+    print(f"  workspace: http://localhost:{PUBLIC_PORT}/workspace", flush=True)
     print("Cursor: forward ONLY port", PUBLIC_PORT, flush=True)
     server.serve_forever()
 
