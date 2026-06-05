@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.noetfield.com/evidence.schema.json",
+  "title": "Noetfield Evidence Object",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "evidence_id",
+    "source",
+    "title",
+    "hash",
+    "ingested_at",
+    "ingest_mode"
+  ],
+  "properties": {
+    "evidence_id": { "type": "string", "pattern": "^EV-[A-Z0-9-]+$" },
+    "tenant_id": { "type": "string", "format": "uuid" },
+    "connector_id": { "type": "string" },
+    "source": {
+      "type": "string",
+      "enum": ["Purview", "EntraID", "AuditLog", "SharePoint", "Endpoint", "SaaS", "Manual"]
+    },
+    "title": { "type": "string" },
+    "hash": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+    "ingested_at": { "type": "string", "format": "date-time" },
+    "sensitivity": {
+      "type": "string",
+      "enum": ["Public", "Internal", "Confidential", "HighlyConfidential"]
+    },
+    "retention_policy": { "type": "string" },
+    "storage_ref": { "type": "string", "description": "Blob or external reference — no raw PII in DB" },
+    "ingest_mode": {
+      "type": "string",
+      "enum": ["metadata_only", "full_capture"],
+      "default": "metadata_only"
+    },
+    "link": { "type": "string", "format": "uri" },
+    "metadata": { "type": "object" }
+  }
+}

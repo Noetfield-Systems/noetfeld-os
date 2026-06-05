@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.noetfield.com/control.schema.json",
+  "title": "Noetfield Control",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["control_id", "title", "domain", "severity", "evaluate_reason_map"],
+  "properties": {
+    "control_id": { "type": "string", "pattern": "^COP-[A-Z0-9-]+$" },
+    "title": { "type": "string" },
+    "domain": {
+      "type": "string",
+      "enum": [
+        "copilot_oversharing",
+        "evidence_retention",
+        "rbac",
+        "agent_tools",
+        "rag_verification"
+      ]
+    },
+    "severity": {
+      "type": "string",
+      "enum": ["low", "medium", "high", "critical"]
+    },
+    "description": { "type": "string" },
+    "test_procedure_ref": { "type": "string" },
+    "evaluate_reason_map": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Substrings matched against evaluate reason[] when pack is bound"
+    },
+    "evidence_types": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "hitl_required": { "type": "boolean", "default": false },
+    "metadata": { "type": "object" }
+  }
+}

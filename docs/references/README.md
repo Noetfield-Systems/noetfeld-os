@@ -1,29 +1,22 @@
 # External governance references (agent index)
 
-**Status:** LOCKED index · Update only with ASF + product signoff when adding new reference books.
+**Canonical path:** `docs/references/` (plural) — GitHub + Cursor Cloud  
+**Processor:** `[NF-LOCAL-REPO-AGENT]` blueprints · `[NF-CLOUD-AGENT]` read-order wiring
 
 | Book | Path | Use when |
 |------|------|----------|
-| **Governance sources** | [GOVERNANCE_SOURCES_HANDBOOK_LOCKED_v1.md](./GOVERNANCE_SOURCES_HANDBOOK_LOCKED_v1.md) | Frameworks, Copilot/Purview, SOC 2, FFIEC, EU AI Act, NIST, ISO 42001 |
-| **Drift detection** | [GOVERNANCE_DRIFT_DETECTION_SOURCES_LOCKED_v1.md](./GOVERNANCE_DRIFT_DETECTION_SOURCES_LOCKED_v1.md) | Policy/config/model/data/semantic drift, continuous monitoring, post-market surveillance |
-| **Drift blueprints (hub)** | [GOVERNANCE_DRIFT_BLUEPRINTS_INDEX_LOCKED_v1.md](./GOVERNANCE_DRIFT_BLUEPRINTS_INDEX_LOCKED_v1.md) | Architecture supplements — defers to sources + TLE mandate (`NF-LOCAL-REPO-AGENT`) |
+| **Governance sources** | [GOVERNANCE_SOURCES_HANDBOOK_LOCKED_v1.md](./GOVERNANCE_SOURCES_HANDBOOK_LOCKED_v1.md) | Frameworks, Copilot/Purview, SOC 2, NIST, ISO 42001 |
+| **Drift detection** | [GOVERNANCE_DRIFT_DETECTION_SOURCES_LOCKED_v1.md](./GOVERNANCE_DRIFT_DETECTION_SOURCES_LOCKED_v1.md) | Taxonomy boss — policy/model/semantic drift |
+| **Drift blueprints (hub)** | [GOVERNANCE_DRIFT_BLUEPRINTS_INDEX_LOCKED_v1.md](./GOVERNANCE_DRIFT_BLUEPRINTS_INDEX_LOCKED_v1.md) | 2026 architecture supplements (`NF-LOCAL-REPO-AGENT`) |
+| **Drift engine** | [GOVERNANCE_DRIFT_ENGINE_BLUEPRINT_LOCKED_v1.md](./GOVERNANCE_DRIFT_ENGINE_BLUEPRINT_LOCKED_v1.md) | Temporal loop — Trust Brief narrative |
+| **TLE for drift** | [TRUST_LEDGER_FOR_DRIFT_BLUEPRINT_LOCKED_v1.md](./TRUST_LEDGER_FOR_DRIFT_BLUEPRINT_LOCKED_v1.md) | TLE v1.3 extension — not second ledger |
+| **LLM drift** | [LLM_DRIFT_DETECTION_ARCHITECTURE_LOCKED_v1.md](./LLM_DRIFT_DETECTION_ARCHITECTURE_LOCKED_v1.md) | Copilot/RAG appendix — cite and record |
+| **Enterprise framework** | [ENTERPRISE_GOVERNANCE_DRIFT_FRAMEWORK_LOCKED_v1.md](./ENTERPRISE_GOVERNANCE_DRIFT_FRAMEWORK_LOCKED_v1.md) | Roles, cadence, GTM honesty |
 
-**Blueprint supplements** (read via hub after push): engine · TLE-for-drift · LLM · enterprise framework.
+**Also present (local book variants):** `GOVERNANCE_SOURCES_BOOK_v1.md`, `GOVERNANCE_DRIFT_DETECTION_SOURCES_v1.md` — prefer `*_LOCKED_v1.md` on conflict.
 
-**Cloud read order:** [docs/ops/NOETFIELD_DRIFT_BLUEPRINTS_CLOUD_READ_ORDER_LOCKED_v1.md](../ops/NOETFIELD_DRIFT_BLUEPRINTS_CLOUD_READ_ORDER_LOCKED_v1.md) (`NF-CLOUD-AGENT`).
+**Cloud read order:** [docs/ops/NOETFIELD_DRIFT_BLUEPRINTS_CLOUD_READ_ORDER_LOCKED_v1.md](../ops/NOETFIELD_DRIFT_BLUEPRINTS_CLOUD_READ_ORDER_LOCKED_v1.md)
 
-**Reliability rule:** Prefer **Tier 1** (official law/standards/government) and **Tier 2** (vendor primary docs). Tier 3–4 = orientation only.
+**Product mandate:** [docs/spec/TRUST_LEDGER_PRODUCT_BLUEPRINT_v1.2_LOCKED.md](../spec/TRUST_LEDGER_PRODUCT_BLUEPRINT_v1.2_LOCKED.md)
 
-**Related in-repo:**
-
-| Topic | Path |
-|-------|------|
-| Agent read order | [docs/ops/AGENT_READ_LINKS_LOCKED_v1.md](../ops/AGENT_READ_LINKS_LOCKED_v1.md) |
-| Evidence contract | [docs/diligence/EVIDENCE_INTAKE_CONTRACT_v1.md](../diligence/EVIDENCE_INTAKE_CONTRACT_v1.md) |
-| Connectors controls | [docs/diligence/CONNECTORS_CONTROLS_v1.md](../diligence/CONNECTORS_CONTROLS_v1.md) |
-| Trust Ledger blueprint | [docs/spec/TRUST_LEDGER_PRODUCT_BLUEPRINT_v1.2_LOCKED.md](../spec/TRUST_LEDGER_PRODUCT_BLUEPRINT_v1.2_LOCKED.md) |
-| TLE schema | [docs/spec/schemas/tle-v1.schema.yaml](../spec/schemas/tle-v1.schema.yaml) |
-
-**Filename policy:** New reference books use `*_LOCKED_v1.md` suffix. Do not rename locked files without founder approval.
-
-**Maintenance:** Bump `Last reviewed` in each book; add changelog section. Regenerate links if primary URLs move (prefer DOI / standards body canonical URLs).
+**Rule:** Blueprints cite and defer to taxonomy + product mandate. Prefer Tier 1–2 sources in buyer copy.

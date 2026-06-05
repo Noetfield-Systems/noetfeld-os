@@ -1,0 +1,26 @@
+[
+  {
+    "risk_id": "RISK-COP-001",
+    "title": "Uncontrolled Copilot oversharing",
+    "description": "Sensitive data exposed via Copilot prompts or broad SharePoint scope.",
+    "likelihood": "possible",
+    "impact": "major",
+    "inherent_score": 65,
+    "residual_score": 40,
+    "linked_controls": ["COP-DLP-001", "COP-SCOPE-002", "COP-PII-003"],
+    "owner": "compliance_owner",
+    "status": "mitigating"
+  },
+  {
+    "risk_id": "RISK-COP-002",
+    "title": "Non-auditable governance decisions",
+    "description": "Evaluate outcomes without tenant-scoped immutable ledger.",
+    "likelihood": "unlikely",
+    "impact": "moderate",
+    "inherent_score": 45,
+    "residual_score": 20,
+    "linked_controls": ["COP-AUDIT-004", "COP-EXPORT-005"],
+    "owner": "governance_admin",
+    "status": "open"
+  }
+]

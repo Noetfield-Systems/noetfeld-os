@@ -1,0 +1,41 @@
+{
+  "workflow_id": "copilot-quickscan-v1",
+  "workflow_type": "copilot_quickscan",
+  "version": "1.0.0",
+  "description": "Signal intake → evaluate → pending_review — no payment steps",
+  "sla_hours": 48,
+  "states": [
+    { "id": "draft", "label": "Draft" },
+    { "id": "pending_review", "label": "Pending review" },
+    { "id": "approved", "label": "Approved" },
+    { "id": "completed", "label": "Completed" },
+    { "id": "cancelled", "label": "Cancelled" }
+  ],
+  "transitions": [
+    { "from": "draft", "to": "pending_review", "trigger": "evaluate_submitted" },
+    { "from": "pending_review", "to": "approved", "trigger": "human_signoff", "requires": ["rid", "compliance_owner"] },
+    { "from": "approved", "to": "completed", "trigger": "audit_events_written" },
+    { "from": "pending_review", "to": "cancelled", "trigger": "deny_or_withdraw" }
+  ],
+  "steps": [
+    {
+      "step_id": "intake",
+      "action": "ingest_signal",
+      "vector": "copilot-governance",
+      "outputs": ["signal_id"]
+    },
+    {
+      "step_id": "evaluate",
+      "action": "governance.evaluate",
+      "inputs": ["actor", "action", "context", "metadata"],
+      "outputs": ["rid", "decision", "risk_score"]
+    },
+    {
+      "step_id": "ledger",
+      "action": "audit_events.append",
+      "inputs": ["rid", "tenant_id"],
+      "guard": "verification_status != unverified"
+    }
+  ],
+  "evidence_requirements": ["quickscan_questionnaire", "m365_tenant_id"]
+}

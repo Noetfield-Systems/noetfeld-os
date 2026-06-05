@@ -1,0 +1,20 @@
+{
+  "policy_id": "evidence-retention-v1",
+  "version": "1.0.0",
+  "title": "Governance Evidence Retention — Copilot Pilot",
+  "description": "Minimum retention and export requirements for evaluate RIDs, audit_events, and readiness signoffs.",
+  "tenant_scope": "pilot",
+  "pack_type": "copilot-governance",
+  "controls": [
+    "COP-AUDIT-004",
+    "COP-EXPORT-005"
+  ],
+  "evidence_requirements": [
+    "audit_export_bundle_json",
+    "rid_lineage_register",
+    "human_signoff_attestation"
+  ],
+  "effective_from": "2026-06-01",
+  "status": "active",
+  "metadata": { "retention_days": 2555, "immutable": true }
+}

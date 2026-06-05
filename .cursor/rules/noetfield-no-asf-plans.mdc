@@ -1,0 +1,24 @@
+---
+description: When user says "plan with no ASF", use os/plans library (1000 items) and agent-owned closeout
+globs:
+  - os/plans/**
+  - os/plan.json
+  - os/SHIP_NOW.md
+alwaysApply: true
+---
+
+# No ASF planning
+
+When the user asks for a **plan with no ASF** (or "no ASF"):
+
+1. Read `os/plans/README.md` and `os/plans/REGISTRY.json` (or `REGISTRY.md`).
+2. Do **not** delegate to ASF for commit, push, ingest, or SourceA edits.
+3. Pick backlog plans: prefer **T0** then **T1**, earlier **phase-*`, aligned with Trust Ledger / Copilot lane A.
+4. Execute: verify → `reports/cursor-reply-latest.txt` (with `reported_at`) → `SinaPromptOS/scripts/ingest-cursor-reply.sh noetfield` → `scripts/sync-sourceA-desktop.sh` → git commit on `cursor/bank-grade-fullstack-37f0`.
+5. **Update** the implemented plan file: set `status: done` in front matter; keep the file (do not delete).
+
+Regenerate library: `python3 scripts/generate-future-plans.py`.
+
+Immediate queue remains `os/plan.json` `next_tasks` + `os/SHIP_NOW.md`.
+
+**GTM / buyer citations:** `docs/strategy/NOETFIELD_GTM_60_DAY_LOCKED_v1.md`, `docs/reference/GOVERNANCE_SOURCES_BOOK_v1.md`, `docs/reference/GOVERNANCE_DRIFT_DETECTION_SOURCES_v1.md`.

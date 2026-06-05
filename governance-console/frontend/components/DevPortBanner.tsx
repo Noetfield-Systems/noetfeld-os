@@ -2,51 +2,87 @@
 
 import { useEffect, useState } from "react";
 
-const DEFAULT_WEB_PORT = process.env.NEXT_PUBLIC_WEB_PORT ?? "13000";
 const DEFAULT_PLATFORM_PORT = process.env.NEXT_PUBLIC_PLATFORM_CONSOLE_PORT ?? "8001";
-const apiEnv = process.env.NEXT_PUBLIC_API_URL ?? `http://127.0.0.1:18002`;
 
 export function DevPortBanner() {
-  const [web, setWeb] = useState<string | null>(null);
+  const [urls, setUrls] = useState<{
+    dashboard: string;
+    console: string;
+    unified: string;
+  } | null>(null);
+  const [open, setOpen] = useState(true);
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      setWeb(`${window.location.origin}/cognitive-dashboard`);
-    }
+    if (typeof window === "undefined") return;
+    const port = window.location.port || "13080";
+    const origin = window.location.origin;
+    setUrls({
+      dashboard: `${origin}/cognitive-dashboard`,
+      console:
+        port === "13080"
+          ? `${origin}/console`
+          : `http://localhost:${DEFAULT_PLATFORM_PORT}/console`,
+      unified: port === "13080" ? origin : `http://localhost:13080`,
+    });
   }, []);
 
   if (process.env.NODE_ENV === "production") {
     return null;
   }
 
-  const port =
-    DEFAULT_WEB_PORT || (typeof window !== "undefined" ? window.location.port : "13000");
-  const pageUrl = web ?? `http://localhost:${port}/cognitive-dashboard`;
-  const consoleUrl = `http://localhost:${DEFAULT_PLATFORM_PORT}/console`;
+  if (!open) {
+    return (
+      <button
+        type="button"
+        onClick={() => setOpen(true)}
+        className="mb-6 text-xs text-accent underline"
+      >
+        Show local dev URLs
+      </button>
+    );
+  }
 
   return (
     <div
-      className="mb-6 rounded-lg border border-accent/30 bg-accent/10 px-4 py-3 font-mono text-xs text-white/90"
+      className="nf-card mb-8 border-accent/25 bg-accent/5 px-4 py-3 font-mono text-xs text-white/90"
       role="status"
       aria-live="polite"
     >
-      <p className="text-[10px] uppercase tracking-widest text-accent">Local dev</p>
-      <p className="mt-1">
-        <span className="text-muted">Dashboard: </span>
-        <a className="text-accent underline" href={pageUrl}>
-          {pageUrl}
-        </a>
-      </p>
-      <p className="mt-1">
-        <span className="text-muted">Console: </span>
-        <a className="text-accent underline" href={consoleUrl}>
-          {consoleUrl}
-        </a>
-      </p>
-      <p className="mt-1">
-        <span className="text-muted">Gov API: </span>
-        {apiEnv}
-      </p>
+      <div className="flex items-start justify-between gap-2">
+        <p className="nf-eyebrow">Local dev</p>
+        <button
+          type="button"
+          onClick={() => setOpen(false)}
+          className="text-muted-2 hover:text-white"
+          aria-label="Dismiss"
+        >
+          ×
+        </button>
+      </div>
+      {urls ? (
+        <ul className="mt-2 space-y-1">
+          <li>
+            <span className="text-muted-2">Unified: </span>
+            <a className="text-accent underline" href={urls.unified}>
+              {urls.unified}
+            </a>
+          </li>
+          <li>
+            <span className="text-muted-2">Dashboard: </span>
+            <a className="text-accent underline" href={urls.dashboard}>
+              {urls.dashboard}
+            </a>
+          </li>
+          <li>
+            <span className="text-muted-2">Console: </span>
+            <a className="text-accent underline" href={urls.console}>
+              {urls.console}
+            </a>
+          </li>
+        </ul>
+      ) : (
+        <p className="mt-2 text-muted">Loading URLs…</p>
+      )}
     </div>
   );
 }

@@ -1,25 +1,48 @@
-# SHIP NOW — Noetfield (canonical)
+# SHIP NOW — Noetfield
 
-**Plane:** DELIVERY · **Authority:** ASF
+**Ship rule:** `os/plan.json` `next_tasks` — agent-owned (no ASF). Ingest required after VERIFY.
 
-## Two different things
+## Active queue (`next_tasks`)
 
-| What it is | Blocks shipping? |
-|------------|------------------|
-| **Ingest** — send answer to system (YAML + reports / `noetfield-latest.txt`) | **No** — required reporting after you ship |
-| **Waiting for the next order** — stop until Prompt OS / M8 / dispatch sends another prompt | **Yes** — ASF said not to do this |
+Empty — Wave 040–042 shipped. Pick next from `os/plans/REGISTRY.json` or founder order.
 
-## Rules
+## Shipped waves
 
-1. Ship from **this repo’s plan** immediately: [plan.json](./plan.json) · [../docs/spec/SPRINT_BACKLOG_WEEKS_0-8.md](../docs/spec/SPRINT_BACKLOG_WEEKS_0-8.md)
-2. Do **not** idle until a new Prompt OS order arrives.
-3. **Do** ingest every completed session (YAML with `reported_at`).
-4. Do **not** edit Sina Prompt OS code.
+| Wave | IDs | Highlights |
+|------|-----|------------|
+| 040–042 | Customer acquisition | design partner SOW, copilot hub, homepage CTA |
+| 037–039 | GTM demo polish | buyer pack, workspace confidence UX, `make verify-gtm` |
+| 034–036 | GTM Tier A | procurement zip, 5-min demo page, `make demo-url` |
+| 023–033 | pilot → alembic | Trust Ledger product waves |
+| **Locks** | GTM + sources book | `docs/strategy/NOETFIELD_GTM_60_DAY_LOCKED_v1.md`, `docs/reference/GOVERNANCE_SOURCES_BOOK_v1.md` |
 
-Full checklist: [../docs/SHIP_NOW.md](../docs/SHIP_NOW.md)
+## Agent references
+
+| Doc | Path |
+|-----|------|
+| Governance Sources Book | `docs/reference/GOVERNANCE_SOURCES_BOOK_v1.md` |
+| Governance Drift Detection | `docs/reference/GOVERNANCE_DRIFT_DETECTION_SOURCES_v1.md` |
+| GTM 60-day (CEO) | `docs/strategy/NOETFIELD_GTM_60_DAY_LOCKED_v1.md` |
 
 ## Verify
 
 ```bash
-make ship-verify
+make verify-gtm
 ```
+
+Or step-by-step:
+
+```bash
+make verify-local-dev && make verify-ui-e2e && make copilot-pilot-e2e
+```
+
+```bash
+make dev-local && make verify-local-dev && make tle-smoke && make copilot-pilot-e2e
+pytest governance-console/backend/tests/test_tle_flow.py -q
+cd governance-console/backend && alembic -c alembic.ini history
+```
+
+## NO ASF closeout
+
+1. Pick from `os/plans/` or repopulate `next_tasks`.
+2. `reports/cursor-reply-latest.txt` + ingest + sync + commit.

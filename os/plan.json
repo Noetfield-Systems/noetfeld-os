@@ -1,81 +1,434 @@
 {
   "repo": "noetfield",
-  "plane": "DELIVERY",
-  "status": "ship_now",
-  "authority": "Agent ship from os/plan.json — ingest after; no idle for Prompt OS order",
+  "plane": "DESIGN",
+  "status": "active",
+  "ship_mandate": "os/SHIP_NOW.md",
+  "ship_rule": "Ship from os/plan.json without waiting for next Prompt OS order; ingest = send answer to system (required); do not edit SinaPromptOS",
   "last_updated": "2026-06-04",
-  "primary_direction": "os/SHIP_NOW.md",
-  "ship_rule": {
-    "ingest": "Send completed answer to Sina Prompt OS (YAML + inbox). Required after ship. Does NOT block shipping.",
-    "do_not": "Stop and idle until the next Prompt OS / M8 / dispatch order arrives.",
-    "do_not_edit": "Sina Prompt OS codebase",
-    "ship_from": "os/plan.json, docs/ops/, os/sprint-trust-ledger-v1.2.md — ship immediately; do not idle for next order"
-  },
-  "locked_positioning": {
-    "headline": "AI Governance & Evidence layer for Copilot adoption",
-    "buyer_line": "We produce the audit trail your Copilot deployment will be asked for later.",
-    "mandate": "Every engagement must produce at least one signed Trust Ledger Entry (TLE v1).",
-    "blueprint": "docs/spec/TRUST_LEDGER_PRODUCT_BLUEPRINT_v1.2_LOCKED.md"
-  },
-  "active_sprint": "Week 3-6 P1",
-  "deferred_asf": [
-    "W02-6 — production DNS/TLS + deploy_platform_smoke (docs/WAVE0_SHIP_CHECKLIST.md)",
-    "W78-3 — live pilot engagement",
-    "SourceA sync + hub :13020"
-  ],
-  "plan_library": "docs/ops/plans/README.md",
-  "plan_no_asf_quick_pick": "docs/ops/plans/no-asf/QUICK_PICK.md",
-  "agent_next_tasks": [],
-  "next_tasks": [
+  "positioning_lock": "docs/strategy/NOETFIELD_TRUST_LEDGER_POSITIONING_LOCKED_v1.2.md",
+  "agent_context_lock": "docs/ops/NOETFIELD_AGENT_CONTEXT_AND_READ_ORDER_LOCKED_v1.md",
+  "sprint_backlog": "os/sprint-trust-ledger-v1.2.md",
+  "future_plans_library": "os/plans/REGISTRY.json",
+  "locked_references": [
     {
-      "id": "ship-p0-merge-001",
-      "title": "Merge bank-grade branch to main and run ship-verify",
-      "status": "done",
-      "priority": "P0",
-      "verify": "make ship-verify"
+      "id": "agent-read-links-v1",
+      "title": "Agent read links — SourceA index + hub tabs + per-repo notices",
+      "path": "docs/ops/AGENT_READ_LINKS_LOCKED_v1.md",
+      "locked_at": "2026-06-04",
+      "mirror": "ops/private/sourceA/founder/repo-agent-notices/AGENT_READ_LINKS_INDEX.md"
     },
     {
-      "id": "ship-p0-gtm-002",
-      "title": "Copilot positioning live on www + Trust Ledger + procurement contract",
-      "status": "done",
-      "priority": "P0"
+      "id": "agent-context-v1",
+      "title": "Agent context & read order — SourceA + Noetfield + cloud vs local",
+      "path": "docs/ops/NOETFIELD_AGENT_CONTEXT_AND_READ_ORDER_LOCKED_v1.md",
+      "locked_at": "2026-06-04",
+      "mandate": "Every agent reads before implement; ingest reports after VERIFY"
     },
     {
-      "id": "ship-p1-ledger-003",
-      "title": "Trust Ledger Core + Evidence Index APIs (agent-complete)",
-      "status": "done",
-      "priority": "P1",
-      "done_criteria": [
-        "Evidence ingest metadata-only",
-        "TLE draft + multi-approve + immutable write",
-        "Connectors register",
-        "List TLE/evidence",
-        "PDF export stub"
+      "id": "trust-ledger-positioning-v1.2",
+      "title": "Trust Ledger final positioning — Copilot governance & evidence layer",
+      "path": "docs/strategy/NOETFIELD_TRUST_LEDGER_POSITIONING_LOCKED_v1.2.md",
+      "locked_at": "2026-06-03",
+      "mandate": "Every engagement produces at least one signed TLE v1"
+    },
+    {
+      "id": "gtm-60-day-v1",
+      "title": "GTM & CEO 60-day focus — one customer, demo, category",
+      "path": "docs/strategy/NOETFIELD_GTM_60_DAY_LOCKED_v1.md",
+      "locked_at": "2026-06-04",
+      "mandate": "70% customers / 20% demo / 10% code; bottleneck is validation not features"
+    },
+    {
+      "id": "governance-sources-book-v1",
+      "title": "Governance Sources Book v1 — citable frameworks for pilots",
+      "path": "docs/reference/GOVERNANCE_SOURCES_BOOK_v1.md",
+      "locked_at": "2026-06-04",
+      "mandate": "Agents cite primary sources (NIST, OECD, ISO, EU, Microsoft, OWASP) in buyer materials"
+    },
+    {
+      "id": "governance-drift-sources-v1",
+      "title": "Governance Drift Detection Sources v1 — monitoring & drift primary links",
+      "path": "docs/reference/GOVERNANCE_DRIFT_DETECTION_SOURCES_v1.md",
+      "locked_at": "2026-06-04",
+      "mandate": "Agents cite drift/monitoring sources (NIST Measure/Manage, EU Art 72, Purview, OPA, CA-7) when selling continuous governance"
+    },
+    {
+      "id": "copilot-sme-system-design-v1",
+      "title": "Noetfield Copilot for SMEs — full system design (5 domains + 90-day roadmap)",
+      "path": "docs/strategy/NOETFIELD_COPILOT_SME_SYSTEM_DESIGN_LOCKED_v1.md",
+      "locked_at": "2026-06-03",
+      "noetfield_lane_a": [
+        "compliance_risk_governance",
+        "ai_automation_agents",
+        "knowledge_documents_decisions",
+        "operations_workflow_lite",
+        "trust_ledger_bridge"
       ],
-      "evidence": [
-        "services/governance/noetfield_governance/trust_ledger.py",
-        "infrastructure/supabase/migrations/0006_trust_ledger_tle.sql",
-        "infrastructure/supabase/migrations/0007_trust_ledger_connectors.sql",
-        "tests/unit/test_trust_ledger_v1.py",
-        ".github/workflows/trust-ledger-ci.yml",
-        "scripts/tle-smoke.sh --api"
-      ],
-      "deferred_ui": [
-        "Workspace UI W56-2/W56-3 full generator",
-        "Connector live sync to Purview/Entra"
+      "deferred_lane_c": [
+        "finance_ledger_payments",
+        "member_portal_execution"
       ]
     }
   ],
-  "ingest_note": "Finish tasks → send reply to Sina Prompt OS (ingest). reported_at required in YAML when ingesting.",
-  "deferred_separate_repos": [
-    "MonoRepo Desktop path sync",
-    "777 Foundation deploy"
+  "next_tasks": [],
+  "lane_a_sprint_map": [
+    "nf-trustfield-conflicts-003",
+    "nf-phase1b-scaffold-004",
+    "nf-audit-events-migration-005",
+    "nf-policy-schema-copilot-006",
+    "nf-workflow-copilot-dsl-007",
+    "nf-agent-manifest-v1-008",
+    "nf-rag-design-010",
+    "nf-copilot-pilot-runbook-009"
   ],
-  "completed_foundation": [
-    "nf-mvp-req-extract-001",
-    "nf-trust-ledger-blueprint-lock-002",
-    "nf-agent-reply-reported-at-003",
-    "Local dev stack 13080 + proxy evaluate fix",
-    "no-asf-p1-connectors-list-approve-export"
+  "updated_at": "2026-06-02",
+  "done": [
+    {
+      "id": "nf-mvp-req-extract-001",
+      "title": "Extract top 5 MVP requirements from existing noetfield markdown into os/plan.json done criteria",
+      "status": "done",
+      "done_criteria": [
+        "MVP requirement #1: Pre-execution governance evaluation must return a clear allow/deny/review decision before external execution (sources: PRODUCT_TRUTH.md, PRODUCT_BRIEF.md).",
+        "MVP requirement #2: Every evaluated intent must produce immutable audit-ready traceability with RID and exportable compliance evidence (sources: PRODUCT_TRUTH.md, docs/strategy/noetfield-future-path.md).",
+        "MVP requirement #3: Product scope must explicitly exclude payment initiation, custody, settlement, routing, FX, and money transmission claims (sources: PRODUCT_TRUTH.md, docs/strategy/noetfield-future-path.md).",
+        "MVP requirement #4: Pilot surface must support regulated-organization workflows (bank/copilot readiness) without execution rights, emphasizing policy checks and reviewability (source: docs/strategy/noetfield-future-path.md).",
+        "MVP requirement #5: Boundary integrity must be enforced in product narrative and verification, including zero TrustField/VIRLUX scope mixing in Noetfield delivery (sources: docs/strategy/noetfield-future-path.md, PROJECT_BOUNDARIES_LOCKED.md)."
+      ],
+      "evidence": [
+        "PRODUCT_TRUTH.md",
+        "PRODUCT_BRIEF.md",
+        "docs/strategy/noetfield-future-path.md",
+        "PROJECT_BOUNDARIES_LOCKED.md"
+      ]
+    },
+    {
+      "id": "nf-tenant-audit-schema-002",
+      "title": "Draft tenant + append-only audit schema outline (markdown only — no .py until ASF activates)",
+      "status": "done",
+      "evidence": [
+        "docs/spec/tenant-append-only-audit-schema-outline.md"
+      ]
+    },
+    {
+      "id": "nf-trustfield-conflicts-003",
+      "title": "List conflicts between noetfield spec and TrustField DELIVERY (corpus vs product)",
+      "status": "done",
+      "evidence": [
+        "docs/spec/trustfield-noetfield-conflict-matrix.md"
+      ]
+    },
+    {
+      "id": "nf-phase1b-scaffold-004",
+      "title": "Prepare Phase 1B scaffold checklist for standalone API (not :8000 route)",
+      "status": "done",
+      "evidence": [
+        "docs/spec/phase-1b-activation-checklist.md"
+      ]
+    },
+    {
+      "id": "nf-audit-events-migration-005",
+      "title": "Phase 1 Trust Ledger: tenants + audit_events migration, tenant header, export",
+      "status": "done",
+      "evidence": [
+        "governance-console/backend/db/models.py",
+        "governance-console/backend/routes/evaluate.py",
+        "governance-console/backend/routes/audit.py",
+        "scripts/verify-local-dev.sh"
+      ]
+    },
+    {
+      "id": "nf-policy-schema-copilot-006",
+      "title": "Phase 2: policy/control/risk JSON schemas + Copilot control catalog",
+      "status": "done",
+      "evidence": [
+        "packages/schemas/policy.schema.json",
+        "packages/schemas/control.schema.json",
+        "packages/schemas/risk.schema.json",
+        "docs/spec/copilot-control-catalog.md",
+        "scripts/validate-compliance-schemas.sh"
+      ]
+    },
+    {
+      "id": "nf-workflow-copilot-dsl-007",
+      "title": "Phase 3: Copilot QuickScan/Readiness workflow DSL + workflow service + M365 design",
+      "status": "done",
+      "evidence": [
+        "docs/spec/workflows/CopilotQuickScan.workflow.json",
+        "docs/spec/workflows/CopilotReadiness.workflow.json",
+        "services/workflow/noetfield_workflow/copilot_workflows.py",
+        "docs/spec/connectors-m365-v1.md"
+      ]
+    },
+    {
+      "id": "nf-agent-manifest-v1-008",
+      "title": "Phase 4: agent manifests, Prompt Studio templates, copilot-governance audit persistence",
+      "status": "done",
+      "evidence": [
+        "packages/schemas/agent-manifest.schema.json",
+        "docs/spec/prompt-studio/",
+        "services/copilot-governance/noetfield_copilot_governance/agent_run.py"
+      ]
+    },
+    {
+      "id": "nf-rag-design-010",
+      "title": "Phase 5: RAG answer schema + knowledge ingestion design",
+      "status": "done",
+      "evidence": [
+        "packages/schemas/rag-answer.schema.json",
+        "docs/spec/knowledge-ingestion-v1.md"
+      ]
+    },
+    {
+      "id": "nf-copilot-pilot-runbook-009",
+      "title": "Phase 6: Copilot Readiness pilot runbook + design-partner E2E",
+      "status": "done",
+      "evidence": [
+        "docs/spec/copilot-readiness-pilot-runbook.md",
+        "docs/spec/rbac-approval-matrix.md",
+        "scripts/copilot-quickscan-e2e.sh"
+      ]
+    },
+    {
+      "id": "nf-tle-positioning-lock-011",
+      "title": "Lock Trust Ledger v1.2 positioning + 60-day sprint backlog",
+      "status": "done",
+      "evidence": [
+        "docs/strategy/NOETFIELD_TRUST_LEDGER_POSITIONING_LOCKED_v1.2.md",
+        "os/sprint-trust-ledger-v1.2.md",
+        "scripts/validate-tle-samples.py"
+      ]
+    },
+    {
+      "id": "nf-homepage-v12-012",
+      "title": "P0: Homepage v1.2 — hero buyer line, TLE CTA",
+      "status": "done",
+      "evidence": ["index.html"]
+    },
+    {
+      "id": "nf-tle-core-db-013",
+      "title": "P1: Trust Ledger Core — tle_entries + digest",
+      "status": "done",
+      "evidence": ["governance-console/backend/db/models.py"]
+    },
+    {
+      "id": "nf-tle-api-014",
+      "title": "P1: TLE + evidence + connector APIs",
+      "status": "done",
+      "evidence": ["governance-console/backend/routes/tle.py", "docs/spec/openapi/tle-v1.openapi.yaml"]
+    },
+    {
+      "id": "nf-trust-ledger-workspace-015",
+      "title": "P1: Trust Ledger Workspace UI",
+      "status": "done",
+      "evidence": ["governance-console/frontend/app/workspace/"]
+    },
+    {
+      "id": "nf-tle-approval-export-016",
+      "title": "P1: Approval chain + board pack export + KMS stub",
+      "status": "done",
+      "evidence": ["governance-console/backend/services/tle_service.py", "governance-console/backend/routes/tle.py"]
+    },
+    {
+      "id": "nf-ship-sample-ledger-017",
+      "title": "SHIP: TLE v1 sample-report + YAML downloads",
+      "status": "done",
+      "evidence": ["trust-ledger/sample-report/index.html", "trust-ledger/sample-report/samples/"]
+    },
+    {
+      "id": "nf-ship-tle-smoke-018",
+      "title": "SHIP: scripts/tle-smoke.sh E2E",
+      "status": "done",
+      "evidence": ["scripts/tle-smoke.sh", "Makefile"]
+    },
+    {
+      "id": "nf-ship-m365-stub-019",
+      "title": "SHIP: M365 evidence stub script",
+      "status": "done",
+      "evidence": ["scripts/seed-m365-evidence-stub.sh"]
+    },
+    {
+      "id": "nf-ship-workspace-search-020",
+      "title": "SHIP: Workspace search/filter",
+      "status": "done",
+      "evidence": ["governance-console/frontend/app/workspace/page.tsx", "governance-console/backend/routes/tle.py"]
+    },
+    {
+      "id": "nf-ship-pilot-pack-021",
+      "title": "SHIP: Procurement pack from /copilot/",
+      "status": "done",
+      "evidence": ["copilot/procurement/index.html", "docs/copilot/PROCUREMENT_ONE_PAGER.md", "copilot/index.html"]
+    },
+    {
+      "id": "nf-ship-staging-path-022",
+      "title": "SHIP: Staging demo documentation",
+      "status": "done",
+      "evidence": ["docs/ops/STAGING_DEMO.md"]
+    },
+    {
+      "id": "nf-pilot-p1-9-023",
+      "title": "P0: Copilot pilot E2E script + checklist page",
+      "status": "done",
+      "evidence": ["scripts/copilot-pilot-e2e.sh", "copilot/pilot/index.html", "copilot/index.html"]
+    },
+    {
+      "id": "nf-pdf-board-pack-024",
+      "title": "P0: PDF board pack export",
+      "status": "done",
+      "evidence": [
+        "governance-console/backend/services/board_pack_pdf.py",
+        "governance-console/backend/routes/tle.py"
+      ]
+    },
+    {
+      "id": "nf-m365-oauth-025",
+      "title": "P1: M365 connector OAuth skeleton",
+      "status": "done",
+      "evidence": [
+        "governance-console/backend/routes/connectors.py",
+        "governance-console/backend/services/m365_oauth_stub.py",
+        "governance-console/frontend/app/workspace/connectors/page.tsx",
+        "docs/LOCAL_DEV.md"
+      ]
+    },
+    {
+      "id": "nf-workspace-rbac-026",
+      "title": "P1: Workspace RBAC viewer vs approver",
+      "status": "done",
+      "evidence": [
+        "governance-console/backend/services/rbac.py",
+        "governance-console/frontend/lib/api.ts",
+        "governance-console/backend/tests/test_tle_flow.py"
+      ]
+    },
+    {
+      "id": "nf-staging-deploy-027",
+      "title": "P2: Staging demo path + staging-smoke.sh",
+      "status": "done",
+      "evidence": ["docs/ops/STAGING_DEMO.md", "scripts/staging-smoke.sh"]
+    },
+    {
+      "id": "nf-m365-connect-e2e-028",
+      "title": "P0: M365 connect → auto evidence ingest",
+      "status": "done",
+      "evidence": [
+        "governance-console/backend/services/m365_connector_sync.py",
+        "governance-console/backend/routes/connectors.py",
+        "scripts/copilot-pilot-e2e.sh"
+      ]
+    },
+    {
+      "id": "nf-pdf-board-pack-v2-029",
+      "title": "P0: Print-grade PDF board pack v2",
+      "status": "done",
+      "evidence": ["governance-console/backend/services/board_pack_pdf.py"]
+    },
+    {
+      "id": "nf-rbac-chain-enforce-030",
+      "title": "P1: Sequential approval chain enforcement",
+      "status": "done",
+      "evidence": [
+        "governance-console/backend/services/tle_service.py",
+        "governance-console/backend/routes/tle.py"
+      ]
+    },
+    {
+      "id": "nf-kms-digest-v2-031",
+      "title": "P1: signature_block in board pack export",
+      "status": "done",
+      "evidence": [
+        "governance-console/backend/services/tle_service.py",
+        "docs/LOCAL_DEV.md"
+      ]
+    },
+    {
+      "id": "nf-staging-ci-smoke-032",
+      "title": "P2: make staging-smoke + PR checklist",
+      "status": "done",
+      "evidence": ["Makefile", "docs/ops/STAGING_DEMO.md"]
+    },
+    {
+      "id": "nf-phase1b-postgres-033",
+      "title": "P2: Postgres migrations doc + alembic skeleton",
+      "status": "done",
+      "evidence": [
+        "docs/spec/phase-1b-postgres-migrations.md",
+        "governance-console/backend/alembic/"
+      ]
+    },
+    {
+      "id": "nf-procurement-pack-zip-034",
+      "title": "P0: One-click procurement zip export",
+      "status": "done",
+      "evidence": [
+        "governance-console/backend/services/procurement_pack.py",
+        "scripts/procurement-pack-e2e.sh"
+      ]
+    },
+    {
+      "id": "nf-demo-page-confidence-035",
+      "title": "P0: 5-min demo page + PDF confidence cover",
+      "status": "done",
+      "evidence": [
+        "copilot/demo/index.html",
+        "governance-console/backend/services/board_pack_pdf.py"
+      ]
+    },
+    {
+      "id": "nf-public-demo-url-036",
+      "title": "P1: Public demo URL path (tunnel/staging smoke)",
+      "status": "done",
+      "evidence": [
+        "scripts/print-demo-url.sh",
+        "docs/ops/STAGING_DEMO.md"
+      ]
+    },
+    {
+      "id": "nf-procurement-buyer-pack-037",
+      "title": "P0: Procurement buyer page + one-pager",
+      "status": "done",
+      "evidence": [
+        "copilot/procurement/index.html",
+        "docs/copilot/PROCUREMENT_ONE_PAGER.md"
+      ]
+    },
+    {
+      "id": "nf-workspace-diligence-038",
+      "title": "P0: Workspace diligence UX",
+      "status": "done",
+      "evidence": [
+        "governance-console/frontend/app/workspace/page.tsx",
+        "governance-console/frontend/app/workspace/[tle_id]/page.tsx"
+      ]
+    },
+    {
+      "id": "nf-gtm-pre-demo-verify-039",
+      "title": "P1: make verify-gtm pre-demo bundle",
+      "status": "done",
+      "evidence": [
+        "scripts/verify-gtm.sh",
+        "docs/ops/STAGING_DEMO.md"
+      ]
+    },
+    {
+      "id": "nf-design-partner-sow-040",
+      "title": "P0: Design partner SOW outline + pilot program page",
+      "status": "done",
+      "evidence": [
+        "docs/copilot/DESIGN_PARTNER_SOW_OUTLINE.md",
+        "copilot/pilot/index.html"
+      ]
+    },
+    {
+      "id": "nf-copilot-hub-gtm-041",
+      "title": "P0: Copilot hub GTM messaging + demo-first links",
+      "status": "done",
+      "evidence": ["copilot/index.html"]
+    },
+    {
+      "id": "nf-homepage-design-partner-042",
+      "title": "P1: Homepage design-partner CTA + verify-ui-e2e",
+      "status": "done",
+      "evidence": ["index.html", "scripts/verify-ui-e2e.sh"]
+    }
   ]
 }

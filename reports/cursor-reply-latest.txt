@@ -1,0 +1,42 @@
+**Implemented** — Wave 040–042 (customer acquisition, NO ASF batch)
+
+## Tasks completed
+
+| ID | Deliverable |
+|----|-------------|
+| `nf-design-partner-sow-040` | `docs/copilot/DESIGN_PARTNER_SOW_OUTLINE.md`; pilot page design partner program + success signals |
+| `nf-copilot-hub-gtm-041` | `copilot/index.html` GTM one-liner hero, demo-first CTAs, fixed HTML structure |
+| `nf-homepage-design-partner-042` | Homepage primary CTA "Become a design partner"; trust strip; verify-ui-e2e homepage + copilot hub |
+
+Registry stubs marked `status: done`: `nf-future-0705`, `0706`, `0709`.
+
+## Verify
+
+```text
+make verify-gtm — passed
+```
+
+GTM note: CEO priority #1 — materials for first contracted design partner; no Tier B connector work.
+
+---
+
+```yaml
+schema_version: 1
+repo: noetfield
+task: "Wave 040-042 customer acquisition (design partner SOW, copilot hub, homepage CTA)"
+status: done
+verify_passed: true
+verify_command: "make verify-gtm"
+verify_output_summary: "verify-gtm passed — full E2E chain green including new homepage and copilot hub UI checks"
+blocked_reason: null
+next_action: "Founder outreach with DESIGN_PARTNER_SOW_OUTLINE; make dev-local-tunnel-bg && make demo-url for live demo"
+evidence_paths:
+  - docs/copilot/DESIGN_PARTNER_SOW_OUTLINE.md
+  - copilot/pilot/index.html
+  - copilot/index.html
+  - index.html
+  - scripts/verify-ui-e2e.sh
+  - os/plan.json
+reporter: cursor
+reported_at: "2026-06-05T13:09:17Z"
+```

@@ -42,9 +42,9 @@ verify-local-dev:
 	@chmod +x scripts/verify-local-dev.sh
 	./scripts/verify-local-dev.sh
 
-tle-smoke:
-	@chmod +x scripts/tle-smoke.sh
-	./scripts/tle-smoke.sh
+verify-ui-e2e:
+	@chmod +x scripts/verify-ui-e2e.sh
+	./scripts/verify-ui-e2e.sh
 
 plans-regen:
 	@python3 scripts/generate-plans-registry.py
@@ -52,6 +52,20 @@ plans-regen:
 plans-done:
 	@echo "Usage: python3 scripts/update-plan-status.py NF-PLAN-0001 --status done"
 
+demo-url:
+	@chmod +x scripts/print-demo-url.sh
+	./scripts/print-demo-url.sh
+
+procurement-pack-e2e:
+	@chmod +x scripts/procurement-pack-e2e.sh
+	./scripts/procurement-pack-e2e.sh
+
+# Pre-demo GTM bundle (Mac waves 034–042)
+verify-gtm:
+	@chmod +x scripts/verify-gtm.sh
+	./scripts/verify-gtm.sh
+
+# Merge/deploy readiness (cloud canonical — superset of verify-gtm checks)
 ship-verify:
 	@echo "=== ship-verify (Noetfield merge/deploy readiness) ==="
 	@test -f docs/SHIP_NOW.md
@@ -73,6 +87,34 @@ ship-verify:
 	@python3 scripts/verify_sitemap_committed.py 2>/dev/null || true
 	@python3 -m compileall -q packages services 2>/dev/null || true
 	@echo "ship-verify: OK"
+
+tle-smoke:
+	@chmod +x scripts/tle-smoke.sh scripts/seed-m365-evidence-stub.sh
+	./scripts/tle-smoke.sh
+
+copilot-pilot-e2e:
+	@chmod +x scripts/copilot-pilot-e2e.sh scripts/seed-m365-evidence-stub.sh
+	./scripts/copilot-pilot-e2e.sh
+
+staging-smoke:
+	@chmod +x scripts/staging-smoke.sh
+	./scripts/staging-smoke.sh
+
+seed-m365-evidence:
+	@chmod +x scripts/seed-m365-evidence-stub.sh
+	./scripts/seed-m365-evidence-stub.sh
+
+validate-compliance-schemas:
+	@chmod +x scripts/validate-compliance-schemas.sh
+	./scripts/validate-compliance-schemas.sh
+
+validate-tle-schemas:
+	@chmod +x scripts/validate-tle-schemas.sh
+	./scripts/validate-tle-schemas.sh
+
+copilot-quickscan-e2e:
+	@chmod +x scripts/copilot-quickscan-e2e.sh
+	./scripts/copilot-quickscan-e2e.sh
 
 dev-local-tunnel:
 	@chmod +x scripts/dev-local-tunnel.sh

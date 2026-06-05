@@ -1,13 +1,15 @@
-# Moved — use docs/references/
+# Reference library — moved to `docs/references/`
 
-**Agent tag:** `NF-CLOUD-AGENT` · **Doc trace:** `NF-CLOUD-REDIRECT-001`
+| Field | Value |
+|-------|--------|
+| **Agent tag** | `NF-CLOUD-AGENT` |
+| **Doc trace** | `NF-CLOUD-REDIRECT-001` |
+| **Updated** | 2026-06-06 |
 
-Drift blueprints and LOCKED reference books live under:
+**Canonical path:** [`../references/README.md`](../references/README.md)
 
-```text
-docs/references/
-```
+| Former | Canonical |
+|--------|-----------|
+| `docs/reference/*` | `docs/references/*` |
 
-Hub: [GOVERNANCE_DRIFT_BLUEPRINTS_INDEX_LOCKED_v1.md](../references/GOVERNANCE_DRIFT_BLUEPRINTS_INDEX_LOCKED_v1.md) (after local push)
-
-**Do not** add new LOCKED docs under `docs/reference/` (singular).
+Hub: [GOVERNANCE_DRIFT_BLUEPRINTS_INDEX_LOCKED_v1.md](../references/GOVERNANCE_DRIFT_BLUEPRINTS_INDEX_LOCKED_v1.md)

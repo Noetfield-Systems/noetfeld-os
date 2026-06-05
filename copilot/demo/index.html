@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8" />
+ <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+ <title>5-Minute Demo — Noetfield</title>
+ <link rel="stylesheet" href="/assets/noetfield-tokens.css" />
+ <link rel="stylesheet" href="/assets/noetfield-shell.css" />
+ <link rel="stylesheet" href="/assets/noetfield-components.css" />
+ <link rel="stylesheet" href="/assets/noetfield-institutional.css" />
+ <link rel="stylesheet" href="/assets/noetfield-sales.css" />
+ <script src="/assets/noetfield-shell.js" defer></script>
+</head>
+<body>
+ <div class="bg" aria-hidden="true"></div>
+ <header id="nfHeader"></header>
+ <main id="main" class="wrap nf-page">
+ <header class="nf-hero">
+ <p class="nf-eyebrow">GTM · 5-minute demo</p>
+ <h1>Board-ready Copilot governance in five minutes</h1>
+ <p class="nf-lead">
+ Noetfield is the AI Governance &amp; Evidence layer for Copilot adoption — evaluate operational intent,
+ index M365 metadata evidence, and produce signed Trust Ledger Entries your board and procurement can defend.
+ </p>
+ <p id="live-demo-url" class="nf-lead" style="margin-top:1rem;font-size:.95rem;color:var(--nf-muted,#8a8a9a)">
+ Shareable demo URL: run <code>make demo-url</code> after <code>make dev-local-tunnel-bg</code> (or set <code>NF_STAGING_URL</code>).
+ </p>
+ </header>
+
+ <section class="nf-section">
+ <h2>Demo script (locked narrative)</h2>
+ <ol>
+ <li><strong>Hook:</strong> Copilot adoption needs a board-ready decision record, not another chatbot.</li>
+ <li><strong>Evaluate</strong> operational intent → governance RID.
+ <a href="/cognitive-dashboard/">Open Governance Console</a> ·
+ <a href="/evaluate/">Evaluate page</a></li>
+ <li><strong>Connect</strong> M365 (or three evidence types) → Evidence Index.
+ <a href="/workspace/connectors/">M365 connectors</a></li>
+ <li><strong>Draft TLE</strong> → highlight <strong>confidence score</strong> and go/no-go decision.
+ <a href="/workspace/">Trust Ledger Workspace</a></li>
+ <li><strong>Approve</strong> sequential chain (CIO → Legal → Security).</li>
+ <li><strong>Export</strong> board pack PDF + procurement ZIP; mention audit JSON for diligence.
+ <a href="/trust-ledger/sample-report/">TLE samples</a></li>
+ </ol>
+ </section>
+
+ <section class="nf-section">
+ <div class="nf-cta-actions" style="display:flex;flex-wrap:wrap;gap:.75rem">
+ <a class="btn btn-primary" href="/cognitive-dashboard/">Start: Evaluate intent</a>
+ <a class="btn btn-secondary" href="/workspace/connectors/">Connect M365</a>
+ <a class="btn btn-secondary" href="/workspace/">Trust Ledger Workspace</a>
+ <a class="btn btn-secondary" href="/copilot/pilot/">Pilot checklist</a>
+ </div>
+ </section>
+ </main>
+ <footer id="nfFooter"></footer>
+ <script>
+ (function () {
+   var el = document.getElementById("live-demo-url");
+   var injected = "%%NF_PUBLIC_DEMO_URL%%";
+   if (el && injected && injected.indexOf("%%") === -1 && injected.indexOf("http") === 0) {
+     el.innerHTML = 'Live demo URL: <a href="' + injected + '/copilot/demo/">' + injected + '/copilot/demo/</a>';
+   }
+ })();
+ </script>
+</body>
+</html>
