@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8" />
+ <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+ <title>Noetfield — SMB AI Automation Operating Model</title>
+ <meta name="description" content="Operating model for AI automation services in construction, trades, and property management — consulting, repeatable patterns, and platform discovery." />
+ <meta name="robots" content="index,follow" />
+ <meta name="theme-color" content="#07070b" />
+ <link rel="canonical" href="https://www.noetfield.com/ai-automation/" />
+ <link rel="icon" href="/noetfield-favicon-512.png" type="image/png" />
+ <link rel="stylesheet" href="/assets/noetfield-tokens.css" />
+ <link rel="stylesheet" href="/assets/noetfield-shell.css" />
+ <link rel="stylesheet" href="/assets/noetfield-components.css" />
+ <link rel="stylesheet" href="/assets/noetfield-institutional.css" />
+ <link rel="stylesheet" href="/assets/noetfield-sales.css" />
+ <script src="/assets/noetfield-shell.js" defer></script>
+ <style>
+  .nf-ops-toc { display: grid; gap: .5rem; margin: 1.5rem 0 2rem; }
+  .nf-ops-toc a { color: var(--accent, #8ab4ff); text-decoration: none; font-size: .95rem; }
+  .nf-ops-toc a:hover { text-decoration: underline; }
+  .nf-ops-phase { margin: 2.5rem 0; padding-top: 1.5rem; border-top: 1px solid var(--line); }
+  .nf-ops-phase h2 { font-size: clamp(1.15rem, 3vw, 1.45rem); margin: 0 0 .75rem; }
+  .nf-ops-phase h3 { font-size: 1rem; margin: 1.25rem 0 .5rem; color: var(--text); }
+  .nf-ops-table { width: 100%; border-collapse: collapse; font-size: .88rem; margin: .75rem 0 1rem; }
+  .nf-ops-table th, .nf-ops-table td { border: 1px solid var(--line); padding: .5rem .65rem; text-align: left; vertical-align: top; }
+  .nf-ops-table th { background: rgba(255,255,255,.04); font-weight: 600; }
+  .nf-ops-table td { color: var(--muted); line-height: 1.5; }
+  .nf-ops-kpi { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: .75rem; margin: 1rem 0; }
+  .nf-ops-kpi div { padding: .75rem; border: 1px solid var(--line); border-radius: 6px; }
+  .nf-ops-kpi strong { display: block; font-size: 1.1rem; }
+  .nf-ops-kpi span { font-size: .8rem; color: var(--muted); }
+  .nf-ops-notice { padding: 1rem 1.25rem; border: 1px solid var(--line); border-radius: 8px; background: rgba(255,255,255,.03); margin: 1.25rem 0; font-size: .9rem; color: var(--muted); line-height: 1.6; }
+  .nf-ops-checklist { list-style: none; padding: 0; margin: .5rem 0; }
+  .nf-ops-checklist li { padding: .35rem 0 .35rem 1.5rem; position: relative; color: var(--muted); font-size: .9rem; }
+  .nf-ops-checklist li::before { content: "☐"; position: absolute; left: 0; color: var(--accent, #8ab4ff); }
+ </style>
+</head>
+<body>
+ <div class="bg" aria-hidden="true"></div>
+ <a class="skip" href="#main">Skip to content</a>
+ <header id="nfHeader"></header>
+ <main id="main" class="wrap nf-page nf-sales">
+ <header class="nf-hero">
+ <p class="nf-eyebrow">Operations design · SMB verticals</p>
+ <h1>AI Automation Company — Operating Model</h1>
+ <p class="lead">
+ Design and delivery system for underserved SMB industries — starting with <strong>Construction &amp; Trades</strong> and <strong>Property Management</strong>.
+ Generate consulting revenue, discover repeatable automation patterns, and convert winners into SaaS — with governance traceability at every deployment.
+ </p>
+ <div class="nf-cta-actions" style="margin-top:1.25rem;display:flex;flex-wrap:wrap;gap:.75rem">
+ <a class="btn btn-primary" href="mailto:operations@noetfield.com?subject=SMB%20AI%20Automation%20inquiry">Contact operations</a>
+ <a class="btn btn-secondary" href="/trust-brief/intake/">Request Governance Brief</a>
+ <a class="btn btn-secondary" href="/copilot/">Copilot governance (shipped)</a>
+ </div>
+ </header>
+
+ <div class="nf-ops-notice" role="note">
+ <strong>Scope (locked).</strong> Contract offerings today remain
+ <a href="/trust-brief/">Trust Brief</a>, <a href="/copilot/">Copilot Governance Pack</a>, and <a href="/bank-pilot/">Bank Pilot</a>.
+ This page is the <em>services &amp; platform discovery</em> operating model — not a public SKU list until founder sign-off.
+ <strong>TrustField Technologies</strong> is a separate company; Phase 8 describes its governance role for automation engagements, not Noetfield Copilot product scope.
+ </div>
+
+ <nav class="nf-ops-toc" aria-label="Phases">
+ <strong style="color:var(--text)">Eight phases</strong>
+ <a href="#phase-1">Phase 1 — Market</a>
+ <a href="#phase-2">Phase 2 — Offer design</a>
+ <a href="#phase-3">Phase 3 — Product discovery</a>
+ <a href="#phase-4">Phase 4 — Software roadmap</a>
+ <a href="#phase-5">Phase 5 — Technical stack</a>
+ <a href="#phase-6">Phase 6 — Sales engine</a>
+ <a href="#phase-7">Phase 7 — Delivery engine</a>
+ <a href="#phase-8">Phase 8 — TrustField governance layer</a>
+ </nav>
+
+ <!-- PHASE 1 -->
+ <section id="phase-1" class="nf-ops-phase">
+ <h2>Phase 1 — Market</h2>
+ <p>Mission: validate revenue paths in Vancouver + remote SMB verticals before product build.</p>
+
+ <h3>TAM (North America SMB ops automation)</h3>
+ <table class="nf-ops-table">
+ <thead><tr><th>Segment</th><th>Est. addressable firms</th><th>ACV potential</th><th>Entry wedge</th></tr></thead>
+ <tbody>
+ <tr><td>Construction &amp; trades (5–50 FTE)</td><td>~450k firms</td><td>$15k–$80k/yr services → $3k–$12k SaaS</td><td>Job costing, scheduling, invoice chase</td></tr>
+ <tr><td>Property management (residential)</td><td>~280k operators</td><td>$12k–$60k/yr</td><td>Tenant comms, maintenance triage, lease docs</td></tr>
+ <tr><td>Remote professional services</td><td>Global</td><td>$8k–$40k/yr</td><td>Back-office workflow packs</td></tr>
+ </tbody>
+ </table>
+
+ <h3>Vancouver market (90-day focus)</h3>
+ <table class="nf-ops-table">
+ <thead><tr><th>Signal</th><th>Data point</th><th>Implication</th></tr></thead>
+ <tbody>
+ <tr><td>Construction permits (Metro Van)</td><td>High renovation / infill activity</td><td>Trades need dispatch + client update automation</td></tr>
+ <tr><td>Rental pressure</td><td>Tight inventory, high tenant churn cost</td><td>PM firms need faster maintenance routing</td></tr>
+ <tr><td>Labor cost</td><td>Admin burden on owners</td><td>AI ops audit ROI is 2–4× in year one</td></tr>
+ </tbody>
+ </table>
+
+ <h3>ICP &amp; buyer personas</h3>
+ <table class="nf-ops-table">
+ <thead><tr><th>Persona</th><th>Title</th><th>Buying trigger</th><th>Objection</th></tr></thead>
+ <tbody>
+ <tr><td>Owner-operator</td><td>GM / Owner</td><td>Missed invoices, schedule chaos</td><td>"We tried Zapier, it broke"</td></tr>
+ <tr><td>Ops lead</td><td>Office manager</td><td>50+ hrs/mo manual data entry</td><td>Security &amp; data residency</td></tr>
+ <tr><td>Portfolio PM</td><td>Director of ops</td><td>SLA breaches, vendor coordination</td><td>Integration with Yardi/AppFolio</td></tr>
+ </tbody>
+ </table>
+
+ <h3>Pain-point matrix</h3>
+ <table class="nf-ops-table">
+ <thead><tr><th>Pain</th><th>Construction</th><th>Property mgmt</th><th>Automation pattern</th></tr></thead>
+ <tbody>
+ <tr><td>Quote → job → invoice gap</td><td>High</td><td>Medium</td><td>CRM + accounting sync agent</td></tr>
+ <tr><td>After-hours tenant requests</td><td>Low</td><td>High</td><td>Triage + vendor dispatch</td></tr>
+ <tr><td>Document version chaos</td><td>High</td><td>High</td><td>RAG + approval gate</td></tr>
+ <tr><td>Compliance evidence</td><td>Medium</td><td>High</td><td>Decision log + export pack</td></tr>
+ </tbody>
+ </table>
+
+ <div class="nf-ops-kpi">
+ <div><strong>50</strong><span>discovery calls / quarter</span></div>
+ <div><strong>8</strong><span>paid audits / quarter</span></div>
+ <div><strong>25%</strong><span>audit → implementation</span></div>
+ </div>
+ </section>
+
+ <!-- PHASE 2 -->
+ <section id="phase-2" class="nf-ops-phase">
+ <h2>Phase 2 — Offer design</h2>
+
+ <table class="nf-ops-table">
+ <thead><tr><th>Offer</th><th>Price</th><th>Scope (2–4 wk)</th><th>Deliverables</th><th>Target margin</th></tr></thead>
+ <tbody>
+ <tr>
+ <td><strong>AI Operations Audit</strong></td>
+ <td>$4,500–$8,500</td>
+ <td>Workflow map, tool stack, AI readiness, ROI model</td>
+ <td>Audit report, opportunity backlog (scored), 90-day roadmap</td>
+ <td>55–65%</td>
+ </tr>
+ <tr>
+ <td><strong>Automation Factory</strong></td>
+ <td>$12k–$35k fixed</td>
+ <td>3–6 workflows automated end-to-end</td>
+ <td>Deployed agents, runbooks, monitoring, handoff training</td>
+ <td>40–50%</td>
+ </tr>
+ <tr>
+ <td><strong>Managed AI Operations</strong></td>
+ <td>$2.5k–$8k/mo</td>
+ <td>Monitor, tune, incident response, monthly ROI report</td>
+ <td>SLA dashboard, change log, quarterly optimization sprint</td>
+ <td>50–60% at scale</td>
+ </tr>
+ </tbody>
+ </table>
+
+ <h3>Onboarding (all offers)</h3>
+ <ol style="color:var(--muted);line-height:1.7;font-size:.9rem">
+ <li>Intake + data-access checklist (metadata-first)</li>
+ <li>Evidence &amp; retention agreement signed</li>
+ <li>Baseline workflow capture (shadow week)</li>
+ <li>Kickoff with RACI + success metrics</li>
+ <li>Weekly steering + decision log export</li>
+ </ol>
+ </section>
+
+ <!-- PHASE 3 -->
+ <section id="phase-3" class="nf-ops-phase">
+ <h2>Phase 3 — Product discovery</h2>
+ <p>Every engagement feeds a <strong>workflow intelligence database</strong> — the factory for SaaS ideas.</p>
+
+ <h3>Deployment tracking system</h3>
+ <table class="nf-ops-table">
+ <thead><tr><th>Field</th><th>Type</th><th>Use</th></tr></thead>
+ <tbody>
+ <tr><td>deployment_id</td><td>UUID</td><td>Cross-offer traceability</td></tr>
+ <tr><td>vertical</td><td>enum</td><td>construction | property_mgmt | other</td></tr>
+ <tr><td>workflow_pattern</td><td>string</td><td>Normalize for SaaS candidacy</td></tr>
+ <tr><td>time_saved_hrs_mo</td><td>decimal</td><td>ROI proof</td></tr>
+ <tr><td>revenue_impact_usd</td><td>decimal</td><td>Churn/recovery/collections</td></tr>
+ <tr><td>automation_frequency</td><td>int</td><td>Runs per week</td></tr>
+ <tr><td>implementation_complexity</td><td>1–5</td><td>Engineering cost</td></tr>
+ <tr><td>vertical_applicability</td><td>1–5</td><td>Repeatability score</td></tr>
+ </tbody>
+ </table>
+
+ <h3>Opportunity scoring framework</h3>
+ <p style="color:var(--muted);font-size:.9rem"><code>score = (time_saved × 0.3) + (revenue_impact × 0.3) + (frequency × 0.15) + (vertical_fit × 0.15) − (complexity × 0.1)</code> — promote to SaaS when score ≥ 70 across 3+ deployments.</p>
+ </section>
+
+ <!-- PHASE 4 -->
+ <section id="phase-4" class="nf-ops-phase">
+ <h2>Phase 4 — Software roadmap</h2>
+
+ <table class="nf-ops-table">
+ <thead><tr><th>MVP concept</th><th>Priority</th><th>Moat</th><th>Monetization</th></tr></thead>
+ <tbody>
+ <tr><td><strong>FieldOps Copilot</strong> — job + invoice agent for trades</td><td>P0</td><td>Vertical templates + QuickBooks bridge</td><td>$299–$799/mo per crew</td></tr>
+ <tr><td><strong>TenantFlow</strong> — maintenance triage for PM</td><td>P0</td><td>SLA playbooks + vendor graph</td><td>$199–$599/mo per portfolio</td></tr>
+ <tr><td><strong>Pattern Library</strong> — reusable automation modules</td><td>P1</td><td>Discovery data flywheel</td><td>Upsell from services</td></tr>
+ </tbody>
+ </table>
+
+ <h3>Milestones (12 months)</h3>
+ <ul class="nf-ops-checklist">
+ <li>M0–3: 10 audits, 4 factory builds, intelligence DB live</li>
+ <li>M4–6: MVP private beta (1 vertical)</li>
+ <li>M7–9: Self-serve onboarding + billing</li>
+ <li>M10–12: Second vertical + partner channel</li>
+ </ul>
+ </section>
+
+ <!-- PHASE 5 -->
+ <section id="phase-5" class="nf-ops-phase">
+ <h2>Phase 5 — Technical stack</h2>
+ <table class="nf-ops-table">
+ <thead><tr><th>Layer</th><th>Design</th><th>Stack direction</th></tr></thead>
+ <tbody>
+ <tr><td>Multi-tenant</td><td>Org → workspace → deployment; row-level isolation</td><td>Postgres + tenant_id; align with governance-console patterns</td></tr>
+ <tr><td>Workflow engine</td><td>DAG steps, human gates, retries</td><td>Extend Noetfield workflow JSON + event bus</td></tr>
+ <tr><td>AI agent framework</td><td>Tool policies, shadow mode, rate limits</td><td>Agent run guard + RID decision logs</td></tr>
+ <tr><td>Vector search</td><td>Per-tenant embeddings, doc boundaries</td><td>pgvector or managed retrieval</td></tr>
+ <tr><td>Integrations</td><td>CRM, accounting, comms</td><td>HubSpot/Pipedrive · QBO/Xero · email/SMS/Slack</td></tr>
+ </tbody>
+ </table>
+ </section>
+
+ <!-- PHASE 6 -->
+ <section id="phase-6" class="nf-ops-phase">
+ <h2>Phase 6 — Sales engine</h2>
+ <table class="nf-ops-table">
+ <thead><tr><th>Channel</th><th>Tactic</th><th>KPI (90d)</th></tr></thead>
+ <tbody>
+ <tr><td>Outbound email</td><td>Vertical-specific 3-touch: pain → audit offer → case stub</td><td>8% reply, 2% meeting</td></tr>
+ <tr><td>LinkedIn</td><td>Owner-operator content + DM after engagement</td><td>200 ICP connects/mo</td></tr>
+ <tr><td>Referral</td><td>15% fee on first audit for trades associations</td><td>3 referrals/qtr</td></tr>
+ <tr><td>Partnership</td><td>Bookkeepers, MSPs, PM software consultants</td><td>2 co-sell pilots</td></tr>
+ <tr><td>Vancouver local</td><td>Chamber, trade associations, property mgmt meetups</td><td>4 events/qtr</td></tr>
+ </tbody>
+ </table>
+ </section>
+
+ <!-- PHASE 7 -->
+ <section id="phase-7" class="nf-ops-phase">
+ <h2>Phase 7 — Delivery engine</h2>
+ <table class="nf-ops-table">
+ <thead><tr><th>SOP</th><th>Stages</th><th>Output</th></tr></thead>
+ <tbody>
+ <tr><td>Project lifecycle</td><td>Discover → Design → Build → Verify → Handoff → Operate</td><td>Signed acceptance + runbook</td></tr>
+ <tr><td>Onboarding</td><td>Access, baseline, RACI, success metrics</td><td>Intake pack complete ≤ 5 days</td></tr>
+ <tr><td>Deployment</td><td>Staging → shadow → limited prod → full</td><td>Rollback plan + monitoring</td></tr>
+ <tr><td>Support</td><td>L1 client / L2 ops / L3 engineering</td><td>4h critical / 24h standard SLA</td></tr>
+ <tr><td>Reporting</td><td>Weekly ops + monthly ROI</td><td>Time saved, $ impact, incidents</td></tr>
+ </tbody>
+ </table>
+
+ <h3>Staffing (year 1)</h3>
+ <table class="nf-ops-table">
+ <thead><tr><th>Role</th><th>FTE</th><th>When</th></tr></thead>
+ <tbody>
+ <tr><td>Founder / solutions architect</td><td>1</td><td>Day 0</td></tr>
+ <tr><td>Automation engineer</td><td>1</td><td>Month 2</td></tr>
+ <tr><td>Delivery / CS lead</td><td>0.5→1</td><td>Month 4</td></tr>
+ <tr><td>SDR (Vancouver + remote)</td><td>0.5</td><td>Month 3</td></tr>
+ </tbody>
+ </table>
+
+ <h3>Financial projection (conservative year 1)</h3>
+ <table class="nf-ops-table">
+ <thead><tr><th>Quarter</th><th>Revenue</th><th>COGS</th><th>Notes</th></tr></thead>
+ <tbody>
+ <tr><td>Q1</td><td>$35k</td><td>$14k</td><td>Audits + 1 factory</td></tr>
+ <tr><td>Q2</td><td>$75k</td><td>$30k</td><td>2 factory + 1 managed</td></tr>
+ <tr><td>Q3</td><td>$110k</td><td>$44k</td><td>Managed expansion</td></tr>
+ <tr><td>Q4</td><td>$140k</td><td>$56k</td><td>MVP beta attach</td></tr>
+ </tbody>
+ </table>
+ </section>
+
+ <!-- PHASE 8 -->
+ <section id="phase-8" class="nf-ops-phase">
+ <h2>Phase 8 — TrustField governance layer</h2>
+ <div class="nf-ops-notice">
+ <strong>Separate entity.</strong> TrustField Technologies provides audit, governance, and compliance framing for automation deployments.
+ Noetfield ships Copilot governance &amp; Trust Ledger evidence (TLE) in this repo — not TrustField product code.
+ </div>
+
+ <table class="nf-ops-table">
+ <thead><tr><th>Layer</th><th>Function</th><th>Artifact</th></tr></thead>
+ <tbody>
+ <tr><td>Audit</td><td>Immutable record of what ran, when, with what data scope</td><td>Decision log + export slice</td></tr>
+ <tr><td>Governance</td><td>Policy gates before external execution</td><td>Allow/deny + human override</td></tr>
+ <tr><td>Decision logs</td><td>RID-threaded approvals per workflow change</td><td>TLE-aligned entries</td></tr>
+ <tr><td>Execution traceability</td><td>Agent tool calls, retries, failures</td><td>Event replay + procurement pack</td></tr>
+ <tr><td>Compliance framework</td><td>Map controls to ISO 42001 / NIST AI RMF language</td><td>Trust Brief → shadow pilot evidence</td></tr>
+ </tbody>
+ </table>
+
+ <h3>Risks &amp; mitigations</h3>
+ <table class="nf-ops-table">
+ <thead><tr><th>Risk</th><th>Mitigation</th></tr></thead>
+ <tbody>
+ <tr><td>Scope creep into payments/custody</td><td>PRODUCT_TRUTH gate on every feature</td></tr>
+ <tr><td>Over-promising AI autonomy</td><td>Shadow mode + human-in-the-loop default</td></tr>
+ <tr><td>Vertical churn</td><td>Intelligence DB scores repeatability before build</td></tr>
+ <tr><td>Brand confusion (Noetfield vs TrustField)</td><td>Separate domains, contracts, and buyer copy</td></tr>
+ </tbody>
+ </table>
+ </section>
+
+ <section class="nf-ops-phase">
+ <h2>Execution checklist — next 30 days</h2>
+ <ul class="nf-ops-checklist">
+ <li>Publish audit one-pager + Calendly for Vancouver ICP</li>
+ <li>Stand up deployment tracking sheet (Phase 3 fields)</li>
+ <li>Run 10 discovery calls (construction + PM split)</li>
+ <li>Close 2 paid AI Operations Audits</li>
+ <li>Document first factory workflow as pattern candidate</li>
+ <li>Align governance narrative with <a href="/trust-ledger/">Trust Ledger</a> samples for diligence buyers</li>
+ </ul>
+ </section>
+
+ <aside class="nf-cta-band">
+ <div>
+ <h2>Start with governance, then automate</h2>
+ <p>Trust Brief or design-partner pilot before full automation factory engagements.</p>
+ </div>
+ <div class="nf-cta-actions">
+ <a class="btn btn-primary" href="/trust-brief/intake/">Request Governance Brief</a>
+ <a class="btn btn-secondary" href="mailto:operations@noetfield.com">operations@noetfield.com</a>
+ </div>
+ </aside>
+ </main>
+ <footer id="nfFooter"></footer>
+</body>
+</html>
