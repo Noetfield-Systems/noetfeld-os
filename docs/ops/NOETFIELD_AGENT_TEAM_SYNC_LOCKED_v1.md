@@ -83,4 +83,20 @@ CLAIM → VERIFY ON DISK → CORRECT → UPDATE REGISTRY → LOG INTAKE
 
 ---
 
-| v1.1 | 2026-06-06 | NF-CLOUD-AGENT merge pass |
+## Systems Operating Plan (Lane B — private L4)
+
+Local ingested Desktop SOURCE. Cloud verified read-order; **do not duplicate L0–L3 prose**.
+
+| Order | Private path (when `ops/private/` on disk) |
+|-------|-------------------------------------------|
+| 1 | `agent-reference/plans/SYSTEMS_OPERATING_PLAN_ANALYSIS_LOCKED_2026.md` |
+| 2 | `agent-reference/plans/SYSTEMS_OPERATING_PLAN_LOCKED_2026.md` |
+| 3 | `intake/systems-operating-plan-desktop-2026-06-06/SOURCE.md` — detail only |
+
+**NKUE (local):** kept 6 · merged 4 · split 2 · deferred 4 · rejected 3  
+**TrustField Phase 8:** `TRUSTFIELD_OPERATING_EXCERPT_POINTER.md` — separate entity  
+**Verdict:** two engines (Lane A product + Lane B Vancouver services), one discipline (RID + metrics + governance artifact per engagement).
+
+---
+
+| v1.2 | 2026-06-06 | NF-CLOUD-AGENT Systems Operating Plan read-order |
