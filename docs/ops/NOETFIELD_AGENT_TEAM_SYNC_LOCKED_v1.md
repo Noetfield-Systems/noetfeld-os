@@ -95,6 +95,8 @@ Local ingested Desktop SOURCE. Cloud verified read-order; **do not duplicate L0�
 
 **NKUE (local):** kept 6 · merged 4 · split 2 · deferred 4 · rejected 3  
 **TrustField Phase 8:** `TRUSTFIELD_OPERATING_EXCERPT_POINTER.md` — separate entity  
+**Verified sources (private):** `SOURCES_VERIFIED_OPERATING_PLAN_2026.md` — StatCan · CMHC · Vancouver · www (6 URLs checked)  
+**Live 8-phase mirror:** https://www.noetfield.com/ai-automation/ (`ai-automation/index.html`)  
 **Verdict:** two engines (Lane A product + Lane B Vancouver services), one discipline (RID + metrics + governance artifact per engagement).
 
 ---
