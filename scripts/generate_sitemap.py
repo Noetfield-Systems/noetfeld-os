@@ -65,6 +65,7 @@ PRIORITY = {
 # Top-level marketing paths (index.html at depth 1) included if indexable
 MARKETING_TOP = {
     "about",
+    "ai-automation",
     "bank-pilot",
     "partners",
     "trust-ledger",
