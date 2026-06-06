@@ -1,13 +1,11 @@
-PLAN WITH NO ASF — 1000 prompt pack lock + iter 4 complete (Noetfield cloud)
+PLAN WITH NO ASF — iteration 5 complete (Noetfield cloud)
 
-Merged PR #30 to main. Locked 1000 prompt-ready pack v2.
+Merged PR #31 to main. Wired GTM ops assets into www surfaces.
 
 Shipped next_tasks (all done):
-1. ship-1000-prompt-pack-lock-010 — generate-prompt-pack-v2, sync-prompt-pack, LOCKED master + slices
-2. ship-customer-outreach-011 — DESIGN_PARTNER_PIPELINE_v1.md
-3. ship-demo-rehearsal-012 — DEMO_REHEARSAL_CHECKLIST_v1.md
-
-Registry: 1000 plans, 62+ done synced, GTM-weighted QUICK_PICK (no webhooks/Prometheus at top).
+1. ship-gtm-ops-www-wire-013 — pilot/demo links to pipeline + rehearsal docs; verify-gtm-ops-docs.sh
+2. ship-buyer-debrief-template-014 — BUYER_DEBRIEF_TEMPLATE_v1.md + pilot CTA
+3. ship-tier-gate-verify-015 — verify-tier-gate.sh (QUICK_PICK top-25 no Tier B/C)
 
 Verify:
 - ./scripts/plan-with-no-asf-verify.sh — PASS
@@ -18,22 +16,20 @@ scope_confirmed: noetfield_only
 ```yaml
 schema_version: 1
 repo: noetfield
-task: 1000 Prompt Pack lock + PLAN WITH NO ASF iter 4
+task: PLAN WITH NO ASF — iteration 5 GTM www wire
 status: done
 verify_passed: true
 verify_command: "./scripts/plan-with-no-asf-verify.sh"
-verify_output_summary: "Full demo verify chain passed; registry v2 validated (1000 entries, prompt-ready fields)"
+verify_output_summary: "UI, gtm-ops-docs, tier-gate, pilot e2e, audit export, procurement — all passed"
 blocked_reason: ""
-next_action: "Pick next 3 from GTM_PRIORITY_100 / QUICK_PICK per founder"
+next_action: "Pick next 3 from QUICK_PICK / GTM_PRIORITY_100"
 evidence_paths:
-  - docs/ops/NOETFIELD_1000_PROMPT_PACK_LOCKED_v1.md
-  - docs/ops/plans/registry.json
-  - docs/ops/plans/BRIDGE_NF_PLAN_TO_NF_FUTURE.json
-  - docs/ops/plans/PROMPT_PACK_LOCKED/
-  - docs/copilot/DESIGN_PARTNER_PIPELINE_v1.md
-  - docs/ops/DEMO_REHEARSAL_CHECKLIST_v1.md
-  - scripts/generate-prompt-pack-v2.py
-  - scripts/sync-prompt-pack-status.py
-reported_at: "2026-06-03T16:00:00Z"
+  - copilot/pilot/index.html
+  - copilot/demo/index.html
+  - docs/copilot/BUYER_DEBRIEF_TEMPLATE_v1.md
+  - scripts/verify-gtm-ops-docs.sh
+  - scripts/verify-tier-gate.sh
+  - os/plan.json
+reported_at: "2026-06-03T18:00:00Z"
 reporter: cursor
 ```
