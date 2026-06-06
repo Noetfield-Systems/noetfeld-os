@@ -15,10 +15,14 @@ chmod +x "${ROOT}/scripts/ensure-platform-console.sh" \
   "${ROOT}/scripts/dev-cognitive-dashboard.sh" \
   "${ROOT}/scripts/dev-kill-port.sh" \
   "${ROOT}/scripts/dev-local-tunnel-bg.sh" \
+  "${ROOT}/scripts/dev-python.sh" \
+  "${ROOT}/scripts/dev-local-preflight.sh" \
   "${ROOT}/scripts/dev-unified-proxy.py" \
   "${ROOT}/scripts/dev-port-redirects.py" \
   "${ROOT}/scripts/verify-local-dev.sh" \
   "${ROOT}/scripts/dev-local-down.sh" 2>/dev/null || true
+
+bash "${ROOT}/scripts/dev-local-preflight.sh"
 
 kill_stale() {
   if [[ -f "${ROOT}/scripts/dev-local-down.sh" ]]; then
@@ -51,7 +55,8 @@ export NF_DEV_GOV_API_INTERNAL="http://127.0.0.1:${NF_DEV_GOV_API_PORT}"
 WEB_URL="http://127.0.0.1:${COGNITIVE_DASHBOARD_PORT}/cognitive-dashboard"
 if ! curl -sf -o /dev/null --connect-timeout 2 "$WEB_URL" 2>/dev/null; then
   echo "Starting cognitive dashboard on ${COGNITIVE_DASHBOARD_PORT}…"
-  nohup env COGNITIVE_DASHBOARD_PORT="$COGNITIVE_DASHBOARD_PORT" \
+  nohup env NF_DASHBOARD_MODE="${NF_DASHBOARD_MODE:-production}" \
+    COGNITIVE_DASHBOARD_PORT="$COGNITIVE_DASHBOARD_PORT" \
     COGNITIVE_DASHBOARD_API_PORT="$COGNITIVE_DASHBOARD_API_PORT" \
     bash "${ROOT}/scripts/dev-cognitive-dashboard.sh" >>"${ROOT}/.cognitive-dashboard.log" 2>&1 &
   echo $! >"${ROOT}/.cognitive-dashboard.pid"
@@ -64,11 +69,11 @@ fi
 nohup env NF_DEV_PUBLIC_PORT="$PUBLIC_PORT" \
   NF_DEV_PLATFORM_PORT="$NF_DEV_PLATFORM_PORT" \
   NF_DEV_GOV_API_INTERNAL="http://127.0.0.1:${NF_DEV_GOV_API_PORT}" \
-  python3 "${ROOT}/scripts/dev-unified-proxy.py" >>"$PROXY_LOG" 2>&1 &
+  bash "${ROOT}/scripts/dev-python.sh" "${ROOT}/scripts/dev-unified-proxy.py" >>"$PROXY_LOG" 2>&1 &
 echo $! >"$PROXY_PID_FILE"
 
 nohup env NF_DEV_PUBLIC_PORT="$PUBLIC_PORT" NF_DEV_LEGACY_NEXT_PORT="$LEGACY_PORT" \
-  python3 "${ROOT}/scripts/dev-port-redirects.py" >>"$REDIRECT_LOG" 2>&1 &
+  bash "${ROOT}/scripts/dev-python.sh" "${ROOT}/scripts/dev-port-redirects.py" >>"$REDIRECT_LOG" 2>&1 &
 echo $! >"$REDIRECT_PID_FILE"
 
 sleep 2
@@ -96,14 +101,19 @@ echo ""
 if "${ROOT}/scripts/verify-local-dev.sh"; then
   echo ""
   echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-  echo "  Servers are UP in this workspace (verified)."
-  echo "  Your Mac browser will NOT see them until you:"
-  echo "    • Cursor → Ports → forward ${PUBLIC_PORT} (+ ${NF_DEV_PLATFORM_PORT}) → globe"
-  echo "    • OR run make dev-local on your Mac"
-  echo "    • OR make dev-local-tunnel for a shareable HTTPS link"
-  echo "  Open: http://localhost:${PUBLIC_PORT}/  (after forwarding)"
+  echo "  Local dev is UP (verified on this machine)."
+  echo "  Open in your browser on THIS Mac:"
+  echo "    http://localhost:${PUBLIC_PORT}/"
+  echo "    http://localhost:${PUBLIC_PORT}/cognitive-dashboard"
+  if [[ "$(uname -s)" == "Darwin" ]] && [[ -z "${NF_DEV_SKIP_OPEN:-}" ]]; then
+    open "http://localhost:${PUBLIC_PORT}/" 2>/dev/null || true
+  fi
+  echo ""
+  echo "  Connection refused? Stack was not running — re-run: make dev-local"
+  echo "  Cursor CLOUD remote only: Ports → forward ${PUBLIC_PORT} → globe"
+  echo "  Public tunnel: make dev-local-tunnel"
   if [[ -f "${ROOT}/.dev-tunnel-url.txt" ]]; then
-    echo "  Public tunnel: $(cat "${ROOT}/.dev-tunnel-url.txt")"
+    echo "  Active tunnel: $(cat "${ROOT}/.dev-tunnel-url.txt")"
   fi
   echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 else

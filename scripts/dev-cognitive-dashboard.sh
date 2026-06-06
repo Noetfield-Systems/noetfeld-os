@@ -14,6 +14,8 @@ export DATABASE_URL="${DATABASE_URL:-sqlite:///${DB_FILE}}"
 
 WEB_PORT="$COGNITIVE_DASHBOARD_PORT"
 API_PORT="$COGNITIVE_DASHBOARD_API_PORT"
+# production = next build + next start (stable assets via :13080). dev = next dev (hot reload).
+DASHBOARD_MODE="${NF_DASHBOARD_MODE:-production}"
 
 kill_port() {
   local p="$1"
@@ -29,7 +31,6 @@ kill_port "$WEB_PORT"
 kill_port "$API_PORT"
 sleep 1
 
-# Empty = same-origin through unified proxy (:13080). Override for dashboard-only on :13000.
 export NEXT_PUBLIC_API_URL="${NEXT_PUBLIC_API_URL:-}"
 export NEXT_PUBLIC_WEB_PORT="$WEB_PORT"
 export NEXT_PUBLIC_PLATFORM_CONSOLE_PORT="$PLATFORM_CONSOLE_PORT"
@@ -42,11 +43,12 @@ export NEXT_PUBLIC_WEB_PORT=$WEB_PORT
 export PLATFORM_CONSOLE_PORT=$PLATFORM_CONSOLE_PORT
 COGNITIVE_DASHBOARD_URL=http://localhost:${WEB_PORT}/cognitive-dashboard
 PLATFORM_CONSOLE_URL=http://localhost:${PLATFORM_CONSOLE_PORT}/console
+UNIFIED_URL=http://localhost:${NF_DEV_PUBLIC_PORT}/cognitive-dashboard
 EOF
 
 cd "$BACKEND"
-python3 -m pip install -q -r requirements.txt
-python3 -m uvicorn main:app --host 0.0.0.0 --port "$API_PORT" &
+bash "${ROOT}/scripts/dev-python.sh" -m pip install -q -r requirements.txt
+bash "${ROOT}/scripts/dev-python.sh" -m uvicorn main:app --host 0.0.0.0 --port "$API_PORT" &
 API_PID=$!
 
 deadline=$((SECONDS + 60))
@@ -59,7 +61,20 @@ done
 cd "$FRONTEND"
 [[ -d node_modules ]] || npm install
 
-echo ">>> http://localhost:${WEB_PORT}/cognitive-dashboard"
-echo ">>> http://localhost:${PLATFORM_CONSOLE_PORT}/console"
+echo ">>> Unified: http://localhost:${NF_DEV_PUBLIC_PORT}/cognitive-dashboard"
+echo ">>> Direct:  http://localhost:${WEB_PORT}/cognitive-dashboard"
+echo ">>> Console: http://localhost:${NF_DEV_PUBLIC_PORT}/console"
+echo ">>> Mode:    ${DASHBOARD_MODE}"
 
-exec env PORT="$WEB_PORT" COGNITIVE_DASHBOARD_PORT="$WEB_PORT" NEXT_PUBLIC_WEB_PORT="$WEB_PORT" npm run dev
+if [[ "$DASHBOARD_MODE" == "production" ]]; then
+  if [[ ! -f .next/BUILD_ID ]] || [[ "${NF_DEV_FORCE_DASHBOARD_BUILD:-0}" == "1" ]]; then
+    echo "Building governance console UI (production)…"
+    npm run build
+  fi
+  exec env NF_DASHBOARD_MODE=production PORT="$WEB_PORT" COGNITIVE_DASHBOARD_PORT="$WEB_PORT" \
+    NEXT_PUBLIC_WEB_PORT="$WEB_PORT" npm run dev
+fi
+
+echo ">>> Dev mode (next dev) — set NF_DASHBOARD_MODE=production for pro performance"
+exec env NF_DASHBOARD_MODE=dev PORT="$WEB_PORT" COGNITIVE_DASHBOARD_PORT="$WEB_PORT" \
+  NEXT_PUBLIC_WEB_PORT="$WEB_PORT" npm run dev

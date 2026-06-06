@@ -1,0 +1,27 @@
+---
+description: No TrustField work — confidential research is not an implementation mandate
+globs:
+  - "**/*"
+---
+
+# Confidential research — Noetfield only
+
+## Hard stop
+
+**TrustField is not our company and not our job.** Never touch trustfield.ca, TrustField repos, or TrustField GTM/www. If the user or internal docs mention TrustField UPGs, vendor packs, or MSB pricing — **do not act on it here.** Say clearly: that is TrustField's scope, not Noetfield.
+
+## Scope
+
+- `docs/internal/` may hold founder-private notes — **gitignored**, never committed.
+- This repo = **Noetfield** governance platform and www only ([PROJECT_BOUNDARIES_LOCKED.md](PROJECT_BOUNDARIES_LOCKED.md)).
+
+## Rules
+
+1. **Never** implement, plan, deploy, or offer to do TrustField work.
+2. **Never** paste named competitor tables into commits, PRs, Issues, or noetfield.com.
+3. **Noetfield-only patterns** (when relevant): audit export, evidence timelines, readiness UX on Lane A — on noetfield.com / governance console only.
+4. Do not port MSB pricing, vendor PDFs, or payment positioning to Noetfield www.
+
+## Chat
+
+If asked about TrustField fintech research → acknowledge boundary, redirect to Noetfield tasks only.

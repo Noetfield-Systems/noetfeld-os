@@ -365,10 +365,10 @@ async def governance_partner_signals_v1(
 
 @router.get("/scenario-presets/{preset}")
 async def governance_scenario_preset_v1(
-    preset: str,
+    preset: Literal["exchange", "bank", "copilot", "msb"],
     auth: PilotAuthContext = Depends(require_pilot_auth),
 ) -> dict[str, object]:
-    """Demo JSON presets for console: exchange, bank, copilot."""
+    """Demo JSON presets for console: exchange, bank, copilot, msb."""
     _ = auth
     try:
         return partner_evaluate_scenario_preset(preset)

@@ -2,6 +2,17 @@
 
 **Read this first** for task priority. Do not create `todolist/` at the repository root.
 
+## Self-audit loop (mandatory)
+
+1. [docs/ops/AGENT_SELF_AUDIT_LOOP_LOCKED_v1.md](../docs/ops/AGENT_SELF_AUDIT_LOOP_LOCKED_v1.md)
+2. [.cursor/agent-memory/MEMORY_LOCKED.yaml](agent-memory/MEMORY_LOCKED.yaml) — **session memory**
+3. [.cursor/incidents/REGISTRY.md](incidents/REGISTRY.md) — **incident reports**
+4. [.cursor/skills/](skills/) — scope gate, pre-commit, session report, incident filing
+5. `./scripts/verify-agent-scope.sh` — run before every commit
+6. [docs/ops/AGENT_DOC_TAGGING_LOCKED_v1.md](../docs/ops/AGENT_DOC_TAGGING_LOCKED_v1.md) — **tag + date on every agent doc**
+
+**Law:** Noetfield only. **Never** TrustField / trustfield.ca / VIRLUX. See [INCIDENT-2026-06-06-001](incidents/INCIDENT-2026-06-06-001-trustfield-scope-bleed.md).
+
 **Noetfield cloud (`noetfield_cloud`):** [docs/ops/AGENT_READ_LINKS_LOCKED_v1.md](../docs/ops/AGENT_READ_LINKS_LOCKED_v1.md) (§ Cloud ship) · [docs/ops/NOETFIELD_AGENT_CONTEXT_AND_READ_ORDER_LOCKED_v1.md](../docs/ops/NOETFIELD_AGENT_CONTEXT_AND_READ_ORDER_LOCKED_v1.md) · paste: [docs/ops/ready_to_paste_noetfield_cloud.txt](../docs/ops/ready_to_paste_noetfield_cloud.txt). Canonical index: Desktop `SourceA/founder/repo-agent-notices/AGENT_READ_LINKS_INDEX.md` — never repo → SourceA.
 
 ## Ship rule (ASF) — two different things
@@ -56,6 +67,15 @@ Seed locally: `./scripts/bootstrap-private-ops.sh` · MSB pack: `./scripts/seed-
 - Desktop canonical: `~/Desktop/SourceA/AUTO_CONFLICT_ENGINE_V3_LOCKED.md`
 
 Do not copy this doctrine into `docs/`, www, or commits. Cross-plane notes use `[DESIGN]` `[EXECUTION]` `[DELIVERY]` when relevant.
+
+## Confidential [AUTO] (gitignored — never quote publicly)
+
+**Path:** `docs/internal/AUTO_CONFIDENTIAL_PORTFOLIO_POSITIONING.md`  
+**Index:** `ops/private/agent-reference/AUTO_INDEX_LOCKED.md` (AUTO-002) when `ops/private/` on disk.
+
+- **Read** when present on founder machine — internal portfolio/entity positioning only.
+- **Never** commit, PR, www, Issues, buyer packs, or paste into public agent replies.
+- Public surfaces: `PRODUCT_TRUTH.md` · `OFFERINGS_LOCKED.md` · `POSITIONING.md` only.
 
 ## Scope
 

@@ -1,0 +1,83 @@
+# Trust Ledger Entry v1 — Conditional
+# Example: Copilot authorized with remediation conditions before full rollout
+
+tle_id: TLE-20260603-COND-002
+decision: "Conditional Go — Copilot pilot limited to Finance sandbox until DLP gaps remediated"
+date: "2026-06-03"
+owner:
+  id: user-cio-002
+  name: "VP Technology"
+  role: CIO
+status: Conditional
+confidence_score: 0.62
+confidence_factors:
+  - factor: required_evidence_coverage
+    weight: 0.40
+    value: 0.70
+  - factor: control_pass_rate
+    weight: 0.35
+    value: 0.55
+  - factor: sensitivity_boundary_compliance
+    weight: 0.25
+    value: 0.65
+evidence:
+  - evidence_id: EV-PURVIEW-002
+    source: Purview
+    title: "DLP gap analysis — 3 policies missing Copilot scope"
+    metadata:
+      timestamp: "2026-06-01T09:00:00Z"
+      hash: "sha256:e5f6789012345678901234567890abcdef1234567890abcdef1234567890abcd"
+      sensitivity_label: Internal
+  - evidence_id: EV-AUDIT-002
+    source: AuditLog
+    title: "Copilot activity report — 30 day summary"
+    metadata:
+      timestamp: "2026-06-01T10:00:00Z"
+      hash: "sha256:f6789012345678901234567890abcdef1234567890abcdef1234567890abcdef"
+      sensitivity_label: Internal
+risk_summary:
+  - id: RISK-010
+    description: "DLP policies not scoped to all Copilot-enabled workloads"
+    severity: High
+  - id: RISK-011
+    description: "Pilot users exceed recommended group size without staged rollout"
+    severity: Medium
+controls:
+  - control_id: COP-DLP-001
+    description: "DLP policies — PARTIAL: 3 of 6 required scopes configured"
+  - control_id: COP-ENTRA-002
+    description: "Conditional Access — PASS"
+  - control_id: COP-PILOT-005
+    description: "Pilot limited to named sandbox site collection"
+approval_chain:
+  - approver:
+      id: user-cio-002
+      name: "VP Technology"
+      role: CIO
+    status: Conditional
+    signed_at: "2026-06-03T14:00:00Z"
+    conditions: "Full rollout blocked until COP-DLP-001 remediated within 30 days"
+  - approver:
+      id: user-legal-002
+      name: "Deputy General Counsel"
+      role: Legal
+    status: Approved
+    signed_at: "2026-06-03T14:30:00Z"
+  - approver:
+      id: user-sec-002
+      name: "Director of Security"
+      role: Security
+    status: Conditional
+    signed_at: "2026-06-03T15:00:00Z"
+    conditions: "Require re-assessment after DLP remediation"
+signatures:
+  - signer_id: user-cio-002
+    signature_hash: "sig:sha256:cafe001"
+    key_id: "kms:noetfield-pilot-001"
+  - signer_id: user-legal-002
+    signature_hash: "sig:sha256:cafe002"
+    key_id: "kms:noetfield-pilot-001"
+  - signer_id: user-sec-002
+    signature_hash: "sig:sha256:cafe003"
+    key_id: "kms:noetfield-pilot-001"
+audit_digest: "sha256:0ab2dd2f64c9fd4e4310cfbb82556f0596060583dec1a7ab2d178603c3eb61d0"

@@ -10,7 +10,7 @@
    Open the **Ports** panel → forward **13080** (and optionally **8001**) → click the **globe** icon. Use the forwarded URL Cursor gives you (often still labeled `localhost` but tunneled through Cursor).
 
 2. **Run on your Mac**  
-   Clone the repo locally, install deps, run `make dev-local` in a terminal on your machine. Then `http://localhost:13080/` works in your browser.
+   Check out the repo on your machine, install deps, run `make dev-local` in a terminal. Then `http://localhost:13080/` works in your browser.
 
 3. **Public tunnel (fallback)**  
    With dev already up in the workspace: `make dev-local-tunnel` — opens an HTTPS link you can paste in any browser.
@@ -29,9 +29,20 @@ Stops stale processes, starts all backends, runs health checks.
 make dev-local-down     # stop everything
 make dev-local-status   # ports + HTTP health summary
 make verify-local-dev   # health check only
+make verify-ui-e2e      # UI page content (catches stale Next builds)
 make dev-local-tunnel   # foreground public HTTPS URL
 make dev-local-tunnel-bg  # background tunnel → .dev-tunnel-url.txt
+make demo-url           # print shareable demo URL (tunnel or NF_STAGING_URL)
 ```
+
+### Share demo in 2 commands
+
+```bash
+make dev-local
+make dev-local-tunnel-bg && make demo-url
+```
+
+Paste the printed **5-min demo** URL (`/copilot/demo/`) for design partners. No secrets in repo.
 
 ## URLs (use after Cursor **Ports** forward)
 
@@ -61,6 +72,32 @@ The server runs in the **remote workspace**. Your Mac browser only sees `localho
 | 18002 | Governance-console dev API (internal) |
 
 Override via `scripts/dev-ports.sh`.
+
+## Trust Ledger dev options
+
+| Variable | Purpose |
+|----------|---------|
+| `NF_DEV_ROLE` | API role override: `viewer` \| `approver` (default approver) |
+| `NEXT_PUBLIC_NF_DEV_ROLE` | Next workspace UI role (mirrors API for approve buttons) |
+| `NF_PUBLIC_BASE_URL` | Base URL for M365 mock OAuth redirect (default `http://127.0.0.1:13080`) |
+| `NF_M365_MOCK_TOKEN` | Dev-only mock token reference (never commit real secrets) |
+| `NF_M365_ALLOW_ANY_CODE` | Set `1` to accept any OAuth callback code in dev |
+
+M365 connector flow: register at `/workspace/connectors` → mock OAuth → **auto-ingests** Purview/Entra/SharePoint evidence (OAuth callback). Fallback: `scripts/seed-m365-evidence-stub.sh`.
+
+### Verify TLE signatures (dev KMS stub)
+
+After full approval, `GET /tle/{id}/export` includes `signature_block`. Each entry signs `json.dumps({tle_id, approver_id, decision}, sort_keys=True)` with SHA-256. Final `audit_digest` hashes the document JSON excluding the `audit_digest` field (`services/integrity.py`).
+
+Pilot E2E: `make copilot-pilot-e2e` (requires `make dev-local`).
+
+If `/workspace/connectors` shows “Loading TLE…” instead of the M365 connectors page, rebuild the dashboard:
+
+```bash
+NF_DEV_FORCE_DASHBOARD_BUILD=1 make dev-local
+```
+
+Browser OAuth from **Register + mock connect** returns to `/workspace/connectors?connected=…` (not raw JSON).
 
 ## Logs
 

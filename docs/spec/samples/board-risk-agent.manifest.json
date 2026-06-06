@@ -1,0 +1,17 @@
+{
+  "agent_id": "board-risk-v1",
+  "version": "1.0.0",
+  "display_name": "Board Risk Brief Agent",
+  "role": "risk",
+  "allowed_actions": [
+    "audit_read",
+    "policy_pack_read",
+    "draft_brief"
+  ],
+  "denied_actions": ["payment_initiate", "transfer_funds", "ledger_post"],
+  "data_scopes": ["tenant_audit_read", "policy_pack_read"],
+  "approval_threshold": "dual_human",
+  "deny_tools_default": true,
+  "prompt_template_ref": "docs/spec/prompt-studio/board_brief.json",
+  "max_tool_calls_per_run": 10
+}

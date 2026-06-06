@@ -1,0 +1,84 @@
+# Trust Ledger Entry v1 — Rejected
+# Example: Copilot deployment not authorized — material control failures
+
+tle_id: TLE-20260603-REJ-003
+decision: "No Go — Copilot deployment not authorized at this time"
+date: "2026-06-03"
+owner:
+  id: user-cio-003
+  name: "Chief Digital Officer"
+  role: CIO
+status: Rejected
+confidence_score: 0.41
+confidence_factors:
+  - factor: required_evidence_coverage
+    weight: 0.40
+    value: 0.45
+  - factor: control_pass_rate
+    weight: 0.35
+    value: 0.30
+  - factor: sensitivity_boundary_compliance
+    weight: 0.25
+    value: 0.50
+evidence:
+  - evidence_id: EV-PURVIEW-003
+    source: Purview
+    title: "Sensitivity label coverage audit — 40% of sites unlabeled"
+    metadata:
+      timestamp: "2026-05-28T08:00:00Z"
+      hash: "sha256:7890123456789012345678901234567890abcdef1234567890abcdef12345678"
+      sensitivity_label: Confidential
+  - evidence_id: EV-ENTRA-003
+    source: EntraID
+    title: "Guest access review — excessive external sharing enabled"
+    metadata:
+      timestamp: "2026-05-28T09:00:00Z"
+      hash: "sha256:890123456789012345678901234567890abcdef1234567890abcdef1234567890"
+      sensitivity_label: HighlyConfidential
+risk_summary:
+  - id: RISK-020
+    description: "Unlabeled SharePoint content exposed to Copilot retrieval"
+    severity: High
+  - id: RISK-021
+    description: "Guest accounts with Copilot licenses and broad site access"
+    severity: High
+  - id: RISK-022
+    description: "No unified audit log export configured for Copilot events"
+    severity: Medium
+controls:
+  - control_id: COP-DLP-001
+    description: "DLP policies — FAIL: not configured for Copilot"
+  - control_id: COP-LABEL-004
+    description: "Sensitivity labeling — FAIL: below 80% coverage threshold"
+  - control_id: COP-AUDIT-003
+    description: "Audit log retention — FAIL: not configured"
+approval_chain:
+  - approver:
+      id: user-cio-003
+      name: "Chief Digital Officer"
+      role: CIO
+    status: Rejected
+    signed_at: "2026-06-03T16:00:00Z"
+  - approver:
+      id: user-legal-003
+      name: "Chief Legal Officer"
+      role: Legal
+    status: Rejected
+    signed_at: "2026-06-03T16:15:00Z"
+  - approver:
+      id: user-sec-003
+      name: "CISO"
+      role: Security
+    status: Rejected
+    signed_at: "2026-06-03T16:30:00Z"
+signatures:
+  - signer_id: user-cio-003
+    signature_hash: "sig:sha256:bad001"
+    key_id: "kms:noetfield-pilot-001"
+  - signer_id: user-legal-003
+    signature_hash: "sig:sha256:bad002"
+    key_id: "kms:noetfield-pilot-001"
+  - signer_id: user-sec-003
+    signature_hash: "sig:sha256:bad003"
+    key_id: "kms:noetfield-pilot-001"
+audit_digest: "sha256:bac5c8d4a50988972986f26a62a540e651884ae279aa418e851f77024f5ac409"

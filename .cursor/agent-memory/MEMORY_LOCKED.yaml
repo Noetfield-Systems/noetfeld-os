@@ -1,0 +1,79 @@
+# Noetfield agent memory — LOCKED (versioned in git)
+# Read at EVERY session start. Bump version when adding lessons.
+
+version: 5
+updated: "2026-06-06T20:00:00Z"
+updated_by: NF-CLOUD-AGENT
+
+company_scope:
+  our_company: Noetfield
+  our_domains:
+    - noetfield.com
+    - www.noetfield.com
+  our_repo: kazemnezhadsina144-dot/Noetfield
+  never_touch:
+    - TrustField Technologies
+    - trustfield.ca
+    - TrustField repo / TF-* work
+    - VIRLUX / VL-*
+
+founder_lock: "Your job is Noetfield only. Any other repo, site, or company is prohibited."
+
+hard_rules:
+  - id: R-001
+    rule: NOETFIELD ONLY. Any other repo, site, or company is prohibited — including TrustField, trustfield.ca, VIRLUX, and all non-Noetfield workspaces.
+    incident: INCIDENT-2026-06-06-001
+    since: "2026-06-06"
+    reaffirmed: "2026-06-06"
+  - id: R-002
+    rule: NEVER commit ops/private/ or docs/internal/.
+    since: "2026-05-29"
+  - id: R-003
+    rule: Noetfield never touches payments, custody, settlement, or present-tense PSP/MSB claims.
+    source: PRODUCT_TRUTH.md
+  - id: R-004
+    rule: Internal research docs are context only — not an implementation mandate for other companies.
+    incident: INCIDENT-2026-06-06-001
+    since: "2026-06-06"
+  - id: R-005
+    rule: Run ./scripts/verify-agent-scope.sh before every commit.
+    since: "2026-06-06"
+  - id: R-006
+    rule: Tag + date header ONLY on docs this agent writes. Never add headers to other people's docs.
+    source: docs/ops/AGENT_DOC_TAGGING_LOCKED_v1.md
+    since: "2026-06-06"
+
+recurring_mistakes:
+  - id: M-001
+    pattern: Treating TrustField / trustfield.ca as in-scope for cloud agent
+    occurrences: 3
+    last_seen: "2026-06-06"
+    corrective_action: Scope gate SKILL-001 + verify-agent-scope.sh + decline reply
+  - id: M-002
+    pattern: Planning UPG/vendor-pack/pricing for TrustField from Noetfield workspace
+    occurrences: 2
+    last_seen: "2026-06-06"
+    corrective_action: Redirect to Noetfield-only tasks; never offer TrustField www work
+
+lessons:
+  - id: L-001
+    lesson: User has stated multiple times — TrustField is NOT our job. Apologize once, fix rules, do not repeat.
+    incident: INCIDENT-2026-06-06-001
+  - id: L-002
+    lesson: Fintech 50 research in docs/internal/ informs patterns for Noetfield Tier D only (audit export UX) — not TrustField GTM.
+    incident: INCIDENT-2026-06-06-001
+  - id: L-003
+    lesson: Cloud agent has no persistent chat memory — git-tracked MEMORY_LOCKED.yaml + incidents are the memory.
+    since: "2026-06-06"
+
+pre_commit_checklist:
+  - Read MEMORY_LOCKED.yaml if not read this session
+  - ./scripts/verify-agent-scope.sh
+  - Confirm diff is Noetfield-only
+  - No trustfield.ca / TF-* / UPG TrustField strings in tracked files
+
+session_start_checklist:
+  - Read MEMORY_LOCKED.yaml
+  - Read incidents/REGISTRY.md open items
+  - Read PROJECT_BOUNDARIES_LOCKED.md
+  - Apply SKILL-001 scope gate

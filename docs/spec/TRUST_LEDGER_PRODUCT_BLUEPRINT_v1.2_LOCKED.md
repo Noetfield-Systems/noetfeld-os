@@ -1,3 +1,11 @@
+---
+agent_tag: nf-local-repo-agent
+agent_display: "[NF-LOCAL-REPO-AGENT]"
+status: locked
+version: 1.2
+provenance: merged-cloud-ff24d56-plus-local-drift-links
+---
+
 # Trust Ledger Product Blueprint v1.2 (LOCKED)
 
 **Status:** LOCKED · **Plane:** DESIGN · **Do not override without ASF + product signoff**
@@ -151,3 +159,27 @@ Landing · Trust Ledger Workspace · Evidence Index · Connector Onboarding · E
 - [PROJECT_BOUNDARIES_LOCKED.md](../../PROJECT_BOUNDARIES_LOCKED.md)
 - [os/plan.json](../../os/plan.json) — MVP done criteria
 - Prior MVP map: [ALIGNMENT_WITH_MVP_v1.md](./ALIGNMENT_WITH_MVP_v1.md)
+
+---
+
+## 8. Drift architecture supplements (L2 — defer to this mandate)
+
+| Doc | Relationship |
+|-----|--------------|
+| [GOVERNANCE_DRIFT_DETECTION_SOURCES_v1.md](../references/GOVERNANCE_DRIFT_DETECTION_SOURCES_v1.md) | Taxonomy boss |
+| [GOVERNANCE_DRIFT_BLUEPRINTS_INDEX_LOCKED_v1.md](../references/GOVERNANCE_DRIFT_BLUEPRINTS_INDEX_LOCKED_v1.md) | Router |
+| [TRUST_LEDGER_FOR_DRIFT_BLUEPRINT_LOCKED_v1.md](../references/TRUST_LEDGER_FOR_DRIFT_BLUEPRINT_LOCKED_v1.md) | TLE v1.3 extension — not a second ledger |
+
+**GTM honesty:** Noetfield records governance drift **decisions** against signed TLE baseline — not a hosted ML observability platform.
+
+### P0 drift ship queue (agreed local + cloud)
+
+| Priority | Work |
+|----------|------|
+| P0 | Drift Contract v0 — `drift_class`, `baseline_tle_id`, `delta_summary`, `severity` |
+| P0 | Evaluate vs last TLE diff helper |
+| P0 | `risk_summary` + drift class in `confidence_factors` |
+| P1 | Optional `prev_tle_digest` in schema |
+| P2 | Link `GET /events/replay` to audit-export narrative |
+
+**Note:** This file existed on cloud/git before Mac merge (`ff24d56`); Mac added §8 links only.

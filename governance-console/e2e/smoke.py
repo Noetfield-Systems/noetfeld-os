@@ -65,8 +65,15 @@ def main() -> int:
         print(f"OK  audit list ({len(rows)} rows)")
 
         if WEB_URL:
-            for path in ("/cognitive-dashboard", "/audit", f"/result/{rid}"):
-                r = client.get(f"{WEB_URL}{path}", timeout=15.0)
+            for path in (
+                "/cognitive-dashboard",
+                "/evaluate",
+                "/audit",
+                "/trust-ledger",
+                f"/result/{rid}",
+            ):
+                headers = {"Accept": "text/html"} if path in ("/audit",) else None
+                r = client.get(f"{WEB_URL}{path}", timeout=15.0, headers=headers)
                 if r.status_code != 200:
                     raise SystemExit(f"Web {path} returned {r.status_code}")
                 print(f"OK  web {path}")

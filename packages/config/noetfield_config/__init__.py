@@ -100,6 +100,11 @@ class Settings(BaseSettings):
         ge=0,
         description="Max governance v1 calls per pilot key per minute (0 = disabled).",
     )
+    governance_workspace_ui_rate_limit_per_min: int = Field(
+        default=60,
+        ge=0,
+        description="Max Trust Ledger workspace UI API calls per pilot key per minute (0 = disabled).",
+    )
     governance_webhook_urls: str = Field(
         default="",
         description="Comma-separated HTTPS URLs for governance.decision.recorded webhooks (pilot).",

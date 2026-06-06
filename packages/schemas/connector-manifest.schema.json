@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.noetfield.com/connector-manifest.schema.json",
+  "title": "Noetfield Connector Manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["connector_id", "type", "required_scopes", "ingest_mode", "status"],
+  "properties": {
+    "connector_id": { "type": "string", "pattern": "^CONN-[A-Z0-9-]+$" },
+    "tenant_id": { "type": "string", "format": "uuid" },
+    "type": {
+      "type": "string",
+      "enum": ["Purview", "EntraID", "AuditLog", "SharePoint", "Endpoint", "SaaS", "ManualUpload"]
+    },
+    "display_name": { "type": "string" },
+    "required_scopes": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Graph or API scopes — read-only for Lane A"
+    },
+    "ingest_mode": {
+      "type": "string",
+      "enum": ["metadata_only", "full_capture"],
+      "default": "metadata_only"
+    },
+    "last_sync": { "type": "string", "format": "date-time" },
+    "status": {
+      "type": "string",
+      "enum": ["pending", "active", "error", "disabled"]
+    },
+    "metadata": { "type": "object" }
+  }
+}

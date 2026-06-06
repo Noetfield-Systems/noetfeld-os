@@ -1,0 +1,91 @@
+# Trust Ledger Entry v1 — Go (Approved)
+# Example: SME Copilot rollout authorized with standard controls
+
+tle_id: TLE-20260603-GO-001
+source_rid: RID-39631619-92361CE4
+decision: "Go — Copilot deployment authorized for pilot business units"
+date: "2026-06-03"
+owner:
+  id: user-cio-001
+  name: "Chief Information Officer"
+  role: CIO
+status: Approved
+confidence_score: 0.87
+confidence_factors:
+  - factor: required_evidence_coverage
+    weight: 0.40
+    value: 0.95
+  - factor: control_pass_rate
+    weight: 0.35
+    value: 0.82
+  - factor: sensitivity_boundary_compliance
+    weight: 0.25
+    value: 0.80
+evidence:
+  - evidence_id: EV-PURVIEW-001
+    source: Purview
+    title: "DLP policy export — Copilot data boundaries"
+    metadata:
+      timestamp: "2026-06-02T14:30:00Z"
+      hash: "sha256:a1b2c3d4e5f6789012345678901234567890abcdef1234567890abcdef123456"
+      sensitivity_label: Internal
+    link: "https://compliance.microsoft.com/purview/dlp/policies/copilot-boundary"
+  - evidence_id: EV-ENTRA-001
+    source: EntraID
+    title: "Conditional Access — Copilot licensed users snapshot"
+    metadata:
+      timestamp: "2026-06-02T15:00:00Z"
+      hash: "sha256:b2c3d4e5f6789012345678901234567890abcdef1234567890abcdef12345678"
+      sensitivity_label: Confidential
+    link: "https://entra.microsoft.com/conditional-access/policies"
+  - evidence_id: EV-SPO-001
+    source: SharePoint
+    title: "SharePoint site permissions — pilot sites inventory"
+    metadata:
+      timestamp: "2026-06-02T16:00:00Z"
+      hash: "sha256:c3d4e5f6789012345678901234567890abcdef1234567890abcdef1234567890"
+      sensitivity_label: Internal
+risk_summary:
+  - id: RISK-001
+    description: "Oversharing via Copilot summarization of sensitive SharePoint content"
+    severity: Medium
+  - id: RISK-002
+    description: "Insufficient audit log retention for Copilot activity"
+    severity: Low
+controls:
+  - control_id: COP-DLP-001
+    description: "DLP policies block Highly Confidential labels from Copilot prompts"
+  - control_id: COP-ENTRA-002
+    description: "Conditional Access requires MFA for Copilot-enabled users"
+  - control_id: COP-AUDIT-003
+    description: "Unified audit log retention minimum 90 days"
+approval_chain:
+  - approver:
+      id: user-cio-001
+      name: "Chief Information Officer"
+      role: CIO
+    status: Approved
+    signed_at: "2026-06-03T10:00:00Z"
+  - approver:
+      id: user-legal-001
+      name: "General Counsel"
+      role: Legal
+    status: Approved
+    signed_at: "2026-06-03T11:30:00Z"
+  - approver:
+      id: user-sec-001
+      name: "CISO"
+      role: Security
+    status: Approved
+    signed_at: "2026-06-03T12:00:00Z"
+signatures:
+  - signer_id: user-cio-001
+    signature_hash: "sig:sha256:deadbeef001"
+    key_id: "kms:noetfield-pilot-001"
+  - signer_id: user-legal-001
+    signature_hash: "sig:sha256:deadbeef002"
+    key_id: "kms:noetfield-pilot-001"
+  - signer_id: user-sec-001
+    signature_hash: "sig:sha256:deadbeef003"
+    key_id: "kms:noetfield-pilot-001"
+audit_digest: "sha256:d4e5f6789012345678901234567890abcdef1234567890abcdef1234567890ab"

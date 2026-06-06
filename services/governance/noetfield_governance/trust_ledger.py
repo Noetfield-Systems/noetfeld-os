@@ -14,14 +14,93 @@ from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from fastapi.responses import Response
 from pydantic import BaseModel, ConfigDict, Field
 
-from noetfield_governance.governance_pilot_limits import check_governance_pilot_rate_limit
-from noetfield_governance.pilot_auth import PilotAuthContext, require_pilot_auth
+from noetfield_governance.governance_pilot_limits import check_workspace_ui_rate_limit
+from noetfield_governance.pilot_auth import (
+    PilotAuthContext,
+    require_pilot_auth,
+    require_workspace_read_scope,
+    require_workspace_write_scope,
+)
 from noetfield_governance.trust_ledger_pdf import minimal_pdf
 
 router = APIRouter(prefix="/api/v1", tags=["trust-ledger-v1"])
 
 TerminalStatus = Literal["Approved", "Rejected", "Conditional"]
 ACTIVE_TLE_STATUSES = ("Draft", "PendingApproval")
+TRUSTED_EVIDENCE_SOURCES = frozenset({"Purview", "EntraID", "AuditLog", "SharePoint"})
+KNOWN_TEMPLATE_BONUS = {"copilot-go-no-go-v1": 0.10}
+CONFIDENCE_METHOD = "deterministic-v0"
+
+
+def compute_confidence_score(
+    evidence_rows: list[dict[str, object]],
+    template_id: str,
+) -> tuple[float, list[dict[str, object]]]:
+    """Deterministic v0 score from evidence refs and template (auditable factors)."""
+    count = len(evidence_rows)
+    sources = {str(row.get("source", "")) for row in evidence_rows}
+    trusted = sources & TRUSTED_EVIDENCE_SOURCES
+    hashes_ok = count > 0 and all(
+        isinstance(row.get("metadata"), dict) and bool((row["metadata"] or {}).get("hash"))
+        for row in evidence_rows
+    )
+
+    factors: list[dict[str, object]] = []
+    score = 0.40
+
+    evidence_contrib = min(0.30, count * 0.10)
+    factors.append(
+        {
+            "factor": "evidence_coverage",
+            "contribution": round(evidence_contrib, 4),
+            "detail": f"{count} evidence ref(s)",
+        }
+    )
+    score += evidence_contrib
+
+    diversity_contrib = min(0.15, len(trusted) * 0.05)
+    factors.append(
+        {
+            "factor": "source_diversity",
+            "contribution": round(diversity_contrib, 4),
+            "detail": ", ".join(sorted(trusted)) if trusted else "no trusted M365 sources",
+        }
+    )
+    score += diversity_contrib
+
+    template_contrib = KNOWN_TEMPLATE_BONUS.get(template_id, 0.0)
+    if template_contrib:
+        factors.append(
+            {
+                "factor": "template_match",
+                "contribution": template_contrib,
+                "detail": template_id,
+            }
+        )
+        score += template_contrib
+
+    hash_contrib = 0.05 if hashes_ok else 0.0
+    factors.append(
+        {
+            "factor": "hash_integrity",
+            "contribution": hash_contrib,
+            "detail": "all evidence hashes present" if hash_contrib else "missing hash metadata",
+        }
+    )
+    score += hash_contrib
+
+    return round(min(1.0, max(0.0, score)), 2), factors
+
+
+def _attach_confidence(body: dict[str, object]) -> dict[str, object]:
+    evidence = body.get("evidence") or []
+    rows = [row for row in evidence if isinstance(row, dict)] if isinstance(evidence, list) else []
+    template_id = str(body.get("template_id") or "")
+    score, factors = compute_confidence_score(rows, template_id)
+    body["confidence_score"] = score
+    body["confidence_factors"] = factors
+    body["confidence_method"] = CONFIDENCE_METHOD
+    return body
 
 
 def required_approvals() -> int:
@@ -309,6 +388,7 @@ class InMemoryTrustLedgerStore:
             "approval_chain": [],
             "signatures": [],
         }
+        _attach_confidence(body)
         now = datetime.now(timezone.utc)
         record = TleRecord(tle_id=tle_id, status=initial, body=body, created_at=now)
         self.tles[tle_id] = record
@@ -511,6 +591,7 @@ class PostgresTrustLedgerStore:
             "approval_chain": [],
             "signatures": [],
         }
+        _attach_confidence(body)
         await self.connect()
         assert self._pool is not None
         async with self._pool.acquire() as conn:
@@ -629,7 +710,10 @@ def get_trust_ledger_deps(request: Request) -> TrustLedgerDeps:
 
 
 def _record_to_entry(record: TleRecord) -> TrustLedgerEntry:
-    return TrustLedgerEntry.model_validate(record.body)
+    body = dict(record.body)
+    if "confidence_score" not in body:
+        _attach_confidence(body)
+    return TrustLedgerEntry.model_validate(body)
 
 
 def _export_lines(record: TleRecord) -> list[str]:
@@ -638,6 +722,7 @@ def _export_lines(record: TleRecord) -> list[str]:
         f"TLE ID: {record.tle_id}",
         f"Status: {record.status}",
         f"Decision: {body.get('decision', '')}",
+        f"Confidence: {body.get('confidence_score', 'n/a')}",
     ]
     evidence = body.get("evidence") or []
     if isinstance(evidence, list):
@@ -661,7 +746,8 @@ async def register_connector(
     auth: PilotAuthContext = Depends(require_pilot_auth),
     deps: TrustLedgerDeps = Depends(get_trust_ledger_deps),
 ) -> ConnectorObject:
-    await check_governance_pilot_rate_limit(auth, request.url.path)
+    require_workspace_write_scope(auth)
+    await check_workspace_ui_rate_limit(auth, "connectors:register")
     return await deps.store.register_connector(payload)
 
 
@@ -671,6 +757,8 @@ async def get_connector(
     auth: PilotAuthContext = Depends(require_pilot_auth),
     deps: TrustLedgerDeps = Depends(get_trust_ledger_deps),
 ) -> ConnectorObject:
+    require_workspace_read_scope(auth)
+    await check_workspace_ui_rate_limit(auth, "connectors:get")
     row = await deps.store.get_connector(connector_id)
     if row is None:
         raise HTTPException(status_code=404, detail="Connector not found")
@@ -685,7 +773,8 @@ async def sync_connector(
     auth: PilotAuthContext = Depends(require_pilot_auth),
     deps: TrustLedgerDeps = Depends(get_trust_ledger_deps),
 ) -> ConnectorObject:
-    await check_governance_pilot_rate_limit(auth, request.url.path)
+    require_workspace_write_scope(auth)
+    await check_workspace_ui_rate_limit(auth, "connectors:sync")
     return await deps.store.sync_connector(connector_id, payload)
 
 
@@ -696,7 +785,8 @@ async def ingest_evidence(
     auth: PilotAuthContext = Depends(require_pilot_auth),
     deps: TrustLedgerDeps = Depends(get_trust_ledger_deps),
 ) -> EvidenceObject:
-    await check_governance_pilot_rate_limit(auth, request.url.path)
+    require_workspace_write_scope(auth)
+    await check_workspace_ui_rate_limit(auth, "evidence:ingest")
     return await deps.store.ingest_evidence(payload)
 
 
@@ -706,6 +796,8 @@ async def list_evidence(
     auth: PilotAuthContext = Depends(require_pilot_auth),
     deps: TrustLedgerDeps = Depends(get_trust_ledger_deps),
 ) -> EvidenceListResponse:
+    require_workspace_read_scope(auth)
+    await check_workspace_ui_rate_limit(auth, "evidence:list")
     items = await deps.store.list_evidence(limit)
     return EvidenceListResponse(items=items, count=len(items))
 
@@ -716,6 +808,8 @@ async def get_evidence(
     auth: PilotAuthContext = Depends(require_pilot_auth),
     deps: TrustLedgerDeps = Depends(get_trust_ledger_deps),
 ) -> EvidenceObject:
+    require_workspace_read_scope(auth)
+    await check_workspace_ui_rate_limit(auth, "evidence:get")
     row = await deps.store.get_evidence(evidence_id)
     if row is None:
         raise HTTPException(status_code=404, detail="Evidence not found")
@@ -729,6 +823,8 @@ async def list_tles(
     auth: PilotAuthContext = Depends(require_pilot_auth),
     deps: TrustLedgerDeps = Depends(get_trust_ledger_deps),
 ) -> TleListResponse:
+    require_workspace_read_scope(auth)
+    await check_workspace_ui_rate_limit(auth, "tle:list")
     records = await deps.store.list_tles(status, limit)
     items = [_record_to_entry(r) for r in records]
     return TleListResponse(items=items, count=len(items))
@@ -741,7 +837,8 @@ async def create_tle_draft(
     auth: PilotAuthContext = Depends(require_pilot_auth),
     deps: TrustLedgerDeps = Depends(get_trust_ledger_deps),
 ) -> TrustLedgerEntry:
-    await check_governance_pilot_rate_limit(auth, request.url.path)
+    require_workspace_write_scope(auth)
+    await check_workspace_ui_rate_limit(auth, "tle:draft")
     record = await deps.store.create_draft(payload)
     return _record_to_entry(record)
 
@@ -752,6 +849,8 @@ async def export_tle(
     auth: PilotAuthContext = Depends(require_pilot_auth),
     deps: TrustLedgerDeps = Depends(get_trust_ledger_deps),
 ) -> Response:
+    require_workspace_read_scope(auth)
+    await check_workspace_ui_rate_limit(auth, "tle:export")
     record = await deps.store.get_tle(tle_id)
     if record is None:
         raise HTTPException(status_code=404, detail="TLE not found")
@@ -767,6 +866,8 @@ async def get_tle(
     auth: PilotAuthContext = Depends(require_pilot_auth),
     deps: TrustLedgerDeps = Depends(get_trust_ledger_deps),
 ) -> TrustLedgerEntry:
+    require_workspace_read_scope(auth)
+    await check_workspace_ui_rate_limit(auth, "tle:get")
     record = await deps.store.get_tle(tle_id)
     if record is None:
         raise HTTPException(status_code=404, detail="TLE not found")
@@ -781,6 +882,7 @@ async def approve_tle_route(
     auth: PilotAuthContext = Depends(require_pilot_auth),
     deps: TrustLedgerDeps = Depends(get_trust_ledger_deps),
 ) -> TrustLedgerEntry:
-    await check_governance_pilot_rate_limit(auth, request.url.path)
+    require_workspace_write_scope(auth)
+    await check_workspace_ui_rate_limit(auth, "tle:approve")
     record = await deps.store.approve_tle(tle_id, payload)
     return _record_to_entry(record)

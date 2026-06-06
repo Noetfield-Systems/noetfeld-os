@@ -3,11 +3,67 @@
 <head>
  <meta charset="UTF-8" />
  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
- <title>Noetfield</title>
- <meta http-equiv="refresh" content="0;url=/enterprise/" />
- <link rel="canonical" href="https://www.noetfield.com/enterprise/" />
+ <title>Trust Ledger Entry v1 — Sample Report | Noetfield</title>
+ <meta name="description" content="Procurement-grade Trust Ledger Entry (TLE v1) samples for Copilot go/no-go governance." />
+ <meta name="robots" content="index,follow" />
+ <link rel="canonical" href="https://www.noetfield.com/trust-ledger/sample-report/" />
+ <link rel="icon" href="/noetfield-favicon-512.png" type="image/png" />
+ <link rel="stylesheet" href="/assets/noetfield-tokens.css" />
+ <link rel="stylesheet" href="/assets/noetfield-shell.css" />
+ <link rel="stylesheet" href="/assets/noetfield-components.css" />
+ <link rel="stylesheet" href="/assets/noetfield-institutional.css" />
+ <link rel="stylesheet" href="/assets/noetfield-sales.css" />
+ <script src="/assets/noetfield-shell.js" defer></script>
 </head>
 <body>
- <p><a href="/enterprise/">Continue</a></p>
+ <div class="bg" aria-hidden="true"></div>
+ <a class="skip" href="#main">Skip to content</a>
+ <header id="nfHeader"></header>
+ <main id="main" class="wrap nf-page">
+ <header class="nf-hero">
+ <p class="nf-eyebrow">TLE v1 · Procurement sample</p>
+ <h1>Trust Ledger Entry examples (Go / Conditional / Rejected)</h1>
+ <p class="nf-lead">
+ Download canonical <strong>TLE v1</strong> YAML records your board and auditors expect for Microsoft 365 Copilot adoption.
+ Metadata-only evidence, confidence score, approval chain, and signed <code>audit_digest</code>.
+ </p>
+ </header>
+
+ <section class="nf-section">
+ <h2>Download samples</h2>
+ <div class="nf-dir-grid">
+ <article class="nf-dir-card featured">
+ <p class="meta">Approved</p>
+ <p>Copilot rollout authorized with standard controls.</p>
+ <a class="btn btn-primary" href="/trust-ledger/sample-report/samples/tle-go-approved.yaml" download>tle-go-approved.yaml</a>
+ </article>
+ <article class="nf-dir-card">
+ <p class="meta">Conditional</p>
+ <p>Rollout gated on DLP and retention controls.</p>
+ <a class="btn btn-secondary" href="/trust-ledger/sample-report/samples/tle-conditional.yaml" download>tle-conditional.yaml</a>
+ </article>
+ <article class="nf-dir-card">
+ <p class="meta">Rejected</p>
+ <p>Deployment not authorized — evidence gaps.</p>
+ <a class="btn btn-secondary" href="/trust-ledger/sample-report/samples/tle-rejected.yaml" download>tle-rejected.yaml</a>
+ </article>
+ </div>
+ </section>
+
+ <section class="nf-section">
+ <h2>Live workspace</h2>
+ <p>Create drafts, run approval chain, and export a board pack in the Governance Console.</p>
+ <div class="nf-cta-actions" style="display:flex;flex-wrap:wrap;gap:.75rem">
+ <a class="btn btn-primary" href="/workspace/">Trust Ledger Workspace</a>
+ <a class="btn btn-secondary" href="/cognitive-dashboard/">Governance Console</a>
+ </div>
+ </section>
+
+ <section class="nf-section">
+ <h2>Schema</h2>
+ <p>Machine schema: <code>packages/schemas/tle-v1.schema.json</code> · validate with <code>python3 scripts/validate-tle-samples.py</code></p>
+ </section>
+ </main>
+ <footer id="nfFooter"></footer>
 </body>
 </html>

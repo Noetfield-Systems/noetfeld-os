@@ -6,7 +6,9 @@ globs:
 
 # Noetfield agent scope
 
-- **This repo = Noetfield product only.** Do not implement TrustField (`TF-*`) or VIRLUX (`VL-*`) here.
+- **This repo = Noetfield product only.** `noetfield.com` / `www.noetfield.com` — that is the job.
+- **NEVER touch TrustField.** Not trustfield.ca, not the TrustField repo, not TrustField www, pricing, vendor packs, UPGs, MSB GTM, or deployment. Do not plan it, suggest it, or implement it. Decline and stay on Noetfield.
+- Do not implement TrustField (`TF-*`) or VIRLUX (`VL-*`) here.
 - **Tracking:** [.cursor/AGENT_TRACKING.md](../AGENT_TRACKING.md) — `ops/private/todolist/` locally, else GitHub Issues.
 - **Do not** recreate `todolist/` at repo root or commit `ops/private/`.
 - **Boundaries:** [PROJECT_BOUNDARIES_LOCKED.md](PROJECT_BOUNDARIES_LOCKED.md)

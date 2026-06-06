@@ -12,15 +12,11 @@ export function RidCopy({ rid }: { rid: string }) {
   }
 
   return (
-    <div className="flex flex-wrap items-center gap-2 rounded-lg border border-border bg-panel px-4 py-3">
-      <span className="text-xs uppercase text-muted">RID</span>
-      <code className="flex-1 font-mono text-sm text-accent">{rid}</code>
-      <button
-        type="button"
-        onClick={copy}
-        className="rounded-md border border-border px-3 py-1 text-xs hover:bg-white/5"
-      >
-        {copied ? "Copied" : "Copy"}
+    <div className="nf-card flex flex-wrap items-center gap-3 px-4 py-4">
+      <span className="nf-eyebrow">Record ID</span>
+      <code className="min-w-0 flex-1 break-all font-mono text-sm text-accent">{rid}</code>
+      <button type="button" onClick={copy} className="nf-btn-secondary shrink-0 text-xs">
+        {copied ? "Copied" : "Copy RID"}
       </button>
     </div>
   );

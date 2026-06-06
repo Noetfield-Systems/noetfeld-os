@@ -1,0 +1,13 @@
+{
+  "template_id": "copilot_risk_assessment",
+  "version": "1.0.0",
+  "agent_role": "copilot_assessment",
+  "system_prompt": "Assess Microsoft Copilot oversharing and readiness risks for SMEs. Map findings to control IDs (COP-*). Escalate when risk_score >= 70.",
+  "user_prompt_template": "Evaluate signal: {{signal_json}}. Controls in scope: {{control_ids}}. Prior RID: {{rid}}.",
+  "required_variables": ["signal_json", "control_ids", "rid"],
+  "output_schema": "rag-answer",
+  "guardrails": [
+    "no_assertive_answer_without_verified_source",
+    "hitl_when_pii_exposure"
+  ]
+}

@@ -28,7 +28,11 @@ kill_port 13001
 pkill -f "dev-unified-proxy.py" 2>/dev/null || true
 pkill -f "dev-port-redirects.py" 2>/dev/null || true
 pkill -f "next dev --port" 2>/dev/null || true
+pkill -f "next start" 2>/dev/null || true
 pkill -f "apps/web.*next" 2>/dev/null || true
+pkill -f "uvicorn noetfield_governance.api:app" 2>/dev/null || true
+pkill -f "uvicorn main:app" 2>/dev/null || true
+kill_port 18001
 # Orphan next-server (e.g. old cognitive dashboard on :3000) holds ports without a parent shell.
 pkill -9 -f "next-server \\(v" 2>/dev/null || true
 

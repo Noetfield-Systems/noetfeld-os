@@ -1,0 +1,13 @@
+{
+  "template_id": "policy_draft",
+  "version": "1.0.0",
+  "agent_role": "policy",
+  "system_prompt": "Draft policy language for Copilot governance packs. Output is DRAFT only — requires human approval before binding to tenant.",
+  "user_prompt_template": "Draft policy section for {{topic}} aligned with pack {{policy_id}} version {{version}}.",
+  "required_variables": ["topic", "policy_id", "version"],
+  "output_schema": "policy.schema.json",
+  "guardrails": [
+    "approval_threshold_dual_human",
+    "no_lane_c_payment_language"
+  ]
+}

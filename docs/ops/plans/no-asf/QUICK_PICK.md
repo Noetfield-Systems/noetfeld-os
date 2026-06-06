@@ -6,16 +6,6 @@ When the founder says **PLAN WITH NO ASF**, start here. Pick the next **agent** 
 
 ## Next 25 agent-ready plans
 
-1. **NF-PLAN-0102** · P1/T1 · Integration tests covering docs diligence happy path and 409 guards  
-   Verify: `pytest and/or make ship-verify; area=docs-diligence; pattern=integration-test`
-1. **NF-PLAN-0103** · P1/T1 · Align OpenAPI spec with implemented msb partner routes  
-   Verify: `pytest and/or make ship-verify; area=msb-partner; pattern=openapi-sync`
-1. **NF-PLAN-0104** · P1/T1 · Supabase migration for observability tables and RLS  
-   Verify: `pytest and/or make ship-verify; area=observability; pattern=migration-schema`
-1. **NF-PLAN-0105** · P1/T1 · Extend tle-smoke or ship-verify check for performance  
-   Verify: `pytest and/or make ship-verify; area=performance; pattern=smoke-script`
-1. **NF-PLAN-0110** · P1/T1 · Pilot rate limits and auth scopes for workspace ui  
-   Verify: `pytest and/or make ship-verify; area=workspace-ui; pattern=rate-limit`
 1. **NF-PLAN-0111** · P1/T1 · Webhook emission on www gtm state transitions  
    Verify: `pytest and/or make ship-verify; area=www-gtm; pattern=webhook-event`
 1. **NF-PLAN-0112** · P1/T1 · Audit-export field bundle for devex decisions  
@@ -59,4 +49,8 @@ When the founder says **PLAN WITH NO ASF**, start here. Pick the next **agent** 
 
 ## Recently completed (update via `scripts/update-plan-status.py`)
 
-- NF-PLAN-* marked `done` in registry — run update script after each ship session.
+- **NF-PLAN-0102** — docs diligence integration tests + 409 guards (`verify-docs-diligence.sh`)
+- **NF-PLAN-0103** — msb partner OpenAPI sync + trust ledger routes (`verify-msb-partner-openapi.sh`)
+- **NF-PLAN-0104** — observability tables migration + RLS (`verify-observability-migration.sh`)
+- **NF-PLAN-0105** — TLE API perf smoke + budgets (`verify-tle-performance.sh`)
+- **NF-PLAN-0110** — workspace UI pilot scopes + rate limits (`verify-workspace-ui-auth.sh`)

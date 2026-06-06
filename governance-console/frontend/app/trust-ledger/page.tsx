@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Shell } from "@/components/Shell";
-import { listTles, TrustLedgerEntry } from "@/lib/trustLedger";
+import { formatConfidence, listTles, TrustLedgerEntry } from "@/lib/trustLedger";
 
 export default function TrustLedgerListPage() {
   const [status, setStatus] = useState("");
@@ -30,11 +30,19 @@ export default function TrustLedgerListPage() {
 
   return (
     <Shell active="trust-ledger">
-      <section className="mb-6">
-        <h2 className="text-2xl font-semibold text-white">Trust Ledger</h2>
-        <p className="mt-2 text-sm text-muted">
-          Read-only view of Trust Ledger Entries (TLE v1). Copilot audit trail for procurement sign-off.
-        </p>
+      <section className="mb-6 flex flex-wrap items-start justify-between gap-4">
+        <div>
+          <h2 className="text-2xl font-semibold text-white">Trust Ledger</h2>
+          <p className="mt-2 text-sm text-muted">
+            Read-only view of Trust Ledger Entries (TLE v1). Copilot audit trail for procurement sign-off.
+          </p>
+        </div>
+        <Link
+          href="/trust-ledger/new"
+          className="rounded-lg border border-accent px-4 py-2 text-sm text-accent hover:bg-accent/10"
+        >
+          New TLE draft
+        </Link>
       </section>
 
       <form
@@ -83,7 +91,11 @@ export default function TrustLedgerListPage() {
 
       {!loading && rows.length === 0 && (
         <p className="text-sm text-muted">
-          No TLEs yet. Run <code className="text-accent">./scripts/tle-smoke.sh --api</code> or create via API.
+          No TLEs yet.{" "}
+          <Link href="/trust-ledger/new" className="text-accent hover:underline">
+            Create a draft
+          </Link>{" "}
+          or run <code className="text-accent">./scripts/tle-smoke.sh --api</code>.
         </p>
       )}
 
@@ -97,7 +109,14 @@ export default function TrustLedgerListPage() {
               <Link href={`/trust-ledger/${encodeURIComponent(row.tle_id)}`} className="block">
                 <div className="flex flex-wrap items-center justify-between gap-2">
                   <span className="font-mono text-sm text-accent">{row.tle_id}</span>
-                  <span className="rounded bg-white/10 px-2 py-0.5 text-xs uppercase">{row.status}</span>
+                  <div className="flex items-center gap-2">
+                    {row.confidence_score !== undefined && (
+                      <span className="rounded bg-accent/20 px-2 py-0.5 text-xs text-accent">
+                        Confidence {formatConfidence(row.confidence_score)}
+                      </span>
+                    )}
+                    <span className="rounded bg-white/10 px-2 py-0.5 text-xs uppercase">{row.status}</span>
+                  </div>
                 </div>
                 <p className="mt-2 text-sm text-muted line-clamp-2">{row.decision ?? "—"}</p>
               </Link>

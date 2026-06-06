@@ -1,0 +1,13 @@
+{
+  "template_id": "board_brief",
+  "version": "1.0.0",
+  "agent_role": "board",
+  "system_prompt": "You produce board-ready governance briefs. Never assert facts without cited evidence. No payment or execution recommendations.",
+  "user_prompt_template": "Summarize governance posture for tenant {{tenant_id}} using audit export and policy pack {{policy_id}}. RID context: {{rid}}.",
+  "required_variables": ["tenant_id", "policy_id", "rid"],
+  "output_schema": "rag-answer",
+  "guardrails": [
+    "deny_tools_default",
+    "require_verification_before_publish"
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.noetfield.com/risk.schema.json",
+  "title": "Noetfield Risk Register Entry",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["risk_id", "title", "likelihood", "impact", "linked_controls"],
+  "properties": {
+    "risk_id": { "type": "string", "pattern": "^RISK-[A-Z0-9-]+$" },
+    "title": { "type": "string" },
+    "description": { "type": "string" },
+    "likelihood": {
+      "type": "string",
+      "enum": ["rare", "unlikely", "possible", "likely", "almost_certain"]
+    },
+    "impact": {
+      "type": "string",
+      "enum": ["negligible", "minor", "moderate", "major", "severe"]
+    },
+    "inherent_score": { "type": "integer", "minimum": 0, "maximum": 100 },
+    "residual_score": { "type": "integer", "minimum": 0, "maximum": 100 },
+    "linked_controls": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "owner": { "type": "string" },
+    "status": {
+      "type": "string",
+      "enum": ["open", "mitigating", "accepted", "closed"]
+    },
+    "metadata": { "type": "object" }
+  }
+}

@@ -36,58 +36,70 @@ export function EvaluateForm() {
   }
 
   return (
-    <form onSubmit={onSubmit} className="space-y-5 rounded-xl border border-border bg-panel p-6">
+    <form onSubmit={onSubmit} className="nf-card space-y-6 p-6 sm:p-8" noValidate>
+      <div className="grid gap-5 sm:grid-cols-2">
+        <label className="block sm:col-span-1">
+          <span className="text-sm font-medium text-muted">Actor</span>
+          <input
+            required
+            value={actor}
+            onChange={(e) => setActor(e.target.value)}
+            placeholder="e.g. service:copilot-agent-01"
+            className="nf-input"
+            autoComplete="off"
+            aria-required="true"
+          />
+        </label>
+        <label className="block sm:col-span-1">
+          <span className="text-sm font-medium text-muted">Action</span>
+          <input
+            required
+            value={action}
+            onChange={(e) => setAction(e.target.value)}
+            placeholder="e.g. export_customer_summary"
+            className="nf-input"
+            autoComplete="off"
+            aria-required="true"
+          />
+        </label>
+      </div>
       <label className="block">
-        <span className="text-sm text-muted">Actor</span>
-        <input
-          required
-          value={actor}
-          onChange={(e) => setActor(e.target.value)}
-          placeholder="e.g. service:copilot-agent-01"
-          className="mt-1 w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm"
-        />
-      </label>
-      <label className="block">
-        <span className="text-sm text-muted">Action</span>
-        <input
-          required
-          value={action}
-          onChange={(e) => setAction(e.target.value)}
-          placeholder="e.g. export_customer_summary"
-          className="mt-1 w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm"
-        />
-      </label>
-      <label className="block">
-        <span className="text-sm text-muted">Context</span>
+        <span className="text-sm font-medium text-muted">Context</span>
         <textarea
           required
           rows={4}
           value={context}
           onChange={(e) => setContext(e.target.value)}
           placeholder="Business justification, data scope, policy references…"
-          className="mt-1 w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm"
+          className="nf-input"
+          aria-required="true"
         />
       </label>
       <label className="block">
-        <span className="text-sm text-muted">Metadata (JSON, optional)</span>
+        <span className="text-sm font-medium text-muted">Metadata (JSON, optional)</span>
         <textarea
           rows={3}
           value={metadataRaw}
           onChange={(e) => setMetadataRaw(e.target.value)}
-          className="mt-1 w-full font-mono text-xs rounded-lg border border-border bg-surface px-3 py-2"
+          className="nf-input font-mono text-xs"
+          spellCheck={false}
+          aria-describedby="metadata-hint"
         />
+        <p id="metadata-hint" className="mt-1 text-xs text-muted-2">
+          Optional structured fields for policy engines.
+        </p>
       </label>
       {error && (
-        <p className="rounded-lg border border-red-900 bg-red-950/50 px-3 py-2 text-sm text-red-300">
+        <p
+          className="rounded-lg border border-red-900/80 bg-red-950/40 px-4 py-3 text-sm text-red-200"
+          role="alert"
+        >
           {error}
         </p>
       )}
-      <button
-        type="submit"
-        disabled={loading}
-        className="rounded-lg bg-accent px-5 py-2.5 text-sm font-semibold text-black hover:opacity-90 disabled:opacity-50"
-      >
-        {loading ? "Evaluating…" : "Evaluate Intent"}
+      <button type="submit" disabled={loading} className="nf-btn-primary w-full sm:w-auto">
+        {loading && <span className="nf-spinner" aria-hidden />}
+        {loading ? "Evaluating…" : "Evaluate intent"}
       </button>
     </form>
   );

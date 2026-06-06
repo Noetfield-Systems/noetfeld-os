@@ -1,0 +1,37 @@
+---
+description: Mandatory self-audit loop — memory, incidents, scope verify
+globs:
+  - "**/*"
+alwaysApply: true
+---
+
+# Noetfield self-audit loop (mandatory)
+
+Follow [docs/ops/AGENT_SELF_AUDIT_LOOP_LOCKED_v1.md](../../docs/ops/AGENT_SELF_AUDIT_LOOP_LOCKED_v1.md).
+
+## Session start
+
+1. Read [.cursor/agent-memory/MEMORY_LOCKED.yaml](../agent-memory/MEMORY_LOCKED.yaml)
+2. Read [.cursor/incidents/REGISTRY.md](../incidents/REGISTRY.md) open items
+3. Apply [.cursor/skills/SKILL-001-scope-gate-before-work.md](../skills/SKILL-001-scope-gate-before-work.md)
+
+## Before commit
+
+- [.cursor/skills/SKILL-002-pre-commit-audit.md](../skills/SKILL-002-pre-commit-audit.md)
+- `./scripts/verify-agent-scope.sh` must pass
+
+## Docs
+
+- Tag + date **only on docs you write** — never retag or edit others' docs ([AGENT_DOC_TAGGING_LOCKED_v1.md](../../docs/ops/AGENT_DOC_TAGGING_LOCKED_v1.md))
+
+## Session end
+
+- [.cursor/skills/SKILL-003-session-end-report.md](../skills/SKILL-003-session-end-report.md)
+
+## On boundary mistake
+
+- [.cursor/skills/SKILL-004-incident-when-boundary-crossed.md](../skills/SKILL-004-incident-when-boundary-crossed.md)
+
+## Memory
+
+Cloud agents have **no chat memory**. Git-tracked `MEMORY_LOCKED.yaml` + incidents **are** the memory. Update them when learning something new.

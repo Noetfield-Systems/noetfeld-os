@@ -1,22 +1,15 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
 import { Shell } from "@/components/Shell";
 import { EvaluateForm } from "@/components/EvaluateForm";
 import { DevPortBanner } from "@/components/DevPortBanner";
-import { ApiHealth, apiBaseLabel, fetchApiHealth } from "@/lib/health";
+import { apiBaseLabel } from "@/lib/health";
+import { platformConsoleHref } from "@/lib/platform-console";
+import { useApiHealth } from "@/lib/useApiHealth";
 
 export default function CognitiveDashboardPage() {
-  const [health, setHealth] = useState<ApiHealth | null>(null);
-
-  useEffect(() => {
-    fetchApiHealth().then(setHealth);
-    const id = setInterval(() => {
-      fetchApiHealth().then(setHealth);
-    }, 15000);
-    return () => clearInterval(id);
-  }, []);
+  const health = useApiHealth();
 
   return (
     <Shell active="dashboard">
@@ -38,7 +31,7 @@ export default function CognitiveDashboardPage() {
         </p>
       </section>
 
-      <div className="mb-8 grid gap-4 sm:grid-cols-3">
+      <div className="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <div className="rounded-xl border border-border bg-panel p-4">
           <p className="text-xs uppercase tracking-wide text-muted">Governance API</p>
           <p className="mt-2 font-mono text-xs text-white/90">{apiBaseLabel()}</p>
@@ -53,10 +46,8 @@ export default function CognitiveDashboardPage() {
           </p>
           {!health?.ok && health !== null && (
             <p className="mt-2 text-xs text-muted">
-              Start API:{" "}
-              <code className="rounded bg-black/40 px-1">
-                cd governance-console/backend && uvicorn main:app --reload --port 8000
-              </code>
+              Start stack:{" "}
+              <code className="rounded bg-black/40 px-1">make dev-local</code>
             </p>
           )}
         </div>
@@ -68,11 +59,16 @@ export default function CognitiveDashboardPage() {
           <p className="mt-2 text-lg font-medium text-white">Audit log</p>
           <p className="mt-1 text-sm text-muted">Search evaluations by RID</p>
         </Link>
+        <Link
+          href="/trust-ledger"
+          className="rounded-xl border border-border bg-panel p-4 transition hover:border-accent/40"
+        >
+          <p className="text-xs uppercase tracking-wide text-muted">Trust Ledger</p>
+          <p className="mt-2 text-lg font-medium text-white">TLE workspace</p>
+          <p className="mt-1 text-sm text-muted">Read-only list, detail, PDF export</p>
+        </Link>
         <a
-          href={
-            process.env.NEXT_PUBLIC_PLATFORM_CONSOLE_URL ??
-            "http://127.0.0.1:8001/console"
-          }
+          href={platformConsoleHref()}
           className="rounded-xl border border-border bg-panel p-4 transition hover:border-accent/40"
         >
           <p className="text-xs uppercase tracking-wide text-muted">Platform console</p>
