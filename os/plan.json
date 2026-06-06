@@ -72,21 +72,21 @@
   ],
   "next_tasks": [
     {
-      "id": "ship-result-confidence-e2e-004",
-      "title": "E2E: evaluate → result confidence score assertion",
-      "plan": "docs/strategy/NOETFIELD_GTM_60_DAY_LOCKED_v1.md",
+      "id": "ship-pilot-e2e-verify-007",
+      "title": "Wire copilot-pilot-e2e into plan-with-no-asf-verify",
+      "plan": "os/plans/phase-0-ship-ops/T0/nf-future-0011.md",
       "status": "done"
     },
     {
-      "id": "ship-copilot-demo-links-005",
-      "title": "Verify copilot/demo CTA hrefs return 200",
-      "plan": "os/plans/phase-0-ship-ops/T0/nf-future-0004.md",
+      "id": "ship-audit-export-api-e2e-008",
+      "title": "Verify /audit/export JSON bundle in verify bundle",
+      "plan": "os/plans/phase-0-ship-ops/T0/nf-future-0016.md",
       "status": "done"
     },
     {
-      "id": "ship-plan-with-no-asf-script-006",
-      "title": "Add plan-with-no-asf-verify.sh + make target",
-      "plan": "docs/ops/plans/no-asf/QUICK_PICK.md",
+      "id": "ship-procurement-e2e-verify-009",
+      "title": "Wire procurement-pack-e2e into plan-with-no-asf-verify",
+      "plan": "os/plans/phase-0-ship-ops/T0/nf-future-0024.md",
       "status": "done"
     }
   ],

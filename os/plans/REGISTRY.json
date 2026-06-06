@@ -173,7 +173,7 @@
       "domain": "pilot",
       "title": "Migrate pilot for ship ops (T0, #0011)",
       "path": "os/plans/phase-0-ship-ops/T0/nf-future-0011.md",
-      "status": "backlog"
+      "status": "done"
     },
     {
       "id": "nf-future-0012",
@@ -223,7 +223,7 @@
       "domain": "audit",
       "title": "Automate audit for ship ops (T0, #0016)",
       "path": "os/plans/phase-0-ship-ops/T0/nf-future-0016.md",
-      "status": "backlog"
+      "status": "done"
     },
     {
       "id": "nf-future-0017",
@@ -303,7 +303,7 @@
       "domain": "procurement",
       "title": "Ship procurement for ship ops (T0, #0024)",
       "path": "os/plans/phase-0-ship-ops/T0/nf-future-0024.md",
-      "status": "backlog"
+      "status": "done"
     },
     {
       "id": "nf-future-0025",

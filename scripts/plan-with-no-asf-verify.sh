@@ -18,9 +18,13 @@ if [[ "$health" != "200" ]]; then
 fi
 
 chmod +x scripts/verify-ui-endpoints.sh scripts/verify-ui-e2e.sh scripts/verify-copilot-demo-links.sh
+chmod +x scripts/verify-audit-export.sh scripts/copilot-pilot-e2e.sh scripts/procurement-pack-e2e.sh
 ./scripts/verify-ui-endpoints.sh
 ./scripts/verify-ui-e2e.sh
 ./scripts/verify-copilot-demo-links.sh
+./scripts/verify-audit-export.sh
+./scripts/copilot-pilot-e2e.sh
+./scripts/procurement-pack-e2e.sh
 
 cd governance-console/backend
 PYTHONPATH=. python3 -m pytest tests/test_audit_events.py -q

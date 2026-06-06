@@ -1,37 +1,36 @@
-PLAN WITH NO ASF — repeatable script complete (Noetfield cloud)
+PLAN WITH NO ASF — iteration 3 complete (Noetfield cloud)
 
-Merged PR #28 to main (audit export UX, demo confidence, TLE www CTAs).
+Merged PR #29 to main. Shipped full GTM demo verify chain.
 
 Shipped next_tasks (all done):
-1. ship-result-confidence-e2e-004 — verify-ui-e2e: evaluate → /result/{rid} confidence badge
-2. ship-copilot-demo-links-005 — verify-copilot-demo-links.sh: demo CTA hrefs 200 on :13080
-3. ship-plan-with-no-asf-script-006 — scripts/plan-with-no-asf-verify.sh + make plan-with-no-asf-verify
+1. ship-pilot-e2e-verify-007 — copilot-pilot-e2e wired into plan-with-no-asf-verify
+2. ship-audit-export-api-e2e-008 — verify-audit-export.sh: /audit/export JSON bundle
+3. ship-procurement-e2e-verify-009 — procurement-pack-e2e wired into verify bundle
 
-Plans marked done: nf-future-0004
+Plans marked done: nf-future-0011, nf-future-0016, nf-future-0024
 
 Verify:
-- ./scripts/plan-with-no-asf-verify.sh — PASS
-- make plan-with-no-asf-verify — PASS
+- ./scripts/plan-with-no-asf-verify.sh — PASS (UI + pilot + audit export + procurement)
 
 scope_confirmed: noetfield_only
 
 ```yaml
 schema_version: 1
 repo: noetfield
-task: PLAN WITH NO ASF — repeatable script
+task: PLAN WITH NO ASF — iteration 3 demo verify chain
 status: done
 verify_passed: true
 verify_command: "./scripts/plan-with-no-asf-verify.sh"
-verify_output_summary: "Agent scope, UI endpoints, UI e2e (confidence), copilot demo links, audit events pytest, bank-grade smoke — all passed"
+verify_output_summary: "Full demo path: UI e2e, copilot demo links, audit export JSON, pilot e2e, procurement zip, audit pytest, bank-grade smoke — all passed"
 blocked_reason: ""
 next_action: "Pick next T0/T1 from os/plans/REGISTRY.json per founder"
 evidence_paths:
   - scripts/plan-with-no-asf-verify.sh
-  - scripts/verify-copilot-demo-links.sh
-  - scripts/verify-ui-e2e.sh
-  - Makefile
+  - scripts/verify-audit-export.sh
   - os/plan.json
-  - os/plans/phase-0-ship-ops/T0/nf-future-0004.md
-reported_at: "2026-06-03T12:00:00Z"
+  - os/plans/phase-0-ship-ops/T0/nf-future-0011.md
+  - os/plans/phase-0-ship-ops/T0/nf-future-0016.md
+  - os/plans/phase-0-ship-ops/T0/nf-future-0024.md
+reported_at: "2026-06-03T14:00:00Z"
 reporter: cursor
 ```
