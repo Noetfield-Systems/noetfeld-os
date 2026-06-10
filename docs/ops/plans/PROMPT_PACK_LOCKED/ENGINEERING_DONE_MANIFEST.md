@@ -52,6 +52,31 @@ Shipped capabilities mapped to registry indices. Run `python3 scripts/sync-promp
 
 ---
 
+## PLAN WITH NO ASF iterations 6–9
+
+| next_tasks id | Shipped | Evidence |
+|---------------|---------|----------|
+| ship-registry-sync-iter6-017 | Registry sync iter 6 | `scripts/sync-prompt-pack-status.py` |
+| ship-bc-ai-www-wire-018 | BC AI www wire | `scripts/verify-gtm-ops-docs.sh` |
+| ship-dual-brand-boundary-019 | Dual-brand boundary | `docs/spec/trustfield-noetfield-conflict-matrix.md` |
+| ship-registry-pattern-propagation-020 | QUICK_PICK dedup | `scripts/sync-prompt-pack-status.py` |
+| ship-diligence-procurement-wire-021 | RPAA procurement wire | `copilot/procurement/` |
+| ship-design-partner-bc-ai-022 | BC AI pipeline block | `docs/copilot/DESIGN_PARTNER_PIPELINE_v1.md` |
+| ship-gtm-next-queue-023 | GTM_NEXT queue | `docs/ops/plans/no-asf/GTM_NEXT.md` |
+| ship-staging-demo-www-wire-024 | STAGING_DEMO www wire | `docs/ops/STAGING_DEMO.md` |
+| ship-security-buyer-tle-copy-025 | Security buyer TLE copy | `trust-ledger/index.html` |
+| ship-procurement-one-pager-wire-027 | Procurement one-pager wire | `copilot/index.html`, `copilot/procurement/` |
+| ship-governance-sources-www-028 | Sources Book on procurement | `copilot/procurement/index.html` |
+| ship-homepage-demo-cta-029 | Homepage demo CTA verify | `scripts/verify-ui-e2e.sh` |
+
+## PLAN WITH NO ASF — 10-phase audit fix (030–032)
+
+| next_tasks id | Shipped | Evidence |
+|---------------|---------|----------|
+| ship-tunnel-smoke-verify-030 | Optional staging-smoke in verify | `scripts/plan-with-no-asf-verify.sh` |
+| ship-governance-sources-handbook-031 | Handbook link on procurement | `copilot/procurement/index.html` |
+| ship-copilot-hub-sources-032 | Sources Book on copilot hub | `copilot/index.html` |
+
 ## Verify command (all future ships)
 
 ```bash

@@ -38,5 +38,16 @@ cd "$ROOT"
 
 python3 scripts/smoke_bank_grade_html.py
 
+chmod +x scripts/verify-no-asf-coherence.sh
+./scripts/verify-no-asf-coherence.sh
+
+if [[ -n "${NF_STAGING_URL:-}" ]]; then
+  echo "NF_STAGING_URL set — running optional staging-smoke …"
+  chmod +x scripts/staging-smoke.sh
+  ./scripts/staging-smoke.sh
+else
+  echo "SKIP staging-smoke (NF_STAGING_URL not set)"
+fi
+
 echo ""
 echo "plan-with-no-asf-verify passed."

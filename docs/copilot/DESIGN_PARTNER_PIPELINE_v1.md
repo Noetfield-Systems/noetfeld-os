@@ -2,6 +2,7 @@
 
 **Agent tag:** `NF-CLOUD-AGENT`  
 **GTM priority:** #1 — one real customer  
+**Execution:** Agentic layer only — see [AGENTIC_COMMERCIAL_HANDOFF_v1.md](../ops/AGENTIC_COMMERCIAL_HANDOFF_v1.md) (`ship-design-partner-outreach-026` is **not** NF-CLOUD implement).  
 **Sources:** `docs/strategy/NOETFIELD_GTM_60_DAY_LOCKED_v1.md`, `docs/copilot/DESIGN_PARTNER_SOW_OUTLINE.md`
 
 ---
