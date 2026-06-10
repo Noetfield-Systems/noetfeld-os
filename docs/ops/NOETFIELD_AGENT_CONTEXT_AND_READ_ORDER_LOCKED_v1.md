@@ -8,7 +8,7 @@
 | Lane | `noetfield_cloud` — semi-separate |
 | Thread | `THREAD-PORTFOLIO` |
 | Plane | `[DELIVERY]` |
-| Authority | ASF — ship from `os/plan.json`; ingest after; do not idle for next order |
+| Authority | ASF — bounded ship from [GTM_NEXT.md](./plans/no-asf/GTM_NEXT.md) + `os/plan.json` `ship_rule` / `agentic_queue` when registry 1000/1000; ingest after; no self-start from `plan.json` alone (R-007/R-011) |
 
 **Link index (in-repo):** [AGENT_READ_LINKS_LOCKED_v1.md](./AGENT_READ_LINKS_LOCKED_v1.md) → § Cloud ship  
 **Canonical index (Mac):** `~/Desktop/SourceA/founder/repo-agent-notices/AGENT_READ_LINKS_INDEX.md`

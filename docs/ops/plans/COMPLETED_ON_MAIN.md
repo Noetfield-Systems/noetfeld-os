@@ -17,7 +17,9 @@ python3 scripts/sync-prompt-pack-status.py
 | 10-phase audit fix (PR #39) | R-011 agentic law, coherence verify, www 030–032, manifest hygiene |
 | Post-audit fix | workflow reconcile, SHIP_DONE_MAP 023–032, path canonicalization, verify hardening |
 | PLAN WITH NO ASF iter 11 | ship-033–035 (trust-brief hub, drift sources procurement, demo rehearsal hub) |
-| Third audit fix | workflow canonical SHIP_NOW, registry agentic_only, coherence hardening |
+| Third audit fix | workflow canonical SHIP_NOW, registry agentic_only, coherence hardening (bundled in fourth-audit PR) |
+| PLAN WITH NO ASF iter 12 | ship-036–038 (trust-brief procurement, drift blueprints, demo-url verify) |
+| Fourth audit fix | third-audit merge-truth + GTM_PRIORITY outreach fence + sprint backlog path |
 | 1000 prompt pack v2 lock | docs/ops/NOETFIELD_1000_PROMPT_PACK_LOCKED_v1.md |
 
 **Registry note:** `1000/1000 done` = pattern propagation dedup — queue is [GTM_NEXT.md](./no-asf/GTM_NEXT.md), not empty backlog.

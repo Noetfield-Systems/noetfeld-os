@@ -11,18 +11,22 @@ When the NF-PLAN registry is fully synced (`1000/1000 done`), pick the next **�
 
 `python3 scripts/sync-prompt-pack-status.py` marks all NF-PLAN rows `done` via `expand_done_by_pattern()` — this is **dedup / pattern propagation**, not “all engineering complete.” Real queue lives here and in `os/plan.json` `next_tasks`.
 
-## Next GTM Tier A (NF-CLOUD disk) — iter 12 proposals
+## ID namespace note
+
+`ship-*-NNN` = GTM Tier A queue (`next_tasks`). `nf-*-NNN` in engineering manifest = product waves — numeric suffix overlap is intentional, not duplicate work.
+
+## Next GTM Tier A (NF-CLOUD disk) — iter 13 proposals
 
 Founder pick or bounded `implement`:
 
-1. **ship-trust-brief-procurement-036** · Trust-brief intake link on procurement buyer pack + verify  
-   Outcome: Diligence reviewers can request Governance Brief from procurement page.
+1. **ship-trust-brief-pilot-039** · Trust-brief intake CTA on copilot pilot page + verify  
+   Outcome: Pilot reviewers can request Governance Brief from pilot checklist.
 
-1. **ship-drift-blueprints-procurement-037** · Drift blueprints index href on procurement + verify  
-   Outcome: Continuous governance blueprint citations for reviewers.
+1. **ship-procurement-cta-homepage-040** · Procurement buyer pack link from homepage hero CTAs + verify  
+   Outcome: Homepage diligence path matches copilot hub procurement wire.
 
-1. **ship-demo-url-verify-038** · `make demo-url` output guard in verify bundle (local dev)  
-   Outcome: Founder demo URL path regression-checked before share.
+1. **ship-cursor-reply-coherence-041** · Coherence gate: cursor-reply `main:` must match `git rev-parse --short HEAD` (FAIL not WARN)  
+   Outcome: Closeout artifact cannot drift from merged main SHA.
 
 ## Agentic only — Hub (not NF-CLOUD implement)
 
@@ -31,6 +35,14 @@ Founder pick or bounded `implement`:
 | **ship-design-partner-outreach-026** | Agentic layer | One named CIO contact + demo URL sent; tracker row updated |
 
 Evidence: [DESIGN_PARTNER_PIPELINE_v1.md](../../../copilot/DESIGN_PARTNER_PIPELINE_v1.md) · [AGENTIC_COMMERCIAL_HANDOFF_v1.md](../../AGENTIC_COMMERCIAL_HANDOFF_v1.md)
+
+## Recently shipped (iter 12)
+
+| ID | Shipped |
+|----|---------|
+| ship-trust-brief-procurement-036 | Trust-brief intake CTA on procurement buyer pack |
+| ship-drift-blueprints-procurement-037 | Drift blueprints index on procurement |
+| ship-demo-url-verify-038 | `make demo-url` guard in plan-with-no-asf-verify |
 
 ## Recently shipped (iter 11)
 

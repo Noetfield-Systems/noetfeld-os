@@ -25,6 +25,8 @@ chmod +x scripts/verify-quick-pick-fresh.sh scripts/verify-boundary-matrix.sh
 ./scripts/verify-ui-e2e.sh
 ./scripts/verify-copilot-demo-links.sh
 ./scripts/verify-gtm-ops-docs.sh
+chmod +x scripts/verify-demo-url.sh
+./scripts/verify-demo-url.sh
 ./scripts/verify-tier-gate.sh
 ./scripts/verify-quick-pick-fresh.sh
 ./scripts/verify-boundary-matrix.sh

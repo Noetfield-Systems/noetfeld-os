@@ -94,6 +94,25 @@ Shipped capabilities mapped to registry indices. Run `python3 scripts/sync-promp
 | ship-drift-sources-procurement-034 | Drift sources on procurement | `copilot/procurement/index.html` |
 | ship-demo-rehearsal-hub-wire-035 | Demo rehearsal on hub | `copilot/index.html` |
 
+## ID namespace note
+
+`ship-*-NNN` (GTM `next_tasks`) and `nf-*-NNN` (product waves above) may share numeric suffixes — different namespaces, not duplicate shipped work.
+
+## PLAN WITH NO ASF iter 12 (036–038)
+
+| next_tasks id | Shipped | Evidence |
+|---------------|---------|----------|
+| ship-trust-brief-procurement-036 | Trust-brief on procurement | `copilot/procurement/index.html`, `verify-gtm-ops-docs.sh` |
+| ship-drift-blueprints-procurement-037 | Drift blueprints index on procurement | `copilot/procurement/index.html` |
+| ship-demo-url-verify-038 | demo-url verify guard | `scripts/verify-demo-url.sh`, `plan-with-no-asf-verify.sh` |
+
+## Fourth audit fix (third-audit bundle + iter 12)
+
+| Area | Shipped | Evidence |
+|------|---------|----------|
+| Third-audit workflow | Canonical SHIP_NOW, registry fence, coherence | `README.md`, `registry.json`, `verify-no-asf-coherence.sh` |
+| Iter 12 www + verify | Procurement trust-brief, drift blueprints, demo-url | `copilot/procurement/`, `verify-demo-url.sh` |
+
 ## Third audit fix (canonical SHIP_NOW + registry fence)
 
 | Area | Shipped | Evidence |

@@ -4,6 +4,10 @@
 
 ## Active queue (`next_tasks`)
 
+**Next iter 13:** trust-brief pilot CTA, homepage procurement CTA, cursor-reply coherence gate — see [GTM_NEXT.md](docs/ops/plans/no-asf/GTM_NEXT.md).
+
+**Shipped iter 12 (2026-06-10):** trust-brief on procurement, drift blueprints index on procurement, demo-url verify guard.
+
 **Shipped iter 11 (2026-06-10):** trust-brief hub CTA verify, drift sources on procurement, demo rehearsal on hub.
 
 **Shipped post-audit + 10-phase audit:** R-011 agentic law, workflow reconcile, www 030–032, coherence verify.

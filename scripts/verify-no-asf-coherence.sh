@@ -34,6 +34,13 @@ else
   fail=1
 fi
 
+if grep -q 'os/SHIP_NOW.md' docs/spec/SPRINT_BACKLOG_WEEKS_0-8.md 2>/dev/null; then
+  echo "OK   sprint backlog cites os/SHIP_NOW.md"
+else
+  echo "FAIL SPRINT_BACKLOG must cite os/SHIP_NOW.md" >&2
+  fail=1
+fi
+
 # AGENT_READ_LINKS canonical ship
 if grep -q 'Ship now (canonical)' docs/ops/AGENT_READ_LINKS_LOCKED_v1.md 2>/dev/null; then
   if grep -q 'docs/SHIP_NOW' docs/ops/AGENT_READ_LINKS_LOCKED_v1.md 2>/dev/null; then
@@ -84,6 +91,13 @@ if grep -q 'agentic only' docs/ops/plans/PROMPT_PACK_LOCKED/GTM_PRIORITY_100.md 
 else
   echo "FAIL GTM_PRIORITY_100 missing agentic fence banner" >&2
   fail=1
+fi
+
+if rg -q 'implement: Design-partner outreach' docs/ops/plans/PROMPT_PACK_LOCKED/GTM_PRIORITY_100.md 2>/dev/null; then
+  echo "FAIL GTM_PRIORITY outreach rows still use implement: Design-partner outreach" >&2
+  fail=1
+else
+  echo "OK   GTM_PRIORITY outreach prompts are agentic-only"
 fi
 
 # Registry customer-outreach agentic_only
@@ -206,7 +220,7 @@ if command -v gh >/dev/null 2>&1; then
   else
     echo "OK   no open trustfield-scope/governance-console PRs"
   fi
-  ship_prs="$(gh pr list --state open --json number,headRefName --jq '.[] | select(.headRefName | test("^cursor/(no-asf|10-phase|post-audit|third-audit)")) | .number' 2>/dev/null || true)"
+  ship_prs="$(gh pr list --state open --json number,headRefName --jq '.[] | select(.headRefName | test("^cursor/(no-asf|10-phase|post-audit|third-audit|fourth-audit)")) | .number' 2>/dev/null || true)"
   if [[ -n "$ship_prs" ]]; then
     echo "WARN open ship PR(s): $ship_prs — merge before next iter closeout"
   else

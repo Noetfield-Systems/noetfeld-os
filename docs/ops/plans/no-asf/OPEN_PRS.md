@@ -6,13 +6,21 @@
 
 Only merge **Noetfield GTM / PLAN WITH NO ASF** ship PRs from branches matching:
 
-`cursor/no-asf-*-37f0`, `cursor/10-phase-audit-fix-37f0`, `cursor/post-audit-10-phase-fix-37f0`, or `cursor/third-audit-10-phase-fix-37f0`
+`cursor/no-asf-*-37f0`, `cursor/10-phase-audit-fix-37f0`, `cursor/post-audit-10-phase-fix-37f0`, `cursor/third-audit-10-phase-fix-37f0`, or `cursor/fourth-audit-iter12-37f0`
 
 ## Do not merge from cloud agent
 
 - TrustField scope PRs
 - Stale governance-console experiments unless founder re-opens
 - Any PR touching `ops/private/` or TrustField implementation
+
+## Pending ship PR
+
+| PR | Branch | Notes |
+|----|--------|-------|
+| (open) | cursor/fourth-audit-iter12-37f0 | Fourth audit — third-audit bundle + iter 12 (036–038) + coherence |
+
+Manual compare if automation fails: `main...cursor/fourth-audit-iter12-37f0`
 
 ## Recently merged
 

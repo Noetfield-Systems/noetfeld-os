@@ -79,6 +79,24 @@
   ],
   "next_tasks": [
     {
+      "id": "ship-trust-brief-procurement-036",
+      "title": "Trust-brief intake link on procurement buyer pack + verify",
+      "plan": "copilot/procurement/index.html",
+      "status": "done"
+    },
+    {
+      "id": "ship-drift-blueprints-procurement-037",
+      "title": "Drift blueprints index href on procurement + verify",
+      "plan": "docs/references/GOVERNANCE_DRIFT_BLUEPRINTS_INDEX_LOCKED_v1.md",
+      "status": "done"
+    },
+    {
+      "id": "ship-demo-url-verify-038",
+      "title": "make demo-url output guard in verify bundle",
+      "plan": "scripts/verify-demo-url.sh",
+      "status": "done"
+    },
+    {
       "id": "ship-trust-brief-intake-wire-033",
       "title": "Trust-brief intake CTA on copilot hub + verify",
       "plan": "copilot/index.html",

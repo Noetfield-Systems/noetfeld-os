@@ -23,7 +23,7 @@
   - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Diligence one-pager evidence for data migrations cont…`
   - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.
 - **AGENTIC ONLY — skip NF-CLOUD** · **NF-PLAN-0021** (nf-future-0021) · P0/T2 · Design-partner outreach and pipeline for trust ledger
-  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Design-partner outreach and pipeline for trust ledger…`
+  - Prompt: `Agentic (Hub only) — ship-design-partner-outreach-026: Design-partner outreach and pipeline for trust ledger…`
   - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.
 - **NF-PLAN-0026** (nf-future-0026) · P0/T2 · Buyer interview debrief and evidence capture for www gtm
   - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Buyer interview debrief and evidence capture for www …`
@@ -41,7 +41,7 @@
   - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Diligence one-pager evidence for data migrations cont…`
   - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.
 - **AGENTIC ONLY — skip NF-CLOUD** · **NF-PLAN-0041** (nf-future-0041) · P0/T3 · Design-partner outreach and pipeline for trust ledger
-  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Design-partner outreach and pipeline for trust ledger…`
+  - Prompt: `Agentic (Hub only) — ship-design-partner-outreach-026: Design-partner outreach and pipeline for trust ledger…`
   - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.
 - **NF-PLAN-0042** (nf-future-0042) · P0/T3 · 5-minute demo rehearsal script and buyer checklist for governance api
   - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: 5-minute demo rehearsal script and buyer checklist fo…`
@@ -62,7 +62,7 @@
   - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Diligence one-pager evidence for data migrations cont…`
   - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.
 - **AGENTIC ONLY — skip NF-CLOUD** · **NF-PLAN-0061** (nf-future-0061) · P0/T4 · Design-partner outreach and pipeline for trust ledger
-  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Design-partner outreach and pipeline for trust ledger…`
+  - Prompt: `Agentic (Hub only) — ship-design-partner-outreach-026: Design-partner outreach and pipeline for trust ledger…`
   - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.
 - **NF-PLAN-0062** (nf-future-0062) · P0/T4 · 5-minute demo rehearsal script and buyer checklist for governance api
   - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: 5-minute demo rehearsal script and buyer checklist fo…`
@@ -83,7 +83,7 @@
   - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Diligence one-pager evidence for data migrations cont…`
   - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.
 - **AGENTIC ONLY — skip NF-CLOUD** · **NF-PLAN-0081** (nf-future-0081) · P0/T5 · Design-partner outreach and pipeline for trust ledger
-  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Design-partner outreach and pipeline for trust ledger…`
+  - Prompt: `Agentic (Hub only) — ship-design-partner-outreach-026: Design-partner outreach and pipeline for trust ledger…`
   - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.
 - **NF-PLAN-0082** (nf-future-0082) · P0/T5 · 5-minute demo rehearsal script and buyer checklist for governance api
   - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: 5-minute demo rehearsal script and buyer checklist fo…`
@@ -131,7 +131,7 @@
   - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Diligence one-pager evidence for data migrations cont…`
   - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.
 - **AGENTIC ONLY — skip NF-CLOUD** · **NF-PLAN-0141** (nf-future-0141) · P1/T3 · Design-partner outreach and pipeline for trust ledger
-  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Design-partner outreach and pipeline for trust ledger…`
+  - Prompt: `Agentic (Hub only) — ship-design-partner-outreach-026: Design-partner outreach and pipeline for trust ledger…`
   - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.
 - **NF-PLAN-0142** (nf-future-0142) · P1/T3 · 5-minute demo rehearsal script and buyer checklist for governance api
   - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: 5-minute demo rehearsal script and buyer checklist fo…`
@@ -152,7 +152,7 @@
   - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Diligence one-pager evidence for data migrations cont…`
   - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.
 - **AGENTIC ONLY — skip NF-CLOUD** · **NF-PLAN-0161** (nf-future-0161) · P1/T4 · Design-partner outreach and pipeline for trust ledger
-  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Design-partner outreach and pipeline for trust ledger…`
+  - Prompt: `Agentic (Hub only) — ship-design-partner-outreach-026: Design-partner outreach and pipeline for trust ledger…`
   - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.
 - **NF-PLAN-0162** (nf-future-0162) · P1/T4 · 5-minute demo rehearsal script and buyer checklist for governance api
   - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: 5-minute demo rehearsal script and buyer checklist fo…`
@@ -173,7 +173,7 @@
   - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Diligence one-pager evidence for data migrations cont…`
   - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.
 - **AGENTIC ONLY — skip NF-CLOUD** · **NF-PLAN-0181** (nf-future-0181) · P1/T5 · Design-partner outreach and pipeline for trust ledger
-  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Design-partner outreach and pipeline for trust ledger…`
+  - Prompt: `Agentic (Hub only) — ship-design-partner-outreach-026: Design-partner outreach and pipeline for trust ledger…`
   - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.
 - **NF-PLAN-0182** (nf-future-0182) · P1/T5 · 5-minute demo rehearsal script and buyer checklist for governance api
   - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: 5-minute demo rehearsal script and buyer checklist fo…`
@@ -194,7 +194,7 @@
   - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Diligence one-pager evidence for data migrations cont…`
   - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.
 - **AGENTIC ONLY — skip NF-CLOUD** · **NF-PLAN-0201** (nf-future-0201) · P2/T1 · Design-partner outreach and pipeline for trust ledger
-  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Design-partner outreach and pipeline for trust ledger…`
+  - Prompt: `Agentic (Hub only) — ship-design-partner-outreach-026: Design-partner outreach and pipeline for trust ledger…`
   - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.
 - **NF-PLAN-0202** (nf-future-0202) · P2/T1 · 5-minute demo rehearsal script and buyer checklist for governance api
   - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: 5-minute demo rehearsal script and buyer checklist fo…`
@@ -215,7 +215,7 @@
   - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Diligence one-pager evidence for data migrations cont…`
   - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.
 - **AGENTIC ONLY — skip NF-CLOUD** · **NF-PLAN-0221** (nf-future-0221) · P2/T2 · Design-partner outreach and pipeline for trust ledger
-  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Design-partner outreach and pipeline for trust ledger…`
+  - Prompt: `Agentic (Hub only) — ship-design-partner-outreach-026: Design-partner outreach and pipeline for trust ledger…`
   - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.
 - **NF-PLAN-0222** (nf-future-0222) · P2/T2 · 5-minute demo rehearsal script and buyer checklist for governance api
   - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: 5-minute demo rehearsal script and buyer checklist fo…`
@@ -236,7 +236,7 @@
   - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Diligence one-pager evidence for data migrations cont…`
   - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.
 - **AGENTIC ONLY — skip NF-CLOUD** · **NF-PLAN-0241** (nf-future-0241) · P2/T3 · Design-partner outreach and pipeline for trust ledger
-  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Design-partner outreach and pipeline for trust ledger…`
+  - Prompt: `Agentic (Hub only) — ship-design-partner-outreach-026: Design-partner outreach and pipeline for trust ledger…`
   - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.
 - **NF-PLAN-0242** (nf-future-0242) · P2/T3 · 5-minute demo rehearsal script and buyer checklist for governance api
   - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: 5-minute demo rehearsal script and buyer checklist fo…`
@@ -257,7 +257,7 @@
   - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Diligence one-pager evidence for data migrations cont…`
   - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.
 - **AGENTIC ONLY — skip NF-CLOUD** · **NF-PLAN-0261** (nf-future-0261) · P2/T4 · Design-partner outreach and pipeline for trust ledger
-  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Design-partner outreach and pipeline for trust ledger…`
+  - Prompt: `Agentic (Hub only) — ship-design-partner-outreach-026: Design-partner outreach and pipeline for trust ledger…`
   - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.
 - **NF-PLAN-0262** (nf-future-0262) · P2/T4 · 5-minute demo rehearsal script and buyer checklist for governance api
   - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: 5-minute demo rehearsal script and buyer checklist fo…`
@@ -278,7 +278,7 @@
   - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Diligence one-pager evidence for data migrations cont…`
   - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.
 - **AGENTIC ONLY — skip NF-CLOUD** · **NF-PLAN-0281** (nf-future-0281) · P2/T5 · Design-partner outreach and pipeline for trust ledger
-  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Design-partner outreach and pipeline for trust ledger…`
+  - Prompt: `Agentic (Hub only) — ship-design-partner-outreach-026: Design-partner outreach and pipeline for trust ledger…`
   - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.
 - **NF-PLAN-0282** (nf-future-0282) · P2/T5 · 5-minute demo rehearsal script and buyer checklist for governance api
   - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: 5-minute demo rehearsal script and buyer checklist fo…`

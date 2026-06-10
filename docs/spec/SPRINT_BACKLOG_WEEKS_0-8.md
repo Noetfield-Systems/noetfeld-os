@@ -9,7 +9,7 @@
 | W02-1 | Publish 3 TLE YAML examples | Files in `docs/spec/examples/` + linked from www | done |
 | W02-2 | Homepage Copilot buyer line | Hero or trust-ledger mentions audit trail for Copilot | done |
 | W02-3 | Evidence Intake Contract v1 | `docs/diligence/EVIDENCE_INTAKE_CONTRACT_v1.md` | done |
-| W02-4 | SHIP_NOW + sprint doc | This file + `docs/SHIP_NOW.md` | done |
+| W02-4 | SHIP_NOW + sprint doc | This file + `os/SHIP_NOW.md` (`docs/SHIP_NOW.md` pointer) | done |
 | W02-5 | Merge PR #15 to main | CI + `make ship-verify` | done |
 | W02-6 | Founder GO_LIVE steps | WAVE0 checklist production smoke | todo (founder) |
 

@@ -1,23 +1,24 @@
-Third Audit 10-Phase Fix — complete (Noetfield cloud)
+Fourth Audit 10-Phase Fix — complete (Noetfield cloud)
 
-Pre: merged PR #41 to main @ 6226807 (iter 11 on main).
+Pre: main @ 6226807 (iter 11 merged); third-audit bundle was stranded on cursor/third-audit-10-phase-fix-37f0.
 
-Shipped (branch cursor/third-audit-10-phase-fix-37f0 @ 055f982):
-Phase 1: PR #41 merged — iter 11 033–035 on main
-Phase 2: OPEN_PRS #40/#41 merged; stale #2/#7 documented; coherence PR inventory
-Phase 3: README + AGENT_READ_LINKS → os/SHIP_NOW canonical; docs/SHIP_NOW pointer-only
-Phase 4: 1000-pack cloud overlay banner, Tier A outreach fix, agent context supersede note, plan.json mandate
-Phase 5: agentic_only on 50 customer-outreach registry rows; GTM_PRIORITY markers; patch script
-Phase 6: AGENT_SELF_AUDIT_LOOP addendum; R-011 in rules; agentic_queue in ship_rule
-Phase 7: Manifest SHIP_DONE_MAP 023–035; sync-prompt-pack-status run
-Phase 8: docs/reference redirect stubs; GTM_NEXT iter 12 picks 036–038
-Phase 9: SOURCEA status + NF_REQUIRE_SOURCEA in AGENT_READ_LINKS (founder sync still required)
-Phase 10: Hardened verify-no-asf-coherence (README, SHIP_DONE_MAP, registry fence, OPEN_PRS)
+Shipped (branch cursor/fourth-audit-iter12-37f0 @ b5c2204):
+Phase 1: Third-audit bundle included (canonical SHIP_NOW, registry agentic_only, coherence hardening)
+Phase 2: COMPLETED_ON_MAIN, OPEN_PRS pending row, merge-truth reconcile
+Phase 3: SPRINT_BACKLOG → os/SHIP_NOW.md; coherence sprint gate
+Phase 4: ID namespace note; plan.json 036–038 done; GTM_NEXT iter 13 seed
+Phase 5: ship-trust-brief-procurement-036 — procurement trust-brief CTA + verify
+Phase 6: ship-drift-blueprints-procurement-037 — drift blueprints index on procurement
+Phase 7: ship-demo-url-verify-038 — verify-demo-url.sh in plan-with-no-asf-verify
+Phase 8: GTM_PRIORITY outreach prompts → agentic (Hub only) + coherence gate
+Phase 9: Agent context authority bounded note; SourceA not synced on VM (founder action)
+Phase 10: sync-prompt-pack-status; verify PASS; iter 13 proposals 039–041 in GTM_NEXT
 
 Verify: ./scripts/plan-with-no-asf-verify.sh — PASS
-Sync: python3 scripts/sync-prompt-pack-status.py
+Sync: python3 scripts/sync-prompt-pack-status.py — 1000/1000
 
-task: Third Audit 10-Phase Fix — full bundle
+task: Fourth Audit 10-Phase Fix — full bundle
 agent: NF-CLOUD-AGENT
-main: 6226807 (PR #41 merged)
-next: ASK founder — merge PR; iter 12 from GTM_NEXT 036–038; agentic 026 Hub; close #2/#7; SourceA sync
+main: 6226807 (pre-merge; merge this PR to update)
+branch: b5c2204
+next: ASK founder — merge PR; iter 13 from GTM_NEXT 039–041; agentic 026 Hub; close #2/#7; SourceA sync
