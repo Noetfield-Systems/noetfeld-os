@@ -98,6 +98,21 @@ Shipped capabilities mapped to registry indices. Run `python3 scripts/sync-promp
 
 `ship-*-NNN` (GTM `next_tasks`) and `nf-*-NNN` (product waves above) may share numeric suffixes — different namespaces, not duplicate shipped work.
 
+## PLAN WITH NO ASF iter 17 (051–053)
+
+| next_tasks id | Shipped | Evidence |
+|---------------|---------|----------|
+| ship-blueprint-services-governance-bridge-051 | services/governance prod bridge | `services/governance/README.md`, `PLATFORM_BLUEPRINT.md` |
+| ship-procurement-control-checkpoint-copy-052 | Procurement checkpoint copy | `copilot/procurement/index.html`, `verify-gtm-ops-docs.sh` |
+| ship-merged-pr-window-five-053 | Rolling top-5 merged PR window | `scripts/verify-no-asf-coherence.sh`, `OPEN_PRS.md` |
+
+## Ninth audit fix (post–PR #46 truth + iter 17)
+
+| Area | Shipped | Evidence |
+|------|---------|----------|
+| Post-merge truth | OPEN_PRS #46 merged @ f2103d3 | `OPEN_PRS.md`, `COMPLETED_ON_MAIN.md` |
+| Iter 17 www + verify | Services bridge, procurement checkpoint, window 5 | `copilot/procurement/`, `verify-no-asf-coherence.sh` |
+
 ## PLAN WITH NO ASF iter 16 (048–050)
 
 | next_tasks id | Shipped | Evidence |
@@ -110,7 +125,7 @@ Shipped capabilities mapped to registry indices. Run `python3 scripts/sync-promp
 
 | Area | Shipped | Evidence |
 |------|---------|----------|
-| Post-merge truth | OPEN_PRS #45 merged @ 80ad8a7 | `OPEN_PRS.md`, `COMPLETED_ON_MAIN.md` |
+| Post-merge truth | OPEN_PRS #46 merged @ f2103d3 | `OPEN_PRS.md`, `COMPLETED_ON_MAIN.md` |
 | Iter 16 verify + docs | Blueprint bridge, rehearsal parity, rolling window | `verify-gtm-ops-docs.sh`, `AGENT_SELF_AUDIT_LOOP_LOCKED_v1.md` |
 
 ## PLAN WITH NO ASF iter 15 (045–047)

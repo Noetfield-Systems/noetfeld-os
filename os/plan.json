@@ -79,6 +79,24 @@
   ],
   "next_tasks": [
     {
+      "id": "ship-blueprint-services-governance-bridge-051",
+      "title": "Link services/governance to PLATFORM_BLUEPRINT §8.3 prod row + README",
+      "plan": "services/governance/README.md",
+      "status": "done"
+    },
+    {
+      "id": "ship-procurement-control-checkpoint-copy-052",
+      "title": "Procurement page eval+enforce control checkpoint copy + verify",
+      "plan": "copilot/procurement/index.html",
+      "status": "done"
+    },
+    {
+      "id": "ship-merged-pr-window-five-053",
+      "title": "Rolling top-5 merged PR window in OPEN_PRS coherence verify",
+      "plan": "scripts/verify-no-asf-coherence.sh",
+      "status": "done"
+    },
+    {
       "id": "ship-blueprint-governance-console-bridge-048",
       "title": "Link PLATFORM_BLUEPRINT §8/§13/§21 to governance-console README",
       "plan": "PLATFORM_BLUEPRINT.md",

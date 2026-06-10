@@ -114,6 +114,12 @@ else
   echo "FAIL /copilot/procurement/ missing GOVERNANCE_SOURCES_HANDBOOK link" >&2
   fail=1
 fi
+if echo "$proc_html" | grep -qF "control checkpoint"; then
+  echo "OK   /copilot/procurement/ eval+enforce checkpoint copy"
+else
+  echo "FAIL /copilot/procurement/ missing control checkpoint copy" >&2
+  fail=1
+fi
 
 hub_html="$(curl -sS --connect-timeout 5 -H "Accept: text/html" "${BASE}/copilot/" 2>/dev/null || true)"
 if echo "$hub_html" | grep -qF "PROCUREMENT_ONE_PAGER"; then

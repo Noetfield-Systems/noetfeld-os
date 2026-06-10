@@ -12,9 +12,9 @@ _Registry backlog empty (1000-pack synced). Pick from [GTM_NEXT.md](./GTM_NEXT.m
 
 ### GTM_NEXT (top picks)
 
-1. **ship-blueprint-services-governance-bridge-051** · Link `services/governance/` to PLATFORM_BLUEPRINT §8.3
-1. **ship-procurement-control-checkpoint-copy-052** · Procurement page cites eval+enforce control checkpoint narrative
-1. **ship-merged-pr-window-five-053** · Extend rolling merged PR window to 5 after iter 16 PR merges
+1. **ship-procurement-checkpoint-verify-054** · Dedicated verify phrase guard hardening for 052 checkpoint copy
+1. **ship-services-governance-openapi-bridge-055** · Link procurement to `services/governance` public OpenAPI path
+1. **ship-merged-window-config-056** · Extract `MERGED_WINDOW` constant to OPEN_PRS header doc
 
 ## Recently completed
 

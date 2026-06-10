@@ -302,8 +302,10 @@ Shipped code maps logical components to repo paths:
 
 | Blueprint component | Implementation |
 |-------------------|----------------|
-| §8.3 Governance Service | [governance-console/](governance-console/) backend (evaluate, policy, RID) |
-| §8.4 Trust Ledger Service | `governance-console/backend/` TLE flow + [services/governance/](services/governance/) production API |
+| §8.3 Governance Service (dev) | [governance-console/](governance-console/) backend (evaluate, policy, RID) |
+| §8.3 Governance Service (prod) | [services/governance/](services/governance/) — `noetfield_governance/api.py`, intake, webhooks |
+| §8.4 Trust Ledger Service (dev) | `governance-console/backend/` TLE flow, board pack PDF, audit export |
+| §8.4 Trust Ledger Service (prod) | [services/governance/noetfield_governance/](services/governance/noetfield_governance/) trust ledger + PDF |
 | §13 AI governance runtime | `governance-console/backend/services/` (TLE, RBAC, audit export) |
 | §21 First implementation boundaries | `make governance-console-e2e` from repo root; see [governance-console/README.md](governance-console/README.md) |
 

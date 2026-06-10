@@ -15,18 +15,18 @@ When the NF-PLAN registry is fully synced (`1000/1000 done`), pick the next **�
 
 `ship-*-NNN` = GTM Tier A queue (`next_tasks`). `nf-*-NNN` in engineering manifest = product waves — numeric suffix overlap is intentional (e.g. `ship-trust-brief-demo-042` ≠ `nf-homepage-design-partner-042`).
 
-## Next GTM Tier A (NF-CLOUD disk) — iter 17 proposals
+## Next GTM Tier A (NF-CLOUD disk) — iter 18 proposals
 
 Founder pick or bounded `implement`:
 
-1. **ship-blueprint-services-governance-bridge-051** · Link `services/governance/` to PLATFORM_BLUEPRINT §8.3  
-   Outcome: Production API cited in architecture constitution.
+1. **ship-procurement-checkpoint-verify-054** · Dedicated verify phrase guard hardening for 052 checkpoint copy  
+   Outcome: Procurement eval+enforce copy cannot drift silently.
 
-1. **ship-procurement-control-checkpoint-copy-052** · Procurement page cites eval+enforce control checkpoint narrative  
-   Outcome: Buyer copy aligns with ASSERT→ACS-style governance loop.
+1. **ship-services-governance-openapi-bridge-055** · Link procurement to `services/governance` public OpenAPI path  
+   Outcome: Buyer pack cites production API surface.
 
-1. **ship-merged-pr-window-five-053** · Extend rolling merged PR window to 5 after iter 16 PR merges  
-   Outcome: Merge history window scales with ship velocity.
+1. **ship-merged-window-config-056** · Extract `MERGED_WINDOW` constant to OPEN_PRS header doc  
+   Outcome: Single source of truth for rolling merge window size.
 
 ## Agentic only — Hub (not NF-CLOUD implement)
 
@@ -35,6 +35,14 @@ Founder pick or bounded `implement`:
 | **ship-design-partner-outreach-026** | Agentic layer | One named CIO contact + demo URL sent; tracker row updated |
 
 Evidence: [DESIGN_PARTNER_PIPELINE_v1.md](../../../copilot/DESIGN_PARTNER_PIPELINE_v1.md) · [AGENTIC_COMMERCIAL_HANDOFF_v1.md](../../AGENTIC_COMMERCIAL_HANDOFF_v1.md)
+
+## Recently shipped (iter 17)
+
+| ID | Shipped |
+|----|---------|
+| ship-blueprint-services-governance-bridge-051 | services/governance README + blueprint §8.3 prod row |
+| ship-procurement-control-checkpoint-copy-052 | Procurement eval+enforce control checkpoint copy |
+| ship-merged-pr-window-five-053 | Rolling top-5 merged PR window in coherence verify |
 
 ## Recently shipped (iter 16)
 
