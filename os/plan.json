@@ -79,6 +79,24 @@
   ],
   "next_tasks": [
     {
+      "id": "ship-blueprint-governance-console-bridge-048",
+      "title": "Link PLATFORM_BLUEPRINT §8/§13/§21 to governance-console README",
+      "plan": "PLATFORM_BLUEPRINT.md",
+      "status": "done"
+    },
+    {
+      "id": "ship-rehearsal-parity-all-pages-049",
+      "title": "Single rehearsal parity loop across hub + pilot ol + demo ol",
+      "plan": "scripts/verify-gtm-ops-docs.sh",
+      "status": "done"
+    },
+    {
+      "id": "ship-open-prs-merged-044-gate-050",
+      "title": "Rolling top-4 merged PR window in OPEN_PRS coherence verify",
+      "plan": "scripts/verify-no-asf-coherence.sh",
+      "status": "done"
+    },
+    {
       "id": "ship-trust-brief-parity-audit-045",
       "title": "Single trust-brief parity loop across buyer pages + verify",
       "plan": "scripts/verify-gtm-ops-docs.sh",

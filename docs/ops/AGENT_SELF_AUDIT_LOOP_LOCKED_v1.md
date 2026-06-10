@@ -18,6 +18,18 @@ Stop repeated agent mistakes (scope bleed, wrong company, wrong repo) through a 
 
 **This repo = Noetfield only.** TrustField and VIRLUX are separate companies — never implement, plan, or deploy for them here.
 
+### Industry parallel (eval → enforce closed loop)
+
+Noetfield audit iterations mirror the June 2026 Open Trust Stack pattern without vendoring external packages:
+
+| Layer | Industry analog | Noetfield implementation |
+|-------|-----------------|--------------------------|
+| Eval | ASSERT (policy → executable tests) | `./scripts/plan-with-no-asf-verify.sh` — finds defects before ship |
+| Enforce | ACS / AGT (fail-closed runtime controls) | FAIL gates in `verify-no-asf-coherence.sh` and `verify-gtm-ops-docs.sh` |
+| Re-eval | Closed loop | Repeated audit iterations (GTM_NEXT ship bundles) until verify PASS |
+
+Buyer-facing framework authority: [GOVERNANCE_SOURCES_BOOK_v1.md](../references/GOVERNANCE_SOURCES_BOOK_v1.md) (NIST AI RMF, ISO/IEC 42001).
+
 ---
 
 ## Loop diagram
