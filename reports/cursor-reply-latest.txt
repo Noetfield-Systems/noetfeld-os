@@ -1,24 +1,24 @@
-Fourth Audit 10-Phase Fix — complete (Noetfield cloud)
+Fifth Audit 10-Phase Fix — complete (Noetfield cloud)
 
-Pre: main @ 6226807 (iter 11 merged); third-audit bundle was stranded on cursor/third-audit-10-phase-fix-37f0.
+Pre: PR #42 merged to main @ 43715a4 (fourth audit + iter 12 on main).
 
-Shipped (branch cursor/fourth-audit-iter12-37f0 @ a7df7d9):
-Phase 1: Third-audit bundle included (canonical SHIP_NOW, registry agentic_only, coherence hardening)
-Phase 2: COMPLETED_ON_MAIN, OPEN_PRS pending row, merge-truth reconcile
-Phase 3: SPRINT_BACKLOG → os/SHIP_NOW.md; coherence sprint gate
-Phase 4: ID namespace note; plan.json 036–038 done; GTM_NEXT iter 13 seed
-Phase 5: ship-trust-brief-procurement-036 — procurement trust-brief CTA + verify
-Phase 6: ship-drift-blueprints-procurement-037 — drift blueprints index on procurement
-Phase 7: ship-demo-url-verify-038 — verify-demo-url.sh in plan-with-no-asf-verify
-Phase 8: GTM_PRIORITY outreach prompts → agentic (Hub only) + coherence gate
-Phase 9: Agent context authority bounded note; SourceA not synced on VM (founder action)
-Phase 10: sync-prompt-pack-status; verify PASS; iter 13 proposals 039–041 in GTM_NEXT
+Shipped (commit a11c0fa on cursor/fifth-audit-iter13-37f0):
+Phase 1: PR #42 merged — third-audit + iter 12 on main
+Phase 2: OPEN_PRS #42 merged; COMPLETED_ON_MAIN post-merge truth
+Phase 3: fifth-audit merge rule; third-audit branch superseded
+Phase 4: plan.json 039–041; GTM_NEXT iter 14 seed; 040 verify-only scope
+Phase 5: ship-trust-brief-pilot-039 — pilot trust-brief CTA + verify
+Phase 6: ship-procurement-cta-homepage-040 — homepage procurement verify guard
+Phase 7: ship-cursor-reply-coherence-041 — cursor-reply FAIL gate (branch-aware)
+Phase 8: QUICK_PICK iter 14 mirror; verify bundle integrated
+Phase 9: SourceA status post–#42; founder close #2/#7 documented
+Phase 10: sync + verify PASS; iter 14 proposals 042–044 in GTM_NEXT
 
 Verify: ./scripts/plan-with-no-asf-verify.sh — PASS
 Sync: python3 scripts/sync-prompt-pack-status.py — 1000/1000
 
-task: Fourth Audit 10-Phase Fix — full bundle
+task: Fifth Audit 10-Phase Fix — iter 13 bundle
 agent: NF-CLOUD-AGENT
-main: 6226807 (pre-merge; merge this PR to update)
-branch: a7df7d9
-next: ASK founder — merge PR; iter 13 from GTM_NEXT 039–041; agentic 026 Hub; close #2/#7; SourceA sync
+main: 43715a4
+head: a11c0fa
+next: ASK founder — merge PR #43; iter 14 from GTM_NEXT 042–044; agentic 026 Hub; close #2/#7; SourceA sync
