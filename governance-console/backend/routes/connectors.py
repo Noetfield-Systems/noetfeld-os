@@ -99,7 +99,14 @@ def oauth_start(
     return RedirectResponse(url=url, status_code=302)
 
 
-@router.get("/{connector_id}/oauth/callback", response_model=None)
+@router.get(
+    "/{connector_id}/oauth/callback",
+    response_model=None,
+    responses={
+        200: {"content": {"application/json": {}}},
+        302: {"content": {"text/html": {}}, "description": "Redirect browser to workspace list"},
+    },
+)
 def oauth_callback(
     connector_id: str,
     request: Request,

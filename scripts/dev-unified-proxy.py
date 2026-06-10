@@ -38,6 +38,14 @@ NEXT_PREFIXES = (
 )
 
 
+class _NoRedirect(urllib.request.HTTPRedirectHandler):
+    def redirect_request(self, req, fp, code, msg, headers, newurl):
+        return None
+
+
+_NO_REDIRECT_OPENER = urllib.request.build_opener(_NoRedirect)
+
+
 def _gov_api_route(path: str, method: str, headers: dict[str, str]) -> bool:
     """Governance-console FastAPI (18002) — must not be sent to Next for POST/API GET."""
     if path == "/health":
@@ -95,7 +103,7 @@ class UnifiedHandler(SimpleHTTPRequestHandler):
             headers={k: v for k, v in self.headers.items() if k.lower() != "host"},
         )
         try:
-            with urllib.request.urlopen(req, timeout=120) as resp:
+            with _NO_REDIRECT_OPENER.open(req, timeout=120) as resp:
                 self.send_response(resp.status)
                 for k, v in resp.headers.items():
                     if k.lower() in ("transfer-encoding", "connection"):

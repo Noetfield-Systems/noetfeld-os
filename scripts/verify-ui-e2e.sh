@@ -47,10 +47,23 @@ check_html "${BASE}/ai-automation/" "ai-automation operator" "Make your AI autom
 
 ws_html="$(curl -sS --connect-timeout 5 -H "Accept: text/html" "${BASE}/workspace" 2>/dev/null || true)"
 ws_chunk="$(echo "$ws_html" | grep -oE '/_next/static/chunks/app/workspace/page-[^"]+\.js' | head -1)"
-if [[ -n "$ws_chunk" ]] && curl -sS "${BASE}${ws_chunk}" 2>/dev/null | grep -qF "5-minute demo script"; then
-  echo "OK   workspace demo link"
+if [[ -n "$ws_chunk" ]]; then
+  ws_chunk_body="$(curl -sS "${BASE}${ws_chunk}" 2>/dev/null || true)"
+  if echo "$ws_chunk_body" | grep -qF "5-minute demo script"; then
+    echo "OK   workspace demo link"
+  else
+    echo "FAIL workspace demo link — rebuild dashboard" >&2
+    fail=1
+  fi
+  if echo "$ws_chunk_body" | grep -qF "Mock OAuth connected" \
+    && echo "$ws_chunk_body" | grep -qF "M365 evidence ingested"; then
+    echo "OK   workspace oauth success banner"
+  else
+    echo "FAIL workspace oauth success banner — rebuild dashboard" >&2
+    fail=1
+  fi
 else
-  echo "FAIL workspace demo link — rebuild dashboard" >&2
+  echo "FAIL workspace client chunk — rebuild dashboard" >&2
   fail=1
 fi
 
@@ -88,6 +101,42 @@ if echo "$conn_html" | grep -qF 'params":{"tle_id":"connectors"'; then
   fail=1
 else
   echo "OK   connectors not captured by [tle_id]"
+fi
+
+conn_chunk="$(echo "$conn_html" | grep -oE '/_next/static/chunks/app/workspace/connectors/page-[^"]+\.js' | head -1)"
+if [[ -n "$conn_chunk" ]]; then
+  conn_chunk_body="$(curl -sS "${BASE}${conn_chunk}" 2>/dev/null || true)"
+  if echo "$conn_chunk_body" | grep -qF "Register + mock connect (M365)" \
+    && echo "$conn_chunk_body" | grep -qF "m365-purview"; then
+    echo "OK   connectors client chunk"
+  else
+    echo "FAIL connectors client chunk — rebuild dashboard" >&2
+    fail=1
+  fi
+else
+  echo "FAIL connectors client chunk — rebuild dashboard" >&2
+  fail=1
+fi
+
+CONN_ID="verify-ui-$(date +%s)"
+curl -sS -o /dev/null \
+  -X POST "${BASE}/connectors" \
+  -H "Content-Type: application/json" \
+  -H "X-Tenant-ID: copilot-pilot-01" \
+  -d "{\"connector_id\":\"${CONN_ID}\",\"connector_type\":\"m365_purview\",\"required_scopes\":[\"Purview.Read\"]}" \
+  2>/dev/null || true
+oauth_headers="$(curl -sS --max-redirs 0 -D - -o /dev/null \
+  -H "Accept: text/html" \
+  -H "X-Tenant-ID: copilot-pilot-01" \
+  "${BASE}/connectors/${CONN_ID}/oauth/callback?code=dev-mock&state=verify-ui" 2>/dev/null || true)"
+oauth_code="$(echo "$oauth_headers" | head -1 | awk '{print $2}')"
+oauth_location="$(echo "$oauth_headers" | awk 'tolower($1)=="location:" {print $2}' | tr -d '\r')"
+if [[ "$oauth_code" == "302" ]] && echo "$oauth_location" | grep -qF "/workspace?connected=${CONN_ID}"; then
+  echo "OK   oauth html redirect to workspace"
+else
+  echo "FAIL oauth html redirect — expected 302 to /workspace?connected=${CONN_ID}" >&2
+  echo "     code=${oauth_code} location=${oauth_location:-<empty>}" >&2
+  fail=1
 fi
 
 if [[ "$fail" -eq 0 ]]; then

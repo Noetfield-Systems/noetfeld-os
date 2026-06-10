@@ -2,18 +2,18 @@
 agent_tag: nf-local-repo-agent
 agent_display: "[NF-LOCAL-REPO-AGENT]"
 authored_at: "2026-06-02"
-doc_id: cursor-reply-nf-0203-oauth-redirect
+doc_id: cursor-reply-nf-0204-verify-ui-e2e
 ---
 
 > **Authored by:** [NF-LOCAL-REPO-AGENT] — 2026-06-02
 
-**Shipped** — nf-0203: M365 mock OAuth callback redirects browser to `/workspace?connected=…` (absolute URL); success banner on workspace list; backward-compat redirect from connectors page; pytest coverage.
+**Shipped** — nf-0204: verify-ui-e2e client-chunk checks for connectors page + workspace OAuth success banner; live HTML OAuth 302 redirect assertion; dev proxy preserves upstream redirects.
 
 ## Verify
 
 ```text
-make verify-gtm — PASS (18 pytest, tle-smoke, copilot-pilot-e2e, full E2E bundle)
-make smoke-pick-no-asf-plan — nf-0203 (now done; next nf-0204)
+make verify-gtm — PASS (18 pytest, verify-ui-e2e 20 checks, full E2E bundle)
+make smoke-pick-no-asf-plan — nf-0204 (now done; next nf-0205)
 ```
 
 ---
@@ -22,20 +22,17 @@ make smoke-pick-no-asf-plan — nf-0203 (now done; next nf-0204)
 schema_version: 1
 repo: noetfield
 agent_tag: nf-local-repo-agent
-task: "nf-0203 — Fix workspace/connectors OAuth redirect to workspace list"
+task: "nf-0204 — Add verify-ui-e2e check for connectors page content"
 status: done
 verify_passed: true
 verify_command: "make verify-gtm"
 verify_output_summary: "verify-gtm passed — safe to run external demo"
 blocked_reason: ""
-next_action: "nf-0204 — Add verify-ui-e2e check for connectors page content"
+next_action: "nf-0205 — run make smoke-pick-no-asf-plan for phase-2 T0 slot 4"
 evidence_paths:
-  - governance-console/backend/services/m365_oauth_stub.py
+  - scripts/verify-ui-e2e.sh
+  - scripts/dev-unified-proxy.py
   - governance-console/backend/routes/connectors.py
-  - governance-console/frontend/app/workspace/page.tsx
-  - governance-console/frontend/app/workspace/connectors/page.tsx
-  - governance-console/backend/tests/test_tle_flow.py
-  - docs/LOCAL_DEV.md
-reported_at: "2026-06-02T14:30:00Z"
+reported_at: "2026-06-02T15:00:00Z"
 reporter: cursor
 ```
