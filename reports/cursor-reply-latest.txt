@@ -1,35 +1,26 @@
-PLAN WITH NO ASF — iteration 5 complete (Noetfield cloud)
+Merged PR #32 + PR #33 to main (Noetfield cloud)
 
-Merged PR #31 to main. Wired GTM ops assets into www surfaces.
-
-Shipped next_tasks (all done):
-1. ship-gtm-ops-www-wire-013 — pilot/demo links to pipeline + rehearsal docs; verify-gtm-ops-docs.sh
-2. ship-buyer-debrief-template-014 — BUYER_DEBRIEF_TEMPLATE_v1.md + pilot CTA
-3. ship-tier-gate-verify-015 — verify-tier-gate.sh (QUICK_PICK top-25 no Tier B/C)
-
-Verify:
-- ./scripts/plan-with-no-asf-verify.sh — PASS
-- make sync-prompt-pack — OK
+PR #32 — iter 5 GTM www wire, buyer debrief, tier-gate verify
+PR #33 — B.C. + federal AI for All outreach alignment
 
 scope_confirmed: noetfield_only
 
 ```yaml
 schema_version: 1
 repo: noetfield
-task: PLAN WITH NO ASF — iteration 5 GTM www wire
+task: "Merge PR #32 and PR #33 to main"
 status: done
 verify_passed: true
-verify_command: "./scripts/plan-with-no-asf-verify.sh"
-verify_output_summary: "UI, gtm-ops-docs, tier-gate, pilot e2e, audit export, procurement — all passed"
+verify_command: "./scripts/verify-agent-scope.sh"
+verify_output_summary: "PR #32 merged at 667b02a; PR #33 conflicts resolved in plan.json + cursor-reply"
 blocked_reason: ""
-next_action: "Pick next 3 from QUICK_PICK / GTM_PRIORITY_100"
+next_action: "ASK founder — next bounded task from QUICK_PICK"
 evidence_paths:
-  - copilot/pilot/index.html
-  - copilot/demo/index.html
+  - docs/strategy/channel-outreach/bc-ai-for-all-2026.md
   - docs/copilot/BUYER_DEBRIEF_TEMPLATE_v1.md
   - scripts/verify-gtm-ops-docs.sh
   - scripts/verify-tier-gate.sh
   - os/plan.json
-reported_at: "2026-06-03T18:00:00Z"
+reported_at: "2026-06-06T23:45:00Z"
 reporter: cursor
 ```

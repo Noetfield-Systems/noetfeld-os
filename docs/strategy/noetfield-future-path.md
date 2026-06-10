@@ -23,6 +23,7 @@ TrustField Technologies and VIRLUX are **not** part of this document — separat
 | **Consumer-Driven Banking** Phase 1 (read) | **2026** | Consent/traceability narrative for **policy layer** — partner integrations, not screen-scraping |
 | **CDB Phase 2** (write) | **Mid-2027** | Pre-execution controls before payment initiation — **via bank/TPP**, not Noetfield holding funds |
 | **Enterprise AI (Copilot)** | Now | Copilot Readiness Pack — policy validation before rollout |
+| **Federal AI for All + B.C. AI action plan** | 2026–27 | Trust/sovereignty narrative — governance evidence for public-sector & SME Copilot adoption ([bc-ai-for-all-2026.md](./channel-outreach/bc-ai-for-all-2026.md)) |
 
 Noetfield does **not** compete on open-banking TPP accreditation or retail wallets.
 
