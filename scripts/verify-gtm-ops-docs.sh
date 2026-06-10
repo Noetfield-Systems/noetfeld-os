@@ -55,12 +55,6 @@ for path in "/copilot/pilot/" "/copilot/demo/"; do
     echo "FAIL ${path} missing Design partner pipeline" >&2
     fail=1
   fi
-  if echo "$html" | grep -qF "demo rehearsal"; then
-    echo "OK   ${path} rehearsal link text"
-  else
-    echo "FAIL ${path} missing demo rehearsal" >&2
-    fail=1
-  fi
   if echo "$html" | grep -qF "bc-ai-for-all-2026.md"; then
     echo "OK   ${path} bc-ai outreach link"
   else
@@ -134,13 +128,6 @@ else
   echo "FAIL /copilot/ missing GOVERNANCE_SOURCES_BOOK link" >&2
   fail=1
 fi
-if echo "$hub_html" | grep -qF "DEMO_REHEARSAL_CHECKLIST_v1.md"; then
-  echo "OK   /copilot/ demo rehearsal checklist link"
-else
-  echo "FAIL /copilot/ missing DEMO_REHEARSAL_CHECKLIST link" >&2
-  fail=1
-fi
-
 check_url "${BASE}/docs/references/GOVERNANCE_DRIFT_DETECTION_SOURCES_LOCKED_v1.md" "drift detection sources locked doc"
 
 if echo "$proc_html" | grep -qF "GOVERNANCE_DRIFT_DETECTION_SOURCES_LOCKED_v1.md"; then
@@ -156,13 +143,6 @@ else
   fail=1
 fi
 pilot_html="$(curl -sS --connect-timeout 5 -H "Accept: text/html" "${BASE}/copilot/pilot/" 2>/dev/null || true)"
-if echo "$pilot_html" | grep -qF "DEMO_REHEARSAL_CHECKLIST_v1.md"; then
-  echo "OK   /copilot/pilot/ rehearsal in checklist"
-else
-  echo "FAIL /copilot/pilot/ missing rehearsal in checklist ol" >&2
-  fail=1
-fi
-
 demo_html="$(curl -sS --connect-timeout 5 -H "Accept: text/html" "${BASE}/copilot/demo/" 2>/dev/null || true)"
 
 # ship-trust-brief-parity-audit-045: single fail-closed loop (4 buyer pages)
@@ -183,11 +163,22 @@ if [[ "$trust_brief_ok" -eq 4 ]]; then
   echo "OK   trust-brief parity (4/4 buyer pages)"
 fi
 
-if echo "$demo_html" | grep -qF "DEMO_REHEARSAL_CHECKLIST_v1.md"; then
-  echo "OK   /copilot/demo/ rehearsal in script ol"
-else
-  echo "FAIL /copilot/demo/ missing rehearsal in script ol" >&2
-  fail=1
+# ship-rehearsal-parity-all-pages-049: single fail-closed loop (hub prose + pilot ol + demo ol)
+rehearsal_ok=0
+for entry in "hub_html|/copilot/" "pilot_html|/copilot/pilot/" "demo_html|/copilot/demo/"; do
+  var="${entry%%|*}"
+  path="${entry#*|}"
+  html="${!var}"
+  if echo "$html" | grep -qF "DEMO_REHEARSAL_CHECKLIST_v1.md"; then
+    echo "OK   ${path} rehearsal checklist"
+    rehearsal_ok=$((rehearsal_ok + 1))
+  else
+    echo "FAIL ${path} missing DEMO_REHEARSAL_CHECKLIST" >&2
+    fail=1
+  fi
+done
+if [[ "$rehearsal_ok" -eq 3 ]]; then
+  echo "OK   rehearsal parity (3/3 buyer runbooks)"
 fi
 
 home_html="$(curl -sS --connect-timeout 5 -H "Accept: text/html" "${BASE}/" 2>/dev/null || true)"

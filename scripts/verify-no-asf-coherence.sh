@@ -68,10 +68,10 @@ if [[ -f docs/ops/plans/no-asf/GTM_NEXT.md ]] && [[ -f docs/ops/plans/no-asf/QUI
     echo "FAIL QUICK_PICK missing GTM_NEXT inline content" >&2
     fail=1
   fi
-  if grep -q 'ship-blueprint-governance-console-bridge-048' docs/ops/plans/no-asf/GTM_NEXT.md && grep -q 'ship-blueprint-governance-console-bridge-048' docs/ops/plans/no-asf/QUICK_PICK.md; then
-    echo "OK   QUICK_PICK mirrors GTM_NEXT iter 16"
+  if grep -q 'ship-blueprint-services-governance-bridge-051' docs/ops/plans/no-asf/GTM_NEXT.md && grep -q 'ship-blueprint-services-governance-bridge-051' docs/ops/plans/no-asf/QUICK_PICK.md; then
+    echo "OK   QUICK_PICK mirrors GTM_NEXT iter 17"
   else
-    echo "FAIL QUICK_PICK out of sync with GTM_NEXT iter 16 picks" >&2
+    echo "FAIL QUICK_PICK out of sync with GTM_NEXT iter 17 picks" >&2
     fail=1
   fi
   if grep -q 'Agentic only' docs/ops/plans/no-asf/GTM_NEXT.md && grep -q 'ship-design-partner-outreach-026' docs/ops/plans/no-asf/GTM_NEXT.md; then
@@ -177,28 +177,34 @@ if [[ -f docs/ops/plans/no-asf/OPEN_PRS.md ]]; then
   else
     echo "OK   OPEN_PRS stale PR wording"
   fi
-  # ship-merged-pr-open-prs-gate-046: recently merged ship PRs must not drift
+  # ship-open-prs-merged-044-gate-050: rolling top-N merged ship PR window
   merged_section="$(awk '/^## Recently merged/,/^## Stale PRs/' docs/ops/plans/no-asf/OPEN_PRS.md)"
-  for pr_num in 40; do
-    if echo "$merged_section" | grep -qE "^\| #${pr_num} \|"; then
-      echo "OK   OPEN_PRS lists PR #${pr_num} merged"
-    else
-      echo "WARN OPEN_PRS missing merged PR #${pr_num}"
-    fi
-  done
-  for pr_num in 41 42 43 44; do
-    if echo "$merged_section" | grep -qE "^\| #${pr_num} \|"; then
-      echo "OK   OPEN_PRS lists PR #${pr_num} merged"
-    else
-      echo "FAIL OPEN_PRS missing merged PR #${pr_num}" >&2
-      fail=1
-    fi
-  done
+  MERGED_WINDOW=4
+  merged_pr_nums="$(echo "$merged_section" | grep -E '^\| #[0-9]+ \|' | head -n "$MERGED_WINDOW" | grep -oE '#[0-9]+' | tr -d '#' || true)"
+  merged_count=0
+  if [[ -n "$merged_pr_nums" ]]; then
+    merged_count="$(echo "$merged_pr_nums" | wc -l | tr -d ' ')"
+  fi
+  if [[ "$merged_count" -lt "$MERGED_WINDOW" ]]; then
+    echo "FAIL OPEN_PRS merged window: need ${MERGED_WINDOW} rows, got ${merged_count}" >&2
+    fail=1
+  else
+    echo "OK   OPEN_PRS merged window (${MERGED_WINDOW} rows)"
+    while IFS= read -r pr_num; do
+      [[ -z "$pr_num" ]] && continue
+      echo "OK   OPEN_PRS lists PR #${pr_num} merged (window)"
+    done <<< "$merged_pr_nums"
+  fi
+  if echo "$merged_section" | grep -qE '^\| #40 \|'; then
+    echo "OK   OPEN_PRS lists PR #40 merged"
+  else
+    echo "WARN OPEN_PRS missing merged PR #40"
+  fi
   # ship-open-prs-autocheck-044: pending table must match gh open ship PRs
   if command -v gh >/dev/null 2>&1; then
     pending_section="$(awk '/^## Pending ship PR/,/^## Recently merged/' docs/ops/plans/no-asf/OPEN_PRS.md)"
     open_prs_doc="$(echo "$pending_section" | grep -E '^\| #[0-9]+ \|' | grep -oE '#[0-9]+' | tr -d '#' | sort -u | tr '\n' ' ' || true)"
-    ship_prs_gh="$(gh pr list --state open --json number,headRefName --jq '.[] | select(.headRefName | test("^cursor/(no-asf|10-phase|post-audit|fourth-audit|fifth-audit|sixth-audit|seventh-audit)")) | .number' 2>/dev/null | sort -u | tr '\n' ' ' || true)"
+    ship_prs_gh="$(gh pr list --state open --json number,headRefName --jq '.[] | select(.headRefName | test("^cursor/(no-asf|10-phase|post-audit|fourth-audit|fifth-audit|sixth-audit|seventh-audit|eighth-audit)")) | .number' 2>/dev/null | sort -u | tr '\n' ' ' || true)"
     open_prs_doc_trim="$(echo "$open_prs_doc" | xargs)"
     ship_prs_gh_trim="$(echo "$ship_prs_gh" | xargs)"
     if [[ -z "$open_prs_doc_trim" && -z "$ship_prs_gh_trim" ]]; then

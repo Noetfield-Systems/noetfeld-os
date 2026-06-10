@@ -296,6 +296,19 @@ or sovereign deployment when enterprise requirements demand it.
 
 The platform should be organized around these logical components.
 
+### Implementation reference (June 2026)
+
+Shipped code maps logical components to repo paths:
+
+| Blueprint component | Implementation |
+|-------------------|----------------|
+| §8.3 Governance Service | [governance-console/](governance-console/) backend (evaluate, policy, RID) |
+| §8.4 Trust Ledger Service | `governance-console/backend/` TLE flow + [services/governance/](services/governance/) production API |
+| §13 AI governance runtime | `governance-console/backend/services/` (TLE, RBAC, audit export) |
+| §21 First implementation boundaries | `make governance-console-e2e` from repo root; see [governance-console/README.md](governance-console/README.md) |
+
+Buyer-facing www and GTM ops remain under `copilot/` and `docs/ops/` (verify-guarded on :13080).
+
 ### 8.1 Public Site
 
 Responsibilities:

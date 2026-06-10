@@ -4,6 +4,8 @@ Pre-execution governance web app: submit operational intent, receive **allow / d
 
 **Not** a payments, trading, wallet, or exchange product.
 
+**Architecture:** [PLATFORM_BLUEPRINT.md](../PLATFORM_BLUEPRINT.md) §8 (logical system architecture), §13 (AI governance runtime), and §21 (first implementation boundaries). Production API sibling: `services/governance/`.
+
 ## Fully automated (one command)
 
 **Docker (recommended — full stack + E2E smoke):**

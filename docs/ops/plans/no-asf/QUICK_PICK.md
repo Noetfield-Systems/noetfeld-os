@@ -12,9 +12,9 @@ _Registry backlog empty (1000-pack synced). Pick from [GTM_NEXT.md](./GTM_NEXT.m
 
 ### GTM_NEXT (top picks)
 
-1. **ship-blueprint-governance-console-bridge-048** · Link PLATFORM_BLUEPRINT §5+ to governance-console README paths
-1. **ship-rehearsal-parity-all-pages-049** · Single verify guard for rehearsal link on hub + pilot ol + demo ol
-1. **ship-open-prs-merged-044-gate-050** · Rolling window: last 4 merged ship PRs (#41–#44) FAIL gate in coherence verify
+1. **ship-blueprint-services-governance-bridge-051** · Link `services/governance/` to PLATFORM_BLUEPRINT §8.3
+1. **ship-procurement-control-checkpoint-copy-052** · Procurement page cites eval+enforce control checkpoint narrative
+1. **ship-merged-pr-window-five-053** · Extend rolling merged PR window to 5 after iter 16 PR merges
 
 ## Recently completed
 

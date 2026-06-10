@@ -98,6 +98,21 @@ Shipped capabilities mapped to registry indices. Run `python3 scripts/sync-promp
 
 `ship-*-NNN` (GTM `next_tasks`) and `nf-*-NNN` (product waves above) may share numeric suffixes — different namespaces, not duplicate shipped work.
 
+## PLAN WITH NO ASF iter 16 (048–050)
+
+| next_tasks id | Shipped | Evidence |
+|---------------|---------|----------|
+| ship-blueprint-governance-console-bridge-048 | Blueprint ↔ governance-console | `PLATFORM_BLUEPRINT.md`, `governance-console/README.md` |
+| ship-rehearsal-parity-all-pages-049 | Rehearsal parity loop (3 runbooks) | `scripts/verify-gtm-ops-docs.sh` |
+| ship-open-prs-merged-044-gate-050 | Rolling top-4 merged PR window | `scripts/verify-no-asf-coherence.sh`, `OPEN_PRS.md` |
+
+## Eighth audit fix (post–PR #45 truth + iter 16)
+
+| Area | Shipped | Evidence |
+|------|---------|----------|
+| Post-merge truth | OPEN_PRS #45 merged @ 80ad8a7 | `OPEN_PRS.md`, `COMPLETED_ON_MAIN.md` |
+| Iter 16 verify + docs | Blueprint bridge, rehearsal parity, rolling window | `verify-gtm-ops-docs.sh`, `AGENT_SELF_AUDIT_LOOP_LOCKED_v1.md` |
+
 ## PLAN WITH NO ASF iter 15 (045–047)
 
 | next_tasks id | Shipped | Evidence |

@@ -6,11 +6,13 @@
 
 Only merge **Noetfield GTM / PLAN WITH NO ASF** ship PRs from branches matching:
 
-`cursor/no-asf-*-37f0`, `cursor/10-phase-audit-fix-37f0`, `cursor/post-audit-10-phase-fix-37f0`, `cursor/fourth-audit-iter12-37f0`, `cursor/fifth-audit-iter13-37f0`, `cursor/sixth-audit-iter14-37f0`, or `cursor/seventh-audit-iter15-37f0`
+`cursor/no-asf-*-37f0`, `cursor/10-phase-audit-fix-37f0`, `cursor/post-audit-10-phase-fix-37f0`, `cursor/fourth-audit-iter12-37f0`, `cursor/fifth-audit-iter13-37f0`, `cursor/sixth-audit-iter14-37f0`, `cursor/seventh-audit-iter15-37f0`, or `cursor/eighth-audit-iter16-37f0`
 
-**Superseded (do not merge):** `cursor/third-audit-10-phase-fix-37f0` (PR #42), `cursor/fourth-audit-iter12-37f0` (PR #42), `cursor/fifth-audit-iter13-37f0` (PR #43), `cursor/sixth-audit-iter14-37f0` (PR #44).
+**Superseded (do not merge):** `cursor/third-audit-10-phase-fix-37f0` (PR #42), `cursor/fourth-audit-iter12-37f0` (PR #42), `cursor/fifth-audit-iter13-37f0` (PR #43), `cursor/sixth-audit-iter14-37f0` (PR #44), `cursor/seventh-audit-iter15-37f0` (PR #45).
 
-**Coherence verify:** `verify-no-asf-coherence.sh` enforces pending rows vs `gh pr list` and FAIL if recently merged ship PRs (#41–#44) are missing from `## Recently merged`.
+**Coherence verify:** `verify-no-asf-coherence.sh` enforces pending rows vs `gh pr list` and FAIL if `## Recently merged` has fewer than 4 ship PR rows (rolling window).
+
+**Rolling merged window:** coherence verify FAILs if the top 4 rows in `## Recently merged` are missing (dynamic parse, not hardcoded list).
 
 ## Do not merge from cloud agent
 
@@ -22,12 +24,13 @@ Only merge **Noetfield GTM / PLAN WITH NO ASF** ship PRs from branches matching:
 
 | PR | Branch | Notes |
 |----|--------|-------|
-| #45 | cursor/seventh-audit-iter15-37f0 | Seventh audit — iter 15 (045–047) + post-merge truth |
+| #46 | cursor/eighth-audit-iter16-37f0 | Eighth audit — iter 16 (048–050) + post-merge truth |
 
 ## Recently merged
 
 | PR | Branch | Notes |
 |----|--------|-------|
+| #45 | cursor/seventh-audit-iter15-37f0 | Seventh audit — iter 15 (045–047) @ 80ad8a7 |
 | #44 | cursor/sixth-audit-iter14-37f0 | Sixth audit — iter 14 (042–044) @ c2543b5 |
 | #43 | cursor/fifth-audit-iter13-37f0 | Fifth audit — iter 13 (039–041) @ 9f0e3f7 |
 | #42 | cursor/fourth-audit-iter12-37f0 | Fourth audit — third-audit bundle + iter 12 (036–038) @ 43715a4 |

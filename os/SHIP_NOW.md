@@ -4,11 +4,15 @@
 
 ## Active queue (`next_tasks`)
 
-**Next iter 16:** see [GTM_NEXT.md](docs/ops/plans/no-asf/GTM_NEXT.md) (blueprint bridge, rehearsal parity, merged PR window).
+**Next iter 17:** see [GTM_NEXT.md](docs/ops/plans/no-asf/GTM_NEXT.md) (services bridge, procurement checkpoint copy, merged PR window 5).
 
-**Shipped seventh audit (PR #44 @ c2543b5):** iter 14 on main.
+**Shipped iter 16 (2026-06-10):** blueprint governance-console bridge, rehearsal parity loop, rolling merged PR window.
 
-**Shipped iter 15 (2026-06-10):** trust-brief parity loop, merged PR #41–#44 FAIL gate, demo rehearsal in script ol.
+**Shipped seventh audit (PR #45 @ 80ad8a7):** iter 15 on main.
+
+**Shipped sixth audit (PR #44 @ c2543b5):** iter 14 on main.
+
+**Shipped iter 15 (2026-06-10):** trust-brief parity loop, merged PR gate, demo rehearsal in script ol.
 
 **Shipped iter 14 (2026-06-10):** demo trust-brief CTA, pilot checklist rehearsal, OPEN_PRS autocheck.
 
