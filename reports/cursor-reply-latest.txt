@@ -2,18 +2,18 @@
 agent_tag: nf-local-repo-agent
 agent_display: "[NF-LOCAL-REPO-AGENT]"
 authored_at: "2026-06-02"
-doc_id: cursor-reply-nf-0202-evidence-hash
+doc_id: cursor-reply-nf-0203-oauth-redirect
 ---
 
 > **Authored by:** [NF-LOCAL-REPO-AGENT] — 2026-06-02
 
-**Shipped** — nf-0202: evidence-intake contract hash validation on POST /evidence/ingest and M365 connector stub sync; deterministic sha256 for metadata-only stubs; aligned bootstrap + seed script; pytest coverage.
+**Shipped** — nf-0203: M365 mock OAuth callback redirects browser to `/workspace?connected=…` (absolute URL); success banner on workspace list; backward-compat redirect from connectors page; pytest coverage.
 
 ## Verify
 
 ```text
-make verify-gtm — PASS (17 pytest, tle-smoke, copilot-pilot-e2e, full E2E bundle)
-make smoke-pick-no-asf-plan — nf-0202 (now done; next nf-0203)
+make verify-gtm — PASS (18 pytest, tle-smoke, copilot-pilot-e2e, full E2E bundle)
+make smoke-pick-no-asf-plan — nf-0203 (now done; next nf-0204)
 ```
 
 ---
@@ -22,21 +22,20 @@ make smoke-pick-no-asf-plan — nf-0202 (now done; next nf-0203)
 schema_version: 1
 repo: noetfield
 agent_tag: nf-local-repo-agent
-task: "nf-0202 — Harden evidence hash on ingest in connector service"
+task: "nf-0203 — Fix workspace/connectors OAuth redirect to workspace list"
 status: done
 verify_passed: true
 verify_command: "make verify-gtm"
 verify_output_summary: "verify-gtm passed — safe to run external demo"
 blocked_reason: ""
-next_action: "nf-0203 — Fix workspace/connectors OAuth redirect to workspace list"
+next_action: "nf-0204 — Add verify-ui-e2e check for connectors page content"
 evidence_paths:
-  - governance-console/backend/services/evidence_hash.py
-  - governance-console/backend/schemas.py
-  - governance-console/backend/routes/evidence.py
-  - governance-console/backend/services/m365_connector_sync.py
-  - governance-console/backend/db/bootstrap.py
-  - scripts/seed-m365-evidence-stub.sh
+  - governance-console/backend/services/m365_oauth_stub.py
+  - governance-console/backend/routes/connectors.py
+  - governance-console/frontend/app/workspace/page.tsx
+  - governance-console/frontend/app/workspace/connectors/page.tsx
   - governance-console/backend/tests/test_tle_flow.py
-reported_at: "2026-06-02T12:00:00Z"
+  - docs/LOCAL_DEV.md
+reported_at: "2026-06-02T14:30:00Z"
 reporter: cursor
 ```

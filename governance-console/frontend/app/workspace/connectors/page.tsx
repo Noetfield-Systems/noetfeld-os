@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Shell } from "@/components/Shell";
 import { LoadingBlock } from "@/components/LoadingBlock";
@@ -8,11 +9,12 @@ import { PageHero } from "@/components/PageHero";
 import { listConnectors, registerConnector, ConnectorSummary } from "@/lib/api";
 
 export default function ConnectorsPage() {
+  const router = useRouter();
   const [rows, setRows] = useState<ConnectorSummary[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [registering, setRegistering] = useState(false);
-  const [success, setSuccess] = useState<string | null>(null);
+  const [redirecting, setRedirecting] = useState(false);
 
   async function load() {
     setLoading(true);
@@ -46,9 +48,13 @@ export default function ConnectorsPage() {
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const connected = params.get("connected");
-    if (connected) setSuccess(connected);
+    if (connected) {
+      setRedirecting(true);
+      router.replace(`/workspace?connected=${encodeURIComponent(connected)}`);
+      return;
+    }
     load();
-  }, []);
+  }, [router]);
 
   return (
     <Shell active="workspace">
@@ -62,12 +68,9 @@ export default function ConnectorsPage() {
         title="M365 evidence connectors"
         lead="Local dev uses mock OAuth (no production secrets). Set NF_M365_MOCK_TOKEN in the API environment."
       />
-      {success && (
-        <p
-          className="mb-4 rounded-lg border border-emerald-900/80 bg-emerald-950/40 px-4 py-3 text-sm text-emerald-200"
-          role="status"
-        >
-          Mock OAuth connected — <code>{success}</code>. M365 evidence ingested.
+      {redirecting && (
+        <p className="mb-4 text-sm text-muted-2" role="status">
+          Redirecting to Trust Ledger workspace…
         </p>
       )}
       {error && (
@@ -76,12 +79,12 @@ export default function ConnectorsPage() {
         </p>
       )}
       <div className="mb-6">
-        <button type="button" className="nf-btn-primary" disabled={registering} onClick={() => registerM365()}>
+        <button type="button" className="nf-btn-primary" disabled={registering || redirecting} onClick={() => registerM365()}>
           Register + mock connect (M365)
         </button>
       </div>
-      {loading && <LoadingBlock label="Loading connectors…" />}
-      {!loading && (
+      {loading && !redirecting && <LoadingBlock label="Loading connectors…" />}
+      {!loading && !redirecting && (
         <ul className="space-y-3">
           {rows.map((c) => (
             <li key={c.connector_id} className="nf-card p-4 text-sm">

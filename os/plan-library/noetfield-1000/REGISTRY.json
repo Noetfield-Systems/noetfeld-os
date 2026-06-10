@@ -4039,7 +4039,7 @@
       "slot": 2,
       "title": "Fix workspace/connectors OAuth redirect to workspace list",
       "path": "os/plan-library/noetfield-1000/prompts/phase-2-evidence-connectors/T0/nf-0203.md",
-      "status": "backlog",
+      "status": "done",
       "verify": "make verify-gtm",
       "sources": [
         "docs/reference/GOVERNANCE_SOURCES_BOOK_v1.md",

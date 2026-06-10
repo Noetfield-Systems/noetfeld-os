@@ -11,7 +11,7 @@ from db.models import ConnectorRecord
 from db.session import get_db
 from schemas import ConnectorRegisterRequest, ConnectorResponse, ConnectorStatusResponse
 from services.m365_connector_sync import ingest_m365_stub_evidence
-from services.m365_oauth_stub import complete_mock_oauth, oauth_start_url
+from services.m365_oauth_stub import complete_mock_oauth, oauth_start_url, oauth_success_redirect_url
 from services.tenant_service import resolve_tenant_id
 
 router = APIRouter(prefix="/connectors", tags=["connectors"])
@@ -130,8 +130,9 @@ def oauth_callback(
         raise HTTPException(status_code=400, detail=str(exc)) from exc
     accept = (request.headers.get("accept") or "").lower()
     if "text/html" in accept and "application/json" not in accept.split(",")[0].strip():
+        base = os.getenv("NF_PUBLIC_BASE_URL", "http://127.0.0.1:13080")
         return RedirectResponse(
-            url=f"/workspace/connectors?connected={connector_id}",
+            url=oauth_success_redirect_url(base, connector_id),
             status_code=302,
         )
     return _to_response(row)

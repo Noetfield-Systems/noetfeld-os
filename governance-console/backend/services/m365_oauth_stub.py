@@ -14,6 +14,10 @@ def oauth_start_url(connector_id: str, base_url: str) -> str:
     return f"{base_url.rstrip('/')}/connectors/{connector_id}/oauth/callback?state={state}&code=dev-mock"
 
 
+def oauth_success_redirect_url(base_url: str, connector_id: str) -> str:
+    return f"{base_url.rstrip('/')}/workspace?connected={connector_id}"
+
+
 def complete_mock_oauth(db: Session, row: ConnectorRecord, code: str | None) -> ConnectorRecord:
     mock_token = os.getenv("NF_M365_MOCK_TOKEN", "dev-mock-token-do-not-use-in-prod")
     if code and code != "dev-mock" and not os.getenv("NF_M365_ALLOW_ANY_CODE"):

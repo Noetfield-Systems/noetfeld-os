@@ -300,6 +300,29 @@ def test_m365_oauth_mock_flow():
     assert st.json()["oauth_connected"] is True
 
 
+def test_oauth_callback_html_redirects_to_workspace():
+    cid = f"m365-html-{uuid.uuid4().hex[:8]}"
+    reg = client.post(
+        "/connectors",
+        headers=TENANT_HEADER,
+        json={
+            "connector_id": cid,
+            "connector_type": "m365_purview",
+            "required_scopes": ["Purview.Read"],
+        },
+    )
+    assert reg.status_code == 201
+    cb = client.get(
+        f"/connectors/{cid}/oauth/callback",
+        headers={**TENANT_HEADER, "Accept": "text/html"},
+        params={"code": "dev-mock", "state": "html"},
+        follow_redirects=False,
+    )
+    assert cb.status_code == 302
+    location = cb.headers.get("location", "")
+    assert f"/workspace?connected={cid}" in location
+
+
 def test_oauth_callback_ingests_evidence():
     cid = f"m365-ingest-{uuid.uuid4().hex[:8]}"
     client.post(
