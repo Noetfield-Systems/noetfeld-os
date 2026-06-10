@@ -2,7 +2,7 @@ Post-Audit 10-Phase Fix — complete (Noetfield cloud)
 
 Pre: merged PR #39 to main @ 76a5c6a (10-phase audit bundle on main).
 
-Shipped (branch cursor/post-audit-10-phase-fix-37f0 @ 21fd814):
+Shipped (branch cursor/post-audit-10-phase-fix-37f0 @ 679390b):
 Phase 1: PR #39 merged — main has R-011, coherence verify, www 030-032
 Phase 2: OPEN_PRS truth (#2/#7 open until founder closes); stale-PR warn in coherence
 Phase 3: Workflow reconcile — 1000-pack overlay, agent context addendum, read-order rules, plan.json ship_rule, docs/SHIP_NOW historical banner
@@ -20,5 +20,5 @@ Sync: python3 scripts/sync-prompt-pack-status.py
 task: Post-Audit 10-Phase Fix — full bundle
 agent: NF-CLOUD-AGENT
 main: 76a5c6a (PR #39 merged)
-branch: 21fd814
+branch: 679390b
 next: ASK founder — merge PR; close stale #2/#7; agentic 026 in Hub; SourceA sync on Mac
