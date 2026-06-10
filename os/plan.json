@@ -41,14 +41,14 @@
     {
       "id": "governance-sources-book-v1",
       "title": "Governance Sources Book v1 — citable frameworks for pilots",
-      "path": "docs/reference/GOVERNANCE_SOURCES_BOOK_v1.md",
+      "path": "docs/references/GOVERNANCE_SOURCES_BOOK_v1.md",
       "locked_at": "2026-06-04",
       "mandate": "Agents cite primary sources (NIST, OECD, ISO, EU, Microsoft, OWASP) in buyer materials"
     },
     {
       "id": "governance-drift-sources-v1",
       "title": "Governance Drift Detection Sources v1 — monitoring & drift primary links",
-      "path": "docs/reference/GOVERNANCE_DRIFT_DETECTION_SOURCES_v1.md",
+      "path": "docs/references/GOVERNANCE_DRIFT_DETECTION_SOURCES_LOCKED_v1.md",
       "locked_at": "2026-06-04",
       "mandate": "Agents cite drift/monitoring sources (NIST Measure/Manage, EU Art 72, Purview, OPA, CA-7) when selling continuous governance"
     },
@@ -79,6 +79,24 @@
   ],
   "next_tasks": [
     {
+      "id": "ship-tunnel-smoke-verify-030",
+      "title": "Optional staging-smoke in plan-with-no-asf-verify when NF_STAGING_URL set",
+      "plan": "scripts/staging-smoke.sh",
+      "status": "done"
+    },
+    {
+      "id": "ship-governance-sources-handbook-031",
+      "title": "Link GOVERNANCE_SOURCES_HANDBOOK_LOCKED from procurement + verify",
+      "plan": "docs/references/GOVERNANCE_SOURCES_HANDBOOK_LOCKED_v1.md",
+      "status": "done"
+    },
+    {
+      "id": "ship-copilot-hub-sources-032",
+      "title": "Governance Sources Book + handbook links on copilot hub + verify",
+      "plan": "copilot/index.html",
+      "status": "done"
+    },
+    {
       "id": "ship-procurement-one-pager-wire-027",
       "title": "Wire PROCUREMENT_ONE_PAGER into copilot hub + procurement + verify",
       "plan": "docs/copilot/PROCUREMENT_ONE_PAGER.md",
@@ -87,7 +105,7 @@
     {
       "id": "ship-governance-sources-www-028",
       "title": "Clickable GOVERNANCE_SOURCES_BOOK on procurement buyer page + verify",
-      "plan": "docs/reference/GOVERNANCE_SOURCES_BOOK_v1.md",
+      "plan": "docs/references/GOVERNANCE_SOURCES_BOOK_v1.md",
       "status": "done"
     },
     {

@@ -12,10 +12,6 @@ _Registry backlog empty (1000-pack synced). Pick from [GTM_NEXT.md](./GTM_NEXT.m
 
 ### GTM_NEXT (top picks)
 
-1. **ship-design-partner-outreach-026** · Agentic commercial — design-partner pipeline execution
-1. **ship-tunnel-smoke-verify-030** · Optional `make staging-smoke` in GTM verify when NF_STAGING_URL set
-1. **ship-governance-sources-handbook-031** · Link GOVERNANCE_SOURCES_HANDBOOK_LOCKED from procurement if distinct from book v1
-1. **ship-copilot-hub-sources-032** · Governance Sources Book link from copilot hub (not only procurement)
 
 ## Recently completed
 

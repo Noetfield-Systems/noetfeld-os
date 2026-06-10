@@ -138,7 +138,24 @@ Every `NF-PLAN-*` entry includes:
 
 ---
 
+## Appendix — post-sync era (GTM_NEXT queue)
+
+**Added:** 2026-06-10 · **Agent-maintained addendum** (founder lock body unchanged)
+
+When `sync-prompt-pack-status.py` reports **1000/1000 `done`**, the registry is fully deduped — **not** “no work left.”
+
+| Era | Queue source | Pick rule |
+|-----|--------------|-----------|
+| Pre-sync | `QUICK_PICK.md` top 25 from registry backlog | `gtm_priority` ascending |
+| Post-sync | [GTM_NEXT.md](./plans/no-asf/GTM_NEXT.md) + `os/plan.json` `next_tasks` | ≤3 Tier A www/verify tasks |
+| Agentic commercial | Hub / agentic layer only | e.g. `ship-design-partner-outreach-026` — **not** NF-CLOUD disk |
+
+**Verify:** `./scripts/plan-with-no-asf-verify.sh` includes `verify-no-asf-coherence.sh` for queue/doc alignment.
+
+---
+
 ## Related
 
 - [docs/ops/plans/README.md](./plans/README.md)
 - [os/LOCKED_REFERENCE_INDEX.md](../../os/LOCKED_REFERENCE_INDEX.md)
+- [GTM_NEXT.md](./plans/no-asf/GTM_NEXT.md)

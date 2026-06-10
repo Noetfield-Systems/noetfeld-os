@@ -28,13 +28,15 @@
 
 1. This file — § Cloud ship (below)
 2. [AGENT_SELF_AUDIT_LOOP_LOCKED_v1.md](./AGENT_SELF_AUDIT_LOOP_LOCKED_v1.md) — memory, incidents, scope gate
-3. [.cursor/agent-memory/MEMORY_LOCKED.yaml](../../.cursor/agent-memory/MEMORY_LOCKED.yaml)
-4. [NOETFIELD_AGENT_TEAM_SYNC_LOCKED_v1.md](./NOETFIELD_AGENT_TEAM_SYNC_LOCKED_v1.md) — local↔cloud bridge
-5. [NOETFIELD_AGENT_CONTEXT_AND_READ_ORDER_LOCKED_v1.md](./NOETFIELD_AGENT_CONTEXT_AND_READ_ORDER_LOCKED_v1.md)
-6. [os/SHIP_NOW.md](../../os/SHIP_NOW.md) → [os/plan.json](../../os/plan.json) · [os/LOCKED_REFERENCE_INDEX.md](../../os/LOCKED_REFERENCE_INDEX.md)
-7. **PLAN WITH NO ASF:** [NOETFIELD_1000_PROMPT_PACK_LOCKED_v1.md](./NOETFIELD_1000_PROMPT_PACK_LOCKED_v1.md) → [plans/no-asf/QUICK_PICK.md](./plans/no-asf/QUICK_PICK.md) · [plans/PROMPT_PACK_LOCKED/](./plans/PROMPT_PACK_LOCKED/) (1000 prompt-ready)
-8. [os/sprint-trust-ledger-v1.2.md](../../os/sprint-trust-ledger-v1.2.md) or [lane_a_sprint_map.md](./lane_a_sprint_map.md)
-9. After founder sync: `ops/private/agent-reference/IN_CHARGE_NOW.md` · `ops/private/sourceA/founder/repo-agent-notices/SEMI_NOTICE_noetfield_cloud_v1.md`
+3. [.cursor/agent-memory/MEMORY_LOCKED.yaml](../../.cursor/agent-memory/MEMORY_LOCKED.yaml) — includes **R-011** agentic commercial law
+4. [FOUNDER_AGENTIC_COMMERCIAL_AND_NO_CURSOR_AUTORUN_LOCKED_v1.md](./FOUNDER_AGENTIC_COMMERCIAL_AND_NO_CURSOR_AUTORUN_LOCKED_v1.md) — no AUTO-RUN; outreach = agentic
+5. [AGENTIC_COMMERCIAL_HANDOFF_v1.md](./AGENTIC_COMMERCIAL_HANDOFF_v1.md) — NF-CLOUD vs Hub split
+6. [NOETFIELD_AGENT_TEAM_SYNC_LOCKED_v1.md](./NOETFIELD_AGENT_TEAM_SYNC_LOCKED_v1.md) — local↔cloud bridge
+7. [NOETFIELD_AGENT_CONTEXT_AND_READ_ORDER_LOCKED_v1.md](./NOETFIELD_AGENT_CONTEXT_AND_READ_ORDER_LOCKED_v1.md)
+8. [os/SHIP_NOW.md](../../os/SHIP_NOW.md) → [os/plan.json](../../os/plan.json) · [os/LOCKED_REFERENCE_INDEX.md](../../os/LOCKED_REFERENCE_INDEX.md)
+9. **PLAN WITH NO ASF:** [NOETFIELD_1000_PROMPT_PACK_LOCKED_v1.md](./NOETFIELD_1000_PROMPT_PACK_LOCKED_v1.md) → [GTM_NEXT.md](./plans/no-asf/GTM_NEXT.md) · [QUICK_PICK.md](./plans/no-asf/QUICK_PICK.md)
+10. [os/sprint-trust-ledger-v1.2.md](../../os/sprint-trust-ledger-v1.2.md) or [lane_a_sprint_map.md](./lane_a_sprint_map.md)
+11. After founder sync: [SOURCEA_MANDATORY_SYNC_STATUS_v1.md](./SOURCEA_MANDATORY_SYNC_STATUS_v1.md) · `ops/private/sourceA/founder/repo-agent-notices/SEMI_NOTICE_noetfield_cloud_v1.md`
 
 ### In-repo links (`noetfield_cloud`)
 
@@ -52,6 +54,9 @@
 | Boundaries | [PROJECT_BOUNDARIES_LOCKED.md](../../PROJECT_BOUNDARIES_LOCKED.md) |
 | Agent workflow | [.cursor/AGENT_TRACKING.md](../../.cursor/AGENT_TRACKING.md) |
 | Self-audit loop | [AGENT_SELF_AUDIT_LOOP_LOCKED_v1.md](./AGENT_SELF_AUDIT_LOOP_LOCKED_v1.md) |
+| Agentic commercial law | [FOUNDER_AGENTIC_COMMERCIAL_AND_NO_CURSOR_AUTORUN_LOCKED_v1.md](./FOUNDER_AGENTIC_COMMERCIAL_AND_NO_CURSOR_AUTORUN_LOCKED_v1.md) |
+| Agentic handoff | [AGENTIC_COMMERCIAL_HANDOFF_v1.md](./AGENTIC_COMMERCIAL_HANDOFF_v1.md) |
+| SourceA sync status | [SOURCEA_MANDATORY_SYNC_STATUS_v1.md](./SOURCEA_MANDATORY_SYNC_STATUS_v1.md) |
 | Agent memory | [.cursor/agent-memory/MEMORY_LOCKED.yaml](../../.cursor/agent-memory/MEMORY_LOCKED.yaml) |
 | Incidents | [.cursor/incidents/REGISTRY.md](../../.cursor/incidents/REGISTRY.md) |
 | Sprint backlog | [docs/spec/SPRINT_BACKLOG_WEEKS_0-8.md](../spec/SPRINT_BACKLOG_WEEKS_0-8.md) |

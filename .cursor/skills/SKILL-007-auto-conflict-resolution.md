@@ -11,7 +11,7 @@
 | Tier | Source | Examples |
 |------|--------|----------|
 | **T0** | Founder **current message** explicit order | `implement X`, `PLAN WITH NO ASF iter 6 implement`, `WRITE DOWN incidents` |
-| **T1** | Hard rules **R-001–R-009** | Noetfield only, no private commit, permission, always ask, SourceA block |
+| **T1** | Hard rules **R-001–R-011** | Noetfield only, no private commit, permission, always ask, SourceA block, no AUTO-RUN / agentic commercial fence |
 | **T2** | Open **P0/P1 incidents** | Stop wrong scope; obey ask-first while 002/005 open |
 | **T3** | Portfolio / Brain law | `execution_authority: false` — advise only unless T0 ship order |
 | **T4** | Bounded **workflow triggers** (only after T0) | PLAN WITH NO ASF bundle, named implement task |
@@ -52,6 +52,8 @@ ON session start OR before first disk mutation:
 | `PLAN WITH NO ASF` (plan only) | implement step | **R-008** | Propose 3 tasks → ASK → founder `yes implement` |
 | Mandatory SourceA file missing | Any ship order | **R-009** | BLOCK implement; sync or paste first |
 | TrustField task | Any other rule | **R-001** | STOP always |
+| Cursor AUTO-RUN / factory loop | R-007/R-008 or R-011 | **R-011** | Validators + bounded implement only |
+| NF-CLOUD outreach send | R-011 agentic commercial | **R-011** | Handoff to agentic layer; www copy only |
 
 ---
 

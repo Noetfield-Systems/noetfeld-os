@@ -7,36 +7,43 @@ When the NF-PLAN registry is fully synced (`1000/1000 done`), pick the next **�
 
 **Commercial P0:** Outreach/calls = agentic layer (founder Hub). NF-CLOUD-AGENT = validators + www/GTM assets only.
 
-## Next GTM Tier A (agent-maintained)
+## Registry 1000/1000 semantics
 
-1. **ship-design-partner-outreach-026** · Agentic commercial — design-partner pipeline execution  
-   Outcome: One named CIO contact + demo URL sent (agentic / founder Hub — **not** NF-CLOUD disk).  
-   Evidence: `docs/copilot/DESIGN_PARTNER_PIPELINE_v1.md`
+`python3 scripts/sync-prompt-pack-status.py` marks all NF-PLAN rows `done` via `expand_done_by_pattern()` — this is **dedup / pattern propagation**, not “all engineering complete.” Real queue lives here and in `os/plan.json` `next_tasks`.
 
-1. **ship-tunnel-smoke-verify-030** · Optional `make staging-smoke` in GTM verify when NF_STAGING_URL set  
-   Outcome: Staging health check before founder shares URL.
+## Next GTM Tier A (NF-CLOUD disk)
 
-1. **ship-governance-sources-handbook-031** · Link GOVERNANCE_SOURCES_HANDBOOK_LOCKED from procurement if distinct from book v1  
-   Outcome: Locked handbook reachable for diligence reviewers.
+_No open NF-CLOUD disk items — pick next Tier A from GTM 60-day lock or founder order._
 
-1. **ship-copilot-hub-sources-032** · Governance Sources Book link from copilot hub (not only procurement)  
-   Outcome: Framework citations on hub page for cold traffic.
+## Agentic only — Hub (not NF-CLOUD implement)
 
-## Recently shipped (iter 8–9)
+| ID | Owner | Outcome |
+|----|-------|---------|
+| **ship-design-partner-outreach-026** | Agentic layer | One named CIO contact + demo URL sent; tracker row updated |
+
+Evidence on disk: [DESIGN_PARTNER_PIPELINE_v1.md](../../../copilot/DESIGN_PARTNER_PIPELINE_v1.md) · [AGENTIC_COMMERCIAL_HANDOFF_v1.md](../../AGENTIC_COMMERCIAL_HANDOFF_v1.md)
+
+## Recently shipped (10-phase audit + iter 9)
+
+| ID | Shipped |
+|----|---------|
+| ship-tunnel-smoke-verify-030 | Optional staging-smoke in plan-with-no-asf-verify |
+| ship-governance-sources-handbook-031 | Handbook link on procurement |
+| ship-copilot-hub-sources-032 | Sources Book + handbook on copilot hub |
+| ship-procurement-one-pager-wire-027 | PROCUREMENT_ONE_PAGER www wire |
+| ship-governance-sources-www-028 | Clickable Sources Book on procurement |
+| ship-homepage-demo-cta-029 | Homepage demo CTA verify guard |
+
+## Prior shipped (iter 6–8)
 
 | ID | Shipped |
 |----|---------|
 | ship-gtm-next-queue-023 | GTM_NEXT queue + QUICK_PICK fallback |
 | ship-staging-demo-www-wire-024 | STAGING_DEMO www wire |
 | ship-security-buyer-tle-copy-025 | CISO security buyer TLE copy |
-| ship-procurement-one-pager-wire-027 | PROCUREMENT_ONE_PAGER www wire |
-| ship-governance-sources-www-028 | Clickable Sources Book on procurement |
-| ship-homepage-demo-cta-029 | Homepage demo CTA verify guard |
-
-## Prior shipped (iter 7–8)
-
-| ID | Shipped |
-|----|---------|
 | ship-registry-pattern-propagation-020 | QUICK_PICK dedup |
 | ship-diligence-procurement-wire-021 | RPAA one-pager www wire |
 | ship-design-partner-bc-ai-022 | BC AI pipeline block |
+| ship-registry-sync-iter6-017 | Registry sync iter 6 |
+| ship-bc-ai-www-wire-018 | BC AI www wire |
+| ship-dual-brand-boundary-019 | Dual-brand boundary matrix |

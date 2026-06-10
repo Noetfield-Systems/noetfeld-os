@@ -4,6 +4,8 @@
 
 ## Active queue (`next_tasks`)
 
+**Shipped 10-phase audit (2026-06-10):** R-011 agentic law mirror, doc reconcile, manifest hygiene, www 030–032, coherence verify, OPEN_PRS policy.
+
 **Shipped iter 9 (2026-06-06):** procurement one-pager www wire, governance sources href, homepage demo CTA verify.
 
 **Prior iter 8:** GTM_NEXT queue + QUICK_PICK fallback, staging demo www wire, security-buyer TLE copy.
@@ -12,9 +14,16 @@
 
 **Prior iter 6:** registry sync + QUICK_PICK refresh, BC AI www wire, dual-brand boundary matrix.
 
-**Prior:** iter 5 GTM ops wire, buyer debrief, tier-gate verify, BC AI outreach doc, incidents + SKILL-007.
+**Queue:** Registry is fully synced — pick from [GTM_NEXT.md](docs/ops/plans/no-asf/GTM_NEXT.md) or `next_tasks` below. [QUICK_PICK.md](docs/ops/plans/no-asf/QUICK_PICK.md) inlines GTM_NEXT when registry backlog is empty. **026 = agentic only** (Hub).
 
-**Queue:** Registry is fully synced — pick from [GTM_NEXT.md](docs/ops/plans/no-asf/GTM_NEXT.md) or `next_tasks` below. [QUICK_PICK.md](docs/ops/plans/no-asf/QUICK_PICK.md) inlines GTM_NEXT when registry backlog is empty.
+## NO ASF closeout cadence
+
+1. Merge ship PR to `main` (if open)
+2. Founder **`implement`** → bounded ≤3 tasks
+3. `./scripts/plan-with-no-asf-verify.sh` (includes `verify-no-asf-coherence.sh`)
+4. `python3 scripts/sync-prompt-pack-status.py`
+5. `reports/cursor-reply-latest.txt`
+6. **ASK** founder next move (Hub ingest = agentic layer)
 
 ## Shipped waves
 
@@ -24,35 +33,28 @@
 | 037–039 | GTM demo polish | buyer pack, workspace confidence UX, `make verify-gtm` |
 | 034–036 | GTM Tier A | procurement zip, 5-min demo page, `make demo-url` |
 | 023–033 | pilot → alembic | Trust Ledger product waves |
-| **Locks** | GTM + sources book | `docs/strategy/NOETFIELD_GTM_60_DAY_LOCKED_v1.md`, `docs/reference/GOVERNANCE_SOURCES_BOOK_v1.md` |
+| **Locks** | GTM + sources book | `docs/strategy/NOETFIELD_GTM_60_DAY_LOCKED_v1.md`, `docs/references/GOVERNANCE_SOURCES_BOOK_v1.md` |
 
 ## Agent references
 
 | Doc | Path |
 |-----|------|
-| Governance Sources Book | `docs/reference/GOVERNANCE_SOURCES_BOOK_v1.md` |
-| Governance Drift Detection | `docs/reference/GOVERNANCE_DRIFT_DETECTION_SOURCES_v1.md` |
+| Governance Sources Book | `docs/references/GOVERNANCE_SOURCES_BOOK_v1.md` |
+| Governance Sources Handbook | `docs/references/GOVERNANCE_SOURCES_HANDBOOK_LOCKED_v1.md` |
+| Governance Drift Detection | `docs/references/GOVERNANCE_DRIFT_DETECTION_SOURCES_LOCKED_v1.md` |
 | GTM 60-day (CEO) | `docs/strategy/NOETFIELD_GTM_60_DAY_LOCKED_v1.md` |
+| Agentic commercial law | `docs/ops/FOUNDER_AGENTIC_COMMERCIAL_AND_NO_CURSOR_AUTORUN_LOCKED_v1.md` |
 
 ## Verify
 
 ```bash
-make verify-gtm
+./scripts/plan-with-no-asf-verify.sh
 ```
 
 Or step-by-step:
 
 ```bash
-make verify-local-dev && make verify-ui-e2e && make copilot-pilot-e2e
-```
-
-```bash
+make verify-gtm
 make dev-local && make verify-local-dev && make tle-smoke && make copilot-pilot-e2e
 pytest governance-console/backend/tests/test_tle_flow.py -q
-cd governance-console/backend && alembic -c alembic.ini history
 ```
-
-## NO ASF closeout
-
-1. Pick from `os/plans/` or repopulate `next_tasks`.
-2. `reports/cursor-reply-latest.txt` + ingest + sync + commit.

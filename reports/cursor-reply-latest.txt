@@ -1,18 +1,23 @@
-PLAN WITH NO ASF — iteration 9 complete (Noetfield cloud)
+10-Phase Audit Fix — complete (Noetfield cloud)
 
-Pre: merged PR #37 (iter 8) to main @ 7ed7b05.
+Pre: merged PR #38 (iter 9) to main @ f994cf9.
 
-Shipped (branch cursor/no-asf-iter9-37f0):
-1. ship-procurement-one-pager-wire-027 — PROCUREMENT_ONE_PAGER linked from copilot hub + procurement; verify-gtm-ops-docs extended
-2. ship-governance-sources-www-028 — clickable Governance Sources Book v1 on procurement page + verify
-3. ship-homepage-demo-cta-029 — verify-ui-e2e homepage asserts 5-minute demo CTA (copy already on index.html)
-
-Queue: GTM_NEXT refreshed — 023–029 moved to shipped; next picks 026 (agentic), 030–032
+Shipped (branch cursor/10-phase-audit-fix-37f0):
+Phase 1: PR #38 already on main — iter 9 truth aligned
+Phase 2: R-011 + FOUNDER_AGENTIC_COMMERCIAL locked doc + SKILL-008 + verify-agent-scope
+Phase 3: no-asf-plans GTM_NEXT queue, 1000-pack addendum, ship-first banner, conflict rule R-011
+Phase 4: COMPLETED_ON_MAIN + ENGINEERING_DONE_MANIFEST iter 6–9; 1000/1000 semantics in GTM_NEXT
+Phase 5: staging-smoke optional in verify; handbook on procurement; sources on copilot hub
+Phase 6: canonical docs/references/ paths in buyer HTML + verify-gtm-ops-docs
+Phase 7: AGENTIC_COMMERCIAL_HANDOFF doc; 026 moved to agentic-only in GTM_NEXT
+Phase 8: SOURCEA_MANDATORY_SYNC_STATUS + AGENT_READ_LINKS paths (founder sync still required)
+Phase 9: OPEN_PRS policy; stale PRs #2 #7 closed
+Phase 10: verify-no-asf-coherence.sh wired into plan-with-no-asf-verify; SHIP_NOW cadence
 
 Verify: ./scripts/plan-with-no-asf-verify.sh — PASS
-Sync: python3 scripts/sync-prompt-pack-status.py — QUICK_PICK inlines updated GTM_NEXT
+Sync: python3 scripts/sync-prompt-pack-status.py
 
-task: PLAN WITH NO ASF — iteration 9 procurement wire, sources href, homepage demo verify
+task: 10-Phase Audit Fix — full bundle
 agent: NF-CLOUD-AGENT
-commercial law: validators + www only; outreach-026 = agentic layer (not NF-CLOUD disk)
-next: ASK founder — merge PR when ready; iter 10 from GTM_NEXT 030+ or agentic commercial track
+commercial law: R-011 on disk; outreach-026 = agentic layer only
+next: ASK founder — merge PR; agentic 026 execution in Hub; SourceA sync on Mac
