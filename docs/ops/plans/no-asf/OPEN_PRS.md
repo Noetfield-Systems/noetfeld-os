@@ -18,7 +18,7 @@ Only merge **Noetfield GTM / PLAN WITH NO ASF** ship PRs from branches matching:
 
 | PR | Branch | Notes |
 |----|--------|-------|
-| (open) | cursor/fourth-audit-iter12-37f0 | Fourth audit — third-audit bundle + iter 12 (036–038) + coherence |
+| #42 | cursor/fourth-audit-iter12-37f0 | Fourth audit — third-audit bundle + iter 12 (036–038) + coherence |
 
 Manual compare if automation fails: `main...cursor/fourth-audit-iter12-37f0`
 
