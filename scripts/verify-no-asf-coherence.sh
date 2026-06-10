@@ -68,6 +68,12 @@ if [[ -f docs/ops/plans/no-asf/GTM_NEXT.md ]] && [[ -f docs/ops/plans/no-asf/QUI
     echo "FAIL QUICK_PICK missing GTM_NEXT inline content" >&2
     fail=1
   fi
+  if grep -q 'ship-trust-brief-demo-042' docs/ops/plans/no-asf/GTM_NEXT.md && grep -q 'ship-trust-brief-demo-042' docs/ops/plans/no-asf/QUICK_PICK.md; then
+    echo "OK   QUICK_PICK mirrors GTM_NEXT iter 14"
+  else
+    echo "FAIL QUICK_PICK out of sync with GTM_NEXT iter 14 picks" >&2
+    fail=1
+  fi
   if grep -q 'Agentic only' docs/ops/plans/no-asf/GTM_NEXT.md && grep -q 'ship-design-partner-outreach-026' docs/ops/plans/no-asf/GTM_NEXT.md; then
     echo "OK   GTM_NEXT 026 in agentic section"
   else
@@ -201,15 +207,42 @@ else
   echo "OK   docs/reference/ stubs are redirect-only"
 fi
 
-# cursor-reply vs HEAD
+# cursor-reply coherence (ship-cursor-reply-coherence-041 — FAIL not WARN)
 reply="reports/cursor-reply-latest.txt"
-head_sha="$(git rev-parse --short HEAD 2>/dev/null || echo unknown)"
+main_sha="$(git rev-parse --short main 2>/dev/null || echo unknown)"
+branch_name="$(git branch --show-current 2>/dev/null || echo unknown)"
 if [[ -f "$reply" ]]; then
-  if grep -q "$head_sha" "$reply" 2>/dev/null; then
-    echo "OK   cursor-reply cites HEAD ($head_sha)"
+  if [[ "$branch_name" == "main" ]]; then
+    if grep -qE "^main: ${main_sha}( |$)" "$reply" 2>/dev/null; then
+      echo "OK   cursor-reply main: matches main ($main_sha)"
+    else
+      echo "FAIL cursor-reply main: must match git rev-parse --short main ($main_sha)" >&2
+      fail=1
+    fi
   else
-    echo "WARN cursor-reply stale vs HEAD $head_sha — refresh after closeout"
+    reply_commit="$(git log -1 --format=%h -- "$reply" 2>/dev/null || echo unknown)"
+    reply_only="$(git diff-tree --no-commit-id --name-only -r "$reply_commit" 2>/dev/null | wc -l | tr -d ' ')"
+    if [[ "$reply_only" == "1" ]] && git diff-tree --no-commit-id --name-only -r "$reply_commit" 2>/dev/null | grep -qx "$reply"; then
+      expected_head="$(git rev-parse --short "${reply_commit}^" 2>/dev/null || echo unknown)"
+    else
+      expected_head="$(git rev-parse --short HEAD 2>/dev/null || echo unknown)"
+    fi
+    if grep -qE "^head: ${expected_head}( |$)" "$reply" 2>/dev/null; then
+      echo "OK   cursor-reply head: matches ship commit ($expected_head)"
+    else
+      echo "FAIL cursor-reply head: must match $expected_head (closeout cites ship SHA)" >&2
+      fail=1
+    fi
+    if grep -qE "^main: ${main_sha}( |$)" "$reply" 2>/dev/null; then
+      echo "OK   cursor-reply main: cites merge base ($main_sha)"
+    else
+      echo "FAIL cursor-reply main: must cite git rev-parse --short main ($main_sha)" >&2
+      fail=1
+    fi
   fi
+else
+  echo "FAIL missing reports/cursor-reply-latest.txt" >&2
+  fail=1
 fi
 
 # PR warnings
@@ -220,7 +253,7 @@ if command -v gh >/dev/null 2>&1; then
   else
     echo "OK   no open trustfield-scope/governance-console PRs"
   fi
-  ship_prs="$(gh pr list --state open --json number,headRefName --jq '.[] | select(.headRefName | test("^cursor/(no-asf|10-phase|post-audit|third-audit|fourth-audit)")) | .number' 2>/dev/null || true)"
+  ship_prs="$(gh pr list --state open --json number,headRefName --jq '.[] | select(.headRefName | test("^cursor/(no-asf|10-phase|post-audit|fourth-audit|fifth-audit)")) | .number' 2>/dev/null || true)"
   if [[ -n "$ship_prs" ]]; then
     echo "WARN open ship PR(s): $ship_prs — merge before next iter closeout"
   else

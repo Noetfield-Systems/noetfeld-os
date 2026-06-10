@@ -10,11 +10,11 @@ When the founder says **PLAN WITH NO ASF**, start here. Pick the next **agent** 
 
 _Registry backlog empty (1000-pack synced). Pick from [GTM_NEXT.md](./GTM_NEXT.md) or `os/plan.json` `next_tasks`._
 
-### GTM_NEXT (top picks)
+### GTM_NEXT (top picks — iter 14)
 
-1. **ship-trust-brief-pilot-039** · Trust-brief intake CTA on copilot pilot page + verify
-1. **ship-procurement-cta-homepage-040** · Procurement buyer pack link from homepage hero CTAs + verify
-1. **ship-cursor-reply-coherence-041** · Coherence gate: cursor-reply `main:` must match `git rev-parse --short HEAD` (FAIL not WARN)
+1. **ship-trust-brief-demo-042** · Trust-brief intake CTA on copilot demo page + verify
+1. **ship-demo-rehearsal-pilot-043** · Demo rehearsal link in pilot checklist section + verify
+1. **ship-open-prs-autocheck-044** · OPEN_PRS pending row must match gh open ship PRs
 
 ## Recently completed
 

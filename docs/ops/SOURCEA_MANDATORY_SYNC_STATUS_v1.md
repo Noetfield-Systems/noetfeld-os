@@ -2,7 +2,7 @@
 
 **Agent tag:** `NF-CLOUD-AGENT`  
 **Rule:** R-009 — do not pseudo-ACK missing mandatory files  
-**Updated:** 2026-06-10 (fourth audit fix)
+**Updated:** 2026-06-10 (fifth audit fix — post–PR #42 merge @ 43715a4)
 
 ---
 

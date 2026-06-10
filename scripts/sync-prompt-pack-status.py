@@ -56,6 +56,9 @@ SHIP_DONE_MAP: dict[str, list[int]] = {
     "ship-trust-brief-procurement-036": [9, 29, 49, 69, 89],
     "ship-drift-blueprints-procurement-037": [10, 30, 50, 70, 90],
     "ship-demo-url-verify-038": [27, 47, 67, 87],
+    "ship-trust-brief-pilot-039": [9, 29, 49, 69, 89],
+    "ship-procurement-cta-homepage-040": [5, 25, 45, 65, 85],
+    "ship-cursor-reply-coherence-041": [8, 28, 48, 68, 88],
 }
 
 # NF-PLAN patterns that are agentic-only (R-011) — never pick for NF-CLOUD implement

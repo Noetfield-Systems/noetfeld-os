@@ -79,6 +79,24 @@
   ],
   "next_tasks": [
     {
+      "id": "ship-trust-brief-pilot-039",
+      "title": "Trust-brief intake CTA on copilot pilot page + verify",
+      "plan": "copilot/pilot/index.html",
+      "status": "done"
+    },
+    {
+      "id": "ship-procurement-cta-homepage-040",
+      "title": "Homepage hero procurement CTA verify guard",
+      "plan": "index.html",
+      "status": "done"
+    },
+    {
+      "id": "ship-cursor-reply-coherence-041",
+      "title": "Coherence FAIL gate for cursor-reply SHA drift",
+      "plan": "scripts/verify-no-asf-coherence.sh",
+      "status": "done"
+    },
+    {
       "id": "ship-trust-brief-procurement-036",
       "title": "Trust-brief intake link on procurement buyer pack + verify",
       "plan": "copilot/procurement/index.html",

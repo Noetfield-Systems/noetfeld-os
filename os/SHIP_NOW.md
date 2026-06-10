@@ -4,7 +4,11 @@
 
 ## Active queue (`next_tasks`)
 
-**Next iter 13:** trust-brief pilot CTA, homepage procurement CTA, cursor-reply coherence gate — see [GTM_NEXT.md](docs/ops/plans/no-asf/GTM_NEXT.md).
+**Next iter 14:** see [GTM_NEXT.md](docs/ops/plans/no-asf/GTM_NEXT.md) (demo trust-brief, pilot rehearsal, OPEN_PRS autocheck).
+
+**Shipped iter 13 (2026-06-10):** pilot trust-brief CTA, homepage procurement verify guard, cursor-reply coherence FAIL gate.
+
+**Shipped fourth audit (PR #42 @ 43715a4):** third-audit workflow + iter 12 on main.
 
 **Shipped iter 12 (2026-06-10):** trust-brief on procurement, drift blueprints index on procurement, demo-url verify guard.
 

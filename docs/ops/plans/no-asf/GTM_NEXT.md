@@ -15,18 +15,18 @@ When the NF-PLAN registry is fully synced (`1000/1000 done`), pick the next **�
 
 `ship-*-NNN` = GTM Tier A queue (`next_tasks`). `nf-*-NNN` in engineering manifest = product waves — numeric suffix overlap is intentional, not duplicate work.
 
-## Next GTM Tier A (NF-CLOUD disk) — iter 13 proposals
+## Next GTM Tier A (NF-CLOUD disk) — iter 14 proposals
 
 Founder pick or bounded `implement`:
 
-1. **ship-trust-brief-pilot-039** · Trust-brief intake CTA on copilot pilot page + verify  
-   Outcome: Pilot reviewers can request Governance Brief from pilot checklist.
+1. **ship-trust-brief-demo-042** · Trust-brief intake CTA on `/copilot/demo/` + verify  
+   Outcome: Demo script reviewers can request Governance Brief from demo page.
 
-1. **ship-procurement-cta-homepage-040** · Procurement buyer pack link from homepage hero CTAs + verify  
-   Outcome: Homepage diligence path matches copilot hub procurement wire.
+1. **ship-demo-rehearsal-pilot-043** · Demo rehearsal checklist link in pilot checklist section + verify  
+   Outcome: Pilot checklist cites rehearsal doc (GTM ops section has it; checklist ol does not).
 
-1. **ship-cursor-reply-coherence-041** · Coherence gate: cursor-reply `main:` must match `git rev-parse --short HEAD` (FAIL not WARN)  
-   Outcome: Closeout artifact cannot drift from merged main SHA.
+1. **ship-open-prs-autocheck-044** · Coherence gate: OPEN_PRS pending row must match open `gh pr list` ship PRs  
+   Outcome: Pending PR table cannot drift from GitHub state.
 
 ## Agentic only — Hub (not NF-CLOUD implement)
 
@@ -35,6 +35,14 @@ Founder pick or bounded `implement`:
 | **ship-design-partner-outreach-026** | Agentic layer | One named CIO contact + demo URL sent; tracker row updated |
 
 Evidence: [DESIGN_PARTNER_PIPELINE_v1.md](../../../copilot/DESIGN_PARTNER_PIPELINE_v1.md) · [AGENTIC_COMMERCIAL_HANDOFF_v1.md](../../AGENTIC_COMMERCIAL_HANDOFF_v1.md)
+
+## Recently shipped (iter 13)
+
+| ID | Shipped |
+|----|---------|
+| ship-trust-brief-pilot-039 | Trust-brief intake CTA on copilot pilot page |
+| ship-procurement-cta-homepage-040 | Homepage hero procurement CTA verify guard |
+| ship-cursor-reply-coherence-041 | cursor-reply SHA coherence FAIL gate |
 
 ## Recently shipped (iter 12)
 

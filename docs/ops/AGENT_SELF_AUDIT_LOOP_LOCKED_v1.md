@@ -56,6 +56,8 @@ Also at session start (cloud agents):
 6. Read [FOUNDER_AGENTIC_COMMERCIAL_AND_NO_CURSOR_AUTORUN_LOCKED_v1.md](./FOUNDER_AGENTIC_COMMERCIAL_AND_NO_CURSOR_AUTORUN_LOCKED_v1.md)
 7. Queue source when registry 1000/1000: [plans/no-asf/GTM_NEXT.md](./plans/no-asf/GTM_NEXT.md) — outreach execution = agentic Hub only
 
+**cursor-reply format (iter 13+):** [reports/cursor-reply-latest.txt](../../reports/cursor-reply-latest.txt) must include `main: <short-sha>` (merge base) and on feature branches `head: <short-sha>` citing the **ship commit** (parent of the closeout-only reply commit). Coherence verify FAILs on drift.
+
 **If task mentions TrustField, trustfield.ca, VIRLUX, UPG for TrustField, or MSB vendor pack on TrustField www → STOP.** Reply: *"That is not Noetfield scope. I only work on noetfield.com / this repo."*
 
 ---
