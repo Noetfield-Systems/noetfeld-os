@@ -1,24 +1,24 @@
-Eighth Audit 10-Phase Fix — complete (Noetfield cloud)
+Ninth Audit 10-Phase Fix — complete (Noetfield cloud)
 
-Pre: PR #45 merged to main @ 80ad8a7 (seventh audit + iter 15 on main).
+Pre: PR #46 merged to main @ f2103d3 (eighth audit + iter 16 on main).
 
-Shipped (commit db993f4 on cursor/eighth-audit-iter16-37f0):
-Phase 1: PR #45 merged — iter 15 on main
-Phase 2: OPEN_PRS #45 merged; COMPLETED_ON_MAIN post-merge truth; SHIP_NOW labels fixed
-Phase 3: eighth-audit merge rule; seventh-audit branch superseded
-Phase 4: plan.json 048–050; GTM_NEXT iter 17 seed
-Phase 5: ship-blueprint-governance-console-bridge-048 — PLATFORM_BLUEPRINT §8/§13/§21 bridge
-Phase 6: ship-rehearsal-parity-all-pages-049 — rehearsal parity loop (3 runbooks)
-Phase 7: ship-open-prs-merged-044-gate-050 — rolling top-4 merged PR window
-Phase 8: SHIP_DONE_MAP 048–050; AGENT_SELF_AUDIT_LOOP eval/enforce note
-Phase 9: SourceA status post–#45; founder 026/#2/#7 documented
-Phase 10: sync + verify PASS; iter 17 proposals 051–053 in GTM_NEXT
+Shipped (commit 4e70c96 on cursor/ninth-audit-iter17-37f0):
+Phase 1: PR #46 merged — iter 16 on main
+Phase 2: OPEN_PRS #46 merged; COMPLETED_ON_MAIN post-merge truth
+Phase 3: ninth-audit merge rule; eighth-audit branch superseded
+Phase 4: plan.json 051–053; GTM_NEXT iter 18 seed
+Phase 5: ship-blueprint-services-governance-bridge-051 — services/governance README + blueprint §8.3
+Phase 6: ship-procurement-control-checkpoint-copy-052 — procurement checkpoint copy + verify
+Phase 7: ship-merged-pr-window-five-053 — rolling top-5 merged PR window
+Phase 8: SHIP_DONE_MAP 051–053; ENGINEERING_DONE_MANIFEST iter 17
+Phase 9: SourceA status post–#46; founder 026/#2/#7 documented
+Phase 10: sync + verify PASS; iter 18 proposals 054–056 in GTM_NEXT
 
 Verify: ./scripts/plan-with-no-asf-verify.sh — PASS
 Sync: python3 scripts/sync-prompt-pack-status.py — 1000/1000
 
-task: Eighth Audit 10-Phase Fix — iter 16 bundle
+task: Ninth Audit 10-Phase Fix — iter 17 bundle
 agent: NF-CLOUD-AGENT
-main: 80ad8a7
-head: db993f4
-next: ASK founder — merge PR #46; iter 17 from GTM_NEXT 051–053; agentic 026 Hub; close #2/#7; SourceA sync
+main: f2103d3
+head: 4e70c96
+next: ASK founder — merge PR #47; iter 18 from GTM_NEXT 054–056; agentic 026 Hub; close #2/#7; SourceA sync
