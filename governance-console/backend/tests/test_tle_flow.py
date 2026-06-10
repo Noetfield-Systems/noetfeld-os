@@ -91,6 +91,33 @@ def test_evidence_ingest_valid_hash():
     )
     assert r.status_code == 201
     assert r.json()["evidence_id"] == eid
+    assert r.json()["tenant_id"] == str(PILOT_TENANT_ID)
+
+
+def test_evidence_ingest_response_includes_tenant_id():
+    eid = f"EV-TENANT-{uuid.uuid4().hex[:8].upper()}"
+    content_hash = content_hash_for_metadata(
+        evidence_id=eid,
+        source="Manual",
+        title="Tenant id evidence",
+        storage_ref="test/tenant",
+    )
+    r = client.post(
+        "/evidence/ingest",
+        headers=TENANT_HEADER,
+        json={
+            "evidence_id": eid,
+            "source": "Manual",
+            "title": "Tenant id evidence",
+            "content_hash": content_hash,
+            "storage_ref": "test/tenant",
+        },
+    )
+    assert r.status_code == 201
+    body = r.json()
+    assert body["tenant_id"] == str(PILOT_TENANT_ID)
+    assert body["evidence_id"] == eid
+    assert "ingested_at" in body
 
 
 def test_evidence_ingest_and_list_connectors():

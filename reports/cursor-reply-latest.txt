@@ -2,19 +2,19 @@
 agent_tag: nf-local-repo-agent
 agent_display: "[NF-LOCAL-REPO-AGENT]"
 authored_at: "2026-06-02"
-doc_id: cursor-reply-nf-0206-seed-idempotency
+doc_id: cursor-reply-nf-0207-evidence-tenant-id
 ---
 
 > **Authored by:** [NF-LOCAL-REPO-AGENT] — 2026-06-02
 
-**Shipped** — nf-0206: hardened seed-m365-evidence-stub.sh (health preflight, created/already-present messaging, 3/3 summary); smoke double-run wired into verify-gtm; REGISTRY nf-0205 drift fixed.
+**Shipped** — nf-0207: validate evidence index API returns tenant_id via pytest + verify-local-dev live ingest check; aligned tle-v1 OpenAPI EvidenceIngestResponse.
 
 ## Verify
 
 ```text
 ./scripts/verify-agent-scope.sh — PASS
-make verify-gtm — PASS (smoke-seed-m365-evidence-stub double-run, 18 pytest, full E2E)
-make smoke-pick-no-asf-plan — next pick after nf-0206 done
+make verify-gtm — PASS (19 pytest, evidence ingest tenant_id check, full E2E)
+make smoke-pick-no-asf-plan — next pick after nf-0207 done
 ```
 
 ---
@@ -23,18 +23,17 @@ make smoke-pick-no-asf-plan — next pick after nf-0206 done
 schema_version: 1
 repo: noetfield
 agent_tag: nf-local-repo-agent
-task: "nf-0206 — Extend seed-m365-evidence-stub.sh idempotency"
+task: "nf-0207 — Validate evidence index API returns tenant_id"
 status: done
 verify_passed: true
 verify_command: "make verify-gtm"
 verify_output_summary: "verify-gtm passed — safe to run external demo"
 blocked_reason: ""
-next_action: "make smoke-pick-no-asf-plan for next phase-2 T0 prompt"
+next_action: "make smoke-pick-no-asf-plan for next phase-2 T0 prompt (nf-0208)"
 evidence_paths:
-  - scripts/seed-m365-evidence-stub.sh
-  - scripts/smoke-seed-m365-evidence-stub.sh
-  - scripts/verify-gtm.sh
-  - os/plan-library/noetfield-1000/REGISTRY.json
-reported_at: "2026-06-02T17:00:00Z"
+  - governance-console/backend/tests/test_tle_flow.py
+  - scripts/verify-local-dev.sh
+  - docs/spec/openapi/tle-v1.openapi.yaml
+reported_at: "2026-06-02T18:00:00Z"
 reporter: cursor
 ```
