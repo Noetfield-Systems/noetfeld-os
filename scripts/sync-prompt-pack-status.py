@@ -174,12 +174,32 @@ def regenerate_quick_pick(plans: list[dict]) -> None:
         "## Next 25 agent-ready plans (GTM-weighted)",
         "",
     ]
-    for pl in agent_plans[:25]:
-        lines.append(
-            f"1. **{pl['id']}** · {pl['phase']}/{pl['tier']} · {pl['title']}  \n"
-            f"   Prompt: {pl['prompt'][:120]}…  \n"
-            f"   Verify: `{pl['verify_command']}`"
+    if agent_plans:
+        for pl in agent_plans[:25]:
+            lines.append(
+                f"1. **{pl['id']}** · {pl['phase']}/{pl['tier']} · {pl['title']}  \n"
+                f"   Prompt: {pl['prompt'][:120]}…  \n"
+                f"   Verify: `{pl['verify_command']}`"
+            )
+    else:
+        lines.extend(
+            [
+                "_Registry backlog empty (1000-pack synced). Pick from "
+                "[GTM_NEXT.md](./GTM_NEXT.md) or `os/plan.json` `next_tasks`._",
+                "",
+            ]
         )
+        gtm_next_path = PLANS_DIR / "no-asf" / "GTM_NEXT.md"
+        if gtm_next_path.exists():
+            gtm_text = gtm_next_path.read_text(encoding="utf-8")
+            if "## Next GTM Tier A" in gtm_text:
+                section = gtm_text.split("## Next GTM Tier A")[1].split("\n## ")[0]
+                lines.append("### GTM_NEXT (top picks)")
+                lines.append("")
+                for line in section.strip().splitlines():
+                    stripped = line.strip()
+                    if stripped.startswith("1."):
+                        lines.append(stripped)
     lines.extend(["", "## Recently completed", "", f"Synced {sum(1 for p in plans if p['status']=='done')} plans as done.", ""])
     (PLANS_DIR / "no-asf" / "QUICK_PICK.md").write_text("\n".join(lines), encoding="utf-8")
 

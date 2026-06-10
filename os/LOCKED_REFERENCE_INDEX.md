@@ -28,6 +28,7 @@
 | Sources handbook | Handbook LOCKED v1 | [docs/references/GOVERNANCE_SOURCES_HANDBOOK_LOCKED_v1.md](../docs/references/GOVERNANCE_SOURCES_HANDBOOK_LOCKED_v1.md) |
 | 1000 Prompt Pack | LOCKED v1 | [docs/ops/NOETFIELD_1000_PROMPT_PACK_LOCKED_v1.md](../docs/ops/NOETFIELD_1000_PROMPT_PACK_LOCKED_v1.md) |
 | PLAN WITH NO ASF | QUICK_PICK | [docs/ops/plans/no-asf/QUICK_PICK.md](../docs/ops/plans/no-asf/QUICK_PICK.md) |
+| GTM Tier A queue | GTM_NEXT | [docs/ops/plans/no-asf/GTM_NEXT.md](../docs/ops/plans/no-asf/GTM_NEXT.md) |
 
 **Verify:** `make ship-verify` (merge) · `make verify-gtm` (pre-demo)
 

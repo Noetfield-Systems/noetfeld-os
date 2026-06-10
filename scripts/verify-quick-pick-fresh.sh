@@ -44,11 +44,23 @@ if [[ "$total" -ge 5 && "$done_count" -eq "$total" ]]; then
   exit 1
 fi
 
+if [[ "$total" -eq 0 ]]; then
+  if grep -qF "GTM_NEXT" "$QUICK" && grep -qF "GTM_NEXT.md" "$QUICK"; then
+    echo "OK   QUICK_PICK GTM_NEXT fallback (registry backlog empty)"
+  else
+    echo "FAIL empty QUICK_PICK without GTM_NEXT fallback" >&2
+    exit 1
+  fi
+fi
+
 python3 - <<'PY' || { echo "FAIL QUICK_PICK stale pattern duplicates" >&2; exit 1; }
 import json, re
 from pathlib import Path
 
 quick = Path("docs/ops/plans/no-asf/QUICK_PICK.md").read_text(encoding="utf-8")
+if "GTM_NEXT" in quick and "NF-PLAN-" not in quick.split("## Recently")[0]:
+    print("OK   top-5 stale-pattern check skipped (GTM_NEXT mode)")
+    raise SystemExit(0)
 section = quick.split("## Next 25")[1].split("## Recently")[0]
 top_ids = re.findall(r"\*\*(NF-PLAN-\d{4})\*\*", section)[:5]
 registry = json.loads(Path("docs/ops/plans/registry.json").read_text(encoding="utf-8"))

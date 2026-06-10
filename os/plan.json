@@ -79,6 +79,24 @@
   ],
   "next_tasks": [
     {
+      "id": "ship-gtm-next-queue-023",
+      "title": "GTM_NEXT queue + QUICK_PICK fallback when registry empty",
+      "plan": "docs/ops/plans/no-asf/GTM_NEXT.md",
+      "status": "done"
+    },
+    {
+      "id": "ship-staging-demo-www-wire-024",
+      "title": "Wire STAGING_DEMO runbook into copilot pilot/demo/pipeline + verify",
+      "plan": "docs/ops/STAGING_DEMO.md",
+      "status": "done"
+    },
+    {
+      "id": "ship-security-buyer-tle-copy-025",
+      "title": "CISO / security buyer section on trust-ledger www + verify",
+      "plan": "trust-ledger/index.html",
+      "status": "done"
+    },
+    {
       "id": "ship-registry-pattern-propagation-020",
       "title": "Registry pattern propagation + QUICK_PICK dedup for phase-rotated plans",
       "plan": "scripts/sync-prompt-pack-status.py",

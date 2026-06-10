@@ -12,7 +12,7 @@
 |-------|--------|----------------|
 | 1. Target | Identify CIO / Head of AI / Compliance at regulated org evaluating Copilot | Named contact + LinkedIn/email |
 | 2. Hook | Send one-liner: board-ready Copilot governance evidence layer | Reply or meeting booked |
-| 3. Demo | Share `:13080/copilot/demo/` or staging URL; run 5-minute script | CIO understands without 45-min explanation |
+| 3. Demo | Share `{{demo_url}}/copilot/demo/` — local tunnel (`make dev-local-tunnel-bg && make demo-url`) or staging (`NF_STAGING_URL`); see [STAGING_DEMO.md](../ops/STAGING_DEMO.md) | CIO understands without 45-min explanation |
 | 4. Pilot | Send design-partner SOW outline; scope 2–4 week readiness pilot | Signed LOI or paid pilot ($2k–10k OK) |
 | 5. Proof | Org uploads evidence, generates TLE, exports board PDF | PDF used in governance meeting |
 

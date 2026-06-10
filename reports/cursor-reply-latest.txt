@@ -1,15 +1,15 @@
-PLAN WITH NO ASF — iteration 7 complete (Noetfield cloud)
+PLAN WITH NO ASF — iteration 8 complete (Noetfield cloud)
 
-Pre: merged PR #35 (iter 6) to main @ c8644ee.
+Pre: merged PR #36 (iter 7) to main @ 975fa5a.
 
-Shipped (branch cursor/no-asf-iter7-37f0):
-1. ship-registry-pattern-propagation-020 — expand_done_by_pattern in sync-prompt-pack-status.py; QUICK_PICK deduped (1000/1000 synced done; no stale phase-duplicates)
-2. ship-diligence-procurement-wire-021 — rpaa-positioning-onepager linked from copilot/pilot, demo, procurement; verify-gtm-ops-docs extended
-3. ship-design-partner-bc-ai-022 — Canada / B.C. AI for All channel block in DESIGN_PARTNER_PIPELINE_v1.md; pipeline verify grep
+Shipped (branch cursor/no-asf-iter8-37f0):
+1. ship-gtm-next-queue-023 — GTM_NEXT.md + QUICK_PICK fallback when registry empty; SHIP_NOW + LOCKED_REFERENCE_INDEX updated; verify-quick-pick-fresh GTM_NEXT mode
+2. ship-staging-demo-www-wire-024 — STAGING_DEMO.md linked from copilot/pilot, copilot/demo, DESIGN_PARTNER_PIPELINE; verify-gtm-ops-docs extended
+3. ship-security-buyer-tle-copy-025 — CISO/security buyer section on trust-ledger/index.html + verify-gtm-ops-docs
 
 Verify: ./scripts/plan-with-no-asf-verify.sh — PASS
-Sync: python3 scripts/sync-prompt-pack-status.py — 1000 indices done
+Sync: python3 scripts/sync-prompt-pack-status.py — QUICK_PICK inlines GTM_NEXT top picks
 
-task: PLAN WITH NO ASF — iteration 7 registry dedup, diligence wire, design-partner BC AI
+task: PLAN WITH NO ASF — iteration 8 GTM_NEXT queue, staging wire, security buyer copy
 agent: NF-CLOUD-AGENT
-next: ASK founder — merge PR when ready; pick iter 8 from os/plan.json / SHIP_NOW (QUICK_PICK empty — new work via next_tasks)
+next: ASK founder — merge PR when ready; iter 9 picks from GTM_NEXT.md (026+) or founder priority

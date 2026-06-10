@@ -4,13 +4,15 @@
 
 ## Active queue (`next_tasks`)
 
-**Shipped iter 7 (2026-06-06):** registry pattern propagation + QUICK_PICK dedup, diligence procurement wire, design-partner BC AI channel.
+**Shipped iter 8 (2026-06-06):** GTM_NEXT queue + QUICK_PICK fallback, staging demo www wire, security-buyer TLE copy.
+
+**Prior iter 7:** registry pattern propagation + QUICK_PICK dedup, diligence procurement wire, design-partner BC AI channel.
 
 **Prior iter 6:** registry sync + QUICK_PICK refresh, BC AI www wire, dual-brand boundary matrix.
 
 **Prior:** iter 5 GTM ops wire, buyer debrief, tier-gate verify, BC AI outreach doc, incidents + SKILL-007.
 
-Pick next from [plans/no-asf/QUICK_PICK.md](docs/ops/plans/no-asf/QUICK_PICK.md) after `make sync-prompt-pack`.
+**Queue:** Registry is fully synced — pick from [GTM_NEXT.md](docs/ops/plans/no-asf/GTM_NEXT.md) or `next_tasks` below. [QUICK_PICK.md](docs/ops/plans/no-asf/QUICK_PICK.md) inlines GTM_NEXT when registry backlog is empty.
 
 ## Shipped waves
 
