@@ -1,26 +1,26 @@
-Merged PR #32 + PR #33 to main (Noetfield cloud)
+Closed incidents 002–005 per founder order (Noetfield cloud)
 
-PR #32 — iter 5 GTM www wire, buyer debrief, tier-gate verify
-PR #33 — B.C. + federal AI for All outreach alignment
+All four incidents marked closed in registry + files. Controls remain on main (R-007–R-010, SKILL-006/007).
 
 scope_confirmed: noetfield_only
 
 ```yaml
 schema_version: 1
 repo: noetfield
-task: "Merge PR #32 and PR #33 to main"
+task: "Close incidents INCIDENT-2026-06-06-002 through 005"
 status: done
 verify_passed: true
 verify_command: "./scripts/verify-agent-scope.sh"
-verify_output_summary: "PR #32 merged at 667b02a; PR #33 conflicts resolved in plan.json + cursor-reply"
+verify_output_summary: "registry shows 002-005 closed; 001 closed; no open incidents"
 blocked_reason: ""
-next_action: "ASK founder — next bounded task from QUICK_PICK"
+next_action: "ASK founder — next bounded task"
 evidence_paths:
-  - docs/strategy/channel-outreach/bc-ai-for-all-2026.md
-  - docs/copilot/BUYER_DEBRIEF_TEMPLATE_v1.md
-  - scripts/verify-gtm-ops-docs.sh
-  - scripts/verify-tier-gate.sh
-  - os/plan.json
-reported_at: "2026-06-06T23:45:00Z"
+  - .cursor/incidents/REGISTRY.md
+  - .cursor/incidents/INCIDENT-2026-06-06-002-unauthorized-disk-edits.md
+  - .cursor/incidents/INCIDENT-2026-06-06-003-mandatory-sourcea-not-read.md
+  - .cursor/incidents/INCIDENT-2026-06-06-004-open-recommendations-not-closed.md
+  - .cursor/incidents/INCIDENT-2026-06-06-005-always-ask-next-move.md
+  - .cursor/agent-memory/MEMORY_LOCKED.yaml
+reported_at: "2026-06-06T23:55:00Z"
 reporter: cursor
 ```

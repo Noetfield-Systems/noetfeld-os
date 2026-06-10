@@ -7,7 +7,9 @@
 | **Doc trace** | `NF-CLOUD-INCIDENT-004` |
 | **Updated** | 2026-06-06 |
 | Severity | **P2** |
-| Status | **open** |
+| Status | **closed** (PR #32, #33, #34 merged; remaining items tracked via ASK workflow) |
+| Closed | 2026-06-06 |
+| Closed by | founder order |
 | Reporter | founder |
 | Agent | NF-CLOUD-AGENT (noetfield_cloud) |
 
