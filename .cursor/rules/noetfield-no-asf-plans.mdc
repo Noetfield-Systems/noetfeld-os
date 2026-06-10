@@ -10,14 +10,20 @@ alwaysApply: true
 
 # No ASF planning
 
+**Conflict law:** Subordinate to [noetfield-rule-conflict-resolution.mdc](noetfield-rule-conflict-resolution.mdc). Steps 5+ require founder **`implement`** approval after propose (SKILL-007).
+
 When the user asks for a **plan with no ASF** (or "no ASF"):
 
+0. Run SKILL-007 — if user did not also say `implement`, stop after step 4 and **ASK** to approve task list.
 1. Run `make pick-no-asf-plan` (or `python3 scripts/pick-noetfield-no-asf-plan.py --tier T0 --limit 1 --prompt`).
-2. Read [`docs/ops/NOETFIELD_1000_PROMPT_LIBRARY_LOCKED_v1.md`](../../docs/ops/NOETFIELD_1000_PROMPT_LIBRARY_LOCKED_v1.md) + picked `nf-XXXX.md` under `os/plan-library/noetfield-1000/`.
-3. Do **not** delegate to ASF for commit, push, ingest, or SourceA edits.
-4. Implement **one** picked prompt; prefer **T0** then **T1**; Lane A only.
-5. Execute: verify → `reports/cursor-reply-latest.txt` (`agent_tag` + `reported_at`) → ingest → `sync-sourceA-desktop.sh` → commit when founder asks.
-6. Set `status: done` in the prompt file front matter; run `sync-noetfield-plans-status.py` optionally.
+2. Read [`.cursor/agent-memory/MEMORY_LOCKED.yaml`](../agent-memory/MEMORY_LOCKED.yaml) — **Noetfield only**.
+3. Read [`docs/ops/NOETFIELD_1000_PROMPT_LIBRARY_LOCKED_v1.md`](../../docs/ops/NOETFIELD_1000_PROMPT_LIBRARY_LOCKED_v1.md) + picked `nf-XXXX.md` under `os/plan-library/noetfield-1000/`.
+4. Present picked prompt(s) to founder — do not edit disk yet.
+5. *(After founder `implement`)* Implement **one** picked prompt; prefer **T0** then **T1**; Lane A only.
+6. Execute: `make verify-gtm` → `./scripts/verify-agent-scope.sh` → `reports/cursor-reply-latest.txt` (`agent_tag` + `reported_at`) → ingest → `sync-sourceA-desktop.sh` → commit when founder asks.
+7. Set `status: done` in the prompt file front matter; run `sync-noetfield-plans-status.py` optionally.
+
+Do **not** delegate to ASF for commit, push, ingest, or SourceA edits.
 
 **Canonical library:** `os/plan-library/noetfield-1000/REGISTRY.json` (prompt-ready).  
 **History stubs:** `os/plans/nf-future-*` — do not run `generate-future-plans.py` (wipes done).
@@ -28,4 +34,4 @@ Immediate queue: `os/plan.json` `next_tasks` + `os/SHIP_NOW.md`.
 
 **Tagging:** new docs `[NF-LOCAL-REPO-AGENT]` only — never edit `[NF-CLOUD-AGENT]` sections.
 
-**GTM:** `docs/strategy/NOETFIELD_GTM_60_DAY_LOCKED_v1.md`, governance + drift sources books.
+**GTM / buyer citations:** `docs/strategy/NOETFIELD_GTM_60_DAY_LOCKED_v1.md`, governance + drift sources books.
