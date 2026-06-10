@@ -6,6 +6,8 @@ globs:
 
 # Noetfield — SHIP FIRST (ASF)
 
+**Conflict law:** Subordinate to [noetfield-rule-conflict-resolution.mdc](noetfield-rule-conflict-resolution.mdc) and R-007/R-008. Ship-first applies **only after** founder gives a bounded session order (e.g. `PLAN WITH NO ASF iter N implement`). Never self-start edits from `plan.json` alone.
+
 ## Two different things
 
 | What it is | Blocks shipping? |
@@ -15,8 +17,9 @@ globs:
 
 ## What you must do
 
-1. **Ship** from Noetfield’s own plan immediately: [os/plan.json](../../os/plan.json) · [os/SHIP_NOW.md](../../os/SHIP_NOW.md) · [docs/spec/SPRINT_BACKLOG_WEEKS_0-8.md](../../docs/spec/SPRINT_BACKLOG_WEEKS_0-8.md)
-2. **Do not** stop and idle until a new Prompt OS order arrives — continue P0 → P1 backlog in the same arc of work.
+1. **Within an approved ship session** (founder ordered), continue P0 → P1 from [os/plan.json](../../os/plan.json) · [os/SHIP_NOW.md](../../os/SHIP_NOW.md) — do not idle mid-bundle.
+2. **Without founder order:** propose next tasks → **ASK** (SKILL-006/007) — do not ship.
+3. **Do not** stop mid-bundle until verify + PR — but **do** ASK before starting the next bundle.
 3. **Do** send every completed session to the system via **ingest** (see [noetfield-ingest-yaml.mdc](noetfield-ingest-yaml.mdc)).
 4. **Do not** edit or weaken **Sina Prompt OS** code — Noetfield repo only.
 

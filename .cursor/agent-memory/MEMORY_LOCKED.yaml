@@ -1,8 +1,8 @@
 # Noetfield agent memory — LOCKED (versioned in git)
 # Read at EVERY session start. Bump version when adding lessons.
 
-version: 5
-updated: "2026-06-06T20:00:00Z"
+version: 7
+updated: "2026-06-06T23:30:00Z"
 updated_by: NF-CLOUD-AGENT
 
 company_scope:
@@ -42,6 +42,21 @@ hard_rules:
     rule: Tag + date header ONLY on docs this agent writes. Never add headers to other people's docs.
     source: docs/ops/AGENT_DOC_TAGGING_LOCKED_v1.md
     since: "2026-06-06"
+  - id: R-007
+    rule: NO disk edits (write, delete, commit, push, PR) without explicit founder permission and bounded task order.
+    incident: INCIDENT-2026-06-06-002
+    since: "2026-06-06"
+  - id: R-008
+    rule: ALWAYS ask for next move, clarification, and suggested implementation before acting. Default advise-only.
+    incident: INCIDENT-2026-06-06-005
+    since: "2026-06-06"
+  - id: R-009
+    rule: If mandatory SourceA handoff file is not on disk, BLOCK — do not pseudo-ACK; ask founder to sync or paste.
+    incident: INCIDENT-2026-06-06-003
+    since: "2026-06-06"
+  - id: R-010
+    rule: On rule conflict, run SKILL-007 before edits. Precedence — founder order > R-001–R-009 > incidents > execution_authority false > workflow bundles > ship-first/plan.json.
+    since: "2026-06-06"
 
 recurring_mistakes:
   - id: M-001
@@ -54,6 +69,16 @@ recurring_mistakes:
     occurrences: 2
     last_seen: "2026-06-06"
     corrective_action: Redirect to Noetfield-only tasks; never offer TrustField www work
+  - id: M-003
+    pattern: Editing disk without founder permission or ask-first step
+    occurrences: 2
+    last_seen: "2026-06-06"
+    corrective_action: SKILL-006 + R-007 + noetfield-ask-before-edit.mdc
+  - id: M-004
+    pattern: ACK of SourceA/Brain law without file on disk
+    occurrences: 1
+    last_seen: "2026-06-06"
+    corrective_action: R-009 block + extend sync-sourceA-desktop.sh (founder)
 
 lessons:
   - id: L-001
@@ -65,9 +90,19 @@ lessons:
   - id: L-003
     lesson: Cloud agent has no persistent chat memory — git-tracked MEMORY_LOCKED.yaml + incidents are the memory.
     since: "2026-06-06"
+  - id: L-004
+    lesson: IMPLEMENT is not blanket permission — confirm bounded task and file scope unless founder names the bundle.
+    incident: INCIDENT-2026-06-06-002
+    since: "2026-06-06"
+  - id: L-005
+    lesson: Open PRs and backlog items are not "done" — session end must list open items and ASK founder next move.
+    incident: INCIDENT-2026-06-06-004
+    since: "2026-06-06"
 
 pre_commit_checklist:
   - Read MEMORY_LOCKED.yaml if not read this session
+  - Founder permission received for this edit scope (R-007)
+  - ASK step completed this session (R-008)
   - ./scripts/verify-agent-scope.sh
   - Confirm diff is Noetfield-only
   - No trustfield.ca / TF-* / UPG TrustField strings in tracked files
@@ -76,4 +111,6 @@ session_start_checklist:
   - Read MEMORY_LOCKED.yaml
   - Read incidents/REGISTRY.md open items
   - Read PROJECT_BOUNDARIES_LOCKED.md
-  - Apply SKILL-001 scope gate
+  - Apply SKILL-007 if any rule conflict detected
+  - Apply SKILL-006 ask-before-implement
+  - Apply SKILL-001 scope gate (after permission only)

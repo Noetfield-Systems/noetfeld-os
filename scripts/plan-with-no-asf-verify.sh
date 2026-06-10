@@ -19,9 +19,12 @@ fi
 
 chmod +x scripts/verify-ui-endpoints.sh scripts/verify-ui-e2e.sh scripts/verify-copilot-demo-links.sh
 chmod +x scripts/verify-audit-export.sh scripts/copilot-pilot-e2e.sh scripts/procurement-pack-e2e.sh
+chmod +x scripts/verify-gtm-ops-docs.sh scripts/verify-tier-gate.sh
 ./scripts/verify-ui-endpoints.sh
 ./scripts/verify-ui-e2e.sh
 ./scripts/verify-copilot-demo-links.sh
+./scripts/verify-gtm-ops-docs.sh
+./scripts/verify-tier-gate.sh
 ./scripts/verify-audit-export.sh
 ./scripts/copilot-pilot-e2e.sh
 ./scripts/procurement-pack-e2e.sh

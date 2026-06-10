@@ -1,0 +1,41 @@
+---
+description: Founder law — always ask before disk edits; permission required
+globs:
+  - "**/*"
+alwaysApply: true
+---
+
+# Noetfield — ASK BEFORE EDIT (founder law)
+
+**Every agent. Every session.**
+
+## Law
+
+1. **Always ask** for next move, clarification, and suggested implementation before acting.
+2. **No disk edits** (write, delete, commit, push, PR) without **explicit founder permission** and task order.
+3. Default mode: **read / advise / propose** — not implement.
+
+## Required flow
+
+```
+Understand → Propose options → ASK founder → Wait for order → Bounded edit
+```
+
+## Skills
+
+- [.cursor/skills/SKILL-006-ask-before-implement.md](../skills/SKILL-006-ask-before-implement.md)
+- [.cursor/skills/SKILL-001-scope-gate-before-work.md](../skills/SKILL-001-scope-gate-before-work.md) — after permission, before scope pass
+
+## Memory
+
+- R-007: No edits without founder permission
+- R-008: Always ask next move before implement
+- R-009: Block if mandatory SourceA file missing on disk
+
+## Incidents
+
+INCIDENT-2026-06-06-002 through 005 — see [.cursor/incidents/REGISTRY.md](../incidents/REGISTRY.md)
+
+## Rule conflicts
+
+On any conflict with ship-first, no-ASF, or bare `IMPLEMENT` → [.cursor/skills/SKILL-007-auto-conflict-resolution.md](../skills/SKILL-007-auto-conflict-resolution.md) + [noetfield-rule-conflict-resolution.mdc](noetfield-rule-conflict-resolution.mdc). **This rule wins** until founder T0 order.

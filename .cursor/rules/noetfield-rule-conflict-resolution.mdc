@@ -1,0 +1,42 @@
+---
+description: Auto conflict resolution when hard rules disagree — all agents
+globs:
+  - "**/*"
+alwaysApply: true
+---
+
+# Noetfield — AUTO CONFLICT RESOLUTION (all agents)
+
+**When any rules conflict → run SKILL-007 before disk edits.**
+
+## Precedence (short)
+
+1. **Founder current message** (explicit bounded order)
+2. **R-001–R-009** hard rules (permission, ask-first, scope, SourceA block)
+3. **Open P0/P1 incidents**
+4. **`execution_authority: false`** (advise only)
+5. **Workflow bundles** (PLAN WITH NO ASF — only after founder approves)
+6. **Ship-first / plan.json** — never self-start
+
+## Hard law
+
+> Ship-first and no-ASF **never** override R-007 (permission) or R-008 (ask first).
+
+## On conflict
+
+1. Stop — no edits
+2. Name both rules + winner
+3. Propose A/B/C
+4. **ASK founder**
+5. Implement only bounded T0 order
+
+## Full algorithm
+
+[.cursor/skills/SKILL-007-auto-conflict-resolution.md](../skills/SKILL-007-auto-conflict-resolution.md)
+
+## Related
+
+- [noetfield-ask-before-edit.mdc](noetfield-ask-before-edit.mdc) — R-007/R-008
+- [noetfield-ship-first.mdc](noetfield-ship-first.mdc) — subordinate to this rule
+- [noetfield-no-asf-plans.mdc](noetfield-no-asf-plans.mdc) — subordinate to this rule
+- MEMORY_LOCKED **R-010**

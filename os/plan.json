@@ -85,21 +85,21 @@
       "status": "done"
     },
     {
-      "id": "ship-1000-prompt-pack-lock-010",
-      "title": "Lock 1000 prompt-ready pack v2 + bridge + GTM QUICK_PICK",
-      "plan": "docs/ops/NOETFIELD_1000_PROMPT_PACK_LOCKED_v1.md",
+      "id": "ship-gtm-ops-www-wire-013",
+      "title": "Wire GTM ops docs into copilot pilot/demo + verify",
+      "plan": "docs/ops/plans/registry.json",
       "status": "done"
     },
     {
-      "id": "ship-customer-outreach-011",
-      "title": "Design partner pipeline + follow-up template",
-      "plan": "docs/copilot/DESIGN_PARTNER_PIPELINE_v1.md",
+      "id": "ship-buyer-debrief-template-014",
+      "title": "Buyer debrief template + pilot link",
+      "plan": "docs/copilot/BUYER_DEBRIEF_TEMPLATE_v1.md",
       "status": "done"
     },
     {
-      "id": "ship-demo-rehearsal-012",
-      "title": "5-minute demo rehearsal checklist + buyer personas",
-      "plan": "docs/ops/DEMO_REHEARSAL_CHECKLIST_v1.md",
+      "id": "ship-tier-gate-verify-015",
+      "title": "QUICK_PICK tier-gate guard in verify bundle",
+      "plan": "docs/ops/plans/PROMPT_PACK_LOCKED/TIER_GATES.md",
       "status": "done"
     }
   ],

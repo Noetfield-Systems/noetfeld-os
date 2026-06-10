@@ -4,6 +4,8 @@
 
 Do not implement until GTM tier unlock conditions are met.
 
+**CI guard:** `./scripts/verify-tier-gate.sh` — fails if QUICK_PICK top-25 includes `tier_gate: B` or `C`.
+
 - **NF-PLAN-0304** (nf-future-0304) · P3/T1 · Governance drift implementation slice for connectors
   - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Governance drift implementation slice for connectors.…`
   - Critic: Blocked until first contracted customer (GTM Tier B).

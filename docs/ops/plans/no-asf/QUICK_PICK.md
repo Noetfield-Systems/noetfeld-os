@@ -8,12 +8,6 @@ When the founder says **PLAN WITH NO ASF**, start here. Pick the next **agent** 
 
 ## Next 25 agent-ready plans (GTM-weighted)
 
-1. **NF-PLAN-0406** · P4/T1 · Buyer interview debrief and evidence capture for www gtm  
-   Prompt: As NF-CLOUD-AGENT (Noetfield only), implement: Buyer interview debrief and evidence capture for www gtm. Read locked GTM…  
-   Verify: `./scripts/plan-with-no-asf-verify.sh`
-1. **NF-PLAN-0407** · P4/T1 · Tier A/B/C gate validation before customer acquisition work  
-   Prompt: As NF-CLOUD-AGENT (Noetfield only), implement: Tier A/B/C gate validation before customer acquisition work. Read locked …  
-   Verify: `./scripts/plan-with-no-asf-verify.sh`
 1. **NF-PLAN-0408** · P4/T1 · Registry reconcile and plan.json sync for demo ops  
    Prompt: As NF-CLOUD-AGENT (Noetfield only), implement: Registry reconcile and plan.json sync for demo ops. Read locked GTM + MEM…  
    Verify: `./scripts/plan-with-no-asf-verify.sh`
@@ -83,7 +77,13 @@ When the founder says **PLAN WITH NO ASF**, start here. Pick the next **agent** 
 1. **NF-PLAN-0728** · P7/T2 · Registry reconcile and plan.json sync for demo ops  
    Prompt: As NF-CLOUD-AGENT (Noetfield only), implement: Registry reconcile and plan.json sync for demo ops. Read locked GTM + MEM…  
    Verify: `./scripts/plan-with-no-asf-verify.sh`
+1. **NF-PLAN-0426** · P4/T2 · Buyer interview debrief and evidence capture for www gtm  
+   Prompt: As NF-CLOUD-AGENT (Noetfield only), implement: Buyer interview debrief and evidence capture for www gtm. Read locked GTM…  
+   Verify: `./scripts/plan-with-no-asf-verify.sh`
+1. **NF-PLAN-0427** · P4/T2 · Tier A/B/C gate validation before customer acquisition work  
+   Prompt: As NF-CLOUD-AGENT (Noetfield only), implement: Tier A/B/C gate validation before customer acquisition work. Read locked …  
+   Verify: `./scripts/plan-with-no-asf-verify.sh`
 
 ## Recently completed
 
-Synced 62 plans as done.
+Synced 64 plans as done.
