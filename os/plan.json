@@ -3,8 +3,8 @@
   "plane": "DESIGN",
   "status": "active",
   "ship_mandate": "os/SHIP_NOW.md",
-  "ship_rule": "Ship from os/plan.json without waiting for next Prompt OS order; ingest = send answer to system (required); do not edit SinaPromptOS",
-  "last_updated": "2026-06-04",
+  "ship_rule": "Bounded founder implement order + os/plan.json GTM_NEXT queue; ingest after VERIFY (required); do not edit SinaPromptOS; no self-start from plan.json alone (R-007/R-011)",
+  "last_updated": "2026-06-10",
   "positioning_lock": "docs/strategy/NOETFIELD_TRUST_LEDGER_POSITIONING_LOCKED_v1.2.md",
   "agent_context_lock": "docs/ops/NOETFIELD_AGENT_CONTEXT_AND_READ_ORDER_LOCKED_v1.md",
   "sprint_backlog": "os/sprint-trust-ledger-v1.2.md",
@@ -191,6 +191,60 @@
       "title": "QUICK_PICK tier-gate guard in verify bundle",
       "plan": "docs/ops/plans/PROMPT_PACK_LOCKED/TIER_GATES.md",
       "status": "done"
+    },
+    {
+      "id": "ship-audit-export-ux-001",
+      "title": "Audit export CTA + event count",
+      "plan": "governance-console/frontend/app/audit/page.tsx",
+      "status": "done"
+    },
+    {
+      "id": "ship-demo-confidence-002",
+      "title": "Confidence on result + dashboard",
+      "plan": "governance-console/frontend/app/result/",
+      "status": "done"
+    },
+    {
+      "id": "ship-www-tle-copy-003",
+      "title": "trust-ledger www CTAs",
+      "plan": "trust-ledger/index.html",
+      "status": "done"
+    },
+    {
+      "id": "ship-result-confidence-e2e-004",
+      "title": "E2E confidence assertion",
+      "plan": "scripts/verify-ui-e2e.sh",
+      "status": "done"
+    },
+    {
+      "id": "ship-copilot-demo-links-005",
+      "title": "Demo CTA 200 checks",
+      "plan": "scripts/verify-copilot-demo-links.sh",
+      "status": "done"
+    },
+    {
+      "id": "ship-plan-with-no-asf-script-006",
+      "title": "Verify bundle script",
+      "plan": "scripts/plan-with-no-asf-verify.sh",
+      "status": "done"
+    },
+    {
+      "id": "ship-pilot-e2e-verify-007",
+      "title": "Pilot e2e in bundle",
+      "plan": "scripts/copilot-pilot-e2e.sh",
+      "status": "done"
+    },
+    {
+      "id": "ship-audit-export-api-e2e-008",
+      "title": "Audit export JSON verify",
+      "plan": "scripts/verify-audit-export.sh",
+      "status": "done"
+    },
+    {
+      "id": "ship-procurement-e2e-verify-009",
+      "title": "Procurement e2e in bundle",
+      "plan": "scripts/procurement-pack-e2e.sh",
+      "status": "done"
     }
   ],
   "lane_a_sprint_map": [
@@ -203,7 +257,16 @@
     "nf-rag-design-010",
     "nf-copilot-pilot-runbook-009"
   ],
-  "updated_at": "2026-06-06",
+  "updated_at": "2026-06-10",
+  "agentic_queue": [
+    {
+      "id": "ship-design-partner-outreach-026",
+      "title": "Design-partner outreach execution — send + tracker",
+      "owner": "agentic_layer",
+      "handoff": "docs/ops/AGENTIC_COMMERCIAL_HANDOFF_v1.md",
+      "note": "Not NF-CLOUD disk implement — founder Hub approves send"
+    }
+  ],
   "done": [
     {
       "id": "nf-mvp-req-extract-001",

@@ -48,7 +48,7 @@ Noetfield provides the **AI Governance & Evidence layer** for a Microsoft 365 Co
 ## Artifacts to attach
 
 - `docs/copilot/PROCUREMENT_ONE_PAGER.md`
-- `docs/reference/GOVERNANCE_SOURCES_BOOK_v1.md` (framework orientation)
+- `docs/references/GOVERNANCE_SOURCES_BOOK_v1.md` (framework orientation)
 - TLE samples: `/trust-ledger/sample-report/`
 - Demo: `/copilot/demo/`
 

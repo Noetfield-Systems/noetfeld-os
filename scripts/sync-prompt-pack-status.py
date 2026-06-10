@@ -41,7 +41,19 @@ SHIP_DONE_MAP: dict[str, list[int]] = {
     "ship-registry-pattern-propagation-020": [8, 28, 48, 68, 88, 108, 128, 148, 168, 188, 208, 228, 248, 268, 288, 308, 328, 348, 368, 388, 408, 428, 448, 468, 488, 508, 528, 548, 568, 588, 608, 628, 648, 668, 688, 708, 728, 748, 768, 788, 808, 828, 848, 868, 888, 908, 928, 948, 968, 988],
     "ship-diligence-procurement-wire-021": [15, 35, 55, 75, 95, 115, 135, 155, 175, 195, 215, 235, 255, 275, 295, 315, 335, 355, 375, 395, 415, 435, 455, 475, 495, 515, 535, 555, 575, 595, 615, 635, 655, 675, 695, 715, 735, 755, 775, 795, 815, 835, 855, 875, 895, 915, 935, 955, 975, 995],
     "ship-design-partner-bc-ai-022": [1, 21, 41, 61, 81, 101, 121, 141, 161, 181, 201, 221, 241, 261, 281, 301, 321, 341, 361, 381, 401, 421, 441, 461, 481, 501, 521, 541, 561, 581, 601, 621, 641, 661, 681, 701, 721, 741, 761, 781, 801, 821, 841, 861, 881, 901, 921, 941, 961, 981],
+    "ship-gtm-next-queue-023": [8, 28, 48, 68, 88],
+    "ship-staging-demo-www-wire-024": [27, 47, 67, 87, 107],
+    "ship-security-buyer-tle-copy-025": [14, 34, 54, 74, 94],
+    "ship-procurement-one-pager-wire-027": [24, 44, 64, 84, 104],
+    "ship-governance-sources-www-028": [15, 35, 55, 75, 95],
+    "ship-homepage-demo-cta-029": [5, 25, 45, 65, 85],
+    "ship-tunnel-smoke-verify-030": [27, 47, 67, 87],
+    "ship-governance-sources-handbook-031": [15, 35, 55, 75, 95],
+    "ship-copilot-hub-sources-032": [6, 26, 46, 66, 86],
 }
+
+# NF-PLAN patterns that are agentic-only (R-011) — never pick for NF-CLOUD implement
+AGENTIC_ONLY_PATTERNS = frozenset({"customer-outreach"})
 
 
 def pattern_index(n: int) -> int:
@@ -152,7 +164,12 @@ def update_os_registry(done_indices: set[int]) -> None:
 def regenerate_quick_pick(plans: list[dict]) -> None:
     """GTM-weighted QUICK_PICK (same logic as v2 generator)."""
     agent_plans = [
-        p for p in plans if not p["asf_only"] and p["status"] == "backlog" and p["tier_gate"] != "C"
+        p
+        for p in plans
+        if not p["asf_only"]
+        and p["status"] == "backlog"
+        and p["tier_gate"] != "C"
+        and p.get("pattern") not in AGENTIC_ONLY_PATTERNS
     ]
     phase_pri = {"P7": 0, "P4": 1, "P0": 2, "P1": 3, "P2": 4, "P3": 5, "P5": 6, "P6": 7, "P8": 8, "P9": 9}
     tier_pri = {"T1": 0, "T2": 1, "T3": 2, "T4": 3, "T5": 4}
@@ -196,10 +213,20 @@ def regenerate_quick_pick(plans: list[dict]) -> None:
                 section = gtm_text.split("## Next GTM Tier A")[1].split("\n## ")[0]
                 lines.append("### GTM_NEXT (top picks)")
                 lines.append("")
+                picked = False
                 for line in section.strip().splitlines():
                     stripped = line.strip()
                     if stripped.startswith("1."):
                         lines.append(stripped)
+                        picked = True
+                if not picked:
+                    lines.extend(
+                        [
+                            "_No open NF-CLOUD disk items — see [GTM_NEXT.md](./GTM_NEXT.md)._",
+                            "",
+                            "**Agentic commercial P0:** ship-design-partner-outreach-026 (Hub only — not NF-CLOUD disk).",
+                        ]
+                    )
     lines.extend(["", "## Recently completed", "", f"Synced {sum(1 for p in plans if p['status']=='done')} plans as done.", ""])
     (PLANS_DIR / "no-asf" / "QUICK_PICK.md").write_text("\n".join(lines), encoding="utf-8")
 

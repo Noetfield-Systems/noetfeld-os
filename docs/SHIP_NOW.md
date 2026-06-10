@@ -1,6 +1,16 @@
-# SHIP NOW — Noetfield primary direction (ASF)
+# SHIP NOW — historical ASF direction (superseded)
+
+> **Canonical ship queue:** [os/SHIP_NOW.md](../os/SHIP_NOW.md) — use that file for PLAN WITH NO ASF closeout.
+>
+> **Post-audit law:** Bounded founder `implement` only (R-007/R-011). Do **not** self-start from `plan.json` or "ship immediately" below.
 
 **Canonical short form:** [os/SHIP_NOW.md](../os/SHIP_NOW.md)
+
+---
+
+## Historical note (pre–2026-06-10)
+
+The sections below are retained for context. Cloud agents follow `os/SHIP_NOW.md`, [GTM_NEXT.md](ops/plans/no-asf/GTM_NEXT.md), and R-011 agentic commercial law.
 
 ## Two different things
 
@@ -11,11 +21,9 @@
 
 **Do not weaken Sina Prompt OS.** **Do not edit Prompt OS code.** Ingest stays **required**.
 
-**Ship** from [os/plan.json](../os/plan.json) immediately. **Do not idle** for the next order.
-
 **Mode:** **DELIVERY** — ship what buyers can buy and pilots can run **this week**.
 
-This repo’s law is:
+This repo's law is:
 
 1. [PRODUCT_TRUTH.md](../PRODUCT_TRUTH.md) · [PROJECT_BOUNDARIES_LOCKED.md](../PROJECT_BOUNDARIES_LOCKED.md)
 2. [TRUST_LEDGER_PRODUCT_BLUEPRINT_v1.2_LOCKED.md](./spec/TRUST_LEDGER_PRODUCT_BLUEPRINT_v1.2_LOCKED.md)
@@ -31,44 +39,10 @@ This repo’s law is:
 
 ---
 
-## P0 — ship this week (engineering + GTM)
-
-| # | Deliverable | Owner | Verify |
-|---|-------------|-------|--------|
-| P0.1 | Production DNS/TLS + platform smoke | Founder | `PLATFORM_HEALTH_BASE=... ./scripts/deploy_platform_smoke.sh` exit 0 |
-| P0.2 | Homepage + `/trust-ledger/` Copilot headline aligned | Engineering | Pages live; copy matches blueprint |
-| P0.3 | Publish TLE v1 examples (YAML) + sample PDF path | Engineering | `docs/spec/examples/tle-v1-*.yaml` linked from trust-ledger |
-| P0.4 | Evidence Intake Contract v1 (procurement) | Product | `docs/diligence/EVIDENCE_INTAKE_CONTRACT_v1.md` |
-| P0.5 | Local dev one-liner for demos | Engineering | `make dev-local` + `make verify-local-dev` |
-| P0.6 | Merge bank-grade branch → `main` | Engineering | PR #15 green |
-| P0.7 | One Shadow Week RID in production | Founder | [SHADOW_WEEK_DEMO.md](./SHADOW_WEEK_DEMO.md) |
-
----
-
-## P1 — weeks 3–6 (product layer)
-
-Trust Ledger Core DB · Evidence Index · M365 metadata connectors · Workspace UI v0 · TLE Generator + Confidence Score.
-
-See [spec/SPRINT_BACKLOG_WEEKS_0-8.md](./spec/SPRINT_BACKLOG_WEEKS_0-8.md).
-
----
-
-## What must NOT block shipping
-
-- **Waiting for the next Prompt OS / M8 / dispatch order** before continuing the sprint
-- DESIGN-only freezes that prevent code/API/www deploy
-- MonoRepo Desktop path unavailable in cloud (sync later; **keep shipping in git**)
-
-## Ingest — required (does not block shipping)
-
-When you finish a task, **send** the reply to Sina Prompt OS. See [EXECUTION_TRUTH_AGENT_REPLY_LOCKED.md](./spec/EXECUTION_TRUTH_AGENT_REPLY_LOCKED.md). A failed ingest on one repo = fix YAML and re-ingest; **keep shipping** Noetfield work.
-
----
-
 ## Single command — am I shippable?
 
 ```bash
-make ship-verify
+./scripts/plan-with-no-asf-verify.sh
 ```
 
 Exit **0** = repo ready for merge/deploy; founder still runs production smoke on live host.

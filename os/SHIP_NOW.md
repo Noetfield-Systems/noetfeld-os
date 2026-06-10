@@ -14,7 +14,15 @@
 
 **Prior iter 6:** registry sync + QUICK_PICK refresh, BC AI www wire, dual-brand boundary matrix.
 
-**Queue:** Registry is fully synced — pick from [GTM_NEXT.md](docs/ops/plans/no-asf/GTM_NEXT.md) or `next_tasks` below. [QUICK_PICK.md](docs/ops/plans/no-asf/QUICK_PICK.md) inlines GTM_NEXT when registry backlog is empty. **026 = agentic only** (Hub).
+**Queue:** Registry is fully synced — pick from [GTM_NEXT.md](docs/ops/plans/no-asf/GTM_NEXT.md) or `next_tasks` below. [QUICK_PICK.md](docs/ops/plans/no-asf/QUICK_PICK.md) inlines GTM_NEXT when registry backlog is empty.
+
+## Active commercial P0 (agentic — Hub only)
+
+| ID | Owner | Handoff |
+|----|-------|---------|
+| **ship-design-partner-outreach-026** | Agentic layer | [AGENTIC_COMMERCIAL_HANDOFF_v1.md](docs/ops/AGENTIC_COMMERCIAL_HANDOFF_v1.md) |
+
+NF-CLOUD ships pipeline **copy** on disk; founder Hub approves send. See R-011 + `os/plan.json` `agentic_queue`.
 
 ## NO ASF closeout cadence
 

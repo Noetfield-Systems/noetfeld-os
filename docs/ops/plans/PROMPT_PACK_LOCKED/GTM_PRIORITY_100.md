@@ -2,6 +2,8 @@
 
 **Count:** 100
 
+> **R-011 fence (agentic only):** Rows titled "Design-partner outreach and pipeline" or `pattern=customer-outreach` are **agentic commercial** — Hub executes send/call (`ship-design-partner-outreach-026`). NF-CLOUD may ship **copy** on disk (templates, pipeline docs, www) only — never send email/call as founder.
+
 - **NF-PLAN-0002** (nf-future-0002) · P0/T1 · 5-minute demo rehearsal script and buyer checklist for governance api
   - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: 5-minute demo rehearsal script and buyer checklist fo…`
   - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.

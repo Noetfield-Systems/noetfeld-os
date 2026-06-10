@@ -14,7 +14,7 @@
 
 ## Framework orientation
 
-Primary citations: `docs/reference/GOVERNANCE_SOURCES_BOOK_v1.md` (NIST AI RMF, ISO 42001, EU AI Act, Microsoft Purview). Orientation only — not legal advice.
+Primary citations: `docs/references/GOVERNANCE_SOURCES_BOOK_v1.md` (NIST AI RMF, ISO 42001, EU AI Act, Microsoft Purview). Orientation only — not legal advice.
 
 ## Out of scope
 

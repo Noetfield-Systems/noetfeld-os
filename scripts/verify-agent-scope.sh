@@ -86,6 +86,18 @@ else
   echo "OK   product/www scope (no product files tracked)"
 fi
 
+if [[ "${NF_REQUIRE_SOURCEA:-}" == "1" ]]; then
+  mirror="ops/private/sourceA/founder/repo-agent-notices/SEMI_NOTICE_noetfield_cloud_v1.md"
+  if [[ -f "$mirror" ]]; then
+    echo "OK   SourceA mirror present ($mirror)"
+  else
+    echo "FAIL NF_REQUIRE_SOURCEA=1 but missing $mirror — run sync-sourceA-desktop.sh on Mac" >&2
+    fail=1
+  fi
+else
+  echo "SKIP SourceA mirror (NF_REQUIRE_SOURCEA not set)"
+fi
+
 if [[ "$fail" -eq 0 ]]; then
   echo ""
   echo "verify-agent-scope passed."

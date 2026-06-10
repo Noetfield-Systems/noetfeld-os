@@ -12,6 +12,9 @@ _Registry backlog empty (1000-pack synced). Pick from [GTM_NEXT.md](./GTM_NEXT.m
 
 ### GTM_NEXT (top picks)
 
+1. **ship-trust-brief-intake-wire-033** · Trust-brief intake CTA from copilot hub + verify
+1. **ship-drift-sources-procurement-034** · Drift detection sources href on procurement buyer pack
+1. **ship-demo-rehearsal-hub-wire-035** · DEMO_REHEARSAL_CHECKLIST link from copilot hub (pilot already has it)
 
 ## Recently completed
 

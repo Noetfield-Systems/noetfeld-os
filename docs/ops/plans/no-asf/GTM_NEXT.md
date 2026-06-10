@@ -11,9 +11,18 @@ When the NF-PLAN registry is fully synced (`1000/1000 done`), pick the next **�
 
 `python3 scripts/sync-prompt-pack-status.py` marks all NF-PLAN rows `done` via `expand_done_by_pattern()` — this is **dedup / pattern propagation**, not “all engineering complete.” Real queue lives here and in `os/plan.json` `next_tasks`.
 
-## Next GTM Tier A (NF-CLOUD disk)
+## Next GTM Tier A (NF-CLOUD disk) — iter 11 proposals
 
-_No open NF-CLOUD disk items — pick next Tier A from GTM 60-day lock or founder order._
+Founder pick or bounded `implement` — from GTM 60-day demo + diligence chain:
+
+1. **ship-trust-brief-intake-wire-033** · Trust-brief intake CTA from copilot hub + verify  
+   Outcome: Cold traffic can request Governance Brief from hub without hunting.
+
+1. **ship-drift-sources-procurement-034** · Drift detection sources href on procurement buyer pack  
+   Outcome: Continuous governance citations for diligence reviewers.
+
+1. **ship-demo-rehearsal-hub-wire-035** · DEMO_REHEARSAL_CHECKLIST link from copilot hub (pilot already has it)  
+   Outcome: Founder demo prep one click from hub for cold traffic.
 
 ## Agentic only — Hub (not NF-CLOUD implement)
 
@@ -23,7 +32,7 @@ _No open NF-CLOUD disk items — pick next Tier A from GTM 60-day lock or founde
 
 Evidence on disk: [DESIGN_PARTNER_PIPELINE_v1.md](../../../copilot/DESIGN_PARTNER_PIPELINE_v1.md) · [AGENTIC_COMMERCIAL_HANDOFF_v1.md](../../AGENTIC_COMMERCIAL_HANDOFF_v1.md)
 
-## Recently shipped (10-phase audit + iter 9)
+## Recently shipped (post-audit + 10-phase audit + iter 9)
 
 | ID | Shipped |
 |----|---------|
@@ -34,10 +43,14 @@ Evidence on disk: [DESIGN_PARTNER_PIPELINE_v1.md](../../../copilot/DESIGN_PARTNE
 | ship-governance-sources-www-028 | Clickable Sources Book on procurement |
 | ship-homepage-demo-cta-029 | Homepage demo CTA verify guard |
 
-## Prior shipped (iter 6–8)
+## Prior shipped (iter 4–8)
 
 | ID | Shipped |
 |----|---------|
+| ship-gtm-ops-www-wire-013 | GTM ops docs www wire |
+| ship-buyer-debrief-template-014 | Buyer debrief template |
+| ship-tier-gate-verify-015 | Tier-gate verify guard |
+| ship-bc-ai-for-all-outreach-016 | BC AI outreach alignment doc |
 | ship-gtm-next-queue-023 | GTM_NEXT queue + QUICK_PICK fallback |
 | ship-staging-demo-www-wire-024 | STAGING_DEMO www wire |
 | ship-security-buyer-tle-copy-025 | CISO security buyer TLE copy |

@@ -1,7 +1,7 @@
 # Governance Sources Book v1 — for Noetfield business use
 
 **Status:** Living reference (v1 locked 2026-06-04)  
-**Path:** `docs/reference/GOVERNANCE_SOURCES_BOOK_v1.md`  
+**Path:** `docs/references/GOVERNANCE_SOURCES_BOOK_v1.md`  
 **Audience:** Founders, design partners, agents (`noetfield_cloud`)  
 **Product mapping:** Trust Ledger (TLE), Evidence Index, Copilot Readiness, board PDF
 
@@ -294,7 +294,7 @@ flowchart LR
 ## Agent pointer (copy-paste)
 
 ```
-Read: docs/reference/GOVERNANCE_SOURCES_BOOK_v1.md
+Read: docs/references/GOVERNANCE_SOURCES_BOOK_v1.md
 GTM: docs/strategy/NOETFIELD_GTM_60_DAY_LOCKED_v1.md
 ```
 

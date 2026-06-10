@@ -33,6 +33,18 @@
 10. [.cursor/AGENT_TRACKING.md](../../.cursor/AGENT_TRACKING.md)
 11. Active task (Issue / PR / Prompt OS task string)
 
+---
+
+## § Post-audit addendum (2026-06-10 — agent-maintained)
+
+Does **not** replace locked authority line above without founder unlock. Cloud agents also read:
+
+- [FOUNDER_AGENTIC_COMMERCIAL_AND_NO_CURSOR_AUTORUN_LOCKED_v1.md](./FOUNDER_AGENTIC_COMMERCIAL_AND_NO_CURSOR_AUTORUN_LOCKED_v1.md) — R-011
+- [GTM_NEXT.md](./plans/no-asf/GTM_NEXT.md) — queue when registry 1000/1000 done
+- [AGENTIC_COMMERCIAL_HANDOFF_v1.md](./AGENTIC_COMMERCIAL_HANDOFF_v1.md) — outreach = agentic layer
+
+**Ship rule (bounded):** Founder explicit `implement` + ≤3 tasks from GTM_NEXT — not self-start from `plan.json` or GTM_PRIORITY outreach rows alone.
+
 ### B. After founder sync (`ops/private/`)
 
 12. `ops/private/agent-reference/IN_CHARGE_NOW.md` → `AGENT_TEAM_STATE.yaml` → `plans/LOCKED_PLANS_INTERNAL.yaml`

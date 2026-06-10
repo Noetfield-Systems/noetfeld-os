@@ -28,7 +28,7 @@ Framework alignment (orientation only — not legal advice):
 - ISO/IEC 42001-style evidence and approval records
 - Microsoft Purview / M365 evidence metadata (when connector ingested)
 
-References: docs/reference/GOVERNANCE_SOURCES_BOOK_v1.md (Noetfield implementation repo)
+References: docs/references/GOVERNANCE_SOURCES_BOOK_v1.md (Noetfield implementation repo)
 
 Noetfield does not initiate payments, custody, or external execution.
 """

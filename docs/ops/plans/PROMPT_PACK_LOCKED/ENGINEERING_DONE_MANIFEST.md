@@ -52,6 +52,15 @@ Shipped capabilities mapped to registry indices. Run `python3 scripts/sync-promp
 
 ---
 
+## PLAN WITH NO ASF iterations 4–5
+
+| next_tasks id | Shipped | Evidence |
+|---------------|---------|----------|
+| ship-gtm-ops-www-wire-013 | GTM ops docs www wire | `scripts/verify-gtm-ops-docs.sh` |
+| ship-buyer-debrief-template-014 | Buyer debrief template | `docs/copilot/BUYER_DEBRIEF_TEMPLATE_v1.md` |
+| ship-tier-gate-verify-015 | Tier-gate verify guard | `scripts/verify-tier-gate.sh` |
+| ship-bc-ai-for-all-outreach-016 | BC AI outreach doc | `docs/strategy/channel-outreach/bc-ai-for-all-2026.md` |
+
 ## PLAN WITH NO ASF iterations 6–9
 
 | next_tasks id | Shipped | Evidence |
@@ -76,6 +85,16 @@ Shipped capabilities mapped to registry indices. Run `python3 scripts/sync-promp
 | ship-tunnel-smoke-verify-030 | Optional staging-smoke in verify | `scripts/plan-with-no-asf-verify.sh` |
 | ship-governance-sources-handbook-031 | Handbook link on procurement | `copilot/procurement/index.html` |
 | ship-copilot-hub-sources-032 | Sources Book on copilot hub | `copilot/index.html` |
+
+## Post-audit fix (workflow + paths + verify hardening)
+
+| Area | Shipped | Evidence |
+|------|---------|----------|
+| Workflow reconcile | 1000-pack overlay, read-order rules, plan.json ship_rule | `NOETFIELD_1000_PROMPT_PACK_LOCKED_v1.md` |
+| R-011 GTM_PRIORITY fence | Agentic-only banner + customer-outreach filter | `GTM_PRIORITY_100.md`, `sync-prompt-pack-status.py` |
+| SHIP_DONE_MAP 023–032 | Registry propagation for iter 8–9 + audit | `scripts/sync-prompt-pack-status.py` |
+| Path canonicalization | `docs/references/` in buyer md + procurement ZIP | `copilot/`, `procurement_pack.py` |
+| Coherence hardening | Manifest + OPEN_PRS + path checks | `scripts/verify-no-asf-coherence.sh` |
 
 ## Verify command (all future ships)
 

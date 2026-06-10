@@ -1,23 +1,24 @@
-10-Phase Audit Fix — complete (Noetfield cloud)
+Post-Audit 10-Phase Fix — complete (Noetfield cloud)
 
-Pre: merged PR #38 (iter 9) to main @ f994cf9.
+Pre: merged PR #39 to main @ 76a5c6a (10-phase audit bundle on main).
 
-Shipped (branch cursor/10-phase-audit-fix-37f0):
-Phase 1: PR #38 already on main — iter 9 truth aligned
-Phase 2: R-011 + FOUNDER_AGENTIC_COMMERCIAL locked doc + SKILL-008 + verify-agent-scope
-Phase 3: no-asf-plans GTM_NEXT queue, 1000-pack addendum, ship-first banner, conflict rule R-011
-Phase 4: COMPLETED_ON_MAIN + ENGINEERING_DONE_MANIFEST iter 6–9; 1000/1000 semantics in GTM_NEXT
-Phase 5: staging-smoke optional in verify; handbook on procurement; sources on copilot hub
-Phase 6: canonical docs/references/ paths in buyer HTML + verify-gtm-ops-docs
-Phase 7: AGENTIC_COMMERCIAL_HANDOFF doc; 026 moved to agentic-only in GTM_NEXT
-Phase 8: SOURCEA_MANDATORY_SYNC_STATUS + AGENT_READ_LINKS paths (founder sync still required)
-Phase 9: OPEN_PRS policy; stale PRs #2 #7 closed
-Phase 10: verify-no-asf-coherence.sh wired into plan-with-no-asf-verify; SHIP_NOW cadence
+Shipped (branch cursor/post-audit-10-phase-fix-37f0 @ 21fd814):
+Phase 1: PR #39 merged — main has R-011, coherence verify, www 030-032
+Phase 2: OPEN_PRS truth (#2/#7 open until founder closes); stale-PR warn in coherence
+Phase 3: Workflow reconcile — 1000-pack overlay, agent context addendum, read-order rules, plan.json ship_rule, docs/SHIP_NOW historical banner
+Phase 4: GTM_PRIORITY R-011 fence; customer-outreach filtered from QUICK_PICK
+Phase 5: Manifest backfill iter 4-5 (013-016); plan.json 001-009 done rows
+Phase 6: SHIP_DONE_MAP 023-032; QUICK_PICK inline sync fix
+Phase 7: docs/references/ canonical paths in buyer md + procurement ZIP
+Phase 8: SHIP_NOW agentic P0 section; GTM_NEXT iter 11 picks 033-035; agentic_queue in plan.json
+Phase 9: SOURCEA_MANDATORY_SYNC_STATUS updated; NF_REQUIRE_SOURCEA hook in verify-agent-scope
+Phase 10: Hardened verify-no-asf-coherence (manifest, paths, OPEN_PRS, QUICK_PICK inline)
 
 Verify: ./scripts/plan-with-no-asf-verify.sh — PASS
 Sync: python3 scripts/sync-prompt-pack-status.py
 
-task: 10-Phase Audit Fix — full bundle
+task: Post-Audit 10-Phase Fix — full bundle
 agent: NF-CLOUD-AGENT
-commercial law: R-011 on disk; outreach-026 = agentic layer only
-next: ASK founder — merge PR; agentic 026 execution in Hub; SourceA sync on Mac
+main: 76a5c6a (PR #39 merged)
+branch: 21fd814
+next: ASK founder — merge PR; close stale #2/#7; agentic 026 in Hub; SourceA sync on Mac

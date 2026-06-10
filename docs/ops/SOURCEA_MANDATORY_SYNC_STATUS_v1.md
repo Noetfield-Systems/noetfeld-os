@@ -1,7 +1,8 @@
 # SourceA mandatory sync status (cloud VM)
 
 **Agent tag:** `NF-CLOUD-AGENT`  
-**Rule:** R-009 — do not pseudo-ACK missing mandatory files
+**Rule:** R-009 — do not pseudo-ACK missing mandatory files  
+**Updated:** 2026-06-10 (post-audit fix)
 
 ---
 
@@ -25,7 +26,7 @@
 
 ---
 
-## Founder action (Phase 8)
+## Founder action (Phase 9)
 
 ```bash
 # On founder Mac
@@ -34,4 +35,4 @@
 
 Then confirm paths in [AGENT_READ_LINKS_LOCKED_v1.md](./AGENT_READ_LINKS_LOCKED_v1.md) § Cloud ship.
 
-**Until sync:** NF-CLOUD blocks mandatory-SourceA claims; repo-locked paths suffice for GTM/verify work.
+**Until sync:** NF-CLOUD blocks mandatory-SourceA claims; repo-locked paths suffice for GTM/verify work. Set `NF_REQUIRE_SOURCEA=1` locally to enforce mirror check via `verify-agent-scope.sh`.

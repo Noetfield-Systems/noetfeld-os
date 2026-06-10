@@ -152,6 +152,17 @@ When `sync-prompt-pack-status.py` reports **1000/1000 `done`**, the registry is 
 
 **Verify:** `./scripts/plan-with-no-asf-verify.sh` includes `verify-no-asf-coherence.sh` for queue/doc alignment.
 
+### Step table overlay (post-audit — supersedes locked steps 1–4 for cloud agents)
+
+| Step | Action (current) |
+|------|------------------|
+| 0 | MEMORY_LOCKED + SKILL-001 + SKILL-007 — stop after propose if no founder `implement` |
+| 1 | Merge open ship PR **only inside approved implement bundle** |
+| 2 | Read `os/SHIP_NOW.md` + [GTM_NEXT.md](./plans/no-asf/GTM_NEXT.md) + QUICK_PICK |
+| 3 | Pick **≤3** from **GTM_NEXT** Tier A — exclude agentic-only (026) |
+| 4 | Write `next_tasks` in `os/plan.json` **after** founder `implement` |
+| 5–8 | Unchanged (branch → verify → sync → cursor-reply → ASK) |
+
 ---
 
 ## Related

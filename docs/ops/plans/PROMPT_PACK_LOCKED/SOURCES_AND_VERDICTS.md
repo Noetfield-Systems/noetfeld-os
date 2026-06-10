@@ -12,8 +12,9 @@
 | GTM 60-day | `docs/strategy/NOETFIELD_GTM_60_DAY_LOCKED_v1.md` | Tier A/B/C fence; ≤3 tasks |
 | Trust Ledger positioning | `docs/strategy/NOETFIELD_TRUST_LEDGER_POSITIONING_LOCKED_v1.2.md` | External one-liner |
 | Copilot SME design | `docs/strategy/NOETFIELD_COPILOT_SME_SYSTEM_DESIGN_LOCKED_v1.md` | Lane A vs C |
-| Governance Sources Book | `docs/reference/GOVERNANCE_SOURCES_BOOK_v1.md` | Buyer citations |
-| Drift detection sources | `docs/reference/GOVERNANCE_DRIFT_DETECTION_SOURCES_v1.md` | Continuous governance |
+| Governance Sources Book | `docs/references/GOVERNANCE_SOURCES_BOOK_v1.md` | Buyer citations |
+| Sources handbook (locked) | `docs/references/GOVERNANCE_SOURCES_HANDBOOK_LOCKED_v1.md` | Diligence reviewers |
+| Drift detection sources | `docs/references/GOVERNANCE_DRIFT_DETECTION_SOURCES_LOCKED_v1.md` | Continuous governance |
 
 ---
 
