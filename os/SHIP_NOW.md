@@ -4,7 +4,11 @@
 
 ## Active queue (`next_tasks`)
 
-**Next iter 14:** see [GTM_NEXT.md](docs/ops/plans/no-asf/GTM_NEXT.md) (demo trust-brief, pilot rehearsal, OPEN_PRS autocheck).
+**Next iter 15:** see [GTM_NEXT.md](docs/ops/plans/no-asf/GTM_NEXT.md) (trust-brief parity, merged PR gate, demo rehearsal ol).
+
+**Shipped iter 14 (2026-06-10):** demo trust-brief CTA, pilot checklist rehearsal, OPEN_PRS autocheck.
+
+**Shipped fifth audit (PR #43 @ 9f0e3f7):** iter 13 on main.
 
 **Shipped iter 13 (2026-06-10):** pilot trust-brief CTA, homepage procurement verify guard, cursor-reply coherence FAIL gate.
 

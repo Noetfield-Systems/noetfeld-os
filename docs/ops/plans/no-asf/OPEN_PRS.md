@@ -6,9 +6,9 @@
 
 Only merge **Noetfield GTM / PLAN WITH NO ASF** ship PRs from branches matching:
 
-`cursor/no-asf-*-37f0`, `cursor/10-phase-audit-fix-37f0`, `cursor/post-audit-10-phase-fix-37f0`, `cursor/fourth-audit-iter12-37f0`, or `cursor/fifth-audit-iter13-37f0`
+`cursor/no-asf-*-37f0`, `cursor/10-phase-audit-fix-37f0`, `cursor/post-audit-10-phase-fix-37f0`, `cursor/fourth-audit-iter12-37f0`, `cursor/fifth-audit-iter13-37f0`, or `cursor/sixth-audit-iter14-37f0`
 
-**Superseded (do not merge):** `cursor/third-audit-10-phase-fix-37f0` — content landed via PR #42.
+**Superseded (do not merge):** `cursor/third-audit-10-phase-fix-37f0` (PR #42), `cursor/fourth-audit-iter12-37f0` (PR #42), `cursor/fifth-audit-iter13-37f0` (PR #43).
 
 ## Do not merge from cloud agent
 
@@ -20,12 +20,13 @@ Only merge **Noetfield GTM / PLAN WITH NO ASF** ship PRs from branches matching:
 
 | PR | Branch | Notes |
 |----|--------|-------|
-| #43 | cursor/fifth-audit-iter13-37f0 | Fifth audit — iter 13 (039–041) + post–#42 truth |
+| (open) | cursor/sixth-audit-iter14-37f0 | Sixth audit — iter 14 (042–044) + post–#43 truth |
 
 ## Recently merged
 
 | PR | Branch | Notes |
 |----|--------|-------|
+| #43 | cursor/fifth-audit-iter13-37f0 | Fifth audit — iter 13 (039–041) @ 9f0e3f7 |
 | #42 | cursor/fourth-audit-iter12-37f0 | Fourth audit — third-audit bundle + iter 12 (036–038) @ 43715a4 |
 | #41 | cursor/no-asf-iter11-37f0 | Iter 11 — trust-brief, drift sources, demo rehearsal hub |
 | #40 | cursor/post-audit-10-phase-fix-37f0 | Post-audit workflow + paths + verify hardening |

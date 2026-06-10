@@ -175,6 +175,20 @@ else
   echo "FAIL /copilot/pilot/ missing trust-brief intake CTA" >&2
   fail=1
 fi
+if echo "$pilot_html" | grep -qF "DEMO_REHEARSAL_CHECKLIST_v1.md"; then
+  echo "OK   /copilot/pilot/ rehearsal in checklist"
+else
+  echo "FAIL /copilot/pilot/ missing rehearsal in checklist ol" >&2
+  fail=1
+fi
+
+demo_html="$(curl -sS --connect-timeout 5 -H "Accept: text/html" "${BASE}/copilot/demo/" 2>/dev/null || true)"
+if echo "$demo_html" | grep -qF "/trust-brief/intake/"; then
+  echo "OK   /copilot/demo/ trust-brief intake CTA"
+else
+  echo "FAIL /copilot/demo/ missing trust-brief intake CTA" >&2
+  fail=1
+fi
 
 home_html="$(curl -sS --connect-timeout 5 -H "Accept: text/html" "${BASE}/" 2>/dev/null || true)"
 if echo "$home_html" | grep -qF 'href="/copilot/procurement/"'; then

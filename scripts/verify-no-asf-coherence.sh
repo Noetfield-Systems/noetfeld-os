@@ -68,10 +68,10 @@ if [[ -f docs/ops/plans/no-asf/GTM_NEXT.md ]] && [[ -f docs/ops/plans/no-asf/QUI
     echo "FAIL QUICK_PICK missing GTM_NEXT inline content" >&2
     fail=1
   fi
-  if grep -q 'ship-trust-brief-demo-042' docs/ops/plans/no-asf/GTM_NEXT.md && grep -q 'ship-trust-brief-demo-042' docs/ops/plans/no-asf/QUICK_PICK.md; then
-    echo "OK   QUICK_PICK mirrors GTM_NEXT iter 14"
+  if grep -q 'ship-trust-brief-parity-audit-045' docs/ops/plans/no-asf/GTM_NEXT.md && grep -q 'ship-trust-brief-parity-audit-045' docs/ops/plans/no-asf/QUICK_PICK.md; then
+    echo "OK   QUICK_PICK mirrors GTM_NEXT iter 15"
   else
-    echo "FAIL QUICK_PICK out of sync with GTM_NEXT iter 14 picks" >&2
+    echo "FAIL QUICK_PICK out of sync with GTM_NEXT iter 15 picks" >&2
     fail=1
   fi
   if grep -q 'Agentic only' docs/ops/plans/no-asf/GTM_NEXT.md && grep -q 'ship-design-partner-outreach-026' docs/ops/plans/no-asf/GTM_NEXT.md; then
@@ -187,6 +187,28 @@ if [[ -f docs/ops/plans/no-asf/OPEN_PRS.md ]]; then
   else
     echo "OK   OPEN_PRS lists PR #41 merged"
   fi
+  if ! grep -q '#43' docs/ops/plans/no-asf/OPEN_PRS.md 2>/dev/null; then
+    echo "FAIL OPEN_PRS missing merged PR #43" >&2
+    fail=1
+  else
+    echo "OK   OPEN_PRS lists PR #43 merged"
+  fi
+  # ship-open-prs-autocheck-044: pending table must match gh open ship PRs
+  if command -v gh >/dev/null 2>&1; then
+    pending_section="$(awk '/^## Pending ship PR/,/^## Recently merged/' docs/ops/plans/no-asf/OPEN_PRS.md)"
+    open_prs_doc="$(echo "$pending_section" | grep -oE '#[0-9]+' | tr -d '#' | sort -u | tr '\n' ' ')"
+    ship_prs_gh="$(gh pr list --state open --json number,headRefName --jq '.[] | select(.headRefName | test("^cursor/(no-asf|10-phase|post-audit|fourth-audit|fifth-audit|sixth-audit)")) | .number' 2>/dev/null | sort -u | tr '\n' ' ')"
+    open_prs_doc_trim="$(echo "$open_prs_doc" | xargs)"
+    ship_prs_gh_trim="$(echo "$ship_prs_gh" | xargs)"
+    if [[ -z "$open_prs_doc_trim" && -z "$ship_prs_gh_trim" ]]; then
+      echo "OK   OPEN_PRS pending matches gh (no open ship PRs)"
+    elif [[ "$open_prs_doc_trim" == "$ship_prs_gh_trim" ]]; then
+      echo "OK   OPEN_PRS pending matches gh open ship PRs"
+    else
+      echo "FAIL OPEN_PRS pending (${open_prs_doc_trim:-none}) != gh ship PRs (${ship_prs_gh_trim:-none})" >&2
+      fail=1
+    fi
+  fi
 fi
 
 # Buyer paths canonical
@@ -253,7 +275,7 @@ if command -v gh >/dev/null 2>&1; then
   else
     echo "OK   no open trustfield-scope/governance-console PRs"
   fi
-  ship_prs="$(gh pr list --state open --json number,headRefName --jq '.[] | select(.headRefName | test("^cursor/(no-asf|10-phase|post-audit|fourth-audit|fifth-audit)")) | .number' 2>/dev/null || true)"
+  ship_prs="$(gh pr list --state open --json number,headRefName --jq '.[] | select(.headRefName | test("^cursor/(no-asf|10-phase|post-audit|fourth-audit|fifth-audit|sixth-audit)")) | .number' 2>/dev/null || true)"
   if [[ -n "$ship_prs" ]]; then
     echo "WARN open ship PR(s): $ship_prs — merge before next iter closeout"
   else

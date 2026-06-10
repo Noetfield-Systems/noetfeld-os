@@ -79,6 +79,24 @@
   ],
   "next_tasks": [
     {
+      "id": "ship-trust-brief-demo-042",
+      "title": "Trust-brief intake CTA on copilot demo page + verify",
+      "plan": "copilot/demo/index.html",
+      "status": "done"
+    },
+    {
+      "id": "ship-demo-rehearsal-pilot-043",
+      "title": "Demo rehearsal checklist link in pilot checklist ol + verify",
+      "plan": "copilot/pilot/index.html",
+      "status": "done"
+    },
+    {
+      "id": "ship-open-prs-autocheck-044",
+      "title": "OPEN_PRS pending row must match gh open ship PRs",
+      "plan": "scripts/verify-no-asf-coherence.sh",
+      "status": "done"
+    },
+    {
       "id": "ship-trust-brief-pilot-039",
       "title": "Trust-brief intake CTA on copilot pilot page + verify",
       "plan": "copilot/pilot/index.html",

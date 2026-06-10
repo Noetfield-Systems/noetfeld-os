@@ -13,20 +13,20 @@ When the NF-PLAN registry is fully synced (`1000/1000 done`), pick the next **�
 
 ## ID namespace note
 
-`ship-*-NNN` = GTM Tier A queue (`next_tasks`). `nf-*-NNN` in engineering manifest = product waves — numeric suffix overlap is intentional, not duplicate work.
+`ship-*-NNN` = GTM Tier A queue (`next_tasks`). `nf-*-NNN` in engineering manifest = product waves — numeric suffix overlap is intentional (e.g. `ship-trust-brief-demo-042` ≠ `nf-homepage-design-partner-042`).
 
-## Next GTM Tier A (NF-CLOUD disk) — iter 14 proposals
+## Next GTM Tier A (NF-CLOUD disk) — iter 15 proposals
 
 Founder pick or bounded `implement`:
 
-1. **ship-trust-brief-demo-042** · Trust-brief intake CTA on `/copilot/demo/` + verify  
-   Outcome: Demo script reviewers can request Governance Brief from demo page.
+1. **ship-trust-brief-parity-audit-045** · Verify all buyer pages (hub, pilot, demo, procurement) have trust-brief CTAs  
+   Outcome: Single coherence guard for trust-brief parity across www.
 
-1. **ship-demo-rehearsal-pilot-043** · Demo rehearsal checklist link in pilot checklist section + verify  
-   Outcome: Pilot checklist cites rehearsal doc (GTM ops section has it; checklist ol does not).
+1. **ship-merged-pr-open-prs-gate-046** · OPEN_PRS recently merged must include last 3 ship PRs (#41–#43)  
+   Outcome: Merge history cannot drift from GitHub.
 
-1. **ship-open-prs-autocheck-044** · Coherence gate: OPEN_PRS pending row must match open `gh pr list` ship PRs  
-   Outcome: Pending PR table cannot drift from GitHub state.
+1. **ship-demo-rehearsal-demo-047** · Demo rehearsal link in demo script steps ol (parity with pilot checklist)  
+   Outcome: Demo page checklist cites rehearsal doc in script steps.
 
 ## Agentic only — Hub (not NF-CLOUD implement)
 
@@ -35,6 +35,14 @@ Founder pick or bounded `implement`:
 | **ship-design-partner-outreach-026** | Agentic layer | One named CIO contact + demo URL sent; tracker row updated |
 
 Evidence: [DESIGN_PARTNER_PIPELINE_v1.md](../../../copilot/DESIGN_PARTNER_PIPELINE_v1.md) · [AGENTIC_COMMERCIAL_HANDOFF_v1.md](../../AGENTIC_COMMERCIAL_HANDOFF_v1.md)
+
+## Recently shipped (iter 14)
+
+| ID | Shipped |
+|----|---------|
+| ship-trust-brief-demo-042 | Trust-brief intake CTA on copilot demo page |
+| ship-demo-rehearsal-pilot-043 | Demo rehearsal link in pilot checklist ol |
+| ship-open-prs-autocheck-044 | OPEN_PRS pending vs gh pr list FAIL gate |
 
 ## Recently shipped (iter 13)
 
