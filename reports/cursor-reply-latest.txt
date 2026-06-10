@@ -1,30 +1,18 @@
 ---
 agent_tag: nf-local-repo-agent
 agent_display: "[NF-LOCAL-REPO-AGENT]"
-authored_at: "2026-06-06"
-doc_id: cursor-reply-nf-0001
+authored_at: "2026-06-10"
+doc_id: cursor-reply-nf-0102-diff-helper
 ---
 
-> **Authored by:** [NF-LOCAL-REPO-AGENT] — 2026-06-06
+> **Authored by:** [NF-LOCAL-REPO-AGENT] — 2026-06-10
 
-**Shipped** — nf-0001 session-start self-audit wiring (PLAN WITH NO ASF turn 1)
-
-## Deliverables
-
-| Item | Path |
-|------|------|
-| Session-start script | `scripts/agent-session-start.sh` |
-| Makefile target | `make agent-session-start` |
-| Agent tracking | `.cursor/AGENT_TRACKING.md` |
-| Cloud paste pack | `docs/ops/ready_to_paste_noetfield_cloud.txt` |
-| verify-gtm preflight | `scripts/verify-gtm.sh` → `validate-noetfield-1000-sources.py` |
-| Prompt done | `os/plan-library/noetfield-1000/prompts/phase-0-ship-ops/T0/nf-0001.md` |
+**Shipped** — evaluate-vs-last-TLE diff helper (`POST /tle/diff/evaluate`); closed nf-0104/0105 regressions already green.
 
 ## Verify
 
 ```text
-make agent-session-start — PASS (noetfield_cloud closeout loaded)
-make verify-gtm — PASS (VALIDATE_PASS + pytest + e2e)
+make verify-gtm — PASS (10 pytest, full E2E bundle)
 ```
 
 ---
@@ -32,19 +20,19 @@ make verify-gtm — PASS (VALIDATE_PASS + pytest + e2e)
 ```yaml
 schema_version: 1
 repo: noetfield
-task: "PLAN WITH NO ASF — nf-0001: session-start self-audit before edits"
+agent_tag: nf-local-repo-agent
+task: "nf-0102: Add evaluate-vs-last-TLE diff helper endpoint or service stub"
 status: done
 verify_passed: true
 verify_command: "make verify-gtm"
-verify_output_summary: "VALIDATE_PASS noetfield-1000; verify-gtm passed — safe to run external demo"
+verify_output_summary: "verify-gtm passed — safe to run external demo"
 blocked_reason: ""
-next_action: "make pick-no-asf-plan → nf-0002"
+next_action: "nf-0103"
 evidence_paths:
-  - scripts/agent-session-start.sh
-  - scripts/verify-gtm.sh
-  - .cursor/AGENT_TRACKING.md
-  - docs/ops/ready_to_paste_noetfield_cloud.txt
-  - os/plan-library/noetfield-1000/prompts/phase-0-ship-ops/T0/nf-0001.md
-reported_at: "2026-06-06T03:12:21Z"
+  - governance-console/backend/services/tle_service.py
+  - governance-console/backend/routes/tle.py
+  - governance-console/backend/schemas.py
+  - governance-console/backend/tests/test_tle_flow.py
+reported_at: "2026-06-10T02:50:00Z"
 reporter: cursor
 ```

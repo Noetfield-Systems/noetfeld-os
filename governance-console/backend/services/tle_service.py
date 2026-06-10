@@ -73,6 +73,92 @@ def default_approval_chain() -> list[dict[str, Any]]:
     ]
 
 
+def compute_drift_class(
+    *,
+    baseline_score: float | None,
+    new_score: float,
+    baseline_evidence_ids: set[str] | None,
+    new_evidence_ids: set[str],
+) -> str:
+    """Drift Contract v0 — classify delta vs baseline TLE (deterministic)."""
+    if baseline_score is None:
+        return "initial"
+    delta = abs(new_score - baseline_score)
+    evidence_changed = baseline_evidence_ids != new_evidence_ids
+    if delta <= 0.05 and not evidence_changed:
+        return "stable"
+    if delta <= 0.15 and not evidence_changed:
+        return "minor"
+    return "material"
+
+
+def get_last_tle(db: Session, *, tenant_id: uuid.UUID) -> TleEntry | None:
+    return db.scalar(
+        select(TleEntry)
+        .where(TleEntry.tenant_id == tenant_id)
+        .order_by(TleEntry.created_at.desc())
+        .limit(1)
+    )
+
+
+def diff_evaluate_vs_last_tle(
+    db: Session,
+    *,
+    tenant_id: uuid.UUID,
+    evidence_ids: list[str],
+    source_rid: str | None = None,
+) -> dict[str, Any]:
+    """Compare proposed evidence (evaluate path) against tenant's most recent TLE."""
+    rows = list(
+        db.scalars(
+            select(EvidenceIndex).where(
+                EvidenceIndex.tenant_id == tenant_id,
+                EvidenceIndex.evidence_id.in_(evidence_ids),
+            )
+        ).all()
+    )
+    if len(rows) != len(evidence_ids):
+        found = {r.evidence_id for r in rows}
+        missing = [eid for eid in evidence_ids if eid not in found]
+        raise ValueError(f"Evidence not found: {', '.join(missing)}")
+
+    evidence_refs = [evidence_to_ref(r) for r in rows]
+    score, _ = compute_confidence_score(evidence_refs)
+
+    last = get_last_tle(db, tenant_id=tenant_id)
+    baseline_doc = (last.document_json or {}) if last else {}
+    baseline_evidence_ids = {
+        str(e.get("evidence_id"))
+        for e in (baseline_doc.get("evidence") or [])
+        if e.get("evidence_id")
+    }
+    new_evidence_ids = set(evidence_ids)
+    drift_class = compute_drift_class(
+        baseline_score=last.confidence_score if last else None,
+        new_score=score,
+        baseline_evidence_ids=baseline_evidence_ids if last else None,
+        new_evidence_ids=new_evidence_ids,
+    )
+
+    baseline_score = last.confidence_score if last else None
+    confidence_delta = round(score - baseline_score, 2) if baseline_score is not None else None
+
+    return {
+        "helper": "evaluate_vs_last_tle_v0",
+        "last_tle_id": last.tle_id if last else None,
+        "last_tle_status": last.status if last else None,
+        "baseline_tle_id": last.tle_id if last else None,
+        "proposed_confidence_score": score,
+        "baseline_confidence_score": baseline_score,
+        "confidence_delta": confidence_delta,
+        "drift_class": drift_class,
+        "evidence_added": sorted(new_evidence_ids - baseline_evidence_ids),
+        "evidence_removed": sorted(baseline_evidence_ids - new_evidence_ids),
+        "source_rid": source_rid,
+        "has_baseline": last is not None,
+    }
+
+
 def draft_from_evaluate(
     db: Session,
     *,
@@ -80,6 +166,7 @@ def draft_from_evaluate(
     source_rid: str | None,
     evidence_ids: list[str],
     owner: dict[str, str] | None = None,
+    baseline_tle_id: str | None = None,
 ) -> TleEntry:
     rows = list(
         db.scalars(
@@ -96,6 +183,38 @@ def draft_from_evaluate(
 
     evidence_refs = [evidence_to_ref(r) for r in rows]
     score, factors = compute_confidence_score(evidence_refs)
+
+    baseline_row: TleEntry | None = None
+    if baseline_tle_id:
+        baseline_row = db.scalar(
+            select(TleEntry).where(
+                TleEntry.tle_id == baseline_tle_id,
+                TleEntry.tenant_id == tenant_id,
+            )
+        )
+        if baseline_row is None:
+            raise ValueError(f"Baseline TLE not found: {baseline_tle_id}")
+
+    baseline_doc = (baseline_row.document_json or {}) if baseline_row else {}
+    baseline_evidence_ids = {
+        str(e.get("evidence_id"))
+        for e in (baseline_doc.get("evidence") or [])
+        if e.get("evidence_id")
+    }
+    drift_class = compute_drift_class(
+        baseline_score=baseline_row.confidence_score if baseline_row else None,
+        new_score=score,
+        baseline_evidence_ids=baseline_evidence_ids if baseline_row else None,
+        new_evidence_ids=set(evidence_ids),
+    )
+    factors.append(
+        {
+            "factor": "drift_class",
+            "weight": 0.0,
+            "value": drift_class,
+            "baseline_tle_id": baseline_tle_id,
+        }
+    )
 
     audit_event: AuditEvent | None = None
     if source_rid:
@@ -154,6 +273,8 @@ def draft_from_evaluate(
         "audit_digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
         "tenant_id": str(tenant_id),
         "metadata": {"generator": "tle_service_v1", "target_status": status},
+        "drift_class": drift_class,
+        "baseline_tle_id": baseline_tle_id,
     }
 
     row = TleEntry(

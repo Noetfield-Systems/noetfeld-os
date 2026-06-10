@@ -105,6 +105,29 @@ class TleDraftRequest(BaseModel):
     source_rid: str | None = None
     evidence_ids: list[str] = Field(min_length=1)
     owner: dict[str, str] | None = None
+    baseline_tle_id: str | None = None
+
+
+class TleDiffEvaluateRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    source_rid: str | None = None
+    evidence_ids: list[str] = Field(min_length=1)
+
+
+class TleDiffEvaluateResponse(BaseModel):
+    helper: str
+    last_tle_id: str | None
+    last_tle_status: str | None
+    baseline_tle_id: str | None
+    proposed_confidence_score: float
+    baseline_confidence_score: float | None
+    confidence_delta: float | None
+    drift_class: str
+    evidence_added: list[str]
+    evidence_removed: list[str]
+    source_rid: str | None
+    has_baseline: bool
 
 
 class TleApproveRequest(BaseModel):

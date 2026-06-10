@@ -121,6 +121,76 @@ def test_tle_draft_approve_export():
     assert pdf.content[:4] == b"%PDF"
 
 
+def test_tle_draft_drift_contract_v0():
+    r1 = client.post(
+        "/tle/draft",
+        headers=TENANT_HEADER,
+        json={"evidence_ids": ["EV-PURVIEW-001", "EV-ENTRA-001", "EV-AUDIT-001"]},
+    )
+    assert r1.status_code == 201
+    baseline = r1.json()
+    assert baseline["document"]["drift_class"] == "initial"
+    assert baseline["document"]["baseline_tle_id"] is None
+
+    r2 = client.post(
+        "/tle/draft",
+        headers=TENANT_HEADER,
+        json={
+            "evidence_ids": ["EV-PURVIEW-001", "EV-ENTRA-001", "EV-AUDIT-001"],
+            "baseline_tle_id": baseline["tle_id"],
+        },
+    )
+    assert r2.status_code == 201
+    follow = r2.json()
+    assert follow["document"]["baseline_tle_id"] == baseline["tle_id"]
+    assert follow["document"]["drift_class"] == "stable"
+
+    bad = client.post(
+        "/tle/draft",
+        headers=TENANT_HEADER,
+        json={
+            "evidence_ids": ["EV-PURVIEW-001"],
+            "baseline_tle_id": "TLE-NOT-FOUND",
+        },
+    )
+    assert bad.status_code == 400
+
+
+def test_tle_diff_evaluate_vs_last():
+    r1 = client.post(
+        "/tle/draft",
+        headers=TENANT_HEADER,
+        json={"evidence_ids": ["EV-PURVIEW-001", "EV-ENTRA-001", "EV-AUDIT-001"]},
+    )
+    assert r1.status_code == 201
+    baseline_id = r1.json()["tle_id"]
+
+    diff0 = client.post(
+        "/tle/diff/evaluate",
+        headers=TENANT_HEADER,
+        json={"evidence_ids": ["EV-PURVIEW-001"]},
+    )
+    assert diff0.status_code == 200
+    body0 = diff0.json()
+    assert body0["helper"] == "evaluate_vs_last_tle_v0"
+    assert body0["last_tle_id"] == baseline_id
+    assert body0["drift_class"] in ("minor", "material")
+    assert "EV-ENTRA-001" in body0["evidence_removed"]
+    assert "EV-AUDIT-001" in body0["evidence_removed"]
+
+    diff1 = client.post(
+        "/tle/diff/evaluate",
+        headers=TENANT_HEADER,
+        json={"evidence_ids": ["EV-PURVIEW-001", "EV-ENTRA-001", "EV-AUDIT-001"]},
+    )
+    assert diff1.status_code == 200
+    body1 = diff1.json()
+    assert body1["last_tle_id"] == baseline_id
+    assert body1["drift_class"] == "stable"
+    assert body1["evidence_added"] == []
+    assert body1["evidence_removed"] == []
+
+
 def test_viewer_cannot_approve():
     r = client.post(
         "/tle/draft",
