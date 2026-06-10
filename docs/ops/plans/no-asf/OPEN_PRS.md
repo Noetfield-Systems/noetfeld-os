@@ -20,7 +20,7 @@ Only merge **Noetfield GTM / PLAN WITH NO ASF** ship PRs from branches matching:
 
 | PR | Branch | Notes |
 |----|--------|-------|
-| (open) | cursor/sixth-audit-iter14-37f0 | Sixth audit — iter 14 (042–044) + post-merge truth |
+| #44 | cursor/sixth-audit-iter14-37f0 | Sixth audit — iter 14 (042–044) + post-merge truth |
 
 ## Recently merged
 
