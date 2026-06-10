@@ -134,12 +134,6 @@ else
   echo "FAIL /copilot/ missing GOVERNANCE_SOURCES_BOOK link" >&2
   fail=1
 fi
-if echo "$hub_html" | grep -qF "/trust-brief/intake/"; then
-  echo "OK   /copilot/ trust-brief intake CTA"
-else
-  echo "FAIL /copilot/ missing trust-brief intake CTA" >&2
-  fail=1
-fi
 if echo "$hub_html" | grep -qF "DEMO_REHEARSAL_CHECKLIST_v1.md"; then
   echo "OK   /copilot/ demo rehearsal checklist link"
 else
@@ -161,20 +155,7 @@ else
   echo "FAIL /copilot/procurement/ missing drift blueprints index link" >&2
   fail=1
 fi
-if echo "$proc_html" | grep -qF "/trust-brief/intake/"; then
-  echo "OK   /copilot/procurement/ trust-brief intake CTA"
-else
-  echo "FAIL /copilot/procurement/ missing trust-brief intake CTA" >&2
-  fail=1
-fi
-
 pilot_html="$(curl -sS --connect-timeout 5 -H "Accept: text/html" "${BASE}/copilot/pilot/" 2>/dev/null || true)"
-if echo "$pilot_html" | grep -qF "/trust-brief/intake/"; then
-  echo "OK   /copilot/pilot/ trust-brief intake CTA"
-else
-  echo "FAIL /copilot/pilot/ missing trust-brief intake CTA" >&2
-  fail=1
-fi
 if echo "$pilot_html" | grep -qF "DEMO_REHEARSAL_CHECKLIST_v1.md"; then
   echo "OK   /copilot/pilot/ rehearsal in checklist"
 else
@@ -183,10 +164,29 @@ else
 fi
 
 demo_html="$(curl -sS --connect-timeout 5 -H "Accept: text/html" "${BASE}/copilot/demo/" 2>/dev/null || true)"
-if echo "$demo_html" | grep -qF "/trust-brief/intake/"; then
-  echo "OK   /copilot/demo/ trust-brief intake CTA"
+
+# ship-trust-brief-parity-audit-045: single fail-closed loop (4 buyer pages)
+trust_brief_ok=0
+for entry in "hub_html|/copilot/" "pilot_html|/copilot/pilot/" "demo_html|/copilot/demo/" "proc_html|/copilot/procurement/"; do
+  var="${entry%%|*}"
+  path="${entry#*|}"
+  html="${!var}"
+  if echo "$html" | grep -qF "/trust-brief/intake/"; then
+    echo "OK   ${path} trust-brief intake CTA"
+    trust_brief_ok=$((trust_brief_ok + 1))
+  else
+    echo "FAIL ${path} missing trust-brief intake CTA" >&2
+    fail=1
+  fi
+done
+if [[ "$trust_brief_ok" -eq 4 ]]; then
+  echo "OK   trust-brief parity (4/4 buyer pages)"
+fi
+
+if echo "$demo_html" | grep -qF "DEMO_REHEARSAL_CHECKLIST_v1.md"; then
+  echo "OK   /copilot/demo/ rehearsal in script ol"
 else
-  echo "FAIL /copilot/demo/ missing trust-brief intake CTA" >&2
+  echo "FAIL /copilot/demo/ missing rehearsal in script ol" >&2
   fail=1
 fi
 

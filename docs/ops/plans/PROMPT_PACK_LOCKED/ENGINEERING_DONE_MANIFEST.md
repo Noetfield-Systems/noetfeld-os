@@ -98,6 +98,21 @@ Shipped capabilities mapped to registry indices. Run `python3 scripts/sync-promp
 
 `ship-*-NNN` (GTM `next_tasks`) and `nf-*-NNN` (product waves above) may share numeric suffixes — different namespaces, not duplicate shipped work.
 
+## PLAN WITH NO ASF iter 15 (045–047)
+
+| next_tasks id | Shipped | Evidence |
+|---------------|---------|----------|
+| ship-trust-brief-parity-audit-045 | Trust-brief parity loop (4 pages) | `scripts/verify-gtm-ops-docs.sh` |
+| ship-merged-pr-open-prs-gate-046 | OPEN_PRS merged #41–#44 FAIL | `scripts/verify-no-asf-coherence.sh` |
+| ship-demo-rehearsal-demo-047 | Demo rehearsal in script ol | `copilot/demo/index.html`, `verify-gtm-ops-docs.sh` |
+
+## Seventh audit fix (post–PR #44 truth + iter 15)
+
+| Area | Shipped | Evidence |
+|------|---------|----------|
+| Post-merge truth | OPEN_PRS #44 merged @ c2543b5 | `OPEN_PRS.md`, `COMPLETED_ON_MAIN.md` |
+| Iter 15 verify + www | Trust-brief parity, merged PR gate, demo rehearsal ol | `verify-gtm-ops-docs.sh`, `PLATFORM_BLUEPRINT.md` §2 |
+
 ## PLAN WITH NO ASF iter 14 (042–044)
 
 | next_tasks id | Shipped | Evidence |

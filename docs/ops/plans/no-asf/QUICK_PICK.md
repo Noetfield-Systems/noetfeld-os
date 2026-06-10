@@ -12,9 +12,9 @@ _Registry backlog empty (1000-pack synced). Pick from [GTM_NEXT.md](./GTM_NEXT.m
 
 ### GTM_NEXT (top picks)
 
-1. **ship-trust-brief-parity-audit-045** · Verify all buyer pages (hub, pilot, demo, procurement) have trust-brief CTAs
-1. **ship-merged-pr-open-prs-gate-046** · OPEN_PRS recently merged must include last 3 ship PRs (#41–#43)
-1. **ship-demo-rehearsal-demo-047** · Demo rehearsal link in demo script steps ol (parity with pilot checklist)
+1. **ship-blueprint-governance-console-bridge-048** · Link PLATFORM_BLUEPRINT §5+ to governance-console README paths
+1. **ship-rehearsal-parity-all-pages-049** · Single verify guard for rehearsal link on hub + pilot ol + demo ol
+1. **ship-open-prs-merged-044-gate-050** · Rolling window: last 4 merged ship PRs (#41–#44) FAIL gate in coherence verify
 
 ## Recently completed
 

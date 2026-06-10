@@ -2,7 +2,7 @@
 
 **Agent tag:** `NF-CLOUD-AGENT`  
 **Rule:** R-009 — do not pseudo-ACK missing mandatory files  
-**Updated:** 2026-06-10 (sixth audit fix — post–PR #43 merge @ 9f0e3f7)
+**Updated:** 2026-06-10 (seventh audit fix — post–PR #44 merge @ c2543b5)
 
 ---
 
@@ -34,6 +34,10 @@
 ```
 
 Then confirm paths in [AGENT_READ_LINKS_LOCKED_v1.md](./AGENT_READ_LINKS_LOCKED_v1.md) § Cloud ship.
+
+**Agentic commercial P0:** `ship-design-partner-outreach-026` — execute on founder Hub per [DESIGN_PARTNER_PIPELINE_v1.md](../../copilot/DESIGN_PARTNER_PIPELINE_v1.md) (not NF-CLOUD implement).
+
+**Stale PRs:** Founder should close #2 and #7 on GitHub (cloud token cannot close).
 
 **Until sync:** NF-CLOUD blocks mandatory-SourceA claims; repo-locked paths suffice for GTM/verify work.
 

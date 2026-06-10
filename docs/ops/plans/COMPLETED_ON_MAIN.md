@@ -22,8 +22,10 @@ python3 scripts/sync-prompt-pack-status.py
 | Fourth audit fix | GTM_PRIORITY outreach fence + sprint backlog path (merged PR #42) |
 | PLAN WITH NO ASF iter 13 (PR #43 @ 9f0e3f7) | ship-039–041 (pilot trust-brief, homepage procurement verify, cursor-reply FAIL) |
 | Fifth audit fix | post–PR #42 truth reconcile + iter 13 (merged PR #43) |
-| PLAN WITH NO ASF iter 14 | ship-042–044 (demo trust-brief, pilot rehearsal ol, OPEN_PRS autocheck) |
-| Sixth audit fix | post–PR #43 truth reconcile + iter 14 |
+| PLAN WITH NO ASF iter 14 (PR #44 @ c2543b5) | ship-042–044 (demo trust-brief, pilot rehearsal ol, OPEN_PRS autocheck) |
+| Sixth audit fix | post–PR #43 truth reconcile + iter 14 (merged PR #44) |
+| PLAN WITH NO ASF iter 15 | ship-045–047 (trust-brief parity, merged PR gate, demo rehearsal ol) |
+| Seventh audit fix | post–PR #44 truth reconcile + iter 15 |
 | 1000 prompt pack v2 lock | docs/ops/NOETFIELD_1000_PROMPT_PACK_LOCKED_v1.md |
 
 **Registry note:** `1000/1000 done` = pattern propagation dedup — queue is [GTM_NEXT.md](./no-asf/GTM_NEXT.md), not empty backlog.

@@ -79,6 +79,24 @@
   ],
   "next_tasks": [
     {
+      "id": "ship-trust-brief-parity-audit-045",
+      "title": "Single trust-brief parity loop across buyer pages + verify",
+      "plan": "scripts/verify-gtm-ops-docs.sh",
+      "status": "done"
+    },
+    {
+      "id": "ship-merged-pr-open-prs-gate-046",
+      "title": "OPEN_PRS recently merged must include ship PRs #41–#44",
+      "plan": "scripts/verify-no-asf-coherence.sh",
+      "status": "done"
+    },
+    {
+      "id": "ship-demo-rehearsal-demo-047",
+      "title": "Demo rehearsal link in demo script ol + verify",
+      "plan": "copilot/demo/index.html",
+      "status": "done"
+    },
+    {
       "id": "ship-trust-brief-demo-042",
       "title": "Trust-brief intake CTA on copilot demo page + verify",
       "plan": "copilot/demo/index.html",

@@ -15,18 +15,18 @@ When the NF-PLAN registry is fully synced (`1000/1000 done`), pick the next **�
 
 `ship-*-NNN` = GTM Tier A queue (`next_tasks`). `nf-*-NNN` in engineering manifest = product waves — numeric suffix overlap is intentional (e.g. `ship-trust-brief-demo-042` ≠ `nf-homepage-design-partner-042`).
 
-## Next GTM Tier A (NF-CLOUD disk) — iter 15 proposals
+## Next GTM Tier A (NF-CLOUD disk) — iter 16 proposals
 
 Founder pick or bounded `implement`:
 
-1. **ship-trust-brief-parity-audit-045** · Verify all buyer pages (hub, pilot, demo, procurement) have trust-brief CTAs  
-   Outcome: Single coherence guard for trust-brief parity across www.
+1. **ship-blueprint-governance-console-bridge-048** · Link PLATFORM_BLUEPRINT §5+ to governance-console README paths  
+   Outcome: Architecture constitution cites dev console entry points.
 
-1. **ship-merged-pr-open-prs-gate-046** · OPEN_PRS recently merged must include last 3 ship PRs (#41–#43)  
-   Outcome: Merge history cannot drift from GitHub.
+1. **ship-rehearsal-parity-all-pages-049** · Single verify guard for rehearsal link on hub + pilot ol + demo ol  
+   Outcome: Rehearsal checklist parity across all buyer runbooks.
 
-1. **ship-demo-rehearsal-demo-047** · Demo rehearsal link in demo script steps ol (parity with pilot checklist)  
-   Outcome: Demo page checklist cites rehearsal doc in script steps.
+1. **ship-open-prs-merged-044-gate-050** · Rolling window: last 4 merged ship PRs (#41–#44) FAIL gate in coherence verify  
+   Outcome: Merge history window documented and enforced.
 
 ## Agentic only — Hub (not NF-CLOUD implement)
 
@@ -35,6 +35,14 @@ Founder pick or bounded `implement`:
 | **ship-design-partner-outreach-026** | Agentic layer | One named CIO contact + demo URL sent; tracker row updated |
 
 Evidence: [DESIGN_PARTNER_PIPELINE_v1.md](../../../copilot/DESIGN_PARTNER_PIPELINE_v1.md) · [AGENTIC_COMMERCIAL_HANDOFF_v1.md](../../AGENTIC_COMMERCIAL_HANDOFF_v1.md)
+
+## Recently shipped (iter 15)
+
+| ID | Shipped |
+|----|---------|
+| ship-trust-brief-parity-audit-045 | Single trust-brief parity loop (4 buyer pages) in verify |
+| ship-merged-pr-open-prs-gate-046 | OPEN_PRS merged #41–#44 FAIL gate |
+| ship-demo-rehearsal-demo-047 | Demo rehearsal link in demo script ol |
 
 ## Recently shipped (iter 14)
 
