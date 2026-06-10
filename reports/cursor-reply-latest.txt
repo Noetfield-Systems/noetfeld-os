@@ -2,7 +2,7 @@ Fourth Audit 10-Phase Fix — complete (Noetfield cloud)
 
 Pre: main @ 6226807 (iter 11 merged); third-audit bundle was stranded on cursor/third-audit-10-phase-fix-37f0.
 
-Shipped (branch cursor/fourth-audit-iter12-37f0 @ b5c2204):
+Shipped (branch cursor/fourth-audit-iter12-37f0 @ a7df7d9):
 Phase 1: Third-audit bundle included (canonical SHIP_NOW, registry agentic_only, coherence hardening)
 Phase 2: COMPLETED_ON_MAIN, OPEN_PRS pending row, merge-truth reconcile
 Phase 3: SPRINT_BACKLOG → os/SHIP_NOW.md; coherence sprint gate
@@ -20,5 +20,5 @@ Sync: python3 scripts/sync-prompt-pack-status.py — 1000/1000
 task: Fourth Audit 10-Phase Fix — full bundle
 agent: NF-CLOUD-AGENT
 main: 6226807 (pre-merge; merge this PR to update)
-branch: b5c2204
+branch: a7df7d9
 next: ASK founder — merge PR; iter 13 from GTM_NEXT 039–041; agentic 026 Hub; close #2/#7; SourceA sync
