@@ -4,7 +4,9 @@
 
 ## Active queue (`next_tasks`)
 
-**Shipped iter 8 (2026-06-06):** GTM_NEXT queue + QUICK_PICK fallback, staging demo www wire, security-buyer TLE copy.
+**Shipped iter 9 (2026-06-06):** procurement one-pager www wire, governance sources href, homepage demo CTA verify.
+
+**Prior iter 8:** GTM_NEXT queue + QUICK_PICK fallback, staging demo www wire, security-buyer TLE copy.
 
 **Prior iter 7:** registry pattern propagation + QUICK_PICK dedup, diligence procurement wire, design-partner BC AI channel.
 

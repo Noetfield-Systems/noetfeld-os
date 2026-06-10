@@ -37,7 +37,7 @@ check_html "${BASE}/workspace/connectors" "connectors page" "M365 evidence conne
 check_html "${BASE}/cognitive-dashboard" "cognitive dashboard" "Cognitive dashboard" "Submit operational intent"
 check_html "${BASE}/evaluate" "evaluate page" "Submit operational intent"
 check_html "${BASE}/audit" "audit page" "Audit log"
-check_html "${BASE}/" "homepage" "audit trail your Copilot deployment" "Become a design partner"
+check_html "${BASE}/" "homepage" "audit trail your Copilot deployment" "Become a design partner" "5-minute demo"
 check_html "${BASE}/copilot/" "copilot hub" "audit trail your Copilot deployment" "5-minute demo"
 check_html "${BASE}/copilot/pilot/" "copilot pilot" "Design-partner Go/No-Go" "Design partner program"
 check_html "${BASE}/copilot/demo/" "copilot demo" "5-minute demo" "Demo script (locked narrative)" "confidence score"

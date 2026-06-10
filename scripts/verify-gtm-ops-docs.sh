@@ -29,6 +29,8 @@ check_url "${BASE}/docs/copilot/BUYER_DEBRIEF_TEMPLATE_v1.md" "buyer debrief doc
 check_url "${BASE}/docs/strategy/channel-outreach/bc-ai-for-all-2026.md" "bc-ai outreach doc"
 check_url "${BASE}/docs/diligence/rpaa-positioning-onepager.md" "rpaa diligence one-pager"
 check_url "${BASE}/docs/ops/STAGING_DEMO.md" "staging demo runbook"
+check_url "${BASE}/docs/copilot/PROCUREMENT_ONE_PAGER.md" "procurement one-pager doc"
+check_url "${BASE}/docs/reference/GOVERNANCE_SOURCES_BOOK_v1.md" "governance sources book doc"
 
 pipeline_body="$(curl -sS --connect-timeout 5 "${BASE}/docs/copilot/DESIGN_PARTNER_PIPELINE_v1.md" 2>/dev/null || true)"
 if echo "$pipeline_body" | grep -qF "bc-ai-for-all-2026"; then
@@ -97,6 +99,26 @@ if echo "$proc_html" | grep -qF "rpaa-positioning-onepager"; then
   echo "OK   /copilot/procurement/ rpaa diligence link"
 else
   echo "FAIL /copilot/procurement/ missing rpaa-positioning-onepager link" >&2
+  fail=1
+fi
+if echo "$proc_html" | grep -qF "PROCUREMENT_ONE_PAGER"; then
+  echo "OK   /copilot/procurement/ procurement one-pager link"
+else
+  echo "FAIL /copilot/procurement/ missing PROCUREMENT_ONE_PAGER link" >&2
+  fail=1
+fi
+if echo "$proc_html" | grep -qF "GOVERNANCE_SOURCES_BOOK_v1.md"; then
+  echo "OK   /copilot/procurement/ governance sources book link"
+else
+  echo "FAIL /copilot/procurement/ missing GOVERNANCE_SOURCES_BOOK link" >&2
+  fail=1
+fi
+
+hub_html="$(curl -sS --connect-timeout 5 -H "Accept: text/html" "${BASE}/copilot/" 2>/dev/null || true)"
+if echo "$hub_html" | grep -qF "PROCUREMENT_ONE_PAGER"; then
+  echo "OK   /copilot/ procurement one-pager link"
+else
+  echo "FAIL /copilot/ missing PROCUREMENT_ONE_PAGER link" >&2
   fail=1
 fi
 
