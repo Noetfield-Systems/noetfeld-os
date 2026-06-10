@@ -44,5 +44,28 @@ if [[ "$total" -ge 5 && "$done_count" -eq "$total" ]]; then
   exit 1
 fi
 
+python3 - <<'PY' || { echo "FAIL QUICK_PICK stale pattern duplicates" >&2; exit 1; }
+import json, re
+from pathlib import Path
+
+quick = Path("docs/ops/plans/no-asf/QUICK_PICK.md").read_text(encoding="utf-8")
+section = quick.split("## Next 25")[1].split("## Recently")[0]
+top_ids = re.findall(r"\*\*(NF-PLAN-\d{4})\*\*", section)[:5]
+registry = json.loads(Path("docs/ops/plans/registry.json").read_text(encoding="utf-8"))
+by_id = {p["id"]: p for p in registry["plans"]}
+p0t1_done_patterns = {
+    p["pattern"]
+    for p in registry["plans"]
+    if p["phase"] == "P0" and p["tier"] == "T1" and p["status"] == "done"
+}
+stale = sum(
+    1 for pid in top_ids
+    if pid in by_id and by_id[pid]["pattern"] in p0t1_done_patterns
+)
+if stale >= 5:
+    raise SystemExit(f"top-5 all repeat P0/T1 done patterns ({stale}/5)")
+print(f"OK   top-5 stale-pattern check ({stale}/5 repeat P0/T1 done patterns)")
+PY
+
 echo ""
 echo "verify-quick-pick-fresh passed ($done_count/$total top-5 done)."

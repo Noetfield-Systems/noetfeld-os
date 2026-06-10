@@ -3,10 +3,11 @@ id: nf-future-0796
 phase: phase-7-pilot-gtm
 tier: T3
 priority: P3
-status: backlog
+status: done
 lane: lane_a
 domain: docs
 no_asf: true
+nf_plan_id: NF-PLAN-0796
 generator: scripts/generate-future-plans.py
 ---
 

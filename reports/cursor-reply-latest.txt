@@ -1,34 +1,15 @@
-PLAN WITH NO ASF — iteration 6 complete (Noetfield cloud)
+PLAN WITH NO ASF — iteration 7 complete (Noetfield cloud)
 
-Shipped next_tasks (all done):
-1. ship-registry-sync-iter6-017 — SHIP_DONE_MAP 014-019, sync-prompt-pack, verify-quick-pick-fresh.sh
-2. ship-bc-ai-www-wire-018 — pilot/demo links to bc-ai-for-all-2026.md + verify-gtm-ops-docs
-3. ship-dual-brand-boundary-019 — conflict matrix govern-first handoff + verify-boundary-matrix.sh
+Pre: merged PR #35 (iter 6) to main @ c8644ee.
 
-Verify:
-- ./scripts/plan-with-no-asf-verify.sh — PASS
-- python3 scripts/sync-prompt-pack-status.py — 84 done in registry
+Shipped (branch cursor/no-asf-iter7-37f0):
+1. ship-registry-pattern-propagation-020 — expand_done_by_pattern in sync-prompt-pack-status.py; QUICK_PICK deduped (1000/1000 synced done; no stale phase-duplicates)
+2. ship-diligence-procurement-wire-021 — rpaa-positioning-onepager linked from copilot/pilot, demo, procurement; verify-gtm-ops-docs extended
+3. ship-design-partner-bc-ai-022 — Canada / B.C. AI for All channel block in DESIGN_PARTNER_PIPELINE_v1.md; pipeline verify grep
 
-scope_confirmed: noetfield_only
+Verify: ./scripts/plan-with-no-asf-verify.sh — PASS
+Sync: python3 scripts/sync-prompt-pack-status.py — 1000 indices done
 
-```yaml
-schema_version: 1
-repo: noetfield
-task: PLAN WITH NO ASF — iteration 6 registry sync, BC AI www wire, dual-brand boundary
-status: done
-verify_passed: true
-verify_command: "./scripts/plan-with-no-asf-verify.sh"
-verify_output_summary: "UI, gtm-ops-docs, tier-gate, quick-pick-fresh, boundary-matrix, pilot e2e, audit export, procurement — all passed"
-blocked_reason: ""
-next_action: "Pick next 3 from QUICK_PICK / GTM_PRIORITY_100"
-evidence_paths:
-  - scripts/sync-prompt-pack-status.py
-  - scripts/verify-quick-pick-fresh.sh
-  - scripts/verify-boundary-matrix.sh
-  - copilot/pilot/index.html
-  - copilot/demo/index.html
-  - docs/spec/trustfield-noetfield-conflict-matrix.md
-  - os/plan.json
-reported_at: "2026-06-07T00:15:00Z"
-reporter: cursor
-```
+task: PLAN WITH NO ASF — iteration 7 registry dedup, diligence wire, design-partner BC AI
+agent: NF-CLOUD-AGENT
+next: ASK founder — merge PR when ready; pick iter 8 from os/plan.json / SHIP_NOW (QUICK_PICK empty — new work via next_tasks)

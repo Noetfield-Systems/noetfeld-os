@@ -3,10 +3,11 @@ id: nf-future-0862
 phase: phase-8-staging-prod
 tier: T2
 priority: P2
-status: backlog
+status: done
 lane: lane_a
 domain: sample
 no_asf: true
+nf_plan_id: NF-PLAN-0862
 generator: scripts/generate-future-plans.py
 ---
 

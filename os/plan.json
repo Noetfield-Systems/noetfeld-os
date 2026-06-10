@@ -79,6 +79,24 @@
   ],
   "next_tasks": [
     {
+      "id": "ship-registry-pattern-propagation-020",
+      "title": "Registry pattern propagation + QUICK_PICK dedup for phase-rotated plans",
+      "plan": "scripts/sync-prompt-pack-status.py",
+      "status": "done"
+    },
+    {
+      "id": "ship-diligence-procurement-wire-021",
+      "title": "Wire RPAA diligence one-pager into copilot procurement/pilot/demo + verify",
+      "plan": "docs/diligence/rpaa-positioning-onepager.md",
+      "status": "done"
+    },
+    {
+      "id": "ship-design-partner-bc-ai-022",
+      "title": "BC AI channel block in design partner pipeline + verify",
+      "plan": "docs/copilot/DESIGN_PARTNER_PIPELINE_v1.md",
+      "status": "done"
+    },
+    {
       "id": "ship-registry-sync-iter6-017",
       "title": "Registry sync + QUICK_PICK refresh for iter 5-6 ships",
       "plan": "scripts/sync-prompt-pack-status.py",

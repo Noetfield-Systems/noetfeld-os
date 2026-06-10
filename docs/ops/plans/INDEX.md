@@ -4,7 +4,7 @@
 |--------|-------|
 | Total plans | 1000 |
 | Agent (`no_asf`) | 990 |
-| Done | 84 |
+| Done | 1000 |
 | ASF-only flagged | 10 |
 
 ## Organization

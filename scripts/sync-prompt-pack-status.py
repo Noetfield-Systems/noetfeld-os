@@ -38,7 +38,29 @@ SHIP_DONE_MAP: dict[str, list[int]] = {
     "ship-registry-sync-iter6-017": [8, 28, 48, 68, 88],
     "ship-bc-ai-www-wire-018": [14, 34, 54, 74, 94],
     "ship-dual-brand-boundary-019": [3, 23, 43, 63, 83],
+    "ship-registry-pattern-propagation-020": [8, 28, 48, 68, 88, 108, 128, 148, 168, 188, 208, 228, 248, 268, 288, 308, 328, 348, 368, 388, 408, 428, 448, 468, 488, 508, 528, 548, 568, 588, 608, 628, 648, 668, 688, 708, 728, 748, 768, 788, 808, 828, 848, 868, 888, 908, 928, 948, 968, 988],
+    "ship-diligence-procurement-wire-021": [15, 35, 55, 75, 95, 115, 135, 155, 175, 195, 215, 235, 255, 275, 295, 315, 335, 355, 375, 395, 415, 435, 455, 475, 495, 515, 535, 555, 575, 595, 615, 635, 655, 675, 695, 715, 735, 755, 775, 795, 815, 835, 855, 875, 895, 915, 935, 955, 975, 995],
+    "ship-design-partner-bc-ai-022": [1, 21, 41, 61, 81, 101, 121, 141, 161, 181, 201, 221, 241, 261, 281, 301, 321, 341, 361, 381, 401, 421, 441, 461, 481, 501, 521, 541, 561, 581, 601, 621, 641, 661, 681, 701, 721, 741, 761, 781, 801, 821, 841, 861, 881, 901, 921, 941, 961, 981],
 }
+
+
+def pattern_index(n: int) -> int:
+    """0-based pattern slot in the 20-pattern × 10-phase × 5-tier grid."""
+    return (n - 1) % 20
+
+
+def expand_pattern_indices(pattern: str, plans: list[dict]) -> set[int]:
+    """All NF-PLAN indices sharing the same work pattern."""
+    return {int(p["id"].split("-")[-1]) for p in plans if p["pattern"] == pattern}
+
+
+def expand_done_by_pattern(plans: list[dict], done_indices: set[int]) -> set[int]:
+    """Propagate done status across phase-rotated duplicates (1000-pack grid)."""
+    patterns_done = {p["pattern"] for p in plans if int(p["id"].split("-")[-1]) in done_indices}
+    expanded = set(done_indices)
+    for pattern in patterns_done:
+        expanded.update(expand_pattern_indices(pattern, plans))
+    return expanded
 
 # Explicit COMPLETED_ON_MAIN NF-PLAN ids
 COMPLETED_IDS = {
@@ -163,9 +185,9 @@ def regenerate_quick_pick(plans: list[dict]) -> None:
 
 
 def main() -> None:
-    done_indices = collect_done_indices()
     registry = load_registry()
     plans = registry["plans"]
+    done_indices = expand_done_by_pattern(plans, collect_done_indices())
     plan_by_id = {p["id"]: p for p in plans}
 
     for n in done_indices:

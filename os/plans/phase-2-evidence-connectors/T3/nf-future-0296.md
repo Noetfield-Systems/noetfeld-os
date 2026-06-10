@@ -3,10 +3,11 @@ id: nf-future-0296
 phase: phase-2-evidence-connectors
 tier: T3
 priority: P3
-status: backlog
+status: done
 lane: lane_a
 domain: docs
 no_asf: true
+nf_plan_id: NF-PLAN-0296
 generator: scripts/generate-future-plans.py
 ---
 

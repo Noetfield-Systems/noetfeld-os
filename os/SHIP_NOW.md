@@ -4,7 +4,9 @@
 
 ## Active queue (`next_tasks`)
 
-**Shipped iter 6 (2026-06-06):** registry sync + QUICK_PICK refresh, BC AI www wire, dual-brand boundary matrix.
+**Shipped iter 7 (2026-06-06):** registry pattern propagation + QUICK_PICK dedup, diligence procurement wire, design-partner BC AI channel.
+
+**Prior iter 6:** registry sync + QUICK_PICK refresh, BC AI www wire, dual-brand boundary matrix.
 
 **Prior:** iter 5 GTM ops wire, buyer debrief, tier-gate verify, BC AI outreach doc, incidents + SKILL-007.
 

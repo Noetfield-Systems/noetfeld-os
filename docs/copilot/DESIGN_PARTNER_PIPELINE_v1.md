@@ -35,6 +35,35 @@ Best,
 
 ---
 
+## Canada / B.C. public-sector channel (AI for All)
+
+**Use when:** Provincial or federal AI adoption programs, regulated public-sector Copilot pilots, or B.C. trust-framework conversations.
+
+**Positioning:** Noetfield is the **governance evidence layer** for Copilot adoption — board-ready TLE, confidence score, audit export. Not payment rails, custody, or MSB execution.
+
+| Asset | Path |
+|-------|------|
+| Full outreach copy + email blocks | [bc-ai-for-all-2026.md](../strategy/channel-outreach/bc-ai-for-all-2026.md) |
+| 5-minute demo | `{{demo_url}}/copilot/demo/` |
+| Diligence one-pager | [rpaa-positioning-onepager.md](../diligence/rpaa-positioning-onepager.md) |
+
+**Subject:** Board-ready governance evidence for your Copilot / AI for All pilot
+
+Hi {{name}},
+
+As {{org}} evaluates responsible AI adoption, boards and procurement teams ask for a **defensible decision record** — not another chatbot demo. Noetfield produces signed Trust Ledger Entries with M365 evidence metadata, confidence scores, and board-pack PDF export. We stay in the governance lane only (no payment or custody claims).
+
+**5-minute demo:** {{demo_url}}/copilot/demo/
+
+**Canada context:** [AI for All outreach notes](../strategy/channel-outreach/bc-ai-for-all-2026.md)
+
+If useful, I can share our one-page diligence summary and scope a 2–4 week design-partner pilot.
+
+Best,  
+{{founder_name}}
+
+---
+
 ## CRM fields (minimal)
 
 - `org`, `contact`, `stage`, `last_touch`, `demo_url_sent`, `tle_exported`, `board_pdf_used`
