@@ -2,18 +2,19 @@
 agent_tag: nf-local-repo-agent
 agent_display: "[NF-LOCAL-REPO-AGENT]"
 authored_at: "2026-06-02"
-doc_id: cursor-reply-nf-0204-verify-ui-e2e
+doc_id: cursor-reply-nf-0205-demo-evidence-copy
 ---
 
 > **Authored by:** [NF-LOCAL-REPO-AGENT] — 2026-06-02
 
-**Shipped** — nf-0204: verify-ui-e2e client-chunk checks for connectors page + workspace OAuth success banner; live HTML OAuth 302 redirect assertion; dev proxy preserves upstream redirects.
+**Shipped** — nf-0205: named three M365 evidence types (Purview, Entra ID, SharePoint) in copilot 5-minute demo step copy; verify-ui-e2e asserts all three in served HTML.
 
 ## Verify
 
 ```text
+./scripts/verify-agent-scope.sh — PASS
 make verify-gtm — PASS (18 pytest, verify-ui-e2e 20 checks, full E2E bundle)
-make smoke-pick-no-asf-plan — nf-0204 (now done; next nf-0205)
+make smoke-pick-no-asf-plan — next pick after nf-0205 done
 ```
 
 ---
@@ -22,17 +23,16 @@ make smoke-pick-no-asf-plan — nf-0204 (now done; next nf-0205)
 schema_version: 1
 repo: noetfield
 agent_tag: nf-local-repo-agent
-task: "nf-0204 — Add verify-ui-e2e check for connectors page content"
+task: "nf-0205 — Document 3 evidence types in copilot demo step copy"
 status: done
 verify_passed: true
 verify_command: "make verify-gtm"
 verify_output_summary: "verify-gtm passed — safe to run external demo"
 blocked_reason: ""
-next_action: "nf-0205 — run make smoke-pick-no-asf-plan for phase-2 T0 slot 4"
+next_action: "make smoke-pick-no-asf-plan for next phase-2 T0 prompt"
 evidence_paths:
+  - copilot/demo/index.html
   - scripts/verify-ui-e2e.sh
-  - scripts/dev-unified-proxy.py
-  - governance-console/backend/routes/connectors.py
-reported_at: "2026-06-02T15:00:00Z"
+reported_at: "2026-06-02T16:00:00Z"
 reporter: cursor
 ```
