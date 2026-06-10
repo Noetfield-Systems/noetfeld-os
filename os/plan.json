@@ -79,6 +79,24 @@
   ],
   "next_tasks": [
     {
+      "id": "ship-procurement-one-pager-wire-027",
+      "title": "Wire PROCUREMENT_ONE_PAGER into copilot hub + procurement + verify",
+      "plan": "docs/copilot/PROCUREMENT_ONE_PAGER.md",
+      "status": "done"
+    },
+    {
+      "id": "ship-governance-sources-www-028",
+      "title": "Clickable GOVERNANCE_SOURCES_BOOK on procurement buyer page + verify",
+      "plan": "docs/reference/GOVERNANCE_SOURCES_BOOK_v1.md",
+      "status": "done"
+    },
+    {
+      "id": "ship-homepage-demo-cta-029",
+      "title": "Homepage 5-minute demo CTA regression guard in verify-ui-e2e",
+      "plan": "index.html",
+      "status": "done"
+    },
+    {
       "id": "ship-gtm-next-queue-023",
       "title": "GTM_NEXT queue + QUICK_PICK fallback when registry empty",
       "plan": "docs/ops/plans/no-asf/GTM_NEXT.md",
