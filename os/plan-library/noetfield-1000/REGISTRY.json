@@ -2139,7 +2139,7 @@
       "slot": 2,
       "title": "Add risk_summary to confidence factors in evaluate response",
       "path": "os/plan-library/noetfield-1000/prompts/phase-1-tle-core/T0/nf-0103.md",
-      "status": "backlog",
+      "status": "done",
       "verify": "make verify-gtm",
       "sources": [
         "docs/spec/TRUST_LEDGER_PRODUCT_BLUEPRINT_v1.2_LOCKED.md",

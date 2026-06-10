@@ -2,17 +2,17 @@
 agent_tag: nf-local-repo-agent
 agent_display: "[NF-LOCAL-REPO-AGENT]"
 authored_at: "2026-06-10"
-doc_id: cursor-reply-nf-0102-diff-helper
+doc_id: cursor-reply-nf-0103-evaluate-confidence
 ---
 
 > **Authored by:** [NF-LOCAL-REPO-AGENT] — 2026-06-10
 
-**Shipped** — evaluate-vs-last-TLE diff helper (`POST /tle/diff/evaluate`); closed nf-0104/0105 regressions already green.
+**Shipped** — nf-0103: `POST /evaluate` returns `risk_summary` + `confidence_factors` (TLE-compatible shape).
 
 ## Verify
 
 ```text
-make verify-gtm — PASS (10 pytest, full E2E bundle)
+make verify-gtm — PASS
 ```
 
 ---
@@ -21,18 +21,18 @@ make verify-gtm — PASS (10 pytest, full E2E bundle)
 schema_version: 1
 repo: noetfield
 agent_tag: nf-local-repo-agent
-task: "nf-0102: Add evaluate-vs-last-TLE diff helper endpoint or service stub"
+task: "nf-0103: Add risk_summary to confidence factors in evaluate response"
 status: done
 verify_passed: true
 verify_command: "make verify-gtm"
 verify_output_summary: "verify-gtm passed — safe to run external demo"
 blocked_reason: ""
-next_action: "nf-0103"
+next_action: "nf-0107"
 evidence_paths:
-  - governance-console/backend/services/tle_service.py
-  - governance-console/backend/routes/tle.py
+  - governance-console/backend/services/governance_engine.py
   - governance-console/backend/schemas.py
-  - governance-console/backend/tests/test_tle_flow.py
-reported_at: "2026-06-10T02:50:00Z"
+  - governance-console/backend/routes/evaluate.py
+  - governance-console/backend/tests/test_audit_events.py
+reported_at: "2026-06-10T12:00:00Z"
 reporter: cursor
 ```

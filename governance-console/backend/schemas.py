@@ -23,6 +23,8 @@ class EvaluateResponse(BaseModel):
     conditions: list[str]
     rid: str
     tenant_id: UUID
+    confidence_factors: list[dict[str, Any]] = Field(default_factory=list)
+    risk_summary: list[dict[str, Any]] = Field(default_factory=list)
 
 
 class AuditRecord(BaseModel):
