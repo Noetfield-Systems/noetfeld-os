@@ -249,8 +249,13 @@ main_sha="$(git rev-parse --short main 2>/dev/null || echo unknown)"
 branch_name="$(git branch --show-current 2>/dev/null || echo unknown)"
 if [[ -f "$reply" ]]; then
   if [[ "$branch_name" == "main" ]]; then
+    reply_main="$(grep -E '^main: ' "$reply" 2>/dev/null | awk '{print $2}' || true)"
     if grep -qE "^main: ${main_sha}( |$)" "$reply" 2>/dev/null; then
       echo "OK   cursor-reply main: matches main ($main_sha)"
+    elif [[ -n "$reply_main" ]] && git cat-file -e "${reply_main}^{commit}" 2>/dev/null \
+         && git merge-base --is-ancestor "$reply_main" "$main_sha" 2>/dev/null \
+         && [[ "$reply_main" != "$main_sha" ]]; then
+      echo "OK   cursor-reply main: cites merge base ($reply_main) before closeout tip ($main_sha)"
     else
       echo "FAIL cursor-reply main: must match git rev-parse --short main ($main_sha)" >&2
       fail=1
