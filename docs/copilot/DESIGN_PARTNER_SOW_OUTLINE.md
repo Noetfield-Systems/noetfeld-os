@@ -15,7 +15,7 @@ Noetfield provides the **AI Governance & Evidence layer** for a Microsoft 365 Co
 | Deliverable | Description |
 |-------------|-------------|
 | Governance evaluate | Pre-execution allow/deny/review with RID lineage |
-| Evidence index | Metadata-only Purview, Entra ID, Audit, SharePoint connectors (read-only) |
+| Evidence index | Metadata-only Purview, Entra ID, Audit, SharePoint connectors (read-only); indexes configured controls — does not replace Microsoft Purview/DLP |
 | TLE v1 | Signed go/no-go with confidence score + sequential approval chain |
 | Board pack | JSON, HTML, PDF export |
 | Procurement pack | One-click ZIP (JSON + PDF + README + audit slice) |

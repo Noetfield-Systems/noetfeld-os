@@ -4172,7 +4172,7 @@
       "slot": 9,
       "title": "Cross-check GOVERNANCE_SOURCES_BOOK M365 citation in buyer docs",
       "path": "os/plan-library/noetfield-1000/prompts/phase-2-evidence-connectors/T0/nf-0210.md",
-      "status": "backlog",
+      "status": "done",
       "verify": "make verify-gtm",
       "sources": [
         "docs/reference/GOVERNANCE_SOURCES_BOOK_v1.md",

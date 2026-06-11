@@ -7,7 +7,7 @@
 | **`agent-team-sync-v1`** | [docs/ops/NOETFIELD_AGENT_TEAM_SYNC_LOCKED_v1.md](../docs/ops/NOETFIELD_AGENT_TEAM_SYNC_LOCKED_v1.md) | **Cloud-readable** team sync, waves summary, private plans pointer |
 | **`trust-ledger-positioning-v1.2`** | [docs/strategy/NOETFIELD_TRUST_LEDGER_POSITIONING_LOCKED_v1.2.md](../docs/strategy/NOETFIELD_TRUST_LEDGER_POSITIONING_LOCKED_v1.2.md) | **Primary GTM + product direction** — TLE mandate, 60-day sprint |
 | **`gtm-60-day-v1`** | [docs/strategy/NOETFIELD_GTM_60_DAY_LOCKED_v1.md](../docs/strategy/NOETFIELD_GTM_60_DAY_LOCKED_v1.md) | **CEO focus** — 1 customer, 5-min demo, 60-day fence, time allocation |
-| **`governance-sources-book-v1`** | [docs/references/GOVERNANCE_SOURCES_BOOK_v1.md](../docs/references/GOVERNANCE_SOURCES_BOOK_v1.md) | **Citable frameworks** — NIST, OECD, ISO, EU AI Act, Microsoft, OWASP |
+| **`governance-sources-book-v1`** | [docs/reference/GOVERNANCE_SOURCES_BOOK_v1.md](../docs/reference/GOVERNANCE_SOURCES_BOOK_v1.md) | **Citable frameworks** — NIST, OECD, ISO, EU AI Act, Microsoft Purview, OWASP |
 | **`governance-drift-sources-v1`** | [docs/references/GOVERNANCE_DRIFT_DETECTION_SOURCES_v1.md](../docs/references/GOVERNANCE_DRIFT_DETECTION_SOURCES_v1.md) | **Drift taxonomy boss** — control/policy/config/model/agent drift |
 | **`trust-ledger-product-blueprint-v1.2`** | [docs/spec/TRUST_LEDGER_PRODUCT_BLUEPRINT_v1.2_LOCKED.md](../docs/spec/TRUST_LEDGER_PRODUCT_BLUEPRINT_v1.2_LOCKED.md) | **Product mandate** — evaluate → TLE → audit-export |
 | **`governance-drift-blueprints-v1`** | [docs/references/GOVERNANCE_DRIFT_BLUEPRINTS_INDEX_LOCKED_v1.md](../docs/references/GOVERNANCE_DRIFT_BLUEPRINTS_INDEX_LOCKED_v1.md) | **2026 architecture supplements** — router to four blueprints |

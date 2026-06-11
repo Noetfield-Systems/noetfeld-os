@@ -2,12 +2,29 @@
 agent_tag: nf-local-repo-agent
 agent_display: "[NF-LOCAL-REPO-AGENT]"
 authored_at: "2026-06-02"
-doc_id: cursor-reply-nf-0209-connector-env-errors
+doc_id: cursor-reply-all-lanes-nf-0210
 ---
 
 > **Authored by:** [NF-LOCAL-REPO-AGENT] — 2026-06-02
 
-**Shipped** — nf-0209: M365 connector returns actionable 503 when required env vars are missing (staging/non-local); local dev defaults unchanged; frontend parses FastAPI detail.
+**Shipped — PLAN FOR ALL**
+
+## Track A — Local PR
+
+- Pushed `cursor/bank-grade-fullstack-37f0` to origin (nf-0202–0209 + nf-0210)
+- Draft PR: open compare URL in `reports/CLOUD_AND_PR_HANDOFF.md` (no `gh` auth on this machine)
+- Rebase onto main **after PR #48 merges**
+
+## Track B / C — Cloud orders
+
+Founder paste blocks for merge PR #48 and debug PR #49 CI → `reports/CLOUD_AND_PR_HANDOFF.md`
+
+## Track D — nf-0210
+
+- Canonical sources book: `docs/reference/GOVERNANCE_SOURCES_BOOK_v1.md`
+- Stub at `docs/references/GOVERNANCE_SOURCES_BOOK_v1.md` (no duplicate drift)
+- `LOCKED_REFERENCE_INDEX.md` pointer fixed
+- Buyer docs aligned with Part B Purview buyer line (index evidence, not replace controls)
 
 ## Verify
 
@@ -22,19 +39,21 @@ make verify-gtm — PASS (21 pytest, full E2E)
 schema_version: 1
 repo: noetfield
 agent_tag: nf-local-repo-agent
-task: "nf-0209 — Improve connector error message for missing env"
+task: "PLAN FOR ALL — push bank-grade PR handoff + nf-0210 M365 citation cross-check"
 status: done
 verify_passed: true
 verify_command: "make verify-gtm"
 verify_output_summary: "verify-gtm passed — safe to run external demo"
 blocked_reason: ""
-next_action: "make smoke-pick-no-asf-plan for next phase-2 T0 prompt (nf-0210)"
+next_action: "Founder: paste cloud orders from CLOUD_AND_PR_HANDOFF.md; open draft PR via compare URL; merge #48 then rebase bank-grade PR"
 evidence_paths:
-  - governance-console/backend/services/m365_oauth_stub.py
-  - governance-console/backend/routes/connectors.py
-  - governance-console/backend/tests/test_tle_flow.py
-  - governance-console/frontend/lib/api.ts
-  - governance-console/.env.example
-reported_at: "2026-06-02T20:30:00Z"
+  - reports/CLOUD_AND_PR_HANDOFF.md
+  - os/LOCKED_REFERENCE_INDEX.md
+  - docs/references/GOVERNANCE_SOURCES_BOOK_v1.md
+  - copilot/procurement/index.html
+  - copilot/demo/index.html
+  - docs/copilot/PROCUREMENT_ONE_PAGER.md
+  - docs/copilot/DESIGN_PARTNER_SOW_OUTLINE.md
+reported_at: "2026-06-02T22:00:00Z"
 reporter: cursor
 ```
