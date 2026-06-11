@@ -6,9 +6,9 @@
 
 **Next iter 19:** see [GTM_NEXT.md](docs/ops/plans/no-asf/GTM_NEXT.md) (OpenAPI verify, README OpenAPI cite, audit manifest).
 
-**Pending tenth audit (PR #48):** iter 18 — merge when ready.
+**Shipped tenth audit (PR #48 @ b822423):** iter 18 on main.
 
-**Shipped iter 18 (2026-06-10):** checkpoint verify hardening, OpenAPI bridge, MERGED_WINDOW config.
+**Shipped iter 18 (2026-06-11):** checkpoint verify hardening, OpenAPI bridge, MERGED_WINDOW config.
 
 **Shipped iter 17 (2026-06-10):** services/governance blueprint bridge, procurement checkpoint copy, rolling merged PR window 5.
 

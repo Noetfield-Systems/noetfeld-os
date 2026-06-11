@@ -30,8 +30,8 @@ python3 scripts/sync-prompt-pack-status.py
 | Eighth audit fix | post–PR #45 truth reconcile + iter 16 (merged PR #46) |
 | PLAN WITH NO ASF iter 17 (PR #47 @ 46a36a3) | ship-051–053 (services bridge, procurement checkpoint, merged window 5) |
 | Ninth audit fix | post–PR #46 truth reconcile + iter 17 (merged PR #47) |
-| PLAN WITH NO ASF iter 18 | ship-054–056 (checkpoint verify, OpenAPI bridge, MERGED_WINDOW config) |
-| Tenth audit fix | post–PR #47 truth reconcile + iter 18 |
+| PLAN WITH NO ASF iter 18 (PR #48 @ b822423) | ship-054–056 (checkpoint verify, OpenAPI bridge, MERGED_WINDOW config) |
+| Tenth audit fix | post–PR #47 truth reconcile + iter 18 (merged PR #48) |
 | 1000 prompt pack v2 lock | docs/ops/NOETFIELD_1000_PROMPT_PACK_LOCKED_v1.md |
 
 **Registry note:** `1000/1000 done` = pattern propagation dedup — queue is [GTM_NEXT.md](./no-asf/GTM_NEXT.md), not empty backlog.
