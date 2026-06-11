@@ -7,7 +7,9 @@
 | **Doc trace** | `NF-CLOUD-INCIDENT-005` |
 | **Updated** | 2026-06-06 |
 | Severity | **P0** (operating law) |
-| Status | **open** (controls shipping) |
+| Status | **closed** (R-007/R-008/R-010 + SKILL-006/007 on main) |
+| Closed | 2026-06-06 |
+| Closed by | founder order |
 | Reporter | founder |
 | Agent | ALL agents |
 

@@ -3,10 +3,11 @@ id: nf-future-0909
 phase: phase-9-ecosystem-bridge
 tier: T0
 priority: P0
-status: backlog
+status: done
 lane: lane_a
 domain: api
 no_asf: true
+nf_plan_id: NF-PLAN-0909
 generator: scripts/generate-future-plans.py
 ---
 

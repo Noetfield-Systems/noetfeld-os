@@ -8,5 +8,6 @@
 | [rbc-finsec-incubator.md](./rbc-finsec-incubator.md) | RBC FinSec Incubator |
 | [rbcx-platform.md](./rbcx-platform.md) | RBCx portfolio / platform |
 | [ncfa-ecosystem.md](./ncfa-ecosystem.md) | NCFA / fintech ecosystem events |
+| [bc-ai-for-all-2026.md](./bc-ai-for-all-2026.md) | Federal AI for All + B.C. AI action plan outreach |
 
 Canonical GTM: [canada-partner-gtm-2026.md](../canada-partner-gtm-2026.md)

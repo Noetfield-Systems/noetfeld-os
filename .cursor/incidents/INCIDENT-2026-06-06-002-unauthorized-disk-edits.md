@@ -7,7 +7,9 @@
 | **Doc trace** | `NF-CLOUD-INCIDENT-002` |
 | **Updated** | 2026-06-06 |
 | Severity | **P1** |
-| Status | **open** (corrective controls in progress) |
+| Status | **closed** (corrective controls verified on main) |
+| Closed | 2026-06-06 |
+| Closed by | founder order |
 | Reporter | founder |
 | Agent | NF-CLOUD-AGENT (noetfield_cloud) |
 

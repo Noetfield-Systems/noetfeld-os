@@ -1,14 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
-const RESERVED_TLE_SLUGS = new Set(["connectors"]);
 import { Shell } from "@/components/Shell";
 import { LoadingBlock } from "@/components/LoadingBlock";
 import { PageHero } from "@/components/PageHero";
 import { approveTle, canApproveInWorkspace, getTle, getWorkspaceRole, TleDetail } from "@/lib/api";
+import { wwwHref } from "@/lib/www-links";
 
 type ApprovalStep = {
   approver?: { id?: string; name?: string; role?: string };
@@ -19,7 +19,6 @@ type ApprovalStep = {
 
 export default function TleViewerPage() {
   const params = useParams();
-  const router = useRouter();
   const tleId = String(params.tle_id ?? "");
   const [tle, setTle] = useState<TleDetail | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -51,12 +50,12 @@ export default function TleViewerPage() {
   }
 
   useEffect(() => {
-    if (RESERVED_TLE_SLUGS.has(tleId)) {
-      router.replace(`/workspace/${tleId}`);
+    if (tleId === "connectors") {
+      window.location.replace("/workspace/connectors");
       return;
     }
     if (tleId) load();
-  }, [tleId, router]);
+  }, [tleId]);
 
   const doc = (tle?.document ?? {}) as Record<string, unknown>;
   const chain = (doc.approval_chain as ApprovalStep[]) ?? [];
@@ -109,7 +108,7 @@ export default function TleViewerPage() {
               <p className="mt-1 text-sm text-muted-2">Board/legal visibility — shown on PDF cover</p>
             </div>
             <div className="flex flex-wrap gap-2 text-sm">
-              <Link href="/copilot/demo/" className="nf-btn-secondary">
+              <Link href={wwwHref("/copilot/demo/")} className="nf-btn-secondary">
                 Demo script
               </Link>
               <a href="/audit/export" className="nf-btn-secondary" download>

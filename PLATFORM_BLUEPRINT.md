@@ -20,24 +20,26 @@ with this blueprint unless the blueprint itself is revised.
 
 The repository currently contains:
 
-- Brand and narrative layer
-- Static landing pages
-- AI governance positioning
-- Service offering structure
-- Conceptual Trust Ledger material
-- Static frontend shell
-- Prototype fintech and payments concepts
+- Brand and narrative layer plus buyer www (`copilot/`, procurement, demo, pilot)
+- AI governance positioning and GTM ops docs (verify-guarded on :13080)
+- **Governance Console** (`governance-console/`) — Golden Edge dev stack: TLE flow, workspace RBAC, board pack PDF, audit export
+- **Production governance API** (`services/governance/`) — deployed runtime for intake, trust ledger, public chat, webhooks
+- Working Trust Ledger routes, sample reports, and procurement buyer pack
+- M365 connector **stub only** (`governance-console/backend/services/m365_oauth_stub.py`) — DESIGN, not production OAuth
+- Prototype fintech and payments concepts (deferred Lane C)
 - External intake and payment links
+
+Implementation truth for shipped capabilities: [os/SHIP_NOW.md](os/SHIP_NOW.md) and [ENGINEERING_DONE_MANIFEST.md](docs/ops/plans/PROMPT_PACK_LOCKED/ENGINEERING_DONE_MANIFEST.md).
 
 The repository is currently best understood as:
 
-> AI governance vision platform
+> AI governance platform with working pilot console and production API shell
 
 It is not yet:
 
-> AI governance operating system
+> Fully unified AI governance operating system (dual dev/prod stacks; schema convergence pending)
 
-The next stage must introduce a durable operational core before significant
+The next stage must harden the operational core and converge dev/prod governance models before significant
 feature expansion. Without that foundation, the platform risks accumulating
 duplicated abstractions, inconsistent governance models, workflow debt, AI
 chaos, security debt, and weak auditability.
@@ -293,6 +295,21 @@ or sovereign deployment when enterprise requirements demand it.
 ## 8. Logical system architecture
 
 The platform should be organized around these logical components.
+
+### Implementation reference (June 2026)
+
+Shipped code maps logical components to repo paths:
+
+| Blueprint component | Implementation |
+|-------------------|----------------|
+| §8.3 Governance Service (dev) | [governance-console/](governance-console/) backend (evaluate, policy, RID) |
+| §8.3 Governance Service (prod) | [services/governance/](services/governance/) — `noetfield_governance/api.py`, intake, webhooks |
+| §8.4 Trust Ledger Service (dev) | `governance-console/backend/` TLE flow, board pack PDF, audit export |
+| §8.4 Trust Ledger Service (prod) | [services/governance/noetfield_governance/](services/governance/noetfield_governance/) trust ledger + PDF |
+| §13 AI governance runtime | `governance-console/backend/services/` (TLE, RBAC, audit export) |
+| §21 First implementation boundaries | `make governance-console-e2e` from repo root; see [governance-console/README.md](governance-console/README.md) |
+
+Buyer-facing www and GTM ops remain under `copilot/` and `docs/ops/` (verify-guarded on :13080).
 
 ### 8.1 Public Site
 

@@ -1,0 +1,306 @@
+# GTM priority 100
+
+**Count:** 100
+
+> **R-011 fence (agentic only):** Rows titled "Design-partner outreach and pipeline" or `pattern=customer-outreach` are **agentic commercial** — Hub executes send/call (`ship-design-partner-outreach-026`). NF-CLOUD may ship **copy** on disk (templates, pipeline docs, www) only — never send email/call as founder.
+
+- **NF-PLAN-0002** (nf-future-0002) · P0/T1 · 5-minute demo rehearsal script and buyer checklist for governance api
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: 5-minute demo rehearsal script and buyer checklist fo…`
+  - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.
+- **NF-PLAN-0006** (nf-future-0006) · P0/T1 · Buyer interview debrief and evidence capture for www gtm
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Buyer interview debrief and evidence capture for www …`
+  - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.
+- **NF-PLAN-0007** (nf-future-0007) · P0/T1 · Tier A/B/C gate validation before customer acquisition work
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Tier A/B/C gate validation before customer acquisitio…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0008** (nf-future-0008) · P0/T1 · Registry reconcile and plan.json sync for demo ops
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Registry reconcile and plan.json sync for demo ops. R…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0014** (nf-future-0014) · P0/T1 · WWW / trust-ledger copy block for security buyer line
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: WWW / trust-ledger copy block for security buyer line…`
+  - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.
+- **NF-PLAN-0015** (nf-future-0015) · P0/T1 · Diligence one-pager evidence for data migrations controls
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Diligence one-pager evidence for data migrations cont…`
+  - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.
+- **AGENTIC ONLY — skip NF-CLOUD** · **NF-PLAN-0021** (nf-future-0021) · P0/T2 · Design-partner outreach and pipeline for trust ledger
+  - Prompt: `Agentic (Hub only) — ship-design-partner-outreach-026: Design-partner outreach and pipeline for trust ledger…`
+  - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.
+- **NF-PLAN-0026** (nf-future-0026) · P0/T2 · Buyer interview debrief and evidence capture for www gtm
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Buyer interview debrief and evidence capture for www …`
+  - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.
+- **NF-PLAN-0027** (nf-future-0027) · P0/T2 · Tier A/B/C gate validation before customer acquisition work
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Tier A/B/C gate validation before customer acquisitio…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0028** (nf-future-0028) · P0/T2 · Registry reconcile and plan.json sync for demo ops
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Registry reconcile and plan.json sync for demo ops. R…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0034** (nf-future-0034) · P0/T2 · WWW / trust-ledger copy block for security buyer line
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: WWW / trust-ledger copy block for security buyer line…`
+  - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.
+- **NF-PLAN-0035** (nf-future-0035) · P0/T2 · Diligence one-pager evidence for data migrations controls
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Diligence one-pager evidence for data migrations cont…`
+  - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.
+- **AGENTIC ONLY — skip NF-CLOUD** · **NF-PLAN-0041** (nf-future-0041) · P0/T3 · Design-partner outreach and pipeline for trust ledger
+  - Prompt: `Agentic (Hub only) — ship-design-partner-outreach-026: Design-partner outreach and pipeline for trust ledger…`
+  - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.
+- **NF-PLAN-0042** (nf-future-0042) · P0/T3 · 5-minute demo rehearsal script and buyer checklist for governance api
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: 5-minute demo rehearsal script and buyer checklist fo…`
+  - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.
+- **NF-PLAN-0046** (nf-future-0046) · P0/T3 · Buyer interview debrief and evidence capture for www gtm
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Buyer interview debrief and evidence capture for www …`
+  - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.
+- **NF-PLAN-0047** (nf-future-0047) · P0/T3 · Tier A/B/C gate validation before customer acquisition work
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Tier A/B/C gate validation before customer acquisitio…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0048** (nf-future-0048) · P0/T3 · Registry reconcile and plan.json sync for demo ops
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Registry reconcile and plan.json sync for demo ops. R…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0054** (nf-future-0054) · P0/T3 · WWW / trust-ledger copy block for security buyer line
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: WWW / trust-ledger copy block for security buyer line…`
+  - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.
+- **NF-PLAN-0055** (nf-future-0055) · P0/T3 · Diligence one-pager evidence for data migrations controls
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Diligence one-pager evidence for data migrations cont…`
+  - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.
+- **AGENTIC ONLY — skip NF-CLOUD** · **NF-PLAN-0061** (nf-future-0061) · P0/T4 · Design-partner outreach and pipeline for trust ledger
+  - Prompt: `Agentic (Hub only) — ship-design-partner-outreach-026: Design-partner outreach and pipeline for trust ledger…`
+  - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.
+- **NF-PLAN-0062** (nf-future-0062) · P0/T4 · 5-minute demo rehearsal script and buyer checklist for governance api
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: 5-minute demo rehearsal script and buyer checklist fo…`
+  - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.
+- **NF-PLAN-0066** (nf-future-0066) · P0/T4 · Buyer interview debrief and evidence capture for www gtm
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Buyer interview debrief and evidence capture for www …`
+  - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.
+- **NF-PLAN-0067** (nf-future-0067) · P0/T4 · Tier A/B/C gate validation before customer acquisition work
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Tier A/B/C gate validation before customer acquisitio…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0068** (nf-future-0068) · P0/T4 · Registry reconcile and plan.json sync for demo ops
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Registry reconcile and plan.json sync for demo ops. R…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0074** (nf-future-0074) · P0/T4 · WWW / trust-ledger copy block for security buyer line
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: WWW / trust-ledger copy block for security buyer line…`
+  - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.
+- **NF-PLAN-0075** (nf-future-0075) · P0/T4 · Diligence one-pager evidence for data migrations controls
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Diligence one-pager evidence for data migrations cont…`
+  - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.
+- **AGENTIC ONLY — skip NF-CLOUD** · **NF-PLAN-0081** (nf-future-0081) · P0/T5 · Design-partner outreach and pipeline for trust ledger
+  - Prompt: `Agentic (Hub only) — ship-design-partner-outreach-026: Design-partner outreach and pipeline for trust ledger…`
+  - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.
+- **NF-PLAN-0082** (nf-future-0082) · P0/T5 · 5-minute demo rehearsal script and buyer checklist for governance api
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: 5-minute demo rehearsal script and buyer checklist fo…`
+  - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.
+- **NF-PLAN-0086** (nf-future-0086) · P0/T5 · Buyer interview debrief and evidence capture for www gtm
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Buyer interview debrief and evidence capture for www …`
+  - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.
+- **NF-PLAN-0087** (nf-future-0087) · P0/T5 · Tier A/B/C gate validation before customer acquisition work
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Tier A/B/C gate validation before customer acquisitio…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0088** (nf-future-0088) · P0/T5 · Registry reconcile and plan.json sync for demo ops
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Registry reconcile and plan.json sync for demo ops. R…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0094** (nf-future-0094) · P0/T5 · WWW / trust-ledger copy block for security buyer line
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: WWW / trust-ledger copy block for security buyer line…`
+  - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.
+- **NF-PLAN-0095** (nf-future-0095) · P0/T5 · Diligence one-pager evidence for data migrations controls
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Diligence one-pager evidence for data migrations cont…`
+  - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.
+- **NF-PLAN-0108** (nf-future-0108) · P1/T1 · Registry reconcile and plan.json sync for demo ops
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Registry reconcile and plan.json sync for demo ops. R…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0114** (nf-future-0114) · P1/T1 · WWW / trust-ledger copy block for security buyer line
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: WWW / trust-ledger copy block for security buyer line…`
+  - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.
+- **NF-PLAN-0115** (nf-future-0115) · P1/T1 · Diligence one-pager evidence for data migrations controls
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Diligence one-pager evidence for data migrations cont…`
+  - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.
+- **NF-PLAN-0122** (nf-future-0122) · P1/T2 · 5-minute demo rehearsal script and buyer checklist for governance api
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: 5-minute demo rehearsal script and buyer checklist fo…`
+  - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.
+- **NF-PLAN-0126** (nf-future-0126) · P1/T2 · Buyer interview debrief and evidence capture for www gtm
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Buyer interview debrief and evidence capture for www …`
+  - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.
+- **NF-PLAN-0127** (nf-future-0127) · P1/T2 · Tier A/B/C gate validation before customer acquisition work
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Tier A/B/C gate validation before customer acquisitio…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0128** (nf-future-0128) · P1/T2 · Registry reconcile and plan.json sync for demo ops
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Registry reconcile and plan.json sync for demo ops. R…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0134** (nf-future-0134) · P1/T2 · WWW / trust-ledger copy block for security buyer line
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: WWW / trust-ledger copy block for security buyer line…`
+  - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.
+- **NF-PLAN-0135** (nf-future-0135) · P1/T2 · Diligence one-pager evidence for data migrations controls
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Diligence one-pager evidence for data migrations cont…`
+  - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.
+- **AGENTIC ONLY — skip NF-CLOUD** · **NF-PLAN-0141** (nf-future-0141) · P1/T3 · Design-partner outreach and pipeline for trust ledger
+  - Prompt: `Agentic (Hub only) — ship-design-partner-outreach-026: Design-partner outreach and pipeline for trust ledger…`
+  - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.
+- **NF-PLAN-0142** (nf-future-0142) · P1/T3 · 5-minute demo rehearsal script and buyer checklist for governance api
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: 5-minute demo rehearsal script and buyer checklist fo…`
+  - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.
+- **NF-PLAN-0146** (nf-future-0146) · P1/T3 · Buyer interview debrief and evidence capture for www gtm
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Buyer interview debrief and evidence capture for www …`
+  - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.
+- **NF-PLAN-0147** (nf-future-0147) · P1/T3 · Tier A/B/C gate validation before customer acquisition work
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Tier A/B/C gate validation before customer acquisitio…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0148** (nf-future-0148) · P1/T3 · Registry reconcile and plan.json sync for demo ops
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Registry reconcile and plan.json sync for demo ops. R…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0154** (nf-future-0154) · P1/T3 · WWW / trust-ledger copy block for security buyer line
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: WWW / trust-ledger copy block for security buyer line…`
+  - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.
+- **NF-PLAN-0155** (nf-future-0155) · P1/T3 · Diligence one-pager evidence for data migrations controls
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Diligence one-pager evidence for data migrations cont…`
+  - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.
+- **AGENTIC ONLY — skip NF-CLOUD** · **NF-PLAN-0161** (nf-future-0161) · P1/T4 · Design-partner outreach and pipeline for trust ledger
+  - Prompt: `Agentic (Hub only) — ship-design-partner-outreach-026: Design-partner outreach and pipeline for trust ledger…`
+  - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.
+- **NF-PLAN-0162** (nf-future-0162) · P1/T4 · 5-minute demo rehearsal script and buyer checklist for governance api
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: 5-minute demo rehearsal script and buyer checklist fo…`
+  - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.
+- **NF-PLAN-0166** (nf-future-0166) · P1/T4 · Buyer interview debrief and evidence capture for www gtm
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Buyer interview debrief and evidence capture for www …`
+  - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.
+- **NF-PLAN-0167** (nf-future-0167) · P1/T4 · Tier A/B/C gate validation before customer acquisition work
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Tier A/B/C gate validation before customer acquisitio…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0168** (nf-future-0168) · P1/T4 · Registry reconcile and plan.json sync for demo ops
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Registry reconcile and plan.json sync for demo ops. R…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0174** (nf-future-0174) · P1/T4 · WWW / trust-ledger copy block for security buyer line
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: WWW / trust-ledger copy block for security buyer line…`
+  - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.
+- **NF-PLAN-0175** (nf-future-0175) · P1/T4 · Diligence one-pager evidence for data migrations controls
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Diligence one-pager evidence for data migrations cont…`
+  - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.
+- **AGENTIC ONLY — skip NF-CLOUD** · **NF-PLAN-0181** (nf-future-0181) · P1/T5 · Design-partner outreach and pipeline for trust ledger
+  - Prompt: `Agentic (Hub only) — ship-design-partner-outreach-026: Design-partner outreach and pipeline for trust ledger…`
+  - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.
+- **NF-PLAN-0182** (nf-future-0182) · P1/T5 · 5-minute demo rehearsal script and buyer checklist for governance api
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: 5-minute demo rehearsal script and buyer checklist fo…`
+  - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.
+- **NF-PLAN-0186** (nf-future-0186) · P1/T5 · Buyer interview debrief and evidence capture for www gtm
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Buyer interview debrief and evidence capture for www …`
+  - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.
+- **NF-PLAN-0187** (nf-future-0187) · P1/T5 · Tier A/B/C gate validation before customer acquisition work
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Tier A/B/C gate validation before customer acquisitio…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0188** (nf-future-0188) · P1/T5 · Registry reconcile and plan.json sync for demo ops
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Registry reconcile and plan.json sync for demo ops. R…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0194** (nf-future-0194) · P1/T5 · WWW / trust-ledger copy block for security buyer line
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: WWW / trust-ledger copy block for security buyer line…`
+  - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.
+- **NF-PLAN-0195** (nf-future-0195) · P1/T5 · Diligence one-pager evidence for data migrations controls
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Diligence one-pager evidence for data migrations cont…`
+  - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.
+- **AGENTIC ONLY — skip NF-CLOUD** · **NF-PLAN-0201** (nf-future-0201) · P2/T1 · Design-partner outreach and pipeline for trust ledger
+  - Prompt: `Agentic (Hub only) — ship-design-partner-outreach-026: Design-partner outreach and pipeline for trust ledger…`
+  - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.
+- **NF-PLAN-0202** (nf-future-0202) · P2/T1 · 5-minute demo rehearsal script and buyer checklist for governance api
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: 5-minute demo rehearsal script and buyer checklist fo…`
+  - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.
+- **NF-PLAN-0206** (nf-future-0206) · P2/T1 · Buyer interview debrief and evidence capture for www gtm
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Buyer interview debrief and evidence capture for www …`
+  - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.
+- **NF-PLAN-0207** (nf-future-0207) · P2/T1 · Tier A/B/C gate validation before customer acquisition work
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Tier A/B/C gate validation before customer acquisitio…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0208** (nf-future-0208) · P2/T1 · Registry reconcile and plan.json sync for demo ops
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Registry reconcile and plan.json sync for demo ops. R…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0214** (nf-future-0214) · P2/T1 · WWW / trust-ledger copy block for security buyer line
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: WWW / trust-ledger copy block for security buyer line…`
+  - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.
+- **NF-PLAN-0215** (nf-future-0215) · P2/T1 · Diligence one-pager evidence for data migrations controls
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Diligence one-pager evidence for data migrations cont…`
+  - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.
+- **AGENTIC ONLY — skip NF-CLOUD** · **NF-PLAN-0221** (nf-future-0221) · P2/T2 · Design-partner outreach and pipeline for trust ledger
+  - Prompt: `Agentic (Hub only) — ship-design-partner-outreach-026: Design-partner outreach and pipeline for trust ledger…`
+  - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.
+- **NF-PLAN-0222** (nf-future-0222) · P2/T2 · 5-minute demo rehearsal script and buyer checklist for governance api
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: 5-minute demo rehearsal script and buyer checklist fo…`
+  - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.
+- **NF-PLAN-0226** (nf-future-0226) · P2/T2 · Buyer interview debrief and evidence capture for www gtm
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Buyer interview debrief and evidence capture for www …`
+  - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.
+- **NF-PLAN-0227** (nf-future-0227) · P2/T2 · Tier A/B/C gate validation before customer acquisition work
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Tier A/B/C gate validation before customer acquisitio…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0228** (nf-future-0228) · P2/T2 · Registry reconcile and plan.json sync for demo ops
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Registry reconcile and plan.json sync for demo ops. R…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0234** (nf-future-0234) · P2/T2 · WWW / trust-ledger copy block for security buyer line
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: WWW / trust-ledger copy block for security buyer line…`
+  - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.
+- **NF-PLAN-0235** (nf-future-0235) · P2/T2 · Diligence one-pager evidence for data migrations controls
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Diligence one-pager evidence for data migrations cont…`
+  - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.
+- **AGENTIC ONLY — skip NF-CLOUD** · **NF-PLAN-0241** (nf-future-0241) · P2/T3 · Design-partner outreach and pipeline for trust ledger
+  - Prompt: `Agentic (Hub only) — ship-design-partner-outreach-026: Design-partner outreach and pipeline for trust ledger…`
+  - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.
+- **NF-PLAN-0242** (nf-future-0242) · P2/T3 · 5-minute demo rehearsal script and buyer checklist for governance api
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: 5-minute demo rehearsal script and buyer checklist fo…`
+  - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.
+- **NF-PLAN-0246** (nf-future-0246) · P2/T3 · Buyer interview debrief and evidence capture for www gtm
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Buyer interview debrief and evidence capture for www …`
+  - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.
+- **NF-PLAN-0247** (nf-future-0247) · P2/T3 · Tier A/B/C gate validation before customer acquisition work
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Tier A/B/C gate validation before customer acquisitio…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0248** (nf-future-0248) · P2/T3 · Registry reconcile and plan.json sync for demo ops
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Registry reconcile and plan.json sync for demo ops. R…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0254** (nf-future-0254) · P2/T3 · WWW / trust-ledger copy block for security buyer line
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: WWW / trust-ledger copy block for security buyer line…`
+  - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.
+- **NF-PLAN-0255** (nf-future-0255) · P2/T3 · Diligence one-pager evidence for data migrations controls
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Diligence one-pager evidence for data migrations cont…`
+  - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.
+- **AGENTIC ONLY — skip NF-CLOUD** · **NF-PLAN-0261** (nf-future-0261) · P2/T4 · Design-partner outreach and pipeline for trust ledger
+  - Prompt: `Agentic (Hub only) — ship-design-partner-outreach-026: Design-partner outreach and pipeline for trust ledger…`
+  - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.
+- **NF-PLAN-0262** (nf-future-0262) · P2/T4 · 5-minute demo rehearsal script and buyer checklist for governance api
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: 5-minute demo rehearsal script and buyer checklist fo…`
+  - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.
+- **NF-PLAN-0266** (nf-future-0266) · P2/T4 · Buyer interview debrief and evidence capture for www gtm
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Buyer interview debrief and evidence capture for www …`
+  - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.
+- **NF-PLAN-0267** (nf-future-0267) · P2/T4 · Tier A/B/C gate validation before customer acquisition work
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Tier A/B/C gate validation before customer acquisitio…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0268** (nf-future-0268) · P2/T4 · Registry reconcile and plan.json sync for demo ops
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Registry reconcile and plan.json sync for demo ops. R…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0274** (nf-future-0274) · P2/T4 · WWW / trust-ledger copy block for security buyer line
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: WWW / trust-ledger copy block for security buyer line…`
+  - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.
+- **NF-PLAN-0275** (nf-future-0275) · P2/T4 · Diligence one-pager evidence for data migrations controls
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Diligence one-pager evidence for data migrations cont…`
+  - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.
+- **AGENTIC ONLY — skip NF-CLOUD** · **NF-PLAN-0281** (nf-future-0281) · P2/T5 · Design-partner outreach and pipeline for trust ledger
+  - Prompt: `Agentic (Hub only) — ship-design-partner-outreach-026: Design-partner outreach and pipeline for trust ledger…`
+  - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.
+- **NF-PLAN-0282** (nf-future-0282) · P2/T5 · 5-minute demo rehearsal script and buyer checklist for governance api
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: 5-minute demo rehearsal script and buyer checklist fo…`
+  - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.
+- **NF-PLAN-0286** (nf-future-0286) · P2/T5 · Buyer interview debrief and evidence capture for www gtm
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Buyer interview debrief and evidence capture for www …`
+  - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.
+- **NF-PLAN-0287** (nf-future-0287) · P2/T5 · Tier A/B/C gate validation before customer acquisition work
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Tier A/B/C gate validation before customer acquisitio…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0288** (nf-future-0288) · P2/T5 · Registry reconcile and plan.json sync for demo ops
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Registry reconcile and plan.json sync for demo ops. R…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0294** (nf-future-0294) · P2/T5 · WWW / trust-ledger copy block for security buyer line
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: WWW / trust-ledger copy block for security buyer line…`
+  - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.
+- **NF-PLAN-0295** (nf-future-0295) · P2/T5 · Diligence one-pager evidence for data migrations controls
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Diligence one-pager evidence for data migrations cont…`
+  - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.
+- **NF-PLAN-0302** (nf-future-0302) · P3/T1 · 5-minute demo rehearsal script and buyer checklist for governance api
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: 5-minute demo rehearsal script and buyer checklist fo…`
+  - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.
+- **NF-PLAN-0306** (nf-future-0306) · P3/T1 · Buyer interview debrief and evidence capture for www gtm
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Buyer interview debrief and evidence capture for www …`
+  - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.

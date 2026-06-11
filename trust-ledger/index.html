@@ -30,6 +30,16 @@
  <a class="btn btn-secondary" href="/docs/diligence/EVIDENCE_INTAKE_CONTRACT_v1.md">Evidence Intake Contract v1</a></p>
  </header>
 
+ <section class="nf-section nf-highlight">
+ <h2>Try the live demo path</h2>
+ <p>For design partners and procurement: evaluate operational intent, review the <strong>confidence score</strong> on the result page, then open the Trust Ledger workspace for board-ready PDF export.</p>
+ <p class="nf-cta-row">
+ <a class="btn btn-primary" href="/cognitive-dashboard">Cognitive dashboard</a>
+ <a class="btn btn-secondary" href="/workspace">Trust Ledger workspace</a>
+ <a class="btn btn-secondary" href="/trust-ledger/sample-report/">TLE v1 samples</a>
+ </p>
+ </section>
+
  <section class="nf-section">
  <h2>TLE v1 samples</h2>
  <p>Procurement-grade Trust Ledger Entries (Go / Conditional / Rejected) — YAML download and schema validation.</p>
@@ -42,7 +52,22 @@
  <li><strong>Evaluate</strong> — policy decision with <code>reason_code</code> and <code>policy_refs</code> tied to a Request ID</li>
  <li><strong>Record</strong> — entries append to the governed audit log (integrity hash per event)</li>
  <li><strong>Export</strong> — audit-export by RID for engagement intake (<a href="/docs/api/">Governance API reference</a>)</li>
+ <li><strong>Trust Ledger API</strong> — live on platform: <code>POST /api/v1/tle/draft</code>, multi-approve, <code>GET /api/v1/tle/{id}/export</code>, connector <code>POST /api/v1/connectors/{id}/sync</code> (OpenAPI at <code>/docs</code> when platform is running)</li>
+ <li><strong>Workspace</strong> — read-only list and detail at <a href="/trust-ledger">Governance Console · Trust Ledger</a> (local dev: <code>http://localhost:13080/trust-ledger</code>)</li>
  </ol>
+ <p><a class="btn btn-secondary" href="/docs/diligence/CONNECTORS_CONTROLS_v1.md">Connectors Controls v1</a></p>
+ </section>
+
+ <section class="nf-section" id="security-buyer">
+ <h2>For CISO and security buyers</h2>
+ <p>
+ <strong>Security buyer line:</strong> Trust Ledger is a <strong>governance evidence layer</strong> for Copilot adoption — metadata-only M365 evidence (Purview, Entra ID, audit logs), immutable audit export by RID, and signed TLE with <strong>confidence score</strong>. No payment routing, custody, or balance claims.
+ </p>
+ <ul>
+ <li>Evidence ingest is metadata-only — see <a href="/docs/diligence/EVIDENCE_INTAKE_CONTRACT_v1.md">Evidence Intake Contract v1</a></li>
+ <li>Connector controls: <a href="/docs/diligence/CONNECTORS_CONTROLS_v1.md">Connectors Controls v1</a></li>
+ <li>Diligence positioning: <a href="/docs/diligence/rpaa-positioning-onepager.md">RPAA-safe one-pager</a></li>
+ </ul>
  </section>
 
  <section class="nf-section">
@@ -53,8 +78,9 @@
 
  <section class="nf-section">
  <h2>See it live</h2>
- <p>Governance Console shows decisions and the compliance log table for authorized pilots.</p>
+ <p>Governance Console shows decisions, Trust Ledger entries (list + detail + PDF export), and the compliance log table for authorized pilots.</p>
  <a class="btn btn-secondary" href="/console/">Governance Console</a>
+ <a class="btn btn-secondary" href="/trust-ledger">Trust Ledger workspace</a>
  </section>
 
  <aside class="nf-cta-band">

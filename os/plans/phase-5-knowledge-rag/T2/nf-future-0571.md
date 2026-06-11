@@ -3,10 +3,11 @@ id: nf-future-0571
 phase: phase-5-knowledge-rag
 tier: T2
 priority: P2
-status: backlog
+status: done
 lane: lane_a
 domain: docs
 no_asf: true
+nf_plan_id: NF-PLAN-0571
 generator: scripts/generate-future-plans.py
 ---
 

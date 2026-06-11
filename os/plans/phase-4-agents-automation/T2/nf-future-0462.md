@@ -3,10 +3,11 @@ id: nf-future-0462
 phase: phase-4-agents-automation
 tier: T2
 priority: P2
-status: backlog
+status: done
 lane: lane_a
 domain: sample
 no_asf: true
+nf_plan_id: NF-PLAN-0462
 generator: scripts/generate-future-plans.py
 ---
 

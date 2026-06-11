@@ -1,4 +1,4 @@
-.PHONY: bootstrap validate api api-v3 apply-migrations ingest-sot-dry-run ingest-sot phase32-smoke phase32-postgres-smoke phase33-verify phase33-postgres-verify phase35-demo final-lock-audit final-lock-semantic governance-console-up governance-console-e2e governance-console-down
+.PHONY: bootstrap validate api api-v3 apply-migrations ingest-sot-dry-run ingest-sot phase32-smoke phase32-postgres-smoke phase33-verify phase33-postgres-verify phase35-demo final-lock-audit final-lock-semantic governance-console-up governance-console-e2e governance-console-down plan-with-no-asf-verify sync-prompt-pack generate-prompt-pack
 
 PYTHONPATH_VALUE := packages/types:packages/config:packages/sdk:services/events:services/ledger:services/graph:services/governance:services/signals:services/workflow:services/ai-runtime:services/inspectors:services/identity:services/copilot-governance
 
@@ -34,6 +34,11 @@ dev-local:
 	@chmod +x scripts/dev-local-all.sh scripts/verify-local-dev.sh scripts/dev-local-down.sh
 	./scripts/dev-local-all.sh
 
+# Pro mode: production Next build + no API hot-reload (lower CPU/RAM than next dev)
+dev-local-pro:
+	@chmod +x scripts/dev-local-all.sh scripts/dev-local-down.sh scripts/dev-platform-console.sh
+	NF_DASHBOARD_MODE=production NF_DEV_HOT_RELOAD=0 ./scripts/dev-local-all.sh
+
 dev-local-down:
 	@chmod +x scripts/dev-local-down.sh
 	./scripts/dev-local-down.sh
@@ -42,9 +47,30 @@ verify-local-dev:
 	@chmod +x scripts/verify-local-dev.sh
 	./scripts/verify-local-dev.sh
 
+verify-agent-scope:
+	@chmod +x scripts/verify-agent-scope.sh
+	./scripts/verify-agent-scope.sh
+
 verify-ui-e2e:
 	@chmod +x scripts/verify-ui-e2e.sh
 	./scripts/verify-ui-e2e.sh
+
+plan-with-no-asf-verify:
+	@chmod +x scripts/plan-with-no-asf-verify.sh scripts/verify-copilot-demo-links.sh
+	./scripts/plan-with-no-asf-verify.sh
+
+sync-prompt-pack:
+	@python3 scripts/sync-prompt-pack-status.py
+
+generate-prompt-pack:
+	@python3 scripts/generate-prompt-pack-v2.py
+	@python3 scripts/sync-prompt-pack-status.py
+
+plans-regen:
+	@python3 scripts/generate-plans-registry.py
+
+plans-done:
+	@echo "Usage: python3 scripts/update-plan-status.py NF-PLAN-0001 --status done"
 
 demo-url:
 	@chmod +x scripts/print-demo-url.sh
@@ -54,10 +80,12 @@ procurement-pack-e2e:
 	@chmod +x scripts/procurement-pack-e2e.sh
 	./scripts/procurement-pack-e2e.sh
 
+# Pre-demo GTM bundle (Mac waves 034–042)
 verify-gtm:
 	@chmod +x scripts/verify-gtm.sh
 	./scripts/verify-gtm.sh
 
+# Merge/deploy readiness (cloud canonical — superset of verify-gtm checks)
 generate-noetfield-1000:
 	@chmod +x scripts/generate-noetfield-1000-prompts.py
 	python3 scripts/generate-noetfield-1000-prompts.py
@@ -106,9 +134,10 @@ sync-noetfield-plans-status:
 	@chmod +x scripts/sync-noetfield-plans-status.py
 	python3 scripts/sync-noetfield-plans-status.py
 
-# Merge/deploy readiness (cloud canonical)
 ship-verify:
 	@echo "=== ship-verify (Noetfield merge/deploy readiness) ==="
+	@chmod +x scripts/verify-agent-scope.sh 2>/dev/null || true
+	@./scripts/verify-agent-scope.sh
 	@test -f docs/SHIP_NOW.md
 	@test -f docs/diligence/EVIDENCE_INTAKE_CONTRACT_v1.md
 	@test -f docs/spec/TRUST_LEDGER_PRODUCT_BLUEPRINT_v1.2_LOCKED.md
@@ -116,6 +145,14 @@ ship-verify:
 	@chmod +x scripts/tle-smoke.sh scripts/verify-local-dev.sh scripts/smoke_bank_grade_html.py 2>/dev/null || true
 	@./scripts/tle-smoke.sh
 	@./scripts/verify-local-dev.sh
+	@chmod +x scripts/verify-ui-endpoints.sh scripts/verify-docs-diligence.sh 2>/dev/null || true
+	@./scripts/verify-ui-endpoints.sh
+	@./scripts/verify-docs-diligence.sh
+	@./scripts/verify-msb-partner-openapi.sh
+	@./scripts/verify-observability-migration.sh
+	@chmod +x scripts/verify-tle-performance.sh scripts/verify-workspace-ui-auth.sh 2>/dev/null || true
+	@./scripts/verify-tle-performance.sh
+	@./scripts/verify-workspace-ui-auth.sh
 	@python3 scripts/smoke_bank_grade_html.py
 	@python3 scripts/verify_sitemap_committed.py 2>/dev/null || true
 	@python3 -m compileall -q packages services 2>/dev/null || true

@@ -58,11 +58,23 @@ app.include_router(connectors.router)
 app.include_router(tle.router)
 
 
+_health_cache: tuple[float, dict[str, str]] | None = None
+_HEALTH_TTL_SEC = 2.0
+
+
 @app.get("/health")
 def health() -> dict[str, str]:
+    import time
+
+    global _health_cache
+    now = time.monotonic()
+    if _health_cache is not None and now - _health_cache[0] < _HEALTH_TTL_SEC:
+        return _health_cache[1]
     db: Session = SessionLocal()
     try:
         db.execute(text("SELECT 1"))
     finally:
         db.close()
-    return {"status": "ok", "service": "governance-console-api"}
+    payload = {"status": "ok", "service": "governance-console-api", "database": "ok"}
+    _health_cache = (now, payload)
+    return payload

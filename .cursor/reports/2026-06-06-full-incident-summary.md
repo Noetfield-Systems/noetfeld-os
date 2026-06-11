@@ -27,10 +27,10 @@
 | ID | Sev | Status | Title |
 |----|-----|--------|-------|
 | [001](./../incidents/INCIDENT-2026-06-06-001-trustfield-scope-bleed.md) | P0 | **closed** | TrustField scope bleed |
-| [002](./../incidents/INCIDENT-2026-06-06-002-unauthorized-disk-edits.md) | P1 | **open** | Unauthorized disk edits without permission |
-| [003](./../incidents/INCIDENT-2026-06-06-003-mandatory-sourcea-not-read.md) | P2 | **open** | Mandatory SourceA not read; partial ACK |
-| [004](./../incidents/INCIDENT-2026-06-06-004-open-recommendations-not-closed.md) | P2 | **open** | Open recommendations not closed |
-| [005](./../incidents/INCIDENT-2026-06-06-005-always-ask-next-move.md) | P0 | **open** | Always ask next move (portfolio law) |
+| [002](./../incidents/INCIDENT-2026-06-06-002-unauthorized-disk-edits.md) | P1 | **closed** | Unauthorized disk edits without permission |
+| [003](./../incidents/INCIDENT-2026-06-06-003-mandatory-sourcea-not-read.md) | P2 | **closed** | Mandatory SourceA not read; partial ACK |
+| [004](./../incidents/INCIDENT-2026-06-06-004-open-recommendations-not-closed.md) | P2 | **closed** | Open recommendations not closed |
+| [005](./../incidents/INCIDENT-2026-06-06-005-always-ask-next-move.md) | P0 | **closed** | Always ask next move (portfolio law) |
 
 ---
 
@@ -81,9 +81,9 @@ ls .cursor/incidents/INCIDENT-2026-06-06-00{2,3,4,5}*.md
 
 ---
 
-## ASK (founder next move)
+## Closure (2026-06-06)
 
-See chat reply — options A–E. **No further disk edits without your order.**
+Founder ordered close of 002–005. All corrective controls on `main` (PR #34 + merges #32/#33). **Open incidents: none.**
 
 ---
 

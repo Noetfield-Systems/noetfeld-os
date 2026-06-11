@@ -1,37 +1,41 @@
 ---
-description: When user says "plan with no ASF", use noetfield-1000 library and agent-owned closeout
+description: When user says "plan with no ASF", use noetfield-1000 library or GTM_NEXT queue and fixed verify bundle
 globs:
   - os/plans/**
   - os/plan-library/**
   - os/plan.json
   - os/SHIP_NOW.md
+  - docs/ops/plans/**
 alwaysApply: true
 ---
 
 # No ASF planning
 
-**Conflict law:** Subordinate to [noetfield-rule-conflict-resolution.mdc](noetfield-rule-conflict-resolution.mdc). Steps 5+ require founder **`implement`** approval after propose (SKILL-007).
+**Conflict law:** Subordinate to [noetfield-rule-conflict-resolution.mdc](noetfield-rule-conflict-resolution.mdc). Steps 5–8 require founder **`implement`** approval after propose (SKILL-007).
 
 When the user asks for a **plan with no ASF** (or "no ASF"):
 
 0. Run SKILL-007 — if user did not also say `implement`, stop after step 4 and **ASK** to approve task list.
-1. Run `make pick-no-asf-plan` (or `python3 scripts/pick-noetfield-no-asf-plan.py --tier T0 --limit 1 --prompt`).
+1. If `os/plan-library/noetfield-1000/` has backlog: `make pick-no-asf-plan` (or `python3 scripts/pick-noetfield-no-asf-plan.py --tier T0 --limit 1 --prompt`). Else read `docs/ops/NOETFIELD_1000_PROMPT_PACK_LOCKED_v1.md` → `docs/ops/plans/no-asf/QUICK_PICK.md` → [GTM_NEXT.md](docs/ops/plans/no-asf/GTM_NEXT.md).
 2. Read [`.cursor/agent-memory/MEMORY_LOCKED.yaml`](../agent-memory/MEMORY_LOCKED.yaml) — **Noetfield only**.
-3. Read [`docs/ops/NOETFIELD_1000_PROMPT_LIBRARY_LOCKED_v1.md`](../../docs/ops/NOETFIELD_1000_PROMPT_LIBRARY_LOCKED_v1.md) + picked `nf-XXXX.md` under `os/plan-library/noetfield-1000/`.
-4. Present picked prompt(s) to founder — do not edit disk yet.
-5. *(After founder `implement`)* Implement **one** picked prompt; prefer **T0** then **T1**; Lane A only.
-6. Execute: `make verify-gtm` → `./scripts/verify-agent-scope.sh` → `reports/cursor-reply-latest.txt` (`agent_tag` + `reported_at`) → ingest → `sync-sourceA-desktop.sh` → commit when founder asks.
-7. Set `status: done` in the prompt file front matter; run `sync-noetfield-plans-status.py` optionally.
+3. Present picked prompt(s) or **≤3** GTM tasks to founder — do not edit disk yet.
+4. *(After founder `implement`)* Merge open ship PR to `main` if one exists (only inside approved implement bundle).
+5. Implement **one** picked prompt (prefer T0/T1) or **≤3** GTM Tier A tasks; Lane A only; branch `cursor/<slug>-37f0`.
+6. Execute: `make verify-gtm` or `./scripts/plan-with-no-asf-verify.sh` → `./scripts/verify-agent-scope.sh`.
+7. `sync-noetfield-plans-status.py` and/or `sync-prompt-pack-status.py` → set `status: done` → `reports/cursor-reply-latest.txt` (`agent_tag` + `reported_at` + `main`/`head` SHAs).
+8. Commit when founder asks → push → draft PR → **ASK** next move.
 
 Do **not** delegate to ASF for commit, push, ingest, or SourceA edits.
 
 **Canonical library:** `os/plan-library/noetfield-1000/REGISTRY.json` (prompt-ready).  
+**GTM fallback:** `docs/ops/plans/no-asf/GTM_NEXT.md` when registry backlog empty.  
 **History stubs:** `os/plans/nf-future-*` — do not run `generate-future-plans.py` (wipes done).
 
-Regenerate locked library: `make generate-noetfield-1000`. Validate: `make validate-noetfield-1000`.
+Regenerate locked library: `make generate-noetfield-1000`. Validate: `make validate-noetfield-1000`.  
+Regenerate pack: `python3 scripts/generate-prompt-pack-v2.py`.
 
 Immediate queue: `os/plan.json` `next_tasks` + `os/SHIP_NOW.md`.
 
 **Tagging:** new docs `[NF-LOCAL-REPO-AGENT]` only — never edit `[NF-CLOUD-AGENT]` sections.
 
-**GTM / buyer citations:** `docs/strategy/NOETFIELD_GTM_60_DAY_LOCKED_v1.md`, governance + drift sources books.
+**GTM / buyer citations:** `docs/strategy/NOETFIELD_GTM_60_DAY_LOCKED_v1.md`, `docs/reference/GOVERNANCE_SOURCES_BOOK_v1.md`, governance + drift sources books.

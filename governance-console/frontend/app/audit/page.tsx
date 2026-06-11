@@ -38,6 +38,31 @@ export default function AuditPage() {
         lead="Every evaluation is stored with a unique RID for immutable compliance traceability."
       />
 
+      <div
+        className="nf-card mb-8 flex flex-wrap items-center justify-between gap-4 border border-accent/30 bg-accent/5 p-6"
+        role="region"
+        aria-label="Audit export bundle"
+      >
+        <div>
+          <p className="text-xs font-medium uppercase tracking-wide text-muted">Diligence export</p>
+          <p className="mt-1 text-sm text-white/90">
+            Download JSON bundle for engagement intake — includes{" "}
+            <strong>{loading ? "…" : rows.length}</strong> event{rows.length === 1 ? "" : "s"} in
+            current view (tenant: pilot default).
+          </p>
+          <p className="mt-1 text-xs text-muted-2">
+            Board packs use TLE export from{" "}
+            <Link href="/workspace" className="text-accent hover:underline">
+              Workspace
+            </Link>
+            .
+          </p>
+        </div>
+        <a href="/audit/export" className="nf-btn-primary shrink-0" download>
+          Export bundle (JSON)
+        </a>
+      </div>
+
       <form
         className="nf-card mb-8 flex flex-wrap gap-3 p-4"
         onSubmit={(e) => {

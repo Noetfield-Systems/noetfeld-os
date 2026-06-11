@@ -3,7 +3,7 @@ id: nf-future-0003
 phase: phase-0-ship-ops
 tier: T0
 priority: P0
-status: backlog
+status: done
 lane: lane_a
 domain: export
 no_asf: true

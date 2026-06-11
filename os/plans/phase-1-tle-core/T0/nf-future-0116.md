@@ -3,10 +3,11 @@ id: nf-future-0116
 phase: phase-1-tle-core
 tier: T0
 priority: P0
-status: backlog
+status: done
 lane: lane_a
 domain: audit
 no_asf: true
+nf_plan_id: NF-PLAN-0116
 generator: scripts/generate-future-plans.py
 ---
 

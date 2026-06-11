@@ -1,0 +1,154 @@
+# Agent ops 50
+
+**Count:** 50
+
+- **NF-PLAN-0008** (nf-future-0008) · P0/T1 · Registry reconcile and plan.json sync for demo ops
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Registry reconcile and plan.json sync for demo ops. R…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0028** (nf-future-0028) · P0/T2 · Registry reconcile and plan.json sync for demo ops
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Registry reconcile and plan.json sync for demo ops. R…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0048** (nf-future-0048) · P0/T3 · Registry reconcile and plan.json sync for demo ops
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Registry reconcile and plan.json sync for demo ops. R…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0068** (nf-future-0068) · P0/T4 · Registry reconcile and plan.json sync for demo ops
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Registry reconcile and plan.json sync for demo ops. R…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0088** (nf-future-0088) · P0/T5 · Registry reconcile and plan.json sync for demo ops
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Registry reconcile and plan.json sync for demo ops. R…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0108** (nf-future-0108) · P1/T1 · Registry reconcile and plan.json sync for demo ops
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Registry reconcile and plan.json sync for demo ops. R…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0128** (nf-future-0128) · P1/T2 · Registry reconcile and plan.json sync for demo ops
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Registry reconcile and plan.json sync for demo ops. R…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0148** (nf-future-0148) · P1/T3 · Registry reconcile and plan.json sync for demo ops
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Registry reconcile and plan.json sync for demo ops. R…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0168** (nf-future-0168) · P1/T4 · Registry reconcile and plan.json sync for demo ops
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Registry reconcile and plan.json sync for demo ops. R…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0188** (nf-future-0188) · P1/T5 · Registry reconcile and plan.json sync for demo ops
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Registry reconcile and plan.json sync for demo ops. R…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0208** (nf-future-0208) · P2/T1 · Registry reconcile and plan.json sync for demo ops
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Registry reconcile and plan.json sync for demo ops. R…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0228** (nf-future-0228) · P2/T2 · Registry reconcile and plan.json sync for demo ops
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Registry reconcile and plan.json sync for demo ops. R…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0248** (nf-future-0248) · P2/T3 · Registry reconcile and plan.json sync for demo ops
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Registry reconcile and plan.json sync for demo ops. R…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0268** (nf-future-0268) · P2/T4 · Registry reconcile and plan.json sync for demo ops
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Registry reconcile and plan.json sync for demo ops. R…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0288** (nf-future-0288) · P2/T5 · Registry reconcile and plan.json sync for demo ops
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Registry reconcile and plan.json sync for demo ops. R…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0308** (nf-future-0308) · P3/T1 · Registry reconcile and plan.json sync for demo ops
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Registry reconcile and plan.json sync for demo ops. R…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0328** (nf-future-0328) · P3/T2 · Registry reconcile and plan.json sync for demo ops
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Registry reconcile and plan.json sync for demo ops. R…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0348** (nf-future-0348) · P3/T3 · Registry reconcile and plan.json sync for demo ops
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Registry reconcile and plan.json sync for demo ops. R…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0368** (nf-future-0368) · P3/T4 · Registry reconcile and plan.json sync for demo ops
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Registry reconcile and plan.json sync for demo ops. R…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0388** (nf-future-0388) · P3/T5 · Registry reconcile and plan.json sync for demo ops
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Registry reconcile and plan.json sync for demo ops. R…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0408** (nf-future-0408) · P4/T1 · Registry reconcile and plan.json sync for demo ops
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Registry reconcile and plan.json sync for demo ops. R…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0428** (nf-future-0428) · P4/T2 · Registry reconcile and plan.json sync for demo ops
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Registry reconcile and plan.json sync for demo ops. R…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0448** (nf-future-0448) · P4/T3 · Registry reconcile and plan.json sync for demo ops
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Registry reconcile and plan.json sync for demo ops. R…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0468** (nf-future-0468) · P4/T4 · Registry reconcile and plan.json sync for demo ops
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Registry reconcile and plan.json sync for demo ops. R…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0488** (nf-future-0488) · P4/T5 · Registry reconcile and plan.json sync for demo ops
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Registry reconcile and plan.json sync for demo ops. R…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0508** (nf-future-0508) · P5/T1 · Registry reconcile and plan.json sync for demo ops
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Registry reconcile and plan.json sync for demo ops. R…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0528** (nf-future-0528) · P5/T2 · Registry reconcile and plan.json sync for demo ops
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Registry reconcile and plan.json sync for demo ops. R…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0548** (nf-future-0548) · P5/T3 · Registry reconcile and plan.json sync for demo ops
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Registry reconcile and plan.json sync for demo ops. R…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0568** (nf-future-0568) · P5/T4 · Registry reconcile and plan.json sync for demo ops
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Registry reconcile and plan.json sync for demo ops. R…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0588** (nf-future-0588) · P5/T5 · Registry reconcile and plan.json sync for demo ops
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Registry reconcile and plan.json sync for demo ops. R…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0608** (nf-future-0608) · P6/T1 · Registry reconcile and plan.json sync for demo ops
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Registry reconcile and plan.json sync for demo ops. R…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0628** (nf-future-0628) · P6/T2 · Registry reconcile and plan.json sync for demo ops
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Registry reconcile and plan.json sync for demo ops. R…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0648** (nf-future-0648) · P6/T3 · Registry reconcile and plan.json sync for demo ops
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Registry reconcile and plan.json sync for demo ops. R…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0668** (nf-future-0668) · P6/T4 · Registry reconcile and plan.json sync for demo ops
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Registry reconcile and plan.json sync for demo ops. R…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0688** (nf-future-0688) · P6/T5 · Registry reconcile and plan.json sync for demo ops
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Registry reconcile and plan.json sync for demo ops. R…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0708** (nf-future-0708) · P7/T1 · Registry reconcile and plan.json sync for demo ops
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Registry reconcile and plan.json sync for demo ops. R…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0728** (nf-future-0728) · P7/T2 · Registry reconcile and plan.json sync for demo ops
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Registry reconcile and plan.json sync for demo ops. R…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0748** (nf-future-0748) · P7/T3 · Registry reconcile and plan.json sync for demo ops
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Registry reconcile and plan.json sync for demo ops. R…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0768** (nf-future-0768) · P7/T4 · Registry reconcile and plan.json sync for demo ops
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Registry reconcile and plan.json sync for demo ops. R…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0788** (nf-future-0788) · P7/T5 · Registry reconcile and plan.json sync for demo ops
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Registry reconcile and plan.json sync for demo ops. R…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0808** (nf-future-0808) · P8/T1 · Registry reconcile and plan.json sync for demo ops
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Registry reconcile and plan.json sync for demo ops. R…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0828** (nf-future-0828) · P8/T2 · Registry reconcile and plan.json sync for demo ops
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Registry reconcile and plan.json sync for demo ops. R…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0848** (nf-future-0848) · P8/T3 · Registry reconcile and plan.json sync for demo ops
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Registry reconcile and plan.json sync for demo ops. R…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0868** (nf-future-0868) · P8/T4 · Registry reconcile and plan.json sync for demo ops
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Registry reconcile and plan.json sync for demo ops. R…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0888** (nf-future-0888) · P8/T5 · Registry reconcile and plan.json sync for demo ops
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Registry reconcile and plan.json sync for demo ops. R…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0908** (nf-future-0908) · P9/T1 · Registry reconcile and plan.json sync for demo ops
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Registry reconcile and plan.json sync for demo ops. R…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0928** (nf-future-0928) · P9/T2 · Registry reconcile and plan.json sync for demo ops
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Registry reconcile and plan.json sync for demo ops. R…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0948** (nf-future-0948) · P9/T3 · Registry reconcile and plan.json sync for demo ops
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Registry reconcile and plan.json sync for demo ops. R…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0968** (nf-future-0968) · P9/T4 · Registry reconcile and plan.json sync for demo ops
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Registry reconcile and plan.json sync for demo ops. R…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0988** (nf-future-0988) · P9/T5 · Registry reconcile and plan.json sync for demo ops
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Registry reconcile and plan.json sync for demo ops. R…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.

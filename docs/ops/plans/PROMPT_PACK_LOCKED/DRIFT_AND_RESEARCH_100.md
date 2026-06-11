@@ -1,0 +1,304 @@
+# Drift and research 100
+
+**Count:** 100
+
+- **NF-PLAN-0901** (nf-future-0901) · P9/T1 · Design-partner outreach and pipeline for trust ledger
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Design-partner outreach and pipeline for trust ledger…`
+  - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.
+- **NF-PLAN-0902** (nf-future-0902) · P9/T1 · 5-minute demo rehearsal script and buyer checklist for governance api
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: 5-minute demo rehearsal script and buyer checklist fo…`
+  - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.
+- **NF-PLAN-0906** (nf-future-0906) · P9/T1 · Buyer interview debrief and evidence capture for www gtm
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Buyer interview debrief and evidence capture for www …`
+  - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.
+- **NF-PLAN-0907** (nf-future-0907) · P9/T1 · Tier A/B/C gate validation before customer acquisition work
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Tier A/B/C gate validation before customer acquisitio…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0908** (nf-future-0908) · P9/T1 · Registry reconcile and plan.json sync for demo ops
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Registry reconcile and plan.json sync for demo ops. R…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0914** (nf-future-0914) · P9/T1 · WWW / trust-ledger copy block for security buyer line
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: WWW / trust-ledger copy block for security buyer line…`
+  - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.
+- **NF-PLAN-0915** (nf-future-0915) · P9/T1 · Diligence one-pager evidence for data migrations controls
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Diligence one-pager evidence for data migrations cont…`
+  - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.
+- **NF-PLAN-0921** (nf-future-0921) · P9/T2 · Design-partner outreach and pipeline for trust ledger
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Design-partner outreach and pipeline for trust ledger…`
+  - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.
+- **NF-PLAN-0922** (nf-future-0922) · P9/T2 · 5-minute demo rehearsal script and buyer checklist for governance api
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: 5-minute demo rehearsal script and buyer checklist fo…`
+  - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.
+- **NF-PLAN-0926** (nf-future-0926) · P9/T2 · Buyer interview debrief and evidence capture for www gtm
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Buyer interview debrief and evidence capture for www …`
+  - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.
+- **NF-PLAN-0927** (nf-future-0927) · P9/T2 · Tier A/B/C gate validation before customer acquisition work
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Tier A/B/C gate validation before customer acquisitio…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0928** (nf-future-0928) · P9/T2 · Registry reconcile and plan.json sync for demo ops
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Registry reconcile and plan.json sync for demo ops. R…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0934** (nf-future-0934) · P9/T2 · WWW / trust-ledger copy block for security buyer line
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: WWW / trust-ledger copy block for security buyer line…`
+  - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.
+- **NF-PLAN-0935** (nf-future-0935) · P9/T2 · Diligence one-pager evidence for data migrations controls
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Diligence one-pager evidence for data migrations cont…`
+  - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.
+- **NF-PLAN-0941** (nf-future-0941) · P9/T3 · Design-partner outreach and pipeline for trust ledger
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Design-partner outreach and pipeline for trust ledger…`
+  - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.
+- **NF-PLAN-0942** (nf-future-0942) · P9/T3 · 5-minute demo rehearsal script and buyer checklist for governance api
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: 5-minute demo rehearsal script and buyer checklist fo…`
+  - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.
+- **NF-PLAN-0946** (nf-future-0946) · P9/T3 · Buyer interview debrief and evidence capture for www gtm
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Buyer interview debrief and evidence capture for www …`
+  - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.
+- **NF-PLAN-0947** (nf-future-0947) · P9/T3 · Tier A/B/C gate validation before customer acquisition work
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Tier A/B/C gate validation before customer acquisitio…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0948** (nf-future-0948) · P9/T3 · Registry reconcile and plan.json sync for demo ops
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Registry reconcile and plan.json sync for demo ops. R…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0954** (nf-future-0954) · P9/T3 · WWW / trust-ledger copy block for security buyer line
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: WWW / trust-ledger copy block for security buyer line…`
+  - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.
+- **NF-PLAN-0955** (nf-future-0955) · P9/T3 · Diligence one-pager evidence for data migrations controls
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Diligence one-pager evidence for data migrations cont…`
+  - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.
+- **NF-PLAN-0961** (nf-future-0961) · P9/T4 · Design-partner outreach and pipeline for trust ledger
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Design-partner outreach and pipeline for trust ledger…`
+  - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.
+- **NF-PLAN-0962** (nf-future-0962) · P9/T4 · 5-minute demo rehearsal script and buyer checklist for governance api
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: 5-minute demo rehearsal script and buyer checklist fo…`
+  - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.
+- **NF-PLAN-0966** (nf-future-0966) · P9/T4 · Buyer interview debrief and evidence capture for www gtm
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Buyer interview debrief and evidence capture for www …`
+  - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.
+- **NF-PLAN-0967** (nf-future-0967) · P9/T4 · Tier A/B/C gate validation before customer acquisition work
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Tier A/B/C gate validation before customer acquisitio…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0968** (nf-future-0968) · P9/T4 · Registry reconcile and plan.json sync for demo ops
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Registry reconcile and plan.json sync for demo ops. R…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0974** (nf-future-0974) · P9/T4 · WWW / trust-ledger copy block for security buyer line
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: WWW / trust-ledger copy block for security buyer line…`
+  - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.
+- **NF-PLAN-0975** (nf-future-0975) · P9/T4 · Diligence one-pager evidence for data migrations controls
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Diligence one-pager evidence for data migrations cont…`
+  - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.
+- **NF-PLAN-0981** (nf-future-0981) · P9/T5 · Design-partner outreach and pipeline for trust ledger
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Design-partner outreach and pipeline for trust ledger…`
+  - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.
+- **NF-PLAN-0982** (nf-future-0982) · P9/T5 · 5-minute demo rehearsal script and buyer checklist for governance api
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: 5-minute demo rehearsal script and buyer checklist fo…`
+  - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.
+- **NF-PLAN-0986** (nf-future-0986) · P9/T5 · Buyer interview debrief and evidence capture for www gtm
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Buyer interview debrief and evidence capture for www …`
+  - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.
+- **NF-PLAN-0987** (nf-future-0987) · P9/T5 · Tier A/B/C gate validation before customer acquisition work
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Tier A/B/C gate validation before customer acquisitio…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0988** (nf-future-0988) · P9/T5 · Registry reconcile and plan.json sync for demo ops
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Registry reconcile and plan.json sync for demo ops. R…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0994** (nf-future-0994) · P9/T5 · WWW / trust-ledger copy block for security buyer line
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: WWW / trust-ledger copy block for security buyer line…`
+  - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.
+- **NF-PLAN-0995** (nf-future-0995) · P9/T5 · Diligence one-pager evidence for data migrations controls
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Diligence one-pager evidence for data migrations cont…`
+  - Critic: GTM scorecard: validation 2/10 until one contracted pilot uses board PDF.
+- **NF-PLAN-0404** (nf-future-0404) · P4/T1 · Governance drift implementation slice for connectors
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Governance drift implementation slice for connectors.…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0405** (nf-future-0405) · P4/T1 · Architecture verdict review and ship gate for workspace ui
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Architecture verdict review and ship gate for workspa…`
+  - Critic: Postgres-first architecture verdict — ship only what supports pilot proof.
+- **NF-PLAN-0410** (nf-future-0410) · P4/T1 · Integration tests covering governance drift happy path and 409 guards
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Integration tests covering governance drift happy pat…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0411** (nf-future-0411) · P4/T1 · Align OpenAPI spec with implemented critic research routes
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Align OpenAPI spec with implemented critic research r…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0424** (nf-future-0424) · P4/T2 · Governance drift implementation slice for connectors
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Governance drift implementation slice for connectors.…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0425** (nf-future-0425) · P4/T2 · Architecture verdict review and ship gate for workspace ui
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Architecture verdict review and ship gate for workspa…`
+  - Critic: Postgres-first architecture verdict — ship only what supports pilot proof.
+- **NF-PLAN-0430** (nf-future-0430) · P4/T2 · Integration tests covering governance drift happy path and 409 guards
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Integration tests covering governance drift happy pat…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0431** (nf-future-0431) · P4/T2 · Align OpenAPI spec with implemented critic research routes
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Align OpenAPI spec with implemented critic research r…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0444** (nf-future-0444) · P4/T3 · Governance drift implementation slice for connectors
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Governance drift implementation slice for connectors.…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0445** (nf-future-0445) · P4/T3 · Architecture verdict review and ship gate for workspace ui
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Architecture verdict review and ship gate for workspa…`
+  - Critic: Postgres-first architecture verdict — ship only what supports pilot proof.
+- **NF-PLAN-0450** (nf-future-0450) · P4/T3 · Integration tests covering governance drift happy path and 409 guards
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Integration tests covering governance drift happy pat…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0451** (nf-future-0451) · P4/T3 · Align OpenAPI spec with implemented critic research routes
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Align OpenAPI spec with implemented critic research r…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0464** (nf-future-0464) · P4/T4 · Governance drift implementation slice for connectors
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Governance drift implementation slice for connectors.…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0465** (nf-future-0465) · P4/T4 · Architecture verdict review and ship gate for workspace ui
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Architecture verdict review and ship gate for workspa…`
+  - Critic: Postgres-first architecture verdict — ship only what supports pilot proof.
+- **NF-PLAN-0470** (nf-future-0470) · P4/T4 · Integration tests covering governance drift happy path and 409 guards
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Integration tests covering governance drift happy pat…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0471** (nf-future-0471) · P4/T4 · Align OpenAPI spec with implemented critic research routes
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Align OpenAPI spec with implemented critic research r…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0484** (nf-future-0484) · P4/T5 · Governance drift implementation slice for connectors
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Governance drift implementation slice for connectors.…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0485** (nf-future-0485) · P4/T5 · Architecture verdict review and ship gate for workspace ui
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Architecture verdict review and ship gate for workspa…`
+  - Critic: Postgres-first architecture verdict — ship only what supports pilot proof.
+- **NF-PLAN-0490** (nf-future-0490) · P4/T5 · Integration tests covering governance drift happy path and 409 guards
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Integration tests covering governance drift happy pat…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0491** (nf-future-0491) · P4/T5 · Align OpenAPI spec with implemented critic research routes
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Align OpenAPI spec with implemented critic research r…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0704** (nf-future-0704) · P7/T1 · Governance drift implementation slice for connectors
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Governance drift implementation slice for connectors.…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0705** (nf-future-0705) · P7/T1 · Architecture verdict review and ship gate for workspace ui
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Architecture verdict review and ship gate for workspa…`
+  - Critic: Postgres-first architecture verdict — ship only what supports pilot proof.
+- **NF-PLAN-0710** (nf-future-0710) · P7/T1 · Integration tests covering governance drift happy path and 409 guards
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Integration tests covering governance drift happy pat…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0711** (nf-future-0711) · P7/T1 · Align OpenAPI spec with implemented critic research routes
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Align OpenAPI spec with implemented critic research r…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0724** (nf-future-0724) · P7/T2 · Governance drift implementation slice for connectors
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Governance drift implementation slice for connectors.…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0725** (nf-future-0725) · P7/T2 · Architecture verdict review and ship gate for workspace ui
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Architecture verdict review and ship gate for workspa…`
+  - Critic: Postgres-first architecture verdict — ship only what supports pilot proof.
+- **NF-PLAN-0730** (nf-future-0730) · P7/T2 · Integration tests covering governance drift happy path and 409 guards
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Integration tests covering governance drift happy pat…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0731** (nf-future-0731) · P7/T2 · Align OpenAPI spec with implemented critic research routes
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Align OpenAPI spec with implemented critic research r…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0744** (nf-future-0744) · P7/T3 · Governance drift implementation slice for connectors
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Governance drift implementation slice for connectors.…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0745** (nf-future-0745) · P7/T3 · Architecture verdict review and ship gate for workspace ui
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Architecture verdict review and ship gate for workspa…`
+  - Critic: Postgres-first architecture verdict — ship only what supports pilot proof.
+- **NF-PLAN-0750** (nf-future-0750) · P7/T3 · Integration tests covering governance drift happy path and 409 guards
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Integration tests covering governance drift happy pat…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0751** (nf-future-0751) · P7/T3 · Align OpenAPI spec with implemented critic research routes
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Align OpenAPI spec with implemented critic research r…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0764** (nf-future-0764) · P7/T4 · Governance drift implementation slice for connectors
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Governance drift implementation slice for connectors.…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0765** (nf-future-0765) · P7/T4 · Architecture verdict review and ship gate for workspace ui
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Architecture verdict review and ship gate for workspa…`
+  - Critic: Postgres-first architecture verdict — ship only what supports pilot proof.
+- **NF-PLAN-0770** (nf-future-0770) · P7/T4 · Integration tests covering governance drift happy path and 409 guards
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Integration tests covering governance drift happy pat…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0771** (nf-future-0771) · P7/T4 · Align OpenAPI spec with implemented critic research routes
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Align OpenAPI spec with implemented critic research r…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0784** (nf-future-0784) · P7/T5 · Governance drift implementation slice for connectors
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Governance drift implementation slice for connectors.…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0785** (nf-future-0785) · P7/T5 · Architecture verdict review and ship gate for workspace ui
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Architecture verdict review and ship gate for workspa…`
+  - Critic: Postgres-first architecture verdict — ship only what supports pilot proof.
+- **NF-PLAN-0790** (nf-future-0790) · P7/T5 · Integration tests covering governance drift happy path and 409 guards
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Integration tests covering governance drift happy pat…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0791** (nf-future-0791) · P7/T5 · Align OpenAPI spec with implemented critic research routes
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Align OpenAPI spec with implemented critic research r…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0903** (nf-future-0903) · P9/T1 · Agent scope-gate drill and verify for evidence
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Agent scope-gate drill and verify for evidence. Read …`
+  - Critic: Best-practice: scope gate before work (MEMORY v5 + verify-agent-scope).
+- **NF-PLAN-0909** (nf-future-0909) · P9/T1 · Add or extend API endpoint for agent ops
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Add or extend API endpoint for agent ops. Read locked…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0923** (nf-future-0923) · P9/T2 · Agent scope-gate drill and verify for evidence
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Agent scope-gate drill and verify for evidence. Read …`
+  - Critic: Best-practice: scope gate before work (MEMORY v5 + verify-agent-scope).
+- **NF-PLAN-0929** (nf-future-0929) · P9/T2 · Add or extend API endpoint for agent ops
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Add or extend API endpoint for agent ops. Read locked…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0943** (nf-future-0943) · P9/T3 · Agent scope-gate drill and verify for evidence
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Agent scope-gate drill and verify for evidence. Read …`
+  - Critic: Best-practice: scope gate before work (MEMORY v5 + verify-agent-scope).
+- **NF-PLAN-0949** (nf-future-0949) · P9/T3 · Add or extend API endpoint for agent ops
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Add or extend API endpoint for agent ops. Read locked…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0963** (nf-future-0963) · P9/T4 · Agent scope-gate drill and verify for evidence
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Agent scope-gate drill and verify for evidence. Read …`
+  - Critic: Best-practice: scope gate before work (MEMORY v5 + verify-agent-scope).
+- **NF-PLAN-0969** (nf-future-0969) · P9/T4 · Add or extend API endpoint for agent ops
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Add or extend API endpoint for agent ops. Read locked…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0983** (nf-future-0983) · P9/T5 · Agent scope-gate drill and verify for evidence
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Agent scope-gate drill and verify for evidence. Read …`
+  - Critic: Best-practice: scope gate before work (MEMORY v5 + verify-agent-scope).
+- **NF-PLAN-0989** (nf-future-0989) · P9/T5 · Add or extend API endpoint for agent ops
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Add or extend API endpoint for agent ops. Read locked…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0004** (nf-future-0004) · P0/T1 · Governance drift implementation slice for connectors
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Governance drift implementation slice for connectors.…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0005** (nf-future-0005) · P0/T1 · Architecture verdict review and ship gate for workspace ui
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Architecture verdict review and ship gate for workspa…`
+  - Critic: Postgres-first architecture verdict — ship only what supports pilot proof.
+- **NF-PLAN-0010** (nf-future-0010) · P0/T1 · Integration tests covering governance drift happy path and 409 guards
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Integration tests covering governance drift happy pat…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0011** (nf-future-0011) · P0/T1 · Align OpenAPI spec with implemented critic research routes
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Align OpenAPI spec with implemented critic research r…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0024** (nf-future-0024) · P0/T2 · Governance drift implementation slice for connectors
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Governance drift implementation slice for connectors.…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0025** (nf-future-0025) · P0/T2 · Architecture verdict review and ship gate for workspace ui
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Architecture verdict review and ship gate for workspa…`
+  - Critic: Postgres-first architecture verdict — ship only what supports pilot proof.
+- **NF-PLAN-0030** (nf-future-0030) · P0/T2 · Integration tests covering governance drift happy path and 409 guards
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Integration tests covering governance drift happy pat…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0031** (nf-future-0031) · P0/T2 · Align OpenAPI spec with implemented critic research routes
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Align OpenAPI spec with implemented critic research r…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0044** (nf-future-0044) · P0/T3 · Governance drift implementation slice for connectors
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Governance drift implementation slice for connectors.…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0045** (nf-future-0045) · P0/T3 · Architecture verdict review and ship gate for workspace ui
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Architecture verdict review and ship gate for workspa…`
+  - Critic: Postgres-first architecture verdict — ship only what supports pilot proof.
+- **NF-PLAN-0050** (nf-future-0050) · P0/T3 · Integration tests covering governance drift happy path and 409 guards
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Integration tests covering governance drift happy pat…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0051** (nf-future-0051) · P0/T3 · Align OpenAPI spec with implemented critic research routes
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Align OpenAPI spec with implemented critic research r…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0064** (nf-future-0064) · P0/T4 · Governance drift implementation slice for connectors
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Governance drift implementation slice for connectors.…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.
+- **NF-PLAN-0065** (nf-future-0065) · P0/T4 · Architecture verdict review and ship gate for workspace ui
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Architecture verdict review and ship gate for workspa…`
+  - Critic: Postgres-first architecture verdict — ship only what supports pilot proof.
+- **NF-PLAN-0070** (nf-future-0070) · P0/T4 · Integration tests covering governance drift happy path and 409 guards
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Integration tests covering governance drift happy pat…`
+  - Critic: Align with ≤3 next_tasks; no infra sprawl per GTM 60-day lock.

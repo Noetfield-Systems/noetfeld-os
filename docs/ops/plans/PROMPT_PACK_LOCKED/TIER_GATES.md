@@ -1,0 +1,143 @@
+# Tier B/C gates
+
+**Count:** 45
+
+Do not implement until GTM tier unlock conditions are met.
+
+**CI guard:** `./scripts/verify-tier-gate.sh` — fails if QUICK_PICK top-25 includes `tier_gate: B` or `C`.
+
+- **NF-PLAN-0304** (nf-future-0304) · P3/T1 · Governance drift implementation slice for connectors
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Governance drift implementation slice for connectors.…`
+  - Critic: Blocked until first contracted customer (GTM Tier B).
+- **NF-PLAN-0314** (nf-future-0314) · P3/T1 · WWW / trust-ledger copy block for security buyer line
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: WWW / trust-ledger copy block for security buyer line…`
+  - Critic: Blocked until first contracted customer (GTM Tier B).
+- **NF-PLAN-0315** (nf-future-0315) · P3/T1 · Diligence one-pager evidence for data migrations controls
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Diligence one-pager evidence for data migrations cont…`
+  - Critic: Blocked until first contracted customer (GTM Tier B).
+- **NF-PLAN-0324** (nf-future-0324) · P3/T2 · Governance drift implementation slice for connectors
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Governance drift implementation slice for connectors.…`
+  - Critic: Blocked until first contracted customer (GTM Tier B).
+- **NF-PLAN-0334** (nf-future-0334) · P3/T2 · WWW / trust-ledger copy block for security buyer line
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: WWW / trust-ledger copy block for security buyer line…`
+  - Critic: Blocked until first contracted customer (GTM Tier B).
+- **NF-PLAN-0335** (nf-future-0335) · P3/T2 · Diligence one-pager evidence for data migrations controls
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Diligence one-pager evidence for data migrations cont…`
+  - Critic: Blocked until first contracted customer (GTM Tier B).
+- **NF-PLAN-0344** (nf-future-0344) · P3/T3 · Governance drift implementation slice for connectors
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Governance drift implementation slice for connectors.…`
+  - Critic: Blocked until first contracted customer (GTM Tier B).
+- **NF-PLAN-0354** (nf-future-0354) · P3/T3 · WWW / trust-ledger copy block for security buyer line
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: WWW / trust-ledger copy block for security buyer line…`
+  - Critic: Blocked until first contracted customer (GTM Tier B).
+- **NF-PLAN-0355** (nf-future-0355) · P3/T3 · Diligence one-pager evidence for data migrations controls
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Diligence one-pager evidence for data migrations cont…`
+  - Critic: Blocked until first contracted customer (GTM Tier B).
+- **NF-PLAN-0364** (nf-future-0364) · P3/T4 · Governance drift implementation slice for connectors
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Governance drift implementation slice for connectors.…`
+  - Critic: Blocked until first contracted customer (GTM Tier B).
+- **NF-PLAN-0374** (nf-future-0374) · P3/T4 · WWW / trust-ledger copy block for security buyer line
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: WWW / trust-ledger copy block for security buyer line…`
+  - Critic: Blocked until first contracted customer (GTM Tier B).
+- **NF-PLAN-0375** (nf-future-0375) · P3/T4 · Diligence one-pager evidence for data migrations controls
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Diligence one-pager evidence for data migrations cont…`
+  - Critic: Blocked until first contracted customer (GTM Tier B).
+- **NF-PLAN-0384** (nf-future-0384) · P3/T5 · Governance drift implementation slice for connectors
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Governance drift implementation slice for connectors.…`
+  - Critic: Blocked until first contracted customer (GTM Tier B).
+- **NF-PLAN-0394** (nf-future-0394) · P3/T5 · WWW / trust-ledger copy block for security buyer line
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: WWW / trust-ledger copy block for security buyer line…`
+  - Critic: Blocked until first contracted customer (GTM Tier B).
+- **NF-PLAN-0395** (nf-future-0395) · P3/T5 · Diligence one-pager evidence for data migrations controls
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Diligence one-pager evidence for data migrations cont…`
+  - Critic: Blocked until first contracted customer (GTM Tier B).
+- **NF-PLAN-0514** (nf-future-0514) · P5/T1 · WWW / trust-ledger copy block for security buyer line
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: WWW / trust-ledger copy block for security buyer line…`
+  - Critic: Blocked until 3+ customers and Tier A+B live (GTM Tier C).
+- **NF-PLAN-0519** (nf-future-0519) · P5/T1 · RUNBOOK section for operating observability in production
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: RUNBOOK section for operating observability in produc…`
+  - Critic: Blocked until 3+ customers and Tier A+B live (GTM Tier C).
+- **NF-PLAN-0520** (nf-future-0520) · P5/T1 · Load test baseline and p95 budget for performance
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Load test baseline and p95 budget for performance. Re…`
+  - Critic: Blocked until 3+ customers and Tier A+B live (GTM Tier C).
+- **NF-PLAN-0534** (nf-future-0534) · P5/T2 · WWW / trust-ledger copy block for security buyer line
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: WWW / trust-ledger copy block for security buyer line…`
+  - Critic: Blocked until 3+ customers and Tier A+B live (GTM Tier C).
+- **NF-PLAN-0539** (nf-future-0539) · P5/T2 · RUNBOOK section for operating observability in production
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: RUNBOOK section for operating observability in produc…`
+  - Critic: Blocked until 3+ customers and Tier A+B live (GTM Tier C).
+- **NF-PLAN-0540** (nf-future-0540) · P5/T2 · Load test baseline and p95 budget for performance
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Load test baseline and p95 budget for performance. Re…`
+  - Critic: Blocked until 3+ customers and Tier A+B live (GTM Tier C).
+- **NF-PLAN-0554** (nf-future-0554) · P5/T3 · WWW / trust-ledger copy block for security buyer line
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: WWW / trust-ledger copy block for security buyer line…`
+  - Critic: Blocked until 3+ customers and Tier A+B live (GTM Tier C).
+- **NF-PLAN-0559** (nf-future-0559) · P5/T3 · RUNBOOK section for operating observability in production
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: RUNBOOK section for operating observability in produc…`
+  - Critic: Blocked until 3+ customers and Tier A+B live (GTM Tier C).
+- **NF-PLAN-0560** (nf-future-0560) · P5/T3 · Load test baseline and p95 budget for performance
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Load test baseline and p95 budget for performance. Re…`
+  - Critic: Blocked until 3+ customers and Tier A+B live (GTM Tier C).
+- **NF-PLAN-0574** (nf-future-0574) · P5/T4 · WWW / trust-ledger copy block for security buyer line
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: WWW / trust-ledger copy block for security buyer line…`
+  - Critic: Blocked until 3+ customers and Tier A+B live (GTM Tier C).
+- **NF-PLAN-0579** (nf-future-0579) · P5/T4 · RUNBOOK section for operating observability in production
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: RUNBOOK section for operating observability in produc…`
+  - Critic: Blocked until 3+ customers and Tier A+B live (GTM Tier C).
+- **NF-PLAN-0580** (nf-future-0580) · P5/T4 · Load test baseline and p95 budget for performance
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Load test baseline and p95 budget for performance. Re…`
+  - Critic: Blocked until 3+ customers and Tier A+B live (GTM Tier C).
+- **NF-PLAN-0594** (nf-future-0594) · P5/T5 · WWW / trust-ledger copy block for security buyer line
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: WWW / trust-ledger copy block for security buyer line…`
+  - Critic: Blocked until 3+ customers and Tier A+B live (GTM Tier C).
+- **NF-PLAN-0599** (nf-future-0599) · P5/T5 · RUNBOOK section for operating observability in production
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: RUNBOOK section for operating observability in produc…`
+  - Critic: Blocked until 3+ customers and Tier A+B live (GTM Tier C).
+- **NF-PLAN-0600** (nf-future-0600) · P5/T5 · Load test baseline and p95 budget for performance
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Load test baseline and p95 budget for performance. Re…`
+  - Critic: Blocked until 3+ customers and Tier A+B live (GTM Tier C).
+- **NF-PLAN-0814** (nf-future-0814) · P8/T1 · WWW / trust-ledger copy block for security buyer line
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: WWW / trust-ledger copy block for security buyer line…`
+  - Critic: Blocked until 3+ customers and Tier A+B live (GTM Tier C).
+- **NF-PLAN-0819** (nf-future-0819) · P8/T1 · RUNBOOK section for operating observability in production
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: RUNBOOK section for operating observability in produc…`
+  - Critic: Blocked until 3+ customers and Tier A+B live (GTM Tier C).
+- **NF-PLAN-0820** (nf-future-0820) · P8/T1 · Load test baseline and p95 budget for performance
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Load test baseline and p95 budget for performance. Re…`
+  - Critic: Blocked until 3+ customers and Tier A+B live (GTM Tier C).
+- **NF-PLAN-0834** (nf-future-0834) · P8/T2 · WWW / trust-ledger copy block for security buyer line
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: WWW / trust-ledger copy block for security buyer line…`
+  - Critic: Blocked until 3+ customers and Tier A+B live (GTM Tier C).
+- **NF-PLAN-0839** (nf-future-0839) · P8/T2 · RUNBOOK section for operating observability in production
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: RUNBOOK section for operating observability in produc…`
+  - Critic: Blocked until 3+ customers and Tier A+B live (GTM Tier C).
+- **NF-PLAN-0840** (nf-future-0840) · P8/T2 · Load test baseline and p95 budget for performance
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Load test baseline and p95 budget for performance. Re…`
+  - Critic: Blocked until 3+ customers and Tier A+B live (GTM Tier C).
+- **NF-PLAN-0854** (nf-future-0854) · P8/T3 · WWW / trust-ledger copy block for security buyer line
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: WWW / trust-ledger copy block for security buyer line…`
+  - Critic: Blocked until 3+ customers and Tier A+B live (GTM Tier C).
+- **NF-PLAN-0859** (nf-future-0859) · P8/T3 · RUNBOOK section for operating observability in production
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: RUNBOOK section for operating observability in produc…`
+  - Critic: Blocked until 3+ customers and Tier A+B live (GTM Tier C).
+- **NF-PLAN-0860** (nf-future-0860) · P8/T3 · Load test baseline and p95 budget for performance
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Load test baseline and p95 budget for performance. Re…`
+  - Critic: Blocked until 3+ customers and Tier A+B live (GTM Tier C).
+- **NF-PLAN-0874** (nf-future-0874) · P8/T4 · WWW / trust-ledger copy block for security buyer line
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: WWW / trust-ledger copy block for security buyer line…`
+  - Critic: Blocked until 3+ customers and Tier A+B live (GTM Tier C).
+- **NF-PLAN-0879** (nf-future-0879) · P8/T4 · RUNBOOK section for operating observability in production
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: RUNBOOK section for operating observability in produc…`
+  - Critic: Blocked until 3+ customers and Tier A+B live (GTM Tier C).
+- **NF-PLAN-0880** (nf-future-0880) · P8/T4 · Load test baseline and p95 budget for performance
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Load test baseline and p95 budget for performance. Re…`
+  - Critic: Blocked until 3+ customers and Tier A+B live (GTM Tier C).
+- **NF-PLAN-0894** (nf-future-0894) · P8/T5 · WWW / trust-ledger copy block for security buyer line
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: WWW / trust-ledger copy block for security buyer line…`
+  - Critic: Blocked until 3+ customers and Tier A+B live (GTM Tier C).
+- **NF-PLAN-0899** (nf-future-0899) · P8/T5 · RUNBOOK section for operating observability in production
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: RUNBOOK section for operating observability in produc…`
+  - Critic: Blocked until 3+ customers and Tier A+B live (GTM Tier C).
+- **NF-PLAN-0900** (nf-future-0900) · P8/T5 · Load test baseline and p95 budget for performance
+  - Prompt: `As NF-CLOUD-AGENT (Noetfield only), implement: Load test baseline and p95 budget for performance. Re…`
+  - Critic: Blocked until 3+ customers and Tier A+B live (GTM Tier C).

@@ -1,7 +1,7 @@
 # Noetfield agent memory — LOCKED (versioned in git)
 # Read at EVERY session start. Bump version when adding lessons.
 
-version: 8
+version: 9
 updated: "2026-06-10T12:00:00Z"
 updated_by: NF-CLOUD-AGENT
 
@@ -55,10 +55,11 @@ hard_rules:
     incident: INCIDENT-2026-06-06-003
     since: "2026-06-06"
   - id: R-010
-    rule: On rule conflict, run SKILL-007 before edits. Precedence — founder order > R-001–R-009 > incidents > execution_authority false > workflow bundles > ship-first/plan.json.
+    rule: On rule conflict, run SKILL-007 before edits. Precedence — founder order > R-001–R-011 > incidents > execution_authority false > workflow bundles > ship-first/plan.json.
     since: "2026-06-06"
   - id: R-011
-    rule: Cursor AUTO-RUN is not a system priority (SourceA law 2026-06-10). All outreach email and sales/demo calls are agentic — founder never sends email or places calls. Ref FOUNDER_AGENTIC_COMMERCIAL_AND_NO_CURSOR_AUTORUN_LOCKED_v1.md on SourceA desktop.
+    rule: Cursor AUTO-RUN is not P0. Commercial outreach and calls = agentic layer only; founder Hub + ASK. NF-CLOUD = validators + www/GTM assets — never send email/call as founder.
+    source: docs/ops/FOUNDER_AGENTIC_COMMERCIAL_AND_NO_CURSOR_AUTORUN_LOCKED_v1.md
     since: "2026-06-10"
 
 recurring_mistakes:
@@ -101,6 +102,9 @@ lessons:
     lesson: Open PRs and backlog items are not "done" — session end must list open items and ASK founder next move.
     incident: INCIDENT-2026-06-06-004
     since: "2026-06-06"
+  - id: L-006
+    lesson: Incidents 002–005 closed 2026-06-06 after controls on main — law remains active via R-007/R-008/R-010; closure does not relax ask-first.
+    since: "2026-06-06"
 
 pre_commit_checklist:
   - Read MEMORY_LOCKED.yaml if not read this session
@@ -117,3 +121,5 @@ session_start_checklist:
   - Apply SKILL-007 if any rule conflict detected
   - Apply SKILL-006 ask-before-implement
   - Apply SKILL-001 scope gate (after permission only)
+  - Apply SKILL-008 agentic commercial boundary
+  - Read FOUNDER_AGENTIC_COMMERCIAL_AND_NO_CURSOR_AUTORUN_LOCKED_v1.md

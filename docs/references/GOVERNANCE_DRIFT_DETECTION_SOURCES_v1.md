@@ -1,7 +1,7 @@
 # Governance Drift Detection — Sources Book v1
 
 **Status:** Living reference (v1 locked 2026-06-04)  
-**Path:** `docs/reference/GOVERNANCE_DRIFT_DETECTION_SOURCES_v1.md`  
+**Path:** `docs/references/GOVERNANCE_DRIFT_DETECTION_SOURCES_v1.md`  
 **Companion:** [GOVERNANCE_SOURCES_BOOK_v1.md](./GOVERNANCE_SOURCES_BOOK_v1.md) (frameworks) · [NOETFIELD_GTM_60_DAY_LOCKED_v1.md](../strategy/NOETFIELD_GTM_60_DAY_LOCKED_v1.md) (GTM)  
 **Audience:** Founders, design partners, agents (`noetfield_cloud`)
 
@@ -467,8 +467,8 @@ flowchart TB
 ## Agent pointer (copy-paste)
 
 ```
-Drift sources: docs/reference/GOVERNANCE_DRIFT_DETECTION_SOURCES_v1.md
-Frameworks:    docs/reference/GOVERNANCE_SOURCES_BOOK_v1.md
+Drift sources: docs/references/GOVERNANCE_DRIFT_DETECTION_SOURCES_v1.md
+Frameworks:    docs/references/GOVERNANCE_SOURCES_BOOK_v1.md
 GTM:           docs/strategy/NOETFIELD_GTM_60_DAY_LOCKED_v1.md
 ```
 

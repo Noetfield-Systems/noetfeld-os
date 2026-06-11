@@ -289,7 +289,7 @@
           "governance-v1"
         ],
         "summary": "Governance Scenario Preset V1",
-        "description": "Demo JSON presets for console: exchange, bank, copilot.",
+        "description": "Demo JSON presets for console: exchange, bank, copilot, msb.",
         "operationId": "governance_scenario_preset_v1_api_v1_governance_scenario_presets__preset__get",
         "parameters": [
           {
@@ -297,6 +297,12 @@
             "in": "path",
             "required": true,
             "schema": {
+              "enum": [
+                "exchange",
+                "bank",
+                "copilot",
+                "msb"
+              ],
               "type": "string",
               "title": "Preset"
             }
@@ -311,6 +317,505 @@
                   "type": "object",
                   "additionalProperties": true,
                   "title": "Response Governance Scenario Preset V1 Api V1 Governance Scenario Presets  Preset  Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/connectors": {
+      "post": {
+        "tags": [
+          "trust-ledger-v1"
+        ],
+        "summary": "Register Connector",
+        "operationId": "register_connector_api_v1_connectors_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ConnectorRegisterRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConnectorObject"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/connectors/{connector_id}": {
+      "get": {
+        "tags": [
+          "trust-ledger-v1"
+        ],
+        "summary": "Get Connector",
+        "operationId": "get_connector_api_v1_connectors__connector_id__get",
+        "parameters": [
+          {
+            "name": "connector_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Connector Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConnectorObject"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/connectors/{connector_id}/sync": {
+      "post": {
+        "tags": [
+          "trust-ledger-v1"
+        ],
+        "summary": "Sync Connector",
+        "operationId": "sync_connector_api_v1_connectors__connector_id__sync_post",
+        "parameters": [
+          {
+            "name": "connector_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Connector Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ConnectorSyncRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConnectorObject"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/evidence/ingest": {
+      "post": {
+        "tags": [
+          "trust-ledger-v1"
+        ],
+        "summary": "Ingest Evidence",
+        "operationId": "ingest_evidence_api_v1_evidence_ingest_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EvidenceIngestRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EvidenceObject"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/evidence": {
+      "get": {
+        "tags": [
+          "trust-ledger-v1"
+        ],
+        "summary": "List Evidence",
+        "operationId": "list_evidence_api_v1_evidence_get",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 200,
+              "minimum": 1,
+              "default": 50,
+              "title": "Limit"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EvidenceListResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/evidence/{evidence_id}": {
+      "get": {
+        "tags": [
+          "trust-ledger-v1"
+        ],
+        "summary": "Get Evidence",
+        "operationId": "get_evidence_api_v1_evidence__evidence_id__get",
+        "parameters": [
+          {
+            "name": "evidence_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Evidence Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EvidenceObject"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/tle": {
+      "get": {
+        "tags": [
+          "trust-ledger-v1"
+        ],
+        "summary": "List Tles",
+        "operationId": "list_tles_api_v1_tle_get",
+        "parameters": [
+          {
+            "name": "status",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Status"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 200,
+              "minimum": 1,
+              "default": 50,
+              "title": "Limit"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TleListResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/tle/draft": {
+      "post": {
+        "tags": [
+          "trust-ledger-v1"
+        ],
+        "summary": "Create Tle Draft",
+        "operationId": "create_tle_draft_api_v1_tle_draft_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TleDraftRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TrustLedgerEntry"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/tle/{tle_id}/export": {
+      "get": {
+        "tags": [
+          "trust-ledger-v1"
+        ],
+        "summary": "Export Tle",
+        "operationId": "export_tle_api_v1_tle__tle_id__export_get",
+        "parameters": [
+          {
+            "name": "tle_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Tle Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/tle/{tle_id}": {
+      "get": {
+        "tags": [
+          "trust-ledger-v1"
+        ],
+        "summary": "Get Tle",
+        "operationId": "get_tle_api_v1_tle__tle_id__get",
+        "parameters": [
+          {
+            "name": "tle_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Tle Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TrustLedgerEntry"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/tle/{tle_id}/approve": {
+      "post": {
+        "tags": [
+          "trust-ledger-v1"
+        ],
+        "summary": "Approve Tle Route",
+        "operationId": "approve_tle_route_api_v1_tle__tle_id__approve_post",
+        "parameters": [
+          {
+            "name": "tle_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Tle Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TleApproveRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TrustLedgerEntry"
                 }
               }
             }
@@ -563,6 +1068,273 @@
           "inspector"
         ],
         "title": "ActorType"
+      },
+      "ConnectorObject": {
+        "properties": {
+          "connector_id": {
+            "type": "string",
+            "title": "Connector Id"
+          },
+          "type": {
+            "type": "string",
+            "title": "Type"
+          },
+          "required_scopes": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Required Scopes"
+          },
+          "ingest_mode": {
+            "type": "string",
+            "title": "Ingest Mode"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "registered_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Registered At"
+          },
+          "last_sync": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Sync"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "connector_id",
+          "type",
+          "required_scopes",
+          "ingest_mode",
+          "status",
+          "registered_at"
+        ],
+        "title": "ConnectorObject"
+      },
+      "ConnectorRegisterRequest": {
+        "properties": {
+          "connector_id": {
+            "type": "string",
+            "maxLength": 128,
+            "minLength": 1,
+            "title": "Connector Id"
+          },
+          "type": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 1,
+            "title": "Type"
+          },
+          "required_scopes": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Required Scopes"
+          },
+          "ingest_mode": {
+            "type": "string",
+            "enum": [
+              "metadata_only",
+              "full_capture"
+            ],
+            "title": "Ingest Mode",
+            "default": "metadata_only"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "connector_id",
+          "type"
+        ],
+        "title": "ConnectorRegisterRequest"
+      },
+      "ConnectorSyncRequest": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "active",
+              "error"
+            ],
+            "title": "Status",
+            "default": "active"
+          },
+          "records_synced": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Records Synced",
+            "default": 0
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "ConnectorSyncRequest"
+      },
+      "EvidenceIngestRequest": {
+        "properties": {
+          "evidence_id": {
+            "type": "string",
+            "maxLength": 128,
+            "minLength": 1,
+            "title": "Evidence Id"
+          },
+          "source": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 1,
+            "title": "Source"
+          },
+          "title": {
+            "type": "string",
+            "maxLength": 512,
+            "minLength": 1,
+            "title": "Title"
+          },
+          "hash": {
+            "type": "string",
+            "maxLength": 256,
+            "minLength": 8,
+            "title": "Hash"
+          },
+          "link": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Link"
+          },
+          "sensitivity": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Sensitivity"
+          },
+          "ingest_mode": {
+            "type": "string",
+            "enum": [
+              "metadata_only",
+              "full_capture"
+            ],
+            "title": "Ingest Mode",
+            "default": "metadata_only"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "evidence_id",
+          "source",
+          "title",
+          "hash"
+        ],
+        "title": "EvidenceIngestRequest"
+      },
+      "EvidenceListResponse": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/EvidenceObject"
+            },
+            "type": "array",
+            "title": "Items"
+          },
+          "count": {
+            "type": "integer",
+            "title": "Count"
+          }
+        },
+        "type": "object",
+        "required": [
+          "items",
+          "count"
+        ],
+        "title": "EvidenceListResponse"
+      },
+      "EvidenceObject": {
+        "properties": {
+          "evidence_id": {
+            "type": "string",
+            "title": "Evidence Id"
+          },
+          "source": {
+            "type": "string",
+            "title": "Source"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "hash": {
+            "type": "string",
+            "title": "Hash"
+          },
+          "ingested_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Ingested At"
+          },
+          "link": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Link"
+          },
+          "sensitivity": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Sensitivity"
+          },
+          "ingest_mode": {
+            "type": "string",
+            "title": "Ingest Mode",
+            "default": "metadata_only"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "evidence_id",
+          "source",
+          "title",
+          "hash",
+          "ingested_at"
+        ],
+        "title": "EvidenceObject"
       },
       "GovernanceEvaluateV1Request": {
         "properties": {
@@ -985,6 +1757,213 @@
           "request_id"
         ],
         "title": "PublicIntakeResponse"
+      },
+      "TleApproveRequest": {
+        "properties": {
+          "approver_id": {
+            "type": "string",
+            "maxLength": 128,
+            "minLength": 1,
+            "title": "Approver Id"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "Approved",
+              "Rejected",
+              "Conditional"
+            ],
+            "title": "Status"
+          },
+          "signature_hash": {
+            "type": "string",
+            "maxLength": 256,
+            "minLength": 8,
+            "title": "Signature Hash"
+          },
+          "key_id": {
+            "type": "string",
+            "maxLength": 128,
+            "minLength": 1,
+            "title": "Key Id"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "approver_id",
+          "status",
+          "signature_hash",
+          "key_id"
+        ],
+        "title": "TleApproveRequest"
+      },
+      "TleDraftRequest": {
+        "properties": {
+          "template_id": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 1,
+            "title": "Template Id"
+          },
+          "evidence_ids": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "minItems": 1,
+            "title": "Evidence Ids"
+          },
+          "owner_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Owner Id"
+          },
+          "decision": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Decision"
+          },
+          "date": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Date"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "template_id",
+          "evidence_ids"
+        ],
+        "title": "TleDraftRequest"
+      },
+      "TleListResponse": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/TrustLedgerEntry"
+            },
+            "type": "array",
+            "title": "Items"
+          },
+          "count": {
+            "type": "integer",
+            "title": "Count"
+          }
+        },
+        "type": "object",
+        "required": [
+          "items",
+          "count"
+        ],
+        "title": "TleListResponse"
+      },
+      "TrustLedgerEntry": {
+        "properties": {
+          "tle_id": {
+            "type": "string",
+            "title": "Tle Id"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "decision": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Decision"
+          },
+          "date": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Date"
+          },
+          "owner": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Owner"
+          },
+          "evidence": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "type": "array",
+            "title": "Evidence"
+          },
+          "template_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Template Id"
+          },
+          "approval_chain": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "type": "array",
+            "title": "Approval Chain"
+          },
+          "signatures": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "type": "array",
+            "title": "Signatures"
+          }
+        },
+        "additionalProperties": true,
+        "type": "object",
+        "required": [
+          "tle_id",
+          "status"
+        ],
+        "title": "TrustLedgerEntry"
       },
       "ValidationError": {
         "properties": {

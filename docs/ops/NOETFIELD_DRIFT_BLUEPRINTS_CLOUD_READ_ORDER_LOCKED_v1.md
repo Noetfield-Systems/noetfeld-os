@@ -1,50 +1,59 @@
+# Drift blueprints — cloud read order (LOCKED v1)
+
+| Field | Value |
+|-------|--------|
+| **Agent tag** | `NF-CLOUD-AGENT` |
+| **Agent id** | `noetfield_cloud` |
+| **Doc trace** | `NF-CLOUD-DRIFT-READ-001` |
+| **Not** | `NF-LOCAL-REPO-AGENT` · `noetfield_local` |
+| **Merged** | `origin/cursor/bank-grade-fullstack-37f0` @ `f18925e` |
+| **Updated** | 2026-06-06 |
+
+Blueprint bodies: `[NF-LOCAL-REPO-AGENT]` on `docs/references/`. Cloud wires read order only.
+
 ---
-agent_tag: nf-local-repo-agent
-agent_display: "[NF-LOCAL-REPO-AGENT]"
-agent_alias: nf-local-agent
-doc_id: drift-blueprints-cloud-read-order
-doc_revision: 2
-last_edited_at: "2026-06-06"
-status: locked
-committed: true
-reviewed_by: nf-cloud-agent-pending
----
 
-> **Authored by:** `[NF-LOCAL-REPO-AGENT]` — committed cloud read order. Cloud: path verify + index wiring with `[NF-CLOUD-AGENT]` only.
+## Authority split
 
-# Drift Blueprints — Cloud Agent Read Order (LOCKED v1)
-
-**Canonical path:** `docs/references/` (plural)
+| Topic | In charge | Tag |
+|-------|-----------|-----|
+| Drift taxonomy | [GOVERNANCE_DRIFT_DETECTION_SOURCES_LOCKED_v1.md](../references/GOVERNANCE_DRIFT_DETECTION_SOURCES_LOCKED_v1.md) | LOCKED v1 (canonical) |
+| Product mandate | [TRUST_LEDGER_PRODUCT_BLUEPRINT_v1.2_LOCKED.md](../spec/TRUST_LEDGER_PRODUCT_BLUEPRINT_v1.2_LOCKED.md) | LOCKED (cloud ff24d56 + local §8) |
+| Architecture vision | [GOVERNANCE_DRIFT_BLUEPRINTS_INDEX_LOCKED_v1.md](../references/GOVERNANCE_DRIFT_BLUEPRINTS_INDEX_LOCKED_v1.md) | `NF-LOCAL-REPO-AGENT` |
+| Code truth | `ops/private/agent-reference/NOETFIELD_DRIFT_IMPLEMENTATION_MAP.md` | `NF-CLOUD-AGENT` (private) |
 
 ---
 
 ## Read order
 
-1. [docs/references/GOVERNANCE_DRIFT_DETECTION_SOURCES_v1.md](../references/GOVERNANCE_DRIFT_DETECTION_SOURCES_v1.md) — taxonomy (boss)
-2. [docs/spec/TRUST_LEDGER_PRODUCT_BLUEPRINT_v1.2_LOCKED.md](../spec/TRUST_LEDGER_PRODUCT_BLUEPRINT_v1.2_LOCKED.md) — product mandate
-3. [docs/references/GOVERNANCE_DRIFT_BLUEPRINTS_INDEX_LOCKED_v1.md](../references/GOVERNANCE_DRIFT_BLUEPRINTS_INDEX_LOCKED_v1.md) — router
-4. Docs 1–4 in index order (engine → trust ledger → LLM → enterprise framework)
-5. Code truth (private): `ops/private/agent-reference/NOETFIELD_DRIFT_IMPLEMENTATION_MAP.md`
+1. [GOVERNANCE_DRIFT_DETECTION_SOURCES_LOCKED_v1.md](../references/GOVERNANCE_DRIFT_DETECTION_SOURCES_LOCKED_v1.md) — taxonomy boss
+2. [TRUST_LEDGER_PRODUCT_BLUEPRINT_v1.2_LOCKED.md](../spec/TRUST_LEDGER_PRODUCT_BLUEPRINT_v1.2_LOCKED.md) — product mandate
+3. [GOVERNANCE_DRIFT_BLUEPRINTS_INDEX_LOCKED_v1.md](../references/GOVERNANCE_DRIFT_BLUEPRINTS_INDEX_LOCKED_v1.md) — hub
+4. Supplements: engine → TLE-for-drift → LLM → enterprise framework
+5. [NOETFIELD_AGENT_TEAM_SYNC_LOCKED_v1.md](./NOETFIELD_AGENT_TEAM_SYNC_LOCKED_v1.md)
+6. Private annex: `ops/private/agent-reference/blueprints/` (`NF-LOCAL-REPO-AGENT` only)
 
-## Committed blueprint files
+---
 
-| File |
-|------|
-| `docs/references/GOVERNANCE_DRIFT_ENGINE_BLUEPRINT_LOCKED_v1.md` |
-| `docs/references/TRUST_LEDGER_FOR_DRIFT_BLUEPRINT_LOCKED_v1.md` |
-| `docs/references/LLM_DRIFT_DETECTION_ARCHITECTURE_LOCKED_v1.md` |
-| `docs/references/ENTERPRISE_GOVERNANCE_DRIFT_FRAMEWORK_LOCKED_v1.md` |
+## GTM honesty
 
-## Private (workspace disk — gitignored)
+> Noetfield records governance drift decisions before external execution — against your signed Trust Ledger baseline, exported as audit evidence. Continuous ML/LLM monitoring stays in your environment or Trust Brief scope.
 
-`ops/private/agent-reference/blueprints/` — implementation annexes (`[NF-LOCAL-REPO-AGENT]` only)
+---
 
-## Cloud edit scope (LOCKED)
+## Shipped vs roadmap (cloud verified)
 
-- Path fixes, `LOCKED_REFERENCE_INDEX` wiring, shipped vs roadmap tables  
-- **Do not** overwrite private annexes without UKE  
-- Run `make ship-verify` if code touched
+| Capability | Status |
+|------------|--------|
+| TLE immutability, evidence hash, confidence factors | Shipped |
+| `GET /events/replay` | Shipped |
+| TLE hash chain (`prev_tle_digest`) | Roadmap (TLE v1.3) |
+| Evaluate vs last TLE diff | **P0** |
+| Drift Contract v0 | **P0** |
+| `risk_summary` + drift class in factors | **P0** |
 
-## GTM line
+**Verify:** `make ship-verify` (merge readiness) · `make verify-gtm` (pre-demo GTM bundle)
 
-Noetfield records governance drift decisions before external execution—against signed Trust Ledger baseline, exported as audit evidence. We do not host customer models or ML observability lakes.
+---
+
+| v1.1 | 2026-06-06 | NF-CLOUD-AGENT post-merge f18925e |

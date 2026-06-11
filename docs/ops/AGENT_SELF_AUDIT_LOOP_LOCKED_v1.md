@@ -18,6 +18,18 @@ Stop repeated agent mistakes (scope bleed, wrong company, wrong repo) through a 
 
 **This repo = Noetfield only.** TrustField and VIRLUX are separate companies — never implement, plan, or deploy for them here.
 
+### Industry parallel (eval → enforce closed loop)
+
+Noetfield audit iterations mirror the June 2026 Open Trust Stack pattern without vendoring external packages:
+
+| Layer | Industry analog | Noetfield implementation |
+|-------|-----------------|--------------------------|
+| Eval | ASSERT (policy → executable tests) | `./scripts/plan-with-no-asf-verify.sh` — finds defects before ship |
+| Enforce | ACS / AGT (fail-closed runtime controls) | FAIL gates in `verify-no-asf-coherence.sh` and `verify-gtm-ops-docs.sh` |
+| Re-eval | Closed loop | Repeated audit iterations (GTM_NEXT ship bundles) until verify PASS |
+
+Buyer-facing framework authority: [GOVERNANCE_SOURCES_BOOK_v1.md](../reference/GOVERNANCE_SOURCES_BOOK_v1.md) (NIST AI RMF, ISO/IEC 42001).
+
 ---
 
 ## Loop diagram
@@ -45,6 +57,14 @@ flowchart TD
 2. Read [.cursor/incidents/REGISTRY.md](../../.cursor/incidents/REGISTRY.md) — **open** incidents
 3. Read [PROJECT_BOUNDARIES_LOCKED.md](../../PROJECT_BOUNDARIES_LOCKED.md)
 4. Run scope gate skill: [.cursor/skills/SKILL-001-scope-gate-before-work.md](../../.cursor/skills/SKILL-001-scope-gate-before-work.md)
+
+Also at session start (cloud agents):
+
+5. Apply **R-011** — [.cursor/skills/SKILL-008-agentic-commercial-boundary.md](../../.cursor/skills/SKILL-008-agentic-commercial-boundary.md)
+6. Read [FOUNDER_AGENTIC_COMMERCIAL_AND_NO_CURSOR_AUTORUN_LOCKED_v1.md](./FOUNDER_AGENTIC_COMMERCIAL_AND_NO_CURSOR_AUTORUN_LOCKED_v1.md)
+7. Queue source when registry 1000/1000: [plans/no-asf/GTM_NEXT.md](./plans/no-asf/GTM_NEXT.md) — outreach execution = agentic Hub only
+
+**cursor-reply format (iter 13+):** [reports/cursor-reply-latest.txt](../../reports/cursor-reply-latest.txt) must include `main: <short-sha>` (merge base) and on feature branches `head: <short-sha>` citing the **ship commit** (parent of the closeout-only reply commit). Coherence verify FAILs on drift.
 
 **If task mentions TrustField, trustfield.ca, VIRLUX, UPG for TrustField, or MSB vendor pack on TrustField www → STOP.** Reply: *"That is not Noetfield scope. I only work on noetfield.com / this repo."*
 

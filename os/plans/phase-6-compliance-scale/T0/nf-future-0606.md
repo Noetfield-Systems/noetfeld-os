@@ -3,10 +3,11 @@ id: nf-future-0606
 phase: phase-6-compliance-scale
 tier: T0
 priority: P0
-status: backlog
+status: done
 lane: lane_a
 domain: policy
 no_asf: true
+nf_plan_id: NF-PLAN-0606
 generator: scripts/generate-future-plans.py
 ---
 

@@ -3,10 +3,11 @@ id: nf-future-0018
 phase: phase-0-ship-ops
 tier: T0
 priority: P0
-status: backlog
+status: done
 lane: lane_a
 domain: rag
 no_asf: true
+nf_plan_id: NF-PLAN-0018
 generator: scripts/generate-future-plans.py
 ---
 

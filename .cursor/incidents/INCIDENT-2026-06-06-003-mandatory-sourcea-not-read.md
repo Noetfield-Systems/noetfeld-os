@@ -7,7 +7,9 @@
 | **Doc trace** | `NF-CLOUD-INCIDENT-003` |
 | **Updated** | 2026-06-06 |
 | Severity | **P2** |
-| Status | **open** |
+| Status | **closed** (R-009 + block rule on main; SourceA sync remains founder ops) |
+| Closed | 2026-06-06 |
+| Closed by | founder order |
 | Reporter | founder |
 | Agent | NF-CLOUD-AGENT (noetfield_cloud) |
 

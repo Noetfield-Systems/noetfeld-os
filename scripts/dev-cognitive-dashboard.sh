@@ -71,8 +71,10 @@ if [[ "$DASHBOARD_MODE" == "production" ]]; then
     echo "Building governance console UI (production)…"
     npm run build
   fi
-  exec env PORT="$WEB_PORT" COGNITIVE_DASHBOARD_PORT="$WEB_PORT" NEXT_PUBLIC_WEB_PORT="$WEB_PORT" \
-    npx next start -p "$WEB_PORT" -H 0.0.0.0
+  exec env NF_DASHBOARD_MODE=production PORT="$WEB_PORT" COGNITIVE_DASHBOARD_PORT="$WEB_PORT" \
+    NEXT_PUBLIC_WEB_PORT="$WEB_PORT" npm run dev
 fi
 
-exec env PORT="$WEB_PORT" COGNITIVE_DASHBOARD_PORT="$WEB_PORT" NEXT_PUBLIC_WEB_PORT="$WEB_PORT" npm run dev
+echo ">>> Dev mode (next dev) — set NF_DASHBOARD_MODE=production for pro performance"
+exec env NF_DASHBOARD_MODE=dev PORT="$WEB_PORT" COGNITIVE_DASHBOARD_PORT="$WEB_PORT" \
+  NEXT_PUBLIC_WEB_PORT="$WEB_PORT" npm run dev

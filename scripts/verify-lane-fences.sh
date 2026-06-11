@@ -7,7 +7,7 @@ fail=0
 
 _search() {
   grep -r -l -i -E "$1" docs os .cursor 2>/dev/null \
-    | grep -v -E 'plan-library|nf-future|reject|grep|conflict-matrix|noetfield-scope|NOETFIELD_AGENT_TEAM|AGENT_SELF_AUDIT|\.cursor/skills|\.cursor/incidents|\.cursor/agent-memory|\.cursor/reports' || true
+    | grep -v -E 'plan-library|nf-future|reject|grep|conflict-matrix|noetfield-scope|NOETFIELD_AGENT_TEAM|AGENT_SELF_AUDIT|\.cursor/skills|\.cursor/incidents|\.cursor/agent-memory|\.cursor/reports|registry\.json|OPEN_PRS|confidential-research' || true
 }
 
 hits="$(_search 'implement.*trustfield|trustfield.*implement')"

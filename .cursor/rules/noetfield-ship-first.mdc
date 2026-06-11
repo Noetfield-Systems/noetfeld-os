@@ -4,9 +4,9 @@ globs:
   - "**/*"
 ---
 
-# Noetfield — SHIP FIRST (ASF)
+# Noetfield — Bounded ship bundle (ASF ingest; not AUTO-RUN)
 
-**Conflict law:** Subordinate to [noetfield-rule-conflict-resolution.mdc](noetfield-rule-conflict-resolution.mdc) and R-007/R-008. Ship-first applies **only after** founder gives a bounded session order (e.g. `PLAN WITH NO ASF iter N implement`). Never self-start edits from `plan.json` alone.
+**Conflict law:** Subordinate to [noetfield-rule-conflict-resolution.mdc](noetfield-rule-conflict-resolution.mdc), R-007/R-008, and **R-011** (no Cursor AUTO-RUN). Bounded ship applies **only after** founder gives an explicit session order (e.g. `PLAN WITH NO ASF iter N implement`). Never self-start edits from `plan.json` alone.
 
 ## Two different things
 

@@ -3,10 +3,11 @@ id: nf-future-0122
 phase: phase-1-tle-core
 tier: T0
 priority: P0
-status: backlog
+status: done
 lane: lane_a
 domain: ui
 no_asf: true
+nf_plan_id: NF-PLAN-0122
 generator: scripts/generate-future-plans.py
 ---
 

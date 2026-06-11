@@ -1,13 +1,15 @@
 openapi: 3.1.0
 info:
   title: Noetfield Trust Ledger API
-  version: 0.1.0
+  version: 0.2.1
   description: |
     DESIGN skeleton — Trust Ledger v1.2 blueprint.
     Pre-execution governance & evidence; no payment or custody APIs.
 servers:
-  - url: https://api.noetfield.com/v1
-    description: Production (placeholder)
+  - url: https://platform.noetfield.com/api/v1
+    description: Production platform
+  - url: http://127.0.0.1:8001/api/v1
+    description: Local platform (make dev-local)
 paths:
   /connectors:
     post:
@@ -22,6 +24,49 @@ paths:
       responses:
         '201':
           description: Connector registered
+  /connectors/{connector_id}:
+    get:
+      summary: Get connector registration
+      operationId: getConnector
+      parameters:
+        - name: connector_id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: Connector manifest
+  /connectors/{connector_id}/sync:
+    post:
+      summary: Record connector heartbeat (stub sync, no live OAuth)
+      operationId: syncConnector
+      parameters:
+        - name: connector_id
+          in: path
+          required: true
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConnectorSync'
+      responses:
+        '200':
+          description: Connector status and last_sync updated
+        '404':
+          description: Connector not found
+  /evidence:
+    get:
+      summary: List evidence metadata (newest first)
+      operationId: listEvidence
+      parameters:
+        - name: limit
+          in: query
+          schema: { type: integer, default: 50 }
+      responses:
+        '200':
+          description: Evidence list
   /evidence/ingest:
     post:
       summary: Ingest evidence metadata
@@ -51,6 +96,20 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/EvidenceObject'
+  /tle:
+    get:
+      summary: List Trust Ledger entries
+      operationId: listTles
+      parameters:
+        - name: status
+          in: query
+          schema: { type: string }
+        - name: limit
+          in: query
+          schema: { type: integer, default: 50 }
+      responses:
+        '200':
+          description: TLE list
   /tle/draft:
     post:
       summary: Create TLE draft from template + evidence refs
@@ -125,6 +184,11 @@ components:
         type: { type: string }
         required_scopes: { type: array, items: { type: string } }
         ingest_mode: { type: string, enum: [metadata_only, full_capture] }
+    ConnectorSync:
+      type: object
+      properties:
+        status: { type: string, enum: [active, error], default: active }
+        records_synced: { type: integer, minimum: 0, default: 0 }
     EvidenceIngest:
       type: object
       required: [evidence_id, source, title, hash]

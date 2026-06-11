@@ -81,6 +81,8 @@ make verify-gtm
 
 Runs pytest, `verify-local-dev`, `verify-ui-e2e`, `copilot-pilot-e2e`, and `procurement-pack-e2e`. Then `make demo-url` for the shareable link.
 
+**NO ASF verify bundle:** `./scripts/plan-with-no-asf-verify.sh` includes `scripts/verify-demo-url.sh` when the dev stack is up (SKIP if no tunnel or `NF_STAGING_URL` configured).
+
 ```bash
 python3 scripts/validate-tle-samples.py
 ```

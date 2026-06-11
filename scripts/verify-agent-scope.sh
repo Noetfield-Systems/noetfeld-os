@@ -17,9 +17,11 @@ done < <(git ls-files 2>/dev/null | grep -E '(^ops/private/|^docs/internal/)' ||
 # 2) Required self-audit files
 for f in \
   docs/ops/AGENT_SELF_AUDIT_LOOP_LOCKED_v1.md \
+  docs/ops/FOUNDER_AGENTIC_COMMERCIAL_AND_NO_CURSOR_AUTORUN_LOCKED_v1.md \
   .cursor/agent-memory/MEMORY_LOCKED.yaml \
   .cursor/incidents/REGISTRY.md \
-  .cursor/skills/SKILL-001-scope-gate-before-work.md; do
+  .cursor/skills/SKILL-001-scope-gate-before-work.md \
+  .cursor/skills/SKILL-008-agentic-commercial-boundary.md; do
   if [[ -f "$f" ]]; then
     echo "OK   exists $f"
   else
@@ -33,6 +35,13 @@ if ! grep -q '^version:' .cursor/agent-memory/MEMORY_LOCKED.yaml 2>/dev/null; th
   fail=1
 else
   echo "OK   memory version locked"
+fi
+
+if grep -q 'R-011' .cursor/agent-memory/MEMORY_LOCKED.yaml 2>/dev/null; then
+  echo "OK   R-011 agentic commercial law locked"
+else
+  echo "FAIL MEMORY_LOCKED.yaml missing R-011" >&2
+  fail=1
 fi
 
 # 3) Scan git-tracked files only — product/www must not implement TrustField
@@ -51,8 +60,6 @@ is_allowlisted() {
   return 1
 }
 
-# Implementation bleed patterns (not negation docs)
-# Links to trustfield.ca or TrustField implementation artifacts only (not boundary copy naming TrustField as separate entity)
 BLEED_PATTERNS='trustfield\.ca|canonical.*trustfield\.ca|VENDOR_DILIGENCE_PACK|web/lib/company-copy|deploy TrustField|TrustField Vercel|UPG-003|UPG-004|UPG-011'
 
 product_files=()
@@ -75,6 +82,18 @@ if [[ ${#product_files[@]} -gt 0 ]]; then
   fi
 else
   echo "OK   product/www scope (no product files tracked)"
+fi
+
+if [[ "${NF_REQUIRE_SOURCEA:-}" == "1" ]]; then
+  mirror="ops/private/sourceA/founder/repo-agent-notices/SEMI_NOTICE_noetfield_cloud_v1.md"
+  if [[ -f "$mirror" ]]; then
+    echo "OK   SourceA mirror present ($mirror)"
+  else
+    echo "FAIL NF_REQUIRE_SOURCEA=1 but missing $mirror — run sync-sourceA-desktop.sh on Mac" >&2
+    fail=1
+  fi
+else
+  echo "SKIP SourceA mirror (NF_REQUIRE_SOURCEA not set)"
 fi
 
 if [[ "$fail" -eq 0 ]]; then

@@ -8,6 +8,8 @@
 | [NOETFIELD_AGENT_CONTEXT_AND_READ_ORDER_LOCKED_v1.md](./NOETFIELD_AGENT_CONTEXT_AND_READ_ORDER_LOCKED_v1.md) | Session read order |
 | [ready_to_paste_noetfield_cloud.txt](./ready_to_paste_noetfield_cloud.txt) | Chat bootstrap |
 | [lane_a_sprint_map.md](./lane_a_sprint_map.md) | Week 0–2 steps |
+| [plans/README.md](./plans/README.md) | **1000 long-term plans** — phases P0–P9, tiers T1–T5 |
+| [plans/no-asf/QUICK_PICK.md](./plans/no-asf/QUICK_PICK.md) | **PLAN WITH NO ASF** — next agent picks |
 
 Canonical (Mac): `~/Desktop/SourceA/founder/repo-agent-notices/AGENT_READ_LINKS_INDEX.md`  
 Sync: `./scripts/sync-sourceA-desktop.sh` → `ops/private/sourceA/` (gitignored).

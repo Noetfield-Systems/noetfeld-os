@@ -3,8 +3,8 @@
   "plane": "DESIGN",
   "status": "active",
   "ship_mandate": "os/SHIP_NOW.md",
-  "ship_rule": "Ship from os/plan.json without waiting for next Prompt OS order; ingest = send answer to system (required); do not edit SinaPromptOS",
-  "last_updated": "2026-06-08",
+  "ship_rule": "Bounded founder implement order + os/plan.json GTM_NEXT queue + agentic_queue (026 Hub only); ingest after VERIFY (required); do not edit SinaPromptOS; no self-start from plan.json alone (R-007/R-011); local Mac may also pick from os/plan-library/noetfield-1000/",
+  "last_updated": "2026-06-10",
   "positioning_lock": "docs/strategy/NOETFIELD_TRUST_LEDGER_POSITIONING_LOCKED_v1.2.md",
   "agent_context_lock": "docs/ops/NOETFIELD_AGENT_CONTEXT_AND_READ_ORDER_LOCKED_v1.md",
   "sprint_backlog": "os/sprint-trust-ledger-v1.2.md",
@@ -42,14 +42,14 @@
     {
       "id": "governance-sources-book-v1",
       "title": "Governance Sources Book v1 — citable frameworks for pilots",
-      "path": "docs/reference/GOVERNANCE_SOURCES_BOOK_v1.md",
+      "path": "docs/references/GOVERNANCE_SOURCES_BOOK_v1.md",
       "locked_at": "2026-06-04",
       "mandate": "Agents cite primary sources (NIST, OECD, ISO, EU, Microsoft, OWASP) in buyer materials"
     },
     {
       "id": "governance-drift-sources-v1",
       "title": "Governance Drift Detection Sources v1 — monitoring & drift primary links",
-      "path": "docs/reference/GOVERNANCE_DRIFT_DETECTION_SOURCES_v1.md",
+      "path": "docs/references/GOVERNANCE_DRIFT_DETECTION_SOURCES_LOCKED_v1.md",
       "locked_at": "2026-06-04",
       "mandate": "Agents cite drift/monitoring sources (NIST Measure/Manage, EU Art 72, Purview, OPA, CA-7) when selling continuous governance"
     },
@@ -69,9 +69,311 @@
         "finance_ledger_payments",
         "member_portal_execution"
       ]
+    },
+    {
+      "id": "1000-prompt-pack-v1",
+      "title": "1000 prompt-ready plan pack — GTM-weighted, locked index",
+      "path": "docs/ops/NOETFIELD_1000_PROMPT_PACK_LOCKED_v1.md",
+      "locked_at": "2026-06-03",
+      "mandate": "PLAN WITH NO ASF picks from GTM_NEXT / QUICK_PICK when registry empty; GTM_PRIORITY outreach = agentic only; verify with plan-with-no-asf-verify.sh"
     }
   ],
-  "next_tasks": [],
+  "next_tasks": [
+    {
+      "id": "ship-blueprint-services-governance-bridge-051",
+      "title": "Link services/governance to PLATFORM_BLUEPRINT §8.3 prod row + README",
+      "plan": "services/governance/README.md",
+      "status": "done"
+    },
+    {
+      "id": "ship-procurement-control-checkpoint-copy-052",
+      "title": "Procurement page eval+enforce control checkpoint copy + verify",
+      "plan": "copilot/procurement/index.html",
+      "status": "done"
+    },
+    {
+      "id": "ship-merged-pr-window-five-053",
+      "title": "Rolling top-5 merged PR window in OPEN_PRS coherence verify",
+      "plan": "scripts/verify-no-asf-coherence.sh",
+      "status": "done"
+    },
+    {
+      "id": "ship-blueprint-governance-console-bridge-048",
+      "title": "Link PLATFORM_BLUEPRINT §8/§13/§21 to governance-console README",
+      "plan": "PLATFORM_BLUEPRINT.md",
+      "status": "done"
+    },
+    {
+      "id": "ship-rehearsal-parity-all-pages-049",
+      "title": "Single rehearsal parity loop across hub + pilot ol + demo ol",
+      "plan": "scripts/verify-gtm-ops-docs.sh",
+      "status": "done"
+    },
+    {
+      "id": "ship-open-prs-merged-044-gate-050",
+      "title": "Rolling top-4 merged PR window in OPEN_PRS coherence verify",
+      "plan": "scripts/verify-no-asf-coherence.sh",
+      "status": "done"
+    },
+    {
+      "id": "ship-trust-brief-parity-audit-045",
+      "title": "Single trust-brief parity loop across buyer pages + verify",
+      "plan": "scripts/verify-gtm-ops-docs.sh",
+      "status": "done"
+    },
+    {
+      "id": "ship-merged-pr-open-prs-gate-046",
+      "title": "OPEN_PRS recently merged must include ship PRs #41–#44",
+      "plan": "scripts/verify-no-asf-coherence.sh",
+      "status": "done"
+    },
+    {
+      "id": "ship-demo-rehearsal-demo-047",
+      "title": "Demo rehearsal link in demo script ol + verify",
+      "plan": "copilot/demo/index.html",
+      "status": "done"
+    },
+    {
+      "id": "ship-trust-brief-demo-042",
+      "title": "Trust-brief intake CTA on copilot demo page + verify",
+      "plan": "copilot/demo/index.html",
+      "status": "done"
+    },
+    {
+      "id": "ship-demo-rehearsal-pilot-043",
+      "title": "Demo rehearsal checklist link in pilot checklist ol + verify",
+      "plan": "copilot/pilot/index.html",
+      "status": "done"
+    },
+    {
+      "id": "ship-open-prs-autocheck-044",
+      "title": "OPEN_PRS pending row must match gh open ship PRs",
+      "plan": "scripts/verify-no-asf-coherence.sh",
+      "status": "done"
+    },
+    {
+      "id": "ship-trust-brief-pilot-039",
+      "title": "Trust-brief intake CTA on copilot pilot page + verify",
+      "plan": "copilot/pilot/index.html",
+      "status": "done"
+    },
+    {
+      "id": "ship-procurement-cta-homepage-040",
+      "title": "Homepage hero procurement CTA verify guard",
+      "plan": "index.html",
+      "status": "done"
+    },
+    {
+      "id": "ship-cursor-reply-coherence-041",
+      "title": "Coherence FAIL gate for cursor-reply SHA drift",
+      "plan": "scripts/verify-no-asf-coherence.sh",
+      "status": "done"
+    },
+    {
+      "id": "ship-trust-brief-procurement-036",
+      "title": "Trust-brief intake link on procurement buyer pack + verify",
+      "plan": "copilot/procurement/index.html",
+      "status": "done"
+    },
+    {
+      "id": "ship-drift-blueprints-procurement-037",
+      "title": "Drift blueprints index href on procurement + verify",
+      "plan": "docs/references/GOVERNANCE_DRIFT_BLUEPRINTS_INDEX_LOCKED_v1.md",
+      "status": "done"
+    },
+    {
+      "id": "ship-demo-url-verify-038",
+      "title": "make demo-url output guard in verify bundle",
+      "plan": "scripts/verify-demo-url.sh",
+      "status": "done"
+    },
+    {
+      "id": "ship-trust-brief-intake-wire-033",
+      "title": "Trust-brief intake CTA on copilot hub + verify",
+      "plan": "copilot/index.html",
+      "status": "done"
+    },
+    {
+      "id": "ship-drift-sources-procurement-034",
+      "title": "Drift detection sources href on procurement buyer pack",
+      "plan": "docs/references/GOVERNANCE_DRIFT_DETECTION_SOURCES_LOCKED_v1.md",
+      "status": "done"
+    },
+    {
+      "id": "ship-demo-rehearsal-hub-wire-035",
+      "title": "DEMO_REHEARSAL_CHECKLIST link from copilot hub + verify",
+      "plan": "docs/ops/DEMO_REHEARSAL_CHECKLIST_v1.md",
+      "status": "done"
+    },
+    {
+      "id": "ship-tunnel-smoke-verify-030",
+      "title": "Optional staging-smoke in plan-with-no-asf-verify when NF_STAGING_URL set",
+      "plan": "scripts/staging-smoke.sh",
+      "status": "done"
+    },
+    {
+      "id": "ship-governance-sources-handbook-031",
+      "title": "Link GOVERNANCE_SOURCES_HANDBOOK_LOCKED from procurement + verify",
+      "plan": "docs/references/GOVERNANCE_SOURCES_HANDBOOK_LOCKED_v1.md",
+      "status": "done"
+    },
+    {
+      "id": "ship-copilot-hub-sources-032",
+      "title": "Governance Sources Book + handbook links on copilot hub + verify",
+      "plan": "copilot/index.html",
+      "status": "done"
+    },
+    {
+      "id": "ship-procurement-one-pager-wire-027",
+      "title": "Wire PROCUREMENT_ONE_PAGER into copilot hub + procurement + verify",
+      "plan": "docs/copilot/PROCUREMENT_ONE_PAGER.md",
+      "status": "done"
+    },
+    {
+      "id": "ship-governance-sources-www-028",
+      "title": "Clickable GOVERNANCE_SOURCES_BOOK on procurement buyer page + verify",
+      "plan": "docs/references/GOVERNANCE_SOURCES_BOOK_v1.md",
+      "status": "done"
+    },
+    {
+      "id": "ship-homepage-demo-cta-029",
+      "title": "Homepage 5-minute demo CTA regression guard in verify-ui-e2e",
+      "plan": "index.html",
+      "status": "done"
+    },
+    {
+      "id": "ship-gtm-next-queue-023",
+      "title": "GTM_NEXT queue + QUICK_PICK fallback when registry empty",
+      "plan": "docs/ops/plans/no-asf/GTM_NEXT.md",
+      "status": "done"
+    },
+    {
+      "id": "ship-staging-demo-www-wire-024",
+      "title": "Wire STAGING_DEMO runbook into copilot pilot/demo/pipeline + verify",
+      "plan": "docs/ops/STAGING_DEMO.md",
+      "status": "done"
+    },
+    {
+      "id": "ship-security-buyer-tle-copy-025",
+      "title": "CISO / security buyer section on trust-ledger www + verify",
+      "plan": "trust-ledger/index.html",
+      "status": "done"
+    },
+    {
+      "id": "ship-registry-pattern-propagation-020",
+      "title": "Registry pattern propagation + QUICK_PICK dedup for phase-rotated plans",
+      "plan": "scripts/sync-prompt-pack-status.py",
+      "status": "done"
+    },
+    {
+      "id": "ship-diligence-procurement-wire-021",
+      "title": "Wire RPAA diligence one-pager into copilot procurement/pilot/demo + verify",
+      "plan": "docs/diligence/rpaa-positioning-onepager.md",
+      "status": "done"
+    },
+    {
+      "id": "ship-design-partner-bc-ai-022",
+      "title": "BC AI channel block in design partner pipeline + verify",
+      "plan": "docs/copilot/DESIGN_PARTNER_PIPELINE_v1.md",
+      "status": "done"
+    },
+    {
+      "id": "ship-registry-sync-iter6-017",
+      "title": "Registry sync + QUICK_PICK refresh for iter 5-6 ships",
+      "plan": "scripts/sync-prompt-pack-status.py",
+      "status": "done"
+    },
+    {
+      "id": "ship-bc-ai-www-wire-018",
+      "title": "Wire BC AI outreach doc into copilot pilot/demo + verify",
+      "plan": "docs/strategy/channel-outreach/bc-ai-for-all-2026.md",
+      "status": "done"
+    },
+    {
+      "id": "ship-dual-brand-boundary-019",
+      "title": "Dual-brand govern-first handoff in conflict matrix + verify",
+      "plan": "docs/spec/trustfield-noetfield-conflict-matrix.md",
+      "status": "done"
+    },
+    {
+      "id": "ship-bc-ai-for-all-outreach-016",
+      "title": "B.C. + federal AI for All Noetfield alignment one-pager + outreach copy",
+      "plan": "docs/strategy/channel-outreach/bc-ai-for-all-2026.md",
+      "status": "done"
+    },
+    {
+      "id": "ship-gtm-ops-www-wire-013",
+      "title": "Wire GTM ops docs into copilot pilot/demo + verify",
+      "plan": "docs/ops/plans/registry.json",
+      "status": "done"
+    },
+    {
+      "id": "ship-buyer-debrief-template-014",
+      "title": "Buyer debrief template + pilot link",
+      "plan": "docs/copilot/BUYER_DEBRIEF_TEMPLATE_v1.md",
+      "status": "done"
+    },
+    {
+      "id": "ship-tier-gate-verify-015",
+      "title": "QUICK_PICK tier-gate guard in verify bundle",
+      "plan": "docs/ops/plans/PROMPT_PACK_LOCKED/TIER_GATES.md",
+      "status": "done"
+    },
+    {
+      "id": "ship-audit-export-ux-001",
+      "title": "Audit export CTA + event count",
+      "plan": "governance-console/frontend/app/audit/page.tsx",
+      "status": "done"
+    },
+    {
+      "id": "ship-demo-confidence-002",
+      "title": "Confidence on result + dashboard",
+      "plan": "governance-console/frontend/app/result/",
+      "status": "done"
+    },
+    {
+      "id": "ship-www-tle-copy-003",
+      "title": "trust-ledger www CTAs",
+      "plan": "trust-ledger/index.html",
+      "status": "done"
+    },
+    {
+      "id": "ship-result-confidence-e2e-004",
+      "title": "E2E confidence assertion",
+      "plan": "scripts/verify-ui-e2e.sh",
+      "status": "done"
+    },
+    {
+      "id": "ship-copilot-demo-links-005",
+      "title": "Demo CTA 200 checks",
+      "plan": "scripts/verify-copilot-demo-links.sh",
+      "status": "done"
+    },
+    {
+      "id": "ship-plan-with-no-asf-script-006",
+      "title": "Verify bundle script",
+      "plan": "scripts/plan-with-no-asf-verify.sh",
+      "status": "done"
+    },
+    {
+      "id": "ship-pilot-e2e-verify-007",
+      "title": "Pilot e2e in bundle",
+      "plan": "scripts/copilot-pilot-e2e.sh",
+      "status": "done"
+    },
+    {
+      "id": "ship-audit-export-api-e2e-008",
+      "title": "Audit export JSON verify",
+      "plan": "scripts/verify-audit-export.sh",
+      "status": "done"
+    },
+    {
+      "id": "ship-procurement-e2e-verify-009",
+      "title": "Procurement e2e in bundle",
+      "plan": "scripts/procurement-pack-e2e.sh",
+      "status": "done"
+    }
+  ],
   "lane_a_sprint_map": [
     "nf-trustfield-conflicts-003",
     "nf-phase1b-scaffold-004",
@@ -82,7 +384,16 @@
     "nf-rag-design-010",
     "nf-copilot-pilot-runbook-009"
   ],
-  "updated_at": "2026-06-06",
+  "updated_at": "2026-06-10T16:00:00Z",
+  "agentic_queue": [
+    {
+      "id": "ship-design-partner-outreach-026",
+      "title": "Design-partner outreach execution — send + tracker",
+      "owner": "agentic_layer",
+      "handoff": "docs/ops/AGENTIC_COMMERCIAL_HANDOFF_v1.md",
+      "note": "Not NF-CLOUD disk implement — founder Hub approves send"
+    }
+  ],
   "done": [
     {
       "id": "nf-mvp-req-extract-001",

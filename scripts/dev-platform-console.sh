@@ -16,4 +16,13 @@ sleep 1
 echo ">>> http://127.0.0.1:${PORT}/console"
 echo ">>> http://localhost:${PORT}/console"
 
-exec bash "${ROOT}/scripts/dev-python.sh" -m uvicorn noetfield_governance.api:app --reload --host 0.0.0.0 --port "$PORT" --app-dir "${ROOT}/services/governance"
+RELOAD_ARGS=()
+if [[ "${NF_DEV_HOT_RELOAD:-0}" == "1" ]]; then
+  RELOAD_ARGS=(--reload)
+  echo ">>> Hot reload ON (NF_DEV_HOT_RELOAD=1) — higher CPU"
+else
+  echo ">>> Hot reload OFF — use NF_DEV_HOT_RELOAD=1 to enable"
+fi
+
+exec bash "${ROOT}/scripts/dev-python.sh" -m uvicorn noetfield_governance.api:app \
+  "${RELOAD_ARGS[@]}" --host 0.0.0.0 --port "$PORT" --app-dir "${ROOT}/services/governance"

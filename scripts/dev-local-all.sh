@@ -55,7 +55,8 @@ export NF_DEV_GOV_API_INTERNAL="http://127.0.0.1:${NF_DEV_GOV_API_PORT}"
 WEB_URL="http://127.0.0.1:${COGNITIVE_DASHBOARD_PORT}/cognitive-dashboard"
 if ! curl -sf -o /dev/null --connect-timeout 2 "$WEB_URL" 2>/dev/null; then
   echo "Starting cognitive dashboard on ${COGNITIVE_DASHBOARD_PORT}…"
-  nohup env COGNITIVE_DASHBOARD_PORT="$COGNITIVE_DASHBOARD_PORT" \
+  nohup env NF_DASHBOARD_MODE="${NF_DASHBOARD_MODE:-production}" \
+    COGNITIVE_DASHBOARD_PORT="$COGNITIVE_DASHBOARD_PORT" \
     COGNITIVE_DASHBOARD_API_PORT="$COGNITIVE_DASHBOARD_API_PORT" \
     bash "${ROOT}/scripts/dev-cognitive-dashboard.sh" >>"${ROOT}/.cognitive-dashboard.log" 2>&1 &
   echo $! >"${ROOT}/.cognitive-dashboard.pid"

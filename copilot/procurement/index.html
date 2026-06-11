@@ -48,7 +48,42 @@
  <tr><td style="padding:.5rem">Microsoft Purview / M365</td><td style="padding:.5rem">Connector ingest → evidence IDs in TLE (index what you configured — not a replacement for Purview/DLP)</td></tr>
  </tbody>
  </table>
- <p class="text-sm" style="margin-top:1rem">Reference: <code>docs/reference/GOVERNANCE_SOURCES_BOOK_v1.md</code> (Part B — Microsoft Purview). Orientation only — not legal advice.</p>
+ <p class="text-sm" style="margin-top:1rem">
+ Reference: <code>docs/reference/GOVERNANCE_SOURCES_BOOK_v1.md</code> (Part B — Microsoft Purview).
+ Also:
+ <a href="/docs/reference/GOVERNANCE_SOURCES_BOOK_v1.md">Governance Sources Book v1</a>
+ ·
+ <a href="/docs/references/GOVERNANCE_SOURCES_HANDBOOK_LOCKED_v1.md">Governance Sources Handbook (locked)</a>
+ (NIST AI RMF, ISO 42001, EU AI Act, Microsoft Purview) — orientation only, not legal advice.
+ </p>
+ <h3 style="margin-top:1.25rem">Governance control checkpoints</h3>
+ <p>
+ Noetfield ships an eval→enforce loop (industry-parallel to ASSERT→ACS, repo-native):
+ <strong>Evaluate</strong> pre-ship policy checks via
+ <code>plan-with-no-asf-verify.sh</code>;
+ <strong>Enforce</strong> fail-closed FAIL gates on buyer www and coherence docs.
+ See
+ <a href="/docs/ops/AGENT_SELF_AUDIT_LOOP_LOCKED_v1.md">agent self-audit loop</a>
+ and
+ <a href="/docs/reference/GOVERNANCE_SOURCES_BOOK_v1.md">Governance Sources Book</a>
+ for framework authority — orientation only, not legal advice.
+ </p>
+ </section>
+
+ <section class="nf-section">
+ <h2>Diligence attachments</h2>
+ <p>For legal, risk, and procurement reviewers under NDA:</p>
+ <ul>
+ <li><a href="/docs/copilot/PROCUREMENT_ONE_PAGER.md">Copilot procurement one-pager</a> — buyer summary (positioning, deliverables, verify path)</li>
+ <li><a href="/docs/diligence/rpaa-positioning-onepager.md">RPAA-safe positioning one-pager</a> — governance vendor layer; no payment or custody claims</li>
+ <li><a href="/docs/diligence/EVIDENCE_INTAKE_CONTRACT_v1.md">Evidence Intake Contract v1</a></li>
+ <li><a href="/docs/diligence/CONNECTORS_CONTROLS_v1.md">Connectors Controls v1</a></li>
+ <li><a href="/docs/references/GOVERNANCE_DRIFT_DETECTION_SOURCES_LOCKED_v1.md">Governance drift detection sources (locked)</a> — continuous monitoring citations</li>
+ <li><a href="/docs/references/GOVERNANCE_DRIFT_BLUEPRINTS_INDEX_LOCKED_v1.md">Governance drift blueprints index (locked)</a> — continuous governance blueprint citations</li>
+ </ul>
+ <p style="margin-top:1rem">
+ <a class="btn btn-primary" href="/trust-brief/intake/?interest=procurement">Request Governance Brief</a>
+ </p>
  </section>
 
  <section class="nf-section">

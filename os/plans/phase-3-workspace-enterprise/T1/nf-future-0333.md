@@ -3,10 +3,11 @@ id: nf-future-0333
 phase: phase-3-workspace-enterprise
 tier: T1
 priority: P1
-status: backlog
+status: done
 lane: lane_a
 domain: ingest
 no_asf: true
+nf_plan_id: NF-PLAN-0333
 generator: scripts/generate-future-plans.py
 ---
 

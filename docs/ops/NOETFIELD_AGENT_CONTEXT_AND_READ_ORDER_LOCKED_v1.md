@@ -8,7 +8,7 @@
 | Lane | `noetfield_cloud` — semi-separate |
 | Thread | `THREAD-PORTFOLIO` |
 | Plane | `[DELIVERY]` |
-| Authority | ASF — ship from `os/plan.json`; ingest after; do not idle for next order |
+| Authority | ASF — bounded ship from [GTM_NEXT.md](./plans/no-asf/GTM_NEXT.md) + `os/plan.json` `ship_rule` / `agentic_queue` when registry 1000/1000; ingest after; no self-start from `plan.json` alone (R-007/R-011) |
 
 **Link index (in-repo):** [AGENT_READ_LINKS_LOCKED_v1.md](./AGENT_READ_LINKS_LOCKED_v1.md) → § Cloud ship  
 **Canonical index (Mac):** `~/Desktop/SourceA/founder/repo-agent-notices/AGENT_READ_LINKS_INDEX.md`
@@ -20,21 +20,41 @@
 ### A. Git (cloud-safe)
 
 1. [AGENT_READ_LINKS_LOCKED_v1.md](./AGENT_READ_LINKS_LOCKED_v1.md) — § Cloud ship
-2. This file
-3. [os/SHIP_NOW.md](../../os/SHIP_NOW.md) → [os/plan.json](../../os/plan.json)
-4. [os/sprint-trust-ledger-v1.2.md](../../os/sprint-trust-ledger-v1.2.md) or [lane_a_sprint_map.md](./lane_a_sprint_map.md)
-5. [PRODUCT_TRUTH.md](../../PRODUCT_TRUTH.md) · [POSITIONING.md](../../POSITIONING.md) · [OFFERINGS_LOCKED.md](../../OFFERINGS_LOCKED.md)
-6. [docs/spec/TRUST_LEDGER_PRODUCT_BLUEPRINT_v1.2_LOCKED.md](../spec/TRUST_LEDGER_PRODUCT_BLUEPRINT_v1.2_LOCKED.md)
-7. [PROJECT_BOUNDARIES_LOCKED.md](../../PROJECT_BOUNDARIES_LOCKED.md)
-8. [.cursor/AGENT_TRACKING.md](../../.cursor/AGENT_TRACKING.md)
-9. Active task (Issue / PR / Prompt OS task string)
+2. [NOETFIELD_AGENT_TEAM_SYNC_LOCKED_v1.md](./NOETFIELD_AGENT_TEAM_SYNC_LOCKED_v1.md) — local↔cloud bridge (committed)
+3. This file
+4. [os/SHIP_NOW.md](../../os/SHIP_NOW.md) → [os/plan.json](../../os/plan.json) · [os/LOCKED_REFERENCE_INDEX.md](../../os/LOCKED_REFERENCE_INDEX.md)
+5. **Long-term plans (1000):** [plans/no-asf/QUICK_PICK.md](./plans/no-asf/QUICK_PICK.md) when user says **PLAN WITH NO ASF**
+6. [os/sprint-trust-ledger-v1.2.md](../../os/sprint-trust-ledger-v1.2.md) or [lane_a_sprint_map.md](./lane_a_sprint_map.md)
+7. [PRODUCT_TRUTH.md](../../PRODUCT_TRUTH.md) · [POSITIONING.md](../../POSITIONING.md) · [OFFERINGS_LOCKED.md](../../OFFERINGS_LOCKED.md)
+8. [docs/spec/TRUST_LEDGER_PRODUCT_BLUEPRINT_v1.2_LOCKED.md](../spec/TRUST_LEDGER_PRODUCT_BLUEPRINT_v1.2_LOCKED.md)
+8b. **Diligence / external frameworks (LOCKED):** [docs/references/README.md](../references/README.md) — sources handbook + drift detection book (TLE, Trust Brief, monitoring)  
+8c. **Drift blueprints (after local push):** [NOETFIELD_DRIFT_BLUEPRINTS_CLOUD_READ_ORDER_LOCKED_v1.md](./NOETFIELD_DRIFT_BLUEPRINTS_CLOUD_READ_ORDER_LOCKED_v1.md) → [GOVERNANCE_DRIFT_BLUEPRINTS_INDEX_LOCKED_v1.md](../references/GOVERNANCE_DRIFT_BLUEPRINTS_INDEX_LOCKED_v1.md)
+9. [PROJECT_BOUNDARIES_LOCKED.md](../../PROJECT_BOUNDARIES_LOCKED.md)
+10. [.cursor/AGENT_TRACKING.md](../../.cursor/AGENT_TRACKING.md)
+11. Active task (Issue / PR / Prompt OS task string)
+
+---
+
+## § Post-audit addendum (2026-06-10 — agent-maintained)
+
+Does **not** replace locked authority line above without founder unlock. Cloud agents also read:
+
+- [FOUNDER_AGENTIC_COMMERCIAL_AND_NO_CURSOR_AUTORUN_LOCKED_v1.md](./FOUNDER_AGENTIC_COMMERCIAL_AND_NO_CURSOR_AUTORUN_LOCKED_v1.md) — R-011
+- [GTM_NEXT.md](./plans/no-asf/GTM_NEXT.md) — queue when registry 1000/1000 done
+- [AGENTIC_COMMERCIAL_HANDOFF_v1.md](./AGENTIC_COMMERCIAL_HANDOFF_v1.md) — outreach = agentic layer
+
+**Ship rule (bounded):** Founder explicit `implement` + ≤3 tasks from GTM_NEXT — not self-start from `plan.json` or GTM_PRIORITY outreach rows alone.
+
+**Locked header note:** The Authority line above ("ship from plan.json; do not idle") is **superseded for cloud agents** by bounded ship per post-audit addendum — founder unlock required to edit the locked header row.
 
 ### B. After founder sync (`ops/private/`)
 
-10. `ops/private/sourceA/founder/repo-agent-notices/SEMI_NOTICE_noetfield_cloud_v1.md`
-11. `ops/private/sourceA/NOETFIELD_REPO_ALIGNMENT.md`
-12. `ops/private/sourceA/AUTO_CONFLICT_ENGINE_V3_LOCKED.md` (optional)
-13. `ops/private/todolist/NEXT_MOVES.md` (optional)
+12. `ops/private/agent-reference/IN_CHARGE_NOW.md` → `AGENT_TEAM_STATE.yaml` → `plans/LOCKED_PLANS_INTERNAL.yaml`
+13. `ops/private/sourceA/founder/repo-agent-notices/SEMI_NOTICE_noetfield_cloud_v1.md`
+14. `ops/private/sourceA/NOETFIELD_REPO_ALIGNMENT.md`
+15. `ops/private/sourceA/AUTO_CONFLICT_ENGINE_V3_LOCKED.md` (optional)
+16. `docs/internal/AUTO_CONFIDENTIAL_PORTFOLIO_POSITIONING.md` — **[AUTO] confidential** (optional, gitignored) — **never quote publicly**; index `ops/private/agent-reference/AUTO_INDEX_LOCKED.md`
+17. `ops/private/todolist/NEXT_MOVES.md` (optional)
 
 ### C. Mac founder session only
 

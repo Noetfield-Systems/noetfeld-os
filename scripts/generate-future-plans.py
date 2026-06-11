@@ -49,18 +49,20 @@ def plan_title(phase_slug: str, tier: str, domain: str, action: str, n: int) -> 
 
 
 def plan_body(plan_id: str, phase_slug: str, phase_desc: str, tier: str, tier_desc: str,
-              domain: str, action: str, seq: int) -> str:
+              domain: str, action: str, seq: int, status: str = "backlog") -> str:
     title = plan_title(phase_slug, tier, domain, action, seq)
     priority = {"T0": "P0", "T1": "P1", "T2": "P2", "T3": "P3"}[tier]
+    nf_plan = f"NF-PLAN-{seq:04d}"
     return f"""---
 id: {plan_id}
 phase: {phase_slug}
 tier: {tier}
 priority: {priority}
-status: backlog
+status: {status}
 lane: lane_a
 domain: {domain}
 no_asf: true
+nf_plan_id: {nf_plan}
 generator: scripts/generate-future-plans.py
 ---
 
@@ -83,9 +85,7 @@ generator: scripts/generate-future-plans.py
 ## Verify
 
 ```bash
-make dev-local
-make verify-local-dev
-pytest governance-console/backend/tests/ -q
+./scripts/plan-with-no-asf-verify.sh
 ```
 
 ## Agent closeout (no ASF)
@@ -100,6 +100,19 @@ pytest governance-console/backend/tests/ -q
 - Prior phase items in same domain may be required.
 - Locked positioning: `docs/strategy/NOETFIELD_TRUST_LEDGER_POSITIONING_LOCKED_v1.2.md`.
 """
+
+
+def _read_existing_status(path: Path) -> str:
+    if not path.exists():
+        return "backlog"
+    text = path.read_text(encoding="utf-8")
+    parts = text.split("---", 2)
+    if len(parts) < 2:
+        return "backlog"
+    for line in parts[1].splitlines():
+        if line.strip().startswith("status:"):
+            return line.split(":", 1)[1].strip()
+    return "backlog"
 
 
 def main() -> None:
@@ -117,20 +130,22 @@ def main() -> None:
                 plan_id = f"nf-future-{seq:04d}"
                 rel_path = f"os/plans/{phase_slug}/{tier}/{plan_id}.md"
                 path = ROOT / rel_path
+                status = _read_existing_status(path)
                 content = plan_body(
                     plan_id, phase_slug, phase_desc, tier, tier_desc,
-                    domain, action, seq,
+                    domain, action, seq, status=status,
                 )
                 path.write_text(content, encoding="utf-8")
                 entries.append({
                     "id": plan_id,
+                    "nf_plan_id": f"NF-PLAN-{seq:04d}",
                     "phase": phase_slug,
                     "tier": tier,
                     "priority": {"T0": "P0", "T1": "P1", "T2": "P2", "T3": "P3"}[tier],
                     "domain": domain,
                     "title": plan_title(phase_slug, tier, domain, action, seq),
                     "path": rel_path,
-                    "status": "backlog",
+                    "status": status,
                 })
 
     registry = {

@@ -1,0 +1,41 @@
+name: Trust Ledger CI
+
+on:
+  push:
+    branches: [main, "cursor/**"]
+    paths:
+      - "services/governance/**"
+      - "tests/unit/test_trust_ledger_v1.py"
+      - "scripts/tle-smoke.sh"
+      - "infrastructure/supabase/migrations/0006_trust_ledger_tle.sql"
+      - "infrastructure/supabase/migrations/0007_trust_ledger_connectors.sql"
+  pull_request:
+    paths:
+      - "services/governance/**"
+      - "tests/unit/test_trust_ledger_v1.py"
+      - "scripts/tle-smoke.sh"
+      - "infrastructure/supabase/migrations/**"
+
+jobs:
+  trust-ledger:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ".[dev]"
+
+      - name: TLE YAML smoke
+        run: ./scripts/tle-smoke.sh
+
+      - name: Trust Ledger unit tests
+        env:
+          PYTHONPATH: packages/types:packages/config:packages/sdk:services/events:services/ledger:services/graph:services/governance:services/signals:services/workflow:services/ai-runtime:services/inspectors:services/identity:services/copilot-governance
+          TLE_REQUIRED_APPROVALS: "2"
+        run: python -m pytest tests/unit/test_trust_ledger_v1.py -q
