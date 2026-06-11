@@ -98,6 +98,21 @@ Shipped capabilities mapped to registry indices. Run `python3 scripts/sync-promp
 
 `ship-*-NNN` (GTM `next_tasks`) and `nf-*-NNN` (product waves above) may share numeric suffixes — different namespaces, not duplicate shipped work.
 
+## PLAN WITH NO ASF iter 18 (054–056)
+
+| next_tasks id | Shipped | Evidence |
+|---------------|---------|----------|
+| ship-procurement-checkpoint-verify-054 | Hardened checkpoint verify | `scripts/verify-gtm-ops-docs.sh` |
+| ship-services-governance-openapi-bridge-055 | OpenAPI + README links on procurement | `copilot/procurement/index.html` |
+| ship-merged-window-config-056 | MERGED_WINDOW in OPEN_PRS header | `OPEN_PRS.md`, `verify-no-asf-coherence.sh` |
+
+## Tenth audit fix (post–PR #47 truth + iter 18)
+
+| Area | Shipped | Evidence |
+|------|---------|----------|
+| Post-merge truth | OPEN_PRS #47 merged @ 46a36a3 | `OPEN_PRS.md`, `COMPLETED_ON_MAIN.md` |
+| Iter 18 verify + www | Checkpoint verify, OpenAPI bridge, window config | `verify-gtm-ops-docs.sh`, `verify-no-asf-coherence.sh` |
+
 ## PLAN WITH NO ASF iter 17 (051–053)
 
 | next_tasks id | Shipped | Evidence |

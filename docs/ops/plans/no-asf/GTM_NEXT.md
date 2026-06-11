@@ -15,18 +15,18 @@ When the NF-PLAN registry is fully synced (`1000/1000 done`), pick the next **�
 
 `ship-*-NNN` = GTM Tier A queue (`next_tasks`). `nf-*-NNN` in engineering manifest = product waves — numeric suffix overlap is intentional (e.g. `ship-trust-brief-demo-042` ≠ `nf-homepage-design-partner-042`).
 
-## Next GTM Tier A (NF-CLOUD disk) — iter 18 proposals
+## Next GTM Tier A (NF-CLOUD disk) — iter 19 proposals
 
 Founder pick or bounded `implement`:
 
-1. **ship-procurement-checkpoint-verify-054** · Dedicated verify phrase guard hardening for 052 checkpoint copy  
-   Outcome: Procurement eval+enforce copy cannot drift silently.
+1. **ship-procurement-openapi-verify-057** · Verify `/openapi.json` returns 200 in gtm-ops bundle  
+   Outcome: Production API schema reachable from buyer verify.
 
-1. **ship-services-governance-openapi-bridge-055** · Link procurement to `services/governance` public OpenAPI path  
-   Outcome: Buyer pack cites production API surface.
+1. **ship-services-governance-readme-openapi-058** · services/governance README cites `/openapi.json` path  
+   Outcome: Prod README matches procurement buyer link.
 
-1. **ship-merged-window-config-056** · Extract `MERGED_WINDOW` constant to OPEN_PRS header doc  
-   Outcome: Single source of truth for rolling merge window size.
+1. **ship-tenth-audit-merge-rule-059** · Document tenth-audit branch in ENGINEERING_DONE_MANIFEST closeout template  
+   Outcome: Audit iteration naming stays traceable in manifest.
 
 ## Agentic only — Hub (not NF-CLOUD implement)
 
@@ -35,6 +35,14 @@ Founder pick or bounded `implement`:
 | **ship-design-partner-outreach-026** | Agentic layer | One named CIO contact + demo URL sent; tracker row updated |
 
 Evidence: [DESIGN_PARTNER_PIPELINE_v1.md](../../../copilot/DESIGN_PARTNER_PIPELINE_v1.md) · [AGENTIC_COMMERCIAL_HANDOFF_v1.md](../../AGENTIC_COMMERCIAL_HANDOFF_v1.md)
+
+## Recently shipped (iter 18)
+
+| ID | Shipped |
+|----|---------|
+| ship-procurement-checkpoint-verify-054 | Hardened checkpoint verify guards on procurement |
+| ship-services-governance-openapi-bridge-055 | Procurement OpenAPI + services/governance README links |
+| ship-merged-window-config-056 | MERGED_WINDOW constant in OPEN_PRS header |
 
 ## Recently shipped (iter 17)
 

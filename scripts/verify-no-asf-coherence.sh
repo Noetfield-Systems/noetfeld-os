@@ -68,10 +68,10 @@ if [[ -f docs/ops/plans/no-asf/GTM_NEXT.md ]] && [[ -f docs/ops/plans/no-asf/QUI
     echo "FAIL QUICK_PICK missing GTM_NEXT inline content" >&2
     fail=1
   fi
-  if grep -q 'ship-procurement-checkpoint-verify-054' docs/ops/plans/no-asf/GTM_NEXT.md && grep -q 'ship-procurement-checkpoint-verify-054' docs/ops/plans/no-asf/QUICK_PICK.md; then
-    echo "OK   QUICK_PICK mirrors GTM_NEXT iter 18"
+  if grep -q 'ship-procurement-openapi-verify-057' docs/ops/plans/no-asf/GTM_NEXT.md && grep -q 'ship-procurement-openapi-verify-057' docs/ops/plans/no-asf/QUICK_PICK.md; then
+    echo "OK   QUICK_PICK mirrors GTM_NEXT iter 19"
   else
-    echo "FAIL QUICK_PICK out of sync with GTM_NEXT iter 18 picks" >&2
+    echo "FAIL QUICK_PICK out of sync with GTM_NEXT iter 19 picks" >&2
     fail=1
   fi
   if grep -q 'Agentic only' docs/ops/plans/no-asf/GTM_NEXT.md && grep -q 'ship-design-partner-outreach-026' docs/ops/plans/no-asf/GTM_NEXT.md; then
@@ -177,9 +177,16 @@ if [[ -f docs/ops/plans/no-asf/OPEN_PRS.md ]]; then
   else
     echo "OK   OPEN_PRS stale PR wording"
   fi
-  # ship-open-prs-merged-044-gate-050: rolling top-N merged ship PR window
+  # ship-merged-window-config-056: MERGED_WINDOW from OPEN_PRS header
   merged_section="$(awk '/^## Recently merged/,/^## Stale PRs/' docs/ops/plans/no-asf/OPEN_PRS.md)"
-  MERGED_WINDOW=5
+  MERGED_WINDOW="$(grep -E '^\*\*MERGED_WINDOW:\*\*' docs/ops/plans/no-asf/OPEN_PRS.md 2>/dev/null | grep -oE '[0-9]+' | head -1 || true)"
+  MERGED_WINDOW="${MERGED_WINDOW:-5}"
+  if grep -qE '^\*\*MERGED_WINDOW:\*\*' docs/ops/plans/no-asf/OPEN_PRS.md 2>/dev/null; then
+    echo "OK   OPEN_PRS MERGED_WINDOW documented (${MERGED_WINDOW})"
+  else
+    echo "FAIL OPEN_PRS missing MERGED_WINDOW header" >&2
+    fail=1
+  fi
   merged_pr_nums="$(echo "$merged_section" | grep -E '^\| #[0-9]+ \|' | head -n "$MERGED_WINDOW" | grep -oE '#[0-9]+' | tr -d '#' || true)"
   merged_count=0
   if [[ -n "$merged_pr_nums" ]]; then
@@ -204,7 +211,7 @@ if [[ -f docs/ops/plans/no-asf/OPEN_PRS.md ]]; then
   if command -v gh >/dev/null 2>&1; then
     pending_section="$(awk '/^## Pending ship PR/,/^## Recently merged/' docs/ops/plans/no-asf/OPEN_PRS.md)"
     open_prs_doc="$(echo "$pending_section" | grep -E '^\| #[0-9]+ \|' | grep -oE '#[0-9]+' | tr -d '#' | sort -u | tr '\n' ' ' || true)"
-    ship_prs_gh="$(gh pr list --state open --json number,headRefName --jq '.[] | select(.headRefName | test("^cursor/(no-asf|10-phase|post-audit|fourth-audit|fifth-audit|sixth-audit|seventh-audit|eighth-audit|ninth-audit)")) | .number' 2>/dev/null | sort -u | tr '\n' ' ' || true)"
+    ship_prs_gh="$(gh pr list --state open --json number,headRefName --jq '.[] | select(.headRefName | test("^cursor/(no-asf|10-phase|post-audit|fourth-audit|fifth-audit|sixth-audit|seventh-audit|eighth-audit|ninth-audit|tenth-audit)")) | .number' 2>/dev/null | sort -u | tr '\n' ' ' || true)"
     open_prs_doc_trim="$(echo "$open_prs_doc" | xargs)"
     ship_prs_gh_trim="$(echo "$ship_prs_gh" | xargs)"
     if [[ -z "$open_prs_doc_trim" && -z "$ship_prs_gh_trim" ]]; then

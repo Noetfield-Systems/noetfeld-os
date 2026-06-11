@@ -15,6 +15,11 @@ FastAPI production runtime for intake, trust ledger, public chat, and webhooks.
 
 Schema convergence between dev and prod stacks is a future engineering wave — not required for GTM www ship.
 
+## Public API
+
+- OpenAPI schema: `/openapi.json` (filtered public surface for institutional buyers)
+- Status: `GET /api/status` includes `openapi` path
+
 ## Key modules
 
 - `noetfield_governance/api.py` — FastAPI app

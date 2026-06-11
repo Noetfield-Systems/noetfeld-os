@@ -120,6 +120,36 @@ else
   echo "FAIL /copilot/procurement/ missing control checkpoint copy" >&2
   fail=1
 fi
+if echo "$proc_html" | grep -qF "Governance control checkpoints"; then
+  echo "OK   /copilot/procurement/ checkpoint section heading"
+else
+  echo "FAIL /copilot/procurement/ missing checkpoint section heading" >&2
+  fail=1
+fi
+if echo "$proc_html" | grep -qF "plan-with-no-asf-verify.sh"; then
+  echo "OK   /copilot/procurement/ evaluate checkpoint cites verify script"
+else
+  echo "FAIL /copilot/procurement/ missing verify script in checkpoint copy" >&2
+  fail=1
+fi
+if echo "$proc_html" | grep -qF "AGENT_SELF_AUDIT_LOOP_LOCKED_v1.md"; then
+  echo "OK   /copilot/procurement/ checkpoint links audit loop doc"
+else
+  echo "FAIL /copilot/procurement/ missing audit loop link in checkpoint copy" >&2
+  fail=1
+fi
+if echo "$proc_html" | grep -qF "/openapi.json"; then
+  echo "OK   /copilot/procurement/ public OpenAPI link"
+else
+  echo "FAIL /copilot/procurement/ missing public OpenAPI link" >&2
+  fail=1
+fi
+if echo "$proc_html" | grep -qF "services/governance/README.md"; then
+  echo "OK   /copilot/procurement/ services/governance README link"
+else
+  echo "FAIL /copilot/procurement/ missing services/governance README link" >&2
+  fail=1
+fi
 
 hub_html="$(curl -sS --connect-timeout 5 -H "Accept: text/html" "${BASE}/copilot/" 2>/dev/null || true)"
 if echo "$hub_html" | grep -qF "PROCUREMENT_ONE_PAGER"; then

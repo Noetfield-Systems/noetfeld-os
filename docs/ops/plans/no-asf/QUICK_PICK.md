@@ -12,9 +12,9 @@ _Registry backlog empty (1000-pack synced). Pick from [GTM_NEXT.md](./GTM_NEXT.m
 
 ### GTM_NEXT (top picks)
 
-1. **ship-procurement-checkpoint-verify-054** · Dedicated verify phrase guard hardening for 052 checkpoint copy
-1. **ship-services-governance-openapi-bridge-055** · Link procurement to `services/governance` public OpenAPI path
-1. **ship-merged-window-config-056** · Extract `MERGED_WINDOW` constant to OPEN_PRS header doc
+1. **ship-procurement-openapi-verify-057** · Verify `/openapi.json` returns 200 in gtm-ops bundle
+1. **ship-services-governance-readme-openapi-058** · services/governance README cites `/openapi.json` path
+1. **ship-tenth-audit-merge-rule-059** · Document tenth-audit branch in ENGINEERING_DONE_MANIFEST closeout template
 
 ## Recently completed
 

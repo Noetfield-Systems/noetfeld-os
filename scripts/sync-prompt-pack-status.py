@@ -71,6 +71,9 @@ SHIP_DONE_MAP: dict[str, list[int]] = {
     "ship-blueprint-services-governance-bridge-051": [8, 28, 48, 68, 88],
     "ship-procurement-control-checkpoint-copy-052": [9, 29, 49, 69, 89],
     "ship-merged-pr-window-five-053": [8, 28, 48, 68, 88],
+    "ship-procurement-checkpoint-verify-054": [9, 29, 49, 69, 89],
+    "ship-services-governance-openapi-bridge-055": [9, 29, 49, 69, 89],
+    "ship-merged-window-config-056": [8, 28, 48, 68, 88],
 }
 
 # NF-PLAN patterns that are agentic-only (R-011) — never pick for NF-CLOUD implement

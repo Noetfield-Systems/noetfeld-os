@@ -79,6 +79,24 @@
   ],
   "next_tasks": [
     {
+      "id": "ship-procurement-checkpoint-verify-054",
+      "title": "Hardened procurement checkpoint verify guards (heading, verify script, audit loop)",
+      "plan": "scripts/verify-gtm-ops-docs.sh",
+      "status": "done"
+    },
+    {
+      "id": "ship-services-governance-openapi-bridge-055",
+      "title": "Procurement links to public OpenAPI + services/governance README",
+      "plan": "copilot/procurement/index.html",
+      "status": "done"
+    },
+    {
+      "id": "ship-merged-window-config-056",
+      "title": "MERGED_WINDOW constant in OPEN_PRS header; verify reads it",
+      "plan": "scripts/verify-no-asf-coherence.sh",
+      "status": "done"
+    },
+    {
       "id": "ship-blueprint-services-governance-bridge-051",
       "title": "Link services/governance to PLATFORM_BLUEPRINT §8.3 prod row + README",
       "plan": "services/governance/README.md",
