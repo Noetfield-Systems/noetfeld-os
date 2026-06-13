@@ -6,7 +6,7 @@ import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-WWW_VER = "23"
+WWW_VER = "24"
 
 # Design-partner pilot intake — primary GTM wedge ($2k–10k · 90 days)
 PILOT_INTAKE = "/trust-brief/intake/?interest=design-partner&vector=copilot-governance"
@@ -126,6 +126,7 @@ def live_proof_panel() -> str:
  <div id="nfLiveProofHero" class="nf-live-proof-panel" data-live-proof-hero="live-proof-hero" aria-label="Governance playground">
  <form id="nfLiveProofForm" class="nf-live-proof-form">
  <h3>Governance playground</h3>
+ <p id="nfScenarioOfDay" class="nf-scenario-of-day" aria-live="polite"></p>
  <p class="nf-scorecard-hint">Every go/no-go gets a <strong>confidence score</strong> + evidence index — not a black-box AI yes.</p>
  <label>Scenario
  <select name="scenario" id="nfLiveProofScenario" aria-label="Evaluate scenario">
@@ -401,6 +402,124 @@ def buyer_journey_strip() -> str:
  </nav>"""
 
 
+def social_proof_industry_strip() -> str:
+    """Sumsub/Stripe-style industry strip — no fake logos."""
+    industries = [
+        ("Financial services", "Copilot rollout under DORA · FFIEC scrutiny"),
+        ("Insurance &amp; health", "Board-grade exports · metadata-only M365"),
+        ("Professional services", "Client-data boundaries · Purview + TLE"),
+        ("Public sector", "ADM · AIA · Copilot PIN orientation"),
+    ]
+    items = "".join(
+        f'<div class="nf-social-proof__item"><strong>{name}</strong><span>{desc}</span></div>'
+        for name, desc in industries
+    )
+    return f"""
+ <div class="nf-social-proof" role="region" aria-label="Regulated industries">
+ <p class="nf-social-proof__label">Built for regulated EU and US institutions</p>
+ <div class="nf-social-proof__grid">{items}</div>
+ </div>"""
+
+
+def role_testimonials_strip() -> str:
+    """Anonymous buyer-role quotes — orientation only, no fake logos (Wave 2)."""
+    quotes = [
+        ("CISO · EU regulated financial institution", "We needed a tamper-evident go/no-go record before Copilot touched production — beyond policy decks alone."),
+        ("GRC lead · US insurer", "The board asked for evidence, not slides. The pilot delivered a PDF we used in risk committee."),
+        ("Procurement · professional services", "Fixed-fee pilot beat a long enterprise rollout for Copilot-specific diligence."),
+    ]
+    cards = "".join(
+        f'<blockquote class="nf-testimonial"><p class="nf-testimonial__quote">{q}</p><footer><cite>{role}</cite></footer></blockquote>'
+        for role, q in quotes
+    )
+    return f"""
+ <section class="nf-section-block nf-section--elevated" aria-labelledby="buyer-voices">
+ <div class="nf-section-block-head"><span class="nf-section-num" aria-hidden="true">"</span><div>
+ <p class="nf-eyebrow" id="buyer-voices">Buyer voices</p>
+ <h2>What regulated teams say they need — not vendor marketing</h2>
+ <p class="nf-section-lead">Anonymous role orientation from design-partner conversations — not paid testimonials or logo claims.</p>
+ </div></div>
+ <div class="nf-testimonial-grid">{cards}</div>
+ </section>"""
+
+
+def assurance_levels_block() -> str:
+    """ShareID-inspired export assurance levels — orientation only."""
+    return """
+ <section class="nf-section-block" aria-labelledby="assurance-levels">
+ <div class="nf-section-block-head"><span class="nf-section-num" aria-hidden="true">A</span><div>
+ <p class="nf-eyebrow" id="assurance-levels">Export assurance</p>
+ <h2>TLE export integrity levels — orientation for diligence reviewers</h2>
+ <p class="nf-section-lead">Not eIDAS or ISO certification — describes what each access path produces today vs planned.</p>
+ </div></div>
+ <div class="nf-assurance-ladder">
+ <article class="nf-assurance-step"><p class="nf-assurance-step__level">Baseline</p><h3>Sandbox · sample YAML</h3><p>Mock evaluate · orientation TLE · export walkthrough · no production tenant.</p><span class="nf-signal-badge nf-signal-badge--available">Available</span></article>
+ <article class="nf-assurance-step nf-assurance-step--gold"><p class="nf-assurance-step__level">Substantial</p><h3>Design partner · signed TLE</h3><p>Live evaluate · approved TLE · confidence score · board PDF in governance meeting.</p><span class="nf-signal-badge nf-signal-badge--available">Pilot $2k–10k</span></article>
+ <article class="nf-assurance-step"><p class="nf-assurance-step__level">High</p><h3>Production · procurement ZIP</h3><p>Fail-closed export verify · procurement ZIP · audit bundle · tenant-scoped keys.</p><span class="nf-signal-badge nf-signal-badge--orientation">Per SOW</span></article>
+ </div>
+ </section>"""
+
+
+def milestone_pricing_ladder() -> str:
+    """Sumsub-class milestone pricing — lead → land → expand."""
+    return f"""
+ <section class="nf-section-block" aria-labelledby="milestone-pricing">
+ <div class="nf-section-block-head"><span class="nf-section-num" aria-hidden="true">$</span><div>
+ <p class="nf-eyebrow" id="milestone-pricing">Milestone pricing</p>
+ <h2>Lead → land → expand — no SKU creep</h2>
+ <p class="nf-section-lead">Same spine at every tier: evaluate → signed TLE → export. Price follows proof, not platform shelfware.</p>
+ </div></div>
+ <div class="nf-milestone-ladder">
+ <a class="nf-milestone-step nf-milestone-step--active" href="{PILOT_INTAKE}"><span class="nf-milestone-step__tag">Lead</span><strong>$2k–10k</strong><span>Design partner · 90 days · board PDF success signal</span></a>
+ <span class="nf-milestone-arrow" aria-hidden="true">→</span>
+ <a class="nf-milestone-step" href="/trust-brief/"><span class="nf-milestone-step__tag">Land</span><strong>$10k</strong><span>Trust Brief · 6 weeks · policy map + risk exposure</span></a>
+ <span class="nf-milestone-arrow" aria-hidden="true">→</span>
+ <a class="nf-milestone-step" href="/bank-pilot/"><span class="nf-milestone-step__tag">Expand</span><strong>Custom</strong><span>Bank Pilot · enterprise SOW · shadow → enforce</span></a>
+ </div>
+ </section>"""
+
+
+def pilot_apply_form() -> str:
+    """Sumsub-class inline pilot apply — routes to design-partner intake."""
+    return f"""
+ <section class="nf-section-block nf-section--elevated" id="pilot-apply" aria-labelledby="pilot-apply-title">
+ <div class="nf-section-block-head"><span class="nf-section-num" aria-hidden="true">→</span><div>
+ <p class="nf-eyebrow" id="pilot-apply-title">Apply online</p>
+ <h2>Start your design-partner pilot intake</h2>
+ <p class="nf-section-lead">Non-confidential · include your Request ID from the footer · operations@noetfield.com</p>
+ </div></div>
+ <form id="nfPilotApplyForm" class="nf-pilot-apply-form" data-intake="{PILOT_INTAKE}" aria-label="Design partner pilot intake">
+ <div class="nf-pilot-apply-grid">
+ <label>Work email<input type="email" name="email" required autocomplete="email" placeholder="you@institution.com" /></label>
+ <label>Organization<input type="text" name="org" required autocomplete="organization" placeholder="Regulated institution name" /></label>
+ <label>Your role
+ <select name="role" required>
+ <option value="">Select role</option>
+ <option value="ciso">CISO / Security</option>
+ <option value="grc">GRC / Compliance</option>
+ <option value="legal">Legal / Procurement</option>
+ <option value="board">Board / Risk committee</option>
+ <option value="it">IT / Copilot owner</option>
+ </select>
+ </label>
+ <label>Pilot band
+ <select name="band">
+ <option value="quickscan">QuickScan · $2,000 · 4 weeks</option>
+ <option value="readiness" selected>Readiness Pilot · $5k–10k · 90 days (recommended)</option>
+ </select>
+ </label>
+ </div>
+ <label>Scope notes (optional)<textarea name="notes" rows="3" placeholder="Copilot rollout timeline · EU/US · unclassified only"></textarea></label>
+ <div class="nf-cta-actions">
+ <button type="submit" class="btn btn-primary">Submit pilot intake</button>
+ <a class="btn btn-secondary" href="/copilot/demo/">5-minute demo first</a>
+ </div>
+ <p class="nf-section-lead" style="margin-top:12px">Fixed fee · metadata-only M365 · board PDF success signal · <a href="/copilot/procurement/">procurement pack</a></p>
+ </form>
+ </section>
+ <script src="/assets/noetfield-pilot-intake.js?v={WWW_VER}" defer></script>"""
+
+
 def pilot_hero_wedge() -> str:
     """Above-fold pilot wedge — links to full pilot page."""
     return f"""
@@ -578,7 +697,7 @@ def pilot_page_body() -> str:
  <article class="nf-loop-step"><p class="nf-loop-step-num">Wk 6</p><h3>Governance meeting</h3><p>Board PDF in real risk, legal, or board session — pilot success signal.</p></article>
  </div>
  </section>
-""" + pilot_success_criteria_block() + eu_us_regulatory_block() + """
+ """ + pilot_success_criteria_block() + milestone_pricing_ladder() + assurance_levels_block() + eu_us_regulatory_block() + role_testimonials_strip() + """
  <section class="nf-section-block" aria-labelledby="pilot-out">
  <div class="nf-section-block-head"><span class="nf-section-num" aria-hidden="true">04</span><div>
  <p class="nf-eyebrow" id="pilot-out">Out of scope</p>
@@ -591,7 +710,7 @@ def pilot_page_body() -> str:
  <li>Full mailbox or content surveillance — metadata-only M365 indices</li>
  </ul>
  </section>
-""" + institution_icp_strip() + scope_block() + proof_grid([
+ """ + institution_icp_strip() + pilot_apply_form() + scope_block() + proof_grid([
         ("/copilot/demo/", "▶", "5-minute demo", "Evaluate → confidence score → export path"),
         ("/trust-ledger/sample-report/", "TLE", "TLE v1 samples", "Go · conditional · rejected YAML"),
         ("/copilot/procurement/", "ZIP", "Procurement pack", "Buyer diligence bundle"),
@@ -742,7 +861,7 @@ def homepage() -> str:
         '</header>',
         hero_regulatory_chips() + "\n </header>",
         1,
-    ) + stat_bar() + pilot_hero_wedge() + buyer_journey_strip() + institution_icp_strip() + three_traps_section() + self_serve_rail() + "\n </section>"
+    ) + stat_bar() + pilot_hero_wedge() + social_proof_industry_strip() + buyer_journey_strip() + institution_icp_strip() + role_testimonials_strip() + three_traps_section() + self_serve_rail() + "\n </section>"
 
     act_prove = f"""
  <section class="nf-section-block nf-act-prove" aria-labelledby="act-prove">
@@ -795,7 +914,7 @@ def homepage() -> str:
  <p class="nf-section-lead">For you / not for you · trust center · export verification.</p>
  </div></div>
  {fit_qualification_body()}
- {eu_us_regulatory_block()}
+ {assurance_levels_block()}
  {procurement_rail()}
  {ciso_strip()}
  {scope_block()}
@@ -1233,7 +1352,7 @@ def pricing_page_body() -> str:
  <tr><td>Sales call required</td><td>No</td><td>Program intake · SOW</td></tr>
  </tbody></table></div>
  </section>
-""" + contrast_table_section() + section_block("02", "Tiers", "Access paths and contract programs", packaging_tiers_grid(compact=True), "Free sandbox is developer access — not a fourth contract SKU.") + mega_cta()
+""" + contrast_table_section() + milestone_pricing_ladder() + section_block("02", "Tiers", "Access paths and contract programs", packaging_tiers_grid(compact=True), "Free sandbox is developer access — not a fourth contract SKU.") + mega_cta()
 
 
 def ai_automation_body() -> str:

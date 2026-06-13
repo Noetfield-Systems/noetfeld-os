@@ -27,6 +27,33 @@
     },
   };
 
+  var SCENARIO_KEYS = ["copilot_rollout", "guest_access", "data_export"];
+
+  var SCENARIO_LABELS = {
+    copilot_rollout: "Copilot rollout · production scope",
+    guest_access: "Guest access · external sharing",
+    data_export: "Bulk export · high sensitivity",
+  };
+
+  function scenarioOfTheDayKey() {
+    var day = new Date().getDay();
+    return SCENARIO_KEYS[day % SCENARIO_KEYS.length];
+  }
+
+  function applyScenarioOfTheDay(form) {
+    var key = scenarioOfTheDayKey();
+    var select = qs('[name="scenario"]', form);
+    var banner = document.getElementById("nfScenarioOfDay");
+    if (select) select.value = key;
+    applyScenario(form);
+    if (banner) {
+      banner.innerHTML =
+        '<strong>Scenario of the day:</strong> ' +
+        (SCENARIO_LABELS[key] || key) +
+        ' — <span class="nf-scenario-of-day__hint">Evaluate to see tamper-evident scorecard</span>';
+    }
+  }
+
   function qs(sel, root) {
     return (root || document).querySelector(sel);
   }
@@ -146,7 +173,7 @@
     var receiptHost = qs("#nfLiveProofReceipt", root);
     var scenarioSelect = qs('[name="scenario"]', form);
     skeletonReceipt(receiptHost);
-    applyScenario(form);
+    applyScenarioOfTheDay(form);
 
     if (scenarioSelect) {
       scenarioSelect.addEventListener("change", function () {

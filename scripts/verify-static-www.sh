@@ -23,28 +23,26 @@ check_file() {
 }
 
 check_file "homepage pilot-first" index.html \
-  'noetfield-www.css?v=23' 'nf-site-v14' 'Board-grade trust' \
-  'tamper-evident decision records' 'data-live-proof-hero' \
-  'EU AI Act Art. 12' 'Apply for pilot ($2k–10k)' \
-  'Lead program · $2k–10k · 90 days' '01 · Pilot' \
-  'What legal and security reviewers need to see' \
-  'Governance playground' 'Three traps before Copilot'
+  'noetfield-www.css?v=24' 'nf-site-v14' 'Board-grade trust' \
+  'tamper-evident decision records' 'nfScenarioOfDay' \
+  'Buyer voices' 'Export assurance' 'data-live-proof-hero' \
+  'Apply for pilot ($2k–10k)' '01 · Pilot' 'Built for regulated EU and US'
 
 check_file "homepage wave1 journey" index.html \
   '02 · Prove' '03 · Try' '04 · Trust' '$2k–10k'
 
 check_file "start sandbox page" start/index.html \
   'nf-hero-flow' 'Try in minutes' '14-day trial' '50 evaluate calls' 'Apply for pilot' \
-  'data-trial-os-flow' 'noetfield-www.css?v=23'
+  'data-trial-os-flow' 'noetfield-www.css?v=24'
 
 check_file "pricing packaging page" pricing/index.html \
-  'Published tiers' 'Apply for pilot ($2k–10k)' 'Developer access · free' \
-  'noetfield-www.css?v=23' 'What you tried vs what breaks vs what Noetfield delivers'
+  'Published tiers' 'Apply for pilot ($2k–10k)' 'Milestone pricing' 'Developer access · free' \
+  'noetfield-www.css?v=24' 'What you tried vs what breaks vs what Noetfield delivers'
 
 check_file "pilot landing page" copilot/pilot/index.html \
-  'noetfield-www.css?v=23' 'board-grade trust' 'GTM-locked pilot success signals' \
-  'interest=design-partner' 'EU AI Act Art. 12' 'QuickScan' 'Pilot deliverables' \
-  'tamper-evident'
+  'noetfield-www.css?v=24' 'board-grade trust' 'GTM-locked pilot success signals' \
+  'interest=design-partner' 'nfPilotApplyForm' 'Milestone pricing' \
+  'Export assurance' 'QuickScan' 'Pilot deliverables' 'tamper-evident'
 
 check_file "footer pilot-first" assets/partials/footer.html \
   'Apply for pilot ($2k–10k)' 'Design-partner pilot' 'tamper-evident'
@@ -69,15 +67,15 @@ check_file "commercial SSOT" docs/strategy/NOETFIELD_COMMERCIAL_SSOT_LOCKED_v1.m
   'OFFERINGS_LOCKED' 'Trust Brief' 'operations@noetfield.com' 'W3 economic signal'
 
 check_file "ai-automation lane B" ai-automation/index.html \
-  'Make your AI automation defensible' 'Apply for pilot' 'noetfield-www.css?v=23'
+  'Make your AI automation defensible' 'Apply for pilot' 'noetfield-www.css?v=24'
 
 # Version coherence on primary hubs
 for f in index.html trust/index.html copilot/index.html msp/index.html federal/index.html investors/index.html start/index.html pricing/index.html faq/index.html contact/index.html enterprise/index.html; do
-  if [[ -f "$f" ]] && ! grep -qF 'noetfield-shell.js?v=23' "$f"; then
-    bad "shell v23 on $f"
+  if [[ -f "$f" ]] && ! grep -qF 'noetfield-shell.js?v=24' "$f"; then
+    bad "shell v24 on $f"
   fi
 done
-[[ "$fail" -eq 0 ]] && ok "shell v23 on primary hubs"
+[[ "$fail" -eq 0 ]] && ok "shell v24 on primary hubs"
 
 if [[ "$fail" -ne 0 ]]; then
   echo "Run: python3 scripts/rebuild-www-v6.py" >&2

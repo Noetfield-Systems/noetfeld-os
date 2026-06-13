@@ -844,6 +844,213 @@ body.nf-www .nf-hero-cinematic .nf-trust--hero .nf-trust__item span {
   line-height: 1.4;
 }
 
+body.nf-www .nf-social-proof {
+  margin: 24px 0;
+  padding: 20px 0;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+body.nf-www .nf-social-proof__label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted2);
+  margin: 0 0 12px;
+}
+
+body.nf-www .nf-social-proof__grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+@media (min-width: 900px) {
+  body.nf-www .nf-social-proof__grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+body.nf-www .nf-social-proof__item strong {
+  display: block;
+  font-size: 0.875rem;
+  margin-bottom: 4px;
+}
+
+body.nf-www .nf-social-proof__item span {
+  font-size: 0.75rem;
+  color: var(--muted2);
+  line-height: 1.4;
+}
+
+body.nf-www .nf-testimonial-grid {
+  display: grid;
+  gap: 16px;
+}
+
+@media (min-width: 900px) {
+  body.nf-www .nf-testimonial-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+body.nf-www .nf-testimonial {
+  margin: 0;
+  padding: 20px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: rgba(255, 255, 255, 0.4);
+}
+
+body.nf-www .nf-testimonial__quote {
+  margin: 0 0 12px;
+  font-size: 0.9375rem;
+  line-height: 1.55;
+}
+
+body.nf-www .nf-testimonial cite {
+  font-size: 0.75rem;
+  font-style: normal;
+  color: var(--muted2);
+}
+
+body.nf-www .nf-assurance-ladder {
+  display: grid;
+  gap: 12px;
+}
+
+@media (min-width: 900px) {
+  body.nf-www .nf-assurance-ladder {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+body.nf-www .nf-assurance-step {
+  padding: 20px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: rgba(255, 255, 255, 0.35);
+}
+
+body.nf-www .nf-assurance-step--gold {
+  border-color: rgba(200, 163, 73, 0.45);
+  background: rgba(200, 163, 73, 0.08);
+}
+
+body.nf-www .nf-assurance-step__level {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--gold-bright, #8a6b1f);
+  margin: 0 0 8px;
+}
+
+body.nf-www .nf-assurance-step h3 {
+  margin: 0 0 8px;
+  font-size: 1rem;
+}
+
+body.nf-www .nf-milestone-ladder {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  gap: 8px;
+}
+
+body.nf-www .nf-milestone-step {
+  flex: 1 1 200px;
+  display: block;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  text-decoration: none;
+  color: inherit;
+  transition: border-color 0.15s ease;
+}
+
+body.nf-www .nf-milestone-step:hover {
+  border-color: rgba(200, 163, 73, 0.5);
+}
+
+body.nf-www .nf-milestone-step--active {
+  border-color: rgba(200, 163, 73, 0.65);
+  background: rgba(200, 163, 73, 0.1);
+}
+
+body.nf-www .nf-milestone-step__tag {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted2);
+}
+
+body.nf-www .nf-milestone-step strong {
+  display: block;
+  font-size: 1.25rem;
+  margin: 6px 0;
+}
+
+body.nf-www .nf-milestone-step span {
+  font-size: 0.8125rem;
+  color: var(--muted2);
+  line-height: 1.4;
+}
+
+body.nf-www .nf-milestone-arrow {
+  align-self: center;
+  color: var(--muted2);
+  font-size: 1.25rem;
+}
+
+body.nf-www .nf-pilot-apply-form {
+  max-width: 720px;
+}
+
+body.nf-www .nf-pilot-apply-grid {
+  display: grid;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+@media (min-width: 768px) {
+  body.nf-www .nf-pilot-apply-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+body.nf-www .nf-pilot-apply-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 0.8125rem;
+}
+
+body.nf-www .nf-pilot-apply-form input,
+body.nf-www .nf-pilot-apply-form select,
+body.nf-www .nf-pilot-apply-form textarea {
+  font: inherit;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.6);
+}
+
+body.nf-www .nf-scenario-of-day {
+  margin: 0 0 10px;
+  padding: 10px 12px;
+  font-size: 0.8125rem;
+  border-radius: 8px;
+  background: rgba(200, 163, 73, 0.12);
+  border: 1px solid rgba(200, 163, 73, 0.25);
+}
+
+body.nf-www .nf-scenario-of-day__hint {
+  color: var(--muted2);
+}
+
 body.nf-www.nf-site-v13 .nf-stat-bar {
   border-color: rgba(200, 163, 73, 0.22);
 }
