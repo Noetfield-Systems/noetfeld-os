@@ -33,13 +33,14 @@
  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,400..700;1,14..32,400..700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" />
  <link rel="stylesheet" href="/assets/noetfield-tokens.css" />
  <link rel="stylesheet" href="/assets/noetfield-shell.css" />
- <link rel="stylesheet" href="/assets/noetfield-www.css?v=30" />
+ <link rel="stylesheet" href="/assets/noetfield-www.css?v=35" />
  <link rel="stylesheet" href="/assets/noetfield-intake.css" />
  <script src="/assets/noetfield-intake-email.js" defer></script>
+ <script src="/assets/noetfield-intake-core.js"></script>
  <script src="/assets/noetfield-intake-pilot-mode.js"></script>
  <script src="/assets/noetfield-intake-ecosystem-mode.js"></script>
  <script src="/assets/noetfield-intake-api.js" defer></script>
- <script src="/assets/noetfield-shell.js?v=30" defer></script>
+ <script src="/assets/noetfield-shell.js?v=35" defer></script>
 
  <!-- legacy inline removed — see noetfield-intake.css -->
 
@@ -136,9 +137,9 @@
  <div class="heroShell heroShell--pilot">
  <div class="heroInner">
  <div class="eyebrow"><span class="dot"></span> Work with Noetfield · Ecosystem apply</div>
- <h1>Connector · facilitator · co-partner · partner</h1>
+ <h1>Connector · facilitator · co-partner · partner · investor</h1>
  <p class="muted" style="margin-top:10px;"><strong>Help regulated institutions attach Copilot Governance Pack</strong> — $2k–10k pilots · board PDF success signal · metadata-only M365 receipts.</p>
- <p class="lead">Non-confidential application for people and firms who introduce buyers, lead rollout workshops, co-deliver pilots, or attach as MSP/SI after Purview readiness.</p>
+ <p class="lead">Non-confidential application for people and firms who introduce buyers, lead rollout workshops, co-deliver pilots, attach as MSP/SI after Purview readiness, or explore the investor path.</p>
  <div class="actions" aria-label="Ecosystem hero actions">
  <a class="btn primary" href="#intake">Complete application</a>
  <a class="btn secondary" href="/work-with-us/" data-rid-link>Program overview</a>
@@ -373,7 +374,7 @@
  <div id="tbIntakeErr" class="notice" style="display:none;color:var(--warn,#e8b84a);" role="alert"></div>
  <div id="tbOk" style="display:none;">
  <div class="notice">
- <strong>Received.</strong> Your intake was recorded (<span id="tbIntakeId"></span>). Operations will reply within one business day at operations@noetfield.com — please keep your Request ID in the subject line.
+ <strong>Received.</strong> Your intake was recorded instantly (<code id="tbIntakeId"></code>). Operations is notified asynchronously and will reply within one business day at operations@noetfield.com — keep your Request ID in the subject line.
  </div>
  </div>
  </form>
@@ -463,6 +464,7 @@
  <li>Facilitator — workshops &amp; kickoffs</li>
  <li>Co-partner — joint Governance Pack delivery</li>
  <li>Partner — MSP / SI / advisory attach</li>
+ <li>Investor — capital / strategic / angel intro</li>
  </ul>
  </article>
  <article class="block">
@@ -730,7 +732,7 @@
  if (lineOut) lineOut.textContent = isPilot
   ? "Copilot Governance Pack · select pilot band to update fee guidance."
   : isEco
-  ? "Work with Noetfield · select program lane in your application."
+  ? "Work with Noetfield · complete your application."
   : "Select form inputs to populate tier direction.";
  if (emailProc) emailProc.href = mailto(INTAKE_EMAIL, isPilot ? "Noetfield — Copilot Governance Pack | Pilot intake" : "Noetfield — Trust Brief | Engagement intake", "");
  if (emailInstead) emailInstead.href = mailto(INTAKE_EMAIL, isPilot ? "Noetfield — Copilot Governance Pack Intake" : "Noetfield — Trust Brief Intake", "");
@@ -793,11 +795,17 @@
  prefill();
  applySummary();
 
+ var debouncedApply;
+ function scheduleApplySummary(){
+  if (debouncedApply) clearTimeout(debouncedApply);
+  debouncedApply = setTimeout(applySummary, 120);
+ }
+
  ["tb_usecases","tb_teams","tb_risk","tb_evidence","tb_tier","tb_proc","tb_driver","tb_start","tb_org","tb_notes","tb_pilot_band","tb_pilot_region","tb_name","tb_email","tb_role"].forEach(function(id){
  var el = document.getElementById(id);
  if (!el) return;
  el.addEventListener("change", applySummary);
- if (id === "tb_notes") el.addEventListener("input", function(){ /* quiet */ });
+ el.addEventListener("input", scheduleApplySummary);
  });
 
  document.querySelectorAll("[data-copy-rid]").forEach(function(btn){

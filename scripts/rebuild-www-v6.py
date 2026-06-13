@@ -6,7 +6,7 @@ import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-WWW_VER = "30"
+WWW_VER = "35"
 
 # Copilot Governance Pack — locked lead SKU ($2k–10k · 90 days · board PDF success signal)
 PILOT_SKU = "Copilot Governance Pack"
@@ -51,8 +51,8 @@ COPY = {
     "meta_home": "Board-grade Copilot governance for EU and US regulated institutions — tamper-evident decision records, signed TLE receipts, fail-closed export. Copilot Governance Pack $2k–10k.",
     "hero_h1": "The audit trail your Copilot deployment will be asked for later",
     "hero_lead": (
-        "Noetfield is the <strong>AI Governance &amp; Evidence</strong> layer for Microsoft 365 Copilot — "
-        "<strong>board-grade, tamper-evident decision records</strong> for <strong>EU and US regulated institutions</strong>. "
+        "Noetfield is the <strong>AI Governance &amp; Evidence</strong> layer for regulated institutions — "
+        "<strong>Copilot Governance Pack</strong>, <strong>Trust Brief</strong>, and <strong>Bank Pilot</strong> on one spine. "
         "Every go/no-go produces a signed Trust Ledger Entry — a record <strong>independent of the app under audit</strong> — "
         "invalid changes <strong>blocked</strong>, allowed decisions <strong>receipted</strong>, export <strong>fail closed</strong> on tamper. "
         "Metadata-only M365 · evaluate → record → export before production scope opens."
@@ -77,8 +77,8 @@ COPY = {
         "<strong>Copilot Governance Pack ($2k–10k)</strong> or Trust Brief SOW."
     ),
     "first_receipt_promise": (
-        "Run one evaluate · get one signed receipt · <strong>before your next Copilot standup</strong> "
-        "(~5 minutes in sandbox)."
+        "Run one evaluate · get one signed receipt · <strong>before your next governance standup</strong> "
+        "(~5 minutes in sandbox · Copilot, Trust Brief, Bank Pilot, or partner shadow scenarios)."
     ),
     "closing_competitive": (
         "Roll out Copilot with <strong>signed receipts</strong> — board PDF, procurement ZIP, and verified export integrity."
@@ -95,6 +95,7 @@ HEAD = """<!DOCTYPE html>
  <meta name="robots" content="index,follow" />
  <meta name="theme-color" content="#f4f5f8" />
  <link rel="canonical" href="https://www.noetfield.com{canonical}" />
+ <meta name="nf-chat-api-base" content="https://platform.noetfield.com" />
  <link rel="icon" href="/noetfield-favicon-512.png" type="image/png" />
 {font_link}
  <link rel="stylesheet" href="/assets/noetfield-tokens.css" />
@@ -102,6 +103,8 @@ HEAD = """<!DOCTYPE html>
  <link rel="stylesheet" href="/assets/noetfield-www.css?v={www_ver}" />
  <link rel="stylesheet" href="/assets/noetfield-print.css?v={www_ver}" media="print" />
  <script src="/assets/noetfield-shell.js?v={www_ver}" defer></script>
+ <script src="/assets/noetfield-intake-core.js?v={www_ver}" defer></script>
+ <script src="/assets/noetfield-forms.js?v={www_ver}" defer></script>
 </head>
 <body class="{body_class}">
  <div class="bg" aria-hidden="true"></div>
@@ -141,19 +144,29 @@ def receipt(rid: str = "RID-2026-0602-HOME", footer: str = "Live sample · <a hr
 
 
 def live_proof_panel() -> str:
-    """UI-01 Governance Playground — scenario picker + mini evaluate + scorecard receipt."""
+    """UI-01 Governance Playground — multi-product scenario picker + mini evaluate + scorecard receipt."""
+    lane_pills = (
+        ("all", "All", True),
+        ("copilot", "Copilot Pack", False),
+        ("trust_brief", "Trust Brief", False),
+        ("bank", "Bank Pilot", False),
+        ("automation", "AI automation", False),
+        ("partner", "Partner shadow", False),
+    )
+    pills_html = "".join(
+        f'<button type="button" class="nf-live-proof-lane{" is-active" if active else ""}" '
+        f'data-live-proof-lane="{key}" aria-pressed="{"true" if active else "false"}">{label}</button>'
+        for key, label, active in lane_pills
+    )
     return f"""
  <div id="nfLiveProofHero" class="nf-live-proof-panel" data-live-proof-hero="live-proof-hero" aria-label="Governance playground">
  <form id="nfLiveProofForm" class="nf-live-proof-form">
  <h3>Governance playground</h3>
  <p id="nfScenarioOfDay" class="nf-scenario-of-day" aria-live="polite"></p>
- <p class="nf-scorecard-hint">Every go/no-go gets a <strong>confidence score</strong> + evidence index — not a black-box AI yes.</p>
+ <p class="nf-scorecard-hint">Every go/no-go gets a <strong>confidence score</strong> + evidence index — Copilot, Trust Brief, Bank Pilot, automation, and partner shadow lanes.</p>
+ <div class="nf-live-proof-lanes" role="group" aria-label="Product lane filter">{pills_html}</div>
  <label>Scenario
- <select name="scenario" id="nfLiveProofScenario" aria-label="Evaluate scenario">
- <option value="copilot_rollout" selected>Copilot rollout · production scope</option>
- <option value="guest_access">Guest access · external sharing</option>
- <option value="data_export">Bulk export · high sensitivity</option>
- </select>
+ <select name="scenario" id="nfLiveProofScenario" aria-label="Evaluate scenario"></select>
  </label>
  <label>Actor<input type="text" name="actor" value="security-team" autocomplete="off" /></label>
  <label>Action<input type="text" name="action" value="copilot_rollout" autocomplete="off" /></label>
@@ -392,16 +405,38 @@ def revenue_path_ladder_inner() -> str:
  </div>"""
 
 
+def product_lane_strip() -> str:
+    """Above-fold product hubs — three contract SKUs + orientation lanes."""
+    lanes = [
+        ("/copilot/pilot/", "Copilot Pack", "$2k–10k · 90 days", "nf-product-lane--lead"),
+        ("/trust-brief/", "Trust Brief", "$10k · 6 weeks", ""),
+        ("/bank-pilot/", "Bank Pilot", "Shadow · read-only", ""),
+        ("/ai-automation/", "AI automation", "Lane B reference", ""),
+        ("/federal/", "Federal", "Schedule I/II", ""),
+    ]
+    cards = "".join(
+        f'<a class="nf-product-lane {cls}" href="{href}"><strong>{title}</strong>'
+        f'<span>{tag}</span></a>'
+        for href, title, tag, cls in lanes
+    )
+    return f"""
+ <nav class="nf-product-lane-strip" aria-label="Product lanes">
+ {cards}
+ </nav>"""
+
+
 def homepage_depth_links() -> str:
-    """Compact links to full buyer depth on pilot landing."""
+    """Compact links to full buyer depth across product hubs."""
     return """
- <nav class="nf-depth-links" aria-label="Deeper buyer resources on pilot page">
- <p class="nf-depth-links__label">Full buyer depth</p>
+ <nav class="nf-depth-links" aria-label="Deeper buyer resources">
+ <p class="nf-depth-links__label">Explore product lanes</p>
+ <a href="/copilot/pilot/">Copilot Governance Pack</a>
+ <a href="/trust-brief/">Trust Brief</a>
+ <a href="/bank-pilot/">Bank Pilot</a>
+ <a href="/ai-automation/">AI automation</a>
+ <a href="/federal/">Federal lane</a>
  <a href="/copilot/pilot/#digital-trust-lane">Digital trust lane</a>
- <a href="/copilot/pilot/#buyer-triggers">Regulated buyer map</a>
  <a href="/copilot/pilot/#governance-gaps">Governance gaps</a>
- <a href="/copilot/pilot/#buyer-voices">Buyer voices</a>
- <a href="/copilot/pilot/#automation-title">Automated governance</a>
  </nav>"""
 
 
@@ -745,7 +780,7 @@ def pilot_apply_form() -> str:
  <h2>Start your Copilot Governance Pack intake</h2>
  <p class="nf-section-lead">Non-confidential · include your Request ID from the footer · operations@noetfield.com</p>
  </div></div>
- <form id="nfPilotApplyForm" class="nf-pilot-apply-form" data-intake="{PILOT_INTAKE}" aria-label="Copilot Governance Pack intake">
+ <form id="nfPilotApplyForm" class="nf-pilot-apply-form" data-intake="{PILOT_INTAKE}" data-vector="copilot-governance" data-nf-intake-custom="1" aria-label="Copilot Governance Pack intake">
  <div class="nf-pilot-apply-grid">
  <label>Work email<input type="email" name="email" required autocomplete="email" placeholder="you@institution.com" /></label>
  <label>Organization<input type="text" name="org" required autocomplete="organization" placeholder="Regulated institution name" /></label>
@@ -772,6 +807,7 @@ def pilot_apply_form() -> str:
  <a class="btn btn-secondary" href="/copilot/demo/">5-minute demo first</a>
  </div>
  <p class="nf-section-lead" style="margin-top:12px">Fixed fee · metadata-only M365 · board PDF success signal · <a href="/copilot/procurement/">procurement pack</a></p>
+ <div id="nfPilotApplyStatus" class="nf-intake-async-status" hidden aria-live="polite"></div>
  </form>
  </section>
  <script src="/assets/noetfield-pilot-intake.js?v={WWW_VER}" defer></script>"""
@@ -784,77 +820,241 @@ def work_with_us_intake(role: str = "") -> str:
     return base
 
 
+def work_with_us_hero_panel() -> str:
+    return """
+ <aside class="nf-hero-panel nf-wwu-hero-panel" aria-label="Program outcomes">
+ <div class="nf-wwu-hero-panel-grid">
+ <div class="nf-wwu-hero-panel-col">
+ <p class="nf-hero-panel-label">Channel · delivery</p>
+ <ul class="nf-hero-panel-list">
+ <li>Copilot Governance Pack · $2k–10k</li>
+ <li>Board PDF in client governance meeting</li>
+ <li>Metadata-only M365 evidence index</li>
+ </ul>
+ </div>
+ <div class="nf-wwu-hero-panel-col nf-wwu-hero-panel-col--investor">
+ <p class="nf-hero-panel-label">Capital · strategic</p>
+ <ul class="nf-hero-panel-list">
+ <li>Land · Expand · Channel model</li>
+ <li>Demo-ready evaluate · TLE · export</li>
+ <li>Board PDF as proof step function</li>
+ </ul>
+ <a class="nf-wwu-hero-link" href="/investors/">Investor brief →</a>
+ </div>
+ </div>
+ </aside>"""
+
+
+def work_with_us_ecosystem_stat_bar() -> str:
+    return """
+ <div class="nf-stat-bar nf-wwu-stat-bar" role="region" aria-label="Ecosystem program metrics">
+ <div class="nf-stat-bar-item"><strong>5</strong><span>Program lanes · channel + capital</span></div>
+ <div class="nf-stat-bar-item"><strong>$2k–10k</strong><span>Governance Pack attach · 90 days</span></div>
+ <div class="nf-stat-bar-item"><strong>Async</strong><span>Apply online · ops notify in seconds</span></div>
+ <div class="nf-stat-bar-item"><strong>EU + US</strong><span>Regulated institutions · metadata-only</span></div>
+ </div>"""
+
+
+def _wwu_lane_card(key: str, icon: str, title: str, tag: str, lead: str, bullets: list[str]) -> str:
+    points = "".join(f"<li>{b}</li>" for b in bullets)
+    return f"""
+ <article class="nf-wwu-lane-card" data-lane="{key}">
+ <span class="nf-wwu-lane-icon" aria-hidden="true">{icon}</span>
+ <p class="nf-wwu-lane-tag">{tag}</p>
+ <h3>{title}</h3>
+ <p class="nf-wwu-lane-lead">{lead}</p>
+ <ul class="nf-wwu-lane-points">{points}</ul>
+ <div class="nf-wwu-lane-actions">
+ <a class="btn btn-primary" href="{work_with_us_intake(key)}">Apply online</a>
+ <a class="btn btn-secondary" href="#partner-apply" data-wwu-pick="{key}">Quick apply</a>
+ </div>
+ </article>"""
+
+
 def work_with_us_roles_grid() -> str:
-    roles = [
+    channel = [
         (
             "connector",
+            "C",
             "Connector",
-            "Introduce regulated EU and US institutions rolling out Microsoft 365 Copilot.",
-            "Warm intros to CISO, GRC, or procurement · referral path after signed Copilot Governance Pack.",
-            "Intro fee · co-marketing orientation",
+            "Intro fee · co-marketing",
+            "Warm intros to CISO, GRC, or procurement at regulated EU and US institutions.",
+            ["Referral path after signed Governance Pack", "Co-marketing orientation", "Non-confidential intros only"],
         ),
         (
             "facilitator",
+            "F",
             "Facilitator",
+            "Workshop · kickoff delivery",
             "Lead buyer workshops, pilot kickoffs, and governance enablement sessions.",
-            "Fixed-fee adjunct delivery · board PDF success signal in client governance meeting.",
-            "Workshop + kickoff delivery",
+            ["Fixed-fee adjunct delivery", "Board PDF success signal in client meeting", "Workshop + kickoff playbooks"],
         ),
         (
             "co-partner",
+            "CP",
             "Co-partner",
-            "Co-deliver Copilot Governance Pack pilots under a joint SOW.",
-            "Shared delivery scope · live TLE · metadata-only M365 evidence · procurement ZIP.",
-            "Joint SOW · $2k–10k pilot bands",
+            "Joint SOW · $2k–10k",
+            "Co-deliver Copilot Governance Pack pilots under a shared delivery scope.",
+            ["Live TLE + metadata-only M365 evidence", "Procurement ZIP for buyer diligence", "Joint SOW · honest scope"],
         ),
         (
             "partner",
+            "P",
             "Partner",
+            "MSP · SI · advisory",
             "MSP, SI, or advisory firm — Phase 2 attach after Purview readiness.",
-            "Readiness → Record handoff · multi-tenant enablement · Governance Pack attach.",
-            "MSP · SI · advisory lane",
+            ["Readiness → Record handoff", "Multi-tenant enablement", "Governance Pack attach"],
         ),
     ]
-    cards = []
-    for key, title, h3, p, tag in roles:
-        cards.append(
-            f'<article class="nf-offer-card nf-offer-card--featured">'
-            f'<p class="meta">{tag}</p>'
-            f"<h3>{title}</h3><p>{h3} {p}</p>"
-            f'<a class="btn btn-primary" href="{work_with_us_intake(key)}">Apply as {title.lower()}</a>'
-            f"</article>"
-        )
+    channel_html = "".join(_wwu_lane_card(k, i, t, tag, lead, pts) for k, i, t, tag, lead, pts in channel)
+    investor_spotlight = f"""
+ <article class="nf-wwu-investor-spotlight" data-lane="investor">
+ <div class="nf-wwu-investor-copy">
+ <span class="nf-wwu-lane-icon nf-wwu-lane-icon--investor" aria-hidden="true">$</span>
+ <div>
+ <p class="nf-wwu-lane-tag">Capital · strategic · intro</p>
+ <h3>Investor</h3>
+ <p class="nf-wwu-lane-lead">Angels, VCs, and strategics backing governance execution infrastructure for Copilot rollouts — product shipped, milestone path honest.</p>
+ </div>
+ </div>
+ <ul class="nf-wwu-investor-metrics" aria-label="Investor thesis signals">
+ <li><strong>Land</strong><span>Trust Brief · $10k wedge</span></li>
+ <li><strong>Expand</strong><span>Governance Pack · enterprise cadence</span></li>
+ <li><strong>Channel</strong><span>MSP attach · partner margin</span></li>
+ <li><strong>Proof</strong><span>Board PDF in governance meeting</span></li>
+ </ul>
+ <div class="nf-wwu-lane-actions">
+ <a class="btn btn-primary" href="{work_with_us_intake("investor")}">Apply as investor</a>
+ <a class="btn btn-secondary" href="/investors/">Read investor brief</a>
+ <a class="btn btn-secondary" href="#partner-apply" data-wwu-pick="investor">Quick apply</a>
+ </div>
+ </article>"""
     return f"""
- <section class="nf-section-block nf-section--elevated" aria-labelledby="wwu-roles">
+ <section class="nf-section-block nf-section--elevated nf-wwu-lanes-section" aria-labelledby="wwu-roles">
  <div class="nf-section-block-head"><span class="nf-section-num" aria-hidden="true">01</span><div>
  <p class="nf-eyebrow" id="wwu-roles">Program lanes</p>
- <h2>Connector · Facilitator · Co-partner · Partner</h2>
- <p class="nf-section-lead">Four ways to work with Noetfield on regulated Copilot governance — pick the lane that matches how you go to market.</p>
+ <h2>Channel partners · capital · one governance spine</h2>
+ <p class="nf-section-lead">Four delivery lanes plus an investor path — all aligned on Copilot Governance Pack attach and board-grade tamper-evident receipts.</p>
  </div></div>
- <div class="nf-offerings-v5">{"".join(cards)}</div>
+ <div class="nf-wwu-lanes-grid">{channel_html}</div>
+ {investor_spotlight}
+ </section>"""
+
+
+def work_with_us_fit_body() -> str:
+    return """
+ <div class="nf-fit-grid nf-wwu-fit-grid">
+ <article class="nf-fit-card nf-fit-card--yes"><h3>Strong fit</h3><ul>
+ <li>You <strong>introduce, facilitate, co-deliver, or attach</strong> on regulated Copilot governance — MSP, SI, advisory, or connector network</li>
+ <li>You want <strong>async intake</strong> with operations follow-up — no purchase hub, no design-partner theater</li>
+ <li>You align on <strong>metadata-only M365</strong>, signed TLE v1, and board PDF as the success signal</li>
+ <li>Investors: you underwrite <strong>Land · Expand · Channel</strong> with demo-ready product today — honest milestone path</li>
+ </ul></article>
+ <article class="nf-fit-card nf-fit-card--no"><h3>Not a fit</h3><ul>
+ <li>You need payment rails, custody, MSB execution, or transaction processing</li>
+ <li>You want full mailbox/content surveillance — we index metadata only</li>
+ <li>You need ISO/SOC <strong>certification from us</strong> — we produce governance artifacts, not company certification</li>
+ <li>You want a generic AI reseller catalog — three contract SKUs + ecosystem lanes only</li>
+ </ul></article>
+ </div>"""
+
+
+def contact_intake_form() -> str:
+    return f"""
+ <section class="nf-section-block nf-section--elevated" id="contact-form" aria-labelledby="contact-form-title">
+ <div class="nf-section-block-head"><span class="nf-section-num" aria-hidden="true">→</span><div>
+ <p class="nf-eyebrow" id="contact-form-title">Message operations</p>
+ <h2>Async intake — saved instantly · ops notified</h2>
+ <p class="nf-section-lead">Non-confidential only · include your Request ID from the footer · operations@noetfield.com replies within one business day.</p>
+ </div></div>
+ <form id="nfContactForm" class="nf-pilot-apply-form" data-nf-intake-form data-intake-vector="contact" data-intake-sku="general" data-submit-label="Send message" data-intake-headline="Message recorded — async ops notify" aria-label="Contact operations">
+ <div class="nf-pilot-apply-grid">
+ <label>Work email<input type="email" name="email" required autocomplete="email" placeholder="you@institution.com" /></label>
+ <label>Organization<input type="text" name="org" required autocomplete="organization" placeholder="Institution or firm" /></label>
+ <label>Topic
+ <select name="topic" required>
+ <option value="">Select topic</option>
+ <option value="pilot">Copilot Governance Pack pilot</option>
+ <option value="trust-brief">Trust Brief ($10k)</option>
+ <option value="bank-pilot">Bank Pilot · shadow evaluate</option>
+ <option value="partner">Partner / MSP program</option>
+ <option value="investor">Investor / strategic</option>
+ <option value="federal">Federal / public sector</option>
+ <option value="feedback">Site feedback</option>
+ <option value="other">Other · operations routing</option>
+ </select>
+ </label>
+ <label>Your name (optional)<input type="text" name="name" autocomplete="name" placeholder="Your name" /></label>
+ </div>
+ <label>Message<textarea name="notes" rows="4" required placeholder="Non-confidential scope · how we can help · unclassified only"></textarea></label>
+ <div class="nf-cta-actions">
+ <button type="submit" class="btn btn-primary">Send message</button>
+ <a class="btn btn-secondary" href="/trust-brief/intake/">Full Trust Brief intake</a>
+ <a class="btn btn-secondary" href="{PILOT_INTAKE}">Apply for pilot</a>
+ </div>
+ <div id="nfContactStatus" class="nf-intake-async-status" data-nf-intake-status hidden aria-live="polite"></div>
+ </form>
+ </section>"""
+
+
+def investor_intake_form() -> str:
+    return f"""
+ <section class="nf-section-block nf-section--elevated" id="investor-apply" aria-labelledby="investor-apply-title">
+ <div class="nf-section-block-head"><span class="nf-section-num" aria-hidden="true">→</span><div>
+ <p class="nf-eyebrow" id="investor-apply-title">Investor inquiry</p>
+ <h2>Async investor intake — Land · Expand · Channel brief</h2>
+ <p class="nf-section-lead">Non-confidential · demo-ready product today · operations follows up within one business day.</p>
+ </div></div>
+ <form id="nfInvestorForm" class="nf-pilot-apply-form" data-nf-intake-form data-intake-vector="work-with-us" data-intake-sku="general" data-submit-label="Submit investor inquiry" data-intake-headline="Investor inquiry recorded" data-intake-detail="Operations shares the investor brief and follows up within one business day." aria-label="Investor inquiry">
+ <div class="nf-pilot-apply-grid">
+ <label>Work email<input type="email" name="email" required autocomplete="email" placeholder="you@fund.com" /></label>
+ <label>Organization<input type="text" name="org" required autocomplete="organization" placeholder="Fund or strategic" /></label>
+ </div>
+ <label>Inquiry (optional)<textarea name="notes" rows="3" placeholder="Thesis fit · Land · Expand · Channel questions · unclassified only"></textarea></label>
+ <input type="hidden" name="role" value="investor" />
+ <div class="nf-cta-actions">
+ <button type="submit" class="btn btn-primary">Submit investor inquiry</button>
+ <a class="btn btn-secondary" href="/investors/">Investor brief</a>
+ <a class="btn btn-secondary" href="/copilot/demo/">5-minute demo</a>
+ </div>
+ <div id="nfInvestorStatus" class="nf-intake-async-status" data-nf-intake-status hidden aria-live="polite"></div>
+ </form>
  </section>"""
 
 
 def partner_apply_form() -> str:
     return f"""
- <section class="nf-section-block" id="partner-apply" aria-labelledby="partner-apply-title">
- <div class="nf-section-block-head"><span class="nf-section-num" aria-hidden="true">→</span><div>
+ <section class="nf-section-block nf-section--elevated nf-wwu-apply-section" id="partner-apply" aria-labelledby="partner-apply-title">
+ <div class="nf-section-block-head"><span class="nf-section-num" aria-hidden="true">03</span><div>
  <p class="nf-eyebrow" id="partner-apply-title">Apply</p>
- <h2>Work with Noetfield — ecosystem application</h2>
- <p class="nf-section-lead">Non-confidential · operations@noetfield.com · include your Request ID from the site footer.</p>
+ <h2>Ecosystem application — async handoff to operations</h2>
+ <p class="nf-section-lead">Non-confidential · saved instantly · operations@noetfield.com · include your Request ID from the footer.</p>
  </div></div>
- <form id="nfPartnerApplyForm" class="nf-pilot-apply-form" data-intake="{WORK_WITH_US_INTAKE}" aria-label="Work with Noetfield application">
+ <div class="nf-wwu-apply-shell">
+ <div class="nf-wwu-lane-picker" role="group" aria-label="Pick your program lane">
+ <p class="nf-wwu-lane-picker-label">Program lane</p>
+ <div class="nf-wwu-lane-pills">
+ <button type="button" class="nf-wwu-lane-pill" data-wwu-lane="connector">Connector</button>
+ <button type="button" class="nf-wwu-lane-pill" data-wwu-lane="facilitator">Facilitator</button>
+ <button type="button" class="nf-wwu-lane-pill" data-wwu-lane="co-partner">Co-partner</button>
+ <button type="button" class="nf-wwu-lane-pill" data-wwu-lane="partner">Partner</button>
+ <button type="button" class="nf-wwu-lane-pill nf-wwu-lane-pill--investor" data-wwu-lane="investor">Investor</button>
+ </div>
+ </div>
+ <form id="nfPartnerApplyForm" class="nf-pilot-apply-form nf-wwu-apply-form" data-intake="{WORK_WITH_US_INTAKE}" data-nf-intake-custom="1" aria-label="Work with Noetfield application">
  <div class="nf-pilot-apply-grid">
  <label>Work email<input type="email" name="email" required autocomplete="email" placeholder="you@firm.com" /></label>
- <label>Organization<input type="text" name="org" required autocomplete="organization" placeholder="Firm or practice name" /></label>
- <label>Program lane
- <select name="role" required>
+ <label>Organization<input type="text" name="org" required autocomplete="organization" placeholder="Firm, fund, or practice name" /></label>
+ <label class="nf-wwu-select-label">Lane (confirm)
+ <select name="role" id="nfPartnerRole" required aria-describedby="nfPartnerRoleHint">
  <option value="">Select lane</option>
  <option value="connector">Connector — warm intros to regulated buyers</option>
  <option value="facilitator">Facilitator — workshops &amp; pilot kickoffs</option>
  <option value="co-partner">Co-partner — joint Copilot Governance Pack delivery</option>
  <option value="partner">Partner — MSP / SI / advisory (Phase 2 attach)</option>
+ <option value="investor">Investor — capital / strategic / angel intro</option>
  </select>
+ <span id="nfPartnerRoleHint" class="nf-wwu-field-hint">Pick a lane above or use the dropdown.</span>
  </label>
  <label>Primary geography
  <select name="region">
@@ -865,59 +1065,59 @@ def partner_apply_form() -> str:
  </select>
  </label>
  </div>
- <label>How you want to work together (optional)<textarea name="notes" rows="3" placeholder="Existing Copilot/Purview practice · target sectors · unclassified only"></textarea></label>
- <div class="nf-cta-actions">
+ <label id="nfPartnerNotesLabel">How you want to work together (optional)
+ <textarea name="notes" id="nfPartnerNotes" rows="4" placeholder="Existing Copilot/Purview practice · target sectors · unclassified only"></textarea>
+ </label>
+ <div class="nf-cta-actions nf-wwu-apply-actions">
  <button type="submit" class="btn btn-primary">Submit application</button>
- <a class="btn btn-secondary" href="/copilot/demo/">See 5-minute demo first</a>
- <a class="btn btn-secondary" href="/msp/">MSP lane overview</a>
+ <a class="btn btn-secondary" href="/copilot/demo/">5-minute demo</a>
+ <a class="btn btn-secondary" href="/investors/">Investor brief</a>
  </div>
+ <div id="nfPartnerApplyStatus" class="nf-intake-async-status" hidden aria-live="polite"></div>
  </form>
- </section>
- <script src="/assets/noetfield-partner-apply.js?v={WWW_VER}" defer></script>"""
+ </div>
+ </section>"""
 
 
 def work_with_us_page_body() -> str:
     return hero(
         "Work with Noetfield · Ecosystem",
-        "Connectors · facilitators · co-partners · partners",
+        "Connectors · facilitators · co-partners · partners · investors",
         "Help regulated institutions get board-grade Copilot governance receipts",
         "Noetfield is the <strong>governance execution layer</strong> for Microsoft 365 Copilot rollouts — signed Trust Ledger Entries, board PDF, procurement ZIP. "
-        "We partner with people and firms who <strong>connect buyers</strong>, <strong>facilitate rollout</strong>, <strong>co-deliver pilots</strong>, or <strong>attach after Purview readiness</strong> — same evaluate → TLE → export spine.",
-        [("Copilot Governance Pack attach", True), ("EU + US regulated lane", True), ("No custody · no MSB", False)],
-        [(WORK_WITH_US_INTAKE, "Apply to work with us", True), ("/copilot/demo/", "5-minute demo", False), ("/msp/", "MSP program", False)],
-        ["Connector", "Facilitator", "Co-partner", "Partner"],
-        panel("What you help deliver", [
-            "Copilot Governance Pack pilots · $2k–10k",
-            "Board PDF in client governance meeting",
-            "Metadata-only M365 evidence index",
-            "Honest scope — no certifier claims",
-        ]),
-    ) + work_with_us_roles_grid() + f"""
- <section class="nf-section-block" aria-labelledby="wwu-model">
+        "We partner with people and firms who <strong>connect buyers</strong>, <strong>facilitate rollout</strong>, <strong>co-deliver pilots</strong>, <strong>attach after Purview readiness</strong>, or <strong>back the Land · Expand · Channel path</strong> — same evaluate → TLE → export spine.",
+        [("Copilot Governance Pack attach", True), ("Async apply · instant record", True), ("EU + US regulated lane", True)],
+        [(WORK_WITH_US_INTAKE, "Apply to work with us", True), ("#partner-apply", "Quick apply", False), ("/investors/", "Investor brief", False)],
+        ["Connector", "Facilitator", "Co-partner", "Partner", "Investor"],
+        work_with_us_hero_panel(),
+    ) + work_with_us_ecosystem_stat_bar() + work_with_us_roles_grid() + f"""
+ <section class="nf-section-block nf-wwu-model-section" aria-labelledby="wwu-model">
  <div class="nf-section-block-head"><span class="nf-section-num" aria-hidden="true">02</span><div>
  <p class="nf-eyebrow" id="wwu-model">How the program works</p>
  <h2>Apply → enable → earn on proof</h2>
- <p class="nf-section-lead">Channel economics follow the same milestone path as direct GTM — lead with Governance Pack, expand on board PDF success.</p>
+ <p class="nf-section-lead">Channel economics and investor diligence follow the same milestone spine — Governance Pack attach, board PDF success, expand on receipts.</p>
  </div></div>
- <div class="nf-loop">
- <article class="nf-loop-step"><p class="nf-loop-step-num">1</p><h3>Apply</h3><p>Tell us your lane — connector, facilitator, co-partner, or MSP/SI partner. Non-confidential intake only.</p></article>
- <article class="nf-loop-step"><p class="nf-loop-step-num">2</p><h3>Enable</h3><p>Sandbox demo · delivery playbook orientation · co-marketing kit for your lane (per agreement).</p></article>
- <article class="nf-loop-step"><p class="nf-loop-step-num">3</p><h3>Earn</h3><p>Attach Copilot Governance Pack pilots · referral or delivery fee per SOW · expand to Trust Brief or enterprise cadence.</p></article>
+ <div class="nf-loop nf-wwu-loop">
+ <article class="nf-loop-step"><p class="nf-loop-step-num">1</p><h3>Apply</h3><p>Pick your lane — connector, facilitator, co-partner, partner, or investor. Async intake · non-confidential only.</p></article>
+ <article class="nf-loop-step"><p class="nf-loop-step-num">2</p><h3>Enable</h3><p>Sandbox demo · delivery or investor brief · playbook orientation for your lane (per agreement).</p></article>
+ <article class="nf-loop-step nf-loop-step--highlight"><p class="nf-loop-step-num">3</p><h3>Earn · underwrite</h3><p><strong>Channel:</strong> attach Governance Pack pilots · referral or delivery fee per SOW. <strong>Investor:</strong> Land · Expand · Channel aligned to board PDF proof in market.</p></article>
  </div>
  </section>
  {partner_apply_form()}
- <section class="nf-section-block nf-section--elevated" aria-labelledby="wwu-fit">
+ <section class="nf-section-block nf-section--elevated nf-wwu-fit-section" aria-labelledby="wwu-fit">
  <div class="nf-section-block-head"><span class="nf-section-num" aria-hidden="true">✓</span><div>
  <p class="nf-eyebrow" id="wwu-fit">Fit</p>
- <h2>Built for ecosystem players in regulated digital trust</h2>
+ <h2>Built for ecosystem players and aligned capital</h2>
  </div></div>
- {fit_qualification_body()}
+ {work_with_us_fit_body()}
  </section>
+ <script src="/assets/noetfield-partner-apply.js?v={WWW_VER}" defer></script>
+ <script src="/assets/noetfield-work-with-us.js?v={WWW_VER}" defer></script>
 """ + mega_cta(
-        "Ready to connect buyers to Copilot governance receipts?",
-        "Apply online · include Request ID · operations@noetfield.com",
+        "Ready to connect buyers — or back the governance receipt layer?",
+        "Async apply · include Request ID · operations@noetfield.com",
         (WORK_WITH_US_INTAKE, "Apply to work with us"),
-        ("/contact/", "Contact operations"),
+        ("/investors/", "Investor brief"),
     )
 
 
@@ -1271,7 +1471,7 @@ def homepage() -> str:
  </div></div>
 """ + hero(
         "Board-grade trust · EU + US regulated institutions",
-        "AI Governance &amp; Evidence · Microsoft 365 Copilot",
+        "AI Governance &amp; Evidence · Copilot · Trust Brief · Bank Pilot",
         COPY["hero_h1"],
         COPY["hero_lead"],
         [("Copilot Governance Pack · $2k–10k", True), ("Tamper-evident TLE", True), ("Board-grade trust", False)],
@@ -1284,6 +1484,10 @@ def homepage() -> str:
         f'<p class="nf-first-receipt-promise">{COPY["first_receipt_promise"]}</p>\n <p class="nf-lead">',
         1,
     ).replace(
+        '<div class="nf-hero-badges">',
+        product_lane_strip() + '\n <div class="nf-hero-badges">',
+        1,
+    ).replace(
         '</header>',
         hero_regulatory_chips() + "\n </header>",
         1,
@@ -1293,8 +1497,8 @@ def homepage() -> str:
  <section class="nf-section-block nf-act-prove" aria-labelledby="act-prove">
  <div class="nf-section-block-head"><span class="nf-section-num" aria-hidden="true">02</span><div>
  <p class="nf-eyebrow" id="act-prove">Prove</p>
- <h2>The moment Copilot becomes auditable</h2>
- <p class="nf-section-lead">{COPY["demo_sentence"]} · {COPY["m365_position"]}</p>
+ <h2>The moment AI execution becomes auditable</h2>
+ <p class="nf-section-lead">{COPY["demo_sentence"]} · Same evaluate → TLE → export spine across Copilot Pack, Trust Brief, and Bank Pilot.</p>
  </div></div>
  <div class="nf-loop">
  <article class="nf-loop-step"><p class="nf-loop-step-num">01</p><h3>Evaluate</h3><p>Pre-execution evaluate — operational intent before production scope opens.</p></article>
@@ -2052,9 +2256,9 @@ def main() -> None:
  <a class="nf-card nf-card--link" href="/msp/"><p class="nf-card__tag">MSP</p><h3>MSP partners</h3><p>Readiness → Record.</p></a>
  </div></section>"""))
 
-    write("work-with-us/index.html", "Work with Noetfield — Connectors, Facilitators & Partners",
-          "Apply to work with Noetfield as a connector, facilitator, co-partner, or MSP/SI partner on Copilot Governance Pack programs.",
-          "/work-with-us/", work_with_us_page_body())
+    write("work-with-us/index.html", "Work with Noetfield — Connectors, Facilitators, Partners & Investors",
+          "Apply to work with Noetfield as a connector, facilitator, co-partner, MSP/SI partner, or investor on Copilot Governance Pack programs.",
+          "/work-with-us/", work_with_us_page_body(), body_class="nf-www nf-site-v14 nf-page-work-with-us")
 
     # FAQ
     write("faq/index.html", "Noetfield — FAQ",
@@ -2083,9 +2287,15 @@ def main() -> None:
 
     write("contact/index.html", "Noetfield — Contact", "Contact Noetfield operations.", "/contact/",
           hero("", "Contact", "Operations intake",
-               "All contract offerings route through Copilot Governance Pack intake, Trust Brief, or operations@noetfield.com.",
-               [], [(PILOT_INTAKE, "Apply for pilot", True), ("mailto:operations@noetfield.com", "operations@noetfield.com", False)], [],
-               panel("Routing", ["Copilot Governance Pack · $2k–10k", "Trust Brief · land SKU", "operations@noetfield.com", "Non-confidential intake only"])) + mega_cta())
+               "All contract offerings route through async intake — Copilot Governance Pack, Trust Brief, Bank Pilot, partner programs, or investor inquiries.",
+               [], [(PILOT_INTAKE, "Apply for pilot", True), ("#contact-form", "Send message", False)], [],
+               panel("Routing", ["Copilot Governance Pack · $2k–10k", "Trust Brief · land SKU", "Bank Pilot · shadow", "Async ops notify"])) +
+          contact_intake_form() + mega_cta(
+              "Prefer async intake?",
+              "Saved instantly · ops notified within one business day",
+              ("#contact-form", "Send message"),
+              (PILOT_INTAKE, "Apply for pilot"),
+          ))
 
     write("trust-ledger/index.html", "Noetfield — Trust Ledger", "Trust Ledger workspace and TLE v1 lifecycle.", "/trust-ledger/",
           hub_page("Trust Ledger", "TLE v1 lifecycle",
@@ -2122,7 +2332,7 @@ def main() -> None:
               "<strong>Product is demo-ready today</strong> — TLE v1, workspace, evaluate API, board PDF, procurement ZIP. "
               "The step function investors underwrite is <strong>one contracted org</strong> using a board PDF in a real governance meeting.",
               [("Demo-ready product", True), ("Board PDF pilots open", True), ("No custody · no MSB", False)],
-              [("/copilot/demo/", "5-minute demo", True), ("mailto:operations@noetfield.com?subject=Investor%20brief", "Investor inquiry", False)],
+              [("/copilot/demo/", "5-minute demo", True), ("#investor-apply", "Investor inquiry", False)],
               ["Land · Expand · Channel", "Governance Pack ≥ CAD 2K", "Metadata-only M365"],
               receipt("RID-2026-0602-INV", "Live product path — <a href=\"/copilot/demo/\">demo</a> · <a href=\"/trust-ledger/sample-report/\">TLE samples</a>"),
           )
@@ -2247,11 +2457,10 @@ def main() -> None:
  </section>
 
  <aside class="nf-callout"><p><strong>Investor honesty:</strong> We do not claim ISO/SOC certification, custody, payment rails, or MSB execution. We do not inflate ARR or logo count. Product is shipped and demoable today — capital accelerates <strong>first contracted Governance Pack</strong> and <strong>referenceable board PDF</strong> on the three locked SKUs.</p></aside>
-"""
-          + mega_cta(
+""" + investor_intake_form() + mega_cta(
               "Investor or Governance Pack conversation",
               "Live demo · commercial SSOT · 90-day milestone plan — operations@noetfield.com",
-              ("mailto:operations@noetfield.com?subject=Investor%20brief", "Email operations"),
+              ("#investor-apply", "Submit investor inquiry"),
               ("/copilot/demo/", "Run 5-minute demo"),
           ))
 

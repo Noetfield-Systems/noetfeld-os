@@ -57,6 +57,97 @@
   min-height: 44px;
 }
 
+.nf-live-proof-lanes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0 0 12px;
+}
+
+.nf-live-proof-lane {
+  appearance: none;
+  border: 1px solid var(--line, #e2e5ec);
+  border-radius: 999px;
+  padding: 6px 11px;
+  font: inherit;
+  font-size: 0.6875rem;
+  font-weight: 650;
+  letter-spacing: 0.02em;
+  color: var(--muted, #4a5060);
+  background: var(--panel2, #f7f6f3);
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease, color 0.15s ease;
+}
+
+.nf-live-proof-lane:hover {
+  border-color: rgba(138, 107, 31, 0.35);
+  color: var(--text, #0f1117);
+}
+
+.nf-live-proof-lane.is-active {
+  border-color: rgba(200, 163, 73, 0.55);
+  background: rgba(200, 163, 73, 0.12);
+  color: var(--text, #0f1117);
+}
+
+.nf-live-proof-form select {
+  display: block;
+  width: 100%;
+  margin-top: 4px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--line, #e2e5ec);
+  font: inherit;
+  font-size: 0.8125rem;
+  background: #fff;
+}
+
+.nf-scenario-of-day__lane {
+  color: var(--gold, #8a6b1f);
+  font-weight: 600;
+}
+
+body.nf-www .nf-product-lane-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0 14px;
+}
+
+body.nf-www .nf-product-lane {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: #fff;
+  box-shadow: var(--shadow2);
+  text-decoration: none;
+  min-width: 118px;
+  transition: border-color 0.15s ease, transform 0.15s ease;
+}
+
+body.nf-www .nf-product-lane:hover {
+  border-color: rgba(138, 107, 31, 0.35);
+  transform: translateY(-1px);
+}
+
+body.nf-www .nf-product-lane strong {
+  font-size: 0.8125rem;
+  color: var(--text);
+}
+
+body.nf-www .nf-product-lane span {
+  font-size: 0.6875rem;
+  color: var(--muted2);
+}
+
+body.nf-www .nf-product-lane--lead {
+  border-color: rgba(200, 163, 73, 0.45);
+  background: linear-gradient(180deg, rgba(255, 248, 235, 0.9), #fff);
+}
+
 .nf-live-proof-receipt {
   flex: 1;
 }

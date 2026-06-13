@@ -547,7 +547,7 @@ class PublicIntakeResponse(BaseModel):
     intake_id: str
     request_id: str | None
     intake_email: str = CANONICAL_INTAKE_EMAIL
-    message: str = "Intake recorded. Operations will follow up via email."
+    message: str = "Intake recorded. Operations notified asynchronously — follow-up via email within one business day."
 
 
 def _secret(value: SecretStr | None) -> str:

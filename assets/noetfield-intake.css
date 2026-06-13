@@ -230,3 +230,29 @@ display: none !important;
 body.intake-ecosystem-mode .grid{
 margin-bottom: 32px;
 }
+
+.nf-intake-async-status{
+margin-top:14px;
+padding:14px 16px;
+border-radius:14px;
+border:1px solid rgba(255,255,255,.12);
+background:rgba(255,255,255,.04);
+font-size:14px;
+line-height:1.55;
+}
+.nf-intake-async-status--ok{
+border-color:rgba(200,163,73,.35);
+background:rgba(200,163,73,.08);
+}
+.nf-intake-async-status--err{
+border-color:rgba(232,184,74,.45);
+background:rgba(232,184,74,.08);
+}
+.nf-intake-async-meta{
+margin:10px 0 0;
+font-size:13px;
+color:var(--muted);
+}
+.nf-intake-async-meta code{
+font-family:var(--font-mono, ui-monospace, monospace);
+}

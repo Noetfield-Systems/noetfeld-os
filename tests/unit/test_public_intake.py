@@ -48,6 +48,33 @@ def test_intake_submit() -> None:
     asyncio.run(run())
 
 
+def test_intake_submit_work_with_us_vector() -> None:
+    async def run() -> None:
+        from noetfield_governance import intake_repository
+
+        await intake_repository.init_intake_repository()
+        transport = ASGITransport(app=app)
+        async with AsyncClient(transport=transport, base_url="http://test") as client:
+            response = await client.post(
+                "/api/intake",
+                json={
+                    "organization": "Partner Co",
+                    "contact_email": "partner@example.com",
+                    "message": "Connector application.",
+                    "vector": "work-with-us",
+                    "sku": "general",
+                    "metadata": {"program_lane": "connector", "async": True},
+                    "source": "web",
+                },
+            )
+        assert response.status_code == 200
+        body = response.json()
+        assert body["intake_id"].startswith("INT-")
+        assert "async" in body["message"].lower()
+
+    asyncio.run(run())
+
+
 def test_llm_fallback_openrouter_to_gemini() -> None:
     async def run() -> None:
         calls: list[str] = []

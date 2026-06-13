@@ -8,15 +8,18 @@
  <meta name="robots" content="index,follow" />
  <meta name="theme-color" content="#f4f5f8" />
  <link rel="canonical" href="https://www.noetfield.com/copilot/pilot/" />
+ <meta name="nf-chat-api-base" content="https://platform.noetfield.com" />
  <link rel="icon" href="/noetfield-favicon-512.png" type="image/png" />
  <link rel="preconnect" href="https://fonts.googleapis.com" />
  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,400..700;1,14..32,400..700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" />
  <link rel="stylesheet" href="/assets/noetfield-tokens.css" />
  <link rel="stylesheet" href="/assets/noetfield-shell.css" />
- <link rel="stylesheet" href="/assets/noetfield-www.css?v=30" />
- <link rel="stylesheet" href="/assets/noetfield-print.css?v=30" media="print" />
- <script src="/assets/noetfield-shell.js?v=30" defer></script>
+ <link rel="stylesheet" href="/assets/noetfield-www.css?v=35" />
+ <link rel="stylesheet" href="/assets/noetfield-print.css?v=35" media="print" />
+ <script src="/assets/noetfield-shell.js?v=35" defer></script>
+ <script src="/assets/noetfield-intake-core.js?v=35" defer></script>
+ <script src="/assets/noetfield-forms.js?v=35" defer></script>
 </head>
 <body class="nf-www nf-site-v14">
  <div class="bg" aria-hidden="true"></div>
@@ -235,7 +238,7 @@
  <h2>Start your Copilot Governance Pack intake</h2>
  <p class="nf-section-lead">Non-confidential · include your Request ID from the footer · operations@noetfield.com</p>
  </div></div>
- <form id="nfPilotApplyForm" class="nf-pilot-apply-form" data-intake="/trust-brief/intake/?interest=pilot&vector=copilot-governance" aria-label="Copilot Governance Pack intake">
+ <form id="nfPilotApplyForm" class="nf-pilot-apply-form" data-intake="/trust-brief/intake/?interest=pilot&vector=copilot-governance" data-vector="copilot-governance" data-nf-intake-custom="1" aria-label="Copilot Governance Pack intake">
  <div class="nf-pilot-apply-grid">
  <label>Work email<input type="email" name="email" required autocomplete="email" placeholder="you@institution.com" /></label>
  <label>Organization<input type="text" name="org" required autocomplete="organization" placeholder="Regulated institution name" /></label>
@@ -262,9 +265,10 @@
  <a class="btn btn-secondary" href="/copilot/demo/">5-minute demo first</a>
  </div>
  <p class="nf-section-lead" style="margin-top:12px">Fixed fee · metadata-only M365 · board PDF success signal · <a href="/copilot/procurement/">procurement pack</a></p>
+ <div id="nfPilotApplyStatus" class="nf-intake-async-status" hidden aria-live="polite"></div>
  </form>
  </section>
- <script src="/assets/noetfield-pilot-intake.js?v=30" defer></script>
+ <script src="/assets/noetfield-pilot-intake.js?v=35" defer></script>
  <section class="nf-trust-signals" aria-labelledby="scope-title">
  <h2 id="scope-title">Available now — capability scope</h2>
  <p class="nf-trust-signals-lead">Honest scope for procurement — what you can demo, export, and defend today.</p>

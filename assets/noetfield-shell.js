@@ -399,12 +399,10 @@
     if (p === "/feedback" || p.startsWith("/feedback/")) return;
     if (document.querySelector(".feedbackTab")) return;
 
-    var email = (eco && eco.intake_email) || "operations@noetfield.com";
-    var subject = encodeURIComponent("[feedback] Noetfield — RID " + (rid || ""));
     var a = document.createElement("a");
     a.className = "feedbackTab";
-    a.href = "mailto:" + email + "?subject=" + subject;
-    a.setAttribute("aria-label", "Send feedback by email");
+    a.href = "/contact/?topic=feedback#contact-form";
+    a.setAttribute("aria-label", "Send feedback");
 
     var spark = document.createElement("span");
     spark.className = "spark";

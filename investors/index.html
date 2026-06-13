@@ -8,15 +8,18 @@
  <meta name="robots" content="index,follow" />
  <meta name="theme-color" content="#f4f5f8" />
  <link rel="canonical" href="https://www.noetfield.com/investors/" />
+ <meta name="nf-chat-api-base" content="https://platform.noetfield.com" />
  <link rel="icon" href="/noetfield-favicon-512.png" type="image/png" />
  <link rel="preconnect" href="https://fonts.googleapis.com" />
  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,400..700;1,14..32,400..700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" />
  <link rel="stylesheet" href="/assets/noetfield-tokens.css" />
  <link rel="stylesheet" href="/assets/noetfield-shell.css" />
- <link rel="stylesheet" href="/assets/noetfield-www.css?v=30" />
- <link rel="stylesheet" href="/assets/noetfield-print.css?v=30" media="print" />
- <script src="/assets/noetfield-shell.js?v=30" defer></script>
+ <link rel="stylesheet" href="/assets/noetfield-www.css?v=35" />
+ <link rel="stylesheet" href="/assets/noetfield-print.css?v=35" media="print" />
+ <script src="/assets/noetfield-shell.js?v=35" defer></script>
+ <script src="/assets/noetfield-intake-core.js?v=35" defer></script>
+ <script src="/assets/noetfield-forms.js?v=35" defer></script>
 </head>
 <body class="nf-www nf-site-v14">
  <div class="bg" aria-hidden="true"></div>
@@ -31,7 +34,7 @@
  <h1>We produce the audit trail your Copilot deployment will be asked for later</h1>
  <p class="nf-lead">Noetfield is the <strong>governance execution layer</strong> for M365 Copilot: evaluate intent, sign Trust Ledger Entries, export board-ready diligence. <strong>Product is demo-ready today</strong> — TLE v1, workspace, evaluate API, board PDF, procurement ZIP. The step function investors underwrite is <strong>one contracted org</strong> using a board PDF in a real governance meeting.</p>
  <div class="nf-hero-badges"><span class="nf-badge-pill nf-badge-pill--gold">Demo-ready product</span><span class="nf-badge-pill nf-badge-pill--gold">Board PDF pilots open</span><span class="nf-badge-pill">No custody · no MSB</span></div>
- <div class="nf-cta-actions"><a class="btn btn-primary" href="/copilot/demo/">5-minute demo</a><a class="btn btn-secondary" href="mailto:operations@noetfield.com?subject=Investor%20brief">Investor inquiry</a></div>
+ <div class="nf-cta-actions"><a class="btn btn-primary" href="/copilot/demo/">5-minute demo</a><a class="btn btn-secondary" href="#investor-apply">Investor inquiry</a></div>
  <ul class="nf-marquee" aria-label="Framework alignment"><li>Land · Expand · Channel</li><li>Governance Pack ≥ CAD 2K</li><li>Metadata-only M365</li></ul>
  </div>
  
@@ -188,11 +191,32 @@
 
  <aside class="nf-callout"><p><strong>Investor honesty:</strong> We do not claim ISO/SOC certification, custody, payment rails, or MSB execution. We do not inflate ARR or logo count. Product is shipped and demoable today — capital accelerates <strong>first contracted Governance Pack</strong> and <strong>referenceable board PDF</strong> on the three locked SKUs.</p></aside>
 
+ <section class="nf-section-block nf-section--elevated" id="investor-apply" aria-labelledby="investor-apply-title">
+ <div class="nf-section-block-head"><span class="nf-section-num" aria-hidden="true">→</span><div>
+ <p class="nf-eyebrow" id="investor-apply-title">Investor inquiry</p>
+ <h2>Async investor intake — Land · Expand · Channel brief</h2>
+ <p class="nf-section-lead">Non-confidential · demo-ready product today · operations follows up within one business day.</p>
+ </div></div>
+ <form id="nfInvestorForm" class="nf-pilot-apply-form" data-nf-intake-form data-intake-vector="work-with-us" data-intake-sku="general" data-submit-label="Submit investor inquiry" data-intake-headline="Investor inquiry recorded" data-intake-detail="Operations shares the investor brief and follows up within one business day." aria-label="Investor inquiry">
+ <div class="nf-pilot-apply-grid">
+ <label>Work email<input type="email" name="email" required autocomplete="email" placeholder="you@fund.com" /></label>
+ <label>Organization<input type="text" name="org" required autocomplete="organization" placeholder="Fund or strategic" /></label>
+ </div>
+ <label>Inquiry (optional)<textarea name="notes" rows="3" placeholder="Thesis fit · Land · Expand · Channel questions · unclassified only"></textarea></label>
+ <input type="hidden" name="role" value="investor" />
+ <div class="nf-cta-actions">
+ <button type="submit" class="btn btn-primary">Submit investor inquiry</button>
+ <a class="btn btn-secondary" href="/investors/">Investor brief</a>
+ <a class="btn btn-secondary" href="/copilot/demo/">5-minute demo</a>
+ </div>
+ <div id="nfInvestorStatus" class="nf-intake-async-status" data-nf-intake-status hidden aria-live="polite"></div>
+ </form>
+ </section>
  <section class="nf-cta-mega" aria-labelledby="cta-h">
  <h2 id="cta-h">Investor or Governance Pack conversation</h2>
  <p>Live demo · commercial SSOT · 90-day milestone plan — operations@noetfield.com</p>
  <div class="nf-cta-actions">
- <a class="btn btn-primary" href="mailto:operations@noetfield.com?subject=Investor%20brief">Email operations</a>
+ <a class="btn btn-primary" href="#investor-apply">Submit investor inquiry</a>
  <a class="btn btn-secondary" href="/copilot/demo/">Run 5-minute demo</a>
  </div>
  </section>

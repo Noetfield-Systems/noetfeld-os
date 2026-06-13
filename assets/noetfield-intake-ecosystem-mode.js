@@ -7,6 +7,7 @@
     facilitator: "Facilitator",
     "co-partner": "Co-partner",
     partner: "Partner · MSP / SI / advisory",
+    investor: "Investor · capital / strategic",
   };
 
   function queryParams() {
@@ -119,7 +120,7 @@
     if (tierRailTitle) tierRailTitle.textContent = "Application summary";
     var tierRailLead = document.getElementById("tbTierRailLead");
     if (tierRailLead) {
-      tierRailLead.textContent = "Connector · facilitator · co-partner · partner paths.";
+      tierRailLead.textContent = "Connector · facilitator · co-partner · partner · investor paths.";
     }
 
     var routingCopy = document.getElementById("tbRoutingCopy");

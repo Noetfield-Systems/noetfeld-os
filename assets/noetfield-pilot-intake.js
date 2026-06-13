@@ -1,53 +1,120 @@
-/** Copilot Governance Pack pilot apply — Sumsub-class inline intake → trust-brief router */
+/** Copilot Governance Pack — async pilot apply (no redirect). */
 (function () {
   "use strict";
 
-  function enc(v) {
-    return encodeURIComponent(v || "");
+  function roleLabel(role) {
+    var map = {
+      ciso: "CISO / Security",
+      grc: "GRC / Compliance",
+      legal: "Legal / Procurement",
+      board: "Board / Risk committee",
+      it: "IT / Copilot owner",
+    };
+    return map[role] || role || "—";
+  }
+
+  function bandLabel(band) {
+    var map = {
+      quickscan: "QuickScan · $2,000 · 4 weeks",
+      readiness: "Readiness Pilot · $5k–10k · 90 days",
+    };
+    return map[band] || band || "Readiness Pilot";
+  }
+
+  function buildMessage(fields) {
+    return (
+      "Noetfield — Copilot Governance Pack (async pilot application)\n" +
+      "Organization: " +
+      fields.org +
+      "\n" +
+      "Work email: " +
+      fields.email +
+      "\n" +
+      "Role: " +
+      roleLabel(fields.role) +
+      "\n" +
+      "Pilot band: " +
+      bandLabel(fields.band) +
+      "\n" +
+      "Notes: " +
+      (fields.notes || "—") +
+      "\n" +
+      "Success signal: board PDF in a real governance meeting.\n"
+    );
   }
 
   function bind() {
     var form = document.getElementById("nfPilotApplyForm");
-    if (!form) return;
+    if (!form || !window.NFIntakeCore) return;
+
+    var statusEl = document.getElementById("nfPilotApplyStatus");
+    var vector =
+      (form.getAttribute("data-vector") || "copilot-governance").trim();
 
     form.addEventListener("submit", function (ev) {
       ev.preventDefault();
-      var base = form.getAttribute("data-intake") || "/trust-brief/intake/?interest=pilot&vector=copilot-governance";
       var email = (form.querySelector('[name="email"]') || {}).value || "";
       var org = (form.querySelector('[name="org"]') || {}).value || "";
       var role = (form.querySelector('[name="role"]') || {}).value || "";
-      var band = (form.querySelector('[name="band"]') || {}).value || "";
+      var band = (form.querySelector('[name="band"]') || {}).value || "readiness";
       var notes = (form.querySelector('[name="notes"]') || {}).value || "";
 
       if (!email || !org) {
-        alert("Work email and organization are required.");
+        if (statusEl) {
+          statusEl.hidden = false;
+          statusEl.className = "nf-intake-async-status nf-intake-async-status--err";
+          statusEl.innerHTML =
+            "<p><strong>Missing fields</strong></p><p>Work email and organization are required.</p>";
+        }
         return;
       }
 
-      var url = base;
-      if (url.indexOf("?") === -1) url += "?";
-      else if (url.slice(-1) !== "&" && url.slice(-1) !== "?") url += "&";
+      var msg = buildMessage({ email: email, org: org, role: role, band: band, notes: notes });
+      var intakeUrl =
+        form.getAttribute("data-intake") ||
+        "/trust-brief/intake/?interest=pilot&vector=copilot-governance";
 
-      url +=
-        "email=" +
-        enc(email) +
-        "&org=" +
-        enc(org) +
-        "&role=" +
-        enc(role) +
-        "&band=" +
-        enc(band);
-
-      if (notes) {
-        try {
-          sessionStorage.setItem(
-            "nf_pilot_intake_notes",
-            JSON.stringify({ email: email, org: org, notes: notes, band: band, role: role })
-          );
-        } catch (_) {}
-      }
-
-      window.location.href = url;
+      window.NFIntakeCore.submitAsync({
+        organization: org,
+        contact_email: email,
+        message: msg,
+        vector: vector,
+        sku: "copilot",
+        metadata: {
+          page: window.location.pathname,
+          pilot_band: band,
+          buyer_role: role,
+          async: true,
+        },
+        submitBtn: form.querySelector('button[type="submit"]'),
+        statusEl: statusEl,
+        labels: {
+          idle: "Submit pilot intake",
+          loading: "Submitting…",
+          done: "Submitted ✓",
+        },
+        successCopy: {
+          headline: "Pilot application recorded — async ops notify",
+          detail:
+            "Your Copilot Governance Pack application was saved instantly. Operations follows up within one business day with kickoff and M365 scoping.",
+          extraHtml:
+            '<p class="nf-section-lead" style="margin-top:10px"><a href="/copilot/demo/">5-minute demo</a> · <a href="/start/">Start sandbox</a> · <a href="' +
+            intakeUrl +
+            "&email=" +
+            encodeURIComponent(email) +
+            "&org=" +
+            encodeURIComponent(org) +
+            "&role=" +
+            encodeURIComponent(role) +
+            "&band=" +
+            encodeURIComponent(band) +
+            '">Complete full intake</a></p>',
+        },
+        errorCopy: {
+          mailSubject: "Noetfield — Copilot Governance Pack pilot application",
+          mailBody: msg,
+        },
+      });
     });
   }
 

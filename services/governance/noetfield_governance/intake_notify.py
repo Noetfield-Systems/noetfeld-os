@@ -17,12 +17,25 @@ def notify_ops_webhook(webhook_url: str, record: IntakeRecord) -> bool:
     url = (webhook_url or "").strip()
     if not url:
         return False
+    meta = record.metadata if isinstance(record.metadata, dict) else {}
+    lane = meta.get("program_lane") or meta.get("buyer_role") or ""
+    band = meta.get("pilot_band") or ""
+    async_flag = meta.get("async")
+    extras = []
+    if lane:
+        extras.append(f"lane/role: {lane}")
+    if band:
+        extras.append(f"pilot_band: {band}")
+    if async_flag:
+        extras.append("async web submit")
+    extra_line = f"• {' · '.join(extras)}\n" if extras else ""
     text = (
         f"*New Noetfield intake* `{record.intake_id}`\n"
         f"• Org: {record.organization}\n"
         f"• Email: {record.contact_email}\n"
         f"• SKU: {record.sku} · vector: {record.vector}\n"
         f"• RID: {record.request_id or '—'}\n"
+        f"{extra_line}"
         f"• Inbox: {CANONICAL_INTAKE_EMAIL}\n"
         f"```{record.message[:1500]}```"
     )

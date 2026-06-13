@@ -1,53 +1,38 @@
-/* Primary intake: POST /api/intake (Formspree removed). Mailto fallback on failure. */
+/* Primary intake: POST /api/intake via NFIntakeCore (async ops notify). */
 (function () {
   "use strict";
 
-  function apiBase() {
-    var meta = document.querySelector('meta[name="nf-chat-api-base"]');
-    if (meta && meta.content) return String(meta.content).replace(/\/$/, "");
-    var host = window.location.hostname;
-    if (host === "localhost" || host === "127.0.0.1") return "http://127.0.0.1:8001";
-    return "https://platform.noetfield.com";
-  }
+  function buildMetadata(vector) {
+    var meta = { page: window.location.pathname, async: true };
+    var role = (document.getElementById("tb_role") || {}).value || "";
+    var band = (document.getElementById("tb_pilot_band") || {}).value || "";
+    var region = (document.getElementById("tb_pilot_region") || {}).value || "";
+    try {
+      var sp = new URLSearchParams(window.location.search);
+      if (!role && sp.get("role")) role = sp.get("role");
+    } catch (_) {}
 
-  function skuFromVector(vector) {
-    var v = (vector || "").toLowerCase();
-    if (v.indexOf("copilot") >= 0) return "copilot";
-    if (v.indexOf("bank") >= 0) return "bank_pilot";
-    if (v.indexOf("trust") >= 0) return "trust_brief";
-    if (v.indexOf("partner") >= 0) return "general";
-    return "general";
-  }
-
-  function postIntake(payload) {
-    return fetch(apiBase() + "/api/intake", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-      credentials: "omit",
-    }).then(function (res) {
-      if (!res.ok) {
-        return res.json().catch(function () {
-          return { detail: res.statusText };
-        }).then(function (body) {
-          var err = new Error(body.detail || "Intake failed");
-          err.status = res.status;
-          throw err;
-        });
-      }
-      return res.json();
-    });
+    if (window.NFIntakePilot && window.NFIntakePilot.isPilotIntake()) {
+      meta.pilot_band = band || "readiness";
+      if (role) meta.buyer_role = role;
+    }
+    if (window.NFIntakeEcosystem && window.NFIntakeEcosystem.isEcosystemIntake()) {
+      meta.program_lane = role || "partner";
+      if (region) meta.region = region;
+    }
+    if (vector) meta.vector = vector;
+    return meta;
   }
 
   function wireForm(formId) {
     var form = document.getElementById(formId);
-    if (!form) return;
+    if (!form || !window.NFIntakeCore) return;
 
     form.addEventListener("submit", function (ev) {
       ev.preventDefault();
 
       var ridEl = form.querySelector("[data-rid-field]");
-      var rid = ridEl && ridEl.value ? ridEl.value : "";
+      var rid = ridEl && ridEl.value ? ridEl.value : window.NFIntakeCore.getRid();
       var org = (document.getElementById("tb_org") || {}).value || "";
       var email = (document.getElementById("tb_email") || {}).value || "";
       var name = (document.getElementById("tb_name") || {}).value || "";
@@ -64,54 +49,69 @@
       try {
         if (typeof buildSummary === "function") {
           var s = buildSummary();
-          if (s && s.text) summary = s.text;
           if (s && s.body) summary = s.body;
+          else if (s && s.text) summary = s.text;
         }
       } catch (_) {}
 
-      var message = notes || summary || (window.NFIntakePilot && window.NFIntakePilot.isPilotIntake()
-        ? "Copilot Governance Pack pilot application submitted."
-        : "Trust Brief intake form submitted.");
+      var isPilot = window.NFIntakePilot && window.NFIntakePilot.isPilotIntake();
+      var isEco = window.NFIntakeEcosystem && window.NFIntakeEcosystem.isEcosystemIntake();
+      var message =
+        notes || summary ||
+        (isPilot
+          ? "Copilot Governance Pack pilot application submitted."
+          : isEco
+          ? "Work with Noetfield ecosystem application submitted."
+          : "Trust Brief intake form submitted.");
+
       var submitBtn = form.querySelector('button[type="submit"]');
       var okWrap = document.getElementById("tbOk");
       var errWrap = document.getElementById("tbIntakeErr");
 
-      if (submitBtn) {
-        submitBtn.disabled = true;
-        submitBtn.textContent = "Sending…";
+      if (errWrap) {
+        errWrap.style.display = "none";
+        errWrap.textContent = "";
       }
-      if (errWrap) errWrap.style.display = "none";
+      if (okWrap) okWrap.style.display = "none";
 
-      postIntake({
+      window.NFIntakeCore.submitAsync({
         organization: org,
         contact_email: email,
         contact_name: name || null,
         message: message,
         request_id: rid || null,
-        sku: skuFromVector(vector),
         vector: vector,
-        source: "web",
-        metadata: { page: window.location.pathname },
-      })
-        .then(function (data) {
-          if (okWrap) okWrap.style.display = "block";
-          var idEl = document.getElementById("tbIntakeId");
-          if (idEl && data && data.intake_id) {
-            idEl.textContent = "ID " + data.intake_id;
-          } else if (idEl) {
-            idEl.textContent = "confirmation pending";
+        sku: window.NFIntakeCore.skuFromVector(vector),
+        metadata: buildMetadata(vector),
+        submitBtn: submitBtn,
+        statusEl: null,
+        labels: {
+          idle: isPilot
+            ? "Submit pilot application"
+            : isEco
+            ? "Submit application"
+            : "Send intake",
+          loading: "Submitting…",
+          done: "Submitted ✓",
+        },
+        successCopy: {
+          headline: "Intake recorded — async ops notify",
+          detail:
+            "Your intake was saved instantly. Operations is notified asynchronously and replies within one business day at operations@noetfield.com.",
+        },
+        onSuccess: function (data) {
+          if (okWrap) {
+            okWrap.style.display = "block";
+            var idEl = document.getElementById("tbIntakeId");
+            if (idEl && data && data.intake_id) {
+              idEl.textContent = data.intake_id;
+            } else if (idEl) {
+              idEl.textContent = "confirmation pending";
+            }
           }
-          if (submitBtn) submitBtn.textContent = "Sent";
           form.scrollIntoView({ behavior: "smooth", block: "end" });
-        })
-        .catch(function (err) {
-          if (submitBtn) {
-            submitBtn.disabled = false;
-            submitBtn.textContent =
-              window.NFIntakePilot && window.NFIntakePilot.isPilotIntake()
-                ? "Submit pilot application"
-                : "Send intake";
-          }
+        },
+        onError: function (err) {
           if (errWrap) {
             errWrap.style.display = "block";
             errWrap.textContent =
@@ -119,9 +119,12 @@
               (err.message || "error") +
               ")";
           } else {
-            alert("Intake API unavailable. Use Email operations@noetfield.com with your Request ID.");
+            alert(
+              "Intake API unavailable. Use operations@noetfield.com with your Request ID."
+            );
           }
-        });
+        },
+      });
     });
   }
 

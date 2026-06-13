@@ -68,7 +68,7 @@ def test_homepage_section_count_at_most_eight() -> None:
 def test_homepage_has_export_assurance_inner() -> None:
     text = (ROOT / "index.html").read_text(encoding="utf-8")
     assert "Export assurance" in text
-    assert "Full buyer depth" in text
+    assert "Explore product lanes" in text
 
 
 def test_pilot_page_has_lane_depth_blocks() -> None:
@@ -77,15 +77,75 @@ def test_pilot_page_has_lane_depth_blocks() -> None:
         assert needle in text, needle
 
 
+def test_global_intake_wiring_on_www() -> None:
+    index = (ROOT / "index.html").read_text(encoding="utf-8")
+    assert "noetfield-intake-core.js" in index
+    assert "noetfield-forms.js" in index
+    contact = (ROOT / "contact" / "index.html").read_text(encoding="utf-8")
+    assert "nfContactForm" in contact
+    assert "data-nf-intake-form" in contact
+    investors = (ROOT / "investors" / "index.html").read_text(encoding="utf-8")
+    assert "nfInvestorForm" in investors
+    vercel = (ROOT / "vercel.json").read_text(encoding="utf-8")
+    assert "/api/intake" in vercel
+    forms_js = (ROOT / "assets" / "noetfield-forms.js").read_text(encoding="utf-8")
+    assert "nfSandboxForm" in forms_js
+    assert "nfContactForm" not in forms_js or "data-nf-intake-form" in forms_js
+
+
+def test_homepage_multi_product_playground() -> None:
+    text = (ROOT / "index.html").read_text(encoding="utf-8")
+    assert "nf-live-proof-lanes" in text
+    assert "nf-product-lane-strip" in text
+    assert "Trust Brief" in text
+    assert "Bank Pilot" in text
+    js = (ROOT / "assets" / "noetfield-live-proof.js").read_text(encoding="utf-8")
+    assert "trust_brief" in js
+    assert "bank_board_report" in js
+    assert "msb_transfer_intent" in js
+    assert "agentic_workflow" in js
+
+
 def test_work_with_us_program_page() -> None:
     text = (ROOT / "work-with-us" / "index.html").read_text(encoding="utf-8")
     assert "Work with Noetfield" in text
     assert "Connector" in text
     assert "Facilitator" in text
     assert "Co-partner" in text
+    assert "Investor" in text
     assert "nfPartnerApplyForm" in text
     assert "interest=partner" in text
     assert "vector=work-with-us" in text
+    assert "role=investor" in text
+    assert "/investors/" in text
+    assert "nf-page-work-with-us" in text
+    assert "nf-wwu-investor-spotlight" in text
+    assert "nf-wwu-lane-pill" in text
+    assert "noetfield-work-with-us.js" in text
+
+
+def test_async_intake_core_wired_on_apply_forms() -> None:
+    core = (ROOT / "assets" / "noetfield-intake-core.js").read_text(encoding="utf-8")
+    assert "submitAsync" in core
+    assert "work-with-us" in core
+    pilot = (ROOT / "copilot" / "pilot" / "index.html").read_text(encoding="utf-8")
+    partner = (ROOT / "work-with-us" / "index.html").read_text(encoding="utf-8")
+    for text, status_id in ((pilot, "nfPilotApplyStatus"), (partner, "nfPartnerApplyStatus")):
+        assert "noetfield-intake-core.js" in text
+        assert status_id in text
+    pilot_js = (ROOT / "assets" / "noetfield-pilot-intake.js").read_text(encoding="utf-8")
+    partner_js = (ROOT / "assets" / "noetfield-partner-apply.js").read_text(encoding="utf-8")
+    assert "NFIntakeCore.submitAsync" in pilot_js
+    assert "NFIntakeCore.submitAsync" in partner_js
+    assert "location.href" not in pilot_js
+    assert "location.href" not in partner_js
+
+
+def test_intake_api_uses_core() -> None:
+    api_js = (ROOT / "assets" / "noetfield-intake-api.js").read_text(encoding="utf-8")
+    assert "NFIntakeCore" in api_js
+    intake_html = (ROOT / "trust-brief" / "intake" / "index.html").read_text(encoding="utf-8")
+    assert "noetfield-intake-core.js" in intake_html
 
 
 def test_pilot_intake_hides_legacy_sticky_and_prepare() -> None:

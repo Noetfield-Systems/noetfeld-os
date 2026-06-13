@@ -10,14 +10,23 @@
   ];
 
   function apiBase() {
+    var host = window.location.hostname;
+    if (host === "localhost" || host === "127.0.0.1") {
+      return "http://127.0.0.1:8001";
+    }
+    if (
+      host === "www.noetfield.com" ||
+      host === "noetfield.com" ||
+      host.indexOf(".vercel.app") > 0
+    ) {
+      return "";
+    }
     var script = document.querySelector("script[data-api-base]");
     if (script && script.getAttribute("data-api-base")) {
       return String(script.getAttribute("data-api-base")).replace(/\/$/, "");
     }
     var meta = document.querySelector('meta[name="nf-chat-api-base"]');
     if (meta && meta.content) return String(meta.content).replace(/\/$/, "");
-    var host = window.location.hostname;
-    if (host === "localhost" || host === "127.0.0.1") return "http://127.0.0.1:8001";
     if (host.indexOf("platform.") === 0) return window.location.origin;
     return "https://platform.noetfield.com";
   }
@@ -63,7 +72,7 @@
     var typing = appendMsg(log, "bot", "Thinking", "typing");
     typing.classList.add("nfChatTypingDots");
 
-    fetch(apiBase() + "/api/public/chat", {
+    fetch((apiBase() || "") + "/api/public/chat", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ message: t, session_id: sessionId() }),
