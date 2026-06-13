@@ -6,7 +6,7 @@ import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-WWW_VER = "29"
+WWW_VER = "30"
 
 # Copilot Governance Pack — locked lead SKU ($2k–10k · 90 days · board PDF success signal)
 PILOT_SKU = "Copilot Governance Pack"
@@ -14,6 +14,7 @@ PILOT_BAND = "$2k–10k · 90 days"
 PILOT_SUCCESS = "board PDF in a real governance meeting"
 PILOT_INTAKE = "/trust-brief/intake/?interest=pilot&vector=copilot-governance"
 TRUST_BRIEF_INTAKE = "/trust-brief/intake/"
+WORK_WITH_US_INTAKE = "/trust-brief/intake/?interest=partner&vector=work-with-us"
 MEGA_CTA_TITLE = "Board PDF in your next governance meeting"
 
 # Lane-native north star (docs/strategy/NOETFIELD_DIGITAL_TRUST_LANE_LOCKED_v1.md)
@@ -774,6 +775,150 @@ def pilot_apply_form() -> str:
  </form>
  </section>
  <script src="/assets/noetfield-pilot-intake.js?v={WWW_VER}" defer></script>"""
+
+
+def work_with_us_intake(role: str = "") -> str:
+    base = WORK_WITH_US_INTAKE
+    if role:
+        return f"{base}&role={role}"
+    return base
+
+
+def work_with_us_roles_grid() -> str:
+    roles = [
+        (
+            "connector",
+            "Connector",
+            "Introduce regulated EU and US institutions rolling out Microsoft 365 Copilot.",
+            "Warm intros to CISO, GRC, or procurement · referral path after signed Copilot Governance Pack.",
+            "Intro fee · co-marketing orientation",
+        ),
+        (
+            "facilitator",
+            "Facilitator",
+            "Lead buyer workshops, pilot kickoffs, and governance enablement sessions.",
+            "Fixed-fee adjunct delivery · board PDF success signal in client governance meeting.",
+            "Workshop + kickoff delivery",
+        ),
+        (
+            "co-partner",
+            "Co-partner",
+            "Co-deliver Copilot Governance Pack pilots under a joint SOW.",
+            "Shared delivery scope · live TLE · metadata-only M365 evidence · procurement ZIP.",
+            "Joint SOW · $2k–10k pilot bands",
+        ),
+        (
+            "partner",
+            "Partner",
+            "MSP, SI, or advisory firm — Phase 2 attach after Purview readiness.",
+            "Readiness → Record handoff · multi-tenant enablement · Governance Pack attach.",
+            "MSP · SI · advisory lane",
+        ),
+    ]
+    cards = []
+    for key, title, h3, p, tag in roles:
+        cards.append(
+            f'<article class="nf-offer-card nf-offer-card--featured">'
+            f'<p class="meta">{tag}</p>'
+            f"<h3>{title}</h3><p>{h3} {p}</p>"
+            f'<a class="btn btn-primary" href="{work_with_us_intake(key)}">Apply as {title.lower()}</a>'
+            f"</article>"
+        )
+    return f"""
+ <section class="nf-section-block nf-section--elevated" aria-labelledby="wwu-roles">
+ <div class="nf-section-block-head"><span class="nf-section-num" aria-hidden="true">01</span><div>
+ <p class="nf-eyebrow" id="wwu-roles">Program lanes</p>
+ <h2>Connector · Facilitator · Co-partner · Partner</h2>
+ <p class="nf-section-lead">Four ways to work with Noetfield on regulated Copilot governance — pick the lane that matches how you go to market.</p>
+ </div></div>
+ <div class="nf-offerings-v5">{"".join(cards)}</div>
+ </section>"""
+
+
+def partner_apply_form() -> str:
+    return f"""
+ <section class="nf-section-block" id="partner-apply" aria-labelledby="partner-apply-title">
+ <div class="nf-section-block-head"><span class="nf-section-num" aria-hidden="true">→</span><div>
+ <p class="nf-eyebrow" id="partner-apply-title">Apply</p>
+ <h2>Work with Noetfield — ecosystem application</h2>
+ <p class="nf-section-lead">Non-confidential · operations@noetfield.com · include your Request ID from the site footer.</p>
+ </div></div>
+ <form id="nfPartnerApplyForm" class="nf-pilot-apply-form" data-intake="{WORK_WITH_US_INTAKE}" aria-label="Work with Noetfield application">
+ <div class="nf-pilot-apply-grid">
+ <label>Work email<input type="email" name="email" required autocomplete="email" placeholder="you@firm.com" /></label>
+ <label>Organization<input type="text" name="org" required autocomplete="organization" placeholder="Firm or practice name" /></label>
+ <label>Program lane
+ <select name="role" required>
+ <option value="">Select lane</option>
+ <option value="connector">Connector — warm intros to regulated buyers</option>
+ <option value="facilitator">Facilitator — workshops &amp; pilot kickoffs</option>
+ <option value="co-partner">Co-partner — joint Copilot Governance Pack delivery</option>
+ <option value="partner">Partner — MSP / SI / advisory (Phase 2 attach)</option>
+ </select>
+ </label>
+ <label>Primary geography
+ <select name="region">
+ <option value="eu-us" selected>EU + US</option>
+ <option value="ca">Canada</option>
+ <option value="eu">EU</option>
+ <option value="us">US</option>
+ </select>
+ </label>
+ </div>
+ <label>How you want to work together (optional)<textarea name="notes" rows="3" placeholder="Existing Copilot/Purview practice · target sectors · unclassified only"></textarea></label>
+ <div class="nf-cta-actions">
+ <button type="submit" class="btn btn-primary">Submit application</button>
+ <a class="btn btn-secondary" href="/copilot/demo/">See 5-minute demo first</a>
+ <a class="btn btn-secondary" href="/msp/">MSP lane overview</a>
+ </div>
+ </form>
+ </section>
+ <script src="/assets/noetfield-partner-apply.js?v={WWW_VER}" defer></script>"""
+
+
+def work_with_us_page_body() -> str:
+    return hero(
+        "Work with Noetfield · Ecosystem",
+        "Connectors · facilitators · co-partners · partners",
+        "Help regulated institutions get board-grade Copilot governance receipts",
+        "Noetfield is the <strong>governance execution layer</strong> for Microsoft 365 Copilot rollouts — signed Trust Ledger Entries, board PDF, procurement ZIP. "
+        "We partner with people and firms who <strong>connect buyers</strong>, <strong>facilitate rollout</strong>, <strong>co-deliver pilots</strong>, or <strong>attach after Purview readiness</strong> — same evaluate → TLE → export spine.",
+        [("Copilot Governance Pack attach", True), ("EU + US regulated lane", True), ("No custody · no MSB", False)],
+        [(WORK_WITH_US_INTAKE, "Apply to work with us", True), ("/copilot/demo/", "5-minute demo", False), ("/msp/", "MSP program", False)],
+        ["Connector", "Facilitator", "Co-partner", "Partner"],
+        panel("What you help deliver", [
+            "Copilot Governance Pack pilots · $2k–10k",
+            "Board PDF in client governance meeting",
+            "Metadata-only M365 evidence index",
+            "Honest scope — no certifier claims",
+        ]),
+    ) + work_with_us_roles_grid() + f"""
+ <section class="nf-section-block" aria-labelledby="wwu-model">
+ <div class="nf-section-block-head"><span class="nf-section-num" aria-hidden="true">02</span><div>
+ <p class="nf-eyebrow" id="wwu-model">How the program works</p>
+ <h2>Apply → enable → earn on proof</h2>
+ <p class="nf-section-lead">Channel economics follow the same milestone path as direct GTM — lead with Governance Pack, expand on board PDF success.</p>
+ </div></div>
+ <div class="nf-loop">
+ <article class="nf-loop-step"><p class="nf-loop-step-num">1</p><h3>Apply</h3><p>Tell us your lane — connector, facilitator, co-partner, or MSP/SI partner. Non-confidential intake only.</p></article>
+ <article class="nf-loop-step"><p class="nf-loop-step-num">2</p><h3>Enable</h3><p>Sandbox demo · delivery playbook orientation · co-marketing kit for your lane (per agreement).</p></article>
+ <article class="nf-loop-step"><p class="nf-loop-step-num">3</p><h3>Earn</h3><p>Attach Copilot Governance Pack pilots · referral or delivery fee per SOW · expand to Trust Brief or enterprise cadence.</p></article>
+ </div>
+ </section>
+ {partner_apply_form()}
+ <section class="nf-section-block nf-section--elevated" aria-labelledby="wwu-fit">
+ <div class="nf-section-block-head"><span class="nf-section-num" aria-hidden="true">✓</span><div>
+ <p class="nf-eyebrow" id="wwu-fit">Fit</p>
+ <h2>Built for ecosystem players in regulated digital trust</h2>
+ </div></div>
+ {fit_qualification_body()}
+ </section>
+""" + mega_cta(
+        "Ready to connect buyers to Copilot governance receipts?",
+        "Apply online · include Request ID · operations@noetfield.com",
+        (WORK_WITH_US_INTAKE, "Apply to work with us"),
+        ("/contact/", "Contact operations"),
+    )
 
 
 def pilot_hero_wedge() -> str:
@@ -1894,16 +2039,22 @@ def main() -> None:
           "/partners/",
           hub_page("Partner programs · Canada", "Licensed execution partners",
                    "AI governance and risk intelligence for partners",
-                   "Programs for banks, credit unions, and supervised firms: evaluate operational intent, record Trust Ledger evidence, return allow or deny.",
+                   "Programs for banks, credit unions, and supervised firms: evaluate operational intent, record Trust Ledger evidence, return allow or deny. "
+                   "<strong>Ecosystem apply:</strong> connectors, facilitators, co-partners, and MSP/SI partners — see <a href=\"/work-with-us/\">Work with Noetfield</a>.",
                    [("Governance evaluate", True), ("Trust Ledger export", False)],
-                   [("/gate/partners/intake/", "Partner intake", True), ("/msp/", "MSP lane", False)],
+                   [(WORK_WITH_US_INTAKE, "Apply to work with us", True), ("/msp/", "MSP lane", False)],
                    [],
                    panel("What partners get", ["Governance evaluate — shadow then enforce", "Trust Ledger — RID-keyed audit export", "Decision webhooks — SIEM / GRC hooks", "HTTP contracts: Governance API"]),
-                   """
+                   f"""
  <section class="nf-section"><div class="nf-cards">
+ <a class="nf-card nf-card--link nf-card--gold" href="/work-with-us/"><p class="nf-card__tag">Apply</p><h3>Work with Noetfield</h3><p>Connector · facilitator · co-partner · partner lanes.</p></a>
  <a class="nf-card nf-card--link" href="/docs/api/"><p class="nf-card__tag">API</p><h3>Governance API</h3><p>OpenAPI + evaluate routes.</p></a>
  <a class="nf-card nf-card--link" href="/msp/"><p class="nf-card__tag">MSP</p><h3>MSP partners</h3><p>Readiness → Record.</p></a>
  </div></section>"""))
+
+    write("work-with-us/index.html", "Work with Noetfield — Connectors, Facilitators & Partners",
+          "Apply to work with Noetfield as a connector, facilitator, co-partner, or MSP/SI partner on Copilot Governance Pack programs.",
+          "/work-with-us/", work_with_us_page_body())
 
     # FAQ
     write("faq/index.html", "Noetfield — FAQ",
@@ -2215,7 +2366,8 @@ def main() -> None:
  <article class="nf-dir-card featured"><p class="meta">Copilot Governance Pack</p><p>$2k–10k · 90 days · board PDF in governance meeting.</p><a class="btn btn-primary" id="giCopilot" href="{PILOT_INTAKE}">Apply for pilot</a></article>
  <article class="nf-dir-card featured"><p class="meta">Trust Brief</p><p>Six-week governance diagnostic — from $10,000.</p><a class="btn btn-secondary" id="giTrustBrief" href="/trust-brief/intake/?vector=trust-brief">Trust Brief intake</a></article>
  <article class="nf-dir-card featured"><p class="meta">Bank Pilot</p><p>Shadow governance evaluation for institutional buyers — read-only simulation only.</p><a class="btn btn-secondary" id="giBankPilot" href="/trust-brief/intake/?vector=bank-pilot&amp;interest=bank-pilot">Bank Pilot intake</a><a class="btn btn-secondary" href="/bank-pilot/">Bank Pilot overview</a></article>
- <article class="nf-dir-card"><p class="meta">Partner programs</p><p>Control layer for banks, credit unions, and licensed partners.</p><a class="btn btn-secondary" href="/partners/">Partners hub</a><a class="btn btn-secondary" id="giPartner" href="/trust-brief/intake/?vector=partner-gateway">Partner intake</a></article>
+ <article class="nf-dir-card featured"><p class="meta">Work with Noetfield</p><p>Connector · facilitator · co-partner · MSP/SI partner — ecosystem apply.</p><a class="btn btn-primary" id="giWorkWithUs" href="{WORK_WITH_US_INTAKE}">Apply to work with us</a><a class="btn btn-secondary" href="/work-with-us/">Program overview</a></article>
+ <article class="nf-dir-card"><p class="meta">Partner programs</p><p>Control layer for banks, credit unions, and licensed partners.</p><a class="btn btn-secondary" href="/partners/">Partners hub</a><a class="btn btn-secondary" id="giPartner" href="/trust-brief/intake/?vector=partner-gateway">Licensed partner intake</a></article>
  <article class="nf-dir-card"><p class="meta">Licensed MSB / PSP</p><p>Control layer before payment APIs — execution stays with you.</p><a class="btn btn-secondary" id="giPartnerMsb" href="/trust-brief/intake/?vector=partner-msb&amp;interest=partner-msb">MSB partner intake</a></article>
  <article class="nf-dir-card"><p class="meta">Licensed exchange / VASP</p><p>Shadow evaluate + read-only signals; partner executes.</p><a class="btn btn-secondary" id="giPartnerExchange" href="/trust-brief/intake/?vector=partner-exchange&amp;interest=partner-exchange">Exchange partner intake</a></article>
  </div>

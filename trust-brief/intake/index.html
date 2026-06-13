@@ -33,12 +33,13 @@
  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,400..700;1,14..32,400..700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" />
  <link rel="stylesheet" href="/assets/noetfield-tokens.css" />
  <link rel="stylesheet" href="/assets/noetfield-shell.css" />
- <link rel="stylesheet" href="/assets/noetfield-www.css?v=29" />
+ <link rel="stylesheet" href="/assets/noetfield-www.css?v=30" />
  <link rel="stylesheet" href="/assets/noetfield-intake.css" />
  <script src="/assets/noetfield-intake-email.js" defer></script>
  <script src="/assets/noetfield-intake-pilot-mode.js"></script>
+ <script src="/assets/noetfield-intake-ecosystem-mode.js"></script>
  <script src="/assets/noetfield-intake-api.js" defer></script>
- <script src="/assets/noetfield-shell.js?v=29" defer></script>
+ <script src="/assets/noetfield-shell.js?v=30" defer></script>
 
  <!-- legacy inline removed — see noetfield-intake.css -->
 
@@ -125,6 +126,23 @@
  </div>
  <div class="notice" role="note">
  <strong>Public intake:</strong> non-confidential only. Final SOW and fee band confirmed after kickoff with operations@noetfield.com.
+ </div>
+ </div>
+ </div>
+ </section>
+
+ <!-- HERO — Work with Noetfield ecosystem (?interest=partner&vector=work-with-us) -->
+ <section class="hero" id="intakeHeroEcosystem" aria-label="Work with Noetfield application" hidden>
+ <div class="heroShell heroShell--pilot">
+ <div class="heroInner">
+ <div class="eyebrow"><span class="dot"></span> Work with Noetfield · Ecosystem apply</div>
+ <h1>Connector · facilitator · co-partner · partner</h1>
+ <p class="muted" style="margin-top:10px;"><strong>Help regulated institutions attach Copilot Governance Pack</strong> — $2k–10k pilots · board PDF success signal · metadata-only M365 receipts.</p>
+ <p class="lead">Non-confidential application for people and firms who introduce buyers, lead rollout workshops, co-deliver pilots, or attach as MSP/SI after Purview readiness.</p>
+ <div class="actions" aria-label="Ecosystem hero actions">
+ <a class="btn primary" href="#intake">Complete application</a>
+ <a class="btn secondary" href="/work-with-us/" data-rid-link>Program overview</a>
+ <a class="btn secondary" href="/copilot/demo/" data-rid-link>5-minute demo</a>
  </div>
  </div>
  </div>
@@ -430,6 +448,34 @@
  </div>
  </div>
  </section>
+
+ <section class="card" id="tbPrepareEcosystem" aria-label="Ecosystem prep" style="margin-top:16px;" hidden>
+ <div class="hd">
+ <h2 class="cardTitle">What to include in your application</h2>
+ <p class="muted">High-level only — no confidential client data.</p>
+ </div>
+ <div class="bd">
+ <div class="blocks">
+ <article class="block">
+ <div class="blockTop"><h3>Your lane</h3><span class="tag">Role</span></div>
+ <ul>
+ <li>Connector — regulated buyer intros</li>
+ <li>Facilitator — workshops &amp; kickoffs</li>
+ <li>Co-partner — joint Governance Pack delivery</li>
+ <li>Partner — MSP / SI / advisory attach</li>
+ </ul>
+ </article>
+ <article class="block">
+ <div class="blockTop"><h3>Practice context</h3><span class="tag">Input</span></div>
+ <ul>
+ <li>Copilot / Purview / M365 governance experience</li>
+ <li>Target sectors (EU / US regulated)</li>
+ <li>Geographies you cover</li>
+ </ul>
+ </article>
+ </div>
+ </div>
+ </section>
  </div>
 
  <!-- RIGHT -->
@@ -479,6 +525,11 @@
  <a class="btn primary" href="#intake">Submit pilot application</a>
  <a class="btn secondary" href="/copilot/pilot/" data-rid-link>Pilot overview</a>
  <a class="btn secondary" href="/copilot/demo/" data-rid-link>5-minute demo</a>
+ </div>
+ <div class="actions" id="tbRoutingActionsEcosystem" style="margin-top:12px;" hidden>
+ <a class="btn primary" href="#intake">Submit application</a>
+ <a class="btn secondary" href="/work-with-us/" data-rid-link>Program overview</a>
+ <a class="btn secondary" href="/msp/" data-rid-link>MSP lane</a>
  </div>
  </div>
  </div>
@@ -605,6 +656,9 @@
  if (window.NFIntakePilot && window.NFIntakePilot.isPilotIntake()) {
   return window.NFIntakePilot.buildPilotSummary({ rid: ridGet() || "—", intakeVector: intakeVector });
  }
+ if (window.NFIntakeEcosystem && window.NFIntakeEcosystem.isEcosystemIntake()) {
+  return window.NFIntakeEcosystem.buildEcosystemSummary({ rid: ridGet() || "—", intakeVector: intakeVector });
+ }
  var rid = ridGet() || "—";
  var band = (document.getElementById("tb_usecases")||{}).value || "";
  var teamsSel = (document.getElementById("tb_teams")||{}).value || "";
@@ -667,6 +721,7 @@
  var emailProc = document.getElementById("tbEmailProc");
  var emailInstead = document.getElementById("tbEmailInstead");
  var isPilot = window.NFIntakePilot && window.NFIntakePilot.isPilotIntake();
+ var isEco = window.NFIntakeEcosystem && window.NFIntakeEcosystem.isEcosystemIntake();
 
  var s = buildSummary();
  if (!s){
@@ -674,6 +729,8 @@
  if (priceOut) priceOut.textContent = "—";
  if (lineOut) lineOut.textContent = isPilot
   ? "Copilot Governance Pack · select pilot band to update fee guidance."
+  : isEco
+  ? "Work with Noetfield · select program lane in your application."
   : "Select form inputs to populate tier direction.";
  if (emailProc) emailProc.href = mailto(INTAKE_EMAIL, isPilot ? "Noetfield — Copilot Governance Pack | Pilot intake" : "Noetfield — Trust Brief | Engagement intake", "");
  if (emailInstead) emailInstead.href = mailto(INTAKE_EMAIL, isPilot ? "Noetfield — Copilot Governance Pack Intake" : "Noetfield — Trust Brief Intake", "");
@@ -732,6 +789,7 @@
 
  ridInit();
  if (window.NFIntakePilot) window.NFIntakePilot.applyDomMode();
+ if (window.NFIntakeEcosystem) window.NFIntakeEcosystem.applyDomMode();
  prefill();
  applySummary();
 

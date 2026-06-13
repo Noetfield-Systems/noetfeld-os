@@ -77,6 +77,17 @@ def test_pilot_page_has_lane_depth_blocks() -> None:
         assert needle in text, needle
 
 
+def test_work_with_us_program_page() -> None:
+    text = (ROOT / "work-with-us" / "index.html").read_text(encoding="utf-8")
+    assert "Work with Noetfield" in text
+    assert "Connector" in text
+    assert "Facilitator" in text
+    assert "Co-partner" in text
+    assert "nfPartnerApplyForm" in text
+    assert "interest=partner" in text
+    assert "vector=work-with-us" in text
+
+
 def test_pilot_intake_hides_legacy_sticky_and_prepare() -> None:
     js = (ROOT / "assets" / "noetfield-intake-pilot-mode.js").read_text(encoding="utf-8")
     assert "intakeStickyCta" in js
