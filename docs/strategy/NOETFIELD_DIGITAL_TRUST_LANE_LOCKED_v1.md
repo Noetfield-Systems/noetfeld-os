@@ -9,6 +9,19 @@
 
 ---
 
+## 0. Operating principle (GTM)
+
+**Learn · Add · Implement · Earn** — study tier-1 conversion patterns (Sumsub trial OS, Stripe proof-in-hero, ShareID assurance ladder), ship them on Noetfield www and product, drive revenue through Copilot Governance Pack intake.
+
+- **Learn** — reference design goals in [DESIGN_REFERENCE_GOALS_LOCKED_v1.md](../DESIGN_REFERENCE_GOALS_LOCKED_v1.md)
+- **Add** — receipt-first proof, milestone pricing, pilot apply form, assurance levels, revenue path strip
+- **Implement** — `scripts/rebuild-www-v6.py` + verify + deploy
+- **Earn** — W3 signal: deposit ≥ CAD 2K or signed LOI · board PDF in governance meeting
+
+Never publish vendor comparison tables or “vs {name}” copy on public www.
+
+---
+
 ## 1. Lane definition
 
 Noetfield occupies **regulated digital trust for Microsoft 365 Copilot rollout decisions**:

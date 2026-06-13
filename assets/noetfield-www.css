@@ -1005,6 +1005,42 @@ body.nf-www .nf-milestone-arrow {
   font-size: 1.25rem;
 }
 
+body.nf-www .nf-revenue-ladder {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: stretch;
+}
+
+body.nf-www .nf-revenue-step {
+  flex: 1 1 160px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 16px 18px;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.45);
+  text-decoration: none;
+  color: inherit;
+}
+
+body.nf-www a.nf-revenue-step:hover {
+  border-color: rgba(200, 163, 73, 0.45);
+}
+
+body.nf-www .nf-revenue-step--gold {
+  border-color: rgba(200, 163, 73, 0.45);
+  background: rgba(200, 163, 73, 0.08);
+}
+
+body.nf-www .nf-revenue-step__num {
+  font-size: 0.6875rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted2);
+}
+
 body.nf-www .nf-pilot-apply-form {
   max-width: 720px;
 }
