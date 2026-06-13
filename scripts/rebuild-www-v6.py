@@ -6,7 +6,7 @@ import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-WWW_VER = "37"
+WWW_VER = "38"
 
 # Copilot Governance Pack — locked lead SKU ($2k–10k · 90 days · board PDF success signal)
 PILOT_SKU = "Copilot Governance Pack"
@@ -152,6 +152,7 @@ def live_proof_panel() -> str:
         ("bank", "Bank Pilot", False),
         ("automation", "AI automation", False),
         ("specialist", "Governance specialist", False),
+        ("investor", "VC diligence", False),
         ("partner", "Partner shadow", False),
     )
     pills_html = "".join(
@@ -164,7 +165,7 @@ def live_proof_panel() -> str:
  <form id="nfLiveProofForm" class="nf-live-proof-form">
  <h3>Governance playground</h3>
  <p id="nfScenarioOfDay" class="nf-scenario-of-day" aria-live="polite"></p>
- <p class="nf-scorecard-hint">Every go/no-go gets a <strong>confidence score</strong> + evidence index — Copilot, Trust Brief, Bank Pilot, AI automation, <strong>governance specialist</strong>, and partner shadow lanes.</p>
+ <p class="nf-scorecard-hint">Every go/no-go gets a <strong>confidence score</strong> + evidence index — Copilot, Trust Brief, Bank Pilot, AI automation, governance specialist, <strong>VC diligence</strong>, and partner shadow lanes.</p>
  <div class="nf-live-proof-lanes" role="group" aria-label="Product lane filter">{pills_html}</div>
  <label>Scenario
  <select name="scenario" id="nfLiveProofScenario" aria-label="Evaluate scenario"></select>
@@ -840,7 +841,7 @@ def work_with_us_hero_panel() -> str:
  <li>Demo-ready evaluate · TLE · export</li>
  <li>Board PDF as proof step function</li>
  </ul>
- <a class="nf-wwu-hero-link" href="/investors/">Investor brief →</a>
+ <a class="nf-wwu-hero-link" href="/investors/diligence/">Diligence vault →</a>
  </div>
  </div>
  </aside>"""
@@ -980,6 +981,7 @@ def contact_intake_form() -> str:
  <option value="bank-pilot">Bank Pilot · shadow evaluate</option>
  <option value="partner">Partner / MSP program</option>
  <option value="investor">Investor / strategic</option>
+ <option value="investor-diligence">Investor diligence vault</option>
  <option value="federal">Federal / public sector</option>
  <option value="feedback">Site feedback</option>
  <option value="other">Other · operations routing</option>
@@ -994,6 +996,136 @@ def contact_intake_form() -> str:
  <a class="btn btn-secondary" href="{PILOT_INTAKE}">Apply for pilot</a>
  </div>
  <div id="nfContactStatus" class="nf-intake-async-status" data-nf-intake-status hidden aria-live="polite"></div>
+ </form>
+ </section>"""
+
+
+def investor_diligence_vault_rail() -> str:
+    return """
+ <nav class="nf-procurement-rail nf-vault-rail" aria-label="Investor diligence vault path">
+ <p class="nf-procurement-rail__label">Diligence vault</p>
+ <a href="/investors/">Investor brief</a>
+ <a href="/investors/diligence/#vault-artifacts">Evidence vault</a>
+ <a href="/investors/diligence/#investor-checklist">18-item checklist</a>
+ <a href="/trust-ledger/sample-report/">TLE samples</a>
+ <a href="/copilot/procurement/">Procurement ZIP</a>
+ </nav>"""
+
+
+def investor_diligence_checklist() -> str:
+    items = [
+        ("AI acceptable-use policy", "Document in data room"),
+        ("AI tool / agent inventory", "Register + metadata index"),
+        ("Human review on high-stakes decisions", "RACI + sample approvals"),
+        ("Shadow AI / unsanctioned tool exposure", "Assessment report"),
+        ("Training data provenance & rights", "Contracts + lineage"),
+        ("Subprocessor DPAs", "Legal list"),
+        ("Bias / fairness testing (where applicable)", "Test logs"),
+        ("Model monitoring & drift process", "Runbooks"),
+        ("AI incident response playbook", "Playbook + RID thread"),
+        ("EU AI Act / state AI law exposure", "Orientation gap map"),
+        ("Board / committee AI oversight", "Minutes + charter"),
+        ("Exportable go/no-go audit trail", "TLE + board PDF + ZIP"),
+        ("Copilot / M365 metadata evidence", "Purview · Entra · audit index"),
+        ("Pre-execution evaluate semantics", "Allow · review · deny receipts"),
+        ("Tamper-evident export integrity", "Fail-closed verify on export"),
+        ("Governance maturity score", "Exposed → architected band"),
+        ("Remediation roadmap", "100-day priorities"),
+        ("Investment memo appendix", "IC-ready shadow brief"),
+    ]
+    rows = "".join(
+        f'<div class="nf-vault-check"><span class="nf-vault-check__num">{i:02d}</span>'
+        f'<div><strong>{title}</strong><span>{hint}</span></div></div>'
+        for i, (title, hint) in enumerate(items, 1)
+    )
+    return f"""
+ <section class="nf-section-block" id="investor-checklist" aria-labelledby="vault-checklist-title">
+ <div class="nf-section-block-head"><span class="nf-section-num" aria-hidden="true">✓</span><div>
+ <p class="nf-eyebrow" id="vault-checklist-title">Investor checklist</p>
+ <h2>What VCs and acquirers ask before term sheet — orientation map</h2>
+ <p class="nf-section-lead">Industry pattern from buy-side governance diligence — not legal advice. Noetfield maps items 12–15 to live artifacts in the vault below.</p>
+ </div></div>
+ <div class="nf-vault-checklist">{rows}</div>
+ </section>"""
+
+
+def investor_diligence_vault_grid() -> str:
+    artifacts = [
+        ("/copilot/demo/", "▶", "5-minute product demo", "Evaluate → TLE → confidence score → export"),
+        ("/trust-ledger/sample-report/", "TLE", "Trust Ledger samples", "Go · conditional · rejected YAML"),
+        ("/copilot/procurement/", "ZIP", "Procurement pack", "NIST AI RMF · buyer diligence bundle"),
+        ("/trust-ledger/verify/", "✓", "Export verify", "Fail-closed tamper check orientation"),
+        ("/docs/api/", "API", "Governance API", "Evaluate · ledger · audit export"),
+        ("/trust/", "🔒", "Trust center", "Honest cert posture · scope badges"),
+        ("/investors/", "↗", "Investor brief", "Land · Expand · Channel success model"),
+        ("/?lane=investor#nfLiveProofHero", "VC", "VC diligence playground", "Shadow evaluate scenarios"),
+    ]
+    return proof_grid(artifacts)
+
+
+def investor_diligence_services() -> str:
+    return """
+ <section class="nf-section-block nf-section--elevated" aria-labelledby="vault-services-title">
+ <div class="nf-section-block-head"><span class="nf-section-num" aria-hidden="true">$</span><div>
+ <p class="nf-eyebrow" id="vault-services-title">Investor-facing services</p>
+ <h2>Decision-evidence diligence — not model benchmarks or Big Four scope</h2>
+ <p class="nf-section-lead">Fixed-scope engagements for deal teams underwriting <strong>governance risk</strong> on Copilot, M365, and agentic claims — same TLE spine as our three contract SKUs.</p>
+ </div></div>
+ <div class="nf-offerings-v5">
+ <article class="nf-offer-card nf-offer-card--featured">
+ <p class="meta">Investor Shadow Governance Brief</p>
+ <p class="price">$15k–$35k · 2 weeks</p>
+ <p>Shadow evaluate on 3–5 representative workflows · governance maturity score · sample TLE + board PDF or gap list · IC-ready memo appendix.</p>
+ <a class="btn btn-primary" href="#investor-diligence-apply">Request shadow brief</a>
+ </article>
+ <article class="nf-offer-card">
+ <p class="meta">Portfolio Copilot risk scan</p>
+ <p class="price">$5k–$10k · portco</p>
+ <p>Light-touch per company · shadow AI exposure · receipt readiness · top remediation priorities · aggregate LP report.</p>
+ <a class="btn btn-secondary" href="#investor-diligence-apply">Fund-level scan</a>
+ </article>
+ <article class="nf-offer-card">
+ <p class="meta">Sell-side · Post-close</p>
+ <p class="price">Trust Brief · Governance Pack</p>
+ <p>Founders: data-room governance folder before Series A/B. PE: 90-day Copilot receipt program after close — board PDF success signal.</p>
+ <a class="btn btn-secondary" href="/trust-brief/">Trust Brief</a>
+ </article>
+ </div>
+ <aside class="nf-callout"><p><strong>Honest scope:</strong> We do not replace technical AI DD (model verification), Big Four financial DD, or certify EU AI Act / SOC / ISO. We deliver <strong>independent decision-evidence artifacts</strong> — shadow evaluate, signed TLE samples, export integrity.</p></aside>
+ </section>"""
+
+
+def investor_diligence_intake_form() -> str:
+    return """
+ <section class="nf-section-block nf-section--elevated" id="investor-diligence-apply" aria-labelledby="investor-diligence-apply-title">
+ <div class="nf-section-block-head"><span class="nf-section-num" aria-hidden="true">→</span><div>
+ <p class="nf-eyebrow" id="investor-diligence-apply-title">Open diligence vault access</p>
+ <h2>Async intake — VC · PE · corp dev · operating partner</h2>
+ <p class="nf-section-lead">Non-confidential · NDA scope on engagement · operations@noetfield.com replies within one business day.</p>
+ </div></div>
+ <form id="nfInvestorDiligenceForm" class="nf-pilot-apply-form" data-nf-intake-form data-intake-vector="investor-diligence" data-intake-sku="general" data-submit-label="Request diligence access" data-intake-headline="Diligence request recorded" data-intake-detail="Operations shares vault artifacts and follows up on shadow brief or portfolio scan scope." aria-label="Investor diligence intake">
+ <div class="nf-pilot-apply-grid">
+ <label>Work email<input type="email" name="email" required autocomplete="email" placeholder="you@fund.com" /></label>
+ <label>Organization<input type="text" name="org" required autocomplete="organization" placeholder="Fund · PE · corp dev" /></label>
+ <label>Engagement type
+ <select name="engagement" required>
+ <option value="">Select engagement</option>
+ <option value="shadow-brief">Shadow Governance Brief ($15k–$35k)</option>
+ <option value="portfolio-scan">Portfolio Copilot risk scan</option>
+ <option value="sell-side">Sell-side governance pack (founder)</option>
+ <option value="post-close">Post-acquisition 90-day pack</option>
+ <option value="vault-access">Vault artifact access only</option>
+ </select>
+ </label>
+ </div>
+ <label>Target context (optional)<textarea name="notes" rows="3" placeholder="Deal stage · portco stack · Copilot/M365 claims · unclassified only"></textarea></label>
+ <input type="hidden" name="role" value="investor-diligence" />
+ <div class="nf-cta-actions">
+ <button type="submit" class="btn btn-primary">Request diligence access</button>
+ <a class="btn btn-secondary" href="/investors/">Investor brief</a>
+ <a class="btn btn-secondary" href="/?lane=investor#nfLiveProofHero">Try VC scenario</a>
+ </div>
+ <div id="nfInvestorDiligenceStatus" class="nf-intake-async-status" data-nf-intake-status hidden aria-live="polite"></div>
  </form>
  </section>"""
 
@@ -2357,7 +2489,7 @@ def main() -> None:
               "<strong>Product is demo-ready today</strong> — TLE v1, workspace, evaluate API, board PDF, procurement ZIP. "
               "The step function investors underwrite is <strong>one contracted org</strong> using a board PDF in a real governance meeting.",
               [("Demo-ready product", True), ("Board PDF pilots open", True), ("No custody · no MSB", False)],
-              [("/copilot/demo/", "5-minute demo", True), ("#investor-apply", "Investor inquiry", False)],
+              [("/investors/diligence/", "Diligence vault", True), ("/copilot/demo/", "5-minute demo", False), ("#investor-apply", "Investor inquiry", False)],
               ["Land · Expand · Channel", "Governance Pack ≥ CAD 2K", "Metadata-only M365"],
               receipt("RID-2026-0602-INV", "Live product path — <a href=\"/copilot/demo/\">demo</a> · <a href=\"/trust-ledger/sample-report/\">TLE samples</a>"),
           )
@@ -2474,6 +2606,7 @@ def main() -> None:
  <h2>Due diligence in five minutes — not a deck</h2>
  </div></div>
  <div class="nf-proof-grid">
+ <a class="nf-proof-card" href="/investors/diligence/"><span class="nf-proof-icon">Vault</span><div><h3>Diligence vault</h3><p>Evidence index · 18-item checklist · shadow brief</p></div></a>
  <a class="nf-proof-card" href="/copilot/demo/"><span class="nf-proof-icon">▶</span><div><h3>5-minute demo</h3><p>Evaluate → TLE → confidence score → export</p></div></a>
  <a class="nf-proof-card" href="/trust-ledger/sample-report/"><span class="nf-proof-icon">TLE</span><div><h3>TLE v1 samples</h3><p>Go · conditional · rejected YAML</p></div></a>
  <a class="nf-proof-card" href="/copilot/procurement/"><span class="nf-proof-icon">ZIP</span><div><h3>Procurement pack</h3><p>Buyer diligence · NIST AI RMF</p></div></a>
@@ -2487,6 +2620,50 @@ def main() -> None:
               "Live demo · commercial SSOT · 90-day milestone plan — operations@noetfield.com",
               ("#investor-apply", "Submit investor inquiry"),
               ("/copilot/demo/", "Run 5-minute demo"),
+          ))
+
+    write("investors/diligence/index.html", "Noetfield — Investor Diligence Vault",
+          "Evidence vault for VCs and acquirers — shadow governance diligence, TLE samples, 18-item checklist, and IC-ready artifacts before term sheet.",
+          "/investors/diligence/",
+          hero(
+              "Investor Diligence Vault · Canada",
+              "Decision-evidence diligence · not a deck",
+              "Underwrite governance risk before term sheet — artifact vault, not assertions",
+              "For <strong>VCs, PE, and corp dev</strong> evaluating startups with Copilot, M365, or agentic governance claims: "
+              "shadow evaluate, signed Trust Ledger samples, board PDF export, and procurement ZIP — the receipts investors ask for in 2026 diligence questionnaires. "
+              "<strong>Independent decision-evidence</strong> — we do not replace technical AI DD or Big Four financial DD.",
+              [("Evidence vault", True), ("Shadow brief · 2 weeks", True), ("Orientation only", False)],
+              [("#investor-diligence-apply", "Request diligence access", True), ("/?lane=investor#nfLiveProofHero", "Try VC scenario", False)],
+              ["Shadow evaluate", "TLE + board PDF", "18-item checklist"],
+              receipt("RID-2026-0602-VAULT", "Vault orientation — <a href=\"/trust-ledger/sample-report/\">TLE samples</a> · <a href=\"/copilot/procurement/\">procurement ZIP</a>"),
+          )
+          + investor_diligence_vault_rail()
+          + """
+ <section class="nf-section-block nf-section--elevated" id="vault-artifacts" aria-labelledby="vault-artifacts-title">
+ <div class="nf-section-block-head"><span class="nf-section-num" aria-hidden="true">01</span><div>
+ <p class="nf-eyebrow" id="vault-artifacts-title">Evidence vault</p>
+ <h2>Inspect artifacts in five minutes — same spine as production pilots</h2>
+ <p class="nf-section-lead">Trust center diligence pattern: metadata-only M365 evidence index, signed TLE records, fail-closed export integrity — orientation samples below.</p>
+ </div></div>
+""" + investor_diligence_vault_grid() + """
+ </section>
+""" + investor_diligence_checklist() + investor_diligence_services() + """
+ <section class="nf-section-block" aria-labelledby="vault-positioning">
+ <div class="nf-section-block-head"><span class="nf-section-num" aria-hidden="true">↗</span><div>
+ <p class="nf-eyebrow" id="vault-positioning">Positioning</p>
+ <h2>Where Noetfield fits in buy-side diligence</h2>
+ </div></div>
+ <div class="nf-outcome-grid">
+ <article class="nf-outcome-card nf-outcome-card--approved"><p class="nf-outcome-label">We deliver</p><h3>Decision-evidence artifacts</h3><p>Shadow evaluate · signed TLE · board PDF · export verify — item #12 on investor AI governance checklists.</p></article>
+ <article class="nf-outcome-card"><p class="nf-outcome-label">Tech DD shops</p><h3>Model verification</h3><p>Architecture benchmarks and capability tests — complementary, not replaced.</p></article>
+ <article class="nf-outcome-card"><p class="nf-outcome-label">Big Four</p><h3>Integrated M&A</h3><p>Financial, legal, and enterprise risk — we slot in as governance-evidence slice.</p></article>
+ </div>
+ </section>
+""" + investor_diligence_intake_form() + mega_cta(
+              "Shadow Governance Brief or portfolio scan",
+              "2-week fixed scope · IC-ready appendix · operations@noetfield.com",
+              ("#investor-diligence-apply", "Request diligence access"),
+              ("/investors/", "Investor brief"),
           ))
 
     # Console

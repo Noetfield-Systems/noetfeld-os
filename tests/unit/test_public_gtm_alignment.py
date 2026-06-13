@@ -110,6 +110,19 @@ def test_homepage_multi_product_playground() -> None:
     assert "agentic_workflow" in js
     assert "specialist_investigate" in js
     assert 'specialist: "Governance specialist"' in js
+    assert "vc_shadow_evaluate" in js
+    assert 'investor: "VC diligence"' in js
+
+
+def test_investor_diligence_vault_page() -> None:
+    text = (ROOT / "investors" / "diligence" / "index.html").read_text(encoding="utf-8")
+    assert "Investor Diligence Vault" in text
+    assert "nfInvestorDiligenceForm" in text
+    assert 'data-intake-vector="investor-diligence"' in text
+    assert "Shadow Governance Brief" in text
+    assert "nf-vault-checklist" in text
+    investors = (ROOT / "investors" / "index.html").read_text(encoding="utf-8")
+    assert "/investors/diligence/" in investors
 
 
 def test_work_with_us_program_page() -> None:

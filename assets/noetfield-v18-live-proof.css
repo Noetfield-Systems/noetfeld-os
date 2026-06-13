@@ -153,6 +153,50 @@ body.nf-www .nf-product-lane--specialist {
   background: linear-gradient(180deg, rgba(244, 247, 255, 0.95), #fff);
 }
 
+body.nf-www .nf-vault-rail {
+  margin: 0 0 28px;
+}
+
+body.nf-www .nf-vault-checklist {
+  display: grid;
+  gap: 10px;
+}
+
+@media (min-width: 720px) {
+  body.nf-www .nf-vault-checklist {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+body.nf-www .nf-vault-check {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 12px 14px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #fff;
+}
+
+body.nf-www .nf-vault-check__num {
+  flex-shrink: 0;
+  font: 650 0.6875rem/1 var(--mono, "JetBrains Mono", monospace);
+  color: var(--gold, #8a6b1f);
+  min-width: 1.5rem;
+}
+
+body.nf-www .nf-vault-check strong {
+  display: block;
+  font-size: 0.8125rem;
+  margin-bottom: 2px;
+}
+
+body.nf-www .nf-vault-check span {
+  display: block;
+  font-size: 0.6875rem;
+  color: var(--muted2);
+}
+
 body.nf-www.nf-site-v14 .nf-agentic-specialist {
   margin: 28px 0 8px;
   padding: 22px 20px;
