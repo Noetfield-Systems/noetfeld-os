@@ -78,6 +78,30 @@ for f in index.html trust/index.html copilot/index.html copilot/sme/index.html m
 done
 [[ "$www_fail" -eq 0 ]] && ok "no comparison framing on public www" || fail=1
 
+# P0 — no internal / founder / agent copy on public www
+LEAK_PATTERN='maintained in repo|not claimed on www|plan-with-no-asf|AGENT_SELF_AUDIT|repo-native|ASSERT→|Founder-led \+ agentic|pipeline stage [0-9]|W3 PASS|Product on disk|/docs/ops/|services/governance/README|nf-card__tag">Hub<|Shipped today — honest|execution infrastructure|API offline'
+leak_fail=0
+for f in index.html copilot/procurement/index.html privacy/index.html terms/index.html status/index.html \
+  trust/index.html faq/index.html investors/index.html trust-ledger/verify/index.html; do
+  if [[ -f "$f" ]] && grep -E -q "$LEAK_PATTERN" "$f"; then
+    echo "FAIL verify-static-www: P0 copy leak in $f" >&2
+    grep -E -n "$LEAK_PATTERN" "$f" >&2 || true
+    leak_fail=1
+  fi
+done
+[[ "$leak_fail" -eq 0 ]] && ok "no P0 copy leaks on public www" || fail=1
+
+check_file "procurement buyer copy" copilot/procurement/index.html \
+  'Available now — capability scope' 'Governance API reference' 'Overview'
+
+check_file "legal pages" privacy/index.html \
+  'What we collect' 'operations@noetfield.com'
+check_file "legal pages terms" terms/index.html \
+  'No custody or payment execution' 'operations@noetfield.com'
+
+[[ -f vercel.json ]] && grep -qF 'docs/ops' vercel.json && ok "vercel.json blocks docs/ops" || bad "vercel.json missing docs/ops block"
+[[ -f .vercelignore ]] && grep -qF 'docs/ops/' .vercelignore && ok "vercelignore excludes docs/ops" || bad "vercelignore missing docs/ops"
+
 if [[ "$fail" -ne 0 ]]; then
   exit 1
 fi

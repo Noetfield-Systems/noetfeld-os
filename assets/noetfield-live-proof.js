@@ -88,9 +88,9 @@
     var foot = container.querySelector(".nf-live-proof-footer");
     if (foot) {
       foot.innerHTML =
-        (msg || "API offline") +
-        ' · <span class="nf-live-proof-degraded">Sample receipt</span> · ' +
-        '<a href="/start/">Start sandbox when API returns</a>';
+        (msg || "Live evaluate is temporarily unavailable") +
+        ' — <span class="nf-live-proof-degraded">showing sample receipt</span> · ' +
+        '<a href="/start/">Try the sandbox</a>';
     }
     var map = {
       tle_id: "TLE-015DCFB8B953",
@@ -151,7 +151,7 @@
           }
         })
         .catch(function () {
-          degradedReceipt(receiptHost, "Start sandbox when API returns");
+          degradedReceipt(receiptHost);
         })
         .finally(function () {
           if (btn) {

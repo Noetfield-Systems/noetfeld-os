@@ -55,11 +55,10 @@
  </div>
  </header>
  <section class="nf-trust-signals" aria-labelledby="scope-title">
- <h2 id="scope-title">Shipped today — honest scope</h2>
+ <h2 id="scope-title">Available now — capability scope</h2>
  <p class="nf-trust-signals-lead">Honest scope for procurement — what you can demo, export, and defend today.</p>
  <div class="nf-trust-signals-grid"><div class="nf-trust-signal"><span class="nf-trust-signal-label">Pre-execution evaluate</span><span class="nf-signal-badge nf-signal-badge--shipped">Shipped</span></div><div class="nf-trust-signal"><span class="nf-trust-signal-label">TLE v1 + workspace UI</span><span class="nf-signal-badge nf-signal-badge--shipped">Shipped</span></div><div class="nf-trust-signal"><span class="nf-trust-signal-label">Board PDF · procurement ZIP</span><span class="nf-signal-badge nf-signal-badge--shipped">Shipped</span></div><div class="nf-trust-signal"><span class="nf-trust-signal-label">M365 metadata connectors</span><span class="nf-signal-badge nf-signal-badge--shipped">Shipped</span></div><div class="nf-trust-signal"><span class="nf-trust-signal-label">Framework citations</span><span class="nf-signal-badge nf-signal-badge--orientation">Orientation</span></div><div class="nf-trust-signal"><span class="nf-trust-signal-label">Payment rails / MSB execution</span><span class="nf-signal-badge nf-signal-badge--na">Out of scope</span></div></div>
  </section>
-
  <section class="nf-section">
  <h2>Framework alignment (orientation only)</h2>
  <p>Citations use primary sources from the Governance Sources Book — not legal advice.</p>
@@ -77,18 +76,15 @@
  Primary citations:
  <a href="/docs/references/GOVERNANCE_SOURCES_BOOK_v1.md">Governance Sources Book v1</a>
  ·
- <a href="/docs/references/GOVERNANCE_SOURCES_HANDBOOK_LOCKED_v1.md">Governance Sources Handbook (locked)</a>
+ <a href="/docs/references/GOVERNANCE_SOURCES_HANDBOOK_LOCKED_v1.md">Governance Sources Handbook</a>
  (NIST AI RMF, ISO 42001, EU AI Act, Microsoft Purview) — orientation only, not legal advice.
  </p>
  <h3 style="margin-top:1.25rem">Governance control checkpoints</h3>
  <p>
- Noetfield ships an eval→enforce loop (industry-parallel to ASSERT→ACS, repo-native):
- <strong>Evaluate</strong> pre-ship policy checks via
- <code>plan-with-no-asf-verify.sh</code>;
- <strong>Enforce</strong> fail-closed FAIL gates on buyer www and coherence docs.
- See
- <a href="/docs/ops/AGENT_SELF_AUDIT_LOOP_LOCKED_v1.md">agent self-audit loop</a>
- and
+ Noetfield provides an evaluate-then-enforce loop for Copilot governance:
+ <strong>Evaluate</strong> operational intent before production use;
+ <strong>Enforce</strong> fail-closed export when board PDF or procurement ZIP bundles are tampered.
+ See the
  <a href="/docs/references/GOVERNANCE_SOURCES_BOOK_v1.md">Governance Sources Book</a>
  for framework authority — orientation only, not legal advice.
  </p>
@@ -96,8 +92,8 @@
  Production API surface:
  <a href="/openapi.json">Public OpenAPI schema</a>
  ·
- <a href="/services/governance/README.md">services/governance README</a>
- (intake, trust ledger, webhooks) — orientation only.
+ <a href="/docs/api/">Governance API reference</a>
+ (evaluate, trust ledger, audit export) — orientation only.
  </p>
  </section>
 
@@ -109,8 +105,8 @@
  <li><a href="/docs/diligence/rpaa-positioning-onepager.md">RPAA-safe positioning one-pager</a> — governance vendor layer; no payment or custody claims</li>
  <li><a href="/docs/diligence/EVIDENCE_INTAKE_CONTRACT_v1.md">Evidence Intake Contract v1</a></li>
  <li><a href="/docs/diligence/CONNECTORS_CONTROLS_v1.md">Connectors Controls v1</a></li>
- <li><a href="/docs/references/GOVERNANCE_DRIFT_DETECTION_SOURCES_LOCKED_v1.md">Governance drift detection sources (locked)</a> — continuous monitoring citations</li>
- <li><a href="/docs/references/GOVERNANCE_DRIFT_BLUEPRINTS_INDEX_LOCKED_v1.md">Governance drift blueprints index (locked)</a> — continuous governance blueprint citations</li>
+ <li><a href="/docs/references/GOVERNANCE_DRIFT_DETECTION_SOURCES_LOCKED_v1.md">Governance drift detection sources</a> — continuous monitoring citations</li>
+ <li><a href="/docs/references/GOVERNANCE_DRIFT_BLUEPRINTS_INDEX_LOCKED_v1.md">Governance drift blueprints index</a> — continuous governance blueprint citations</li>
  </ul>
  </section>
 
@@ -119,21 +115,17 @@
  <ul>
  <li>Trust Ledger Entry (TLE v1) with <strong>confidence score</strong> and sequential approval chain</li>
  <li>Evidence index — metadata only (Purview, Entra ID, Audit, SharePoint)</li>
- <li>Governance evaluate + <code>GET /audit/export</code> tenant bundle</li>
+ <li>Governance evaluate + audit export tenant bundle</li>
  </ul>
  </section>
-
  <section class="nf-section nf-section--lift"><div class="nf-cards">
- <a class="nf-card nf-card--link" href="/copilot/"><p class="nf-card__tag">Hub</p><h3>Copilot Governance Pack</h3><p>Full offering overview.</p></a>
- <a class="nf-card nf-card--link" href="/trust-ledger/sample-report/"><p class="nf-card__tag">Samples</p><h3>TLE v1 YAML</h3><p>Go · conditional · rejected.</p></a>
- <a class="nf-card nf-card--link" href="/copilot/demo/"><p class="nf-card__tag">Demo</p><h3>5-minute demo script</h3><p>Procurement walkthrough.</p></a>
- <a class="nf-card nf-card--link" href="/workspace/"><p class="nf-card__tag">Workspace</p><h3>Trust Ledger Workspace</h3><p>Evaluate and export.</p></a>
+<a class="nf-card nf-card--link" href="/copilot/"><p class="nf-card__tag">Overview</p><h3>Copilot Governance Pack</h3><p>Full offering overview.</p></a><a class="nf-card nf-card--link" href="/trust-ledger/sample-report/"><p class="nf-card__tag">Samples</p><h3>TLE v1 YAML</h3><p>Go · conditional · rejected.</p></a><a class="nf-card nf-card--link" href="/copilot/demo/"><p class="nf-card__tag">Demo</p><h3>5-minute demo script</h3><p>Procurement walkthrough.</p></a><a class="nf-card nf-card--link" href="/workspace/"><p class="nf-card__tag">Workspace</p><h3>Trust Ledger Workspace</h3><p>Evaluate and export.</p></a>
  </div></section>
  <section class="nf-cta-mega" aria-labelledby="cta-h">
  <h2 id="cta-h">Request Governance Brief</h2>
  <p>Non-confidential intake · include your Request ID · Trust Brief ($10k), Copilot pilot ($2k–10k), federal or MSP lane · operations@noetfield.com</p>
  <div class="nf-cta-actions">
- <a class="btn btn-primary" href="/trust-brief/intake/?interest=procurement">Request Governance Brief</a>
+ <a class="btn btn-primary" href="/trust-brief/intake/">Request Governance Brief</a>
  <a class="btn btn-secondary" href="/copilot/pilot/">Become a design partner</a>
  </div>
  </section>

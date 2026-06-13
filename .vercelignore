@@ -1,0 +1,12 @@
+# Internal / engineering — exclude from public www deploy
+.cursor/
+.github/
+os/
+reports/
+scripts/
+prompts/
+infrastructure/
+governance-console/
+services/
+docs/ops/
+docs/strategy/

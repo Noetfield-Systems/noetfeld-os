@@ -55,7 +55,7 @@ check_html "${BASE}/copilot/sme/" "copilot sme pack" "SME Governance Pack" "90-d
 check_html "${BASE}/trust-brief/" "trust brief" '$10,000' "Request Governance Brief"
 check_html "${BASE}/federal/" "federal lane" "June 24, 2026" "Algorithmic Impact Assessment" "Copilot PIN" "canada.ca" "tbs-sct.canada.ca" "not a federal certifier"
 check_html "${BASE}/msp/" "msp partner lane" "Readiness → Record" "Phase 1" "Phase 2" "W3-MSP"
-check_html "${BASE}/" "homepage scope" "Shipped today" "Pre-execution evaluate" "TLE v1"
+check_html "${BASE}/" "homepage scope" "Available now" "Pre-execution evaluate" "TLE v1"
 check_html "${BASE}/" "homepage receipt" "Trust Ledger Entry" "export_integrity" "fail closed"
 check_html "${BASE}/" "homepage v18 live proof" "data-live-proof-hero" "live-proof-hero"
 check_html "${BASE}/start/" "start trial os" "data-trial-os-flow" "trial-os-flow"

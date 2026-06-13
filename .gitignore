@@ -45,3 +45,4 @@ ops/private/
 # Confidential internal docs — [AUTO] index; agents read on disk only; never commit or quote publicly
 docs/internal/
 .dev-tunnel-url.txt.tmp
+.vercel
