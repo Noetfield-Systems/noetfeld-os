@@ -6,7 +6,7 @@ import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-WWW_VER = "38"
+WWW_VER = "39"
 
 # Copilot Governance Pack — locked lead SKU ($2k–10k · 90 days · board PDF success signal)
 PILOT_SKU = "Copilot Governance Pack"
@@ -1871,6 +1871,42 @@ def federal_aia_preview_table() -> str:
  <p class="nf-section-lead">Full mapping: <a href="/docs/federal/AIA_TLE_MAPPING_v1.md">AIA ↔ TLE mapping v1</a>. Not a federal certifier or AIA approver.</p>"""
 
 
+def msp_buyer_block() -> str:
+    """End-client path on MSP page — regulated buyers, not partner channel."""
+    return f"""
+ <section class="nf-section-block nf-section--elevated" id="msp-end-client" aria-labelledby="msp-buyer-title">
+ <div class="nf-section-block-head"><span class="nf-section-num" aria-hidden="true">→</span><div>
+ <p class="nf-eyebrow" id="msp-buyer-title">End client · not an MSP?</p>
+ <h2>Regulated institution rolling out Copilot — start on the buyer path</h2>
+ <p class="nf-section-lead">This page is for <strong>MSP and SI partners</strong> (Phase 1 readiness → Phase 2 TLE attach). If you are a CISO, GRC, or procurement team at a regulated EU or US institution, use the Copilot Governance Pack buyer path instead.</p>
+ </div></div>
+ <div class="nf-outcome-grid">
+ <article class="nf-outcome-card nf-outcome-card--approved"><p class="nf-outcome-label">Lead wedge</p><h3>Copilot Governance Pack</h3><p>$2k–10k · 90 days · board PDF in governance meeting · procurement ZIP.</p><a class="btn btn-primary" href="{PILOT_INTAKE}">Apply for pilot</a> <a class="btn btn-secondary" href="/copilot/pilot/">Pilot overview</a></article>
+ <article class="nf-outcome-card"><p class="nf-outcome-label">Diagnostic</p><h3>Trust Brief</h3><p>$10k · 6 weeks · policy map before Copilot scale.</p><a class="btn btn-secondary" href="/trust-brief/">Trust Brief</a></article>
+ <article class="nf-outcome-card"><p class="nf-outcome-label">Questions</p><h3>Async contact</h3><p>Non-confidential · operations@noetfield.com · include your Request ID.</p><a class="btn btn-secondary" href="/contact/?topic=pilot#contact-form">Contact operations</a></article>
+ </div>
+ </section>"""
+
+
+def status_intake_health_section() -> str:
+    return """
+ <section class="nf-section-block nf-section--elevated" aria-labelledby="intake-health-title">
+ <div class="nf-section-block-head"><span class="nf-section-num" aria-hidden="true">✉</span><div>
+ <p class="nf-eyebrow" id="intake-health-title">Intake delivery</p>
+ <h2>Form → operations inbox</h2>
+ <p class="nf-section-lead">Live check — www Resend email and platform intake persistence. When email is configured, every form notifies <strong>operations@noetfield.com</strong> with Reply-To set to the submitter.</p>
+ </div></div>
+ <div class="nf-trust-signals-grid" data-intake-health-host aria-live="polite">
+ <div class="nf-trust-signal"><span class="nf-trust-signal-label">Checking…</span><span class="nf-signal-badge nf-signal-badge--orientation">Loading</span></div>
+ </div>
+ </section>"""
+
+
+def status_page_script() -> str:
+    return f"""
+ <script src="/assets/noetfield-intake-status.js?v={WWW_VER}" defer></script>"""
+
+
 def msp_phase_diagram() -> str:
     return """
  <div class="nf-phase-ladder" role="region" aria-label="MSP two-tier model">
@@ -1989,6 +2025,7 @@ def legal_prose(kind: str) -> str:
  <section><h2>Public website</h2><p>Marketing pages, sandbox signup, pricing, and buyer documentation are available.</p></section>
  <section><h2>Workspace and evaluate API</h2><p>Sandbox evaluate and workspace are available for self-serve trial. Production API keys and tenant-scoped evaluate are provisioned per Copilot Governance Pack or Trust Brief SOW.</p></section>
  <section><h2>Engagement support</h2><p>For status on your organization&rsquo;s engagement, use <a href="/contact/?topic=other#contact-form">async contact</a> or operations@noetfield.com with your Request ID.</p></section>
+ <section><h2>Intake not delivering?</h2><p>Check delivery mode on this page. Ops setup: <code>docs/ops/VERCEL_INTAKE_SETUP.md</code> (founder) — requires <code>RESEND_API_KEY</code> on Vercel www project.</p></section>
  </div>""",
     }
     return blocks[kind]
@@ -2375,7 +2412,7 @@ def main() -> None:
         ("/docs/msp/READINESS_TO_RECORD_MAPPING_v1.md", "MAP", "Readiness → Record", "Assessment import"),
         ("/copilot/demo/", "▶", "5-minute demo", "Phase 2 proof"),
  ]) + """
- </section>""",
+ </section>""" + msp_buyer_block(),
           mega_cta("MSP partner intake", "Partner enablement · first tenant pilot · co-marketing path", ("/gate/partners/intake/", "MSP partner intake"))))
 
     write("bank-pilot/index.html", "Noetfield — Bank Pilot (Shadow Governance)",
@@ -2430,17 +2467,23 @@ def main() -> None:
  <section><h2>What do you offer?</h2><p>Lead wedge: Copilot Governance Pack ($2k–10k · 90 days · board PDF). Land SKU: Trust Brief ($10k · 6 weeks). Custom: Bank Pilot shadow simulation. Three contract SKUs only.</p></section>
  <section><h2>What does Noetfield add to Microsoft Purview?</h2><p>Signed Copilot governance receipts — metadata-only evidence index plus board PDF and procurement ZIP on every go/no-go decision.</p></section>
  <section><h2>Are you a certifier?</h2><p>No. We produce governance records and export bundles — honest Available · Planned · Out of scope posture, not ISO/SOC certification claims.</p></section>
+ <section><h2>I'm an investor or VC — where do I start?</h2><p><a href="/investors/diligence/">Investor Diligence Vault</a> — evidence artifacts, 18-item checklist, Shadow Governance Brief. Or <a href="/investors/">investor brief</a> for Land · Expand · Channel model.</p></section>
+ <section><h2>I'm on /msp/ but I'm not a partner</h2><p>MSP page is partner-facing. End clients: <a href="/copilot/pilot/">Apply for Copilot Governance Pack</a> or <a href="/contact/?topic=pilot#contact-form">contact operations</a>.</p></section>
  </div>""" + mega_cta())
 
     # Simple pages
     for rel, title, desc, canon, h1, lead in [
-        ("status/index.html", "Noetfield — Status", "Noetfield platform status.", "/status/", "Platform status", "Public surfaces and workspace availability."),
         ("privacy/index.html", "Noetfield — Privacy", "Privacy policy.", "/privacy/", "Privacy", "How Noetfield handles intake and operational metadata."),
         ("terms/index.html", "Noetfield — Terms", "Terms of use.", "/terms/", "Terms", "Terms governing use of Noetfield public surfaces."),
     ]:
         write(rel, title, desc, canon,
               hero("", "", h1, lead, [], [("/contact/", "Contact", False)], [], receipt("RID-STATUS", "Operational metadata only.")) +
-              legal_prose({"privacy": "privacy", "terms": "terms", "status": "status"}[rel.split("/")[0]]) + mega_cta())
+              legal_prose({"privacy": "privacy", "terms": "terms"}[rel.split("/")[0]]) + mega_cta())
+
+    write("status/index.html", "Noetfield — Status", "Noetfield platform status.", "/status/",
+          hero("", "", "Platform status", "Public surfaces, intake delivery, and workspace availability.",
+               [], [("/contact/", "Contact", False)], [], receipt("RID-STATUS", "Operational metadata only.")) +
+          status_intake_health_section() + legal_prose("status") + mega_cta() + status_page_script())
 
     write("contact/index.html", "Noetfield — Contact", "Contact Noetfield operations.", "/contact/",
           hero("", "Contact", "Operations intake",

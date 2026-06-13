@@ -16,6 +16,9 @@ function intakeLabel(body) {
   if (vector.indexOf("sandbox") >= 0 || formId === "nfsandboxform" || formId === "nftrialaccountform") {
     return "Sandbox signup";
   }
+  if (vector === "investor-diligence" || topic === "investor-diligence") {
+    return "Investor diligence vault";
+  }
   if (topic === "investor" || (vector === "work-with-us" && topic === "investor")) {
     return "Investor brief";
   }
@@ -47,6 +50,7 @@ function metaLine(body) {
   if (lane) parts.push("lane/role: " + lane);
   if (topic && topic !== lane) parts.push("topic: " + topic);
   if (m.pilot_band) parts.push("pilot_band: " + m.pilot_band);
+  if (m.engagement) parts.push("engagement: " + m.engagement);
   if (m.page) parts.push("page: " + m.page);
   if (m.form_id) parts.push("form: " + m.form_id);
   if (m.async) parts.push("async web submit");
@@ -168,5 +172,6 @@ module.exports = {
   emailConfigured,
   intakeLabel,
   intakeSubject,
+  opsBodyText,
   sendIntakeEmails,
 };

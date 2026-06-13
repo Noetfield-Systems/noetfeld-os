@@ -125,6 +125,19 @@ def test_investor_diligence_vault_page() -> None:
     assert "/investors/diligence/" in investors
 
 
+def test_msp_end_client_buyer_block() -> None:
+    text = (ROOT / "msp" / "index.html").read_text(encoding="utf-8")
+    assert "msp-end-client" in text
+    assert "End client" in text
+    assert "/copilot/pilot/" in text
+
+
+def test_status_intake_health_widget() -> None:
+    text = (ROOT / "status" / "index.html").read_text(encoding="utf-8")
+    assert "data-intake-health-host" in text
+    assert "noetfield-intake-status.js" in text
+
+
 def test_work_with_us_program_page() -> None:
     text = (ROOT / "work-with-us" / "index.html").read_text(encoding="utf-8")
     assert "Work with Noetfield" in text

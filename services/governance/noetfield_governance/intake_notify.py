@@ -48,6 +48,7 @@ def _meta_line(record: IntakeRecord) -> str:
     lane = meta.get("program_lane") or meta.get("buyer_role") or meta.get("role") or ""
     topic = meta.get("topic") or ""
     band = meta.get("pilot_band") or ""
+    engagement = meta.get("engagement") or ""
     page = meta.get("page") or ""
     form_id = meta.get("form_id") or ""
     parts = []
@@ -57,6 +58,8 @@ def _meta_line(record: IntakeRecord) -> str:
         parts.append(f"topic: {topic}")
     if band:
         parts.append(f"pilot_band: {band}")
+    if engagement:
+        parts.append(f"engagement: {engagement}")
     if page:
         parts.append(f"page: {page}")
     if form_id:
@@ -75,6 +78,8 @@ def intake_label(record: IntakeRecord) -> str:
 
     if "sandbox" in vector or form_id in {"nfsandboxform", "nftrialaccountform"}:
         return "Sandbox signup"
+    if vector == "investor-diligence" or topic == "investor-diligence":
+        return "Investor diligence vault"
     if topic == "investor" or (vector == "work-with-us" and topic == "investor"):
         return "Investor brief"
     if vector == "work-with-us" or topic in {"connector", "facilitator", "co-partner", "partner"}:

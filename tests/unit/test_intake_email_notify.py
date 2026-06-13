@@ -56,6 +56,11 @@ def test_intake_label_investor() -> None:
     assert intake_label(rec) == "Investor brief"
 
 
+def test_intake_label_investor_diligence() -> None:
+    rec = _record(vector="investor-diligence", sku="general", metadata={"engagement": "shadow-brief"})
+    assert intake_label(rec) == "Investor diligence vault"
+
+
 def test_intake_subject_includes_vector_and_rid() -> None:
     subject = intake_subject(_record())
     assert "Governance Pack apply" in subject

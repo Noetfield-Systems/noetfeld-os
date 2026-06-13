@@ -62,6 +62,7 @@
       var notes = field(form, "notes") || field(form, "message");
       var topic = field(form, "topic") || field(form, "role") || field(form, "subject");
       var role = field(form, "role");
+      var engagement = field(form, "engagement");
 
       if (!email || email.indexOf("@") < 1) {
         var st = statusEl(form);
@@ -78,6 +79,7 @@
       if (!org) org = topic || "Web inquiry";
 
       var vector = form.getAttribute("data-intake-vector") || "web-intake";
+      if (topic === "investor-diligence") vector = "investor-diligence";
       var sku = form.getAttribute("data-intake-sku") || window.NFIntakeCore.skuFromVector(vector);
       var headline = form.getAttribute("data-intake-headline") || "Message recorded — async ops notify";
       var detail =
@@ -91,6 +93,7 @@
           location.pathname +
           "\n" +
           (topic ? "Topic: " + topic + "\n" : "") +
+          (engagement ? "Engagement: " + engagement + "\n" : "") +
           (name ? "Name: " + name + "\n" : "") +
           "Organization: " +
           org +
@@ -112,6 +115,7 @@
           form_id: form.id || "",
           topic: topic || "",
           role: role || topic || "",
+          engagement: engagement || "",
           async: true,
         },
         submitBtn: form.querySelector('button[type="submit"]'),

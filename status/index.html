@@ -15,11 +15,11 @@
  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,400..700;1,14..32,400..700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" />
  <link rel="stylesheet" href="/assets/noetfield-tokens.css" />
  <link rel="stylesheet" href="/assets/noetfield-shell.css" />
- <link rel="stylesheet" href="/assets/noetfield-www.css?v=38" />
- <link rel="stylesheet" href="/assets/noetfield-print.css?v=38" media="print" />
- <script src="/assets/noetfield-shell.js?v=38" defer></script>
- <script src="/assets/noetfield-intake-core.js?v=38" defer></script>
- <script src="/assets/noetfield-forms.js?v=38" defer></script>
+ <link rel="stylesheet" href="/assets/noetfield-www.css?v=39" />
+ <link rel="stylesheet" href="/assets/noetfield-print.css?v=39" media="print" />
+ <script src="/assets/noetfield-shell.js?v=39" defer></script>
+ <script src="/assets/noetfield-intake-core.js?v=39" defer></script>
+ <script src="/assets/noetfield-forms.js?v=39" defer></script>
 </head>
 <body class="nf-www nf-site-v14">
  <div class="bg" aria-hidden="true"></div>
@@ -32,7 +32,7 @@
  
  
  <h1>Platform status</h1>
- <p class="nf-lead">Public surfaces and workspace availability.</p>
+ <p class="nf-lead">Public surfaces, intake delivery, and workspace availability.</p>
  <div class="nf-hero-badges"></div>
  <div class="nf-cta-actions"><a class="btn btn-secondary" href="/contact/">Contact</a></div>
  <ul class="nf-marquee" aria-label="Framework alignment"></ul>
@@ -57,10 +57,21 @@
  </aside>
  </div>
  </header>
+ <section class="nf-section-block nf-section--elevated" aria-labelledby="intake-health-title">
+ <div class="nf-section-block-head"><span class="nf-section-num" aria-hidden="true">✉</span><div>
+ <p class="nf-eyebrow" id="intake-health-title">Intake delivery</p>
+ <h2>Form → operations inbox</h2>
+ <p class="nf-section-lead">Live check — www Resend email and platform intake persistence. When email is configured, every form notifies <strong>operations@noetfield.com</strong> with Reply-To set to the submitter.</p>
+ </div></div>
+ <div class="nf-trust-signals-grid" data-intake-health-host aria-live="polite">
+ <div class="nf-trust-signal"><span class="nf-trust-signal-label">Checking…</span><span class="nf-signal-badge nf-signal-badge--orientation">Loading</span></div>
+ </div>
+ </section>
  <div class="nf-prose">
  <section><h2>Public website</h2><p>Marketing pages, sandbox signup, pricing, and buyer documentation are available.</p></section>
  <section><h2>Workspace and evaluate API</h2><p>Sandbox evaluate and workspace are available for self-serve trial. Production API keys and tenant-scoped evaluate are provisioned per Copilot Governance Pack or Trust Brief SOW.</p></section>
  <section><h2>Engagement support</h2><p>For status on your organization&rsquo;s engagement, use <a href="/contact/?topic=other#contact-form">async contact</a> or operations@noetfield.com with your Request ID.</p></section>
+ <section><h2>Intake not delivering?</h2><p>Check delivery mode on this page. Ops setup: <code>docs/ops/VERCEL_INTAKE_SETUP.md</code> (founder) — requires <code>RESEND_API_KEY</code> on Vercel www project.</p></section>
  </div>
  <section class="nf-cta-mega" aria-labelledby="cta-h">
  <h2 id="cta-h">Board PDF in your next governance meeting</h2>
@@ -70,6 +81,7 @@
  <a class="btn btn-secondary" href="/trust-brief/intake/">Request Trust Brief ($10k)</a>
  </div>
  </section>
+ <script src="/assets/noetfield-intake-status.js?v=39" defer></script>
  </main>
  <footer id="nfFooter"></footer>
 </body>

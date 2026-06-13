@@ -23,14 +23,19 @@ module.exports = async function handler(req, res) {
   }
 
   const wwwEmail = emailConfigured();
+  const platformEnabled = platform.enabled === true;
+  const intakeReady = wwwEmail || platformEnabled || Boolean(platform.ops_email_configured);
+
   return res.status(200).json({
-    enabled: platform.enabled !== false,
+    enabled: intakeReady,
     intake_email: CANONICAL,
-    storage: platform.storage || "www-proxy",
+    storage: platform.storage || (wwwEmail ? "www-email" : "www-proxy"),
     ops_webhook_configured: Boolean(platform.ops_webhook_configured),
     ops_email_configured: wwwEmail || Boolean(platform.ops_email_configured),
     www_email_configured: wwwEmail,
+    platform_intake_enabled: platformEnabled,
     auto_ack_enabled: (process.env.INTAKE_AUTO_ACK_ENABLED || "true").toLowerCase() !== "false",
     platform_reachable: platform.enabled !== undefined,
+    delivery_mode: wwwEmail ? "resend" : platformEnabled ? "platform" : "unconfigured",
   });
 };

@@ -32,6 +32,7 @@
     if (v.indexOf("copilot") >= 0) return "copilot";
     if (v.indexOf("bank") >= 0) return "bank_pilot";
     if (v.indexOf("work-with-us") >= 0) return "general";
+    if (v.indexOf("investor-diligence") >= 0) return "general";
     if (v.indexOf("trust") >= 0) return "trust_brief";
     return "general";
   }
@@ -68,6 +69,8 @@
           .then(function (body) {
             var err = new Error(body.detail || "Intake failed");
             err.status = res.status;
+            err.mailto = body.mailto || null;
+            err.intake_id = body.intake_id || null;
             throw err;
           });
       }
@@ -132,15 +135,17 @@
     if (!container) return;
     var subject = (opts && opts.mailSubject) || "Noetfield — Intake (API fallback)";
     var body = (opts && opts.mailBody) || "Intake API unavailable. Please follow up manually.\n";
+    var mailHref = (err && err.mailto) || mailtoFallback(subject, body);
     container.hidden = false;
     container.className = "nf-intake-async-status nf-intake-async-status--err";
     container.innerHTML =
       "<p><strong>Could not reach intake API</strong></p>" +
       "<p>" +
       (err && err.message ? err.message : "Network error") +
+      (err && err.intake_id ? "</p><p>Reference: <code>" + err.intake_id + "</code>" : "") +
       "</p>" +
       '<p><a class="btn btn-secondary" href="' +
-      mailtoFallback(subject, body) +
+      mailHref +
       '">Email operations</a></p>';
   }
 

@@ -1,6 +1,6 @@
 /** POST /api/intake — forward to platform + deliver to operations inbox (Resend). */
 
-const { emailConfigured, sendIntakeEmails } = require("./_lib/intake-email");
+const { CANONICAL, emailConfigured, sendIntakeEmails, opsBodyText } = require("./_lib/intake-email");
 
 function randomIntakeId() {
   const hex = Array.from({ length: 12 }, function () {
@@ -54,18 +54,31 @@ module.exports = async function handler(req, res) {
   }
 
   if (platformOk && platformData) {
-    return res.status(200).json(platformData);
+    return res.status(200).json({
+      ...platformData,
+      email_delivered: emailResult.ops,
+      email_ack: emailResult.ack,
+    });
   }
   if (emailResult.ops) {
     return res.status(200).json({
       intake_id: intakeId,
       request_id: body.request_id || null,
       message: "Intake recorded — operations notified by email",
+      email_delivered: true,
+      email_ack: emailResult.ack,
     });
   }
 
+  const mailSubject =
+    "[vector:" + (body.vector || "web-intake") + "] Noetfield — Intake fallback (" + intakeId + ")";
+  const mailBody = opsBodyText(body, intakeId);
+
   return res.status(502).json({
     detail:
-      "Intake unavailable. Use /contact/ or email operations@noetfield.com with your Request ID.",
+      "Intake unavailable — email not configured. Use /contact/ or email operations@noetfield.com with your Request ID.",
+    intake_id: intakeId,
+    mailto: "mailto:" + CANONICAL + "?subject=" + encodeURIComponent(mailSubject) + "&body=" + encodeURIComponent(mailBody),
+    www_email_configured: emailResult.configured,
   });
 };

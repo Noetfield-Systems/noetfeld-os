@@ -12,7 +12,16 @@
 | `INTAKE_EMAIL_TO` | Vercel www + platform | Default `operations@noetfield.com` |
 | `INTAKE_AUTO_ACK_ENABLED` | Vercel www + platform | Instant receipt to submitter |
 | `INTAKE_OPS_WEBHOOK_URL` | platform | Slack-compatible webhook (optional) |
-| `GET /api/intake/health` | www or platform | `ops_email_configured` / `www_email_configured` |
+| `GET /api/intake/health` | www or platform | `ops_email_configured` / `www_email_configured` / `delivery_mode` |
+
+**Go-live:** [docs/ops/VERCEL_INTAKE_SETUP.md](./ops/VERCEL_INTAKE_SETUP.md)
+
+## Investor diligence vector
+
+| Vector | Form | Ops label |
+|--------|------|-----------|
+| `investor-diligence` | `/investors/diligence/#investor-diligence-apply` | Investor diligence vault |
+| Contact topic `investor-diligence` | `/contact/` | Same routing via contact form |
 
 ## Answering intakes
 
