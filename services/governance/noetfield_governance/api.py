@@ -17,7 +17,12 @@ from pydantic import BaseModel, ConfigDict, Field, SecretStr
 from noetfield_governance.chat_errors import ChatAPIError, ChatConfigurationError
 from noetfield_governance.public_chat import answer_public_question, resolve_chat_provider
 from noetfield_governance import intake_repository, redis_runtime
-from noetfield_governance.intake_notify import notify_ops_webhook
+from noetfield_governance.intake_notify import (
+    intake_email_configured,
+    notify_ops_inbox,
+    notify_ops_webhook,
+    notify_submitter_ack,
+)
 from noetfield_governance.public_intake import submit_intake
 from noetfield_governance.telegram_client import (
     TelegramAPIError,
@@ -613,6 +618,8 @@ async def intake_health() -> dict[str, object]:
         "intake_email": CANONICAL_INTAKE_EMAIL,
         "storage": intake_repository.storage_label(),
         "ops_webhook_configured": bool((settings.intake_ops_webhook_url or "").strip()),
+        "ops_email_configured": intake_email_configured(settings),
+        "auto_ack_enabled": settings.intake_auto_ack_enabled,
         "redis_rate_limit": redis_runtime.is_enabled(),
     }
 
@@ -625,6 +632,8 @@ async def _notify_intake_background(record: object) -> None:
     url = (settings.intake_ops_webhook_url or "").strip()
     if url:
         await asyncio.to_thread(notify_ops_webhook, url, record)
+    await asyncio.to_thread(notify_ops_inbox, settings, record)
+    await asyncio.to_thread(notify_submitter_ack, settings, record)
 
 
 @app.post("/api/intake", tags=["intake"], response_model=PublicIntakeResponse)

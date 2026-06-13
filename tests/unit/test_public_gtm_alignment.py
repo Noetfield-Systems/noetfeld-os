@@ -87,10 +87,12 @@ def test_global_intake_wiring_on_www() -> None:
     investors = (ROOT / "investors" / "index.html").read_text(encoding="utf-8")
     assert "nfInvestorForm" in investors
     vercel = (ROOT / "vercel.json").read_text(encoding="utf-8")
-    assert "/api/intake" in vercel
+    assert "api/public/chat" in vercel
+    assert (ROOT / "api" / "intake.js").is_file()
+    intake_api = (ROOT / "api" / "intake.js").read_text(encoding="utf-8")
+    assert "sendIntakeEmails" in intake_api
     forms_js = (ROOT / "assets" / "noetfield-forms.js").read_text(encoding="utf-8")
     assert "nfSandboxForm" in forms_js
-    assert "nfContactForm" not in forms_js or "data-nf-intake-form" in forms_js
 
 
 def test_homepage_multi_product_playground() -> None:

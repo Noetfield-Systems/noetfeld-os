@@ -4,10 +4,22 @@
 
 ## Platform wiring
 
-| Setting | Purpose |
-|---------|---------|
-| `INTAKE_OPS_WEBHOOK_URL` | Slack-compatible webhook; fires on each `POST /api/intake` |
-| `GET /api/intake/health` | Confirms `ops_webhook_configured` |
+## Platform + www wiring
+
+| Setting | Where | Purpose |
+|---------|-------|---------|
+| `RESEND_API_KEY` | **Vercel www** + platform | Delivers every form to `operations@noetfield.com`; `Reply-To` = submitter |
+| `INTAKE_EMAIL_TO` | Vercel www + platform | Default `operations@noetfield.com` |
+| `INTAKE_AUTO_ACK_ENABLED` | Vercel www + platform | Instant receipt to submitter |
+| `INTAKE_OPS_WEBHOOK_URL` | platform | Slack-compatible webhook (optional) |
+| `GET /api/intake/health` | www or platform | `ops_email_configured` / `www_email_configured` |
+
+## Answering intakes
+
+1. **Form submit** → email lands in `operations@noetfield.com` with **Reply-To: submitter@…**
+2. **Hit Reply** in Gmail/Outlook — your response goes directly to the prospect
+3. **Templates:** [ops/templates/msb/INTAKE_RESPONSE_TEMPLATES.md](../ops/templates/msb/INTAKE_RESPONSE_TEMPLATES.md) — copy to `ops/private/msb/` via `./scripts/market-entry-bootstrap.sh`
+4. **Direct email** to operations@ still works — same inbox if Google Workspace is configured
 
 Templates for replies: copy [ops/templates/msb/INTAKE_RESPONSE_TEMPLATES.md](../ops/templates/msb/INTAKE_RESPONSE_TEMPLATES.md) to `ops/private/msb/` via `./scripts/market-entry-bootstrap.sh`.
 

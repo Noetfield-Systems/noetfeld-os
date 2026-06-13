@@ -18,7 +18,10 @@ def test_intake_health() -> None:
         async with AsyncClient(transport=transport, base_url="http://test") as client:
             response = await client.get("/api/intake/health")
         assert response.status_code == 200
-        assert response.json()["enabled"] is True
+        body = response.json()
+        assert body["enabled"] is True
+        assert "ops_email_configured" in body
+        assert "auto_ack_enabled" in body
 
     asyncio.run(run())
 

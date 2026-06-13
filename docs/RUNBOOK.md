@@ -22,7 +22,7 @@ curl -sS http://127.0.0.1:8001/api/ecosystem/health | python3 -m json.tool
 
 ## Production deploy (platform)
 
-1. Set secrets (never in git): `OPENROUTER_API_KEY`, `GEMINI_API_KEY`, `TELEGRAM_BOT_TOKEN`, `TELEGRAM_WEBHOOK_SECRET`, optional `INTAKE_OPS_WEBHOOK_URL`, Langfuse keys.
+1. Set secrets (never in git): `OPENROUTER_API_KEY`, `GEMINI_API_KEY`, `TELEGRAM_BOT_TOKEN`, `TELEGRAM_WEBHOOK_SECRET`, optional `INTAKE_OPS_WEBHOOK_URL`, **`RESEND_API_KEY`** (or `INTAKE_SMTP_*`) for inbox delivery, Langfuse keys.
 2. `RUNTIME_EVENT_STORE=postgres`, `INTAKE_PERSISTENCE=auto`, `DATABASE_URL=...`, `REDIS_URL=...`
 3. Apply migrations: `python3 scripts/apply_postgres_migrations.py`
 4. Start API (port 8001).
@@ -42,7 +42,8 @@ curl -sS http://127.0.0.1:8001/api/ecosystem/health | python3 -m json.tool
 ## Intake operations
 
 - Public: `POST /api/intake` (Postgres when `INTAKE_PERSISTENCE=auto` + postgres runtime).
-- Web form mirrors via `noetfield-intake-api.js`.
+- Web forms → same API via `noetfield-intake-core.js` + site-wide `noetfield-forms.js`.
+- **Inbox email:** `RESEND_API_KEY` (or `INTAKE_SMTP_*`) → `operations@noetfield.com`, `Reply-To` submitter; auto-ack optional (`INTAKE_AUTO_ACK_ENABLED`).
 - Slack: set `INTAKE_OPS_WEBHOOK_URL`.
 - Idempotent on `request_id` (`RID-…`).
 

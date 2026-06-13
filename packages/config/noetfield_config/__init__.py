@@ -62,6 +62,31 @@ class Settings(BaseSettings):
         default=None,
         description="Slack-compatible webhook URL for new intake notifications.",
     )
+    intake_email_notify_enabled: bool = True
+    intake_email_from: str = Field(
+        default="Noetfield Intake <notifications@noetfield.com>",
+        description="From address for intake inbox + auto-ack emails (Resend/SMTP verified domain).",
+    )
+    intake_email_to: str = Field(
+        default="operations@noetfield.com",
+        description="Operations inbox that receives every POST /api/intake.",
+    )
+    intake_auto_ack_enabled: bool = Field(
+        default=True,
+        description="Send submitter an instant receipt email when intake email delivery is configured.",
+    )
+    resend_api_key: SecretStr | None = Field(
+        default=None,
+        description="Resend API key — preferred intake email transport (server-side only).",
+    )
+    intake_smtp_host: str | None = Field(
+        default=None,
+        description="SMTP host fallback when RESEND_API_KEY is unset (e.g. smtp.gmail.com).",
+    )
+    intake_smtp_port: int = Field(default=587, ge=1, le=65535)
+    intake_smtp_user: str | None = None
+    intake_smtp_password: SecretStr | None = None
+    intake_smtp_use_tls: bool = True
     redis_sessions_enabled: bool = True
 
     telegram_bot_enabled: bool = True

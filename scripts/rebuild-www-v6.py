@@ -6,7 +6,7 @@ import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-WWW_VER = "35"
+WWW_VER = "36"
 
 # Copilot Governance Pack — locked lead SKU ($2k–10k · 90 days · board PDF success signal)
 PILOT_SKU = "Copilot Governance Pack"
@@ -1818,20 +1818,20 @@ def legal_prose(kind: str) -> str:
  <section><h2>Overview</h2><p>Noetfield processes operational and intake metadata to deliver governance evaluation, Trust Ledger records, and export bundles. We do not take custody of Microsoft 365 mailbox content.</p></section>
  <section><h2>What we collect</h2><p>Trust Brief and sandbox intake: contact details, organization name, and non-confidential scope notes you provide. M365 connectors use metadata-only indices (Purview labels, Entra ID configuration, audit log references).</p></section>
  <section><h2>Your Request ID</h2><p>We assign a Request ID (RID) to thread intake, evaluate, and export on your engagement. You may copy it from the site footer.</p></section>
- <section><h2>Contact</h2><p>Privacy questions: <a href="mailto:operations@noetfield.com">operations@noetfield.com</a></p></section>
+ <section><h2>Contact</h2><p>Privacy questions: <a href="/contact/?topic=privacy#contact-form">Contact operations</a> · async intake · operations@noetfield.com</p></section>
  </div>""",
         "terms": """
  <div class="nf-prose">
  <section><h2>Use of public surfaces</h2><p>Noetfield public websites, sandbox, and documentation are provided for evaluation and diligence. Orientation materials are not legal advice.</p></section>
  <section><h2>No custody or payment execution</h2><p>Noetfield is a governance evaluation layer — not a bank, MSB, certifier, or payment processor.</p></section>
  <section><h2>Sandbox and production</h2><p>Free sandbox uses mock connectors and sample limits. Production evaluate, workspace, and export require a Copilot Governance Pack or Trust Brief engagement.</p></section>
- <section><h2>Contact</h2><p>Terms questions: <a href="mailto:operations@noetfield.com">operations@noetfield.com</a></p></section>
+ <section><h2>Contact</h2><p>Terms questions: <a href="/contact/?topic=other#contact-form">Contact operations</a> · operations@noetfield.com</p></section>
  </div>""",
         "status": """
  <div class="nf-prose">
  <section><h2>Public website</h2><p>Marketing pages, sandbox signup, pricing, and buyer documentation are available.</p></section>
  <section><h2>Workspace and evaluate API</h2><p>Sandbox evaluate and workspace are available for self-serve trial. Production API keys and tenant-scoped evaluate are provisioned per Copilot Governance Pack or Trust Brief SOW.</p></section>
- <section><h2>Engagement support</h2><p>For status on your organization&rsquo;s engagement, contact <a href="mailto:operations@noetfield.com">operations@noetfield.com</a> with your Request ID.</p></section>
+ <section><h2>Engagement support</h2><p>For status on your organization&rsquo;s engagement, use <a href="/contact/?topic=other#contact-form">async contact</a> or operations@noetfield.com with your Request ID.</p></section>
  </div>""",
     }
     return blocks[kind]
@@ -2561,9 +2561,9 @@ def main() -> None:
         "Engagement intake · Canada",
         "Unified gateway",
         "Request governance engagement",
-        "All intake vectors — Trust Brief, Copilot, Bank Pilot, and partner programs — route through a single operational inbox: <strong><a href=\"mailto:operations@noetfield.com\">operations@noetfield.com</a></strong>. Include your footer <strong>Request ID</strong> (<code>RID-…</code>) when you have one.",
+        "All intake vectors — Trust Brief, Copilot, Bank Pilot, and partner programs — route through async intake to <strong>operations@noetfield.com</strong>. Include your footer <strong>Request ID</strong> (<code>RID-…</code>) when you have one.",
         [("Non-confidential", True), ("RID-threaded", False)],
-        [("mailto:operations@noetfield.com", "operations@noetfield.com", True), ("/trust-brief/intake/", "Trust Brief intake", False)],
+        [("/contact/#contact-form", "Send message", True), ("/trust-brief/intake/", "Trust Brief intake", False)],
         [],
         receipt("RID-2026-0602-GATE", "Same RID ties intake, evaluate, export."),
     ) + scope_block() + f"""
@@ -2580,7 +2580,7 @@ def main() -> None:
  <article class="nf-dir-card"><p class="meta">Licensed MSB / PSP</p><p>Control layer before payment APIs — execution stays with you.</p><a class="btn btn-secondary" id="giPartnerMsb" href="/trust-brief/intake/?vector=partner-msb&amp;interest=partner-msb">MSB partner intake</a></article>
  <article class="nf-dir-card"><p class="meta">Licensed exchange / VASP</p><p>Shadow evaluate + read-only signals; partner executes.</p><a class="btn btn-secondary" id="giPartnerExchange" href="/trust-brief/intake/?vector=partner-exchange&amp;interest=partner-exchange">Exchange partner intake</a></article>
  </div>
- </section>""" + mega_cta("Email operations directly", "Include your Request ID if you have one", ("mailto:operations@noetfield.com", "operations@noetfield.com"), (PILOT_INTAKE, "Apply for pilot"))
+ </section>""" + mega_cta("Send a message", "Async intake — saved instantly · ops replies within one business day", ("/contact/#contact-form", "Contact form"), (PILOT_INTAKE, "Apply for pilot"))
     write("gate/intake/index.html", "Noetfield — Engagement Intake Gateway",
           "Unified engagement intake for Trust Brief, Copilot, and Bank Pilot.",
           "/gate/intake/",
@@ -2595,13 +2595,9 @@ def main() -> None:
      location.replace("/trust-brief/intake/?" + sp.toString());
      return;
    }
-   var mail = document.querySelector('a[href^="mailto:operations@noetfield.com"]');
-   if (mail && window.noetfieldIntakeMailto) {
-     mail.href = window.noetfieldIntakeMailto(
-       "Noetfield — Gate intake",
-       "Engagement intake via /gate/intake/\\n",
-       vector || "gate-intake"
-     );
+   var contact = document.querySelector('a[href="/contact/#contact-form"], a[href^="/contact/"]');
+   if (contact && window.noetfieldIntakeMailto) {
+     contact.href = "/contact/?topic=" + encodeURIComponent(vector || "gate-intake") + "#contact-form";
    }
    ["giTrustBrief", "giCopilot", "giBankPilot", "giPartner", "giPartnerMsb", "giPartnerExchange"].forEach(function (id) {
      var el = document.getElementById(id);
