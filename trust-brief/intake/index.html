@@ -333,7 +333,9 @@
  <div class="actions" aria-label="Form actions">
  <button class="btn primary" type="submit">Send intake</button>
  <a class="btn secondary" id="tbEmailInstead" href="mailto:operations@noetfield.com">Email operations</a>
+ <span id="tbFormActionsTrustBrief">
  <a class="btn secondary" href="/gate/intake/?vector=trust-brief" data-rid-link>Engagement gateway</a>
+ </span>
  <a class="btn secondary" href="/status/" data-rid-link>Status</a>
  </div>
 
@@ -344,7 +346,7 @@
  </span>
  </div>
 
- <div class="notice">
+ <div class="notice" id="tbNextStepNotice">
  <strong>Next step:</strong> scope confirmation → kickoff scheduling (using Request ID) → week-by-week delivery → board memo + starter ledger pack.
  <br />
  <strong>Operational intake:</strong> operations@noetfield.com (all SKUs and validation brief kickoffs)
@@ -360,7 +362,7 @@
  </div>
  </section>
 
- <section class="card" aria-label="What to prepare" style="margin-top:16px;">
+ <section class="card" id="tbPrepareTrustBrief" aria-label="What to prepare" style="margin-top:16px;">
  <div class="hd">
  <h2 class="cardTitle">What to prepare</h2>
  <p class="muted">Non-confidential, high-level inputs that speed kickoff.</p>
@@ -397,6 +399,37 @@
  </div>
  </div>
  </section>
+
+ <section class="card" id="tbPreparePilot" aria-label="Pilot kickoff prep" style="margin-top:16px;" hidden>
+ <div class="hd">
+ <h2 class="cardTitle">What speeds pilot kickoff</h2>
+ <p class="muted">Non-confidential · high-level only · no credentials or tenant secrets in this form.</p>
+ </div>
+ <div class="bd">
+ <div class="blocks">
+ <article class="block">
+ <div class="blockTop"><h3>Copilot rollout context</h3><span class="tag">Input</span></div>
+ <ul>
+ <li>Target business units for Copilot go/no-go receipts</li>
+ <li>Named approvers (CISO, GRC, legal, procurement)</li>
+ <li>Board or risk committee date you want the PDF for</li>
+ </ul>
+ </article>
+ <article class="block">
+ <div class="blockTop"><h3>M365 evidence path</h3><span class="tag">Input</span></div>
+ <ul>
+ <li>Purview / Entra / audit metadata — read-only orientation</li>
+ <li>Tenant admin contact for connector scoping (post-kickoff)</li>
+ <li>Sandbox evaluate completed (optional) — <a href="/start/">Start sandbox</a></li>
+ </ul>
+ </article>
+ <article class="block">
+ <div class="blockTop"><h3>Success signal</h3><span class="tag">Pilot</span></div>
+ <p>One approved TLE and board PDF used in a real governance meeting — fixed fee $2k–10k · 90 days.</p>
+ </article>
+ </div>
+ </div>
+ </section>
  </div>
 
  <!-- RIGHT -->
@@ -424,7 +457,7 @@
  <div class="actions" style="margin-top:12px;">
  <button class="btn secondary" type="button" id="tbCopySummary">Copy summary</button>
  <a class="btn secondary" id="tbEmailProc" href="mailto:operations@noetfield.com">Email operations</a>
- <a class="btn secondary" href="/trust-brief/#pricing" data-rid-link>Back to pricing</a>
+ <a class="btn secondary" id="tbBackLink" href="/trust-brief/#pricing" data-rid-link>Back to pricing</a>
  </div>
 
  <div class="notice" style="margin-top:12px;">
@@ -453,7 +486,7 @@
  </aside>
  </section>
 
- <section class="stickyCta" aria-label="Sticky CTA">
+ <section class="stickyCta" id="intakeStickyCta" aria-label="Sticky CTA">
  <div class="stickyInner">
  <div class="stickyText" id="tbStickyText"><strong>Trust Brief intake</strong> — non-confidential. Confirm scope signals and route via engagement intake if needed.</div>
  <div class="actions" id="tbStickyActionsTrustBrief" style="margin-top:0">

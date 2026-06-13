@@ -77,6 +77,13 @@ def test_pilot_page_has_lane_depth_blocks() -> None:
         assert needle in text, needle
 
 
+def test_pilot_intake_hides_legacy_sticky_and_prepare() -> None:
+    js = (ROOT / "assets" / "noetfield-intake-pilot-mode.js").read_text(encoding="utf-8")
+    assert "intakeStickyCta" in js
+    assert "tbPrepareTrustBrief" in js
+    assert "sticky.hidden = true" in js or "sticky) sticky.hidden = true" in js
+
+
 def test_pilot_intake_page_has_governance_pack_mode() -> None:
     text = (ROOT / "trust-brief" / "intake" / "index.html").read_text(encoding="utf-8")
     assert "noetfield-intake-pilot-mode.js" in text

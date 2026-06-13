@@ -58,7 +58,8 @@ check_file "pilot landing page" copilot/pilot/index.html \
 
 check_file "pilot intake page" trust-brief/intake/index.html \
   'noetfield-intake-pilot-mode.js' 'intakeHeroPilot' 'Copilot Governance Pack' \
-  'Submit pilot application' 'tb_pilot_band' 'interest=pilot'
+  'Submit pilot application' 'tb_pilot_band' 'intakeStickyCta' 'tbPreparePilot' \
+  'What speeds pilot kickoff'
 
 check_file "footer pilot-first" assets/partials/footer.html \
   'Apply for pilot ($2k–10k)' 'Copilot Governance Pack' 'tamper-evident'

@@ -227,15 +227,28 @@
     if (tbRouting) tbRouting.hidden = true;
     if (pilotRouting) pilotRouting.hidden = false;
 
-    var stickyText = document.getElementById("tbStickyText");
-    if (stickyText) {
-      stickyText.innerHTML =
-        "<strong>Copilot Governance Pack</strong> — $2k–10k pilot intake · non-confidential · board PDF success signal.";
+    var sticky = document.getElementById("intakeStickyCta");
+    if (sticky) sticky.hidden = true;
+
+    var prepareTb = document.getElementById("tbPrepareTrustBrief");
+    var preparePilot = document.getElementById("tbPreparePilot");
+    if (prepareTb) prepareTb.hidden = true;
+    if (preparePilot) preparePilot.hidden = false;
+
+    var formTbActions = document.getElementById("tbFormActionsTrustBrief");
+    if (formTbActions) formTbActions.hidden = true;
+
+    var backLink = document.getElementById("tbBackLink");
+    if (backLink) {
+      backLink.textContent = "Back to pilot overview";
+      backLink.href = "/copilot/pilot/";
     }
-    var stickyTrust = document.getElementById("tbStickyActionsTrustBrief");
-    var stickyPilot = document.getElementById("tbStickyActionsPilot");
-    if (stickyTrust) stickyTrust.hidden = true;
-    if (stickyPilot) stickyPilot.hidden = false;
+
+    var nextStep = document.getElementById("tbNextStepNotice");
+    if (nextStep) {
+      nextStep.innerHTML =
+        "<strong>Next step:</strong> operations replies within one business day → kickoff + M365 metadata scoping → live TLE → board PDF in governance meeting.";
+    }
 
     var driver = document.getElementById("tb_driver");
     if (driver && !driver.value) {
