@@ -29,6 +29,8 @@ make verify-gtm
 
 Share external demo:
 
+**Commercial SSOT:** `docs/strategy/NOETFIELD_COMMERCIAL_SSOT_LOCKED_v1.md` · **SME pack:** `/copilot/sme/`
+
 ```bash
 make dev-local-tunnel-bg && make demo-url
 ```

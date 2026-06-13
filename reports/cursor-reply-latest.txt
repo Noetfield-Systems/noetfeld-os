@@ -1,36 +1,36 @@
 ---
 agent_tag: nf-local-repo-agent
 agent_display: "[NF-LOCAL-REPO-AGENT]"
-authored_at: "2026-06-02"
-doc_id: cursor-reply-all-lanes-nf-0210
+authored_at: "2026-06-12"
+doc_id: cursor-reply-commercial-ssot-sme-embed
 ---
 
-> **Authored by:** [NF-LOCAL-REPO-AGENT] — 2026-06-02
+> **Authored by:** [NF-LOCAL-REPO-AGENT] — 2026-06-12
 
-**Shipped — PLAN FOR ALL**
+**Shipped — Commercial SSOT + SME provider embed**
 
-## Track A — Local PR
+## Docs (new LOCKED)
 
-- Pushed `cursor/bank-grade-fullstack-37f0` to origin (nf-0202–0209 + nf-0210)
-- Draft PR: open compare URL in `reports/CLOUD_AND_PR_HANDOFF.md` (no `gh` auth on this machine)
-- Rebase onto main **after PR #48 merges**
+- `docs/strategy/NOETFIELD_COMMERCIAL_SSOT_LOCKED_v1.md` — buyer line, internal engine/commercial split (agents only), W3, messaging matrix
+- `docs/strategy/NOETFIELD_SME_PROVIDER_BLUEPRINT_LOCKED_v1.md` — high-grade SME journey, Lane A map, W3 batch assets
+- `docs/copilot/SME_GOVERNANCE_PACK_ONE_PAGER.md` — CISO/GRC/procurement one-pager
 
-## Track B / C — Cloud orders
+## www embed
 
-Founder paste blocks for merge PR #48 and debug PR #49 CI → `reports/CLOUD_AND_PR_HANDOFF.md`
+- `/copilot/sme/` — SME Governance Pack landing (90-day design partner, proof links)
+- `/` — governance execution loop section + SME pack CTA
+- `/copilot/` — SME provider grade section · canonical Sources Book path fix
+- `os/LOCKED_REFERENCE_INDEX.md` — three new index rows
 
-## Track D — nf-0210
+## Boundaries held
 
-- Canonical sources book: `docs/reference/GOVERNANCE_SOURCES_BOOK_v1.md`
-- Stub at `docs/references/GOVERNANCE_SOURCES_BOOK_v1.md` (no duplicate drift)
-- `LOCKED_REFERENCE_INDEX.md` pointer fixed
-- Buyer docs aligned with Part B Purview buyer line (index evidence, not replace controls)
+- No SourceA disk edits · no payment/custody claims · engine brand not on buyer www
+- Agentic outreach remains handoff — Hub approve before send
 
 ## Verify
 
 ```text
 ./scripts/verify-agent-scope.sh — PASS
-make verify-gtm — PASS (21 pytest, full E2E)
 ```
 
 ---
@@ -39,21 +39,23 @@ make verify-gtm — PASS (21 pytest, full E2E)
 schema_version: 1
 repo: noetfield
 agent_tag: nf-local-repo-agent
-task: "PLAN FOR ALL — push bank-grade PR handoff + nf-0210 M365 citation cross-check"
+task: "Commercial SSOT + SME provider blueprint + www embed (portfolio engine model, buyer-facing NF only)"
 status: done
 verify_passed: true
-verify_command: "make verify-gtm"
-verify_output_summary: "verify-gtm passed — safe to run external demo"
+verify_command: "./scripts/verify-agent-scope.sh"
+verify_output_summary: "verify-agent-scope passed"
 blocked_reason: ""
-next_action: "Founder: paste cloud orders from CLOUD_AND_PR_HANDOFF.md; open draft PR via compare URL; merge #48 then rebase bank-grade PR"
+next_action: "Founder: push branch · make verify-gtm with dev stack · Hub PICKs for W3 batch · film W1 with Noetfield story only"
 evidence_paths:
-  - reports/CLOUD_AND_PR_HANDOFF.md
+  - docs/strategy/NOETFIELD_COMMERCIAL_SSOT_LOCKED_v1.md
+  - docs/strategy/NOETFIELD_SME_PROVIDER_BLUEPRINT_LOCKED_v1.md
+  - docs/copilot/SME_GOVERNANCE_PACK_ONE_PAGER.md
+  - copilot/sme/index.html
+  - index.html
+  - copilot/index.html
   - os/LOCKED_REFERENCE_INDEX.md
-  - docs/references/GOVERNANCE_SOURCES_BOOK_v1.md
-  - copilot/procurement/index.html
-  - copilot/demo/index.html
-  - docs/copilot/PROCUREMENT_ONE_PAGER.md
-  - docs/copilot/DESIGN_PARTNER_SOW_OUTLINE.md
-reported_at: "2026-06-02T22:00:00Z"
+reported_at: "2026-06-12T17:00:00Z"
 reporter: cursor
+main: pending-push
+head: pending-commit
 ```

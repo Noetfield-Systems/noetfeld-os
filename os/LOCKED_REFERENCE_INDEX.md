@@ -5,6 +5,9 @@
 | **`agent-read-links-v1`** | [docs/ops/AGENT_READ_LINKS_LOCKED_v1.md](../docs/ops/AGENT_READ_LINKS_LOCKED_v1.md) | **Full index** — hub :13020, mandatory chain 1–14, every repo separate, local vs cloud |
 | **`agent-context-v1`** | [docs/ops/NOETFIELD_AGENT_CONTEXT_AND_READ_ORDER_LOCKED_v1.md](../docs/ops/NOETFIELD_AGENT_CONTEXT_AND_READ_ORDER_LOCKED_v1.md) | Ship/ingest rules, cloud vs local, diagnostics |
 | **`agent-team-sync-v1`** | [docs/ops/NOETFIELD_AGENT_TEAM_SYNC_LOCKED_v1.md](../docs/ops/NOETFIELD_AGENT_TEAM_SYNC_LOCKED_v1.md) | **Cloud-readable** team sync, waves summary, private plans pointer |
+| **`commercial-ssot-v1`** | [docs/strategy/NOETFIELD_COMMERCIAL_SSOT_LOCKED_v1.md](../docs/strategy/NOETFIELD_COMMERCIAL_SSOT_LOCKED_v1.md) | **Primary commercial SSOT** — buyer line, engine/internal split, W3, messaging matrix |
+| **`sme-provider-blueprint-v1`** | [docs/strategy/NOETFIELD_SME_PROVIDER_BLUEPRINT_LOCKED_v1.md](../docs/strategy/NOETFIELD_SME_PROVIDER_BLUEPRINT_LOCKED_v1.md) | **SME high-grade blueprint** — journey, site map, Lane A modules, W3 batch assets |
+| **`sme-governance-one-pager`** | [docs/copilot/SME_GOVERNANCE_PACK_ONE_PAGER.md](../docs/copilot/SME_GOVERNANCE_PACK_ONE_PAGER.md) | Buyer one-pager — CISO/GRC/procurement |
 | **`trust-ledger-positioning-v1.2`** | [docs/strategy/NOETFIELD_TRUST_LEDGER_POSITIONING_LOCKED_v1.2.md](../docs/strategy/NOETFIELD_TRUST_LEDGER_POSITIONING_LOCKED_v1.2.md) | **Primary GTM + product direction** — TLE mandate, 60-day sprint |
 | **`gtm-60-day-v1`** | [docs/strategy/NOETFIELD_GTM_60_DAY_LOCKED_v1.md](../docs/strategy/NOETFIELD_GTM_60_DAY_LOCKED_v1.md) | **CEO focus** — 1 customer, 5-min demo, 60-day fence, time allocation |
 | **`governance-sources-book-v1`** | [docs/reference/GOVERNANCE_SOURCES_BOOK_v1.md](../docs/reference/GOVERNANCE_SOURCES_BOOK_v1.md) | **Citable frameworks** — NIST, OECD, ISO, EU AI Act, Microsoft Purview, OWASP |
