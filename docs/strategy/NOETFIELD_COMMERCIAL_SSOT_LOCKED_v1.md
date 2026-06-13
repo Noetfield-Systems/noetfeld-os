@@ -42,7 +42,7 @@ We are the **AI Governance & Evidence layer** for Microsoft 365 Copilot adoption
 | **TrustField** | Second commercial front | MSB/regulated receipt wedge (separate site) |
 | **Portfolio engine** | Backend motor | **Nothing** — credibility flows up to Noetfield |
 
-**W3 economic signal:** deposit ≥ CAD 2K or signed LOI/SOW on **Noetfield design partner** — not “sell the engine as SKU.”
+**W3 economic signal:** deposit ≥ CAD 2K or signed LOI/SOW on **Copilot Governance Pack** — not “sell the engine as SKU.”
 
 ---
 
@@ -50,7 +50,7 @@ We are the **AI Governance & Evidence layer** for Microsoft 365 Copilot adoption
 
 | Persona | Pain | Noetfield package |
 |---------|------|-------------------|
-| **CISO / Head of AI** | Copilot rollout ahead of evidence | Copilot Governance Pack · design partner |
+| **CISO / Head of AI** | Copilot rollout ahead of evidence | Copilot Governance Pack · $2k–10k |
 | **GRC / Compliance** | Board asks for defensible decision record | TLE v1 + board pack PDF |
 | **Procurement / Legal** | Diligence ZIP, framework citations | Procurement pack · Sources Book alignment |
 | **CIO / M365 owner** | Purview configured but not packaged for audit | Evidence index (metadata only) |
@@ -66,10 +66,10 @@ See [OFFERINGS_LOCKED.md](../../OFFERINGS_LOCKED.md).
 | SKU | Price band | Deliverable |
 |-----|------------|-------------|
 | **Trust Brief** | $10,000 · 6 weeks | Governance audit + policy map + risk exposure |
-| **Copilot Governance Pack** | Design partner $2k–10k pilot | Block + record + export (TLE + board PDF) |
+| **Copilot Governance Pack** | $2k–10k · 90 days · board PDF | Block + record + export (TLE + board PDF) |
 | **Bank Pilot** | Custom | Read-only shadow simulation — no execution authority |
 
-**Primary CTA (lead):** [Apply for design-partner pilot](/trust-brief/intake/?interest=design-partner&vector=copilot-governance) · `operations@noetfield.com`  
+**Primary CTA (lead):** [Apply for pilot ($2k–10k)](/trust-brief/intake/?interest=pilot&vector=copilot-governance) · `operations@noetfield.com`  
 **Primary CTA (land):** [Request Trust Brief](/trust-brief/intake/)
 
 **Self-serve CTA (access):** [Start free sandbox](/start/) — no sales call · 14-day · 50 evaluates
@@ -84,7 +84,7 @@ See [WWW_V16_PACKAGING_PLAN_LOCKED_v1.md](../WWW_V16_PACKAGING_PLAN_LOCKED_v1.md
 |-------|--------------|------|
 | **Try** | Sign up on `/start/` | Sandbox · mock M365 |
 | **Prove** | Evaluate → TLE sample → export orientation | Sandbox |
-| **Apply** | Design partner program | Production path |
+| **Apply** | Copilot Governance Pack | Production path · board PDF |
 | **Buy** | Trust Brief or Bank Pilot SOW | Contract SKU |
 
 **Published tiers:** `/pricing/` · **Agentic workflows:** investigate → triage → draft TLE → act on low-risk (human approvers on high-risk).
@@ -107,7 +107,7 @@ Maps to shipped product + portfolio engine behavior — **do not name internal e
 
 ---
 
-## 5. Design partner program (90-day commercial path)
+## 5. Copilot Governance Pack (90-day commercial path)
 
 | Week | Milestone | Proof |
 |------|-----------|-------|
@@ -163,11 +163,11 @@ Maps to shipped product + portfolio engine behavior — **do not name internal e
 
 | Path | Purpose |
 |------|---------|
-| `/` | Hero · offerings · design partner CTA |
+| `/` | Hero · offerings · Governance Pack CTA |
 | `/copilot/` | Copilot Governance Pack hub |
 | `/copilot/sme/` | SME provider grade pack (CISO/GRC) |
 | `/copilot/demo/` | 5-minute demo script |
-| `/copilot/pilot/` | Design-partner checklist |
+| `/copilot/pilot/` | Copilot Governance Pack · 90-day pilot |
 | `/copilot/procurement/` | Diligence buyer pack |
 | `/trust-brief/` | Trust Brief SKU |
 | `/workspace/` | TLE workspace |

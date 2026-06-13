@@ -13,11 +13,11 @@
 |---------|------|
 | **Wedge** | Governance execution for M365 Copilot: invalid changes blocked, allowed decisions receipted, export fail closed on tamper. |
 | **Self-serve** | Sign up → sandbox → try API/product **without a sales call** — 14-day · 50 evaluates · mock M365. |
-| **Packaging** | Published tiers on `/pricing/` — free developer access · design partner program · 3 contract SKUs. |
+| **Packaging** | Published tiers on `/pricing/` — free developer access · Copilot Governance Pack · 3 contract SKUs. |
 | **Agentic** | Agents execute investigate → triage → draft TLE → act on low-risk — not “AI assist” alone. |
 | **Three verbs** | Evaluate · Record · Export |
 | **Complement line** | Complement Purview and Copilot Control System — not replace. Metadata-only M365. |
-| **Primary CTA (lead)** | Apply for design-partner pilot → `/trust-brief/intake/?interest=design-partner&vector=copilot-governance` |
+| **Primary CTA (lead)** | Apply for pilot ($2k–10k) → `/trust-brief/intake/?interest=pilot&vector=copilot-governance` |
 | **Primary CTA (land)** | Request Trust Brief → `/trust-brief/intake/` |
 | **Primary CTA (try)** | Start free sandbox → `/start/` |
 | **Trust diligence** | `/trust/` · `/trust-ledger/verify/` |
@@ -56,7 +56,7 @@
 | `/trust/` | Trust & security | Apply for pilot | Procurement pack · Verify export |
 | `/trust-brief/` | Trust Brief · 6 weeks · $10,000 | Request Trust Brief | Apply for pilot first |
 | `/copilot/` | Copilot Governance Pack · EU + US | Apply for pilot | 5-minute demo · Procurement pack |
-| `/copilot/pilot/` | Design partner · $2k–10k | Apply for pilot | 5-minute demo |
+| `/copilot/pilot/` | Copilot Governance Pack · $2k–10k | Apply for pilot | 5-minute demo |
 | `/bank-pilot/` | Bank Pilot · Shadow mode | Discuss Bank Pilot | Apply for pilot |
 | `/partners/` | Partners · Channel | Partner intake | `/docs/api/` in footer |
 | `/console/` | Governance Console | 5-minute demo | Apply for pilot |
@@ -77,7 +77,7 @@ Golden Edge, GCIP, pre-execution (homepage hero), Cross-Border Payments, Payment
 
 1. **Sandbox start** — product-led · no SOW  
 2. Trust Brief — $10,000 CAD  
-3. Design partner — Copilot Pack $2k–10k  
+3. Copilot Governance Pack — $2k–10k · board PDF  
 4. Bank Pilot / enterprise — custom shadow  
 5. Annual API license — after pilot proof  
 
@@ -89,7 +89,7 @@ See [GO_FORWARD_NOW.md](strategy/GO_FORWARD_NOW.md) · [MARKET_ENTRY_30_DAY.md](
 
 - `Noetfield — Sandbox upgrade (RID-…)`  
 - `Noetfield — Trust Brief Intake (RID-…)`  
-- `Noetfield — Design partner apply (RID-…)`  
+- `Noetfield — Governance Pack apply (RID-…)`  
 - `Noetfield — Production API keys (RID-…)`  
 - `Noetfield — Bank Pilot inquiry (RID-…)`  
 

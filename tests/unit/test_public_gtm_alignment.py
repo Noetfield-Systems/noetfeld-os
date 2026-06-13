@@ -54,7 +54,7 @@ def test_offerings_locked_three_tiers() -> None:
     assert "$10,000" in text or "$10k" in text.lower()
     assert "Copilot Governance Pack" in text
     assert "Bank Pilot" in text
-    assert "design-partner" in text.lower()
+    assert "interest=pilot" in text.lower()
     assert "v6.1" not in text
 
 
@@ -98,7 +98,7 @@ def test_offerings_strip_partial_exists() -> None:
 def test_footer_partial_pilot_first() -> None:
     text = (ROOT / "assets" / "partials" / "footer.html").read_text(encoding="utf-8")
     assert "Apply for pilot ($2k–10k)" in text
-    assert "Design-partner pilot" in text
+    assert "Copilot Governance Pack" in text
 
 
 def test_tier_pages_have_shell_and_cta() -> None:
@@ -113,7 +113,7 @@ def test_pilot_page_full_landing() -> None:
     text = (ROOT / "copilot" / "pilot" / "index.html").read_text(encoding="utf-8")
     assert "GTM-locked pilot success signals" in text
     assert "Pilot deliverables" in text
-    assert "interest=design-partner" in text
+    assert "interest=pilot" in text
     assert "QuickScan" in text
 
 

@@ -12,7 +12,7 @@
 
     form.addEventListener("submit", function (ev) {
       ev.preventDefault();
-      var base = form.getAttribute("data-intake") || "/trust-brief/intake/?interest=design-partner&vector=copilot-governance";
+      var base = form.getAttribute("data-intake") || "/trust-brief/intake/?interest=pilot&vector=copilot-governance";
       var email = (form.querySelector('[name="email"]') || {}).value || "";
       var org = (form.querySelector('[name="org"]') || {}).value || "";
       var role = (form.querySelector('[name="role"]') || {}).value || "";
