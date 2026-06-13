@@ -23,21 +23,27 @@ check_file() {
 }
 
 check_file "homepage v18 shell" index.html \
-  'noetfield-www.css?v=21' 'nf-site-v14' 'The audit trail your Copilot deployment' \
+  'noetfield-www.css?v=22' 'nf-site-v14' 'The audit trail your Copilot deployment' \
   'data-live-proof-hero' 'What legal and security reviewers need to see' \
-  'nf-procurement-rail' 'Start free sandbox' 'Published tiers' \
+  'nf-procurement-rail' 'Apply for pilot ($2k–10k)' 'Published tiers' \
   'Governance playground' 'Three traps before Copilot' 'One evaluate · four exports' \
-  'Your peers roll out Copilot with slides' 'This is for you if'
+  'Your peers roll out Copilot with slides' 'This is for you if' \
+  'EU and US regulated institutions' 'EU AI Act Art. 12'
 
 check_file "homepage wave1 journey" index.html \
-  '01 · Try' '02 · Prove' '03 · Package' '04 · Trust' '6 wk → 5 min'
+  '01 · Pilot' '02 · Prove' '03 · Try' '04 · Trust' '$2k–10k' \
+  'Lead program · $2k–10k · 90 days' 'Pilot overview'
 
 check_file "start sandbox page" start/index.html \
   'nf-hero-flow' 'Try in minutes' '14-day trial' '50 evaluate calls' 'Sandbox mode' \
   'data-trial-os-flow'
 
 check_file "pricing packaging page" pricing/index.html \
-  'Published tiers' 'Sandbox + production' 'Developer access · free' 'noetfield-www.css?v=21' 'What you tried vs what breaks vs what Noetfield delivers'
+  'Published tiers' 'Sandbox + production' 'Developer access · free' 'noetfield-www.css?v=22' 'What you tried vs what breaks vs what Noetfield delivers'
+
+check_file "pilot landing page" copilot/pilot/index.html \
+  'noetfield-www.css?v=22' '90-day design-partner pilot' 'Pilot deliverables' \
+  'interest=design-partner' 'EU AI Act Art. 12' 'QuickScan' 'Board PDF success signal'
 
 check_file "trust center diligence theme" trust/index.html \
   'nf-trust-diligence' 'fail closed' 'Metadata-only'
@@ -49,21 +55,22 @@ check_file "copilot dual artifact" copilot/index.html \
   'nf-hero-artifacts' 'nf-workspace-mock' 'Copilot Control System'
 
 check_file "offerings lock" OFFERINGS_LOCKED.md \
-  'Three contract offerings' 'Trust Brief' 'Copilot Governance Pack' 'Bank Pilot'
+  'Three contract offerings' 'Trust Brief' 'Copilot Governance Pack' 'Bank Pilot' \
+  'Primary CTA' 'design-partner'
 
 check_file "commercial SSOT" docs/strategy/NOETFIELD_COMMERCIAL_SSOT_LOCKED_v1.md \
   'OFFERINGS_LOCKED' 'Trust Brief' 'operations@noetfield.com' 'W3 economic signal'
 
 check_file "ai-automation lane B" ai-automation/index.html \
-  'Make your AI automation defensible' 'Three offerings only' 'noetfield-www.css?v=21'
+  'Make your AI automation defensible' 'Three offerings only' 'noetfield-www.css?v=22'
 
 # Version coherence on primary hubs
 for f in index.html trust/index.html copilot/index.html msp/index.html federal/index.html investors/index.html start/index.html pricing/index.html; do
-  if [[ -f "$f" ]] && ! grep -qF 'noetfield-shell.js?v=21' "$f"; then
-    bad "shell v21 on $f"
+  if [[ -f "$f" ]] && ! grep -qF 'noetfield-shell.js?v=22' "$f"; then
+    bad "shell v22 on $f"
   fi
 done
-[[ "$fail" -eq 0 ]] && ok "shell v21 on primary hubs"
+[[ "$fail" -eq 0 ]] && ok "shell v22 on primary hubs"
 
 if [[ "$fail" -ne 0 ]]; then
   echo "Run: python3 scripts/rebuild-www-v6.py" >&2

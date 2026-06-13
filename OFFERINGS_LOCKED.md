@@ -13,7 +13,7 @@
 | **Route** | `/start/` → `/cognitive-dashboard/?sandbox=1` |
 | **Trial** | 14 days · 50 evaluate calls |
 | **M365** | Mock OAuth · metadata-only orientation |
-| **Upgrade** | Design partner program or Trust Brief |
+| **Upgrade** | Design-partner pilot or Trust Brief |
 
 ---
 
@@ -21,18 +21,23 @@
 
 Six-week engagement: governance audit, AI policy mapping, risk exposure analysis.
 
+**Land SKU** — diagnostic before enterprise scale. Most regulated buyers **lead with the design-partner pilot** below.
+
 **Intake:** `/trust-brief/intake/`
 
 ---
 
-## 2. Copilot Governance Pack
+## 2. Copilot Governance Pack — LEAD WEDGE
 
 Enterprise AI compliance layer and policy validation for Microsoft 365 Copilot rollouts.
 
 **Design partner band:** CAD/USD $2,000–10,000 · 90-day program  
 **Sub-lanes (same SKU — not separate contracts):** QuickScan · Readiness Pilot · SME orientation (`/copilot/sme/`) · operator reference (`/ai-automation/`)
 
-**Intake:** `/trust-brief/intake/?interest=copilot`
+**Success signal:** one org uses **board PDF in a real governance meeting**
+
+**Public page:** `/copilot/pilot/`  
+**Intake:** `/trust-brief/intake/?interest=design-partner&vector=copilot-governance`
 
 ---
 
@@ -42,6 +47,7 @@ Read-only governance simulation only. No execution rights. Audit and compliance 
 
 ---
 
-**Primary CTA:** Request Governance Brief → `/trust-brief/intake/`
+**Primary CTA:** Apply for design-partner pilot → `/trust-brief/intake/?interest=design-partner&vector=copilot-governance`  
+**Secondary CTA:** Request Trust Brief → `/trust-brief/intake/`
 
 **Operational intake (all SKUs):** `operations@noetfield.com` — Trust Brief purchase confirmations, validation brief kickoffs, Copilot and Bank Pilot engagement, and partner programs. Alternate public aliases (`contact@`, `procurement@`, `sales@`) are retired from user-facing surfaces.
