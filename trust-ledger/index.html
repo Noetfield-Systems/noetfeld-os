@@ -4,94 +4,66 @@
  <meta charset="UTF-8" />
  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
  <title>Noetfield — Trust Ledger</title>
- <meta name="description" content="Trust Ledger is Noetfield's immutable governance compliance log: policy decisions, RID lineage, and audit export for regulated buyers." />
+ <meta name="description" content="Trust Ledger workspace and TLE v1 lifecycle." />
  <meta name="robots" content="index,follow" />
+ <meta name="theme-color" content="#07070b" />
  <link rel="canonical" href="https://www.noetfield.com/trust-ledger/" />
  <link rel="icon" href="/noetfield-favicon-512.png" type="image/png" />
  <link rel="stylesheet" href="/assets/noetfield-tokens.css" />
  <link rel="stylesheet" href="/assets/noetfield-shell.css" />
- <link rel="stylesheet" href="/assets/noetfield-components.css" />
- <link rel="stylesheet" href="/assets/noetfield-institutional.css" />
- <link rel="stylesheet" href="/assets/noetfield-sales.css" />
- <script src="/assets/noetfield-shell.js" defer></script>
+ <link rel="stylesheet" href="/assets/noetfield-www.css?v=10" />
+ <script src="/assets/noetfield-shell.js?v=10" defer></script>
 </head>
-<body>
+<body class="nf-www nf-site-v5">
  <div class="bg" aria-hidden="true"></div>
  <a class="skip" href="#main">Skip to content</a>
  <header id="nfHeader"></header>
- <main id="main" class="wrap nf-page">
- <header class="nf-hero">
- <p class="nf-eyebrow">Trust Ledger · Copilot</p>
- <h1>The audit trail your Copilot rollout will be asked for</h1>
- <p class="nf-lead">
- <strong>Trust Ledger Entries (TLE v1)</strong> are the canonical authorization records for Copilot adoption: evidence from Purview, Entra ID, and M365 audit metadata—signed approval chains, confidence scores, and board-ready export. Every engagement produces at least one signed TLE. Not a payment ledger or wallet.
- </p>
- <p><a class="btn btn-secondary" href="/docs/spec/examples/tle-v1-go.yaml">Sample TLE (Go)</a>
- <a class="btn btn-secondary" href="/docs/diligence/EVIDENCE_INTAKE_CONTRACT_v1.md">Evidence Intake Contract v1</a></p>
- </header>
+ <main id="main" class="nf-main nf-page">
 
- <section class="nf-section nf-highlight">
- <h2>Try the live demo path</h2>
- <p>For design partners and procurement: evaluate operational intent, review the <strong>confidence score</strong> on the result page, then open the Trust Ledger workspace for board-ready PDF export.</p>
- <p class="nf-cta-row">
- <a class="btn btn-primary" href="/cognitive-dashboard">Cognitive dashboard</a>
- <a class="btn btn-secondary" href="/workspace">Trust Ledger workspace</a>
- <a class="btn btn-secondary" href="/trust-ledger/sample-report/">TLE v1 samples</a>
- </p>
- </section>
-
- <section class="nf-section">
- <h2>TLE v1 samples</h2>
- <p>Procurement-grade Trust Ledger Entries (Go / Conditional / Rejected) — YAML download and schema validation.</p>
- <a class="btn btn-secondary" href="/trust-ledger/sample-report/">Sample report &amp; downloads</a>
- </section>
-
- <section class="nf-section">
- <h2>How it is produced</h2>
- <ol>
- <li><strong>Evaluate</strong> — policy decision with <code>reason_code</code> and <code>policy_refs</code> tied to a Request ID</li>
- <li><strong>Record</strong> — entries append to the governed audit log (integrity hash per event)</li>
- <li><strong>Export</strong> — audit-export by RID for engagement intake (<a href="/docs/api/">Governance API reference</a>)</li>
- <li><strong>Trust Ledger API</strong> — live on platform: <code>POST /api/v1/tle/draft</code>, multi-approve, <code>GET /api/v1/tle/{id}/export</code>, connector <code>POST /api/v1/connectors/{id}/sync</code> (OpenAPI at <code>/docs</code> when platform is running)</li>
- <li><strong>Workspace</strong> — read-only list and detail at <a href="/trust-ledger">Governance Console · Trust Ledger</a> (local dev: <code>http://localhost:13080/trust-ledger</code>)</li>
- </ol>
- <p><a class="btn btn-secondary" href="/docs/diligence/CONNECTORS_CONTROLS_v1.md">Connectors Controls v1</a></p>
- </section>
-
- <section class="nf-section" id="security-buyer">
- <h2>For CISO and security buyers</h2>
- <p>
- <strong>Security buyer line:</strong> Trust Ledger is a <strong>governance evidence layer</strong> for Copilot adoption — metadata-only M365 evidence (Purview, Entra ID, audit logs), immutable audit export by RID, and signed TLE with <strong>confidence score</strong>. No payment routing, custody, or balance claims.
- </p>
- <ul>
- <li>Evidence ingest is metadata-only — see <a href="/docs/diligence/EVIDENCE_INTAKE_CONTRACT_v1.md">Evidence Intake Contract v1</a></li>
- <li>Connector controls: <a href="/docs/diligence/CONNECTORS_CONTROLS_v1.md">Connectors Controls v1</a></li>
- <li>Diligence positioning: <a href="/docs/diligence/rpaa-positioning-onepager.md">RPAA-safe one-pager</a></li>
- </ul>
- </section>
-
- <section class="nf-section">
- <h2>Trust Brief starter entries</h2>
- <p>Six-week Trust Brief engagements deliver board-ready outputs including <strong>starter Trust Ledger entries</strong>, control baseline, and evidence expectations — then pilots extend the same RID lineage on the platform.</p>
- <a class="btn btn-secondary" href="/trust-brief/">Trust Brief</a>
- </section>
-
- <section class="nf-section">
- <h2>See it live</h2>
- <p>Governance Console shows decisions, Trust Ledger entries (list + detail + PDF export), and the compliance log table for authorized pilots.</p>
- <a class="btn btn-secondary" href="/console/">Governance Console</a>
- <a class="btn btn-secondary" href="/trust-ledger">Trust Ledger workspace</a>
- </section>
-
- <aside class="nf-cta-band">
+ <header class="nf-hero-cinematic">
  <div>
- <h2>Request Governance Brief</h2>
- <p>From $10,000 — includes Trust Ledger starter format</p>
+ <p class="nf-hero-kicker"><span class="nf-hero-kicker-dot" aria-hidden="true"></span> Trust Ledger</p>
+ <p class="nf-eyebrow">TLE v1 lifecycle</p>
+ <h1>Signed governance records for Copilot decisions</h1>
+ <p class="nf-lead">Trust Ledger Entries document evaluate → decide → record → export with tamper-evident integrity.</p>
+ <div class="nf-hero-badges"><span class="nf-badge-pill nf-badge-pill--gold">TLE v1</span><span class="nf-badge-pill">Workspace UI</span></div>
+ <div class="nf-cta-actions"><a class="btn btn-primary" href="/workspace/">Open workspace</a><a class="btn btn-secondary" href="/trust-ledger/sample-report/">TLE samples</a></div>
+ <ul class="nf-marquee" aria-label="Framework alignment"></ul>
  </div>
- <div class="nf-cta-actions">
- <a class="btn btn-primary" href="/trust-brief/intake/?vector=trust-brief&amp;source=trust-ledger">Request Governance Brief</a>
+ 
+ <aside class="nf-receipt-mock" aria-label="Trust Ledger Entry receipt">
+ <div class="nf-receipt-mock-header">
+ <p class="nf-receipt-mock-title">Trust Ledger Entry · v1</p>
+ <span class="nf-receipt-mock-status">Verified</span>
  </div>
+ <dl class="nf-receipt-mock-body">
+ <div class="nf-receipt-row"><dt>tle_id</dt><dd>TLE-015DCFB8B953</dd></div>
+ <div class="nf-receipt-row"><dt>decision</dt><dd>allow</dd></div>
+ <div class="nf-receipt-row"><dt>confidence_score</dt><dd>0.82</dd></div>
+ <div class="nf-receipt-row"><dt>rid</dt><dd>RID-2026-0602-TL</dd></div>
+ <div class="nf-receipt-row"><dt>evidence_index</dt><dd>purview · entra · audit</dd></div>
+ <div class="nf-receipt-row"><dt>export_integrity</dt><dd class="nf-receipt-ok">PASS · fail closed on tamper</dd></div>
+ </dl>
+ <p class="nf-receipt-mock-footer">Live sample · <a href="/trust-ledger/sample-report/">Download TLE YAML</a></p>
  </aside>
+ </header>
+ <section class="nf-trust-signals" aria-labelledby="scope-title">
+ <h2 id="scope-title">Shipped today — honest scope</h2>
+ <p class="nf-trust-signals-lead">No certifier claims. No custody. What you can demo and export now.</p>
+ <div class="nf-trust-signals-grid"><div class="nf-trust-signal"><span class="nf-trust-signal-label">Pre-execution evaluate</span><span class="nf-signal-badge nf-signal-badge--shipped">Shipped</span></div><div class="nf-trust-signal"><span class="nf-trust-signal-label">TLE v1 + workspace UI</span><span class="nf-signal-badge nf-signal-badge--shipped">Shipped</span></div><div class="nf-trust-signal"><span class="nf-trust-signal-label">Board PDF · procurement ZIP</span><span class="nf-signal-badge nf-signal-badge--shipped">Shipped</span></div><div class="nf-trust-signal"><span class="nf-trust-signal-label">M365 metadata connectors</span><span class="nf-signal-badge nf-signal-badge--shipped">Shipped</span></div><div class="nf-trust-signal"><span class="nf-trust-signal-label">Framework citations</span><span class="nf-signal-badge nf-signal-badge--orientation">Orientation</span></div><div class="nf-trust-signal"><span class="nf-trust-signal-label">Payment rails / MSB execution</span><span class="nf-signal-badge nf-signal-badge--na">Out of scope</span></div></div>
+ </section>
+ <section class="nf-section"><div class="nf-proof">
+ <a class="nf-proof__item" href="/trust-ledger/sample-report/"><span class="nf-proof__icon">YAML</span><div><h3>Sample reports</h3><p>Go · conditional · rejected</p></div></a>
+ <a class="nf-proof__item" href="/workspace/"><span class="nf-proof__icon">UI</span><div><h3>Workspace</h3><p>Create TLE draft</p></div></a>
+ </div></section>
+ <section class="nf-cta-mega" aria-labelledby="cta-h">
+ <h2 id="cta-h">Request Governance Brief</h2>
+ <p>Non-confidential intake · Trust Brief, Copilot pilot, or federal / MSP lane.</p>
+ <div class="nf-cta-actions">
+ <a class="btn btn-primary" href="/trust-brief/intake/">Request Governance Brief</a>
+ <a class="btn btn-secondary" href="/copilot/pilot/">Become a design partner</a>
+ </div>
+ </section>
  </main>
  <footer id="nfFooter"></footer>
 </body>

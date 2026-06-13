@@ -14,7 +14,8 @@
 | **`msp-governance-pack-v1`** | [docs/msp/MSP_GOVERNANCE_PACK_v1.md](../docs/msp/MSP_GOVERNANCE_PACK_v1.md) | **MSP lane SSOT** — two-tier model, partner SKUs, Readiness → Record |
 | **`msp-phase1-phase2-raci-v1`** | [docs/msp/PHASE1_PHASE2_RACI_v1.md](../docs/msp/PHASE1_PHASE2_RACI_v1.md) | Phase 1 (MSP) vs Phase 2 (Noetfield) RACI |
 | **`msp-readiness-to-record-v1`** | [docs/msp/READINESS_TO_RECORD_MAPPING_v1.md](../docs/msp/READINESS_TO_RECORD_MAPPING_v1.md) | Readiness assessment → Governance Pack mapper |
-| **`msp-inforcer-complement-v1`** | [docs/msp/INFORCER_COMPLEMENT_BATTLECARD_v1.md](../docs/msp/INFORCER_COMPLEMENT_BATTLECARD_v1.md) | Inforcer / Lighthouse complement battlecard |
+| **`www-design-reference-v1`** | [docs/DESIGN_REFERENCE_GOALS_LOCKED_v1.md](../docs/DESIGN_REFERENCE_GOALS_LOCKED_v1.md) | **Locked www UX targets** — receipt hero, numbered sections, no compare pages |
+| **`www-v6-stylesheet`** | [assets/noetfield-www.css](../assets/noetfield-www.css) | **Ground-up www rebuild** — single CSS; `body.nf-www`; run `scripts/rebuild-www-v6.py` |
 | **`trust-ledger-positioning-v1.2`** | [docs/strategy/NOETFIELD_TRUST_LEDGER_POSITIONING_LOCKED_v1.2.md](../docs/strategy/NOETFIELD_TRUST_LEDGER_POSITIONING_LOCKED_v1.2.md) | **Primary GTM + product direction** — TLE mandate, 60-day sprint |
 | **`gtm-60-day-v1`** | [docs/strategy/NOETFIELD_GTM_60_DAY_LOCKED_v1.md](../docs/strategy/NOETFIELD_GTM_60_DAY_LOCKED_v1.md) | **CEO focus** — 1 customer, 5-min demo, 60-day fence, time allocation |
 | **`governance-sources-book-v1`** | [docs/reference/GOVERNANCE_SOURCES_BOOK_v1.md](../docs/reference/GOVERNANCE_SOURCES_BOOK_v1.md) | **Citable frameworks** — NIST, OECD, ISO, EU AI Act, Microsoft Purview, OWASP |

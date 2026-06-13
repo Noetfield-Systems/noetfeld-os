@@ -139,4 +139,3 @@
 |-----|------|
 | [MSP_GOVERNANCE_PACK_v1.md](./MSP_GOVERNANCE_PACK_v1.md) | Lane SSOT |
 | [READINESS_TO_RECORD_MAPPING_v1.md](./READINESS_TO_RECORD_MAPPING_v1.md) | Handoff field mapping |
-| [INFORCER_COMPLEMENT_BATTLECARD_v1.md](./INFORCER_COMPLEMENT_BATTLECARD_v1.md) | Phase 1 tool positioning |

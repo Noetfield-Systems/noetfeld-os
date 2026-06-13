@@ -5,102 +5,56 @@
  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
  <title>Noetfield — Bank Pilot (Shadow Governance)</title>
  <meta name="description" content="Read-only Bank Pilot: policy evaluation in shadow mode for OSFI E-23 readiness." />
+ <meta name="robots" content="index,follow" />
  <meta name="theme-color" content="#07070b" />
  <link rel="canonical" href="https://www.noetfield.com/bank-pilot/" />
  <link rel="icon" href="/noetfield-favicon-512.png" type="image/png" />
  <link rel="stylesheet" href="/assets/noetfield-tokens.css" />
  <link rel="stylesheet" href="/assets/noetfield-shell.css" />
- <link rel="stylesheet" href="/assets/noetfield-components.css" />
- <link rel="stylesheet" href="/assets/noetfield-institutional.css" />
- <link rel="stylesheet" href="/assets/noetfield-sales.css" />
- <script src="/assets/noetfield-shell.js" defer></script>
+ <link rel="stylesheet" href="/assets/noetfield-www.css?v=10" />
+ <script src="/assets/noetfield-shell.js?v=10" defer></script>
 </head>
-<body>
+<body class="nf-www nf-site-v5">
  <div class="bg" aria-hidden="true"></div>
  <a class="skip" href="#main">Skip to content</a>
  <header id="nfHeader"></header>
- <main id="main" class="wrap nf-page">
- <header class="nf-hero nf-hero--premium">
+ <main id="main" class="nf-main nf-page">
+
+ <header class="nf-hero-cinematic">
  <div>
- <p class="nf-eyebrow">Bank Pilot · Shadow mode</p>
+ <p class="nf-hero-kicker"><span class="nf-hero-kicker-dot" aria-hidden="true"></span> Bank Pilot · Shadow mode</p>
+ <p class="nf-eyebrow">FRFI · read-only simulation</p>
  <h1>Governance simulation for FRFI buyers</h1>
- <p class="nf-lead">
- Evaluate operational intent against policy <strong>before</strong> any partner or bank execution layer acts. Read-only pilot — no payment rails or custody inside Noetfield.
- </p>
- <div class="nf-hero-badges">
- <span class="nf-badge-pill nf-badge-pill--gold">Read-only simulation only</span>
- <span class="nf-badge-pill">OSFI E-23 orientation</span>
- <span class="nf-badge-pill">No custody</span>
+ <p class="nf-lead">Evaluate operational intent against policy <strong>before</strong> any partner or bank execution layer acts. Read-only — no payment rails or custody.</p>
+ <div class="nf-hero-badges"><span class="nf-badge-pill nf-badge-pill--gold">Read-only only</span><span class="nf-badge-pill">OSFI E-23 orientation</span><span class="nf-badge-pill">No custody</span></div>
+ <div class="nf-cta-actions"><a class="btn btn-primary" href="/gate/intake/?vector=bank-pilot&interest=bank-pilot">Discuss Bank Pilot</a><a class="btn btn-secondary" href="/console/">Governance Console</a></div>
+ <ul class="nf-marquee" aria-label="Framework alignment"></ul>
  </div>
- <div class="nf-cta-actions">
- <a class="btn btn-primary" href="/gate/intake/?vector=bank-pilot&amp;interest=bank-pilot">Discuss Bank Pilot</a>
- <a class="btn btn-secondary" href="/console/">Governance Console</a>
- </div>
- </div>
+ 
  <aside class="nf-hero-panel" aria-label="Shadow mode">
- <p class="nf-hero-panel-label">What we do not do</p>
- <ul class="nf-hero-panel-list">
- <li>No transaction execution or custody</li>
- <li>No movement of financial value</li>
- <li>Governance evaluation layer only</li>
- <li>Immutable compliance log by RID</li>
- </ul>
+ <p class="nf-hero-panel-label">Shadow mode</p>
+ <ul class="nf-hero-panel-list"><li>Policy evaluate in shadow</li><li>Compliance log export</li><li>No transaction authority</li><li>Partner execution stays in your environment</li></ul>
+ 
  </aside>
  </header>
-
- <div class="nf-trust nf-trust--premium" role="region" aria-label="Bank pilot capabilities">
- <div class="nf-trust-item"><strong>Evaluate</strong><span>Shadow allow / deny</span></div>
- <div class="nf-trust-item"><strong>Record</strong><span>RID + audit slice</span></div>
- <div class="nf-trust-item"><strong>Export</strong><span>Vendor diligence bundle</span></div>
- <div class="nf-trust-item"><strong>Prove</strong><span>No execution authority</span></div>
- </div>
-
- <section class="nf-section nf-section--elevated">
- <p class="nf-section-label">Sample evaluate</p>
- <h2>API shadow mode (curl)</h2>
- <pre class="nf-code-block"><code id="sampleCurl">curl -sS -X POST "$PLATFORM/api/v1/governance/evaluate" \
- -H "Content-Type: application/json" \
- -H "Authorization: Bearer $PILOT_API_KEY" \
- -d '{
-   "tenant_id": "00000000-0000-4000-8000-000000000001",
-   "organization_id": "00000000-0000-4000-8000-000000000002",
-   "action": "publish_board_report",
-   "resource_type": "governance_artifact",
-   "resource_id": "bank-pilot-demo",
-   "mode": "shadow",
-   "request_id": "RID-BANK-PILOT-DEMO"
- }'</code></pre>
+ <section class="nf-trust-signals" aria-labelledby="scope-title">
+ <h2 id="scope-title">Shipped today — honest scope</h2>
+ <p class="nf-trust-signals-lead">No certifier claims. No custody. What you can demo and export now.</p>
+ <div class="nf-trust-signals-grid"><div class="nf-trust-signal"><span class="nf-trust-signal-label">Pre-execution evaluate</span><span class="nf-signal-badge nf-signal-badge--shipped">Shipped</span></div><div class="nf-trust-signal"><span class="nf-trust-signal-label">TLE v1 + workspace UI</span><span class="nf-signal-badge nf-signal-badge--shipped">Shipped</span></div><div class="nf-trust-signal"><span class="nf-trust-signal-label">Board PDF · procurement ZIP</span><span class="nf-signal-badge nf-signal-badge--shipped">Shipped</span></div><div class="nf-trust-signal"><span class="nf-trust-signal-label">M365 metadata connectors</span><span class="nf-signal-badge nf-signal-badge--shipped">Shipped</span></div><div class="nf-trust-signal"><span class="nf-trust-signal-label">Framework citations</span><span class="nf-signal-badge nf-signal-badge--orientation">Orientation</span></div><div class="nf-trust-signal"><span class="nf-trust-signal-label">Payment rails / MSB execution</span><span class="nf-signal-badge nf-signal-badge--na">Out of scope</span></div></div>
  </section>
-
- <section class="nf-section nf-section--elevated">
- <p class="nf-section-label">Audit export</p>
- <h2>Immutable compliance slice</h2>
- <p class="nf-section-lead">
- Immutable compliance slice by Request ID for vendor due diligence. Full route reference:
- <a href="/docs/api/">Governance API</a>.
- </p>
- </section>
-
- <aside class="nf-cta-band">
- <div>
- <h2>Request Bank Pilot access</h2>
- <p>Engagements via operations intake with RID lineage</p>
- </div>
+ <section class="nf-section nf-section--lift"><div class="nf-cards">
+ <article class="nf-card nf-card--gold"><p class="nf-card__tag">Scope</p><h3>Governance layer only</h3><p>Not a bank core system or payment rail.</p></article>
+ <article class="nf-card"><p class="nf-card__tag">Output</p><h3>Audit lineage</h3><p>RID-keyed records for board and OSFI conversations.</p></article>
+ </div></section>
+ <section class="nf-cta-mega" aria-labelledby="cta-h">
+ <h2 id="cta-h">Discuss Bank Pilot</h2>
+ <p>Non-confidential intake for FRFI shadow governance</p>
  <div class="nf-cta-actions">
- <a class="btn btn-primary" href="/gate/intake/?vector=bank-pilot&amp;interest=bank-pilot">Discuss Bank Pilot</a>
- <a class="btn btn-secondary" href="/trust-brief/intake/">Request Governance Brief</a>
+ <a class="btn btn-primary" href="/gate/intake/?vector=bank-pilot&interest=bank-pilot">Discuss Bank Pilot</a>
+ 
  </div>
- </aside>
+ </section>
  </main>
  <footer id="nfFooter"></footer>
- <script>
- (function () {
-   var host = window.location.hostname;
-   var platform = "https://platform.noetfield.com";
-   if (host === "localhost" || host === "127.0.0.1") platform = "http://127.0.0.1:8001";
-   var el = document.getElementById("sampleCurl");
-   if (el) el.textContent = el.textContent.replace(/\$PLATFORM/g, platform);
- })();
- </script>
 </body>
 </html>

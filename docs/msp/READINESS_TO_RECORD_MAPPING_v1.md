@@ -144,5 +144,4 @@ handoff:
 | Doc | Role |
 |-----|------|
 | [PHASE1_PHASE2_RACI_v1.md](./PHASE1_PHASE2_RACI_v1.md) | Who owns each step |
-| [INFORCER_COMPLEMENT_BATTLECARD_v1.md](./INFORCER_COMPLEMENT_BATTLECARD_v1.md) | Inforcer report → Phase 2 pitch |
 | [copilot-readiness-pilot-runbook.md](../spec/copilot-readiness-pilot-runbook.md) | Design-partner E2E |

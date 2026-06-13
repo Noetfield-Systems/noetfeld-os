@@ -40,7 +40,7 @@
 | **Partner Center Copilot tab** | Jun 2026 | Propensity + security readiness side-by-side |
 | **Business Premium + Copilot SKUs** | Jul 1, 2026 | B-SKU bundle attach |
 | **Microsoft OSS readiness assessment** | Active | Import CSV → [READINESS_TO_RECORD_MAPPING_v1.md](./READINESS_TO_RECORD_MAPPING_v1.md) |
-| **Inforcer 1000+ MSPs** on Purview multi-tenant | 2026 | Complement — [INFORCER_COMPLEMENT_BATTLECARD_v1.md](./INFORCER_COMPLEMENT_BATTLECARD_v1.md) |
+| **MSP Purview multi-tenant tooling** | 2026 | Complement — Phase 1 stays in partner stack |
 | **Lighthouse + CIPP** dual stack | 2026 | Phase 1 tooling — Noetfield after baselines |
 
 **External references:**
@@ -120,7 +120,6 @@ Detail: [PHASE1_PHASE2_RACI_v1.md](./PHASE1_PHASE2_RACI_v1.md)
 | 452 | This document | `docs/msp/MSP_GOVERNANCE_PACK_v1.md` |
 | 453 | RACI | `docs/msp/PHASE1_PHASE2_RACI_v1.md` |
 | 454 | Readiness mapping | `docs/msp/READINESS_TO_RECORD_MAPPING_v1.md` |
-| 455 | Inforcer battlecard | `docs/msp/INFORCER_COMPLEMENT_BATTLECARD_v1.md` |
 
 ---
 
@@ -130,6 +129,5 @@ Detail: [PHASE1_PHASE2_RACI_v1.md](./PHASE1_PHASE2_RACI_v1.md)
 |-----|------|
 | [PHASE1_PHASE2_RACI_v1.md](./PHASE1_PHASE2_RACI_v1.md) | Delivery boundaries |
 | [READINESS_TO_RECORD_MAPPING_v1.md](./READINESS_TO_RECORD_MAPPING_v1.md) | Assessment → pilot mapper |
-| [INFORCER_COMPLEMENT_BATTLECARD_v1.md](./INFORCER_COMPLEMENT_BATTLECARD_v1.md) | Competitive complement |
 | [SME_GOVERNANCE_PACK_ONE_PAGER.md](../copilot/SME_GOVERNANCE_PACK_ONE_PAGER.md) | End-customer artifact language |
 | [FEDERAL_GOVERNANCE_PACK_v1.md](../federal/FEDERAL_GOVERNANCE_PACK_v1.md) | Separate lane — no overlap |

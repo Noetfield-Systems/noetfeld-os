@@ -2,355 +2,60 @@
 <html lang="en">
 <head>
  <meta charset="UTF-8" />
- <title>Noetfield – Terms</title>
- <meta name="viewport" content="width=device-width, initial-scale=1" />
-
- <meta
- name="description"
- content="Noetfield Terms of Use. Governance-first artefacts and services, acceptable use, disclaimers, limitation of liability, and contact."
- />
+ <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+ <title>Noetfield — Terms</title>
+ <meta name="description" content="Terms of use." />
  <meta name="robots" content="index,follow" />
- <meta name="author" content="Noetfield Systems Inc." />
  <meta name="theme-color" content="#07070b" />
-
  <link rel="canonical" href="https://www.noetfield.com/terms/" />
-
  <link rel="icon" href="/noetfield-favicon-512.png" type="image/png" />
- <link rel="apple-touch-icon" href="/noetfield-favicon-512.png" />
-
- <!-- OG -->
- <meta property="og:type" content="website" />
- <meta property="og:site_name" content="Noetfield" />
- <meta property="og:title" content="Noetfield – Terms" />
- <meta
- property="og:description"
- content="Terms of Use for Noetfield."
- />
- <meta property="og:url" content="https://www.noetfield.com/terms/" />
- <meta property="og:image" content="https://www.noetfield.com/noetfield-og.png" />
-
- <!-- Twitter -->
- <meta name="twitter:card" content="summary_large_image" />
- <meta name="twitter:title" content="Noetfield – Terms" />
- <meta name="twitter:description" content="Terms of Use for Noetfield." />
- <meta name="twitter:image" content="https://www.noetfield.com/noetfield-og.png" />
-
  <link rel="stylesheet" href="/assets/noetfield-tokens.css" />
  <link rel="stylesheet" href="/assets/noetfield-shell.css" />
- <link rel="stylesheet" href="/assets/noetfield-components.css" />
- <script src="/assets/noetfield-shell.js" defer></script>
-
- <!-- Page styles (minimal; rely on shell) -->
- <style>
- .hero{padding:22px 0 14px}
- .heroShell{
- position:relative;
- border-radius: calc(var(--radius) + 8px);
- border: 1px solid rgba(255,255,255,.11);
- background:
- radial-gradient(1000px 420px at 18% 0%, rgba(200,163,73,.14), transparent 60%),
- radial-gradient(1000px 420px at 90% 10%, rgba(122,167,255,.10), transparent 62%),
- linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.022));
- box-shadow: var(--shadow);
- overflow:hidden;
- }
- .heroShell::before{
- content:"";
- position:absolute; inset:-1px;
- background: linear-gradient(120deg, rgba(200,163,73,.20), transparent 30%, rgba(255,255,255,.08) 68%, transparent);
- opacity:.44;
- pointer-events:none;
- mask-image: linear-gradient(180deg, black 0%, black 58%, transparent 96%);
- }
- .heroInner{padding: 24px 22px}
-
- .eyebrow{
- display:inline-flex; gap:10px; align-items:center;
- color:var(--muted);
- font-size:13px;
- padding:9px 12px;
- border-radius:999px;
- border:1px solid rgba(255,255,255,.13);
- background: rgba(255,255,255,.035);
- }
- .dot{
- width:8px; height:8px; border-radius:50%;
- background: rgba(200,163,73,.97);
- box-shadow: 0 0 0 3px rgba(200,163,73,.18);
- }
-
- h1{margin:14px 0 10px; font-size:40px; line-height:1.07; letter-spacing:-0.75px}
- .lead{margin:0; color:var(--muted); font-size:16px; max-width: 980px}
-
- .wrapNarrow{max-width: 920px}
-
- .card{
- margin-top:18px;
- border-radius:var(--radius);
- border:1px solid rgba(255,255,255,.11);
- background: linear-gradient(180deg, rgba(255,255,255,.055), rgba(255,255,255,.022));
- box-shadow: var(--shadow2);
- overflow:hidden;
- }
- .card .bd{padding:18px}
-
- .meta{
- display:flex; flex-wrap:wrap; gap:10px;
- margin-top:12px;
- color:var(--muted2);
- font-size:12.5px;
- }
- .pill{
- display:inline-flex; align-items:center; gap:10px;
- padding:9px 12px;
- border-radius:999px;
- border:1px solid rgba(255,255,255,.12);
- background: rgba(255,255,255,.03);
- color:var(--muted);
- font-size:13px;
- }
- .pill strong{color:var(--text); font-weight:800}
-
- .toc{
- display:grid;
- grid-template-columns: 1fr 1fr;
- gap:10px 14px;
- margin-top:12px;
- }
- .toc a{
- display:block;
- padding:10px 12px;
- border-radius:14px;
- border:1px solid rgba(255,255,255,.10);
- background: rgba(255,255,255,.03);
- color:var(--muted);
- text-decoration:none;
- transition: border-color .15s ease, background .15s ease;
- }
- .toc a:hover{border-color:rgba(255,255,255,.20); background: rgba(255,255,255,.05)}
- .toc span{color:var(--muted2); font-size:12px}
-
- h2{
- margin:18px 0 8px;
- font-size:18px;
- letter-spacing:-0.2px;
- }
- p{margin:0 0 12px; color:var(--muted); line-height:1.75}
- ul{margin:0 0 12px; padding-left:18px; color:var(--muted); line-height:1.75}
- li{margin:6px 0}
-
- .note{
- margin-top:12px;
- padding:12px 12px;
- border-radius:14px;
- border:1px solid rgba(255,255,255,.10);
- background: rgba(255,255,255,.03);
- color:var(--muted2);
- font-size:12.5px;
- line-height:1.6;
- }
- .note strong{color:var(--text); font-weight:800}
- .note a{border-bottom:1px solid rgba(255,255,255,.18)}
-
- .hr{
- height:1px;
- background: rgba(255,255,255,.10);
- margin: 16px 0;
- border:0;
- }
-
- @media (max-width: 980px){
- .toc{grid-template-columns: 1fr}
- }
- @media (max-width: 760px){
- h1{font-size:30px}
- }
- </style>
-
- <script type="application/ld+json">
- {
- "@context": "https://schema.org",
- "@type": "WebPage",
- "name": "Noetfield – Terms",
- "url": "https://www.noetfield.com/terms/",
- "description": "Noetfield Terms of Use.",
- "isPartOf": {"@type":"WebSite","name":"Noetfield","url":"https://www.noetfield.com/"},
- "publisher": {"@type":"Organization","name":"Noetfield Systems Inc."}
- }
- </script>
+ <link rel="stylesheet" href="/assets/noetfield-www.css?v=10" />
+ <script src="/assets/noetfield-shell.js?v=10" defer></script>
 </head>
-
-<body>
+<body class="nf-www nf-site-v5">
  <div class="bg" aria-hidden="true"></div>
  <a class="skip" href="#main">Skip to content</a>
+ <header id="nfHeader"></header>
+ <main id="main" class="nf-main nf-page">
 
- <!-- injected header -->
- <div id="nfHeader"></div>
-
- <main id="main" class="wrap wrapNarrow nf-page nf-prose">
- <section class="hero">
- <div class="heroShell">
- <div class="heroInner">
- <div class="eyebrow"><span class="dot"></span> Legal • terms of use</div>
- <h1>Terms.</h1>
- <p class="lead">
- These Terms govern use of the Noetfield website and any related materials, intakes, and artefacts.
- If you do not agree, do not use the site.
- </p>
-
- <div class="meta" aria-label="Metadata">
- <div class="pill"><strong>Last updated</strong> <span>2025-12-13</span></div>
- <div class="pill"><strong>Applies to</strong> <span>noetfield.com</span></div>
+ <header class="nf-hero-cinematic">
+ <div>
+ 
+ 
+ <h1>Terms</h1>
+ <p class="nf-lead">Terms governing use of Noetfield public surfaces.</p>
+ <div class="nf-hero-badges"></div>
+ <div class="nf-cta-actions"><a class="btn btn-secondary" href="/contact/">Contact</a></div>
+ <ul class="nf-marquee" aria-label="Framework alignment"></ul>
  </div>
-
- <div class="note" style="margin-top:14px;">
- <strong>Important:</strong> This is a general template and not legal advice. For jurisdiction-specific terms
- (BC/Canada, US, EU), have counsel review before relying on it.
+ 
+ <aside class="nf-receipt-mock" aria-label="Trust Ledger Entry receipt">
+ <div class="nf-receipt-mock-header">
+ <p class="nf-receipt-mock-title">Trust Ledger Entry · v1</p>
+ <span class="nf-receipt-mock-status">Verified</span>
  </div>
-
- <div class="toc" aria-label="Table of contents">
- <a href="#acceptance"><strong>1) Acceptance</strong><br/><span>Agreement and eligibility</span></a>
- <a href="#use"><strong>2) Acceptable use</strong><br/><span>No abuse, no confidential data</span></a>
- <a href="#intakes"><strong>3) Intakes & submissions</strong><br/><span>RID tracking and governance flow</span></a>
- <a href="#ip"><strong>4) Intellectual property</strong><br/><span>Site content and trademarks</span></a>
- <a href="#confidentiality"><strong>5) Confidentiality</strong><br/><span>Default is non-confidential</span></a>
- <a href="#disclaimer"><strong>6) Disclaimers</strong><br/><span>No warranty; informational use</span></a>
- <a href="#liability"><strong>7) Limitation of liability</strong><br/><span>Cap and exclusions</span></a>
- <a href="#payments"><strong>8) Payments</strong><br/><span>When checkout is enabled</span></a>
- <a href="#termination"><strong>9) Termination</strong><br/><span>Access and enforcement</span></a>
- <a href="#changes"><strong>10) Changes</strong><br/><span>Updates to terms</span></a>
- <a href="#contact"><strong>11) Contact</strong><br/><span>How to reach us</span></a>
- </div>
- </div>
- </div>
- </section>
-
- <section class="card" aria-label="Terms body">
- <div class="bd">
- <h2 id="acceptance">1) Acceptance</h2>
- <p>
- By accessing or using this site, you agree to these Terms and our related policies, including
- <a href="/privacy/">Privacy</a> and any posted notices on specific pages.
- </p>
- <p>
- You must be legally able to enter into a contract in your jurisdiction to use the site.
- </p>
-
- <hr class="hr" />
-
- <h2 id="use">2) Acceptable use</h2>
- <p>You agree not to:</p>
- <ul>
- <li>Use the site for unlawful, harmful, or fraudulent purposes.</li>
- <li>Attempt to probe, scan, or test the security of the site or related infrastructure.</li>
- <li>Scrape, harvest, or collect data in ways that degrade service or violate applicable law.</li>
- <li>Upload or submit confidential information unless explicitly authorized in writing.</li>
- <li>Misrepresent affiliation, identity, or authority.</li>
- </ul>
-
- <hr class="hr" />
-
- <h2 id="intakes">3) Intakes & submissions</h2>
- <p>
- Some pages provide forms (“intakes”) for governance flow requests. Submissions may be tagged with a Request ID (RID)
- to support tracking and support workflows.
- </p>
- <p>
- You are responsible for the accuracy of information you submit and for ensuring you have the right to share it.
- </p>
- <div class="note">
- <strong>Non-confidential default:</strong> Unless a page explicitly permits confidential uploads, assume all intakes
- are non-confidential and provide only public or sanitized information.
- </div>
-
- <hr class="hr" />
-
- <h2 id="ip">4) Intellectual property</h2>
- <p>
- The site, design, text, trademarks, and logos are owned by or licensed to Noetfield Systems Inc. (or its licensors)
- and are protected by applicable intellectual property laws.
- </p>
- <p>
- You may view and use the site for internal evaluation and informational purposes. You may not reproduce, distribute,
- or create derivative works from site content without written permission, except as allowed by law.
- </p>
-
- <hr class="hr" />
-
- <h2 id="confidentiality">5) Confidentiality</h2>
- <p>
- No confidentiality obligation is created by your use of the site or submission of an intake unless you have a
- separate written agreement (e.g., NDA) signed by both parties.
- </p>
-
- <hr class="hr" />
-
- <h2 id="disclaimer">6) Disclaimers</h2>
- <p>
- The site and any materials are provided “as is” and “as available.” We make no warranties, express or implied,
- including warranties of merchantability, fitness for a particular purpose, and non-infringement.
- </p>
- <p>
- Content may be informational and may not reflect the most current requirements in your jurisdiction.
- You should obtain professional advice where appropriate (legal, compliance, security, regulatory).
- </p>
-
- <hr class="hr" />
-
- <h2 id="liability">7) Limitation of liability</h2>
- <p>
- To the maximum extent permitted by law, Noetfield Systems Inc. will not be liable for any indirect, incidental,
- special, consequential, or punitive damages, or any loss of profits, revenue, data, or goodwill.
- </p>
- <p>
- To the maximum extent permitted by law, our total liability for any claim relating to the site will not exceed
- the amount you paid to us (if any) for access to the site or materials in the twelve (12) months before the event
- giving rise to the claim.
- </p>
-
- <hr class="hr" />
-
- <h2 id="payments">8) Payments</h2>
- <p>
- If and when checkout links are enabled, payments may be processed by third-party providers (e.g., Stripe, PayPal),
- subject to their terms. Fees, refund rules, and scope will be stated on the relevant offer page.
- </p>
-
- <hr class="hr" />
-
- <h2 id="termination">9) Termination</h2>
- <p>
- We may suspend or terminate access to the site at any time if we believe you have violated these Terms, if required
- by law, or to protect the integrity and security of the service.
- </p>
-
- <hr class="hr" />
-
- <h2 id="changes">10) Changes</h2>
- <p>
- We may update these Terms from time to time. The “Last updated” date will reflect the latest version. Your continued
- use of the site after changes become effective constitutes acceptance of the updated Terms.
- </p>
-
- <hr class="hr" />
-
- <h2 id="contact">11) Contact</h2>
- <p>
- For questions about these Terms, contact us via <a href="/contact/">/contact/</a>.
- </p>
-
- <div class="note" style="margin-top:16px;">
- <strong>Related:</strong>
- <a href="/privacy/">Privacy</a> ·
- <a href="/cookies/">Cookies</a> ·
- <a href="/accessibility/">Accessibility</a> ·
- <a href="/policies/">Policies</a>
- </div>
+ <dl class="nf-receipt-mock-body">
+ <div class="nf-receipt-row"><dt>tle_id</dt><dd>TLE-015DCFB8B953</dd></div>
+ <div class="nf-receipt-row"><dt>decision</dt><dd>allow</dd></div>
+ <div class="nf-receipt-row"><dt>confidence_score</dt><dd>0.82</dd></div>
+ <div class="nf-receipt-row"><dt>rid</dt><dd>RID-STATUS</dd></div>
+ <div class="nf-receipt-row"><dt>evidence_index</dt><dd>purview · entra · audit</dd></div>
+ <div class="nf-receipt-row"><dt>export_integrity</dt><dd class="nf-receipt-ok">PASS · fail closed on tamper</dd></div>
+ </dl>
+ <p class="nf-receipt-mock-footer">Operational metadata only.</p>
+ </aside>
+ </header><div class="nf-prose"><section><p>Full legal text maintained in repo. Contact operations@noetfield.com for questions.</p></section></div>
+ <section class="nf-cta-mega" aria-labelledby="cta-h">
+ <h2 id="cta-h">Request Governance Brief</h2>
+ <p>Non-confidential intake · Trust Brief, Copilot pilot, or federal / MSP lane.</p>
+ <div class="nf-cta-actions">
+ <a class="btn btn-primary" href="/trust-brief/intake/">Request Governance Brief</a>
+ <a class="btn btn-secondary" href="/copilot/pilot/">Become a design partner</a>
  </div>
  </section>
  </main>
-
- <!-- injected footer -->
- <div id="nfFooter"></div>
+ <footer id="nfFooter"></footer>
 </body>
 </html>

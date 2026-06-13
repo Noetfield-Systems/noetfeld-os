@@ -53,6 +53,9 @@ check_html "${BASE}/copilot/sme/" "copilot sme pack" "SME Governance Pack" "90-d
 check_html "${BASE}/trust-brief/" "trust brief" "$10,000" "Request Governance Brief"
 check_html "${BASE}/federal/" "federal lane" "June 24, 2026" "Algorithmic Impact Assessment" "Copilot PIN" "Automated Decision-Making" "unclassified"
 check_html "${BASE}/msp/" "msp partner lane" "Readiness to Record" "Phase 1" "Phase 2" "partner"
+check_html "${BASE}/" "homepage scope" "What we ship" "Pre-execution intent check" "Signed Trust Ledger Entry"
+check_html "${BASE}/" "homepage receipt" "Trust Ledger Entry" "export_integrity" "fail closed"
+check_html "${BASE}/investors/" "investors success model" "Land → Expand → Channel" "Trust Brief" "Copilot Governance Pack"
 check_html "${BASE}/trust-ledger/sample-report/" "tle samples" "Trust Ledger"
 check_html "${BASE}/ai-automation/" "ai-automation operator" "Make your AI automation defensible" "Request Governance Brief" "Scope (locked)"
 

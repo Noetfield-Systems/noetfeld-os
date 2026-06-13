@@ -4,83 +4,95 @@
  <meta charset="UTF-8" />
  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
  <title>Noetfield — Governance API</title>
- <meta name="description" content="Institutional governance API: evaluate AI-driven intent, compliance log, audit export. OpenAPI and pilot authentication." />
+ <meta name="description" content="Institutional governance API: evaluate AI-driven intent, compliance log, audit export." />
  <meta name="robots" content="index,follow" />
+ <meta name="theme-color" content="#07070b" />
  <link rel="canonical" href="https://www.noetfield.com/docs/api/" />
  <link rel="icon" href="/noetfield-favicon-512.png" type="image/png" />
  <link rel="stylesheet" href="/assets/noetfield-tokens.css" />
  <link rel="stylesheet" href="/assets/noetfield-shell.css" />
- <link rel="stylesheet" href="/assets/noetfield-components.css" />
- <link rel="stylesheet" href="/assets/noetfield-institutional.css" />
- <link rel="stylesheet" href="/assets/noetfield-sales.css" />
- <script src="/assets/noetfield-shell.js" defer></script>
+ <link rel="stylesheet" href="/assets/noetfield-www.css?v=10" />
+ <script src="/assets/noetfield-shell.js?v=10" defer></script>
 </head>
-<body>
+<body class="nf-www nf-site-v5">
  <div class="bg" aria-hidden="true"></div>
  <a class="skip" href="#main">Skip to content</a>
  <header id="nfHeader"></header>
- <main id="main" class="wrap nf-page">
- <header class="nf-hero">
- <p class="nf-eyebrow">Governance API · Technical reference</p>
- <h1>Policy evaluate, compliance log, and audit export</h1>
- <p class="nf-lead">
- This page is for engineering and engagement intake: HTTP contracts for governance evaluation, RID lineage, and Trust Ledger export. Product narrative and engagements live on the other surfaces — each with its own scope.
- </p>
- </header>
+ <main id="main" class="nf-main nf-page">
 
- <section class="nf-section">
- <h2>Pilot surface (v1)</h2>
- <table class="nf-api-table">
- <thead>
- <tr><th>Method</th><th>Route</th><th>Role</th></tr>
- </thead>
- <tbody>
+ <header class="nf-hero-cinematic">
+ <div>
+ <p class="nf-hero-kicker"><span class="nf-hero-kicker-dot" aria-hidden="true"></span> Governance API · Canada</p>
+ <p class="nf-eyebrow">Technical reference · pilot contracts</p>
+ <h1>Policy evaluate, compliance log, and audit export</h1>
+ <p class="nf-lead">HTTP contracts for governance evaluation, RID lineage, and Trust Ledger export. Product narrative lives on GTM hubs — this page is for engineering and engagement intake.</p>
+ <div class="nf-hero-badges"><span class="nf-badge-pill nf-badge-pill--gold">OpenAPI</span><span class="nf-badge-pill">Pilot auth</span></div>
+ <div class="nf-cta-actions"><a class="btn btn-primary" href="/trust-brief/intake/?interest=api-pilot&source=api-docs">Request pilot access</a><a class="btn btn-secondary" href="/status/">Status</a></div>
+ <ul class="nf-marquee" aria-label="Framework alignment"></ul>
+ </div>
+ 
+ <aside class="nf-receipt-mock" aria-label="Trust Ledger Entry receipt">
+ <div class="nf-receipt-mock-header">
+ <p class="nf-receipt-mock-title">Trust Ledger Entry · v1</p>
+ <span class="nf-receipt-mock-status">Verified</span>
+ </div>
+ <dl class="nf-receipt-mock-body">
+ <div class="nf-receipt-row"><dt>tle_id</dt><dd>TLE-015DCFB8B953</dd></div>
+ <div class="nf-receipt-row"><dt>decision</dt><dd>allow</dd></div>
+ <div class="nf-receipt-row"><dt>confidence_score</dt><dd>0.82</dd></div>
+ <div class="nf-receipt-row"><dt>rid</dt><dd>RID-2026-0602-API</dd></div>
+ <div class="nf-receipt-row"><dt>evidence_index</dt><dd>purview · entra · audit</dd></div>
+ <div class="nf-receipt-row"><dt>export_integrity</dt><dd class="nf-receipt-ok">PASS · fail closed on tamper</dd></div>
+ </dl>
+ <p class="nf-receipt-mock-footer">Evaluate → ledger → export routes shipped.</p>
+ </aside>
+ </header>
+ <section class="nf-trust-signals" aria-labelledby="scope-title">
+ <h2 id="scope-title">Shipped today — honest scope</h2>
+ <p class="nf-trust-signals-lead">No certifier claims. No custody. What you can demo and export now.</p>
+ <div class="nf-trust-signals-grid"><div class="nf-trust-signal"><span class="nf-trust-signal-label">Pre-execution evaluate</span><span class="nf-signal-badge nf-signal-badge--shipped">Shipped</span></div><div class="nf-trust-signal"><span class="nf-trust-signal-label">TLE v1 + workspace UI</span><span class="nf-signal-badge nf-signal-badge--shipped">Shipped</span></div><div class="nf-trust-signal"><span class="nf-trust-signal-label">Board PDF · procurement ZIP</span><span class="nf-signal-badge nf-signal-badge--shipped">Shipped</span></div><div class="nf-trust-signal"><span class="nf-trust-signal-label">M365 metadata connectors</span><span class="nf-signal-badge nf-signal-badge--shipped">Shipped</span></div><div class="nf-trust-signal"><span class="nf-trust-signal-label">Framework citations</span><span class="nf-signal-badge nf-signal-badge--orientation">Orientation</span></div><div class="nf-trust-signal"><span class="nf-trust-signal-label">Payment rails / MSB execution</span><span class="nf-signal-badge nf-signal-badge--na">Out of scope</span></div></div>
+ </section>
+ <section class="nf-section nf-section--lift" aria-labelledby="api-v1">
+ <div class="nf-section__head"><span class="nf-section__num">01</span><div>
+ <p class="nf-section__label" id="api-v1">Pilot surface</p><h2>Governance API v1</h2>
+ </div></div>
+ <div class="nf-table-wrap"><table class="nf-table"><thead><tr><th>Method</th><th>Route</th><th>Role</th></tr></thead><tbody>
  <tr><td><code>POST</code></td><td><code>/api/v1/governance/evaluate</code></td><td>Allow, restrict, or block before external execution</td></tr>
  <tr><td><code>GET</code></td><td><code>/api/v1/governance/ledger</code></td><td>Compliance log read</td></tr>
  <tr><td><code>GET</code></td><td><code>/api/v1/governance/audit-export</code></td><td>Procurement / audit slice by RID</td></tr>
  <tr><td><code>GET</code></td><td><code>/api/v1/governance/vendor-evidence</code></td><td>Vendor due diligence metadata</td></tr>
  <tr><td><code>POST</code></td><td><code>/api/v1/governance/partner-signals</code></td><td>Read-only operational signals (pilots)</td></tr>
- <tr><td><code>GET</code></td><td><code>/api/v1/governance/scenario-presets/{name}</code></td><td>Shadow demo payloads (exchange, bank, copilot, msb)</td></tr>
- </tbody>
- </table>
+ <tr><td><code>GET</code></td><td><code>/api/v1/governance/scenario-presets/{name}</code></td><td>Shadow demo payloads</td></tr>
+ </tbody></table></div>
  </section>
-
- <section class="nf-section">
- <h2>Public intake</h2>
- <ul>
+ <section class="nf-section" aria-labelledby="api-intake">
+ <div class="nf-section__head"><span class="nf-section__num">02</span><div>
+ <p class="nf-section__label" id="api-intake">Public intake</p><h2>Intake and status routes</h2>
+ </div></div>
+ <div class="nf-prose"><ul>
  <li><code>POST /api/intake</code> — governance brief and partner intakes (RID on every submission)</li>
  <li><code>POST /api/public/chat</code> — site assistant (rate-limited)</li>
  <li><code>GET /api/status</code> — platform summary · <a href="/status/">status page</a></li>
- </ul>
+ </ul></div>
  </section>
-
- <section class="nf-section">
- <h2>Artifacts</h2>
- <ul>
- <li><a href="./openapi.json">openapi.json</a> — machine-readable schema</li>
- <li><a href="https://github.com/kazemnezhadsina144-dot/Noetfield/tree/main/docs/api">Repository docs</a> — README, Canada trust, partner integration notes</li>
- <li><code>packages/sdk</code> — Python client for pilot integrations</li>
- </ul>
- </section>
-
- <section class="nf-section">
- <h2>Related surfaces</h2>
- <p>
- <a href="/">Home</a> · <a href="/enterprise/">Enterprise</a> · <a href="/partners/">Partners</a> ·
- <a href="/trust-ledger/">Trust Ledger</a> · <a href="/console/">Governance Console</a> · <a href="/bank-pilot/">Bank Pilot</a>
- </p>
- </section>
-
- <aside class="nf-cta-band">
- <div>
- <h2>Pilot access</h2>
- <p>Keys issued per engagement after Trust Brief or partner briefing</p>
+ <section class="nf-section" aria-labelledby="api-artifacts">
+ <div class="nf-section__head"><span class="nf-section__num">03</span><div>
+ <p class="nf-section__label" id="api-artifacts">Artifacts</p><h2>Schema and SDK</h2>
+ </div></div>
+ <div class="nf-proof">
+ <a class="nf-proof__item" href="./openapi.json"><span class="nf-proof__icon">JSON</span><div><h3>openapi.json</h3><p>Machine-readable schema</p></div></a>
+ <a class="nf-proof__item" href="/console/"><span class="nf-proof__icon">UI</span><div><h3>Governance Console</h3><p>Evaluate interface</p></div></a>
+ <a class="nf-proof__item" href="/trust-ledger/"><span class="nf-proof__icon">TLE</span><div><h3>Trust Ledger</h3><p>TLE v1 lifecycle</p></div></a>
  </div>
+ </section>
+ <section class="nf-cta-mega" aria-labelledby="cta-h">
+ <h2 id="cta-h">Pilot access</h2>
+ <p>Keys issued per engagement after Trust Brief or partner briefing</p>
  <div class="nf-cta-actions">
- <a class="btn btn-primary" href="/trust-brief/intake/?interest=api-pilot&amp;source=api-docs">Request Governance Brief</a>
+ <a class="btn btn-primary" href="/trust-brief/intake/?interest=api-pilot&source=api-docs">Request Governance Brief</a>
  <a class="btn btn-secondary" href="/status/">Status</a>
  </div>
- </aside>
+ </section>
  </main>
  <footer id="nfFooter"></footer>
 </body>
