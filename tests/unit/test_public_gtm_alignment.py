@@ -59,6 +59,24 @@ def test_public_www_has_no_legacy_comparison_headlines() -> None:
     assert "Available now vs what capital accelerates" not in text
 
 
+def test_homepage_section_count_at_most_eight() -> None:
+    text = (ROOT / "index.html").read_text(encoding="utf-8")
+    count = text.count("<section")
+    assert count <= 8, f"homepage has {count} sections; expected ≤8 (U5 v17 compression)"
+
+
+def test_homepage_has_export_assurance_inner() -> None:
+    text = (ROOT / "index.html").read_text(encoding="utf-8")
+    assert "Export assurance" in text
+    assert "Full buyer depth" in text
+
+
+def test_pilot_page_has_lane_depth_blocks() -> None:
+    text = (ROOT / "copilot" / "pilot" / "index.html").read_text(encoding="utf-8")
+    for needle in ("Digital trust lane", "Governance gaps", "Buyer voices", "Policy-bound workflows"):
+        assert needle in text, needle
+
+
 def test_positioning_locked_sentence() -> None:
     text = (ROOT / "POSITIONING.md").read_text(encoding="utf-8")
     assert (

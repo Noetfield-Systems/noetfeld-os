@@ -23,29 +23,38 @@ check_file() {
 }
 
 check_file "homepage pilot-first" index.html \
-  'noetfield-www.css?v=28' 'nf-site-v14' 'Board-grade trust' \
+  'noetfield-www.css?v=29' 'nf-site-v14' 'Board-grade trust' \
   'tamper-evident decision records' 'nfScenarioOfDay' \
-  'Buyer voices' 'Export assurance' 'data-live-proof-hero' \
+  'data-live-proof-hero' \
   'Apply for pilot ($2k–10k)' '01 · Pilot' 'Built for regulated EU and US' \
-  'Copilot Governance Pack' 'Digital trust lane' 'Regulated buyer map' \
-  'independent of the app under audit' 'Commercial path' 'Learn in sandbox'
+  'Copilot Governance Pack' 'Commercial path' 'Learn in sandbox' \
+  'Full buyer depth' 'independent of the app under audit'
 
 check_file "homepage wave1 journey" index.html \
-  '02 · Prove' '03 · Try' '04 · Trust' '$2k–10k'
+  '02 · Prove' '03 · Try' '04 · Trust' '$2k–10k' 'Published tiers'
+
+# Homepage IA compression — ≤8 top-level sections (U5 v17)
+section_count="$(grep -c '<section' index.html || true)"
+if [[ "$section_count" -le 8 ]]; then
+  ok "homepage section count ≤8 ($section_count)"
+else
+  bad "homepage section count ≤8 — found $section_count sections"
+fi
 
 check_file "start sandbox page" start/index.html \
   'nf-hero-flow' 'Try in minutes' '14-day trial' '50 evaluate calls' 'Apply for pilot' \
-  'data-trial-os-flow' 'noetfield-www.css?v=28'
+  'data-trial-os-flow' 'noetfield-www.css?v=29'
 
 check_file "pricing packaging page" pricing/index.html \
   'Published tiers' 'Apply for pilot ($2k–10k)' 'Milestone pricing' 'Developer access · free' \
-  'noetfield-www.css?v=28' 'What regulated buyers receive from Noetfield'
+  'noetfield-www.css?v=29' 'What regulated buyers receive from Noetfield'
 
 check_file "pilot landing page" copilot/pilot/index.html \
-  'noetfield-www.css?v=28' 'Board-grade trust' 'GTM-locked pilot success signals' \
+  'noetfield-www.css?v=29' 'Board-grade trust' 'GTM-locked pilot success signals' \
   'interest=pilot' 'nfPilotApplyForm' 'Milestone pricing' \
   'Export assurance' 'QuickScan' 'Pilot deliverables' 'tamper-evident' \
-  'Copilot Governance Pack' 'Regulated buyer map' 'Honest scope'
+  'Copilot Governance Pack' 'Regulated buyer map' 'Honest scope' \
+  'Digital trust lane' 'Governance gaps' 'Buyer voices' 'Policy-bound workflows'
 
 check_file "footer pilot-first" assets/partials/footer.html \
   'Apply for pilot ($2k–10k)' 'Copilot Governance Pack' 'tamper-evident'
@@ -70,15 +79,15 @@ check_file "commercial SSOT" docs/strategy/NOETFIELD_COMMERCIAL_SSOT_LOCKED_v1.m
   'OFFERINGS_LOCKED' 'Trust Brief' 'operations@noetfield.com' 'W3 economic signal'
 
 check_file "ai-automation lane B" ai-automation/index.html \
-  'Make your AI automation defensible' 'Apply for pilot' 'noetfield-www.css?v=28'
+  'Make your AI automation defensible' 'Apply for pilot' 'noetfield-www.css?v=29'
 
 # Version coherence on primary hubs
 for f in index.html trust/index.html copilot/index.html msp/index.html federal/index.html investors/index.html start/index.html pricing/index.html faq/index.html contact/index.html enterprise/index.html; do
-  if [[ -f "$f" ]] && ! grep -qF 'noetfield-shell.js?v=28' "$f"; then
-    bad "shell v28 on $f"
+  if [[ -f "$f" ]] && ! grep -qF 'noetfield-shell.js?v=29' "$f"; then
+    bad "shell v29 on $f"
   fi
 done
-[[ "$fail" -eq 0 ]] && ok "shell v28 on primary hubs"
+[[ "$fail" -eq 0 ]] && ok "shell v29 on primary hubs"
 
 LEGACY_GTM='design-partner|Design partner|Become a design partner|Purview-only trap|Accepting design partners|Available now vs what capital accelerates'
 legacy_fail=0
@@ -125,7 +134,7 @@ for f in index.html start/index.html copilot/procurement/index.html privacy/inde
 done
 [[ "$leak_fail" -eq 0 ]] && ok "no P0 copy leaks on public www" || fail=1
 
-check_file "homepage automation copy" index.html \
+check_file "pilot automation copy" copilot/pilot/index.html \
   'Policy-bound workflows' 'Automated governance' 'nf-signal-badge--available'
 
 check_file "procurement buyer copy" copilot/procurement/index.html \

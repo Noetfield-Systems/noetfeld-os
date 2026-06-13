@@ -6,7 +6,7 @@ import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-WWW_VER = "28"
+WWW_VER = "29"
 
 # Copilot Governance Pack — locked lead SKU ($2k–10k · 90 days · board PDF success signal)
 PILOT_SKU = "Copilot Governance Pack"
@@ -294,6 +294,15 @@ def scope_block() -> str:
  </section>"""
 
 
+def scope_block_inner() -> str:
+    return f"""
+ <div class="nf-trust-signals nf-block-inner" id="scope-title">
+ <h3>Available now — capability scope</h3>
+ <p class="nf-trust-signals-lead">{COPY["scope_lead"]}</p>
+ <div class="nf-trust-signals-grid">{scope_rows_html()}</div>
+ </div>"""
+
+
 def stat_bar() -> str:
     return outcome_stat_bar()
 
@@ -357,6 +366,41 @@ def self_serve_rail() -> str:
  <a href="/docs/api/">Governance API</a>
  <a class="btn btn-primary" href="{PILOT_INTAKE}">Apply for pilot</a>
  <a class="btn btn-secondary" href="/start/">Start sandbox</a>
+ </nav>"""
+
+
+def revenue_path_ladder_inner() -> str:
+    """Commercial path ladder — embed inside a parent section (homepage compression)."""
+    return f"""
+ <div class="nf-block-inner nf-revenue-path" id="revenue-path" aria-labelledby="revenue-path-label">
+ <div class="nf-section-block-head"><span class="nf-section-num" aria-hidden="true">$</span><div>
+ <p class="nf-eyebrow" id="revenue-path-label">Commercial path</p>
+ <h3>Learn in sandbox · earn with Governance Pack · expand on proof</h3>
+ <p class="nf-section-lead">Fixed-fee entry · board PDF success signal · same evaluate → TLE → export spine at every tier.</p>
+ </div></div>
+ <div class="nf-revenue-ladder">
+ <a class="nf-revenue-step" href="/start/"><span class="nf-revenue-step__num">Try</span><strong>Free sandbox</strong><span>14 days · 50 evaluates · mock M365 · no sales call</span></a>
+ <span class="nf-milestone-arrow" aria-hidden="true">→</span>
+ <a class="nf-revenue-step nf-revenue-step--gold" href="{PILOT_INTAKE}"><span class="nf-revenue-step__num">Lead</span><strong>Copilot Governance Pack</strong><span>$2k–10k · 90 days · board PDF in governance meeting</span></a>
+ <span class="nf-milestone-arrow" aria-hidden="true">→</span>
+ <a class="nf-revenue-step" href="/trust-brief/"><span class="nf-revenue-step__num">Land</span><strong>Trust Brief</strong><span>$10k · 6 weeks · policy map before scale</span></a>
+ <span class="nf-milestone-arrow" aria-hidden="true">→</span>
+ <span class="nf-revenue-step"><span class="nf-revenue-step__num">Expand</span><strong>Seats + export cadence</strong><span>Production keys · MSP attach · enterprise SOW</span></span>
+ </div>
+ <aside class="nf-callout nf-callout--urgency"><p><strong>W3 economic signal:</strong> deposit ≥ CAD 2K or signed LOI on Copilot Governance Pack — one org uses board PDF in a real governance meeting.</p></aside>
+ </div>"""
+
+
+def homepage_depth_links() -> str:
+    """Compact links to full buyer depth on pilot landing."""
+    return """
+ <nav class="nf-depth-links" aria-label="Deeper buyer resources on pilot page">
+ <p class="nf-depth-links__label">Full buyer depth</p>
+ <a href="/copilot/pilot/#digital-trust-lane">Digital trust lane</a>
+ <a href="/copilot/pilot/#buyer-triggers">Regulated buyer map</a>
+ <a href="/copilot/pilot/#governance-gaps">Governance gaps</a>
+ <a href="/copilot/pilot/#buyer-voices">Buyer voices</a>
+ <a href="/copilot/pilot/#automation-title">Automated governance</a>
  </nav>"""
 
 
@@ -443,6 +487,40 @@ def regulated_buyer_triggers_block() -> str:
  </section>"""
 
 
+def honest_moat_inner() -> str:
+    """Honest moat body — embed inside Trust act (homepage compression)."""
+    claims = [
+        ("Signed go/no-go receipt per Copilot decision", "TLE v1 + evaluate API", "available"),
+        ("Board + procurement exports", "Board PDF · procurement ZIP", "available"),
+        ("M365-native evidence index", "Purview · Entra · audit metadata", "available"),
+        ("Fail-closed export integrity", "/trust-ledger/verify/", "available"),
+        ("Fixed-fee institutional pilot", "Copilot Governance Pack $2k–10k", "available"),
+        ("Ed25519 / Merkle transparency log", "Roadmap · orientation on verify page", "roadmap"),
+    ]
+    dont = [
+        "ISO / SOC / eIDAS certification from Noetfield",
+        "Identity verification or KYC at onboarding",
+        "Payment custody · MSB execution · money transmission",
+        "Full Article 12 compliance certifier claims",
+        "Platform ARR · logo wall · inflated references",
+    ]
+    items = "".join(
+        f'<article class="nf-moat-item"><h3>{c}</h3><p>{e}</p><span class="nf-signal-badge nf-signal-badge--{s}">{SCOPE_LABELS[s]}</span></article>'
+        for c, e, s in claims
+    )
+    dont_li = "".join(f"<li>{d}</li>" for d in dont)
+    return f"""
+ <div class="nf-block-inner" id="honest-moat">
+ <div class="nf-section-block-head"><span class="nf-section-num" aria-hidden="true">✓</span><div>
+ <p class="nf-eyebrow">Honest scope</p>
+ <h3>What you can claim in diligence today</h3>
+ <p class="nf-section-lead">Available now with demo and export walkthrough — Planned and out-of-scope labeled honestly.</p>
+ </div></div>
+ <div class="nf-moat-grid">{items}</div>
+ <aside class="nf-callout"><p><strong>Do not claim:</strong></p><ul class="nf-hero-panel-list">{dont_li}</ul></aside>
+ </div>"""
+
+
 def honest_moat_grid() -> str:
     """Honest capability claims — evidence and do-not-claim boundaries."""
     claims = [
@@ -477,15 +555,8 @@ def honest_moat_grid() -> str:
  </section>"""
 
 
-def buyer_delivery_outcomes_table() -> str:
-    """Positive delivery map — no competitor or approach comparison."""
+def _buyer_delivery_outcomes_body() -> str:
     return """
- <section class="nf-section-block" aria-labelledby="delivery-outcomes">
- <div class="nf-section-block-head"><span class="nf-section-num" aria-hidden="true">→</span><div>
- <p class="nf-eyebrow" id="delivery-outcomes">Delivery outcomes</p>
- <h2>What regulated buyers receive from Noetfield</h2>
- <p class="nf-section-lead">Same evaluate → TLE → export spine from sandbox through Copilot Governance Pack production tenant.</p>
- </div></div>
  <div class="nf-table-wrap">
  <table class="nf-table nf-table--compact">
  <thead><tr><th>Buyer need</th><th>Noetfield deliverable</th></tr></thead>
@@ -497,7 +568,31 @@ def buyer_delivery_outcomes_table() -> str:
  <tr><td><strong>Fixed-fee institutional entry</strong></td><td>Copilot Governance Pack · $2k–10k · 90 days · QuickScan to Readiness Pilot bands</td></tr>
  </tbody>
  </table>
- </div>
+ </div>"""
+
+
+def buyer_delivery_outcomes_inner() -> str:
+    return f"""
+ <div class="nf-block-inner" id="delivery-outcomes">
+ <div class="nf-section-block-head"><span class="nf-section-num" aria-hidden="true">→</span><div>
+ <p class="nf-eyebrow">Delivery outcomes</p>
+ <h3>What regulated buyers receive from Noetfield</h3>
+ <p class="nf-section-lead">Same evaluate → TLE → export spine from sandbox through Copilot Governance Pack production tenant.</p>
+ </div></div>
+ {_buyer_delivery_outcomes_body()}
+ </div>"""
+
+
+def buyer_delivery_outcomes_table() -> str:
+    """Positive delivery map — no competitor or approach comparison."""
+    return f"""
+ <section class="nf-section-block" aria-labelledby="delivery-outcomes">
+ <div class="nf-section-block-head"><span class="nf-section-num" aria-hidden="true">→</span><div>
+ <p class="nf-eyebrow" id="delivery-outcomes">Delivery outcomes</p>
+ <h2>What regulated buyers receive from Noetfield</h2>
+ <p class="nf-section-lead">Same evaluate → TLE → export spine from sandbox through Copilot Governance Pack production tenant.</p>
+ </div></div>
+ {_buyer_delivery_outcomes_body()}
  </section>"""
 
 
@@ -586,6 +681,22 @@ def role_testimonials_strip() -> str:
  </div></div>
  <div class="nf-testimonial-grid">{cards}</div>
  </section>"""
+
+
+def assurance_levels_inner() -> str:
+    return """
+ <div class="nf-block-inner" id="assurance-levels">
+ <div class="nf-section-block-head"><span class="nf-section-num" aria-hidden="true">A</span><div>
+ <p class="nf-eyebrow">Export assurance</p>
+ <h3>TLE export integrity levels — orientation for diligence reviewers</h3>
+ <p class="nf-section-lead">Orientation for diligence reviewers — Available · Planned · Per SOW. Not eIDAS or ISO certification.</p>
+ </div></div>
+ <div class="nf-assurance-ladder">
+ <article class="nf-assurance-step"><p class="nf-assurance-step__level">Baseline</p><h3>Sandbox · sample YAML</h3><p>Mock evaluate · orientation TLE · export walkthrough · no production tenant.</p><span class="nf-signal-badge nf-signal-badge--available">Available</span></article>
+ <article class="nf-assurance-step nf-assurance-step--gold"><p class="nf-assurance-step__level">Substantial</p><h3>Governance Pack · signed TLE</h3><p>Live evaluate · approved TLE · confidence score · board PDF in governance meeting.</p><span class="nf-signal-badge nf-signal-badge--available">Pilot $2k–10k</span></article>
+ <article class="nf-assurance-step"><p class="nf-assurance-step__level">High</p><h3>Production · procurement ZIP</h3><p>Fail-closed export verify · procurement ZIP · audit bundle · tenant-scoped keys.</p><span class="nf-signal-badge nf-signal-badge--orientation">Per SOW</span></article>
+ </div>
+ </div>"""
 
 
 def assurance_levels_block() -> str:
@@ -678,20 +789,37 @@ def pilot_hero_wedge() -> str:
  </aside>"""
 
 
-def governance_output_suite() -> str:
+def _governance_output_suite_body() -> str:
     return """
+ <div class="nf-export-suite" role="list">
+ <article class="nf-export-suite__item" role="listitem"><span class="nf-export-suite__icon">TLE</span><h3>TLE v1 YAML</h3><p>Signed decision · confidence score · approval chain · evidence index.</p></article>
+ <article class="nf-export-suite__item" role="listitem"><span class="nf-export-suite__icon">PDF</span><h3>Board PDF</h3><p>Executive-ready digest for governance and budget conversations.</p></article>
+ <article class="nf-export-suite__item" role="listitem"><span class="nf-export-suite__icon">ZIP</span><h3>Procurement ZIP</h3><p>Buyer diligence bundle · fail-closed integrity on tamper.</p></article>
+ <article class="nf-export-suite__item is-roadmap" role="listitem"><span class="nf-export-suite__icon">API</span><h3>Audit export <span class="nf-signal-badge nf-signal-badge--roadmap">Planned</span></h3><p>Tenant audit bundle · SIEM / GRC webhooks — planned capability, orientation only.</p></article>
+ </div>"""
+
+
+def governance_output_suite_inner() -> str:
+    return f"""
+ <div class="nf-block-inner" id="export-suite-title" aria-labelledby="export-suite-title">
+ <div class="nf-section-block-head"><span class="nf-section-num" aria-hidden="true">↗</span><div>
+ <p class="nf-eyebrow">Governance Output Suite</p>
+ <h3>One evaluate · four exports</h3>
+ <p class="nf-section-lead">Buyers file artifacts — not API access alone. Same spine from sandbox to production tenant.</p>
+ </div></div>
+ {_governance_output_suite_body()}
+ </div>"""
+
+
+def governance_output_suite() -> str:
+    return f"""
  <section class="nf-section-block" aria-labelledby="export-suite-title">
  <div class="nf-section-block-head"><span class="nf-section-num" aria-hidden="true">↗</span><div>
  <p class="nf-eyebrow" id="export-suite-title">Governance Output Suite</p>
  <h2>One evaluate · four exports</h2>
  <p class="nf-section-lead">Buyers file artifacts — not API access alone. Same spine from sandbox to production tenant.</p>
  </div></div>
- <div class="nf-export-suite" role="list">
- <article class="nf-export-suite__item" role="listitem"><span class="nf-export-suite__icon">TLE</span><h3>TLE v1 YAML</h3><p>Signed decision · confidence score · approval chain · evidence index.</p></article>
- <article class="nf-export-suite__item" role="listitem"><span class="nf-export-suite__icon">PDF</span><h3>Board PDF</h3><p>Executive-ready digest for governance and budget conversations.</p></article>
- <article class="nf-export-suite__item" role="listitem"><span class="nf-export-suite__icon">ZIP</span><h3>Procurement ZIP</h3><p>Buyer diligence bundle · fail-closed integrity on tamper.</p></article>
- <article class="nf-export-suite__item is-roadmap" role="listitem"><span class="nf-export-suite__icon">API</span><h3>Audit export <span class="nf-signal-badge nf-signal-badge--roadmap">Planned</span></h3><p>Tenant audit bundle · SIEM / GRC webhooks — planned capability, orientation only.</p></article>
- </div>
+ {_governance_output_suite_body()}
  </section>"""
 
 
@@ -793,7 +921,7 @@ def pilot_page_body() -> str:
             "Board pack PDF used in governance meeting",
             "Optional: procurement ZIP shared with diligence",
         ]),
-    ) + f"""
+    ) + digital_trust_lane_block() + copilot_governance_gaps_section() + f"""
  <section class="nf-section-block" aria-labelledby="pilot-deliverables">
  <div class="nf-section-block-head"><span class="nf-section-num" aria-hidden="true">01</span><div>
  <p class="nf-eyebrow" id="pilot-deliverables">In scope</p>
@@ -838,7 +966,7 @@ def pilot_page_body() -> str:
  <li>Full mailbox or content surveillance — metadata-only M365 indices</li>
  </ul>
  </section>
- """ + institution_icp_strip() + pilot_apply_form() + scope_block() + proof_grid([
+ """ + institution_icp_strip() + agentic_autonomous_section() + pilot_apply_form() + scope_block() + proof_grid([
         ("/copilot/demo/", "▶", "5-minute demo", "Evaluate → confidence score → export path"),
         ("/trust-ledger/sample-report/", "TLE", "TLE v1 samples", "Go · conditional · rejected YAML"),
         ("/copilot/procurement/", "ZIP", "Procurement pack", "Buyer diligence bundle"),
@@ -928,6 +1056,31 @@ def sandbox_signup_form(next_path: str = "/cognitive-dashboard/?sandbox=1") -> s
  <script src="/assets/noetfield-sandbox.js?v={WWW_VER}" defer></script>"""
 
 
+def ciso_strip_inner() -> str:
+    cards = [
+        ("Metadata-only M365", "Purview · Entra · audit indices — evidence index on every TLE, no mailbox custody.", "available", SCOPE_LABELS["available"]),
+        ("Fail-closed export", "Board PDF and procurement ZIP fail verification when tampered — by design.", "available", SCOPE_LABELS["available"]),
+        ("EU + US regulatory orientation", "EU AI Act Art. 12 · NIST AI RMF · ISO 42001 mapping — orientation only, not certifier claims.", "orientation", SCOPE_LABELS["orientation"]),
+        ("Ed25519 transparency log", "Cryptographic receipt chain — planned product capability.", "roadmap", SCOPE_LABELS["roadmap"]),
+        ("SOC 2 Type II", "Independent audit planned — not yet completed.", "roadmap", SCOPE_LABELS["roadmap"]),
+        ("No custody rails", "No payment execution, MSB, asset custody, or money-transmission claims.", "na", SCOPE_LABELS["na"]),
+    ]
+    items = "".join(
+        f'<article class="nf-ciso-card"><h3>{h}</h3><p>{p}</p>'
+        f'<span class="nf-signal-badge {SCOPE_BADGES[k]}">{label}</span></article>'
+        for h, p, k, label in cards
+    )
+    return f"""
+ <div class="nf-ciso-strip nf-block-inner" id="ciso-h">
+ <div class="nf-ciso-strip-head">
+ <p class="nf-eyebrow">Procurement diligence</p>
+ <h3>What legal and security reviewers need to see</h3>
+ <p>Honest Available · Orientation · Planned · Out of scope — what legal, security, and procurement reviewers inspect before pilot sign-off.</p>
+ </div>
+ <div class="nf-ciso-grid">{items}</div>
+ </div>"""
+
+
 def ciso_strip() -> str:
     cards = [
         ("Metadata-only M365", "Purview · Entra · audit indices — evidence index on every TLE, no mailbox custody.", "available", SCOPE_LABELS["available"]),
@@ -964,8 +1117,8 @@ def write(rel: str, title: str, desc: str, canonical: str, body: str, body_class
 
 
 def homepage() -> str:
-    """UI-03 four-act homepage — Pilot · Prove · Package · Trust (+ Wave 1 conversion blocks)."""
-    act_try = f"""
+    """Four-act homepage — Pilot · Prove · Package · Trust (≤8 top-level sections, U5 v17)."""
+    act_pilot = f"""
  <section class="nf-section-block nf-act-try" aria-labelledby="act-try">
  <div class="nf-section-block-head"><span class="nf-section-num" aria-hidden="true">01</span><div>
  <p class="nf-eyebrow" id="act-try">Pilot</p>
@@ -989,7 +1142,7 @@ def homepage() -> str:
         '</header>',
         hero_regulatory_chips() + "\n </header>",
         1,
-    ) + stat_bar() + pilot_hero_wedge() + digital_trust_lane_block() + revenue_path_strip() + social_proof_industry_strip() + buyer_journey_strip() + institution_icp_strip() + regulated_buyer_triggers_block() + role_testimonials_strip() + copilot_governance_gaps_section() + self_serve_rail() + "\n </section>"
+    ) + stat_bar() + pilot_hero_wedge() + social_proof_industry_strip() + buyer_journey_strip() + revenue_path_ladder_inner() + homepage_depth_links() + "\n </section>"
 
     act_prove = f"""
  <section class="nf-section-block nf-act-prove" aria-labelledby="act-prove">
@@ -1010,7 +1163,7 @@ def homepage() -> str:
         ("/copilot/procurement/", "ZIP", "Procurement pack", "Buyer diligence ZIP · NIST AI RMF · trust center crosswalk"),
         ("/trust-ledger/verify/", "✓", "Verify export", "Fail-closed export integrity walkthrough"),
     ])}
- {governance_output_suite()}
+ {governance_output_suite_inner()}
  <p class="nf-section-lead" style="margin-top:20px"><a href="/copilot/">What buyers ask</a> · extended FAQ · stack complement · category map on the Copilot hub.</p>
  </section>"""
 
@@ -1021,17 +1174,10 @@ def homepage() -> str:
  <h2>Published tiers — pilot to contract</h2>
  <p class="nf-section-lead">Lead with the <strong>Copilot Governance Pack ($2k–10k · 90 days · board PDF)</strong>, try free in developer sandbox, or buy a locked contract SKU — same evaluate → TLE → export spine.</p>
  </div></div>
- {contrast_table_section()}
+ {buyer_delivery_outcomes_inner()}
  {packaging_tiers_grid(compact=True)}
- <p class="nf-section-lead"><a href="/pricing/">See all tiers</a> · Sandbox + production modes · three contract SKUs only.</p>
- </section>
- {agentic_autonomous_section()}
- <section class="nf-section-block" aria-labelledby="act-offerings">
- <div class="nf-section-block-head"><span class="nf-section-num" aria-hidden="true">—</span><div>
- <p class="nf-eyebrow" id="act-offerings">Contract programs</p>
- <h2>Three SKUs — locked scope</h2>
- </div></div>
  {offerings_three_skus()}
+ <p class="nf-section-lead"><a href="/pricing/">See all tiers</a> · Sandbox + production modes · three contract SKUs only.</p>
  </section>"""
 
     act_trust = f"""
@@ -1042,16 +1188,16 @@ def homepage() -> str:
  <p class="nf-section-lead">For you / not for you · trust center · export verification.</p>
  </div></div>
  {fit_qualification_body()}
- {assurance_levels_block()}
- {honest_moat_grid()}
+ {assurance_levels_inner()}
+ {honest_moat_inner()}
  {procurement_rail()}
- {ciso_strip()}
- {scope_block()}
+ {ciso_strip_inner()}
+ {scope_block_inner()}
  {closing_competitive_line()}
  </section>
 """ + mega_cta() + sticky_mobile_cta()
 
-    return act_try + act_prove + act_package + act_trust
+    return act_pilot + act_prove + act_package + act_trust
 
 
 def category_map_block() -> str:
@@ -1862,16 +2008,16 @@ def main() -> None:
  </div></div>
  <div class="nf-offerings-v5">
  <article class="nf-offer-card nf-offer-card--featured">
- <p class="meta">Land · Trust Brief</p>
- <p class="price">$10,000 · 6 weeks</p>
- <p>Fixed-scope governance diagnostic — policy map, risk exposure, executive summary. Opens CIO conversation with board-ready output.</p>
- <a class="btn btn-primary" href="/trust-brief/">Trust Brief</a>
+ <p class="meta">Land · Copilot Governance Pack</p>
+ <p class="price">$2k–10k · 90 days</p>
+ <p>Lead wedge: live TLE records, confidence score, board PDF in governance meeting — fixed-fee institutional entry before scale.</p>
+ <a class="btn btn-primary" href="/copilot/pilot/">Apply for pilot</a>
  </article>
  <article class="nf-offer-card nf-offer-card--featured">
- <p class="meta">Expand · Copilot Governance Pack</p>
- <p class="price">$2k–10k · 90 days</p>
- <p>Copilot Governance Pack: live TLE records, confidence score, board PDF in governance meeting — then expand seats and export cadence.</p>
- <a class="btn btn-primary" href="/copilot/pilot/">Governance Pack</a>
+ <p class="meta">Expand · Trust Brief</p>
+ <p class="price">$10,000 · 6 weeks</p>
+ <p>Six-week governance diagnostic — policy map, risk exposure, executive summary when diagnostic precedes Copilot scale.</p>
+ <a class="btn btn-primary" href="/trust-brief/">Trust Brief</a>
  </article>
  <article class="nf-offer-card">
  <p class="meta">Channel · Federal · MSP · Bank</p>

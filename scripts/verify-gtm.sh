@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# GTM pre-demo verify — run before sharing tunnel/staging URL with a design partner.
+# GTM pre-demo verify — run before sharing tunnel/staging URL with a pilot buyer.
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 # shellcheck source=dev-ports.sh
