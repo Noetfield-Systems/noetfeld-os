@@ -8,6 +8,13 @@
 | **`commercial-ssot-v1`** | [docs/strategy/NOETFIELD_COMMERCIAL_SSOT_LOCKED_v1.md](../docs/strategy/NOETFIELD_COMMERCIAL_SSOT_LOCKED_v1.md) | **Primary commercial SSOT** — buyer line, engine/internal split, W3, messaging matrix |
 | **`sme-provider-blueprint-v1`** | [docs/strategy/NOETFIELD_SME_PROVIDER_BLUEPRINT_LOCKED_v1.md](../docs/strategy/NOETFIELD_SME_PROVIDER_BLUEPRINT_LOCKED_v1.md) | **SME high-grade blueprint** — journey, site map, Lane A modules, W3 batch assets |
 | **`sme-governance-one-pager`** | [docs/copilot/SME_GOVERNANCE_PACK_ONE_PAGER.md](../docs/copilot/SME_GOVERNANCE_PACK_ONE_PAGER.md) | Buyer one-pager — CISO/GRC/procurement |
+| **`federal-governance-pack-v1`** | [docs/federal/FEDERAL_GOVERNANCE_PACK_v1.md](../docs/federal/FEDERAL_GOVERNANCE_PACK_v1.md) | **Federal lane SSOT** — ADM, AIA, Copilot PIN, GC AI Register |
+| **`federal-aia-tle-mapping-v1`** | [docs/federal/AIA_TLE_MAPPING_v1.md](../docs/federal/AIA_TLE_MAPPING_v1.md) | AIA risk/mitigation ↔ TLE export crosswalk |
+| **`federal-copilot-pin-checklist-v1`** | [docs/federal/GC_COPILOT_PIN_CHECKLIST_v1.md](../docs/federal/GC_COPILOT_PIN_CHECKLIST_v1.md) | GC Copilot for Work PIN compliance checklist |
+| **`msp-governance-pack-v1`** | [docs/msp/MSP_GOVERNANCE_PACK_v1.md](../docs/msp/MSP_GOVERNANCE_PACK_v1.md) | **MSP lane SSOT** — two-tier model, partner SKUs, Readiness → Record |
+| **`msp-phase1-phase2-raci-v1`** | [docs/msp/PHASE1_PHASE2_RACI_v1.md](../docs/msp/PHASE1_PHASE2_RACI_v1.md) | Phase 1 (MSP) vs Phase 2 (Noetfield) RACI |
+| **`msp-readiness-to-record-v1`** | [docs/msp/READINESS_TO_RECORD_MAPPING_v1.md](../docs/msp/READINESS_TO_RECORD_MAPPING_v1.md) | Readiness assessment → Governance Pack mapper |
+| **`msp-inforcer-complement-v1`** | [docs/msp/INFORCER_COMPLEMENT_BATTLECARD_v1.md](../docs/msp/INFORCER_COMPLEMENT_BATTLECARD_v1.md) | Inforcer / Lighthouse complement battlecard |
 | **`trust-ledger-positioning-v1.2`** | [docs/strategy/NOETFIELD_TRUST_LEDGER_POSITIONING_LOCKED_v1.2.md](../docs/strategy/NOETFIELD_TRUST_LEDGER_POSITIONING_LOCKED_v1.2.md) | **Primary GTM + product direction** — TLE mandate, 60-day sprint |
 | **`gtm-60-day-v1`** | [docs/strategy/NOETFIELD_GTM_60_DAY_LOCKED_v1.md](../docs/strategy/NOETFIELD_GTM_60_DAY_LOCKED_v1.md) | **CEO focus** — 1 customer, 5-min demo, 60-day fence, time allocation |
 | **`governance-sources-book-v1`** | [docs/reference/GOVERNANCE_SOURCES_BOOK_v1.md](../docs/reference/GOVERNANCE_SOURCES_BOOK_v1.md) | **Citable frameworks** — NIST, OECD, ISO, EU AI Act, Microsoft Purview, OWASP |

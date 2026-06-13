@@ -4,6 +4,10 @@
  <meta charset="UTF-8" />
  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
  <title>5-Minute Demo — Noetfield</title>
+ <meta name="description" content="Board-ready Copilot governance demo — evaluate, connect M365 evidence, TLE with confidence score, board PDF export." />
+ <meta name="theme-color" content="#07070b" />
+ <link rel="canonical" href="https://www.noetfield.com/copilot/demo/" />
+ <link rel="icon" href="/noetfield-favicon-512.png" type="image/png" />
  <link rel="stylesheet" href="/assets/noetfield-tokens.css" />
  <link rel="stylesheet" href="/assets/noetfield-shell.css" />
  <link rel="stylesheet" href="/assets/noetfield-components.css" />
@@ -13,72 +17,129 @@
 </head>
 <body>
  <div class="bg" aria-hidden="true"></div>
+ <a class="skip" href="#main">Skip to content</a>
  <header id="nfHeader"></header>
  <main id="main" class="wrap nf-page">
- <header class="nf-hero">
+ <header class="nf-hero nf-hero--compact">
  <p class="nf-eyebrow">GTM · 5-minute demo</p>
  <h1>Board-ready Copilot governance in five minutes</h1>
  <p class="nf-lead">
  Noetfield is the AI Governance &amp; Evidence layer for Copilot adoption — evaluate operational intent,
  index M365 metadata evidence, and produce signed Trust Ledger Entries your board and procurement can defend.
  </p>
- <p id="live-demo-url" class="nf-lead" style="margin-top:1rem;font-size:.95rem;color:var(--nf-muted,#8a8a9a)">
- Shareable demo URL: run <code>make demo-url</code> after <code>make dev-local-tunnel-bg</code> (or set <code>NF_STAGING_URL</code>).
- See <a href="/docs/ops/STAGING_DEMO.md">staging &amp; buyer demo runbook</a> for tunnel and staging options.
- </p>
+ <div class="nf-demo-banner" id="live-demo-url">
+ <strong>Shareable URL</strong>
+ <span>Run <code>make demo-url</code> after <code>make dev-local-tunnel-bg</code> — see <a href="/docs/ops/STAGING_DEMO.md">staging runbook</a>.</span>
+ </div>
  </header>
 
- <section class="nf-section">
- <h2>Demo script (locked narrative)</h2>
- <ol>
- <li><strong>Hook:</strong> Copilot adoption needs a board-ready decision record, not another chatbot.</li>
- <li><strong>Rehearsal:</strong> <a href="/docs/ops/DEMO_REHEARSAL_CHECKLIST_v1.md">5-minute demo rehearsal checklist</a></li>
- <li><strong>Evaluate</strong> operational intent → governance RID.
- <a href="/cognitive-dashboard/">Open Governance Console</a> ·
- <a href="/evaluate/">Evaluate page</a></li>
- <li><strong>Connect</strong> M365 → Evidence Index ingests three metadata sources:
- <strong>Purview</strong> (sensitivity labels), <strong>Entra ID</strong> (Conditional Access),
- <strong>SharePoint</strong> (site policies). Metadata only.
- <a href="/workspace/connectors/">M365 connectors</a></li>
- <li><strong>Draft TLE</strong> → highlight <strong>confidence score</strong> and go/no-go decision.
- <a href="/workspace/">Trust Ledger Workspace</a></li>
- <li><strong>Approve</strong> sequential chain (CIO → Legal → Security).</li>
- <li><strong>Export</strong> board pack PDF + procurement ZIP; mention audit JSON for diligence.
- <a href="/trust-ledger/sample-report/">TLE samples</a></li>
+ <div class="nf-trust nf-trust--premium" role="region" aria-label="Demo flow">
+ <div class="nf-trust-item"><strong>Evaluate</strong><span>Intent + RID</span></div>
+ <div class="nf-trust-item"><strong>Connect</strong><span>Purview · Entra · SharePoint</span></div>
+ <div class="nf-trust-item"><strong>TLE v1</strong><span>confidence score</span></div>
+ <div class="nf-trust-item"><strong>Export</strong><span>Board PDF · procurement ZIP</span></div>
+ </div>
+
+ <section class="nf-section nf-section--elevated" aria-labelledby="script-heading">
+ <p class="nf-section-label" id="script-heading">Demo script (locked narrative)</p>
+ <h2>Seven steps · under five minutes</h2>
+ <p class="nf-section-lead">Rehearse with the <a href="/docs/ops/DEMO_REHEARSAL_CHECKLIST_v1.md">demo rehearsal checklist</a> before buyer meetings.</p>
+ <ol class="nf-demo-timeline">
+ <li class="nf-demo-step">
+ <span class="nf-demo-step-marker">01</span>
+ <div class="nf-demo-step-body">
+ <h3>Hook</h3>
+ <p>Copilot adoption needs a board-ready decision record, not another chatbot.</p>
+ </div>
+ </li>
+ <li class="nf-demo-step">
+ <span class="nf-demo-step-marker">02</span>
+ <div class="nf-demo-step-body">
+ <h3>Evaluate operational intent</h3>
+ <p>Submit intent → governance RID. Show allow / deny / review before execution.</p>
+ <div class="nf-demo-step-actions">
+ <a class="btn btn-primary" href="/cognitive-dashboard/">Open Governance Console</a>
+ <a class="btn btn-secondary" href="/evaluate/">Evaluate page</a>
+ </div>
+ </div>
+ </li>
+ <li class="nf-demo-step">
+ <span class="nf-demo-step-marker">03</span>
+ <div class="nf-demo-step-body">
+ <h3>Connect M365 evidence</h3>
+ <p>Evidence Index ingests three metadata sources: <strong>Purview</strong> (sensitivity labels), <strong>Entra ID</strong> (Conditional Access), <strong>SharePoint</strong> (site policies). Metadata only.</p>
+ <div class="nf-demo-step-actions">
+ <a class="btn btn-secondary" href="/workspace/connectors/">M365 connectors</a>
+ </div>
+ </div>
+ </li>
+ <li class="nf-demo-step">
+ <span class="nf-demo-step-marker">04</span>
+ <div class="nf-demo-step-body">
+ <h3>Draft TLE v1</h3>
+ <p>Highlight <strong>confidence score</strong> and go/no-go decision on the Trust Ledger Entry.</p>
+ <div class="nf-demo-step-actions">
+ <a class="btn btn-secondary" href="/workspace/">Trust Ledger Workspace</a>
+ </div>
+ </div>
+ </li>
+ <li class="nf-demo-step">
+ <span class="nf-demo-step-marker">05</span>
+ <div class="nf-demo-step-body">
+ <h3>Approve sequential chain</h3>
+ <p>CIO → Legal → Security approval chain captured in the signed record.</p>
+ </div>
+ </li>
+ <li class="nf-demo-step">
+ <span class="nf-demo-step-marker">06</span>
+ <div class="nf-demo-step-body">
+ <h3>Export board pack + procurement ZIP</h3>
+ <p>Board PDF for governance meeting; audit JSON slice for diligence reviewers.</p>
+ <div class="nf-demo-step-actions">
+ <a class="btn btn-secondary" href="/trust-ledger/sample-report/">TLE samples</a>
+ <a class="btn btn-secondary" href="/copilot/procurement/">Procurement pack</a>
+ </div>
+ </div>
+ </li>
+ <li class="nf-demo-step">
+ <span class="nf-demo-step-marker">07</span>
+ <div class="nf-demo-step-body">
+ <h3>Tamper FAIL (optional climax)</h3>
+ <p>Edit export byte → integrity verify fails closed. Orientation for procurement README.</p>
+ </div>
+ </li>
  </ol>
  </section>
 
- <section class="nf-section">
- <h2>Framework orientation</h2>
- <p class="text-sm">
- M365 evidence citations align with
- <code>docs/reference/GOVERNANCE_SOURCES_BOOK_v1.md</code> Part B (Microsoft Purview).
- We index Purview/DLP <strong>evidence</strong> into your TLE — what you configured, not what we replace.
- Orientation only — not legal advice.
+ <section class="nf-section nf-section--elevated">
+ <p class="nf-section-label">Framework orientation</p>
+ <h2>M365 evidence citations</h2>
+ <p class="nf-section-lead">
+ Aligns with <a href="/docs/reference/GOVERNANCE_SOURCES_BOOK_v1.md">Governance Sources Book v1</a> Part B (Microsoft Purview).
+ We index Purview/DLP <strong>evidence</strong> into your TLE — what you configured, not what we replace. Orientation only — not legal advice.
  </p>
  </section>
 
  <section class="nf-section">
- <h2>Before you demo</h2>
- <p>
- Run the <a href="/docs/ops/DEMO_REHEARSAL_CHECKLIST_v1.md">demo rehearsal checklist</a>
- (pre-demo verify, buyer personas, script A/B). After the meeting, use the
- <a href="/docs/copilot/BUYER_DEBRIEF_TEMPLATE_v1.md">buyer debrief template</a>.
+ <p class="nf-section-label">Before you demo</p>
+ <div class="nf-callout">
+ <strong>Pre-flight:</strong> Run <code>make verify-gtm</code> · rehearse script A/B · use
+ <a href="/docs/copilot/BUYER_DEBRIEF_TEMPLATE_v1.md">buyer debrief template</a> after the meeting.
  Design partner pipeline: <a href="/docs/copilot/DESIGN_PARTNER_PIPELINE_v1.md">outreach guide</a>.
- Canada / public-sector angle: <a href="/docs/strategy/channel-outreach/bc-ai-for-all-2026.md">AI for All outreach copy</a>.
- Diligence reviewers: <a href="/docs/diligence/rpaa-positioning-onepager.md">RPAA-safe positioning one-pager</a>.
- </p>
- </section>
-
- <section class="nf-section">
- <div class="nf-cta-actions" style="display:flex;flex-wrap:wrap;gap:.75rem">
- <a class="btn btn-primary" href="/cognitive-dashboard/">Start: Evaluate intent</a>
- <a class="btn btn-secondary" href="/workspace/connectors/">Connect M365</a>
- <a class="btn btn-secondary" href="/workspace/">Trust Ledger Workspace</a>
- <a class="btn btn-secondary" href="/copilot/pilot/">Pilot checklist</a>
- <a class="btn btn-primary" href="/trust-brief/intake/?interest=demo">Request Governance Brief</a>
  </div>
  </section>
+
+ <aside class="nf-cta-band">
+ <div>
+ <h2>Run the demo now</h2>
+ <p>Evaluate → connect → TLE → export</p>
+ </div>
+ <div class="nf-cta-actions">
+ <a class="btn btn-primary" href="/cognitive-dashboard/">Start: Evaluate intent</a>
+ <a class="btn btn-secondary" href="/copilot/pilot/">Design partner program</a>
+ <a class="btn btn-primary" href="/trust-brief/intake/?interest=demo">Request Governance Brief</a>
+ </div>
+ </aside>
  </main>
  <footer id="nfFooter"></footer>
  <script>
@@ -86,7 +147,7 @@
    var el = document.getElementById("live-demo-url");
    var injected = "%%NF_PUBLIC_DEMO_URL%%";
    if (el && injected && injected.indexOf("%%") === -1 && injected.indexOf("http") === 0) {
-     el.innerHTML = 'Live demo URL: <a href="' + injected + '/copilot/demo/">' + injected + '/copilot/demo/</a>';
+     el.innerHTML = '<strong>Live demo URL</strong> <a href="' + injected + '/copilot/demo/">' + injected + '/copilot/demo/</a>';
    }
  })();
  </script>

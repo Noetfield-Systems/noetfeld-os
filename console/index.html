@@ -12,6 +12,7 @@
  <link rel="stylesheet" href="/assets/noetfield-tokens.css" />
  <link rel="stylesheet" href="/assets/noetfield-shell.css" />
  <link rel="stylesheet" href="/assets/noetfield-components.css" />
+ <link rel="stylesheet" href="/assets/noetfield-institutional.css" />
  <link rel="stylesheet" href="/assets/noetfield-sales.css" />
  <script src="/assets/noetfield-shell.js" defer></script>
 </head>
@@ -20,26 +21,55 @@
  <a class="skip" href="#main">Skip to content</a>
  <header id="nfHeader"></header>
  <main id="main" class="wrap nf-page">
- <header class="nf-hero">
+ <header class="nf-hero nf-hero--premium">
+ <div>
  <p class="nf-eyebrow">Governance Console</p>
  <h1>Governance Evaluation Interface</h1>
  <p class="nf-lead">
  Submit operational intent, receive an allow or deny decision, and review the compliance log on your authorized pilot host.
  </p>
- <div class="nf-hero-actions">
+ <div class="nf-cta-actions">
  <a class="btn btn-primary" id="go" href="/trust-brief/intake/">Open Governance Console</a>
+ <a class="btn btn-secondary" href="/cognitive-dashboard/">Cognitive dashboard</a>
  </div>
+ </div>
+ <aside class="nf-hero-panel" aria-label="Console capabilities">
+ <p class="nf-hero-panel-label">What you get</p>
+ <ul class="nf-hero-panel-list">
+ <li>Submit Intent — evaluate API or console</li>
+ <li>Decision + RID — threaded request identity</li>
+ <li>Compliance log — immutable ledger entries</li>
+ <li>Export — audit bundle for diligence</li>
+ </ul>
+ </aside>
  </header>
 
- <section class="nf-section">
- <h2>What you get</h2>
- <ul>
- <li><strong>Submit Intent</strong> — describe proposed operational action (evaluate API or console).</li>
- <li><strong>Decision + RID</strong> — request id (<code>RID-…</code>) ties intake, evaluate, and audit export.</li>
- <li><strong>Compliance log</strong> — immutable ledger entries for engagement intake and E-23 evidence.</li>
- </ul>
- <p style="font-size:var(--text-sm);color:var(--muted2);">Pilot SSO: enterprise identity provider integration is configured per engagement (placeholder until IdP cutover).</p>
- </section>
+ <div class="nf-loop">
+ <article class="nf-loop-step">
+ <p class="nf-loop-step-num">01</p>
+ <h3>Submit</h3>
+ <p>Describe proposed operational action.</p>
+ </article>
+ <article class="nf-loop-step">
+ <p class="nf-loop-step-num">02</p>
+ <h3>Decide</h3>
+ <p>Allow or deny with confidence score.</p>
+ </article>
+ <article class="nf-loop-step">
+ <p class="nf-loop-step-num">03</p>
+ <h3>Record</h3>
+ <p>RID ties intake, evaluate, audit export.</p>
+ </article>
+ <article class="nf-loop-step">
+ <p class="nf-loop-step-num">04</p>
+ <h3>Review</h3>
+ <p>Compliance log for E-23 evidence.</p>
+ </article>
+ </div>
+
+ <div class="nf-callout">
+ <strong>Enterprise access:</strong> Pilot SSO and identity provider integration configured per engagement.
+ </div>
 
  <aside class="nf-cta-band">
  <div>
@@ -53,16 +83,16 @@
  </main>
  <footer id="nfFooter"></footer>
  <script>
-  (function () {
-    var host = window.location.hostname;
-    var target = "https://platform.noetfield.com/console";
-    if (host === "localhost" || host === "127.0.0.1") target = "http://127.0.0.1:8001/console";
-    else if (host.indexOf("platform.") === 0) target = window.location.protocol + "//" + host + "/console";
-    var a = document.getElementById("go");
-    a.href = target;
-    a.textContent = "Open Governance Console";
-    if (/[?&]go=1/.test(location.search)) location.replace(target);
-  })();
+ (function () {
+   var host = window.location.hostname;
+   var target = "https://platform.noetfield.com/console";
+   if (host === "localhost" || host === "127.0.0.1") target = "http://127.0.0.1:8001/console";
+   else if (host.indexOf("platform.") === 0) target = window.location.protocol + "//" + host + "/console";
+   var a = document.getElementById("go");
+   a.href = target;
+   a.textContent = "Open Governance Console";
+   if (/[?&]go=1/.test(location.search)) location.replace(target);
+ })();
  </script>
 </body>
 </html>

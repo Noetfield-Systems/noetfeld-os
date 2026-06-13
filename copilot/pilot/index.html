@@ -4,6 +4,10 @@
  <meta charset="UTF-8" />
  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
  <title>Copilot Pilot — Design Partner | Noetfield</title>
+ <meta name="description" content="Design-partner Go/No-Go path — 90-day Copilot governance pilot, board PDF, procurement ZIP." />
+ <meta name="theme-color" content="#07070b" />
+ <link rel="canonical" href="https://www.noetfield.com/copilot/pilot/" />
+ <link rel="icon" href="/noetfield-favicon-512.png" type="image/png" />
  <link rel="stylesheet" href="/assets/noetfield-tokens.css" />
  <link rel="stylesheet" href="/assets/noetfield-shell.css" />
  <link rel="stylesheet" href="/assets/noetfield-components.css" />
@@ -13,34 +17,63 @@
 </head>
 <body>
  <div class="bg" aria-hidden="true"></div>
+ <a class="skip" href="#main">Skip to content</a>
  <header id="nfHeader"></header>
  <main id="main" class="wrap nf-page">
- <header class="nf-hero">
+ <header class="nf-hero nf-hero--premium">
+ <div>
  <p class="nf-eyebrow">Copilot Governance Pack · Pilot</p>
  <h1>Design-partner Go/No-Go path</h1>
- <p class="nf-lead">Run the documented pilot: evaluate intent, index evidence, produce a signed TLE, and export a board pack for procurement.</p>
+ <p class="nf-lead">
+ Run the documented pilot: evaluate intent, index evidence, produce a signed TLE, and export a board pack for procurement.
+ </p>
+ <div class="nf-hero-badges">
+ <span class="nf-badge-pill nf-badge-pill--gold">90-day program</span>
+ <span class="nf-badge-pill">Pilot $2k–10k</span>
+ </div>
+ <div class="nf-cta-actions">
+ <a class="btn btn-primary" href="/trust-brief/intake/?interest=pilot">Become a design partner</a>
+ <a class="btn btn-secondary" href="/copilot/demo/">5-minute demo</a>
+ </div>
+ </div>
+ <aside class="nf-hero-panel" aria-label="Success signals">
+ <p class="nf-hero-panel-label">Design partner program</p>
+ <ul class="nf-hero-panel-list">
+ <li>One referenceable org · board PDF in real meeting</li>
+ <li>Approved TLE with confidence score</li>
+ <li>M365 metadata evidence connected</li>
+ <li>Procurement ZIP for diligence (optional)</li>
+ </ul>
+ </aside>
  </header>
 
- <section class="nf-section">
- <h2>Design partner program</h2>
- <p>We are seeking <strong>one referenceable org</strong> that uses a board PDF in a real governance meeting. Pilot fees typically <strong>$2k–$10k</strong> for 4–6 weeks.</p>
- <h3>Success signals</h3>
- <ol>
+ <div class="nf-metrics" role="region" aria-label="Pilot timeline">
+ <div class="nf-metric"><strong>Week 0–2</strong><span>Demo · SOW scoped</span></div>
+ <div class="nf-metric"><strong>Week 3–6</strong><span>Evidence · first TLE</span></div>
+ <div class="nf-metric"><strong>Week 7–10</strong><span>Board PDF in meeting</span></div>
+ <div class="nf-metric"><strong>Week 11–12</strong><span>LOI · deposit</span></div>
+ </div>
+
+ <section class="nf-section nf-section--elevated">
+ <p class="nf-section-label">Success signals</p>
+ <h2>What “done” looks like</h2>
+ <ul class="nf-checklist nf-checklist--numbered">
  <li>Connect M365 metadata evidence (or use pilot seed evidence)</li>
  <li>Generate an <strong>approved TLE</strong> with confidence score visible</li>
  <li>Export <strong>board pack PDF</strong> for board / legal / risk review</li>
  <li>Optional: share <strong>procurement ZIP</strong> with diligence reviewers</li>
- </ol>
- <p>SOW outline (founder template): <code>docs/copilot/DESIGN_PARTNER_SOW_OUTLINE.md</code></p>
- <p>
- <a href="/docs/copilot/DESIGN_PARTNER_PIPELINE_v1.md">Design partner pipeline</a> —
- outreach stages, follow-up email template, minimal CRM fields.
+ </ul>
+ <p class="text-sm">
+ <a href="/docs/copilot/DESIGN_PARTNER_SOW_OUTLINE.md">SOW outline</a>
+ ·
+ <a href="/docs/copilot/DESIGN_PARTNER_PIPELINE_v1.md">Design partner pipeline</a>
  </p>
  </section>
 
- <section class="nf-section">
- <h2>Pilot checklist</h2>
- <ol>
+ <section class="nf-section nf-section--elevated">
+ <p class="nf-section-label">Pilot checklist</p>
+ <h2>Engineering pre-flight</h2>
+ <ul class="nf-checklist nf-checklist--numbered">
  <li>Start local stack: <code>make dev-local</code></li>
  <li>Pre-demo verify: <code>make verify-gtm</code></li>
  <li>Rehearsal: <a href="/docs/ops/DEMO_REHEARSAL_CHECKLIST_v1.md">5-minute demo rehearsal checklist</a></li>
@@ -48,35 +81,42 @@
  <li>Open Trust Ledger Workspace and review TLE + approvals</li>
  <li>Download board pack (PDF) for board / legal review</li>
  <li>Export audit bundle for diligence</li>
- </ol>
- </section>
-
- <section class="nf-section">
- <h2>GTM ops (agent-maintained)</h2>
- <ul>
- <li><a href="/docs/ops/DEMO_REHEARSAL_CHECKLIST_v1.md">5-minute demo rehearsal checklist</a> — pre-demo verify, buyer personas, script A/B</li>
- <li><a href="/docs/copilot/BUYER_DEBRIEF_TEMPLATE_v1.md">Buyer debrief template</a> — post-demo capture for design partners</li>
- <li><a href="/docs/strategy/channel-outreach/bc-ai-for-all-2026.md">Canada AI for All outreach</a> — federal + B.C. trust narrative, email blocks (Noetfield governance only)</li>
- <li><a href="/docs/diligence/rpaa-positioning-onepager.md">RPAA-safe diligence one-pager</a> — attach to procurement / legal reviewers (governance layer only)</li>
- <li><a href="/docs/ops/STAGING_DEMO.md">Staging &amp; shareable demo URL</a> — <code>make dev-local-tunnel-bg</code> + <code>make demo-url</code>, or <code>NF_STAGING_URL</code></li>
  </ul>
  </section>
 
  <section class="nf-section">
- <div class="nf-cta-actions" style="display:flex;flex-wrap:wrap;gap:.75rem">
- <a class="btn btn-primary" href="/copilot/demo/">5-minute demo script</a>
- <a class="btn btn-secondary" href="/workspace/">Trust Ledger Workspace</a>
- <a class="btn btn-secondary" href="/cognitive-dashboard/">Governance Console</a>
- <a class="btn btn-secondary" href="/copilot/procurement/">Procurement pack</a>
- <a class="btn btn-secondary" href="/trust-ledger/sample-report/">TLE samples</a>
- <a class="btn btn-primary" href="/trust-brief/intake/?interest=pilot">Request Governance Brief</a>
+ <p class="nf-section-label">GTM ops</p>
+ <div class="nf-proof-grid">
+ <a class="nf-proof-card" href="/docs/ops/DEMO_REHEARSAL_CHECKLIST_v1.md">
+ <span class="nf-proof-icon" aria-hidden="true">▶</span>
+ <div><h3>Demo rehearsal</h3><p>Pre-demo verify · personas · script A/B</p></div>
+ </a>
+ <a class="nf-proof-card" href="/docs/copilot/BUYER_DEBRIEF_TEMPLATE_v1.md">
+ <span class="nf-proof-icon" aria-hidden="true">DB</span>
+ <div><h3>Buyer debrief</h3><p>Post-demo capture template</p></div>
+ </a>
+ <a class="nf-proof-card" href="/docs/ops/STAGING_DEMO.md">
+ <span class="nf-proof-icon" aria-hidden="true">URL</span>
+ <div><h3>Shareable demo URL</h3><p>Tunnel + staging runbook</p></div>
+ </a>
+ <a class="nf-proof-card" href="/docs/diligence/rpaa-positioning-onepager.md">
+ <span class="nf-proof-icon" aria-hidden="true">RPAA</span>
+ <div><h3>RPAA positioning</h3><p>Attach for legal reviewers</p></div>
+ </a>
  </div>
  </section>
 
- <section class="nf-section">
- <h2>Runbook</h2>
- <p>Full procedure: <code>docs/spec/copilot-readiness-pilot-runbook.md</code> in the implementation repo.</p>
- </section>
+ <aside class="nf-cta-band">
+ <div>
+ <h2>Request Governance Brief</h2>
+ <p>Start design partner intake</p>
+ </div>
+ <div class="nf-cta-actions">
+ <a class="btn btn-primary" href="/trust-brief/intake/?interest=pilot">Request Governance Brief</a>
+ <a class="btn btn-secondary" href="/workspace/">Trust Ledger Workspace</a>
+ <a class="btn btn-secondary" href="/copilot/procurement/">Procurement pack</a>
+ </div>
+ </aside>
  </main>
  <footer id="nfFooter"></footer>
 </body>

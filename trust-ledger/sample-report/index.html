@@ -6,6 +6,7 @@
  <title>Trust Ledger Entry v1 — Sample Report | Noetfield</title>
  <meta name="description" content="Procurement-grade Trust Ledger Entry (TLE v1) samples for Copilot go/no-go governance." />
  <meta name="robots" content="index,follow" />
+ <meta name="theme-color" content="#07070b" />
  <link rel="canonical" href="https://www.noetfield.com/trust-ledger/sample-report/" />
  <link rel="icon" href="/noetfield-favicon-512.png" type="image/png" />
  <link rel="stylesheet" href="/assets/noetfield-tokens.css" />
@@ -20,7 +21,7 @@
  <a class="skip" href="#main">Skip to content</a>
  <header id="nfHeader"></header>
  <main id="main" class="wrap nf-page">
- <header class="nf-hero">
+ <header class="nf-hero nf-hero--compact">
  <p class="nf-eyebrow">TLE v1 · Procurement sample</p>
  <h1>Trust Ledger Entry examples (Go / Conditional / Rejected)</h1>
  <p class="nf-lead">
@@ -29,40 +30,55 @@
  </p>
  </header>
 
- <section class="nf-section">
- <h2>Download samples</h2>
- <div class="nf-dir-grid">
- <article class="nf-dir-card featured">
- <p class="meta">Approved</p>
+ <div class="nf-trust nf-trust--premium" role="region" aria-label="Trust Ledger">
+ <div class="nf-trust-item"><strong>Go</strong><span>Approved rollout</span></div>
+ <div class="nf-trust-item"><strong>Conditional</strong><span>Controls required</span></div>
+ <div class="nf-trust-item"><strong>Rejected</strong><span>Evidence gaps</span></div>
+ <div class="nf-trust-item"><strong>Signed</strong><span>audit_digest</span></div>
+ </div>
+
+ <section class="nf-section nf-section--elevated" aria-labelledby="samples-heading">
+ <p class="nf-section-label" id="samples-heading">Download samples</p>
+ <h2>Three decision outcomes</h2>
+ <div class="nf-outcome-grid">
+ <article class="nf-outcome-card nf-outcome-card--approved">
+ <p class="nf-outcome-label">Approved</p>
  <p>Copilot rollout authorized with standard controls.</p>
  <a class="btn btn-primary" href="/trust-ledger/sample-report/samples/tle-go-approved.yaml" download>tle-go-approved.yaml</a>
  </article>
- <article class="nf-dir-card">
- <p class="meta">Conditional</p>
+ <article class="nf-outcome-card">
+ <p class="nf-outcome-label">Conditional</p>
  <p>Rollout gated on DLP and retention controls.</p>
  <a class="btn btn-secondary" href="/trust-ledger/sample-report/samples/tle-conditional.yaml" download>tle-conditional.yaml</a>
  </article>
- <article class="nf-dir-card">
- <p class="meta">Rejected</p>
+ <article class="nf-outcome-card nf-outcome-card--rejected">
+ <p class="nf-outcome-label">Rejected</p>
  <p>Deployment not authorized — evidence gaps.</p>
  <a class="btn btn-secondary" href="/trust-ledger/sample-report/samples/tle-rejected.yaml" download>tle-rejected.yaml</a>
  </article>
  </div>
  </section>
 
- <section class="nf-section">
- <h2>Live workspace</h2>
- <p>Create drafts, run approval chain, and export a board pack in the Governance Console.</p>
- <div class="nf-cta-actions" style="display:flex;flex-wrap:wrap;gap:.75rem">
+ <section class="nf-section nf-section--elevated">
+ <p class="nf-section-label">Live workspace</p>
+ <h2>Create your own TLE</h2>
+ <p class="nf-section-lead">Create drafts, run approval chain, and export a board pack in the Governance Console.</p>
+ <div class="nf-cta-actions">
  <a class="btn btn-primary" href="/workspace/">Trust Ledger Workspace</a>
  <a class="btn btn-secondary" href="/cognitive-dashboard/">Governance Console</a>
+ <a class="btn btn-secondary" href="/copilot/procurement/">Procurement pack</a>
  </div>
  </section>
 
- <section class="nf-section">
- <h2>Schema</h2>
- <p>Machine schema: <code>packages/schemas/tle-v1.schema.json</code> · validate with <code>python3 scripts/validate-tle-samples.py</code></p>
- </section>
+ <aside class="nf-cta-band">
+ <div>
+ <h2>Request Governance Brief</h2>
+ <p>Copilot governance assessment</p>
+ </div>
+ <div class="nf-cta-actions">
+ <a class="btn btn-primary" href="/trust-brief/intake/?interest=tle-sample">Request Governance Brief</a>
+ </div>
+ </aside>
  </main>
  <footer id="nfFooter"></footer>
 </body>

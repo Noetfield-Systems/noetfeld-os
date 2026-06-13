@@ -49,6 +49,10 @@ check_html "${BASE}/copilot/" "copilot hub" "audit trail your Copilot deployment
 check_html "${BASE}/copilot/pilot/" "copilot pilot" "Design-partner Go/No-Go" "Design partner program"
 check_html "${BASE}/copilot/demo/" "copilot demo" "5-minute demo" "Demo script (locked narrative)" "confidence score" "Purview" "Entra" "SharePoint"
 check_html "${BASE}/copilot/procurement/" "procurement buyer" "buyer pack" "Procurement pack (ZIP)" "NIST AI RMF"
+check_html "${BASE}/copilot/sme/" "copilot sme pack" "SME Governance Pack" "90-day design partner" "confidence score"
+check_html "${BASE}/trust-brief/" "trust brief" "$10,000" "Request Governance Brief"
+check_html "${BASE}/federal/" "federal lane" "June 24, 2026" "Algorithmic Impact Assessment" "Copilot PIN" "Automated Decision-Making" "unclassified"
+check_html "${BASE}/msp/" "msp partner lane" "Readiness to Record" "Phase 1" "Phase 2" "partner"
 check_html "${BASE}/trust-ledger/sample-report/" "tle samples" "Trust Ledger"
 check_html "${BASE}/ai-automation/" "ai-automation operator" "Make your AI automation defensible" "Request Governance Brief" "Scope (locked)"
 
