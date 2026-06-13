@@ -6,7 +6,7 @@ import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-WWW_VER = "36"
+WWW_VER = "37"
 
 # Copilot Governance Pack — locked lead SKU ($2k–10k · 90 days · board PDF success signal)
 PILOT_SKU = "Copilot Governance Pack"
@@ -78,7 +78,7 @@ COPY = {
     ),
     "first_receipt_promise": (
         "Run one evaluate · get one signed receipt · <strong>before your next governance standup</strong> "
-        "(~5 minutes in sandbox · Copilot, Trust Brief, Bank Pilot, or partner shadow scenarios)."
+        "(~5 minutes in sandbox · Copilot, Trust Brief, Bank Pilot, governance specialist, or partner shadow scenarios)."
     ),
     "closing_competitive": (
         "Roll out Copilot with <strong>signed receipts</strong> — board PDF, procurement ZIP, and verified export integrity."
@@ -151,6 +151,7 @@ def live_proof_panel() -> str:
         ("trust_brief", "Trust Brief", False),
         ("bank", "Bank Pilot", False),
         ("automation", "AI automation", False),
+        ("specialist", "Governance specialist", False),
         ("partner", "Partner shadow", False),
     )
     pills_html = "".join(
@@ -163,7 +164,7 @@ def live_proof_panel() -> str:
  <form id="nfLiveProofForm" class="nf-live-proof-form">
  <h3>Governance playground</h3>
  <p id="nfScenarioOfDay" class="nf-scenario-of-day" aria-live="polite"></p>
- <p class="nf-scorecard-hint">Every go/no-go gets a <strong>confidence score</strong> + evidence index — Copilot, Trust Brief, Bank Pilot, automation, and partner shadow lanes.</p>
+ <p class="nf-scorecard-hint">Every go/no-go gets a <strong>confidence score</strong> + evidence index — Copilot, Trust Brief, Bank Pilot, AI automation, <strong>governance specialist</strong>, and partner shadow lanes.</p>
  <div class="nf-live-proof-lanes" role="group" aria-label="Product lane filter">{pills_html}</div>
  <label>Scenario
  <select name="scenario" id="nfLiveProofScenario" aria-label="Evaluate scenario"></select>
@@ -411,7 +412,7 @@ def product_lane_strip() -> str:
         ("/copilot/pilot/", "Copilot Pack", "$2k–10k · 90 days", "nf-product-lane--lead"),
         ("/trust-brief/", "Trust Brief", "$10k · 6 weeks", ""),
         ("/bank-pilot/", "Bank Pilot", "Shadow · read-only", ""),
-        ("/ai-automation/", "AI automation", "Lane B reference", ""),
+        ("/ai-automation/", "Governance specialist", "Agentic workflow", "nf-product-lane--specialist"),
         ("/federal/", "Federal", "Schedule I/II", ""),
     ]
     cards = "".join(
@@ -433,7 +434,7 @@ def homepage_depth_links() -> str:
  <a href="/copilot/pilot/">Copilot Governance Pack</a>
  <a href="/trust-brief/">Trust Brief</a>
  <a href="/bank-pilot/">Bank Pilot</a>
- <a href="/ai-automation/">AI automation</a>
+ <a href="/ai-automation/">Governance specialist workflow</a>
  <a href="/federal/">Federal lane</a>
  <a href="/copilot/pilot/#digital-trust-lane">Digital trust lane</a>
  <a href="/copilot/pilot/#governance-gaps">Governance gaps</a>
@@ -1371,6 +1372,29 @@ def packaging_tiers_grid(compact: bool = False) -> str:
  <p class="nf-section-lead">Three contract SKUs only — free sandbox is product access, not a retail SKU. Upgrade path: sandbox → Copilot Governance Pack → Trust Brief or enterprise SOW.</p>"""
 
 
+def agentic_governance_specialist_block() -> str:
+    """Homepage — agentic governance specialist workflow (investigate → triage → draft → approve)."""
+    return """
+ <div class="nf-block-inner nf-agentic-specialist" id="agentic-specialist" aria-labelledby="agentic-specialist-title">
+ <div class="nf-section-block-head"><span class="nf-section-num" aria-hidden="true">↻</span><div>
+ <p class="nf-eyebrow" id="agentic-specialist-title">Agentic governance specialist</p>
+ <h3>Policy-bound workflow — investigate → triage → draft → approve</h3>
+ <p class="nf-section-lead">Your team sets policy. A governance specialist runs metadata-only M365 evidence checks, routes confidence scores, drafts Trust Ledger Entries, and escalates high-risk Copilot scope to named human approvers — same evaluate semantics as <code>POST /evaluate</code>.</p>
+ </div></div>
+ <div class="nf-agentic-grid nf-agentic-grid--specialist">
+ <article class="nf-agentic-step"><strong>1 · Investigate</strong><p>Surfaces Purview label gaps, Entra CA posture, and audit index coverage before rollout sign-off.</p></article>
+ <article class="nf-agentic-step"><strong>2 · Triage</strong><p>Confidence score and policy rules route allow, review, or deny — every decision RID-threaded.</p></article>
+ <article class="nf-agentic-step"><strong>3 · Draft TLE</strong><p>Prepares Trust Ledger Entry YAML, evidence index, and approver chain for human sign-off.</p></article>
+ <article class="nf-agentic-step nf-agentic-step--highlight"><strong>4 · Human approve</strong><p>High-risk Copilot go/no-go stays with named approvers; low-risk sandbox paths auto-record only.</p></article>
+ </div>
+ <div class="nf-cta-actions">
+ <a class="btn btn-primary" href="/?lane=specialist#nfLiveProofHero">Try specialist scenario</a>
+ <a class="btn btn-secondary" href="/start/">Start sandbox</a>
+ <a class="btn btn-secondary" href="/ai-automation/">Lane B reference</a>
+ </div>
+ </div>"""
+
+
 def agentic_autonomous_section() -> str:
     return """
  <section class="nf-section-block nf-section--elevated" aria-labelledby="automation-title">
@@ -1506,6 +1530,7 @@ def homepage() -> str:
  <article class="nf-loop-step"><p class="nf-loop-step-num">03</p><h3>Record</h3><p>Signed Trust Ledger Entry · TLE v1 with M365 metadata evidence index.</p></article>
  <article class="nf-loop-step"><p class="nf-loop-step-num">04</p><h3>Export</h3><p>Board PDF and procurement ZIP — <strong>export_integrity</strong> fails closed on tamper.</p></article>
  </div>
+ {agentic_governance_specialist_block()}
  {proof_grid([
         ("/copilot/demo/", "▶", "5-minute demo", "Evaluate → confidence score → Purview · Entra · SharePoint index"),
         ("/trust-ledger/sample-report/", "TLE", "TLE v1 samples", "Go · conditional · rejected YAML for procurement review"),

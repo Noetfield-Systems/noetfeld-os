@@ -148,6 +148,30 @@ body.nf-www .nf-product-lane--lead {
   background: linear-gradient(180deg, rgba(255, 248, 235, 0.9), #fff);
 }
 
+body.nf-www .nf-product-lane--specialist {
+  border-color: rgba(90, 120, 180, 0.35);
+  background: linear-gradient(180deg, rgba(244, 247, 255, 0.95), #fff);
+}
+
+body.nf-www.nf-site-v14 .nf-agentic-specialist {
+  margin: 28px 0 8px;
+  padding: 22px 20px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--panel);
+}
+
+body.nf-www.nf-site-v14 .nf-agentic-step--highlight {
+  border-color: rgba(200, 163, 73, 0.4);
+  background: linear-gradient(180deg, rgba(255, 251, 242, 0.95), var(--panel));
+}
+
+@media (min-width: 900px) {
+  body.nf-www.nf-site-v14 .nf-agentic-grid--specialist {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
 .nf-live-proof-receipt {
   flex: 1;
 }

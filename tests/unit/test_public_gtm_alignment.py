@@ -99,6 +99,8 @@ def test_homepage_multi_product_playground() -> None:
     text = (ROOT / "index.html").read_text(encoding="utf-8")
     assert "nf-live-proof-lanes" in text
     assert "nf-product-lane-strip" in text
+    assert "Governance specialist" in text
+    assert "agentic-specialist" in text
     assert "Trust Brief" in text
     assert "Bank Pilot" in text
     js = (ROOT / "assets" / "noetfield-live-proof.js").read_text(encoding="utf-8")
@@ -106,6 +108,8 @@ def test_homepage_multi_product_playground() -> None:
     assert "bank_board_report" in js
     assert "msb_transfer_intent" in js
     assert "agentic_workflow" in js
+    assert "specialist_investigate" in js
+    assert 'specialist: "Governance specialist"' in js
 
 
 def test_work_with_us_program_page() -> None:

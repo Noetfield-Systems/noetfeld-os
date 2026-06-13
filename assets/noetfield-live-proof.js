@@ -11,6 +11,7 @@
     trust_brief: "Trust Brief",
     bank: "Bank Pilot",
     automation: "AI automation",
+    specialist: "Governance specialist",
     partner: "Partner shadow",
   };
 
@@ -125,6 +126,50 @@
       decision: "allow",
       score: "0.93",
       evidence: "sandbox · tle · export",
+    },
+    {
+      key: "specialist_investigate",
+      lane: "specialist",
+      label: "Governance specialist · investigate gaps",
+      action: "investigate_purview_gaps",
+      actor: "governance-specialist",
+      context: "Agentic specialist — investigate Purview label, DLP, and Entra CA coverage before Copilot sign-off",
+      decision: "review",
+      score: "0.78",
+      evidence: "purview · entra · specialist",
+    },
+    {
+      key: "specialist_triage",
+      lane: "specialist",
+      label: "Governance specialist · confidence triage",
+      action: "triage_operational_intent",
+      actor: "governance-specialist",
+      context: "Policy-bound triage — confidence score routes allow, review, or deny on metadata-only M365 evidence",
+      decision: "review",
+      score: "0.76",
+      evidence: "policy · confidence · rid",
+    },
+    {
+      key: "specialist_draft_tle",
+      lane: "specialist",
+      label: "Governance specialist · draft TLE",
+      action: "draft_trust_ledger_entry",
+      actor: "governance-specialist",
+      context: "Draft Trust Ledger Entry YAML, evidence index, and approver chain for human sign-off",
+      decision: "review",
+      score: "0.80",
+      evidence: "tle draft · evidence · approver",
+    },
+    {
+      key: "specialist_human_escalation",
+      lane: "specialist",
+      label: "Governance specialist · escalate to approver",
+      action: "escalate_human_approval",
+      actor: "governance-specialist",
+      context: "High-risk Copilot scope — specialist prepares receipt; named human approver must sign before production",
+      decision: "review",
+      score: "0.81",
+      evidence: "policy · approver chain · board",
     },
     {
       key: "msb_transfer_intent",
@@ -355,6 +400,20 @@
     var receiptHost = qs("#nfLiveProofReceipt", root);
     var scenarioSelect = qs('[name="scenario"]', form);
     skeletonReceipt(receiptHost);
+
+    try {
+      var sp = new URLSearchParams(window.location.search);
+      var laneParam = sp.get("lane");
+      if (laneParam && LANE_LABELS[laneParam]) {
+        activeLane = laneParam;
+        document.querySelectorAll("[data-live-proof-lane]").forEach(function (b) {
+          var on = b.getAttribute("data-live-proof-lane") === laneParam;
+          b.classList.toggle("is-active", on);
+          b.setAttribute("aria-pressed", on ? "true" : "false");
+        });
+      }
+    } catch (_) {}
+
     bindLaneFilters(form);
     applyScenarioOfTheDay(form);
 
