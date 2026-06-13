@@ -6,7 +6,7 @@ import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-WWW_VER = "27"
+WWW_VER = "28"
 
 # Copilot Governance Pack — locked lead SKU ($2k–10k · 90 days · board PDF success signal)
 PILOT_SKU = "Copilot Governance Pack"
@@ -48,7 +48,7 @@ SCOPE_BADGES = {
 # Commercial narrative — SSOT: docs/strategy/NOETFIELD_COMMERCIAL_SSOT_LOCKED_v1.md · docs/GTM_COPYBOOK.md
 COPY = {
     "meta_home": "Board-grade Copilot governance for EU and US regulated institutions — tamper-evident decision records, signed TLE receipts, fail-closed export. Copilot Governance Pack $2k–10k.",
-    "hero_h1": "Board-grade trust — the audit trail your Copilot deployment will be asked for later",
+    "hero_h1": "The audit trail your Copilot deployment will be asked for later",
     "hero_lead": (
         "Noetfield is the <strong>AI Governance &amp; Evidence</strong> layer for Microsoft 365 Copilot — "
         "<strong>board-grade, tamper-evident decision records</strong> for <strong>EU and US regulated institutions</strong>. "
@@ -1885,7 +1885,7 @@ def main() -> None:
  <section class="nf-section-block" aria-labelledby="inv-04">
  <div class="nf-section-block-head"><span class="nf-section-num" aria-hidden="true">04</span><div>
  <p class="nf-eyebrow" id="inv-04">Honest milestone stack</p>
- <h2>Available now vs what capital accelerates</h2>
+ <h2>Shipped today · what capital accelerates next</h2>
  <p class="nf-section-lead">No fake traction. Product converts in a 5-minute demo — economic proof is a contracted pilot and referenceable board PDF.</p>
  </div></div>
  <div class="nf-trust-signals-grid">

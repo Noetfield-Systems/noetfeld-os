@@ -16,7 +16,7 @@
 | **Packaging** | Published tiers on `/pricing/` — free developer access · Copilot Governance Pack · 3 contract SKUs. |
 | **Agentic** | Agents execute investigate → triage → draft TLE → act on low-risk — not “AI assist” alone. |
 | **Three verbs** | Evaluate · Record · Export |
-| **Complement line** | Complement Purview and Copilot Control System — not replace. Metadata-only M365. |
+| **Complement line** | Metadata-only M365 · signed execution receipts on every Copilot go/no-go · board PDF + procurement ZIP. |
 | **Primary CTA (lead)** | Apply for pilot ($2k–10k) → `/trust-brief/intake/?interest=pilot&vector=copilot-governance` |
 | **Primary CTA (land)** | Request Trust Brief → `/trust-brief/intake/` |
 | **Primary CTA (try)** | Start free sandbox → `/start/` |

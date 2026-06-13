@@ -33,11 +33,11 @@
  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,400..700;1,14..32,400..700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" />
  <link rel="stylesheet" href="/assets/noetfield-tokens.css" />
  <link rel="stylesheet" href="/assets/noetfield-shell.css" />
- <link rel="stylesheet" href="/assets/noetfield-www.css?v=27" />
+ <link rel="stylesheet" href="/assets/noetfield-www.css?v=28" />
  <link rel="stylesheet" href="/assets/noetfield-intake.css" />
  <script src="/assets/noetfield-intake-email.js" defer></script>
  <script src="/assets/noetfield-intake-api.js" defer></script>
- <script src="/assets/noetfield-shell.js?v=27" defer></script>
+ <script src="/assets/noetfield-shell.js?v=28" defer></script>
 
  <!-- legacy inline removed — see noetfield-intake.css -->
 
@@ -442,6 +442,10 @@
  function intakeVector(){
  try{
  var sp = new URLSearchParams(location.search);
+ if (sp.get("interest") === "design-partner") {
+  sp.set("interest", "pilot");
+  history.replaceState(null, "", location.pathname + "?" + sp.toString());
+ }
  return (sp.get("vector") || sp.get("interest") || sp.get("source") || "trust-brief-intake").trim();
  }catch(e){ return "trust-brief-intake"; }
  }

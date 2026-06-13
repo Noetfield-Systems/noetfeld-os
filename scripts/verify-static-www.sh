@@ -23,7 +23,7 @@ check_file() {
 }
 
 check_file "homepage pilot-first" index.html \
-  'noetfield-www.css?v=27' 'nf-site-v14' 'Board-grade trust' \
+  'noetfield-www.css?v=28' 'nf-site-v14' 'Board-grade trust' \
   'tamper-evident decision records' 'nfScenarioOfDay' \
   'Buyer voices' 'Export assurance' 'data-live-proof-hero' \
   'Apply for pilot ($2k–10k)' '01 · Pilot' 'Built for regulated EU and US' \
@@ -35,14 +35,14 @@ check_file "homepage wave1 journey" index.html \
 
 check_file "start sandbox page" start/index.html \
   'nf-hero-flow' 'Try in minutes' '14-day trial' '50 evaluate calls' 'Apply for pilot' \
-  'data-trial-os-flow' 'noetfield-www.css?v=27'
+  'data-trial-os-flow' 'noetfield-www.css?v=28'
 
 check_file "pricing packaging page" pricing/index.html \
   'Published tiers' 'Apply for pilot ($2k–10k)' 'Milestone pricing' 'Developer access · free' \
-  'noetfield-www.css?v=27' 'What regulated buyers receive from Noetfield'
+  'noetfield-www.css?v=28' 'What regulated buyers receive from Noetfield'
 
 check_file "pilot landing page" copilot/pilot/index.html \
-  'noetfield-www.css?v=27' 'Board-grade trust' 'GTM-locked pilot success signals' \
+  'noetfield-www.css?v=28' 'Board-grade trust' 'GTM-locked pilot success signals' \
   'interest=pilot' 'nfPilotApplyForm' 'Milestone pricing' \
   'Export assurance' 'QuickScan' 'Pilot deliverables' 'tamper-evident' \
   'Copilot Governance Pack' 'Regulated buyer map' 'Honest scope'
@@ -57,7 +57,7 @@ check_file "trust center diligence theme" trust/index.html \
   'nf-trust-diligence' 'fail closed' 'Metadata-only'
 
 check_file "investors honesty" investors/index.html \
-  'do not inflate ARR' 'Governance Pack' 'tamper-evident'
+  'do not inflate ARR' 'Governance Pack' 'tamper-evident' 'Board PDF pilots open' 'Shipped today'
 
 check_file "copilot dual artifact" copilot/index.html \
   'nf-hero-artifacts' 'Apply for pilot' 'board-grade governance'
@@ -70,15 +70,26 @@ check_file "commercial SSOT" docs/strategy/NOETFIELD_COMMERCIAL_SSOT_LOCKED_v1.m
   'OFFERINGS_LOCKED' 'Trust Brief' 'operations@noetfield.com' 'W3 economic signal'
 
 check_file "ai-automation lane B" ai-automation/index.html \
-  'Make your AI automation defensible' 'Apply for pilot' 'noetfield-www.css?v=27'
+  'Make your AI automation defensible' 'Apply for pilot' 'noetfield-www.css?v=28'
 
 # Version coherence on primary hubs
 for f in index.html trust/index.html copilot/index.html msp/index.html federal/index.html investors/index.html start/index.html pricing/index.html faq/index.html contact/index.html enterprise/index.html; do
-  if [[ -f "$f" ]] && ! grep -qF 'noetfield-shell.js?v=27' "$f"; then
-    bad "shell v27 on $f"
+  if [[ -f "$f" ]] && ! grep -qF 'noetfield-shell.js?v=28' "$f"; then
+    bad "shell v28 on $f"
   fi
 done
-[[ "$fail" -eq 0 ]] && ok "shell v27 on primary hubs"
+[[ "$fail" -eq 0 ]] && ok "shell v28 on primary hubs"
+
+LEGACY_GTM='design-partner|Design partner|Become a design partner|Purview-only trap|Accepting design partners|Available now vs what capital accelerates'
+legacy_fail=0
+for f in index.html copilot/pilot/index.html investors/index.html assets/partials/header.html assets/partials/footer.html; do
+  if [[ -f "$f" ]] && grep -Eiq "$LEGACY_GTM" "$f"; then
+    echo "FAIL verify-static-www: legacy GTM copy in $f" >&2
+    grep -Ei -n "$LEGACY_GTM" "$f" >&2 || true
+    legacy_fail=1
+  fi
+done
+[[ "$legacy_fail" -eq 0 ]] && ok "no legacy design-partner GTM on public www"
 
 check_file "digital trust lane doc" docs/strategy/NOETFIELD_DIGITAL_TRUST_LANE_LOCKED_v1.md \
   'Digital Trust Lane' 'North star' 'Regulated buyer map' 'Honest moat' 'Learn · Add · Implement · Earn'

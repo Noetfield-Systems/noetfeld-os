@@ -1,7 +1,7 @@
-# Design Partner SOW Outline — Copilot Governance Pilot
+# Copilot Governance Pack SOW Outline — 90-day pilot
 
-**Audience:** Founder + design partner legal/procurement  
-**GTM lock:** One contracted org uses a board PDF in a real governance meeting ($2k–10k pilot OK)  
+**Audience:** Founder + buyer legal/procurement  
+**GTM lock:** One contracted org uses a board PDF in a real governance meeting ($2k–10k · Copilot Governance Pack)  
 **Not legal advice** — customize per engagement.
 
 ## One-line scope
@@ -15,7 +15,7 @@ Noetfield provides the **AI Governance & Evidence layer** for a Microsoft 365 Co
 | Deliverable | Description |
 |-------------|-------------|
 | Governance evaluate | Pre-execution allow/deny/review with RID lineage |
-| Evidence index | Metadata-only Purview, Entra ID, Audit, SharePoint connectors (read-only); indexes configured controls — does not replace Microsoft Purview/DLP |
+| Evidence index | Metadata-only Purview, Entra ID, Audit, SharePoint connectors (read-only); indexes configured controls |
 | TLE v1 | Signed go/no-go with confidence score + sequential approval chain |
 | Board pack | JSON, HTML, PDF export |
 | Procurement pack | One-click ZIP (JSON + PDF + README + audit slice) |
@@ -39,8 +39,8 @@ Noetfield provides the **AI Governance & Evidence layer** for a Microsoft 365 Co
 
 | Term | Example |
 |------|---------|
-| Duration | 4–6 weeks |
-| Fee | $2,000–$10,000 (pilot / design partner) |
+| Duration | 4–6 weeks (up to 90-day program band) |
+| Fee | $2,000–$10,000 (Copilot Governance Pack) |
 | Data | Metadata only; no content exfiltration |
 | Support | Weekly check-in + `make verify-gtm` demo environment |
 | Reference | Case study rights (optional, by mutual agreement) |
@@ -48,14 +48,7 @@ Noetfield provides the **AI Governance & Evidence layer** for a Microsoft 365 Co
 ## Artifacts to attach
 
 - `docs/copilot/PROCUREMENT_ONE_PAGER.md`
-- `docs/references/GOVERNANCE_SOURCES_BOOK_v1.md` (framework orientation)
-- TLE samples: `/trust-ledger/sample-report/`
-- Demo: `/copilot/demo/`
+- `docs/copilot/DESIGN_PARTNER_PIPELINE_v1.md` (internal ops name — public SKU: Copilot Governance Pack)
+- Sample TLE: `/trust-ledger/sample-report/`
 
-## Verify before kickoff
-
-```bash
-make dev-local
-make verify-gtm
-make dev-local-tunnel-bg && make demo-url
-```
+**Intake:** `/trust-brief/intake/?interest=pilot&vector=copilot-governance`

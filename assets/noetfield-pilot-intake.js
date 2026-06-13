@@ -1,4 +1,4 @@
-/** Design-partner pilot apply — Sumsub-class inline intake → trust-brief router */
+/** Copilot Governance Pack pilot apply — Sumsub-class inline intake → trust-brief router */
 (function () {
   "use strict";
 

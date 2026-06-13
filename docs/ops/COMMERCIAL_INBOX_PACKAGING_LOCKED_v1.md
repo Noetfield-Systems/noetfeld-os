@@ -25,7 +25,7 @@
 | Sandbox signup | `/start/` form | Yes — product only | No email required | — |
 | Sandbox limit hit | 50 evaluates / 14d expiry | Optional nurture | Agentic queue | `Noetfield — Sandbox upgrade (RID-…)` |
 | Production keys | `/docs/api/` · `/pricing/` | No | Trust Brief or pilot intake | `Noetfield — Production API keys (RID-…)` |
-| Design partner apply | `/copilot/pilot/` | No | `?interest=pilot` intake | `Noetfield — Design partner apply (RID-…)` |
+| Copilot Governance Pack apply | `/copilot/pilot/` | No | `?interest=pilot` intake | `Noetfield — Governance Pack apply (RID-…)` |
 | Trust Brief purchase | `/trust-brief/intake/` | No | SOW kickoff | `Noetfield — Trust Brief Intake (RID-…)` |
 | Bank Pilot | `/bank-pilot/` · gate | No | `?vector=bank-pilot` | `Noetfield — Bank Pilot inquiry (RID-…)` |
 | Federal / MSP | Lane hubs | No | Lane-specific intake | `Noetfield — Federal Brief (RID-…)` |
@@ -42,7 +42,7 @@ When agentic layer triages inbound:
 | Sandbox nurture | Send async demo link · `/start/` · `/copilot/demo/` | Claim production keys issued |
 | Pilot qualify | Book debrief · attach board PDF sample | Sign SOW without founder |
 | Trust Brief | Confirm $10k scope · schedule kickoff | Discount or SKU creep |
-| Production upgrade | Route to design partner intake | Bypass M365 readiness story |
+| Production upgrade | Route to Copilot Governance Pack intake | Bypass M365 readiness story |
 
 **Handoff:** [AGENTIC_COMMERCIAL_HANDOFF_v1.md](./AGENTIC_COMMERCIAL_HANDOFF_v1.md)
 

@@ -34,10 +34,29 @@ def test_homepage_has_no_prohibited_payment_language() -> None:
 def test_homepage_states_governance_positioning() -> None:
     text = (ROOT / "index.html").read_text(encoding="utf-8").lower()
     assert "governance" in text
-    assert "board-grade trust" in text
+    assert "the audit trail your copilot deployment will be asked for later" in text
     assert "apply for pilot" in text
     assert "eu ai act art. 12" in text
     assert "tamper-evident" in text
+
+
+def test_public_www_has_no_design_partner_language() -> None:
+    paths = (
+        "index.html",
+        "copilot/pilot/index.html",
+        "assets/partials/header.html",
+        "assets/partials/footer.html",
+        "investors/index.html",
+    )
+    for rel in paths:
+        text = (ROOT / rel).read_text(encoding="utf-8").lower()
+        assert "design-partner" not in text, rel
+        assert "design partner" not in text, rel
+
+
+def test_public_www_has_no_legacy_comparison_headlines() -> None:
+    text = (ROOT / "investors/index.html").read_text(encoding="utf-8")
+    assert "Available now vs what capital accelerates" not in text
 
 
 def test_positioning_locked_sentence() -> None:

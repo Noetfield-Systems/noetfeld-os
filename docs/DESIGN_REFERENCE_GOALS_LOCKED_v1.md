@@ -19,7 +19,7 @@
 | **R7** | **Three SKUs only** | Trust Brief ($10k) · Copilot Governance Pack ($2k–10k) · Bank Pilot (custom) — featured cards, no SKU creep. |
 | **R8** | **Mega CTA close** | Full-bleed gold-border band: Apply for pilot ($2k–10k) + Trust Brief secondary. Every hub page ends here. |
 | **R9** | **Lane hubs** | Federal and MSP get same www shell — hero, trust anchors, proof grid, CTA. No separate “compare” surface. |
-| **R10** | **Metadata-only M365** | Copy always: complement Purview, not replace; invalid blocked, allowed receipted, tamper fails on export. |
+| **R10** | **Metadata-only M365** | Copy always: metadata-only evidence index · signed execution receipts · invalid blocked, allowed receipted, tamper fails on export. |
 | **R11** | **Category orientation strip** | Public www zone grid — no vendor names; investor page may name zones. |
 | **R12** | **Pain moment (§07)** | Copilot live → auditor asks — before registry/inventory pitch. |
 | **R13** | **Trust hub** | `/trust/` — honest scope / cert table; linked from footer + procurement. |
@@ -76,7 +76,7 @@ References inform **design quality** only. The website is the artifact.
 | `body.nf-site-v14` | Light-first institutional default (bank / procurement grade) |
 | `assets/noetfield-enterprise.css` | Locked reference stylesheet (receipt mock, cinematic hero, stat bar, sections 01–10) |
 | `assets/noetfield-tokens.css` | Design tokens — `--gold-bright`, `--max-wide: 1320px` |
-| `scripts/rebuild-www-v6.py` | Regenerates all GTM hub pages · `WWW_VER=16` |
+| `scripts/rebuild-www-v6.py` | Regenerates all GTM hub pages · `WWW_VER=27` |
 | `assets/partials/header.html` | Pilot · $2k–10k · Demo · Sandbox · Pricing |
 | `start/index.html` | Developer sandbox signup + async demo flow |
 | `pricing/index.html` | Published tiers · sandbox vs production |
@@ -88,7 +88,7 @@ References inform **design quality** only. The website is the artifact.
 
 ## Verify
 
-- Homepage E2E: `audit trail your Copilot deployment`, `Start free sandbox`, `Published tiers`, `Fully agentic workflows`, `Become a design partner`, `5-minute demo`
+- Homepage E2E: `audit trail your Copilot deployment`, `Apply for pilot ($2k–10k)`, `Published tiers`, `Fully agentic workflows`, `Commercial path`, `5-minute demo`
 - `/start/` sandbox signup · `/pricing/` tier table
 - `/trust/` live with honest cert table
 - `/trust-ledger/verify/` tamper walkthrough
