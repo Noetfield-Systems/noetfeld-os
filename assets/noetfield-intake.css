@@ -210,3 +210,14 @@ h1{ font-size: 30px; }
 @media (max-width: 760px){
 .stickyText{display:none}
 }
+
+body.intake-pilot-mode .heroShell--pilot{
+border-color: rgba(200,163,73,.42);
+}
+body.intake-pilot-mode .pilot-scope-fields .groupTitle{
+color: var(--gold, #c8a349);
+}
+body.intake-pilot-mode #tbTierOut{
+font-size: 15px;
+line-height: 1.35;
+}

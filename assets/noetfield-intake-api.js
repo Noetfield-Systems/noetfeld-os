@@ -69,7 +69,9 @@
         }
       } catch (_) {}
 
-      var message = notes || summary || "Trust Brief intake form submitted.";
+      var message = notes || summary || (window.NFIntakePilot && window.NFIntakePilot.isPilotIntake()
+        ? "Copilot Governance Pack pilot application submitted."
+        : "Trust Brief intake form submitted.");
       var submitBtn = form.querySelector('button[type="submit"]');
       var okWrap = document.getElementById("tbOk");
       var errWrap = document.getElementById("tbIntakeErr");
@@ -105,7 +107,10 @@
         .catch(function (err) {
           if (submitBtn) {
             submitBtn.disabled = false;
-            submitBtn.textContent = "Send intake";
+            submitBtn.textContent =
+              window.NFIntakePilot && window.NFIntakePilot.isPilotIntake()
+                ? "Submit pilot application"
+                : "Send intake";
           }
           if (errWrap) {
             errWrap.style.display = "block";

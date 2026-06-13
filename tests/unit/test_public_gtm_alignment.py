@@ -77,6 +77,15 @@ def test_pilot_page_has_lane_depth_blocks() -> None:
         assert needle in text, needle
 
 
+def test_pilot_intake_page_has_governance_pack_mode() -> None:
+    text = (ROOT / "trust-brief" / "intake" / "index.html").read_text(encoding="utf-8")
+    assert "noetfield-intake-pilot-mode.js" in text
+    assert "intakeHeroPilot" in text
+    assert "Copilot Governance Pack" in text
+    assert "Submit pilot application" in text
+    assert "tb_pilot_band" in text
+
+
 def test_positioning_locked_sentence() -> None:
     text = (ROOT / "POSITIONING.md").read_text(encoding="utf-8")
     assert (
