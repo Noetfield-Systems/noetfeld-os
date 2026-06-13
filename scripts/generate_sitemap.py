@@ -56,6 +56,11 @@ PRIORITY = {
     "/partners/": 0.88,
     "/trust-ledger/": 0.82,
     "/status/": 0.75,
+    "/next/": 0.85,
+    "/investors/": 0.85,
+    "/investors/diligence/": 0.84,
+    "/contact/": 0.82,
+    "/work-with-us/": 0.82,
     "/faq/": 0.8,
     "/for-whom/": 0.8,
     "/trust-ledger/": 0.8,
@@ -72,13 +77,29 @@ MARKETING_TOP = {
     "copilot",
     "enterprise",
     "status",
+    "next",
+    "investors",
+    "contact",
+    "work-with-us",
+    "federal",
+    "msp",
+    "pricing",
+    "start",
+    "trust",
     "faq",
     "for-whom",
     "privacy",
     "resources",
     "terms",
     "trust-brief",
-    "trust-ledger",
+}
+
+# Nested marketing routes (depth 2)
+MARKETING_NESTED = {
+    ("investors", "diligence"),
+    ("copilot", "pilot"),
+    ("copilot", "demo"),
+    ("copilot", "procurement"),
 }
 
 
@@ -93,6 +114,8 @@ def is_public_route(path: Path) -> bool:
     if depth == 0:
         pass
     elif depth == 1 and rel.parts[0] in MARKETING_TOP:
+        pass
+    elif depth == 2 and tuple(rel.parts[:2]) in MARKETING_NESTED:
         pass
     elif rel.parts[:2] == ("gate", "intake"):
         pass

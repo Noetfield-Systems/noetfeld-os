@@ -30,11 +30,14 @@ npx vercel --prod --yes --scope noetfield-systems --project web
 ## Verify
 
 ```bash
-curl -sS https://www.noetfield.com/api/intake/health | jq .
+./scripts/check-intake-health.sh
+# or: curl -sS https://www.noetfield.com/api/intake/health | jq .
 # expect: "www_email_configured": true, "enabled": true, "delivery_mode": "resend"
 ```
 
 Submit [noetfield.com/contact/](https://www.noetfield.com/contact/) with a real email — ops inbox + auto-ack should arrive.
+
+**Public ops checklist:** [noetfield.com/next/#next-ops](https://www.noetfield.com/next/#next-ops)
 
 ## Platform (optional persistence)
 

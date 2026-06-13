@@ -138,6 +138,16 @@ def test_status_intake_health_widget() -> None:
     assert "noetfield-intake-status.js" in text
 
 
+def test_next_steps_hub_page() -> None:
+    text = (ROOT / "next" / "index.html").read_text(encoding="utf-8")
+    assert "next-buyer" in text
+    assert "next-investor" in text
+    assert "next-ops" in text
+    assert "RESEND_API_KEY" in text
+    index = (ROOT / "index.html").read_text(encoding="utf-8")
+    assert "/next/" in index
+
+
 def test_work_with_us_program_page() -> None:
     text = (ROOT / "work-with-us" / "index.html").read_text(encoding="utf-8")
     assert "Work with Noetfield" in text

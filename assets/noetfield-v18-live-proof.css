@@ -197,6 +197,22 @@ body.nf-www .nf-vault-check span {
   color: var(--muted2);
 }
 
+body.nf-www .nf-loop--next .nf-loop-step {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+body.nf-www .nf-loop--next .nf-loop-step .btn {
+  align-self: flex-start;
+  margin-top: auto;
+}
+
+body.nf-www .nf-loop-step--gold {
+  border-color: rgba(200, 163, 73, 0.45);
+  background: linear-gradient(180deg, rgba(255, 251, 242, 0.95), var(--panel, #fff));
+}
+
 body.nf-www.nf-site-v14 .nf-agentic-specialist {
   margin: 28px 0 8px;
   padding: 22px 20px;

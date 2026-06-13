@@ -23,7 +23,7 @@ check_file() {
 }
 
 check_file "homepage pilot-first" index.html \
-  'noetfield-www.css?v=39' 'nf-site-v14' 'Board-grade trust' \
+  'noetfield-www.css?v=40' 'nf-site-v14' 'Board-grade trust' \
   'data-live-proof-hero' 'nf-live-proof-lanes' 'nf-product-lane-strip' \
   'Governance specialist' 'agentic-specialist' 'VC diligence' \
   'Trust Brief' 'Bank Pilot' 'Explore product lanes' \
@@ -45,14 +45,14 @@ fi
 
 check_file "start sandbox page" start/index.html \
   'nf-hero-flow' 'Try in minutes' '14-day trial' '50 evaluate calls' 'Apply for pilot' \
-  'data-trial-os-flow' 'noetfield-www.css?v=39'
+  'data-trial-os-flow' 'noetfield-www.css?v=40'
 
 check_file "pricing packaging page" pricing/index.html \
   'Published tiers' 'Apply for pilot ($2k–10k)' 'Milestone pricing' 'Developer access · free' \
-  'noetfield-www.css?v=39' 'What regulated buyers receive from Noetfield'
+  'noetfield-www.css?v=40' 'What regulated buyers receive from Noetfield'
 
 check_file "pilot landing page" copilot/pilot/index.html \
-  'noetfield-www.css?v=39' 'Board-grade trust' 'GTM-locked pilot success signals' \
+  'noetfield-www.css?v=40' 'Board-grade trust' 'GTM-locked pilot success signals' \
   'interest=pilot' 'nfPilotApplyForm' 'Milestone pricing' \
   'Export assurance' 'QuickScan' 'Pilot deliverables' 'tamper-evident' \
   'Copilot Governance Pack' 'Regulated buyer map' 'Honest scope' \
@@ -60,7 +60,7 @@ check_file "pilot landing page" copilot/pilot/index.html \
   'noetfield-intake-core.js' 'nfPilotApplyStatus'
 
 check_file "work with us program" work-with-us/index.html \
-  'noetfield-www.css?v=39' 'Work with Noetfield' 'Connector' 'Facilitator' \
+  'noetfield-www.css?v=40' 'Work with Noetfield' 'Connector' 'Facilitator' \
   'Co-partner' 'Apply to work with us' 'nfPartnerApplyForm' 'Apply → enable → earn' \
   'noetfield-intake-core.js' 'nfPartnerApplyStatus' 'Investor' '/investors/' \
   'nf-wwu-investor-spotlight' 'nf-wwu-lane-pill' 'noetfield-work-with-us.js'
@@ -85,10 +85,14 @@ check_file "msp end-client buyer block" msp/index.html \
   'msp-end-client' 'End client' 'Apply for pilot' '/copilot/pilot/'
 
 check_file "status intake health" status/index.html \
-  'data-intake-health-host' 'noetfield-intake-status.js' 'Intake delivery'
+  'data-intake-health-host' 'noetfield-intake-status.js' 'Intake delivery' '/next/'
 
 check_file "header investors nav" assets/partials/header.html \
-  '/investors/diligence/' 'Investors'
+  '/investors/diligence/' 'Investors' '/next/'
+
+check_file "next steps hub" next/index.html \
+  'next-buyer' 'next-investor' 'next-partner' 'next-ops' \
+  'RESEND_API_KEY' 'noetfield-intake-status.js' 'Apply for pilot'
 
 check_file "vercel intake API" vercel.json \
   'api/public/chat'
@@ -122,15 +126,15 @@ check_file "commercial SSOT" docs/strategy/NOETFIELD_COMMERCIAL_SSOT_LOCKED_v1.m
   'OFFERINGS_LOCKED' 'Trust Brief' 'operations@noetfield.com' 'W3 economic signal'
 
 check_file "ai-automation lane B" ai-automation/index.html \
-  'Make your AI automation defensible' 'Apply for pilot' 'noetfield-www.css?v=39'
+  'Make your AI automation defensible' 'Apply for pilot' 'noetfield-www.css?v=40'
 
 # Version coherence on primary hubs
 for f in index.html trust/index.html copilot/index.html msp/index.html federal/index.html investors/index.html start/index.html pricing/index.html faq/index.html contact/index.html enterprise/index.html; do
-  if [[ -f "$f" ]] && ! grep -qF 'noetfield-shell.js?v=39' "$f"; then
-    bad "shell v39 on $f"
+  if [[ -f "$f" ]] && ! grep -qF 'noetfield-shell.js?v=40' "$f"; then
+    bad "shell v40 on $f"
   fi
 done
-[[ "$fail" -eq 0 ]] && ok "shell v39 on primary hubs"
+[[ "$fail" -eq 0 ]] && ok "shell v40 on primary hubs"
 
 LEGACY_GTM='design-partner|Design partner|Become a design partner|Purview-only trap|Accepting design partners|Available now vs what capital accelerates'
 legacy_fail=0

@@ -6,7 +6,7 @@ import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-WWW_VER = "39"
+WWW_VER = "40"
 
 # Copilot Governance Pack — locked lead SKU ($2k–10k · 90 days · board PDF success signal)
 PILOT_SKU = "Copilot Governance Pack"
@@ -437,6 +437,7 @@ def homepage_depth_links() -> str:
  <a href="/bank-pilot/">Bank Pilot</a>
  <a href="/ai-automation/">Governance specialist workflow</a>
  <a href="/federal/">Federal lane</a>
+ <a href="/next/">Next steps</a>
  <a href="/copilot/pilot/#digital-trust-lane">Digital trust lane</a>
  <a href="/copilot/pilot/#governance-gaps">Governance gaps</a>
  </nav>"""
@@ -1888,13 +1889,125 @@ def msp_buyer_block() -> str:
  </section>"""
 
 
+def next_steps_lane_block(lane_id: str, eyebrow: str, title: str, lead: str, steps: list[tuple[str, str, str, str]]) -> str:
+    """steps: (num, h3, p, href)"""
+    cards = "".join(
+        f'<article class="nf-loop-step"><p class="nf-loop-step-num">{num}</p>'
+        f"<h3>{h3}</h3><p>{p}</p>"
+        f'<a class="btn btn-secondary" href="{href}">Go →</a></article>'
+        for num, h3, p, href in steps
+    )
+    return f"""
+ <section class="nf-section-block" id="{lane_id}" aria-labelledby="{lane_id}-title">
+ <div class="nf-section-block-head"><span class="nf-section-num" aria-hidden="true">→</span><div>
+ <p class="nf-eyebrow" id="{lane_id}-title">{eyebrow}</p>
+ <h2>{title}</h2>
+ <p class="nf-section-lead">{lead}</p>
+ </div></div>
+ <div class="nf-loop nf-loop--next">{cards}</div>
+ </section>"""
+
+
+def next_steps_buyer_lane() -> str:
+    return next_steps_lane_block(
+        "next-buyer",
+        "Buyer · CISO · GRC",
+        "Copilot governance — demo to board PDF",
+        "Fixed-fee path on three locked SKUs — same evaluate → TLE → export spine.",
+        [
+            ("1", "Sandbox", "14 days · 50 evaluates · mock M365 · no sales call.", "/start/"),
+            ("2", "5-minute demo", "Evaluate → confidence score → TLE sample → export integrity.", "/copilot/demo/"),
+            ("3", "Apply for pilot", "Copilot Governance Pack · $2k–10k · 90 days · async intake.", PILOT_INTAKE),
+            ("4", "Board PDF", "Success signal: one org uses board PDF in a real governance meeting.", "/copilot/pilot/#pilot-success"),
+        ],
+    )
+
+
+def next_steps_investor_lane() -> str:
+    return next_steps_lane_block(
+        "next-investor",
+        "Investor · VC · PE",
+        "Decision-evidence diligence before term sheet",
+        "Shadow evaluate and artifact vault — not model benchmarks or Big Four financial DD.",
+        [
+            ("1", "Diligence vault", "TLE samples · procurement ZIP · 18-item checklist · live demo.", "/investors/diligence/"),
+            ("2", "VC playground", "Shadow evaluate scenarios on homepage governance playground.", "/?lane=investor#nfLiveProofHero"),
+            ("3", "Shadow brief", "2-week fixed scope · IC-ready appendix · $15k–$35k band.", "/investors/diligence/#investor-diligence-apply"),
+            ("4", "Investor brief", "Land · Expand · Channel success model · honest milestones.", "/investors/"),
+        ],
+    )
+
+
+def next_steps_partner_lane() -> str:
+    return next_steps_lane_block(
+        "next-partner",
+        "Partner · MSP · SI",
+        "Readiness → Record attach",
+        "Phase 1 stays in your Purview practice · Phase 2 TLE receipts per tenant.",
+        [
+            ("1", "MSP lane", "Two-tier RACI · readiness → signed TLE attach.", "/msp/"),
+            ("2", "Work with us", "Connector · facilitator · co-partner · partner apply.", "/work-with-us/"),
+            ("3", "5-minute demo", "Show Phase 2 proof to your first tenant prospect.", "/copilot/demo/"),
+            ("4", "First tenant", "Partner success: LOI + one live tenant on Governance Pack.", "/gate/partners/intake/"),
+        ],
+    )
+
+
+def next_steps_ops_lane() -> str:
+    return """
+ <section class="nf-section-block nf-section--elevated" id="next-ops" aria-labelledby="next-ops-title">
+ <div class="nf-section-block-head"><span class="nf-section-num" aria-hidden="true">⚙</span><div>
+ <p class="nf-eyebrow" id="next-ops-title">Operations · intake go-live</p>
+ <h2>Wire forms → operations@noetfield.com</h2>
+ <p class="nf-section-lead">Code is deployed — enable Resend on Vercel <code>web</code> project to turn on async email delivery. Check live status on <a href="/status/">/status/</a>.</p>
+ </div></div>
+ <div class="nf-loop nf-loop--next">
+ <article class="nf-loop-step"><p class="nf-loop-step-num">1</p><h3>Resend domain</h3><p>Verify noetfield.com · create API key · notifications@ sender.</p></article>
+ <article class="nf-loop-step"><p class="nf-loop-step-num">2</p><h3>Vercel env</h3><p><code>RESEND_API_KEY</code> · <code>INTAKE_EMAIL_TO=operations@noetfield.com</code> · redeploy www.</p></article>
+ <article class="nf-loop-step"><p class="nf-loop-step-num">3</p><h3>Verify health</h3><p><code>GET /api/intake/health</code> → <code>www_email_configured: true</code> · test contact form.</p><a class="btn btn-secondary" href="/status/">Check status</a></article>
+ <article class="nf-loop-step nf-loop-step--gold"><p class="nf-loop-step-num">4</p><h3>Reply from inbox</h3><p>Ops notification Reply-To = submitter · auto-ack to prospect · RID in thread.</p><a class="btn btn-secondary" href="/contact/#contact-form">Test contact form</a></article>
+ </div>
+ <aside class="nf-callout"><p><strong>Founder doc:</strong> <code>docs/ops/VERCEL_INTAKE_SETUP.md</code> (repo) · Platform persistence optional — email-only path works when platform intake is disabled.</p></aside>
+ <div class="nf-trust-signals-grid" data-intake-health-host aria-live="polite" style="margin-top:16px">
+ <div class="nf-trust-signal"><span class="nf-trust-signal-label">Intake health</span><span class="nf-signal-badge nf-signal-badge--orientation">Loading…</span></div>
+ </div>
+ </section>"""
+
+
+def next_steps_page_body() -> str:
+    return (
+        hero(
+            "Next steps · Noetfield",
+            "Pick your lane",
+            "What to do next — buyer, investor, partner, or ops",
+            "Every path ends in a <strong>signed receipt</strong> or honest async handoff to operations@noetfield.com. "
+            "Three contract SKUs only — no scope creep.",
+            [("Buyer · Investor · Partner", True), ("Ops go-live checklist", True)],
+            [(PILOT_INTAKE, "Apply for pilot", True), ("/investors/diligence/", "Diligence vault", False)],
+            ["Evaluate → TLE → export", "Board PDF signal", "Metadata-only M365"],
+            receipt("RID-2026-0602-NEXT", "Live paths — <a href=\"/status/\">status</a> · <a href=\"/copilot/demo/\">demo</a>"),
+        )
+        + next_steps_buyer_lane()
+        + next_steps_investor_lane()
+        + next_steps_partner_lane()
+        + next_steps_ops_lane()
+        + mega_cta(
+            "Not sure which lane?",
+            "Async contact · include your Request ID · operations@noetfield.com",
+            ("/contact/#contact-form", "Contact operations"),
+            ("/faq/", "Read FAQ"),
+        )
+        + status_page_script()
+    )
+
+
 def status_intake_health_section() -> str:
     return """
  <section class="nf-section-block nf-section--elevated" aria-labelledby="intake-health-title">
  <div class="nf-section-block-head"><span class="nf-section-num" aria-hidden="true">✉</span><div>
  <p class="nf-eyebrow" id="intake-health-title">Intake delivery</p>
  <h2>Form → operations inbox</h2>
- <p class="nf-section-lead">Live check — www Resend email and platform intake persistence. When email is configured, every form notifies <strong>operations@noetfield.com</strong> with Reply-To set to the submitter.</p>
+ <p class="nf-section-lead">Live check — www Resend email and platform intake persistence. When email is configured, every form notifies <strong>operations@noetfield.com</strong> with Reply-To set to the submitter. <a href="/next/#next-ops">Ops go-live steps →</a></p>
  </div></div>
  <div class="nf-trust-signals-grid" data-intake-health-host aria-live="polite">
  <div class="nf-trust-signal"><span class="nf-trust-signal-label">Checking…</span><span class="nf-signal-badge nf-signal-badge--orientation">Loading</span></div>
@@ -2483,7 +2596,20 @@ def main() -> None:
     write("status/index.html", "Noetfield — Status", "Noetfield platform status.", "/status/",
           hero("", "", "Platform status", "Public surfaces, intake delivery, and workspace availability.",
                [], [("/contact/", "Contact", False)], [], receipt("RID-STATUS", "Operational metadata only.")) +
-          status_intake_health_section() + legal_prose("status") + mega_cta() + status_page_script())
+          status_intake_health_section() + legal_prose("status") + """
+ <section class="nf-section-block" aria-labelledby="status-next-title">
+ <div class="nf-section-block-head"><span class="nf-section-num" aria-hidden="true">→</span><div>
+ <p class="nf-eyebrow" id="status-next-title">Upgrade paths</p>
+ <h2>Next steps by lane</h2>
+ </div></div>
+ <div class="nf-proof-grid">
+ <a class="nf-proof-card" href="/next/#next-buyer"><span class="nf-proof-icon">01</span><div><h3>Buyer path</h3><p>Sandbox → demo → pilot → board PDF</p></div></a>
+ <a class="nf-proof-card" href="/next/#next-investor"><span class="nf-proof-icon">02</span><div><h3>Investor path</h3><p>Vault → shadow brief → IC appendix</p></div></a>
+ <a class="nf-proof-card" href="/next/#next-partner"><span class="nf-proof-icon">03</span><div><h3>Partner path</h3><p>MSP → first tenant → TLE attach</p></div></a>
+ <a class="nf-proof-card" href="/next/"><span class="nf-proof-icon">↗</span><div><h3>Full next steps</h3><p>All lanes + ops checklist</p></div></a>
+ </div>
+ </section>
+""" + mega_cta() + status_page_script())
 
     write("contact/index.html", "Noetfield — Contact", "Contact Noetfield operations.", "/contact/",
           hero("", "Contact", "Operations intake",
@@ -2702,12 +2828,31 @@ def main() -> None:
  <article class="nf-outcome-card"><p class="nf-outcome-label">Big Four</p><h3>Integrated M&A</h3><p>Financial, legal, and enterprise risk — we slot in as governance-evidence slice.</p></article>
  </div>
  </section>
-""" + investor_diligence_intake_form() + mega_cta(
+ """ + investor_diligence_intake_form() + """
+ <section class="nf-section-block" aria-labelledby="vault-next-title">
+ <div class="nf-section-block-head"><span class="nf-section-num" aria-hidden="true">→</span><div>
+ <p class="nf-eyebrow" id="vault-next-title">Next steps</p>
+ <h2>After the vault — typical VC diligence flow</h2>
+ </div></div>
+ <div class="nf-loop">
+ <article class="nf-loop-step"><p class="nf-loop-step-num">1</p><h3>Inspect artifacts</h3><p>Demo · TLE samples · procurement ZIP · export verify — 5 minutes.</p></article>
+ <article class="nf-loop-step"><p class="nf-loop-step-num">2</p><h3>Shadow evaluate</h3><p>Run VC scenarios on target Copilot/M365 governance claims.</p></article>
+ <article class="nf-loop-step"><p class="nf-loop-step-num">3</p><h3>Shadow brief</h3><p>2-week engagement · maturity score · IC-ready memo appendix.</p></article>
+ <article class="nf-loop-step"><p class="nf-loop-step-num">4</p><h3>Term sheet</h3><p>Governance gap list or sample TLE in data room — not policy PDFs alone.</p></article>
+ </div>
+ <p class="nf-section-lead"><a href="/next/#next-investor">Full investor next steps →</a></p>
+ </section>
+""" + mega_cta(
               "Shadow Governance Brief or portfolio scan",
               "2-week fixed scope · IC-ready appendix · operations@noetfield.com",
               ("#investor-diligence-apply", "Request diligence access"),
               ("/investors/", "Investor brief"),
           ))
+
+    write("next/index.html", "Noetfield — Next Steps",
+          "Next steps for buyers, investors, partners, and ops — sandbox to board PDF, diligence vault to shadow brief, intake go-live checklist.",
+          "/next/",
+          next_steps_page_body())
 
     # Console
     write("console/index.html", "Noetfield — Governance Console",
