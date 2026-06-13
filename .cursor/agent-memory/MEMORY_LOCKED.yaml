@@ -1,9 +1,35 @@
 # Noetfield agent memory — LOCKED (versioned in git)
 # Read at EVERY session start. Bump version when adding lessons.
 
-version: 9
-updated: "2026-06-10T12:00:00Z"
+version: 12
+updated: "2026-06-13T18:00:00Z"
 updated_by: NF-CLOUD-AGENT
+
+packaging_v16:
+  master_plan: docs/WWW_V16_PACKAGING_PLAN_LOCKED_v1.md
+  inbox_routing: docs/ops/COMMERCIAL_INBOX_PACKAGING_LOCKED_v1.md
+  start_url: /start/
+  pricing_url: /pricing/
+  sandbox_limits: "14-day trial · 50 evaluate calls · mock M365 · no sales call"
+  contract_skus: 3
+  free_tier: "Developer access — not a fourth contract SKU"
+  agentic_public: "Investigate → triage → draft TLE → act on low-risk; human approvers on high-risk"
+  verify: "make verify-ui-e2e && make verify-static-www"
+
+tier1_ui_v18:
+  masterplan: docs/WWW_V18_TIER1_UI_MASTERPLAN_LOCKED_v1.md
+  north_star: "TTFR < 90s — landing to real RID + confidence + export orientation"
+  build_waves: "A Live Proof + Trial OS · B Shell + Receipt Studio · C Design system + Agent deck · D Visual QA"
+  pick_ids: UI-01 through UI-10
+
+doc_navigation:
+  hub: docs/README.md
+  unified_index: docs/DOC_UNIFIED_INDEX_LOCKED_v1.md
+  domain_index: os/LOCKED_REFERENCE_INDEX.md
+  cursor_layer: .cursor/README.md
+  pick_next: docs/ops/plans/no-asf/QUICK_PICK.md
+  active_ship: os/SHIP_NOW.md
+  verify: make verify-doc-ssot
 
 company_scope:
   our_company: Noetfield
@@ -116,6 +142,8 @@ pre_commit_checklist:
 
 session_start_checklist:
   - Read MEMORY_LOCKED.yaml
+  - Read docs/DOC_UNIFIED_INDEX_LOCKED_v1.md (navigation SSOT)
+  - Read docs/WWW_V16_PACKAGING_PLAN_LOCKED_v1.md when touching www/GTM/commercial copy
   - Read incidents/REGISTRY.md open items
   - Read PROJECT_BOUNDARIES_LOCKED.md
   - Apply SKILL-007 if any rule conflict detected

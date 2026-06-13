@@ -228,16 +228,16 @@ components:
 
     EvidenceIngestResponse:
       type: object
-      required: [evidence_id, ingested_at, status]
+      required: [evidence_id, tenant_id, ingested_at]
       properties:
         evidence_id:
           type: string
+        tenant_id:
+          type: string
+          format: uuid
         ingested_at:
           type: string
           format: date-time
-        status:
-          type: string
-          enum: [indexed]
 
     ConnectorManifest:
       type: object

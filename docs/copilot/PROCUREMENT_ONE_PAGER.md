@@ -14,7 +14,7 @@
 
 ## Framework orientation
 
-Primary citations: `docs/references/GOVERNANCE_SOURCES_BOOK_v1.md` (NIST AI RMF, ISO 42001, EU AI Act, Microsoft Purview). Orientation only — not legal advice.
+Primary citations: `docs/reference/GOVERNANCE_SOURCES_BOOK_v1.md` (NIST AI RMF, ISO 42001, EU AI Act, Microsoft Purview Part B). Purview/M365: we index metadata evidence into TLE — what you configured, not what we replace. Orientation only — not legal advice.
 
 ## Out of scope
 
@@ -28,6 +28,8 @@ make verify-gtm
 ```
 
 Share external demo:
+
+**Commercial SSOT:** `docs/strategy/NOETFIELD_COMMERCIAL_SSOT_LOCKED_v1.md` · **SME pack:** `/copilot/sme/`
 
 ```bash
 make dev-local-tunnel-bg && make demo-url

@@ -11,7 +11,7 @@ export function RiskMeter({ score }: { score: number }) {
     <div className="w-full">
       <div className="mb-2 flex justify-between text-sm">
         <span className="font-medium text-muted">Risk score</span>
-        <span className="font-mono font-semibold text-white">{score}</span>
+        <span className="font-mono font-semibold text-text">{score}</span>
       </div>
       <div className="h-2.5 overflow-hidden rounded-full bg-border">
         <div

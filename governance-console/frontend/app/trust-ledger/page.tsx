@@ -32,7 +32,7 @@ export default function TrustLedgerListPage() {
     <Shell active="trust-ledger">
       <section className="mb-6 flex flex-wrap items-start justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-semibold text-white">Trust Ledger</h2>
+          <h2 className="text-2xl font-semibold text-text">Trust Ledger</h2>
           <p className="mt-2 text-sm text-muted">
             Read-only view of Trust Ledger Entries (TLE v1). Copilot audit trail for procurement sign-off.
           </p>
@@ -65,7 +65,7 @@ export default function TrustLedgerListPage() {
         </select>
         <button
           type="submit"
-          className="rounded-lg border border-border px-4 py-2 text-sm hover:bg-white/5"
+          className="rounded-lg border border-border px-4 py-2 text-sm hover:bg-panel-solid"
         >
           Filter
         </button>
@@ -75,7 +75,7 @@ export default function TrustLedgerListPage() {
             setStatus("");
             load();
           }}
-          className="rounded-lg border border-border px-4 py-2 text-sm hover:bg-white/5"
+          className="rounded-lg border border-border px-4 py-2 text-sm hover:bg-panel-solid"
         >
           Reset
         </button>

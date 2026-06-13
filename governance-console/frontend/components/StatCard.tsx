@@ -21,7 +21,7 @@ export function StatCard({
   const inner = (
     <>
       <p className="nf-eyebrow">{label}</p>
-      <p className="mt-2 text-lg font-semibold text-white">{title}</p>
+      <p className="mt-2 text-lg font-semibold text-text">{title}</p>
       {description && <p className="mt-1 text-sm text-muted">{description}</p>}
       {children && <div className="mt-3">{children}</div>}
     </>

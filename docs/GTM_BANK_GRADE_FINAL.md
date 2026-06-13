@@ -6,7 +6,7 @@ Consolidated from six strategic passes. **Supremacy:** [PRODUCT_TRUTH.md](../PRO
 
 | Topic | Decision | Implementation |
 |-------|----------|----------------|
-| **Trust Ledger** | Reference / sandbox only; no public Stripe | `/trust-ledger/` rewritten; maps to 3 contract tiers |
+| **Trust Ledger** | Reference / sandbox only; no public card checkout | `/trust-ledger/` rewritten; maps to 3 contract tiers |
 | **Playbook / Gumroad** | De-emphasize; framework specs in footer | `/resources/`; Playbook copy updated; kits under `#kits` |
 | **Partners** | Unified hub + legacy slugs | `/gate/partners/` form → `/gate/intake/`; subs redirect with `?vector=`; `intake/` forms retained |
 | **Brand** | Gold + dark web; clinical print for PDFs | `noetfield-print.css` for board/audit exports |

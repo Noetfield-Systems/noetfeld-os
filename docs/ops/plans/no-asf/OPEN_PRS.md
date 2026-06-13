@@ -20,7 +20,7 @@ Only merge **Noetfield GTM / PLAN WITH NO ASF** ship PRs from branches matching:
 
 - TrustField scope PRs
 - Stale governance-console experiments unless founder re-opens
-- Any PR touching `ops/private/` or TrustField implementation
+- Any PR touching `ops/private/` or out-of-scope TrustField product repos
 
 ## Pending ship PR
 

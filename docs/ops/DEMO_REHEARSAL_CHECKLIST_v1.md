@@ -17,7 +17,7 @@
 
 ## Locked narrative (6 steps)
 
-1. **Hook:** "Copilot adoption needs a board-ready decision record, not another chatbot."
+1. **Hook:** "Copilot adoption needs a board-ready decision record — signed TLE export for audit."
 2. **Evaluate** → RID + **confidence score** on `/result/{rid}`
 3. **Connect** M365 (or three evidence types) → Evidence Index
 4. **Draft TLE** → highlight confidence score and go/no-go

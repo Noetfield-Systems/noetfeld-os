@@ -16,6 +16,9 @@ done < <(git ls-files 2>/dev/null | grep -E '(^ops/private/|^docs/internal/)' ||
 
 # 2) Required self-audit files
 for f in \
+  docs/DOC_UNIFIED_INDEX_LOCKED_v1.md \
+  docs/README.md \
+  .cursor/README.md \
   docs/ops/AGENT_SELF_AUDIT_LOOP_LOCKED_v1.md \
   docs/ops/FOUNDER_AGENTIC_COMMERCIAL_AND_NO_CURSOR_AUTORUN_LOCKED_v1.md \
   .cursor/agent-memory/MEMORY_LOCKED.yaml \
@@ -60,8 +63,6 @@ is_allowlisted() {
   return 1
 }
 
-# Implementation bleed patterns (not negation docs)
-# Links to trustfield.ca or TrustField implementation artifacts only (not boundary copy naming TrustField as separate entity)
 BLEED_PATTERNS='trustfield\.ca|canonical.*trustfield\.ca|VENDOR_DILIGENCE_PACK|web/lib/company-copy|deploy TrustField|TrustField Vercel|UPG-003|UPG-004|UPG-011'
 
 product_files=()

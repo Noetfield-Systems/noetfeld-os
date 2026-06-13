@@ -20,8 +20,8 @@ globs:
 1. **Within an approved ship session** (founder ordered), continue P0 → P1 from [os/plan.json](../../os/plan.json) · [os/SHIP_NOW.md](../../os/SHIP_NOW.md) — do not idle mid-bundle.
 2. **Without founder order:** propose next tasks → **ASK** (SKILL-006/007) — do not ship.
 3. **Do not** stop mid-bundle until verify + PR — but **do** ASK before starting the next bundle.
-3. **Do** send every completed session to the system via **ingest** (see [noetfield-ingest-yaml.mdc](noetfield-ingest-yaml.mdc)).
-4. **Do not** edit or weaken **Sina Prompt OS** code — Noetfield repo only.
+4. **Do** send every completed session to the system via **ingest** (see [noetfield-ingest-yaml.mdc](noetfield-ingest-yaml.mdc)).
+5. **Do not** edit or weaken **Sina Prompt OS** code — Noetfield repo only.
 
 **“Don’t block progress”** = do not wait for the next order. **Not** = skip ingest.
 

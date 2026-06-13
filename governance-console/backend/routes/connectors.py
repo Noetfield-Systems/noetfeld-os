@@ -11,7 +11,13 @@ from db.models import ConnectorRecord
 from db.session import get_db
 from schemas import ConnectorRegisterRequest, ConnectorResponse, ConnectorStatusResponse
 from services.m365_connector_sync import ingest_m365_stub_evidence
-from services.m365_oauth_stub import complete_mock_oauth, oauth_start_url
+from services.m365_oauth_stub import (
+    ConnectorEnvError,
+    complete_mock_oauth,
+    ensure_m365_connector_env,
+    oauth_start_url,
+    oauth_success_redirect_url,
+)
 from services.tenant_service import resolve_tenant_id
 
 router = APIRouter(prefix="/connectors", tags=["connectors"])
@@ -94,12 +100,23 @@ def oauth_start(
     )
     if row is None:
         raise HTTPException(status_code=404, detail="Connector not found")
+    try:
+        ensure_m365_connector_env()
+    except ConnectorEnvError as exc:
+        raise HTTPException(status_code=503, detail=str(exc)) from exc
     base = os.getenv("NF_PUBLIC_BASE_URL", "http://127.0.0.1:13080")
     url = oauth_start_url(connector_id, base)
     return RedirectResponse(url=url, status_code=302)
 
 
-@router.get("/{connector_id}/oauth/callback", response_model=None)
+@router.get(
+    "/{connector_id}/oauth/callback",
+    response_model=None,
+    responses={
+        200: {"content": {"application/json": {}}},
+        302: {"content": {"text/html": {}}, "description": "Redirect browser to workspace list"},
+    },
+)
 def oauth_callback(
     connector_id: str,
     request: Request,
@@ -126,12 +143,15 @@ def oauth_callback(
         db.add(row)
         db.commit()
         db.refresh(row)
+    except ConnectorEnvError as exc:
+        raise HTTPException(status_code=503, detail=str(exc)) from exc
     except ValueError as exc:
         raise HTTPException(status_code=400, detail=str(exc)) from exc
     accept = (request.headers.get("accept") or "").lower()
     if "text/html" in accept and "application/json" not in accept.split(",")[0].strip():
+        base = os.getenv("NF_PUBLIC_BASE_URL", "http://127.0.0.1:13080")
         return RedirectResponse(
-            url=f"/workspace/connectors?connected={connector_id}",
+            url=oauth_success_redirect_url(base, connector_id),
             status_code=302,
         )
     return _to_response(row)

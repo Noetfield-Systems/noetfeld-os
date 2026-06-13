@@ -6,7 +6,12 @@ Agent id: noetfield_cloud
 Thread: THREAD-PORTFOLIO
 Plane: [DELIVERY]
 
+SESSION START (before any edit):
+  make agent-session-start
+  (or: python3 ~/Desktop/SourceA/scripts/cursor_agent_self_audit.py session-start --agent noetfield_cloud)
+
 READ FIRST (in repo):
+0. docs/spec/EXECUTION_TRUTH_AGENT_REPLY_LOCKED.md — before every closeout
 1. docs/ops/AGENT_READ_LINKS_LOCKED_v1.md — section "Cloud ship"
 2. docs/ops/NOETFIELD_AGENT_CONTEXT_AND_READ_ORDER_LOCKED_v1.md
 3. os/SHIP_NOW.md + os/plan.json
@@ -18,8 +23,10 @@ NOT: REPO_NOTICE_noetfield_v1.md (that is noetfield_local / All-Documents only)
 RULES:
 - Ship from os/plan.json immediately. Do NOT idle for next Prompt OS order.
 - Do NOT edit Sina PromptOS. Do NOT use Noetfield-All-Documents as primary.
-- Ingest after ship: reported_at in YAML (docs/spec/EXECUTION_TRUTH_AGENT_REPLY_LOCKED.md).
+- Ingest after ship: agent_tag + reported_at in front matter and YAML footer (docs/spec/EXECUTION_TRUTH_AGENT_REPLY_LOCKED.md). Template: reports/cursor-reply-template.txt
 
 MAC ONLY (founder active session): Hub http://127.0.0.1:13020/ — do not assume in cloud VM.
 
-VERIFY: ./scripts/verify-local-dev.sh · ./scripts/tle-smoke.sh · make ship-verify
+VERIFY: make verify-gtm · make verify-lane-fences
+CLOSEOUT (after verify PASS): make ship-closeout  (ingest + sync-sourceA; template: reports/cursor-reply-template.txt)
+SESSION END: make agent-session-close

@@ -66,7 +66,7 @@ sequenceDiagram
 
 ## SIEM / GRC
 
-Map `reason_code` and `policy_refs` to ServiceNow, Archer, or Splunk using `request_id` as the correlation key shared with intake (`POST /api/intake`) and ops email.
+Map `reason_code` and `policy_refs` to your ITSM, GRC, or SIEM tools using `request_id` as the correlation key shared with intake (`POST /api/intake`) and ops email.
 
 ## Enterprise tier (deferred in code)
 

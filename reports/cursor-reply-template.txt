@@ -1,0 +1,34 @@
+---
+agent_tag: nf-local-repo-agent
+agent_display: "[NF-LOCAL-REPO-AGENT]"
+authored_at: "YYYY-MM-DD"
+doc_id: cursor-reply-<task-slug>
+---
+
+> **Authored by:** [NF-LOCAL-REPO-AGENT] — YYYY-MM-DD
+
+**Shipped** — <one-line summary>
+
+## Verify
+
+```text
+<verify command> — PASS | FAIL
+```
+
+---
+
+```yaml
+schema_version: 1
+repo: noetfield
+agent_tag: nf-local-repo-agent
+task: "<exact task string>"
+status: done
+verify_passed: true
+verify_command: "<command you ran>"
+verify_output_summary: "<one line>"
+blocked_reason: ""
+next_action: ""
+evidence_paths: []
+reported_at: "<ISO8601 UTC — REQUIRED>"
+reporter: cursor
+```

@@ -1,3 +1,16 @@
+---
+agent_tag: nf-local-repo-agent
+agent_display: "[NF-LOCAL-REPO-AGENT]"
+agent_role: local-repo-chat-mac
+doc_id: agent-team-sync-locked-v1
+doc_revision: 4
+last_edited_at: "2026-06-06"
+provenance: local-only
+committed: true
+---
+
+> **Authored by:** `[NF-LOCAL-REPO-AGENT]` — local repo chat (Mac). **Cloud agent:** sign your edits `[NF-CLOUD-AGENT]`; do not overwrite this file without UKE + `doc_revision` bump.
+
 # Noetfield agent team sync (LOCKED v1)
 
 | Field | Value |
@@ -45,7 +58,7 @@ These are **not aliases** — different scripts, different scope.
 | Cloud read order | `docs/ops/NOETFIELD_DRIFT_BLUEPRINTS_CLOUD_READ_ORDER_LOCKED_v1.md` | `NF-CLOUD-AGENT` |
 | Code truth | `ops/private/.../NOETFIELD_DRIFT_IMPLEMENTATION_MAP.md` | `NF-CLOUD-AGENT` |
 
-Canonical path: **`docs/references/`** (plural). Redirect: `docs/reference/README.md`.
+Canonical path: **`docs/reference/GOVERNANCE_SOURCES_BOOK_v1.md`** (singular). Drift blueprints: **`docs/references/`** (plural). Redirect: `docs/reference/README.md`.
 
 ---
 
@@ -65,6 +78,34 @@ Canonical path: **`docs/references/`** (plural). Redirect: `docs/reference/READM
 ```
 CLAIM → VERIFY ON DISK → CORRECT → UPDATE REGISTRY → LOG INTAKE
 ```
+
+| Plan ID | Purpose |
+|---------|---------|
+| `no-asf-operating-model` | NO ASF ship loop |
+| `waves-028-042-shipped` | Shipped wave summary |
+| `wave-template-no-asf` | Copy for next sprint |
+| `uke-locked` | Unifying knowledge engine rules |
+| `agent-team-self-heal` | Local/cloud correction protocol |
+
+Path: `ops/private/agent-reference/LOCKED_PLANS/`  
+Registry: `ops/private/agent-reference/LOCKED_PLANS_REGISTRY.yaml`  
+Live state: `ops/private/agent-reference/AGENT_TEAM_STATE.yaml`
+
+### Systems Operating Plan ingest (LOCKED 2026-06-06)
+
+**Status:** Dual-agent concurrence — `[NF-LOCAL-REPO-AGENT]` + `[NF-CLOUD-AGENT]`  
+**Verdict:** Two engines (Lane A product + Lane B Vancouver services), one discipline — every paid engagement → RID + metrics + exportable governance artifact.
+
+**Read order (private — no L0–L3 duplication):** `sources/SYSTEMS_OPERATING_PLAN_SOURCES_LOCKED_2026.md` → `plans/LANE_A_B_OPERATING_MODEL_LOCKED_2026.md` → `plans/VANCOUVER_SMB_GOVERNANCE_GTM_LOCKED_2026.md` → `plans/SYSTEMS_OPERATING_PLAN_LOCKED_2026.md`.
+
+**Cloud without SOURCE:** rsync `ops/private/` from Mac workspace — not git pull.
+
+### Cloud without `ops/private/`
+
+1. Use **this file** + `os/plan.json` + public LOCKED docs  
+2. Write `reports/cursor-reply-latest.txt` — founder ingests on Mac  
+3. Set in handoff: `founder_ingest_required: true`  
+4. Do not claim Mac paths (`~/Desktop/SourceA`, SinaPromptOS) were executed
 
 | Agent | After ship |
 |-------|------------|

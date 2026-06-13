@@ -4,86 +4,60 @@
  <meta charset="UTF-8" />
  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
  <title>Noetfield — Partner Governance Infrastructure</title>
- <meta name="description" content="Partner governance programs: AI policy evaluation, risk intelligence, Trust Ledger audit lineage." />
+ <meta name="description" content="Partner governance programs for banks, credit unions, and licensed execution partners." />
  <meta name="robots" content="index,follow" />
+ <meta name="theme-color" content="#f4f5f8" />
  <link rel="canonical" href="https://www.noetfield.com/partners/" />
  <link rel="icon" href="/noetfield-favicon-512.png" type="image/png" />
+ <link rel="preconnect" href="https://fonts.googleapis.com" />
+ <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&amp;family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700&amp;family=IBM+Plex+Serif:ital,wght@0,500;0,600;0,700&amp;display=swap" />
  <link rel="stylesheet" href="/assets/noetfield-tokens.css" />
  <link rel="stylesheet" href="/assets/noetfield-shell.css" />
- <link rel="stylesheet" href="/assets/noetfield-components.css" />
- <link rel="stylesheet" href="/assets/noetfield-institutional.css" />
- <link rel="stylesheet" href="/assets/noetfield-sales.css" />
- <script src="/assets/noetfield-shell.js" defer></script>
+ <link rel="stylesheet" href="/assets/noetfield-www.css?v=18" />
+ <link rel="stylesheet" href="/assets/noetfield-print.css?v=18" media="print" />
+ <script src="/assets/noetfield-shell.js?v=18" defer></script>
 </head>
-<body>
+<body class="nf-www nf-site-v14">
  <div class="bg" aria-hidden="true"></div>
  <a class="skip" href="#main">Skip to content</a>
  <header id="nfHeader"></header>
- <main id="main" class="wrap nf-page">
- <header class="nf-hero">
- <p class="nf-eyebrow">Partner programs · Canada 2026–27</p>
- <h1>AI governance and risk intelligence for licensed execution partners</h1>
- <p class="nf-lead">
- Programs for banks, credit unions, licensed marketplaces, and supervised payment firms building in Canada: evaluate operational intent, record <strong>Trust Ledger</strong> evidence, return allow or deny. Execution stays in your environment.
- </p>
- </header>
+ <main id="main" class="nf-main nf-page">
 
- <section class="nf-section">
- <h2>What partners get</h2>
- <ul>
- <li><strong>Governance evaluate</strong> — shadow pilots, then enforce when policy owners sign off</li>
- <li><strong>Trust Ledger</strong> — RID-keyed audit export for boards and vendor diligence</li>
- <li><strong>Operational signals</strong> — read-only ingest for risk context (your orchestration owns placement)</li>
- <li><strong>Decision webhooks</strong> — SIEM and GRC tooling hooks where configured</li>
- </ul>
- <p>HTTP contracts and OpenAPI: <a href="/docs/api/">Governance API</a></p>
- </section>
-
- <section class="nf-section">
- <h2>Canada regulatory timing</h2>
- <p>Evidence packs aligned to OSFI E-23 (third-party AI), Consumer-Driven Banking policy gates, and supervision timelines for payment and digital-asset firms — delivered as governance software.</p>
- </section>
-
- <section class="nf-section">
- <h2>Integration pattern</h2>
- <p>Intent and RID into evaluate → decision and compliance log → your licensed stack acts → optional signals → audit export for engagement intake.</p>
- </section>
-
- <section class="nf-offerings" aria-label="Partner intakes">
- <p class="nf-section-label">Partner intakes</p>
- <div class="nf-dir-grid">
- <article class="nf-dir-card featured">
- <p class="meta">Licensed MSB / PSP</p>
- <p>Evaluate before remittance or payment APIs; Trust Ledger for FINTRAC evidence.</p>
- <a class="btn btn-secondary" href="/trust-brief/intake/?vector=partner-msb&amp;interest=partner-msb">MSB partner intake</a>
- </article>
- <article class="nf-dir-card featured">
- <p class="meta">Licensed exchange / VASP</p>
- <p>Shadow evaluate before trading APIs; signal ingest for compliance logs.</p>
- <a class="btn btn-secondary" href="/trust-brief/intake/?vector=partner-exchange&amp;interest=partner-exchange">Partner exchange intake</a>
- </article>
- <article class="nf-dir-card featured">
- <p class="meta">Bank or credit union</p>
- <p>Bank Pilot simulation and E-23 evidence path.</p>
- <a class="btn btn-secondary" href="/bank-pilot/">Bank Pilot</a>
- </article>
- <article class="nf-dir-card">
- <p class="meta">General partner</p>
- <p>Platform or channel integration in regulated markets.</p>
- <a class="btn btn-secondary" href="/gate/intake/?vector=partner-gateway">Partner gateway</a>
- </article>
- </div>
- </section>
-
- <aside class="nf-cta-band">
+ <header class="nf-hero-cinematic">
  <div>
- <h2>Partner Integration Program</h2>
- <p>Extends Trust Brief, Bank Pilot, or Copilot engagements — not a fourth product</p>
+ <p class="nf-hero-kicker"><span class="nf-hero-kicker-dot" aria-hidden="true"></span> Partner programs · Canada</p>
+ <p class="nf-eyebrow">Licensed execution partners</p>
+ <h1>AI governance and risk intelligence for partners</h1>
+ <p class="nf-lead">Programs for banks, credit unions, and supervised firms: evaluate operational intent, record Trust Ledger evidence, return allow or deny.</p>
+ <div class="nf-hero-badges"><span class="nf-badge-pill nf-badge-pill--gold">Governance evaluate</span><span class="nf-badge-pill">Trust Ledger export</span></div>
+ <div class="nf-cta-actions"><a class="btn btn-primary" href="/gate/partners/intake/">Partner intake</a><a class="btn btn-secondary" href="/msp/">MSP lane</a></div>
+ <ul class="nf-marquee" aria-label="Framework alignment"></ul>
  </div>
- <div class="nf-cta-actions">
- <a class="btn btn-primary" href="/trust-brief/intake/?vector=partner-gateway&amp;source=partners">Request partner briefing</a>
- </div>
+ 
+ <aside class="nf-hero-panel" aria-label="What partners get">
+ <p class="nf-hero-panel-label">What partners get</p>
+ <ul class="nf-hero-panel-list"><li>Governance evaluate — shadow then enforce</li><li>Trust Ledger — RID-keyed audit export</li><li>Decision webhooks — SIEM / GRC hooks</li><li>HTTP contracts: Governance API</li></ul>
+ 
  </aside>
+ </header>
+ <section class="nf-trust-signals" aria-labelledby="scope-title">
+ <h2 id="scope-title">Shipped today — honest scope</h2>
+ <p class="nf-trust-signals-lead">Honest scope for procurement — what you can demo, export, and defend today.</p>
+ <div class="nf-trust-signals-grid"><div class="nf-trust-signal"><span class="nf-trust-signal-label">Pre-execution evaluate</span><span class="nf-signal-badge nf-signal-badge--shipped">Shipped</span></div><div class="nf-trust-signal"><span class="nf-trust-signal-label">TLE v1 + workspace UI</span><span class="nf-signal-badge nf-signal-badge--shipped">Shipped</span></div><div class="nf-trust-signal"><span class="nf-trust-signal-label">Board PDF · procurement ZIP</span><span class="nf-signal-badge nf-signal-badge--shipped">Shipped</span></div><div class="nf-trust-signal"><span class="nf-trust-signal-label">M365 metadata connectors</span><span class="nf-signal-badge nf-signal-badge--shipped">Shipped</span></div><div class="nf-trust-signal"><span class="nf-trust-signal-label">Framework citations</span><span class="nf-signal-badge nf-signal-badge--orientation">Orientation</span></div><div class="nf-trust-signal"><span class="nf-trust-signal-label">Payment rails / MSB execution</span><span class="nf-signal-badge nf-signal-badge--na">Out of scope</span></div></div>
+ </section>
+ <section class="nf-section"><div class="nf-cards">
+ <a class="nf-card nf-card--link" href="/docs/api/"><p class="nf-card__tag">API</p><h3>Governance API</h3><p>OpenAPI + evaluate routes.</p></a>
+ <a class="nf-card nf-card--link" href="/msp/"><p class="nf-card__tag">MSP</p><h3>MSP partners</h3><p>Readiness → Record.</p></a>
+ </div></section>
+ <section class="nf-cta-mega" aria-labelledby="cta-h">
+ <h2 id="cta-h">Request Governance Brief</h2>
+ <p>Non-confidential intake · include your Request ID · Trust Brief ($10k), Copilot pilot ($2k–10k), federal or MSP lane · operations@noetfield.com</p>
+ <div class="nf-cta-actions">
+ <a class="btn btn-primary" href="/trust-brief/intake/">Request Governance Brief</a>
+ <a class="btn btn-secondary" href="/copilot/pilot/">Become a design partner</a>
+ </div>
+ </section>
  </main>
  <footer id="nfFooter"></footer>
 </body>

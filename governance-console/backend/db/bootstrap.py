@@ -5,6 +5,7 @@ from sqlalchemy.orm import Session
 
 from db.models import AuditEvent, AuditLog, Base, EvidenceIndex
 from db.session import engine
+from services.evidence_hash import content_hash_for_metadata
 from services.integrity import audit_integrity_hash
 from services.tenant_service import ensure_pilot_tenant
 
@@ -16,32 +17,35 @@ def seed_pilot_evidence(db: Session) -> int:
             "evidence_id": "EV-PURVIEW-001",
             "source": "Purview",
             "title": "Copilot sensitivity label coverage report",
-            "content_hash": "sha256:abc111",
         },
         {
             "evidence_id": "EV-ENTRA-001",
             "source": "EntraID",
             "title": "Conditional access policy export",
-            "content_hash": "sha256:abc222",
         },
         {
             "evidence_id": "EV-AUDIT-001",
             "source": "AuditLog",
             "title": "M365 unified audit log sample (metadata)",
-            "content_hash": "sha256:abc333",
         },
     ]
     added = 0
     for s in samples:
         if db.get(EvidenceIndex, s["evidence_id"]):
             continue
+        storage_ref = "metadata-only/local-dev"
         db.add(
             EvidenceIndex(
                 evidence_id=s["evidence_id"],
                 tenant_id=tenant.tenant_id,
                 source=s["source"],
                 title=s["title"],
-                content_hash=s["content_hash"],
+                content_hash=content_hash_for_metadata(
+                    evidence_id=s["evidence_id"],
+                    source=s["source"],
+                    title=s["title"],
+                    storage_ref=storage_ref,
+                ),
                 sensitivity="confidential",
                 retention_policy="7y",
                 storage_ref="metadata-only/local-dev",

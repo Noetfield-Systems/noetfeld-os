@@ -25,7 +25,7 @@
 
 Hi {{name}},
 
-Copilot adoption needs a **board-ready decision record**, not another chatbot. Noetfield produces the audit trail your Copilot deployment will be asked for later — evaluate intent, index M365 evidence, and export a signed Trust Ledger Entry your board and procurement can defend.
+Copilot adoption needs a **board-ready decision record** — signed TLE export for audit. Noetfield produces the audit trail your Copilot deployment will be asked for later — evaluate intent, index M365 evidence, and export a signed Trust Ledger Entry your board and procurement can defend.
 
 **5-minute demo:** {{demo_url}}/copilot/demo/
 
@@ -52,7 +52,7 @@ Best,
 
 Hi {{name}},
 
-As {{org}} evaluates responsible AI adoption, boards and procurement teams ask for a **defensible decision record** — not another chatbot demo. Noetfield produces signed Trust Ledger Entries with M365 evidence metadata, confidence scores, and board-pack PDF export. We stay in the governance lane only (no payment or custody claims).
+As {{org}} evaluates responsible AI adoption, boards and procurement teams ask for a **defensible decision record** with exportable evidence. Noetfield produces signed Trust Ledger Entries with M365 evidence metadata, confidence scores, and board-pack PDF export. We stay in the governance lane only (no payment or custody claims).
 
 **5-minute demo:** {{demo_url}}/copilot/demo/
 

@@ -8,6 +8,12 @@ cd "$ROOT"
 
 echo "=== plan-with-no-asf-verify ==="
 
+chmod +x scripts/verify-no-competitor-names.sh
+./scripts/verify-no-competitor-names.sh
+
+chmod +x scripts/verify-static-www.sh
+./scripts/verify-static-www.sh
+
 chmod +x scripts/verify-agent-scope.sh
 ./scripts/verify-agent-scope.sh
 

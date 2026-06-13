@@ -12,7 +12,7 @@
 (function () {
   "use strict";
 
-  var SHELL_VERSION = "2026.05.30.1";
+  var SHELL_VERSION = "2026.06.02.v18";
   var PARTIALS_BASE = "/assets/partials";
   var RID_KEY = "nf_rid";
 
@@ -431,6 +431,7 @@
   }
 
   async function injectOfferingsStrip() {
+    if (document.body.classList.contains("nf-www")) return;
     var header = document.getElementById("nfHeader");
     if (!header || document.querySelector(".nfOfferStrip")) return;
     var mount = document.createElement("div");

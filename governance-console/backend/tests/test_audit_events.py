@@ -73,6 +73,43 @@ def test_evaluate_returns_tenant_and_rid(client: TestClient) -> None:
     assert body["tenant_id"] == "00000000-0000-4000-8000-000000000101"
 
 
+def test_evaluate_includes_confidence_factors_and_risk_summary(client: TestClient) -> None:
+    low = client.post(
+        "/evaluate",
+        json={
+            "actor": "test:unit",
+            "action": "copilot_quickscan",
+            "context": "unit test evaluate low risk path",
+            "metadata": {},
+        },
+        headers={"X-Tenant-ID": "copilot-pilot-01"},
+    )
+    assert low.status_code == 200
+    body = low.json()
+    assert len(body["confidence_factors"]) >= 2
+    assert body["confidence_factors"][0]["factor"] == "governance_risk"
+    risk_factor = next(f for f in body["confidence_factors"] if f["factor"] == "risk_summary")
+    assert risk_factor["weight"] == 0.0
+    assert len(body["risk_summary"]) == 1
+    assert body["risk_summary"][0]["severity"] == "Low"
+    assert body["risk_summary"][0]["id"].startswith("RISK-")
+
+    high = client.post(
+        "/evaluate",
+        json={
+            "actor": "test:unit",
+            "action": "payment transfer",
+            "context": "unknown unverified context",
+            "metadata": {"high_risk": True, "pii_exposure": True},
+        },
+        headers={"X-Tenant-ID": "copilot-pilot-01"},
+    )
+    assert high.status_code == 200
+    high_body = high.json()
+    assert high_body["risk_summary"][0]["severity"] in {"High", "Medium"}
+    assert high_body["risk_score"] >= 40
+
+
 def test_audit_export_bundle(client: TestClient) -> None:
     client.post(
         "/evaluate",

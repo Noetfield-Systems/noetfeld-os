@@ -26,6 +26,7 @@
 ```yaml
 schema_version: 1
 repo: noetfield
+agent_tag: nf-local-repo-agent
 task: "<exact task string from Prompt OS>"
 status: done | blocked | partial
 verify_passed: true | false

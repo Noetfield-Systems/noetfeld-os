@@ -39,16 +39,16 @@ export default function TrustLedgerDetailPage() {
       {entry && (
         <section className="space-y-6">
           <header>
-            <h2 className="font-mono text-xl text-white">{entry.tle_id}</h2>
+            <h2 className="font-mono text-xl text-text">{entry.tle_id}</h2>
             <p className="mt-1 text-sm text-muted">
-              Status: <strong className="text-white">{entry.status}</strong>
+              Status: <strong className="text-text">{entry.status}</strong>
               {entry.date ? ` · ${entry.date}` : ""}
             </p>
           </header>
 
           {entry.confidence_score !== undefined && (
             <div className="rounded-lg border border-border bg-panel/60 p-4">
-              <h3 className="text-sm font-semibold text-white">Confidence score</h3>
+              <h3 className="text-sm font-semibold text-text">Confidence score</h3>
               <p className="mt-2 text-3xl font-semibold text-accent">
                 {formatConfidence(entry.confidence_score)}
               </p>
@@ -60,7 +60,7 @@ export default function TrustLedgerDetailPage() {
                   {entry.confidence_factors.map((f) => (
                     <li key={f.factor} className="flex flex-wrap justify-between gap-2 border-t border-border/60 pt-2">
                       <span>
-                        <strong className="text-white">{f.factor}</strong> — {f.detail}
+                        <strong className="text-text">{f.factor}</strong> — {f.detail}
                       </span>
                       <span className="font-mono text-accent">+{Math.round(f.contribution * 100)}%</span>
                     </li>
@@ -71,13 +71,13 @@ export default function TrustLedgerDetailPage() {
           )}
 
           <div className="rounded-lg border border-border bg-panel/60 p-4">
-            <h3 className="text-sm font-semibold text-white">Decision</h3>
+            <h3 className="text-sm font-semibold text-text">Decision</h3>
             <p className="mt-2 text-sm text-muted">{entry.decision ?? "—"}</p>
           </div>
 
           {entry.evidence && entry.evidence.length > 0 && (
             <div className="rounded-lg border border-border bg-panel/60 p-4">
-              <h3 className="text-sm font-semibold text-white">Evidence</h3>
+              <h3 className="text-sm font-semibold text-text">Evidence</h3>
               <ul className="mt-2 list-inside list-disc text-sm text-muted">
                 {entry.evidence.map((ev, i) => (
                   <li key={i}>
@@ -91,7 +91,7 @@ export default function TrustLedgerDetailPage() {
 
           {entry.approval_chain && entry.approval_chain.length > 0 && (
             <div className="rounded-lg border border-border bg-panel/60 p-4">
-              <h3 className="text-sm font-semibold text-white">Approval chain</h3>
+              <h3 className="text-sm font-semibold text-text">Approval chain</h3>
               <ul className="mt-2 space-y-2 text-sm text-muted">
                 {entry.approval_chain.map((step, i) => (
                   <li key={i}>

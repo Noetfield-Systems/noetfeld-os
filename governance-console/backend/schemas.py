@@ -23,6 +23,8 @@ class EvaluateResponse(BaseModel):
     conditions: list[str]
     rid: str
     tenant_id: UUID
+    confidence_factors: list[dict[str, Any]] = Field(default_factory=list)
+    risk_summary: list[dict[str, Any]] = Field(default_factory=list)
 
 
 class AuditRecord(BaseModel):
@@ -56,7 +58,7 @@ class EvidenceIngestRequest(BaseModel):
     evidence_id: str = Field(min_length=3, max_length=64)
     source: str
     title: str = ""
-    content_hash: str
+    content_hash: str = Field(pattern=r"^sha256:[a-f0-9]{64}$")
     sensitivity: str = "internal"
     retention_policy: str = "standard"
     storage_ref: str = ""
@@ -102,9 +104,35 @@ class ConnectorStatusResponse(BaseModel):
 class TleDraftRequest(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
+    # Lane C forbidden: payment_rail, custody_account, wire_transfer_id — not in schema by design.
     source_rid: str | None = None
     evidence_ids: list[str] = Field(min_length=1)
     owner: dict[str, str] | None = None
+    baseline_tle_id: str | None = None
+
+
+class TleDiffEvaluateRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    source_rid: str | None = None
+    evidence_ids: list[str] = Field(min_length=1)
+
+
+class TleDiffEvaluateResponse(BaseModel):
+    helper: str
+    last_tle_id: str | None
+    last_tle_status: str | None
+    baseline_tle_id: str | None
+    proposed_confidence_score: float
+    baseline_confidence_score: float | None
+    confidence_delta: float | None
+    drift_class: str
+    severity: str
+    delta_summary: dict[str, Any]
+    evidence_added: list[str]
+    evidence_removed: list[str]
+    source_rid: str | None
+    has_baseline: bool
 
 
 class TleApproveRequest(BaseModel):

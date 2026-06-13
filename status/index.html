@@ -3,68 +3,66 @@
 <head>
  <meta charset="UTF-8" />
  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
- <title>Noetfield — Platform Status</title>
- <meta name="description" content="Operational status for Noetfield www and platform API." />
+ <title>Noetfield — Status</title>
+ <meta name="description" content="Noetfield platform status." />
  <meta name="robots" content="index,follow" />
+ <meta name="theme-color" content="#f4f5f8" />
  <link rel="canonical" href="https://www.noetfield.com/status/" />
  <link rel="icon" href="/noetfield-favicon-512.png" type="image/png" />
+ <link rel="preconnect" href="https://fonts.googleapis.com" />
+ <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&amp;family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700&amp;family=IBM+Plex+Serif:ital,wght@0,500;0,600;0,700&amp;display=swap" />
  <link rel="stylesheet" href="/assets/noetfield-tokens.css" />
  <link rel="stylesheet" href="/assets/noetfield-shell.css" />
- <link rel="stylesheet" href="/assets/noetfield-components.css" />
- <link rel="stylesheet" href="/assets/noetfield-sales.css" />
- <script src="/assets/noetfield-shell.js" defer></script>
+ <link rel="stylesheet" href="/assets/noetfield-www.css?v=18" />
+ <link rel="stylesheet" href="/assets/noetfield-print.css?v=18" media="print" />
+ <script src="/assets/noetfield-shell.js?v=18" defer></script>
 </head>
-<body>
+<body class="nf-www nf-site-v14">
  <div class="bg" aria-hidden="true"></div>
  <a class="skip" href="#main">Skip to content</a>
  <header id="nfHeader"></header>
- <main id="main" class="wrap nf-page">
- <header class="nf-hero">
- <p class="nf-eyebrow">Status</p>
+ <main id="main" class="nf-main nf-page">
+
+ <header class="nf-hero-cinematic">
+ <div>
+ 
+ 
  <h1>Platform status</h1>
- <p class="nf-lead">Live checks against the Noetfield platform API. Governance evaluation only — not payments or custody.</p>
- </header>
-
- <section class="nf-status-panel" id="statusPanel" aria-live="polite">
- <p id="statusSummary" class="ok">Loading…</p>
- <ul id="statusChecks" style="margin:16px 0 0;padding-left:1.2rem;color:var(--muted);"></ul>
+ <p class="nf-lead">Public surfaces and workspace availability.</p>
+ <div class="nf-hero-badges"></div>
+ <div class="nf-cta-actions"><a class="btn btn-secondary" href="/contact/">Contact</a></div>
+ <ul class="nf-marquee" aria-label="Framework alignment"></ul>
+ </div>
+ 
+ <div class="nf-artifact-panel">
+ <div class="nf-artifact-panel-chrome">
+ <span class="nf-artifact-panel-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+ <span class="nf-artifact-panel-file">tle-receipt.yaml</span>
+ <span class="nf-artifact-panel-badge">Verified</span>
+ </div>
+ <aside class="nf-receipt-mock" aria-label="Trust Ledger Entry receipt">
+ <dl class="nf-receipt-mock-body">
+ <div class="nf-receipt-row"><dt>tle_id</dt><dd>TLE-015DCFB8B953</dd></div>
+ <div class="nf-receipt-row"><dt>decision</dt><dd>allow</dd></div>
+ <div class="nf-receipt-row"><dt>confidence_score</dt><dd>0.82</dd></div>
+ <div class="nf-receipt-row"><dt>rid</dt><dd>RID-STATUS</dd></div>
+ <div class="nf-receipt-row"><dt>evidence_index</dt><dd>purview · entra · audit</dd></div>
+ <div class="nf-receipt-row"><dt>export_integrity</dt><dd class="nf-receipt-ok">PASS · fail closed on tamper</dd></div>
+ </dl>
+ <p class="nf-receipt-mock-footer">Operational metadata only.</p>
+ </aside>
+ </div>
+ </header><div class="nf-prose"><section><p>Full legal text maintained in repo. Contact operations@noetfield.com for questions.</p></section></div>
+ <section class="nf-cta-mega" aria-labelledby="cta-h">
+ <h2 id="cta-h">Request Governance Brief</h2>
+ <p>Non-confidential intake · include your Request ID · Trust Brief ($10k), Copilot pilot ($2k–10k), federal or MSP lane · operations@noetfield.com</p>
+ <div class="nf-cta-actions">
+ <a class="btn btn-primary" href="/trust-brief/intake/">Request Governance Brief</a>
+ <a class="btn btn-secondary" href="/copilot/pilot/">Become a design partner</a>
+ </div>
  </section>
-
- <p style="font-size:var(--text-sm);color:var(--muted2);margin-top:24px;">
- <a href="/docs/api/">Governance API</a> · <a href="/privacy/">Privacy</a> · <a href="/terms/">Terms</a>
- </p>
  </main>
  <footer id="nfFooter"></footer>
- <script>
-  (function () {
-    function apiBase() {
-      var host = window.location.hostname;
-      if (host === "localhost" || host === "127.0.0.1") return "http://127.0.0.1:8001";
-      return "https://platform.noetfield.com";
-    }
-    var summary = document.getElementById("statusSummary");
-    var list = document.getElementById("statusChecks");
-    fetch(apiBase() + "/api/status", { credentials: "omit" })
-      .then(function (r) { return r.json(); })
-      .then(function (data) {
-        var ok = data.status === "operational";
-        summary.textContent = ok ? "All monitored services operational." : "One or more services degraded.";
-        summary.className = ok ? "ok" : "warn";
-        var items = [
-          "API: " + (data.service || "noetfield-platform"),
-          "Governance pilot auth: " + (data.governance_pilot_auth_required ? "required" : "open (dev)"),
-          "Governance API: /api/v1/governance (production pilots)",
-        ];
-        var eco = data.ecosystem || {};
-        if (eco.website_chat) items.push("Website chat: " + (eco.website_chat.configured ? "configured" : "not configured"));
-        if (eco.intake_api) items.push("Intake API: " + (eco.intake_api.enabled ? "enabled" : "disabled"));
-        list.innerHTML = items.map(function (t) { return "<li>" + t + "</li>"; }).join("");
-      })
-      .catch(function () {
-        summary.textContent = "Status API unreachable. Check platform.noetfield.com or try again later.";
-        summary.className = "warn";
-      });
-  })();
- </script>
 </body>
 </html>

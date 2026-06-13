@@ -36,7 +36,7 @@
 | Path | Use |
 |------|-----|
 | `/playbook/` | Governance modules & kits |
-| `/trust-ledger/` | Reference telemetry (no public Stripe) |
+| `/trust-ledger/` | Reference telemetry (no public card checkout) |
 | `/resources/` | Framework specifications & blueprint kits |
 | `/gate/partners/` | Unified partner gateway |
 | `/copilot/quickscan/` | Rapid Copilot snapshot |

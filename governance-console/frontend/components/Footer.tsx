@@ -5,7 +5,7 @@ export function Footer() {
     <footer className="mt-16 border-t border-border py-8">
       <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-4 text-xs text-muted-2 sm:px-6">
         <p>
-          Noetfield — pre-execution governance · no custody or payments ·{" "}
+          Noetfield — AI Governance &amp; Evidence for M365 Copilot · blocked · receipted · fail-closed export ·{" "}
           <a
             href="https://www.noetfield.com"
             className="text-accent hover:underline"

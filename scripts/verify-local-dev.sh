@@ -30,6 +30,8 @@ check "http://127.0.0.1:${PUBLIC}/trust-ledger" "trust-ledger (proxy)"
 check "http://127.0.0.1:${PUBLIC}/docs/api/" "docs/api (static)"
 check "http://127.0.0.1:${PLATFORM}/console" "console (direct)"
 check "http://127.0.0.1:${PUBLIC}/assets/noetfield-tokens.css" "www assets"
+check "http://127.0.0.1:${PUBLIC}/ai-automation/" "ai-automation operator page"
+check "http://127.0.0.1:${PUBLIC}/assets/noetfield-ops.css" "ops page stylesheet"
 
 LEGACY="${NF_DEV_LEGACY_NEXT_PORT:-3000}"
 legacy_code="$(curl -sS -o /dev/null -w "%{http_code}" --max-redirs 0 --connect-timeout 2 \
@@ -70,6 +72,21 @@ if [[ "$dash_eval" == "200" ]] && grep -q '"decision"' /tmp/nf-dash-eval.json 2>
   fi
 else
   echo "FAIL dashboard API via proxy ($dash_eval) — POST /evaluate must hit gov API, not Next HTML" >&2
+  fail=1
+fi
+
+evidence_eid="EV-VERIFY-$(date +%s)"
+evidence_hash="$(python3 -c "import sys; sys.path.insert(0, '${ROOT}/governance-console/backend'); from services.evidence_hash import content_hash_for_metadata; print(content_hash_for_metadata(evidence_id=sys.argv[1], source='Manual', title='verify-local-dev', storage_ref='verify/local'))" "$evidence_eid")"
+evidence_ingest="$(curl -sS -o /tmp/nf-evidence-ingest.json -w "%{http_code}" --connect-timeout 5 \
+  -X POST "http://127.0.0.1:${PUBLIC}/evidence/ingest" \
+  -H "Content-Type: application/json" \
+  -H "X-Tenant-ID: copilot-pilot-01" \
+  -d "{\"evidence_id\":\"${evidence_eid}\",\"source\":\"Manual\",\"title\":\"verify-local-dev\",\"content_hash\":\"${evidence_hash}\",\"storage_ref\":\"verify/local\",\"ingest_mode\":\"metadata_only\"}" \
+  2>/dev/null || echo "000")"
+if [[ "$evidence_ingest" == "201" ]] && grep -q '"tenant_id"' /tmp/nf-evidence-ingest.json 2>/dev/null; then
+  echo "OK   evidence ingest includes tenant_id"
+else
+  echo "FAIL evidence ingest missing tenant_id ($evidence_ingest)" >&2
   fail=1
 fi
 

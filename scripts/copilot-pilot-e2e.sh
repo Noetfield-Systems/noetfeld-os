@@ -44,7 +44,8 @@ done
 echo "OK   approvals"
 
 echo "Step 5: board pack export (json + pdf)"
-curl -sS "${BASE}/tle/${TLE_ID}/export" -H "${TENANT}" | python3 -c "import sys,json; d=json.load(sys.stdin); assert d['export_type']=='board_pack_v1'"
+EXPORT_JSON="$(curl -sS "${BASE}/tle/${TLE_ID}/export" -H "${TENANT}")"
+echo "$EXPORT_JSON" | python3 -c "import sys,json; d=json.load(sys.stdin); assert d['export_type']=='board_pack_v1'; assert d.get('confidence_score',0)>0; assert 'drift_contract' in d"
 pdf_code="$(curl -sS -o /dev/null -w "%{http_code}" "${BASE}/tle/${TLE_ID}/export?format=pdf" -H "${TENANT}")"
 [[ "$pdf_code" == "200" ]] || { echo "FAIL pdf export $pdf_code" >&2; exit 1; }
 echo "OK   export json + pdf"

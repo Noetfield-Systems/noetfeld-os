@@ -9,7 +9,7 @@
 |------|---------|
 | [../NOETFIELD_1000_PROMPT_PACK_LOCKED_v1.md](../NOETFIELD_1000_PROMPT_PACK_LOCKED_v1.md) | **LOCKED** — 1000 prompt pack master index |
 | [PROMPT_PACK_LOCKED/](./PROMPT_PACK_LOCKED/) | GTM 100, agent ops 50, drift 100, tier gates, sources |
-| [no-asf/QUICK_PICK.md](./no-asf/QUICK_PICK.md) | **PLAN WITH NO ASF** — next 25 GTM-weighted plans |
+| [no-asf/QUICK_PICK.md](./no-asf/QUICK_PICK.md) | **PLAN WITH NO ASF** — `make pick-wise` (v14 WISE) |
 | [BRIDGE_NF_PLAN_TO_NF_FUTURE.json](./BRIDGE_NF_PLAN_TO_NF_FUTURE.json) | NF-PLAN ↔ nf-future crosswalk |
 | [INDEX.md](./INDEX.md) | Counts, phase/tier map |
 | [registry.json](./registry.json) | All 1000 plans (machine-readable, v2 prompt-ready) |
@@ -42,6 +42,8 @@
 | T5 | Horizon — experimental |
 
 ## Update policy (agents must follow)
+
+**Registry 1000/1000 done** in [INDEX.md](./INDEX.md) means the NF-PLAN grid is fully enumerated — **not** that shipping is finished. Active execution: [os/plan.json](../../os/plan.json) · [no-asf/GTM_NEXT.md](./no-asf/GTM_NEXT.md) · `make pick-wise`.
 
 1. **After each ship session** — sync done status from plan.json:
    ```bash

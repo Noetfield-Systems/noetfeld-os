@@ -24,5 +24,9 @@ else
   echo ">>> Hot reload OFF — use NF_DEV_HOT_RELOAD=1 to enable"
 fi
 
+if [[ ${#RELOAD_ARGS[@]} -gt 0 ]]; then
+  exec bash "${ROOT}/scripts/dev-python.sh" -m uvicorn noetfield_governance.api:app \
+    "${RELOAD_ARGS[@]}" --host 0.0.0.0 --port "$PORT" --app-dir "${ROOT}/services/governance"
+fi
 exec bash "${ROOT}/scripts/dev-python.sh" -m uvicorn noetfield_governance.api:app \
-  "${RELOAD_ARGS[@]}" --host 0.0.0.0 --port "$PORT" --app-dir "${ROOT}/services/governance"
+  --host 0.0.0.0 --port "$PORT" --app-dir "${ROOT}/services/governance"

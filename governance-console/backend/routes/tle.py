@@ -7,12 +7,24 @@ from sqlalchemy.orm import Session
 
 from db.models import TleEntry
 from db.session import get_db
-from schemas import TleApproveRequest, TleDetail, TleDraftRequest, TleSummary
+from schemas import (
+    TleApproveRequest,
+    TleDetail,
+    TleDiffEvaluateRequest,
+    TleDiffEvaluateResponse,
+    TleDraftRequest,
+    TleSummary,
+)
 from services.board_pack_pdf import render_board_pack_pdf
 from services.procurement_pack import build_procurement_pack_zip
 from services.rbac import can_approve_tle, resolve_workspace_role
 from services.tenant_service import resolve_tenant_id
-from services.tle_service import approve_step, board_pack_export, draft_from_evaluate
+from services.tle_service import (
+    approve_step,
+    board_pack_export,
+    diff_evaluate_vs_last_tle,
+    draft_from_evaluate,
+)
 
 router = APIRouter(prefix="/tle", tags=["tle"])
 
@@ -57,10 +69,30 @@ def create_draft(
             source_rid=body.source_rid,
             evidence_ids=body.evidence_ids,
             owner=body.owner,
+            baseline_tle_id=body.baseline_tle_id,
         )
     except ValueError as exc:
         raise HTTPException(status_code=400, detail=str(exc)) from exc
     return _to_detail(row)
+
+
+@router.post("/diff/evaluate", response_model=TleDiffEvaluateResponse)
+def diff_evaluate_against_last_tle(
+    body: TleDiffEvaluateRequest,
+    db: Session = Depends(get_db),
+    x_tenant_id: str | None = Header(default=None, alias="X-Tenant-ID"),
+) -> TleDiffEvaluateResponse:
+    tenant_id = resolve_tenant_id(x_tenant_id, db)
+    try:
+        result = diff_evaluate_vs_last_tle(
+            db,
+            tenant_id=tenant_id,
+            evidence_ids=body.evidence_ids,
+            source_rid=body.source_rid,
+        )
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+    return TleDiffEvaluateResponse(**result)
 
 
 @router.get("", response_model=list[TleSummary])

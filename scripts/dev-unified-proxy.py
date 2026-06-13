@@ -46,12 +46,14 @@ NEXT_PREFIXES = (
 )
 
 def _is_next_trust_ledger(path: str) -> bool:
-    """Next UI: /trust-ledger, /trust-ledger/new, /trust-ledger/{id} — not www YAML/HTML."""
-    if path == "/trust-ledger" or path.startswith("/trust-ledger/new"):
+    """Next UI: dynamic TLE routes — not static www hub or sample-report HTML."""
+    if path.startswith("/trust-ledger/new"):
         return True
-    if path in ("/trust-ledger/", "/trust-ledger/index.html"):
+    if path in ("/trust-ledger/", "/trust-ledger/index.html", "/trust-ledger"):
         return False
     if path.startswith("/trust-ledger/sample-report"):
+        return False
+    if path.startswith("/trust-ledger/verify"):
         return False
     if path.startswith("/trust-ledger/") and not path.endswith((".html", ".yaml", ".yml", ".md")):
         return True
@@ -63,6 +65,14 @@ _GOV_API_PREFIXES = (
     "/connectors",
     "/evidence/",
 )
+
+
+class _NoRedirect(urllib.request.HTTPRedirectHandler):
+    def redirect_request(self, req, fp, code, msg, headers, newurl):
+        return None
+
+
+_NO_REDIRECT_OPENER = urllib.request.build_opener(_NoRedirect)
 
 
 def _gov_api_route(path: str, method: str, headers: dict[str, str]) -> bool:
@@ -124,7 +134,7 @@ class UnifiedHandler(SimpleHTTPRequestHandler):
             headers={k: v for k, v in self.headers.items() if k.lower() != "host"},
         )
         try:
-            with urllib.request.urlopen(req, timeout=120) as resp:
+            with _NO_REDIRECT_OPENER.open(req, timeout=120) as resp:
                 self.send_response(resp.status)
                 for k, v in resp.headers.items():
                     if k.lower() in ("transfer-encoding", "connection"):
@@ -149,6 +159,12 @@ class UnifiedHandler(SimpleHTTPRequestHandler):
         return _proxy_target(path, self.command, hdrs)
 
     def do_GET(self) -> None:
+        path = self.path.split("?")[0]
+        if path == "/trust-ledger":
+            self.send_response(301)
+            self.send_header("Location", "/trust-ledger/")
+            self.end_headers()
+            return
         target = self._route()
         if target:
             return self._proxy(target)

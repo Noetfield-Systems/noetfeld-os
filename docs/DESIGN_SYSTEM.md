@@ -1,50 +1,32 @@
-# Noetfield design system v3 (www)
+# Noetfield design system v7 (www)
 
-Institutional dark + gold UI for public GTM surfaces. **Do not** change positioning copy or SKU count when editing styles.
+**Ground-up rebuild — one CSS, one generator, reference-grade layout.**
 
-## Stylesheet load order
+## Stack (only these three + optional intake)
 
 ```html
 <link rel="stylesheet" href="/assets/noetfield-tokens.css" />
 <link rel="stylesheet" href="/assets/noetfield-shell.css" />
-<link rel="stylesheet" href="/assets/noetfield-components.css" />
-<link rel="stylesheet" href="/assets/noetfield-institutional.css" />
-<link rel="stylesheet" href="/assets/noetfield-sales.css" />
+<link rel="stylesheet" href="/assets/noetfield-www.css?v=7" />
+<script src="/assets/noetfield-shell.js?v=7" defer></script>
+<body class="nf-www">
 ```
 
-Intake adds [`/assets/noetfield-intake.css`](/assets/noetfield-intake.css).
+Intake adds `noetfield-intake.css` only.
 
-## Tokens
+**Do not** load components, enterprise, institutional, or sales CSS on public pages.
 
-[`noetfield-tokens.css`](/assets/noetfield-tokens.css) — colors, `--font-sans`, `--font-serif`, spacing, `--section-y`, motion.
+## Regenerate + migrate everything
 
-## Components
+```bash
+python3 scripts/rebuild-www-v6.py      # 20 GTM hub pages from zero
+python3 scripts/migrate-all-public-www.py  # force remaining shell pages to v7
+```
 
-| Class | Use |
-|-------|-----|
-| `.nf-page` | Main content wrapper |
-| `.nf-hero` | Page hero (eyebrow, H1 serif, lead) |
-| `.nf-prs` / `.nf-prs-card` | Problem · Risk · Solution |
-| `.nf-trust` | Capability strip (home) |
-| `.nf-offerings` | Three SKU cards |
-| `.nf-cta-band` | Primary CTA footer on page |
-| `.nf-section` | Generic content block |
-| `.nf-api-table` | `/docs/api/` routes |
-| `.nf-status-panel` | `/status/` |
-| `.nf-prose` | Legal / long-form |
+## Reference patterns
 
-## Shell
+[DESIGN_REFERENCE_GOALS_LOCKED_v1.md](./DESIGN_REFERENCE_GOALS_LOCKED_v1.md) — receipt hero, honest scope, numbered sections, three SKUs.
 
-- Header/footer: [`assets/partials/`](/assets/partials/)
-- Loader: [`noetfield-shell.js`](/assets/noetfield-shell.js) v3 (`SHELL_VERSION`)
+## Live preview
 
-## Do not break
-
-- Homepage: **governance evaluation** or **governance execution** in copy; no `pre-execution` on `/`
-- All tier pages: `nfHeader`, `Request Governance Brief`, `noetfield-shell.css`
-- Five nav items only; API in footer **Reference** column
-- [`make verify-final-lock`](/Makefile) and [`scripts/audit_public_site_health.py`](/scripts/audit_public_site_health.py)
-
-## Surface map
-
-Page roles: [public-surface-map.md](strategy/public-surface-map.md)
+`python3 -m http.server 13081` → http://127.0.0.1:13081/

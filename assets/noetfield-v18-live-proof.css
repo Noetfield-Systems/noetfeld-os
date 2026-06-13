@@ -1,0 +1,79 @@
+/* v18 Live Proof Hero panel (UI-01) */
+
+.nf-live-proof-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.nf-live-proof-form {
+  padding: 18px;
+  border-radius: var(--radius, 12px);
+  border: 1px solid var(--line, #e2e5ec);
+  background: var(--panel, #fff);
+  box-shadow: 0 8px 28px rgba(15, 17, 23, 0.06);
+}
+
+.nf-live-proof-form h3 {
+  margin: 0 0 6px;
+  font-size: 0.9375rem;
+  font-weight: 650;
+}
+
+.nf-live-proof-form p {
+  margin: 0 0 14px;
+  font-size: 0.8125rem;
+  color: var(--muted, #4a5060);
+}
+
+.nf-live-proof-form label {
+  display: block;
+  margin-bottom: 10px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--muted, #4a5060);
+}
+
+.nf-live-proof-form input,
+.nf-live-proof-form textarea {
+  display: block;
+  width: 100%;
+  margin-top: 4px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--line, #e2e5ec);
+  font: inherit;
+  font-size: 0.8125rem;
+}
+
+.nf-live-proof-form textarea {
+  min-height: 64px;
+  resize: vertical;
+}
+
+.nf-live-proof-form .btn {
+  width: 100%;
+  margin-top: 4px;
+  min-height: 44px;
+}
+
+.nf-live-proof-receipt {
+  flex: 1;
+}
+
+.nf-live-proof-degraded {
+  color: var(--muted, #4a5060);
+  font-style: italic;
+}
+
+@media (min-width: 960px) {
+  .nf-hero-cinematic:has(.nf-live-proof-panel) {
+    grid-template-columns: minmax(0, 1.05fr) minmax(320px, 0.95fr);
+  }
+}
+
+@media (max-width: 959px) {
+  .nf-live-proof-panel {
+    order: -1;
+  }
+}

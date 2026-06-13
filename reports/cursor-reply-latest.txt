@@ -1,24 +1,47 @@
-Tenth Audit 10-Phase Fix — complete (Noetfield cloud)
+---
+agent_tag: nf-local-repo-agent
+agent_display: "[NF-LOCAL-REPO-AGENT]"
+authored_at: "2026-06-13"
+doc_id: cursor-reply-v18-merge-main
+---
 
-Pre: PR #48 merged to main @ b822423 (tenth audit + iter 18 on main).
+> **Authored by:** [NF-LOCAL-REPO-AGENT] — 2026-06-13
 
-Post-merge truth on main:
-Phase 1: PR #48 merged — iter 18 on main @ b822423
-Phase 2: OPEN_PRS pending cleared; #48 in recently merged window
-Phase 3: tenth-audit branch superseded in merge rule
-Phase 4: GTM_NEXT iter 19 seed live (057–059)
-Phase 5: ship-procurement-checkpoint-verify-054 — hardened checkpoint verify guards
-Phase 6: ship-services-governance-openapi-bridge-055 — procurement OpenAPI + README links
-Phase 7: ship-merged-window-config-056 — MERGED_WINDOW in OPEN_PRS header
-Phase 8: SHIP_DONE_MAP 054–056; ENGINEERING_DONE_MANIFEST iter 18
-Phase 9: SourceA status post–#48; founder 026/#2/#7 documented
-Phase 10: sync + verify PASS; iter 19 proposals 057–059 in GTM_NEXT
+**Merged to main — www v18 tier-1 UI + commercial SSOT**
 
-Verify: ./scripts/plan-with-no-asf-verify.sh — PASS
-Sync: python3 scripts/sync-prompt-pack-status.py — 1000/1000
+## Tenth audit closeout (main @ b822423)
 
-task: Tenth Audit 10-Phase Fix — iter 18 bundle (post-merge closeout)
-agent: NF-CLOUD-AGENT
-main: b822423
-head: 2331756
-next: ASK founder — iter 19 from GTM_NEXT 057–059; do NOT merge #49/#50/#51/#52 without bounded order; agentic 026 Hub; close #2/#7; SourceA sync
+- Phase 1: PR #48 merged — iter 18 on main
+- Phase 2–7: checkpoint verify, OpenAPI bridge, MERGED_WINDOW config shipped
+- Phase 8–10: GTM_NEXT iter 19 seeded; verify PASS
+
+## Shipped on feature branch (now on main)
+
+- www v18: Live Proof Hero, Trial OS, four-act homepage, motion/a11y CSS
+- governance-console: AppShell 2.0, Receipt Studio, Decision Timeline, onboarding
+- Commercial SSOT + SME provider blueprint + `/copilot/sme/` embed
+- v16 packaging: `/start/` · `/pricing/` · agentic workflows
+
+## Docs (new LOCKED)
+
+- `docs/strategy/NOETFIELD_COMMERCIAL_SSOT_LOCKED_v1.md`
+- `docs/strategy/NOETFIELD_SME_PROVIDER_BLUEPRINT_LOCKED_v1.md`
+- `docs/WWW_V18_TIER1_UI_MASTERPLAN_LOCKED_v1.md`
+
+## Next
+
+- Vercel production deploy from main (confirm www.noetfield.com shows v18)
+- Optional: Cloudflare cache purge
+- P1: platform API host for Live Proof `/evaluate` on production
+
+```yaml
+schema_version: 1
+repo: noetfield
+agent_tag: nf-local-repo-agent
+task: "Merge cursor/bank-grade-fullstack-37f0 → main (www v18 + commercial SSOT)"
+status: done
+verify_passed: pending-post-merge
+next_action: "Founder: confirm Vercel deploy · purge CDN cache if needed"
+reported_at: "2026-06-13T00:00:00Z"
+reporter: cursor
+```

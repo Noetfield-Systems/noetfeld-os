@@ -60,7 +60,20 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
   });
   if (!res.ok) {
     const text = await res.text();
-    throw new Error(text || `HTTP ${res.status}`);
+    let message = text || `HTTP ${res.status}`;
+    if (text) {
+      try {
+        const parsed = JSON.parse(text) as { detail?: unknown };
+        if (typeof parsed.detail === "string") {
+          message = parsed.detail;
+        } else if (Array.isArray(parsed.detail)) {
+          message = parsed.detail.map(String).join("; ");
+        }
+      } catch {
+        /* use raw text */
+      }
+    }
+    throw new Error(message);
   }
   return res.json() as Promise<T>;
 }

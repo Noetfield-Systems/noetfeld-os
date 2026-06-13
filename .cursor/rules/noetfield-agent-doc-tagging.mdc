@@ -1,0 +1,55 @@
+---
+description: Agent-authored docs must carry unique tag + date; never edit other agents' docs
+alwaysApply: true
+---
+
+# Noetfield — agent doc tagging (LOCKED for this agent)
+
+## Identity (this Cursor agent — local Mac ship chat)
+
+| Field | Value |
+|-------|-------|
+| `agent_tag` | `nf-local-repo-agent` |
+| `agent_display` | `[NF-LOCAL-REPO-AGENT]` |
+| `agent_role` | `local-repo-chat-mac` |
+
+Cloud ship agent uses **`[NF-CLOUD-AGENT]`** / `nf-cloud-repo-agent` — **do not edit their sections or bump their `doc_revision`**.
+
+## Every document **this agent** creates or fully rewrites
+
+1. **YAML frontmatter** at top (markdown) or header block (`.txt` replies):
+
+```yaml
+---
+agent_tag: nf-local-repo-agent
+agent_display: "[NF-LOCAL-REPO-AGENT]"
+authored_at: "YYYY-MM-DD"
+doc_id: <short-kebab-id>
+---
+```
+
+2. **Prose line** under frontmatter:
+
+`> **Authored by:** [NF-LOCAL-REPO-AGENT] — <date ISO>`
+
+3. **YAML ingest footer** — add when present:
+
+```yaml
+agent_tag: nf-local-repo-agent
+agent_display: "[NF-LOCAL-REPO-AGENT]"
+reporter: cursor
+reported_at: "<ISO8601 UTC>"
+```
+
+## Do NOT
+
+- Edit files whose frontmatter shows `agent_tag: nf-cloud-repo-agent` or `> **Authored by:** [NF-CLOUD-AGENT]`
+- Overwrite `reports/cursor-reply-latest.txt` without the authorship header above
+- Change `doc_revision` on dual-agent LOCKED docs without explicit founder ask
+- Remove or paraphrase another agent's paragraphs — append a new **tagged section** only if founder requires an addendum
+
+## Applies to
+
+- `reports/cursor-reply-latest.txt`
+- New `docs/ops/*` drafts **you** create (prefer `docs/ops/` only when founder asks; else `ops/private/`)
+- Session closeouts under `~/.sina/agent-workspaces/noetfield_cloud/`

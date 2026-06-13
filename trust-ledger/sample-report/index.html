@@ -3,65 +3,69 @@
 <head>
  <meta charset="UTF-8" />
  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
- <title>Trust Ledger Entry v1 — Sample Report | Noetfield</title>
- <meta name="description" content="Procurement-grade Trust Ledger Entry (TLE v1) samples for Copilot go/no-go governance." />
+ <title>Noetfield — TLE v1 Sample Report</title>
+ <meta name="description" content="Sample Trust Ledger Entry YAML reports." />
  <meta name="robots" content="index,follow" />
+ <meta name="theme-color" content="#f4f5f8" />
  <link rel="canonical" href="https://www.noetfield.com/trust-ledger/sample-report/" />
  <link rel="icon" href="/noetfield-favicon-512.png" type="image/png" />
+ <link rel="preconnect" href="https://fonts.googleapis.com" />
+ <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&amp;family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700&amp;family=IBM+Plex+Serif:ital,wght@0,500;0,600;0,700&amp;display=swap" />
  <link rel="stylesheet" href="/assets/noetfield-tokens.css" />
  <link rel="stylesheet" href="/assets/noetfield-shell.css" />
- <link rel="stylesheet" href="/assets/noetfield-components.css" />
- <link rel="stylesheet" href="/assets/noetfield-institutional.css" />
- <link rel="stylesheet" href="/assets/noetfield-sales.css" />
- <script src="/assets/noetfield-shell.js" defer></script>
+ <link rel="stylesheet" href="/assets/noetfield-www.css?v=18" />
+ <link rel="stylesheet" href="/assets/noetfield-print.css?v=18" media="print" />
+ <script src="/assets/noetfield-shell.js?v=18" defer></script>
 </head>
-<body>
+<body class="nf-www nf-site-v14">
  <div class="bg" aria-hidden="true"></div>
  <a class="skip" href="#main">Skip to content</a>
  <header id="nfHeader"></header>
- <main id="main" class="wrap nf-page">
- <header class="nf-hero">
- <p class="nf-eyebrow">TLE v1 · Procurement sample</p>
- <h1>Trust Ledger Entry examples (Go / Conditional / Rejected)</h1>
- <p class="nf-lead">
- Download canonical <strong>TLE v1</strong> YAML records your board and auditors expect for Microsoft 365 Copilot adoption.
- Metadata-only evidence, confidence score, approval chain, and signed <code>audit_digest</code>.
- </p>
+ <main id="main" class="nf-main nf-page">
+
+ <header class="nf-hero-cinematic">
+ <div>
+ <p class="nf-hero-kicker"><span class="nf-hero-kicker-dot" aria-hidden="true"></span> TLE v1 samples</p>
+ <p class="nf-eyebrow">Orientation artifacts</p>
+ <h1>Sample Trust Ledger Entry reports</h1>
+ <p class="nf-lead">Go, conditional, and rejected YAML samples — canonical schema orientation for procurement and engineering.</p>
+ <div class="nf-hero-badges"><span class="nf-badge-pill nf-badge-pill--gold">YAML download</span><span class="nf-badge-pill">Not live records</span></div>
+ <div class="nf-cta-actions"><a class="btn btn-primary" href="/workspace/">Workspace</a><a class="btn btn-secondary" href="/copilot/demo/">5-minute demo</a></div>
+ <ul class="nf-marquee" aria-label="Framework alignment"></ul>
+ </div>
+ 
+ <div class="nf-artifact-panel">
+ <div class="nf-artifact-panel-chrome">
+ <span class="nf-artifact-panel-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+ <span class="nf-artifact-panel-file">tle-receipt.yaml</span>
+ <span class="nf-artifact-panel-badge">Verified</span>
+ </div>
+ <aside class="nf-receipt-mock" aria-label="Trust Ledger Entry receipt">
+ <dl class="nf-receipt-mock-body">
+ <div class="nf-receipt-row"><dt>tle_id</dt><dd>TLE-015DCFB8B953</dd></div>
+ <div class="nf-receipt-row"><dt>decision</dt><dd>allow</dd></div>
+ <div class="nf-receipt-row"><dt>confidence_score</dt><dd>0.82</dd></div>
+ <div class="nf-receipt-row"><dt>rid</dt><dd>RID-2026-0602-SAMPLE</dd></div>
+ <div class="nf-receipt-row"><dt>evidence_index</dt><dd>purview · entra · audit</dd></div>
+ <div class="nf-receipt-row"><dt>export_integrity</dt><dd class="nf-receipt-ok">PASS · fail closed on tamper</dd></div>
+ </dl>
+ <p class="nf-receipt-mock-footer">Orientation sample — not a live record.</p>
+ </aside>
+ </div>
  </header>
-
- <section class="nf-section">
- <h2>Download samples</h2>
- <div class="nf-dir-grid">
- <article class="nf-dir-card featured">
- <p class="meta">Approved</p>
- <p>Copilot rollout authorized with standard controls.</p>
- <a class="btn btn-primary" href="/trust-ledger/sample-report/samples/tle-go-approved.yaml" download>tle-go-approved.yaml</a>
- </article>
- <article class="nf-dir-card">
- <p class="meta">Conditional</p>
- <p>Rollout gated on DLP and retention controls.</p>
- <a class="btn btn-secondary" href="/trust-ledger/sample-report/samples/tle-conditional.yaml" download>tle-conditional.yaml</a>
- </article>
- <article class="nf-dir-card">
- <p class="meta">Rejected</p>
- <p>Deployment not authorized — evidence gaps.</p>
- <a class="btn btn-secondary" href="/trust-ledger/sample-report/samples/tle-rejected.yaml" download>tle-rejected.yaml</a>
- </article>
- </div>
+ <section class="nf-trust-signals" aria-labelledby="scope-title">
+ <h2 id="scope-title">Shipped today — honest scope</h2>
+ <p class="nf-trust-signals-lead">Honest scope for procurement — what you can demo, export, and defend today.</p>
+ <div class="nf-trust-signals-grid"><div class="nf-trust-signal"><span class="nf-trust-signal-label">Pre-execution evaluate</span><span class="nf-signal-badge nf-signal-badge--shipped">Shipped</span></div><div class="nf-trust-signal"><span class="nf-trust-signal-label">TLE v1 + workspace UI</span><span class="nf-signal-badge nf-signal-badge--shipped">Shipped</span></div><div class="nf-trust-signal"><span class="nf-trust-signal-label">Board PDF · procurement ZIP</span><span class="nf-signal-badge nf-signal-badge--shipped">Shipped</span></div><div class="nf-trust-signal"><span class="nf-trust-signal-label">M365 metadata connectors</span><span class="nf-signal-badge nf-signal-badge--shipped">Shipped</span></div><div class="nf-trust-signal"><span class="nf-trust-signal-label">Framework citations</span><span class="nf-signal-badge nf-signal-badge--orientation">Orientation</span></div><div class="nf-trust-signal"><span class="nf-trust-signal-label">Payment rails / MSB execution</span><span class="nf-signal-badge nf-signal-badge--na">Out of scope</span></div></div>
  </section>
-
- <section class="nf-section">
- <h2>Live workspace</h2>
- <p>Create drafts, run approval chain, and export a board pack in the Governance Console.</p>
- <div class="nf-cta-actions" style="display:flex;flex-wrap:wrap;gap:.75rem">
- <a class="btn btn-primary" href="/workspace/">Trust Ledger Workspace</a>
- <a class="btn btn-secondary" href="/cognitive-dashboard/">Governance Console</a>
+ <section class="nf-cta-mega" aria-labelledby="cta-h">
+ <h2 id="cta-h">Request Governance Brief</h2>
+ <p>Non-confidential intake · include your Request ID · Trust Brief ($10k), Copilot pilot ($2k–10k), federal or MSP lane · operations@noetfield.com</p>
+ <div class="nf-cta-actions">
+ <a class="btn btn-primary" href="/trust-brief/intake/">Request Governance Brief</a>
+ <a class="btn btn-secondary" href="/copilot/pilot/">Become a design partner</a>
  </div>
- </section>
-
- <section class="nf-section">
- <h2>Schema</h2>
- <p>Machine schema: <code>packages/schemas/tle-v1.schema.json</code> · validate with <code>python3 scripts/validate-tle-samples.py</code></p>
  </section>
  </main>
  <footer id="nfFooter"></footer>

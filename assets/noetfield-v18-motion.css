@@ -1,0 +1,91 @@
+/* v18 motion + CLS discipline (UI-09) — gated by prefers-reduced-motion */
+
+.nf-live-proof-panel {
+  min-height: 420px;
+}
+
+.nf-live-proof-row--in {
+  animation: nf-receipt-row-in 0.18s ease forwards;
+}
+
+.nf-skel-line {
+  display: block;
+  height: 0.85rem;
+  width: 72%;
+  border-radius: 4px;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.18) 50%, rgba(255, 255, 255, 0.08) 100%);
+  background-size: 200% 100%;
+  animation: nf-skel-pulse 1.2s ease infinite;
+}
+
+.nf-sticky-mobile-cta {
+  display: none;
+}
+
+@keyframes nf-receipt-row-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes nf-skel-pulse {
+  0% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: -100% 0;
+  }
+}
+
+@keyframes nf-trial-enter {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 768px) {
+  .nf-sticky-mobile-cta {
+    display: flex;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 90;
+    padding: 12px 16px calc(12px + env(safe-area-inset-bottom, 0px));
+    background: rgba(244, 245, 248, 0.96);
+    border-top: 1px solid var(--line, #e2e5ec);
+    backdrop-filter: blur(12px);
+  }
+
+  .nf-sticky-mobile-cta .btn {
+    flex: 1;
+    min-height: 44px;
+    justify-content: center;
+  }
+
+  body.nf-www {
+    padding-bottom: 72px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nf-live-proof-row--in,
+  .nf-skel-line {
+    animation: none;
+  }
+
+  .nf-live-proof-row--in {
+    opacity: 1;
+    transform: none;
+  }
+}

@@ -79,8 +79,11 @@ WORK_PATTERNS = [
 VERIFY_DEFAULT = "./scripts/plan-with-no-asf-verify.sh"
 
 BASE_SOURCES = [
+    "docs/strategy/NOETFIELD_COMMERCIAL_SSOT_LOCKED_v1.md",
     "docs/strategy/NOETFIELD_GTM_60_DAY_LOCKED_v1.md",
-    "docs/strategy/NOETFIELD_TRUST_LEDGER_POSITIONING_LOCKED_v1.2.md",
+    "docs/ops/NOETFIELD_PROMPT_PACK_V14_WISE_LOCKED_v1.md",
+    "docs/WWW_V13_INSTITUTIONAL_100_PLAN_LOCKED_v1.md",
+    "docs/GTM_COPYBOOK.md",
     "docs/ops/NOETFIELD_AGENT_CONTEXT_AND_READ_ORDER_LOCKED_v1.md",
     ".cursor/agent-memory/MEMORY_LOCKED.yaml",
     "os/SHIP_NOW.md",
@@ -167,14 +170,15 @@ def build_prompt(area: str, pattern: str, title: str, phase: str, tier: str) -> 
         return (
             f"As NF-CLOUD-AGENT (Noetfield only), agentic layer only — maintain pipeline copy on disk "
             f"(not send/call): {title}. Read R-011 + AGENTIC_COMMERCIAL_HANDOFF. "
-            f"Area={area_label}; pattern={pattern}; phase={phase}; tier={tier}. "
-            f"NF-CLOUD may wire www/docs; Hub executes outreach."
+            f"Prefer Tier 1 WISE id L-15 via pick-wise.py. "
+            f"Area={area_label}; pattern={pattern}; phase={phase}; tier={tier}."
         )
     return (
-        f"As NF-CLOUD-AGENT (Noetfield only), implement: {title}. "
-        f"Read locked GTM + MEMORY_LOCKED first. Lane A only — no TrustField/VIRLUX. "
+        f"As NF-CLOUD-AGENT (Noetfield only): {title}. "
+        f"Use SMART wrapper (docs/ops/NOETFIELD_PROMPT_PACK_V13_SMART_LOCKED_v1.md). "
+        f"Prefer pick-wise.py over raw NF-PLAN grid. Lane A only. "
         f"Area={area_label}; pattern={pattern}; phase={phase}; tier={tier}. "
-        f"Verify with {VERIFY_DEFAULT}; update plan status and cursor-reply-latest.txt."
+        f"Max 5 source files · one verify command · update tier1-status on done."
     )
 
 

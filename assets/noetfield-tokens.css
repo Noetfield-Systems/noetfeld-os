@@ -1,5 +1,5 @@
-/* Noetfield design tokens v3 — institutional */
-@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Serif:ital,wght@0,500;0,600;1,500&display=swap");
+/* Noetfield design tokens v5 — institutional enterprise (full redesign)
+   Fonts: preconnect + stylesheet in page HEAD (rebuild-www-v6.py) — not @import. */
 
 :root {
   /* Color */
@@ -12,12 +12,26 @@
   --muted2: #8e91ad;
   --line: rgba(255, 255, 255, 0.11);
   --gold: #c8a349;
+  --gold-bright: #e4c06a;
   --gold-dim: rgba(200, 163, 73, 0.35);
+  --accent: #7aa7ff;
+  --accent-dim: rgba(122, 167, 255, 0.2);
   --ok: #2de38a;
   --okGlow: rgba(45, 227, 138, 0.18);
+  --warn: #e4b84a;
+  --deny: #f07178;
+
+  /* Trust diligence sub-theme (procurement readers) */
+  --trust-bg: #f4f2ec;
+  --trust-panel: rgba(255, 255, 255, 0.92);
+  --trust-text: #1a1a22;
+  --trust-muted: #4a4a5c;
+  --trust-line: rgba(26, 26, 34, 0.12);
+  --trust-gold: #8a6b1f;
 
   /* Layout */
-  --max: 1140px;
+  --max: 1200px;
+  --max-wide: 1320px;
   --radius: 18px;
   --radius-sm: 12px;
   --navH: 72px;
@@ -34,6 +48,7 @@
   --text-base: 1rem;
   --text-lg: 1.125rem;
   --text-xl: clamp(1.65rem, 4.5vw, 2.65rem);
+  --text-2xl: clamp(2rem, 5vw, 3.25rem);
   --leading-tight: 1.12;
   --leading-body: 1.65;
   --tracking-caps: 0.12em;

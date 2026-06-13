@@ -141,6 +141,21 @@ Potential framing:
 
 This preserves useful prior work while removing brand confusion.
 
+### 4.5 Commercial packaging (v16 — shipped)
+
+**SSOT:** [docs/WWW_V16_PACKAGING_PLAN_LOCKED_v1.md](docs/WWW_V16_PACKAGING_PLAN_LOCKED_v1.md) · [docs/ops/COMMERCIAL_INBOX_PACKAGING_LOCKED_v1.md](docs/ops/COMMERCIAL_INBOX_PACKAGING_LOCKED_v1.md)
+
+| Layer | Buyer path |
+|-------|------------|
+| **Try (free)** | `/start/` — 14-day sandbox · 50 evaluates · mock M365 · no sales call |
+| **Compare** | `/pricing/` — sandbox vs production · published tiers |
+| **Apply** | Design partner program — Copilot Governance Pack $2k–10k |
+| **Buy** | Three contract SKUs only — Trust Brief · Copilot Pack · Bank Pilot |
+
+**Agentic runtime (public):** investigate → triage → draft TLE → act on low-risk; human approvers on high-risk production paths.
+
+**Product hierarchy (locked revenue):** Three contract SKUs + free developer access — not a fourth retail product.
+
 ## 5. Core principles
 
 The platform should follow these principles.
@@ -437,7 +452,7 @@ Responsibilities:
 
 - Microsoft Graph connectors
 - Entra ID connectors
-- ServiceNow connectors
+- ITSM connectors
 - Jira connectors
 - Slack and Teams notifications
 - SIEM integrations
@@ -1019,11 +1034,11 @@ Initial priority:
 
 Secondary integrations:
 
-- ServiceNow
+- ITSM integrations
 - Jira
 - Confluence
 - Slack
-- SIEM systems such as Microsoft Sentinel or Splunk
+- SIEM systems such as Microsoft Sentinel (metadata correlation only)
 - GRC platforms
 - Cloud providers
 - Vendor management systems

@@ -3,12 +3,13 @@
   "plane": "DESIGN",
   "status": "active",
   "ship_mandate": "os/SHIP_NOW.md",
-  "ship_rule": "Bounded founder implement order + os/plan.json GTM_NEXT queue + agentic_queue (026 Hub only); ingest after VERIFY (required); do not edit SinaPromptOS; no self-start from plan.json alone (R-007/R-011)",
-  "last_updated": "2026-06-10",
+  "ship_rule": "Bounded founder implement order + os/plan.json GTM_NEXT queue + agentic_queue (026 Hub only); ingest after VERIFY (required); do not edit SinaPromptOS; no self-start from plan.json alone (R-007/R-011); local Mac may also pick from os/plan-library/noetfield-1000/",
+  "last_updated": "2026-06-13",
   "positioning_lock": "docs/strategy/NOETFIELD_TRUST_LEDGER_POSITIONING_LOCKED_v1.2.md",
   "agent_context_lock": "docs/ops/NOETFIELD_AGENT_CONTEXT_AND_READ_ORDER_LOCKED_v1.md",
   "sprint_backlog": "os/sprint-trust-ledger-v1.2.md",
-  "future_plans_library": "os/plans/REGISTRY.json",
+  "future_plans_library": "os/plan-library/noetfield-1000/REGISTRY.json",
+  "future_plans_stubs": "os/plans/REGISTRY.json",
   "locked_references": [
     {
       "id": "agent-read-links-v1",
@@ -75,6 +76,20 @@
       "path": "docs/ops/NOETFIELD_1000_PROMPT_PACK_LOCKED_v1.md",
       "locked_at": "2026-06-03",
       "mandate": "PLAN WITH NO ASF picks from GTM_NEXT / QUICK_PICK when registry empty; GTM_PRIORITY outreach = agentic only; verify with plan-with-no-asf-verify.sh"
+    },
+    {
+      "id": "www-v16-packaging-v1",
+      "title": "WWW v16 self-serve packaging — sandbox, tiers, agentic GTM",
+      "path": "docs/WWW_V16_PACKAGING_PLAN_LOCKED_v1.md",
+      "locked_at": "2026-06-13",
+      "mandate": "All www/prompt/inbox work aligns to sandbox funnel; three contract SKUs only; free tier is nf-pack-card not nf-offer-card"
+    },
+    {
+      "id": "commercial-inbox-packaging-v1",
+      "title": "Commercial inbox routing — sandbox vs contract threads",
+      "path": "docs/ops/COMMERCIAL_INBOX_PACKAGING_LOCKED_v1.md",
+      "locked_at": "2026-06-13",
+      "mandate": "operations@ routing; no mandatory sales call for sandbox; RID on contract threads"
     }
   ],
   "next_tasks": [
@@ -94,6 +109,42 @@
       "id": "ship-merged-window-config-056",
       "title": "MERGED_WINDOW constant in OPEN_PRS header; verify reads it",
       "plan": "scripts/verify-no-asf-coherence.sh",
+      "status": "done"
+    },
+    {
+      "id": "ship-sandbox-server-side-057",
+      "title": "Optional server-side sandbox session persistence",
+      "plan": "governance-console/backend/",
+      "status": "pending"
+    },
+    {
+      "id": "ship-agentic-workflow-manifest-058",
+      "title": "Wire agent manifest schema to public agentic workflow copy",
+      "plan": "packages/schemas/agent-manifest.schema.json",
+      "status": "pending"
+    },
+    {
+      "id": "ship-pricing-verify-doc-ssot-059",
+      "title": "Add v16 packaging docs to verify-doc-ssot.sh",
+      "plan": "scripts/verify-doc-ssot.sh",
+      "status": "done"
+    },
+    {
+      "id": "ship-v16-packaging-www-057",
+      "title": "v16 www packaging — /start/ /pricing/ self-serve rail agentic block",
+      "plan": "docs/WWW_V16_PACKAGING_PLAN_LOCKED_v1.md",
+      "status": "done"
+    },
+    {
+      "id": "ship-v16-prompt-pack-058",
+      "title": "Align WISE/500/memory/inbox/docs to v16 packaging funnel",
+      "plan": "docs/ops/NOETFIELD_PROMPT_PACK_V14_WISE_LOCKED_v1.md",
+      "status": "done"
+    },
+    {
+      "id": "ship-v16-verify-e2e-059",
+      "title": "verify-ui-e2e + verify-static-www v16 needles",
+      "plan": "scripts/verify-ui-e2e.sh",
       "status": "done"
     },
     {
@@ -401,7 +452,7 @@
     "nf-rag-design-010",
     "nf-copilot-pilot-runbook-009"
   ],
-  "updated_at": "2026-06-10T16:00:00Z",
+  "updated_at": "2026-06-13T18:00:00Z",
   "agentic_queue": [
     {
       "id": "ship-design-partner-outreach-026",
@@ -409,6 +460,13 @@
       "owner": "agentic_layer",
       "handoff": "docs/ops/AGENTIC_COMMERCIAL_HANDOFF_v1.md",
       "note": "Not NF-CLOUD disk implement — founder Hub approves send"
+    },
+    {
+      "id": "ship-sandbox-nurture-060",
+      "title": "Sandbox → design partner nurture templates",
+      "owner": "agentic_layer",
+      "handoff": "docs/ops/COMMERCIAL_INBOX_PACKAGING_LOCKED_v1.md",
+      "note": "Optional upgrade path after 50 evaluates or 14d — no mandatory sales call"
     }
   ],
   "done": [

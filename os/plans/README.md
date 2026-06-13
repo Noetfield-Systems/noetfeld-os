@@ -1,18 +1,20 @@
 # Noetfield future plans library (NO ASF)
 
-**Count:** 1000 plan stubs (regenerate with `python3 scripts/generate-future-plans.py`)  
-**Canonical path:** `~/Desktop/Noetfield/os/plans/`  
-**Cursor mirror:** `~/.cursor/plans/noetfield-os/` (index only; full library stays in repo)
+**Count:** 1000 plan stubs (history — **do not** regenerate with `generate-future-plans.py`)  
+**Prompt-ready LOCKED library:** `~/Desktop/Noetfield/os/plan-library/noetfield-1000/` — use for **PLAN WITH NO ASF**  
+**Index:** `docs/ops/NOETFIELD_1000_PROMPT_LIBRARY_LOCKED_v1.md`  
+**Canonical stubs:** `~/Desktop/Noetfield/os/plans/`  
+**Cursor mirror:** `~/.cursor/plans/noetfield-os/` → links to locked 1000 library
 
 ## When you say “plan with no ASF”
 
 Agents must:
 
 1. **Not** wait for ASF commit, push, ingest, or SourceA edits.
-2. Read [`REGISTRY.json`](./REGISTRY.json) or [`REGISTRY.md`](./REGISTRY.md).
-3. Pick the highest-value **backlog** item matching current `os/SHIP_NOW.md` / sprint (prefer **T0** then **T1**, lower phase number when tied).
-4. Open the plan file under `phase-*/T*/nf-future-*.md` and execute it (verify → ingest → sync → commit).
-5. **Update** the plan front matter `status: done` and append a line to [`REGISTRY.json`](./REGISTRY.json) `plans[].status` (or re-run generator after editing templates).
+2. Run `make pick-no-asf-plan` — reads [`../plan-library/noetfield-1000/REGISTRY.json`](../plan-library/noetfield-1000/REGISTRY.json).
+3. Open picked `nf-XXXX.md` under `plan-library/noetfield-1000/prompts/`.
+4. Execute verify → ingest → sync → commit (one prompt per turn).
+5. Set `status: done` in prompt front matter; optional `sync-noetfield-plans-status.py` for nf-future stubs.
 
 ## Organization
 

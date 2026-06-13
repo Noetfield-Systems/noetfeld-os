@@ -72,7 +72,7 @@ agent_alias: nf-local-agent
 |------------|---------|---------|
 | TLE immutability after approve | Yes (DB trigger / service) | — |
 | `signature_hash` + evidence hash | Yes (`tle_service.py`) | — |
-| Evaluate vs last TLE diff | **No** | P0 Drift Contract v0 |
+| Evaluate vs last TLE diff | Yes (`POST /tle/diff/evaluate`) | Drift Contract v0 extensions |
 | `prev_hash` TLE chain | **No** (PLATFORM_BLUEPRINT mention only) | P1 `prev_tle_digest` migration |
 | Event replay | Yes (`GET /events/replay`) | Link to audit-export narrative |
 | Observability middleware → tables | **No** (schema may exist) | P1 wire NF-0104 |

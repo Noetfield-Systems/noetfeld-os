@@ -22,6 +22,7 @@ export default function WorkspacePage() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [drafting, setDrafting] = useState(false);
+  const [oauthSuccess, setOauthSuccess] = useState<string | null>(null);
 
   async function load(search?: string, status?: string) {
     setLoading(true);
@@ -55,6 +56,14 @@ export default function WorkspacePage() {
   }
 
   useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const connected = params.get("connected");
+    if (connected) {
+      setOauthSuccess(connected);
+      const url = new URL(window.location.href);
+      url.searchParams.delete("connected");
+      window.history.replaceState({}, "", url.pathname + url.search);
+    }
     load();
   }, []);
 
@@ -63,8 +72,16 @@ export default function WorkspacePage() {
       <PageHero
         eyebrow="Trust Ledger v1"
         title="Trust Ledger Workspace"
-        lead="Procurement-grade authorization records for Copilot adoption — evidence, confidence score, and approval chain."
+        lead="Signed Trust Ledger Entries for Copilot go/no-go — M365 evidence index, confidence score, approval chain, and board-ready export."
       />
+      {oauthSuccess && (
+        <p
+          className="mb-4 rounded-lg border border-emerald-900/80 bg-emerald-950/40 px-4 py-3 text-sm text-emerald-200"
+          role="status"
+        >
+          Mock OAuth connected — <code>{oauthSuccess}</code>. M365 evidence ingested.
+        </p>
+      )}
       <p className="mb-6 flex flex-wrap gap-x-4 gap-y-1 text-sm">
         <Link href="/workspace/connectors" className="text-accent hover:underline">
           M365 connectors (dev OAuth)
@@ -167,7 +184,7 @@ export default function WorkspacePage() {
                   <span className={`text-sm font-medium ${statusClass(row.status)}`}>{row.status}</span>
                 </div>
               </div>
-              <p className="mt-3 text-sm text-white/90">{row.decision}</p>
+              <p className="mt-3 text-sm text-muted">{row.decision}</p>
               <p className="mt-1 text-xs text-muted-2">
                 {row.date}
                 {row.source_rid ? ` · RID ${row.source_rid}` : ""}

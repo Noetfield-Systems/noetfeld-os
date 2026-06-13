@@ -16,9 +16,10 @@ _test_db = tempfile.NamedTemporaryFile(suffix=".db", delete=False)
 os.environ["DATABASE_URL"] = f"sqlite:///{_test_db.name}"
 
 from db.bootstrap import init_schema, migrate_audit_logs_to_events, seed_pilot_evidence  # noqa: E402
-from db.models import PILOT_TENANT_ID  # noqa: E402
+from db.models import ConnectorRecord, EvidenceIndex, PILOT_TENANT_ID  # noqa: E402
 from db.session import get_db  # noqa: E402
 from main import app  # noqa: E402
+from services.evidence_hash import CONTENT_HASH_RE, content_hash_for_metadata  # noqa: E402
 
 engine = create_engine(
     os.environ["DATABASE_URL"],
@@ -54,8 +55,78 @@ client = TestClient(app)
 TENANT_HEADER = {"X-Tenant-ID": str(PILOT_TENANT_ID)}
 
 
+def test_evidence_ingest_invalid_hash_rejected():
+    eid = f"EV-BAD-{uuid.uuid4().hex[:8].upper()}"
+    r = client.post(
+        "/evidence/ingest",
+        headers=TENANT_HEADER,
+        json={
+            "evidence_id": eid,
+            "source": "Manual",
+            "title": "Bad hash evidence",
+            "content_hash": "sha256:deadbeef",
+        },
+    )
+    assert r.status_code == 422
+
+
+def test_evidence_ingest_valid_hash():
+    eid = f"EV-GOOD-{uuid.uuid4().hex[:8].upper()}"
+    content_hash = content_hash_for_metadata(
+        evidence_id=eid,
+        source="Manual",
+        title="Valid hash evidence",
+        storage_ref="test/local",
+    )
+    r = client.post(
+        "/evidence/ingest",
+        headers=TENANT_HEADER,
+        json={
+            "evidence_id": eid,
+            "source": "Manual",
+            "title": "Valid hash evidence",
+            "content_hash": content_hash,
+            "storage_ref": "test/local",
+        },
+    )
+    assert r.status_code == 201
+    assert r.json()["evidence_id"] == eid
+    assert r.json()["tenant_id"] == str(PILOT_TENANT_ID)
+
+
+def test_evidence_ingest_response_includes_tenant_id():
+    eid = f"EV-TENANT-{uuid.uuid4().hex[:8].upper()}"
+    content_hash = content_hash_for_metadata(
+        evidence_id=eid,
+        source="Manual",
+        title="Tenant id evidence",
+        storage_ref="test/tenant",
+    )
+    r = client.post(
+        "/evidence/ingest",
+        headers=TENANT_HEADER,
+        json={
+            "evidence_id": eid,
+            "source": "Manual",
+            "title": "Tenant id evidence",
+            "content_hash": content_hash,
+            "storage_ref": "test/tenant",
+        },
+    )
+    assert r.status_code == 201
+    body = r.json()
+    assert body["tenant_id"] == str(PILOT_TENANT_ID)
+    assert body["evidence_id"] == eid
+    assert "ingested_at" in body
+
+
 def test_evidence_ingest_and_list_connectors():
     eid = f"EV-TEST-{uuid.uuid4().hex[:8].upper()}"
+    content_hash = content_hash_for_metadata(
+        evidence_id=eid,
+        source="Manual",
+        title="Test evidence",
+    )
     r = client.post(
         "/evidence/ingest",
         headers=TENANT_HEADER,
@@ -63,7 +134,7 @@ def test_evidence_ingest_and_list_connectors():
             "evidence_id": eid,
             "source": "Manual",
             "title": "Test evidence",
-            "content_hash": "sha256:deadbeef",
+            "content_hash": content_hash,
         },
     )
     assert r.status_code == 201
@@ -121,6 +192,103 @@ def test_tle_draft_approve_export():
     assert pdf.content[:4] == b"%PDF"
 
 
+def test_tle_draft_drift_contract_v0():
+    r1 = client.post(
+        "/tle/draft",
+        headers=TENANT_HEADER,
+        json={"evidence_ids": ["EV-PURVIEW-001", "EV-ENTRA-001", "EV-AUDIT-001"]},
+    )
+    assert r1.status_code == 201
+    baseline = r1.json()
+    assert baseline["document"]["drift_class"] == "initial"
+    assert baseline["document"]["baseline_tle_id"] is None
+
+    r2 = client.post(
+        "/tle/draft",
+        headers=TENANT_HEADER,
+        json={
+            "evidence_ids": ["EV-PURVIEW-001", "EV-ENTRA-001", "EV-AUDIT-001"],
+            "baseline_tle_id": baseline["tle_id"],
+        },
+    )
+    assert r2.status_code == 201
+    follow = r2.json()
+    assert follow["document"]["baseline_tle_id"] == baseline["tle_id"]
+    assert follow["document"]["drift_class"] == "stable"
+    assert follow["document"]["delta_summary"]["drift_class"] == "stable"
+    assert follow["document"]["severity"] == "Low"
+
+    bad = client.post(
+        "/tle/draft",
+        headers=TENANT_HEADER,
+        json={
+            "evidence_ids": ["EV-PURVIEW-001"],
+            "baseline_tle_id": "TLE-NOT-FOUND",
+        },
+    )
+    assert bad.status_code == 400
+
+
+def test_tle_diff_evaluate_vs_last():
+    r1 = client.post(
+        "/tle/draft",
+        headers=TENANT_HEADER,
+        json={"evidence_ids": ["EV-PURVIEW-001", "EV-ENTRA-001", "EV-AUDIT-001"]},
+    )
+    assert r1.status_code == 201
+    baseline_id = r1.json()["tle_id"]
+
+    diff0 = client.post(
+        "/tle/diff/evaluate",
+        headers=TENANT_HEADER,
+        json={"evidence_ids": ["EV-PURVIEW-001"]},
+    )
+    assert diff0.status_code == 200
+    body0 = diff0.json()
+    assert body0["helper"] == "evaluate_vs_last_tle_v0"
+    assert body0["last_tle_id"] == baseline_id
+    assert body0["drift_class"] in ("minor", "material")
+    assert "EV-ENTRA-001" in body0["evidence_removed"]
+    assert "EV-AUDIT-001" in body0["evidence_removed"]
+
+    diff1 = client.post(
+        "/tle/diff/evaluate",
+        headers=TENANT_HEADER,
+        json={"evidence_ids": ["EV-PURVIEW-001", "EV-ENTRA-001", "EV-AUDIT-001"]},
+    )
+    assert diff1.status_code == 200
+    body1 = diff1.json()
+    assert body1["last_tle_id"] == baseline_id
+    assert body1["drift_class"] == "stable"
+    assert body1["evidence_added"] == []
+    assert body1["evidence_removed"] == []
+
+
+def test_diff_evaluate_empty_baseline():
+    from services.tle_service import build_delta_summary, drift_severity
+
+    summary = build_delta_summary(
+        drift_class="initial",
+        baseline_tle_id=None,
+        baseline_score=None,
+        new_score=0.83,
+        evidence_added=[],
+        evidence_removed=[],
+    )
+    assert summary["drift_class"] == "initial"
+    assert summary["baseline_tle_id"] is None
+    assert drift_severity("initial") == "Low"
+
+    diff = client.post(
+        "/tle/diff/evaluate",
+        headers=TENANT_HEADER,
+        json={"evidence_ids": ["EV-PURVIEW-001"]},
+    )
+    assert diff.status_code == 200
+    assert "severity" in diff.json()
+    assert "delta_summary" in diff.json()
+
+
 def test_viewer_cannot_approve():
     r = client.post(
         "/tle/draft",
@@ -159,6 +327,116 @@ def test_m365_oauth_mock_flow():
     assert st.json()["oauth_connected"] is True
 
 
+def test_connector_connected_state_persists_after_oauth():
+    cid = f"m365-persist-{uuid.uuid4().hex[:8]}"
+    reg = client.post(
+        "/connectors",
+        headers=TENANT_HEADER,
+        json={
+            "connector_id": cid,
+            "connector_type": "m365_purview",
+            "required_scopes": ["Purview.Read"],
+        },
+    )
+    assert reg.status_code == 201
+    reg_body = reg.json()
+    assert reg_body["oauth_connected"] is False
+    assert reg_body["status"] == "registered"
+
+    cb = client.get(
+        f"/connectors/{cid}/oauth/callback",
+        headers=TENANT_HEADER,
+        params={"code": "dev-mock", "state": "persist"},
+    )
+    assert cb.status_code == 200
+    cb_body = cb.json()
+    assert cb_body["oauth_connected"] is True
+    assert cb_body["status"] == "connected"
+
+    listed = client.get("/connectors", headers=TENANT_HEADER)
+    assert listed.status_code == 200
+    match = next(c for c in listed.json() if c["connector_id"] == cid)
+    assert match["oauth_connected"] is True
+    assert match["status"] == "connected"
+
+    st = client.get(f"/connectors/{cid}/status", headers=TENANT_HEADER)
+    assert st.status_code == 200
+    st_body = st.json()
+    assert st_body["oauth_connected"] is True
+    assert st_body["status"] == "connected"
+
+    db = TestingSessionLocal()
+    try:
+        row = db.get(ConnectorRecord, cid)
+        assert row is not None
+        assert row.status == "connected"
+        assert row.oauth_json.get("connected_at")
+    finally:
+        db.close()
+
+
+def test_connector_oauth_missing_env_clear_error(monkeypatch):
+    cid = f"m365-env-{uuid.uuid4().hex[:8]}"
+    reg = client.post(
+        "/connectors",
+        headers=TENANT_HEADER,
+        json={
+            "connector_id": cid,
+            "connector_type": "m365_purview",
+            "required_scopes": ["Purview.Read"],
+        },
+    )
+    assert reg.status_code == 201
+
+    monkeypatch.setenv("NF_PUBLIC_BASE_URL", "https://staging.example.com")
+    monkeypatch.delenv("NF_M365_MOCK_TOKEN", raising=False)
+
+    cb = client.get(
+        f"/connectors/{cid}/oauth/callback",
+        headers=TENANT_HEADER,
+        params={"code": "dev-mock", "state": "env"},
+    )
+    assert cb.status_code == 503
+    detail = cb.json()["detail"]
+    assert "NF_M365_MOCK_TOKEN" in detail
+    assert "LOCAL_DEV" in detail
+
+    monkeypatch.delenv("NF_PUBLIC_BASE_URL", raising=False)
+    monkeypatch.setenv("NF_M365_REQUIRE_ENV", "1")
+    cb2 = client.get(
+        f"/connectors/{cid}/oauth/callback",
+        headers=TENANT_HEADER,
+        params={"code": "dev-mock", "state": "env2"},
+    )
+    assert cb2.status_code == 503
+    detail2 = cb2.json()["detail"]
+    assert "NF_M365_MOCK_TOKEN" in detail2
+    assert "LOCAL_DEV" in detail2
+
+
+def test_oauth_callback_html_redirects_to_workspace():
+    cid = f"m365-html-{uuid.uuid4().hex[:8]}"
+    reg = client.post(
+        "/connectors",
+        headers=TENANT_HEADER,
+        json={
+            "connector_id": cid,
+            "connector_type": "m365_purview",
+            "required_scopes": ["Purview.Read"],
+        },
+    )
+    assert reg.status_code == 201
+    cb = client.get(
+        f"/connectors/{cid}/oauth/callback",
+        headers={**TENANT_HEADER, "Accept": "text/html"},
+        params={"code": "dev-mock", "state": "html"},
+        follow_redirects=False,
+    )
+    assert cb.status_code == 302
+    location = cb.headers.get("location", "")
+    assert f"/workspace?connected={cid}" in location
+
+
 def test_oauth_callback_ingests_evidence():
     cid = f"m365-ingest-{uuid.uuid4().hex[:8]}"
     client.post(
@@ -187,7 +465,23 @@ def test_oauth_callback_ingests_evidence():
         },
     )
     assert draft.status_code == 201
-    assert len(draft.json()["document"]["evidence"]) == 3
+    evidence = draft.json()["document"]["evidence"]
+    assert len(evidence) == 3
+    for item in evidence:
+        assert CONTENT_HASH_RE.match(item["metadata"]["hash"])
+
+    db = TestingSessionLocal()
+    try:
+        for eid in (
+            "EV-PURVIEW-COPILOT-LABELS",
+            "EV-ENTRA-CA-COPILOT",
+            "EV-SPO-SITE-POLICY",
+        ):
+            row = db.get(EvidenceIndex, eid)
+            assert row is not None
+            assert CONTENT_HASH_RE.match(row.content_hash)
+    finally:
+        db.close()
 
 
 def test_out_of_order_approval_denied():
@@ -227,10 +521,15 @@ def test_export_includes_signature_block():
     export = client.get(f"/tle/{tle_id}/export", headers=TENANT_HEADER).json()
     assert "signature_block" in export
     assert export["signature_block"]["key_id"]
+    assert export["signature_block"]["digest_version"] == "v2"
     assert len(export["signature_block"]["signatures"]) == 3
+    assert export.get("audit_digest_link") is not None
+    assert export.get("confidence_score", 0) > 0
+    assert "drift_contract" in export
     pdf = client.get(f"/tle/{tle_id}/export?format=pdf", headers=TENANT_HEADER)
     assert pdf.status_code == 200
     assert len(pdf.content) > 800
+    assert pdf.content[:4] == b"%PDF"
 
 
 def test_export_procurement_zip():

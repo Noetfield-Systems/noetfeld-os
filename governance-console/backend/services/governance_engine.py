@@ -91,3 +91,42 @@ def evaluate_intent(
         conditions=conditions,
         rid=generate_rid(),
     )
+
+
+def _risk_severity(risk_score: int) -> str:
+    if risk_score >= 70:
+        return "High"
+    if risk_score >= 40:
+        return "Medium"
+    return "Low"
+
+
+def build_evaluate_confidence(
+    *,
+    action: str,
+    risk_score: int,
+    reasons: list[str],
+) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
+    """Return (risk_summary, confidence_factors) — deterministic, TLE-compatible shape."""
+    description = (action or "").strip()[:120] or (reasons[0][:120] if reasons else "Governance evaluation risk")
+    risk_summary = [
+        {
+            "id": f"RISK-{risk_score:03d}",
+            "description": description,
+            "severity": _risk_severity(risk_score),
+        }
+    ]
+    governance_value = round((100 - risk_score) / 100, 2)
+    confidence_factors: list[dict[str, Any]] = [
+        {
+            "factor": "governance_risk",
+            "weight": governance_value,
+            "value": governance_value,
+        },
+        {
+            "factor": "risk_summary",
+            "weight": 0.0,
+            "value": risk_summary,
+        },
+    ]
+    return risk_summary, confidence_factors

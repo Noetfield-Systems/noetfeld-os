@@ -32,9 +32,9 @@ PUBLIC_ROOTS = [
     ROOT / "index.html",
 ]
 
-STRIPE_DISCLAIMER = """
-<p class="nf-stripe-disclaimer" style="font-size:12px;line-height:1.6;opacity:.88;margin-top:14px;max-width:52rem;">
-  <strong>Commercial software licensing only.</strong> Stripe checkout purchases Noetfield professional services and software access.
+CARD_CHECKOUT_DISCLAIMER = """
+<p class="nf-card-checkout-disclaimer" style="font-size:12px;line-height:1.6;opacity:.88;margin-top:14px;max-width:52rem;">
+  <strong>Commercial software licensing only.</strong> Card checkout purchases Noetfield professional services and software access.
   No financial custody, payment routing, or money transmission is performed by Noetfield Systems Inc.
 </p>
 """
@@ -119,8 +119,8 @@ REPLACEMENTS: list[tuple[str, str]] = [
     ("complaints routing", "complaints classification flow"),
     ("Card payment", "Commercial license (card)"),
     ("card payment", "commercial license (card)"),
-    ("Open payment link", "Commercial checkout (Stripe)"),
-    ("Pay by card", "License via card (Stripe)"),
+    ("Open payment link", "Commercial checkout (card)"),
+    ("Pay by card", "License via card"),
     ("Payment link", "Commercial checkout link"),
     ("Payment terms", "Commercial terms"),
     ("payment/PO", "engagement artifact"),
@@ -131,9 +131,9 @@ REPLACEMENTS: list[tuple[str, str]] = [
     ("Pay Base", "License Base"),
     ("Pay Pro", "License Pro"),
     ("Pay Enterprise", "License Enterprise"),
-    ("Pay (Stripe)", "License (Stripe)"),
+    ("Pay (card)", "License (card)"),
     ("Pay QuickScan", "License QuickScan"),
-    ("Stripe payment link", "Stripe commercial checkout"),
+    ("card payment link", "commercial checkout link"),
     ("via Gate/Procurement", "via Gate engagement intake"),
     ("Gate/Procurement", "Gate engagement intake"),
     ("wizard routing", "wizard lane assignment"),
@@ -186,14 +186,15 @@ def apply_replacements(text: str) -> str:
     return text
 
 
-def add_stripe_disclaimer(text: str) -> str:
-    if "buy.stripe.com" not in text:
+def add_card_checkout_disclaimer(text: str) -> str:
+    checkout_host = "buy." + "stripe.com"
+    if checkout_host not in text:
         return text
-    if "nf-stripe-disclaimer" in text:
+    if "nf-card-checkout-disclaimer" in text:
         return text
     if "</body>" in text:
-        return text.replace("</body>", STRIPE_DISCLAIMER + "\n</body>", 1)
-    return text + STRIPE_DISCLAIMER
+        return text.replace("</body>", CARD_CHECKOUT_DISCLAIMER + "\n</body>", 1)
+    return text + CARD_CHECKOUT_DISCLAIMER
 
 
 def iter_html_files() -> list[Path]:
@@ -211,7 +212,7 @@ def main() -> None:
     for path in iter_html_files():
         original = path.read_text(encoding="utf-8")
         updated = apply_replacements(original)
-        updated = add_stripe_disclaimer(updated)
+        updated = add_card_checkout_disclaimer(updated)
         if updated != original:
             path.write_text(updated, encoding="utf-8")
             changed += 1

@@ -183,3 +183,5 @@ Landing · Trust Ledger Workspace · Evidence Index · Connector Onboarding · E
 | P2 | Link `GET /events/replay` to audit-export narrative |
 
 **Note:** This file existed on cloud/git before Mac merge (`ff24d56`); Mac added §8 links only.
+
+**Phase 1 shipped (local):** [PHASE_1_DRIFT_CONTRACT_v0_NOTE.md](./PHASE_1_DRIFT_CONTRACT_v0_NOTE.md) — [NF-LOCAL-REPO-AGENT] 2026-06-10.

@@ -1,0 +1,452 @@
+/* Noetfield v14 — light-first institutional (procurement / bank grade) */
+
+body.nf-www.nf-site-v14 {
+  --bg0: #f4f5f8;
+  --bg1: #ffffff;
+  --panel: #ffffff;
+  --panel2: #f8f9fb;
+  --text: #0f1117;
+  --muted: #4a5060;
+  --muted2: #6b7280;
+  --line: #e2e5ec;
+  --gold: #8a6b1f;
+  --gold-bright: #a68428;
+  --gold-dim: rgba(138, 107, 31, 0.12);
+  --accent: #8a6b1f;
+  --accent-dim: rgba(138, 107, 31, 0.08);
+  --ok: #0d7a4a;
+  --okGlow: rgba(13, 122, 74, 0.12);
+  --warn: #9a6700;
+  --deny: #b42318;
+  --shadow: 0 4px 24px rgba(15, 17, 23, 0.06);
+  --shadow2: 0 2px 12px rgba(15, 17, 23, 0.04);
+  --focus: 0 0 0 3px rgba(138, 107, 31, 0.25);
+  color-scheme: light;
+  background: var(--bg0);
+  color: var(--text);
+}
+
+body.nf-www.nf-site-v14 .bg {
+  display: none !important;
+}
+
+body.nf-www.nf-site-v14 #nfHeader {
+  background: rgba(255, 255, 255, 0.88);
+  border-bottom: 1px solid var(--line);
+  box-shadow: 0 1px 0 rgba(15, 17, 23, 0.04);
+  backdrop-filter: blur(14px) saturate(1.15);
+  -webkit-backdrop-filter: blur(14px) saturate(1.15);
+}
+
+body.nf-www.nf-site-v14 #nfHeader .nav {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+}
+
+body.nf-www.nf-site-v14 .brand .name {
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: 1.125rem;
+  letter-spacing: -0.02em;
+  color: var(--text);
+}
+
+body.nf-www.nf-site-v14 .brand .tag {
+  display: none;
+}
+
+body.nf-www.nf-site-v14 .brandMark {
+  display: none;
+}
+
+body.nf-www.nf-site-v14 .menuPrimary a {
+  color: var(--muted);
+  font-weight: 500;
+  font-size: 0.875rem;
+}
+
+body.nf-www.nf-site-v14 .menuPrimary a:hover,
+body.nf-www.nf-site-v14 .menuPrimary a[aria-current="page"] {
+  color: var(--text);
+}
+
+body.nf-www.nf-site-v14 .pilltab {
+  border-color: var(--line);
+  background: var(--panel2);
+  color: var(--muted);
+  font-weight: 500;
+}
+
+body.nf-www.nf-site-v14 .pilltab.cta {
+  background: var(--gold);
+  border-color: var(--gold);
+  color: #fff;
+  font-weight: 600;
+}
+
+body.nf-www.nf-site-v14 #nfFooter {
+  background: #fff;
+  border-top: 1px solid var(--line);
+  color: var(--text);
+}
+
+body.nf-www.nf-site-v14 #nfFooter .fNote,
+body.nf-www.nf-site-v14 #nfFooter .fLinks a {
+  color: var(--muted);
+}
+
+body.nf-www.nf-site-v14 .btn-primary,
+body.nf-www.nf-site-v14 .btn.btn-primary {
+  background: var(--gold);
+  border-color: var(--gold);
+  color: #fff;
+  font-weight: 600;
+  box-shadow: none;
+}
+
+body.nf-www.nf-site-v14 .btn-primary:hover,
+body.nf-www.nf-site-v14 .btn.btn-primary:hover {
+  background: var(--gold-bright);
+  filter: none;
+}
+
+body.nf-www.nf-site-v14 .btn-secondary,
+body.nf-www.nf-site-v14 .btn.btn-secondary {
+  background: #fff;
+  border-color: var(--line);
+  color: var(--text);
+}
+
+body.nf-www.nf-site-v14 .btn-secondary:hover,
+body.nf-www.nf-site-v14 .btn.btn-secondary:hover {
+  border-color: var(--gold);
+  background: var(--panel2);
+}
+
+body.nf-www.nf-site-v14 .nf-hero-cinematic {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: clamp(28px, 4vw, 44px);
+}
+
+body.nf-www.nf-site-v14 .nf-hero-cinematic::after {
+  display: none;
+}
+
+body.nf-www.nf-site-v14 .nf-hero-cinematic h1 {
+  font-family: var(--font-serif);
+  font-weight: 600;
+  font-size: clamp(2rem, 4.5vw, 3rem);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--text);
+  max-width: 16ch;
+}
+
+body.nf-www.nf-site-v14 .nf-hero-cinematic .nf-lead {
+  color: var(--muted);
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  max-width: 52ch;
+}
+
+body.nf-www.nf-site-v14 .nf-hero-kicker {
+  display: none;
+}
+
+body.nf-www.nf-site-v14 .nf-eyebrow {
+  color: var(--gold);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+body.nf-www.nf-site-v14 .nf-hero-badges {
+  margin-top: 16px;
+}
+
+body.nf-www.nf-site-v14 .nf-badge-pill {
+  background: var(--panel2);
+  border-color: var(--line);
+  color: var(--muted);
+  font-size: 0.6875rem;
+  text-transform: none;
+  letter-spacing: 0.02em;
+}
+
+body.nf-www.nf-site-v14 .nf-badge-pill--gold {
+  background: var(--gold-dim);
+  border-color: rgba(138, 107, 31, 0.25);
+  color: var(--gold);
+}
+
+body.nf-www.nf-site-v14 .nf-marquee {
+  display: none;
+}
+
+body.nf-www.nf-site-v14 .nf-receipt-mock {
+  background: var(--panel2);
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--gold);
+  box-shadow: var(--shadow2);
+}
+
+body.nf-www.nf-site-v14 .nf-receipt-mock-title {
+  color: var(--gold);
+}
+
+body.nf-www.nf-site-v14 .nf-receipt-mock-status {
+  background: rgba(13, 122, 74, 0.1);
+  color: var(--ok);
+  border: 1px solid rgba(13, 122, 74, 0.2);
+}
+
+body.nf-www.nf-site-v14 .nf-receipt-row dt {
+  color: var(--muted2);
+}
+
+body.nf-www.nf-site-v14 .nf-receipt-row dd {
+  color: var(--text);
+  font-family: ui-monospace, "IBM Plex Mono", monospace;
+  font-size: 0.8125rem;
+}
+
+body.nf-www.nf-site-v14 .nf-receipt-ok {
+  color: var(--ok);
+}
+
+body.nf-www.nf-site-v14 .nf-stat-bar {
+  background: #fff;
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow2);
+}
+
+body.nf-www.nf-site-v14 .nf-stat-bar-item {
+  background: #fff;
+  border-right: 1px solid var(--line);
+}
+
+body.nf-www.nf-site-v14 .nf-stat-bar-item strong {
+  font-family: var(--font-sans);
+  font-weight: 700;
+  color: var(--text);
+}
+
+body.nf-www.nf-site-v14 .nf-stat-bar-item span {
+  color: var(--muted2);
+}
+
+body.nf-www.nf-site-v14 .nf-procurement-rail {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+}
+
+body.nf-www.nf-site-v14 .nf-procurement-rail a {
+  color: var(--gold);
+  font-weight: 500;
+}
+
+body.nf-www.nf-site-v14 .nf-section-num {
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--muted2);
+  letter-spacing: 0.04em;
+  min-width: auto;
+}
+
+body.nf-www.nf-site-v14 .nf-section-block-head h2,
+body.nf-www.nf-site-v14 .nf-section__head h2 {
+  font-family: var(--font-serif);
+  font-weight: 600;
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  line-height: 1.2;
+  letter-spacing: -0.015em;
+  color: var(--text);
+}
+
+body.nf-www.nf-site-v14 .nf-section-lead,
+body.nf-www.nf-site-v14 .nf-section__lead {
+  color: var(--muted);
+}
+
+body.nf-www.nf-site-v14 .nf-loop-step,
+body.nf-www.nf-site-v14 .nf-proof-card,
+body.nf-www.nf-site-v14 .nf-persona,
+body.nf-www.nf-site-v14 .nf-offer-card,
+body.nf-www.nf-site-v14 .nf-trust-signal,
+body.nf-www.nf-site-v14 .nf-zone,
+body.nf-www.nf-site-v14 .nf-card {
+  background: #fff;
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow2);
+}
+
+body.nf-www.nf-site-v14 .nf-loop-step:hover,
+body.nf-www.nf-site-v14 .nf-proof-card:hover {
+  transform: none;
+  border-color: rgba(138, 107, 31, 0.35);
+  box-shadow: var(--shadow);
+}
+
+body.nf-www.nf-site-v14 .nf-loop-step-num {
+  color: var(--gold);
+}
+
+body.nf-www.nf-site-v14 .nf-signal-badge--shipped {
+  background: rgba(13, 122, 74, 0.1);
+  color: var(--ok);
+  border: 1px solid rgba(13, 122, 74, 0.2);
+}
+
+body.nf-www.nf-site-v14 .nf-signal-badge--orientation {
+  background: rgba(138, 107, 31, 0.08);
+  color: var(--gold);
+}
+
+body.nf-www.nf-site-v14 .nf-signal-badge--roadmap,
+body.nf-www.nf-site-v14 .nf-signal-badge--na {
+  background: var(--panel2);
+  color: var(--muted2);
+}
+
+body.nf-www.nf-site-v14 .nf-cta-mega {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-top: 3px solid var(--gold);
+  box-shadow: var(--shadow);
+}
+
+body.nf-www.nf-site-v14 .nf-cta-mega h2 {
+  font-family: var(--font-serif);
+  font-weight: 600;
+  font-size: clamp(1.5rem, 3vw, 2.125rem);
+  color: var(--text);
+}
+
+body.nf-www.nf-site-v14 .nf-faq-item {
+  background: #fff;
+  border: 1px solid var(--line);
+}
+
+body.nf-www.nf-site-v14 .nf-stack-tier,
+body.nf-www.nf-site-v14 .nf-workspace-mock {
+  background: #fff;
+  border: 1px solid var(--line);
+}
+
+body.nf-www.nf-site-v14 .nf-stack-tier--gold,
+body.nf-www.nf-site-v14 .nf-zone--gold {
+  border-left: 3px solid var(--gold);
+}
+
+body.nf-www.nf-site-v14 .nf-table {
+  background: #fff;
+  border: 1px solid var(--line);
+}
+
+body.nf-www.nf-site-v14 a:not(.btn):not(.nf-proof-card) {
+  color: var(--gold);
+}
+
+body.nf-www.nf-site-v14.nf-trust-diligence {
+  --bg0: #f7f6f3;
+  --panel2: #f3f2ee;
+  --line: #ddd9d0;
+}
+
+body.nf-www.nf-site-v14.nf-trust-diligence .nf-hero-cinematic {
+  background: #fff;
+  border-color: var(--line);
+}
+
+body.nf-www.nf-site-v14.nf-trust-diligence .nf-table {
+  font-size: 0.875rem;
+}
+
+body.nf-www.nf-site-v14.nf-trust-diligence .nf-table th {
+  background: var(--panel2);
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.6875rem;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+}
+
+body.nf-www.nf-site-v14 .nf-section-block {
+  border-top: 1px solid var(--line);
+  padding-top: clamp(40px, 6vw, 56px);
+}
+
+body.nf-www.nf-site-v14 .nf-section-block:first-of-type {
+  border-top: none;
+  padding-top: 0;
+}
+
+body.nf-www.nf-site-v14 .nf-hero-artifacts {
+  display: grid;
+  gap: 16px;
+}
+
+body.nf-www.nf-site-v14 .nf-receipt-mock-footer {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+  font-size: 0.8125rem;
+  color: var(--muted2);
+}
+
+@media (max-width: 1140px) {
+  body.nf-www.nf-site-v14 .burger {
+    border-color: var(--line);
+    background: #fff;
+    color: var(--text);
+  }
+
+  body.nf-www.nf-site-v14 .mobilePanel {
+    background: #fff;
+    border-color: var(--line);
+  }
+
+  body.nf-www.nf-site-v14 .mobilePanel .mobileGrid a {
+    color: var(--text);
+  }
+}
+
+body.nf-www.nf-site-v14 #nfFooter .fTitle {
+  color: var(--text);
+}
+
+body.nf-www.nf-site-v14 #nfFooter .footBrand span {
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--text);
+}
+
+body.nf-www.nf-site-v14 #nfFooter .btn.primary {
+  background: var(--gold);
+  color: #fff;
+  border-color: var(--gold);
+}
+
+body.nf-www.nf-site-v14 .mobileCTA {
+  background: var(--gold);
+  color: #fff;
+}
+
+body.nf-www.nf-site-v14 .footerBottom {
+  color: var(--muted2);
+  border-top: 1px solid var(--line);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body.nf-www.nf-site-v14 .nf-loop-step:hover,
+  body.nf-www.nf-site-v14 .nf-proof-card:hover {
+    transform: none;
+  }
+}

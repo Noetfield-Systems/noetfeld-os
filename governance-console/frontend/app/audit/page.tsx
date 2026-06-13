@@ -35,8 +35,14 @@ export default function AuditPage() {
       <PageHero
         eyebrow="Compliance"
         title="Audit log"
-        lead="Every evaluation is stored with a unique RID for immutable compliance traceability."
+        lead="RID-threaded compliance log for every governance evaluate — search by actor, action, or Request ID for audit and procurement review."
       />
+
+      <p className="mb-6 text-sm">
+        <Link href="/audit/timeline" className="text-accent hover:underline">
+          Decision timeline →
+        </Link>
+      </p>
 
       <div
         className="nf-card mb-8 flex flex-wrap items-center justify-between gap-4 border border-accent/30 bg-accent/5 p-6"
@@ -45,7 +51,7 @@ export default function AuditPage() {
       >
         <div>
           <p className="text-xs font-medium uppercase tracking-wide text-muted">Diligence export</p>
-          <p className="mt-1 text-sm text-white/90">
+          <p className="mt-1 text-sm text-muted">
             Download JSON bundle for engagement intake — includes{" "}
             <strong>{loading ? "…" : rows.length}</strong> event{rows.length === 1 ? "" : "s"} in
             current view (tenant: pilot default).
@@ -120,7 +126,7 @@ export default function AuditPage() {
                 <code className="font-mono text-sm text-accent">{row.rid}</code>
                 <DecisionBadge decision={row.decision} />
               </div>
-              <p className="mt-3 text-sm text-white/90">
+              <p className="mt-3 text-sm text-muted">
                 {row.actor}
                 <span className="text-muted-2"> · </span>
                 {row.action}

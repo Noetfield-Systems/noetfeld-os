@@ -1,0 +1,83 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-06-13T08:28:53.106799+00:00",
+  "authorities": [
+    {
+      "doc_id": "gtm-60-day",
+      "path": "docs/strategy/NOETFIELD_GTM_60_DAY_LOCKED_v1.md",
+      "optional": false,
+      "exists_on_disk": true,
+      "prompt_count": 100
+    },
+    {
+      "doc_id": "tle-positioning",
+      "path": "docs/strategy/NOETFIELD_TRUST_LEDGER_POSITIONING_LOCKED_v1.2.md",
+      "optional": false,
+      "exists_on_disk": true,
+      "prompt_count": 0
+    },
+    {
+      "doc_id": "tle-blueprint",
+      "path": "docs/spec/TRUST_LEDGER_PRODUCT_BLUEPRINT_v1.2_LOCKED.md",
+      "optional": false,
+      "exists_on_disk": true,
+      "prompt_count": 100
+    },
+    {
+      "doc_id": "governance-sources",
+      "path": "docs/references/GOVERNANCE_SOURCES_HANDBOOK_LOCKED_v1.md",
+      "optional": false,
+      "exists_on_disk": true,
+      "prompt_count": 200
+    },
+    {
+      "doc_id": "drift-sources",
+      "path": "docs/references/GOVERNANCE_DRIFT_DETECTION_SOURCES_LOCKED_v1.md",
+      "optional": false,
+      "exists_on_disk": true,
+      "prompt_count": 100
+    },
+    {
+      "doc_id": "drift-blueprints",
+      "path": "docs/references/GOVERNANCE_DRIFT_BLUEPRINTS_INDEX_LOCKED_v1.md",
+      "optional": false,
+      "exists_on_disk": true,
+      "prompt_count": 100
+    },
+    {
+      "doc_id": "agent-sync",
+      "path": "docs/ops/NOETFIELD_AGENT_TEAM_SYNC_LOCKED_v1.md",
+      "optional": false,
+      "exists_on_disk": true,
+      "prompt_count": 100
+    },
+    {
+      "doc_id": "execution-truth",
+      "path": "docs/spec/EXECUTION_TRUTH_AGENT_REPLY_LOCKED.md",
+      "optional": false,
+      "exists_on_disk": true,
+      "prompt_count": 100
+    },
+    {
+      "doc_id": "context-incident",
+      "path": "~/Desktop/SourceA/CURSOR_AGENT_CONTEXT_MEMORY_INCIDENT_LOCKED_v1.md",
+      "optional": true,
+      "exists_on_disk": true,
+      "prompt_count": 0
+    },
+    {
+      "doc_id": "repo-truth",
+      "path": "ops/private/agent-reference/REPO_TRUTH_CORRECTIONS.md",
+      "optional": true,
+      "exists_on_disk": true,
+      "prompt_count": 0
+    },
+    {
+      "doc_id": "private-todolist",
+      "path": "ops/private/todolist/NEXT_MOVES.md",
+      "optional": true,
+      "exists_on_disk": true,
+      "prompt_count": 0
+    }
+  ]
+}

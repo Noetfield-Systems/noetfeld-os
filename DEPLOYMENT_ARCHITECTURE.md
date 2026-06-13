@@ -12,7 +12,7 @@
 1. Never embed demo runtime widgets on the institutional homepage.
 2. Never serve cross-border payment / FX calculator / payment intent UI on `noetfield.com`.
 3. CORS and cookies: demo subdomain may use separate cookie namespace from marketing site.
-4. Stripe checkout links on institutional pages include commercial-licensing disclaimer only.
+4. Card checkout links on institutional pages include commercial-licensing disclaimer only.
 
 ## Static site (institutional)
 

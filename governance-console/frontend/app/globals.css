@@ -1,27 +1,30 @@
+@import "../../../packages/ui-tokens/tokens.css";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  color-scheme: dark;
+  color-scheme: light;
 }
 
 body {
-  @apply min-h-screen font-sans text-gray-100 antialiased;
-  background:
-    radial-gradient(ellipse 120% 80% at 50% -20%, rgba(200, 163, 73, 0.08), transparent 50%),
-    radial-gradient(ellipse 60% 40% at 100% 0%, rgba(45, 227, 138, 0.04), transparent 40%),
-    #07070b;
+  @apply min-h-screen font-sans text-text antialiased;
+  background: var(--surface);
+}
+
+.nf-proof-mode main {
+  @apply bg-[#141820] text-[#e8eaef];
 }
 
 @layer components {
   .nf-input {
-    @apply mt-1.5 w-full rounded-lg border border-border bg-surface/80 px-3 py-2.5 text-sm text-white placeholder:text-muted-2 transition;
+    @apply mt-1.5 w-full rounded-lg border border-border bg-white px-3 py-2.5 text-sm text-text placeholder:text-muted-2 transition;
     @apply focus:border-accent/50 focus:outline-none focus:ring-2 focus:ring-accent/20;
   }
 
   .nf-card {
-    @apply rounded-xl border border-border bg-panel shadow-panel backdrop-blur-sm transition;
+    @apply rounded-xl border border-border bg-panel shadow-panel transition;
   }
 
   .nf-card-hover {
@@ -29,20 +32,20 @@ body {
   }
 
   .nf-btn-primary {
-    @apply inline-flex items-center justify-center gap-2 rounded-lg bg-accent px-5 py-2.5 text-sm font-semibold text-black transition;
+    @apply inline-flex items-center justify-center gap-2 rounded-lg bg-accent px-5 py-2.5 text-sm font-semibold text-white transition;
     @apply hover:brightness-110 focus:outline-none focus:ring-2 focus:ring-accent/40 disabled:cursor-not-allowed disabled:opacity-50;
   }
 
   .nf-btn-secondary {
-    @apply inline-flex items-center justify-center rounded-lg border border-border bg-white/5 px-4 py-2 text-sm transition;
-    @apply hover:border-accent/30 hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-accent/20;
+    @apply inline-flex items-center justify-center rounded-lg border border-border bg-white px-4 py-2 text-sm text-text transition;
+    @apply hover:border-accent/30 hover:bg-panel-solid focus:outline-none focus:ring-2 focus:ring-accent/20;
   }
 
   .nf-eyebrow {
-    @apply text-[10px] font-semibold uppercase tracking-[0.14em] text-accent;
+    @apply text-[10px] font-semibold uppercase tracking-[0.1em] text-accent;
   }
 
   .nf-spinner {
-    @apply inline-block h-4 w-4 animate-spin rounded-full border-2 border-black/20 border-t-black;
+    @apply inline-block h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white;
   }
 }

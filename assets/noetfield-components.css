@@ -1,4 +1,5 @@
 /* Noetfield components v3 — bank-grade GTM surfaces */
+@import url("noetfield-enterprise.css");
 
 .nf-page {
   max-width: 100%;
@@ -124,16 +125,11 @@
 .nf-trust {
   display: grid;
   gap: 12px;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
   margin-bottom: var(--section-y);
   padding: 20px 0;
   border-top: 1px solid var(--line);
   border-bottom: 1px solid var(--line);
-}
-@media (max-width: 768px) {
-  .nf-trust {
-    grid-template-columns: 1fr;
-  }
 }
 .nf-trust-item {
   text-align: center;

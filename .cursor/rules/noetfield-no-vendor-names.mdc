@@ -1,0 +1,36 @@
+---
+description: No third-party vendor or competitor names on public www or active buyer docs
+globs:
+  - "**/*"
+---
+
+# Noetfield — No vendor names on buyer surfaces
+
+## Policy (locked)
+
+- **Never** name third-party companies on public www, GTM copy, MSP/federal hubs, investor pages, or active ops/agent docs.
+- **Never** write comparison pages, battlecards, scorecards, vendor tables, or “not another X” / “they configure; we …” framing on www.
+- Use **buyer patterns only**: receipt-first, trust center, procurement ZIP, Phase 1/2 MSP, numbered narrative, honest scope badges.
+- If copy does not help a buyer decide or pay, remove it. Do not overshare internal systems architecture.
+
+## Allowed
+
+- **Microsoft** product/docs names when factual (Purview, Copilot Control System, M365, Entra, Learn links).
+- **Government** sources (Canada.ca AIA, TBS ADM, NIST AI RMF).
+- **TrustField Technologies** as invoicing entity where already locked.
+
+## Verify
+
+Run before demo or www ship:
+
+```bash
+make verify-no-vendor-names
+```
+
+Fix generator (`scripts/rebuild-www-v6.py`) and regenerate HTML — do not hand-patch vendor strings into static pages.
+
+## Forbidden in new work
+
+- `/compare/` routes, battlecard docs, competitor tables, “category scorecards”
+- Vendor names in `success_reference`, homepage copy, MSP hero, investor zone map
+- Analyst firm name-drops used as social proof

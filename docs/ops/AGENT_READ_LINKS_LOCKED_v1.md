@@ -107,6 +107,22 @@ Mandatory read chain 1→14: under `~/Desktop/SourceA/` — see canonical index 
 
 ---
 
+---
+
+## § 1000 prompt library (added [NF-LOCAL-REPO-AGENT] 2026-06-06)
+
+| What | Path |
+|------|------|
+| LOCKED index | [NOETFIELD_1000_PROMPT_LIBRARY_LOCKED_v1.md](./NOETFIELD_1000_PROMPT_LIBRARY_LOCKED_v1.md) |
+| Registry | [os/plan-library/noetfield-1000/REGISTRY.json](../../os/plan-library/noetfield-1000/REGISTRY.json) |
+| Pick next | `make pick-no-asf-plan` |
+| Trigger | Founder says **PLAN WITH NO ASF** |
+
+Global hub lane: `~/.cursor/plans/no-asf-library/` → `lanes.noetfield`
+
+---
+
 | Version | Date |
 |---------|------|
 | v1 | 2026-06-03 — founder correction: `docs/ops/` only; no root index |
+| v1.1 | 2026-06-06 — 1000 LOCKED prompt library row (local agent addendum only) |

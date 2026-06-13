@@ -48,7 +48,7 @@ Only these three are **contractable** public offerings:
 2. **Copilot Readiness Pack** — enterprise AI compliance + policy alignment (M365 Copilot)  
 3. **Bank Pilot v6.1** — read-only visibility + governance overlay (no execution authority)
 
-See [OFFERINGS.md](OFFERINGS.md) for scope boundaries.
+See [OFFERINGS_LOCKED.md](OFFERINGS_LOCKED.md) for scope boundaries.
 
 ## Document hierarchy (L0 → L5)
 
@@ -70,9 +70,9 @@ See [OFFERINGS.md](OFFERINGS.md) for scope boundaries.
 | procurement (visible copy) | engagement intake |
 | invoice / PO | engagement artifact |
 | payment intent | *(remove)* |
-| card payment (Stripe) | commercial license (card) |
+| card payment (card checkout) | commercial license (card) |
 
-Stripe: **commercial software licensing / service subscription only**, with disclaimer that Noetfield performs no custody, payment routing, or money transmission.
+Card checkout: **commercial software licensing / service subscription only**, with disclaimer that Noetfield performs no custody, payment routing, or money transmission.
 
 **Domain:** `noetfield.com` = institutional only · `platform.noetfield.com` = demos/runtime.
 

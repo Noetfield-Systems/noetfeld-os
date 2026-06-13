@@ -44,7 +44,7 @@ export function DevPortBanner() {
 
   return (
     <div
-      className="nf-card mb-8 border-accent/25 bg-accent/5 px-4 py-3 font-mono text-xs text-white/90"
+      className="nf-card mb-8 border-accent/25 bg-accent/5 px-4 py-3 font-mono text-xs text-muted"
       role="status"
       aria-live="polite"
     >
@@ -53,7 +53,7 @@ export function DevPortBanner() {
         <button
           type="button"
           onClick={() => setOpen(false)}
-          className="text-muted-2 hover:text-white"
+          className="text-muted-2 hover:text-text"
           aria-label="Dismiss"
         >
           ×

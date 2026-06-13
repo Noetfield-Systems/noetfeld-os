@@ -60,7 +60,7 @@ ALLOWLIST_FILES = {
     "docs/PRODUCTION_READINESS_REPORT.md",
     "docs/REMOVED_PAYMENT_ARTIFACTS.md",
     "NORTH_STAR.md",
-    "OFFERINGS.md",
+    "OFFERINGS_LOCKED.md",
 }
 
 
@@ -128,7 +128,7 @@ def main() -> None:
 
     reg = registry_summary()
     rpaa_safe = len(violations) == 0
-    revenue_ready = (ROOT / "OFFERINGS.md").is_file() and (ROOT / "NORTH_STAR.md").is_file()
+    revenue_ready = (ROOT / "OFFERINGS_LOCKED.md").is_file() and (ROOT / "NORTH_STAR.md").is_file()
 
     settings_check = (ROOT / "packages/config/noetfield_config/__init__.py").read_text()
     postgres_default = 'runtime_event_store: Literal["memory", "postgres"] = "postgres"' in settings_check
@@ -165,7 +165,7 @@ def main() -> None:
             "",
             "Canonical offerings (only three): Trust Brief · Copilot Readiness Pack · Bank Pilot v6.1",
             "",
-            "See [OFFERINGS.md](../OFFERINGS.md).",
+            "See [OFFERINGS_LOCKED.md](../OFFERINGS_LOCKED.md).",
             "",
             "## 3. Clean architecture confirmation",
             "",
@@ -188,7 +188,7 @@ def main() -> None:
             "| procurement (public copy) | engagement intake |",
             "| invoice / PO | engagement artifact |",
             "| payment intent | removed |",
-            "| card payment (Stripe CTAs) | commercial license (card) |",
+            "| card payment CTAs | commercial license (card) |",
             "",
             "URLs `/gate/procurement/` retained for backward compatibility; visible labels updated.",
             "",

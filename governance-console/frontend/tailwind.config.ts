@@ -1,4 +1,5 @@
 import type { Config } from "tailwindcss";
+import tokens from "../../packages/ui-tokens/tokens.json";
 
 const config: Config = {
   content: ["./app/**/*.{js,ts,jsx,tsx}", "./components/**/*.{js,ts,jsx,tsx}"],
@@ -10,23 +11,27 @@ const config: Config = {
         mono: ["ui-monospace", "SFMono-Regular", "Menlo", "monospace"],
       },
       colors: {
-        surface: "#07070b",
-        panel: "rgba(255,255,255,0.055)",
-        "panel-solid": "#14141c",
-        border: "rgba(255,255,255,0.11)",
-        muted: "#b9bbcf",
-        "muted-2": "#8e91ad",
-        accent: "#c8a349",
-        "accent-dim": "rgba(200,163,73,0.35)",
-        ok: "#2de38a",
+        surface: tokens.colors.surface,
+        panel: tokens.colors.panel,
+        "panel-solid": "#f8f9fb",
+        border: tokens.colors.border,
+        text: tokens.colors.text,
+        muted: tokens.colors.muted,
+        "muted-2": "#6b7280",
+        accent: tokens.colors.gold,
+        "accent-dim": "rgba(138, 107, 31, 0.12)",
+        ok: tokens.colors.ok,
       },
       boxShadow: {
-        panel: "0 28px 80px rgba(0,0,0,0.45)",
-        glow: "0 0 40px rgba(200,163,73,0.12)",
+        panel: "0 4px 24px rgba(15, 17, 23, 0.06)",
+        glow: "0 2px 12px rgba(15, 17, 23, 0.04)",
       },
       borderRadius: {
         xl: "18px",
         lg: "12px",
+      },
+      maxWidth: {
+        content: "1320px",
       },
     },
   },

@@ -8,7 +8,7 @@ export default function EvaluatePage() {
       <PageHero
         eyebrow="Pre-execution"
         title="Submit operational intent"
-        lead="Describe who is acting, what they propose, and the operational context. Noetfield returns a governance decision before any external system executes."
+        lead="Describe who is acting, what they propose, and the operational context. Noetfield returns a governance decision — allow, deny, or review — before any external system executes."
       />
       <EvaluateForm />
     </Shell>

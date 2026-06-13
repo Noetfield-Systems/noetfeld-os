@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8" />
+ <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+ <title>Noetfield — Start Free Sandbox</title>
+ <meta name="description" content="Developer sandbox: sign up, try Governance API and workspace without a sales call. 14-day trial, 50 evaluate calls." />
+ <meta name="robots" content="index,follow" />
+ <meta name="theme-color" content="#f4f5f8" />
+ <link rel="canonical" href="https://www.noetfield.com/start/" />
+ <link rel="icon" href="/noetfield-favicon-512.png" type="image/png" />
+ <link rel="preconnect" href="https://fonts.googleapis.com" />
+ <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&amp;family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700&amp;family=IBM+Plex+Serif:ital,wght@0,500;0,600;0,700&amp;display=swap" />
+ <link rel="stylesheet" href="/assets/noetfield-tokens.css" />
+ <link rel="stylesheet" href="/assets/noetfield-shell.css" />
+ <link rel="stylesheet" href="/assets/noetfield-www.css?v=18" />
+ <link rel="stylesheet" href="/assets/noetfield-print.css?v=18" media="print" />
+ <script src="/assets/noetfield-shell.js?v=18" defer></script>
+</head>
+<body class="nf-www nf-site-v14">
+ <div class="bg" aria-hidden="true"></div>
+ <a class="skip" href="#main">Skip to content</a>
+ <header id="nfHeader"></header>
+ <main id="main" class="nf-main nf-page">
+
+ <header class="nf-hero-cinematic">
+ <div>
+ <p class="nf-hero-kicker"><span class="nf-hero-kicker-dot" aria-hidden="true"></span> Developer sandbox · Canada</p>
+ <p class="nf-eyebrow">Self-serve · no sales call</p>
+ <h1>Sign up → sandbox → try the product in minutes</h1>
+ <p class="nf-lead">Create a free developer sandbox, open the Governance Console, and run evaluate → TLE → export with mock M365 connectors — <strong>before</strong> a Trust Brief or design partner conversation.</p>
+ <div class="nf-hero-badges"><span class="nf-badge-pill nf-badge-pill--gold">14-day trial</span><span class="nf-badge-pill">50 evaluate calls</span><span class="nf-badge-pill">Sandbox mode</span></div>
+ <div class="nf-cta-actions"><a class="btn btn-primary" href="#trial-os">Start sandbox</a><a class="btn btn-secondary" href="/copilot/demo/">5-minute demo</a></div>
+ <ul class="nf-marquee" aria-label="Framework alignment"><li>POST /evaluate</li><li>Mock OAuth</li><li>TLE samples</li></ul>
+ </div>
+ 
+ <aside class="nf-workspace-mock" aria-label="Governance workspace preview">
+ <p class="nf-workspace-mock__title">Sandbox · evaluate</p>
+ <div class="nf-workspace-mock__row"><span>Intent</span><code>Copilot rollout · prod</code></div>
+ <div class="nf-workspace-mock__row"><span>Decision</span><code class="nf-workspace-mock__ok">allow · 0.82</code></div>
+ <div class="nf-workspace-mock__row"><span>TLE</span><code>TLE-015DCFB8B953</code></div>
+ <div class="nf-workspace-mock__row"><span>Export</span><code>board.pdf · pack.zip</code></div>
+ <p class="nf-workspace-mock__foot"><a href="/workspace/">Open workspace</a> · <a href="/copilot/demo/">5-minute demo</a></p>
+ </aside>
+ </header>
+ <nav class="nf-self-serve-rail" aria-label="Self-serve product access">
+ <p class="nf-self-serve-rail__label">Try without a sales call</p>
+ <a href="/start/">Developer sandbox</a>
+ <a href="/pricing/">Published tiers</a>
+ <a href="/docs/api/">Governance API</a>
+ <a href="/copilot/demo/">5-minute demo</a>
+ <a class="btn btn-primary" href="/start/">Start free sandbox</a>
+ </nav>
+ <section class="nf-section-block" id="trial-os" aria-labelledby="start-trial">
+ <div class="nf-section-block-head"><span class="nf-section-num" aria-hidden="true">01</span><div>
+ <p class="nf-eyebrow" id="start-trial">Trial OS</p>
+ <h2>Full self-serve flow — no calendar required</h2>
+ <p class="nf-section-lead">Sandbox mode · mock M365 · evaluate API · sample export — 14-day sandbox · 50 evaluate calls · mock M365 connectors · no sales call.</p>
+ </div></div>
+ 
+ <div id="nfTrialOs" class="nf-trial-os" data-trial-os-flow="trial-os-flow" aria-label="Trial OS wizard">
+ <p class="nf-trial-os__usage" data-nf-usage-chip hidden>0/50 evaluates · 14 days left</p>
+ <ol class="nf-trial-os__stepper" aria-label="Sandbox setup steps">
+ <li class="nf-trial-os__step is-active"><span class="nf-trial-os__step-num">1</span> Account</li>
+ <li class="nf-trial-os__step"><span class="nf-trial-os__step-num">2</span> Environment</li>
+ <li class="nf-trial-os__step"><span class="nf-trial-os__step-num">3</span> Connect M365</li>
+ <li class="nf-trial-os__step"><span class="nf-trial-os__step-num">4</span> First evaluate</li>
+ <li class="nf-trial-os__step"><span class="nf-trial-os__step-num">5</span> Receipt + export</li>
+ </ol>
+ <div class="nf-trial-os__panel is-active" data-step="0">
+ <form id="nfTrialAccountForm" class="nf-sandbox-form" aria-labelledby="trial-account-title">
+ <h3 id="trial-account-title">Create your developer sandbox</h3>
+ <p class="nf-section-lead">No credit card · no sales call · 14-day sandbox · 50 evaluate calls · mock M365 connectors · no sales call</p>
+ <label>Work email<input type="email" name="email" required autocomplete="email" placeholder="you@company.com" /></label>
+ <label>Organization (optional)<input type="text" name="org" autocomplete="organization" placeholder="Your team or company" /></label>
+ <div class="nf-trial-os__actions"><button type="submit" class="btn btn-primary">Continue</button></div>
+ </form>
+ </div>
+ <div class="nf-trial-os__panel" data-step="1">
+ <h3>Environment mode</h3>
+ <div class="nf-trial-os__env">
+ <article class="nf-trial-os__env-tile is-active"><strong>Sandbox</strong><p>Mock M365 · 50 evaluate calls · 14-day trial · active now.</p></article>
+ <article class="nf-trial-os__env-tile is-locked"><strong>Production</strong><p>Real metadata index · board PDF · design partner keys.</p><span class="nf-trial-os__lock">🔒 <a href="/copilot/pilot/">Apply to design partner</a></span></article>
+ </div>
+ <div class="nf-trial-os__actions"><button type="button" class="btn btn-primary" data-trial-next="2">Continue in sandbox</button></div>
+ </div>
+ <div class="nf-trial-os__panel" data-step="2">
+ <h3>Connect mock M365</h3>
+ <p class="nf-section-lead">One-click OAuth success UI — metadata-only Purview · Entra · audit (sandbox simulation).</p>
+ <div class="nf-trial-os__mock-oauth"><button type="button" id="nfTrialMockOAuth" class="btn btn-primary">Register + mock connect (M365)</button></div>
+ <p id="nfTrialOAuthStatus" class="nf-callout" hidden role="status"></p>
+ <div class="nf-trial-os__actions"><button type="button" class="btn btn-primary" data-trial-next="3">Continue</button></div>
+ </div>
+ <div class="nf-trial-os__panel" data-step="3">
+ <h3>First evaluate</h3>
+ <form id="nfTrialEvaluateForm"><p class="nf-section-lead">Submit operational intent — confidence score · RID-threaded audit log.</p><div class="nf-trial-os__actions"><button type="submit" class="btn btn-primary">Run first evaluate</button></div></form>
+ </div>
+ <div class="nf-trial-os__panel" data-step="4">
+ <h3>Receipt + export orientation</h3>
+ <p class="nf-section-lead">RID <code data-trial-rid>RID-pending</code> · sample TLE YAML · board PDF path · procurement ZIP orientation.</p>
+ <div class="nf-trial-os__api-drawer">
+ <strong>API drawer</strong> · key preview <code data-api-key>nf_sbx_…</code> · <a href="/docs/api/">API reference</a>
+ <pre data-curl-example>curl example loads after signup</pre>
+ </div>
+ <div class="nf-trial-os__actions">
+ <button type="button" id="nfTrialFinish" class="btn btn-primary">Open Governance Console</button>
+ <a class="btn btn-secondary" href="/trust-ledger/sample-report/">Download sample export orientation</a>
+ </div>
+ </div>
+ </div>
+ <script src="/assets/noetfield-sandbox.js?v=18" defer></script>
+ <aside class="nf-callout"><p><strong>Sandbox vs production:</strong> Sandbox uses mock connectors and local evaluate limits. Production mode unlocks via <a href="/copilot/pilot/">design partner program</a> or Trust Brief engagement.</p></aside>
+ </section>
+ 
+ <section class="nf-section-block nf-section--elevated" aria-labelledby="agentic-title">
+ <div class="nf-section-block-head"><span class="nf-section-num" aria-hidden="true">A</span><div>
+ <p class="nf-eyebrow" id="agentic-title">Agentic governance</p>
+ <h2>Fully agentic workflows — not AI assist alone</h2>
+ <p class="nf-section-lead">Governance agents execute investigate → triage → draft → act on policy-bounded paths. High-risk Copilot go/no-go stays with named human approvers; low-risk allows auto-record to signed TLE when policy permits.</p>
+ </div></div>
+ <div class="nf-agentic-grid">
+ <article class="nf-agentic-step"><strong>Investigate</strong><p>Agent pulls M365 metadata gaps — Purview labels, Entra CA, audit indices — before rollout sign-off.</p></article>
+ <article class="nf-agentic-step"><strong>Triage</strong><p>Confidence score and policy rules route allow, review, or deny — same semantics as <code>POST /evaluate</code>.</p></article>
+ <article class="nf-agentic-step"><strong>Draft TLE</strong><p>Agent prepares Trust Ledger Entry YAML, approval chain, and evidence index for human sign-off.</p></article>
+ <article class="nf-agentic-step"><strong>Act on low-risk</strong><p>Pre-approved policy paths auto-record sandbox evaluates; production requires design partner keys and approver chain.</p></article>
+ </div>
+ </section>
+
+ <div class="nf-pack-grid nf-pack-grid--4" role="list" aria-label="Access paths and contract programs">
+ <article class="nf-pack-card nf-pack-card--free" role="listitem">
+ <p class="nf-pack-card__tag">Developer access · free</p>
+ <p class="nf-pack-card__price">$0</p>
+ <p>Self-serve sandbox — evaluate API, workspace, mock M365 connectors. 14-day sandbox · 50 evaluate calls · mock M365 connectors · no sales call.</p>
+ <ul><li>Sandbox mode</li><li>Instant workspace</li><li>Sample TLE export</li></ul>
+ <a class="btn btn-primary" href="/start/">Start sandbox</a>
+ </article>
+ <article class="nf-pack-card nf-pack-card--program" role="listitem">
+ <p class="nf-pack-card__tag">Named program · apply online</p>
+ <p class="nf-pack-card__price">$2k–10k</p>
+ <p>Copilot Governance Pack design partner — production tenant, board PDF in governance meeting, procurement ZIP.</p>
+ <ul><li>90-day program</li><li>Production mode</li><li>API keys per engagement</li></ul>
+ <a class="btn btn-primary" href="/copilot/pilot/">Apply to design partner</a>
+ </article>
+ <article class="nf-pack-card" role="listitem">
+ <p class="nf-pack-card__tag">Contract SKU</p>
+ <p class="nf-pack-card__price">$10,000</p>
+ <p>Trust Brief — six-week governance diagnostic before Copilot or automation scale.</p>
+ <ul><li>Policy map</li><li>Risk exposure</li><li>Board-ready summary</li></ul>
+ <a class="btn btn-secondary" href="/trust-brief/">Trust Brief</a>
+ </article>
+ <article class="nf-pack-card" role="listitem">
+ <p class="nf-pack-card__tag">Contract SKU · custom</p>
+ <p class="nf-pack-card__price">Enterprise</p>
+ <p>Bank Pilot shadow simulation — read-only governance evaluate for FRFI and regulated institutions.</p>
+ <ul><li>Shadow mode</li><li>No custody rails</li><li>Audit lineage export</li></ul>
+ <a class="btn btn-secondary" href="/bank-pilot/">Bank Pilot</a>
+ </article>
+ </div>
+ <p class="nf-section-lead">Three contract SKUs only — free sandbox is product access, not a retail SKU. Upgrade path: sandbox → design partner → Trust Brief or enterprise SOW.</p>
+ <section class="nf-cta-mega" aria-labelledby="cta-h">
+ <h2 id="cta-h">Upgrade to design partner</h2>
+ <p>Production keys · real M365 metadata · board PDF in governance meeting</p>
+ <div class="nf-cta-actions">
+ <a class="btn btn-primary" href="/copilot/pilot/">Apply to design partner</a>
+ <a class="btn btn-secondary" href="/pricing/">Compare tiers</a>
+ </div>
+ </section>
+ </main>
+ <footer id="nfFooter"></footer>
+</body>
+</html>

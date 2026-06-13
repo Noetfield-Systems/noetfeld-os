@@ -4,83 +4,98 @@
  <meta charset="UTF-8" />
  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
  <title>Noetfield — Copilot Governance Pack</title>
- <meta name="description" content="AI Governance & Evidence layer for Microsoft 365 Copilot adoption — signed TLE v1 and board-ready export." />
+ <meta name="description" content="AI Governance & Evidence layer for Microsoft 365 Copilot — signed TLE v1 and board-ready export." />
  <meta name="robots" content="index,follow" />
- <meta name="theme-color" content="#07070b" />
+ <meta name="theme-color" content="#f4f5f8" />
  <link rel="canonical" href="https://www.noetfield.com/copilot/" />
  <link rel="icon" href="/noetfield-favicon-512.png" type="image/png" />
+ <link rel="preconnect" href="https://fonts.googleapis.com" />
+ <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&amp;family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700&amp;family=IBM+Plex+Serif:ital,wght@0,500;0,600;0,700&amp;display=swap" />
  <link rel="stylesheet" href="/assets/noetfield-tokens.css" />
  <link rel="stylesheet" href="/assets/noetfield-shell.css" />
- <link rel="stylesheet" href="/assets/noetfield-components.css" />
- <link rel="stylesheet" href="/assets/noetfield-institutional.css" />
- <link rel="stylesheet" href="/assets/noetfield-sales.css" />
- <script src="/assets/noetfield-shell.js" defer></script>
+ <link rel="stylesheet" href="/assets/noetfield-www.css?v=18" />
+ <link rel="stylesheet" href="/assets/noetfield-print.css?v=18" media="print" />
+ <script src="/assets/noetfield-shell.js?v=18" defer></script>
 </head>
-<body>
+<body class="nf-www nf-site-v14">
  <div class="bg" aria-hidden="true"></div>
  <a class="skip" href="#main">Skip to content</a>
  <header id="nfHeader"></header>
- <main id="main" class="wrap nf-page">
- <header class="nf-hero">
- <p class="nf-eyebrow">Copilot Governance Pack</p>
+ <main id="main" class="nf-main nf-page">
+
+ <header class="nf-hero-cinematic">
+ <div>
+ <p class="nf-hero-kicker"><span class="nf-hero-kicker-dot" aria-hidden="true"></span> Copilot Governance Pack</p>
+ <p class="nf-eyebrow">Microsoft 365 Copilot · governance execution</p>
  <h1>The audit trail your Copilot deployment will be asked for later</h1>
- <p class="nf-lead">
- AI Governance &amp; Evidence for Copilot adoption — evaluate operational intent, index M365 metadata evidence,
- and produce signed Trust Ledger Entries your board and procurement can defend.
- </p>
- <div class="nf-cta-actions" style="margin-top:1.25rem;display:flex;flex-wrap:wrap;gap:.75rem">
- <a class="btn btn-primary" href="/copilot/demo/">5-minute demo</a>
- <a class="btn btn-secondary" href="/workspace/">Trust Ledger Workspace</a>
- <a class="btn btn-secondary" href="/copilot/pilot/">Design-partner pilot</a>
+ <p class="nf-lead">Noetfield governs Copilot execution — evaluate operational intent, index M365 metadata evidence, and produce signed Trust Ledger Entries your board, auditor, and procurement can defend. Complement Purview and Copilot Control System, not replace.</p>
+ <div class="nf-hero-badges"><span class="nf-badge-pill nf-badge-pill--gold">TLE v1 signed records</span><span class="nf-badge-pill">Purview · Entra · SharePoint</span></div>
+ <div class="nf-cta-actions"><a class="btn btn-primary" href="/copilot/demo/">5-minute demo</a><a class="btn btn-secondary" href="/copilot/pilot/">Design-partner pilot</a><a class="btn btn-secondary" href="/copilot/procurement/">Procurement pack</a></div>
+ <ul class="nf-marquee" aria-label="Framework alignment"><li>Evaluate · Decide · Record · Export</li></ul>
  </div>
+ <div class="nf-hero-artifacts">
+ <div class="nf-artifact-panel">
+ <div class="nf-artifact-panel-chrome">
+ <span class="nf-artifact-panel-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+ <span class="nf-artifact-panel-file">tle-receipt.yaml</span>
+ <span class="nf-artifact-panel-badge">Verified</span>
+ </div>
+ <aside class="nf-receipt-mock" aria-label="Trust Ledger Entry receipt">
+ <dl class="nf-receipt-mock-body">
+ <div class="nf-receipt-row"><dt>tle_id</dt><dd>TLE-015DCFB8B953</dd></div>
+ <div class="nf-receipt-row"><dt>decision</dt><dd>allow</dd></div>
+ <div class="nf-receipt-row"><dt>confidence_score</dt><dd>0.82</dd></div>
+ <div class="nf-receipt-row"><dt>rid</dt><dd>RID-2026-0602-COPILOT</dd></div>
+ <div class="nf-receipt-row"><dt>evidence_index</dt><dd>purview · entra · audit</dd></div>
+ <div class="nf-receipt-row"><dt>export_integrity</dt><dd class="nf-receipt-ok">PASS · fail closed on tamper</dd></div>
+ </dl>
+ <p class="nf-receipt-mock-footer">Live sample · <a href="/trust-ledger/sample-report/">Download TLE YAML</a></p>
+ </aside>
+ </div>
+ <aside class="nf-workspace-mock" aria-label="Governance workspace preview">
+ <p class="nf-workspace-mock__title">Workspace · evaluate</p>
+ <div class="nf-workspace-mock__row"><span>Intent</span><code>Copilot rollout · prod</code></div>
+ <div class="nf-workspace-mock__row"><span>Decision</span><code class="nf-workspace-mock__ok">allow · 0.82</code></div>
+ <div class="nf-workspace-mock__row"><span>TLE</span><code>TLE-015DCFB8B953</code></div>
+ <div class="nf-workspace-mock__row"><span>Export</span><code>board.pdf · pack.zip</code></div>
+ <p class="nf-workspace-mock__foot"><a href="/workspace/">Open workspace</a> · <a href="/copilot/demo/">5-minute demo</a></p>
+ </aside></div>
  </header>
+ <section class="nf-trust-signals" aria-labelledby="scope-title">
+ <h2 id="scope-title">Shipped today — honest scope</h2>
+ <p class="nf-trust-signals-lead">Honest scope for procurement — what you can demo, export, and defend today.</p>
+ <div class="nf-trust-signals-grid"><div class="nf-trust-signal"><span class="nf-trust-signal-label">Pre-execution evaluate</span><span class="nf-signal-badge nf-signal-badge--shipped">Shipped</span></div><div class="nf-trust-signal"><span class="nf-trust-signal-label">TLE v1 + workspace UI</span><span class="nf-signal-badge nf-signal-badge--shipped">Shipped</span></div><div class="nf-trust-signal"><span class="nf-trust-signal-label">Board PDF · procurement ZIP</span><span class="nf-signal-badge nf-signal-badge--shipped">Shipped</span></div><div class="nf-trust-signal"><span class="nf-trust-signal-label">M365 metadata connectors</span><span class="nf-signal-badge nf-signal-badge--shipped">Shipped</span></div><div class="nf-trust-signal"><span class="nf-trust-signal-label">Framework citations</span><span class="nf-signal-badge nf-signal-badge--orientation">Orientation</span></div><div class="nf-trust-signal"><span class="nf-trust-signal-label">Payment rails / MSB execution</span><span class="nf-signal-badge nf-signal-badge--na">Out of scope</span></div></div>
+ </section>
+ <section class="nf-section-block" aria-labelledby="copilot-ccs">
+ <div class="nf-section-block-head"><span class="nf-section-num" aria-hidden="true">01</span><div>
+ <p class="nf-eyebrow" id="copilot-ccs">Stack complement</p><h2>Phase 2 after Copilot Control System and partner readiness</h2>
+ <p class="nf-section-lead">Microsoft secures and measures Copilot. Partners standardize tenants. Noetfield receipts the operational go/no-go when Copilot touches production scope.</p>
+ </div></div>
 
- <p class="nf-section-label">Problem · Risk · Solution</p>
- <div class="nf-prs">
- <article class="nf-prs-card">
- <span class="nf-prs-num" aria-hidden="true">1</span>
- <h2>Problem</h2>
- <p>Copilot spreads before legal and risk sign off on data handling and prohibited actions.</p>
- </article>
- <article class="nf-prs-card">
- <span class="nf-prs-num" aria-hidden="true">2</span>
- <h2>Risk</h2>
- <p>Oversharing and unlogged decisions create regulatory and privacy exposure.</p>
- </article>
- <article class="nf-prs-card">
- <span class="nf-prs-num" aria-hidden="true">3</span>
- <h2>Solution</h2>
- <p>Signed TLE v1 records, confidence score, and procurement-grade export — not another chatbot.</p>
- </article>
- </div>
-
- <section class="nf-section">
- <h2>Procurement &amp; pilot</h2>
- <p>Design-partner program, diligence ZIP, and buyer pack for Copilot governance.
- <a href="/docs/copilot/PROCUREMENT_ONE_PAGER.md">Procurement one-pager (md)</a>
- ·
- <a href="/docs/references/GOVERNANCE_SOURCES_BOOK_v1.md">Governance Sources Book v1</a>
- ·
- <a href="/docs/references/GOVERNANCE_SOURCES_HANDBOOK_LOCKED_v1.md">Sources Handbook (locked)</a>
- ·
- <a href="/docs/ops/DEMO_REHEARSAL_CHECKLIST_v1.md">Demo rehearsal checklist</a></p>
- <div class="nf-cta-actions" style="display:flex;flex-wrap:wrap;gap:.75rem;margin-top:.75rem">
- <a class="btn btn-primary" href="/copilot/pilot/">Design-partner pilot</a>
- <a class="btn btn-secondary" href="/copilot/procurement/">Procurement buyer pack</a>
- <a class="btn btn-secondary" href="/trust-ledger/sample-report/">TLE v1 samples</a>
- <a class="btn btn-secondary" href="/copilot/quickscan/">Copilot QuickScan</a>
+ <div class="nf-stack-ladder" role="region" aria-label="Microsoft stack complement">
+ <div class="nf-stack-tier"><p class="nf-stack-tier__label">Microsoft Copilot Control System</p><p>Security &amp; governance (Purview) · management · measurement (Copilot Analytics). <a href="https://learn.microsoft.com/en-us/copilot/microsoft-365/copilot-control-system/overview" rel="noopener noreferrer">Learn overview ↗</a></p></div>
+ <div class="nf-stack-tier"><p class="nf-stack-tier__label">Partner Phase 1 · tenant readiness</p><p>Labels · DLP · readiness assessment · Copilot enable — MSP or internal IT leads.</p></div>
+ <div class="nf-stack-tier nf-stack-tier--gold"><p class="nf-stack-tier__label">Noetfield Phase 2 · execution receipts</p><p>Evaluate operational intent → sign TLE v1 → board PDF · procurement ZIP. Evidence index: <code>purview · entra · audit</code>.</p></div>
  </div>
  </section>
-
- <aside class="nf-cta-band">
- <div>
- <h2>Request Governance Brief</h2>
- <p>Copilot rollout governance assessment</p>
- </div>
+ <section class="nf-section-block" aria-labelledby="copilot-prs">
+ <div class="nf-section-block-head"><span class="nf-section-num" aria-hidden="true">02</span><div>
+ <p class="nf-eyebrow" id="copilot-prs">Problem · Risk · Solution</p><h2>Copilot spreads before legal signs off</h2>
+ </div></div>
+ <div class="nf-personas">
+ <article class="nf-persona"><p class="nf-persona-role">Problem</p><h3>Undocumented decisions</h3><p>Copilot adoption outpaces policy and risk review.</p></article>
+ <article class="nf-persona"><p class="nf-persona-role">Risk</p><h3>Audit exposure</h3><p>Oversharing and unlogged go/no-go create regulatory risk.</p></article>
+ <article class="nf-persona"><p class="nf-persona-role">Solution</p><h3>Signed TLE v1</h3><p>Confidence score + procurement-grade export your board and auditor can defend.</p></article>
+ </div></section>
+ <section class="nf-cta-mega" aria-labelledby="cta-h">
+ <h2 id="cta-h">Request Governance Brief</h2>
+ <p>Non-confidential intake · include your Request ID · Trust Brief ($10k), Copilot pilot ($2k–10k), federal or MSP lane · operations@noetfield.com</p>
  <div class="nf-cta-actions">
- <a class="btn btn-primary" href="/trust-brief/intake/?interest=copilot">Request Governance Brief</a>
+ <a class="btn btn-primary" href="/trust-brief/intake/">Request Governance Brief</a>
+ <a class="btn btn-secondary" href="/copilot/pilot/">Become a design partner</a>
  </div>
- </aside>
+ </section>
  </main>
  <footer id="nfFooter"></footer>
 </body>

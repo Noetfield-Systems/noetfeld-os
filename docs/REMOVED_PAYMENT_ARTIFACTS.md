@@ -18,7 +18,7 @@ Production alignment sprint — institutional GTM (GCIP v4 / North Star).
 
 - **Invoice / PO** — B2B procurement for governance services  
 - **Lane assignment / Request ID** — intake discipline (not fund routing)  
-- **Card checkout** — purchase of Trust Brief / QuickScan **services** via Stripe (commercial, not money transmission)
+- **Card checkout** — purchase of Trust Brief / QuickScan **services** via card (commercial, not money transmission)
 
 ## Backend
 

@@ -1,0 +1,14 @@
+---
+description: Do not edit Sina Command (SourceA) — report via API only
+alwaysApply: true
+---
+
+# Sina Command — read only
+
+Never modify `~/Desktop/SourceA/` or Sina Command UI/scripts from this chat.
+
+**Private workspace:** `/Users/sinakazemnezhad/.sina/agent-workspaces/noetfield_cloud/` (notes, INBOX) — product code in `/Users/sinakazemnezhad/Desktop/Noetfield` only. Marker: `.sina-agent/README.md`.
+
+**Founder law:** No Terminal for founder — add **Actions** one-tap or run commands yourself.
+
+Report app bugs: `POST /api/agent-review` or Sina Command **Backlog**. Only **SinaaiDataBase** + ASF edit SourceA.

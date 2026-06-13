@@ -16,7 +16,7 @@ No forbidden financial product phrases detected in scanned public HTML.
 
 Canonical offerings (only three): Trust Brief · Copilot Readiness Pack · Bank Pilot v6.1
 
-See [OFFERINGS.md](../OFFERINGS.md).
+See [OFFERINGS_LOCKED.md](../OFFERINGS_LOCKED.md).
 
 ## 3. Clean architecture confirmation
 
@@ -39,7 +39,7 @@ See [OFFERINGS.md](../OFFERINGS.md).
 | procurement (public copy) | engagement intake |
 | invoice / PO | engagement artifact |
 | payment intent | removed |
-| card payment (Stripe CTAs) | commercial license (card) |
+| card payment CTAs | commercial license (card) |
 
 URLs `/gate/procurement/` retained for backward compatibility; visible labels updated.
 

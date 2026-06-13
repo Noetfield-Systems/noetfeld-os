@@ -3,99 +3,197 @@
 <head>
  <meta charset="UTF-8" />
  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
- <title>Noetfield — Governance Execution Infrastructure</title>
- <meta name="description" content="Governance execution infrastructure that evaluates AI-driven operational intent before execution in regulated environments." />
+ <title>Noetfield — Copilot Governance &amp; Trust Ledger Evidence</title>
+ <meta name="description" content="Govern Copilot execution for regulated buyers — blocked changes, receipted decisions, fail-closed export. Metadata-only M365." />
  <meta name="robots" content="index,follow" />
- <meta name="theme-color" content="#07070b" />
+ <meta name="theme-color" content="#f4f5f8" />
  <link rel="canonical" href="https://www.noetfield.com/" />
  <link rel="icon" href="/noetfield-favicon-512.png" type="image/png" />
+ <link rel="preconnect" href="https://fonts.googleapis.com" />
+ <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&amp;family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700&amp;family=IBM+Plex+Serif:ital,wght@0,500;0,600;0,700&amp;display=swap" />
  <link rel="stylesheet" href="/assets/noetfield-tokens.css" />
  <link rel="stylesheet" href="/assets/noetfield-shell.css" />
- <link rel="stylesheet" href="/assets/noetfield-components.css" />
- <link rel="stylesheet" href="/assets/noetfield-institutional.css" />
- <link rel="stylesheet" href="/assets/noetfield-sales.css" />
- <script src="/assets/noetfield-shell.js" defer></script>
+ <link rel="stylesheet" href="/assets/noetfield-www.css?v=18" />
+ <link rel="stylesheet" href="/assets/noetfield-print.css?v=18" media="print" />
+ <script src="/assets/noetfield-shell.js?v=18" defer></script>
 </head>
-<body>
+<body class="nf-www nf-site-v14">
  <div class="bg" aria-hidden="true"></div>
  <a class="skip" href="#main">Skip to content</a>
  <header id="nfHeader"></header>
- <main id="main" class="wrap nf-page">
- <header class="nf-hero">
- <p class="nf-eyebrow">AI Governance & Evidence · Copilot adoption</p>
+ <main id="main" class="nf-main nf-page">
+
+ <header class="nf-hero-cinematic">
+ <div>
+ <p class="nf-hero-kicker"><span class="nf-hero-kicker-dot" aria-hidden="true"></span> Governance execution · Canada</p>
+ <p class="nf-eyebrow">AI Governance &amp; Evidence · Microsoft 365 Copilot</p>
  <h1>The audit trail your Copilot deployment will be asked for later</h1>
- <p class="nf-lead">
- Noetfield is the AI Governance & Evidence layer for Copilot adoption.
- We evaluate operational intent, index metadata-only evidence from M365 connectors, and produce signed
- <strong>Trust Ledger Entries (TLE v1)</strong> — procurement-grade go/no-go records your board and auditors can defend.
- </p>
- <div class="nf-cta-actions" style="margin-top:1.25rem;display:flex;flex-wrap:wrap;gap:.75rem">
- <a class="btn btn-primary" href="/copilot/pilot/">Become a design partner</a>
- <a class="btn btn-secondary" href="/copilot/demo/">5-minute demo</a>
- <a class="btn btn-secondary" href="/cognitive-dashboard/">Open Governance Console</a>
- <a class="btn btn-secondary" href="/workspace/">Trust Ledger Workspace</a>
- <a class="btn btn-secondary" href="/copilot/procurement/">Procurement pack</a>
+ <p class="nf-lead">Noetfield is the <strong>AI Governance &amp; Evidence</strong> layer for Microsoft 365 Copilot — invalid changes <strong>blocked</strong>, allowed decisions <strong>receipted</strong>, export <strong>fail closed</strong> on tamper. Metadata-only M365 — complement Purview and Copilot Control System, not replace.</p>
+ <div class="nf-hero-badges"><span class="nf-badge-pill nf-badge-pill--gold">Trust Ledger · TLE v1</span><span class="nf-badge-pill">No custody · no payment rails</span></div>
+ <div class="nf-cta-actions"><a class="btn btn-primary" href="/start/">Start free sandbox</a><a class="btn btn-secondary" href="/copilot/demo/">5-minute demo</a><a class="btn btn-secondary" href="/copilot/pilot/">Become a design partner</a></div>
+ <ul class="nf-marquee" aria-label="Framework alignment"><li>NIST AI RMF</li><li>ISO-style evidence</li><li>Microsoft Purview</li><li>RPAA-safe vendor</li></ul>
  </div>
+ 
+ <div id="nfLiveProofHero" class="nf-live-proof-panel" data-live-proof-hero="live-proof-hero" aria-label="Live evaluate mini">
+ <form id="nfLiveProofForm" class="nf-live-proof-form">
+ <h3>Try evaluate — live receipt</h3>
+ <p>POST <code>/evaluate</code> from the homepage · Trust Ledger Entry fields match export semantics.</p>
+ <label>Actor<input type="text" name="actor" value="www-hero" autocomplete="off" /></label>
+ <label>Action<input type="text" name="action" value="copilot_rollout" autocomplete="off" /></label>
+ <label>Context<textarea name="context">Copilot rollout governance check — homepage live proof</textarea></label>
+ <button type="submit" class="btn btn-primary">Evaluate intent</button>
+ </form>
+ <div id="nfLiveProofReceipt" class="nf-live-proof-receipt-host" aria-live="polite">
+ 
+ <div class="nf-artifact-panel">
+ <div class="nf-artifact-panel-chrome">
+ <span class="nf-artifact-panel-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+ <span class="nf-artifact-panel-file">tle-receipt.yaml</span>
+ <span class="nf-artifact-panel-badge">Verified</span>
+ </div>
+ <aside class="nf-receipt-mock" aria-label="Trust Ledger Entry receipt">
+ <dl class="nf-receipt-mock-body">
+ <div class="nf-receipt-row"><dt>tle_id</dt><dd>TLE-015DCFB8B953</dd></div>
+ <div class="nf-receipt-row"><dt>decision</dt><dd>allow</dd></div>
+ <div class="nf-receipt-row"><dt>confidence_score</dt><dd>0.82</dd></div>
+ <div class="nf-receipt-row"><dt>rid</dt><dd>RID-2026-0602-HOME</dd></div>
+ <div class="nf-receipt-row"><dt>evidence_index</dt><dd>purview · entra · audit</dd></div>
+ <div class="nf-receipt-row"><dt>export_integrity</dt><dd class="nf-receipt-ok">PASS · fail closed on tamper</dd></div>
+ </dl>
+ <p class="nf-receipt-mock-footer">Live sample · <a href="/trust-ledger/sample-report/">Download TLE YAML</a></p>
+ </aside>
+ </div>
+ </div>
+ </div>
+ <script src="/assets/noetfield-live-proof.js?v=18" defer></script>
  </header>
-
- <div class="nf-trust" role="region" aria-label="Trust Ledger capabilities">
- <div class="nf-trust-item"><strong>TLE v1</strong><span>Signed go/no-go with confidence score</span></div>
- <div class="nf-trust-item"><strong>Evidence index</strong><span>Purview, Entra ID, audit metadata only</span></div>
- <div class="nf-trust-item"><strong>Board pack export</strong><span>PDF-ready digest for diligence</span></div>
- <div class="nf-trust-item"><strong>Design partner</strong><span>$2k–10k pilot · board PDF in governance meeting</span></div>
+ <div class="nf-stat-bar" role="region" aria-label="Key metrics">
+ <div class="nf-stat-bar-item"><strong>4</strong><span>Evaluate · Decide · Record · Export</span></div>
+ <div class="nf-stat-bar-item"><strong>$10k</strong><span>Trust Brief · governance diagnostic</span></div>
+ <div class="nf-stat-bar-item"><strong>90d</strong><span>Design partner · board PDF path</span></div>
+ <div class="nf-stat-bar-item"><strong>3</strong><span>Contract SKUs · no catalog creep</span></div>
  </div>
-
- <p class="nf-section-label">Problem · Risk · Solution</p>
- <div class="nf-prs">
- <article class="nf-prs-card">
- <span class="nf-prs-num" aria-hidden="true">1</span>
- <h2>Problem</h2>
- <p>AI-assisted workflows scale faster than ownership, policy, and evidence can keep pace.</p>
- </article>
- <article class="nf-prs-card">
- <span class="nf-prs-num" aria-hidden="true">2</span>
- <h2>Risk</h2>
- <p>Regulators and boards ask what was permitted, under which rule, and who approved it—often after the fact.</p>
- </article>
- <article class="nf-prs-card">
- <span class="nf-prs-num" aria-hidden="true">3</span>
- <h2>Solution</h2>
- <p>A governance evaluation layer your risk, compliance, and technology leaders can defend in diligence and audit.</p>
- </article>
+ <nav class="nf-self-serve-rail" aria-label="Self-serve product access">
+ <p class="nf-self-serve-rail__label">Try without a sales call</p>
+ <a href="/start/">Developer sandbox</a>
+ <a href="/pricing/">Published tiers</a>
+ <a href="/docs/api/">Governance API</a>
+ <a href="/copilot/demo/">5-minute demo</a>
+ <a class="btn btn-primary" href="/start/">Start free sandbox</a>
+ </nav>
+ <section class="nf-section-block nf-act-prove" aria-labelledby="act-prove">
+ <div class="nf-section-block-head"><span class="nf-section-num" aria-hidden="true">02</span><div>
+ <p class="nf-eyebrow" id="act-prove">Prove</p>
+ <h2>The moment Copilot becomes auditable</h2>
+ <p class="nf-section-lead">Show the record your auditor would accept before Copilot touches production data. · Execution receipts for Copilot operational decisions — complement the <strong>Copilot Control System</strong>, not replace Purview.</p>
+ </div></div>
+ <div class="nf-loop">
+ <article class="nf-loop-step"><p class="nf-loop-step-num">01</p><h3>Evaluate</h3><p>Pre-execution evaluate — operational intent before production scope opens.</p></article>
+ <article class="nf-loop-step"><p class="nf-loop-step-num">02</p><h3>Decide</h3><p>Confidence score and named approvers — defensible go/no-go.</p></article>
+ <article class="nf-loop-step"><p class="nf-loop-step-num">03</p><h3>Record</h3><p>Signed Trust Ledger Entry · TLE v1 with M365 metadata evidence index.</p></article>
+ <article class="nf-loop-step"><p class="nf-loop-step-num">04</p><h3>Export</h3><p>Board PDF and procurement ZIP — <strong>export_integrity</strong> fails closed on tamper.</p></article>
  </div>
-
- <section class="nf-offerings" aria-labelledby="offerings-heading">
- <p class="nf-section-label" id="offerings-heading">Three offerings</p>
- <div class="nf-dir-grid">
- <article class="nf-dir-card featured">
- <p class="meta">Trust Brief</p>
- <p class="price">$10,000 · 6 weeks</p>
- <p>Six-week governance audit, AI policy mapping, and risk exposure analysis.</p>
+ <div class="nf-proof-grid"><a class="nf-proof-card" href="/copilot/demo/"><span class="nf-proof-icon">▶</span><div><h3>5-minute demo</h3><p>Evaluate → confidence score → Purview · Entra · SharePoint index</p></div></a><a class="nf-proof-card" href="/trust-ledger/sample-report/"><span class="nf-proof-icon">TLE</span><div><h3>TLE v1 samples</h3><p>Go · conditional · rejected YAML for procurement review</p></div></a><a class="nf-proof-card" href="/copilot/procurement/"><span class="nf-proof-icon">ZIP</span><div><h3>Procurement pack</h3><p>Buyer diligence ZIP · NIST AI RMF · trust center crosswalk</p></div></a><a class="nf-proof-card" href="/trust-ledger/verify/"><span class="nf-proof-icon">✓</span><div><h3>Verify export</h3><p>Fail-closed export integrity walkthrough</p></div></a></div>
+ <p class="nf-section-lead" style="margin-top:20px"><a href="/copilot/">What buyers ask</a> · extended FAQ · stack complement · category map on the Copilot hub.</p>
+ </section>
+ <section class="nf-section-block nf-act-package" aria-labelledby="act-package">
+ <div class="nf-section-block-head"><span class="nf-section-num" aria-hidden="true">03</span><div>
+ <p class="nf-eyebrow" id="act-package">Package</p>
+ <h2>Published tiers — sandbox to contract</h2>
+ <p class="nf-section-lead">Start free in developer sandbox, apply to the design partner program, or buy a locked contract SKU — same evaluate → TLE → export spine.</p>
+ </div></div>
+ 
+ <div class="nf-pack-grid nf-pack-grid--4" role="list" aria-label="Access paths and contract programs">
+ <article class="nf-pack-card nf-pack-card--free" role="listitem">
+ <p class="nf-pack-card__tag">Developer access · free</p>
+ <p class="nf-pack-card__price">$0</p>
+ <p>Self-serve sandbox — evaluate API, workspace, mock M365 connectors. 14-day sandbox · 50 evaluate calls · mock M365 connectors · no sales call.</p>
+ <ul><li>Sandbox mode</li><li>Instant workspace</li><li>Sample TLE export</li></ul>
+ <a class="btn btn-primary" href="/start/">Start sandbox</a>
+ </article>
+ <article class="nf-pack-card nf-pack-card--program" role="listitem">
+ <p class="nf-pack-card__tag">Named program · apply online</p>
+ <p class="nf-pack-card__price">$2k–10k</p>
+ <p>Copilot Governance Pack design partner — production tenant, board PDF in governance meeting, procurement ZIP.</p>
+ <ul><li>90-day program</li><li>Production mode</li><li>API keys per engagement</li></ul>
+ <a class="btn btn-primary" href="/copilot/pilot/">Apply to design partner</a>
+ </article>
+ <article class="nf-pack-card" role="listitem">
+ <p class="nf-pack-card__tag">Contract SKU</p>
+ <p class="nf-pack-card__price">$10,000</p>
+ <p>Trust Brief — six-week governance diagnostic before Copilot or automation scale.</p>
+ <ul><li>Policy map</li><li>Risk exposure</li><li>Board-ready summary</li></ul>
  <a class="btn btn-secondary" href="/trust-brief/">Trust Brief</a>
  </article>
- <article class="nf-dir-card featured">
- <p class="meta">Copilot Governance Pack</p>
- <p>Enterprise AI compliance and policy validation for Microsoft 365 Copilot rollouts.</p>
- <a class="btn btn-secondary" href="/copilot/">Copilot</a>
- </article>
- <article class="nf-dir-card featured">
- <p class="meta">Bank Pilot</p>
- <span class="nf-badge">Read-only simulation only</span>
- <p>Shadow governance evaluation for institutional buyers—no execution authority.</p>
+ <article class="nf-pack-card" role="listitem">
+ <p class="nf-pack-card__tag">Contract SKU · custom</p>
+ <p class="nf-pack-card__price">Enterprise</p>
+ <p>Bank Pilot shadow simulation — read-only governance evaluate for FRFI and regulated institutions.</p>
+ <ul><li>Shadow mode</li><li>No custody rails</li><li>Audit lineage export</li></ul>
  <a class="btn btn-secondary" href="/bank-pilot/">Bank Pilot</a>
  </article>
  </div>
+ <p class="nf-section-lead">Three contract SKUs only — free sandbox is product access, not a retail SKU. Upgrade path: sandbox → design partner → Trust Brief or enterprise SOW.</p>
+ <p class="nf-section-lead"><a href="/pricing/">See all tiers</a> · Sandbox + production modes · three contract SKUs only.</p>
  </section>
-
- <aside class="nf-cta-band" aria-label="Primary call to action">
- <div>
- <h2>Request Governance Brief</h2>
- <p>Non-confidential intake · operations@noetfield.com</p>
+ 
+ <section class="nf-section-block nf-section--elevated" aria-labelledby="agentic-title">
+ <div class="nf-section-block-head"><span class="nf-section-num" aria-hidden="true">A</span><div>
+ <p class="nf-eyebrow" id="agentic-title">Agentic governance</p>
+ <h2>Fully agentic workflows — not AI assist alone</h2>
+ <p class="nf-section-lead">Governance agents execute investigate → triage → draft → act on policy-bounded paths. High-risk Copilot go/no-go stays with named human approvers; low-risk allows auto-record to signed TLE when policy permits.</p>
+ </div></div>
+ <div class="nf-agentic-grid">
+ <article class="nf-agentic-step"><strong>Investigate</strong><p>Agent pulls M365 metadata gaps — Purview labels, Entra CA, audit indices — before rollout sign-off.</p></article>
+ <article class="nf-agentic-step"><strong>Triage</strong><p>Confidence score and policy rules route allow, review, or deny — same semantics as <code>POST /evaluate</code>.</p></article>
+ <article class="nf-agentic-step"><strong>Draft TLE</strong><p>Agent prepares Trust Ledger Entry YAML, approval chain, and evidence index for human sign-off.</p></article>
+ <article class="nf-agentic-step"><strong>Act on low-risk</strong><p>Pre-approved policy paths auto-record sandbox evaluates; production requires design partner keys and approver chain.</p></article>
  </div>
+ </section>
+ <section class="nf-section-block" aria-labelledby="act-offerings">
+ <div class="nf-section-block-head"><span class="nf-section-num" aria-hidden="true">—</span><div>
+ <p class="nf-eyebrow" id="act-offerings">Contract programs</p>
+ <h2>Three SKUs — locked scope</h2>
+ </div></div>
+ 
+ <div class="nf-offerings-v5">
+ <article class="nf-offer-card nf-offer-card--featured"><p class="meta">Trust Brief</p><p class="price">$10,000 · 6 weeks</p><p>Governance audit, AI policy mapping, and risk exposure analysis — board-ready executive summary before Copilot scale.</p><a class="btn btn-primary" href="/trust-brief/">Trust Brief</a></article>
+ <article class="nf-offer-card nf-offer-card--featured"><p class="meta">Copilot Governance Pack</p><p class="price">$2k–10k · 90 days</p><p>Enterprise AI compliance layer for M365 Copilot — live TLE records, board PDF, and procurement ZIP on every go/no-go.</p><a class="btn btn-primary" href="/copilot/">Copilot Pack</a></article>
+ <article class="nf-offer-card"><p class="meta">Bank Pilot</p><p class="price">Custom</p><p>Read-only shadow governance simulation — policy evaluate without execution authority or custody rails.</p><a class="btn btn-secondary" href="/bank-pilot/">Bank Pilot</a></article>
+ </div>
+ </section>
+ <nav class="nf-procurement-rail" aria-label="Procurement diligence path">
+ <p class="nf-procurement-rail__label">Procurement</p>
+ <a href="/trust/">Trust center</a>
+ <a href="/copilot/procurement/">Diligence pack</a>
+ <a href="/trust-ledger/sample-report/">TLE samples</a>
+ <a href="/trust-ledger/verify/">Verify export</a>
+ </nav>
+ <section class="nf-ciso-strip" aria-labelledby="ciso-h">
+ <div class="nf-ciso-strip-head">
+ <p class="nf-eyebrow" id="ciso-h">Procurement diligence</p>
+ <h2>What legal and security reviewers need to see</h2>
+ <p>Honest Shipped · Orientation · Roadmap · Out of scope — what legal, security, and procurement reviewers inspect before pilot sign-off.</p>
+ </div>
+ <div class="nf-ciso-grid"><article class="nf-ciso-card"><h3>Metadata-only M365</h3><p>Purview · Entra · audit indices — evidence index on every TLE, no mailbox custody.</p><span class="nf-signal-badge nf-signal-badge--shipped">Shipped</span></article><article class="nf-ciso-card"><h3>Fail-closed export</h3><p>Board PDF and procurement ZIP fail verification when tampered — by design.</p><span class="nf-signal-badge nf-signal-badge--shipped">Shipped</span></article><article class="nf-ciso-card"><h3>Canada trust posture</h3><p>Data handling and GC buyer notes for regulated procurement.</p><span class="nf-signal-badge nf-signal-badge--orientation">Orientation</span></article><article class="nf-ciso-card"><h3>SOC 2 Type II</h3><p>Independent audit on roadmap — not claimed on www today.</p><span class="nf-signal-badge nf-signal-badge--roadmap">Roadmap</span></article><article class="nf-ciso-card"><h3>SSO / SAML</h3><p>Enterprise IdP for console access — product roadmap.</p><span class="nf-signal-badge nf-signal-badge--roadmap">Roadmap</span></article><article class="nf-ciso-card"><h3>No custody rails</h3><p>No payment execution, MSB, asset custody, or money-transmission claims.</p><span class="nf-signal-badge nf-signal-badge--na">Out of scope</span></article></div>
+ </section>
+ <section class="nf-trust-signals" aria-labelledby="scope-title">
+ <h2 id="scope-title">Shipped today — honest scope</h2>
+ <p class="nf-trust-signals-lead">Honest scope for procurement — what you can demo, export, and defend today.</p>
+ <div class="nf-trust-signals-grid"><div class="nf-trust-signal"><span class="nf-trust-signal-label">Pre-execution evaluate</span><span class="nf-signal-badge nf-signal-badge--shipped">Shipped</span></div><div class="nf-trust-signal"><span class="nf-trust-signal-label">TLE v1 + workspace UI</span><span class="nf-signal-badge nf-signal-badge--shipped">Shipped</span></div><div class="nf-trust-signal"><span class="nf-trust-signal-label">Board PDF · procurement ZIP</span><span class="nf-signal-badge nf-signal-badge--shipped">Shipped</span></div><div class="nf-trust-signal"><span class="nf-trust-signal-label">M365 metadata connectors</span><span class="nf-signal-badge nf-signal-badge--shipped">Shipped</span></div><div class="nf-trust-signal"><span class="nf-trust-signal-label">Framework citations</span><span class="nf-signal-badge nf-signal-badge--orientation">Orientation</span></div><div class="nf-trust-signal"><span class="nf-trust-signal-label">Payment rails / MSB execution</span><span class="nf-signal-badge nf-signal-badge--na">Out of scope</span></div></div>
+ </section>
+ <section class="nf-cta-mega" aria-labelledby="cta-h">
+ <h2 id="cta-h">Request Governance Brief</h2>
+ <p>Non-confidential intake · include your Request ID · Trust Brief ($10k), Copilot pilot ($2k–10k), federal or MSP lane · operations@noetfield.com</p>
  <div class="nf-cta-actions">
  <a class="btn btn-primary" href="/trust-brief/intake/">Request Governance Brief</a>
+ <a class="btn btn-secondary" href="/copilot/pilot/">Become a design partner</a>
  </div>
- </aside>
+ </section>
+ <div class="nf-sticky-mobile-cta" aria-label="Quick start">
+ <a class="btn btn-primary" href="/start/">Start free sandbox</a>
+ </div>
  </main>
  <footer id="nfFooter"></footer>
 </body>

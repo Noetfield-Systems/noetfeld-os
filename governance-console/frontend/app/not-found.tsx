@@ -6,7 +6,7 @@ export default function NotFound() {
     <Shell>
       <div className="nf-card mx-auto max-w-lg p-10 text-center">
         <p className="nf-eyebrow">404</p>
-        <h1 className="mt-2 font-serif text-2xl font-semibold text-white">Page not found</h1>
+        <h1 className="mt-2 font-sans text-2xl font-bold text-text">Page not found</h1>
         <p className="mt-3 text-sm text-muted">
           This route is not part of the governance console dev surface.
         </p>

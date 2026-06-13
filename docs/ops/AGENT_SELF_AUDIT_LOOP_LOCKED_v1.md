@@ -28,7 +28,7 @@ Noetfield audit iterations mirror the June 2026 Open Trust Stack pattern without
 | Enforce | ACS / AGT (fail-closed runtime controls) | FAIL gates in `verify-no-asf-coherence.sh` and `verify-gtm-ops-docs.sh` |
 | Re-eval | Closed loop | Repeated audit iterations (GTM_NEXT ship bundles) until verify PASS |
 
-Buyer-facing framework authority: [GOVERNANCE_SOURCES_BOOK_v1.md](../references/GOVERNANCE_SOURCES_BOOK_v1.md) (NIST AI RMF, ISO/IEC 42001).
+Buyer-facing framework authority: [GOVERNANCE_SOURCES_BOOK_v1.md](../reference/GOVERNANCE_SOURCES_BOOK_v1.md) (NIST AI RMF, ISO/IEC 42001).
 
 ---
 
@@ -57,10 +57,6 @@ flowchart TD
 2. Read [.cursor/incidents/REGISTRY.md](../../.cursor/incidents/REGISTRY.md) — **open** incidents
 3. Read [PROJECT_BOUNDARIES_LOCKED.md](../../PROJECT_BOUNDARIES_LOCKED.md)
 4. Run scope gate skill: [.cursor/skills/SKILL-001-scope-gate-before-work.md](../../.cursor/skills/SKILL-001-scope-gate-before-work.md)
-
----
-
-## § Post-audit addendum (2026-06-10 — agent-maintained)
 
 Also at session start (cloud agents):
 

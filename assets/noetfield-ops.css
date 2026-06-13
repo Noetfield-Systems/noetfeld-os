@@ -1,0 +1,213 @@
+/* Operator / Lane B reference pages — tables, phases, checklists */
+
+.nf-ops .nf-hero h1 {
+  max-width: none;
+}
+
+.nf-ops-toc {
+  display: grid;
+  gap: 0.5rem;
+  margin: 1.5rem 0 2rem;
+  padding: 1rem 1.25rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--panel2);
+}
+
+.nf-ops-toc strong {
+  color: var(--text);
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  margin-bottom: 0.25rem;
+}
+
+.nf-ops-toc a {
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 0.95rem;
+  padding: 0.15rem 0;
+  transition: color var(--motion-fast) ease;
+}
+
+.nf-ops-toc a:hover {
+  color: var(--gold);
+  text-decoration: none;
+}
+
+.nf-ops-phase {
+  margin: 2.5rem 0;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--line);
+}
+
+.nf-ops-phase h2 {
+  font-size: clamp(1.15rem, 3vw, 1.45rem);
+  margin: 0 0 0.75rem;
+  font-weight: 650;
+}
+
+.nf-ops-phase h3 {
+  font-size: 1rem;
+  margin: 1.25rem 0 0.5rem;
+  color: var(--text);
+  font-weight: 600;
+}
+
+.nf-ops-phase > p {
+  color: var(--muted);
+  font-size: var(--text-sm);
+  line-height: var(--leading-body);
+  max-width: 72ch;
+  margin: 0 0 1rem;
+}
+
+.nf-ops-scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin: 0.75rem 0 1rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--line);
+}
+
+.nf-ops-table {
+  width: 100%;
+  min-width: 520px;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+  margin: 0;
+}
+
+.nf-ops-table th,
+.nf-ops-table td {
+  border-bottom: 1px solid var(--line);
+  padding: 0.65rem 0.75rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+.nf-ops-table tr:last-child th,
+.nf-ops-table tr:last-child td {
+  border-bottom: none;
+}
+
+.nf-ops-table th {
+  background: rgba(255, 255, 255, 0.04);
+  font-weight: 600;
+  color: var(--text);
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.nf-ops-table td {
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.nf-ops-table td strong {
+  color: var(--text);
+}
+
+.nf-ops-kpi {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 0.75rem;
+  margin: 1rem 0;
+}
+
+.nf-ops-kpi div {
+  padding: 0.85rem 1rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--panel2);
+}
+
+.nf-ops-kpi strong {
+  display: block;
+  font-size: 1.15rem;
+  color: var(--gold);
+  margin-bottom: 0.25rem;
+}
+
+.nf-ops-kpi span {
+  font-size: 0.8rem;
+  color: var(--muted2);
+}
+
+.nf-ops-notice {
+  padding: 1rem 1.25rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: rgba(255, 255, 255, 0.03);
+  margin: 1.25rem 0;
+  font-size: 0.9rem;
+  color: var(--muted);
+  line-height: 1.65;
+}
+
+.nf-ops-notice strong {
+  color: var(--text);
+}
+
+.nf-ops-notice a {
+  color: var(--gold);
+}
+
+.nf-ops-checklist {
+  list-style: none;
+  padding: 0;
+  margin: 0.5rem 0;
+}
+
+.nf-ops-checklist li {
+  padding: 0.4rem 0 0.4rem 1.5rem;
+  position: relative;
+  color: var(--muted);
+  font-size: 0.9rem;
+  line-height: 1.55;
+}
+
+.nf-ops-checklist li::before {
+  content: "☐";
+  position: absolute;
+  left: 0;
+  color: var(--gold);
+}
+
+.nf-ops-checklist a {
+  color: var(--gold);
+}
+
+.nf-ops-steps {
+  color: var(--muted);
+  line-height: 1.7;
+  font-size: 0.9rem;
+  padding-left: 1.25rem;
+  margin: 0.5rem 0 1rem;
+  max-width: 72ch;
+}
+
+.nf-ops-tag {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  border: 1px solid var(--line);
+  color: var(--muted2);
+  margin-left: 0.35rem;
+  vertical-align: middle;
+}
+
+.nf-ops-tag--private {
+  border-color: rgba(200, 163, 73, 0.35);
+  color: var(--gold);
+}
+
+.nf-ops-tag--future {
+  border-color: var(--line);
+  color: var(--muted2);
+}

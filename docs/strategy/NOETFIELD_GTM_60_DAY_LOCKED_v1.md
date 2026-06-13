@@ -68,7 +68,7 @@ Noetfield → Trust Brief / Readiness → Evidence → TLE → Board Pack
 
 ## 5-minute demo script (locked narrative)
 
-1. **Hook:** “Copilot adoption needs a board-ready decision record, not another chatbot.”  
+1. **Hook:** “Copilot adoption needs a board-ready decision record — signed TLE export for audit.”  
 2. **Evaluate** intent → RID (governance console).  
 3. **Connect** M365 (or 3 evidence types) → Evidence Index.  
 4. **Draft TLE** → highlight **confidence score** and decision.  

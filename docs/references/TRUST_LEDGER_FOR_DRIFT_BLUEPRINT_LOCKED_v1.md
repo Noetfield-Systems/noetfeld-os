@@ -220,7 +220,7 @@ The Trust Ledger is **not** a log file—it is a **temporal model of truth**. It
 - **Reconstruct** drift (replay at T)
 - **Forecast** drift (trajectory slope and area)
 
-This is what banks, insurers, and regulated AI operators require in 2026—not another SIEM export.
+This is what banks, insurers, and regulated AI operators require in 2026 — signed governance receipts with export integrity, not log dumps alone.
 
 ---
 

@@ -1,4 +1,4 @@
-.PHONY: bootstrap validate api api-v3 apply-migrations ingest-sot-dry-run ingest-sot phase32-smoke phase32-postgres-smoke phase33-verify phase33-postgres-verify phase35-demo final-lock-audit final-lock-semantic governance-console-up governance-console-e2e governance-console-down plan-with-no-asf-verify sync-prompt-pack generate-prompt-pack
+.PHONY: bootstrap validate api api-v3 apply-migrations ingest-sot-dry-run ingest-sot phase32-smoke phase32-postgres-smoke phase33-verify phase33-postgres-verify phase35-demo final-lock-audit final-lock-semantic governance-console-up governance-console-e2e governance-console-down plan-with-no-asf-verify sync-prompt-pack generate-prompt-pack verify-gtm verify-no-vendor-names verify-static-www verify-www
 
 PYTHONPATH_VALUE := packages/types:packages/config:packages/sdk:services/events:services/ledger:services/graph:services/governance:services/signals:services/workflow:services/ai-runtime:services/inspectors:services/identity:services/copilot-governance
 
@@ -47,6 +47,10 @@ verify-local-dev:
 	@chmod +x scripts/verify-local-dev.sh
 	./scripts/verify-local-dev.sh
 
+verify-doc-ssot:
+	@chmod +x scripts/verify-doc-ssot.sh
+	./scripts/verify-doc-ssot.sh
+
 verify-agent-scope:
 	@chmod +x scripts/verify-agent-scope.sh
 	./scripts/verify-agent-scope.sh
@@ -54,6 +58,10 @@ verify-agent-scope:
 verify-ui-e2e:
 	@chmod +x scripts/verify-ui-e2e.sh
 	./scripts/verify-ui-e2e.sh
+
+verify-ui-visual:
+	@chmod +x scripts/verify-ui-visual.sh
+	./scripts/verify-ui-visual.sh
 
 plan-with-no-asf-verify:
 	@chmod +x scripts/plan-with-no-asf-verify.sh scripts/verify-copilot-demo-links.sh
@@ -85,7 +93,100 @@ verify-gtm:
 	@chmod +x scripts/verify-gtm.sh
 	./scripts/verify-gtm.sh
 
+verify-no-vendor-names:
+	@chmod +x scripts/verify-no-competitor-names.sh
+	./scripts/verify-no-competitor-names.sh
+
+verify-static-www:
+	@chmod +x scripts/verify-static-www.sh
+	./scripts/verify-static-www.sh
+
+verify-www: verify-no-vendor-names verify-static-www
+	@python3 scripts/rebuild-www-v6.py
+	@$(MAKE) verify-static-www
+
+market-roadmap:
+	@python3 scripts/generate-market-success-1000-roadmap.py
+
+verify-market-roadmap: market-roadmap
+	@chmod +x scripts/verify-market-roadmap.sh
+	@./scripts/verify-market-roadmap.sh
+
+verify-all-static: verify-www verify-market-roadmap verify-lane-fences validate-noetfield-1000 verify-doc-ssot
+
 # Merge/deploy readiness (cloud canonical — superset of verify-gtm checks)
+generate-noetfield-1000:
+	@chmod +x scripts/generate-noetfield-1000-prompts.py
+	python3 scripts/generate-noetfield-1000-prompts.py
+
+agent-session-start:
+	@chmod +x scripts/agent-session-start.sh
+	./scripts/agent-session-start.sh
+
+ingest-cursor-reply:
+	@chmod +x scripts/ingest-cursor-reply.sh
+	./scripts/ingest-cursor-reply.sh
+
+sync-sourceA:
+	@chmod +x scripts/sync-sourceA-desktop.sh
+	./scripts/sync-sourceA-desktop.sh
+
+ship-closeout:
+	@chmod +x scripts/ship-closeout.sh
+	./scripts/ship-closeout.sh
+
+agent-session-close:
+	@chmod +x scripts/agent-session-close.sh
+	./scripts/agent-session-close.sh
+
+smoke-pick-no-asf-plan:
+	@chmod +x scripts/smoke-pick-no-asf-plan.sh
+	./scripts/smoke-pick-no-asf-plan.sh
+
+verify-lane-fences:
+	@chmod +x scripts/verify-lane-fences.sh
+	./scripts/verify-lane-fences.sh
+
+mirror-noetfield-os-readme:
+	@chmod +x scripts/mirror-noetfield-os-readme.py
+	python3 scripts/mirror-noetfield-os-readme.py
+
+pick-no-asf-plan:
+	@chmod +x scripts/pick-noetfield-no-asf-plan.py
+	python3 scripts/pick-noetfield-no-asf-plan.py --tier T0 --limit 1 --prompt
+
+generate-tier1-smart:
+	@chmod +x scripts/generate-tier1-smart-pack.py
+	python3 scripts/generate-tier1-smart-pack.py
+
+generate-catalog-500: generate-tier1-smart
+	@chmod +x scripts/generate-prompt-catalog-500.py
+	python3 scripts/generate-prompt-catalog-500.py
+
+pick-tier1-smart:
+	@chmod +x scripts/pick-wise.py
+	python3 scripts/pick-wise.py --limit 1 --prompt
+
+pick-wise:
+	@chmod +x scripts/pick-wise.py
+	python3 scripts/pick-wise.py --limit 1 --prompt
+
+pick-wise-maturity:
+	@chmod +x scripts/pick-wise.py
+	python3 scripts/pick-wise.py --maturity
+
+sync-tier1-status:
+	@chmod +x scripts/sync-tier1-status.py
+	python3 scripts/sync-tier1-status.py $(ARGS)
+
+validate-noetfield-1000:
+	@chmod +x scripts/validate-noetfield-1000-sources.py
+	python3 scripts/validate-noetfield-1000-sources.py
+
+sync-noetfield-plans-status:
+	@chmod +x scripts/sync-noetfield-plans-status.py
+	python3 scripts/sync-noetfield-plans-status.py
+
 ship-verify:
 	@echo "=== ship-verify (Noetfield merge/deploy readiness) ==="
 	@chmod +x scripts/verify-agent-scope.sh 2>/dev/null || true

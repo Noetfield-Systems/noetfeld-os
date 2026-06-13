@@ -80,6 +80,8 @@ for p in sys.argv[2:]:
     for key in ("tle_id", "status"):
         if key not in data:
             raise SystemExit(f"missing {key} in {p}")
+    if "drift_class" in data:
+        print(f"  drift_class={data.get('drift_class')} (optional field OK)")
 print(f"tle-smoke: OK ({len(sys.argv) - 2} example(s))")
 PY
 else

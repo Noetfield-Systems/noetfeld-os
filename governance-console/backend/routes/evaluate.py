@@ -8,7 +8,7 @@ from sqlalchemy.orm import Session
 from db.models import AuditEvent
 from db.session import get_db
 from schemas import EvaluateRequest, EvaluateResponse
-from services.governance_engine import evaluate_intent
+from services.governance_engine import build_evaluate_confidence, evaluate_intent
 from services.integrity import audit_integrity_hash
 from services.tenant_service import resolve_tenant_id
 
@@ -55,6 +55,11 @@ def post_evaluate(
     )
     db.add(row)
     db.commit()
+    risk_summary, confidence_factors = build_evaluate_confidence(
+        action=body.action.strip(),
+        risk_score=result.risk_score,
+        reasons=result.reason,
+    )
     return EvaluateResponse(
         decision=result.decision,
         risk_score=result.risk_score,
@@ -62,4 +67,6 @@ def post_evaluate(
         conditions=result.conditions,
         rid=result.rid,
         tenant_id=tenant_id,
+        confidence_factors=confidence_factors,
+        risk_summary=risk_summary,
     )

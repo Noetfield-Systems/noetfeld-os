@@ -400,7 +400,7 @@ Do **not** treat these as primary governance evidence without a T1/T2 anchor:
 - Random “AI governance checklist” blogs and LinkedIn posts  
 - Unverified GitHub awesome-lists without links to primary law/standards  
 - Vendor whitepapers that restate NIST/ISO without publishing auditable controls  
-- **Noetfield competitor marketing** pages  
+- **Noetfield vendor comparison marketing** pages  
 
 When adding new sources to v1.1, require: **named authority**, **stable URL**, **publication date**, and **one-sentence Noetfield mapping**.
 

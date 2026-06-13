@@ -1,5 +1,7 @@
 # Governance Drift Detection — Sources Book v1
 
+> **Canonical for agents:** prefer [GOVERNANCE_DRIFT_DETECTION_SOURCES_LOCKED_v1.md](./GOVERNANCE_DRIFT_DETECTION_SOURCES_LOCKED_v1.md). This file remains for historical nf-1000 prompt context budgets.
+
 **Status:** Living reference (v1 locked 2026-06-04)  
 **Path:** `docs/references/GOVERNANCE_DRIFT_DETECTION_SOURCES_v1.md`  
 **Companion:** [GOVERNANCE_SOURCES_BOOK_v1.md](./GOVERNANCE_SOURCES_BOOK_v1.md) (frameworks) · [NOETFIELD_GTM_60_DAY_LOCKED_v1.md](../strategy/NOETFIELD_GTM_60_DAY_LOCKED_v1.md) (GTM)  
@@ -301,7 +303,7 @@ Drift is continuous between formal audits. Detection requires **ongoing monitori
 | Field | Value |
 |-------|--------|
 | Reliability | **Secondary** (vendor essay) / concept aligns with **NIST CA-7** |
-| Archer | https://www.archerirm.com/post/why-continuous-controls-monitoring-is-the-future-of-cyber-grc |
+| Secondary reference | Continuous controls monitoring (CCM) industry pattern — aligns with **NIST CA-7** |
 
 **Idea:** Manual audit evidence goes stale immediately → **CCM** streams live control status.
 
@@ -445,7 +447,7 @@ flowchart TB
 | Source type | Why |
 |-------------|-----|
 | Random SEO “AI governance” listicles | Not auditable |
-| Paywalled Gartner/Forrester only | Buyer must use their subscription |
+| Paywalled analyst research only | Buyer must use their subscription |
 | TrustField / crypto governance | Product boundary |
 | Unverified survey stats in blogs | Re-verify or drop |
 | Lane C payment rails | Out of PRODUCT_TRUTH |

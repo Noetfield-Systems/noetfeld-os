@@ -2,413 +2,67 @@
 <html lang="en">
 <head>
  <meta charset="UTF-8" />
- <title>Noetfield – Privacy</title>
- <meta name="viewport" content="width=device-width, initial-scale=1" />
-
- <meta
- name="description"
- content="Noetfield Privacy Policy. What we collect, why we collect it, how we use it, and how request IDs and form submissions are handled across Gate and Partners lanes."
- />
+ <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+ <title>Noetfield — Privacy</title>
+ <meta name="description" content="Privacy policy." />
  <meta name="robots" content="index,follow" />
- <meta name="author" content="Noetfield Systems Inc." />
- <meta name="theme-color" content="#07070b" />
-
+ <meta name="theme-color" content="#f4f5f8" />
  <link rel="canonical" href="https://www.noetfield.com/privacy/" />
-
  <link rel="icon" href="/noetfield-favicon-512.png" type="image/png" />
- <link rel="apple-touch-icon" href="/noetfield-favicon-512.png" />
-
- <!-- OG -->
- <meta property="og:type" content="website" />
- <meta property="og:site_name" content="Noetfield" />
- <meta property="og:title" content="Noetfield – Privacy" />
- <meta
- property="og:description"
- content="Noetfield Privacy Policy. What we collect, why we collect it, and how intakes are handled."
- />
- <meta property="og:url" content="https://www.noetfield.com/privacy/" />
- <meta property="og:image" content="https://www.noetfield.com/noetfield-og.png" />
-
- <!-- Twitter -->
- <meta name="twitter:card" content="summary_large_image" />
- <meta name="twitter:title" content="Noetfield – Privacy" />
- <meta
- name="twitter:description"
- content="Noetfield Privacy Policy. What we collect, why we collect it, and how intakes are handled."
- />
- <meta name="twitter:image" content="https://www.noetfield.com/noetfield-og.png" />
-
+ <link rel="preconnect" href="https://fonts.googleapis.com" />
+ <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&amp;family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700&amp;family=IBM+Plex+Serif:ital,wght@0,500;0,600;0,700&amp;display=swap" />
  <link rel="stylesheet" href="/assets/noetfield-tokens.css" />
  <link rel="stylesheet" href="/assets/noetfield-shell.css" />
- <link rel="stylesheet" href="/assets/noetfield-components.css" />
- <script src="/assets/noetfield-shell.js" defer></script>
-
- <!-- Page styles (minimal; rely on shell) -->
- <style>
- .hero{padding:22px 0 14px}
- .heroShell{
- position:relative;
- border-radius: calc(var(--radius) + 8px);
- border: 1px solid rgba(255,255,255,.11);
- background:
- radial-gradient(1000px 420px at 18% 0%, rgba(200,163,73,.14), transparent 60%),
- radial-gradient(1000px 420px at 90% 10%, rgba(122,167,255,.10), transparent 62%),
- linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.022));
- box-shadow: var(--shadow);
- overflow:hidden;
- }
- .heroShell::before{
- content:"";
- position:absolute; inset:-1px;
- background: linear-gradient(120deg, rgba(200,163,73,.22), transparent 30%, rgba(255,255,255,.08) 68%, transparent);
- opacity:.44;
- pointer-events:none;
- mask-image: linear-gradient(180deg, black 0%, black 58%, transparent 96%);
- }
- .heroInner{padding: 24px 22px}
-
- .eyebrow{
- display:inline-flex; gap:10px; align-items:center;
- color:var(--muted);
- font-size:13px;
- padding:9px 12px;
- border-radius:999px;
- border:1px solid rgba(255,255,255,.13);
- background: rgba(255,255,255,.035);
- }
- .dot{
- width:8px; height:8px; border-radius:50%;
- background: rgba(200,163,73,.97);
- box-shadow: 0 0 0 3px rgba(200,163,73,.18);
- }
-
- h1{margin:14px 0 10px; font-size:40px; line-height:1.07; letter-spacing:-0.75px}
- .lead{margin:0; color:var(--muted); font-size:16px; max-width: 980px}
-
- .grid{
- display:grid;
- grid-template-columns: 1.2fr .8fr;
- gap:18px;
- margin: 18px 0 34px;
- align-items:start;
- }
- .card{
- border-radius:var(--radius);
- border:1px solid rgba(255,255,255,.11);
- background: linear-gradient(180deg, rgba(255,255,255,.055), rgba(255,255,255,.022));
- box-shadow: var(--shadow2);
- overflow:hidden;
- min-width:0;
- }
- .card .hd{padding:18px 18px 0}
- .card .bd{padding:18px}
- .card h2{margin:0 0 8px; font-size:18px; letter-spacing:-0.2px}
- .card p{margin:0 0 12px; color:var(--muted)}
-
- .section{
- border:1px solid rgba(255,255,255,.10);
- background: rgba(255,255,255,.03);
- border-radius:16px;
- padding:14px;
- margin-top:12px;
- }
- .sectionTitle{
- font-weight:900;
- letter-spacing:-.2px;
- margin:0 0 6px;
- font-size:14px;
- }
- .sectionDesc{
- margin:0 0 12px;
- color:var(--muted2);
- font-size:12.5px;
- line-height:1.6;
- }
-
- .kv{
- display:grid;
- grid-template-columns: 180px 1fr;
- gap:10px 14px;
- align-items:start;
- margin-top:10px;
- }
- .k{color:var(--muted2); font-size:12px}
- .v{color:var(--muted); font-size:13px; line-height:1.6}
- .v a{border-bottom:1px solid rgba(255,255,255,.18)}
-
- .list{margin:0; padding-left:18px; color:var(--muted); font-size:13px; line-height:1.7}
- .list li{margin:8px 0}
- .miniList{margin:8px 0 0; padding-left:18px; color:var(--muted2); font-size:12.5px; line-height:1.65}
- .miniList li{margin:6px 0}
-
- .pillRow{display:flex; flex-wrap:wrap; gap:10px; margin-top:12px}
- .pill{
- display:inline-flex; align-items:center; gap:10px;
- padding:9px 12px;
- border-radius:999px;
- border:1px solid rgba(255,255,255,.12);
- background: rgba(255,255,255,.03);
- color:var(--muted);
- font-size:13px;
- }
- .pill strong{color:var(--text); font-weight:800}
-
- .box{
- margin-top:12px;
- padding:12px 12px;
- border-radius:14px;
- border:1px solid rgba(255,255,255,.10);
- background: rgba(255,255,255,.03);
- color:var(--muted2);
- font-size:12.5px;
- line-height:1.6;
- }
- .box strong{color:var(--text); font-weight:800}
- .box a{border-bottom:1px solid rgba(255,255,255,.18)}
-
- .toc a{display:block; padding:10px 10px; border-radius:12px; border:1px solid rgba(255,255,255,.10); background: rgba(255,255,255,.03); color:var(--muted); margin:8px 0}
- .toc a:hover{border-color: rgba(255,255,255,.20); background: rgba(255,255,255,.05)}
- .toc small{color:var(--muted2)}
- code{font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; font-size: .95em}
-
- @media (max-width: 980px){
- .grid{grid-template-columns:1fr}
- .kv{grid-template-columns: 1fr}
- }
- @media (max-width: 760px){
- h1{font-size:30px}
- }
- </style>
-
- <script type="application/ld+json">
- {
- "@context": "https://schema.org",
- "@type": "WebPage",
- "name": "Noetfield – Privacy",
- "url": "https://www.noetfield.com/privacy/",
- "description": "Noetfield Privacy Policy. What we collect, why we collect it, how we use it, and how request IDs and form submissions are handled across Gate and Partners lanes.",
- "isPartOf": {"@type":"WebSite","name":"Noetfield","url":"https://www.noetfield.com/"},
- "publisher": {"@type":"Organization","name":"Noetfield Systems Inc."}
- }
- </script>
+ <link rel="stylesheet" href="/assets/noetfield-www.css?v=18" />
+ <link rel="stylesheet" href="/assets/noetfield-print.css?v=18" media="print" />
+ <script src="/assets/noetfield-shell.js?v=18" defer></script>
 </head>
-
-<body>
+<body class="nf-www nf-site-v14">
  <div class="bg" aria-hidden="true"></div>
  <a class="skip" href="#main">Skip to content</a>
+ <header id="nfHeader"></header>
+ <main id="main" class="nf-main nf-page">
 
- <!-- injected header -->
- <div id="nfHeader"></div>
-
- <main id="main" class="wrap nf-page nf-prose">
- <section class="hero">
- <div class="heroShell">
- <div class="heroInner">
- <div class="eyebrow"><span class="dot"></span> Privacy • minimal data • evidence discipline</div>
- <h1>Privacy policy.</h1>
- <p class="lead">
- Noetfield collects only what is needed to route intakes and respond. We do not sell personal information.
- Keep submissions non-confidential (no credentials, no internal security details, no private client data).
- </p>
-
- <div class="pillRow" aria-label="Highlights">
- <div class="pill"><strong>Purpose-limited</strong></div>
- <div class="pill"><strong>No selling data</strong></div>
- <div class="pill"><strong>Non-confidential intakes</strong></div>
- <div class="pill"><strong>Request ID tracking</strong></div>
+ <header class="nf-hero-cinematic">
+ <div>
+ 
+ 
+ <h1>Privacy</h1>
+ <p class="nf-lead">How Noetfield handles intake and operational metadata.</p>
+ <div class="nf-hero-badges"></div>
+ <div class="nf-cta-actions"><a class="btn btn-secondary" href="/contact/">Contact</a></div>
+ <ul class="nf-marquee" aria-label="Framework alignment"></ul>
  </div>
+ 
+ <div class="nf-artifact-panel">
+ <div class="nf-artifact-panel-chrome">
+ <span class="nf-artifact-panel-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+ <span class="nf-artifact-panel-file">tle-receipt.yaml</span>
+ <span class="nf-artifact-panel-badge">Verified</span>
  </div>
- </div>
- </section>
-
- <section class="grid">
- <!-- MAIN -->
- <div class="card">
- <div class="hd">
- <h2>Policy</h2>
- <p>Effective date and scope.</p>
- </div>
- <div class="bd">
- <div class="section" id="scope">
- <div class="sectionTitle">1) Scope</div>
- <p class="sectionDesc">
- This policy applies to the Noetfield website and its pages, including Gate and Partners lanes.
- Some pages include forms that send submissions to a form processing provider (e.g., Formspree) as configured on the page.
- </p>
-
- <div class="kv" aria-label="Policy metadata">
- <div class="k">Effective</div>
- <div class="v"><span id="effectiveDate">2025-12-13</span></div>
-
- <div class="k">Owner</div>
- <div class="v">Noetfield Systems Inc.</div>
-
- <div class="k">Contact</div>
- <div class="v"><a href="/contact/">/contact/</a></div>
- </div>
- </div>
-
- <div class="section" id="what-we-collect">
- <div class="sectionTitle">2) What we collect</div>
- <p class="sectionDesc">We collect data you provide, plus minimal technical telemetry needed for basic site operation.</p>
-
- <ul class="list">
- <li>
- <strong>Form submissions:</strong> information you enter into a form (e.g., name, email, role, organization, notes, links).
- </li>
- <li>
- <strong>Request IDs:</strong> some flows generate a <code>request_id</code> used to track an intake across pages
- (for example: <code>/status/?rid=...</code> or <code>/thanks/?rid=...</code>).
- </li>
- <li>
- <strong>Basic technical data:</strong> standard web server logs (e.g., IP address, user agent, timestamps, requested path) for security and reliability.
- </li>
- <li>
- <strong>Local storage:</strong> the site may store non-sensitive keys in your browser (e.g., last <code>rid</code>, lane/track) to improve continuity.
- </li>
- </ul>
-
- <div class="box">
- <strong>Do not submit confidential information.</strong> Forms are designed for links and summaries only, not uploads of sensitive documents or credentials.
- </div>
- </div>
-
- <div class="section" id="how-we-use">
- <div class="sectionTitle">3) How we use information</div>
- <p class="sectionDesc">We use your information to route, respond, and improve site reliability.</p>
-
- <ul class="list">
- <li><strong>Lane assignment:</strong> categorize by track/lane (e.g., Gate vs Partners; integration vs delivery) and prioritize follow-up.</li>
- <li><strong>Response:</strong> reply to your inquiry, request clarifications, or schedule next steps.</li>
- <li><strong>Quality:</strong> identify broken links, form failures, or UX issues.</li>
- <li><strong>Security:</strong> protect the site against abuse and spam.</li>
- </ul>
- </div>
-
- <div class="section" id="sharing">
- <div class="sectionTitle">4) Sharing and service providers</div>
- <p class="sectionDesc">
- We may share data with service providers that help operate the site (for example: form processing, email delivery, analytics if enabled).
- Providers process data on our behalf to deliver the requested function.
- </p>
-
- <ul class="list">
- <li><strong>Form processing:</strong> a provider configured in the form’s <code>action</code> URL receives submissions.</li>
- <li><strong>Email delivery:</strong> if enabled, submissions may be forwarded to designated inboxes for response.</li>
- </ul>
-
- <div class="box">
- <strong>No selling of personal data.</strong> We do not sell your personal information to third parties.
- </div>
- </div>
-
- <div class="section" id="cookies">
- <div class="sectionTitle">5) Cookies and local storage</div>
- <p class="sectionDesc">
- We may use cookies or local storage for basic functionality (navigation state, governance flow continuity, request ID continuity).
- You can clear storage in your browser settings; some flows may become less convenient.
- </p>
-
- <ul class="list">
- <li><strong>Functional:</strong> remember an <code>rid</code> or track so you can continue an intake.</li>
- <li><strong>Security:</strong> basic anti-spam measures (where enabled).</li>
- </ul>
- </div>
-
- <div class="section" id="retention">
- <div class="sectionTitle">6) Data retention</div>
- <p class="sectionDesc">
- We retain information only as long as necessary for the purposes described above, unless a longer retention is required for compliance,
- dispute resolution, or security investigation.
- </p>
- </div>
-
- <div class="section" id="your-rights">
- <div class="sectionTitle">7) Your choices and rights</div>
- <p class="sectionDesc">
- You can request access, correction, or deletion of your submitted personal information, subject to legal and operational limits.
- Use the contact page and include the relevant <code>request_id</code> if available.
- </p>
-
- <div class="box">
- <strong>Tip:</strong> If you submitted an intake, include your <code>Request ID</code> so we can locate it quickly.
- Use <a href="/contact/">/contact/</a>.
- </div>
- </div>
-
- <div class="section" id="security">
- <div class="sectionTitle">8) Security</div>
- <p class="sectionDesc">
- We use reasonable measures to protect information. No system is perfectly secure; please avoid sending sensitive information through web forms.
- </p>
-
- <ul class="list">
- <li>Minimized collection and purpose-limited usage.</li>
- <li>Anti-spam measures may be added over time.</li>
- <li>Operational access limited to what is needed to respond and route.</li>
- </ul>
- </div>
-
- <div class="section" id="changes">
- <div class="sectionTitle">9) Changes</div>
- <p class="sectionDesc">
- We may update this policy to reflect changes in site functionality. The effective date will be updated on this page.
- </p>
- </div>
-
- <div class="section" id="contact">
- <div class="sectionTitle">10) Contact</div>
- <p class="sectionDesc">
- Questions about this policy: use <a href="/contact/">/contact/</a>.
- </p>
- </div>
- </div>
- </div>
-
- <!-- ASIDE -->
- <aside class="card">
- <div class="hd">
- <h2>Quick navigation</h2>
- <p>Jump to a section.</p>
- </div>
- <div class="bd">
- <div class="toc" aria-label="Table of contents">
- <a href="#scope">1) Scope <small>what this covers</small></a>
- <a href="#what-we-collect">2) What we collect <small>forms, request IDs</small></a>
- <a href="#how-we-use">3) How we use it <small>governance flow, response</small></a>
- <a href="#sharing">4) Sharing <small>service providers</small></a>
- <a href="#cookies">5) Cookies/storage <small>functional continuity</small></a>
- <a href="#retention">6) Retention <small>how long</small></a>
- <a href="#your-rights">7) Your rights <small>access/deletion</small></a>
- <a href="#security">8) Security <small>risk posture</small></a>
- <a href="#changes">9) Changes <small>updates</small></a>
- <a href="#contact">10) Contact <small>how to reach us</small></a>
- </div>
-
- <div class="box" style="margin-top:14px;">
- <strong>Related:</strong><br/>
- <a href="/gate/">Gate</a> ·
- <a href="/partners/">Partners</a> ·
- <a href="/feedback/">Feedback</a> ·
- <a href="/terms/">Terms</a>
- </div>
- </div>
+ <aside class="nf-receipt-mock" aria-label="Trust Ledger Entry receipt">
+ <dl class="nf-receipt-mock-body">
+ <div class="nf-receipt-row"><dt>tle_id</dt><dd>TLE-015DCFB8B953</dd></div>
+ <div class="nf-receipt-row"><dt>decision</dt><dd>allow</dd></div>
+ <div class="nf-receipt-row"><dt>confidence_score</dt><dd>0.82</dd></div>
+ <div class="nf-receipt-row"><dt>rid</dt><dd>RID-STATUS</dd></div>
+ <div class="nf-receipt-row"><dt>evidence_index</dt><dd>purview · entra · audit</dd></div>
+ <div class="nf-receipt-row"><dt>export_integrity</dt><dd class="nf-receipt-ok">PASS · fail closed on tamper</dd></div>
+ </dl>
+ <p class="nf-receipt-mock-footer">Operational metadata only.</p>
  </aside>
+ </div>
+ </header><div class="nf-prose"><section><p>Full legal text maintained in repo. Contact operations@noetfield.com for questions.</p></section></div>
+ <section class="nf-cta-mega" aria-labelledby="cta-h">
+ <h2 id="cta-h">Request Governance Brief</h2>
+ <p>Non-confidential intake · include your Request ID · Trust Brief ($10k), Copilot pilot ($2k–10k), federal or MSP lane · operations@noetfield.com</p>
+ <div class="nf-cta-actions">
+ <a class="btn btn-primary" href="/trust-brief/intake/">Request Governance Brief</a>
+ <a class="btn btn-secondary" href="/copilot/pilot/">Become a design partner</a>
+ </div>
  </section>
  </main>
-
- <!-- injected footer -->
- <div id="nfFooter"></div>
-
- <script>
- (function(){
- // Keep effective date stable unless you want to auto-update.
- // If you prefer auto, uncomment the next lines.
- // var d = new Date();
- // var iso = d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2,"0") + "-" + String(d.getDate()).padStart(2,"0");
- // var el = document.getElementById("effectiveDate");
- // if (el) el.textContent = iso;
- })();
- </script>
+ <footer id="nfFooter"></footer>
 </body>
 </html>

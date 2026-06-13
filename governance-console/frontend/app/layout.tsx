@@ -15,7 +15,7 @@ const ibmSerif = IBM_Plex_Serif({
   weight: ["600"],
   variable: "--font-serif",
   display: "swap",
-  preload: false,
+  preload: true,
 });
 
 export const metadata: Metadata = {
@@ -32,8 +32,8 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#07070b",
-  colorScheme: "dark",
+  themeColor: "#f4f5f8",
+  colorScheme: "light",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

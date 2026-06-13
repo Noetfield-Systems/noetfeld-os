@@ -97,7 +97,7 @@ If `/workspace/connectors` shows “Loading TLE…” instead of the M365 connec
 NF_DEV_FORCE_DASHBOARD_BUILD=1 make dev-local
 ```
 
-Browser OAuth from **Register + mock connect** returns to `/workspace/connectors?connected=…` (not raw JSON).
+Browser OAuth from **Register + mock connect** returns to `/workspace?connected=…` (workspace list, not raw JSON).
 
 ## Logs
 

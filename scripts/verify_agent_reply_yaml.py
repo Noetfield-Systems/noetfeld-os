@@ -12,6 +12,7 @@ REQUIRED_KEYS = frozenset(
     {
         "schema_version",
         "repo",
+        "agent_tag",
         "task",
         "status",
         "verify_passed",

@@ -62,7 +62,7 @@ export default function TrustLedgerNewPage() {
       </p>
 
       <section className="mb-6">
-        <h2 className="text-2xl font-semibold text-white">TLE Generator</h2>
+        <h2 className="text-2xl font-semibold text-text">TLE Generator</h2>
         <p className="mt-2 text-sm text-muted">
           Template + evidence refs → draft TLE with deterministic confidence score.
         </p>
@@ -76,7 +76,7 @@ export default function TrustLedgerNewPage() {
 
       <form onSubmit={onSubmit} className="space-y-6">
         <div>
-          <label htmlFor="template" className="block text-sm font-medium text-white">
+          <label htmlFor="template" className="block text-sm font-medium text-text">
             Template
           </label>
           <select
@@ -94,7 +94,7 @@ export default function TrustLedgerNewPage() {
         </div>
 
         <div>
-          <label htmlFor="decision" className="block text-sm font-medium text-white">
+          <label htmlFor="decision" className="block text-sm font-medium text-text">
             Decision (optional)
           </label>
           <input
@@ -108,7 +108,7 @@ export default function TrustLedgerNewPage() {
         </div>
 
         <div>
-          <p className="text-sm font-medium text-white">Evidence</p>
+          <p className="text-sm font-medium text-text">Evidence</p>
           {loading && <p className="mt-2 text-sm text-muted">Loading evidence…</p>}
           {!loading && evidence.length === 0 && (
             <p className="mt-2 text-sm text-muted">
