@@ -11,12 +11,12 @@
  <link rel="icon" href="/noetfield-favicon-512.png" type="image/png" />
  <link rel="preconnect" href="https://fonts.googleapis.com" />
  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
- <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&amp;family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700&amp;family=IBM+Plex+Serif:ital,wght@0,500;0,600;0,700&amp;display=swap" />
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,400..700;1,14..32,400..700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" />
  <link rel="stylesheet" href="/assets/noetfield-tokens.css" />
  <link rel="stylesheet" href="/assets/noetfield-shell.css" />
- <link rel="stylesheet" href="/assets/noetfield-www.css?v=19" />
- <link rel="stylesheet" href="/assets/noetfield-print.css?v=19" media="print" />
- <script src="/assets/noetfield-shell.js?v=19" defer></script>
+ <link rel="stylesheet" href="/assets/noetfield-www.css?v=20" />
+ <link rel="stylesheet" href="/assets/noetfield-print.css?v=20" media="print" />
+ <script src="/assets/noetfield-shell.js?v=20" defer></script>
 </head>
 <body class="nf-www nf-site-v14">
  <div class="bg" aria-hidden="true"></div>
@@ -57,7 +57,7 @@
  <section class="nf-trust-signals" aria-labelledby="scope-title">
  <h2 id="scope-title">Available now — capability scope</h2>
  <p class="nf-trust-signals-lead">Honest scope for procurement — what you can demo, export, and defend today.</p>
- <div class="nf-trust-signals-grid"><div class="nf-trust-signal"><span class="nf-trust-signal-label">Pre-execution evaluate</span><span class="nf-signal-badge nf-signal-badge--shipped">Shipped</span></div><div class="nf-trust-signal"><span class="nf-trust-signal-label">TLE v1 + workspace UI</span><span class="nf-signal-badge nf-signal-badge--shipped">Shipped</span></div><div class="nf-trust-signal"><span class="nf-trust-signal-label">Board PDF · procurement ZIP</span><span class="nf-signal-badge nf-signal-badge--shipped">Shipped</span></div><div class="nf-trust-signal"><span class="nf-trust-signal-label">M365 metadata connectors</span><span class="nf-signal-badge nf-signal-badge--shipped">Shipped</span></div><div class="nf-trust-signal"><span class="nf-trust-signal-label">Framework citations</span><span class="nf-signal-badge nf-signal-badge--orientation">Orientation</span></div><div class="nf-trust-signal"><span class="nf-trust-signal-label">Payment rails / MSB execution</span><span class="nf-signal-badge nf-signal-badge--na">Out of scope</span></div></div>
+ <div class="nf-trust-signals-grid"><div class="nf-trust-signal"><span class="nf-trust-signal-label">Pre-execution evaluate</span><span class="nf-signal-badge nf-signal-badge--shipped">Available</span></div><div class="nf-trust-signal"><span class="nf-trust-signal-label">TLE v1 + workspace UI</span><span class="nf-signal-badge nf-signal-badge--shipped">Available</span></div><div class="nf-trust-signal"><span class="nf-trust-signal-label">Board PDF · procurement ZIP</span><span class="nf-signal-badge nf-signal-badge--shipped">Available</span></div><div class="nf-trust-signal"><span class="nf-trust-signal-label">M365 metadata connectors</span><span class="nf-signal-badge nf-signal-badge--shipped">Available</span></div><div class="nf-trust-signal"><span class="nf-trust-signal-label">Framework citations</span><span class="nf-signal-badge nf-signal-badge--orientation">Orientation</span></div><div class="nf-trust-signal"><span class="nf-trust-signal-label">Payment rails / MSB execution</span><span class="nf-signal-badge nf-signal-badge--na">Out of scope</span></div></div>
  </section>
  <section class="nf-section">
  <h2>Framework alignment (orientation only)</h2>
@@ -73,25 +73,17 @@
  </tbody>
  </table>
  <p class="text-sm" style="margin-top:1rem">
- Primary citations:
- <a href="/docs/references/GOVERNANCE_SOURCES_BOOK_v1.md">Governance Sources Book v1</a>
- ·
- <a href="/docs/references/GOVERNANCE_SOURCES_HANDBOOK_LOCKED_v1.md">Governance Sources Handbook</a>
- (NIST AI RMF, ISO 42001, EU AI Act, Microsoft Purview) — orientation only, not legal advice.
+ Framework citations cover NIST AI RMF, ISO/IEC 42001-style evidence, EU AI Act orientation, and Microsoft Purview metadata indices — orientation only, not legal advice.
+ See <a href="/trust/">Trust center</a> for cert posture and scope badges.
  </p>
  <h3 style="margin-top:1.25rem">Governance control checkpoints</h3>
  <p>
  Noetfield provides an evaluate-then-enforce loop for Copilot governance:
  <strong>Evaluate</strong> operational intent before production use;
  <strong>Enforce</strong> fail-closed export when board PDF or procurement ZIP bundles are tampered.
- See the
- <a href="/docs/references/GOVERNANCE_SOURCES_BOOK_v1.md">Governance Sources Book</a>
- for framework authority — orientation only, not legal advice.
  </p>
  <p style="margin-top:1rem">
  Production API surface:
- <a href="/openapi.json">Public OpenAPI schema</a>
- ·
  <a href="/docs/api/">Governance API reference</a>
  (evaluate, trust ledger, audit export) — orientation only.
  </p>
@@ -101,12 +93,10 @@
  <h2>Diligence attachments</h2>
  <p>For legal, risk, and procurement reviewers under NDA:</p>
  <ul>
- <li><a href="/docs/copilot/PROCUREMENT_ONE_PAGER.md">Copilot procurement one-pager</a> — buyer summary (positioning, deliverables, verify path)</li>
+ <li><a href="/docs/copilot/PROCUREMENT_ONE_PAGER.md">Copilot procurement one-pager</a> — buyer summary (positioning, deliverables, scope)</li>
  <li><a href="/docs/diligence/rpaa-positioning-onepager.md">RPAA-safe positioning one-pager</a> — governance vendor layer; no payment or custody claims</li>
  <li><a href="/docs/diligence/EVIDENCE_INTAKE_CONTRACT_v1.md">Evidence Intake Contract v1</a></li>
  <li><a href="/docs/diligence/CONNECTORS_CONTROLS_v1.md">Connectors Controls v1</a></li>
- <li><a href="/docs/references/GOVERNANCE_DRIFT_DETECTION_SOURCES_LOCKED_v1.md">Governance drift detection sources</a> — continuous monitoring citations</li>
- <li><a href="/docs/references/GOVERNANCE_DRIFT_BLUEPRINTS_INDEX_LOCKED_v1.md">Governance drift blueprints index</a> — continuous governance blueprint citations</li>
  </ul>
  </section>
 

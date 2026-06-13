@@ -8,6 +8,13 @@
     { "source": "/reports/:path*", "destination": "/404", "statusCode": 404 },
     { "source": "/scripts/:path*", "destination": "/404", "statusCode": 404 },
     { "source": "/services/:path*", "destination": "/404", "statusCode": 404 },
-    { "source": "/governance-console/:path*", "destination": "/404", "statusCode": 404 }
+    { "source": "/governance-console/:path*", "destination": "/404", "statusCode": 404 },
+    { "source": "/docs/references/:path*", "destination": "/404", "statusCode": 404 },
+    { "source": "/docs/spec/:path*", "destination": "/404", "statusCode": 404 },
+    { "source": "/docs/SOURCE_OF_TRUTH/:path*", "destination": "/404", "statusCode": 404 },
+    { "source": "/docs/LOCAL_DEV.md", "destination": "/404", "statusCode": 404 },
+    { "source": "/docs/ROADMAP.md", "destination": "/404", "statusCode": 404 },
+    { "source": "/docs/LEGAL.md", "destination": "/404", "statusCode": 404 },
+    { "source": "/docs/MARKET_ENTRY_30_DAY.md", "destination": "/404", "statusCode": 404 }
   ]
 }

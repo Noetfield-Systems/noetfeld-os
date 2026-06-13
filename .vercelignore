@@ -10,3 +10,14 @@ governance-console/
 services/
 docs/ops/
 docs/strategy/
+docs/
+!docs/api/
+!docs/api/**
+!docs/diligence/
+!docs/diligence/**
+!docs/copilot/
+!docs/copilot/PROCUREMENT_ONE_PAGER.md
+!docs/msp/
+!docs/msp/**
+!docs/federal/
+!docs/federal/**

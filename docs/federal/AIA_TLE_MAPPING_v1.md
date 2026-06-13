@@ -2,7 +2,6 @@
 
 | Field | Value |
 |-------|--------|
-| **Agent tag** | `[NF-LOCAL-REPO-AGENT]` |
 | **Doc id** | `noetfield-aia-tle-mapping-v1` |
 | **Parent** | [FEDERAL_GOVERNANCE_PACK_v1.md](./FEDERAL_GOVERNANCE_PACK_v1.md) |
 | **Updated** | 2026-06-02 |

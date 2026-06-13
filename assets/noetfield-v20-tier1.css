@@ -1,0 +1,470 @@
+/* Noetfield v20 — Tier-1 typography + navigation (Linear / Stripe / Vercel grade) */
+
+body.nf-www.nf-site-v14 {
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-display: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-serif: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", "Cascadia Code", monospace;
+  --navH: 68px;
+  --radius-btn: 10px;
+  --text-2xl: clamp(2.375rem, 5.4vw, 3.75rem);
+  font-family: var(--font-sans);
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* —— Global type scale —— */
+body.nf-www.nf-site-v14 .nf-hero-cinematic h1,
+body.nf-www.nf-site-v14 .nf-section-block-head h2,
+body.nf-www.nf-site-v14 .nf-section__head h2 {
+  font-family: var(--font-display);
+  font-weight: 650;
+  letter-spacing: -0.038em;
+  font-variation-settings: "opsz" 32;
+}
+
+body.nf-www.nf-site-v14 .nf-hero-cinematic h1 {
+  font-size: var(--text-2xl);
+  line-height: 1.04;
+  max-width: 18ch;
+  color: #0a0c10;
+}
+
+body.nf-www.nf-site-v14 .nf-hero-cinematic h1.nf-hero-h1--wide,
+body.nf-www.nf-site-v14 .nf-hero-cinematic h1:has(.nf-hero-flow) {
+  max-width: none;
+}
+
+body.nf-www.nf-site-v14 .nf-hero-cinematic .nf-lead {
+  font-size: 1.125rem;
+  line-height: 1.62;
+  letter-spacing: -0.014em;
+  color: #4b5568;
+  font-weight: 450;
+}
+
+body.nf-www.nf-site-v14 .nf-eyebrow {
+  font-size: 0.6875rem;
+  font-weight: 650;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+body.nf-www.nf-site-v14 .nf-section-block-head h2,
+body.nf-www.nf-site-v14 .nf-section__head h2 {
+  font-size: clamp(1.625rem, 2.8vw, 2.125rem);
+  line-height: 1.12;
+  letter-spacing: -0.028em;
+}
+
+body.nf-www.nf-site-v14 .nf-section-num {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: -0.04em;
+}
+
+/* Hero flow headline (start page) */
+body.nf-www.nf-site-v14 .nf-hero-flow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.35em 0.5em;
+  max-width: none;
+}
+
+body.nf-www.nf-site-v14 .nf-hero-flow__step {
+  white-space: nowrap;
+}
+
+body.nf-www.nf-site-v14 .nf-hero-flow__sep {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.25rem;
+  height: 1.25rem;
+  color: #9ca3af;
+  flex-shrink: 0;
+}
+
+body.nf-www.nf-site-v14 .nf-hero-flow__sep svg {
+  width: 100%;
+  height: 100%;
+  opacity: 0.85;
+}
+
+/* —— Tier-1 header shell —— */
+body.nf-www.nf-site-v14 #nfHeader {
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  background: rgba(255, 255, 255, 0.82);
+  border-bottom: 1px solid rgba(15, 17, 23, 0.08);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.9) inset;
+  backdrop-filter: blur(20px) saturate(1.25);
+  -webkit-backdrop-filter: blur(20px) saturate(1.25);
+}
+
+@media (min-width: 981px) {
+  body.nf-www.nf-site-v14 #nfHeader {
+    padding: 0 !important;
+    background: rgba(255, 255, 255, 0.82) !important;
+    border-bottom: 1px solid rgba(15, 17, 23, 0.08) !important;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.9) inset !important;
+    backdrop-filter: blur(20px) saturate(1.25) !important;
+    -webkit-backdrop-filter: blur(20px) saturate(1.25) !important;
+  }
+
+  body.nf-www.nf-site-v14 #nfHeader .nav {
+    width: 100%;
+    max-width: var(--max-wide);
+    margin: 0 auto;
+    padding: 0 clamp(20px, 3vw, 32px);
+    min-height: var(--navH);
+    border: none !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+  }
+}
+
+body.nf-www.nf-site-v14 #nfHeader .nav {
+  gap: 24px;
+}
+
+/* Brand */
+body.nf-www.nf-site-v14 #nfHeader .brand {
+  min-width: 0;
+  max-width: none;
+  gap: 10px;
+}
+
+body.nf-www.nf-site-v14 #nfHeader .brandMark {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 9px;
+  background: linear-gradient(145deg, #0f1117 0%, #1a2230 100%);
+  border: 1px solid rgba(15, 17, 23, 0.12);
+  box-shadow: 0 2px 8px rgba(15, 17, 23, 0.12);
+  flex-shrink: 0;
+}
+
+body.nf-www.nf-site-v14 #nfHeader .brandMark svg {
+  display: block;
+  width: 18px;
+  height: 18px;
+}
+
+body.nf-www.nf-site-v14 #nfHeader .brand .name {
+  font-family: var(--font-display);
+  font-size: 1.0625rem;
+  font-weight: 650;
+  letter-spacing: -0.032em;
+  color: #0a0c10;
+  line-height: 1;
+}
+
+/* Primary nav */
+body.nf-www.nf-site-v14 #nfHeader .menu {
+  gap: 8px;
+}
+
+body.nf-www.nf-site-v14 #nfHeader .menuPrimary {
+  gap: 2px;
+  justify-content: center;
+}
+
+body.nf-www.nf-site-v14 #nfHeader .menuPrimary a {
+  padding: 8px 14px;
+  border-radius: 8px;
+  border: none;
+  background: transparent;
+  font-size: 0.875rem;
+  font-weight: 500;
+  letter-spacing: -0.012em;
+  color: #5c6370;
+  line-height: 1.2;
+  transition: color 0.15s ease, background 0.15s ease;
+}
+
+body.nf-www.nf-site-v14 #nfHeader .menuPrimary a:hover {
+  color: #0a0c10;
+  background: rgba(15, 17, 23, 0.04);
+  border: none;
+}
+
+body.nf-www.nf-site-v14 #nfHeader .menuPrimary a[aria-current="page"],
+body.nf-www.nf-site-v14 #nfHeader .menuPrimary a.active {
+  color: #0a0c10;
+  font-weight: 600;
+  background: rgba(15, 17, 23, 0.05);
+  box-shadow: none;
+  border: none;
+}
+
+/* Actions */
+body.nf-www.nf-site-v14 #nfHeader .menuActions {
+  gap: 6px;
+}
+
+body.nf-www.nf-site-v14 #nfHeader .menuActions a.nav-link {
+  padding: 8px 12px;
+  border: none;
+  background: transparent;
+  font-size: 0.875rem;
+  font-weight: 500;
+  letter-spacing: -0.012em;
+  color: #5c6370;
+  border-radius: 8px;
+  white-space: nowrap;
+}
+
+body.nf-www.nf-site-v14 #nfHeader .menuActions a.nav-link:hover {
+  color: #0a0c10;
+  background: rgba(15, 17, 23, 0.04);
+}
+
+body.nf-www.nf-site-v14 #nfHeader .menuActions a.nav-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 36px;
+  padding: 0 16px;
+  border-radius: var(--radius-btn);
+  border: 1px solid #0a0c10;
+  background: #0a0c10;
+  color: #fff;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  transition: background 0.15s ease, border-color 0.15s ease, transform 0.12s ease;
+}
+
+body.nf-www.nf-site-v14 #nfHeader .menuActions a.nav-cta:hover {
+  background: #1a1f2a;
+  border-color: #1a1f2a;
+  color: #fff;
+  filter: none;
+  transform: translateY(-1px);
+}
+
+body.nf-www.nf-site-v14 #nfHeader .menuActions a.nav-cta--gold {
+  border-color: var(--gold);
+  background: var(--gold);
+}
+
+body.nf-www.nf-site-v14 #nfHeader .menuActions a.nav-cta--gold:hover {
+  background: var(--gold-bright);
+  border-color: var(--gold-bright);
+}
+
+/* Legacy pilltab fallback (mobile partial cache) */
+body.nf-www.nf-site-v14 #nfHeader .menu a.pilltab:not(.cta) {
+  border: none;
+  background: transparent;
+  font-weight: 500;
+}
+
+/* Buttons sitewide — tier-1 radius */
+body.nf-www.nf-site-v14 .btn,
+body.nf-www.nf-site-v14 .btn.btn-primary,
+body.nf-www.nf-site-v14 .btn.btn-secondary {
+  border-radius: var(--radius-btn);
+  min-height: 44px;
+  padding: 0 20px;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  letter-spacing: -0.014em;
+}
+
+body.nf-www.nf-site-v14 .btn.btn-primary {
+  background: #0a0c10;
+  border-color: #0a0c10;
+  color: #fff;
+  box-shadow: 0 1px 2px rgba(15, 17, 23, 0.08);
+}
+
+body.nf-www.nf-site-v14 .btn.btn-primary:hover {
+  background: #1a1f2a;
+  border-color: #1a1f2a;
+  filter: none;
+}
+
+body.nf-www.nf-site-v14 .btn.btn-secondary {
+  background: #fff;
+  border-color: rgba(15, 17, 23, 0.14);
+  color: #0a0c10;
+  box-shadow: 0 1px 2px rgba(15, 17, 23, 0.04);
+}
+
+body.nf-www.nf-site-v14 .btn.btn-secondary:hover {
+  border-color: rgba(15, 17, 23, 0.22);
+  background: #f8f9fb;
+}
+
+/* Mobile */
+body.nf-www.nf-site-v14 #nfHeader .burger {
+  border-radius: 10px;
+  border-color: rgba(15, 17, 23, 0.12);
+  background: #fff;
+}
+
+body.nf-www.nf-site-v14 #nfHeader .mobilePanel {
+  background: rgba(255, 255, 255, 0.96);
+  border-top-color: rgba(15, 17, 23, 0.08);
+}
+
+body.nf-www.nf-site-v14 #nfHeader .mobileGrid a {
+  border-color: rgba(15, 17, 23, 0.1);
+  background: #f8f9fb;
+  color: #4b5568;
+  font-weight: 500;
+  border-radius: 10px;
+}
+
+body.nf-www.nf-site-v14 #nfHeader .mobileGrid a.mobileCTA {
+  background: #0a0c10;
+  border-color: #0a0c10;
+  color: #fff;
+  font-weight: 600;
+}
+
+@media (max-width: 1100px) {
+  body.nf-www.nf-site-v14 #nfHeader .menuPrimary a {
+    padding: 8px 10px;
+    font-size: 0.8125rem;
+  }
+}
+
+@media (max-width: 980px) {
+  body.nf-www.nf-site-v14 #nfHeader .nav {
+    padding: 10px 16px;
+  }
+
+  body.nf-www.nf-site-v14 #nfHeader .menuPrimary {
+    display: none;
+  }
+
+  body.nf-www.nf-site-v14 #nfHeader .menuActions a.nav-link {
+    display: none;
+  }
+}
+
+/* —— Footer tier-1 —— */
+body.nf-www.nf-site-v14 #nfFooter {
+  background: #fff;
+  border-top: 1px solid rgba(15, 17, 23, 0.08);
+  font-family: var(--font-sans);
+}
+
+body.nf-www.nf-site-v14 #nfFooter .footBrand span,
+body.nf-www.nf-site-v14 #nfFooter .fTitle {
+  font-weight: 650;
+  letter-spacing: -0.02em;
+  color: #0a0c10;
+}
+
+body.nf-www.nf-site-v14 #nfFooter .fLinks a {
+  border: none;
+  background: transparent;
+  padding: 6px 0;
+  font-size: 0.875rem;
+  font-weight: 450;
+  letter-spacing: -0.01em;
+  color: #5c6370;
+  border-radius: 0;
+}
+
+body.nf-www.nf-site-v14 #nfFooter .fLinks a:hover {
+  color: #0a0c10;
+  background: transparent;
+}
+
+body.nf-www.nf-site-v14 #nfFooter .fNote {
+  font-size: 0.8125rem;
+  line-height: 1.6;
+  color: #6b7280;
+}
+
+/* —— Self-serve rail —— */
+body.nf-www.nf-site-v14 .nf-self-serve-rail {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 20px;
+  padding: 14px 20px;
+  margin: 20px 0 var(--section-y);
+  border: 1px solid rgba(15, 17, 23, 0.08);
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 1px 2px rgba(15, 17, 23, 0.04);
+}
+
+body.nf-www.nf-site-v14 .nf-self-serve-rail__label {
+  margin: 0;
+  font-size: 0.6875rem;
+  font-weight: 650;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+body.nf-www.nf-site-v14 .nf-self-serve-rail a:not(.btn) {
+  font-size: 0.875rem;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: #4b5568;
+}
+
+body.nf-www.nf-site-v14 .nf-self-serve-rail a:not(.btn):hover {
+  color: #0a0c10;
+}
+
+body.nf-www.nf-site-v14 .nf-self-serve-rail .btn {
+  margin-left: auto;
+  min-height: 38px;
+  padding: 0 16px;
+  font-size: 0.875rem;
+}
+
+/* —— Scope badges (buyer language) —— */
+body.nf-www.nf-site-v14 .nf-signal-badge--shipped {
+  background: rgba(13, 122, 74, 0.1);
+  border-color: rgba(13, 122, 74, 0.25);
+  color: #0d7a4a;
+  font-weight: 600;
+  font-size: 0.6875rem;
+  letter-spacing: 0.04em;
+}
+
+body.nf-www.nf-site-v14 .nf-badge-pill,
+body.nf-www.nf-site-v14 .nf-hero-badges .nf-badge-pill {
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  padding: 6px 12px;
+  border-radius: 8px;
+}
+
+/* —— Prose / legal —— */
+body.nf-www.nf-site-v14 .nf-prose h2 {
+  font-family: var(--font-display);
+  font-weight: 650;
+  letter-spacing: -0.024em;
+  font-size: 1.25rem;
+  color: #0a0c10;
+}
+
+body.nf-www.nf-site-v14 .nf-prose p {
+  font-size: 1rem;
+  line-height: 1.65;
+  color: #4b5568;
+  letter-spacing: -0.011em;
+}

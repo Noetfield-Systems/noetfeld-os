@@ -45,10 +45,10 @@ body.nf-www.nf-site-v14 #nfHeader .nav {
 }
 
 body.nf-www.nf-site-v14 .brand .name {
-  font-family: var(--font-sans);
-  font-weight: 700;
-  font-size: 1.125rem;
-  letter-spacing: -0.02em;
+  font-family: var(--font-display);
+  font-weight: 650;
+  font-size: 1.0625rem;
+  letter-spacing: -0.032em;
   color: var(--text);
 }
 
@@ -137,13 +137,13 @@ body.nf-www.nf-site-v14 .nf-hero-cinematic::after {
 }
 
 body.nf-www.nf-site-v14 .nf-hero-cinematic h1 {
-  font-family: var(--font-serif);
-  font-weight: 600;
-  font-size: clamp(2rem, 4.5vw, 3rem);
-  line-height: 1.1;
-  letter-spacing: -0.02em;
+  font-family: var(--font-display);
+  font-weight: 650;
+  font-size: clamp(2.375rem, 5.4vw, 3.75rem);
+  line-height: 1.06;
+  letter-spacing: -0.038em;
   color: var(--text);
-  max-width: 16ch;
+  max-width: none;
 }
 
 body.nf-www.nf-site-v14 .nf-hero-cinematic .nf-lead {
@@ -211,7 +211,7 @@ body.nf-www.nf-site-v14 .nf-receipt-row dt {
 
 body.nf-www.nf-site-v14 .nf-receipt-row dd {
   color: var(--text);
-  font-family: ui-monospace, "IBM Plex Mono", monospace;
+  font-family: ui-monospace, var(--font-mono), monospace;
   font-size: 0.8125rem;
 }
 

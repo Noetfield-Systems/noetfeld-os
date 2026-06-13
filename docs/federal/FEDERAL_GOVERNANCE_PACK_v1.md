@@ -2,7 +2,6 @@
 
 | Field | Value |
 |-------|--------|
-| **Agent tag** | `[NF-LOCAL-REPO-AGENT]` |
 | **Doc id** | `noetfield-federal-governance-pack-v1` |
 | **Lane** | `federal` — Government of Canada only |
 | **Parent SSOT** | [NOETFIELD_COMMERCIAL_SSOT_LOCKED_v1.md](../strategy/NOETFIELD_COMMERCIAL_SSOT_LOCKED_v1.md) |

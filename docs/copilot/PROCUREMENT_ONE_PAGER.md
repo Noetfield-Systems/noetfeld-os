@@ -14,31 +14,19 @@
 
 ## Framework orientation
 
-Primary citations: `docs/reference/GOVERNANCE_SOURCES_BOOK_v1.md` (NIST AI RMF, ISO 42001, EU AI Act, Microsoft Purview Part B). Purview/M365: we index metadata evidence into TLE — what you configured, not what we replace. Orientation only — not legal advice.
+Citations cover NIST AI RMF, ISO/IEC 42001-style evidence, EU AI Act orientation, and Microsoft Purview metadata indices. Purview/M365: we index metadata evidence into TLE — what you configured, not what we replace. **Orientation only — not legal advice.**
 
 ## Out of scope
 
-No payments, custody, settlement, or money transmission.
+No payments, custody, settlement, or money transmission. No ISO/SOC certification claims from Noetfield.
 
-## Verify locally
+## Try before procurement
 
-```bash
-make dev-local
-make verify-gtm
-```
+- **Free sandbox:** [https://www.noetfield.com/start/](https://www.noetfield.com/start/) — 14-day trial · 50 evaluate calls · mock M365 connectors
+- **5-minute demo:** [https://www.noetfield.com/copilot/demo/](https://www.noetfield.com/copilot/demo/)
+- **Procurement pack page:** [https://www.noetfield.com/copilot/procurement/](https://www.noetfield.com/copilot/procurement/)
+- **Trust center:** [https://www.noetfield.com/trust/](https://www.noetfield.com/trust/)
 
-Share external demo:
+## Contact
 
-**Commercial SSOT:** `docs/strategy/NOETFIELD_COMMERCIAL_SSOT_LOCKED_v1.md` · **SME pack:** `/copilot/sme/`
-
-```bash
-make dev-local-tunnel-bg && make demo-url
-```
-
-## Artifacts
-
-- Buyer pack page: `/copilot/procurement/`
-- 5-minute demo: `/copilot/demo/`
-- TLE samples: `/trust-ledger/sample-report/`
-- Pilot runbook: `docs/spec/copilot-readiness-pilot-runbook.md`
-- Staging: `docs/ops/STAGING_DEMO.md`
+operations@noetfield.com — include your Request ID (RID) from intake or sandbox.

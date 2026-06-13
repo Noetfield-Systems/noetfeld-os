@@ -2,14 +2,13 @@
 
 | Field | Value |
 |-------|--------|
-| **Agent tag** | `[NF-LOCAL-REPO-AGENT]` |
 | **Doc id** | `noetfield-msp-governance-pack-v1` |
 | **Lane** | `msp` — Microsoft 365 CSP / managed service providers only |
 | **Parent SSOT** | [NOETFIELD_COMMERCIAL_SSOT_LOCKED_v1.md](../strategy/NOETFIELD_COMMERCIAL_SSOT_LOCKED_v1.md) |
 | **Locked** | 2026-06-02 |
 | **Public page** | `/msp/` |
 
-**Not legal advice** — orientation for MSP partners and internal GTM. Noetfield sells **through MSPs** in this lane — not direct end-customer scale in year 1.
+**Not legal advice** — orientation for MSP partners and buyer diligence. Noetfield sells **through MSPs** in this lane — not direct end-customer scale in year 1.
 
 ---
 

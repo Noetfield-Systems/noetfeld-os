@@ -6,7 +6,20 @@ import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-WWW_VER = "19"
+WWW_VER = "20"
+
+FONT_LINK = (
+    ' <link rel="preconnect" href="https://fonts.googleapis.com" />\n'
+    ' <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />\n'
+    ' <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,400..700;1,14..32,400..700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" />'
+)
+
+SCOPE_LABELS = {
+    "shipped": "Available",
+    "orientation": "Orientation",
+    "roadmap": "Planned",
+    "na": "Out of scope",
+}
 
 # Commercial narrative — SSOT: docs/strategy/NOETFIELD_COMMERCIAL_SSOT_LOCKED_v1.md · docs/GTM_COPYBOOK.md
 COPY = {
@@ -48,9 +61,7 @@ HEAD = """<!DOCTYPE html>
  <meta name="theme-color" content="#f4f5f8" />
  <link rel="canonical" href="https://www.noetfield.com{canonical}" />
  <link rel="icon" href="/noetfield-favicon-512.png" type="image/png" />
- <link rel="preconnect" href="https://fonts.googleapis.com" />
- <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
- <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&amp;family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700&amp;family=IBM+Plex+Serif:ital,wght@0,500;0,600;0,700&amp;display=swap" />
+{font_link}
  <link rel="stylesheet" href="/assets/noetfield-tokens.css" />
  <link rel="stylesheet" href="/assets/noetfield-shell.css" />
  <link rel="stylesheet" href="/assets/noetfield-www.css?v={www_ver}" />
@@ -194,7 +205,7 @@ def panel(label: str, items: list[str], btn: str = "") -> str:
  </aside>"""
 
 
-def hero(kicker: str, eyebrow: str, h1: str, lead: str, badges: list[tuple[str, bool]], actions: list[tuple[str, str, bool]], tags: list[str], side: str) -> str:
+def hero(kicker: str, eyebrow: str, h1: str, lead: str, badges: list[tuple[str, bool]], actions: list[tuple[str, str, bool]], tags: list[str], side: str, *, h1_class: str = "") -> str:
     badge_html = "".join(
         f'<span class="nf-badge-pill{" nf-badge-pill--gold" if gold else ""}">{t}</span>' for t, gold in badges
     )
@@ -204,12 +215,13 @@ def hero(kicker: str, eyebrow: str, h1: str, lead: str, badges: list[tuple[str, 
     tag_html = "".join(f"<li>{t}</li>" for t in tags)
     kick = f'<p class="nf-hero-kicker"><span class="nf-hero-kicker-dot" aria-hidden="true"></span> {kicker}</p>' if kicker else ""
     eye = f'<p class="nf-eyebrow">{eyebrow}</p>' if eyebrow else ""
+    h1_attr = f' class="{h1_class}"' if h1_class else ""
     return f"""
  <header class="nf-hero-cinematic">
  <div>
  {kick}
  {eye}
- <h1>{h1}</h1>
+ <h1{h1_attr}>{h1}</h1>
  <p class="nf-lead">{lead}</p>
  <div class="nf-hero-badges">{badge_html}</div>
  <div class="nf-cta-actions">{act_html}</div>
@@ -234,7 +246,7 @@ def scope_rows_html() -> str:
         "roadmap": "nf-signal-badge--roadmap",
         "na": "nf-signal-badge--na",
     }
-    labels = {"shipped": "Shipped", "orientation": "Orientation", "roadmap": "Roadmap", "na": "Out of scope"}
+    labels = SCOPE_LABELS
     return "".join(
         f'<div class="nf-trust-signal"><span class="nf-trust-signal-label">{l}</span>'
         f'<span class="nf-signal-badge {badges[k]}">{labels[k]}</span></div>'
@@ -268,7 +280,7 @@ def outcome_stat_bar() -> str:
 def investor_stat_bar() -> str:
     return """
  <div class="nf-stat-bar" role="region" aria-label="Investor metrics">
- <div class="nf-stat-bar-item"><strong>Shipped</strong><span>Evaluate · TLE · export live</span></div>
+ <div class="nf-stat-bar-item"><strong>Live</strong><span>Evaluate · TLE · export available</span></div>
  <div class="nf-stat-bar-item"><strong>$10k</strong><span>Trust Brief land wedge</span></div>
  <div class="nf-stat-bar-item"><strong>90d</strong><span>Design partner path</span></div>
  <div class="nf-stat-bar-item"><strong>3</strong><span>Locked SKUs only</span></div>
@@ -354,7 +366,7 @@ def governance_output_suite() -> str:
  <article class="nf-export-suite__item" role="listitem"><span class="nf-export-suite__icon">TLE</span><h3>TLE v1 YAML</h3><p>Signed decision · confidence score · approval chain · evidence index.</p></article>
  <article class="nf-export-suite__item" role="listitem"><span class="nf-export-suite__icon">PDF</span><h3>Board PDF</h3><p>Executive-ready digest for governance and budget conversations.</p></article>
  <article class="nf-export-suite__item" role="listitem"><span class="nf-export-suite__icon">ZIP</span><h3>Procurement ZIP</h3><p>Buyer diligence bundle · fail-closed integrity on tamper.</p></article>
- <article class="nf-export-suite__item is-roadmap" role="listitem"><span class="nf-export-suite__icon">API</span><h3>Audit export <span class="nf-signal-badge nf-signal-badge--roadmap">Roadmap</span></h3><p>Tenant audit bundle · SIEM / GRC webhooks — orientation on roadmap.</p></article>
+ <article class="nf-export-suite__item is-roadmap" role="listitem"><span class="nf-export-suite__icon">API</span><h3>Audit export <span class="nf-signal-badge nf-signal-badge--roadmap">Planned</span></h3><p>Tenant audit bundle · SIEM / GRC webhooks — planned capability, orientation only.</p></article>
  </div>
  </section>"""
 
@@ -364,7 +376,7 @@ def contrast_table_section() -> str:
  <section class="nf-section-block" aria-labelledby="contrast-title">
  <div class="nf-section-block-head"><span class="nf-section-num" aria-hidden="true">⇄</span><div>
  <p class="nf-eyebrow" id="contrast-title">Why Noetfield</p>
- <h2>What you tried vs what breaks vs what we ship</h2>
+ <h2>What you tried vs what breaks vs what Noetfield delivers</h2>
  <p class="nf-section-lead">Self-sort in one table — built for CISO, GRC, and procurement reviewers.</p>
  </div></div>
  <div class="nf-contrast-table-wrap">
@@ -483,12 +495,12 @@ def sandbox_signup_form(next_path: str = "/cognitive-dashboard/?sandbox=1") -> s
 
 def ciso_strip() -> str:
     cards = [
-        ("Metadata-only M365", "Purview · Entra · audit indices — evidence index on every TLE, no mailbox custody.", "shipped", "Shipped"),
-        ("Fail-closed export", "Board PDF and procurement ZIP fail verification when tampered — by design.", "shipped", "Shipped"),
-        ("Canada trust posture", "Data handling and GC buyer notes for regulated procurement.", "orientation", "Orientation"),
-        ("SOC 2 Type II", "Independent audit planned — not yet completed.", "roadmap", "Roadmap"),
-        ("SSO / SAML", "Enterprise IdP for console access — product roadmap.", "roadmap", "Roadmap"),
-        ("No custody rails", "No payment execution, MSB, asset custody, or money-transmission claims.", "na", "Out of scope"),
+        ("Metadata-only M365", "Purview · Entra · audit indices — evidence index on every TLE, no mailbox custody.", "shipped", SCOPE_LABELS["shipped"]),
+        ("Fail-closed export", "Board PDF and procurement ZIP fail verification when tampered — by design.", "shipped", SCOPE_LABELS["shipped"]),
+        ("Canada trust posture", "Data handling and GC buyer notes for regulated procurement.", "orientation", SCOPE_LABELS["orientation"]),
+        ("SOC 2 Type II", "Independent audit planned — not yet completed.", "roadmap", SCOPE_LABELS["roadmap"]),
+        ("SSO / SAML", "Enterprise IdP for console access — planned product capability.", "roadmap", SCOPE_LABELS["roadmap"]),
+        ("No custody rails", "No payment execution, MSB, asset custody, or money-transmission claims.", "na", SCOPE_LABELS["na"]),
     ]
     badges = {
         "shipped": "nf-signal-badge--shipped",
@@ -506,7 +518,7 @@ def ciso_strip() -> str:
  <div class="nf-ciso-strip-head">
  <p class="nf-eyebrow" id="ciso-h">Procurement diligence</p>
  <h2>What legal and security reviewers need to see</h2>
- <p>Honest Shipped · Orientation · Roadmap · Out of scope — what legal, security, and procurement reviewers inspect before pilot sign-off.</p>
+ <p>Honest Available · Orientation · Planned · Out of scope — what legal, security, and procurement reviewers inspect before pilot sign-off.</p>
  </div>
  <div class="nf-ciso-grid">{items}</div>
  </section>"""
@@ -516,7 +528,7 @@ def write(rel: str, title: str, desc: str, canonical: str, body: str, body_class
     path = ROOT / rel
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(
-        HEAD.format(title=title, desc=desc, canonical=canonical, www_ver=WWW_VER, body_class=body_class) + body + FOOT,
+        HEAD.format(title=title, desc=desc, canonical=canonical, www_ver=WWW_VER, body_class=body_class, font_link=FONT_LINK) + body + FOOT,
         encoding="utf-8",
     )
     print("wrote", rel)
@@ -539,6 +551,7 @@ def homepage() -> str:
         [("/start/", "Start free sandbox", True), ("/copilot/demo/", "5-minute demo", False), ("/trust-brief/intake/", "Request Governance Brief", False)],
         ["NIST AI RMF", "ISO-style evidence", "Microsoft Purview", "RPAA-safe vendor"],
         live_proof_panel(),
+        h1_class="nf-hero-h1--wide",
     ).replace(
         '<p class="nf-lead">',
         f'<p class="nf-first-receipt-promise">{COPY["first_receipt_promise"]}</p>\n <p class="nf-lead">',
@@ -792,7 +805,7 @@ def trust_center_body() -> str:
         ("Ed25519 / Merkle transparency log", "roadmap"),
     ]
     badges = {"shipped": "nf-signal-badge--shipped", "roadmap": "nf-signal-badge--roadmap", "na": "nf-signal-badge--na"}
-    labels = {"shipped": "Shipped", "roadmap": "Roadmap", "na": "Out of scope"}
+    labels = SCOPE_LABELS
     cert_html = "".join(
         f'<div class="nf-trust-signal"><span class="nf-trust-signal-label">{l}</span>'
         f'<span class="nf-signal-badge {badges[k]}">{labels[k]}</span></div>'
@@ -802,7 +815,7 @@ def trust_center_body() -> str:
         "Trust &amp; security · Canada",
         "Procurement diligence · honest scope",
         "Trust center for AI Governance &amp; Evidence",
-        "Metadata-only Microsoft 365 processing. Export bundles <strong>fail closed on tamper</strong>. No custody, payment rails, or certifier claims — Shipped · Roadmap · Out of scope only.",
+        "Metadata-only Microsoft 365 processing. Export bundles <strong>fail closed on tamper</strong>. No custody, payment rails, or certifier claims — Available · Planned · Out of scope only.",
         [("Metadata-only M365", True), ("Fail-closed export", False)],
         [("/copilot/procurement/", "Procurement pack", True), ("/trust-ledger/verify/", "Verify export integrity", False)],
         ["Retention · subprocessors · scope"],
@@ -825,7 +838,7 @@ def trust_center_body() -> str:
  <section class="nf-section-block" aria-labelledby="trust-03">
  <div class="nf-section-block-head"><span class="nf-section-num" aria-hidden="true">03</span><div>
  <p class="nf-eyebrow" id="trust-03">Honest certification posture</p>
- <h2>Shipped · Roadmap · Out of scope</h2>
+ <h2>Available · Planned · Out of scope</h2>
  </div></div>
  <div class="nf-trust-signals-grid">{cert_html}</div>
  </section>
@@ -860,7 +873,7 @@ def verify_page_body() -> str:
  <article class="nf-loop-step"><p class="nf-loop-step-num">04</p><h3>Tamper FAIL</h3><p>Alter any file — export verification <strong>fail closed</strong> (expected).</p></article>
  </div>
  </section>
- <aside class="nf-callout"><p><strong>Current capability:</strong> Offline verify covers export integrity available today. Cryptographic transparency-log verification (Ed25519 / Merkle) is on our roadmap — not offered yet.</p></aside>
+ <aside class="nf-callout"><p><strong>Current capability:</strong> Offline verify covers export integrity available today. Cryptographic transparency-log verification (Ed25519 / Merkle) is a <strong>planned capability</strong> — not available yet.</p></aside>
 """ + mega_cta("Request Governance Brief", "Procurement diligence · pilot export walkthrough")
 
 
@@ -929,25 +942,17 @@ def procurement_diligence_body() -> str:
  </tbody>
  </table>
  <p class="text-sm" style="margin-top:1rem">
- Primary citations:
- <a href="/docs/references/GOVERNANCE_SOURCES_BOOK_v1.md">Governance Sources Book v1</a>
- ·
- <a href="/docs/references/GOVERNANCE_SOURCES_HANDBOOK_LOCKED_v1.md">Governance Sources Handbook</a>
- (NIST AI RMF, ISO 42001, EU AI Act, Microsoft Purview) — orientation only, not legal advice.
+ Framework citations cover NIST AI RMF, ISO/IEC 42001-style evidence, EU AI Act orientation, and Microsoft Purview metadata indices — orientation only, not legal advice.
+ See <a href="/trust/">Trust center</a> for cert posture and scope badges.
  </p>
  <h3 style="margin-top:1.25rem">Governance control checkpoints</h3>
  <p>
  Noetfield provides an evaluate-then-enforce loop for Copilot governance:
  <strong>Evaluate</strong> operational intent before production use;
  <strong>Enforce</strong> fail-closed export when board PDF or procurement ZIP bundles are tampered.
- See the
- <a href="/docs/references/GOVERNANCE_SOURCES_BOOK_v1.md">Governance Sources Book</a>
- for framework authority — orientation only, not legal advice.
  </p>
  <p style="margin-top:1rem">
  Production API surface:
- <a href="/openapi.json">Public OpenAPI schema</a>
- ·
  <a href="/docs/api/">Governance API reference</a>
  (evaluate, trust ledger, audit export) — orientation only.
  </p>
@@ -957,12 +962,10 @@ def procurement_diligence_body() -> str:
  <h2>Diligence attachments</h2>
  <p>For legal, risk, and procurement reviewers under NDA:</p>
  <ul>
- <li><a href="/docs/copilot/PROCUREMENT_ONE_PAGER.md">Copilot procurement one-pager</a> — buyer summary (positioning, deliverables, verify path)</li>
+ <li><a href="/docs/copilot/PROCUREMENT_ONE_PAGER.md">Copilot procurement one-pager</a> — buyer summary (positioning, deliverables, scope)</li>
  <li><a href="/docs/diligence/rpaa-positioning-onepager.md">RPAA-safe positioning one-pager</a> — governance vendor layer; no payment or custody claims</li>
  <li><a href="/docs/diligence/EVIDENCE_INTAKE_CONTRACT_v1.md">Evidence Intake Contract v1</a></li>
  <li><a href="/docs/diligence/CONNECTORS_CONTROLS_v1.md">Connectors Controls v1</a></li>
- <li><a href="/docs/references/GOVERNANCE_DRIFT_DETECTION_SOURCES_LOCKED_v1.md">Governance drift detection sources</a> — continuous monitoring citations</li>
- <li><a href="/docs/references/GOVERNANCE_DRIFT_BLUEPRINTS_INDEX_LOCKED_v1.md">Governance drift blueprints index</a> — continuous governance blueprint citations</li>
  </ul>
  </section>
 
@@ -976,11 +979,26 @@ def procurement_diligence_body() -> str:
  </section>"""
 
 
+START_H1 = (
+    '<span class="nf-hero-flow">'
+    '<span class="nf-hero-flow__step">Sign up</span>'
+    '<span class="nf-hero-flow__sep" aria-hidden="true">'
+    '<svg viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+    '</span>'
+    '<span class="nf-hero-flow__step">Sandbox</span>'
+    '<span class="nf-hero-flow__sep" aria-hidden="true">'
+    '<svg viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+    '</span>'
+    '<span class="nf-hero-flow__step">Try in minutes</span>'
+    '</span>'
+)
+
+
 def start_page_body() -> str:
     return hero(
         "Developer sandbox · Canada",
         "Self-serve · no sales call",
-        "Sign up → sandbox → try the product in minutes",
+        START_H1,
         "Create a free developer sandbox, open the Governance Console, and run evaluate → TLE → export with mock M365 connectors — "
         "<strong>before</strong> a Trust Brief or design partner conversation.",
         [("14-day trial", True), ("50 evaluate calls", False), ("Sandbox mode", False)],
@@ -1321,7 +1339,7 @@ def main() -> None:
  <section><h2>What is Noetfield?</h2><p>AI Governance &amp; Evidence for Microsoft 365 Copilot — evaluate operational intent before execution, with signed Trust Ledger records and fail-closed export. No custody or payment execution.</p></section>
  <section><h2>What do you offer?</h2><p>Three contract SKUs only: Trust Brief ($10k · 6 weeks), Copilot Governance Pack ($2k–10k · 90-day design partner), Bank Pilot (custom shadow simulation).</p></section>
  <section><h2>Do you replace Microsoft Purview?</h2><p>No. We complement Purview and Copilot Control System — metadata-only evidence index and signed Copilot governance receipts.</p></section>
- <section><h2>Are you a certifier?</h2><p>No. We produce governance records and export bundles — honest Shipped · Roadmap · Out of scope posture, not ISO/SOC certification claims.</p></section>
+ <section><h2>Are you a certifier?</h2><p>No. We produce governance records and export bundles — honest Available · Planned · Out of scope posture, not ISO/SOC certification claims.</p></section>
  </div>""" + mega_cta())
 
     # Simple pages
@@ -1439,9 +1457,9 @@ def main() -> None:
  <p class="nf-section-lead">No fake traction. Product converts in a 5-minute demo — economic proof is a contracted pilot and referenceable board PDF.</p>
  </div></div>
  <div class="nf-trust-signals-grid">
- <div class="nf-trust-signal"><span class="nf-trust-signal-label">Governance evaluate + TLE v1 + workspace</span><span class="nf-signal-badge nf-signal-badge--shipped">Shipped</span></div>
- <div class="nf-trust-signal"><span class="nf-trust-signal-label">Board PDF + procurement ZIP export</span><span class="nf-signal-badge nf-signal-badge--shipped">Shipped</span></div>
- <div class="nf-trust-signal"><span class="nf-trust-signal-label">M365 metadata evidence index</span><span class="nf-signal-badge nf-signal-badge--shipped">Shipped</span></div>
+ <div class="nf-trust-signal"><span class="nf-trust-signal-label">Governance evaluate + TLE v1 + workspace</span><span class="nf-signal-badge nf-signal-badge--shipped">Available</span></div>
+ <div class="nf-trust-signal"><span class="nf-trust-signal-label">Board PDF + procurement ZIP export</span><span class="nf-signal-badge nf-signal-badge--shipped">Available</span></div>
+ <div class="nf-trust-signal"><span class="nf-trust-signal-label">M365 metadata evidence index</span><span class="nf-signal-badge nf-signal-badge--shipped">Available</span></div>
  <div class="nf-trust-signal"><span class="nf-trust-signal-label">First org: TLE in production + board PDF in meeting</span><span class="nf-signal-badge nf-signal-badge--orientation">Target</span></div>
  <div class="nf-trust-signal"><span class="nf-trust-signal-label">Design partner LOI / deposit ≥ CAD 2K</span><span class="nf-signal-badge nf-signal-badge--orientation">Target</span></div>
  <div class="nf-trust-signal"><span class="nf-trust-signal-label">Governance Monitor MRR · tenant refresh</span><span class="nf-signal-badge nf-signal-badge--roadmap">Roadmap</span></div>
@@ -1555,7 +1573,7 @@ def main() -> None:
               [("OpenAPI", True), ("Sandbox + production", False)],
               [("/start/", "Start free sandbox", True), ("/trust-brief/intake/?interest=api-pilot&source=api-docs", "Request production keys", False)],
               [],
-              receipt("RID-2026-0602-API", "Evaluate → ledger → export routes shipped."),
+              receipt("RID-2026-0602-API", "Evaluate → ledger → export routes available in sandbox and production."),
           ) + scope_block() + """
  <section class="nf-section nf-section--lift" aria-labelledby="api-sandbox">
  <div class="nf-section__head"><span class="nf-section__num">00</span><div>
@@ -1702,5 +1720,39 @@ def main() -> None:
             print("patched css", rel)
 
 
+def sync_all_shell_pages() -> None:
+    """Ensure every public shell page uses Inter + www v20 assets."""
+    ibm = "IBM+Plex"
+    for path in ROOT.rglob("*.html"):
+        if "services/governance" in str(path) or "docs/collateral" in str(path):
+            continue
+        text = path.read_text(encoding="utf-8")
+        if 'id="nfHeader"' not in text:
+            continue
+        new = text
+        if ibm in new:
+            new = re.sub(
+                r' <link rel="preconnect" href="https://fonts\.googleapis\.com" />\n'
+                r' <link rel="preconnect" href="https://fonts\.gstatic\.com" crossorigin />\n'
+                r' <link rel="stylesheet" href="https://fonts\.googleapis\.com/css2\?family=[^"]+" />\n?',
+                FONT_LINK + "\n",
+                new,
+            )
+        if "fonts.googleapis.com" not in new and "noetfield-tokens.css" in new:
+            new = new.replace(
+                '<link rel="stylesheet" href="/assets/noetfield-tokens.css" />',
+                FONT_LINK + '\n <link rel="stylesheet" href="/assets/noetfield-tokens.css" />',
+            )
+        new = re.sub(r"noetfield-www\.css\?v=[^\"']+", f"noetfield-www.css?v={WWW_VER}", new)
+        new = re.sub(r"noetfield-print\.css\?v=[^\"']+", f"noetfield-print.css?v={WWW_VER}", new)
+        new = re.sub(r"noetfield-shell\.js\?v=[^\"']+", f"noetfield-shell.js?v={WWW_VER}", new)
+        new = re.sub(r"noetfield-sandbox\.js\?v=[^\"']+", f"noetfield-sandbox.js?v={WWW_VER}", new)
+        new = re.sub(r"noetfield-live-proof\.js\?v=[^\"']+", f"noetfield-live-proof.js?v={WWW_VER}", new)
+        if new != text:
+            path.write_text(new, encoding="utf-8")
+            print("synced assets", path.relative_to(ROOT))
+
+
 if __name__ == "__main__":
     main()
+    sync_all_shell_pages()
