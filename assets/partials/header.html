@@ -1,31 +1,64 @@
-<!-- /assets/partials/header.html — v4.0 (institutional 2026) -->
-<div class="nav" role="navigation" aria-label="Noetfield global navigation">
+<!-- /assets/partials/header.html — v5.0 (institutional Canada 2026) -->
+<div class="instTopbar" role="region" aria-label="Institutional notice">
+ <div class="instTopbarInner">
+ <div class="instTopbarLeft">
+ <span class="instCaBadge" aria-label="Canada">
+ <svg class="instMaple" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+ <path fill="currentColor" d="M12 2l1.2 3.6h3.8l-3.1 2.2 1.2 3.6L12 9.2 8.9 11.4l1.2-3.6-3.1-2.2h3.8L12 2zm-7.4 8.2l2.8 2-1 3.2 2.8-2 2.8 2-1-3.2 2.8-2h-3.5l-1.1-3.4-1.1 3.4H4.6zm14.8 0h-3.5l-1.1-3.4-1.1 3.4h-3.5l2.8 2-1 3.2 2.8-2 2.8 2-1-3.2 2.8-2zM12 14.8l-2.2 3.2h4.4L12 14.8z"/>
+ </svg>
+ Canada
+ </span>
+ <span class="instTopbarText">Noetfield Systems Inc. · Vancouver, BC</span>
+ <span class="instTopbarSep" aria-hidden="true">·</span>
+ <span class="instTopbarText">Governance infrastructure · Non-custodial · PIPEDA-aligned intake</span>
+ </div>
+ <div class="instTopbarRight" aria-label="Utility links">
+ <a href="/status/" data-rid-link class="instTopbarLink statusLink"><span class="statusDot" aria-hidden="true"></span>Status</a>
+ <a href="/privacy/" class="instTopbarLink">Privacy</a>
+ <a href="/contact/" data-rid-link class="instTopbarLink">Contact</a>
+ </div>
+ </div>
+</div>
+
+<div class="instHeaderShell">
+ <div class="nav" role="navigation" aria-label="Noetfield global navigation">
  <a class="brand" href="/" aria-label="Noetfield home">
  <img class="brandMark" src="/noetfield-favicon-512.png" alt="Noetfield mark" />
  <div class="brandText">
  <div class="name">Noetfield</div>
- <div class="tag">Copilot governance · Trust Ledger</div>
+ <div class="tag">Copilot governance · Trust Ledger · Canada</div>
  </div>
  </a>
 
  <nav class="menu" aria-label="Primary navigation">
- <div class="menuPrimary" aria-label="Core">
+ <div class="menuPrimary" aria-label="Products and reference">
+ <div class="navGroup" aria-label="Products">
+ <span class="navGroupLabel">Products</span>
+ <div class="navGroupLinks">
  <a href="/trust-ledger/">Trust Ledger</a>
  <a href="/trust-brief/">Trust Brief</a>
  <a href="/copilot/">Copilot</a>
+ </div>
+ </div>
+ <div class="navGroup" aria-label="Reference">
+ <span class="navGroupLabel">Reference</span>
+ <div class="navGroupLinks">
  <a href="/playbook/">Playbook</a>
  <a href="/for-whom/">For Whom</a>
  </div>
+ </div>
+ <div class="navGroup" aria-label="Programs">
+ <span class="navGroupLabel">Programs</span>
+ <div class="navGroupLinks">
+ <a href="/gate/" data-rid-link>Gate</a>
+ <a href="/gate/procurement/" data-rid-link>Procurement</a>
+ <a href="/gate/diligence/" data-rid-link>Diligence</a>
+ </div>
+ </div>
+ </div>
 
- <div class="menuActions" aria-label="App actions">
- <a class="pilltab" href="/gate/diligence/" data-rid-link>Diligence</a>
- <a class="pilltab" href="/gate/" data-rid-link>Gate</a>
- <a class="pilltab cta" href="/gate/sales/" data-rid-link aria-label="Sales start">Sales</a>
-
- <a class="pilltab statusLink" href="/status/" data-rid-link>
- <span class="statusDot" aria-hidden="true"></span>Status
- </a>
-
+ <div class="menuActions" aria-label="Account actions">
+ <a class="pilltab cta" href="/gate/sales/" data-rid-link aria-label="Start at Sales">Start</a>
  <a class="login" href="/portal/login/" data-rid-link>Login</a>
  </div>
  </nav>
@@ -42,27 +75,50 @@
  <path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
  </svg>
  </button>
-</div>
+ </div>
 
-<div class="mobilePanel" id="mobilePanel" hidden>
+ <div class="mobilePanel" id="mobilePanel" hidden>
  <div class="mobileInner">
- <div class="mobileGrid" aria-label="Mobile navigation">
- <a class="mobileCTA" href="/gate/sales/" data-rid-link>Sales (Start)</a>
+ <div class="mobileIntro">
+ <span class="instCaBadge"><svg class="instMaple" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2l1.2 3.6h3.8l-3.1 2.2 1.2 3.6L12 9.2 8.9 11.4l1.2-3.6-3.1-2.2h3.8L12 2z"/></svg>Canada</span>
+ <span>Vancouver, BC · Regulated institutions · Non-custodial</span>
+ </div>
+ <a class="mobileCTA" href="/gate/sales/" data-rid-link>Start at Sales</a>
 
+ <div class="mobileSection">
+ <div class="mobileSectionLabel">Products</div>
+ <div class="mobileGrid">
  <a href="/trust-ledger/">Trust Ledger</a>
  <a href="/trust-brief/">Trust Brief</a>
  <a href="/copilot/">Copilot</a>
+ </div>
+ </div>
+
+ <div class="mobileSection">
+ <div class="mobileSectionLabel">Reference</div>
+ <div class="mobileGrid">
  <a href="/playbook/">Playbook</a>
  <a href="/for-whom/">For Whom</a>
+ </div>
+ </div>
 
- <a href="/gate/diligence/" data-rid-link>Investor diligence</a>
+ <div class="mobileSection">
+ <div class="mobileSectionLabel">Programs</div>
+ <div class="mobileGrid">
  <a href="/gate/" data-rid-link>Gate</a>
+ <a href="/gate/procurement/" data-rid-link>Procurement</a>
+ <a href="/gate/diligence/" data-rid-link>Investor diligence</a>
+ </div>
+ </div>
 
- <a class="statusLink" href="/status/" data-rid-link>
- <span class="statusDot" aria-hidden="true"></span>Status
- </a>
-
+ <div class="mobileSection">
+ <div class="mobileSectionLabel">Account</div>
+ <div class="mobileGrid">
+ <a class="statusLink" href="/status/" data-rid-link><span class="statusDot" aria-hidden="true"></span>Status</a>
  <a href="/portal/login/" data-rid-link>Login</a>
+ <a href="/contact/" data-rid-link>Contact</a>
+ </div>
+ </div>
  </div>
  </div>
 </div>

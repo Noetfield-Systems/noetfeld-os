@@ -9,6 +9,14 @@ DILIGENCE_PAGE = ROOT / "gate" / "diligence" / "index.html"
 HOME = ROOT / "index.html"
 
 
+def test_header_has_institutional_canada_nav() -> None:
+    text = (ROOT / "assets" / "partials" / "header.html").read_text(encoding="utf-8")
+    assert "instTopbar" in text
+    assert "navGroup" in text
+    assert "Canada" in text
+    assert "Vancouver" in text
+
+
 def test_homepage_has_no_gcip_bleed() -> None:
     text = HOME.read_text(encoding="utf-8")
     assert "GCIP" not in text

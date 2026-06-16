@@ -90,6 +90,27 @@ else
   echo "OK   footer links to /gate/diligence/"
 fi
 
+if ! grep -qF 'instTopbar' assets/partials/header.html; then
+  echo "FAIL header missing institutional topbar" >&2
+  fail=1
+else
+  echo "OK   header has institutional topbar"
+fi
+
+if ! grep -qF 'navGroup' assets/partials/header.html; then
+  echo "FAIL header missing grouped nav" >&2
+  fail=1
+else
+  echo "OK   header has grouped institutional nav"
+fi
+
+if ! grep -qF 'Canada' assets/partials/header.html; then
+  echo "FAIL header missing Canada institutional badge" >&2
+  fail=1
+else
+  echo "OK   header tuned for Canada"
+fi
+
 if [[ "$fail" -eq 0 ]]; then
   echo ""
   echo "Running nested buyer-audience gate..."

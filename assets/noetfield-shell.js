@@ -1,18 +1,18 @@
-/* /assets/noetfield-shell.js — v2.4
+/* /assets/noetfield-shell.js — v2.6
    Noetfield Shell:
    - Inject header/footer partials
    - Burger menu (with iOS-safe scroll lock + focus handling)
-   - Active links
+   - Active links (grouped nav + topbar)
    - Footer year
    - Feedback tab
    - RID: generate/store/display/copy + propagate to tagged links + inject into forms
    - Emits: window.__nf + event "nf:shell:ready"
-   Version: 2025.12.19.2
+   Version: 2026.06.03
 */
 (function () {
   "use strict";
 
-  var SHELL_VERSION = "2025.12.19.2";
+  var SHELL_VERSION = "2026.06.03";
   var PARTIALS_BASE = "/assets/partials";
   var RID_KEY = "nf_rid";
 
@@ -165,9 +165,11 @@
     var current = normPath(window.location.pathname);
 
     var selectors = [
-      "#nfHeader .menuPrimary a",
+      "#nfHeader .navGroupLinks a",
       "#nfHeader .menuActions a",
+      "#nfHeader .instTopbarLink",
       "#nfHeader .mobileGrid a",
+      "#nfHeader a.mobileCTA",
       "#nfFooter .footerMiniNav a"
     ].join(", ");
 
