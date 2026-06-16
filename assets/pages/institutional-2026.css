@@ -1,0 +1,561 @@
+/* institutional-2026.css — Noetfield / TrustField-aligned 2026 page system */
+/* Shared layout, hero, sections, path, surfaces, pricing, trust, FAQ */
+
+:root {
+  --nf26-max: 1180px;
+  --nf26-section: 72px;
+  --nf26-section-sm: 48px;
+  --nf26-accent: #2de38a;
+  --nf26-accent-dim: rgba(45, 227, 138, 0.14);
+  --nf26-blue: #7aa7ff;
+  --nf26-blue-dim: rgba(122, 167, 255, 0.12);
+}
+
+.nf26-page { padding-bottom: 88px; }
+
+/* ── Section rhythm ── */
+.nf26-section {
+  margin: var(--nf26-section) 0;
+}
+.nf26-section:first-child { margin-top: 0; }
+.nf26-sectionHead {
+  margin-bottom: 22px;
+  max-width: 720px;
+}
+.nf26-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 10px;
+}
+.nf26-kicker::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--gold);
+  box-shadow: 0 0 0 3px rgba(200, 163, 73, 0.18);
+}
+.nf26-h2 {
+  margin: 0 0 10px;
+  font-size: clamp(1.5rem, 2.4vw, 2rem);
+  line-height: 1.12;
+  letter-spacing: -0.04em;
+  font-weight: 850;
+}
+.nf26-lead {
+  margin: 0;
+  color: var(--muted);
+  font-size: 1rem;
+  line-height: 1.72;
+}
+.nf26-lead strong { color: var(--text); font-weight: 900; }
+
+/* ── Hero ── */
+.nf26-hero { padding: 20px 0 8px; }
+.nf26-heroShell {
+  position: relative;
+  border-radius: calc(var(--radius) + 12px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background:
+    radial-gradient(1200px 520px at 14% 0%, rgba(200, 163, 73, 0.22), transparent 58%),
+    radial-gradient(1100px 520px at 96% 8%, rgba(122, 167, 255, 0.14), transparent 60%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.02));
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+.nf26-heroShell::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 55%, rgba(7, 7, 11, 0.35) 100%);
+  pointer-events: none;
+}
+.nf26-heroInner {
+  position: relative;
+  z-index: 1;
+  padding: clamp(24px, 4vw, 40px) clamp(18px, 3vw, 32px);
+}
+.nf26-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--muted);
+  font-size: 12.5px;
+  font-weight: 600;
+}
+.nf26-eyebrow .dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--nf26-accent);
+  box-shadow: 0 0 0 3px var(--nf26-accent-dim);
+  flex-shrink: 0;
+}
+.nf26-h1 {
+  margin: 16px 0 12px;
+  font-size: clamp(2rem, 4.2vw, 3.25rem);
+  line-height: 1.06;
+  letter-spacing: -0.045em;
+  font-weight: 900;
+  max-width: 18ch;
+}
+.nf26-h1.wide { max-width: 22ch; }
+.nf26-heroLead {
+  margin: 0;
+  max-width: 62ch;
+  color: var(--muted);
+  font-size: clamp(1rem, 1.6vw, 1.125rem);
+  line-height: 1.72;
+}
+.nf26-heroLead strong { color: var(--text); font-weight: 900; }
+.nf26-metaRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 18px;
+}
+.nf26-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.035);
+  color: var(--muted);
+  font-size: 12.5px;
+}
+.nf26-pill strong { color: var(--text); font-weight: 850; }
+.nf26-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 20px;
+  align-items: center;
+}
+.nf26-actions .btn { min-height: 46px; padding: 12px 18px; font-size: 14px; }
+.nf26-notice {
+  margin-top: 16px;
+  padding: 14px 16px;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--muted2);
+  font-size: 13px;
+  line-height: 1.65;
+  max-width: 72ch;
+}
+.nf26-notice strong { color: var(--text); }
+
+/* ── Path steps (TrustField-style) ── */
+.nf26-path {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-top: 8px;
+}
+.nf26-pathStep {
+  position: relative;
+  border-radius: var(--radius);
+  border: 1px solid rgba(255, 255, 255, 0.11);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.02));
+  padding: 18px 16px;
+  min-height: 140px;
+}
+.nf26-pathStep::before {
+  content: attr(data-step);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 10px;
+  border: 1px solid rgba(200, 163, 73, 0.45);
+  background: rgba(200, 163, 73, 0.12);
+  color: var(--gold);
+  font-size: 12px;
+  font-weight: 900;
+  margin-bottom: 12px;
+}
+.nf26-pathStep h3 {
+  margin: 0 0 6px;
+  font-size: 15px;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+}
+.nf26-pathStep p {
+  margin: 0;
+  color: var(--muted2);
+  font-size: 12.5px;
+  line-height: 1.6;
+}
+.nf26-pathStep .nf26-price {
+  display: block;
+  margin-top: 10px;
+  color: var(--gold);
+  font-size: 13px;
+  font-weight: 850;
+}
+
+/* ── Loop / spine (evaluate → export) ── */
+.nf26-spine {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+.nf26-spineStep {
+  border-radius: var(--radius);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.03);
+  padding: 18px;
+  text-align: left;
+}
+.nf26-spineNum {
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0.18em;
+  color: var(--gold);
+  margin-bottom: 8px;
+}
+.nf26-spineStep h3 {
+  margin: 0 0 8px;
+  font-size: 16px;
+  font-weight: 900;
+}
+.nf26-spineStep p {
+  margin: 0;
+  color: var(--muted2);
+  font-size: 13px;
+  line-height: 1.65;
+}
+
+/* ── Surface grid ── */
+.nf26-surfaces {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+.nf26-surface {
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--radius);
+  border: 1px solid rgba(255, 255, 255, 0.11);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.018));
+  padding: 18px;
+  transition: border-color 0.15s ease, transform 0.12s ease;
+  min-height: 148px;
+}
+.nf26-surface:hover {
+  border-color: rgba(200, 163, 73, 0.35);
+  transform: translateY(-2px);
+}
+.nf26-surfaceTag {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted2);
+  margin-bottom: 8px;
+}
+.nf26-surface h3 {
+  margin: 0 0 8px;
+  font-size: 16px;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+}
+.nf26-surface p {
+  margin: 0 0 14px;
+  flex: 1;
+  color: var(--muted2);
+  font-size: 13px;
+  line-height: 1.6;
+}
+.nf26-surface .btn {
+  align-self: flex-start;
+  font-size: 12.5px;
+  min-height: 38px;
+}
+
+/* ── Cards & grids ── */
+.nf26-grid2 {
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  gap: 16px;
+  align-items: start;
+}
+.nf26-grid3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+.nf26-card {
+  border-radius: var(--radius);
+  border: 1px solid rgba(255, 255, 255, 0.11);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.02));
+  box-shadow: var(--shadow2);
+  overflow: hidden;
+}
+.nf26-cardPad { padding: 20px; }
+.nf26-card h3 {
+  margin: 0 0 8px;
+  font-size: 17px;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+}
+.nf26-card p, .nf26-card li {
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.68;
+}
+.nf26-card ul {
+  margin: 10px 0 0;
+  padding-left: 18px;
+}
+
+/* ── Pricing tiers ── */
+.nf26-pricing {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+.nf26-tier {
+  border-radius: calc(var(--radius) + 4px);
+  border: 1px solid rgba(255, 255, 255, 0.11);
+  background: rgba(255, 255, 255, 0.03);
+  padding: 22px 20px;
+  display: flex;
+  flex-direction: column;
+}
+.nf26-tier.featured {
+  border-color: rgba(200, 163, 73, 0.5);
+  background:
+    radial-gradient(400px 200px at 50% 0%, rgba(200, 163, 73, 0.14), transparent 70%),
+    rgba(255, 255, 255, 0.04);
+}
+.nf26-tierLabel {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted2);
+  margin-bottom: 8px;
+}
+.nf26-tierPrice {
+  font-size: clamp(1.5rem, 2.5vw, 2rem);
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  margin-bottom: 4px;
+}
+.nf26-tierTitle {
+  font-size: 15px;
+  font-weight: 900;
+  margin-bottom: 12px;
+  color: var(--text);
+}
+.nf26-tier ul {
+  margin: 0 0 18px;
+  padding-left: 18px;
+  flex: 1;
+  color: var(--muted2);
+  font-size: 13px;
+  line-height: 1.65;
+}
+.nf26-tier .btn { width: 100%; justify-content: center; }
+
+/* ── Audience strip ── */
+.nf26-audience {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.nf26-audience span {
+  padding: 10px 16px;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 650;
+}
+
+/* ── Trust / proof blocks ── */
+.nf26-trustGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+.nf26-trustBlock {
+  border-radius: var(--radius);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 18px;
+  background: rgba(255, 255, 255, 0.025);
+}
+.nf26-trustBlock h3 {
+  margin: 0 0 10px;
+  font-size: 15px;
+  font-weight: 900;
+}
+.nf26-trustBlock ul {
+  margin: 0;
+  padding-left: 18px;
+  color: var(--muted2);
+  font-size: 13px;
+  line-height: 1.7;
+}
+.nf26-badge {
+  display: inline-flex;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--muted);
+}
+.nf26-badge.ok {
+  border-color: rgba(45, 227, 138, 0.4);
+  background: var(--nf26-accent-dim);
+  color: var(--nf26-accent);
+}
+.nf26-badge.warn {
+  border-color: rgba(200, 163, 73, 0.4);
+  background: rgba(200, 163, 73, 0.1);
+  color: var(--gold);
+}
+
+/* ── Table ── */
+.nf26-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+  font-size: 13px;
+}
+.nf26-table th,
+.nf26-table td {
+  padding: 12px 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  text-align: left;
+  vertical-align: top;
+}
+.nf26-table th {
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--muted2);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.nf26-table tr:last-child td { border-bottom: none; }
+.nf26-table td { color: var(--muted); }
+
+/* ── FAQ ── */
+.nf26-faq { display: flex; flex-direction: column; gap: 10px; }
+.nf26-faq details {
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.03);
+  overflow: hidden;
+}
+.nf26-faq summary {
+  padding: 16px 18px;
+  cursor: pointer;
+  font-weight: 800;
+  font-size: 14px;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.nf26-faq summary::-webkit-details-marker { display: none; }
+.nf26-faq summary::after {
+  content: "+";
+  color: var(--gold);
+  font-size: 18px;
+  font-weight: 400;
+  flex-shrink: 0;
+}
+.nf26-faq details[open] summary::after { content: "−"; }
+.nf26-faq details p {
+  margin: 0;
+  padding: 0 18px 16px;
+  color: var(--muted2);
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+/* ── CTA band ── */
+.nf26-ctaBand {
+  margin-top: var(--nf26-section);
+  border-radius: calc(var(--radius) + 8px);
+  border: 1px solid rgba(200, 163, 73, 0.35);
+  background:
+    radial-gradient(800px 320px at 20% 0%, rgba(200, 163, 73, 0.16), transparent 60%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+  padding: clamp(24px, 4vw, 36px);
+  text-align: center;
+}
+.nf26-ctaBand h2 {
+  margin: 0 0 10px;
+  font-size: clamp(1.35rem, 2.5vw, 1.75rem);
+  font-weight: 900;
+  letter-spacing: -0.03em;
+}
+.nf26-ctaBand p {
+  margin: 0 auto 18px;
+  max-width: 52ch;
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.65;
+}
+.nf26-ctaBand .nf26-actions { justify-content: center; margin-top: 0; }
+
+/* ── Code snippet (API proof) ── */
+.nf26-codeBlock {
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(0, 0, 0, 0.35);
+  padding: 16px;
+  font-family: ui-monospace, "Cascadia Code", "SF Mono", monospace;
+  font-size: 12px;
+  line-height: 1.55;
+  color: var(--muted);
+  overflow-x: auto;
+}
+.nf26-codeBlock .key { color: var(--nf26-blue); }
+.nf26-codeBlock .val { color: var(--nf26-accent); }
+
+/* ── Responsive ── */
+@media (max-width: 1024px) {
+  .nf26-path,
+  .nf26-spine,
+  .nf26-surfaces,
+  .nf26-pricing { grid-template-columns: 1fr 1fr; }
+  .nf26-h1 { max-width: none; }
+}
+@media (max-width: 760px) {
+  .nf26-section { margin: var(--nf26-section-sm) 0; }
+  .nf26-grid2,
+  .nf26-grid3,
+  .nf26-path,
+  .nf26-spine,
+  .nf26-surfaces,
+  .nf26-pricing,
+  .nf26-trustGrid { grid-template-columns: 1fr; }
+  .nf26-h1 { font-size: 1.85rem; }
+}

@@ -9,10 +9,19 @@ DILIGENCE_PAGE = ROOT / "gate" / "diligence" / "index.html"
 HOME = ROOT / "index.html"
 
 
-def test_homepage_has_no_gcip_or_internal_trust_strip() -> None:
+def test_homepage_has_no_gcip_bleed() -> None:
     text = HOME.read_text(encoding="utf-8")
     assert "GCIP" not in text
     assert "(internal)" not in text
+
+
+def test_homepage_has_modern_shell_and_spine() -> None:
+    text = HOME.read_text(encoding="utf-8")
+    assert 'id="nfHeader"' in text
+    assert 'id="nfFooter"' in text
+    assert "nf26-hero" in text
+    assert "Evaluate" in text
+    assert "Trust Ledger" in text
 
 
 def test_checklist_map_references_all_four_groups() -> None:

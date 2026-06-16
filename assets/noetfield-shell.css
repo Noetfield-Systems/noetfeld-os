@@ -1,6 +1,8 @@
-/* /assets/noetfield-shell.css — v2.4 (navOpen scroll lock + srOnly + minor hardening) */
+/* /assets/noetfield-shell.css — v2.5 (institutional-2026 page system) */
 /* Noetfield Shell (Header + Mobile Nav + Footer) */
-/* Version: locked-2025.12.19+sales-cta+header-scope */
+/* Version: locked-2026.06+institutional-2026 */
+
+@import url('./pages/institutional-2026.css');
 
 :root{
   --bg0:#07070b; --bg1:#0b0b14;

@@ -12,68 +12,35 @@
  <link rel="icon" href="/noetfield-favicon-512.png" type="image/png" />
  <link rel="stylesheet" href="/assets/noetfield-shell.css" />
  <script src="/assets/noetfield-shell.js" defer></script>
- <style>
- .hero{padding:22px 0 10px}
- .heroShell{
- border-radius:calc(var(--radius) + 8px);
- border:1px solid rgba(255,255,255,.11);
- background:
- radial-gradient(1000px 420px at 18% 0%, rgba(200,163,73,.18), transparent 60%),
- radial-gradient(1000px 420px at 90% 10%, rgba(122,167,255,.10), transparent 62%),
- linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.022));
- box-shadow:var(--shadow);overflow:hidden;
- }
- .heroInner{padding:24px 22px}
- .eyebrow{display:inline-flex;gap:10px;align-items:center;color:var(--muted);font-size:13px;padding:9px 12px;border-radius:999px;border:1px solid rgba(255,255,255,.13);background:rgba(255,255,255,.035)}
- .dot{width:8px;height:8px;border-radius:50%;background:rgba(200,163,73,.97);box-shadow:0 0 0 3px rgba(200,163,73,.18)}
- h1{margin:14px 0 10px;font-size:clamp(28px,3vw,40px);line-height:1.08;letter-spacing:-.75px}
- .lead{margin:0;color:var(--muted);font-size:16px;max-width:980px;line-height:1.65}
- .lead strong{color:var(--text);font-weight:800}
- .metaRow{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
- .pill{display:inline-flex;align-items:center;gap:10px;padding:9px 12px;border-radius:999px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.03);color:var(--muted);font-size:13px}
- .pill strong{color:var(--text);font-weight:800}
- .actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:14px}
- .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:18px 0}
- .card{border-radius:var(--radius);border:1px solid rgba(255,255,255,.11);background:linear-gradient(180deg,rgba(255,255,255,.055),rgba(255,255,255,.022));box-shadow:var(--shadow2);padding:18px}
- .card h2{margin:0 0 8px;font-size:18px}
- .card p{margin:0;color:var(--muted);line-height:1.65;font-size:14px}
- .card ul{margin:10px 0 0;padding-left:18px;color:var(--muted);line-height:1.7;font-size:14px}
- .bar{margin-top:14px;padding:12px;border-radius:14px;border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.03);color:var(--muted2);font-size:12.8px;line-height:1.65}
- .bar strong{color:var(--text)}
- .table{width:100%;border-collapse:separate;border-spacing:0;border-radius:14px;border:1px solid rgba(255,255,255,.10);margin-top:12px;font-size:13px}
- .table th,.table td{padding:10px 12px;border-bottom:1px solid rgba(255,255,255,.08);text-align:left;vertical-align:top}
- .table th{color:var(--muted2);font-size:11px;letter-spacing:.2em;text-transform:uppercase;background:rgba(255,255,255,.03)}
- .table tr:last-child td{border-bottom:none}
- @media(max-width:760px){.grid{grid-template-columns:1fr}h1{font-size:28px}}
- </style>
 </head>
-<body>
+<body class="nf26-page">
  <div class="bg" aria-hidden="true"></div>
  <a class="skip" href="#main">Skip to content</a>
  <header id="nfHeader"></header>
+
  <main id="main" class="wrap">
- <section class="hero">
- <div class="heroShell">
- <div class="heroInner">
- <div class="eyebrow"><span class="dot"></span> Buy-side diligence · decision evidence</div>
- <h1>Governance diligence for Copilot and M365 targets</h1>
- <p class="lead">
+ <section class="nf26-hero" aria-label="Investor diligence hero">
+ <div class="nf26-heroShell">
+ <div class="nf26-heroInner">
+ <div class="nf26-eyebrow"><span class="dot" aria-hidden="true"></span> Buy-side diligence · decision evidence</div>
+ <h1 class="nf26-h1 wide">Governance diligence for Copilot and M365 targets</h1>
+ <p class="nf26-heroLead">
  For <strong>your diligence team</strong> evaluating a target’s Copilot or agentic workflow claims:
  Noetfield supplies <strong>independent decision-evidence</strong> — shadow evaluate orientation,
  signed Trust Ledger samples, and board-export artifacts. Not technical model benchmarks. Not EU AI Act certification.
  </p>
- <div class="metaRow">
- <div class="pill"><strong>Audience</strong> VC · PE · corp dev</div>
- <div class="pill"><strong>SKU</strong> Trust Brief (6 weeks)</div>
- <div class="pill"><strong>Wedge</strong> Exportable go/no-go trail</div>
+ <div class="nf26-metaRow">
+ <div class="nf26-pill"><strong>Audience</strong> VC · PE · corp dev</div>
+ <div class="nf26-pill"><strong>SKU</strong> Trust Brief (6 weeks)</div>
+ <div class="nf26-pill"><strong>Wedge</strong> Exportable go/no-go trail</div>
  </div>
- <div class="actions">
- <a class="btn" href="/trust-brief/intake/?vector=investor-diligence" data-rid-link>Request Trust Brief</a>
- <a class="btn secondary" href="/trust-ledger/sample-report/" data-rid-link>TLE samples</a>
+ <div class="nf26-actions">
+ <a class="btn primary" href="/trust-brief/intake/?vector=investor-diligence" data-rid-link>Request Trust Brief</a>
+ <a class="btn" href="/trust-ledger/sample-report/" data-rid-link>TLE samples</a>
  <a class="btn secondary" href="/gate/procurement/procurement-pack/" data-rid-link>Procurement pack</a>
  <a class="btn secondary" href="/gate/intake/?vector=investor-diligence" data-rid-link>Gate intake</a>
  </div>
- <div class="bar" role="note">
+ <div class="nf26-notice" role="note">
  <strong>Two-lane diligence:</strong> Technical AI DD (models, code, moat) is a separate specialist lane.
  Noetfield covers <strong>governance and human-architecture</strong> — can your target prove oversight when AI fails or regulators ask?
  </div>
@@ -81,9 +48,9 @@
  </div>
  </section>
 
- <section class="grid" aria-label="What you receive">
- <article class="card">
- <h2>What you receive (Trust Brief)</h2>
+ <section class="nf26-section nf26-grid2" aria-label="What you receive">
+ <article class="nf26-card nf26-cardPad">
+ <h3>What you receive (Trust Brief)</h3>
  <p>Fixed-scope six-week diagnostic mapped to your target — same Trust Brief SKU, buy-side intake vector.</p>
  <ul>
  <li>Material AI / Copilot use-case map</li>
@@ -91,10 +58,10 @@
  <li>Starter Trust Ledger entries with approver chain</li>
  <li>Board memo with options for your IC appendix</li>
  </ul>
- <p style="margin-top:12px"><a href="/trust-brief/">Trust Brief overview</a></p>
+ <p style="margin-top:14px"><a class="btn secondary" href="/trust-brief/" data-rid-link>Trust Brief overview</a></p>
  </article>
- <article class="card">
- <h2>Sample artifacts (self-serve)</h2>
+ <article class="nf26-card nf26-cardPad">
+ <h3>Sample artifacts (self-serve)</h3>
  <ul>
  <li><a href="/trust-ledger/sample-report/">TLE v1 samples</a> — go / conditional / rejected</li>
  <li><a href="/gate/procurement/procurement-pack/">Engagement procurement pack</a></li>
@@ -104,13 +71,16 @@
  </article>
  </section>
 
- <section class="card" aria-label="Honest coverage">
- <h2>Honest coverage (2026 VC questionnaire)</h2>
- <p style="color:var(--muted);line-height:1.65;margin:0 0 12px">
+ <section class="nf26-section nf26-card nf26-cardPad" aria-label="Honest coverage">
+ <div class="nf26-sectionHead" style="margin-bottom:16px">
+ <div class="nf26-kicker">Honest scope</div>
+ <h2 class="nf26-h2">2026 VC questionnaire coverage</h2>
+ </div>
+ <p class="nf26-lead" style="margin-bottom:16px">
  We strengthen <strong>items 2, 4, 8, and 12</strong> (inventory orientation, IR spine, human review, exportable trail).
- Bias testing, training-data provenance, and valuation/moat analysis are <strong>out of scope</strong> — refer to technical DD and counsel.
+ Bias testing, training-data provenance, and valuation/moat analysis are <strong>out of scope</strong>.
  </p>
- <table class="table">
+ <table class="nf26-table">
  <thead><tr><th>Area</th><th>Noetfield</th><th>Gap</th></tr></thead>
  <tbody>
  <tr><td>Policy &amp; inventory</td><td>Trust Brief outputs</td><td>Target-owned AUP &amp; HR training</td></tr>
@@ -119,17 +89,27 @@
  <tr><td>Regulatory map</td><td>Framework orientation only</td><td>Not certification</td></tr>
  </tbody>
  </table>
- <p style="margin-top:12px;font-size:13px;color:var(--muted2)">
+ <p style="margin-top:14px;font-size:13px;color:var(--muted2)">
  Orientation only — not legal advice. Three contract offerings only: Trust Brief, Copilot Readiness Pack, Bank pilot.
  </p>
  </section>
 
- <section class="bar" style="margin-top:18px">
+ <section class="nf26-section nf26-notice" style="max-width:none">
  <strong>Sell-side vs buy-side:</strong> Portco CEOs preparing a data room use the same Trust Brief —
  see <a href="/trust-brief/">Trust Brief</a> sell-side framing. This lane is for <strong>your</strong> team diligencing a target.
  Capital raise for Noetfield itself is a separate private lane (not indexed).
  </section>
+
+ <section class="nf26-ctaBand" aria-label="Diligence call to action">
+ <h2>Start buy-side Trust Brief intake</h2>
+ <p>Include target name and Copilot scope in non-confidential intake — Request ID threads status and procurement.</p>
+ <div class="nf26-actions">
+ <a class="btn primary" href="/trust-brief/intake/?vector=investor-diligence" data-rid-link>Trust Brief intake</a>
+ <a class="btn secondary" href="/gate/intake/?vector=investor-diligence" data-rid-link>Gate intake</a>
+ </div>
+ </section>
  </main>
+
  <footer id="nfFooter"></footer>
 </body>
 </html>
