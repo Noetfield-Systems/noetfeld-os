@@ -1,0 +1,57 @@
+{
+  "policy_id": "copilot-governance-v1",
+  "version": "1.0.0",
+  "title": "Copilot Governance Pack — Pre-execution controls",
+  "description": "Phase 3.4 executable policy pack for Copilot governance wedge. Metadata-only M365 evidence, human review on high-impact actions, no silent publication.",
+  "tenant_scope": "pilot",
+  "pack_type": "copilot-governance",
+  "controls": [
+    "confidence:min-threshold",
+    "human-review:high-impact",
+    "autonomy:no-silent-publication",
+    "inspectors:bounded-execution",
+    "copilot:review-required"
+  ],
+  "evidence_requirements": [
+    "m365_dlp_policy_export",
+    "sharepoint_site_permissions_snapshot",
+    "copilot_activity_report_30d"
+  ],
+  "effective_from": "2026-06-17",
+  "status": "active",
+  "metadata": {
+    "vector": "copilot-governance",
+    "lane": "A",
+    "template_id": "copilot-governance",
+    "runtime": {
+      "minimum_confidence": 0.75,
+      "inspector_execution_limit": 3,
+      "high_impact_actions": [
+        "approve_workflow",
+        "execute_inspector_action",
+        "publish_report",
+        "publish_board_report",
+        "export_audit_package",
+        "run_copilot_governance_demo"
+      ],
+      "blocked_autonomous_actions": [
+        "publish_report",
+        "publish_board_report",
+        "export_audit_package",
+        "approve_workflow"
+      ],
+      "forbidden_financial_actions": [
+        "submit_payment_intent",
+        "initiate_payment",
+        "execute_payment",
+        "route_settlement",
+        "settlement_orchestration",
+        "execute_transfer",
+        "custody_move",
+        "fx_execution",
+        "corridor_route",
+        "treasury_route"
+      ]
+    }
+  }
+}

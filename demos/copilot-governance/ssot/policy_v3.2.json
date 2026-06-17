@@ -1,0 +1,13 @@
+{
+  "policy_id": "copilot-acceptable-use",
+  "version": "3.2",
+  "effective_at": "2026-06-02T00:00:00Z",
+  "supersedes": "3.1",
+  "title": "Copilot Acceptable Use Policy",
+  "rules_summary": [
+    "Guest access blocked for production Copilot scope (pilot-only exception removed)",
+    "Board PDF publish requires named human approver sign-off",
+    "All pending evaluations on v3.1 must re-brief within 24 hours of publish"
+  ],
+  "ssot_hash": "sha256:f6e5d4c3b2a1prod"
+}

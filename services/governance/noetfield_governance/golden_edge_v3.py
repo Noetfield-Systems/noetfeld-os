@@ -11,8 +11,10 @@ from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict, Field
 
+from noetfield_governance.ledger_digest import policy_version_hash
 from noetfield_governance.policies import PolicyEvaluator, PolicyInput
 from noetfield_governance.policy_pack import PolicyDecisionCode
+from noetfield_governance.control_plane import ControlPlaneState
 from noetfield_governance.runtime import (
     GovernanceActionCommand,
     GovernanceExecutionResult,
@@ -52,6 +54,9 @@ class GoldenEdgeEvaluateResponse(BaseModel):
     execution_state: str | None = None
     policy_refs: list[str] = Field(default_factory=list)
     obligations: list[str] = Field(default_factory=list)
+    policy_version_hash: str | None = None
+    control_plane_state: str = ControlPlaneState.GOVERNANCE_CHECKED.value
+    ledger_event_id: str | None = None
 
 
 class GoldenEdgeV3Engine:
@@ -65,6 +70,15 @@ class GoldenEdgeV3Engine:
     ) -> None:
         self.governance_runtime = governance_runtime
         self.policy_evaluator = policy_evaluator or PolicyEvaluator()
+
+    def _enrich(self, evaluation: object, response: GoldenEdgeEvaluateResponse) -> GoldenEdgeEvaluateResponse:
+        refs = getattr(evaluation, "policy_refs", response.policy_refs)
+        return response.model_copy(
+            update={
+                "policy_version_hash": policy_version_hash(list(refs)),
+                "control_plane_state": ControlPlaneState.GOVERNANCE_CHECKED.value,
+            }
+        )
 
     async def evaluate(self, request: GoldenEdgeEvaluateRequest) -> GoldenEdgeEvaluateResponse:
         """Policy-only evaluate (no side effects)."""
@@ -85,30 +99,39 @@ class GoldenEdgeV3Engine:
             )
         )
         if not evaluation.allowed:
-            return GoldenEdgeEvaluateResponse(
-                decision=AgentLoopDecision.REJECT,
-                allowed=False,
-                reason=evaluation.reason,
-                reason_code=evaluation.reason_code.value,
-                policy_refs=evaluation.policy_refs,
-                obligations=evaluation.obligations,
+            return self._enrich(
+                evaluation,
+                GoldenEdgeEvaluateResponse(
+                    decision=AgentLoopDecision.REJECT,
+                    allowed=False,
+                    reason=evaluation.reason,
+                    reason_code=evaluation.reason_code.value,
+                    policy_refs=evaluation.policy_refs,
+                    obligations=evaluation.obligations,
+                ),
             )
         if evaluation.requires_human_review:
-            return GoldenEdgeEvaluateResponse(
-                decision=AgentLoopDecision.REQUIRE_HUMAN_REVIEW,
+            return self._enrich(
+                evaluation,
+                GoldenEdgeEvaluateResponse(
+                    decision=AgentLoopDecision.REQUIRE_HUMAN_REVIEW,
+                    allowed=True,
+                    reason=evaluation.reason,
+                    reason_code=evaluation.reason_code.value,
+                    policy_refs=evaluation.policy_refs,
+                    obligations=evaluation.obligations,
+                ),
+            )
+        return self._enrich(
+            evaluation,
+            GoldenEdgeEvaluateResponse(
+                decision=AgentLoopDecision.PROCEED,
                 allowed=True,
                 reason=evaluation.reason,
                 reason_code=evaluation.reason_code.value,
                 policy_refs=evaluation.policy_refs,
                 obligations=evaluation.obligations,
-            )
-        return GoldenEdgeEvaluateResponse(
-            decision=AgentLoopDecision.PROCEED,
-            allowed=True,
-            reason=evaluation.reason,
-            reason_code=evaluation.reason_code.value,
-            policy_refs=evaluation.policy_refs,
-            obligations=evaluation.obligations,
+            ),
         )
 
     async def agent_loop(self, request: GoldenEdgeEvaluateRequest) -> GoldenEdgeEvaluateResponse:
@@ -136,6 +159,9 @@ class GoldenEdgeV3Engine:
                 reason=result.reason,
                 reason_code=PolicyDecisionCode.VETO_BLOCKED_ACTION.value,
                 execution_state=result.state.value,
+                policy_version_hash=preview.policy_version_hash,
+                control_plane_state=result.control_plane_state.value,
+                ledger_event_id=str(result.trace.event_id),
             )
         if result.state == GovernanceExecutionState.QUEUED_FOR_APPROVAL:
             return GoldenEdgeEvaluateResponse(
@@ -144,6 +170,9 @@ class GoldenEdgeV3Engine:
                 reason=result.reason,
                 reason_code=PolicyDecisionCode.REQUIRE_HUMAN_REVIEW.value,
                 execution_state=result.state.value,
+                policy_version_hash=preview.policy_version_hash,
+                control_plane_state=result.control_plane_state.value,
+                ledger_event_id=str(result.trace.event_id),
             )
         return GoldenEdgeEvaluateResponse(
             decision=AgentLoopDecision.PROCEED,
@@ -153,4 +182,7 @@ class GoldenEdgeV3Engine:
             execution_state=result.state.value,
             policy_refs=preview.policy_refs,
             obligations=preview.obligations,
+            policy_version_hash=preview.policy_version_hash,
+            control_plane_state=result.control_plane_state.value,
+            ledger_event_id=str(result.trace.event_id),
         )

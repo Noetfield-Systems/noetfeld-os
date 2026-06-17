@@ -1,0 +1,13 @@
+{
+  "template_id": "copilot-governance",
+  "policy_pack": "copilot-governance-v1",
+  "governance_config": "docs/spec/samples/governance-copilot-v1.yaml",
+  "workflow": "docs/spec/workflows/CopilotReadiness.workflow.json",
+  "evidence_checklist": [
+    "m365_dlp_policy_export",
+    "sharepoint_site_permissions_snapshot",
+    "copilot_activity_report_30d"
+  ],
+  "deploy_cta": "/start/?template=copilot-governance-v1",
+  "intake_cta": "/trust-brief/intake/?interest=pilot&vector=copilot-governance&template=copilot-governance"
+}

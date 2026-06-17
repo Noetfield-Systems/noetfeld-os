@@ -1,0 +1,22 @@
+---
+description: NF-GAOS boot ladder — ROUTING_CARD + START_HERE
+globs:
+  - "**/*"
+alwaysApply: true
+---
+
+# Noetfield — routing card (boot)
+
+**Every session:**
+
+```bash
+make nf-onboard
+```
+
+Then read **only your row** in [entry/START_HERE_LOCKED_v1.md](../../entry/START_HERE_LOCKED_v1.md) and [ROUTING_CARD.md](../../ROUTING_CARD.md).
+
+Live truth: [reports/agent-auto/LIVE-STATUS.md](../../reports/agent-auto/LIVE-STATUS.md) — **machine wins over prose**.
+
+Graph: `bash scripts/nf-unified-routing.sh --json` · law: [docs/ops/NF_GAOS_W0_LOCKED_v1.md](../../docs/ops/NF_GAOS_W0_LOCKED_v1.md)
+
+Lost / stale: `make nf-orient` (manual — not on every boot).

@@ -1,0 +1,88 @@
+{
+  "schema_version": "nf-session-gate-v1",
+  "ok": true,
+  "agent_id": "noetfield_cloud",
+  "role": "cloud",
+  "generated_at": "2026-06-17T23:30:30Z",
+  "repo_root": "/Users/sinakazemnezhad/Desktop/Noetfield/Noetfield-All-Documents/Noetfield",
+  "gates": [
+    {
+      "gate": "entry/START_HERE_LOCKED_v1.md",
+      "ok": true,
+      "path": "/Users/sinakazemnezhad/Desktop/Noetfield/Noetfield-All-Documents/Noetfield/entry/START_HERE_LOCKED_v1.md"
+    },
+    {
+      "gate": "ROUTING_CARD.md",
+      "ok": true,
+      "path": "/Users/sinakazemnezhad/Desktop/Noetfield/Noetfield-All-Documents/Noetfield/ROUTING_CARD.md"
+    },
+    {
+      "gate": "docs/ops/NF_GAOS_W0_LOCKED_v1.md",
+      "ok": true,
+      "path": "/Users/sinakazemnezhad/Desktop/Noetfield/Noetfield-All-Documents/Noetfield/docs/ops/NF_GAOS_W0_LOCKED_v1.md"
+    },
+    {
+      "gate": "docs/ops/NF_GAOS_W1_LOCKED_v1.md",
+      "ok": true,
+      "path": "/Users/sinakazemnezhad/Desktop/Noetfield/Noetfield-All-Documents/Noetfield/docs/ops/NF_GAOS_W1_LOCKED_v1.md"
+    },
+    {
+      "gate": "os/NF_UNIFIED_ROUTING_GRAPH.json",
+      "ok": true,
+      "path": "/Users/sinakazemnezhad/Desktop/Noetfield/Noetfield-All-Documents/Noetfield/os/NF_UNIFIED_ROUTING_GRAPH.json"
+    },
+    {
+      "gate": "os/NF_SSOT_INVENTORY.json",
+      "ok": true,
+      "path": "/Users/sinakazemnezhad/Desktop/Noetfield/Noetfield-All-Documents/Noetfield/os/NF_SSOT_INVENTORY.json"
+    },
+    {
+      "gate": "os/NF_BAVT_STRATEGY.json",
+      "ok": true,
+      "path": "/Users/sinakazemnezhad/Desktop/Noetfield/Noetfield-All-Documents/Noetfield/os/NF_BAVT_STRATEGY.json"
+    },
+    {
+      "gate": "os/plan.json",
+      "ok": true,
+      "path": "/Users/sinakazemnezhad/Desktop/Noetfield/Noetfield-All-Documents/Noetfield/os/plan.json"
+    },
+    {
+      "gate": "os/SHIP_NOW.md",
+      "ok": true,
+      "path": "/Users/sinakazemnezhad/Desktop/Noetfield/Noetfield-All-Documents/Noetfield/os/SHIP_NOW.md"
+    },
+    {
+      "gate": "PROJECT_BOUNDARIES_LOCKED.md",
+      "ok": true,
+      "path": "/Users/sinakazemnezhad/Desktop/Noetfield/Noetfield-All-Documents/Noetfield/PROJECT_BOUNDARIES_LOCKED.md"
+    },
+    {
+      "gate": ".cursor/agent-memory/MEMORY_LOCKED.yaml",
+      "ok": true,
+      "path": "/Users/sinakazemnezhad/Desktop/Noetfield/Noetfield-All-Documents/Noetfield/.cursor/agent-memory/MEMORY_LOCKED.yaml"
+    },
+    {
+      "gate": ".cursor/incidents/REGISTRY.md",
+      "ok": true,
+      "path": "/Users/sinakazemnezhad/Desktop/Noetfield/Noetfield-All-Documents/Noetfield/.cursor/incidents/REGISTRY.md"
+    },
+    {
+      "gate": "memory_R-007",
+      "ok": true
+    },
+    {
+      "gate": "memory_R-011",
+      "ok": true
+    },
+    {
+      "gate": "memory_version",
+      "ok": true
+    },
+    {
+      "gate": "open_p0_incidents",
+      "ok": true,
+      "count": 0
+    }
+  ],
+  "next": "make nf-live-orient"
+}

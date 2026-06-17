@@ -16,6 +16,12 @@ done < <(git ls-files 2>/dev/null | grep -E '(^ops/private/|^docs/internal/)' ||
 
 # 2) Required self-audit files
 for f in \
+  entry/START_HERE_LOCKED_v1.md \
+  ROUTING_CARD.md \
+  docs/ops/NF_GAOS_W0_LOCKED_v1.md \
+  docs/ops/NF_GAOS_W1_LOCKED_v1.md \
+  os/NF_UNIFIED_ROUTING_GRAPH.json \
+  os/NF_SSOT_INVENTORY.json \
   docs/DOC_UNIFIED_INDEX_LOCKED_v1.md \
   docs/README.md \
   .cursor/README.md \
@@ -46,6 +52,17 @@ else
   echo "FAIL MEMORY_LOCKED.yaml missing R-011" >&2
   fail=1
 fi
+
+# NF-GAOS W1 — exactly 4 alwaysApply core rules
+core_rules=(nf-authority-stack.mdc nf-routing-card.mdc noetfield-ask-before-edit.mdc nf-ship-bundle.mdc)
+for r in "${core_rules[@]}"; do
+  if [[ -f ".cursor/rules/$r" ]] && grep -q 'alwaysApply: true' ".cursor/rules/$r"; then
+    echo "OK   core rule $r"
+  else
+    echo "FAIL missing or not alwaysApply: $r" >&2
+    fail=1
+  fi
+done
 
 # 3) Scan git-tracked files only — product/www must not implement TrustField
 is_allowlisted() {

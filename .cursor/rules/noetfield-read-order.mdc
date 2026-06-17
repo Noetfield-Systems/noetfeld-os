@@ -1,26 +1,11 @@
 ---
-description: LOCKED read order — SourceA + Noetfield (read before implement)
-globs:
-  - "**/*"
-alwaysApply: true
+description: MOVED — see nf-routing-card.mdc + ROUTING_CARD.md
+globs: []
+alwaysApply: false
 ---
 
-# Read order (LOCKED)
+# MOVED
 
-Before implement, read:
+Read order is now: **`make nf-onboard`** → [ROUTING_CARD.md](../../ROUTING_CARD.md) → [entry/START_HERE_LOCKED_v1.md](../../entry/START_HERE_LOCKED_v1.md).
 
-0. **`docs/DOC_UNIFIED_INDEX_LOCKED_v1.md`** — navigation SSOT (one map for docs, plans, superseded)
-1. **`docs/ops/AGENT_READ_LINKS_LOCKED_v1.md`** — § Cloud ship
-2. **`docs/ops/NOETFIELD_AGENT_CONTEXT_AND_READ_ORDER_LOCKED_v1.md`**
-3. [`.cursor/agent-memory/MEMORY_LOCKED.yaml`](../agent-memory/MEMORY_LOCKED.yaml) — R-011
-4. **`docs/ops/FOUNDER_AGENTIC_COMMERCIAL_AND_NO_CURSOR_AUTORUN_LOCKED_v1.md`** + SKILL-008
-5. `os/SHIP_NOW.md` → `os/plan.json` → **`docs/ops/plans/no-asf/GTM_NEXT.md`**
-6. `docs/strategy/NOETFIELD_TRUST_LEDGER_POSITIONING_LOCKED_v1.2.md`
-7. **`docs/ops/plans/no-asf/QUICK_PICK.md`** + v14 WISE when user says PLAN WITH NO ASF (`make pick-wise`)
-8. `.cursor/rules/noetfield-ship-first.mdc` + `noetfield-ingest-yaml.mdc`
-
-**Repo:** `~/Desktop/Noetfield` (noetfield_cloud) — not All-Documents for code.
-
-**Sync mirror (Mac):** `./scripts/bootstrap-private-ops.sh` && `./scripts/sync-sourceA-desktop.sh`
-
-Smarter = more sources read — not skipping the plan.
+Always-on rule: [nf-routing-card.mdc](nf-routing-card.mdc)

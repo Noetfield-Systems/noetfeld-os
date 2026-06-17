@@ -46,6 +46,17 @@
     "entity_type": { "type": "string" },
     "entity_id": { "type": "string" },
     "policy_context": { "type": "object" },
+    "control_plane_state": {
+      "type": "string",
+      "enum": [
+        "INITIATED",
+        "INTENT_PARSED",
+        "ROUTED",
+        "GOVERNANCE_CHECKED",
+        "EXECUTED",
+        "ARCHIVED"
+      ]
+    },
     "risk_context": { "type": "object" },
     "payload": { "type": "object" },
     "integrity_hash": { "type": ["string", "null"] }

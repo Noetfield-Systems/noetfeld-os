@@ -1,0 +1,32 @@
+{
+  "tenant_id": "demo-northstar",
+  "pending_evaluations": [
+    {
+      "rid": "RID-A1B2C3D4-001",
+      "action": "copilot_rollout",
+      "actor": "security-team",
+      "context": "Copilot rollout to production M365 tenant — guest sharing enabled in SharePoint",
+      "policy_version": "3.1",
+      "status": "pending",
+      "briefed_at": "2026-05-28T14:00:00Z"
+    },
+    {
+      "rid": "RID-E5F6G7H8-002",
+      "action": "guest_sharing",
+      "actor": "collaboration-lead",
+      "context": "External guest access to Copilot-enabled SharePoint — production scope",
+      "policy_version": "3.1",
+      "status": "pending",
+      "briefed_at": "2026-05-29T09:30:00Z"
+    },
+    {
+      "rid": "RID-I9J0K1L2-003",
+      "action": "copilot_rollout",
+      "actor": "security-team",
+      "context": "Sandbox evaluate — low risk auto-record path",
+      "policy_version": "3.2",
+      "status": "pending",
+      "briefed_at": "2026-06-01T11:00:00Z"
+    }
+  ]
+}

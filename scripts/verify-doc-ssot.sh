@@ -47,8 +47,8 @@ check_file "cursor layer index" .cursor/README.md \
 check_file "sources index locked paths" os/plan-library/noetfield-1000/SOURCES_INDEX.yaml \
   'GOVERNANCE_SOURCES_HANDBOOK_LOCKED_v1.md' 'GOVERNANCE_DRIFT_DETECTION_SOURCES_LOCKED_v1.md'
 
-check_file "read-order unified index" .cursor/rules/noetfield-read-order.mdc \
-  'DOC_UNIFIED_INDEX_LOCKED_v1.md' 'pick-wise'
+check_file "read-order routing card" .cursor/rules/nf-routing-card.mdc \
+  'make nf-onboard' 'ROUTING_CARD.md'
 
 check_file "500 master picker" docs/ops/NOETFIELD_PROMPT_PACK_500_MASTER_LOCKED_v1.md \
   'pick-wise' 'V14_WISE'
@@ -73,6 +73,24 @@ check_file "north star offerings" NORTH_STAR.md \
 
 check_file "registry nf-1000 sources" os/plan-library/noetfield-1000/REGISTRY.json \
   'GOVERNANCE_SOURCES_HANDBOOK_LOCKED_v1.md' 'GOVERNANCE_DRIFT_DETECTION_SOURCES_LOCKED_v1.md'
+
+check_file "nf-gaos w0 spine" docs/ops/NF_GAOS_W0_LOCKED_v1.md \
+  'make nf-onboard' 'nf_session_gate_run_v1.py' 'ROUTING_CARD.md'
+
+check_file "routing card boot" ROUTING_CARD.md \
+  'make nf-onboard' 'entry/START_HERE_LOCKED_v1.md'
+
+check_file "sandbox funnel metrics 061" docs/copilot/SANDBOX_FUNNEL_METRICS_SPEC_v1.md \
+  'S0' 'S1' 'S2' 'S3' 'S4' 'S5' 'session_id'
+
+check_file "copilot intake hub report 062" docs/copilot/INTAKE_COPILOT_GOVERNANCE_HUB_REPORT_v1.md \
+  'vector=copilot-governance' 'INTAKE REPORT' 'copilot-governance'
+
+if [[ -x scripts/verify-nf-gaos-w0.sh ]]; then
+  ./scripts/verify-nf-gaos-w0.sh && ok "nf-gaos-w0 verify bundle"
+else
+  bad "nf-gaos-w0 verify script missing"
+fi
 
 if [[ -f ops/private/agent-reference/README.md ]]; then
   ok "private agent-reference README"

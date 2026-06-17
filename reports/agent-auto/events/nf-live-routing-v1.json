@@ -1,0 +1,23 @@
+{
+  "schema_version": "nf-live-routing-v1",
+  "generated_at": "2026-06-17T23:30:30Z",
+  "agent_id": "noetfield_cloud",
+  "pending_task": {
+    "id": "ship-sandbox-server-side-057",
+    "title": "Optional server-side sandbox session persistence"
+  },
+  "git": {
+    "sha": "6d241ab",
+    "branch": "main"
+  },
+  "sourcea_mirror": true,
+  "boot": [
+    "make nf-onboard"
+  ],
+  "pins": {
+    "start_here": "entry/START_HERE_LOCKED_v1.md",
+    "routing_card": "ROUTING_CARD.md",
+    "live_status": "reports/agent-auto/LIVE-STATUS.md",
+    "graph": "os/NF_UNIFIED_ROUTING_GRAPH.json"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "schema_version": "nf-stale-guard-v1",
+  "generated_at": "2026-06-17T23:30:30Z",
+  "context_stale": false,
+  "pending_task": {
+    "id": "ship-sandbox-server-side-057",
+    "title": "Optional server-side sandbox session persistence",
+    "plan": "governance-console/backend/",
+    "status": "pending"
+  },
+  "issues": [],
+  "heal": null
+}

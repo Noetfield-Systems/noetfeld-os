@@ -21,6 +21,9 @@ from noetfield_copilot_governance import (
 )
 from noetfield_events import AsyncEventBus, EventReplayCursor, InMemoryDeadLetterStore, InMemoryEventStore
 from noetfield_governance import GovernanceRuntime, HumanApprovalQueue
+from noetfield_governance.governance_config import config_policy_version_hash, load_governance_config
+from noetfield_governance.ledger_digest import policy_version_hash
+from noetfield_governance.policy_loader import load_default_policy_pack
 from noetfield_graph import (
     InMemoryGraphReflectionStore,
     InMemoryGraphStore,
@@ -42,6 +45,7 @@ from noetfield_workflow import InMemoryWorkflowStore, WorkflowStateMachine
 
 
 DEFAULT_INPUT = Path("demos/copilot-governance/sample_copilot_signal.json")
+DEFAULT_GOV_CONFIG = Path("docs/spec/samples/governance-copilot-v1.yaml")
 
 
 def stable_uuid(name: str) -> UUID:
@@ -165,9 +169,17 @@ async def build_demo_package(signal_payload: dict[str, Any]) -> dict[str, Any]:
         "events": [event.model_dump(mode="json") for event in replayed_events],
     }
 
+    pack = load_default_policy_pack()
+    policy_hash = policy_version_hash(pack.policy_refs())
+    governance_config_hash = None
+    if DEFAULT_GOV_CONFIG.is_file():
+        governance_config_hash = config_policy_version_hash(load_governance_config(DEFAULT_GOV_CONFIG))
+
     return {
         "demo": "noetfield-copilot-governance-phase-3.5",
         "status": "ready_for_demo",
+        "policy_version_hash": policy_hash,
+        "governance_config_hash": governance_config_hash,
         "input_signal": signal_payload,
         "board_brief": board_brief,
         "audit_package": audit_package,

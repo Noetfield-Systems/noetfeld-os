@@ -4,6 +4,10 @@
 
 | ID | Document | Use when |
 |----|----------|----------|
+| **`nf-gaos-w0`** | [docs/ops/NF_GAOS_W0_LOCKED_v1.md](../docs/ops/NF_GAOS_W0_LOCKED_v1.md) | **Agent OS spine** — gate, live orient, boot ladder |
+| **`nf-start-here`** | [entry/START_HERE_LOCKED_v1.md](../entry/START_HERE_LOCKED_v1.md) | **Role picker** — read one row only |
+| **`nf-routing-card`** | [ROUTING_CARD.md](../ROUTING_CARD.md) | **Daily pin** — boot + question ladder |
+| **`nf-gaos-w1`** | [docs/ops/NF_GAOS_W1_LOCKED_v1.md](../docs/ops/NF_GAOS_W1_LOCKED_v1.md) | **W1 machines** — voyage, BAVT, anti-frag, panel |
 | **`doc-unified-v1`** | [docs/DOC_UNIFIED_INDEX_LOCKED_v1.md](../docs/DOC_UNIFIED_INDEX_LOCKED_v1.md) | **Navigation SSOT** — execution, plans, superseded map |
 | **`agent-read-links-v1`** | [docs/ops/AGENT_READ_LINKS_LOCKED_v1.md](../docs/ops/AGENT_READ_LINKS_LOCKED_v1.md) | **Full index** — hub :13020, mandatory chain 1–14, every repo separate, local vs cloud |
 | **`agent-context-v1`** | [docs/ops/NOETFIELD_AGENT_CONTEXT_AND_READ_ORDER_LOCKED_v1.md](../docs/ops/NOETFIELD_AGENT_CONTEXT_AND_READ_ORDER_LOCKED_v1.md) | Ship/ingest rules, cloud vs local, diagnostics |

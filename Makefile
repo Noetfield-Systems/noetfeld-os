@@ -1,4 +1,4 @@
-.PHONY: bootstrap validate api api-v3 apply-migrations ingest-sot-dry-run ingest-sot phase32-smoke phase32-postgres-smoke phase33-verify phase33-postgres-verify phase35-demo final-lock-audit final-lock-semantic governance-console-up governance-console-e2e governance-console-down plan-with-no-asf-verify sync-prompt-pack generate-prompt-pack verify-gtm verify-no-vendor-names verify-static-www verify-www
+.PHONY: bootstrap validate api api-v3 apply-migrations ingest-sot-dry-run ingest-sot phase32-smoke phase32-postgres-smoke phase33-verify phase33-postgres-verify phase35-demo final-lock-audit final-lock-semantic governance-console-up governance-console-e2e governance-console-down plan-with-no-asf-verify sync-prompt-pack generate-prompt-pack verify-gtm verify-no-vendor-names verify-static-www verify-www verify-tier0 verify-tier1 verify-tier2 verify-tier3 verify-all-tiers
 
 PYTHONPATH_VALUE := packages/types:packages/config:packages/sdk:services/events:services/ledger:services/graph:services/governance:services/signals:services/workflow:services/ai-runtime:services/inspectors:services/identity:services/copilot-governance
 
@@ -93,6 +93,25 @@ verify-gtm:
 	@chmod +x scripts/verify-gtm.sh
 	./scripts/verify-gtm.sh
 
+# NF verify tiers — see docs/ops/NF_VERIFY_TIERS_LOCKED_v1.md
+verify-tier0:
+	@$(MAKE) verify-nf-gaos-w1
+
+verify-tier1:
+	@$(MAKE) ship-verify
+
+verify-tier2:
+	@$(MAKE) verify-gtm
+
+verify-tier3:
+	@$(MAKE) plan-with-no-asf-verify
+
+verify-all-tiers:
+	@$(MAKE) verify-tier0
+	@$(MAKE) verify-tier1
+	@$(MAKE) verify-tier2
+	@$(MAKE) verify-tier3
+
 verify-no-vendor-names:
 	@chmod +x scripts/verify-no-competitor-names.sh
 	./scripts/verify-no-competitor-names.sh
@@ -122,6 +141,53 @@ generate-noetfield-1000:
 agent-session-start:
 	@chmod +x scripts/agent-session-start.sh
 	./scripts/agent-session-start.sh
+
+# NF-GAOS W0 — governed agent boot (cloud-native gate + live orient)
+nf-onboard:
+	@chmod +x scripts/nf-onboard.sh scripts/nf-live-orient-v1.sh scripts/nf_routing_card.sh scripts/nf-unified-routing.sh scripts/verify-nf-gaos-w0.sh
+	./scripts/nf-onboard.sh cloud
+
+nf-onboard-local:
+	@chmod +x scripts/nf-onboard.sh
+	./scripts/nf-onboard.sh local
+
+nf-live-orient:
+	@chmod +x scripts/nf-live-orient-v1.sh scripts/nf_routing_card.sh
+	./scripts/nf-live-orient-v1.sh
+
+nf-session-gate:
+	@python3 scripts/nf_session_gate_run_v1.py --json
+
+nf-unified-routing:
+	@chmod +x scripts/nf-unified-routing.sh
+	./scripts/nf-unified-routing.sh --json
+
+verify-nf-gaos-w0:
+	@chmod +x scripts/verify-nf-gaos-w0.sh
+	./scripts/verify-nf-gaos-w0.sh
+
+nf-voyage-integrity:
+	@chmod +x scripts/nf-voyage-integrity-pipeline.sh
+	./scripts/nf-voyage-integrity-pipeline.sh
+
+nf-orient:
+	@python3 scripts/nf_orient_v1.py --json
+
+nf-bavt:
+	@chmod +x scripts/nf-bavt-run.sh
+	./scripts/nf-bavt-run.sh
+
+nf-panel-export:
+	@chmod +x scripts/nf-panel-export-v1.sh
+	./scripts/nf-panel-export-v1.sh
+
+verify-nf-anti-frag:
+	@chmod +x scripts/verify-nf-anti-fragmentation-v1.sh
+	./scripts/verify-nf-anti-fragmentation-v1.sh
+
+verify-nf-gaos-w1:
+	@chmod +x scripts/verify-nf-gaos-w1.sh scripts/verify-nf-anti-fragmentation-v1.sh scripts/nf-bavt-run.sh
+	./scripts/verify-nf-gaos-w1.sh
 
 ingest-cursor-reply:
 	@chmod +x scripts/ingest-cursor-reply.sh
@@ -191,6 +257,8 @@ ship-verify:
 	@echo "=== ship-verify (Noetfield merge/deploy readiness) ==="
 	@chmod +x scripts/verify-agent-scope.sh 2>/dev/null || true
 	@./scripts/verify-agent-scope.sh
+	@chmod +x scripts/verify-nf-gaos-w1.sh 2>/dev/null || true
+	@./scripts/verify-nf-gaos-w1.sh
 	@test -f docs/SHIP_NOW.md
 	@test -f docs/diligence/EVIDENCE_INTAKE_CONTRACT_v1.md
 	@test -f docs/spec/TRUST_LEDGER_PRODUCT_BLUEPRINT_v1.2_LOCKED.md
@@ -286,6 +354,7 @@ final-lock-audit:
 	python3 scripts/audit_final_system_lock.py
 
 verify-final-lock: final-lock-audit
+	bash scripts/deploy-copilot-template.sh
 	python3 scripts/audit_intake_email.py
 	PYTHONPATH=$(PYTHONPATH_VALUE) RUNTIME_EVENT_STORE=memory python3 -m pytest tests/unit -q
 

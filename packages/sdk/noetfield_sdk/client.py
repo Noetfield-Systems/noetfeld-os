@@ -142,3 +142,22 @@ class NoetfieldClient:
 
     def vendor_evidence(self) -> dict[str, Any]:
         return self._request("GET", "/api/v1/governance/vendor-evidence")
+
+    def approve_decision(
+        self,
+        *,
+        approval_id: str,
+        approved: bool,
+        rationale: str,
+        decided_by: str = "sdk-human",
+    ) -> dict[str, Any]:
+        return self._request(
+            "POST",
+            "/approvals/decide",
+            body={
+                "approval_id": approval_id,
+                "approved": approved,
+                "rationale": rationale,
+                "decided_by": decided_by,
+            },
+        )
