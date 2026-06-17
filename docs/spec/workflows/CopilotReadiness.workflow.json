@@ -19,7 +19,7 @@
     { "from": "approved", "to": "completed", "trigger": "audit_export_delivered" }
   ],
   "steps": [
-    { "step_id": "bind_policy", "action": "policy_pack.bind", "pack": "copilot-oversharing-v1" },
+    { "step_id": "bind_policy", "action": "policy_pack.bind", "pack": "copilot-governance-v1" },
     { "step_id": "control_tests", "action": "run_control_catalog", "ref": "docs/spec/copilot-control-catalog.md" },
     { "step_id": "evaluate", "action": "governance.evaluate", "mode": "shadow" },
     { "step_id": "signoff", "action": "human.approve", "hitl": true },

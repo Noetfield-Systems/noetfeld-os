@@ -28,8 +28,8 @@ check_marker "${BASE}/" "live proof hero" "data-live-proof-hero"
 check_marker "${BASE}/" "live proof script" "noetfield-live-proof.js"
 check_marker "${BASE}/start/" "trial os flow" "data-trial-os-flow"
 check_marker "${BASE}/start/" "trial os wizard" "nfTrialOs"
-check_marker "${BASE}/" "four-act prove" "The moment Copilot becomes auditable"
-check_marker "${BASE}/pricing/" "pricing v18 css" "noetfield-www.css?v=18"
+check_marker "${BASE}/" "four-act prove" "The moment AI execution becomes auditable"
+check_marker "${BASE}/pricing/" "pricing v18 css" "noetfield-www.css?v=40"
 
 dash_html="$(curl -sS --connect-timeout 5 -H "Accept: text/html" "${BASE}/cognitive-dashboard" 2>/dev/null || true)"
 dash_chunk="$(echo "$dash_html" | grep -oE '/_next/static/chunks/app/cognitive-dashboard/page-[^"]+\.js' | head -1)"
@@ -68,7 +68,7 @@ fi
 if [[ -f "${ROOT}/governance-console/playwright/visual.spec.ts" ]]; then
   if command -v npx >/dev/null 2>&1 && [[ -d "${ROOT}/governance-console/frontend/node_modules" ]]; then
     (cd "${ROOT}/governance-console/frontend" && npx playwright test ../playwright/visual.spec.ts --reporter=line 2>/dev/null) || {
-      echo "WARN playwright visual spec skipped or failed — marker checks above are required" >&2
+      echo "WARN playwright visual spec skipped or failed — marker checks above are required"
     }
   else
     echo "SKIP playwright (install frontend deps to enable full baselines)"

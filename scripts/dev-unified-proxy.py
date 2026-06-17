@@ -47,9 +47,11 @@ NEXT_PREFIXES = (
 
 def _is_next_trust_ledger(path: str) -> bool:
     """Next UI: dynamic TLE routes — not static www hub or sample-report HTML."""
+    if path == "/trust-ledger":
+        return True
     if path.startswith("/trust-ledger/new"):
         return True
-    if path in ("/trust-ledger/", "/trust-ledger/index.html", "/trust-ledger"):
+    if path in ("/trust-ledger/", "/trust-ledger/index.html"):
         return False
     if path.startswith("/trust-ledger/sample-report"):
         return False

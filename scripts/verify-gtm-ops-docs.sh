@@ -49,10 +49,10 @@ fi
 
 for path in "/copilot/pilot/" "/copilot/demo/"; do
   html="$(curl -sS --connect-timeout 5 -H "Accept: text/html" "${BASE}${path}" 2>/dev/null || true)"
-  if echo "$html" | grep -qF "Design partner pipeline"; then
-    echo "OK   ${path} pipeline link text"
+  if echo "$html" | grep -qF "DESIGN_PARTNER_PIPELINE_v1.md"; then
+    echo "OK   ${path} pipeline runbook link"
   else
-    echo "FAIL ${path} missing Design partner pipeline" >&2
+    echo "FAIL ${path} missing DESIGN_PARTNER_PIPELINE_v1.md link" >&2
     fail=1
   fi
   if echo "$html" | grep -qF "bc-ai-for-all-2026.md"; then

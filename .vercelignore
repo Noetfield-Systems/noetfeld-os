@@ -9,6 +9,7 @@ infrastructure/
 governance-console/
 services/
 docs/*.md
+docs/mockups/
 docs/ops/
 docs/strategy/
 docs/references/

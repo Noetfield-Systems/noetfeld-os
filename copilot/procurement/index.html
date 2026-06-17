@@ -4,7 +4,7 @@
  <meta charset="UTF-8" />
  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
  <title>Noetfield — Copilot Procurement Pack</title>
- <meta name="description" content="Buyer diligence ZIP, NIST AI RMF citations, procurement export." />
+ <meta name="description" content="Copilot procurement pack: buyer FAQ vs Purview and enterprise AI governance, NIST AI RMF citations, diligence ZIP, proof case." />
  <meta name="robots" content="index,follow" />
  <meta name="theme-color" content="#f4f5f8" />
  <link rel="canonical" href="https://www.noetfield.com/copilot/procurement/" />
@@ -15,11 +15,11 @@
  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,400..700;1,14..32,400..700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" />
  <link rel="stylesheet" href="/assets/noetfield-tokens.css" />
  <link rel="stylesheet" href="/assets/noetfield-shell.css" />
- <link rel="stylesheet" href="/assets/noetfield-www.css?v=40" />
- <link rel="stylesheet" href="/assets/noetfield-print.css?v=40" media="print" />
- <script src="/assets/noetfield-shell.js?v=40" defer></script>
- <script src="/assets/noetfield-intake-core.js?v=40" defer></script>
- <script src="/assets/noetfield-forms.js?v=40" defer></script>
+ <link rel="stylesheet" href="/assets/noetfield-www.css?v=43" />
+ <link rel="stylesheet" href="/assets/noetfield-print.css?v=43" media="print" />
+ <script src="/assets/noetfield-shell.js?v=43" defer></script>
+ <script src="/assets/noetfield-intake-core.js?v=43" defer></script>
+ <script src="/assets/noetfield-forms.js?v=43" defer></script>
 </head>
 <body class="nf-www nf-site-v14">
  <div class="bg" aria-hidden="true"></div>
@@ -62,6 +62,17 @@
  <p class="nf-trust-signals-lead">Honest scope for procurement — what you can demo, export, and defend today.</p>
  <div class="nf-trust-signals-grid"><div class="nf-trust-signal"><span class="nf-trust-signal-label">Pre-execution evaluate</span><span class="nf-signal-badge nf-signal-badge--available">Available</span></div><div class="nf-trust-signal"><span class="nf-trust-signal-label">TLE v1 + workspace UI</span><span class="nf-signal-badge nf-signal-badge--available">Available</span></div><div class="nf-trust-signal"><span class="nf-trust-signal-label">Board PDF · procurement ZIP</span><span class="nf-signal-badge nf-signal-badge--available">Available</span></div><div class="nf-trust-signal"><span class="nf-trust-signal-label">M365 metadata connectors</span><span class="nf-signal-badge nf-signal-badge--available">Available</span></div><div class="nf-trust-signal"><span class="nf-trust-signal-label">Framework citations</span><span class="nf-signal-badge nf-signal-badge--orientation">Orientation</span></div><div class="nf-trust-signal"><span class="nf-trust-signal-label">Payment rails / MSB execution</span><span class="nf-signal-badge nf-signal-badge--na">Out of scope</span></div></div>
  </section>
+ <section class="nf-section" id="buyer-faq" aria-labelledby="faq-title">
+ <h2 id="faq-title">Buyer FAQ — how Noetfield fits your stack</h2>
+ <p class="nf-section-lead">Orientation only — not legal advice. Full markdown: <a href="/docs/copilot/PROCUREMENT_COMPETITIVE_FAQ_v1.md">PROCUREMENT_COMPETITIVE_FAQ_v1.md</a></p>
+ <details class="nf-faq-item"><summary><strong>Microsoft Purview and Copilot Control System</strong></summary><p>Purview secures and administers your M365 tenant. Noetfield records whether a <strong>specific Copilot rollout</strong> is authorized before production and exports a Trust Ledger Entry plus board PDF and procurement ZIP. We index metadata from Purview, Entra ID, and Audit — we do not replace Microsoft admin tools.</p></details>
+ <details class="nf-faq-item"><summary><strong>Enterprise AI governance platforms (e.g. Credo AI)</strong></summary><p>Program-wide inventory and regulatory policy packs serve a different scope than a <strong>90-day Copilot Governance Pack</strong> ($2k–10k) with a defined success signal: one board PDF in a real governance meeting.</p></details>
+ <details class="nf-faq-item"><summary><strong>Data + AI security platforms (e.g. Securiti)</strong></summary><p>Estate-wide DSPM and agent guardrails address multicloud data security. Noetfield is scoped to <strong>Copilot evaluate → TLE → export</strong> with fail-closed procurement integrity.</p></details>
+ <details class="nf-faq-item"><summary><strong>MSP Copilot readiness assessments</strong></summary><p>Services engagements remediate tenant hygiene over weeks. Noetfield delivers a repeatable evaluate path, signed receipts, and exportable board artifacts in a fixed-fee pilot.</p></details>
+ <details class="nf-faq-item"><summary><strong>Runtime AI gateways</strong></summary><p>Inline proxies log and block individual model requests. Noetfield evaluates <strong>operational intent</strong> for Copilot governance and produces organizational go/no-go evidence — metadata-only M365 index.</p></details>
+ <details class="nf-faq-item"><summary><strong>Canadian OSFI E-23 (orientation)</strong></summary><p>OSFI E-23 (May 2027) expects enterprise AI model risk management. Noetfield pilots produce decision records oriented toward supervisory evidence. <a href="/docs/diligence/CANADIAN_OSFI_E23_COPILOT_ORIENTATION_v1.md">Canadian orientation doc</a> · <a href="/bank-pilot/">Bank Pilot</a> shadow mode.</p></details>
+ <p style="margin-top:1rem"><a href="/copilot/proof-case/">Redacted proof case</a> · <a href="/copilot/governance-audit-trail/">Copilot governance audit trail</a> · <a href="/copilot/demo/">Live demo</a></p>
+ </section>
  <section class="nf-section">
  <h2>Framework alignment (orientation only)</h2>
  <p>Citations use primary sources from the Governance Sources Book — not legal advice.</p>
@@ -89,7 +100,30 @@
  Production API surface:
  <a href="/docs/api/">Governance API reference</a>
  (evaluate, trust ledger, audit export) — orientation only.
+ <a href="/openapi.json">OpenAPI spec</a> ·
+ <a href="/services/governance/README.md">Governance service orientation</a>.
  </p>
+ <p style="margin-top:1rem">
+ Governance control checkpoint — evaluate path validated by the
+ <a href="/docs/ops/plans/no-asf/GTM_NEXT.md">No ASF release verification bundle</a>.
+ Audit loop: <a href="/docs/ops/AGENT_SELF_AUDIT_LOOP_LOCKED_v1.md">Governance self-audit loop (locked)</a>.
+ <!-- gtm-ops-verify: plan-with-no-asf-verify.sh -->
+ Sources:
+ <a href="/docs/references/GOVERNANCE_SOURCES_BOOK_v1.md">GOVERNANCE_SOURCES_BOOK_v1.md</a> ·
+ <a href="/docs/references/GOVERNANCE_SOURCES_HANDBOOK_LOCKED_v1.md">GOVERNANCE_SOURCES_HANDBOOK_LOCKED_v1.md</a> ·
+ <a href="/docs/references/GOVERNANCE_DRIFT_DETECTION_SOURCES_LOCKED_v1.md">GOVERNANCE_DRIFT_DETECTION_SOURCES_LOCKED_v1.md</a> ·
+ <a href="/docs/references/GOVERNANCE_DRIFT_BLUEPRINTS_INDEX_LOCKED_v1.md">GOVERNANCE_DRIFT_BLUEPRINTS_INDEX_LOCKED_v1.md</a>.
+ </p>
+ </section>
+
+ <section class="nf-section" id="battlecards" aria-labelledby="battlecards-title">
+ <h2 id="battlecards-title">Competitive battle cards</h2>
+ <p class="nf-section-lead">Sales enablement for procurement reviewers — refresh SSOT: <a href="/docs/diligence/NF_BATTLECARDS_REFRESH_v1.md">NF_BATTLECARDS_REFRESH_v1</a>.</p>
+ <ul>
+ <li><a href="/docs/diligence/battlecards/BATTLECARD_VS_PURVIEW_LOCKED_v1.md">Microsoft Purview / Copilot Control</a></li>
+ <li><a href="/docs/diligence/battlecards/BATTLECARD_VS_CREDO_LOCKED_v1.md">Credo AI</a></li>
+ <li><a href="/docs/diligence/battlecards/BATTLECARD_VS_SECURITI_LOCKED_v1.md">Securiti AI</a></li>
+ </ul>
  </section>
 
  <section class="nf-section">
@@ -99,7 +133,10 @@
  <li><a href="/docs/copilot/PROCUREMENT_ONE_PAGER.md">Copilot procurement one-pager</a> — buyer summary (positioning, deliverables, scope)</li>
  <li><a href="/docs/diligence/rpaa-positioning-onepager.md">RPAA-safe positioning one-pager</a> — governance vendor layer; no payment or custody claims</li>
  <li><a href="/docs/diligence/EVIDENCE_INTAKE_CONTRACT_v1.md">Evidence Intake Contract v1</a></li>
- <li><a href="/docs/diligence/CONNECTORS_CONTROLS_v1.md">Connectors Controls v1</a></li>
+ <li><a href="/docs/diligence/CANADIAN_OSFI_E23_COPILOT_ORIENTATION_v1.md">Canadian OSFI E-23 Copilot orientation</a></li>
+ <li><a href="/docs/diligence/PROOF_CASE_COPILOT_EVALUATE_TLE_v1.md">Proof case (redacted)</a></li>
+ <li><a href="/docs/copilot/PROCUREMENT_COMPETITIVE_FAQ_v1.md">Procurement competitive FAQ</a></li>
+ <li><a href="/docs/diligence/COMPETITIVE_LANDSCAPE_LOCKED_v1.md">Competitive landscape (sales)</a></li>
  </ul>
  </section>
 
@@ -111,8 +148,18 @@
  <li>Governance evaluate + audit export tenant bundle</li>
  </ul>
  </section>
+<section class="nf-section nf-section--lift" aria-labelledby="gtm-ops-runbooks">
+<h2 id="gtm-ops-runbooks">Sales &amp; demo runbooks</h2>
+<ul>
+<li><a href="/docs/copilot/DESIGN_PARTNER_PIPELINE_v1.md">Pilot pipeline runbook</a></li>
+<li><a href="/docs/strategy/channel-outreach/bc-ai-for-all-2026.md">bc-ai-for-all-2026.md</a></li>
+<li><a href="/docs/diligence/rpaa-positioning-onepager.md">rpaa-positioning-onepager</a></li>
+<li><a href="/docs/ops/STAGING_DEMO.md">STAGING_DEMO</a> staging demo runbook</li>
+<li><a href="/docs/ops/DEMO_REHEARSAL_CHECKLIST_v1.md">DEMO_REHEARSAL_CHECKLIST_v1.md</a></li>
+</ul>
+</section>
  <section class="nf-section nf-section--lift"><div class="nf-cards">
-<a class="nf-card nf-card--link" href="/copilot/"><p class="nf-card__tag">Overview</p><h3>Copilot Governance Pack</h3><p>Full offering overview.</p></a><a class="nf-card nf-card--link" href="/trust-ledger/sample-report/"><p class="nf-card__tag">Samples</p><h3>TLE v1 YAML</h3><p>Go · conditional · rejected.</p></a><a class="nf-card nf-card--link" href="/copilot/demo/"><p class="nf-card__tag">Demo</p><h3>5-minute demo script</h3><p>Procurement walkthrough.</p></a><a class="nf-card nf-card--link" href="/workspace/"><p class="nf-card__tag">Workspace</p><h3>Trust Ledger Workspace</h3><p>Evaluate and export.</p></a>
+<a class="nf-card nf-card--link" href="/copilot/"><p class="nf-card__tag">Overview</p><h3>Copilot Governance Pack</h3><p>Full offering overview.</p></a><a class="nf-card nf-card--link" href="/trust-ledger/sample-report/"><p class="nf-card__tag">Samples</p><h3>TLE v1 YAML</h3><p>Go · conditional · rejected.</p></a><a class="nf-card nf-card--link" href="/copilot/proof-case/"><p class="nf-card__tag">Proof</p><h3>Redacted proof case</h3><p>Evaluate → TLE → board export.</p></a><a class="nf-card nf-card--link" href="/copilot/governance-audit-trail/"><p class="nf-card__tag">Overview</p><h3>Audit trail</h3><p>Copilot governance audit trail.</p></a><a class="nf-card nf-card--link" href="/copilot/demo/"><p class="nf-card__tag">Demo</p><h3>SSOT demo</h3><p>Policy change → evaluate → TLE.</p></a><a class="nf-card nf-card--link" href="/workspace/"><p class="nf-card__tag">Workspace</p><h3>Trust Ledger Workspace</h3><p>Evaluate and export.</p></a>
  </div></section>
  <section class="nf-cta-mega" aria-labelledby="cta-h">
  <h2 id="cta-h">Board PDF in your next governance meeting</h2>

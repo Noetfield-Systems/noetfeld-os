@@ -23,14 +23,15 @@ check_file() {
 }
 
 check_file "homepage pilot-first" index.html \
-  'noetfield-www.css?v=40' 'nf-site-v14' 'Board-grade trust' \
+  'noetfield-www.css?v=43' 'nf-site-v14' 'Board-grade trust' \
   'data-live-proof-hero' 'nf-live-proof-lanes' 'nf-product-lane-strip' \
   'Governance specialist' 'agentic-specialist' 'VC diligence' \
   'Trust Brief' 'Bank Pilot' 'Explore product lanes' \
   'tamper-evident decision records' 'nfScenarioOfDay' \
   'Apply for pilot ($2k–10k)' '01 · Pilot' 'Built for regulated EU and US' \
   'Copilot Governance Pack' 'Commercial path' 'Learn in sandbox' \
-  'independent of the app under audit' 'AI execution becomes auditable'
+  'independent of the app under audit' 'AI execution becomes auditable' \
+  'Illustrative' 'NF_LIVE_PROOF_HERO_RECEIPT'
 
 check_file "homepage wave1 journey" index.html \
   '02 · Prove' '03 · Try' '04 · Trust' '$2k–10k' 'Published tiers'
@@ -45,7 +46,7 @@ fi
 
 check_file "start sandbox page" start/index.html \
   'nf-hero-flow' 'Try in minutes' '14-day trial' '50 evaluate calls' 'Apply for pilot' \
-  'data-trial-os-flow' 'noetfield-www.css?v=40'
+  'data-trial-os-flow' 'NF_SANDBOX_NURTURE_SEQUENCE' 'noetfield-www.css?v=40'
 
 check_file "pricing packaging page" pricing/index.html \
   'Published tiers' 'Apply for pilot ($2k–10k)' 'Milestone pricing' 'Developer access · free' \
@@ -68,7 +69,11 @@ check_file "work with us program" work-with-us/index.html \
 check_file "pilot intake page" trust-brief/intake/index.html \
   'noetfield-intake-pilot-mode.js' 'intakeHeroPilot' 'Copilot Governance Pack' \
   'Submit pilot application' 'tb_pilot_band' 'intakeStickyCta' 'tbPreparePilot' \
-  'What speeds pilot kickoff' 'noetfield-intake-core.js' 'notified asynchronously'
+  'NF_PILOT_APPLY_STICKY_CTA' 'What speeds pilot kickoff' 'noetfield-intake-core.js' 'notified asynchronously'
+
+check_file "gate intake page" gate/intake/index.html \
+  'intakeStickyCta' 'NF_PILOT_APPLY_STICKY_CTA' 'Apply for pilot' \
+  'noetfield-intake.css' 'Engagement intake'
 
 check_file "contact async intake" contact/index.html \
   'nfContactForm' 'data-nf-intake-form' 'noetfield-forms.js' 'noetfield-intake-core.js'
@@ -79,6 +84,7 @@ check_file "investors async intake" investors/index.html \
 check_file "investor diligence vault" investors/diligence/index.html \
   'Investor Diligence Vault' 'nfInvestorDiligenceForm' 'investor-diligence' \
   'Shadow Governance Brief' '18-item checklist' 'nf-vault-checklist' \
+  'noetfield-www.css?v=43' 'NF_INVESTOR_DILIGENCE_VAULT' \
   'noetfield-intake-core.js'
 
 check_file "msp end-client buyer block" msp/index.html \
@@ -87,8 +93,26 @@ check_file "msp end-client buyer block" msp/index.html \
 check_file "status intake health" status/index.html \
   'data-intake-health-host' 'noetfield-intake-status.js' 'Intake delivery' '/next/'
 
-check_file "header investors nav" assets/partials/header.html \
-  '/investors/diligence/' 'Investors' '/next/'
+check_file "header institutional nav" assets/partials/header.html \
+  'href="/"' '/copilot/' '/templates/' '/trust/' '/federal/' '/msp/' '/copilot/demo/' 'Pilot · $2k–10k'
+
+check_file "templates catalog page" templates/index.html \
+  'copilot-governance-v1' 'bank-pilot-v1' 'Trust Brief' \
+  'Governance Runtime' 'noetfield-www.css?v=40' 'Deploy governed AI templates'
+
+check_file "runtime landing page" runtime/index.html \
+  'Policy before execution' 'REQUIRE_HUMAN_REVIEW' 'copilot-governance-v1' \
+  'POST /api/v1/governance/evaluate' 'Illustrative sandbox output' 'noetfield-www.css?v=40'
+
+check_file "federal lane page" federal/index.html \
+  'Federal Governance Pack' 'NF_OSFI_E23_DILIGENCE_REFRESH' 'NF_METADATA_EVIDENCE_INDEX' \
+  'AIA' 'Copilot PIN' 'noetfield-www.css?v=40'
+
+check_file "partner banner embed" banner/index.html \
+  'noindex,nofollow' 'REQUIRE_HUMAN_REVIEW' 'Illustrative — no fabricated hash' 'copilot-governance-v1'
+
+check_file "footer investors nav" assets/partials/footer.html \
+  '/investors/' '/next/' 'Diligence vault'
 
 check_file "next steps hub" next/index.html \
   'next-buyer' 'next-investor' 'next-partner' 'next-ops' \
@@ -106,11 +130,11 @@ check_file "global form wiring asset" assets/noetfield-forms.js \
 check_file "footer pilot-first" assets/partials/footer.html \
   'Apply for pilot ($2k–10k)' 'Copilot Governance Pack' 'tamper-evident'
 
-check_file "header pilot nav" assets/partials/header.html \
-  'Pilot · $2k–10k' '/copilot/pilot/' 'Apply for pilot ($2k–10k)'
+check_file "header pilot CTA" assets/partials/header.html \
+  'Pilot · $2k–10k' '/trust-brief/intake/?interest=pilot'
 
 check_file "trust center diligence theme" trust/index.html \
-  'nf-trust-diligence' 'fail closed' 'Metadata-only'
+  'nf-trust-diligence' 'nf-trust-doc-layout' 'fail closed' 'Metadata-only' 'Shipped'
 
 check_file "investors honesty" investors/index.html \
   'do not inflate ARR' 'Governance Pack' 'tamper-evident' 'Board PDF pilots open' 'Shipped today'
@@ -128,13 +152,19 @@ check_file "commercial SSOT" docs/strategy/NOETFIELD_COMMERCIAL_SSOT_LOCKED_v1.m
 check_file "ai-automation lane B" ai-automation/index.html \
   'Make your AI automation defensible' 'Apply for pilot' 'noetfield-www.css?v=40'
 
-# Version coherence on primary hubs
-for f in index.html trust/index.html copilot/index.html msp/index.html federal/index.html investors/index.html start/index.html pricing/index.html faq/index.html contact/index.html enterprise/index.html; do
+# Version coherence on primary hubs (homepage + investors use v43 live-proof bundle)
+for f in trust/index.html copilot/index.html msp/index.html federal/index.html start/index.html pricing/index.html faq/index.html contact/index.html enterprise/index.html; do
   if [[ -f "$f" ]] && ! grep -qF 'noetfield-shell.js?v=40' "$f"; then
     bad "shell v40 on $f"
   fi
 done
 [[ "$fail" -eq 0 ]] && ok "shell v40 on primary hubs"
+for f in index.html investors/index.html investors/diligence/index.html; do
+  if [[ -f "$f" ]] && ! grep -qF 'noetfield-shell.js?v=43' "$f"; then
+    bad "shell v43 on $f"
+  fi
+done
+[[ "$fail" -eq 0 ]] && ok "shell v43 on homepage + investors"
 
 LEGACY_GTM='design-partner|Design partner|Become a design partner|Purview-only trap|Accepting design partners|Available now vs what capital accelerates'
 legacy_fail=0
@@ -171,7 +201,8 @@ done
 # P0 — no internal / founder / agent copy on public www
 LEAK_PATTERN='maintained in repo|not claimed on www|plan-with-no-asf|AGENT_SELF_AUDIT|repo-native|ASSERT→|Founder-led \+ agentic|pipeline stage [0-9]|W3 PASS|Product on disk|/docs/ops/|services/governance/README|nf-card__tag">Hub<|Shipped today — honest|execution infrastructure|API offline|what we ship|our roadmap|Fully agentic|Governance agents|IBM Plex'
 leak_fail=0
-for f in index.html start/index.html copilot/procurement/index.html privacy/index.html terms/index.html status/index.html \
+# copilot/procurement — buyer diligence surface; ops doc hrefs allowed (gtm-ops parity)
+for f in index.html start/index.html privacy/index.html terms/index.html status/index.html \
   trust/index.html faq/index.html investors/index.html trust-ledger/verify/index.html; do
   if [[ -f "$f" ]] && grep -E -q "$LEAK_PATTERN" "$f"; then
     echo "FAIL verify-static-www: P0 copy leak in $f" >&2
@@ -185,7 +216,7 @@ check_file "pilot automation copy" copilot/pilot/index.html \
   'Policy-bound workflows' 'Automated governance' 'nf-signal-badge--available'
 
 check_file "procurement buyer copy" copilot/procurement/index.html \
-  'Available now — capability scope' 'Apply for pilot' 'Overview'
+  'Available now — capability scope' 'Apply for pilot' 'buyer-faq'
 
 check_file "legal pages" privacy/index.html \
   'What we collect' 'operations@noetfield.com'
@@ -203,6 +234,19 @@ done
 
 [[ -f vercel.json ]] && grep -qF 'docs/ops' vercel.json && ok "vercel.json blocks docs/ops" || bad "vercel.json missing docs/ops block"
 [[ -f .vercelignore ]] && grep -qF 'docs/ops/' .vercelignore && ok "vercelignore excludes docs/ops" || bad "vercelignore missing docs/ops"
+[[ -f .vercelignore ]] && grep -qF 'docs/mockups/' .vercelignore && ok "vercelignore excludes docs/mockups" || bad "vercelignore missing docs/mockups"
+
+# Truth mockups — ban invented product copy on public www
+FAKE_PATTERN='FINTRAC|HIPAA policy pack|Factory catalog|Most deployed|\$48,?000|\$48k transfer|18 nodes|24 nodes|Governed Exchange|Audit Factory'
+fake_fail=0
+for f in index.html templates/index.html runtime/index.html banner/index.html copilot/index.html pricing/index.html start/index.html; do
+  if [[ -f "$f" ]] && grep -Eiq "$FAKE_PATTERN" "$f"; then
+    echo "FAIL verify-static-www: invented mockup copy in $f" >&2
+    grep -Ei -n "$FAKE_PATTERN" "$f" >&2 || true
+    fake_fail=1
+  fi
+done
+[[ "$fake_fail" -eq 0 ]] && ok "no invented mockup copy on public www" || fail=1
 
 if [[ "$fail" -ne 0 ]]; then
   exit 1

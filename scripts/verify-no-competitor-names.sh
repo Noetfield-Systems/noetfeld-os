@@ -12,17 +12,22 @@ GREP_INCLUDE=(--include='*.md' --include='*.py' --include='*.sh' --include='*.ht
 should_skip() {
   local path="$1"
   [[ "$path" == *"/.git/"* ]] && return 0
+  [[ "$path" == *"/.agents/"* ]] && return 0
   [[ "$path" == *"/node_modules/"* ]] && return 0
   [[ "$path" == *"/.next/"* ]] && return 0
   [[ "$path" == *"/.venv/"* ]] && return 0
   [[ "$path" == *"/dist/"* ]] && return 0
   [[ "$path" == *"/__pycache__/"* ]] && return 0
   [[ "$path" == *"verify-no-competitor-names.sh" ]] && return 0
+  [[ "$path" == *"verify-competitive-content.sh" ]] && return 0
   [[ "$path" == *"verify-ui-e2e.sh" ]] && return 0
   [[ "$path" == *"/docs/SOURCE_OF_TRUTH/"* ]] && return 0
   [[ "$path" == *"/L2-knowledge/"* ]] && return 0
   [[ "$path" == *"/Noetfield-All-Documents/"* ]] && return 0
   [[ "$path" == *"/ops/private/"* ]] && return 0
+  [[ "$path" == *"/docs/diligence/"* ]] && return 0
+  [[ "$path" == *"docs/copilot/PROCUREMENT_COMPETITIVE_FAQ"* ]] && return 0
+  [[ "$path" == *"copilot/procurement/"* ]] && return 0
   [[ "$path" == *"scripts/generate-market-success-1000-roadmap.py" ]] && return 0
   [[ "$path" == *"scripts/market_success_1000_data.py" ]] && return 0
   [[ "$path" == *"scripts/verify-market-roadmap.sh" ]] && return 0

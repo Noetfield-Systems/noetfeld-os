@@ -1483,6 +1483,50 @@
             "type": "array",
             "title": "Obligations"
           },
+          "policy_version_hash": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Policy Version Hash"
+          },
+          "config_policy_version_hash": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Config Policy Version Hash"
+          },
+          "ledger_event_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ledger Event Id"
+          },
+          "gel_lane": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Gel Lane"
+          },
           "non_psp_boundary": {
             "type": "string",
             "title": "Non Psp Boundary",
@@ -1747,7 +1791,7 @@
           "message": {
             "type": "string",
             "title": "Message",
-            "default": "Intake recorded. Operations will follow up via email."
+            "default": "Intake recorded. Operations notified asynchronously \u2014 follow-up via email within one business day."
           }
         },
         "additionalProperties": false,
@@ -1988,13 +2032,6 @@
           "type": {
             "type": "string",
             "title": "Error Type"
-          },
-          "input": {
-            "title": "Input"
-          },
-          "ctx": {
-            "type": "object",
-            "title": "Context"
           }
         },
         "type": "object",

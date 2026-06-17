@@ -5,6 +5,14 @@
   "buildCommand": null,
   "rewrites": [
     {
+      "source": "/health",
+      "destination": "/api/health"
+    },
+    {
+      "source": "/evaluate",
+      "destination": "/api/demo/evaluate"
+    },
+    {
       "source": "/api/public/chat",
       "destination": "https://platform.noetfield.com/api/public/chat"
     },

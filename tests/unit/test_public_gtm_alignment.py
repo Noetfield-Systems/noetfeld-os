@@ -71,6 +71,12 @@ def test_homepage_has_export_assurance_inner() -> None:
     assert "Explore product lanes" in text
 
 
+def test_pilot_page_template_deploy_cta() -> None:
+    text = (ROOT / "copilot" / "pilot" / "index.html").read_text(encoding="utf-8")
+    assert "Deploy Copilot Governance Template" in text
+    assert "nf-template-deploy" in text
+
+
 def test_pilot_page_has_lane_depth_blocks() -> None:
     text = (ROOT / "copilot" / "pilot" / "index.html").read_text(encoding="utf-8")
     for needle in ("Digital trust lane", "Governance gaps", "Buyer voices", "Policy-bound workflows"):

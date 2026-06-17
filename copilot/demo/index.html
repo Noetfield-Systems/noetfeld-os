@@ -3,23 +3,24 @@
 <head>
  <meta charset="UTF-8" />
  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
- <title>Noetfield — 5-Minute Copilot Governance Demo</title>
- <meta name="description" content="Live demo: confidence score, Purview, Entra, SharePoint evidence index." />
+ <title>Noetfield — Copilot Governance SSOT Demo (5 min)</title>
+ <meta name="description" content="Live vertical demo: policy SSOT change → invalidate stale evaluations → re-brief → pre-execution evaluate → signed TLE and board digest." />
  <meta name="robots" content="index,follow" />
  <meta name="theme-color" content="#f4f5f8" />
  <link rel="canonical" href="https://www.noetfield.com/copilot/demo/" />
- <meta name="nf-chat-api-base" content="https://platform.noetfield.com" />
+ <meta name="nf-chat-api-base" content="" />
  <link rel="icon" href="/noetfield-favicon-512.png" type="image/png" />
  <link rel="preconnect" href="https://fonts.googleapis.com" />
  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,400..700;1,14..32,400..700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" />
  <link rel="stylesheet" href="/assets/noetfield-tokens.css" />
  <link rel="stylesheet" href="/assets/noetfield-shell.css" />
- <link rel="stylesheet" href="/assets/noetfield-www.css?v=40" />
- <link rel="stylesheet" href="/assets/noetfield-print.css?v=40" media="print" />
- <script src="/assets/noetfield-shell.js?v=40" defer></script>
- <script src="/assets/noetfield-intake-core.js?v=40" defer></script>
- <script src="/assets/noetfield-forms.js?v=40" defer></script>
+ <link rel="stylesheet" href="/assets/noetfield-www.css?v=43" />
+ <link rel="stylesheet" href="/assets/noetfield-ssot-demo.css?v=2" />
+ <link rel="stylesheet" href="/assets/noetfield-print.css?v=43" media="print" />
+ <script src="/assets/noetfield-shell.js?v=43" defer></script>
+ <script src="/assets/noetfield-intake-core.js?v=43" defer></script>
+ <script src="/assets/noetfield-ssot-demo.js?v=2" defer></script>
 </head>
 <body class="nf-www nf-site-v14">
  <div class="bg" aria-hidden="true"></div>
@@ -29,38 +30,99 @@
 
  <header class="nf-hero-cinematic">
  <div>
- <p class="nf-hero-kicker"><span class="nf-hero-kicker-dot" aria-hidden="true"></span> 5-minute demo</p>
- <p class="nf-eyebrow">Live proof · Copilot governance</p>
- <h1>See confidence score, M365 evidence index, and TLE export in five minutes</h1>
- <p class="nf-lead">Walk through evaluate → receipt → export with Purview, Entra ID, and SharePoint metadata. Demo script (locked narrative) — confidence score on every decision. Metadata-only M365 evidence index on every Trust Ledger Entry — Purview · Entra · audit references plus signed execution receipts, board PDF, and procurement exports.</p>
- <div class="nf-hero-badges"><span class="nf-badge-pill nf-badge-pill--gold">Live demo script</span><span class="nf-badge-pill">Confidence score</span></div>
- <div class="nf-cta-actions"><a class="btn btn-primary" href="/workspace/">Open workspace</a><a class="btn btn-secondary" href="/copilot/procurement/">Procurement pack</a></div>
- <ul class="nf-marquee" aria-label="Framework alignment"></ul>
+ <p class="nf-hero-kicker"><span class="nf-hero-kicker-dot" aria-hidden="true"></span> Vertical demo · Dynamic compliance</p>
+ <p class="nf-eyebrow">Copilot Governance Pack · middleware gate</p>
+ <h1>Policy changes invalidate stale agent context — then evaluate produces a signed receipt</h1>
+ <p class="nf-lead">Five-minute buyer story: publish Copilot Acceptable Use v3.2 → <code>SSOT_CHANGED</code> invalidates pending evaluations → agency agents re-brief → <code>POST /api/demo/evaluate</code> returns allow/review/deny with Trust Ledger receipt and board digest excerpt. Noetfield is gate + ledger — not the agent, not payment rails.</p>
+ <div class="nf-hero-badges"><span class="nf-badge-pill nf-badge-pill--gold">SSOT → re-brief → TLE</span><span class="nf-badge-pill">Middleware API</span></div>
+ <div class="nf-cta-actions"><a class="btn btn-primary" href="/trust-brief/intake/?interest=pilot&amp;vector=copilot-governance">Apply for pilot ($2k–10k)</a><a class="btn btn-secondary" href="/workspace/">Open workspace</a></div>
  </div>
- 
- <aside class="nf-workspace-mock" aria-label="Governance workspace preview">
- <p class="nf-workspace-mock__title">Live workspace path</p>
- <div class="nf-workspace-mock__row"><span>Intent</span><code>Copilot rollout · prod</code></div>
- <div class="nf-workspace-mock__row"><span>Decision</span><code class="nf-workspace-mock__ok">allow · 0.82</code></div>
- <div class="nf-workspace-mock__row"><span>TLE</span><code>TLE-015DCFB8B953</code></div>
- <div class="nf-workspace-mock__row"><span>Export</span><code>board.pdf · pack.zip</code></div>
- <p class="nf-workspace-mock__foot"><a href="/workspace/">Open workspace</a> · <a href="/copilot/demo/">5-minute demo</a></p>
+ <aside class="nf-workspace-mock" aria-label="Demo outcome preview">
+ <p class="nf-workspace-mock__title">Expected outcome</p>
+ <div class="nf-workspace-mock__row"><span>Event</span><code>SSOT_CHANGED</code></div>
+ <div class="nf-workspace-mock__row"><span>Invalidated</span><code>2 · v3.1 → v3.2</code></div>
+ <div class="nf-workspace-mock__row"><span>Evaluate</span><code class="nf-workspace-mock__ok">allow · 0.80</code></div>
+ <div class="nf-workspace-mock__row"><span>Export</span><code>tle.yaml · board.pdf</code></div>
  </aside>
  </header>
- <section class="nf-trust-signals" aria-labelledby="scope-title">
- <h2 id="scope-title">Available now — capability scope</h2>
- <p class="nf-trust-signals-lead">Honest scope for procurement — what you can demo, export, and defend today.</p>
- <div class="nf-trust-signals-grid"><div class="nf-trust-signal"><span class="nf-trust-signal-label">Pre-execution evaluate</span><span class="nf-signal-badge nf-signal-badge--available">Available</span></div><div class="nf-trust-signal"><span class="nf-trust-signal-label">TLE v1 + workspace UI</span><span class="nf-signal-badge nf-signal-badge--available">Available</span></div><div class="nf-trust-signal"><span class="nf-trust-signal-label">Board PDF · procurement ZIP</span><span class="nf-signal-badge nf-signal-badge--available">Available</span></div><div class="nf-trust-signal"><span class="nf-trust-signal-label">M365 metadata connectors</span><span class="nf-signal-badge nf-signal-badge--available">Available</span></div><div class="nf-trust-signal"><span class="nf-trust-signal-label">Framework citations</span><span class="nf-signal-badge nf-signal-badge--orientation">Orientation</span></div><div class="nf-trust-signal"><span class="nf-trust-signal-label">Payment rails / MSB execution</span><span class="nf-signal-badge nf-signal-badge--na">Out of scope</span></div></div>
+
+ <section class="nf-section nf-section--lift" id="nfSsotDemo" aria-labelledby="ssot-demo-title">
+ <h2 id="ssot-demo-title">Interactive demo — governance latency fix</h2>
+ <p class="nf-section-lead">Walk the pipeline your agency or MSP clients would mount agents on. Step through SSOT publish, invalidation, re-brief, and evaluate.</p>
+
+ <ol class="nf-ssot-demo__rail" aria-label="Demo steps">
+ <li class="nf-ssot-demo__step is-active">1 · SSOT publish</li>
+ <li class="nf-ssot-demo__step">2 · Invalidate + re-brief</li>
+ <li class="nf-ssot-demo__step">3 · Evaluate + TLE</li>
+ </ol>
+
+ <div class="nf-ssot-demo">
+ <div class="nf-ssot-demo__grid nf-ssot-demo__grid--split">
+ <div class="nf-ssot-panel">
+ <h3>Policy SSOT (before → after)</h3>
+ <p class="muted">Copilot Acceptable Use — v3.2 adds production guest-sharing block and approver sign-off.</p>
+ <div id="nfSsotPolicyCards" class="nf-ssot-demo__grid nf-ssot-demo__grid--split"></div>
+ <div class="nf-ssot-demo__actions">
+ <button type="button" class="btn btn-primary" id="nfSsotPublish">Publish policy v3.2 (SSOT change)</button>
+ </div>
+ </div>
+ <div class="nf-ssot-panel">
+ <h3>Pending evaluations (pre-change)</h3>
+ <p class="muted">Agency agents briefed against v3.1 — production rollout still in flight.</p>
+ <div id="nfSsotPending"></div>
+ </div>
+ </div>
+
+ <div class="nf-ssot-demo__grid nf-ssot-demo__grid--split">
+ <div class="nf-ssot-panel">
+ <h3>Event log</h3>
+ <div id="nfSsotEventLog"><p class="muted">Publish v3.2 to emit <code>SSOT_CHANGED</code> and invalidate stale context.</p></div>
+ <h3 style="margin-top:1rem">Re-brief queue</h3>
+ <div id="nfSsotReBrief"><p class="muted">Queued items appear after SSOT publish.</p></div>
+ <div class="nf-ssot-demo__actions">
+ <button type="button" class="btn btn-secondary" id="nfSsotEvaluate" disabled>Run re-brief + evaluate</button>
+ </div>
+ </div>
+ <div class="nf-ssot-panel">
+ <h3>Trust Ledger receipt</h3>
+ <div id="nfSsotReceipt" class="nf-ssot-receipt-host" aria-live="polite"></div>
+ <div id="nfSsotBoard" class="nf-ssot-panel" style="margin-top:1rem;border:none;padding:0;background:transparent"></div>
+ </div>
+ </div>
+
+ <div class="nf-ssot-panel" id="nfSsotMiddlewareWrap">
+ <div id="nfSsotMiddleware"><p class="muted">Complete evaluate to see middleware curl for agency integration.</p></div>
+ </div>
+ </div>
  </section>
+
+ <section class="nf-trust-signals" aria-labelledby="scope-title">
+ <h2 id="scope-title">What this demo proves</h2>
+ <p class="nf-trust-signals-lead">Horizontal engine, vertical packaging — dynamic compliance for Copilot governance.</p>
+ <div class="nf-trust-signals-grid"><div class="nf-trust-signal"><span class="nf-trust-signal-label">SSOT invalidation</span><span class="nf-signal-badge nf-signal-badge--available">Available</span></div><div class="nf-trust-signal"><span class="nf-trust-signal-label">Pre-execution evaluate API</span><span class="nf-signal-badge nf-signal-badge--available">Available</span></div><div class="nf-trust-signal"><span class="nf-trust-signal-label">TLE + board PDF export</span><span class="nf-signal-badge nf-signal-badge--available">Available</span></div><div class="nf-trust-signal"><span class="nf-trust-signal-label">Agency middleware hook</span><span class="nf-signal-badge nf-signal-badge--available">Available</span></div><div class="nf-trust-signal"><span class="nf-trust-signal-label">Payment / MSB execution</span><span class="nf-signal-badge nf-signal-badge--na">Out of scope</span></div></div>
+ </section>
+
  <section class="nf-section nf-section--lift"><div class="nf-cards">
 <a class="nf-card nf-card--link" href="/copilot/"><p class="nf-card__tag">Overview</p><h3>Copilot Governance Pack</h3><p>Full offering overview.</p></a><a class="nf-card nf-card--link" href="/trust-ledger/sample-report/"><p class="nf-card__tag">Samples</p><h3>TLE v1 YAML</h3><p>Go · conditional · rejected.</p></a>
  </div></section>
+
+<section class="nf-section nf-section--lift" aria-labelledby="gtm-ops-runbooks">
+<h2 id="gtm-ops-runbooks">Sales &amp; demo runbooks</h2>
+<ul>
+<li><a href="/docs/copilot/DESIGN_PARTNER_PIPELINE_v1.md">Pilot pipeline runbook</a></li>
+<li><a href="/docs/strategy/channel-outreach/bc-ai-for-all-2026.md">bc-ai-for-all-2026.md</a></li>
+<li><a href="/docs/diligence/rpaa-positioning-onepager.md">rpaa-positioning-onepager</a></li>
+<li><a href="/docs/ops/STAGING_DEMO.md">STAGING_DEMO</a> staging demo runbook</li>
+<li><a href="/docs/ops/DEMO_REHEARSAL_CHECKLIST_v1.md">DEMO_REHEARSAL_CHECKLIST_v1.md</a></li>
+</ul>
+</section>
+
  <section class="nf-cta-mega" aria-labelledby="cta-h">
  <h2 id="cta-h">Board PDF in your next governance meeting</h2>
- <p>Non-confidential intake · include your Request ID · Copilot Governance Pack ($2k–10k · 90 days · board PDF), Trust Brief ($10k), federal or MSP lane · operations@noetfield.com</p>
+ <p>Non-confidential intake · Copilot Governance Pack ($2k–10k · 90 days) · operations@noetfield.com</p>
  <div class="nf-cta-actions">
- <a class="btn btn-primary" href="/trust-brief/intake/?interest=pilot&vector=copilot-governance">Apply for pilot ($2k–10k)</a>
- <a class="btn btn-secondary" href="/trust-brief/intake/">Request Trust Brief ($10k)</a>
+ <a class="btn btn-primary" href="/trust-brief/intake/?interest=pilot&amp;vector=copilot-governance">Apply for pilot ($2k–10k)</a>
+ <a class="btn btn-secondary" href="/start/">Start sandbox</a>
  </div>
  </section>
  </main>

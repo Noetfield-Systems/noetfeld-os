@@ -5,8 +5,8 @@
   var PILOT_BANDS = {
     quickscan: {
       name: "Copilot Governance Pack · QuickScan",
-      priceLabel: "$2,000 CAD",
-      priceMid: 2000,
+      priceLabel: "$2,000 – $3,500 CAD",
+      priceMid: 2750,
       line: "4-week scope · evaluate orientation · sample TLE · export walkthrough",
     },
     readiness: {

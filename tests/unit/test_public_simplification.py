@@ -24,7 +24,7 @@ FORBIDDEN_PHRASES = (
     "FastAPI",
 )
 
-REQUIRED_NAV = ("Home", "Enterprise", "Trust Brief", "Copilot", "Governance Console")
+PRIMARY_NAV = ("/copilot/", "/templates/", "/trust/", "/enterprise/", "/pricing/", "/partners/")
 
 
 def test_positioning_exact_sentence() -> None:
@@ -47,12 +47,16 @@ def test_public_pages_no_internal_architecture_terms() -> None:
             assert phrase not in text, f"{path.name}: {phrase}"
 
 
-def test_header_only_five_nav_items() -> None:
+def test_header_primary_nav_items() -> None:
     header = (ROOT / "assets" / "partials" / "header.html").read_text(encoding="utf-8")
-    for label in REQUIRED_NAV:
-        assert label in header
+    primary = header.split('class="menuPrimary"', 1)[1].split("</div>", 1)[0]
+    for href in PRIMARY_NAV:
+        assert href in primary, href
+    assert primary.count("<a ") == 6
     assert "/directory/" not in header
     assert 'href="/gate/' not in header
+    assert "Work with us" not in primary
+    assert "Next steps" not in primary
 
 
 def test_gate_index_redirects_enterprise() -> None:

@@ -1,0 +1,36 @@
+{
+  "schema_version": "nf-ssot-inventory-v1",
+  "locked_at": "2026-06-17",
+  "boot_entries": [
+    {"id": "nf-start-here", "path": "entry/START_HERE_LOCKED_v1.md", "role": "role_picker"},
+    {"id": "nf-routing-card", "path": "ROUTING_CARD.md", "role": "daily_pin"},
+    {"id": "nf-gaos-w0", "path": "docs/ops/NF_GAOS_W0_LOCKED_v1.md", "role": "spine_law"},
+    {"id": "nf-gaos-w1", "path": "docs/ops/NF_GAOS_W1_LOCKED_v1.md", "role": "spine_law_w1"},
+    {"id": "nf-routing-graph", "path": "os/NF_UNIFIED_ROUTING_GRAPH.json", "role": "machine_graph"},
+    {"id": "agent-read-links", "path": "docs/ops/AGENT_READ_LINKS_LOCKED_v1.md", "role": "deep_chain"},
+    {"id": "agent-context", "path": "docs/ops/NOETFIELD_AGENT_CONTEXT_AND_READ_ORDER_LOCKED_v1.md", "role": "appendix"},
+    {"id": "agent-self-audit", "path": "docs/ops/AGENT_SELF_AUDIT_LOOP_LOCKED_v1.md", "role": "audit_loop"},
+    {"id": "gov-unify", "path": "docs/ops/NF_GOVERNANCE_UNIFICATION_ENGINE_LOCKED_v1.md", "role": "intake_engine"},
+    {"id": "doc-unified-index", "path": "docs/DOC_UNIFIED_INDEX_LOCKED_v1.md", "role": "navigation"},
+    {"id": "project-boundaries", "path": "PROJECT_BOUNDARIES_LOCKED.md", "role": "scope_law"},
+    {"id": "ship-now", "path": "os/SHIP_NOW.md", "role": "ship_mandate"},
+    {"id": "plan-json", "path": "os/plan.json", "role": "queue_ssot"},
+    {"id": "gtm-next", "path": "docs/ops/plans/no-asf/GTM_NEXT.md", "role": "gtm_queue"},
+    {"id": "memory", "path": ".cursor/agent-memory/MEMORY_LOCKED.yaml", "role": "agent_memory"},
+    {"id": "incidents", "path": ".cursor/incidents/REGISTRY.md", "role": "incidents"}
+  ],
+  "always_apply_rules": [
+    "nf-authority-stack.mdc",
+    "nf-routing-card.mdc",
+    "noetfield-ask-before-edit.mdc",
+    "nf-ship-bundle.mdc"
+  ],
+  "moved_rules": [
+    "noetfield-read-order.mdc",
+    "noetfield-ship-first.mdc",
+    "noetfield-no-asf-plans.mdc",
+    "noetfield-rule-conflict-resolution.mdc",
+    "noetfield-scope.mdc",
+    "noetfield-self-audit.mdc"
+  ]
+}

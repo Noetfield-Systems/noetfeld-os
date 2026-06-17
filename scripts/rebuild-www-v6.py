@@ -372,6 +372,34 @@ def procurement_rail() -> str:
  </nav>"""
 
 
+def trust_sidebar_rail() -> str:
+    """Sticky diligence rail — trust center reference layout (v14)."""
+    return f"""
+ <aside class="nf-trust-sidebar" aria-label="Diligence shortcuts">
+ <p class="nf-trust-sidebar__label">Procurement rail</p>
+ <nav class="nf-trust-sidebar__nav">
+ <a href="/trust-ledger/sample-report/">TLE samples</a>
+ <a href="/trust-ledger/verify/">Verify export</a>
+ <a href="/copilot/procurement/">Procurement pack</a>
+ <a href="/status/">Status</a>
+ </nav>
+ {receipt("RID-2026-0602-TRUST", "Sample receipt — <a href=\"/trust-ledger/sample-report/\">download YAML</a>")}
+ <p class="nf-trust-sidebar__note">Capabilities marked <strong>Available</strong> are Shipped in sandbox and pilot — orientation only, not certification.</p>
+ </aside>"""
+
+
+def trust_doc_hero() -> str:
+    """Light document hero — no cinematic chrome (v14 trust reference page)."""
+    return """
+ <header class="nf-trust-doc-hero">
+ <p class="nf-eyebrow">Procurement diligence · honest scope</p>
+ <h1>Trust center for AI Governance &amp; Evidence</h1>
+ <p class="nf-lead">Metadata-only Microsoft 365 processing. Export bundles <strong>fail closed on tamper</strong>. No custody, payment rails, or certifier claims — Available · Planned · Out of scope only.</p>
+ <div class="nf-hero-badges"><span class="nf-badge-pill nf-badge-pill--gold">Metadata-only M365</span><span class="nf-badge-pill">Fail-closed export</span></div>
+ <div class="nf-cta-actions"><a class="btn btn-primary" href="/copilot/procurement/">Procurement pack</a><a class="btn btn-secondary" href="/trust-ledger/verify/">Verify export integrity</a></div>
+ </header>"""
+
+
 def self_serve_rail() -> str:
     return f"""
  <nav class="nf-self-serve-rail" aria-label="Self-serve product access">
@@ -799,7 +827,7 @@ def pilot_apply_form() -> str:
  </label>
  <label>Pilot band
  <select name="band">
- <option value="quickscan">QuickScan · $2,000 · 4 weeks</option>
+ <option value="quickscan">QuickScan · $2k–$3.5k · 4 weeks</option>
  <option value="readiness" selected>Readiness Pilot · $5k–10k · 90 days (recommended)</option>
  </select>
  </label>
@@ -1415,7 +1443,7 @@ def pilot_page_body() -> str:
  <h2>Fixed-fee pilot — no SKU creep</h2>
  </div></div>
  <div class="nf-pack-grid nf-pack-grid--4">
- <article class="nf-pack-card"><p class="nf-pack-card__tag">QuickScan</p><p class="nf-pack-card__price">$2,000</p><p>Evaluate orientation · sample TLE · export walkthrough · 4-week scope.</p></article>
+ <article class="nf-pack-card"><p class="nf-pack-card__tag">QuickScan</p><p class="nf-pack-card__price">$2k–$3.5k</p><p>Evaluate orientation · sample TLE · export walkthrough · 3–5 day active scope.</p></article>
  <article class="nf-pack-card nf-pack-card--program"><p class="nf-pack-card__tag">Readiness Pilot · recommended</p><p class="nf-pack-card__price">$5k–10k</p><p>Production tenant · live TLE records · board PDF in governance meeting · procurement ZIP · 90 days.</p><a class="btn btn-primary" href="{PILOT_INTAKE}">Apply for pilot</a></article>
  <article class="nf-pack-card"><p class="nf-pack-card__tag">After pilot</p><p class="nf-pack-card__price">Trust Brief</p><p>Six-week governance diagnostic ($10k) before enterprise scale — optional land SKU.</p><a class="btn btn-secondary" href="/trust-brief/">Trust Brief</a></article>
  </div>
@@ -2032,56 +2060,75 @@ def msp_phase_diagram() -> str:
 
 def trust_center_body() -> str:
     cert_rows = [
-        ("TLE v1 + workspace", "available"),
-        ("Export integrity fail-closed", "available"),
-        ("M365 metadata-only processing", "available"),
-        ("Board PDF + procurement ZIP", "available"),
-        ("SOC 2 Type II", "roadmap"),
-        ("ISO 27001 / 42001 certification", "na"),
-        ("Ed25519 / Merkle transparency log", "roadmap"),
+        ("TLE v1 + workspace UI", "available", "Shipped"),
+        ("Export integrity fail-closed", "available", "Shipped"),
+        ("M365 metadata-only processing", "available", "Shipped"),
+        ("Board PDF + procurement ZIP", "available", "Shipped"),
+        ("Framework citations (NIST · ISO orientation)", "orientation", "Orientation"),
+        ("SOC 2 Type II", "roadmap", "Planned"),
+        ("ISO 27001 / 42001 certification (Noetfield as certifier)", "na", "Out of scope"),
+        ("Ed25519 / Merkle transparency log", "roadmap", "Planned"),
     ]
-    cert_html = "".join(
-        f'<div class="nf-trust-signal"><span class="nf-trust-signal-label">{l}</span>'
-        f'<span class="nf-signal-badge {SCOPE_BADGES[k]}">{SCOPE_LABELS[k]}</span></div>'
-        for l, k in cert_rows
+    cert_table_rows = "".join(
+        f"<tr><td>{cap}</td><td><span class=\"nf-signal-badge {SCOPE_BADGES[k]}\">{label}</span></td></tr>"
+        for cap, k, label in cert_rows
     )
-    return hero(
-        "Trust &amp; security · Canada",
-        "Procurement diligence · honest scope",
-        "Trust center for AI Governance &amp; Evidence",
-        "Metadata-only Microsoft 365 processing. Export bundles <strong>fail closed on tamper</strong>. No custody, payment rails, or certifier claims — Available · Planned · Out of scope only.",
-        [("Metadata-only M365", True), ("Fail-closed export", False)],
-        [("/copilot/procurement/", "Procurement pack", True), ("/trust-ledger/verify/", "Verify export integrity", False)],
-        ["Retention · subprocessors · scope"],
-        receipt("RID-2026-0602-TRUST", "Diligence path — <a href=\"/status/\">status</a> · <a href=\"/trust-ledger/sample-report/\">TLE samples</a>"),
-    ) + procurement_rail() + ciso_strip() + f"""
+    main_col = f"""
+ {trust_doc_hero()}
+ {procurement_rail()}
+ {ciso_strip()}
  <section class="nf-section-block" aria-labelledby="trust-01">
- <div class="nf-section-block-head"><span class="nf-section-num" aria-hidden="true">01</span><div>
+ <div class="nf-section-block-head"><span class="nf-section-num" aria-hidden="true">01 · Data handling</span><div>
  <p class="nf-eyebrow" id="trust-01">Data handling</p>
  <h2>Metadata-only M365 connectors</h2>
  <p class="nf-section-lead">Purview · Entra ID · audit log indices — no mailbox content custody. See <a href="/privacy/">Privacy</a> and <a href="/docs/api/CANADA_TRUST.md">Canada trust notes</a>.</p>
  </div></div>
+ <div class="nf-table-wrap"><table class="nf-table nf-table--compact nf-table--captioned" aria-labelledby="trust-01">
+ <caption class="srOnly">Data handling summary</caption>
+ <thead><tr><th scope="col">Surface</th><th scope="col">Posture</th></tr></thead>
+ <tbody>
+ <tr><td>M365 mailbox / content custody</td><td><span class="nf-signal-badge nf-signal-badge--na">Out of scope</span></td></tr>
+ <tr><td>Purview · Entra · audit metadata index</td><td><span class="nf-signal-badge nf-signal-badge--available">Available</span></td></tr>
+ <tr><td>Subprocessor list &amp; retention</td><td><span class="nf-signal-badge nf-signal-badge--orientation">Orientation</span></td></tr>
+ </tbody>
+ </table></div>
  </section>
  <section class="nf-section-block" aria-labelledby="trust-02">
- <div class="nf-section-block-head"><span class="nf-section-num" aria-hidden="true">02</span><div>
+ <div class="nf-section-block-head"><span class="nf-section-num" aria-hidden="true">02 · Export integrity</span><div>
  <p class="nf-eyebrow" id="trust-02">Export integrity</p>
  <h2>Fail closed on tamper</h2>
  <p class="nf-section-lead">Board PDF and procurement ZIP include integrity checks. Walkthrough: <a href="/trust-ledger/verify/">offline verify guide</a>.</p>
  </div></div>
+ <div class="nf-loop">
+ <article class="nf-loop-step"><p class="nf-loop-step-num">1</p><h3>Export bundle</h3><p>Board PDF + procurement ZIP + manifest from workspace or pilot tenant.</p></article>
+ <article class="nf-loop-step"><p class="nf-loop-step-num">2</p><h3>Verify PASS</h3><p>Unmodified bundle returns <code>export_integrity: PASS</code>.</p></article>
+ <article class="nf-loop-step"><p class="nf-loop-step-num">3</p><h3>Tamper FAIL</h3><p>Any alteration fails verification — by design for procurement reviewers.</p></article>
+ </div>
  </section>
  <section class="nf-section-block" aria-labelledby="trust-03">
- <div class="nf-section-block-head"><span class="nf-section-num" aria-hidden="true">03</span><div>
+ <div class="nf-section-block-head"><span class="nf-section-num" aria-hidden="true">03 · Certification</span><div>
  <p class="nf-eyebrow" id="trust-03">Honest certification posture</p>
  <h2>Available · Planned · Out of scope</h2>
+ <p class="nf-section-lead">We produce governance artifacts — not company ISO/SOC certification claims.</p>
  </div></div>
- <div class="nf-trust-signals-grid">{cert_html}</div>
+ <div class="nf-table-wrap"><table class="nf-table nf-table--compact nf-table--captioned" aria-labelledby="trust-03">
+ <caption class="srOnly">Certification and capability posture</caption>
+ <thead><tr><th scope="col">Control / capability</th><th scope="col">Posture</th></tr></thead>
+ <tbody>{cert_table_rows}</tbody>
+ </table></div>
  </section>
  {proof_grid([
         ("/copilot/demo/", "▶", "5-minute demo", "Live evaluate → TLE path"),
         ("/trust-ledger/sample-report/", "TLE", "YAML samples", "Go · conditional · rejected"),
         ("/copilot/procurement/", "ZIP", "Procurement pack", "Buyer diligence bundle"),
         ("/status/", "●", "Status", "Public surface availability"),
- ])}""" + mega_cta()
+ ])}"""
+    return f"""
+ <div class="nf-trust-doc-layout">
+ <div class="nf-trust-doc-main">{main_col}</div>
+ {trust_sidebar_rail()}
+ </div>
+""" + mega_cta()
 
 
 def verify_page_body() -> str:

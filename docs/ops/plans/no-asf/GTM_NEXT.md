@@ -17,6 +17,16 @@ When the NF-PLAN registry is fully synced (`1000/1000 done`), pick the next **�
 
 `ship-*-NNN` = GTM Tier A queue (`next_tasks`). `nf-*-NNN` in engineering manifest = product waves — numeric suffix overlap is intentional.
 
+## Portfolio N-P1 wave (2026-06-17)
+
+Founder bounded `implement` — disk queue head from `os/plan.json`:
+
+1. **ship-portfolio-np1-funnel-metrics-061** · Sandbox funnel metrics spec S0→S5 for Hub weekly rollup — **done**  
+   Plan: [`SANDBOX_FUNNEL_METRICS_SPEC_v1.md`](../../../copilot/SANDBOX_FUNNEL_METRICS_SPEC_v1.md)
+
+1. **ship-portfolio-np1-hub-intake-062** · Copilot-governance intake Hub report template — **done**  
+   Plan: [`INTAKE_COPILOT_GOVERNANCE_HUB_REPORT_v1.md`](../../../copilot/INTAKE_COPILOT_GOVERNANCE_HUB_REPORT_v1.md)
+
 ## Next GTM Tier A (NF-CLOUD disk) — iter 19 proposals
 
 Founder pick or bounded `implement`:

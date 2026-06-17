@@ -16,13 +16,16 @@ if [[ ! -f "$DEMO_HTML" ]]; then
   exit 1
 fi
 
-# Paths required by GTM demo script (with or without trailing slash)
+# Paths referenced by GTM demo page (with or without trailing slash)
 paths=(
-  "/cognitive-dashboard"
-  "/evaluate"
   "/workspace"
-  "/workspace/connectors"
+  "/copilot"
+  "/start"
 )
+
+# Demo page must include SSOT interactive block
+grep -q 'id="nfSsotDemo"' "$DEMO_HTML" || { echo "FAIL missing nfSsotDemo section" >&2; fail=1; }
+grep -q 'noetfield-ssot-demo.js' "$DEMO_HTML" || { echo "FAIL missing ssot demo script" >&2; fail=1; }
 
 for path in "${paths[@]}"; do
   code="$(curl -sS -o /dev/null -w "%{http_code}" --connect-timeout 5 "${BASE}${path}" 2>/dev/null || echo "000")"

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8" />
+ <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+ <title>Governance Runtime — Policy before execution | Noetfield</title>
+ <meta name="description" content="Noetfield Governance Runtime evaluates policy before execution, produces signed Trust Ledger Entries, and exports board-ready evidence. Non-custodial — three SKUs only." />
+ <meta name="robots" content="index,follow" />
+ <meta name="theme-color" content="#f4f5f8" />
+ <link rel="canonical" href="https://www.noetfield.com/runtime/" />
+ <meta name="nf-chat-api-base" content="https://platform.noetfield.com" />
+ <link rel="icon" href="/noetfield-favicon-512.png" type="image/png" />
+ <link rel="preconnect" href="https://fonts.googleapis.com" />
+ <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,400..700;1,14..32,400..700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" />
+ <link rel="stylesheet" href="/assets/noetfield-tokens.css" />
+ <link rel="stylesheet" href="/assets/noetfield-shell.css" />
+ <link rel="stylesheet" href="/assets/noetfield-www.css?v=40" />
+ <link rel="stylesheet" href="/assets/noetfield-print.css?v=40" media="print" />
+ <script src="/assets/noetfield-shell.js?v=40" defer></script>
+</head>
+<body class="nf-www nf-site-v14">
+ <div class="bg" aria-hidden="true"></div>
+ <a class="skip" href="#main">Skip to content</a>
+ <header id="nfHeader"></header>
+ <main id="main" class="nf-main nf-page">
+
+ <header class="nf-hero-cinematic">
+ <div>
+ <p class="nf-hero-kicker"><span class="nf-hero-kicker-dot" aria-hidden="true"></span> Governance Execution Layer</p>
+ <p class="nf-eyebrow">Enterprise AI Control Plane</p>
+ <h1>Policy before execution. Trust Ledger after.</h1>
+ <p class="nf-lead">Noetfield evaluates policy before your systems act, produces signed Trust Ledger Entries, and exports board-ready evidence. Pre-execution governance — not payment rails, not custody.</p>
+ <div class="nf-cta-actions"><a class="btn btn-primary" href="/copilot/demo/">5-minute demo</a><a class="btn btn-secondary" href="/templates/">Deploy a template</a><a class="btn btn-secondary" href="/start/">Start sandbox</a></div>
+ </div>
+
+ <div class="nf-artifact-panel">
+ <div class="nf-artifact-panel-chrome">
+ <span class="nf-artifact-panel-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+ <span class="nf-artifact-panel-file">evaluate-response.json</span>
+ <span class="nf-artifact-panel-badge">Review</span>
+ </div>
+ <aside class="nf-receipt-mock" aria-label="Governance evaluate response">
+ <dl class="nf-receipt-mock-body">
+ <div class="nf-receipt-row"><dt>action</dt><dd>publish_board_report</dd></div>
+ <div class="nf-receipt-row"><dt>policy_pack</dt><dd>copilot-governance-v1</dd></div>
+ <div class="nf-receipt-row"><dt>rule</dt><dd>copilot:review-required</dd></div>
+ <div class="nf-receipt-row"><dt>decision</dt><dd class="nf-receipt-review">REQUIRE_HUMAN_REVIEW</dd></div>
+ <div class="nf-receipt-row"><dt>seal</dt><dd>HMAC-SHA256 (sandbox)</dd></div>
+ </dl>
+ <p class="nf-receipt-mock-footer">Illustrative sandbox output — not a live receipt</p>
+ </aside>
+ </div>
+ </header>
+
+ <section class="nf-section-block" aria-labelledby="runtime-how">
+ <div class="nf-section-block-head"><span class="nf-section-num" aria-hidden="true">01</span><div>
+ <p class="nf-eyebrow" id="runtime-how">How it works</p>
+ <h2>check → approve → ledger</h2>
+ </div></div>
+ <div class="nf-trust nf-trust--hero" role="list">
+ <div class="nf-trust__item" role="listitem"><strong>01 · Evaluate</strong><span>POST /api/v1/governance/evaluate — policy pack loaded from disk</span></div>
+ <div class="nf-trust__item" role="listitem"><strong>02 · Approve</strong><span>Human review queue on high-impact Copilot actions</span></div>
+ <div class="nf-trust__item" role="listitem"><strong>03 · Ledger</strong><span>Signed TLE v1, board PDF export, audit pack</span></div>
+ <div class="nf-trust__item" role="listitem"><strong>Decisions</strong><span>PROCEED · REQUIRE_HUMAN_REVIEW · REJECT</span></div>
+ </div>
+ </section>
+
+ <section class="nf-section-block" aria-labelledby="runtime-why">
+ <div class="nf-section-block-head"><span class="nf-section-num" aria-hidden="true">02</span><div>
+ <p class="nf-eyebrow" id="runtime-why">Why teams choose it</p>
+ <h2>The audit trail your Copilot deployment will be asked for later.</h2>
+ </div></div>
+ <div class="nf-trust" role="list">
+ <div class="nf-trust__item" role="listitem"><strong>Governance Runtime</strong><span>Phase 3.4 policy pack wired in production API</span></div>
+ <div class="nf-trust__item" role="listitem"><strong>Trust Ledger</strong><span>Append-only TLE store with confidence score</span></div>
+ <div class="nf-trust__item" role="listitem"><strong>Non-custodial</strong><span>No payment execution, no custody, no MSB claims</span></div>
+ <div class="nf-trust__item" role="listitem"><strong>Sandbox first</strong><span>14-day trial · 50 evaluate calls · $2k–10k pilot upgrade</span></div>
+ </div>
+ </section>
+
+ <section class="nf-section-block" aria-labelledby="runtime-templates">
+ <div class="nf-section-block-head"><span class="nf-section-num" aria-hidden="true">03</span><div>
+ <p class="nf-eyebrow" id="runtime-templates">Templates</p>
+ <h2>Policy packs you can deploy today</h2>
+ <p class="nf-section-lead">Templates are demos of the runtime — policy packs only, not agent factories. Shipped packs: copilot-governance-v1 and bank-pilot-v1.</p>
+ <div class="nf-cta-actions"><a class="btn btn-primary" href="/templates/">View template catalog</a><a class="btn btn-secondary" href="/trust-brief/intake/?interest=pilot&vector=copilot-governance">Apply for pilot ($2k–10k)</a></div>
+ </div></div>
+ </section>
+
+ <section class="nf-section-block" aria-labelledby="runtime-gel">
+ <div class="nf-section-block-head"><span class="nf-section-num" aria-hidden="true">04</span><div>
+ <p class="nf-eyebrow" id="runtime-gel">GEL tiers</p>
+ <h2>Platform runtime ladder</h2>
+ <p class="nf-section-lead">GEL tiers are platform/runtime — not a fourth contract SKU. Three www offerings unchanged: Trust Brief · Copilot Pack · Bank Pilot.</p>
+ </div></div>
+ <div class="nf-cards">
+ <article class="nf-card"><p class="nf-card__tag">Starter · ~$10K</p><h3>Sandbox + 1 pack</h3><p>Audit portal · single org.</p><a href="/docs/runtime/GEL_STARTER_TIER_SPEC_v1.md">Tier spec</a></article>
+ <article class="nf-card nf-card--gold"><p class="nf-card__tag">Standard · ~$50K</p><h3>Multi-tenant</h3><p>Postgres · SLA orientation.</p><a href="/docs/runtime/GEL_STANDARD_TIER_SPEC_v1.md">Tier spec</a></article>
+ <article class="nf-card"><p class="nf-card__tag">Trust Ledger · ~$120K</p><h3>Quarterly export</h3><p>Drift scoring · board pack.</p><a href="/docs/runtime/GEL_TRUST_LEDGER_TIER_SPEC_v1.md">Tier spec</a></article>
+ </div>
+ </section>
+ <section class="nf-section-block" aria-labelledby="runtime-api">
+ <div class="nf-section-block-head"><span class="nf-section-num" aria-hidden="true">05</span><div>
+ <p class="nf-eyebrow" id="runtime-api">Governance API</p>
+ <h2>Live evaluate endpoint</h2>
+ <p class="nf-section-lead">Production path: <code>POST /api/v1/governance/evaluate</code> — OpenAPI, ledger, and audit-export documented at <a href="/docs/api/">/docs/api/</a>. SSOT: <a href="/docs/runtime/NF_RUNTIME_API_DOCS_LINK_v1.md">API link map</a>.</p>
+ <div class="nf-cta-actions"><a class="btn btn-primary" href="/docs/api/">Open API reference</a><a class="btn btn-secondary" href="/docs/api/openapi.json">openapi.json</a><a class="btn btn-secondary" href="/start/">Start sandbox</a></div>
+ </div></div>
+ </section>
+
+ <footer id="nfFooter"></footer>
+</body>
+</html>

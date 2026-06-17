@@ -32,9 +32,13 @@ fi
 
 code="$(curl -sS -o /dev/null -w "%{http_code}" --connect-timeout 3 "http://127.0.0.1:${NF_DEV_PUBLIC_PORT}/health" 2>/dev/null || echo "000")"
 if [[ "$code" != "200" ]]; then
-  echo "FAIL: dev stack not up (health ${code}). Run: make dev-local" >&2
-  exit 1
+  echo "Dev stack not up (health ${code}) — booting for verify-gtm…"
+  chmod +x scripts/dev-local-all.sh scripts/wait-dev-www-ready.sh 2>/dev/null || true
+  ./scripts/dev-local-all.sh
 fi
+
+chmod +x scripts/wait-dev-www-ready.sh
+./scripts/wait-dev-www-ready.sh
 
 if [[ -f scripts/smoke-seed-m365-evidence-stub.sh ]]; then
   chmod +x scripts/smoke-seed-m365-evidence-stub.sh

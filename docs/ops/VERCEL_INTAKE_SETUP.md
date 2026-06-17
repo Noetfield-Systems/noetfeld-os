@@ -1,7 +1,8 @@
 # Vercel www — intake email go-live
 
 **Inbox:** operations@noetfield.com  
-**Project:** `web` · scope `noetfield-systems`
+**Canonical project:** `www` · scope `noetfield-systems`  
+**One project only** — run `./scripts/auto-heal-www.sh` to dedupe, sync env, deploy, verify.
 
 ## Required (Production)
 
@@ -12,30 +13,38 @@ INTAKE_EMAIL_TO=operations@noetfield.com
 INTAKE_AUTO_ACK_ENABLED=true
 ```
 
+Source of truth for keys: `~/.sina/secrets.env` (auto-heal reads and pushes to Vercel).
+
 ## Resend domain
 
 1. [resend.com](https://resend.com) → Domains → add `noetfield.com`
 2. Add DNS records Resend provides (SPF/DKIM)
 3. Create API key with send permission
 
-## Set on Vercel
+## Auto-heal (recommended)
 
 ```bash
 cd /path/to/Noetfield
-npx vercel env add RESEND_API_KEY production --scope noetfield-systems
-# repeat for INTAKE_EMAIL_FROM, INTAKE_EMAIL_TO, INTAKE_AUTO_ACK_ENABLED
-npx vercel --prod --yes --scope noetfield-systems --project web
+chmod +x scripts/auto-heal-www.sh
+./scripts/auto-heal-www.sh
 ```
 
-## Verify
+What it does:
+
+1. Renames legacy `project-gc7lm` → `www` if needed  
+2. Removes duplicate projects (`web`, `project-j43wr`)  
+3. Syncs intake env from founder vault  
+4. Deploys production  
+5. Checks intake health on canonical URL + `www.noetfield.com`
+
+Dry run: `HEAL_DRY_RUN=1 ./scripts/auto-heal-www.sh`
+
+## Manual verify
 
 ```bash
 ./scripts/check-intake-health.sh
-# or: curl -sS https://www.noetfield.com/api/intake/health | jq .
-# expect: "www_email_configured": true, "enabled": true, "delivery_mode": "resend"
+# expect: www_email_configured true, delivery_mode resend
 ```
-
-Submit [noetfield.com/contact/](https://www.noetfield.com/contact/) with a real email — ops inbox + auto-ack should arrive.
 
 **Public ops checklist:** [noetfield.com/next/#next-ops](https://www.noetfield.com/next/#next-ops)
 

@@ -1,0 +1,11 @@
+name = "noetfield-www-proxy"
+main = "src/worker.js"
+compatibility_date = "2024-11-01"
+account_id = "0d0b967b77e2e5535455d39ff3dae72c"
+
+routes = [
+  { pattern = "www.noetfield.com/*", zone_name = "noetfield.com" }
+]
+
+[vars]
+ORIGIN = "https://project-gc7lm.vercel.app"

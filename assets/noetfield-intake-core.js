@@ -3,21 +3,28 @@
   "use strict";
 
   var INTAKE_EMAIL = "operations@noetfield.com";
+  var CANONICAL_INTAKE_ORIGIN = "https://project-gc7lm.vercel.app";
+
+  function metaBase(name) {
+    var meta = document.querySelector('meta[name="' + name + '"]');
+    return meta && meta.content ? String(meta.content).replace(/\/$/, "") : "";
+  }
 
   function apiBase() {
     var host = global.location && global.location.hostname;
     if (host === "localhost" || host === "127.0.0.1") {
       return "http://127.0.0.1:8001";
     }
-    if (
-      host === "www.noetfield.com" ||
-      host === "noetfield.com" ||
-      (host && host.indexOf(".vercel.app") > 0)
-    ) {
+    if (host && host.indexOf(".vercel.app") > 0) {
       return "";
     }
-    var meta = document.querySelector('meta[name="nf-chat-api-base"]');
-    if (meta && meta.content) return String(meta.content).replace(/\/$/, "");
+    var intakeMeta = metaBase("nf-intake-api-base");
+    if (intakeMeta) return intakeMeta;
+    if (host === "www.noetfield.com" || host === "noetfield.com") {
+      return CANONICAL_INTAKE_ORIGIN;
+    }
+    var chatMeta = metaBase("nf-chat-api-base");
+    if (chatMeta) return chatMeta;
     return "https://platform.noetfield.com";
   }
 
