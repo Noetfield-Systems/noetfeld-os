@@ -21,6 +21,7 @@ make verify-law-stack   # anti-drift law + registry
 | `make verify-law-stack` | `scripts/verify-law-stack.sh` + pytest | Current law visible, registry L0 = GCIP v4, mirror sync |
 | `make verify-investor-lane` | `verify-investor-diligence-lane.sh` | Investor diligence docs + www |
 | `make verify-commercial-agentic` | `verify-commercial-agentic.sh` | Demo/trial + commercial reference |
+| `make verify-factory-copilot` | `verify-factory-copilot.sh` + pytest | AI factory YAML spec + 8-node pipeline |
 | `make verify-final-lock` | audit + GTM pytest | Payment language prohibition |
 
 ---
@@ -58,7 +59,18 @@ Runs:
 make phase33-verify              # unit tests (memory)
 make phase33-postgres-verify     # integration + postgres
 make phase35-demo                # copilot governance demo package
+make verify-factory-copilot      # AI factory spec + runtime smoke
 ```
+
+### AI factory (Copilot Governance Readiness)
+
+```bash
+make verify-factory-copilot
+# HTTP: POST /factories/copilot_governance_readiness_v1/run
+# Legacy: POST /use-cases/copilot-governance/demo
+```
+
+Spec: `packages/schemas/factories/copilot_governance_readiness_v1.yaml`
 
 ---
 
@@ -88,6 +100,7 @@ flowchart LR
     VL[verify-law-stack]
     VI[verify-investor-lane]
     VC[verify-commercial-agentic]
+    VF[verify-factory-copilot]
   end
   subgraph live [Live system]
     PG[(PostgreSQL)]
@@ -113,5 +126,6 @@ flowchart LR
 | Where is doc X? | `docs/SOURCE_OF_TRUTH/registry/source_document_inventory.json` |
 | Old version of Y? | `docs/SOURCE_OF_TRUTH/archive/SUPERSESSION_INDEX.md` |
 | Commercial UI patterns? | `docs/strategy/COMMERCIAL_AGENTIC_UI_REFERENCE_v1.md` |
+| AI factory spec? | `packages/schemas/factories/copilot_governance_readiness_v1.yaml` |
 
 Machine manifest: `governance/LAW_STACK.json`

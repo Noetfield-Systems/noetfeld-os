@@ -1,0 +1,150 @@
+apiVersion: noetfield.ai/factory/v1
+kind: Factory
+metadata:
+  id: copilot_governance_readiness_v1
+  version: "1.0.0"
+  factory_type: copilot_governance_readiness
+  target_user: enterprise_compliance_lead
+  output_format: board_brief_and_audit_package
+  supremacy: GCIP_v4
+  sku: Copilot_Readiness_Pack
+  runtime_binding: services/copilot-governance/noetfield_copilot_governance/demo.py
+
+spec:
+  constraints:
+    cost_tier: low
+    max_nodes: 12
+    max_concurrent_inspectors: 3
+    stateless_workers: true
+    durable_state_store: postgres
+    min_confidence: 0.75
+
+  governance:
+    pre_execution_gate: golden_edge_v3
+    agent_loop_endpoint: /v3/agent-loop
+    blocked_autonomous_actions:
+      - publish_board_report
+      - export_audit_package
+      - approve_workflow
+    forbidden_financial_actions: policy_pack.forbidden_financial_actions
+
+  input_schema: packages/schemas/factory_io/copilot_governance_input.schema.json
+  output_schema: packages/schemas/factory_io/copilot_governance_output.schema.json
+
+  context:
+    required_headers:
+      - X-Request-Id
+      - X-Tenant-Id
+      - X-Organization-Id
+    correlation_field: correlation_id
+    audit_field: source_request_id
+
+  nodes:
+    - id: n01_intake_validate
+      type: validator
+      handler: noetfield_factories.nodes.intake_validate
+      timeout_sec: 5
+      retries: 0
+      emits: [FACTORY_RUN_STARTED]
+      on_fail: terminal_reject
+
+    - id: n02_signal_ingest
+      type: pipeline
+      handler: noetfield_signals.pipeline.ingest
+      binds: SignalIngestionPipeline
+      timeout_sec: 15
+      retries: 2
+      governance_gate: false
+      emits: [SIGNAL_INGESTED]
+
+    - id: n03_graph_mutate
+      type: pipeline
+      handler: noetfield_graph.mutation.mutate_relationship
+      binds: LiveGraphMutationEngine
+      timeout_sec: 15
+      retries: 2
+      emits: [RELATIONSHIP_INFERRED]
+
+    - id: n04_graph_reflect
+      type: pipeline
+      handler: noetfield_graph.reflection.run
+      binds: TemporalGraphReflectionCycle
+      timeout_sec: 20
+      retries: 1
+      emits: [GRAPH_REFLECTION_COMPLETED]
+
+    - id: n05_inspector_collaborate
+      type: multi_agent
+      handler: noetfield_inspectors.collaboration.run
+      binds: InspectorCollaborationRuntime
+      parallel: true
+      max_agents: 3
+      agents: [OpportunityHunter, ThreatMonitor, LeadScout]
+      timeout_sec: 30
+      retries: 1
+      emits: [INSPECTOR_COLLABORATION_STARTED, INSPECTOR_COMPLETED]
+
+    - id: n06_policy_evaluate
+      type: governance
+      handler: noetfield_governance.golden_edge_v3.evaluate
+      binds: GoldenEdgeV3Engine
+      timeout_sec: 10
+      retries: 0
+      on_reject: terminal_veto
+      on_require_review: continue_with_flag
+      emits: [POLICY_EVALUATED]
+
+    - id: n07_workflow_govern
+      type: governance
+      handler: composite
+      steps:
+        - noetfield_workflow.state_machine.start
+        - noetfield_workflow.state_machine.transition
+        - noetfield_governance.runtime.execute
+      binds: [WorkflowStateMachine, GovernanceRuntime]
+      timeout_sec: 20
+      retries: 1
+      emits: [WORKFLOW_STARTED, HUMAN_APPROVAL_REQUESTED]
+
+    - id: n08_package_export
+      type: packager
+      handler: noetfield_factories.nodes.package_copilot_deliverable
+      timeout_sec: 15
+      retries: 1
+      requires_human_approval: true
+      emits: [EVIDENCE_ATTACHED, AI_OUTPUT_GENERATED]
+      on_fail: partial_result_with_replay_hint
+
+  edges:
+    - n01_intake_validate -> n02_signal_ingest
+    - n02_signal_ingest -> n03_graph_mutate
+    - n03_graph_mutate -> n04_graph_reflect
+    - n04_graph_reflect -> n05_inspector_collaborate
+    - n05_inspector_collaborate -> n06_policy_evaluate
+    - n06_policy_evaluate -> n07_workflow_govern
+    - n07_workflow_govern -> n08_package_export
+
+  failure_handling:
+    transient_retry:
+      max_attempts: 3
+      backoff_ms: [500, 2000, 8000]
+    subscriber_exception: dead_letter_queue
+    policy_veto: terminal_with_audit
+    human_review_pause: workflow_pending_review
+    node_timeout: mark_failed + DLQ + return partial
+
+  logging_audit:
+    event_bus: AsyncEventBus
+    audit_subscriber: AuditLedgerRuntime
+    replay_endpoint: GET /events/replay
+    integrity: HMAC-SHA256 on governance_events
+    per_node_fields: [run_id, correlation_id, source_request_id, node_id, tenant_id]
+
+  deployment:
+    service: noetfield_governance.api:app
+    http_route: POST /factories/copilot_governance_readiness_v1/run
+    legacy_alias: POST /use-cases/copilot-governance/demo
+    min_instances: 0
+    max_instances: 10
+    cpu: 1
+    memory_mb: 512

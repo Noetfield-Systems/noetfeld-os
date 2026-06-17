@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "CopilotGovernanceFactoryOutput",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "factory_id",
+    "run_id",
+    "factory_status",
+    "board_brief",
+    "audit_package",
+    "replay_hint"
+  ],
+  "properties": {
+    "factory_id": { "type": "string" },
+    "run_id": { "type": "string", "format": "uuid" },
+    "factory_status": {
+      "enum": ["completed", "pending_approval", "vetoed"]
+    },
+    "board_brief": {
+      "type": "object",
+      "required": ["title", "governance_state"],
+      "properties": {
+        "title": { "type": "string" },
+        "generated_at": { "type": "string" },
+        "positioning": { "type": "string" },
+        "executive_summary": { "type": "string" },
+        "risk_findings": { "type": "array", "items": { "type": "string" } },
+        "governance_state": { "type": "object" },
+        "graph_state": { "type": "object" },
+        "inspector_state": { "type": "object" }
+      }
+    },
+    "audit_package": {
+      "type": "object",
+      "required": ["tenant_id", "organization_id", "event_count"],
+      "properties": {
+        "tenant_id": { "type": "string" },
+        "organization_id": { "type": "string" },
+        "signal_id": { "type": "string" },
+        "workflow_id": { "type": "string" },
+        "event_count": { "type": "integer" },
+        "audit_record_count": { "type": "integer" },
+        "event_types": { "type": "array", "items": { "type": "string" } },
+        "pending_approval_count": { "type": "integer" },
+        "events": { "type": "array" }
+      }
+    },
+    "replay_hint": { "type": "string" },
+    "runtime_result": { "type": "object" },
+    "policy_decision": { "type": "object" }
+  }
+}

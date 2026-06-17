@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "CopilotGovernanceFactoryInput",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["tenant_id", "organization_id", "submitted_by", "signal_payload"],
+  "properties": {
+    "tenant_id": { "type": "string", "format": "uuid" },
+    "organization_id": { "type": "string", "format": "uuid" },
+    "submitted_by": { "type": "string", "minLength": 1 },
+    "source_request_id": {
+      "type": "string",
+      "description": "RID from X-Request-Id header"
+    },
+    "signal_payload": {
+      "type": "object",
+      "required": ["source", "summary"],
+      "properties": {
+        "source": { "enum": ["m365_copilot", "manual", "webhook"] },
+        "summary": { "type": "string" },
+        "risk_tier": { "enum": ["low", "medium", "high", "critical"] }
+      }
+    },
+    "source_entity_id": { "type": "string", "format": "uuid" },
+    "target_entity_id": { "type": "string", "format": "uuid" }
+  }
+}

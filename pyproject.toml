@@ -21,6 +21,7 @@ dependencies = [
   "supabase",
   "temporalio",
   "uvicorn",
+  "pyyaml",
 ]
 
 [build-system]
@@ -41,6 +42,7 @@ where = [
   "services/inspectors",
   "services/identity",
   "services/copilot-governance",
+  "services/factories",
 ]
 include = ["noetfield_*"]
 
@@ -79,4 +81,5 @@ pythonpath = [
   "services/inspectors",
   "services/identity",
   "services/copilot-governance",
+  "services/factories",
 ]

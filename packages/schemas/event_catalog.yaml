@@ -72,3 +72,9 @@ events:
   DEAD_LETTER_RECORDED:
     layer: operational_runtime
     description: Subscriber failure captured for replay or recovery.
+  FACTORY_RUN_STARTED:
+    layer: operational_runtime
+    description: Governed AI factory pipeline run started.
+  FACTORY_NODE_COMPLETED:
+    layer: operational_runtime
+    description: Governed AI factory pipeline node completed.

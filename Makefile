@@ -1,6 +1,6 @@
-.PHONY: bootstrap validate api api-v3 apply-migrations ingest-sot-dry-run ingest-sot phase32-smoke phase32-postgres-smoke phase33-verify phase33-postgres-verify phase35-demo final-lock-audit final-lock-semantic verify-investor-lane verify-commercial-agentic verify-law-stack sync-derived-docs
+.PHONY: bootstrap validate api api-v3 apply-migrations ingest-sot-dry-run ingest-sot phase32-smoke phase32-postgres-smoke phase33-verify phase33-postgres-verify phase35-demo final-lock-audit final-lock-semantic verify-investor-lane verify-commercial-agentic verify-law-stack sync-derived-docs verify-factory-copilot
 
-PYTHONPATH_VALUE := packages/types:packages/config:services/events:services/ledger:services/graph:services/governance:services/signals:services/workflow:services/ai-runtime:services/inspectors:services/identity:services/copilot-governance
+PYTHONPATH_VALUE := packages/types:packages/config:services/events:services/ledger:services/graph:services/governance:services/signals:services/workflow:services/ai-runtime:services/inspectors:services/identity:services/copilot-governance:services/factories
 
 bootstrap:
 	python3 -m venv .venv
@@ -69,3 +69,8 @@ verify-law-stack:
 	chmod +x ./scripts/verify-law-stack.sh
 	./scripts/verify-law-stack.sh
 	python3 -m pytest tests/unit/test_law_stack.py -q
+
+verify-factory-copilot:
+	chmod +x ./scripts/verify-factory-copilot.sh
+	./scripts/verify-factory-copilot.sh
+	PYTHONPATH=$(PYTHONPATH_VALUE) python3 -m pytest tests/unit/test_factory_copilot.py -q

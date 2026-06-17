@@ -5,6 +5,7 @@ from .demo import (
     CopilotGovernanceDemoResult,
     CopilotGovernanceDemoRuntime,
     CopilotGovernanceRunStore,
+    CopilotPipelineState,
     InMemoryCopilotGovernanceRunStore,
     PostgresCopilotGovernanceRunStore,
 )
@@ -14,6 +15,7 @@ __all__ = [
     "CopilotGovernanceDemoResult",
     "CopilotGovernanceDemoRuntime",
     "CopilotGovernanceRunStore",
+    "CopilotPipelineState",
     "InMemoryCopilotGovernanceRunStore",
     "PostgresCopilotGovernanceRunStore",
 ]

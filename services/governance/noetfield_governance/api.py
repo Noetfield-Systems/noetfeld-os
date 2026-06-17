@@ -1,8 +1,8 @@
 """FastAPI entrypoint for the Noetfield backend runtime core."""
 
-from uuid import UUID
+from uuid import UUID, uuid4
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Header, HTTPException, Request, Response
 from pydantic import BaseModel, ConfigDict
 
 from noetfield_config import get_settings
@@ -18,6 +18,14 @@ from noetfield_events import (
     PostgresDeadLetterStore,
     PostgresEventStore,
     event_catalog,
+)
+from noetfield_events.context import reset_request_context, set_request_context
+from noetfield_factories import (
+    FactoryRunRequest,
+    FactoryStatus,
+    FactoryValidationError,
+    get_factory_runner,
+    list_factory_ids,
 )
 from noetfield_governance.golden_edge_v3 import (
     GoldenEdgeEvaluateRequest,
@@ -112,16 +120,27 @@ inspector_runtime.register(ThreatMonitorInspector())
 inspector_runtime.register(LeadScoutInspector())
 inspector_execution_loop = InspectorExecutionLoop(runtime=inspector_runtime, store=inspector_store)
 
+golden_edge_v3 = GoldenEdgeV3Engine(governance_runtime=governance_runtime)
+
 copilot_demo_runtime = CopilotGovernanceDemoRuntime(
     signal_pipeline=signal_pipeline,
     graph_mutations=graph_mutations,
     graph_reflections=graph_reflections,
     workflow_state_machine=workflow_state_machine,
     governance_runtime=governance_runtime,
+    golden_edge=golden_edge_v3,
+    inspector_execution_loop=inspector_execution_loop,
     run_store=copilot_run_store,
 )
 
-golden_edge_v3 = GoldenEdgeV3Engine(governance_runtime=governance_runtime)
+copilot_factory_runner = get_factory_runner(
+    "copilot_governance_readiness_v1",
+    demo_runtime=copilot_demo_runtime,
+    event_bus=event_bus,
+    audit_store=audit_store,
+    graph_store=graph_store,
+    governance_runtime=governance_runtime,
+)
 
 
 class ApprovalDecisionRequest(BaseModel):
@@ -161,6 +180,29 @@ class ManualIngestionRequest(BaseModel):
 @app.on_event("startup")
 async def subscribe_runtime_audit() -> None:
     await event_bus.subscribe(name="audit-ledger-runtime", event_types={"*"}, handler=audit_runtime.record_event)
+
+
+@app.middleware("http")
+async def request_context_middleware(request: Request, call_next):
+    request_id = request.headers.get("X-Request-Id") or request.headers.get("X-Request-ID")
+    correlation_id = uuid4()
+    correlation_header = request.headers.get("X-Correlation-Id")
+    if correlation_header:
+        try:
+            correlation_id = UUID(correlation_header)
+        except ValueError:
+            pass
+    rid_token, corr_token = set_request_context(
+        source_request_id=request_id,
+        correlation_id=correlation_id,
+    )
+    try:
+        response = await call_next(request)
+        if request_id:
+            response.headers["X-Request-Id"] = request_id
+        return response
+    finally:
+        reset_request_context(rid_token, corr_token)
 
 
 @app.on_event("shutdown")
@@ -318,6 +360,36 @@ async def execute_inspectors(command: InspectorCollaborationCommand) -> dict[str
 async def run_copilot_governance_demo(command: CopilotGovernanceCommand) -> dict[str, object]:
     result = await copilot_demo_runtime.run(command)
     return result.model_dump(mode="json")
+
+
+@app.get("/factories", tags=["factories"])
+async def list_factories() -> dict[str, list[str]]:
+    return {"factories": list_factory_ids()}
+
+
+@app.post("/factories/{factory_id}/run", tags=["factories"])
+async def run_factory(
+    factory_id: str,
+    command: CopilotGovernanceCommand,
+    response: Response,
+    x_request_id: str | None = Header(default=None, alias="X-Request-Id"),
+) -> dict[str, object]:
+    if factory_id != copilot_factory_runner.FACTORY_ID:
+        raise HTTPException(status_code=404, detail=f"Unknown factory: {factory_id}")
+
+    try:
+        result = await copilot_factory_runner.run(
+            FactoryRunRequest(command=command, source_request_id=x_request_id)
+        )
+    except FactoryValidationError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+
+    payload = result.model_dump(mode="json")
+    if result.factory_status == FactoryStatus.VETOED:
+        raise HTTPException(status_code=403, detail=payload)
+    if result.factory_status == FactoryStatus.PENDING_APPROVAL:
+        response.status_code = 202
+    return payload
 
 
 @app.get("/runtime/console", tags=["runtime"])
