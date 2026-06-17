@@ -1,0 +1,25 @@
+apiVersion: noetfield.ai/factory/v1
+kind: Factory
+metadata:
+  id: marketing_artifact_v1
+  version: "0.1.0"
+  factory_type: marketing_artifact
+  target_user: marketing_ops
+  output_format: governed_markdown_artifact
+  supremacy: GCIP_v4
+  sku: null
+  tier: tier_1
+  capability: marketing_factory
+  visibility: internal
+  status: planned
+  priority: P2
+  runtime_binding: null
+
+spec:
+  constraints:
+    stateless_workers: true
+  governance:
+    pre_execution_gate: golden_edge_v3
+  nodes: []
+  deployment:
+    http_route: null

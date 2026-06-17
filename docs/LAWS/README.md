@@ -15,6 +15,7 @@ This folder is the **single human entry point** for “what law applies now.” 
 | **3** | [`../../OFFERINGS.md`](../../OFFERINGS.md) | Three contract SKUs (FINAL LOCK) |
 | **4** | [`../../PLATFORM_BLUEPRINT.md`](../../PLATFORM_BLUEPRINT.md) | Architecture constitution |
 | **5** | [`../../DEPLOYMENT_ARCHITECTURE.md`](../../DEPLOYMENT_ARCHITECTURE.md) | Domain split (www vs platform) |
+| **6** | [`../platform/CATALOG.md`](../platform/CATALOG.md) | Tier + factory dual registry (platform) |
 
 Machine-readable manifest: [`../../governance/LAW_STACK.json`](../../governance/LAW_STACK.json)
 

@@ -24,8 +24,12 @@ from noetfield_factories import (
     FactoryRunRequest,
     FactoryStatus,
     FactoryValidationError,
+    catalog_factory_entries,
     get_factory_runner,
+    is_factory_live,
     list_factory_ids,
+    load_factory_catalog,
+    load_tier_catalog,
 )
 from noetfield_governance.golden_edge_v3 import (
     GoldenEdgeEvaluateRequest,
@@ -363,8 +367,43 @@ async def run_copilot_governance_demo(command: CopilotGovernanceCommand) -> dict
 
 
 @app.get("/factories", tags=["factories"])
-async def list_factories() -> dict[str, list[str]]:
-    return {"factories": list_factory_ids()}
+async def list_factories() -> dict[str, object]:
+    catalog = load_factory_catalog()
+    factories = []
+    for entry in catalog_factory_entries():
+        factories.append(
+            {
+                "id": entry["id"],
+                "name": entry.get("name"),
+                "tier": entry.get("tier"),
+                "capability": entry.get("capability"),
+                "sku": entry.get("sku"),
+                "status": entry.get("status"),
+                "route": entry.get("route"),
+                "visibility": entry.get("visibility"),
+                "callable": entry.get("status") == "live",
+            }
+        )
+    return {
+        "catalog_version": catalog.get("catalog_version"),
+        "platform_layers": catalog.get("platform_layers"),
+        "live_factories": list_factory_ids(),
+        "factories": factories,
+    }
+
+
+@app.get("/catalog/tiers", tags=["catalog"])
+async def catalog_tiers() -> dict[str, object]:
+    tier_catalog = load_tier_catalog()
+    factory_catalog = load_factory_catalog()
+    return {
+        "catalog_version": tier_catalog.get("catalog_version"),
+        "allowed_gtm_skus": tier_catalog.get("allowed_gtm_skus"),
+        "tiers": tier_catalog.get("tiers"),
+        "factory_catalog_entries": tier_catalog.get("factory_catalog_entries"),
+        "platform_layers": factory_catalog.get("platform_layers"),
+        "platform_layer_anchors": factory_catalog.get("platform_layer_anchors"),
+    }
 
 
 @app.post("/factories/{factory_id}/run", tags=["factories"])
@@ -374,8 +413,10 @@ async def run_factory(
     response: Response,
     x_request_id: str | None = Header(default=None, alias="X-Request-Id"),
 ) -> dict[str, object]:
+    if not is_factory_live(factory_id):
+        raise HTTPException(status_code=404, detail=f"Factory not live or unknown: {factory_id}")
     if factory_id != copilot_factory_runner.FACTORY_ID:
-        raise HTTPException(status_code=404, detail=f"Unknown factory: {factory_id}")
+        raise HTTPException(status_code=404, detail=f"Factory runner not wired: {factory_id}")
 
     try:
         result = await copilot_factory_runner.run(

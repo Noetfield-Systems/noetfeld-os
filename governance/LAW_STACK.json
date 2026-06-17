@@ -25,10 +25,16 @@
   "verify_commands": [
     "make verify-law-stack",
     "make sync-derived-docs",
-    "make verify-factory-copilot"
+    "make verify-factory-copilot",
+    "make verify-factory-catalog"
   ],
   "factory_specs": [
     "packages/schemas/factories/copilot_governance_readiness_v1.yaml"
+  ],
+  "catalog_manifests": [
+    "governance/FACTORY_CATALOG.json",
+    "governance/CAPABILITY_TIER_CATALOG.json",
+    "docs/platform/CATALOG.md"
   ],
   "layers": {
     "L0": {

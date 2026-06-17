@@ -1,0 +1,26 @@
+apiVersion: noetfield.ai/factory/v1
+kind: Factory
+metadata:
+  id: trust_brief_diligence_v1
+  version: "0.1.0"
+  factory_type: trust_brief_diligence
+  target_user: investor_diligence_lead
+  output_format: ic_appendix_and_checklist_map
+  supremacy: GCIP_v4
+  sku: Trust_Brief
+  tier: tier_3
+  capability: due_diligence
+  visibility: platform
+  status: planned
+  priority: P0
+  runtime_binding: null
+
+spec:
+  constraints:
+    stateless_workers: true
+    durable_state_store: postgres
+  governance:
+    pre_execution_gate: golden_edge_v3
+  nodes: []
+  deployment:
+    http_route: null

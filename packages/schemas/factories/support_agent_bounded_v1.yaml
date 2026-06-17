@@ -1,0 +1,27 @@
+apiVersion: noetfield.ai/factory/v1
+kind: Factory
+metadata:
+  id: support_agent_bounded_v1
+  version: "0.1.0"
+  factory_type: support_agent_bounded
+  target_user: platform_operator
+  output_format: inspector_findings_package
+  supremacy: GCIP_v4
+  sku: null
+  tier: tier_1
+  capability: support_agent
+  visibility: platform
+  status: planned
+  priority: P2
+  runtime_binding: null
+  note: Bounded inspector pattern — not autonomous support product
+
+spec:
+  constraints:
+    stateless_workers: true
+    max_concurrent_inspectors: 3
+  governance:
+    pre_execution_gate: golden_edge_v3
+  nodes: []
+  deployment:
+    http_route: null

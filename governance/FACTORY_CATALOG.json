@@ -1,0 +1,127 @@
+{
+  "catalog_version": "2026.06.03",
+  "platform_layers": [
+    "governance",
+    "runtime",
+    "control_plane",
+    "policy_engine",
+    "factory_catalog"
+  ],
+  "platform_layer_anchors": {
+    "governance": "services/governance/noetfield_governance/golden_edge_v3.py",
+    "runtime": "services/governance/noetfield_governance/api.py",
+    "control_plane": "services/workflow/noetfield_workflow/state_machine.py",
+    "policy_engine": "services/governance/noetfield_governance/policy_pack.py",
+    "factory_catalog": "services/factories/noetfield_factories/"
+  },
+  "allowed_gtm_skus": [
+    "Trust_Brief",
+    "Copilot_Readiness_Pack",
+    "Bank_Pilot_v6.1"
+  ],
+  "blocked_capabilities": [
+    "rwa_settlement",
+    "payment_execution",
+    "ecommerce_checkout"
+  ],
+  "factories": [
+    {
+      "id": "copilot_governance_readiness_v1",
+      "name": "Copilot Governance Readiness",
+      "tier": "tier_3",
+      "capability": "compliance",
+      "sku": "Copilot_Readiness_Pack",
+      "status": "live",
+      "priority": null,
+      "spec_path": "packages/schemas/factories/copilot_governance_readiness_v1.yaml",
+      "route": "POST /factories/copilot_governance_readiness_v1/run",
+      "visibility": "platform"
+    },
+    {
+      "id": "trust_brief_diligence_v1",
+      "name": "Trust Brief Due Diligence",
+      "tier": "tier_3",
+      "capability": "due_diligence",
+      "sku": "Trust_Brief",
+      "status": "planned",
+      "priority": "P0",
+      "spec_path": "packages/schemas/factories/trust_brief_diligence_v1.yaml",
+      "route": null,
+      "visibility": "platform"
+    },
+    {
+      "id": "legal_review_v1",
+      "name": "Legal Review",
+      "tier": "tier_2",
+      "capability": "legal",
+      "sku": null,
+      "status": "planned",
+      "priority": "P1",
+      "spec_path": "packages/schemas/factories/legal_review_v1.yaml",
+      "route": null,
+      "visibility": "platform"
+    },
+    {
+      "id": "aml_governance_trace_v1",
+      "name": "AML Governance Trace",
+      "tier": "tier_3",
+      "capability": "compliance",
+      "sku": null,
+      "status": "planned",
+      "priority": "P1",
+      "spec_path": "packages/schemas/factories/aml_governance_trace_v1.yaml",
+      "route": null,
+      "visibility": "platform"
+    },
+    {
+      "id": "marketing_artifact_v1",
+      "name": "Marketing Artifact",
+      "tier": "tier_1",
+      "capability": "marketing_factory",
+      "sku": null,
+      "status": "planned",
+      "priority": "P2",
+      "spec_path": "packages/schemas/factories/marketing_artifact_v1.yaml",
+      "route": null,
+      "visibility": "internal"
+    },
+    {
+      "id": "support_agent_bounded_v1",
+      "name": "Support Agent Bounded",
+      "tier": "tier_1",
+      "capability": "support_agent",
+      "sku": null,
+      "status": "planned",
+      "priority": "P2",
+      "spec_path": "packages/schemas/factories/support_agent_bounded_v1.yaml",
+      "route": null,
+      "visibility": "platform"
+    },
+    {
+      "id": "rwa_governance_overlay_v1",
+      "name": "RWA Governance Overlay",
+      "tier": null,
+      "capability": "rwa_governance_overlay",
+      "sku": null,
+      "status": "deferred",
+      "priority": null,
+      "spec_path": null,
+      "route": null,
+      "visibility": "internal",
+      "note": "Governance trace overlay only — not RWA settlement OS"
+    },
+    {
+      "id": "ecommerce_engine_v1",
+      "name": "E-commerce Engine",
+      "tier": "tier_3",
+      "capability": "ecommerce_engine",
+      "sku": null,
+      "status": "blocked",
+      "priority": null,
+      "spec_path": null,
+      "route": null,
+      "visibility": "internal",
+      "note": "Blocked — conflicts with NORTH_STAR non-custodial positioning"
+    }
+  ]
+}

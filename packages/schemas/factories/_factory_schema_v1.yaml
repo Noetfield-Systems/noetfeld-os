@@ -1,0 +1,38 @@
+# Factory YAML template — noetfield.ai/factory/v1
+# Copy this file when adding a new factory spec.
+
+apiVersion: noetfield.ai/factory/v1
+kind: Factory
+metadata:
+  id: example_factory_v1
+  version: "0.0.0"
+  factory_type: example
+  target_user: platform_operator
+  output_format: json_artifact
+  supremacy: GCIP_v4
+  sku: null
+  tier: tier_1
+  capability: example_capability
+  visibility: platform
+  status: planned
+  runtime_binding: null
+
+spec:
+  constraints:
+    cost_tier: low
+    max_nodes: 12
+    stateless_workers: true
+    durable_state_store: postgres
+
+  governance:
+    pre_execution_gate: golden_edge_v3
+    agent_loop_endpoint: /v3/agent-loop
+
+  input_schema: packages/schemas/factory_io/example_input.schema.json
+  output_schema: packages/schemas/factory_io/example_output.schema.json
+
+  nodes: []
+
+  deployment:
+    service: noetfield_governance.api:app
+    http_route: null

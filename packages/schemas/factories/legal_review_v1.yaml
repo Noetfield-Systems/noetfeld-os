@@ -1,0 +1,25 @@
+apiVersion: noetfield.ai/factory/v1
+kind: Factory
+metadata:
+  id: legal_review_v1
+  version: "0.1.0"
+  factory_type: legal_review
+  target_user: legal_ops_lead
+  output_format: policy_review_package
+  supremacy: GCIP_v4
+  sku: null
+  tier: tier_2
+  capability: legal
+  visibility: platform
+  status: planned
+  priority: P1
+  runtime_binding: null
+
+spec:
+  constraints:
+    stateless_workers: true
+  governance:
+    pre_execution_gate: golden_edge_v3
+  nodes: []
+  deployment:
+    http_route: null

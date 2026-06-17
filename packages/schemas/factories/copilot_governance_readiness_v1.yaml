@@ -8,6 +8,10 @@ metadata:
   output_format: board_brief_and_audit_package
   supremacy: GCIP_v4
   sku: Copilot_Readiness_Pack
+  tier: tier_3
+  capability: compliance
+  visibility: platform
+  status: live
   runtime_binding: services/copilot-governance/noetfield_copilot_governance/demo.py
 
 spec:

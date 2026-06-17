@@ -27,6 +27,9 @@
 | Route | Purpose |
 |-------|---------|
 | `platform.noetfield.com` | Runtime API + workspace |
+| `GET /catalog/tiers` | Capability tier tree (not on www) |
+| `GET /factories` | Factory registry with tier, status, SKU |
+| `POST /factories/{id}/run` | Execute live factories only |
 | `/platform/` | Static pilot hub (repo) |
 | `/platform/dashboard/` | Governance console pilot |
 | `/portal/login/` | Auth / sandbox entry |
@@ -42,6 +45,9 @@
 | `docs/SOURCE_OF_TRUTH/registry/` | Machine SSOT decisions |
 | `docs/SOURCE_OF_TRUTH/archive/` | Supersession index (old versions) |
 | `docs/strategy/` | Operational locks (verified) |
+| `docs/platform/CATALOG.md` | Tier + factory catalog hub |
+| `governance/FACTORY_CATALOG.json` | Machine factory registry |
+| `governance/CAPABILITY_TIER_CATALOG.json` | Machine tier capability tree |
 | `L2-knowledge/strategy/noetfield/` | Derived — regenerate only |
 | `Noetfield-All-Documents/` | Desktop mirror — regenerate only |
 | `_archive/` | Cold storage / prohibited artifacts |

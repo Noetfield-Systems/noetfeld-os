@@ -1,0 +1,27 @@
+apiVersion: noetfield.ai/factory/v1
+kind: Factory
+metadata:
+  id: aml_governance_trace_v1
+  version: "0.1.0"
+  factory_type: aml_governance_trace
+  target_user: bank_compliance_lead
+  output_format: aml_trace_audit_package
+  supremacy: GCIP_v4
+  sku: null
+  tier: tier_3
+  capability: compliance
+  visibility: platform
+  status: planned
+  priority: P1
+  runtime_binding: null
+  note: AML screening governance trace — not MSB or payment execution
+
+spec:
+  constraints:
+    stateless_workers: true
+  governance:
+    pre_execution_gate: golden_edge_v3
+    forbidden_financial_actions: policy_pack.forbidden_financial_actions
+  nodes: []
+  deployment:
+    http_route: null

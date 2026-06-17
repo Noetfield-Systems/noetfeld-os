@@ -22,6 +22,7 @@ make verify-law-stack   # anti-drift law + registry
 | `make verify-investor-lane` | `verify-investor-diligence-lane.sh` | Investor diligence docs + www |
 | `make verify-commercial-agentic` | `verify-commercial-agentic.sh` | Demo/trial + commercial reference |
 | `make verify-factory-copilot` | `verify-factory-copilot.sh` + pytest | AI factory YAML spec + 8-node pipeline |
+| `make verify-factory-catalog` | `verify-factory-catalog.sh` + pytest | Dual registry JSON + tier/factory anti-drift |
 | `make verify-final-lock` | audit + GTM pytest | Payment language prohibition |
 
 ---

@@ -1,0 +1,172 @@
+{
+  "catalog_version": "2026.06.03",
+  "supremacy": "Three public SKUs in OFFERINGS.md — tier items are capabilities not retail product lines",
+  "allowed_gtm_skus": [
+    "Trust_Brief",
+    "Copilot_Readiness_Pack",
+    "Bank_Pilot_v6.1"
+  ],
+  "tiers": [
+    {
+      "id": "tier_1",
+      "name": "Revenue Now",
+      "description": "Near-term operational factories and bounded agents",
+      "capabilities": [
+        {
+          "id": "social_content",
+          "name": "Social Content",
+          "status": "planned",
+          "factory_id": null,
+          "gtm_sku": null,
+          "visibility": "internal_only",
+          "public_sku": false
+        },
+        {
+          "id": "support_agent",
+          "name": "Support Agent",
+          "status": "planned",
+          "factory_id": "support_agent_bounded_v1",
+          "gtm_sku": null,
+          "visibility": "platform",
+          "public_sku": false
+        },
+        {
+          "id": "marketing_factory",
+          "name": "Marketing Factory",
+          "status": "planned",
+          "factory_id": "marketing_artifact_v1",
+          "gtm_sku": null,
+          "visibility": "internal_only",
+          "public_sku": false
+        },
+        {
+          "id": "admin_automation",
+          "name": "Admin Automation",
+          "status": "planned",
+          "factory_id": null,
+          "gtm_sku": null,
+          "visibility": "platform",
+          "public_sku": false
+        }
+      ]
+    },
+    {
+      "id": "tier_2",
+      "name": "Scaling Business",
+      "description": "Department-scale governance factories",
+      "capabilities": [
+        {
+          "id": "research",
+          "name": "Research",
+          "status": "planned",
+          "factory_id": null,
+          "gtm_sku": null,
+          "visibility": "platform",
+          "public_sku": false
+        },
+        {
+          "id": "legal",
+          "name": "Legal",
+          "status": "planned",
+          "factory_id": "legal_review_v1",
+          "gtm_sku": null,
+          "visibility": "platform",
+          "public_sku": false
+        },
+        {
+          "id": "finance",
+          "name": "Finance",
+          "status": "restricted",
+          "factory_id": null,
+          "gtm_sku": null,
+          "visibility": "platform",
+          "public_sku": false,
+          "note": "Governance overlay only — no payment or settlement language"
+        },
+        {
+          "id": "hr",
+          "name": "HR",
+          "status": "planned",
+          "factory_id": null,
+          "gtm_sku": null,
+          "visibility": "platform",
+          "public_sku": false
+        }
+      ]
+    },
+    {
+      "id": "tier_3",
+      "name": "Enterprise Moat",
+      "description": "Institutional compliance and diligence factories",
+      "capabilities": [
+        {
+          "id": "compliance",
+          "name": "Compliance",
+          "status": "live",
+          "factory_id": "copilot_governance_readiness_v1",
+          "gtm_sku": "Copilot_Readiness_Pack",
+          "visibility": "platform",
+          "public_sku": true
+        },
+        {
+          "id": "due_diligence",
+          "name": "Due Diligence",
+          "status": "partial",
+          "factory_id": "trust_brief_diligence_v1",
+          "gtm_sku": "Trust_Brief",
+          "visibility": "platform",
+          "public_sku": true
+        },
+        {
+          "id": "rag_systems",
+          "name": "RAG Systems",
+          "status": "planned",
+          "factory_id": null,
+          "gtm_sku": null,
+          "visibility": "platform",
+          "public_sku": false,
+          "note": "Governance trace on retrieval — not a RAG product SKU"
+        },
+        {
+          "id": "ecommerce_engine",
+          "name": "E-commerce Engine",
+          "status": "blocked",
+          "factory_id": "ecommerce_engine_v1",
+          "gtm_sku": null,
+          "visibility": "internal_only",
+          "public_sku": false,
+          "note": "Blocked on www — conflicts with non-custodial positioning"
+        }
+      ]
+    }
+  ],
+  "factory_catalog_entries": [
+    {
+      "id": "ma_diligence",
+      "name": "M&A Factory",
+      "maps_to_factory_id": "trust_brief_diligence_v1",
+      "status": "planned",
+      "note": "Diligence artifact factory — not deal execution"
+    },
+    {
+      "id": "rwa_factory",
+      "name": "RWA Factory",
+      "maps_to_factory_id": "rwa_governance_overlay_v1",
+      "status": "deferred",
+      "note": "Governance trace overlay only — blocked as settlement OS identity"
+    },
+    {
+      "id": "legal_factory",
+      "name": "Legal Factory",
+      "maps_to_factory_id": "legal_review_v1",
+      "status": "planned"
+    },
+    {
+      "id": "aml_factory",
+      "name": "AML Factory",
+      "maps_to_factory_id": "aml_governance_trace_v1",
+      "status": "planned",
+      "note": "AML screening governance — not MSB"
+    }
+  ]
+}
