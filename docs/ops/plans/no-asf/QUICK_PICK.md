@@ -12,8 +12,7 @@ _Registry backlog empty (1000-pack synced). Pick from [GTM_NEXT.md](./GTM_NEXT.m
 
 ### GTM_NEXT (top picks)
 
-1. **ship-sandbox-server-side-057** · Persist sandbox sessions server-side (optional) — today localStorage only
-1. **ship-agentic-workflow-manifest-058** · Wire `packages/schemas/agent-manifest.schema.json` to public agentic copy on `/start/`
+1. **ship-sandbox-server-side-057** · Persist sandbox sessions server-side (optional) — spec: `docs/start/SANDBOX_SERVER_SIDE_SESSION_SPEC_v1.md`
 1. **ship-pricing-verify-doc-ssot-059** · Add v16 packaging docs to `verify-doc-ssot.sh` locked refs
 1. **ship-procurement-openapi-verify-060** · Verify `/openapi.json` returns 200 in gtm-ops bundle
 1. **ship-services-governance-readme-openapi-061** · services/governance README cites `/openapi.json` path

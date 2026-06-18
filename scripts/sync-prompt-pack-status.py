@@ -98,6 +98,7 @@ SHIP_DONE_MAP: dict[str, list[int]] = {
     "ship-portfolio-np7-sandbox-nurture-077": [8, 28, 48, 68, 88],
     "ship-portfolio-np8-sticky-cta-078": [8, 28, 48, 68, 88],
     "ship-portfolio-np8-regression-079": [8, 28, 48, 68, 88],
+    "ship-agentic-workflow-manifest-058": [8, 28, 48, 68, 88],
 }
 
 # NF-PLAN patterns that are agentic-only (R-011) — never pick for NF-CLOUD implement

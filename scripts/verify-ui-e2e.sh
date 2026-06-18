@@ -61,7 +61,7 @@ check_html "${BASE}/" "homepage pilot-first" "audit trail your Copilot deploymen
 check_html "${BASE}/" "homepage packaging" "Published tiers" "Developer access · free" "What regulated buyers receive"
 check_html "${BASE}/" "homepage commercial path" "Commercial path" "Learn in sandbox" "Copilot Governance Pack"
 check_html "${BASE}/copilot/pilot/" "pilot lane depth" "Digital trust lane" "Governance gaps" "Buyer voices" "Policy-bound workflows"
-check_html "${BASE}/start/" "start sandbox" "Trial OS" "50 evaluate calls" "Apply for Governance Pack"
+check_html "${BASE}/start/" "start sandbox" "Trial OS" "50 evaluate calls" "Apply for Governance Pack" "agent-manifest.schema.json"
 check_html "${BASE}/pricing/" "pricing tiers" "Sandbox + production" "14-day sandbox" "Apply for pilot"
 check_html "${BASE}/docs/api/" "api sandbox CTA" "Start free sandbox" "Sandbox + production"
 check_html "${BASE}/" "homepage v15 procurement rail" "Procurement" "Trust center" "Verify export" "Procurement pack"

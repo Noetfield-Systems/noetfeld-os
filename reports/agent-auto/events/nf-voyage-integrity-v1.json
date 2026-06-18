@@ -1,11 +1,11 @@
 {
   "schema_version": "nf-voyage-integrity-v1",
-  "generated_at": "2026-06-18T00:17:43Z",
+  "generated_at": "2026-06-18T00:23:05Z",
   "ok": true,
   "pending_task": {
     "id": "ship-sandbox-server-side-057",
     "title": "Optional server-side sandbox session persistence",
-    "plan": "governance-console/backend/",
+    "plan": "docs/start/SANDBOX_SERVER_SIDE_SESSION_SPEC_v1.md",
     "status": "pending"
   },
   "gates": [
@@ -25,7 +25,7 @@
     },
     {
       "gate": "cursor_reply_sha_present",
-      "ok": true,
+      "ok": false,
       "optional": true
     }
   ]

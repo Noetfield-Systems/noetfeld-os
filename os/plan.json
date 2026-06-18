@@ -268,14 +268,14 @@
     {
       "id": "ship-sandbox-server-side-057",
       "title": "Optional server-side sandbox session persistence",
-      "plan": "governance-console/backend/",
+      "plan": "docs/start/SANDBOX_SERVER_SIDE_SESSION_SPEC_v1.md",
       "status": "pending"
     },
     {
       "id": "ship-agentic-workflow-manifest-058",
       "title": "Wire agent manifest schema to public agentic workflow copy",
-      "plan": "packages/schemas/agent-manifest.schema.json",
-      "status": "pending"
+      "plan": "docs/schemas/agent-manifest.schema.json · /start/",
+      "status": "done"
     },
     {
       "id": "ship-pricing-verify-doc-ssot-059",

@@ -1,6 +1,6 @@
 {
   "schema_version": "nf-truth-bundle-v1",
-  "generated_at": "2026-06-18T00:17:43Z",
+  "generated_at": "2026-06-18T00:23:05Z",
   "agent_id": "noetfield_cloud",
   "plane": "noetfield_cloud",
   "session_gate": {
@@ -8,7 +8,7 @@
     "ok": true,
     "agent_id": "noetfield_cloud",
     "role": "cloud",
-    "generated_at": "2026-06-18T00:17:43Z",
+    "generated_at": "2026-06-18T00:23:05Z",
     "repo_root": "/Users/sinakazemnezhad/Desktop/Noetfield/Noetfield-All-Documents/Noetfield",
     "gates": [
       {
@@ -108,12 +108,12 @@
   },
   "stale_guard": {
     "schema_version": "nf-stale-guard-v1",
-    "generated_at": "2026-06-18T00:17:43Z",
+    "generated_at": "2026-06-18T00:23:05Z",
     "context_stale": false,
     "pending_task": {
       "id": "ship-sandbox-server-side-057",
       "title": "Optional server-side sandbox session persistence",
-      "plan": "governance-console/backend/",
+      "plan": "docs/start/SANDBOX_SERVER_SIDE_SESSION_SPEC_v1.md",
       "status": "pending"
     },
     "issues": [],
@@ -121,12 +121,12 @@
   },
   "voyage_integrity": {
     "schema_version": "nf-voyage-integrity-v1",
-    "generated_at": "2026-06-18T00:17:43Z",
+    "generated_at": "2026-06-18T00:23:05Z",
     "ok": true,
     "pending_task": {
       "id": "ship-sandbox-server-side-057",
       "title": "Optional server-side sandbox session persistence",
-      "plan": "governance-console/backend/",
+      "plan": "docs/start/SANDBOX_SERVER_SIDE_SESSION_SPEC_v1.md",
       "status": "pending"
     },
     "gates": [
@@ -146,21 +146,21 @@
       },
       {
         "gate": "cursor_reply_sha_present",
-        "ok": true,
+        "ok": false,
         "optional": true
       }
     ]
   },
   "live_routing": {
     "schema_version": "nf-live-routing-v1",
-    "generated_at": "2026-06-18T00:17:43Z",
+    "generated_at": "2026-06-18T00:23:05Z",
     "agent_id": "noetfield_cloud",
     "pending_task": {
       "id": "ship-sandbox-server-side-057",
       "title": "Optional server-side sandbox session persistence"
     },
     "git": {
-      "sha": "1ada511",
+      "sha": "c59cac0",
       "branch": "ship/nf-gaos-w2-production"
     },
     "sourcea_mirror": true,
@@ -176,7 +176,7 @@
   },
   "live_surfaces": {
     "schema_version": "nf-live-surfaces-v1",
-    "generated_at": "2026-06-18T00:17:42Z",
+    "generated_at": "2026-06-18T00:23:04Z",
     "agent_id": "noetfield_cloud",
     "plane": "noetfield_cloud",
     "product_now_line": "ship-sandbox-server-side-057 \u2014 Optional server-side sandbox session persistence",
@@ -187,10 +187,10 @@
     "pending_task": {
       "id": "ship-sandbox-server-side-057",
       "title": "Optional server-side sandbox session persistence",
-      "plan": "governance-console/backend/",
+      "plan": "docs/start/SANDBOX_SERVER_SIDE_SESSION_SPEC_v1.md",
       "status": "pending"
     },
-    "git_sha": "1ada511",
+    "git_sha": "c59cac0",
     "routing_pending": {
       "id": "ship-sandbox-server-side-057",
       "title": "Optional server-side sandbox session persistence"
@@ -200,7 +200,7 @@
   },
   "receipt_cascade": {
     "schema_version": "nf-receipt-cascade-v1",
-    "generated_at": "2026-06-18T00:17:42Z",
+    "generated_at": "2026-06-18T00:23:04Z",
     "ok": true,
     "failures": [],
     "nodes": [],
@@ -217,7 +217,7 @@
   },
   "gatekeeper": {
     "schema_version": "nf-gatekeeper-v1",
-    "generated_at": "2026-06-18T00:17:42Z",
+    "generated_at": "2026-06-18T00:23:04Z",
     "status": "PASS",
     "ok": true,
     "safe_to_implement": true,

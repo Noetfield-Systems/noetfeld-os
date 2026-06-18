@@ -1,6 +1,6 @@
 {
   "schema_version": "nf-live-surfaces-v1",
-  "generated_at": "2026-06-18T00:17:43Z",
+  "generated_at": "2026-06-18T00:23:05Z",
   "agent_id": "noetfield_cloud",
   "plane": "noetfield_cloud",
   "product_now_line": "ship-sandbox-server-side-057 \u2014 Optional server-side sandbox session persistence",
@@ -11,10 +11,10 @@
   "pending_task": {
     "id": "ship-sandbox-server-side-057",
     "title": "Optional server-side sandbox session persistence",
-    "plan": "governance-console/backend/",
+    "plan": "docs/start/SANDBOX_SERVER_SIDE_SESSION_SPEC_v1.md",
     "status": "pending"
   },
-  "git_sha": "1ada511",
+  "git_sha": "c59cac0",
   "routing_pending": {
     "id": "ship-sandbox-server-side-057",
     "title": "Optional server-side sandbox session persistence"

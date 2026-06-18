@@ -6,6 +6,7 @@
     {"id": "nf-routing-card", "path": "ROUTING_CARD.md", "role": "daily_pin"},
     {"id": "nf-gaos-w0", "path": "docs/ops/NF_GAOS_W0_LOCKED_v1.md", "role": "spine_law"},
     {"id": "nf-gaos-w1", "path": "docs/ops/NF_GAOS_W1_LOCKED_v1.md", "role": "spine_law_w1"},
+    {"id": "nf-gaos-w2", "path": "docs/ops/NF_GAOS_W2_LOCKED_v1.md", "role": "spine_law_w2"},
     {"id": "nf-gaos-w3", "path": "docs/ops/NF_GAOS_W3_FACTORY_SPINE_LOCKED_v1.md", "role": "spine_law_w3"},
     {"id": "nf-orient-routing", "path": "data/nf_orient_routing_v1.json", "role": "orient_ssot"},
     {"id": "nf-routing-graph", "path": "os/NF_UNIFIED_ROUTING_GRAPH.json", "role": "machine_graph"},

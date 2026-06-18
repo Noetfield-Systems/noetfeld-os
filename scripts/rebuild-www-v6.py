@@ -2425,6 +2425,10 @@ def start_page_body() -> str:
  </section>
  {fit_qualification_section()}
  {agentic_autonomous_section()}
+ <section class="nf-section nf-section--lift" aria-labelledby="agent-manifest-title">
+ <h2 id="agent-manifest-title">Agent manifest schema</h2>
+ <p class="nf-section-lead">Policy-bound workflow orientation — investigate · triage · draft · approve maps to the public JSON schema at <a href="/docs/schemas/agent-manifest.schema.json">agent-manifest.schema.json</a> (sandbox simulation today; production workflow per SOW).</p>
+ </section>
 """ + packaging_tiers_grid(compact=True) + revenue_path_strip() + mega_cta("Upgrade to Copilot Governance Pack", "Production keys · real M365 metadata · board PDF in governance meeting", (PILOT_INTAKE, "Apply for pilot ($2k–10k)"), ("/pricing/", "Published tiers"))
 
 

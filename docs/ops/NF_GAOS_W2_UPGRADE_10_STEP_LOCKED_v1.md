@@ -23,19 +23,19 @@ source_a_refs:
 
 > **Green T0→T3 · merge ship PR · live platform.noetfield.com · Wave 0 RID proof · W2 machines locked — then revenue motion on Hub, not chat.**
 
-## Current baseline (2026-06-17)
+## Current baseline (2026-06-18)
 
 | Signal | State |
 |--------|--------|
-| NF-GAOS W0/W1 | On disk · `make verify-nf-gaos-w1` |
-| Verify tiers | `docs/ops/NF_VERIFY_TIERS_LOCKED_v1.md` · Makefile targets |
+| NF-GAOS W0/W1/W2 lock | On disk · `make verify-nf-gaos-w2` (light) |
+| Verify tiers | **Step 1 DONE** · `make verify-all-tiers` green on ship branch |
 | Governance Runtime 10-step | LOCKED + implemented · `make verify-final-lock` |
 | Portfolio N-P1…N-P8 | Done on disk |
-| Git ship lane | Branch `ship/nf-gaos-w2-production` · 2 commits pushed |
-| www production | Vercel `noetfield-systems/www` · intake healthy |
+| Git ship lane | Branch `ship/nf-gaos-w2-production` · **4 commits unpushed** |
+| www production | Canonical deploy intake OK · **live domain mis-aliased** |
 | platform production | **Not live** — bridge DNS only until API host |
-| Queue head | `ship-sandbox-server-side-057` → `ship-agentic-workflow-manifest-058` |
-| Routing Panel Noetfield tab | Mono repo · local `:8780` · uncommitted |
+| Queue head | `ship-sandbox-server-side-057` (spec) · **058 done** |
+| Routing Panel Noetfield tab | Mono repo · code on disk · **mono PR pending** |
 
 ## Anti-goals (SourceA factory law)
 

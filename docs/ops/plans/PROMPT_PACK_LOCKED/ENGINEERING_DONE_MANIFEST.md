@@ -209,6 +209,7 @@ Shipped capabilities mapped to registry indices. Run `python3 scripts/sync-promp
 | ship-portfolio-np7-sandbox-nurture-077 | Sandbox nurture on /start/ | `/start/` |
 | ship-portfolio-np8-sticky-cta-078 | Pilot apply sticky CTA | gate + trust-brief intake |
 | ship-portfolio-np8-regression-079 | Governance Runtime regression SSOT | `tests/`, verify bundle |
+| ship-agentic-workflow-manifest-058 | Agent manifest on /start/ | `docs/schemas/agent-manifest.schema.json`, `rebuild-www-v6.py` |
 
 ## Fifth audit fix (post–PR #42 truth + iter 13)
 

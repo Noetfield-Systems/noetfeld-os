@@ -1,6 +1,6 @@
 ---
 agent_tag: nf-local-repo-agent
-generated_at: 2026-06-18T00:17:43Z
+generated_at: 2026-06-18T00:23:05Z
 author: nf-live-orient-v1.sh
 type: live-snapshot
 do_not_edit_by_hand: refresh via make nf-live-orient
@@ -8,7 +8,7 @@ do_not_edit_by_hand: refresh via make nf-live-orient
 
 # LIVE STATUS — Noetfield (machine snapshot)
 
-**Generated:** 2026-06-18T00:17:43Z UTC · **Law:** `docs/ops/NF_GAOS_W0_LOCKED_v1.md`
+**Generated:** 2026-06-18T00:23:05Z UTC · **Law:** `docs/ops/NF_GAOS_W0_LOCKED_v1.md`
 
 > Static prose in SHIP_NOW is hints only. Re-run `make nf-live-orient` when orientation matters.
 
@@ -18,7 +18,7 @@ do_not_edit_by_hand: refresh via make nf-live-orient
 |-------|-------|
 | Pending id | `ship-sandbox-server-side-057` |
 | Title | Optional server-side sandbox session persistence |
-| Git | `ship/nf-gaos-w2-production` @ `1ada511` |
+| Git | `ship/nf-gaos-w2-production` @ `c59cac0` |
 
 ## Gates
 

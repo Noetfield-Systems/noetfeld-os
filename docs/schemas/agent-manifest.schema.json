@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.noetfield.com/agent-manifest.schema.json",
+  "title": "Noetfield Agent Manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "agent_id",
+    "version",
+    "display_name",
+    "allowed_actions",
+    "data_scopes",
+    "approval_threshold",
+    "deny_tools_default"
+  ],
+  "properties": {
+    "agent_id": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+    "version": { "type": "string" },
+    "display_name": { "type": "string" },
+    "role": {
+      "type": "string",
+      "enum": ["board", "risk", "policy", "copilot_assessment"]
+    },
+    "allowed_actions": {
+      "type": "array",
+      "items": { "type": "string" },
+      "minItems": 1
+    },
+    "denied_actions": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "data_scopes": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "e.g. tenant_audit_read, policy_pack_read"
+    },
+    "approval_threshold": {
+      "type": "string",
+      "enum": ["none", "single_human", "dual_human"]
+    },
+    "deny_tools_default": { "type": "boolean", "default": true },
+    "prompt_template_ref": { "type": "string" },
+    "max_tool_calls_per_run": { "type": "integer", "minimum": 1, "maximum": 50 },
+    "metadata": { "type": "object" }
+  }
+}

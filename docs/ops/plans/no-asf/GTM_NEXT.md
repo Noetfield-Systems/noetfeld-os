@@ -31,11 +31,10 @@ Founder bounded `implement` — disk queue head from `os/plan.json`:
 
 Founder pick or bounded `implement`:
 
-1. **ship-sandbox-server-side-057** · Persist sandbox sessions server-side (optional) — today localStorage only  
+1. **ship-sandbox-server-side-057** · Persist sandbox sessions server-side (optional) — spec: `docs/start/SANDBOX_SERVER_SIDE_SESSION_SPEC_v1.md`  
    Outcome: Production-grade trial without inventing fourth SKU.
 
-1. **ship-agentic-workflow-manifest-058** · Wire `packages/schemas/agent-manifest.schema.json` to public agentic copy on `/start/`  
-   Outcome: Investigate/triage/draft paths documented in product, not marketing-only.
+~~1. **ship-agentic-workflow-manifest-058**~~ · **DONE** — `/start/` links `docs/schemas/agent-manifest.schema.json`
 
 1. **ship-pricing-verify-doc-ssot-059** · Add v16 packaging docs to `verify-doc-ssot.sh` locked refs  
    Outcome: Agents cannot drift from packaging SSOT.

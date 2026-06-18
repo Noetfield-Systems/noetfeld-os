@@ -1,4 +1,4 @@
-.PHONY: bootstrap validate api api-v3 apply-migrations ingest-sot-dry-run ingest-sot phase32-smoke phase32-postgres-smoke phase33-verify phase33-postgres-verify phase35-demo final-lock-audit final-lock-semantic governance-console-up governance-console-e2e governance-console-down plan-with-no-asf-verify sync-prompt-pack generate-prompt-pack verify-gtm verify-no-vendor-names verify-static-www verify-www verify-tier0 verify-tier1 verify-tier2 verify-tier3 verify-all-tiers
+.PHONY: bootstrap validate api api-v3 apply-migrations ingest-sot-dry-run ingest-sot phase32-smoke phase32-postgres-smoke phase33-verify phase33-postgres-verify phase35-demo final-lock-audit final-lock-semantic governance-console-up governance-console-e2e governance-console-down plan-with-no-asf-verify sync-prompt-pack generate-prompt-pack verify-gtm verify-no-vendor-names verify-static-www verify-www verify-tier0 verify-tier1 verify-tier2 verify-tier3 verify-all-tiers verify-nf-gaos-w2
 
 PYTHONPATH_VALUE := packages/types:packages/config:packages/sdk:services/events:services/ledger:services/graph:services/governance:services/signals:services/workflow:services/ai-runtime:services/inspectors:services/identity:services/copilot-governance
 
@@ -188,6 +188,10 @@ nf-gatekeeper:
 verify-nf-gaos-w3:
 	@chmod +x scripts/verify-nf-gaos-w3.sh scripts/nf-repo-find.sh scripts/prove-nf-factory-spine.sh
 	./scripts/verify-nf-gaos-w3.sh
+
+verify-nf-gaos-w2:
+	@chmod +x scripts/verify-nf-gaos-w2.sh
+	./scripts/verify-nf-gaos-w2.sh
 
 nf-prove-factory-spine:
 	@chmod +x scripts/prove-nf-factory-spine.sh
