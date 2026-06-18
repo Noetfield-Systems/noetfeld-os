@@ -30,7 +30,7 @@ make verify-nf-gaos-w3 — PASS
 - `www.noetfield.com` not under `noetfield-systems` Vercel scope — alias blocked
 - Fix: set Resend key + attach domain to `noetfield-systems/www`, then `bash scripts/auto-heal-www.sh`
 
-head: 1ada511
+head: 416cc89
 main: 6d241ab
 
 ---
@@ -51,6 +51,6 @@ evidence_paths:
   - docs/ops/NF_GAOS_W2_UPGRADE_10_STEP_LOCKED_v1.md
 reported_at: "2026-06-18T00:20:00Z"
 reporter: cursor
-head: 1ada511
+head: 416cc89
 main: 6d241ab
 ```
