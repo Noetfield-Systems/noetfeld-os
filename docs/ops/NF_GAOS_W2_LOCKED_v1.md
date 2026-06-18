@@ -33,11 +33,11 @@ parents:
 | Step | Title | Status | Blocker |
 |------|-------|--------|---------|
 | 1 | Verify all tiers green | **DONE** | — |
-| 2 | Merge ship PR | **PENDING** | Push + merge `ship/nf-gaos-w2-production` |
+| 2 | Merge ship PR | **PENDING** | Open/merge PR after CI — branch pushed @ `2543505` |
 | 3 | Platform production host | **PENDING** | Cloud container host + vault secrets |
 | 4 | Platform DNS + smoke | **PENDING** | Step 3 · not Vercel bridge |
 | 5 | Wave 0 RID proof | **PENDING** | Step 4 live API |
-| 6 | Queue 057 + 058 | **PARTIAL** | 058 wired · 057 spec only |
+| 6 | Queue 057 + 058 | **PARTIAL** | **058 DONE** · **057 spec only** (`SANDBOX_SERVER_SIDE_SESSION_SPEC_v1.md`) |
 | 7 | Routing Panel ship | **PENDING** | Mono PR · `:8780` |
 | 8 | NF-GAOS W2 lock | **DONE** | This doc + `verify-nf-gaos-w2.sh` |
 | 9 | Staging regression | **PENDING** | `NF_STAGING_URL` unset |
