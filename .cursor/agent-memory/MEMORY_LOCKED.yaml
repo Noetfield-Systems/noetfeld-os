@@ -1,8 +1,8 @@
 # Noetfield agent memory — LOCKED (versioned in git)
 # Read at EVERY session start. Bump version when adding lessons.
 
-version: 12
-updated: "2026-06-13T18:00:00Z"
+version: 13
+updated: "2026-06-03T12:00:00Z"
 updated_by: NF-CLOUD-AGENT
 
 packaging_v16:
@@ -18,9 +18,11 @@ packaging_v16:
 
 tier1_ui_v18:
   masterplan: docs/WWW_V18_TIER1_UI_MASTERPLAN_LOCKED_v1.md
+  ui_build_checklist: docs/ops/UI_BUILD_CHECKLIST_LOCKED_v1.md
   north_star: "TTFR < 90s — landing to real RID + confidence + export orientation"
   build_waves: "A Live Proof + Trial OS · B Shell + Receipt Studio · C Design system + Agent deck · D Visual QA"
   pick_ids: UI-01 through UI-10
+  verify: "make verify-ui-build-checklist && make verify-ui-e2e && make verify-static-www"
 
 doc_navigation:
   hub: docs/README.md
@@ -87,6 +89,10 @@ hard_rules:
     rule: Cursor AUTO-RUN is not P0. Commercial outreach and calls = agentic layer only; founder Hub + ASK. NF-CLOUD = validators + www/GTM assets — never send email/call as founder.
     source: docs/ops/FOUNDER_AGENTIC_COMMERCIAL_AND_NO_CURSOR_AUTORUN_LOCKED_v1.md
     since: "2026-06-10"
+  - id: R-012
+    rule: BEFORE any UI/form/www/app edit — read docs/ops/UI_BUILD_CHECKLIST_LOCKED_v1.md and run make verify-ui-build-checklist. No invitation/calendar CTAs on public surfaces; self-serve sandbox + async intake only.
+    source: docs/ops/UI_BUILD_CHECKLIST_LOCKED_v1.md
+    since: "2026-06-03"
 
 recurring_mistakes:
   - id: M-001
@@ -136,6 +142,8 @@ pre_commit_checklist:
   - Read MEMORY_LOCKED.yaml if not read this session
   - Founder permission received for this edit scope (R-007)
   - ASK step completed this session (R-008)
+  - UI_BUILD_CHECKLIST applied if HTML/CSS/JS/forms changed (R-012)
+  - make verify-ui-build-checklist (when UI touched)
   - ./scripts/verify-agent-scope.sh
   - Confirm diff is Noetfield-only
   - No trustfield.ca / TF-* / UPG TrustField strings in tracked files
@@ -143,6 +151,7 @@ pre_commit_checklist:
 session_start_checklist:
   - Read MEMORY_LOCKED.yaml
   - Read docs/DOC_UNIFIED_INDEX_LOCKED_v1.md (navigation SSOT)
+  - Read docs/ops/UI_BUILD_CHECKLIST_LOCKED_v1.md before ANY UI/form/www work (R-012)
   - Read docs/WWW_V16_PACKAGING_PLAN_LOCKED_v1.md when touching www/GTM/commercial copy
   - Read incidents/REGISTRY.md open items
   - Read PROJECT_BOUNDARIES_LOCKED.md

@@ -21,22 +21,22 @@ operations@noetfield.com
 
 ---
 
-## B — Offer Shadow Week (partner / enterprise)
+## B — Shadow Week orientation (partner / enterprise)
 
-Subject: RID `[RID]` — 30-min Shadow Week slots
+Subject: RID `[RID]` — Shadow Week next steps (async)
 
 Hi `[Name]`,
 
-Based on your intake (`vector: [vector]`), we'd like to offer a **30-minute Shadow Week** session:
+Based on your intake (`vector: [vector]`), here is the **Shadow Week orientation path** (no calendar required to start):
 
-- Governance evaluation in **shadow mode**
-- Trust Ledger audit export on the same RID
-- No execution authority in Noetfield
+- **5-minute demo:** https://www.noetfield.com/copilot/demo/
+- **Developer sandbox:** https://www.noetfield.com/start/ (observe mode · mock M365)
+- **Pilot intake:** https://www.noetfield.com/trust-brief/intake/?interest=pilot&vector=copilot-governance
 
-Please suggest two times (ET) this week or next. We'll send a calendar hold and the demo script link.
+Reply on this thread with your RID when ready for scoped Shadow Week SOW review. Governance evaluation stays in **shadow mode** — no execution authority in Noetfield.
 
 Partners overview: https://www.noetfield.com/partners/  
-API reference (if needed for your engineers): https://www.noetfield.com/docs/api/
+API reference: https://www.noetfield.com/docs/api/
 
 Best,  
 Operations

@@ -22,6 +22,9 @@ require_file governance/FREEMIUM_POLICY_LOCKED_v1.md
 require_file assets/noetfield-sandbox.js
 require_file services/governance/noetfield_governance/sandbox_service.py
 
+require_file docs/ops/UI_BUILD_CHECKLIST_LOCKED_v1.md
+require_file .cursor/skills/SKILL-009-ui-build-checklist-mandatory.md
+
 api="$(cat services/governance/noetfield_governance/api.py)"
 for route in \
   "/api/sandbox/provision" \
@@ -79,6 +82,12 @@ for phrase in "observe" "enforce" "50" "14 days" "watermarked"; do
   fi
 done
 echo "OK   freemium policy doc complete"
+
+if [[ -x scripts/verify-ui-build-checklist.sh ]]; then
+  echo ""
+  echo "Running UI build checklist (subset)..."
+  ./scripts/verify-ui-build-checklist.sh || fail=1
+fi
 
 if [[ "$fail" -eq 0 ]]; then
   echo ""

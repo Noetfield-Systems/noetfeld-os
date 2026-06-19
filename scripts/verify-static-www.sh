@@ -30,7 +30,7 @@ check_file "homepage pilot-first" index.html \
   'tamper-evident decision records' 'nfScenarioOfDay' \
   'Apply for pilot ($2k–10k)' '01 · Pilot' 'Built for regulated EU and US' \
   'Copilot Governance Pack' 'Commercial path' 'Learn in sandbox' \
-  'independent of the app under audit' 'AI execution becomes auditable'
+  'independent of the app under audit' 'Copilot becomes auditable'
 
 check_file "homepage wave1 journey" index.html \
   '02 · Prove' '03 · Try' '04 · Trust' '$2k–10k' 'Published tiers'

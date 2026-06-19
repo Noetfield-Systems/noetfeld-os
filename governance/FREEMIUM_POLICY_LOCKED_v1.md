@@ -62,11 +62,16 @@ Demo → Sandbox → Copilot Readiness Pack → Trust Brief → Bank Pilot
 
 ---
 
-## Verification
+## No invitation surfaces (locked)
 
-```bash
-make verify-freemium-policy
-```
+Public buyer UI is **self-serve + async intake only**:
+
+- Allowed: `/start/`, `/copilot/demo/`, `/copilot/trial/`, `/trust-brief/intake/`, `/pricing/`
+- Forbidden: calendar booking, "schedule a call", `gate/sales` as primary CTA, mandatory sales call for sandbox
+
+Machine gate: `make verify-ui-build-checklist` (see `docs/ops/UI_BUILD_CHECKLIST_LOCKED_v1.md`).
+
+---
 
 Checks: policy doc present, sandbox API routes wired, trial page ladder aligned, observe mode in client + server.
 

@@ -223,16 +223,24 @@ def trial_os_wizard() -> str:
  <form id="nfTrialEvaluateForm"><p class="nf-section-lead">Submit operational intent — confidence score · RID-threaded audit log.</p><div class="nf-trial-os__actions"><button type="submit" class="btn btn-primary">Run first evaluate</button></div></form>
  </div>
  <div class="nf-trial-os__panel" data-step="4">
- <h3>Receipt + export orientation</h3>
- <p class="nf-section-lead">RID <code data-trial-rid>RID-pending</code> · sample TLE YAML · board PDF path · procurement ZIP orientation.</p>
+ <h3>Receipt + export moment</h3>
+ <p class="nf-section-lead">RID <code data-trial-rid>RID-pending</code> · watermarked board PDF · Copilot Readiness upgrade with RID pre-filled.</p>
+ <p id="nfTrialUsageWarn" class="nf-callout nf-callout--warn" hidden role="status"></p>
  <div class="nf-trial-os__api-drawer">
- <strong>API drawer</strong> · key preview <code data-api-key>nf_sbx_…</code> · <a href="/docs/api/">API reference</a>
+ <strong>API drawer</strong> · key preview <code data-api-key>nf_sbx_…</code> · mode <strong>observe</strong> · <a href="/docs/api/">API reference</a>
  <pre data-curl-example>curl example loads after signup</pre>
  </div>
+ <div class="nf-trial-os__factory-demos" aria-label="Factory catalog demos (observe mode)">
+ <p class="nf-eyebrow">Factory demos · observe only</p>
+ <button type="button" class="btn btn-secondary" data-factory-demo="copilot_governance_readiness_v1">Copilot readiness</button>
+ <button type="button" class="btn btn-secondary" data-factory-demo="trust_brief_diligence_v1">Trust Brief diligence</button>
+ <button type="button" class="btn btn-secondary" data-factory-demo="legal_review_v1">Legal review</button>
+ </div>
  <div class="nf-trial-os__actions">
- <button type="button" id="nfTrialFinish" class="btn btn-primary">Open Governance Console</button>
- <a class="btn btn-primary" href="{PILOT_INTAKE}">Apply for Governance Pack · $2k–10k</a>
- <a class="btn btn-secondary" href="/trust-ledger/sample-report/">Download sample export orientation</a>
+ <a id="nfTrialExportPdf" class="btn btn-primary" href="#" role="button">Download watermarked board PDF</a>
+ <a class="btn btn-primary" data-sandbox-upgrade href="{PILOT_INTAKE}">Upgrade · Copilot Readiness Pack</a>
+ <button type="button" id="nfTrialFinish" class="btn btn-secondary">Open Governance Console</button>
+ <a class="btn btn-secondary" href="/copilot/demo/">5-minute demo</a>
  </div>
  </div>
  </div>
@@ -1608,6 +1616,17 @@ def ciso_strip() -> str:
  </section>"""
 
 
+def write_agentic_demo_page() -> None:
+    """NF26 interactive demo — preserved outside www hub_page generator (UI-01/UI-08)."""
+    template = ROOT / "scripts/templates/copilot-demo-nf26.html"
+    if not template.is_file():
+        raise SystemExit(f"missing agentic demo template: {template}")
+    dest = ROOT / "copilot/demo/index.html"
+    dest.parent.mkdir(parents=True, exist_ok=True)
+    dest.write_text(template.read_text(encoding="utf-8"), encoding="utf-8")
+    print("wrote", dest.relative_to(ROOT))
+
+
 def write(rel: str, title: str, desc: str, canonical: str, body: str, body_class: str = "nf-www nf-site-v14") -> None:
     path = ROOT / rel
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -1632,7 +1651,7 @@ def homepage() -> str:
         COPY["hero_h1"],
         COPY["hero_lead"],
         [("Copilot Governance Pack · $2k–10k", True), ("Tamper-evident TLE", True), ("Board-grade trust", False)],
-        [(PILOT_INTAKE, "Apply for pilot ($2k–10k)", True), ("/copilot/demo/", "5-minute demo", False), ("/start/", "Start free sandbox", False)],
+        [(PILOT_INTAKE, "Apply for pilot ($2k–10k)", True), ("/copilot/demo/", "5-minute demo", False), ("/start/", "Start free sandbox", False), ("/copilot/trial/", "Trial orientation", False)],
         HERO_MARQUEE + ["Microsoft Purview"],
         live_proof_panel(),
         h1_class="nf-hero-h1--wide",
@@ -1654,7 +1673,7 @@ def homepage() -> str:
  <section class="nf-section-block nf-act-prove" aria-labelledby="act-prove">
  <div class="nf-section-block-head"><span class="nf-section-num" aria-hidden="true">02</span><div>
  <p class="nf-eyebrow" id="act-prove">Prove</p>
- <h2>The moment AI execution becomes auditable</h2>
+ <h2>The moment Copilot becomes auditable</h2>
  <p class="nf-section-lead">{COPY["demo_sentence"]} · Same evaluate → TLE → export spine across Copilot Pack, Trust Brief, and Bank Pilot.</p>
  </div></div>
  <div class="nf-loop">
@@ -2399,14 +2418,6 @@ def main() -> None:
  </div></section>"""))
 
     pages = [
-        ("copilot/demo/index.html", "Noetfield — 5-Minute Copilot Governance Demo", "Live demo: confidence score, Purview, Entra, SharePoint evidence index.", "/copilot/demo/",
-         "5-minute demo", "Live proof · Copilot governance",
-         "See confidence score, M365 evidence index, and TLE export in five minutes",
-         "Walk through evaluate → receipt → export with Purview, Entra ID, and SharePoint metadata. Demo script (locked narrative) — confidence score on every decision. "
-         + COPY["m365_position"],
-         [("Live demo script", True), ("Confidence score", False)],
-         [("/workspace/", "Open workspace", True), ("/copilot/procurement/", "Procurement pack", False)],
-         workspace_mock("Live workspace path")),
         ("copilot/procurement/index.html", "Noetfield — Copilot Procurement Pack", "Buyer diligence ZIP, NIST AI RMF citations, procurement export.", "/copilot/procurement/",
          "Procurement pack", "Buyer diligence · ZIP export",
          "Procurement-grade export for Copilot governance diligence",
@@ -2425,6 +2436,7 @@ def main() -> None:
     write("copilot/pilot/index.html", "Copilot Governance Pack — 90-day pilot | Noetfield",
           "90-day Copilot governance pilot for EU and US regulated institutions — $2k–10k, board PDF, procurement ZIP.",
           "/copilot/pilot/", pilot_page_body())
+    write_agentic_demo_page()
     for rel, title, desc, canon, kick, eye, h1, lead, badges, actions, side in pages:
         if "procurement" in rel:
             extra = procurement_diligence_body() + copilot_link_cards(
@@ -3019,6 +3031,8 @@ def main() -> None:
     for path in ROOT.rglob("*.html"):
         if "services/governance" in str(path) or "docs/collateral" in str(path):
             continue
+        if "scripts/templates" in str(path):
+            continue
         text = path.read_text(encoding="utf-8")
         if 'id="nfHeader"' not in text:
             continue
@@ -3050,6 +3064,8 @@ def sync_all_shell_pages() -> None:
     ibm = "IBM+Plex"
     for path in ROOT.rglob("*.html"):
         if "services/governance" in str(path) or "docs/collateral" in str(path):
+            continue
+        if "scripts/templates" in str(path):
             continue
         text = path.read_text(encoding="utf-8")
         if 'id="nfHeader"' not in text:

@@ -72,7 +72,8 @@
 | `./scripts/verify-local-dev.sh` | Dev stack / unified proxy `:13080` |
 | `NF_REQUIRE_SOURCEA=1 ./scripts/verify-agent-scope.sh` | Optional — enforce SourceA mirror on founder Mac sync |
 | `./scripts/tle-smoke.sh` | TLE examples + schema sanity |
-| `make ship-verify` | Merge / deploy readiness |
+| `./scripts/verify-ui-build-checklist.sh` | **Mandatory before any UI/www/form edit** |
+| `make verify-freemium-policy` | Sandbox v2 observe/enforce gate |
 
 ### Semi notice (not in git)
 
