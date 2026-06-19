@@ -29,6 +29,12 @@ def test_trial_page_positions_sandbox_not_fourth_sku() -> None:
     assert "sandbox" in text
     assert "three contract" in text
     assert "fourth sku" not in text
+    assert "quickscan" not in text
+
+
+def test_trial_page_links_start_sandbox() -> None:
+    text = TRIAL.read_text(encoding="utf-8")
+    assert 'href="/start/"' in text
 
 
 def test_header_links_demo_and_trial() -> None:

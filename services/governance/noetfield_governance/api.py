@@ -24,6 +24,15 @@ from noetfield_governance.intake_notify import (
     notify_submitter_ack,
 )
 from noetfield_governance.public_intake import submit_intake
+from noetfield_governance.sandbox_service import (
+    build_board_export_pdf,
+    provision_sandbox,
+    sandbox_evaluate,
+    sandbox_factory_demo,
+    sandbox_health,
+    get_sandbox_session,
+    update_sandbox_session,
+)
 from noetfield_governance.telegram_client import (
     TelegramAPIError,
     TelegramConfigurationError,
@@ -709,6 +718,46 @@ class PublicIntakeResponse(BaseModel):
     message: str = "Intake recorded. Operations notified asynchronously — follow-up via email within one business day."
 
 
+class SandboxProvisionRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    email: str = Field(..., min_length=3, max_length=254)
+    org: str | None = Field(default=None, max_length=200)
+
+
+class SandboxSessionResponse(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    session_token: str
+    tenant_id: str
+    email: str
+    org: str
+    api_key_preview: str
+    mode: Literal["observe"]
+    evaluates_used: int
+    evaluates_limit: int
+    created_at: str
+    expires_at: str
+    trial_step: int
+    m365_connected: bool
+    last_rid: str | None = None
+    factory_demos_run: list[str] = Field(default_factory=list)
+    upgrade_url: str
+
+
+class SandboxPatchRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    trial_step: int | None = Field(default=None, ge=0, le=4)
+    m365_connected: bool | None = None
+
+
+class SandboxFactoryDemoRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    factory_id: str = Field(..., min_length=3, max_length=80)
+
+
 def _secret(value: SecretStr | None) -> str:
     return value.get_secret_value().strip() if value else ""
 
@@ -846,6 +895,108 @@ async def intake_recent(request: Request, limit: int = 20) -> dict[str, object]:
         "storage": intake_repository.storage_label(),
         "records": await intake_repository.list_recent(limit=limit),
     }
+
+
+def _sandbox_token_header(request: Request) -> str:
+    token = (request.headers.get("X-Sandbox-Token") or "").strip()
+    if not token:
+        raise HTTPException(status_code=401, detail="X-Sandbox-Token header required")
+    return token
+
+
+def _sandbox_session_response(session: object) -> SandboxSessionResponse:
+    from noetfield_governance.sandbox_service import SandboxSession
+
+    if not isinstance(session, SandboxSession):
+        raise TypeError("expected SandboxSession")
+    payload = session.to_dict()
+    payload["upgrade_url"] = settings.sandbox_copilot_pack_intake_url
+    return SandboxSessionResponse.model_validate(payload)
+
+
+@app.get("/api/sandbox/health", tags=["sandbox"])
+async def sandbox_api_health() -> dict[str, object]:
+    return sandbox_health()
+
+
+@app.post("/api/sandbox/provision", tags=["sandbox"], response_model=SandboxSessionResponse)
+async def sandbox_provision(
+    body: SandboxProvisionRequest,
+    request: Request,
+) -> SandboxSessionResponse:
+    if not settings.sandbox_enabled:
+        raise HTTPException(status_code=503, detail="Sandbox API is disabled")
+    client_host = request.client.host if request.client else "unknown"
+    client_key = f"{client_host}:{body.email.strip().lower()}"
+    try:
+        session = await provision_sandbox(
+            email=body.email,
+            org=body.org,
+            client_key=client_key,
+        )
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+    logger.info("sandbox_provisioned tenant_id=%s email_domain=%s", session.tenant_id, session.email.rsplit("@", 1)[-1])
+    return _sandbox_session_response(session)
+
+
+@app.get("/api/sandbox/session", tags=["sandbox"], response_model=SandboxSessionResponse)
+async def sandbox_session_get(request: Request) -> SandboxSessionResponse:
+    if not settings.sandbox_enabled:
+        raise HTTPException(status_code=503, detail="Sandbox API is disabled")
+    token = _sandbox_token_header(request)
+    session = await get_sandbox_session(token)
+    return _sandbox_session_response(session)
+
+
+@app.patch("/api/sandbox/session", tags=["sandbox"], response_model=SandboxSessionResponse)
+async def sandbox_session_patch(
+    body: SandboxPatchRequest,
+    request: Request,
+) -> SandboxSessionResponse:
+    if not settings.sandbox_enabled:
+        raise HTTPException(status_code=503, detail="Sandbox API is disabled")
+    token = _sandbox_token_header(request)
+    session = await update_sandbox_session(
+        token,
+        trial_step=body.trial_step,
+        m365_connected=body.m365_connected,
+    )
+    return _sandbox_session_response(session)
+
+
+@app.post("/api/sandbox/evaluate", tags=["sandbox"])
+async def sandbox_api_evaluate(request: Request) -> dict[str, object]:
+    if not settings.sandbox_enabled:
+        raise HTTPException(status_code=503, detail="Sandbox API is disabled")
+    token = _sandbox_token_header(request)
+    return await sandbox_evaluate(token)
+
+
+@app.post("/api/sandbox/factory-demo", tags=["sandbox"])
+async def sandbox_api_factory_demo(
+    body: SandboxFactoryDemoRequest,
+    request: Request,
+) -> dict[str, object]:
+    if not settings.sandbox_enabled:
+        raise HTTPException(status_code=503, detail="Sandbox API is disabled")
+    token = _sandbox_token_header(request)
+    return await sandbox_factory_demo(token, body.factory_id)
+
+
+@app.get("/api/sandbox/export/board.pdf", tags=["sandbox"])
+async def sandbox_export_board_pdf(request: Request) -> Response:
+    if not settings.sandbox_enabled:
+        raise HTTPException(status_code=503, detail="Sandbox API is disabled")
+    token = _sandbox_token_header(request)
+    session = await get_sandbox_session(token)
+    pdf = build_board_export_pdf(session)
+    filename = f"noetfield-board-sandbox-{session.tenant_id}.pdf"
+    return Response(
+        content=pdf,
+        media_type="application/pdf",
+        headers={"Content-Disposition": f'attachment; filename="{filename}"'},
+    )
 
 
 @app.get("/api/ecosystem/public", tags=["ecosystem"])

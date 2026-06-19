@@ -10,8 +10,9 @@
 
 | Field | Value |
 |-------|--------|
-| **Route** | `/start/` → `/cognitive-dashboard/?sandbox=1` |
-| **Trial** | 14 days · 50 evaluate calls |
+| **Route** | `/start/` → server session via `POST /api/sandbox/provision` |
+| **Trial** | 14 days · 50 evaluate calls · **observe mode** |
+| **API** | `/api/sandbox/*` — Redis-backed caps (see `governance/FREEMIUM_POLICY_LOCKED_v1.md`) |
 | **M365** | Mock OAuth · metadata-only orientation |
 | **Upgrade** | Copilot Governance Pack or Trust Brief |
 

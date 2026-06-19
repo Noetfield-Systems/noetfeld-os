@@ -104,3 +104,31 @@ async def clear_session(session_key: str) -> None:
         return
     assert _client is not None
     await _client.delete(f"nf:sess:{session_key}")
+
+
+async def get_json(key: str) -> dict[str, Any] | None:
+    if not is_enabled():
+        return None
+    assert _client is not None
+    raw = await _client.get(key)
+    if not raw:
+        return None
+    try:
+        data = json.loads(raw)
+    except json.JSONDecodeError:
+        return None
+    return data if isinstance(data, dict) else None
+
+
+async def set_json(key: str, payload: dict[str, Any], *, ttl_sec: int) -> None:
+    if not is_enabled():
+        return
+    assert _client is not None
+    await _client.set(key, json.dumps(payload), ex=ttl_sec)
+
+
+async def delete_key(key: str) -> None:
+    if not is_enabled():
+        return
+    assert _client is not None
+    await _client.delete(key)

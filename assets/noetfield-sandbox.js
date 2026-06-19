@@ -1,9 +1,16 @@
-/** Self-serve developer sandbox + Trial OS wizard (v18 UI-02). */
+/** Self-serve developer sandbox + Trial OS wizard (v2 — server-backed). */
 (function () {
-  var STORAGE_KEY = "nf_sandbox_v1";
-  var LIMIT_EVALUATES = 50;
-  var TRIAL_DAYS = 14;
-  var STEPS = ["account", "environment", "connect", "evaluate", "receipt"];
+  var STORAGE_KEY = "nf_sandbox_v2";
+  var TOKEN_KEY = "nf_sandbox_token";
+  var API_BASE = (function () {
+    var meta = document.querySelector('meta[name="nf-chat-api-base"]');
+    return (meta && meta.getAttribute("content")) || "";
+  })();
+
+  function apiUrl(path) {
+    if (API_BASE) return API_BASE.replace(/\/$/, "") + path;
+    return path;
+  }
 
   function readSession() {
     try {
@@ -14,17 +21,21 @@
     }
   }
 
+  function readToken() {
+    try {
+      return localStorage.getItem(TOKEN_KEY) || "";
+    } catch (e) {
+      return "";
+    }
+  }
+
   function writeSession(data) {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+      if (data && data.session_token) {
+        localStorage.setItem(TOKEN_KEY, data.session_token);
+      }
     } catch (e) {}
-  }
-
-  function newTenantId() {
-    var hex = "0123456789abcdef";
-    var s = "sandbox-";
-    for (var i = 0; i < 8; i++) s += hex[Math.floor(Math.random() * 16)];
-    return s;
   }
 
   function daysRemaining(expiresAt) {
@@ -32,36 +43,25 @@
     return Math.max(0, Math.ceil(ms / 86400000));
   }
 
-  function createSession(email, org) {
-    var now = Date.now();
-    var session = {
-      email: email,
-      org: org || "Sandbox org",
-      tenant_id: newTenantId(),
-      api_key_preview: "nf_sbx_" + Math.random().toString(36).slice(2, 10),
-      mode: "sandbox",
-      evaluates_used: 0,
-      evaluates_limit: LIMIT_EVALUATES,
-      created_at: new Date(now).toISOString(),
-      expires_at: new Date(now + TRIAL_DAYS * 86400000).toISOString(),
-      trial_step: 0,
-      m365_connected: false,
+  function normalizeSession(data) {
+    if (!data) return null;
+    return {
+      session_token: data.session_token || readToken(),
+      email: data.email,
+      org: data.org || "Sandbox org",
+      tenant_id: data.tenant_id,
+      api_key_preview: data.api_key_preview,
+      mode: data.mode || "observe",
+      evaluates_used: data.evaluates_used || 0,
+      evaluates_limit: data.evaluates_limit || 50,
+      created_at: data.created_at,
+      expires_at: data.expires_at,
+      trial_step: data.trial_step || 0,
+      m365_connected: !!data.m365_connected,
+      last_rid: data.last_rid || null,
+      factory_demos_run: data.factory_demos_run || [],
+      upgrade_url: data.upgrade_url || "/trust-brief/intake/?interest=pilot&vector=copilot-governance",
     };
-    writeSession(session);
-    return session;
-  }
-
-  function incrementEvaluate() {
-    var session = readSession();
-    if (!session) return null;
-    session.evaluates_used = Math.min(
-      session.evaluates_limit,
-      (session.evaluates_used || 0) + 1
-    );
-    if (session.trial_step < 4) session.trial_step = 4;
-    writeSession(session);
-    renderUsageChips();
-    return session;
   }
 
   function usageLabel(session) {
@@ -73,7 +73,8 @@
       session.evaluates_limit +
       " evaluates · " +
       days +
-      " days left"
+      " days left · mode " +
+      (session.mode || "observe")
     );
   }
 
@@ -90,8 +91,73 @@
     });
   }
 
+  function sandboxHeaders() {
+    var token = readToken();
+    var headers = { "Content-Type": "application/json" };
+    if (token) headers["X-Sandbox-Token"] = token;
+    return headers;
+  }
+
+  function provisionSession(email, org) {
+    return fetch(apiUrl("/api/sandbox/provision"), {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: email, org: org || "" }),
+    }).then(function (res) {
+      return res.json().then(function (data) {
+        if (!res.ok) throw new Error((data && data.detail) || "Provision failed");
+        var session = normalizeSession(data);
+        writeSession(session);
+        renderUsageChips();
+        return session;
+      });
+    });
+  }
+
+  function refreshSession() {
+    var token = readToken();
+    if (!token) return Promise.resolve(readSession());
+    return fetch(apiUrl("/api/sandbox/session"), {
+      headers: sandboxHeaders(),
+    })
+      .then(function (res) {
+        return res.json().then(function (data) {
+          if (!res.ok) throw new Error((data && data.detail) || "Session expired");
+          var session = normalizeSession(data);
+          writeSession(session);
+          renderUsageChips();
+          return session;
+        });
+      })
+      .catch(function () {
+        return readSession();
+      });
+  }
+
+  function patchSession(patch) {
+    return fetch(apiUrl("/api/sandbox/session"), {
+      method: "PATCH",
+      headers: sandboxHeaders(),
+      body: JSON.stringify(patch),
+    }).then(function (res) {
+      return res.json().then(function (data) {
+        if (!res.ok) throw new Error((data && data.detail) || "Update failed");
+        var session = normalizeSession(data);
+        writeSession(session);
+        renderUsageChips();
+        return session;
+      });
+    });
+  }
+
   function setTrialStep(index) {
     var session = readSession();
+    if (session && readToken()) {
+      patchSession({ trial_step: index }).then(function () {
+        updateTrialUI(index);
+      });
+      return;
+    }
     if (session) {
       session.trial_step = Math.max(session.trial_step || 0, index);
       writeSession(session);
@@ -127,10 +193,39 @@
     if (curlEl && session) {
       curlEl.textContent =
         'curl -X POST "' +
-        location.origin +
-        '/evaluate" \\\n  -H "Content-Type: application/json" \\\n  -H "X-Tenant-ID: ' +
-        session.tenant_id +
-        '" \\\n  -d \'{"actor":"sandbox","action":"copilot_rollout","context":"Trial OS evaluate"}\'';
+        (API_BASE || location.origin) +
+        '/api/sandbox/evaluate" \\\n  -H "X-Sandbox-Token: ' +
+        (session.session_token || readToken()) +
+        '"';
+    }
+
+    var ridEl = root.querySelector("[data-trial-rid]");
+    if (ridEl && session && session.last_rid) ridEl.textContent = session.last_rid;
+
+    var upgradeEl = root.querySelector("[data-sandbox-upgrade]");
+    if (upgradeEl && session) {
+      var base = session.upgrade_url || "/trust-brief/intake/?interest=pilot&vector=copilot-governance";
+      var url = base;
+      if (session.last_rid) {
+        url += (base.indexOf("?") >= 0 ? "&" : "?") + "request_id=" + encodeURIComponent(session.last_rid);
+      }
+      upgradeEl.setAttribute("href", url);
+    }
+
+    var warnEl = root.querySelector("#nfTrialUsageWarn");
+    if (warnEl && session) {
+      var warnAt = Math.ceil(session.evaluates_limit * 0.8);
+      if (session.evaluates_used >= warnAt) {
+        warnEl.hidden = false;
+        warnEl.textContent =
+          "You've used " +
+          session.evaluates_used +
+          "/" +
+          session.evaluates_limit +
+          " evaluates — upgrade to Copilot Readiness Pack for production tenant and enforce mode.";
+      } else {
+        warnEl.hidden = true;
+      }
     }
   }
 
@@ -145,25 +240,41 @@
         alert("Enter a work email to start your sandbox.");
         return;
       }
-      createSession(email, orgEl && orgEl.value ? orgEl.value.trim() : "");
-      var next = form.getAttribute("data-next") || "/cognitive-dashboard/?sandbox=1";
-      try {
-        var u = new URL(next, location.origin);
-        var session = readSession();
-        if (session) u.searchParams.set("tenant", session.tenant_id);
-        u.searchParams.set("sandbox", "1");
-        location.href = u.pathname + u.search;
-      } catch (e) {
-        location.href = next;
-      }
+      provisionSession(email, orgEl && orgEl.value ? orgEl.value.trim() : "")
+        .then(function (session) {
+          var next = form.getAttribute("data-next") || "/cognitive-dashboard/?sandbox=1";
+          try {
+            var u = new URL(next, location.origin);
+            if (session) u.searchParams.set("tenant", session.tenant_id);
+            u.searchParams.set("sandbox", "1");
+            location.href = u.pathname + u.search;
+          } catch (e) {
+            location.href = next;
+          }
+        })
+        .catch(function (err) {
+          alert(err.message || "Sandbox provision failed — try a work email.");
+        });
+    });
+  }
+
+  function runFactoryDemo(factoryId) {
+    return fetch(apiUrl("/api/sandbox/factory-demo"), {
+      method: "POST",
+      headers: sandboxHeaders(),
+      body: JSON.stringify({ factory_id: factoryId }),
+    }).then(function (res) {
+      return res.json();
     });
   }
 
   function bindTrialOs(root) {
     if (!root) return;
-    var session = readSession();
-    var startIndex = session ? Math.min(STEPS.length - 1, session.trial_step || 0) : 0;
-    updateTrialUI(startIndex);
+
+    refreshSession().then(function (session) {
+      var startIndex = session ? Math.min(4, session.trial_step || 0) : 0;
+      updateTrialUI(startIndex);
+    });
 
     var accountForm = root.querySelector("#nfTrialAccountForm");
     if (accountForm) {
@@ -175,8 +286,24 @@
           alert("Enter a work email.");
           return;
         }
-        createSession(email.trim(), org.trim());
-        setTrialStep(1);
+        var btn = accountForm.querySelector('button[type="submit"]');
+        if (btn) {
+          btn.disabled = true;
+          btn.textContent = "Provisioning…";
+        }
+        provisionSession(email.trim(), org.trim())
+          .then(function () {
+            setTrialStep(1);
+          })
+          .catch(function (err) {
+            alert(err.message || "Provision failed — use a work email address.");
+          })
+          .finally(function () {
+            if (btn) {
+              btn.disabled = false;
+              btn.textContent = "Continue";
+            }
+          });
       });
     }
 
@@ -190,61 +317,120 @@
     var oauthBtn = root.querySelector("#nfTrialMockOAuth");
     if (oauthBtn) {
       oauthBtn.addEventListener("click", function () {
-        var s = readSession();
-        if (s) {
-          s.m365_connected = true;
-          s.trial_step = 3;
-          writeSession(s);
+        var done = function () {
+          var status = root.querySelector("#nfTrialOAuthStatus");
+          if (status) {
+            status.hidden = false;
+            status.textContent =
+              "Mock OAuth connected · M365 evidence ingested (sandbox simulation · observe mode)";
+          }
+          setTrialStep(3);
+        };
+        if (readToken()) {
+          patchSession({ m365_connected: true, trial_step: 3 }).then(done);
+        } else {
+          done();
         }
-        var status = root.querySelector("#nfTrialOAuthStatus");
-        if (status) {
-          status.hidden = false;
-          status.textContent = "Mock OAuth connected · M365 evidence ingested (sandbox simulation)";
-        }
-        setTrialStep(3);
       });
     }
+
+    root.querySelectorAll("[data-factory-demo]").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        var factoryId = btn.getAttribute("data-factory-demo");
+        if (!factoryId || !readToken()) return;
+        btn.disabled = true;
+        runFactoryDemo(factoryId)
+          .then(function () {
+            btn.textContent = "Demo complete";
+          })
+          .catch(function () {
+            btn.disabled = false;
+          });
+      });
+    });
 
     var evalForm = root.querySelector("#nfTrialEvaluateForm");
     if (evalForm) {
       evalForm.addEventListener("submit", function (ev) {
         ev.preventDefault();
-        var s = readSession();
         var btn = evalForm.querySelector('button[type="submit"]');
         if (btn) {
           btn.disabled = true;
           btn.textContent = "Evaluating…";
         }
-        fetch("/evaluate", {
+        fetch(apiUrl("/api/sandbox/evaluate"), {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "X-Tenant-ID": s ? s.tenant_id : "sandbox",
-          },
-          body: JSON.stringify({
-            actor: "trial-os",
-            action: "copilot_rollout",
-            context: "Trial OS first evaluate",
-            metadata: { source: "trial-os-flow" },
-          }),
+          headers: sandboxHeaders(),
         })
           .then(function (res) {
-            return res.json();
+            return res.json().then(function (data) {
+              if (!res.ok) throw new Error((data && data.detail) || "Evaluate failed");
+              return data;
+            });
           })
           .then(function (data) {
-            incrementEvaluate();
-            var ridEl = root.querySelector("[data-trial-rid]");
-            if (ridEl && data.rid) ridEl.textContent = data.rid;
-            setTrialStep(4);
+            return refreshSession().then(function () {
+              var ridEl = root.querySelector("[data-trial-rid]");
+              if (ridEl && data.rid) ridEl.textContent = data.rid;
+              if (data.usage_warning) {
+                var warnEl = root.querySelector("#nfTrialUsageWarn");
+                if (warnEl) {
+                  warnEl.hidden = false;
+                  warnEl.textContent =
+                    "Approaching evaluate cap — " +
+                    data.evaluates_used +
+                    "/" +
+                    data.evaluates_limit +
+                    " used. Upgrade for production enforce mode.";
+                }
+              }
+              setTrialStep(4);
+            });
           })
-          .catch(function () {
-            alert("Evaluate failed — ensure dev stack is running.");
+          .catch(function (err) {
+            alert(err.message || "Evaluate failed — ensure API is reachable.");
           })
           .finally(function () {
             if (btn) {
               btn.disabled = false;
               btn.textContent = "Run first evaluate";
             }
+          });
+      });
+    }
+
+    var exportBtn = root.querySelector("#nfTrialExportPdf");
+    if (exportBtn) {
+      exportBtn.addEventListener("click", function (ev) {
+        ev.preventDefault();
+        var token = readToken();
+        if (!token) {
+          alert("Complete sandbox signup before exporting.");
+          return;
+        }
+        exportBtn.disabled = true;
+        fetch(apiUrl("/api/sandbox/export/board.pdf"), {
+          headers: { "X-Sandbox-Token": token },
+        })
+          .then(function (res) {
+            if (!res.ok) throw new Error("Export failed");
+            return res.blob();
+          })
+          .then(function (blob) {
+            var url = URL.createObjectURL(blob);
+            var a = document.createElement("a");
+            a.href = url;
+            a.download = "noetfield-board-sandbox.pdf";
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            URL.revokeObjectURL(url);
+          })
+          .catch(function () {
+            alert("Board PDF export failed — ensure sandbox session is active.");
+          })
+          .finally(function () {
+            exportBtn.disabled = false;
           });
       });
     }
@@ -273,7 +459,7 @@
       session.tenant_id +
       "</code> · " +
       usageLabel(session) +
-      " · mode <strong>sandbox</strong></p>";
+      "</p>";
   }
 
   document.addEventListener("DOMContentLoaded", function () {
@@ -290,9 +476,11 @@
 
   window.noetfieldSandbox = {
     read: readSession,
-    create: createSession,
-    incrementEvaluate: incrementEvaluate,
-    limit: LIMIT_EVALUATES,
-    trialDays: TRIAL_DAYS,
+    provision: provisionSession,
+    refresh: refreshSession,
+    apiUrl: apiUrl,
+    limit: 50,
+    trialDays: 14,
+    mode: "observe",
   };
 })();

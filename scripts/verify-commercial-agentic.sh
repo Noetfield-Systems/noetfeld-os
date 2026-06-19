@@ -41,13 +41,20 @@ for phrase in "nf26-demoStepper" "nf26-eventTrace" "nf26-progressRing" "Human-in
 done
 echo "OK   copilot/demo has agentic demo patterns"
 
-for phrase in "sandbox" "three contract" "Copilot Readiness" "mock M365"; do
+for phrase in "sandbox" "three contract" "Copilot Readiness" "mock M365" "/start/"; do
   if ! grep -qiF "$phrase" <<< "$trial"; then
     echo "FAIL copilot/trial missing: $phrase" >&2
     fail=1
   fi
 done
 echo "OK   copilot/trial has commercial sandbox copy"
+
+if grep -qiF "QuickScan" <<< "$trial"; then
+  echo "FAIL copilot/trial must not list QuickScan as ladder step" >&2
+  fail=1
+else
+  echo "OK   trial ladder free of QuickScan retail step"
+fi
 
 for bad in "payment rails" "Start sending payments" "Treasury" "corridor"; do
   if grep -qiF "$bad" <<< "$trial" || grep -qiF "$bad" <<< "$demo"; then

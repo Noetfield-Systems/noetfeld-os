@@ -143,6 +143,36 @@ class Settings(BaseSettings):
         description="Canonical institutional status page linked from API health payloads.",
     )
 
+    sandbox_enabled: bool = Field(
+        default=True,
+        description="Enable POST /api/sandbox/* self-serve developer sandbox.",
+    )
+    sandbox_evaluate_limit: int = Field(
+        default=50,
+        ge=1,
+        le=500,
+        description="Max evaluate calls per sandbox session.",
+    )
+    sandbox_trial_days: int = Field(
+        default=14,
+        ge=1,
+        le=90,
+        description="Sandbox session TTL in days.",
+    )
+    sandbox_provision_rate_limit_per_hour: int = Field(
+        default=10,
+        ge=0,
+        description="Max sandbox provisions per client IP per hour (0 = disabled).",
+    )
+    sandbox_block_free_email: bool = Field(
+        default=True,
+        description="Reject common consumer email domains for sandbox signup.",
+    )
+    sandbox_copilot_pack_intake_url: str = Field(
+        default="/trust-brief/intake/?interest=pilot&vector=copilot-governance",
+        description="Upgrade CTA path for sandbox export moment (RID appended client-side).",
+    )
+
 
 @lru_cache(maxsize=1)
 def get_settings() -> Settings:

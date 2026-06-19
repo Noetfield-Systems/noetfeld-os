@@ -1,4 +1,4 @@
-.PHONY: bootstrap validate api api-v3 apply-migrations ingest-sot-dry-run ingest-sot phase32-smoke phase32-postgres-smoke phase33-verify phase33-postgres-verify phase35-demo final-lock-audit final-lock-semantic governance-console-up governance-console-e2e governance-console-down plan-with-no-asf-verify sync-prompt-pack generate-prompt-pack verify-gtm verify-no-vendor-names verify-static-www verify-www verify-investor-lane verify-commercial-agentic verify-law-stack sync-derived-docs verify-factory-copilot verify-factory-catalog verify-factory-trust-brief verify-factory-legal verify-factory-aml
+.PHONY: bootstrap validate api api-v3 apply-migrations ingest-sot-dry-run ingest-sot phase32-smoke phase32-postgres-smoke phase33-verify phase33-postgres-verify phase35-demo final-lock-audit final-lock-semantic governance-console-up governance-console-e2e governance-console-down plan-with-no-asf-verify sync-prompt-pack generate-prompt-pack verify-gtm verify-no-vendor-names verify-static-www verify-www verify-investor-lane verify-commercial-agentic verify-law-stack sync-derived-docs verify-factory-copilot verify-factory-catalog verify-factory-trust-brief verify-factory-legal verify-factory-aml verify-freemium-policy
 
 PYTHONPATH_VALUE := packages/types:packages/config:packages/sdk:services/events:services/ledger:services/graph:services/governance:services/signals:services/workflow:services/ai-runtime:services/inspectors:services/identity:services/copilot-governance:services/factories:services/trust-brief:services/legal-review:services/aml-trace
 
@@ -388,4 +388,8 @@ verify-factory-legal:
 verify-factory-aml:
 	chmod +x ./scripts/verify-factory-aml.sh
 	./scripts/verify-factory-aml.sh
+
+verify-freemium-policy:
+	chmod +x ./scripts/verify-freemium-policy.sh
+	./scripts/verify-freemium-policy.sh
 	PYTHONPATH=$(PYTHONPATH_VALUE) python3 -m pytest tests/unit/test_factory_aml.py -q

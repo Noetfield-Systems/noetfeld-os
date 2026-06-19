@@ -101,20 +101,28 @@
  <form id="nfTrialEvaluateForm"><p class="nf-section-lead">Submit operational intent — confidence score · RID-threaded audit log.</p><div class="nf-trial-os__actions"><button type="submit" class="btn btn-primary">Run first evaluate</button></div></form>
  </div>
  <div class="nf-trial-os__panel" data-step="4">
- <h3>Receipt + export orientation</h3>
- <p class="nf-section-lead">RID <code data-trial-rid>RID-pending</code> · sample TLE YAML · board PDF path · procurement ZIP orientation.</p>
+ <h3>Receipt + export moment</h3>
+ <p class="nf-section-lead">RID <code data-trial-rid>RID-pending</code> · watermarked board PDF · Copilot Readiness upgrade with RID pre-filled.</p>
+ <p id="nfTrialUsageWarn" class="nf-callout nf-callout--warn" hidden role="status"></p>
  <div class="nf-trial-os__api-drawer">
- <strong>API drawer</strong> · key preview <code data-api-key>nf_sbx_…</code> · <a href="/docs/api/">API reference</a>
+ <strong>API drawer</strong> · key preview <code data-api-key>nf_sbx_…</code> · mode <strong>observe</strong> · <a href="/docs/api/">API reference</a>
  <pre data-curl-example>curl example loads after signup</pre>
  </div>
+ <div class="nf-trial-os__factory-demos" aria-label="Factory catalog demos (observe mode)">
+ <p class="nf-eyebrow">Factory demos · observe only</p>
+ <button type="button" class="btn btn-secondary" data-factory-demo="copilot_governance_readiness_v1">Copilot readiness</button>
+ <button type="button" class="btn btn-secondary" data-factory-demo="trust_brief_diligence_v1">Trust Brief diligence</button>
+ <button type="button" class="btn btn-secondary" data-factory-demo="legal_review_v1">Legal review</button>
+ </div>
  <div class="nf-trial-os__actions">
- <button type="button" id="nfTrialFinish" class="btn btn-primary">Open Governance Console</button>
- <a class="btn btn-primary" href="/trust-brief/intake/?interest=pilot&vector=copilot-governance">Apply for Governance Pack · $2k–10k</a>
- <a class="btn btn-secondary" href="/trust-ledger/sample-report/">Download sample export orientation</a>
+ <a id="nfTrialExportPdf" class="btn btn-primary" href="#" role="button">Download watermarked board PDF</a>
+ <a class="btn btn-primary" data-sandbox-upgrade href="/trust-brief/intake/?interest=pilot&vector=copilot-governance">Upgrade · Copilot Readiness Pack</a>
+ <button type="button" id="nfTrialFinish" class="btn btn-secondary">Open Governance Console</button>
+ <a class="btn btn-secondary" href="/copilot/demo/">5-minute demo</a>
  </div>
  </div>
  </div>
- <script src="/assets/noetfield-sandbox.js?v=40" defer></script>
+ <script src="/assets/noetfield-sandbox.js?v=41" defer></script>
  
  <aside class="nf-callout"><p><strong>Production evidence path:</strong> Production tenant, real metadata connectors, and board PDF export unlock via <strong>Copilot Governance Pack ($2k–10k)</strong> or Trust Brief SOW.</p></aside>
  </section>
