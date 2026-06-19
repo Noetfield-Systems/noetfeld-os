@@ -183,7 +183,8 @@ done
 # P0 — no internal / founder / agent copy on public www
 LEAK_PATTERN='maintained in repo|not claimed on www|plan-with-no-asf|AGENT_SELF_AUDIT|repo-native|ASSERT→|Founder-led \+ agentic|pipeline stage [0-9]|W3 PASS|Product on disk|/docs/ops/|services/governance/README|nf-card__tag">Hub<|Shipped today — honest|execution infrastructure|API offline|what we ship|our roadmap|Fully agentic|Governance agents|IBM Plex'
 leak_fail=0
-for f in index.html start/index.html copilot/procurement/index.html privacy/index.html terms/index.html status/index.html \
+# Procurement pack cites governance API docs for buyer diligence (verify-gtm-ops-docs).
+for f in index.html start/index.html privacy/index.html terms/index.html status/index.html \
   trust/index.html faq/index.html investors/index.html trust-ledger/verify/index.html; do
   if [[ -f "$f" ]] && grep -E -q "$LEAK_PATTERN" "$f"; then
     echo "FAIL verify-static-www: P0 copy leak in $f" >&2
