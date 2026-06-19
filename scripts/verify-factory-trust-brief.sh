@@ -36,7 +36,7 @@ grep -q '"/catalog/platform"' services/governance/noetfield_governance/api.py ||
 
 ok "API and platform console present"
 
-PYTHONPATH=packages/types:packages/config:services/events:services/ledger:services/graph:services/governance:services/signals:services/workflow:services/ai-runtime:services/inspectors:services/identity:services/copilot-governance:services/factories:services/trust-brief \
+PYTHONPATH=packages/types:packages/config:packages/sdk:services/events:services/ledger:services/graph:services/governance:services/signals:services/workflow:services/ai-runtime:services/inspectors:services/identity:services/copilot-governance:services/factories:services/trust-brief:services/legal-review:services/aml-trace \
   python3 -c "from noetfield_trust_brief import TrustBriefDiligenceRuntime; from noetfield_factories import TrustBriefFactoryRunner" \
   || fail "trust brief packages import failed"
 

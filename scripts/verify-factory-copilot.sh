@@ -45,7 +45,7 @@ grep -q "/factories/{factory_id}/run" services/governance/noetfield_governance/a
 
 ok "Makefile and API factory route present"
 
-PYTHONPATH=packages/types:packages/config:services/events:services/ledger:services/graph:services/governance:services/signals:services/workflow:services/ai-runtime:services/inspectors:services/identity:services/copilot-governance:services/factories:services/trust-brief \
+PYTHONPATH=packages/types:packages/config:packages/sdk:services/events:services/ledger:services/graph:services/governance:services/signals:services/workflow:services/ai-runtime:services/inspectors:services/identity:services/copilot-governance:services/factories:services/trust-brief:services/legal-review:services/aml-trace \
   python3 -c "from noetfield_factories import load_factory_spec; load_factory_spec('copilot_governance_readiness_v1')" \
   || fail "factory package import failed"
 

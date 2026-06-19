@@ -124,6 +124,8 @@ def test_factory_spec_loads() -> None:
     assert set(list_factory_ids()) == {
         "copilot_governance_readiness_v1",
         "trust_brief_diligence_v1",
+        "legal_review_v1",
+        "aml_governance_trace_v1",
     }
 
 
