@@ -2,7 +2,8 @@
 """NF execution gatekeeper — invariant before implement (no LLM).
 
 Invariant:
-  session_gate.ok ∧ ¬context_stale ∧ voyage.ok ∧ receipt_cascade.ok
+  session_gate.ok ∧ mono_nerve.ok ∧ ¬context_stale ∧ voyage.ok ∧ receipt_cascade.ok
+  ∧ email_send_defer_line present ∧ ¬(defer_active ∧ email_lane_task)
   ∧ (founder implement OR dry-run advisory)
 
 Law: docs/ops/NF_GAOS_W3_FACTORY_SPINE_LOCKED_v1.md
@@ -25,6 +26,7 @@ from nf_factory_lib_v1 import (
     write_event,
     write_sina,
 )
+from nf_mono_nerve_v1 import task_touches_email_lane
 
 
 def run_gatekeeper(require_implement: bool = False) -> dict:
@@ -34,6 +36,10 @@ def run_gatekeeper(require_implement: bool = False) -> dict:
     gate = load_event("nf-session-gate-v1.json", root) or load_sina("nf_session_gate_receipt_v1.json") or {}
     if not gate.get("ok"):
         reasons.append("SESSION_GATE_FAIL")
+
+    mono = load_event("nf-mono-nerve-v1.json", root) or load_sina("nf-mono-nerve-v1.json") or {}
+    if not mono.get("ok"):
+        reasons.append("MONO_NERVE_FAIL")
 
     stale = load_event("nf-stale-guard-v1.json", root) or {}
     if stale.get("context_stale"):
@@ -51,12 +57,23 @@ def run_gatekeeper(require_implement: bool = False) -> dict:
     surfaces = load_event("nf-live-surfaces-v1.json", root) or load_sina("nf-live-surfaces-v1.json") or {}
     pending = surfaces.get("pending_task") or stale.get("pending_task") or voyage.get("pending_task")
     task_id = (pending or {}).get("id", "")
+    task_override = os.environ.get("NF_TASK_ID", "").strip()
+    check_task = pending or ({"id": task_override, "title": task_override} if task_override else None)
+
+    email_line = surfaces.get("email_send_defer_line") or mono.get("email_send_defer_line") or ""
+    if not email_line:
+        reasons.append("MISSING_EMAIL_SEND_DEFER_LINE")
+
+    defer_active = surfaces.get("defer_active")
+    if defer_active is None:
+        defer_active = mono.get("defer_active")
+    if defer_active and task_touches_email_lane(check_task):
+        reasons.append("EMAIL_SEND_DEFERRED")
 
     founder_implement = os.environ.get("NF_FOUNDER_IMPLEMENT", "").strip().lower() in ("1", "true", "yes")
     if require_implement and not founder_implement:
         reasons.append("FOUNDER_IMPLEMENT_REQUIRED")
 
-    # Executor lock
     lock = load_lock() or {}
     if lock.get("locked") and lock.get("agent_id") != agent_id():
         reasons.append(f"EXECUTOR_LOCK_HELD:{lock.get('agent_id')}")
@@ -73,6 +90,8 @@ def run_gatekeeper(require_implement: bool = False) -> dict:
         "pending_task_id": task_id,
         "founder_implement": founder_implement,
         "product_now_line": surfaces.get("product_now_line"),
+        "email_send_defer_line": email_line,
+        "defer_active": defer_active,
         "next": "SAFE TO IMPLEMENT" if ok else "EXECUTION DENIED — fix reasons then re-run nf-gatekeeper",
     }
 
@@ -95,6 +114,7 @@ def main() -> int:
         if receipt["ok"]:
             print(f"Task: {receipt.get('pending_task_id')}")
             print(f"Line: {receipt.get('product_now_line')}")
+            print(f"Defer: {receipt.get('email_send_defer_line')}")
             print("SAFE TO IMPLEMENT")
         else:
             print("EXECUTION DENIED")

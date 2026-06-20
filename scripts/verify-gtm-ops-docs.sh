@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# GTM ops docs — served on :13080 and linked from copilot pilot/demo pages.
+# GTM buyer proof docs — served on :13080; public pages link buyer-facing docs only.
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 # shellcheck source=dev-ports.sh
@@ -23,57 +23,31 @@ check_url() {
   fi
 }
 
-check_url "${BASE}/docs/copilot/COPILOT_GOVERNANCE_PIPELINE_v1.md" "pipeline doc"
-check_url "${BASE}/docs/ops/DEMO_REHEARSAL_CHECKLIST_v1.md" "demo rehearsal doc"
+# Docs remain on disk for ops/diligence — not required on public copilot hero copy
 check_url "${BASE}/docs/copilot/BUYER_DEBRIEF_TEMPLATE_v1.md" "buyer debrief doc"
-check_url "${BASE}/docs/strategy/channel-outreach/bc-ai-for-all-2026.md" "bc-ai outreach doc"
 check_url "${BASE}/docs/diligence/rpaa-positioning-onepager.md" "rpaa diligence one-pager"
-check_url "${BASE}/docs/ops/STAGING_DEMO.md" "staging demo runbook"
 check_url "${BASE}/docs/copilot/PROCUREMENT_ONE_PAGER.md" "procurement one-pager doc"
 check_url "${BASE}/docs/references/GOVERNANCE_SOURCES_BOOK_v1.md" "governance sources book doc"
 check_url "${BASE}/docs/references/GOVERNANCE_SOURCES_HANDBOOK_LOCKED_v1.md" "governance sources handbook doc"
+check_url "${BASE}/docs/references/GOVERNANCE_DRIFT_DETECTION_SOURCES_LOCKED_v1.md" "drift detection sources locked doc"
 
-pipeline_body="$(curl -sS --connect-timeout 5 "${BASE}/docs/copilot/COPILOT_GOVERNANCE_PIPELINE_v1.md" 2>/dev/null || true)"
-if echo "$pipeline_body" | grep -qF "bc-ai-for-all-2026"; then
-  echo "OK   pipeline doc bc-ai channel reference"
-else
-  echo "FAIL pipeline doc missing bc-ai-for-all-2026 reference" >&2
-  fail=1
-fi
-if echo "$pipeline_body" | grep -qF "STAGING_DEMO"; then
-  echo "OK   pipeline doc staging demo reference"
-else
-  echo "FAIL pipeline doc missing STAGING_DEMO reference" >&2
-  fail=1
-fi
-
-for path in "/copilot/pilot/" "/copilot/demo/"; do
+# Public copilot pages — client proof section, no founder runbooks
+FOUNDER_LINK_PATTERN='STAGING_DEMO|DEMO_REHEARSAL_CHECKLIST|gtm-ops-runbooks|COPILOT_GOVERNANCE_PIPELINE_v1'
+proof_ok=0
+for path in "/copilot/" "/copilot/pilot/" "/copilot/demo/"; do
   html="$(curl -sS --connect-timeout 5 -H "Accept: text/html" "${BASE}${path}" 2>/dev/null || true)"
-  if echo "$html" | grep -qF "COPILOT_GOVERNANCE_PIPELINE_v1.md"; then
-    echo "OK   ${path} pipeline runbook link"
+  if echo "$html" | grep -qF 'buyer-proof-links' \
+    && echo "$html" | grep -qF 'Proof and diligence' \
+    && echo "$html" | grep -qF '/copilot/procurement/' \
+    && ! echo "$html" | grep -qE "$FOUNDER_LINK_PATTERN"; then
+    echo "OK   ${path} buyer-proof section (no founder runbooks)"
+    proof_ok=$((proof_ok + 1))
   else
-    echo "FAIL ${path} missing COPILOT_GOVERNANCE_PIPELINE_v1.md link" >&2
-    fail=1
-  fi
-  if echo "$html" | grep -qF "bc-ai-for-all-2026.md"; then
-    echo "OK   ${path} bc-ai outreach link"
-  else
-    echo "FAIL ${path} missing bc-ai-for-all-2026.md link" >&2
-    fail=1
-  fi
-  if echo "$html" | grep -qF "rpaa-positioning-onepager"; then
-    echo "OK   ${path} rpaa diligence link"
-  else
-    echo "FAIL ${path} missing rpaa-positioning-onepager link" >&2
-    fail=1
-  fi
-  if echo "$html" | grep -qF "STAGING_DEMO"; then
-    echo "OK   ${path} staging demo link"
-  else
-    echo "FAIL ${path} missing STAGING_DEMO link" >&2
+    echo "FAIL ${path} missing buyer-proof or has founder runbook links" >&2
     fail=1
   fi
 done
+[[ "$proof_ok" -eq 3 ]] && echo "OK   buyer-proof parity (3/3 copilot pages)"
 
 tle_www="$(curl -sS --connect-timeout 5 -H "Accept: text/html" "${BASE}/trust-ledger/" 2>/dev/null || true)"
 if echo "$tle_www" | grep -qF "security buyer"; then
@@ -132,22 +106,10 @@ else
   echo "FAIL /copilot/procurement/ missing verify script in checkpoint copy" >&2
   fail=1
 fi
-if echo "$proc_html" | grep -qF "AGENT_SELF_AUDIT_LOOP_LOCKED_v1.md"; then
-  echo "OK   /copilot/procurement/ checkpoint links audit loop doc"
-else
-  echo "FAIL /copilot/procurement/ missing audit loop link in checkpoint copy" >&2
-  fail=1
-fi
 if echo "$proc_html" | grep -qF "/openapi.json"; then
   echo "OK   /copilot/procurement/ public OpenAPI link"
 else
   echo "FAIL /copilot/procurement/ missing public OpenAPI link" >&2
-  fail=1
-fi
-if echo "$proc_html" | grep -qF "services/governance/README.md"; then
-  echo "OK   /copilot/procurement/ services/governance README link"
-else
-  echo "FAIL /copilot/procurement/ missing services/governance README link" >&2
   fail=1
 fi
 
@@ -164,7 +126,6 @@ else
   echo "FAIL /copilot/ missing GOVERNANCE_SOURCES_BOOK link" >&2
   fail=1
 fi
-check_url "${BASE}/docs/references/GOVERNANCE_DRIFT_DETECTION_SOURCES_LOCKED_v1.md" "drift detection sources locked doc"
 
 if echo "$proc_html" | grep -qF "GOVERNANCE_DRIFT_DETECTION_SOURCES_LOCKED_v1.md"; then
   echo "OK   /copilot/procurement/ drift detection sources link"
@@ -181,7 +142,6 @@ fi
 pilot_html="$(curl -sS --connect-timeout 5 -H "Accept: text/html" "${BASE}/copilot/pilot/" 2>/dev/null || true)"
 demo_html="$(curl -sS --connect-timeout 5 -H "Accept: text/html" "${BASE}/copilot/demo/" 2>/dev/null || true)"
 
-# ship-trust-brief-parity-audit-045: single fail-closed loop (4 buyer pages)
 trust_brief_ok=0
 for entry in "hub_html|/copilot/" "pilot_html|/copilot/pilot/" "demo_html|/copilot/demo/" "proc_html|/copilot/procurement/"; do
   var="${entry%%|*}"
@@ -197,24 +157,6 @@ for entry in "hub_html|/copilot/" "pilot_html|/copilot/pilot/" "demo_html|/copil
 done
 if [[ "$trust_brief_ok" -eq 4 ]]; then
   echo "OK   trust-brief parity (4/4 buyer pages)"
-fi
-
-# ship-rehearsal-parity-all-pages-049: single fail-closed loop (hub prose + pilot ol + demo ol)
-rehearsal_ok=0
-for entry in "hub_html|/copilot/" "pilot_html|/copilot/pilot/" "demo_html|/copilot/demo/"; do
-  var="${entry%%|*}"
-  path="${entry#*|}"
-  html="${!var}"
-  if echo "$html" | grep -qF "DEMO_REHEARSAL_CHECKLIST_v1.md"; then
-    echo "OK   ${path} rehearsal checklist"
-    rehearsal_ok=$((rehearsal_ok + 1))
-  else
-    echo "FAIL ${path} missing DEMO_REHEARSAL_CHECKLIST" >&2
-    fail=1
-  fi
-done
-if [[ "$rehearsal_ok" -eq 3 ]]; then
-  echo "OK   rehearsal parity (3/3 buyer runbooks)"
 fi
 
 home_html="$(curl -sS --connect-timeout 5 -H "Accept: text/html" "${BASE}/" 2>/dev/null || true)"
@@ -234,6 +176,8 @@ for needle in "Board PDF used in governance meeting" "Persona" "Next step"; do
     fail=1
   fi
 done
+
+check_url "${BASE}/openapi.json" "public OpenAPI schema (procurement path)"
 
 if [[ "$fail" -eq 0 ]]; then
   echo ""

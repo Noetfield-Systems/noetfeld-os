@@ -35,6 +35,10 @@ def _check_source(root: Path, src: dict) -> dict | None:
         if not data.get(src["required_line"]):
             ok = False
             reason = f"missing {src['required_line']}"
+    if src.get("required_line_2") and ok:
+        if not data.get(src["required_line_2"]):
+            ok = False
+            reason = f"missing {src['required_line_2']}"
 
     if not ok:
         return {"node_id": src["fail_node"], "reason": reason or "check failed", "ok": False}

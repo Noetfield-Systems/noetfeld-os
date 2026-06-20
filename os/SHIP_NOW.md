@@ -1,16 +1,53 @@
 # SHIP NOW — Noetfield
 
+**Founder cascade sync (2026-06-20T00:56:33Z):** NO HUB REBUILD — cascade proof test — source `validator_proof` · synced by `nf_founder_input_sync_v1.py`
+
+
+**Founder cascade sync (2026-06-19T19:30:49Z):** F009 DONE sa-1200 CL10 queue_head_pin. Queue advanced to F011 sa-1201. INBOX delivered. — source `cursor_entry_gate:worker` · synced by `nf_founder_input_sync_v1.py`
+
+
+**Founder cascade sync (2026-06-19T18:48:35Z):** NO HUB REBUILD — cascade proof test — source `validator_proof` · synced by `nf_founder_input_sync_v1.py`
+
+
+**Founder cascade sync (2026-06-19T18:48:19Z):** governance center auto cycle — source `governance_center` · synced by `nf_founder_input_sync_v1.py`
+
+
+**Founder cascade sync (2026-06-19T18:46:58Z):** NO HUB REBUILD — cascade proof test — source `validator_proof` · synced by `nf_founder_input_sync_v1.py`
+
+
+**Founder cascade sync (2026-06-19T18:46:38Z):** governance center auto cycle — source `governance_center` · synced by `nf_founder_input_sync_v1.py`
+
+
+**Founder cascade sync (2026-06-19T18:45:29Z):** NO HUB REBUILD — cascade proof test — source `validator_proof` · synced by `nf_founder_input_sync_v1.py`
+
+
 **Ship rule:** Bounded founder `implement` + [GTM_NEXT.md](docs/ops/plans/no-asf/GTM_NEXT.md) queue — see `os/plan.json` `ship_rule`. Ingest required after VERIFY. No self-start (R-007/R-011).
 
 ## Active queue (`next_tasks`)
 
-**P0 pending (live queue head):** `ship-sandbox-server-side-057` — Optional server-side sandbox session persistence · plan: `governance-console/backend/` · see [GTM_NEXT.md](docs/ops/plans/no-asf/GTM_NEXT.md).
+**P0 queue head:** Phase 17 prep (OPS-P1 + XF-P2b + CA-P2b + PL-P2) — see [GTM_NEXT.md](docs/ops/plans/no-asf/GTM_NEXT.md).
+
+**Phase 16 shipped (2026-06-19):** Portfolio **260/300** · XF-P2 + CA-P2 + PL-P1 **30/30** · ship-063–066 anti-staleness verify + status/registry · `bash …/scripts/verify-portfolio-300-phase16.sh` PASS.
+
+**Phase 15 shipped (2026-06-18):** Portfolio **197/300** · XF-P1 + V-P2 + CA-P1 **30/30** · ship-057 sandbox API · GTM 059–062 · `bash …/scripts/verify-portfolio-300-phase15.sh` PASS.
+
+**Commercial inbox (2026-06-18):** `operations@noetfield.com` **ACTIVE** (Google Workspace) · form auto-send (Resend) **deferred post-factory** · [COMMERCIAL_INBOX_PACKAGING_LOCKED_v1.md](docs/ops/COMMERCIAL_INBOX_PACKAGING_LOCKED_v1.md).
+
+**Mono nerve wired (2026-06-19):** fail-closed boot · ecosystem nerve · TrustField fleet pulse.
+
+**Anti-staleness MAX (2026-06-19):** [NF_ANTI_STALENESS_MAXIMUM_FIX_SET_LOCKED_v1.md](docs/ops/NF_ANTI_STALENESS_MAXIMUM_FIX_SET_LOCKED_v1.md) · `make verify-nf-anti-staleness-max` · receipt `~/.sina/nf-anti-staleness-max-v1.json`
+
+**Factory Round 16 (2026-06-19):** [NF_FACTORY_ROUND_16_PREP_LOCKED_v1.md](docs/ops/NF_FACTORY_ROUND_16_PREP_LOCKED_v1.md) · `~/Desktop/1 PAGER/PORTFOLIO_300_PHASE16_10_STEP_LOCKED_v1.md`.
+
+**Factory Round 15 (2026-06-18):** [NF_FACTORY_ROUND_15_PREP_LOCKED_v1.md](docs/ops/NF_FACTORY_ROUND_15_PREP_LOCKED_v1.md) · `~/Desktop/1 PAGER/PORTFOLIO_300_PHASE15_10_STEP_LOCKED_v1.md`.
 
 **Portfolio N-P8 (2026-06-17):** `ship-portfolio-np8-sticky-cta-078` + `ship-portfolio-np8-regression-079` **done** — pilot sticky CTA on gate + intake · Governance Runtime regression SSOT · `wait-dev-www-ready.sh` cold-boot fix · `bash …/scripts/verify-portfolio-300-phase8.sh` PASS.
 
 **Portfolio T-P8 (2026-06-17):** TrustField invoicing rail **5/5 done** — SSOT read chain · conflict matrix · RPAA map · export roadmap · SOC2 gate · `bash …/scripts/verify-portfolio-300-phase13.sh` PASS.
 
-**Portfolio 300 Phase 14 (2026-06-17):** Next 100 plans **100/100 done** — SourceA S-P1/S-P2 · WitnessBC W-P1–W-P3 · seven77 7-P1/7-P2 · Virlux V-P1 · registry **171/300** · `bash …/scripts/verify-portfolio-300-phase14.sh` PASS.
+**Portfolio 300 Phase 15 (2026-06-18):** XF-P1 + V-P2 + CA-P1 **30/30 done** — registry **197/300** · ship-057 sandbox API · `bash …/scripts/verify-portfolio-300-phase15.sh` PASS.
+
+**Portfolio 300 Phase 14 (2026-06-17):** Next 100 plans **100/100 done** — SourceA S-P1/S-P2 · WitnessBC W-P1–W-P3 · seven77 7-P1/7-P2 · Virlux V-P1 · `bash …/scripts/verify-portfolio-300-phase14.sh` PASS.
 
 **Portfolio T-P7 (2026-06-17):** TrustField MSP partner ops **10/10 done** — COPY_SAFETY · CASL · pricing tiers · invoicing rail notice · W3 queue SSOT · `bash …/scripts/verify-portfolio-300-phase12.sh` PASS.
 
@@ -115,6 +152,9 @@ NF-CLOUD ships product + www on disk; founder Hub approves outbound. See R-011 +
 
 | Doc | Path |
 |-----|------|
+| **UI build checklist** | `docs/www/NF_UI_BUILD_CHECKLIST_LOCKED_v1.md` |
+| **WWW language layers** | `docs/www/NF_WWW_LANGUAGE_LAYERS_LOCKED_v1.md` |
+| **Factory Round 15** | `docs/ops/NF_FACTORY_ROUND_15_PREP_LOCKED_v1.md` |
 | **Packaging v16** | `docs/WWW_V16_PACKAGING_PLAN_LOCKED_v1.md` |
 | **Inbox routing** | `docs/ops/COMMERCIAL_INBOX_PACKAGING_LOCKED_v1.md` |
 | GTM copybook | `docs/GTM_COPYBOOK.md` |

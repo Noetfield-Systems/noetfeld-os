@@ -69,10 +69,10 @@ check_file "work with us program" work-with-us/index.html \
 check_file "pilot intake page" trust-brief/intake/index.html \
   'noetfield-intake-pilot-mode.js' 'intakeHeroPilot' 'Copilot Governance Pack' \
   'Submit pilot application' 'tb_pilot_band' 'intakeStickyCta' 'tbPreparePilot' \
-  'NF_PILOT_APPLY_STICKY_CTA' 'What speeds pilot kickoff' 'noetfield-intake-core.js' 'notified asynchronously'
+  'we reply within one business day' 'What speeds pilot kickoff' 'noetfield-intake-core.js' 'notified asynchronously'
 
 check_file "gate intake page" gate/intake/index.html \
-  'intakeStickyCta' 'NF_PILOT_APPLY_STICKY_CTA' 'Apply for pilot' \
+  'intakeStickyCta' 'board PDF in governance meeting' 'Apply for pilot' \
   'noetfield-intake.css' 'Engagement intake'
 
 check_file "contact async intake" contact/index.html \
@@ -116,7 +116,7 @@ check_file "footer investors nav" assets/partials/footer.html \
 
 check_file "next steps hub" next/index.html \
   'next-buyer' 'next-investor' 'next-partner' 'next-ops' \
-  'RESEND_API_KEY' 'noetfield-intake-status.js' 'Apply for pilot'
+  'deferred' 'noetfield-intake-status.js' 'Apply for pilot'
 
 check_file "vercel intake API" vercel.json \
   'api/public/chat'
@@ -211,6 +211,20 @@ for f in index.html start/index.html privacy/index.html terms/index.html status/
   fi
 done
 [[ "$leak_fail" -eq 0 ]] && ok "no P0 copy leaks on public www" || fail=1
+
+# Client-view language — no founder/SSOT jargon on buyer surfaces (developer demo widget exempt)
+LANG_PATTERN='W3 economic signal|Lane SSOT|nurture SSOT|commercial SSOT|SourceA = motor|REGISTRY\.json|OFFERINGS_LOCKED|SSOT: <a|sell-side governance pack \(founder\)|gtm-ops-runbooks|STAGING_DEMO\.md|DEMO_REHEARSAL_CHECKLIST|design partner|design-partner|Accepting design partners|Become a design partner'
+lang_fail=0
+for f in index.html start/index.html pricing/index.html copilot/pilot/index.html federal/index.html msp/index.html \
+  investors/index.html investors/diligence/index.html gate/intake/index.html trust-brief/intake/index.html \
+  status/index.html templates/index.html factory/index.html runtime/index.html copilot/index.html copilot/demo/index.html; do
+  if [[ -f "$f" ]] && grep -E -q "$LANG_PATTERN" "$f"; then
+    echo "FAIL verify-static-www: founder/internal language in $f" >&2
+    grep -E -n "$LANG_PATTERN" "$f" >&2 || true
+    lang_fail=1
+  fi
+done
+[[ "$lang_fail" -eq 0 ]] && ok "client-view language on public www" || fail=1
 
 check_file "pilot automation copy" copilot/pilot/index.html \
   'Policy-bound workflows' 'Automated governance' 'nf-signal-badge--available'

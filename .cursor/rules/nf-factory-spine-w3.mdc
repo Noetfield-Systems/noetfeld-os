@@ -15,7 +15,9 @@ make nf-onboard
 
 ## Quote rule (every substantive reply)
 
-Read `~/.sina/nf-live-surfaces-v1.json` → quote **`product_now_line`** and **`portfolio_now_line`** if present.
+Read `~/.sina/nf-live-surfaces-v1.json` → quote **`product_now_line`**, **`portfolio_now_line`**, and **`email_send_defer_line`** if present.
+
+Email compile/send lanes follow SourceA defer law — `hello@` / Mail FROM active ≠ send lane open.
 
 ## Before first file edit
 
@@ -31,7 +33,7 @@ Gatekeeper FAIL → **EXECUTION DENIED** — fix cascade nodes, re-run onboard.
 make nf-prove-factory-spine
 ```
 
-Must PASS. Receipt: `~/.sina/nf-factory-spine-proof-v1.json` (9 proofs incl. stale inject → DENIED)
+Must PASS. Receipt: `~/.sina/nf-factory-spine-proof-v1.json` (15 proofs incl. ecosystem + orient chain + anti-staleness max)
 
 ## Forbidden
 

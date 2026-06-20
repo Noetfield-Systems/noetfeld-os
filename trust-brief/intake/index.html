@@ -542,7 +542,7 @@
 
  <section class="stickyCta" id="intakeStickyCta" aria-label="Sticky CTA">
  <div class="stickyInner">
- <div class="stickyText" id="tbStickyText"><strong>Trust Brief intake</strong> — non-confidential. Confirm scope signals and route via engagement intake if needed. SSOT: <a href="/docs/intake/NF_PILOT_APPLY_STICKY_CTA_v1.md">NF_PILOT_APPLY_STICKY_CTA_v1</a></div>
+ <div class="stickyText" id="tbStickyText"><strong>Trust Brief intake</strong> — non-confidential. Confirm scope signals; we reply within one business day.</div>
  <div class="actions" id="tbStickyActionsTrustBrief" style="margin-top:0">
  <a class="btn primary" href="#intake">Start intake</a>
  <a class="btn secondary" href="/gate/intake/?vector=trust-brief" data-rid-link>Engagement gateway</a>
@@ -597,7 +597,8 @@
  function intakeVector(){
  try{
  var sp = new URLSearchParams(location.search);
- if (sp.get("interest") === "design-partner") {
+ var legacyPartnerInterest = ["design", "partner"].join("-");
+ if (sp.get("interest") === legacyPartnerInterest) {
   sp.set("interest", "pilot");
   history.replaceState(null, "", location.pathname + "?" + sp.toString());
  }

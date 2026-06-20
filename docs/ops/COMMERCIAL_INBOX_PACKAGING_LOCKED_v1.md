@@ -3,9 +3,21 @@
 | Field | Value |
 |-------|--------|
 | **Status** | LOCKED — operations@ routing after v16 self-serve packaging |
-| **Updated** | 2026-06-13 |
+| **Updated** | 2026-06-18 |
 | **Inbox** | `operations@noetfield.com` only (public surfaces) |
+| **Google Workspace** | **ACTIVE** (2026-06-18) — direct email + Reply works now |
+| **Form auto-send (Resend)** | **DEFERRED post-factory** — not P0; factory spine + portfolio waves first |
 | **Packaging SSOT** | [WWW_V16_PACKAGING_PLAN_LOCKED_v1.md](../WWW_V16_PACKAGING_PLAN_LOCKED_v1.md) |
+
+---
+
+## Sequencing law (founder 2026-06-18)
+
+1. **Factory + portfolio waves** — gates, verify, disk closeout (`make nf-prove-factory-spine`, Phase 16+)
+2. **Google Workspace inbox** — **done** · `operations@noetfield.com` receives direct email now
+3. **Resend / Vercel form auto-notify** — **deferred until after factory** · not session boot · not queue head
+
+Intake until Resend ships: **mailto:** links · direct email · optional platform persistence — never mandatory sales call.
 
 ---
 

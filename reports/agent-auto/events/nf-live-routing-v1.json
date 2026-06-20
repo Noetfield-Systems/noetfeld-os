@@ -1,13 +1,10 @@
 {
   "schema_version": "nf-live-routing-v1",
-  "generated_at": "2026-06-18T00:23:05Z",
+  "generated_at": "2026-06-20T01:19:08Z",
   "agent_id": "noetfield_cloud",
-  "pending_task": {
-    "id": "ship-sandbox-server-side-057",
-    "title": "Optional server-side sandbox session persistence"
-  },
+  "pending_task": null,
   "git": {
-    "sha": "c59cac0",
+    "sha": "d3f057e",
     "branch": "ship/nf-gaos-w2-production"
   },
   "sourcea_mirror": true,

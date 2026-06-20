@@ -46,6 +46,10 @@ def _proof(name: str, ok: bool, detail: str, proofs: list[dict]) -> None:
 
 def prove_receipts_on_disk(root: Path, proofs: list[dict]) -> None:
     repo_files = [
+        "nf-mono-nerve-v1.json",
+        "nf-anti-staleness-max-v1.json",
+        "nf-orient-read-chain-v1.json",
+        "nf-founder-disk-sync-v1.json",
         "nf-session-gate-v1.json",
         "nf-stale-guard-v1.json",
         "nf-voyage-integrity-v1.json",
@@ -57,6 +61,7 @@ def prove_receipts_on_disk(root: Path, proofs: list[dict]) -> None:
     ]
     missing = [f for f in repo_files if not (root / "reports/agent-auto/events" / f).is_file()]
     sina_files = [
+        "nf-mono-nerve-v1.json",
         "nf_session_gate_receipt_v1.json",
         "nf-live-surfaces-v1.json",
         "nf-truth-bundle-v1.json",
@@ -122,9 +127,7 @@ def prove_stale_injection_denies(root: Path, proofs: list[dict]) -> None:
             stale_path.write_text(backup, encoding="utf-8")
         else:
             stale_path.unlink(missing_ok=True)
-        _run(["python3", "scripts/nf_stale_guard_v1.py", "--json"], root)
-        _run(["python3", "scripts/nf_live_surfaces_v1.py", "--json"], root)
-        _run(["python3", "scripts/nf_receipt_cascade_v1.py", "--json"], root)
+        _run(["make", "nf-onboard"], root)
 
 
 def prove_founder_implement_required(root: Path, proofs: list[dict]) -> None:
@@ -140,9 +143,7 @@ def prove_founder_implement_required(root: Path, proofs: list[dict]) -> None:
 
 
 def prove_founder_implement_passes(root: Path, proofs: list[dict]) -> None:
-    # After heal from stale proof, fresh cascade should pass
-    _run(["python3", "scripts/nf_live_surfaces_v1.py", "--json"], root)
-    _run(["python3", "scripts/nf_receipt_cascade_v1.py", "--json"], root)
+    _run(["make", "nf-onboard"], root)
     rc, _ = _run(
         ["python3", "scripts/nf_gatekeeper_v1.py", "--json", "--require-implement"],
         root,
@@ -187,11 +188,15 @@ def prove_truth_bundle_keys(root: Path, proofs: list[dict]) -> None:
     _run(["python3", "scripts/nf_truth_bundle_v1.py", "--json"], root)
     bundle = load_event("nf-truth-bundle-v1.json", root) or load_sina("nf-truth-bundle-v1.json") or {}
     required = [
+        "mono_nerve",
+        "ecosystem_nerve",
         "session_gate",
         "stale_guard",
         "voyage_integrity",
         "live_surfaces",
         "product_now_line",
+        "email_send_defer_line",
+        "ecosystem_nerve",
         "portfolio",
     ]
     missing = [k for k in required if not bundle.get(k) and k != "portfolio"]
@@ -209,11 +214,77 @@ def prove_onboard_pipeline(root: Path, proofs: list[dict]) -> None:
     _proof("onboard_pipeline_exit_0", ok, f"exit={rc}", proofs)
 
 
+def prove_mono_nerve_wired(root: Path, proofs: list[dict]) -> None:
+    mono = load_event("nf-mono-nerve-v1.json", root) or load_sina("nf-mono-nerve-v1.json") or {}
+    ok = bool(mono.get("ok")) and bool(mono.get("email_send_defer_line"))
+    _proof("mono_nerve_wired", ok, f"line={mono.get('email_send_defer_line')!r}", proofs)
+
+
+def prove_email_defer_line_on_surfaces(root: Path, proofs: list[dict]) -> None:
+    surfaces = load_event("nf-live-surfaces-v1.json", root) or load_sina("nf-live-surfaces-v1.json") or {}
+    line = surfaces.get("email_send_defer_line") or ""
+    ok = bool(line) and "email-defer" in line
+    _proof("email_defer_line_surfaces", ok, f"line={line!r}", proofs)
+
+
+def prove_email_task_denied_when_defer(root: Path, proofs: list[dict]) -> None:
+    events = root / "reports/agent-auto/events"
+    plan_path = root / "os/plan.json"
+    plan = load_json(plan_path) or {}
+    backup_plan = plan_path.read_text(encoding="utf-8") if plan_path.is_file() else None
+    try:
+        injected = dict(plan)
+        injected["next_tasks"] = [
+            {
+                "id": "PROOF-RESEND-WIRE",
+                "title": "Wire Resend auto-notify on www intake",
+                "status": "pending",
+            }
+        ]
+        plan_path.write_text(json.dumps(injected, indent=2) + "\n", encoding="utf-8")
+        _run(["python3", "scripts/nf_live_surfaces_v1.py", "--json"], root)
+        _run(["python3", "scripts/nf_gatekeeper_v1.py", "--json"], root)
+        gate = load_event("nf-gatekeeper-v1.json", root) or {}
+        surfaces = load_event("nf-live-surfaces-v1.json", root) or {}
+        denied = "EMAIL_SEND_DEFERRED" in (gate.get("reasons") or [])
+        defer_on = bool(surfaces.get("defer_active"))
+        ok = denied if defer_on else True
+        _proof("email_task_denied_when_defer", ok, f"denied={denied} defer={defer_on}", proofs)
+    finally:
+        if backup_plan is not None:
+            plan_path.write_text(backup_plan, encoding="utf-8")
+        _run(["make", "nf-onboard"], root)
+
+
+def prove_ecosystem_nerve_linked(root: Path, proofs: list[dict]) -> None:
+    eco = load_sina("ecosystem-live-nerve-v1.json") or {}
+    ok = bool(eco.get("ok")) and bool(eco.get("email_send_defer_line"))
+    planes = eco.get("planes") or {}
+    nf_ok = (planes.get("noetfield") or {}).get("ok")
+    ok = ok and bool(nf_ok)
+    _proof("ecosystem_nerve_linked", ok, f"line={eco.get('email_send_defer_line')!r}", proofs)
+
+
+def prove_anti_staleness_max(root: Path, proofs: list[dict]) -> None:
+    max_r = load_event("nf-anti-staleness-max-v1.json", root) or load_sina("nf-anti-staleness-max-v1.json") or {}
+    ok = bool(max_r.get("ok")) and bool(max_r.get("email_send_defer_line"))
+    _proof("anti_staleness_max", ok, f"checks={len(max_r.get('checks') or [])}", proofs)
+
+
+def prove_orient_read_chain(root: Path, proofs: list[dict]) -> None:
+    orient = load_event("nf-orient-read-chain-v1.json", root) or load_sina("nf-orient-read-chain-v1.json") or {}
+    ok = bool(orient.get("ok")) and not orient.get("missing")
+    _proof("orient_read_chain", ok, f"{orient.get('present')}/{orient.get('total')}", proofs)
+
+
 def prove_cascade_ssot_shape(root: Path, proofs: list[dict]) -> None:
     ssot = load_json(root / "data/nf_orient_routing_v1.json") or {}
     sources = ssot.get("receipt_cascade_sources") or []
-    ok = len(sources) >= 4 and bool(ssot.get("session_start_rule"))
-    _proof("cascade_ssot_shape", ok, f"sources={len(sources)}", proofs)
+    has_mono = any(s.get("id") == "nf_mono_nerve" for s in sources)
+    has_founder = any(s.get("id") == "nf_founder_disk_sync" for s in sources)
+    has_orient = any(s.get("id") == "nf_orient_read_chain" for s in sources)
+    ok = len(sources) >= 8 and bool(ssot.get("session_start_rule")) and has_mono and has_founder and has_orient
+    _proof("cascade_ssot_shape", ok, f"sources={len(sources)} mono={has_mono} founder={has_founder} orient={has_orient}", proofs)
 
 
 def run_all_proofs(root: Path | None = None) -> dict:
@@ -222,10 +293,16 @@ def run_all_proofs(root: Path | None = None) -> dict:
 
     prove_cascade_ssot_shape(root, proofs)
     prove_onboard_pipeline(root, proofs)
+    prove_mono_nerve_wired(root, proofs)
+    prove_ecosystem_nerve_linked(root, proofs)
+    prove_email_defer_line_on_surfaces(root, proofs)
+    prove_orient_read_chain(root, proofs)
+    prove_anti_staleness_max(root, proofs)
     prove_receipts_on_disk(root, proofs)
     prove_product_now_line_matches_plan(root, proofs)
     prove_truth_bundle_keys(root, proofs)
     prove_stale_injection_denies(root, proofs)
+    prove_email_task_denied_when_defer(root, proofs)
     prove_founder_implement_required(root, proofs)
     prove_founder_implement_passes(root, proofs)
     prove_executor_lock(root, proofs)

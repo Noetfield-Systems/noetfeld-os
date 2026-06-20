@@ -210,6 +210,10 @@ Shipped capabilities mapped to registry indices. Run `python3 scripts/sync-promp
 | ship-portfolio-np8-sticky-cta-078 | Pilot apply sticky CTA | gate + trust-brief intake |
 | ship-portfolio-np8-regression-079 | Governance Runtime regression SSOT | `tests/`, verify bundle |
 | ship-agentic-workflow-manifest-058 | Agent manifest on /start/ | `docs/schemas/agent-manifest.schema.json`, `rebuild-www-v6.py` |
+| ship-sandbox-server-side-057 | Server-side sandbox sessions | `governance-console/backend/routes/sandbox.py`, `assets/noetfield-sandbox.js` |
+| ship-procurement-openapi-verify-060 | OpenAPI 200 in gtm-ops verify | `scripts/verify-gtm-ops-docs.sh` |
+| ship-services-governance-readme-openapi-061 | README cites /openapi.json | `services/governance/README.md` |
+| ship-tenth-audit-merge-rule-062 | Tenth-audit manifest template | `ENGINEERING_DONE_MANIFEST.md` |
 
 ## Fifth audit fix (post–PR #42 truth + iter 13)
 
@@ -256,3 +260,20 @@ Shipped capabilities mapped to registry indices. Run `python3 scripts/sync-promp
 ```bash
 ./scripts/plan-with-no-asf-verify.sh
 ```
+
+## Tenth-audit closeout template (ship-062)
+
+When closing an audit iteration (e.g. PR #48 tenth audit), append a section:
+
+```markdown
+## Nth audit fix (iter M — short label)
+
+| Area | Shipped | Evidence |
+|------|---------|----------|
+| <area> | <one-line outcome> | `<path>` · `<verify command>` |
+```
+
+Rules:
+- Branch name: `audit/iter-N-<slug>` or merge PR with audit tag in ENGINEERING_DONE_MANIFEST
+- Cross-link `os/SHIP_NOW.md` active queue head after each audit closeout
+- Run `python3 scripts/sync-prompt-pack-status.py` before manifest update

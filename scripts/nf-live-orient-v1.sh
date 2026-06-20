@@ -23,6 +23,7 @@ OUT="$ROOT/reports/agent-auto/LIVE-STATUS.md"
 mkdir -p "$EVENTS"
 
 bash scripts/nf_routing_card.sh --json >"$EVENTS/nf-live-routing-v1.json" 2>/dev/null || true
+python3 scripts/nf_mono_nerve_v1.py --json >"$EVENTS/nf-mono-nerve-v1.json" 2>/dev/null || true
 python3 scripts/nf_stale_guard_v1.py --json >"$EVENTS/nf-stale-guard-v1.json" 2>/dev/null || true
 python3 scripts/nf_session_gate_run_v1.py --json >"$EVENTS/nf-session-gate-v1.json" 2>/dev/null || true
 
@@ -47,6 +48,15 @@ def load(name):
 routing = load("nf-live-routing-v1.json")
 stale = load("nf-stale-guard-v1.json")
 gate = load("nf-session-gate-v1.json")
+mono = load("nf-mono-nerve-v1.json")
+surfaces = load("nf-live-surfaces-v1.json")
+
+defer_line = (
+    (surfaces.get("email_send_defer_line") if surfaces else None)
+    or mono.get("email_send_defer_line")
+    or stale.get("email_send_defer_line")
+    or "—"
+)
 
 pending = routing.get("pending_task") or {}
 git_info = routing.get("git") or {}
@@ -79,7 +89,9 @@ lines = [
     f"| Gate | Value |",
     f"|------|-------|",
     f"| Session gate | {'PASS' if gate.get('ok') else 'FAIL'} |",
+    f"| Mono nerve | {'PASS' if mono.get('ok') else 'FAIL'} |",
     f"| Context stale | {stale.get('context_stale', '?')} |",
+    f"| Email defer | `{defer_line}` |",
     f"| SourceA mirror | {routing.get('sourcea_mirror', False)} |",
     "",
     "## Boot",

@@ -26,6 +26,7 @@ def build_truth_bundle() -> dict:
         "generated_at": iso_now(),
         "agent_id": agent_id(),
         "plane": "noetfield_cloud",
+        "mono_nerve": load_event("nf-mono-nerve-v1.json", root) or load_sina("nf-mono-nerve-v1.json"),
         "session_gate": load_event("nf-session-gate-v1.json", root) or load_sina("nf_session_gate_receipt_v1.json"),
         "stale_guard": load_event("nf-stale-guard-v1.json", root),
         "voyage_integrity": load_event("nf-voyage-integrity-v1.json", root),
@@ -38,8 +39,12 @@ def build_truth_bundle() -> dict:
         "routing_card": "ROUTING_CARD.md",
     }
     surfaces = bundle.get("live_surfaces") or {}
+    mono = bundle.get("mono_nerve") or {}
     bundle["product_now_line"] = surfaces.get("product_now_line")
     bundle["portfolio_now_line"] = surfaces.get("portfolio_now_line")
+    bundle["email_send_defer_line"] = surfaces.get("email_send_defer_line") or mono.get("email_send_defer_line")
+    bundle["ecosystem_nerve"] = load_sina("ecosystem-live-nerve-v1.json")
+    bundle["defer_active"] = surfaces.get("defer_active") if surfaces.get("defer_active") is not None else mono.get("defer_active")
     return bundle
 
 

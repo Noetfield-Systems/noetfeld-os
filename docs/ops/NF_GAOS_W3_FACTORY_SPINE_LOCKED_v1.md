@@ -13,19 +13,37 @@
 
 ```text
 make nf-onboard
-  → session_gate → live_orient → routing_card → stale_guard → voyage
-  → live_surfaces (product_now_line) → receipt_cascade → gatekeeper (advisory)
+  → mono_nerve (SourceA defer + ~/.sina wires) → session_gate → live_orient
+  → routing_card → stale_guard → voyage
+  → live_surfaces (product_now_line + email_send_defer_line) → receipt_cascade → gatekeeper (advisory)
   → panel export
 
 Before first edit:
   NF_FOUNDER_IMPLEMENT=1 make nf-gatekeeper --require-implement
 ```
 
+## Mono nerve (W3.1 — fail-closed)
+
+| Asset | Path |
+|-------|------|
+| Wiring SSOT | `data/nf_mono_nerve_wiring_v1.json` |
+| Mono nerve script | `scripts/nf_mono_nerve_v1.py` |
+| Defer SSOT (read-only) | `~/Desktop/SourceA/data/commercial-email-send-defer-v1.json` |
+| Defer receipt | `~/.sina/commercial-email-send-defer-receipt-v1.json` |
+| Operations inbox receipt | `~/.sina/noetfield-operations-inbox-active-v1.json` |
+| Mono receipt | `~/.sina/nf-mono-nerve-v1.json` |
+
+**Law:** `email_send_defer_line` required on every boot. Gatekeeper **DENY** (`EMAIL_SEND_DEFERRED`) if pending task touches Resend/email/outreach while defer ON.
+
+**Maximum fix set:** [NF_ANTI_STALENESS_MAXIMUM_FIX_SET_LOCKED_v1.md](./NF_ANTI_STALENESS_MAXIMUM_FIX_SET_LOCKED_v1.md) · `make verify-nf-anti-staleness-max`
+
 ## New artifacts (W3)
 
 | Asset | Path |
 |-------|------|
 | Orient SSOT | `data/nf_orient_routing_v1.json` |
+| UI checklist LOCK | `docs/www/NF_UI_BUILD_CHECKLIST_LOCKED_v1.md` |
+| Factory Round 15 | `docs/ops/NF_FACTORY_ROUND_15_PREP_LOCKED_v1.md` |
 | Live surfaces | `~/.sina/nf-live-surfaces-v1.json` |
 | Truth bundle | `~/.sina/nf-truth-bundle-v1.json` |
 | Receipt cascade | `~/.sina/nf-receipt-cascade-v1.json` |
@@ -34,7 +52,15 @@ Before first edit:
 
 ## Agent quote rule (mandatory)
 
-Every substantive reply quotes **`product_now_line`** from `nf-live-surfaces-v1.json` — not chat memory.
+Every substantive reply quotes **`product_now_line`** and **`email_send_defer_line`** from `nf-live-surfaces-v1.json` — not chat memory.
+
+## Commercial inbox sequencing (founder 2026-06-18)
+
+| Layer | Status |
+|-------|--------|
+| Google Workspace `operations@noetfield.com` | **ACTIVE** — direct email |
+| Resend / www form auto-send | **DEFERRED post-factory** — not session boot |
+| P0 | Factory spine + portfolio waves |
 
 ## Laws
 

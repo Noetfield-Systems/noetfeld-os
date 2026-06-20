@@ -3,7 +3,7 @@
   "ok": true,
   "agent_id": "noetfield_cloud",
   "role": "cloud",
-  "generated_at": "2026-06-18T00:23:05Z",
+  "generated_at": "2026-06-20T01:19:08Z",
   "repo_root": "/Users/sinakazemnezhad/Desktop/Noetfield/Noetfield-All-Documents/Noetfield",
   "gates": [
     {
@@ -32,9 +32,29 @@
       "path": "/Users/sinakazemnezhad/Desktop/Noetfield/Noetfield-All-Documents/Noetfield/docs/ops/NF_GAOS_W3_FACTORY_SPINE_LOCKED_v1.md"
     },
     {
+      "gate": "docs/ops/COMMERCIAL_INBOX_PACKAGING_LOCKED_v1.md",
+      "ok": true,
+      "path": "/Users/sinakazemnezhad/Desktop/Noetfield/Noetfield-All-Documents/Noetfield/docs/ops/COMMERCIAL_INBOX_PACKAGING_LOCKED_v1.md"
+    },
+    {
+      "gate": "docs/ops/NF_ANTI_STALENESS_MAXIMUM_FIX_SET_LOCKED_v1.md",
+      "ok": true,
+      "path": "/Users/sinakazemnezhad/Desktop/Noetfield/Noetfield-All-Documents/Noetfield/docs/ops/NF_ANTI_STALENESS_MAXIMUM_FIX_SET_LOCKED_v1.md"
+    },
+    {
+      "gate": "data/nf_anti_staleness_max_v1.json",
+      "ok": true,
+      "path": "/Users/sinakazemnezhad/Desktop/Noetfield/Noetfield-All-Documents/Noetfield/data/nf_anti_staleness_max_v1.json"
+    },
+    {
       "gate": "data/nf_orient_routing_v1.json",
       "ok": true,
       "path": "/Users/sinakazemnezhad/Desktop/Noetfield/Noetfield-All-Documents/Noetfield/data/nf_orient_routing_v1.json"
+    },
+    {
+      "gate": "data/nf_mono_nerve_wiring_v1.json",
+      "ok": true,
+      "path": "/Users/sinakazemnezhad/Desktop/Noetfield/Noetfield-All-Documents/Noetfield/data/nf_mono_nerve_wiring_v1.json"
     },
     {
       "gate": "os/NF_REPO_CAPABILITY_MAP.json",
@@ -91,6 +111,30 @@
     },
     {
       "gate": "memory_version",
+      "ok": true
+    },
+    {
+      "gate": "mono_defer_ssot",
+      "ok": true,
+      "path": "/Users/sinakazemnezhad/Desktop/SourceA/data/commercial-email-send-defer-v1.json"
+    },
+    {
+      "gate": "mono_defer_receipt",
+      "ok": true,
+      "path": "/Users/sinakazemnezhad/.sina/commercial-email-send-defer-receipt-v1.json"
+    },
+    {
+      "gate": "mono_agent_live_surfaces",
+      "ok": true,
+      "path": "/Users/sinakazemnezhad/.sina/agent-live-surfaces-v1.json"
+    },
+    {
+      "gate": "mono_nf_inbox",
+      "ok": true,
+      "path": "/Users/sinakazemnezhad/.sina/agent-workspaces/noetfield_cloud/INBOX.md"
+    },
+    {
+      "gate": "mono_email_send_defer_line",
       "ok": true
     },
     {

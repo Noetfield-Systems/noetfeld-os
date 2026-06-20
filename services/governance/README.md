@@ -19,6 +19,8 @@ FastAPI production runtime for intake, trust ledger, public chat, and webhooks.
 
 Decisions: `PROCEED` / `REQUIRE_HUMAN_REVIEW` / `REJECT`.
 
+**OpenAPI:** [`/openapi.json`](../../openapi.json) (production schema) · static reference [`docs/api/openapi.yaml`](../../docs/api/openapi.yaml)
+
 ## Dual-stack note
 
 | Stack | Path | Role |

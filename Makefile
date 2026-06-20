@@ -1,4 +1,4 @@
-.PHONY: bootstrap validate api api-v3 apply-migrations ingest-sot-dry-run ingest-sot phase32-smoke phase32-postgres-smoke phase33-verify phase33-postgres-verify phase35-demo final-lock-audit final-lock-semantic governance-console-up governance-console-e2e governance-console-down plan-with-no-asf-verify sync-prompt-pack generate-prompt-pack verify-gtm verify-no-vendor-names verify-static-www verify-www verify-tier0 verify-tier1 verify-tier2 verify-tier3 verify-all-tiers verify-nf-gaos-w2
+.PHONY: bootstrap validate api api-v3 apply-migrations ingest-sot-dry-run ingest-sot phase32-smoke phase32-postgres-smoke phase33-verify phase33-postgres-verify phase35-demo final-lock-audit final-lock-semantic governance-console-up governance-console-e2e governance-console-down plan-with-no-asf-verify sync-prompt-pack generate-prompt-pack verify-gtm verify-no-vendor-names verify-static-www verify-ui-build-checklist nf-ui-checklist verify-www verify-tier0 verify-tier1 verify-tier2 verify-tier3 verify-all-tiers verify-nf-gaos-w2
 
 PYTHONPATH_VALUE := packages/types:packages/config:packages/sdk:services/events:services/ledger:services/graph:services/governance:services/signals:services/workflow:services/ai-runtime:services/inspectors:services/identity:services/copilot-governance
 
@@ -120,9 +120,15 @@ verify-static-www:
 	@chmod +x scripts/verify-static-www.sh
 	./scripts/verify-static-www.sh
 
-verify-www: verify-no-vendor-names verify-static-www
+verify-ui-build-checklist:
+	@chmod +x scripts/verify-ui-build-checklist.sh
+	./scripts/verify-ui-build-checklist.sh
+
+nf-ui-checklist: verify-ui-build-checklist
+
+verify-www: verify-no-vendor-names
 	@python3 scripts/rebuild-www-v6.py
-	@$(MAKE) verify-static-www
+	@$(MAKE) verify-ui-build-checklist
 
 market-roadmap:
 	@python3 scripts/generate-market-success-1000-roadmap.py
@@ -157,6 +163,33 @@ nf-live-orient:
 
 nf-session-gate:
 	@python3 scripts/nf_session_gate_run_v1.py --json
+
+nf-mono-nerve:
+	@python3 scripts/nf_mono_nerve_v1.py --json
+
+verify-nf-anti-staleness-max:
+	@chmod +x scripts/verify-nf-anti-staleness-max.sh scripts/verify-nf-mono-nerve-wire.sh
+	./scripts/verify-nf-anti-staleness-max.sh
+
+nf-anti-staleness-max:
+	@python3 scripts/nf_anti_staleness_max_v1.py --json
+
+nf-orient-read-chain:
+	@python3 scripts/nf_orient_read_chain_v1.py --json
+
+nf-email-lane-guard:
+	@python3 scripts/nf_email_lane_guard_v1.py --json
+
+nf-founder-input-sync:
+	@python3 scripts/nf_founder_input_sync_v1.py --json
+
+nf-assert-implement:
+	@chmod +x scripts/nf_assert_implement_allowed.sh
+	@NF_FOUNDER_IMPLEMENT=1 ./scripts/nf_assert_implement_allowed.sh
+
+verify-nf-mono-nerve-wire:
+	@chmod +x scripts/verify-nf-mono-nerve-wire.sh
+	./scripts/verify-nf-mono-nerve-wire.sh
 
 nf-unified-routing:
 	@chmod +x scripts/nf-unified-routing.sh

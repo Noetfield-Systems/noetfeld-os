@@ -1,0 +1,58 @@
+{
+  "schema": "noetfield-factory-spec-v1",
+  "factory_id": "noetfield-rent-line-v1",
+  "spec_version": "1.0.0",
+  "saved_at": "2026-06-19T06:30:00Z",
+  "kind": "premium",
+  "phase": "P2",
+  "demo_seconds": 0,
+  "kernel": {
+    "id": "fbe-v1",
+    "lines": ["tle_motor", "board_refinery", "copilot_assembly"],
+    "graph": ["COMPILE", "SPAWN", "RUN", "RECEIPT", "FEDERATE"]
+  },
+  "runtime": {
+    "bay_slug": "noetfield-tenant-bay",
+    "default_tenant": "tenant-placeholder",
+    "execution_mode": "CLOUD_HEADLESS",
+    "billing": "bay_subscription_plus_metered_evals"
+  },
+  "io": {
+    "input_schema": {
+      "type": "object",
+      "required": ["tenant_id", "line_id"],
+      "properties": {
+        "tenant_id": { "type": "string" },
+        "line_id": { "enum": ["tle_motor", "board_refinery", "copilot_assembly"] },
+        "policy_pack_id": { "type": "string" }
+      }
+    },
+    "output_schema": {
+      "type": "object",
+      "required": ["receipt_id", "verdict", "board_line"],
+      "properties": {
+        "receipt_id": { "type": "string" },
+        "verdict": { "enum": ["GO", "NO_GO", "MOCK_ONLY"] },
+        "board_line": { "type": "string" }
+      }
+    },
+    "receipt_emitter": "scripts/emit-governance-receipt.py"
+  },
+  "governance": {
+    "tier_cap_honest": "PREMIUM",
+    "delivery_mode": "live",
+    "isolation": "per_tenant_bay"
+  },
+  "commercial": {
+    "name": "Noetfield Rent-a-Line",
+    "tagline": "Your own TLE · Board · Copilot campus line",
+    "upgrade_cta": "Contact for bay subscription + metered TLE evals",
+    "monetization": "bay_subscription + metered_evals"
+  },
+  "catalog_ui": {
+    "tab": "Build Factory",
+    "section": "Rent a line",
+    "install_label": "Request bay",
+    "proof_line": "Dedicated governance line — not shared sandbox mesh"
+  }
+}

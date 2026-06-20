@@ -83,6 +83,8 @@ def _gov_api_route(path: str, method: str, headers: dict[str, str]) -> bool:
         return True
     if path == "/evaluate" and method == "POST":
         return True
+    if path.startswith("/api/v1/sandbox"):
+        return True
     if path.startswith("/audit/"):
         return True
     if path == "/audit" and method == "GET":

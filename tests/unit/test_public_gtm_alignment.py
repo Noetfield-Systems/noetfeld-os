@@ -44,6 +44,7 @@ def test_public_www_has_no_design_partner_language() -> None:
     paths = (
         "index.html",
         "copilot/pilot/index.html",
+        "templates/index.html",
         "assets/partials/header.html",
         "assets/partials/footer.html",
         "investors/index.html",
@@ -149,7 +150,8 @@ def test_next_steps_hub_page() -> None:
     assert "next-buyer" in text
     assert "next-investor" in text
     assert "next-ops" in text
-    assert "RESEND_API_KEY" in text
+    assert "deferred" in text.lower() or "Deferred" in text
+    assert "noetfield-intake-status.js" in text
     index = (ROOT / "index.html").read_text(encoding="utf-8")
     assert "/next/" in index
 

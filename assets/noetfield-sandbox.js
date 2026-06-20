@@ -1,9 +1,19 @@
 /** Self-serve developer sandbox + Trial OS wizard (v18 UI-02). */
 (function () {
   var STORAGE_KEY = "nf_sandbox_v1";
+  var SESSION_ID_KEY = "nf_sandbox_sid_v1";
   var LIMIT_EVALUATES = 50;
   var TRIAL_DAYS = 14;
   var STEPS = ["account", "environment", "connect", "evaluate", "receipt"];
+
+  function useServerApi() {
+    return window.NF_SANDBOX_API === 1 || window.NF_SANDBOX_API === "1";
+  }
+
+  function apiSessionsUrl() {
+    var base = window.NF_SANDBOX_API_BASE || "";
+    return base + "/api/v1/sandbox/sessions";
+  }
 
   function readSession() {
     try {
@@ -17,7 +27,38 @@
   function writeSession(data) {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+      if (data && data.session_id) {
+        localStorage.setItem(SESSION_ID_KEY, data.session_id);
+      }
     } catch (e) {}
+    if (useServerApi() && data && data.session_id) {
+      fetch(apiSessionsUrl() + "/" + encodeURIComponent(data.session_id), {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          evaluates_used: data.evaluates_used,
+          trial_step: data.trial_step,
+          m365_connected: data.m365_connected,
+        }),
+      }).catch(function () {});
+    }
+  }
+
+  function serverToClient(data) {
+    return {
+      session_id: data.session_id,
+      email: data.email,
+      org: data.org,
+      tenant_id: data.tenant_id,
+      api_key_preview: data.api_key_preview,
+      mode: data.mode || "sandbox",
+      evaluates_used: data.evaluates_used || 0,
+      evaluates_limit: data.evaluates_limit || LIMIT_EVALUATES,
+      created_at: data.created_at,
+      expires_at: data.expires_at,
+      trial_step: data.trial_step || 0,
+      m365_connected: !!data.m365_connected,
+    };
   }
 
   function newTenantId() {
@@ -32,7 +73,7 @@
     return Math.max(0, Math.ceil(ms / 86400000));
   }
 
-  function createSession(email, org) {
+  function createSessionLocal(email, org) {
     var now = Date.now();
     var session = {
       email: email,
@@ -49,6 +90,61 @@
     };
     writeSession(session);
     return session;
+  }
+
+  function createSession(email, org, onReady) {
+    if (!useServerApi()) {
+      var local = createSessionLocal(email, org);
+      if (onReady) onReady(local);
+      return local;
+    }
+    fetch(apiSessionsUrl(), {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: email, org: org || "Sandbox org" }),
+    })
+      .then(function (res) {
+        if (!res.ok) throw new Error("sandbox api");
+        return res.json();
+      })
+      .then(function (data) {
+        var session = serverToClient(data);
+        writeSession(session);
+        if (onReady) onReady(session);
+      })
+      .catch(function () {
+        var fallback = createSessionLocal(email, org);
+        if (onReady) onReady(fallback);
+      });
+    return null;
+  }
+
+  function resumeServerSession(onReady) {
+    if (!useServerApi()) {
+      if (onReady) onReady(readSession());
+      return;
+    }
+    var sid = null;
+    try {
+      sid = localStorage.getItem(SESSION_ID_KEY);
+    } catch (e) {}
+    if (!sid) {
+      if (onReady) onReady(readSession());
+      return;
+    }
+    fetch(apiSessionsUrl() + "/" + encodeURIComponent(sid))
+      .then(function (res) {
+        if (!res.ok) throw new Error("resume failed");
+        return res.json();
+      })
+      .then(function (data) {
+        var session = serverToClient(data);
+        writeSession(session);
+        if (onReady) onReady(session);
+      })
+      .catch(function () {
+        if (onReady) onReady(readSession());
+      });
   }
 
   function incrementEvaluate() {
@@ -134,6 +230,18 @@
     }
   }
 
+  function afterSessionReady(session, next) {
+    if (!session) return;
+    try {
+      var u = new URL(next, location.origin);
+      u.searchParams.set("tenant", session.tenant_id);
+      u.searchParams.set("sandbox", "1");
+      location.href = u.pathname + u.search;
+    } catch (e) {
+      location.href = next;
+    }
+  }
+
   function bindLegacyForm(form) {
     if (!form) return;
     form.addEventListener("submit", function (ev) {
@@ -145,25 +253,20 @@
         alert("Enter a work email to start your sandbox.");
         return;
       }
-      createSession(email, orgEl && orgEl.value ? orgEl.value.trim() : "");
       var next = form.getAttribute("data-next") || "/cognitive-dashboard/?sandbox=1";
-      try {
-        var u = new URL(next, location.origin);
-        var session = readSession();
-        if (session) u.searchParams.set("tenant", session.tenant_id);
-        u.searchParams.set("sandbox", "1");
-        location.href = u.pathname + u.search;
-      } catch (e) {
-        location.href = next;
-      }
+      createSession(email, orgEl && orgEl.value ? orgEl.value.trim() : "", function (session) {
+        afterSessionReady(session, next);
+      });
     });
   }
 
   function bindTrialOs(root) {
     if (!root) return;
-    var session = readSession();
-    var startIndex = session ? Math.min(STEPS.length - 1, session.trial_step || 0) : 0;
-    updateTrialUI(startIndex);
+    resumeServerSession(function (session) {
+      var startIndex = session ? Math.min(STEPS.length - 1, session.trial_step || 0) : 0;
+      updateTrialUI(startIndex);
+      renderUsageChips();
+    });
 
     var accountForm = root.querySelector("#nfTrialAccountForm");
     if (accountForm) {
@@ -175,8 +278,9 @@
           alert("Enter a work email.");
           return;
         }
-        createSession(email.trim(), org.trim());
-        setTrialStep(1);
+        createSession(email.trim(), org.trim(), function () {
+          setTrialStep(1);
+        });
       });
     }
 
@@ -279,13 +383,15 @@
   document.addEventListener("DOMContentLoaded", function () {
     bindLegacyForm(document.getElementById("nfSandboxForm"));
     bindTrialOs(document.getElementById("nfTrialOs"));
-    renderStatus(document.getElementById("nfSandboxStatus"));
-    renderUsageChips();
-    var badge = document.getElementById("nfSandboxBadge");
-    if (badge && readSession()) {
-      badge.textContent = "Sandbox";
-      badge.hidden = false;
-    }
+    resumeServerSession(function () {
+      renderStatus(document.getElementById("nfSandboxStatus"));
+      renderUsageChips();
+      var badge = document.getElementById("nfSandboxBadge");
+      if (badge && readSession()) {
+        badge.textContent = "Sandbox";
+        badge.hidden = false;
+      }
+    });
   });
 
   window.noetfieldSandbox = {
@@ -294,5 +400,6 @@
     incrementEvaluate: incrementEvaluate,
     limit: LIMIT_EVALUATES,
     trialDays: TRIAL_DAYS,
+    useServerApi: useServerApi,
   };
 })();

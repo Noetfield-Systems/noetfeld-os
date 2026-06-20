@@ -10,7 +10,9 @@ chmod +x scripts/nf-onboard.sh scripts/nf-live-orient-v1.sh 2>/dev/null || true
 
 echo "=== agent-session-start (NF-GAOS) ==="
 if ! ./scripts/nf-onboard.sh cloud; then
-  echo "WARN: nf-onboard reported gate issues — read reports/agent-auto/LIVE-STATUS.md" >&2
+  echo "BLOCKED: nf-onboard FAIL — mono nerve / cascade / gates not green" >&2
+  echo "Read: reports/agent-auto/LIVE-STATUS.md" >&2
+  exit 1
 fi
 
 if [[ -f "$AUDIT" ]]; then

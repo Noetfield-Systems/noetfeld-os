@@ -163,3 +163,36 @@ class TleDetail(BaseModel):
     finalized_at: datetime | None
     document: dict[str, Any]
 
+
+class SandboxSessionCreate(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    email: str = Field(min_length=3, max_length=320)
+    org: str = Field(default="Sandbox org", max_length=256)
+
+
+class SandboxSessionPatch(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    evaluates_used: int | None = Field(default=None, ge=0)
+    trial_step: int | None = Field(default=None, ge=0, le=4)
+    m365_connected: bool | None = None
+    increment_evaluate: bool = False
+
+
+class SandboxSessionResponse(BaseModel):
+    session_id: UUID
+    email: str
+    org: str
+    tenant_id: str
+    api_key_preview: str
+    mode: str
+    evaluates_used: int
+    evaluates_limit: int
+    trial_step: int
+    m365_connected: bool
+    created_at: datetime
+    expires_at: datetime
+
+    model_config = ConfigDict(from_attributes=True)
+

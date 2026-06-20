@@ -1,0 +1,43 @@
+{
+  "schema": "noetfield-factory-spec-v1",
+  "factory_id": "noetfield-governance-factory-v1",
+  "spec_version": "1.0.0",
+  "saved_at": "2026-06-19T06:00:00Z",
+  "kind": "freemium",
+  "demo_seconds": 30,
+  "kernel": {
+    "id": "scan-pick-prove-governance-v1",
+    "graph": ["SCAN", "POLICY_EVAL", "TLE", "RECEIPT"],
+    "honest_label": "mock_only until premium upgrade"
+  },
+  "runtime": {
+    "bay_slug": "noetfield-governance-bay",
+    "execution_mode": "AGENT_RUN",
+    "entry_command": "make nf-onboard",
+    "sandbox_command": "make nf-onboard MOCK_ONLY=1"
+  },
+  "io": {
+    "receipt_emitter": "scripts/emit-governance-receipt.py",
+    "certainty_report": true,
+    "input": "Governance intent + policy pack",
+    "output": "TLE v1 + board go/no-go line + export bundle"
+  },
+  "governance": {
+    "tier_cap_honest": "FREEMIUM",
+    "delivery_mode": "mock_only",
+    "freemium_caps": { "evals_per_day": 5, "watermark": true },
+    "premium_unlock": ["full TLE ladder", "board PDF", "Copilot pack", "team hire"],
+    "sourcea_law": "read-only motor — never edit SourceA disk"
+  },
+  "commercial": {
+    "name": "Noetfield Governance Factory",
+    "tagline": "Every Copilot action evaluated, signed, and logged.",
+    "buyer": "CISO · GRC · VP Risk · M365 admin",
+    "upgrade_cta": "Upgrade for board PDF + Copilot Governance Pack"
+  },
+  "catalog_ui": {
+    "tab": "Build Factory",
+    "install_label": "Run governance eval (30s demo)",
+    "proof_line": "TLE receipt + board line — mock until upgrade"
+  }
+}

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Noetfield cloud-native session gate — receipt on disk; no SourceA dependency."""
+"""Noetfield session gate — mono nerve receipts required (read-only SourceA/data)."""
 
 from __future__ import annotations
 
@@ -25,7 +25,11 @@ REQUIRED_FILES = [
     "docs/ops/NF_GAOS_W0_LOCKED_v1.md",
     "docs/ops/NF_GAOS_W1_LOCKED_v1.md",
     "docs/ops/NF_GAOS_W3_FACTORY_SPINE_LOCKED_v1.md",
+    "docs/ops/COMMERCIAL_INBOX_PACKAGING_LOCKED_v1.md",
+    "docs/ops/NF_ANTI_STALENESS_MAXIMUM_FIX_SET_LOCKED_v1.md",
+    "data/nf_anti_staleness_max_v1.json",
     "data/nf_orient_routing_v1.json",
+    "data/nf_mono_nerve_wiring_v1.json",
     "os/NF_REPO_CAPABILITY_MAP.json",
     "os/NF_UNIFIED_ROUTING_GRAPH.json",
     "os/NF_SSOT_INVENTORY.json",
@@ -65,6 +69,31 @@ def run_gate(role: str, agent_override: str | None) -> dict:
             gates.append({"gate": f"memory_{token.strip(':')}", "ok": passed})
             if not passed:
                 ok = False
+
+    sina = Path.home() / ".sina"
+    mono_paths = [
+        ("mono_defer_ssot", Path.home() / "Desktop/SourceA/data/commercial-email-send-defer-v1.json"),
+        ("mono_defer_receipt", sina / "commercial-email-send-defer-receipt-v1.json"),
+        ("mono_agent_live_surfaces", sina / "agent-live-surfaces-v1.json"),
+        ("mono_nf_inbox", sina / "agent-workspaces/noetfield_cloud/INBOX.md"),
+    ]
+    for gate_name, path in mono_paths:
+        passed = path.is_file()
+        gates.append({"gate": gate_name, "ok": passed, "path": str(path)})
+        if not passed:
+            ok = False
+
+    defer_receipt = {}
+    dr_path = sina / "commercial-email-send-defer-receipt-v1.json"
+    if dr_path.is_file():
+        try:
+            defer_receipt = json.loads(dr_path.read_text(encoding="utf-8"))
+        except (json.JSONDecodeError, OSError):
+            defer_receipt = {}
+    has_defer_line = bool(defer_receipt.get("email_send_defer_line"))
+    gates.append({"gate": "mono_email_send_defer_line", "ok": has_defer_line})
+    if not has_defer_line:
+        ok = False
 
     incidents = root / ".cursor/incidents/REGISTRY.md"
     open_incidents = 0

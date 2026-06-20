@@ -1,0 +1,614 @@
+{
+  "schema_version": "nf-anti-staleness-max-v1",
+  "generated_at": "2026-06-20T01:19:09Z",
+  "ok": true,
+  "agent_id": "noetfield_cloud",
+  "law_doc": "docs/ops/NF_ANTI_STALENESS_MAXIMUM_FIX_SET_LOCKED_v1.md",
+  "checks": [
+    {
+      "layer": "L0_mono_receipt",
+      "ok": true,
+      "detail": "email-defer \u00b7 ON \u00b7 main=5/5 \u00b7 sites=RED \u00b7 email=AFTER_MAIN \u00b7 lift=NO",
+      "data": {
+        "schema_version": "nf-mono-nerve-v1",
+        "generated_at": "2026-06-20T01:19:08Z",
+        "ok": true,
+        "agent_id": "noetfield_cloud",
+        "defer_active": true,
+        "email_send_defer_line": "email-defer \u00b7 ON \u00b7 main=5/5 \u00b7 sites=RED \u00b7 email=AFTER_MAIN \u00b7 lift=NO",
+        "operations_inbox": {
+          "schema": "noetfield-operations-inbox-active-v1",
+          "at": "2026-06-20T01:19:07Z",
+          "ok": true,
+          "inbox": "operations@noetfield.com",
+          "gw_status": "ACTIVE",
+          "form_autonotify": "DEFERRED_POST_FACTORY",
+          "receive_lane": "OPEN",
+          "send_lane": "DEFERRED_POST_FACTORY",
+          "ssot_doc": "docs/ops/COMMERCIAL_INBOX_PACKAGING_LOCKED_v1.md",
+          "one_law": "GW inbox receive OPEN \u00b7 Resend/form auto-send DEFERRED until after factory"
+        },
+        "defer_receipt_at": "2026-06-20T01:19:07Z",
+        "agent_live_surfaces_at": "2026-06-20T00:29:44Z",
+        "founder_cascade_latest_at": "2026-06-20T00:56:33Z",
+        "founder_cascade_newer_than_ship": false,
+        "mono_newer_than_live_status": false,
+        "trustfield_pulse": {
+          "ok": true,
+          "email_send_defer_line": "email-defer \u00b7 ON \u00b7 main=5/5 \u00b7 sites=RED \u00b7 email=AFTER_MAIN \u00b7 lift=NO \u00b7 TF_MACLAW=ACTIVE \u00b7 attract_users",
+          "defer_active": false,
+          "commercial_send_allowed": true,
+          "synced_at": "2026-06-20T01:19:08Z"
+        },
+        "gates": [
+          {
+            "gate": "defer_ssot",
+            "ok": true,
+            "path": "/Users/sinakazemnezhad/Desktop/SourceA/data/commercial-email-send-defer-v1.json"
+          },
+          {
+            "gate": "defer_script",
+            "ok": true,
+            "path": "/Users/sinakazemnezhad/Desktop/SourceA/scripts/commercial_email_send_defer_v1.py"
+          },
+          {
+            "gate": "commercial_inbox_doc",
+            "ok": true,
+            "path": "docs/ops/COMMERCIAL_INBOX_PACKAGING_LOCKED_v1.md"
+          },
+          {
+            "gate": "nf_inbox",
+            "ok": true,
+            "path": "/Users/sinakazemnezhad/.sina/agent-workspaces/noetfield_cloud/INBOX.md"
+          },
+          {
+            "gate": "defer_assess",
+            "ok": true,
+            "detail": null
+          },
+          {
+            "gate": "operations_inbox_receipt",
+            "ok": true,
+            "gw": "ACTIVE"
+          },
+          {
+            "gate": "email_send_defer_line",
+            "ok": true,
+            "line": "email-defer \u00b7 ON \u00b7 main=5/5 \u00b7 sites=RED \u00b7 email=AFTER_MAIN \u00b7 lift=NO"
+          },
+          {
+            "gate": "defer_active_wired",
+            "ok": true
+          },
+          {
+            "gate": "agent_live_surfaces",
+            "ok": true,
+            "synced_at": "2026-06-20T00:29:44Z"
+          },
+          {
+            "gate": "founder_cascade_readable",
+            "ok": true,
+            "latest_at": "2026-06-20T00:56:33Z"
+          },
+          {
+            "gate": "trustfield_fleet_wire",
+            "ok": true,
+            "detail": null
+          }
+        ],
+        "wiring_ssot": "data/nf_mono_nerve_wiring_v1.json",
+        "heal": null,
+        "quote_rule": "Quote product_now_line AND email_send_defer_line \u2014 not chat memory"
+      }
+    },
+    {
+      "layer": "L0_founder_receipt",
+      "ok": true,
+      "detail": "already_synced",
+      "data": {
+        "schema_version": "nf-founder-disk-sync-v1",
+        "generated_at": "2026-06-20T01:19:05Z",
+        "ok": true,
+        "action": "already_synced",
+        "agent_id": "noetfield_cloud",
+        "cascade_at": "2026-06-20T00:56:33Z",
+        "cascade_source": "validator_proof",
+        "text_preview": "NO HUB REBUILD \u2014 cascade proof test",
+        "inbox_action": "INBOX_STALE",
+        "needs_disk_patch": false,
+        "cascade_newer_than_ship": false,
+        "patched_ship_now": false,
+        "patched_inbox": false,
+        "ship_now": "os/SHIP_NOW.md",
+        "inbox": "/Users/sinakazemnezhad/.sina/agent-workspaces/noetfield_cloud/INBOX.md",
+        "heal": null
+      }
+    },
+    {
+      "layer": "L1_stale_receipt",
+      "ok": true,
+      "detail": "[]",
+      "data": {
+        "schema_version": "nf-stale-guard-v1",
+        "generated_at": "2026-06-20T01:19:08Z",
+        "context_stale": false,
+        "pending_task": null,
+        "issues": [],
+        "mono_synced_at": "2026-06-20T00:29:44.588015+00:00",
+        "founder_cascade_at": "2026-06-20T00:56:33Z",
+        "founder_disk_sync_at": "2026-06-20T00:56:33Z",
+        "email_send_defer_line": "email-defer \u00b7 ON \u00b7 main=5/5 \u00b7 sites=RED \u00b7 email=AFTER_MAIN \u00b7 lift=NO",
+        "heal": null
+      }
+    },
+    {
+      "layer": "L2_surfaces_line",
+      "ok": true,
+      "detail": "email-defer \u00b7 ON \u00b7 main=5/5 \u00b7 sites=RED \u00b7 email=AFTER_MAIN \u00b7 lift=NO",
+      "data": {
+        "schema_version": "nf-live-surfaces-v1",
+        "generated_at": "2026-06-20T01:19:08Z",
+        "agent_id": "noetfield_cloud",
+        "plane": "noetfield_cloud",
+        "product_now_line": "no pending next_tasks",
+        "portfolio_now_line": "portfolio 260/300 done",
+        "email_send_defer_line": "email-defer \u00b7 ON \u00b7 main=5/5 \u00b7 sites=RED \u00b7 email=AFTER_MAIN \u00b7 lift=NO",
+        "defer_active": true,
+        "w3_send_ready": false,
+        "w3_email_send_deferred": true,
+        "commercial_blockers": [
+          "factory_now",
+          "w3_critic_circle",
+          "w3_email_send_defer",
+          "w3_output_clean",
+          "w3_rrl",
+          "w3_send_ready"
+        ],
+        "advisory_line": "advisory \u00b7 idle \u00b7 SourceA Sina read \u2192 Noetfield compile \u2192 TrustField send",
+        "portfolio_parent_at": "2026-06-20T00:29:44Z",
+        "mono_nerve_ok": true,
+        "operations_inbox": "ACTIVE",
+        "gate_ok": true,
+        "context_stale": false,
+        "voyage_ok": true,
+        "pending_task": null,
+        "git_sha": "d3f057e",
+        "routing_pending": null,
+        "quote_rule": "Quote product_now_line AND email_send_defer_line \u2014 not chat memory",
+        "heal": null,
+        "surfaces_ok": true
+      }
+    },
+    {
+      "layer": "L2_cascade",
+      "ok": true,
+      "detail": "",
+      "data": {
+        "schema_version": "nf-receipt-cascade-v1",
+        "generated_at": "2026-06-20T01:19:03Z",
+        "ok": true,
+        "failures": [],
+        "nodes": [],
+        "ssot": "/Users/sinakazemnezhad/Desktop/Noetfield/Noetfield-All-Documents/Noetfield/data/nf_orient_routing_v1.json",
+        "heal": null,
+        "orient_read_chain": [
+          "entry/START_HERE_LOCKED_v1.md",
+          "ROUTING_CARD.md",
+          "docs/ops/COMMERCIAL_INBOX_PACKAGING_LOCKED_v1.md",
+          "docs/ops/NF_ANTI_STALENESS_MAXIMUM_FIX_SET_LOCKED_v1.md",
+          "docs/ops/NF_GAOS_W3_FACTORY_SPINE_LOCKED_v1.md",
+          "data/nf_anti_staleness_max_v1.json",
+          "data/nf_mono_nerve_wiring_v1.json",
+          "~/.sina/nf-mono-nerve-v1.json",
+          "~/.sina/commercial-email-send-defer-receipt-v1.json",
+          "~/.sina/agent-live-surfaces-v1.json",
+          "~/.sina/ecosystem-live-nerve-v1.json",
+          "~/.sina/noetfield-operations-inbox-active-v1.json",
+          "~/.sina/agent-workspaces/noetfield_cloud/INBOX.md",
+          "docs/www/NF_UI_BUILD_CHECKLIST_LOCKED_v1.md",
+          "docs/www/NF_WWW_LANGUAGE_LAYERS_LOCKED_v1.md",
+          "docs/ops/NF_FACTORY_ROUND_15_PREP_LOCKED_v1.md",
+          "reports/agent-auto/LIVE-STATUS.md",
+          "os/plan.json",
+          "os/SHIP_NOW.md",
+          "docs/ops/AGENT_READ_LINKS_LOCKED_v1.md"
+        ]
+      }
+    },
+    {
+      "layer": "L3_orient_chain",
+      "ok": true,
+      "detail": "20/20",
+      "data": {
+        "schema_version": "nf-orient-read-chain-v1",
+        "generated_at": "2026-06-20T01:19:08Z",
+        "ok": true,
+        "total": 20,
+        "present": 20,
+        "missing": [],
+        "present_paths": [
+          "entry/START_HERE_LOCKED_v1.md",
+          "ROUTING_CARD.md",
+          "docs/ops/COMMERCIAL_INBOX_PACKAGING_LOCKED_v1.md",
+          "docs/ops/NF_ANTI_STALENESS_MAXIMUM_FIX_SET_LOCKED_v1.md",
+          "docs/ops/NF_GAOS_W3_FACTORY_SPINE_LOCKED_v1.md",
+          "data/nf_anti_staleness_max_v1.json",
+          "data/nf_mono_nerve_wiring_v1.json",
+          "~/.sina/nf-mono-nerve-v1.json",
+          "~/.sina/commercial-email-send-defer-receipt-v1.json",
+          "~/.sina/agent-live-surfaces-v1.json",
+          "~/.sina/ecosystem-live-nerve-v1.json",
+          "~/.sina/noetfield-operations-inbox-active-v1.json",
+          "~/.sina/agent-workspaces/noetfield_cloud/INBOX.md",
+          "docs/www/NF_UI_BUILD_CHECKLIST_LOCKED_v1.md",
+          "docs/www/NF_WWW_LANGUAGE_LAYERS_LOCKED_v1.md",
+          "docs/ops/NF_FACTORY_ROUND_15_PREP_LOCKED_v1.md",
+          "reports/agent-auto/LIVE-STATUS.md",
+          "os/plan.json",
+          "os/SHIP_NOW.md",
+          "docs/ops/AGENT_READ_LINKS_LOCKED_v1.md"
+        ],
+        "heal": null
+      }
+    },
+    {
+      "layer": "L3_ecosystem",
+      "ok": true,
+      "detail": "GW inbox receive OPEN \u00b7 Resend/W3 send DEFERRED until factory + sites + founder lift",
+      "data": {
+        "schema": "ecosystem-live-nerve-v1",
+        "generated_at": "2026-06-20T01:19:08Z",
+        "ok": true,
+        "email_send_defer_line": "email-defer \u00b7 ON \u00b7 main=5/5 \u00b7 sites=RED \u00b7 email=AFTER_MAIN \u00b7 lift=NO",
+        "defer_active": true,
+        "planes": {
+          "noetfield": {
+            "receipt": "~/.sina/nf-mono-nerve-v1.json",
+            "ok": true,
+            "operations_inbox": "ACTIVE"
+          },
+          "trustfield": {
+            "receipt": "~/.sina/tf-live-surfaces-v1.json",
+            "ok": true,
+            "commercial_send_allowed": true
+          },
+          "sourcea_parent": {
+            "receipt": "~/.sina/agent-live-surfaces-v1.json",
+            "synced_at": "2026-06-20T00:29:44Z",
+            "factory_now_line": "factory-now \u00b7 Valid YES 1000 \u00b7 brain 1000 \u00b7 dual_proof True \u00b7 mode FREEZE \u00b7 queue "
+          }
+        },
+        "sequencing_law": "GW inbox receive OPEN \u00b7 Resend/W3 send DEFERRED until factory + sites + founder lift",
+        "heal": "make nf-onboard"
+      }
+    },
+    {
+      "layer": "L3_inbox_receive",
+      "ok": true,
+      "detail": "ACTIVE",
+      "data": {
+        "schema": "noetfield-operations-inbox-active-v1",
+        "at": "2026-06-20T01:19:07Z",
+        "ok": true,
+        "inbox": "operations@noetfield.com",
+        "gw_status": "ACTIVE",
+        "form_autonotify": "DEFERRED_POST_FACTORY",
+        "receive_lane": "OPEN",
+        "send_lane": "DEFERRED_POST_FACTORY",
+        "ssot_doc": "docs/ops/COMMERCIAL_INBOX_PACKAGING_LOCKED_v1.md",
+        "one_law": "GW inbox receive OPEN \u00b7 Resend/form auto-send DEFERRED until after factory"
+      }
+    },
+    {
+      "layer": "L3_outbound_defer",
+      "ok": true,
+      "detail": "email-defer \u00b7 ON \u00b7 main=5/5 \u00b7 sites=RED \u00b7 email=AFTER_MAIN \u00b7 lift=NO",
+      "data": {
+        "schema": "commercial-email-send-defer-receipt-v1",
+        "at": "2026-06-20T01:19:08Z",
+        "ok": true,
+        "one_law": "Commercial email send is DEFERRED \u2014 runs only AFTER FBE factory builder is ONLINE in cloud + main cloud factories + product sites. Email is not a main factory. Mac is never a factory.",
+        "execution_model": {
+          "mac_role": "control_panel_only",
+          "factory_role": "cloud_only",
+          "main_factories_first": true,
+          "email_lane": "deferred_after_main",
+          "authority": "data/founder-execution-model-v1.json",
+          "factory_online_law": "data/cloud-factories-online-only-v1.json",
+          "machine_registry": "data/machine-execution-plane-registry-v1.json"
+        },
+        "defer_active": true,
+        "main_factories_online": true,
+        "cloud_factories_online": true,
+        "sites_online": false,
+        "workers_online": true,
+        "hardening_ready": false,
+        "founder_lift": false,
+        "email_send_defer_line": "email-defer \u00b7 ON \u00b7 main=5/5 \u00b7 sites=RED \u00b7 email=AFTER_MAIN \u00b7 lift=NO",
+        "deferred_lane": {
+          "id": "commercial_email_cloud",
+          "label": "W3 outbound email (TrustField send)",
+          "priority": 99,
+          "not_a_main_factory": true,
+          "runs_after": [
+            "fbe_factory_builder",
+            "main_cloud_factories",
+            "product_sites",
+            "founder_lift"
+          ]
+        },
+        "mac_control_panel": {
+          "id": "worker_hub",
+          "label": "Mac control panel (Worker Hub)",
+          "ok": false,
+          "gates_email_send": false,
+          "detail": "http://127.0.0.1:13020/health \u00b7 <urlopen error [Errno 61] Connection refused>"
+        },
+        "main_cloud_factories": [
+          {
+            "id": "fbe_factory_builder",
+            "label": "FBE factory builder bundle (cloud headless spawn)",
+            "required": true,
+            "kind": "fbe_factory_builder_bundle",
+            "ok": true,
+            "detail": "schema=fbe-factory-builder-bundle-v1 cloud_headless=True"
+          },
+          {
+            "id": "fbe_railway",
+            "label": "FBE Railway cloud worker",
+            "required": true,
+            "kind": "cloud_http",
+            "ok": true,
+            "detail": "https://sourcea-fbe-runner-production.up.railway.app/health service=fbe-cloud-worker"
+          },
+          {
+            "id": "supabase_edge",
+            "label": "Supabase edge (cloud API)",
+            "required": false,
+            "kind": "cloud_url_secret",
+            "ok": false,
+            "detail": "SUPABASE_URL=missing_or_local"
+          },
+          {
+            "id": "video_ad_factory",
+            "label": "Video ad factory (cloud federated)",
+            "required": false,
+            "kind": "receipt",
+            "ok": false,
+            "detail": "ok=False"
+          },
+          {
+            "id": "noetfield_freemium_bay",
+            "label": "Noetfield freemium cloud bay",
+            "required": true,
+            "kind": "receipt",
+            "ok": true,
+            "detail": "ok=True"
+          },
+          {
+            "id": "trustfield_sandbox",
+            "label": "TrustField cloud sandbox",
+            "required": true,
+            "kind": "receipt",
+            "ok": true,
+            "detail": "ok=True"
+          },
+          {
+            "id": "witnessbc_proof_lab",
+            "label": "WitnessBC Proof Lab factory",
+            "required": true,
+            "kind": "receipt",
+            "ok": true,
+            "detail": "ok=True"
+          },
+          {
+            "id": "fal_rendering_bridge",
+            "label": "FAL rendering bridge",
+            "required": false,
+            "kind": "secret",
+            "ok": false,
+            "detail": "FAL_KEY=missing"
+          },
+          {
+            "id": "openrouter_cloud",
+            "label": "OpenRouter cloud LLM",
+            "required": false,
+            "kind": "secret",
+            "ok": true,
+            "detail": "OPENROUTER_API_KEY=set"
+          }
+        ],
+        "cloud_factories": [
+          {
+            "id": "fbe_factory_builder",
+            "label": "FBE factory builder bundle (cloud headless spawn)",
+            "required": true,
+            "kind": "fbe_factory_builder_bundle",
+            "ok": true,
+            "detail": "schema=fbe-factory-builder-bundle-v1 cloud_headless=True"
+          },
+          {
+            "id": "fbe_railway",
+            "label": "FBE Railway cloud worker",
+            "required": true,
+            "kind": "cloud_http",
+            "ok": true,
+            "detail": "https://sourcea-fbe-runner-production.up.railway.app/health service=fbe-cloud-worker"
+          },
+          {
+            "id": "supabase_edge",
+            "label": "Supabase edge (cloud API)",
+            "required": false,
+            "kind": "cloud_url_secret",
+            "ok": false,
+            "detail": "SUPABASE_URL=missing_or_local"
+          },
+          {
+            "id": "video_ad_factory",
+            "label": "Video ad factory (cloud federated)",
+            "required": false,
+            "kind": "receipt",
+            "ok": false,
+            "detail": "ok=False"
+          },
+          {
+            "id": "noetfield_freemium_bay",
+            "label": "Noetfield freemium cloud bay",
+            "required": true,
+            "kind": "receipt",
+            "ok": true,
+            "detail": "ok=True"
+          },
+          {
+            "id": "trustfield_sandbox",
+            "label": "TrustField cloud sandbox",
+            "required": true,
+            "kind": "receipt",
+            "ok": true,
+            "detail": "ok=True"
+          },
+          {
+            "id": "witnessbc_proof_lab",
+            "label": "WitnessBC Proof Lab factory",
+            "required": true,
+            "kind": "receipt",
+            "ok": true,
+            "detail": "ok=True"
+          },
+          {
+            "id": "fal_rendering_bridge",
+            "label": "FAL rendering bridge",
+            "required": false,
+            "kind": "secret",
+            "ok": false,
+            "detail": "FAL_KEY=missing"
+          },
+          {
+            "id": "openrouter_cloud",
+            "label": "OpenRouter cloud LLM",
+            "required": false,
+            "kind": "secret",
+            "ok": true,
+            "detail": "OPENROUTER_API_KEY=set"
+          }
+        ],
+        "product_sites": [
+          {
+            "id": "trustfield",
+            "label": "TrustField",
+            "required": true,
+            "ok": true,
+            "detail": "https://www.trustfield.ca \u00b7 HTTP 200"
+          },
+          {
+            "id": "noetfield",
+            "label": "Noetfield",
+            "required": true,
+            "ok": true,
+            "detail": "https://www.noetfield.com \u00b7 HTTP 200"
+          },
+          {
+            "id": "witnessbc",
+            "label": "WitnessBC",
+            "required": true,
+            "ok": false,
+            "detail": "https://www.witnessbc.com \u00b7 missing: AI policy at dispatch, brand-disambiguation \u00b7 stale: Independent Public-interest Journalism"
+          }
+        ],
+        "ssot": "data/commercial-email-send-defer-v1.json",
+        "lift_command": "python3 scripts/commercial_email_send_defer_v1.py --lift"
+      }
+    },
+    {
+      "layer": "L3_trustfield_wire",
+      "ok": true,
+      "detail": "email-defer \u00b7 ON \u00b7 main=5/5 \u00b7 sites=RED \u00b7 email=AFTER_MAIN \u00b7 lift=NO \u00b7 TF_MACLAW=ACTIVE \u00b7 attract_users",
+      "data": {
+        "schema": "tf-live-surfaces-v1",
+        "version": "1.0.0",
+        "synced_at": "2026-06-20T01:19:08Z",
+        "agent_id": "trustfield",
+        "law": "email AFTER main factories + product sites + founder lift (TrustField MACLAW override when active)",
+        "ssot": "SourceA/data/commercial-email-send-defer-v1.json",
+        "maclaw_doc": "docs/MACLAW_USER_GROWTH_ANALYTICS_SEO_LOCKED.md",
+        "tf_maclaw_override": true,
+        "email_send_defer_line": "email-defer \u00b7 ON \u00b7 main=5/5 \u00b7 sites=RED \u00b7 email=AFTER_MAIN \u00b7 lift=NO \u00b7 TF_MACLAW=ACTIVE \u00b7 attract_users",
+        "defer_active": false,
+        "portfolio_defer_active": true,
+        "w3_send_ready": false,
+        "w3_email_send_deferred": true,
+        "commercial_blockers": [
+          "factory_now",
+          "w3_critic_circle",
+          "w3_email_send_defer",
+          "w3_output_clean",
+          "w3_rrl",
+          "w3_send_ready"
+        ],
+        "commercial_send_allowed": true,
+        "commercial_blocked_ladder": true,
+        "ladder_priority_step": 1,
+        "sites_online": false,
+        "main_factories_online": true,
+        "founder_lift": false,
+        "mail_from": [
+          {
+            "lane": "TF",
+            "email": "hello@trustfield.ca",
+            "configured": true
+          },
+          {
+            "lane": "NF",
+            "email": "operation@noetfield.com",
+            "configured": true
+          }
+        ],
+        "parent_surfaces_at": "2026-06-20T00:29:44Z",
+        "nerve_line": "nerve \u00b7 queue=idle \u00b7 aligned \u00b7 drift=57 \u00b7 loop=3sys\u00b73comm \u00b7 rules=forbidden_one,lane_forbidden,salvage_pattern,ship_gate:w3_critic_circle+1 \u00b7 fleet66% \u00b7 research=YES \u00b7 AS=ok \u00b7 ui_fc=BLOCK \u00b7 worker=PASS \u00b7 outbound \u00b7 0/100 done \u00b7 head=? \u00b7 plan=? \u00b7 sa=?",
+        "advisory_line": "advisory \u00b7 idle \u00b7 SourceA Sina read \u2192 Noetfield compile \u2192 TrustField send",
+        "better_loop_line": "better-loop \u00b7 3 sys \u00b7 3 commercial \u00b7 lever=money \u00b7 W3 clean=93% \u00b7 Goal 1 idle \u00b7 Hub glance \u00b7 commercial P0",
+        "factory_now_line": "factory-now \u00b7 Valid YES 1000 \u00b7 brain 1000 \u00b7 dual_proof True \u00b7 mode FREEZE \u00b7 queue ",
+        "quote_rule": "Quote email_send_defer_line in every commercial reply \u2014 not chat memory",
+        "boot_command": "./scripts/tf_session_gate_run.sh",
+        "pulse": {
+          "steps": [
+            {
+              "step": "commercial_email_send_defer",
+              "ok": true,
+              "defer_active": true,
+              "line": "email-defer \u00b7 ON \u00b7 main=5/5 \u00b7 sites=RED \u00b7 email=AFTER_MAIN \u00b7 lift=NO"
+            }
+          ],
+          "ok": true
+        }
+      }
+    },
+    {
+      "layer": "L4_email_lane",
+      "ok": true,
+      "detail": "",
+      "data": {
+        "schema_version": "nf-email-lane-guard-v1",
+        "generated_at": "2026-06-19T20:23:25Z",
+        "ok": true,
+        "defer_active": true,
+        "email_send_defer_line": "email-defer \u00b7 ON \u00b7 main=4/4 \u00b7 sites=RED \u00b7 email=AFTER_MAIN \u00b7 lift=NO",
+        "task_checked": null,
+        "email_lane_paths": [
+          "api/_lib/intake-email.js",
+          "api/intake.js",
+          "scripts/setup-resend-domain.sh",
+          "scripts/auto-heal-www.sh",
+          "docs/ops/VERCEL_INTAKE_SETUP.md"
+        ],
+        "blocked": false,
+        "reason": null,
+        "law": "Resend/form auto-send DEFERRED post-factory \u2014 see COMMERCIAL_INBOX_PACKAGING_LOCKED_v1.md"
+      }
+    }
+  ],
+  "product_now_line": "no pending next_tasks",
+  "email_send_defer_line": "email-defer \u00b7 ON \u00b7 main=5/5 \u00b7 sites=RED \u00b7 email=AFTER_MAIN \u00b7 lift=NO",
+  "defer_active": true,
+  "heal": null
+}

@@ -1,23 +1,13 @@
 {
   "schema_version": "nf-voyage-integrity-v1",
-  "generated_at": "2026-06-18T00:23:05Z",
+  "generated_at": "2026-06-20T01:19:08Z",
   "ok": true,
-  "pending_task": {
-    "id": "ship-sandbox-server-side-057",
-    "title": "Optional server-side sandbox session persistence",
-    "plan": "docs/start/SANDBOX_SERVER_SIDE_SESSION_SPEC_v1.md",
-    "status": "pending"
-  },
+  "pending_task": null,
   "gates": [
     {
-      "gate": "pending_in_ship_now",
+      "gate": "pending_task_exists",
       "ok": true,
-      "id": "ship-sandbox-server-side-057"
-    },
-    {
-      "gate": "pending_in_gtm_next",
-      "ok": true,
-      "id": "ship-sandbox-server-side-057"
+      "note": "no pending next_tasks"
     },
     {
       "gate": "locked_refs_unique_ids",

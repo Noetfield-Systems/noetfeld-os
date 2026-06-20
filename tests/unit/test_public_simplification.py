@@ -22,6 +22,24 @@ FORBIDDEN_PHRASES = (
     "Golden Edge v3",
     "PostgreSQL",
     "FastAPI",
+    "W3 economic signal",
+    "Lane SSOT",
+    "nurture SSOT",
+    "commercial SSOT",
+    "SourceA = motor",
+)
+
+CLIENT_VIEW_PAGES = (
+    ROOT / "index.html",
+    ROOT / "start" / "index.html",
+    ROOT / "pricing" / "index.html",
+    ROOT / "copilot" / "pilot" / "index.html",
+    ROOT / "federal" / "index.html",
+    ROOT / "msp" / "index.html",
+    ROOT / "investors" / "index.html",
+    ROOT / "gate" / "intake" / "index.html",
+    ROOT / "status" / "index.html",
+    ROOT / "templates" / "index.html",
 )
 
 PRIMARY_NAV = ("/copilot/", "/templates/", "/trust/", "/enterprise/", "/pricing/", "/partners/")
@@ -38,6 +56,13 @@ def test_product_brief_no_internal_names() -> None:
     text = (ROOT / "PRODUCT_BRIEF.md").read_text(encoding="utf-8")
     for phrase in ("Golden Edge", "GCIP", "STRATEGIC_LOCK", "NOS", "NPL"):
         assert phrase not in text
+
+
+def test_client_view_pages_no_founder_language() -> None:
+    for path in CLIENT_VIEW_PAGES:
+        text = path.read_text(encoding="utf-8")
+        for phrase in FORBIDDEN_PHRASES:
+            assert phrase not in text, f"{path}: {phrase}"
 
 
 def test_public_pages_no_internal_architecture_terms() -> None:

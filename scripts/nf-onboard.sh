@@ -37,31 +37,45 @@ export NOETFIELD_AGENT_ID="${NOETFIELD_AGENT_ID:-noetfield_cloud}"
 FAIL=0
 
 echo "=== nf-onboard CLOUD ==="
-echo "step 1/8 session gate"
+echo "step 1/11 mono nerve (SourceA defer + ~/.sina wires)"
+python3 scripts/nf_mono_nerve_v1.py --json || FAIL=1
+
+echo "step 2/11 founder-input sync (INBOX + SHIP_NOW + receipt)"
+python3 scripts/nf_founder_input_sync_v1.py --json || FAIL=1
+
+echo "step 3/11 session gate"
 python3 scripts/nf_session_gate_run_v1.py --role cloud --json || FAIL=1
 
-echo "step 2/8 live orient"
+echo "step 4/11 live orient"
 bash scripts/nf-live-orient-v1.sh || FAIL=1
 
-echo "step 3/8 routing card"
+echo "step 5/11 routing card"
 bash scripts/nf_routing_card.sh --json > /dev/null
 
-echo "step 4/8 stale guard"
+echo "step 6/11 stale guard"
 python3 scripts/nf_stale_guard_v1.py --json || FAIL=1
 
-echo "step 5/8 voyage integrity"
+echo "step 7/11 voyage integrity"
 python3 scripts/nf_voyage_integrity_v1.py --json || FAIL=1
 
-echo "step 6/8 live surfaces + truth bundle"
+echo "step 8/12 live surfaces + truth bundle"
 python3 scripts/nf_live_surfaces_v1.py --json || FAIL=1
 python3 scripts/nf_truth_bundle_v1.py --json || true
 
-echo "step 7/8 receipt cascade + gatekeeper (advisory)"
+echo "step 9/12 orient read chain"
+python3 scripts/nf_orient_read_chain_v1.py --json || FAIL=1
+
+echo "step 10/12 receipt cascade + gatekeeper (advisory)"
 python3 scripts/nf_receipt_cascade_v1.py --json || FAIL=1
 python3 scripts/nf_gatekeeper_v1.py --json || true
 
-echo "step 8/8 panel export"
+echo "step 11/12 panel export"
 bash scripts/nf-panel-export-v1.sh || true
+
+echo "step 12/12 UI checklist + anti-staleness maximum"
+chmod +x scripts/verify-ui-build-checklist.sh
+./scripts/verify-ui-build-checklist.sh || FAIL=1
+python3 scripts/nf_anti_staleness_max_v1.py --json || FAIL=1
 
 if [[ "$JSON" == true ]]; then
   python3 - <<PY
@@ -77,9 +91,11 @@ print(json.dumps({
   "ok": $FAIL == 0,
   "agent_id": "$NOETFIELD_AGENT_ID",
   "gate": load("nf-session-gate-v1.json"),
+  "mono_nerve": load("nf-mono-nerve-v1.json"),
   "stale": load("nf-stale-guard-v1.json"),
   "voyage": load("nf-voyage-integrity-v1.json"),
   "routing": load("nf-live-routing-v1.json"),
+  "anti_staleness_max": load("nf-anti-staleness-max-v1.json"),
   "live_status": "reports/agent-auto/LIVE-STATUS.md",
 }, indent=2))
 PY

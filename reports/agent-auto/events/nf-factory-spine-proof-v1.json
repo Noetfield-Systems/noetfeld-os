@@ -1,20 +1,45 @@
 {
   "schema_version": "nf-factory-spine-proof-v1",
-  "generated_at": "2026-06-18T00:23:05Z",
-  "ok": true,
-  "proof_count": 9,
-  "passed": 9,
-  "failed": 0,
+  "generated_at": "2026-06-20T01:18:11Z",
+  "ok": false,
+  "proof_count": 15,
+  "passed": 11,
+  "failed": 4,
   "proofs": [
     {
       "proof": "cascade_ssot_shape",
       "ok": true,
-      "detail": "sources=5"
+      "detail": "sources=8 mono=True founder=True orient=True"
     },
     {
       "proof": "onboard_pipeline_exit_0",
+      "ok": false,
+      "detail": "exit=2"
+    },
+    {
+      "proof": "mono_nerve_wired",
+      "ok": false,
+      "detail": "line='email-defer \u00b7 ON \u00b7 main=5/5 \u00b7 sites=RED \u00b7 email=AFTER_MAIN \u00b7 lift=NO'"
+    },
+    {
+      "proof": "ecosystem_nerve_linked",
       "ok": true,
-      "detail": "exit=0"
+      "detail": "line='email-defer \u00b7 ON \u00b7 main=5/5 \u00b7 sites=RED \u00b7 email=AFTER_MAIN \u00b7 lift=NO'"
+    },
+    {
+      "proof": "email_defer_line_surfaces",
+      "ok": true,
+      "detail": "line='email-defer \u00b7 ON \u00b7 main=5/5 \u00b7 sites=RED \u00b7 email=AFTER_MAIN \u00b7 lift=NO'"
+    },
+    {
+      "proof": "orient_read_chain",
+      "ok": true,
+      "detail": "20/20"
+    },
+    {
+      "proof": "anti_staleness_max",
+      "ok": false,
+      "detail": "checks=11"
     },
     {
       "proof": "receipts_on_disk",
@@ -24,12 +49,12 @@
     {
       "proof": "product_now_line_plan",
       "ok": true,
-      "detail": "expected='ship-sandbox-server-side-057 \u2014 Optional server-side sandbox session persistence' got='ship-sandbox-server-side-057 \u2014 Optional server-side sandbox session persistence'"
+      "detail": "line='no pending next_tasks'"
     },
     {
       "proof": "truth_bundle_keys",
       "ok": true,
-      "detail": "missing=[] line='ship-sandbox-server-side-057 \u2014 Optional server-side sandbox session persistence'"
+      "detail": "missing=[] line='no pending next_tasks'"
     },
     {
       "proof": "stale_injection_denies",
@@ -37,14 +62,19 @@
       "detail": "cascade_fail=True stale_node=True gate_denied=True stale_reason=True"
     },
     {
+      "proof": "email_task_denied_when_defer",
+      "ok": true,
+      "detail": "denied=True defer=True"
+    },
+    {
       "proof": "founder_implement_required",
       "ok": true,
-      "detail": "exit=1 reasons=['FOUNDER_IMPLEMENT_REQUIRED']"
+      "detail": "exit=1 reasons=['MONO_NERVE_FAIL', 'CONTEXT_STALE', 'RECEIPT_CASCADE_FAIL:nf_mono_nerve,nf_stale_guard', 'FOUNDER_IMPLEMENT_REQUIRED']"
     },
     {
       "proof": "founder_implement_passes",
-      "ok": true,
-      "detail": "exit=0 safe=True"
+      "ok": false,
+      "detail": "exit=1 safe=False"
     },
     {
       "proof": "executor_lock_acquire_release",
@@ -52,5 +82,5 @@
       "detail": "locked=True"
     }
   ],
-  "product_now_line": "ship-sandbox-server-side-057 \u2014 Optional server-side sandbox session persistence"
+  "product_now_line": "no pending next_tasks"
 }

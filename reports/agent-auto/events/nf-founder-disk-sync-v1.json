@@ -1,0 +1,18 @@
+{
+  "schema_version": "nf-founder-disk-sync-v1",
+  "generated_at": "2026-06-20T01:19:05Z",
+  "ok": true,
+  "action": "already_synced",
+  "agent_id": "noetfield_cloud",
+  "cascade_at": "2026-06-20T00:56:33Z",
+  "cascade_source": "validator_proof",
+  "text_preview": "NO HUB REBUILD \u2014 cascade proof test",
+  "inbox_action": "INBOX_STALE",
+  "needs_disk_patch": false,
+  "cascade_newer_than_ship": false,
+  "patched_ship_now": false,
+  "patched_inbox": false,
+  "ship_now": "os/SHIP_NOW.md",
+  "inbox": "/Users/sinakazemnezhad/.sina/agent-workspaces/noetfield_cloud/INBOX.md",
+  "heal": null
+}

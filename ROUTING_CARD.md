@@ -8,7 +8,7 @@
 
 ## One sentence
 
-> **Gate → live orient → routing card → stale guard → one pending task → founder `implement` → verify → ingest — chat is never SSOT.**
+> **Mono nerve → gate → live orient → routing card → stale guard → one pending task → founder `implement` → verify → ingest — chat is never SSOT.**
 
 ---
 
@@ -30,13 +30,30 @@
 make nf-onboard
 ```
 
-Steps inside onboard:
+Steps inside onboard (12 — **skip none**):
 
-1. `nf_session_gate_run_v1.py` — never skip  
-2. `nf-live-orient-v1.sh` — `LIVE-STATUS.md` + events JSON  
-3. `nf_routing_card.sh --json` — queue head + scope  
-4. `nf_stale_guard_v1.py` — stop if `context_stale=true`  
-5. Print first pending `next_tasks` row from live probe  
+1. `nf_mono_nerve_v1.py` — defer + ecosystem + TrustField fleet  
+2. `nf_founder_input_sync_v1.py` — cascade → INBOX + SHIP_NOW  
+3. `nf_session_gate_run_v1.py`  
+4. `nf-live-orient-v1.sh`  
+5. `nf_routing_card.sh`  
+6. `nf_stale_guard_v1.py`  
+7. `nf_voyage_integrity_v1.py`  
+8. `nf_live_surfaces_v1.py` — `email_send_defer_line` required  
+9. `nf_receipt_cascade_v1.py`  
+10. `nf_gatekeeper_v1.py` — advisory until implement  
+11. UI build checklist  
+12. `nf_orient_read_chain` + `nf_anti_staleness_max`  
+
+**Law:** `docs/ops/NF_ANTI_STALENESS_MAXIMUM_FIX_SET_LOCKED_v1.md`
+
+**Before first file edit:**
+
+```bash
+NF_FOUNDER_IMPLEMENT=1 bash scripts/nf_assert_implement_allowed.sh
+```
+
+Quote every substantive reply: **`product_now_line`** + **`email_send_defer_line`** from `~/.sina/nf-live-surfaces-v1.json`.
 
 Then: **ASK** founder unless **`implement`** already given.
 
@@ -54,6 +71,8 @@ Then: **ASK** founder unless **`implement`** already given.
 | Am I allowed to edit? | Gate PASS + `make nf-gatekeeper` + founder **`implement`** |
 | Live one-liner? | `~/.sina/nf-live-surfaces-v1.json` → `product_now_line` |
 | **Prove factory spine?** | `make nf-prove-factory-spine` → `~/.sina/nf-factory-spine-proof-v1.json` |
+| **UI / www / form change?** | Read `docs/www/NF_UI_BUILD_CHECKLIST_LOCKED_v1.md` → `make nf-ui-checklist` PASS first |
+| **Factory Round 15?** | `docs/ops/NF_FACTORY_ROUND_15_PREP_LOCKED_v1.md` · `pick-portfolio-plan.py --path-ref XF-laws` |
 | Execution gate? | `make nf-gatekeeper` (FAIL = EXECUTION DENIED) |
 | Lost / cascade FAIL? | `make nf-orient` (manual only — not boot) |
 | Commercial outreach? | `AGENTIC_COMMERCIAL_HANDOFF_v1.md` — not cursor disk for 026 |
@@ -91,6 +110,7 @@ Execution (services/, www, verify scripts — NEVER authority)
 ```bash
 ./scripts/plan-with-no-asf-verify.sh
 make verify-gtm
+make nf-ui-checklist
 ./scripts/verify-agent-scope.sh
 ```
 

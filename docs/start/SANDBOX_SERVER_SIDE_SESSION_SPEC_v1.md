@@ -1,7 +1,7 @@
 # Sandbox server-side session persistence (spec v1)
 
 **Queue id:** `ship-sandbox-server-side-057`  
-**Status:** Spec only — optional upgrade from `localStorage` (`nf_sandbox_v1`)
+**Status:** Shipped — server-first when `NF_SANDBOX_API=1`; `localStorage` fallback
 
 ## Goal
 
@@ -28,7 +28,8 @@ Persist sandbox trial sessions server-side so founders can resume across devices
 ## Verify (when implemented)
 
 ```bash
-make ship-verify   # includes sandbox session API smoke
+cd governance-console/backend && python3 -m pytest tests/test_sandbox_sessions.py -q
+make ship-verify   # includes sandbox session API smoke when dev stack up
 ```
 
-*Orientation spec · ship-057 pending implementation*
+*Orientation spec · ship-057 shipped 2026-06-18*

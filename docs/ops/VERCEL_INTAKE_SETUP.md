@@ -1,6 +1,10 @@
 # Vercel www — intake email go-live
 
 **Inbox:** operations@noetfield.com  
+**Google Workspace:** **ACTIVE** (2026-06-18) — mailbox live; direct email works  
+**Status:** **DEFERRED post-factory** — enable Resend only after factory spine + portfolio waves complete  
+
+> Founder law: factory first · email sending second · do not boot sessions into Resend setup.
 **Canonical project:** `www` · scope `noetfield-systems`  
 **One project only** — run `./scripts/auto-heal-www.sh` to dedupe, sync env, deploy, verify.
 
