@@ -59,8 +59,17 @@ check_file "agent memory packaging" .cursor/agent-memory/MEMORY_LOCKED.yaml \
 check_file "v16 packaging plan" docs/WWW_V16_PACKAGING_PLAN_LOCKED_v1.md \
   'Sign up (free)' '/start/' '14 days' '50 calls' 'Agentic'
 
+check_file "phase15 factory prep" docs/ops/NF_FACTORY_ROUND_15_PREP_LOCKED_v1.md \
+  '197/300' 'XF-P1' 'ship-sandbox-server-side-057'
+
+check_file "phase16 factory prep" docs/ops/NF_FACTORY_ROUND_16_PREP_LOCKED_v1.md \
+  '260/300' 'XF-P2' 'CA-P2' 'PL-P1' 'verify-nf-anti-staleness-max' 'PORTFOLIO_300_PHASE16_10_STEP_LOCKED_v1.md'
+
+check_file "sandbox server-side spec" docs/start/SANDBOX_SERVER_SIDE_SESSION_SPEC_v1.md \
+  '/api/v1/sandbox/sessions' 'NF_SANDBOX_API=1' 'localStorage'
+
 check_file "commercial inbox packaging" docs/ops/COMMERCIAL_INBOX_PACKAGING_LOCKED_v1.md \
-  'operations@noetfield.com' 'sandbox' 'Self-serve first'
+  'operations@noetfield.com' 'sandbox' 'Self-serve first' 'Google Workspace' 'ACTIVE' 'DEFERRED post-factory'
 
 check_file "gtm copybook v16" docs/GTM_COPYBOOK.md \
   'Start free sandbox' 'Published tiers' 'Agentic'
@@ -78,7 +87,7 @@ check_file "nf-gaos w0 spine" docs/ops/NF_GAOS_W0_LOCKED_v1.md \
   'make nf-onboard' 'nf_session_gate_run_v1.py' 'ROUTING_CARD.md'
 
 check_file "routing card boot" ROUTING_CARD.md \
-  'make nf-onboard' 'entry/START_HERE_LOCKED_v1.md'
+  'make nf-onboard' 'nf_mono_nerve_v1.py' 'email_send_defer_line' 'nf_assert_implement_allowed.sh'
 
 check_file "sandbox funnel metrics 061" docs/copilot/SANDBOX_FUNNEL_METRICS_SPEC_v1.md \
   'S0' 'S1' 'S2' 'S3' 'S4' 'S5' 'session_id'
@@ -86,8 +95,20 @@ check_file "sandbox funnel metrics 061" docs/copilot/SANDBOX_FUNNEL_METRICS_SPEC
 check_file "copilot intake hub report 062" docs/copilot/INTAKE_COPILOT_GOVERNANCE_HUB_REPORT_v1.md \
   'vector=copilot-governance' 'INTAKE REPORT' 'copilot-governance'
 
+check_file "anti-staleness maximum" docs/ops/NF_ANTI_STALENESS_MAXIMUM_FIX_SET_LOCKED_v1.md \
+  'make nf-onboard' 'nf_anti_staleness_max' 'email_send_defer_line' 'Three email gates'
+
 check_file "nf-gaos w3 factory spine" docs/ops/NF_GAOS_W3_FACTORY_SPINE_LOCKED_v1.md \
-  'make verify-nf-gaos-w3' 'prove-nf-factory-spine'
+  'make verify-nf-gaos-w3' 'prove-nf-factory-spine' 'nf_mono_nerve_v1.py' 'email_send_defer_line'
+
+check_file "platform entity split index" docs/platform/NF_PLATFORM_ENTITY_SPLIT_INDEX_v1.md \
+  'pf-0266' 'pf-0275' 'PL-P1' 'separate_brand_law'
+
+check_file "living system charter v3" docs/platform/NF_LIVING_SYSTEM_CHARTER_DRAFT_v3.md \
+  'status: draft' 'visibility: internal-agent-only' 'not_www: true' \
+  'NF_PLATFORM_ENTITY_SPLIT_INDEX_v1.md' 'Sense' 'Remember' 'Reflex' 'Speak' \
+  'Goal A' '260/300' 'separate_brand_law' 'campus factory metric' \
+  'www_email_configured' 'DEFERRED' 'sites=GREEN' 'make nf-onboard' 'never public www'
 
 if [[ -x scripts/verify-nf-gaos-w3.sh ]]; then
   ./scripts/verify-nf-gaos-w3.sh && ok "nf-gaos-w3 prove bundle"
