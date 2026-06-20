@@ -1,8 +1,11 @@
 {
-  "status_version": "2026.06.03.step2",
-  "updated": "2026-06-03T20:00:00Z",
-  "updated_by": "NF-CLOUD-AGENT",
+  "status_version": "2026.06.20.agent-sync",
+  "updated": "2026-06-20T01:19:08Z",
+  "updated_by": "NF-LOCAL-REPO-AGENT",
   "rule": "Founder ops truth on disk beats chat, branch assumptions, and stale www copy. Agents MUST read this file before building.",
+  "visibility": "internal-agent-only",
+  "not_www": true,
+  "audience": ["NF-LOCAL-REPO-AGENT", "NF-CLOUD-AGENT"],
   "witness_order": [
     "governance/OPS_LIVE_STATUS_LOCKED.json",
     ".cursor/agent-memory/MEMORY_LOCKED.yaml",
@@ -11,6 +14,26 @@
     "os/plan.json next_tasks (open items only)",
     "curl /api/intake/health + /gate/sales/ (production when reachable)"
   ],
+  "agent_surfaces": {
+    "witnessed_at": "2026-06-20T01:19:08Z",
+    "git_sha": "d3f057e",
+    "product_now_line": "no pending next_tasks",
+    "portfolio_now_line": "portfolio 260/300 done",
+    "email_send_defer_line": "email-defer · ON · main=5/5 · sites=RED · email=AFTER_MAIN · lift=NO",
+    "defer_active": true,
+    "gate_ok": true,
+    "context_stale": false,
+    "mono_nerve_ok": true,
+    "surfaces_ok": true,
+    "quote_rule": "Quote product_now_line AND email_send_defer_line — not chat memory",
+    "sync_law": "Both agents read this file on git main — not www"
+  },
+  "internal_agent_docs": {
+    "living_system_charter_v3": "docs/platform/NF_LIVING_SYSTEM_CHARTER_DRAFT_v3.md",
+    "live_status": "reports/agent-auto/LIVE-STATUS.md",
+    "routing_card": "ROUTING_CARD.md"
+  },
+  "charter_present": true,
   "layers": {
     "google_workspace_inbox": {
       "id": "ops-inbox-workspace",

@@ -74,6 +74,16 @@ check_file "north star offerings" NORTH_STAR.md \
 check_file "registry nf-1000 sources" os/plan-library/noetfield-1000/REGISTRY.json \
   'GOVERNANCE_SOURCES_HANDBOOK_LOCKED_v1.md' 'GOVERNANCE_DRIFT_DETECTION_SOURCES_LOCKED_v1.md'
 
+check_file "platform entity split index" docs/platform/NF_PLATFORM_ENTITY_SPLIT_INDEX_v1.md \
+  'pf-0266' 'pf-0275' 'PL-P1' 'separate_brand_law'
+
+check_file "living system charter v3" docs/platform/NF_LIVING_SYSTEM_CHARTER_DRAFT_v3.md \
+  'status: draft' 'visibility: internal-agent-only' 'not_www: true' \
+  'Agent sync law (internal only)' '260/300' 'never public www'
+
+check_file "ops live witness" governance/OPS_LIVE_STATUS_LOCKED.json \
+  'internal-agent-only' 'living_system_charter_v3' 'agent_surfaces' 'portfolio 260/300 done'
+
 if [[ -f ops/private/agent-reference/README.md ]]; then
   ok "private agent-reference README"
 else
