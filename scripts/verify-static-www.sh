@@ -215,7 +215,11 @@ for f in faq/index.html contact/index.html enterprise/index.html pricing/index.h
 done
 
 [[ -f vercel.json ]] && grep -qF 'docs/ops' vercel.json && ok "vercel.json blocks docs/ops" || bad "vercel.json missing docs/ops block"
+[[ -f vercel.json ]] && grep -qF 'docs/platform' vercel.json && ok "vercel.json blocks docs/platform" || bad "vercel.json missing docs/platform block"
+[[ -f vercel.json ]] && grep -qF 'governance/' vercel.json && ok "vercel.json blocks governance" || bad "vercel.json missing governance block"
 [[ -f .vercelignore ]] && grep -qF 'docs/ops/' .vercelignore && ok "vercelignore excludes docs/ops" || bad "vercelignore missing docs/ops"
+[[ -f .vercelignore ]] && grep -qF 'docs/platform/' .vercelignore && ok "vercelignore excludes docs/platform" || bad "vercelignore missing docs/platform"
+[[ -f .vercelignore ]] && grep -qF 'governance/' .vercelignore && ok "vercelignore excludes governance" || bad "vercelignore missing governance"
 
 if [[ "$fail" -ne 0 ]]; then
   exit 1

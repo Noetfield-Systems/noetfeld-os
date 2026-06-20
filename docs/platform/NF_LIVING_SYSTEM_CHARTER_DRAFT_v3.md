@@ -25,7 +25,7 @@ cloud_ingest: witness on main before agents cite as locked law — online for bo
 
 ### Agent sync law (internal only)
 
-**Private · not public.** This charter is for **both agents** (Mac `NF-LOCAL-REPO-AGENT` + cloud `NF-CLOUD-AGENT`) to read the same truth **online** via git main / governance witness — **not** for noetfield.com, `/about/`, investor pages, or any www surface. `verify-static-www.sh` must never ship this copy.
+**Private · not public.** This charter is for **both agents** (Mac `NF-LOCAL-REPO-AGENT` + cloud `NF-CLOUD-AGENT`) to read the same truth **online** via git main / governance witness — **not** for noetfield.com, `/about/`, investor pages, or any www surface. `verify-static-www.sh` must never ship this copy. **Deploy law:** `vercel.json` + `.vercelignore` block `/docs/platform/` and `/governance/` — redeploy required after merge.
 
 Path: `docs/platform/` in the Noetfield product repo (internal repo docs, not www). **Cloud main** must witness it (push + `make nf-onboard`) before either agent cites v3 as canonical. Until witnessed on cloud: *draft agreed — not yet ops-locked on cloud main.*
 

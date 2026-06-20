@@ -7,9 +7,11 @@ scripts/
 prompts/
 infrastructure/
 governance-console/
+governance/
 services/
 docs/*.md
 docs/ops/
+docs/platform/
 docs/strategy/
 docs/references/
 docs/spec/

@@ -16,6 +16,10 @@
   "redirects": [
     { "source": "/docs/ops/:path*", "destination": "/404", "statusCode": 404 },
     { "source": "/docs/ops", "destination": "/404", "statusCode": 404 },
+    { "source": "/docs/platform/:path*", "destination": "/404", "statusCode": 404 },
+    { "source": "/docs/platform", "destination": "/404", "statusCode": 404 },
+    { "source": "/governance/:path*", "destination": "/404", "statusCode": 404 },
+    { "source": "/governance", "destination": "/404", "statusCode": 404 },
     { "source": "/.cursor/:path*", "destination": "/404", "statusCode": 404 },
     { "source": "/os/:path*", "destination": "/404", "statusCode": 404 },
     { "source": "/reports/:path*", "destination": "/404", "statusCode": 404 },
