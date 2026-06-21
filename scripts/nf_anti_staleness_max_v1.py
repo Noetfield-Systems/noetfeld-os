@@ -92,6 +92,16 @@ def run_anti_staleness_max(*, execute: bool = False) -> dict:
     else:
         record("L4_email_lane", email_guard.get("ok", True), "", email_guard)
 
+    reply_path = root / "reports/cursor-reply-latest.txt"
+    if reply_path.is_file():
+        rc, lang = _run(
+            ["python3", "scripts/nf_agent_report_language_gate_v1.py", "--scan-file", str(reply_path), "--json"],
+            root,
+        )
+        record("L5_language", rc == 0 and lang.get("ok"), f"score={lang.get('score')}", lang)
+    else:
+        record("L5_language", True, "skip:no cursor-reply", {})
+
     receipt = {
         "schema_version": "nf-anti-staleness-max-v1",
         "generated_at": iso_now(),

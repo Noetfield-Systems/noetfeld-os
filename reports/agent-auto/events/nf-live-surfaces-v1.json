@@ -1,6 +1,6 @@
 {
   "schema_version": "nf-live-surfaces-v1",
-  "generated_at": "2026-06-20T01:19:08Z",
+  "generated_at": "2026-06-20T01:28:16Z",
   "agent_id": "noetfield_cloud",
   "plane": "noetfield_cloud",
   "product_now_line": "no pending next_tasks",
@@ -25,7 +25,7 @@
   "context_stale": false,
   "voyage_ok": true,
   "pending_task": null,
-  "git_sha": "d3f057e",
+  "git_sha": "ec54f94",
   "routing_pending": null,
   "quote_rule": "Quote product_now_line AND email_send_defer_line \u2014 not chat memory",
   "heal": null,

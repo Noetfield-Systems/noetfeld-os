@@ -6,8 +6,8 @@
     "NF-LOCAL-REPO-AGENT",
     "NF-CLOUD-AGENT"
   ],
-  "witnessed_at": "2026-06-20T01:19:08Z",
-  "git_sha": "d3f057e",
+  "witnessed_at": "2026-06-20T01:28:16Z",
+  "git_sha": "ec54f94",
   "product_now_line": "no pending next_tasks",
   "portfolio_now_line": "portfolio 260/300 done",
   "email_send_defer_line": "email-defer \u00b7 ON \u00b7 main=5/5 \u00b7 sites=RED \u00b7 email=AFTER_MAIN \u00b7 lift=NO",
@@ -16,12 +16,13 @@
   "context_stale": false,
   "mono_nerve_ok": true,
   "surfaces_ok": true,
+  "quote_rule": "Quote product_now_line AND email_send_defer_line \u2014 not chat memory",
   "internal_agent_docs": {
     "living_system_charter_v3": "docs/platform/NF_LIVING_SYSTEM_CHARTER_DRAFT_v3.md",
+    "language_law": "data/nf-agent-report-language-standard-v1.json",
     "live_status": "reports/agent-auto/LIVE-STATUS.md",
     "routing_card": "ROUTING_CARD.md"
   },
   "charter_present": true,
-  "quote_rule": "Quote product_now_line AND email_send_defer_line \u2014 not chat memory",
   "sync_law": "Mac nf-onboard writes this file; cloud reads git main \u2014 not www"
 }

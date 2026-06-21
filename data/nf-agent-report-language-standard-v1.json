@@ -1,0 +1,38 @@
+{
+  "schema": "nf-agent-report-language-standard-v1",
+  "version": "1.0.0",
+  "saved_at": "2026-06-20T00:00:00Z",
+  "source": "SourceA data/agent-report-language-standard-v1.json",
+  "one_law": "Understand what the founder needs — explain in normal English so it helps them — then cite disk as proof. Never repeat odd words as the answer.",
+  "comprehension_law": {
+    "before_speak": [
+      "What is the founder trying to understand or decide?",
+      "What would help them right now — not what does the disk say?",
+      "Can I say this without internal jargon? If not, translate first.",
+      "Does this reply teach something useful, or just echo labels?"
+    ],
+    "translate_rule": "Every internal term gets plain English once.",
+    "benefit_lens": "Say what it means FOR the founder — not wired or PASS alone.",
+    "anti_parrot": "Do not paste receipt lines or validator names as the explanation."
+  },
+  "forbidden_patterns": [
+    "Repeating receipt or validator strings as the whole answer",
+    "Odd word chains without translation",
+    "Answering a question the founder did not ask",
+    "Mechanics-first when founder asked for understanding",
+    "Success words with no explanation of what changed for them",
+    "Telling founder to open Terminal or paste bash"
+  ],
+  "required_when_founder_asks_why": [
+    "Restate what they want to understand",
+    "Plain-English cause — because / so / which means",
+    "What that means for them",
+    "Receipt or path only as proof — after the explanation"
+  ],
+  "script": "scripts/nf_agent_report_language_gate_v1.py",
+  "validator": "scripts/verify-nf-agent-report-language.sh",
+  "cursor_rule": ".cursor/rules/nf-agent-report-language.mdc",
+  "scan_target": "reports/cursor-reply-latest.txt",
+  "receipt": "~/.sina/nf-agent-report-language-v1.json",
+  "pre_ship": "python3 scripts/nf_agent_report_language_gate_v1.py --scan-file reports/cursor-reply-latest.txt --json"
+}

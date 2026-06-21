@@ -168,8 +168,12 @@ nf-mono-nerve:
 	@python3 scripts/nf_mono_nerve_v1.py --json
 
 verify-nf-anti-staleness-max:
-	@chmod +x scripts/verify-nf-anti-staleness-max.sh scripts/verify-nf-mono-nerve-wire.sh
+	@chmod +x scripts/verify-nf-anti-staleness-max.sh scripts/verify-nf-mono-nerve-wire.sh scripts/verify-nf-agent-report-language.sh
 	./scripts/verify-nf-anti-staleness-max.sh
+
+verify-nf-agent-report-language:
+	@chmod +x scripts/verify-nf-agent-report-language.sh
+	./scripts/verify-nf-agent-report-language.sh
 
 nf-anti-staleness-max:
 	@python3 scripts/nf_anti_staleness_max_v1.py --json

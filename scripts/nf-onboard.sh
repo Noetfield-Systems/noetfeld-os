@@ -72,10 +72,17 @@ python3 scripts/nf_gatekeeper_v1.py --json || true
 echo "step 11/12 panel export"
 bash scripts/nf-panel-export-v1.sh || true
 
-echo "step 12/12 UI checklist + anti-staleness maximum"
+echo "step 12/13 UI checklist + anti-staleness maximum"
 chmod +x scripts/verify-ui-build-checklist.sh
 ./scripts/verify-ui-build-checklist.sh || FAIL=1
 python3 scripts/nf_anti_staleness_max_v1.py --json || FAIL=1
+
+echo "step 13/13 language law receipt"
+chmod +x scripts/verify-nf-agent-report-language.sh
+./scripts/verify-nf-agent-report-language.sh || FAIL=1
+if [[ -f reports/cursor-reply-latest.txt ]]; then
+  python3 scripts/nf_founder_reply_loop_v1.py --file reports/cursor-reply-latest.txt --write-receipt --json >/dev/null || true
+fi
 
 if [[ "$JSON" == true ]]; then
   python3 - <<PY

@@ -1,6 +1,6 @@
 {
   "schema_version": "nf-anti-staleness-max-v1",
-  "generated_at": "2026-06-20T01:19:09Z",
+  "generated_at": "2026-06-20T01:28:18Z",
   "ok": true,
   "agent_id": "noetfield_cloud",
   "law_doc": "docs/ops/NF_ANTI_STALENESS_MAXIMUM_FIX_SET_LOCKED_v1.md",
@@ -11,14 +11,14 @@
       "detail": "email-defer \u00b7 ON \u00b7 main=5/5 \u00b7 sites=RED \u00b7 email=AFTER_MAIN \u00b7 lift=NO",
       "data": {
         "schema_version": "nf-mono-nerve-v1",
-        "generated_at": "2026-06-20T01:19:08Z",
+        "generated_at": "2026-06-20T01:28:16Z",
         "ok": true,
         "agent_id": "noetfield_cloud",
         "defer_active": true,
         "email_send_defer_line": "email-defer \u00b7 ON \u00b7 main=5/5 \u00b7 sites=RED \u00b7 email=AFTER_MAIN \u00b7 lift=NO",
         "operations_inbox": {
           "schema": "noetfield-operations-inbox-active-v1",
-          "at": "2026-06-20T01:19:07Z",
+          "at": "2026-06-20T01:28:15Z",
           "ok": true,
           "inbox": "operations@noetfield.com",
           "gw_status": "ACTIVE",
@@ -28,7 +28,7 @@
           "ssot_doc": "docs/ops/COMMERCIAL_INBOX_PACKAGING_LOCKED_v1.md",
           "one_law": "GW inbox receive OPEN \u00b7 Resend/form auto-send DEFERRED until after factory"
         },
-        "defer_receipt_at": "2026-06-20T01:19:07Z",
+        "defer_receipt_at": "2026-06-20T01:28:15Z",
         "agent_live_surfaces_at": "2026-06-20T00:29:44Z",
         "founder_cascade_latest_at": "2026-06-20T00:56:33Z",
         "founder_cascade_newer_than_ship": false,
@@ -38,7 +38,7 @@
           "email_send_defer_line": "email-defer \u00b7 ON \u00b7 main=5/5 \u00b7 sites=RED \u00b7 email=AFTER_MAIN \u00b7 lift=NO \u00b7 TF_MACLAW=ACTIVE \u00b7 attract_users",
           "defer_active": false,
           "commercial_send_allowed": true,
-          "synced_at": "2026-06-20T01:19:08Z"
+          "synced_at": "2026-06-20T01:28:16Z"
         },
         "gates": [
           {
@@ -107,7 +107,7 @@
       "detail": "already_synced",
       "data": {
         "schema_version": "nf-founder-disk-sync-v1",
-        "generated_at": "2026-06-20T01:19:05Z",
+        "generated_at": "2026-06-20T01:28:14Z",
         "ok": true,
         "action": "already_synced",
         "agent_id": "noetfield_cloud",
@@ -130,7 +130,7 @@
       "detail": "[]",
       "data": {
         "schema_version": "nf-stale-guard-v1",
-        "generated_at": "2026-06-20T01:19:08Z",
+        "generated_at": "2026-06-20T01:28:16Z",
         "context_stale": false,
         "pending_task": null,
         "issues": [],
@@ -147,7 +147,7 @@
       "detail": "email-defer \u00b7 ON \u00b7 main=5/5 \u00b7 sites=RED \u00b7 email=AFTER_MAIN \u00b7 lift=NO",
       "data": {
         "schema_version": "nf-live-surfaces-v1",
-        "generated_at": "2026-06-20T01:19:08Z",
+        "generated_at": "2026-06-20T01:28:16Z",
         "agent_id": "noetfield_cloud",
         "plane": "noetfield_cloud",
         "product_now_line": "no pending next_tasks",
@@ -172,7 +172,7 @@
         "context_stale": false,
         "voyage_ok": true,
         "pending_task": null,
-        "git_sha": "d3f057e",
+        "git_sha": "ec54f94",
         "routing_pending": null,
         "quote_rule": "Quote product_now_line AND email_send_defer_line \u2014 not chat memory",
         "heal": null,
@@ -185,7 +185,7 @@
       "detail": "",
       "data": {
         "schema_version": "nf-receipt-cascade-v1",
-        "generated_at": "2026-06-20T01:19:03Z",
+        "generated_at": "2026-06-20T01:28:12Z",
         "ok": true,
         "failures": [],
         "nodes": [],
@@ -221,7 +221,7 @@
       "detail": "20/20",
       "data": {
         "schema_version": "nf-orient-read-chain-v1",
-        "generated_at": "2026-06-20T01:19:08Z",
+        "generated_at": "2026-06-20T01:28:16Z",
         "ok": true,
         "total": 20,
         "present": 20,
@@ -257,7 +257,7 @@
       "detail": "GW inbox receive OPEN \u00b7 Resend/W3 send DEFERRED until factory + sites + founder lift",
       "data": {
         "schema": "ecosystem-live-nerve-v1",
-        "generated_at": "2026-06-20T01:19:08Z",
+        "generated_at": "2026-06-20T01:28:16Z",
         "ok": true,
         "email_send_defer_line": "email-defer \u00b7 ON \u00b7 main=5/5 \u00b7 sites=RED \u00b7 email=AFTER_MAIN \u00b7 lift=NO",
         "defer_active": true,
@@ -288,7 +288,7 @@
       "detail": "ACTIVE",
       "data": {
         "schema": "noetfield-operations-inbox-active-v1",
-        "at": "2026-06-20T01:19:07Z",
+        "at": "2026-06-20T01:28:15Z",
         "ok": true,
         "inbox": "operations@noetfield.com",
         "gw_status": "ACTIVE",
@@ -305,7 +305,7 @@
       "detail": "email-defer \u00b7 ON \u00b7 main=5/5 \u00b7 sites=RED \u00b7 email=AFTER_MAIN \u00b7 lift=NO",
       "data": {
         "schema": "commercial-email-send-defer-receipt-v1",
-        "at": "2026-06-20T01:19:08Z",
+        "at": "2026-06-20T01:28:16Z",
         "ok": true,
         "one_law": "Commercial email send is DEFERRED \u2014 runs only AFTER FBE factory builder is ONLINE in cloud + main cloud factories + product sites. Email is not a main factory. Mac is never a factory.",
         "execution_model": {
@@ -526,7 +526,7 @@
       "data": {
         "schema": "tf-live-surfaces-v1",
         "version": "1.0.0",
-        "synced_at": "2026-06-20T01:19:08Z",
+        "synced_at": "2026-06-20T01:28:16Z",
         "agent_id": "trustfield",
         "law": "email AFTER main factories + product sites + founder lift (TrustField MACLAW override when active)",
         "ssot": "SourceA/data/commercial-email-send-defer-v1.json",
@@ -589,10 +589,10 @@
       "detail": "",
       "data": {
         "schema_version": "nf-email-lane-guard-v1",
-        "generated_at": "2026-06-19T20:23:25Z",
+        "generated_at": "2026-06-20T01:27:29Z",
         "ok": true,
         "defer_active": true,
-        "email_send_defer_line": "email-defer \u00b7 ON \u00b7 main=4/4 \u00b7 sites=RED \u00b7 email=AFTER_MAIN \u00b7 lift=NO",
+        "email_send_defer_line": "email-defer \u00b7 ON \u00b7 main=5/5 \u00b7 sites=RED \u00b7 email=AFTER_MAIN \u00b7 lift=NO",
         "task_checked": null,
         "email_lane_paths": [
           "api/_lib/intake-email.js",
@@ -604,6 +604,18 @@
         "blocked": false,
         "reason": null,
         "law": "Resend/form auto-send DEFERRED post-factory \u2014 see COMMERCIAL_INBOX_PACKAGING_LOCKED_v1.md"
+      }
+    },
+    {
+      "layer": "L5_language",
+      "ok": true,
+      "detail": "score=100",
+      "data": {
+        "ok": true,
+        "hits": [],
+        "score": 100,
+        "schema": "nf-agent-report-language-gate-v1",
+        "ssot": "data/nf-agent-report-language-standard-v1.json"
       }
     }
   ],

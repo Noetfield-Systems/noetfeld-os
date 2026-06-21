@@ -16,7 +16,8 @@
     {"id": "L3_orient_chain", "script": "nf_orient_read_chain_v1.py", "receipt": "nf-orient-read-chain-v1.json", "skip": "never"},
     {"id": "L3_ecosystem", "sina": "ecosystem-live-nerve-v1.json", "skip": "never"},
     {"id": "L4_gatekeeper", "script": "nf_gatekeeper_v1.py", "receipt": "nf-gatekeeper-v1.json", "skip": "until_implement"},
-    {"id": "L4_email_lane", "script": "nf_email_lane_guard_v1.py", "receipt": "nf-email-lane-guard-v1.json", "skip": "until_email_edit"}
+    {"id": "L4_email_lane", "script": "nf_email_lane_guard_v1.py", "receipt": "nf-email-lane-guard-v1.json", "skip": "until_email_edit"},
+    {"id": "L5_language", "script": "nf_agent_report_language_gate_v1.py", "receipt": "nf-agent-report-language-v1.json", "skip": "never", "scan": "reports/cursor-reply-latest.txt"}
   ],
   "email_lane_paths": [
     "api/_lib/intake-email.js",

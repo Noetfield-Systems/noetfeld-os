@@ -44,6 +44,11 @@ Steps inside onboard (12 — **skip none**):
 10. `nf_gatekeeper_v1.py` — advisory until implement  
 11. UI build checklist  
 12. `nf_orient_read_chain` + `nf_anti_staleness_max`  
+13. `verify-nf-agent-report-language` — **FAIL = do not reply to founder**
+
+**Agent sync (internal — not www):** `governance/OPS_LIVE_STATUS_LOCKED.json` on **git main** — both agents read same file after pull.
+
+**Language law:** `data/nf-agent-report-language-standard-v1.json` · gate: `make verify-nf-agent-report-language`
 
 **Law:** `docs/ops/NF_ANTI_STALENESS_MAXIMUM_FIX_SET_LOCKED_v1.md`
 
@@ -73,6 +78,8 @@ Then: **ASK** founder unless **`implement`** already given.
 | **Prove factory spine?** | `make nf-prove-factory-spine` → `~/.sina/nf-factory-spine-proof-v1.json` |
 | **UI / www / form change?** | Read `docs/www/NF_UI_BUILD_CHECKLIST_LOCKED_v1.md` → `make nf-ui-checklist` PASS first |
 | **Factory Round 15?** | `docs/ops/NF_FACTORY_ROUND_15_PREP_LOCKED_v1.md` · `pick-portfolio-plan.py --path-ref XF-laws` |
+| **Both agents same truth?** | `governance/OPS_LIVE_STATUS_LOCKED.json` on git main · `make nf-onboard` |
+| **Reply blocked / parrot?** | `make verify-nf-agent-report-language` · rewrite plain English |
 | Execution gate? | `make nf-gatekeeper` (FAIL = EXECUTION DENIED) |
 | Lost / cascade FAIL? | `make nf-orient` (manual only — not boot) |
 | Commercial outreach? | `AGENTIC_COMMERCIAL_HANDOFF_v1.md` — not cursor disk for 026 |

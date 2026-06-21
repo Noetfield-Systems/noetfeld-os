@@ -1,1 +1,1 @@
-v3 charter refined per cloud review — Act VIII machine receipt @ 2026-06-20T01:12:18Z · campus law II.B · witness note · verify needles. Cloud: witness on main before canonical cite. Say lock v1.0 when ready.
+Mac and cloud agents can now read the same internal status online after git main is pulled — this is for agents only, not the public website. Outbound email stays blocked until live sites pass their checks. Every agent reply must explain in plain English first; the machine rejects answers that only repeat internal labels.

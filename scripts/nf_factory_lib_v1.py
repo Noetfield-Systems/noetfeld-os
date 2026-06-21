@@ -86,16 +86,14 @@ def write_lock(data: dict, root: Path | None = None) -> None:
 
 
 def write_ops_live_witness(surfaces: dict, root: Path | None = None) -> Path:
-    """Git-tracked witness — both agents read git main; never www."""
+    """Git-tracked witness — merge agent_surfaces into existing OPS_LIVE; never www."""
     root = root or repo_root()
     gov = root / "governance"
     gov.mkdir(parents=True, exist_ok=True)
+    path = gov / "OPS_LIVE_STATUS_LOCKED.json"
+    existing = load_json(path) or {}
     charter = root / "docs/platform/NF_LIVING_SYSTEM_CHARTER_DRAFT_v3.md"
-    witness = {
-        "schema_version": "ops-live-status-locked-v1",
-        "visibility": "internal-agent-only",
-        "not_www": True,
-        "audience": ["NF-LOCAL-REPO-AGENT", "NF-CLOUD-AGENT"],
+    agent_surfaces = {
         "witnessed_at": surfaces.get("generated_at") or iso_now(),
         "git_sha": surfaces.get("git_sha"),
         "product_now_line": surfaces.get("product_now_line"),
@@ -106,16 +104,35 @@ def write_ops_live_witness(surfaces: dict, root: Path | None = None) -> Path:
         "context_stale": surfaces.get("context_stale"),
         "mono_nerve_ok": surfaces.get("mono_nerve_ok"),
         "surfaces_ok": surfaces.get("surfaces_ok"),
-        "internal_agent_docs": {
-            "living_system_charter_v3": "docs/platform/NF_LIVING_SYSTEM_CHARTER_DRAFT_v3.md",
-            "live_status": "reports/agent-auto/LIVE-STATUS.md",
-            "routing_card": "ROUTING_CARD.md",
-        },
-        "charter_present": charter.is_file(),
         "quote_rule": surfaces.get("quote_rule"),
-        "sync_law": "Mac nf-onboard writes this file; cloud reads git main — not www",
     }
-    path = gov / "OPS_LIVE_STATUS_LOCKED.json"
+    internal_docs = {
+        "living_system_charter_v3": "docs/platform/NF_LIVING_SYSTEM_CHARTER_DRAFT_v3.md",
+        "language_law": "data/nf-agent-report-language-standard-v1.json",
+        "live_status": "reports/agent-auto/LIVE-STATUS.md",
+        "routing_card": "ROUTING_CARD.md",
+    }
+    if existing.get("layers") or existing.get("witness_order"):
+        existing["visibility"] = "internal-agent-only"
+        existing["not_www"] = True
+        existing["audience"] = ["NF-LOCAL-REPO-AGENT", "NF-CLOUD-AGENT"]
+        existing["agent_surfaces"] = agent_surfaces
+        existing["internal_agent_docs"] = internal_docs
+        existing["charter_present"] = charter.is_file()
+        existing["updated"] = agent_surfaces["witnessed_at"]
+        existing["sync_law"] = "nf-onboard writes agent_surfaces; both agents read git main — not www"
+        witness = existing
+    else:
+        witness = {
+            "schema_version": "ops-live-status-locked-v1",
+            "visibility": "internal-agent-only",
+            "not_www": True,
+            "audience": ["NF-LOCAL-REPO-AGENT", "NF-CLOUD-AGENT"],
+            **agent_surfaces,
+            "internal_agent_docs": internal_docs,
+            "charter_present": charter.is_file(),
+            "sync_law": "Mac nf-onboard writes this file; cloud reads git main — not www",
+        }
     write_json(path, witness)
     return path
 

@@ -36,6 +36,10 @@ if [[ -x scripts/verify-nf-mono-nerve-wire.sh ]]; then
   echo "OK   verify-nf-mono-nerve-wire"
 fi
 
+chmod +x scripts/verify-nf-agent-report-language.sh
+./scripts/verify-nf-agent-report-language.sh || fail=1
+echo "OK   verify-nf-agent-report-language"
+
 chmod +x scripts/prove-nf-factory-spine.sh 2>/dev/null || true
 if [[ -x scripts/prove-nf-factory-spine.sh ]]; then
   ./scripts/prove-nf-factory-spine.sh || fail=1

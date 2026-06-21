@@ -1,10 +1,10 @@
 {
   "schema_version": "nf-factory-spine-proof-v1",
-  "generated_at": "2026-06-20T01:18:11Z",
-  "ok": false,
+  "generated_at": "2026-06-20T01:28:18Z",
+  "ok": true,
   "proof_count": 15,
-  "passed": 11,
-  "failed": 4,
+  "passed": 15,
+  "failed": 0,
   "proofs": [
     {
       "proof": "cascade_ssot_shape",
@@ -13,12 +13,12 @@
     },
     {
       "proof": "onboard_pipeline_exit_0",
-      "ok": false,
-      "detail": "exit=2"
+      "ok": true,
+      "detail": "exit=0"
     },
     {
       "proof": "mono_nerve_wired",
-      "ok": false,
+      "ok": true,
       "detail": "line='email-defer \u00b7 ON \u00b7 main=5/5 \u00b7 sites=RED \u00b7 email=AFTER_MAIN \u00b7 lift=NO'"
     },
     {
@@ -38,8 +38,8 @@
     },
     {
       "proof": "anti_staleness_max",
-      "ok": false,
-      "detail": "checks=11"
+      "ok": true,
+      "detail": "checks=12"
     },
     {
       "proof": "receipts_on_disk",
@@ -69,12 +69,12 @@
     {
       "proof": "founder_implement_required",
       "ok": true,
-      "detail": "exit=1 reasons=['MONO_NERVE_FAIL', 'CONTEXT_STALE', 'RECEIPT_CASCADE_FAIL:nf_mono_nerve,nf_stale_guard', 'FOUNDER_IMPLEMENT_REQUIRED']"
+      "detail": "exit=1 reasons=['FOUNDER_IMPLEMENT_REQUIRED']"
     },
     {
       "proof": "founder_implement_passes",
-      "ok": false,
-      "detail": "exit=1 safe=False"
+      "ok": true,
+      "detail": "exit=0 safe=True"
     },
     {
       "proof": "executor_lock_acquire_release",
