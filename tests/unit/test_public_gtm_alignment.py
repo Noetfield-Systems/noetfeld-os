@@ -284,8 +284,9 @@ def test_trust_ledger_explainer_not_subscription() -> None:
 
 def test_offerings_strip_partial_exists() -> None:
     text = (ROOT / "assets" / "partials" / "offerings-strip.html").read_text(encoding="utf-8")
-    assert PILOT_CTA in text
-    assert "Pilot · $2k–10k" in text
+    assert "Book Diagnostic" in text or "Diagnostic" in text
+    assert "/intelligence/intake/" in text
+    assert "Copilot" in text
 
 
 def test_footer_partial_intelligence_primary() -> None:
