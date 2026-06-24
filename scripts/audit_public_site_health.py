@@ -10,11 +10,23 @@ ROOT = Path(__file__).resolve().parents[1]
 
 TIER_PAGES = (
     ROOT / "index.html",
+    ROOT / "governance" / "index.html",
     ROOT / "enterprise" / "index.html",
     ROOT / "trust-brief" / "index.html",
     ROOT / "copilot" / "index.html",
     ROOT / "console" / "index.html",
 )
+
+REQUIRED_TIER = (
+    "nfHeader",
+    "viewport",
+    "noetfield-shell.css",
+)
+
+REQUIRED_TIER_BY_PAGE = {
+    "index.html": ("Diagnostic Sprint", "Noetfield Intelligence"),
+    "governance/index.html": ("Apply for pilot", "governance"),
+}
 
 REQUIRED_SHELL_PARTIALS = (
     ROOT / "assets" / "partials" / "header.html",
@@ -27,13 +39,6 @@ FORBIDDEN_HOME = (
     "Payment Intent",
     "Submit Payment",
     "FX Calculator",
-)
-
-REQUIRED_TIER = (
-    "nfHeader",
-    "viewport",
-    "Apply for pilot",
-    "noetfield-shell.css",
 )
 
 
@@ -54,9 +59,13 @@ def main() -> int:
             errors.append(f"missing tier page: {path.relative_to(ROOT)}")
             continue
         text = path.read_text(encoding="utf-8", errors="replace")
+        rel = str(path.relative_to(ROOT))
         for req in REQUIRED_TIER:
             if req not in text:
-                errors.append(f"{path.relative_to(ROOT)}: missing {req!r}")
+                errors.append(f"{rel}: missing {req!r}")
+        for req in REQUIRED_TIER_BY_PAGE.get(rel, ("Apply for pilot",)):
+            if req not in text:
+                errors.append(f"{rel}: missing {req!r}")
 
     home = ROOT / "index.html"
     if home.is_file():
@@ -64,12 +73,10 @@ def main() -> int:
         for phrase in FORBIDDEN_HOME:
             if phrase in ht:
                 errors.append(f"index.html contains forbidden: {phrase}")
-        if (
-            "governance evaluation" not in ht.lower()
-            and "governance execution" not in ht.lower()
-            and "ai governance" not in ht.lower()
-        ):
-            errors.append("index.html missing governance positioning")
+        if "noetfield intelligence" not in ht.lower():
+            errors.append("index.html missing Intelligence positioning")
+        if "/intelligence/intake/" not in ht:
+            errors.append("index.html missing Diagnostic intake link")
         for bad in ("Golden Edge", "GCIP", "pre-execution", "audit ledger"):
             if bad in ht:
                 errors.append(f"index.html contains internal term: {bad}")
