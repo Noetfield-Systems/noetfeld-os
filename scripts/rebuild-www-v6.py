@@ -9,11 +9,21 @@ ROOT = Path(__file__).resolve().parents[1]
 WWW_VER = "40"
 LIVE_PROOF_WWW_VER = "43"  # homepage + investors live-proof bundle (pf-0068)
 
-# Copilot Governance Pack — locked lead SKU ($2k–10k · 90 days · board PDF success signal)
+# Pages maintained by Intelligence 613 lane — never overwrite on rebuild
+PROTECTED_INTELLIGENCE_PATHS = frozenset({
+    "index.html",
+    "governance/index.html",
+    "intelligence/intake/index.html",
+    "pricing/index.html",
+    "contact/index.html",
+})
+
+# Copilot Governance Pack — enterprise governance lane (~20% GTM)
 PILOT_SKU = "Copilot Governance Pack"
 PILOT_BAND = "$2k–10k · 90 days"
 PILOT_SUCCESS = "board PDF in a real governance meeting"
 PILOT_INTAKE = "/trust-brief/intake/?interest=pilot&vector=copilot-governance"
+INTELLIGENCE_DIAGNOSTIC = "/intelligence/intake/"
 TRUST_BRIEF_INTAKE = "/trust-brief/intake/"
 WORK_WITH_US_INTAKE = "/trust-brief/intake/?interest=partner&vector=work-with-us"
 MEGA_CTA_TITLE = "Board PDF in your next governance meeting"
@@ -1743,6 +1753,9 @@ def ciso_strip() -> str:
 
 
 def write(rel: str, title: str, desc: str, canonical: str, body: str, body_class: str = "nf-www nf-site-v14") -> None:
+    if rel in PROTECTED_INTELLIGENCE_PATHS and (ROOT / rel).is_file():
+        print("skip protected", rel)
+        return
     path = ROOT / rel
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(
@@ -2514,9 +2527,10 @@ def ai_automation_body() -> str:
 
 
 def main() -> None:
-    write("index.html", "Noetfield — Copilot Governance &amp; Trust Ledger Evidence",
+    # Intelligence homepage: protected hand-maintained at index.html (613 primary GTM)
+    write("governance/index.html", "Noetfield — Enterprise AI Governance &amp; Trust Ledger Evidence",
           COPY["meta_home"],
-          "/", homepage())
+          "/governance/", homepage(), body_class="nf-www nf-site-v14 nf-lane-governance")
 
     write("start/index.html", "Noetfield — Start Free Sandbox",
           "Developer sandbox: sign up, try Governance API and workspace without a sales call. 14-day trial, 50 evaluate calls.",
