@@ -22,6 +22,8 @@
 
 ## § Cloud ship (read this in cloud / Cursor VM)
 
+**Boot (NF-GAOS W0):** `make nf-onboard` → `reports/agent-auto/LIVE-STATUS.md` · `entry/START_HERE_LOCKED_v1.md` · `ROUTING_CARD.md` · `docs/ops/NF_GAOS_W0_LOCKED_v1.md`
+
 **No hub required.** Do not assume `http://127.0.0.1:13020/` or `~/Desktop/SourceA` unless founder confirms **Mac session active**.
 
 ### Read order

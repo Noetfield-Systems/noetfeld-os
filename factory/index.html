@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex,nofollow" />
+  <title>Noetfield — Governance Sandbox Sample</title>
+  <link rel="stylesheet" href="/assets/noetfield-tokens.css" />
+  <link rel="stylesheet" href="/assets/noetfield-shell.css" />
+  <link rel="stylesheet" href="/assets/noetfield-www.css?v=40" />
+  <style>
+    .nf-factory-tabs { display:flex; flex-wrap:wrap; gap:8px; margin:16px 0; }
+    .nf-factory-tabs button { padding:8px 14px; border-radius:8px; border:1px solid var(--nf-line,#e2e8f0); background:#fff; cursor:pointer; }
+    .nf-factory-tabs button.active { background:#1e3a5f; color:#fff; border-color:#1e3a5f; }
+    .nf-factory-card { border:1px solid var(--nf-line,#e2e8f0); border-radius:12px; padding:16px; margin:12px 0; background:#fafbfc; }
+    .nf-mock-out { font-family: ui-monospace, monospace; font-size:12px; background:#0f172a; color:#a7f3d0; padding:12px; border-radius:8px; white-space:pre-wrap; margin-top:12px; }
+    .nf-badge { display:inline-block; font-size:11px; padding:3px 8px; border-radius:999px; background:#fef3c7; color:#92400e; font-weight:600; }
+  </style>
+</head>
+<body class="nf-www">
+  <main class="nf-main" style="max-width:760px;margin:0 auto;padding:24px 16px 48px">
+    <p class="nf-badge">FORM_OFFICIAL campus · governance factory</p>
+    <h1>Build Factory</h1>
+    <p>Governed governance factories — sandbox → freemium → premium</p>
+    <p><strong id="hero-metric">0 sent · 2 active · 0 close</strong></p>
+    <div class="nf-factory-tabs" id="tabs">
+      <button type="button" class="active" data-tab="catalog">Catalog</button>
+      <button type="button" data-tab="studio">Studio</button>
+      <button type="button" data-tab="sandbox">Sandbox Bay</button>
+      <button type="button" data-tab="teams">Teams</button>
+    </div>
+    <section id="panel-catalog">
+      <div class="nf-factory-card">
+        <h2>Noetfield Governance Factory</h2>
+        <p>TLE · policy eval · procurement-grade go/no-go</p>
+        <p><span class="nf-badge">Freemium</span> · 30s demo · mock until upgrade</p>
+        <button type="button" id="btn-catalog-run">Run governance eval</button>
+      </div>
+      <div class="nf-factory-card">
+        <h2>Copilot Governance Pack</h2>
+        <p>M365 Copilot compliance validation · premium</p>
+        <a href="/console/">Open console →</a>
+      </div>
+    </section>
+    <section id="panel-studio" hidden>
+      <p>Read-only TLE spec · mock_only until premium</p>
+      <pre class="nf-mock-out" id="studio-spec">Loading spec…</pre>
+    </section>
+    <section id="panel-sandbox" hidden>
+      <p>Try the line — no compute until upgrade</p>
+      <button type="button" id="btn-sandbox">Run governance eval (30s demo)</button>
+      <pre class="nf-mock-out" id="sandbox-out">Tap to run MOCK_ONLY receipt</pre>
+    </section>
+    <section id="panel-teams" hidden>
+      <p>Premium unlock — hire TLE · Board · Copilot specialists</p>
+      <div class="nf-factory-card">
+        <strong>Noetfield Governance Team</strong>
+        <p>TLE eval agent · Board pack agent · Copilot readiness agent</p>
+      </div>
+    </section>
+    <p style="margin-top:24px;font-size:12px;color:#64748b">Sandbox sample · governance campus · honest capability tiers</p>
+  </main>
+  <script>
+  (function(){
+    const specUrl = "/os/plan-library/noetfield-factory-catalog/specs/noetfield-governance-factory-v1.json";
+    fetch(specUrl).then(r=>r.json()).then(j=>{
+      document.getElementById("studio-spec").textContent = JSON.stringify(j, null, 2);
+    }).catch(()=>{ document.getElementById("studio-spec").textContent = "See os/plan-library/noetfield-factory-catalog/specs/"; });
+    function mockReceipt(){
+      return JSON.stringify({
+        schema: "noetfield-governance-receipt-v1",
+        verdict: "MOCK_ONLY",
+        board_line: "MOCK_ONLY — sandbox TLE; upgrade for board PDF",
+        honest_label: "mock_only until premium",
+        emitted_at: new Date().toISOString()
+      }, null, 2);
+    }
+    function runMock(el){ el.textContent = mockReceipt(); }
+    document.getElementById("btn-sandbox").onclick = function(){ runMock(document.getElementById("sandbox-out")); };
+    document.getElementById("btn-catalog-run").onclick = function(){ document.querySelector('[data-tab="sandbox"]').click(); runMock(document.getElementById("sandbox-out")); };
+    document.querySelectorAll("#tabs button").forEach(function(btn){
+      btn.onclick = function(){
+        document.querySelectorAll("#tabs button").forEach(b=>b.classList.remove("active"));
+        btn.classList.add("active");
+        ["catalog","studio","sandbox","teams"].forEach(function(t){
+          document.getElementById("panel-"+t).hidden = (t !== btn.dataset.tab);
+        });
+      };
+    });
+  })();
+  </script>
+</body>
+</html>

@@ -50,7 +50,7 @@ check_html "http://127.0.0.1:${PUBLIC}/cognitive-dashboard" "dashboard" "Cogniti
 check_html "http://127.0.0.1:${PUBLIC}/evaluate" "evaluate" "Submit operational intent"
 check_html "http://127.0.0.1:${PUBLIC}/audit" "audit page" "Audit log"
 check_html "http://127.0.0.1:${PUBLIC}/audit" "audit export CTA" "Export bundle (JSON)"
-check_html "http://127.0.0.1:${PUBLIC}/trust-ledger" "trust-ledger list" "New TLE draft"
+check_html "http://127.0.0.1:${PUBLIC}/trust-ledger/" "trust-ledger list" "Open workspace"
 check_html "http://127.0.0.1:${PUBLIC}/trust-ledger/new" "tle generator" "TLE Generator"
 check_html "http://127.0.0.1:${PUBLIC}/workspace" "workspace list" "Trust Ledger Workspace"
 check_html "http://127.0.0.1:${PUBLIC}/workspace/connectors" "workspace connectors" "M365 evidence connectors"

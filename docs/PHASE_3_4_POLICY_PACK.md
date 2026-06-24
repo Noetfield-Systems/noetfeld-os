@@ -11,6 +11,9 @@ runtime, tests, and early deployments.
 
 ## Policy rules
 
+Runtime packs load from `packages/policy-packs/*.json` via `policy_loader.py`.
+The Python evaluator remains the authoritative fallback when a pack file is missing.
+
 | Rule | Behavior |
 | --- | --- |
 | `confidence:min-threshold` | Low-confidence actions require human review. |

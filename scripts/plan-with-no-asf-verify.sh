@@ -11,8 +11,8 @@ echo "=== plan-with-no-asf-verify ==="
 chmod +x scripts/verify-no-competitor-names.sh
 ./scripts/verify-no-competitor-names.sh
 
-chmod +x scripts/verify-static-www.sh
-./scripts/verify-static-www.sh
+chmod +x scripts/verify-ui-build-checklist.sh
+./scripts/verify-ui-build-checklist.sh
 
 chmod +x scripts/verify-agent-scope.sh
 ./scripts/verify-agent-scope.sh
@@ -22,6 +22,9 @@ if [[ "$health" != "200" ]]; then
   echo "Dev stack not up (health ${health}); starting NF_DASHBOARD_MODE=production make dev-local-pro …"
   NF_DASHBOARD_MODE=production make dev-local-pro
 fi
+
+chmod +x scripts/wait-dev-www-ready.sh
+./scripts/wait-dev-www-ready.sh
 
 chmod +x scripts/verify-ui-endpoints.sh scripts/verify-ui-e2e.sh scripts/verify-copilot-demo-links.sh
 chmod +x scripts/verify-audit-export.sh scripts/copilot-pilot-e2e.sh scripts/procurement-pack-e2e.sh
@@ -48,6 +51,9 @@ python3 scripts/smoke_bank_grade_html.py
 
 chmod +x scripts/verify-no-asf-coherence.sh
 ./scripts/verify-no-asf-coherence.sh
+
+chmod +x scripts/verify-nf-gaos-w3.sh scripts/prove-nf-factory-spine.sh
+./scripts/verify-nf-gaos-w3.sh
 
 if [[ -n "${NF_STAGING_URL:-}" ]]; then
   echo "NF_STAGING_URL set — running optional staging-smoke …"

@@ -1,11 +1,21 @@
-/** Status + /next/ — live intake health + ops go-live next steps */
+/** Status + /next/ — live intake health + ops status (factory-first law) */
 (function () {
   "use strict";
 
   function badge(label, state) {
-    var cls = "nf-signal-badge nf-signal-badge--" + state;
+    var cls =
+      "nf-signal-badge nf-signal-badge--" +
+      (state === "deferred" ? "roadmap" : state);
     var text =
-      state === "available" ? "Ready" : state === "orientation" ? "Partial" : "Pending";
+      state === "available"
+        ? "Ready"
+        : state === "deferred" || state === "roadmap"
+          ? "Deferred"
+          : state === "orientation"
+            ? "Partial"
+            : state === "na"
+              ? "N/A"
+              : "Pending";
     return (
       '<div class="nf-trust-signal"><span class="nf-trust-signal-label">' +
       label +
@@ -17,23 +27,19 @@
     );
   }
 
-  function opsNextSteps(ready) {
-    var inboxNote =
-      "<p><strong>Google Workspace inbox active.</strong> <code>operations@noetfield.com</code> receives direct email — reply from Gmail/Outlook in the same thread.</p>";
-    if (ready) {
+  function opsNextSteps(wwwReady) {
+    if (wwwReady) {
       return (
         '<aside class="nf-callout nf-callout--urgency" style="margin-top:16px">' +
-        inboxNote +
-        "<p><strong>Form delivery live.</strong> Every form notifies operations@noetfield.com · Reply-To = submitter · auto-ack enabled.</p>" +
+        "<p><strong>Intake email live.</strong> Forms notify operations@noetfield.com · Reply-To = submitter.</p>" +
         "</aside>"
       );
     }
     return (
-      '<aside class="nf-callout nf-callout--urgency" style="margin-top:16px">' +
-      inboxNote +
-      "<p><strong>Next step — wire form delivery:</strong> Add <code>RESEND_API_KEY</code> on Vercel <code>web</code> → redeploy → verify here. " +
-      "Until then, use <code>mailto:</code> fallbacks on intake forms or email operations@ directly. " +
-      '<a href="/next/#next-ops">Full ops checklist →</a></p>' +
+      '<aside class="nf-callout" style="margin-top:16px">' +
+      "<p><strong>Google Workspace inbox is live.</strong> Direct email to operations@noetfield.com works. " +
+      "WWW form auto-send (Resend) is <strong>deferred until after factory</strong> — not the current P0. " +
+      '<a href="/next/#next-ops">Ops status →</a></p>' +
       "</aside>"
     );
   }
@@ -48,7 +54,7 @@
     host.innerHTML =
       badge("Google Workspace inbox", "available") +
       badge("Form intake API", enabled ? "available" : "orientation") +
-      badge("WWW form delivery (Resend)", www ? "available" : "orientation") +
+      badge("WWW form email (Resend)", www ? "available" : "deferred") +
       badge("Platform intake store", platform ? "available" : "orientation") +
       badge("Auto-ack to submitter", h.auto_ack_enabled ? "available" : "na") +
       '<p class="nf-section-lead" style="margin-top:12px">Delivery mode: <code>' +
@@ -64,9 +70,9 @@
     host.innerHTML =
       badge("Google Workspace inbox", "available") +
       badge("Form intake API", "orientation") +
-      badge("WWW form delivery (Resend)", "orientation") +
+      badge("WWW form email (Resend)", "deferred") +
       badge("Platform intake store", "orientation") +
-      badge("Auto-ack to submitter", "orientation");
+      badge("Auto-ack to submitter", "na");
     window.NFIntakeCore.checkHealth().then(function (h) {
       render(host, h);
     });
@@ -74,41 +80,6 @@
 
   function init() {
     document.querySelectorAll("[data-intake-health-host]").forEach(initHost);
-    initSandboxHealth();
-  }
-
-  function sandboxApiBase() {
-    var meta = document.querySelector('meta[name="nf-chat-api-base"]');
-    return (meta && meta.getAttribute("content")) || "https://platform.noetfield.com";
-  }
-
-  function initSandboxHealth() {
-    document.querySelectorAll("[data-sandbox-health-host]").forEach(function (host) {
-      host.innerHTML = badge("Sandbox API", "orientation");
-      var base = sandboxApiBase().replace(/\/$/, "");
-      fetch(base + "/api/sandbox/health")
-        .then(function (r) {
-          return r.json();
-        })
-        .then(function (h) {
-          var enabled = h && h.enabled === true;
-          var redis = h && h.redis_backed === true;
-          host.innerHTML =
-            badge("Sandbox API", enabled ? "available" : "orientation") +
-            badge("Redis sessions", redis ? "available" : "orientation") +
-            badge("Observe mode", h && h.mode === "observe" ? "available" : "orientation") +
-            '<p class="nf-section-lead" style="margin-top:12px">Limit: <code>' +
-            (h.evaluate_limit || 50) +
-            "</code> evaluates · TTL <code>" +
-            (h.trial_days || 14) +
-            "d</code></p>";
-        })
-        .catch(function () {
-          host.innerHTML =
-            badge("Sandbox API", "orientation") +
-            '<p class="nf-section-lead" style="margin-top:12px">Platform sandbox health unreachable — local trial may still work via www.</p>';
-        });
-    });
   }
 
   if (document.readyState === "loading") {

@@ -11,7 +11,7 @@
 | ID | Pattern | Goal on Noetfield |
 |----|---------|-------------------|
 | **R1** | **Receipt-first proof** | Hero includes a live **TLE receipt mock** — monospace fields, verified badge, `export_integrity: PASS`. Proof before pitch. |
-| **R2** | **Institutional light + gold** | Bank-grade palette: `#f4f5f8` base, gold accent `#8a6b1f`, IBM Plex sans headlines, white sticky nav. |
+| **R2** | **Institutional light + gold (v14 default)** | Bank-grade palette: `#f4f5f8` base, gold accent `#8a6b1f`, Inter sans headlines, white sticky nav — `body.nf-site-v14`. Dark artifact panels reserved for proof mode only. |
 | **R3** | **Honest scope strip** | **Shipped / Orientation / Roadmap / Out of scope** badges on every GTM hub — no certifier or custody claims. |
 | **R4** | **Numbered narrative** | Sections **01–10**: loop → scope → buyers → lanes → proof → SKUs → pain → category → stack → FAQ. |
 | **R5** | **Split premium hero** | Left: kicker + H1 + buyer line + CTAs. Right: artifact panel (receipt mock or governance loop). |
@@ -77,11 +77,11 @@ References inform **design quality** only. The website is the artifact.
 | `assets/noetfield-enterprise.css` | Locked reference stylesheet (receipt mock, cinematic hero, stat bar, sections 01–10) |
 | `assets/noetfield-tokens.css` | Design tokens — `--gold-bright`, `--max-wide: 1320px` |
 | `scripts/rebuild-www-v6.py` | Regenerates all GTM hub pages · `WWW_VER=27` |
-| `assets/partials/header.html` | Pilot · $2k–10k · Demo · Sandbox · Pricing |
+| `assets/partials/header.html` | v14 nav: Home · Copilot · Trust · Federal · MSP · Demo · Pilot CTA |
 | `start/index.html` | Developer sandbox signup + async demo flow |
 | `pricing/index.html` | Published tiers · sandbox vs production |
 | `index.html` | Canonical homepage — cinematic hero + sections 01–10 |
-| `trust/index.html` | Trust center — honest cert posture |
+| `trust/index.html` | Trust center — v14 document layout · sticky procurement rail · cert tables |
 | `trust-ledger/verify/index.html` | Export integrity walkthrough |
 
 ---

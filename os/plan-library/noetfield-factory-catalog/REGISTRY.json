@@ -1,0 +1,49 @@
+{
+  "schema": "noetfield-factory-catalog-v1",
+  "version": 1,
+  "generated_at": "2026-06-19",
+  "platform": "Noetfield",
+  "tagline": "Governed governance factories — TLE · board pack · Copilot readiness.",
+  "inspired_by": "SourceA FBE catalog (read-only — implemented in Noetfield only)",
+  "sourcea_motor": "read-only — ~/Desktop/SourceA/docs/SOURCEA_FACTORY_BUILDER_ENGINE_LOCKED_v1.md",
+  "tiers": {
+    "sandbox": { "label": "Sandbox", "description": "Mock TLE eval · sample board line", "cost_usd": 0 },
+    "freemium": { "label": "Freemium", "description": "Capped evals · watermarked exports", "cost_usd": 0 },
+    "premium": { "label": "Premium", "description": "Full TLE · board PDF · team hire", "cost_usd": "paid" }
+  },
+  "factories": [
+    {
+      "catalog_id": "cat-governance-factory",
+      "factory_id": "noetfield-governance-factory-v1",
+      "spec_path": "os/plan-library/noetfield-factory-catalog/specs/noetfield-governance-factory-v1.json",
+      "kind": "engine",
+      "tier": "freemium",
+      "status": "live",
+      "demo_seconds": 30,
+      "install_label": "Run governance eval",
+      "tagline": "TLE · policy eval · procurement-grade go/no-go",
+      "commands": ["make nf-onboard", "pytest tests/unit/test_governance_runtime_10step.py -q"]
+    },
+    {
+      "catalog_id": "cat-copilot-pack",
+      "factory_id": "noetfield-copilot-governance-v1",
+      "spec_path": "docs/strategy/NOETFIELD_TRUST_LEDGER_POSITIONING_LOCKED_v1.2.md",
+      "kind": "product",
+      "tier": "premium",
+      "status": "live",
+      "demo_seconds": 60,
+      "install_label": "Open console",
+      "tagline": "M365 Copilot governance · board-defensible evidence"
+    }
+  ],
+  "specialist_teams": [
+    {
+      "team_id": "team-governance-ship-it",
+      "label": "Noetfield Governance Team",
+      "supervisor": "Governance lead",
+      "specialists": ["TLE eval agent", "Board pack agent", "Copilot readiness agent"],
+      "tier": "premium",
+      "pick": "os/plan.json GTM_NEXT queue"
+    }
+  ]
+}

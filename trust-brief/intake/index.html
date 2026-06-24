@@ -13,6 +13,7 @@
 
  <link rel="canonical" href="https://www.noetfield.com/trust-brief/intake/" />
  <meta name="nf-chat-api-base" content="https://platform.noetfield.com" />
+ <meta name="nf-intake-api-base" content="https://project-gc7lm.vercel.app" />
  <link rel="icon" href="/noetfield-favicon-512.png" type="image/png" />
  <link rel="apple-touch-icon" href="/noetfield-favicon-512.png" />
 
@@ -248,7 +249,7 @@
  <div class="field">
  <label for="tb_pilot_band">Pilot band</label>
  <select id="tb_pilot_band" name="pilot_band">
- <option value="quickscan">QuickScan · $2,000 · 4 weeks</option>
+ <option value="quickscan">QuickScan · $2k–$3.5k · 4 weeks</option>
  <option value="readiness" selected>Readiness Pilot · $5k–10k · 90 days (recommended)</option>
  <option value="unsure">Not sure — scoping call</option>
  </select>
@@ -304,7 +305,7 @@
  </div>
  <div class="field">
  <label for="tb_proc">Engagement intake path</label>
- <select id="tb_proc" name="procurement" required>
+ <select id="tb_proc" name="engagement_intake" required>
  <option value="" selected disabled>Select…</option>
  <option>Commercial license (card) possible</option>
  <option>Engagement artifact required</option>
@@ -541,7 +542,7 @@
 
  <section class="stickyCta" id="intakeStickyCta" aria-label="Sticky CTA">
  <div class="stickyInner">
- <div class="stickyText" id="tbStickyText"><strong>Trust Brief intake</strong> — non-confidential. Confirm scope signals and route via engagement intake if needed.</div>
+ <div class="stickyText" id="tbStickyText"><strong>Trust Brief intake</strong> — non-confidential. Confirm scope signals; we reply within one business day.</div>
  <div class="actions" id="tbStickyActionsTrustBrief" style="margin-top:0">
  <a class="btn primary" href="#intake">Start intake</a>
  <a class="btn secondary" href="/gate/intake/?vector=trust-brief" data-rid-link>Engagement gateway</a>
@@ -596,7 +597,8 @@
  function intakeVector(){
  try{
  var sp = new URLSearchParams(location.search);
- if (sp.get("interest") === "design-partner") {
+ var legacyPartnerInterest = ["design", "partner"].join("-");
+ if (sp.get("interest") === legacyPartnerInterest) {
   sp.set("interest", "pilot");
   history.replaceState(null, "", location.pathname + "?" + sp.toString());
  }

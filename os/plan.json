@@ -4,7 +4,7 @@
   "status": "active",
   "ship_mandate": "os/SHIP_NOW.md",
   "ship_rule": "Bounded founder implement order + os/plan.json GTM_NEXT queue + agentic_queue (026 Hub only); ingest after VERIFY (required); do not edit SinaPromptOS; no self-start from plan.json alone (R-007/R-011); local Mac may also pick from os/plan-library/noetfield-1000/",
-  "last_updated": "2026-06-03",
+  "last_updated": "2026-06-19",
   "positioning_lock": "docs/strategy/NOETFIELD_TRUST_LEDGER_POSITIONING_LOCKED_v1.2.md",
   "agent_context_lock": "docs/ops/NOETFIELD_AGENT_CONTEXT_AND_READ_ORDER_LOCKED_v1.md",
   "sprint_backlog": "os/sprint-trust-ledger-v1.2.md",
@@ -12,50 +12,75 @@
   "future_plans_stubs": "os/plans/REGISTRY.json",
   "locked_references": [
     {
+      "id": "nf-gaos-w0",
+      "title": "NF-GAOS W0 \u2014 governed agent OS spine (gate, live orient, routing graph)",
+      "path": "docs/ops/NF_GAOS_W0_LOCKED_v1.md",
+      "locked_at": "2026-06-17",
+      "mandate": "Every agent runs make nf-onboard before implement; trust LIVE-STATUS over prose"
+    },
+    {
+      "id": "nf-start-here-v1",
+      "title": "START HERE \u2014 role picker for noetfield_cloud vs local vs ecosystem",
+      "path": "entry/START_HERE_LOCKED_v1.md",
+      "locked_at": "2026-06-17"
+    },
+    {
+      "id": "nf-routing-card-v1",
+      "title": "ROUTING CARD \u2014 daily anti-fragmentation pin",
+      "path": "ROUTING_CARD.md",
+      "locked_at": "2026-06-17"
+    },
+    {
+      "id": "nf-gaos-w1",
+      "title": "NF-GAOS W1 \u2014 anti-drift, BAVT, panel, rule collapse",
+      "path": "docs/ops/NF_GAOS_W1_LOCKED_v1.md",
+      "locked_at": "2026-06-17"
+    },
+    {
       "id": "agent-read-links-v1",
-      "title": "Agent read links — SourceA index + hub tabs + per-repo notices",
+      "title": "Agent read links \u2014 SourceA index + hub tabs + per-repo notices",
       "path": "docs/ops/AGENT_READ_LINKS_LOCKED_v1.md",
       "locked_at": "2026-06-04",
       "mirror": "ops/private/sourceA/founder/repo-agent-notices/AGENT_READ_LINKS_INDEX.md"
     },
     {
       "id": "agent-context-v1",
-      "title": "Agent context & read order — SourceA + Noetfield + cloud vs local",
+      "title": "Agent context & read order \u2014 SourceA + Noetfield + cloud vs local",
       "path": "docs/ops/NOETFIELD_AGENT_CONTEXT_AND_READ_ORDER_LOCKED_v1.md",
       "locked_at": "2026-06-04",
       "mandate": "Every agent reads before implement; ingest reports after VERIFY"
     },
     {
       "id": "trust-ledger-positioning-v1.2",
-      "title": "Trust Ledger final positioning — Copilot governance & evidence layer",
+      "title": "Trust Ledger final positioning \u2014 Copilot governance & evidence layer",
       "path": "docs/strategy/NOETFIELD_TRUST_LEDGER_POSITIONING_LOCKED_v1.2.md",
       "locked_at": "2026-06-03",
       "mandate": "Every engagement produces at least one signed TLE v1"
     },
     {
       "id": "gtm-60-day-v1",
-      "title": "GTM & CEO 60-day focus — one customer, demo, category",
+      "title": "GTM & CEO 60-day focus \u2014 one customer, demo, category",
       "path": "docs/strategy/NOETFIELD_GTM_60_DAY_LOCKED_v1.md",
       "locked_at": "2026-06-04",
       "mandate": "70% customers / 20% demo / 10% code; bottleneck is validation not features"
     },
     {
       "id": "governance-sources-book-v1",
-      "title": "Governance Sources Book v1 — citable frameworks for pilots",
+      "title": "Governance Sources Book v1 \u2014 citable frameworks for pilots",
       "path": "docs/references/GOVERNANCE_SOURCES_BOOK_v1.md",
       "locked_at": "2026-06-04",
       "mandate": "Agents cite primary sources (NIST, OECD, ISO, EU, Microsoft, OWASP) in buyer materials"
     },
     {
       "id": "governance-drift-sources-v1",
-      "title": "Governance Drift Detection Sources v1 — monitoring & drift primary links",
+      "title": "Governance Drift Detection Sources v1 \u2014 monitoring & drift primary links",
       "path": "docs/references/GOVERNANCE_DRIFT_DETECTION_SOURCES_LOCKED_v1.md",
       "locked_at": "2026-06-04",
       "mandate": "Agents cite drift/monitoring sources (NIST Measure/Manage, EU Art 72, Purview, OPA, CA-7) when selling continuous governance"
     },
     {
       "id": "copilot-sme-system-design-v1",
-      "title": "Noetfield Copilot for SMEs — full system design (5 domains + 90-day roadmap)",
+      "title": "Noetfield Copilot for SMEs \u2014 full system design (5 domains + 90-day roadmap)",
       "path": "docs/strategy/NOETFIELD_COPILOT_SME_SYSTEM_DESIGN_LOCKED_v1.md",
       "locked_at": "2026-06-03",
       "noetfield_lane_a": [
@@ -72,37 +97,190 @@
     },
     {
       "id": "1000-prompt-pack-v1",
-      "title": "1000 prompt-ready plan pack — GTM-weighted, locked index",
+      "title": "1000 prompt-ready plan pack \u2014 GTM-weighted, locked index",
       "path": "docs/ops/NOETFIELD_1000_PROMPT_PACK_LOCKED_v1.md",
       "locked_at": "2026-06-03",
       "mandate": "PLAN WITH NO ASF picks from GTM_NEXT / QUICK_PICK when registry empty; GTM_PRIORITY outreach = agentic only; verify with plan-with-no-asf-verify.sh"
     },
     {
       "id": "www-v16-packaging-v1",
-      "title": "WWW v16 self-serve packaging — sandbox, tiers, agentic GTM",
+      "title": "WWW v16 self-serve packaging \u2014 sandbox, tiers, agentic GTM",
       "path": "docs/WWW_V16_PACKAGING_PLAN_LOCKED_v1.md",
       "locked_at": "2026-06-13",
       "mandate": "All www/prompt/inbox work aligns to sandbox funnel; three contract SKUs only; free tier is nf-pack-card not nf-offer-card"
     },
     {
       "id": "commercial-inbox-packaging-v1",
-      "title": "Commercial inbox routing — sandbox vs contract threads",
+      "title": "Commercial inbox routing \u2014 sandbox vs contract threads",
       "path": "docs/ops/COMMERCIAL_INBOX_PACKAGING_LOCKED_v1.md",
       "locked_at": "2026-06-13",
       "mandate": "operations@ routing; no mandatory sales call for sandbox; RID on contract threads"
+    },
+    {
+      "id": "governance-runtime-10step-v1",
+      "title": "Governance Runtime 10-step LOCK \u2014 Enterprise AI Control Plane",
+      "path": "~/.sina/agent-workspaces/noetfield_cloud/commercial-goal/GOVERNANCE_RUNTIME_10_STEP_LOCKED_v1.md",
+      "locked_at": "2026-06-17",
+      "mandate": "VC-scale path: Runtime > Ledger > Policy Engine > SDK > Templates; factories are demos only"
+    },
+    {
+      "id": "governance-runtime-contract-v1",
+      "title": "Governance Runtime public API contract",
+      "path": "docs/strategy/NOETFIELD_GOVERNANCE_RUNTIME_CONTRACT_LOCKED_v1.md",
+      "locked_at": "2026-06-17",
+      "mandate": "Single prod surface \u2014 evaluate/ledger/audit-export/TLE; PROCEED|REVIEW|REJECT vocabulary"
+    },
+    {
+      "id": "governance-as-code-v1",
+      "title": "Governance-as-Code spec \u2014 governance.yaml",
+      "path": "docs/strategy/GOVERNANCE_AS_CODE_LOCKED_v1.md",
+      "locked_at": "2026-06-17",
+      "mandate": "Declarative governance config versions with every TLE"
     }
   ],
   "next_tasks": [
     {
-      "id": "ship-procurement-checkpoint-verify-054",
-      "title": "Hardened procurement checkpoint verify guards (heading, verify script, audit loop)",
-      "plan": "scripts/verify-gtm-ops-docs.sh",
+      "id": "ship-anti-staleness-verify-063",
+      "title": "Anti-staleness verify needles in verify-doc-ssot + factory spine",
+      "plan": "scripts/verify-doc-ssot.sh \u00b7 make verify-nf-anti-staleness-max",
       "status": "done"
     },
     {
-      "id": "ship-services-governance-openapi-bridge-055",
-      "title": "Procurement links to public OpenAPI + services/governance README",
-      "plan": "copilot/procurement/index.html",
+      "id": "ship-status-phase16-064",
+      "title": "Status + next pages reflect Phase 17 queue head (260/300)",
+      "plan": "next/index.html \u00b7 scripts/rebuild-www-v6.py",
+      "status": "done"
+    },
+    {
+      "id": "ship-portfolio-registry-sync-065",
+      "title": "Phase 16 LOCK + portfolio registry sync in verify-doc-ssot",
+      "plan": "docs/ops/NF_FACTORY_ROUND_16_PREP_LOCKED_v1.md",
+      "status": "done"
+    },
+    {
+      "id": "ship-pl-entity-readme-066",
+      "title": "Platform entity split index doc (PL-P1 pf-0266\u20130275)",
+      "plan": "docs/platform/NF_PLATFORM_ENTITY_SPLIT_INDEX_v1.md",
+      "status": "done"
+    },
+    {
+      "id": "ship-portfolio-np8-sticky-cta-078",
+      "title": "N-P8 pilot apply sticky CTA on gate + trust-brief intake",
+      "plan": "portfolio-300 pf-0074 \u00b7 docs/intake/NF_PILOT_APPLY_STICKY_CTA_v1.md",
+      "status": "done"
+    },
+    {
+      "id": "ship-portfolio-np8-regression-079",
+      "title": "N-P8 Governance Runtime regression suite SSOT",
+      "plan": "portfolio-300 pf-0075 \u00b7 docs/runtime/NF_GOVERNANCE_RUNTIME_REGRESSION_SUITE_v1.md",
+      "status": "done"
+    },
+    {
+      "id": "ship-portfolio-np7-osfi-refresh-075",
+      "title": "N-P7 OSFI E-23 diligence refresh on /federal/ + /bank-pilot/",
+      "plan": "portfolio-300 pf-0071 \u00b7 docs/federal/NF_OSFI_E23_DILIGENCE_REFRESH_v1.md",
+      "status": "done"
+    },
+    {
+      "id": "ship-portfolio-np7-metadata-index-076",
+      "title": "N-P7 metadata-only evidence index (Purview complement)",
+      "plan": "portfolio-300 pf-0072 \u00b7 docs/diligence/NF_METADATA_EVIDENCE_INDEX_v1.md",
+      "status": "done"
+    },
+    {
+      "id": "ship-portfolio-np7-sandbox-nurture-077",
+      "title": "N-P7 sandbox nurture sequence on /start/",
+      "plan": "portfolio-300 pf-0073 \u00b7 docs/start/NF_SANDBOX_NURTURE_SEQUENCE_v1.md",
+      "status": "done"
+    },
+    {
+      "id": "ship-portfolio-np6-live-proof-072",
+      "title": "N-P6 live proof hero illustrative label + homepage IA guard",
+      "plan": "portfolio-300 pf-0066\u2013pf-0067 \u00b7 docs/www/ \u00b7 index.html",
+      "status": "done"
+    },
+    {
+      "id": "ship-portfolio-np6-investor-vault-073",
+      "title": "N-P6 shell v43 + investor diligence vault SSOT",
+      "plan": "portfolio-300 pf-0068\u2013pf-0069 \u00b7 investors/ \u00b7 docs/diligence/",
+      "status": "done"
+    },
+    {
+      "id": "ship-portfolio-np6-battlecards-074",
+      "title": "N-P6 battle cards refresh on /copilot/procurement/",
+      "plan": "portfolio-300 pf-0070 \u00b7 docs/diligence/NF_BATTLECARDS_REFRESH_v1.md",
+      "status": "done"
+    },
+    {
+      "id": "ship-portfolio-np5-runtime-api-069",
+      "title": "N-P5 Governance Runtime API docs link on /runtime/",
+      "plan": "portfolio-300 pf-0061 \u00b7 docs/runtime/NF_RUNTIME_API_DOCS_LINK_v1.md",
+      "status": "done"
+    },
+    {
+      "id": "ship-portfolio-np5-template-catalog-070",
+      "title": "N-P5 template catalog SSOT + status badges on /templates/",
+      "plan": "portfolio-300 pf-0062\u2013pf-0063 \u00b7 docs/templates/ \u00b7 docs/start/",
+      "status": "done"
+    },
+    {
+      "id": "ship-portfolio-np5-sdk-scaffold-071",
+      "title": "N-P5 deploy CI gate + SDK local governance scaffold",
+      "plan": "portfolio-300 pf-0064\u2013pf-0065 \u00b7 Makefile \u00b7 packages/sdk/",
+      "status": "done"
+    },
+    {
+      "id": "ship-portfolio-np4-msp-flow-066",
+      "title": "N-P4 MSP partner program Apply \u2192 Enable \u2192 Earn on /msp/",
+      "plan": "portfolio-300 pf-0056 \u00b7 docs/msp/MSP_PARTNER_PROGRAM_FLOW_v1.md",
+      "status": "done"
+    },
+    {
+      "id": "ship-portfolio-np4-gel-tiers-067",
+      "title": "GEL Starter/Standard/Trust Ledger tier specs on /runtime/",
+      "plan": "portfolio-300 pf-0058\u2013pf-0060 \u00b7 docs/runtime/",
+      "status": "done"
+    },
+    {
+      "id": "ship-portfolio-np4-ffiec-068",
+      "title": "FFIEC orientation refresh linked from /federal/",
+      "plan": "portfolio-300 pf-0057 \u00b7 docs/federal/FFIEC_ORIENTATION_REFRESH_v1.md",
+      "status": "done"
+    },
+    {
+      "id": "ship-portfolio-np3-wave-complete-063",
+      "title": "N-P3 Bank Pilot shadow pack 7/7 \u2014 institutional lane complete",
+      "plan": "portfolio-300 pf-0049\u2013pf-0055 \u00b7 docs/bank-pilot/",
+      "status": "done"
+    },
+    {
+      "id": "ship-portfolio-np3-cu-intake-064",
+      "title": "Credit union bank-pilot intake vector on gate + /bank-pilot/",
+      "plan": "portfolio-300 pf-0053 \u00b7 docs/bank-pilot/NF_BP_CREDIT_UNION_INTAKE_VECTOR_v1.md",
+      "status": "done"
+    },
+    {
+      "id": "ship-portfolio-np3-boundary-faq-065",
+      "title": "NF-BP vs TF-001 boundary FAQ linked for dual institutional deals",
+      "plan": "portfolio-300 pf-0055 \u00b7 docs/bank-pilot/NF_BP_VS_TF001_BOUNDARY_FAQ_v1.md",
+      "status": "done"
+    },
+    {
+      "id": "ship-portfolio-np1-pricing-align-060",
+      "title": "N-P1 pilot pricing QuickScan $2k\u2013$3.5k aligned across pilot/intake/FAQ",
+      "plan": "portfolio-300 pf-0028 \u00b7 docs/copilot/PILOT_PRICING_ALIGNMENT_v1.md",
+      "status": "done"
+    },
+    {
+      "id": "ship-portfolio-np1-funnel-metrics-061",
+      "title": "Sandbox funnel metrics spec S0\u2192S5 for Hub weekly rollup",
+      "plan": "portfolio-300 pf-0033 \u00b7 docs/copilot/SANDBOX_FUNNEL_METRICS_SPEC_v1.md",
+      "status": "done"
+    },
+    {
+      "id": "ship-portfolio-np1-hub-intake-062",
+      "title": "Copilot-governance intake Hub report template wired to agent queue",
+      "plan": "portfolio-300 pf-0034 \u00b7 docs/copilot/INTAKE_COPILOT_GOVERNANCE_HUB_REPORT_v1.md",
       "status": "done"
     },
     {
@@ -114,13 +292,31 @@
     {
       "id": "ship-sandbox-server-side-057",
       "title": "Optional server-side sandbox session persistence",
-      "plan": "docs/ops/SANDBOX_PRODUCTION_PERSISTENCE.md",
+      "plan": "docs/start/SANDBOX_SERVER_SIDE_SESSION_SPEC_v1.md",
+      "status": "done"
+    },
+    {
+      "id": "ship-procurement-openapi-verify-060",
+      "title": "Verify /openapi.json returns 200 in gtm-ops bundle",
+      "plan": "scripts/verify-gtm-ops-docs.sh",
+      "status": "done"
+    },
+    {
+      "id": "ship-services-governance-readme-openapi-061",
+      "title": "services/governance README cites /openapi.json path",
+      "plan": "services/governance/README.md",
+      "status": "done"
+    },
+    {
+      "id": "ship-tenth-audit-merge-rule-062",
+      "title": "Document tenth-audit branch in ENGINEERING_DONE_MANIFEST closeout template",
+      "plan": "docs/ops/plans/PROMPT_PACK_LOCKED/ENGINEERING_DONE_MANIFEST.md",
       "status": "done"
     },
     {
       "id": "ship-agentic-workflow-manifest-058",
       "title": "Wire agent manifest schema to public agentic workflow copy",
-      "plan": "assets/noetfield-agent-manifest.json",
+      "plan": "docs/schemas/agent-manifest.schema.json \u00b7 /start/",
       "status": "done"
     },
     {
@@ -131,7 +327,7 @@
     },
     {
       "id": "ship-v16-packaging-www-057",
-      "title": "v16 www packaging — /start/ /pricing/ self-serve rail agentic block",
+      "title": "v16 www packaging \u2014 /start/ /pricing/ self-serve rail agentic block",
       "plan": "docs/WWW_V16_PACKAGING_PLAN_LOCKED_v1.md",
       "status": "done"
     },
@@ -149,7 +345,7 @@
     },
     {
       "id": "ship-blueprint-services-governance-bridge-051",
-      "title": "Link services/governance to PLATFORM_BLUEPRINT §8.3 prod row + README",
+      "title": "Link services/governance to PLATFORM_BLUEPRINT \u00a78.3 prod row + README",
       "plan": "services/governance/README.md",
       "status": "done"
     },
@@ -167,7 +363,7 @@
     },
     {
       "id": "ship-blueprint-governance-console-bridge-048",
-      "title": "Link PLATFORM_BLUEPRINT §8/§13/§21 to governance-console README",
+      "title": "Link PLATFORM_BLUEPRINT \u00a78/\u00a713/\u00a721 to governance-console README",
       "plan": "PLATFORM_BLUEPRINT.md",
       "status": "done"
     },
@@ -191,7 +387,7 @@
     },
     {
       "id": "ship-merged-pr-open-prs-gate-046",
-      "title": "OPEN_PRS recently merged must include ship PRs #41–#44",
+      "title": "OPEN_PRS recently merged must include ship PRs #41\u2013#44",
       "plan": "scripts/verify-no-asf-coherence.sh",
       "status": "done"
     },
@@ -452,24 +648,50 @@
     "nf-rag-design-010",
     "nf-copilot-pilot-runbook-009"
   ],
-  "updated_at": "2026-06-13T18:00:00Z",
+  "updated_at": "2026-06-14",
   "agentic_queue": [
     {
       "id": "ship-design-partner-outreach-026",
-      "title": "Design-partner outreach execution — send + tracker",
+      "title": "Design-partner outreach execution \u2014 send + tracker",
       "owner": "agentic_layer",
       "handoff": "docs/ops/AGENTIC_COMMERCIAL_HANDOFF_v1.md",
-      "note": "Not NF-CLOUD disk implement — founder Hub approves send"
+      "note": "Not NF-CLOUD disk implement \u2014 founder Hub approves send"
     },
     {
       "id": "ship-sandbox-nurture-060",
-      "title": "Sandbox → design partner nurture templates",
+      "title": "Sandbox \u2192 design partner nurture templates",
       "owner": "agentic_layer",
       "handoff": "docs/ops/COMMERCIAL_INBOX_PACKAGING_LOCKED_v1.md",
-      "note": "Optional upgrade path after 50 evaluates or 14d — no mandatory sales call"
+      "note": "Optional upgrade path after 50 evaluates or 14d \u2014 no mandatory sales call"
     }
   ],
   "done": [
+    {
+      "id": "governance-runtime-verify-green-20260617",
+      "title": "Governance Runtime verify-green \u2014 5 www failures fixed, 213/213 verify-final-lock PASS",
+      "status": "done",
+      "done_criteria": [
+        "POSITIONING.md locked sentence endswith + POSITIONING_EXTENDED.md split",
+        "Header nav restored: Copilot/Trust/Enterprise/Pricing/Partners",
+        "pre-execution removed from public tier pages",
+        "dev-unified-proxy trust-ledger routing fixed",
+        "OpenAPI governance-v1 + GaC wire + demo policy_version_hash",
+        "verify-final-lock 213/213 PASS"
+      ]
+    },
+    {
+      "id": "governance-runtime-10step-20260617",
+      "title": "Governance Runtime 10-step LOCK + implement \u2014 unified platform/GEL, policy packs, SDK, templates",
+      "status": "done",
+      "done_criteria": [
+        "GOVERNANCE_RUNTIME_10_STEP_LOCKED_v1.md + contract + GaC locked docs",
+        "gel_adapter.py + policy_loader.py + governance_config.py + control_plane.py + tle_signer.py",
+        "copilot-governance-v1.json + bank-pilot-v1.json policy packs load at runtime",
+        "Governance SDK check/audit/approve + template deploy at /templates/",
+        "Control plane state machine INITIATED\u2192ARCHIVED + deploy-copilot-template.sh PASS",
+        "verify-final-lock 229/229 PASS"
+      ]
+    },
     {
       "id": "nf-mvp-req-extract-001",
       "title": "Extract top 5 MVP requirements from existing noetfield markdown into os/plan.json done criteria",
@@ -490,7 +712,7 @@
     },
     {
       "id": "nf-tenant-audit-schema-002",
-      "title": "Draft tenant + append-only audit schema outline (markdown only — no .py until ASF activates)",
+      "title": "Draft tenant + append-only audit schema outline (markdown only \u2014 no .py until ASF activates)",
       "status": "done",
       "evidence": [
         "docs/spec/tenant-append-only-audit-schema-outline.md"
@@ -587,75 +809,108 @@
     },
     {
       "id": "nf-homepage-v12-012",
-      "title": "P0: Homepage v1.2 — hero buyer line, TLE CTA",
+      "title": "P0: Homepage v1.2 \u2014 hero buyer line, TLE CTA",
       "status": "done",
-      "evidence": ["index.html"]
+      "evidence": [
+        "index.html"
+      ]
     },
     {
       "id": "nf-tle-core-db-013",
-      "title": "P1: Trust Ledger Core — tle_entries + digest",
+      "title": "P1: Trust Ledger Core \u2014 tle_entries + digest",
       "status": "done",
-      "evidence": ["governance-console/backend/db/models.py"]
+      "evidence": [
+        "governance-console/backend/db/models.py"
+      ]
     },
     {
       "id": "nf-tle-api-014",
       "title": "P1: TLE + evidence + connector APIs",
       "status": "done",
-      "evidence": ["governance-console/backend/routes/tle.py", "docs/spec/openapi/tle-v1.openapi.yaml"]
+      "evidence": [
+        "governance-console/backend/routes/tle.py",
+        "docs/spec/openapi/tle-v1.openapi.yaml"
+      ]
     },
     {
       "id": "nf-trust-ledger-workspace-015",
       "title": "P1: Trust Ledger Workspace UI",
       "status": "done",
-      "evidence": ["governance-console/frontend/app/workspace/"]
+      "evidence": [
+        "governance-console/frontend/app/workspace/"
+      ]
     },
     {
       "id": "nf-tle-approval-export-016",
       "title": "P1: Approval chain + board pack export + KMS stub",
       "status": "done",
-      "evidence": ["governance-console/backend/services/tle_service.py", "governance-console/backend/routes/tle.py"]
+      "evidence": [
+        "governance-console/backend/services/tle_service.py",
+        "governance-console/backend/routes/tle.py"
+      ]
     },
     {
       "id": "nf-ship-sample-ledger-017",
       "title": "SHIP: TLE v1 sample-report + YAML downloads",
       "status": "done",
-      "evidence": ["trust-ledger/sample-report/index.html", "trust-ledger/sample-report/samples/"]
+      "evidence": [
+        "trust-ledger/sample-report/index.html",
+        "trust-ledger/sample-report/samples/"
+      ]
     },
     {
       "id": "nf-ship-tle-smoke-018",
       "title": "SHIP: scripts/tle-smoke.sh E2E",
       "status": "done",
-      "evidence": ["scripts/tle-smoke.sh", "Makefile"]
+      "evidence": [
+        "scripts/tle-smoke.sh",
+        "Makefile"
+      ]
     },
     {
       "id": "nf-ship-m365-stub-019",
       "title": "SHIP: M365 evidence stub script",
       "status": "done",
-      "evidence": ["scripts/seed-m365-evidence-stub.sh"]
+      "evidence": [
+        "scripts/seed-m365-evidence-stub.sh"
+      ]
     },
     {
       "id": "nf-ship-workspace-search-020",
       "title": "SHIP: Workspace search/filter",
       "status": "done",
-      "evidence": ["governance-console/frontend/app/workspace/page.tsx", "governance-console/backend/routes/tle.py"]
+      "evidence": [
+        "governance-console/frontend/app/workspace/page.tsx",
+        "governance-console/backend/routes/tle.py"
+      ]
     },
     {
       "id": "nf-ship-pilot-pack-021",
       "title": "SHIP: Procurement pack from /copilot/",
       "status": "done",
-      "evidence": ["copilot/procurement/index.html", "docs/copilot/PROCUREMENT_ONE_PAGER.md", "copilot/index.html"]
+      "evidence": [
+        "copilot/procurement/index.html",
+        "docs/copilot/PROCUREMENT_ONE_PAGER.md",
+        "copilot/index.html"
+      ]
     },
     {
       "id": "nf-ship-staging-path-022",
       "title": "SHIP: Staging demo documentation",
       "status": "done",
-      "evidence": ["docs/ops/STAGING_DEMO.md"]
+      "evidence": [
+        "docs/ops/STAGING_DEMO.md"
+      ]
     },
     {
       "id": "nf-pilot-p1-9-023",
       "title": "P0: Copilot pilot E2E script + checklist page",
       "status": "done",
-      "evidence": ["scripts/copilot-pilot-e2e.sh", "copilot/pilot/index.html", "copilot/index.html"]
+      "evidence": [
+        "scripts/copilot-pilot-e2e.sh",
+        "copilot/pilot/index.html",
+        "copilot/index.html"
+      ]
     },
     {
       "id": "nf-pdf-board-pack-024",
@@ -691,11 +946,14 @@
       "id": "nf-staging-deploy-027",
       "title": "P2: Staging demo path + staging-smoke.sh",
       "status": "done",
-      "evidence": ["docs/ops/STAGING_DEMO.md", "scripts/staging-smoke.sh"]
+      "evidence": [
+        "docs/ops/STAGING_DEMO.md",
+        "scripts/staging-smoke.sh"
+      ]
     },
     {
       "id": "nf-m365-connect-e2e-028",
-      "title": "P0: M365 connect → auto evidence ingest",
+      "title": "P0: M365 connect \u2192 auto evidence ingest",
       "status": "done",
       "evidence": [
         "governance-console/backend/services/m365_connector_sync.py",
@@ -707,7 +965,9 @@
       "id": "nf-pdf-board-pack-v2-029",
       "title": "P0: Print-grade PDF board pack v2",
       "status": "done",
-      "evidence": ["governance-console/backend/services/board_pack_pdf.py"]
+      "evidence": [
+        "governance-console/backend/services/board_pack_pdf.py"
+      ]
     },
     {
       "id": "nf-rbac-chain-enforce-030",
@@ -731,7 +991,10 @@
       "id": "nf-staging-ci-smoke-032",
       "title": "P2: make staging-smoke + PR checklist",
       "status": "done",
-      "evidence": ["Makefile", "docs/ops/STAGING_DEMO.md"]
+      "evidence": [
+        "Makefile",
+        "docs/ops/STAGING_DEMO.md"
+      ]
     },
     {
       "id": "nf-phase1b-postgres-033",
@@ -809,13 +1072,60 @@
       "id": "nf-copilot-hub-gtm-041",
       "title": "P0: Copilot hub GTM messaging + demo-first links",
       "status": "done",
-      "evidence": ["copilot/index.html"]
+      "evidence": [
+        "copilot/index.html"
+      ]
     },
     {
       "id": "nf-homepage-design-partner-042",
       "title": "P1: Homepage design-partner CTA + verify-ui-e2e",
       "status": "done",
-      "evidence": ["index.html", "scripts/verify-ui-e2e.sh"]
+      "evidence": [
+        "index.html",
+        "scripts/verify-ui-e2e.sh"
+      ]
+    },
+    {
+      "id": "ship-procurement-checkpoint-verify-054",
+      "title": "Hardened procurement checkpoint verify guards (heading, verify script, audit loop)",
+      "plan": "scripts/verify-gtm-ops-docs.sh",
+      "status": "done"
+    },
+    {
+      "id": "ship-services-governance-openapi-bridge-055",
+      "title": "Procurement links to public OpenAPI + services/governance README",
+      "plan": "copilot/procurement/index.html",
+      "status": "done"
     }
-  ]
+  ],
+  "factory_campus": {
+    "platform": "Noetfield",
+    "active_focus": "governance-factory-campus-p0",
+    "authority": {
+      "factory_catalog": "os/plan-library/noetfield-factory-catalog/REGISTRY.json",
+      "factory_catalog_lock": "os/plan-library/NOETFIELD-FACTORY-CATALOG-LOCK.md",
+      "workers_plan": "os/plan-library/NOETFIELD-WORKERS-PLAN-LOCK.md",
+      "build_factory_ia": "os/plan-library/BUILD_FACTORY_TAB_IA_v1.md",
+      "blueprint": "os/plan-library/FACTORY_CAMPUS_BLUEPRINT_LOCKED_v1.md",
+      "sourcea_motor": "read-only \u2014 ~/Desktop/SourceA/docs/SOURCEA_FACTORY_BUILDER_ENGINE_LOCKED_v1.md"
+    },
+    "site_route": "/factory/",
+    "phase": {
+      "p0_run": "shipped",
+      "p1_hire": "shell",
+      "p2_rent": "spec"
+    }
+  },
+  "mcp_chain": {
+    "suggestion_pack": "os/plan-library/SOURCEA_SUGGESTION_MCP_CHAIN_LOCKED_v1.md",
+    "master_index": "os/plan-library/CROSS_REPO_MCP_CHAIN_MASTER_INDEX_LOCKED_v1.md",
+    "gateway_partner_lead": true,
+    "cloud_pick_step": 31,
+    "phase": {
+      "p0_consume": "active",
+      "p1_publish": "next",
+      "p2_gateway": "lead",
+      "p3_rent": "spec"
+    }
+  }
 }

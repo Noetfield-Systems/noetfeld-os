@@ -1,111 +1,28 @@
 {
-  "status_version": "2026.06.20.agent-sync",
-  "updated": "2026-06-20T01:19:08Z",
-  "updated_by": "NF-LOCAL-REPO-AGENT",
-  "rule": "Founder ops truth on disk beats chat, branch assumptions, and stale www copy. Agents MUST read this file before building.",
+  "schema_version": "ops-live-status-locked-v1",
   "visibility": "internal-agent-only",
   "not_www": true,
-  "audience": ["NF-LOCAL-REPO-AGENT", "NF-CLOUD-AGENT"],
-  "witness_order": [
-    "governance/OPS_LIVE_STATUS_LOCKED.json",
-    ".cursor/agent-memory/MEMORY_LOCKED.yaml",
-    "docs/ops/AGENT_READ_LINKS_LOCKED_v1.md",
-    "os/SHIP_NOW.md",
-    "os/plan.json next_tasks (open items only)",
-    "curl /api/intake/health + /gate/sales/ (production when reachable)"
+  "audience": [
+    "NF-LOCAL-REPO-AGENT",
+    "NF-CLOUD-AGENT"
   ],
-  "agent_surfaces": {
-    "witnessed_at": "2026-06-20T01:19:08Z",
-    "git_sha": "d3f057e",
-    "product_now_line": "no pending next_tasks",
-    "portfolio_now_line": "portfolio 260/300 done",
-    "email_send_defer_line": "email-defer · ON · main=5/5 · sites=RED · email=AFTER_MAIN · lift=NO",
-    "defer_active": true,
-    "gate_ok": true,
-    "context_stale": false,
-    "mono_nerve_ok": true,
-    "surfaces_ok": true,
-    "quote_rule": "Quote product_now_line AND email_send_defer_line — not chat memory",
-    "sync_law": "Both agents read this file on git main — not www"
-  },
+  "witnessed_at": "2026-06-20T01:28:16Z",
+  "git_sha": "ec54f94",
+  "product_now_line": "no pending next_tasks",
+  "portfolio_now_line": "portfolio 260/300 done",
+  "email_send_defer_line": "email-defer \u00b7 ON \u00b7 main=5/5 \u00b7 sites=RED \u00b7 email=AFTER_MAIN \u00b7 lift=NO",
+  "defer_active": true,
+  "gate_ok": true,
+  "context_stale": false,
+  "mono_nerve_ok": true,
+  "surfaces_ok": true,
+  "quote_rule": "Quote product_now_line AND email_send_defer_line \u2014 not chat memory",
   "internal_agent_docs": {
     "living_system_charter_v3": "docs/platform/NF_LIVING_SYSTEM_CHARTER_DRAFT_v3.md",
+    "language_law": "data/nf-agent-report-language-standard-v1.json",
     "live_status": "reports/agent-auto/LIVE-STATUS.md",
     "routing_card": "ROUTING_CARD.md"
   },
   "charter_present": true,
-  "layers": {
-    "google_workspace_inbox": {
-      "id": "ops-inbox-workspace",
-      "status": "live",
-      "address": "operations@noetfield.com",
-      "meaning": "Direct email + Reply-from-Gmail/Outlook works. This is NOT the same as form auto-notify.",
-      "verified_by": "founder 2026-06-03"
-    },
-    "form_delivery_resend": {
-      "id": "ops-form-delivery",
-      "status": "deferred_post_factory",
-      "meaning": "RESEND_API_KEY on Vercel www — auto-notify inbox on every form submit + auto-ack. Intentionally after factory build wave.",
-      "production_health_field": "www_email_configured",
-      "production_last_seen": "false (2026-06-03)",
-      "fallback": "mailto: on intake forms + direct email to operations@",
-      "founder_go_live_checklist": [
-        "Resend domain verify on noetfield.com",
-        "Vercel web env: RESEND_API_KEY, INTAKE_EMAIL_TO=operations@noetfield.com, INTAKE_AUTO_ACK_ENABLED=true",
-        "Redeploy www",
-        "Flip status to live in OPS_LIVE when GET /api/intake/health shows www_email_configured: true"
-      ]
-    },
-    "stripe_commercial_licensing": {
-      "id": "ops-stripe-checkout",
-      "status": "live",
-      "hub": "/gate/sales/",
-      "catalog": "governance/STRIPE_CATALOG.json",
-      "webhook_route": "POST /api/stripe/webhook",
-      "mode": "live",
-      "account_id": "acct_1SfSseJ03eJkL57J",
-      "payment_links": 2,
-      "note": "Commercial licensing only — not payment execution/custody"
-    },
-    "platform_factories": {
-      "id": "ops-factories",
-      "status": "live",
-      "catalog": "governance/FACTORY_CATALOG.json",
-      "live_count": 4,
-      "factories": [
-        "copilot_governance_readiness_v1",
-        "trust_brief_diligence_v1",
-        "legal_review_v1",
-        "aml_governance_trace_v1"
-      ],
-      "verified": "make verify-factory-catalog verify-factory-legal verify-factory-aml verify-factory-copilot"
-    }
-  },
-  "founder_orders_active": [
-    {
-      "id": "FO-001",
-      "order": "Audit everything and update before building new features",
-      "since": "2026-06-03"
-    },
-    {
-      "id": "FO-002",
-      "order": "Email form sending deferred until after factory build — inbox is live via Google Workspace",
-      "since": "2026-06-03"
-    }
-  ],
-  "stale_sources_do_not_trust": [
-    "Chat-only founder updates (not yet written to this file)",
-    "status/next copy that predates OPS_LIVE_STATUS_LOCKED.json",
-    "Branch-local work (stripe-gtm-setup, sandbox-v2) not merged to deploy branch",
-    "ops/private/sourceA/ when mirror missing on cloud VM"
-  ],
-  "trustfield_boundary": {
-    "note": "TrustField / trustfield.ca is a separate company (R-001). This file does NOT sync to TrustField agents automatically.",
-    "bridge": "Founder must sync SourceA SEMI_NOTICE or paste into TrustField repo separately",
-    "step2_checklist": [
-      "./scripts/sync-sourceA-desktop.sh on founder Mac",
-      "Bump OPS_LIVE_STATUS status_version",
-      "Mirror ops deltas to TrustField notice file"
-    ]
-  }
+  "sync_law": "Mac nf-onboard writes this file; cloud reads git main \u2014 not www"
 }

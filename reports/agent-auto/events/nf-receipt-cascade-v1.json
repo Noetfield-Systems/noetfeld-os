@@ -1,0 +1,31 @@
+{
+  "schema_version": "nf-receipt-cascade-v1",
+  "generated_at": "2026-06-20T01:28:12Z",
+  "ok": true,
+  "failures": [],
+  "nodes": [],
+  "ssot": "/Users/sinakazemnezhad/Desktop/Noetfield/Noetfield-All-Documents/Noetfield/data/nf_orient_routing_v1.json",
+  "heal": null,
+  "orient_read_chain": [
+    "entry/START_HERE_LOCKED_v1.md",
+    "ROUTING_CARD.md",
+    "docs/ops/COMMERCIAL_INBOX_PACKAGING_LOCKED_v1.md",
+    "docs/ops/NF_ANTI_STALENESS_MAXIMUM_FIX_SET_LOCKED_v1.md",
+    "docs/ops/NF_GAOS_W3_FACTORY_SPINE_LOCKED_v1.md",
+    "data/nf_anti_staleness_max_v1.json",
+    "data/nf_mono_nerve_wiring_v1.json",
+    "~/.sina/nf-mono-nerve-v1.json",
+    "~/.sina/commercial-email-send-defer-receipt-v1.json",
+    "~/.sina/agent-live-surfaces-v1.json",
+    "~/.sina/ecosystem-live-nerve-v1.json",
+    "~/.sina/noetfield-operations-inbox-active-v1.json",
+    "~/.sina/agent-workspaces/noetfield_cloud/INBOX.md",
+    "docs/www/NF_UI_BUILD_CHECKLIST_LOCKED_v1.md",
+    "docs/www/NF_WWW_LANGUAGE_LAYERS_LOCKED_v1.md",
+    "docs/ops/NF_FACTORY_ROUND_15_PREP_LOCKED_v1.md",
+    "reports/agent-auto/LIVE-STATUS.md",
+    "os/plan.json",
+    "os/SHIP_NOW.md",
+    "docs/ops/AGENT_READ_LINKS_LOCKED_v1.md"
+  ]
+}

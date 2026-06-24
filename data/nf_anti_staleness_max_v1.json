@@ -1,0 +1,40 @@
+{
+  "schema": "nf-anti-staleness-max-v1",
+  "version": "1.0.0",
+  "saved_at": "2026-06-19",
+  "law_doc": "docs/ops/NF_ANTI_STALENESS_MAXIMUM_FIX_SET_LOCKED_v1.md",
+  "boot_command": "make nf-onboard",
+  "assert_implement": "NF_FOUNDER_IMPLEMENT=1 bash scripts/nf_assert_implement_allowed.sh",
+  "verify_command": "make verify-nf-anti-staleness-max",
+  "layers": [
+    {"id": "L0_mono", "script": "nf_mono_nerve_v1.py", "receipt": "nf-mono-nerve-v1.json", "skip": "never"},
+    {"id": "L0_founder", "script": "nf_founder_input_sync_v1.py", "receipt": "nf-founder-disk-sync-v1.json", "skip": "never"},
+    {"id": "L1_session", "script": "nf_session_gate_run_v1.py", "receipt": "nf-session-gate-v1.json", "skip": "never"},
+    {"id": "L1_stale", "script": "nf_stale_guard_v1.py", "receipt": "nf-stale-guard-v1.json", "skip": "never"},
+    {"id": "L2_surfaces", "script": "nf_live_surfaces_v1.py", "receipt": "nf-live-surfaces-v1.json", "skip": "never"},
+    {"id": "L2_cascade", "script": "nf_receipt_cascade_v1.py", "receipt": "nf-receipt-cascade-v1.json", "skip": "never"},
+    {"id": "L3_orient_chain", "script": "nf_orient_read_chain_v1.py", "receipt": "nf-orient-read-chain-v1.json", "skip": "never"},
+    {"id": "L3_ecosystem", "sina": "ecosystem-live-nerve-v1.json", "skip": "never"},
+    {"id": "L4_gatekeeper", "script": "nf_gatekeeper_v1.py", "receipt": "nf-gatekeeper-v1.json", "skip": "until_implement"},
+    {"id": "L4_email_lane", "script": "nf_email_lane_guard_v1.py", "receipt": "nf-email-lane-guard-v1.json", "skip": "until_email_edit"},
+    {"id": "L5_language", "script": "nf_agent_report_language_gate_v1.py", "receipt": "nf-agent-report-language-v1.json", "skip": "never", "scan": "reports/cursor-reply-latest.txt"}
+  ],
+  "email_lane_paths": [
+    "api/_lib/intake-email.js",
+    "api/intake.js",
+    "scripts/setup-resend-domain.sh",
+    "scripts/auto-heal-www.sh",
+    "docs/ops/VERCEL_INTAKE_SETUP.md"
+  ],
+  "three_email_gates": {
+    "inbox_receive": "noetfield-operations-inbox-active-v1.json",
+    "form_autonotify": "DEFERRED_POST_FACTORY",
+    "outbound_send": "commercial-email-send-defer-receipt-v1.json"
+  },
+  "cross_plane": {
+    "noetfield": "nf-mono-nerve-v1.json",
+    "trustfield": "tf-live-surfaces-v1.json",
+    "sourcea_parent": "agent-live-surfaces-v1.json",
+    "ecosystem": "ecosystem-live-nerve-v1.json"
+  }
+}

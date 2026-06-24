@@ -44,6 +44,12 @@
  
  </aside>
  </header>
+ <aside class="nf-callout nf-template-deploy" aria-label="Template deploy callout">
+ <p><strong>Copilot Governance Template</strong> — policy pack <code>copilot-governance-v1</code> pre-wired. Run sandbox evaluate against shipped rules, then upgrade to this pilot.</p>
+ <a class="btn btn-secondary nf-template-deploy" href="/start/?template=copilot-governance-v1">Deploy Copilot Governance Template</a>
+ <a class="btn btn-secondary" href="/templates/">Template catalog</a>
+ </aside>
+
  <section class="nf-section-block nf-section--elevated" aria-labelledby="digital-trust-lane">
  <div class="nf-section-block-head"><span class="nf-section-num" aria-hidden="true">◎</span><div>
  <p class="nf-eyebrow" id="digital-trust-lane">Digital trust lane</p>
@@ -75,7 +81,7 @@
  <h2>Pilot deliverables — Copilot governance evidence layer</h2>
  <p class="nf-section-lead">Same evaluate → TLE → export spine as sandbox — production tenant, API keys, and board-grade exports per SOW.</p>
  </div></div>
- <div class="nf-table-wrap"><table class="nf-table nf-table--compact"><thead><tr><th>Deliverable</th><th>Description</th></tr></thead><tbody><tr><td><strong>Governance evaluate</strong></td><td>Pre-execution allow / deny / review with Request ID lineage on every decision.</td></tr><tr><td><strong>Evidence index</strong></td><td>Metadata-only Purview, Entra ID, Audit, SharePoint connectors — read-only; complements Microsoft DLP.</td></tr><tr><td><strong>TLE v1</strong></td><td>Signed go/no-go with confidence score and sequential approval chain.</td></tr><tr><td><strong>Board pack</strong></td><td>JSON, HTML, and PDF export for board, risk, or legal governance meetings.</td></tr><tr><td><strong>Procurement pack</strong></td><td>One-click ZIP — JSON + PDF + README + audit slice for diligence reviewers.</td></tr><tr><td><strong>Audit export</strong></td><td>Tenant-scoped audit bundle orientation via governance API.</td></tr></tbody></table></div>
+ <div class="nf-table-wrap"><table class="nf-table nf-table--compact"><thead><tr><th>Deliverable</th><th>Description</th></tr></thead><tbody><tr><td><strong>Governance evaluate</strong></td><td>Policy-bound allow / deny / review with Request ID lineage on every decision.</td></tr><tr><td><strong>Evidence index</strong></td><td>Metadata-only Purview, Entra ID, Audit, SharePoint connectors — read-only; complements Microsoft DLP.</td></tr><tr><td><strong>TLE v1</strong></td><td>Signed go/no-go with confidence score and sequential approval chain.</td></tr><tr><td><strong>Board pack</strong></td><td>JSON, HTML, and PDF export for board, risk, or legal governance meetings.</td></tr><tr><td><strong>Procurement pack</strong></td><td>One-click ZIP — JSON + PDF + README + audit slice for diligence reviewers.</td></tr><tr><td><strong>Audit export</strong></td><td>Tenant-scoped audit bundle orientation via governance API.</td></tr></tbody></table></div>
  </section>
  <section class="nf-section-block" aria-labelledby="pilot-pricing">
  <div class="nf-section-block-head"><span class="nf-section-num" aria-hidden="true">02</span><div>
@@ -83,7 +89,7 @@
  <h2>Fixed-fee pilot — no SKU creep</h2>
  </div></div>
  <div class="nf-pack-grid nf-pack-grid--4">
- <article class="nf-pack-card"><p class="nf-pack-card__tag">QuickScan</p><p class="nf-pack-card__price">$2,000</p><p>Evaluate orientation · sample TLE · export walkthrough · 4-week scope.</p></article>
+ <article class="nf-pack-card"><p class="nf-pack-card__tag">QuickScan</p><p class="nf-pack-card__price">$2k–$3.5k</p><p>Evaluate orientation · sample TLE · export walkthrough · 3–5 day active scope.</p></article>
  <article class="nf-pack-card nf-pack-card--program"><p class="nf-pack-card__tag">Readiness Pilot · recommended</p><p class="nf-pack-card__price">$5k–10k</p><p>Production tenant · live TLE records · board PDF in governance meeting · procurement ZIP · 90 days.</p><a class="btn btn-primary" href="/trust-brief/intake/?interest=pilot&vector=copilot-governance">Apply for pilot</a></article>
  <article class="nf-pack-card"><p class="nf-pack-card__tag">After pilot</p><p class="nf-pack-card__price">Trust Brief</p><p>Six-week governance diagnostic ($10k) before enterprise scale — optional land SKU.</p><a class="btn btn-secondary" href="/trust-brief/">Trust Brief</a></article>
  </div>
@@ -143,7 +149,7 @@
  <span class="nf-milestone-arrow" aria-hidden="true">→</span>
  <span class="nf-revenue-step"><span class="nf-revenue-step__num">Expand</span><strong>Seats + export cadence</strong><span>Production keys · MSP attach · enterprise SOW</span></span>
  </div>
- <aside class="nf-callout nf-callout--urgency"><p><strong>W3 economic signal:</strong> deposit ≥ CAD 2K or signed LOI on Copilot Governance Pack — one org uses board PDF in a real governance meeting.</p></aside>
+ <aside class="nf-callout nf-callout--urgency"><p><strong>What success looks like:</strong> signed pilot or deposit on the Copilot Governance Pack — one org uses board PDF in a real governance meeting.</p></aside>
  </section>
  <section class="nf-section-block" aria-labelledby="assurance-levels">
  <div class="nf-section-block-head"><span class="nf-section-num" aria-hidden="true">A</span><div>
@@ -255,7 +261,7 @@
  </label>
  <label>Pilot band
  <select name="band">
- <option value="quickscan">QuickScan · $2,000 · 4 weeks</option>
+ <option value="quickscan">QuickScan · $2k–$3.5k · 4 weeks</option>
  <option value="readiness" selected>Readiness Pilot · $5k–10k · 90 days (recommended)</option>
  </select>
  </label>
@@ -272,9 +278,18 @@
  <script src="/assets/noetfield-pilot-intake.js?v=40" defer></script>
  <section class="nf-trust-signals" aria-labelledby="scope-title">
  <h2 id="scope-title">Available now — capability scope</h2>
- <p class="nf-trust-signals-lead">Honest scope for procurement — what you can demo, export, and defend today.</p>
- <div class="nf-trust-signals-grid"><div class="nf-trust-signal"><span class="nf-trust-signal-label">Pre-execution evaluate</span><span class="nf-signal-badge nf-signal-badge--available">Available</span></div><div class="nf-trust-signal"><span class="nf-trust-signal-label">TLE v1 + workspace UI</span><span class="nf-signal-badge nf-signal-badge--available">Available</span></div><div class="nf-trust-signal"><span class="nf-trust-signal-label">Board PDF · procurement ZIP</span><span class="nf-signal-badge nf-signal-badge--available">Available</span></div><div class="nf-trust-signal"><span class="nf-trust-signal-label">M365 metadata connectors</span><span class="nf-signal-badge nf-signal-badge--available">Available</span></div><div class="nf-trust-signal"><span class="nf-trust-signal-label">Framework citations</span><span class="nf-signal-badge nf-signal-badge--orientation">Orientation</span></div><div class="nf-trust-signal"><span class="nf-trust-signal-label">Payment rails / MSB execution</span><span class="nf-signal-badge nf-signal-badge--na">Out of scope</span></div></div>
+ <p class="nf-trust-signals-lead">Honest scope for diligence reviewers — what you can demo, export, and defend today.</p>
+ <div class="nf-trust-signals-grid"><div class="nf-trust-signal"><span class="nf-trust-signal-label">Governance evaluate</span><span class="nf-signal-badge nf-signal-badge--available">Available</span></div><div class="nf-trust-signal"><span class="nf-trust-signal-label">TLE v1 + workspace UI</span><span class="nf-signal-badge nf-signal-badge--available">Available</span></div><div class="nf-trust-signal"><span class="nf-trust-signal-label">Board PDF · procurement ZIP</span><span class="nf-signal-badge nf-signal-badge--available">Available</span></div><div class="nf-trust-signal"><span class="nf-trust-signal-label">M365 metadata connectors</span><span class="nf-signal-badge nf-signal-badge--available">Available</span></div><div class="nf-trust-signal"><span class="nf-trust-signal-label">Framework citations</span><span class="nf-signal-badge nf-signal-badge--orientation">Orientation</span></div><div class="nf-trust-signal"><span class="nf-trust-signal-label">Payment rails / MSB execution</span><span class="nf-signal-badge nf-signal-badge--na">Out of scope</span></div></div>
  </section><div class="nf-proof-grid"><a class="nf-proof-card" href="/copilot/demo/"><span class="nf-proof-icon">▶</span><div><h3>5-minute demo</h3><p>Evaluate → confidence score → export path</p></div></a><a class="nf-proof-card" href="/trust-ledger/sample-report/"><span class="nf-proof-icon">TLE</span><div><h3>TLE v1 samples</h3><p>Go · conditional · rejected YAML</p></div></a><a class="nf-proof-card" href="/copilot/procurement/"><span class="nf-proof-icon">ZIP</span><div><h3>Procurement pack</h3><p>Buyer diligence bundle</p></div></a><a class="nf-proof-card" href="/trust-ledger/verify/"><span class="nf-proof-icon">✓</span><div><h3>Verify export</h3><p>Fail-closed integrity walkthrough</p></div></a></div>
+<section class="nf-section nf-section--lift" aria-labelledby="buyer-proof-links">
+<h2 id="buyer-proof-links">Proof and diligence</h2>
+<ul>
+<li><a href="/copilot/procurement/">Procurement pack</a></li>
+<li><a href="/trust-ledger/sample-report/">Trust Ledger samples</a></li>
+<li><a href="/trust-ledger/verify/">Verify export integrity</a></li>
+<li><a href="/docs/api/">Governance API reference</a></li>
+</ul>
+</section>
  <section class="nf-cta-mega" aria-labelledby="cta-h">
  <h2 id="cta-h">Ready for a board-grade Copilot pilot?</h2>
  <p>Include your Request ID · non-confidential intake · operations@noetfield.com</p>

@@ -1,0 +1,18 @@
+{
+  "schema_version": "nf-bavt-strategy-v1",
+  "locked_at": "2026-06-17",
+  "pipeline": ["PICK", "PROPOSE", "IMPLEMENT", "BUILD", "VERIFY", "TRAIN", "CLOSEOUT"],
+  "gates": [
+    {"id": "session_gate", "run": "python3 scripts/nf_session_gate_run_v1.py --json", "tier": "T0"},
+    {"id": "voyage_integrity", "run": "python3 scripts/nf_voyage_integrity_v1.py --json", "tier": "T0"},
+    {"id": "stale_guard", "run": "python3 scripts/nf_stale_guard_v1.py --json", "tier": "T0"},
+    {"id": "agent_scope", "run": "./scripts/verify-agent-scope.sh", "tier": "T1"},
+    {"id": "plan_no_asf", "run": "./scripts/plan-with-no-asf-verify.sh", "tier": "T1"},
+    {"id": "verify_gtm", "run": "make verify-gtm", "tier": "T1"}
+  ],
+  "closeout": [
+    "sync-prompt-pack-status.py if task done",
+    "reports/cursor-reply-latest.txt + ingest YAML",
+    "ASK founder next move (R-008)"
+  ]
+}

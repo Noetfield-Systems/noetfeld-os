@@ -122,6 +122,12 @@ body.nf-www.nf-site-v14 .btn-secondary:hover,
 body.nf-www.nf-site-v14 .btn.btn-secondary:hover {
   border-color: var(--gold);
   background: var(--panel2);
+  transform: none;
+}
+
+body.nf-www.nf-site-v14 .btn:hover,
+body.nf-www.nf-site-v14 .btn.btn:hover {
+  transform: none;
 }
 
 body.nf-www.nf-site-v14 .nf-hero-cinematic {
@@ -217,6 +223,10 @@ body.nf-www.nf-site-v14 .nf-receipt-row dd {
 
 body.nf-www.nf-site-v14 .nf-receipt-ok {
   color: var(--ok);
+}
+
+body.nf-www.nf-site-v14 .nf-receipt-review {
+  color: var(--gold);
 }
 
 body.nf-www.nf-site-v14 .nf-stat-bar {
@@ -377,6 +387,112 @@ body.nf-www.nf-site-v14.nf-trust-diligence .nf-table th {
   font-size: 0.6875rem;
   letter-spacing: 0.06em;
   color: var(--muted);
+}
+
+/* Trust center — v14 document layout (procurement reference page) */
+body.nf-www.nf-site-v14.nf-trust-diligence .nf-trust-doc-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(240px, 300px);
+  gap: clamp(24px, 4vw, 40px);
+  align-items: start;
+}
+
+body.nf-www.nf-site-v14.nf-trust-diligence .nf-trust-doc-main {
+  min-width: 0;
+}
+
+body.nf-www.nf-site-v14.nf-trust-diligence .nf-trust-doc-hero {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: clamp(28px, 4vw, 40px);
+  margin-bottom: 20px;
+}
+
+body.nf-www.nf-site-v14.nf-trust-diligence .nf-trust-doc-hero h1 {
+  font-family: var(--font-display);
+  font-weight: 650;
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  line-height: 1.12;
+  letter-spacing: -0.028em;
+  margin: 0 0 12px;
+}
+
+body.nf-www.nf-site-v14.nf-trust-diligence .nf-trust-sidebar {
+  position: sticky;
+  top: calc(var(--navH) + 16px);
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow2);
+  padding: 20px;
+}
+
+body.nf-www.nf-site-v14.nf-trust-diligence .nf-trust-sidebar__label {
+  margin: 0 0 10px;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+body.nf-www.nf-site-v14.nf-trust-diligence .nf-trust-sidebar__nav {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 16px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--line);
+}
+
+body.nf-www.nf-site-v14.nf-trust-diligence .nf-trust-sidebar__nav a {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--gold);
+}
+
+body.nf-www.nf-site-v14.nf-trust-diligence .nf-trust-sidebar .nf-artifact-panel {
+  margin: 0;
+}
+
+body.nf-www.nf-site-v14.nf-trust-diligence .nf-trust-sidebar__note {
+  margin: 12px 0 0;
+  font-size: 0.75rem;
+  line-height: 1.5;
+  color: var(--muted2);
+}
+
+body.nf-www.nf-site-v14.nf-trust-diligence .nf-table--captioned caption {
+  caption-side: top;
+  text-align: left;
+  padding-bottom: 8px;
+  font-size: 0.8125rem;
+  color: var(--muted2);
+}
+
+@media (max-width: 960px) {
+  body.nf-www.nf-site-v14.nf-trust-diligence .nf-trust-doc-layout {
+    grid-template-columns: 1fr;
+  }
+
+  body.nf-www.nf-site-v14.nf-trust-diligence .nf-trust-sidebar {
+    position: static;
+    order: -1;
+  }
+}
+
+body.nf-www.nf-site-v14 .srOnly {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
 }
 
 body.nf-www.nf-site-v14 .nf-section-block {

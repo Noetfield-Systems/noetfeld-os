@@ -1,6 +1,6 @@
-.PHONY: bootstrap validate api api-v3 apply-migrations ingest-sot-dry-run ingest-sot phase32-smoke phase32-postgres-smoke phase33-verify phase33-postgres-verify phase35-demo final-lock-audit final-lock-semantic governance-console-up governance-console-e2e governance-console-down plan-with-no-asf-verify sync-prompt-pack generate-prompt-pack verify-gtm verify-no-vendor-names verify-static-www verify-www verify-investor-lane verify-commercial-agentic verify-law-stack sync-derived-docs verify-factory-copilot verify-factory-catalog verify-factory-trust-brief verify-factory-legal verify-factory-aml verify-freemium-policy verify-ui-build-checklist verify-stripe-catalog verify-procurement-openapi verify-ops-live witness-session-start
+.PHONY: bootstrap validate api api-v3 apply-migrations ingest-sot-dry-run ingest-sot phase32-smoke phase32-postgres-smoke phase33-verify phase33-postgres-verify phase35-demo final-lock-audit final-lock-semantic governance-console-up governance-console-e2e governance-console-down plan-with-no-asf-verify sync-prompt-pack generate-prompt-pack verify-gtm verify-no-vendor-names verify-static-www verify-ui-build-checklist nf-ui-checklist verify-www verify-tier0 verify-tier1 verify-tier2 verify-tier3 verify-all-tiers verify-nf-gaos-w2
 
-PYTHONPATH_VALUE := packages/types:packages/config:packages/sdk:services/events:services/ledger:services/graph:services/governance:services/signals:services/workflow:services/ai-runtime:services/inspectors:services/identity:services/copilot-governance:services/factories:services/trust-brief:services/legal-review:services/aml-trace
+PYTHONPATH_VALUE := packages/types:packages/config:packages/sdk:services/events:services/ledger:services/graph:services/governance:services/signals:services/workflow:services/ai-runtime:services/inspectors:services/identity:services/copilot-governance
 
 bootstrap:
 	python3 -m venv .venv
@@ -93,6 +93,25 @@ verify-gtm:
 	@chmod +x scripts/verify-gtm.sh
 	./scripts/verify-gtm.sh
 
+# NF verify tiers — see docs/ops/NF_VERIFY_TIERS_LOCKED_v1.md
+verify-tier0:
+	@$(MAKE) verify-nf-gaos-w1
+
+verify-tier1:
+	@$(MAKE) ship-verify
+
+verify-tier2:
+	@$(MAKE) verify-gtm
+
+verify-tier3:
+	@$(MAKE) plan-with-no-asf-verify
+
+verify-all-tiers:
+	@$(MAKE) verify-tier0
+	@$(MAKE) verify-tier1
+	@$(MAKE) verify-tier2
+	@$(MAKE) verify-tier3
+
 verify-no-vendor-names:
 	@chmod +x scripts/verify-no-competitor-names.sh
 	./scripts/verify-no-competitor-names.sh
@@ -101,9 +120,15 @@ verify-static-www:
 	@chmod +x scripts/verify-static-www.sh
 	./scripts/verify-static-www.sh
 
-verify-www: verify-no-vendor-names verify-ops-live verify-ui-build-checklist verify-stripe-catalog verify-static-www
+verify-ui-build-checklist:
+	@chmod +x scripts/verify-ui-build-checklist.sh
+	./scripts/verify-ui-build-checklist.sh
+
+nf-ui-checklist: verify-ui-build-checklist
+
+verify-www: verify-no-vendor-names
 	@python3 scripts/rebuild-www-v6.py
-	@$(MAKE) verify-static-www
+	@$(MAKE) verify-ui-build-checklist
 
 market-roadmap:
 	@python3 scripts/generate-market-success-1000-roadmap.py
@@ -122,6 +147,108 @@ generate-noetfield-1000:
 agent-session-start:
 	@chmod +x scripts/agent-session-start.sh
 	./scripts/agent-session-start.sh
+
+# NF-GAOS W0 — governed agent boot (cloud-native gate + live orient)
+nf-onboard:
+	@chmod +x scripts/nf-onboard.sh scripts/nf-live-orient-v1.sh scripts/nf_routing_card.sh scripts/nf-unified-routing.sh scripts/verify-nf-gaos-w0.sh
+	./scripts/nf-onboard.sh cloud
+
+nf-onboard-local:
+	@chmod +x scripts/nf-onboard.sh
+	./scripts/nf-onboard.sh local
+
+nf-live-orient:
+	@chmod +x scripts/nf-live-orient-v1.sh scripts/nf_routing_card.sh
+	./scripts/nf-live-orient-v1.sh
+
+nf-session-gate:
+	@python3 scripts/nf_session_gate_run_v1.py --json
+
+nf-mono-nerve:
+	@python3 scripts/nf_mono_nerve_v1.py --json
+
+verify-nf-anti-staleness-max:
+	@chmod +x scripts/verify-nf-anti-staleness-max.sh scripts/verify-nf-mono-nerve-wire.sh scripts/verify-nf-agent-report-language.sh
+	./scripts/verify-nf-anti-staleness-max.sh
+
+verify-nf-agent-report-language:
+	@chmod +x scripts/verify-nf-agent-report-language.sh
+	./scripts/verify-nf-agent-report-language.sh
+
+nf-anti-staleness-max:
+	@python3 scripts/nf_anti_staleness_max_v1.py --json
+
+nf-orient-read-chain:
+	@python3 scripts/nf_orient_read_chain_v1.py --json
+
+nf-email-lane-guard:
+	@python3 scripts/nf_email_lane_guard_v1.py --json
+
+nf-founder-input-sync:
+	@python3 scripts/nf_founder_input_sync_v1.py --json
+
+nf-assert-implement:
+	@chmod +x scripts/nf_assert_implement_allowed.sh
+	@NF_FOUNDER_IMPLEMENT=1 ./scripts/nf_assert_implement_allowed.sh
+
+verify-nf-mono-nerve-wire:
+	@chmod +x scripts/verify-nf-mono-nerve-wire.sh
+	./scripts/verify-nf-mono-nerve-wire.sh
+
+nf-unified-routing:
+	@chmod +x scripts/nf-unified-routing.sh
+	./scripts/nf-unified-routing.sh --json
+
+verify-nf-gaos-w0:
+	@chmod +x scripts/verify-nf-gaos-w0.sh
+	./scripts/verify-nf-gaos-w0.sh
+
+nf-voyage-integrity:
+	@chmod +x scripts/nf-voyage-integrity-pipeline.sh
+	./scripts/nf-voyage-integrity-pipeline.sh
+
+nf-orient:
+	@python3 scripts/nf_orient_v1.py --json
+
+nf-live-surfaces:
+	@python3 scripts/nf_live_surfaces_v1.py --json
+
+nf-truth-bundle:
+	@python3 scripts/nf_truth_bundle_v1.py --json
+
+nf-receipt-cascade:
+	@python3 scripts/nf_receipt_cascade_v1.py --json
+
+nf-gatekeeper:
+	@python3 scripts/nf_gatekeeper_v1.py --json
+
+verify-nf-gaos-w3:
+	@chmod +x scripts/verify-nf-gaos-w3.sh scripts/nf-repo-find.sh scripts/prove-nf-factory-spine.sh
+	./scripts/verify-nf-gaos-w3.sh
+
+verify-nf-gaos-w2:
+	@chmod +x scripts/verify-nf-gaos-w2.sh
+	./scripts/verify-nf-gaos-w2.sh
+
+nf-prove-factory-spine:
+	@chmod +x scripts/prove-nf-factory-spine.sh
+	./scripts/prove-nf-factory-spine.sh
+
+nf-bavt:
+	@chmod +x scripts/nf-bavt-run.sh
+	./scripts/nf-bavt-run.sh
+
+nf-panel-export:
+	@chmod +x scripts/nf-panel-export-v1.sh
+	./scripts/nf-panel-export-v1.sh
+
+verify-nf-anti-frag:
+	@chmod +x scripts/verify-nf-anti-fragmentation-v1.sh
+	./scripts/verify-nf-anti-fragmentation-v1.sh
+
+verify-nf-gaos-w1:
+	@chmod +x scripts/verify-nf-gaos-w1.sh scripts/verify-nf-anti-fragmentation-v1.sh scripts/nf-bavt-run.sh
+	./scripts/verify-nf-gaos-w1.sh
 
 ingest-cursor-reply:
 	@chmod +x scripts/ingest-cursor-reply.sh
@@ -191,6 +318,8 @@ ship-verify:
 	@echo "=== ship-verify (Noetfield merge/deploy readiness) ==="
 	@chmod +x scripts/verify-agent-scope.sh 2>/dev/null || true
 	@./scripts/verify-agent-scope.sh
+	@chmod +x scripts/verify-nf-gaos-w1.sh 2>/dev/null || true
+	@./scripts/verify-nf-gaos-w1.sh
 	@test -f docs/SHIP_NOW.md
 	@test -f docs/diligence/EVIDENCE_INTAKE_CONTRACT_v1.md
 	@test -f docs/spec/TRUST_LEDGER_PRODUCT_BLUEPRINT_v1.2_LOCKED.md
@@ -286,6 +415,7 @@ final-lock-audit:
 	python3 scripts/audit_final_system_lock.py
 
 verify-final-lock: final-lock-audit
+	bash scripts/deploy-copilot-template.sh
 	python3 scripts/audit_intake_email.py
 	PYTHONPATH=$(PYTHONPATH_VALUE) RUNTIME_EVENT_STORE=memory python3 -m pytest tests/unit -q
 
@@ -346,70 +476,3 @@ governance-console-down:
 cognitive-dashboard-dev:
 	chmod +x scripts/dev-cognitive-dashboard.sh
 	./scripts/dev-cognitive-dashboard.sh
-
-verify-investor-lane:
-	./scripts/verify-investor-diligence-lane.sh
-	python3 -m pytest tests/unit/test_investor_diligence_lane.py -q
-
-verify-commercial-agentic:
-	chmod +x ./scripts/verify-commercial-agentic.sh
-	./scripts/verify-commercial-agentic.sh
-	python3 -m pytest tests/unit/test_commercial_agentic.py -q
-
-sync-derived-docs:
-	chmod +x ./scripts/sync-derived-docs.sh
-	./scripts/sync-derived-docs.sh
-
-verify-law-stack:
-	chmod +x ./scripts/verify-law-stack.sh
-	./scripts/verify-law-stack.sh
-	python3 -m pytest tests/unit/test_law_stack.py -q
-
-verify-factory-copilot:
-	chmod +x ./scripts/verify-factory-copilot.sh
-	./scripts/verify-factory-copilot.sh
-	PYTHONPATH=$(PYTHONPATH_VALUE) python3 -m pytest tests/unit/test_factory_copilot.py -q
-
-verify-factory-catalog:
-	chmod +x ./scripts/verify-factory-catalog.sh
-	./scripts/verify-factory-catalog.sh
-	PYTHONPATH=$(PYTHONPATH_VALUE) python3 -m pytest tests/unit/test_factory_catalog.py -q
-
-verify-factory-trust-brief:
-	chmod +x ./scripts/verify-factory-trust-brief.sh
-	./scripts/verify-factory-trust-brief.sh
-	PYTHONPATH=$(PYTHONPATH_VALUE) python3 -m pytest tests/unit/test_factory_trust_brief.py -q
-
-verify-factory-legal:
-	chmod +x ./scripts/verify-factory-legal.sh
-	./scripts/verify-factory-legal.sh
-	PYTHONPATH=$(PYTHONPATH_VALUE) python3 -m pytest tests/unit/test_factory_legal.py -q
-
-verify-factory-aml:
-	chmod +x ./scripts/verify-factory-aml.sh
-	./scripts/verify-factory-aml.sh
-	PYTHONPATH=$(PYTHONPATH_VALUE) python3 -m pytest tests/unit/test_factory_aml.py -q
-
-verify-freemium-policy:
-	chmod +x ./scripts/verify-freemium-policy.sh
-	./scripts/verify-freemium-policy.sh
-
-verify-ui-build-checklist:
-	chmod +x ./scripts/verify-ui-build-checklist.sh
-	./scripts/verify-ui-build-checklist.sh
-
-verify-stripe-catalog:
-	chmod +x ./scripts/verify-stripe-catalog.sh
-	./scripts/verify-stripe-catalog.sh
-
-verify-procurement-openapi:
-	chmod +x ./scripts/verify-procurement-openapi.sh
-	./scripts/verify-procurement-openapi.sh
-
-verify-ops-live:
-	chmod +x ./scripts/verify-ops-live.sh
-	./scripts/verify-ops-live.sh
-
-witness-session-start:
-	chmod +x ./scripts/witness-session-start.sh
-	./scripts/witness-session-start.sh

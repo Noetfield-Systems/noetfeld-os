@@ -15,6 +15,11 @@ from fastapi.responses import Response
 from pydantic import BaseModel, ConfigDict, Field
 
 from noetfield_governance.governance_pilot_limits import check_workspace_ui_rate_limit
+from noetfield_governance.ledger_digest import (
+    compute_tle_audit_digest,
+    signature_hash_for_approval,
+    signature_key_id,
+)
 from noetfield_governance.pilot_auth import (
     PilotAuthContext,
     require_pilot_auth,
@@ -246,6 +251,20 @@ def _apply_approval(record: TleRecord, request: TleApproveRequest) -> TleRecord:
         }
     )
     body["signatures"] = signatures
+
+    policy_version = str(body.get("policy_version") or body.get("template_id") or "copilot-governance-v1")
+    if not request.signature_hash.startswith("sig:"):
+        request_key = signature_hash_for_approval(
+            tle_id=str(body.get("tle_id", record.tle_id)),
+            approver_id=request.approver_id,
+            policy_version=policy_version,
+        )
+    else:
+        request_key = request.signature_hash
+    signatures[-1]["signature_hash"] = request_key
+    signatures[-1]["key_id"] = signature_key_id(policy_version)
+    body["signatures"] = signatures
+    body["audit_digest"] = compute_tle_audit_digest(body)
 
     needed = required_approvals()
     if len(chain) < needed:

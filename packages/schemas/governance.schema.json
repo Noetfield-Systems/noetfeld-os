@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.noetfield.com/governance.schema.json",
+  "title": "Noetfield Governance-as-Code",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["governance"],
+  "properties": {
+    "governance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["policy_pack"],
+      "properties": {
+        "policy_pack": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+        "budget": {
+          "type": "object",
+          "properties": {
+            "max_cost_usd": { "type": "number", "minimum": 0 }
+          }
+        },
+        "approval": {
+          "type": "object",
+          "properties": {
+            "human_required": { "type": "boolean" }
+          }
+        },
+        "pii": {
+          "type": "object",
+          "properties": {
+            "deny": { "type": "boolean" }
+          }
+        },
+        "audit": {
+          "type": "object",
+          "properties": {
+            "enabled": { "type": "boolean" },
+            "retain_days": { "type": "integer", "minimum": 1 }
+          }
+        },
+        "memory": {
+          "type": "object",
+          "properties": {
+            "encrypted": { "type": "boolean" }
+          }
+        },
+        "legal": {
+          "type": "object",
+          "properties": {
+            "strict": { "type": "boolean" }
+          }
+        }
+      }
+    }
+  }
+}

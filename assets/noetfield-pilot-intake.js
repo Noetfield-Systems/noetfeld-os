@@ -15,7 +15,7 @@
 
   function bandLabel(band) {
     var map = {
-      quickscan: "QuickScan · $2,000 · 4 weeks",
+      quickscan: "QuickScan · $2k–$3.5k · 4 weeks",
       readiness: "Readiness Pilot · $5k–10k · 90 days",
     };
     return map[band] || band || "Readiness Pilot";

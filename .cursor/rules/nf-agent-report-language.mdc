@@ -1,0 +1,35 @@
+---
+description: NF agent report language law — understand · explain · benefit (machine gate)
+alwaysApply: true
+---
+
+# Agent report language law (mandatory)
+
+**SSOT:** `data/nf-agent-report-language-standard-v1.json`  
+**Gate:** `python3 scripts/nf_agent_report_language_gate_v1.py --scan-text "<draft>" --json`
+
+## One law
+
+> Understand what the founder needs — explain so it helps them — then show disk proof.  
+> Repeating receipt lines, jargon, or PASS/wired is **not** an answer.
+
+## Before every founder reply
+
+1. What are they trying to **understand** or **decide**?
+2. Explain in **normal English** — because / so / which means **for you**.
+3. Disk proof **after** the explanation — never instead of it.
+
+## Forbidden
+
+- Parroting machine lines (`email-defer · ON · sites=RED`) as the answer
+- Long architecture lectures when they asked one question
+- "PASS · wired · witness" with no meaning
+- Telling founder to open Terminal
+
+## Pre-ship (mandatory)
+
+```bash
+python3 scripts/nf_agent_report_language_gate_v1.py --scan-file reports/cursor-reply-latest.txt --json
+```
+
+FAIL → rewrite → gate again. Do not reach founder with parrot text.

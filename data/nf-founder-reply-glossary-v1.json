@@ -1,0 +1,24 @@
+{
+  "schema": "nf-founder-reply-glossary-v1",
+  "version": "1.0.0",
+  "source": "SourceA data/founder-reply-glossary-v1.json",
+  "translations": {
+    "sites=RED": "a live website check is still failing",
+    "defer flag ON": "outbound email stays blocked",
+    "email-defer": "email send stays blocked",
+    "lift=NO": "the block is still active",
+    "SSOT": "the official record on disk",
+    "wired": "connected in the system",
+    "witness note": "agent sync instructions",
+    "validator": "automatic test",
+    "gate PASS": "the check passed",
+    "receipt": "saved result file",
+    "nf-onboard": "refresh agent truth from disk",
+    "git main": "the online copy both agents read"
+  },
+  "strip_patterns": [
+    "bash ~/Desktop/SourceA/",
+    "run in Terminal",
+    "paste this command"
+  ]
+}

@@ -1,6 +1,10 @@
 # Bank Pilot — demo path (read-only)
 
-**SKU:** Bank Pilot v6.1 — governance simulation only. No execution rights.
+**SKU:** Bank Pilot v6.1 — governance simulation only. No execution rights.  
+**Shadow mode SSOT:** [bank-pilot/NF_BP_SHADOW_MODE_DOCS_v1.md](./bank-pilot/NF_BP_SHADOW_MODE_DOCS_v1.md)  
+**OSFI E-23 cross-link:** [bank-pilot/NF_BP_OSFI_E23_CROSS_LINK_v1.md](./bank-pilot/NF_BP_OSFI_E23_CROSS_LINK_v1.md)  
+**Demo environment:** [bank-pilot/NF_BP_DEMO_ENVIRONMENT_v1.md](./bank-pilot/NF_BP_DEMO_ENVIRONMENT_v1.md) · synthetic fixtures only  
+**TF-001 boundary:** [bank-pilot/NF_BP_VS_TF001_BOUNDARY_FAQ_v1.md](./bank-pilot/NF_BP_VS_TF001_BOUNDARY_FAQ_v1.md)
 
 ## Audience
 

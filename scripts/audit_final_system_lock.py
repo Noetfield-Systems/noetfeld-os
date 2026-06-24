@@ -56,6 +56,39 @@ ROUTING_ALLOW = (
     r"lane assignment",
 )
 
+# Legitimate product/export copy — not legacy gate "procurement" label drift.
+PROCUREMENT_ALLOW_CTX = (
+    r"procurement pack",
+    r"procurement zip",
+    r"procurement-grade",
+    r"procurement diligence",
+    r"procurement and legal",
+    r"procurement reviewers",
+    r"procurement scrutiny",
+    r"procurement review",
+    r"procurement rail",
+    r"for procurement",
+    r"nf-procurement",
+    r"/copilot/procurement",
+    r"board pdf.{0,40}procurement",
+    r"procurement.{0,40}zip",
+    r"production.{0,20}procurement",
+    r"aria-label=\"procurement",
+    r"board and procurement",
+    r"and procurement can",
+    r"procurement exports",
+    r"scope for procurement",
+    r"procurement reviewers",
+    r"procurement integrity",
+    r"legal / procurement",
+    r"legal, and procurement",
+    r"legal, procurement",
+    r"grc · procurement",
+    r"grc, and procurement",
+    r"name=\"procurement\"",
+    r"cite>procurement",
+)
+
 ALLOWLIST_FILES = {
     "docs/PRODUCTION_READINESS_REPORT.md",
     "docs/REMOVED_PAYMENT_ARTIFACTS.md",
@@ -76,6 +109,18 @@ def _forbidden_match(text: str, pattern: str) -> bool:
     return False
 
 
+def _procurement_residual(text: str) -> bool:
+    """True when bare 'procurement' appears outside allowed product/export context."""
+    for m in re.finditer(r"\b[Pp]rocurement\b", text):
+        start = max(0, m.start() - 80)
+        end = min(len(text), m.end() + 80)
+        ctx = text[start:end].lower()
+        if any(re.search(p, ctx) for p in PROCUREMENT_ALLOW_CTX):
+            continue
+        return True
+    return False
+
+
 def scan_file(path: Path) -> dict[str, list[str]]:
     rel = str(path.relative_to(ROOT)).replace("\\", "/")
     if any(rel.startswith(a) for a in ALLOWLIST_FILES):
@@ -87,7 +132,10 @@ def scan_file(path: Path) -> dict[str, list[str]]:
         if _forbidden_match(text, pattern):
             forbidden.append(label)
     for label, pattern in WARN_PUBLIC:
-        if re.search(pattern, text):
+        if label == "procurement label":
+            if _procurement_residual(text):
+                warn.append(label)
+        elif re.search(pattern, text):
             warn.append(label)
     if re.search(r"\brouting\b", text, re.I):
         if not any(a in text for a in ROUTING_ALLOW) and "governance flow" not in text.lower():

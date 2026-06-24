@@ -1,0 +1,28 @@
+---
+description: NF-GAOS boot ladder — ROUTING_CARD + START_HERE
+globs:
+  - "**/*"
+alwaysApply: true
+---
+
+# Noetfield — routing card (boot)
+
+**Every session:**
+
+```bash
+make nf-onboard
+```
+
+Then read **only your row** in [entry/START_HERE_LOCKED_v1.md](../../entry/START_HERE_LOCKED_v1.md) and [ROUTING_CARD.md](../../ROUTING_CARD.md).
+
+Quote **`product_now_line`** + **`email_send_defer_line`** from `~/.sina/nf-live-surfaces-v1.json` — not chat memory.
+
+**Before first file edit:** `NF_FOUNDER_IMPLEMENT=1 bash scripts/nf_assert_implement_allowed.sh`
+
+**Any UI / www / form / app change:** read [docs/www/NF_UI_BUILD_CHECKLIST_LOCKED_v1.md](../../docs/www/NF_UI_BUILD_CHECKLIST_LOCKED_v1.md) first — `make nf-ui-checklist` must PASS before ship.
+
+Live truth: [reports/agent-auto/LIVE-STATUS.md](../../reports/agent-auto/LIVE-STATUS.md) — **machine wins over prose**.
+
+Graph: `bash scripts/nf-unified-routing.sh --json` · law: [docs/ops/NF_GAOS_W0_LOCKED_v1.md](../../docs/ops/NF_GAOS_W0_LOCKED_v1.md)
+
+Lost / stale: `make nf-orient` (manual — not on every boot).

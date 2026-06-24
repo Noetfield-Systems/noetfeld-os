@@ -111,7 +111,7 @@ function ackBody(body, intakeId) {
 
 async function sendResend({ from, to, subject, text, replyTo }) {
   const key = (process.env.RESEND_API_KEY || "").trim();
-  if (!key) return false;
+  if (!key) return { ok: false, error: "missing_api_key" };
   const payload = { from, to, subject, text };
   if (replyTo) payload.reply_to = replyTo;
 
@@ -123,7 +123,12 @@ async function sendResend({ from, to, subject, text, replyTo }) {
     },
     body: JSON.stringify(payload),
   });
-  return res.ok;
+  if (res.ok) return { ok: true };
+  const errBody = await res.text().catch(function () {
+    return "";
+  });
+  console.error("resend_send_failed", res.status, errBody.slice(0, 500));
+  return { ok: false, error: errBody.slice(0, 200) };
 }
 
 function emailConfigured() {
@@ -145,26 +150,28 @@ async function sendIntakeEmails(body, ids) {
     return { ops: false, ack: false, configured: true };
   }
 
-  const ops = await sendResend({
+  const opsResult = await sendResend({
     from,
     to: [inbox],
     subject: intakeSubject(body, intakeId),
     text: opsBodyText(body, intakeId),
     replyTo: body.contact_email,
   });
+  const ops = opsResult.ok;
 
   let ack = false;
   if (autoAck && ops) {
-    ack = await sendResend({
+    const ackResult = await sendResend({
       from,
       to: [body.contact_email],
       subject: "Noetfield — message received (" + (body.request_id || intakeId) + ")",
       text: ackBody(body, intakeId),
       replyTo: CANONICAL,
     });
+    ack = ackResult.ok;
   }
 
-  return { ops, ack, configured: true };
+  return { ops, ack, configured: true, resend_error: ops ? null : opsResult.error || null };
 }
 
 module.exports = {

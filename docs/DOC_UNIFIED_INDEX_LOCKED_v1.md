@@ -14,6 +14,10 @@
 
 | Order | Asset | Path |
 |-------|-------|------|
+| 0 | **NF-GAOS boot** | `make nf-onboard` → `reports/agent-auto/LIVE-STATUS.md` |
+| 0b | Role picker | `entry/START_HERE_LOCKED_v1.md` |
+| 0c | Routing pin | `ROUTING_CARD.md` |
+| 0d | Spine law | `docs/ops/NF_GAOS_W0_LOCKED_v1.md` |
 | 1 | Agent memory | `.cursor/agent-memory/MEMORY_LOCKED.yaml` |
 | 1b | Cursor layer | `.cursor/README.md` — skills + rules index |
 | 2 | Incidents | `.cursor/incidents/REGISTRY.md` |
@@ -106,6 +110,8 @@
 | Federal | `docs/federal/FEDERAL_GOVERNANCE_PACK_v1.md` |
 | MSP | `docs/msp/MSP_GOVERNANCE_PACK_v1.md` |
 | SME / Copilot | `docs/strategy/NOETFIELD_COPILOT_SME_SYSTEM_DESIGN_LOCKED_v1.md` |
+| Sandbox funnel metrics | `docs/copilot/SANDBOX_FUNNEL_METRICS_SPEC_v1.md` |
+| Copilot intake Hub report | `docs/copilot/INTAKE_COPILOT_GOVERNANCE_HUB_REPORT_v1.md` |
 
 ---
 

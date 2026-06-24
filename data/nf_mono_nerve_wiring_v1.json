@@ -1,0 +1,41 @@
+{
+  "schema": "nf-mono-nerve-wiring-v1",
+  "version": "1.0.0",
+  "saved_at": "2026-06-19",
+  "law": "Mono truth (~/.sina + SourceA/data) must reach Noetfield boot — skip = FAIL",
+  "refresh_command": "python3 scripts/nf_mono_nerve_v1.py --json",
+  "nodes": [
+    {"id": "defer_ssot", "path": "~/Desktop/SourceA/data/commercial-email-send-defer-v1.json", "required": true},
+    {"id": "defer_assess", "command": "python3 ~/Desktop/SourceA/scripts/commercial_email_send_defer_v1.py --json", "required": true},
+    {"id": "defer_receipt", "sina": "commercial-email-send-defer-receipt-v1.json", "required_line": "email_send_defer_line"},
+    {"id": "agent_live_surfaces", "sina": "agent-live-surfaces-v1.json", "inherit": ["email_send_defer_line", "truth_bundle_at"]},
+    {"id": "agent_nerve_receipt", "sina": "agent-nerve-system-receipt-v1.json", "inherit": ["ship_gates.email_send_defer_line"]},
+    {"id": "tf_live_surfaces", "sina": "tf-live-surfaces-v1.json", "inherit": ["email_send_defer_line"]},
+    {"id": "operations_inbox", "sina": "noetfield-operations-inbox-active-v1.json", "sync_from": "docs/ops/COMMERCIAL_INBOX_PACKAGING_LOCKED_v1.md"},
+    {"id": "founder_cascade", "sina": "founder-input-cascade-events.jsonl", "staleness_probe": true},
+    {"id": "nf_inbox", "path": "~/.sina/agent-workspaces/noetfield_cloud/INBOX.md", "required": true},
+    {"id": "trustfield_fleet_wire", "command": "python3 ~/Desktop/TrustField Technologies/scripts/tf_fleet_live_wire_v1.py --json --no-refresh", "required": true},
+    {"id": "ecosystem_nerve", "sina": "ecosystem-live-nerve-v1.json", "required": true},
+    {"id": "commercial_inbox_doc", "repo": "docs/ops/COMMERCIAL_INBOX_PACKAGING_LOCKED_v1.md", "required": true}
+  ],
+  "pipeline_hooks": [
+    "nf-onboard.sh step 1",
+    "nf_session_gate_run_v1.py mono_gates",
+    "nf_stale_guard_v1.py mono_staleness",
+    "nf_live_surfaces_v1.py commercial_blockers",
+    "nf_gatekeeper_v1.py EMAIL_SEND_DEFERRED",
+    "nf_receipt_cascade_v1.json nf_mono_nerve",
+    "nf_truth_bundle_v1.json mono_nerve"
+  ],
+  "email_task_denial_patterns": [
+    "resend",
+    "auto-notify",
+    "auto_notify",
+    "w3_send",
+    "outreach",
+    "commercial_email",
+    "send_w3",
+    "mail_from",
+    "form_autonotify"
+  ]
+}

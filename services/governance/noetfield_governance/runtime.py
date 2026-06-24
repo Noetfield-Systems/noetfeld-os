@@ -13,6 +13,10 @@ import asyncpg
 from pydantic import BaseModel, ConfigDict, Field
 
 from noetfield_events import AsyncEventBus, EventTrace, EventType, build_event
+from noetfield_governance.control_plane import (
+    ControlPlaneState,
+    advance_control_plane,
+)
 from noetfield_governance.policies import PolicyEvaluator, PolicyInput
 from noetfield_types import Actor, ActorType, GovernanceBoundary, coerce_jsonb_mapping
 
@@ -70,6 +74,7 @@ class GovernanceExecutionResult(BaseModel):
     reason: str
     trace: EventTrace
     approval_id: UUID | None = None
+    control_plane_state: ControlPlaneState = ControlPlaneState.GOVERNANCE_CHECKED
 
 
 class ApprovalQueueStore(Protocol):
@@ -281,6 +286,7 @@ class GovernanceRuntime:
                 state=GovernanceExecutionState.VETOED,
                 reason=policy.reason,
                 trace=trace,
+                control_plane_state=ControlPlaneState.GOVERNANCE_CHECKED,
             )
 
         requires_review = (
@@ -318,6 +324,7 @@ class GovernanceRuntime:
                 reason="human approval required",
                 trace=trace,
                 approval_id=approval.approval_id,
+                control_plane_state=ControlPlaneState.GOVERNANCE_CHECKED,
             )
 
         trace = await self.event_bus.publish(
@@ -336,6 +343,7 @@ class GovernanceRuntime:
             state=GovernanceExecutionState.EXECUTED,
             reason="policy allowed and review not required",
             trace=trace,
+            control_plane_state=advance_control_plane(ControlPlaneState.GOVERNANCE_CHECKED),
         )
 
     async def decide_approval(

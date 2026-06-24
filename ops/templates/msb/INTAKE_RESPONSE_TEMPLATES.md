@@ -66,6 +66,27 @@ Operations
 
 ---
 
+## E — Trust Brief → NF-RD upgrade path
+
+Subject: RID `[RID]` — Trust Brief received · Copilot pilot path (optional upgrade)
+
+Hi `[Name]`,
+
+Thank you for your Trust Brief intake (`[intake_id]`). Your Request ID is **`[RID]`**.
+
+**Trust Brief ($10,000 · 6 weeks)** — governance audit, AI policy mapping, risk exposure analysis. Full scope: `docs/trust-brief/NF_TB_SIX_WEEK_SOW_OUTLINE_v1.md`
+
+**Lead wedge (most buyers):** **Copilot Governance Pack** — $2k–$10k · board PDF in governance meeting · https://www.noetfield.com/trust-brief/intake/?interest=pilot&vector=copilot-governance&request_id=`[RID]`
+
+Separate SOWs if you pursue both — we do not blend SKUs in one engagement letter.
+
+5-minute demo: https://www.noetfield.com/copilot/demo/
+
+Best,  
+Operations
+
+---
+
 ## D — Wrong vector / redirect
 
 Subject: Re: intake `[intake_id]` — routed to `[correct page]`

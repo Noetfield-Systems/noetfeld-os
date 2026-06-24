@@ -1,0 +1,54 @@
+---
+description: NF-GAOS W3 factory spine — quote product_now_line, gatekeeper before implement
+alwaysApply: true
+---
+
+# NF factory spine (W3)
+
+**Disk is SSOT. Chat is not.**
+
+## Session boot (never skip)
+
+```bash
+make nf-onboard
+```
+
+## Quote rule (every substantive reply)
+
+Read `~/.sina/nf-live-surfaces-v1.json` → quote **`product_now_line`**, **`portfolio_now_line`**, and **`email_send_defer_line`** if present.
+
+Email compile/send lanes follow SourceA defer law — `hello@` / Mail FROM active ≠ send lane open.
+
+## Before first file edit
+
+```bash
+NF_FOUNDER_IMPLEMENT=1 make nf-gatekeeper --require-implement
+```
+
+Gatekeeper FAIL → **EXECUTION DENIED** — fix cascade nodes, re-run onboard.
+
+## Prove (machine — not prose)
+
+```bash
+make nf-prove-factory-spine
+```
+
+Must PASS. Receipt: `~/.sina/nf-factory-spine-proof-v1.json` (15 proofs incl. ecosystem + orient chain + anti-staleness max)
+
+## Forbidden
+
+- Auto-run `make nf-orient` on session start
+- Mix `sa-*` / `mx-*` tasks in nf cloud session
+- Edit `~/Desktop/SourceA/`
+- Open visible Chrome / rapid browser tabs
+- Run `make verify-gtm` in loops
+
+## Lost state only
+
+```bash
+make nf-orient
+```
+
+## SSOT
+
+`data/nf_orient_routing_v1.json` · `docs/ops/NF_GAOS_W3_FACTORY_SPINE_LOCKED_v1.md` · `ROUTING_CARD.md`

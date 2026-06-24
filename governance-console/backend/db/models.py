@@ -3,7 +3,7 @@ from __future__ import annotations
 import uuid
 from datetime import datetime, timezone
 
-from sqlalchemy import JSON, DateTime, Float, ForeignKey, Integer, String, Text, Uuid
+from sqlalchemy import JSON, Boolean, DateTime, Float, ForeignKey, Integer, String, Text, Uuid
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 
 
@@ -143,3 +143,26 @@ class AuditLog(Base):
         nullable=False,
         default=lambda: datetime.now(timezone.utc),
     )
+
+
+class SandboxSession(Base):
+    """Server-side sandbox trial session (ship-057)."""
+
+    __tablename__ = "sandbox_sessions"
+
+    session_id: Mapped[uuid.UUID] = mapped_column(Uuid(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    email: Mapped[str] = mapped_column(String(320), nullable=False, index=True)
+    org: Mapped[str] = mapped_column(String(256), nullable=False, default="Sandbox org")
+    tenant_id: Mapped[str] = mapped_column(String(64), nullable=False, unique=True, index=True)
+    api_key_preview: Mapped[str] = mapped_column(String(64), nullable=False)
+    mode: Mapped[str] = mapped_column(String(32), nullable=False, default="sandbox")
+    evaluates_used: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    evaluates_limit: Mapped[int] = mapped_column(Integer, nullable=False, default=50)
+    trial_step: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    m365_connected: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        nullable=False,
+        default=lambda: datetime.now(timezone.utc),
+    )
+    expires_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)

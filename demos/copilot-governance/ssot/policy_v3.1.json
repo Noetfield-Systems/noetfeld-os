@@ -1,0 +1,12 @@
+{
+  "policy_id": "copilot-acceptable-use",
+  "version": "3.1",
+  "effective_at": "2026-01-15T00:00:00Z",
+  "title": "Copilot Acceptable Use Policy",
+  "rules_summary": [
+    "Guest access permitted in pilot tenants with Purview DLP labels applied",
+    "Production rollout requires security team sign-off",
+    "Board materials may use Copilot draft with manual review"
+  ],
+  "ssot_hash": "sha256:a1b2c3d4e5f6pilot"
+}

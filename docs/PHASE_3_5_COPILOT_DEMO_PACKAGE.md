@@ -1,11 +1,11 @@
 # Phase 3.5 Copilot Governance Demo Package
 
-Phase 3.5 packages the backend runtime into a sellable demo flow:
+Phase 3.5 packages the backend runtime into a sellable **template** demo flow:
 
 > Copilot signal -> graph update -> policy evaluation -> workflow approval -> audit replay.
 
 This is not a polished SaaS UI. It is a backend-first proof that Noetfield can
-operate as governed AI trust infrastructure.
+operate as governed AI trust infrastructure. Factories are retired as product language — use **templates** and **policy packs**.
 
 ## What the demo proves
 
@@ -30,6 +30,7 @@ Or use:
 
 ```bash
 make phase35-demo
+bash scripts/deploy-copilot-template.sh
 ```
 
 ## Demo narrative

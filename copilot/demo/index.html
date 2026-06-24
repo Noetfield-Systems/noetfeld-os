@@ -1,215 +1,101 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
- <meta charset="utf-8" />
- <meta name="viewport" content="width=device-width, initial-scale=1" />
+ <meta charset="UTF-8" />
+ <meta name="viewport" content="width=device-width, initial-scale=1.0" />
  <title>Noetfield — 5-Minute Copilot Governance Demo</title>
- <meta name="description" content="Interactive walkthrough: evaluate Copilot intent, confidence score, human approver gate, and Trust Ledger export — ADK-style event trace for institutional buyers. Canada · non-custodial." />
+ <meta name="description" content="Live demo: confidence score, Purview, Entra, SharePoint evidence index." />
  <meta name="robots" content="index,follow" />
+ <meta name="theme-color" content="#f4f5f8" />
  <link rel="canonical" href="https://www.noetfield.com/copilot/demo/" />
+ <meta name="nf-chat-api-base" content="https://platform.noetfield.com" />
  <link rel="icon" href="/noetfield-favicon-512.png" type="image/png" />
+ <link rel="preconnect" href="https://fonts.googleapis.com" />
+ <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,400..700;1,14..32,400..700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" />
+ <link rel="stylesheet" href="/assets/noetfield-tokens.css" />
  <link rel="stylesheet" href="/assets/noetfield-shell.css" />
- <link rel="stylesheet" href="/assets/pages/institutional-2026.css" />
+ <link rel="stylesheet" href="/assets/noetfield-www.css?v=40" />
+ <link rel="stylesheet" href="/assets/noetfield-print.css?v=40" media="print" />
  <script src="/assets/noetfield-shell.js?v=40" defer></script>
+ <script src="/assets/noetfield-intake-core.js?v=40" defer></script>
+ <script src="/assets/noetfield-forms.js?v=40" defer></script>
 </head>
 <body class="nf-www nf-site-v14">
  <div class="bg" aria-hidden="true"></div>
  <a class="skip" href="#main">Skip to content</a>
  <header id="nfHeader"></header>
+ <main id="main" class="nf-main nf-page">
 
- <main id="main" class="wrap">
- <section class="nf26-hero" aria-label="Demo hero">
- <div class="nf26-heroShell">
- <div class="nf26-heroInner">
- <div class="nf26-eyebrow"><span class="dot" aria-hidden="true"></span> 5-minute demo · agentic governance trace</div>
- <h1 class="nf26-h1 wide">See evaluate → approve → export in one thread</h1>
- <p class="nf26-heroLead">
- Institutional buyers use this loop before production Copilot scope opens.
- Inspired by <strong>agent event traces</strong> (Google ADK-style inspection) — orientation only on www;
- live evaluate runs on your tenant after pilot intake.
- </p>
- <div class="nf26-metaRow">
- <div class="nf26-pill"><strong>Spine</strong> Evaluate → TLE → export</div>
- <div class="nf26-pill"><strong>HITL</strong> Named approver on high-risk</div>
- <div class="nf26-pill"><strong>RID</strong> One Request ID thread</div>
- </div>
- <div class="nf26-actions">
- <a class="btn primary" href="/start/" data-rid-link>Start sandbox</a>
- <a class="btn" href="/pricing/" data-rid-link>Published tiers</a>
- <a class="btn secondary" href="/trust-ledger/sample-report/" data-rid-link>TLE samples</a>
- </div>
- </div>
- </div>
- </section>
-
- <section class="nf26-section" aria-labelledby="stepper-heading">
- <div class="nf26-sectionHead">
- <div class="nf26-kicker">Interactive proof</div>
- <h2 class="nf26-h2" id="stepper-heading">Click each step — event trace updates</h2>
- <p class="nf26-lead">Same semantics as production: policy-bound workflow with human gate before export.</p>
- </div>
-
- <div class="nf26-progressWrap" aria-label="Demo session progress">
- <div class="nf26-progressRing" id="progressRing" style="--pct:20"><span id="progressPct">20%</span></div>
- <div class="nf26-progressMeta">
- <h4 id="progressTitle">Session: Evaluate started</h4>
- <p id="progressSub">Complete all 5 steps to unlock export achievement — then start sandbox or apply for pilot.</p>
- </div>
- </div>
- <div class="nf26-achievement" id="achievement" role="status">Export proof unlocked — board-ready artifact path visible</div>
-
- <div class="nf26-demoStepper" role="tablist" aria-label="Demo steps">
- <button type="button" class="nf26-demoStep" role="tab" data-step="0" aria-current="step">
- <div class="nf26-demoStepNum">01</div>
- <div class="nf26-demoStepTitle">Evaluate</div>
- </button>
- <button type="button" class="nf26-demoStep" role="tab" data-step="1">
- <div class="nf26-demoStepNum">02</div>
- <div class="nf26-demoStepTitle">Confidence</div>
- </button>
- <button type="button" class="nf26-demoStep" role="tab" data-step="2">
- <div class="nf26-demoStepNum">03</div>
- <div class="nf26-demoStepTitle">Human approve</div>
- </button>
- <button type="button" class="nf26-demoStep" role="tab" data-step="3">
- <div class="nf26-demoStepNum">04</div>
- <div class="nf26-demoStepTitle">Record TLE</div>
- </button>
- <button type="button" class="nf26-demoStep" role="tab" data-step="4">
- <div class="nf26-demoStepNum">05</div>
- <div class="nf26-demoStepTitle">Export</div>
- </button>
- </div>
-
- <div class="nf26-grid2">
- <div class="nf26-eventTrace" id="eventTrace" aria-live="polite" aria-label="Agent event trace"></div>
+ <header class="nf-hero-cinematic">
  <div>
- <div class="nf26-hitlGate" id="hitlPanel">
- <h4>Human-in-the-loop (AG-UI pattern)</h4>
- <p id="hitlCopy">High-risk Copilot scope routes to a <strong>named approver</strong> before any export is valid. Low-risk sandbox paths auto-record only.</p>
+ <p class="nf-hero-kicker"><span class="nf-hero-kicker-dot" aria-hidden="true"></span> 5-minute demo</p>
+ <p class="nf-eyebrow">Live proof · Copilot governance</p>
+ <h1>Five-minute buyer story — policy update to signed Trust Ledger receipt</h1>
+ <p class="nf-lead">Walk through a <strong>policy update</strong> → invalidate stale evaluations → re-brief → evaluate → signed <strong>Trust Ledger Entry</strong> with confidence score and M365 metadata evidence index. Metadata-only M365 evidence index on every Trust Ledger Entry — Purview · Entra · audit references plus signed execution receipts, board PDF, and procurement exports.</p>
+ <div class="nf-hero-badges"><span class="nf-badge-pill nf-badge-pill--gold">Live demo script</span><span class="nf-badge-pill">Confidence score</span></div>
+ <div class="nf-cta-actions"><a class="btn btn-primary" href="/workspace/">Open workspace</a><a class="btn btn-secondary" href="/copilot/procurement/">Procurement pack</a><a class="btn btn-secondary" href="/start/">Start sandbox</a></div>
+ <ul class="nf-marquee" aria-label="Framework alignment"></ul>
  </div>
- <pre class="nf26-codeBlock" id="tlePreview" aria-label="TLE preview"><span class="key">tle_id</span>: <span class="val">tle_demo_001</span>
-<span class="key">decision</span>: <span class="val">conditional</span>
-<span class="key">confidence</span>: <span class="val">0.72</span>
-<span class="key">approver</span>: <span class="val">pending — CISO delegate</span>
-<span class="key">rid</span>: <span class="val">(your Request ID)</span></pre>
- <p style="margin-top:12px;font-size:13px;color:var(--muted2)">
- Orientation sample — not live tenant data. <a href="/trust-ledger/verify/">Verify export integrity</a>.
- </p>
+ 
+ <aside class="nf-workspace-mock" aria-label="Governance workspace preview">
+ <p class="nf-workspace-mock__title">Live workspace path</p>
+ <div class="nf-workspace-mock__row"><span>Intent</span><code>Copilot rollout · prod</code></div>
+ <div class="nf-workspace-mock__row"><span>Decision</span><code class="nf-workspace-mock__ok">allow · 0.80</code></div>
+ <div class="nf-workspace-mock__row"><span>Trust Ledger</span><code>TLE-015DCFB8B953</code></div>
+ <div class="nf-workspace-mock__row"><span>Export</span><code>board.pdf · pack.zip</code></div>
+ <p class="nf-workspace-mock__foot"><a href="/workspace/">Open workspace</a> · <a href="/copilot/">Copilot hub</a> · <a href="/start/">Start sandbox</a></p>
+ </aside>
+ </header>
+ <section class="nf-section-block nf-section--elevated" aria-labelledby="ssot-demo-title">
+ <div class="nf-section-block-head"><span class="nf-section-num" aria-hidden="true">▶</span><div>
+ <p class="nf-eyebrow" id="ssot-demo-title">Interactive demo</p>
+ <h2>Five-minute buyer story — policy change → Trust Ledger</h2>
+ <p class="nf-section-lead">Publish policy v3.2, invalidate stale v3.1 evaluations, re-brief, then evaluate Copilot rollout intent. The interactive sample shows a policy update event and sample decision <code>allow · 0.80</code>.</p>
+ </div></div>
+ <div id="nfSsotDemo" class="nf-ssot-demo" aria-label="Policy governance demo">
+ <ol class="nf-ssot-demo__steps" aria-label="Demo steps">
+ <li class="nf-ssot-demo__step is-active"><span>1</span> Policy baseline</li>
+ <li class="nf-ssot-demo__step"><span>2</span> Invalidate + re-brief</li>
+ <li class="nf-ssot-demo__step"><span>3</span> Evaluate + TLE</li>
+ </ol>
+ <div id="nfSsotPolicyCards" class="nf-ssot-policy-cards"></div>
+ <div id="nfSsotPending" class="nf-ssot-pending"></div>
+ <p class="nf-section-lead"><strong>Policy updated</strong> — Copilot Acceptable Use v3.2 (guest sharing blocked in production scope).</p>
+ <div id="nfSsotEventLog" class="nf-ssot-event-log"></div>
+ <div id="nfSsotReBrief" class="nf-ssot-rebrief"></div>
+ <div class="nf-cta-actions">
+ <button type="button" id="nfSsotPublish" class="btn btn-secondary">Publish policy v3.2</button>
+ <button type="button" id="nfSsotEvaluate" class="btn btn-primary" disabled>Run re-brief + evaluate</button>
  </div>
+ <div id="nfSsotReceipt" class="nf-ssot-receipt" aria-live="polite"></div>
+ <div id="nfSsotBoard" class="nf-ssot-board"></div>
+ <div id="nfSsotMiddleware" class="nf-ssot-middleware"></div>
  </div>
+ <script src="/assets/noetfield-ssot-demo.js?v=40" defer></script>
  </section>
 
- <section class="nf26-section" aria-labelledby="catalog-heading">
- <div class="nf26-sectionHead">
- <div class="nf26-kicker">A2UI-style catalog</div>
- <h2 class="nf26-h2" id="catalog-heading">Approved commercial surfaces only</h2>
- <p class="nf26-lead">Public www uses a locked component catalog — cards, badges, exports — not arbitrary agent HTML.</p>
- </div>
- <div class="nf26-surfaces">
- <a class="nf26-surface" href="/start/" data-rid-link>
- <div class="nf26-surfaceTag">Try</div>
- <h3>Developer sandbox</h3>
- <p>Mock M365 · capped evaluates · observe mode · no sales call.</p>
- <span class="btn secondary">Start sandbox</span>
- </a>
- <a class="nf26-surface" href="/trust-brief/intake/?interest=pilot&vector=copilot-governance" data-rid-link>
- <div class="nf26-surfaceTag">Lead</div>
- <h3>Copilot Readiness Pack</h3>
- <p>90-day program · production tenant · enforce mode · board PDF.</p>
- <span class="btn secondary">Apply for pilot</span>
- </a>
- <a class="nf26-surface" href="/pricing/" data-rid-link>
- <div class="nf26-surfaceTag">Buy</div>
- <h3>Published tiers</h3>
- <p>Three contract SKUs · fixed scope · async intake only.</p>
- <span class="btn secondary">Pricing</span>
- </a>
- </div>
- </section>
-
- <section class="nf26-ctaBand">
- <h2>Run this on your governance meeting agenda</h2>
- <p>Apply for Copilot Readiness or Trust Brief — include your Request ID in intake.</p>
- <div class="nf26-actions">
- <a class="btn primary" href="/start/" data-rid-link>Start sandbox</a>
- <a class="btn" href="/trust-brief/intake/?interest=pilot&vector=copilot-governance" data-rid-link>Apply for pilot</a>
+ <section class="nf-section nf-section--lift"><div class="nf-cards">
+<a class="nf-card nf-card--link" href="/copilot/"><p class="nf-card__tag">Overview</p><h3>Copilot Governance Pack</h3><p>Full offering overview.</p></a><a class="nf-card nf-card--link" href="/trust-ledger/sample-report/"><p class="nf-card__tag">Samples</p><h3>TLE v1 YAML</h3><p>Go · conditional · rejected.</p></a><a class="nf-card nf-card--link" href="/copilot/"><p class="nf-card__tag">Overview</p><h3>Copilot Governance Pack</h3><p>Full offering overview.</p></a><a class="nf-card nf-card--link" href="/trust-ledger/sample-report/"><p class="nf-card__tag">Samples</p><h3>Trust Ledger YAML</h3><p>Go · conditional · rejected.</p></a><a class="nf-card nf-card--link" href="/copilot/proof-case/"><p class="nf-card__tag">Proof</p><h3>Redacted proof case</h3><p>Evaluate → TLE → board export.</p></a>
+ </div></section>
+<section class="nf-section nf-section--lift" aria-labelledby="buyer-proof-links">
+<h2 id="buyer-proof-links">Proof and diligence</h2>
+<ul>
+<li><a href="/copilot/procurement/">Procurement pack</a></li>
+<li><a href="/trust-ledger/sample-report/">Trust Ledger samples</a></li>
+<li><a href="/trust-ledger/verify/">Verify export integrity</a></li>
+<li><a href="/docs/api/">Governance API reference</a></li>
+</ul>
+</section>
+ <section class="nf-cta-mega" aria-labelledby="cta-h">
+ <h2 id="cta-h">Board PDF in your next governance meeting</h2>
+ <p>Non-confidential intake · Copilot Governance Pack ($2k–10k) · Trust Brief ($10k) · operations@noetfield.com</p>
+ <div class="nf-cta-actions">
+ <a class="btn btn-primary" href="/trust-brief/intake/?interest=pilot&vector=copilot-governance">Apply for pilot ($2k–10k)</a>
+ <a class="btn btn-secondary" href="/trust-brief/intake/">Request Trust Brief ($10k)</a>
  </div>
  </section>
  </main>
-
  <footer id="nfFooter"></footer>
-
- <script>
- (function () {
- var steps = [
-  { name: "POST /evaluate", detail: "Pre-execution policy check on Copilot operational intent.", badge: "signal", time: "T+0ms" },
-  { name: "Policy router", detail: "Purview label gap + Entra CA posture surfaced for reviewer.", badge: "inspect", time: "T+42ms" },
-  { name: "Confidence score", detail: "0.72 — route: conditional (human review required).", badge: "score", time: "T+88ms" },
-  { name: "Workflow: pending_review", detail: "Approver chain: CISO delegate · RID threaded.", badge: "HITL", time: "T+120ms" },
-  { name: "TLE draft", detail: "Signed entry prepared — metadata-only M365 evidence index.", badge: "record", time: "T+180ms" },
-  { name: "Export gate", detail: "Board PDF + procurement ZIP fail closed if tampered.", badge: "export", time: "T+210ms" }
- ];
- var activeSlice = [1, 2, 3, 4, 5, 6];
- var hitl = [
-  "Signal ingested. Policy rules evaluate metadata-only M365 connectors.",
-  "Confidence 0.72 — automatic allow blocked; review queue opened.",
-  "Human-in-the-loop: <strong>named approver</strong> must sign before TLE is valid for board export.",
-  "Approver signed — TLE v1 YAML sealed with evidence index.",
-  "Export bundle ready — board PDF + procurement ZIP with integrity verify path."
- ];
- var tle = [
-  "tle_id: tle_demo_001\ndecision: evaluating\nconfidence: —\napprover: —",
-  "tle_id: tle_demo_001\ndecision: conditional\nconfidence: 0.72\napprover: pending",
-  "tle_id: tle_demo_001\ndecision: conditional\nconfidence: 0.72\napprover: pending — CISO delegate",
-  "tle_id: tle_demo_001\ndecision: approved\nconfidence: 0.72\napprover: jchen@institution.example",
-  "tle_id: tle_demo_001\ndecision: exported\nconfidence: 0.72\nexport: board_pdf + procurement_zip"
- ];
- var trace = document.getElementById("eventTrace");
- var hitlCopy = document.getElementById("hitlCopy");
- var tlePre = document.getElementById("tlePreview");
- var tabs = document.querySelectorAll(".nf26-demoStep");
- var ring = document.getElementById("progressRing");
- var pctEl = document.getElementById("progressPct");
- var titleEl = document.getElementById("progressTitle");
- var subEl = document.getElementById("progressSub");
- var ach = document.getElementById("achievement");
- var titles = [
-  "Session: Evaluate started",
-  "Session: Confidence scored",
-  "Session: Human gate active",
-  "Session: TLE recorded",
-  "Session: Export ready"
- ];
- var pcts = [20, 40, 60, 80, 100];
-
- function render(stepIdx) {
-  var end = activeSlice[stepIdx];
-  trace.innerHTML = steps.slice(0, end).map(function (s, i) {
-   var cls = i === end - 1 ? " nf26-eventRow active" : " nf26-eventRow";
-   return '<div class="' + cls.trim() + '"><div class="nf26-eventTime">' + s.time + '</div><div><div class="nf26-eventName">' + s.name + '</div><div class="nf26-eventDetail">' + s.detail + '</div></div><span class="nf26-eventBadge' + (s.badge === "HITL" ? " ok" : "") + '">' + s.badge + '</span></div>';
-  }).join("");
-  hitlCopy.innerHTML = hitl[stepIdx];
-  tlePre.textContent = tle[stepIdx];
-  tabs.forEach(function (t, i) {
-   if (i === stepIdx) { t.setAttribute("aria-current", "step"); } else { t.removeAttribute("aria-current"); }
-  });
-  ring.style.setProperty("--pct", String(pcts[stepIdx]));
-  pctEl.textContent = pcts[stepIdx] + "%";
-  titleEl.textContent = titles[stepIdx];
-  if (stepIdx >= 4) {
-   ach.classList.add("show");
-   subEl.textContent = "Achievement unlocked — start sandbox or apply for Copilot Readiness Pack.";
-  } else {
-   ach.classList.remove("show");
-   subEl.textContent = "Complete all 5 steps to unlock export achievement — then start sandbox or apply for pilot.";
-  }
- }
- tabs.forEach(function (btn) {
-  btn.addEventListener("click", function () { render(parseInt(btn.getAttribute("data-step"), 10)); });
- });
- render(0);
- })();
- </script>
 </body>
 </html>

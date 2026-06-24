@@ -1,0 +1,42 @@
+---
+description: NF anti-staleness maximum — boot + defer + founder sync + email lane DENY
+alwaysApply: true
+---
+
+# Anti-staleness maximum (LOCKED)
+
+**Law:** [docs/ops/NF_ANTI_STALENESS_MAXIMUM_FIX_SET_LOCKED_v1.md](../../docs/ops/NF_ANTI_STALENESS_MAXIMUM_FIX_SET_LOCKED_v1.md)
+
+## Session boot (skip = FAIL)
+
+```bash
+make nf-onboard
+```
+
+Step 12 runs `nf_anti_staleness_max` superset.
+
+## Quote rule
+
+`product_now_line` + `email_send_defer_line` from `~/.sina/nf-live-surfaces-v1.json`
+
+## Before implement
+
+```bash
+NF_FOUNDER_IMPLEMENT=1 bash scripts/nf_assert_implement_allowed.sh
+```
+
+## Before Resend/email lane edit
+
+```bash
+NF_EMAIL_LANE_EDIT=1 python3 scripts/nf_email_lane_guard_v1.py --json
+```
+
+Defer ON → **EMAIL_LANE_EDIT_BLOCKED**
+
+## Verify
+
+```bash
+make verify-nf-anti-staleness-max
+```
+
+Receipt: `~/.sina/nf-anti-staleness-max-v1.json`

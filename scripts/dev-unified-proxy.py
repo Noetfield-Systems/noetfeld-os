@@ -47,9 +47,11 @@ NEXT_PREFIXES = (
 
 def _is_next_trust_ledger(path: str) -> bool:
     """Next UI: dynamic TLE routes — not static www hub or sample-report HTML."""
+    if path == "/trust-ledger":
+        return True
     if path.startswith("/trust-ledger/new"):
         return True
-    if path in ("/trust-ledger/", "/trust-ledger/index.html", "/trust-ledger"):
+    if path in ("/trust-ledger/", "/trust-ledger/index.html"):
         return False
     if path.startswith("/trust-ledger/sample-report"):
         return False
@@ -80,6 +82,8 @@ def _gov_api_route(path: str, method: str, headers: dict[str, str]) -> bool:
     if path == "/health":
         return True
     if path == "/evaluate" and method == "POST":
+        return True
+    if path.startswith("/api/v1/sandbox"):
         return True
     if path.startswith("/audit/"):
         return True

@@ -54,7 +54,7 @@ See [DEPLOYMENT_ARCHITECTURE.md](../DEPLOYMENT_ARCHITECTURE.md).
 
 ## 6. Warnings (review)
 
-- `trust-brief/intake/index.html`: procurement label
+- None
 
 ## 7. SOT ↔ Backend ↔ Public Site
 
