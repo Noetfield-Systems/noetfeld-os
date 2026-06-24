@@ -16,6 +16,7 @@ PROTECTED_INTELLIGENCE_PATHS = frozenset({
     "intelligence/intake/index.html",
     "pricing/index.html",
     "contact/index.html",
+    "about/index.html",
 })
 
 # Copilot Governance Pack — enterprise governance lane (~20% GTM)

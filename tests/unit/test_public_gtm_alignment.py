@@ -84,6 +84,21 @@ def test_homepage_section_count_at_most_eight() -> None:
     assert count <= 8, f"homepage has {count} sections; expected ≤8 (Intelligence 613)"
 
 
+def test_homepage_pro_ui_frozen_structure() -> None:
+    """Blocks thin-page regression — month-built pro UI must stay intact."""
+    text = (ROOT / "index.html").read_text(encoding="utf-8")
+    lines = text.splitlines()
+    assert len(lines) >= 320, f"homepage has {len(lines)} lines; expected ≥320 (pro UI floor)"
+    assert text.count("<section") == 5, "homepage must keep four-act + mega CTA (5 sections)"
+    assert "nfLiveProofHero" in text
+    assert "Governance playground" in text
+    assert "nf-stat-bar" in text
+    assert "nf-journey-strip" in text
+    assert "nf-act-prove" in text
+    assert "nf-act-package" in text
+    assert "nf-act-trust" in text
+
+
 def test_homepage_has_governance_lane_section() -> None:
     text = (ROOT / "index.html").read_text(encoding="utf-8")
     assert "Enterprise Copilot governance" in text

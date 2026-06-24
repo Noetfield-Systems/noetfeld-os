@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
-"""Refactor public www pages — Intelligence 613 primary lane (~80%), Copilot governance ~20%."""
+"""Refactor public www pages — Intelligence 613 primary lane (~80%), Copilot governance ~20%.
+
+MANUAL USE ONLY — not part of routine CI or rebuild. Homepage and protected paths
+are copy-tuned by hand; running this script bulk-overwrites neutral page CTAs.
+"""
 
 from __future__ import annotations
 
