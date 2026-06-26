@@ -12,7 +12,7 @@
 (function () {
   "use strict";
 
-  var SHELL_VERSION = "2026.06.24.v19";
+  var SHELL_VERSION = "2026.06.26.v21";
   var PARTIALS_BASE = "/assets/partials";
   var RID_KEY = "nf_rid";
 
@@ -325,6 +325,8 @@
     } else if (isGovernanceLanePath(p)) {
       document.body.classList.add("nf-lane-governance");
     }
+  }
+
   function normalizeFooterCTA() {
     /* Intelligence 613: footer CTAs live in footer.html partial — do not strip */
   }

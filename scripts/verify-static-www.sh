@@ -23,7 +23,7 @@ check_file() {
 }
 
 check_file "homepage intelligence-first" index.html \
-  'noetfield-www.css?v=40' 'nf-site-v14' 'Board-grade trust' \
+  'noetfield-www.css?v=41' 'nf-site-v14' 'Board-grade trust' \
   'data-live-proof-hero' 'nf-live-proof-lanes' 'nf-product-lane-strip' \
   'Governance specialist' 'agentic-specialist' 'VC diligence' \
   'Trust Brief' 'Bank Pilot' 'Explore product lanes' \
@@ -45,14 +45,14 @@ fi
 
 check_file "start sandbox page" start/index.html \
   'nf-hero-flow' 'Try in minutes' '14-day trial' '50 evaluate calls' 'Apply for pilot' \
-  'data-trial-os-flow' 'NF_SANDBOX_NURTURE_SEQUENCE' 'noetfield-www.css?v=40'
+  'data-trial-os-flow' 'NF_SANDBOX_NURTURE_SEQUENCE' 'noetfield-www.css?v=41'
 
 check_file "pricing packaging page" pricing/index.html \
   'Published tiers' 'Apply for pilot ($2k–10k)' 'Milestone pricing' 'Developer access · free' \
-  'noetfield-www.css?v=40' 'What regulated buyers receive from Noetfield'
+  'noetfield-www.css?v=41' 'What regulated buyers receive from Noetfield'
 
 check_file "pilot landing page" copilot/pilot/index.html \
-  'noetfield-www.css?v=40' 'Board-grade trust' 'GTM-locked pilot success signals' \
+  'noetfield-www.css?v=41' 'Board-grade trust' 'GTM-locked pilot success signals' \
   'interest=pilot' 'nfPilotApplyForm' 'Milestone pricing' \
   'Export assurance' 'QuickScan' 'Pilot deliverables' 'tamper-evident' \
   'Copilot Governance Pack' 'Regulated buyer map' 'Honest scope' \
@@ -60,7 +60,7 @@ check_file "pilot landing page" copilot/pilot/index.html \
   'noetfield-intake-core.js' 'nfPilotApplyStatus'
 
 check_file "work with us program" work-with-us/index.html \
-  'noetfield-www.css?v=40' 'Work with Noetfield' 'Connector' 'Facilitator' \
+  'noetfield-www.css?v=41' 'Work with Noetfield' 'Connector' 'Facilitator' \
   'Co-partner' 'Apply to work with us' 'nfPartnerApplyForm' 'Apply → enable → earn' \
   'noetfield-intake-core.js' 'nfPartnerApplyStatus' 'Investor' '/investors/' \
   'nf-wwu-investor-spotlight' 'nf-wwu-lane-pill' 'noetfield-work-with-us.js'
@@ -100,15 +100,15 @@ check_file "footer enterprise nav" assets/partials/footer.html \
 
 check_file "templates catalog page" templates/index.html \
   'copilot-governance-v1' 'bank-pilot-v1' 'Trust Brief' \
-  'Governance Runtime' 'noetfield-www.css?v=40' 'Deploy governed AI templates'
+  'Governance Runtime' 'noetfield-www.css?v=41' 'Deploy governed AI templates'
 
 check_file "runtime landing page" runtime/index.html \
   'Policy before execution' 'REQUIRE_HUMAN_REVIEW' 'copilot-governance-v1' \
-  'POST /api/v1/governance/evaluate' 'Illustrative sandbox output' 'noetfield-www.css?v=40'
+  'POST /api/v1/governance/evaluate' 'Illustrative sandbox output' 'noetfield-www.css?v=41'
 
 check_file "federal lane page" federal/index.html \
   'Federal Governance Pack' 'NF_OSFI_E23_DILIGENCE_REFRESH' 'NF_METADATA_EVIDENCE_INDEX' \
-  'AIA' 'Copilot PIN' 'noetfield-www.css?v=40'
+  'AIA' 'Copilot PIN' 'noetfield-www.css?v=41'
 
 check_file "partner banner embed" banner/index.html \
   'noindex,nofollow' 'REQUIRE_HUMAN_REVIEW' 'Illustrative — no fabricated hash' 'copilot-governance-v1'
@@ -149,15 +149,15 @@ check_file "commercial SSOT" docs/strategy/NOETFIELD_COMMERCIAL_SSOT_LOCKED_v1.m
   'OFFERINGS_LOCKED' 'Trust Brief' 'operations@noetfield.com' 'W3 economic signal'
 
 check_file "ai-automation lane B" ai-automation/index.html \
-  'Make your AI automation defensible' 'Apply for pilot' 'noetfield-www.css?v=40'
+  'Make your AI automation defensible' 'Apply for pilot' 'noetfield-www.css?v=41'
 
 # Version coherence on primary hubs
 for f in index.html trust/index.html copilot/index.html msp/index.html federal/index.html investors/index.html start/index.html pricing/index.html faq/index.html contact/index.html enterprise/index.html; do
-  if [[ -f "$f" ]] && ! grep -qF 'noetfield-shell.js?v=40' "$f"; then
-    bad "shell v40 on $f"
+  if [[ -f "$f" ]] && ! grep -qF 'noetfield-shell.js?v=41' "$f"; then
+    bad "shell v41 on $f"
   fi
 done
-[[ "$fail" -eq 0 ]] && ok "shell v40 on primary hubs"
+[[ "$fail" -eq 0 ]] && ok "shell v41 on primary hubs"
 
 LEGACY_GTM='design-partner|Design partner|Become a design partner|Purview-only trap|Accepting design partners|Available now vs what capital accelerates'
 legacy_fail=0

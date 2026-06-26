@@ -43,7 +43,7 @@
 
   /* Layout */
   --max: 1200px;
-  --max-wide: 1320px;
+  --max-wide: min(1680px, calc(100vw - 32px));
   --radius: 18px;
   --radius-sm: 12px;
   --navH: 72px;

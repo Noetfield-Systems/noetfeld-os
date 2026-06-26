@@ -8,6 +8,7 @@
 @import url("noetfield-v18-motion.css");
 @import url("noetfield-v18-wave1.css");
 @import url("noetfield-v20-tier1.css");
+@import url("noetfield-v21-fullwidth.css");
 
 body.nf-www {
   --section-y: clamp(64px, 9vw, 104px);

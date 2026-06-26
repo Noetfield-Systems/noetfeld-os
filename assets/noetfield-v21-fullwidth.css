@@ -1,0 +1,80 @@
+/* v21 — full-width institutional layout (2026 enterprise + SME) */
+
+body.nf-www.nf-site-v14 {
+  --max-wide: min(1680px, calc(100vw - 32px));
+  --section-y: clamp(48px, 6vw, 88px);
+}
+
+body.nf-www .nf-main {
+  max-width: var(--max-wide);
+  padding: 4px clamp(12px, 1.5vw, 20px) var(--section-y);
+}
+
+body.nf-www #nfHeader .nav,
+body.nf-www #nfFooter .footerTop,
+body.nf-www #nfFooter .footerBottom {
+  max-width: var(--max-wide);
+  padding-left: clamp(12px, 1.5vw, 20px);
+  padding-right: clamp(12px, 1.5vw, 20px);
+}
+
+body.nf-www #nfHeader {
+  min-height: var(--navH);
+  border-bottom: 1px solid var(--line);
+}
+
+body.nf-www #nfHeader:empty {
+  display: none;
+}
+
+body.nf-www.nf-site-v14 .nf-hero-cinematic {
+  gap: clamp(20px, 3vw, 40px);
+  padding: clamp(20px, 2.5vw, 36px);
+}
+
+body.nf-www.nf-site-v14 .nf-section-block {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+body.nf-www .nf-journey-strip,
+body.nf-www .nf-product-lane-strip,
+body.nf-www .nf-revenue-ladder,
+body.nf-www .nf-depth-links {
+  width: 100%;
+}
+
+body.nf-www .nf-sandbox-ribbon {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 16px;
+  margin: 0 0 12px;
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--line);
+  background: linear-gradient(90deg, rgba(138, 107, 31, 0.06), transparent);
+  font-size: var(--text-sm);
+  color: var(--muted);
+}
+
+body.nf-www .nf-sandbox-ribbon strong {
+  color: var(--text);
+}
+
+body.nf-www .nf-sandbox-ribbon a {
+  color: var(--gold);
+  font-weight: 600;
+}
+
+@media (min-width: 1280px) {
+  body.nf-www.nf-site-v14 .nf-hero-cinematic {
+    grid-template-columns: minmax(0, 1.15fr) minmax(320px, 0.85fr);
+  }
+}
+
+@media (max-width: 900px) {
+  body.nf-www.nf-site-v14 {
+    --max-wide: calc(100vw - 16px);
+  }
+}
