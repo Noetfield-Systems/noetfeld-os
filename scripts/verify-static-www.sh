@@ -22,19 +22,18 @@ check_file() {
   [[ "$missing" -eq 0 ]] && ok "$label" || bad "$label"
 }
 
-check_file "homepage pilot-first" index.html \
-  'noetfield-www.css?v=43' 'nf-site-v14' 'Board-grade trust' \
+check_file "homepage intelligence-first" index.html \
+  'noetfield-www.css?v=40' 'nf-site-v14' 'Board-grade trust' \
   'data-live-proof-hero' 'nf-live-proof-lanes' 'nf-product-lane-strip' \
   'Governance specialist' 'agentic-specialist' 'VC diligence' \
   'Trust Brief' 'Bank Pilot' 'Explore product lanes' \
   'tamper-evident decision records' 'nfScenarioOfDay' \
-  'Apply for pilot ($2k–10k)' '01 · Pilot' 'Built for regulated EU and US' \
-  'Copilot Governance Pack' 'Commercial path' 'Learn in sandbox' \
-  'independent of the app under audit' 'AI execution becomes auditable' \
-  'Illustrative' 'NF_LIVE_PROOF_HERO_RECEIPT'
+  'Apply for pilot ($2k–10k)' '01 · Diagnose' 'Diagnostic Sprint' \
+  'Copilot Governance Pack' 'Commercial path' 'Start free sandbox' \
+  'fail closed' 'Copilot becomes auditable'
 
-check_file "homepage wave1 journey" index.html \
-  '02 · Prove' '03 · Try' '04 · Trust' '$2k–10k' 'Published tiers'
+check_file "homepage buyer journey" index.html \
+  '02 · Build' '03 · Prove' '04 · Govern' '$2k–10k' 'Published tiers'
 
 # Homepage IA compression — ≤8 top-level sections (U5 v17)
 section_count="$(grep -c '<section' index.html || true)"
@@ -96,6 +95,9 @@ check_file "status intake health" status/index.html \
 check_file "header institutional nav" assets/partials/header.html \
   'href="/"' '/copilot/' '/templates/' '/trust/' '/federal/' '/msp/' '/copilot/demo/' 'Pilot · $2k–10k'
 
+check_file "footer enterprise nav" assets/partials/footer.html \
+  '/investors/' '/next/' 'Diligence vault' 'Copilot Governance Pack'
+
 check_file "templates catalog page" templates/index.html \
   'copilot-governance-v1' 'bank-pilot-v1' 'Trust Brief' \
   'Governance Runtime' 'noetfield-www.css?v=40' 'Deploy governed AI templates'
@@ -111,12 +113,12 @@ check_file "federal lane page" federal/index.html \
 check_file "partner banner embed" banner/index.html \
   'noindex,nofollow' 'REQUIRE_HUMAN_REVIEW' 'Illustrative — no fabricated hash' 'copilot-governance-v1'
 
-check_file "footer investors nav" assets/partials/footer.html \
-  '/investors/' '/next/' 'Diligence vault'
+check_file "header pilot CTA" assets/partials/header.html \
+  'Pilot · $2k–10k' '/trust-brief/intake/?interest=pilot'
 
 check_file "next steps hub" next/index.html \
   'next-buyer' 'next-investor' 'next-partner' 'next-ops' \
-  'deferred' 'noetfield-intake-status.js' 'Apply for pilot'
+  'noetfield-intake-status.js' 'Apply for pilot' 'Enterprise standard'
 
 check_file "vercel intake API" vercel.json \
   'api/public/chat'
@@ -129,9 +131,6 @@ check_file "global form wiring asset" assets/noetfield-forms.js \
 
 check_file "footer pilot-first" assets/partials/footer.html \
   'Apply for pilot ($2k–10k)' 'Copilot Governance Pack' 'tamper-evident'
-
-check_file "header pilot CTA" assets/partials/header.html \
-  'Pilot · $2k–10k' '/trust-brief/intake/?interest=pilot'
 
 check_file "trust center diligence theme" trust/index.html \
   'nf-trust-diligence' 'nf-trust-doc-layout' 'fail closed' 'Metadata-only' 'Shipped'
@@ -152,19 +151,13 @@ check_file "commercial SSOT" docs/strategy/NOETFIELD_COMMERCIAL_SSOT_LOCKED_v1.m
 check_file "ai-automation lane B" ai-automation/index.html \
   'Make your AI automation defensible' 'Apply for pilot' 'noetfield-www.css?v=40'
 
-# Version coherence on primary hubs (homepage + investors use v43 live-proof bundle)
-for f in trust/index.html copilot/index.html msp/index.html federal/index.html start/index.html pricing/index.html faq/index.html contact/index.html enterprise/index.html; do
+# Version coherence on primary hubs
+for f in index.html trust/index.html copilot/index.html msp/index.html federal/index.html investors/index.html start/index.html pricing/index.html faq/index.html contact/index.html enterprise/index.html; do
   if [[ -f "$f" ]] && ! grep -qF 'noetfield-shell.js?v=40' "$f"; then
     bad "shell v40 on $f"
   fi
 done
 [[ "$fail" -eq 0 ]] && ok "shell v40 on primary hubs"
-for f in index.html investors/index.html investors/diligence/index.html; do
-  if [[ -f "$f" ]] && ! grep -qF 'noetfield-shell.js?v=43' "$f"; then
-    bad "shell v43 on $f"
-  fi
-done
-[[ "$fail" -eq 0 ]] && ok "shell v43 on homepage + investors"
 
 LEGACY_GTM='design-partner|Design partner|Become a design partner|Purview-only trap|Accepting design partners|Available now vs what capital accelerates'
 legacy_fail=0
@@ -213,11 +206,11 @@ done
 [[ "$leak_fail" -eq 0 ]] && ok "no P0 copy leaks on public www" || fail=1
 
 # Client-view language — no founder/SSOT jargon on buyer surfaces (developer demo widget exempt)
-LANG_PATTERN='W3 economic signal|Lane SSOT|nurture SSOT|commercial SSOT|SourceA = motor|REGISTRY\.json|OFFERINGS_LOCKED|SSOT: <a|sell-side governance pack \(founder\)|gtm-ops-runbooks|STAGING_DEMO\.md|DEMO_REHEARSAL_CHECKLIST|design partner|design-partner|Accepting design partners|Become a design partner'
+LANG_PATTERN='W3 economic signal|Lane SSOT|nurture SSOT|commercial SSOT|SourceA = motor|REGISTRY\.json|OFFERINGS_LOCKED|SSOT: <a|sell-side governance pack \(founder\)|gtm-ops-runbooks|STAGING_DEMO\.md|DEMO_REHEARSAL_CHECKLIST|design partner|design-partner|Accepting design partners|Become a design partner|613 GTM|founder never|Hub approve|RESEND_API_KEY|plan-with-no-asf|AGENT_SELF_AUDIT|docs/ops/|make nf-prove|portfolio [0-9]+/300'
 lang_fail=0
 for f in index.html start/index.html pricing/index.html copilot/pilot/index.html federal/index.html msp/index.html \
   investors/index.html investors/diligence/index.html gate/intake/index.html trust-brief/intake/index.html \
-  status/index.html templates/index.html factory/index.html runtime/index.html copilot/index.html copilot/demo/index.html; do
+  status/index.html templates/index.html factory/index.html runtime/index.html copilot/index.html copilot/demo/index.html next/index.html; do
   if [[ -f "$f" ]] && grep -E -q "$LANG_PATTERN" "$f"; then
     echo "FAIL verify-static-www: founder/internal language in $f" >&2
     grep -E -n "$LANG_PATTERN" "$f" >&2 || true
@@ -255,6 +248,8 @@ done
 [[ -f .vercelignore ]] && grep -qF 'docs/platform/' .vercelignore && ok "vercelignore excludes docs/platform" || bad "vercelignore missing docs/platform"
 [[ -f .vercelignore ]] && grep -qF 'governance/*.json' .vercelignore && ok "vercelignore excludes governance json" || bad "vercelignore missing governance json"
 [[ -f .vercelignore ]] && grep -qF 'OFFERINGS_LOCKED.md' .vercelignore && ok "vercelignore excludes OFFERINGS_LOCKED" || bad "vercelignore missing OFFERINGS_LOCKED"
+[[ -f .vercelignore ]] && grep -qF 'platform/' .vercelignore && ok "vercelignore excludes platform" || bad "vercelignore missing platform"
+[[ -f vercel.json ]] && grep -qF '/platform' vercel.json && ok "vercel.json blocks platform" || bad "vercel.json missing platform block"
 [[ -f governance/index.html ]] && ok "public governance hub html present" || bad "missing governance/index.html"
 [[ -f .vercelignore ]] && grep -qF 'docs/mockups/' .vercelignore && ok "vercelignore excludes docs/mockups" || bad "vercelignore missing docs/mockups"
 

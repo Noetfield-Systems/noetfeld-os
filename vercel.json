@@ -38,6 +38,8 @@
     { "source": "/governance/golden-edge-synth/:path*", "destination": "/404", "statusCode": 404 },
     { "source": "/governance/alignment-scoring/:path*", "destination": "/404", "statusCode": 404 },
     { "source": "/OFFERINGS_LOCKED.md", "destination": "/404", "statusCode": 404 },
+    { "source": "/platform/:path*", "destination": "/404", "statusCode": 404 },
+    { "source": "/platform", "destination": "/404", "statusCode": 404 },
     { "source": "/.cursor/:path*", "destination": "/404", "statusCode": 404 },
     { "source": "/os/:path*", "destination": "/404", "statusCode": 404 },
     { "source": "/reports/:path*", "destination": "/404", "statusCode": 404 },

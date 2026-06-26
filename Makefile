@@ -120,6 +120,10 @@ verify-static-www:
 	@chmod +x scripts/verify-static-www.sh
 	./scripts/verify-static-www.sh
 
+verify-www-e2e:
+	@chmod +x scripts/check_noetfield_com_e2e.py
+	python3 scripts/check_noetfield_com_e2e.py
+
 verify-ui-build-checklist:
 	@chmod +x scripts/verify-ui-build-checklist.sh
 	./scripts/verify-ui-build-checklist.sh
