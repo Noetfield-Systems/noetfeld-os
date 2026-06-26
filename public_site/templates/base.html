@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ page.title }}</title>
+  <meta name="description" content="{{ page.description }}">
+  <link rel="stylesheet" href="/static/site.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="site-header-inner">
+      <a href="/" class="brand">Noetfield Systems</a>
+      <nav class="site-nav">
+        <a href="/trust-ledger/"{% if active == "trust-ledger" %} class="active"{% endif %}>Trust Ledger</a>
+        <a href="/gate/partners/"{% if active == "partners" %} class="active"{% endif %}>Partner Gateway</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="hero-label">{{ page.page_type }} // v{{ page.version }}</div>
+    <h1>{{ page.hero_headline }}</h1>
+    <p class="hero-sub">{{ page.hero_subheadline }}</p>
+  </section>
+
+  <main class="content">
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="site-footer">
+    NOETFIELD SYSTEMS INC. // INSTITUTIONAL OPERATING SYSTEM
+  </footer>
+</body>
+</html>

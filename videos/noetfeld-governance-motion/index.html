@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <title>Noetfield OS — Governance Motion</title>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: #060a12;
+      }
+      body {
+        font-family: "Inter", system-ui, sans-serif;
+      }
+      #root {
+        position: relative;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background:
+          radial-gradient(ellipse 80% 60% at 50% 0%, rgba(56, 189, 248, 0.12), transparent 70%),
+          radial-gradient(ellipse 50% 40% at 100% 100%, rgba(99, 102, 241, 0.1), transparent 60%),
+          #060a12;
+      }
+      .clip {
+        position: absolute;
+        inset: 0;
+        display: grid;
+        place-items: center;
+        padding: 120px 160px;
+      }
+      .stack {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 28px;
+        text-align: center;
+        max-width: 1400px;
+      }
+      .eyebrow {
+        font-size: 28px;
+        font-weight: 600;
+        letter-spacing: 0.28em;
+        text-transform: uppercase;
+        color: #38bdf8;
+      }
+      .headline {
+        font-size: 108px;
+        font-weight: 700;
+        line-height: 1.02;
+        letter-spacing: -0.03em;
+        color: #f8fafc;
+      }
+      .subline {
+        font-size: 42px;
+        font-weight: 400;
+        line-height: 1.35;
+        color: #94a3b8;
+        max-width: 1100px;
+      }
+      .brand {
+        font-size: 132px;
+        font-weight: 800;
+        letter-spacing: -0.04em;
+        background: linear-gradient(135deg, #f8fafc 0%, #38bdf8 55%, #818cf8 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+      }
+      .pill-row {
+        display: flex;
+        gap: 20px;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      .pill {
+        display: inline-block;
+        padding: 18px 32px;
+        border-radius: 999px;
+        border: 1px solid rgba(56, 189, 248, 0.35);
+        background: rgba(15, 23, 42, 0.72);
+        color: #e2e8f0;
+        font-size: 30px;
+        font-weight: 600;
+        letter-spacing: 0.02em;
+      }
+      .cta {
+        font-size: 36px;
+        font-weight: 500;
+        color: #cbd5e1;
+        letter-spacing: 0.04em;
+      }
+      .grid-lines {
+        position: absolute;
+        inset: 0;
+        opacity: 0.18;
+        background-image:
+          linear-gradient(rgba(148, 163, 184, 0.25) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(148, 163, 184, 0.25) 1px, transparent 1px);
+        background-size: 80px 80px;
+        pointer-events: none;
+      }
+      .accent-bar {
+        display: block;
+        width: 120px;
+        height: 6px;
+        border-radius: 999px;
+        background: linear-gradient(90deg, #38bdf8, #818cf8);
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="main"
+      data-start="0"
+      data-width="1920"
+      data-height="1080"
+      data-duration="10"
+    >
+      <div class="grid-lines" aria-hidden="true"></div>
+
+      <section
+        id="scene-problem"
+        class="clip"
+        data-start="0"
+        data-duration="3.2"
+        data-track-index="1"
+      >
+        <div class="stack">
+          <span id="problem-eyebrow" class="eyebrow">Governance drift</span>
+          <h1 id="problem-headline" class="headline">Decisions without evidence</h1>
+          <p id="problem-subline" class="subline">
+            Teams ship fast — but policy, approvals, and audit trails fall behind.
+          </p>
+        </div>
+      </section>
+
+      <section
+        id="scene-brand"
+        class="clip"
+        data-start="3"
+        data-duration="3.5"
+        data-track-index="2"
+      >
+        <div class="stack">
+          <span id="brand-eyebrow" class="eyebrow">Introducing</span>
+          <h1 id="brand-name" class="brand">Noetfield OS</h1>
+          <span id="brand-bar" class="accent-bar"></span>
+          <p id="brand-subline" class="subline">
+            FastAPI governance decisioning — rule sets, idempotent gates, TLE export.
+          </p>
+        </div>
+      </section>
+
+      <section
+        id="scene-features"
+        class="clip"
+        data-start="6.2"
+        data-duration="2.8"
+        data-track-index="3"
+      >
+        <div class="stack">
+          <h2 id="features-headline" class="headline" style="font-size: 84px">Decide · Gate · Export</h2>
+          <div id="features-pills" class="pill-row">
+            <span class="pill">API auth</span>
+            <span class="pill">rule_set_version</span>
+            <span class="pill">board PDF</span>
+            <span class="pill">noetfield gate CLI</span>
+          </div>
+        </div>
+      </section>
+
+      <section
+        id="scene-cta"
+        class="clip"
+        data-start="8.8"
+        data-duration="1.2"
+        data-track-index="4"
+      >
+        <div class="stack">
+          <p id="cta-text" class="cta">Pilot-ready governance for agentic teams</p>
+        </div>
+      </section>
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+
+      tl.from("#problem-eyebrow", { y: 24, opacity: 0, duration: 0.45, ease: "power3.out" }, 0.15)
+        .from("#problem-headline", { y: 40, opacity: 0, duration: 0.6, ease: "power3.out" }, 0.35)
+        .from("#problem-subline", { y: 28, opacity: 0, duration: 0.55, ease: "power3.out" }, 0.65)
+        .to(
+          "#scene-problem .stack",
+          { opacity: 0, y: -24, duration: 0.45, ease: "power2.in" },
+          2.55
+        )
+        .set("#scene-problem .stack", { opacity: 0 }, 3.0)
+        .from("#brand-eyebrow", { y: 20, opacity: 0, duration: 0.4, ease: "power3.out" }, 3.05)
+        .from("#brand-name", { scale: 0.92, opacity: 0, duration: 0.75, ease: "back.out(1.4)" }, 3.25)
+        .from("#brand-bar", { scaleX: 0, opacity: 0, duration: 0.5, ease: "power2.out", transformOrigin: "center" }, 3.75)
+        .from("#brand-subline", { y: 24, opacity: 0, duration: 0.55, ease: "power3.out" }, 3.95)
+        .to(
+          "#scene-brand .stack",
+          { opacity: 0, y: -20, duration: 0.4, ease: "power2.in" },
+          6.0
+        )
+        .set("#scene-brand .stack", { opacity: 0 }, 6.5)
+        .from("#features-headline", { y: 36, opacity: 0, duration: 0.55, ease: "power3.out" }, 6.35)
+        .from(
+          "#features-pills .pill",
+          { y: 28, opacity: 0, duration: 0.45, stagger: 0.1, ease: "power3.out" },
+          6.75
+        )
+        .to(
+          "#scene-features .stack",
+          { opacity: 0, duration: 0.35, ease: "power2.in" },
+          8.55
+        )
+        .set("#scene-features .stack", { opacity: 0 }, 9.0)
+        .from("#cta-text", { opacity: 0, y: 16, duration: 0.45, ease: "power2.out" }, 8.9);
+
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

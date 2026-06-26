@@ -1,0 +1,12 @@
+{
+  "salt": "replace-with-random-salt",
+  "keys": [
+    {
+      "key_id": "example-readwrite",
+      "key_hash": "replace-with-sha256-of-salt:raw-key",
+      "tenant_id": "tenant-demo",
+      "org_id": "org-demo",
+      "scopes": ["decision:write", "audit:read"]
+    }
+  ]
+}

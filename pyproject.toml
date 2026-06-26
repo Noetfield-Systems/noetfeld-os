@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "noetfield-gate"
+version = "0.1.0"
+description = "Chain tool: pre-execution gate (PASS/BLOCK) and policy decision receipts for Noetfield OS"
+readme = "packages/noetfield-gate/README.md"
+requires-python = ">=3.11"
+license = { text = "Proprietary" }
+authors = [{ name = "Noetfield Systems Inc." }]
+keywords = ["governance", "agents", "policy", "noetfield"]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Intended Audience :: Developers",
+  "Programming Language :: Python :: 3",
+]
+dependencies = []
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0", "httpx>=0.28"]
+
+[project.scripts]
+noetfield = "noetfield_gate.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["noetfield_gate*"]
+
+[tool.setuptools.package-dir]
+"" = "."

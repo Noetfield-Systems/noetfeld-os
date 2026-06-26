@@ -1,0 +1,127 @@
+{
+  "vault": "NOOS_AGENT",
+  "agent_id": "noetfeld-os-cursor-chat",
+  "agent_lane": "NOETFELD-OS",
+  "workspace_root": "/Users/sinakazemnezhad/Projects/noetfeld-os",
+  "search_token": "NOOS-AGENT-DOC",
+  "updated_at": "2026-06-15",
+  "part8_sync_at": "2026-06-15",
+  "canonical_ssot_source": "/Users/sinakazemnezhad/Desktop/Noetfield/Noetfield-All-Documents/",
+  "sync_script": "scripts/sync-noos-ssot.sh",
+  "documents": [
+    {
+      "trace_id": "NOETFIELD-UNIFIED-MASTER-V1",
+      "path": "docs/_NOOS_AGENT/NOETFIELD_UNIFIED_MASTER_v1_LOCKED.md",
+      "doc_type": "UNIFIED_MASTER_LOCKED",
+      "title": "Noetfield Unified Master v1 — single entry point"
+    },
+    {
+      "trace_id": "NOETFIELD-OS-SSOT-V1",
+      "path": "docs/_NOOS_AGENT/NOETFIELD_OS_SSOT_v1_LOCKED.md",
+      "doc_type": "PRODUCT_SSOT_LOCKED",
+      "title": "Noetfield OS Product SSOT v1 — build/GTM law"
+    },
+    {
+      "trace_id": "NOOS-AGENT-PRODUCT-TRUTH",
+      "path": "docs/_NOOS_AGENT/PRODUCT_TRUTH.md",
+      "doc_type": "PRODUCT_TRUTH",
+      "title": "Live product state — phase, endpoints, gaps"
+    },
+    {
+      "trace_id": "NOOS-AGENT-VAULT-README",
+      "path": "docs/_NOOS_AGENT/README.md",
+      "doc_type": "AGENT_VAULT_INDEX",
+      "title": "NOOS Agent Document Vault — tagging rules"
+    },
+    {
+      "trace_id": "NOOS-AGENT-20260608-005",
+      "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260608-005]_ORIENTATION_START_HERE.md",
+      "doc_type": "ORIENTATION",
+      "title": "ORIENTATION — session start"
+    },
+    {
+      "trace_id": "NOOS-AGENT-20260615-006",
+      "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260615-006]_NINETY_DAY_EXECUTION_PLAN.md",
+      "doc_type": "EXECUTION_PLAN",
+      "title": "90-day execution plan"
+    },
+    {
+      "trace_id": "NOOS-AGENT-20260529-002",
+      "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260529-002]_BUSINESS_PRODUCT_CLIENT_DEFINITION.md",
+      "doc_type": "PRODUCT_POSITIONING",
+      "title": "Business, product & client definition"
+    },
+    {
+      "trace_id": "NOOS-AGENT-20260615-007",
+      "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260615-007]_GLOSSARY_AND_PLANE_TAGS.md",
+      "doc_type": "GLOSSARY",
+      "title": "Glossary, plane tags & anti-ICP"
+    },
+    {
+      "trace_id": "NOOS-AGENT-20260608-003",
+      "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260608-003]_TEN_MARKET_SUCCESS_MODELS_JUNE_2026.md",
+      "doc_type": "MARKET_RESEARCH",
+      "title": "Ten market success models"
+    },
+    {
+      "trace_id": "NOOS-AGENT-20260529-001",
+      "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260529-001]_GOVERNANCE_DRIFT_DETECTION_ESSAY.md",
+      "doc_type": "INTERNAL_AGENT_REFERENCE",
+      "title": "Governance drift detection essay"
+    },
+    {
+      "trace_id": "NOOS-AGENT-20260608-004",
+      "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260608-004]_ROADMAP_1000_STEPS_10_PHASES.md",
+      "doc_type": "ROADMAP_MASTER",
+      "title": "1000-step roadmap"
+    },
+    {
+      "trace_id": "NOOS-AGENT-20260615-008",
+      "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260615-008]_GEL_WEB_URL_STRUCTURE.md",
+      "doc_type": "WEB_IA",
+      "title": "noetfield.com/gel URL structure"
+    },
+    {
+      "trace_id": "NOOS-AGENT-20260615-009",
+      "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260615-009]_PITCH_ALIGNMENT_NOTES.md",
+      "doc_type": "ALIGNMENT_AUDIT",
+      "title": "Pitch & PDF alignment notes"
+    },
+    {
+      "trace_id": "NOOS-AGENT-20260615-010",
+      "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260615-010]_BUSINESS_STRATEGY_PROOF_DENSITY_v1.md",
+      "doc_type": "BUSINESS_STRATEGY",
+      "title": "Proof-density commercial strategy (NW1/SW1/W1)"
+    },
+    {
+      "trace_id": "NOOS-AGENT-20260615-011",
+      "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260615-011]_FOUNDING_PILOT_ONEPAGER_EXTERNAL_v1.md",
+      "doc_type": "BUYER_ONEPAGER",
+      "title": "Founding pilot one-pager — NW1 Copilot attach"
+    },
+    {
+      "trace_id": "NOOS-AGENT-20260615-013",
+      "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260615-013]_FOUNDING_PILOT_ONEPAGER_AGENTS_v1.md",
+      "doc_type": "BUYER_ONEPAGER",
+      "title": "Founding pilot one-pager — SW1 agents attach (2 PAGER)"
+    },
+    {
+      "trace_id": "NOOS-AGENT-20260615-012",
+      "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260615-012]_CHAIN_TOOLS_STRATEGY_v1.md",
+      "doc_type": "CHAIN_TOOLS_STRATEGY",
+      "title": "Graphify-class chain tools (noetfield-gate)"
+    },
+    {
+      "trace_id": "NOOS-AGENT-20260615-014",
+      "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260615-014]_UPGRADE_PLAN_300_STEPS_v1.md",
+      "doc_type": "UPGRADE_PLAN_300",
+      "title": "300-step upgrade plan — next upgrades (UPG-0001–0300)"
+    },
+    {
+      "trace_id": "NOOS-AGENT-ROADMAP-MANIFEST",
+      "path": "docs/_NOOS_AGENT/ROADMAP_MANIFEST.json",
+      "doc_type": "ROADMAP_PROGRESS",
+      "title": "Roadmap step completion tracker"
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "plan_trace_id": "NOOS-AGENT-20260615-014",
+  "plan_title": "300-Step Upgrade Plan — Next Upgrades",
+  "total_steps": 300,
+  "step_prefix": "UPG",
+  "parent_roadmap": "NOOS-AGENT-20260608-004",
+  "maps_to_master_range": "0194-0500 (approx)",
+  "current_phase": 1,
+  "phase_names": {
+    "1": "Unblock & Ship",
+    "2": "GEL Core Hardening",
+    "3": "Evidence & Trust Ledger",
+    "4": "Chain Tools & SDK",
+    "5": "Tenant & Production",
+    "6": "Pilot Revenue & Scale"
+  },
+  "completed_steps": [],
+  "in_progress_steps": [],
+  "blocked_steps": {
+    "UPG-0001": "NW1 send — founder click in Mail",
+    "UPG-0008": "DNS cutover — CF_NOETFIELD_API_TOKEN"
+  },
+  "updated_at": "2026-06-15",
+  "notes": "Actionable upgrade track parallel to 1000-step master. UPG wins for sprint planning; master wins for long-range taxonomy."
+}

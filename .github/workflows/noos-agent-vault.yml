@@ -1,0 +1,19 @@
+name: NOOS Agent Vault
+
+on:
+  push:
+    paths:
+      - 'docs/_NOOS_AGENT/**'
+      - 'scripts/check_noos_agent_docs.sh'
+  pull_request:
+    paths:
+      - 'docs/_NOOS_AGENT/**'
+      - 'scripts/check_noos_agent_docs.sh'
+
+jobs:
+  tag-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify NOOS-AGENT-DOC tags
+        run: bash scripts/check_noos_agent_docs.sh

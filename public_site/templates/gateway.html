@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% if flash %}
+<div class="flash-success">{{ flash }}</div>
+{% endif %}
+
+{{ page.body_html | safe }}
+
+<section class="intake-panel">
+  <h2>Integration Inquiry Form</h2>
+
+  <div class="intake-steps">
+    <div class="intake-step">
+      <div class="intake-step-num">Phase 1</div>
+      Profile Classification &amp; Schema Mapping
+    </div>
+    <div class="intake-step">
+      <div class="intake-step-num">Phase 2</div>
+      Telemetry &amp; Context Submission
+    </div>
+    <div class="intake-step">
+      <div class="intake-step-num">Phase 3</div>
+      Secure Review &amp; Key Generation
+    </div>
+  </div>
+
+  <form class="intake-form" method="post" action="/gate/partners/submit">
+    <div class="form-row">
+      <label for="organization">Organization Name</label>
+      <input type="text" id="organization" name="organization" required>
+    </div>
+    <div class="form-row">
+      <label for="domain">Corporate Domain</label>
+      <input type="text" id="domain" name="domain" required placeholder="example.com">
+    </div>
+    <div class="form-row">
+      <label for="vector">Primary Integration Vector</label>
+      <select id="vector" name="vector" required>
+        <option value="" disabled{% if not selected_vector %} selected{% endif %}>Select vector</option>
+        <option value="rwa_issuer"{% if selected_vector == "rwa_issuer" %} selected{% endif %}>Asset Issuer / RWA Developer</option>
+        <option value="integrator"{% if selected_vector == "integrator" %} selected{% endif %}>System Integrator / Engineering Partner</option>
+        <option value="allocator"{% if selected_vector == "allocator" %} selected{% endif %}>Capital Provider / Institutional Allocator</option>
+      </select>
+    </div>
+    <div class="form-row">
+      <label for="footprint">Technical Footprint</label>
+      <textarea id="footprint" name="footprint" required placeholder="Architecture summary, IDE infrastructure, deployment scale, compliance boundaries…"></textarea>
+    </div>
+    <div class="form-row">
+      <label for="pubkey">Cryptographic PubKey (optional)</label>
+      <input type="text" id="pubkey" name="pubkey" placeholder="SSH or GPG public key for payload verification">
+    </div>
+    <button type="submit" class="btn-submit">Submit Intake Brief</button>
+  </form>
+</section>
+{% endblock %}
