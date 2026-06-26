@@ -34,7 +34,7 @@
  <h1><span class="nf-hero-flow"><span class="nf-hero-flow__step">Sign up</span><span class="nf-hero-flow__sep" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="nf-hero-flow__step">Sandbox</span><span class="nf-hero-flow__sep" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="nf-hero-flow__step">Try in minutes</span></span></h1>
  <p class="nf-lead">Create a free developer sandbox, open the Governance Console, and run evaluate → tamper-evident TLE → export with mock M365 connectors — then upgrade to the <strong>Copilot Governance Pack ($2k–10k)</strong> for production tenant and board PDF.</p>
  <div class="nf-hero-badges"><span class="nf-badge-pill nf-badge-pill--gold">14-day trial</span><span class="nf-badge-pill">50 evaluate calls</span><span class="nf-badge-pill">Sandbox mode</span></div>
- <div class="nf-cta-actions"><a class="btn btn-primary" href="/trust-brief/intake/?interest=pilot&vector=copilot-governance">Apply for pilot</a><a class="btn btn-secondary" href="#trial-os">Start sandbox</a><a class="btn btn-secondary" href="/copilot/demo/">5-minute demo</a></div>
+ <div class="nf-cta-actions"><a class="btn btn-primary" href="/intelligence/intake/">Book Diagnostic Sprint</a><a class="btn btn-secondary" href="#trial-os">Start sandbox</a><a class="btn btn-secondary" href="/copilot/demo/">5-minute demo</a></div>
  <ul class="nf-marquee" aria-label="Framework alignment"><li>EU AI Act Art. 12</li><li>ISO 42001</li><li>DORA orientation</li><li>NIST AI RMF</li></ul>
  </div>
  
@@ -56,11 +56,24 @@
  <a class="btn btn-primary" href="/trust-brief/intake/?interest=pilot&vector=copilot-governance">Apply for pilot</a>
  <a class="btn btn-secondary" href="/start/">Start sandbox</a>
  </nav>
+ <aside id="nf-template-deploy-callout" class="nf-callout nf-template-deploy" hidden aria-label="Template deploy callout">
+ <p><strong>Copilot Governance Template</strong> — policy pack <code>copilot-governance-v1</code> pre-wired. Complete sandbox signup, then run your first evaluate against shipped rules. <a href="/templates/">Template catalog</a> · <a href="/docs/api/">Governance API</a></p>
+ <a class="btn btn-primary" href="/trust-brief/intake/?interest=pilot&vector=copilot-governance">Apply for pilot</a>
+ </aside>
+ <script>
+ (function () {
+   var sp = new URLSearchParams(location.search);
+   if (sp.get("template") === "copilot-governance-v1") {
+     var el = document.getElementById("nf-template-deploy-callout");
+     if (el) el.hidden = false;
+   }
+ })();
+ </script>
  <section class="nf-section-block" id="trial-os" aria-labelledby="start-trial">
  <div class="nf-section-block-head"><span class="nf-section-num" aria-hidden="true">01</span><div>
  <p class="nf-eyebrow" id="start-trial">Trial OS</p>
  <h2>Full self-serve flow — no calendar required</h2>
- <p class="nf-section-lead">Sandbox mode · mock M365 · evaluate API · sample export — 14-day sandbox · 50 evaluate calls · mock M365 connectors · no sales call.</p>
+ <p class="nf-section-lead">Sandbox mode · mock M365 · evaluate API · sample export — 14-day sandbox · 50 evaluate calls · mock M365 connectors · no sales call · After signup: sample evaluate walkthrough, upgrade path to Governance Pack, and optional pilot apply — <a href="/docs/start/NF_SANDBOX_NURTURE_SEQUENCE_v1.md">sandbox guide</a></p>
  </div></div>
  
  <div id="nfTrialOs" class="nf-trial-os" data-trial-os-flow="trial-os-flow" aria-label="Trial OS wizard">
@@ -122,6 +135,7 @@
  </div>
  </div>
  </div>
+ <script>window.NF_SANDBOX_API=1;</script>
  <script src="/assets/noetfield-sandbox.js?v=40" defer></script>
  
  <aside class="nf-callout"><p><strong>Production evidence path:</strong> Production tenant, real metadata connectors, and board PDF export unlock via <strong>Copilot Governance Pack ($2k–10k)</strong> or Trust Brief SOW.</p></aside>
@@ -163,6 +177,10 @@
  </div>
  <p class="nf-section-lead" style="margin-top:12px">Agent manifest (schema-locked): <a href="/assets/noetfield-agent-manifest.json"><code>noetfield-agent-manifest.json</code></a> · <code>packages/schemas/agent-manifest.schema.json</code></p>
  </section>
+ <section class="nf-section nf-section--lift" aria-labelledby="agent-manifest-title">
+ <h2 id="agent-manifest-title">Agent manifest schema</h2>
+ <p class="nf-section-lead">Policy-bound workflow orientation — investigate · triage · draft · approve maps to the public JSON schema at <a href="/docs/schemas/agent-manifest.schema.json">agent-manifest.schema.json</a> (sandbox simulation today; production workflow per SOW).</p>
+ </section>
 
  <div class="nf-pack-grid nf-pack-grid--4" role="list" aria-label="Access paths and contract programs">
  <article class="nf-pack-card nf-pack-card--free" role="listitem">
@@ -173,7 +191,7 @@
  <a class="btn btn-secondary" href="/start/">Start sandbox</a>
  </article>
  <article class="nf-pack-card nf-pack-card--program" role="listitem">
- <p class="nf-pack-card__tag">Lead program · apply online</p>
+ <p class="nf-pack-card__tag">Governance program · apply online</p>
  <p class="nf-pack-card__price">$2k–10k</p>
  <p>Copilot Governance Pack — production tenant, board PDF in governance meeting, procurement ZIP.</p>
  <ul><li>90-day program</li><li>Production mode</li><li>Board PDF success signal</li></ul>
@@ -210,7 +228,7 @@
  <span class="nf-milestone-arrow" aria-hidden="true">→</span>
  <span class="nf-revenue-step"><span class="nf-revenue-step__num">Expand</span><strong>Seats + export cadence</strong><span>Production keys · MSP attach · enterprise SOW</span></span>
  </div>
- <aside class="nf-callout nf-callout--urgency"><p><strong>W3 economic signal:</strong> deposit ≥ CAD 2K or signed LOI on Copilot Governance Pack — one org uses board PDF in a real governance meeting.</p></aside>
+ <aside class="nf-callout nf-callout--urgency"><p><strong>What success looks like:</strong> signed pilot or deposit on the Copilot Governance Pack — one org uses board PDF in a real governance meeting.</p></aside>
  </section>
  <section class="nf-cta-mega" aria-labelledby="cta-h">
  <h2 id="cta-h">Upgrade to Copilot Governance Pack</h2>

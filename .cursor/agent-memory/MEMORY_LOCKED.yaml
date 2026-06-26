@@ -1,9 +1,9 @@
 # Noetfield agent memory — LOCKED (versioned in git)
 # Read at EVERY session start. Bump version when adding lessons.
 
-version: 14
-updated: "2026-06-03T18:00:00Z"
-updated_by: NF-CLOUD-AGENT
+version: 13
+updated: "2026-06-17T12:00:00Z"
+updated_by: NF-LOCAL-REPO-AGENT
 
 packaging_v16:
   master_plan: docs/WWW_V16_PACKAGING_PLAN_LOCKED_v1.md
@@ -18,21 +18,21 @@ packaging_v16:
 
 tier1_ui_v18:
   masterplan: docs/WWW_V18_TIER1_UI_MASTERPLAN_LOCKED_v1.md
-  ui_build_checklist: docs/ops/UI_BUILD_CHECKLIST_LOCKED_v1.md
   north_star: "TTFR < 90s — landing to real RID + confidence + export orientation"
   build_waves: "A Live Proof + Trial OS · B Shell + Receipt Studio · C Design system + Agent deck · D Visual QA"
   pick_ids: UI-01 through UI-10
-  verify: "make verify-ui-build-checklist && make verify-ui-e2e && make verify-static-www"
 
 doc_navigation:
   hub: docs/README.md
   unified_index: docs/DOC_UNIFIED_INDEX_LOCKED_v1.md
+  nf_gaos: docs/ops/NF_GAOS_W0_LOCKED_v1.md
+  start_here: entry/START_HERE_LOCKED_v1.md
+  routing_card: ROUTING_CARD.md
+  live_status: reports/agent-auto/LIVE-STATUS.md
   domain_index: os/LOCKED_REFERENCE_INDEX.md
   cursor_layer: .cursor/README.md
   pick_next: docs/ops/plans/no-asf/QUICK_PICK.md
   active_ship: os/SHIP_NOW.md
-  ops_live_status: governance/OPS_LIVE_STATUS_LOCKED.json
-  witness_audit: docs/ops/OPS_WITNESS_AUDIT_LOCKED_v1.md
   verify: make verify-doc-ssot
 
 company_scope:
@@ -91,14 +91,6 @@ hard_rules:
     rule: Cursor AUTO-RUN is not P0. Commercial outreach and calls = agentic layer only; founder Hub + ASK. NF-CLOUD = validators + www/GTM assets — never send email/call as founder.
     source: docs/ops/FOUNDER_AGENTIC_COMMERCIAL_AND_NO_CURSOR_AUTORUN_LOCKED_v1.md
     since: "2026-06-10"
-  - id: R-012
-    rule: BEFORE any UI/form/www/app edit — read docs/ops/UI_BUILD_CHECKLIST_LOCKED_v1.md and run make verify-ui-build-checklist. No invitation/calendar CTAs on public surfaces; self-serve sandbox + async intake only.
-    source: docs/ops/UI_BUILD_CHECKLIST_LOCKED_v1.md
-    since: "2026-06-03"
-  - id: R-013
-    rule: BEFORE any plan/build — read governance/OPS_LIVE_STATUS_LOCKED.json and run ./scripts/witness-session-start.sh. Founder ops on disk beats chat. Do not treat form Resend as inbox-pending when Google Workspace inbox is live. Email form auto-notify is deferred post-factory per founder order — document fallbacks, do not block factory work.
-    source: docs/ops/OPS_WITNESS_AUDIT_LOCKED_v1.md
-    since: "2026-06-03"
 
 recurring_mistakes:
   - id: M-001
@@ -121,11 +113,6 @@ recurring_mistakes:
     occurrences: 1
     last_seen: "2026-06-06"
     corrective_action: R-009 block + extend sync-sourceA-desktop.sh (founder)
-  - id: M-005
-    pattern: Building/planning before reading OPS_LIVE_STATUS — stale www copy treated as truth; founder chat updates ignored
-    occurrences: 2
-    last_seen: "2026-06-03"
-    corrective_action: SKILL-010 + R-013 + witness-session-start.sh + make verify-ops-live
 
 lessons:
   - id: L-001
@@ -148,32 +135,22 @@ lessons:
   - id: L-006
     lesson: Incidents 002–005 closed 2026-06-06 after controls on main — law remains active via R-007/R-008/R-010; closure does not relax ask-first.
     since: "2026-06-06"
-  - id: L-007
-    lesson: Founder ops updates (Workspace inbox live, Stripe live, email form deferred) must land in governance/OPS_LIVE_STATUS_LOCKED.json same session — chat alone does not reach the next agent or TrustField.
-    since: "2026-06-03"
 
 pre_commit_checklist:
   - Read MEMORY_LOCKED.yaml if not read this session
   - Founder permission received for this edit scope (R-007)
   - ASK step completed this session (R-008)
-  - UI_BUILD_CHECKLIST applied if HTML/CSS/JS/forms changed (R-012)
-  - make verify-ui-build-checklist (when UI touched)
   - ./scripts/verify-agent-scope.sh
   - Confirm diff is Noetfield-only
   - No trustfield.ca / TF-* / UPG TrustField strings in tracked files
 
+  - id: L-007
+    lesson: NF-GAOS W0 locked — run make nf-onboard every session; trust LIVE-STATUS.md over SHIP_NOW prose tables.
+    since: "2026-06-17"
+
 session_start_checklist:
-  - Read governance/OPS_LIVE_STATUS_LOCKED.json (R-013 witness)
-  - Run ./scripts/witness-session-start.sh
+  - make nf-onboard (or read reports/agent-auto/LIVE-STATUS.md if just run)
+  - Read entry/START_HERE_LOCKED_v1.md — your role row only
+  - Read ROUTING_CARD.md
   - Read MEMORY_LOCKED.yaml
-  - Read docs/DOC_UNIFIED_INDEX_LOCKED_v1.md (navigation SSOT)
-  - Read docs/ops/UI_BUILD_CHECKLIST_LOCKED_v1.md before ANY UI/form/www work (R-012)
-  - Read docs/WWW_V16_PACKAGING_PLAN_LOCKED_v1.md when touching www/GTM/commercial copy
-  - Read incidents/REGISTRY.md open items
-  - Read PROJECT_BOUNDARIES_LOCKED.md
-  - Apply SKILL-007 if any rule conflict detected
-  - Apply SKILL-006 ask-before-implement
-  - Apply SKILL-001 scope gate (after permission only)
-  - Apply SKILL-010 witness before build (R-013)
-  - Apply SKILL-008 agentic commercial boundary
-  - Read FOUNDER_AGENTIC_COMMERCIAL_AND_NO_CURSOR_AUTORUN_LOCKED_v1.md
+  - Read docs/ops/NF_GAOS_W0_LOCKED_v1.md when implementing agent/gov changes

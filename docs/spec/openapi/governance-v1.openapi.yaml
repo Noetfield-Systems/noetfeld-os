@@ -1,0 +1,142 @@
+openapi: 3.1.0
+info:
+  title: Noetfield Governance API v1
+  version: 1.0.0
+  description: Institutional pilot surface — unified evaluate contract for Enterprise AI Control Plane.
+servers:
+  - url: https://platform.noetfield.com
+paths:
+  /api/v1/governance/evaluate:
+    post:
+      operationId: governanceEvaluateV1
+      summary: Pre-execution governance evaluate
+      tags: [governance-v1]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GovernanceEvaluateV1Request'
+      responses:
+        '200':
+          description: Policy decision with audit lineage fields
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GovernanceEvaluateV1Response'
+  /api/v1/governance/ledger:
+    get:
+      operationId: governanceLedgerV1
+      summary: Immutable compliance log slice
+      tags: [governance-v1]
+      parameters:
+        - name: tenant_id
+          in: query
+          schema:
+            type: string
+            format: uuid
+        - name: request_id
+          in: query
+          schema:
+            type: string
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 100
+      responses:
+        '200':
+          description: Ledger entries
+  /api/v1/governance/audit-export:
+    get:
+      operationId: governanceAuditExportV1
+      summary: Procurement audit export pack
+      tags: [governance-v1]
+      parameters:
+        - name: request_id
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Audit export JSON
+components:
+  schemas:
+    GovernanceEvaluateV1Request:
+      type: object
+      required: [tenant_id, organization_id, action, resource_type, resource_id]
+      properties:
+        tenant_id:
+          type: string
+          format: uuid
+        organization_id:
+          type: string
+          format: uuid
+        action:
+          type: string
+        resource_type:
+          type: string
+        resource_id:
+          type: string
+        actor_id:
+          type: string
+          default: governance-api-v1
+        confidence:
+          type: number
+          minimum: 0
+          maximum: 1
+        payload:
+          type: object
+          additionalProperties: true
+        request_id:
+          type: string
+          description: RID lineage id
+        correlation_id:
+          type: string
+        mode:
+          type: string
+          enum: [shadow, enforce]
+          default: shadow
+    GovernanceEvaluateV1Response:
+      type: object
+      required: [request_id, mode, decision, allowed, reason, reason_code]
+      properties:
+        request_id:
+          type: string
+        correlation_id:
+          type: string
+          nullable: true
+        mode:
+          type: string
+          enum: [shadow, enforce]
+        decision:
+          type: string
+          enum: [PROCEED, REQUIRE_HUMAN_REVIEW, REJECT]
+        allowed:
+          type: boolean
+        reason:
+          type: string
+        reason_code:
+          type: string
+        policy_refs:
+          type: array
+          items:
+            type: string
+        obligations:
+          type: array
+          items:
+            type: string
+        policy_version_hash:
+          type: string
+          nullable: true
+        config_policy_version_hash:
+          type: string
+          nullable: true
+        ledger_event_id:
+          type: string
+          nullable: true
+        gel_lane:
+          type: string
+          nullable: true
+        non_psp_boundary:
+          type: string

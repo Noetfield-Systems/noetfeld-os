@@ -125,7 +125,9 @@ Detail: [PHASE1_PHASE2_RACI_v1.md](./PHASE1_PHASE2_RACI_v1.md)
 
 | Doc | Role |
 |-----|------|
+| [MSP_PARTNER_PROGRAM_FLOW_v1.md](./MSP_PARTNER_PROGRAM_FLOW_v1.md) | Apply → Enable → Earn program ladder |
 | [PHASE1_PHASE2_RACI_v1.md](./PHASE1_PHASE2_RACI_v1.md) | Delivery boundaries |
 | [READINESS_TO_RECORD_MAPPING_v1.md](./READINESS_TO_RECORD_MAPPING_v1.md) | Assessment → pilot mapper |
 | [SME_GOVERNANCE_PACK_ONE_PAGER.md](../copilot/SME_GOVERNANCE_PACK_ONE_PAGER.md) | End-customer artifact language |
+| [NF_QS_QUICKSCAN_OFFER_ONE_PAGER_v1.md](./NF_QS_QUICKSCAN_OFFER_ONE_PAGER_v1.md) | NF-QS QuickScan MSP handoff ($2k–$3.5k) |
 | [FEDERAL_GOVERNANCE_PACK_v1.md](../federal/FEDERAL_GOVERNANCE_PACK_v1.md) | Separate lane — no overlap |

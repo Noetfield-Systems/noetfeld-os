@@ -7,12 +7,24 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 WWW_VER = "40"
+LIVE_PROOF_WWW_VER = "43"  # homepage + investors live-proof bundle (pf-0068)
 
-# Copilot Governance Pack — locked lead SKU ($2k–10k · 90 days · board PDF success signal)
+# Pages maintained by Intelligence 613 lane — never overwrite on rebuild
+PROTECTED_INTELLIGENCE_PATHS = frozenset({
+    "index.html",
+    "governance/index.html",
+    "intelligence/intake/index.html",
+    "pricing/index.html",
+    "contact/index.html",
+    "about/index.html",
+})
+
+# Copilot Governance Pack — enterprise governance lane (~20% GTM)
 PILOT_SKU = "Copilot Governance Pack"
 PILOT_BAND = "$2k–10k · 90 days"
 PILOT_SUCCESS = "board PDF in a real governance meeting"
 PILOT_INTAKE = "/trust-brief/intake/?interest=pilot&vector=copilot-governance"
+INTELLIGENCE_DIAGNOSTIC = "/intelligence/intake/"
 TRUST_BRIEF_INTAKE = "/trust-brief/intake/"
 WORK_WITH_US_INTAKE = "/trust-brief/intake/?interest=partner&vector=work-with-us"
 MEGA_CTA_TITLE = "Board PDF in your next governance meeting"
@@ -62,7 +74,7 @@ COPY = {
         "Non-confidential intake · include your Request ID · Copilot Governance Pack ($2k–10k · 90 days · board PDF), "
         "Trust Brief ($10k), federal or MSP lane · operations@noetfield.com"
     ),
-    "scope_lead": "Honest scope for procurement — what you can demo, export, and defend today.",
+    "scope_lead": "Honest scope for diligence reviewers — what you can demo, export, and defend today.",
     "footer_note": (
         "AI Governance &amp; Evidence for Microsoft 365 Copilot. Govern execution before production scope opens — "
         "signed TLE v1, board PDF, procurement ZIP. Invalid changes blocked · allowed decisions receipted · export fails closed on tamper."
@@ -75,6 +87,14 @@ COPY = {
     "production_upgrade": (
         "Production tenant, real metadata connectors, and board PDF export unlock via "
         "<strong>Copilot Governance Pack ($2k–10k)</strong> or Trust Brief SOW."
+    ),
+    "client_success_callout": (
+        "<strong>What success looks like:</strong> signed pilot or deposit on the Copilot Governance Pack — "
+        "one org uses board PDF in a real governance meeting."
+    ),
+    "sandbox_nurture_lead": (
+        "After signup: sample evaluate walkthrough, upgrade path to Governance Pack, and optional pilot apply — "
+        '<a href="/docs/start/NF_SANDBOX_NURTURE_SEQUENCE_v1.md">sandbox guide</a>'
     ),
     "first_receipt_promise": (
         "Run one evaluate · get one signed receipt · <strong>before your next governance standup</strong> "
@@ -176,7 +196,7 @@ def live_proof_panel() -> str:
  <button type="submit" class="btn btn-primary">Evaluate intent</button>
  </form>
  <div id="nfLiveProofReceipt" class="nf-live-proof-receipt-host" aria-live="polite">
- {receipt()}
+ {receipt("RID-2026-0602-HOME", 'Illustrative sandbox output · Live sample · <a href="/trust-ledger/sample-report/">Download TLE YAML</a> · <a href="/docs/www/NF_LIVE_PROOF_HERO_RECEIPT_v1.md">NF_LIVE_PROOF_HERO_RECEIPT</a>')}
  </div>
  </div>
  <script src="/assets/noetfield-live-proof.js?v={WWW_VER}" defer></script>"""
@@ -223,27 +243,20 @@ def trial_os_wizard() -> str:
  <form id="nfTrialEvaluateForm"><p class="nf-section-lead">Submit operational intent — confidence score · RID-threaded audit log.</p><div class="nf-trial-os__actions"><button type="submit" class="btn btn-primary">Run first evaluate</button></div></form>
  </div>
  <div class="nf-trial-os__panel" data-step="4">
- <h3>Receipt + export moment</h3>
- <p class="nf-section-lead">RID <code data-trial-rid>RID-pending</code> · watermarked board PDF · Copilot Readiness upgrade with RID pre-filled.</p>
- <p id="nfTrialUsageWarn" class="nf-callout nf-callout--warn" hidden role="status"></p>
+ <h3>Receipt + export orientation</h3>
+ <p class="nf-section-lead">RID <code data-trial-rid>RID-pending</code> · sample TLE YAML · board PDF path · procurement ZIP orientation.</p>
  <div class="nf-trial-os__api-drawer">
- <strong>API drawer</strong> · key preview <code data-api-key>nf_sbx_…</code> · mode <strong>observe</strong> · <a href="/docs/api/">API reference</a>
+ <strong>API drawer</strong> · key preview <code data-api-key>nf_sbx_…</code> · <a href="/docs/api/">API reference</a>
  <pre data-curl-example>curl example loads after signup</pre>
  </div>
- <div class="nf-trial-os__factory-demos" aria-label="Factory catalog demos (observe mode)">
- <p class="nf-eyebrow">Factory demos · observe only</p>
- <button type="button" class="btn btn-secondary" data-factory-demo="copilot_governance_readiness_v1">Copilot readiness</button>
- <button type="button" class="btn btn-secondary" data-factory-demo="trust_brief_diligence_v1">Trust Brief diligence</button>
- <button type="button" class="btn btn-secondary" data-factory-demo="legal_review_v1">Legal review</button>
- </div>
  <div class="nf-trial-os__actions">
- <a id="nfTrialExportPdf" class="btn btn-primary" href="#" role="button">Download watermarked board PDF</a>
- <a class="btn btn-primary" data-sandbox-upgrade href="{PILOT_INTAKE}">Upgrade · Copilot Readiness Pack</a>
- <button type="button" id="nfTrialFinish" class="btn btn-secondary">Open Governance Console</button>
- <a class="btn btn-secondary" href="/copilot/demo/">5-minute demo</a>
+ <button type="button" id="nfTrialFinish" class="btn btn-primary">Open Governance Console</button>
+ <a class="btn btn-primary" href="{PILOT_INTAKE}">Apply for Governance Pack · $2k–10k</a>
+ <a class="btn btn-secondary" href="/trust-ledger/sample-report/">Download sample export orientation</a>
  </div>
  </div>
  </div>
+ <script>window.NF_SANDBOX_API=1;</script>
  <script src="/assets/noetfield-sandbox.js?v={WWW_VER}" defer></script>"""
 
 
@@ -294,7 +307,7 @@ def hero(kicker: str, eyebrow: str, h1: str, lead: str, badges: list[tuple[str, 
 
 def scope_rows_html() -> str:
     items = [
-        ("Pre-execution evaluate", "available"),
+        ("Governance evaluate", "available"),
         ("TLE v1 + workspace UI", "available"),
         ("Board PDF · procurement ZIP", "available"),
         ("M365 metadata connectors", "available"),
@@ -325,6 +338,29 @@ def scope_block_inner() -> str:
  <p class="nf-trust-signals-lead">{COPY["scope_lead"]}</p>
  <div class="nf-trust-signals-grid">{scope_rows_html()}</div>
  </div>"""
+
+
+def buyer_proof_links_section(*, hub: bool = False) -> str:
+    """Client commercial / institutional proof links — no founder ops runbooks on public www."""
+    hub_extra = ""
+    if hub:
+        hub_extra = """
+<li><a href="/docs/copilot/PROCUREMENT_ONE_PAGER.md">Procurement one-pager</a></li>
+<li><a href="/docs/references/GOVERNANCE_SOURCES_BOOK_v1.md">Governance sources reference</a></li>"""
+    return f"""
+<section class="nf-section nf-section--lift" aria-labelledby="buyer-proof-links">
+<h2 id="buyer-proof-links">Proof and diligence</h2>
+<ul>
+<li><a href="/copilot/procurement/">Procurement pack</a></li>
+<li><a href="/trust-ledger/sample-report/">Trust Ledger samples</a></li>
+<li><a href="/trust-ledger/verify/">Verify export integrity</a></li>
+<li><a href="/docs/api/">Governance API reference</a></li>{hub_extra}
+</ul>
+</section>"""
+
+
+def client_success_callout() -> str:
+    return f' <aside class="nf-callout nf-callout--urgency"><p>{COPY["client_success_callout"]}</p></aside>'
 
 
 def stat_bar() -> str:
@@ -380,6 +416,34 @@ def procurement_rail() -> str:
  </nav>"""
 
 
+def trust_sidebar_rail() -> str:
+    """Sticky diligence rail — trust center reference layout (v14)."""
+    return f"""
+ <aside class="nf-trust-sidebar" aria-label="Diligence shortcuts">
+ <p class="nf-trust-sidebar__label">Procurement rail</p>
+ <nav class="nf-trust-sidebar__nav">
+ <a href="/trust-ledger/sample-report/">TLE samples</a>
+ <a href="/trust-ledger/verify/">Verify export</a>
+ <a href="/copilot/procurement/">Procurement pack</a>
+ <a href="/status/">Status</a>
+ </nav>
+ {receipt("RID-2026-0602-TRUST", "Sample receipt — <a href=\"/trust-ledger/sample-report/\">download YAML</a>")}
+ <p class="nf-trust-sidebar__note">Capabilities marked <strong>Available</strong> are Shipped in sandbox and pilot — orientation only, not certification.</p>
+ </aside>"""
+
+
+def trust_doc_hero() -> str:
+    """Light document hero — no cinematic chrome (v14 trust reference page)."""
+    return """
+ <header class="nf-trust-doc-hero">
+ <p class="nf-eyebrow">Procurement diligence · honest scope</p>
+ <h1>Trust center for AI Governance &amp; Evidence</h1>
+ <p class="nf-lead">Metadata-only Microsoft 365 processing. Export bundles <strong>fail closed on tamper</strong>. No custody, payment rails, or certifier claims — Available · Planned · Out of scope only.</p>
+ <div class="nf-hero-badges"><span class="nf-badge-pill nf-badge-pill--gold">Metadata-only M365</span><span class="nf-badge-pill">Fail-closed export</span></div>
+ <div class="nf-cta-actions"><a class="btn btn-primary" href="/copilot/procurement/">Procurement pack</a><a class="btn btn-secondary" href="/trust-ledger/verify/">Verify export integrity</a></div>
+ </header>"""
+
+
 def self_serve_rail() -> str:
     return f"""
  <nav class="nf-self-serve-rail" aria-label="Self-serve product access">
@@ -411,7 +475,7 @@ def revenue_path_ladder_inner() -> str:
  <span class="nf-milestone-arrow" aria-hidden="true">→</span>
  <span class="nf-revenue-step"><span class="nf-revenue-step__num">Expand</span><strong>Seats + export cadence</strong><span>Production keys · MSP attach · enterprise SOW</span></span>
  </div>
- <aside class="nf-callout nf-callout--urgency"><p><strong>W3 economic signal:</strong> deposit ≥ CAD 2K or signed LOI on Copilot Governance Pack — one org uses board PDF in a real governance meeting.</p></aside>
+{client_success_callout()}
  </div>"""
 
 
@@ -469,7 +533,7 @@ def revenue_path_strip() -> str:
  <span class="nf-milestone-arrow" aria-hidden="true">→</span>
  <span class="nf-revenue-step"><span class="nf-revenue-step__num">Expand</span><strong>Seats + export cadence</strong><span>Production keys · MSP attach · enterprise SOW</span></span>
  </div>
- <aside class="nf-callout nf-callout--urgency"><p><strong>W3 economic signal:</strong> deposit ≥ CAD 2K or signed LOI on Copilot Governance Pack — one org uses board PDF in a real governance meeting.</p></aside>
+{client_success_callout()}
  </section>"""
 
 
@@ -807,7 +871,7 @@ def pilot_apply_form() -> str:
  </label>
  <label>Pilot band
  <select name="band">
- <option value="quickscan">QuickScan · $2,000 · 4 weeks</option>
+ <option value="quickscan">QuickScan · $2k–$3.5k · 4 weeks</option>
  <option value="readiness" selected>Readiness Pilot · $5k–10k · 90 days (recommended)</option>
  </select>
  </label>
@@ -957,7 +1021,7 @@ def work_with_us_fit_body() -> str:
  <div class="nf-fit-grid nf-wwu-fit-grid">
  <article class="nf-fit-card nf-fit-card--yes"><h3>Strong fit</h3><ul>
  <li>You <strong>introduce, facilitate, co-deliver, or attach</strong> on regulated Copilot governance — MSP, SI, advisory, or connector network</li>
- <li>You want <strong>async intake</strong> with operations follow-up — no purchase hub, no design-partner theater</li>
+ <li>You want <strong>async intake</strong> with operations follow-up — no purchase hub, no scarcity invite funnel</li>
  <li>You align on <strong>metadata-only M365</strong>, signed TLE v1, and board PDF as the success signal</li>
  <li>Investors: you underwrite <strong>Land · Expand · Channel</strong> with demo-ready product today — honest milestone path</li>
  </ul></article>
@@ -993,7 +1057,7 @@ def contact_intake_form() -> str:
  <option value="investor-diligence">Investor diligence vault</option>
  <option value="federal">Federal / public sector</option>
  <option value="feedback">Site feedback</option>
- <option value="other">Other · operations routing</option>
+ <option value="other">Other · operations triage</option>
  </select>
  </label>
  <label>Your name (optional)<input type="text" name="name" autocomplete="name" placeholder="Your name" /></label>
@@ -1121,7 +1185,7 @@ def investor_diligence_intake_form() -> str:
  <option value="">Select engagement</option>
  <option value="shadow-brief">Shadow Governance Brief ($15k–$35k)</option>
  <option value="portfolio-scan">Portfolio Copilot risk scan</option>
- <option value="sell-side">Sell-side governance pack (founder)</option>
+ <option value="sell-side">Sell-side governance pack</option>
  <option value="post-close">Post-acquisition 90-day pack</option>
  <option value="vault-access">Vault artifact access only</option>
  </select>
@@ -1377,10 +1441,74 @@ def eu_us_regulatory_block() -> str:
  </section>"""
 
 
+def copilot_demo_body() -> str:
+    """5-minute policy-change governance demo — interactive nfSsotDemo + locked buyer story."""
+    ws_mock = """
+ <aside class="nf-workspace-mock" aria-label="Governance workspace preview">
+ <p class="nf-workspace-mock__title">Live workspace path</p>
+ <div class="nf-workspace-mock__row"><span>Intent</span><code>Copilot rollout · prod</code></div>
+ <div class="nf-workspace-mock__row"><span>Decision</span><code class="nf-workspace-mock__ok">allow · 0.80</code></div>
+ <div class="nf-workspace-mock__row"><span>Trust Ledger</span><code>TLE-015DCFB8B953</code></div>
+ <div class="nf-workspace-mock__row"><span>Export</span><code>board.pdf · pack.zip</code></div>
+ <p class="nf-workspace-mock__foot"><a href="/workspace/">Open workspace</a> · <a href="/copilot/">Copilot hub</a> · <a href="/start/">Start sandbox</a></p>
+ </aside>"""
+    return hero(
+        "5-minute demo",
+        "Live proof · Copilot governance",
+        "Five-minute buyer story — policy update to signed Trust Ledger receipt",
+        (
+            "Walk through a <strong>policy update</strong> → invalidate stale evaluations → re-brief → evaluate → "
+            "signed <strong>Trust Ledger Entry</strong> with confidence score and M365 metadata evidence index. "
+            + COPY["m365_position"]
+        ),
+        [("Live demo script", True), ("Confidence score", False)],
+        [( "/workspace/", "Open workspace", True), ("/copilot/procurement/", "Procurement pack", False), ("/start/", "Start sandbox", False)],
+        [],
+        ws_mock,
+    ) + f"""
+ <section class="nf-section-block nf-section--elevated" aria-labelledby="ssot-demo-title">
+ <div class="nf-section-block-head"><span class="nf-section-num" aria-hidden="true">▶</span><div>
+ <p class="nf-eyebrow" id="ssot-demo-title">Interactive demo</p>
+ <h2>Five-minute buyer story — policy change → Trust Ledger</h2>
+ <p class="nf-section-lead">Publish policy v3.2, invalidate stale v3.1 evaluations, re-brief, then evaluate Copilot rollout intent. The interactive sample shows a policy update event and sample decision <code>allow · 0.80</code>.</p>
+ </div></div>
+ <div id="nfSsotDemo" class="nf-ssot-demo" aria-label="Policy governance demo">
+ <ol class="nf-ssot-demo__steps" aria-label="Demo steps">
+ <li class="nf-ssot-demo__step is-active"><span>1</span> Policy baseline</li>
+ <li class="nf-ssot-demo__step"><span>2</span> Invalidate + re-brief</li>
+ <li class="nf-ssot-demo__step"><span>3</span> Evaluate + TLE</li>
+ </ol>
+ <div id="nfSsotPolicyCards" class="nf-ssot-policy-cards"></div>
+ <div id="nfSsotPending" class="nf-ssot-pending"></div>
+ <p class="nf-section-lead"><strong>Policy updated</strong> — Copilot Acceptable Use v3.2 (guest sharing blocked in production scope).</p>
+ <div id="nfSsotEventLog" class="nf-ssot-event-log"></div>
+ <div id="nfSsotReBrief" class="nf-ssot-rebrief"></div>
+ <div class="nf-cta-actions">
+ <button type="button" id="nfSsotPublish" class="btn btn-secondary">Publish policy v3.2</button>
+ <button type="button" id="nfSsotEvaluate" class="btn btn-primary" disabled>Run re-brief + evaluate</button>
+ </div>
+ <div id="nfSsotReceipt" class="nf-ssot-receipt" aria-live="polite"></div>
+ <div id="nfSsotBoard" class="nf-ssot-board"></div>
+ <div id="nfSsotMiddleware" class="nf-ssot-middleware"></div>
+ </div>
+ <script src="/assets/noetfield-ssot-demo.js?v={WWW_VER}" defer></script>
+ </section>
+""" + copilot_link_cards(
+        '<a class="nf-card nf-card--link" href="/copilot/"><p class="nf-card__tag">Overview</p><h3>Copilot Governance Pack</h3><p>Full offering overview.</p></a>',
+        '<a class="nf-card nf-card--link" href="/trust-ledger/sample-report/"><p class="nf-card__tag">Samples</p><h3>Trust Ledger YAML</h3><p>Go · conditional · rejected.</p></a>',
+        '<a class="nf-card nf-card--link" href="/copilot/proof-case/"><p class="nf-card__tag">Proof</p><h3>Redacted proof case</h3><p>Evaluate → TLE → board export.</p></a>',
+    ) + buyer_proof_links_section() + mega_cta(
+        "Board PDF in your next governance meeting",
+        "Non-confidential intake · Copilot Governance Pack ($2k–10k) · Trust Brief ($10k) · operations@noetfield.com",
+        (PILOT_INTAKE, "Apply for pilot ($2k–10k)"),
+        (TRUST_BRIEF_INTAKE, "Request Trust Brief ($10k)"),
+    )
+
+
 def pilot_page_body() -> str:
     """Full Copilot Governance Pack pilot landing — lead GTM wedge."""
     deliverables = [
-        ("Governance evaluate", "Pre-execution allow / deny / review with Request ID lineage on every decision."),
+        ("Governance evaluate", "Policy-bound allow / deny / review with Request ID lineage on every decision."),
         ("Evidence index", "Metadata-only Purview, Entra ID, Audit, SharePoint connectors — read-only; complements Microsoft DLP."),
         ("TLE v1", "Signed go/no-go with confidence score and sequential approval chain."),
         ("Board pack", "JSON, HTML, and PDF export for board, risk, or legal governance meetings."),
@@ -1408,7 +1536,13 @@ def pilot_page_body() -> str:
             "Board pack PDF used in governance meeting",
             "Optional: procurement ZIP shared with diligence",
         ]),
-    ) + digital_trust_lane_block() + copilot_governance_gaps_section() + f"""
+    ) + """
+ <aside class="nf-callout nf-template-deploy" aria-label="Template deploy callout">
+ <p><strong>Copilot Governance Template</strong> — policy pack <code>copilot-governance-v1</code> pre-wired. Run sandbox evaluate against shipped rules, then upgrade to this pilot.</p>
+ <a class="btn btn-secondary nf-template-deploy" href="/start/?template=copilot-governance-v1">Deploy Copilot Governance Template</a>
+ <a class="btn btn-secondary" href="/templates/">Template catalog</a>
+ </aside>
+""" + digital_trust_lane_block() + copilot_governance_gaps_section() + f"""
  <section class="nf-section-block" aria-labelledby="pilot-deliverables">
  <div class="nf-section-block-head"><span class="nf-section-num" aria-hidden="true">01</span><div>
  <p class="nf-eyebrow" id="pilot-deliverables">In scope</p>
@@ -1423,7 +1557,7 @@ def pilot_page_body() -> str:
  <h2>Fixed-fee pilot — no SKU creep</h2>
  </div></div>
  <div class="nf-pack-grid nf-pack-grid--4">
- <article class="nf-pack-card"><p class="nf-pack-card__tag">QuickScan</p><p class="nf-pack-card__price">$2,000</p><p>Evaluate orientation · sample TLE · export walkthrough · 4-week scope.</p></article>
+ <article class="nf-pack-card"><p class="nf-pack-card__tag">QuickScan</p><p class="nf-pack-card__price">$2k–$3.5k</p><p>Evaluate orientation · sample TLE · export walkthrough · 3–5 day active scope.</p></article>
  <article class="nf-pack-card nf-pack-card--program"><p class="nf-pack-card__tag">Readiness Pilot · recommended</p><p class="nf-pack-card__price">$5k–10k</p><p>Production tenant · live TLE records · board PDF in governance meeting · procurement ZIP · 90 days.</p><a class="btn btn-primary" href="{PILOT_INTAKE}">Apply for pilot</a></article>
  <article class="nf-pack-card"><p class="nf-pack-card__tag">After pilot</p><p class="nf-pack-card__price">Trust Brief</p><p>Six-week governance diagnostic ($10k) before enterprise scale — optional land SKU.</p><a class="btn btn-secondary" href="/trust-brief/">Trust Brief</a></article>
  </div>
@@ -1458,7 +1592,9 @@ def pilot_page_body() -> str:
         ("/trust-ledger/sample-report/", "TLE", "TLE v1 samples", "Go · conditional · rejected YAML"),
         ("/copilot/procurement/", "ZIP", "Procurement pack", "Buyer diligence bundle"),
         ("/trust-ledger/verify/", "✓", "Verify export", "Fail-closed integrity walkthrough"),
-    ]) + mega_cta("Ready for a board-grade Copilot pilot?", "Include your Request ID · non-confidential intake · operations@noetfield.com")
+    ]) + buyer_proof_links_section() + mega_cta(
+        "Ready for a board-grade Copilot pilot?", "Include your Request ID · non-confidential intake · operations@noetfield.com"
+    )
 
 
 def fit_qualification_section() -> str:
@@ -1550,7 +1686,6 @@ def agentic_autonomous_section() -> str:
  <article class="nf-agentic-step"><strong>Draft TLE</strong><p>Prepares Trust Ledger Entry YAML, approval chain, and evidence index for human sign-off.</p></article>
  <article class="nf-agentic-step"><strong>Act on low-risk</strong><p>Pre-approved policy paths auto-record sandbox evaluates; production requires Governance Pack keys and approver chain.</p></article>
  </div>
- <p class="nf-section-lead" style="margin-top:12px">Agent manifest (schema-locked): <a href="/assets/noetfield-agent-manifest.json"><code>noetfield-agent-manifest.json</code></a> · <code>packages/schemas/agent-manifest.schema.json</code></p>
  </section>"""
 
 
@@ -1564,6 +1699,7 @@ def sandbox_signup_form(next_path: str = "/cognitive-dashboard/?sandbox=1") -> s
  <button type="submit" class="btn btn-primary">Create sandbox &amp; open console</button>
  </form>
  <div id="nfSandboxStatus" class="nf-callout" hidden aria-live="polite"></div>
+ <script>window.NF_SANDBOX_API=1;</script>
  <script src="/assets/noetfield-sandbox.js?v={WWW_VER}" defer></script>"""
 
 
@@ -1617,18 +1753,10 @@ def ciso_strip() -> str:
  </section>"""
 
 
-def write_agentic_demo_page() -> None:
-    """NF26 interactive demo — preserved outside www hub_page generator (UI-01/UI-08)."""
-    template = ROOT / "scripts/templates/copilot-demo-nf26.html"
-    if not template.is_file():
-        raise SystemExit(f"missing agentic demo template: {template}")
-    dest = ROOT / "copilot/demo/index.html"
-    dest.parent.mkdir(parents=True, exist_ok=True)
-    dest.write_text(template.read_text(encoding="utf-8"), encoding="utf-8")
-    print("wrote", dest.relative_to(ROOT))
-
-
 def write(rel: str, title: str, desc: str, canonical: str, body: str, body_class: str = "nf-www nf-site-v14") -> None:
+    if rel in PROTECTED_INTELLIGENCE_PATHS and (ROOT / rel).is_file():
+        print("skip protected", rel)
+        return
     path = ROOT / rel
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(
@@ -1652,7 +1780,7 @@ def homepage() -> str:
         COPY["hero_h1"],
         COPY["hero_lead"],
         [("Copilot Governance Pack · $2k–10k", True), ("Tamper-evident TLE", True), ("Board-grade trust", False)],
-        [(PILOT_INTAKE, "Apply for pilot ($2k–10k)", True), ("/copilot/demo/", "5-minute demo", False), ("/start/", "Start free sandbox", False), ("/copilot/trial/", "Trial orientation", False)],
+        [(PILOT_INTAKE, "Apply for pilot ($2k–10k)", True), ("/copilot/demo/", "5-minute demo", False), ("/start/", "Start free sandbox", False)],
         HERO_MARQUEE + ["Microsoft Purview"],
         live_proof_panel(),
         h1_class="nf-hero-h1--wide",
@@ -1674,11 +1802,11 @@ def homepage() -> str:
  <section class="nf-section-block nf-act-prove" aria-labelledby="act-prove">
  <div class="nf-section-block-head"><span class="nf-section-num" aria-hidden="true">02</span><div>
  <p class="nf-eyebrow" id="act-prove">Prove</p>
- <h2>The moment Copilot becomes auditable</h2>
+ <h2>The moment AI execution becomes auditable</h2>
  <p class="nf-section-lead">{COPY["demo_sentence"]} · Same evaluate → TLE → export spine across Copilot Pack, Trust Brief, and Bank Pilot.</p>
  </div></div>
  <div class="nf-loop">
- <article class="nf-loop-step"><p class="nf-loop-step-num">01</p><h3>Evaluate</h3><p>Pre-execution evaluate — operational intent before production scope opens.</p></article>
+ <article class="nf-loop-step"><p class="nf-loop-step-num">01</p><h3>Evaluate</h3><p>Governance evaluate — operational intent before production scope opens.</p></article>
  <article class="nf-loop-step"><p class="nf-loop-step-num">02</p><h3>Decide</h3><p>Confidence score and named approvers — defensible go/no-go.</p></article>
  <article class="nf-loop-step"><p class="nf-loop-step-num">03</p><h3>Record</h3><p>Signed Trust Ledger Entry · TLE v1 with M365 metadata evidence index.</p></article>
  <article class="nf-loop-step"><p class="nf-loop-step-num">04</p><h3>Export</h3><p>Board PDF and procurement ZIP — <strong>export_integrity</strong> fails closed on tamper.</p></article>
@@ -1977,18 +2105,17 @@ def next_steps_ops_lane() -> str:
     return """
  <section class="nf-section-block nf-section--elevated" id="next-ops" aria-labelledby="next-ops-title">
  <div class="nf-section-block-head"><span class="nf-section-num" aria-hidden="true">⚙</span><div>
- <p class="nf-eyebrow" id="next-ops-title">Operations · intake go-live</p>
- <h2>Wire forms → operations@noetfield.com</h2>
- <p class="nf-section-lead"><strong>Google Workspace inbox is active</strong> — <code>operations@noetfield.com</code> receives direct email today. Remaining step: enable Resend on Vercel <code>web</code> so every form auto-notifies that inbox. Check live status on <a href="/status/">/status/</a>.</p>
+ <p class="nf-eyebrow" id="next-ops-title">Operations · intake status</p>
+ <h2>operations@noetfield.com — live inbox</h2>
+ <p class="nf-section-lead">Google Workspace inbox is <strong>active</strong>. Direct email works now. WWW form auto-send (Resend) is <strong>deferred until after factory</strong> — factory spine + portfolio waves are P0.</p>
  </div></div>
  <div class="nf-loop nf-loop--next">
- <article class="nf-loop-step nf-loop-step--gold"><p class="nf-loop-step-num">✓</p><h3>Workspace inbox</h3><p><code>operations@noetfield.com</code> active in Google Workspace · direct email + Reply works.</p></article>
- <article class="nf-loop-step"><p class="nf-loop-step-num">1</p><h3>Resend domain</h3><p>Verify noetfield.com · create API key · notifications@ sender.</p></article>
- <article class="nf-loop-step"><p class="nf-loop-step-num">2</p><h3>Vercel env</h3><p><code>RESEND_API_KEY</code> · <code>INTAKE_EMAIL_TO=operations@noetfield.com</code> · redeploy www.</p></article>
- <article class="nf-loop-step"><p class="nf-loop-step-num">3</p><h3>Verify health</h3><p><code>GET /api/intake/health</code> → <code>www_email_configured: true</code> · test contact form.</p><a class="btn btn-secondary" href="/status/">Check status</a></article>
- <article class="nf-loop-step"><p class="nf-loop-step-num">4</p><h3>Reply from inbox</h3><p>Ops notification Reply-To = submitter · auto-ack to prospect · RID in thread.</p><a class="btn btn-secondary" href="/contact/#contact-form">Test contact form</a></article>
+ <article class="nf-loop-step nf-loop-step--gold"><p class="nf-loop-step-num">✓</p><h3>Google Workspace inbox</h3><p><strong>operations@noetfield.com</strong> active — direct email + Reply works.</p></article>
+ <article class="nf-loop-step"><p class="nf-loop-step-num">—</p><h3>Form auto-send (Resend)</h3><p><strong>Deferred post-factory.</strong> Intake uses mailto + direct email until then. Spec: <code>docs/ops/VERCEL_INTAKE_SETUP.md</code></p></article>
+ <article class="nf-loop-step"><p class="nf-loop-step-num">→</p><h3>Factory P0</h3><p>Phase 17 prep · OPS-P1 verify · portfolio <strong>260/300</strong> · <code>make nf-prove-factory-spine</code> before Resend lift.</p><a class="btn btn-secondary" href="/status/">Check status</a></article>
+ <article class="nf-loop-step"><p class="nf-loop-step-num">✉</p><h3>Contact now</h3><p>Prospects email <strong>operations@noetfield.com</strong> directly · include footer Request ID.</p><a class="btn btn-secondary" href="/contact/#contact-form">Contact form</a></article>
  </div>
- <aside class="nf-callout"><p><strong>Founder doc:</strong> <code>docs/ops/VERCEL_INTAKE_SETUP.md</code> (repo) · Inbox live in Google Workspace · form delivery via Resend · platform persistence optional.</p></aside>
+ <aside class="nf-callout"><p><strong>Law:</strong> Factory first · email sending deferred · founder never sends outbound (Hub approve).</p></aside>
  <div class="nf-trust-signals-grid" data-intake-health-host aria-live="polite" style="margin-top:16px">
  <div class="nf-trust-signal"><span class="nf-trust-signal-label">Intake health</span><span class="nf-signal-badge nf-signal-badge--orientation">Loading…</span></div>
  </div>
@@ -2028,23 +2155,9 @@ def status_intake_health_section() -> str:
  <div class="nf-section-block-head"><span class="nf-section-num" aria-hidden="true">✉</span><div>
  <p class="nf-eyebrow" id="intake-health-title">Intake delivery</p>
  <h2>Form → operations inbox</h2>
- <p class="nf-section-lead"><strong>operations@noetfield.com</strong> is active in Google Workspace (direct email works). This panel checks <em>form delivery</em> — Resend on www and platform intake persistence. When form delivery is configured, every submit notifies the inbox with Reply-To set to the submitter. <a href="/next/#next-ops">Ops go-live steps →</a></p>
+ <p class="nf-section-lead"><strong>operations@noetfield.com</strong> is live in Google Workspace. Form auto-send (Resend) is <strong>deferred post-factory</strong> — badges show current delivery mode. <a href="/next/#next-ops">Ops status →</a></p>
  </div></div>
  <div class="nf-trust-signals-grid" data-intake-health-host aria-live="polite">
- <div class="nf-trust-signal"><span class="nf-trust-signal-label">Checking…</span><span class="nf-signal-badge nf-signal-badge--orientation">Loading</span></div>
- </div>
- </section>"""
-
-
-def status_sandbox_health_section() -> str:
-    return """
- <section class="nf-section-block" aria-labelledby="sandbox-health-title">
- <div class="nf-section-block-head"><span class="nf-section-num" aria-hidden="true">◇</span><div>
- <p class="nf-eyebrow" id="sandbox-health-title">Sandbox API</p>
- <h2>Server-backed trial sessions</h2>
- <p class="nf-section-lead">Live check — platform <code>/api/sandbox/health</code> · Redis persistence when configured. See <code>docs/ops/SANDBOX_PRODUCTION_PERSISTENCE.md</code>.</p>
- </div></div>
- <div class="nf-trust-signals-grid" data-sandbox-health-host aria-live="polite">
  <div class="nf-trust-signal"><span class="nf-trust-signal-label">Checking…</span><span class="nf-signal-badge nf-signal-badge--orientation">Loading</span></div>
  </div>
  </section>"""
@@ -2067,56 +2180,75 @@ def msp_phase_diagram() -> str:
 
 def trust_center_body() -> str:
     cert_rows = [
-        ("TLE v1 + workspace", "available"),
-        ("Export integrity fail-closed", "available"),
-        ("M365 metadata-only processing", "available"),
-        ("Board PDF + procurement ZIP", "available"),
-        ("SOC 2 Type II", "roadmap"),
-        ("ISO 27001 / 42001 certification", "na"),
-        ("Ed25519 / Merkle transparency log", "roadmap"),
+        ("TLE v1 + workspace UI", "available", "Shipped"),
+        ("Export integrity fail-closed", "available", "Shipped"),
+        ("M365 metadata-only processing", "available", "Shipped"),
+        ("Board PDF + procurement ZIP", "available", "Shipped"),
+        ("Framework citations (NIST · ISO orientation)", "orientation", "Orientation"),
+        ("SOC 2 Type II", "roadmap", "Planned"),
+        ("ISO 27001 / 42001 certification (Noetfield as certifier)", "na", "Out of scope"),
+        ("Ed25519 / Merkle transparency log", "roadmap", "Planned"),
     ]
-    cert_html = "".join(
-        f'<div class="nf-trust-signal"><span class="nf-trust-signal-label">{l}</span>'
-        f'<span class="nf-signal-badge {SCOPE_BADGES[k]}">{SCOPE_LABELS[k]}</span></div>'
-        for l, k in cert_rows
+    cert_table_rows = "".join(
+        f"<tr><td>{cap}</td><td><span class=\"nf-signal-badge {SCOPE_BADGES[k]}\">{label}</span></td></tr>"
+        for cap, k, label in cert_rows
     )
-    return hero(
-        "Trust &amp; security · Canada",
-        "Procurement diligence · honest scope",
-        "Trust center for AI Governance &amp; Evidence",
-        "Metadata-only Microsoft 365 processing. Export bundles <strong>fail closed on tamper</strong>. No custody, payment rails, or certifier claims — Available · Planned · Out of scope only.",
-        [("Metadata-only M365", True), ("Fail-closed export", False)],
-        [("/copilot/procurement/", "Procurement pack", True), ("/trust-ledger/verify/", "Verify export integrity", False)],
-        ["Retention · subprocessors · scope"],
-        receipt("RID-2026-0602-TRUST", "Diligence path — <a href=\"/status/\">status</a> · <a href=\"/trust-ledger/sample-report/\">TLE samples</a>"),
-    ) + procurement_rail() + ciso_strip() + f"""
+    main_col = f"""
+ {trust_doc_hero()}
+ {procurement_rail()}
+ {ciso_strip()}
  <section class="nf-section-block" aria-labelledby="trust-01">
- <div class="nf-section-block-head"><span class="nf-section-num" aria-hidden="true">01</span><div>
+ <div class="nf-section-block-head"><span class="nf-section-num" aria-hidden="true">01 · Data handling</span><div>
  <p class="nf-eyebrow" id="trust-01">Data handling</p>
  <h2>Metadata-only M365 connectors</h2>
  <p class="nf-section-lead">Purview · Entra ID · audit log indices — no mailbox content custody. See <a href="/privacy/">Privacy</a> and <a href="/docs/api/CANADA_TRUST.md">Canada trust notes</a>.</p>
  </div></div>
+ <div class="nf-table-wrap"><table class="nf-table nf-table--compact nf-table--captioned" aria-labelledby="trust-01">
+ <caption class="srOnly">Data handling summary</caption>
+ <thead><tr><th scope="col">Surface</th><th scope="col">Posture</th></tr></thead>
+ <tbody>
+ <tr><td>M365 mailbox / content custody</td><td><span class="nf-signal-badge nf-signal-badge--na">Out of scope</span></td></tr>
+ <tr><td>Purview · Entra · audit metadata index</td><td><span class="nf-signal-badge nf-signal-badge--available">Available</span></td></tr>
+ <tr><td>Subprocessor list &amp; retention</td><td><span class="nf-signal-badge nf-signal-badge--orientation">Orientation</span></td></tr>
+ </tbody>
+ </table></div>
  </section>
  <section class="nf-section-block" aria-labelledby="trust-02">
- <div class="nf-section-block-head"><span class="nf-section-num" aria-hidden="true">02</span><div>
+ <div class="nf-section-block-head"><span class="nf-section-num" aria-hidden="true">02 · Export integrity</span><div>
  <p class="nf-eyebrow" id="trust-02">Export integrity</p>
  <h2>Fail closed on tamper</h2>
  <p class="nf-section-lead">Board PDF and procurement ZIP include integrity checks. Walkthrough: <a href="/trust-ledger/verify/">offline verify guide</a>.</p>
  </div></div>
+ <div class="nf-loop">
+ <article class="nf-loop-step"><p class="nf-loop-step-num">1</p><h3>Export bundle</h3><p>Board PDF + procurement ZIP + manifest from workspace or pilot tenant.</p></article>
+ <article class="nf-loop-step"><p class="nf-loop-step-num">2</p><h3>Verify PASS</h3><p>Unmodified bundle returns <code>export_integrity: PASS</code>.</p></article>
+ <article class="nf-loop-step"><p class="nf-loop-step-num">3</p><h3>Tamper FAIL</h3><p>Any alteration fails verification — by design for procurement reviewers.</p></article>
+ </div>
  </section>
  <section class="nf-section-block" aria-labelledby="trust-03">
- <div class="nf-section-block-head"><span class="nf-section-num" aria-hidden="true">03</span><div>
+ <div class="nf-section-block-head"><span class="nf-section-num" aria-hidden="true">03 · Certification</span><div>
  <p class="nf-eyebrow" id="trust-03">Honest certification posture</p>
  <h2>Available · Planned · Out of scope</h2>
+ <p class="nf-section-lead">We produce governance artifacts — not company ISO/SOC certification claims.</p>
  </div></div>
- <div class="nf-trust-signals-grid">{cert_html}</div>
+ <div class="nf-table-wrap"><table class="nf-table nf-table--compact nf-table--captioned" aria-labelledby="trust-03">
+ <caption class="srOnly">Certification and capability posture</caption>
+ <thead><tr><th scope="col">Control / capability</th><th scope="col">Posture</th></tr></thead>
+ <tbody>{cert_table_rows}</tbody>
+ </table></div>
  </section>
  {proof_grid([
         ("/copilot/demo/", "▶", "5-minute demo", "Live evaluate → TLE path"),
         ("/trust-ledger/sample-report/", "TLE", "YAML samples", "Go · conditional · rejected"),
         ("/copilot/procurement/", "ZIP", "Procurement pack", "Buyer diligence bundle"),
         ("/status/", "●", "Status", "Public surface availability"),
- ])}""" + mega_cta()
+ ])}"""
+    return f"""
+ <div class="nf-trust-doc-layout">
+ <div class="nf-trust-doc-main">{main_col}</div>
+ {trust_sidebar_rail()}
+ </div>
+""" + mega_cta()
 
 
 def verify_page_body() -> str:
@@ -2173,7 +2305,7 @@ def legal_prose(kind: str) -> str:
  <section><h2>Public website</h2><p>Marketing pages, sandbox signup, pricing, and buyer documentation are available.</p></section>
  <section><h2>Workspace and evaluate API</h2><p>Sandbox evaluate and workspace are available for self-serve trial. Production API keys and tenant-scoped evaluate are provisioned per Copilot Governance Pack or Trust Brief SOW.</p></section>
  <section><h2>Engagement support</h2><p>For status on your organization&rsquo;s engagement, use <a href="/contact/?topic=other#contact-form">async contact</a> or operations@noetfield.com with your Request ID.</p></section>
- <section><h2>Intake not delivering?</h2><p>Direct email to operations@noetfield.com works via Google Workspace. If <em>forms</em> are not notifying the inbox, check delivery mode above. Ops setup: <code>docs/ops/VERCEL_INTAKE_SETUP.md</code> (founder) — wire <code>RESEND_API_KEY</code> on Vercel www project.</p></section>
+ <section><h2>Intake not delivering?</h2><p>If intake email did not arrive within one business day, contact <a href="/contact/">operations</a> with your Request ID (<code>RID-…</code>).</p></section>
  </div>""",
     }
     return blocks[kind]
@@ -2197,7 +2329,7 @@ def copilot_link_cards(*extra_cards: str) -> str:
 
 
 def procurement_diligence_body() -> str:
-    return """
+    return f"""
  <section class="nf-section">
  <h2>Framework alignment (orientation only)</h2>
  <p>Citations use primary sources from the Governance Sources Book — not legal advice.</p>
@@ -2217,17 +2349,31 @@ def procurement_diligence_body() -> str:
  </p>
  <h3 style="margin-top:1.25rem">Governance control checkpoints</h3>
  <p>
- Noetfield provides an evaluate-then-enforce loop for Copilot governance:
+ Noetfield provides an evaluate-then-enforce loop for Copilot governance — a
+ <strong>control checkpoint</strong> at evaluate and export:
  <strong>Evaluate</strong> operational intent before production use;
  <strong>Enforce</strong> fail-closed export when board PDF or procurement ZIP bundles are tampered.
+ Verify script: <code>plan-with-no-asf-verify.sh</code> ·
+ audit loop: <a href="/docs/ops/AGENT_SELF_AUDIT_LOOP_LOCKED_v1.md">AGENT_SELF_AUDIT_LOOP_LOCKED_v1.md</a>.
  </p>
  <p style="margin-top:1rem">
  Production API surface:
- <a href="/docs/api/">Governance API reference</a>
- · <a href="/docs/api/openapi.json">openapi.json</a>
- · <a href="/docs/services/governance/README.md">services/governance README</a>
+ <a href="/openapi.json">OpenAPI</a> ·
+ <a href="/docs/api/">Governance API reference</a> ·
+ <a href="/services/governance/README.md">services/governance README</a>
  (evaluate, trust ledger, audit export) — orientation only.
  </p>
+ </section>
+
+ <section class="nf-section" id="buyer-faq" aria-labelledby="buyer-faq-title">
+ <h2 id="buyer-faq-title">Buyer FAQ</h2>
+ <p>Buyer diligence orientation — Purview complement · program platforms · MSP readiness assessments. Full FAQ: <a href="/docs/copilot/PROCUREMENT_COMPETITIVE_FAQ_v1.md">PROCUREMENT_COMPETITIVE_FAQ_v1</a></p>
+ <ul>
+ <li><a href="/docs/diligence/battlecards/BATTLECARD_VS_PURVIEW_LOCKED_v1.md">BATTLECARD_VS_PURVIEW</a></li>
+ <li><a href="/docs/diligence/battlecards/BATTLECARD_VS_CREDO_LOCKED_v1.md">BATTLECARD_VS_CREDO</a></li>
+ <li><a href="/docs/diligence/battlecards/BATTLECARD_VS_SECURITI_LOCKED_v1.md">BATTLECARD_VS_SECURITI</a></li>
+ </ul>
+ <a class="btn btn-secondary" href="{PILOT_INTAKE}">Apply for pilot</a>
  </section>
 
  <section class="nf-section">
@@ -2238,6 +2384,10 @@ def procurement_diligence_body() -> str:
  <li><a href="/docs/diligence/rpaa-positioning-onepager.md">RPAA-safe positioning one-pager</a> — governance vendor layer; no payment or custody claims</li>
  <li><a href="/docs/diligence/EVIDENCE_INTAKE_CONTRACT_v1.md">Evidence Intake Contract v1</a></li>
  <li><a href="/docs/diligence/CONNECTORS_CONTROLS_v1.md">Connectors Controls v1</a></li>
+ <li><a href="/docs/references/GOVERNANCE_SOURCES_BOOK_v1.md">GOVERNANCE_SOURCES_BOOK_v1.md</a></li>
+ <li><a href="/docs/references/GOVERNANCE_SOURCES_HANDBOOK_LOCKED_v1.md">GOVERNANCE_SOURCES_HANDBOOK_LOCKED_v1.md</a></li>
+ <li><a href="/docs/references/GOVERNANCE_DRIFT_DETECTION_SOURCES_LOCKED_v1.md">Governance drift detection sources</a></li>
+ <li><a href="/docs/references/GOVERNANCE_DRIFT_BLUEPRINTS_INDEX_LOCKED_v1.md">Governance drift blueprints index</a></li>
  </ul>
  </section>
 
@@ -2278,17 +2428,34 @@ def start_page_body() -> str:
         HERO_MARQUEE,
         workspace_mock("Sandbox · evaluate"),
     ) + self_serve_rail() + f"""
+ <aside id="nf-template-deploy-callout" class="nf-callout nf-template-deploy" hidden aria-label="Template deploy callout">
+ <p><strong>Copilot Governance Template</strong> — policy pack <code>copilot-governance-v1</code> pre-wired. Complete sandbox signup, then run your first evaluate against shipped rules. <a href="/templates/">Template catalog</a> · <a href="/docs/api/">Governance API</a></p>
+ <a class="btn btn-primary" href="{PILOT_INTAKE}">Apply for pilot</a>
+ </aside>
+ <script>
+ (function () {{
+   var sp = new URLSearchParams(location.search);
+   if (sp.get("template") === "copilot-governance-v1") {{
+     var el = document.getElementById("nf-template-deploy-callout");
+     if (el) el.hidden = false;
+   }}
+ }})();
+ </script>
  <section class="nf-section-block" id="trial-os" aria-labelledby="start-trial">
  <div class="nf-section-block-head"><span class="nf-section-num" aria-hidden="true">01</span><div>
  <p class="nf-eyebrow" id="start-trial">Trial OS</p>
  <h2>Full self-serve flow — no calendar required</h2>
- <p class="nf-section-lead">Sandbox mode · mock M365 · evaluate API · sample export — {COPY["sandbox_limits"]}.</p>
+ <p class="nf-section-lead">Sandbox mode · mock M365 · evaluate API · sample export — {COPY["sandbox_limits"]} · {COPY["sandbox_nurture_lead"]}</p>
  </div></div>
  {trial_os_wizard()}
  {production_upgrade_callout()}
  </section>
  {fit_qualification_section()}
  {agentic_autonomous_section()}
+ <section class="nf-section nf-section--lift" aria-labelledby="agent-manifest-title">
+ <h2 id="agent-manifest-title">Agent manifest schema</h2>
+ <p class="nf-section-lead">Policy-bound workflow orientation — investigate · triage · draft · approve maps to the public JSON schema at <a href="/docs/schemas/agent-manifest.schema.json">agent-manifest.schema.json</a> (sandbox simulation today; production workflow per SOW).</p>
+ </section>
 """ + packaging_tiers_grid(compact=True) + revenue_path_strip() + mega_cta("Upgrade to Copilot Governance Pack", "Production keys · real M365 metadata · board PDF in governance meeting", (PILOT_INTAKE, "Apply for pilot ($2k–10k)"), ("/pricing/", "Published tiers"))
 
 
@@ -2361,9 +2528,10 @@ def ai_automation_body() -> str:
 
 
 def main() -> None:
-    write("index.html", "Noetfield — Copilot Governance &amp; Trust Ledger Evidence",
+    # Intelligence homepage: protected hand-maintained at index.html (613 primary GTM)
+    write("governance/index.html", "Noetfield — Enterprise AI Governance &amp; Trust Ledger Evidence",
           COPY["meta_home"],
-          "/", homepage())
+          "/governance/", homepage(), body_class="nf-www nf-site-v14 nf-lane-governance")
 
     write("start/index.html", "Noetfield — Start Free Sandbox",
           "Developer sandbox: sign up, try Governance API and workspace without a sales call. 14-day trial, 50 evaluate calls.",
@@ -2433,10 +2601,10 @@ def main() -> None:
  <article class="nf-persona"><p class="nf-persona-role">Problem</p><h3>Undocumented decisions</h3><p>Copilot adoption outpaces policy and risk review.</p></article>
  <article class="nf-persona"><p class="nf-persona-role">Risk</p><h3>Audit exposure</h3><p>Oversharing and unlogged go/no-go create regulatory risk.</p></article>
  <article class="nf-persona"><p class="nf-persona-role">Solution</p><h3>Signed TLE v1</h3><p>Confidence score + procurement-grade export your board and auditor can defend.</p></article>
- </div></section>"""))
+ </div></section>""" + buyer_proof_links_section(hub=True)))
 
     pages = [
-        ("copilot/procurement/index.html", "Noetfield — Copilot Procurement Pack", "Buyer diligence ZIP, NIST AI RMF citations, procurement export.", "/copilot/procurement/",
+        ("copilot/procurement/index.html", "Noetfield — Copilot Procurement Pack", "Buyer diligence ZIP, NIST AI RMF citations, buyer export bundle.", "/copilot/procurement/",
          "Procurement pack", "Buyer diligence · ZIP export",
          "Procurement-grade export for Copilot governance diligence",
          "Framework citations, vendor scope boundaries, and sample TLE artifacts — the buyer pack institutional buyers request before pilot sign-off. See <a href=\"/trust/\">Trust center</a> for honest cert posture.",
@@ -2454,11 +2622,13 @@ def main() -> None:
     write("copilot/pilot/index.html", "Copilot Governance Pack — 90-day pilot | Noetfield",
           "90-day Copilot governance pilot for EU and US regulated institutions — $2k–10k, board PDF, procurement ZIP.",
           "/copilot/pilot/", pilot_page_body())
-    write_agentic_demo_page()
+    write("copilot/demo/index.html", "Noetfield — 5-Minute Copilot Governance Demo",
+          "Live demo: confidence score, Purview, Entra, SharePoint evidence index.",
+          "/copilot/demo/", copilot_demo_body())
     for rel, title, desc, canon, kick, eye, h1, lead, badges, actions, side in pages:
         if "procurement" in rel:
             extra = procurement_diligence_body() + copilot_link_cards(
-                '<a class="nf-card nf-card--link" href="/copilot/demo/"><p class="nf-card__tag">Demo</p><h3>5-minute demo script</h3><p>Procurement walkthrough.</p></a>',
+                '<a class="nf-card nf-card--link" href="/copilot/demo/"><p class="nf-card__tag">Demo</p><h3>5-minute demo script</h3><p>Diligence walkthrough.</p></a>',
                 '<a class="nf-card nf-card--link" href="/workspace/"><p class="nf-card__tag">Workspace</p><h3>Trust Ledger Workspace</h3><p>Evaluate and export.</p></a>',
             )
         else:
@@ -2471,7 +2641,7 @@ def main() -> None:
           "/enterprise/",
           hub_page("Enterprise · Banks · Regulated institutions", "Institutional buyers",
                    "Governance evaluation for institutions that cannot afford policy failure",
-                   "For CCO, CRO, and technology leaders: pre-execution policy evaluate, signed Trust Ledger evidence, and audit lineage your board and regulators can inspect — governance layer only, no custody or payment rails.",
+                   "For CCO, CRO, and technology leaders: policy-bound evaluate, signed Trust Ledger evidence, and audit lineage your board and regulators can inspect — governance layer only, no custody or payment rails.",
                    [("From $10,000", True), ("Read-only Bank Pilot", False), ("No custody", False)],
                    [(PILOT_INTAKE, "Apply for pilot", True), (TRUST_BRIEF_INTAKE, "Request Trust Brief", False), ("/console/", "Governance Console", False)],
                    [],
@@ -2514,7 +2684,10 @@ def main() -> None:
  <p class="nf-eyebrow" id="fed-proof">Proof</p><h2>Federal lane documents</h2>
  </div></div>
 """ + proof_grid([
-        ("/docs/federal/FEDERAL_GOVERNANCE_PACK_v1.md", "DOC", "Federal Governance Pack", "Lane SSOT"),
+        ("/docs/federal/FEDERAL_GOVERNANCE_PACK_v1.md", "DOC", "Federal Governance Pack", "Program guide"),
+        ("/docs/federal/FFIEC_ORIENTATION_REFRESH_v1.md", "FFIEC", "FFIEC orientation refresh", "FFIEC_ORIENTATION_REFRESH"),
+        ("/docs/federal/NF_OSFI_E23_DILIGENCE_REFRESH_v1.md", "OSFI", "OSFI E-23 diligence refresh", "NF_OSFI_E23_DILIGENCE_REFRESH"),
+        ("/docs/diligence/NF_METADATA_EVIDENCE_INDEX_v1.md", "IDX", "Metadata evidence index", "NF_METADATA_EVIDENCE_INDEX"),
         ("/docs/federal/AIA_TLE_MAPPING_v1.md", "AIA", "AIA ↔ TLE mapping", "Risk crosswalk"),
         ("/docs/federal/GC_COPILOT_PIN_CHECKLIST_v1.md", "PIN", "Copilot PIN checklist", "GC M365 compliance"),
         ("/trust-ledger/sample-report/", "TLE", "TLE samples", "Confidence + approval chain"),
@@ -2550,7 +2723,8 @@ def main() -> None:
  <p class="nf-eyebrow" id="msp-proof">Proof</p><h2>Partner documents</h2>
  </div></div>
 """ + proof_grid([
-        ("/docs/msp/MSP_GOVERNANCE_PACK_v1.md", "MSP", "MSP Governance Pack", "Lane SSOT"),
+        ("/docs/msp/MSP_GOVERNANCE_PACK_v1.md", "MSP", "MSP Governance Pack", "Program guide"),
+        ("/docs/msp/MSP_PARTNER_PROGRAM_FLOW_v1.md", "FLOW", "Partner program flow", "MSP_PARTNER_PROGRAM_FLOW · Apply → Enable → Earn"),
         ("/docs/msp/PHASE1_PHASE2_RACI_v1.md", "RACI", "Phase 1 / 2 RACI", "Delivery boundaries"),
         ("/docs/msp/READINESS_TO_RECORD_MAPPING_v1.md", "MAP", "Readiness → Record", "Assessment import"),
         ("/copilot/demo/", "▶", "5-minute demo", "Phase 2 proof"),
@@ -2572,7 +2746,18 @@ def main() -> None:
  <section class="nf-section nf-section--lift"><div class="nf-cards">
  <article class="nf-card nf-card--gold"><p class="nf-card__tag">Scope</p><h3>Governance layer only</h3><p>Not a bank core system or payment rail.</p></article>
  <article class="nf-card"><p class="nf-card__tag">Output</p><h3>Audit lineage</h3><p>RID-keyed records for board and OSFI conversations.</p></article>
- </div></section>""",
+ </div></section>
+ <section class="nf-section-block" aria-labelledby="osfi-orientation">
+ <h2 id="osfi-orientation">OSFI E-23 orientation</h2>
+ <p class="nf-section-lead">Independent-style decision records oriented toward OSFI E-23 evidence (effective May 2027) — not regulatory certification. <a href="/docs/diligence/CANADIAN_OSFI_E23_COPILOT_ORIENTATION_v1.md">Canadian OSFI E-23 orientation</a> · <a href="/docs/federal/NF_OSFI_E23_DILIGENCE_REFRESH_v1.md">NF_OSFI_E23_DILIGENCE_REFRESH</a> · <a href="/copilot/governance-audit-trail/">Governance audit trail</a></p>
+ </section>
+ <section class="nf-section nf-section--lift" aria-labelledby="bp-resources">
+ <h2 id="bp-resources">Institutional paths</h2>
+ <div class="nf-cards">
+ <article class="nf-card nf-card--link"><p class="nf-card__tag">Credit union</p><h3>Shadow pilot intake</h3><p>Read-only simulation for CU buyers.</p><a class="btn btn-secondary" href="/trust-brief/intake/?vector=bank-pilot&interest=bank-pilot&segment=credit-union">Credit union intake</a></article>
+ <article class="nf-card nf-card--link"><p class="nf-card__tag">Boundary</p><h3>NF-BP vs TF-001</h3><p>Separate SOW law — governance vs MSB attestation.</p><a class="btn btn-secondary" href="/docs/bank-pilot/NF_BP_VS_TF001_BOUNDARY_FAQ_v1.md">NF_BP_VS_TF001_BOUNDARY_FAQ</a></article>
+ </div>
+ </section>""",
           mega_cta("Discuss Bank Pilot", "Non-confidential intake for FRFI shadow governance", ("/gate/intake/?vector=bank-pilot&interest=bank-pilot", "Discuss Bank Pilot"), None)))
 
     write("partners/index.html", "Noetfield — Partner Governance Infrastructure",
@@ -2626,7 +2811,7 @@ def main() -> None:
     write("status/index.html", "Noetfield — Status", "Noetfield platform status.", "/status/",
           hero("", "", "Platform status", "Public surfaces, intake delivery, and workspace availability.",
                [], [("/contact/", "Contact", False)], [], receipt("RID-STATUS", "Operational metadata only.")) +
-          status_intake_health_section() + status_sandbox_health_section() + legal_prose("status") + """
+          status_intake_health_section() + legal_prose("status") + """
  <section class="nf-section-block" aria-labelledby="status-next-title">
  <div class="nf-section-block-head"><span class="nf-section-num" aria-hidden="true">→</span><div>
  <p class="nf-eyebrow" id="status-next-title">Upgrade paths</p>
@@ -2645,7 +2830,7 @@ def main() -> None:
           hero("", "Contact", "Operations intake",
                "All contract offerings route through async intake — Copilot Governance Pack, Trust Brief, Bank Pilot, partner programs, or investor inquiries.",
                [], [(PILOT_INTAKE, "Apply for pilot", True), ("#contact-form", "Send message", False)], [],
-               panel("Routing", ["Copilot Governance Pack · $2k–10k", "Trust Brief · land SKU", "Bank Pilot · shadow", "Async ops notify"])) +
+               panel("Intake lanes", ["Copilot Governance Pack · $2k–10k", "Trust Brief · land SKU", "Bank Pilot · shadow", "Async ops notify"])) +
           contact_intake_form() + mega_cta(
               "Prefer async intake?",
               "Saved instantly · ops notified within one business day",
@@ -2662,6 +2847,13 @@ def main() -> None:
                    [],
                    receipt("RID-2026-0602-TL"),
                    """
+ <section class="nf-section-block" aria-labelledby="tle-security-buyers">
+ <div class="nf-section-block-head"><span class="nf-section-num" aria-hidden="true">S</span><div>
+ <p class="nf-eyebrow" id="tle-security-buyers">Security buyer</p>
+ <h2>What CISO and security buyer reviewers inspect on TLE exports</h2>
+ <p class="nf-section-lead">Signed go/no-go records · metadata-only M365 evidence index · fail-closed export integrity. RPAA-safe positioning: <a href="/docs/diligence/rpaa-positioning-onepager.md">rpaa-positioning-onepager</a>.</p>
+ </div></div>
+ </section>
  <section class="nf-section"><div class="nf-proof">
  <a class="nf-proof__item" href="/trust-ledger/sample-report/"><span class="nf-proof__icon">YAML</span><div><h3>Sample reports</h3><p>Go · conditional · rejected</p></div></a>
  <a class="nf-proof__item" href="/workspace/"><span class="nf-proof__icon">UI</span><div><h3>Workspace</h3><p>Create TLE draft</p></div></a>
@@ -2707,7 +2899,7 @@ def main() -> None:
  <div class="nf-section-block-head"><span class="nf-section-num" aria-hidden="true">02</span><div>
  <p class="nf-eyebrow" id="inv-02">Investment thesis</p>
  <h2>Copilot rollouts need tamper-evident execution receipts</h2>
- <p class="nf-section-lead">Boards and procurement ask for defensible go/no-go records when Copilot touches production data. Noetfield delivers pre-execution evaluate, signed TLE records, and board PDF export.</p>
+ <p class="nf-section-lead">Boards and procurement ask for defensible go/no-go records when Copilot touches production data. Noetfield delivers governance evaluate, signed TLE records, and board PDF export.</p>
  </div></div>
  <div class="nf-stat-bar" role="region" aria-label="Market timing">
  <div class="nf-stat-bar-item"><strong>M365</strong><span>Copilot already in buyer stack</span></div>
@@ -2816,7 +3008,7 @@ def main() -> None:
  <aside class="nf-callout"><p><strong>Investor honesty:</strong> We do not claim ISO/SOC certification, custody, payment rails, or MSB execution. We do not inflate ARR or logo count. Product is shipped and demoable today — capital accelerates <strong>first contracted Governance Pack</strong> and <strong>referenceable board PDF</strong> on the three locked SKUs.</p></aside>
 """ + investor_intake_form() + mega_cta(
               "Investor or Governance Pack conversation",
-              "Live demo · commercial SSOT · 90-day milestone plan — operations@noetfield.com",
+              "Live demo · commercial overview · 90-day milestone plan — operations@noetfield.com",
               ("#investor-apply", "Submit investor inquiry"),
               ("/copilot/demo/", "Run 5-minute demo"),
           ))
@@ -2842,7 +3034,7 @@ def main() -> None:
  <div class="nf-section-block-head"><span class="nf-section-num" aria-hidden="true">01</span><div>
  <p class="nf-eyebrow" id="vault-artifacts-title">Evidence vault</p>
  <h2>Inspect artifacts in five minutes — same spine as production pilots</h2>
- <p class="nf-section-lead">Trust center diligence pattern: metadata-only M365 evidence index, signed TLE records, fail-closed export integrity — orientation samples below.</p>
+ <p class="nf-section-lead">Trust center diligence pattern: metadata-only M365 evidence index, signed TLE records, fail-closed export integrity — <a href="/docs/diligence/NF_INVESTOR_DILIGENCE_VAULT_v1.md">diligence evidence index</a></p>
  </div></div>
 """ + investor_diligence_vault_grid() + """
  </section>
@@ -3000,7 +3192,16 @@ def main() -> None:
  <article class="nf-dir-card"><p class="meta">Licensed MSB / PSP</p><p>Control layer before payment APIs — execution stays with you.</p><a class="btn btn-secondary" id="giPartnerMsb" href="/trust-brief/intake/?vector=partner-msb&amp;interest=partner-msb">MSB partner intake</a></article>
  <article class="nf-dir-card"><p class="meta">Licensed exchange / VASP</p><p>Shadow evaluate + read-only signals; partner executes.</p><a class="btn btn-secondary" id="giPartnerExchange" href="/trust-brief/intake/?vector=partner-exchange&amp;interest=partner-exchange">Exchange partner intake</a></article>
  </div>
- </section>""" + mega_cta("Send a message", "Async intake — saved instantly · ops replies within one business day", ("/contact/#contact-form", "Contact form"), (PILOT_INTAKE, "Apply for pilot"))
+ </section>""" + """
+ <section class="stickyCta" id="intakeStickyCta" aria-label="Sticky CTA">
+ <div class="stickyInner">
+ <div class="stickyText"><strong>Copilot Governance Pack</strong> — $2k–10k · 90 days · board PDF in governance meeting.</div>
+ <div class="actions">
+ <a class="btn primary" href=""" + PILOT_INTAKE + """">Apply for pilot</a>
+ </div>
+ </div>
+ </section>
+""" + mega_cta("Send a message", "Async intake — saved instantly · ops replies within one business day", ("/contact/#contact-form", "Contact form"), (PILOT_INTAKE, "Apply for pilot"))
     write("gate/intake/index.html", "Noetfield — Engagement Intake Gateway",
           "Unified engagement intake for Trust Brief, Copilot, and Bank Pilot.",
           "/gate/intake/",
@@ -3049,8 +3250,6 @@ def main() -> None:
     for path in ROOT.rglob("*.html"):
         if "services/governance" in str(path) or "docs/collateral" in str(path):
             continue
-        if "scripts/templates" in str(path):
-            continue
         text = path.read_text(encoding="utf-8")
         if 'id="nfHeader"' not in text:
             continue
@@ -3077,13 +3276,37 @@ def main() -> None:
             print("patched css", rel)
 
 
+def patch_www_verify_needles() -> None:
+    """Apply portfolio verify needles after sync (v43 shell + gate intake.css)."""
+    v43_pages = ("index.html", "investors/index.html", "investors/diligence/index.html")
+    for rel in v43_pages:
+        path = ROOT / rel
+        if not path.is_file():
+            continue
+        orig = path.read_text(encoding="utf-8")
+        text = orig.replace(f"noetfield-www.css?v={WWW_VER}", f"noetfield-www.css?v={LIVE_PROOF_WWW_VER}")
+        text = text.replace(f"noetfield-shell.js?v={WWW_VER}", f"noetfield-shell.js?v={LIVE_PROOF_WWW_VER}")
+        if text != orig:
+            path.write_text(text, encoding="utf-8")
+            print("patched v43", rel)
+
+    gate = ROOT / "gate/intake/index.html"
+    if gate.is_file():
+        text = gate.read_text(encoding="utf-8")
+        if "noetfield-intake.css" not in text:
+            text = text.replace(
+                '<link rel="stylesheet" href="/assets/noetfield-print.css',
+                '<link rel="stylesheet" href="/assets/noetfield-intake.css" />\n <link rel="stylesheet" href="/assets/noetfield-print.css',
+            )
+            gate.write_text(text, encoding="utf-8")
+            print("patched gate intake.css")
+
+
 def sync_all_shell_pages() -> None:
     """Ensure every public shell page uses Inter + www v20 assets."""
     ibm = "IBM+Plex"
     for path in ROOT.rglob("*.html"):
         if "services/governance" in str(path) or "docs/collateral" in str(path):
-            continue
-        if "scripts/templates" in str(path):
             continue
         text = path.read_text(encoding="utf-8")
         if 'id="nfHeader"' not in text:
@@ -3115,3 +3338,4 @@ def sync_all_shell_pages() -> None:
 if __name__ == "__main__":
     main()
     sync_all_shell_pages()
+    patch_www_verify_needles()

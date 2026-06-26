@@ -4,6 +4,7 @@ from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict, Field
 
+from .policy_loader import load_default_policy_pack
 from .policy_pack import (
     GovernancePolicyPack,
     PolicyDecisionCode,
@@ -43,7 +44,7 @@ class PolicyEvaluator:
     """
 
     def __init__(self, policy_pack: GovernancePolicyPack | None = None) -> None:
-        self.policy_pack = policy_pack or GovernancePolicyPack()
+        self.policy_pack = policy_pack or load_default_policy_pack()
 
     def evaluate(self, policy_input: PolicyInput) -> PolicyEvaluation:
         context = policy_input.context

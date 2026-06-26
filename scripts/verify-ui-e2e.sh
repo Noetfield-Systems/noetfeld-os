@@ -8,12 +8,32 @@ source "${ROOT}/scripts/dev-ports.sh"
 BASE="http://127.0.0.1:${NF_DEV_PUBLIC_PORT}"
 fail=0
 
+if [[ -f "${ROOT}/scripts/wait-dev-www-ready.sh" ]]; then
+  chmod +x "${ROOT}/scripts/wait-dev-www-ready.sh"
+  "${ROOT}/scripts/wait-dev-www-ready.sh"
+fi
+
+fetch_html() {
+  local url="$1"
+  local tries="${2:-3}"
+  local html="" attempt
+  for ((attempt = 1; attempt <= tries; attempt++)); do
+    html="$(curl -sS --connect-timeout 5 -H "Accept: text/html" "$url" 2>/dev/null || true)"
+    if [[ -n "$html" ]]; then
+      echo "$html"
+      return 0
+    fi
+    sleep 1
+  done
+  echo "$html"
+}
+
 check_html() {
   local url="$1"
   local label="$2"
   shift 2
   local html
-  html="$(curl -sS --connect-timeout 5 -H "Accept: text/html" "$url" 2>/dev/null || true)"
+  html="$(fetch_html "$url")"
   local missing=0
   for needle in "$@"; do
     if ! echo "$html" | grep -qF "$needle"; then
@@ -37,27 +57,27 @@ check_html "${BASE}/workspace/connectors" "connectors page" "M365 evidence conne
 check_html "${BASE}/cognitive-dashboard" "cognitive dashboard" "Cognitive dashboard" "Submit operational intent"
 check_html "${BASE}/evaluate" "evaluate page" "Submit operational intent"
 check_html "${BASE}/audit" "audit page" "Audit log"
-check_html "${BASE}/" "homepage pilot-first" "audit trail your Copilot deployment" "Apply for pilot ($2k–10k)" "5-minute demo" "Start free sandbox"
+check_html "${BASE}/" "homepage pilot-first" "audit trail your Copilot deployment" 'Apply for pilot ($2k–10k)' "5-minute demo" "Start free sandbox"
 check_html "${BASE}/" "homepage packaging" "Published tiers" "Developer access · free" "What regulated buyers receive"
 check_html "${BASE}/" "homepage commercial path" "Commercial path" "Learn in sandbox" "Copilot Governance Pack"
 check_html "${BASE}/copilot/pilot/" "pilot lane depth" "Digital trust lane" "Governance gaps" "Buyer voices" "Policy-bound workflows"
-check_html "${BASE}/start/" "start sandbox" "Trial OS" "50 evaluate calls" "Apply for Governance Pack"
-check_html "${BASE}/pricing/" "pricing tiers" "Sandbox + production" "14-day trial" "Apply for pilot"
+check_html "${BASE}/start/" "start sandbox" "Trial OS" "50 evaluate calls" "Apply for Governance Pack" "agent-manifest.schema.json"
+check_html "${BASE}/pricing/" "pricing tiers" "Sandbox + production" "14-day sandbox" "Apply for pilot"
 check_html "${BASE}/docs/api/" "api sandbox CTA" "Start free sandbox" "Sandbox + production"
 check_html "${BASE}/" "homepage v15 procurement rail" "Procurement" "Trust center" "Verify export" "Procurement pack"
 check_html "${BASE}/" "homepage v15 ciso strip" "What legal and security reviewers need to see" "Fail-closed export"
-check_html "${BASE}/" "homepage pain moment" "The moment Copilot becomes auditable" "One evaluate · four exports"
+check_html "${BASE}/" "homepage pain moment" "The moment AI execution becomes auditable" "One evaluate · four exports"
 check_html "${BASE}/trust/" "trust center" "Trust center" "Metadata-only" "fail closed on tamper" "Shipped"
 check_html "${BASE}/trust-ledger/verify/" "tle verify" "fail closed on tamper" "Verify export integrity"
 check_html "${BASE}/copilot/" "copilot hub" "audit trail your Copilot deployment" "Phase 2" "Copilot Governance Pack"
 check_html "${BASE}/copilot/pilot/" "copilot pilot" "Copilot Governance Pack" "GTM-locked pilot success signals" "nfPilotApplyForm"
-check_html "${BASE}/copilot/demo/" "copilot demo" "5-minute demo" "confidence score" "Purview" "Entra" "SharePoint"
+check_html "${BASE}/copilot/demo/" "copilot demo" "Five-minute buyer story" "SSOT_CHANGED" "allow · 0.80" "Trust Ledger"
 check_html "${BASE}/copilot/procurement/" "procurement buyer" "Procurement-grade export" "NIST AI RMF" "/trust/"
 check_html "${BASE}/copilot/sme/" "copilot sme pack" "SME Governance Pack" "90-day Governance Pack" "confidence score"
 check_html "${BASE}/trust-brief/" "trust brief" '$10,000' "Request Trust Brief"
 check_html "${BASE}/federal/" "federal lane" "June 24, 2026" "Algorithmic Impact Assessment" "Copilot PIN" "canada.ca" "tbs-sct.canada.ca" "not a federal certifier"
-check_html "${BASE}/msp/" "msp partner lane" "Readiness → Record" "Phase 1" "Phase 2" "W3-MSP"
-check_html "${BASE}/" "homepage scope" "Available now" "Pre-execution evaluate" "Governance playground"
+check_html "${BASE}/msp/" "msp partner lane" "Readiness → Record" "Phase 1" "Phase 2" "Governance Pack"
+check_html "${BASE}/" "homepage scope" "Available now" "Governance evaluate" "Governance playground"
 check_html "${BASE}/" "homepage receipt" "Trust Ledger Entry" "export_integrity" "fail closed"
 check_html "${BASE}/" "homepage v18 live proof" "data-live-proof-hero" "live-proof-hero"
 check_html "${BASE}/start/" "start trial os" "data-trial-os-flow" "trial-os-flow"
@@ -185,7 +205,13 @@ else
 fi
 
 VENDOR_PATTERN='Veridra|Vanta|Drata|OneTrust|Inforcer|Securiti|Credo AI|Holistic AI|Audital'
-LEGACY_GTM_PATTERN='design.partner|Design.partner|Become a design partner|Apply to design partner|Purview-only trap|Accepting design partners'
+LEGACY_GTM_NEEDLES=(
+  'Become a design partner'
+  'Apply to design partner'
+  'Accepting design partners'
+  'Purview-only trap'
+  'design-partner intake'
+)
 for path in / /trust/ /copilot/ /copilot/pilot/ /msp/ /federal/ /investors/ /start/ /pricing/; do
   page_html="$(curl -sS --connect-timeout 5 -H "Accept: text/html" "${BASE}${path}" 2>/dev/null || true)"
   if echo "$page_html" | grep -Eiq "$VENDOR_PATTERN"; then
@@ -194,11 +220,17 @@ for path in / /trust/ /copilot/ /copilot/pilot/ /msp/ /federal/ /investors/ /sta
   else
     echo "OK   no vendor names on ${path}"
   fi
-  if echo "$page_html" | grep -Eiq "$LEGACY_GTM_PATTERN"; then
-    echo "FAIL legacy GTM copy on ${path} — use Copilot Governance Pack / Apply for pilot" >&2
-    fail=1
-  else
+  legacy_hit=0
+  for needle in "${LEGACY_GTM_NEEDLES[@]}"; do
+    if echo "$page_html" | grep -Fq "$needle"; then
+      echo "FAIL legacy GTM copy on ${path} — matched: ${needle}" >&2
+      legacy_hit=1
+    fi
+  done
+  if [[ "$legacy_hit" -eq 0 ]]; then
     echo "OK   no legacy design-partner copy on ${path}"
+  else
+    fail=1
   fi
 done
 

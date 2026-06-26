@@ -181,6 +181,40 @@ Shipped capabilities mapped to registry indices. Run `python3 scripts/sync-promp
 | ship-procurement-cta-homepage-040 | Homepage procurement verify | `index.html`, `verify-ui-e2e.sh`, `verify-gtm-ops-docs.sh` |
 | ship-cursor-reply-coherence-041 | cursor-reply SHA FAIL gate | `scripts/verify-no-asf-coherence.sh` |
 
+## Portfolio N-P1–N-P8 wave (2026-06-17)
+
+| next_tasks id | Shipped | Evidence |
+|---------------|---------|----------|
+| ship-v16-packaging-www-057 | v16 www packaging | `/start/`, `/pricing/`, `rebuild-www-v6.py` |
+| ship-v16-prompt-pack-058 | v16 prompt pack alignment | WISE/500/inbox docs |
+| ship-v16-verify-e2e-059 | v16 verify needles | `verify-ui-e2e.sh`, `verify-static-www.sh` |
+| ship-pricing-verify-doc-ssot-059 | Packaging docs in verify-doc-ssot | `verify-doc-ssot.sh` |
+| ship-portfolio-np1-pricing-align-060 | Pilot pricing QuickScan alignment | `copilot/pilot/`, `pricing/` |
+| ship-portfolio-np1-funnel-metrics-061 | Sandbox funnel metrics spec | `SANDBOX_FUNNEL_METRICS_SPEC_v1.md` |
+| ship-portfolio-np1-hub-intake-062 | Copilot-governance Hub intake template | `INTAKE_COPILOT_GOVERNANCE_HUB_REPORT_v1.md` |
+| ship-portfolio-np3-wave-complete-063 | Bank Pilot shadow pack 7/7 | `/bank-pilot/` |
+| ship-portfolio-np3-cu-intake-064 | Credit union bank-pilot intake vector | `/bank-pilot/`, gate intake |
+| ship-portfolio-np3-boundary-faq-065 | NF-BP vs TF-001 boundary FAQ | `/bank-pilot/`, `/faq/` |
+| ship-portfolio-np4-msp-flow-066 | MSP partner program flow | `/msp/` |
+| ship-portfolio-np4-gel-tiers-067 | GEL tier specs | `/runtime/` |
+| ship-portfolio-np4-ffiec-068 | FFIEC orientation refresh | `/federal/` |
+| ship-portfolio-np5-runtime-api-069 | Governance Runtime API docs | `/runtime/` |
+| ship-portfolio-np5-template-catalog-070 | Template catalog SSOT | `/templates/` |
+| ship-portfolio-np5-sdk-scaffold-071 | Deploy CI gate + SDK scaffold | `services/governance/` |
+| ship-portfolio-np6-live-proof-072 | Live proof hero label + IA guard | `index.html`, `rebuild-www-v6.py` |
+| ship-portfolio-np6-investor-vault-073 | Investor diligence vault SSOT | `/investors/diligence/` |
+| ship-portfolio-np6-battlecards-074 | Battle cards on procurement | `/copilot/procurement/` |
+| ship-portfolio-np7-osfi-refresh-075 | OSFI E-23 diligence refresh | `/federal/`, `/bank-pilot/` |
+| ship-portfolio-np7-metadata-index-076 | Metadata-only evidence index copy | `rebuild-www-v6.py` |
+| ship-portfolio-np7-sandbox-nurture-077 | Sandbox nurture on /start/ | `/start/` |
+| ship-portfolio-np8-sticky-cta-078 | Pilot apply sticky CTA | gate + trust-brief intake |
+| ship-portfolio-np8-regression-079 | Governance Runtime regression SSOT | `tests/`, verify bundle |
+| ship-agentic-workflow-manifest-058 | Agent manifest on /start/ | `docs/schemas/agent-manifest.schema.json`, `rebuild-www-v6.py` |
+| ship-sandbox-server-side-057 | Server-side sandbox sessions | `governance-console/backend/routes/sandbox.py`, `assets/noetfield-sandbox.js` |
+| ship-procurement-openapi-verify-060 | OpenAPI 200 in gtm-ops verify | `scripts/verify-gtm-ops-docs.sh` |
+| ship-services-governance-readme-openapi-061 | README cites /openapi.json | `services/governance/README.md` |
+| ship-tenth-audit-merge-rule-062 | Tenth-audit manifest template | `ENGINEERING_DONE_MANIFEST.md` |
+
 ## Fifth audit fix (post–PR #42 truth + iter 13)
 
 | Area | Shipped | Evidence |
@@ -226,3 +260,20 @@ Shipped capabilities mapped to registry indices. Run `python3 scripts/sync-promp
 ```bash
 ./scripts/plan-with-no-asf-verify.sh
 ```
+
+## Tenth-audit closeout template (ship-062)
+
+When closing an audit iteration (e.g. PR #48 tenth audit), append a section:
+
+```markdown
+## Nth audit fix (iter M — short label)
+
+| Area | Shipped | Evidence |
+|------|---------|----------|
+| <area> | <one-line outcome> | `<path>` · `<verify command>` |
+```
+
+Rules:
+- Branch name: `audit/iter-N-<slug>` or merge PR with audit tag in ENGINEERING_DONE_MANIFEST
+- Cross-link `os/SHIP_NOW.md` active queue head after each audit closeout
+- Run `python3 scripts/sync-prompt-pack-status.py` before manifest update

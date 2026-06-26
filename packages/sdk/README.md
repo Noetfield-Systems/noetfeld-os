@@ -36,3 +36,15 @@ export = client.audit_export(request_id=result["request_id"])
 ```
 
 Contracts align with `packages/types` and `docs/api/openapi.json`. **No payment or custody APIs** — pre-execution governance only.
+
+## Local governance scaffold
+
+Offline demo aligned to shipped Copilot policy vocabulary:
+
+- **Doc:** [`docs/sdk/NF_SDK_LOCAL_GOVERNANCE_SCAFFOLD_v1.md`](/docs/sdk/NF_SDK_LOCAL_GOVERNANCE_SCAFFOLD_v1.md)
+- **Example:** `packages/sdk/examples/local_governance_scaffold.py`
+
+```bash
+export PYTHONPATH="packages/sdk:packages/types:packages/config:services/governance:..."
+python3 packages/sdk/examples/local_governance_scaffold.py
+```

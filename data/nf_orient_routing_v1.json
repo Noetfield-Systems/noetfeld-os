@@ -1,0 +1,69 @@
+{
+  "schema": "nf-orient-routing-v1",
+  "version": "1.1.0",
+  "saved_at": "2026-06-19",
+  "human": "docs/ops/NF_GAOS_W3_FACTORY_SPINE_LOCKED_v1.md",
+  "law": "ROUTING_CARD.md · orientation manual only — never auto-boot",
+  "session_start_rule": "make nf-onboard — not nf-orient",
+  "commands": {
+    "onboard": "make nf-onboard",
+    "mono_nerve": "python3 scripts/nf_mono_nerve_v1.py --json",
+    "founder_input_sync": "python3 scripts/nf_founder_input_sync_v1.py --json",
+    "session_gate": "python3 scripts/nf_session_gate_run_v1.py --json",
+    "live_surfaces": "python3 scripts/nf_live_surfaces_v1.py --json",
+    "truth_bundle": "python3 scripts/nf_truth_bundle_v1.py --json",
+    "receipt_cascade": "python3 scripts/nf_receipt_cascade_v1.py --json",
+    "gatekeeper": "python3 scripts/nf_gatekeeper_v1.py --json",
+    "orient": "python3 scripts/nf_orient_v1.py --json",
+    "repo_find": "bash scripts/nf-repo-find.sh --repo noetfield"
+  },
+  "daily_ladder": [
+    {"order": 1, "route": "mono_nerve", "skip": "never"},
+    {"order": 2, "route": "founder_input_sync", "skip": "never"},
+    {"order": 3, "route": "session_gate", "skip": "never"},
+    {"order": 4, "route": "live_orient", "skip": "never"},
+    {"order": 5, "route": "routing_card", "skip": "never"},
+    {"order": 6, "route": "stale_guard", "skip": "never"},
+    {"order": 7, "route": "voyage_integrity", "skip": "never"},
+    {"order": 8, "route": "live_surfaces", "skip": "never"},
+    {"order": 9, "route": "receipt_cascade", "skip": "never"},
+    {"order": 10, "route": "gatekeeper", "skip": "optional_until_implement"}
+  ],
+  "receipt_cascade_sources": [
+    {"id": "nf_mono_nerve", "path": "nf-mono-nerve-v1.json", "sina": "nf-mono-nerve-v1.json", "fail_node": "nf_mono_nerve", "ok_field": "ok"},
+    {"id": "nf_founder_disk_sync", "path": "nf-founder-disk-sync-v1.json", "sina": "nf-founder-disk-sync-receipt-v1.json", "fail_node": "nf_founder_input_sync", "ok_field": "ok"},
+    {"id": "nf_session_gate", "path": "nf-session-gate-v1.json", "sina": "nf_session_gate_receipt_v1.json", "fail_node": "nf_session_gate"},
+    {"id": "nf_stale_guard", "path": "nf-stale-guard-v1.json", "fail_node": "nf_stale_guard", "stale_field": "context_stale"},
+    {"id": "nf_voyage_integrity", "path": "nf-voyage-integrity-v1.json", "fail_node": "nf_voyage_integrity", "ok_field": "ok"},
+    {"id": "nf_live_routing", "path": "nf-live-routing-v1.json", "fail_node": "nf_routing_card"},
+    {"id": "nf_live_surfaces", "path": "nf-live-surfaces-v1.json", "sina": "nf-live-surfaces-v1.json", "fail_node": "nf_live_surfaces", "required_line": "product_now_line", "required_line_2": "email_send_defer_line"},
+    {"id": "nf_orient_read_chain", "path": "nf-orient-read-chain-v1.json", "sina": "nf-orient-read-chain-v1.json", "fail_node": "nf_orient_read_chain", "ok_field": "ok"}
+  ],
+  "role_routing": {
+    "noetfield_cloud": {"build": true, "lane": "nf-*", "forbidden_prefix": ["sa-*", "mx-*"]},
+    "noetfield_local": {"build": false, "lane": "docs-only"},
+    "sourcea_worker": {"build": false, "note": "different chat — ~/Desktop/SourceA"}
+  },
+  "orient_read_chain": [
+    "entry/START_HERE_LOCKED_v1.md",
+    "ROUTING_CARD.md",
+    "docs/ops/COMMERCIAL_INBOX_PACKAGING_LOCKED_v1.md",
+    "docs/ops/NF_ANTI_STALENESS_MAXIMUM_FIX_SET_LOCKED_v1.md",
+    "docs/ops/NF_GAOS_W3_FACTORY_SPINE_LOCKED_v1.md",
+    "data/nf_anti_staleness_max_v1.json",
+    "data/nf_mono_nerve_wiring_v1.json",
+    "~/.sina/nf-mono-nerve-v1.json",
+    "~/.sina/commercial-email-send-defer-receipt-v1.json",
+    "~/.sina/agent-live-surfaces-v1.json",
+    "~/.sina/ecosystem-live-nerve-v1.json",
+    "~/.sina/noetfield-operations-inbox-active-v1.json",
+    "~/.sina/agent-workspaces/noetfield_cloud/INBOX.md",
+    "docs/www/NF_UI_BUILD_CHECKLIST_LOCKED_v1.md",
+    "docs/www/NF_WWW_LANGUAGE_LAYERS_LOCKED_v1.md",
+    "docs/ops/NF_FACTORY_ROUND_15_PREP_LOCKED_v1.md",
+    "reports/agent-auto/LIVE-STATUS.md",
+    "os/plan.json",
+    "os/SHIP_NOW.md",
+    "docs/ops/AGENT_READ_LINKS_LOCKED_v1.md"
+  ]
+}

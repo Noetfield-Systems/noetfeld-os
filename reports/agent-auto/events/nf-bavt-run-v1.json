@@ -1,0 +1,20 @@
+{
+  "schema_version": "nf-bavt-run-v1",
+  "generated_at": "2026-06-18T00:25:25Z",
+  "ok": true,
+  "gates": [
+    {
+      "id": "session_gate",
+      "ok": true
+    },
+    {
+      "id": "voyage_integrity",
+      "ok": true
+    },
+    {
+      "id": "stale_guard",
+      "ok": true
+    }
+  ],
+  "strategy": "os/NF_BAVT_STRATEGY.json"
+}

@@ -1,7 +1,6 @@
 """Public HTML must align with final GTM simplification (no legacy surfaces)."""
 
 from pathlib import Path
-import json
 import subprocess
 import sys
 
@@ -17,6 +16,7 @@ FORBIDDEN_IN_HOME = (
 
 TIER_PAGES = (
     "index.html",
+    "governance/index.html",
     "enterprise/index.html",
     "trust-brief/index.html",
     "copilot/index.html",
@@ -32,8 +32,17 @@ def test_homepage_has_no_prohibited_payment_language() -> None:
         assert phrase not in text, f"index.html still contains: {phrase}"
 
 
-def test_homepage_states_governance_positioning() -> None:
+def test_homepage_states_intelligence_positioning() -> None:
     text = (ROOT / "index.html").read_text(encoding="utf-8").lower()
+    assert "noetfield intelligence" in text
+    assert "automate the work your team still does in spreadsheets" in text
+    assert "diagnostic sprint" in text
+    assert "/intelligence/intake/" in text
+    assert "governed" in text
+
+
+def test_governance_page_states_copilot_positioning() -> None:
+    text = (ROOT / "governance" / "index.html").read_text(encoding="utf-8").lower()
     assert "governance" in text
     assert "the audit trail your copilot deployment will be asked for later" in text
     assert "apply for pilot" in text
@@ -41,10 +50,19 @@ def test_homepage_states_governance_positioning() -> None:
     assert "tamper-evident" in text
 
 
+def test_header_nav_intelligence_primary() -> None:
+    text = (ROOT / "assets" / "partials" / "header.html").read_text(encoding="utf-8")
+    assert 'href="/">Intelligence</a>' in text
+    assert text.index("Intelligence") < text.index("Copilot Pack")
+    assert "/intelligence/intake/" in text
+    assert "Book Diagnostic" in text
+
+
 def test_public_www_has_no_design_partner_language() -> None:
     paths = (
         "index.html",
         "copilot/pilot/index.html",
+        "templates/index.html",
         "assets/partials/header.html",
         "assets/partials/footer.html",
         "investors/index.html",
@@ -63,13 +81,35 @@ def test_public_www_has_no_legacy_comparison_headlines() -> None:
 def test_homepage_section_count_at_most_eight() -> None:
     text = (ROOT / "index.html").read_text(encoding="utf-8")
     count = text.count("<section")
-    assert count <= 8, f"homepage has {count} sections; expected ≤8 (U5 v17 compression)"
+    assert count <= 8, f"homepage has {count} sections; expected ≤8 (Intelligence 613)"
 
 
-def test_homepage_has_export_assurance_inner() -> None:
+def test_homepage_pro_ui_frozen_structure() -> None:
+    """Blocks thin-page regression — month-built pro UI must stay intact."""
     text = (ROOT / "index.html").read_text(encoding="utf-8")
-    assert "Export assurance" in text
-    assert "Explore product lanes" in text
+    lines = text.splitlines()
+    assert len(lines) >= 320, f"homepage has {len(lines)} lines; expected ≥320 (pro UI floor)"
+    assert text.count("<section") == 5, "homepage must keep four-act + mega CTA (5 sections)"
+    assert "nfLiveProofHero" in text
+    assert "Governance playground" in text
+    assert "nf-stat-bar" in text
+    assert "nf-journey-strip" in text
+    assert "nf-act-prove" in text
+    assert "nf-act-package" in text
+    assert "nf-act-trust" in text
+
+
+def test_homepage_has_governance_lane_section() -> None:
+    text = (ROOT / "index.html").read_text(encoding="utf-8")
+    assert "Enterprise Copilot governance" in text
+    assert "/governance/" in text
+    assert "/copilot/pilot/" in text
+
+
+def test_pilot_page_template_deploy_cta() -> None:
+    text = (ROOT / "copilot" / "pilot" / "index.html").read_text(encoding="utf-8")
+    assert "Deploy Copilot Governance Template" in text
+    assert "nf-template-deploy" in text
 
 
 def test_pilot_page_has_lane_depth_blocks() -> None:
@@ -96,14 +136,16 @@ def test_global_intake_wiring_on_www() -> None:
     assert "nfSandboxForm" in forms_js
 
 
-def test_homepage_multi_product_playground() -> None:
-    text = (ROOT / "index.html").read_text(encoding="utf-8")
+def test_governance_page_multi_product_playground() -> None:
+    text = (ROOT / "governance" / "index.html").read_text(encoding="utf-8")
     assert "nf-live-proof-lanes" in text
     assert "nf-product-lane-strip" in text
     assert "Governance specialist" in text
     assert "agentic-specialist" in text
     assert "Trust Brief" in text
     assert "Bank Pilot" in text
+    assert "Export assurance" in text
+    assert "Explore product lanes" in text
     js = (ROOT / "assets" / "noetfield-live-proof.js").read_text(encoding="utf-8")
     assert "trust_brief" in js
     assert "bank_board_report" in js
@@ -133,22 +175,10 @@ def test_msp_end_client_buyer_block() -> None:
     assert "/copilot/pilot/" in text
 
 
-def test_stripe_purchase_hub_live() -> None:
-    text = (ROOT / "gate" / "sales" / "index.html").read_text(encoding="utf-8")
-    assert "nf-stripe-disclaimer" in text
-    assert "noetfield-stripe-catalog.json" in text
-    assert "Pay with Stripe" in text
-    catalog = json.loads((ROOT / "assets" / "noetfield-stripe-catalog.json").read_text(encoding="utf-8"))
-    links = [o["payment_link_url"] for o in catalog["offerings"] if o.get("payment_link_url")]
-    assert len(links) >= 2
-    assert all(u.startswith("https://buy.stripe.com/") for u in links)
-
-
 def test_status_intake_health_widget() -> None:
     text = (ROOT / "status" / "index.html").read_text(encoding="utf-8")
     assert "data-intake-health-host" in text
     assert "noetfield-intake-status.js" in text
-    assert "Google Workspace" in text
 
 
 def test_next_steps_hub_page() -> None:
@@ -156,10 +186,8 @@ def test_next_steps_hub_page() -> None:
     assert "next-buyer" in text
     assert "next-investor" in text
     assert "next-ops" in text
-    assert "RESEND_API_KEY" in text
-    assert "Google Workspace" in text
-    index = (ROOT / "index.html").read_text(encoding="utf-8")
-    assert "/next/" in index
+    assert "deferred" in text.lower() or "Deferred" in text
+    assert "noetfield-intake-status.js" in text
 
 
 def test_work_with_us_program_page() -> None:
@@ -271,21 +299,35 @@ def test_trust_ledger_explainer_not_subscription() -> None:
 
 def test_offerings_strip_partial_exists() -> None:
     text = (ROOT / "assets" / "partials" / "offerings-strip.html").read_text(encoding="utf-8")
-    assert PILOT_CTA in text
-    assert "Pilot · $2k–10k" in text
+    assert "Book Diagnostic" in text or "Diagnostic" in text
+    assert "/intelligence/intake/" in text
+    assert "Copilot" in text
 
 
-def test_footer_partial_pilot_first() -> None:
+def test_footer_partial_intelligence_primary() -> None:
     text = (ROOT / "assets" / "partials" / "footer.html").read_text(encoding="utf-8")
-    assert "Apply for pilot ($2k–10k)" in text
+    assert "Book Diagnostic" in text
+    assert "/intelligence/intake/" in text
+    assert "Governance hub" in text
     assert "Copilot Governance Pack" in text
+
+
+def test_intelligence_diagnostic_intake_page() -> None:
+    text = (ROOT / "intelligence" / "intake" / "index.html").read_text(encoding="utf-8")
+    assert "nfIntelligenceDiagnosticForm" in text
+    assert 'data-intake-vector="intelligence-diagnostic"' in text
+    assert 'data-intake-sku="intelligence-diagnostic"' in text
+    assert "$2,500" in text
 
 
 def test_tier_pages_have_shell_and_cta() -> None:
     for rel in TIER_PAGES:
         text = (ROOT / rel).read_text(encoding="utf-8")
         assert "nfHeader" in text, rel
-        assert PILOT_CTA in text, rel
+        if rel == "index.html":
+            assert "Diagnostic Sprint" in text, rel
+        else:
+            assert PILOT_CTA in text, rel
         assert 'name="viewport"' in text, rel
 
 

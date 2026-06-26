@@ -12,7 +12,7 @@
 (function () {
   "use strict";
 
-  var SHELL_VERSION = "2026.06.02.v18";
+  var SHELL_VERSION = "2026.06.24.v19";
   var PARTIALS_BASE = "/assets/partials";
   var RID_KEY = "nf_rid";
 
@@ -304,24 +304,29 @@
     });
   }
 
-  function normalizeFooterCTA() {
-    var cta = document.querySelector("#nfFooter .ctaRow");
-    if (!cta) return;
-
-    var keepPaths = {
-      "/trust-brief/intake": true,
-      "/enterprise": true,
-      "/gate/procurement": true,
-      "/gate": true
-    };
-
-    Array.prototype.slice.call(cta.querySelectorAll("a")).forEach(function (a) {
-      var hrefRaw = (a.getAttribute("href") || "").trim();
-      var p = toInternalPath(hrefRaw);
-      if (!p) return;
-      var n = normPath(p);
-      if (!keepPaths[n]) a.parentNode && a.parentNode.removeChild(a);
+  function isGovernanceLanePath(p) {
+    if (!p || p === "/") return false;
+    if (p === "/intelligence" || p.startsWith("/intelligence/")) return false;
+    var prefixes = [
+      "/governance", "/copilot", "/trust-brief", "/bank-pilot", "/enterprise",
+      "/federal", "/msp", "/ai-automation", "/trust-ledger", "/trust/",
+      "/gate", "/console", "/docs/api"
+    ];
+    return prefixes.some(function (pre) {
+      return p === pre || p.startsWith(pre + "/");
     });
+  }
+
+  function applyBodyLaneClass() {
+    var p = normPath(window.location.pathname);
+    document.body.classList.remove("nf-lane-intelligence", "nf-lane-governance");
+    if (p === "/" || p.startsWith("/intelligence")) {
+      document.body.classList.add("nf-lane-intelligence");
+    } else if (isGovernanceLanePath(p)) {
+      document.body.classList.add("nf-lane-governance");
+    }
+  function normalizeFooterCTA() {
+    /* Intelligence 613: footer CTAs live in footer.html partial — do not strip */
   }
 
   async function loadEcosystem() {
@@ -429,7 +434,6 @@
   }
 
   async function injectOfferingsStrip() {
-    if (document.body.classList.contains("nf-www")) return;
     var header = document.getElementById("nfHeader");
     if (!header || document.querySelector(".nfOfferStrip")) return;
     var mount = document.createElement("div");
@@ -444,9 +448,32 @@
     }
   }
 
+  async function injectLaneRail() {
+    if (!isGovernanceLanePath(normPath(window.location.pathname))) return;
+    if (document.querySelector(".nf-lane-rail")) return;
+    var header = document.getElementById("nfHeader");
+    if (!header) return;
+    var mount = document.createElement("div");
+    mount.id = "nfLaneRailMount";
+    var strip = document.querySelector(".nfOfferStrip");
+    if (strip) {
+      strip.insertAdjacentElement("afterend", mount);
+    } else {
+      header.insertAdjacentElement("afterend", mount);
+    }
+    await injectOne("nfLaneRailMount", "intelligence-rail.html");
+    var inner = mount.querySelector(".nf-lane-rail");
+    if (inner) {
+      mount.replaceWith(inner);
+    } else {
+      mount.remove();
+    }
+  }
+
   async function injectShell() {
     await injectOne("nfHeader", "header.html");
     await injectOfferingsStrip();
+    await injectLaneRail();
     await injectOne("nfFooter", "footer.html");
   }
 
@@ -477,6 +504,7 @@
 
     await injectShell();
 
+    applyBodyLaneClass();
     var rid = getOrCreateRID();
     applyRID(rid);
 

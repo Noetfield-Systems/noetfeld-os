@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Noetfield — product banner (truth)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --ink:#0A0C0D; --panel:#12171A; --line:rgba(255,255,255,.09);
+    --text:#ECEFEE; --muted:#8C938F;
+    --gold:#E8B04B; --gold-dim:rgba(232,176,75,.13);
+    --disp:"Space Grotesk",sans-serif; --body:"Inter",sans-serif; --mono:"JetBrains Mono",monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:#000;color:var(--text);font-family:var(--body)}
+  .stage{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:32px;background:#000}
+  .banner{
+    width:100%;max-width:1280px;aspect-ratio:1280/540;min-height:480px;
+    background:radial-gradient(120% 140% at 12% 0%, #14191B 0%, var(--ink) 55%);
+    border:1px solid var(--line);border-radius:20px;overflow:hidden;position:relative;
+    display:grid;grid-template-columns:1.25fr .95fr;
+  }
+  .banner::before{content:"";position:absolute;inset:0;
+    background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);
+    background-size:46px 46px;opacity:.18;mask-image:radial-gradient(80% 80% at 30% 20%,#000 30%,transparent 75%)}
+  .left{position:relative;padding:48px 44px;display:flex;flex-direction:column;justify-content:center;gap:22px}
+  .mark{display:flex;align-items:center;gap:11px}
+  .seal{width:26px;height:26px;border-radius:50%;border:1.5px solid var(--gold);
+    display:flex;align-items:center;justify-content:center;color:var(--gold);font-family:var(--disp);font-weight:600;font-size:13px}
+  .wordmark{font-family:var(--disp);font-weight:600;font-size:19px;letter-spacing:-.01em}
+  .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+  h1{font-family:var(--disp);font-weight:500;font-size:clamp(30px,3.4vw,46px);line-height:1.04;letter-spacing:-.025em;max-width:15ch}
+  h1 em{font-style:normal;color:var(--gold)}
+  .sub{font-size:clamp(14px,1.15vw,16px);line-height:1.6;color:#C2C8C5;max-width:46ch}
+  .flow{display:flex;flex-wrap:wrap;gap:8px;margin-top:2px}
+  .pill{font-family:var(--mono);font-size:11.5px;letter-spacing:.02em;color:#B9C0BC;
+    border:1px solid var(--line);border-radius:999px;padding:7px 13px;white-space:nowrap}
+  .pill b{color:var(--gold);font-weight:500}
+  .cta{display:flex;align-items:center;gap:14px;margin-top:8px;flex-wrap:wrap}
+  .btn{font-family:var(--body);font-weight:500;font-size:14.5px;text-decoration:none;border-radius:11px;padding:12px 20px}
+  .btn.primary{background:var(--gold);color:#1A1404}
+  .btn.ghost{color:var(--text);border:1px solid var(--line)}
+  .domain{position:absolute;left:44px;bottom:26px;font-family:var(--mono);font-size:12px;color:var(--muted);letter-spacing:.04em}
+  .right{position:relative;padding:40px 40px 40px 8px;display:flex;align-items:center;justify-content:center;flex-direction:column}
+  .receipt{width:100%;max-width:330px;background:var(--panel);border:1px solid var(--line);border-radius:14px}
+  .r-head{display:flex;align-items:center;justify-content:space-between;padding:16px 18px;border-bottom:1px dashed var(--line)}
+  .r-title{font-family:var(--disp);font-weight:500;font-size:14px}
+  .stamp{font-family:var(--mono);font-weight:500;font-size:11px;letter-spacing:.14em;color:var(--gold);
+    border:1.5px solid var(--gold);border-radius:6px;padding:4px 9px;background:var(--gold-dim)}
+  .r-body{padding:16px 18px;display:grid;gap:11px}
+  .row{display:flex;justify-content:space-between;gap:14px;align-items:baseline}
+  .k{font-size:11px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);font-family:var(--mono)}
+  .v{font-family:var(--mono);font-size:12.5px;color:#DCE2DF;text-align:right}
+  .v.flag{color:var(--gold)}
+  .r-foot{padding:13px 18px 18px;border-top:1px dashed var(--line);font-family:var(--mono);font-size:11px;color:var(--muted)}
+  .ex{font-family:var(--mono);font-size:10.5px;color:var(--muted);margin-top:10px;text-align:center}
+  @media (max-width:880px){.banner{grid-template-columns:1fr;aspect-ratio:auto}.domain{position:static;margin:20px 30px 4px}}
+</style>
+</head>
+<body>
+  <div class="stage">
+    <div class="banner">
+      <div class="left">
+        <div class="mark"><span class="seal">N</span><span class="wordmark">Noetfield</span></div>
+        <span class="eyebrow">Governance Execution Layer</span>
+        <h1>Policy before execution. <em>Trust Ledger after.</em></h1>
+        <p class="sub">Evaluate Copilot actions before they publish. Produce signed Trust Ledger Entries and board-ready exports. Non-custodial — no payment rails on Noetfield.</p>
+        <div class="flow">
+          <span class="pill"><b>PROCEED</b> · policy allowed</span>
+          <span class="pill"><b>REVIEW</b> · human required</span>
+          <span class="pill"><b>REJECT</b> · pre-execution veto</span>
+        </div>
+        <div class="cta">
+          <a class="btn primary" href="https://www.noetfield.com/copilot/demo/">5-minute demo</a>
+          <a class="btn ghost" href="https://www.noetfield.com/templates/">Deploy template</a>
+        </div>
+        <span class="domain">www.noetfield.com</span>
+      </div>
+
+      <div class="right">
+        <div class="receipt">
+          <div class="r-head">
+            <span class="r-title">TLE evaluate (sandbox)</span>
+            <span class="stamp">review</span>
+          </div>
+          <div class="r-body">
+            <div class="row"><span class="k">Action</span><span class="v">publish_board_report</span></div>
+            <div class="row"><span class="k">Pack</span><span class="v">copilot-governance-v1</span></div>
+            <div class="row"><span class="k">Rule</span><span class="v">human-review:high-impact</span></div>
+            <div class="row"><span class="k">Decision</span><span class="v flag">REQUIRE_HUMAN_REVIEW</span></div>
+          </div>
+          <div class="r-foot">illustrative — no fabricated hash · see sandbox evaluate</div>
+        </div>
+        <div class="ex">Copilot Governance Pack · $2k–10k · 90 days</div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

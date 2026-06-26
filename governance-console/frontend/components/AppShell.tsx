@@ -69,7 +69,7 @@ export function AppShell({ children, active, title, proofRid }: AppShellProps) {
     <div className={`min-h-screen flex flex-col bg-surface ${proofMode ? "nf-proof-mode" : ""}`}>
       <CommandPalette />
       <header className="sticky top-0 z-50 border-b border-border bg-white/95 backdrop-blur">
-        <div className="mx-auto flex max-w-[1600px] items-center justify-between gap-3 px-4 py-2.5 sm:px-6">
+        <div className="mx-auto flex max-w-content items-center justify-between gap-3 px-4 py-2.5 sm:px-6">
           <Link href="/cognitive-dashboard" className="flex shrink-0 items-center gap-2 hover:opacity-90">
             <div>
               <p className="text-base font-bold tracking-tight text-text">Noetfield</p>
@@ -104,7 +104,7 @@ export function AppShell({ children, active, title, proofRid }: AppShellProps) {
         </div>
       </header>
 
-      <div className="mx-auto flex w-full max-w-[1600px] flex-1">
+      <div className="mx-auto flex w-full max-w-content flex-1">
         <nav
           className="hidden w-52 shrink-0 border-r border-border bg-white/80 p-4 lg:block"
           aria-label="Primary"

@@ -71,6 +71,7 @@ warn_unused_ignores = true
 warn_return_any = true
 
 [tool.pytest.ini_options]
+asyncio_default_fixture_loop_scope = "function"
 testpaths = ["tests"]
 pythonpath = [
   "packages/types",

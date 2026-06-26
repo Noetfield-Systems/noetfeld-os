@@ -11,7 +11,7 @@ from sqlalchemy.orm import Session
 
 from db.bootstrap import init_schema, migrate_audit_logs_to_events, migrate_dev_schema_patches, seed_pilot_evidence
 from db.session import SessionLocal, engine
-from routes import audit, connectors, evaluate, evidence, tle
+from routes import audit, connectors, evaluate, evidence, sandbox, tle
 
 load_dotenv()
 
@@ -56,6 +56,7 @@ app.include_router(audit.router)
 app.include_router(evidence.router)
 app.include_router(connectors.router)
 app.include_router(tle.router)
+app.include_router(sandbox.router)
 
 
 _health_cache: tuple[float, dict[str, str]] | None = None

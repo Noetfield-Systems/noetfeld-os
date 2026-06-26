@@ -1,0 +1,32 @@
+---
+description: Bounded ship bundle — PLAN WITH NO ASF + ingest + SKILL-007
+globs:
+  - os/**
+  - docs/ops/plans/**
+  - "**/*"
+alwaysApply: true
+---
+
+# Noetfield — ship bundle
+
+**Conflict law:** [SKILL-007](../skills/SKILL-007-auto-conflict-resolution.md) · R-007/R-008/R-011 win over ship workflow.
+
+## Triggers
+
+- **`PLAN WITH NO ASF`** — pick via `make pick-wise` or `make pick-no-asf-plan`; read GTM_NEXT / SHIP_NOW
+- **`implement`** — required before disk edits (founder order)
+
+## Flow
+
+0. SKILL-007 — without `implement`, stop after propose and **ASK**
+1. Present ≤3 tasks from live queue ([LIVE-STATUS.md](../../reports/agent-auto/LIVE-STATUS.md))
+2. After `implement`: one prompt or ≤3 Tier-A GTM tasks · branch `cursor/<slug>-37f0`
+3. Verify: `make plan-with-no-asf-verify` · `make verify-gtm` · `make verify-agent-scope`
+4. Sync status · [ingest YAML](noetfield-ingest-yaml.mdc) · **ASK** next move
+
+## Ingest vs idle
+
+| Ingest after ship | Required — does not block |
+| Wait for next Prompt OS order mid-bundle | Forbidden |
+
+Never self-start from `plan.json` alone. Never edit SourceA or SinaPromptOS.

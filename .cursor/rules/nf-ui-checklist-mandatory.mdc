@@ -1,0 +1,41 @@
+---
+description: Mandatory UI build checklist — www, forms, apps (machine gate)
+globs:
+  - "**/*.html"
+  - "**/*.tsx"
+  - "**/*.jsx"
+  - "**/rebuild-www-v6.py"
+  - "**/noetfield-www.css"
+  - "**/noetfield-shell.css"
+  - "**/governance-console/**"
+  - "**/intake/**"
+alwaysApply: true
+---
+
+# NF UI checklist — mandatory (no exceptions)
+
+**Before any UI, form, www, or app surface change:**
+
+1. Read `docs/www/NF_UI_BUILD_CHECKLIST_LOCKED_v1.md`
+2. Read `docs/www/NF_WWW_LANGUAGE_LAYERS_LOCKED_v1.md`
+3. Read `docs/DESIGN_REFERENCE_GOALS_LOCKED_v1.md` (R1–R8 minimum)
+
+**After edits — fail-closed:**
+
+```bash
+bash scripts/verify-ui-build-checklist.sh
+```
+
+## Language law (client-facing)
+
+- **No invitation copy** — no design partner, scarcity invites, “join us” funnels
+- **No founder jargon** on public www — W3, Lane SSOT, nurture SSOT, SourceA, REGISTRY.json, `docs/ops/` links
+- Show system as **sample / sandbox / demo** only — not ASF factory process
+
+## Build law
+
+- Marketing hubs: `python3 scripts/rebuild-www-v6.py` only
+- Three contract SKUs only on www
+- Stable CTAs: Apply for pilot · Start sandbox · Request Trust Brief
+
+**Do not ship UI if `verify-ui-build-checklist` fails.**

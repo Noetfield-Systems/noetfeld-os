@@ -1,0 +1,126 @@
+{
+  "board_snippet": {
+    "bullets": [
+      "SSOT change triggers automatic context invalidation (governance latency fix).",
+      "Re-brief queue routes agency agents through middleware evaluate API.",
+      "Board PDF exports TLE + evidence index \u2014 no payment rails or execution."
+    ],
+    "confidence_score": 0.8,
+    "decision": "allow",
+    "executive_summary": "Policy v3.2 published; 2 stale evaluations invalidated; fresh evaluate \u2192 allow with signed receipt.",
+    "generated_at": "2026-06-15T06:01:07.338973+00:00",
+    "title": "Copilot Governance \u2014 board digest (demo excerpt)"
+  },
+  "demo": "noetfield-ssot-governance-vertical",
+  "evaluate_result": {
+    "conditions": [
+      "External systems may proceed only under your institution's execution authority."
+    ],
+    "confidence_score": 0.8,
+    "context": "Copilot rollout to production M365 tenant \u2014 re-briefed after policy v3.2 publish",
+    "decision": "allow",
+    "policy_version": "3.2",
+    "reason": [
+      "Production Copilot rollout requires v3.2 evidence index and approver chain.",
+      "Intent within default policy tolerance for shadow evaluation."
+    ],
+    "rid": "RID-SSOT-DEMO-0601",
+    "risk_score": 20
+  },
+  "middleware": {
+    "evaluate_endpoint": "POST /api/demo/evaluate",
+    "note": "Agency agents call Noetfield as gate + ledger \u2014 not the execution layer.",
+    "ssot_endpoint": "POST /api/demo/ssot-change"
+  },
+  "policy_after": {
+    "effective_at": "2026-06-02T00:00:00Z",
+    "policy_id": "copilot-acceptable-use",
+    "rules_summary": [
+      "Guest access blocked for production Copilot scope (pilot-only exception removed)",
+      "Board PDF publish requires named human approver sign-off",
+      "All pending evaluations on v3.1 must re-brief within 24 hours of publish"
+    ],
+    "ssot_hash": "sha256:f6e5d4c3b2a1prod",
+    "supersedes": "3.1",
+    "title": "Copilot Acceptable Use Policy",
+    "version": "3.2"
+  },
+  "policy_before": {
+    "effective_at": "2026-01-15T00:00:00Z",
+    "policy_id": "copilot-acceptable-use",
+    "rules_summary": [
+      "Guest access permitted in pilot tenants with Purview DLP labels applied",
+      "Production rollout requires security team sign-off",
+      "Board materials may use Copilot draft with manual review"
+    ],
+    "ssot_hash": "sha256:a1b2c3d4e5f6pilot",
+    "title": "Copilot Acceptable Use Policy",
+    "version": "3.1"
+  },
+  "re_brief_queue": [
+    {
+      "action": "copilot_rollout",
+      "briefing_status": "queued",
+      "reason": "Re-brief required against Copilot Acceptable Use v3.2",
+      "required_policy_version": "3.2",
+      "rid": "RID-A1B2C3D4-001"
+    },
+    {
+      "action": "guest_sharing",
+      "briefing_status": "queued",
+      "reason": "Re-brief required against Copilot Acceptable Use v3.2",
+      "required_policy_version": "3.2",
+      "rid": "RID-E5F6G7H8-002"
+    }
+  ],
+  "ssot_event": {
+    "event": "SSOT_CHANGED",
+    "from_version": "3.1",
+    "invalidated": [
+      {
+        "action": "copilot_rollout",
+        "prior_policy_version": "3.1",
+        "reason": "SSOT_CHANGED \u2014 policy v3.2 supersedes v3.1",
+        "rid": "RID-A1B2C3D4-001",
+        "status": "invalidated"
+      },
+      {
+        "action": "guest_sharing",
+        "prior_policy_version": "3.1",
+        "reason": "SSOT_CHANGED \u2014 policy v3.2 supersedes v3.1",
+        "rid": "RID-E5F6G7H8-002",
+        "status": "invalidated"
+      }
+    ],
+    "invalidated_count": 2,
+    "occurred_at": "2026-06-15T06:01:07.338829+00:00",
+    "policy_id": "copilot-acceptable-use",
+    "re_brief_queue": [
+      {
+        "action": "copilot_rollout",
+        "briefing_status": "queued",
+        "reason": "Re-brief required against Copilot Acceptable Use v3.2",
+        "required_policy_version": "3.2",
+        "rid": "RID-A1B2C3D4-001"
+      },
+      {
+        "action": "guest_sharing",
+        "briefing_status": "queued",
+        "reason": "Re-brief required against Copilot Acceptable Use v3.2",
+        "required_policy_version": "3.2",
+        "rid": "RID-E5F6G7H8-002"
+      }
+    ],
+    "to_version": "3.2"
+  },
+  "status": "ready_for_demo",
+  "tle_receipt": {
+    "confidence_score": "0.8",
+    "decision": "allow",
+    "evidence_index": "purview \u00b7 entra \u00b7 audit",
+    "export_integrity": "PASS \u00b7 fail closed on tamper",
+    "policy_version": "3.2",
+    "rid": "RID-SSOT-DEMO-0601",
+    "tle_id": "TLE-OT-DEMO-0601"
+  }
+}

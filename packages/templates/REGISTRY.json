@@ -1,0 +1,25 @@
+{
+  "version": "1.0.0",
+  "templates": [
+    {
+      "template_id": "copilot-governance",
+      "title": "Copilot Governance Template",
+      "description": "Deploy pre-execution Copilot governance — policy pack, workflow, intake vector.",
+      "policy_pack": "copilot-governance-v1",
+      "workflow": "copilot-readiness-v1",
+      "intake_vector": "copilot-governance",
+      "deploy_cta": "/trust-brief/intake/?interest=pilot&vector=copilot-governance",
+      "status": "active"
+    },
+    {
+      "template_id": "osfi-e23-bank",
+      "title": "OSFI E-23 Bank Shadow Template",
+      "description": "Bank Pilot shadow lane — governance evaluate without execution rights.",
+      "policy_pack": "bank-pilot-v1",
+      "workflow": "copilot-readiness-v1",
+      "intake_vector": "bank-pilot",
+      "deploy_cta": "/trust-brief/intake/?interest=pilot&vector=bank-pilot",
+      "status": "stub"
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+---
+description: NF-GAOS authority stack, scope, self-audit pointers
+globs:
+  - "**/*"
+alwaysApply: true
+---
+
+# Noetfield — authority stack
+
+```text
+ASF → Mac Law mirror → Noetfield SSOT → machines → execution (never authority)
+```
+
+**Chat is never SSOT.** Run `make nf-onboard` first.
+
+## Scope (Noetfield only)
+
+- Product: `noetfield.com` / this repo — governance, www, nf-* queue
+- **Never:** TrustField, VIRLUX, SourceA edits, SinaPromptOS code, mx/sa queues
+- Boundaries: [PROJECT_BOUNDARIES_LOCKED.md](../../PROJECT_BOUNDARIES_LOCKED.md)
+
+## Self-audit
+
+Follow [docs/ops/AGENT_SELF_AUDIT_LOOP_LOCKED_v1.md](../../docs/ops/AGENT_SELF_AUDIT_LOOP_LOCKED_v1.md) · skills SKILL-001–008 as needed.
+
+## Memory + incidents
+
+- [.cursor/agent-memory/MEMORY_LOCKED.yaml](../agent-memory/MEMORY_LOCKED.yaml) — R-001–R-011
+- [.cursor/incidents/REGISTRY.md](../incidents/REGISTRY.md)
+
+## Deep read (when task needs it)
+
+- [docs/DOC_UNIFIED_INDEX_LOCKED_v1.md](../../docs/DOC_UNIFIED_INDEX_LOCKED_v1.md)
+- [docs/ops/AGENT_READ_LINKS_LOCKED_v1.md](../../docs/ops/AGENT_READ_LINKS_LOCKED_v1.md) § Cloud ship

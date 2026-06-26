@@ -1,0 +1,15 @@
+governance:
+  policy_pack: copilot-governance-v1
+  budget:
+    max_cost_usd: 5.00
+  approval:
+    human_required: true
+  pii:
+    deny: true
+  audit:
+    enabled: true
+    retain_days: 365
+  memory:
+    encrypted: true
+  legal:
+    strict: true

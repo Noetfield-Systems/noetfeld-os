@@ -1,0 +1,33 @@
+{
+  "schema_version": "nf-live-surfaces-v1",
+  "generated_at": "2026-06-20T01:28:16Z",
+  "agent_id": "noetfield_cloud",
+  "plane": "noetfield_cloud",
+  "product_now_line": "no pending next_tasks",
+  "portfolio_now_line": "portfolio 260/300 done",
+  "email_send_defer_line": "email-defer \u00b7 ON \u00b7 main=5/5 \u00b7 sites=RED \u00b7 email=AFTER_MAIN \u00b7 lift=NO",
+  "defer_active": true,
+  "w3_send_ready": false,
+  "w3_email_send_deferred": true,
+  "commercial_blockers": [
+    "factory_now",
+    "w3_critic_circle",
+    "w3_email_send_defer",
+    "w3_output_clean",
+    "w3_rrl",
+    "w3_send_ready"
+  ],
+  "advisory_line": "advisory \u00b7 idle \u00b7 SourceA Sina read \u2192 Noetfield compile \u2192 TrustField send",
+  "portfolio_parent_at": "2026-06-20T00:29:44Z",
+  "mono_nerve_ok": true,
+  "operations_inbox": "ACTIVE",
+  "gate_ok": true,
+  "context_stale": false,
+  "voyage_ok": true,
+  "pending_task": null,
+  "git_sha": "ec54f94",
+  "routing_pending": null,
+  "quote_rule": "Quote product_now_line AND email_send_defer_line \u2014 not chat memory",
+  "heal": null,
+  "surfaces_ok": true
+}

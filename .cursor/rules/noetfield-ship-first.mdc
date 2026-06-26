@@ -1,30 +1,9 @@
 ---
-description: ASF ship rule — two different things (ingest vs waiting for next order)
-globs:
-  - "**/*"
+description: MOVED — see nf-ship-bundle.mdc
+globs: []
+alwaysApply: false
 ---
 
-# Noetfield — Bounded ship bundle (ASF ingest; not AUTO-RUN)
+# MOVED
 
-**Conflict law:** Subordinate to [noetfield-rule-conflict-resolution.mdc](noetfield-rule-conflict-resolution.mdc), R-007/R-008, and **R-011** (no Cursor AUTO-RUN). Bounded ship applies **only after** founder gives an explicit session order (e.g. `PLAN WITH NO ASF iter N implement`). Never self-start edits from `plan.json` alone.
-
-## Two different things
-
-| What it is | Blocks shipping? |
-|------------|------------------|
-| **Ingest** — send your answer to the system (YAML footer + inbox / `ingest-inbox.sh` / `cursor-reply-latest.txt`) | **No** — required reporting **after** you ship |
-| **Waiting for the next order** — stop after one task until Prompt OS / M8 / dispatch sends another prompt | **Yes** — ASF said **not** to do this |
-
-## What you must do
-
-1. **Within an approved ship session** (founder ordered), continue P0 → P1 from [os/plan.json](../../os/plan.json) · [os/SHIP_NOW.md](../../os/SHIP_NOW.md) — do not idle mid-bundle.
-2. **Without founder order:** propose next tasks → **ASK** (SKILL-006/007) — do not ship.
-3. **Do not** stop mid-bundle until verify + PR — but **do** ASK before starting the next bundle.
-4. **Do** send every completed session to the system via **ingest** (see [noetfield-ingest-yaml.mdc](noetfield-ingest-yaml.mdc)).
-5. **Do not** edit or weaken **Sina Prompt OS** code — Noetfield repo only.
-
-**“Don’t block progress”** = do not wait for the next order. **Not** = skip ingest.
-
-## Boundaries
-
-[PROJECT_BOUNDARIES_LOCKED.md](../../PROJECT_BOUNDARIES_LOCKED.md)
+Ship bundle law: [nf-ship-bundle.mdc](nf-ship-bundle.mdc) · [ROUTING_CARD.md](../../ROUTING_CARD.md)

@@ -1,0 +1,123 @@
+/* SSOT governance vertical demo — Copilot policy change flow */
+
+.nf-ssot-demo {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.nf-ssot-demo__rail {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  list-style: none;
+  padding: 0;
+  margin: 0 0 0.5rem;
+}
+
+.nf-ssot-demo__step {
+  font-size: 0.8125rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+  border: 1px solid var(--border, rgba(255, 255, 255, 0.12));
+  color: var(--muted, #6b7280);
+}
+
+.nf-ssot-demo__step.is-active {
+  border-color: var(--gold, #c9a227);
+  color: var(--text, #e8eaef);
+  background: rgba(201, 162, 39, 0.08);
+}
+
+.nf-ssot-demo__step.is-done {
+  color: var(--text, #e8eaef);
+  opacity: 0.85;
+}
+
+.nf-ssot-demo__grid {
+  display: grid;
+  gap: 1rem;
+}
+
+@media (min-width: 900px) {
+  .nf-ssot-demo__grid--split {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.nf-ssot-policy {
+  padding: 1rem 1.1rem;
+  border-radius: 12px;
+  border: 1px solid var(--border, rgba(255, 255, 255, 0.1));
+  background: rgba(0, 0, 0, 0.15);
+}
+
+.nf-ssot-policy h4 {
+  margin: 0 0 0.5rem;
+  font-size: 0.9375rem;
+}
+
+.nf-ssot-policy ul {
+  margin: 0;
+  padding-left: 1.1rem;
+  font-size: 0.875rem;
+  color: var(--muted, #9ca3af);
+}
+
+.nf-ssot-policy--new {
+  border-color: rgba(201, 162, 39, 0.35);
+}
+
+.nf-ssot-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.8125rem;
+}
+
+.nf-ssot-table th,
+.nf-ssot-table td {
+  text-align: left;
+  padding: 0.45rem 0.5rem;
+  border-bottom: 1px solid var(--border, rgba(255, 255, 255, 0.08));
+}
+
+.nf-ssot-event {
+  font-family: var(--font-mono, "JetBrains Mono", monospace);
+  font-size: 0.8125rem;
+}
+
+.nf-ssot-panel {
+  padding: 1rem 1.1rem;
+  border-radius: 12px;
+  border: 1px solid var(--border, rgba(255, 255, 255, 0.1));
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.nf-ssot-panel h3 {
+  margin: 0 0 0.35rem;
+  font-size: 1rem;
+}
+
+.nf-ssot-panel p.muted {
+  margin: 0 0 0.75rem;
+  font-size: 0.875rem;
+}
+
+.nf-ssot-curl {
+  overflow-x: auto;
+  font-size: 0.75rem;
+  padding: 0.75rem;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid var(--border, rgba(255, 255, 255, 0.08));
+}
+
+.nf-ssot-demo__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.nf-ssot-receipt-host {
+  min-height: 220px;
+}

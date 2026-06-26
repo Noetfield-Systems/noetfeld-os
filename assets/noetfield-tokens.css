@@ -1,8 +1,20 @@
-/* Noetfield design tokens v5 — institutional enterprise (full redesign)
+/* Noetfield design tokens v14 — light-first institutional (www default via nf-site-v14)
+   Legacy dark tokens retained for non-www surfaces; www overrides in noetfield-v14-light.css
    Fonts: preconnect + stylesheet in page HEAD (rebuild-www-v6.py) — not @import. */
 
 :root {
-  /* Color */
+  /* v14 light institutional (canonical for public www) */
+  --v14-bg: #f4f5f8;
+  --v14-bg-alt: #ffffff;
+  --v14-text: #0f1117;
+  --v14-muted: #4a5060;
+  --v14-muted-2: #6b7280;
+  --v14-line: #e2e5ec;
+  --v14-gold: #8a6b1f;
+  --v14-gold-bright: #a68428;
+  --v14-ok: #0d7a4a;
+
+  /* Legacy dark shell (overridden on body.nf-site-v14) */
   --bg0: #07070b;
   --bg1: #0b0b14;
   --panel: rgba(255, 255, 255, 0.055);

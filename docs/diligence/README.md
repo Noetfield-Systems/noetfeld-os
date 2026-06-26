@@ -14,6 +14,13 @@
 | Sample audit export (redacted) | [sample-audit-export.redacted.json](./sample-audit-export.redacted.json) |
 | OpenAPI (filtered, institutional) | [../api/openapi.json](../api/openapi.json) · live `/openapi.json` on platform |
 | RPAA-safe positioning | [rpaa-positioning-onepager.md](./rpaa-positioning-onepager.md) |
+| **Competitive landscape (sales)** | [COMPETITIVE_LANDSCAPE_LOCKED_v1.md](./COMPETITIVE_LANDSCAPE_LOCKED_v1.md) |
+| Battle card vs Purview | [battlecards/BATTLECARD_VS_PURVIEW_LOCKED_v1.md](./battlecards/BATTLECARD_VS_PURVIEW_LOCKED_v1.md) |
+| Battle card vs Credo | [battlecards/BATTLECARD_VS_CREDO_LOCKED_v1.md](./battlecards/BATTLECARD_VS_CREDO_LOCKED_v1.md) |
+| Battle card vs Securiti | [battlecards/BATTLECARD_VS_SECURITI_LOCKED_v1.md](./battlecards/BATTLECARD_VS_SECURITI_LOCKED_v1.md) |
+| Canadian OSFI E-23 orientation | [CANADIAN_OSFI_E23_COPILOT_ORIENTATION_v1.md](./CANADIAN_OSFI_E23_COPILOT_ORIENTATION_v1.md) |
+| Proof case (redacted) | [PROOF_CASE_COPILOT_EVALUATE_TLE_v1.md](./PROOF_CASE_COPILOT_EVALUATE_TLE_v1.md) |
+| Procurement competitive FAQ | [../copilot/PROCUREMENT_COMPETITIVE_FAQ_v1.md](../copilot/PROCUREMENT_COMPETITIVE_FAQ_v1.md) |
 | Print / board PDF styles | [../../assets/noetfield-print.css](../../assets/noetfield-print.css) · [../collateral/](../collateral/) |
 | MSB partner templates | [../../ops/templates/msb/](../../ops/templates/msb/) |
 | E-23 vendor evidence API | `GET /api/v1/governance/vendor-evidence` |

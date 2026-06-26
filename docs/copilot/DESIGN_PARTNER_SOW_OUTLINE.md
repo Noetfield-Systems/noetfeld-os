@@ -47,6 +47,7 @@ Noetfield provides the **AI Governance & Evidence layer** for a Microsoft 365 Co
 
 ## Artifacts to attach
 
+- `docs/copilot/NF_RD_DESIGN_PARTNER_LOI_TEMPLATE_v1.md` (LOI before full SOW)
 - `docs/copilot/PROCUREMENT_ONE_PAGER.md`
 - `docs/copilot/DESIGN_PARTNER_PIPELINE_v1.md` (internal ops name — public SKU: Copilot Governance Pack)
 - Sample TLE: `/trust-ledger/sample-report/`

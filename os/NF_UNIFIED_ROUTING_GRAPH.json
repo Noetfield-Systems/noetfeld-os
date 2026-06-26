@@ -1,0 +1,165 @@
+{
+  "schema_version": "nf-unified-routing-graph-v1",
+  "locked_at": "2026-06-17",
+  "one_sentence": "Noetfield agent nodes — role boot, live truth, ship queue, verify, scope, ecosystem bridge.",
+  "authority": {
+    "nf_gaos": "docs/ops/NF_GAOS_W0_LOCKED_v1.md",
+    "start_here": "entry/START_HERE_LOCKED_v1.md",
+    "routing_card": "ROUTING_CARD.md",
+    "boundaries": "PROJECT_BOUNDARIES_LOCKED.md",
+    "ecosystem_routing": "SourceA/brain-os/system/WORKER_ASSIGNMENT_AND_CHAT_ROUTING_LOCKED_v1.md",
+    "mono_graph": "SinaaiMonoRepo/os/UNIFIED_NODE_ROUTING_GRAPH.json"
+  },
+  "trigger_phrases": [
+    "NF ONBOARD",
+    "nf-onboard",
+    "NF UNIFIED ROUTING",
+    "nf-unified-routing"
+  ],
+  "pipelines": {
+    "NF_ONBOARD": {
+      "entry": "make nf-onboard",
+      "scope": "Cloud product lane session boot",
+      "steps": [
+        "nf_session_gate_run_v1.py",
+        "nf-live-orient-v1.sh",
+        "nf_routing_card.sh",
+        "nf_stale_guard_v1.py"
+      ]
+    },
+    "NF_LIVE_ORIENT": {
+      "entry": "make nf-live-orient",
+      "scope": "Refresh LIVE-STATUS and events JSON",
+      "output": "reports/agent-auto/LIVE-STATUS.md"
+    },
+    "NF_SHIP": {
+      "entry": "make pick-wise",
+      "scope": "Bounded implement after founder order",
+      "verify": "scripts/plan-with-no-asf-verify.sh"
+    }
+  },
+  "nodes": [
+    {
+      "id": "NF0_AUTHORITY",
+      "layer": "law",
+      "label": "Noetfield SSOT stack",
+      "reads": [
+        "PROJECT_BOUNDARIES_LOCKED.md",
+        "PRODUCT_TRUTH.md",
+        "os/LOCKED_REFERENCE_INDEX.md"
+      ],
+      "forbidden": ["infer law from runtime", "treat chat as SSOT"]
+    },
+    {
+      "id": "NF1_ENTRY",
+      "layer": "entry",
+      "label": "Role picker + routing card",
+      "reads": ["entry/START_HERE_LOCKED_v1.md", "ROUTING_CARD.md"],
+      "parent": "NF0_AUTHORITY"
+    },
+    {
+      "id": "NF2_GATE",
+      "layer": "control",
+      "label": "Session gate",
+      "runs": ["scripts/nf_session_gate_run_v1.py"],
+      "writes": ["reports/agent-auto/events/nf-session-gate-v1.json"],
+      "parent": "NF1_ENTRY"
+    },
+    {
+      "id": "NF3_LIVE",
+      "layer": "live",
+      "label": "Live orientation",
+      "runs": ["scripts/nf-live-orient-v1.sh"],
+      "writes": ["reports/agent-auto/LIVE-STATUS.md"],
+      "parent": "NF2_GATE"
+    },
+    {
+      "id": "NF4_QUEUES",
+      "layer": "control",
+      "label": "Ship queues",
+      "reads": ["os/plan.json", "docs/ops/plans/no-asf/GTM_NEXT.md", "os/plan-library/noetfield-1000/REGISTRY.json"],
+      "parent": "NF3_LIVE"
+    },
+    {
+      "id": "NF5_SHIP",
+      "layer": "factory",
+      "label": "Active ship mandate",
+      "reads": ["os/SHIP_NOW.md"],
+      "parent": "NF4_QUEUES"
+    },
+    {
+      "id": "NF6_VERIFY",
+      "layer": "verify",
+      "label": "Verify bundle",
+      "runs": ["scripts/plan-with-no-asf-verify.sh", "scripts/verify-gtm.sh", "scripts/verify-agent-scope.sh"],
+      "parent": "NF5_SHIP"
+    },
+    {
+      "id": "NF7_SCOPE",
+      "layer": "law",
+      "label": "Scope + memory + incidents",
+      "reads": [".cursor/agent-memory/MEMORY_LOCKED.yaml", ".cursor/incidents/REGISTRY.md"],
+      "parent": "NF0_AUTHORITY"
+    },
+    {
+      "id": "NF8_COMMERCIAL",
+      "layer": "agentic",
+      "label": "Hub outreach lane",
+      "reads": ["docs/ops/AGENTIC_COMMERCIAL_HANDOFF_v1.md"],
+      "forbidden": ["default disk ship for outreach-026"],
+      "parent": "NF0_AUTHORITY"
+    },
+    {
+      "id": "NF9_ECOSYSTEM",
+      "layer": "bridge",
+      "label": "SourceA + Mono read-only bridge",
+      "reads": ["docs/ops/AGENT_READ_LINKS_LOCKED_v1.md"],
+      "optional": ["ops/private/sourceA/"],
+      "parent": "NF0_AUTHORITY"
+    },
+    {
+      "id": "NF10_PANEL",
+      "layer": "live",
+      "label": "Routing Panel integration",
+      "runs": ["scripts/nf-panel-export-v1.sh"],
+      "reads": ["http://127.0.0.1:8780/api/panel/noetfield"],
+      "note": "Mono :8780 Noetfield tab — W2 live",
+      "parent": "NF9_ECOSYSTEM"
+    }
+  ],
+  "edges": [
+    { "from": "NF0_AUTHORITY", "to": "NF1_ENTRY", "type": "boot_first" },
+    { "from": "NF1_ENTRY", "to": "NF2_GATE", "type": "never_skip" },
+    { "from": "NF2_GATE", "to": "NF3_LIVE", "type": "sequence" },
+    { "from": "NF3_LIVE", "to": "NF4_QUEUES", "type": "informs" },
+    { "from": "NF4_QUEUES", "to": "NF5_SHIP", "type": "pick_one" },
+    { "from": "NF5_SHIP", "to": "NF6_VERIFY", "type": "closeout" },
+    { "from": "NF0_AUTHORITY", "to": "NF7_SCOPE", "type": "guards" },
+    { "from": "NF9_ECOSYSTEM", "to": "NF10_PANEL", "type": "optional_w2" }
+  ],
+  "routing_ladder": [
+    { "question": "Which workspace?", "read": "entry/START_HERE_LOCKED_v1.md" },
+    { "question": "Daily boot?", "run": "make nf-onboard" },
+    { "question": "Live snapshot?", "run": "make nf-live-orient" },
+    { "question": "Full graph?", "run": "bash scripts/nf-unified-routing.sh --json" },
+    { "question": "Pick GTM task?", "run": "make pick-wise" },
+    { "question": "Gate receipt?", "run": "python3 scripts/nf_session_gate_run_v1.py --json" },
+    { "question": "Ecosystem Worker law?", "read": "SourceA/brain-os/system/WORKER_ASSIGNMENT_AND_CHAT_ROUTING_LOCKED_v1.md" },
+    { "question": "Mono big picture?", "run": "bash SinaaiMonoRepo/scripts/unified-routing.sh --json" }
+  ],
+  "repo_profiles": {
+    "noetfield_cloud": {
+      "path": ".",
+      "agent_id": "noetfield_cloud",
+      "queue_prefix": "nf-",
+      "boot": ["make nf-onboard"],
+      "build_allowed": true
+    },
+    "noetfield_local": {
+      "path": "../Noetfield-All-Documents",
+      "agent_id": "noetfield_local",
+      "boot": ["make nf-onboard-local"],
+      "build_allowed": false
+    }
+  }
+}

@@ -10,6 +10,7 @@ governance-console/
 governance/
 services/
 docs/*.md
+docs/mockups/
 docs/ops/
 docs/platform/
 docs/strategy/

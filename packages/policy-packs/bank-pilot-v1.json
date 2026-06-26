@@ -1,0 +1,56 @@
+{
+  "policy_id": "bank-pilot-v1",
+  "version": "1.0.0",
+  "title": "Bank Pilot — Shadow governance lane",
+  "description": "Read-only governance simulation for FRFI pilots. No execution rights. OSFI E-23 adjacency.",
+  "tenant_scope": "pilot",
+  "pack_type": "bank-pilot",
+  "controls": [
+    "confidence:min-threshold",
+    "human-review:high-impact",
+    "autonomy:no-silent-publication",
+    "inspectors:bounded-execution",
+    "bank:shadow-only"
+  ],
+  "evidence_requirements": [
+    "model_inventory_export",
+    "third_party_ai_register",
+    "audit_log_retention_policy"
+  ],
+  "effective_from": "2026-06-17",
+  "status": "active",
+  "metadata": {
+    "vector": "bank-pilot",
+    "lane": "A",
+    "template_id": "osfi-e23-bank",
+    "runtime": {
+      "minimum_confidence": 0.80,
+      "inspector_execution_limit": 2,
+      "high_impact_actions": [
+        "approve_workflow",
+        "execute_inspector_action",
+        "publish_report",
+        "export_audit_package"
+      ],
+      "blocked_autonomous_actions": [
+        "publish_report",
+        "export_audit_package",
+        "approve_workflow",
+        "execute_payment",
+        "initiate_payment"
+      ],
+      "forbidden_financial_actions": [
+        "submit_payment_intent",
+        "initiate_payment",
+        "execute_payment",
+        "route_settlement",
+        "settlement_orchestration",
+        "execute_transfer",
+        "custody_move",
+        "fx_execution",
+        "corridor_route",
+        "treasury_route"
+      ]
+    }
+  }
+}

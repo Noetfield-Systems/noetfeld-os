@@ -172,12 +172,14 @@ body.nf-www.nf-site-v14 #nfHeader .brand .name {
 
 /* Primary nav */
 body.nf-www.nf-site-v14 #nfHeader .menu {
-  gap: 8px;
+  gap: 16px;
 }
 
 body.nf-www.nf-site-v14 #nfHeader .menuPrimary {
-  gap: 2px;
-  justify-content: center;
+  gap: 6px;
+  justify-content: flex-end;
+  flex: 1 1 auto;
+  margin-right: 4px;
 }
 
 body.nf-www.nf-site-v14 #nfHeader .menuPrimary a {

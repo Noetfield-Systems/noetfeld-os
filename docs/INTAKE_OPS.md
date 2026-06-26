@@ -2,7 +2,11 @@
 
 **Inbox:** operations@noetfield.com (canonical — [packages/config/noetfield_config/intake.py](../packages/config/noetfield_config/intake.py))
 
-**Google Workspace:** Inbox is **active** (2026-06-03). Direct email and Reply-from-inbox work. Form auto-notify is a separate layer — see go-live below.
+**Google Workspace (2026-06-18):** `operations@noetfield.com` is **active** — prospects can email directly; founder/ops can Reply from the inbox.
+
+**Form auto-send (Resend):** **DEFERRED post-factory** — do not prioritize before factory spine + portfolio waves. Spec when ready: [VERCEL_INTAKE_SETUP.md](./ops/VERCEL_INTAKE_SETUP.md).
+
+## Platform wiring
 
 ## Platform + www wiring
 
@@ -28,7 +32,7 @@
 1. **Form submit** → email lands in `operations@noetfield.com` with **Reply-To: submitter@…**
 2. **Hit Reply** in Gmail/Outlook — your response goes directly to the prospect
 3. **Templates:** [ops/templates/msb/INTAKE_RESPONSE_TEMPLATES.md](../ops/templates/msb/INTAKE_RESPONSE_TEMPLATES.md) — copy to `ops/private/msb/` via `./scripts/market-entry-bootstrap.sh`
-4. **Direct email** to operations@ still works — same inbox if Google Workspace is configured
+4. **Direct email** to operations@ works now — Google Workspace inbox active (2026-06-18)
 
 Templates for replies: copy [ops/templates/msb/INTAKE_RESPONSE_TEMPLATES.md](../ops/templates/msb/INTAKE_RESPONSE_TEMPLATES.md) to `ops/private/msb/` via `./scripts/market-entry-bootstrap.sh`.
 

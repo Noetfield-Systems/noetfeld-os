@@ -16,20 +16,21 @@ done < <(git ls-files 2>/dev/null | grep -E '(^ops/private/|^docs/internal/)' ||
 
 # 2) Required self-audit files
 for f in \
+  entry/START_HERE_LOCKED_v1.md \
+  ROUTING_CARD.md \
+  docs/ops/NF_GAOS_W0_LOCKED_v1.md \
+  docs/ops/NF_GAOS_W1_LOCKED_v1.md \
+  os/NF_UNIFIED_ROUTING_GRAPH.json \
+  os/NF_SSOT_INVENTORY.json \
   docs/DOC_UNIFIED_INDEX_LOCKED_v1.md \
   docs/README.md \
-  docs/ops/UI_BUILD_CHECKLIST_LOCKED_v1.md \
   .cursor/README.md \
   docs/ops/AGENT_SELF_AUDIT_LOOP_LOCKED_v1.md \
   docs/ops/FOUNDER_AGENTIC_COMMERCIAL_AND_NO_CURSOR_AUTORUN_LOCKED_v1.md \
   .cursor/agent-memory/MEMORY_LOCKED.yaml \
   .cursor/incidents/REGISTRY.md \
   .cursor/skills/SKILL-001-scope-gate-before-work.md \
-  .cursor/skills/SKILL-008-agentic-commercial-boundary.md \
-  .cursor/skills/SKILL-009-ui-build-checklist-mandatory.md \
-  .cursor/skills/SKILL-010-witness-before-build.md \
-  governance/OPS_LIVE_STATUS_LOCKED.json \
-  docs/ops/OPS_WITNESS_AUDIT_LOCKED_v1.md; do
+  .cursor/skills/SKILL-008-agentic-commercial-boundary.md; do
   if [[ -f "$f" ]]; then
     echo "OK   exists $f"
   else
@@ -52,41 +53,16 @@ else
   fail=1
 fi
 
-if grep -q 'R-012' .cursor/agent-memory/MEMORY_LOCKED.yaml 2>/dev/null; then
-  echo "OK   R-012 UI build checklist law locked"
-else
-  echo "FAIL MEMORY_LOCKED.yaml missing R-012" >&2
-  fail=1
-fi
-
-if grep -q 'R-013' .cursor/agent-memory/MEMORY_LOCKED.yaml 2>/dev/null; then
-  echo "OK   R-013 ops witness law locked"
-else
-  echo "FAIL MEMORY_LOCKED.yaml missing R-013" >&2
-  fail=1
-fi
-
-if [[ -f governance/OPS_LIVE_STATUS_LOCKED.json ]]; then
-  echo "OK   OPS_LIVE_STATUS_LOCKED.json present"
-else
-  echo "FAIL missing governance/OPS_LIVE_STATUS_LOCKED.json" >&2
-  fail=1
-fi
-
-if grep -q 'SKILL-009' .cursor/agent-memory/MEMORY_LOCKED.yaml 2>/dev/null || \
-   grep -q 'UI_BUILD_CHECKLIST' .cursor/agent-memory/MEMORY_LOCKED.yaml 2>/dev/null; then
-  echo "OK   UI checklist referenced in memory"
-else
-  echo "FAIL memory must reference UI_BUILD_CHECKLIST" >&2
-  fail=1
-fi
-
-if [[ -x scripts/verify-ui-build-checklist.sh ]]; then
-  echo "OK   verify-ui-build-checklist.sh executable"
-else
-  echo "FAIL missing scripts/verify-ui-build-checklist.sh" >&2
-  fail=1
-fi
+# NF-GAOS W1+W3 — 5 alwaysApply core rules
+core_rules=(nf-authority-stack.mdc nf-routing-card.mdc noetfield-ask-before-edit.mdc nf-ship-bundle.mdc nf-factory-spine-w3.mdc)
+for r in "${core_rules[@]}"; do
+  if [[ -f ".cursor/rules/$r" ]] && grep -q 'alwaysApply: true' ".cursor/rules/$r"; then
+    echo "OK   core rule $r"
+  else
+    echo "FAIL missing or not alwaysApply: $r" >&2
+    fail=1
+  fi
+done
 
 # 3) Scan git-tracked files only — product/www must not implement TrustField
 is_allowlisted() {

@@ -8,12 +8,20 @@ from datetime import datetime
 from typing import Literal
 from uuid import UUID
 
+from pathlib import Path
+
 from fastapi import APIRouter, Depends, HTTPException, Request
 from pydantic import BaseModel, ConfigDict, Field
 
 from noetfield_config import CANONICAL_INTAKE_EMAIL, COMPLIANCE_REMEDIATION_TIP, get_settings
 from noetfield_events import EventType, build_event
-from noetfield_governance.golden_edge_v3 import GoldenEdgeEvaluateRequest, GoldenEdgeV3Engine
+from noetfield_governance.gel_adapter import GelAdapter
+from noetfield_governance.governance_config import config_policy_version_hash, load_governance_config
+from noetfield_governance.golden_edge_v3 import (
+    AgentLoopDecision,
+    GoldenEdgeEvaluateRequest,
+    GoldenEdgeV3Engine,
+)
 from noetfield_governance.governance_rid import generate_rid, normalize_rid
 from noetfield_governance.governance_webhooks import GovernanceWebhookDispatcher
 from noetfield_governance.governance_pilot_limits import check_governance_pilot_rate_limit
@@ -28,6 +36,21 @@ from noetfield_signals import SignalIngestionPipeline
 from noetfield_types import Actor, ActorType
 
 logger = logging.getLogger("noetfield.governance.v1")
+
+_REPO_ROOT = Path(__file__).resolve().parents[3]
+_DEFAULT_GOV_CONFIG = _REPO_ROOT / "docs" / "spec" / "samples" / "governance-copilot-v1.yaml"
+
+
+def _resolve_governance_config_hash(payload: dict[str, object]) -> str | None:
+    config_path = payload.get("governance_config_path")
+    path = Path(str(config_path)) if config_path else _DEFAULT_GOV_CONFIG
+    if not path.is_file():
+        return None
+    try:
+        return config_policy_version_hash(load_governance_config(path))
+    except (OSError, ValueError):
+        return None
+
 
 router = APIRouter(prefix="/api/v1/governance", tags=["governance-v1"])
 
@@ -87,6 +110,10 @@ class GovernanceEvaluateV1Response(BaseModel):
     reason_code: str
     policy_refs: list[str] = Field(default_factory=list)
     obligations: list[str] = Field(default_factory=list)
+    policy_version_hash: str | None = None
+    config_policy_version_hash: str | None = None
+    ledger_event_id: str | None = None
+    gel_lane: str | None = None
     non_psp_boundary: str = (
         "Noetfield does not execute payments, hold custody, or operate as a PSP/MSB."
     )
@@ -162,6 +189,8 @@ async def governance_evaluate_v1(
     except ValueError as exc:
         raise HTTPException(status_code=400, detail=str(exc)) from exc
 
+    config_hash = _resolve_governance_config_hash(body.payload)
+
     ge_request = GoldenEdgeEvaluateRequest(
         tenant_id=body.tenant_id,
         organization_id=body.organization_id,
@@ -173,7 +202,27 @@ async def governance_evaluate_v1(
         confidence=body.confidence,
         payload={**body.payload, "governance_mode": body.mode, "request_id": rid},
     )
+    gel_lane: str | None = None
+    if body.payload.get("use_gel_adapter") or body.payload.get("lane") == "gel":
+        gel = GelAdapter()
+        gel_result = gel.evaluate_sync(
+            tenant_id=str(body.tenant_id),
+            applicant_id=body.actor_id,
+            request_id=rid,
+            input_payload=dict(body.payload),
+        )
+        if gel_result is not None:
+            gel_lane = gel_result.platform_decision
+
     result = await deps.engine.evaluate(ge_request)
+    if gel_lane == "REJECT" and result.decision.value != "REJECT":
+        result = result.model_copy(
+            update={
+                "decision": AgentLoopDecision.REJECT,
+                "allowed": False,
+                "reason": "GEL credit lane declined action",
+            }
+        )
     await _publish_evaluate_events(deps, body, result, rid)
 
     if result.decision.value == "REJECT":
@@ -209,6 +258,10 @@ async def governance_evaluate_v1(
         reason_code=result.reason_code,
         policy_refs=result.policy_refs,
         obligations=result.obligations,
+        policy_version_hash=result.policy_version_hash,
+        config_policy_version_hash=config_hash,
+        ledger_event_id=result.ledger_event_id,
+        gel_lane=gel_lane,
     )
 
 
