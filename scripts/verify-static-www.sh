@@ -121,7 +121,10 @@ check_file "next steps hub" next/index.html \
   'noetfield-intake-status.js' 'Apply for pilot' 'Enterprise standard'
 
 check_file "vercel intake API" vercel.json \
-  'api/public/chat'
+  '/api/health'
+
+check_file "www chat handler" api/public/chat/index.js \
+  'www-local' 'operations@noetfield.com'
 
 check_file "www intake serverless" api/intake.js \
   'sendIntakeEmails' 'operations@noetfield.com'

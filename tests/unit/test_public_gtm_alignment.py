@@ -128,7 +128,8 @@ def test_global_intake_wiring_on_www() -> None:
     investors = (ROOT / "investors" / "index.html").read_text(encoding="utf-8")
     assert "nfInvestorForm" in investors
     vercel = (ROOT / "vercel.json").read_text(encoding="utf-8")
-    assert "api/public/chat" in vercel
+    assert "/api/health" in vercel
+    assert (ROOT / "api" / "public" / "chat" / "index.js").is_file()
     assert (ROOT / "api" / "intake.js").is_file()
     intake_api = (ROOT / "api" / "intake.js").read_text(encoding="utf-8")
     assert "sendIntakeEmails" in intake_api

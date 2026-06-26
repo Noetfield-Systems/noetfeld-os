@@ -1,25 +1,39 @@
-/** GET /api/public/chat/health — www stub until platform spine is fully live. */
+/** GET /api/public/chat/health — platform proxy when live; www-local FAQ otherwise. */
 
 module.exports = async function handler(req, res) {
   res.setHeader("Access-Control-Allow-Origin", "*");
   if (req.method !== "GET") {
     return res.status(405).json({ detail: "Method not allowed" });
   }
+
   const platformBase = (process.env.PLATFORM_API_BASE || "https://platform.noetfield.com").replace(/\/$/, "");
   try {
     const r = await fetch(platformBase + "/api/public/chat/health", {
       headers: { Accept: "application/json" },
     });
-    const body = await r.json().catch(function () {
-      return { ok: false, detail: "invalid_json" };
-    });
-    return res.status(r.status).json(body);
+    if (r.ok) {
+      const body = await r.json().catch(function () {
+        return {};
+      });
+      return res.status(200).json({
+        ok: true,
+        mode: "platform-proxy",
+        platform_base: platformBase,
+        ...body,
+      });
+    }
   } catch (_) {
-    return res.status(200).json({
-      ok: false,
-      mode: "www-stub",
-      detail: "platform spine unreachable — chat disabled on institutional www",
-      platform_base: platformBase,
-    });
+    /* www-local spine */
   }
+
+  return res.status(200).json({
+    ok: true,
+    mode: "www-local",
+    enabled: true,
+    configured: true,
+    provider: "rule-based",
+    active_provider: "www-local",
+    detail: "Institutional FAQ assistant on www (LLM proxy when platform spine is live)",
+    platform_reachable: false,
+  });
 };

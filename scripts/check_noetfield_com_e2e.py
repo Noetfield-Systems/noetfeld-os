@@ -164,8 +164,66 @@ def main() -> int:
         else:
             print("FAIL intake not fully configured (auto-heal-www gate)", file=sys.stderr)
             fail += 1
+        if intake.get("platform_reachable") is False:
+            print("OK   intake platform_reachable=false (www-owned spine until DNS live)")
+        elif intake.get("platform_reachable") is True:
+            print("OK   intake platform_reachable=true (platform proxy)")
+        else:
+            print("FAIL intake platform_reachable missing", file=sys.stderr)
+            fail += 1
     except json.JSONDecodeError:
         print("FAIL intake health not JSON", file=sys.stderr)
+        fail += 1
+
+    chat_code, chat_body = fetch(f"{BASE}/api/public/chat/health")
+    if 200 <= chat_code < 300:
+        try:
+            chat = json.loads(chat_body)
+            if chat.get("ok") is True and chat.get("mode") in ("www-local", "platform-proxy"):
+                print(f"OK   chat health mode={chat.get('mode')}")
+            else:
+                print(f"FAIL chat health bad contract: {chat_body[:200]}", file=sys.stderr)
+                fail += 1
+        except json.JSONDecodeError:
+            print("FAIL chat health not JSON", file=sys.stderr)
+            fail += 1
+    else:
+        print(f"FAIL /api/public/chat/health ({chat_code})", file=sys.stderr)
+        fail += 1
+
+    chat_post = json.dumps({"message": "What is Noetfield?", "session_id": "e2e-smoke"}).encode()
+    chat_post_code, chat_post_body = fetch(
+        f"{BASE}/api/public/chat", method="POST", data=chat_post
+    )
+    if 200 <= chat_post_code < 300:
+        try:
+            reply = json.loads(chat_post_body).get("reply", "")
+            if reply and "governance" in reply.lower():
+                print("OK   POST /api/public/chat FAQ reply")
+            else:
+                print(f"FAIL chat reply unexpected: {chat_post_body[:200]}", file=sys.stderr)
+                fail += 1
+        except json.JSONDecodeError:
+            print("FAIL chat POST not JSON", file=sys.stderr)
+            fail += 1
+    else:
+        print(f"FAIL POST /api/public/chat ({chat_post_code})", file=sys.stderr)
+        fail += 1
+
+    eco_code, eco_body = fetch(f"{BASE}/api/ecosystem/public")
+    if 200 <= eco_code < 300:
+        try:
+            eco = json.loads(eco_body)
+            base = eco.get("chat_api_base", "MISSING")
+            if base in ("", BASE, BASE + "/"):
+                print("OK   ecosystem chat_api_base same-origin")
+            else:
+                print(f"WARN ecosystem chat_api_base={base!r} (expected same-origin until platform DNS)")
+        except json.JSONDecodeError:
+            print("FAIL ecosystem/public not JSON", file=sys.stderr)
+            fail += 1
+    else:
+        print(f"FAIL /api/ecosystem/public ({eco_code})", file=sys.stderr)
         fail += 1
 
     eval_payload = json.dumps(
@@ -188,15 +246,23 @@ def main() -> int:
         print(f"FAIL POST /evaluate ({code}): {eval_body[:200]}", file=sys.stderr)
         fail += 1
 
-    for host, note in (
-        ("https://platform.noetfield.com/health", "platform spine"),
-        ("https://api.noetfield.com/health", "GEL lane (noetfeld-os)"),
-    ):
-        code, _ = fetch(host, timeout=15.0)
-        if 200 <= code < 300:
-            print(f"OK   {host} ({code})")
-        else:
-            print(f"WARN {host} ({code}) — {note}")
+    spine_code, spine_body = fetch(f"{BASE}/api/health")
+    if 200 <= spine_code < 300:
+        try:
+            spine = json.loads(spine_body)
+            if spine.get("status") == "ok" and spine.get("service") == "noetfield-www":
+                print("OK   www spine /api/health")
+            else:
+                print(f"FAIL www spine contract: {spine_body[:200]}", file=sys.stderr)
+                fail += 1
+        except json.JSONDecodeError:
+            print("FAIL www spine not JSON", file=sys.stderr)
+            fail += 1
+    else:
+        print(f"FAIL www spine /api/health ({spine_code})", file=sys.stderr)
+        fail += 1
+
+    print("INFO platform.noetfield.com + api.noetfield.com — out of www E2E scope until DNS provisioned (see L0-law §7)")
 
     print()
     if fail:

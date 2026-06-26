@@ -11,15 +11,21 @@ module.exports = async function handler(req, res) {
 
   const platformBase = (process.env.PLATFORM_API_BASE || "https://platform.noetfield.com").replace(/\/$/, "");
   let platform = {};
+  let platformReachable = false;
   try {
     const r = await fetch(platformBase + "/api/intake/health", {
       headers: { Accept: "application/json" },
     });
-    platform = await r.json().catch(function () {
-      return {};
-    });
+    if (r.ok) {
+      platform = await r.json().catch(function () {
+        return {};
+      });
+      platformReachable = true;
+    } else {
+      platform = { enabled: false };
+    }
   } catch (_) {
-    platform = { enabled: false, platform_reachable: false };
+    platform = { enabled: false };
   }
 
   const wwwEmail = emailConfigured();
@@ -35,7 +41,7 @@ module.exports = async function handler(req, res) {
     www_email_configured: wwwEmail,
     platform_intake_enabled: platformEnabled,
     auto_ack_enabled: (process.env.INTAKE_AUTO_ACK_ENABLED || "true").toLowerCase() !== "false",
-    platform_reachable: platform.enabled !== undefined,
+    platform_reachable: platformReachable,
     delivery_mode: wwwEmail ? "resend" : platformEnabled ? "platform" : "unconfigured",
   });
 };

@@ -11,14 +11,6 @@
     {
       "source": "/evaluate",
       "destination": "/api/demo/evaluate"
-    },
-    {
-      "source": "/api/public/chat",
-      "destination": "https://platform.noetfield.com/api/public/chat"
-    },
-    {
-      "source": "/api/ecosystem/public",
-      "destination": "https://platform.noetfield.com/api/ecosystem/public"
     }
   ],
   "redirects": [
