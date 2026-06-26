@@ -34,7 +34,9 @@ PATHS_404 = (
     "/governance/OPS_LIVE_STATUS_LOCKED.json",
     "/governance/LAW_STACK.json",
     "/OFFERINGS_LOCKED.md",
+    "/platform/",
     "/platform/factories/",
+    "/platform/dashboard/",
     "/docs/ops/AGENT_SELF_AUDIT_LOOP_LOCKED_v1.md",
     "/services/governance/README.md",
 )

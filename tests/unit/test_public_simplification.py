@@ -42,7 +42,7 @@ CLIENT_VIEW_PAGES = (
     ROOT / "templates" / "index.html",
 )
 
-PRIMARY_NAV = ("/copilot/", "/templates/", "/trust/", "/enterprise/", "/pricing/", "/partners/")
+PRIMARY_NAV = ("/", "/governance/", "/copilot/", "/templates/", "/trust/", "/federal/", "/msp/", "/copilot/demo/")
 
 
 def test_positioning_exact_sentence() -> None:
@@ -77,7 +77,7 @@ def test_header_primary_nav_items() -> None:
     primary = header.split('class="menuPrimary"', 1)[1].split("</div>", 1)[0]
     for href in PRIMARY_NAV:
         assert href in primary, href
-    assert primary.count("<a ") == 6
+    assert primary.count("<a ") == 8
     assert "/directory/" not in header
     assert 'href="/gate/' not in header
     assert "Work with us" not in primary

@@ -186,7 +186,8 @@ def test_next_steps_hub_page() -> None:
     assert "next-buyer" in text
     assert "next-investor" in text
     assert "next-ops" in text
-    assert "deferred" in text.lower() or "Deferred" in text
+    assert "Enterprise standard" in text
+    assert "founder never" not in text.lower()
     assert "noetfield-intake-status.js" in text
 
 
