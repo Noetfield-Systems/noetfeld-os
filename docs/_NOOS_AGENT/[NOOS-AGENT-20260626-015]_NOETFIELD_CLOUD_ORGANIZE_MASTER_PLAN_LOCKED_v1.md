@@ -179,3 +179,10 @@ api.noetfield.com · PyPI noetfield-gate · npm @noetfield/gate · status.noetfi
 - https://github.com/kazemnezhadsina144-dot/Noetfield
 - https://github.com/kazemnezhadsina144-dot/noetfeld-os (private)
 - https://github.com/kazemnezhadsina144-dot/noetfield-studio-ide (private)
+
+**Vercel www (2026-06-26):**
+- Team: `the-777-foundation` · Project: **`noetfield`** (not `www`)
+- Dashboard: https://vercel.com/the-777-foundation/noetfield
+- Production: `dpl_4mWNMRWceW9ag4co5S6fsAPqJjj7` → https://www.noetfield.com
+- GitHub auto-deploy: connected to `Noetfield` repo `main`
+- Runbook: `docs/ops/VERCEL_WWW_DEPLOY_LOCKED_v1.md` · `scripts/deploy-www-vercel.sh`
