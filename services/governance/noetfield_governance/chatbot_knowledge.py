@@ -13,6 +13,28 @@ _EXTRA_MD = (
     _REPO_ROOT / "docs" / "FINAL_PUBLIC_SITE.md",
 )
 
+# In-image fallback when markdown sources are missing (e.g. incomplete deploy).
+_BUILTIN_CORE = """## Source: faq.md (core)
+# Noetfield — Frequently asked questions
+
+## What is Noetfield?
+
+Noetfield is governance execution infrastructure for regulated organizations. We evaluate AI-driven operational intent before execution, record a compliance log, and return allow or deny decisions. We do not move money, hold custody, or execute transactions on your behalf.
+
+## What are the three offerings?
+
+1. **Trust Brief — $10,000** — Six-week engagement: governance audit, AI policy mapping, risk exposure analysis.
+2. **Copilot Governance Pack** — Enterprise AI compliance and policy validation for Microsoft 365 Copilot rollouts.
+3. **Bank Pilot** — Read-only governance simulation only (shadow mode). No execution rights.
+
+## How do I engage?
+
+Request a Governance Brief at `/trust-brief/intake/`. All operational intake routes to **operations@noetfield.com**.
+
+## Source: positioning.md (core)
+Noetfield is governance execution infrastructure that evaluates AI-driven operational intent before execution in regulated environments.
+"""
+
 
 def _read(path: Path) -> str:
     if not path.is_file():
@@ -33,6 +55,8 @@ def build_knowledge_context() -> str:
         body = _read(path)
         if body:
             chunks.append(f"## Source: {path.name}\n{body}")
+    if not chunks:
+        return _BUILTIN_CORE
     return "\n\n---\n\n".join(chunks)
 
 
@@ -50,6 +74,8 @@ def _pinned_sections() -> str:
         if body:
             label = path.name if path.parent.name != "knowledge" else f"knowledge/{path.name}"
             chunks.append(f"## Source: {label} (core)\n{body}")
+    if not chunks:
+        return _BUILTIN_CORE
     return "\n\n---\n\n".join(chunks)
 
 

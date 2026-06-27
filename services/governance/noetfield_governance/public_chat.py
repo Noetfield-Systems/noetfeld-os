@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import asyncio
+import logging
 import time
 from collections import defaultdict, deque
 from typing import Literal
@@ -20,6 +21,8 @@ _RATE_LIMIT_WINDOW_SEC = 60
 _RATE_LIMIT_MAX_PER_WINDOW = 30
 
 ChatProvider = Literal["gemini", "openrouter", "auto"]
+
+logger = logging.getLogger("noetfield.governance.public_chat")
 
 _buckets: defaultdict[str, deque[float]] = defaultdict(deque)
 
@@ -138,6 +141,8 @@ async def answer_public_question(
     await _check_rate_limit(client_key or "anonymous")
 
     context = select_relevant_excerpt(text)
+    if len(context.strip()) < 200:
+        logger.warning("public_chat_thin_context chars=%s question=%r", len(context), text[:80])
     citations = _citations_from_context(context)
     system = _system_instruction(context)
 
