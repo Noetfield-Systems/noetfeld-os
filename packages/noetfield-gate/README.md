@@ -26,6 +26,16 @@ noetfield gate
 
 Exit code `0` = PASS, `1` = BLOCK.
 
+## SDK scaffold (stdlib)
+
+Minimal offline governance client (check → execute → receipt):
+
+```bash
+python3 scripts/noetfield_sdk_scaffold.py
+```
+
+See `scripts/noetfield_sdk_scaffold.py` (moved from Desktop loose file, 2026-06-26).
+
 ## One command: decide (receipt on disk)
 
 Start API: `python3 run.py` (port **8001**)
