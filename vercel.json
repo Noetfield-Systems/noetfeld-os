@@ -14,6 +14,12 @@
     }
   ],
   "redirects": [
+    {
+      "source": "/",
+      "has": [{ "type": "host", "value": "status.noetfield.com" }],
+      "destination": "https://www.noetfield.com/status/",
+      "statusCode": 308
+    },
     { "source": "/docs/ops/:path*", "destination": "/404", "statusCode": 404 },
     { "source": "/docs/ops", "destination": "/404", "statusCode": 404 },
     { "source": "/docs/platform/:path*", "destination": "/404", "statusCode": 404 },
