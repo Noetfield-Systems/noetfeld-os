@@ -55,7 +55,7 @@ manifest: docs/_NOOS_AGENT/UPGRADE_MANIFEST.json
 
 - **UPG-0011:** Sync Vercel production env — Resend intake keys on canonical project
 - **UPG-0012:** Deploy `vercel.json` rewrites — `/health`, `/evaluate` → API routes
-- **UPG-0013:** Confirm `project-gc7lm.vercel.app` parity checklist vs www post-cutover
+- **UPG-0013:** Confirm `www.noetfield.com` parity checklist vs www post-cutover
 - **UPG-0014:** Add tamper-evident copy to `index.html` if drifted
 - **UPG-0015:** Stage `platform.noetfield.com` DNS record — document blocker if any
 - **UPG-0016:** Document cloud ship vs GEL repo boundary in PRODUCT_TRUTH

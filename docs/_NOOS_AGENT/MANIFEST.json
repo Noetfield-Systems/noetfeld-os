@@ -4,7 +4,7 @@
   "agent_lane": "NOETFELD-OS",
   "workspace_root": "/Users/sinakazemnezhad/Projects/noetfeld-os",
   "search_token": "NOOS-AGENT-DOC",
-  "updated_at": "2026-06-15",
+  "updated_at": "2026-06-26",
   "part8_sync_at": "2026-06-15",
   "canonical_ssot_source": "/Users/sinakazemnezhad/Desktop/Noetfield/Noetfield-All-Documents/",
   "sync_script": "scripts/sync-noos-ssot.sh",
@@ -122,6 +122,12 @@
       "path": "docs/_NOOS_AGENT/ROADMAP_MANIFEST.json",
       "doc_type": "ROADMAP_PROGRESS",
       "title": "Roadmap step completion tracker"
+    },
+    {
+      "trace_id": "NOOS-AGENT-20260626-015",
+      "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260626-015]_NOETFIELD_CLOUD_ORGANIZE_MASTER_PLAN_LOCKED_v1.md",
+      "doc_type": "CLOUD_ORGANIZE_MASTER_PLAN_LOCKED",
+      "title": "Noetfield cloud organize master plan — locked v1"
     }
   ]
 }

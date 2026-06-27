@@ -54,7 +54,7 @@ Most enterprises now run agents in production; most lack formal governance; a la
 ## See it live
 
 - Pilot overview: **https://www.noetfield.com/copilot/pilot/**
-- Governance / compliance demo: **https://project-gc7lm.vercel.app/copilot/demo/**
+- Governance / compliance demo: **https://www.noetfield.com/copilot/demo/**
 
 **Next step:** a 15-minute live walkthrough of the full governance-receipt chain. We can run it in shadow mode against your environment immediately after.
 

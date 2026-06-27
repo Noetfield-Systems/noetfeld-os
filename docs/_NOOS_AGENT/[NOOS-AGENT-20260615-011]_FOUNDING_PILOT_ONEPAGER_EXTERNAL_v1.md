@@ -88,7 +88,7 @@ Founding customers receive founding pricing, roadmap input, and priority support
 ## See it live
 
 - Pilot overview: **https://www.noetfield.com/copilot/pilot/**
-- Governance demo: **https://project-gc7lm.vercel.app/copilot/demo/**
+- Governance demo: **https://www.noetfield.com/copilot/demo/**
 
 **Next step:** 15-minute live walkthrough of the full governance-receipt chain. Happy to run in shadow mode and name a live demo date when you reply.
 

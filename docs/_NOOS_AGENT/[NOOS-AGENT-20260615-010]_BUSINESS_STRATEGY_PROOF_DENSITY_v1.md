@@ -183,7 +183,7 @@ Currency: **proof + first paid design partner.** Design-partner active usage = p
 | Surface | URL | Status |
 |---------|-----|--------|
 | Pilot page | https://www.noetfield.com/copilot/pilot/ | Live (marketing) |
-| Compliance demo | https://project-gc7lm.vercel.app/copilot/demo/ | Canonical until DNS cutover |
+| Compliance demo | https://www.noetfield.com/copilot/demo/ | Canonical until DNS cutover |
 | GEL local | http://127.0.0.1:8001 | Start: `python3 run.py` |
 | SW1 chain tool | `noetfield gate` · `noetfield decide --sample` | `packages/noetfield-gate/README.md` |
 | GEL health | `/health` `/readiness` `/v1/meta` | Policy `noetfeld-credit-v1` @ 1.0.0 |

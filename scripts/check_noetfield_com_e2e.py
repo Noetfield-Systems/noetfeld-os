@@ -12,7 +12,7 @@ import urllib.request
 
 BASE = os.environ.get("NOETFIELD_E2E_BASE", "https://www.noetfield.com")
 CANONICAL = os.environ.get(
-    "NOETFIELD_CANONICAL_BASE", "https://project-gc7lm.vercel.app"
+    "NOETFIELD_CANONICAL_BASE", "https://www.noetfield.com"
 )
 
 PATHS = (
