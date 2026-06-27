@@ -181,7 +181,7 @@ api.noetfield.com · PyPI noetfield-gate · npm @noetfield/gate · status.noetfi
 - https://github.com/kazemnezhadsina144-dot/noetfeld-os (private)
 - https://github.com/kazemnezhadsina144-dot/noetfield-studio-ide (private)
 
-| **Vercel www (2026-06-26):**
+**Vercel www (2026-06-26):**
 - Team: `the-777-foundation` · Project: **`noetfield`** (not `www`)
 - Dashboard: https://vercel.com/the-777-foundation/noetfield
 - Production: `dpl_4mWNMRWceW9ag4co5S6fsAPqJjj7` → https://www.noetfield.com
@@ -195,7 +195,7 @@ api.noetfield.com · PyPI noetfield-gate · npm @noetfield/gate · status.noetfi
 - Live www today: **direct Vercel DNS** (`server: Vercel`); worker route **dormant**
 - Runbook: `docs/ops/CF_WWW_PROXY_LOCKED_v1.md` · `scripts/deploy-cf-www-proxy.sh`
 
-| **Phase 6 verify (2026-06-26):**
+**Phase 6 verify (2026-06-26):**
 - Studio: 96 unit + 33 E2E passed
 - GEL: 23 pytest passed
 - www E2E + platform /health: PASS
