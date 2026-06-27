@@ -1,0 +1,34 @@
+{
+  "trace_id": "NOETFIELD-CHATBOT-KNOWLEDGE-V1",
+  "locked_doc": "docs/ops/CHATBOT_KNOWLEDGE_UPGRADE_LOCKED_v1.md",
+  "knowledge_dir": "data/chatbot/knowledge",
+  "knowledge_files": [
+    "canada-regulatory-2026.md",
+    "developer-tools.md",
+    "faq.md",
+    "gel-runtime.md",
+    "intelligence-lane.md",
+    "investor-public.md",
+    "offerings.md",
+    "partner-control-layer.md",
+    "positioning.md",
+    "site-surfaces.md",
+    "trust-ledger-public.md"
+  ],
+  "pinned": [
+    "OFFERINGS_LOCKED.md",
+    "knowledge/faq.md",
+    "knowledge/gel-runtime.md",
+    "knowledge/site-surfaces.md"
+  ],
+  "extra_sources": [
+    "PRODUCT_BRIEF.md",
+    "OFFERINGS_LOCKED.md"
+  ],
+  "removed_stale": [
+    "docs/FINAL_PUBLIC_SITE.md"
+  ],
+  "eval_tests": "tests/unit/test_chat_scenarios.py",
+  "phase_a_date": "2026-06-26",
+  "deploy_required": "platform.noetfield.com governance service"
+}

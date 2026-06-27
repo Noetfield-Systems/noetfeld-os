@@ -12,7 +12,9 @@
 |-------|------|
 | `assets/noetfield-chat.js` | Floating widget on www — calls API only |
 | `POST /api/public/chat` | FastAPI on `platform.noetfield.com` (or `:8001` locally) |
-| `data/chatbot/knowledge/*.md` | FAQ + offerings context |
+| `data/chatbot/knowledge/*.md` | FAQ, GEL, developer tools, site map, investor, trust ledger |
+| `OFFERINGS_LOCKED.md` | Pinned contract SKUs + sandbox caps |
+| `PRODUCT_BRIEF.md` | Trust Ledger positioning |
 | `OPENROUTER_API_KEY` or `GEMINI_API_KEY` | Server environment variables (never in the browser) |
 
 ## Providers

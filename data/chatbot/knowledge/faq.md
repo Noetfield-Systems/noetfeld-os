@@ -20,6 +20,10 @@ Request a Governance Brief at `/trust-brief/intake/`. All operational intake rou
 - **Telegram:** when deployed, link appears in the site footer (`@username`). Use `/start`, `/offerings`, `/intake`. Free-text Q&A requires the platform LLM keys to be configured.
 - Neither channel executes payments or replaces signed contracts.
 
+## What is GEL?
+
+**GEL** = **Governance Execution Layer** — Noetfield's pre-execution control plane for agent workflows. Public page: `/gel/`. Hosted API: `api.noetfield.com`. Chain tools: `noetfield gate`, `noetfield decide`, PyPI package `noetfield-gate`.
+
 ## What is the Governance Console?
 
 The Governance Evaluation Interface lets authorized pilot users submit operational intent and view allow/deny decisions plus the compliance log. Marketing entry: `/console/` on www; product UI on the authorized platform host (`/console` on platform.noetfield.com).

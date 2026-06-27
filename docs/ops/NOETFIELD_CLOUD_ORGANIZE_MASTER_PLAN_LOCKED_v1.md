@@ -208,4 +208,7 @@ api.noetfield.com · PyPI noetfield-gate · npm @noetfield/gate · status.noetfi
 - www `/gel/` marketing page ✅
 - `status.noetfield.com` DNS + redirect → www `/status/` ✅
 - Studio Gemini key parity (Admin provider store) ✅
-- **Still open:** PyPI `noetfield-gate`, npm `@noetfield/gate`, Studio PNG/SVG export
+- Studio PNG/SVG export ✅ (`noetfield-studio-ide` f668cee)
+- PyPI `noetfield-gate` v0.1.0 built — publish blocked on token/trusted publisher
+- **Chatbot knowledge Phase A** ✅ in repo — **deploy platform to go live** · locked plan: `docs/ops/CHATBOT_KNOWLEDGE_UPGRADE_LOCKED_v1.md`
+- **Still open:** PyPI publish live · npm `@noetfield/gate` · chatbot Phase 3–10 (distill, pgvector, 100-Q eval)
