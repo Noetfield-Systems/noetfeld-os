@@ -1,42 +1,54 @@
-/* Noetfield institutional assistant — pro UI */
+/* Noetfield institutional assistant — readable panel (SourceA-inspired contrast) */
 .nfChatFab {
   position: fixed;
   right: 22px;
   bottom: 22px;
   z-index: 9998;
-  width: 58px;
-  height: 58px;
-  border-radius: 50%;
-  border: 1px solid rgba(200, 163, 73, 0.55);
-  background: linear-gradient(145deg, rgba(200, 163, 73, 0.42), rgba(200, 163, 73, 0.14));
-  color: #eff0f7;
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  min-height: 52px;
+  padding: 0.65rem 1.1rem;
+  border-radius: 999px;
+  border: none;
+  background: linear-gradient(135deg, #c8a349, #9a7728);
+  color: #0c0e12;
   font-weight: 800;
-  font-size: 22px;
+  font-size: 0.92rem;
   cursor: pointer;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
-  transition: transform 0.15s ease, filter 0.15s ease;
+  box-shadow: 0 10px 32px rgba(0, 0, 0, 0.28);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
-.nfChatFab:hover { transform: scale(1.04); filter: brightness(1.1); }
+.nfChatFab:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.32);
+}
 .nfChatFab[aria-expanded="true"] {
-  background: linear-gradient(145deg, rgba(200, 163, 73, 0.55), rgba(200, 163, 73, 0.22));
+  background: linear-gradient(135deg, #d4b85a, #a8842e);
 }
 
 .nfChatPanel {
   position: fixed;
   right: 22px;
-  bottom: 92px;
+  bottom: 88px;
   z-index: 9999;
   width: min(400px, calc(100vw - 28px));
   max-height: min(560px, calc(100vh - 110px));
   display: none;
   flex-direction: column;
-  border-radius: 16px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  background: linear-gradient(180deg, #12151c 0%, #0c0e12 100%);
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+  border-radius: 18px;
+  border: 1px solid #d8dce3;
+  background: #ffffff;
+  color: #0f1117;
+  box-shadow: 0 24px 64px rgba(15, 17, 23, 0.18);
   overflow: hidden;
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  isolation: isolate;
 }
-.nfChatPanel.open { display: flex; animation: nfChatIn 0.2s ease; }
+.nfChatPanel.open {
+  display: flex;
+  animation: nfChatIn 0.22s ease;
+}
 @keyframes nfChatIn {
   from { opacity: 0; transform: translateY(8px); }
   to { opacity: 1; transform: translateY(0); }
@@ -47,33 +59,45 @@
   align-items: center;
   gap: 12px;
   padding: 14px 16px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  background: linear-gradient(180deg, rgba(200, 163, 73, 0.14), transparent);
+  border-bottom: 1px solid #e5e7eb;
+  background: linear-gradient(180deg, #faf8f3, #ffffff);
 }
 .nfChatHeadMark {
   width: 36px;
   height: 36px;
   border-radius: 10px;
-  background: rgba(200, 163, 73, 0.2);
+  background: rgba(200, 163, 73, 0.16);
   border: 1px solid rgba(200, 163, 73, 0.35);
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: 800;
   font-size: 14px;
-  color: #e8c56a;
+  color: #8a6b1f;
 }
-.nfChatHeadText strong { display: block; font-size: 14px; color: #eff0f7; }
-.nfChatHeadText span { font-size: 12px; color: #8b949e; }
+.nfChatHeadText strong {
+  display: block;
+  font-size: 14px;
+  color: #0f1117;
+}
+.nfChatHeadText span {
+  font-size: 12px;
+  color: #5c6370;
+}
 .nfChatClose {
   margin-left: auto;
-  background: transparent;
+  background: #f3f4f6;
   border: none;
-  color: #8b949e;
+  color: #5c6370;
   font-size: 20px;
   cursor: pointer;
   line-height: 1;
-  padding: 4px;
+  padding: 4px 8px;
+  border-radius: 8px;
+}
+.nfChatClose:hover {
+  background: #e5e7eb;
+  color: #0f1117;
 }
 
 .nfChatQuick {
@@ -86,14 +110,15 @@
   font-size: 11px;
   padding: 6px 10px;
   border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  background: rgba(255, 255, 255, 0.04);
-  color: #c9d1d9;
+  border: 1px solid #d8dce3;
+  background: #f8f9fb;
+  color: #374151;
   cursor: pointer;
 }
 .nfChatQuick button:hover {
-  border-color: rgba(200, 163, 73, 0.4);
-  color: #eff0f7;
+  border-color: rgba(200, 163, 73, 0.55);
+  color: #0f1117;
+  background: rgba(200, 163, 73, 0.08);
 }
 
 .nfChatLog {
@@ -105,29 +130,35 @@
   gap: 10px;
   font-size: 13px;
   line-height: 1.6;
+  background: #ffffff;
+  scroll-behavior: smooth;
 }
 .nfChatMsg {
   padding: 11px 13px;
-  border-radius: 12px;
+  border-radius: 14px;
   max-width: 92%;
   white-space: pre-wrap;
   word-break: break-word;
+  color: #0f1117;
 }
 .nfChatMsg.user {
   align-self: flex-end;
-  background: linear-gradient(180deg, rgba(200, 163, 73, 0.22), rgba(200, 163, 73, 0.1));
-  border: 1px solid rgba(200, 163, 73, 0.28);
+  background: rgba(200, 163, 73, 0.18);
+  border: 1px solid rgba(200, 163, 73, 0.42);
+  color: #1a1508;
 }
 .nfChatMsg.bot {
   align-self: flex-start;
-  background: rgba(255, 255, 255, 0.045);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: #f3f4f6;
+  border: 1px solid #e5e7eb;
+  color: #0f1117;
 }
 .nfChatMsg.typing {
   align-self: flex-start;
-  color: #8b949e;
+  color: #5c6370;
   font-style: italic;
   border-style: dashed;
+  background: #fafafa;
 }
 .nfChatTypingDots::after {
   content: "";
@@ -144,38 +175,63 @@
   display: flex;
   gap: 8px;
   padding: 12px 14px;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
-  background: rgba(0, 0, 0, 0.2);
+  border-top: 1px solid #e5e7eb;
+  background: #fafafa;
 }
 .nfChatForm input {
   flex: 1;
   min-height: 42px;
   border-radius: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  background: #080a0d;
-  color: #eff0f7;
+  border: 1px solid #d8dce3;
+  background: #ffffff;
+  color: #0f1117;
   padding: 0 14px;
   font-size: 14px;
 }
+.nfChatForm input::placeholder {
+  color: #9ca3af;
+}
 .nfChatForm input:focus {
-  outline: none;
-  border-color: rgba(200, 163, 73, 0.45);
+  outline: 2px solid rgba(200, 163, 73, 0.35);
+  border-color: rgba(200, 163, 73, 0.55);
 }
 .nfChatForm button {
   min-height: 42px;
   padding: 0 16px;
   border-radius: 10px;
-  border: 1px solid rgba(200, 163, 73, 0.5);
-  background: linear-gradient(180deg, rgba(200, 163, 73, 0.35), rgba(200, 163, 73, 0.15));
-  color: #eff0f7;
-  font-weight: 650;
+  border: none;
+  background: linear-gradient(135deg, #c8a349, #9a7728);
+  color: #0c0e12;
+  font-weight: 700;
   cursor: pointer;
 }
-.nfChatForm button:disabled { opacity: 0.45; cursor: not-allowed; }
+.nfChatForm button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
 
 .nfChatNote {
   font-size: 11px;
-  color: #6e7681;
+  color: #6b7280;
   padding: 0 14px 12px;
   line-height: 1.45;
+  background: #fafafa;
+}
+
+@media (max-width: 480px) {
+  .nfChatPanel {
+    right: 10px;
+    left: 10px;
+    width: auto;
+    bottom: 78px;
+  }
+  .nfChatFab {
+    right: 14px;
+    bottom: 14px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nfChatPanel.open { animation: none; }
+  .nfChatTypingDots::after { animation: none; }
 }

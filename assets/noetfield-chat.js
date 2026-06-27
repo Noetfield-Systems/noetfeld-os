@@ -112,7 +112,7 @@
 
     var link = document.createElement("link");
     link.rel = "stylesheet";
-    link.href = "/assets/noetfield-chat.css?v=2";
+    link.href = "/assets/noetfield-chat.css?v=3";
     document.head.appendChild(link);
 
     var fab = el("button", "nfChatFab", "✦");

@@ -49,7 +49,7 @@ class Settings(BaseSettings):
         default=None,
         description="OpenRouter API key — server-side only; routes to Gemini/other models via OpenRouter.",
     )
-    openrouter_model: str = "google/gemini-2.0-flash-001"
+    openrouter_model: str = "google/gemini-2.5-flash"
     public_chat_provider: Literal["auto", "gemini", "openrouter"] = "auto"
     public_chat_enabled: bool = True
     public_chat_cors_origins: str = (

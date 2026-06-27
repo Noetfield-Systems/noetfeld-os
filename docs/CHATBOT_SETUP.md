@@ -19,7 +19,7 @@
 
 | Provider | Env | Default model |
 |----------|-----|----------------|
-| **OpenRouter** (recommended) | `OPENROUTER_API_KEY` | `OPENROUTER_MODEL=google/gemini-2.0-flash-001` |
+| **OpenRouter** (recommended) | `OPENROUTER_API_KEY` | `OPENROUTER_MODEL=google/gemini-2.5-flash` |
 | **Google Gemini** (direct) | `GEMINI_API_KEY` | `GEMINI_MODEL=gemini-2.0-flash` |
 
 `PUBLIC_CHAT_PROVIDER`:
@@ -32,7 +32,7 @@
 
 ```bash
 export OPENROUTER_API_KEY="your-key-from-openrouter.ai"
-export OPENROUTER_MODEL="google/gemini-2.0-flash-001"
+export OPENROUTER_MODEL="google/gemini-2.5-flash"
 export PUBLIC_CHAT_PROVIDER=openrouter
 export RUNTIME_EVENT_STORE=memory
 make api-v3

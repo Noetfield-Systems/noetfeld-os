@@ -14,6 +14,7 @@ from fastapi.responses import FileResponse
 from starlette.staticfiles import StaticFiles
 from pydantic import BaseModel, ConfigDict, Field, SecretStr
 
+from noetfield_governance.chatbot_knowledge import knowledge_context_stats
 from noetfield_governance.chat_errors import ChatAPIError, ChatConfigurationError
 from noetfield_governance.public_chat import answer_public_question, resolve_chat_provider
 from noetfield_governance import intake_repository, redis_runtime
@@ -785,6 +786,7 @@ async def public_chat_health() -> dict[str, object]:
         "active_provider": active,
         "gemini": {"configured": bool(gemini_key), "model": settings.gemini_model},
         "openrouter": {"configured": bool(openrouter_key), "model": settings.openrouter_model},
+        "knowledge": knowledge_context_stats(),
     }
 
 
