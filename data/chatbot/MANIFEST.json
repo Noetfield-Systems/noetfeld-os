@@ -29,6 +29,10 @@
     "docs/FINAL_PUBLIC_SITE.md"
   ],
   "eval_tests": "tests/unit/test_chat_scenarios.py",
-  "phase_a_date": "2026-06-26",
+  "plans_total": 100,
+  "plans_done": 22,
+  "plans_partial": 14,
+  "plans_open": 64,
+  "full_register": "docs/ops/CHATBOT_KNOWLEDGE_UPGRADE_LOCKED_v1.md#10-phases--100-plans-full-register",
   "deploy_required": "platform.noetfield.com governance service"
 }
