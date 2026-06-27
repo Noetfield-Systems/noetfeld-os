@@ -194,3 +194,10 @@ api.noetfield.com · PyPI noetfield-gate · npm @noetfield/gate · status.noetfi
 - ORIGIN: `https://noetfield-the-777-foundation.vercel.app` (direct Vercel — no loop)
 - Live www today: **direct Vercel DNS** (`server: Vercel`); worker route **dormant**
 - Runbook: `docs/ops/CF_WWW_PROXY_LOCKED_v1.md` · `scripts/deploy-cf-www-proxy.sh`
+
+**Phase 6 verify (2026-06-26):**
+- Studio: 96 unit + 33 E2E passed
+- GEL: 23 pytest passed
+- www E2E + platform /health: PASS
+- `noetfield gate`: PASS
+- Inventory: `docs/ops/CLOUD_INVENTORY_LOCKED_v1.md`
