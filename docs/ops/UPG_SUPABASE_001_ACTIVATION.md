@@ -22,7 +22,7 @@ Migrations are authored under `infrastructure/supabase/migrations/` (0001–0008
 1. Open [Supabase dashboard → Noetfield Systems](https://supabase.com/dashboard/project/tkgpapowwplupyekpivy).
 2. **Settings → Database** — copy **Connection string** (URI, pooler port 6543 recommended for Railway).
 3. **Settings → API** — copy `URL` + **service_role** key (server-side only).
-4. Add to `~/.sina/secrets.env`:
+4. Add to `~/.sina/secrets.env` **or** ensure `~/.sourcea-secrets/noetfield.env` has API keys + database URL:
 
 ```bash
 NOETFIELD_SUPABASE_REF=tkgpapowwplupyekpivy
@@ -31,6 +31,8 @@ NOETFIELD_SUPABASE_ANON_KEY=<anon-key>
 NOETFIELD_SUPABASE_SERVICE_ROLE_KEY=<service-role-key>
 NOETFIELD_SUPABASE_DATABASE_URL=postgresql://postgres.[ref]:[password]@aws-0-[region].pooler.supabase.com:6543/postgres
 ```
+
+The script auto-loads `~/.sourcea-secrets/noetfield.env` when present.
 
 5. Run:
 

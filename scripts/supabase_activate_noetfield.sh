@@ -6,6 +6,7 @@ ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT"
 
 VAULT="${HOME}/.sina/secrets.env"
+SOURCEA_SECRETS="${HOME}/.sourcea-secrets/noetfield.env"
 REF="${NOETFIELD_SUPABASE_REF:-tkgpapowwplupyekpivy}"
 RAILWAY_SERVICE="${RAILWAY_API_SERVICE:-platform-api}"
 
@@ -19,10 +20,14 @@ read_vault() {
 }
 
 load_env() {
-  SUPABASE_URL="${NOETFIELD_SUPABASE_URL:-$(read_vault NOETFIELD_SUPABASE_URL || true)}"
-  SUPABASE_ANON="${NOETFIELD_SUPABASE_ANON_KEY:-$(read_vault NOETFIELD_SUPABASE_ANON_KEY || true)}"
-  SUPABASE_SERVICE="${NOETFIELD_SUPABASE_SERVICE_ROLE_KEY:-$(read_vault NOETFIELD_SUPABASE_SERVICE_ROLE_KEY || true)}"
-  DATABASE_URL="${NOETFIELD_SUPABASE_DATABASE_URL:-$(read_vault NOETFIELD_SUPABASE_DATABASE_URL || true)}"
+  if [[ -f "$SOURCEA_SECRETS" ]]; then
+    # shellcheck disable=SC1090
+    set -a && source "$SOURCEA_SECRETS" && set +a
+  fi
+  SUPABASE_URL="${NOETFIELD_SUPABASE_URL:-${SUPABASE_URL:-$(read_vault NOETFIELD_SUPABASE_URL || true)}}"
+  SUPABASE_ANON="${NOETFIELD_SUPABASE_ANON_KEY:-${SUPABASE_ANON_KEY:-$(read_vault NOETFIELD_SUPABASE_ANON_KEY || true)}}"
+  SUPABASE_SERVICE="${NOETFIELD_SUPABASE_SERVICE_ROLE_KEY:-${SUPABASE_SERVICE_ROLE_KEY:-$(read_vault NOETFIELD_SUPABASE_SERVICE_ROLE_KEY || true)}}"
+  DATABASE_URL="${NOETFIELD_SUPABASE_DATABASE_URL:-${SUPABASE_DATABASE_URL:-$(read_vault NOETFIELD_SUPABASE_DATABASE_URL || true)}}"
 
   if [[ -z "$SUPABASE_URL" && -n "$REF" ]]; then
     SUPABASE_URL="https://${REF}.supabase.co"
