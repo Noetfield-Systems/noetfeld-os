@@ -173,6 +173,7 @@ api.noetfield.com · PyPI noetfield-gate · npm @noetfield/gate · status.noetfi
 | Phase 2A Noetfield | Merged remote cloud commits; pushed `9ec40426` |
 | Phase 2B studio-ide | Private repo created + pushed |
 | Phase 2C noetfeld-os | Private repo created + pushed |
+| Phase 3 CF worker | `noetfield-www-proxy` redeployed; ORIGIN → direct Vercel URL |
 | E2E verify | `check_noetfield_com_e2e.py` PASS (api.noetfield.com WARN expected) |
 
 **GitHub remotes:**
@@ -180,9 +181,23 @@ api.noetfield.com · PyPI noetfield-gate · npm @noetfield/gate · status.noetfi
 - https://github.com/kazemnezhadsina144-dot/noetfeld-os (private)
 - https://github.com/kazemnezhadsina144-dot/noetfield-studio-ide (private)
 
-**Vercel www (2026-06-26):**
+| **Vercel www (2026-06-26):**
 - Team: `the-777-foundation` · Project: **`noetfield`** (not `www`)
 - Dashboard: https://vercel.com/the-777-foundation/noetfield
 - Production: `dpl_4mWNMRWceW9ag4co5S6fsAPqJjj7` → https://www.noetfield.com
 - GitHub auto-deploy: connected to `Noetfield` repo `main`
 - Runbook: `docs/ops/VERCEL_WWW_DEPLOY_LOCKED_v1.md` · `scripts/deploy-www-vercel.sh`
+
+**CF www proxy (2026-06-26 — Phase 3):**
+- Worker: `noetfield-www-proxy` version `f1864fff-6054-47ec-815a-c0cc14f1bb78`
+- Route: `www.noetfield.com/*` (zone `noetfield.com`)
+- ORIGIN: `https://noetfield-the-777-foundation.vercel.app` (direct Vercel — no loop)
+- Live www today: **direct Vercel DNS** (`server: Vercel`); worker route **dormant**
+- Runbook: `docs/ops/CF_WWW_PROXY_LOCKED_v1.md` · `scripts/deploy-cf-www-proxy.sh`
+
+**Phase 6 verify (2026-06-26):**
+- Studio: 96 unit + 33 E2E passed
+- GEL: 23 pytest passed
+- www E2E + platform /health: PASS
+- `noetfield gate`: PASS
+- Inventory: `docs/ops/CLOUD_INVENTORY_LOCKED_v1.md`
