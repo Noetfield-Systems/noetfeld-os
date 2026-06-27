@@ -9,5 +9,6 @@ Tests: 23 passing
 Built: API auth, rule_set_version, idempotency, health, TLE v1 export, board PDF stub, noetfield-gate CLI
 Hosted: api.noetfield.com (Railway gel-api)
 PyPI: noetfield-gate v0.1.0 built + twine check PASS — publish blocked on PYPI_API_TOKEN / trusted publisher
-Gap: npm SDK
+Chatbot: Phase A knowledge upgrade in Noetfield repo — deploy platform.noetfield.com to activate
+Gap: npm SDK · PyPI live · chatbot Phases 3–10 (distill, pgvector RAG)
 Commercial: NOOS-AGENT-20260615-010 strategy (2 PAGER) + 011 NW1 + 013 SW1 one-pagers in vault
