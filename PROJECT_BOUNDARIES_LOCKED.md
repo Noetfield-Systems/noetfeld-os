@@ -11,6 +11,14 @@
 | **TrustField Technologies** corporate / execution / `TF-*` | **No** — private ops or TrustField repo |
 | **VIRLUX** payments / `VL-*` | **No** — VIRLUX repo only |
 
+## Supabase split handoff
+
+```yaml
+supabase_split: "SourceA/Forge→portfolio-spine; Noetfield/TrustField→noetfield; Labs/Virlux→labs-sandbox; async events only; no cross-project joins; no secrets in repo."
+```
+
+For full authority, read SourceA `data/supabase-portfolio-tiers-v1.json`; this repo does not redefine ownership. Noetfield uses the `noetfield` Supabase project, schema `noetfield`. TrustField shares the same project but stays in schema `trustfield` and outside this repo's execution scope.
+
 ## Agent checklist (before every task)
 
 1. Is the work **Noetfield** (`NF-*`, governance platform, public site)? → Proceed.
