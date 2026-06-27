@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 import re
 from functools import lru_cache
 from pathlib import Path
@@ -22,7 +23,7 @@ _LANE_FILES: dict[str, tuple[str, ...]] = {
     ),
     "investor": ("investor-public.md", "site-surfaces.md"),
     "gel": ("gel-runtime.md", "site-surfaces.md"),
-    "sme": ("intelligence-lane.md", "faq.md"),
+    "sme": ("intelligence-lane.md", "faq.md", "pricing-matrix.md"),
     "trust": ("trust-ledger-public.md", "PRODUCT_BRIEF.md"),
 }
 
@@ -147,7 +148,22 @@ def _forced_lane_sections(lanes: list[str]) -> str:
     return "\n\n---\n\n".join(chunks)
 
 
-def knowledge_context_stats() -> dict[str, int | bool]:
+def knowledge_bundle_version() -> str:
+    manifest = _REPO_ROOT / "data" / "chatbot" / "MANIFEST.json"
+    if not manifest.is_file():
+        return "NOETFIELD-CHATBOT-UNKNOWN"
+    try:
+        data = json.loads(manifest.read_text(encoding="utf-8"))
+    except json.JSONDecodeError:
+        return "NOETFIELD-CHATBOT-INVALID"
+    trace = data.get("trace_id", "NOETFIELD-CHATBOT")
+    done = data.get("plans_done", 0)
+    distilled = data.get("distilled_at", "")
+    suffix = distilled[:10] if distilled else str(len(data.get("knowledge_files", [])))
+    return f"{trace}-p{done}-{suffix}"
+
+
+def knowledge_context_stats() -> dict[str, int | bool | str]:
     """Lightweight health signal for deploy verification."""
     pinned = _pinned_sections()
     full = build_knowledge_context()
@@ -156,6 +172,7 @@ def knowledge_context_stats() -> dict[str, int | bool]:
         "chars": len(full),
         "pinned_chars": len(pinned),
         "knowledge_files": len(list(_KNOWLEDGE_DIR.glob("*.md"))) if _KNOWLEDGE_DIR.is_dir() else 0,
+        "knowledge_bundle_version": knowledge_bundle_version(),
     }
 
 

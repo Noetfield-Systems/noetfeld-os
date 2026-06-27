@@ -5,6 +5,7 @@
   "knowledge_files": [
     "canada-regulatory-2026.md",
     "developer-tools.md",
+    "faq-live.md",
     "faq.md",
     "gel-runtime.md",
     "intelligence-lane.md",
@@ -12,6 +13,7 @@
     "offerings.md",
     "partner-control-layer.md",
     "positioning.md",
+    "pricing-matrix.md",
     "site-surfaces.md",
     "trust-ledger-public.md"
   ],
@@ -30,9 +32,10 @@
   ],
   "eval_tests": "tests/unit/test_chat_scenarios.py",
   "plans_total": 100,
-  "plans_done": 22,
+  "plans_done": 28,
   "plans_partial": 14,
-  "plans_open": 64,
+  "plans_open": 58,
   "full_register": "docs/ops/CHATBOT_KNOWLEDGE_UPGRADE_LOCKED_v1.md#10-phases--100-plans-full-register",
-  "deploy_required": "platform.noetfield.com governance service"
+  "deploy_required": "platform.noetfield.com governance service",
+  "distilled_at": "2026-06-27T06:04:06Z"
 }

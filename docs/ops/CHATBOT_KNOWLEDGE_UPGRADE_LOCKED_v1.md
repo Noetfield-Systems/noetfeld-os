@@ -106,8 +106,8 @@ Status key: **DONE** · **PARTIAL** · **OPEN**
 | 011 | Add `gel-runtime.md` (GEL, /gel/, api.noetfield.com) | DONE |
 | 012 | Add `developer-tools.md` (noetfield-gate, PyPI org templates) | DONE |
 | 013 | Add `intelligence-lane.md` (Diagnostic Sprint, SME) | DONE |
-| 014 | Add `pricing-matrix.md` synced from `/pricing/` HTML | OPEN |
-| 015 | Add `faq-live.md` distilled from `/faq/index.html` | OPEN |
+| 014 | Add `pricing-matrix.md` synced from `/pricing/` HTML | DONE |
+| 015 | Add `faq-live.md` distilled from `/faq/index.html` | DONE |
 | 016 | Add `sandbox-freemium.md` merge from FREEMIUM_POLICY | PARTIAL |
 | 017 | Add `trust-ledger-public.md` | DONE |
 | 018 | Add `copilot-pack.md` from pilot pricing + procurement FAQ | OPEN |
@@ -118,15 +118,15 @@ Status key: **DONE** · **PARTIAL** · **OPEN**
 
 | ID | Plan | Status |
 |----|------|--------|
-| 021 | Script `scripts/distill-www-to-knowledge.py` (HTML → markdown chunks) | OPEN |
+| 021 | Script `scripts/distill-www-to-knowledge.py` (HTML → markdown chunks) | DONE |
 | 022 | Script `scripts/distill-docs-to-knowledge.py` (allowlist paths) | OPEN |
 | 023 | Script `scripts/distill-external-repo.py` (noetfeld-os public files) | OPEN |
 | 024 | Strip secrets and internal paths from distilled chunks | OPEN |
-| 025 | Frontmatter: `lane`, `updated`, `source_path`, `public:true` | OPEN |
-| 026 | Target `make chatbot-refresh` (distill + validate) | OPEN |
+| 025 | Frontmatter: `lane`, `updated`, `source_path`, `public:true` | DONE |
+| 026 | Target `make chatbot-refresh` (distill + validate) | DONE |
 | 027 | CI: live www pricing matches `pricing-matrix.md` | OPEN |
 | 028 | CI fail if manifest source missing or stale vs source file | OPEN |
-| 029 | Expose `knowledge_bundle_version` on chat health endpoint | OPEN |
+| 029 | Expose `knowledge_bundle_version` on chat health endpoint | DONE |
 | 030 | Remove hard dependency on stale `_EXTRA_MD` sources | PARTIAL |
 
 ### Phase 4 — Chunking & Postgres sync (031–040)

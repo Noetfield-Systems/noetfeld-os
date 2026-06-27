@@ -465,6 +465,12 @@ platform-migrate:
 platform-sync-knowledge:
 	PYTHONPATH=$(PYTHONPATH_VALUE) python3 scripts/sync_knowledge_chunks.py
 
+chatbot-distill:
+	python3 scripts/distill-www-to-knowledge.py
+
+chatbot-refresh: chatbot-distill
+	PYTHONPATH=$(PYTHONPATH_VALUE) python3 -m pytest tests/unit/test_chat_scenarios.py tests/unit/test_chat_quality.py tests/unit/test_public_chat.py -q
+
 collapse-public:
 	python3 scripts/collapse_public_routes.py
 
