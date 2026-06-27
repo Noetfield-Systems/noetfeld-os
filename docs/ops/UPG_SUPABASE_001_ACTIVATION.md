@@ -22,17 +22,20 @@ Migrations are authored under `infrastructure/supabase/migrations/` (0001–0008
 1. Open [Supabase dashboard → Noetfield Systems](https://supabase.com/dashboard/project/tkgpapowwplupyekpivy).
 2. **Settings → Database** — copy **Connection string** (URI, pooler port 6543 recommended for Railway).
 3. **Settings → API** — copy `URL` + **service_role** key (server-side only).
-4. Add to `~/.sina/secrets.env` **or** ensure `~/.sourcea-secrets/noetfield.env` has API keys + database URL:
+4. **SourceA lane (already wired):** live keys live in `~/.sourcea-secrets/noetfield.env` — scaffolded from `~/Desktop/sourceA/infra/supabase/noetfield/config.example.env`. See `data/supabase-cloud-project-map-v1.json`.
+
+Optional DB password file (migrations):
 
 ```bash
-NOETFIELD_SUPABASE_REF=tkgpapowwplupyekpivy
-NOETFIELD_SUPABASE_URL=https://tkgpapowwplupyekpivy.supabase.co
-NOETFIELD_SUPABASE_ANON_KEY=<anon-key>
-NOETFIELD_SUPABASE_SERVICE_ROLE_KEY=<service-role-key>
-NOETFIELD_SUPABASE_DATABASE_URL=postgresql://postgres.[ref]:[password]@aws-0-[region].pooler.supabase.com:6543/postgres
+cp ~/Desktop/sourceA/infra/supabase/noetfield/config.db.example.env ~/.sourcea-secrets/noetfield-db.env
+# paste postgres password → then: ./scripts/supabase_activate_noetfield.sh --all
 ```
 
-The script auto-loads `~/.sourcea-secrets/noetfield.env` when present.
+Or load in shell:
+
+```bash
+source ~/Desktop/sourceA/infra/scripts/load-supabase-secrets-v1.sh noetfield
+```
 
 5. Run:
 

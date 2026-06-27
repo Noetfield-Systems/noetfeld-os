@@ -7,6 +7,9 @@ cd "$ROOT"
 
 VAULT="${HOME}/.sina/secrets.env"
 SOURCEA_SECRETS="${HOME}/.sourcea-secrets/noetfield.env"
+SOURCEA_DB_SECRETS="${HOME}/.sourcea-secrets/noetfield-db.env"
+SOURCEA_ROOT="${SOURCEA_ROOT:-${HOME}/Desktop/sourceA}"
+SOURCEA_NOETFIELD_INFRA="${SOURCEA_ROOT}/infra/supabase/noetfield"
 REF="${NOETFIELD_SUPABASE_REF:-tkgpapowwplupyekpivy}"
 RAILWAY_SERVICE="${RAILWAY_API_SERVICE:-platform-api}"
 
@@ -20,9 +23,18 @@ read_vault() {
 }
 
 load_env() {
+  # SourceA lane: live keys in ~/.sourcea-secrets/ (scaffolded from Desktop/sourceA/infra/supabase/noetfield/)
   if [[ -f "$SOURCEA_SECRETS" ]]; then
     # shellcheck disable=SC1090
     set -a && source "$SOURCEA_SECRETS" && set +a
+  elif [[ -f "${SOURCEA_NOETFIELD_INFRA}/config.env" ]]; then
+    set -a && source "${SOURCEA_NOETFIELD_INFRA}/config.env" && set +a
+  fi
+  if [[ -f "$SOURCEA_DB_SECRETS" ]]; then
+    # shellcheck disable=SC1090
+    set -a && source "$SOURCEA_DB_SECRETS" && set +a
+  elif [[ -f "${SOURCEA_NOETFIELD_INFRA}/config.db.env" ]]; then
+    set -a && source "${SOURCEA_NOETFIELD_INFRA}/config.db.env" && set +a
   fi
   SUPABASE_URL="${NOETFIELD_SUPABASE_URL:-${SUPABASE_URL:-$(read_vault NOETFIELD_SUPABASE_URL || true)}}"
   SUPABASE_ANON="${NOETFIELD_SUPABASE_ANON_KEY:-${SUPABASE_ANON_KEY:-$(read_vault NOETFIELD_SUPABASE_ANON_KEY || true)}}"
@@ -48,7 +60,10 @@ require_api() {
 }
 
 run_migrations() {
-  require_db
+  if [[ -z "$DATABASE_URL" ]]; then
+    log "SKIP migrations — add SUPABASE_DB_PASSWORD to ${SOURCEA_DB_SECRETS} (copy from ${SOURCEA_NOETFIELD_INFRA}/config.db.example.env)"
+    return 0
+  fi
   log "Applying migrations to Supabase Postgres…"
   python3 scripts/apply_postgres_migrations.py --database-url "$DATABASE_URL"
 }
@@ -125,7 +140,7 @@ wire_railway() {
     RAILWAY_CALLER="skill:use-railway" railway variable set --service "$RAILWAY_SERVICE" \
       "DATABASE_URL=${DATABASE_URL}"
   else
-    log "SKIP DATABASE_URL (add SUPABASE_DB_PASSWORD to ${SOURCEA_SECRETS} for migrations + DB wire-up)"
+    log "SKIP DATABASE_URL (add SUPABASE_DB_PASSWORD to ${SOURCEA_DB_SECRETS})"
   fi
 
   log "Redeploying ${RAILWAY_SERVICE}…"
@@ -169,7 +184,7 @@ main() {
     shift
   done
 
-  log "Noetfield Supabase ref=${REF}"
+  log "Noetfield Supabase ref=${REF} (SourceA secrets: ${SOURCEA_SECRETS})"
   [[ "$do_mig" -eq 1 ]] && run_migrations
   [[ "$do_hb" -eq 1 ]] && run_heartbeat
   [[ "$do_wire" -eq 1 ]] && wire_railway
