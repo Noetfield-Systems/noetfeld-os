@@ -1,0 +1,10 @@
+.venv
+__pycache__
+*.pyc
+.pytest_cache
+.git
+docs
+.agent-private
+*.db
+api_keys.local.json
+.github
