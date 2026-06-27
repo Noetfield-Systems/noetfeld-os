@@ -1,0 +1,8 @@
+{
+  "rule_set_id": "noetfeld-credit-v1",
+  "policy_pack_version": "1.0.0",
+  "status": "active",
+  "approve_threshold": 70.0,
+  "review_threshold": 45.0,
+  "allow_manual_override": true
+}

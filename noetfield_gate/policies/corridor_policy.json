@@ -1,0 +1,28 @@
+{
+  "rule_set_id": "noetfeld-credit-v1",
+  "policy_pack_version": "1.0.0",
+  "status": "active",
+  "corridors": [
+    {
+      "name": "High DTI requires review",
+      "metric": "dti_ratio",
+      "min_value": null,
+      "max_value": 0.50,
+      "on_breach_decision": "REVIEW"
+    },
+    {
+      "name": "Extreme DTI is decline",
+      "metric": "dti_ratio",
+      "min_value": null,
+      "max_value": 0.60,
+      "on_breach_decision": "DECLINE"
+    },
+    {
+      "name": "Max LTV standard cap",
+      "metric": "ltv_ratio",
+      "min_value": null,
+      "max_value": 0.95,
+      "on_breach_decision": "REVIEW"
+    }
+  ]
+}

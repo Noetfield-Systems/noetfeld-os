@@ -7,3 +7,5 @@ api_keys.local.json
 .pytest_cache/
 .coverage
 htmlcov/
+dist/
+*.egg-info/

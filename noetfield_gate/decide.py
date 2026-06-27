@@ -23,7 +23,7 @@ SAMPLE_INTENT: dict[str, Any] = {
 
 
 def api_base() -> str:
-    return os.environ.get("NOETFIELD_API_URL", "http://127.0.0.1:8001").strip().rstrip("/")
+    return os.environ.get("NOETFIELD_API_URL", "https://api.noetfield.com").strip().rstrip("/")
 
 
 def api_key() -> str:

@@ -28,6 +28,30 @@ def resolve_root() -> Path:
     return here
 
 
+def bundled_policy_dir() -> Path:
+    return Path(__file__).resolve().parent / "policies"
+
+
+def resolve_policy_paths(root: Path, *, use_bundled_fallback: bool) -> tuple[Path, Path, str]:
+    base = root / "base_policy.json"
+    corridor = root / "corridor_policy.json"
+    if base.is_file() and corridor.is_file():
+        return base, corridor, "repo"
+    if use_bundled_fallback:
+        bundled = bundled_policy_dir()
+        bundled_base = bundled / "base_policy.json"
+        bundled_corridor = bundled / "corridor_policy.json"
+        if bundled_base.is_file() and bundled_corridor.is_file():
+            return bundled_base, bundled_corridor, "bundled"
+    return base, corridor, "missing"
+
+
+def resolve_db_path(root: Path) -> Path:
+    if (root / "run.py").is_file():
+        return root / "noetfeld.db"
+    return Path.home() / ".noetfield" / "noetfeld.db"
+
+
 def _check(name: str, cid: str, ok: bool, reason: str, **extra: Any) -> dict[str, Any]:
     row: dict[str, Any] = {"id": cid, "name": name, "ok": ok, "reason": reason}
     row.update(extra)
@@ -35,14 +59,15 @@ def _check(name: str, cid: str, ok: bool, reason: str, **extra: Any) -> dict[str
 
 
 def run_gate_checks(*, root: Path | None = None, api_url: str | None = None) -> dict[str, Any]:
+    explicit_root = root is not None
     root = (root or resolve_root()).resolve()
     checks: list[dict[str, Any]] = []
 
-    base_path = root / "base_policy.json"
-    corridor_path = root / "corridor_policy.json"
-    if base_path.is_file() and corridor_path.is_file():
-        checks.append(_check("policy_pack_present", "G1", True, "base + corridor policy files found"))
-    else:
+    base_path, corridor_path, policy_source = resolve_policy_paths(
+        root,
+        use_bundled_fallback=not explicit_root,
+    )
+    if policy_source == "missing":
         checks.append(
             _check(
                 "policy_pack_present",
@@ -52,6 +77,18 @@ def run_gate_checks(*, root: Path | None = None, api_url: str | None = None) -> 
                 root=str(root),
             )
         )
+    elif policy_source == "bundled":
+        checks.append(
+            _check(
+                "policy_pack_present",
+                "G1",
+                True,
+                "bundled default policy pack (pip install)",
+                policy_source=policy_source,
+            )
+        )
+    else:
+        checks.append(_check("policy_pack_present", "G1", True, "base + corridor policy files found"))
 
     rule_set_id = ""
     rule_set_version = ""
@@ -76,7 +113,7 @@ def run_gate_checks(*, root: Path | None = None, api_url: str | None = None) -> 
     except (OSError, json.JSONDecodeError) as exc:
         checks.append(_check("policy_pack_valid", "G2", False, f"policy parse error: {exc}"))
 
-    db_path = root / "noetfeld.db"
+    db_path = resolve_db_path(root)
     try:
         db_path.parent.mkdir(parents=True, exist_ok=True)
         conn = sqlite3.connect(str(db_path))
@@ -111,24 +148,34 @@ def run_gate_checks(*, root: Path | None = None, api_url: str | None = None) -> 
             )
         )
 
-    # Policy registry load (in-process) when running from repo
-    if str(root) not in sys.path:
-        sys.path.insert(0, str(root))
-    try:
-        from policy_meta import build_policy_meta
-
-        meta = build_policy_meta(base_path=base_path, corridor_path=corridor_path)
+    if policy_source == "bundled" or not (root / "run.py").is_file():
         checks.append(
             _check(
                 "policy_registry",
                 "G5",
                 True,
-                "PolicyRegistry loaded",
-                combined_hash=meta.combined_hash,
+                "skipped — portable gate (full PolicyRegistry requires noetfeld-os checkout)",
+                skipped=True,
             )
         )
-    except Exception as exc:
-        checks.append(_check("policy_registry", "G5", False, f"PolicyRegistry: {exc}"))
+    else:
+        if str(root) not in sys.path:
+            sys.path.insert(0, str(root))
+        try:
+            from policy_meta import build_policy_meta
+
+            meta = build_policy_meta(base_path=base_path, corridor_path=corridor_path)
+            checks.append(
+                _check(
+                    "policy_registry",
+                    "G5",
+                    True,
+                    "PolicyRegistry loaded",
+                    combined_hash=meta.combined_hash,
+                )
+            )
+        except Exception as exc:
+            checks.append(_check("policy_registry", "G5", False, f"PolicyRegistry: {exc}"))
 
     failed = [c for c in checks if not c.get("ok")]
     outcome = "PASS" if not failed else "BLOCK"

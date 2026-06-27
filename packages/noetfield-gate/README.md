@@ -2,11 +2,20 @@
 
 Graphify-class chain tool for **Noetfield OS** — sits between your agent and execution.
 
-## Install (dev)
+## Install (PyPI)
+
+```bash
+pip install noetfield-gate
+noetfield gate
+```
+
+Bundled default policies ship in the wheel. Receipts land in `~/.noetfield/gate-report-v1.json`.
+
+## Install (dev / full runtime)
 
 ```bash
 cd ~/Projects/noetfeld-os
-pip install -e .
+pip install -e ".[dev]"
 ```
 
 ## One command: gate (PASS or BLOCK)
@@ -17,28 +26,18 @@ noetfield gate
 # -> ~/.noetfield/gate-report-v1.md
 ```
 
-Checks: policy pack on disk · JSON valid · sqlite writable · PolicyRegistry load · optional API `/readiness`.
+Checks: policy pack · JSON valid · sqlite writable · optional API `/readiness` · PolicyRegistry when running from full repo checkout.
 
 ```bash
-export NOETFIELD_API_URL=http://127.0.0.1:8001
+export NOETFIELD_API_URL=https://api.noetfield.com
 noetfield gate
 ```
 
 Exit code `0` = PASS, `1` = BLOCK.
 
-## SDK scaffold (stdlib)
-
-Minimal offline governance client (check → execute → receipt):
-
-```bash
-python3 scripts/noetfield_sdk_scaffold.py
-```
-
-See `scripts/noetfield_sdk_scaffold.py` (moved from Desktop loose file, 2026-06-26).
-
 ## One command: decide (receipt on disk)
 
-Start API: `python3 run.py` (port **8001**)
+Hosted API default: `https://api.noetfield.com`. Local dev: `NOETFIELD_API_URL=http://127.0.0.1:8001`.
 
 ```bash
 export NOETFIELD_API_KEY=your-key
@@ -56,14 +55,14 @@ noetfield decide --file intent.json --out DECISION_RECEIPT.json
 
 | Variable | Purpose |
 |----------|---------|
-| `NOETFIELD_ROOT` | Repo root if auto-detect fails |
-| `NOETFIELD_API_URL` | Remote or local GEL base URL |
+| `NOETFIELD_ROOT` | Full repo root (policies + PolicyRegistry) |
+| `NOETFIELD_API_URL` | GEL base URL (default: `https://api.noetfield.com`) |
 | `NOETFIELD_API_KEY` | `X-API-Key` for `/v1/decision` |
 
 ## Chain tool pattern
 
 - One command in → one artifact out (JSON + optional `.md`)
 - Runs at **every** execution boundary
-- Open-source CLI; hosted API = `api.noetfield.com` (Phase 7)
+- Open-source CLI; hosted API = `api.noetfield.com`
 
-**Related:** SourceA `critic_boot_v1.py` (portfolio boot) · Noetfield `POST /v1/decision` (policy gate).
+**Docs:** https://www.noetfield.com/gel/

@@ -27,6 +27,13 @@ def test_gate_block_missing_policy(tmp_path):
     assert report["block_reasons"]
 
 
+def test_gate_pass_portable_bundled(tmp_path, monkeypatch):
+    monkeypatch.chdir(tmp_path)
+    report = run_gate_checks(api_url=None)
+    assert report["outcome"] == "PASS"
+    assert any(c["name"] == "policy_pack_present" and c["ok"] for c in report["checks"])
+
+
 def test_gate_report_writes_md_and_json(tmp_path):
     report = {
         "schema": "noetfield-gate-report-v1",
