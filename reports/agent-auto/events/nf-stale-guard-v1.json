@@ -1,12 +1,12 @@
 {
   "schema_version": "nf-stale-guard-v1",
-  "generated_at": "2026-06-20T01:28:16Z",
+  "generated_at": "2026-06-28T04:48:57Z",
   "context_stale": false,
   "pending_task": null,
   "issues": [],
-  "mono_synced_at": "2026-06-20T00:29:44.588015+00:00",
-  "founder_cascade_at": "2026-06-20T00:56:33Z",
-  "founder_disk_sync_at": "2026-06-20T00:56:33Z",
-  "email_send_defer_line": "email-defer \u00b7 ON \u00b7 main=5/5 \u00b7 sites=RED \u00b7 email=AFTER_MAIN \u00b7 lift=NO",
+  "mono_synced_at": "2026-06-27T19:30:32Z",
+  "founder_cascade_at": "2026-06-24T08:37:18Z",
+  "founder_disk_sync_at": "2026-06-24T08:37:18Z",
+  "email_send_defer_line": "email-defer \u00b7 ON \u00b7 main=5/5 \u00b7 sites=RED \u00b7 email=AFTER_MAIN \u00b7 lift=YES",
   "heal": null
 }

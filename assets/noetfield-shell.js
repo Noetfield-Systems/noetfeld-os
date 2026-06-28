@@ -420,6 +420,76 @@
     document.body.appendChild(a);
   }
 
+  function analyticsSessionId() {
+    var key = "nf_analytics_sid";
+    try {
+      var existing = localStorage.getItem(key);
+      if (existing) return existing;
+      var sid = "as-" + Math.random().toString(36).slice(2, 12);
+      localStorage.setItem(key, sid);
+      return sid;
+    } catch (_) {
+      return "as-anon";
+    }
+  }
+
+  function analyticsPayload(eventName, metadata) {
+    var url;
+    try { url = new URL(window.location.href); } catch (_) { url = null; }
+    return {
+      event_name: eventName,
+      request_id: (window.__nf && window.__nf.rid) || "",
+      session_id: analyticsSessionId(),
+      page_path: window.location.pathname,
+      page_url: window.location.href,
+      referrer: document.referrer || "",
+      utm_source: url ? url.searchParams.get("utm_source") : "",
+      utm_medium: url ? url.searchParams.get("utm_medium") : "",
+      utm_campaign: url ? url.searchParams.get("utm_campaign") : "",
+      component: metadata && metadata.component ? metadata.component : "shell",
+      metadata: metadata || {},
+    };
+  }
+
+  function track(eventName, metadata) {
+    try {
+      var payload = analyticsPayload(eventName, metadata || {});
+      var body = JSON.stringify(payload);
+      if (navigator.sendBeacon) {
+        var blob = new Blob([body], { type: "application/json" });
+        if (navigator.sendBeacon("/api/analytics/event", blob)) return;
+      }
+      fetch("/api/analytics/event", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: body,
+        credentials: "omit",
+        keepalive: true,
+      }).catch(function () {});
+    } catch (_) {}
+  }
+
+  function installAnalytics() {
+    window.NFAnalytics = window.NFAnalytics || { track: track };
+    track("page_view", { component: "page", title: document.title || "" });
+    document.addEventListener("click", function (ev) {
+      var a = ev.target && ev.target.closest ? ev.target.closest("a,button") : null;
+      if (!a) return;
+      var text = (a.textContent || "").trim().slice(0, 120);
+      var href = a.getAttribute("href") || "";
+      var commercial = /apply|pilot|intake|demo|pricing|brief|contact|dashboard|export|admin/i.test(text + " " + href);
+      if (commercial) {
+        track("cta_click", {
+          component: "cta",
+          text: text,
+          href: href,
+          id: a.id || "",
+          class_name: a.className || "",
+        });
+      }
+    }, true);
+  }
+
   async function injectOne(targetId, partialName) {
     var el = document.getElementById(targetId);
     if (!el) return;
@@ -517,6 +587,7 @@
     initBurger();
     normalizeFooterCTA();
     ensureFeedbackTab(rid, eco);
+    installAnalytics();
     loadPublicChat();
 
     emitReady(rid);

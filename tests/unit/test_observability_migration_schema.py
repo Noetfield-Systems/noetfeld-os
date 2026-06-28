@@ -46,4 +46,8 @@ def test_observability_migration_lexical_order() -> None:
     migrations = sorted((ROOT / "infrastructure" / "supabase" / "migrations").glob("*.sql"))
     names = [m.name for m in migrations]
     assert "0008_observability_tables.sql" in names
-    assert names.index("0008_observability_tables.sql") == len(names) - 1
+    assert names.index("0008_observability_tables.sql") == 7
+    assert names[names.index("0008_observability_tables.sql") + 1 :] == [
+        "0009_public_analytics_events.sql",
+        "0010_public_analytics_funnel_tables.sql",
+    ]

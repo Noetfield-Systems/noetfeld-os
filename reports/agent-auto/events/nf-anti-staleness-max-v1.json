@@ -1,6 +1,6 @@
 {
   "schema_version": "nf-anti-staleness-max-v1",
-  "generated_at": "2026-06-20T01:28:18Z",
+  "generated_at": "2026-06-28T04:48:58Z",
   "ok": true,
   "agent_id": "noetfield_cloud",
   "law_doc": "docs/ops/NF_ANTI_STALENESS_MAXIMUM_FIX_SET_LOCKED_v1.md",
@@ -8,17 +8,17 @@
     {
       "layer": "L0_mono_receipt",
       "ok": true,
-      "detail": "email-defer \u00b7 ON \u00b7 main=5/5 \u00b7 sites=RED \u00b7 email=AFTER_MAIN \u00b7 lift=NO",
+      "detail": "email-defer \u00b7 ON \u00b7 main=5/5 \u00b7 sites=RED \u00b7 email=AFTER_MAIN \u00b7 lift=YES",
       "data": {
         "schema_version": "nf-mono-nerve-v1",
-        "generated_at": "2026-06-20T01:28:16Z",
+        "generated_at": "2026-06-28T04:48:57Z",
         "ok": true,
         "agent_id": "noetfield_cloud",
         "defer_active": true,
-        "email_send_defer_line": "email-defer \u00b7 ON \u00b7 main=5/5 \u00b7 sites=RED \u00b7 email=AFTER_MAIN \u00b7 lift=NO",
+        "email_send_defer_line": "email-defer \u00b7 ON \u00b7 main=5/5 \u00b7 sites=RED \u00b7 email=AFTER_MAIN \u00b7 lift=YES",
         "operations_inbox": {
           "schema": "noetfield-operations-inbox-active-v1",
-          "at": "2026-06-20T01:28:15Z",
+          "at": "2026-06-28T04:48:56Z",
           "ok": true,
           "inbox": "operations@noetfield.com",
           "gw_status": "ACTIVE",
@@ -28,17 +28,17 @@
           "ssot_doc": "docs/ops/COMMERCIAL_INBOX_PACKAGING_LOCKED_v1.md",
           "one_law": "GW inbox receive OPEN \u00b7 Resend/form auto-send DEFERRED until after factory"
         },
-        "defer_receipt_at": "2026-06-20T01:28:15Z",
-        "agent_live_surfaces_at": "2026-06-20T00:29:44Z",
-        "founder_cascade_latest_at": "2026-06-20T00:56:33Z",
+        "defer_receipt_at": "2026-06-28T04:48:55Z",
+        "agent_live_surfaces_at": "2026-06-27T19:30:32Z",
+        "founder_cascade_latest_at": "2026-06-24T08:37:18Z",
         "founder_cascade_newer_than_ship": false,
         "mono_newer_than_live_status": false,
         "trustfield_pulse": {
           "ok": true,
-          "email_send_defer_line": "email-defer \u00b7 ON \u00b7 main=5/5 \u00b7 sites=RED \u00b7 email=AFTER_MAIN \u00b7 lift=NO \u00b7 TF_MACLAW=ACTIVE \u00b7 attract_users",
+          "email_send_defer_line": "email-defer \u00b7 ON \u00b7 main=5/5 \u00b7 sites=RED \u00b7 email=AFTER_MAIN \u00b7 lift=YES \u00b7 TF_MACLAW=ACTIVE \u00b7 attract_users",
           "defer_active": false,
           "commercial_send_allowed": true,
-          "synced_at": "2026-06-20T01:28:16Z"
+          "synced_at": "2026-06-28T04:48:57Z"
         },
         "gates": [
           {
@@ -74,7 +74,7 @@
           {
             "gate": "email_send_defer_line",
             "ok": true,
-            "line": "email-defer \u00b7 ON \u00b7 main=5/5 \u00b7 sites=RED \u00b7 email=AFTER_MAIN \u00b7 lift=NO"
+            "line": "email-defer \u00b7 ON \u00b7 main=5/5 \u00b7 sites=RED \u00b7 email=AFTER_MAIN \u00b7 lift=YES"
           },
           {
             "gate": "defer_active_wired",
@@ -83,12 +83,12 @@
           {
             "gate": "agent_live_surfaces",
             "ok": true,
-            "synced_at": "2026-06-20T00:29:44Z"
+            "synced_at": "2026-06-27T19:30:32Z"
           },
           {
             "gate": "founder_cascade_readable",
             "ok": true,
-            "latest_at": "2026-06-20T00:56:33Z"
+            "latest_at": "2026-06-24T08:37:18Z"
           },
           {
             "gate": "trustfield_fleet_wire",
@@ -107,11 +107,11 @@
       "detail": "already_synced",
       "data": {
         "schema_version": "nf-founder-disk-sync-v1",
-        "generated_at": "2026-06-20T01:28:14Z",
+        "generated_at": "2026-06-28T04:48:54Z",
         "ok": true,
         "action": "already_synced",
         "agent_id": "noetfield_cloud",
-        "cascade_at": "2026-06-20T00:56:33Z",
+        "cascade_at": "2026-06-24T08:37:18Z",
         "cascade_source": "validator_proof",
         "text_preview": "NO HUB REBUILD \u2014 cascade proof test",
         "inbox_action": "INBOX_STALE",
@@ -130,32 +130,32 @@
       "detail": "[]",
       "data": {
         "schema_version": "nf-stale-guard-v1",
-        "generated_at": "2026-06-20T01:28:16Z",
+        "generated_at": "2026-06-28T04:48:57Z",
         "context_stale": false,
         "pending_task": null,
         "issues": [],
-        "mono_synced_at": "2026-06-20T00:29:44.588015+00:00",
-        "founder_cascade_at": "2026-06-20T00:56:33Z",
-        "founder_disk_sync_at": "2026-06-20T00:56:33Z",
-        "email_send_defer_line": "email-defer \u00b7 ON \u00b7 main=5/5 \u00b7 sites=RED \u00b7 email=AFTER_MAIN \u00b7 lift=NO",
+        "mono_synced_at": "2026-06-27T19:30:32Z",
+        "founder_cascade_at": "2026-06-24T08:37:18Z",
+        "founder_disk_sync_at": "2026-06-24T08:37:18Z",
+        "email_send_defer_line": "email-defer \u00b7 ON \u00b7 main=5/5 \u00b7 sites=RED \u00b7 email=AFTER_MAIN \u00b7 lift=YES",
         "heal": null
       }
     },
     {
       "layer": "L2_surfaces_line",
       "ok": true,
-      "detail": "email-defer \u00b7 ON \u00b7 main=5/5 \u00b7 sites=RED \u00b7 email=AFTER_MAIN \u00b7 lift=NO",
+      "detail": "email-defer \u00b7 ON \u00b7 main=5/5 \u00b7 sites=RED \u00b7 email=AFTER_MAIN \u00b7 lift=YES",
       "data": {
         "schema_version": "nf-live-surfaces-v1",
-        "generated_at": "2026-06-20T01:28:16Z",
+        "generated_at": "2026-06-28T04:48:57Z",
         "agent_id": "noetfield_cloud",
         "plane": "noetfield_cloud",
         "product_now_line": "no pending next_tasks",
         "portfolio_now_line": "portfolio 260/300 done",
-        "email_send_defer_line": "email-defer \u00b7 ON \u00b7 main=5/5 \u00b7 sites=RED \u00b7 email=AFTER_MAIN \u00b7 lift=NO",
+        "email_send_defer_line": "email-defer \u00b7 ON \u00b7 main=5/5 \u00b7 sites=RED \u00b7 email=AFTER_MAIN \u00b7 lift=YES",
         "defer_active": true,
         "w3_send_ready": false,
-        "w3_email_send_deferred": true,
+        "w3_email_send_deferred": false,
         "commercial_blockers": [
           "factory_now",
           "w3_critic_circle",
@@ -165,14 +165,14 @@
           "w3_send_ready"
         ],
         "advisory_line": "advisory \u00b7 idle \u00b7 SourceA Sina read \u2192 Noetfield compile \u2192 TrustField send",
-        "portfolio_parent_at": "2026-06-20T00:29:44Z",
+        "portfolio_parent_at": "2026-06-27T19:30:32Z",
         "mono_nerve_ok": true,
         "operations_inbox": "ACTIVE",
         "gate_ok": true,
         "context_stale": false,
         "voyage_ok": true,
         "pending_task": null,
-        "git_sha": "ec54f94",
+        "git_sha": "92b42f94",
         "routing_pending": null,
         "quote_rule": "Quote product_now_line AND email_send_defer_line \u2014 not chat memory",
         "heal": null,
@@ -185,7 +185,7 @@
       "detail": "",
       "data": {
         "schema_version": "nf-receipt-cascade-v1",
-        "generated_at": "2026-06-20T01:28:12Z",
+        "generated_at": "2026-06-28T04:48:52Z",
         "ok": true,
         "failures": [],
         "nodes": [],
@@ -221,7 +221,7 @@
       "detail": "20/20",
       "data": {
         "schema_version": "nf-orient-read-chain-v1",
-        "generated_at": "2026-06-20T01:28:16Z",
+        "generated_at": "2026-06-28T04:48:57Z",
         "ok": true,
         "total": 20,
         "present": 20,
@@ -257,9 +257,9 @@
       "detail": "GW inbox receive OPEN \u00b7 Resend/W3 send DEFERRED until factory + sites + founder lift",
       "data": {
         "schema": "ecosystem-live-nerve-v1",
-        "generated_at": "2026-06-20T01:28:16Z",
+        "generated_at": "2026-06-28T04:48:57Z",
         "ok": true,
-        "email_send_defer_line": "email-defer \u00b7 ON \u00b7 main=5/5 \u00b7 sites=RED \u00b7 email=AFTER_MAIN \u00b7 lift=NO",
+        "email_send_defer_line": "email-defer \u00b7 ON \u00b7 main=5/5 \u00b7 sites=RED \u00b7 email=AFTER_MAIN \u00b7 lift=YES",
         "defer_active": true,
         "planes": {
           "noetfield": {
@@ -274,8 +274,8 @@
           },
           "sourcea_parent": {
             "receipt": "~/.sina/agent-live-surfaces-v1.json",
-            "synced_at": "2026-06-20T00:29:44Z",
-            "factory_now_line": "factory-now \u00b7 Valid YES 1000 \u00b7 brain 1000 \u00b7 dual_proof True \u00b7 mode FREEZE \u00b7 queue "
+            "synced_at": "2026-06-27T19:30:32Z",
+            "factory_now_line": "factory-now \u00b7 Cloud Workers.app owns Cloud Forge Run \u00b7 head CLOUD-SEC-7167 \u00b7 batch 73 \u00b7 100 rows/10min \u00b7 100 tasks/row"
           }
         },
         "sequencing_law": "GW inbox receive OPEN \u00b7 Resend/W3 send DEFERRED until factory + sites + founder lift",
@@ -288,7 +288,7 @@
       "detail": "ACTIVE",
       "data": {
         "schema": "noetfield-operations-inbox-active-v1",
-        "at": "2026-06-20T01:28:15Z",
+        "at": "2026-06-28T04:48:56Z",
         "ok": true,
         "inbox": "operations@noetfield.com",
         "gw_status": "ACTIVE",
@@ -302,10 +302,10 @@
     {
       "layer": "L3_outbound_defer",
       "ok": true,
-      "detail": "email-defer \u00b7 ON \u00b7 main=5/5 \u00b7 sites=RED \u00b7 email=AFTER_MAIN \u00b7 lift=NO",
+      "detail": "email-defer \u00b7 ON \u00b7 main=5/5 \u00b7 sites=RED \u00b7 email=AFTER_MAIN \u00b7 lift=YES",
       "data": {
         "schema": "commercial-email-send-defer-receipt-v1",
-        "at": "2026-06-20T01:28:16Z",
+        "at": "2026-06-28T04:48:57Z",
         "ok": true,
         "one_law": "Commercial email send is DEFERRED \u2014 runs only AFTER FBE factory builder is ONLINE in cloud + main cloud factories + product sites. Email is not a main factory. Mac is never a factory.",
         "execution_model": {
@@ -323,8 +323,8 @@
         "sites_online": false,
         "workers_online": true,
         "hardening_ready": false,
-        "founder_lift": false,
-        "email_send_defer_line": "email-defer \u00b7 ON \u00b7 main=5/5 \u00b7 sites=RED \u00b7 email=AFTER_MAIN \u00b7 lift=NO",
+        "founder_lift": true,
+        "email_send_defer_line": "email-defer \u00b7 ON \u00b7 main=5/5 \u00b7 sites=RED \u00b7 email=AFTER_MAIN \u00b7 lift=YES",
         "deferred_lane": {
           "id": "commercial_email_cloud",
           "label": "W3 outbound email (TrustField send)",
@@ -374,8 +374,8 @@
             "label": "Video ad factory (cloud federated)",
             "required": false,
             "kind": "receipt",
-            "ok": false,
-            "detail": "ok=False"
+            "ok": true,
+            "detail": "ok=True"
           },
           {
             "id": "noetfield_freemium_bay",
@@ -448,8 +448,8 @@
             "label": "Video ad factory (cloud federated)",
             "required": false,
             "kind": "receipt",
-            "ok": false,
-            "detail": "ok=False"
+            "ok": true,
+            "detail": "ok=True"
           },
           {
             "id": "noetfield_freemium_bay",
@@ -504,15 +504,15 @@
             "id": "noetfield",
             "label": "Noetfield",
             "required": true,
-            "ok": true,
-            "detail": "https://www.noetfield.com \u00b7 HTTP 200"
+            "ok": false,
+            "detail": "https://www.noetfield.com \u00b7 HTTP 403"
           },
           {
             "id": "witnessbc",
             "label": "WitnessBC",
             "required": true,
-            "ok": false,
-            "detail": "https://www.witnessbc.com \u00b7 missing: AI policy at dispatch, brand-disambiguation \u00b7 stale: Independent Public-interest Journalism"
+            "ok": true,
+            "detail": "https://www.witnessbc.com \u00b7 HTTP 200"
           }
         ],
         "ssot": "data/commercial-email-send-defer-v1.json",
@@ -522,21 +522,21 @@
     {
       "layer": "L3_trustfield_wire",
       "ok": true,
-      "detail": "email-defer \u00b7 ON \u00b7 main=5/5 \u00b7 sites=RED \u00b7 email=AFTER_MAIN \u00b7 lift=NO \u00b7 TF_MACLAW=ACTIVE \u00b7 attract_users",
+      "detail": "email-defer \u00b7 ON \u00b7 main=5/5 \u00b7 sites=RED \u00b7 email=AFTER_MAIN \u00b7 lift=YES \u00b7 TF_MACLAW=ACTIVE \u00b7 attract_users",
       "data": {
         "schema": "tf-live-surfaces-v1",
         "version": "1.0.0",
-        "synced_at": "2026-06-20T01:28:16Z",
+        "synced_at": "2026-06-28T04:48:57Z",
         "agent_id": "trustfield",
         "law": "email AFTER main factories + product sites + founder lift (TrustField MACLAW override when active)",
         "ssot": "SourceA/data/commercial-email-send-defer-v1.json",
         "maclaw_doc": "docs/MACLAW_USER_GROWTH_ANALYTICS_SEO_LOCKED.md",
         "tf_maclaw_override": true,
-        "email_send_defer_line": "email-defer \u00b7 ON \u00b7 main=5/5 \u00b7 sites=RED \u00b7 email=AFTER_MAIN \u00b7 lift=NO \u00b7 TF_MACLAW=ACTIVE \u00b7 attract_users",
+        "email_send_defer_line": "email-defer \u00b7 ON \u00b7 main=5/5 \u00b7 sites=RED \u00b7 email=AFTER_MAIN \u00b7 lift=YES \u00b7 TF_MACLAW=ACTIVE \u00b7 attract_users",
         "defer_active": false,
         "portfolio_defer_active": true,
         "w3_send_ready": false,
-        "w3_email_send_deferred": true,
+        "w3_email_send_deferred": false,
         "commercial_blockers": [
           "factory_now",
           "w3_critic_circle",
@@ -546,11 +546,11 @@
           "w3_send_ready"
         ],
         "commercial_send_allowed": true,
-        "commercial_blocked_ladder": true,
-        "ladder_priority_step": 1,
+        "commercial_blocked_ladder": false,
+        "ladder_priority_step": 6,
         "sites_online": false,
         "main_factories_online": true,
-        "founder_lift": false,
+        "founder_lift": true,
         "mail_from": [
           {
             "lane": "TF",
@@ -563,11 +563,11 @@
             "configured": true
           }
         ],
-        "parent_surfaces_at": "2026-06-20T00:29:44Z",
-        "nerve_line": "nerve \u00b7 queue=idle \u00b7 aligned \u00b7 drift=57 \u00b7 loop=3sys\u00b73comm \u00b7 rules=forbidden_one,lane_forbidden,salvage_pattern,ship_gate:w3_critic_circle+1 \u00b7 fleet66% \u00b7 research=YES \u00b7 AS=ok \u00b7 ui_fc=BLOCK \u00b7 worker=PASS \u00b7 outbound \u00b7 0/100 done \u00b7 head=? \u00b7 plan=? \u00b7 sa=?",
+        "parent_surfaces_at": "2026-06-27T19:30:32Z",
+        "nerve_line": "nerve \u00b7 queue=idle \u00b7 aligned \u00b7 drift=86 \u00b7 loop=3sys\u00b73comm \u00b7 rules=forbidden_one,lane_forbidden,salvage_pattern,ship_gate:w3_critic_circle+1 \u00b7 fleet90+ \u00b7 research=YES \u00b7 AS=ok \u00b7 ui_fc=BLOCK \u00b7 maclaw=PASS \u00b7 worker=BLOCK",
         "advisory_line": "advisory \u00b7 idle \u00b7 SourceA Sina read \u2192 Noetfield compile \u2192 TrustField send",
-        "better_loop_line": "better-loop \u00b7 3 sys \u00b7 3 commercial \u00b7 lever=money \u00b7 W3 clean=93% \u00b7 Goal 1 idle \u00b7 Hub glance \u00b7 commercial P0",
-        "factory_now_line": "factory-now \u00b7 Valid YES 1000 \u00b7 brain 1000 \u00b7 dual_proof True \u00b7 mode FREEZE \u00b7 queue ",
+        "better_loop_line": "better-loop \u00b7 3 sys \u00b7 3 commercial \u00b7 lever=money \u00b7 W3 clean=93% \u00b7 FORGE FACTORY cycle2 \u00b7 FORGE FACTORY cycle2 \u00b7 Loop auto \u00b7 Hub glance \u00b7 commercial P0 parallel",
+        "factory_now_line": "factory-now \u00b7 Cloud Workers.app owns Cloud Forge Run \u00b7 head CLOUD-SEC-7167 \u00b7 batch 73 \u00b7 100 rows/10min \u00b7 100 tasks/row",
         "quote_rule": "Quote email_send_defer_line in every commercial reply \u2014 not chat memory",
         "boot_command": "./scripts/tf_session_gate_run.sh",
         "pulse": {
@@ -576,7 +576,7 @@
               "step": "commercial_email_send_defer",
               "ok": true,
               "defer_active": true,
-              "line": "email-defer \u00b7 ON \u00b7 main=5/5 \u00b7 sites=RED \u00b7 email=AFTER_MAIN \u00b7 lift=NO"
+              "line": "email-defer \u00b7 ON \u00b7 main=5/5 \u00b7 sites=RED \u00b7 email=AFTER_MAIN \u00b7 lift=YES"
             }
           ],
           "ok": true
@@ -620,7 +620,7 @@
     }
   ],
   "product_now_line": "no pending next_tasks",
-  "email_send_defer_line": "email-defer \u00b7 ON \u00b7 main=5/5 \u00b7 sites=RED \u00b7 email=AFTER_MAIN \u00b7 lift=NO",
+  "email_send_defer_line": "email-defer \u00b7 ON \u00b7 main=5/5 \u00b7 sites=RED \u00b7 email=AFTER_MAIN \u00b7 lift=YES",
   "defer_active": true,
   "heal": null
 }

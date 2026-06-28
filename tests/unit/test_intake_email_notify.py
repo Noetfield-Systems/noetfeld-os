@@ -21,6 +21,7 @@ class _EmailSettings:
     intake_email_from: str = "Noetfield Intake <notifications@noetfield.com>"
     intake_email_to: str = "operations@noetfield.com"
     intake_auto_ack_enabled: bool = True
+    casl_mailing_address: str = "7816 Windsor St\nVancouver, BC, V5X 4A8\nCanada"
     resend_api_key: object | None = "re_test_key"
     intake_smtp_host: str | None = None
     intake_smtp_port: int = 587
@@ -103,6 +104,9 @@ def test_notify_submitter_ack() -> None:
     assert kwargs["to_addrs"] == ["alex@acme.example"]
     assert kwargs["reply_to"] == "operations@noetfield.com"
     assert "message received" in kwargs["subject"].lower()
+    assert "7816 Windsor St" in kwargs["text"]
+    assert "Vancouver, BC, V5X 4A8" in kwargs["text"]
+    assert "reply to this message to stop follow-up" in kwargs["text"]
 
 
 def test_notify_submitter_ack_respects_disable() -> None:

@@ -4,6 +4,15 @@ const CANONICAL_INTAKE = "operations@noetfield.com";
 
 const RULES = [
   {
+    match: /\b(store|save|log|record|history|transcript|conversation|privacy|data retention)\b/i,
+    reply:
+      "Public web assistant conversations may be logged server-side for quality, reliability, and security review. " +
+      "Do not send confidential information in this chat. Use public product questions here, and use the formal intake path or " +
+      CANONICAL_INTAKE +
+      " for follow-up.",
+    citations: ["/privacy/"],
+  },
+  {
     match: /\b(trust brief|10k|10000|\$10)\b/i,
     reply:
       "Trust Brief is a six-week engagement ($10,000): governance audit, AI policy mapping, and risk exposure analysis. " +

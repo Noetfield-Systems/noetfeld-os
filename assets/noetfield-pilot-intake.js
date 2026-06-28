@@ -21,6 +21,14 @@
     return map[band] || band || "Readiness Pilot";
   }
 
+  function track(eventName, metadata) {
+    try {
+      if (window.NFAnalytics && window.NFAnalytics.track) {
+        window.NFAnalytics.track(eventName, metadata || {});
+      }
+    } catch (_) {}
+  }
+
   function buildMessage(fields) {
     return (
       "Noetfield — Copilot Governance Pack (async pilot application)\n" +
@@ -35,6 +43,15 @@
       "\n" +
       "Pilot band: " +
       bandLabel(fields.band) +
+      "\n" +
+      "Timeline: " +
+      (fields.timeline || "—") +
+      "\n" +
+      "Evidence readiness: " +
+      (fields.evidence || "—") +
+      "\n" +
+      "Success meeting: " +
+      (fields.success_meeting || "—") +
       "\n" +
       "Notes: " +
       (fields.notes || "—") +
@@ -57,6 +74,9 @@
       var org = (form.querySelector('[name="org"]') || {}).value || "";
       var role = (form.querySelector('[name="role"]') || {}).value || "";
       var band = (form.querySelector('[name="band"]') || {}).value || "readiness";
+      var timeline = (form.querySelector('[name="timeline"]') || {}).value || "";
+      var evidence = (form.querySelector('[name="evidence"]') || {}).value || "";
+      var successMeeting = (form.querySelector('[name="success_meeting"]') || {}).value || "";
       var notes = (form.querySelector('[name="notes"]') || {}).value || "";
 
       if (!email || !org) {
@@ -69,7 +89,16 @@
         return;
       }
 
-      var msg = buildMessage({ email: email, org: org, role: role, band: band, notes: notes });
+      var msg = buildMessage({
+        email: email,
+        org: org,
+        role: role,
+        band: band,
+        timeline: timeline,
+        evidence: evidence,
+        success_meeting: successMeeting,
+        notes: notes,
+      });
       var intakeUrl =
         form.getAttribute("data-intake") ||
         "/trust-brief/intake/?interest=pilot&vector=copilot-governance";
@@ -84,6 +113,12 @@
           page: window.location.pathname,
           pilot_band: band,
           buyer_role: role,
+          timeline: timeline,
+          evidence_readiness: evidence,
+          success_meeting: successMeeting,
+          contact_email: email,
+          organization: org,
+          vector: vector,
           async: true,
         },
         submitBtn: form.querySelector('button[type="submit"]'),
@@ -113,6 +148,32 @@
         errorCopy: {
           mailSubject: "Noetfield — Copilot Governance Pack pilot application",
           mailBody: msg,
+        },
+        onSuccess: function () {
+          track("form_submit", {
+            component: "form",
+            form_id: form.id || "",
+            vector: vector,
+            sku: "copilot",
+            page: window.location.pathname,
+            contact_email: email,
+            organization: org,
+            role: role,
+            pilot_band: band,
+            timeline: timeline,
+            evidence_readiness: evidence,
+            success_meeting: successMeeting,
+          });
+        },
+        onError: function (err) {
+          track("form_submit_error", {
+            component: "form",
+            form_id: form.id || "",
+            vector: vector,
+            sku: "copilot",
+            page: window.location.pathname,
+            status: err && err.status ? err.status : 0,
+          });
         },
       });
     });

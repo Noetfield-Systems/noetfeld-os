@@ -128,10 +128,24 @@
  <h2>Async intake — VC · PE · corp dev · operating partner</h2>
  <p class="nf-section-lead">Non-confidential · NDA scope on engagement · operations@noetfield.com replies within one business day.</p>
  </div></div>
- <form id="nfInvestorDiligenceForm" class="nf-pilot-apply-form" data-nf-intake-form data-intake-vector="investor-diligence" data-intake-sku="general" data-submit-label="Request diligence access" data-intake-headline="Diligence request recorded" data-intake-detail="Operations shares vault artifacts and follows up on shadow brief or portfolio scan scope." aria-label="Investor diligence intake">
+ <form id="nfInvestorDiligenceForm" class="nf-pilot-apply-form nf-multistep-form" data-nf-multistep-form data-nf-intake-form data-intake-vector="investor-diligence" data-intake-sku="general" data-submit-label="Request diligence access" data-intake-headline="Diligence request recorded" data-intake-detail="Operations shares vault artifacts and follows up on shadow brief or portfolio scan scope." aria-label="Investor diligence intake">
+ <ol class="nf-form-stepper" aria-label="Diligence request steps">
+ <li data-nf-step-target class="is-active"><span>1</span> Team</li>
+ <li data-nf-step-target><span>2</span> Deal</li>
+ <li data-nf-step-target><span>3</span> Submit</li>
+ </ol>
+ <fieldset class="nf-form-step" data-nf-form-step="team" data-step-label="Team">
+ <legend>Who should operations follow up with?</legend>
  <div class="nf-pilot-apply-grid">
  <label>Work email<input type="email" name="email" required autocomplete="email" placeholder="you@fund.com" /></label>
  <label>Organization<input type="text" name="org" required autocomplete="organization" placeholder="Fund · PE · corp dev" /></label>
+ <label>Your role<input type="text" name="role" required placeholder="Partner · principal · corp dev · operator" /></label>
+ </div>
+ <div class="nf-cta-actions"><button type="button" class="btn btn-primary" data-nf-step-next>Continue to deal</button><a class="btn btn-secondary" href="/investors/">Investor brief</a></div>
+ </fieldset>
+ <fieldset class="nf-form-step" data-nf-form-step="deal" data-step-label="Deal" hidden>
+ <legend>What diligence path are we supporting?</legend>
+ <div class="nf-pilot-apply-grid">
  <label>Engagement type
  <select name="engagement" required>
  <option value="">Select engagement</option>
@@ -142,14 +156,29 @@
  <option value="vault-access">Vault artifact access only</option>
  </select>
  </label>
+ <label>Deal stage
+ <select name="deal_stage" required>
+ <option value="">Select stage</option>
+ <option value="screening">Screening</option>
+ <option value="ioi-loi">IOI / LOI</option>
+ <option value="confirmatory-diligence">Confirmatory diligence</option>
+ <option value="post-close">Post-close operating plan</option>
+ <option value="portfolio-review">Portfolio review</option>
+ </select>
+ </label>
  </div>
- <label>Target context (optional)<textarea name="notes" rows="3" placeholder="Deal stage · portco stack · Copilot/M365 claims · unclassified only"></textarea></label>
- <input type="hidden" name="role" value="investor-diligence" />
+ <label>Target context (optional)<textarea name="target_context" rows="3" placeholder="Portco stack · Copilot/M365 claims · unclassified only"></textarea></label>
+ <div class="nf-cta-actions"><button type="button" class="btn btn-secondary" data-nf-step-back>Back</button><button type="button" class="btn btn-primary" data-nf-step-next>Continue to submit</button></div>
+ </fieldset>
+ <fieldset class="nf-form-step" data-nf-form-step="confirm" data-step-label="Submit" hidden>
+ <legend>Confirm request</legend>
+ <label>Priority question (optional)<textarea name="notes" rows="3" placeholder="What should the first diligence answer prove?"></textarea></label>
  <div class="nf-cta-actions">
+ <button type="button" class="btn btn-secondary" data-nf-step-back>Back</button>
  <button type="submit" class="btn btn-primary">Request diligence access</button>
- <a class="btn btn-secondary" href="/investors/">Investor brief</a>
  <a class="btn btn-secondary" href="/?lane=investor#nfLiveProofHero">Try VC scenario</a>
  </div>
+ </fieldset>
  <div id="nfInvestorDiligenceStatus" class="nf-intake-async-status" data-nf-intake-status hidden aria-live="polite"></div>
  </form>
  </section>

@@ -245,7 +245,14 @@
  <h2>Start your Copilot Governance Pack intake</h2>
  <p class="nf-section-lead">Non-confidential · include your Request ID from the footer · operations@noetfield.com</p>
  </div></div>
- <form id="nfPilotApplyForm" class="nf-pilot-apply-form" data-intake="/trust-brief/intake/?interest=pilot&vector=copilot-governance" data-vector="copilot-governance" data-nf-intake-custom="1" aria-label="Copilot Governance Pack intake">
+ <form id="nfPilotApplyForm" class="nf-pilot-apply-form nf-multistep-form" data-nf-multistep-form data-intake="/trust-brief/intake/?interest=pilot&vector=copilot-governance" data-vector="copilot-governance" data-nf-intake-custom="1" aria-label="Copilot Governance Pack intake">
+ <ol class="nf-form-stepper" aria-label="Pilot intake steps">
+ <li data-nf-step-target class="is-active"><span>1</span> Contact</li>
+ <li data-nf-step-target><span>2</span> Scope</li>
+ <li data-nf-step-target><span>3</span> Submit</li>
+ </ol>
+ <fieldset class="nf-form-step" data-nf-form-step="contact" data-step-label="Contact">
+ <legend>Who owns the Copilot rollout?</legend>
  <div class="nf-pilot-apply-grid">
  <label>Work email<input type="email" name="email" required autocomplete="email" placeholder="you@institution.com" /></label>
  <label>Organization<input type="text" name="org" required autocomplete="organization" placeholder="Regulated institution name" /></label>
@@ -261,16 +268,56 @@
  </label>
  <label>Pilot band
  <select name="band">
- <option value="quickscan">QuickScan · $2k–$3.5k · 4 weeks</option>
- <option value="readiness" selected>Readiness Pilot · $5k–10k · 90 days (recommended)</option>
+ <option value="quickscan">QuickScan · $2k-$3.5k · 4 weeks</option>
+ <option value="readiness" selected>Readiness Pilot · $5k-10k · 90 days (recommended)</option>
+ </select>
+ </label>
+ </div>
+ <div class="nf-cta-actions"><button type="button" class="btn btn-primary" data-nf-step-next>Continue to scope</button><a class="btn btn-secondary" href="/copilot/demo/">5-minute demo first</a></div>
+ </fieldset>
+ <fieldset class="nf-form-step" data-nf-form-step="scope" data-step-label="Scope" hidden>
+ <legend>What should the pilot prove?</legend>
+ <div class="nf-pilot-apply-grid">
+ <label>Rollout timeline
+ <select name="timeline" required>
+ <option value="">Select timeline</option>
+ <option value="0-30-days">0-30 days</option>
+ <option value="30-90-days">30-90 days</option>
+ <option value="90-plus-days">90+ days</option>
+ <option value="already-live">Already live; need governance evidence</option>
+ </select>
+ </label>
+ <label>Evidence readiness
+ <select name="evidence" required>
+ <option value="">Select readiness</option>
+ <option value="m365-metadata-ready">M365 metadata source ready</option>
+ <option value="policy-decks-only">Policy decks only</option>
+ <option value="procurement-asking">Procurement or board is asking</option>
+ <option value="unknown">Not sure yet</option>
  </select>
  </label>
  </div>
  <label>Scope notes (optional)<textarea name="notes" rows="3" placeholder="Copilot rollout timeline · EU/US · unclassified only"></textarea></label>
+ <div class="nf-cta-actions"><button type="button" class="btn btn-secondary" data-nf-step-back>Back</button><button type="button" class="btn btn-primary" data-nf-step-next>Continue to submit</button></div>
+ </fieldset>
+ <fieldset class="nf-form-step" data-nf-form-step="confirm" data-step-label="Submit" hidden>
+ <legend>Confirm the success signal</legend>
+ <label>Target governance meeting
+ <select name="success_meeting" required>
+ <option value="">Select meeting</option>
+ <option value="risk-committee">Risk committee</option>
+ <option value="board">Board meeting</option>
+ <option value="legal-procurement">Legal / procurement review</option>
+ <option value="security-steering">Security steering committee</option>
+ <option value="not-scheduled">Not scheduled yet</option>
+ </select>
+ </label>
+ <p class="nf-section-lead" style="margin-top:12px">We only need non-confidential scope. Operations follows up with kickoff, M365 metadata scoping, and board PDF success criteria.</p>
  <div class="nf-cta-actions">
+ <button type="button" class="btn btn-secondary" data-nf-step-back>Back</button>
  <button type="submit" class="btn btn-primary">Submit pilot intake</button>
- <a class="btn btn-secondary" href="/copilot/demo/">5-minute demo first</a>
  </div>
+ </fieldset>
  <p class="nf-section-lead" style="margin-top:12px">Fixed fee · metadata-only M365 · board PDF success signal · <a href="/copilot/procurement/">procurement pack</a></p>
  <div id="nfPilotApplyStatus" class="nf-intake-async-status" hidden aria-live="polite"></div>
  </form>

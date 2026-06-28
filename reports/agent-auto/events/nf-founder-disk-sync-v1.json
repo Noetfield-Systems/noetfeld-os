@@ -1,10 +1,10 @@
 {
   "schema_version": "nf-founder-disk-sync-v1",
-  "generated_at": "2026-06-20T01:28:14Z",
+  "generated_at": "2026-06-28T04:48:54Z",
   "ok": true,
   "action": "already_synced",
   "agent_id": "noetfield_cloud",
-  "cascade_at": "2026-06-20T00:56:33Z",
+  "cascade_at": "2026-06-24T08:37:18Z",
   "cascade_source": "validator_proof",
   "text_preview": "NO HUB REBUILD \u2014 cascade proof test",
   "inbox_action": "INBOX_STALE",

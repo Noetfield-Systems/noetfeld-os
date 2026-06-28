@@ -2,7 +2,7 @@
   "version": "1",
   "intake_email": "operations@noetfield.com",
   "intake_url": "https://www.noetfield.com/trust-brief/intake/",
-  "chat_api_base": "",
+  "chat_api_base": "https://platform.noetfield.com",
   "telegram_bot_username": "",
   "channels": {
     "website_chat": true,

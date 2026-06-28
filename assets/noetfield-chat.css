@@ -58,9 +58,9 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 14px 16px;
+  padding: 15px 16px;
   border-bottom: 1px solid #e5e7eb;
-  background: linear-gradient(180deg, #faf8f3, #ffffff);
+  background: linear-gradient(180deg, #fbfaf7, #ffffff);
 }
 .nfChatHeadMark {
   width: 36px;
@@ -78,6 +78,7 @@
 .nfChatHeadText strong {
   display: block;
   font-size: 14px;
+  letter-spacing: 0.01em;
   color: #0f1117;
 }
 .nfChatHeadText span {
@@ -104,7 +105,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
-  padding: 10px 14px 0;
+  padding: 11px 14px 0;
 }
 .nfChatQuick button {
   font-size: 11px;
@@ -153,6 +154,16 @@
   border: 1px solid #e5e7eb;
   color: #0f1117;
 }
+.nfChatMsg.bot a {
+  color: #7b5f1d;
+  font-weight: 700;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(123, 95, 29, 0.28);
+}
+.nfChatMsg.bot a:hover {
+  color: #4f3d14;
+  border-bottom-color: rgba(79, 61, 20, 0.65);
+}
 .nfChatMsg.typing {
   align-self: flex-start;
   color: #5c6370;
@@ -169,6 +180,40 @@
   25% { content: "."; }
   50% { content: ".."; }
   75% { content: "..."; }
+}
+
+.nfChatCitations {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin-top: 10px;
+  padding-top: 9px;
+  border-top: 1px solid rgba(15, 17, 23, 0.08);
+}
+.nfChatCitationsLabel {
+  width: 100%;
+  color: #6b7280;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.nfChatCitations a {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid rgba(200, 163, 73, 0.35);
+  border-radius: 999px;
+  padding: 3px 8px;
+  background: rgba(200, 163, 73, 0.08);
+  color: #5f4918;
+  font-size: 11px;
+  font-weight: 700;
+  text-decoration: none;
+}
+.nfChatCitations a:hover {
+  border-color: rgba(200, 163, 73, 0.7);
+  background: rgba(200, 163, 73, 0.14);
 }
 
 .nfChatForm {

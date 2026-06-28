@@ -1,13 +1,13 @@
 {
   "schema_version": "nf-mono-nerve-v1",
-  "generated_at": "2026-06-20T01:28:16Z",
+  "generated_at": "2026-06-28T04:48:57Z",
   "ok": true,
   "agent_id": "noetfield_cloud",
   "defer_active": true,
-  "email_send_defer_line": "email-defer \u00b7 ON \u00b7 main=5/5 \u00b7 sites=RED \u00b7 email=AFTER_MAIN \u00b7 lift=NO",
+  "email_send_defer_line": "email-defer \u00b7 ON \u00b7 main=5/5 \u00b7 sites=RED \u00b7 email=AFTER_MAIN \u00b7 lift=YES",
   "operations_inbox": {
     "schema": "noetfield-operations-inbox-active-v1",
-    "at": "2026-06-20T01:28:15Z",
+    "at": "2026-06-28T04:48:56Z",
     "ok": true,
     "inbox": "operations@noetfield.com",
     "gw_status": "ACTIVE",
@@ -17,17 +17,17 @@
     "ssot_doc": "docs/ops/COMMERCIAL_INBOX_PACKAGING_LOCKED_v1.md",
     "one_law": "GW inbox receive OPEN \u00b7 Resend/form auto-send DEFERRED until after factory"
   },
-  "defer_receipt_at": "2026-06-20T01:28:15Z",
-  "agent_live_surfaces_at": "2026-06-20T00:29:44Z",
-  "founder_cascade_latest_at": "2026-06-20T00:56:33Z",
+  "defer_receipt_at": "2026-06-28T04:48:55Z",
+  "agent_live_surfaces_at": "2026-06-27T19:30:32Z",
+  "founder_cascade_latest_at": "2026-06-24T08:37:18Z",
   "founder_cascade_newer_than_ship": false,
   "mono_newer_than_live_status": false,
   "trustfield_pulse": {
     "ok": true,
-    "email_send_defer_line": "email-defer \u00b7 ON \u00b7 main=5/5 \u00b7 sites=RED \u00b7 email=AFTER_MAIN \u00b7 lift=NO \u00b7 TF_MACLAW=ACTIVE \u00b7 attract_users",
+    "email_send_defer_line": "email-defer \u00b7 ON \u00b7 main=5/5 \u00b7 sites=RED \u00b7 email=AFTER_MAIN \u00b7 lift=YES \u00b7 TF_MACLAW=ACTIVE \u00b7 attract_users",
     "defer_active": false,
     "commercial_send_allowed": true,
-    "synced_at": "2026-06-20T01:28:16Z"
+    "synced_at": "2026-06-28T04:48:57Z"
   },
   "gates": [
     {
@@ -63,7 +63,7 @@
     {
       "gate": "email_send_defer_line",
       "ok": true,
-      "line": "email-defer \u00b7 ON \u00b7 main=5/5 \u00b7 sites=RED \u00b7 email=AFTER_MAIN \u00b7 lift=NO"
+      "line": "email-defer \u00b7 ON \u00b7 main=5/5 \u00b7 sites=RED \u00b7 email=AFTER_MAIN \u00b7 lift=YES"
     },
     {
       "gate": "defer_active_wired",
@@ -72,12 +72,12 @@
     {
       "gate": "agent_live_surfaces",
       "ok": true,
-      "synced_at": "2026-06-20T00:29:44Z"
+      "synced_at": "2026-06-27T19:30:32Z"
     },
     {
       "gate": "founder_cascade_readable",
       "ok": true,
-      "latest_at": "2026-06-20T00:56:33Z"
+      "latest_at": "2026-06-24T08:37:18Z"
     },
     {
       "gate": "trustfield_fleet_wire",

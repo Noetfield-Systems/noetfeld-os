@@ -1,18 +1,18 @@
 {
   "schema_version": "nf-truth-bundle-v1",
-  "generated_at": "2026-06-20T01:28:12Z",
+  "generated_at": "2026-06-28T04:48:52Z",
   "agent_id": "noetfield_cloud",
   "plane": "noetfield_cloud",
   "mono_nerve": {
     "schema_version": "nf-mono-nerve-v1",
-    "generated_at": "2026-06-20T01:28:11Z",
+    "generated_at": "2026-06-28T04:48:51Z",
     "ok": true,
     "agent_id": "noetfield_cloud",
     "defer_active": true,
-    "email_send_defer_line": "email-defer \u00b7 ON \u00b7 main=5/5 \u00b7 sites=RED \u00b7 email=AFTER_MAIN \u00b7 lift=NO",
+    "email_send_defer_line": "email-defer \u00b7 ON \u00b7 main=5/5 \u00b7 sites=RED \u00b7 email=AFTER_MAIN \u00b7 lift=YES",
     "operations_inbox": {
       "schema": "noetfield-operations-inbox-active-v1",
-      "at": "2026-06-20T01:28:10Z",
+      "at": "2026-06-28T04:48:50Z",
       "ok": true,
       "inbox": "operations@noetfield.com",
       "gw_status": "ACTIVE",
@@ -22,17 +22,17 @@
       "ssot_doc": "docs/ops/COMMERCIAL_INBOX_PACKAGING_LOCKED_v1.md",
       "one_law": "GW inbox receive OPEN \u00b7 Resend/form auto-send DEFERRED until after factory"
     },
-    "defer_receipt_at": "2026-06-20T01:28:10Z",
-    "agent_live_surfaces_at": "2026-06-20T00:29:44Z",
-    "founder_cascade_latest_at": "2026-06-20T00:56:33Z",
+    "defer_receipt_at": "2026-06-28T04:48:50Z",
+    "agent_live_surfaces_at": "2026-06-27T19:30:32Z",
+    "founder_cascade_latest_at": "2026-06-24T08:37:18Z",
     "founder_cascade_newer_than_ship": false,
     "mono_newer_than_live_status": false,
     "trustfield_pulse": {
       "ok": true,
-      "email_send_defer_line": "email-defer \u00b7 ON \u00b7 main=5/5 \u00b7 sites=RED \u00b7 email=AFTER_MAIN \u00b7 lift=NO \u00b7 TF_MACLAW=ACTIVE \u00b7 attract_users",
+      "email_send_defer_line": "email-defer \u00b7 ON \u00b7 main=5/5 \u00b7 sites=RED \u00b7 email=AFTER_MAIN \u00b7 lift=YES \u00b7 TF_MACLAW=ACTIVE \u00b7 attract_users",
       "defer_active": false,
       "commercial_send_allowed": true,
-      "synced_at": "2026-06-20T01:28:11Z"
+      "synced_at": "2026-06-28T04:48:51Z"
     },
     "gates": [
       {
@@ -68,7 +68,7 @@
       {
         "gate": "email_send_defer_line",
         "ok": true,
-        "line": "email-defer \u00b7 ON \u00b7 main=5/5 \u00b7 sites=RED \u00b7 email=AFTER_MAIN \u00b7 lift=NO"
+        "line": "email-defer \u00b7 ON \u00b7 main=5/5 \u00b7 sites=RED \u00b7 email=AFTER_MAIN \u00b7 lift=YES"
       },
       {
         "gate": "defer_active_wired",
@@ -77,12 +77,12 @@
       {
         "gate": "agent_live_surfaces",
         "ok": true,
-        "synced_at": "2026-06-20T00:29:44Z"
+        "synced_at": "2026-06-27T19:30:32Z"
       },
       {
         "gate": "founder_cascade_readable",
         "ok": true,
-        "latest_at": "2026-06-20T00:56:33Z"
+        "latest_at": "2026-06-24T08:37:18Z"
       },
       {
         "gate": "trustfield_fleet_wire",
@@ -99,7 +99,7 @@
     "ok": true,
     "agent_id": "noetfield_cloud",
     "role": "cloud",
-    "generated_at": "2026-06-20T01:28:11Z",
+    "generated_at": "2026-06-28T04:48:51Z",
     "repo_root": "/Users/sinakazemnezhad/Desktop/Noetfield/Noetfield-All-Documents/Noetfield",
     "gates": [
       {
@@ -243,19 +243,19 @@
   },
   "stale_guard": {
     "schema_version": "nf-stale-guard-v1",
-    "generated_at": "2026-06-20T01:28:11Z",
+    "generated_at": "2026-06-28T04:48:52Z",
     "context_stale": false,
     "pending_task": null,
     "issues": [],
-    "mono_synced_at": "2026-06-20T00:29:44.588015+00:00",
-    "founder_cascade_at": "2026-06-20T00:56:33Z",
-    "founder_disk_sync_at": "2026-06-20T00:56:33Z",
-    "email_send_defer_line": "email-defer \u00b7 ON \u00b7 main=5/5 \u00b7 sites=RED \u00b7 email=AFTER_MAIN \u00b7 lift=NO",
+    "mono_synced_at": "2026-06-27T19:30:32Z",
+    "founder_cascade_at": "2026-06-24T08:37:18Z",
+    "founder_disk_sync_at": "2026-06-24T08:37:18Z",
+    "email_send_defer_line": "email-defer \u00b7 ON \u00b7 main=5/5 \u00b7 sites=RED \u00b7 email=AFTER_MAIN \u00b7 lift=YES",
     "heal": null
   },
   "voyage_integrity": {
     "schema_version": "nf-voyage-integrity-v1",
-    "generated_at": "2026-06-20T01:28:11Z",
+    "generated_at": "2026-06-28T04:48:52Z",
     "ok": true,
     "pending_task": null,
     "gates": [
@@ -277,12 +277,12 @@
   },
   "live_routing": {
     "schema_version": "nf-live-routing-v1",
-    "generated_at": "2026-06-20T01:28:11Z",
+    "generated_at": "2026-06-28T04:48:52Z",
     "agent_id": "noetfield_cloud",
     "pending_task": null,
     "git": {
-      "sha": "ec54f94",
-      "branch": "ship/nf-gaos-w2-production"
+      "sha": "92b42f94",
+      "branch": "main"
     },
     "sourcea_mirror": true,
     "boot": [
@@ -297,15 +297,15 @@
   },
   "live_surfaces": {
     "schema_version": "nf-live-surfaces-v1",
-    "generated_at": "2026-06-20T01:28:12Z",
+    "generated_at": "2026-06-28T04:48:52Z",
     "agent_id": "noetfield_cloud",
     "plane": "noetfield_cloud",
     "product_now_line": "no pending next_tasks",
     "portfolio_now_line": "portfolio 260/300 done",
-    "email_send_defer_line": "email-defer \u00b7 ON \u00b7 main=5/5 \u00b7 sites=RED \u00b7 email=AFTER_MAIN \u00b7 lift=NO",
+    "email_send_defer_line": "email-defer \u00b7 ON \u00b7 main=5/5 \u00b7 sites=RED \u00b7 email=AFTER_MAIN \u00b7 lift=YES",
     "defer_active": true,
     "w3_send_ready": false,
-    "w3_email_send_deferred": true,
+    "w3_email_send_deferred": false,
     "commercial_blockers": [
       "factory_now",
       "w3_critic_circle",
@@ -315,14 +315,14 @@
       "w3_send_ready"
     ],
     "advisory_line": "advisory \u00b7 idle \u00b7 SourceA Sina read \u2192 Noetfield compile \u2192 TrustField send",
-    "portfolio_parent_at": "2026-06-20T00:29:44Z",
+    "portfolio_parent_at": "2026-06-27T19:30:32Z",
     "mono_nerve_ok": true,
     "operations_inbox": "ACTIVE",
     "gate_ok": true,
     "context_stale": false,
     "voyage_ok": true,
     "pending_task": null,
-    "git_sha": "ec54f94",
+    "git_sha": "92b42f94",
     "routing_pending": null,
     "quote_rule": "Quote product_now_line AND email_send_defer_line \u2014 not chat memory",
     "heal": null,
@@ -330,7 +330,7 @@
   },
   "receipt_cascade": {
     "schema_version": "nf-receipt-cascade-v1",
-    "generated_at": "2026-06-20T01:28:00Z",
+    "generated_at": "2026-06-28T04:48:41Z",
     "ok": true,
     "failures": [],
     "nodes": [],
@@ -361,7 +361,7 @@
   },
   "gatekeeper": {
     "schema_version": "nf-gatekeeper-v1",
-    "generated_at": "2026-06-20T01:28:06Z",
+    "generated_at": "2026-06-28T04:48:47Z",
     "status": "FAIL",
     "ok": false,
     "safe_to_implement": false,
@@ -372,7 +372,7 @@
     "pending_task_id": "",
     "founder_implement": false,
     "product_now_line": "no pending next_tasks",
-    "email_send_defer_line": "email-defer \u00b7 ON \u00b7 main=5/5 \u00b7 sites=RED \u00b7 email=AFTER_MAIN \u00b7 lift=NO",
+    "email_send_defer_line": "email-defer \u00b7 ON \u00b7 main=5/5 \u00b7 sites=RED \u00b7 email=AFTER_MAIN \u00b7 lift=YES",
     "defer_active": true,
     "next": "EXECUTION DENIED \u2014 fix reasons then re-run nf-gatekeeper"
   },
@@ -386,12 +386,12 @@
   "routing_card": "ROUTING_CARD.md",
   "product_now_line": "no pending next_tasks",
   "portfolio_now_line": "portfolio 260/300 done",
-  "email_send_defer_line": "email-defer \u00b7 ON \u00b7 main=5/5 \u00b7 sites=RED \u00b7 email=AFTER_MAIN \u00b7 lift=NO",
+  "email_send_defer_line": "email-defer \u00b7 ON \u00b7 main=5/5 \u00b7 sites=RED \u00b7 email=AFTER_MAIN \u00b7 lift=YES",
   "ecosystem_nerve": {
     "schema": "ecosystem-live-nerve-v1",
-    "generated_at": "2026-06-20T01:28:11Z",
+    "generated_at": "2026-06-28T04:48:51Z",
     "ok": true,
-    "email_send_defer_line": "email-defer \u00b7 ON \u00b7 main=5/5 \u00b7 sites=RED \u00b7 email=AFTER_MAIN \u00b7 lift=NO",
+    "email_send_defer_line": "email-defer \u00b7 ON \u00b7 main=5/5 \u00b7 sites=RED \u00b7 email=AFTER_MAIN \u00b7 lift=YES",
     "defer_active": true,
     "planes": {
       "noetfield": {
@@ -406,8 +406,8 @@
       },
       "sourcea_parent": {
         "receipt": "~/.sina/agent-live-surfaces-v1.json",
-        "synced_at": "2026-06-20T00:29:44Z",
-        "factory_now_line": "factory-now \u00b7 Valid YES 1000 \u00b7 brain 1000 \u00b7 dual_proof True \u00b7 mode FREEZE \u00b7 queue "
+        "synced_at": "2026-06-27T19:30:32Z",
+        "factory_now_line": "factory-now \u00b7 Cloud Workers.app owns Cloud Forge Run \u00b7 head CLOUD-SEC-7167 \u00b7 batch 73 \u00b7 100 rows/10min \u00b7 100 tasks/row"
       }
     },
     "sequencing_law": "GW inbox receive OPEN \u00b7 Resend/W3 send DEFERRED until factory + sites + founder lift",

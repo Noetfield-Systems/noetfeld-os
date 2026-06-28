@@ -2,6 +2,7 @@
 
 import asyncio
 import logging
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any, Literal
 from uuid import UUID
@@ -16,13 +17,33 @@ from pydantic import BaseModel, ConfigDict, Field, SecretStr
 
 from noetfield_governance.chatbot_knowledge import knowledge_context_stats
 from noetfield_governance.chat_errors import ChatAPIError, ChatConfigurationError
+from noetfield_governance.public_chat_intelligence import (
+    analyze_public_chat_intent,
+    build_decision_path,
+    deterministic_reply_for_intent,
+    evaluate_intent_alignment,
+)
 from noetfield_governance.public_chat import answer_public_question, resolve_chat_provider
+from noetfield_governance.public_chat_telemetry import (
+    PublicChatTelemetrySettings,
+    build_public_chat_event,
+    conversation_state_for_session,
+    hash_identifier,
+    monotonic_ms,
+    record_public_chat_event,
+    telemetry_stats,
+)
 from noetfield_governance import intake_repository, redis_runtime
 from noetfield_governance.intake_notify import (
     intake_email_configured,
     notify_ops_inbox,
     notify_ops_webhook,
     notify_submitter_ack,
+)
+from noetfield_governance.analytics_store import (
+    InMemoryAnalyticsStore,
+    PostgresAnalyticsStore,
+    build_analytics_event,
 )
 from noetfield_governance.public_intake import submit_intake
 from noetfield_governance.sandbox_service import (
@@ -139,6 +160,12 @@ from noetfield_workflow import (
 settings = get_settings()
 logger = logging.getLogger("noetfield.governance.api")
 
+chat_telemetry_settings = PublicChatTelemetrySettings(
+    enabled=settings.public_chat_telemetry_enabled,
+    path=settings.public_chat_telemetry_path,
+    max_chars=settings.public_chat_telemetry_max_chars,
+)
+
 app = FastAPI(
     title="Noetfield Platform API",
     version="0.4.0",
@@ -191,6 +218,9 @@ copilot_run_store = (
     PostgresCopilotGovernanceRunStore(settings.database_url)
     if postgres_mode
     else InMemoryCopilotGovernanceRunStore()
+)
+analytics_store = (
+    PostgresAnalyticsStore(settings.database_url) if postgres_mode else InMemoryAnalyticsStore()
 )
 
 audit_runtime = AuditLedgerRuntime(store=audit_store)
@@ -721,6 +751,29 @@ class PublicIntakeResponse(BaseModel):
     message: str = "Intake recorded. Operations notified asynchronously — follow-up via email within one business day."
 
 
+class PublicAnalyticsEventRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    event_name: str = Field(..., min_length=2, max_length=80, pattern=r"^[a-z0-9_.:-]+$")
+    request_id: str | None = Field(default=None, max_length=64)
+    session_id: str | None = Field(default=None, max_length=96)
+    page_path: str | None = Field(default=None, max_length=512)
+    page_url: str | None = Field(default=None, max_length=1000)
+    referrer: str | None = Field(default=None, max_length=1000)
+    utm_source: str | None = Field(default=None, max_length=120)
+    utm_medium: str | None = Field(default=None, max_length=120)
+    utm_campaign: str | None = Field(default=None, max_length=180)
+    component: str | None = Field(default=None, max_length=160)
+    metadata: dict[str, object] = Field(default_factory=dict)
+
+
+class PublicAnalyticsEventResponse(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    ok: bool = True
+    event_id: str
+
+
 class SandboxProvisionRequest(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
@@ -765,6 +818,10 @@ def _secret(value: SecretStr | None) -> str:
     return value.get_secret_value().strip() if value else ""
 
 
+def _admin_dashboard_secret() -> str:
+    return _secret(settings.admin_dashboard_secret) or _secret(settings.telegram_webhook_secret)
+
+
 @app.get("/api/public/chat/health", tags=["public-chat"])
 async def public_chat_health() -> dict[str, object]:
     gemini_key = _secret(settings.gemini_api_key)
@@ -787,6 +844,7 @@ async def public_chat_health() -> dict[str, object]:
         "gemini": {"configured": bool(gemini_key), "model": settings.gemini_model},
         "openrouter": {"configured": bool(openrouter_key), "model": settings.openrouter_model},
         "knowledge": knowledge_context_stats(),
+        "telemetry": telemetry_stats(chat_telemetry_settings),
     }
 
 
@@ -794,27 +852,179 @@ async def public_chat_health() -> dict[str, object]:
 async def public_chat(body: PublicChatRequest, request: Request) -> PublicChatResponse:
     if not settings.public_chat_enabled:
         raise HTTPException(status_code=503, detail="Public chat is disabled")
+    started_ms = monotonic_ms()
     client_host = request.client.host if request.client else "unknown"
     client_key = f"{client_host}:{body.session_id or 'anon'}"
+    user_agent = request.headers.get("user-agent")
+    intent = analyze_public_chat_intent(body.message)
+    session_hash = hash_identifier(body.session_id)
+    conversation_state = conversation_state_for_session(
+        chat_telemetry_settings,
+        session_hash=session_hash,
+    )
+    deterministic = deterministic_reply_for_intent(intent)
     try:
-        reply, provider, citations = await answer_public_question(
-            message=body.message,
-            provider=settings.public_chat_provider,
-            gemini_api_key=_secret(settings.gemini_api_key) or None,
-            gemini_model=settings.gemini_model,
-            openrouter_api_key=_secret(settings.openrouter_api_key) or None,
-            openrouter_model=settings.openrouter_model,
-            client_key=client_key,
-        )
+        if deterministic is not None:
+            reply, citations = deterministic
+            provider = "deterministic"
+        else:
+            reply, provider, citations = await answer_public_question(
+                message=body.message,
+                provider=settings.public_chat_provider,
+                gemini_api_key=_secret(settings.gemini_api_key) or None,
+                gemini_model=settings.gemini_model,
+                openrouter_api_key=_secret(settings.openrouter_api_key) or None,
+                openrouter_model=settings.openrouter_model,
+                client_key=client_key,
+            )
     except ValueError as exc:
+        decision_path = build_decision_path(
+            intent=intent,
+            provider=None,
+            citations=[],
+            deterministic=False,
+            error_type=type(exc).__name__,
+        )
+        record_public_chat_event(
+            settings=chat_telemetry_settings,
+            event=build_public_chat_event(
+                status="bad_request",
+                message=body.message,
+                reply=None,
+                provider=None,
+                citations=[],
+                client_key=client_key,
+                session_id=body.session_id,
+                user_agent=user_agent,
+                duration_ms=monotonic_ms() - started_ms,
+                settings=chat_telemetry_settings,
+                conversation_state=conversation_state,
+                intent=intent.to_dict(),
+                decision_path=decision_path,
+                alignment={"aligned": False, "error": "bad_request"},
+                error_type=type(exc).__name__,
+                error_detail=str(exc),
+            ),
+        )
         raise HTTPException(status_code=400, detail=str(exc)) from exc
     except PermissionError as exc:
+        decision_path = build_decision_path(
+            intent=intent,
+            provider=None,
+            citations=[],
+            deterministic=False,
+            error_type=type(exc).__name__,
+        )
+        record_public_chat_event(
+            settings=chat_telemetry_settings,
+            event=build_public_chat_event(
+                status="rate_limited",
+                message=body.message,
+                reply=None,
+                provider=None,
+                citations=[],
+                client_key=client_key,
+                session_id=body.session_id,
+                user_agent=user_agent,
+                duration_ms=monotonic_ms() - started_ms,
+                settings=chat_telemetry_settings,
+                conversation_state=conversation_state,
+                intent=intent.to_dict(),
+                decision_path=decision_path,
+                alignment={"aligned": False, "error": "rate_limited"},
+                error_type=type(exc).__name__,
+                error_detail=str(exc),
+            ),
+        )
         raise HTTPException(status_code=429, detail=str(exc)) from exc
     except ChatConfigurationError as exc:
+        decision_path = build_decision_path(
+            intent=intent,
+            provider=None,
+            citations=[],
+            deterministic=False,
+            error_type=type(exc).__name__,
+        )
+        record_public_chat_event(
+            settings=chat_telemetry_settings,
+            event=build_public_chat_event(
+                status="configuration_error",
+                message=body.message,
+                reply=None,
+                provider=None,
+                citations=[],
+                client_key=client_key,
+                session_id=body.session_id,
+                user_agent=user_agent,
+                duration_ms=monotonic_ms() - started_ms,
+                settings=chat_telemetry_settings,
+                conversation_state=conversation_state,
+                intent=intent.to_dict(),
+                decision_path=decision_path,
+                alignment={"aligned": False, "error": "configuration_error"},
+                error_type=type(exc).__name__,
+                error_detail=str(exc),
+            ),
+        )
         raise HTTPException(status_code=503, detail=str(exc)) from exc
     except ChatAPIError as exc:
         logger.warning("public_chat_llm_error %s", exc)
+        decision_path = build_decision_path(
+            intent=intent,
+            provider=None,
+            citations=[],
+            deterministic=False,
+            error_type=type(exc).__name__,
+        )
+        record_public_chat_event(
+            settings=chat_telemetry_settings,
+            event=build_public_chat_event(
+                status="llm_error",
+                message=body.message,
+                reply=None,
+                provider=None,
+                citations=[],
+                client_key=client_key,
+                session_id=body.session_id,
+                user_agent=user_agent,
+                duration_ms=monotonic_ms() - started_ms,
+                settings=chat_telemetry_settings,
+                conversation_state=conversation_state,
+                intent=intent.to_dict(),
+                decision_path=decision_path,
+                alignment={"aligned": False, "error": "llm_error"},
+                error_type=type(exc).__name__,
+                error_detail=str(exc),
+            ),
+        )
         raise HTTPException(status_code=502, detail="Assistant temporarily unavailable") from exc
+    alignment = evaluate_intent_alignment(intent=intent, reply=reply, citations=citations)
+    decision_path = build_decision_path(
+        intent=intent,
+        provider=provider,
+        citations=citations,
+        deterministic=deterministic is not None,
+        knowledge_chars=(knowledge_context_stats().get("chars") if deterministic is None else None),
+    )
+    record_public_chat_event(
+        settings=chat_telemetry_settings,
+        event=build_public_chat_event(
+            status="ok",
+            message=body.message,
+            reply=reply,
+            provider=provider,
+            citations=citations,
+            client_key=client_key,
+            session_id=body.session_id,
+            user_agent=user_agent,
+            duration_ms=monotonic_ms() - started_ms,
+            settings=chat_telemetry_settings,
+            conversation_state=conversation_state,
+            intent=intent.to_dict(),
+            decision_path=decision_path,
+            alignment=alignment,
+        ),
+    )
     return PublicChatResponse(reply=reply, provider=provider, citations=citations)
 
 
@@ -898,6 +1108,83 @@ async def intake_recent(request: Request, limit: int = 20) -> dict[str, object]:
         "intake_email": CANONICAL_INTAKE_EMAIL,
         "storage": intake_repository.storage_label(),
         "records": await intake_repository.list_recent(limit=limit),
+    }
+
+
+def _safe_analytics_metadata(value: dict[str, object]) -> dict[str, object]:
+    """Bound anonymous public analytics metadata before storing."""
+    safe: dict[str, object] = {}
+    for key, raw in list(value.items())[:30]:
+        k = str(key).strip()[:80]
+        if not k:
+            continue
+        if isinstance(raw, (str, int, float, bool)) or raw is None:
+            safe[k] = str(raw)[:500] if isinstance(raw, str) else raw
+        elif isinstance(raw, list):
+            safe[k] = [str(item)[:160] for item in raw[:20]]
+        elif isinstance(raw, dict):
+            safe[k] = {str(child_key)[:80]: str(child_val)[:160] for child_key, child_val in list(raw.items())[:20]}
+        else:
+            safe[k] = str(raw)[:160]
+    return safe
+
+
+@app.post("/api/analytics/event", tags=["analytics"], response_model=PublicAnalyticsEventResponse)
+async def public_analytics_event(
+    body: PublicAnalyticsEventRequest,
+    request: Request,
+) -> PublicAnalyticsEventResponse:
+    client_host = request.client.host if request.client else "unknown"
+    event = build_analytics_event(
+        event_name=body.event_name,
+        request_id=body.request_id,
+        session_id=body.session_id,
+        page_path=body.page_path,
+        page_url=body.page_url,
+        referrer=body.referrer,
+        utm_source=body.utm_source,
+        utm_medium=body.utm_medium,
+        utm_campaign=body.utm_campaign,
+        component=body.component,
+        metadata={
+            **_safe_analytics_metadata(body.metadata),
+            "client_host": client_host,
+            "user_agent": (request.headers.get("user-agent") or "")[:300],
+        },
+    )
+    try:
+        stored = await analytics_store.record(event)
+    except Exception as exc:
+        logger.warning("public_analytics_event_failed event=%s err=%s", body.event_name, exc)
+        raise HTTPException(status_code=503, detail="Analytics temporarily unavailable") from exc
+    return PublicAnalyticsEventResponse(event_id=stored.event_id)
+
+
+@app.get("/api/analytics/recent", tags=["analytics"], include_in_schema=False)
+async def analytics_recent(request: Request, limit: int = 50) -> dict[str, object]:
+    """Operations view — requires admin secret as X-Admin-Secret when configured."""
+    admin_secret = _admin_dashboard_secret()
+    if admin_secret:
+        auth = request.headers.get("X-Admin-Secret", "")
+        if auth != admin_secret:
+            raise HTTPException(status_code=403, detail="Invalid admin secret")
+    return {"records": await analytics_store.recent(limit=limit)}
+
+
+@app.get("/api/analytics/traction", tags=["analytics"], include_in_schema=False)
+async def analytics_traction(request: Request, days: int = 30) -> dict[str, object]:
+    """Internal traction dashboard — requires ADMIN_DASHBOARD_SECRET as X-Admin-Secret."""
+    admin_secret = _admin_dashboard_secret()
+    if not admin_secret:
+        raise HTTPException(status_code=503, detail="Admin dashboard secret is not configured")
+    auth = request.headers.get("X-Admin-Secret", "")
+    if auth != admin_secret:
+        raise HTTPException(status_code=403, detail="Invalid admin secret")
+    window_days = max(1, min(days, 365))
+    return {
+        "window_days": window_days,
+        "generated_at": datetime.now(UTC).isoformat(),
+        **await analytics_store.summary(days=window_days),
     }
 
 

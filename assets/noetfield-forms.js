@@ -44,6 +44,105 @@
     window.NFIntakeCore.submitAsync(opts).catch(function () {});
   }
 
+  function track(eventName, metadata) {
+    try {
+      if (window.NFAnalytics && window.NFAnalytics.track) {
+        window.NFAnalytics.track(eventName, metadata || {});
+      }
+    } catch (_) {}
+  }
+
+  function formMeta(form, step) {
+    return {
+      component: "form",
+      form_id: form.id || "",
+      vector: form.getAttribute("data-intake-vector") || form.getAttribute("data-vector") || "web-intake",
+      sku: form.getAttribute("data-intake-sku") || "",
+      page: location.pathname,
+      step_index: step ? step.index : undefined,
+      step_id: step ? step.id : undefined,
+      step_label: step ? step.label : undefined,
+    };
+  }
+
+  function bindMultiStepForm(form) {
+    if (!form || form.dataset.nfMultiStepBound === "1") return;
+    var panels = Array.prototype.slice.call(form.querySelectorAll("[data-nf-form-step]"));
+    if (panels.length < 2) return;
+    form.dataset.nfMultiStepBound = "1";
+
+    var current = 0;
+    var progress = Array.prototype.slice.call(form.querySelectorAll("[data-nf-step-target]"));
+
+    function stepInfo(index) {
+      var panel = panels[index];
+      return {
+        index: index + 1,
+        id: panel ? panel.getAttribute("data-nf-form-step") || String(index + 1) : "",
+        label: panel ? panel.getAttribute("data-step-label") || "" : "",
+      };
+    }
+
+    function setStep(index, reason) {
+      current = Math.max(0, Math.min(index, panels.length - 1));
+      panels.forEach(function (panel, panelIndex) {
+        var active = panelIndex === current;
+        panel.hidden = !active;
+        panel.setAttribute("aria-hidden", active ? "false" : "true");
+        Array.prototype.slice.call(panel.querySelectorAll("input, select, textarea, button")).forEach(function (fieldEl) {
+          if (fieldEl.hasAttribute("data-nf-step-back") || fieldEl.hasAttribute("data-nf-step-next")) return;
+          fieldEl.disabled = !active;
+        });
+      });
+      progress.forEach(function (item, itemIndex) {
+        item.classList.toggle("is-active", itemIndex === current);
+        item.classList.toggle("is-complete", itemIndex < current);
+        item.setAttribute("aria-current", itemIndex === current ? "step" : "false");
+      });
+      track("form_step_view", Object.assign(formMeta(form, stepInfo(current)), { reason: reason || "init" }));
+    }
+
+    function validateCurrentStep() {
+      var fields = Array.prototype.slice.call(panels[current].querySelectorAll("input, select, textarea"));
+      for (var i = 0; i < fields.length; i += 1) {
+        if (!fields[i].checkValidity()) {
+          fields[i].reportValidity();
+          return false;
+        }
+      }
+      return true;
+    }
+
+    form.addEventListener("click", function (ev) {
+      var next = ev.target.closest("[data-nf-step-next]");
+      var back = ev.target.closest("[data-nf-step-back]");
+      if (next) {
+        ev.preventDefault();
+        if (!validateCurrentStep()) return;
+        track("form_step_complete", formMeta(form, stepInfo(current)));
+        setStep(current + 1, "next");
+      }
+      if (back) {
+        ev.preventDefault();
+        setStep(current - 1, "back");
+        track("form_step_back", formMeta(form, stepInfo(current)));
+      }
+    });
+
+    form.addEventListener("submit", function (ev) {
+      if (current < panels.length - 1) {
+        ev.preventDefault();
+        if (!validateCurrentStep()) return;
+        track("form_step_complete", formMeta(form, stepInfo(current)));
+        setStep(current + 1, "submit-next");
+        return;
+      }
+      track("form_step_complete", Object.assign(formMeta(form, stepInfo(current)), { final: true }));
+    }, true);
+
+    setStep(0, "init");
+  }
+
   function bindGenericForm(form) {
     if (!form || isBound(form)) return;
     if (form.id === "tbIntakeForm") return;
@@ -63,6 +162,8 @@
       var topic = field(form, "topic") || field(form, "role") || field(form, "subject");
       var role = field(form, "role");
       var engagement = field(form, "engagement");
+      var dealStage = field(form, "deal_stage");
+      var targetContext = field(form, "target_context");
 
       if (!email || email.indexOf("@") < 1) {
         var st = statusEl(form);
@@ -94,6 +195,8 @@
           "\n" +
           (topic ? "Topic: " + topic + "\n" : "") +
           (engagement ? "Engagement: " + engagement + "\n" : "") +
+          (dealStage ? "Deal stage: " + dealStage + "\n" : "") +
+          (targetContext ? "Target context: " + targetContext + "\n" : "") +
           (name ? "Name: " + name + "\n" : "") +
           "Organization: " +
           org +
@@ -116,6 +219,8 @@
           topic: topic || "",
           role: role || topic || "",
           engagement: engagement || "",
+          deal_stage: dealStage || "",
+          target_context: targetContext || "",
           async: true,
         },
         submitBtn: form.querySelector('button[type="submit"]'),
@@ -130,6 +235,19 @@
           mailSubject: "Noetfield — " + (topic || "Contact"),
           mailBody: message,
         },
+      });
+      track("form_submit", {
+        component: "form",
+        form_id: form.id || "",
+        vector: vector,
+        sku: sku,
+        topic: topic || "",
+        page: location.pathname,
+        contact_email: email,
+        organization: org,
+        contact_name: name || "",
+        engagement: engagement || "",
+        deal_stage: dealStage || "",
       });
     });
   }
@@ -160,12 +278,22 @@
           submitBtn: null,
           statusEl: null,
         });
+        track("form_submit", {
+          component: "form",
+          form_id: form.id || "",
+          vector: "sandbox-signup",
+          sku: "general",
+          page: location.pathname,
+          contact_email: email,
+          organization: org,
+        });
       },
       true
     );
   }
 
   function bindAll() {
+    document.querySelectorAll("[data-nf-multistep-form]").forEach(bindMultiStepForm);
     document.querySelectorAll("[data-nf-intake-form]").forEach(bindGenericForm);
     bindSandboxLead(document.getElementById("nfSandboxForm"));
     bindSandboxLead(document.getElementById("nfTrialAccountForm"));

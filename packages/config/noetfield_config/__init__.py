@@ -55,6 +55,20 @@ class Settings(BaseSettings):
     public_chat_cors_origins: str = (
         "https://www.noetfield.com,https://noetfield.com,http://localhost:8080,http://127.0.0.1:8080"
     )
+    public_chat_telemetry_enabled: bool = Field(
+        default=True,
+        description="Persist public chat prompts/replies/errors for behavior analysis.",
+    )
+    public_chat_telemetry_path: str = Field(
+        default="var/public_chat_telemetry.jsonl",
+        description="JSONL path for public chat telemetry. Use a durable mount in production.",
+    )
+    public_chat_telemetry_max_chars: int = Field(
+        default=4000,
+        ge=200,
+        le=12000,
+        description="Maximum stored characters per public chat prompt or reply.",
+    )
 
     public_intake_enabled: bool = True
     intake_persistence: Literal["auto", "memory", "postgres"] = "auto"
@@ -74,6 +88,10 @@ class Settings(BaseSettings):
     intake_auto_ack_enabled: bool = Field(
         default=True,
         description="Send submitter an instant receipt email when intake email delivery is configured.",
+    )
+    casl_mailing_address: str = Field(
+        default="7816 Windsor St\nVancouver, BC, V5X 4A8\nCanada",
+        description="Physical mailing address included in CASL-compliant commercial email footers.",
     )
     resend_api_key: SecretStr | None = Field(
         default=None,
@@ -97,6 +115,10 @@ class Settings(BaseSettings):
     telegram_webhook_secret: SecretStr | None = Field(
         default=None,
         description="Optional secret_token for Telegram setWebhook (X-Telegram-Bot-Api-Secret-Token).",
+    )
+    admin_dashboard_secret: SecretStr | None = Field(
+        default=None,
+        description="Internal admin dashboard secret for X-Admin-Secret protected operations views.",
     )
     telegram_webhook_base_url: str | None = Field(
         default=None,

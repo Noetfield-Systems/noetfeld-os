@@ -1,11 +1,11 @@
 {
   "schema_version": "nf-live-routing-v1",
-  "generated_at": "2026-06-20T01:28:16Z",
+  "generated_at": "2026-06-28T04:48:57Z",
   "agent_id": "noetfield_cloud",
   "pending_task": null,
   "git": {
-    "sha": "ec54f94",
-    "branch": "ship/nf-gaos-w2-production"
+    "sha": "92b42f94",
+    "branch": "main"
   },
   "sourcea_mirror": true,
   "boot": [

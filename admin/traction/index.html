@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8" />
+ <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+ <title>Noetfield Admin — Traction Dashboard</title>
+ <meta name="robots" content="noindex,nofollow" />
+ <meta name="theme-color" content="#07070b" />
+ <link rel="icon" href="/noetfield-favicon-512.png" type="image/png" />
+ <link rel="stylesheet" href="/assets/noetfield-tokens.css" />
+ <link rel="stylesheet" href="/assets/noetfield-shell.css" />
+ <link rel="stylesheet" href="/assets/noetfield-www.css?v=43" />
+ <script src="/assets/noetfield-shell.js?v=44" defer></script>
+ <script src="/assets/noetfield-admin-traction.js?v=2" defer></script>
+ <style>
+  body.nf-www .nf-admin-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin:22px 0}
+  body.nf-www .nf-admin-card{border:1px solid var(--line);border-radius:16px;padding:16px;background:rgba(255,255,255,.55)}
+  body.nf-www .nf-admin-card span,body.nf-www .nf-admin-card small{display:block;color:var(--muted2)}
+  body.nf-www .nf-admin-card strong{display:block;font-size:2rem;margin:6px 0;color:var(--ink)}
+  body.nf-www .nf-admin-controls{display:grid;grid-template-columns:1.4fr .8fr .8fr 1fr auto auto auto auto;gap:10px;align-items:end;max-width:1180px}
+  body.nf-www .nf-admin-controls label{display:flex;flex-direction:column;gap:6px;font-size:.8125rem;color:var(--muted2)}
+  body.nf-www .nf-admin-controls input,body.nf-www .nf-admin-controls select{font:inherit;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:rgba(255,255,255,.75);color:var(--ink)}
+  body.nf-www .nf-admin-status{margin-top:14px;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:rgba(255,255,255,.45)}
+  body.nf-www .nf-admin-status--ok{border-color:rgba(56,142,60,.35);background:rgba(56,142,60,.08)}
+  body.nf-www .nf-admin-status--err{border-color:rgba(183,28,28,.35);background:rgba(183,28,28,.08)}
+  body.nf-www .nf-admin-panel{margin-top:24px;border:1px solid var(--line);border-radius:18px;padding:16px;background:rgba(255,255,255,.5)}
+  body.nf-www .nf-admin-panel h2{margin:0 0 12px;font-size:1rem}
+  body.nf-www .nf-admin-table-wrap{overflow:auto}
+  body.nf-www .nf-admin-panel table{width:100%;border-collapse:collapse;font-size:.875rem}
+  body.nf-www .nf-admin-panel th,body.nf-www .nf-admin-panel td{padding:9px 10px;border-bottom:1px solid var(--line);text-align:left;white-space:nowrap}
+  body.nf-www .nf-admin-panel th{color:var(--muted2);font-weight:700}
+  body.nf-www .nf-admin-funnel{display:grid;gap:10px}
+  body.nf-www .nf-admin-funnel-row{display:grid;grid-template-columns:160px 1fr 64px;gap:12px;align-items:center}
+  body.nf-www .nf-admin-funnel-row div{height:14px;border-radius:999px;background:rgba(8,12,22,.08);overflow:hidden}
+  body.nf-www .nf-admin-funnel-row i{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,#c8a349,#786026)}
+  @media(max-width:980px){body.nf-www .nf-admin-controls{grid-template-columns:1fr 1fr}body.nf-www .nf-admin-funnel-row{grid-template-columns:1fr}}
+ </style>
+</head>
+<body class="nf-www nf-site-v14">
+ <div class="bg" aria-hidden="true"></div>
+ <a class="skip" href="#main">Skip to content</a>
+ <header id="nfHeader"></header>
+ <main id="main" class="nf-main nf-page">
+  <header class="nf-hero-cinematic">
+   <div>
+    <p class="nf-hero-kicker"><span class="nf-hero-kicker-dot" aria-hidden="true"></span> Internal admin · protected data API</p>
+    <p class="nf-eyebrow">Traction dashboard</p>
+    <h1>Sessions, conversions, leads, source pages, and activity</h1>
+    <p class="nf-lead">Internal traction view over Noetfield Supabase analytics tables. Data requires the admin secret and is not exposed by this static page.</p>
+   </div>
+   <aside class="nf-hero-panel" aria-label="Dashboard scope">
+    <p class="nf-hero-panel-label">Tables</p>
+    <ul class="nf-hero-panel-list"><li>analytics_events</li><li>visitor_sessions</li><li>conversion_events</li><li>lead_profiles</li></ul>
+   </aside>
+  </header>
+
+  <section class="nf-section-block nf-section--elevated" aria-labelledby="admin-controls-title">
+   <div class="nf-section-block-head"><span class="nf-section-num" aria-hidden="true">A</span><div>
+    <p class="nf-eyebrow" id="admin-controls-title">Access and filters</p>
+    <h2>Load protected traction summary</h2>
+    <p class="nf-section-lead">Use the internal admin secret. Search/filter/export happens in-browser after protected data loads.</p>
+   </div></div>
+   <div class="nf-admin-controls">
+    <label>Admin secret<input id="nfAdminSecret" type="password" autocomplete="current-password" placeholder="X-Admin-Secret" /></label>
+    <label>Window<select id="nfWindowDays"><option value="7">7 days</option><option value="30" selected>30 days</option><option value="90">90 days</option><option value="365">365 days</option></select></label>
+    <label>Event filter<select id="nfEventFilter"><option value="all">All events</option></select></label>
+    <label>Search<input id="nfAdminSearch" type="search" placeholder="email, org, RID, page..." /></label>
+    <button id="nfLoadTraction" type="button" class="btn btn-primary">Load</button>
+    <button id="nfExportCsv" type="button" class="btn btn-secondary">CSV</button>
+    <button id="nfExportJson" type="button" class="btn btn-secondary">JSON</button>
+    <button id="nfClearSecret" type="button" class="btn btn-secondary">Clear</button>
+   </div>
+   <div id="nfAdminStatus" class="nf-admin-status" hidden></div>
+  </section>
+
+  <section class="nf-section-block" aria-labelledby="traction-output-title">
+   <div class="nf-section-block-head"><span class="nf-section-num" aria-hidden="true">T</span><div>
+    <p class="nf-eyebrow" id="traction-output-title">Traction</p>
+    <h2>Admin view</h2>
+    <p class="nf-section-lead">Generated <span id="nfGeneratedAt">after load</span></p>
+   </div></div>
+   <div id="nfTractionOutput"></div>
+  </section>
+ </main>
+ <footer id="nfFooter"></footer>
+</body>
+</html>

@@ -6,7 +6,10 @@ import asyncio
 from unittest.mock import patch
 
 from httpx import ASGITransport, AsyncClient
+from pydantic import SecretStr
 
+from noetfield_governance import api as governance_api
+from noetfield_governance.analytics_store import InMemoryAnalyticsStore
 from noetfield_governance.api import app
 from noetfield_governance.chat_errors import ChatAPIError
 from noetfield_governance.public_chat import answer_public_question
@@ -101,5 +104,62 @@ def test_llm_fallback_openrouter_to_gemini() -> None:
         assert reply == "Fallback answer from Gemini."
         assert provider == "gemini"
         assert calls == ["openrouter", "gemini"]
+
+    asyncio.run(run())
+
+
+def test_analytics_event_records_rollups_and_dashboard_summary() -> None:
+    async def run() -> None:
+        original_store = governance_api.analytics_store
+        original_secret = governance_api.settings.admin_dashboard_secret
+        governance_api.analytics_store = InMemoryAnalyticsStore()
+        governance_api.settings.admin_dashboard_secret = SecretStr("traction-secret")
+        try:
+            transport = ASGITransport(app=app)
+            async with AsyncClient(transport=transport, base_url="http://test") as client:
+                first = await client.post(
+                    "/api/analytics/event",
+                    json={
+                        "event_name": "page_view",
+                        "request_id": "RID-ANALYTICS-1",
+                        "session_id": "as-test",
+                        "page_path": "/copilot/pilot/",
+                        "component": "page",
+                        "metadata": {"title": "Pilot"},
+                    },
+                )
+                submit = await client.post(
+                    "/api/analytics/event",
+                    json={
+                        "event_name": "form_submit",
+                        "request_id": "RID-ANALYTICS-1",
+                        "session_id": "as-test",
+                        "page_path": "/copilot/pilot/",
+                        "component": "form",
+                        "metadata": {
+                            "contact_email": "buyer@example.com",
+                            "organization": "Example Bank",
+                            "vector": "copilot-governance",
+                        },
+                    },
+                )
+                forbidden = await client.get("/api/analytics/traction")
+                summary = await client.get(
+                    "/api/analytics/traction",
+                    headers={"X-Admin-Secret": "traction-secret"},
+                )
+            assert first.status_code == 200
+            assert submit.status_code == 200
+            assert forbidden.status_code == 403
+            assert summary.status_code == 200
+            body = summary.json()
+            assert body["totals"]["events"] == 2
+            assert body["totals"]["sessions"] == 1
+            assert body["totals"]["conversions"] == 1
+            assert body["totals"]["leads"] == 1
+            assert body["funnel"][-1]["stage"] == "Leads"
+        finally:
+            governance_api.analytics_store = original_store
+            governance_api.settings.admin_dashboard_secret = original_secret
 
     asyncio.run(run())

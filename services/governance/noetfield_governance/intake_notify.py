@@ -22,6 +22,7 @@ class IntakeEmailSettings(Protocol):
     intake_email_from: str
     intake_email_to: str
     intake_auto_ack_enabled: bool
+    casl_mailing_address: str
     resend_api_key: object | None
     intake_smtp_host: str | None
     intake_smtp_port: int
@@ -148,6 +149,20 @@ def submitter_ack_body(record: IntakeRecord) -> str:
         "Non-confidential only · include your Request ID in any follow-up.\n\n"
         "— Noetfield Operations\n"
         f"{CANONICAL_INTAKE_EMAIL}\n"
+    )
+
+
+def append_casl_footer(text: str, settings: IntakeEmailSettings) -> str:
+    address = (settings.casl_mailing_address or "").strip()
+    if not address:
+        return text
+    return (
+        text.rstrip()
+        + "\n\n"
+        + "Commercial email compliance:\n"
+        + "You can reply to this message to stop follow-up.\n"
+        + address
+        + "\n"
     )
 
 
@@ -292,7 +307,7 @@ def notify_submitter_ack(settings: IntakeEmailSettings, record: IntakeRecord) ->
         settings,
         to_addrs=[record.contact_email],
         subject=submitter_ack_subject(record),
-        text=submitter_ack_body(record),
+        text=append_casl_footer(submitter_ack_body(record), settings),
         reply_to=CANONICAL_INTAKE_EMAIL,
     )
 

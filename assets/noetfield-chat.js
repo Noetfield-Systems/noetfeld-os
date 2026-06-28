@@ -3,10 +3,11 @@
   "use strict";
 
   var QUICK_PROMPTS = [
-    "What is Noetfield?",
+    "Executive overview",
     "Trust Brief pricing",
-    "Bank Pilot scope",
-    "How do we engage?",
+    "GEL developer docs",
+    "Investor diligence",
+    "Do you store chat history?",
   ];
 
   function apiBase() {
@@ -44,6 +45,14 @@
     }
   }
 
+  function track(eventName, metadata) {
+    try {
+      if (window.NFAnalytics && window.NFAnalytics.track) {
+        window.NFAnalytics.track(eventName, Object.assign({ component: "chat" }, metadata || {}));
+      }
+    } catch (_) {}
+  }
+
   function el(tag, cls, text) {
     var node = document.createElement(tag);
     if (cls) node.className = cls;
@@ -51,9 +60,84 @@
     return node;
   }
 
-  function appendMsg(log, role, text, extraClass) {
+  function isSafeHref(href) {
+    return (
+      href.indexOf("/") === 0 ||
+      href.indexOf("https://www.noetfield.com/") === 0 ||
+      href.indexOf("https://noetfield.com/") === 0 ||
+      href.indexOf("mailto:operations@noetfield.com") === 0
+    );
+  }
+
+  function publicHref(value) {
+    var text = String(value || "").trim();
+    if (!text) return "";
+    if (/^operations@noetfield\.com$/i.test(text)) return "mailto:operations@noetfield.com";
+    if (/^https:\/\/(www\.)?noetfield\.com\//i.test(text)) return text;
+    if (/^\/[a-z0-9/_?=&.#-]*$/i.test(text)) return text;
+    return "";
+  }
+
+  function appendSafeLink(parent, label, href) {
+    if (!isSafeHref(href)) {
+      parent.appendChild(document.createTextNode(label));
+      return;
+    }
+    var a = document.createElement("a");
+    a.href = href;
+    a.textContent = label;
+    if (href.indexOf("http") === 0) {
+      a.target = "_blank";
+      a.rel = "noopener noreferrer";
+    }
+    parent.appendChild(a);
+  }
+
+  function renderRichText(parent, text) {
+    var source = String(text || "");
+    var pattern =
+      /(https:\/\/(?:www\.)?noetfield\.com\/[^\s)]+|operations@noetfield\.com|\/[a-z0-9][a-z0-9/_?=&.#-]*(?:\/)?)/gi;
+    var last = 0;
+    source.replace(pattern, function (match, _m, offset) {
+      if (offset > last) parent.appendChild(document.createTextNode(source.slice(last, offset)));
+      appendSafeLink(parent, match, publicHref(match));
+      last = offset + match.length;
+      return match;
+    });
+    if (last < source.length) parent.appendChild(document.createTextNode(source.slice(last)));
+  }
+
+  function appendCitations(msg, citations) {
+    var publicCitations = (citations || [])
+      .map(function (citation) {
+        return String(citation || "").trim();
+      })
+      .filter(function (citation) {
+        return publicHref(citation);
+      })
+      .slice(0, 4);
+    if (!publicCitations.length) return;
+    var wrap = el("div", "nfChatCitations");
+    var label = el("span", "nfChatCitationsLabel", "Suggested links");
+    wrap.appendChild(label);
+    publicCitations.forEach(function (citation) {
+      var chip = document.createElement("a");
+      chip.href = publicHref(citation);
+      chip.textContent = citation;
+      wrap.appendChild(chip);
+    });
+    msg.appendChild(wrap);
+  }
+
+  function appendMsg(log, role, text, extraClass, citations) {
     var cls = "nfChatMsg " + role + (extraClass ? " " + extraClass : "");
-    var msg = el("div", cls, text);
+    var msg = el("div", cls);
+    if (role === "bot") {
+      renderRichText(msg, text);
+      appendCitations(msg, citations);
+    } else {
+      msg.textContent = text || "";
+    }
     log.appendChild(msg);
     log.scrollTop = log.scrollHeight;
     return msg;
@@ -71,6 +155,7 @@
     sendBtn.disabled = true;
     var typing = appendMsg(log, "bot", "Thinking", "typing");
     typing.classList.add("nfChatTypingDots");
+    track("chat_message_sent", { length: t.length });
 
     fetch((apiBase() || "") + "/api/public/chat", {
       method: "POST",
@@ -85,13 +170,19 @@
       .then(function (result) {
         removeEl(typing);
         if (result.ok && result.data && result.data.reply) {
-          appendMsg(log, "bot", result.data.reply);
+          appendMsg(log, "bot", result.data.reply, "", result.data.citations || []);
+          track("chat_response_received", {
+            provider: result.data.provider || "",
+            citations: result.data.citations || [],
+            reply_length: String(result.data.reply || "").length,
+          });
           return;
         }
         var detail =
           (result.data && result.data.detail) ||
           "Assistant is unavailable. Use /trust-brief/intake/ or email operations@noetfield.com.";
         appendMsg(log, "bot", String(detail));
+        track("chat_response_error", { detail: String(detail).slice(0, 160) });
       })
       .catch(function () {
         removeEl(typing);
@@ -100,6 +191,7 @@
           "bot",
           "Could not reach the assistant. Email operations@noetfield.com or visit /trust-brief/intake/."
         );
+        track("chat_response_error", { detail: "network_error" });
       })
       .finally(function () {
         sendBtn.disabled = false;
@@ -112,7 +204,7 @@
 
     var link = document.createElement("link");
     link.rel = "stylesheet";
-    link.href = "/assets/noetfield-chat.css?v=3";
+    link.href = "/assets/noetfield-chat.css?v=4";
     document.head.appendChild(link);
 
     var fab = el("button", "nfChatFab", "✦");
@@ -130,7 +222,7 @@
     var headText = document.createElement("div");
     headText.className = "nfChatHeadText";
     headText.innerHTML =
-      "<strong>Noetfield Assistant</strong><span>Governance · Offerings · Intake</span>";
+      "<strong>Noetfield Assistant</strong><span>Executive Q&A · Governance · Intake</span>";
     var closeBtn = el("button", "nfChatClose", "×");
     closeBtn.type = "button";
     closeBtn.setAttribute("aria-label", "Close");
@@ -154,7 +246,7 @@
     var form = el("form", "nfChatForm");
     var input = document.createElement("input");
     input.type = "text";
-    input.placeholder = "Ask about Trust Brief, Copilot, Bank Pilot…";
+    input.placeholder = "Ask for pricing, diligence, GEL, or next step…";
     input.autocomplete = "off";
     input.maxLength = 2000;
     input.setAttribute("aria-label", "Your question");
@@ -174,13 +266,16 @@
     appendMsg(
       log,
       "bot",
-      "Welcome. I can help with Noetfield offerings, governance evaluation, and how to request a Governance Brief."
+      "Welcome. I can help with Noetfield offerings, governance evaluation, GEL, investor diligence, and the right next step. Ask directly, or use the prompts above."
     );
 
     function setOpen(open) {
       panel.classList.toggle("open", open);
       fab.setAttribute("aria-expanded", open ? "true" : "false");
-      if (open) input.focus();
+      if (open) {
+        track("chat_opened", {});
+        input.focus();
+      }
     }
 
     fab.addEventListener("click", function () {
