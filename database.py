@@ -46,7 +46,7 @@ _CREATE_AUDIT_TABLE = f"""
 CREATE TABLE IF NOT EXISTS {AUDIT_TABLE_NAME} (
     id              INTEGER  PRIMARY KEY AUTOINCREMENT,
     created_at      TEXT     NOT NULL,
-    request_id      TEXT     NOT NULL UNIQUE,
+    request_id      TEXT     NOT NULL,
     applicant_id    TEXT     NOT NULL,
     tenant_id       TEXT     NOT NULL DEFAULT 'unknown',
     decision        TEXT     NOT NULL,
@@ -71,6 +71,7 @@ _CREATE_INDEXES = [
     f"CREATE INDEX IF NOT EXISTS idx_audit_created_at   ON {AUDIT_TABLE_NAME}(created_at);",
     f"CREATE INDEX IF NOT EXISTS idx_audit_decision      ON {AUDIT_TABLE_NAME}(decision);",
     f"CREATE INDEX IF NOT EXISTS idx_audit_tenant_id     ON {AUDIT_TABLE_NAME}(tenant_id);",
+    f"CREATE UNIQUE INDEX IF NOT EXISTS idx_audit_tenant_request_id ON {AUDIT_TABLE_NAME}(tenant_id, request_id);",
 ]
 
 _MIGRATION_COLUMNS: list[tuple[str, str]] = [
@@ -96,6 +97,43 @@ def _migrate_schema(conn: sqlite3.Connection) -> None:
     for column, ddl in _MIGRATION_COLUMNS:
         if column not in existing:
             conn.execute(f"ALTER TABLE {AUDIT_TABLE_NAME} ADD COLUMN {column} {ddl}")
+    if _has_global_request_id_unique(conn):
+        _rebuild_audit_table_for_tenant_request_id(conn)
+
+
+def _has_global_request_id_unique(conn: sqlite3.Connection) -> bool:
+    for index in conn.execute(f"PRAGMA index_list({AUDIT_TABLE_NAME})").fetchall():
+        if not index[2]:
+            continue
+        index_name = index[1]
+        columns = [
+            row[2]
+            for row in conn.execute(f"PRAGMA index_info({index_name})").fetchall()
+        ]
+        if columns == ["request_id"]:
+            return True
+    return False
+
+
+def _rebuild_audit_table_for_tenant_request_id(conn: sqlite3.Connection) -> None:
+    old_table = f"{AUDIT_TABLE_NAME}_old_global_request_id"
+    conn.execute(f"ALTER TABLE {AUDIT_TABLE_NAME} RENAME TO {old_table}")
+    conn.execute(_CREATE_AUDIT_TABLE)
+
+    new_columns = {
+        row[1] for row in conn.execute(f"PRAGMA table_info({AUDIT_TABLE_NAME})").fetchall()
+    }
+    old_columns = [
+        row[1]
+        for row in conn.execute(f"PRAGMA table_info({old_table})").fetchall()
+        if row[1] in new_columns
+    ]
+    column_list = ", ".join(old_columns)
+    conn.execute(
+        f"INSERT INTO {AUDIT_TABLE_NAME} ({column_list}) "
+        f"SELECT {column_list} FROM {old_table}"
+    )
+    conn.execute(f"DROP TABLE {old_table}")
 
 
 def init_db() -> None:
@@ -191,12 +229,26 @@ def get_audit_by_id(audit_id: int) -> dict[str, Any] | None:
     return _row_to_record(row)
 
 
-def get_audit_by_request_id(request_id: str) -> dict[str, Any] | None:
+def get_audit_by_request_id(
+    request_id: str,
+    *,
+    tenant_id: str | None = None,
+) -> dict[str, Any] | None:
     with _get_conn() as conn:
-        row = conn.execute(
-            f"SELECT * FROM {AUDIT_TABLE_NAME} WHERE request_id = ? LIMIT 1",
-            (request_id,),
-        ).fetchone()
+        if tenant_id is None:
+            row = conn.execute(
+                f"SELECT * FROM {AUDIT_TABLE_NAME} WHERE request_id = ? LIMIT 1",
+                (request_id,),
+            ).fetchone()
+        else:
+            row = conn.execute(
+                f"""
+                SELECT * FROM {AUDIT_TABLE_NAME}
+                WHERE tenant_id = ? AND request_id = ?
+                LIMIT 1
+                """,
+                (tenant_id, request_id),
+            ).fetchone()
     if row is None:
         return None
     return _row_to_record(row)

@@ -1,0 +1,21 @@
+{
+  "guardrails": {
+    "original_pack_statuses_modified": false,
+    "portfolio_spine_used": false,
+    "production_mutation": false,
+    "repo_env_read": false,
+    "secret_values_printed": false
+  },
+  "note": "All rows were triggered and receipted. Read-only rows were completed by evidence receipts; task-specific implementation and production-change rows were deferred rather than falsely completed.",
+  "pack_path": "docs/run_patches/noetfield_run_patch_pack_10100_v1.jsonl",
+  "patch_count": 101,
+  "receipt_path": "docs/run_patches/execution/noetfield_run_patch_execution_receipts_v1.jsonl",
+  "result_counts": {
+    "deferred_production_change": 100,
+    "deferred_task_specific_work": 4445,
+    "read_only_receipt_complete": 5555
+  },
+  "run_id": "noetfield-run-pack-v1-20260628T044924Z",
+  "total_rows": 10100,
+  "triggered_at": "2026-06-28T04:49:24+00:00"
+}

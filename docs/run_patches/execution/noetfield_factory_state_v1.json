@@ -1,0 +1,39 @@
+{
+  "cycle_count": 9,
+  "factory_id": "noetfield-factory-v1-20260628T032922Z",
+  "guardrails": {
+    "portfolio_spine_used": false,
+    "production_mutation": false,
+    "repo_env_read": false,
+    "restart_on_recoverable_error": true,
+    "secret_values_printed": false
+  },
+  "interval_seconds": 600,
+  "last_cycle_result": {
+    "cycle_number": 9,
+    "exit_code": 0,
+    "finished_at": "2026-06-28T04:49:24+00:00",
+    "guardrails": {
+      "portfolio_spine_used": false,
+      "production_mutation": false,
+      "repo_env_read": false,
+      "secret_values_printed": false
+    },
+    "runner_output": {
+      "deferred_production_change": 100,
+      "deferred_task_specific_work": 4445,
+      "patches_seen": 101,
+      "read_only_receipt_complete": 5555,
+      "receipts": "docs/run_patches/execution/noetfield_run_patch_execution_receipts_v1.jsonl",
+      "run_id": "noetfield-run-pack-v1-20260628T044924Z",
+      "state": "docs/run_patches/execution/noetfield_run_patch_execution_state_v1.json",
+      "triggered_rows": 10100
+    },
+    "started_at": "2026-06-28T04:49:24+00:00",
+    "status": "ok",
+    "stderr_present": false
+  },
+  "last_heartbeat_at": "2026-06-28T04:49:24+00:00",
+  "started_at": "2026-06-28T03:29:22+00:00",
+  "status": "running"
+}

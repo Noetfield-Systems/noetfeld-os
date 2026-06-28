@@ -27,8 +27,8 @@ def _tenant_audit_or_404(audit_id: int, client: AuthenticatedClient) -> dict:
 
 
 def _tenant_audit_by_request_or_404(request_id: str, client: AuthenticatedClient) -> dict:
-    record = get_audit_by_request_id(request_id)
-    if record is None or record.get("tenant_id") != client.tenant_id:
+    record = get_audit_by_request_id(request_id, tenant_id=client.tenant_id)
+    if record is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Audit not found")
     return record
 

@@ -4,6 +4,8 @@ from __future__ import annotations
 
 from auth import AuthenticatedClient
 from decision_engine import decide
+from database import get_audit_by_request_id
+from audit.audit_store import list_audits
 from policy_meta import PolicyRegistry
 from tests.conftest import SAMPLE_PAYLOAD
 
@@ -39,6 +41,43 @@ def test_conflicting_request_id_returns_409(auth_headers):
     assert second.status_code == 409
 
 
+def test_request_id_idempotency_is_tenant_scoped(temp_runtime):
+    _app, _raw_key = temp_runtime
+    PolicyRegistry.load()
+    payload = {k: v for k, v in SAMPLE_PAYLOAD.items() if k != "applicant_id"}
+    tenant_a = AuthenticatedClient(
+        key_id="key-a",
+        tenant_id="tenant-a",
+        org_id="org-a",
+        scopes=frozenset({"decision:write", "audit:read"}),
+    )
+    tenant_b = AuthenticatedClient(
+        key_id="key-b",
+        tenant_id="tenant-b",
+        org_id="org-b",
+        scopes=frozenset({"decision:write", "audit:read"}),
+    )
+
+    first = decide(
+        payload=payload,
+        applicant_id=SAMPLE_PAYLOAD["applicant_id"],
+        client=tenant_a,
+        request_id="shared-request-id",
+    )
+    second = decide(
+        payload={**payload, "credit_score": 680},
+        applicant_id=SAMPLE_PAYLOAD["applicant_id"],
+        client=tenant_b,
+        request_id="shared-request-id",
+    )
+
+    assert first.audit_id != second.audit_id
+    assert first.tenant_id == "tenant-a"
+    assert second.tenant_id == "tenant-b"
+    assert get_audit_by_request_id("shared-request-id", tenant_id="tenant-a")["id"] == first.audit_id
+    assert get_audit_by_request_id("shared-request-id", tenant_id="tenant-b")["id"] == second.audit_id
+
+
 def test_get_decision_by_request_id(auth_headers):
     client, headers = auth_headers
     payload = {**SAMPLE_PAYLOAD, "request_id": "rid-read-001"}
@@ -57,6 +96,28 @@ def test_portal_audits_scoped_to_tenant(auth_headers):
     assert audits.status_code == 200
     assert len(audits.json()) >= 1
     assert all(row["tenant_id"] == "tenant-test" for row in audits.json())
+
+
+def test_audit_store_preserves_tenant_filter(temp_runtime):
+    _app, _raw_key = temp_runtime
+    PolicyRegistry.load()
+    payload = {k: v for k, v in SAMPLE_PAYLOAD.items() if k != "applicant_id"}
+    for tenant_id in ("tenant-a", "tenant-b"):
+        decide(
+            payload=payload,
+            applicant_id=SAMPLE_PAYLOAD["applicant_id"],
+            client=AuthenticatedClient(
+                key_id=f"key-{tenant_id}",
+                tenant_id=tenant_id,
+                org_id=f"org-{tenant_id}",
+                scopes=frozenset({"decision:write", "audit:read"}),
+            ),
+            request_id=f"store-{tenant_id}",
+        )
+
+    tenant_a_rows = list_audits(tenant_id="tenant-a")
+    assert tenant_a_rows
+    assert all(row["tenant_id"] == "tenant-a" for row in tenant_a_rows)
 
 
 def test_deterministic_replay_same_outcome(temp_runtime):

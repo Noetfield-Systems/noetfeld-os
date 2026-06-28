@@ -4,7 +4,7 @@
   "agent_lane": "NOETFELD-OS",
   "workspace_root": "/Users/sinakazemnezhad/Projects/noetfeld-os",
   "search_token": "NOOS-AGENT-DOC",
-  "updated_at": "2026-06-26",
+  "updated_at": "2026-06-27",
   "part8_sync_at": "2026-06-15",
   "canonical_ssot_source": "/Users/sinakazemnezhad/Desktop/Noetfield/Noetfield-All-Documents/",
   "sync_script": "scripts/sync-noos-ssot.sh",
@@ -128,6 +128,24 @@
       "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260626-015]_NOETFIELD_CLOUD_ORGANIZE_MASTER_PLAN_LOCKED_v1.md",
       "doc_type": "CLOUD_ORGANIZE_MASTER_PLAN_LOCKED",
       "title": "Noetfield cloud organize master plan — locked v1"
+    },
+    {
+      "trace_id": "NOOS-AGENT-20260627-016",
+      "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260627-016]_STUDIO_SUPABASE_BOUNDARY.md",
+      "doc_type": "STUDIO_SUPABASE_BOUNDARY",
+      "title": "Noetfield Studio Supabase boundary"
+    },
+    {
+      "trace_id": "NOOS-AGENT-20260627-017",
+      "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260627-017]_NOETFIELD_RUN_PATCH_PACK_10100_v1.md",
+      "doc_type": "RUN_PATCH_PACK_10100",
+      "title": "Noetfield run patch pack - 10,100 task rows"
+    },
+    {
+      "trace_id": "NOOS-AGENT-20260627-018",
+      "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260627-018]_WEBSITE_REVENUE_OPERATING_IMPLEMENTATION_LOCKED_v1.md",
+      "doc_type": "WEBSITE_REVENUE_OPERATING_IMPLEMENTATION_LOCKED",
+      "title": "Website revenue + operating implementation plan — locked v1"
     }
   ]
 }

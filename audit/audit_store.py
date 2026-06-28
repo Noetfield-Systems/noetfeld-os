@@ -14,6 +14,7 @@ def list_audits(
     *,
     request_id: str | None = None,
     applicant_id: str | None = None,
+    tenant_id: str | None = None,
     decision: str | None = None,
     since: datetime | None = None,
     until: datetime | None = None,
@@ -28,6 +29,7 @@ def list_audits(
     return get_audit(
         request_id=request_id,
         applicant_id=applicant_id,
+        tenant_id=tenant_id,
         decision=decision,
         since=since,
         until=until,

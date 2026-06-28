@@ -143,10 +143,8 @@ async def get_decision(
 ) -> DecisionResponse:
     from database import get_audit_by_request_id
 
-    record = get_audit_by_request_id(request_id)
+    record = get_audit_by_request_id(request_id, tenant_id=client.tenant_id)
     if record is None:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Decision not found")
-    if record.get("tenant_id") != client.tenant_id:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Decision not found")
 
     from decision_engine import result_from_audit

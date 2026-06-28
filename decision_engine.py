@@ -132,7 +132,10 @@ def decide(
     resolved_request_id = request_id or str(uuid4())
     canonical = _canonical_payload(payload)
 
-    existing = get_audit_by_request_id(resolved_request_id)
+    existing = get_audit_by_request_id(
+        resolved_request_id,
+        tenant_id=client.tenant_id,
+    )
     if existing is not None:
         existing_inputs = {
             k: v
