@@ -5,9 +5,9 @@
     "version": "1.0.0"
   },
   "paths": {
-    "/api/config": {
+    "/noetfield-ai-factory-lanes.json": {
       "get": {
-        "summary": "Return AI Factory route and lane config"
+        "summary": "Return static AI Factory route and lane config"
       }
     },
     "/api/gate/ai-factory-design": {
