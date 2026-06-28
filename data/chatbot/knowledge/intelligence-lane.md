@@ -25,4 +25,4 @@ Homepage hero: automate spreadsheet-heavy work with **board-grade trust artifact
 
 ## Anti-ICP (polite redirect)
 
-We are **not** a generic chatbot catalog or consumer AI app store. Three **contract** SKUs plus free developer sandbox — see `OFFERINGS_LOCKED.md`.
+We are **not** a generic chatbot catalog or consumer AI app store. Three **contract** SKUs plus free developer sandbox — see the public offerings lock.

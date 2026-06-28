@@ -1,96 +1,15 @@
-/** POST /api/public/chat — www-local FAQ assistant until platform spine is live. */
+/** POST /api/public/chat — proxies platform chat; local fallback only routes intake. */
 
 const CANONICAL_INTAKE = "operations@noetfield.com";
 
-const RULES = [
-  {
-    match: /\b(store|save|log|record|history|transcript|conversation|privacy|data retention)\b/i,
-    reply:
-      "Public web assistant conversations may be logged server-side for quality, reliability, and security review. " +
-      "Do not send confidential information in this chat. Use public product questions here, and use the formal intake path or " +
-      CANONICAL_INTAKE +
-      " for follow-up.",
-    citations: ["/privacy/"],
-  },
-  {
-    match: /\b(trust brief|10k|10000|\$10)\b/i,
-    reply:
-      "Trust Brief is a six-week engagement ($10,000): governance audit, AI policy mapping, and risk exposure analysis. " +
-      "Request at /trust-brief/intake/ or email " +
-      CANONICAL_INTAKE +
-      " with your site Request ID (RID in the footer).",
-    citations: ["/trust-brief/intake/"],
-  },
-  {
-    match: /\b(pilot|copilot|governance pack|board pdf|\$2k|\$10k)\b/i,
-    reply:
-      "Copilot Governance Pack is $2k–10k over 90 days with a board PDF as the success signal. " +
-      "Apply at /trust-brief/intake/?interest=pilot&vector=copilot-governance or /copilot/pilot/. " +
-      "Operational intake: " +
-      CANONICAL_INTAKE +
-      ".",
-    citations: ["/copilot/pilot/", "/trust-brief/intake/"],
-  },
-  {
-    match: /\b(bank pilot|shadow|simulation)\b/i,
-    reply:
-      "Bank Pilot is read-only governance simulation (shadow mode) — no execution rights. " +
-      "See /copilot/ and apply via /trust-brief/intake/ or " +
-      CANONICAL_INTAKE +
-      ".",
-    citations: ["/copilot/"],
-  },
-  {
-    match: /\b(pric(e|ing)|cost|fee)\b/i,
-    reply:
-      "Published lanes: Diagnostic Sprint from $2,500 · Copilot Governance Pack $2k–10k · Trust Brief $10,000. " +
-      "See /pricing/ and /start/ for paths. Intake: /trust-brief/intake/ · " +
-      CANONICAL_INTAKE +
-      ".",
-    citations: ["/pricing/", "/start/"],
-  },
-  {
-    match: /\b(engage|contact|how do|get started|intake)\b/i,
-    reply:
-      "Start at /start/ or submit /trust-brief/intake/. All operational intake routes to " +
-      CANONICAL_INTAKE +
-      " — include your Request ID (RID) from the site footer.",
-    citations: ["/start/", "/trust-brief/intake/"],
-  },
-  {
-    match: /\b(what is|who is|noetfield)\b/i,
-    reply:
-      "Noetfield is governance execution infrastructure for regulated organizations. " +
-      "We evaluate AI-driven operational intent before execution, record tamper-evident decision records, and return allow/deny. " +
-      "We do not move money, hold custody, or execute transactions on your behalf.",
-    citations: ["/", "/governance/"],
-  },
-];
-
-function pickReply(message) {
-  const text = String(message || "").trim();
-  if (!text) {
-    return {
-      reply:
-        "Ask about Trust Brief, Copilot Governance Pack, Bank Pilot, pricing, or how to engage. " +
-        "Or use /trust-brief/intake/ · " +
-        CANONICAL_INTAKE +
-        ".",
-      citations: ["/trust-brief/intake/"],
-    };
-  }
-  for (const rule of RULES) {
-    if (rule.match.test(text)) {
-      return { reply: rule.reply, citations: rule.citations || [] };
-    }
-  }
+function routeOnlyFallback() {
   return {
     reply:
-      "I can help with offerings, pricing, and intake paths on www.noetfield.com. " +
-      "For a detailed answer, use /trust-brief/intake/ or email " +
+      "I’m having trouble reaching the live assistant right now. " +
+      "If you’re exploring, start with /start/ or /pricing/. If you want to share context, use /trust-brief/intake/ or email " +
       CANONICAL_INTAKE +
-      " with your Request ID.",
-    citations: ["/trust-brief/intake/"],
+      ".",
+    citations: ["/start/", "/pricing/", "/trust-brief/intake/"],
   };
 }
 
@@ -135,10 +54,10 @@ module.exports = async function handler(req, res) {
     /* fall through to www-local */
   }
 
-  const picked = pickReply(message);
+  const picked = routeOnlyFallback();
   return res.status(200).json({
     reply: picked.reply,
-    provider: "www-local",
+    provider: "www-routing-fallback",
     citations: picked.citations,
     intake_email: CANONICAL_INTAKE,
   });

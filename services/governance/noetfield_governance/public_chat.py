@@ -6,11 +6,15 @@ import asyncio
 import logging
 import time
 from collections import defaultdict, deque
-from typing import Literal
+from typing import Any, Literal
 
 from noetfield_config import CANONICAL_INTAKE_EMAIL, get_settings
 from noetfield_governance.chat_errors import ChatAPIError, ChatConfigurationError
-from noetfield_governance.chatbot_knowledge import select_relevant_excerpt
+
+from noetfield_governance.chatbot_knowledge import (
+    build_query_with_subject,
+    select_relevant_excerpt,
+)
 from noetfield_governance.observability import trace_public_chat
 from noetfield_governance import redis_runtime
 from noetfield_governance.gemini_client import generate_reply as gemini_generate_reply
@@ -48,29 +52,43 @@ async def _check_rate_limit(client_key: str) -> None:
     _check_rate_limit_memory(client_key)
 
 
-def _system_instruction(context: str) -> str:
+def _system_instruction(
+    context: str,
+    *,
+    active_subject: str | None = None,
+    follow_up_resolved: bool = False,
+) -> str:
+    kernel = ""
+    if active_subject:
+        kernel = (
+            "\nConversation kernel:\n"
+            f"- Active subject: {active_subject}\n"
+            f"- Follow-up resolution: {'yes' if follow_up_resolved else 'no'}\n"
+            "- If the user asks an elliptical follow-up, answer about the active subject unless the new message clearly changes subject.\n"
+            "- Do not borrow reasons/details from another entity just because it shares words like retired, renamed, deprecated, old, or changed.\n"
+            "- If the active entity has no stated reason/detail in the retrieved facts, say that the public knowledge does not state the detail.\n"
+        )
     return f"""You are the Noetfield institutional assistant on www.noetfield.com — for buyers, developers, partners, and investors.
 
-Tone: professional, precise, calm, board-ready. No hype or startup slang.
+Tone: natural, thoughtful, concise, and calm. Sound like a capable human product guide, not a FAQ script or compliance bot. No hype or startup slang.
 
-Audience lanes (use the matching knowledge):
-- **Buyer / SME:** Diagnostic Sprint from $2,500, Copilot Governance Pack $2k–10k, Trust Brief $10k, Bank Pilot shadow — see OFFERINGS_LOCKED and intelligence-lane.
-- **Developer:** GEL = Governance Execution Layer (/gel/), api.noetfield.com, pip package noetfield-gate, noetfield gate / noetfield decide — see gel-runtime and developer-tools.
-- **Investor:** /investors/ and /investors/diligence/ — see investor-public.
-- **Trust / audit:** Trust Ledger (TLE infrastructure) vs Trust Brief (consulting SKU) — see trust-ledger-public.
+Use the knowledge that matches the user's intent:
+- Buyer / SME: public packages, examples, pricing, and intake.
+- Developer: GEL, api.noetfield.com, noetfield-gate, and public docs.
+- Investor: investor and diligence pages.
+- Trust / audit: Trust Ledger evidence and Trust Brief engagement context.
 
-Rules:
-- Answer using the knowledge base below. Prefer pinned (core) sources for pricing and identity.
-- **GEL is a public acronym** — Governance Execution Layer. Never say GEL is unused or unknown.
-- **noetfield-gate exists on PyPI** when developer-tools says so — give install/command guidance and PyPI org form templates from that doc.
-- If absent from knowledge, say so briefly and direct to the best public page or {CANONICAL_INTAKE_EMAIL} with RID — do not refuse answerable developer or GEL questions that are in the KB.
-- Never invent pricing, legal terms, SLAs, or features not in the KB.
-- Never claim payments, custody, or fund routing.
-- Contract SKUs: Trust Brief ($10,000), Copilot Governance Pack ($2k–10k), Bank Pilot (read-only). Free sandbox at /start/ is not a fourth contract SKU.
-- Include relevant paths (/gel/, /trust-brief/intake/, /investors/diligence/) when helpful.
-- For buyer, investor, developer, or intake questions, end with one clean next step and a public link or {CANONICAL_INTAKE_EMAIL}.
-- Keep replies compact: answer first, then next step. Avoid long lists unless the user asks for detail.
-- Do not reveal API keys, secrets, or internal-only ops details.
+Guidance:
+- Answer from the knowledge base below. Use current public sources for pricing, identity, and product claims.
+- Compose the answer; do not recite source snippets mechanically.
+- GEL is public: Governance Execution Layer.
+- If something is absent from the knowledge, say that plainly and offer the closest useful public page or {CANONICAL_INTAKE_EMAIL}.
+- Do not invent pricing, legal terms, SLAs, customer logos, or features.
+- Do not introduce payment, custody, or fund-routing topics unless the user asks directly.
+- Include a useful public path only when it helps the answer.
+- End with one natural next step when appropriate. Avoid long lists unless the user asks for detail.
+- Do not reveal API keys, secrets, internal-only ops details, or hidden runbooks.
+{kernel}
 
 Knowledge base:
 {context}
@@ -140,6 +158,7 @@ async def answer_public_question(
     openrouter_api_key: str | None,
     openrouter_model: str,
     client_key: str,
+    conversation_state: dict[str, Any] | None = None,
 ) -> tuple[str, ChatProvider, list[str]]:
     text = (message or "").strip()
     if not text:
@@ -149,11 +168,26 @@ async def answer_public_question(
 
     await _check_rate_limit(client_key or "anonymous")
 
-    context = select_relevant_excerpt(text)
+    query, active_subject, follow_up_resolved = build_query_with_subject(
+        text,
+        conversation_state=conversation_state,
+    )
+    context = select_relevant_excerpt(text, conversation_state=conversation_state)
     if len(context.strip()) < 200:
         logger.warning("public_chat_thin_context chars=%s question=%r", len(context), text[:80])
     citations = _citations_from_context(context)
-    system = _system_instruction(context)
+    system = _system_instruction(
+        context,
+        active_subject=active_subject,
+        follow_up_resolved=follow_up_resolved,
+    )
+    user_message = text
+    if active_subject and follow_up_resolved:
+        user_message = (
+            f"Active subject from prior turn: {active_subject}\n"
+            f"Resolved retrieval query: {query}\n"
+            f"User question: {text}"
+        )
 
     resolved, api_key = resolve_chat_provider(
         preference=provider,
@@ -189,7 +223,7 @@ async def answer_public_question(
                 gemini_model=gemini_model,
                 openrouter_model=openrouter_model,
                 system_instruction=system,
-                user_message=text,
+                user_message=user_message,
             )
             return reply, resolved, citations
         except ChatAPIError as primary_exc:
@@ -209,7 +243,7 @@ async def answer_public_question(
                     gemini_model=gemini_model,
                     openrouter_model=openrouter_model,
                     system_instruction=system,
-                    user_message=text,
+                    user_message=user_message,
                 )
                 return reply, fb_provider, citations
             except ChatAPIError:

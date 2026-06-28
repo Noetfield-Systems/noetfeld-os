@@ -2,7 +2,7 @@
 
 ## What is the Partner Integration Program?
 
-A **program**, not a fourth product. Licensed banks, VASPs, exchanges, and PSPs embed Noetfield's **pre-execution evaluate API** and **Trust Ledger** audit export. Noetfield does not execute trades, hold custody, or operate as an MSB or RPAA registrant.
+A **program**, not a fourth product. Licensed banks, VASPs, exchanges, and PSPs embed Noetfield's **pre-execution evaluate API** and **Trust Ledger** audit export.
 
 ## How do exchanges integrate?
 

@@ -1,4 +1,4 @@
-"""Deterministic intent and alignment helpers for the public chatbot."""
+"""Intent telemetry and alignment helpers for the public chatbot."""
 
 from __future__ import annotations
 
@@ -14,7 +14,6 @@ _PRIVACY_RE = re.compile(
     r"\b(store|save|log|record|history|transcript|conversation|privacy|data retention)\b",
     re.I,
 )
-_PRICING_RE = re.compile(r"\b(price|pricing|cost|fee|trust brief|governance pack|pilot|\$)\b", re.I)
 _CONTACT_RE = re.compile(r"\b(contact|engage|start|get started|book|apply|email|intake)\b", re.I)
 _OFF_TOPIC_RE = re.compile(r"\b(weather|recipe|sports|celebrity|homework|dating|joke)\b", re.I)
 
@@ -27,7 +26,6 @@ class PublicChatIntent:
     risk_flags: list[str] = field(default_factory=list)
     required_terms: list[str] = field(default_factory=list)
     forbidden_terms: list[str] = field(default_factory=list)
-    deterministic: bool = False
 
     def to_dict(self) -> dict[str, Any]:
         return asdict(self)
@@ -36,7 +34,6 @@ class PublicChatIntent:
 def analyze_public_chat_intent(message: str) -> PublicChatIntent:
     text = (message or "").strip()
     lanes = detect_question_lanes(text)
-    lower = text.lower()
 
     if _PRIVACY_RE.search(text):
         return PublicChatIntent(
@@ -44,9 +41,7 @@ def analyze_public_chat_intent(message: str) -> PublicChatIntent:
             lanes=lanes,
             outcome_goal="explain_tracking_and_safe_use",
             risk_flags=["privacy_disclosure", "trust"],
-            required_terms=["logged", "quality", "non-confidential"],
             forbidden_terms=["we do not store"],
-            deterministic=True,
         )
     if _OFF_TOPIC_RE.search(text):
         return PublicChatIntent(
@@ -55,19 +50,6 @@ def analyze_public_chat_intent(message: str) -> PublicChatIntent:
             outcome_goal="redirect_to_noetfield_scope",
             risk_flags=["off_topic"],
             required_terms=["Noetfield", CANONICAL_INTAKE_EMAIL],
-            deterministic=True,
-        )
-    if _PRICING_RE.search(text):
-        if "trust brief" in lower and not re.search(r"\b(copilot|governance pack|pilot|all|offerings)\b", lower):
-            required_terms = ["$10,000"]
-        else:
-            required_terms = ["$10,000", "$2k", "$10k"]
-        return PublicChatIntent(
-            primary_intent="pricing",
-            lanes=lanes or ["buyer"],
-            outcome_goal="state_locked_pricing_and_next_step",
-            risk_flags=["pricing_accuracy"],
-            required_terms=required_terms,
         )
     if _CONTACT_RE.search(text):
         return PublicChatIntent(
@@ -95,13 +77,12 @@ def analyze_public_chat_intent(message: str) -> PublicChatIntent:
             required_terms=["/investors/diligence/"],
         )
 
-    if not lower:
+    if not text.lower():
         return PublicChatIntent(
             primary_intent="empty",
             lanes=[],
             outcome_goal="reject_empty",
             risk_flags=["bad_request"],
-            deterministic=True,
         )
     return PublicChatIntent(
         primary_intent="general_product",
@@ -110,35 +91,6 @@ def analyze_public_chat_intent(message: str) -> PublicChatIntent:
         risk_flags=[],
         required_terms=["Noetfield"],
     )
-
-
-def deterministic_reply_for_intent(intent: PublicChatIntent) -> tuple[str, list[str]] | None:
-    if intent.primary_intent == "pricing" and "sme" in intent.lanes:
-        return (
-            "For a mortgage broker or Canadian SME, start with the Noetfield Intelligence "
-            "Diagnostic Sprint: from $2,500 CAD for a one-week ops audit, top 3 automations, "
-            "and a roadmap PDF. If the work moves into regulated Copilot governance, the next "
-            "step is the Copilot Governance Pack ($2k–10k, 90 days, board PDF). For a deeper "
-            "governance diagnostic before scale, use Trust Brief ($10,000, six weeks). "
-            "Start at /intelligence/intake/ or /pricing/.",
-            ["knowledge/intelligence-lane.md", "knowledge/pricing-matrix.md", "/pricing/"],
-        )
-    if intent.primary_intent == "privacy_history":
-        return (
-            "Public web assistant conversations may be logged server-side for quality, reliability, "
-            "and security review. Treat this as a non-confidential public chat: do not send "
-            "confidential information here. Use public product questions in the assistant, and use the formal intake path or operations@noetfield.com "
-            "for follow-up. We hash session/client identifiers and redact obvious API keys or tokens "
-            "before storing telemetry.",
-            ["/privacy/", "docs/CHATBOT_SETUP.md"],
-        )
-    if intent.primary_intent == "off_topic":
-        return (
-            "I can only help with Noetfield offerings, Governance Execution Layer, Trust Brief, "
-            f"Copilot Governance Pack, Bank Pilot, pricing, and intake. For Noetfield follow-up, email {CANONICAL_INTAKE_EMAIL}.",
-            ["/", "/pricing/"],
-        )
-    return None
 
 
 def evaluate_intent_alignment(
@@ -169,7 +121,6 @@ def build_decision_path(
     intent: PublicChatIntent,
     provider: str | None,
     citations: list[str],
-    deterministic: bool,
     knowledge_chars: int | None = None,
     error_type: str | None = None,
 ) -> list[dict[str, Any]]:
@@ -183,11 +134,8 @@ def build_decision_path(
             "outcome_goal": intent.outcome_goal,
         },
     ]
-    if deterministic:
-        path.append({"step": "deterministic_policy", "status": "used"})
-    else:
-        path.append({"step": "knowledge_retrieval", "status": "used", "knowledge_chars": knowledge_chars})
-        path.append({"step": "llm_provider", "status": "used", "provider": provider})
+    path.append({"step": "knowledge_retrieval", "status": "used", "knowledge_chars": knowledge_chars})
+    path.append({"step": "llm_provider", "status": "used", "provider": provider})
     path.append({"step": "citations", "status": "ok" if citations else "missing", "citations": citations})
     if error_type:
         path.append({"step": "error", "status": "failed", "error_type": error_type})

@@ -1,8 +1,8 @@
-# Noetfield — Frequently asked questions
+# Noetfield — Public site context
 
 ## What is Noetfield?
 
-Noetfield is governance execution infrastructure for regulated organizations. We evaluate AI-driven operational intent before execution, record a compliance log, and return allow or deny decisions. We do not move money, hold custody, or execute transactions on your behalf.
+Noetfield is governance execution infrastructure for regulated organizations. We evaluate AI-driven operational intent before execution and produce board-ready evidence from the decision path.
 
 ## What are the three offerings?
 
@@ -14,11 +14,11 @@ Noetfield is governance execution infrastructure for regulated organizations. We
 
 Request a Governance Brief at `/trust-brief/intake/`. All operational intake routes to **operations@noetfield.com**. Include your site **Request ID** (`RID-…` in the footer) in email subjects.
 
-## Web assistant and Telegram
+## Web assistant
 
-- **Website:** bottom-right assistant on www (calls the platform API; same knowledge as this bot).
-- **Telegram:** when deployed, link appears in the site footer (`@username`). Use `/start`, `/offerings`, `/intake`. Free-text Q&A requires the platform LLM keys to be configured.
-- Neither channel executes payments or replaces signed contracts.
+- The website assistant should use the platform chat path when configured.
+- The local website fallback is routing-only. It must not pretend to answer from static local rules.
+- If the model path is unavailable, route to `/start/`, `/pricing/`, `/trust-brief/intake/`, or **operations@noetfield.com**.
 
 ## What is GEL?
 
@@ -27,10 +27,6 @@ Request a Governance Brief at `/trust-brief/intake/`. All operational intake rou
 ## What is the Governance Console?
 
 The Governance Evaluation Interface lets authorized pilot users submit operational intent and view allow/deny decisions plus the compliance log. Marketing entry: `/console/` on www; product UI on the authorized platform host (`/console` on platform.noetfield.com).
-
-## Do you process payments or hold funds?
-
-No. Noetfield provides governance evaluation and compliance logging only—not payment execution, custody, or money transmission.
 
 ## Who is this for?
 

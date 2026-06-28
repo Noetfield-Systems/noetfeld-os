@@ -6,6 +6,7 @@ import json
 import re
 from functools import lru_cache
 from pathlib import Path
+from typing import Any
 
 _REPO_ROOT = Path(__file__).resolve().parents[3]
 _KNOWLEDGE_DIR = _REPO_ROOT / "data" / "chatbot" / "knowledge"
@@ -53,12 +54,74 @@ _LANE_PATTERNS: dict[str, re.Pattern[str]] = {
     ),
 }
 
-_BUILTIN_CORE = """## Source: faq.md (core)
+_BUILTIN_CORE = """## Source: Public site context (core)
 Noetfield is governance execution infrastructure. Three contract SKUs: Trust Brief, Copilot Governance Pack, Bank Pilot.
 GEL = Governance Execution Layer — see /gel/ and gel-runtime.md.
 Developer tools: pip install noetfield-gate · api.noetfield.com
 Intake: operations@noetfield.com with RID in subject.
 """
+
+_ENTITY_ALIASES: dict[str, tuple[str, ...]] = {
+    "AI Factories": ("ai factories", "ai factory", "factory layer", "factory"),
+    "Bank Pilot": ("bank pilot", "shadow mode"),
+    "Copilot Governance Pack": ("copilot governance pack", "governance pack", "copilot pack"),
+    "Developer Sandbox": ("developer sandbox", "free sandbox", "sandbox"),
+    "Federal": ("federal", "government"),
+    "GEL": ("gel", "governance execution layer", "api.noetfield.com", "noetfield-gate"),
+    "Governance": ("governance", "governance evaluation"),
+    "Intelligence": ("intelligence", "intelligence tab", "intelligence page"),
+    "MSP": ("msp", "partner"),
+    "Noetfield OS": ("noetfield os", "noetfeld-os", "noos"),
+    "Pricing": ("pricing", "price", "cost"),
+    "Templates": ("templates", "template"),
+    "Trust Brief": ("trust brief", "governance brief"),
+    "Trust Ledger": ("trust ledger", "tle"),
+}
+
+_FOLLOW_UP_RE = re.compile(
+    r"^\s*(why|what about|how about|and|so|then|it|that|this|they|them|those|"
+    r"why retired|why remove|why rename|should we|is it|does it|can it)\b",
+    re.I,
+)
+
+_LIFECYCLE_TERMS = {
+    "changed",
+    "deprecated",
+    "old",
+    "outdated",
+    "removed",
+    "renamed",
+    "retired",
+}
+
+_GENERIC_SUBJECT_RE = re.compile(
+    r"\b(?:retired|deprecated|renamed|removed|outdated|changed|old)\s+"
+    r"([a-z][a-z0-9 /-]{2,80}?)(?:[?.!,;:]|$)",
+    re.I,
+)
+_OBJECT_SUBJECT_RE = re.compile(
+    r"\b(?:about|for|to|the|this|that)\s+"
+    r"([a-z][a-z0-9 /-]{0,60}?"
+    r"(?:tab|page|route|offer|sku|program|path|pricing|alias|aliases|intake))\b",
+    re.I,
+)
+
+_PUBLIC_SOURCE_LABELS: dict[str, str] = {
+    "PRODUCT_BRIEF.md": "Public product brief",
+    "OFFERINGS_LOCKED.md": "Public offerings",
+    "ai-factory.md": "AI Factory public page",
+    "canada-regulatory-2026.md": "Canada regulatory context",
+    "developer-tools.md": "Developer tools",
+    "faq-live.md": "Public site context",
+    "faq.md": "Public site context",
+    "gel-runtime.md": "GEL runtime public context",
+    "intelligence-lane.md": "Intelligence lane public context",
+    "investor-public.md": "Investor public context",
+    "partner-control-layer.md": "Partner control layer",
+    "pricing-matrix.md": "Pricing public context",
+    "site-surfaces.md": "Public site map",
+    "trust-ledger-public.md": "Trust Ledger public context",
+}
 
 
 def detect_question_lanes(question: str) -> list[str]:
@@ -68,6 +131,122 @@ def detect_question_lanes(question: str) -> list[str]:
         if pattern.search(text):
             lanes.append(lane)
     return lanes
+
+
+def detect_entities(text: str) -> list[str]:
+    """Return canonical public entities mentioned in text."""
+
+    haystack = (text or "").lower()
+    found: list[str] = []
+    for canonical, aliases in _ENTITY_ALIASES.items():
+        if any(alias in haystack for alias in aliases):
+            found.append(canonical)
+    return found
+
+
+def _clean_subject_phrase(value: str) -> str | None:
+    text = re.sub(r"\s+", " ", value or "").strip(" -_.,;:?!/").lower()
+    if not text:
+        return None
+    text = re.sub(r"^(the|this|that|a|an)\s+", "", text)
+    text = re.sub(r"\b(still|used|stay|stays|changed|retired|removed|renamed)\b.*$", "", text).strip()
+    if not text or text in {"it", "this", "that", "why", "what"}:
+        return None
+    if len(text.split()) > 6:
+        text = " ".join(text.split()[:6])
+    return text.title() if len(text) <= 4 else text
+
+
+def infer_subject_phrase(text: str) -> str | None:
+    """Infer a subject phrase when the prior turn names an entity outside the alias map."""
+
+    source = (text or "").strip()
+    for pattern in (_GENERIC_SUBJECT_RE, _OBJECT_SUBJECT_RE):
+        match = pattern.search(source)
+        if match:
+            cleaned = _clean_subject_phrase(match.group(1))
+            if cleaned:
+                return cleaned
+    return None
+
+
+def active_subject_from_conversation(conversation_state: dict[str, Any] | None) -> str | None:
+    """Infer the current subject from recent turns, newest first."""
+
+    if not conversation_state:
+        return None
+    recent = conversation_state.get("recent") or []
+    if not isinstance(recent, list):
+        return None
+    for event in reversed(recent):
+        if not isinstance(event, dict):
+            continue
+        text = " ".join(
+            str(event.get(key) or "") for key in ("message", "reply_preview", "active_subject")
+        )
+        entities = detect_entities(text)
+        if entities:
+            return entities[0]
+        inferred = infer_subject_phrase(text)
+        if inferred:
+            return inferred
+    return None
+
+
+def is_follow_up_question(question: str) -> bool:
+    text = (question or "").strip()
+    if not text:
+        return False
+    if detect_entities(text):
+        return False
+    return bool(_FOLLOW_UP_RE.search(text)) or len(text.split()) <= 4
+
+
+def _word_tokens(text: str) -> set[str]:
+    return {t.lower() for t in re.split(r"\W+", text or "") if len(t) > 2}
+
+
+def _aliases_for(entity: str | None) -> tuple[str, ...]:
+    if not entity:
+        return ()
+    return _ENTITY_ALIASES.get(entity, ()) + ((entity or "").lower(),)
+
+
+def _mentions_entity(text: str, entity: str | None) -> bool:
+    lower = (text or "").lower()
+    return any(alias and alias in lower for alias in _aliases_for(entity))
+
+
+def _mentions_other_entity(text: str, active_subject: str | None) -> bool:
+    lower = (text or "").lower()
+    for canonical, aliases in _ENTITY_ALIASES.items():
+        if canonical == active_subject:
+            continue
+        if any(alias in lower for alias in aliases):
+            return True
+    return False
+
+
+def _has_lifecycle_term(text: str) -> bool:
+    return bool(_word_tokens(text) & _LIFECYCLE_TERMS)
+
+
+def build_query_with_subject(
+    question: str,
+    *,
+    conversation_state: dict[str, Any] | None = None,
+) -> tuple[str, str | None, bool]:
+    """Resolve elliptical follow-ups for retrieval without hardcoding an answer."""
+
+    text = (question or "").strip()
+    mentioned = detect_entities(text)
+    if mentioned:
+        return text, mentioned[0], False
+    subject = active_subject_from_conversation(conversation_state)
+    follow_up = bool(subject and is_follow_up_question(text))
+    if follow_up:
+        return f"{subject}: {text}", subject, True
+    return text, subject, False
 
 
 def _read(path: Path) -> str:
@@ -80,10 +259,7 @@ def _source_block(path: Path, *, core: bool = False) -> str:
     body = _read(path)
     if not body:
         return ""
-    if path.parent.name == "knowledge":
-        label = f"knowledge/{path.name}"
-    else:
-        label = path.name
+    label = _PUBLIC_SOURCE_LABELS.get(path.name, path.stem.replace("-", " ").title())
     if core:
         label = f"{label} (core)"
     return f"## Source: {label}\n{body}"
@@ -176,9 +352,18 @@ def knowledge_context_stats() -> dict[str, int | bool | str]:
     }
 
 
-def select_relevant_excerpt(question: str, *, max_chars: int = 32_000) -> str:
+def select_relevant_excerpt(
+    question: str,
+    *,
+    max_chars: int = 32_000,
+    conversation_state: dict[str, Any] | None = None,
+) -> str:
     """Keyword-ranked excerpts with pinned core + lane-forced sources."""
-    lanes = detect_question_lanes(question)
+    query, active_subject, is_follow_up = build_query_with_subject(
+        question,
+        conversation_state=conversation_state,
+    )
+    lanes = detect_question_lanes(query)
     pinned = _pinned_sections()
     forced = _forced_lane_sections(lanes)
     full = build_knowledge_context()
@@ -190,10 +375,12 @@ def select_relevant_excerpt(question: str, *, max_chars: int = 32_000) -> str:
         parts.append(full)
     combined = "\n\n---\n\n".join(p for p in parts if p.strip())
 
-    if len(combined) <= max_chars:
+    if len(combined) <= max_chars and not active_subject:
         return combined
 
-    tokens = {t.lower() for t in question.split() if len(t) > 2}
+    tokens = _word_tokens(query)
+    subject_tokens = _word_tokens(active_subject or "")
+    lifecycle_follow_up = is_follow_up and bool(tokens & _LIFECYCLE_TERMS)
     remainder = full
     if pinned and full.startswith(pinned):
         remainder = full[len(pinned) :].lstrip("\n-")
@@ -206,25 +393,46 @@ def select_relevant_excerpt(question: str, *, max_chars: int = 32_000) -> str:
     scored: list[tuple[int, str]] = []
     for i, section in enumerate(sections):
         text = section if i == 0 else "## " + section
-        score = sum(1 for t in tokens if t in text.lower())
+        lower = text.lower()
+        subject_match = _mentions_entity(lower, active_subject)
+        score = sum(1 for t in tokens if t in lower)
+        score += 4 * sum(1 for t in subject_tokens if t in lower)
+        if subject_match:
+            score += 8
+        if active_subject and _mentions_other_entity(lower, active_subject) and not subject_match:
+            score -= 12
+        if lifecycle_follow_up and _has_lifecycle_term(lower) and not subject_match:
+            score -= 30
         for lane in lanes:
-            if lane in text.lower():
+            if lane in lower:
                 score += 2
         scored.append((score, text))
     scored.sort(key=lambda x: (-x[0], x[1]))
 
     out: list[str] = []
     size = 0
-    for _, text in scored:
+    for score, text in scored:
+        if active_subject and score <= 0:
+            continue
         if size + len(text) > budget:
             break
         out.append(text)
         size += len(text)
     ranked = "\n\n".join(out) if out else remainder[:budget]
 
-    head = pinned
+    head = _BUILTIN_CORE if active_subject and is_follow_up else pinned
     if forced:
         head = head + "\n\n---\n\n" + forced
+    if active_subject:
+        marker = (
+            "## Conversation Kernel\n"
+            f"Active subject: {active_subject}\n"
+            f"Follow-up resolved: {'yes' if is_follow_up else 'no'}\n"
+            f"Retrieval query: {query}\n"
+            "Entity boundary: do not borrow lifecycle facts from another entity.\n"
+            "Missing detail rule: if sources do not give the reason/detail for the active subject, say the detail is not in the public knowledge.\n"
+        )
+        head = marker + "\n---\n\n" + head
     return head + "\n\n---\n\n" + ranked
 
 

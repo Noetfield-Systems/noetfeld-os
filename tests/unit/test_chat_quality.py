@@ -12,7 +12,7 @@ from noetfield_governance.public_chat import answer_public_question
 CANONICAL_QUESTIONS = (
     "How much is Trust Brief?",
     "What are the three offerings?",
-    "Does Noetfield hold custody of funds?",
+    "Where should a governance lead start?",
 )
 
 

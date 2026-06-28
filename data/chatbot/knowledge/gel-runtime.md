@@ -11,7 +11,6 @@ Tagline: **Policy before execution. Receipt after.**
 - Evaluates operational intent against your **policy pack** before any downstream system runs
 - Returns **APPROVE / REVIEW / DECLINE** (or allow/deny in compliance language)
 - Emits **Trust Ledger Entries (TLEs)** — tamper-evident decision records for audit and board use
-- **Non-custodial** — does not move money, hold custody, or execute transactions
 
 ## GEL vs www homepage
 

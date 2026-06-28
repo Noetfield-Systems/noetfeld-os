@@ -3,11 +3,11 @@
   "use strict";
 
   var QUICK_PROMPTS = [
-    "Executive overview",
-    "Trust Brief pricing",
-    "GEL developer docs",
-    "Investor diligence",
-    "Do you store chat history?",
+    "Help me understand Noetfield",
+    "What should I read before applying?",
+    "How does GEL fit?",
+    "What should an investor review?",
+    "Can I share confidential context here?",
   ];
 
   function apiBase() {
@@ -180,7 +180,7 @@
         }
         var detail =
           (result.data && result.data.detail) ||
-          "Assistant is unavailable. Use /trust-brief/intake/ or email operations@noetfield.com.";
+          "I’m having trouble reaching the live assistant. Try again in a moment, or use /trust-brief/intake/ if you want to share context.";
         appendMsg(log, "bot", String(detail));
         track("chat_response_error", { detail: String(detail).slice(0, 160) });
       })
@@ -189,7 +189,7 @@
         appendMsg(
           log,
           "bot",
-          "Could not reach the assistant. Email operations@noetfield.com or visit /trust-brief/intake/."
+          "I couldn’t reach the live assistant. Try again in a moment, or use /trust-brief/intake/ if this is time-sensitive."
         );
         track("chat_response_error", { detail: "network_error" });
       })
@@ -266,7 +266,7 @@
     appendMsg(
       log,
       "bot",
-      "Welcome. I can help with Noetfield offerings, governance evaluation, GEL, investor diligence, and the right next step. Ask directly, or use the prompts above."
+      "Hi. Ask naturally about Noetfield, governance evaluation, GEL, diligence, or what to read next. I’ll keep it practical."
     );
 
     function setOpen(open) {

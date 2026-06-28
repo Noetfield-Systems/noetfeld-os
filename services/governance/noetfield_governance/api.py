@@ -20,7 +20,6 @@ from noetfield_governance.chat_errors import ChatAPIError, ChatConfigurationErro
 from noetfield_governance.public_chat_intelligence import (
     analyze_public_chat_intent,
     build_decision_path,
-    deterministic_reply_for_intent,
     evaluate_intent_alignment,
 )
 from noetfield_governance.public_chat import answer_public_question, resolve_chat_provider
@@ -862,27 +861,22 @@ async def public_chat(body: PublicChatRequest, request: Request) -> PublicChatRe
         chat_telemetry_settings,
         session_hash=session_hash,
     )
-    deterministic = deterministic_reply_for_intent(intent)
     try:
-        if deterministic is not None:
-            reply, citations = deterministic
-            provider = "deterministic"
-        else:
-            reply, provider, citations = await answer_public_question(
-                message=body.message,
-                provider=settings.public_chat_provider,
-                gemini_api_key=_secret(settings.gemini_api_key) or None,
-                gemini_model=settings.gemini_model,
-                openrouter_api_key=_secret(settings.openrouter_api_key) or None,
-                openrouter_model=settings.openrouter_model,
-                client_key=client_key,
-            )
+        reply, provider, citations = await answer_public_question(
+            message=body.message,
+            provider=settings.public_chat_provider,
+            gemini_api_key=_secret(settings.gemini_api_key) or None,
+            gemini_model=settings.gemini_model,
+            openrouter_api_key=_secret(settings.openrouter_api_key) or None,
+            openrouter_model=settings.openrouter_model,
+            client_key=client_key,
+            conversation_state=conversation_state,
+        )
     except ValueError as exc:
         decision_path = build_decision_path(
             intent=intent,
             provider=None,
             citations=[],
-            deterministic=False,
             error_type=type(exc).__name__,
         )
         record_public_chat_event(
@@ -912,7 +906,6 @@ async def public_chat(body: PublicChatRequest, request: Request) -> PublicChatRe
             intent=intent,
             provider=None,
             citations=[],
-            deterministic=False,
             error_type=type(exc).__name__,
         )
         record_public_chat_event(
@@ -942,7 +935,6 @@ async def public_chat(body: PublicChatRequest, request: Request) -> PublicChatRe
             intent=intent,
             provider=None,
             citations=[],
-            deterministic=False,
             error_type=type(exc).__name__,
         )
         record_public_chat_event(
@@ -973,7 +965,6 @@ async def public_chat(body: PublicChatRequest, request: Request) -> PublicChatRe
             intent=intent,
             provider=None,
             citations=[],
-            deterministic=False,
             error_type=type(exc).__name__,
         )
         record_public_chat_event(
@@ -1003,8 +994,7 @@ async def public_chat(body: PublicChatRequest, request: Request) -> PublicChatRe
         intent=intent,
         provider=provider,
         citations=citations,
-        deterministic=deterministic is not None,
-        knowledge_chars=(knowledge_context_stats().get("chars") if deterministic is None else None),
+        knowledge_chars=knowledge_context_stats().get("chars"),
     )
     record_public_chat_event(
         settings=chat_telemetry_settings,

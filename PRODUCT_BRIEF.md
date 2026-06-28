@@ -9,4 +9,4 @@ Noetfield is an **AI Governance & Evidence layer for Copilot adoption** — gove
 
 ## Value
 
-Regulated organizations adopt copilots faster than policy can keep pace. Noetfield provides structured assessments and a Trust Ledger that checks whether a proposed Copilot deployment is authorized under your rules, records defensible evidence, and returns a clear go/no-go decision before rollout. The product does not move money, hold assets, or execute transactions—it produces the audit trail your Copilot deployment will be asked for later.
+Regulated organizations adopt copilots faster than policy can keep pace. Noetfield provides structured assessments and a Trust Ledger that checks whether a proposed Copilot deployment is authorized under your rules, records defensible evidence, and returns a clear go/no-go decision before rollout.

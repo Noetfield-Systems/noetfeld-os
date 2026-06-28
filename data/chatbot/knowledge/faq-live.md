@@ -7,10 +7,10 @@ updated: 2026-06-27T06:04:06Z
 content_hash: ffd5585f5723799f
 ---
 
-# Noetfield FAQ (live www distill)
+# Noetfield public context (live www distill)
 
 ## What is Noetfield?
-AI Governance & Evidence for Microsoft 365 Copilot — board-grade, tamper-evident decision records. Evaluate operational intent before execution, with signed Trust Ledger Entries and fail-closed export. No custody or payment execution.
+AI Governance & Evidence for Microsoft 365 Copilot — board-grade, tamper-evident decision records. Evaluate operational intent before execution, with signed Trust Ledger Entries and fail-closed export.
 
 ## What do you offer?
 Enterprise lane: Copilot Governance Pack ($2k–10k · 90 days · board PDF). Land SKU: Trust Brief ($10k · 6 weeks). Custom: Bank Pilot shadow simulation. Three contract SKUs only.
