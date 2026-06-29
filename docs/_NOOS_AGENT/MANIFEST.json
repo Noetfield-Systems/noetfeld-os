@@ -164,6 +164,12 @@
       "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260629-021]_DIRTY_STATE_DECISION_AUDIT_PLAN_v1.md",
       "doc_type": "DIRTY_STATE_DECISION_AUDIT_PLAN",
       "title": "Dirty state decision audit plan — live sync and generated receipt policy"
+    },
+    {
+      "trace_id": "NOOS-AGENT-20260629-022",
+      "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260629-022]_SYSTEM_FIX_AND_UPGRADE_100_PLAN_v1.md",
+      "doc_type": "SYSTEM_FIX_AND_UPGRADE_100_PLAN",
+      "title": "System fix and upgrade 100-plan register — nerves, nodes, validators, stale docs"
     }
   ]
 }
