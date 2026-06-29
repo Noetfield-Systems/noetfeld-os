@@ -1,7 +1,7 @@
 {
   "gate": "PASS",
-  "generated_at": "2026-06-29T02:17:55.439998Z",
-  "git_sha": "78532e0ac0a144fa35907173eecfbb7b4c315b26",
+  "generated_at": "2026-06-29T02:27:39.963667Z",
+  "git_sha": "c1ec274f7f6d682d8e217905f6c44ee4bc942a99",
   "next_safe_action": "use this receipt as current truth before docs or chat summaries",
   "nodes": {
     "N1_PUBLIC_OUTPUT": {
@@ -29,6 +29,38 @@
       "contract": "public markdown requires generated metadata in phase 2; raw internal docs are blocked from output now",
       "ok": true,
       "public_markdown_count": 63
+    },
+    "N4_WWW_LIVE_OUTPUT": {
+      "base": "https://www.noetfield.com",
+      "blocked_count": 18,
+      "health_preview": "{\"status\":\"ok\",\"service\":\"noetfield-www\",\"surface\":\"institutional\"}",
+      "health_status": 200,
+      "leaks": [],
+      "ok": true
+    },
+    "N5_WWW_CHAT_SEMANTIC": {
+      "base": "https://www.noetfield.com",
+      "ok": true,
+      "provider": "www-controlled-executive-overview",
+      "reply_preview": "Noetfield produces the audit trail a regulated Copilot rollout will be asked for later. For CCO, CRO, CISO, CTO, procurement, and board teams, Noetfield turns each high-risk Microsoft 365 Copilot or AI go/no-go into signed evidence: policy ",
+      "stale_hits": [],
+      "status": 200
+    },
+    "N6_PLATFORM_CHAT_SEMANTIC": {
+      "base": "https://platform.noetfield.com",
+      "ok": true,
+      "provider": "openrouter",
+      "reply_preview": "Noetfield provides an AI Governance & Evidence layer, primarily for Microsoft 365 Copilot adoption. We produce the audit trail that regulated organizations will need for their Copilot rollouts. This includes policy-bound go/no-go decisions,",
+      "stale_hits": [],
+      "status": 200
+    },
+    "N7_GEL_LIVE_RUNTIME": {
+      "base": "https://api.noetfield.com",
+      "health_preview": "{\"status\":\"ok\",\"service\":\"noetfeld-os\",\"version\":\"0.3.0\",\"policy\":{\"rule_set_id\":\"noetfeld-credit-v1\",\"rule_set_version\":\"1.0.0\",\"base_policy_hash\":\"c20a6eaeb66b2f1674b1b7df5a057e9bee1958aff6a74eab87e",
+      "health_status": 200,
+      "ok": true,
+      "readiness_preview": "{\"ready\":true,\"policy_loaded\":true,\"db_ok\":true}",
+      "readiness_status": 200
     }
   },
   "ok": true,

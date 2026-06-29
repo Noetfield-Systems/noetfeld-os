@@ -78,6 +78,20 @@ governance/NOETFIELD_LIVE_NERVE_RECEIPT.json
 
 If the receipt is missing or `gate=FAIL`, the next safe action is to repair the live nerve. Do not use stale docs as implementation truth while the live nerve is failing.
 
+Current live nerve nodes:
+
+```text
+N1_PUBLIC_OUTPUT
+N2_CHAT_TRUTH
+N3_DOC_FRESHNESS
+N4_WWW_LIVE_OUTPUT
+N5_WWW_CHAT_SEMANTIC
+N6_PLATFORM_CHAT_SEMANTIC
+N7_GEL_LIVE_RUNTIME
+```
+
+This means website, platform public chat, and GEL readiness are checked together before claiming the ecosystem is green.
+
 ## Write Rule
 
 Website-side handoffs and website implementation docs go in:
