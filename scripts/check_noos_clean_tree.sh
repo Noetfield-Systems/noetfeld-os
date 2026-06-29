@@ -7,13 +7,8 @@ FAIL=0
 
 cd "$ROOT"
 
-if ps -axo command | while IFS= read -r command; do
-  case "$command" in
-    *run_noetfield_factory_loop_v1.py*)
-      printf '%s\n' "$command"
-      ;;
-  esac
-done | read -r active_factory; then
+active_factory="$(ps -axo command | awk '/[r]un_noetfield_factory_loop_v1.py/ { print; exit }')"
+if [[ -n "$active_factory" ]]; then
   echo "FAIL: run_noetfield_factory_loop_v1.py is active and may rewrite generated receipts"
   echo "      $active_factory"
   FAIL=1
