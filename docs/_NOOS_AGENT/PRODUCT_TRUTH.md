@@ -1,14 +1,19 @@
 <!-- NOOS-AGENT-DOC -->
 # PRODUCT TRUTH — Noetfield OS
-Date: 2026-06-26
+Date: 2026-06-29
 Phase: 3 — Evidence export + TLE mapping
 Steps done: ~22 / 1000 · UPG plan: 0 / 300 (see NOOS-AGENT-20260615-014)
 Runtime: FastAPI + SQLite + .venv
 Port: 8001 (local dev) · Railway gel-api (production)
-Tests: 23 passing
+Tests: 26 passing
 Built: API auth, rule_set_version, idempotency, health, TLE v1 export, board PDF stub, noetfield-gate CLI
-Hosted: api.noetfield.com (Railway gel-api)
+Local smoke: 127.0.0.1:8001 /health OK · /readiness OK when uvicorn is running
+Hosted: api.noetfield.com /health OK · /readiness OK (Railway gel-api)
+Website live: www.noetfield.com 200 · gate/trust-ledger/status 200 · platform.noetfield.com/health 200
+Website drift: live homepage is titled "Noetfield Intelligence"; /intelligence/ is 404 while /intelligence/intake/ is used as a diagnostic CTA. Website repo owns nav/page implementation.
+Website E2E: current website repo `make verify-www-e2e` PASS after live nerve hardening; internal/static truth paths 404 on production.
+Live nerve: website repo `governance/NOETFIELD_LIVE_NERVE_RECEIPT.json` PASS across www output, www chat, platform chat, and api.noetfield.com readiness.
 PyPI: noetfield-gate v0.1.0 built + twine check PASS — publish blocked on PYPI_API_TOKEN / trusted publisher
-Chatbot: Phase A knowledge upgrade in Noetfield repo — deploy platform.noetfield.com to activate
+Chatbot: Phase A knowledge upgrade in Noetfield repo is active on www and direct platform chat; platform health exposes manifest version/hash.
 Gap: npm SDK · PyPI live · chatbot Phases 3–10 (distill, pgvector RAG)
 Commercial: NOOS-AGENT-20260615-010 strategy (2 PAGER) + 011 NW1 + 013 SW1 one-pagers in vault

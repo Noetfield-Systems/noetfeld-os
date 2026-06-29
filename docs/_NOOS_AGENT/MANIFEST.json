@@ -146,6 +146,18 @@
       "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260627-018]_WEBSITE_REVENUE_OPERATING_IMPLEMENTATION_LOCKED_v1.md",
       "doc_type": "WEBSITE_REVENUE_OPERATING_IMPLEMENTATION_LOCKED",
       "title": "Website revenue + operating implementation plan — locked v1"
+    },
+    {
+      "trace_id": "NOOS-AGENT-20260628-019",
+      "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260628-019]_WEBSITE_NOOS_REAL_SYNC_HANDOFF_LOCKED_v1.md",
+      "doc_type": "CROSS_REPO_SYNC_HANDOFF_LOCKED",
+      "title": "Website + NOOS real sync handoff — locked v1"
+    },
+    {
+      "trace_id": "NOOS-AGENT-20260629-020",
+      "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260629-020]_WEBSITE_PLATFORM_LIVE_NERVE_RESPONSE_LOCKED_v1.md",
+      "doc_type": "CROSS_REPO_RESPONSE_LOCKED",
+      "title": "Website/platform live nerve response — locked v1"
     }
   ]
 }

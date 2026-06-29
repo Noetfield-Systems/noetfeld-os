@@ -1,6 +1,7 @@
-# NOETFIELD OS — PRODUCT SSOT v1 LOCKED
+# NOETFIELD OS — PRODUCT SSOT v1.2 LOCKED
 **Status:** LOCKED
-**Date:** 2026-06-15
+**Date:** 2026-06-29
+**Version:** 1.2 live-nerve refresh
 **Parent SSOT:** `SOURCEA_UNIFIED_PORTFOLIO_COMMERCIAL_SSOT_LOCKED_v3.1.md` (wins on all portfolio, identity, and architecture conflicts)
 **Repo:** `~/Projects/noetfeld-os`
 **Index ID:** `NOETFIELD_OS_SSOT`
@@ -20,6 +21,7 @@ docs/_NOOS_AGENT/                                          ← unified agent vau
 
 **Rules:**
 - This SSOT governs noetfield-os product decisions, build order, GTM, and agent briefings
+- `PRODUCT_TRUTH.md` wins for current phase, hosted state, test counts, and live gaps
 - Parent SSOT governs portfolio identity, SourceA engine architecture, and cross-layer rules
 - If conflict: parent wins on identity/architecture. This file wins on product/build/GTM specifics.
 - This file CAN be updated as implementation progresses and new decisions are locked
@@ -30,10 +32,10 @@ docs/_NOOS_AGENT/                                          ← unified agent vau
 
 ## PART 1 — WHAT NOETFIELD OS IS
 
-**Noetfield OS is the Governance Execution Layer (GEL) runtime that powers noetfield.com.**
+**Noetfield OS is the Governance Execution Layer (GEL) runtime that powers the gate/log behind Noetfield.**
 
 ```
-noetfield.com         → brand, story, evidence, sales surface
+noetfield.com         → brand, story, evidence, sales surface (owned by the Noetfield repo)
 Noetfield OS (GEL)   → the runtime: evaluate() → APPROVE / REVIEW / DECLINE + immutable audit
 SourceA engine        → durable execution infra underneath — DO NOT merge into this repo
 TrustField            → regulated program delivery peer — hand off execution, keep governance design
@@ -117,17 +119,17 @@ docs/_NOOS_AGENT/
 
 ---
 
-## PART 5 — CURRENT STATE (PHASE 1)
+## PART 5 — CURRENT STATE (LIVE)
 
 | Field | Value |
 |-------|-------|
-| Phase | 1 — Declare & baseline |
-| Steps done | 0 / 1000 |
-| Phase 1 exit | NOT MET |
+| Phase | 3 — Evidence export + TLE mapping |
+| Steps done | ~22 / 1000 |
 | Runtime | FastAPI + SQLite + `.venv` |
-| Port | `:8000` (local dev only — NOT the mono spine port) |
-| DB | `noetfeld.db` — 2 audit rows |
-| Decision endpoint | `POST /v1/decision` → score 49.69 → DECLINE |
+| Local port | `:8001` — never mono `:8000` |
+| Hosted API | `https://api.noetfield.com` on Railway `gel-api` |
+| Tests | 26 passing |
+| Decision endpoint | `POST /v1/decision` |
 | Audit portal | `GET /portal/audits` |
 
 **What's built:**
@@ -135,19 +137,26 @@ docs/_NOOS_AGENT/
 - Scoring + corridors
 - SQLite audit trail
 - FastAPI routes
-- Agent vault (7 docs)
+- Agent vault
 - 1000-step roadmap
+- API auth
+- `rule_set_version`
+- Idempotency
+- Health/readiness
+- TLE v1 export
+- Board PDF stub
+- `noetfield-gate` CLI
 
 **What's missing (gaps):**
 - Postgres
 - Tenant isolation
-- API auth
 - `/drift` endpoint
-- `api.noetfield.com` deployment
-- `rule_set_version` on every decision
-- `request_id` + deterministic replay
-- Board PDF export
+- PyPI publish live
+- npm SDK
+- Chatbot Phase 3-10 distill + pgvector RAG
 - Paying pilot
+- Cross-scope live nerve expansion beyond current `www`, `platform` chat, and `api` readiness nodes.
+- Website nav/content decision: `/intelligence/` is still 404 while `/intelligence/intake/` is live; website repo owns whether this becomes a hub or nav changes to Home.
 
 ---
 
@@ -161,20 +170,19 @@ A $2K–10K Design Partner needs to see:
 3. Board PDF export → one page, decision + evidence trail
 4. API key → they can test themselves before signing
 
-**P0 — Phase 1 exit (weeks 1–2):**
+**P0 — live hardening:**
 | Item | Why |
 |------|-----|
-| `rule_set_version` + policy hash on every decision | Auditors ask "which policy?" |
 | `request_id` + deterministic replay | "Prove same input → same outcome" |
-| API key auth (one key is fine for first DP) | Can't demo without isolation story |
-| `PRODUCT_TRUTH.md` updated | Phase 1 exit gate |
+| PyPI trusted publisher / token | Developers need installable chain tools |
+| `PRODUCT_TRUTH.md` updated | Prevent stale state drift |
 
 **P0 — Design Partner demo (weeks 3–4):**
 | Item | Why |
 |------|-----|
 | Board-ready export (JSON + PDF from audit) | Boards buy proof, not dashboards |
 | Credit / Copilot scenario policy pack | Vertical depth beats generic gate |
-| Deploy to `api.noetfield.com` | Sandbox link in outreach email |
+| Keep `api.noetfield.com` health/readiness green | Sandbox link in outreach email |
 
 **P1 — After first DP signs (weeks 5–8):**
 - Postgres migration
@@ -186,7 +194,7 @@ A $2K–10K Design Partner needs to see:
 - Full Copilot connector
 - Compliance exports (SOC 2 evidence pack)
 - Quarterly TLE export to Trust Ledger register
-- Production-grade `api.noetfield.com`
+- Production hardening for `api.noetfield.com`
 
 **Do NOT build before first DP:**
 - Multi-tenant architecture
@@ -306,7 +314,7 @@ Every noetfield-os agent session must:
 2. Read: THIS FILE (NOETFIELD_OS_SSOT_v1_LOCKED.md)
 3. Read: docs/_NOOS_AGENT/MANIFEST.json
 4. Read: docs/_NOOS_AGENT/PRODUCT_TRUTH.md (current phase/state)
-5. Confirm: active phase, steps done, what's built, what's next
+5. Confirm: active phase, steps done, what's built, what's next from PRODUCT_TRUTH
 6. Confirm: running on correct port (NOT :8000)
 7. Report: ORIENTATION COMPLETE or list gaps
 ```
@@ -322,11 +330,11 @@ Every noetfield-os agent session must:
 
 ```
 Immediate actions:
-1. Create docs/_NOOS_AGENT/PRODUCT_TRUTH.md with current state
-2. Copy this SSOT into docs/_NOOS_AGENT/NOETFIELD_OS_SSOT_v1_LOCKED.md
-3. Update MANIFEST.json to include new files
-4. Implement P0 items: rule_set_version + request_id + API auth
-5. Report Phase 1 exit gate status
+1. Keep docs/_NOOS_AGENT/PRODUCT_TRUTH.md current after every runtime change
+2. Keep this SSOT aligned to PRODUCT_TRUTH when live state changes
+3. Keep MANIFEST.json current when files are added
+4. Harden P0 live items: deterministic replay, PyPI publish, npm SDK, chatbot distill/RAG
+5. Report GEL live status from PRODUCT_TRUTH plus api.noetfield.com health/readiness
 ```
 
 **For ASF:**
@@ -335,7 +343,7 @@ Immediate actions:
 
 ---
 
-*NOETFIELD OS SSOT v1 LOCKED — 2026-06-15*
+*NOETFIELD OS SSOT v1.1 LOCKED — 2026-06-28*
 *Parent: SOURCEA_UNIFIED_PORTFOLIO_COMMERCIAL_SSOT_LOCKED_v3.1.md*
-*Next version: when Phase 1 exits or first DP signs*
+*Next version: when first DP signs or GEL runtime state changes materially*
 *All updates must be reflected in docs/_NOOS_AGENT/ copy within same session*
