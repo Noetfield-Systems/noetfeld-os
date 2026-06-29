@@ -1,0 +1,90 @@
+{
+  "schema": "noetfield-validator-registry-v1",
+  "updated_at": "2026-06-29",
+  "owner": "website-platform",
+  "purpose": "Machine-readable registry of Noetfield website/platform validators. No validator should be trusted if it is not registered here and mapped to a nerve node.",
+  "validators": [
+    {
+      "id": "V1_PUBLIC_OUTPUT_ALLOWLIST",
+      "scope": "local-public-output",
+      "command": "python3 scripts/verify-public-output-allowlist.py",
+      "script": "scripts/verify-public-output-allowlist.py",
+      "receipt": null,
+      "node_ids": ["N1_PUBLIC_OUTPUT"]
+    },
+    {
+      "id": "V2_PUBLIC_CHAT_TRUTH",
+      "scope": "chatbot-knowledge",
+      "command": "bash scripts/verify-public-chat-truth.sh",
+      "script": "scripts/verify-public-chat-truth.sh",
+      "receipt": null,
+      "node_ids": ["N2_CHAT_TRUTH"]
+    },
+    {
+      "id": "V3_PUBLIC_DENYLIST_SYNC",
+      "scope": "public-leak-config",
+      "command": "python3 scripts/verify-public-denylist-sync.py",
+      "script": "scripts/verify-public-denylist-sync.py",
+      "receipt": null,
+      "node_ids": ["N4_WWW_LIVE_OUTPUT"]
+    },
+    {
+      "id": "V4_ROUTE_NAV_TRUTH",
+      "scope": "route-nav-public-truth",
+      "command": "python3 scripts/verify-route-nav-truth.py",
+      "script": "scripts/verify-route-nav-truth.py",
+      "receipt": null,
+      "node_ids": ["N8_ROUTE_NAV_TRUTH"]
+    },
+    {
+      "id": "V5_LIVE_NERVE",
+      "scope": "cross-scope-live-receipt",
+      "command": "python3 scripts/noetfield_live_nerve.py --write",
+      "script": "scripts/noetfield_live_nerve.py",
+      "receipt": "governance/NOETFIELD_LIVE_NERVE_RECEIPT.json",
+      "node_ids": [
+        "N1_PUBLIC_OUTPUT",
+        "N2_CHAT_TRUTH",
+        "N3_DOC_FRESHNESS",
+        "N4_WWW_LIVE_OUTPUT",
+        "N5_WWW_CHAT_SEMANTIC",
+        "N6_PLATFORM_CHAT_SEMANTIC",
+        "N7_GEL_LIVE_RUNTIME",
+        "N8_ROUTE_NAV_TRUTH",
+        "N9_VALIDATOR_NODE_REGISTRY"
+      ]
+    },
+    {
+      "id": "V6_PRODUCTION_WWW_E2E",
+      "scope": "production-www-e2e",
+      "command": "python3 scripts/check_noetfield_com_e2e.py",
+      "script": "scripts/check_noetfield_com_e2e.py",
+      "receipt": null,
+      "node_ids": ["N4_WWW_LIVE_OUTPUT", "N5_WWW_CHAT_SEMANTIC"]
+    },
+    {
+      "id": "V7_STATIC_WWW",
+      "scope": "static-www",
+      "command": "bash scripts/verify-static-www.sh",
+      "script": "scripts/verify-static-www.sh",
+      "receipt": null,
+      "node_ids": ["N1_PUBLIC_OUTPUT", "N2_CHAT_TRUTH", "N4_WWW_LIVE_OUTPUT", "N8_ROUTE_NAV_TRUTH"]
+    },
+    {
+      "id": "V8_REPO_POLICY",
+      "scope": "repo-policy-boundary",
+      "command": "python3 scripts/check_repo_policy.py",
+      "script": "scripts/check_repo_policy.py",
+      "receipt": null,
+      "node_ids": ["N10_REPO_POLICY_BOUNDARY"]
+    },
+    {
+      "id": "V9_VALIDATOR_NODE_REGISTRY",
+      "scope": "validator-node-registry",
+      "command": "python3 scripts/verify-validator-node-registry.py",
+      "script": "scripts/verify-validator-node-registry.py",
+      "receipt": null,
+      "node_ids": ["N9_VALIDATOR_NODE_REGISTRY"]
+    }
+  ]
+}

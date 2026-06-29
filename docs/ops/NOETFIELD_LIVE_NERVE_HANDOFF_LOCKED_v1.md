@@ -44,6 +44,7 @@ governance/NOETFIELD_LIVE_NERVE_RECEIPT.json
 - `N6_PLATFORM_CHAT_SEMANTIC`: direct `platform.noetfield.com` public chat does not return stale source/internal language.
 - `N7_GEL_LIVE_RUNTIME`: `api.noetfield.com` health/readiness are live and ready.
 - `N8_ROUTE_NAV_TRUTH`: public nav labels do not imply missing hubs or stale public company language.
+- `N9_VALIDATOR_NODE_REGISTRY`: validator registry and node catalog have no orphan validators, orphan live nodes, or missing files.
 
 ## Agent Rule
 

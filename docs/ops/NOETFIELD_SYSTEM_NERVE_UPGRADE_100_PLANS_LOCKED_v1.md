@@ -30,6 +30,10 @@ P0 is not "ideas". P0 means the system must fail closed when public output, rout
 3. Wire production E2E and live nerve to read that shared denylist.
 4. Add a denylist sync validator so `.vercelignore`, `vercel.json`, live nerve, and E2E cannot drift silently.
 5. Add route/nav truth gating for the known `/intelligence/` issue.
+6. Add a validator registry that maps validator id, scope, command, script, receipt, and node ids.
+7. Add a node catalog that maps live nerve nodes to owners, tiers, files, and validator ids.
+8. Add validator/node registry verification and wire it into static and live nerve checks.
+9. Add `N9_VALIDATOR_NODE_REGISTRY` to the live nerve receipt.
 
 ### Remaining P0 Decisions
 

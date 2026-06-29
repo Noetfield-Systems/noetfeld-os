@@ -1,4 +1,4 @@
-.PHONY: bootstrap validate api api-v3 apply-migrations ingest-sot-dry-run ingest-sot phase32-smoke phase32-postgres-smoke phase33-verify phase33-postgres-verify phase35-demo final-lock-audit final-lock-semantic governance-console-up governance-console-e2e governance-console-down plan-with-no-asf-verify sync-prompt-pack generate-prompt-pack verify-gtm verify-no-vendor-names verify-static-www verify-ui-build-checklist nf-ui-checklist verify-www verify-tier0 verify-tier1 verify-tier2 verify-tier3 verify-all-tiers verify-nf-gaos-w2 verify-public-output-allowlist verify-public-chat-truth verify-public-denylist-sync verify-route-nav-truth nf-live-nerve verify-live-nerve
+.PHONY: bootstrap validate api api-v3 apply-migrations ingest-sot-dry-run ingest-sot phase32-smoke phase32-postgres-smoke phase33-verify phase33-postgres-verify phase35-demo final-lock-audit final-lock-semantic governance-console-up governance-console-e2e governance-console-down plan-with-no-asf-verify sync-prompt-pack generate-prompt-pack verify-gtm verify-no-vendor-names verify-static-www verify-ui-build-checklist nf-ui-checklist verify-www verify-tier0 verify-tier1 verify-tier2 verify-tier3 verify-all-tiers verify-nf-gaos-w2 verify-public-output-allowlist verify-public-chat-truth verify-public-denylist-sync verify-route-nav-truth verify-validator-node-registry nf-live-nerve verify-live-nerve
 
 PYTHONPATH_VALUE := packages/types:packages/config:packages/sdk:services/events:services/ledger:services/graph:services/governance:services/signals:services/workflow:services/ai-runtime:services/inspectors:services/identity:services/copilot-governance
 
@@ -133,15 +133,20 @@ verify-public-denylist-sync:
 verify-route-nav-truth:
 	@python3 scripts/verify-route-nav-truth.py
 
+verify-validator-node-registry:
+	@python3 scripts/verify-validator-node-registry.py
+
 nf-live-nerve:
 	@python3 scripts/verify-public-denylist-sync.py
 	@python3 scripts/verify-route-nav-truth.py
 	@python3 scripts/noetfield_live_nerve.py --write
+	@python3 scripts/verify-validator-node-registry.py
 
 verify-live-nerve:
 	@python3 scripts/verify-public-denylist-sync.py
 	@python3 scripts/verify-route-nav-truth.py
 	@python3 scripts/noetfield_live_nerve.py --write
+	@python3 scripts/verify-validator-node-registry.py
 
 verify-www-e2e:
 	@chmod +x scripts/check_noetfield_com_e2e.py

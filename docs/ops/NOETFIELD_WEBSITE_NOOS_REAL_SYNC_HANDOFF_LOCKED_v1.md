@@ -89,6 +89,7 @@ N5_WWW_CHAT_SEMANTIC
 N6_PLATFORM_CHAT_SEMANTIC
 N7_GEL_LIVE_RUNTIME
 N8_ROUTE_NAV_TRUTH
+N9_VALIDATOR_NODE_REGISTRY
 ```
 
 This means website, platform public chat, and GEL readiness are checked together before claiming the ecosystem is green.

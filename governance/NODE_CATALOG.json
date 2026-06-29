@@ -1,0 +1,116 @@
+{
+  "schema": "noetfield-node-catalog-v1",
+  "updated_at": "2026-06-29",
+  "owner": "website-platform",
+  "purpose": "Noetfield website/platform nerve node catalog. Each node must map to validators, source files, and the live receipt when applicable.",
+  "nodes": [
+    {
+      "id": "N1_PUBLIC_OUTPUT",
+      "tier": "T1_truth",
+      "owner": "website-platform",
+      "status": "active",
+      "description": "Generated public output contains no internal truth surfaces.",
+      "files": ["scripts/verify-public-output-allowlist.py", "governance/PUBLIC_OUTPUT_DENYLIST.json"],
+      "validator_ids": ["V1_PUBLIC_OUTPUT_ALLOWLIST", "V5_LIVE_NERVE", "V7_STATIC_WWW"]
+    },
+    {
+      "id": "N2_CHAT_TRUTH",
+      "tier": "T1_truth",
+      "owner": "website-platform",
+      "status": "active",
+      "description": "Public chatbot knowledge is manifest-gated and stale framing is blocked.",
+      "files": ["data/chatbot/MANIFEST.json", "scripts/verify-public-chat-truth.sh"],
+      "validator_ids": ["V2_PUBLIC_CHAT_TRUTH", "V5_LIVE_NERVE", "V7_STATIC_WWW"]
+    },
+    {
+      "id": "N3_DOC_FRESHNESS",
+      "tier": "T1_truth",
+      "owner": "website-platform",
+      "status": "active",
+      "description": "Public markdown exposure is counted and internal docs are blocked from public output.",
+      "files": ["scripts/noetfield_live_nerve.py", "docs/ops/NOETFIELD_LIVE_NERVE_HANDOFF_LOCKED_v1.md"],
+      "validator_ids": ["V5_LIVE_NERVE"]
+    },
+    {
+      "id": "N4_WWW_LIVE_OUTPUT",
+      "tier": "T2_live",
+      "owner": "website-platform",
+      "status": "active",
+      "description": "Live www public routes are healthy and internal/public denylist URLs return 404.",
+      "files": ["governance/PUBLIC_OUTPUT_DENYLIST.json", "scripts/check_noetfield_com_e2e.py", "scripts/noetfield_live_nerve.py"],
+      "validator_ids": ["V3_PUBLIC_DENYLIST_SYNC", "V5_LIVE_NERVE", "V6_PRODUCTION_WWW_E2E", "V7_STATIC_WWW"]
+    },
+    {
+      "id": "N5_WWW_CHAT_SEMANTIC",
+      "tier": "T2_live",
+      "owner": "website-platform",
+      "status": "active",
+      "description": "Live www chat reply stays buyer-safe and does not leak stale/internal source language.",
+      "files": ["api/public/chat/index.js", "scripts/check_noetfield_com_e2e.py", "scripts/noetfield_live_nerve.py"],
+      "validator_ids": ["V5_LIVE_NERVE", "V6_PRODUCTION_WWW_E2E"]
+    },
+    {
+      "id": "N6_PLATFORM_CHAT_SEMANTIC",
+      "tier": "T2_live",
+      "owner": "platform-spine",
+      "status": "active",
+      "description": "Direct platform public chat is fresh and aligned with website public chat truth.",
+      "files": ["services/governance/noetfield_governance/public_chat.py", "scripts/noetfield_live_nerve.py"],
+      "validator_ids": ["V5_LIVE_NERVE"]
+    },
+    {
+      "id": "N7_GEL_LIVE_RUNTIME",
+      "tier": "T2_live",
+      "owner": "noos-runtime",
+      "status": "active",
+      "description": "api.noetfield.com health/readiness are live and ready.",
+      "files": ["scripts/noetfield_live_nerve.py", "docs/ops/NOETFIELD_WEBSITE_NOOS_REAL_SYNC_HANDOFF_LOCKED_v1.md"],
+      "validator_ids": ["V5_LIVE_NERVE"]
+    },
+    {
+      "id": "N8_ROUTE_NAV_TRUTH",
+      "tier": "T1_truth",
+      "owner": "website-platform",
+      "status": "active",
+      "description": "Public nav labels do not imply missing hubs or stale public company language.",
+      "files": ["scripts/verify-route-nav-truth.py", "assets/partials/header.html", "assets/partials/footer.html", "about/index.html"],
+      "validator_ids": ["V4_ROUTE_NAV_TRUTH", "V5_LIVE_NERVE", "V7_STATIC_WWW"]
+    },
+    {
+      "id": "N9_VALIDATOR_NODE_REGISTRY",
+      "tier": "T0_safety",
+      "owner": "website-platform",
+      "status": "active",
+      "description": "Validator registry and node catalog are mutually wired with no orphan nodes or scripts.",
+      "files": ["governance/VALIDATOR_REGISTRY.json", "governance/NODE_CATALOG.json", "scripts/verify-validator-node-registry.py"],
+      "validator_ids": ["V5_LIVE_NERVE", "V9_VALIDATOR_NODE_REGISTRY"]
+    },
+    {
+      "id": "N10_REPO_POLICY_BOUNDARY",
+      "tier": "T0_safety",
+      "owner": "repo-policy",
+      "status": "active",
+      "description": "Repo-local agent and boundary policy is present, wired, and shape-validated.",
+      "files": ["repo-policy.json", "scripts/check_repo_policy.py", "docs/ops/REPO_POLICY_BOUNDARY_LOCKED_v1.md"],
+      "validator_ids": ["V8_REPO_POLICY"]
+    },
+    {
+      "id": "N11_STUDIO_BOUNDARY",
+      "tier": "T3_external",
+      "owner": "studio-ide",
+      "status": "planned",
+      "description": "Studio Supabase boundary is checked by Studio/NOOS, not by website live nerve yet.",
+      "files": [],
+      "validator_ids": []
+    },
+    {
+      "id": "N12_SOURCEA_FOUNDATION_WARNING",
+      "tier": "T3_external",
+      "owner": "foundation-pattern",
+      "status": "warning-only",
+      "description": "SourceA foundation drift is visible as warning in NOOS, not a website deployment blocker.",
+      "files": ["docs/ops/NOETFIELD_WEBSITE_NOOS_REAL_SYNC_HANDOFF_LOCKED_v1.md"],
+      "validator_ids": []
+    }
+  ]
+}
