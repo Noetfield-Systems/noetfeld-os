@@ -99,7 +99,7 @@ Single ordered checklist for every Noetfield asset (local, GitHub, Vercel, Railw
 | 3.8–3.14 | Railway `noetfield-platform` | Live | Keep |
 | 3.15–3.19 | Railway `mergepack-api` | SourceA lane | Out of scope |
 | 3.20–3.21 | DNS www + platform | Correct | Keep |
-| 3.22 | `api.noetfield.com` | Not deployed | Backlog |
+| 3.22 | `api.noetfield.com` | Live on Railway `gel-api` | Keep + verify |
 | 3.25–3.29 | CF `noetfield-www-proxy` | Stale ORIGIN | Fix in Phase 4 |
 | 3.31–3.35 | Supabase | Not wired | Skip |
 | 3.36–3.39 | PyPI, npm SDK, status page | Gaps | Phase 8 |
@@ -124,7 +124,7 @@ Then: commit, push, grep zero matches, re-run E2E.
 |---------|-------|-------|------|
 | www | Noetfield/ | Vercel | 443 |
 | platform API | Noetfield/services | Railway platform.noetfield.com | 443 |
-| GEL | noetfeld-os | api.noetfield.com (future) | 8001 |
+| GEL | noetfeld-os | api.noetfield.com | 8001 |
 | Studio IDE | noetfield-studio-ide | local/desktop | 3005 |
 | Gate CLI | noetfield-gate | ~/.noetfield/receipts | — |
 
@@ -132,7 +132,7 @@ Then: commit, push, grep zero matches, re-run E2E.
 
 ## Phase 6 — Verify gates
 
-6.1 Studio unit (96) · 6.2 Studio E2E (33) · 6.3 GEL tests · 6.4 www health · 6.5 platform health · 6.6 api (fail OK) · 6.7 `noetfield gate` · 6.8 GitHub sync · 6.9 Vercel SHA · 6.10 desktop app optional
+6.1 Studio unit (96) · 6.2 Studio E2E (33) · 6.3 GEL tests · 6.4 www health · 6.5 platform health · 6.6 api health/readiness · 6.7 `noetfield gate` · 6.8 GitHub sync · 6.9 Vercel SHA · 6.10 desktop app optional
 
 ---
 
@@ -144,7 +144,7 @@ Then: commit, push, grep zero matches, re-run E2E.
 
 ## Phase 8 — Backlog
 
-api.noetfield.com · PyPI noetfield-gate · npm @noetfield/gate · status.noetfield.com · noetfield.com/gel · Studio visual artifacts · Gemini key parity · CI gates
+PyPI noetfield-gate publish live · npm @noetfield/gate · chatbot Phases 3-10 · CI gates
 
 ---
 
@@ -174,7 +174,7 @@ api.noetfield.com · PyPI noetfield-gate · npm @noetfield/gate · status.noetfi
 | Phase 2B studio-ide | Private repo created + pushed |
 | Phase 2C noetfeld-os | Private repo created + pushed |
 | Phase 3 CF worker | `noetfield-www-proxy` redeployed; ORIGIN → direct Vercel URL |
-| E2E verify | `check_noetfield_com_e2e.py` PASS (api.noetfield.com WARN expected) |
+| E2E verify | `check_noetfield_com_e2e.py` PASS; API live status superseded by Phase 8 receipt |
 
 **GitHub remotes:**
 - https://github.com/kazemnezhadsina144-dot/Noetfield

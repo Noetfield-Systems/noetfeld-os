@@ -15,6 +15,12 @@ related_code: /Users/sinakazemnezhad/Desktop/Noetfield/Noetfield-All-Documents/N
 
 The NOOS health report was directionally correct but is now partially stale after the website/platform live nerve repair.
 
+Accepted correction:
+
+- NOOS was right to create a repo-local live sync gate.
+- The missing hardening was that the wrapper could write from an already-cached website receipt.
+- The gate is now wired to refresh the website live nerve first and to record the selected scope in the receipt.
+
 Correct current state:
 
 - `www.noetfield.com` live E2E is current and PASS.
@@ -52,9 +58,27 @@ N7_GEL_LIVE_RUNTIME
 
 ## Cross-Agent Rule
 
-Before either website/platform or NOOS claims "Noetfield is green", check the live nerve receipt.
+Before either website/platform or NOOS claims "Noetfield is green", run the live nerve gate for the intended scope.
 
 If `gate=FAIL`, the next action is to repair the failed node, not to reason from stale docs.
+
+NOOS command:
+
+```bash
+cd /Users/sinakazemnezhad/Projects/noetfeld-os
+bash scripts/check_noos_live_sync_gate.sh
+```
+
+Focused scopes:
+
+```bash
+NOOS_LIVE_SYNC_SCOPE=runtime bash scripts/check_noos_live_sync_gate.sh
+NOOS_LIVE_SYNC_SCOPE=public bash scripts/check_noos_live_sync_gate.sh
+NOOS_LIVE_SYNC_SCOPE=studio bash scripts/check_noos_live_sync_gate.sh
+NOOS_LIVE_SYNC_SCOPE=foundation bash scripts/check_noos_live_sync_gate.sh
+NOOS_LIVE_SYNC_SCOPE=ecosystem bash scripts/check_noos_live_sync_gate.sh
+NOOS_LIVE_SYNC_SCOPE=all bash scripts/check_noos_live_sync_gate.sh
+```
 
 ## What NOOS Should Keep Owning
 

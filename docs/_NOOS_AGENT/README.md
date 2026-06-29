@@ -24,6 +24,7 @@ workspace_root: /Users/sinakazemnezhad/Projects/noetfeld-os
    - Filename prefix: `[NOOS-AGENT-YYYYMMDD-NNN]_`
    - Entry in `MANIFEST.json`
 4. **Trace IDs** are monotonic per day: `NOOS-AGENT-20260529-001`, `-002`, etc.
+5. **Pathless Noetfield SAVE/LOCK belongs here.** If ASF says `SAVE`, `SAVE AND LOCK`, `LOCK`, or `FILE` for Noetfield / Noetfield OS / noetfeld-os work, create or update the proper file in this repo's vault and update `MANIFEST.json`; do not route it to `~/Desktop/SourceA/docs/`.
 
 ---
 

@@ -15,3 +15,5 @@ alwaysApply: false
 4. Do not edit vault docs from other agent lanes without an explicit merge task.
 5. This repo is `[DELIVERY]` — do not merge into SinaaiRuntime `:8000`.
 6. Run `bash scripts/check_noos_agent_docs.sh` after vault edits.
+7. Before claiming live/local/online Noetfield state, run `bash scripts/check_noos_live_sync_gate.sh`. The wrapper refreshes the website live nerve before writing `docs/_NOOS_AGENT/live_sync/NOOS_LIVE_SYNC_RECEIPT.json`.
+8. Use `NOOS_LIVE_SYNC_SCOPE=runtime|public|studio|foundation|ecosystem|all` for focused work. `DEGRADED` is usable current truth for the selected scope, but not a fully-green ecosystem claim.

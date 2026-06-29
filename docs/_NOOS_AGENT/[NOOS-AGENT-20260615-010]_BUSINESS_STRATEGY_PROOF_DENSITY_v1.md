@@ -183,12 +183,13 @@ Currency: **proof + first paid design partner.** Design-partner active usage = p
 | Surface | URL | Status |
 |---------|-----|--------|
 | Pilot page | https://www.noetfield.com/copilot/pilot/ | Live (marketing) |
-| Compliance demo | https://www.noetfield.com/copilot/demo/ | Canonical until DNS cutover |
+| Compliance demo | https://www.noetfield.com/copilot/demo/ | Live |
 | GEL local | http://127.0.0.1:8001 | Start: `python3 run.py` |
+| GEL hosted | https://api.noetfield.com | Railway `gel-api` |
 | SW1 chain tool | `noetfield gate` · `noetfield decide --sample` | `packages/noetfield-gate/README.md` |
 | GEL health | `/health` `/readiness` `/v1/meta` | Policy `noetfeld-credit-v1` @ 1.0.0 |
 
-**DNS blocker:** `www.noetfield.com` still on legacy Vercel — run `diagnose-www-fragmentation.sh` in cloud ship repo.
+**DNS state:** `www.noetfield.com` is live on Vercel project `noetfield`; `api.noetfield.com` is live on Railway `gel-api`.
 
 ---
 

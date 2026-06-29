@@ -35,7 +35,7 @@ Noetfield OS / GEL (product runtime)
   → POST /v1/decision → APPROVE / REVIEW / DECLINE
   → TLE v1 (Trust Ledger Entry) — signed, timestamped, policy-versioned
   → Append-only audit trail → board PDF export
-  → ~/Projects/noetfeld-os/ (FastAPI + SQLite, Phase 1)
+  → ~/Projects/noetfeld-os/ (FastAPI + SQLite, Phase 3 live GEL runtime)
 
 SourceA (engine underneath)
   → Pre-LLM governance execution runtime — never mentioned to customers
@@ -127,15 +127,17 @@ SourceA (engine underneath)
 
 ---
 
-### Location 3 — ~/Projects/noetfeld-os/ (LIVE PROTOTYPE)
+### Location 3 — ~/Projects/noetfeld-os/ (LIVE GEL RUNTIME)
 
 | Item | Status | Notes |
 |------|--------|-------|
-| FastAPI app | ✅ RUNNING | `POST /v1/decision` → score 49.69 → DECLINE |
-| SQLite audit | ✅ ACTIVE | `noetfeld.db` — 2 audit rows |
-| Agent vault | ✅ ACTIVE | `docs/_NOOS_AGENT/` — 7 docs + MANIFEST.json |
-| Phase | Phase 1 | 0 / 1000 steps done |
-| Phase 1 exit | NOT MET | Need: rule_set_version, request_id, API auth, PRODUCT_TRUTH.md |
+| FastAPI app | RUNNING | `POST /v1/decision` |
+| SQLite audit | ACTIVE | Local dev persistence |
+| Agent vault | ACTIVE | `docs/_NOOS_AGENT/` + MANIFEST.json |
+| Phase | Phase 3 | Evidence export + TLE mapping |
+| Hosted API | LIVE | `https://api.noetfield.com` on Railway `gel-api` |
+| Local port | ACTIVE | `:8001`; never mono `:8000` |
+| Tests | PASS | 26 pytest checks passing in this workspace |
 
 ---
 
@@ -230,7 +232,7 @@ From `noetfield-master-document-directory-l0-l5-v1`:
 
 **Pipeline:** L0 → L1 → L2 → L3, with L4 as observability. L4 answers "where defined" not "what to do."
 
-**Current build focus:** L0 (constitution) + L1 (product kernel) + evidence pack schema → feeds Phase 1 exit.
+**Current build focus:** keep GEL runtime live, harden deterministic replay, publish developer tools, and keep `PRODUCT_TRUTH.md` current.
 
 ---
 
@@ -313,8 +315,8 @@ bash ~/Projects/noetfeld-os/scripts/sync-noos-ssot.sh
 
 **Noetfield OS agent (noetfeld-os workspace):**
 - Sync this file and `NOETFIELD_OS_SSOT_v1_LOCKED.md` to `docs/_NOOS_AGENT/`
-- Create `docs/_NOOS_AGENT/PRODUCT_TRUTH.md` (current state, phase, steps done)
-- Implement P0: `rule_set_version` + `request_id` + API key auth + board PDF export
+- Keep `docs/_NOOS_AGENT/PRODUCT_TRUTH.md` current after every runtime change
+- Harden P0 live items: deterministic replay, PyPI publish, npm SDK, chatbot distill/RAG
 - Update MANIFEST.json
 
 **SourceA engine (Maintainer 2):**
@@ -323,7 +325,7 @@ bash ~/Projects/noetfeld-os/scripts/sync-noos-ssot.sh
 
 ---
 
-*NOETFIELD UNIFIED MASTER v1 LOCKED — 2026-06-15*
+*NOETFIELD UNIFIED MASTER v1 LOCKED — live-state refresh 2026-06-28*
 *Supersedes: scattered content across 4 locations*
-*Next version: when NW1 closes or Phase 1 exits*
+*Next version: when NW1 closes or GEL runtime state changes materially*
 *Must be synced to ~/Projects/noetfeld-os/docs/_NOOS_AGENT/ on every update*

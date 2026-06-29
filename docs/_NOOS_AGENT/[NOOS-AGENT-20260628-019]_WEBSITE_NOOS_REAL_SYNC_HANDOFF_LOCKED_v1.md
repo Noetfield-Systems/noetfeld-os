@@ -76,6 +76,61 @@ make verify-live-nerve
 
 The receipt proves local public-output, chatbot manifest truth, live www output, live www chat semantics, live platform chat semantics, and `api.noetfield.com` readiness.
 
+## NOOS Live Sync Gate
+
+NOOS now has its own repo-local live sync gate:
+
+```bash
+cd /Users/sinakazemnezhad/Projects/noetfeld-os
+bash scripts/check_noos_live_sync_gate.sh
+```
+
+The wrapper refreshes the website live nerve first. For focused work, set:
+
+```bash
+NOOS_LIVE_SYNC_SCOPE=runtime bash scripts/check_noos_live_sync_gate.sh
+NOOS_LIVE_SYNC_SCOPE=public bash scripts/check_noos_live_sync_gate.sh
+NOOS_LIVE_SYNC_SCOPE=studio bash scripts/check_noos_live_sync_gate.sh
+NOOS_LIVE_SYNC_SCOPE=foundation bash scripts/check_noos_live_sync_gate.sh
+NOOS_LIVE_SYNC_SCOPE=ecosystem bash scripts/check_noos_live_sync_gate.sh
+NOOS_LIVE_SYNC_SCOPE=all bash scripts/check_noos_live_sync_gate.sh
+```
+
+Receipt:
+
+```text
+docs/_NOOS_AGENT/live_sync/NOOS_LIVE_SYNC_RECEIPT.json
+```
+
+This gate reads:
+
+- Website live nerve receipt: `governance/NOETFIELD_LIVE_NERVE_RECEIPT.json`.
+- `api.noetfield.com` health/readiness.
+- `www.noetfield.com` and `platform.noetfield.com/health`.
+- SourceA live surfaces and session gate receipt.
+- Noetfield Studio Supabase boundary files.
+- NOOS vault tag and manifest health.
+
+Gate meanings:
+
+- `PASS` — required surfaces for the selected scope and warnings are green.
+- `DEGRADED` — required surfaces for the selected scope are usable, but warnings remain. Agents may use the receipt as current truth for that scope, but must not claim the whole ecosystem is fully green.
+- `FAIL` — required surfaces for the selected scope failed; repair before updating public/runtime truth.
+
+Scopes:
+
+- `runtime` — NOOS repo plus `api.noetfield.com` GEL runtime.
+- `public` — NOOS repo plus fresh website/platform live nerve and public website health.
+- `studio` — NOOS repo plus Studio Supabase boundary.
+- `foundation` — NOOS repo plus SourceA live nerve.
+- `ecosystem` — default cross-Noetfield scope without making SourceA session gate a hard runtime failure.
+- `all` — all known nodes in one receipt.
+
+Current expected warnings until repaired:
+
+- `sourcea_session_gate_not_green`
+- `website_intelligence_page_404`
+
 ## Write Rule
 
 Website-side handoffs and website implementation docs go in:

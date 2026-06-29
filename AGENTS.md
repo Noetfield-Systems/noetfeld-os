@@ -18,6 +18,19 @@ workspace_root: /Users/sinakazemnezhad/Projects/noetfeld-os
 2. Search tagged docs: `grep -r "NOOS-AGENT-DOC" docs/_NOOS_AGENT/`
 3. Check `docs/_NOOS_AGENT/MANIFEST.json` for trace IDs before editing any essay or internal note.
 
+### Live sync / nerve gate
+
+- Before claiming current Noetfield live state, run `bash scripts/check_noos_live_sync_gate.sh`. The wrapper refreshes the website live nerve first; do not rely on an old receipt unless you are explicitly doing read-only archaeology.
+- The gate is scope-aware. Set `NOOS_LIVE_SYNC_SCOPE=runtime|public|studio|foundation|ecosystem|all` when the task has a narrow focus. Default scope is `ecosystem`.
+- This NOOS receipt consumes the fresh website live nerve receipt, SourceA live surfaces, Noetfield GEL/API health, public website health, and Studio Supabase boundary existence.
+- `DEGRADED` means the selected scope's required surfaces are usable but warnings remain; do not report "fully green" until warnings are repaired.
+
+### SAVE / LOCK routing in this repo
+
+- If ASF says `SAVE`, `SAVE AND LOCK`, `LOCK`, or `FILE` for Noetfield / Noetfield OS / noetfeld-os work, the file belongs in this repo, not SourceA.
+- Agent-authored internal docs go under `docs/_NOOS_AGENT/` with a `NOOS-AGENT-DOC` block, `[NOOS-AGENT-YYYYMMDD-NNN]_` filename prefix, and a `MANIFEST.json` row.
+- Product code changes stay in this repo's code paths. Do not save Noetfield implementation docs into `~/Desktop/SourceA/docs/` unless ASF explicitly names that SourceA path.
+
 ## If you are a **different** agent (mono, Noetfield Runtime, SourceA, TrustField)
 
 - **Do not** edit `docs/_NOOS_AGENT/**` unless your task explicitly says merge from `NOOS-AGENT-DOC`.

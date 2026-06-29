@@ -1,0 +1,222 @@
+{
+  "gate": "DEGRADED",
+  "generated_at": "2026-06-29T02:41:02.284036Z",
+  "next_safe_action": "use this receipt as current NOOS truth; repair warnings before claiming full ecosystem green",
+  "nodes": {
+    "GEL_RUNTIME": {
+      "health": {
+        "body_preview": "{\"status\":\"ok\",\"service\":\"noetfeld-os\",\"version\":\"0.3.0\",\"policy\":{\"rule_set_id\":\"noetfeld-credit-v1\",\"rule_set_version\":\"1.0.0\",\"base_policy_hash\":\"c20a6eaeb66b2f1674b1b7df5a057e9bee1958aff6a74eab87e186d8cf65d373\",\"corridor_policy_hash\":\"e170116c33cb837e4b0497e8eeaccdd8d1258c69efa42d981a3f6b81d798d",
+        "content_type": "application/json",
+        "json": {
+          "policy": {
+            "base_policy_hash": "c20a6eaeb66b2f1674b1b7df5a057e9bee1958aff6a74eab87e186d8cf65d373",
+            "base_status": "active",
+            "combined_hash": "6ed3dd7180db65bdfce6ab99a9a7ee98334f49aa7a5944fd8a1683d099e95fde",
+            "corridor_policy_hash": "e170116c33cb837e4b0497e8eeaccdd8d1258c69efa42d981a3f6b81d798df87",
+            "corridor_status": "active",
+            "rule_set_id": "noetfeld-credit-v1",
+            "rule_set_version": "1.0.0"
+          },
+          "service": "noetfeld-os",
+          "status": "ok",
+          "version": "0.3.0"
+        },
+        "ok": true,
+        "status": 200
+      },
+      "ok": true,
+      "readiness": {
+        "body_preview": "{\"ready\":true,\"policy_loaded\":true,\"db_ok\":true}",
+        "content_type": "application/json",
+        "json": {
+          "db_ok": true,
+          "policy_loaded": true,
+          "ready": true
+        },
+        "ok": true,
+        "status": 200
+      }
+    },
+    "NOOS_REPO": {
+      "checks": {
+        "agent_docs": {
+          "ok": true,
+          "returncode": 0,
+          "stderr": "",
+          "stdout": "OK: all docs/_NOOS_AGENT/*.md files tagged with NOOS-AGENT-DOC\n"
+        },
+        "manifest_json": {
+          "ok": true,
+          "returncode": 0,
+          "stderr": "",
+          "stdout": "manifest json ok\n"
+        }
+      },
+      "ok": true
+    },
+    "PUBLIC_WEBSITE": {
+      "checks": {
+        "intelligence_page": {
+          "error": "HTTPError",
+          "ok": false,
+          "status": 404
+        },
+        "platform": {
+          "body_preview": "{\"status\":\"ok\",\"service\":\"noetfield-platform\",\"runtime\":\"phase-3.1-backend-core\",\"golden_edge\":\"v3\",\"control_plane\":\"v1\",\"governance_api\":\"/api/v1/governance\",\"policy_packs\":[\"copilot-governance-v1\",\"bank-pilot-v1\"],\"system_of_record\":\"postgresql\",\"supabase_authority\":\"optional-tooling-only\",\"intake",
+          "content_type": "application/json",
+          "json": {
+            "control_plane": "v1",
+            "golden_edge": "v3",
+            "governance_api": "/api/v1/governance",
+            "intake_storage": "postgres",
+            "policy_packs": [
+              "copilot-governance-v1",
+              "bank-pilot-v1"
+            ],
+            "redis_sessions": false,
+            "runtime": "phase-3.1-backend-core",
+            "service": "noetfield-platform",
+            "status": "ok",
+            "supabase_authority": "optional-tooling-only",
+            "system_of_record": "postgresql"
+          },
+          "ok": true,
+          "status": 200
+        },
+        "www": {
+          "body_preview": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n <meta charset=\"UTF-8\" />\n <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n <title>Noetfield Intelligence \u2014 AI consulting for Canadian SMEs</title>\n <meta name=\"description\" content=\"Noetfield Intelligence \u2014 governed AI consulting for ",
+          "content_type": "text/html; charset=utf-8",
+          "json": null,
+          "ok": true,
+          "status": 200
+        }
+      },
+      "known_drift": {
+        "intelligence_page_404": true,
+        "meaning": "Intelligence is currently homepage positioning/intake lane unless website repo builds /intelligence/."
+      },
+      "ok": true
+    },
+    "SOURCEA_NERVE": {
+      "factory_now_line": "factory-now \u00b7 Cloud Workers.app owns Cloud Forge Run \u00b7 head CLOUD-SEC-7267 \u00b7 batch 74 \u00b7 100 rows/10min \u00b7 100 tasks/row",
+      "form_official_line": "FORM_OFFICIAL \u00b7 third_form \u00b7 80 open PICKs on disk \u00b7 INCIDENT-037 block ON \u00b7 agent-submit forbidden",
+      "live_surfaces_path": "/Users/sinakazemnezhad/.sina/agent-live-surfaces-v1.json",
+      "nerve_system_line": "nerve \u00b7 queue=idle \u00b7 aligned \u00b7 drift=86 \u00b7 loop=3sys\u00b73comm \u00b7 rules=forbidden_one,lane_forbidden,salvage_pattern,ship_gate:w3_critic_circle+1 \u00b7 fleet90+ \u00b7 research=YES \u00b7 AS=ok \u00b7 ui_fc=BLOCK \u00b7 maclaw=PASS \u00b7 worker=BLOCK",
+      "ok": true,
+      "sascip_line": "SASCIP WIRED \u00b7 sourcea_worker \u00b7 T2_fleet_L2 \u00b7 risk 30 \u00b7 ADMIT \u00b7 probes=PASS \u00b7 panic=clear \u00b7 watch=ok",
+      "session_gate_failures": [
+        {
+          "exit": 1,
+          "incident": "INCIDENT-041",
+          "poison_hits": 2,
+          "step": "mirror_poison_validate"
+        },
+        {
+          "exit": 1,
+          "incident": null,
+          "poison_hits": null,
+          "step": "entry_gate_worker"
+        }
+      ],
+      "session_gate_ok": false,
+      "session_receipt_path": "/Users/sinakazemnezhad/.sina/agent_session_gate_receipt_v1.json",
+      "ui_upgrade_first_check_line": "UI-FIRST-CHECK \u00b7 wired=YES \u00b7 validator=FAIL \u00b7 surfaces=8 \u00b7 law=UP-0..UP-7 \u00b7 ack_before_edit=mandatory \u00b7 ZERO-DRIFT=ON"
+    },
+    "STUDIO_SUPABASE_BOUNDARY": {
+      "boundary_check": null,
+      "boundary_module_exists": true,
+      "ok": true,
+      "repo": "/Users/sinakazemnezhad/Desktop/Noetfield/noetfield-studio-ide",
+      "sql_policy_exists": true
+    },
+    "WEBSITE_LIVE_NERVE": {
+      "age_hours": 1.4593333333333333e-05,
+      "fresh": true,
+      "gate": "PASS",
+      "generated_at": "2026-06-29T02:41:01.292275Z",
+      "nodes": {
+        "N1_PUBLIC_OUTPUT": {
+          "blocked_count": 0,
+          "findings": [],
+          "ok": true,
+          "output": "/Users/sinakazemnezhad/Desktop/Noetfield/Noetfield-All-Documents/Noetfield/.vercel/output/static"
+        },
+        "N2_CHAT_TRUTH": {
+          "bundle_version": "NOETFIELD-CHATBOT-KNOWLEDGE-V1-p28-2026-06-29",
+          "manifest_hash": "c6ba9baa25af9efed74b2c126d974d539ecaa2584ffc3b4d261c9f493a51963e",
+          "ok": true,
+          "stats": {
+            "chars": 24035,
+            "knowledge_bundle_version": "NOETFIELD-CHATBOT-KNOWLEDGE-V1-p28-2026-06-29",
+            "knowledge_files": 15,
+            "loaded": true,
+            "manifest_ok": true,
+            "manifest_violations": 0,
+            "pinned_chars": 9485
+          },
+          "violations": []
+        },
+        "N3_DOC_FRESHNESS": {
+          "contract": "public markdown requires generated metadata in phase 2; raw internal docs are blocked from output now",
+          "ok": true,
+          "public_markdown_count": 63
+        },
+        "N4_WWW_LIVE_OUTPUT": {
+          "base": "https://www.noetfield.com",
+          "blocked_count": 18,
+          "health_preview": "{\"status\":\"ok\",\"service\":\"noetfield-www\",\"surface\":\"institutional\"}",
+          "health_status": 200,
+          "leaks": [],
+          "ok": true
+        },
+        "N5_WWW_CHAT_SEMANTIC": {
+          "base": "https://www.noetfield.com",
+          "ok": true,
+          "provider": "www-controlled-executive-overview",
+          "reply_preview": "Noetfield produces the audit trail a regulated Copilot rollout will be asked for later. For CCO, CRO, CISO, CTO, procurement, and board teams, Noetfield turns each high-risk Microsoft 365 Copilot or AI go/no-go into signed evidence: policy ",
+          "stale_hits": [],
+          "status": 200
+        },
+        "N6_PLATFORM_CHAT_SEMANTIC": {
+          "base": "https://platform.noetfield.com",
+          "ok": true,
+          "provider": "openrouter",
+          "reply_preview": "Noetfield provides an AI Governance & Evidence layer specifically designed for Microsoft 365 Copilot adoption. Our core purpose is to produce the audit trail that regulated organizations will need for their Copilot rollouts.\n\nThis means we ",
+          "stale_hits": [],
+          "status": 200
+        },
+        "N7_GEL_LIVE_RUNTIME": {
+          "base": "https://api.noetfield.com",
+          "health_preview": "{\"status\":\"ok\",\"service\":\"noetfeld-os\",\"version\":\"0.3.0\",\"policy\":{\"rule_set_id\":\"noetfeld-credit-v1\",\"rule_set_version\":\"1.0.0\",\"base_policy_hash\":\"c20a6eaeb66b2f1674b1b7df5a057e9bee1958aff6a74eab87e",
+          "health_status": 200,
+          "ok": true,
+          "readiness_preview": "{\"ready\":true,\"policy_loaded\":true,\"db_ok\":true}",
+          "readiness_status": 200
+        }
+      },
+      "ok": true,
+      "path": "/Users/sinakazemnezhad/Desktop/Noetfield/Noetfield-All-Documents/Noetfield/governance/NOETFIELD_LIVE_NERVE_RECEIPT.json",
+      "refresh": {
+        "ok": true,
+        "returncode": 0,
+        "stderr": "",
+        "stdout": "NOETFIELD_LIVE_NERVE PASS receipt=/Users/sinakazemnezhad/Desktop/Noetfield/Noetfield-All-Documents/Noetfield/governance/NOETFIELD_LIVE_NERVE_RECEIPT.json\nN1_PUBLIC_OUTPUT ok=True\nN2_CHAT_TRUTH ok=True\nN3_DOC_FRESHNESS ok=True\nN4_WWW_LIVE_OUTPUT ok=True\nN5_WWW_CHAT_SEMANTIC ok=True\nN6_PLATFORM_CHAT_SEMANTIC ok=True\nN7_GEL_LIVE_RUNTIME ok=True\n"
+      }
+    }
+  },
+  "ok": true,
+  "repo": "/Users/sinakazemnezhad/Projects/noetfeld-os",
+  "required_nodes": [
+    "NOOS_REPO",
+    "WEBSITE_LIVE_NERVE",
+    "GEL_RUNTIME",
+    "PUBLIC_WEBSITE",
+    "STUDIO_SUPABASE_BOUNDARY"
+  ],
+  "schema": "noos-live-sync-receipt-v1",
+  "scope": "ecosystem",
+  "warnings": [
+    "sourcea_session_gate_not_green",
+    "website_intelligence_page_404"
+  ]
+}
