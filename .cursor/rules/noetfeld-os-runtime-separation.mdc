@@ -1,0 +1,32 @@
+---
+description: Keep Noetfield OS separate from TrustField, SourceA, and product repos
+alwaysApply: true
+---
+
+# Noetfield OS Runtime Separation
+
+Noetfield OS is a separate operating/runtime system. It is not TrustField and not SourceA.
+
+Allowed scope:
+- GEL/runtime
+- gates
+- logs
+- TLE
+- control process
+- runtime docs
+- operating-system-level governance mechanics
+
+Hard rules:
+- Do not mix Noetfield OS with TrustField architecture, deploy, compliance, or messaging.
+- Do not use SourceA as active storage.
+- Do not import product-specific Noetfield or TrustField files unless explicitly documented as an interface.
+- Noetfield OS may connect through contracts, exports, and manifests only.
+- Work lane-by-lane only, max 20-40 files per pass.
+- Use one atomic commit per coherent lane.
+- Generated/evidence outputs must be handled as snapshot plus manifest.
+
+Before work:
+- Run `git status --short`, confirm branch, and count dirty files.
+- State the target lane.
+- Classify dirty files as `COMMIT`, `RESTORE`, `DELETE`, `SNAPSHOT`, `QUARANTINE`, or `LEAVE`.
+- Quarantine SourceA, Noetfield product, or TrustField product files found inside the NOOS repo unless they are explicit interface artifacts.

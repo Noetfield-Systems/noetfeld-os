@@ -170,6 +170,12 @@
       "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260629-022]_SYSTEM_FIX_AND_UPGRADE_100_PLAN_v1.md",
       "doc_type": "SYSTEM_FIX_AND_UPGRADE_100_PLAN",
       "title": "System fix and upgrade 100-plan register — nerves, nodes, validators, stale docs"
+    },
+    {
+      "trace_id": "NOOS-AGENT-20260629-023",
+      "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260629-023]_NOETFIELD_OS_REPO_POLICY_LOCKED_v1.md",
+      "doc_type": "NOETFIELD_OS_REPO_POLICY_LOCKED",
+      "title": "Noetfield OS repo policy — runtime/control separation"
     }
   ]
 }
