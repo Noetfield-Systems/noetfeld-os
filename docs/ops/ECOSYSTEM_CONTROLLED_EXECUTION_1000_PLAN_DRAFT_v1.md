@@ -3,10 +3,14 @@ agent_tag: nf-local-repo-agent
 agent_display: "[NF-LOCAL-REPO-AGENT]"
 authored_at: "2026-06-28"
 doc_type: execution_register
-status: draft_until_validated
+status: draft_only_not_for_execution
 ---
 
-# Ecosystem Controlled Execution 1000 Plan — Draft Until Validated
+# Ecosystem Controlled Execution 1000 Plan — DRAFT
+
+
+> DRAFT ONLY — NOT FOR AGENT EXECUTION.
+> This 1000-item register is retained as raw planning inventory and must not be treated as a locked execution plan. Use `ECOSYSTEM_CONTROLLED_EXECUTION_FIRST_100_LOCKED_v1.md` for active execution planning.
 
 ## Executive Summary
 
