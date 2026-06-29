@@ -133,7 +133,7 @@ Three parallel tracks (portfolio SSOT energy law adapted for GEL):
 |------|-------|--------|
 | Full multi-tenant RLS | 4 | Stub sufficient for first DP |
 | `GET /drift` engine | 5 | Differentiator, not blocker for NW1 |
-| `api.noetfield.com` production | 7 | Local/staging demo first |
+| `api.noetfield.com` production hardening | 7 | Host is live; rate limits, partner key flow, metering, and scale/SLA hardening remain |
 | Trust Ledger full integration | 3–8 | Export bundle sufficient for pilot |
 | SourceA engine merge | Never | Isolation from mono `:8000` |
 

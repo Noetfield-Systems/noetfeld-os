@@ -25,6 +25,13 @@ workspace_root: /Users/sinakazemnezhad/Projects/noetfeld-os
 - This NOOS receipt consumes the fresh website live nerve receipt, SourceA live surfaces, Noetfield GEL/API health, public website health, and Studio Supabase boundary existence.
 - `DEGRADED` means the selected scope's required surfaces are usable but warnings remain; do not report "fully green" until warnings are repaired.
 
+### Dirty-tree closeout
+
+- Before committing or ending implementation work, run `bash scripts/check_noos_clean_tree.sh` after validators/tests pass.
+- Do not commit routine run-patch execution churn from `docs/run_patches/execution/*`.
+- Treat `docs/run_patches/noetfield_run_patch_manifest_10100_v1.json` runtime metadata churn as generated unless an explicit receipt snapshot is being closed.
+- If `run_noetfield_factory_loop_v1.py` is active, stop and classify the writer before claiming the repo is clean.
+
 ### SAVE / LOCK routing in this repo
 
 - If ASF says `SAVE`, `SAVE AND LOCK`, `LOCK`, or `FILE` for Noetfield / Noetfield OS / noetfeld-os work, the file belongs in this repo, not SourceA.

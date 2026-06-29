@@ -1,11 +1,11 @@
 {
   "plan_trace_id": "NOOS-AGENT-20260615-014",
-  "plan_title": "300-Step Upgrade Plan — Next Upgrades",
+  "plan_title": "300-Step Upgrade Plan \u2014 Next Upgrades",
   "total_steps": 300,
   "step_prefix": "UPG",
   "parent_roadmap": "NOOS-AGENT-20260608-004",
   "maps_to_master_range": "0194-0500 (approx)",
-  "current_phase": 1,
+  "current_phase": 4,
   "phase_names": {
     "1": "Unblock & Ship",
     "2": "GEL Core Hardening",
@@ -14,12 +14,32 @@
     "5": "Tenant & Production",
     "6": "Pilot Revenue & Scale"
   },
-  "completed_steps": [],
+  "completed_steps": [
+    "UPG-0008",
+    "UPG-0009",
+    "UPG-0015",
+    "UPG-0016",
+    "UPG-0171",
+    "UPG-0172",
+    "UPG-0173",
+    "UPG-0176"
+  ],
   "in_progress_steps": [],
   "blocked_steps": {
-    "UPG-0001": "NW1 send — founder click in Mail",
-    "UPG-0008": "DNS cutover — CF_NOETFIELD_API_TOKEN"
+    "UPG-0001": "NW1 send requires founder click/send authority",
+    "UPG-0174": "Production secrets/API-key vault policy remains to be finalized",
+    "UPG-0175": "Production policy pack semver pinning remains to be finalized"
   },
-  "updated_at": "2026-06-15",
-  "notes": "Actionable upgrade track parallel to 1000-step master. UPG wins for sprint planning; master wins for long-range taxonomy."
+  "updated_at": "2026-06-29",
+  "notes": "Actionable upgrade track parallel to 1000-step master. UPG wins for sprint planning; master wins for long-range taxonomy. Completed rows only reflect live receipts or repo docs; founder-send and production-hardening rows remain blocked/open.",
+  "evidence": {
+    "UPG-0008": "PRODUCT_TRUTH.md: www.noetfield.com 200",
+    "UPG-0009": "PRODUCT_TRUTH.md: website repo make verify-www-e2e PASS",
+    "UPG-0015": "PRODUCT_TRUTH.md: platform.noetfield.com/health 200",
+    "UPG-0016": "PRODUCT_TRUTH.md and WEBSITE_NOOS_REAL_SYNC_HANDOFF_LOCKED_v1 boundary notes",
+    "UPG-0171": "PRODUCT_TRUTH.md: api.noetfield.com /health OK on Railway gel-api",
+    "UPG-0172": "PRODUCT_TRUTH.md: api.noetfield.com HTTPS health/readiness OK",
+    "UPG-0173": "PRODUCT_TRUTH.md: Railway gel-api production host live",
+    "UPG-0176": "docs/ops/GEL_API_DEPLOY_LOCKED_v1.md and package README document hosted readiness checks"
+  }
 }

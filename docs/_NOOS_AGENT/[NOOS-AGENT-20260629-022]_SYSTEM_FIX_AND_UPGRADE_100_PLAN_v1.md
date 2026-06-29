@@ -197,3 +197,27 @@ This plan converts those observations into 100 decision-ready fixes. `Agent` mea
 
 Do not say "whole system fully green" while `NOOS_LIVE_SYNC` is `DEGRADED`. Say: "Noetfield required runtime/public surfaces are usable; ecosystem is degraded by SourceA session gate and `/intelligence/` route drift."
 
+---
+
+## Cleanup Closeout - 2026-06-29
+
+**Closed in NOOS:**
+
+- `001` clean start/end rule enforced by `scripts/check_noos_clean_tree.sh`.
+- `002` generated run-patch churn policy recorded in run-patch control doc and `AGENTS.md`.
+- `004` clean-tree guard added.
+- `005` commit gate now includes doc tags, tests, diff check, manifest JSON, and clean-tree guard.
+- `008` factory-loop writer detection added to the clean-tree guard.
+- `009` dirty-tree closeout section added to `AGENTS.md`.
+- `061-062` stale live-state scan run; misleading API-local-only claims corrected.
+- `065` `PRODUCT_TRUTH.md` UPG count reconciled to `UPGRADE_MANIFEST.json`.
+- `097` post-commit clean-tree check added through `scripts/check_noos_clean_tree.sh`.
+
+**Still open by authority boundary:**
+
+- `/intelligence/` route drift remains a website/founder decision.
+- SourceA session gate repair remains in SourceA.
+- Studio Cmd+Z experiment cleanup remains in Studio/founder decision scope.
+- PyPI token/trusted publisher remains founder/API credential scope.
+- npm SDK and chatbot RAG remain product backlog, not dirty-tree blockers.
+

@@ -70,6 +70,9 @@ Run one patch at a time. A patch is ready for review only when all 100 rows have
 - TrustField data belongs on Noetfield Supabase boundaries, never `portfolio-spine`.
 - Do not replace the 1000-step roadmap or 300-step upgrade plan.
 - Keep generated rows pending until actual execution evidence exists.
+- Do not commit routine execution churn from `docs/run_patches/execution/*`; commit those files only when an explicit receipt snapshot is being closed.
+- Treat `factory_runtime` / latest-run metadata in `docs/run_patches/noetfield_run_patch_manifest_10100_v1.json` as mutable runtime state unless the founder approves a source/receipt snapshot.
+- Run `bash scripts/check_noos_clean_tree.sh` before closeout to catch generated churn and active factory writers.
 
 ## Validation Receipt
 

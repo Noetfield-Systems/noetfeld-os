@@ -29,7 +29,7 @@ classification: INTERNAL — grant/pitch drift flags (Step 0008)
 | Issue | PDF / deck location | Code truth | Action |
 |-------|---------------------|------------|--------|
 | **SQLite vs Postgres** | Grant narrative may claim Postgres append-only audit | `database.py` uses SQLite WAL | Footnote: "Pilot: SQLite; production target: Postgres Phase 3" OR update PDF to match prototype |
-| **Production readiness** | Pitch may imply live `api.noetfield.com` | Local FastAPI prototype only | Add "engineering prototype" label on external handout until Phase 7 |
+| **Production readiness** | Pitch may overstate scale/SLA beyond current GEL | `api.noetfield.com` health/readiness is live on Railway; runtime remains pilot/prototype-grade with SQLite WAL | Say "live GEL pilot runtime" and avoid enterprise SLA, multi-region, or Postgres claims until shipped |
 | **Golden Edge v3** | Some slides reference Golden Edge as core | SSOT: Golden Edge = optional scoring at `:8001` | Remove or demote to optional integration slide |
 | **TrustField conflation** | Avoid implying TrustField is inside Noetfield OS | Separate peer company | Use identity separation table from portfolio SSOT v3.1 |
 | **Custody language** | Any "process payments" wording | Non-custodial GEL only | Replace with "governance signals" |

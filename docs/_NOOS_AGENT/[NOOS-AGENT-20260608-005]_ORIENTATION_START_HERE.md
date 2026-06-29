@@ -89,7 +89,7 @@ python3 scripts/mint_api_key.py
 | Rate limiting per API key | Phase 2.7 |
 | Board export bundle | Phase 3 |
 | `GET /drift` + drift engine | Phase 5 |
-| `api.noetfield.com` production | Phase 7 |
+| `api.noetfield.com` production hardening | Phase 7; host is live, hardening remains |
 | First paying pilot | Phase 9 |
 
 ---

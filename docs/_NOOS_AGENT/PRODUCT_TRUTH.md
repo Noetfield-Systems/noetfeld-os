@@ -2,7 +2,7 @@
 # PRODUCT TRUTH — Noetfield OS
 Date: 2026-06-29
 Phase: 3 — Evidence export + TLE mapping
-Steps done: ~22 / 1000 · UPG plan: 0 / 300 (see NOOS-AGENT-20260615-014)
+Steps done: ~22 / 1000 · UPG plan: 8 / 300 evidence-backed rows closed (see `UPGRADE_MANIFEST.json`)
 Runtime: FastAPI + SQLite + .venv
 Port: 8001 (local dev) · Railway gel-api (production)
 Tests: 26 passing
