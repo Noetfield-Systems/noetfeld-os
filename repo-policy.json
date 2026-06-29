@@ -1,0 +1,67 @@
+{
+  "repo_name": "noetfeld-os",
+  "repo_role": "separate runtime/control system for GEL governance mechanics",
+  "allowed_ownership": [
+    "GEL runtime",
+    "gates",
+    "logs",
+    "TLE",
+    "control process",
+    "runtime docs",
+    "operating-system-level governance mechanics"
+  ],
+  "forbidden_ownership": [
+    "TrustField architecture",
+    "TrustField deploy",
+    "TrustField compliance",
+    "TrustField messaging",
+    "SourceA active storage",
+    "product-specific Noetfield files",
+    "product-specific TrustField files"
+  ],
+  "dirty_file_states": [
+    "COMMIT",
+    "RESTORE",
+    "DELETE",
+    "SNAPSHOT",
+    "QUARANTINE",
+    "LEAVE"
+  ],
+  "cross_lane_quarantine_paths": [
+    "SourceA/**",
+    "sourceA/**",
+    "TrustField/**",
+    "trustfield/**",
+    "Noetfield-All-Documents/**",
+    "noetfield-studio-ide/**",
+    "public_site/**"
+  ],
+  "generated_artifact_policy": {
+    "mode": "snapshot_plus_manifest",
+    "default_state": "LEAVE",
+    "commit_requires": [
+      "explicit snapshot",
+      "manifest entry"
+    ]
+  },
+  "evidence_policy": {
+    "mode": "snapshot_plus_manifest",
+    "required_for_done_claims": true
+  },
+  "cursor_performance_policy": {
+    "work_lane_by_lane": true,
+    "avoid_large_mixed_passes": true
+  },
+  "max_files_per_pass": 40,
+  "required_prework_commands": [
+    "git status --short",
+    "git branch --show-current"
+  ],
+  "required_final_report": [
+    "target_lane",
+    "dirty_file_classification",
+    "validation_commands",
+    "commit_sha",
+    "final_git_status"
+  ]
+}
