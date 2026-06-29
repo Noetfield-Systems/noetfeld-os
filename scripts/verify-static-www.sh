@@ -128,6 +128,8 @@ check_file "www chat handler" api/public/chat/index.js \
 
 chmod +x scripts/verify-public-chat-truth.sh
 scripts/verify-public-chat-truth.sh
+python3 scripts/verify-public-denylist-sync.py
+python3 scripts/verify-route-nav-truth.py
 
 check_file "www intake serverless" api/intake.js \
   'sendIntakeEmails' 'operations@noetfield.com'

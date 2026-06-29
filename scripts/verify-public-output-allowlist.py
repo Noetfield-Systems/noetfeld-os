@@ -11,50 +11,23 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_OUTPUT = ROOT / ".vercel" / "output" / "static"
+DENYLIST = ROOT / "governance" / "PUBLIC_OUTPUT_DENYLIST.json"
 
-FORBIDDEN_PREFIXES = (
-    ".agents/",
-    ".cursor/",
-    ".github/",
-    "entry/",
-    "L0-law/",
-    "L1-operational/",
-    "L2-knowledge/",
-    "L3-external/",
-    "tests/",
-    "packages/",
-    "infra/",
-    "infrastructure/",
-    "ops/",
-    "apps/",
-    "_archive/",
-    "Noetfield-All-Documents/",
-    ".sina-agent/",
-    "reports/",
-    "scripts/",
-    "services/",
-    "os/",
-    "ops/",
-    "data/",
-    "var/",
-    "platform/",
-    "governance-console/",
-    "data/",
-    "data/chatbot/",
-    "prompts/",
-    "var/",
-)
+def public_denylist() -> dict[str, list[str]]:
+    return json.loads(DENYLIST.read_text(encoding="utf-8"))
 
-FORBIDDEN_EXACT = {
-    "Makefile",
-    "railway.toml",
-    "PROJECT_BOUNDARIES_LOCKED.md",
-    "OFFERINGS_LOCKED.md",
-    "ROUTING_CARD.md",
-    "railway.toml",
-    "railway.json",
-    "package-lock.json",
-}
+
+def forbidden_prefixes() -> tuple[str, ...]:
+    denylist = public_denylist()
+    prefixes = [prefix.lstrip("/") for prefix in denylist.get("prefix_paths", [])]
+    return tuple(dict.fromkeys(prefixes + ["prompts/"]))
+
+
+def forbidden_exact() -> set[str]:
+    denylist = public_denylist()
+    exact = {path.lstrip("/") for path in denylist.get("exact_paths", [])}
+    exact.update({"Makefile", "railway.json", "package-lock.json"})
+    return exact
 
 FORBIDDEN_ROOT_PATTERNS = (
     re.compile(r"^[A-Z0-9_./-]*LOCKED(?:_[A-Za-z0-9.-]+)?\.md$"),
@@ -105,9 +78,9 @@ def rel(path: Path, root: Path) -> str:
 
 
 def is_forbidden(rel_path: str) -> str | None:
-    if rel_path in FORBIDDEN_EXACT:
+    if rel_path in forbidden_exact():
         return "forbidden exact file"
-    if any(rel_path.startswith(prefix) for prefix in FORBIDDEN_PREFIXES):
+    if any(rel_path.startswith(prefix) for prefix in forbidden_prefixes()):
         return "forbidden internal prefix"
     if "/" not in rel_path:
         if any(pattern.search(rel_path) for pattern in FORBIDDEN_ROOT_PATTERNS):
@@ -164,7 +137,7 @@ def clean(output: Path, findings: list[dict[str, str]]) -> None:
             directory.rmdir()
         except OSError:
             pass
-    for prefix in FORBIDDEN_PREFIXES:
+    for prefix in forbidden_prefixes():
         top = output / prefix.split("/", 1)[0]
         if top.exists() and top.is_dir() and not any(top.iterdir()):
             shutil.rmtree(top)

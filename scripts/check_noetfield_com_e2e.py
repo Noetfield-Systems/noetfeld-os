@@ -9,8 +9,11 @@ import re
 import sys
 import urllib.error
 import urllib.request
+from pathlib import Path
 
 BASE = os.environ.get("NOETFIELD_E2E_BASE", "https://www.noetfield.com")
+ROOT = Path(__file__).resolve().parents[1]
+DENYLIST = ROOT / "governance" / "PUBLIC_OUTPUT_DENYLIST.json"
 
 PATHS_200 = (
     "/",
@@ -33,36 +36,6 @@ PATHS_200 = (
     "/config/status-ai-factory.json",
     "/noetfield-ai-factory-lanes.json",
     "/health",
-)
-
-PATHS_404 = (
-    "/docs/platform/NF_LIVING_SYSTEM_CHARTER_DRAFT_v3.md",
-    "/governance/OPS_LIVE_STATUS_LOCKED.json",
-    "/governance/LAW_STACK.json",
-    "/OFFERINGS_LOCKED.md",
-    "/PROJECT_BOUNDARIES_LOCKED.md",
-    "/ROUTING_CARD.md",
-    "/.agents/skills/cloudflare/SKILL.md",
-    "/entry/START_HERE_LOCKED_v1.md",
-    "/L0-law/PUBLIC_WWW_BRAND_E2E_LAW_LOCKED_v1.md",
-    "/tests/unit/test_public_chat.py",
-    "/packages/schemas/governance.schema.json",
-    "/infra/cf-www-proxy/wrangler.toml",
-    "/infrastructure/supabase/migrations/0005_public_ecosystem_platform.sql",
-    "/data/chatbot/MANIFEST.json",
-    "/data/nf_orient_routing_v1.json",
-    "/data/nf_mono_nerve_wiring_v1.json",
-    "/data/nf_anti_staleness_max_v1.json",
-    "/ops/private/sourceA/founder/repo-agent-notices/manifest.json",
-    "/ops/private/agent-reference/NOETFIELD_AUTHORITY_REGISTRY.yaml",
-    "/ops/private/agent-reference/intake/intake_log.jsonl",
-    "/ops/private/sourceA/EXECUTION_TRUTH.json",
-    "/railway.toml",
-    "/platform/",
-    "/platform/factories/",
-    "/platform/dashboard/",
-    "/docs/ops/AGENT_SELF_AUDIT_LOOP_LOCKED_v1.md",
-    "/services/governance/README.md",
 )
 
 API_PATHS = ("/api/intake/health", "/api/public/chat/health")
@@ -115,6 +88,15 @@ def fetch(
         return 0, str(exc.reason)
 
 
+def denied_paths() -> tuple[str, ...]:
+    denylist = json.loads(DENYLIST.read_text(encoding="utf-8"))
+    probes = list(denylist.get("probe_paths", []))
+    base_prefixes = [prefix.rstrip("/") for prefix in denylist.get("prefix_paths", [])]
+    exact = list(denylist.get("exact_paths", []))
+    paths = probes + exact + base_prefixes
+    return tuple(dict.fromkeys(paths))
+
+
 def main() -> int:
     fail = 0
     print("=== NOETFIELD.COM PRODUCTION E2E ===")
@@ -142,7 +124,7 @@ def main() -> int:
             print(f"FAIL {label}", file=sys.stderr)
             fail += 1
 
-    for path in PATHS_404:
+    for path in denied_paths():
         code, _ = fetch(f"{BASE}{path}")
         if code == 404:
             print(f"OK   blocked {path} (404)")

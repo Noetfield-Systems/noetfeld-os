@@ -43,6 +43,7 @@ governance/NOETFIELD_LIVE_NERVE_RECEIPT.json
 - `N5_WWW_CHAT_SEMANTIC`: live `www` public chat does not return stale source/internal language.
 - `N6_PLATFORM_CHAT_SEMANTIC`: direct `platform.noetfield.com` public chat does not return stale source/internal language.
 - `N7_GEL_LIVE_RUNTIME`: `api.noetfield.com` health/readiness are live and ready.
+- `N8_ROUTE_NAV_TRUTH`: public nav labels do not imply missing hubs or stale public company language.
 
 ## Agent Rule
 
