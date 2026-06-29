@@ -6,7 +6,7 @@ const EXECUTIVE_OVERVIEW_REPLY =
   "For CCO, CRO, CISO, CTO, procurement, and board teams, Noetfield turns each high-risk Microsoft 365 Copilot or AI go/no-go into signed evidence: policy check, confidence score, named approvers, metadata-only M365 evidence index, Trust Ledger Entry, board PDF, and procurement ZIP. " +
   "The lead paid path is the Copilot Governance Pack ($2k-10k, 90 days): live TLE records, board PDF for a governance meeting, and procurement ZIP for diligence. " +
   "Trust Brief is the $10k diagnostic when policy mapping comes first. Bank Pilot is read-only shadow governance for regulated institutions. " +
-  "Plain English: we make AI execution impossible to bypass governance. We do not move money, hold custody, or execute transactions.";
+  "Plain English: we make AI execution impossible to bypass governance.";
 
 const EXECUTIVE_OVERVIEW_CITATIONS = [
   "/enterprise/",
@@ -41,6 +41,32 @@ function isStaleInfrastructureReply(reply) {
     (text.includes("record a compliance log") && text.includes("allow or deny decisions")) ||
     (text.includes("our offerings include the trust brief") && text.includes("support compliance and risk management"))
   );
+}
+
+function isInternalSourceLeakReply(reply) {
+  const text = String(reply || "").toLowerCase();
+  return (
+    text.includes("offerings_locked") ||
+    text.includes("product_brief") ||
+    text.includes("positioning.md") ||
+    text.includes("faq.md") ||
+    text.includes("gel-runtime.md") ||
+    text.includes("knowledge/") ||
+    text.includes("docs/") ||
+    text.includes("source:")
+  );
+}
+
+function publicGuidanceReply(provider) {
+  return {
+    reply:
+      "Before applying, read the public pilot and pricing pages, then choose the intake path that matches your stage. " +
+      "For most teams, start with the Copilot Governance Pack if you need a board-ready governance receipt, or Trust Brief if you need policy mapping first. " +
+      "Next step: use /copilot/pilot/ or /trust-brief/intake/ and include your Request ID if you already have one.",
+    provider,
+    citations: ["/copilot/pilot/", "/pricing/", "/trust-brief/intake/"],
+    intake_email: CANONICAL_INTAKE,
+  };
 }
 
 function routeOnlyFallback() {
@@ -93,6 +119,9 @@ module.exports = async function handler(req, res) {
       if (data && data.reply) {
         if (isStaleInfrastructureReply(data.reply)) {
           return res.status(200).json(executiveOverviewReply("www-stale-platform-guard"));
+        }
+        if (isInternalSourceLeakReply(data.reply)) {
+          return res.status(200).json(publicGuidanceReply("www-source-leak-guard"));
         }
         return res.status(200).json(data);
       }

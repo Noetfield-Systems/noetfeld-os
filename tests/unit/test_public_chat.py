@@ -64,6 +64,9 @@ def test_public_chat_has_no_local_faq_rule_engine() -> None:
     assert "deterministic_reply_for_intent" not in intent_helper
     assert "deterministic_policy" not in intent_helper
     assert "Ask naturally" in frontend
+    assert "move money" not in vercel_fallback
+    assert "hold custody" not in vercel_fallback
+    assert "isInternalSourceLeakReply" in vercel_fallback
 
 
 def test_public_chat_health() -> None:
