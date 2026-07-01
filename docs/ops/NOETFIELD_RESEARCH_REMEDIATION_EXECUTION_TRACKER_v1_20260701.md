@@ -6,6 +6,13 @@ planning_for: noetfield.com
 source_report: deep-research-report (2).md
 authored_at: "2026-07-01"
 mode: TRACK_ONLY
+decision_locks:
+  DEC-001: "Homepage = two-door entry"
+  DEC-002: "First proof lane = Trust Brief / AI Value OS"
+  DEC-003: "Trust roadmap = Ed25519 verify first, SOC 2 readiness second"
+  DEC-004: "Enterprise lead = AI Value Governance OS"
+  DEC-005: "Build minimal /intelligence/ hub"
+decision_locked_at: "2026-07-01"
 governing_rules:
   - no Pattern Factory language on Noetfield pages
   - no implied institutional client/partner/sponsor endorsements
@@ -70,7 +77,7 @@ This doc is the **single tracker**. Website edits execute in the website repo; N
 
 | Step | Action | Owner | Status | Receipt |
 |------|--------|-------|--------|---------|
-| 1.1 | Select one proof lane: Copilot Pack **or** Trust Brief (not both) | Commercial | pending | — |
+| 1.1 | **LOCKED (DEC-002):** First proof lane = Trust Brief / AI Value OS — not Copilot Pack or Bank shadow | Commercial | done | DEC-002 |
 | 1.2 | Contract pilot with explicit success: TLE in prod + Board PDF in governance forum | Commercial | pending | SOW |
 | 1.3 | Capture permissioned/redacted artifacts for publish | Commercial + Legal | pending | — |
 | 1.4 | Update investor + trust pages from "target" → "achieved" when true | Website | pending | deploy receipt |
@@ -103,13 +110,13 @@ This doc is the **single tracker**. Website edits execute in the website repo; N
 
 | Step | Action | Owner | Status | Receipt |
 |------|--------|-------|--------|---------|
-| 3.1 | Decision: two-door homepage vs enterprise-first vs Intelligence sub-brand | Founder | pending | decision note |
-| 3.2 | Implement chosen split on homepage + nav | Website | pending | PR |
+| 3.1 | **LOCKED (DEC-001):** Homepage = two-door entry (Enterprise governance vs SME Intelligence) | Founder | done | DEC-001 |
+| 3.2 | Implement two-door split on homepage + nav | Website | pending | PR |
 | 3.3 | Pricing: two-column Governance SKUs vs Intelligence SKUs | Website | pending | PR |
 | 3.4 | Chatbot intent split: SME vs enterprise | Website | pending | knowledge files |
-| 3.5 | Resolve `/intelligence/` hub (missing in route inventory) | Website | blocked | ROUTE_INVENTORY decision |
+| 3.5 | **LOCKED (DEC-005):** Build minimal `/intelligence/` hub; register in ROUTE_INVENTORY | Website | pending | PR + route entry |
 
-**Recommended short-term:** Two-door homepage + enterprise nav to `/ai-value-governance-os/`.
+**Locked GTM:** Two-door homepage; enterprise door leads to **AI Value Governance OS** (DEC-004); SME door leads to Intelligence lane.
 
 **Success metric:** Enterprise inbound describes offer without SME confusion.
 
@@ -166,8 +173,8 @@ This doc is the **single tracker**. Website edits execute in the website repo; N
 |------|--------|-------|--------|---------|
 | 7.1 | Sitewide audit: every security claim has Available/Planned/Out-of-scope badge | Website | pending | audit checklist |
 | 7.2 | Fail-closed verify regression + uptime monitor | NOOS + Ops | pending | gate receipt |
-| 7.3 | Ed25519 verify v2 spec + trust page date | NOOS | pending | doc + code |
-| 7.4 | SOC 2 Type I readiness → Type II timeline (publish when true) | Ops | pending | trust page |
+| 7.3 | **LOCKED (DEC-003):** Ed25519 verify v2 spec + trust page date — **first** trust roadmap priority | NOOS | pending | doc + code |
+| 7.4 | **LOCKED (DEC-003):** SOC 2 Type I readiness → Type II timeline — **second**, after Ed25519 | Ops | pending | trust page |
 | 7.5 | One webhook pilot integration | NOOS | pending | API doc |
 | 7.6 | Procurement security appendix template | Commercial | pending | gate/procurement |
 
@@ -178,6 +185,8 @@ This doc is the **single tracker**. Website edits execute in the website repo; N
 ### TRK-008 — M365 concentration + AI Value OS wedge
 
 **Researcher issue:** Heavy Copilot anchor; exposed if Microsoft closes evidence gap.
+
+**Locked enterprise lead (DEC-004):** AI Value Governance OS is the primary enterprise wedge; Copilot Pack remains attach lane.
 
 | Step | Action | Owner | Status | Receipt |
 |------|--------|-------|--------|---------|
@@ -323,11 +332,12 @@ This doc is the **single tracker**. Website edits execute in the website repo; N
 
 | File | Route | Task | Track | Status |
 |------|-------|------|-------|--------|
-| `index.html` | `/` | Two-door hero: Enterprise governance vs SME Intelligence; reduce mixed messaging | TRK-003 | pending |
+| `index.html` | `/` | **DEC-001:** Two-door hero — Enterprise (AI Value OS) vs SME Intelligence | TRK-003 | pending |
 | `assets/partials/header.html` | (global) | Confirm enterprise path → `/ai-value-governance-os/`; SME paths distinct | TRK-003 | done |
 | `pricing/index.html` | `/pricing/` | Split Governance SKUs vs Intelligence SKUs in two columns | TRK-003 | pending |
 | `intelligence/intake/index.html` | `/intelligence/intake/` | Ensure SME lane CTA does not lead with Board PDF procurement | TRK-003 | pending |
-| `governance/ROUTE_INVENTORY.json` | — | Decide `/intelligence/` hub: build or remove nav dead-end | TRK-003 | blocked |
+| `governance/ROUTE_INVENTORY.json` | — | **DEC-005:** Add `/intelligence/` route → minimal hub page | TRK-003 | pending |
+| `intelligence/index.html` | `/intelligence/` | **DEC-005:** Build minimal Intelligence hub (SME lane entry, links to intake) | TRK-003 | pending |
 | `data/chatbot/knowledge/*.md` | — | Split SME vs enterprise intents; no mixed answers | TRK-003 | pending |
 | `data/chatbot/MANIFEST.json` | — | Register new/updated knowledge rows after split | TRK-003 | pending |
 
@@ -397,7 +407,8 @@ This doc is the **single tracker**. Website edits execute in the website repo; N
 |------|-------|--------|-------|
 | TLE export reliability for pilot tenant | TRK-001 | pending | `noetfeld-os` runtime |
 | Evaluate API uptime + health gate | TRK-007 | pending | `api.noetfield.com` |
-| Ed25519 verify v2 specification | TRK-007 | pending | docs + implementation |
+| Ed25519 verify v2 specification | TRK-007 | pending | **DEC-003 priority 1** |
+| SOC 2 Type I readiness | TRK-007 | pending | **DEC-003 priority 2** |
 | SIEM/GRC webhook pilot | TRK-007 | pending | one integration |
 | Doctrine IV enforcement shim | control scope | pending | see discovery report |
 | PRODUCT_TRUTH sync with trust pages | TRK-007 | pending | NOOS docs |
@@ -424,20 +435,21 @@ gantt
     Microsoft complement matrix          :t05, 2026-07-15, 21d
     section Platform
     Monitoring SKU definition            :t04, 2026-09-01, 60d
-    Ed25519 or SOC2 Type I milestone     :t07b, 2026-08-01, 120d
+    Ed25519 verify v2 (DEC-003 P1)       :t07b, 2026-08-01, 90d
+    SOC 2 Type I readiness (DEC-003 P2)  :t07c, 2026-10-01, 90d
 ```
 
 ---
 
-## Decision log (founder input required)
+## Decision log — LOCKED 2026-07-01
 
-| ID | Decision | Options | Blocks |
-|----|----------|---------|--------|
-| DEC-001 | Homepage GTM | Two-door / enterprise-first / Intelligence sub-brand | TRK-003 |
-| DEC-002 | First proof lane | Copilot Pack vs Trust Brief vs Bank shadow | TRK-001 |
-| DEC-003 | Trust roadmap priority | Ed25519 verify vs SOC 2 Type I first | TRK-007 |
-| DEC-004 | Enterprise lead wedge | AI Value OS vs Copilot Pack primary | TRK-008 |
-| DEC-005 | `/intelligence/` hub | Build real hub vs remove nav link | TRK-003 |
+| ID | Decision | Locked resolution | Blocks |
+|----|----------|-------------------|--------|
+| DEC-001 | Homepage GTM | **Two-door entry** — Enterprise governance vs SME Intelligence | TRK-003 |
+| DEC-002 | First proof lane | **Trust Brief / AI Value OS** — not Copilot Pack or Bank shadow first | TRK-001 |
+| DEC-003 | Trust roadmap priority | **Ed25519 verify first**; **SOC 2 readiness second** | TRK-007 |
+| DEC-004 | Enterprise lead wedge | **AI Value Governance OS** primary; Copilot Pack attach | TRK-008 |
+| DEC-005 | `/intelligence/` hub | **Build minimal hub**; register in ROUTE_INVENTORY | TRK-003 |
 
 ---
 
@@ -456,3 +468,4 @@ gantt
 |------|--------|
 | 2026-07-01 | v1 created from deep-research-report (2).md analysis |
 | 2026-07-01 | Marked `ai-value-governance-os/index.html`, header nav, contact topic as done from prior commit `9a24de09` |
+| 2026-07-01 | Locked DEC-001 through DEC-005; updated tracks, checklist, and timeline |
