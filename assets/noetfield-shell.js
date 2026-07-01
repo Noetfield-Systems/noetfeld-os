@@ -477,7 +477,28 @@
       if (!a) return;
       var text = (a.textContent || "").trim().slice(0, 120);
       var href = a.getAttribute("href") || "";
-      var commercial = /apply|pilot|intake|demo|pricing|brief|contact|dashboard|export|admin/i.test(text + " " + href);
+      var explicit = a.getAttribute("data-nf-analytics-event");
+      if (explicit) {
+        track(explicit, {
+          component: "cta",
+          text: text,
+          href: href,
+          id: a.id || "",
+          class_name: a.className || "",
+        });
+        return;
+      }
+      if (/vector=ai-value-governance-os/i.test(href)) {
+        track("ai_value_os_briefing", {
+          component: "cta",
+          text: text,
+          href: href,
+          id: a.id || "",
+          class_name: a.className || "",
+        });
+        return;
+      }
+      var commercial = /apply|pilot|intake|demo|pricing|brief|contact|dashboard|export|admin|briefing/i.test(text + " " + href);
       if (commercial) {
         track("cta_click", {
           component: "cta",
