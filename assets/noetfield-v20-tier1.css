@@ -100,19 +100,99 @@ body.nf-www.nf-site-v14 #nfHeader {
   position: sticky;
   top: 0;
   z-index: 200;
-  background: rgba(255, 255, 255, 0.82);
+  background: rgba(255, 255, 255, 0.92);
   border-bottom: 1px solid rgba(15, 17, 23, 0.08);
-  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.9) inset;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.95) inset, 0 8px 32px rgba(15, 17, 23, 0.04);
   backdrop-filter: blur(20px) saturate(1.25);
   -webkit-backdrop-filter: blur(20px) saturate(1.25);
+}
+
+/* Institutional ribbon — Canada presence + trust signals */
+body.nf-www.nf-site-v14 #nfHeader .instTopbar {
+  background: linear-gradient(180deg, #0a0c10 0%, #12151c 100%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.72);
+  font-family: var(--font-sans);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+body.nf-www.nf-site-v14 #nfHeader .instTopbar__inner {
+  max-width: var(--max-wide);
+  margin: 0 auto;
+  padding: 0 clamp(20px, 3vw, 32px);
+  min-height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+body.nf-www.nf-site-v14 #nfHeader .instTopbar__loc,
+body.nf-www.nf-site-v14 #nfHeader .instTopbar__signals {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+body.nf-www.nf-site-v14 #nfHeader .instTopbar__signals {
+  justify-content: flex-end;
+  flex-wrap: wrap;
+}
+
+body.nf-www.nf-site-v14 #nfHeader .instTopbar__badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 5px;
+  background: rgba(200, 163, 73, 0.16);
+  border: 1px solid rgba(200, 163, 73, 0.42);
+  color: #e8d5a8;
+  font-size: 0.5625rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  flex-shrink: 0;
+}
+
+body.nf-www.nf-site-v14 #nfHeader .instTopbar__text {
+  color: rgba(255, 255, 255, 0.88);
+  white-space: nowrap;
+}
+
+body.nf-www.nf-site-v14 #nfHeader .instTopbar__sep {
+  color: rgba(255, 255, 255, 0.28);
+  font-weight: 400;
+  letter-spacing: 0;
+  user-select: none;
+}
+
+body.nf-www.nf-site-v14 #nfHeader .instTopbar__link {
+  color: rgba(255, 255, 255, 0.92);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.22);
+  padding-bottom: 1px;
+  letter-spacing: 0.06em;
+  transition: color 0.15s ease, border-color 0.15s ease;
+  white-space: nowrap;
+}
+
+body.nf-www.nf-site-v14 #nfHeader .instTopbar__link:hover {
+  color: #fff;
+  border-bottom-color: rgba(200, 163, 73, 0.75);
 }
 
 @media (min-width: 981px) {
   body.nf-www.nf-site-v14 #nfHeader {
     padding: 0 !important;
-    background: rgba(255, 255, 255, 0.82) !important;
+    background: rgba(255, 255, 255, 0.92) !important;
     border-bottom: 1px solid rgba(15, 17, 23, 0.08) !important;
-    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.9) inset !important;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.95) inset, 0 8px 32px rgba(15, 17, 23, 0.04) !important;
     backdrop-filter: blur(20px) saturate(1.25) !important;
     -webkit-backdrop-filter: blur(20px) saturate(1.25) !important;
   }
@@ -142,16 +222,42 @@ body.nf-www.nf-site-v14 #nfHeader .brand {
   gap: 10px;
 }
 
+body.nf-www.nf-site-v14 #nfHeader .brand .name {
+  font-family: var(--font-display);
+  font-size: 1.0625rem;
+  font-weight: 650;
+  letter-spacing: -0.032em;
+  color: #0a0c10;
+  line-height: 1.05;
+}
+
+body.nf-www.nf-site-v14 #nfHeader .brandText {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+body.nf-www.nf-site-v14 #nfHeader .brandTagline {
+  font-size: 0.625rem;
+  font-weight: 550;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #6b7280;
+  line-height: 1;
+  white-space: nowrap;
+}
+
 body.nf-www.nf-site-v14 #nfHeader .brandMark {
   display: flex !important;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
-  border-radius: 9px;
-  background: linear-gradient(145deg, #0f1117 0%, #1a2230 100%);
-  border: 1px solid rgba(15, 17, 23, 0.12);
-  box-shadow: 0 2px 8px rgba(15, 17, 23, 0.12);
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: linear-gradient(145deg, #0a0c10 0%, #1a2230 100%);
+  border: 1px solid rgba(15, 17, 23, 0.14);
+  box-shadow: 0 2px 10px rgba(15, 17, 23, 0.14), inset 0 1px 0 rgba(255, 255, 255, 0.06);
   flex-shrink: 0;
 }
 
@@ -159,15 +265,6 @@ body.nf-www.nf-site-v14 #nfHeader .brandMark svg {
   display: block;
   width: 18px;
   height: 18px;
-}
-
-body.nf-www.nf-site-v14 #nfHeader .brand .name {
-  font-family: var(--font-display);
-  font-size: 1.0625rem;
-  font-weight: 650;
-  letter-spacing: -0.032em;
-  color: #0a0c10;
-  line-height: 1;
 }
 
 /* Primary nav */
@@ -346,8 +443,22 @@ body.nf-www.nf-site-v14 #nfHeader .mobileGrid a.mobileCTA {
 }
 
 @media (max-width: 980px) {
+  body.nf-www.nf-site-v14 #nfHeader .instTopbar__signals {
+    display: none;
+  }
+
+  body.nf-www.nf-site-v14 #nfHeader .instTopbar__inner {
+    min-height: 32px;
+    justify-content: flex-start;
+  }
+
   body.nf-www.nf-site-v14 #nfHeader .nav {
-    padding: 10px 16px;
+    padding: 12px 16px;
+    min-height: 60px;
+  }
+
+  body.nf-www.nf-site-v14 #nfHeader .brandTagline {
+    display: none;
   }
 
   body.nf-www.nf-site-v14 #nfHeader .menuPrimary {
@@ -356,6 +467,14 @@ body.nf-www.nf-site-v14 #nfHeader .mobileGrid a.mobileCTA {
 
   body.nf-www.nf-site-v14 #nfHeader .menuActions a.nav-link {
     display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  body.nf-www.nf-site-v14 #nfHeader .instTopbar__text:last-of-type {
+    max-width: 9rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 }
 
