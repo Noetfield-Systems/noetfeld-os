@@ -1,6 +1,6 @@
 {
   "schema": "noetfield-route-inventory-v1",
-  "updated_at": "2026-06-29",
+  "updated_at": "2026-07-01",
   "owner": "website-platform",
   "purpose": "Single source for public www routes that must remain live. Production E2E reads this file instead of owning route truth in code.",
   "routes": [
@@ -145,6 +145,20 @@
       "source": "noetfield-ai-factory-lanes.json"
     },
     {
+      "path": "/intelligence/",
+      "expected_status": 200,
+      "owner": "website-platform",
+      "purpose": "Noetfield Intelligence SME hub",
+      "source": "intelligence/index.html"
+    },
+    {
+      "path": "/about/",
+      "expected_status": 200,
+      "owner": "website-platform",
+      "purpose": "Company and entity proof",
+      "source": "about/index.html"
+    },
+    {
       "path": "/health",
       "expected_status": 200,
       "owner": "website-platform",
@@ -152,11 +166,5 @@
       "source": "api/health.js"
     }
   ],
-  "known_missing_decisions": [
-    {
-      "path": "/intelligence/",
-      "status": "intentionally_missing_until_decided",
-      "decision": "Build a real Intelligence hub or keep nav as Home."
-    }
-  ]
+  "known_missing_decisions": []
 }

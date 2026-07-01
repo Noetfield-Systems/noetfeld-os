@@ -69,17 +69,11 @@ def main() -> int:
             failures.append(f"{path} missing purpose")
         if not source or not (ROOT / source).exists():
             failures.append(f"{path} missing source file: {source}")
-        if path == "/intelligence/":
-            failures.append("/intelligence/ must not be in live routes until the hub exists")
 
         if args.live:
             status = fetch_status(args.base.rstrip("/") + path)
             if status != expected:
                 failures.append(f"{path} live status {status}, expected {expected}")
-
-    decisions = inventory.get("known_missing_decisions", [])
-    if not any(row.get("path") == "/intelligence/" for row in decisions if isinstance(row, dict)):
-        failures.append("known_missing_decisions must record /intelligence/ decision")
 
     if failures:
         print("verify-route-inventory: FAIL")
