@@ -88,21 +88,19 @@ jobs:
           import urllib.request
           from pathlib import Path
 
-          state_path = Path("docs/run_patches/execution/noetfield_factory_state_v1.json")
-          if not state_path.is_file():
-              print("ERROR: factory state file missing")
-              sys.exit(1)
-          state = json.loads(state_path.read_text(encoding="utf-8"))
-          cycle_status = state.get("last_cycle_result", {}).get("status")
-          sink = state.get("supabase_sink", {})
-          print(f"factory_cycle_status={cycle_status}")
-          print(f"supabase_sink_ok={sink.get('ok')}")
-          if cycle_status != "ok":
-              print("ERROR: factory cycle did not complete with status=ok")
-              sys.exit(1)
-          if not sink.get("ok"):
-              print("ERROR: Supabase sink did not succeed")
-              sys.exit(1)
+          runtime_state = Path(".noos-runtime/factory/execution/noetfield_factory_state_v1.json")
+          if runtime_state.is_file():
+              state = json.loads(runtime_state.read_text(encoding="utf-8"))
+              cycle_status = state.get("last_cycle_result", {}).get("status")
+              sink = state.get("supabase_sink", {})
+              print(f"factory_cycle_status={cycle_status}")
+              print(f"supabase_sink_ok={sink.get('ok')}")
+              if cycle_status != "ok":
+                  print("ERROR: factory cycle did not complete with status=ok")
+                  sys.exit(1)
+              if not sink.get("ok"):
+                  print("ERROR: Supabase sink did not succeed")
+                  sys.exit(1)
 
           base = os.environ["NOETFIELD_SUPABASE_URL"].rstrip("/")
           key = os.environ["NOETFIELD_SUPABASE_SERVICE_ROLE_KEY"]
@@ -111,6 +109,17 @@ jobs:
               "Authorization": f"Bearer {key}",
               "Prefer": "count=exact",
           }
+          req = urllib.request.Request(
+              f"{base}/rest/v1/noetfield_factory_cycle_runs?select=cycle_number,status,recorded_at&order=recorded_at.desc&limit=1",
+              headers=headers,
+          )
+          with urllib.request.urlopen(req, timeout=20) as resp:
+              latest = json.loads(resp.read().decode("utf-8"))
+          if not latest or latest[0].get("status") != "ok":
+              print("ERROR: latest Supabase factory cycle is missing or not ok")
+              sys.exit(1)
+          print(f"latest_supabase_cycle={latest[0]}")
+
           req = urllib.request.Request(
               f"{base}/rest/v1/noetfield_factory_cycle_runs?select=id",
               headers=headers,

@@ -10,3 +10,4 @@ htmlcov/
 dist/
 node_modules/
 *.egg-info/
+.noos-runtime/

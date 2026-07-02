@@ -20,9 +20,7 @@ from typing import Any
 ROOT = Path(__file__).resolve().parents[1]
 PACK_PATH = ROOT / "docs/run_patches/noetfield_run_patch_pack_10100_v1.jsonl"
 MANIFEST_PATH = ROOT / "docs/run_patches/noetfield_run_patch_manifest_10100_v1.json"
-EXECUTION_DIR = ROOT / "docs/run_patches/execution"
-RECEIPTS_PATH = EXECUTION_DIR / "noetfield_run_patch_execution_receipts_v1.jsonl"
-STATE_PATH = EXECUTION_DIR / "noetfield_run_patch_execution_state_v1.json"
+DEFAULT_EXECUTION_DIR = ROOT / "docs/run_patches/execution"
 
 READ_ONLY_STAGES = {
     "read",
@@ -192,13 +190,13 @@ def write_json(path: Path, data: dict[str, Any]) -> None:
     path.write_text(json.dumps(data, ensure_ascii=True, indent=2, sort_keys=True) + "\n", encoding="utf-8")
 
 
-def update_manifest(state: dict[str, Any]) -> None:
+def update_manifest(state: dict[str, Any], *, exec_dir: Path) -> None:
     manifest = json.loads(MANIFEST_PATH.read_text(encoding="utf-8"))
     manifest["latest_trigger_run"] = {
         "run_id": state["run_id"],
         "triggered_at": state["triggered_at"],
-        "receipt_path": "docs/run_patches/execution/noetfield_run_patch_execution_receipts_v1.jsonl",
-        "state_path": "docs/run_patches/execution/noetfield_run_patch_execution_state_v1.json",
+        "receipt_path": str((exec_dir / "noetfield_run_patch_execution_receipts_v1.jsonl").relative_to(ROOT)),
+        "state_path": str((exec_dir / "noetfield_run_patch_execution_state_v1.json").relative_to(ROOT)),
         "total_rows": state["total_rows"],
         "result_counts": state["result_counts"],
         "guardrails": state["guardrails"],
@@ -210,6 +208,12 @@ def main() -> int:
     parser = argparse.ArgumentParser(description="Trigger Noetfield run patch pack receipts.")
     parser.add_argument("--limit", type=int, default=0, help="Limit rows for a smoke run. Default: all rows.")
     parser.add_argument("--no-manifest-update", action="store_true", help="Do not update run patch manifest.")
+    parser.add_argument(
+        "--runtime-dir",
+        type=Path,
+        default=DEFAULT_EXECUTION_DIR,
+        help="Directory for execution receipts/state (default: tracked execution dir).",
+    )
     args = parser.parse_args()
 
     rows = load_rows()
@@ -217,13 +221,16 @@ def main() -> int:
         rows = rows[: args.limit]
 
     run_id = f"noetfield-run-pack-v1-{datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%SZ')}"
-    EXECUTION_DIR.mkdir(parents=True, exist_ok=True)
+    exec_dir = args.runtime_dir.resolve()
+    exec_dir.mkdir(parents=True, exist_ok=True)
+    receipts_path = exec_dir / "noetfield_run_patch_execution_receipts_v1.jsonl"
+    state_path = exec_dir / "noetfield_run_patch_execution_state_v1.json"
 
     receipts = [build_receipt(row, run_id) for row in rows]
     result_counts = Counter(receipt["execution_result"] for receipt in receipts)
     patch_counts = Counter(receipt["patch_id"] for receipt in receipts)
 
-    with RECEIPTS_PATH.open("w", encoding="utf-8") as handle:
+    with receipts_path.open("w", encoding="utf-8") as handle:
         for receipt in receipts:
             handle.write(json.dumps(receipt, ensure_ascii=True, sort_keys=True) + "\n")
 
@@ -231,7 +238,7 @@ def main() -> int:
         "run_id": run_id,
         "triggered_at": utc_now(),
         "pack_path": "docs/run_patches/noetfield_run_patch_pack_10100_v1.jsonl",
-        "receipt_path": "docs/run_patches/execution/noetfield_run_patch_execution_receipts_v1.jsonl",
+        "receipt_path": str(receipts_path.relative_to(ROOT)),
         "total_rows": len(receipts),
         "patch_count": len(patch_counts),
         "result_counts": dict(sorted(result_counts.items())),
@@ -247,17 +254,17 @@ def main() -> int:
             "task-specific implementation and production-change rows were deferred rather than falsely completed."
         ),
     }
-    write_json(STATE_PATH, state)
+    write_json(state_path, state)
     if not args.no_manifest_update:
-        update_manifest(state)
+        update_manifest(state, exec_dir=exec_dir)
 
     print(f"run_id: {run_id}")
     print(f"triggered_rows: {len(receipts)}")
     print(f"patches_seen: {len(patch_counts)}")
     for key, value in sorted(result_counts.items()):
         print(f"{key}: {value}")
-    print(f"state: {STATE_PATH.relative_to(ROOT)}")
-    print(f"receipts: {RECEIPTS_PATH.relative_to(ROOT)}")
+    print(f"state: {state_path.relative_to(ROOT)}")
+    print(f"receipts: {receipts_path.relative_to(ROOT)}")
     return 0
 
 

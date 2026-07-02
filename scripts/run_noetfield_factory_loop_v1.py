@@ -21,12 +21,12 @@ from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
 RUNNER = ROOT / "scripts/run_noetfield_patch_pack_v1.py"
-EXECUTION_DIR = ROOT / "docs/run_patches/execution"
-FACTORY_STATE = EXECUTION_DIR / "noetfield_factory_state_v1.json"
-FACTORY_HEARTBEAT = EXECUTION_DIR / "noetfield_factory_heartbeat_v1.json"
-FACTORY_LOG = EXECUTION_DIR / "noetfield_factory_cycles_v1.jsonl"
-MANIFEST_PATH = ROOT / "docs/run_patches/noetfield_run_patch_manifest_10100_v1.json"
 SINK_SCRIPT = ROOT / "scripts/factory_supabase_sink_v1.py"
+
+import sys
+
+sys.path.insert(0, str(ROOT / "scripts"))
+from factory_runtime_paths_v1 import MANIFEST_PATH, execution_dir, receipt_commit_enabled
 
 
 def utc_now() -> str:
@@ -92,7 +92,7 @@ def sink_cycle_to_supabase(cycle: dict[str, Any], *, factory_id: str) -> dict[st
         Path(tmp_path).unlink(missing_ok=True)
 
 
-def update_manifest(factory_state: dict[str, Any]) -> None:
+def update_manifest(factory_state: dict[str, Any], *, paths: dict[str, Path]) -> None:
     manifest = json.loads(MANIFEST_PATH.read_text(encoding="utf-8"))
     manifest["factory_runtime"] = {
         "status": factory_state["status"],
@@ -101,17 +101,19 @@ def update_manifest(factory_state: dict[str, Any]) -> None:
         "last_heartbeat_at": factory_state["last_heartbeat_at"],
         "cycle_count": factory_state["cycle_count"],
         "last_cycle_result": factory_state["last_cycle_result"],
-        "state_path": "docs/run_patches/execution/noetfield_factory_state_v1.json",
-        "heartbeat_path": "docs/run_patches/execution/noetfield_factory_heartbeat_v1.json",
-        "cycle_log_path": "docs/run_patches/execution/noetfield_factory_cycles_v1.jsonl",
+        "state_path": str(paths["state"].relative_to(ROOT)),
+        "heartbeat_path": str(paths["heartbeat"].relative_to(ROOT)),
+        "cycle_log_path": str(paths["log"].relative_to(ROOT)),
         "guardrails": factory_state["guardrails"],
     }
     write_json(MANIFEST_PATH, manifest)
 
 
-def run_cycle(cycle_number: int) -> dict[str, Any]:
+def run_cycle(cycle_number: int, *, exec_dir: Path, receipt_commit: bool) -> dict[str, Any]:
     started_at = utc_now()
-    command = ["python3", str(RUNNER)]
+    command = ["python3", str(RUNNER), "--runtime-dir", str(exec_dir)]
+    if not receipt_commit:
+        command.append("--no-manifest-update")
     completed = subprocess.run(
         command,
         cwd=ROOT,
@@ -147,10 +149,23 @@ def main() -> int:
     parser.add_argument("--interval-seconds", type=int, default=600, help="Delay between cycles.")
     parser.add_argument("--max-cycles", type=int, default=0, help="Stop after N cycles. Default: run forever.")
     parser.add_argument("--once", action="store_true", help="Run exactly one cycle.")
+    parser.add_argument(
+        "--receipt-commit",
+        action="store_true",
+        help="Write factory receipts into tracked docs/run_patches paths and update manifest.",
+    )
     args = parser.parse_args()
 
+    receipt_commit = receipt_commit_enabled(args.receipt_commit)
+    exec_dir = execution_dir(receipt_commit=receipt_commit)
+    exec_dir.mkdir(parents=True, exist_ok=True)
+    paths = {
+        "state": exec_dir / "noetfield_factory_state_v1.json",
+        "heartbeat": exec_dir / "noetfield_factory_heartbeat_v1.json",
+        "log": exec_dir / "noetfield_factory_cycles_v1.jsonl",
+    }
+
     max_cycles = 1 if args.once else args.max_cycles
-    EXECUTION_DIR.mkdir(parents=True, exist_ok=True)
     factory_id = f"noetfield-factory-v1-{datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%SZ')}"
     started_at = utc_now()
     cycle_count = 0
@@ -159,7 +174,7 @@ def main() -> int:
     while True:
         cycle_count += 1
         try:
-            last_cycle = run_cycle(cycle_count)
+            last_cycle = run_cycle(cycle_count, exec_dir=exec_dir, receipt_commit=receipt_commit)
         except Exception as exc:  # keep the factory alive on recoverable failures
             last_cycle = {
                 "cycle_number": cycle_count,
@@ -177,7 +192,7 @@ def main() -> int:
                 },
             }
 
-        append_jsonl(FACTORY_LOG, last_cycle)
+        append_jsonl(paths["log"], last_cycle)
         supabase_sink = sink_cycle_to_supabase(last_cycle, factory_id=factory_id)
         state = {
             "factory_id": factory_id,
@@ -188,6 +203,8 @@ def main() -> int:
             "cycle_count": cycle_count,
             "last_cycle_result": last_cycle,
             "supabase_sink": supabase_sink,
+            "runtime_dir": str(exec_dir.relative_to(ROOT)),
+            "receipt_commit": receipt_commit,
             "guardrails": {
                 "repo_env_read": False,
                 "secret_values_printed": False,
@@ -196,9 +213,10 @@ def main() -> int:
                 "restart_on_recoverable_error": True,
             },
         }
-        write_json(FACTORY_STATE, state)
-        write_json(FACTORY_HEARTBEAT, state)
-        update_manifest(state)
+        write_json(paths["state"], state)
+        write_json(paths["heartbeat"], state)
+        if receipt_commit:
+            update_manifest(state, paths=paths)
         print(
             f"factory_id={factory_id} cycle={cycle_count} "
             f"status={last_cycle['status']} heartbeat={state['last_heartbeat_at']}",
