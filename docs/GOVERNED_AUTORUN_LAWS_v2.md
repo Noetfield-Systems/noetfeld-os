@@ -41,6 +41,15 @@ Verifiers and pass criteria are founder-gated. A failing agent fixes the system,
 
 Deploys run from a clean committed SHA. Dirty guard fails closed; scoped exceptions only via founder-reviewed `dirty_scope_map`; `dirty_total > cap` → TRIAGE_REQUIRED on every scope. Receipts live in the repo, never home directories. Branches must land on `main` before any schedule claim — stranded branches = loop specialist defect.
 
+**Proof vs runtime receipts:**
+
+| Tier | Path | Use |
+|------|------|-----|
+| **Proof** | `receipts/proof/` or Supabase | Migration apply, schedule proof, VERIFIED-window closes — cite in closeout |
+| **Runtime** | `.noos-runtime/` | Cycle churn, heartbeat mirrors, execution state — never cite as closeout evidence |
+
+Proof-grade writers: `apply_supabase_migration_v1.py`, `verify_noos_github_schedule_v1.py`, `open_noos_verified_window_v1.py`.
+
 ### L7 — Founder items never block, never vanish
 
 Status `founder_blocked` (never `cancelled`), excluded from machine scan, present in every cycle receipt with count/oldest/priority/age. Aging founder P0s get louder — escalate in heartbeat after age threshold.
@@ -147,7 +156,7 @@ Report only: <fixed fields — SHAs, receipts, counts, before/after, cost table,
 
 1. Registry entries consumed by existing reconciler (L1)
 2. Read-only status integration
-3. Scheduled trigger proven: 2+ consecutive `schedule`-event runs
+3. Scheduled trigger proven: 2+ consecutive `schedule`-event success runs on the **same workflow** (factory autorun: two consecutive `noos-factory-autorun.yml` runs ~10m apart; canary does not substitute)
 4. External verifier (L4) + cost metering (L11) before write/deploy authority
 5. 24h zero-manual window green on external receipts
 

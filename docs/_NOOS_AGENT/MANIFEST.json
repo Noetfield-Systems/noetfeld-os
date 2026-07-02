@@ -194,6 +194,12 @@
       "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260702-026]_TRACK_ABC_CLOSEOUT_RECEIPT_v1.md",
       "doc_type": "CLOSEOUT_RECEIPT",
       "title": "Track A/B/C v2 closeout receipt"
+    },
+    {
+      "trace_id": "NOOS-AGENT-20260702-027",
+      "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260702-027]_UNIFIED_AUTONOMY_UPGRADE_MASTER_v1.md",
+      "doc_type": "UNIFIED_UPGRADE_MASTER",
+      "title": "Unified autonomy upgrade master — tiered combined backlog (Fly-plane)"
     }
   ]
 }

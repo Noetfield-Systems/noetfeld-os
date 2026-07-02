@@ -1,8 +1,7 @@
 name: Publish PyPI
 
+# Manual TestPyPI/prod dispatch only. Tag releases use release-noetfield-gate.yml (UPG-0163).
 on:
-  release:
-    types: [published]
   workflow_dispatch:
     inputs:
       target:
@@ -21,7 +20,7 @@ permissions:
 jobs:
   publish:
     runs-on: ubuntu-latest
-    environment: ${{ github.event_name == 'release' && 'pypi' || inputs.target == 'prod' && 'pypi' || 'testpypi' }}
+    environment: ${{ inputs.target == 'prod' && 'pypi' || 'testpypi' }}
     steps:
       - uses: actions/checkout@v4
 
@@ -49,7 +48,7 @@ jobs:
           packages-dir: dist/
 
       - name: Publish to PyPI (trusted publishing)
-        if: github.event_name == 'release' || (github.event_name == 'workflow_dispatch' && inputs.target == 'prod')
+        if: github.event_name == 'workflow_dispatch' && inputs.target == 'prod'
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
           packages-dir: dist/

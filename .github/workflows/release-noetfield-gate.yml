@@ -1,0 +1,49 @@
+# UPG-0163 — tag push → GitHub Release with sdist/wheel + PyPI trusted publish.
+# Founder-unblocked: complements publish-pypi.yml manual dispatch for test/prod.
+name: Release noetfield-gate
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+  id-token: write
+
+jobs:
+  release:
+    name: Tag release + dist + PyPI
+    runs-on: ubuntu-latest
+    environment: pypi
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install build tools
+        run: python -m pip install build twine
+
+      - name: Test gate package
+        run: python -m pytest -q tests/test_noetfield_gate.py
+
+      - name: Build sdist and wheel
+        run: python -m build
+
+      - name: Twine check
+        run: python -m twine check dist/*
+
+      - name: Create GitHub Release with dist artifacts
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/*
+          generate_release_notes: true
+          draft: false
+          prerelease: false
+
+      - name: Publish to PyPI (trusted publishing)
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          packages-dir: dist/
