@@ -54,7 +54,9 @@
     "UPG-0196",
     "UPG-0197",
     "UPG-0159",
-    "UPG-0160"
+    "UPG-0160",
+    "UPG-0161",
+    "UPG-0163"
   ],
   "in_progress_steps": [
     "UPG-0001",
@@ -69,18 +71,43 @@
     "UPG-0010": "Founder verify only",
     "UPG-0029": "Screen capture requires founder session",
     "UPG-0030": "Publish demo video link when UPG-0029 done",
-    "UPG-0161": "PyPI org + trusted publish — founder tomorrow",
-    "UPG-0163": "GitHub release workflow after org publish",
     "UPG-0167": "npm publish after legal/org",
     "UPG-0174": "Production secrets/API-key vault policy remains to be finalized",
     "UPG-0175": "Production policy pack semver pinning remains to be finalized"
   },
   "deferred_to_founder": {
-    "pypi_org": "Phase B — PyPI org approval + token rotation — 2026-07-03",
     "commercial_c01": "Phase C — first Trust Brief / AI Value OS briefing"
   },
   "updated_at": "2026-07-02",
-  "notes": "Track A/B/C v2 closed. Track D SourceA observe loop live. Phase 4 integration tests UPG-0159/0160. Commercial proof (UPG-0001–0007) remains founder-led.",
+  "notes": "Unified tiered backlog NOOS-AGENT-20260702-027. T1: 24/7 loop VERIFIED windows. T2: Fly-plane UPG-0201–0207.",
+  "unified_backlog": "data/noos-unified-upgrade-backlog-v1.json",
+  "unified_plan_trace_id": "NOOS-AGENT-20260702-027",
+  "backlog_tiers": {
+    "T0_closed": 13,
+    "T1_p0_now": 8,
+    "T2_p1_near": 10,
+    "T3_p2_mid": 6,
+    "T4_p3_later": 7,
+    "founder_blocked": 9
+  },
+  "planned_steps": [
+    "UPG-0164",
+    "UPG-0168",
+    "UPG-0169",
+    "UPG-0201",
+    "UPG-0202",
+    "UPG-0203",
+    "UPG-0204",
+    "UPG-0205",
+    "UPG-0206",
+    "UPG-0207",
+    "UPG-0208",
+    "UPG-0209",
+    "UPG-0210",
+    "UPG-0211",
+    "UPG-0212",
+    "UPG-0213"
+  ],
   "evidence": {
     "UPG-0008": "PRODUCT_TRUTH.md: www.noetfield.com 200",
     "UPG-0009": "PRODUCT_TRUTH.md: website repo make verify-www-e2e PASS",
@@ -121,6 +148,8 @@
     "UPG-0196": "gel-ci.yml pip-audit + cyclonedx SBOM artifact",
     "UPG-0197": "gel-ci.yml gitleaks-action on push/PR",
     "UPG-0159": "tests/test_gate_integration_ci.py + gel-ci integration gate step",
-    "UPG-0160": "tests/test_decide_integration_ci.py + gel-ci local uvicorn decide step"
+    "UPG-0160": "tests/test_decide_integration_ci.py + gel-ci local uvicorn decide step",
+    "UPG-0161": "publish-pypi.yml workflow_dispatch target=test (TestPyPI trusted publish)",
+    "UPG-0163": ".github/workflows/release-noetfield-gate.yml tag v* → GitHub Release + dist + PyPI"
   }
 }

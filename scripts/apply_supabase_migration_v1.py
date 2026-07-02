@@ -19,6 +19,8 @@ from typing import Any
 from urllib.parse import quote_plus
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "scripts"))
+from noos_proof_receipt_paths_v1 import proof_receipt  # noqa: E402
 MIGRATIONS = ROOT / "infrastructure/supabase/migrations"
 NOETFIELD_ENV = Path.home() / ".sourcea-secrets/noetfield.env"
 NOETFIELD_DB_ENV = Path.home() / ".sourcea-secrets/noetfield-db.env"
@@ -163,10 +165,10 @@ def main() -> int:
     result = apply_migration(number, dry_run=args.dry_run)
 
     if args.write_receipt:
-        out = ROOT / f".noos-runtime/factory/receipts/supabase-migration-{number}-v1.json"
-        out.parent.mkdir(parents=True, exist_ok=True)
+        out = proof_receipt(f"supabase-migration-{number}-v1.json")
         out.write_text(json.dumps(result, indent=2) + "\n", encoding="utf-8")
         result["receipt_path"] = str(out.relative_to(ROOT))
+        result["receipt_tier"] = "proof"
 
     if args.json:
         print(json.dumps(result, indent=2))

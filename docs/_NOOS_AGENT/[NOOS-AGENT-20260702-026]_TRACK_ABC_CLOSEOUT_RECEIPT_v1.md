@@ -20,7 +20,7 @@ authority: NOOS-AGENT-20260702-025, UPGRADE_MANIFEST.json
 |------|--------|
 | A2–A9 | DONE — CF motor, cloud_meta, dashboard v1.3, inbox freshness |
 | A10 | DONE — `.noos-runtime/factory/receipts/noos-autonomous-24h-verify-v1.json` `ok: true` post-epoch |
-| A1 | OPEN — native GitHub `schedule` backup (private repo UI) |
+| A1 | DONE — native GitHub `schedule` backup verified (`make schedule-verify`, 2+ success runs) |
 
 ## Track B — Phase 4 chain tools
 
@@ -47,5 +47,5 @@ authority: NOOS-AGENT-20260702-025, UPGRADE_MANIFEST.json
 ## Out of scope (unchanged)
 
 - NW1/SW1 sends UPG-0001–0004
-- PyPI org UPG-0161
+- PyPI org UPG-0161/0163 closed — `release-noetfield-gate.yml` + manual TestPyPI dispatch
 - SourceA `phase_reconciler_v1` control

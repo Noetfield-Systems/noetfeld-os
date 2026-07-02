@@ -81,8 +81,9 @@ python3 scripts/noos_loop_heartbeat_v1.py --write-receipt --json
 
 ## Open-item close checklist
 
-1. **Migration 0012 live** — `founder_blocked` in inbox status check constraint; receipt at `.noos-runtime/factory/receipts/supabase-migration-0012-v1.json`
-2. **Schedule proof** — >=2 consecutive `schedule`-event success runs on `main`; receipt at `.noos-runtime/factory/receipts/noos-github-schedule-a1-v1.json`
+1. **Migration 0012 live** — `founder_blocked` in inbox status check constraint; proof at `receipts/proof/supabase-migration-0012-v1.json`
+2. **Schedule proof** — 2 consecutive `schedule` success runs on `noos-factory-autorun.yml` (~10m apart); proof at `receipts/proof/noos-github-schedule-a1-v1.json`
+3. **VERIFIED window** — proof at `receipts/proof/noos-loop-verified-window-v1.json` (DECLARED→VERIFIED from merge SHA)
 
 ## Kaizen
 

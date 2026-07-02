@@ -22,6 +22,10 @@
 
 Or tag release `v0.1.0` → auto-publish to production.
 
+**Tag release (UPG-0163):** push annotated tag `v*` on default branch → `release-noetfield-gate.yml` builds sdist/wheel, creates GitHub Release with artifacts, publishes PyPI via trusted publishing.
+
+**Manual dispatch:** Actions → Publish PyPI → Run workflow (target: `test` then `prod`) — TestPyPI dry run path for UPG-0161.
+
 ### B — API token (local script)
 
 1. https://pypi.org/manage/account/token/ → scope: entire account or project

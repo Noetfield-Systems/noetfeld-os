@@ -1,4 +1,4 @@
-.PHONY: test gate demo build-gate-js install inbox cloud-worker autorun-once autorun autorun-status autorun-tick-deploy autorun-tick-dispatch autonomous-verify supabase-migrate loop-run loop-fleet-deploy loop-fleet-dispatch loops-status loop-heartbeat urls
+.PHONY: test gate demo build-gate-js install inbox cloud-worker autorun-once autorun autorun-status autorun-tick-deploy autorun-tick-dispatch autonomous-verify schedule-verify supabase-migrate verified-window loop-run loop-fleet-deploy loop-fleet-dispatch loops-status loop-heartbeat backlog urls
 
 test:
 	pytest -q
@@ -39,9 +39,15 @@ autorun-tick-dispatch:
 autonomous-verify:
 	python3 scripts/verify_noos_autonomous_24h_v1.py --write-receipt --json
 
+schedule-verify:
+	python3 scripts/verify_noos_github_schedule_v1.py --write-receipt --json
+
 supabase-migrate:
 	@test -n "$(MIGRATION)" || (echo "Usage: make supabase-migrate MIGRATION=0012" && exit 1)
 	python3 scripts/apply_supabase_migration_v1.py --migration $(MIGRATION) --write-receipt --json
+
+verified-window:
+	python3 scripts/open_noos_verified_window_v1.py --write-receipt --json
 
 loop-run:
 	@test -n "$(EVENT)" || (echo "Usage: make loop-run EVENT=noos_chain_loop_tick" && exit 1)
@@ -58,6 +64,9 @@ loops-status:
 
 loop-heartbeat:
 	python3 scripts/noos_loop_heartbeat_v1.py --write-receipt --json
+
+backlog:
+	@python3 -c "import json; d=json.load(open('data/noos-unified-upgrade-backlog-v1.json')); print(json.dumps({'tiers':d['tier_definitions'],'summary':d['summary'],'next':[x['id'] for x in d['items'] if x.get('tier')=='T1' and x.get('status')=='open']}, indent=2))"
 
 urls:
 	bash scripts/check_production_urls.sh

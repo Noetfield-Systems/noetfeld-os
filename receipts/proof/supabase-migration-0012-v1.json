@@ -1,0 +1,19 @@
+{
+  "schema": "supabase-migration-receipt-v1",
+  "migration": "0012",
+  "migration_file": "infrastructure/supabase/migrations/0012_worker_inbox_founder_blocked.sql",
+  "applied_at": "2026-07-02T11:53:20Z",
+  "dry_run": false,
+  "postgres_configured": true,
+  "pre_verify": {
+    "ok": true,
+    "constraint_def": "CHECK ((status = ANY (ARRAY['pending'::text, 'dispatched'::text, 'completed'::text, 'blocked'::text, 'cancelled'::text, 'founder_blocked'::text])))"
+  },
+  "ok": true,
+  "skipped": true,
+  "reason": "already_applied",
+  "post_verify": {
+    "ok": true,
+    "constraint_def": "CHECK ((status = ANY (ARRAY['pending'::text, 'dispatched'::text, 'completed'::text, 'blocked'::text, 'cancelled'::text, 'founder_blocked'::text])))"
+  }
+}
