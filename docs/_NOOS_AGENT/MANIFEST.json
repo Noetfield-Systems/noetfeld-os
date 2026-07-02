@@ -4,7 +4,7 @@
   "agent_lane": "NOETFELD-OS",
   "workspace_root": "/Users/sinakazemnezhad/Projects/noetfeld-os",
   "search_token": "NOOS-AGENT-DOC",
-  "updated_at": "2026-06-27",
+  "updated_at": "2026-07-02",
   "part8_sync_at": "2026-06-15",
   "canonical_ssot_source": "/Users/sinakazemnezhad/Desktop/Noetfield/Noetfield-All-Documents/",
   "sync_script": "scripts/sync-noos-ssot.sh",
@@ -176,6 +176,12 @@
       "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260629-023]_NOETFIELD_OS_REPO_POLICY_LOCKED_v1.md",
       "doc_type": "NOETFIELD_OS_REPO_POLICY_LOCKED",
       "title": "Noetfield OS repo policy — runtime/control separation"
+    },
+    {
+      "trace_id": "NOOS-AGENT-20260702-024",
+      "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260702-024]_ECOSYSTEM_NEXT_PLAN_LOCKED_v1.md",
+      "doc_type": "ECOSYSTEM_NEXT_PLAN_LOCKED",
+      "title": "Ecosystem next plan — PyPI, www, commercial proof — locked v1"
     }
   ]
 }
