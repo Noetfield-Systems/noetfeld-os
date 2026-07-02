@@ -227,6 +227,7 @@ def execute_loop(loop: dict[str, Any], *, self_heal: bool = True) -> dict[str, A
     fb = founder_blocked_probe()
     inv = sink_invariant(step_results, heal_results)
 
+    state_before = "RUNNING"
     # L2 — seven-state model, never fake PASS / never silence
     if no_work:
         state_after = "IDLE_NO_WORK"
@@ -236,6 +237,11 @@ def execute_loop(loop: dict[str, Any], *, self_heal: bool = True) -> dict[str, A
         state_after = "COMPLETE"
     else:
         state_after = "FAILED_WITH_RECEIPT"
+
+    # L13 — auditable transition tail (D5)
+    transition_log_tail = [
+        {"from": state_before, "to": state_after, "at": finished_at, "cycle": cycle_number}
+    ]
 
     # L3 — no decision without a reason: blocker_reason REQUIRED non-null when blocked
     blocker_reason = None
@@ -263,8 +269,9 @@ def execute_loop(loop: dict[str, Any], *, self_heal: bool = True) -> dict[str, A
         "cycle_number": cycle_number,
         "started_at": started_at,
         "finished_at": finished_at,
-        "state_before": "RUNNING",
+        "state_before": state_before,
         "state_after": state_after,
+        "transition_log_tail": transition_log_tail,
         "status": "ok" if state_after in ("COMPLETE", "IDLE_NO_WORK") else "degraded",
         "exit_code": 0 if state_after in ("COMPLETE", "IDLE_NO_WORK") else 1,
         "cost": meter_cost(step_results),
@@ -293,6 +300,7 @@ def execute_loop(loop: dict[str, Any], *, self_heal: bool = True) -> dict[str, A
         "last_status": cycle["status"],
         "last_state": state_after,
         "last_finished_at": finished_at,
+        "transition_log_tail": transition_log_tail[-5:],
     }
     loop_state_path(loop_id).write_text(json.dumps(state, indent=2) + "\n", encoding="utf-8")
 

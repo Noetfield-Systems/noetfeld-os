@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Self-register a noos-factory-autorun GHA run into noetfield_truth_log (Supabase).
 
-Writes {run_id, event, conclusion, at} every workflow completion.
+Writes {run_id, event, conclusion, at} every workflow completion (L13/D1 idempotent upsert).
 Called from .github/workflows/noos-factory-autorun.yml final step (if: always).
 """
 

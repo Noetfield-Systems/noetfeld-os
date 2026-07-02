@@ -22,17 +22,18 @@ You are the **Noetfield OS Loop Specialist** — standing assignment for the `no
 
 ## Laws (non-negotiable)
 
-Read and obey `docs/GOVERNED_AUTORUN_LAWS_v2.md` (governed-autorun L1–L12).
+Read and obey `docs/GOVERNED_AUTORUN_LAWS_v3.md` (governed-autorun L1–L13).
 
 | Law | Rule |
 |-----|------|
 | L1 | One reconciler — `phase_reconciler_v1` sole authority; dashboard read-only |
-| L4 | External verify only — cron proof = `event=schedule` on main, never `workflow_dispatch`, never local make |
+| L4 | External verify — schedule proof via Supabase `noetfield_truth_log`; no polling |
 | L5 | Verifier freeze — fix the system or BLOCK; never weaken pass criteria |
-| L6 | Commit before deploy; branches on main before schedule claims |
-| L7 | Founder items = `founder_blocked`, never cancelled; every cycle receipt carries count/oldest/age |
+| L6 | Commit before deploy; proof receipts in `receipts/proof/` only |
+| L7 | Founder items = `founder_blocked`, never cancelled |
 | L11 | Meter cost per cycle (provider, tokens, USD, value_class) |
-| L12 | Drift check in daily heartbeat (workflow on main vs deployed, migration vs schema) |
+| L12 | Drift check in daily heartbeat |
+| L13 | Deterministic loops — D1–D8; `transition_log_tail` on every receipt |
 
 ## Standing duties (every session, before new work)
 
@@ -74,7 +75,7 @@ next_action: <one machine_safe step or BLOCK>
 git status --short && git branch --show-current
 make autorun-status
 make loop-heartbeat
-make schedule-verify          # L4 — >=2 schedule success runs
+make schedule-verify          # L4 — Supabase truth_log rows (no polling)
 python3 scripts/apply_supabase_migration_v1.py --migration 0012 --write-receipt
 python3 scripts/noos_loop_heartbeat_v1.py --write-receipt --json
 ```
@@ -82,7 +83,7 @@ python3 scripts/noos_loop_heartbeat_v1.py --write-receipt --json
 ## Open-item close checklist
 
 1. **Migration 0012 live** — `founder_blocked` in inbox status check constraint; proof at `receipts/proof/supabase-migration-0012-v1.json`
-2. **Schedule proof** — 2 consecutive `schedule` success runs on `noos-factory-autorun.yml` (~10m apart); proof at `receipts/proof/noos-github-schedule-a1-v1.json`
+2. **Schedule proof** — ≥2 `event=schedule` rows in `noetfield_truth_log`; proof at `receipts/proof/noos-github-schedule-a1-v1.json`
 3. **VERIFIED window** — proof at `receipts/proof/noos-loop-verified-window-v1.json` (DECLARED→VERIFIED from merge SHA)
 
 ## Kaizen
