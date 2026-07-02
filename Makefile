@@ -1,4 +1,4 @@
-.PHONY: test gate demo build-gate-js install inbox cloud-worker autorun-once autorun urls
+.PHONY: test gate demo build-gate-js install inbox cloud-worker autorun-once autorun autorun-status urls
 
 test:
 	pytest -q
@@ -26,6 +26,9 @@ autorun-once:
 
 autorun:
 	python3 scripts/run_noetfield_factory_loop_v1.py --interval-seconds 600
+
+autorun-status:
+	python3 scripts/autorun_status_v1.py
 
 urls:
 	bash scripts/check_production_urls.sh

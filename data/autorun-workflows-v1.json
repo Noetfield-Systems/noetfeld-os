@@ -1,0 +1,93 @@
+{
+  "schema": "autorun-workflows-v1",
+  "version": "1.0.0",
+  "read_only": true,
+  "one_law": "Observe autorun surfaces only. phase_reconciler_v1 remains sole control authority.",
+  "control_authority": {
+    "sole_reconciler": "SourceA/scripts/phase_reconciler_v1.py",
+    "noos_writes_desired_state": false,
+    "noos_starts_sourcea_batch": false
+  },
+  "status_values": [
+    "RUNNING",
+    "IDLE_NO_WORK",
+    "BLOCKED_WITH_REASON",
+    "COMPLETE",
+    "FAILED_WITH_RECEIPT",
+    "TRIAGE_REQUIRED"
+  ],
+  "workflows": [
+    {
+      "id": "sourcea_cloud_queue",
+      "title": "SourceA cloud queue",
+      "plane": "SourceA",
+      "probe": {
+        "type": "http_json",
+        "url_default": "https://sourcea-fbe-runner-production.up.railway.app/api/cloud-forge-run/queue/v1",
+        "url_env": "FBE_CLOUD_WORKER_URL",
+        "url_suffix": "/api/cloud-forge-run/queue/v1",
+        "pending_fields": ["pending_count", "remaining", "queue_remaining"],
+        "head_fields": ["cloud_forge_run_head", "queue_head"]
+      },
+      "receipt_path": "~/.sina/living-system-chain-validate-receipt-v1.json",
+      "blocked_command": "curl -fsS $FBE_CLOUD_WORKER_URL/api/cloud-forge-run/queue/v1"
+    },
+    {
+      "id": "sourcea_buyer_proof_verifier",
+      "title": "SourceA buyer-proof verifier",
+      "plane": "SourceA",
+      "probe": {
+        "type": "receipt_json",
+        "receipt_path": "~/.sina/buyer-proof-hotfix-verify-v1.json",
+        "ok_field": "ok"
+      },
+      "verify_command": "cd ~/Desktop/SourceA && python3 scripts/verify_buyer_proof_hotfix_v1.py --json"
+    },
+    {
+      "id": "sourcea_recipe_queue_builder",
+      "title": "SourceA recipe queue builder",
+      "plane": "SourceA",
+      "probe": {
+        "type": "queue_file",
+        "queue_path": "~/Desktop/SourceA/data/client-proof-recipe-queue-v1.json",
+        "items_field": "items",
+        "pending_statuses": ["backlog", "pending", "queued"]
+      },
+      "build_command": "cd ~/Desktop/SourceA && python3 scripts/build_client_proof_recipe_queue_v1.py"
+    },
+    {
+      "id": "noetfield_factory_autorun",
+      "title": "Noetfield OS factory autorun",
+      "plane": "NOETFELD-OS",
+      "probe": {
+        "type": "noos_factory",
+        "runtime_state": ".noos-runtime/factory/execution/noetfield_factory_state_v1.json",
+        "supabase_table": "noetfield_factory_cycle_runs",
+        "github_workflow": "noos-factory-autorun.yml"
+      },
+      "run_command": "make autorun-once"
+    },
+    {
+      "id": "noetfield_worker_inbox",
+      "title": "Noetfield worker inbox",
+      "plane": "NOETFELD-OS",
+      "probe": {
+        "type": "noos_inbox",
+        "supabase_table": "noetfield_worker_inbox_queue",
+        "executable_statuses": ["pending"],
+        "founder_blocked_status": "founder_blocked"
+      },
+      "run_command": "make cloud-worker"
+    },
+    {
+      "id": "sandbox_health_sweep",
+      "title": "Sandbox health sweep",
+      "plane": "NOETFELD-OS",
+      "probe": {
+        "type": "url_sweep",
+        "script": "scripts/check_production_urls.sh",
+        "receipt_path": ".noos-runtime/factory/receipts/sandbox-health-sweep-v1.json"
+      }
+    }
+  ]
+}

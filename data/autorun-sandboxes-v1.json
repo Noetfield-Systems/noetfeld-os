@@ -1,0 +1,38 @@
+{
+  "schema": "autorun-sandboxes-v1",
+  "version": "1.0.0",
+  "read_only": true,
+  "triage_threshold_dirty_total": 200,
+  "sandboxes": [
+    {
+      "id": "noetfeld-os",
+      "title": "Noetfield OS repo",
+      "path": ".",
+      "git": true,
+      "plane": "NOETFELD-OS"
+    },
+    {
+      "id": "noos-runtime",
+      "title": "NOOS ephemeral factory runtime",
+      "path": ".noos-runtime",
+      "git": false,
+      "plane": "NOETFELD-OS"
+    },
+    {
+      "id": "sourcea",
+      "title": "SourceA repo (observe-only from NOOS)",
+      "path": "~/Desktop/SourceA",
+      "git": true,
+      "plane": "SourceA",
+      "observe_only": true
+    },
+    {
+      "id": "sina-receipts",
+      "title": "Sina receipt lane",
+      "path": "~/.sina",
+      "git": false,
+      "plane": "ECOSYSTEM",
+      "observe_only": true
+    }
+  ]
+}
