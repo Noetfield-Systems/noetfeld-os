@@ -1,38 +1,46 @@
 {
   "schema": "autorun-sandboxes-v1",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "read_only": true,
   "triage_threshold_dirty_total": 200,
+  "one_law": "dirty_total counts NOOS repo only. SourceA/Sina observe via Supabase — no git reads on external paths.",
   "sandboxes": [
     {
       "id": "noetfeld-os",
       "title": "Noetfield OS repo",
       "path": ".",
       "git": true,
-      "plane": "NOETFELD-OS"
+      "plane": "NOETFELD-OS",
+      "counts_toward_dirty_total": true
     },
     {
       "id": "noos-runtime",
       "title": "NOOS ephemeral factory runtime",
       "path": ".noos-runtime",
       "git": false,
-      "plane": "NOETFELD-OS"
+      "plane": "NOETFELD-OS",
+      "counts_toward_dirty_total": false,
+      "observe_only": true
     },
     {
       "id": "sourcea",
-      "title": "SourceA repo (observe-only from NOOS)",
+      "title": "SourceA (Supabase observe-only from NOOS)",
       "path": "~/Desktop/SourceA",
-      "git": true,
+      "git": false,
       "plane": "SourceA",
-      "observe_only": true
+      "observe_only": true,
+      "counts_toward_dirty_total": false,
+      "dirty_source": "supabase_only"
     },
     {
       "id": "sina-receipts",
-      "title": "Sina receipt lane",
+      "title": "Sina receipt lane (not read by dashboard)",
       "path": "~/.sina",
       "git": false,
       "plane": "ECOSYSTEM",
-      "observe_only": true
+      "observe_only": true,
+      "counts_toward_dirty_total": false,
+      "dirty_source": "none"
     }
   ]
 }

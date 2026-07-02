@@ -1,13 +1,27 @@
 {
   "schema": "autorun-workflows-v1",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "read_only": true,
   "one_law": "Observe autorun surfaces only. phase_reconciler_v1 remains sole control authority.",
+  "sourcea_truth_lane": "Supabase only (truth_log, cycle_receipts, heartbeat). Never read SourceA repo or ~/.sina.",
   "control_authority": {
     "sole_reconciler": "SourceA/scripts/phase_reconciler_v1.py",
     "noos_writes_desired_state": false,
     "noos_starts_sourcea_batch": false
   },
+  "supabase_profiles": {
+    "noetfield": {
+      "env_file": "~/.sourcea-secrets/noetfield.env",
+      "url_env": ["NOETFIELD_SUPABASE_URL", "SUPABASE_URL"],
+      "key_env": ["NOETFIELD_SUPABASE_SERVICE_ROLE_KEY", "SUPABASE_SERVICE_ROLE_KEY"]
+    },
+    "portfolio_spine": {
+      "env_file": "~/.sourcea-secrets/portfolio-spine.env",
+      "url_env": ["SUPABASE_URL"],
+      "key_env": ["SUPABASE_SERVICE_ROLE_KEY", "SUPABASE_SERVICE_KEY"]
+    }
+  },
+  "stale_threshold_minutes": 30,
   "status_values": [
     "RUNNING",
     "IDLE_NO_WORK",
@@ -22,24 +36,30 @@
       "title": "SourceA cloud queue",
       "plane": "SourceA",
       "probe": {
-        "type": "http_json",
-        "url_default": "https://sourcea-fbe-runner-production.up.railway.app/api/cloud-forge-run/queue/v1",
-        "url_env": "FBE_CLOUD_WORKER_URL",
-        "url_suffix": "/api/cloud-forge-run/queue/v1",
-        "pending_fields": ["pending_count", "remaining", "queue_remaining"],
-        "head_fields": ["cloud_forge_run_head", "queue_head"]
+        "type": "supabase_sourcea_cloud_queue",
+        "supabase_profile": "portfolio_spine",
+        "truth_log_table": "truth_log",
+        "cycle_table": "cycle_receipts",
+        "cycle_fallback_table": "telemetry_logs",
+        "cycle_fallback_memory_type": "truth_cycle_receipt",
+        "cycle_id_contains": "CLOUD-SEC",
+        "heartbeat_events": ["CRON_FIRED", "QUEUE_ADVANCED", "JOB_STARTED", "JOB_COMPLETED"]
       },
-      "receipt_path": "~/.sina/living-system-chain-validate-receipt-v1.json",
-      "blocked_command": "curl -fsS $FBE_CLOUD_WORKER_URL/api/cloud-forge-run/queue/v1"
+      "blocked_command": "Apply portfolio-spine truth_log migration; cloud writers emit CRON_FIRED + cycle receipts."
     },
     {
-      "id": "sourcea_buyer_proof_verifier",
-      "title": "SourceA buyer-proof verifier",
+      "id": "sourcea_buyer_proof_verify",
+      "title": "SourceA buyer-proof verify",
       "plane": "SourceA",
       "probe": {
-        "type": "receipt_json",
-        "receipt_path": "~/.sina/buyer-proof-hotfix-verify-v1.json",
-        "ok_field": "ok"
+        "type": "supabase_sourcea_receipt",
+        "supabase_profile": "portfolio_spine",
+        "cycle_table": "cycle_receipts",
+        "cycle_fallback_table": "telemetry_logs",
+        "cycle_fallback_memory_type": "truth_cycle_receipt",
+        "receipt_schema": "buyer-proof-hotfix-verify-v1",
+        "metadata_contains": ["buyer-proof", "buyer_proof"],
+        "execution_id_contains": ["buyer-proof", "buyer_proof"]
       },
       "verify_command": "cd ~/Desktop/SourceA && python3 scripts/verify_buyer_proof_hotfix_v1.py --json"
     },
@@ -48,34 +68,41 @@
       "title": "SourceA recipe queue builder",
       "plane": "SourceA",
       "probe": {
-        "type": "queue_file",
-        "queue_path": "~/Desktop/SourceA/data/client-proof-recipe-queue-v1.json",
-        "items_field": "items",
-        "pending_statuses": ["backlog", "pending", "queued"]
+        "type": "supabase_sourcea_receipt",
+        "supabase_profile": "portfolio_spine",
+        "cycle_table": "cycle_receipts",
+        "cycle_fallback_table": "telemetry_logs",
+        "cycle_fallback_memory_type": "truth_cycle_receipt",
+        "receipt_schema": "client-proof-recipe-queue-v1",
+        "metadata_contains": ["client-proof-recipe", "recipe-queue", "recipe_queue"],
+        "execution_id_contains": ["recipe-queue", "recipe_queue", "client-proof-recipe"],
+        "pending_metadata_fields": ["pending_count", "backlog_count", "queued_count"]
       },
       "build_command": "cd ~/Desktop/SourceA && python3 scripts/build_client_proof_recipe_queue_v1.py"
     },
     {
-      "id": "noetfield_factory_autorun",
+      "id": "noos_factory_autorun",
       "title": "Noetfield OS factory autorun",
       "plane": "NOETFELD-OS",
       "probe": {
-        "type": "noos_factory",
-        "runtime_state": ".noos-runtime/factory/execution/noetfield_factory_state_v1.json",
+        "type": "supabase_noos_factory",
+        "supabase_profile": "noetfield",
         "supabase_table": "noetfield_factory_cycle_runs",
-        "github_workflow": "noos-factory-autorun.yml"
+        "github_workflow": "noos-factory-autorun.yml",
+        "idle_statuses": ["IDLE_NO_WORK", "idle_no_work"]
       },
       "run_command": "make autorun-once"
     },
     {
-      "id": "noetfield_worker_inbox",
+      "id": "noos_worker_inbox",
       "title": "Noetfield worker inbox",
       "plane": "NOETFELD-OS",
       "probe": {
-        "type": "noos_inbox",
+        "type": "supabase_noos_inbox",
+        "supabase_profile": "noetfield",
         "supabase_table": "noetfield_worker_inbox_queue",
-        "executable_statuses": ["pending"],
-        "founder_blocked_status": "founder_blocked"
+        "founder_blocked_status": "founder_blocked",
+        "executable_statuses": ["pending"]
       },
       "run_command": "make cloud-worker"
     },
@@ -84,9 +111,15 @@
       "title": "Sandbox health sweep",
       "plane": "NOETFELD-OS",
       "probe": {
-        "type": "url_sweep",
-        "script": "scripts/check_production_urls.sh",
-        "receipt_path": ".noos-runtime/factory/receipts/sandbox-health-sweep-v1.json"
+        "type": "url_sweep_readonly",
+        "urls": [
+          {"name": "www home", "url": "https://www.noetfield.com/"},
+          {"name": "www gel", "url": "https://www.noetfield.com/gel/"},
+          {"name": "www ai-value-os", "url": "https://www.noetfield.com/ai-value-governance-os/"},
+          {"name": "platform health", "url": "https://platform.noetfield.com/health"},
+          {"name": "gel-api health", "url": "https://api.noetfield.com/health"},
+          {"name": "gel-api readiness", "url": "https://api.noetfield.com/readiness"}
+        ]
       }
     }
   ]
