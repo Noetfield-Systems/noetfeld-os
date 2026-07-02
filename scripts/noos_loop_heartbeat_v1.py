@@ -11,6 +11,7 @@ from __future__ import annotations
 import argparse
 import json
 import re
+import sys
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -19,6 +20,9 @@ ROOT = Path(__file__).resolve().parents[1]
 REGISTRY = ROOT / "data/noos-24-7-loops-v1.json"
 RUNTIME = ROOT / ".noos-runtime/loops"
 WORKFLOWS = ROOT / ".github/workflows"
+
+sys.path.insert(0, str(ROOT / "scripts"))
+from sandbox_health_sweep_v1 import run_sweep  # noqa: E402
 
 
 def utc_now() -> str:
@@ -92,11 +96,37 @@ def recent_cycles(loop_id: str, limit: int = 20) -> list[dict[str, Any]]:
     return out
 
 
+def trigger_registry_sweep() -> dict[str, Any]:
+    """L12 T-REG — diff live triggers vs data/trigger-registry-v1.json."""
+    try:
+        return run_sweep(repo_root=ROOT)
+    except Exception as exc:
+        return {
+            "schema": "sandbox-health-sweep-v1",
+            "ok": False,
+            "drift": True,
+            "report_line": f"trigger_sweep_error · {exc}",
+            "errors": [str(exc)[:120]],
+        }
+
+
 def build_heartbeat() -> dict[str, Any]:
     registry = load_registry()
     loops_out: list[dict[str, Any]] = []
     mismatches: list[dict[str, Any]] = []
     founder_blocked_total = 0
+    trigger_sweep = trigger_registry_sweep()
+    if trigger_sweep.get("drift") or not trigger_sweep.get("ok"):
+        mismatches.append(
+            {
+                "loop_id": "trigger_registry",
+                "surface": "trigger_sweep",
+                "committed_truth": trigger_sweep.get("registry_path"),
+                "deployed_truth": trigger_sweep.get("report_line"),
+                "dead_or_mismatch": trigger_sweep.get("dead_or_mismatch"),
+                "unregistered_live": trigger_sweep.get("unregistered_live"),
+            }
+        )
 
     for loop in registry.get("loops") or []:
         loop_id = str(loop["id"])
@@ -156,7 +186,11 @@ def build_heartbeat() -> dict[str, Any]:
         "date": datetime.now(timezone.utc).strftime("%Y-%m-%d"),
         "generated_at": utc_now(),
         "loops": loops_out,
-        "drift": {"checked": True, "mismatches": mismatches},
+        "drift": {
+            "checked": True,
+            "mismatches": mismatches,
+            "trigger_sweep": trigger_sweep,
+        },
         "founder_blocked_total": founder_blocked_total,
         "founder_gated_improvements": [],
         "escalations": [m["loop_id"] for m in mismatches]

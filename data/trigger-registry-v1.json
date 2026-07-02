@@ -1,0 +1,235 @@
+{
+  "schema": "trigger-registry-v1",
+  "version": "1.0.0",
+  "system": "noetfeld-os",
+  "spec_path": "docs/NOETFIELD_COHERENT_SYSTEM_SPEC_v1.md",
+  "triggers": [
+    {
+      "trigger_id": "NOOS-T2-factory-cf",
+      "system": "noetfeld-os",
+      "kind": "schedule",
+      "schedule": "*/10 * * * *",
+      "target": "CF cron → repository_dispatch noos_factory_autorun_tick",
+      "valid_in_verified_window": true,
+      "owner_workflow": "noos-factory-autorun",
+      "live_probe": {
+        "type": "wrangler_cron",
+        "path": "cloud/workers/noos-factory-autorun-tick-v1/wrangler.toml"
+      }
+    },
+    {
+      "trigger_id": "NOOS-T6-fleet-cf",
+      "system": "noetfeld-os",
+      "kind": "schedule",
+      "schedule": "*/5 * * * *",
+      "target": "CF loop fleet motor → repository_dispatch loop ticks",
+      "valid_in_verified_window": true,
+      "owner_workflow": "noos-loop-fleet-tick",
+      "live_probe": {
+        "type": "wrangler_cron",
+        "path": "cloud/workers/noos-loop-fleet-tick-v1/wrangler.toml"
+      }
+    },
+    {
+      "trigger_id": "NOOS-T3-factory-gha",
+      "system": "noetfeld-os",
+      "kind": "schedule",
+      "schedule": "0,10,20,30,40,50 * * * *",
+      "target": "GitHub schedule backup for factory autorun",
+      "valid_in_verified_window": true,
+      "owner_workflow": "noos-factory-autorun",
+      "live_probe": {
+        "type": "gha_schedule",
+        "path": ".github/workflows/noos-factory-autorun.yml"
+      }
+    },
+    {
+      "trigger_id": "NOOS-T6-inbox",
+      "system": "noetfeld-os",
+      "kind": "schedule",
+      "schedule": "*/5 * * * *",
+      "target": "Inbox drain loop schedule backup",
+      "valid_in_verified_window": true,
+      "owner_workflow": "noos-inbox-loop",
+      "live_probe": {
+        "type": "gha_schedule",
+        "path": ".github/workflows/noos-inbox-loop.yml"
+      }
+    },
+    {
+      "trigger_id": "NOOS-T6-runtime",
+      "system": "noetfeld-os",
+      "kind": "schedule",
+      "schedule": "5,20,35,50 * * * *",
+      "target": "Runtime gate + pytest loop",
+      "valid_in_verified_window": true,
+      "owner_workflow": "noos-runtime-loop",
+      "live_probe": {
+        "type": "gha_schedule",
+        "path": ".github/workflows/noos-runtime-loop.yml"
+      }
+    },
+    {
+      "trigger_id": "NOOS-T6-surface",
+      "system": "noetfeld-os",
+      "kind": "schedule",
+      "schedule": "0,20,40 * * * *",
+      "target": "Public surface health loop",
+      "valid_in_verified_window": true,
+      "owner_workflow": "noos-surface-loop",
+      "live_probe": {
+        "type": "gha_schedule",
+        "path": ".github/workflows/noos-surface-loop.yml"
+      }
+    },
+    {
+      "trigger_id": "NOOS-T6-chain",
+      "system": "noetfeld-os",
+      "kind": "schedule",
+      "schedule": "0,30 * * * *",
+      "target": "Chain tools verify loop",
+      "valid_in_verified_window": true,
+      "owner_workflow": "noos-chain-loop",
+      "live_probe": {
+        "type": "gha_schedule",
+        "path": ".github/workflows/noos-chain-loop.yml"
+      }
+    },
+    {
+      "trigger_id": "NOOS-T6-self-heal",
+      "system": "noetfeld-os",
+      "kind": "schedule",
+      "schedule": "0,10,20,30,40,50 * * * *",
+      "target": "Self-heal + autonomy nerve loop",
+      "valid_in_verified_window": true,
+      "owner_workflow": "noos-self-heal-loop",
+      "live_probe": {
+        "type": "gha_schedule",
+        "path": ".github/workflows/noos-self-heal-loop.yml"
+      }
+    },
+    {
+      "trigger_id": "NOOS-T6-sourcea-observe",
+      "system": "noetfeld-os",
+      "kind": "schedule",
+      "schedule": "15,45 * * * *",
+      "target": "SourceA portfolio-spine observe loop",
+      "valid_in_verified_window": true,
+      "owner_workflow": "noos-sourcea-observe-loop",
+      "live_probe": {
+        "type": "gha_schedule",
+        "path": ".github/workflows/noos-sourcea-observe-loop.yml"
+      }
+    },
+    {
+      "trigger_id": "NOOS-T6-agent-nerve",
+      "system": "noetfeld-os",
+      "kind": "schedule",
+      "schedule": "0 * * * *",
+      "target": "Agent vault nerve loop",
+      "valid_in_verified_window": true,
+      "owner_workflow": "noos-agent-nerve-loop",
+      "live_probe": {
+        "type": "gha_schedule",
+        "path": ".github/workflows/noos-agent-nerve-loop.yml"
+      }
+    },
+    {
+      "trigger_id": "NOOS-T3-schedule-canary",
+      "system": "noetfeld-os",
+      "kind": "schedule",
+      "schedule": "0,10,20,30,40,50 * * * *",
+      "target": "GitHub schedule canary probe",
+      "valid_in_verified_window": true,
+      "owner_workflow": "noos-schedule-canary",
+      "live_probe": {
+        "type": "gha_schedule",
+        "path": ".github/workflows/noos-schedule-canary.yml"
+      }
+    },
+    {
+      "trigger_id": "NOOS-T-gel-ci-push",
+      "system": "noetfeld-os",
+      "kind": "event",
+      "schedule": null,
+      "target": "GEL CI on push to main",
+      "valid_in_verified_window": true,
+      "owner_workflow": "gel-ci",
+      "live_probe": {
+        "type": "gha_workflow",
+        "path": ".github/workflows/gel-ci.yml",
+        "expects": ["push"]
+      }
+    },
+    {
+      "trigger_id": "NOOS-T-gel-ci-pr",
+      "system": "noetfeld-os",
+      "kind": "event",
+      "schedule": null,
+      "target": "GEL CI on pull_request",
+      "valid_in_verified_window": true,
+      "owner_workflow": "gel-ci",
+      "live_probe": {
+        "type": "gha_workflow",
+        "path": ".github/workflows/gel-ci.yml",
+        "expects": ["pull_request"]
+      }
+    },
+    {
+      "trigger_id": "NOOS-T-agent-vault-push",
+      "system": "noetfeld-os",
+      "kind": "event",
+      "schedule": null,
+      "target": "Agent vault tag check on push",
+      "valid_in_verified_window": true,
+      "owner_workflow": "noos-agent-vault",
+      "live_probe": {
+        "type": "gha_workflow",
+        "path": ".github/workflows/noos-agent-vault.yml",
+        "expects": ["push"]
+      }
+    },
+    {
+      "trigger_id": "NOOS-T-agent-vault-pr",
+      "system": "noetfeld-os",
+      "kind": "event",
+      "schedule": null,
+      "target": "Agent vault tag check on pull_request",
+      "valid_in_verified_window": true,
+      "owner_workflow": "noos-agent-vault",
+      "live_probe": {
+        "type": "gha_workflow",
+        "path": ".github/workflows/noos-agent-vault.yml",
+        "expects": ["pull_request"]
+      }
+    },
+    {
+      "trigger_id": "NOOS-T-release-tags",
+      "system": "noetfeld-os",
+      "kind": "event",
+      "schedule": null,
+      "target": "Tag push → GitHub Release + PyPI",
+      "valid_in_verified_window": true,
+      "owner_workflow": "release-noetfield-gate",
+      "live_probe": {
+        "type": "gha_workflow",
+        "path": ".github/workflows/release-noetfield-gate.yml",
+        "expects": ["push"]
+      }
+    },
+    {
+      "trigger_id": "NOOS-T5-publish-pypi",
+      "system": "noetfeld-os",
+      "kind": "manual",
+      "schedule": null,
+      "target": "Manual PyPI publish workflow_dispatch",
+      "valid_in_verified_window": false,
+      "owner_workflow": "publish-pypi",
+      "live_probe": {
+        "type": "gha_workflow",
+        "path": ".github/workflows/publish-pypi.yml",
+        "expects": ["workflow_dispatch"]
+      }
+    }
+  ]
+}
