@@ -12,9 +12,13 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 MANIFEST = ROOT / "docs/_NOOS_AGENT/UPGRADE_MANIFEST.json"
-OUT = ROOT / "data/noos-cloud-worker-inbox-v1.json"
 SINA_COPY = Path.home() / ".sina/noos-cloud-worker-inbox-v1.json"
 SINK = ROOT / "scripts/factory_supabase_sink_v1.py"
+
+import sys
+
+sys.path.insert(0, str(ROOT / "scripts"))
+from factory_runtime_paths_v1 import inbox_bundle_path, receipt_commit_enabled
 
 # Next agent-executable UPG batch (Phase 4 gate hardening + TLE lane starters)
 INBOX_ITEMS = [
@@ -95,17 +99,29 @@ def build_bundle() -> dict:
 
 
 def main() -> int:
+    import argparse
+
+    parser = argparse.ArgumentParser(description="Enqueue NOOS cloud worker inbox items.")
+    parser.add_argument(
+        "--receipt-commit",
+        action="store_true",
+        help="Write inbox bundle to tracked data/noos-cloud-worker-inbox-v1.json.",
+    )
+    args = parser.parse_args()
+
+    receipt_commit = receipt_commit_enabled(args.receipt_commit)
+    out = inbox_bundle_path(receipt_commit=receipt_commit)
     bundle = build_bundle()
-    OUT.parent.mkdir(parents=True, exist_ok=True)
-    OUT.write_text(json.dumps(bundle, indent=2) + "\n", encoding="utf-8")
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text(json.dumps(bundle, indent=2) + "\n", encoding="utf-8")
     SINA_COPY.parent.mkdir(parents=True, exist_ok=True)
     SINA_COPY.write_text(json.dumps(bundle, indent=2) + "\n", encoding="utf-8")
-    print(f"Wrote {OUT} ({len(bundle['items'])} items)")
+    print(f"Wrote {out} ({len(bundle['items'])} items)")
     print(f"Mirrored {SINA_COPY}")
 
     if SINK.is_file():
         proc = subprocess.run(
-            [sys.executable, str(SINK), "inbox", str(OUT)],
+            [sys.executable, str(SINK), "inbox", str(out)],
             cwd=ROOT,
             capture_output=True,
             text=True,
