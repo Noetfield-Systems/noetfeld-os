@@ -5,9 +5,18 @@ on:
     - cron: "*/10 * * * *"
   workflow_dispatch:
 
+permissions:
+  contents: read
+
+concurrency:
+  group: noos-factory-autorun
+  cancel-in-progress: false
+
 jobs:
-  factory-cycle:
+  factory-autorun:
+    name: Factory autorun (10-min cycle)
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
 
@@ -20,6 +29,35 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
           pip install -e .
+
+      - name: Verify required secrets (presence only)
+        env:
+          NOETFIELD_SUPABASE_URL: ${{ secrets.NOETFIELD_SUPABASE_URL }}
+          NOETFIELD_SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.NOETFIELD_SUPABASE_SERVICE_ROLE_KEY }}
+          NOETFIELD_SUPABASE_DATABASE_URL: ${{ secrets.NOETFIELD_SUPABASE_DATABASE_URL }}
+          SUPABASE_DB_PASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD }}
+          NOETFIELD_API_KEY: ${{ secrets.NOETFIELD_API_KEY }}
+        run: |
+          python3 - <<'PY'
+          import os
+          import sys
+
+          required = (
+              "NOETFIELD_SUPABASE_URL",
+              "NOETFIELD_SUPABASE_SERVICE_ROLE_KEY",
+          )
+          optional = (
+              "NOETFIELD_SUPABASE_DATABASE_URL",
+              "SUPABASE_DB_PASSWORD",
+              "NOETFIELD_API_KEY",
+          )
+          for name in required + optional:
+              print(f"{name}={'YES' if os.environ.get(name) else 'NO'}")
+          missing = [name for name in required if not os.environ.get(name)]
+          if missing:
+              print("ERROR: missing required secrets:", ", ".join(missing))
+              sys.exit(1)
+          PY
 
       - name: Enqueue cloud worker inbox
         env:
@@ -35,4 +73,48 @@ jobs:
           NOETFIELD_SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.NOETFIELD_SUPABASE_SERVICE_ROLE_KEY }}
           NOETFIELD_SUPABASE_DATABASE_URL: ${{ secrets.NOETFIELD_SUPABASE_DATABASE_URL }}
           SUPABASE_DB_PASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD }}
-        run: python3 scripts/run_noetfield_factory_loop_v1.py --once
+        run: make autorun-once
+
+      - name: Verify Supabase factory cycle sink
+        env:
+          NOETFIELD_SUPABASE_URL: ${{ secrets.NOETFIELD_SUPABASE_URL }}
+          NOETFIELD_SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.NOETFIELD_SUPABASE_SERVICE_ROLE_KEY }}
+        run: |
+          python3 - <<'PY'
+          import json
+          import os
+          import sys
+          import urllib.request
+          from pathlib import Path
+
+          state_path = Path("docs/run_patches/execution/noetfield_factory_state_v1.json")
+          if not state_path.is_file():
+              print("ERROR: factory state file missing")
+              sys.exit(1)
+          state = json.loads(state_path.read_text(encoding="utf-8"))
+          cycle_status = state.get("last_cycle_result", {}).get("status")
+          sink = state.get("supabase_sink", {})
+          print(f"factory_cycle_status={cycle_status}")
+          print(f"supabase_sink_ok={sink.get('ok')}")
+          if cycle_status != "ok":
+              print("ERROR: factory cycle did not complete with status=ok")
+              sys.exit(1)
+          if not sink.get("ok"):
+              print("ERROR: Supabase sink did not succeed")
+              sys.exit(1)
+
+          base = os.environ["NOETFIELD_SUPABASE_URL"].rstrip("/")
+          key = os.environ["NOETFIELD_SUPABASE_SERVICE_ROLE_KEY"]
+          headers = {
+              "apikey": key,
+              "Authorization": f"Bearer {key}",
+              "Prefer": "count=exact",
+          }
+          req = urllib.request.Request(
+              f"{base}/rest/v1/noetfield_factory_cycle_runs?select=id",
+              headers=headers,
+          )
+          with urllib.request.urlopen(req, timeout=20) as resp:
+              count = resp.headers.get("Content-Range", "*/0").split("/")[-1]
+          print(f"supabase_factory_cycle_count={count}")
+          PY
