@@ -1,0 +1,43 @@
+{
+  "name": "@noetfield/gate",
+  "version": "0.1.0",
+  "description": "TypeScript client for Noetfield GEL POST /v1/decision",
+  "license": "UNLICENSED",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "prepublishOnly": "npm run build"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "keywords": [
+    "noetfield",
+    "gel",
+    "governance",
+    "agents",
+    "policy"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kazemnezhadsina144-dot/noetfeld-os.git",
+    "directory": "packages/gate"
+  },
+  "homepage": "https://www.noetfield.com/gel/",
+  "devDependencies": {
+    "@types/node": "^22.15.0",
+    "typescript": "^5.8.3"
+  }
+}

@@ -27,10 +27,10 @@ locked_at: 2026-07-02
 | PyPI primary email | `operations@noetfield.com` (confirmed) |
 | `www.noetfield.com/about/` | 200 · entity proof under NDA (no Pending publication) |
 | `www.noetfield.com/trust/` | 200 · proof tiers + entity proof under NDA |
-| `www.noetfield.com/gel/` | 200 · **update in progress** — flip to live `noetfield-gate` |
+| `www.noetfield.com/gel/` | 200 · live `noetfield-gate` v0.1.0 on PyPI |
 | `www.noetfield.com/ai-value-governance-os/` | 200 · Visual Polish v1 live |
 | SourceA contract E2E | ALL PASS |
-| `@noetfield/gate` npm | **NOT STARTED** |
+| `@noetfield/gate` npm | **SCAFFOLD** — `packages/gate/` (publish pending) |
 | First real customer proof | **NOT PUBLIC** — synthetic case remains labeled |
 
 ---
@@ -59,19 +59,49 @@ locked_at: 2026-07-02
 
 ---
 
-## Phase B — PyPI org + publish hygiene (when org approved)
+## Phase B — PyPI org + publish hygiene (**DEFERRED — founder 2026-07-03**)
+
+> **SKIP for agents.** Founder handles org approval + token rotation tomorrow.
 
 | Step | Action |
 |------|--------|
 | B-01 | Approve Noetfield PyPI organization |
 | B-02 | Add `operations@noetfield.com` maintainers |
-| B-03 | Transfer or republish `sourcea-boot` + `noetfield-gate` under org |
-| B-04 | Enable GitHub trusted publishing (`publish-pypi.yml`) |
+| B-03 | Transfer or republish packages under org |
+| B-04 | Enable GitHub trusted publishing |
 | B-05 | Revoke old account-scoped PyPI token after trusted publish works |
 
 ---
 
-## Phase C — Commercial proof (highest ROI)
+## Phase A status — **COMPLETE** (2026-07-02)
+
+All A-01 through A-05 closed. Website commit `30320c48`. NOOS commit `7667ccc`.
+
+---
+
+## Phase D — Developer packaging (**IN PROGRESS**)
+
+| Step | Action | Status |
+|------|--------|--------|
+| D-01 | Scaffold `@noetfield/gate` npm package | **DONE** — `packages/gate/` |
+| D-02 | Typed fetch wrapper for `POST /v1/decision` | **DONE** |
+| D-03 | `DecisionReceipt` interface + sample | **DONE** |
+| D-04 | Link `/gel/` to npm when published | Blocked on npm publish |
+
+---
+
+## 300-plan sprint (Phase 4 — active)
+
+| UPG | Item | Status |
+|-----|------|--------|
+| 0021–0028 | GEL 5-min demo script + fixtures + `--sample-block` | **DONE** |
+| 0165–0166 | `@noetfield/gate` npm scaffold | **DONE** |
+| 0184 | Makefile (`make demo`, `make gate`, `make test`) | **DONE** |
+| 0018 | `check_production_urls.sh` | **DONE** |
+| 0001–0007 | NW1/SW1 outbound + W1 video | **Founder** |
+| 0167 | npm publish | After legal/org |
+
+## Phase C — Commercial proof (highest ROI — **NEXT for founder**)
 
 Research report + tracker agree: **public traction is thin; artifact spine is strong.**
 
@@ -81,17 +111,6 @@ Research report + tracker agree: **public traction is thin; artifact spine is st
 | C-02 | Share entity proof under NDA in active diligence | Procurement moves forward |
 | C-03 | Keep synthetic proof case explicitly labeled | No fake customer claims |
 | C-04 | Target: one org uses Board PDF in governance meeting | Research report proof threshold |
-
----
-
-## Phase D — Developer packaging (after Phase A)
-
-| Step | Action | Repo |
-|------|--------|------|
-| D-01 | Scaffold `@noetfield/gate` npm package | noetfeld-os |
-| D-02 | Typed fetch wrapper for `POST /v1/decision` | noetfeld-os |
-| D-03 | `DecisionReceipt` interface + sample | noetfeld-os |
-| D-04 | Link `/gel/` to npm when published | Website |
 
 ---
 
@@ -137,8 +156,9 @@ SOURCEA_E2E_STRICT_NOETFIELD=1 bash scripts/validate-sourcea-contract-pages-e2e-
 
 ## Next action (immediate)
 
-1. **Execute Phase A** — gel + KB + deploy (in progress)
-2. **Stop website churn** until one briefing/pilot is active (Phase C)
-3. **PyPI org** — founder admin tomorrow
+1. **Founder tomorrow:** PyPI org (Phase B) — agents skip
+2. **Founder now:** Phase C — run one Trust Brief / AI Value OS briefing (UPG-0001 motion)
+3. **Agent done this pass:** Phase 4 demo + npm scaffold (UPG-0021–0028, 0165–0166, 0184)
+4. **Optional founder:** `bash scripts/demo-gel-5min-v1.sh` + record W1 video (UPG-0005, 0029)
 
 **Locked by:** noetfeld-os-cursor-chat · 2026-07-02

@@ -1,0 +1,10 @@
+{
+  "applicant_id": "gate-demo-decline",
+  "credit_score": 620,
+  "monthly_debt": 4200.0,
+  "monthly_income": 6000.0,
+  "loan_amount": 350000.0,
+  "collateral_value": 300000.0,
+  "employment_history_years": 1.0,
+  "liquid_reserves_months": 1.0
+}

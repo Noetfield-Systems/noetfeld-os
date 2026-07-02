@@ -8,4 +8,5 @@ api_keys.local.json
 .coverage
 htmlcov/
 dist/
+node_modules/
 *.egg-info/

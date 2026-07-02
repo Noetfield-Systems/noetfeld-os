@@ -21,6 +21,18 @@ SAMPLE_INTENT: dict[str, Any] = {
     "liquid_reserves_months": 6.0,
 }
 
+# Extreme DTI (>0.60 corridor cap) — expect DECLINE from hosted GEL.
+SAMPLE_BLOCK_INTENT: dict[str, Any] = {
+    "applicant_id": "gate-demo-decline",
+    "credit_score": 620,
+    "monthly_debt": 4200.0,
+    "monthly_income": 6000.0,
+    "loan_amount": 350000.0,
+    "collateral_value": 300000.0,
+    "employment_history_years": 1.0,
+    "liquid_reserves_months": 1.0,
+}
+
 
 def api_base() -> str:
     return os.environ.get("NOETFIELD_API_URL", "https://api.noetfield.com").strip().rstrip("/")
@@ -97,6 +109,7 @@ def default_out_path() -> Path:
 
 __all__ = [
     "SAMPLE_INTENT",
+    "SAMPLE_BLOCK_INTENT",
     "post_decision",
     "build_receipt",
     "write_receipt",

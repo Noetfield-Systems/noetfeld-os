@@ -8,7 +8,7 @@ from pathlib import Path
 import pytest
 
 from noetfield_gate.boot import run_gate_checks, write_gate_report
-from noetfield_gate.decide import build_receipt
+from noetfield_gate.decide import SAMPLE_BLOCK_INTENT, build_receipt
 
 
 def test_gate_pass_in_repo(tmp_path, monkeypatch):
@@ -59,3 +59,8 @@ def test_build_receipt_shape():
     receipt = build_receipt(api, intent={"applicant_id": "x"})
     assert receipt["decision"] == "APPROVE"
     assert receipt["schema"] == "noetfield-decision-receipt-v1"
+
+
+def test_sample_block_intent_extreme_dti():
+    dti = SAMPLE_BLOCK_INTENT["monthly_debt"] / SAMPLE_BLOCK_INTENT["monthly_income"]
+    assert dti > 0.60
