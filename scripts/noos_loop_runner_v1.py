@@ -49,6 +49,8 @@ def next_cycle_number(loop_id: str) -> int:
 
 
 def run_cmd(cmd: list[str], *, continue_on_error: bool = False, timeout: int = 600) -> dict[str, Any]:
+    if cmd and cmd[0] == "python3":
+        cmd = [sys.executable, *cmd[1:]]
     try:
         proc = subprocess.run(
             cmd,

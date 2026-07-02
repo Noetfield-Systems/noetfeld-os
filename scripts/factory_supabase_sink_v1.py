@@ -116,6 +116,19 @@ def _post_row(table: str, row: dict[str, Any], *, merge: bool = False) -> dict[s
         return {"ok": False, "status": exc.code, "error": detail[:500]}
 
 
+def _sink_status(cycle: dict[str, Any]) -> str:
+    """Map loop/factory cycle status to Supabase check constraint values."""
+    raw = str(cycle.get("status") or "ok")
+    state = str(cycle.get("state_after") or "")
+    if raw == "ok" or state in ("COMPLETE", "IDLE_NO_WORK"):
+        return "ok"
+    if state in ("FAILED_WITH_RECEIPT", "BLOCKED_WITH_REASON", "TRIAGE_REQUIRED"):
+        return "recoverable_error"
+    if raw == "degraded":
+        return "recoverable_error"
+    return raw if raw in ("recoverable_error", "recoverable_exception") else "recoverable_error"
+
+
 def insert_factory_cycle(cycle: dict[str, Any], *, factory_id: str) -> dict[str, Any]:
     runner = cycle.get("runner_output") or {}
     row = {
@@ -124,7 +137,7 @@ def insert_factory_cycle(cycle: dict[str, Any], *, factory_id: str) -> dict[str,
         "started_at": cycle.get("started_at"),
         "finished_at": cycle.get("finished_at"),
         "exit_code": cycle.get("exit_code"),
-        "status": cycle.get("status") or "ok",
+        "status": _sink_status(cycle),
         "runner_output": runner if isinstance(runner, dict) else {"raw": runner},
         "guardrails": cycle.get("guardrails") or {},
     }
