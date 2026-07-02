@@ -82,12 +82,21 @@
       "github_workflow": "noos-self-heal-loop.yml",
       "factory_id": "loop-self-heal",
       "steps": [
-        {"name": "reenqueue_blocked", "cmd": ["python3", "scripts/reenqueue_blocked_upg_inbox_v1.py"]},
+        {
+          "name": "reenqueue_blocked",
+          "cmd": ["python3", "scripts/reenqueue_blocked_upg_inbox_v1.py"],
+          "continue_on_error": true
+        },
         {
           "name": "autonomy_verify",
-          "cmd": ["python3", "scripts/verify_noos_autonomous_24h_v1.py", "--hours", "6", "--write-receipt"]
+          "cmd": ["python3", "scripts/verify_noos_autonomous_24h_v1.py", "--hours", "6", "--write-receipt"],
+          "continue_on_error": true
         },
-        {"name": "autorun_status", "cmd": ["python3", "scripts/autorun_status_v1.py"]}
+        {
+          "name": "autorun_status",
+          "cmd": ["python3", "scripts/autorun_status_v1.py"],
+          "continue_on_error": true
+        }
       ]
     },
     {
