@@ -70,7 +70,7 @@
         "cf-cron",
         "cloudflare_cron"
       ],
-      "note": "cloudflare_cron is live CF motor; cf-cron is canonical alias"
+      "note": "cf-cron is canonical; cloudflare_cron accepted for legacy rows"
     },
     "invalid_triggers": [
       "manual",
@@ -81,23 +81,24 @@
     "schedule_verify_gates_window": false,
     "primary_motor": "cf-cron \u2192 repository_dispatch"
   },
-  "criteria_aligned_at": "2026-07-02T21:03:59Z",
+  "criteria_aligned_at": "2026-07-02T21:36:28Z",
   "window_progress": {
     "ok": true,
     "window_started_at": "2026-07-02T12:12:50Z",
-    "reported_at": "2026-07-02T21:03:59Z",
-    "row_count": 338,
+    "reported_at": "2026-07-02T21:36:28Z",
+    "row_count": 358,
     "by_trigger_source": {
-      "repository_dispatch": 301,
-      "schedule": 37
+      "repository_dispatch": 319,
+      "repository_dispatch:cf-cron": 1,
+      "schedule": 38
     },
     "by_factory_id": {
       "loop-agent-nerve": 14,
-      "loop-chain": 23,
-      "loop-inbox": 112,
-      "loop-runtime": 41,
-      "loop-self-heal": 59,
-      "loop-surface": 32,
+      "loop-chain": 24,
+      "loop-inbox": 120,
+      "loop-runtime": 45,
+      "loop-self-heal": 62,
+      "loop-surface": 33,
       "noetfield-factory-v1-20260702T122056Z": 1,
       "noetfield-factory-v1-20260702T123054Z": 1,
       "noetfield-factory-v1-20260702T124057Z": 1,
@@ -154,9 +155,20 @@
       "noetfield-factory-v1-20260702T203100Z": 1,
       "noetfield-factory-v1-20260702T204059Z": 1,
       "noetfield-factory-v1-20260702T205058Z": 1,
-      "noetfield-factory-v1-20260702T210058Z": 1
+      "noetfield-factory-v1-20260702T210058Z": 1,
+      "noetfield-factory-v1-20260702T211053Z": 1,
+      "noetfield-factory-v1-20260702T212110Z": 1,
+      "noetfield-factory-v1-20260702T213113Z": 1
     },
-    "autonomous_row_count": 338,
+    "autonomous_row_count": 358,
     "invalid_or_unknown_trigger_count": 0
+  },
+  "loop_evaluations": [],
+  "close_blocker": "window_not_elapsed",
+  "evaluated_at": "2026-07-02T21:36:28Z",
+  "passive_observation": {
+    "observed_at": "2026-07-02T21:36:28Z",
+    "window_elapsed": false,
+    "note": "Passive autonomous run until window_closes_at; no polling"
   }
 }

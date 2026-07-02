@@ -29,8 +29,8 @@
   },
   "summary": {
     "total_items": 63,
-    "done": 39,
-    "open_t1": 8,
+    "done": 40,
+    "open_t1": 7,
     "open_t2": 10,
     "open_t3": 6,
     "deferred_t4": 7,
@@ -50,15 +50,15 @@
     {"id": "LOOP-FLEET", "tier": "T0", "track": "A", "status": "done", "priority": "P0", "owner": "machine", "title": "7 domain loops + CF fleet motor deployed", "success_check": "7 loops dispatch green", "evidence": "data/noos-24-7-loops-v1.json"},
     {"id": "GOV-L7-L12", "tier": "T0", "track": "GOV", "status": "done", "priority": "P0", "owner": "machine", "title": "Governed-autorun v2 cycle receipts + heartbeat", "success_check": "autorun-cycle-receipt-v2 fields present", "evidence": "scripts/noos_loop_runner_v1.py, scripts/noos_loop_heartbeat_v1.py"},
 
-    {"id": "LOOP-VERIFY-ALL", "tier": "T1", "track": "I", "status": "open", "priority": "P0", "owner": "machine", "title": "24h VERIFIED window per loop (schedule-only, zero manual)", "success_check": "7/7 loops DECLARED→VERIFIED", "depends_on": ["A1", "GOV-L7-L12"], "note": "Manual dispatch green ≠ cron green (governed-autorun L109)"},
-    {"id": "LOOP-VERIFY-inbox", "tier": "T1", "track": "I", "status": "open", "priority": "P0", "owner": "machine", "title": "inbox loop 24h VERIFIED", "success_check": "2+ consecutive schedule runs + sink invariant PASS"},
-    {"id": "LOOP-VERIFY-self_heal", "tier": "T1", "track": "I", "status": "open", "priority": "P0", "owner": "machine", "title": "self-heal loop 24h VERIFIED", "success_check": "heartbeat daily + drift 0"},
-    {"id": "LOOP-VERIFY-runtime", "tier": "T1", "track": "I", "status": "open", "priority": "P0", "owner": "machine", "title": "runtime loop 24h VERIFIED", "success_check": "gate+pytest schedule cycles"},
-    {"id": "LOOP-VERIFY-surface", "tier": "T1", "track": "I", "status": "open", "priority": "P0", "owner": "machine", "title": "surface loop 24h VERIFIED", "success_check": "check_production_urls schedule cycles"},
-    {"id": "LOOP-VERIFY-chain", "tier": "T1", "track": "I", "status": "open", "priority": "P0", "owner": "machine", "title": "chain loop 24h VERIFIED", "success_check": "noetfield verify schedule cycles"},
+    {"id": "LOOP-VERIFY-ALL", "tier": "T1", "track": "I", "status": "open", "priority": "P0", "owner": "machine", "title": "24h VERIFIED window per loop (autonomous triggers, zero manual)", "success_check": "7/7 loops DECLARED→VERIFIED via cf-cron dispatch or schedule", "depends_on": ["A1", "GOV-L7-L12"], "note": "make schedule-verify diagnostic only; does not gate window"},
+    {"id": "LOOP-VERIFY-inbox", "tier": "T1", "track": "I", "status": "open", "priority": "P0", "owner": "machine", "title": "inbox loop 24h VERIFIED", "success_check": "24h autonomous cycles + sink invariant PASS"},
+    {"id": "LOOP-VERIFY-self_heal", "tier": "T1", "track": "I", "status": "open", "priority": "P0", "owner": "machine", "title": "self-heal loop 24h VERIFIED", "success_check": "24h autonomous cycles + heartbeat daily + drift 0"},
+    {"id": "LOOP-VERIFY-runtime", "tier": "T1", "track": "I", "status": "open", "priority": "P0", "owner": "machine", "title": "runtime loop 24h VERIFIED", "success_check": "24h autonomous gate+pytest cycles"},
+    {"id": "LOOP-VERIFY-surface", "tier": "T1", "track": "I", "status": "open", "priority": "P0", "owner": "machine", "title": "surface loop 24h VERIFIED", "success_check": "24h autonomous check_production_urls cycles"},
+    {"id": "LOOP-VERIFY-chain", "tier": "T1", "track": "I", "status": "open", "priority": "P0", "owner": "machine", "title": "chain loop 24h VERIFIED", "success_check": "24h autonomous noetfield verify cycles"},
     {"id": "LOOP-VERIFY-sourcea", "tier": "T1", "track": "I", "status": "open", "priority": "P1", "owner": "machine", "title": "sourcea observe loop 24h VERIFIED", "success_check": "observe receipt FRESH", "note": "External SourceA writers may keep STALE until CRON_FIRED"},
-    {"id": "LOOP-VERIFY-agent_nerve", "tier": "T1", "track": "I", "status": "open", "priority": "P1", "owner": "machine", "title": "agent-nerve loop 24h VERIFIED", "success_check": "agent docs check schedule cycles"},
-    {"id": "MERGE-GOV-BRANCH", "tier": "T1", "track": "GOV", "status": "open", "priority": "P0", "owner": "machine", "title": "Merge cursor/governed-autorun + A1/release to main", "success_check": "main has heartbeat + schedule-verify + release workflow", "depends_on": []},
+    {"id": "LOOP-VERIFY-agent_nerve", "tier": "T1", "track": "I", "status": "open", "priority": "P1", "owner": "machine", "title": "agent-nerve loop 24h VERIFIED", "success_check": "24h autonomous agent docs check cycles"},
+    {"id": "MERGE-GOV-BRANCH", "tier": "T1", "track": "GOV", "status": "done", "priority": "P0", "owner": "machine", "title": "Merge cursor/governed-autorun + A1/release to main", "success_check": "main has v3 laws + determinism + PR #9 alignment", "depends_on": [], "evidence": "ff8a932"},
 
     {"id": "UPG-0201", "tier": "T2", "track": "E", "status": "open", "priority": "P1", "owner": "machine", "title": "fly.toml + Dockerfile inbox runner daemon", "success_check": "Fly app /health 200", "depends_on": ["LOOP-VERIFY-inbox"]},
     {"id": "UPG-0202", "tier": "T2", "track": "E", "status": "open", "priority": "P1", "owner": "machine", "title": "Health /ready endpoints on always-on runners", "success_check": "external probe L4 PASS"},
@@ -98,7 +98,7 @@
     {"id": "UPG-0010", "tier": "FOUNDER", "track": "COM", "status": "founder_blocked", "priority": "P2", "owner": "founder", "title": "Founder verify only gate", "success_check": "founder sign-off receipt"}
   ],
   "execution_order": [
-    "T1: MERGE-GOV-BRANCH → LOOP-VERIFY-* (parallel, 24h wall clock each)",
+    "T1: LOOP-VERIFY-* (parallel, 24h wall clock each; cf-cron dispatch valid)",
     "T2: UPG-0201 → UPG-0202 → UPG-0203 → UPG-0205/0206 (parallel) → UPG-0204",
     "T2: UPG-0207 after LOOP-VERIFY-ALL + UPG-0206",
     "T3: SANDBOX-REGISTRY + UPG-0210 + UPG-0211 + UPG-0212",

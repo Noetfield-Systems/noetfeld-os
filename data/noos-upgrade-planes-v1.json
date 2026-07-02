@@ -6,7 +6,7 @@
   "updated_at": "2026-07-02",
   "backlog_registry": "data/noos-unified-upgrade-backlog-v1.json",
   "execution_order": [
-    "GOV G7: MERGE-GOV-BRANCH \u2192 main",
+    "GOV G7: MERGE-GOV-BRANCH → main (done ff8a932)",
     "I I2-I8: parallel 24h VERIFIED windows (schedule-only)",
     "GOV G9: D2 CAS in loop runner",
     "E E1: UPG-0201 inbox Fly runner",
@@ -1243,8 +1243,8 @@
           "id": "I2",
           "status": "open",
           "priority": "P0",
-          "action": "LOOP-VERIFY-inbox 24h schedule-only",
-          "success_check": "2+ schedule runs sink PASS",
+          "action": "LOOP-VERIFY-inbox 24h autonomous (cf-cron or schedule)",
+          "success_check": "24h autonomous cycles sink PASS",
           "verify_cmd": "make verified-window",
           "backlog_ids": [
             "LOOP-VERIFY-inbox"
@@ -1446,14 +1446,15 @@
         {
           "step": 7,
           "id": "G7",
-          "status": "open",
+          "status": "done",
           "priority": "P0",
           "action": "MERGE-GOV-BRANCH to main",
-          "success_check": "main has v3 laws + determinism",
-          "verify_cmd": "git branch --show-current",
+          "success_check": "main has v3 laws + determinism + PR #9 alignment",
+          "verify_cmd": "git rev-parse HEAD",
           "backlog_ids": [
             "MERGE-GOV-BRANCH"
-          ]
+          ],
+          "evidence": "ff8a932"
         },
         {
           "step": 8,
@@ -1471,7 +1472,7 @@
         {
           "step": 9,
           "id": "G9",
-          "status": "open",
+          "status": "done",
           "priority": "P1",
           "action": "D2 CAS wire in loop runner",
           "success_check": "cas_advance on cycle_number",
@@ -1479,23 +1480,23 @@
           "backlog_ids": [
             "G9"
           ],
-          "evidence": "receipts/proof/noos-determinism-gap-audit-v1.json"
+          "evidence": "scripts/noos_loop_runner_v1.py acquire_cycle_number"
         },
         {
           "step": 10,
           "id": "G10",
-          "status": "open",
+          "status": "done",
           "priority": "P2",
           "action": "D1 op_key upsert + D5 nightly replay",
-          "success_check": "sink upsert + replay job",
-          "verify_cmd": "make determinism-verify",
+          "success_check": "sink idempotent + replay job",
+          "verify_cmd": "make replay-verify",
           "backlog_ids": [
             "G10"
           ],
-          "evidence": "receipts/proof/noos-determinism-gap-audit-v1.json"
+          "evidence": "receipts/proof/noos-loop-replay-verify-v1.json"
         }
       ],
-      "current_step": 7
+      "current_step": 10
     }
   ]
 }

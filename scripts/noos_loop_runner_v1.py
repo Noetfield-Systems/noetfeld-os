@@ -18,7 +18,7 @@ SINK = ROOT / "scripts/factory_supabase_sink_v1.py"
 RUNTIME = ROOT / ".noos-runtime/loops"
 
 sys.path.insert(0, str(ROOT / "scripts"))
-from noos_loop_determinism_v1 import advance_state, op_key, transition_allowed  # noqa: E402
+from noos_loop_determinism_v1 import advance_state, cas_advance, op_key, transition_allowed  # noqa: E402
 
 
 def utc_now() -> str:
@@ -40,15 +40,33 @@ def loop_state_path(loop_id: str) -> Path:
     return RUNTIME / loop_id / "state-v1.json"
 
 
-def next_cycle_number(loop_id: str) -> int:
+def acquire_cycle_number(loop_id: str) -> tuple[int | None, dict[str, Any]]:
+    """D2 — CAS on cycle_number before side effects."""
     path = loop_state_path(loop_id)
+    expected = 0
     if path.is_file():
         try:
             state = json.loads(path.read_text(encoding="utf-8"))
-            return int(state.get("cycle_number") or 0) + 1
+            expected = int(state.get("cycle_number") or 0)
         except (OSError, json.JSONDecodeError, ValueError):
-            pass
-    return 1
+            expected = 0
+    observed = expected
+    if path.is_file():
+        try:
+            live = json.loads(path.read_text(encoding="utf-8"))
+            observed = int(live.get("cycle_number") or 0)
+        except (OSError, json.JSONDecodeError, ValueError):
+            observed = expected
+    new_number = observed + 1
+    cas = cas_advance(expected=expected, observed=observed, new_value=new_number)
+    if cas.get("verdict") != "ACCEPTED":
+        return None, {"cas": cas, "reason": "cas_mismatch"}
+    return new_number, {"cas": cas}
+
+
+def next_cycle_number(loop_id: str) -> int:
+    number, _meta = acquire_cycle_number(loop_id)
+    return number if number is not None else 1
 
 
 def run_cmd(cmd: list[str], *, continue_on_error: bool = False, timeout: int = 600) -> dict[str, Any]:
@@ -204,8 +222,27 @@ def execute_loop(loop: dict[str, Any], *, self_heal: bool = True) -> dict[str, A
     loop_id = str(loop["id"])
     event_type = str(loop["event_type"])
     factory_id = str(loop.get("factory_id") or f"loop-{loop_id}")
-    cycle_number = next_cycle_number(loop_id)
+    cycle_number, cas_meta = acquire_cycle_number(loop_id)
     started_at = utc_now()
+    if cycle_number is None:
+        finished_at = utc_now()
+        return {
+            "schema": "noos-24-7-loop-cycle-v1",
+            "receipt_schema": "autorun-cycle-receipt-v2",
+            "loop_id": loop_id,
+            "event_type": event_type,
+            "factory_id": factory_id,
+            "cycle_number": 0,
+            "started_at": started_at,
+            "finished_at": finished_at,
+            "state_before": "RUNNING",
+            "state_after": "BLOCKED_WITH_REASON",
+            "status": "recoverable_error",
+            "exit_code": 1,
+            "blocker_reason": f"cas_rejected:{cas_meta.get('reason')}",
+            "d2": cas_meta,
+            "runner_output": {"cloud_meta": cloud_meta(), "cas": cas_meta},
+        }
 
     step_results: list[dict[str, Any]] = []
     for spec in loop.get("steps") or []:
@@ -305,6 +342,7 @@ def execute_loop(loop: dict[str, Any], *, self_heal: bool = True) -> dict[str, A
             "blocker_reason": blocker_reason,
             "next_action": "await_next_scheduled_tick" if state_after in ("COMPLETE", "IDLE_NO_WORK") else "self_heal_or_triage",
             "d4": {"execute_ok": ok, "validate_ok": validate_ok, "sink_acked": sink_acked},
+            "d2": cas_meta,
             "transition_log_tail": [
                 {
                     "from": state_before,

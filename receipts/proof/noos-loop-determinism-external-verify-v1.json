@@ -1,10 +1,11 @@
 {
   "schema": "external-verify-receipt-v1",
   "runner": "github-action",
-  "verified_at": "2026-07-02T12:28:26Z",
+  "verified_at": "2026-07-02T21:36:28Z",
   "gate": "loop-determinism-v1",
   "ok": true,
   "exit_code": 0,
+  "inline_fallback": null,
   "checks": [
     {
       "id": "D1",
@@ -32,6 +33,6 @@
       "test": "test_illegal_transition_fuzz"
     }
   ],
-  "stdout_tail": "...........                                                              [100%]\n11 passed in 0.01s\n",
+  "stdout_tail": "...........                                                              [100%]\n11 passed in 0.02s\n",
   "stderr_tail": ""
 }

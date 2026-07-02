@@ -146,6 +146,133 @@ def _trigger_from_row(row: dict[str, Any]) -> str:
     return str(event)
 
 
+def fetch_cycle_rows(*, window_started_at: str, factory_id: str | None = None) -> list[dict[str, Any]] | dict[str, Any]:
+    cfg = supabase_cfg()
+    if not cfg:
+        return {"ok": False, "blocker_reason": "supabase_not_configured"}
+    base, key = cfg
+    query: dict[str, str] = {
+        "select": "factory_id,status,exit_code,recorded_at,runner_output",
+        "recorded_at": f"gte.{window_started_at}",
+        "order": "recorded_at.desc",
+        "limit": "500",
+    }
+    if factory_id:
+        query["factory_id"] = f"eq.{factory_id}"
+    params = urllib.parse.urlencode(query)
+    req = urllib.request.Request(
+        f"{base}/rest/v1/noetfield_factory_cycle_runs?{params}",
+        headers={"apikey": key, "Authorization": f"Bearer {key}"},
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=30) as resp:
+            return json.loads(resp.read().decode("utf-8"))
+    except urllib.error.HTTPError as exc:
+        return {"ok": False, "error": exc.read().decode("utf-8", errors="replace")[:300]}
+
+
+def loop_factory_map() -> dict[str, str]:
+    registry = json.loads(REGISTRY.read_text(encoding="utf-8"))
+    return {str(loop["id"]): str(loop.get("factory_id") or f"loop-{loop['id']}") for loop in registry.get("loops") or []}
+
+
+def evaluate_loop(*, loop_id: str, rows: list[dict[str, Any]], min_cycles: int = 2) -> dict[str, Any]:
+    factory_id = loop_factory_map().get(loop_id, f"loop-{loop_id}")
+    loop_rows = [r for r in rows if str(r.get("factory_id")) == factory_id]
+    invalid = 0
+    for row in loop_rows:
+        trig = _trigger_from_row(row)
+        event = trig.split(":")[0]
+        if event in INVALID_TRIGGERS:
+            invalid += 1
+        elif event == "repository_dispatch" and ":" in trig:
+            source = trig.split(":", 1)[1]
+            if source not in VALID_DISPATCH_SOURCES:
+                invalid += 1
+    latest = loop_rows[0] if loop_rows else None
+    sink_ok = bool(latest) and str(latest.get("status") or "") in ("ok", "degraded")
+    ready = len(loop_rows) >= min_cycles and invalid == 0 and sink_ok
+    blockers: list[str] = []
+    if len(loop_rows) < min_cycles:
+        blockers.append(f"insufficient_cycles:{len(loop_rows)}<{min_cycles}")
+    if invalid:
+        blockers.append(f"invalid_triggers:{invalid}")
+    if not sink_ok:
+        blockers.append("latest_sink_not_ok")
+    return {
+        "loop_id": loop_id,
+        "factory_id": factory_id,
+        "cycle_count": len(loop_rows),
+        "invalid_trigger_count": invalid,
+        "latest_status": latest.get("status") if latest else None,
+        "ready": ready,
+        "blockers": blockers,
+    }
+
+
+def parse_ts(value: str) -> datetime:
+    return datetime.fromisoformat(value.replace("Z", "+00:00"))
+
+
+def close_window(*, force: bool = False) -> dict[str, Any]:
+    if not PROOF_RECEIPT.is_file():
+        return {"ok": False, "blocker_reason": "window_receipt_missing"}
+    data = json.loads(PROOF_RECEIPT.read_text(encoding="utf-8"))
+    started_at = data["window_started_at"]
+    closes_at = data["window_closes_at"]
+    now = utc_now()
+    window_elapsed = now >= parse_ts(closes_at)
+    if not window_elapsed and not force:
+        data["window_progress"] = window_report(window_started_at=started_at)
+        data["loop_evaluations"] = []
+        data["close_blocker"] = "window_not_elapsed"
+        data["evaluated_at"] = now.strftime("%Y-%m-%dT%H:%M:%SZ")
+        PROOF_RECEIPT.write_text(json.dumps(data, indent=2) + "\n", encoding="utf-8")
+        return {"ok": False, "blocker_reason": "window_not_elapsed", "window_closes_at": closes_at}
+
+    rows = fetch_cycle_rows(window_started_at=started_at)
+    if isinstance(rows, dict) and not rows.get("ok", True):
+        return rows
+
+    evaluations = [evaluate_loop(loop_id=str(loop["loop_id"]), rows=rows) for loop in data.get("loops") or []]
+    verified_at = now.strftime("%Y-%m-%dT%H:%M:%SZ")
+    all_ready = all(ev["ready"] for ev in evaluations)
+    for loop_entry, ev in zip(data.get("loops") or [], evaluations, strict=False):
+        if ev["ready"] and (window_elapsed or force):
+            loop_entry["verification_state"] = "VERIFIED"
+            loop_entry["verified_at"] = verified_at
+        loop_entry["evaluation"] = ev
+
+    data["loop_evaluations"] = evaluations
+    data["window_progress"] = window_report(window_started_at=started_at)
+    data["evaluated_at"] = verified_at
+    data.pop("close_blocker", None)
+    if all_ready and (window_elapsed or force):
+        data["overall_state"] = "VERIFIED"
+        data["verified_at"] = verified_at
+        close_proof = proof_receipt("noos-loop-verified-window-close-v1.json")
+        close_row = {
+            "schema": "noos-loop-verified-window-close-v1",
+            "closed_at": verified_at,
+            "overall_state": "VERIFIED",
+            "loops_verified": sum(1 for loop in data.get("loops") or [] if loop.get("verification_state") == "VERIFIED"),
+            "loop_count": data.get("loop_count"),
+            "window_started_at": started_at,
+            "window_closes_at": closes_at,
+        }
+        close_proof.write_text(json.dumps(close_row, indent=2) + "\n", encoding="utf-8")
+        data["close_receipt_path"] = str(close_proof.relative_to(ROOT))
+    else:
+        data["overall_state"] = "DECLARED"
+        data["close_blocker"] = "loops_not_ready" if not all_ready else "window_not_elapsed"
+
+    PROOF_RECEIPT.write_text(json.dumps(data, indent=2) + "\n", encoding="utf-8")
+    data["receipt_path"] = str(PROOF_RECEIPT.relative_to(ROOT))
+    data["receipt_tier"] = "proof"
+    data["ok"] = data["overall_state"] == "VERIFIED"
+    return data
+
+
 def window_report(*, window_started_at: str) -> dict[str, Any]:
     cfg = supabase_cfg()
     if not cfg:
@@ -216,6 +343,12 @@ def align_existing_receipt() -> dict[str, Any]:
     data["criteria_aligned_at"] = utc_now().strftime("%Y-%m-%dT%H:%M:%SZ")
     report = window_report(window_started_at=data["window_started_at"])
     data["window_progress"] = report
+    closes_at = data.get("window_closes_at", "")
+    data["passive_observation"] = {
+        "observed_at": utc_now().strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "window_elapsed": bool(closes_at) and utc_now() >= parse_ts(closes_at),
+        "note": "Passive autonomous run until window_closes_at; no polling",
+    }
     PROOF_RECEIPT.write_text(json.dumps(data, indent=2) + "\n", encoding="utf-8")
     data["receipt_path"] = str(PROOF_RECEIPT.relative_to(ROOT))
     data["receipt_tier"] = "proof"
@@ -227,12 +360,15 @@ def main() -> int:
     ap.add_argument("--merge-sha", help="Merge commit SHA (default: HEAD)")
     ap.add_argument("--write-receipt", action="store_true")
     ap.add_argument("--align-criteria", action="store_true", help="Patch existing window receipt criteria + progress")
+    ap.add_argument("--close-window", action="store_true", help="Evaluate loops; VERIFIED when window elapsed + gates pass")
     ap.add_argument("--window-report", action="store_true", help="Print trigger_source counts for open window")
     ap.add_argument("--json", action="store_true")
     args = ap.parse_args()
 
     if args.align_criteria:
         row = align_existing_receipt()
+    elif args.close_window:
+        row = close_window()
     elif args.window_report:
         if not PROOF_RECEIPT.is_file():
             print(json.dumps({"ok": False, "blocker_reason": "window_receipt_missing"}))
@@ -249,7 +385,7 @@ def main() -> int:
     if args.json:
         print(json.dumps(row, indent=2))
     else:
-        if args.window_report or args.align_criteria:
+        if args.window_report or args.align_criteria or args.close_window:
             print(f"rows={row.get('row_count', 0)} triggers={row.get('by_trigger_source', {})}")
         else:
             print(

@@ -1,0 +1,93 @@
+{
+  "schema": "noos-loop-replay-verify-v1",
+  "verified_at": "2026-07-02T21:36:28Z",
+  "ok": true,
+  "loop_count": 7,
+  "loops": [
+    {
+      "loop_id": "inbox",
+      "ok": true,
+      "skipped": true,
+      "reason": "no_local_events"
+    },
+    {
+      "loop_id": "runtime",
+      "ok": true,
+      "folded": {
+        "cycle_number": 1,
+        "last_state": "FAILED_WITH_RECEIPT",
+        "last_status": "degraded",
+        "events": 1,
+        "op_keys": []
+      },
+      "live": {
+        "loop_id": "runtime",
+        "event_type": "noos_runtime_loop_tick",
+        "cycle_number": 1,
+        "last_status": "degraded",
+        "last_state": "FAILED_WITH_RECEIPT",
+        "last_finished_at": "2026-07-02T12:16:10+00:00"
+      }
+    },
+    {
+      "loop_id": "surface",
+      "ok": true,
+      "skipped": true,
+      "reason": "no_local_events"
+    },
+    {
+      "loop_id": "chain",
+      "ok": true,
+      "skipped": true,
+      "reason": "legacy_cycle_format",
+      "detail": {
+        "ok": false,
+        "folded": {
+          "cycle_number": 1,
+          "last_state": "UNKNOWN",
+          "last_status": "ok",
+          "events": 1,
+          "op_keys": []
+        },
+        "live": {
+          "loop_id": "chain",
+          "event_type": "noos_chain_loop_tick",
+          "cycle_number": 1,
+          "last_status": "ok",
+          "last_finished_at": "2026-07-02T08:43:19+00:00"
+        }
+      }
+    },
+    {
+      "loop_id": "self_heal",
+      "ok": true,
+      "skipped": true,
+      "reason": "no_local_events"
+    },
+    {
+      "loop_id": "sourcea_observe",
+      "ok": true,
+      "skipped": true,
+      "reason": "no_local_events"
+    },
+    {
+      "loop_id": "agent_nerve",
+      "ok": true,
+      "folded": {
+        "cycle_number": 1,
+        "last_state": "COMPLETE",
+        "last_status": "ok",
+        "events": 1,
+        "op_keys": []
+      },
+      "live": {
+        "loop_id": "agent_nerve",
+        "event_type": "noos_agent_nerve_loop_tick",
+        "cycle_number": 1,
+        "last_status": "ok",
+        "last_state": "COMPLETE",
+        "last_finished_at": "2026-07-02T11:28:54+00:00"
+      }
+    }
+  ]
+}

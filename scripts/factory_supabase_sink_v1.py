@@ -10,7 +10,7 @@ import urllib.error
 import urllib.request
 from pathlib import Path
 from typing import Any
-from urllib.parse import quote_plus
+from urllib.parse import quote_plus, urlencode
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from cloud_inbox_constants_v1 import PRESERVED_INBOX_STATUSES
@@ -132,9 +132,20 @@ def _sink_status(cycle: dict[str, Any]) -> str:
 
 def insert_factory_cycle(cycle: dict[str, Any], *, factory_id: str) -> dict[str, Any]:
     runner = cycle.get("runner_output") or {}
+    cycle_number = int(cycle.get("cycle_number") or 0)
+    op_key_val = str(cycle.get("op_key") or "")
+    existing = _get_factory_cycle(factory_id=factory_id, cycle_number=cycle_number)
+    if existing:
+        return {
+            "ok": True,
+            "idempotent": True,
+            "merged": True,
+            "id": existing.get("id"),
+            "op_key": op_key_val or None,
+        }
     row = {
         "factory_id": factory_id,
-        "cycle_number": int(cycle.get("cycle_number") or 0),
+        "cycle_number": cycle_number,
         "started_at": cycle.get("started_at"),
         "finished_at": cycle.get("finished_at"),
         "exit_code": cycle.get("exit_code"),
@@ -142,7 +153,35 @@ def insert_factory_cycle(cycle: dict[str, Any], *, factory_id: str) -> dict[str,
         "runner_output": runner if isinstance(runner, dict) else {"raw": runner},
         "guardrails": cycle.get("guardrails") or {},
     }
-    return _post_row("noetfield_factory_cycle_runs", row)
+    result = _post_row("noetfield_factory_cycle_runs", row)
+    if op_key_val:
+        result["op_key"] = op_key_val
+    return result
+
+
+def _get_factory_cycle(*, factory_id: str, cycle_number: int) -> dict[str, Any] | None:
+    cfg = _supabase_config()
+    if not cfg:
+        return None
+    base, key = cfg
+    params = urlencode(
+        {
+            "select": "id,factory_id,cycle_number,status",
+            "factory_id": f"eq.{factory_id}",
+            "cycle_number": f"eq.{cycle_number}",
+            "limit": "1",
+        }
+    )
+    req = urllib.request.Request(
+        f"{base}/rest/v1/noetfield_factory_cycle_runs?{params}",
+        headers={"apikey": key, "Authorization": f"Bearer {key}"},
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=30) as resp:
+            rows = json.loads(resp.read().decode("utf-8"))
+            return rows[0] if rows else None
+    except urllib.error.HTTPError:
+        return None
 
 
 def _get_inbox_item(item_id: str) -> dict[str, Any] | None:
