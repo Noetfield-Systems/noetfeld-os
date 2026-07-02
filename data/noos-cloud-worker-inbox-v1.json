@@ -1,0 +1,114 @@
+{
+  "schema": "noos-cloud-worker-inbox-v1",
+  "lane": "NOETFELD-OS",
+  "saved_at": "2026-07-02T04:00:41+00:00",
+  "one_law": "Cloud Workers consume worker_inbox_queue on Supabase; factory autorun every 10 min.",
+  "plan_trace_id": "NOOS-AGENT-20260615-014",
+  "completed_steps_count": 23,
+  "items": [
+    {
+      "item_id": "UPG-0151",
+      "priority": "P1",
+      "title": "PyPI package metadata polish \u2014 classifiers, project URLs",
+      "source_trace": "NOOS-AGENT-20260615-014",
+      "payload": {
+        "upg": "UPG-0151",
+        "phase": 4,
+        "repo": "noetfeld-os"
+      },
+      "status": "pending",
+      "lane": "NOETFELD-OS"
+    },
+    {
+      "item_id": "UPG-0152",
+      "priority": "P1",
+      "title": "noetfield gate --json stdout mode for CI",
+      "source_trace": "NOOS-AGENT-20260615-014",
+      "payload": {
+        "upg": "UPG-0152",
+        "phase": 4,
+        "repo": "noetfeld-os"
+      },
+      "status": "pending",
+      "lane": "NOETFELD-OS"
+    },
+    {
+      "item_id": "UPG-0153",
+      "priority": "P1",
+      "title": "noetfield gate --strict fails on skipped API check when URL set",
+      "source_trace": "NOOS-AGENT-20260615-014",
+      "payload": {
+        "upg": "UPG-0153",
+        "phase": 4,
+        "repo": "noetfeld-os"
+      },
+      "status": "pending",
+      "lane": "NOETFELD-OS"
+    },
+    {
+      "item_id": "UPG-0156",
+      "priority": "P1",
+      "title": "noetfield decide --file schema validation against OpenAPI",
+      "source_trace": "NOOS-AGENT-20260615-014",
+      "payload": {
+        "upg": "UPG-0156",
+        "phase": 4,
+        "repo": "noetfeld-os"
+      },
+      "status": "pending",
+      "lane": "NOETFELD-OS"
+    },
+    {
+      "item_id": "UPG-0158",
+      "priority": "P1",
+      "title": "noetfield verify subcommand \u2014 chain + signature + gate report",
+      "source_trace": "NOOS-AGENT-20260615-014",
+      "payload": {
+        "upg": "UPG-0158",
+        "phase": 4,
+        "repo": "noetfeld-os"
+      },
+      "status": "pending",
+      "lane": "NOETFELD-OS"
+    },
+    {
+      "item_id": "UPG-0101",
+      "priority": "P2",
+      "title": "TLE export bundle \u2014 procurement ZIP endpoint scaffold",
+      "source_trace": "NOOS-AGENT-20260615-014",
+      "payload": {
+        "upg": "UPG-0101",
+        "phase": 3,
+        "repo": "noetfeld-os"
+      },
+      "status": "pending",
+      "lane": "NOETFELD-OS"
+    },
+    {
+      "item_id": "UPG-0191",
+      "priority": "P2",
+      "title": "GitHub Actions \u2014 pytest on push (extend gel-ci)",
+      "source_trace": "NOOS-AGENT-20260615-014",
+      "payload": {
+        "upg": "UPG-0191",
+        "phase": 4,
+        "repo": "noetfeld-os"
+      },
+      "status": "pending",
+      "lane": "NOETFELD-OS"
+    },
+    {
+      "item_id": "NOOS-C-01",
+      "priority": "P0",
+      "title": "Founder: first Trust Brief / AI Value OS briefing",
+      "source_trace": "NOOS-AGENT-20260702-024",
+      "payload": {
+        "phase": "C",
+        "owner": "founder",
+        "lane": "commercial"
+      },
+      "status": "pending",
+      "lane": "NOETFELD-OS"
+    }
+  ]
+}

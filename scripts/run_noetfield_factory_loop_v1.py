@@ -26,6 +26,7 @@ FACTORY_STATE = EXECUTION_DIR / "noetfield_factory_state_v1.json"
 FACTORY_HEARTBEAT = EXECUTION_DIR / "noetfield_factory_heartbeat_v1.json"
 FACTORY_LOG = EXECUTION_DIR / "noetfield_factory_cycles_v1.jsonl"
 MANIFEST_PATH = ROOT / "docs/run_patches/noetfield_run_patch_manifest_10100_v1.json"
+SINK_SCRIPT = ROOT / "scripts/factory_supabase_sink_v1.py"
 
 
 def utc_now() -> str:
@@ -54,6 +55,41 @@ def parse_runner_output(output: str) -> dict[str, Any]:
         else:
             parsed[key] = value
     return parsed
+
+
+def sink_cycle_to_supabase(cycle: dict[str, Any], *, factory_id: str) -> dict[str, Any]:
+    if not SINK_SCRIPT.is_file():
+        return {"ok": False, "skipped": True, "reason": "sink_script_missing"}
+    import os
+    import tempfile
+
+    if not (
+        os.environ.get("NOETFIELD_SUPABASE_URL")
+        or os.environ.get("SUPABASE_URL")
+        or os.environ.get("SUPABASE_DB_PASSWORD")
+        or os.environ.get("NOETFIELD_SUPABASE_DB_PASSWORD")
+    ):
+        return {"ok": False, "skipped": True, "reason": "supabase_not_configured"}
+    with tempfile.NamedTemporaryFile("w", suffix=".json", delete=False, encoding="utf-8") as tmp:
+        json.dump(cycle, tmp, ensure_ascii=True)
+        tmp_path = tmp.name
+    try:
+        completed = subprocess.run(
+            ["python3", str(SINK_SCRIPT), "cycle", tmp_path, "--factory-id", factory_id],
+            cwd=ROOT,
+            capture_output=True,
+            text=True,
+            check=False,
+            timeout=45,
+        )
+        if completed.stdout.strip():
+            try:
+                return json.loads(completed.stdout.strip())
+            except json.JSONDecodeError:
+                return {"ok": completed.returncode == 0, "raw": completed.stdout.strip()}
+        return {"ok": False, "stderr": completed.stderr.strip()[:300]}
+    finally:
+        Path(tmp_path).unlink(missing_ok=True)
 
 
 def update_manifest(factory_state: dict[str, Any]) -> None:
@@ -142,6 +178,7 @@ def main() -> int:
             }
 
         append_jsonl(FACTORY_LOG, last_cycle)
+        supabase_sink = sink_cycle_to_supabase(last_cycle, factory_id=factory_id)
         state = {
             "factory_id": factory_id,
             "status": "running" if not max_cycles or cycle_count < max_cycles else "completed_bounded_run",
@@ -150,6 +187,7 @@ def main() -> int:
             "interval_seconds": args.interval_seconds,
             "cycle_count": cycle_count,
             "last_cycle_result": last_cycle,
+            "supabase_sink": supabase_sink,
             "guardrails": {
                 "repo_env_read": False,
                 "secret_values_printed": False,
