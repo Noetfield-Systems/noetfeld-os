@@ -78,6 +78,7 @@
     {"id": "SANDBOX-REGISTRY", "tier": "T3", "track": "I", "status": "open", "priority": "P2", "owner": "machine", "title": "8-sandbox fleet registry (inbox, chain, surface, sourcea, improve, gel-api, www, cf)", "success_check": "one row per sandbox in autorun-workflows"},
 
     {"id": "UPG-0213", "tier": "T4", "track": "E", "status": "deferred", "priority": "P3", "owner": "machine", "title": "Migrate gel-api Railway → Fly (optional)", "success_check": "api.noetfield.com L4 verify post-migrate", "depends_on": ["UPG-0203", "UPG-0204"], "note": "Only if Railway drift/cost hurts"},
+    {"id": "UPG-0214", "tier": "T3", "track": "GOV", "status": "open", "priority": "P2", "owner": "machine", "title": "Determinism CI gate (D5 replay, D1 idempotency, D2 CAS, illegal transitions)", "success_check": "gel-ci determinism test job green", "depends_on": ["GOV-L7-L12"], "note": "governed-autorun v3 L13"},
     {"id": "UPG-0167", "tier": "T4", "track": "D", "status": "blocked", "priority": "P3", "owner": "founder", "title": "npm @noetfield/gate publish", "success_check": "npm registry 200", "blocker": "legal/org"},
     {"id": "UPG-0174", "tier": "T4", "track": "D", "status": "blocked", "priority": "P3", "owner": "founder", "title": "Production secrets/API-key vault policy", "success_check": "vault policy doc locked"},
     {"id": "UPG-0175", "tier": "T4", "track": "D", "status": "blocked", "priority": "P3", "owner": "founder", "title": "Production policy pack semver pinning", "success_check": "policy pack version locked"},

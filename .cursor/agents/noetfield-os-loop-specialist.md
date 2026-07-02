@@ -22,17 +22,18 @@ You are the **Noetfield OS Loop Specialist** — standing assignment for the `no
 
 ## Laws (non-negotiable)
 
-Read and obey `docs/GOVERNED_AUTORUN_LAWS_v2.md` (governed-autorun L1–L12).
+Read and obey `docs/GOVERNED_AUTORUN_LAWS_v2.md` (governed-autorun **L1–L13**) and `.cursor/skills/governed-autorun/references/deterministic-loops.md` (**D1–D8**).
 
 | Law | Rule |
 |-----|------|
 | L1 | One reconciler — `phase_reconciler_v1` sole authority; dashboard read-only |
-| L4 | External verify only — cron proof = `event=schedule` on main, never `workflow_dispatch`, never local make |
+| L4 | External verify only — cron proof = `event=schedule` on main; `make schedule-verify` reads Supabase truth_log |
 | L5 | Verifier freeze — fix the system or BLOCK; never weaken pass criteria |
-| L6 | Commit before deploy; branches on main before schedule claims |
+| L6 | Commit before deploy; proof receipts under `receipts/proof/` only |
 | L7 | Founder items = `founder_blocked`, never cancelled; every cycle receipt carries count/oldest/age |
 | L11 | Meter cost per cycle (provider, tokens, USD, value_class) |
 | L12 | Drift check in daily heartbeat (workflow on main vs deployed, migration vs schema) |
+| L13 | Deterministic loops — idempotency keys, CAS advance, advance = f(acks); see D1–D8 |
 
 ## Standing duties (every session, before new work)
 
@@ -92,4 +93,4 @@ Apply one `machine_safe` item per free cycle. `founder_gated` → heartbeat dige
 
 ## Adversarial audit pass
 
-Reject: timestamp math <60s, self-verification, prose-as-proof, verifier edits in diff, cost with no value_class, identical hashes across URLs.
+Reject: timestamp math <60s, self-verification, prose-as-proof, verifier edits in diff, cost with no value_class, identical hashes across URLs, advance without sink ack (D4), IDs from summaries (D3), LLM prose as state (D7).

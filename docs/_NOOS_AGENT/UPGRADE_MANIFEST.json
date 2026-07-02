@@ -79,7 +79,7 @@
     "commercial_c01": "Phase C — first Trust Brief / AI Value OS briefing"
   },
   "updated_at": "2026-07-02",
-  "notes": "Unified tiered backlog NOOS-AGENT-20260702-027. T1: 24/7 loop VERIFIED windows. T2: Fly-plane UPG-0201–0207.",
+  "notes": "Governed-autorun v3 skill (L13 + D1–D8). Unified tiered backlog NOOS-AGENT-20260702-027. T1: 24/7 loop VERIFIED windows.",
   "unified_backlog": "data/noos-unified-upgrade-backlog-v1.json",
   "unified_plan_trace_id": "NOOS-AGENT-20260702-027",
   "backlog_tiers": {
@@ -106,7 +106,8 @@
     "UPG-0210",
     "UPG-0211",
     "UPG-0212",
-    "UPG-0213"
+    "UPG-0213",
+    "UPG-0214"
   ],
   "evidence": {
     "UPG-0008": "PRODUCT_TRUTH.md: www.noetfield.com 200",
