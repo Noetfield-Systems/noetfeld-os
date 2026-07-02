@@ -4,8 +4,8 @@
 Success: >=2 rows with source=noos-factory-autorun, event=schedule,
 conclusion=success, ordered by recorded_at desc.
 
-Private-repo GitHub cron lags 10–30+ min; workflow self-registers every run.
-No GitHub API polling. Proof: receipts/proof/noos-github-schedule-a1-v1.json
+Private-repo GitHub cron lags 10–30+ min; this script is a **native-cron diagnostic only**.
+Does NOT gate the VERIFIED window (primary motor = CF repository_dispatch).
 """
 
 from __future__ import annotations

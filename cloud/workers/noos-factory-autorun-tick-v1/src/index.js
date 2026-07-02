@@ -32,7 +32,7 @@ async function dispatchFactoryAutorun(env, meta = {}) {
     body: JSON.stringify({
       event_type: EVENT_TYPE,
       client_payload: {
-        source: meta.source || "cloudflare_cron",
+        source: meta.source || "cf-cron",
         at: new Date().toISOString(),
         ...meta,
       },
@@ -54,7 +54,7 @@ export default {
   async scheduled(event, env, ctx) {
     ctx.waitUntil(
       dispatchFactoryAutorun(env, {
-        source: "cloudflare_cron",
+        source: "cf-cron",
         cron: event?.cron || "*/10 * * * *",
       }),
     );

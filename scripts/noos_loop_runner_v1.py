@@ -111,11 +111,13 @@ def sink_cycle(cycle: dict[str, Any], *, factory_id: str) -> dict[str, Any]:
 
 
 def cloud_meta() -> dict[str, Any]:
+    dispatch_source = os.environ.get("DISPATCH_SOURCE", "").strip()
     return {
         "processor": "noos_loop_runner_v1",
         "github_event": os.environ.get("GITHUB_EVENT_NAME"),
         "github_run_id": os.environ.get("GITHUB_RUN_ID"),
         "github_workflow": os.environ.get("GITHUB_WORKFLOW"),
+        "dispatch_source": dispatch_source or None,
         "processed_at": utc_now(),
     }
 

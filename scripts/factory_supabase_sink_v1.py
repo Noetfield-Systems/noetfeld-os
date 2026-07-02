@@ -117,16 +117,17 @@ def _post_row(table: str, row: dict[str, Any], *, merge: bool = False) -> dict[s
 
 
 def _sink_status(cycle: dict[str, Any]) -> str:
-    """Map loop/factory cycle status to Supabase check constraint values."""
+    """Write true cycle status to Supabase (D5 — no alias flattening)."""
     raw = str(cycle.get("status") or "ok")
+    allowed = frozenset({"ok", "degraded", "recoverable_error", "recoverable_exception"})
+    if raw in allowed:
+        return raw
     state = str(cycle.get("state_after") or "")
-    if raw == "ok" or state in ("COMPLETE", "IDLE_NO_WORK"):
+    if state in ("COMPLETE", "IDLE_NO_WORK"):
         return "ok"
-    if state in ("FAILED_WITH_RECEIPT", "BLOCKED_WITH_REASON", "TRIAGE_REQUIRED"):
-        return "recoverable_error"
-    if raw == "degraded":
-        return "recoverable_error"
-    return raw if raw in ("recoverable_error", "recoverable_exception") else "recoverable_error"
+    if state in ("FAILED_WITH_RECEIPT", "BLOCKED_WITH_REASON", "TRIAGE_REQUIRED") or raw == "degraded":
+        return "degraded"
+    return "recoverable_error"
 
 
 def insert_factory_cycle(cycle: dict[str, Any], *, factory_id: str) -> dict[str, Any]:

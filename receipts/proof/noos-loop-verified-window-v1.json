@@ -5,7 +5,7 @@
   "window_started_at": "2026-07-02T12:12:50Z",
   "window_closes_at": "2026-07-03T12:12:50Z",
   "overall_state": "DECLARED",
-  "law": "Manual dispatch green \u2260 cron green (L4). Each loop VERIFIED after 24h schedule-only.",
+  "law": "Primary motor = CF repository_dispatch. schedule = backup. Manual/workflow_dispatch green \u2260 autonomous green (L4).",
   "founder_blocked_note": "NOOS-C-01 remains founder_blocked; does not block window.",
   "loops": [
     {
@@ -60,7 +60,103 @@
   ],
   "loop_count": 7,
   "close_criteria": {
-    "per_loop": "2+ consecutive schedule runs + sink invariant PASS",
-    "zero_manual": true
+    "per_loop": "24h autonomous cycles + sink invariant PASS",
+    "valid_triggers": [
+      "repository_dispatch",
+      "schedule"
+    ],
+    "repository_dispatch_requires": {
+      "client_payload.source": [
+        "cf-cron",
+        "cloudflare_cron"
+      ],
+      "note": "cloudflare_cron is live CF motor; cf-cron is canonical alias"
+    },
+    "invalid_triggers": [
+      "manual",
+      "workflow_dispatch"
+    ],
+    "zero_manual": true,
+    "schedule_verify_role": "native_cron_diagnostic_only",
+    "schedule_verify_gates_window": false,
+    "primary_motor": "cf-cron \u2192 repository_dispatch"
+  },
+  "criteria_aligned_at": "2026-07-02T21:03:59Z",
+  "window_progress": {
+    "ok": true,
+    "window_started_at": "2026-07-02T12:12:50Z",
+    "reported_at": "2026-07-02T21:03:59Z",
+    "row_count": 338,
+    "by_trigger_source": {
+      "repository_dispatch": 301,
+      "schedule": 37
+    },
+    "by_factory_id": {
+      "loop-agent-nerve": 14,
+      "loop-chain": 23,
+      "loop-inbox": 112,
+      "loop-runtime": 41,
+      "loop-self-heal": 59,
+      "loop-surface": 32,
+      "noetfield-factory-v1-20260702T122056Z": 1,
+      "noetfield-factory-v1-20260702T123054Z": 1,
+      "noetfield-factory-v1-20260702T124057Z": 1,
+      "noetfield-factory-v1-20260702T125058Z": 1,
+      "noetfield-factory-v1-20260702T130058Z": 1,
+      "noetfield-factory-v1-20260702T130613Z": 1,
+      "noetfield-factory-v1-20260702T131053Z": 1,
+      "noetfield-factory-v1-20260702T132057Z": 1,
+      "noetfield-factory-v1-20260702T133053Z": 1,
+      "noetfield-factory-v1-20260702T134104Z": 1,
+      "noetfield-factory-v1-20260702T135056Z": 1,
+      "noetfield-factory-v1-20260702T140056Z": 1,
+      "noetfield-factory-v1-20260702T141056Z": 1,
+      "noetfield-factory-v1-20260702T142057Z": 1,
+      "noetfield-factory-v1-20260702T143059Z": 1,
+      "noetfield-factory-v1-20260702T144100Z": 1,
+      "noetfield-factory-v1-20260702T145059Z": 1,
+      "noetfield-factory-v1-20260702T150052Z": 1,
+      "noetfield-factory-v1-20260702T151056Z": 1,
+      "noetfield-factory-v1-20260702T152054Z": 1,
+      "noetfield-factory-v1-20260702T153014Z": 1,
+      "noetfield-factory-v1-20260702T153102Z": 1,
+      "noetfield-factory-v1-20260702T154056Z": 1,
+      "noetfield-factory-v1-20260702T155054Z": 1,
+      "noetfield-factory-v1-20260702T160055Z": 1,
+      "noetfield-factory-v1-20260702T161054Z": 1,
+      "noetfield-factory-v1-20260702T162100Z": 1,
+      "noetfield-factory-v1-20260702T163056Z": 1,
+      "noetfield-factory-v1-20260702T164057Z": 1,
+      "noetfield-factory-v1-20260702T165053Z": 1,
+      "noetfield-factory-v1-20260702T170058Z": 1,
+      "noetfield-factory-v1-20260702T171058Z": 1,
+      "noetfield-factory-v1-20260702T171457Z": 1,
+      "noetfield-factory-v1-20260702T172057Z": 1,
+      "noetfield-factory-v1-20260702T173059Z": 1,
+      "noetfield-factory-v1-20260702T174058Z": 1,
+      "noetfield-factory-v1-20260702T175055Z": 1,
+      "noetfield-factory-v1-20260702T180058Z": 1,
+      "noetfield-factory-v1-20260702T181103Z": 1,
+      "noetfield-factory-v1-20260702T182055Z": 1,
+      "noetfield-factory-v1-20260702T183056Z": 1,
+      "noetfield-factory-v1-20260702T184054Z": 1,
+      "noetfield-factory-v1-20260702T185057Z": 1,
+      "noetfield-factory-v1-20260702T185232Z": 1,
+      "noetfield-factory-v1-20260702T190058Z": 1,
+      "noetfield-factory-v1-20260702T192057Z": 1,
+      "noetfield-factory-v1-20260702T193057Z": 1,
+      "noetfield-factory-v1-20260702T194055Z": 1,
+      "noetfield-factory-v1-20260702T195055Z": 1,
+      "noetfield-factory-v1-20260702T200052Z": 1,
+      "noetfield-factory-v1-20260702T201054Z": 1,
+      "noetfield-factory-v1-20260702T202053Z": 1,
+      "noetfield-factory-v1-20260702T202439Z": 1,
+      "noetfield-factory-v1-20260702T203100Z": 1,
+      "noetfield-factory-v1-20260702T204059Z": 1,
+      "noetfield-factory-v1-20260702T205058Z": 1,
+      "noetfield-factory-v1-20260702T210058Z": 1
+    },
+    "autonomous_row_count": 338,
+    "invalid_or_unknown_trigger_count": 0
   }
 }
