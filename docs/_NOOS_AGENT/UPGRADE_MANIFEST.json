@@ -80,8 +80,9 @@
     "commercial_c01": "Phase C — first Trust Brief / AI Value OS briefing"
   },
   "updated_at": "2026-07-02",
-  "notes": "Governed-autorun v3 skill (L13 + D1–D8). Unified tiered backlog NOOS-AGENT-20260702-027. T1: 24/7 loop VERIFIED windows.",
+  "notes": "Ten upgrade planes NOOS-AGENT-20260702-028. Governed-autorun v3 skill (L13 + D1–D8). Unified tiered backlog NOOS-AGENT-20260702-027. T1: 24/7 loop VERIFIED windows.",
   "unified_backlog": "data/noos-unified-upgrade-backlog-v1.json",
+  "upgrade_planes": "data/noos-upgrade-planes-v1.json",
   "unified_plan_trace_id": "NOOS-AGENT-20260702-027",
   "backlog_tiers": {
     "T0_closed": 13,

@@ -2,6 +2,7 @@
   "schema": "noos-unified-upgrade-backlog-v1",
   "version": "1.0.0",
   "authority": "NOOS-AGENT-20260702-027",
+  "planes_registry": "data/noos-upgrade-planes-v1.json",
   "governed_by": "governed-autorun L1-L12",
   "updated_at": "2026-07-02",
   "current_phase": 4,

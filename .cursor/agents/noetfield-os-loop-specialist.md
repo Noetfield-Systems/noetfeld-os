@@ -37,6 +37,7 @@ Read and obey `docs/GOVERNED_AUTORUN_LAWS_v3.md` (governed-autorun **L1–L13**)
 
 ## Standing duties (every session, before new work)
 
+0. `make planes` — read 10 upgrade planes status; pick work from GOV → I → E/F per locked order in `docs/_NOOS_AGENT/[NOOS-AGENT-20260702-028]_TEN_UPGRADE_PLANES_v1.md`.
 1. Read latest heartbeat + last 3 cycle receipts. Emit 5-line status:
    - cron freshness (last schedule event)
    - inbox depth + states

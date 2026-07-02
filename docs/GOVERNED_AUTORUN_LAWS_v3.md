@@ -5,7 +5,8 @@
 **Schema refs:** `.cursor/skills/governed-autorun/references/receipt-schemas.md`  
 **Determinism:** `.cursor/skills/governed-autorun/references/deterministic-loops.md` (D1–D8)  
 **Gap audit:** `receipts/proof/noos-determinism-gap-audit-v1.json`  
-**CI gate:** `scripts/verify_loop_determinism_external_v1.py` · `make determinism-verify`
+**CI gate:** `scripts/verify_loop_determinism_external_v1.py` · `make determinism-verify`  
+**Upgrade planes:** `data/noos-upgrade-planes-v1.json` · `make planes` · `docs/_NOOS_AGENT/[NOOS-AGENT-20260702-028]_TEN_UPGRADE_PLANES_v1.md`
 
 Operating system for continuous, parallel, self-improving multi-sandbox execution. v2 adds ROI governance (L11). v3 adds deterministic loop core (L13, D1–D8).
 
