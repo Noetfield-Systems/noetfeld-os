@@ -1,6 +1,4 @@
-/**
- * NOOS 24/7 loop fleet — CF cron */5 → repository_dispatch for all due domain loops.
- */
+// NOOS 24/7 loop fleet: Cloudflare five-minute cron dispatches due domain loops.
 const DEFAULT_REPO = "kazemnezhadsina144-dot/noetfeld-os";
 
 const LOOPS = [
