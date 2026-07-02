@@ -404,6 +404,81 @@ def probe_supabase_sourcea_receipt(wf: dict[str, Any], wf_doc: dict[str, Any], s
     return stale_wrap(result, observed_at=observed_at, stale_minutes=stale_minutes, source=wf["id"])
 
 
+def github_latest_run(workflow_file: str, *, event: str | None = None) -> dict[str, Any]:
+    proc = subprocess.run(
+        ["git", "credential", "fill"],
+        input="protocol=https\nhost=github.com\n\n",
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    if proc.returncode != 0:
+        return {"ok": False, "error": "github_credential_unavailable"}
+    token = dict(line.split("=", 1) for line in proc.stdout.splitlines() if "=" in line).get("password")
+    if not token:
+        return {"ok": False, "error": "github_token_missing"}
+    repo = "kazemnezhadsina144-dot/noetfeld-os"
+    params: dict[str, str] = {"per_page": "5"}
+    if event:
+        params["event"] = event
+    query = urllib.parse.urlencode(params)
+    req = urllib.request.Request(
+        f"https://api.github.com/repos/{repo}/actions/workflows/{workflow_file}/runs?{query}",
+        headers={"Authorization": f"Bearer {token}", "Accept": "application/vnd.github+json"},
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=25) as resp:
+            runs = json.loads(resp.read().decode("utf-8")).get("workflow_runs") or []
+        if not runs:
+            return {"ok": True, "runs": 0, "latest": None}
+        latest = runs[0]
+        return {
+            "ok": True,
+            "runs": len(runs),
+            "latest": {
+                "id": latest.get("id"),
+                "event": latest.get("event"),
+                "status": latest.get("status"),
+                "conclusion": latest.get("conclusion"),
+                "created_at": latest.get("created_at"),
+            },
+        }
+    except Exception as exc:
+        return {"ok": False, "error": str(exc)[:200]}
+
+
+def probe_github_schedule(wf: dict[str, Any]) -> dict[str, Any]:
+    workflow_file = (wf.get("probe") or {}).get("github_workflow", "")
+    sched = github_latest_run(workflow_file, event="schedule")
+    any_run = github_latest_run(workflow_file)
+    latest = (sched.get("latest") or any_run.get("latest")) if sched.get("ok") else None
+    if not latest:
+        return blocked(
+            "no_github_runs",
+            command=f"PUT .../workflows/enable + wait for schedule on {workflow_file}",
+            evidence={"schedule_probe": sched, "any_probe": any_run},
+        )
+    event = latest.get("event")
+    observed_at = latest.get("created_at")
+    if event == "schedule" and latest.get("conclusion") == "success":
+        status = "COMPLETE"
+    elif event == "schedule":
+        status = "RUNNING" if latest.get("status") != "completed" else "FAILED_WITH_RECEIPT"
+    elif event == "repository_dispatch":
+        status = "RUNNING"
+    else:
+        status = "BLOCKED_WITH_REASON"
+    row: dict[str, Any] = {
+        "status": status,
+        "github_run_id": latest.get("id"),
+        "github_event": event,
+        "evidence": {"latest": latest, "schedule_count": sched.get("runs")},
+    }
+    if status == "BLOCKED_WITH_REASON":
+        row["reason"] = f"latest_event_not_schedule:{event}"
+    return row
+
+
 def probe_supabase_noos_factory(wf: dict[str, Any], wf_doc: dict[str, Any], stale_minutes: float) -> dict[str, Any]:
     probe = wf["probe"]
     cfg = supabase_profile_config(probe.get("supabase_profile", "noetfield"), wf_doc)
@@ -476,6 +551,12 @@ def probe_supabase_noos_factory(wf: dict[str, Any], wf_doc: dict[str, Any], stal
         prefer_count=True,
     )
     base["supabase_cycle_count"] = total.get("count")
+    sched_files = probe.get("github_workflows_schedule") or [probe.get("github_workflow")]
+    sched_evidence = {}
+    for wf_file in sched_files:
+        if wf_file:
+            sched_evidence[wf_file] = github_latest_run(str(wf_file), event="schedule")
+    base["evidence"]["github_schedule"] = sched_evidence
     return stale_wrap(base, observed_at=observed_at, stale_minutes=stale_minutes, source="noos_factory_autorun")
 
 
@@ -546,6 +627,11 @@ def probe_supabase_noos_inbox(wf: dict[str, Any], wf_doc: dict[str, Any], stale_
     if latest_cycle.get("rows"):
         row0 = latest_cycle["rows"][0]
         observed_at = row0.get("dispatched_at") or row0.get("enqueued_at")
+    if pending:
+        for row in pending:
+            ts = row.get("enqueued_at")
+            if ts and (observed_at is None or str(ts) > str(observed_at)):
+                observed_at = ts
 
     if executable:
         base: dict[str, Any] = {
@@ -645,6 +731,7 @@ PROBES = {
     "supabase_noos_factory": probe_supabase_noos_factory,
     "supabase_noos_inbox": probe_supabase_noos_inbox,
     "url_sweep_readonly": probe_url_sweep_readonly,
+    "github_schedule_probe": probe_github_schedule,
 }
 
 
@@ -698,6 +785,8 @@ def build_dashboard() -> dict[str, Any]:
             try:
                 if probe_type == "url_sweep_readonly":
                     row.update(fn(wf))
+                elif probe_type == "github_schedule_probe":
+                    row.update(fn(wf))
                 else:
                     row.update(fn(wf, wf_doc, stale_minutes))
             except Exception as exc:
@@ -710,7 +799,7 @@ def build_dashboard() -> dict[str, Any]:
     registered_sandboxes = [sb["id"] for sb in sb_doc.get("sandboxes") or []]
 
     return {
-        "schema": "autorun-status-dashboard-v1.1",
+        "schema": "autorun-status-dashboard-v1.2",
         "read_only": True,
         "generated_at": utc_now(),
         "dirty_total": dirty_total,

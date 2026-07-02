@@ -144,6 +144,13 @@ def run_cycle(cycle_number: int, *, exec_dir: Path, receipt_commit: bool) -> dic
             parsed["worker_result"] = json.loads(lines[-1])
         except json.JSONDecodeError:
             pass
+    if isinstance(parsed.get("worker_result"), dict):
+        wr = parsed["worker_result"]
+        for key in ("status", "idle_reason", "action", "founder_blocked", "founder_blocked_this_cycle"):
+            if key in wr and wr[key] is not None:
+                parsed[key] = wr[key]
+        if wr.get("status") == "IDLE_NO_WORK":
+            parsed["cycle_status"] = "IDLE_NO_WORK"
     result = {
         "cycle_number": cycle_number,
         "started_at": started_at,
@@ -221,6 +228,11 @@ def main() -> int:
             if not isinstance(runner, dict):
                 runner = {}
             runner["cloud_trigger"] = trigger
+            runner["cloud_meta"] = {
+                "github_event": trigger,
+                "github_run_id": _os.environ.get("GITHUB_RUN_ID"),
+                "github_workflow": _os.environ.get("GITHUB_WORKFLOW"),
+            }
             if _os.environ.get("GITHUB_RUN_ID"):
                 runner["github_run_id"] = _os.environ.get("GITHUB_RUN_ID")
             last_cycle["runner_output"] = runner

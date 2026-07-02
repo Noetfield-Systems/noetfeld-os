@@ -67,6 +67,7 @@ def test_workflow_registry_ids():
         "sourcea_recipe_queue_builder",
         "noos_factory_autorun",
         "noos_worker_inbox",
+        "noos_schedule_canary",
         "sandbox_health_sweep",
     ]
 

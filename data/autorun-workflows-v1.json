@@ -1,6 +1,6 @@
 {
   "schema": "autorun-workflows-v1",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "read_only": true,
   "one_law": "Observe autorun surfaces only. phase_reconciler_v1 remains sole control authority.",
   "sourcea_truth_lane": "Supabase only (truth_log, cycle_receipts, heartbeat). Never read SourceA repo or ~/.sina.",
@@ -89,6 +89,10 @@
         "supabase_profile": "noetfield",
         "supabase_table": "noetfield_factory_cycle_runs",
         "github_workflow": "noos-factory-autorun.yml",
+        "github_workflows_schedule": [
+          "noos-factory-autorun.yml",
+          "noos-schedule-canary.yml"
+        ],
         "idle_statuses": ["IDLE_NO_WORK", "idle_no_work"]
       },
       "run_command": "make autorun-once"
@@ -105,6 +109,15 @@
         "executable_statuses": ["pending"]
       },
       "run_command": "make cloud-worker"
+    },
+    {
+      "id": "noos_schedule_canary",
+      "title": "NOOS schedule canary",
+      "plane": "NOETFELD-OS",
+      "probe": {
+        "type": "github_schedule_probe",
+        "github_workflow": "noos-schedule-canary.yml"
+      }
     },
     {
       "id": "sandbox_health_sweep",

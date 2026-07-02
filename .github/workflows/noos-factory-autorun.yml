@@ -1,8 +1,13 @@
 name: NOOS factory autorun
 
+# Schedule: GitHub cron */10 UTC on main.
+# Bridge: repository_dispatch type noos_factory_autorun_tick (CF cron → GitHub API).
+# No workflow_dispatch — zero manual Cursor triggers.
 on:
   schedule:
     - cron: "*/10 * * * *"
+  repository_dispatch:
+    types: [noos_factory_autorun_tick]
 
 permissions:
   contents: read
