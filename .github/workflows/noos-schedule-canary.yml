@@ -1,0 +1,21 @@
+name: NOOS schedule canary
+
+on:
+  schedule:
+    - cron: "*/10 * * * *"
+
+permissions:
+  contents: read
+
+jobs:
+  canary:
+    name: Schedule canary ping
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: Timestamp echo
+        run: |
+          echo "noos_schedule_canary event=${{ github.event_name }}"
+          echo "timestamp_utc=$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          echo "workflow=${{ github.workflow }}"
+          echo "run_id=${{ github.run_id }}"
