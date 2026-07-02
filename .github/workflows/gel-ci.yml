@@ -33,6 +33,12 @@ jobs:
       - name: Pytest
         run: pytest -q
 
+      - name: Integration gate (UPG-0159)
+        run: pytest -q tests/test_gate_integration_ci.py
+
+      - name: Integration decide local server (UPG-0160)
+        run: pytest -q tests/test_decide_integration_ci.py
+
       - name: noetfield gate (local)
         run: noetfield gate --json
 

@@ -188,6 +188,12 @@
       "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260702-025]_THREE_TRACK_10_STEP_UPGRADE_PLAN_v1.md",
       "doc_type": "UPGRADE_PLAN_10_STEP",
       "title": "Three-track 10-step upgrade plan — Autonomy, Phase 4, CI"
+    },
+    {
+      "trace_id": "NOOS-AGENT-20260702-026",
+      "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260702-026]_TRACK_ABC_CLOSEOUT_RECEIPT_v1.md",
+      "doc_type": "CLOSEOUT_RECEIPT",
+      "title": "Track A/B/C v2 closeout receipt"
     }
   ]
 }

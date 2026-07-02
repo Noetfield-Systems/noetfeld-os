@@ -100,6 +100,22 @@
       ]
     },
     {
+      "id": "sourcea_observe",
+      "title": "SourceA portfolio-spine observe loop",
+      "domain": "sourcea-observe",
+      "event_type": "noos_sourcea_observe_loop_tick",
+      "interval_minutes": 30,
+      "github_workflow": "noos-sourcea-observe-loop.yml",
+      "factory_id": "loop-sourcea-observe",
+      "steps": [
+        {
+          "name": "sourcea_supabase_observe",
+          "cmd": ["python3", "scripts/observe_sourcea_supabase_v1.py", "--write-receipt", "--json"],
+          "continue_on_error": true
+        }
+      ]
+    },
+    {
       "id": "agent_nerve",
       "title": "Agent vault nerve loop",
       "domain": "agent-docs",

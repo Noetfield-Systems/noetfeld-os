@@ -7,6 +7,7 @@ const LOOPS = [
   { event_type: "noos_surface_loop_tick", interval: 20, domain: "public-nerve" },
   { event_type: "noos_chain_loop_tick", interval: 30, domain: "chain-tools" },
   { event_type: "noos_self_heal_loop_tick", interval: 10, domain: "self-improvement" },
+  { event_type: "noos_sourcea_observe_loop_tick", interval: 30, domain: "sourcea-observe" },
   { event_type: "noos_agent_nerve_loop_tick", interval: 60, domain: "agent-docs" },
 ];
 

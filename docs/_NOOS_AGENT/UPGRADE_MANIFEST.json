@@ -52,7 +52,9 @@
     "UPG-0194",
     "UPG-0195",
     "UPG-0196",
-    "UPG-0197"
+    "UPG-0197",
+    "UPG-0159",
+    "UPG-0160"
   ],
   "in_progress_steps": [
     "UPG-0001",
@@ -78,7 +80,7 @@
     "commercial_c01": "Phase C — first Trust Brief / AI Value OS briefing"
   },
   "updated_at": "2026-07-02",
-  "notes": "Track B/C v2 closeout: Phase 4 chain tools (0151-0158), CI hardening (0191-0197), CF motor autonomous factory. Commercial proof (UPG-0001–0007) remains founder-led.",
+  "notes": "Track A/B/C v2 closed. Track D SourceA observe loop live. Phase 4 integration tests UPG-0159/0160. Commercial proof (UPG-0001–0007) remains founder-led.",
   "evidence": {
     "UPG-0008": "PRODUCT_TRUTH.md: www.noetfield.com 200",
     "UPG-0009": "PRODUCT_TRUTH.md: website repo make verify-www-e2e PASS",
@@ -117,6 +119,8 @@
     "UPG-0194": "gel-ci.yml noetfield gate --json required",
     "UPG-0195": ".github/dependabot.yml pip weekly",
     "UPG-0196": "gel-ci.yml pip-audit + cyclonedx SBOM artifact",
-    "UPG-0197": "gel-ci.yml gitleaks-action on push/PR"
+    "UPG-0197": "gel-ci.yml gitleaks-action on push/PR",
+    "UPG-0159": "tests/test_gate_integration_ci.py + gel-ci integration gate step",
+    "UPG-0160": "tests/test_decide_integration_ci.py + gel-ci local uvicorn decide step"
   }
 }

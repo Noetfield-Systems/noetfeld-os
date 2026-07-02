@@ -227,6 +227,19 @@
       "run_command": "python3 scripts/noos_loop_runner_v1.py --event-type noos_agent_nerve_loop_tick"
     },
     {
+      "id": "noos_loop_sourcea_observe",
+      "title": "24/7 loop — SourceA observe",
+      "plane": "SourceA",
+      "probe": {
+        "type": "supabase_noos_loop",
+        "supabase_profile": "noetfield",
+        "factory_id": "loop-sourcea-observe",
+        "loop_id": "sourcea_observe",
+        "github_workflow": "noos-sourcea-observe-loop.yml"
+      },
+      "run_command": "python3 scripts/noos_loop_runner_v1.py --event-type noos_sourcea_observe_loop_tick"
+    },
+    {
       "id": "sandbox_health_sweep",
       "title": "Sandbox health sweep",
       "plane": "NOETFELD-OS",

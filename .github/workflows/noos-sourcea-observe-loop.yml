@@ -1,0 +1,31 @@
+name: NOOS loop — SourceA observe
+
+on:
+  schedule:
+    - cron: "15,45 * * * *"
+  repository_dispatch:
+    types: [noos_sourcea_observe_loop_tick]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: noos-loop-sourcea-observe
+  cancel-in-progress: false
+
+jobs:
+  loop:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements.txt && pip install -e .
+      - name: Run SourceA observe loop (read-only)
+        env:
+          GITHUB_EVENT_NAME: ${{ github.event_name }}
+          GITHUB_RUN_ID: ${{ github.run_id }}
+          GITHUB_WORKFLOW: ${{ github.workflow }}
+        run: python3 scripts/noos_loop_runner_v1.py --event-type noos_sourcea_observe_loop_tick --json
