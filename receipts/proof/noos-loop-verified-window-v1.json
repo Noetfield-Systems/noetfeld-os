@@ -1,6 +1,6 @@
 {
   "schema": "noos-loop-verified-window-v1",
-  "merge_sha": "86beb4005a295e67a260f8d59992662d4d696dba",
+  "merge_sha": "444fcfff3d6afae46f37a6685720eaf1fb17d439",
   "window_hours": 24,
   "window_started_at": "2026-07-02T12:12:50Z",
   "window_closes_at": "2026-07-03T12:12:50Z",
