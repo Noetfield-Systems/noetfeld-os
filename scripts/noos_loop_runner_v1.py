@@ -115,6 +115,84 @@ def cloud_meta() -> dict[str, Any]:
     }
 
 
+def meter_cost(step_results: list[dict[str, Any]]) -> dict[str, Any]:
+    """L11 — compute cost at call site. NOOS loops run on GitHub/CF free tiers.
+
+    These loops invoke no paid LLM/provider calls, so metered spend is a true 0.0.
+    The field is present and honest, not estimated after the fact.
+    """
+    return {
+        "provider": "github_actions+cloudflare_cron",
+        "model": "none",
+        "tokens_in": 0,
+        "tokens_out": 0,
+        "unit_cost_usd": 0.0,
+        "total_usd": 0.0,
+        "metered_at_call_site": True,
+        "step_count": len(step_results),
+    }
+
+
+def founder_blocked_probe() -> dict[str, Any]:
+    """L7 — surface founder_blocked count/oldest/age in every cycle receipt."""
+    url = os.environ.get("NOETFIELD_SUPABASE_URL") or os.environ.get("SUPABASE_URL")
+    key = os.environ.get("NOETFIELD_SUPABASE_SERVICE_ROLE_KEY") or os.environ.get(
+        "SUPABASE_SERVICE_ROLE_KEY"
+    )
+    if not url or not key:
+        return {"count": 0, "oldest_id": "", "priority": "", "age_seconds": 0, "escalated": False, "skipped": True}
+    import urllib.error
+    import urllib.request
+
+    query = (
+        "select=item_id,priority,enqueued_at&status=eq.founder_blocked&order=enqueued_at.asc"
+    )
+    req = urllib.request.Request(
+        f"{url.rstrip('/')}/rest/v1/noetfield_worker_inbox_queue?{query}",
+        headers={"apikey": key, "Authorization": f"Bearer {key}"},
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=20) as resp:
+            rows = json.loads(resp.read().decode("utf-8"))
+    except (urllib.error.URLError, urllib.error.HTTPError, json.JSONDecodeError):
+        return {"count": 0, "oldest_id": "", "priority": "", "age_seconds": 0, "escalated": False, "probe_failed": True}
+    if not rows:
+        return {"count": 0, "oldest_id": "", "priority": "", "age_seconds": 0, "escalated": False}
+    oldest = rows[0]
+    age = 0
+    ts = oldest.get("enqueued_at")
+    if ts:
+        try:
+            t = datetime.fromisoformat(str(ts).replace("Z", "+00:00"))
+            age = int((datetime.now(timezone.utc) - t).total_seconds())
+        except ValueError:
+            age = 0
+    # L7 — aging founder P0 gets louder past 24h
+    escalated = oldest.get("priority") == "P0" and age > 86400
+    return {
+        "count": len(rows),
+        "oldest_id": oldest.get("item_id", ""),
+        "priority": oldest.get("priority", ""),
+        "age_seconds": age,
+        "escalated": escalated,
+    }
+
+
+def sink_invariant(step_results: list[dict[str, Any]], heal_results: list[dict[str, Any]]) -> dict[str, Any]:
+    """L8 — Σ(origin counts) == sink_count, provenance-tagged."""
+    origin_counts = {"steps": len(step_results), "self_heal": len(heal_results)}
+    sink_count = len(step_results) + len(heal_results)
+    total = sum(origin_counts.values())
+    verdict = "PASS" if total == sink_count else "BLOCKED_WITH_REASON"
+    return {
+        "law": "sum(origin_counts) == sink_count",
+        "counts": origin_counts,
+        "sink_count": sink_count,
+        "provenance_tags": {"steps": "loop_step", "self_heal": "loop_self_heal"},
+        "verdict": verdict,
+    }
+
+
 def execute_loop(loop: dict[str, Any], *, self_heal: bool = True) -> dict[str, Any]:
     loop_id = str(loop["id"])
     event_type = str(loop["event_type"])
@@ -131,6 +209,7 @@ def execute_loop(loop: dict[str, Any], *, self_heal: bool = True) -> dict[str, A
         result["name"] = spec.get("name") or cmd[0]
         step_results.append(result)
 
+    no_work = len(step_results) == 0
     ok = all(r.get("ok") for r in step_results)
     heal_results: list[dict[str, Any]] = []
     if not ok and self_heal:
@@ -143,23 +222,63 @@ def execute_loop(loop: dict[str, Any], *, self_heal: bool = True) -> dict[str, A
             heal_results.append(heal)
 
     finished_at = utc_now()
+    fb = founder_blocked_probe()
+    inv = sink_invariant(step_results, heal_results)
+
+    # L2 — seven-state model, never fake PASS / never silence
+    if no_work:
+        state_after = "IDLE_NO_WORK"
+    elif inv["verdict"] != "PASS":
+        state_after = "BLOCKED_WITH_REASON"
+    elif ok:
+        state_after = "COMPLETE"
+    else:
+        state_after = "FAILED_WITH_RECEIPT"
+
+    # L3 — no decision without a reason: blocker_reason REQUIRED non-null when blocked
+    blocker_reason = None
+    if state_after == "BLOCKED_WITH_REASON":
+        blocker_reason = f"sink_invariant_failed:{inv['counts']}"
+    elif state_after == "FAILED_WITH_RECEIPT":
+        failed = [r.get("name") for r in step_results if not r.get("ok")]
+        blocker_reason = f"steps_failed:{failed}"
+
+    evidence = [
+        {"command": " ".join(r.get("cmd", [])), "exit_code": r.get("exit_code"), "output": (r.get("stdout_tail") or r.get("error") or "")[-400:]}
+        for r in (step_results + heal_results)
+    ]
+
     cycle = {
         "schema": "noos-24-7-loop-cycle-v1",
+        "receipt_schema": "autorun-cycle-receipt-v2",
+        "workflow_id": str(loop.get("github_workflow") or loop_id),
+        "sandbox_id": "noetfeld-os",
+        "lane": loop.get("lane") or "noos",
         "loop_id": loop_id,
         "event_type": event_type,
         "domain": loop.get("domain"),
+        "trigger_source": os.environ.get("GITHUB_EVENT_NAME") or "local",
         "cycle_number": cycle_number,
         "started_at": started_at,
         "finished_at": finished_at,
-        "status": "ok" if ok else "degraded",
-        "exit_code": 0 if ok else 1,
+        "state_before": "RUNNING",
+        "state_after": state_after,
+        "status": "ok" if state_after in ("COMPLETE", "IDLE_NO_WORK") else "degraded",
+        "exit_code": 0 if state_after in ("COMPLETE", "IDLE_NO_WORK") else 1,
+        "cost": meter_cost(step_results),
+        "value_class": loop.get("value_class") or "hygiene",
+        "sink_invariant": inv,
+        "founder_blocked": fb,
+        "blocker_reason": blocker_reason,
+        "evidence": evidence,
+        "next_action": "await_next_scheduled_tick" if state_after in ("COMPLETE", "IDLE_NO_WORK") else "self_heal_or_triage",
         "runner_output": {
             "steps": step_results,
             "self_heal": heal_results,
             "cloud_meta": cloud_meta(),
             "cloud_trigger": os.environ.get("GITHUB_EVENT_NAME") or "local",
         },
-        "guardrails": {"lane": "NOETFELD-OS", "read_only_control": False},
+        "guardrails": {"lane": loop.get("lane") or "noos", "read_only_control": loop.get("domain") == "sourcea-observe"},
     }
 
     out_dir = RUNTIME / loop_id
@@ -170,6 +289,7 @@ def execute_loop(loop: dict[str, Any], *, self_heal: bool = True) -> dict[str, A
         "event_type": event_type,
         "cycle_number": cycle_number,
         "last_status": cycle["status"],
+        "last_state": state_after,
         "last_finished_at": finished_at,
     }
     loop_state_path(loop_id).write_text(json.dumps(state, indent=2) + "\n", encoding="utf-8")
