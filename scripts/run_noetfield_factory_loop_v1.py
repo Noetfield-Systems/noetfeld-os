@@ -21,6 +21,7 @@ from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
 RUNNER = ROOT / "scripts/run_noetfield_patch_pack_v1.py"
+WORKER = ROOT / "scripts/cloud_inbox_worker_v1.py"
 SINK_SCRIPT = ROOT / "scripts/factory_supabase_sink_v1.py"
 
 import sys
@@ -110,20 +111,39 @@ def update_manifest(factory_state: dict[str, Any], *, paths: dict[str, Path]) ->
 
 
 def run_cycle(cycle_number: int, *, exec_dir: Path, receipt_commit: bool) -> dict[str, Any]:
+    import os as _os
+
     started_at = utc_now()
-    command = ["python3", str(RUNNER), "--runtime-dir", str(exec_dir)]
-    if not receipt_commit:
-        command.append("--no-manifest-update")
+    use_patch_pack = _os.environ.get("NOOS_FACTORY_PATCH_PACK", "").strip().lower() in {
+        "1",
+        "true",
+        "yes",
+        "on",
+    }
+    if use_patch_pack:
+        command = ["python3", str(RUNNER), "--runtime-dir", str(exec_dir)]
+        if not receipt_commit:
+            command.append("--no-manifest-update")
+        timeout = 120
+    else:
+        command = ["python3", str(WORKER)]
+        timeout = 180
     completed = subprocess.run(
         command,
         cwd=ROOT,
         capture_output=True,
         check=False,
         text=True,
-        timeout=120,
+        timeout=timeout,
     )
     finished_at = utc_now()
     parsed = parse_runner_output(completed.stdout)
+    lines = [line for line in completed.stdout.splitlines() if line.strip()]
+    if lines:
+        try:
+            parsed["worker_result"] = json.loads(lines[-1])
+        except json.JSONDecodeError:
+            pass
     result = {
         "cycle_number": cycle_number,
         "started_at": started_at,

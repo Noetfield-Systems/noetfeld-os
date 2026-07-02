@@ -20,9 +20,16 @@ from noetfield_gate.decide import (
 
 
 def _cmd_gate(args: argparse.Namespace) -> int:
-    report = run_gate_checks(root=Path(args.root) if args.root else None, api_url=args.api_url)
+    report = run_gate_checks(
+        root=Path(args.root) if args.root else None,
+        api_url=args.api_url,
+        strict=bool(args.strict),
+    )
     out = write_gate_report(report, Path(args.out) if args.out else DEFAULT_RECEIPT)
-    print(f"{report['outcome']} — gate report -> {out}")
+    if args.json:
+        print(json.dumps(report, indent=2))
+    else:
+        print(f"{report['outcome']} — gate report -> {out}")
     if report["outcome"] == "BLOCK":
         for reason in report.get("block_reasons", []):
             print(f"  BLOCK: {reason}", file=sys.stderr)
@@ -61,6 +68,12 @@ def main(argv: list[str] | None = None) -> int:
     gate = sub.add_parser("gate", help="4+ checks → PASS/BLOCK + GATE_REPORT on disk")
     gate.add_argument("--root", help="Noetfield OS repo root (auto-detect if omitted)")
     gate.add_argument("--api-url", help="Probe GET /readiness (or NOETFIELD_API_URL)")
+    gate.add_argument("--json", action="store_true", help="Print gate report JSON on stdout (UPG-0152)")
+    gate.add_argument(
+        "--strict",
+        action="store_true",
+        help="Fail on skipped checks when API URL is set (UPG-0153)",
+    )
     gate.add_argument("--out", help=f"JSON report path (default {DEFAULT_RECEIPT})")
     gate.set_defaults(func=_cmd_gate)
 

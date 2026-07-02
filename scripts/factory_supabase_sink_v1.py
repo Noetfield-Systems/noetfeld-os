@@ -127,7 +127,33 @@ def insert_factory_cycle(cycle: dict[str, Any], *, factory_id: str) -> dict[str,
     return _post_row("noetfield_factory_cycle_runs", row)
 
 
+def _get_inbox_item(item_id: str) -> dict[str, Any] | None:
+    cfg = _supabase_config()
+    if not cfg:
+        return None
+    base, key = cfg
+    req = urllib.request.Request(
+        f"{base}/rest/v1/noetfield_worker_inbox_queue?item_id=eq.{item_id}&select=*",
+        headers={"apikey": key, "Authorization": f"Bearer {key}"},
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=30) as resp:
+            rows = json.loads(resp.read().decode("utf-8"))
+            return rows[0] if rows else None
+    except urllib.error.HTTPError:
+        return None
+
+
 def upsert_inbox_item(item: dict[str, Any]) -> dict[str, Any]:
+    existing = _get_inbox_item(item["item_id"])
+    if existing and existing.get("status") not in ("pending",):
+        return {
+            "ok": True,
+            "skipped": True,
+            "reason": "status_preserved",
+            "item_id": item["item_id"],
+            "status": existing.get("status"),
+        }
     row = {
         "item_id": item["item_id"],
         "lane": item.get("lane") or "NOETFELD-OS",

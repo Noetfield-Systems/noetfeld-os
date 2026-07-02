@@ -58,7 +58,9 @@ def _check(name: str, cid: str, ok: bool, reason: str, **extra: Any) -> dict[str
     return row
 
 
-def run_gate_checks(*, root: Path | None = None, api_url: str | None = None) -> dict[str, Any]:
+def run_gate_checks(
+    *, root: Path | None = None, api_url: str | None = None, strict: bool = False
+) -> dict[str, Any]:
     explicit_root = root is not None
     root = (root or resolve_root()).resolve()
     checks: list[dict[str, Any]] = []
@@ -176,6 +178,12 @@ def run_gate_checks(*, root: Path | None = None, api_url: str | None = None) -> 
             )
         except Exception as exc:
             checks.append(_check("policy_registry", "G5", False, f"PolicyRegistry: {exc}"))
+
+    if strict:
+        for check in checks:
+            if check.get("skipped"):
+                check["ok"] = False
+                check["reason"] = f"strict mode: skipped check not allowed ({check.get('reason', '')})"
 
     failed = [c for c in checks if not c.get("ok")]
     outcome = "PASS" if not failed else "BLOCK"
