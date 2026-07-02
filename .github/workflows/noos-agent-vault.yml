@@ -10,6 +10,10 @@ on:
       - 'docs/_NOOS_AGENT/**'
       - 'scripts/check_noos_agent_docs.sh'
 
+concurrency:
+  group: noos-agent-vault-${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
   tag-check:
     runs-on: ubuntu-latest

@@ -11,6 +11,10 @@ on:
   pull_request:
     branches: [main]
 
+concurrency:
+  group: gel-ci-${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
   test-and-gate:
     runs-on: ubuntu-latest

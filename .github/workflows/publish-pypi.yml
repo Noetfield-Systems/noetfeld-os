@@ -13,6 +13,10 @@ on:
           - test
           - prod
 
+concurrency:
+  group: publish-pypi-${{ github.ref }}
+  cancel-in-progress: false
+
 permissions:
   id-token: write
   contents: read
