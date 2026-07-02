@@ -8,8 +8,12 @@ import os
 import sys
 import urllib.error
 import urllib.request
+from pathlib import Path
 from typing import Any
 from urllib.parse import quote_plus
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from cloud_inbox_constants_v1 import PRESERVED_INBOX_STATUSES
 
 
 def _env(name: str) -> str:
@@ -146,7 +150,7 @@ def _get_inbox_item(item_id: str) -> dict[str, Any] | None:
 
 def upsert_inbox_item(item: dict[str, Any]) -> dict[str, Any]:
     existing = _get_inbox_item(item["item_id"])
-    if existing and existing.get("status") not in ("pending",):
+    if existing and existing.get("status") in PRESERVED_INBOX_STATUSES:
         return {
             "ok": True,
             "skipped": True,
