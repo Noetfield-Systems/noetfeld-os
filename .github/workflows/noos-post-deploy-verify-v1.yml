@@ -1,0 +1,69 @@
+name: NOOS post-deploy verify
+
+# Platform-native verify chain — runs after deploy-noos-cloud-workers-v1 (no timing guess).
+on:
+  workflow_run:
+    workflows: [deploy-noos-cloud-workers-v1]
+    types: [completed]
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    if: >
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.head_branch == 'main'
+    name: Post-deploy production verify
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      GITHUB_RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+      VERIFY_CHAINED_FROM_DEPLOY: "1"
+      DEPLOY_WORKFLOW_COMPLETED_AT: ${{ github.event.workflow_run.updated_at }}
+      DEPLOY_WORKFLOW_RUN_ID: ${{ github.event.workflow_run.id }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Production URL smoke (no deploy sleep)
+        run: bash scripts/check_production_urls.sh
+
+      - name: Trigger registry sweep
+        run: /usr/bin/python3 scripts/sandbox_health_sweep_v1.py --json | tee receipts/proof/noos-post-deploy-trigger-sweep-v1.json
+
+      - name: Write post-deploy verify receipt
+        run: |
+          set -euo pipefail
+          mkdir -p receipts/proof
+          python3 - <<'PY'
+          import json, os
+          from datetime import datetime, timezone
+          from pathlib import Path
+          doc = {
+              "schema": "noos-post-deploy-verify-v1",
+              "version": "1.0.0",
+              "at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+              "platform": "workflow_run",
+              "deploy_run_id": os.environ.get("DEPLOY_WORKFLOW_RUN_ID", ""),
+              "deploy_completed_at": os.environ.get("DEPLOY_WORKFLOW_COMPLETED_AT", ""),
+              "verify_run_url": os.environ.get("GITHUB_RUN_URL", ""),
+              "checks": ["check_production_urls.sh", "sandbox_health_sweep_v1.py"],
+          }
+          out = Path("receipts/proof/noos-post-deploy-verify-v1.json")
+          out.write_text(json.dumps(doc, indent=2) + "\n", encoding="utf-8")
+          print(json.dumps(doc, indent=2))
+          PY
+
+      - name: Upload verify receipt
+        uses: actions/upload-artifact@v4
+        with:
+          name: noos-post-deploy-verify-v1
+          path: receipts/proof/noos-post-deploy-verify-v1.json
+          retention-days: 30
