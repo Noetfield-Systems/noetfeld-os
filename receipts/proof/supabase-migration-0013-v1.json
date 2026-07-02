@@ -1,0 +1,19 @@
+{
+  "schema": "supabase-migration-receipt-v1",
+  "migration": "0013",
+  "migration_file": "infrastructure/supabase/migrations/0013_noetfield_truth_log_schedule_register.sql",
+  "applied_at": "2026-07-02T12:12:34Z",
+  "dry_run": false,
+  "postgres_configured": true,
+  "pre_verify": {
+    "ok": false,
+    "table": "noetfield_truth_log",
+    "exists": false
+  },
+  "post_verify": {
+    "ok": true,
+    "table": "noetfield_truth_log",
+    "exists": true
+  },
+  "ok": true
+}

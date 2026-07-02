@@ -1,0 +1,19 @@
+{
+  "schema": "noos-github-schedule-a1-v1",
+  "verified_at": "2026-07-02T12:12:37Z",
+  "proof_source": "supabase",
+  "table": "noetfield_truth_log",
+  "ok": false,
+  "a1_criterion": ">=2 rows in noetfield_truth_log with source=noos-factory-autorun, event=schedule, conclusion=success (self-registered by workflow)",
+  "schedule_row_count": 1,
+  "schedule_rows": [
+    {
+      "run_id": "28585156058",
+      "event": "schedule",
+      "conclusion": "success",
+      "at": "2026-07-02T11:03:12+00:00"
+    }
+  ],
+  "blocker_reason": "insufficient_schedule_rows_in_supabase",
+  "note": "GitHub private-repo cron lags; workflow self-registers every run. No gh polling."
+}

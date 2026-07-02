@@ -81,6 +81,21 @@ async def _run_sql(url: str, sql: str) -> None:
         await conn.close()
 
 
+async def _verify_table_exists(url: str, table: str) -> dict[str, Any]:
+    import asyncpg
+
+    conn = await asyncpg.connect(url)
+    try:
+        row = await conn.fetchrow(
+            "select to_regclass($1) as reg",
+            f"public.{table}",
+        )
+        ok = row["reg"] is not None
+        return {"ok": ok, "table": table, "exists": ok}
+    finally:
+        await conn.close()
+
+
 async def _verify_founder_blocked(url: str) -> dict[str, Any]:
     import asyncpg
 
@@ -105,6 +120,8 @@ async def _verify_founder_blocked(url: str) -> dict[str, Any]:
 def verify_migration(number: str, *, url: str) -> dict[str, Any]:
     if number == "0012":
         return asyncio.run(_verify_founder_blocked(url))
+    if number == "0013":
+        return asyncio.run(_verify_table_exists(url, "noetfield_truth_log"))
     return {"ok": True, "note": "no specific verifier for migration"}
 
 
