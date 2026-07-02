@@ -2,7 +2,19 @@
 
 from __future__ import annotations
 
+from auth import KEY_STORE
+from database import init_db
 from tests.conftest import SAMPLE_PAYLOAD
+
+
+def test_key_store_load_respects_monkeypatched_api_keys_path(temp_runtime):
+    """Regression: uvicorn lifespan calls KEY_STORE.load() without a path."""
+    _app, raw_key = temp_runtime
+    init_db()
+    KEY_STORE.load()
+    client = KEY_STORE.authenticate(raw_key)
+    assert client is not None
+    assert client.key_id == "test-key"
 
 
 def test_missing_api_key_returns_401(auth_headers):
