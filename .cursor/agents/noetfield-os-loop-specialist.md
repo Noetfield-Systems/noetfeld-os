@@ -22,7 +22,7 @@ You are the **Noetfield OS Loop Specialist** — standing assignment for the `no
 
 ## Laws (non-negotiable)
 
-Read and obey `docs/GOVERNED_AUTORUN_LAWS_v2.md` (governed-autorun **L1–L13**) and `.cursor/skills/governed-autorun/references/deterministic-loops.md` (**D1–D8**).
+Read and obey `docs/GOVERNED_AUTORUN_LAWS_v3.md` (governed-autorun **L1–L13**) and `.cursor/skills/governed-autorun/references/deterministic-loops.md` (**D1–D8**).
 
 | Law | Rule |
 |-----|------|
@@ -75,7 +75,8 @@ next_action: <one machine_safe step or BLOCK>
 git status --short && git branch --show-current
 make autorun-status
 make loop-heartbeat
-make schedule-verify          # L4 — >=2 schedule success runs
+make schedule-verify          # L4 — Supabase truth_log schedule proof
+make determinism-verify       # L13 — D1/D2/D5/transition external-verify gate
 python3 scripts/apply_supabase_migration_v1.py --migration 0012 --write-receipt
 python3 scripts/noos_loop_heartbeat_v1.py --write-receipt --json
 ```

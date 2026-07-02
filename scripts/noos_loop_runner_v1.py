@@ -17,6 +17,9 @@ REGISTRY = ROOT / "data/noos-24-7-loops-v1.json"
 SINK = ROOT / "scripts/factory_supabase_sink_v1.py"
 RUNTIME = ROOT / ".noos-runtime/loops"
 
+sys.path.insert(0, str(ROOT / "scripts"))
+from noos_loop_determinism_v1 import advance_state, op_key, transition_allowed  # noqa: E402
+
 
 def utc_now() -> str:
     return datetime.now(timezone.utc).isoformat(timespec="seconds")
@@ -224,34 +227,20 @@ def execute_loop(loop: dict[str, Any], *, self_heal: bool = True) -> dict[str, A
     finished_at = utc_now()
     fb = founder_blocked_probe()
     inv = sink_invariant(step_results, heal_results)
+    validate_ok = inv["verdict"] == "PASS"
 
-    # L2 — seven-state model, never fake PASS / never silence
-    if no_work:
-        state_after = "IDLE_NO_WORK"
-    elif inv["verdict"] != "PASS":
-        state_after = "BLOCKED_WITH_REASON"
-    elif ok:
-        state_after = "COMPLETE"
-    else:
-        state_after = "FAILED_WITH_RECEIPT"
-
-    # L3 — no decision without a reason: blocker_reason REQUIRED non-null when blocked
-    blocker_reason = None
-    if state_after == "BLOCKED_WITH_REASON":
-        blocker_reason = f"sink_invariant_failed:{inv['counts']}"
-    elif state_after == "FAILED_WITH_RECEIPT":
-        failed = [r.get("name") for r in step_results if not r.get("ok")]
-        blocker_reason = f"steps_failed:{failed}"
+    workflow_id = str(loop.get("github_workflow") or loop_id)
+    op_key_val = op_key(workflow_id=workflow_id, loop_id=loop_id, cycle_number=cycle_number)
 
     evidence = [
         {"command": " ".join(r.get("cmd", [])), "exit_code": r.get("exit_code"), "output": (r.get("stdout_tail") or r.get("error") or "")[-400:]}
         for r in (step_results + heal_results)
     ]
 
-    cycle = {
+    cycle: dict[str, Any] = {
         "schema": "noos-24-7-loop-cycle-v1",
         "receipt_schema": "autorun-cycle-receipt-v2",
-        "workflow_id": str(loop.get("github_workflow") or loop_id),
+        "workflow_id": workflow_id,
         "sandbox_id": "noetfeld-os",
         "lane": loop.get("lane") or "noos",
         "loop_id": loop_id,
@@ -259,19 +248,14 @@ def execute_loop(loop: dict[str, Any], *, self_heal: bool = True) -> dict[str, A
         "domain": loop.get("domain"),
         "trigger_source": os.environ.get("GITHUB_EVENT_NAME") or "local",
         "cycle_number": cycle_number,
+        "op_key": op_key_val,
         "started_at": started_at,
-        "finished_at": finished_at,
         "state_before": "RUNNING",
-        "state_after": state_after,
-        "status": "ok" if state_after in ("COMPLETE", "IDLE_NO_WORK") else "degraded",
-        "exit_code": 0 if state_after in ("COMPLETE", "IDLE_NO_WORK") else 1,
         "cost": meter_cost(step_results),
         "value_class": loop.get("value_class") or "hygiene",
         "sink_invariant": inv,
         "founder_blocked": fb,
-        "blocker_reason": blocker_reason,
         "evidence": evidence,
-        "next_action": "await_next_scheduled_tick" if state_after in ("COMPLETE", "IDLE_NO_WORK") else "self_heal_or_triage",
         "runner_output": {
             "steps": step_results,
             "self_heal": heal_results,
@@ -280,6 +264,45 @@ def execute_loop(loop: dict[str, Any], *, self_heal: bool = True) -> dict[str, A
         },
         "guardrails": {"lane": loop.get("lane") or "noos", "read_only_control": loop.get("domain") == "sourcea-observe"},
     }
+
+    cycle["supabase_sink"] = sink_cycle(cycle, factory_id=factory_id)
+    sink_acked = cycle["supabase_sink"].get("ok") is True
+
+    if no_work:
+        state_before = "IDLE_NO_WORK"
+        state_after = "IDLE_NO_WORK"
+        d4_reason = None
+    else:
+        state_before = "RUNNING"
+        state_after, d4_reason = advance_state(
+            no_work=False,
+            execute_ok=ok,
+            validate_ok=validate_ok,
+            sink_acked=sink_acked,
+        )
+        if not transition_allowed(state_before, state_after):
+            state_after = "BLOCKED_WITH_REASON"
+            d4_reason = f"illegal_transition:{state_before}->{state_after}"
+
+    blocker_reason = None
+    if state_after == "BLOCKED_WITH_REASON":
+        blocker_reason = d4_reason or f"sink_invariant_failed:{inv['counts']}"
+    elif state_after == "FAILED_WITH_RECEIPT":
+        failed = [r.get("name") for r in step_results if not r.get("ok")]
+        blocker_reason = f"steps_failed:{failed}"
+
+    cycle.update(
+        {
+            "finished_at": utc_now(),
+            "state_before": state_before,
+            "state_after": state_after,
+            "status": "ok" if state_after in ("COMPLETE", "IDLE_NO_WORK") else "degraded",
+            "exit_code": 0 if state_after in ("COMPLETE", "IDLE_NO_WORK") else 1,
+            "blocker_reason": blocker_reason,
+            "next_action": "await_next_scheduled_tick" if state_after in ("COMPLETE", "IDLE_NO_WORK") else "self_heal_or_triage",
+            "d4": {"execute_ok": ok, "validate_ok": validate_ok, "sink_acked": sink_acked},
+        }
+    )
 
     out_dir = RUNTIME / loop_id
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -290,11 +313,11 @@ def execute_loop(loop: dict[str, Any], *, self_heal: bool = True) -> dict[str, A
         "cycle_number": cycle_number,
         "last_status": cycle["status"],
         "last_state": state_after,
-        "last_finished_at": finished_at,
+        "last_finished_at": cycle["finished_at"],
+        "transition_log_tail": [{"from": state_before, "to": state_after, "op_key": op_key_val}],
     }
     loop_state_path(loop_id).write_text(json.dumps(state, indent=2) + "\n", encoding="utf-8")
 
-    cycle["supabase_sink"] = sink_cycle(cycle, factory_id=factory_id)
     return cycle
 
 

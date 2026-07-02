@@ -56,7 +56,8 @@
     "UPG-0159",
     "UPG-0160",
     "UPG-0161",
-    "UPG-0163"
+    "UPG-0163",
+    "UPG-0214"
   ],
   "in_progress_steps": [
     "UPG-0001",
@@ -86,7 +87,7 @@
     "T0_closed": 13,
     "T1_p0_now": 8,
     "T2_p1_near": 10,
-    "T3_p2_mid": 6,
+    "T3_p2_mid": 5,
     "T4_p3_later": 7,
     "founder_blocked": 9
   },
@@ -106,8 +107,7 @@
     "UPG-0210",
     "UPG-0211",
     "UPG-0212",
-    "UPG-0213",
-    "UPG-0214"
+    "UPG-0213"
   ],
   "evidence": {
     "UPG-0008": "PRODUCT_TRUTH.md: www.noetfield.com 200",
@@ -151,6 +151,7 @@
     "UPG-0159": "tests/test_gate_integration_ci.py + gel-ci integration gate step",
     "UPG-0160": "tests/test_decide_integration_ci.py + gel-ci local uvicorn decide step",
     "UPG-0161": "publish-pypi.yml workflow_dispatch target=test (TestPyPI trusted publish)",
-    "UPG-0163": ".github/workflows/release-noetfield-gate.yml tag v* → GitHub Release + dist + PyPI"
+    "UPG-0163": ".github/workflows/release-noetfield-gate.yml tag v* → GitHub Release + dist + PyPI",
+    "UPG-0214": "tests/test_loop_determinism_ci.py + verify_loop_determinism_external_v1.py in gel-ci; receipts/proof/noos-loop-determinism-external-verify-v1.json"
   }
 }
