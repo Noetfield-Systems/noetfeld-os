@@ -1,4 +1,4 @@
-.PHONY: test gate demo build-gate-js install inbox autorun-once autorun urls
+.PHONY: test gate demo build-gate-js install inbox dispatch-inbox autorun-once autorun urls
 
 test:
 	pytest -q
@@ -17,6 +17,9 @@ build-gate-js:
 
 inbox:
 	python3 scripts/enqueue_noos_cloud_inbox_v1.py
+
+dispatch-inbox:
+	python3 scripts/cloud_inbox_dispatch_v1.py
 
 autorun-once:
 	python3 scripts/run_noetfield_factory_loop_v1.py --once

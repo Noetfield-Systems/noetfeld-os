@@ -68,12 +68,24 @@ jobs:
           SUPABASE_DB_PASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD }}
         run: python3 scripts/enqueue_noos_cloud_inbox_v1.py
 
+      - name: Dispatch cloud inbox (P0 queue)
+        env:
+          NOETFIELD_SUPABASE_URL: ${{ secrets.NOETFIELD_SUPABASE_URL }}
+          NOETFIELD_SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.NOETFIELD_SUPABASE_SERVICE_ROLE_KEY }}
+          GITHUB_EVENT_NAME: ${{ github.event_name }}
+          GITHUB_RUN_ID: ${{ github.run_id }}
+          GITHUB_WORKFLOW: ${{ github.workflow }}
+        run: python3 scripts/cloud_inbox_dispatch_v1.py
+
       - name: Factory cycle (once)
         env:
           NOETFIELD_SUPABASE_URL: ${{ secrets.NOETFIELD_SUPABASE_URL }}
           NOETFIELD_SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.NOETFIELD_SUPABASE_SERVICE_ROLE_KEY }}
           NOETFIELD_SUPABASE_DATABASE_URL: ${{ secrets.NOETFIELD_SUPABASE_DATABASE_URL }}
           SUPABASE_DB_PASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD }}
+          GITHUB_EVENT_NAME: ${{ github.event_name }}
+          GITHUB_RUN_ID: ${{ github.run_id }}
+          GITHUB_WORKFLOW: ${{ github.workflow }}
         run: make autorun-once
 
       - name: Verify Supabase factory cycle sink
@@ -127,4 +139,20 @@ jobs:
           with urllib.request.urlopen(req, timeout=20) as resp:
               count = resp.headers.get("Content-Range", "*/0").split("/")[-1]
           print(f"supabase_factory_cycle_count={count}")
+
+          req = urllib.request.Request(
+              f"{base}/rest/v1/noetfield_factory_cycle_runs"
+              "?select=recorded_at,runner_output&runner_output->>cloud_trigger=eq.schedule"
+              "&order=recorded_at.desc&limit=1",
+              headers=headers,
+          )
+          try:
+              with urllib.request.urlopen(req, timeout=20) as resp:
+                  scheduled = json.loads(resp.read().decode("utf-8"))
+              if scheduled:
+                  print(f"latest_scheduled_receipt={scheduled[0]}")
+              else:
+                  print("latest_scheduled_receipt=none_yet")
+          except urllib.error.HTTPError:
+              print("latest_scheduled_receipt=query_unavailable")
           PY

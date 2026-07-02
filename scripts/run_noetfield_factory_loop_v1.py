@@ -193,6 +193,17 @@ def main() -> int:
             }
 
         append_jsonl(paths["log"], last_cycle)
+        import os as _os
+
+        trigger = _os.environ.get("GITHUB_EVENT_NAME")
+        if trigger:
+            runner = last_cycle.get("runner_output")
+            if not isinstance(runner, dict):
+                runner = {}
+            runner["cloud_trigger"] = trigger
+            if _os.environ.get("GITHUB_RUN_ID"):
+                runner["github_run_id"] = _os.environ.get("GITHUB_RUN_ID")
+            last_cycle["runner_output"] = runner
         supabase_sink = sink_cycle_to_supabase(last_cycle, factory_id=factory_id)
         state = {
             "factory_id": factory_id,
