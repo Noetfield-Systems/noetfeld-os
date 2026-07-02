@@ -35,7 +35,7 @@ async function dispatchLoop(env, eventType, meta = {}) {
     body: JSON.stringify({
       event_type: eventType,
       client_payload: {
-        source: meta.source || "cloudflare_cron",
+        source: meta.source || "cf-cron",
         at: new Date().toISOString(),
         ...meta,
       },
@@ -64,7 +64,7 @@ export default {
         for (const loop of due) {
           results.push(
             await dispatchLoop(env, loop.event_type, {
-              source: "cloudflare_cron",
+              source: "cf-cron",
               cron: event?.cron || "*/5 * * * *",
               domain: loop.domain,
               utc_minute: minute,

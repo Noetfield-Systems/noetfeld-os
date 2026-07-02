@@ -1,0 +1,19 @@
+{
+  "schema": "supabase-migration-receipt-v1",
+  "migration": "0014",
+  "migration_file": "infrastructure/supabase/migrations/0014_factory_cycle_status_degraded.sql",
+  "applied_at": "2026-07-02T21:02:55Z",
+  "dry_run": false,
+  "postgres_configured": true,
+  "pre_verify": {
+    "ok": false,
+    "constraint_def": "CHECK ((status = ANY (ARRAY['ok'::text, 'recoverable_error'::text, 'recoverable_exception'::text])))",
+    "remaining_aliased_loop_rows": 0
+  },
+  "post_verify": {
+    "ok": true,
+    "constraint_def": "CHECK ((status = ANY (ARRAY['ok'::text, 'degraded'::text, 'recoverable_error'::text, 'recoverable_exception'::text])))",
+    "remaining_aliased_loop_rows": 0
+  },
+  "ok": true
+}

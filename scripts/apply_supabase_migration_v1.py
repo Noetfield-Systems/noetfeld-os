@@ -96,6 +96,37 @@ async def _verify_table_exists(url: str, table: str) -> dict[str, Any]:
         await conn.close()
 
 
+async def _verify_factory_cycle_degraded(url: str) -> dict[str, Any]:
+    import asyncpg
+
+    conn = await asyncpg.connect(url)
+    try:
+        row = await conn.fetchrow(
+            """
+            select pg_get_constraintdef(c.oid) as def
+            from pg_constraint c
+            join pg_class t on t.oid = c.conrelid
+            where t.relname = 'noetfield_factory_cycle_runs'
+              and c.conname = 'noetfield_factory_cycle_runs_status_check'
+            """
+        )
+        defn = (row["def"] if row else "") or ""
+        ok = "degraded" in defn
+        aliased = await conn.fetchval(
+            """
+            select count(*) from noetfield_factory_cycle_runs
+            where status = 'recoverable_error' and exit_code = 1 and factory_id like 'loop-%'
+            """
+        )
+        return {
+            "ok": ok,
+            "constraint_def": defn[:500],
+            "remaining_aliased_loop_rows": int(aliased or 0),
+        }
+    finally:
+        await conn.close()
+
+
 async def _verify_founder_blocked(url: str) -> dict[str, Any]:
     import asyncpg
 
@@ -122,6 +153,8 @@ def verify_migration(number: str, *, url: str) -> dict[str, Any]:
         return asyncio.run(_verify_founder_blocked(url))
     if number == "0013":
         return asyncio.run(_verify_table_exists(url, "noetfield_truth_log"))
+    if number == "0014":
+        return asyncio.run(_verify_factory_cycle_degraded(url))
     return {"ok": True, "note": "no specific verifier for migration"}
 
 
