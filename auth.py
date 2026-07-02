@@ -12,7 +12,7 @@ from pathlib import Path
 
 from fastapi import Header, HTTPException, status
 
-from config import API_KEYS_PATH
+import config
 
 
 @dataclass(frozen=True)
@@ -34,7 +34,7 @@ class ApiKeyStore:
         self._salt = "noetfeld-os-v1"
 
     def load(self, path: Path | None = None) -> None:
-        path = path or API_KEYS_PATH
+        path = path or config.API_KEYS_PATH
         if not path.is_file():
             self._by_hash = {}
             return
