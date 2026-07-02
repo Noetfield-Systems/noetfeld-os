@@ -632,6 +632,15 @@ def probe_supabase_noos_inbox(wf: dict[str, Any], wf_doc: dict[str, Any], stale_
             ts = row.get("enqueued_at")
             if ts and (observed_at is None or str(ts) > str(observed_at)):
                 observed_at = ts
+    factory_hit = supabase_get(
+        cfg,
+        "noetfield_factory_cycle_runs",
+        query=urllib.parse.urlencode({"select": "recorded_at", "order": "recorded_at.desc", "limit": "1"}),
+    )
+    if factory_hit.get("rows"):
+        fr = factory_hit["rows"][0].get("recorded_at")
+        if fr and (observed_at is None or str(fr) > str(observed_at)):
+            observed_at = fr
 
     if executable:
         base: dict[str, Any] = {
