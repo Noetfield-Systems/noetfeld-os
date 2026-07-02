@@ -1,4 +1,4 @@
-.PHONY: test gate demo build-gate-js install inbox cloud-worker autorun-once autorun autorun-status autorun-tick-deploy autorun-tick-dispatch autonomous-verify loop-run loop-fleet-deploy loop-fleet-dispatch loops-status loop-heartbeat urls
+.PHONY: test gate demo build-gate-js install inbox cloud-worker autorun-once autorun autorun-status autorun-tick-deploy autorun-tick-dispatch autonomous-verify supabase-migrate loop-run loop-fleet-deploy loop-fleet-dispatch loops-status loop-heartbeat urls
 
 test:
 	pytest -q
@@ -38,6 +38,10 @@ autorun-tick-dispatch:
 
 autonomous-verify:
 	python3 scripts/verify_noos_autonomous_24h_v1.py --write-receipt --json
+
+supabase-migrate:
+	@test -n "$(MIGRATION)" || (echo "Usage: make supabase-migrate MIGRATION=0012" && exit 1)
+	python3 scripts/apply_supabase_migration_v1.py --migration $(MIGRATION) --write-receipt --json
 
 loop-run:
 	@test -n "$(EVENT)" || (echo "Usage: make loop-run EVENT=noos_chain_loop_tick" && exit 1)
