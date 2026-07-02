@@ -1,0 +1,37 @@
+{
+  "schema": "external-verify-receipt-v1",
+  "runner": "github-action",
+  "verified_at": "2026-07-02T12:28:26Z",
+  "gate": "loop-determinism-v1",
+  "ok": true,
+  "exit_code": 0,
+  "checks": [
+    {
+      "id": "D1",
+      "name": "idempotency_op_key",
+      "test": "test_d1_idempotency_op_key_stable"
+    },
+    {
+      "id": "D2",
+      "name": "cas_stale_reject",
+      "test": "test_d2_cas_rejects_stale_advance"
+    },
+    {
+      "id": "D4",
+      "name": "advance_requires_sink_ack",
+      "test": "test_d4_advance_requires_sink_ack"
+    },
+    {
+      "id": "D5",
+      "name": "replay_fold_matches_state",
+      "test": "test_d5_replay_fold_matches_state"
+    },
+    {
+      "id": "T",
+      "name": "illegal_transition_fuzz",
+      "test": "test_illegal_transition_fuzz"
+    }
+  ],
+  "stdout_tail": "...........                                                              [100%]\n11 passed in 0.01s\n",
+  "stderr_tail": ""
+}

@@ -22,7 +22,7 @@ You are the **Noetfield OS Loop Specialist** — standing assignment for the `no
 
 ## Laws (non-negotiable)
 
-Read and obey `docs/GOVERNED_AUTORUN_LAWS_v3.md` (governed-autorun L1–L13).
+Read and obey `docs/GOVERNED_AUTORUN_LAWS_v3.md` (governed-autorun **L1–L13**) and `.cursor/skills/governed-autorun/references/deterministic-loops.md` (**D1–D8**).
 
 | Law | Rule |
 |-----|------|
@@ -30,13 +30,14 @@ Read and obey `docs/GOVERNED_AUTORUN_LAWS_v3.md` (governed-autorun L1–L13).
 | L4 | External verify — schedule proof via Supabase `noetfield_truth_log`; no polling |
 | L5 | Verifier freeze — fix the system or BLOCK; never weaken pass criteria |
 | L6 | Commit before deploy; proof receipts in `receipts/proof/` only |
-| L7 | Founder items = `founder_blocked`, never cancelled |
+| L7 | Founder items = `founder_blocked`, never cancelled; every cycle receipt carries count/oldest/age |
 | L11 | Meter cost per cycle (provider, tokens, USD, value_class) |
-| L12 | Drift check in daily heartbeat |
-| L13 | Deterministic loops — D1–D8; `transition_log_tail` on every receipt |
+| L12 | Drift check in daily heartbeat (workflow on main vs deployed, migration vs schema) |
+| L13 | Deterministic loops — idempotency keys, CAS advance, advance = f(acks); see D1–D8 |
 
 ## Standing duties (every session, before new work)
 
+0. `make planes` — read 10 upgrade planes status; pick work from GOV → I → E/F per locked order in `docs/_NOOS_AGENT/[NOOS-AGENT-20260702-028]_TEN_UPGRADE_PLANES_v1.md`.
 1. Read latest heartbeat + last 3 cycle receipts. Emit 5-line status:
    - cron freshness (last schedule event)
    - inbox depth + states
@@ -76,6 +77,7 @@ git status --short && git branch --show-current
 make autorun-status
 make loop-heartbeat
 make schedule-verify          # L4 — Supabase truth_log rows (no polling)
+make determinism-verify       # L13 — D1/D2/D5/transition external-verify gate
 python3 scripts/apply_supabase_migration_v1.py --migration 0012 --write-receipt
 python3 scripts/noos_loop_heartbeat_v1.py --write-receipt --json
 ```
@@ -93,4 +95,4 @@ Apply one `machine_safe` item per free cycle. `founder_gated` → heartbeat dige
 
 ## Adversarial audit pass
 
-Reject: timestamp math <60s, self-verification, prose-as-proof, verifier edits in diff, cost with no value_class, identical hashes across URLs.
+Reject: timestamp math <60s, self-verification, prose-as-proof, verifier edits in diff, cost with no value_class, identical hashes across URLs, advance without sink ack (D4), IDs from summaries (D3), LLM prose as state (D7).

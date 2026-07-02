@@ -1,0 +1,1501 @@
+{
+  "schema": "noos-upgrade-planes-v1",
+  "version": "1.0.0",
+  "authority": "NOOS-AGENT-20260702-028",
+  "governed_by": "governed-autorun L1-L13",
+  "updated_at": "2026-07-02",
+  "backlog_registry": "data/noos-unified-upgrade-backlog-v1.json",
+  "execution_order": [
+    "GOV G7: MERGE-GOV-BRANCH \u2192 main",
+    "I I2-I8: parallel 24h VERIFIED windows (schedule-only)",
+    "GOV G9: D2 CAS in loop runner",
+    "E E1: UPG-0201 inbox Fly runner",
+    "F F1: UPG-0203 deploy CLI",
+    "E+H: E3 self-heal Fly + H2 queue scaler (parallel)",
+    "I+GOV: I9-I10 sandbox registry + G10 determinism closeout"
+  ],
+  "planes": [
+    {
+      "id": "A",
+      "name": "Factory Autonomy",
+      "track_alias": "A",
+      "tier": "T1",
+      "win_condition": "7/7 loops schedule-verified; factory monolith deprecated",
+      "depends_on": [
+        "GOV"
+      ],
+      "verify_cmd": "make schedule-verify",
+      "key_files": [
+        ".github/workflows/noos-factory-autorun.yml",
+        "scripts/run_noetfield_factory_loop_v1.py",
+        "data/noos-24-7-loops-v1.json"
+      ],
+      "backlog_ids": [
+        "A1",
+        "A2-A9",
+        "A10",
+        "LOOP-FLEET",
+        "UPG-0207"
+      ],
+      "steps": [
+        {
+          "step": 1,
+          "id": "A1",
+          "status": "done",
+          "priority": "P0",
+          "action": "Poll GitHub/Supabase for schedule proof",
+          "success_check": "make schedule-verify ok",
+          "verify_cmd": "make schedule-verify",
+          "backlog_ids": [
+            "A1"
+          ],
+          "evidence": "scripts/verify_noos_github_schedule_v1.py"
+        },
+        {
+          "step": 2,
+          "id": "A2",
+          "status": "done",
+          "priority": "P0",
+          "action": "Scheduled workflows enabled on private repo",
+          "success_check": "schedule runs on main",
+          "verify_cmd": "make schedule-verify",
+          "backlog_ids": [
+            "A2-A9"
+          ]
+        },
+        {
+          "step": 3,
+          "id": "A3",
+          "status": "done",
+          "priority": "P0",
+          "action": "CF cron \u2192 repository_dispatch bridge",
+          "success_check": "no Cursor manual dispatch",
+          "verify_cmd": "make autonomous-verify",
+          "backlog_ids": [
+            "A2-A9"
+          ]
+        },
+        {
+          "step": 4,
+          "id": "A4",
+          "status": "done",
+          "priority": "P0",
+          "action": "Persist cloud_trigger + cloud_meta in factory sink",
+          "success_check": "Supabase row with cloud_meta",
+          "verify_cmd": "make autorun-status",
+          "backlog_ids": [
+            "A2-A9"
+          ]
+        },
+        {
+          "step": 5,
+          "id": "A5",
+          "status": "done",
+          "priority": "P0",
+          "action": "make autorun-status \u2192 factory FRESH",
+          "success_check": "age < 30m",
+          "verify_cmd": "make autorun-status",
+          "backlog_ids": [
+            "A2-A9"
+          ]
+        },
+        {
+          "step": 6,
+          "id": "A6",
+          "status": "done",
+          "priority": "P0",
+          "action": "founder_blocked every cycle receipt",
+          "success_check": "NOOS-C-01 blocked",
+          "verify_cmd": "make loop-heartbeat",
+          "backlog_ids": [
+            "A2-A9"
+          ]
+        },
+        {
+          "step": 7,
+          "id": "A7",
+          "status": "done",
+          "priority": "P1",
+          "action": "Empty queue \u2192 IDLE_NO_WORK + idle_reason",
+          "success_check": "cycle receipt fields",
+          "verify_cmd": "make autorun-status",
+          "backlog_ids": [
+            "A2-A9"
+          ]
+        },
+        {
+          "step": 8,
+          "id": "A8",
+          "status": "done",
+          "priority": "P1",
+          "action": "Dashboard v1.3 \u2014 factory + schedule run age",
+          "success_check": "read-only dashboard",
+          "verify_cmd": "make autorun-status",
+          "backlog_ids": [
+            "A2-A9"
+          ],
+          "evidence": "NOOS-AGENT-20260702-026"
+        },
+        {
+          "step": 9,
+          "id": "A9",
+          "status": "done",
+          "priority": "P1",
+          "action": "Dashboard inbox freshness from timestamps",
+          "success_check": "founder count visible",
+          "verify_cmd": "make autorun-status",
+          "backlog_ids": [
+            "A2-A9"
+          ]
+        },
+        {
+          "step": 10,
+          "id": "A10",
+          "status": "open",
+          "priority": "P1",
+          "action": "24h zero-manual proof + deprecate factory monolith",
+          "success_check": "schedule-only 24h + UPG-0207",
+          "verify_cmd": "make autonomous-verify",
+          "backlog_ids": [
+            "A10",
+            "UPG-0207"
+          ],
+          "evidence": ".noos-runtime/factory/receipts/noos-autonomous-24h-verify-v1.json"
+        }
+      ],
+      "current_step": 10
+    },
+    {
+      "id": "B",
+      "name": "Chain Tools",
+      "track_alias": "B",
+      "tier": "T0",
+      "win_condition": "noetfield gate/decide/verify CLI live; integration tests in CI",
+      "depends_on": [
+        "A"
+      ],
+      "verify_cmd": "noetfield verify --json",
+      "key_files": [
+        "noetfield_gate/",
+        "tests/test_noetfield_gate.py"
+      ],
+      "backlog_ids": [
+        "B1-B10",
+        "UPG-0159",
+        "UPG-0160"
+      ],
+      "steps": [
+        {
+          "step": 1,
+          "id": "B1",
+          "status": "done",
+          "priority": "P0",
+          "action": "UPG-0151 PyPI metadata / pyproject verify",
+          "success_check": "pyproject valid",
+          "verify_cmd": "noetfield gate --json",
+          "backlog_ids": [
+            "B1-B10",
+            "UPG-0151"
+          ]
+        },
+        {
+          "step": 2,
+          "id": "B2",
+          "status": "done",
+          "priority": "P0",
+          "action": "UPG-0152 noetfield gate --json",
+          "success_check": "gate JSON output",
+          "verify_cmd": "noetfield gate --json",
+          "backlog_ids": [
+            "B1-B10",
+            "UPG-0152"
+          ]
+        },
+        {
+          "step": 3,
+          "id": "B3",
+          "status": "done",
+          "priority": "P0",
+          "action": "UPG-0153 noetfield gate --strict",
+          "success_check": "strict mode PASS",
+          "verify_cmd": "noetfield gate --strict",
+          "backlog_ids": [
+            "B1-B10",
+            "UPG-0153"
+          ]
+        },
+        {
+          "step": 4,
+          "id": "B4",
+          "status": "done",
+          "priority": "P0",
+          "action": "UPG-0156 decide --validate-only",
+          "success_check": "schema validation",
+          "verify_cmd": "noetfield decide --validate-only fixtures/demo_intents/approve.json",
+          "backlog_ids": [
+            "B1-B10",
+            "UPG-0156"
+          ]
+        },
+        {
+          "step": 5,
+          "id": "B5",
+          "status": "done",
+          "priority": "P0",
+          "action": "UPG-0158 noetfield verify subcommand",
+          "success_check": "verify JSON",
+          "verify_cmd": "noetfield verify --json",
+          "backlog_ids": [
+            "B1-B10",
+            "UPG-0158"
+          ]
+        },
+        {
+          "step": 6,
+          "id": "B6",
+          "status": "done",
+          "priority": "P1",
+          "action": "UPG-0157 dated receipt dir",
+          "success_check": "~/.noetfield/receipts/YYYY-MM-DD",
+          "verify_cmd": "noetfield gate",
+          "backlog_ids": [
+            "B1-B10",
+            "UPG-0157"
+          ]
+        },
+        {
+          "step": 7,
+          "id": "B7",
+          "status": "done",
+          "priority": "P1",
+          "action": "UPG-0154 gate G6 pytest check",
+          "success_check": "gate --pytest",
+          "verify_cmd": "noetfield gate --pytest",
+          "backlog_ids": [
+            "B1-B10",
+            "UPG-0154"
+          ]
+        },
+        {
+          "step": 8,
+          "id": "B8",
+          "status": "done",
+          "priority": "P1",
+          "action": "UPG-0155 PRODUCT_TRUTH alignment",
+          "success_check": "G7 phase check",
+          "verify_cmd": "noetfield gate --json",
+          "backlog_ids": [
+            "B1-B10",
+            "UPG-0155"
+          ]
+        },
+        {
+          "step": 9,
+          "id": "B9",
+          "status": "done",
+          "priority": "P1",
+          "action": "UPG-0159 integration test gate in CI",
+          "success_check": "gel-ci integration step",
+          "verify_cmd": "pytest -q tests/test_gate_integration_ci.py",
+          "backlog_ids": [
+            "D2",
+            "UPG-0159"
+          ]
+        },
+        {
+          "step": 10,
+          "id": "B10",
+          "status": "done",
+          "priority": "P1",
+          "action": "UPG-0160 decide integration + manifest close",
+          "success_check": "gel-ci decide step",
+          "verify_cmd": "pytest -q tests/test_decide_integration_ci.py",
+          "backlog_ids": [
+            "D2",
+            "UPG-0160",
+            "B1-B10"
+          ]
+        }
+      ],
+      "current_step": 10
+    },
+    {
+      "id": "C",
+      "name": "CI and Quality",
+      "track_alias": "C",
+      "tier": "T0",
+      "win_condition": "main protected by pytest + gate + agent-doc + determinism checks",
+      "depends_on": [
+        "A"
+      ],
+      "verify_cmd": "pytest -q",
+      "key_files": [
+        ".github/workflows/gel-ci.yml",
+        ".github/dependabot.yml"
+      ],
+      "backlog_ids": [
+        "C1-C10",
+        "UPG-0214"
+      ],
+      "steps": [
+        {
+          "step": 1,
+          "id": "C1",
+          "status": "done",
+          "priority": "P0",
+          "action": "UPG-0191 pytest on push/PR",
+          "success_check": "gel-ci pytest green",
+          "verify_cmd": "pytest -q",
+          "backlog_ids": [
+            "C1-C10",
+            "UPG-0191"
+          ]
+        },
+        {
+          "step": 2,
+          "id": "C2",
+          "status": "done",
+          "priority": "P0",
+          "action": "Cloud worker handler wired",
+          "success_check": "inbox handler ok",
+          "verify_cmd": "pytest -q",
+          "backlog_ids": [
+            "C1-C10"
+          ]
+        },
+        {
+          "step": 3,
+          "id": "C3",
+          "status": "done",
+          "priority": "P0",
+          "action": "UPG-0192 check_noos_agent_docs in CI",
+          "success_check": "vault tags pass",
+          "verify_cmd": "bash scripts/check_noos_agent_docs.sh",
+          "backlog_ids": [
+            "C1-C10",
+            "UPG-0192"
+          ]
+        },
+        {
+          "step": 4,
+          "id": "C4",
+          "status": "done",
+          "priority": "P0",
+          "action": "UPG-0194 noetfield gate required in CI",
+          "success_check": "gate step green",
+          "verify_cmd": "noetfield gate --json",
+          "backlog_ids": [
+            "C1-C10",
+            "UPG-0194"
+          ]
+        },
+        {
+          "step": 5,
+          "id": "C5",
+          "status": "done",
+          "priority": "P1",
+          "action": "UPG-0193 business strategy check",
+          "success_check": "continue-on-error wired",
+          "verify_cmd": "bash scripts/check_noetfield_business_strategy.sh",
+          "backlog_ids": [
+            "C1-C10",
+            "UPG-0193"
+          ]
+        },
+        {
+          "step": 6,
+          "id": "C6",
+          "status": "done",
+          "priority": "P1",
+          "action": "UPG-0195 Dependabot pip weekly",
+          "success_check": "dependabot.yml present",
+          "verify_cmd": "test -f .github/dependabot.yml",
+          "backlog_ids": [
+            "C1-C10",
+            "UPG-0195"
+          ]
+        },
+        {
+          "step": 7,
+          "id": "C7",
+          "status": "done",
+          "priority": "P1",
+          "action": "UPG-0197 gitleaks secret scan",
+          "success_check": "gitleaks in gel-ci",
+          "verify_cmd": "grep gitleaks .github/workflows/gel-ci.yml",
+          "backlog_ids": [
+            "C1-C10",
+            "UPG-0197"
+          ]
+        },
+        {
+          "step": 8,
+          "id": "C8",
+          "status": "done",
+          "priority": "P1",
+          "action": "UPG-0196 SBOM + pip-audit artifact",
+          "success_check": "sbom artifact uploaded",
+          "verify_cmd": "grep cyclonedx .github/workflows/gel-ci.yml",
+          "backlog_ids": [
+            "C1-C10",
+            "UPG-0196"
+          ]
+        },
+        {
+          "step": 9,
+          "id": "C9",
+          "status": "done",
+          "priority": "P1",
+          "action": "CI lane separate from factory autorun",
+          "success_check": "gel-ci no secrets",
+          "verify_cmd": "grep -L secrets .github/workflows/gel-ci.yml",
+          "backlog_ids": [
+            "C1-C10"
+          ]
+        },
+        {
+          "step": 10,
+          "id": "C10",
+          "status": "done",
+          "priority": "P1",
+          "action": "Determinism gate UPG-0214 in gel-ci",
+          "success_check": "make determinism-verify ok",
+          "verify_cmd": "make determinism-verify",
+          "backlog_ids": [
+            "UPG-0214"
+          ],
+          "evidence": "receipts/proof/noos-loop-determinism-external-verify-v1.json"
+        }
+      ],
+      "current_step": 10
+    },
+    {
+      "id": "D",
+      "name": "Ecosystem Observe and Packaging",
+      "track_alias": "D",
+      "tier": "T2",
+      "win_condition": "SourceA observe FRESH; PyPI publish path; dev UX examples shipped",
+      "depends_on": [
+        "B",
+        "C"
+      ],
+      "verify_cmd": "python3 scripts/observe_sourcea_supabase_v1.py --json",
+      "key_files": [
+        "scripts/observe_sourcea_supabase_v1.py",
+        ".github/workflows/publish-pypi.yml",
+        ".github/workflows/release-noetfield-gate.yml"
+      ],
+      "backlog_ids": [
+        "D1",
+        "UPG-0161",
+        "UPG-0162",
+        "UPG-0163",
+        "UPG-0164",
+        "UPG-0168",
+        "UPG-0169",
+        "UPG-0167",
+        "UPG-0174",
+        "UPG-0175",
+        "PHASE-5"
+      ],
+      "steps": [
+        {
+          "step": 1,
+          "id": "D1",
+          "status": "done",
+          "priority": "P1",
+          "action": "SourceA Supabase observe loop",
+          "success_check": "noos_sourcea_observe_loop_tick",
+          "verify_cmd": "python3 scripts/observe_sourcea_supabase_v1.py --json",
+          "backlog_ids": [
+            "D1"
+          ]
+        },
+        {
+          "step": 2,
+          "id": "D2",
+          "status": "done",
+          "priority": "P1",
+          "action": "UPG-0159/0160 integration in gel-ci",
+          "success_check": "integration steps green",
+          "verify_cmd": "pytest -q tests/test_gate_integration_ci.py tests/test_decide_integration_ci.py",
+          "backlog_ids": [
+            "D2"
+          ]
+        },
+        {
+          "step": 3,
+          "id": "D3",
+          "status": "done",
+          "priority": "P1",
+          "action": "UPG-0161 TestPyPI trusted publish path",
+          "success_check": "publish-pypi workflow_dispatch",
+          "verify_cmd": "test -f .github/workflows/publish-pypi.yml",
+          "backlog_ids": [
+            "UPG-0161"
+          ]
+        },
+        {
+          "step": 4,
+          "id": "D4",
+          "status": "done",
+          "priority": "P1",
+          "action": "UPG-0162 noetfield-gate on PyPI",
+          "success_check": "pypi 200",
+          "verify_cmd": "curl -sf https://pypi.org/pypi/noetfield-gate/json | head -1",
+          "backlog_ids": [
+            "UPG-0162"
+          ]
+        },
+        {
+          "step": 5,
+          "id": "D5",
+          "status": "done",
+          "priority": "P1",
+          "action": "UPG-0163 tag release workflow",
+          "success_check": "release-noetfield-gate.yml on main",
+          "verify_cmd": "test -f .github/workflows/release-noetfield-gate.yml",
+          "backlog_ids": [
+            "UPG-0163"
+          ]
+        },
+        {
+          "step": 6,
+          "id": "D6",
+          "status": "open",
+          "priority": "P2",
+          "action": "SourceA observe FRESH on schedule cron",
+          "success_check": "observe receipt FRESH or STALE labeled",
+          "verify_cmd": "python3 scripts/observe_sourcea_supabase_v1.py --json",
+          "backlog_ids": [
+            "LOOP-VERIFY-sourcea"
+          ]
+        },
+        {
+          "step": 7,
+          "id": "D7",
+          "status": "open",
+          "priority": "P2",
+          "action": "UPG-0164 PyPI README 3-line \u2192 full docs",
+          "success_check": "pypi links noetfield.com/gel",
+          "verify_cmd": "grep -i gel pyproject.toml README.md",
+          "backlog_ids": [
+            "UPG-0164"
+          ]
+        },
+        {
+          "step": 8,
+          "id": "D8",
+          "status": "open",
+          "priority": "P2",
+          "action": "UPG-0168 GitHub Action gate example",
+          "success_check": "example workflow in docs",
+          "verify_cmd": "test -f docs/examples/noetfield-gate-action.yml || echo pending",
+          "backlog_ids": [
+            "UPG-0168"
+          ]
+        },
+        {
+          "step": 9,
+          "id": "D9",
+          "status": "open",
+          "priority": "P2",
+          "action": "UPG-0169 pre-commit hook example",
+          "success_check": "docs snippet + stub",
+          "verify_cmd": "grep -r pre-commit docs/ || echo pending",
+          "backlog_ids": [
+            "UPG-0169"
+          ]
+        },
+        {
+          "step": 10,
+          "id": "D10",
+          "status": "deferred",
+          "priority": "P3",
+          "action": "T4 deferred: Homebrew stub, npm publish, vault policy, Phase 5",
+          "success_check": "docs stub only",
+          "verify_cmd": "test -f docs/ops/HOMEBREW_TAP_STUB.md || echo deferred",
+          "backlog_ids": [
+            "UPG-0170",
+            "UPG-0167",
+            "UPG-0174",
+            "UPG-0175",
+            "PHASE-5"
+          ]
+        }
+      ],
+      "current_step": 6
+    },
+    {
+      "id": "E",
+      "name": "Always-on Runtime",
+      "track_alias": "E",
+      "tier": "T2",
+      "win_condition": "Fly inbox + self-heal always-on; /health external L4 PASS",
+      "depends_on": [
+        "I",
+        "A"
+      ],
+      "verify_cmd": "curl -sf https://<fly-app>/health",
+      "key_files": [
+        "fly.toml",
+        "Dockerfile"
+      ],
+      "backlog_ids": [
+        "UPG-0201",
+        "UPG-0202",
+        "UPG-0206",
+        "UPG-0213"
+      ],
+      "steps": [
+        {
+          "step": 1,
+          "id": "E1",
+          "status": "open",
+          "priority": "P1",
+          "action": "UPG-0201 fly.toml + Dockerfile inbox daemon",
+          "success_check": "Fly app /health 200",
+          "verify_cmd": "fly status",
+          "backlog_ids": [
+            "UPG-0201"
+          ]
+        },
+        {
+          "step": 2,
+          "id": "E2",
+          "status": "open",
+          "priority": "P1",
+          "action": "UPG-0202 /health + /ready on runners",
+          "success_check": "external L4 PASS",
+          "verify_cmd": "curl -sf /health",
+          "backlog_ids": [
+            "UPG-0202"
+          ]
+        },
+        {
+          "step": 3,
+          "id": "E3",
+          "status": "open",
+          "priority": "P1",
+          "action": "UPG-0206 migrate self-heal loop to Fly",
+          "success_check": "sub-minute reenqueue",
+          "verify_cmd": "fly logs",
+          "backlog_ids": [
+            "UPG-0206"
+          ]
+        },
+        {
+          "step": 4,
+          "id": "E4",
+          "status": "open",
+          "priority": "P2",
+          "action": "Inbox worker always-on drain",
+          "success_check": "pending queue < 5 steady",
+          "verify_cmd": "make autorun-status",
+          "backlog_ids": [
+            "UPG-0201"
+          ]
+        },
+        {
+          "step": 5,
+          "id": "E5",
+          "status": "open",
+          "priority": "P2",
+          "action": "CF motor fallback retained",
+          "success_check": "schedule backup if Fly down",
+          "verify_cmd": "make schedule-verify",
+          "backlog_ids": [
+            "A1"
+          ]
+        },
+        {
+          "step": 6,
+          "id": "E6",
+          "status": "deferred",
+          "priority": "P3",
+          "action": "UPG-0213 gel-api Railway \u2192 Fly",
+          "success_check": "api.noetfield.com L4 post-migrate",
+          "verify_cmd": "curl api.noetfield.com/health",
+          "backlog_ids": [
+            "UPG-0213"
+          ]
+        },
+        {
+          "step": 7,
+          "id": "E7",
+          "status": "deferred",
+          "priority": "P3",
+          "action": "Multi-loop Fly fleet registry",
+          "success_check": "one app per critical loop",
+          "verify_cmd": "fly apps list",
+          "backlog_ids": [
+            "E7"
+          ]
+        },
+        {
+          "step": 8,
+          "id": "E8",
+          "status": "deferred",
+          "priority": "P3",
+          "action": "Fly secrets via vault policy",
+          "success_check": "no plaintext in fly.toml",
+          "verify_cmd": "fly secrets list",
+          "backlog_ids": [
+            "UPG-0174"
+          ]
+        },
+        {
+          "step": 9,
+          "id": "E9",
+          "status": "deferred",
+          "priority": "P3",
+          "action": "Fly autoscale machines",
+          "success_check": "scale on queue depth",
+          "verify_cmd": "fly scale show",
+          "backlog_ids": [
+            "UPG-0205"
+          ]
+        },
+        {
+          "step": 10,
+          "id": "E10",
+          "status": "deferred",
+          "priority": "P3",
+          "action": "Retire GHA-only inbox when Fly stable",
+          "success_check": "Fly primary path",
+          "verify_cmd": "make planes",
+          "backlog_ids": [
+            "UPG-0207"
+          ]
+        }
+      ],
+      "current_step": 1
+    },
+    {
+      "id": "F",
+      "name": "Deploy Reconciler",
+      "track_alias": "F",
+      "tier": "T2",
+      "win_condition": "noetfield deploy --scope unified; drift Kaizen auto-rollback",
+      "depends_on": [
+        "E"
+      ],
+      "verify_cmd": "noetfield deploy --scope gel-api --dry-run",
+      "key_files": [
+        "noetfield_gate/deploy.py"
+      ],
+      "backlog_ids": [
+        "UPG-0203",
+        "UPG-0204"
+      ],
+      "steps": [
+        {
+          "step": 1,
+          "id": "F1",
+          "status": "open",
+          "priority": "P1",
+          "action": "UPG-0203 noetfield deploy --scope CLI",
+          "success_check": "one receipt per surface",
+          "verify_cmd": "noetfield deploy --help",
+          "backlog_ids": [
+            "UPG-0203"
+          ]
+        },
+        {
+          "step": 2,
+          "id": "F2",
+          "status": "open",
+          "priority": "P1",
+          "action": "Unify 5 deploy scripts under CLI",
+          "success_check": "single entrypoint",
+          "verify_cmd": "grep deploy scripts/",
+          "backlog_ids": [
+            "UPG-0203"
+          ]
+        },
+        {
+          "step": 3,
+          "id": "F3",
+          "status": "open",
+          "priority": "P1",
+          "action": "Deploy receipt schema v1",
+          "success_check": "receipt per deploy",
+          "verify_cmd": "noetfield deploy --json",
+          "backlog_ids": [
+            "UPG-0203"
+          ]
+        },
+        {
+          "step": 4,
+          "id": "F4",
+          "status": "open",
+          "priority": "P1",
+          "action": "UPG-0204 drift auto-deploy Kaizen",
+          "success_check": "drift \u2192 machine_safe fix",
+          "verify_cmd": "make loop-heartbeat",
+          "backlog_ids": [
+            "UPG-0204"
+          ]
+        },
+        {
+          "step": 5,
+          "id": "F5",
+          "status": "open",
+          "priority": "P2",
+          "action": "Auto-rollback on regression",
+          "success_check": "failed verify \u2192 revert",
+          "verify_cmd": "noetfield deploy --rollback",
+          "backlog_ids": [
+            "UPG-0204"
+          ]
+        },
+        {
+          "step": 6,
+          "id": "F6",
+          "status": "open",
+          "priority": "P2",
+          "action": "gel-api deploy scope",
+          "success_check": "api.noetfield.com health",
+          "verify_cmd": "bash scripts/check_production_urls.sh",
+          "backlog_ids": [
+            "UPG-0203"
+          ]
+        },
+        {
+          "step": 7,
+          "id": "F7",
+          "status": "open",
+          "priority": "P2",
+          "action": "www deploy scope",
+          "success_check": "www.noetfield.com 200",
+          "verify_cmd": "make urls",
+          "backlog_ids": [
+            "UPG-0203"
+          ]
+        },
+        {
+          "step": 8,
+          "id": "F8",
+          "status": "open",
+          "priority": "P2",
+          "action": "CF worker deploy scope",
+          "success_check": "fleet motor live",
+          "verify_cmd": "make loop-fleet-dispatch",
+          "backlog_ids": [
+            "UPG-0203"
+          ]
+        },
+        {
+          "step": 9,
+          "id": "F9",
+          "status": "deferred",
+          "priority": "P3",
+          "action": "Studio Supabase deploy scope",
+          "success_check": "boundary exists",
+          "verify_cmd": "bash scripts/check_noos_live_sync_gate.sh",
+          "backlog_ids": [
+            "F9"
+          ]
+        },
+        {
+          "step": 10,
+          "id": "F10",
+          "status": "deferred",
+          "priority": "P3",
+          "action": "Deploy dry-run in gel-ci",
+          "success_check": "no secrets in CI deploy",
+          "verify_cmd": "grep deploy .github/workflows/gel-ci.yml",
+          "backlog_ids": [
+            "F10"
+          ]
+        }
+      ],
+      "current_step": 1
+    },
+    {
+      "id": "G",
+      "name": "Edge and Private Mesh",
+      "track_alias": "G",
+      "tier": "T3",
+      "win_condition": "loops use internal gel-api URL; multi-region canary verified",
+      "depends_on": [
+        "F"
+      ],
+      "verify_cmd": "bash scripts/check_production_urls.sh",
+      "key_files": [
+        "docs/ops/GEL_API_DEPLOY_LOCKED_v1.md"
+      ],
+      "backlog_ids": [
+        "UPG-0208",
+        "UPG-0209"
+      ],
+      "steps": [
+        {
+          "step": 1,
+          "id": "G1",
+          "status": "open",
+          "priority": "P2",
+          "action": "UPG-0208 private mesh internal URL",
+          "success_check": "loops never hit public api for health",
+          "verify_cmd": "grep internal docs/ops/",
+          "backlog_ids": [
+            "UPG-0208"
+          ]
+        },
+        {
+          "step": 2,
+          "id": "G2",
+          "status": "open",
+          "priority": "P2",
+          "action": "Wire loop health probes to mesh",
+          "success_check": "internal URL in loop config",
+          "verify_cmd": "make loop-heartbeat",
+          "backlog_ids": [
+            "UPG-0208"
+          ]
+        },
+        {
+          "step": 3,
+          "id": "G3",
+          "status": "open",
+          "priority": "P2",
+          "action": "UPG-0209 multi-region canary yyz+ord",
+          "success_check": "external verify both regions",
+          "verify_cmd": "bash scripts/check_production_urls.sh",
+          "backlog_ids": [
+            "UPG-0209"
+          ]
+        },
+        {
+          "step": 4,
+          "id": "G4",
+          "status": "open",
+          "priority": "P2",
+          "action": "L4 verify both regions post-deploy",
+          "success_check": "FULL-body hash match",
+          "verify_cmd": "bash scripts/check_production_urls.sh",
+          "backlog_ids": [
+            "UPG-0209"
+          ]
+        },
+        {
+          "step": 5,
+          "id": "G5",
+          "status": "deferred",
+          "priority": "P3",
+          "action": "CF edge routing for gel-api",
+          "success_check": "edge cache rules",
+          "verify_cmd": "curl -I api.noetfield.com",
+          "backlog_ids": [
+            "G5"
+          ]
+        },
+        {
+          "step": 6,
+          "id": "G6",
+          "status": "deferred",
+          "priority": "P3",
+          "action": "Private VPC for Fly\u2194Railway",
+          "success_check": "no public health from loops",
+          "verify_cmd": "fly wireguard",
+          "backlog_ids": [
+            "G6"
+          ]
+        },
+        {
+          "step": 7,
+          "id": "G7",
+          "status": "deferred",
+          "priority": "P3",
+          "action": "mTLS doc for enterprise tier",
+          "success_check": "UPG-0214 enterprise doc",
+          "verify_cmd": "grep mTLS docs/",
+          "backlog_ids": [
+            "UPG-0214"
+          ]
+        },
+        {
+          "step": 8,
+          "id": "G8",
+          "status": "deferred",
+          "priority": "P3",
+          "action": "Regional failover playbook",
+          "success_check": "ord down \u2192 yyz primary",
+          "verify_cmd": "docs/ops/",
+          "backlog_ids": [
+            "G8"
+          ]
+        },
+        {
+          "step": 9,
+          "id": "G9",
+          "status": "deferred",
+          "priority": "P3",
+          "action": "Edge latency SLO registry",
+          "success_check": "p99 < 200ms",
+          "verify_cmd": "data/noos-runtime-scaling-v1.json",
+          "backlog_ids": [
+            "UPG-0212"
+          ]
+        },
+        {
+          "step": 10,
+          "id": "G10",
+          "status": "deferred",
+          "priority": "P3",
+          "action": "Mesh verify in nightly loop",
+          "success_check": "surface loop L4 both regions",
+          "verify_cmd": "make loop-run EVENT=noos_surface_loop_tick",
+          "backlog_ids": [
+            "G10"
+          ]
+        }
+      ],
+      "current_step": 1
+    },
+    {
+      "id": "H",
+      "name": "Autoscale and ROI",
+      "track_alias": "H",
+      "tier": "T2",
+      "win_condition": "L11 THROTTLED_ROI rules live; queue scaler reacts",
+      "depends_on": [
+        "E",
+        "GOV"
+      ],
+      "verify_cmd": "make loop-heartbeat",
+      "key_files": [
+        "data/noos-runtime-scaling-v1.json"
+      ],
+      "backlog_ids": [
+        "UPG-0205",
+        "UPG-0212"
+      ],
+      "steps": [
+        {
+          "step": 1,
+          "id": "H1",
+          "status": "done",
+          "priority": "P0",
+          "action": "L11 cost on every cycle receipt",
+          "success_check": "cost + value_class fields",
+          "verify_cmd": "make loop-heartbeat",
+          "backlog_ids": [
+            "GOV-L7-L12"
+          ]
+        },
+        {
+          "step": 2,
+          "id": "H2",
+          "status": "open",
+          "priority": "P1",
+          "action": "UPG-0205 queue-depth inbox scaler",
+          "success_check": "pending>10 \u2192 scale 1\u21922",
+          "verify_cmd": "make autorun-status",
+          "backlog_ids": [
+            "UPG-0205"
+          ]
+        },
+        {
+          "step": 3,
+          "id": "H3",
+          "status": "open",
+          "priority": "P2",
+          "action": "UPG-0212 runtime scaling registry",
+          "success_check": "THROTTLED_ROI per loop",
+          "verify_cmd": "test -f data/noos-runtime-scaling-v1.json",
+          "backlog_ids": [
+            "UPG-0212"
+          ]
+        },
+        {
+          "step": 4,
+          "id": "H4",
+          "status": "open",
+          "priority": "P2",
+          "action": "30% none spend \u2192 THROTTLED_ROI",
+          "success_check": "L11 enforcement",
+          "verify_cmd": "make loop-heartbeat",
+          "backlog_ids": [
+            "GOV-L7-L12"
+          ]
+        },
+        {
+          "step": 5,
+          "id": "H5",
+          "status": "open",
+          "priority": "P2",
+          "action": "Backpressure on inbox depth",
+          "success_check": "admit rate capped",
+          "verify_cmd": "make autorun-status",
+          "backlog_ids": [
+            "UPG-0205"
+          ]
+        },
+        {
+          "step": 6,
+          "id": "H6",
+          "status": "deferred",
+          "priority": "P3",
+          "action": "Per-loop cost budget caps",
+          "success_check": "monthly USD cap",
+          "verify_cmd": "make planes",
+          "backlog_ids": [
+            "H6"
+          ]
+        },
+        {
+          "step": 7,
+          "id": "H7",
+          "status": "deferred",
+          "priority": "P3",
+          "action": "ROI dashboard in autorun-status",
+          "success_check": "value_class breakdown",
+          "verify_cmd": "make autorun-status",
+          "backlog_ids": [
+            "UPG-0210"
+          ]
+        },
+        {
+          "step": 8,
+          "id": "H8",
+          "status": "deferred",
+          "priority": "P3",
+          "action": "Auto-throttle low-ROI loops",
+          "success_check": "THROTTLED_ROI state",
+          "verify_cmd": "make loop-heartbeat",
+          "backlog_ids": [
+            "H8"
+          ]
+        },
+        {
+          "step": 9,
+          "id": "H9",
+          "status": "deferred",
+          "priority": "P3",
+          "action": "Scaler integration with Fly",
+          "success_check": "fly scale on depth",
+          "verify_cmd": "fly scale show",
+          "backlog_ids": [
+            "UPG-0205"
+          ]
+        },
+        {
+          "step": 10,
+          "id": "H10",
+          "status": "deferred",
+          "priority": "P3",
+          "action": "Scaling receipt per scale event",
+          "success_check": "improvement-receipt-v2",
+          "verify_cmd": "receipts/proof/",
+          "backlog_ids": [
+            "H10"
+          ]
+        }
+      ],
+      "current_step": 2
+    },
+    {
+      "id": "I",
+      "name": "Sandbox Fleet",
+      "track_alias": "I",
+      "tier": "T1",
+      "win_condition": "7/7 loops VERIFIED 24h; 8-sandbox registry live",
+      "depends_on": [
+        "GOV",
+        "A"
+      ],
+      "verify_cmd": "make loop-heartbeat",
+      "key_files": [
+        "data/noos-24-7-loops-v1.json",
+        "scripts/noos_loop_runner_v1.py",
+        "scripts/open_noos_verified_window_v1.py"
+      ],
+      "backlog_ids": [
+        "LOOP-FLEET",
+        "LOOP-VERIFY-ALL",
+        "LOOP-VERIFY-inbox",
+        "LOOP-VERIFY-self_heal",
+        "LOOP-VERIFY-runtime",
+        "LOOP-VERIFY-surface",
+        "LOOP-VERIFY-chain",
+        "LOOP-VERIFY-sourcea",
+        "LOOP-VERIFY-agent_nerve",
+        "UPG-0210",
+        "UPG-0211",
+        "SANDBOX-REGISTRY"
+      ],
+      "steps": [
+        {
+          "step": 1,
+          "id": "I1",
+          "status": "done",
+          "priority": "P0",
+          "action": "LOOP-FLEET 7 domain loops deployed",
+          "success_check": "7 loops dispatch green",
+          "verify_cmd": "make loops-status",
+          "backlog_ids": [
+            "LOOP-FLEET"
+          ]
+        },
+        {
+          "step": 2,
+          "id": "I2",
+          "status": "open",
+          "priority": "P0",
+          "action": "LOOP-VERIFY-inbox 24h schedule-only",
+          "success_check": "2+ schedule runs sink PASS",
+          "verify_cmd": "make verified-window",
+          "backlog_ids": [
+            "LOOP-VERIFY-inbox"
+          ]
+        },
+        {
+          "step": 3,
+          "id": "I3",
+          "status": "open",
+          "priority": "P0",
+          "action": "LOOP-VERIFY-self_heal 24h",
+          "success_check": "heartbeat daily drift 0",
+          "verify_cmd": "make loop-heartbeat",
+          "backlog_ids": [
+            "LOOP-VERIFY-self_heal"
+          ]
+        },
+        {
+          "step": 4,
+          "id": "I4",
+          "status": "open",
+          "priority": "P0",
+          "action": "LOOP-VERIFY-runtime 24h",
+          "success_check": "gate+pytest schedule cycles",
+          "verify_cmd": "make verified-window",
+          "backlog_ids": [
+            "LOOP-VERIFY-runtime"
+          ]
+        },
+        {
+          "step": 5,
+          "id": "I5",
+          "status": "open",
+          "priority": "P0",
+          "action": "LOOP-VERIFY-surface 24h",
+          "success_check": "check_production_urls schedule",
+          "verify_cmd": "make urls",
+          "backlog_ids": [
+            "LOOP-VERIFY-surface"
+          ]
+        },
+        {
+          "step": 6,
+          "id": "I6",
+          "status": "open",
+          "priority": "P0",
+          "action": "LOOP-VERIFY-chain 24h",
+          "success_check": "noetfield verify schedule",
+          "verify_cmd": "noetfield verify --json",
+          "backlog_ids": [
+            "LOOP-VERIFY-chain"
+          ]
+        },
+        {
+          "step": 7,
+          "id": "I7",
+          "status": "open",
+          "priority": "P1",
+          "action": "LOOP-VERIFY-sourcea + agent_nerve",
+          "success_check": "observe FRESH + agent docs",
+          "verify_cmd": "python3 scripts/observe_sourcea_supabase_v1.py --json",
+          "backlog_ids": [
+            "LOOP-VERIFY-sourcea",
+            "LOOP-VERIFY-agent_nerve"
+          ]
+        },
+        {
+          "step": 8,
+          "id": "I8",
+          "status": "open",
+          "priority": "P0",
+          "action": "LOOP-VERIFY-ALL umbrella close",
+          "success_check": "7/7 DECLARED\u2192VERIFIED",
+          "verify_cmd": "make verified-window",
+          "backlog_ids": [
+            "LOOP-VERIFY-ALL"
+          ]
+        },
+        {
+          "step": 9,
+          "id": "I9",
+          "status": "open",
+          "priority": "P2",
+          "action": "UPG-0210 per-sandbox SLA in autorun-status",
+          "success_check": "DECLARED|VERIFIED per sandbox",
+          "verify_cmd": "make autorun-status",
+          "backlog_ids": [
+            "UPG-0210"
+          ]
+        },
+        {
+          "step": 10,
+          "id": "I10",
+          "status": "open",
+          "priority": "P2",
+          "action": "SANDBOX-REGISTRY 8 sandboxes",
+          "success_check": "one row per sandbox",
+          "verify_cmd": "make autorun-status",
+          "backlog_ids": [
+            "SANDBOX-REGISTRY",
+            "UPG-0211"
+          ]
+        }
+      ],
+      "current_step": 2
+    },
+    {
+      "id": "GOV",
+      "name": "Governance and Determinism",
+      "track_alias": "GOV",
+      "tier": "T1",
+      "win_condition": "governed-autorun L1\u2013L13 on main; D1\u2013D8 gap closed",
+      "depends_on": [],
+      "verify_cmd": "make determinism-verify",
+      "key_files": [
+        "docs/GOVERNED_AUTORUN_LAWS_v3.md",
+        "scripts/noos_loop_determinism_v1.py",
+        "scripts/noos_loop_heartbeat_v1.py"
+      ],
+      "backlog_ids": [
+        "GOV-L7-L12",
+        "MERGE-GOV-BRANCH",
+        "UPG-0214"
+      ],
+      "steps": [
+        {
+          "step": 1,
+          "id": "G1",
+          "status": "done",
+          "priority": "P0",
+          "action": "L7 founder_blocked never vanishes",
+          "success_check": "every cycle receipt",
+          "verify_cmd": "make loop-heartbeat",
+          "backlog_ids": [
+            "GOV-L7-L12"
+          ]
+        },
+        {
+          "step": 2,
+          "id": "G2",
+          "status": "done",
+          "priority": "P0",
+          "action": "L8 sink invariant per cycle",
+          "success_check": "origin counts == sink_count",
+          "verify_cmd": "make loop-heartbeat",
+          "backlog_ids": [
+            "GOV-L7-L12"
+          ]
+        },
+        {
+          "step": 3,
+          "id": "G3",
+          "status": "done",
+          "priority": "P0",
+          "action": "L11 cost metering on receipts",
+          "success_check": "cost block present",
+          "verify_cmd": "make loop-heartbeat",
+          "backlog_ids": [
+            "GOV-L7-L12"
+          ]
+        },
+        {
+          "step": 4,
+          "id": "G4",
+          "status": "done",
+          "priority": "P0",
+          "action": "L12 drift in daily heartbeat",
+          "success_check": "drift=0 or labeled",
+          "verify_cmd": "make loop-heartbeat",
+          "backlog_ids": [
+            "GOV-L7-L12"
+          ]
+        },
+        {
+          "step": 5,
+          "id": "G5",
+          "status": "done",
+          "priority": "P0",
+          "action": "v2 cycle receipts + heartbeat",
+          "success_check": "autorun-cycle-receipt-v2",
+          "verify_cmd": "make loop-heartbeat",
+          "backlog_ids": [
+            "GOV-L7-L12"
+          ]
+        },
+        {
+          "step": 6,
+          "id": "G6",
+          "status": "done",
+          "priority": "P1",
+          "action": "UPG-0214 determinism CI gate",
+          "success_check": "make determinism-verify ok",
+          "verify_cmd": "make determinism-verify",
+          "backlog_ids": [
+            "UPG-0214"
+          ],
+          "evidence": "receipts/proof/noos-loop-determinism-external-verify-v1.json"
+        },
+        {
+          "step": 7,
+          "id": "G7",
+          "status": "open",
+          "priority": "P0",
+          "action": "MERGE-GOV-BRANCH to main",
+          "success_check": "main has v3 laws + determinism",
+          "verify_cmd": "git branch --show-current",
+          "backlog_ids": [
+            "MERGE-GOV-BRANCH"
+          ]
+        },
+        {
+          "step": 8,
+          "id": "G8",
+          "status": "done",
+          "priority": "P0",
+          "action": "D4 sink-ack gates COMPLETE",
+          "success_check": "advance_state requires sink_acked",
+          "verify_cmd": "make determinism-verify",
+          "backlog_ids": [
+            "G8"
+          ],
+          "evidence": "receipts/proof/noos-kaizen-d4-sink-ack-v1.json"
+        },
+        {
+          "step": 9,
+          "id": "G9",
+          "status": "open",
+          "priority": "P1",
+          "action": "D2 CAS wire in loop runner",
+          "success_check": "cas_advance on cycle_number",
+          "verify_cmd": "make determinism-verify",
+          "backlog_ids": [
+            "G9"
+          ],
+          "evidence": "receipts/proof/noos-determinism-gap-audit-v1.json"
+        },
+        {
+          "step": 10,
+          "id": "G10",
+          "status": "open",
+          "priority": "P2",
+          "action": "D1 op_key upsert + D5 nightly replay",
+          "success_check": "sink upsert + replay job",
+          "verify_cmd": "make determinism-verify",
+          "backlog_ids": [
+            "G10"
+          ],
+          "evidence": "receipts/proof/noos-determinism-gap-audit-v1.json"
+        }
+      ],
+      "current_step": 7
+    }
+  ]
+}

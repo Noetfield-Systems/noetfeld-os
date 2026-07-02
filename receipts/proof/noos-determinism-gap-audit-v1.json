@@ -1,0 +1,69 @@
+{
+  "schema": "noos-determinism-gap-audit-v1",
+  "audited_at": "2026-07-02",
+  "scope": "7x 24/7 domain loops + factory autorun + cloud inbox worker",
+  "authority": "governed-autorun v3 L13 / D1-D8",
+  "gaps": [
+    {
+      "rule": "D1",
+      "current_state": "op_key on cycle receipts; Supabase sink not upsert-by-op_key",
+      "compliant": "partial",
+      "fix": "Upsert factory_cycle_runs on op_key in factory_supabase_sink_v1.py",
+      "effort": "M"
+    },
+    {
+      "rule": "D2",
+      "current_state": "next_cycle_number read-increment-write without CAS",
+      "compliant": "N",
+      "fix": "Wire cas_advance() in noos_loop_runner_v1.py state writes",
+      "effort": "M"
+    },
+    {
+      "rule": "D3",
+      "current_state": "cycle_number from state file +1 (not max from sink)",
+      "compliant": "partial",
+      "fix": "Derive next ID from max(sink rows, state file)",
+      "effort": "M"
+    },
+    {
+      "rule": "D4",
+      "current_state": "advance_state() gates COMPLETE on sink_acked; persist after sink",
+      "compliant": "Y",
+      "fix": null,
+      "effort": "done"
+    },
+    {
+      "rule": "D5",
+      "current_state": "cycle-*.json append log; fold_cycle_events() + CI replay test",
+      "compliant": "partial",
+      "fix": "Nightly replay job compares all loop dirs to state-v1.json",
+      "effort": "S"
+    },
+    {
+      "rule": "D6",
+      "current_state": "trigger_source recorded; jitter only at CF motor",
+      "compliant": "partial",
+      "fix": "Record jitter_ms in cycle receipt at dispatch edge",
+      "effort": "S"
+    },
+    {
+      "rule": "D7",
+      "current_state": "No LLM in loop runner paths",
+      "compliant": "Y",
+      "fix": null,
+      "effort": "n/a"
+    },
+    {
+      "rule": "D8",
+      "current_state": "verify_loop_determinism_external_v1.py in gel-ci",
+      "compliant": "Y",
+      "fix": null,
+      "effort": "done"
+    }
+  ],
+  "first_kaizen_fix": {
+    "rule": "D4",
+    "roi": "high — prevents false COMPLETE when Supabase sink fails (23-row class incident)",
+    "receipt": "receipts/proof/noos-kaizen-d4-sink-ack-v1.json"
+  }
+}

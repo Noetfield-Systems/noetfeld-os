@@ -1,10 +1,14 @@
 # Governed Autorun Laws v3
 
 **Authority:** NOETFELD-OS runtime · applies to all autorun/loop work in `noetfeld-os`  
+**Skill:** `.cursor/skills/governed-autorun/SKILL.md` (canonical L1–L13)  
 **Schema refs:** `docs/governed-autorun/references/receipt-schemas.md`  
-**Determinism refs:** `docs/governed-autorun/references/deterministic-loops.md` (D1–D8)
+**Determinism refs:** `docs/governed-autorun/references/deterministic-loops.md` (D1–D8)  
+**Gap audit:** `receipts/proof/noos-determinism-gap-audit-v1.json`  
+**CI gate:** `scripts/verify_loop_determinism_external_v1.py` · `make determinism-verify`  
+**Upgrade planes:** `data/noos-upgrade-planes-v1.json` · `make planes` · `docs/_NOOS_AGENT/[NOOS-AGENT-20260702-028]_TEN_UPGRADE_PLANES_v1.md`
 
-Operating system for continuous, parallel, self-improving multi-sandbox execution. Every law traces to a real production incident. v2 added the ROI layer; v3 adds deterministic loop core (L13).
+Operating system for continuous, parallel, self-improving multi-sandbox execution. Every law traces to a real production incident. v2 added the ROI layer; v3 adds deterministic loop core (L13, D1–D8).
 
 ---
 
@@ -48,10 +52,10 @@ Deploys run from a clean committed SHA. Dirty guard fails closed. Receipts live 
 
 | Tier | Path | Use |
 |------|------|-----|
-| **Proof** | `receipts/proof/` or Supabase | Migration apply, schedule proof, VERIFIED-window closes |
+| **Proof** | `receipts/proof/` or Supabase | Migration apply, schedule proof, VERIFIED-window, determinism gate |
 | **Runtime** | `.noos-runtime/` | Cycle churn, heartbeat mirrors — never cite as closeout evidence |
 
-Proof-grade writers: `apply_supabase_migration_v1.py`, `verify_noos_github_schedule_v1.py`, `open_noos_verified_window_v1.py`.
+Proof-grade writers: `apply_supabase_migration_v1.py`, `verify_noos_github_schedule_v1.py`, `open_noos_verified_window_v1.py`, `verify_loop_determinism_external_v1.py`.
 
 ### L7 — Founder items never block, never vanish
 
@@ -69,7 +73,7 @@ Expansion admits only rows passing the current rubric unmodified. 0 admitted is 
 
 No sandbox reads another's disk/repo. Status flows through the shared DB. Rows older than freshness window → `STALE_DATA`, never guessed.
 
-NOOS reads SourceA via Supabase (`portfolio-spine` profile) only.
+NOOS reads SourceA via Supabase (`portfolio-spine` profile) only — never SourceA repo or `~/.sina` disk.
 
 ### L11 — Every cycle has a cost; every loop earns its keep
 
@@ -77,7 +81,7 @@ Each cycle receipt carries `cost` and `value_class`. Trailing-window spend >30% 
 
 ### L12 — Drift is detected, not discovered
 
-Each heartbeat compares deployed truth to committed truth. Any mismatch → DRIFT receipt with the diff.
+Each heartbeat compares deployed truth to committed truth (config, worker version, cron, routes, migrations). Any mismatch → DRIFT receipt with the diff.
 
 ### L13 — Loops are deterministic
 
@@ -86,6 +90,23 @@ Same inputs → same transitions → same receipts, replayable from the event lo
 Full rules + legal-transition table: `docs/governed-autorun/references/deterministic-loops.md`.
 
 Cycle receipts carry `transition_log_tail` (last transition auditable inline).
+
+---
+
+## Deterministic loop core (D1–D8)
+
+| Rule | Requirement | Module |
+|------|-------------|--------|
+| D1 | Idempotency `op_key` on every side effect | `scripts/noos_loop_determinism_v1.py` |
+| D2 | Single writer + CAS advance | `cas_advance()` — wire in runner (pending) |
+| D3 | IDs from max(actual)+1 | cycle_number from state file — partial |
+| D4 | Advance := execute ∧ validate ∧ sink_ack | `advance_state()` in loop runner |
+| D5 | Event log truth; state = fold(events) | `fold_cycle_events()` + replay test |
+| D6 | Time/random at scheduling edge only | partial — `trigger_source` recorded |
+| D7 | LLM proposal only | N/A (no LLM in loop runner) |
+| D8 | Verify pure function | `verify_loop_determinism_external_v1.py` |
+
+**CI determinism gate (UPG-0214):** `pytest tests/test_loop_determinism_ci.py` via `make determinism-verify` in `gel-ci.yml`.
 
 ---
 
@@ -123,7 +144,7 @@ Report only: fixed fields — SHAs, receipts, counts, cost table, dirty state.
 2. Read-only status integration
 3. Schedule proof via Supabase truth_log (≥2 `event=schedule` rows)
 4. External verifier (L4) + metering (L11) before write/deploy authority
-5. 24h zero-manual window → **VERIFIED**
+5. 24h zero-manual window green · determinism gate green (L13) → **VERIFIED**
 
 ---
 

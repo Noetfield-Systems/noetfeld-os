@@ -200,6 +200,12 @@
       "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260702-027]_UNIFIED_AUTONOMY_UPGRADE_MASTER_v1.md",
       "doc_type": "UNIFIED_UPGRADE_MASTER",
       "title": "Unified autonomy upgrade master — tiered combined backlog (Fly-plane)"
+    },
+    {
+      "trace_id": "NOOS-AGENT-20260702-028",
+      "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260702-028]_TEN_UPGRADE_PLANES_v1.md",
+      "doc_type": "UPGRADE_PLANES_10x10",
+      "title": "Ten upgrade planes — 10×10 execution matrix (A–I + GOV)"
     }
   ]
 }
