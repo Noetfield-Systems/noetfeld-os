@@ -1,4 +1,4 @@
-.PHONY: test gate demo build-gate-js install inbox cloud-worker autorun-once autorun autorun-status autorun-tick-deploy autorun-tick-dispatch autonomous-verify loop-run loop-fleet-deploy loop-fleet-dispatch loops-status urls
+.PHONY: test gate demo build-gate-js install inbox cloud-worker autorun-once autorun autorun-status autorun-tick-deploy autorun-tick-dispatch autonomous-verify loop-run loop-fleet-deploy loop-fleet-dispatch loops-status loop-heartbeat urls
 
 test:
 	pytest -q
@@ -51,6 +51,9 @@ loop-fleet-dispatch:
 
 loops-status:
 	@python3 -c "import json; d=json.load(open('data/noos-24-7-loops-v1.json')); print(json.dumps({'motor':d['motor'],'loops':[{'id':x['id'],'interval':x['interval_minutes'],'event':x['event_type']} for x in d['loops']]}, indent=2))"
+
+loop-heartbeat:
+	python3 scripts/noos_loop_heartbeat_v1.py --write-receipt --json
 
 urls:
 	bash scripts/check_production_urls.sh
