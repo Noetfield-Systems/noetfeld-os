@@ -111,6 +111,20 @@
       "run_command": "make cloud-worker"
     },
     {
+      "id": "noos_factory_autorun_tick",
+      "title": "NOOS factory autorun CF tick",
+      "plane": "NOETFELD-OS",
+      "probe": {
+        "type": "url_sweep_readonly",
+        "urls": [
+          {
+            "name": "cf tick health",
+            "url": "https://noos-factory-autorun-tick-v1.sina-kazemnezhad-ca.workers.dev/health"
+          }
+        ]
+      }
+    },
+    {
       "id": "noos_schedule_canary",
       "title": "NOOS schedule canary",
       "plane": "NOETFELD-OS",

@@ -1,4 +1,4 @@
-.PHONY: test gate demo build-gate-js install inbox cloud-worker autorun-once autorun autorun-status urls
+.PHONY: test gate demo build-gate-js install inbox cloud-worker autorun-once autorun autorun-status autorun-tick-deploy autorun-tick-dispatch urls
 
 test:
 	pytest -q
@@ -29,6 +29,12 @@ autorun:
 
 autorun-status:
 	python3 scripts/autorun_status_v1.py
+
+autorun-tick-deploy:
+	bash scripts/deploy_noos_factory_autorun_tick_cf_v1.sh
+
+autorun-tick-dispatch:
+	python3 scripts/trigger_noos_factory_dispatch_v1.py
 
 urls:
 	bash scripts/check_production_urls.sh

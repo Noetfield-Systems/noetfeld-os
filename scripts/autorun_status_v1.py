@@ -462,10 +462,10 @@ def probe_github_schedule(wf: dict[str, Any]) -> dict[str, Any]:
     observed_at = latest.get("created_at")
     if event == "schedule" and latest.get("conclusion") == "success":
         status = "COMPLETE"
-    elif event == "schedule":
-        status = "RUNNING" if latest.get("status") != "completed" else "FAILED_WITH_RECEIPT"
-    elif event == "repository_dispatch":
-        status = "RUNNING"
+    elif event in ("schedule", "repository_dispatch"):
+        status = "RUNNING" if latest.get("status") != "completed" else (
+            "COMPLETE" if latest.get("conclusion") == "success" else "FAILED_WITH_RECEIPT"
+        )
     else:
         status = "BLOCKED_WITH_REASON"
     row: dict[str, Any] = {

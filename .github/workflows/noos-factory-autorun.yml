@@ -5,7 +5,8 @@ name: NOOS factory autorun
 # No workflow_dispatch — zero manual Cursor triggers.
 on:
   schedule:
-    - cron: "*/10 * * * *"
+    # Explicit UTC minutes — some private repos ignore */10 until re-enabled.
+    - cron: "0,10,20,30,40,50 * * * *"
   repository_dispatch:
     types: [noos_factory_autorun_tick]
 
@@ -139,7 +140,8 @@ jobs:
 
           req = urllib.request.Request(
               f"{base}/rest/v1/noetfield_factory_cycle_runs"
-              "?select=recorded_at,runner_output&runner_output->>cloud_trigger=eq.schedule"
+              "?select=recorded_at,runner_output"
+              "&runner_output->>cloud_trigger=in.(schedule,repository_dispatch)"
               "&order=recorded_at.desc&limit=1",
               headers=headers,
           )
@@ -147,9 +149,9 @@ jobs:
               with urllib.request.urlopen(req, timeout=20) as resp:
                   scheduled = json.loads(resp.read().decode("utf-8"))
               if scheduled:
-                  print(f"latest_scheduled_receipt={scheduled[0]}")
+                  print(f"latest_autonomous_receipt={scheduled[0]}")
               else:
-                  print("latest_scheduled_receipt=none_yet")
+                  print("latest_autonomous_receipt=none_yet")
           except urllib.error.HTTPError:
-              print("latest_scheduled_receipt=query_unavailable")
+              print("latest_autonomous_receipt=query_unavailable")
           PY
