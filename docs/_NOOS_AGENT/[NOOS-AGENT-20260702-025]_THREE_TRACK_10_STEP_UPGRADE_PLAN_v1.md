@@ -14,6 +14,8 @@ manifest: docs/_NOOS_AGENT/MANIFEST.json
 -->
 
 **Status:** Active · 2026-07-02  
+**Superseded for execution by [NOOS-AGENT-20260702-029]([NOOS-AGENT-20260702-029]_TEN_10_STEP_UPGRADE_PLANS_v1.md)** — tracks A/B/C now live in the 10-plane set. Retained for historical closeout reference only (026 cites this doc).
+
 **Scope:** Three parallel 10-step tracks — Factory Autonomy (A), Phase 4 Chain Tools (B), CI/Quality (C)  
 **Baseline:** Migration `0012` applied · dashboard v1.1 · canary `e2e0b8b` · schedule silence diagnosed
 

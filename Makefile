@@ -1,4 +1,4 @@
-.PHONY: test gate demo build-gate-js install inbox cloud-worker autorun-once autorun autorun-status autorun-tick-deploy autorun-tick-dispatch autonomous-verify schedule-verify determinism-verify planes supabase-migrate verified-window loop-run loop-fleet-deploy loop-fleet-dispatch loops-status loop-heartbeat backlog urls
+.PHONY: test gate demo build-gate-js install inbox cloud-worker autorun-once autorun autorun-status autorun-tick-deploy autorun-tick-dispatch autonomous-verify schedule-verify determinism-verify planes plan plans-all supabase-migrate verified-window loop-run loop-fleet-deploy loop-fleet-dispatch loops-status loop-heartbeat backlog urls
 
 test:
 	pytest -q
@@ -47,6 +47,13 @@ determinism-verify:
 
 planes:
 	python3 scripts/planes_status_v1.py --json
+
+plan:
+	@test -n "$(PLANE)" || (echo "Usage: make plan PLANE=GOV" && exit 1)
+	python3 scripts/plane_plan_v1.py --plane $(PLANE)
+
+plans-all:
+	python3 scripts/plane_plan_v1.py --list
 
 supabase-migrate:
 	@test -n "$(MIGRATION)" || (echo "Usage: make supabase-migrate MIGRATION=0012" && exit 1)

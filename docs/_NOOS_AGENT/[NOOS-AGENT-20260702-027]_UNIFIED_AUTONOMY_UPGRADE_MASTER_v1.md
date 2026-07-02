@@ -17,7 +17,8 @@ manifest: docs/_NOOS_AGENT/MANIFEST.json
 **Status:** ACTIVE · 2026-07-02  
 **Goal:** Fly.io-grade autonomous full stack — always-on runtime + governed control plane  
 **Machine backlog:** `data/noos-unified-upgrade-backlog-v1.json` (62 items, tiered)  
-**Upgrade planes:** `data/noos-upgrade-planes-v1.json` · [NOOS-AGENT-20260702-028]([NOOS-AGENT-20260702-028]_TEN_UPGRADE_PLANES_v1.md) · `make planes`
+**Upgrade planes:** `data/noos-upgrade-planes-v1.json` · [NOOS-AGENT-20260702-028]([NOOS-AGENT-20260702-028]_TEN_UPGRADE_PLANES_v1.md) · `make planes`  
+**Sprint plans:** [NOOS-AGENT-20260702-029]([NOOS-AGENT-20260702-029]_TEN_10_STEP_UPGRADE_PLANS_v1.md) · `make plan PLANE=GOV`
 
 ---
 
@@ -28,11 +29,13 @@ Ten parallel machine lanes (A–I + GOV), each with a 10-step ladder (100 steps 
 | Command | Purpose |
 |---------|---------|
 | `make planes` | JSON status: tier, progress, next open step per plane |
+| `make plan PLANE=GOV` | Sprint-grade 10-step plan for one plane |
+| `make plans-all` | List all planes + next step |
 | `make schedule-verify` | Plane A verify |
 | `make determinism-verify` | Plane GOV verify |
 | `make loop-heartbeat` | Plane I + H verify |
 
-See **[NOOS-AGENT-20260702-028]_TEN_UPGRADE_PLANES_v1.md** for per-plane tables and locked execution order.
+See **[NOOS-AGENT-20260702-028]_TEN_UPGRADE_PLANES_v1.md** for per-plane overview and **[NOOS-AGENT-20260702-029]_TEN_10_STEP_UPGRADE_PLANS_v1.md** for sprint execution tables.
 
 ---
 

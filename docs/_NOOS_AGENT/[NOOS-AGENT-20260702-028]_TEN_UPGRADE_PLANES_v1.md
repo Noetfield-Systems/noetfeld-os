@@ -16,7 +16,8 @@ manifest: docs/_NOOS_AGENT/MANIFEST.json
 
 **Status:** ACTIVE · 2026-07-02  
 **Scope:** 10 machine upgrade planes (A–I + GOV) · 100 steps total · COM excluded (FOUNDER lane L7)  
-**Machine SSOT:** `data/noos-upgrade-planes-v1.json` · `make planes`
+**Machine SSOT:** `data/noos-upgrade-planes-v1.json` · `make planes`  
+**Sprint execution:** [NOOS-AGENT-20260702-029]([NOOS-AGENT-20260702-029]_TEN_10_STEP_UPGRADE_PLANS_v1.md) · `make plan PLANE=<id>`
 
 ---
 
@@ -226,6 +227,8 @@ flowchart LR
 
 ```bash
 make planes                    # JSON status all 10 planes
+make plan PLANE=GOV            # sprint 10-step plan for one plane
+make plans-all                 # list planes + next step
 make schedule-verify           # Plane A
 make determinism-verify        # Plane GOV
 make loop-heartbeat            # Plane I + H

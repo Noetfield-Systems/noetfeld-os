@@ -206,6 +206,12 @@
       "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260702-028]_TEN_UPGRADE_PLANES_v1.md",
       "doc_type": "UPGRADE_PLANES_10x10",
       "title": "Ten upgrade planes — 10×10 execution matrix (A–I + GOV)"
+    },
+    {
+      "trace_id": "NOOS-AGENT-20260702-029",
+      "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260702-029]_TEN_10_STEP_UPGRADE_PLANS_v1.md",
+      "doc_type": "UPGRADE_PLAN_10_STEP",
+      "title": "Ten 10-step upgrade plans — sprint-grade execution (all planes)"
     }
   ]
 }
