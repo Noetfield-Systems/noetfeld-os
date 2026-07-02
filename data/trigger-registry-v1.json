@@ -5,6 +5,34 @@
   "spec_path": "docs/NOETFIELD_COHERENT_SYSTEM_SPEC_v1.md",
   "triggers": [
     {
+      "trigger_id": "NOOS-T-deploy-workers-push",
+      "system": "noetfeld-os",
+      "kind": "event",
+      "schedule": null,
+      "target": "Deploy NOOS CF workers on push",
+      "valid_in_verified_window": true,
+      "owner_workflow": "deploy-noos-cloud-workers-v1",
+      "live_probe": {
+        "type": "gha_workflow",
+        "path": ".github/workflows/deploy-noos-cloud-workers-v1.yml",
+        "expects": ["push"]
+      }
+    },
+    {
+      "trigger_id": "NOOS-T-deploy-workers-dispatch",
+      "system": "noetfeld-os",
+      "kind": "manual",
+      "schedule": null,
+      "target": "Manual deploy NOOS CF workers workflow_dispatch",
+      "valid_in_verified_window": false,
+      "owner_workflow": "deploy-noos-cloud-workers-v1",
+      "live_probe": {
+        "type": "gha_workflow",
+        "path": ".github/workflows/deploy-noos-cloud-workers-v1.yml",
+        "expects": ["workflow_dispatch"]
+      }
+    },
+    {
       "trigger_id": "NOOS-T2-factory-cf",
       "system": "noetfeld-os",
       "kind": "schedule",
@@ -229,6 +257,19 @@
         "type": "gha_workflow",
         "path": ".github/workflows/publish-pypi.yml",
         "expects": ["workflow_dispatch"]
+      }
+    },
+    {
+      "trigger_id": "NOOS-T8-stale-lane-pgcron",
+      "system": "noetfeld-os",
+      "kind": "schedule",
+      "schedule": "*/15 * * * *",
+      "target": "Supabase pg_cron stale-lane detector → noetfield_stale_lane_events + pg_notify spine feed",
+      "valid_in_verified_window": true,
+      "owner_workflow": "pg_cron_t8",
+      "live_probe": {
+        "type": "pg_cron_migration",
+        "path": "infrastructure/supabase/migrations/0015_stale_lane_pgcron_t8.sql"
       }
     }
   ]

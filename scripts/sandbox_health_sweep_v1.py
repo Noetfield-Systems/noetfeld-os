@@ -169,6 +169,16 @@ def _probe_registry_entry(entry: dict[str, Any]) -> dict[str, Any]:
             "live_events": parsed["events"],
             "reason": None if ok else f"missing_events:{','.join(missing)}",
         }
+    if probe_type == "pg_cron_migration":
+        expected = str(entry.get("schedule") or "")
+        ok = expected in text and "noetfield_detect_stale_lanes_v1" in text
+        return {
+            "trigger_id": trigger_id,
+            "ok": ok,
+            "path": rel_path,
+            "expected_schedule": expected,
+            "reason": None if ok else "pg_cron_migration_mismatch",
+        }
     return {"trigger_id": trigger_id, "ok": False, "reason": "unknown_probe_type", "path": rel_path}
 
 
@@ -198,6 +208,8 @@ def run_sweep(*, repo_root: Path | None = None) -> dict[str, Any]:
         elif probe_type == "gha_workflow":
             for event in probe.get("expects") or []:
                 claimed.add(f"gha:{rel}:{event}")
+        elif probe_type == "pg_cron_migration":
+            claimed.add(f"pg_cron:{rel}:{entry.get('schedule')}")
 
     unregistered = [row for row in live_all if row["signature"] not in claimed]
 
