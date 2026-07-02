@@ -1,0 +1,17 @@
+# P4 prep — founder enables branch protection in GitHub UI before enforcing.
+# Copilot Kaizen pilot (P7) depends on these fences (spec §4, §7).
+
+/docs/GOVERNED_AUTORUN_LAWS_v3.md @kazemnezhadsina144-dot
+/docs/NOETFIELD_COHERENT_SYSTEM_SPEC_v1.md @kazemnezhadsina144-dot
+
+/scripts/verify_* @kazemnezhadsina144-dot
+/scripts/noos_loop_determinism_v1.py @kazemnezhadsina144-dot
+/scripts/open_noos_verified_window_v1.py @kazemnezhadsina144-dot
+/scripts/verify_loop_determinism_external_v1.py @kazemnezhadsina144-dot
+/scripts/verify_noos_loop_replay_v1.py @kazemnezhadsina144-dot
+/scripts/sandbox_health_sweep_v1.py @kazemnezhadsina144-dot
+
+/data/trigger-registry-v1.json @kazemnezhadsina144-dot
+/data/mission-registry-v1.json @kazemnezhadsina144-dot
+
+/noetfield_gate/ @kazemnezhadsina144-dot

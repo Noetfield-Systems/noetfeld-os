@@ -1,0 +1,58 @@
+---
+name: Copilot Kaizen (machine_safe)
+description: Assign a machine_safe Kaizen item to GitHub Copilot coding agent (P7 pilot).
+title: "[Kaizen] "
+labels:
+  - kaizen
+  - machine_safe
+  - copilot-agent
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **P7 pilot — do not use for founder_gated work.** Copilot may only touch paths outside CODEOWNERS fences.
+        Required gates before merge: `gel-ci` + scoped tests. Founder enables branch protection (P4) before auto-merge.
+  - type: dropdown
+    id: mission_id
+    attributes:
+      label: Mission
+      description: Parent mission for spend accounting (spec §3).
+      options:
+        - M4 kaizen
+        - M3 truth-spine
+        - M2 factory-24-7
+    validations:
+      required: true
+  - type: input
+    id: op_key
+    attributes:
+      label: op_key
+      description: Deterministic idempotency key for this change (governed-autorun v3).
+      placeholder: kaizen-20260702-docstring-noos-loop-heartbeat
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: Scoped target (one sandbox)
+      description: Single file or tight directory — max 40 files per lane law.
+      placeholder: scripts/noos_loop_heartbeat_v1.py — clarify trigger_sweep docstring only
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance check
+      description: Minimum verify command that must pass on the PR.
+      placeholder: python3 scripts/sandbox_health_sweep_v1.py && make loop-heartbeat
+    validations:
+      required: true
+  - type: checkboxes
+    id: fences
+    attributes:
+      label: Fence confirmation
+      options:
+        - label: Change does NOT touch scripts/verify_* , laws docs, registries, or noetfield_gate/
+          required: true
+        - label: Change is machine_safe (reversible, no founder decision, no verifier authority)
+          required: true
