@@ -82,8 +82,11 @@ def _post_row(table: str, row: dict[str, Any], *, merge: bool = False) -> dict[s
     prefer = "return=representation"
     if merge:
         prefer += ",resolution=merge-duplicates"
+    url = f"{base}/rest/v1/{table}"
+    if merge and "item_id" in row:
+        url = f"{url}?on_conflict=item_id"
     req = urllib.request.Request(
-        f"{base}/rest/v1/{table}",
+        url,
         data=json.dumps(row).encode("utf-8"),
         method="POST",
         headers={
@@ -100,6 +103,8 @@ def _post_row(table: str, row: dict[str, Any], *, merge: bool = False) -> dict[s
             return {"ok": True, "id": inserted.get("id"), "status": resp.status}
     except urllib.error.HTTPError as exc:
         detail = exc.read().decode("utf-8", errors="replace")
+        if exc.code == 409 and merge:
+            return {"ok": True, "status": 409, "merged": True}
         if exc.code in (404, 406):
             pg = _insert_pg(table, row, merge=merge)
             if pg.get("ok") or pg.get("skipped"):
