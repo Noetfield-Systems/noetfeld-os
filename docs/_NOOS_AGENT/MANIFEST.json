@@ -182,6 +182,12 @@
       "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260702-024]_ECOSYSTEM_NEXT_PLAN_LOCKED_v1.md",
       "doc_type": "ECOSYSTEM_NEXT_PLAN_LOCKED",
       "title": "Ecosystem next plan — PyPI, www, commercial proof — locked v1"
+    },
+    {
+      "trace_id": "NOOS-AGENT-20260702-025",
+      "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260702-025]_THREE_TRACK_10_STEP_UPGRADE_PLAN_v1.md",
+      "doc_type": "UPGRADE_PLAN_10_STEP",
+      "title": "Three-track 10-step upgrade plan — Autonomy, Phase 4, CI"
     }
   ]
 }
