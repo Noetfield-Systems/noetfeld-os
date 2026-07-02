@@ -1,0 +1,66 @@
+{
+  "schema": "noos-loop-verified-window-v1",
+  "merge_sha": "86beb4005a295e67a260f8d59992662d4d696dba",
+  "window_hours": 24,
+  "window_started_at": "2026-07-02T12:12:50Z",
+  "window_closes_at": "2026-07-03T12:12:50Z",
+  "overall_state": "DECLARED",
+  "law": "Manual dispatch green \u2260 cron green (L4). Each loop VERIFIED after 24h schedule-only.",
+  "founder_blocked_note": "NOOS-C-01 remains founder_blocked; does not block window.",
+  "loops": [
+    {
+      "loop_id": "inbox",
+      "github_workflow": "noos-inbox-loop.yml",
+      "interval_minutes": 5,
+      "verification_state": "DECLARED",
+      "verified_at": null
+    },
+    {
+      "loop_id": "runtime",
+      "github_workflow": "noos-runtime-loop.yml",
+      "interval_minutes": 15,
+      "verification_state": "DECLARED",
+      "verified_at": null
+    },
+    {
+      "loop_id": "surface",
+      "github_workflow": "noos-surface-loop.yml",
+      "interval_minutes": 20,
+      "verification_state": "DECLARED",
+      "verified_at": null
+    },
+    {
+      "loop_id": "chain",
+      "github_workflow": "noos-chain-loop.yml",
+      "interval_minutes": 30,
+      "verification_state": "DECLARED",
+      "verified_at": null
+    },
+    {
+      "loop_id": "self_heal",
+      "github_workflow": "noos-self-heal-loop.yml",
+      "interval_minutes": 10,
+      "verification_state": "DECLARED",
+      "verified_at": null
+    },
+    {
+      "loop_id": "sourcea_observe",
+      "github_workflow": "noos-sourcea-observe-loop.yml",
+      "interval_minutes": 30,
+      "verification_state": "DECLARED",
+      "verified_at": null
+    },
+    {
+      "loop_id": "agent_nerve",
+      "github_workflow": "noos-agent-nerve-loop.yml",
+      "interval_minutes": 60,
+      "verification_state": "DECLARED",
+      "verified_at": null
+    }
+  ],
+  "loop_count": 7,
+  "close_criteria": {
+    "per_loop": "2+ consecutive schedule runs + sink invariant PASS",
+    "zero_manual": true
+  }
+}
