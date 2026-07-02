@@ -1,0 +1,33 @@
+name: NOOS loop — self-heal
+
+on:
+  schedule:
+    - cron: "0,10,20,30,40,50 * * * *"
+  repository_dispatch:
+    types: [noos_self_heal_loop_tick]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: noos-loop-self-heal
+  cancel-in-progress: false
+
+jobs:
+  loop:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements.txt && pip install -e .
+      - name: Run 24/7 self-heal loop
+        env:
+          NOETFIELD_SUPABASE_URL: ${{ secrets.NOETFIELD_SUPABASE_URL }}
+          NOETFIELD_SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.NOETFIELD_SUPABASE_SERVICE_ROLE_KEY }}
+          GITHUB_EVENT_NAME: ${{ github.event_name }}
+          GITHUB_RUN_ID: ${{ github.run_id }}
+          GITHUB_WORKFLOW: ${{ github.workflow }}
+        run: python3 scripts/noos_loop_runner_v1.py --event-type noos_self_heal_loop_tick --json

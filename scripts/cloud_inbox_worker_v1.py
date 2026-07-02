@@ -172,19 +172,99 @@ def _run(cmd: list[str], *, cwd: Path | None = None, timeout: int = 180) -> dict
 
 
 def _exec_upg_0152() -> dict[str, Any]:
-    result = _run(["noetfield", "gate", "--json"])
-    if result["ok"]:
-        json.loads(result["stdout"])
-    return result
+    return _run_gate_json()
 
 
 def _exec_upg_0153() -> dict[str, Any]:
     api = os.environ.get("NOETFIELD_API_URL", "https://api.noetfield.com").rstrip("/")
-    return _run(["noetfield", "gate", "--strict", "--api-url", api])
+    return _run_gate_json(extra_args=["--strict", "--api-url", api])
+
+
+def _exec_upg_0154() -> dict[str, Any]:
+    return _run_gate_json(extra_args=["--pytest"])
+
+
+def _exec_upg_0155() -> dict[str, Any]:
+    return _run_gate_json()
+
+
+def _exec_upg_0156() -> dict[str, Any]:
+    intent = ROOT / "fixtures/demo_intents/approve.json"
+    proc = subprocess.run(
+        [sys.executable, "-m", "noetfield_gate.cli", "decide", "--file", str(intent), "--validate-only"],
+        cwd=str(ROOT),
+        capture_output=True,
+        text=True,
+        timeout=60,
+    )
+    return {
+        "upg": "UPG-0156",
+        "ok": proc.returncode == 0,
+        "stdout": proc.stdout[-500:],
+        "stderr": proc.stderr[-500:],
+        "exit_code": proc.returncode,
+    }
+
+
+def _exec_upg_0157() -> dict[str, Any]:
+    from noetfield_gate.boot import dated_receipt_dir
+
+    gate_dir = dated_receipt_dir("gate")
+    decide_dir = dated_receipt_dir("decide")
+    gate_dir.mkdir(parents=True, exist_ok=True)
+    decide_dir.mkdir(parents=True, exist_ok=True)
+    gate_result = _run_gate_json()
+    return {
+        "upg": "UPG-0157",
+        "ok": gate_result.get("ok") and gate_dir.is_dir() and decide_dir.is_dir(),
+        "gate_receipt_dir": str(gate_dir),
+        "decide_receipt_dir": str(decide_dir),
+        "gate": gate_result,
+    }
+
+
+def _exec_upg_0158() -> dict[str, Any]:
+    proc = subprocess.run(
+        [sys.executable, "-m", "noetfield_gate.cli", "verify", "--json"],
+        cwd=str(ROOT),
+        capture_output=True,
+        text=True,
+        timeout=120,
+    )
+    ok = proc.returncode == 0
+    try:
+        payload = json.loads(proc.stdout) if proc.stdout.strip() else {}
+        ok = ok and payload.get("outcome") == "PASS"
+    except json.JSONDecodeError:
+        ok = False
+    return {
+        "upg": "UPG-0158",
+        "ok": ok,
+        "stdout": proc.stdout[-800:],
+        "stderr": proc.stderr[-500:],
+        "exit_code": proc.returncode,
+    }
+
+
+def _run_gate_json(*, extra_args: list[str] | None = None) -> dict[str, Any]:
+    cmd = [sys.executable, "-m", "noetfield_gate.cli", "gate", "--json"]
+    if extra_args:
+        cmd.extend(extra_args)
+    result = _run(cmd)
+    if result["ok"]:
+        try:
+            json.loads(result["stdout"])
+        except json.JSONDecodeError:
+            result["ok"] = False
+    return result
+
+
+def _run_pytest() -> dict[str, Any]:
+    return _run([sys.executable, "-m", "pytest", "-q"])
 
 
 def _exec_upg_0191() -> dict[str, Any]:
-    return _run(["pytest", "-q"])
+    return _run_pytest()
 
 
 def _exec_upg_0151() -> dict[str, Any]:
@@ -194,8 +274,8 @@ def _exec_upg_0151() -> dict[str, Any]:
 
 
 def _exec_baseline(item: dict[str, Any]) -> dict[str, Any]:
-    gate = _run(["noetfield", "gate", "--json"])
-    tests = _run(["pytest", "-q"])
+    gate = _run_gate_json()
+    tests = _run_pytest()
     return {
         "ok": gate["ok"] and tests["ok"],
         "exit_code": 0 if gate["ok"] and tests["ok"] else 1,
@@ -211,6 +291,11 @@ HANDLERS: dict[str, Callable[[], dict[str, Any]]] = {
     "UPG-0151": _exec_upg_0151,
     "UPG-0152": _exec_upg_0152,
     "UPG-0153": _exec_upg_0153,
+    "UPG-0154": _exec_upg_0154,
+    "UPG-0155": _exec_upg_0155,
+    "UPG-0156": _exec_upg_0156,
+    "UPG-0157": _exec_upg_0157,
+    "UPG-0158": _exec_upg_0158,
     "UPG-0191": _exec_upg_0191,
 }
 

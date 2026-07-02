@@ -1,0 +1,6 @@
+name = "noos-loop-fleet-tick-v1"
+main = "src/index.js"
+compatibility_date = "2024-06-01"
+
+[triggers]
+crons = ["*/5 * * * *"]

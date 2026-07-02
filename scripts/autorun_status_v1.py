@@ -560,6 +560,66 @@ def probe_supabase_noos_factory(wf: dict[str, Any], wf_doc: dict[str, Any], stal
     return stale_wrap(base, observed_at=observed_at, stale_minutes=stale_minutes, source="noos_factory_autorun")
 
 
+def probe_supabase_noos_loop(wf: dict[str, Any], wf_doc: dict[str, Any], stale_minutes: float) -> dict[str, Any]:
+    probe = wf["probe"]
+    cfg = supabase_profile_config(probe.get("supabase_profile", "noetfield"), wf_doc)
+    command = wf.get("run_command")
+    table = probe.get("supabase_table", "noetfield_factory_cycle_runs")
+    factory_id = probe.get("factory_id", "")
+    if not cfg:
+        return blocked("supabase_not_configured", command=command, evidence={"table": table, "factory_id": factory_id})
+    params = urllib.parse.urlencode(
+        {
+            "select": "cycle_number,status,recorded_at,runner_output,exit_code,factory_id",
+            "factory_id": f"eq.{factory_id}",
+            "order": "recorded_at.desc",
+            "limit": "1",
+        }
+    )
+    hit = supabase_get(cfg, table, query=params)
+    if not hit.get("ok"):
+        return blocked(
+            "supabase_query_failed",
+            command=command,
+            evidence={"table": table, "factory_id": factory_id, "http": hit.get("status")},
+        )
+    rows = hit.get("rows") or []
+    if not rows:
+        return {
+            "status": "IDLE_NO_WORK",
+            "reason": "no_loop_cycles",
+            "command": command,
+            "evidence": {"factory_id": factory_id, "table": table},
+        }
+    row = rows[0]
+    observed_at = row.get("recorded_at")
+    cycle_status = str(row.get("status") or "")
+    runner = row.get("runner_output") or {}
+    if cycle_status == "ok":
+        base: dict[str, Any] = {
+            "status": "RUNNING",
+            "cycle_number": row.get("cycle_number"),
+            "evidence": {
+                "factory_id": factory_id,
+                "recorded_at": observed_at,
+                "cloud_trigger": runner.get("cloud_trigger"),
+                "loop_id": runner.get("loop_id") or probe.get("loop_id"),
+            },
+        }
+    elif cycle_status == "degraded":
+        base = {
+            "status": "FAILED_WITH_RECEIPT",
+            "command": command,
+            "evidence": {"factory_id": factory_id, "recorded_at": observed_at, "status": cycle_status},
+        }
+    else:
+        base = {"status": "IDLE_NO_WORK", "evidence": {"factory_id": factory_id, "recorded_at": observed_at}}
+    gh_wf = probe.get("github_workflow")
+    if gh_wf:
+        base["evidence"]["github_dispatch"] = github_latest_run(str(gh_wf), event="repository_dispatch")
+    return stale_wrap(base, observed_at=observed_at, stale_minutes=stale_minutes, source=f"noos_loop:{factory_id}")
+
+
 def probe_supabase_noos_inbox(wf: dict[str, Any], wf_doc: dict[str, Any], stale_minutes: float) -> dict[str, Any]:
     probe = wf["probe"]
     cfg = supabase_profile_config(probe.get("supabase_profile", "noetfield"), wf_doc)
@@ -738,6 +798,7 @@ PROBES = {
     "supabase_sourcea_cloud_queue": probe_supabase_sourcea_cloud_queue,
     "supabase_sourcea_receipt": probe_supabase_sourcea_receipt,
     "supabase_noos_factory": probe_supabase_noos_factory,
+    "supabase_noos_loop": probe_supabase_noos_loop,
     "supabase_noos_inbox": probe_supabase_noos_inbox,
     "url_sweep_readonly": probe_url_sweep_readonly,
     "github_schedule_probe": probe_github_schedule,
@@ -808,7 +869,7 @@ def build_dashboard() -> dict[str, Any]:
     registered_sandboxes = [sb["id"] for sb in sb_doc.get("sandboxes") or []]
 
     return {
-        "schema": "autorun-status-dashboard-v1.2",
+        "schema": "autorun-status-dashboard-v1.3",
         "read_only": True,
         "generated_at": utc_now(),
         "dirty_total": dirty_total,

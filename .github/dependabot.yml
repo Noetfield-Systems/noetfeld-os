@@ -1,0 +1,15 @@
+# NOOS CI quality lane — complements factory autorun (secrets) and CF cron motor (dispatch).
+# gel-ci.yml: pytest + gate + agent docs on push/PR (UPG-0191–0194).
+# noos-factory-autorun.yml: Supabase sink + inbox drain — separate secrets lane.
+# noos-factory-autorun-tick-v1 CF Worker: repository_dispatch every 10m — not part of PR CI.
+
+version: 2
+updates:
+  - package-ecosystem: pip
+    directory: "/"
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+    labels:
+      - dependencies
+      - noos-ci

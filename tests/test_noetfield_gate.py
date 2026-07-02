@@ -85,3 +85,54 @@ def test_gate_json_stdout(tmp_path, monkeypatch, capsys):
 def test_sample_block_intent_extreme_dti():
     dti = SAMPLE_BLOCK_INTENT["monthly_debt"] / SAMPLE_BLOCK_INTENT["monthly_income"]
     assert dti > 0.60
+
+
+def test_intent_validate_approve_fixture():
+    from noetfield_gate.intent_validate import validate_intent_file
+
+    root = Path(__file__).resolve().parents[1]
+    result = validate_intent_file(root / "fixtures/demo_intents/approve.json")
+    assert result["ok"]
+    assert result["applicant_id"] == "gate-demo-001"
+
+
+def test_verify_chain_passes_in_repo(monkeypatch):
+    root = Path(__file__).resolve().parents[1]
+    monkeypatch.chdir(root)
+    from noetfield_gate.verify import verify_chain
+
+    report = verify_chain(root=root)
+    assert report["outcome"] == "PASS"
+
+
+def test_dated_receipt_dirs():
+    from noetfield_gate.boot import dated_receipt_dir
+
+    gate = dated_receipt_dir("gate")
+    decide = dated_receipt_dir("decide")
+    assert gate.parent == decide.parent
+    assert "receipts" in str(gate)
+
+
+def test_decide_validate_only_cli(capsys):
+    root = Path(__file__).resolve().parents[1]
+    from noetfield_gate.cli import main
+
+    code = main(
+        ["decide", "--file", str(root / "fixtures/demo_intents/approve.json"), "--validate-only"]
+    )
+    assert code == 0
+    out = capsys.readouterr().out
+    payload = json.loads(out)
+    assert payload["ok"]
+
+
+def test_verify_cli_json(monkeypatch, capsys):
+    root = Path(__file__).resolve().parents[1]
+    monkeypatch.chdir(root)
+    from noetfield_gate.cli import main
+
+    code = main(["verify", "--json"])
+    assert code == 0
+    payload = json.loads(capsys.readouterr().out)
+    assert payload["outcome"] == "PASS"

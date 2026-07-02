@@ -10,7 +10,13 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-DEFAULT_RECEIPT = Path.home() / ".noetfield" / "gate-report-v1.json"
+def dated_receipt_dir(kind: str) -> Path:
+    """UPG-0157 — ~/.noetfield/receipts/YYYY-MM-DD/{kind}/"""
+    day = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    return Path.home() / ".noetfield" / "receipts" / day / kind
+
+
+DEFAULT_RECEIPT = dated_receipt_dir("gate") / "gate-report-v1.json"
 
 
 def _now() -> str:
@@ -59,7 +65,11 @@ def _check(name: str, cid: str, ok: bool, reason: str, **extra: Any) -> dict[str
 
 
 def run_gate_checks(
-    *, root: Path | None = None, api_url: str | None = None, strict: bool = False
+    *,
+    root: Path | None = None,
+    api_url: str | None = None,
+    strict: bool = False,
+    include_pytest: bool = False,
 ) -> dict[str, Any]:
     explicit_root = root is not None
     root = (root or resolve_root()).resolve()
@@ -179,6 +189,77 @@ def run_gate_checks(
         except Exception as exc:
             checks.append(_check("policy_registry", "G5", False, f"PolicyRegistry: {exc}"))
 
+    if include_pytest and (root / "run.py").is_file():
+        import subprocess
+
+        try:
+            proc = subprocess.run(
+                [sys.executable, "-m", "pytest", "-q", "--tb=no"],
+                cwd=str(root),
+                capture_output=True,
+                text=True,
+                timeout=180,
+            )
+            ok = proc.returncode == 0
+            tail = (proc.stdout or proc.stderr or "").strip().splitlines()[-1:] or [""]
+            checks.append(
+                _check(
+                    "pytest_suite",
+                    "G6",
+                    ok,
+                    tail[0] if ok else (proc.stderr or proc.stdout or "pytest failed")[:200],
+                )
+            )
+        except subprocess.TimeoutExpired:
+            checks.append(_check("pytest_suite", "G6", False, "pytest timed out (180s)"))
+        except Exception as exc:
+            checks.append(_check("pytest_suite", "G6", False, str(exc)))
+    else:
+        checks.append(
+            _check(
+                "pytest_suite",
+                "G6",
+                True,
+                "skipped — pass include_pytest=True or use noetfield gate --pytest",
+                skipped=True,
+            )
+        )
+
+    truth_path = root / "docs/_NOOS_AGENT/PRODUCT_TRUTH.md"
+    manifest_path = root / "docs/_NOOS_AGENT/UPGRADE_MANIFEST.json"
+    if truth_path.is_file() and manifest_path.is_file():
+        try:
+            import re
+
+            text = truth_path.read_text(encoding="utf-8")
+            manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+            phase_match = re.search(r"Phase:\s*(\d+)", text)
+            truth_phase = int(phase_match.group(1)) if phase_match else None
+            manifest_phase = int(manifest.get("current_phase") or 0)
+            ok = truth_phase is not None and truth_phase == manifest_phase
+            checks.append(
+                _check(
+                    "product_truth_phase",
+                    "G7",
+                    ok,
+                    f"PRODUCT_TRUTH phase {truth_phase} vs manifest {manifest_phase}",
+                    truth_phase=truth_phase,
+                    manifest_phase=manifest_phase,
+                )
+            )
+        except (OSError, json.JSONDecodeError, ValueError) as exc:
+            checks.append(_check("product_truth_phase", "G7", False, str(exc)))
+    else:
+        checks.append(
+            _check(
+                "product_truth_phase",
+                "G7",
+                True,
+                "skipped — PRODUCT_TRUTH or UPGRADE_MANIFEST missing",
+                skipped=True,
+            )
+        )
+
     if strict:
         for check in checks:
             if check.get("skipped"):
@@ -220,4 +301,4 @@ def write_gate_report(report: dict[str, Any], path: Path | None = None) -> Path:
     return out
 
 
-__all__ = ["run_gate_checks", "write_gate_report", "resolve_root", "DEFAULT_RECEIPT"]
+__all__ = ["run_gate_checks", "write_gate_report", "resolve_root", "DEFAULT_RECEIPT", "dated_receipt_dir"]

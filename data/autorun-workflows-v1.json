@@ -1,6 +1,6 @@
 {
   "schema": "autorun-workflows-v1",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "read_only": true,
   "one_law": "Observe autorun surfaces only. phase_reconciler_v1 remains sole control authority.",
   "sourcea_truth_lane": "Supabase only (truth_log, cycle_receipts, heartbeat). Never read SourceA repo or ~/.sina.",
@@ -132,6 +132,99 @@
         "type": "github_schedule_probe",
         "github_workflow": "noos-schedule-canary.yml"
       }
+    },
+    {
+      "id": "noos_loop_fleet_tick",
+      "title": "NOOS 24/7 loop fleet CF tick",
+      "plane": "NOETFELD-OS",
+      "probe": {
+        "type": "url_sweep_readonly",
+        "urls": [
+          {
+            "name": "loop fleet health",
+            "url": "https://noos-loop-fleet-tick-v1.sina-kazemnezhad-ca.workers.dev/health"
+          }
+        ]
+      }
+    },
+    {
+      "id": "noos_loop_inbox",
+      "title": "24/7 loop — inbox drain",
+      "plane": "NOETFELD-OS",
+      "probe": {
+        "type": "supabase_noos_loop",
+        "supabase_profile": "noetfield",
+        "supabase_table": "noetfield_factory_cycle_runs",
+        "factory_id": "loop-inbox",
+        "loop_id": "inbox",
+        "github_workflow": "noos-inbox-loop.yml"
+      },
+      "run_command": "python3 scripts/noos_loop_runner_v1.py --event-type noos_inbox_loop_tick"
+    },
+    {
+      "id": "noos_loop_runtime",
+      "title": "24/7 loop — runtime gate+pytest",
+      "plane": "NOETFELD-OS",
+      "probe": {
+        "type": "supabase_noos_loop",
+        "supabase_profile": "noetfield",
+        "factory_id": "loop-runtime",
+        "loop_id": "runtime",
+        "github_workflow": "noos-runtime-loop.yml"
+      },
+      "run_command": "python3 scripts/noos_loop_runner_v1.py --event-type noos_runtime_loop_tick"
+    },
+    {
+      "id": "noos_loop_surface",
+      "title": "24/7 loop — public surface",
+      "plane": "NOETFELD-OS",
+      "probe": {
+        "type": "supabase_noos_loop",
+        "supabase_profile": "noetfield",
+        "factory_id": "loop-surface",
+        "loop_id": "surface",
+        "github_workflow": "noos-surface-loop.yml"
+      },
+      "run_command": "python3 scripts/noos_loop_runner_v1.py --event-type noos_surface_loop_tick"
+    },
+    {
+      "id": "noos_loop_chain",
+      "title": "24/7 loop — chain tools",
+      "plane": "NOETFELD-OS",
+      "probe": {
+        "type": "supabase_noos_loop",
+        "supabase_profile": "noetfield",
+        "factory_id": "loop-chain",
+        "loop_id": "chain",
+        "github_workflow": "noos-chain-loop.yml"
+      },
+      "run_command": "python3 scripts/noos_loop_runner_v1.py --event-type noos_chain_loop_tick"
+    },
+    {
+      "id": "noos_loop_self_heal",
+      "title": "24/7 loop — self-heal nerve",
+      "plane": "NOETFELD-OS",
+      "probe": {
+        "type": "supabase_noos_loop",
+        "supabase_profile": "noetfield",
+        "factory_id": "loop-self-heal",
+        "loop_id": "self_heal",
+        "github_workflow": "noos-self-heal-loop.yml"
+      },
+      "run_command": "python3 scripts/noos_loop_runner_v1.py --event-type noos_self_heal_loop_tick"
+    },
+    {
+      "id": "noos_loop_agent_nerve",
+      "title": "24/7 loop — agent vault nerve",
+      "plane": "NOETFELD-OS",
+      "probe": {
+        "type": "supabase_noos_loop",
+        "supabase_profile": "noetfield",
+        "factory_id": "loop-agent-nerve",
+        "loop_id": "agent_nerve",
+        "github_workflow": "noos-agent-nerve-loop.yml"
+      },
+      "run_command": "python3 scripts/noos_loop_runner_v1.py --event-type noos_agent_nerve_loop_tick"
     },
     {
       "id": "sandbox_health_sweep",

@@ -1,5 +1,10 @@
 name: GEL CI
 
+# Lane separation (Track C C9):
+# - This workflow: public CI on push/PR — pytest, gate, agent docs, SBOM (no secrets).
+# - noos-factory-autorun.yml: factory loop + Supabase sink (repository secrets).
+# - CF noos-factory-autorun-tick-v1: cron → repository_dispatch (not PR CI).
+
 on:
   push:
     branches: [main]
@@ -29,4 +34,27 @@ jobs:
         run: pytest -q
 
       - name: noetfield gate (local)
-        run: noetfield gate
+        run: noetfield gate --json
+
+      - name: Business strategy alignment (UPG-0193)
+        continue-on-error: true
+        run: bash scripts/check_noetfield_business_strategy.sh
+
+      - name: Gitleaks secret scan (UPG-0197)
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: SBOM + pip-audit (UPG-0196)
+        run: |
+          pip install pip-audit cyclonedx-bom
+          pip-audit -r requirements.txt || true
+          cyclonedx-py requirements -o sbom-cyclonedx.json requirements.txt
+          test -f sbom-cyclonedx.json
+
+      - name: Upload SBOM artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: sbom-cyclonedx
+          path: sbom-cyclonedx.json
+          if-no-files-found: warn

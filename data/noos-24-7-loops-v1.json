@@ -1,0 +1,111 @@
+{
+  "schema": "noos-24-7-loops-v1",
+  "version": "1.0.0",
+  "one_law": "Each loop runs forever via CF fleet motor + GitHub repository_dispatch. No workflow_dispatch.",
+  "motor": {
+    "cf_worker": "noos-loop-fleet-tick-v1",
+    "base_cron": "*/5 * * * *",
+    "health_url": "https://noos-loop-fleet-tick-v1.sina-kazemnezhad-ca.workers.dev/health",
+    "legacy_factory_motor": "noos-factory-autorun-tick-v1"
+  },
+  "loops": [
+    {
+      "id": "inbox",
+      "title": "Inbox drain loop",
+      "domain": "factory-inbox",
+      "event_type": "noos_inbox_loop_tick",
+      "interval_minutes": 5,
+      "github_workflow": "noos-inbox-loop.yml",
+      "factory_id": "loop-inbox",
+      "steps": [
+        {"name": "cloud_worker", "cmd": ["python3", "scripts/cloud_inbox_worker_v1.py"]}
+      ],
+      "self_heal": [
+        {"name": "reenqueue_blocked", "cmd": ["python3", "scripts/reenqueue_blocked_upg_inbox_v1.py"]}
+      ]
+    },
+    {
+      "id": "runtime",
+      "title": "Runtime gate + pytest loop",
+      "domain": "gel-runtime",
+      "event_type": "noos_runtime_loop_tick",
+      "interval_minutes": 15,
+      "github_workflow": "noos-runtime-loop.yml",
+      "factory_id": "loop-runtime",
+      "steps": [
+        {"name": "gate", "cmd": ["python3", "-m", "noetfield_gate.cli", "gate", "--json", "--pytest"]},
+        {"name": "pytest", "cmd": ["python3", "-m", "pytest", "-q"]}
+      ]
+    },
+    {
+      "id": "surface",
+      "title": "Public surface health loop",
+      "domain": "public-nerve",
+      "event_type": "noos_surface_loop_tick",
+      "interval_minutes": 20,
+      "github_workflow": "noos-surface-loop.yml",
+      "factory_id": "loop-surface",
+      "steps": [
+        {"name": "production_urls", "cmd": ["bash", "scripts/check_production_urls.sh"]}
+      ]
+    },
+    {
+      "id": "chain",
+      "title": "Chain tools verify loop",
+      "domain": "chain-tools",
+      "event_type": "noos_chain_loop_tick",
+      "interval_minutes": 30,
+      "github_workflow": "noos-chain-loop.yml",
+      "factory_id": "loop-chain",
+      "steps": [
+        {"name": "verify", "cmd": ["python3", "-m", "noetfield_gate.cli", "verify", "--json"]},
+        {
+          "name": "decide_validate",
+          "cmd": [
+            "python3",
+            "-m",
+            "noetfield_gate.cli",
+            "decide",
+            "--file",
+            "fixtures/demo_intents/approve.json",
+            "--validate-only"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "self_heal",
+      "title": "Self-heal + autonomy nerve loop",
+      "domain": "self-improvement",
+      "event_type": "noos_self_heal_loop_tick",
+      "interval_minutes": 10,
+      "github_workflow": "noos-self-heal-loop.yml",
+      "factory_id": "loop-self-heal",
+      "steps": [
+        {"name": "reenqueue_blocked", "cmd": ["python3", "scripts/reenqueue_blocked_upg_inbox_v1.py"]},
+        {
+          "name": "autonomy_verify",
+          "cmd": ["python3", "scripts/verify_noos_autonomous_24h_v1.py", "--hours", "6", "--write-receipt"]
+        },
+        {"name": "autorun_status", "cmd": ["python3", "scripts/autorun_status_v1.py"]}
+      ]
+    },
+    {
+      "id": "agent_nerve",
+      "title": "Agent vault nerve loop",
+      "domain": "agent-docs",
+      "event_type": "noos_agent_nerve_loop_tick",
+      "interval_minutes": 60,
+      "github_workflow": "noos-agent-nerve-loop.yml",
+      "factory_id": "loop-agent-nerve",
+      "steps": [
+        {"name": "agent_docs", "cmd": ["bash", "scripts/check_noos_agent_docs.sh"]},
+        {
+          "name": "business_strategy",
+          "cmd": ["bash", "scripts/check_noetfield_business_strategy.sh"],
+          "continue_on_error": true
+        }
+      ]
+    }
+  ]
+}

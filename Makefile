@@ -1,4 +1,4 @@
-.PHONY: test gate demo build-gate-js install inbox cloud-worker autorun-once autorun autorun-status autorun-tick-deploy autorun-tick-dispatch urls
+.PHONY: test gate demo build-gate-js install inbox cloud-worker autorun-once autorun autorun-status autorun-tick-deploy autorun-tick-dispatch autonomous-verify loop-run loop-fleet-deploy loop-fleet-dispatch loops-status urls
 
 test:
 	pytest -q
@@ -35,6 +35,22 @@ autorun-tick-deploy:
 
 autorun-tick-dispatch:
 	python3 scripts/trigger_noos_factory_dispatch_v1.py
+
+autonomous-verify:
+	python3 scripts/verify_noos_autonomous_24h_v1.py --write-receipt --json
+
+loop-run:
+	@test -n "$(EVENT)" || (echo "Usage: make loop-run EVENT=noos_chain_loop_tick" && exit 1)
+	python3 scripts/noos_loop_runner_v1.py --event-type $(EVENT) --json
+
+loop-fleet-deploy:
+	bash scripts/deploy_noos_loop_fleet_tick_cf_v1.sh
+
+loop-fleet-dispatch:
+	python3 scripts/trigger_noos_loop_dispatch_v1.py --all --json
+
+loops-status:
+	@python3 -c "import json; d=json.load(open('data/noos-24-7-loops-v1.json')); print(json.dumps({'motor':d['motor'],'loops':[{'id':x['id'],'interval':x['interval_minutes'],'event':x['event_type']} for x in d['loops']]}, indent=2))"
 
 urls:
 	bash scripts/check_production_urls.sh

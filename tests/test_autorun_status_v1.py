@@ -69,6 +69,13 @@ def test_workflow_registry_ids():
         "noos_worker_inbox",
         "noos_factory_autorun_tick",
         "noos_schedule_canary",
+        "noos_loop_fleet_tick",
+        "noos_loop_inbox",
+        "noos_loop_runtime",
+        "noos_loop_surface",
+        "noos_loop_chain",
+        "noos_loop_self_heal",
+        "noos_loop_agent_nerve",
         "sandbox_health_sweep",
     ]
 

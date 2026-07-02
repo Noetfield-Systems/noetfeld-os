@@ -37,7 +37,22 @@
     "UPG-0176",
     "UPG-0184",
     "UPG-0189",
-    "UPG-0190"
+    "UPG-0190",
+    "UPG-0151",
+    "UPG-0152",
+    "UPG-0153",
+    "UPG-0154",
+    "UPG-0155",
+    "UPG-0156",
+    "UPG-0157",
+    "UPG-0158",
+    "UPG-0191",
+    "UPG-0192",
+    "UPG-0193",
+    "UPG-0194",
+    "UPG-0195",
+    "UPG-0196",
+    "UPG-0197"
   ],
   "in_progress_steps": [
     "UPG-0001",
@@ -63,7 +78,7 @@
     "commercial_c01": "Phase C — first Trust Brief / AI Value OS briefing"
   },
   "updated_at": "2026-07-02",
-  "notes": "Phase A www truth sync closed. PyPI org deferred to founder. Executing Phase 4 chain tools: demo script, npm scaffold, Makefile. Commercial proof (UPG-0001–0007) remains founder-led.",
+  "notes": "Track B/C v2 closeout: Phase 4 chain tools (0151-0158), CI hardening (0191-0197), CF motor autonomous factory. Commercial proof (UPG-0001–0007) remains founder-led.",
   "evidence": {
     "UPG-0008": "PRODUCT_TRUTH.md: www.noetfield.com 200",
     "UPG-0009": "PRODUCT_TRUTH.md: website repo make verify-www-e2e PASS",
@@ -87,6 +102,21 @@
     "UPG-0176": "docs/ops/GEL_API_DEPLOY_LOCKED_v1.md and package README document hosted readiness checks",
     "UPG-0184": "Makefile — test, gate, demo, build-gate-js, urls",
     "UPG-0189": "www.noetfield.com/gel/ live (website commit 30320c48)",
-    "UPG-0190": "gel page links PyPI noetfield-gate + sourcea-boot"
+    "UPG-0190": "gel page links PyPI noetfield-gate + sourcea-boot",
+    "UPG-0151": "pyproject.toml classifiers; cloud inbox handler _exec_upg_0151",
+    "UPG-0152": "noetfield gate --json; gel-ci.yml",
+    "UPG-0153": "noetfield gate --strict; tests/test_noetfield_gate.py",
+    "UPG-0154": "noetfield_gate/boot.py G6; noetfield gate --pytest",
+    "UPG-0155": "noetfield_gate/boot.py G7 PRODUCT_TRUTH phase alignment",
+    "UPG-0156": "noetfield_gate/intent_validate.py; decide --validate-only",
+    "UPG-0157": "noetfield_gate/boot.py dated_receipt_dir ~/.noetfield/receipts/YYYY-MM-DD",
+    "UPG-0158": "noetfield_gate/verify.py; noetfield verify --json",
+    "UPG-0191": ".github/workflows/gel-ci.yml pytest on push/PR",
+    "UPG-0192": "gel-ci.yml check_noos_agent_docs.sh",
+    "UPG-0193": "gel-ci.yml check_noetfield_business_strategy.sh continue-on-error",
+    "UPG-0194": "gel-ci.yml noetfield gate --json required",
+    "UPG-0195": ".github/dependabot.yml pip weekly",
+    "UPG-0196": "gel-ci.yml pip-audit + cyclonedx SBOM artifact",
+    "UPG-0197": "gel-ci.yml gitleaks-action on push/PR"
   }
 }

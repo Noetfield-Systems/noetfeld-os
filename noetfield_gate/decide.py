@@ -104,7 +104,9 @@ def write_receipt(receipt: dict[str, Any], path: Path) -> Path:
 
 
 def default_out_path() -> Path:
-    return Path.cwd() / f"noetfield-decision-{uuid.uuid4().hex[:8]}.json"
+    from noetfield_gate.boot import dated_receipt_dir
+
+    return dated_receipt_dir("decide") / f"noetfield-decision-{uuid.uuid4().hex[:8]}.json"
 
 
 __all__ = [

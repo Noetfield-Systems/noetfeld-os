@@ -17,6 +17,8 @@ from noetfield_gate.decide import (
     post_decision,
     write_receipt,
 )
+from noetfield_gate.intent_validate import validate_intent_file
+from noetfield_gate.verify import verify_chain
 
 
 def _cmd_gate(args: argparse.Namespace) -> int:
@@ -24,6 +26,7 @@ def _cmd_gate(args: argparse.Namespace) -> int:
         root=Path(args.root) if args.root else None,
         api_url=args.api_url,
         strict=bool(args.strict),
+        include_pytest=bool(args.pytest),
     )
     out = write_gate_report(report, Path(args.out) if args.out else DEFAULT_RECEIPT)
     if args.json:
@@ -43,7 +46,12 @@ def _cmd_decide(args: argparse.Namespace) -> int:
     elif args.sample:
         intent = dict(SAMPLE_INTENT)
     elif args.file:
-        intent = json.loads(Path(args.file).read_text(encoding="utf-8"))
+        file_path = Path(args.file)
+        validation = validate_intent_file(file_path)
+        if args.validate_only:
+            print(json.dumps(validation, indent=2))
+            return 0
+        intent = json.loads(file_path.read_text(encoding="utf-8"))
     else:
         print("Provide --sample, --sample-block, or --file intent.json", file=sys.stderr)
         return 2
@@ -55,6 +63,20 @@ def _cmd_decide(args: argparse.Namespace) -> int:
     decision = resp.get("decision", "UNKNOWN")
     print(f"OK — {decision} score={resp.get('composite_score')} receipt -> {out}")
     return 0
+
+
+def _cmd_verify(args: argparse.Namespace) -> int:
+    report = verify_chain(
+        root=Path(args.root) if args.root else None,
+        gate_report=Path(args.gate_report) if args.gate_report else None,
+        receipt_path=Path(args.receipt) if args.receipt else None,
+        api_url=args.api_url,
+    )
+    if args.json:
+        print(json.dumps(report, indent=2))
+    else:
+        print(f"{report['outcome']} — verify chain ({len(report.get('checks', []))} checks)")
+    return 0 if report["outcome"] == "PASS" else 1
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -74,6 +96,11 @@ def main(argv: list[str] | None = None) -> int:
         action="store_true",
         help="Fail on skipped checks when API URL is set (UPG-0153)",
     )
+    gate.add_argument(
+        "--pytest",
+        action="store_true",
+        help="Include G6 pytest suite check (UPG-0154)",
+    )
     gate.add_argument("--out", help=f"JSON report path (default {DEFAULT_RECEIPT})")
     gate.set_defaults(func=_cmd_gate)
 
@@ -85,11 +112,24 @@ def main(argv: list[str] | None = None) -> int:
         help="Use built-in extreme-DTI intent (DECLINE corridor path)",
     )
     decide.add_argument("--file", help="Path to intent JSON")
+    decide.add_argument(
+        "--validate-only",
+        action="store_true",
+        help="Validate intent JSON against DecisionRequest schema only (UPG-0156)",
+    )
     decide.add_argument("--request-id", help="Optional idempotency key")
     decide.add_argument("--api-url", help="API base (default http://127.0.0.1:8001)")
     decide.add_argument("--api-key", help="X-API-Key (or NOETFIELD_API_KEY)")
     decide.add_argument("--out", help="Receipt output path")
     decide.set_defaults(func=_cmd_decide)
+
+    verify = sub.add_parser("verify", help="Gate report + optional receipt chain (UPG-0158)")
+    verify.add_argument("--root", help="Noetfield OS repo root")
+    verify.add_argument("--gate-report", help="Existing gate report JSON path")
+    verify.add_argument("--receipt", help="Decision receipt JSON to validate")
+    verify.add_argument("--api-url", help="Probe GET /readiness")
+    verify.add_argument("--json", action="store_true")
+    verify.set_defaults(func=_cmd_verify)
 
     args = parser.parse_args(argv)
     return int(args.func(args))
