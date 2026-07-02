@@ -1,0 +1,72 @@
+{
+  "schema": "mission-registry-v1",
+  "version": "1.0.0",
+  "system": "noetfeld-os",
+  "spec_path": "docs/NOETFIELD_COHERENT_SYSTEM_SPEC_v1.md",
+  "missions": [
+    {
+      "mission_id": "M1",
+      "name": "buyer-proof",
+      "value_class": "revenue_path",
+      "workflows": ["noos-inbox-loop", "check_production_urls"],
+      "definition_of_done": "inbox drain green + public URLs PASS"
+    },
+    {
+      "mission_id": "M2",
+      "name": "factory-24-7",
+      "value_class": "proof_asset",
+      "workflows": [
+        "noos-factory-autorun",
+        "noos-inbox-loop",
+        "noos-self-heal-loop",
+        "noos-sourcea-observe-loop",
+        "noos-schedule-canary"
+      ],
+      "definition_of_done": "loop window VERIFIED, stay green 7d"
+    },
+    {
+      "mission_id": "M3",
+      "name": "truth-spine",
+      "value_class": "risk_reduction",
+      "workflows": [
+        "noos-runtime-loop",
+        "noos-chain-loop",
+        "noos-surface-loop",
+        "gel-ci",
+        "determinism-verify",
+        "replay-verify"
+      ],
+      "definition_of_done": "D-metrics all 0 for 7d"
+    },
+    {
+      "mission_id": "M4",
+      "name": "kaizen",
+      "value_class": "hygiene",
+      "workflows": ["noos-self-heal-loop", "noos-agent-nerve-loop", "noos-agent-vault"],
+      "definition_of_done": ">=1 machine_safe/day, 0 rollback debt"
+    },
+    {
+      "mission_id": "M5",
+      "name": "client-recipes",
+      "value_class": "revenue_path",
+      "workflows": ["noos-inbox-loop"],
+      "definition_of_done": "inbox queue refilled only by rubric; demos replayable"
+    }
+  ],
+  "workflow_missions": {
+    "noos-factory-autorun.yml": "M2",
+    "noos-inbox-loop.yml": "M2",
+    "noos-runtime-loop.yml": "M3",
+    "noos-surface-loop.yml": "M3",
+    "noos-chain-loop.yml": "M3",
+    "noos-self-heal-loop.yml": "M4",
+    "noos-sourcea-observe-loop.yml": "M2",
+    "noos-agent-nerve-loop.yml": "M4",
+    "noos-schedule-canary.yml": "M2",
+    "gel-ci.yml": "M3",
+    "noos-agent-vault.yml": "M4",
+    "release-noetfield-gate.yml": "M3",
+    "publish-pypi.yml": "M3"
+  },
+  "default_mission_id": "M2"
+}

@@ -29,6 +29,18 @@ def load_registry() -> dict[str, Any]:
     return json.loads(REGISTRY.read_text(encoding="utf-8"))
 
 
+def resolve_mission_id(*, workflow_id: str) -> str:
+    path = ROOT / "data/mission-registry-v1.json"
+    if not path.is_file():
+        return "M2"
+    try:
+        row = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return "M2"
+    mapping = row.get("workflow_missions") if isinstance(row.get("workflow_missions"), dict) else {}
+    return str(mapping.get(workflow_id) or row.get("default_mission_id") or "M2")
+
+
 def loop_by_event(registry: dict[str, Any], event_type: str) -> dict[str, Any]:
     for row in registry.get("loops") or []:
         if row.get("event_type") == event_type:
@@ -232,6 +244,8 @@ def execute_loop(loop: dict[str, Any], *, self_heal: bool = True) -> dict[str, A
             "loop_id": loop_id,
             "event_type": event_type,
             "factory_id": factory_id,
+            "workflow_id": str(loop.get("github_workflow") or loop_id),
+            "mission_id": resolve_mission_id(workflow_id=str(loop.get("github_workflow") or loop_id)),
             "cycle_number": 0,
             "started_at": started_at,
             "finished_at": finished_at,
@@ -271,6 +285,7 @@ def execute_loop(loop: dict[str, Any], *, self_heal: bool = True) -> dict[str, A
     validate_ok = inv["verdict"] == "PASS"
 
     workflow_id = str(loop.get("github_workflow") or loop_id)
+    mission_id = resolve_mission_id(workflow_id=workflow_id)
     op_key_val = op_key(workflow_id=workflow_id, loop_id=loop_id, cycle_number=cycle_number)
 
     evidence = [
@@ -282,6 +297,7 @@ def execute_loop(loop: dict[str, Any], *, self_heal: bool = True) -> dict[str, A
         "schema": "noos-24-7-loop-cycle-v1",
         "receipt_schema": "autorun-cycle-receipt-v2",
         "workflow_id": workflow_id,
+        "mission_id": mission_id,
         "sandbox_id": "noetfeld-os",
         "lane": loop.get("lane") or "noos",
         "loop_id": loop_id,
