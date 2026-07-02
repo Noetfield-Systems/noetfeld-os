@@ -145,3 +145,20 @@ def test_process_cycle_includes_founder_blocked_summary():
     assert result["founder_blocked"]["founder_blocked_count"] == 1
     assert result["founder_blocked"]["oldest"] == "NOOS-C-01"
     assert store["founder_blocked"][0]["status"] == FOUNDER_BLOCKED_STATUS
+
+
+def test_empty_inbox_idle_no_work():
+    store = {"pending": [], "founder_blocked": []}
+
+    def fake_request(method: str, path: str, *, body: dict | None = None):
+        if method == "GET" and "status=eq.pending" in path:
+            return list(store["pending"])
+        if method == "GET" and f"status=eq.{FOUNDER_BLOCKED_STATUS}" in path:
+            return list(store["founder_blocked"])
+        raise AssertionError(f"unexpected request: {method} {path}")
+
+    worker._request_fn = fake_request
+    result = process_cycle()
+    worker._request_fn = None
+    assert result["status"] == "IDLE_NO_WORK"
+    assert result["idle_reason"] == "empty_inbox"

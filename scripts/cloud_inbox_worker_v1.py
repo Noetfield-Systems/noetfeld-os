@@ -260,10 +260,16 @@ def process_cycle() -> dict[str, Any]:
     pending = _fetch_pending()
     target = select_executable(pending)
     if not target:
+        pending_total = len(pending)
+        idle_reason = (
+            "empty_inbox"
+            if pending_total == 0 and summary.get("founder_blocked_count", 0) == 0
+            else "no_executable_pending"
+        )
         return {
             "ok": True,
-            "skipped": True,
-            "reason": "no_executable_pending",
+            "status": "IDLE_NO_WORK",
+            "idle_reason": idle_reason,
             "founder_blocked": summary,
             "founder_blocked_this_cycle": [row["item_id"] for row in blocked_founder],
         }
@@ -286,7 +292,9 @@ def main() -> int:
         return 1
 
     item_id = result.get("item_id") or "none"
-    status = result.get("status") or result.get("action") or ("skipped" if result.get("skipped") else "unknown")
+    status = result.get("status") or result.get("action") or "unknown"
+    if result.get("skipped") and status == "unknown":
+        status = "IDLE_NO_WORK"
     exit_code = 0 if result.get("ok") else 1
     fb = result.get("founder_blocked") or {}
     print(f"work_item_id: {item_id}")

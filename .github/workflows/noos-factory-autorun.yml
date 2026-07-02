@@ -3,7 +3,6 @@ name: NOOS factory autorun
 on:
   schedule:
     - cron: "*/10 * * * *"
-  workflow_dispatch:
 
 permissions:
   contents: read
@@ -26,6 +25,7 @@ jobs:
 
       - name: Install
         run: |
+          echo "github_event=${{ github.event_name }}"
           python -m pip install --upgrade pip
           pip install -r requirements.txt
           pip install -e .
