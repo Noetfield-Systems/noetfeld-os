@@ -140,3 +140,14 @@ jobs:
               count = resp.headers.get("Content-Range", "*/0").split("/")[-1]
           print(f"supabase_factory_cycle_count={count}")
           PY
+
+      - name: Register run in Supabase truth_log
+        if: always()
+        env:
+          NOETFIELD_SUPABASE_URL: ${{ secrets.NOETFIELD_SUPABASE_URL }}
+          NOETFIELD_SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.NOETFIELD_SUPABASE_SERVICE_ROLE_KEY }}
+          GITHUB_RUN_ID: ${{ github.run_id }}
+          GITHUB_EVENT_NAME: ${{ github.event_name }}
+          GITHUB_WORKFLOW: ${{ github.workflow }}
+          JOB_CONCLUSION: ${{ job.status }}
+        run: python3 scripts/register_noos_factory_run_truth_v1.py --json

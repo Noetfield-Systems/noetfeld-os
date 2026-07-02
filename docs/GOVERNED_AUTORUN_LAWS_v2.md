@@ -31,6 +31,8 @@ PASS is valid only from a probe the building agent does not control: external ru
 
 **Cron proof:** GitHub Actions runs with `event=schedule` on `main`. Manual `workflow_dispatch` and local `make` runs do **not** count as autonomous proof.
 
+**Schedule proof sink:** Every `noos-factory-autorun.yml` run self-registers `{run_id, event, conclusion, at}` into Supabase `noetfield_truth_log`. `make schedule-verify` reads Supabase only (no GitHub API polling). Private-repo cron lags 10–30+ min; absence in a short window is not failure evidence.
+
 Local dist, same-machine curls, preview URLs = INVALID. Verify-time minus publish-time < 60s = auto-reject.
 
 ### L5 — Verifier freeze
