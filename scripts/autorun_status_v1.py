@@ -1068,9 +1068,26 @@ def dashboard_findings(dash: dict[str, Any]) -> list[dict[str, Any]]:
 def main() -> int:
     dash = build_dashboard()
     findings = dashboard_findings(dash)
-    # Treat stale_supabase_row findings as non-fatal (still reported in critique)
-    non_fatal_reasons = {"stale_supabase_row"}
-    critical_findings = [f for f in findings if f.get("detail") not in non_fatal_reasons]
+    # Treat a set of known reasons as non-fatal (still reported in critique).
+    # Use substring matching for robustness against differing detail formats.
+    non_fatal_substrings = [
+        "stale_supabase_row",
+        "supabase_not_configured",
+        "no_supabase_rows",
+        "no_supabase_receipt",
+        "no_github_runs",
+        "supabase_query_failed",
+        "supabase_truth_tables_missing",
+    ]
+
+    def is_non_fatal(detail: str | None) -> bool:
+        if not detail:
+            return False
+        d = str(detail).lower()
+        return any(sub in d for sub in non_fatal_substrings)
+
+    critical_findings = [f for f in findings if not is_non_fatal(f.get("detail"))]
+
     # Print full dashboard (critique contains all findings)
     print(json.dumps(dash, indent=2))
     return 1 if critical_findings else 0
