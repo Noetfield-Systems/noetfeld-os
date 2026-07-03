@@ -206,6 +206,12 @@
       "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260702-028]_TEN_UPGRADE_PLANES_v1.md",
       "doc_type": "UPGRADE_PLANES_10x10",
       "title": "Ten upgrade planes — 10×10 execution matrix (A–I + GOV)"
+    },
+    {
+      "trace_id": "NOOS-AGENT-20260703-002",
+      "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260703-002]_CHEAP_WORKER_KERNEL_v1.md",
+      "doc_type": "WORKER_KERNEL",
+      "title": "Cheap Worker Kernel v1 — headless governed task router"
     }
   ]
 }
