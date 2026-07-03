@@ -13,7 +13,7 @@
 1. Create/login at https://pypi.org
 2. Register project name `noetfield-gate` (first upload claims it)
 3. **Account → Publishing → Add trusted publisher**
-   - Owner: `kazemnezhadsina144-dot`
+   - Owner: `Noetfield-Systems`
    - Repository: `noetfeld-os`
    - Workflow: `publish-pypi.yml`
    - Environment: `pypi` (prod) / `testpypi` (TestPyPI)

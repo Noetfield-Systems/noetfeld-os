@@ -1,17 +1,17 @@
 # P4 prep — founder enables branch protection in GitHub UI before enforcing.
 # Copilot Kaizen pilot (P7) depends on these fences (spec §4, §7).
 
-/docs/GOVERNED_AUTORUN_LAWS_v3.md @sinakazemnezhad
-/docs/NOETFIELD_COHERENT_SYSTEM_SPEC_v1.md @sinakazemnezhad
+/docs/GOVERNED_AUTORUN_LAWS_v3.md @Noetfield-Systems
+/docs/NOETFIELD_COHERENT_SYSTEM_SPEC_v1.md @Noetfield-Systems
 
-/scripts/verify_* @sinakazemnezhad
-/scripts/noos_loop_determinism_v1.py @sinakazemnezhad
-/scripts/open_noos_verified_window_v1.py @sinakazemnezhad
-/scripts/verify_loop_determinism_external_v1.py @sinakazemnezhad
-/scripts/verify_noos_loop_replay_v1.py @sinakazemnezhad
-/scripts/sandbox_health_sweep_v1.py @sinakazemnezhad
+/scripts/verify_* @Noetfield-Systems
+/scripts/noos_loop_determinism_v1.py @Noetfield-Systems
+/scripts/open_noos_verified_window_v1.py @Noetfield-Systems
+/scripts/verify_loop_determinism_external_v1.py @Noetfield-Systems
+/scripts/verify_noos_loop_replay_v1.py @Noetfield-Systems
+/scripts/sandbox_health_sweep_v1.py @Noetfield-Systems
 
-/data/trigger-registry-v1.json @sinakazemnezhad
-/data/mission-registry-v1.json @sinakazemnezhad
+/data/trigger-registry-v1.json @Noetfield-Systems
+/data/mission-registry-v1.json @Noetfield-Systems
 
-/noetfield_gate/ @sinakazemnezhad
+/noetfield_gate/ @Noetfield-Systems
