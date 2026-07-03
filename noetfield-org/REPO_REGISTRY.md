@@ -12,12 +12,12 @@ This registry defines the core repos participating in the org sync plane. It is 
 | SourceA | `noetfield-systems/sourcea` | design + spine + brain foundation | `.noetfield/agent_manifest.yml`, `.github/copilot-instructions.md` |
 | TrustField-Technologies | `Noetfield-Systems/TrustField-Technologies` | peer delivery plane | `.noetfield/agent_manifest.yml`, `.github/copilot-instructions.md` |
 | noetfeld-os | `Noetfield-Systems/noetfeld-os` | GEL runtime + control process | `.noetfield/agent_manifest.yml`, `.github/copilot-instructions.md` |
-| sina-governance-SSOT | `kazemnezhadsina144-dot/sina-governance-SSOT` | governance registry / SSOT lane | `.noetfield/agent_manifest.yml`, `.github/copilot-instructions.md` |
+| sina-governance-SSOT | `kazemnezhadsina144[-]dot/sina-governance-SSOT` | governance registry / SSOT lane | `.noetfield/agent_manifest.yml`, `.github/copilot-instructions.md` |
 | Noetfield | `Noetfield-Systems/Noetfield` | public brand + commercial surface | `.noetfield/agent_manifest.yml`, `.github/copilot-instructions.md` |
 
 ## Slug migration law
 
-The legacy slug `kazemnezhadsina144-dot` is a **forbidden active-config marker**.
+The legacy slug `kazemnezhadsina144[-]dot` is a **forbidden active-config marker**.
 
 - Allowed: historical docs, receipts, archaeology notes.
 - Forbidden: active repo URLs, active dispatch defaults, active owner handles, active manifest defaults, active agent-routing config.

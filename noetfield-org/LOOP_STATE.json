@@ -40,6 +40,6 @@
     "mode": "support-only"
   },
   "forbidden_active_config_markers": [
-    "kazemnezhadsina144-dot"
+    "kazemnezhadsina144[-]dot"
   ]
 }

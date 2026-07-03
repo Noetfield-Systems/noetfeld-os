@@ -7,7 +7,7 @@ coordination_support:
   integrator_protocol: data/noos-integrator-role-v1.json
   mode: support-only
 forbidden_active_config_markers:
-  - kazemnezhadsina144-dot
+  - kazemnezhadsina144[-]dot
 registry_paths:
   repo_registry: noetfield-org/REPO_REGISTRY.md
   agent_registry: noetfield-org/AGENT_REGISTRY.md
