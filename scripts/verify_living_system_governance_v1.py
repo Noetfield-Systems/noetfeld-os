@@ -151,6 +151,21 @@ def check_cursor_local_mac(registry: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def check_copilot_cli_mac(registry: dict[str, Any]) -> dict[str, Any]:
+    workers = registry.get("workers") if isinstance(registry.get("workers"), list) else []
+    row = next(
+        (w for w in workers if isinstance(w, dict) and w.get("worker_id") == "copilot-cli-mac"),
+        None,
+    )
+    ok = isinstance(row, dict) and row.get("tier") == "T2_local" and row.get("requires_integrator_claim") is True
+    return {
+        "ok": ok,
+        "worker_id": "copilot-cli-mac",
+        "tier": row.get("tier") if isinstance(row, dict) else None,
+        "requires_integrator_claim": row.get("requires_integrator_claim") if isinstance(row, dict) else None,
+    }
+
+
 def run_verify(*, write_receipt: bool = False) -> dict[str, Any]:
     registry = load_json(PARALLEL_REGISTRY)
     workflows = discover_gha_workflows()
@@ -165,6 +180,7 @@ def run_verify(*, write_receipt: bool = False) -> dict[str, Any]:
     integrator_row = check_integrator_protocol()
     cursor_row = check_cursor_automation_count(registry)
     t2_row = check_cursor_local_mac(registry)
+    copilot_cli_row = check_copilot_cli_mac(registry)
 
     checks = {
         "trigger_sweep": sweep_row.get("ok"),
@@ -174,6 +190,7 @@ def run_verify(*, write_receipt: bool = False) -> dict[str, Any]:
         "integrator_protocol": integrator_row.get("ok"),
         "cursor_automations": cursor_row.get("ok"),
         "cursor_local_mac": t2_row.get("ok"),
+        "copilot_cli_mac": copilot_cli_row.get("ok"),
     }
     ok = all(bool(v) for v in checks.values())
 
@@ -197,6 +214,7 @@ def run_verify(*, write_receipt: bool = False) -> dict[str, Any]:
         "integrator_protocol": integrator_row,
         "cursor_automations": cursor_row,
         "cursor_local_mac": t2_row,
+        "copilot_cli_mac": copilot_cli_row,
         "coordination": registry.get("coordination"),
         "report_line": (
             "living_system_governance_clean · GHA+Copilot+integrator+automations aligned"

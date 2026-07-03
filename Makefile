@@ -1,4 +1,4 @@
-.PHONY: test gate demo build-gate-js install inbox cloud-worker autorun-once autorun autorun-status autorun-tick-deploy autorun-tick-dispatch autonomous-verify schedule-verify determinism-verify replay-verify planes supabase-migrate verified-window loop-run loop-fleet-deploy loop-fleet-dispatch loops-status loop-heartbeat backlog urls local-boot local-closeout local-patch-proposal local-heartbeat local-lane local-sweep-stale
+.PHONY: test gate demo build-gate-js install inbox cloud-worker autorun-once autorun autorun-status autorun-tick-deploy autorun-tick-dispatch autonomous-verify schedule-verify determinism-verify replay-verify planes supabase-migrate verified-window loop-run loop-fleet-deploy loop-fleet-dispatch loops-status loop-heartbeat backlog urls local-boot local-closeout local-patch-proposal local-heartbeat local-lane local-sweep-stale local-status
 
 test:
 	pytest -q
@@ -104,16 +104,27 @@ local-lane:
 local-sweep-stale:
 	python3 scripts/noos_integrator_sync_v1.py sweep-stale
 
+local-status:
+	python3 scripts/noos_local_status_v1.py
+
 local-heartbeat:
-	@test -n "$(TASK)" || (echo "Usage: make local-heartbeat TASK=NOOS-LANE-001" && exit 1)
+	@test -n "$(TASK)" || (echo "Usage: make local-heartbeat TASK=NOOS-LANE-001 [AGENT_ID=cursor-local-mac IDE=cursor]" && exit 1)
 	python3 scripts/noos_integrator_sync_v1.py heartbeat \
-	  --agent-id cursor-local-mac --ide cursor --task-id $(TASK)
+	  --agent-id $${AGENT_ID:-cursor-local-mac} --ide $${IDE:-cursor} --task-id $(TASK)
 
 local-closeout:
-	@test -n "$(TASK)" || (echo "Usage: make local-closeout TASK=NOOS-LANE-001" && exit 1)
-	python3 -m pytest -q
-	bash scripts/check_noos_clean_tree.sh
-	python3 scripts/noos_integrator_sync_v1.py complete --agent-id cursor-local-mac --ide cursor --task-id $(TASK) --note "lane closed"
+	@test -n "$(TASK)" || (echo "Usage: make local-closeout TASK=NOOS-LANE-001 [AGENT_ID=... IDE=...]" && exit 1)
+	python3 -m pytest -q || ($(MAKE) local-sweep-stale; exit 1)
+	bash scripts/check_noos_clean_tree.sh || ($(MAKE) local-sweep-stale; exit 1)
+	python3 scripts/noos_integrator_sync_v1.py complete \
+	  --agent-id $${AGENT_ID:-cursor-local-mac} --ide $${IDE:-cursor} \
+	  --task-id $(TASK) --note "lane closed"
+	@if [ "$(WRITE_RECEIPT)" = "1" ]; then \
+		AGENT_ID=$${AGENT_ID:-cursor-local-mac} IDE=$${IDE:-cursor} \
+		python3 scripts/noos_local_closeout_receipt_v1.py \
+		  --task-id $(TASK) --agent-id $${AGENT_ID} --ide $${IDE} \
+		  --pytest-ok true --clean-tree-ok true --complete-ok true --json; \
+	fi
 
 local-patch-proposal:
 	@if [ -n "$(PAYLOAD_FILE)" ]; then \

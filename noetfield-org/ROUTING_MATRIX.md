@@ -9,7 +9,7 @@ Plane: L17 org sync
 |---|---|---|---|---|
 | GitHub Actions | T0 | execute | CI, schedules, deterministic loop dispatch, verification | machine-only route |
 | Copilot | T1 | implement | repo-local coding, tests, PR preparation | branch-scoped |
-| Cursor local | T2 | local operator | local repo edits, inspections, operational glue | local-machine route |
+| Cursor local | T2 | local operator | local repo edits, inspections, operational glue | `make local-lane`, `make local-status`, `make local-closeout` |
 | Codex | T3 reasoning | reason | plan, audit, architecture, synthesis, coordination support | reasoning route only |
 | Cloud integrator | T3 merge | merge | arbitration, sync-plane summaries, merge-oriented coordination | merge route only |
 

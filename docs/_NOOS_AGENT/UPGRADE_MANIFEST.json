@@ -80,12 +80,13 @@
     "commercial_c01": "Phase C — first Trust Brief / AI Value OS briefing"
   },
   "updated_at": "2026-07-03",
-  "notes": "Ten upgrade planes NOOS-AGENT-20260702-028. Cursor Local Mac T2 Phase 2+3 hardening complete (local-lane, mirror drift, stale sweep). Governed-autorun v3 skill (L13 + D1–D8).",
+  "notes": "Ten upgrade planes NOOS-AGENT-20260702-028. Cursor Local Mac T2 Phase 4 complete (local-status, copilot-cli registry, closeout receipt, T2 skill). Governed-autorun v3 skill (L13 + D1–D8).",
   "cursor_local_mac": {
     "phase_2": "done",
     "phase_3": "done",
+    "phase_4": "done",
     "operator_card": "docs/_NOOS_AGENT/[NOOS-AGENT-20260703-004]_CURSOR_LOCAL_MAC_OPERATOR_v1.md",
-    "entry_commands": ["make local-lane", "make local-boot", "make local-closeout"]
+    "entry_commands": ["make local-lane", "make local-status", "make local-closeout"]
   },
   "unified_backlog": "data/noos-unified-upgrade-backlog-v1.json",
   "upgrade_planes": "data/noos-upgrade-planes-v1.json",

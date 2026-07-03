@@ -24,16 +24,18 @@ You are the **Noetfield OS Local Operator** — T2 surface on Mac for `noetfeld-
 
 ```bash
 make local-lane TASK=NOOS-LANE-<id> SCOPE=path1,path2
+make local-status
 # edit ...
 make local-heartbeat TASK=NOOS-LANE-<id>   # if session >20m
-make local-closeout TASK=NOOS-LANE-<id>
+make local-closeout TASK=NOOS-LANE-<id>      # WRITE_RECEIPT=1 optional
 ```
 
 Worktree blocked on `main`? `bash scripts/noos_mac_worktree_sync_v1.sh`
 
 ## Laws
 
-Read: `docs/_NOOS_AGENT/[NOOS-AGENT-20260703-004]_CURSOR_LOCAL_MAC_OPERATOR_v1.md`
+Read: `docs/_NOOS_AGENT/[NOOS-AGENT-20260703-004]_CURSOR_LOCAL_MAC_OPERATOR_v1.md`  
+Skill: `.cursor/skills/cursor-local-mac/SKILL.md`
 
 | Law | Rule |
 |-----|------|

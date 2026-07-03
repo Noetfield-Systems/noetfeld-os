@@ -17,6 +17,8 @@ sys.path.insert(0, str(ROOT / "scripts"))
 import noos_agent_conflict_check_v1 as conflict  # noqa: E402
 import noos_integrator_mirror_check_v1 as mirror  # noqa: E402
 import noos_local_boot_receipt_v1 as boot_receipt  # noqa: E402
+import noos_local_closeout_receipt_v1 as closeout_receipt  # noqa: E402
+import noos_local_status_v1 as local_status  # noqa: E402
 import verify_living_system_governance_v1 as gov  # noqa: E402
 
 
@@ -25,12 +27,7 @@ def test_local_operator_subagent_exists():
     assert path.is_file()
     text = path.read_text(encoding="utf-8")
     assert "make local-lane" in text
-
-
-def test_makefile_has_local_lane_target():
-    text = (ROOT / "Makefile").read_text(encoding="utf-8")
-    assert "local-lane:" in text
-    assert "local-sweep-stale:" in text
+    assert "cursor-local-mac/SKILL.md" in text
 
 
 def test_mirror_drift_check_clean_when_in_sync(monkeypatch: pytest.MonkeyPatch, tmp_path: Path):
@@ -100,17 +97,67 @@ def test_claim_reminder_hook_exits_zero_without_block():
     assert proc.returncode == 0
 
 
-def test_governance_includes_cursor_local_mac():
+def test_makefile_has_local_lane_target():
+    text = (ROOT / "Makefile").read_text(encoding="utf-8")
+    assert "local-lane:" in text
+    assert "local-sweep-stale:" in text
+    assert "local-status:" in text
+    assert "AGENT_ID:-" in text
+
+
+def test_local_status_script_exists():
+    path = ROOT / "scripts/noos_local_status_v1.py"
+    assert path.is_file()
+    row = local_status.build_status()
+    assert row["schema"] == "noos-local-status-v1"
+    assert "branch" in row
+    assert "governance_ok" in row
+
+
+def test_t2_cursor_local_mac_skill_exists():
+    path = ROOT / ".cursor/skills/cursor-local-mac/SKILL.md"
+    assert path.is_file()
+    text = path.read_text(encoding="utf-8")
+    assert "make local-status" in text
+    assert "make local-closeout" in text
+
+
+def test_governance_includes_copilot_cli_mac():
     registry = gov.load_json(gov.PARALLEL_REGISTRY)
-    row = gov.check_cursor_local_mac(registry)
+    row = gov.check_copilot_cli_mac(registry)
     assert row["ok"] is True
-    assert row["worker_id"] == "cursor-local-mac"
+    assert row["worker_id"] == "copilot-cli-mac"
 
 
 def test_full_governance_verify_still_passes():
     row = gov.run_verify(write_receipt=False)
     assert row["ok"] is True
     assert row["checks"]["cursor_local_mac"] is True
+    assert row["checks"]["copilot_cli_mac"] is True
+
+
+def test_local_closeout_receipt_schema_no_write(tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
+    monkeypatch.chdir(ROOT)
+    row = closeout_receipt.build_receipt(
+        task_id="NOOS-LANE-TEST",
+        agent_id="cursor-local-mac",
+        ide="cursor",
+        pytest_ok=True,
+        clean_tree_ok=True,
+        complete_ok=True,
+        write_file=False,
+    )
+    assert row["schema"] == "noos-local-closeout-v1"
+    assert row["task_id"] == "NOOS-LANE-TEST"
+    assert "mirror_drift" in row
+    assert row["ok"] is True
+
+
+def test_governance_includes_cursor_local_mac():
+    registry = gov.load_json(gov.PARALLEL_REGISTRY)
+    row = gov.check_cursor_local_mac(registry)
+    assert row["ok"] is True
+    assert row["worker_id"] == "cursor-local-mac"
 
 
 def test_claim_overlap_fails_closed():

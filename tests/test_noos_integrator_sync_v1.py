@@ -140,3 +140,30 @@ def test_complete_releases_claim(tmp_path, monkeypatch):
     assert task["status"] == "done"
     assert task["claimed_by"] is None
     assert agent["current_task_ids"] == []
+
+
+def test_sweep_stale_releases_expired_claim(tmp_path, monkeypatch):
+    _state(tmp_path, monkeypatch)
+    integrator.main(["init"])
+    integrator.main(["register-agent", "--agent-id", "copilot", "--ide", "copilot-cli"])
+    integrator.main(
+        [
+            "claim",
+            "--agent-id",
+            "copilot",
+            "--ide",
+            "copilot-cli",
+            "--task-id",
+            "TASK-STALE",
+            "--title",
+            "Stale task",
+        ]
+    )
+
+    monkeypatch.setattr(integrator, "_is_stale_task", lambda task, protocol, now=None: True)
+    assert integrator.main(["sweep-stale"]) == 0
+
+    state = integrator.read_state()
+    task = state["tasks"][0]
+    assert task["status"] == "released"
+    assert task["claimed_by"] is None

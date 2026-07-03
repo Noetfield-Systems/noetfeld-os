@@ -20,6 +20,7 @@ related_registry: data/noos-parallel-agent-registry-v1.json
 
 ```bash
 make local-boot
+make local-status
 # optional audit receipt:
 make local-boot WRITE_RECEIPT=1
 ```
@@ -59,19 +60,17 @@ make local-lane TASK=NOOS-LANE-001 SCOPE=scripts/foo.py,tests/test_foo.py
 
 # Or separate steps
 bash scripts/noos_local_claim_lane_v1.sh NOOS-LANE-001 scripts/foo.py tests/test_foo.py
-```
-
 # Long session — refresh claim (stale after 30m without heartbeat)
 make local-heartbeat TASK=NOOS-LANE-001
 
 # Work: ≤5 files / ≤200 lines direct; larger → kernel
 make local-patch-proposal PATHS=scripts/foo.py,tests/test_foo.py
 
-# Closeout
+# Closeout (optional receipt: WRITE_RECEIPT=1)
 make local-closeout TASK=NOOS-LANE-001
 ```
 
-**Copilot CLI on same Mac:** register as `copilot-cli-mac`; claim with `AGENT_ID=copilot-cli-mac IDE=copilot-cli bash scripts/noos_local_claim_lane_v1.sh ...`. Both IDEs read `~/.sina/noos-integrator-state-v1.json`.
+**Copilot CLI on same Mac:** register as `copilot-cli-mac`; claim with `AGENT_ID=copilot-cli-mac IDE=copilot-cli make local-lane TASK=... SCOPE=...` or `AGENT_ID=copilot-cli-mac IDE=copilot-cli bash scripts/noos_local_claim_lane_v1.sh ...`. Closeout: `AGENT_ID=copilot-cli-mac IDE=copilot-cli make local-closeout TASK=...`. Both IDEs read `~/.sina/noos-integrator-state-v1.json`.
 
 **Stale lanes:** `make local-sweep-stale` at session start if yesterday's lane was interrupted.
 

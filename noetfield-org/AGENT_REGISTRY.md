@@ -7,13 +7,14 @@ Plane: L17 org sync
 
 Parallel law: `data/noos-parallel-agent-registry-v1.json` · `docs/_NOOS_AGENT/[NOOS-AGENT-20260703-003]_PARALLEL_AGENT_GOVERNANCE_v1.md`
 
-**Cursor Local Mac operator card:** `docs/_NOOS_AGENT/[NOOS-AGENT-20260703-004]_CURSOR_LOCAL_MAC_OPERATOR_v1.md` · boot: `make local-boot`
+**Cursor Local Mac operator card:** `docs/_NOOS_AGENT/[NOOS-AGENT-20260703-004]_CURSOR_LOCAL_MAC_OPERATOR_v1.md` · entry: `make local-lane` · agents: `cursor-local-mac`, `copilot-cli-mac`
 
 | Agent surface | Tier | Primary role | Write scope | Receipts |
 |---|---|---|---|---|
 | GitHub Actions | T0 | deterministic execution, CI, schedules, loop ticks | workflow-defined paths only | workflow runs, artifacts, cycle receipts |
 | Copilot | T1 | coding agent, repo implementation, machine-safe changes | repo-local branch/worktree | git diff, tests, PR |
-| Cursor local | T2 | local operator + fast repo edits | repo-local branch/worktree | git diff, tests, session output |
+| Cursor local (`cursor-local-mac`) | T2 | local operator + fast repo edits | repo-local branch/worktree | git diff, tests, closeout receipt |
+| Copilot CLI Mac (`copilot-cli-mac`) | T2 | same Mac integrator lane as Cursor local | repo-local branch/worktree | git diff, tests, closeout receipt |
 | Codex | T3 reasoning | architecture, planning, deep reasoning, arbitration support | repo-local branch/worktree | plans, diffs, tests, receipts |
 | Cloud integrator | T3 merge | cross-repo sync, arbitration, merge-plane coordination | registry + receipt coordination only | sync receipts, registry updates |
 
