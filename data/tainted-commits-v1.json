@@ -1,0 +1,9 @@
+{
+  "schema": "tainted-commits-v1",
+  "version": "1.0.0",
+  "policy": "founder_append_only",
+  "description": "Git wrappers reject HEAD or source SHAs that equal or descend from any listed commit.",
+  "updated_at": "2026-07-03",
+  "append_authority": "founder_only",
+  "shas": []
+}

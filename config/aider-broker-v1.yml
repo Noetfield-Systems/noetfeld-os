@@ -1,0 +1,12 @@
+# Aider broker binding — shell disabled, auto-commit via NOOS tool broker only
+# Authority: data/noos-tool-broker-config-v1.json (M5)
+
+auto_commits: false
+suggest_shell_commands: false
+dirty_commits: false
+
+# Aider must not execute shell; agents call:
+#   python3 scripts/noos_tool_broker_v1.py invoke --tool aider_auto_commit --agent-id <id> --params '{"worktree_path":"...","message":"..."}'
+
+edit_format: diff
+model: deepseek/deepseek-chat

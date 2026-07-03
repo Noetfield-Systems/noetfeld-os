@@ -242,6 +242,12 @@
       "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260703-006]_MACHINE_LOOPS_v1.md",
       "doc_type": "MACHINE_LOOPS",
       "title": "Machine loops v1 — critic, repair, audit, autonomy E2E"
+    },
+    {
+      "trace_id": "NOOS-AGENT-20260703-007",
+      "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260703-007]_TOOL_BROKER_v1.md",
+      "doc_type": "TOOL_BROKER",
+      "title": "Tool broker v1 — allowlist execution wall"
     }
   ]
 }

@@ -29,13 +29,14 @@ def write_receipt(
     key = op_key or row.get("op_key") or "run"
     safe = re.sub(r"[^a-zA-Z0-9_-]+", "-", str(key))[:80]
     ts = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
-    path = out_dir / f"noos-worker-kernel-{safe}-{ts}.json"
     doc = {
-        "schema": "noos-worker-kernel-receipt-v1",
         "version": "1.0.0",
         "written_at": utc_now(),
         **row,
     }
+    doc.setdefault("schema", "noos-worker-kernel-receipt-v1")
+    prefix = "noos-tool-broker" if doc["schema"] == "noos-tool-broker-receipt-v1" else "noos-worker-kernel"
+    path = out_dir / f"{prefix}-{safe}-{ts}.json"
     path.write_text(json.dumps(doc, indent=2) + "\n", encoding="utf-8")
     try:
         doc["receipt_path"] = str(path.relative_to(ROOT))

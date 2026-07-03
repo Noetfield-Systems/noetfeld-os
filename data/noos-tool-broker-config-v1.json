@@ -1,0 +1,41 @@
+{
+  "schema": "noos-tool-broker-config-v1",
+  "version": "1.0.0",
+  "broker_module": "scripts/noos_tool_broker_v1.py",
+  "receipt_schema": "noos-tool-broker-receipt-v1",
+  "enforcement": {
+    "allowlist_only": true,
+    "shell_strings_forbidden": true,
+    "egress_default": "deny_all",
+    "egress_allowed": ["git_remote"],
+    "denylist_reference": "docs/_NOOS_AGENT/TOOL_BROKER_DENYLIST_REFERENCE_v1.md"
+  },
+  "branch_pattern": "^(cursor|copilot|task|noos-task)/[a-zA-Z0-9._/-]+$",
+  "protected_branches": ["main", "master"],
+  "tainted_commits_path": "data/tainted-commits-v1.json",
+  "allowlist": [
+    "grep",
+    "check",
+    "pytest_q",
+    "git_status",
+    "git_rev_parse",
+    "git_log_oneline",
+    "open_pr_task_branch",
+    "git_push_task_branch",
+    "aider_auto_commit"
+  ],
+  "agents_required": {
+    "healer_layer_2": "broker_only",
+    "p1_agents": "broker_only"
+  },
+  "aider": {
+    "shell_suggestions_disabled": true,
+    "auto_commit_via_broker": "aider_auto_commit",
+    "config_path": "config/aider-broker-v1.yml"
+  },
+  "cost_cap": {
+    "schema": "L11",
+    "max_usd_per_invoke": 0.05,
+    "inherit_kernel_budget": true
+  }
+}

@@ -10,8 +10,15 @@
   "authority": [
     "docs/GOVERNED_AUTORUN_LAWS_v3.md",
     "config/model-router.yml",
-    "data/mission-registry-v1.json"
+    "data/mission-registry-v1.json",
+    "data/noos-tool-broker-config-v1.json",
+    "scripts/noos_tool_broker_v1.py"
   ],
+  "tool_execution": {
+    "broker_only": true,
+    "module": "scripts/noos_tool_broker_v1.py",
+    "agents": ["healer_layer_2", "p1_agents", "noos-worker-kernel"]
+  },
   "tiers": {
     "T0": "deterministic — grep/check/validate, zero LLM",
     "T1": "summary/classification — free or DeepSeek cheap",

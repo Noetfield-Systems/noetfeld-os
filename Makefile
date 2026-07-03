@@ -1,4 +1,4 @@
-.PHONY: test gate demo build-gate-js install inbox cloud-worker autorun-once autorun autorun-status autorun-tick-deploy autorun-tick-dispatch autonomous-verify schedule-verify determinism-verify replay-verify planes supabase-migrate verified-window loop-run loop-fleet-deploy loop-fleet-dispatch loops-status loop-heartbeat backlog urls local-boot local-closeout local-patch-proposal local-heartbeat local-lane local-sweep-stale local-status integrator-sync machine-status machine-reconcile machine-audit machine-verify machine-validate-merge machine-critic machine-research
+.PHONY: test gate demo build-gate-js install inbox cloud-worker autorun-once autorun autorun-status autorun-tick-deploy autorun-tick-dispatch autonomous-verify schedule-verify determinism-verify replay-verify planes supabase-migrate verified-window loop-run loop-fleet-deploy loop-fleet-dispatch loops-status loop-heartbeat backlog urls local-boot local-closeout local-patch-proposal local-heartbeat local-lane local-sweep-stale local-status integrator-sync machine-status machine-reconcile machine-audit machine-verify machine-validate-merge machine-critic machine-research broker-invoke
 
 test:
 	pytest -q
@@ -168,3 +168,7 @@ machine-research:
 	else \
 		python3 scripts/noos_machine_loops_v1.py research-memo --question "$(QUESTION)"; \
 	fi
+
+broker-invoke:
+	@test -n "$(AGENT_ID)" && test -n "$(TOOL)" || (echo "Usage: make broker-invoke AGENT_ID=healer-l2 TOOL=grep PARAMS='{\"pattern\":\"x\"}'" && exit 1)
+	python3 scripts/noos_tool_broker_v1.py invoke --agent-id $(AGENT_ID) --tool $(TOOL) --params '$${PARAMS:-{}}' $(if $(WORKTREE),--worktree-root $(WORKTREE),)

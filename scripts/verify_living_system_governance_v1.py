@@ -190,6 +190,26 @@ def check_machine_loops() -> dict[str, Any]:
     }
 
 
+def check_tool_broker() -> dict[str, Any]:
+    required = [
+        ROOT / "data/noos-tool-broker-config-v1.json",
+        ROOT / "data/tainted-commits-v1.json",
+        ROOT / "scripts/noos_tool_broker_v1.py",
+        ROOT / "config/aider-broker-v1.yml",
+        ROOT / "docs/_NOOS_AGENT/TOOL_BROKER_DENYLIST_REFERENCE_v1.md",
+    ]
+    missing = [str(p.relative_to(ROOT)) for p in required if not p.is_file()]
+    cfg = load_json(ROOT / "data/noos-tool-broker-config-v1.json")
+    allowlist = cfg.get("allowlist") if isinstance(cfg.get("allowlist"), list) else []
+    git_tools = {"open_pr_task_branch", "git_push_task_branch"}
+    ok = not missing and git_tools.issubset(set(allowlist))
+    return {
+        "ok": ok,
+        "missing": missing,
+        "allowlist_count": len(allowlist),
+    }
+
+
 def run_verify(*, write_receipt: bool = False) -> dict[str, Any]:
     registry = load_json(PARALLEL_REGISTRY)
     workflows = discover_gha_workflows()
@@ -206,6 +226,7 @@ def run_verify(*, write_receipt: bool = False) -> dict[str, Any]:
     t2_row = check_cursor_local_mac(registry)
     copilot_cli_row = check_copilot_cli_mac(registry)
     machine_loops_row = check_machine_loops()
+    tool_broker_row = check_tool_broker()
 
     checks = {
         "trigger_sweep": sweep_row.get("ok"),
@@ -217,6 +238,7 @@ def run_verify(*, write_receipt: bool = False) -> dict[str, Any]:
         "cursor_local_mac": t2_row.get("ok"),
         "copilot_cli_mac": copilot_cli_row.get("ok"),
         "machine_loops": machine_loops_row.get("ok"),
+        "tool_broker": tool_broker_row.get("ok"),
     }
     ok = all(bool(v) for v in checks.values())
 
@@ -242,6 +264,7 @@ def run_verify(*, write_receipt: bool = False) -> dict[str, Any]:
         "cursor_local_mac": t2_row,
         "copilot_cli_mac": copilot_cli_row,
         "machine_loops": machine_loops_row,
+        "tool_broker": tool_broker_row,
         "coordination": registry.get("coordination"),
         "report_line": (
             "living_system_governance_clean · GHA+Copilot+integrator+automations aligned"

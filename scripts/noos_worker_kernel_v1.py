@@ -28,11 +28,15 @@ from noos_model_router_v1 import (  # noqa: E402
     route_task,
 )
 from noos_patch_sandbox_v1 import (  # noqa: E402
-    run_deterministic_grep,
     validate_patch_proposal,
     write_sandbox_patch,
 )
 from noos_receipt_writer_v1 import write_receipt  # noqa: E402
+
+try:
+    from noos_tool_broker_v1 import invoke as broker_invoke  # noqa: E402
+except ImportError:
+    broker_invoke = None  # type: ignore
 
 
 def utc_now() -> str:
@@ -47,24 +51,24 @@ def _payload_hash(payload: dict[str, Any]) -> str:
     return hashlib.sha256(json.dumps(payload, sort_keys=True).encode()).hexdigest()[:16]
 
 
-def execute_t0(task_kind: str, payload: dict[str, Any]) -> dict[str, Any]:
-    if task_kind == "grep":
-        return run_deterministic_grep(
-            str(payload.get("pattern") or ""),
-            path=str(payload.get("path") or "scripts"),
-            max_matches=int(payload.get("max_matches") or 20),
-        )
-    if task_kind == "check":
-        target = str(payload.get("path") or "")
-        p = ROOT / target
-        exists = p.is_file() or p.is_dir()
-        return {
-            "check": "path_exists",
-            "path": target,
-            "ok": exists,
-            "exit_code": 0 if exists else 1,
-        }
-    return {"ok": False, "error": f"unsupported_t0_task:{task_kind}"}
+def execute_t0(task_kind: str, payload: dict[str, Any], *, agent_id: str = "noos-worker-kernel") -> dict[str, Any]:
+    """T0 tools execute only via tool broker (M1)."""
+    tool_map = {"grep": "grep", "check": "check", "validate": "pytest_q", "lint": "pytest_q"}
+    tool = tool_map.get(task_kind, task_kind)
+    if broker_invoke is None:
+        return {"ok": False, "error": "tool_broker_unavailable"}
+    broker_params = dict(payload)
+    if task_kind in ("validate", "lint") and "paths" not in broker_params:
+        broker_params["paths"] = broker_params.get("paths") or ["tests/"]
+    row = broker_invoke(agent_id=agent_id, tool=tool, params=broker_params, dry_run=False)
+    return {
+        "ok": row.get("ok"),
+        "broker": True,
+        "tool": tool,
+        "result": row.get("result"),
+        "receipt_path": row.get("receipt_path"),
+        "cost": row.get("cost"),
+    }
 
 
 def execute_t1(task_kind: str, payload: dict[str, Any], *, routing: dict[str, Any]) -> dict[str, Any]:
