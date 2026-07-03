@@ -4,7 +4,7 @@
   "agent_lane": "NOETFELD-OS",
   "workspace_root": "/Users/sinakazemnezhad/Projects/noetfeld-os",
   "search_token": "NOOS-AGENT-DOC",
-  "updated_at": "2026-07-02",
+  "updated_at": "2026-07-03",
   "part8_sync_at": "2026-06-15",
   "canonical_ssot_source": "/Users/sinakazemnezhad/Desktop/Noetfield/Noetfield-All-Documents/",
   "sync_script": "scripts/sync-noos-ssot.sh",
@@ -206,6 +206,12 @@
       "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260702-028]_TEN_UPGRADE_PLANES_v1.md",
       "doc_type": "UPGRADE_PLANES_10x10",
       "title": "Ten upgrade planes — 10×10 execution matrix (A–I + GOV)"
+    },
+    {
+      "trace_id": "NOOS-AGENT-20260703-001",
+      "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260703-001]_INTEGRATOR_AGENT_PROTOCOL_v1.md",
+      "doc_type": "INTEGRATOR_PROTOCOL",
+      "title": "Integrator agent protocol — local cross-IDE task sync"
     }
   ]
 }

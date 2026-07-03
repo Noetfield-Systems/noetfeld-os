@@ -1,0 +1,45 @@
+{
+  "schema": "noetfield-org-loop-state-v1",
+  "status": "DECLARED",
+  "plane": "L17",
+  "updated_at": "2026-07-03T00:00:00Z",
+  "routes": [
+    {
+      "surface": "github-actions",
+      "tier": "T0",
+      "role": "execute",
+      "state": "active"
+    },
+    {
+      "surface": "copilot",
+      "tier": "T1",
+      "role": "implement",
+      "state": "active"
+    },
+    {
+      "surface": "cursor-local",
+      "tier": "T2",
+      "role": "local-operator",
+      "state": "active"
+    },
+    {
+      "surface": "codex",
+      "tier": "T3",
+      "role": "reasoning",
+      "state": "active"
+    },
+    {
+      "surface": "cloud-integrator",
+      "tier": "T3",
+      "role": "merge",
+      "state": "active"
+    }
+  ],
+  "coordination_support": {
+    "integrator_protocol": "data/noos-integrator-role-v1.json",
+    "mode": "support-only"
+  },
+  "forbidden_active_config_markers": [
+    "kazemnezhadsina144[-]dot"
+  ]
+}

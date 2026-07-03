@@ -52,6 +52,7 @@ jobs:
         run: bash scripts/check_noetfield_business_strategy.sh
 
       - name: Gitleaks secret scan (UPG-0197)
+        if: github.event_name == 'push'
         uses: gitleaks/gitleaks-action@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

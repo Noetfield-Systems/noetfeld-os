@@ -27,8 +27,8 @@ dependencies = []
 [project.urls]
 Homepage = "https://www.noetfield.com/gel/"
 Documentation = "https://www.noetfield.com/gel/"
-Repository = "https://github.com/kazemnezhadsina144-dot/noetfeld-os"
-Issues = "https://github.com/kazemnezhadsina144-dot/noetfeld-os/issues"
+Repository = "https://github.com/Noetfield-Systems/noetfeld-os"
+Issues = "https://github.com/Noetfield-Systems/noetfeld-os/issues"
 
 [project.optional-dependencies]
 dev = ["pytest>=8.0", "httpx>=0.28", "build>=1.2", "twine>=5.0"]

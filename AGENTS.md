@@ -32,6 +32,13 @@ workspace_root: /Users/sinakazemnezhad/Projects/noetfeld-os
 - Treat `docs/run_patches/noetfield_run_patch_manifest_10100_v1.json` runtime metadata churn as generated unless an explicit receipt snapshot is being closed.
 - If `run_noetfield_factory_loop_v1.py` is active, stop and classify the writer before claiming the repo is clean.
 
+### Integrator coordination
+
+- Before starting overlapping implementation work, read the integrator summary: `python3 scripts/noos_integrator_sync_v1.py summary --json`
+- Register/claim through `scripts/noos_integrator_sync_v1.py` before editing shared code paths across multiple IDE agents.
+- Respect `scope_files` conflicts. If another non-stale agent owns the same files, do not proceed silently.
+- Repo-local runtime state is primary; `~/.sina/noos-integrator-state-v1.json` is the cross-worktree/home mirror for other IDEs on the same Mac.
+
 ### SAVE / LOCK routing in this repo
 
 - If ASF says `SAVE`, `SAVE AND LOCK`, `LOCK`, or `FILE` for Noetfield / Noetfield OS / noetfeld-os work, the file belongs in this repo, not SourceA.
@@ -91,3 +98,4 @@ Before work:
 | `NOOS-AGENT-20260615-013` | **Founding pilot one-pager — SW1 agents attach** |
 | `NOOS-AGENT-20260615-012` | **Chain tools — `noetfield gate` / `noetfield decide`** |
 | `NOOS-AGENT-20260615-014` | **300-step upgrade plan — UPG-0001–0300** |
+| `NOOS-AGENT-20260703-001` | **Integrator agent protocol — local cross-IDE task sync** |

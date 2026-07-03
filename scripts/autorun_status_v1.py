@@ -417,7 +417,7 @@ def github_latest_run(workflow_file: str, *, event: str | None = None) -> dict[s
     token = dict(line.split("=", 1) for line in proc.stdout.splitlines() if "=" in line).get("password")
     if not token:
         return {"ok": False, "error": "github_token_missing"}
-    repo = "kazemnezhadsina144-dot/noetfeld-os"
+    repo = "Noetfield-Systems/noetfeld-os"
     params: dict[str, str] = {"per_page": "5"}
     if event:
         params["event"] = event
