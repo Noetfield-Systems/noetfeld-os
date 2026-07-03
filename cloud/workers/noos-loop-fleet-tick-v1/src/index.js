@@ -1,5 +1,5 @@
 // NOOS 24/7 loop fleet: Cloudflare five-minute cron dispatches due domain loops.
-const DEFAULT_REPO = "kazemnezhadsina144-dot/noetfeld-os";
+const DEFAULT_REPO = "Noetfield-Systems/noetfeld-os";
 
 const LOOPS = [
   { event_type: "noos_inbox_loop_tick", interval: 5, domain: "factory-inbox" },

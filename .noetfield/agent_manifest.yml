@@ -1,0 +1,16 @@
+schema: noetfield-agent-manifest-v1
+repo: Noetfield-Systems/noetfeld-os
+repo_key: noetfeld-os
+plane: DELIVERY
+agent_routing_tier: T1
+coordination_support:
+  integrator_protocol: data/noos-integrator-role-v1.json
+  mode: support-only
+forbidden_active_config_markers:
+  - kazemnezhadsina144-dot
+registry_paths:
+  repo_registry: noetfield-org/REPO_REGISTRY.md
+  agent_registry: noetfield-org/AGENT_REGISTRY.md
+  routing_matrix: noetfield-org/ROUTING_MATRIX.md
+  loop_state: noetfield-org/LOOP_STATE.json
+  sync_receipts: noetfield-org/SYNC_RECEIPTS.md

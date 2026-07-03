@@ -1,0 +1,32 @@
+{
+  "schema": "noos-integrator-role-v1",
+  "version": "1.0.0",
+  "one_law": "Repo-local integrator state is the writeable coordination truth for NOOS local agents; home mirror and Supabase are read replicas unless an explicit operator promotes them.",
+  "claim_ttl_minutes": 90,
+  "stale_agent_minutes": 30,
+  "paths": {
+    "protocol": "data/noos-integrator-role-v1.json",
+    "runtime_state": ".noos-runtime/integrator/noos-integrator-state-v1.json",
+    "runtime_lock": ".noos-runtime/integrator/noos-integrator-state-v1.lock",
+    "home_mirror": "~/.sina/noos-integrator-state-v1.json"
+  },
+  "statuses": {
+    "task": ["open", "claimed", "in_progress", "blocked", "done", "cancelled"],
+    "agent": ["active", "idle", "blocked"]
+  },
+  "required_claim_fields": [
+    "agent_id",
+    "task_id",
+    "status",
+    "scope_files",
+    "claimed_at",
+    "heartbeat_at"
+  ],
+  "rules": [
+    "Agents must register before claiming work.",
+    "Every claimed task should declare scope_files when code paths are known.",
+    "An agent must not claim a task whose scope overlaps an active non-stale task owned by another agent.",
+    "Every mutating command writes the repo-local runtime state and a home mirror for other IDEs/worktrees on the same Mac.",
+    "Supabase mirror is optional and should be enabled only when service-role access is available."
+  ]
+}
