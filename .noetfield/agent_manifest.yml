@@ -31,7 +31,7 @@ required_receipts:
   - autonomous_verification_receipt_v1.json
 
 forbidden_actions:
-  - Use of old org slug "kazemnezhadsina144-dot" (see ROUTING_MATRIX.md)
+  - Use of legacy personal org slug listed in noetfield-org/FORBIDDEN_MARKERS.txt (see ROUTING_MATRIX.md)
   - Wait indefinitely on receipt (report blocker instead)
   - Retroactive mutation of receipt archive
   - Mutate main branch without PR + 2 approvals
@@ -76,7 +76,7 @@ org_sync_anchors:
 # Pre-Execution Checklist
 pre_exec_checklist:
   - "[ ] Read LOOP_STATE.json for current tick and missions"
-  - "[ ] No old slug 'kazemnezhadsina144-dot' in any workflow"
+  - "[ ] No legacy personal slug from noetfield-org/FORBIDDEN_MARKERS.txt in any workflow"
   - "[ ] LOOP_STATE.json reflects mission priorities (M1 > M6)"
   - "[ ] All receipt schemas match registries"
   - "[ ] Git clean before committing to branch"

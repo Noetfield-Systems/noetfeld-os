@@ -351,6 +351,70 @@ def invoke(
     return receipt_body
 
 
+class ToolBroker:
+    """Backward-compatible minimal broker API for merged tool wrappers/tests."""
+
+    def __init__(self, allowlist: list[str] | None = None, cost_cap_usd: float = 1.0):
+        self.allowlist = allowlist or ["git", "python3", "echo"]
+        self.cost_cap_usd = float(cost_cap_usd)
+
+    def _allowed(self, cmd: list[str]) -> bool:
+        if not cmd:
+            return False
+        if cmd[0] not in self.allowlist:
+            return False
+        joined = " ".join(cmd)
+        forbidden = [";", "|", "&&", "$", "`", ">", "<"]
+        return not any(ch in joined for ch in forbidden)
+
+    def execute(self, cmd: list[str], timeout: int = 300) -> dict[str, Any]:
+        import os
+        import time
+
+        start = time.time()
+        receipt: dict[str, Any] = {
+            "cmd": cmd,
+            "allowed": False,
+            "exit_code": None,
+            "stdout": "",
+            "stderr": "",
+            "duration_seconds": None,
+            "timestamp": utc_now(),
+            "cost_estimate_usd": 0.0,
+        }
+        if not self._allowed(cmd):
+            receipt["reason"] = "not_allowed"
+            return receipt
+
+        receipt["allowed"] = True
+        receipt["cost_estimate_usd"] = 0.01
+        if receipt["cost_estimate_usd"] > self.cost_cap_usd:
+            receipt["reason"] = "cost_cap_exceeded"
+            return receipt
+
+        try:
+            proc = subprocess.run(
+                cmd,
+                cwd=str(ROOT),
+                capture_output=True,
+                text=True,
+                timeout=timeout,
+                check=False,
+            )
+            receipt["exit_code"] = proc.returncode
+            receipt["stdout"] = (proc.stdout or "").strip()[:2000]
+            receipt["stderr"] = (proc.stderr or "").strip()[:2000]
+        except subprocess.TimeoutExpired:
+            receipt["exit_code"] = -1
+            receipt["stderr"] = "timeout"
+        except OSError as exc:
+            receipt["exit_code"] = -1
+            receipt["stderr"] = str(exc)
+        finally:
+            receipt["duration_seconds"] = round(time.time() - start, 3)
+        return receipt
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--json", action="store_true")
