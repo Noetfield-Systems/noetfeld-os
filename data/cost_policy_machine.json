@@ -1,0 +1,15 @@
+{
+  "allowed_default_models": ["gpt-5-mini", "gpt-5-mini-equivalent", "local-llama-2-small"],
+  "forbidden_models": ["gpt-5.4", "gpt-5.5", "anthropic/claude", "openai-gpt-4o", "gemini-3.1-pro-preview"],
+  "forbidden_providers": ["openrouter_premium", "anthropic-hosted", "openai-premium"],
+  "requires_explicit_authorization": true,
+  "max_cost_per_cycle_usd": 5.0,
+  "max_retry_count": 3,
+  "no_background_premium_models": true,
+  "fail_closed_on_unknown_model": true,
+  "scheduled_jobs_require_cost_policy_pass": true,
+  "background_jobs_require_model_none_or_allowed_cheap": true,
+  "fail_closed_on_missing_cost_receipt": true,
+  "receipt_requirements": ["provider", "model", "tokens_in", "tokens_out", "estimated_cost", "cost_policy_pass", "cost_policy_version"],
+  "scan_file_globs": [".github/workflows/**/*.yml", "scripts/**/*.py", "cloud/workers/**/*.js", "data/**/*.json", "*.md"]
+}
