@@ -1,0 +1,118 @@
+# NOOS Cheap Worker Kernel — model router config v1
+# Authority: governed-autorun v3 L5/L7/L11 · headless kernel only (no IDE/UI)
+schema: noos-model-router-v1
+version: "1.0.0"
+spec_path: docs/_NOOS_AGENT/[NOOS-AGENT-20260703-002]_CHEAP_WORKER_KERNEL_v1.md
+
+budget:
+  max_usd_per_run: 0.05
+  max_usd_per_day: 0.50
+  throttle_on_exceed: true
+
+tiers:
+  T0:
+    name: deterministic
+    description: Grep, check, validate — zero LLM spend
+    providers: [local_shell]
+    models: []
+    max_usd: 0.0
+    requires_founder_approval: false
+    task_kinds:
+      - grep
+      - check
+      - validate
+      - lint
+      - count
+      - diff_stat
+
+  T1:
+    name: cheap_summary
+    description: Summary and classification via free/cheap models
+    providers: [openrouter_free, deepseek_cheap]
+    models:
+      - id: openrouter/google/gemma-2-9b-it:free
+        provider: openrouter_free
+        unit_cost_usd_per_1k_tokens: 0.0
+      - id: deepseek/deepseek-chat
+        provider: deepseek_cheap
+        unit_cost_usd_per_1k_tokens: 0.00014
+    max_usd: 0.01
+    requires_founder_approval: false
+    task_kinds:
+      - summarize
+      - classify
+      - triage
+      - digest
+
+  T2:
+    name: bounded_patch
+    description: Patch proposals inside sandbox only — deterministic gate decides merge
+    providers: [deepseek_cheap, openrouter_free]
+    models:
+      - id: deepseek/deepseek-chat
+        provider: deepseek_cheap
+        unit_cost_usd_per_1k_tokens: 0.00014
+    max_usd: 0.03
+    requires_founder_approval: false
+    task_kinds:
+      - patch_proposal
+      - kaizen_proposal
+      - docstring_fix
+
+  T3:
+    name: premium_exception
+    description: Premium models — founder approval required every run
+    providers: [openrouter_premium]
+    models:
+      - id: anthropic/claude-sonnet-4
+        provider: openrouter_premium
+        unit_cost_usd_per_1k_tokens: 0.003
+    max_usd: 0.05
+    requires_founder_approval: true
+    task_kinds:
+      - premium_analysis
+      - architecture_review
+      - verifier_change
+
+routing:
+  default_tier: T0
+  unknown_task_kind: T0
+  escalate_to_t3_requires: founder_approval_token
+
+governance:
+  no_secrets_to_model: true
+  no_direct_main_edits: true
+  no_product_code_paths:
+    - noetfield_gate/
+    - app/
+    - src/
+  patch_sandbox_root: .noos-runtime/worker-kernel/patches
+  receipt_dir: receipts/proof
+  allowed_patch_prefixes:
+    - scripts/
+    - docs/_NOOS_AGENT/
+    - data/
+    - tests/
+    - config/
+  forbidden_patch_paths:
+    - noetfield_gate/
+    - .github/CODEOWNERS
+    - docs/GOVERNED_AUTORUN_LAWS_v3.md
+    - scripts/verify_
+    - infrastructure/supabase/migrations/
+
+secret_redaction:
+  patterns:
+    - '(?i)(api[_-]?key|secret|token|password|authorization)\s*[:=]\s*\S+'
+    - 'sk-[a-zA-Z0-9]{20,}'
+    - 'ghp_[a-zA-Z0-9]{20,}'
+    - 'eyJ[a-zA-Z0-9_-]{10,}\.[a-zA-Z0-9_-]{10,}'
+  replacement: "[REDACTED]"
+
+deterministic_checks:
+  patch_apply_requires:
+    - sandbox_path_under_allowed_prefix
+    - no_main_branch_target
+    - max_files: 5
+    - max_lines_changed: 200
+  pass_verdict_from: deterministic_gate_only

@@ -1,0 +1,34 @@
+{
+  "schema": "noos-worker-kernel-role-v1",
+  "version": "1.0.0",
+  "role_id": "noos-cheap-worker-kernel",
+  "title": "NOOS Cheap Worker Kernel",
+  "lane": "NOETFELD-OS",
+  "mode": "headless",
+  "not_allowed": ["ui", "ide", "github_copilot_api", "background_loops", "direct_main_edits", "product_code_mutation"],
+  "purpose": "Route governed tasks to deterministic tools or tiered models under SSOT budget law.",
+  "authority": [
+    "docs/GOVERNED_AUTORUN_LAWS_v3.md",
+    "config/model-router.yml",
+    "data/mission-registry-v1.json"
+  ],
+  "tiers": {
+    "T0": "deterministic — grep/check/validate, zero LLM",
+    "T1": "summary/classification — free or DeepSeek cheap",
+    "T2": "bounded patch proposal — sandbox only, gate decides pass/fail",
+    "T3": "premium exception — founder approval required"
+  },
+  "inputs": {
+    "task_kind": "grep|check|summarize|classify|patch_proposal|premium_analysis|...",
+    "payload": "task-specific JSON-safe body (secrets stripped before routing)",
+    "scope_paths": "optional list of paths bounded to kernel lane",
+    "founder_approval_token": "required for T3 only"
+  },
+  "outputs": {
+    "receipt": "receipts/proof/noos-worker-kernel-run-*.json",
+    "patch_sandbox": ".noos-runtime/worker-kernel/patches/<op_key>/",
+    "verdict": "PASS|BLOCKED_WITH_REASON from deterministic checks only"
+  },
+  "mission_default": "M4",
+  "value_class_default": "hygiene"
+}

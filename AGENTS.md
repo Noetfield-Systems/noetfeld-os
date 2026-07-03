@@ -35,6 +35,7 @@ workspace_root: /Users/sinakazemnezhad/Projects/noetfeld-os
 ### Integrator coordination
 
 - Before starting overlapping implementation work, read the integrator summary: `python3 scripts/noos_integrator_sync_v1.py summary --json`
+- Before parallel agent work, run conflict check: `python3 scripts/noos_agent_conflict_check_v1.py --json`
 - Register/claim through `scripts/noos_integrator_sync_v1.py` before editing shared code paths across multiple IDE agents.
 - Respect `scope_files` conflicts. If another non-stale agent owns the same files, do not proceed silently.
 - Repo-local runtime state is primary; `~/.sina/noos-integrator-state-v1.json` is the cross-worktree/home mirror for other IDEs on the same Mac.

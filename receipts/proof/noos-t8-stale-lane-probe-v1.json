@@ -1,0 +1,12 @@
+{
+  "schema": "noetfield-t8-stale-lane-probe-v1",
+  "at": "2026-07-02T21:57:21Z",
+  "registry_trigger_id": "NOOS-T8-stale-lane-pgcron",
+  "table_ok": false,
+  "recent_events": [],
+  "ok": false,
+  "errors": [
+    "supabase_not_configured"
+  ],
+  "report_line": "t8_stale_lane_probe_fail \u00b7 supabase_not_configured"
+}

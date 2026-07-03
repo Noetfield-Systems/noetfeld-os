@@ -1,0 +1,11 @@
+{
+  "schema": "noos-parallel-agent-conflict-check-v1",
+  "version": "1.0.0",
+  "at": "2026-07-03T08:49:34+00:00",
+  "registry_path": "data/noos-parallel-agent-registry-v1.json",
+  "integrator_state_present": true,
+  "active_claims": 0,
+  "conflicts": [],
+  "ok": true,
+  "report_line": "parallel_agents_clean \u00b7 no mutex or scope conflicts"
+}

@@ -825,6 +825,33 @@ PROBES = {
 }
 
 
+def fetch_t8_stale_lane_events(wf_doc: dict[str, Any], *, limit: int = 20) -> list[dict[str, Any]]:
+    """T8 spine feed — latest pg_cron stale-lane receipts (replaces poll-only stale math when present)."""
+    cfg = supabase_profile_config("noetfield", wf_doc)
+    if not cfg:
+        return []
+    hit = supabase_get(
+        cfg,
+        "noetfield_stale_lane_events",
+        query=urllib.parse.urlencode(
+            {
+                "select": "id,recorded_at,lane_id,factory_id,last_seen_at,event,metadata",
+                "order": "recorded_at.desc",
+                "limit": str(limit),
+            }
+        ),
+    )
+    rows = hit.get("rows") if isinstance(hit.get("rows"), list) else []
+    return rows
+
+
+def t8_stale_for_factory(events: list[dict[str, Any]], factory_id: str) -> dict[str, Any] | None:
+    for row in events:
+        if str(row.get("factory_id") or row.get("lane_id") or "") == factory_id:
+            return row
+    return None
+
+
 def apply_triage(row: dict[str, Any], *, triage: bool, dirty_total: int, threshold: int) -> dict[str, Any]:
     if triage and row.get("status") not in ("FAILED_WITH_RECEIPT",):
         row = dict(row)
@@ -885,6 +912,7 @@ def build_dashboard() -> dict[str, Any]:
     sb_doc = read_json(SANDBOXES)
     threshold = int(sb_doc.get("triage_threshold_dirty_total") or 200)
     stale_minutes = float(wf_doc.get("stale_threshold_minutes") or DEFAULT_STALE_MINUTES)
+    t8_events = fetch_t8_stale_lane_events(wf_doc)
 
     sandbox_rows = []
     dirty_total = 0
@@ -945,6 +973,15 @@ def build_dashboard() -> dict[str, Any]:
                     "age_days": 0,
                 }
             )
+        probe = wf.get("probe") or {}
+        factory_id = str(probe.get("factory_id") or "")
+        t8 = t8_stale_for_factory(t8_events, factory_id) if factory_id else None
+        if t8:
+            row["t8_stale_lane"] = t8
+            row["data_freshness"] = "STALE_DATA"
+            row["status"] = "BLOCKED_WITH_REASON"
+            row["reason"] = "t8_pgcron_stale_lane"
+            row["command"] = "Investigate lane writer; pg_cron emitted stale_lane receipt"
         workflows_out.append(row)
 
     authority = reconciler_authority_check(wf_doc)
@@ -967,6 +1004,11 @@ def build_dashboard() -> dict[str, Any]:
         "triage_threshold": threshold,
         "triage_required": triage,
         "stale_threshold_minutes": stale_minutes,
+        "spine_feed": {
+            "transport": "rest_snapshot+t8_pgcron",
+            "stale_lane_events": t8_events[:10],
+            "realtime_cli": "python3 scripts/spine_realtime_feed_v1.py --listen --once --json",
+        },
         "reconciler_authority": authority,
         "registered_workflows": registered_workflows,
         "registered_sandboxes": registered_sandboxes,

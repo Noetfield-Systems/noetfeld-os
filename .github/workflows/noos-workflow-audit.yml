@@ -32,3 +32,5 @@ jobs:
           GITHUB_WORKFLOW: ${{ github.workflow }}
           DISPATCH_SOURCE: ${{ github.event.client_payload.source || 'cf-cron' }}
         run: python3 scripts/noos_loop_runner_v1.py --event-type noos_workflow_audit_tick --json
+      - name: Parallel agent governance verify
+        run: python3 scripts/verify_living_system_governance_v1.py --write-receipt --json
