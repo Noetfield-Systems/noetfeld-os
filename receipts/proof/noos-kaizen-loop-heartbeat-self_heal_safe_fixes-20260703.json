@@ -2,7 +2,7 @@
   "schema": "improvement-receipt-v2",
   "class": "machine_safe",
   "source": "failed_check",
-  "diff_summary": "autorun-status SLO miss for noos_loop_runtime: score 0.0 < 80",
+  "diff_summary": "loop-heartbeat SLO miss for self_heal_safe_fixes: score 51.43 < 80",
   "expected_effect": "Restore freshness, success rate, and latency SLO compliance for the loop",
   "expected_roi": {
     "cost_saved_usd": 0,
@@ -14,25 +14,23 @@
   "external_verify_before": "",
   "external_verify_after": "",
   "auto_rolled_back": false,
-  "source_ref": "autorun-status",
-  "loop_id": "noos_loop_runtime",
+  "source_ref": "loop-heartbeat",
+  "loop_id": "self_heal_safe_fixes",
   "score": {
-    "score": 0.0,
+    "score": 51.43,
     "misses": [
-      "freshness_miss",
+      "freshness_missing",
       "success_rate_miss",
-      "latency_miss"
+      "latency_missing"
     ],
     "ok": false
   },
   "evidence": {
-    "title": "24/7 loop \u2014 runtime gate+pytest",
-    "plane": "NOETFELD-OS",
-    "status": "BLOCKED_WITH_REASON",
-    "observed_at": "2026-07-02T21:46:15.840681+00:00",
-    "freshness_minutes": 751.01,
-    "success_rate": 0.0,
-    "latency_minutes": 751.01
+    "workflow_id": "noos-self-heal.yml",
+    "freshness_minutes": null,
+    "success_rate": 0.6,
+    "latency_minutes": null,
+    "status": "UNKNOWN"
   },
-  "generated_at": "2026-07-03T10:17:16Z"
+  "generated_at": "2026-07-03T10:17:21Z"
 }

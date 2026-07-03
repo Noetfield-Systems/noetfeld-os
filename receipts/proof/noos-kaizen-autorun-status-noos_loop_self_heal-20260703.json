@@ -30,9 +30,9 @@
     "plane": "NOETFELD-OS",
     "status": "BLOCKED_WITH_REASON",
     "observed_at": "2026-07-02T21:41:17.906499+00:00",
-    "freshness_minutes": 732.91,
+    "freshness_minutes": 756.02,
     "success_rate": 0.0,
-    "latency_minutes": 732.91
+    "latency_minutes": 756.02
   },
-  "generated_at": "2026-07-03T09:54:12Z"
+  "generated_at": "2026-07-03T10:17:19Z"
 }
