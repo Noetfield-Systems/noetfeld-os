@@ -1,0 +1,143 @@
+# Copilot Instructions for Noetfield-Systems/noetfeld-OS
+
+**Last Updated:** 2026-07-03  
+**Org:** Noetfield-Systems  
+**Repo:** noetfeld-OS  
+**Tier:** T1/T3 (code + advanced reasoning)  
+
+## Critical Rules
+
+### 1. Slug Enforcement
+- **REQUIRED:** Use only `Noetfield-Systems` org slug in all workflows and configs.
+- **FORBIDDEN:** Any reference to `kazemnezhadsina144-dot`.
+- **Verification:** `grep -r "kazemnezhadsina144-dot" .` must return 0 results.
+
+### 2. Org-Sync Anchors (Mandatory)
+This repo is the sync-plane hub. Always respect:
+- `noetfield-org/REPO_REGISTRY.md` (foundational — do not delete)
+- `noetfield-org/AGENT_REGISTRY.md` (mission stack reference)
+- `noetfield-org/ROUTING_MATRIX.md` (L17 tool routing — canonical)
+- `noetfield-org/LOOP_STATE.json` (machine-readable mission + tick state)
+- `noetfield-org/SYNC_RECEIPTS.md` (verified windows, restart points)
+
+### 3. Read Repo State First
+- Always read `LOOP_STATE.json` before modifying factory/loop logic.
+- Check mission priorities: M1 buyer-proof is always priority.
+- M6 (AI Station) is parked — do NOT allocate T0 resources to M6.
+- Do NOT treat June status files as current truth.
+
+### 4. No Background Waiting
+- Do NOT wait indefinitely on receipts or external workflows.
+- If blocked: report condition and commit work.
+- Loop tick operates on T0 schedule — you prepare code, T0 orchestrates.
+
+### 5. Forbidden Actions
+- No force push.
+- No direct main mutation without PR + approval.
+- No retroactive mutation of receipt archive.
+- No M6 spend without M1 >99% determinism gate pass.
+
+## Workflow Integration
+
+### noetfeld-OS Execution Flows
+1. **Factory Tick (T0 Dispatch)**
+   - T0 executes `noos-factory-autorun-tick-v1`
+   - You: ensure factory code is ready, passes tests
+   - Receipt: `factory_tick_receipt_v1.json` → sina-governance-SSOT
+
+2. **Loop Fleet Tick (T0 Orchestration)**
+   - T0 executes `noos-loop-fleet-tick-v1`
+   - You: maintain loop state machine logic
+   - Receipt: `loop_fleet_state_receipt_v1.json`
+
+3. **Autonomous Verification (T3 Reasoning)**
+   - `verify_noos_autonomous_24h_v1.py` runs independently
+   - You: ensure script syntax correct, metrics collected
+   - Receipt: `autonomous_verification_receipt_v1.json`
+
+### Your T1/T3 Responsibilities
+- Implement factory/loop logic (T1)
+- Maintain receipt schemas (T1)
+- Update governance registries (T1)
+- Validate cross-repo sync (T3)
+- Report via GitHub issues (no waiting)
+
+## Repo State Checklist (Before Any Work)
+
+```bash
+# 1. Verify org slug
+grep -r "kazemnezhadsina144-dot" . && echo "ERROR: Old slug!" || echo "✓ No old slug"
+
+# 2. Read current LOOP_STATE
+cat noetfield-org/LOOP_STATE.json | jq '.loop_state, .mission_stack | keys'
+
+# 3. Check mission M6 constraint
+cat noetfield-org/LOOP_STATE.json | jq '.mission_stack.M6.constraint'
+
+# 4. Verify branch
+git branch
+
+# 5. Validate org-sync anchors exist
+ls -la noetfield-org/REPO_REGISTRY.md noetfield-org/ROUTING_MATRIX.md noetfield-org/LOOP_STATE.json
+```
+
+## Updating LOOP_STATE.json (Critical Task)
+
+Never edit LOOP_STATE manually outside of proper receipt flow:
+1. Factory tick writes `tick_number`, `factory_state`
+2. Loop fleet tick updates `loop_state` receipt
+3. Verification updates verified windows
+4. Only T1 (you) updates mission priorities in special cases (must PR)
+
+**Safe to edit:**
+- Mission priorities (with PR)
+- Receipt schemas (with PR)
+
+**Never edit:**
+- Tick numbers (T0 only)
+- Verified SHA (T3 only)
+
+## Signing Off (Before PR)
+
+When changes are ready:
+1. Run checklist above
+2. Commit: `feat: [description] — Noetfield-Systems org migration`
+3. Push to branch
+4. Open PR with:
+   - **Title:** Feature description
+   - **Description:**
+     ```
+     **Repo:** Noetfield-Systems/noetfeld-OS
+     **Tier:** T1/T3 orchestrator
+     **Mission:** M2 autonomy + M3 governance
+     
+     **Changes:**
+     - [File changes summary]
+     - [Org-sync anchor updates if any]
+     
+     **LOOP_STATE Updated:** [yes/no — which fields]
+     **Registries Updated:** [yes/no — which docs]
+     **SHA:** [git rev-parse HEAD]
+     **Files Changed:** [git diff --stat HEAD~1 HEAD]
+     ```
+   - **Reviewers:** Request 2 approvals
+
+## Escalation Path
+
+- **T0 needs to execute:** File issue `needs-t0-dispatch`
+- **Receipt validation needed:** File issue `needs-t3-verification`
+- **Sync plane update:** File PR, describe changes to registries
+- **M6 budget needed:** File issue, explain how M1 constraint still satisfied
+
+## Related Docs
+
+- **Manifest:** `.noetfield/agent_manifest.yml` (your orchestrator role)
+- **Tool Routing:** `noetfield-org/ROUTING_MATRIX.md` (L17 access — canonical)
+- **Repo Registry:** `noetfield-org/REPO_REGISTRY.md` (foundational)
+- **Agent Registry:** `noetfield-org/AGENT_REGISTRY.md` (M1-M6 assignments)
+- **Loop State:** `noetfield-org/LOOP_STATE.json` (mission stack + ticks)
+- **Verification:** `noetfield-org/SYNC_RECEIPTS.md` (verified windows)
+
+---
+
+**Last Rule:** Before pushing: "Is LOOP_STATE consistent? Is M1 still top priority? Am I using Noetfield-Systems slug? Am I on a branch? Ready for PR?" If yes to all, proceed.

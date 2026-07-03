@@ -4,7 +4,7 @@
 Usage (Cloudflare cron / headless automation only — not Cursor manual):
   GITHUB_TOKEN=... python3 scripts/trigger_noos_factory_dispatch_v1.py
 
-Requires token with `repo` scope on kazemnezhadsina144-dot/noetfeld-os.
+Requires token with `repo` scope on Noetfield-Systems/noetfeld-os.
 """
 
 from __future__ import annotations
@@ -16,7 +16,7 @@ import sys
 import urllib.error
 import urllib.request
 
-REPO = "kazemnezhadsina144-dot/noetfeld-os"
+REPO = "Noetfield-Systems/noetfeld-os"
 EVENT_TYPE = "noos_factory_autorun_tick"
 
 

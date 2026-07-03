@@ -16,7 +16,7 @@ from pathlib import Path
 from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
-REPO = "kazemnezhadsina144-dot/noetfeld-os"
+REPO = "Noetfield-Systems/noetfeld-os"
 CF_HEALTH = "https://noos-factory-autorun-tick-v1.sina-kazemnezhad-ca.workers.dev/health"
 AUTONOMOUS_EVENTS = frozenset({"repository_dispatch", "schedule"})
 MANUAL_EVENTS = frozenset({"workflow_dispatch"})

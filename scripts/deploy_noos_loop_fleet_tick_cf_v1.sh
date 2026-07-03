@@ -4,7 +4,7 @@ set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 WORKER_DIR="$ROOT/cloud/workers/noos-loop-fleet-tick-v1"
-REPO="${GITHUB_REPO:-kazemnezhadsina144-dot/noetfeld-os}"
+REPO="${GITHUB_REPO:-Noetfield-Systems/noetfeld-os}"
 
 token() {
   if [[ -n "${GITHUB_TOKEN:-}" ]]; then printf '%s' "$GITHUB_TOKEN"; return 0; fi

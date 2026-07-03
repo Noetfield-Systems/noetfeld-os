@@ -2,7 +2,7 @@
  * NOOS factory autorun tick — Cloudflare cron → GitHub repository_dispatch.
  * Native GitHub schedule is silent on this private repo; CF cron is the autonomous motor.
  */
-const DEFAULT_REPO = "kazemnezhadsina144-dot/noetfeld-os";
+const DEFAULT_REPO = "Noetfield-Systems/noetfeld-os";
 const EVENT_TYPE = "noos_factory_autorun_tick";
 
 function json(body, status = 200) {
