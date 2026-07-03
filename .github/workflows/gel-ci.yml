@@ -48,7 +48,6 @@ jobs:
         run: noetfield gate --json
 
       - name: Business strategy alignment (UPG-0193)
-        continue-on-error: true
         run: bash scripts/check_noetfield_business_strategy.sh
 
       - name: Gitleaks secret scan (UPG-0197)

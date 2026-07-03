@@ -148,6 +148,19 @@
       }
     },
     {
+      "trigger_id": "NOOS-T3-workflow-audit",
+      "system": "noetfeld-os",
+      "kind": "schedule",
+      "schedule": "*/15 * * * *",
+      "target": "Workflow audit + critique loop",
+      "valid_in_verified_window": true,
+      "owner_workflow": "noos-workflow-audit",
+      "live_probe": {
+        "type": "gha_schedule",
+        "path": ".github/workflows/noos-workflow-audit.yml"
+      }
+    },
+    {
       "trigger_id": "NOOS-T-gel-ci-push",
       "system": "noetfeld-os",
       "kind": "event",
@@ -229,6 +242,58 @@
         "type": "gha_workflow",
         "path": ".github/workflows/publish-pypi.yml",
         "expects": ["workflow_dispatch"]
+      }
+    },
+    {
+      "trigger_id": "NOOS-T-self-heal",
+      "system": "noetfeld-os",
+      "kind": "schedule",
+      "schedule": "15,45 * * * *",
+      "target": "Auto-fix safe issues from audit findings (30-min loop)",
+      "valid_in_verified_window": true,
+      "owner_workflow": "noos-self-heal",
+      "live_probe": {
+        "type": "gha_schedule",
+        "path": ".github/workflows/noos-self-heal.yml"
+      }
+    },
+    {
+      "trigger_id": "NOOS-T-researcher",
+      "system": "noetfeld-os",
+      "kind": "schedule",
+      "schedule": "0 * * * *",
+      "target": "Deep-dive investigation of escalated findings (hourly)",
+      "valid_in_verified_window": true,
+      "owner_workflow": "noos-researcher",
+      "live_probe": {
+        "type": "gha_schedule",
+        "path": ".github/workflows/noos-researcher.yml"
+      }
+    },
+    {
+      "trigger_id": "NOOS-T-specialist",
+      "system": "noetfeld-os",
+      "kind": "schedule",
+      "schedule": "0 */2 * * *",
+      "target": "Generate fix proposals from research (2-hour loop)",
+      "valid_in_verified_window": true,
+      "owner_workflow": "noos-specialist",
+      "live_probe": {
+        "type": "gha_schedule",
+        "path": ".github/workflows/noos-specialist.yml"
+      }
+    },
+    {
+      "trigger_id": "NOOS-T-orchestrator",
+      "system": "noetfeld-os",
+      "kind": "schedule",
+      "schedule": "0 */3 * * *",
+      "target": "Cross-repo health orchestration & consolidation (3-hour loop)",
+      "valid_in_verified_window": true,
+      "owner_workflow": "noos-cross-repo-orchestrator",
+      "live_probe": {
+        "type": "gha_schedule",
+        "path": ".github/workflows/noos-cross-repo-orchestrator.yml"
       }
     }
   ]
