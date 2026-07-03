@@ -38,6 +38,10 @@ jobs:
 
       - name: Pytest
         run: pytest -q
+        continue-on-error: false
+      - name: Run autorun unit tests
+        run: pytest -q tests/test_autorun_findings.py
+        continue-on-error: false
 
       - name: Integration gate (UPG-0159)
         run: pytest -q tests/test_gate_integration_ci.py

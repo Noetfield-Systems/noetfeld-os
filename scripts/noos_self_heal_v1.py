@@ -249,11 +249,8 @@ def build_healing_report(
     }
 
 
-def main(dry_run: bool = False) -> int:
+def main(dry_run: bool = False, findings_file: str = "data/noos-audit-findings-v1.json", handoff_file: str = "data/noos-healing-handoff-v1.json") -> int:
     """Main healing loop."""
-    findings_file = "data/noos-audit-findings-v1.json"
-    handoff_file = "data/noos-healing-handoff-v1.json"
-
     audit_findings = read_audit_findings(findings_file)
     handoff = read_handoff(handoff_file)
 
@@ -311,6 +308,8 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description="NOOS Self-Heal Engine")
     parser.add_argument("--dry-run", action="store_true", help="Run without writing changes")
+    parser.add_argument("--findings-file", default="data/noos-audit-findings-v1.json", help="Path to audit findings file")
+    parser.add_argument("--handoff-file", default="data/noos-healing-handoff-v1.json", help="Path to handoff file")
     args = parser.parse_args()
 
-    sys.exit(main(dry_run=args.dry_run))
+    sys.exit(main(dry_run=args.dry_run, findings_file=args.findings_file, handoff_file=args.handoff_file))
