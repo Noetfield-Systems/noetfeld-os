@@ -8,6 +8,6 @@
 
 ## Forbidden active-config markers
 
-The following legacy slug must not appear in active configuration:
+The following legacy slug must not appear in active configuration (see `docs/FORBIDDEN_MARKERS.txt`):
 
-- `kazemnezhadsina144-dot`
+- `kazemnezhadsina144[-]dot`

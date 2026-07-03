@@ -21,5 +21,4 @@ agents:
       - repo-local receipts
       - repo-local handoff updates
 metadata:
-  legacy_slug_forbidden_in_active_config:
-    - kazemnezhadsina144-dot
+  forbidden_active_config_markers_source: .github/copilot-instructions.md
