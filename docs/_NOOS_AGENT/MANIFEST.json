@@ -224,6 +224,12 @@
       "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260703-003]_PARALLEL_AGENT_GOVERNANCE_v1.md",
       "doc_type": "PARALLEL_AGENT_GOVERNANCE",
       "title": "Parallel agent governance — living system dedup law"
+    },
+    {
+      "trace_id": "NOOS-AGENT-20260703-004",
+      "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260703-004]_CURSOR_LOCAL_MAC_OPERATOR_v1.md",
+      "doc_type": "CURSOR_LOCAL_OPERATOR",
+      "title": "Cursor Local Mac operator — T2 boot, claim, closeout"
     }
   ]
 }

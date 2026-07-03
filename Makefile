@@ -1,4 +1,4 @@
-.PHONY: test gate demo build-gate-js install inbox cloud-worker autorun-once autorun autorun-status autorun-tick-deploy autorun-tick-dispatch autonomous-verify schedule-verify determinism-verify replay-verify planes supabase-migrate verified-window loop-run loop-fleet-deploy loop-fleet-dispatch loops-status loop-heartbeat backlog urls
+.PHONY: test gate demo build-gate-js install inbox cloud-worker autorun-once autorun autorun-status autorun-tick-deploy autorun-tick-dispatch autonomous-verify schedule-verify determinism-verify replay-verify planes supabase-migrate verified-window loop-run loop-fleet-deploy loop-fleet-dispatch loops-status loop-heartbeat backlog urls local-boot local-closeout local-patch-proposal
 
 test:
 	pytest -q
@@ -79,3 +79,27 @@ backlog:
 
 urls:
 	bash scripts/check_production_urls.sh
+
+local-boot:
+	git status --short
+	git branch --show-current
+	python3 scripts/noos_agent_conflict_check_v1.py --json
+	python3 scripts/verify_living_system_governance_v1.py --json
+	python3 scripts/noos_integrator_sync_v1.py summary --json
+
+local-closeout:
+	@test -n "$(TASK)" || (echo "Usage: make local-closeout TASK=NOOS-LANE-001" && exit 1)
+	python3 -m pytest -q
+	bash scripts/check_noos_clean_tree.sh
+	python3 scripts/noos_integrator_sync_v1.py complete --agent-id cursor-local-mac --ide cursor --task-id $(TASK) --note "lane closed"
+
+local-patch-proposal:
+	@if [ -n "$(PAYLOAD_FILE)" ]; then \
+		python3 scripts/noos_worker_kernel_v1.py --task-kind patch_proposal --payload-file "$(PAYLOAD_FILE)" --json; \
+	elif [ -n "$(PATHS)" ]; then \
+		python3 scripts/noos_worker_kernel_v1.py --task-kind patch_proposal --payload "$$(python3 -c "import json,os; paths=[p.strip() for p in os.environ.get('PATHS','').split(',') if p.strip()]; print(json.dumps({'files':[{'path':p,'content':''} for p in paths]}))")" --json; \
+	else \
+		echo "Usage: make local-patch-proposal PAYLOAD_FILE=proposal.json"; \
+		echo "   or: make local-patch-proposal PATHS=scripts/foo.py,tests/test_foo.py"; \
+		exit 1; \
+	fi

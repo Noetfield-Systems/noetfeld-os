@@ -7,6 +7,8 @@ Plane: L17 org sync
 
 Parallel law: `data/noos-parallel-agent-registry-v1.json` · `docs/_NOOS_AGENT/[NOOS-AGENT-20260703-003]_PARALLEL_AGENT_GOVERNANCE_v1.md`
 
+**Cursor Local Mac operator card:** `docs/_NOOS_AGENT/[NOOS-AGENT-20260703-004]_CURSOR_LOCAL_MAC_OPERATOR_v1.md` · boot: `make local-boot`
+
 | Agent surface | Tier | Primary role | Write scope | Receipts |
 |---|---|---|---|---|
 | GitHub Actions | T0 | deterministic execution, CI, schedules, loop ticks | workflow-defined paths only | workflow runs, artifacts, cycle receipts |

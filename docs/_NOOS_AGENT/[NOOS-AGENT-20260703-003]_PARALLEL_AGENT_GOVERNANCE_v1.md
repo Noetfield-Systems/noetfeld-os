@@ -110,7 +110,8 @@ python3 scripts/verify_living_system_governance_v1.py --json
 python3 scripts/noos_integrator_sync_v1.py summary --json
 
 # 3. Claim before mutate (T1/T2/T3 with writes)
-python3 scripts/noos_integrator_sync_v1.py claim --agent-id <id> --task-id <id> --scope-file <path>
+bash scripts/noos_local_claim_lane_v1.sh <task-id> <scope-file>...
+# or: python3 scripts/noos_integrator_sync_v1.py claim --agent-id <id> --task-id <id> --scope-file <path>
 
 # 4. One-shot routed task (optional)
 python3 scripts/noos_worker_kernel_v1.py --task-kind check --payload '{"path":"scripts/noos_agent_conflict_check_v1.py"}' --json
