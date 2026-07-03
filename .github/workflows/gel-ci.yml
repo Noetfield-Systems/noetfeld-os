@@ -56,7 +56,7 @@ jobs:
         run: python3 scripts/verify_living_system_governance_v1.py --json
 
       - name: Machine loops E2E verify
-        run: python3 scripts/noos_machine_loops_v1.py verify --json
+        run: python3 scripts/noos_machine_loops_v1.py --json verify
 
       - name: noetfield gate (local)
         run: noetfield gate --json

@@ -34,16 +34,16 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Machine loops structural verify
-        run: python3 scripts/noos_machine_loops_v1.py verify --json
+        run: python3 scripts/noos_machine_loops_v1.py --json verify
 
       - name: Reconcile dispatch queue from failure receipts
-        run: python3 scripts/noos_machine_loops_v1.py reconcile --json
+        run: python3 scripts/noos_machine_loops_v1.py --json reconcile
 
       - name: Outside audit (trailing window)
-        run: python3 scripts/noos_machine_loops_v1.py audit --json
+        run: python3 scripts/noos_machine_loops_v1.py --json audit
 
       - name: Autonomy status digest
-        run: python3 scripts/noos_machine_loops_v1.py status --json
+        run: python3 scripts/noos_machine_loops_v1.py --json status
 
       - name: Machine loops unit tests
         run: pytest -q tests/test_noos_machine_loops_v1.py
