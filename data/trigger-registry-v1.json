@@ -127,8 +127,21 @@
       "trigger_id": "NOOS-T6-self-heal",
       "system": "noetfeld-os",
       "kind": "schedule",
-      "schedule": "0,10,20,30,40,50 * * * *",
-      "target": "Self-heal + autonomy nerve loop",
+      "schedule": "0 */1 * * *",
+      "target": "Self-heal + autonomy nerve loop (hourly)",
+      "valid_in_verified_window": true,
+      "owner_workflow": "noos-self-heal-loop",
+      "live_probe": {
+        "type": "gha_schedule",
+        "path": ".github/workflows/noos-self-heal-loop.yml"
+      }
+    },
+    {
+      "trigger_id": "NOOS-T6-self-heal-weekly",
+      "system": "noetfeld-os",
+      "kind": "schedule",
+      "schedule": "0 0 * * 0",
+      "target": "Self-heal weekly maintenance placeholder",
       "valid_in_verified_window": true,
       "owner_workflow": "noos-self-heal-loop",
       "live_probe": {
