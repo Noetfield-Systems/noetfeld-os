@@ -1,0 +1,127 @@
+name: "NOOS Researcher Agent"
+on:
+  schedule:
+    # Run hourly, during even hours
+    - cron: "0 * * * *"
+  workflow_dispatch:
+    inputs:
+      depth:
+        description: "Investigation depth"
+        required: false
+        default: "standard"
+        type: choice
+        options:
+          - quick
+          - standard
+          - deep
+      
+concurrency:
+  group: noos-researcher
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  actions: read
+  checks: write
+
+jobs:
+  research:
+    name: Deep-Dive Investigation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 50
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install dependencies
+        run: |
+          pip install -q \
+            PyGithub \
+            requests \
+            python-dateutil \
+            pyyaml
+
+      - name: Check for escalated findings
+        id: check
+        run: |
+          if [ -f "data/noos-healing-handoff-v1.json" ]; then
+            COUNT=$(jq '.escalated_issues | length' data/noos-healing-handoff-v1.json)
+            echo "escalated_count=$COUNT" >> $GITHUB_OUTPUT
+            if [ "$COUNT" -gt 0 ]; then
+              echo "status=has_escalations" >> $GITHUB_OUTPUT
+            else
+              echo "status=no_escalations" >> $GITHUB_OUTPUT
+            fi
+          else
+            echo "status=no_handoff" >> $GITHUB_OUTPUT
+            echo "escalated_count=0" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Run researcher agent
+        if: steps.check.outputs.status == 'has_escalations'
+        id: research
+        run: |
+          python3 scripts/noos_researcher_v1.py \
+            --handoff-file data/noos-healing-handoff-v1.json \
+            --output-file data/noos-research-findings-v1.json \
+            --depth ${{ github.event.inputs.depth || 'standard' }}
+        continue-on-error: true
+
+      - name: Parse research findings
+        id: parse
+        run: |
+          if [ -f "data/noos-research-findings-v1.json" ]; then
+            INVESTIGATED=$(jq '.findings_investigated // 0' data/noos-research-findings-v1.json)
+            SYSTEMATIC=$(jq '.critique.systematic_issues // 0' data/noos-research-findings-v1.json)
+            INTEGRATION=$(jq '.critique.integration_issues // 0' data/noos-research-findings-v1.json)
+            echo "investigated=$INVESTIGATED" >> $GITHUB_OUTPUT
+            echo "systematic=$SYSTEMATIC" >> $GITHUB_OUTPUT
+            echo "integration=$INTEGRATION" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Report research findings
+        if: steps.research.outcome != 'failure'
+        run: |
+          echo "## Research Report"
+          echo "- **Findings Investigated**: ${{ steps.parse.outputs.investigated || 0 }}"
+          echo "- **Systematic Issues Found**: ${{ steps.parse.outputs.systematic || 0 }}"
+          echo "- **Integration Issues Found**: ${{ steps.parse.outputs.integration || 0 }}"
+          [ -f "data/noos-research-findings-v1.json" ] && cat data/noos-research-findings-v1.json | jq '.critique' || echo "No research findings"
+
+      - name: No escalations to investigate
+        if: steps.check.outputs.status == 'no_escalations'
+        run: |
+          echo "✓ No escalated findings. System is healthy."
+
+      - name: Upload research report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: research-findings
+          path: |
+            data/noos-research-findings-v1.json
+            receipts/proof/noos-kaizen-researcher-report-v1.json
+          retention-days: 30
+
+  trigger_specialist:
+    name: Trigger Specialist Review
+    needs: research
+    runs-on: ubuntu-latest
+    if: always()
+    steps:
+      - name: Dispatch specialist workflow
+        run: |
+          curl -X POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            https://api.github.com/repos/${{ github.repository }}/actions/workflows/noos-specialist.yml/dispatches \
+            -d '{"ref":"main"}' \
+            --connect-timeout 5 || echo "Specialist dispatch queued"
+        continue-on-error: true

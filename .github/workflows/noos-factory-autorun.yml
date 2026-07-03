@@ -66,7 +66,6 @@ jobs:
           PY
 
       - name: Enqueue cloud worker inbox
-        continue-on-error: true
         env:
           NOETFIELD_SUPABASE_URL: ${{ secrets.NOETFIELD_SUPABASE_URL }}
           NOETFIELD_SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.NOETFIELD_SUPABASE_SERVICE_ROLE_KEY }}

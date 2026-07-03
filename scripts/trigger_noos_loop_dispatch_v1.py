@@ -14,7 +14,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 REGISTRY = ROOT / "data/noos-24-7-loops-v1.json"
-REPO = "kazemnezhadsina144-dot/noetfeld-os"
+REPO = "Noetfield-Systems/noetfeld-os"
 
 
 def _token() -> str | None:

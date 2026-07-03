@@ -1,0 +1,42 @@
+{
+  "version": "1.0",
+  "purpose": "NOOS Self-Healing Ecosystem State Transfer — tracks fixes, escalations, and proposals across audit → heal → research → specialist cycles",
+  "last_run": null,
+  "cycle_count": 0,
+  "fixed_issues": [],
+  "escalated_issues": [],
+  "in_progress": [],
+  "research_findings": [],
+  "specialist_proposals": [],
+  "metrics": {
+    "total_fixes_attempted": 0,
+    "total_fixes_succeeded": 0,
+    "total_escalated": 0,
+    "total_researched": 0,
+    "total_proposals_generated": 0,
+    "success_rate": 0.0
+  },
+  "cross_repo_status": {
+    "noetfeld-os": {
+      "last_audit": null,
+      "pending_escalations": [],
+      "pending_proposals": []
+    },
+    "noetfield": {
+      "last_audit": null,
+      "pending_escalations": [],
+      "pending_proposals": []
+    },
+    "trustfield": {
+      "last_audit": null,
+      "pending_escalations": [],
+      "pending_proposals": []
+    }
+  },
+  "schedule": {
+    "audit": "every 15 minutes",
+    "heal": "every 30 minutes (staggered 15 min after audit)",
+    "research": "every 1 hour (on escalated findings from last 4 audits)",
+    "specialist": "every 2 hours (proposes fixes for next heal cycle)"
+  }
+}

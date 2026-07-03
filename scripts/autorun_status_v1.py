@@ -24,6 +24,9 @@ WORKFLOWS = ROOT / "data/autorun-workflows-v1.json"
 SANDBOXES = ROOT / "data/autorun-sandboxes-v1.json"
 DEFAULT_STALE_MINUTES = 30
 
+sys.path.insert(0, str(ROOT / "scripts"))
+from noos_slo_v1 import autofile_kaizen_receipt, score_slo, slo_config, status_proxy_success_rate  # noqa: E402
+
 
 def utc_now() -> str:
     return datetime.now(timezone.utc).isoformat(timespec="seconds")
@@ -152,6 +155,20 @@ def stale_wrap(
         result["data_freshness"] = "FRESH"
         result["age_minutes"] = mins
     return result
+
+
+def observed_timestamp(evidence: dict[str, Any]) -> str | None:
+    for key in ("observed_at", "recorded_at", "finished_at", "created_at"):
+        val = evidence.get(key)
+        if val:
+            return str(val)
+    latest = evidence.get("latest")
+    if isinstance(latest, dict):
+        for key in ("created_at", "updated_at", "recorded_at", "finished_at"):
+            val = latest.get(key)
+            if val:
+                return str(val)
+    return None
 
 
 def blocked(reason: str, *, command: str | None = None, evidence: dict[str, Any] | None = None) -> dict[str, Any]:
@@ -417,7 +434,7 @@ def github_latest_run(workflow_file: str, *, event: str | None = None) -> dict[s
     token = dict(line.split("=", 1) for line in proc.stdout.splitlines() if "=" in line).get("password")
     if not token:
         return {"ok": False, "error": "github_token_missing"}
-    repo = "kazemnezhadsina144-dot/noetfeld-os"
+    repo = "Noetfield-Systems/noetfeld-os"
     params: dict[str, str] = {"per_page": "5"}
     if event:
         params["event"] = event
@@ -459,7 +476,7 @@ def probe_github_schedule(wf: dict[str, Any]) -> dict[str, Any]:
             evidence={"schedule_probe": sched, "any_probe": any_run},
         )
     event = latest.get("event")
-    observed_at = latest.get("created_at")
+    observed_at = latest.get("created_at") or utc_now()
     if event == "schedule" and latest.get("conclusion") == "success":
         status = "COMPLETE"
     elif event in ("schedule", "repository_dispatch"):
@@ -472,7 +489,8 @@ def probe_github_schedule(wf: dict[str, Any]) -> dict[str, Any]:
         "status": status,
         "github_run_id": latest.get("id"),
         "github_event": event,
-        "evidence": {"latest": latest, "schedule_count": sched.get("runs")},
+        "observed_at": observed_at,
+        "evidence": {"latest": latest, "schedule_count": sched.get("runs"), "observed_at": observed_at},
     }
     if status == "BLOCKED_WITH_REASON":
         row["reason"] = f"latest_event_not_schedule:{event}"
@@ -756,9 +774,11 @@ def probe_url_sweep_readonly(wf: dict[str, Any]) -> dict[str, Any]:
         return {
             "status": "FAILED_WITH_RECEIPT",
             "command": "make urls",
-            "evidence": {"fails": fails[:8], "oks": oks[:8], "checked": len(urls)},
+            "observed_at": utc_now(),
+            "evidence": {"fails": fails[:8], "oks": oks[:8], "checked": len(urls), "observed_at": utc_now()},
         }
-    return {"status": "COMPLETE", "evidence": {"checked": len(urls), "oks": oks}}
+    observed_at = utc_now()
+    return {"status": "COMPLETE", "observed_at": observed_at, "evidence": {"checked": len(urls), "oks": oks, "observed_at": observed_at}}
 
 
 def dirty_count(path: Path) -> int:
@@ -840,6 +860,53 @@ def apply_triage(row: dict[str, Any], *, triage: bool, dirty_total: int, thresho
     return row
 
 
+def workflow_slo(row: dict[str, Any], wf: dict[str, Any], wf_doc: dict[str, Any]) -> tuple[dict[str, Any], str | None]:
+    targets = slo_config(wf_doc.get("slo_defaults") or {}, wf)
+    evidence = row.get("evidence") or {}
+    observed_at = observed_timestamp(evidence)
+    freshness_minutes = age_minutes(observed_at)
+    success_rate = status_proxy_success_rate(str(row.get("status") or ""))
+    latency_minutes = freshness_minutes
+    score = score_slo(
+        freshness_minutes=freshness_minutes,
+        success_rate=success_rate,
+        latency_minutes=latency_minutes,
+        targets=targets,
+    )
+    receipt_path = None
+    if not score["ok"]:
+        receipt_path = autofile_kaizen_receipt(
+            root=ROOT,
+            source="autorun-status",
+            loop_id=str(wf["id"]),
+            score_row=score,
+            evidence={
+                "title": wf.get("title"),
+                "plane": wf.get("plane"),
+                "status": row.get("status"),
+                "observed_at": observed_at,
+                "freshness_minutes": freshness_minutes,
+                "success_rate": round(success_rate, 4),
+                "latency_minutes": latency_minutes,
+            },
+        )
+    return (
+        {
+            "targets": targets,
+            "observed": {
+                "freshness_minutes": freshness_minutes,
+                "success_rate": round(success_rate, 4),
+                "latency_minutes": latency_minutes,
+            },
+            "score": score["score"],
+            "misses": score["misses"],
+            "ok": score["ok"],
+            "kaizen_receipt": receipt_path,
+        },
+        receipt_path,
+    )
+
+
 def build_dashboard() -> dict[str, Any]:
     wf_doc = read_json(WORKFLOWS)
     sb_doc = read_json(SANDBOXES)
@@ -868,6 +935,7 @@ def build_dashboard() -> dict[str, Any]:
 
     triage = dirty_total > threshold
     workflows_out = []
+    founder_gated_improvements: list[dict[str, Any]] = []
     for wf in wf_doc.get("workflows") or []:
         probe_type = (wf.get("probe") or {}).get("type")
         fn = PROBES.get(probe_type or "")
@@ -890,6 +958,21 @@ def build_dashboard() -> dict[str, Any]:
             except Exception as exc:
                 row.update(blocked(str(exc)[:200], evidence={"probe_type": probe_type}))
         row = apply_triage(row, triage=triage, dirty_total=dirty_total, threshold=threshold)
+        slo, receipt_path = workflow_slo(row, wf, wf_doc)
+        row["slo"] = slo
+        if receipt_path:
+            founder_gated_improvements.append(
+                {
+                    "id": receipt_path,
+                    "expected_roi": {
+                        "cost_saved_usd": 0,
+                        "risk_reduced": "autorun SLO miss",
+                        "revenue_unblocked": "",
+                        "build_cost_usd": 0,
+                    },
+                    "age_days": 0,
+                }
+            )
         probe = wf.get("probe") or {}
         factory_id = str(probe.get("factory_id") or "")
         t8 = t8_stale_for_factory(t8_events, factory_id) if factory_id else None
@@ -905,6 +988,14 @@ def build_dashboard() -> dict[str, Any]:
     registered_workflows = [wf["id"] for wf in wf_doc.get("workflows") or []]
     registered_sandboxes = [sb["id"] for sb in sb_doc.get("sandboxes") or []]
 
+    findings = dashboard_findings(
+        {
+            "triage_required": triage,
+            "dirty_total": dirty_total,
+            "triage_threshold": threshold,
+            "workflows": workflows_out,
+        }
+    )
     return {
         "schema": "autorun-status-dashboard-v1.3",
         "read_only": True,
@@ -923,13 +1014,62 @@ def build_dashboard() -> dict[str, Any]:
         "registered_sandboxes": registered_sandboxes,
         "workflows": workflows_out,
         "sandboxes": sandbox_rows,
+        "founder_gated_improvements": founder_gated_improvements,
+        "critique": {"overall_ok": not findings, "findings": findings},
     }
+
+
+def dashboard_findings(dash: dict[str, Any]) -> list[dict[str, Any]]:
+    findings: list[dict[str, Any]] = []
+    if dash.get("triage_required"):
+        findings.append(
+            {
+                "scope": "sandbox_triage",
+                "severity": "high",
+                "summary": "Dirty workspace total exceeds triage threshold",
+                "detail": f"dirty_total={dash.get('dirty_total')} threshold={dash.get('triage_threshold')}",
+            }
+        )
+    for wf in dash.get("workflows") or []:
+        status = str(wf.get("status") or "").upper()
+        slo = wf.get("slo") or {}
+        evidence = wf.get("evidence") or {}
+        observed_at = observed_timestamp(evidence)
+        if status in {"BLOCKED_WITH_REASON", "FAILED_WITH_RECEIPT", "TRIAGE_REQUIRED"}:
+            findings.append(
+                {
+                    "scope": wf.get("id"),
+                    "severity": "high",
+                    "summary": f"Workflow is not healthy: {status}",
+                    "detail": wf.get("reason") or wf.get("command") or "",
+                }
+            )
+        elif status in {"RUNNING", "COMPLETE"} and not observed_at:
+            findings.append(
+                {
+                    "scope": wf.get("id"),
+                    "severity": "high",
+                    "summary": "Workflow has no observed_at evidence",
+                    "detail": "status is active but no timestamped observation is available",
+                }
+            )
+        elif not slo.get("ok") and observed_at:
+            findings.append(
+                {
+                    "scope": wf.get("id"),
+                    "severity": "high",
+                    "summary": "Workflow SLO miss",
+                    "detail": ", ".join(slo.get("misses") or []) or "slo_miss",
+                }
+            )
+    return findings
 
 
 def main() -> int:
     dash = build_dashboard()
+    findings = dashboard_findings(dash)
     print(json.dumps(dash, indent=2))
-    return 0
+    return 1 if findings else 0
 
 
 if __name__ == "__main__":

@@ -52,13 +52,38 @@ jobs:
         run: noetfield gate --json
 
       - name: Business strategy alignment (UPG-0193)
-        continue-on-error: true
         run: bash scripts/check_noetfield_business_strategy.sh
 
       - name: Gitleaks secret scan (UPG-0197)
-        uses: gitleaks/gitleaks-action@v2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        # gitleaks/gitleaks-action@v2 requires a paid GITLEAKS_LICENSE for
+        # organization-owned repos (noetfeld-os moved from a personal account
+        # to the Noetfield-Systems org). The gitleaks CLI itself stays free
+        # and open-source, so run it directly instead of the licensed action.
+        if: github.event_name == 'push'
+        run: |
+          set -euo pipefail
+          GITLEAKS_VERSION="8.30.1"
+          curl -sSL -o gitleaks.tar.gz "https://github.com/gitleaks/gitleaks/releases/download/v${GITLEAKS_VERSION}/gitleaks_${GITLEAKS_VERSION}_linux_x64.tar.gz"
+          tar -xzf gitleaks.tar.gz gitleaks
+          chmod +x gitleaks
+
+          BEFORE_SHA="${{ github.event.before }}"
+          if [ -z "$BEFORE_SHA" ] || [ "$BEFORE_SHA" = "0000000000000000000000000000000000000000" ]; then
+            LOG_OPTS="--no-merges --first-parent"
+          else
+            LOG_OPTS="--no-merges --first-parent ${BEFORE_SHA}..${{ github.sha }}"
+          fi
+
+          ./gitleaks detect --redact -v --exit-code=1 --report-format=sarif --report-path=results.sarif --log-opts="${LOG_OPTS}"
+          rm -f gitleaks gitleaks.tar.gz
+
+      - name: Upload gitleaks SARIF (UPG-0197)
+        if: github.event_name == 'push' && always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gitleaks-results.sarif
+          path: results.sarif
+          if-no-files-found: ignore
 
       - name: SBOM + pip-audit (UPG-0196)
         run: |

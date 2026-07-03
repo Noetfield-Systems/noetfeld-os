@@ -23,10 +23,35 @@ WORKFLOWS = ROOT / ".github/workflows"
 
 sys.path.insert(0, str(ROOT / "scripts"))
 from sandbox_health_sweep_v1 import run_sweep  # noqa: E402
+from noos_slo_v1 import autofile_kaizen_receipt, score_slo, slo_config, status_proxy_success_rate  # noqa: E402
 
 
 def utc_now() -> str:
     return datetime.now(timezone.utc).isoformat(timespec="seconds")
+
+
+def parse_iso(ts: str | None) -> datetime | None:
+    if not ts:
+        return None
+    text = str(ts).strip()
+    if not text:
+        return None
+    if text.endswith("Z"):
+        text = text[:-1] + "+00:00"
+    try:
+        dt = datetime.fromisoformat(text)
+    except ValueError:
+        return None
+    if dt.tzinfo is None:
+        dt = dt.replace(tzinfo=timezone.utc)
+    return dt.astimezone(timezone.utc)
+
+
+def age_minutes(ts: str | None) -> float | None:
+    dt = parse_iso(ts)
+    if dt is None:
+        return None
+    return round((datetime.now(timezone.utc) - dt).total_seconds() / 60.0, 2)
 
 
 def load_registry() -> dict[str, Any]:
@@ -112,9 +137,11 @@ def trigger_registry_sweep() -> dict[str, Any]:
 
 def build_heartbeat() -> dict[str, Any]:
     registry = load_registry()
+    slo_defaults = registry.get("slo_defaults") or {}
     loops_out: list[dict[str, Any]] = []
     mismatches: list[dict[str, Any]] = []
     founder_blocked_total = 0
+    founder_gated_improvements: list[dict[str, Any]] = []
     trigger_sweep = trigger_registry_sweep()
     if trigger_sweep.get("drift") or not trigger_sweep.get("ok"):
         mismatches.append(
@@ -166,6 +193,48 @@ def build_heartbeat() -> dict[str, Any]:
                 "deployed_truth": dep_cron or "MISSING",
             })
 
+        freshness_minutes = age_minutes(state.get("last_finished_at") or state.get("last_status_at") or state.get("last_recorded_at"))
+        success_rate = (
+            sum(1 for c in cycles if str(c.get("state_after") or "").upper() == "COMPLETE") / len(cycles)
+            if cycles
+            else status_proxy_success_rate(str(state.get("last_state") or state.get("last_status") or ""))
+        )
+        latency_minutes = freshness_minutes
+        slo_targets = slo_config(slo_defaults, loop)
+        slo = score_slo(
+            freshness_minutes=freshness_minutes,
+            success_rate=success_rate,
+            latency_minutes=latency_minutes,
+            targets=slo_targets,
+        )
+        kaizen_receipt = None
+        if not slo["ok"]:
+            kaizen_receipt = autofile_kaizen_receipt(
+                root=ROOT,
+                source="loop-heartbeat",
+                loop_id=loop_id,
+                score_row=slo,
+                evidence={
+                    "workflow_id": str(loop.get("github_workflow") or loop_id),
+                    "freshness_minutes": freshness_minutes,
+                    "success_rate": round(success_rate, 4),
+                    "latency_minutes": latency_minutes,
+                    "status": state.get("last_state") or state.get("last_status") or "UNKNOWN",
+                },
+            )
+            founder_gated_improvements.append(
+                {
+                    "id": kaizen_receipt,
+                    "expected_roi": {
+                        "cost_saved_usd": 0,
+                        "risk_reduced": "loop heartbeat SLO miss",
+                        "revenue_unblocked": "",
+                        "build_cost_usd": 0,
+                    },
+                    "age_days": 0,
+                }
+            )
+
         loops_out.append({
             "workflow_id": str(loop.get("github_workflow") or loop_id),
             "lane": loop.get("lane") or "noos",
@@ -179,8 +248,26 @@ def build_heartbeat() -> dict[str, Any]:
             "spend_by_value_class": {k: round(v, 6) for k, v in spend_by_value.items()},
             "throttled_roi": throttled,
             "cycles_observed": len(cycles),
+            "slo": {
+                "targets": slo_targets,
+                "observed": {
+                    "freshness_minutes": freshness_minutes,
+                    "success_rate": round(success_rate, 4),
+                    "latency_minutes": latency_minutes,
+                },
+                "score": slo["score"],
+                "misses": slo["misses"],
+                "ok": slo["ok"],
+                "kaizen_receipt": kaizen_receipt,
+            },
         })
 
+    findings = heartbeat_findings(
+        {
+            "drift": {"mismatches": mismatches},
+            "loops": loops_out,
+        }
+    )
     return {
         "schema": "autorun-heartbeat-v2",
         "date": datetime.now(timezone.utc).strftime("%Y-%m-%d"),
@@ -192,10 +279,47 @@ def build_heartbeat() -> dict[str, Any]:
             "trigger_sweep": trigger_sweep,
         },
         "founder_blocked_total": founder_blocked_total,
-        "founder_gated_improvements": [],
+        "founder_gated_improvements": founder_gated_improvements,
         "escalations": [m["loop_id"] for m in mismatches]
-        + [lp["workflow_id"] for lp in loops_out if lp["throttled_roi"]],
+        + [lp["workflow_id"] for lp in loops_out if lp["throttled_roi"] or not lp["slo"]["ok"]],
+        "critique": {"overall_ok": not findings, "findings": findings},
     }
+
+
+def heartbeat_findings(hb: dict[str, Any]) -> list[dict[str, Any]]:
+    findings: list[dict[str, Any]] = []
+    for mismatch in hb.get("drift", {}).get("mismatches") or []:
+        findings.append(
+            {
+                "scope": mismatch.get("loop_id"),
+                "severity": "high",
+                "summary": f"Drift mismatch on {mismatch.get('surface')}",
+                "detail": f"committed={mismatch.get('committed_truth')} deployed={mismatch.get('deployed_truth')}",
+            }
+        )
+    for loop in hb.get("loops") or []:
+        slo = loop.get("slo") or {}
+        observed = loop.get("last_run_at")
+        cycles = int(loop.get("cycles_observed") or 0)
+        if not slo.get("ok") and (observed or cycles > 0):
+            findings.append(
+                {
+                    "scope": loop.get("workflow_id"),
+                    "severity": "high",
+                    "summary": "Loop SLO miss",
+                    "detail": ", ".join(slo.get("misses") or []) or "slo_miss",
+                }
+            )
+        if loop.get("throttled_roi"):
+            findings.append(
+                {
+                    "scope": loop.get("workflow_id"),
+                    "severity": "medium",
+                    "summary": "Loop ROI is throttled",
+                    "detail": "More spend is going to low-value work than the allowed threshold",
+                }
+            )
+    return findings
 
 
 def main() -> int:
@@ -224,8 +348,8 @@ def main() -> int:
         for m in drift:
             print(f"  DRIFT {m['loop_id']}: committed={m['committed_truth']} deployed={m['deployed_truth']}")
 
-    # Fail closed on drift so the heartbeat surfaces the mismatch loudly (L12)
-    return 1 if hb["drift"]["mismatches"] else 0
+    # Fail closed on drift and SLO misses so the heartbeat is a real critique, not a green wash.
+    return 1 if heartbeat_findings(hb) else 0
 
 
 if __name__ == "__main__":

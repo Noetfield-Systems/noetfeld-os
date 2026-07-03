@@ -1,0 +1,201 @@
+{
+  "schema": "sandbox-health-sweep-v1",
+  "version": "1.0.0",
+  "at": "2026-07-03T05:42:26Z",
+  "registry_path": "data/trigger-registry-v1.json",
+  "registry_trigger_count": 17,
+  "live_trigger_count": 17,
+  "probe_results": [
+    {
+      "trigger_id": "NOOS-T2-factory-cf",
+      "ok": true,
+      "path": "cloud/workers/noos-factory-autorun-tick-v1/wrangler.toml",
+      "expected_schedule": "*/10 * * * *",
+      "live_schedules": [
+        "*/10 * * * *"
+      ],
+      "reason": null
+    },
+    {
+      "trigger_id": "NOOS-T6-fleet-cf",
+      "ok": true,
+      "path": "cloud/workers/noos-loop-fleet-tick-v1/wrangler.toml",
+      "expected_schedule": "*/5 * * * *",
+      "live_schedules": [
+        "*/5 * * * *"
+      ],
+      "reason": null
+    },
+    {
+      "trigger_id": "NOOS-T3-factory-gha",
+      "ok": true,
+      "path": ".github/workflows/noos-factory-autorun.yml",
+      "expected_schedule": "0,10,20,30,40,50 * * * *",
+      "live_schedules": [
+        "0,10,20,30,40,50 * * * *"
+      ],
+      "reason": null
+    },
+    {
+      "trigger_id": "NOOS-T6-inbox",
+      "ok": true,
+      "path": ".github/workflows/noos-inbox-loop.yml",
+      "expected_schedule": "*/5 * * * *",
+      "live_schedules": [
+        "*/5 * * * *"
+      ],
+      "reason": null
+    },
+    {
+      "trigger_id": "NOOS-T6-runtime",
+      "ok": true,
+      "path": ".github/workflows/noos-runtime-loop.yml",
+      "expected_schedule": "5,20,35,50 * * * *",
+      "live_schedules": [
+        "5,20,35,50 * * * *"
+      ],
+      "reason": null
+    },
+    {
+      "trigger_id": "NOOS-T6-surface",
+      "ok": true,
+      "path": ".github/workflows/noos-surface-loop.yml",
+      "expected_schedule": "0,20,40 * * * *",
+      "live_schedules": [
+        "0,20,40 * * * *"
+      ],
+      "reason": null
+    },
+    {
+      "trigger_id": "NOOS-T6-chain",
+      "ok": true,
+      "path": ".github/workflows/noos-chain-loop.yml",
+      "expected_schedule": "0,30 * * * *",
+      "live_schedules": [
+        "0,30 * * * *"
+      ],
+      "reason": null
+    },
+    {
+      "trigger_id": "NOOS-T6-self-heal",
+      "ok": true,
+      "path": ".github/workflows/noos-self-heal-loop.yml",
+      "expected_schedule": "0,10,20,30,40,50 * * * *",
+      "live_schedules": [
+        "0,10,20,30,40,50 * * * *"
+      ],
+      "reason": null
+    },
+    {
+      "trigger_id": "NOOS-T6-sourcea-observe",
+      "ok": true,
+      "path": ".github/workflows/noos-sourcea-observe-loop.yml",
+      "expected_schedule": "15,45 * * * *",
+      "live_schedules": [
+        "15,45 * * * *"
+      ],
+      "reason": null
+    },
+    {
+      "trigger_id": "NOOS-T6-agent-nerve",
+      "ok": true,
+      "path": ".github/workflows/noos-agent-nerve-loop.yml",
+      "expected_schedule": "0 * * * *",
+      "live_schedules": [
+        "0 * * * *"
+      ],
+      "reason": null
+    },
+    {
+      "trigger_id": "NOOS-T3-schedule-canary",
+      "ok": true,
+      "path": ".github/workflows/noos-schedule-canary.yml",
+      "expected_schedule": "0,10,20,30,40,50 * * * *",
+      "live_schedules": [
+        "0,10,20,30,40,50 * * * *"
+      ],
+      "reason": null
+    },
+    {
+      "trigger_id": "NOOS-T-gel-ci-push",
+      "ok": true,
+      "path": ".github/workflows/gel-ci.yml",
+      "expects": [
+        "push"
+      ],
+      "live_events": [
+        "pull_request",
+        "push"
+      ],
+      "reason": null
+    },
+    {
+      "trigger_id": "NOOS-T-gel-ci-pr",
+      "ok": true,
+      "path": ".github/workflows/gel-ci.yml",
+      "expects": [
+        "pull_request"
+      ],
+      "live_events": [
+        "pull_request",
+        "push"
+      ],
+      "reason": null
+    },
+    {
+      "trigger_id": "NOOS-T-agent-vault-push",
+      "ok": true,
+      "path": ".github/workflows/noos-agent-vault.yml",
+      "expects": [
+        "push"
+      ],
+      "live_events": [
+        "pull_request",
+        "push"
+      ],
+      "reason": null
+    },
+    {
+      "trigger_id": "NOOS-T-agent-vault-pr",
+      "ok": true,
+      "path": ".github/workflows/noos-agent-vault.yml",
+      "expects": [
+        "pull_request"
+      ],
+      "live_events": [
+        "pull_request",
+        "push"
+      ],
+      "reason": null
+    },
+    {
+      "trigger_id": "NOOS-T-release-tags",
+      "ok": true,
+      "path": ".github/workflows/release-noetfield-gate.yml",
+      "expects": [
+        "push"
+      ],
+      "live_events": [
+        "push"
+      ],
+      "reason": null
+    },
+    {
+      "trigger_id": "NOOS-T5-publish-pypi",
+      "ok": true,
+      "path": ".github/workflows/publish-pypi.yml",
+      "expects": [
+        "workflow_dispatch"
+      ],
+      "live_events": [
+        "workflow_dispatch"
+      ],
+      "reason": null
+    }
+  ],
+  "dead_or_mismatch": [],
+  "unregistered_live": [],
+  "ok": true,
+  "drift": false,
+  "report_line": "trigger_sweep_clean \u00b7 registry matches live"
+}

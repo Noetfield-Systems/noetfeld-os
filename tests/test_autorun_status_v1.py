@@ -81,6 +81,25 @@ def test_workflow_registry_ids():
     ]
 
 
+def test_dashboard_findings_flags_blocked_and_slo_miss():
+    dash_row = {
+        "triage_required": False,
+        "workflows": [
+            {
+                "id": "wf-1",
+                "status": "BLOCKED_WITH_REASON",
+                "reason": "supabase_not_configured",
+                "evidence": {},
+                "slo": {"ok": False, "misses": ["success_rate_miss"]},
+            }
+        ],
+    }
+
+    findings = dash.dashboard_findings(dash_row)
+    assert len(findings) == 1
+    assert any(f["summary"].startswith("Workflow is not healthy") for f in findings)
+
+
 def test_sandboxes_no_sourcea_dirty():
     doc = json.loads((ROOT / "data/autorun-sandboxes-v1.json").read_text())
     sourcea = next(sb for sb in doc["sandboxes"] if sb["id"] == "sourcea")

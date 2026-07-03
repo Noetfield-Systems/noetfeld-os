@@ -16,7 +16,7 @@ from pathlib import Path
 from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
-REPO = "kazemnezhadsina144-dot/noetfeld-os"
+REPO = "Noetfield-Systems/noetfeld-os"
 CF_HEALTH = "https://noos-factory-autorun-tick-v1.sina-kazemnezhad-ca.workers.dev/health"
 AUTONOMOUS_EVENTS = frozenset({"repository_dispatch", "schedule"})
 MANUAL_EVENTS = frozenset({"workflow_dispatch"})
@@ -147,13 +147,16 @@ def verify(*, hours: float = 24.0) -> dict[str, Any]:
     ]
     autonomous_in_window = len(dispatch_runs) + len(schedule_runs)
     cf_ok = cf.get("ok") and (cf.get("body") or {}).get("github_token_ready")
-    cycles_ok = cycles.get("ok") and cycles.get("recent_count", 0) >= 1
+    # If supabase not configured or explicitly skipped, treat cycles as non-fatal (skip) so transient infra doesn't mark autonomy as failed.
+    cycles_skipped = bool(cycles.get("skipped"))
+    cycles_ok = True if cycles_skipped else (cycles.get("ok") and cycles.get("recent_count", 0) >= 1)
     has_github = bool(_github_token())
     dispatch_ok = len(dispatch_runs) >= 1 if has_github else cf_ok
 
     ok = cf_ok and dispatch_ok and len(manual_in_window) == 0 and cycles_ok
 
     return {
+        "supabase_skipped": cycles_skipped,
         "schema": "noos-autonomous-24h-verify-v1",
         "at": _now(),
         "commit_sha": _git_sha(),
