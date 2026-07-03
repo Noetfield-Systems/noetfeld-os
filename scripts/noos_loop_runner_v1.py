@@ -165,6 +165,9 @@ def meter_cost(step_results: list[dict[str, Any]]) -> dict[str, Any]:
         "tokens_out": 0,
         "unit_cost_usd": 0.0,
         "total_usd": 0.0,
+        "estimated_cost": 0.0,
+        "cost_policy_pass": True,
+        "cost_policy_version": "cost-policy-v1",
         "metered_at_call_site": True,
         "step_count": len(step_results),
     }
