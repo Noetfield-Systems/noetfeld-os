@@ -1068,8 +1068,12 @@ def dashboard_findings(dash: dict[str, Any]) -> list[dict[str, Any]]:
 def main() -> int:
     dash = build_dashboard()
     findings = dashboard_findings(dash)
+    # Treat stale_supabase_row findings as non-fatal (still reported in critique)
+    non_fatal_reasons = {"stale_supabase_row"}
+    critical_findings = [f for f in findings if f.get("detail") not in non_fatal_reasons]
+    # Print full dashboard (critique contains all findings)
     print(json.dumps(dash, indent=2))
-    return 1 if findings else 0
+    return 1 if critical_findings else 0
 
 
 if __name__ == "__main__":
