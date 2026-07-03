@@ -54,8 +54,12 @@ bash scripts/noos_mac_worktree_sync_v1.sh
 ## 3. Claim → edit → closeout
 
 ```bash
-# Claim (L-P5)
+# One command: boot + claim
+make local-lane TASK=NOOS-LANE-001 SCOPE=scripts/foo.py,tests/test_foo.py
+
+# Or separate steps
 bash scripts/noos_local_claim_lane_v1.sh NOOS-LANE-001 scripts/foo.py tests/test_foo.py
+```
 
 # Long session — refresh claim (stale after 30m without heartbeat)
 make local-heartbeat TASK=NOOS-LANE-001
@@ -66,6 +70,12 @@ make local-patch-proposal PATHS=scripts/foo.py,tests/test_foo.py
 # Closeout
 make local-closeout TASK=NOOS-LANE-001
 ```
+
+**Copilot CLI on same Mac:** register as `copilot-cli-mac`; claim with `AGENT_ID=copilot-cli-mac IDE=copilot-cli bash scripts/noos_local_claim_lane_v1.sh ...`. Both IDEs read `~/.sina/noos-integrator-state-v1.json`.
+
+**Stale lanes:** `make local-sweep-stale` at session start if yesterday's lane was interrupted.
+
+**Mirror drift:** `make local-boot` runs mirror check; repair with `python3 scripts/noos_integrator_sync_v1.py sync`.
 
 First-run Mac registration is automatic via `make local-boot` (idempotent). Manual fallback:
 

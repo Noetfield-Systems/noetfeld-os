@@ -1,4 +1,4 @@
-"""Tests for Cursor Local Mac T2 Phase 2 tooling."""
+"""Tests for Cursor Local Mac T2 Phase 2+3 tooling."""
 
 from __future__ import annotations
 
@@ -15,8 +15,53 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 
 import noos_agent_conflict_check_v1 as conflict  # noqa: E402
+import noos_integrator_mirror_check_v1 as mirror  # noqa: E402
 import noos_local_boot_receipt_v1 as boot_receipt  # noqa: E402
 import verify_living_system_governance_v1 as gov  # noqa: E402
+
+
+def test_local_operator_subagent_exists():
+    path = ROOT / ".cursor/agents/noetfield-os-local-operator.md"
+    assert path.is_file()
+    text = path.read_text(encoding="utf-8")
+    assert "make local-lane" in text
+
+
+def test_makefile_has_local_lane_target():
+    text = (ROOT / "Makefile").read_text(encoding="utf-8")
+    assert "local-lane:" in text
+    assert "local-sweep-stale:" in text
+
+
+def test_mirror_drift_check_clean_when_in_sync(monkeypatch: pytest.MonkeyPatch, tmp_path: Path):
+    repo_state = tmp_path / "repo.json"
+    home_state = tmp_path / "home.json"
+    payload = {
+        "tasks": [{"task_id": "T1", "status": "open", "claimed_by": None, "scope_files": []}],
+        "agents": [{"agent_id": "cursor-local-mac", "ide": "cursor", "role": "local-operator", "status": "active"}],
+        "summary": {"open": 1},
+    }
+    repo_state.write_text(json.dumps(payload), encoding="utf-8")
+    home_state.write_text(json.dumps(payload), encoding="utf-8")
+    monkeypatch.setattr(mirror, "integrator_state_path", lambda: repo_state)
+    monkeypatch.setattr(mirror, "integrator_home_mirror_path", lambda: home_state)
+    row = mirror.check_mirror_drift()
+    assert row["ok"] is True
+    assert row["drift"] is False
+
+
+def test_heartbeat_reminder_hook_exits_zero():
+    hook = ROOT / ".cursor/hooks/noos-heartbeat-reminder.sh"
+    assert hook.is_file()
+    proc = subprocess.run(
+        [str(hook)],
+        input="{}",
+        cwd=ROOT,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    assert proc.returncode == 0
 
 
 def test_claim_lane_script_executable():
@@ -98,3 +143,4 @@ def test_local_boot_receipt_schema_no_write(tmp_path: Path, monkeypatch: pytest.
     assert row["schema"] == "noos-local-boot-v1"
     assert "governance_checks" in row
     assert "cursor_local_mac" in (row.get("governance_checks") or {})
+    assert "mirror_drift" in row

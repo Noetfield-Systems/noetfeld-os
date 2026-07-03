@@ -650,6 +650,32 @@ def cmd_sync(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_sweep_stale(args: argparse.Namespace) -> int:
+    released: list[str] = []
+    with locked_state() as state:
+        protocol = load_protocol()
+        now = datetime.now(timezone.utc)
+        for task in state.get("tasks") or []:
+            if not isinstance(task, dict):
+                continue
+            if task.get("status") not in ACTIVE_TASK_STATUSES:
+                continue
+            if not _is_stale_task(task, protocol, now=now):
+                continue
+            task["status"] = "released"
+            task["updated_at"] = utc_now()
+            task["released_at"] = utc_now()
+            task["release_note"] = args.note or "stale_sweep"
+            task["claimed_by"] = None
+            released.append(str(task.get("task_id") or ""))
+        _recompute_summary(state)
+        result = _mirror_outputs(state, force_supabase=args.mirror_supabase)
+        result["released_task_ids"] = [t for t in released if t]
+        result["released_count"] = len(released)
+    print(json.dumps(result, indent=2))
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="NOOS integrator coordination layer")
     sub = parser.add_subparsers(dest="command", required=True)
@@ -731,6 +757,12 @@ def build_parser() -> argparse.ArgumentParser:
     sync_p = sub.add_parser("sync", help="Refresh mirrors without mutating tasks")
     sync_p.add_argument("--mirror-supabase", action="store_true")
     sync_p.set_defaults(func=cmd_sync)
+
+    sweep_p = sub.add_parser("sweep-stale", help="Release stale claimed/in_progress tasks")
+    sweep_p.add_argument("--agent-id", default="integrator")
+    sweep_p.add_argument("--note", default="stale_sweep")
+    sweep_p.add_argument("--mirror-supabase", action="store_true")
+    sweep_p.set_defaults(func=cmd_sweep_stale)
 
     return parser
 

@@ -10,6 +10,12 @@
       {
         "command": ".cursor/hooks/noos-claim-reminder.sh"
       }
+    ],
+    "postToolUse": [
+      {
+        "command": ".cursor/hooks/noos-heartbeat-reminder.sh",
+        "matcher": "Write|Edit"
+      }
     ]
   }
 }

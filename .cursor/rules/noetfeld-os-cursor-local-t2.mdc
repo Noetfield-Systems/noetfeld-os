@@ -11,6 +11,8 @@ Surface: **T2 local operator** per `noetfield-org/ROUTING_MATRIX.md` and `data/n
 
 ```bash
 make local-boot
+# or one-shot lane open:
+make local-lane TASK=NOOS-LANE-<id> SCOPE=path1,path2
 ```
 
 ## Parallel laws (L-P1–L-P7)

@@ -15,6 +15,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 
 import noos_agent_conflict_check_v1 as conflict  # noqa: E402
+import noos_integrator_mirror_check_v1 as mirror  # noqa: E402
 import verify_living_system_governance_v1 as gov  # noqa: E402
 
 
@@ -56,6 +57,7 @@ def build_receipt(*, write_file: bool = True) -> dict[str, Any]:
     conflict_row = conflict.check_conflicts(registry=registry, integrator=integrator)
     gov_row = gov.run_verify(write_receipt=False)
     summary = integrator_summary()
+    mirror_row = mirror.check_mirror_drift()
 
     row: dict[str, Any] = {
         "schema": "noos-local-boot-v1",
@@ -67,9 +69,10 @@ def build_receipt(*, write_file: bool = True) -> dict[str, Any]:
         "parallel_conflict_ok": conflict_row.get("ok"),
         "governance_ok": gov_row.get("ok"),
         "governance_checks": gov_row.get("checks"),
+        "mirror_drift": mirror_row,
         "integrator_summary": summary.get("summary") if isinstance(summary, dict) else {},
         "active_agents": summary.get("agents") if isinstance(summary.get("agents"), list) else [],
-        "ok": bool(conflict_row.get("ok")) and bool(gov_row.get("ok")),
+        "ok": bool(conflict_row.get("ok")) and bool(gov_row.get("ok")) and bool(mirror_row.get("ok")),
         "report_line": (
             "local_boot_clean · T2 session ready"
             if conflict_row.get("ok") and gov_row.get("ok")

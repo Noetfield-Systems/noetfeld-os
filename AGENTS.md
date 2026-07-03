@@ -20,10 +20,13 @@ workspace_root: /Users/sinakazemnezhad/Projects/noetfeld-os
 
 ### Cursor Local Mac (T2)
 
+- Open lane: `make local-lane TASK=<task-id> SCOPE=path1,path2`
 - Boot: `make local-boot` (optional receipt: `make local-boot WRITE_RECEIPT=1`)
 - Operator card: **`docs/_NOOS_AGENT/[NOOS-AGENT-20260703-004]_CURSOR_LOCAL_MAC_OPERATOR_v1.md`**
-- Claim before edit: `bash scripts/noos_local_claim_lane_v1.sh <task-id> <paths...>`
+- Subagent: `.cursor/agents/noetfield-os-local-operator.md`
+- Claim before edit: `bash scripts/noos_local_claim_lane_v1.sh <task-id> <paths...>` (or `AGENT_ID=copilot-cli-mac IDE=copilot-cli`)
 - Long session: `make local-heartbeat TASK=<task-id>`
+- Stale claims: `make local-sweep-stale`
 - Closeout: `make local-closeout TASK=<task-id>`
 - Cannot `git checkout main`? Run `bash scripts/noos_mac_worktree_sync_v1.sh`
 

@@ -1,4 +1,4 @@
-.PHONY: test gate demo build-gate-js install inbox cloud-worker autorun-once autorun autorun-status autorun-tick-deploy autorun-tick-dispatch autonomous-verify schedule-verify determinism-verify replay-verify planes supabase-migrate verified-window loop-run loop-fleet-deploy loop-fleet-dispatch loops-status loop-heartbeat backlog urls local-boot local-closeout local-patch-proposal local-heartbeat
+.PHONY: test gate demo build-gate-js install inbox cloud-worker autorun-once autorun autorun-status autorun-tick-deploy autorun-tick-dispatch autonomous-verify schedule-verify determinism-verify replay-verify planes supabase-migrate verified-window loop-run loop-fleet-deploy loop-fleet-dispatch loops-status loop-heartbeat backlog urls local-boot local-closeout local-patch-proposal local-heartbeat local-lane local-sweep-stale
 
 test:
 	pytest -q
@@ -86,10 +86,23 @@ local-boot:
 	python3 scripts/noos_integrator_sync_v1.py init
 	python3 scripts/noos_integrator_sync_v1.py register-agent \
 	  --agent-id cursor-local-mac --ide cursor --role local-operator
+	python3 scripts/noos_integrator_sync_v1.py register-agent \
+	  --agent-id copilot-cli-mac --ide copilot-cli --role local-operator
+	python3 scripts/noos_integrator_sync_v1.py sweep-stale
 	python3 scripts/noos_agent_conflict_check_v1.py --json
 	python3 scripts/verify_living_system_governance_v1.py --json
 	python3 scripts/noos_integrator_sync_v1.py summary --json
+	python3 scripts/noos_integrator_mirror_check_v1.py --json
 	@if [ "$(WRITE_RECEIPT)" = "1" ]; then python3 scripts/noos_local_boot_receipt_v1.py --json; fi
+
+local-lane:
+	@test -n "$(TASK)" || (echo "Usage: make local-lane TASK=NOOS-LANE-001 SCOPE=path1,path2" && exit 1)
+	@test -n "$(SCOPE)" || (echo "Usage: make local-lane TASK=NOOS-LANE-001 SCOPE=path1,path2" && exit 1)
+	$(MAKE) local-boot
+	bash scripts/noos_local_claim_lane_v1.sh $(TASK) $$(echo "$(SCOPE)" | tr ',' ' ')
+
+local-sweep-stale:
+	python3 scripts/noos_integrator_sync_v1.py sweep-stale
 
 local-heartbeat:
 	@test -n "$(TASK)" || (echo "Usage: make local-heartbeat TASK=NOOS-LANE-001" && exit 1)

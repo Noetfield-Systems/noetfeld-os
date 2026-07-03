@@ -47,6 +47,8 @@ ASF (you — final authority)
 | EXECUTION | SinaaiRuntime :8000 | Isolated — never a submodule |
 | DELIVERY | This code + NOOS docs | **Canonical for our output** |
 
+**Mac Cursor Local (T2):** Operator card `[NOOS-AGENT-20260703-004]_CURSOR_LOCAL_MAC_OPERATOR_v1.md` · open lane: `make local-lane TASK=... SCOPE=...` · subagent: `.cursor/agents/noetfield-os-local-operator.md`
+
 ---
 
 ## 3. What is built (code today)

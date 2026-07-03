@@ -18,9 +18,12 @@ for path in "$@"; do
   SCOPE_ARGS+=(--scope-file "$path")
 done
 
+AGENT_ID="${AGENT_ID:-cursor-local-mac}"
+IDE="${IDE:-cursor}"
+
 exec python3 scripts/noos_integrator_sync_v1.py claim \
-  --agent-id cursor-local-mac \
-  --ide cursor \
+  --agent-id "$AGENT_ID" \
+  --ide "$IDE" \
   --task-id "$TASK_ID" \
   --title "$TASK_ID" \
   "${SCOPE_ARGS[@]}"
