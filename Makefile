@@ -1,4 +1,4 @@
-.PHONY: test gate demo build-gate-js install inbox cloud-worker autorun-once autorun autorun-status autorun-tick-deploy autorun-tick-dispatch autonomous-verify schedule-verify determinism-verify replay-verify planes supabase-migrate verified-window loop-run loop-fleet-deploy loop-fleet-dispatch loops-status loop-heartbeat backlog urls local-boot local-closeout local-patch-proposal local-heartbeat local-lane local-sweep-stale local-status machine-status machine-reconcile machine-audit machine-verify machine-validate-merge machine-critic machine-research
+.PHONY: test gate demo build-gate-js install inbox cloud-worker autorun-once autorun autorun-status autorun-tick-deploy autorun-tick-dispatch autonomous-verify schedule-verify determinism-verify replay-verify planes supabase-migrate verified-window loop-run loop-fleet-deploy loop-fleet-dispatch loops-status loop-heartbeat backlog urls local-boot local-closeout local-patch-proposal local-heartbeat local-lane local-sweep-stale local-status integrator-sync machine-status machine-reconcile machine-audit machine-verify machine-validate-merge machine-critic machine-research
 
 test:
 	pytest -q
@@ -119,12 +119,17 @@ local-closeout:
 	python3 scripts/noos_integrator_sync_v1.py complete \
 	  --agent-id $${AGENT_ID:-cursor-local-mac} --ide $${IDE:-cursor} \
 	  --task-id $(TASK) --note "lane closed"
+	python3 scripts/noos_integrator_sync_v1.py session-exit \
+	  --agent-id $${AGENT_ID:-cursor-local-mac}
 	@if [ "$(WRITE_RECEIPT)" = "1" ]; then \
 		AGENT_ID=$${AGENT_ID:-cursor-local-mac} IDE=$${IDE:-cursor} \
 		python3 scripts/noos_local_closeout_receipt_v1.py \
 		  --task-id $(TASK) --agent-id $${AGENT_ID} --ide $${IDE} \
 		  --pytest-ok true --clean-tree-ok true --complete-ok true --json; \
 	fi
+
+integrator-sync:
+	python3 scripts/noos_integrator_sync_v1.py sync --agent-id $${AGENT_ID:-cursor-local-mac}
 
 local-patch-proposal:
 	@if [ -n "$(PAYLOAD_FILE)" ]; then \

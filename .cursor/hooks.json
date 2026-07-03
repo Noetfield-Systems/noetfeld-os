@@ -16,6 +16,11 @@
         "command": ".cursor/hooks/noos-heartbeat-reminder.sh",
         "matcher": "Write|Edit"
       }
+    ],
+    "sessionEnd": [
+      {
+        "command": ".cursor/hooks/noos-session-exit.sh"
+      }
     ]
   }
 }

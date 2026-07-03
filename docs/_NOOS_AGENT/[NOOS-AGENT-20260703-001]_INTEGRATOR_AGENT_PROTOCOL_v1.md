@@ -33,6 +33,14 @@ This means:
 2. Other IDEs can read the **home mirror** even if they are on another worktree.
 3. Supabase is an optional observer/mirror, not the primary control plane.
 
+### Ownership rules (v1.1)
+
+| Rule | Law |
+|------|-----|
+| **Local session exit** | Any agent/IDE/session that mutates integrator state must run `session-exit` (or `sync`) before stopping. `make local-closeout` and the Cursor `sessionEnd` hook enforce this. |
+| **Mirror** | Home mirror (`~/.sina/noos-integrator-state-v1.json`) is a shared local coordination copy — not primary truth unless explicitly promoted. |
+| **Cloud owner** | Cloud/Supabase integrator ownership belongs only to the configured NOOS automation/orchestrator (`cloud_owner` in `data/noos-integrator-role-v1.json`). If `cloud_owner.enabled` is false, repo-local state is authoritative and Supabase writes are blocked. |
+
 ---
 
 ## 2. Integrator role
@@ -115,7 +123,10 @@ python3 scripts/noos_integrator_sync_v1.py release \
 ```bash
 python3 scripts/noos_integrator_sync_v1.py summary --json
 python3 scripts/noos_integrator_sync_v1.py sync
+python3 scripts/noos_integrator_sync_v1.py session-exit --agent-id cursor-local-mac
 ```
+
+`session-exit` is the mandatory closeout when integrator state was mutated this session.
 
 ---
 
@@ -126,6 +137,8 @@ python3 scripts/noos_integrator_sync_v1.py sync
 3. **Do not bypass a scope conflict.** If claim returns conflict, pick a different task or wait.
 4. **Heartbeat long-running work** so stale claims are real, not accidental.
 5. **Complete or release** when done. Do not leave silent ownership behind.
+6. **Run session-exit before stopping** if you claimed, heartbeated, opened, completed, or released tasks this session.
+7. **Do not treat home mirror or Supabase as writable primary truth** unless an operator explicitly promotes them.
 
 ---
 

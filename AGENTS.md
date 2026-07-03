@@ -59,7 +59,9 @@ workspace_root: /Users/sinakazemnezhad/Projects/noetfeld-os
 - Before parallel agent work, run conflict check: `python3 scripts/noos_agent_conflict_check_v1.py --json`
 - Register/claim through `scripts/noos_integrator_sync_v1.py` before editing shared code paths across multiple IDE agents.
 - Respect `scope_files` conflicts. If another non-stale agent owns the same files, do not proceed silently.
-- Repo-local runtime state is primary; `~/.sina/noos-integrator-state-v1.json` is the cross-worktree/home mirror for other IDEs on the same Mac.
+- **Repo-local runtime state is primary** (`.noos-runtime/integrator/noos-integrator-state-v1.json`). Home mirror (`~/.sina/noos-integrator-state-v1.json`) is a shared local coordination copy — not primary truth unless explicitly promoted.
+- **LOCAL SESSION EXIT:** any session that mutates integrator state must run `python3 scripts/noos_integrator_sync_v1.py session-exit` (or `make integrator-sync`) before stopping. `make local-closeout` does this automatically.
+- **CLOUD OWNER:** Supabase/cloud integrator writes only when `data/noos-integrator-role-v1.json` has `cloud_owner.enabled` and the caller matches `owner_agent_id`. If unconfigured, repo-local state is authoritative.
 
 ### SAVE / LOCK routing in this repo
 

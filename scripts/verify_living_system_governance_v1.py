@@ -114,10 +114,16 @@ def check_copilot_instructions() -> dict[str, Any]:
 def check_integrator_protocol() -> dict[str, Any]:
     role = load_json(INTEGRATOR_ROLE)
     ok = role.get("schema") == "noos-integrator-role-v1"
+    cloud = role.get("cloud_owner") if isinstance(role.get("cloud_owner"), dict) else {}
+    session_rules = role.get("session_rules") if isinstance(role.get("session_rules"), dict) else {}
+    rules_ok = bool(cloud) and bool(session_rules.get("local_session_exit"))
     return {
-        "ok": ok,
+        "ok": ok and rules_ok,
         "path": str(INTEGRATOR_ROLE.relative_to(ROOT)),
         "schema": role.get("schema"),
+        "version": role.get("version"),
+        "cloud_owner_configured": cloud.get("enabled") is not None,
+        "session_rules_present": bool(session_rules),
     }
 
 

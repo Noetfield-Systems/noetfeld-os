@@ -311,6 +311,34 @@ def _supabase_enabled() -> bool:
     return os.environ.get("NOOS_INTEGRATOR_SUPABASE_SYNC", "").strip().lower() in {"1", "true", "yes", "on"}
 
 
+def _supabase_mirror_allowed(*, agent_id: str | None = None) -> dict[str, Any]:
+    protocol = load_protocol()
+    cloud = protocol.get("cloud_owner") or {}
+    if not cloud.get("enabled"):
+        return {
+            "allowed": False,
+            "skipped": True,
+            "reason": "cloud_owner_not_configured",
+            "authority": "repo_local",
+            "note": "Repo-local integrator state is authoritative when cloud owner is not configured.",
+        }
+    owner = str(cloud.get("owner_agent_id") or "").strip()
+    caller = str(agent_id or os.environ.get("NOOS_INTEGRATOR_AGENT_ID") or "").strip()
+    if owner and caller and caller != owner:
+        return {
+            "allowed": False,
+            "skipped": True,
+            "reason": "cloud_owner_mismatch",
+            "owner_agent_id": owner,
+            "caller": caller,
+        }
+    return {
+        "allowed": True,
+        "owner_agent_id": owner or None,
+        "owner_workflow": cloud.get("owner_workflow"),
+    }
+
+
 def _mirror_supabase(state: dict[str, Any]) -> dict[str, Any]:
     cfg = _supabase_config()
     if not cfg:
@@ -347,7 +375,12 @@ def _mirror_supabase(state: dict[str, Any]) -> dict[str, Any]:
         return {"ok": False, "status": exc.code, "error": detail[:300]}
 
 
-def _mirror_outputs(state: dict[str, Any], *, force_supabase: bool = False) -> dict[str, Any]:
+def _mirror_outputs(
+    state: dict[str, Any],
+    *,
+    force_supabase: bool = False,
+    agent_id: str | None = None,
+) -> dict[str, Any]:
     summary = _recompute_summary(state)
     _write_state(state)
 
@@ -360,9 +393,16 @@ def _mirror_outputs(state: dict[str, Any], *, force_supabase: bool = False) -> d
         "state_path": str(_state_path()),
         "home_mirror_path": str(home),
         "summary": summary,
+        "authority": "repo_local",
     }
-    if force_supabase or _supabase_enabled():
-        result["supabase"] = _mirror_supabase(state)
+    want_supabase = force_supabase or _supabase_enabled()
+    if want_supabase:
+        gate = _supabase_mirror_allowed(agent_id=agent_id)
+        if gate.get("allowed"):
+            result["supabase"] = _mirror_supabase(state)
+            result["authority"] = "cloud_mirror"
+        else:
+            result["supabase"] = {"ok": False, **gate}
     else:
         result["supabase"] = {"ok": False, "skipped": True, "reason": "supabase_sync_disabled"}
     return result
@@ -375,7 +415,7 @@ def cmd_init(args: argparse.Namespace) -> int:
             state.update(_default_state())
         else:
             state.update(read_state())
-        result = _mirror_outputs(state, force_supabase=args.mirror_supabase)
+        result = _mirror_outputs(state, force_supabase=args.mirror_supabase, agent_id=getattr(args, "agent_id", None))
     print(json.dumps(result, indent=2))
     return 0
 
@@ -391,7 +431,7 @@ def cmd_register_agent(args: argparse.Namespace) -> int:
             workspace_path=args.workspace_path,
             status=args.status,
         )
-        result = _mirror_outputs(state, force_supabase=args.mirror_supabase)
+        result = _mirror_outputs(state, force_supabase=args.mirror_supabase, agent_id=getattr(args, "agent_id", None))
     print(json.dumps(result, indent=2))
     return 0
 
@@ -432,7 +472,7 @@ def cmd_open_task(args: argparse.Namespace) -> int:
                 task["acceptance"] = args.acceptance
             task["updated_at"] = utc_now()
         _append_history(task, action="open_task", agent_id=args.agent_id, note=args.note)
-        result = _mirror_outputs(state, force_supabase=args.mirror_supabase)
+        result = _mirror_outputs(state, force_supabase=args.mirror_supabase, agent_id=getattr(args, "agent_id", None))
         result["task"] = task
     print(json.dumps(result, indent=2))
     return 0
@@ -518,7 +558,7 @@ def cmd_claim(args: argparse.Namespace) -> int:
         current.add(args.task_id)
         agent["current_task_ids"] = sorted(current)
 
-        result = _mirror_outputs(state, force_supabase=args.mirror_supabase)
+        result = _mirror_outputs(state, force_supabase=args.mirror_supabase, agent_id=getattr(args, "agent_id", None))
         result["task"] = task
     print(json.dumps(result, indent=2))
     return 0
@@ -546,7 +586,7 @@ def cmd_heartbeat(args: argparse.Namespace) -> int:
             current = set(agent.get("current_task_ids") or [])
             current.add(args.task_id)
             agent["current_task_ids"] = sorted(current)
-        result = _mirror_outputs(state, force_supabase=args.mirror_supabase)
+        result = _mirror_outputs(state, force_supabase=args.mirror_supabase, agent_id=getattr(args, "agent_id", None))
         if task is not None:
             result["task"] = task
     print(json.dumps(result, indent=2))
@@ -603,7 +643,7 @@ def cmd_complete(args: argparse.Namespace) -> int:
         if task is None:
             print(json.dumps({"ok": False, "reason": "task_not_found", "task_id": args.task_id}, indent=2))
             return 2
-        result = _mirror_outputs(state, force_supabase=args.mirror_supabase)
+        result = _mirror_outputs(state, force_supabase=args.mirror_supabase, agent_id=getattr(args, "agent_id", None))
         result["task"] = task
     print(json.dumps(result, indent=2))
     return 0
@@ -626,7 +666,7 @@ def cmd_release(args: argparse.Namespace) -> int:
         if task is None:
             print(json.dumps({"ok": False, "reason": "task_not_found", "task_id": args.task_id}, indent=2))
             return 2
-        result = _mirror_outputs(state, force_supabase=args.mirror_supabase)
+        result = _mirror_outputs(state, force_supabase=args.mirror_supabase, agent_id=getattr(args, "agent_id", None))
         result["task"] = task
     print(json.dumps(result, indent=2))
     return 0
@@ -645,7 +685,23 @@ def cmd_summary(args: argparse.Namespace) -> int:
 
 def cmd_sync(args: argparse.Namespace) -> int:
     with locked_state() as state:
-        result = _mirror_outputs(state, force_supabase=args.mirror_supabase)
+        result = _mirror_outputs(state, force_supabase=args.mirror_supabase, agent_id=getattr(args, "agent_id", None))
+    print(json.dumps(result, indent=2))
+    return 0
+
+
+def cmd_session_exit(args: argparse.Namespace) -> int:
+    with locked_state() as state:
+        coordinator = state.setdefault("coordinator", {})
+        coordinator["last_session_exit_at"] = utc_now()
+        if args.agent_id:
+            coordinator["last_session_exit_agent_id"] = args.agent_id
+        result = _mirror_outputs(
+            state,
+            force_supabase=args.mirror_supabase,
+            agent_id=args.agent_id,
+        )
+        result["session_exit"] = True
     print(json.dumps(result, indent=2))
     return 0
 
@@ -669,7 +725,7 @@ def cmd_sweep_stale(args: argparse.Namespace) -> int:
             task["claimed_by"] = None
             released.append(str(task.get("task_id") or ""))
         _recompute_summary(state)
-        result = _mirror_outputs(state, force_supabase=args.mirror_supabase)
+        result = _mirror_outputs(state, force_supabase=args.mirror_supabase, agent_id=getattr(args, "agent_id", None))
         result["released_task_ids"] = [t for t in released if t]
         result["released_count"] = len(released)
     print(json.dumps(result, indent=2))
@@ -755,8 +811,17 @@ def build_parser() -> argparse.ArgumentParser:
     summary_p.set_defaults(func=cmd_summary)
 
     sync_p = sub.add_parser("sync", help="Refresh mirrors without mutating tasks")
+    sync_p.add_argument("--agent-id")
     sync_p.add_argument("--mirror-supabase", action="store_true")
     sync_p.set_defaults(func=cmd_sync)
+
+    session_exit_p = sub.add_parser(
+        "session-exit",
+        help="Mandatory session closeout: refresh mirrors after integrator mutations",
+    )
+    session_exit_p.add_argument("--agent-id")
+    session_exit_p.add_argument("--mirror-supabase", action="store_true")
+    session_exit_p.set_defaults(func=cmd_session_exit)
 
     sweep_p = sub.add_parser("sweep-stale", help="Release stale claimed/in_progress tasks")
     sweep_p.add_argument("--agent-id", default="integrator")

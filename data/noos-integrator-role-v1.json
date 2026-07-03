@@ -1,6 +1,6 @@
 {
   "schema": "noos-integrator-role-v1",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "one_law": "Repo-local integrator state is the writeable coordination truth for NOOS local agents; home mirror and Supabase are read replicas unless an explicit operator promotes them.",
   "claim_ttl_minutes": 90,
   "stale_agent_minutes": 30,
@@ -9,6 +9,17 @@
     "runtime_state": ".noos-runtime/integrator/noos-integrator-state-v1.json",
     "runtime_lock": ".noos-runtime/integrator/noos-integrator-state-v1.lock",
     "home_mirror": "~/.sina/noos-integrator-state-v1.json"
+  },
+  "cloud_owner": {
+    "enabled": false,
+    "owner_agent_id": null,
+    "owner_workflow": "noos-cross-repo-orchestrator",
+    "note": "Cloud integrator ownership belongs only to the configured NOOS automation/orchestrator. If disabled, repo-local state is authoritative."
+  },
+  "session_rules": {
+    "local_session_exit": "Any agent/IDE/session that mutates integrator state must run integrator sync before stopping.",
+    "mirror_rule": "Home mirror is a shared local coordination copy, not primary truth unless explicitly promoted.",
+    "cloud_owner_rule": "Supabase/cloud mirror writes require configured cloud_owner; otherwise repo-local only."
   },
   "statuses": {
     "task": ["open", "claimed", "in_progress", "blocked", "done", "cancelled"],
@@ -27,6 +38,9 @@
     "Every claimed task should declare scope_files when code paths are known.",
     "An agent must not claim a task whose scope overlaps an active non-stale task owned by another agent.",
     "Every mutating command writes the repo-local runtime state and a home mirror for other IDEs/worktrees on the same Mac.",
+    "LOCAL SESSION EXIT: any session that mutates integrator state must run `integrator sync` before stopping (make local-closeout does this automatically).",
+    "MIRROR RULE: home mirror is coordination copy only — repo-local runtime state is primary unless explicitly promoted.",
+    "CLOUD OWNER RULE: cloud/Supabase integrator writes only when cloud_owner.enabled and caller matches owner_agent_id; else repo-local is authoritative.",
     "Supabase mirror is optional and should be enabled only when service-role access is available."
   ]
 }

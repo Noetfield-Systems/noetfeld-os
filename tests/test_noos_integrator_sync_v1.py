@@ -167,3 +167,63 @@ def test_sweep_stale_releases_expired_claim(tmp_path, monkeypatch):
     task = state["tasks"][0]
     assert task["status"] == "released"
     assert task["claimed_by"] is None
+
+
+def test_session_exit_records_closeout_and_refreshes_mirror(tmp_path, monkeypatch, capsys):
+    _, home_mirror = _state(tmp_path, monkeypatch)
+    integrator.main(["init"])
+    integrator.main(["register-agent", "--agent-id", "cursor", "--ide", "cursor"])
+    capsys.readouterr()
+
+    assert integrator.main(["session-exit", "--agent-id", "cursor"]) == 0
+    payload = json.loads(capsys.readouterr().out)
+    assert payload.get("session_exit") is True
+    assert home_mirror.is_file()
+
+    state = integrator.read_state()
+    assert state["coordinator"].get("last_session_exit_agent_id") == "cursor"
+    assert state["coordinator"].get("last_session_exit_at")
+
+
+def test_cloud_owner_blocks_supabase_when_unconfigured(tmp_path, monkeypatch, capsys):
+    _state(tmp_path, monkeypatch)
+    monkeypatch.setenv("NOOS_INTEGRATOR_SUPABASE_SYNC", "1")
+    monkeypatch.setattr(
+        integrator,
+        "load_protocol",
+        lambda: {
+            "schema": "noos-integrator-role-v1",
+            "cloud_owner": {"enabled": False, "owner_agent_id": None},
+        },
+    )
+    monkeypatch.setattr(integrator, "_mirror_supabase", lambda state: {"ok": True, "should_not_run": True})
+
+    integrator.main(["init"])
+    capsys.readouterr()
+    assert integrator.main(["sync", "--mirror-supabase", "--agent-id", "cursor"]) == 0
+    payload = json.loads(capsys.readouterr().out)
+    supabase = payload.get("supabase") or {}
+    assert supabase.get("reason") == "cloud_owner_not_configured"
+    assert payload.get("authority") == "repo_local"
+
+
+def test_cloud_owner_mismatch_blocks_supabase(tmp_path, monkeypatch, capsys):
+    _state(tmp_path, monkeypatch)
+    monkeypatch.setenv("NOOS_INTEGRATOR_SUPABASE_SYNC", "1")
+    monkeypatch.setattr(
+        integrator,
+        "load_protocol",
+        lambda: {
+            "schema": "noos-integrator-role-v1",
+            "cloud_owner": {"enabled": True, "owner_agent_id": "noos-cross-repo-orchestrator"},
+        },
+    )
+    monkeypatch.setattr(integrator, "_mirror_supabase", lambda state: {"ok": True, "should_not_run": True})
+
+    integrator.main(["init"])
+    capsys.readouterr()
+    assert integrator.main(["sync", "--mirror-supabase", "--agent-id", "cursor-local-mac"]) == 0
+    payload = json.loads(capsys.readouterr().out)
+    supabase = payload.get("supabase") or {}
+    assert supabase.get("reason") == "cloud_owner_mismatch"
+    assert supabase.get("owner_agent_id") == "noos-cross-repo-orchestrator"
