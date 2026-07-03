@@ -2,7 +2,9 @@ name: NOOS loop — self-heal
 
 on:
   schedule:
-    - cron: "0,10,20,30,40,50 * * * *"
+    # Halved frequency per budget rules: audit 30m, heal 1h, researcher 2h, specialist 4h, orchestrator 6h
+    - cron: "0 */1 * * *" # self-heal hourly (was every 10 minutes; reduced for budget)
+    - cron: "0 0 * * 0" # weekly maintenance placeholder
   repository_dispatch:
     types: [noos_self_heal_loop_tick]
 
