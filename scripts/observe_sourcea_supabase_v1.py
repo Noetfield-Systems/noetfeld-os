@@ -108,7 +108,20 @@ def main() -> int:
             f"truth={row.get('truth_log', {}).get('count', 0)} "
             f"cycles={row.get('cycle_receipts', {}).get('count', 0)}"
         )
-    return 0 if row.get("ok") else 1
+
+    # If the Supabase profile is simply not configured (observations skipped), treat
+    # this as non-fatal in CI runs: write the receipt and exit 0 so read-only probes
+    # do not cause workflow failure in environments without Supabase.
+    def all_skipped(*sections):
+        return all(bool(s.get("skipped")) for s in sections)
+
+    if row.get("ok"):
+        return 0
+    if all_skipped(truth, cycles, telemetry):
+        # not configured — non-fatal
+        return 0
+    # Otherwise, a real failure (HTTP errors, partial data) should return non-zero
+    return 1
 
 
 if __name__ == "__main__":
