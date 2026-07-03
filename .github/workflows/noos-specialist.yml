@@ -2,7 +2,7 @@ name: "NOOS Specialist Agent"
 on:
   schedule:
     # Run every 2 hours
-    - cron: "0 */2 * * *"
+    - cron: "0 */4 * * *"
   workflow_dispatch:
       
 concurrency:

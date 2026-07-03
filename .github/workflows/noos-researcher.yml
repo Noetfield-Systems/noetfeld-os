@@ -2,7 +2,7 @@ name: "NOOS Researcher Agent"
 on:
   schedule:
     # Run hourly, during even hours
-    - cron: "0 * * * *"
+    - cron: "0 */2 * * *"
   workflow_dispatch:
     inputs:
       depth:

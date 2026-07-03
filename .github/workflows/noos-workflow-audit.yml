@@ -2,7 +2,7 @@ name: NOOS workflow audit
 
 on:
   schedule:
-    - cron: "*/15 * * * *"
+    - cron: "*/30 * * * *"
   repository_dispatch:
     types: [noos_workflow_audit_tick]
 

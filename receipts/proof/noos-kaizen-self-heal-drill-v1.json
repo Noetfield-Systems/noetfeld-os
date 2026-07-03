@@ -1,0 +1,19 @@
+{
+  "test": "Layer 2 Protected Path Drill",
+  "input": {
+    "id": "drill_verify_gate",
+    "severity": "medium",
+    "metadata": {
+      "workflow_file": "scripts/verify_noos_autonomous_24h_v1.py"
+    }
+  },
+  "expected": "founder_gated escalation",
+  "result": "PASS",
+  "evidence": {
+    "findings": 1,
+    "auto_pr": 0,
+    "proposal": 0,
+    "escalation": 1
+  },
+  "assertion": "Layer 2 classified scripts/verify_* as founder_gated and refused auto-fix"
+}
