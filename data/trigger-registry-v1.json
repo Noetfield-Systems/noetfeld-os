@@ -15,7 +15,9 @@
       "live_probe": {
         "type": "gha_workflow",
         "path": ".github/workflows/deploy-noos-cloud-workers-v1.yml",
-        "expects": ["push"]
+        "expects": [
+          "push"
+        ]
       }
     },
     {
@@ -29,7 +31,9 @@
       "live_probe": {
         "type": "gha_workflow",
         "path": ".github/workflows/deploy-noos-cloud-workers-v1.yml",
-        "expects": ["workflow_dispatch"]
+        "expects": [
+          "workflow_dispatch"
+        ]
       }
     },
     {
@@ -37,7 +41,7 @@
       "system": "noetfeld-os",
       "kind": "schedule",
       "schedule": "*/10 * * * *",
-      "target": "CF cron → repository_dispatch noos_factory_autorun_tick",
+      "target": "CF cron \u2192 repository_dispatch noos_factory_autorun_tick",
       "valid_in_verified_window": true,
       "owner_workflow": "noos-factory-autorun",
       "live_probe": {
@@ -50,7 +54,7 @@
       "system": "noetfeld-os",
       "kind": "schedule",
       "schedule": "*/5 * * * *",
-      "target": "CF loop fleet motor → repository_dispatch loop ticks",
+      "target": "CF loop fleet motor \u2192 repository_dispatch loop ticks",
       "valid_in_verified_window": true,
       "owner_workflow": "noos-loop-fleet-tick",
       "live_probe": {
@@ -212,7 +216,9 @@
       "live_probe": {
         "type": "gha_workflow",
         "path": ".github/workflows/gel-ci.yml",
-        "expects": ["push"]
+        "expects": [
+          "push"
+        ]
       }
     },
     {
@@ -226,7 +232,9 @@
       "live_probe": {
         "type": "gha_workflow",
         "path": ".github/workflows/gel-ci.yml",
-        "expects": ["pull_request"]
+        "expects": [
+          "pull_request"
+        ]
       }
     },
     {
@@ -240,7 +248,9 @@
       "live_probe": {
         "type": "gha_workflow",
         "path": ".github/workflows/noos-agent-vault.yml",
-        "expects": ["push"]
+        "expects": [
+          "push"
+        ]
       }
     },
     {
@@ -254,7 +264,9 @@
       "live_probe": {
         "type": "gha_workflow",
         "path": ".github/workflows/noos-agent-vault.yml",
-        "expects": ["pull_request"]
+        "expects": [
+          "pull_request"
+        ]
       }
     },
     {
@@ -262,13 +274,15 @@
       "system": "noetfeld-os",
       "kind": "event",
       "schedule": null,
-      "target": "Tag push → GitHub Release + PyPI",
+      "target": "Tag push \u2192 GitHub Release + PyPI",
       "valid_in_verified_window": true,
       "owner_workflow": "release-noetfield-gate",
       "live_probe": {
         "type": "gha_workflow",
         "path": ".github/workflows/release-noetfield-gate.yml",
-        "expects": ["push"]
+        "expects": [
+          "push"
+        ]
       }
     },
     {
@@ -282,7 +296,9 @@
       "live_probe": {
         "type": "gha_workflow",
         "path": ".github/workflows/publish-pypi.yml",
-        "expects": ["workflow_dispatch"]
+        "expects": [
+          "workflow_dispatch"
+        ]
       }
     },
     {
@@ -348,7 +364,9 @@
       "live_probe": {
         "type": "gha_workflow",
         "path": ".github/workflows/noos-self-heal.yml",
-        "expects": ["workflow_dispatch"]
+        "expects": [
+          "workflow_dispatch"
+        ]
       }
     },
     {
@@ -362,7 +380,9 @@
       "live_probe": {
         "type": "gha_workflow",
         "path": ".github/workflows/noos-researcher.yml",
-        "expects": ["workflow_dispatch"]
+        "expects": [
+          "workflow_dispatch"
+        ]
       }
     },
     {
@@ -376,7 +396,9 @@
       "live_probe": {
         "type": "gha_workflow",
         "path": ".github/workflows/noos-specialist.yml",
-        "expects": ["workflow_dispatch"]
+        "expects": [
+          "workflow_dispatch"
+        ]
       }
     },
     {
@@ -390,7 +412,9 @@
       "live_probe": {
         "type": "gha_workflow",
         "path": ".github/workflows/noos-cross-repo-orchestrator.yml",
-        "expects": ["workflow_dispatch"]
+        "expects": [
+          "workflow_dispatch"
+        ]
       }
     },
     {
@@ -439,7 +463,7 @@
       "system": "noetfeld-os",
       "kind": "schedule",
       "schedule": "*/15 * * * *",
-      "target": "Supabase pg_cron stale-lane detector → noetfield_stale_lane_events + pg_notify spine feed",
+      "target": "Supabase pg_cron stale-lane detector \u2192 noetfield_stale_lane_events + pg_notify spine feed",
       "valid_in_verified_window": true,
       "owner_workflow": "pg_cron_t8",
       "live_probe": {

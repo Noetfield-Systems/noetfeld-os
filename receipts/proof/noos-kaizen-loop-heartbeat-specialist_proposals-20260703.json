@@ -1,0 +1,36 @@
+{
+  "schema": "improvement-receipt-v2",
+  "class": "machine_safe",
+  "source": "failed_check",
+  "diff_summary": "loop-heartbeat SLO miss for specialist_proposals: score 51.43 < 80",
+  "expected_effect": "Restore freshness, success rate, and latency SLO compliance for the loop",
+  "expected_roi": {
+    "cost_saved_usd": 0,
+    "risk_reduced": "workflow heartbeat drift / SLO miss",
+    "revenue_unblocked": "",
+    "build_cost_usd": 0
+  },
+  "rollback_command": "revert the SLO target change or fix the underlying loop/runtime issue",
+  "external_verify_before": "",
+  "external_verify_after": "",
+  "auto_rolled_back": false,
+  "source_ref": "loop-heartbeat",
+  "loop_id": "specialist_proposals",
+  "score": {
+    "score": 51.43,
+    "misses": [
+      "freshness_missing",
+      "success_rate_miss",
+      "latency_missing"
+    ],
+    "ok": false
+  },
+  "evidence": {
+    "workflow_id": "noos-specialist.yml",
+    "freshness_minutes": null,
+    "success_rate": 0.6,
+    "latency_minutes": null,
+    "status": "UNKNOWN"
+  },
+  "generated_at": "2026-07-03T10:17:21Z"
+}
