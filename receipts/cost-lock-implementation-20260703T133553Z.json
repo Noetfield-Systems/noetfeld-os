@@ -1,0 +1,23 @@
+{
+  "task": "implement_cost_lock_minimal",
+  "timestamp": "2026-07-03T13:35:53Z",
+  "summary": "Added CI cost-policy scanner, runtime routing guard, receipt fields, and CI workflow. Ran scanner locally — no executable violations remain.",
+  "files_created": [
+    "data/cost_policy_machine.json",
+    "scripts/cost_policy_scan.py",
+    "scripts/runtime_routing_guard.py",
+    ".github/workflows/cost-policy-scan.yml"
+  ],
+  "scanner_run": "passed",
+  "scanner_output_file": "receipts/noos-monitor-20260703T124329Z/cost_policy_scan_output.json",
+  "next_steps": [
+    "Merge CI workflow to protect main branch (requires PR review)",
+    "Deploy runtime routing guard in the worker/kernel entrypoint (requires runtime changes)",
+    "Request org secret inventory and mark external surfaces BLOCK until audit",
+    "Implement runtime telemetry receipts with tokens_in/tokens_out when runtime can report them"
+  ],
+  "blocking_unknowns": [
+    "Org-level secret inventory (outside repo)",
+    "External worker/kernel runtime location that attempted premium routing (receipt evidence present)"
+  ]
+}
