@@ -1,6 +1,6 @@
 {
   "gate": "PASS",
-  "generated_at": "2026-07-03T08:00:31.783497Z",
+  "generated_at": "2026-07-03T20:09:19.106585Z",
   "next_safe_action": "use this receipt as current NOOS truth; repair warnings before claiming full ecosystem green",
   "nodes": {
     "GEL_RUNTIME": {
@@ -119,10 +119,10 @@
       "sql_policy_exists": true
     },
     "WEBSITE_LIVE_NERVE": {
-      "age_hours": 0.0059762386111111105,
+      "age_hours": 0.0019107325,
       "fresh": true,
       "gate": "PASS",
-      "generated_at": "2026-07-03T08:00:09.311990Z",
+      "generated_at": "2026-07-03T20:09:11.231618Z",
       "nodes": {
         "N13_ROUTE_INVENTORY": {
           "command": "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3 scripts/verify-route-inventory.py",
@@ -131,7 +131,7 @@
           "stdout": "verify-route-inventory: PASS mode=structural routes=23\n"
         },
         "N14_RECEIPT_FRESHNESS": {
-          "expires_at": "2026-07-03T08:30:09.311990Z",
+          "expires_at": "2026-07-03T20:39:11.231618Z",
           "ok": true,
           "valid_for_seconds": 1800
         },
@@ -213,7 +213,7 @@
         "ok": true,
         "returncode": 0,
         "stderr": "",
-        "stdout": "verify-public-denylist-sync: PASS\nexact_paths=24 prefix_paths=32 probe_paths=23\nverify-route-nav-truth: PASS\nverify-route-inventory: PASS mode=structural routes=23\nNOETFIELD_LIVE_NERVE PASS receipt=/Users/sinakazemnezhad/Desktop/Noetfield/Noetfield-All-Documents/Noetfield/governance/NOETFIELD_LIVE_NERVE_RECEIPT.json\nN1_PUBLIC_OUTPUT ok=True\nN2_CHAT_TRUTH ok=True\nN3_DOC_FRESHNESS ok=True\nN4_WWW_LIVE_OUTPUT ok=True\nN5_WWW_CHAT_SEMANTIC ok=True\nN6_PLATFORM_CHAT_SEMANTIC ok=True\nN7_GEL_LIVE_RUNTIME ok=True\nN8_ROUTE_NAV_TRUTH ok=True\nN9_VALIDATOR_NODE_REGISTRY ok=True\nN13_ROUTE_INVENTORY ok=True\nN14_RECEIPT_FRESHNESS ok=True\nverify-validator-node-registry: PASS\nmode=full validators=11 nodes=14 live_nodes=11\nverify-live-nerve-receipt: PASS\nscope=website-platform-public gate=PASS expires_at=2026-07-03T08:30:09.311990Z\n"
+        "stdout": "verify-public-denylist-sync: PASS\nexact_paths=24 prefix_paths=32 probe_paths=23\nverify-route-nav-truth: PASS\nverify-route-inventory: PASS mode=structural routes=23\nNOETFIELD_LIVE_NERVE PASS receipt=/Users/sinakazemnezhad/Desktop/Noetfield/Noetfield-All-Documents/Noetfield/governance/NOETFIELD_LIVE_NERVE_RECEIPT.json\nN1_PUBLIC_OUTPUT ok=True\nN2_CHAT_TRUTH ok=True\nN3_DOC_FRESHNESS ok=True\nN4_WWW_LIVE_OUTPUT ok=True\nN5_WWW_CHAT_SEMANTIC ok=True\nN6_PLATFORM_CHAT_SEMANTIC ok=True\nN7_GEL_LIVE_RUNTIME ok=True\nN8_ROUTE_NAV_TRUTH ok=True\nN9_VALIDATOR_NODE_REGISTRY ok=True\nN13_ROUTE_INVENTORY ok=True\nN14_RECEIPT_FRESHNESS ok=True\nverify-validator-node-registry: PASS\nmode=full validators=11 nodes=14 live_nodes=11\nverify-live-nerve-receipt: PASS\nscope=website-platform-public gate=PASS expires_at=2026-07-03T20:39:11.231618Z\n"
       }
     }
   },
