@@ -58,7 +58,7 @@ FORBIDDEN=(
   'repo-native'
   'agent self-audit'
   'packages/sdk'
-  'kazemnezhadsina144-dot'
+  'Noetfield-Systems'
   'Repository docs'
 )
 

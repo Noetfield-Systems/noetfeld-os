@@ -13,7 +13,7 @@
 
 **Merge + verify** (`ship-p0-merge-001`):
 
-1. Merge [PR #15](https://github.com/kazemnezhadsina144-dot/Noetfield/pull/15) to `main`
+1. Merge [PR #15](https://github.com/Noetfield-Systems/Noetfield/pull/15) to `main`
 2. `make ship-verify` exit 0
 3. Evidence: `scripts/verify-local-dev.sh`, `scripts/tle-smoke.sh`, `docs/ops/lane_a_sprint_map.md`
 

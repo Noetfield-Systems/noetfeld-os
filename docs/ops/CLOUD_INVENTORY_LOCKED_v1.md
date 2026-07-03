@@ -24,7 +24,7 @@
 | Team | `the-777-foundation` |
 | Project | **`noetfield`** |
 | Dashboard | https://vercel.com/the-777-foundation/noetfield |
-| GitHub | `kazemnezhadsina144-dot/Noetfield` → `main` auto-deploy |
+| GitHub | `Noetfield-Systems/Noetfield` → `main` auto-deploy |
 | Runbook | `docs/ops/VERCEL_WWW_DEPLOY_LOCKED_v1.md` |
 
 ---

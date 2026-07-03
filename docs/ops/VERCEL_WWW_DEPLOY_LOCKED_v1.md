@@ -14,7 +14,7 @@
 | **Project name** | `noetfield` ← **not** `www`, **not** `project-gc7lm` |
 | **Production URL** | https://www.noetfield.com |
 | **Dashboard** | https://vercel.com/the-777-foundation/noetfield |
-| **GitHub repo** | https://github.com/kazemnezhadsina144-dot/Noetfield (connected) |
+| **GitHub repo** | https://github.com/Noetfield-Systems/Noetfield (connected) |
 | **Production branch** | `main` |
 
 ---

@@ -130,7 +130,7 @@ def _trigger_deploy(token: str) -> dict:
             "target": "production",
             "gitSource": {
                 "type": "github",
-                "org": "kazemnezhadsina144-dot",
+                "org": "Noetfield-Systems",
                 "repo": "Noetfield",
                 "ref": "ship/nf-gaos-w2-production",
             },

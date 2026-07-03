@@ -1,0 +1,25 @@
+schema: noetfield-agent-manifest-v1
+repo:
+  name: Noetfield
+  id: Noetfield-Systems/Noetfield
+  lane: cross-repo-contract
+  policy_source: repo-policy.json
+coordination:
+  protocol: integrator-v1
+  mode: support-only
+  contract_boundary: contracts-exports-manifests-apis-receipts
+agents:
+  - role: repo-integrator
+    owns:
+      - repo-local contracts and manifests
+      - repo-local documentation and policy artifacts
+    must_not_own:
+      - noetfeld-os runtime implementation
+      - studio-ide implementation
+  - role: sync-reporter
+    outputs:
+      - repo-local receipts
+      - repo-local handoff updates
+metadata:
+  legacy_slug_forbidden_in_active_config:
+    - kazemnezhadsina144-dot

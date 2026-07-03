@@ -10,7 +10,7 @@
 
 | Entity | Repo / chat | Noetfield may implement? |
 |--------|---------------|---------------------------|
-| **Noetfield** | `kazemnezhadsina144-dot/Noetfield` | **Yes** |
+| **Noetfield** | `Noetfield-Systems/Noetfield` | **Yes** |
 | **TrustField Technologies** | TrustField repo / private ops | **No** |
 | **VIRLUX** | VIRLUX repo | **No** |
 

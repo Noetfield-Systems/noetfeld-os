@@ -34,7 +34,7 @@ This page is safe for a **public** repository. Detailed `NF-*` checklists and fo
 |----------|--------|
 | **Public / partners** | This file + strategy doc + GitHub Releases |
 | **Agents (local)** | [.cursor/AGENT_TRACKING.md](../.cursor/AGENT_TRACKING.md) → `ops/private/todolist/` when present |
-| **Agents (cloud) + team** | [GitHub Issues](https://github.com/kazemnezhadsina144-dot/Noetfield/issues) |
+| **Agents (cloud) + team** | [GitHub Issues](https://github.com/Noetfield-Systems/Noetfield/issues) |
 | **Founder private** | `ops/private/` (gitignored — run `./scripts/bootstrap-private-ops.sh`) |
 
 **Boundaries:** [PROJECT_BOUNDARIES_LOCKED.md](../PROJECT_BOUNDARIES_LOCKED.md) — Noetfield only in this repo; TrustField and VIRLUX are separate entities.

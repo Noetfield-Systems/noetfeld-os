@@ -26,7 +26,7 @@ site into an enterprise AI governance operating system.
 |-----|----------|
 | [docs/ROADMAP.md](docs/ROADMAP.md) | Public horizons + shipped summary |
 | [docs/strategy/noetfield-future-path.md](docs/strategy/noetfield-future-path.md) | Product strategy (2026–2027) |
-| [GitHub Issues](https://github.com/kazemnezhadsina144-dot/Noetfield/issues) | Team execution (`launch`, `legal`, `engineering`) |
+| [GitHub Issues](https://github.com/Noetfield-Systems/Noetfield/issues) | Team execution (`launch`, `legal`, `engineering`) |
 | [.cursor/AGENT_TRACKING.md](.cursor/AGENT_TRACKING.md) | **Agents:** local `ops/private/` or Issues |
 | [ops/README.md](ops/README.md) | Ops guide + gitignored `ops/private/` |
 

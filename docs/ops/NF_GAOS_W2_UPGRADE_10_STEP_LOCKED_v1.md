@@ -80,7 +80,7 @@ Commit any post-push drift (pipeline doc rename, gtm-ops needles) before merge.
 
 ### 2 — Merge ship PR
 
-- URL: https://github.com/kazemnezhadsina144-dot/Noetfield/pull/new/ship/nf-gaos-w2-production
+- URL: https://github.com/Noetfield-Systems/Noetfield/pull/new/ship/nf-gaos-w2-production
 - Two commits: (1) NF-GAOS W0/W1 + governance runtime (2) www + GTM + portfolio
 
 ### 3 — Platform production host

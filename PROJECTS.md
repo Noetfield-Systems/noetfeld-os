@@ -18,7 +18,7 @@ See also: [PROJECT_BOUNDARIES_LOCKED.md](PROJECT_BOUNDARIES_LOCKED.md)
 
 - Pre-execution governance: policy, compliance logic, audit traces — **no custody, no payments** ([STRATEGIC_LOCK.md](STRATEGIC_LOCK.md)).
 - **Public roadmap:** [docs/ROADMAP.md](docs/ROADMAP.md) · [docs/strategy/noetfield-future-path.md](docs/strategy/noetfield-future-path.md)
-- **Team tracking:** [GitHub Issues](https://github.com/kazemnezhadsina144-dot/Noetfield/issues) · [ops/README.md](ops/README.md)
+- **Team tracking:** [GitHub Issues](https://github.com/Noetfield-Systems/Noetfield/issues) · [ops/README.md](ops/README.md)
 
 ---
 

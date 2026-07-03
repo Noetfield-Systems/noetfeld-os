@@ -33,4 +33,4 @@ Governance execution, AI policy enforcement, and risk intelligence **before** ex
 **Internal go-forward:** [docs/strategy/GO_FORWARD_NOW.md](docs/strategy/GO_FORWARD_NOW.md)
 
 **Public roadmap:** [docs/ROADMAP.md](docs/ROADMAP.md) · [docs/strategy/noetfield-future-path.md](docs/strategy/noetfield-future-path.md)  
-**Execution:** [GitHub Issues](https://github.com/kazemnezhadsina144-dot/Noetfield/issues) · [ops/README.md](ops/README.md)
+**Execution:** [GitHub Issues](https://github.com/Noetfield-Systems/Noetfield/issues) · [ops/README.md](ops/README.md)

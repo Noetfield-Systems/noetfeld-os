@@ -178,9 +178,9 @@ PyPI noetfield-gate publish live · npm @noetfield/gate · chatbot Phase 3-10 ·
 | E2E verify | `check_noetfield_com_e2e.py` PASS; API live status superseded by Phase 8 receipt |
 
 **GitHub remotes:**
-- https://github.com/kazemnezhadsina144-dot/Noetfield
-- https://github.com/kazemnezhadsina144-dot/noetfeld-os (private)
-- https://github.com/kazemnezhadsina144-dot/noetfield-studio-ide (private)
+- https://github.com/Noetfield-Systems/Noetfield
+- https://github.com/Noetfield-Systems/noetfeld-os (private)
+- https://github.com/Noetfield-Systems/noetfield-studio-ide (private)
 
 **Vercel www (2026-06-26):**
 - Team: `the-777-foundation` · Project: **`noetfield`** (not `www`)

@@ -5,7 +5,7 @@
 
 ## 1. Merge and release
 
-1. Merge [PR #11](https://github.com/kazemnezhadsina144-dot/Noetfield/pull/11) (institutional API + partner GTM) into `main`.
+1. Merge [PR #11](https://github.com/Noetfield-Systems/Noetfield/pull/11) (institutional API + partner GTM) into `main`.
 2. Tag or deploy from `main` per [GO_LIVE.md](./GO_LIVE.md).
 
 ## 2. Deploy surfaces
