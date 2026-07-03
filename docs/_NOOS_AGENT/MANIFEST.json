@@ -230,6 +230,18 @@
       "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260703-004]_CURSOR_LOCAL_MAC_OPERATOR_v1.md",
       "doc_type": "CURSOR_LOCAL_OPERATOR",
       "title": "Cursor Local Mac operator — T2 boot, claim, closeout"
+    },
+    {
+      "trace_id": "NOOS-AGENT-20260703-005",
+      "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260703-005]_FOUNDER_CANON_INTERFACE_v1.md",
+      "doc_type": "FOUNDER_CANON_INTERFACE",
+      "title": "Founder canon interface — zero-founder validation law"
+    },
+    {
+      "trace_id": "NOOS-AGENT-20260703-006",
+      "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260703-006]_MACHINE_LOOPS_v1.md",
+      "doc_type": "MACHINE_LOOPS",
+      "title": "Machine loops v1 — critic, repair, audit, autonomy E2E"
     }
   ]
 }

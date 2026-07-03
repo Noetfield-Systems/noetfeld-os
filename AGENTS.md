@@ -31,6 +31,14 @@ workspace_root: /Users/sinakazemnezhad/Projects/noetfeld-os
 - Closeout: `make local-closeout TASK=<task-id>` (optional receipt: `WRITE_RECEIPT=1`)
 - Cannot `git checkout main`? Run `bash scripts/noos_mac_worktree_sync_v1.sh`
 
+### Machine loops (zero-founder process)
+
+- Canon: **`docs/_NOOS_AGENT/[NOOS-AGENT-20260703-005]_FOUNDER_CANON_INTERFACE_v1.md`**
+- Loops: **`docs/_NOOS_AGENT/[NOOS-AGENT-20260703-006]_MACHINE_LOOPS_v1.md`**
+- Status: `make machine-status` · reconcile: `make machine-reconcile` · audit: `make machine-audit`
+- Merge gate: `make machine-validate-merge` · skill: `.cursor/skills/machine-loops/SKILL.md`
+- Default: route failures to critic/repair/research — not founder
+
 ### Live sync / nerve gate
 
 - Before claiming current Noetfield live state, run `bash scripts/check_noos_live_sync_gate.sh`. The wrapper refreshes the website live nerve first; do not rely on an old receipt unless you are explicitly doing read-only archaeology.

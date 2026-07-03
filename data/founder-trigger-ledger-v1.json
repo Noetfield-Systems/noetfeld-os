@@ -1,0 +1,88 @@
+{
+  "schema": "founder-trigger-ledger-v1",
+  "version": "1.0.0",
+  "canon_pointer": "docs/_NOOS_AGENT/[NOOS-AGENT-20260703-005]_FOUNDER_CANON_INTERFACE_v1.md",
+  "machine_loops_pointer": "docs/_NOOS_AGENT/[NOOS-AGENT-20260703-006]_MACHINE_LOOPS_v1.md",
+  "updated_at": "2026-07-03",
+  "shadow_decision_threshold": 10,
+  "triggers": [
+    {
+      "trigger_id": "FT-MERGE-T0-T1",
+      "class": "validation",
+      "description": "Merge review for docs/tests/receipts/scoped app code",
+      "status": "bootstrap_founder_reviewed",
+      "retirement_condition": "10 consecutive machine merge validations where shadow_decision matches founder",
+      "evidence_counter": 0,
+      "target_status": "machine_autonomous",
+      "bootstrap_cycles_remaining": 5
+    },
+    {
+      "trigger_id": "FT-MERGE-T2",
+      "class": "validation",
+      "description": "Merge review for dependency/config/CI changes",
+      "status": "founder_gated",
+      "retirement_condition": "20 consecutive T2 merges with dual-critic APPROVE and zero post-merge regressions",
+      "evidence_counter": 0,
+      "target_status": "machine_autonomous"
+    },
+    {
+      "trigger_id": "FT-COMMERCIAL-SEND",
+      "class": "capital_legal",
+      "description": "NW1/SW1 outreach send authority",
+      "status": "founder_only",
+      "retirement_condition": "agentic send receipts + 30d zero compliance incidents",
+      "evidence_counter": 0,
+      "target_status": "delegated_agentic",
+      "backlog_ids": ["UPG-0001", "UPG-0002", "UPG-0003", "UPG-0004"]
+    },
+    {
+      "trigger_id": "FT-DEMO-RECORD",
+      "class": "human_presence",
+      "description": "Demo video / screen capture",
+      "status": "founder_only",
+      "retirement_condition": "scripted capture worker + founder 5min gate receipts x10",
+      "evidence_counter": 0,
+      "target_status": "delegated_capture",
+      "backlog_ids": ["UPG-0005", "UPG-0029", "UPG-0030"]
+    },
+    {
+      "trigger_id": "FT-L5-VERIFY",
+      "class": "irreversible_l5",
+      "description": "Founder verify on verifier/gate/law edits",
+      "status": "founder_only",
+      "retirement_condition": "never — canon §8 irreversible L5",
+      "evidence_counter": 0,
+      "target_status": "founder_only",
+      "backlog_ids": ["UPG-0010"]
+    },
+    {
+      "trigger_id": "FT-PHASE-UNLOCK",
+      "class": "phase_unlock",
+      "description": "Grant new autonomy tier",
+      "status": "founder_only",
+      "retirement_condition": "auto-proposal only; unlock act stays founder (ratchet safety)",
+      "evidence_counter": 0,
+      "target_status": "founder_one_click"
+    },
+    {
+      "trigger_id": "FT-PRODUCTION-SECRETS",
+      "class": "capital_legal",
+      "description": "Production vault policy and secret posture",
+      "status": "founder_only",
+      "retirement_condition": "vault policy receipt + 90d CI secret-scan green",
+      "evidence_counter": 0,
+      "target_status": "machine_monitored",
+      "backlog_ids": ["UPG-0174", "UPG-0175"]
+    },
+    {
+      "trigger_id": "FT-TRUST-BRIEF",
+      "class": "commercial",
+      "description": "First Trust Brief / AI Value OS briefing",
+      "status": "founder_only",
+      "retirement_condition": "intake receipt + follow-up automation receipts",
+      "evidence_counter": 0,
+      "target_status": "delegated_agentic",
+      "backlog_ids": ["NOOS-C-01"]
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "schema": "noos-dispatch-template-v1",
+  "template_id": "repair-lane-v1",
+  "version": "1.0.0",
+  "canon_version": "FOUNDER_CANON_v1+MACHINE_LOOPS_v1",
+  "laws": "FOUNDER_CANON v1 + governed-autorun v3. Violations = BLOCKED_WITH_REASON.",
+  "loop": "self_repair",
+  "trigger_sources": ["FAILED_WITH_RECEIPT", "critic_REJECT", "DRIFT", "gate_event"],
+  "fresh_context_rule": "R1",
+  "scope_derivation": "failure_receipt.files_changed ∪ failing_test_paths",
+  "scope_rule": "machine_narrowed_only",
+  "max_attempts_before_escalation": 2,
+  "escalation_target": ["research_memo", "outside_audit"],
+  "inputs": {
+    "task_id": "{{task_id}}-repair-{{attempt}}",
+    "failure_receipt": "{{failure_receipt}}",
+    "allowed_paths": "{{derived_paths}}",
+    "preserve_lane_read_only": true
+  },
+  "outputs": {
+    "before_receipt": "required",
+    "after_receipt": "required"
+  },
+  "receipt_schema": "noos-machine-repair-receipt-v1"
+}

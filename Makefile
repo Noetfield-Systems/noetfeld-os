@@ -1,4 +1,4 @@
-.PHONY: test gate demo build-gate-js install inbox cloud-worker autorun-once autorun autorun-status autorun-tick-deploy autorun-tick-dispatch autonomous-verify schedule-verify determinism-verify replay-verify planes supabase-migrate verified-window loop-run loop-fleet-deploy loop-fleet-dispatch loops-status loop-heartbeat backlog urls local-boot local-closeout local-patch-proposal local-heartbeat local-lane local-sweep-stale local-status
+.PHONY: test gate demo build-gate-js install inbox cloud-worker autorun-once autorun autorun-status autorun-tick-deploy autorun-tick-dispatch autonomous-verify schedule-verify determinism-verify replay-verify planes supabase-migrate verified-window loop-run loop-fleet-deploy loop-fleet-dispatch loops-status loop-heartbeat backlog urls local-boot local-closeout local-patch-proposal local-heartbeat local-lane local-sweep-stale local-status machine-status machine-reconcile machine-audit machine-verify machine-validate-merge machine-critic machine-research
 
 test:
 	pytest -q
@@ -135,4 +135,31 @@ local-patch-proposal:
 		echo "Usage: make local-patch-proposal PAYLOAD_FILE=proposal.json"; \
 		echo "   or: make local-patch-proposal PATHS=scripts/foo.py,tests/test_foo.py"; \
 		exit 1; \
+	fi
+
+machine-status:
+	python3 scripts/noos_machine_loops_v1.py status
+
+machine-reconcile:
+	python3 scripts/noos_machine_loops_v1.py reconcile
+
+machine-audit:
+	python3 scripts/noos_machine_loops_v1.py audit
+
+machine-verify:
+	python3 scripts/noos_machine_loops_v1.py verify
+
+machine-validate-merge:
+	python3 scripts/noos_machine_loops_v1.py validate-merge
+
+machine-critic:
+	@test -n "$(RECEIPT)" || (echo "Usage: make machine-critic RECEIPT=receipts/proof/foo.json" && exit 1)
+	python3 scripts/noos_machine_loops_v1.py critic --receipt $(RECEIPT)
+
+machine-research:
+	@test -n "$(QUESTION)" || (echo "Usage: make machine-research QUESTION='...' [RECEIPT=...]" && exit 1)
+	@if [ -n "$(RECEIPT)" ]; then \
+		python3 scripts/noos_machine_loops_v1.py research-memo --question "$(QUESTION)" --receipt "$(RECEIPT)"; \
+	else \
+		python3 scripts/noos_machine_loops_v1.py research-memo --question "$(QUESTION)"; \
 	fi

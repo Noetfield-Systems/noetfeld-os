@@ -1,0 +1,49 @@
+name: NOOS Machine Loops
+
+on:
+  schedule:
+    - cron: "0 6 * * 1"
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - ".agent-policy/**"
+      - "data/founder-trigger-ledger-v1.json"
+      - "data/noos-machine-loops-config-v1.json"
+      - "scripts/noos_machine_loops_v1.py"
+      - "scripts/noos_receipt_chain_v1.py"
+      - ".github/workflows/noos-machine-loops.yml"
+
+concurrency:
+  group: noos-machine-loops
+  cancel-in-progress: false
+
+jobs:
+  machine-loops:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Machine loops structural verify
+        run: python3 scripts/noos_machine_loops_v1.py verify --json
+
+      - name: Reconcile dispatch queue from failure receipts
+        run: python3 scripts/noos_machine_loops_v1.py reconcile --json
+
+      - name: Outside audit (trailing window)
+        run: python3 scripts/noos_machine_loops_v1.py audit --json
+
+      - name: Autonomy status digest
+        run: python3 scripts/noos_machine_loops_v1.py status --json
+
+      - name: Machine loops unit tests
+        run: pytest -q tests/test_noos_machine_loops_v1.py

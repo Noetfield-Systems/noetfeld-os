@@ -134,6 +134,7 @@ def test_full_governance_verify_still_passes():
     assert row["ok"] is True
     assert row["checks"]["cursor_local_mac"] is True
     assert row["checks"]["copilot_cli_mac"] is True
+    assert row["checks"]["machine_loops"] is True
 
 
 def test_local_closeout_receipt_schema_no_write(tmp_path: Path, monkeypatch: pytest.MonkeyPatch):

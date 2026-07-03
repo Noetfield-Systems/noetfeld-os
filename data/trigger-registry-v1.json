@@ -394,6 +394,47 @@
       }
     },
     {
+      "trigger_id": "NOOS-T-machine-loops-weekly",
+      "system": "noetfeld-os",
+      "kind": "schedule",
+      "schedule": "0 6 * * 1",
+      "target": "Outside audit + reconcile + autonomy status",
+      "valid_in_verified_window": true,
+      "owner_workflow": "noos-machine-loops",
+      "live_probe": {
+        "type": "gha_schedule",
+        "path": ".github/workflows/noos-machine-loops.yml"
+      }
+    },
+    {
+      "trigger_id": "NOOS-T-machine-loops-push",
+      "system": "noetfeld-os",
+      "kind": "event",
+      "schedule": null,
+      "target": "Machine loops verify on main path push",
+      "valid_in_verified_window": true,
+      "owner_workflow": "noos-machine-loops",
+      "live_probe": {
+        "type": "gha_workflow",
+        "path": ".github/workflows/noos-machine-loops.yml",
+        "expects": ["push"]
+      }
+    },
+    {
+      "trigger_id": "NOOS-T-machine-loops-dispatch",
+      "system": "noetfeld-os",
+      "kind": "manual",
+      "schedule": null,
+      "target": "Manual machine loops workflow_dispatch",
+      "valid_in_verified_window": true,
+      "owner_workflow": "noos-machine-loops",
+      "live_probe": {
+        "type": "gha_workflow",
+        "path": ".github/workflows/noos-machine-loops.yml",
+        "expects": ["workflow_dispatch"]
+      }
+    },
+    {
       "trigger_id": "NOOS-T8-stale-lane-pgcron",
       "system": "noetfeld-os",
       "kind": "schedule",

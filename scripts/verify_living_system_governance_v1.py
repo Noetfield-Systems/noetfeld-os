@@ -166,6 +166,24 @@ def check_copilot_cli_mac(registry: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def check_machine_loops() -> dict[str, Any]:
+    required = [
+        ROOT / "data/noos-machine-loops-config-v1.json",
+        ROOT / "data/founder-trigger-ledger-v1.json",
+        ROOT / ".agent-policy/dispatch-templates/worker-execute-v1.json",
+        ROOT / ".agent-policy/dispatch-templates/repair-lane-v1.json",
+        ROOT / ".agent-policy/dispatch-templates/critic-pass-v1.json",
+        ROOT / ".agent-policy/dispatch-templates/research-memo-v1.json",
+        ROOT / "scripts/noos_machine_loops_v1.py",
+    ]
+    missing = [str(p.relative_to(ROOT)) for p in required if not p.is_file()]
+    return {
+        "ok": not missing,
+        "missing": missing,
+        "template_count": 4,
+    }
+
+
 def run_verify(*, write_receipt: bool = False) -> dict[str, Any]:
     registry = load_json(PARALLEL_REGISTRY)
     workflows = discover_gha_workflows()
@@ -181,6 +199,7 @@ def run_verify(*, write_receipt: bool = False) -> dict[str, Any]:
     cursor_row = check_cursor_automation_count(registry)
     t2_row = check_cursor_local_mac(registry)
     copilot_cli_row = check_copilot_cli_mac(registry)
+    machine_loops_row = check_machine_loops()
 
     checks = {
         "trigger_sweep": sweep_row.get("ok"),
@@ -191,6 +210,7 @@ def run_verify(*, write_receipt: bool = False) -> dict[str, Any]:
         "cursor_automations": cursor_row.get("ok"),
         "cursor_local_mac": t2_row.get("ok"),
         "copilot_cli_mac": copilot_cli_row.get("ok"),
+        "machine_loops": machine_loops_row.get("ok"),
     }
     ok = all(bool(v) for v in checks.values())
 
@@ -215,6 +235,7 @@ def run_verify(*, write_receipt: bool = False) -> dict[str, Any]:
         "cursor_automations": cursor_row,
         "cursor_local_mac": t2_row,
         "copilot_cli_mac": copilot_cli_row,
+        "machine_loops": machine_loops_row,
         "coordination": registry.get("coordination"),
         "report_line": (
             "living_system_governance_clean · GHA+Copilot+integrator+automations aligned"

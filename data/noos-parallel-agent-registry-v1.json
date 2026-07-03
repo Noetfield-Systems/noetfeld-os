@@ -31,7 +31,8 @@
     "publish-pypi": ["gha-publish-pypi"],
     "release-noetfield-gate": ["gha-release-noetfield-gate"],
     "noos-agent-vault": ["gha-noos-agent-vault"],
-    "noos-schedule-canary": ["gha-noos-schedule-canary"]
+    "noos-schedule-canary": ["gha-noos-schedule-canary"],
+    "noos-machine-loops": ["noos-machine-auditor", "noos-machine-reconciler"]
   },
   "surfaces": {
     "T0_machine": "GitHub Actions schedules, repository_dispatch, CF cron, worker-kernel T0",
@@ -399,6 +400,39 @@
       "write_scope": [".noos-runtime/worker-kernel/", "receipts/proof/"],
       "primary_task_kinds": ["grep", "check", "summarize", "classify", "patch_proposal"],
       "note": "Does not replace GHA loops or Cursor automations — routes one-shot tasks only"
+    },
+    {
+      "worker_id": "noos-machine-reconciler",
+      "surface": "headless_cli",
+      "tier": "T0_machine",
+      "cadence": "on_demand",
+      "mission_id": "M4",
+      "territory": "machine-loops",
+      "write_scope": [".noos-runtime/machine-loops/", "receipts/proof/"],
+      "primary_task_kinds": ["reconcile", "repair_dispatch"],
+      "note": "Instantiates dispatch templates from failure receipts (R2)"
+    },
+    {
+      "worker_id": "noos-machine-critic",
+      "surface": "headless_cli",
+      "tier": "T0_machine",
+      "cadence": "on_push",
+      "mission_id": "M4",
+      "territory": "machine-loops",
+      "write_scope": ["receipts/proof/"],
+      "primary_task_kinds": ["critic_pass", "merge_validation"],
+      "note": "Read-only adversarial checklist — different model family than worker"
+    },
+    {
+      "worker_id": "noos-machine-auditor",
+      "surface": "github_actions",
+      "tier": "T0_machine",
+      "cadence": "weekly",
+      "mission_id": "M4",
+      "territory": "machine-loops",
+      "write_scope": ["receipts/proof/"],
+      "primary_task_kinds": ["outside_audit", "receipt_chain_verify"],
+      "note": "Independent verifier-plane audit over trailing receipts"
     },
     {
       "worker_id": "gha-loop-fleet",
