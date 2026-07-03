@@ -1,0 +1,130 @@
+name: "NOOS Self-Heal Loop"
+on:
+  schedule:
+    # Run every 30 minutes, staggered 15 minutes after audit completes
+    - cron: "15,45 * * * *"
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Run without applying fixes"
+        required: false
+        default: "false"
+      
+concurrency:
+  group: noos-self-heal
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  actions: read
+  checks: write
+
+jobs:
+  heal:
+    name: Execute Safe Fixes
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install dependencies
+        run: |
+          pip install -q \
+            PyGithub \
+            requests \
+            python-dateutil
+
+      - name: Wait for audit to complete
+        run: |
+          echo "Waiting for audit findings..."
+          for attempt in {1..30}; do
+            if [ -f "data/noos-audit-findings-v1.json" ]; then
+              echo "✓ Audit findings ready"
+              exit 0
+            fi
+            echo "Attempt $attempt: findings not ready, waiting..."
+            sleep 10
+          done
+          echo "⚠ Audit findings timeout; proceeding with empty findings"
+
+      - name: Run self-heal engine
+        id: heal
+        run: |
+          python3 scripts/noos_self_heal_v1.py \
+            --findings-file data/noos-audit-findings-v1.json \
+            --handoff-file data/noos-healing-handoff-v1.json \
+            ${{ github.event.inputs.dry_run == 'true' && '--dry-run' || '' }}
+        continue-on-error: true
+
+      - name: Parse healing report
+        id: parse
+        run: |
+          if [ -f "receipts/proof/noos-kaizen-self-heal-report-v1.json" ]; then
+            FIXED=$(jq '.summary.findings_fixed // 0' receipts/proof/noos-kaizen-self-heal-report-v1.json)
+            ESCALATED=$(jq '.summary.findings_escalated // 0' receipts/proof/noos-kaizen-self-heal-report-v1.json)
+            echo "fixed=$FIXED" >> $GITHUB_OUTPUT
+            echo "escalated=$ESCALATED" >> $GITHUB_OUTPUT
+            echo "status=complete" >> $GITHUB_OUTPUT
+          else
+            echo "status=no_findings" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Report healing results
+        if: always()
+        run: |
+          echo "## Self-Heal Report"
+          echo "- **Fixed Issues**: ${{ steps.parse.outputs.fixed || 0 }}"
+          echo "- **Escalated Issues**: ${{ steps.parse.outputs.escalated || 0 }}"
+          [ -f "receipts/proof/noos-kaizen-self-heal-report-v1.json" ] && cat receipts/proof/noos-kaizen-self-heal-report-v1.json | jq '.critique' || echo "No healing report"
+
+      - name: Check for high-risk escalations
+        if: steps.parse.outputs.escalated > 5
+        run: |
+          echo "::warning::High escalation count (${{ steps.parse.outputs.escalated }}). Researcher will investigate."
+
+  notify_researcher:
+    name: Trigger Researcher If Escalated
+    needs: heal
+    runs-on: ubuntu-latest
+    if: always()
+    steps:
+      - name: Dispatch researcher workflow
+        run: |
+          curl -X POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            https://api.github.com/repos/${{ github.repository }}/actions/workflows/noos-researcher.yml/dispatches \
+            -d '{"ref":"main"}' \
+            --connect-timeout 5 || echo "Researcher dispatch queued (may retry later)"
+        continue-on-error: true
+
+  commit_results:
+    name: Commit Healing State
+    needs: heal
+    runs-on: ubuntu-latest
+    if: success()
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Commit handoff manifest
+        run: |
+          git config user.name "noos-self-heal[bot]"
+          git config user.email "noos-self-heal@noetfield.local"
+          
+          if git diff --quiet data/noos-healing-handoff-v1.json; then
+            echo "No changes to commit"
+          else
+            git add data/noos-healing-handoff-v1.json receipts/proof/noos-kaizen-self-heal-report-v1.json 2>/dev/null || true
+            git commit -m "chore: self-heal cycle update [skip ci]" || echo "Nothing to commit"
+            git push origin HEAD:main || echo "Push failed; next cycle will retry"
+          fi
+        continue-on-error: true

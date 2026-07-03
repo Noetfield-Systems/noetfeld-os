@@ -79,7 +79,7 @@ def test_heartbeat_emits_slo_and_kaizen_receipt(tmp_path: Path, monkeypatch) -> 
             ],
         },
     )
-    monkeypatch.setattr(hb, "loop_state", lambda loop_id: {"last_state": "RUNNING", "last_finished_at": datetime.now(timezone.utc).isoformat()})
+    monkeypatch.setattr(hb, "loop_state", lambda loop_id: {"last_state": "BLOCKED_WITH_REASON", "last_finished_at": datetime.now(timezone.utc).isoformat()})
     monkeypatch.setattr(hb, "recent_cycles", lambda loop_id, limit=20: [])
     monkeypatch.setattr(hb, "trigger_registry_sweep", lambda: {"ok": True, "drift": False, "registry_path": "data/trigger-registry-v1.json", "report_line": "trigger_sweep_clean"})
     monkeypatch.setattr(hb, "deployed_cron", lambda workflow_file: "*/5 * * * *")
@@ -90,3 +90,29 @@ def test_heartbeat_emits_slo_and_kaizen_receipt(tmp_path: Path, monkeypatch) -> 
     assert loop["slo"]["ok"] is False
     assert loop["slo"]["kaizen_receipt"]
     assert row["founder_gated_improvements"]
+
+
+def test_heartbeat_findings_flags_slo_miss(tmp_path: Path, monkeypatch) -> None:
+    monkeypatch.setattr(hb, "ROOT", tmp_path)
+    report = {
+        "drift": {"mismatches": []},
+        "loops": [
+            {
+                "workflow_id": "wf-1",
+                "last_run_at": datetime.now(timezone.utc).isoformat(),
+                "cycles_observed": 1,
+                "throttled_roi": False,
+                "slo": {"ok": False, "misses": ["freshness_miss"]},
+            }
+        ],
+    }
+
+    findings = hb.heartbeat_findings(report)
+    assert len(findings) == 1
+    assert findings[0]["summary"] == "Loop SLO miss"
+
+
+def test_loop_registry_includes_workflow_audit() -> None:
+    doc = json.loads((ROOT / "data/noos-24-7-loops-v1.json").read_text())
+    ids = [loop["id"] for loop in doc["loops"]]
+    assert "workflow_audit" in ids

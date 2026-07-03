@@ -1,0 +1,137 @@
+name: "NOOS Specialist Agent"
+on:
+  schedule:
+    # Run every 2 hours
+    - cron: "0 */2 * * *"
+  workflow_dispatch:
+      
+concurrency:
+  group: noos-specialist
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  actions: read
+  pull-requests: read
+  checks: write
+
+jobs:
+  specialist:
+    name: Generate Fix Proposals
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install dependencies
+        run: |
+          pip install -q \
+            PyGithub \
+            requests \
+            python-dateutil
+
+      - name: Wait for researcher
+        run: |
+          echo "Waiting for research findings..."
+          for attempt in {1..20}; do
+            if [ -f "data/noos-research-findings-v1.json" ]; then
+              echo "✓ Research findings ready"
+              exit 0
+            fi
+            echo "Attempt $attempt: findings not ready, waiting..."
+            sleep 15
+          done
+          echo "⚠ Research findings timeout; proceeding with empty findings"
+
+      - name: Run specialist agent
+        id: specialist
+        run: |
+          python3 scripts/noos_specialist_v1.py \
+            --research-file data/noos-research-findings-v1.json \
+            --output-file data/noos-specialist-proposals-v1.json
+        continue-on-error: true
+
+      - name: Parse specialist proposals
+        id: parse
+        run: |
+          if [ -f "data/noos-specialist-proposals-v1.json" ]; then
+            TOTAL=$(jq '.summary.total_proposals // 0' data/noos-specialist-proposals-v1.json)
+            AUTO=$(jq '.summary.ready_for_automation // 0' data/noos-specialist-proposals-v1.json)
+            MANUAL=$(jq '.summary.require_manual_review // 0' data/noos-specialist-proposals-v1.json)
+            HIGH_CONF=$(jq '.summary.high_confidence_proposals // 0' data/noos-specialist-proposals-v1.json)
+            echo "total=$TOTAL" >> $GITHUB_OUTPUT
+            echo "automation_ready=$AUTO" >> $GITHUB_OUTPUT
+            echo "manual_review=$MANUAL" >> $GITHUB_OUTPUT
+            echo "high_confidence=$HIGH_CONF" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Report specialist proposals
+        if: always()
+        run: |
+          echo "## Specialist Report"
+          echo "- **Total Proposals**: ${{ steps.parse.outputs.total || 0 }}"
+          echo "- **Ready for Automation**: ${{ steps.parse.outputs.automation_ready || 0 }}"
+          echo "- **Require Manual Review**: ${{ steps.parse.outputs.manual_review || 0 }}"
+          echo "- **High Confidence**: ${{ steps.parse.outputs.high_confidence || 0 }}"
+          [ -f "data/noos-specialist-proposals-v1.json" ] && cat data/noos-specialist-proposals-v1.json | jq '.critique' || echo "No proposals generated"
+
+      - name: Create proposal summary issue
+        if: steps.parse.outputs.high_confidence > 0
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const proposals = JSON.parse(fs.readFileSync('data/noos-specialist-proposals-v1.json', 'utf8'));
+            const highConf = proposals.proposals.filter(p => p.confidence_score > 0.8);
+            
+            const body = `## Specialist Fix Proposals
+            
+            Generated: ${proposals.timestamp}
+            
+            ### High-Confidence Proposals (${highConf.length})
+            
+            ${highConf.map(p => `
+            - **${p.proposed_changes.changes[0].type}** on ${p.proposed_changes.workflow || p.proposed_changes.integration}
+              - Confidence: ${(p.confidence_score * 100).toFixed(0)}%
+              - Expected: ${p.expected_improvement}
+              - Ready for Automation: ${p.ready_for_automation ? '✓' : '✗'}
+            `).join('\n')}
+            
+            ### Manual Review Items
+            
+            ${proposals.proposals.filter(p => p.requires_approval).map(p => `
+            - ${p.fix_type} (Confidence: ${(p.confidence_score * 100).toFixed(0)}%)
+              - Notes: ${p.human_review_notes?.join('; ') || 'See proposal details'}
+            `).join('\n')}
+            `;
+            
+            github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `🔧 Specialist Fix Proposals [${new Date().toISOString().split('T')[0]}]`,
+              body: body,
+              labels: ['🤖 noos-specialist', 'proposal', 'self-heal']
+            });
+        continue-on-error: true
+
+      - name: Schedule next heal cycle
+        run: |
+          echo "Next heal cycle in 15 minutes..."
+          # In production, this would enqueue the healing cycle to run sooner if high-confidence proposals exist
+        continue-on-error: true
+
+      - name: Upload proposals
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: specialist-proposals
+          path: |
+            data/noos-specialist-proposals-v1.json
+            receipts/proof/noos-kaizen-specialist-proposals-v1.json
+          retention-days: 30

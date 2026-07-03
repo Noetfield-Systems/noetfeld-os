@@ -262,6 +262,12 @@ def build_heartbeat() -> dict[str, Any]:
             },
         })
 
+    findings = heartbeat_findings(
+        {
+            "drift": {"mismatches": mismatches},
+            "loops": loops_out,
+        }
+    )
     return {
         "schema": "autorun-heartbeat-v2",
         "date": datetime.now(timezone.utc).strftime("%Y-%m-%d"),
@@ -276,7 +282,44 @@ def build_heartbeat() -> dict[str, Any]:
         "founder_gated_improvements": founder_gated_improvements,
         "escalations": [m["loop_id"] for m in mismatches]
         + [lp["workflow_id"] for lp in loops_out if lp["throttled_roi"] or not lp["slo"]["ok"]],
+        "critique": {"overall_ok": not findings, "findings": findings},
     }
+
+
+def heartbeat_findings(hb: dict[str, Any]) -> list[dict[str, Any]]:
+    findings: list[dict[str, Any]] = []
+    for mismatch in hb.get("drift", {}).get("mismatches") or []:
+        findings.append(
+            {
+                "scope": mismatch.get("loop_id"),
+                "severity": "high",
+                "summary": f"Drift mismatch on {mismatch.get('surface')}",
+                "detail": f"committed={mismatch.get('committed_truth')} deployed={mismatch.get('deployed_truth')}",
+            }
+        )
+    for loop in hb.get("loops") or []:
+        slo = loop.get("slo") or {}
+        observed = loop.get("last_run_at")
+        cycles = int(loop.get("cycles_observed") or 0)
+        if not slo.get("ok") and (observed or cycles > 0):
+            findings.append(
+                {
+                    "scope": loop.get("workflow_id"),
+                    "severity": "high",
+                    "summary": "Loop SLO miss",
+                    "detail": ", ".join(slo.get("misses") or []) or "slo_miss",
+                }
+            )
+        if loop.get("throttled_roi"):
+            findings.append(
+                {
+                    "scope": loop.get("workflow_id"),
+                    "severity": "medium",
+                    "summary": "Loop ROI is throttled",
+                    "detail": "More spend is going to low-value work than the allowed threshold",
+                }
+            )
+    return findings
 
 
 def main() -> int:
@@ -305,8 +348,8 @@ def main() -> int:
         for m in drift:
             print(f"  DRIFT {m['loop_id']}: committed={m['committed_truth']} deployed={m['deployed_truth']}")
 
-    # Fail closed on drift so the heartbeat surfaces the mismatch loudly (L12)
-    return 1 if hb["drift"]["mismatches"] else 0
+    # Fail closed on drift and SLO misses so the heartbeat is a real critique, not a green wash.
+    return 1 if heartbeat_findings(hb) else 0
 
 
 if __name__ == "__main__":

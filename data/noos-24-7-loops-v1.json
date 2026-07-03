@@ -99,23 +99,19 @@
       "steps": [
         {
           "name": "reenqueue_blocked",
-          "cmd": ["python3", "scripts/reenqueue_blocked_upg_inbox_v1.py"],
-          "continue_on_error": true
+          "cmd": ["python3", "scripts/reenqueue_blocked_upg_inbox_v1.py"]
         },
         {
           "name": "autonomy_verify",
-          "cmd": ["python3", "scripts/verify_noos_autonomous_24h_v1.py", "--hours", "6", "--write-receipt"],
-          "continue_on_error": true
+          "cmd": ["python3", "scripts/verify_noos_autonomous_24h_v1.py", "--hours", "6", "--write-receipt"]
         },
         {
           "name": "autorun_status",
-          "cmd": ["python3", "scripts/autorun_status_v1.py"],
-          "continue_on_error": true
+          "cmd": ["python3", "scripts/autorun_status_v1.py"]
         },
         {
           "name": "loop_heartbeat",
-          "cmd": ["python3", "scripts/noos_loop_heartbeat_v1.py", "--write-receipt"],
-          "continue_on_error": true
+          "cmd": ["python3", "scripts/noos_loop_heartbeat_v1.py", "--write-receipt"]
         }
       ]
     },
@@ -132,8 +128,7 @@
       "steps": [
         {
           "name": "sourcea_supabase_observe",
-          "cmd": ["python3", "scripts/observe_sourcea_supabase_v1.py", "--write-receipt", "--json"],
-          "continue_on_error": true
+          "cmd": ["python3", "scripts/observe_sourcea_supabase_v1.py", "--write-receipt", "--json"]
         }
       ]
     },
@@ -151,8 +146,92 @@
         {"name": "agent_docs", "cmd": ["bash", "scripts/check_noos_agent_docs.sh"]},
         {
           "name": "business_strategy",
-          "cmd": ["bash", "scripts/check_noetfield_business_strategy.sh"],
-          "continue_on_error": true
+          "cmd": ["bash", "scripts/check_noetfield_business_strategy.sh"]
+        }
+      ]
+    },
+    {
+      "id": "workflow_audit",
+      "title": "Workflow audit + critique loop",
+      "domain": "workflow-governance",
+      "lane": "noos",
+      "value_class": "risk_reduction",
+      "event_type": "noos_workflow_audit_tick",
+      "interval_minutes": 15,
+      "github_workflow": "noos-workflow-audit.yml",
+      "factory_id": "loop-workflow-audit",
+      "steps": [
+        {
+          "name": "workflow_audit",
+          "cmd": ["python3", "scripts/noos_workflow_audit_v1.py", "--json"]
+        }
+      ]
+    },
+    {
+      "id": "self_heal_safe_fixes",
+      "title": "Auto-fix safe issues from audit findings",
+      "domain": "self-improvement",
+      "lane": "noos",
+      "value_class": "risk_reduction",
+      "event_type": "noos_self_heal_safe_fixes_tick",
+      "interval_minutes": 30,
+      "github_workflow": "noos-self-heal.yml",
+      "factory_id": "loop-self-heal-safe-fixes",
+      "steps": [
+        {
+          "name": "execute_safe_fixes",
+          "cmd": ["python3", "scripts/noos_self_heal_v1.py", "--findings-file", "data/noos-audit-findings-v1.json"]
+        }
+      ]
+    },
+    {
+      "id": "researcher_deep_dive",
+      "title": "Deep-dive investigation of escalated findings",
+      "domain": "self-improvement",
+      "lane": "noos",
+      "value_class": "risk_reduction",
+      "event_type": "noos_researcher_deep_dive_tick",
+      "interval_minutes": 60,
+      "github_workflow": "noos-researcher.yml",
+      "factory_id": "loop-researcher",
+      "steps": [
+        {
+          "name": "investigate_escalations",
+          "cmd": ["python3", "scripts/noos_researcher_v1.py", "--depth", "standard"]
+        }
+      ]
+    },
+    {
+      "id": "specialist_proposals",
+      "title": "Generate fix proposals from research",
+      "domain": "self-improvement",
+      "lane": "noos",
+      "value_class": "risk_reduction",
+      "event_type": "noos_specialist_proposals_tick",
+      "interval_minutes": 120,
+      "github_workflow": "noos-specialist.yml",
+      "factory_id": "loop-specialist",
+      "steps": [
+        {
+          "name": "generate_proposals",
+          "cmd": ["python3", "scripts/noos_specialist_v1.py"]
+        }
+      ]
+    },
+    {
+      "id": "orchestrator_cross_repo",
+      "title": "Cross-repo health orchestration & consolidation",
+      "domain": "self-improvement",
+      "lane": "noos",
+      "value_class": "risk_reduction",
+      "event_type": "noos_orchestrator_cross_repo_tick",
+      "interval_minutes": 180,
+      "github_workflow": "noos-cross-repo-orchestrator.yml",
+      "factory_id": "loop-orchestrator",
+      "steps": [
+        {
+          "name": "aggregate_health",
+          "cmd": ["echo", "Aggregating health across all org repos"]
         }
       ]
     }

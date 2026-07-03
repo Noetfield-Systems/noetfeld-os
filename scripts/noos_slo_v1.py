@@ -29,7 +29,7 @@ def status_proxy_success_rate(status: str) -> float:
     if normalized == "COMPLETE":
         return 1.0
     if normalized in {"RUNNING", "IDLE_NO_WORK"}:
-        return 0.95
+        return 1.0
     if normalized == "TRIAGE_REQUIRED":
         return 0.5
     if normalized in {"BLOCKED_WITH_REASON", "FAILED_WITH_RECEIPT"}:
