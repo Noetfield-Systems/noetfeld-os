@@ -103,6 +103,9 @@ related_registry: data/noos-parallel-agent-registry-v1.json
 # 1. Conflict check (read-only)
 python3 scripts/noos_agent_conflict_check_v1.py --json
 
+# Full GHA + Copilot + integrator + Cursor automation alignment
+python3 scripts/verify_living_system_governance_v1.py --json
+
 # 2. Integrator summary (who owns what now)
 python3 scripts/noos_integrator_sync_v1.py summary --json
 

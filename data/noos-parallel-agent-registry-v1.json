@@ -8,7 +8,30 @@
     "integrator_cli": "scripts/noos_integrator_sync_v1.py",
     "routing_matrix": "noetfield-org/ROUTING_MATRIX.md",
     "worker_kernel": "config/model-router.yml",
-    "conflict_check": "scripts/noos_agent_conflict_check_v1.py"
+    "conflict_check": "scripts/noos_agent_conflict_check_v1.py",
+    "governance_verify": "scripts/verify_living_system_governance_v1.py"
+  },
+  "gha_workflow_coverage": {
+    "gel-ci": ["gha-gel-ci"],
+    "deploy-noos-cloud-workers-v1": ["gha-deploy-noos-cloud-workers"],
+    "noos-post-deploy-verify-v1": ["gha-post-deploy-verify"],
+    "noos-factory-autorun": ["gha-noos-factory-autorun"],
+    "noos-inbox-loop": ["gha-loop-fleet"],
+    "noos-runtime-loop": ["gha-loop-fleet"],
+    "noos-chain-loop": ["gha-loop-fleet"],
+    "noos-surface-loop": ["gha-noos-surface-loop"],
+    "noos-self-heal-loop": ["gha-noos-self-heal-loop"],
+    "noos-sourcea-observe-loop": ["gha-loop-fleet"],
+    "noos-agent-nerve-loop": ["gha-loop-fleet"],
+    "noos-workflow-audit": ["gha-noos-workflow-audit"],
+    "noos-self-heal": ["gha-noos-self-heal"],
+    "noos-researcher": ["gha-noos-researcher"],
+    "noos-specialist": ["gha-noos-specialist"],
+    "noos-cross-repo-orchestrator": ["gha-noos-orchestrator"],
+    "publish-pypi": ["gha-publish-pypi"],
+    "release-noetfield-gate": ["gha-release-noetfield-gate"],
+    "noos-agent-vault": ["gha-noos-agent-vault"],
+    "noos-schedule-canary": ["gha-noos-schedule-canary"]
   },
   "surfaces": {
     "T0_machine": "GitHub Actions schedules, repository_dispatch, CF cron, worker-kernel T0",
@@ -361,7 +384,116 @@
       "mission_id": "M2",
       "territory": "domain-loops",
       "write_scope": [".noos-runtime/loops/"],
-      "primary_task_kinds": ["inbox_drain", "runtime_gate", "chain_verify", "sourcea_observe"]
+      "primary_task_kinds": ["inbox_drain", "runtime_gate", "chain_verify", "sourcea_observe"],
+      "gha_workflows": [
+        "noos-inbox-loop",
+        "noos-runtime-loop",
+        "noos-chain-loop",
+        "noos-sourcea-observe-loop",
+        "noos-agent-nerve-loop"
+      ]
+    },
+    {
+      "worker_id": "gha-gel-ci",
+      "surface": "github_actions",
+      "tier": "T0_machine",
+      "cadence": "on_push_pr",
+      "mission_id": "M3",
+      "territory": "ci-gate",
+      "write_scope": [],
+      "read_only": true,
+      "mutex_groups": ["drift-proof"],
+      "primary_task_kinds": ["pytest", "gate", "governance_verify"],
+      "gha_workflow": "gel-ci"
+    },
+    {
+      "worker_id": "gha-deploy-noos-cloud-workers",
+      "surface": "github_actions",
+      "tier": "T0_machine",
+      "cadence": "on_push",
+      "mission_id": "M2",
+      "territory": "deploy-surfaces",
+      "write_scope": ["cloud/workers/"],
+      "mutex_groups": ["deploy-boundary"],
+      "primary_task_kinds": ["deploy"],
+      "gha_workflow": "deploy-noos-cloud-workers-v1"
+    },
+    {
+      "worker_id": "gha-post-deploy-verify",
+      "surface": "github_actions",
+      "tier": "T0_machine",
+      "cadence": "workflow_run",
+      "mission_id": "M3",
+      "territory": "deploy-surfaces",
+      "write_scope": [],
+      "read_only": true,
+      "mutex_groups": ["deploy-boundary"],
+      "primary_task_kinds": ["post_deploy_verify"],
+      "gha_workflow": "noos-post-deploy-verify-v1"
+    },
+    {
+      "worker_id": "gha-noos-factory-autorun",
+      "surface": "github_actions",
+      "tier": "T0_machine",
+      "cadence": "*/10 * * * *",
+      "mission_id": "M2",
+      "territory": "factory-loop",
+      "write_scope": [".noos-runtime/factory/"],
+      "primary_task_kinds": ["factory_autorun"]
+    },
+    {
+      "worker_id": "gha-noos-self-heal-loop",
+      "surface": "github_actions",
+      "tier": "T0_machine",
+      "cadence": "*/10 * * * *",
+      "mission_id": "M4",
+      "territory": "legacy-self-heal-loop",
+      "write_scope": [".noos-runtime/loops/self-heal/"],
+      "primary_task_kinds": ["legacy_heal_loop"]
+    },
+    {
+      "worker_id": "gha-publish-pypi",
+      "surface": "github_actions",
+      "tier": "T0_machine",
+      "cadence": "on_release",
+      "mission_id": "M2",
+      "territory": "pypi-release",
+      "write_scope": [],
+      "read_only": true,
+      "primary_task_kinds": ["publish"]
+    },
+    {
+      "worker_id": "gha-release-noetfield-gate",
+      "surface": "github_actions",
+      "tier": "T0_machine",
+      "cadence": "on_tag",
+      "mission_id": "M2",
+      "territory": "gate-release",
+      "write_scope": [],
+      "read_only": true,
+      "primary_task_kinds": ["release"]
+    },
+    {
+      "worker_id": "gha-noos-agent-vault",
+      "surface": "github_actions",
+      "tier": "T0_machine",
+      "cadence": "on_push",
+      "mission_id": "M3",
+      "territory": "agent-doc-vault",
+      "write_scope": [],
+      "read_only": true,
+      "primary_task_kinds": ["agent_vault_check"]
+    },
+    {
+      "worker_id": "gha-noos-schedule-canary",
+      "surface": "github_actions",
+      "tier": "T0_machine",
+      "cadence": "daily",
+      "mission_id": "M3",
+      "territory": "schedule-canary",
+      "write_scope": [],
+      "read_only": true,
+      "primary_task_kinds": ["schedule_canary"]
     }
   ],
   "laws": [
