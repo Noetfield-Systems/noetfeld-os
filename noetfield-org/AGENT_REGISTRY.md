@@ -5,6 +5,8 @@ Plane: L17 org sync
 
 ## Registered agent surfaces
 
+Parallel law: `data/noos-parallel-agent-registry-v1.json` · `docs/_NOOS_AGENT/[NOOS-AGENT-20260703-003]_PARALLEL_AGENT_GOVERNANCE_v1.md`
+
 | Agent surface | Tier | Primary role | Write scope | Receipts |
 |---|---|---|---|---|
 | GitHub Actions | T0 | deterministic execution, CI, schedules, loop ticks | workflow-defined paths only | workflow runs, artifacts, cycle receipts |

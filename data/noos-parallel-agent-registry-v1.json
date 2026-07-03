@@ -1,0 +1,376 @@
+{
+  "schema": "noos-parallel-agent-registry-v1",
+  "version": "1.0.0",
+  "spec_path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260703-003]_PARALLEL_AGENT_GOVERNANCE_v1.md",
+  "one_law": "Every parallel worker has one territory, one primary writer per scope cell, and one mutex group per overlapping cadence — observe downstream, never duplicate upstream.",
+  "coordination": {
+    "integrator_protocol": "data/noos-integrator-role-v1.json",
+    "integrator_cli": "scripts/noos_integrator_sync_v1.py",
+    "routing_matrix": "noetfield-org/ROUTING_MATRIX.md",
+    "worker_kernel": "config/model-router.yml",
+    "conflict_check": "scripts/noos_agent_conflict_check_v1.py"
+  },
+  "surfaces": {
+    "T0_machine": "GitHub Actions schedules, repository_dispatch, CF cron, worker-kernel T0",
+    "T1_implement": "GitHub Copilot coding agent, Cursor Automations with write",
+    "T2_local": "Cursor chat agent, Copilot CLI on Mac",
+    "T3_reason": "Codex, integrator arbitration, manual audit automations"
+  },
+  "mutex_groups": [
+    {
+      "id": "integrator-coordination",
+      "rule": "one writer to integrator state; audits read-only",
+      "owners": ["cursor-integrator-arbitration", "gha-integrator-sync-audit"]
+    },
+    {
+      "id": "public-health-nerve",
+      "rule": "GHA surface loop owns curl smoke; Cursor daily health owns narrative escalation only",
+      "owners": ["gha-noos-surface-loop", "cursor-daily-production-surfaces"]
+    },
+    {
+      "id": "autorun-observability",
+      "rule": "self-heal loop step owns machine autorun_status; Cursor daily autorun owns human digest",
+      "owners": ["gha-self-heal-autorun-step", "cursor-daily-autorun-status"]
+    },
+    {
+      "id": "drift-proof",
+      "rule": "trigger sweep + determinism gate own machine drift; Cursor proof drift owns cross-lane narrative",
+      "owners": ["gha-determinism-gate", "gha-trigger-sweep-heartbeat", "cursor-daily-proof-drift"]
+    },
+    {
+      "id": "deploy-boundary",
+      "rule": "deploy workflows own mutation; deployment boundary automation is read-only audit",
+      "owners": ["gha-deploy-noos-cloud-workers", "cursor-manual-deployment-boundary"]
+    },
+    {
+      "id": "pr-merge",
+      "rule": "Copilot Kaizen opens PRs; PR readiness automation reviews only — no merge without founder",
+      "owners": ["copilot-kaizen-agent", "cursor-manual-pr-readiness"]
+    },
+    {
+      "id": "self-heal-pipeline",
+      "rule": "audit→heal→research→specialist sequential handoff; no stage skips upstream writer",
+      "owners": [
+        "gha-noos-workflow-audit",
+        "gha-noos-self-heal",
+        "gha-noos-researcher",
+        "gha-noos-specialist",
+        "gha-noos-orchestrator"
+      ]
+    }
+  ],
+  "workers": [
+    {
+      "worker_id": "cursor-issue-triage-daily",
+      "surface": "cursor_automation",
+      "tier": "T3_reason",
+      "cadence": "daily",
+      "mission_id": "M1",
+      "territory": "sourcea-github-issues",
+      "write_scope": ["labels", "comments"],
+      "read_only": false,
+      "mutex_groups": [],
+      "conflicts_if": ["claims scope in noetfeld-os product paths"],
+      "primary_task_kinds": ["issue_triage"]
+    },
+    {
+      "worker_id": "cursor-integrator-arbitration",
+      "surface": "cursor_automation",
+      "tier": "T3_reason",
+      "cadence": "manual",
+      "mission_id": "M4",
+      "territory": "integrator-state",
+      "write_scope": [".noos-runtime/integrator/"],
+      "mutex_groups": ["integrator-coordination"],
+      "primary_task_kinds": ["integrator_arbitration", "claim_release"]
+    },
+    {
+      "worker_id": "gha-integrator-sync-audit",
+      "surface": "cursor_automation",
+      "tier": "T3_reason",
+      "cadence": "hourly",
+      "mission_id": "M4",
+      "territory": "integrator-state",
+      "write_scope": [],
+      "read_only": true,
+      "mutex_groups": ["integrator-coordination"],
+      "primary_task_kinds": ["integrator_audit"]
+    },
+    {
+      "worker_id": "cursor-manual-bug-triage",
+      "surface": "cursor_automation",
+      "tier": "T3_reason",
+      "cadence": "manual",
+      "mission_id": "M3",
+      "territory": "noetfeld-os-repo",
+      "write_scope": [],
+      "read_only": true,
+      "primary_task_kinds": ["bug_triage", "root_cause"]
+    },
+    {
+      "worker_id": "cursor-implementation-planner",
+      "surface": "cursor_automation",
+      "tier": "T3_reason",
+      "cadence": "manual",
+      "mission_id": "M4",
+      "territory": "noetfeld-os-repo",
+      "write_scope": ["docs/_NOOS_AGENT/"],
+      "read_only": false,
+      "primary_task_kinds": ["implementation_plan"],
+      "conflicts_if": ["overlaps active integrator claim on same scope_files"]
+    },
+    {
+      "worker_id": "cursor-weekly-workflow-effectiveness",
+      "surface": "cursor_automation",
+      "tier": "T3_reason",
+      "cadence": "weekly",
+      "mission_id": "M3",
+      "territory": "github-workflows-portfolio",
+      "write_scope": [],
+      "read_only": true,
+      "primary_task_kinds": ["workflow_portfolio_audit"]
+    },
+    {
+      "worker_id": "cursor-evidence-pack-audit",
+      "surface": "cursor_automation",
+      "tier": "T3_reason",
+      "cadence": "manual",
+      "mission_id": "M1",
+      "territory": "receipts-proof",
+      "write_scope": [],
+      "read_only": true,
+      "primary_task_kinds": ["evidence_pack_audit"]
+    },
+    {
+      "worker_id": "cursor-manual-pr-readiness",
+      "surface": "cursor_automation",
+      "tier": "T3_reason",
+      "cadence": "manual",
+      "mission_id": "M3",
+      "territory": "open-pull-requests",
+      "write_scope": ["pr_comments"],
+      "mutex_groups": ["pr-merge"],
+      "primary_task_kinds": ["pr_readiness_review"]
+    },
+    {
+      "worker_id": "cursor-manual-deployment-boundary",
+      "surface": "cursor_automation",
+      "tier": "T3_reason",
+      "cadence": "manual",
+      "mission_id": "M3",
+      "territory": "deploy-surfaces",
+      "write_scope": [],
+      "read_only": true,
+      "mutex_groups": ["deploy-boundary"],
+      "primary_task_kinds": ["deployment_boundary_audit"]
+    },
+    {
+      "worker_id": "cursor-weekly-security-dependency",
+      "surface": "cursor_automation",
+      "tier": "T3_reason",
+      "cadence": "weekly",
+      "mission_id": "M3",
+      "territory": "dependencies",
+      "write_scope": [],
+      "read_only": true,
+      "primary_task_kinds": ["security_dependency_review"]
+    },
+    {
+      "worker_id": "cursor-daily-production-surfaces",
+      "surface": "cursor_automation",
+      "tier": "T3_reason",
+      "cadence": "daily",
+      "mission_id": "M3",
+      "territory": "public-urls",
+      "write_scope": [],
+      "read_only": true,
+      "mutex_groups": ["public-health-nerve"],
+      "primary_task_kinds": ["production_surface_narrative"],
+      "delegates_machine_to": "gha-noos-surface-loop"
+    },
+    {
+      "worker_id": "cursor-weekly-roadmap-reconciliation",
+      "surface": "cursor_automation",
+      "tier": "T3_reason",
+      "cadence": "weekly",
+      "mission_id": "M4",
+      "territory": "upgrade-backlog-planes",
+      "write_scope": [],
+      "read_only": true,
+      "primary_task_kinds": ["roadmap_reconciliation"]
+    },
+    {
+      "worker_id": "cursor-daily-proof-drift",
+      "surface": "cursor_automation",
+      "tier": "T3_reason",
+      "cadence": "daily",
+      "mission_id": "M3",
+      "territory": "cross-lane-proof",
+      "write_scope": [],
+      "read_only": true,
+      "mutex_groups": ["drift-proof"],
+      "primary_task_kinds": ["proof_drift_narrative"],
+      "delegates_machine_to": "gha-trigger-sweep-heartbeat"
+    },
+    {
+      "worker_id": "cursor-runtime-contract-review",
+      "surface": "cursor_automation",
+      "tier": "T3_reason",
+      "cadence": "manual",
+      "mission_id": "M3",
+      "territory": "runtime-contracts",
+      "write_scope": [],
+      "read_only": true,
+      "primary_task_kinds": ["runtime_contract_review"]
+    },
+    {
+      "worker_id": "cursor-daily-autorun-status",
+      "surface": "cursor_automation",
+      "tier": "T3_reason",
+      "cadence": "daily",
+      "mission_id": "M2",
+      "territory": "autorun-dashboard",
+      "write_scope": [],
+      "read_only": true,
+      "mutex_groups": ["autorun-observability"],
+      "primary_task_kinds": ["autorun_human_digest"],
+      "delegates_machine_to": "gha-self-heal-autorun-step"
+    },
+    {
+      "worker_id": "gha-noos-surface-loop",
+      "surface": "github_actions",
+      "tier": "T0_machine",
+      "cadence": "*/20 * * * *",
+      "mission_id": "M3",
+      "territory": "public-urls",
+      "write_scope": [".noos-runtime/loops/surface/"],
+      "mutex_groups": ["public-health-nerve"],
+      "primary_task_kinds": ["curl_smoke", "check"]
+    },
+    {
+      "worker_id": "gha-self-heal-autorun-step",
+      "surface": "github_actions",
+      "tier": "T0_machine",
+      "cadence": "*/10 * * * *",
+      "mission_id": "M4",
+      "territory": "autorun-dashboard",
+      "write_scope": [".noos-runtime/heartbeat/"],
+      "mutex_groups": ["autorun-observability"],
+      "primary_task_kinds": ["heartbeat", "autorun_status"]
+    },
+    {
+      "worker_id": "gha-trigger-sweep-heartbeat",
+      "surface": "github_actions",
+      "tier": "T0_machine",
+      "cadence": "daily",
+      "mission_id": "M3",
+      "territory": "trigger-registry",
+      "write_scope": [".noos-runtime/heartbeat/"],
+      "mutex_groups": ["drift-proof"],
+      "primary_task_kinds": ["trigger_sweep"]
+    },
+    {
+      "worker_id": "gha-noos-workflow-audit",
+      "surface": "github_actions",
+      "tier": "T0_machine",
+      "cadence": "*/15 * * * *",
+      "mission_id": "M4",
+      "territory": "workflow-audit-findings",
+      "write_scope": ["data/noos-audit-findings-v1.json"],
+      "mutex_groups": ["self-heal-pipeline"],
+      "pipeline_stage": 1,
+      "primary_task_kinds": ["workflow_audit"]
+    },
+    {
+      "worker_id": "gha-noos-self-heal",
+      "surface": "github_actions",
+      "tier": "T0_machine",
+      "cadence": "15,45 * * * *",
+      "mission_id": "M4",
+      "territory": "safe-auto-fix",
+      "write_scope": ["data/noos-healing-handoff-v1.json"],
+      "mutex_groups": ["self-heal-pipeline"],
+      "pipeline_stage": 2,
+      "primary_task_kinds": ["machine_safe_heal"]
+    },
+    {
+      "worker_id": "gha-noos-researcher",
+      "surface": "github_actions",
+      "tier": "T0_machine",
+      "cadence": "0 * * * *",
+      "mission_id": "M4",
+      "territory": "escalated-findings",
+      "write_scope": ["data/noos-research-findings-v1.json"],
+      "mutex_groups": ["self-heal-pipeline"],
+      "pipeline_stage": 3,
+      "primary_task_kinds": ["research"]
+    },
+    {
+      "worker_id": "gha-noos-specialist",
+      "surface": "github_actions",
+      "tier": "T0_machine",
+      "cadence": "0 */2 * * *",
+      "mission_id": "M4",
+      "territory": "fix-proposals",
+      "write_scope": ["data/noos-specialist-proposals-v1.json"],
+      "mutex_groups": ["self-heal-pipeline"],
+      "pipeline_stage": 4,
+      "primary_task_kinds": ["patch_proposal"]
+    },
+    {
+      "worker_id": "gha-noos-orchestrator",
+      "surface": "github_actions",
+      "tier": "T0_machine",
+      "cadence": "0 */3 * * *",
+      "mission_id": "M2",
+      "territory": "cross-repo-health",
+      "write_scope": [],
+      "read_only": true,
+      "mutex_groups": ["self-heal-pipeline"],
+      "pipeline_stage": 5,
+      "primary_task_kinds": ["orchestrate"]
+    },
+    {
+      "worker_id": "copilot-kaizen-agent",
+      "surface": "github_copilot_agent",
+      "tier": "T1_implement",
+      "cadence": "on_issue",
+      "mission_id": "M4",
+      "territory": "kaizen-machine-safe",
+      "write_scope": ["scripts/", "docs/_NOOS_AGENT/", "tests/", "config/"],
+      "forbidden_paths": ["scripts/verify_*", "noetfield_gate/", "docs/GOVERNED_AUTORUN_LAWS_v3.md"],
+      "mutex_groups": ["pr-merge"],
+      "primary_task_kinds": ["kaizen_proposal", "patch_proposal"]
+    },
+    {
+      "worker_id": "noos-worker-kernel",
+      "surface": "headless_cli",
+      "tier": "T0_machine",
+      "cadence": "on_demand",
+      "mission_id": "M4",
+      "territory": "bounded-task-routing",
+      "write_scope": [".noos-runtime/worker-kernel/", "receipts/proof/"],
+      "primary_task_kinds": ["grep", "check", "summarize", "classify", "patch_proposal"],
+      "note": "Does not replace GHA loops or Cursor automations — routes one-shot tasks only"
+    },
+    {
+      "worker_id": "gha-loop-fleet",
+      "surface": "github_actions",
+      "tier": "T0_machine",
+      "cadence": "*/5 * * * *",
+      "mission_id": "M2",
+      "territory": "domain-loops",
+      "write_scope": [".noos-runtime/loops/"],
+      "primary_task_kinds": ["inbox_drain", "runtime_gate", "chain_verify", "sourcea_observe"]
+    }
+  ],
+  "laws": [
+    "L-P1 TERRITORY: Each worker_id owns its territory; others may read, not write the same scope cell.",
+    "L-P2 MUTEX: At most one mutating worker active per mutex_group (integrator claim or GHA concurrency).",
+    "L-P3 PIPELINE: Self-heal stages 1→5 are sequential handoffs; never duplicate an upstream stage.",
+    "L-P4 DELEGATE: Cursor daily/weekly audits delegate machine proof to listed delegates_machine_to.",
+    "L-P5 CLAIM: T1/T2/T3 agents must integrator-claim before editing shared scope_files.",
+    "L-P6 KERNEL: Worker kernel routes one-shot tasks; it does not schedule loops or replace automations.",
+    "L-P7 COPILOT: Copilot agent stays inside CODEOWNERS-fenced kaizen paths; never verifiers or laws."
+  ]
+}

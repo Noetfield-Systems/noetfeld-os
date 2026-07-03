@@ -218,6 +218,12 @@
       "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260703-002]_CHEAP_WORKER_KERNEL_v1.md",
       "doc_type": "WORKER_KERNEL",
       "title": "Cheap Worker Kernel v1 — headless governed task router"
+    },
+    {
+      "trace_id": "NOOS-AGENT-20260703-003",
+      "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260703-003]_PARALLEL_AGENT_GOVERNANCE_v1.md",
+      "doc_type": "PARALLEL_AGENT_GOVERNANCE",
+      "title": "Parallel agent governance — living system dedup law"
     }
   ]
 }
