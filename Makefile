@@ -1,4 +1,4 @@
-.PHONY: test gate demo build-gate-js install inbox cloud-worker autorun-once autorun autorun-status autorun-tick-deploy autorun-tick-dispatch autonomous-verify schedule-verify determinism-verify replay-verify planes supabase-migrate verified-window loop-run loop-fleet-deploy loop-fleet-dispatch loops-status loop-heartbeat backlog urls local-boot local-closeout local-patch-proposal
+.PHONY: test gate demo build-gate-js install inbox cloud-worker autorun-once autorun autorun-status autorun-tick-deploy autorun-tick-dispatch autonomous-verify schedule-verify determinism-verify replay-verify planes supabase-migrate verified-window loop-run loop-fleet-deploy loop-fleet-dispatch loops-status loop-heartbeat backlog urls local-boot local-closeout local-patch-proposal local-heartbeat
 
 test:
 	pytest -q
@@ -83,9 +83,18 @@ urls:
 local-boot:
 	git status --short
 	git branch --show-current
+	python3 scripts/noos_integrator_sync_v1.py init
+	python3 scripts/noos_integrator_sync_v1.py register-agent \
+	  --agent-id cursor-local-mac --ide cursor --role local-operator
 	python3 scripts/noos_agent_conflict_check_v1.py --json
 	python3 scripts/verify_living_system_governance_v1.py --json
 	python3 scripts/noos_integrator_sync_v1.py summary --json
+	@if [ "$(WRITE_RECEIPT)" = "1" ]; then python3 scripts/noos_local_boot_receipt_v1.py --json; fi
+
+local-heartbeat:
+	@test -n "$(TASK)" || (echo "Usage: make local-heartbeat TASK=NOOS-LANE-001" && exit 1)
+	python3 scripts/noos_integrator_sync_v1.py heartbeat \
+	  --agent-id cursor-local-mac --ide cursor --task-id $(TASK)
 
 local-closeout:
 	@test -n "$(TASK)" || (echo "Usage: make local-closeout TASK=NOOS-LANE-001" && exit 1)

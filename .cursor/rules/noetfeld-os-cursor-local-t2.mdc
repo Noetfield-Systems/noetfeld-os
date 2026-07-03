@@ -43,4 +43,8 @@ Patches land under `.noos-runtime/worker-kernel/patches/` only. Forbidden: `scri
 make local-closeout TASK=NOOS-LANE-<id>
 ```
 
+Long lanes: `make local-heartbeat TASK=NOOS-LANE-<id>` before the 30m stale threshold.
+
 Integrator: `complete` or `release` if handing off. Never leave stale claims.
+
+**Pre-edit reminder:** `.cursor/hooks/noos-claim-reminder.sh` warns (fail-open) if no claim covers the edited path.

@@ -366,6 +366,18 @@
       "primary_task_kinds": ["kaizen_proposal", "patch_proposal"]
     },
     {
+      "worker_id": "cursor-local-mac",
+      "surface": "cursor_chat",
+      "tier": "T2_local",
+      "cadence": "on_session",
+      "mission_id": "M4",
+      "territory": "noetfeld-os-repo",
+      "write_scope": ["repo-local branch/worktree"],
+      "mutex_groups": ["integrator-coordination"],
+      "primary_task_kinds": ["local_edit", "lane_closeout"],
+      "requires_integrator_claim": true
+    },
+    {
       "worker_id": "noos-worker-kernel",
       "surface": "headless_cli",
       "tier": "T0_machine",

@@ -5,6 +5,11 @@
       {
         "command": ".cursor/hooks/noos-local-boot.sh"
       }
+    ],
+    "beforeFileEdit": [
+      {
+        "command": ".cursor/hooks/noos-claim-reminder.sh"
+      }
     ]
   }
 }

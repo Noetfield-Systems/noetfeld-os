@@ -20,9 +20,17 @@ related_registry: data/noos-parallel-agent-registry-v1.json
 
 ```bash
 make local-boot
+# optional audit receipt:
+make local-boot WRITE_RECEIPT=1
 ```
 
 Read-only hook also runs on `sessionStart` via `.cursor/hooks/noos-local-boot.sh`.
+
+**Worktree note:** If `git checkout main` fails (main bound to another worktree), run:
+
+```bash
+bash scripts/noos_mac_worktree_sync_v1.sh
+```
 
 ---
 
@@ -49,6 +57,9 @@ Read-only hook also runs on `sessionStart` via `.cursor/hooks/noos-local-boot.sh
 # Claim (L-P5)
 bash scripts/noos_local_claim_lane_v1.sh NOOS-LANE-001 scripts/foo.py tests/test_foo.py
 
+# Long session — refresh claim (stale after 30m without heartbeat)
+make local-heartbeat TASK=NOOS-LANE-001
+
 # Work: ≤5 files / ≤200 lines direct; larger → kernel
 make local-patch-proposal PATHS=scripts/foo.py,tests/test_foo.py
 
@@ -56,7 +67,7 @@ make local-patch-proposal PATHS=scripts/foo.py,tests/test_foo.py
 make local-closeout TASK=NOOS-LANE-001
 ```
 
-First-run Mac registration:
+First-run Mac registration is automatic via `make local-boot` (idempotent). Manual fallback:
 
 ```bash
 python3 scripts/noos_integrator_sync_v1.py init

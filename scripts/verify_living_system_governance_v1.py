@@ -136,6 +136,21 @@ def check_cursor_automation_count(registry: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def check_cursor_local_mac(registry: dict[str, Any]) -> dict[str, Any]:
+    workers = registry.get("workers") if isinstance(registry.get("workers"), list) else []
+    row = next(
+        (w for w in workers if isinstance(w, dict) and w.get("worker_id") == "cursor-local-mac"),
+        None,
+    )
+    ok = isinstance(row, dict) and row.get("tier") == "T2_local" and row.get("requires_integrator_claim") is True
+    return {
+        "ok": ok,
+        "worker_id": "cursor-local-mac",
+        "tier": row.get("tier") if isinstance(row, dict) else None,
+        "requires_integrator_claim": row.get("requires_integrator_claim") if isinstance(row, dict) else None,
+    }
+
+
 def run_verify(*, write_receipt: bool = False) -> dict[str, Any]:
     registry = load_json(PARALLEL_REGISTRY)
     workflows = discover_gha_workflows()
@@ -149,6 +164,7 @@ def run_verify(*, write_receipt: bool = False) -> dict[str, Any]:
     copilot_row = check_copilot_instructions()
     integrator_row = check_integrator_protocol()
     cursor_row = check_cursor_automation_count(registry)
+    t2_row = check_cursor_local_mac(registry)
 
     checks = {
         "trigger_sweep": sweep_row.get("ok"),
@@ -157,6 +173,7 @@ def run_verify(*, write_receipt: bool = False) -> dict[str, Any]:
         "copilot_instructions": copilot_row.get("ok"),
         "integrator_protocol": integrator_row.get("ok"),
         "cursor_automations": cursor_row.get("ok"),
+        "cursor_local_mac": t2_row.get("ok"),
     }
     ok = all(bool(v) for v in checks.values())
 
@@ -179,6 +196,7 @@ def run_verify(*, write_receipt: bool = False) -> dict[str, Any]:
         "copilot_instructions": copilot_row,
         "integrator_protocol": integrator_row,
         "cursor_automations": cursor_row,
+        "cursor_local_mac": t2_row,
         "coordination": registry.get("coordination"),
         "report_line": (
             "living_system_governance_clean · GHA+Copilot+integrator+automations aligned"

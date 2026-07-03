@@ -18,6 +18,15 @@ workspace_root: /Users/sinakazemnezhad/Projects/noetfeld-os
 2. Search tagged docs: `grep -r "NOOS-AGENT-DOC" docs/_NOOS_AGENT/`
 3. Check `docs/_NOOS_AGENT/MANIFEST.json` for trace IDs before editing any essay or internal note.
 
+### Cursor Local Mac (T2)
+
+- Boot: `make local-boot` (optional receipt: `make local-boot WRITE_RECEIPT=1`)
+- Operator card: **`docs/_NOOS_AGENT/[NOOS-AGENT-20260703-004]_CURSOR_LOCAL_MAC_OPERATOR_v1.md`**
+- Claim before edit: `bash scripts/noos_local_claim_lane_v1.sh <task-id> <paths...>`
+- Long session: `make local-heartbeat TASK=<task-id>`
+- Closeout: `make local-closeout TASK=<task-id>`
+- Cannot `git checkout main`? Run `bash scripts/noos_mac_worktree_sync_v1.sh`
+
 ### Live sync / nerve gate
 
 - Before claiming current Noetfield live state, run `bash scripts/check_noos_live_sync_gate.sh`. The wrapper refreshes the website live nerve first; do not rely on an old receipt unless you are explicitly doing read-only archaeology.
