@@ -24,6 +24,9 @@ WORKFLOWS = ROOT / "data/autorun-workflows-v1.json"
 SANDBOXES = ROOT / "data/autorun-sandboxes-v1.json"
 DEFAULT_STALE_MINUTES = 30
 
+sys.path.insert(0, str(ROOT / "scripts"))
+from noos_slo_v1 import autofile_kaizen_receipt, score_slo, slo_config, status_proxy_success_rate  # noqa: E402
+
 
 def utc_now() -> str:
     return datetime.now(timezone.utc).isoformat(timespec="seconds")
@@ -813,6 +816,53 @@ def apply_triage(row: dict[str, Any], *, triage: bool, dirty_total: int, thresho
     return row
 
 
+def workflow_slo(row: dict[str, Any], wf: dict[str, Any], wf_doc: dict[str, Any]) -> tuple[dict[str, Any], str | None]:
+    targets = slo_config(wf_doc.get("slo_defaults") or {}, wf)
+    evidence = row.get("evidence") or {}
+    observed_at = evidence.get("observed_at")
+    freshness_minutes = age_minutes(observed_at)
+    success_rate = status_proxy_success_rate(str(row.get("status") or ""))
+    latency_minutes = freshness_minutes
+    score = score_slo(
+        freshness_minutes=freshness_minutes,
+        success_rate=success_rate,
+        latency_minutes=latency_minutes,
+        targets=targets,
+    )
+    receipt_path = None
+    if not score["ok"]:
+        receipt_path = autofile_kaizen_receipt(
+            root=ROOT,
+            source="autorun-status",
+            loop_id=str(wf["id"]),
+            score_row=score,
+            evidence={
+                "title": wf.get("title"),
+                "plane": wf.get("plane"),
+                "status": row.get("status"),
+                "observed_at": observed_at,
+                "freshness_minutes": freshness_minutes,
+                "success_rate": round(success_rate, 4),
+                "latency_minutes": latency_minutes,
+            },
+        )
+    return (
+        {
+            "targets": targets,
+            "observed": {
+                "freshness_minutes": freshness_minutes,
+                "success_rate": round(success_rate, 4),
+                "latency_minutes": latency_minutes,
+            },
+            "score": score["score"],
+            "misses": score["misses"],
+            "ok": score["ok"],
+            "kaizen_receipt": receipt_path,
+        },
+        receipt_path,
+    )
+
+
 def build_dashboard() -> dict[str, Any]:
     wf_doc = read_json(WORKFLOWS)
     sb_doc = read_json(SANDBOXES)
@@ -840,6 +890,7 @@ def build_dashboard() -> dict[str, Any]:
 
     triage = dirty_total > threshold
     workflows_out = []
+    founder_gated_improvements: list[dict[str, Any]] = []
     for wf in wf_doc.get("workflows") or []:
         probe_type = (wf.get("probe") or {}).get("type")
         fn = PROBES.get(probe_type or "")
@@ -862,6 +913,21 @@ def build_dashboard() -> dict[str, Any]:
             except Exception as exc:
                 row.update(blocked(str(exc)[:200], evidence={"probe_type": probe_type}))
         row = apply_triage(row, triage=triage, dirty_total=dirty_total, threshold=threshold)
+        slo, receipt_path = workflow_slo(row, wf, wf_doc)
+        row["slo"] = slo
+        if receipt_path:
+            founder_gated_improvements.append(
+                {
+                    "id": receipt_path,
+                    "expected_roi": {
+                        "cost_saved_usd": 0,
+                        "risk_reduced": "autorun SLO miss",
+                        "revenue_unblocked": "",
+                        "build_cost_usd": 0,
+                    },
+                    "age_days": 0,
+                }
+            )
         workflows_out.append(row)
 
     authority = reconciler_authority_check(wf_doc)
@@ -881,6 +947,7 @@ def build_dashboard() -> dict[str, Any]:
         "registered_sandboxes": registered_sandboxes,
         "workflows": workflows_out,
         "sandboxes": sandbox_rows,
+        "founder_gated_improvements": founder_gated_improvements,
     }
 
 
