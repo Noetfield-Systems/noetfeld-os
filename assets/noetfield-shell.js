@@ -584,11 +584,22 @@
 
   function loadPublicChat() {
     if (document.querySelector('script[data-nf-chat]')) return;
-    var s = document.createElement("script");
-    s.src = "/assets/noetfield-chat.js?v=6";
-    s.defer = true;
-    s.setAttribute("data-nf-chat", "1");
-    document.body.appendChild(s);
+    function loadChatScript() {
+      var s = document.createElement("script");
+      s.src = "/assets/noetfield-chat.js?v=7";
+      s.defer = true;
+      s.setAttribute("data-nf-chat", "1");
+      document.body.appendChild(s);
+    }
+    if (window.NF_CHAT_GREETING_SSOT && window.NF_CHAT_GREETING_SSOT.greeting) {
+      loadChatScript();
+      return;
+    }
+    var ssot = document.createElement("script");
+    ssot.src = "/assets/nf-chat-greeting-ssot.js?v=7";
+    ssot.onload = loadChatScript;
+    ssot.onerror = loadChatScript;
+    document.body.appendChild(ssot);
   }
 
   async function boot() {

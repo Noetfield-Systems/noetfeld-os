@@ -844,6 +844,7 @@ async def public_chat_greeting() -> dict[str, object]:
     return {
         "greeting": payload["greeting"],
         "citations": payload["citations"],
+        "content_hash": payload["content_hash"],
         "source": "platform-disk-ssot",
     }
 
@@ -866,6 +867,10 @@ async def public_chat_health() -> dict[str, object]:
         "enabled": settings.public_chat_enabled,
         "configured": configured,
         "git_sha": deploy_git_sha(),
+        "greeting_ssot": {
+            "content_hash": public_chat_greeting_payload()["content_hash"],
+            "schema": public_chat_greeting_payload()["schema"],
+        },
         "provider_preference": settings.public_chat_provider,
         "active_provider": active,
         "gemini": {"configured": bool(gemini_key), "model": settings.gemini_model},

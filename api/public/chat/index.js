@@ -85,11 +85,17 @@ function routeOnlyFallback() {
 
 function localGreetingPayload() {
   try {
+    const crypto = require("crypto");
     const file = path.join(process.cwd(), "data/chatbot/public-chat-greeting.json");
     const data = JSON.parse(fs.readFileSync(file, "utf8"));
+    const greeting = String(data.greeting || "").trim();
+    const citations = Array.isArray(data.citations) ? data.citations : [];
+    const canonical = JSON.stringify({ citations, greeting });
+    const content_hash = crypto.createHash("sha256").update(canonical).digest("hex");
     return {
-      greeting: String(data.greeting || "").trim(),
-      citations: Array.isArray(data.citations) ? data.citations : [],
+      greeting,
+      citations,
+      content_hash,
       source: "www-disk-ssot",
     };
   } catch (_) {

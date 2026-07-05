@@ -63,9 +63,10 @@ def test_public_chat_has_no_local_faq_rule_engine() -> None:
     assert "I will not answer" not in vercel_fallback
     assert "deterministic_reply_for_intent" not in intent_helper
     assert "deterministic_policy" not in intent_helper
-    assert "Ask naturally" not in frontend
+    assert "Ask naturally about Noetfield" not in frontend
     assert "/api/public/chat" in frontend
-    assert "method: \"GET\"" in frontend or "method: 'GET'" in frontend
+    assert "NF_CHAT_GREETING_SSOT" in frontend
+    assert "widgetGreetingPayload" in frontend
     assert "site assistant" not in frontend
     assert "move money" not in vercel_fallback
     assert "hold custody" not in vercel_fallback
@@ -81,6 +82,8 @@ def test_public_chat_health() -> None:
         body = response.json()
         assert "configured" in body
         assert "enabled" in body
+        greeting_ssot = body.get("greeting_ssot") or {}
+        assert greeting_ssot.get("content_hash")
 
     asyncio.run(run())
 
@@ -420,6 +423,8 @@ def test_public_chat_greeting_ssot() -> None:
 
 def test_public_chat_greeting_endpoint() -> None:
     async def run() -> None:
+        from noetfield_governance.public_chat_copy import public_chat_greeting_payload
+
         transport = ASGITransport(app=app)
         async with AsyncClient(transport=transport, base_url="http://test") as client:
             response = await client.get("/api/public/chat/greeting")
@@ -427,6 +432,7 @@ def test_public_chat_greeting_endpoint() -> None:
         body = response.json()
         assert "Diagnostic Sprint" in body["greeting"]
         assert "/intelligence/intake/" in body["citations"]
+        assert body["content_hash"] == public_chat_greeting_payload()["content_hash"]
 
     asyncio.run(run())
 

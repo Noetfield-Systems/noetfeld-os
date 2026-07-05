@@ -72,11 +72,26 @@
     "/copilot/": "Copilot overview",
   };
 
+  function widgetGreetingPayload() {
+    var ssot = window.NF_CHAT_GREETING_SSOT || {};
+    var greeting = String(ssot.greeting || "").trim();
+    var citations = Array.isArray(ssot.citations) ? ssot.citations : [];
+    if (greeting && greeting.indexOf("Ask naturally") === -1) {
+      return { greeting: greeting, citations: citations };
+    }
+    return {
+      greeting: "Hi — what are you working on?",
+      citations: ["/pricing/"],
+    };
+  }
+
   function citationLabel(href) {
     var key = String(href || "").trim();
     if (CITATION_LABELS[key]) return CITATION_LABELS[key];
     return key.replace(/^\/+|\/+$/g, "").replace(/-/g, " ").replace(/\//g, " · ") || key;
   }
+
+  function isSafeHref(href) {
     return (
       href.indexOf("/") === 0 ||
       href.indexOf("https://www.noetfield.com/") === 0 ||
@@ -220,7 +235,7 @@
 
     var link = document.createElement("link");
     link.rel = "stylesheet";
-    link.href = "/assets/noetfield-chat.css?v=6";
+    link.href = "/assets/noetfield-chat.css?v=7";
     document.head.appendChild(link);
 
     var fab = el("button", "nfChatFab", "✦");
@@ -279,30 +294,8 @@
     document.body.appendChild(fab);
     document.body.appendChild(panel);
 
-    appendMsg(
-      log,
-      "bot",
-      "Hi — one moment…",
-      "typing"
-    );
-    fetch((apiBase() || "") + "/api/public/chat", { method: "GET", headers: { Accept: "application/json" } })
-      .then(function (res) {
-        return res.json();
-      })
-      .then(function (data) {
-        var host = log.querySelector(".nfChatMsg.bot");
-        if (host) removeEl(host);
-        if (data && data.greeting && data.greeting.indexOf("Ask naturally") === -1) {
-          appendMsg(log, "bot", data.greeting, "", data.citations || []);
-          return;
-        }
-        appendMsg(log, "bot", "Hi — what are you working on?", "", ["/pricing/"]);
-      })
-      .catch(function () {
-        var host = log.querySelector(".nfChatMsg.bot");
-        if (host) removeEl(host);
-        appendMsg(log, "bot", "Hi — what are you working on?", "", ["/pricing/"]);
-      });
+    var seed = widgetGreetingPayload();
+    appendMsg(log, "bot", seed.greeting, "", seed.citations);
 
     function setOpen(open) {
       panel.classList.toggle("open", open);

@@ -77,6 +77,9 @@ set_platform_variables() {
 }
 
 deploy_api() {
+  log "Verifying greeting SSOT coupling on disk…"
+  python3 "$ROOT/scripts/sync_chat_greeting_asset.py"
+  python3 "$ROOT/scripts/verify_chat_greeting_coupling.py"
   log "Deploying platform API (Dockerfile.api)..."
   local git_sha
   git_sha="$(git -C "$ROOT" rev-parse HEAD 2>/dev/null || true)"
@@ -164,6 +167,9 @@ main() {
 
   if smoke_platform "https://${PLATFORM_DOMAIN}"; then
     log "UPG-WWW-001 PASS — platform spine live at https://${PLATFORM_DOMAIN}"
+    python3 "$ROOT/scripts/verify_chat_greeting_coupling.py" --live \
+      --platform-base "https://${PLATFORM_DOMAIN}" || \
+      log "WARN: live greeting coupling not yet green on platform"
     log "Next: www chat will auto-proxy when PLATFORM_API_BASE resolves (no vercel rewrite needed)"
     exit 0
   fi
