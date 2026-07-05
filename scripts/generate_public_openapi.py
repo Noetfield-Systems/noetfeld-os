@@ -10,16 +10,23 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "packages" / "types"))
 sys.path.insert(0, str(ROOT / "packages" / "config"))
-sys.path.insert(0, str(ROOT / "services" / "governance"))
-sys.path.insert(0, str(ROOT / "services" / "events"))
-sys.path.insert(0, str(ROOT / "services" / "ledger"))
-sys.path.insert(0, str(ROOT / "services" / "graph"))
-sys.path.insert(0, str(ROOT / "services" / "signals"))
-sys.path.insert(0, str(ROOT / "services" / "workflow"))
-sys.path.insert(0, str(ROOT / "services" / "ai-runtime"))
-sys.path.insert(0, str(ROOT / "services" / "inspectors"))
-sys.path.insert(0, str(ROOT / "services" / "identity"))
-sys.path.insert(0, str(ROOT / "services" / "copilot-governance"))
+for _svc in (
+    "events",
+    "ledger",
+    "graph",
+    "governance",
+    "signals",
+    "workflow",
+    "ai-runtime",
+    "inspectors",
+    "identity",
+    "copilot-governance",
+    "factories",
+    "trust-brief",
+    "legal-review",
+    "aml-trace",
+):
+    sys.path.insert(0, str(ROOT / "services" / _svc))
 
 
 def main() -> int:

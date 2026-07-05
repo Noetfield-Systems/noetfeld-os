@@ -554,6 +554,21 @@ paths:
                 additionalProperties: true
                 type: object
                 title: Response Api Status Api Status Get
+  /api/public/chat/greeting:
+    get:
+      tags:
+      - public-chat
+      summary: Public Chat Greeting
+      operationId: public_chat_greeting_api_public_chat_greeting_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                additionalProperties: true
+                type: object
+                title: Response Public Chat Greeting Api Public Chat Greeting Get
   /api/public/chat/health:
     get:
       tags:
@@ -609,6 +624,34 @@ paths:
                 additionalProperties: true
                 type: object
                 title: Response Intake Health Api Intake Health Get
+  /api/intake/status:
+    get:
+      tags:
+      - intake
+      summary: Intake Status
+      operationId: intake_status_api_intake_status_get
+      parameters:
+      - name: request_id
+        in: query
+        required: true
+        schema:
+          type: string
+          title: Request Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+                title: Response Intake Status Api Intake Status Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
   /api/intake:
     post:
       tags:
@@ -1057,6 +1100,91 @@ components:
       - signal_kind
       title: PartnerSignalIngestRequest
       description: Read-only operational signal from a licensed partner (exchange/VASP/PSP).
+    PublicAnalyticsEventRequest:
+      properties:
+        event_name:
+          type: string
+          maxLength: 80
+          minLength: 2
+          pattern: ^[a-z0-9_.:-]+$
+          title: Event Name
+        request_id:
+          anyOf:
+          - type: string
+            maxLength: 64
+          - type: 'null'
+          title: Request Id
+        session_id:
+          anyOf:
+          - type: string
+            maxLength: 96
+          - type: 'null'
+          title: Session Id
+        page_path:
+          anyOf:
+          - type: string
+            maxLength: 512
+          - type: 'null'
+          title: Page Path
+        page_url:
+          anyOf:
+          - type: string
+            maxLength: 1000
+          - type: 'null'
+          title: Page Url
+        referrer:
+          anyOf:
+          - type: string
+            maxLength: 1000
+          - type: 'null'
+          title: Referrer
+        utm_source:
+          anyOf:
+          - type: string
+            maxLength: 120
+          - type: 'null'
+          title: Utm Source
+        utm_medium:
+          anyOf:
+          - type: string
+            maxLength: 120
+          - type: 'null'
+          title: Utm Medium
+        utm_campaign:
+          anyOf:
+          - type: string
+            maxLength: 180
+          - type: 'null'
+          title: Utm Campaign
+        component:
+          anyOf:
+          - type: string
+            maxLength: 160
+          - type: 'null'
+          title: Component
+        metadata:
+          additionalProperties: true
+          type: object
+          title: Metadata
+      additionalProperties: false
+      type: object
+      required:
+      - event_name
+      title: PublicAnalyticsEventRequest
+    PublicAnalyticsEventResponse:
+      properties:
+        ok:
+          type: boolean
+          title: Ok
+          default: true
+        event_id:
+          type: string
+          title: Event Id
+      additionalProperties: false
+      type: object
+      required:
+      - event_id
+      title: PublicAnalyticsEventResponse
     PublicChatRequest:
       properties:
         message:
@@ -1189,6 +1317,122 @@ components:
       - intake_id
       - request_id
       title: PublicIntakeResponse
+    SandboxFactoryDemoRequest:
+      properties:
+        factory_id:
+          type: string
+          maxLength: 80
+          minLength: 3
+          title: Factory Id
+      additionalProperties: false
+      type: object
+      required:
+      - factory_id
+      title: SandboxFactoryDemoRequest
+    SandboxPatchRequest:
+      properties:
+        trial_step:
+          anyOf:
+          - type: integer
+            maximum: 4.0
+            minimum: 0.0
+          - type: 'null'
+          title: Trial Step
+        m365_connected:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: M365 Connected
+      additionalProperties: false
+      type: object
+      title: SandboxPatchRequest
+    SandboxProvisionRequest:
+      properties:
+        email:
+          type: string
+          maxLength: 254
+          minLength: 3
+          title: Email
+        org:
+          anyOf:
+          - type: string
+            maxLength: 200
+          - type: 'null'
+          title: Org
+      additionalProperties: false
+      type: object
+      required:
+      - email
+      title: SandboxProvisionRequest
+    SandboxSessionResponse:
+      properties:
+        session_token:
+          type: string
+          title: Session Token
+        tenant_id:
+          type: string
+          title: Tenant Id
+        email:
+          type: string
+          title: Email
+        org:
+          type: string
+          title: Org
+        api_key_preview:
+          type: string
+          title: Api Key Preview
+        mode:
+          type: string
+          const: observe
+          title: Mode
+        evaluates_used:
+          type: integer
+          title: Evaluates Used
+        evaluates_limit:
+          type: integer
+          title: Evaluates Limit
+        created_at:
+          type: string
+          title: Created At
+        expires_at:
+          type: string
+          title: Expires At
+        trial_step:
+          type: integer
+          title: Trial Step
+        m365_connected:
+          type: boolean
+          title: M365 Connected
+        last_rid:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Last Rid
+        factory_demos_run:
+          items:
+            type: string
+          type: array
+          title: Factory Demos Run
+        upgrade_url:
+          type: string
+          title: Upgrade Url
+      additionalProperties: false
+      type: object
+      required:
+      - session_token
+      - tenant_id
+      - email
+      - org
+      - api_key_preview
+      - mode
+      - evaluates_used
+      - evaluates_limit
+      - created_at
+      - expires_at
+      - trial_step
+      - m365_connected
+      - upgrade_url
+      title: SandboxSessionResponse
     TleApproveRequest:
       properties:
         approver_id:
@@ -1338,6 +1582,11 @@ components:
         type:
           type: string
           title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
       type: object
       required:
       - loc

@@ -51,10 +51,10 @@
  <div class="nf-section-block-head"><span class="nf-section-num" aria-hidden="true">▶</span><div>
  <p class="nf-eyebrow" id="ssot-demo-title">Interactive demo</p>
  <h2>Five-minute buyer story — policy change → Trust Ledger</h2>
- <p class="nf-section-lead">Publish policy v3.2, invalidate stale v3.1 evaluations, re-brief, then evaluate Copilot rollout intent. The interactive sample shows a policy update event and sample decision <code>allow · 0.80</code>.</p>
+ <p class="nf-section-lead">Publish policy v3.2, invalidate stale v3.1 evaluations, re-brief, then evaluate Copilot rollout intent. Human-in-the-loop approval stays in the buyer workflow. The interactive sample shows a policy update event and sample decision <code>allow · 0.80</code>.</p>
  </div></div>
  <div id="nfSsotDemo" class="nf-ssot-demo" aria-label="Policy governance demo">
- <ol class="nf-ssot-demo__steps" aria-label="Demo steps">
+ <ol class="nf-ssot-demo__steps nf26-demoStepper" aria-label="Demo steps">
  <li class="nf-ssot-demo__step is-active"><span>1</span> Policy baseline</li>
  <li class="nf-ssot-demo__step"><span>2</span> Invalidate + re-brief</li>
  <li class="nf-ssot-demo__step"><span>3</span> Evaluate + TLE</li>
@@ -62,7 +62,7 @@
  <div id="nfSsotPolicyCards" class="nf-ssot-policy-cards"></div>
  <div id="nfSsotPending" class="nf-ssot-pending"></div>
  <p class="nf-section-lead"><strong>Policy updated</strong> — Copilot Acceptable Use v3.2 (guest sharing blocked in production scope).</p>
- <div id="nfSsotEventLog" class="nf-ssot-event-log"></div>
+ <div id="nfSsotEventLog" class="nf-ssot-event-log nf26-eventTrace"></div>
  <div id="nfSsotReBrief" class="nf-ssot-rebrief"></div>
  <div class="nf-cta-actions">
  <button type="button" id="nfSsotPublish" class="btn btn-secondary">Publish policy v3.2</button>

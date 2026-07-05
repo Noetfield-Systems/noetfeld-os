@@ -20,9 +20,7 @@ ENV HOSTNAME=0.0.0.0
 
 RUN addgroup --system --gid 1001 nodejs && adduser --system --uid 1001 nextjs
 
-COPY --from=builder /app/governance-console/frontend/public ./public
-COPY --from=builder --chown=nextjs:nodejs /app/governance-console/frontend/.next/standalone ./
-COPY --from=builder --chown=nextjs:nodejs /app/governance-console/frontend/.next/static ./.next/static
+COPY --from=builder --chown=nextjs:nodejs /app/governance-console/frontend/.next/standalone/governance-console/frontend ./
 
 USER nextjs
 EXPOSE 3000
