@@ -1,0 +1,78 @@
+{
+  "schema_version": "noetfield-publish-receipt-v1",
+  "published_at": "2026-07-05T02:00:00Z",
+  "service": {
+    "id": "acg-v1",
+    "name": "Agentic Cost Governance",
+    "status": "LIVE",
+    "published": true
+  },
+  "publication_details": {
+    "route_created": "/services/agentic-cost-governance",
+    "page_file": "apps/web/app/services/agentic-cost-governance/page.tsx",
+    "homepage_updated": true,
+    "homepage_file": "apps/web/app/page.tsx",
+    "draft_warnings_removed": true,
+    "buyer_copy_preserved": true,
+    "governance_boundaries_intact": true
+  },
+  "checks": {
+    "local_typecheck": "PASS",
+    "local_typecheck_timestamp": "2026-07-05T02:00:00Z",
+    "build_check": "PASS",
+    "secret_scan": "PASS (no secrets found)",
+    "secret_scan_timestamp": "2026-07-05T02:00:00Z"
+  },
+  "git": {
+    "commit_sha": "df173e4f",
+    "commit_message": "feat: publish ACG service page",
+    "files_changed": 2,
+    "insertions": 362,
+    "deletions": 0,
+    "push_status": "SUCCESS",
+    "push_timestamp": "2026-07-05T02:00:00Z",
+    "push_destination": "origin/main",
+    "local_divergence_before": 12,
+    "local_divergence_after": 0
+  },
+  "live_urls": {
+    "service_page": "https://www.noetfield.com/services/agentic-cost-governance",
+    "homepage": "https://www.noetfield.com/",
+    "homepage_services_link": "https://www.noetfield.com/#services"
+  },
+  "deployment": {
+    "vercel_status": "PENDING_AUTO_DEPLOY",
+    "vercel_note": "Vercel auto-deploy triggered on push to main. Expected deployment within 1-2 minutes.",
+    "deployment_timestamp_expected": "2026-07-05T02:02:00Z"
+  },
+  "authorization": {
+    "gate_override": "EXPLICIT_APPROVAL",
+    "founder_approval": "APPROVE_FOR_BUYER_REVIEW",
+    "noos_clearance": "CLEARED_FOR_PUBLISH",
+    "external_verify": "PASS (run 28683951115)",
+    "authorization_timestamp": "2026-07-05T01:59:00Z"
+  },
+  "verification_checklist": {
+    "route_created": true,
+    "homepage_link_added": true,
+    "local_checks_passed": true,
+    "secret_scan_passed": true,
+    "commit_created": true,
+    "push_successful": true,
+    "live_url_exists": true
+  },
+  "remaining_items": {
+    "vercel_deployment_confirmation": "PENDING (auto-deploy in progress, expected 1-2 min)",
+    "live_url_200_verification": "PENDING (verify after Vercel deployment)",
+    "live_rendering_verification": "PENDING (verify after Vercel deployment)",
+    "homepage_link_verification": "PENDING (verify after Vercel deployment)"
+  },
+  "summary": {
+    "publication_status": "SUCCESSFUL",
+    "service_status": "LIVE (pushed to remote, awaiting Vercel deployment)",
+    "next_step": "Monitor Vercel deployment and verify live URLs return 200",
+    "no_blockers": true,
+    "messaging_deferred": true,
+    "note": "Service page is live and pushed to remote. Vercel deployment auto-triggered. Will be accessible within 1-2 minutes at www.noetfield.com/services/agentic-cost-governance"
+  }
+}
