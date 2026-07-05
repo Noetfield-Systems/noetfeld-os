@@ -1,4 +1,4 @@
-.PHONY: test gate demo build-gate-js install inbox cloud-worker autorun-once autorun autorun-status autorun-tick-deploy autorun-tick-dispatch autonomous-verify schedule-verify determinism-verify replay-verify planes supabase-migrate verified-window loop-run loop-fleet-deploy loop-fleet-dispatch loops-status loop-heartbeat loop-baseline loop-registry-reconcile loop-verify-all loop-upgrade-closeout backlog urls local-boot local-closeout local-patch-proposal local-heartbeat local-lane local-sweep-stale local-status machine-status machine-reconcile machine-audit machine-verify machine-validate-merge machine-critic machine-research
+.PHONY: test gate demo build-gate-js install inbox cloud-worker autorun-once autorun autorun-status autorun-tick-deploy autorun-tick-dispatch autonomous-verify schedule-verify determinism-verify replay-verify planes supabase-migrate verified-window loop-run loop-fleet-deploy loop-fleet-dispatch loops-status loop-heartbeat loop-baseline loop-registry-reconcile loop-verify-all loop-upgrade-closeout deploy-baseline deploy-status deploy-fly-inbox deploy-fly-selfheal deploy-drift-kaizen inbox-scaler t2-deploy-closeout acg-founder-send-prep backlog urls local-boot local-closeout local-patch-proposal local-heartbeat local-lane local-sweep-stale local-status machine-status machine-reconcile machine-audit machine-verify machine-validate-merge machine-critic machine-research
 
 test:
 	pytest -q
@@ -85,6 +85,30 @@ loop-verify-all:
 
 loop-upgrade-closeout:
 	python3 scripts/noos_loop_upgrade_closeout_v1.py --json --write-receipt
+
+deploy-baseline:
+	python3 scripts/noos_deploy_baseline_audit_v1.py --write-receipt --json
+
+deploy-status:
+	python3 scripts/noetfield_deploy_v1.py status --json
+
+deploy-fly-inbox:
+	python3 scripts/noetfield_deploy_v1.py deploy --scope fly-inbox --write-receipt --json
+
+deploy-fly-selfheal:
+	python3 scripts/noetfield_deploy_v1.py deploy --scope fly-self-heal --write-receipt --json
+
+deploy-drift-kaizen:
+	python3 scripts/noos_deploy_drift_kaizen_v1.py --inject-drift --write-receipt --json
+
+inbox-scaler:
+	python3 scripts/noos_inbox_scaler_v1.py --simulate-pending 11 --write-receipt --json
+
+t2-deploy-closeout:
+	python3 scripts/noos_t2_deploy_closeout_v1.py --write-receipt --json
+
+acg-founder-send-prep:
+	python3 scripts/noos_acg_founder_send_prep_v1.py --write-receipt --json
 
 backlog:
 	@python3 -c "import json; d=json.load(open('data/noos-unified-upgrade-backlog-v1.json')); print(json.dumps({'tiers':d['tier_definitions'],'summary':d['summary'],'next':[x['id'] for x in d['items'] if x.get('tier')=='T1' and x.get('status')=='open']}, indent=2))"

@@ -7,7 +7,7 @@ check() {
   local name="$1"
   local url="$2"
   local code
-  code=$(curl -sS -o /dev/null -w '%{http_code}' --max-time 15 "$url" || echo "000")
+  code=$(curl -sSL -o /dev/null -w '%{http_code}' --max-time 15 "$url" || echo "000")
   if [[ "$code" =~ ^2 ]]; then
     echo "OK   $name ($code) $url"
   else

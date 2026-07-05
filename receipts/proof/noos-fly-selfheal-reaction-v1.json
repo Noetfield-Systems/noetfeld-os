@@ -1,0 +1,10 @@
+{
+  "schema": "noos-fly-selfheal-reaction-v1",
+  "measured_at": "2026-07-05T15:51:58Z",
+  "command": "reenqueue_blocked_upg_inbox_v1.py",
+  "exit_code": 0,
+  "reaction_ms": 332,
+  "under_60s": true,
+  "ok": true,
+  "report_line": "self_heal_reaction \u00b7 332ms"
+}

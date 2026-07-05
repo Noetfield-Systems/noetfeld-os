@@ -1,0 +1,28 @@
+{
+  "schema": "noos-deploy-receipt-v1",
+  "deployed_at": "2026-07-05T15:51:32Z",
+  "merge_sha": "5d6fb9aea33b96c4f6c6fb03a11fb1c9e2dfe429",
+  "scope": "fly-inbox",
+  "upg": "UPG-0201",
+  "dry_run": false,
+  "mode": "local_smoke_fallback",
+  "fly_app": "noos-inbox-runner",
+  "l4_live": false,
+  "ok": true,
+  "smoke": {
+    "ok": true,
+    "mode": "local_smoke",
+    "port": 8080,
+    "health": {
+      "url": "http://127.0.0.1:8080/health",
+      "ok": false,
+      "status": 503
+    },
+    "ready": {
+      "url": "http://127.0.0.1:8080/ready",
+      "ok": true,
+      "status": 200
+    }
+  },
+  "blocker_reason": "fly_auth_required"
+}

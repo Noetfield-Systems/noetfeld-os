@@ -1,0 +1,26 @@
+{
+  "schema": "noos-runtime-scaling-v1",
+  "version": "1.0.0",
+  "updated_at": "2026-07-05",
+  "authority": "UPG-0205",
+  "rules": [
+    {
+      "id": "inbox-queue-depth",
+      "sandbox": "inbox",
+      "metric": "pending_inbox_depth",
+      "threshold": 10,
+      "action": "scale_fly_machines",
+      "from": 1,
+      "to": 2,
+      "cooldown_minutes": 15,
+      "roi_class": "THROTTLED_ROI"
+    }
+  ],
+  "fly_apps": {
+    "noos-inbox-runner": {
+      "min_machines": 1,
+      "max_machines": 2,
+      "region": "yyz"
+    }
+  }
+}

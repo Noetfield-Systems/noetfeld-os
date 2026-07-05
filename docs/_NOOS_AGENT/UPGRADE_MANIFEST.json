@@ -59,6 +59,9 @@
     "UPG-0197",
     "UPG-0201",
     "UPG-0202",
+    "UPG-0203",
+    "UPG-0204",
+    "UPG-0205",
     "UPG-0206",
     "UPG-0207",
     "UPG-0210",
@@ -85,7 +88,7 @@
     "commercial_c01": "Phase C \u2014 first Trust Brief / AI Value OS briefing"
   },
   "updated_at": "2026-07-05",
-  "notes": "Machine Loops 10-step upgrade lane closed. Loop verify receipts + Fly runners scaffolded.",
+  "notes": "T2 deploy ACG lane closed. Fly L4 honest: see deploy baseline receipt.",
   "machine_loops": {
     "status": "active",
     "canon": "docs/_NOOS_AGENT/[NOOS-AGENT-20260703-005]_FOUNDER_CANON_INTERFACE_v1.md",
@@ -123,9 +126,6 @@
     "UPG-0164",
     "UPG-0168",
     "UPG-0169",
-    "UPG-0203",
-    "UPG-0204",
-    "UPG-0205",
     "UPG-0208",
     "UPG-0209",
     "UPG-0211",
@@ -176,10 +176,13 @@
     "UPG-0161": "publish-pypi.yml workflow_dispatch target=test (TestPyPI trusted publish)",
     "UPG-0163": ".github/workflows/release-noetfield-gate.yml tag v* \u2192 GitHub Release + dist + PyPI",
     "UPG-0214": "tests/test_loop_determinism_ci.py + verify_loop_determinism_external_v1.py in gel-ci; receipts/proof/noos-loop-determinism-external-verify-v1.json",
-    "UPG-0201": "ops/fly/noos-inbox-runner/fly.toml + Dockerfile + /health /ready",
-    "UPG-0202": "ops/fly/noos-inbox-runner/server.py + ops/fly/noos-self-heal-runner/server.py health probes",
-    "UPG-0206": "ops/fly/noos-self-heal-runner/fly.toml (60s interval)",
+    "UPG-0201": "ops/fly/* scaffold + local smoke (L4 pending fly auth)",
+    "UPG-0202": "ops/fly/* scaffold + local smoke (L4 pending fly auth)",
+    "UPG-0206": "ops/fly/* scaffold + local smoke (L4 pending fly auth)",
     "UPG-0207": "docs/ops/NOOS_FACTORY_AUTORUN_DEPRECATION_v1.md",
-    "UPG-0210": "receipts/proof/noos-loop-verify-all-v1.json per-sandbox rows"
+    "UPG-0210": "receipts/proof/noos-loop-verify-all-v1.json per-sandbox rows",
+    "UPG-0203": "scripts/noetfield_deploy_v1.py",
+    "UPG-0204": "scripts/noos_deploy_drift_kaizen_v1.py",
+    "UPG-0205": "scripts/noos_inbox_scaler_v1.py"
   }
 }

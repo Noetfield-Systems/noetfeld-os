@@ -42,6 +42,24 @@ def utc_now() -> str:
     return datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
 
+def _loop_motor_note() -> dict[str, Any]:
+    if not REGISTRY.is_file():
+        return {"secondary_motor": None}
+    reg = json.loads(REGISTRY.read_text(encoding="utf-8"))
+    motor = reg.get("motor") or {}
+    fly_receipts = {
+        "inbox": (ROOT / "receipts/proof/noos-deploy-fly-inbox-v1.json").is_file(),
+        "self_heal": (ROOT / "receipts/proof/noos-deploy-fly-self-heal-v1.json").is_file(),
+    }
+    return {
+        "primary_motor": "cf-cron → repository_dispatch",
+        "secondary_motor": motor.get("secondary_motor"),
+        "secondary_motor_note": motor.get("secondary_motor_note"),
+        "fly_deploy_receipts": fly_receipts,
+        "fly_l4_live": False,
+    }
+
+
 def merged_env() -> dict[str, str]:
     env = os.environ.copy()
     for key, val in load_env().items():
@@ -249,6 +267,7 @@ def verify_all(
         "stale_allowed_count": stale_allowed,
         "core_loop_count": len(CORE_LOOP_IDS),
         "new_verified_window": window,
+        "secondary_motor": _loop_motor_note(),
         "ok": verified + stale_allowed >= len(CORE_LOOP_IDS),
         "report_line": (
             f"loop_verify_all · verified={verified} stale_allowed={stale_allowed} "

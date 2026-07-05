@@ -23,11 +23,17 @@ class HealthHandler(BaseHTTPRequestHandler):
         return
 
     def do_GET(self) -> None:  # noqa: N802
-        if self.path in ("/health", "/ready"):
+        if self.path == "/health":
+            code = 200 if _ready else 503
+            self.send_response(code)
+            self.end_headers()
+            self.wfile.write(b"ok" if code == 200 else b"starting")
+            return
+        if self.path == "/ready":
             code = 200 if (_ready and _last_cycle_ok is not False) else 503
             self.send_response(code)
             self.end_headers()
-            self.wfile.write(b"ok")
+            self.wfile.write(b"ready" if code == 200 else b"degraded")
             return
         self.send_response(404)
         self.end_headers()
@@ -62,7 +68,9 @@ def worker_loop() -> None:
 
 
 def main() -> None:
+    global _ready
     threading.Thread(target=worker_loop, daemon=True).start()
+    _ready = True
     HTTPServer(("0.0.0.0", PORT), HealthHandler).serve_forever()
 
 

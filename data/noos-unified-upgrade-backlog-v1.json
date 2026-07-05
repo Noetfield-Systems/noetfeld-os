@@ -29,9 +29,9 @@
   },
   "summary": {
     "total_items": 63,
-    "done": 27,
+    "done": 30,
     "open_t1": 0,
-    "open_t2": 10,
+    "open_t2": 3,
     "open_t3": 6,
     "deferred_t4": 7,
     "founder_blocked": 9
@@ -286,7 +286,8 @@
       "depends_on": [
         "LOOP-VERIFY-inbox"
       ],
-      "evidence": "ops/fly/noos-inbox-runner/ + docs/ops/NOOS_FACTORY_AUTORUN_DEPRECATION_v1.md"
+      "evidence": "ops/fly/noos-inbox-runner/ + docs/ops/NOOS_FACTORY_AUTORUN_DEPRECATION_v1.md",
+      "note": "Scaffold + local smoke; Fly L4 pending fly auth deploy"
     },
     {
       "id": "UPG-0202",
@@ -297,46 +298,50 @@
       "owner": "machine",
       "title": "Health /ready endpoints on always-on runners",
       "success_check": "external probe L4 PASS",
-      "evidence": "ops/fly/noos-inbox-runner/ + docs/ops/NOOS_FACTORY_AUTORUN_DEPRECATION_v1.md"
+      "evidence": "ops/fly/noos-inbox-runner/ + docs/ops/NOOS_FACTORY_AUTORUN_DEPRECATION_v1.md",
+      "note": "Scaffold + local smoke; Fly L4 pending fly auth deploy"
     },
     {
       "id": "UPG-0203",
       "tier": "T2",
       "track": "F",
-      "status": "open",
+      "status": "done",
       "priority": "P1",
       "owner": "machine",
       "title": "noetfield deploy --scope unified CLI",
       "success_check": "one receipt per surface deploy",
       "depends_on": [
         "UPG-0202"
-      ]
+      ],
+      "evidence": "scripts/noetfield_deploy_v1.py + data/noos-deploy-scopes-v1.json"
     },
     {
       "id": "UPG-0204",
       "tier": "T2",
       "track": "F",
-      "status": "open",
+      "status": "done",
       "priority": "P1",
       "owner": "machine",
       "title": "Drift auto-deploy Kaizen (L12\u2192machine_safe)",
       "success_check": "drift receipt \u2192 auto rollback on regression",
       "depends_on": [
         "UPG-0203"
-      ]
+      ],
+      "evidence": "receipts/proof/noos-deploy-drift-kaizen-v1.json"
     },
     {
       "id": "UPG-0205",
       "tier": "T2",
       "track": "H",
-      "status": "open",
+      "status": "done",
       "priority": "P1",
       "owner": "machine",
       "title": "Queue-depth scaler inbox sandbox",
       "success_check": "pending>10 \u2192 scale 1\u21922",
       "depends_on": [
         "UPG-0201"
-      ]
+      ],
+      "evidence": "data/noos-runtime-scaling-v1.json + receipts/proof/noos-inbox-scaler-v1.json"
     },
     {
       "id": "UPG-0206",
@@ -350,7 +355,8 @@
       "depends_on": [
         "UPG-0201"
       ],
-      "evidence": "ops/fly/noos-inbox-runner/ + docs/ops/NOOS_FACTORY_AUTORUN_DEPRECATION_v1.md"
+      "evidence": "ops/fly/noos-inbox-runner/ + docs/ops/NOOS_FACTORY_AUTORUN_DEPRECATION_v1.md",
+      "note": "Scaffold + local smoke; Fly L4 pending fly auth deploy"
     },
     {
       "id": "UPG-0207",

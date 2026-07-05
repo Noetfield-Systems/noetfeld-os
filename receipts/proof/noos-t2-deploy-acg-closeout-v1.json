@@ -1,0 +1,33 @@
+{
+  "schema": "noos-t2-deploy-acg-closeout-v1",
+  "closed_at": "2026-07-05T15:53:17Z",
+  "authority": "NOOS_T2_DEPLOY_ACG_STEP_10",
+  "backlog_update": {
+    "changed": [
+      "UPG-0203",
+      "UPG-0204",
+      "UPG-0205"
+    ],
+    "fly_l4_live": false,
+    "summary": {
+      "total_items": 63,
+      "done": 30,
+      "open_t1": 0,
+      "open_t2": 3,
+      "open_t3": 6,
+      "deferred_t4": 7,
+      "founder_blocked": 9
+    }
+  },
+  "manifest_update": {
+    "completed_added": [
+      "UPG-0203",
+      "UPG-0204",
+      "UPG-0205"
+    ]
+  },
+  "fly_l4_live": false,
+  "acg_founder_prep": "noetfield-org/receipts/NOOS_ACG_FOUNDER_SEND_PREP_2026-07-05.md",
+  "ok": true,
+  "report_line": "t2_deploy_acg_closeout \u00b7 lane complete"
+}

@@ -1,6 +1,6 @@
 {
   "schema": "noos-loop-registry-reconcile-v1",
-  "reconciled_at": "2026-07-05T12:29:41Z",
+  "reconciled_at": "2026-07-05T15:52:20Z",
   "authority": "NOOS_MACHINE_LOOPS_UPGRADE_STEP_2",
   "loop_count": 12,
   "core_loop_count": 7,

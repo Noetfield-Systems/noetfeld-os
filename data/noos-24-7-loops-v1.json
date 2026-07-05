@@ -11,7 +11,9 @@
     "cf_worker": "noos-loop-fleet-tick-v1",
     "base_cron": "*/5 * * * *",
     "health_url": "https://noos-loop-fleet-tick-v1.sina-kazemnezhad-ca.workers.dev/health",
-    "legacy_factory_motor": "noos-factory-autorun-tick-v1"
+    "legacy_factory_motor": "noos-factory-autorun-tick-v1",
+    "secondary_motor": "fly_always_on",
+    "secondary_motor_note": "noos-inbox-runner + noos-self-heal-runner on Fly (CF fleet remains primary)"
   },
   "loops": [
     {
@@ -24,6 +26,7 @@
       "interval_minutes": 5,
       "github_workflow": "noos-inbox-loop.yml",
       "factory_id": "loop-inbox",
+      "secondary_motor": "fly:noos-inbox-runner",
       "steps": [
         {"name": "cloud_worker", "cmd": ["python3", "scripts/cloud_inbox_worker_v1.py"]}
       ],
@@ -96,6 +99,7 @@
       "interval_minutes": 10,
       "github_workflow": "noos-self-heal-loop.yml",
       "factory_id": "loop-self-heal",
+      "secondary_motor": "fly:noos-self-heal-runner",
       "steps": [
         {
           "name": "reenqueue_blocked",

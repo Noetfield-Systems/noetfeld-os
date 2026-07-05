@@ -1,0 +1,24 @@
+{
+  "schema": "noos-deploy-drift-kaizen-v1",
+  "evaluated_at": "2026-07-05T15:52:17Z",
+  "baseline_present": true,
+  "live_status": {},
+  "expected_sha": "5d6fb9aea33b96c4f6c6fb03a11fb1c9e2dfe429",
+  "observed_sha": "drift-injected-sha",
+  "drift_detected": true,
+  "kaizen_candidate": {
+    "class": "machine_safe",
+    "title": "Deploy drift auto-rollback",
+    "expected_roi": "risk_reduced",
+    "source": "deploy_drift_kaizen"
+  },
+  "rollback": {
+    "action": "noetfield deploy --scope <scope> --dry-run rollback",
+    "executed": false,
+    "note": "Rollback wired via deploy CLI dry-run; live rollback requires fly auth"
+  },
+  "routes_to": "repair_loop",
+  "founder_required": false,
+  "ok": true,
+  "report_line": "deploy_drift_kaizen \u00b7 drift=True"
+}
