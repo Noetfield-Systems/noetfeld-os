@@ -37,6 +37,8 @@ coverage/
 *.tfstate
 *.tfstate.*
 
+www-pages-dist/
+api/_lib/greeting-ssot.json
 tmp/
 logs/
 var/

@@ -7,8 +7,10 @@ from typing import Any, Literal, Protocol
 
 from noetfield_config import Settings
 from noetfield_governance.intake_store import IntakeRecord
+from noetfield_governance.intake_store import get_by_request_id as memory_get_by_request_id
 from noetfield_governance.intake_store import list_recent as memory_list_recent
 from noetfield_governance.intake_store import record_intake as memory_record_intake
+from noetfield_governance.intake_store import update_email_archive_status as memory_update_email_archive_status
 from noetfield_governance.postgres_intake_store import PostgresIntakeStore
 
 logger = logging.getLogger("noetfield.governance.intake")
@@ -33,6 +35,16 @@ class IntakeStoreBackend(Protocol):
 
     async def list_recent(self, *, limit: int = 50) -> list[dict[str, Any]]: ...
 
+    async def get_by_request_id(self, request_id: str) -> IntakeRecord | None: ...
+
+    async def update_email_archive_status(
+        self,
+        *,
+        request_id: str,
+        status: str,
+        detail: str | None = None,
+    ) -> dict[str, Any] | None: ...
+
     async def close(self) -> None: ...
 
 
@@ -42,6 +54,25 @@ class _MemoryIntakeBackend:
 
     async def list_recent(self, *, limit: int = 50) -> list[dict[str, Any]]:
         return memory_list_recent(limit=limit)
+
+    async def get_by_request_id(self, request_id: str) -> IntakeRecord | None:
+        row = memory_get_by_request_id(request_id)
+        if row is None:
+            return None
+        return IntakeRecord(**row)
+
+    async def update_email_archive_status(
+        self,
+        *,
+        request_id: str,
+        status: str,
+        detail: str | None = None,
+    ) -> dict[str, Any] | None:
+        return memory_update_email_archive_status(
+            request_id=request_id,
+            status=status,
+            detail=detail,
+        )
 
     async def close(self) -> None:
         return None
@@ -102,3 +133,48 @@ async def list_recent(*, limit: int = 50) -> list[dict[str, Any]]:
     if _backend is None:
         return memory_list_recent(limit=limit)
     return await _backend.list_recent(limit=limit)
+
+
+async def get_by_request_id(request_id: str) -> IntakeRecord | None:
+    if _backend is None:
+        await init_intake_repository()
+    assert _backend is not None
+    return await _backend.get_by_request_id(request_id)
+
+
+async def update_email_archive_status(
+    *,
+    request_id: str,
+    status: str,
+    detail: str | None = None,
+) -> dict[str, Any] | None:
+    if _backend is None:
+        await init_intake_repository()
+    assert _backend is not None
+    return await _backend.update_email_archive_status(
+        request_id=request_id,
+        status=status,
+        detail=detail,
+    )
+
+
+def intake_status_payload(record: IntakeRecord | dict[str, Any]) -> dict[str, object]:
+    if isinstance(record, IntakeRecord):
+        data = {
+            "intake_id": record.intake_id,
+            "request_id": record.request_id,
+            "created_at": record.created_at,
+            "email_archive_status": record.email_archive_status,
+            "email_archive_updated_at": record.email_archive_updated_at,
+            "email_archive_detail": record.email_archive_detail,
+        }
+    else:
+        data = {
+            "intake_id": record.get("intake_id"),
+            "request_id": record.get("request_id"),
+            "created_at": record.get("created_at"),
+            "email_archive_status": record.get("email_archive_status"),
+            "email_archive_updated_at": record.get("email_archive_updated_at"),
+            "email_archive_detail": record.get("email_archive_detail"),
+        }
+    return data

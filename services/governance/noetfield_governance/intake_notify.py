@@ -174,6 +174,7 @@ def _send_via_resend(
     subject: str,
     text: str,
     reply_to: str | None = None,
+    request_id: str | None = None,
 ) -> bool:
     payload: dict[str, object] = {
         "from": from_addr,
@@ -183,6 +184,9 @@ def _send_via_resend(
     }
     if reply_to:
         payload["reply_to"] = reply_to
+    rid = (request_id or "").strip().upper()
+    if rid:
+        payload["tags"] = [{"name": "request_id", "value": rid}]
     body = json.dumps(payload).encode("utf-8")
     request = urllib.request.Request(
         "https://api.resend.com/emails",
@@ -248,6 +252,7 @@ def send_intake_email(
     subject: str,
     text: str,
     reply_to: str | None = None,
+    request_id: str | None = None,
 ) -> bool:
     if not settings.intake_email_notify_enabled:
         return False
@@ -268,6 +273,7 @@ def send_intake_email(
             subject=subject,
             text=text,
             reply_to=reply_to,
+            request_id=request_id,
         )
 
     smtp_host = (settings.intake_smtp_host or "").strip()
@@ -297,6 +303,7 @@ def notify_ops_inbox(settings: IntakeEmailSettings, record: IntakeRecord) -> boo
         subject=intake_subject(record),
         text=intake_body_text(record),
         reply_to=record.contact_email,
+        request_id=record.request_id,
     )
 
 
@@ -309,6 +316,7 @@ def notify_submitter_ack(settings: IntakeEmailSettings, record: IntakeRecord) ->
         subject=submitter_ack_subject(record),
         text=append_casl_footer(submitter_ack_body(record), settings),
         reply_to=CANONICAL_INTAKE_EMAIL,
+        request_id=record.request_id,
     )
 
 

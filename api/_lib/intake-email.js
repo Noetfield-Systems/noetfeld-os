@@ -109,11 +109,13 @@ function ackBody(body, intakeId) {
   );
 }
 
-async function sendResend({ from, to, subject, text, replyTo }) {
+async function sendResend({ from, to, subject, text, replyTo, requestId }) {
   const key = (process.env.RESEND_API_KEY || "").trim();
   if (!key) return { ok: false, error: "missing_api_key" };
   const payload = { from, to, subject, text };
   if (replyTo) payload.reply_to = replyTo;
+  const rid = String(requestId || "").trim().toUpperCase();
+  if (rid) payload.tags = [{ name: "request_id", value: rid }];
 
   const res = await fetch("https://api.resend.com/emails", {
     method: "POST",
@@ -156,6 +158,7 @@ async function sendIntakeEmails(body, ids) {
     subject: intakeSubject(body, intakeId),
     text: opsBodyText(body, intakeId),
     replyTo: body.contact_email,
+    requestId: body.request_id || ids.rid || null,
   });
   const ops = opsResult.ok;
 
@@ -167,6 +170,7 @@ async function sendIntakeEmails(body, ids) {
       subject: "Noetfield — message received (" + (body.request_id || intakeId) + ")",
       text: ackBody(body, intakeId),
       replyTo: CANONICAL,
+      requestId: body.request_id || ids.rid || null,
     });
     ack = ackResult.ok;
   }

@@ -1,0 +1,8 @@
+name = "noetfield-www"
+compatibility_date = "2025-03-01"
+compatibility_flags = ["nodejs_compat"]
+pages_build_output_dir = "www-pages-dist"
+
+[vars]
+PLATFORM_API_BASE = "https://platform.noetfield.com"
+INTAKE_AUTO_ACK_ENABLED = "true"

@@ -11,6 +11,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 SSOT = ROOT / "data" / "chatbot" / "public-chat-greeting.json"
 OUT = ROOT / "assets" / "nf-chat-greeting-ssot.js"
+OUT_JSON = ROOT / "api" / "_lib" / "greeting-ssot.json"
 
 
 def payload_from_ssot() -> dict[str, object]:
@@ -62,12 +63,29 @@ def main() -> int:
         return 1
     payload = payload_from_ssot()
     digest = content_hash(payload)
-    text = render_js(payload, digest)
-    if OUT.is_file() and OUT.read_text(encoding="utf-8") == text:
-        print(f"ok unchanged {OUT.name} sha256={digest[:12]}")
-        return 0
-    OUT.write_text(text, encoding="utf-8")
-    print(f"wrote {OUT.relative_to(ROOT)} sha256={digest[:12]}")
+    js_text = render_js(payload, digest)
+    json_text = json.dumps(
+        {
+            "schema": payload["schema"],
+            "content_hash": digest,
+            "greeting": payload["greeting"],
+            "citations": payload["citations"],
+        },
+        ensure_ascii=True,
+        indent=2,
+    ) + "\n"
+    changed = False
+    if not OUT.is_file() or OUT.read_text(encoding="utf-8") != js_text:
+        OUT.write_text(js_text, encoding="utf-8")
+        print(f"wrote {OUT.relative_to(ROOT)} sha256={digest[:12]}")
+        changed = True
+    OUT_JSON.parent.mkdir(parents=True, exist_ok=True)
+    if not OUT_JSON.is_file() or OUT_JSON.read_text(encoding="utf-8") != json_text:
+        OUT_JSON.write_text(json_text, encoding="utf-8")
+        print(f"wrote {OUT_JSON.relative_to(ROOT)} sha256={digest[:12]}")
+        changed = True
+    if not changed:
+        print(f"ok unchanged greeting assets sha256={digest[:12]}")
     return 0
 
 

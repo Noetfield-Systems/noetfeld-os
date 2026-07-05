@@ -84,6 +84,8 @@ sync_intake_env() {
         val="operations@noetfield.com"
       elif [[ "$key" == "INTAKE_EMAIL_FROM" ]]; then
         val="Noetfield Intake <notifications@noetfield.com>"
+      elif [[ "$key" == "TELEGRAM_OPS_CHAT_ID" ]]; then
+        val="8635650894"
       else
         log "warn: $key missing in $NF_SECRETS_VAULT — skip"
         continue

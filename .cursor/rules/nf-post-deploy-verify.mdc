@@ -1,0 +1,54 @@
+---
+description: After every deploy — live version check + Telegram alert on failure
+alwaysApply: true
+---
+
+# Post-deploy live verify (mandatory)
+
+After **any** production deploy, verify live surfaces match disk **before** telling the founder it shipped.
+
+## Triggers
+
+- `./scripts/deploy-www-cloudflare.sh` (canonical www)
+- `./scripts/deploy-www-vercel.sh` (legacy — remove after CF cutover)
+- `./scripts/deploy-platform-railway.sh` or `railway up` on `platform-api`
+- Any manual Vercel/Railway production deploy
+
+## Required flow
+
+```bash
+EXPECTED_SHA=$(git rev-parse HEAD)
+
+# deploy command here — if it fails, alert immediately:
+python3 scripts/nf_post_deploy_verify.py --deploy-failed "www vercel" --surface www || true
+
+# after successful deploy:
+python3 scripts/nf_post_deploy_verify.py --expected-sha "$EXPECTED_SHA"
+```
+
+Use `--surface www`, `platform`, or `both` (default) when only one surface changed.
+
+## What “new version” means
+
+| Surface | Live proof |
+|---------|------------|
+| Platform | `/api/public/chat/health` → `git_sha` matches `EXPECTED_SHA` |
+| WWW | `verify_chat_greeting_coupling.py --live` PASS |
+| Intake E2E | `nf_intake_e2e.py` — submit + poll `email_archive_status=delivered` (skipped when webhook tracking off) |
+
+## Telegram alert
+
+On deploy failure **or** verify failure, `nf_post_deploy_verify.py` messages founder via Telegram.
+
+Requires in `~/.sina/secrets.env` (never commit):
+
+- `TELEGRAM_NOETFIELD_OPS_BOT_TOKEN`
+- `TELEGRAM_OPS_CHAT_ID` — founder’s numeric chat id
+
+Missing chat id → verify still runs; failure prints to stderr.
+
+## Forbidden
+
+- Reporting deploy PASS without live verify
+- Skipping Telegram alert when deploy or verify fails
+- Treating “build succeeded” as “live is current”

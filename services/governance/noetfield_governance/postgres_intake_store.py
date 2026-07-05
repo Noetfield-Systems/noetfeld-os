@@ -90,7 +90,8 @@ class PostgresIntakeStore:
             row = await connection.fetchrow(
                 """
                 select intake_id, created_at, request_id, organization, contact_name,
-                       contact_email, sku, vector, source, message, metadata
+                       contact_email, sku, vector, source, message, metadata,
+                       email_archive_status, email_archive_updated_at, email_archive_detail
                 from noetfield.public_intakes
                 where request_id = $1
                 limit 1
@@ -101,6 +102,36 @@ class PostgresIntakeStore:
             return None
         return _row_to_record(row)
 
+    async def update_email_archive_status(
+        self,
+        *,
+        request_id: str,
+        status: str,
+        detail: str | None = None,
+    ) -> dict[str, Any] | None:
+        await self.connect()
+        assert self._pool is not None
+        rid = request_id.strip().upper()
+        async with self._pool.acquire() as connection:
+            row = await connection.fetchrow(
+                """
+                update noetfield.public_intakes
+                set email_archive_status = $2,
+                    email_archive_updated_at = now(),
+                    email_archive_detail = $3
+                where request_id = $1
+                returning intake_id, created_at, request_id, organization, contact_name,
+                          contact_email, sku, vector, source, message, metadata,
+                          email_archive_status, email_archive_updated_at, email_archive_detail
+                """,
+                rid,
+                status,
+                detail,
+            )
+        if row is None:
+            return None
+        return _row_to_dict(row)
+
     async def list_recent(self, *, limit: int = 50) -> list[dict[str, Any]]:
         await self.connect()
         assert self._pool is not None
@@ -109,7 +140,8 @@ class PostgresIntakeStore:
             rows = await connection.fetch(
                 """
                 select intake_id, created_at, request_id, organization, contact_name,
-                       contact_email, sku, vector, source, message, metadata
+                       contact_email, sku, vector, source, message, metadata,
+                       email_archive_status, email_archive_updated_at, email_archive_detail
                 from noetfield.public_intakes
                 order by created_at desc
                 limit $1
@@ -133,6 +165,9 @@ def _row_to_record(row: asyncpg.Record) -> IntakeRecord:
     created = row["created_at"]
     if hasattr(created, "isoformat"):
         created = created.isoformat()
+    archive_updated = row["email_archive_updated_at"] if "email_archive_updated_at" in row else None
+    if archive_updated is not None and hasattr(archive_updated, "isoformat"):
+        archive_updated = archive_updated.isoformat()
     return IntakeRecord(
         intake_id=row["intake_id"],
         created_at=str(created),
@@ -145,6 +180,9 @@ def _row_to_record(row: asyncpg.Record) -> IntakeRecord:
         source=row["source"],
         message=row["message"],
         metadata=dict(meta or {}),
+        email_archive_status=row["email_archive_status"] if "email_archive_status" in row else None,
+        email_archive_updated_at=str(archive_updated) if archive_updated else None,
+        email_archive_detail=row["email_archive_detail"] if "email_archive_detail" in row else None,
     )
 
 

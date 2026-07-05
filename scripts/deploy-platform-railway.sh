@@ -51,9 +51,10 @@ ensure_data_services() {
 
 set_platform_variables() {
   log "Setting platform API variables on service ${API_SERVICE}..."
-  local or_key resend_key event_secret
+  local or_key resend_key resend_webhook_secret event_secret
   or_key="$(read_vault OPENROUTER_API_KEY || true)"
   resend_key="$(read_vault RESEND_API_KEY || true)"
+  resend_webhook_secret="$(read_vault RESEND_WEBHOOK_SECRET || true)"
   event_secret="$(read_vault EVENT_INTEGRITY_SECRET || true)"
 
   railway_cmd variable set --service "$API_SERVICE" --skip-deploys \
@@ -73,6 +74,7 @@ set_platform_variables() {
 
   [[ -n "$or_key" ]] && railway_cmd variable set --service "$API_SERVICE" --skip-deploys OPENROUTER_API_KEY="$or_key"
   [[ -n "$resend_key" ]] && railway_cmd variable set --service "$API_SERVICE" --skip-deploys RESEND_API_KEY="$resend_key"
+  [[ -n "$resend_webhook_secret" ]] && railway_cmd variable set --service "$API_SERVICE" --skip-deploys RESEND_WEBHOOK_SECRET="$resend_webhook_secret"
   [[ -n "$event_secret" ]] && railway_cmd variable set --service "$API_SERVICE" --skip-deploys EVENT_INTEGRITY_SECRET="$event_secret"
 }
 
@@ -170,6 +172,7 @@ main() {
     python3 "$ROOT/scripts/verify_chat_greeting_coupling.py" --live \
       --platform-base "https://${PLATFORM_DOMAIN}" || \
       log "WARN: live greeting coupling not yet green on platform"
+    python3 "$ROOT/scripts/nf_post_deploy_verify.py" --surface platform || true
     log "Next: www chat will auto-proxy when PLATFORM_API_BASE resolves (no vercel rewrite needed)"
     exit 0
   fi

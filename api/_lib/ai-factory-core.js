@@ -1,7 +1,18 @@
-const crypto = require("crypto");
-
 function hash(value) {
-  return crypto.createHash("sha256").update(JSON.stringify(value)).digest("hex");
+  const s = JSON.stringify(value);
+  let h = 2166136261;
+  for (let i = 0; i < s.length; i++) {
+    h ^= s.charCodeAt(i);
+    h = Math.imul(h, 16777619);
+  }
+  return (h >>> 0).toString(16).padStart(8, "0");
+}
+
+function randomId() {
+  if (globalThis.crypto && typeof globalThis.crypto.randomUUID === "function") {
+    return globalThis.crypto.randomUUID();
+  }
+  return "req-" + hash({ t: Date.now(), r: Math.random() });
 }
 
 function validateGateRequest(payload) {
@@ -25,7 +36,7 @@ function policyDecision(payload) {
 }
 
 function buildFactoryReceipt(payload) {
-  const requestId = payload.request_id || crypto.randomUUID();
+  const requestId = payload.request_id || randomId();
   const normalized = {
     request_id: requestId,
     user_id: payload.user_id || "anonymous",
@@ -72,13 +83,13 @@ function buildFactoryReceipt(payload) {
 
 function buildStatusPreview(requestId) {
   const lanes = ["intake", "design", "spec_review", "validation", "deployment", "ledger_complete"];
-  const digest = crypto.createHash("sha256").update(requestId).digest();
-  const lane = lanes[digest[0] % lanes.length];
+  const digest = hash(requestId);
+  const lane = lanes[digest.charCodeAt(0) % lanes.length];
   return {
     request_id: requestId,
     request_type: "AI Factory",
     lane,
-    policy_decision: digest[1] % 5 === 0 ? "ESCALATE" : "ALLOW",
+    policy_decision: digest.charCodeAt(1) % 5 === 0 ? "ESCALATE" : "ALLOW",
     current_node: lane === "ledger_complete" ? "write_audit_record" : "create_execution_plan",
     audit_state: lane === "ledger_complete" ? "ledger_ready" : "in_progress",
     next_action: lane === "ledger_complete" ? "Review Trust Ledger receipt" : "Continue factory design review",

@@ -1053,15 +1053,33 @@ async def public_chat(body: PublicChatRequest, request: Request) -> PublicChatRe
 
 @app.get("/api/intake/health", tags=["intake"])
 async def intake_health() -> dict[str, object]:
+    webhook_secret = _secret(settings.resend_webhook_secret)
     return {
         "enabled": settings.public_intake_enabled,
         "intake_email": CANONICAL_INTAKE_EMAIL,
         "storage": intake_repository.storage_label(),
         "ops_webhook_configured": bool((settings.intake_ops_webhook_url or "").strip()),
         "ops_email_configured": intake_email_configured(settings),
+        "resend_webhook_configured": bool(webhook_secret),
+        "email_delivery_tracking": bool(webhook_secret),
         "auto_ack_enabled": settings.intake_auto_ack_enabled,
         "redis_rate_limit": redis_runtime.is_enabled(),
     }
+
+
+@app.get("/api/intake/status", tags=["intake"])
+async def intake_status(request_id: str) -> dict[str, object]:
+    if not settings.public_intake_enabled:
+        raise HTTPException(status_code=503, detail="Public intake API is disabled")
+    rid = (request_id or "").strip().upper()
+    if not rid:
+        raise HTTPException(status_code=400, detail="request_id is required")
+    record = await intake_repository.get_by_request_id(rid)
+    if record is None:
+        raise HTTPException(status_code=404, detail="Intake not found for request_id")
+    payload = intake_repository.intake_status_payload(record)
+    payload["found"] = True
+    return payload
 
 
 async def _notify_intake_background(record: object) -> None:
@@ -1074,6 +1092,23 @@ async def _notify_intake_background(record: object) -> None:
         await asyncio.to_thread(notify_ops_webhook, url, record)
     await asyncio.to_thread(notify_ops_inbox, settings, record)
     await asyncio.to_thread(notify_submitter_ack, settings, record)
+
+
+@app.post("/api/intake/resend/webhook", tags=["intake"], include_in_schema=False)
+async def intake_resend_webhook(request: Request) -> dict[str, object]:
+    from noetfield_governance.resend_webhook import handle_resend_webhook
+
+    payload = await request.body()
+    headers = {k.lower(): v for k, v in request.headers.items()}
+    result = await handle_resend_webhook(settings, payload, headers)
+    if not result.get("ok"):
+        err = str(result.get("error") or "webhook_error")
+        if err == "invalid_signature":
+            raise HTTPException(status_code=400, detail=err)
+        if err == "resend_webhook_not_configured":
+            raise HTTPException(status_code=503, detail=err)
+        raise HTTPException(status_code=400, detail=err)
+    return result
 
 
 @app.post("/api/intake", tags=["intake"], response_model=PublicIntakeResponse)

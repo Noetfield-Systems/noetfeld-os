@@ -1,7 +1,6 @@
 /** GET /api/ecosystem/public — safe www config (mirrors assets/noetfield-ecosystem.json). */
 
-const fs = require("fs");
-const path = require("path");
+const ecosystem = require("../../assets/noetfield-ecosystem.json");
 
 module.exports = async function handler(req, res) {
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -9,10 +8,8 @@ module.exports = async function handler(req, res) {
     return res.status(405).json({ detail: "Method not allowed" });
   }
 
-  const jsonPath = path.join(process.cwd(), "assets", "noetfield-ecosystem.json");
   try {
-    const raw = fs.readFileSync(jsonPath, "utf8");
-    const data = JSON.parse(raw);
+    const data = { ...ecosystem };
     if (!data.chat_api_base || data.chat_api_base.indexOf("platform.noetfield.com") >= 0) {
       data.chat_api_base = "";
     }

@@ -1,8 +1,5 @@
 /** POST /api/public/chat — proxies platform chat; GET returns greeting SSOT. */
 
-const fs = require("fs");
-const path = require("path");
-
 const CANONICAL_INTAKE = "operations@noetfield.com";
 const EXECUTIVE_OVERVIEW_REPLY =
   "Noetfield produces the audit trail a regulated Copilot rollout will be asked for later. " +
@@ -85,17 +82,13 @@ function routeOnlyFallback() {
 
 function localGreetingPayload() {
   try {
-    const crypto = require("crypto");
-    const file = path.join(process.cwd(), "data/chatbot/public-chat-greeting.json");
-    const data = JSON.parse(fs.readFileSync(file, "utf8"));
+    const data = require("../_lib/greeting-ssot.json");
     const greeting = String(data.greeting || "").trim();
     const citations = Array.isArray(data.citations) ? data.citations : [];
-    const canonical = JSON.stringify({ citations, greeting });
-    const content_hash = crypto.createHash("sha256").update(canonical).digest("hex");
     return {
       greeting,
       citations,
-      content_hash,
+      content_hash: String(data.content_hash || ""),
       source: "www-disk-ssot",
     };
   } catch (_) {
