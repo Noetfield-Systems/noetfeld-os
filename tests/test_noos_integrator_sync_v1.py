@@ -167,3 +167,27 @@ def test_sweep_stale_releases_expired_claim(tmp_path, monkeypatch):
     task = state["tasks"][0]
     assert task["status"] == "released"
     assert task["claimed_by"] is None
+
+
+def test_service_status_reads_service_lanes():
+    assert (
+        integrator.main(
+            [
+                "service-status",
+                "--service",
+                "svc-cost-audit-firewall-001",
+                "--json",
+            ]
+        )
+        == 0
+    )
+    payload = integrator._parse_service_lane_status("svc-cost-audit-firewall-001")
+    assert payload["ok"] is True
+    assert payload["service_id"] == "svc-cost-audit-firewall-001"
+    assert payload["status"] == "PUBLIC_PAGE_LIVE"
+
+
+def test_service_status_unknown_service():
+    payload = integrator._parse_service_lane_status("svc-does-not-exist")
+    assert payload["ok"] is False
+    assert payload["error"] == "service_not_found"

@@ -2,8 +2,8 @@
 
 **Org:** Noetfield-Systems  
 **Registry Version:** 1.0  
-**Last Updated:** 2026-07-03T00:00:00Z  
-**Status:** Active (Post-Migration)
+**Last Updated:** 2026-07-05T11:26:00Z  
+**Status:** Active (Post-Migration + Service Lane Coordination)
 
 ## Core Execution Repos
 
@@ -102,6 +102,30 @@
 
 **Verified Windows Invalidated:** ✓ Tracked in SYNC_RECEIPTS.md
 
+## Service Lanes
+
+**Registry File:** SERVICE_LANES.md
+
+Service lanes are buyer-facing or operational services delivered via mission execution. NOOS tracks service status, gates, and current blockers without becoming the product owner.
+
+### Active Service Lanes
+
+#### AI Spend Leak Audit + Premium Model Firewall
+- **Service ID:** `svc-cost-audit-firewall-001`
+- **Category:** Agentic Cost Governance
+- **Product Owner (Buyer-Facing):** Noetfield.com
+- **Delivery Owner:** SourceA
+- **Control Layer:** NOOS
+- **Canon/Ledger:** SG
+- **Status:** PUBLIC_PAGE_LIVE
+- **Live URL:** https://www.noetfield.com/services/agentic-cost-governance
+- **Publish Commit:** 096428e2 (origin/main)
+- **Current Gate:** Public page live ✓ → factory lift ⏳ → full revenue motion
+- **NOOS Blocking:** None
+- **See:** SERVICE_LANES.md for owner planes, receipts, and next actions
+
+---
+
 ## Sync Verification Checklist
 
 - [ ] All repos on `main` branch
@@ -111,3 +135,7 @@
 - [ ] Copilot instructions present in all 5 core repos
 - [ ] LOOP_STATE.json reflects current mission stack
 - [ ] SYNC_RECEIPTS.md has post-migration restart windows
+- [x] SERVICE_LANES.md created and service lanes registered
+- [x] SG service registration confirmed for active lanes (svc-cost-audit-firewall-001)
+- [x] Noetfield.com ACG page live (096428e2, PUBLIC_PAGE_LIVE)
+- [ ] Factory lift + full revenue motion LIVE
