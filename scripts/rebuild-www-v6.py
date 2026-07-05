@@ -6,8 +6,8 @@ import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-WWW_VER = "41"
-LIVE_PROOF_WWW_VER = "41"  # homepage + investors live-proof bundle; keep shell verifier aligned
+WWW_VER = "42"
+LIVE_PROOF_WWW_VER = "42"  # homepage + investors live-proof bundle; keep shell verifier aligned
 INVESTOR_DILIGENCE_WWW_VER = "43"
 
 # Pages maintained by Intelligence 613 lane — never overwrite on rebuild

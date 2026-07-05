@@ -585,7 +585,7 @@
   function loadPublicChat() {
     if (document.querySelector('script[data-nf-chat]')) return;
     var s = document.createElement("script");
-    s.src = "/assets/noetfield-chat.js";
+    s.src = "/assets/noetfield-chat.js?v=6";
     s.defer = true;
     s.setAttribute("data-nf-chat", "1");
     document.body.appendChild(s);

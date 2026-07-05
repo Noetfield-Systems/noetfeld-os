@@ -3,11 +3,11 @@
   "use strict";
 
   var QUICK_PROMPTS = [
-    "Help me understand Noetfield",
-    "What should I read before applying?",
-    "How does GEL fit?",
-    "What should an investor review?",
-    "Can I share confidential context here?",
+    "What does Noetfield do for my business?",
+    "I want a Diagnostic Sprint — what's involved?",
+    "We're evaluating vendors",
+    "Investor diligence materials",
+    "Is this channel confidential?",
   ];
 
   function apiBase() {
@@ -220,7 +220,7 @@
 
     var link = document.createElement("link");
     link.rel = "stylesheet";
-    link.href = "/assets/noetfield-chat.css?v=4";
+    link.href = "/assets/noetfield-chat.css?v=6";
     document.head.appendChild(link);
 
     var fab = el("button", "nfChatFab", "✦");
@@ -262,7 +262,7 @@
     var form = el("form", "nfChatForm");
     var input = document.createElement("input");
     input.type = "text";
-    input.placeholder = "Ask for pricing, diligence, GEL, or next step…";
+    input.placeholder = "What are you working on?";
     input.autocomplete = "off";
     input.maxLength = 2000;
     input.setAttribute("aria-label", "Your question");
@@ -292,7 +292,7 @@
       .then(function (data) {
         var host = log.querySelector(".nfChatMsg.bot");
         if (host) removeEl(host);
-        if (data && data.greeting) {
+        if (data && data.greeting && data.greeting.indexOf("Ask naturally") === -1) {
           appendMsg(log, "bot", data.greeting, "", data.citations || []);
           return;
         }
