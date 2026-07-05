@@ -1,0 +1,51 @@
+{
+  "receipt_id": "noos-lock-v1-2026-07-04T19:40:00-07:00",
+  "type": "NOOS_LOCK_RECEIPT_v1",
+  "created_at": "2026-07-04T19:40:00-07:00",
+  "created_by": "assistant-local",
+  "workspace_root": "/Users/sinakazemnezhad/Desktop/Noetfield-Systems",
+  "note": "Read-only disk receipt capturing local repo state at creation time. Do not treat as upstream verification; reconcile diverged repos before acting.",
+  "repos": [
+    { "name": "Noetfield", "path": "Noetfield", "branch": "main", "ahead": 1, "behind": 5, "origin": "https://github.com/Noetfield-Systems/Noetfield.git" },
+    { "name": "SinaaiMonoRepo", "path": "SinaaiMonoRepo", "branch": "main", "ahead": 1, "behind": 0, "origin": "https://github.com/Noetfield-Systems/SinaaiMonoRepo.git" },
+    { "name": "SourceA", "path": "SourceA", "branch": "main", "ahead": 3, "behind": 0, "origin": "https://github.com/Noetfield-Systems/SourceA.git" },
+    { "name": "TrustField-Technologies", "path": "TrustField-Technologies", "branch": "main", "ahead": 1, "behind": 0, "origin": "https://github.com/Noetfield-Systems/TrustField-Technologies.git" },
+    { "name": "buildmatch", "path": "buildmatch", "branch": "main", "ahead": 0, "behind": 0, "origin": "https://github.com/Noetfield-Systems/buildmatch.git" },
+    { "name": "noetfeld-OS", "path": "noetfeld-OS", "branch": "main", "ahead": 0, "behind": 0, "origin": "https://github.com/Noetfield-Systems/noetfeld-OS.git" },
+    { "name": "noetfield-studio-ide", "path": "noetfield-studio-ide", "branch": "feat/cursor-lite-loop-complete", "ahead": 0, "behind": 0, "origin": "https://github.com/Noetfield-Systems/noetfield-studio-ide.git" },
+    { "name": "sina-governance-SSOT", "path": "sina-governance-SSOT", "branch": "main", "ahead": 1, "behind": 15, "origin": "https://github.com/Noetfield-Systems/sina-governance-SSOT.git" }
+  ],
+  "push_attempts": {
+    "SourceA": {
+      "pushed": false,
+      "reason": "rejected: remote contains work you do not have locally (fetch first)"
+    }
+  },
+  "integrator_anchor": "/Users/sinakazemnezhad/Desktop/Noetfield-Systems/noetfeld-OS/noetfield-org/REPO_REGISTRY.md",
+  "recommendation": "Reconcile diverged repos (Noetfield, sina-governance-SSOT, SourceA push conflict) before making cross-repo changes. Use NOOS registry files as canonical local control plane.",
+  "generated_by_tool": "ApplyPatch",
+  "notes": [
+    "This file was created by the assistant agent with write permission.",
+    "If this creation failed due to tool or API restrictions, no file would exist and an explicit error would have been returned."
+  ]
+}
+{
+  "schema": "noos-lock-receipt-v1",
+  "receipt_id": "noos-lock-20260704-0001",
+  "ok": true,
+  "written_at": "2026-07-04T09:40:00Z",
+  "integrator": "noetfeld-OS",
+  "lock": {
+    "brain_taxonomy_locked": true,
+    "allowed_labels": [
+      "Library Live Brain",
+      "SourceA Brain Role",
+      "SourceA Website Brain Chat",
+      "NOOS Control Brain / Integrator",
+      "SG / Library Spine"
+    ],
+    "rule": "Unqualified 'Brain' is ambiguous and must be clarified in receipts or rejected."
+  },
+  "notes": "Created by operator request. Disk-level NOOS Brain Taxonomy Lock for local workspace. Do not alter without reconciliation workflow.",
+  "author": "assistant"
+}

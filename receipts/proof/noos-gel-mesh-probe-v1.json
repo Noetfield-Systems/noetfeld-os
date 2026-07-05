@@ -1,0 +1,13 @@
+{
+  "schema": "noos-gel-mesh-probe-v1",
+  "verified_at": "2026-07-05T16:45:00Z",
+  "authority": "UPG-0208",
+  "NOOS_GEL_INTERNAL_HEALTH": "https://api.noetfield.com/health",
+  "loop_probe_user_agent": "Noetfield-OS-Loop/1.0",
+  "note": "Railway private URL deferred; loops use env override with loop User-Agent",
+  "probe_log": [
+    "OK   gel-api health (200) https://api.noetfield.com/health",
+    "OK   gel-api readiness (200) https://api.noetfield.com/readiness"
+  ],
+  "ok": true
+}

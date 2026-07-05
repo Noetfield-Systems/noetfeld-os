@@ -1,6 +1,9 @@
 # noetfield-gate
 
-Graphify-class chain tool for **Noetfield OS** — sits between your agent and execution.
+Graphify-class chain tool — gate before agent execution.  
+**Full docs:** https://www.noetfield.com/gel/
+
+---
 
 ## Install (PyPI)
 

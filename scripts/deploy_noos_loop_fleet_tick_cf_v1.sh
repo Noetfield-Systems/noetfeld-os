@@ -1,31 +1,28 @@
 #!/usr/bin/env bash
-# deploy_noos_loop_fleet_tick_cf_v1.sh — CF */5 cron → parallel domain loop dispatches
+# deploy_noos_loop_fleet_tick_cf_v1.sh — CF */5 cron → Railway loop runner (no GHA)
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 WORKER_DIR="$ROOT/cloud/workers/noos-loop-fleet-tick-v1"
-REPO="${GITHUB_REPO:-Noetfield-Systems/noetfeld-os}"
+TABLE_SRC="$ROOT/data/noos-cf-dispatch-table-v1.json"
+TABLE_DST="$WORKER_DIR/src/dispatch-table.json"
 
-token() {
-  if [[ -n "${GITHUB_TOKEN:-}" ]]; then printf '%s' "$GITHUB_TOKEN"; return 0; fi
-  if [[ -n "${GH_TOKEN:-}" ]]; then printf '%s' "$GH_TOKEN"; return 0; fi
-  git credential fill <<EOF 2>/dev/null | awk -F= '$1=="password"{print $2; exit}'
-protocol=https
-host=github.com
+cp "$TABLE_SRC" "$TABLE_DST"
 
-EOF
-}
-
-GITHUB_TOKEN_VAL="$(token || true)"
-if [[ -z "$GITHUB_TOKEN_VAL" ]]; then
-  echo "FAIL: set GITHUB_TOKEN or configure git credential for github.com" >&2
+if [[ -z "${LOOP_RUNNER_URL:-}" ]]; then
+  echo "FAIL: set LOOP_RUNNER_URL (Railway noos-loop-runner public URL)" >&2
+  exit 1
+fi
+if [[ -z "${LOOP_RUNNER_SECRET:-}" ]]; then
+  echo "FAIL: set LOOP_RUNNER_SECRET (must match Railway service)" >&2
   exit 1
 fi
 
 cd "$WORKER_DIR"
-printf '%s' "$GITHUB_TOKEN_VAL" | wrangler secret put GITHUB_TOKEN
-printf '%s' "$REPO" | wrangler secret put GITHUB_REPO
+printf '%s' "$LOOP_RUNNER_URL" | wrangler secret put LOOP_RUNNER_URL
+printf '%s' "$LOOP_RUNNER_SECRET" | wrangler secret put LOOP_RUNNER_SECRET
 wrangler deploy
 
-echo "OK deployed noos-loop-fleet-tick-v1 cron */5 → 6 domain loops ($REPO)"
+echo "OK deployed noos-loop-fleet-tick-v1 → Railway ($LOOP_RUNNER_URL)"
 echo "Health: curl -fsS https://noos-loop-fleet-tick-v1.sina-kazemnezhad-ca.workers.dev/health"
+echo "Verify: curl -X POST 'https://noos-loop-fleet-tick-v1.sina-kazemnezhad-ca.workers.dev/tick?all=1'"

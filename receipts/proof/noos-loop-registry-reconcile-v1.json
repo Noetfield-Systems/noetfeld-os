@@ -1,0 +1,210 @@
+{
+  "schema": "noos-loop-registry-reconcile-v1",
+  "reconciled_at": "2026-07-05T16:44:02Z",
+  "authority": "NOOS_MACHINE_LOOPS_UPGRADE_STEP_2",
+  "loop_count": 12,
+  "core_loop_count": 7,
+  "loops": [
+    {
+      "loop_id": "inbox",
+      "github_workflow": "noos-inbox-loop.yml",
+      "event_type": "noos_inbox_loop_tick",
+      "factory_id": "loop-inbox",
+      "core_domain_loop": true,
+      "workflow_exists": true,
+      "event_match": true,
+      "factory_id_ok": true,
+      "triggers": {
+        "schedule": true,
+        "workflow_dispatch": false,
+        "repository_dispatch_types": [
+          "noos_inbox_loop_tick"
+        ]
+      }
+    },
+    {
+      "loop_id": "runtime",
+      "github_workflow": "noos-runtime-loop.yml",
+      "event_type": "noos_runtime_loop_tick",
+      "factory_id": "loop-runtime",
+      "core_domain_loop": true,
+      "workflow_exists": true,
+      "event_match": true,
+      "factory_id_ok": true,
+      "triggers": {
+        "schedule": true,
+        "workflow_dispatch": false,
+        "repository_dispatch_types": [
+          "noos_runtime_loop_tick"
+        ]
+      }
+    },
+    {
+      "loop_id": "surface",
+      "github_workflow": "noos-surface-loop.yml",
+      "event_type": "noos_surface_loop_tick",
+      "factory_id": "loop-surface",
+      "core_domain_loop": true,
+      "workflow_exists": true,
+      "event_match": true,
+      "factory_id_ok": true,
+      "triggers": {
+        "schedule": true,
+        "workflow_dispatch": false,
+        "repository_dispatch_types": [
+          "noos_surface_loop_tick"
+        ]
+      }
+    },
+    {
+      "loop_id": "chain",
+      "github_workflow": "noos-chain-loop.yml",
+      "event_type": "noos_chain_loop_tick",
+      "factory_id": "loop-chain",
+      "core_domain_loop": true,
+      "workflow_exists": true,
+      "event_match": true,
+      "factory_id_ok": true,
+      "triggers": {
+        "schedule": true,
+        "workflow_dispatch": false,
+        "repository_dispatch_types": [
+          "noos_chain_loop_tick"
+        ]
+      }
+    },
+    {
+      "loop_id": "self_heal",
+      "github_workflow": "noos-self-heal-loop.yml",
+      "event_type": "noos_self_heal_loop_tick",
+      "factory_id": "loop-self-heal",
+      "core_domain_loop": true,
+      "workflow_exists": true,
+      "event_match": true,
+      "factory_id_ok": true,
+      "triggers": {
+        "schedule": true,
+        "workflow_dispatch": false,
+        "repository_dispatch_types": [
+          "noos_self_heal_loop_tick"
+        ]
+      }
+    },
+    {
+      "loop_id": "sourcea_observe",
+      "github_workflow": "noos-sourcea-observe-loop.yml",
+      "event_type": "noos_sourcea_observe_loop_tick",
+      "factory_id": "loop-sourcea-observe",
+      "core_domain_loop": true,
+      "workflow_exists": true,
+      "event_match": true,
+      "factory_id_ok": true,
+      "triggers": {
+        "schedule": true,
+        "workflow_dispatch": false,
+        "repository_dispatch_types": [
+          "noos_sourcea_observe_loop_tick"
+        ]
+      }
+    },
+    {
+      "loop_id": "agent_nerve",
+      "github_workflow": "noos-agent-nerve-loop.yml",
+      "event_type": "noos_agent_nerve_loop_tick",
+      "factory_id": "loop-agent-nerve",
+      "core_domain_loop": true,
+      "workflow_exists": true,
+      "event_match": true,
+      "factory_id_ok": true,
+      "triggers": {
+        "schedule": true,
+        "workflow_dispatch": false,
+        "repository_dispatch_types": [
+          "noos_agent_nerve_loop_tick"
+        ]
+      }
+    },
+    {
+      "loop_id": "workflow_audit",
+      "github_workflow": "noos-workflow-audit.yml",
+      "event_type": "noos_workflow_audit_tick",
+      "factory_id": "loop-workflow-audit",
+      "core_domain_loop": false,
+      "workflow_exists": true,
+      "event_match": true,
+      "factory_id_ok": true,
+      "triggers": {
+        "schedule": true,
+        "workflow_dispatch": false,
+        "repository_dispatch_types": [
+          "noos_workflow_audit_tick"
+        ]
+      }
+    },
+    {
+      "loop_id": "self_heal_safe_fixes",
+      "github_workflow": "noos-self-heal.yml",
+      "event_type": "noos_self_heal_safe_fixes_tick",
+      "factory_id": "loop-self-heal-safe-fixes",
+      "core_domain_loop": false,
+      "workflow_exists": true,
+      "event_match": true,
+      "factory_id_ok": true,
+      "triggers": {
+        "schedule": true,
+        "workflow_dispatch": true,
+        "repository_dispatch_types": []
+      }
+    },
+    {
+      "loop_id": "researcher_deep_dive",
+      "github_workflow": "noos-researcher.yml",
+      "event_type": "noos_researcher_deep_dive_tick",
+      "factory_id": "loop-researcher",
+      "core_domain_loop": false,
+      "workflow_exists": true,
+      "event_match": true,
+      "factory_id_ok": true,
+      "triggers": {
+        "schedule": true,
+        "workflow_dispatch": true,
+        "repository_dispatch_types": []
+      }
+    },
+    {
+      "loop_id": "specialist_proposals",
+      "github_workflow": "noos-specialist.yml",
+      "event_type": "noos_specialist_proposals_tick",
+      "factory_id": "loop-specialist",
+      "core_domain_loop": false,
+      "workflow_exists": true,
+      "event_match": true,
+      "factory_id_ok": true,
+      "triggers": {
+        "schedule": true,
+        "workflow_dispatch": true,
+        "repository_dispatch_types": []
+      }
+    },
+    {
+      "loop_id": "orchestrator_cross_repo",
+      "github_workflow": "noos-cross-repo-orchestrator.yml",
+      "event_type": "noos_orchestrator_cross_repo_tick",
+      "factory_id": "loop-orchestrator",
+      "core_domain_loop": false,
+      "workflow_exists": true,
+      "event_match": true,
+      "factory_id_ok": true,
+      "triggers": {
+        "schedule": true,
+        "workflow_dispatch": true,
+        "repository_dispatch_types": []
+      }
+    }
+  ],
+  "orphan_loop_workflows": [],
+  "issues": [],
+  "core_issues": [],
+  "ok": true,
+  "report_line": "loop_registry_reconcile \u00b7 loops=12 core_issues=0"
+}

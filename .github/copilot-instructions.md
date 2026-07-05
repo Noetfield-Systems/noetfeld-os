@@ -9,8 +9,8 @@
 
 ### 1. Slug Enforcement
 - **REQUIRED:** Use only `Noetfield-Systems` org slug in all workflows and configs.
-- **FORBIDDEN:** Any reference to `kazemnezhadsina144-dot`.
-- **Verification:** `grep -r "kazemnezhadsina144-dot" .` must return 0 results.
+- **FORBIDDEN:** Any reference to the legacy personal org slug listed in `noetfield-org/FORBIDDEN_MARKERS.txt`.
+- **Verification:** `pytest tests/test_forbidden_markers.py` must pass (slug only in marker file).
 
 ### 2. Org-Sync Anchors (Mandatory)
 This repo is the sync-plane hub. Always respect:
@@ -36,6 +36,13 @@ This repo is the sync-plane hub. Always respect:
 - No direct main mutation without PR + approval.
 - No retroactive mutation of receipt archive.
 - No M6 spend without M1 >99% determinism gate pass.
+
+### 6. Parallel Agent + Integrator (L-P5 / L-P7)
+- Registry: `data/noos-parallel-agent-registry-v1.json`
+- Claim + sync: `scripts/noos_integrator_sync_v1.py`
+- Conflict check: `scripts/noos_agent_conflict_check_v1.py`
+- **L-P5:** claim lane before mutating shared paths.
+- **L-P7:** close lane with receipt; no stale claims.
 
 ## Workflow Integration
 
@@ -65,8 +72,8 @@ This repo is the sync-plane hub. Always respect:
 ## Repo State Checklist (Before Any Work)
 
 ```bash
-# 1. Verify org slug
-grep -r "kazemnezhadsina144-dot" . && echo "ERROR: Old slug!" || echo "✓ No old slug"
+# 1. Verify org slug (marker file is sole canonical store)
+pytest tests/test_forbidden_markers.py -q
 
 # 2. Read current LOOP_STATE
 cat noetfield-org/LOOP_STATE.json | jq '.loop_state, .mission_stack | keys'

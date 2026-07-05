@@ -1,15 +1,7 @@
-// NOOS 24/7 loop fleet: Cloudflare five-minute cron dispatches due domain loops.
-const DEFAULT_REPO = "Noetfield-Systems/noetfeld-os";
+// NOOS loop motor: single CF cron → Railway HTTP (no GitHub Actions dispatch).
+import dispatchDoc from "./dispatch-table.json";
 
-const LOOPS = [
-  { event_type: "noos_inbox_loop_tick", interval: 5, domain: "factory-inbox" },
-  { event_type: "noos_runtime_loop_tick", interval: 15, domain: "gel-runtime" },
-  { event_type: "noos_surface_loop_tick", interval: 20, domain: "public-nerve" },
-  { event_type: "noos_chain_loop_tick", interval: 30, domain: "chain-tools" },
-  { event_type: "noos_self_heal_loop_tick", interval: 10, domain: "self-improvement" },
-  { event_type: "noos_sourcea_observe_loop_tick", interval: 30, domain: "sourcea-observe" },
-  { event_type: "noos_agent_nerve_loop_tick", interval: 60, domain: "agent-docs" },
-];
+const TARGETS = dispatchDoc.targets || [];
 
 function json(body, status = 200) {
   return Response.json(body, {
@@ -18,55 +10,58 @@ function json(body, status = 200) {
   });
 }
 
-async function dispatchLoop(env, eventType, meta = {}) {
-  const token = (env.GITHUB_TOKEN || "").trim();
-  const repo = (env.GITHUB_REPO || DEFAULT_REPO).trim();
-  if (!token) {
-    return { ok: false, error: "GITHUB_TOKEN missing", event_type: eventType };
+async function dispatchTarget(env, target, meta = {}) {
+  const base = (env.LOOP_RUNNER_URL || "").trim().replace(/\/$/, "");
+  const secret = (env.LOOP_RUNNER_SECRET || "").trim();
+  const eventType = target.event_type;
+  if (!base) {
+    return { ok: false, error: "LOOP_RUNNER_URL missing", event_type: eventType };
   }
-  const resp = await fetch(`https://api.github.com/repos/${repo}/dispatches`, {
+  const headers = { "Content-Type": "application/json", "User-Agent": "noos-loop-fleet-tick-v1" };
+  if (secret) headers.Authorization = `Bearer ${secret}`;
+  const resp = await fetch(`${base}/loop`, {
     method: "POST",
-    headers: {
-      Authorization: `Bearer ${token}`,
-      Accept: "application/vnd.github+json",
-      "Content-Type": "application/json",
-      "User-Agent": "noos-loop-fleet-tick-v1",
-    },
+    headers,
     body: JSON.stringify({
       event_type: eventType,
-      client_payload: {
-        source: meta.source || "cf-cron",
-        at: new Date().toISOString(),
-        ...meta,
-      },
+      dispatch_id: target.dispatch_id,
+      handler: target.handler,
+      source: meta.source || "cf-cron",
+      at: new Date().toISOString(),
+      ...meta,
     }),
   });
-  const text = await resp.text();
+  let body = null;
+  try {
+    body = await resp.json();
+  } catch {
+    body = { raw: (await resp.text()).slice(0, 200) };
+  }
   return {
-    ok: resp.status === 204,
+    ok: resp.ok && body?.ok !== false,
     status: resp.status,
     event_type: eventType,
-    body: text ? text.slice(0, 120) : null,
+    dispatch_id: target.dispatch_id,
+    body,
   };
 }
 
-function dueLoops(utcMinute) {
-  return LOOPS.filter((loop) => utcMinute % loop.interval === 0);
+function dueTargets(utcMinute) {
+  return TARGETS.filter((t) => utcMinute % Number(t.interval_minutes || 5) === 0);
 }
 
 export default {
   async scheduled(event, env, ctx) {
     const minute = new Date().getUTCMinutes();
-    const due = dueLoops(minute);
+    const due = dueTargets(minute);
     ctx.waitUntil(
       (async () => {
         const results = [];
-        for (const loop of due) {
+        for (const target of due) {
           results.push(
-            await dispatchLoop(env, loop.event_type, {
+            await dispatchTarget(env, target, {
               source: "cf-cron",
-              cron: event?.cron || "*/5 * * * *",
-              domain: loop.domain,
+              cron: event?.cron || dispatchDoc.motor_cron || "*/5 * * * *",
               utc_minute: minute,
             }),
           );
@@ -83,7 +78,7 @@ export default {
         headers: {
           "Access-Control-Allow-Origin": "*",
           "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-          "Access-Control-Allow-Headers": "Content-Type",
+          "Access-Control-Allow-Headers": "Content-Type, Authorization",
         },
       });
     }
@@ -92,28 +87,31 @@ export default {
       const minute = new Date().getUTCMinutes();
       return json({
         ok: true,
-        schema: "noos-loop-fleet-tick-health-v1",
+        schema: "noos-loop-motor-health-v1",
         service: "noos-loop-fleet-tick-v1",
-        cron: "*/5 * * * *",
-        github_token_ready: Boolean(env.GITHUB_TOKEN),
-        github_repo: env.GITHUB_REPO || DEFAULT_REPO,
-        loops: LOOPS,
-        due_now: dueLoops(minute).map((l) => l.event_type),
+        cron: dispatchDoc.motor_cron || "*/5 * * * *",
+        execution_plane: dispatchDoc.execution_plane || "railway:noos-loop-runner",
+        loop_runner_url_ready: Boolean(env.LOOP_RUNNER_URL),
+        target_count: TARGETS.length,
+        targets: TARGETS,
+        due_now: dueTargets(minute).map((t) => t.event_type),
         utc_minute: minute,
       });
     }
     if (url.pathname === "/tick" && request.method === "POST") {
       const minute = new Date().getUTCMinutes();
       const force = url.searchParams.get("all") === "1";
-      const targets = force ? LOOPS : dueLoops(minute);
-      const results = [];
-      for (const loop of targets) {
-        results.push(
-          await dispatchLoop(env, loop.event_type, { source: "http_tick", utc_minute: minute }),
-        );
+      const eventFilter = url.searchParams.get("event_type");
+      let targets = force ? TARGETS : dueTargets(minute);
+      if (eventFilter) {
+        targets = TARGETS.filter((t) => t.event_type === eventFilter);
       }
-      const ok = results.every((r) => r.ok);
-      return json({ ok, schema: "noos-loop-fleet-tick-v1", results }, ok ? 200 : 502);
+      const results = [];
+      for (const target of targets) {
+        results.push(await dispatchTarget(env, target, { source: "http_tick", utc_minute: minute }));
+      }
+      const ok = results.length > 0 && results.every((r) => r.ok);
+      return json({ ok, schema: "noos-loop-motor-tick-v1", results }, ok ? 200 : 502);
     }
     return json({ ok: false, error: "not_found" }, 404);
   },

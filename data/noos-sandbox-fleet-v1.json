@@ -1,0 +1,92 @@
+{
+  "schema": "noos-sandbox-fleet-v1",
+  "version": "1.0.0",
+  "updated_at": "2026-07-05",
+  "authority": "SANDBOX-REGISTRY",
+  "one_law": "One authoritative row per autorun sandbox; reconcile against loops + deploy scopes.",
+  "sandboxes": [
+    {
+      "sandbox_id": "inbox",
+      "motor": "fly",
+      "health_url": "https://noos-inbox-runner.fly.dev/health",
+      "workflow_id": "noos-inbox-loop.yml",
+      "loop_id": "inbox",
+      "value_class": "revenue_path",
+      "sla_hours": 24,
+      "deploy_scope": "fly-inbox"
+    },
+    {
+      "sandbox_id": "chain",
+      "motor": "gha",
+      "health_url": null,
+      "workflow_id": "noos-chain-loop.yml",
+      "loop_id": "chain",
+      "value_class": "proof_asset",
+      "sla_hours": 24,
+      "deploy_scope": null
+    },
+    {
+      "sandbox_id": "surface",
+      "motor": "gha",
+      "health_url": "https://www.noetfield.com/",
+      "workflow_id": "noos-surface-loop.yml",
+      "loop_id": "surface",
+      "value_class": "risk_reduction",
+      "sla_hours": 24,
+      "deploy_scope": "www"
+    },
+    {
+      "sandbox_id": "sourcea_observe",
+      "motor": "gha",
+      "health_url": null,
+      "workflow_id": "noos-sourcea-observe-loop.yml",
+      "loop_id": "sourcea_observe",
+      "value_class": "risk_reduction",
+      "sla_hours": 24,
+      "deploy_scope": null
+    },
+    {
+      "sandbox_id": "improve",
+      "motor": "gha",
+      "health_url": null,
+      "workflow_id": null,
+      "loop_id": null,
+      "value_class": "THROTTLED_ROI",
+      "sla_hours": 24,
+      "deploy_scope": null,
+      "runner": "scripts/noos_improve_kaizen_runner_v1.py"
+    },
+    {
+      "sandbox_id": "gel-api",
+      "motor": "railway",
+      "health_url": "https://api.noetfield.com/health",
+      "internal_health_url": "https://api.noetfield.com/health",
+      "workflow_id": null,
+      "loop_id": "runtime",
+      "value_class": "risk_reduction",
+      "sla_hours": 24,
+      "deploy_scope": "gel-api"
+    },
+    {
+      "sandbox_id": "www",
+      "motor": "pages",
+      "health_url": "https://www.noetfield.com/",
+      "workflow_id": null,
+      "loop_id": "surface",
+      "value_class": "revenue_path",
+      "sla_hours": 24,
+      "deploy_scope": "www"
+    },
+    {
+      "sandbox_id": "cf",
+      "motor": "cf-cron",
+      "health_url": "https://noos-loop-fleet-tick-v1.sina-kazemnezhad-ca.workers.dev/health",
+      "workflow_id": null,
+      "cf_worker": "noos-loop-fleet-tick-v1",
+      "loop_id": null,
+      "value_class": "risk_reduction",
+      "sla_hours": 24,
+      "deploy_scope": null
+    }
+  ]
+}

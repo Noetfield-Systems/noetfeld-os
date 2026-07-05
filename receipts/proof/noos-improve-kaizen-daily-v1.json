@@ -1,0 +1,23 @@
+{
+  "schema": "noos-improve-kaizen-daily-v1",
+  "ran_at": "2026-07-05T16:43:56Z",
+  "authority": "UPG-0211",
+  "sandbox_id": "improve",
+  "roi_class": "THROTTLED_ROI",
+  "skipped_today": false,
+  "candidate_count": 49,
+  "picked": {
+    "source_path": "receipts/proof/noos-kaizen-loop-heartbeat-orchestrator_cross_repo-20260705.json",
+    "diff_summary": "loop-heartbeat SLO miss for orchestrator_cross_repo: score 51.43 < 80",
+    "loop_id": "orchestrator_cross_repo",
+    "roi_score": 10.0,
+    "class": "machine_safe"
+  },
+  "repair_route": {
+    "worker": "noos-machine-reconciler",
+    "action": "route_to_repair_loop",
+    "founder_required": false
+  },
+  "ok": true,
+  "report_line": "improve_kaizen_daily \u00b7 picked=orchestrator_cross_repo roi=10.0"
+}

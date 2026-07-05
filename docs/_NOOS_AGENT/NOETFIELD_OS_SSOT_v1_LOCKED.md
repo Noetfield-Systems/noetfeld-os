@@ -123,12 +123,12 @@ docs/_NOOS_AGENT/
 
 | Field | Value |
 |-------|-------|
-| Phase | 3 — Evidence export + TLE mapping |
+| Phase | 4 — Chain tools + CI hardening (live); Phase 3 deliverables (TLE export, evidence) remain active build order |
 | Steps done | ~22 / 1000 |
 | Runtime | FastAPI + SQLite + `.venv` |
 | Local port | `:8001` — never mono `:8000` |
 | Hosted API | `https://api.noetfield.com` on Railway `gel-api` |
-| Tests | 26 passing |
+| Tests | 143 passing |
 | Decision endpoint | `POST /v1/decision` |
 | Audit portal | `GET /portal/audits` |
 
@@ -156,7 +156,7 @@ docs/_NOOS_AGENT/
 - Chatbot Phase 3-10 distill + pgvector RAG
 - Paying pilot
 - Cross-scope live nerve expansion beyond current `www`, `platform` chat, and `api` readiness nodes.
-- Website nav/content decision: `/intelligence/` is still 404 while `/intelligence/intake/` is live; website repo owns whether this becomes a hub or nav changes to Home.
+- Website nav/content: `/intelligence/` live (200); CF worker denylist blocks internal doc leaks on www
 
 ---
 

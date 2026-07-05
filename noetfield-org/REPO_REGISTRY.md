@@ -2,8 +2,8 @@
 
 **Org:** Noetfield-Systems  
 **Registry Version:** 1.0  
-**Last Updated:** 2026-07-03T00:00:00Z  
-**Status:** Active (Post-Migration)
+**Last Updated:** 2026-07-05T15:44:00Z  
+**Status:** Active (Post-Migration + Service Lane Coordination)
 
 ## Core Execution Repos
 
@@ -57,7 +57,9 @@
 - **Purpose:** Marketing website · investor relations · trust ledger UX
 - **Agent Role:** T1 builder · asset deployment · web frontend
 - **Must-Sync-With:** sina-governance-SSOT (for trust ledger samples)
-- **Workflows:** vercel-www-deploy · buyer-audience-verify
+- **Workflows:** static-www deploy · CF www-proxy denylist worker · buyer-audience-verify (Vercel retired 2026-07-05)
+- **Production:** Cloudflare Pages `noetfield-www` + edge worker `noetfield-www-proxy` (denylist → Pages origin)
+- **Interface commit:** `573069c1` — `infra/cf-www-proxy/` + `scripts/generate_cf_www_denylist_v1.py`
 - **Owner:** Noetfield-Systems
 
 ### 6. noetfield-studio-ide
@@ -102,6 +104,31 @@
 
 **Verified Windows Invalidated:** ✓ Tracked in SYNC_RECEIPTS.md
 
+## Service Lanes
+
+**Registry File:** SERVICE_LANES.md
+
+Service lanes are buyer-facing or operational services delivered via mission execution. NOOS tracks service status, gates, and current blockers without becoming the product owner.
+
+### Active Service Lanes
+
+#### AI Spend Leak Audit + Premium Model Firewall
+- **Service ID:** `svc-cost-audit-firewall-001`
+- **Category:** Agentic Cost Governance
+- **Product Owner (Buyer-Facing):** Noetfield.com
+- **Delivery Owner:** SourceA
+- **Control Layer:** NOOS
+- **Canon/Ledger:** SG
+- **Status:** PUBLIC_PAGE_LIVE + PROSPECT_PACKET_READY
+- **Live URL:** https://www.noetfield.com/services/agentic-cost-governance
+- **Publish Commit:** 096428e2 (origin/main)
+- **Prospect Packet:** docs/commercial/ACG_FIRST_PROSPECT_PACKET_v1.md (SourceA bfc05dbb, preserve/acg-2026-07-05)
+- **Current Gate:** Public page live ✓ → prospect packet ready ✓ → founder send ⏳
+- **NOOS Blocking:** None
+- **See:** SERVICE_LANES.md for owner planes, receipts, and next actions
+
+---
+
 ## Sync Verification Checklist
 
 - [ ] All repos on `main` branch
@@ -111,3 +138,9 @@
 - [ ] Copilot instructions present in all 5 core repos
 - [ ] LOOP_STATE.json reflects current mission stack
 - [ ] SYNC_RECEIPTS.md has post-migration restart windows
+- [x] SERVICE_LANES.md created and service lanes registered
+- [x] SG service registration confirmed for active lanes (svc-cost-audit-firewall-001)
+- [x] Noetfield.com ACG page live (096428e2, PUBLIC_PAGE_LIVE)
+- [x] SourceA first prospect packet ready (bfc05dbb, PROSPECT_PACKET_READY)
+- [ ] Founder review + first prospect send (FT-COMMERCIAL-SEND)
+- [ ] Factory lift + full revenue motion LIVE

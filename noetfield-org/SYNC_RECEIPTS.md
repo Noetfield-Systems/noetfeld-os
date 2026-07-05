@@ -128,11 +128,11 @@
 
 **Pre-Restart Checklist:**
 - [ ] Noetfield repo on main
-- [ ] Vercel hook URLs use new org slug
+- [ ] Cloudflare static www deploy path confirmed (Vercel retired 2026-07-05)
 - [ ] buyer-audience-verify script updated
 - [ ] TLE samples from SSOT fetched with new URLs
 
-**Restart Trigger:** Manual Vercel deployment trigger
+**Restart Trigger:** Manual static-www deploy / buyer-audience-verify
 
 ---
 
@@ -215,6 +215,27 @@ Implements ORG SYNC PLANE v1 + SLUG MIGRATION SWEEP
 **Repos Affected:** All 8 governed org repos
 **Status:** Ready for review (do not merge to main without 2 approvals)
 ```
+
+---
+
+## NOOS Integrator Receipt Chain (2026-07-05)
+
+**Service Lane:** `svc-cost-audit-firewall-001` (Agentic Cost Governance)  
+**Canonical State:** `noetfield-org/SERVICE_LANES.md`  
+**Current Status:** PUBLIC_PAGE_LIVE + PROSPECT_PACKET_READY (Noetfield 096428e2; SourceA prospect bfc05dbb, verified 2026-07-05)
+
+| Order | Receipt | Purpose |
+|-------|---------|---------|
+| 1 | `receipts/NOOS_INTEGRATOR_SYNC_RECEIPT_2026-07-05.md` | Path authority + SourceA lane metadata sync |
+| 2 | `receipts/NOOS_SERVICE_LANE_REGISTRATION_2026-07-05.md` | Service lane registration (historical snapshot) |
+| 3 | `receipts/NOOS_SERVICE_LANE_TICK_2026-07-05.md` | State → DRAFT_READY_FOR_REVIEW |
+| 4 | `receipts/NOOS_SERVICE_LANE_TICK_2026-07-05_PRESERVATION.md` | SourceA preserve branch documented |
+| 5 | `receipts/NOOS_SERVICE_LANE_TICK_2026-07-05_EXTERNAL_VERIFY.md` | External-verify PASS recorded |
+| 6 | `receipts/NOOS_MODEL_OUTCOME_VERIFICATION_RECEIPT_2026-07-05.md` | Model outcome ledger |
+| 7 | `receipts/NOOS_PRE_PUBLISH_CLEARANCE_RECEIPT_2026-07-05.md` | Pre-publish clearance (current gate) |
+| 8 | `receipts/NOOS_SERVICE_LANE_LIVE_RECEIPT_2026-07-05.md` | Final live publish (096428e2, PUBLIC_PAGE_LIVE) |
+
+**Monitoring:** `python3 scripts/noos_integrator_sync_v1.py service-status --service svc-cost-audit-firewall-001 --json`
 
 ---
 

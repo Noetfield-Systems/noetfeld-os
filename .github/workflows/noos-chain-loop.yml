@@ -1,10 +1,8 @@
+# Retired 2026-07-05 — CF cron → Railway (zero GHA minutes).
 name: NOOS loop — chain
 
 on:
-  schedule:
-    - cron: "0,30 * * * *"
-  repository_dispatch:
-    types: [noos_chain_loop_tick]
+  workflow_dispatch:
 
 permissions:
   contents: read

@@ -21,6 +21,20 @@ from noetfield_gate.intent_validate import validate_intent_file
 from noetfield_gate.verify import verify_chain
 
 
+def _cmd_deploy(args: argparse.Namespace) -> int:
+    import subprocess
+
+    cmd = [sys.executable, "scripts/noetfield_deploy_v1.py", "deploy", "--scope", args.scope]
+    if args.dry_run:
+        cmd.append("--dry-run")
+    if args.write_receipt:
+        cmd.append("--write-receipt")
+    if args.json:
+        cmd.append("--json")
+    proc = subprocess.run(cmd, cwd=resolve_root(), check=False)
+    return proc.returncode
+
+
 def _cmd_gate(args: argparse.Namespace) -> int:
     report = run_gate_checks(
         root=Path(args.root) if args.root else None,
@@ -130,6 +144,17 @@ def main(argv: list[str] | None = None) -> int:
     verify.add_argument("--api-url", help="Probe GET /readiness")
     verify.add_argument("--json", action="store_true")
     verify.set_defaults(func=_cmd_verify)
+
+    deploy = sub.add_parser("deploy", help="Unified deploy by scope (UPG-0203)")
+    deploy.add_argument(
+        "--scope",
+        required=True,
+        choices=["fly-inbox", "fly-self-heal", "gel-api", "www"],
+    )
+    deploy.add_argument("--dry-run", action="store_true")
+    deploy.add_argument("--write-receipt", action="store_true")
+    deploy.add_argument("--json", action="store_true")
+    deploy.set_defaults(func=_cmd_deploy)
 
     args = parser.parse_args(argv)
     return int(args.func(args))

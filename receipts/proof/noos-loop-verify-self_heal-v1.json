@@ -1,0 +1,204 @@
+{
+  "schema": "noos-loop-verify-v1",
+  "backlog_id": "LOOP-VERIFY-self_heal",
+  "loop_id": "self_heal",
+  "verified_at": "2026-07-05T16:44:30Z",
+  "verification_state": "VERIFIED",
+  "smoke": {
+    "loop_id": "self_heal",
+    "event_type": "noos_self_heal_loop_tick",
+    "exit_code": 1,
+    "ok": false,
+    "cycle": {
+      "schema": "noos-24-7-loop-cycle-v1",
+      "receipt_schema": "autorun-cycle-receipt-v2",
+      "workflow_id": "noos-self-heal-loop.yml",
+      "mission_id": "M4",
+      "sandbox_id": "noetfeld-os",
+      "lane": "noos",
+      "loop_id": "self_heal",
+      "event_type": "noos_self_heal_loop_tick",
+      "domain": "self-improvement",
+      "trigger_source": "repository_dispatch",
+      "cycle_number": 5,
+      "op_key": "d5b05f632a51dca24f03c8fd",
+      "started_at": "2026-07-05T16:44:13+00:00",
+      "state_before": "RUNNING",
+      "cost": {
+        "provider": "github_actions+cloudflare_cron",
+        "model": "none",
+        "tokens_in": 0,
+        "tokens_out": 0,
+        "unit_cost_usd": 0.0,
+        "total_usd": 0.0,
+        "metered_at_call_site": true,
+        "step_count": 4
+      },
+      "value_class": "risk_reduction",
+      "sink_invariant": {
+        "law": "sum(origin_counts) == sink_count",
+        "counts": {
+          "steps": 4,
+          "self_heal": 0
+        },
+        "sink_count": 4,
+        "provenance_tags": {
+          "steps": "loop_step",
+          "self_heal": "loop_self_heal"
+        },
+        "verdict": "PASS"
+      },
+      "founder_blocked": {
+        "count": 1,
+        "oldest_id": "NOOS-C-01",
+        "priority": "P0",
+        "age_seconds": 305027,
+        "escalated": true
+      },
+      "evidence": [
+        {
+          "command": "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3 scripts/reenqueue_blocked_upg_inbox_v1.py",
+          "exit_code": 0,
+          "output": "{\n  \"requeued\": [],\n  \"blocked_seen\": 0\n}"
+        },
+        {
+          "command": "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3 scripts/verify_noos_autonomous_24h_v1.py --hours 6 --write-receipt",
+          "exit_code": 0,
+          "output": "autonomous PASS \u00b7 sha 146e8fe1 \u00b7 dispatch=77 schedule=21 manual=0"
+        },
+        {
+          "command": "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3 scripts/autorun_status_v1.py",
+          "exit_code": 1,
+          "output": "      {\n        \"scope\": \"noos_loop_agent_nerve\",\n        \"severity\": \"high\",\n        \"summary\": \"Workflow is not healthy: BLOCKED_WITH_REASON\",\n        \"detail\": \"stale_supabase_row\"\n      },\n      {\n        \"scope\": \"noos_loop_sourcea_observe\",\n        \"severity\": \"high\",\n        \"summary\": \"Workflow is not healthy: BLOCKED_WITH_REASON\",\n        \"detail\": \"stale_supabase_row\"\n      }\n    ]\n  }\n}"
+        },
+        {
+          "command": "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3 scripts/noos_loop_heartbeat_v1.py --write-receipt",
+          "exit_code": 1,
+          "output": "heartbeat 2026-07-05 loops=12 drift_mismatches=1 founder_blocked=1 escalations=13\n  DRIFT self_heal: committed=every_10m deployed=0 */1 * * *"
+        }
+      ],
+      "runner_output": {
+        "steps": [
+          {
+            "cmd": [
+              "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+              "scripts/reenqueue_blocked_upg_inbox_v1.py"
+            ],
+            "ok": true,
+            "exit_code": 0,
+            "stdout_tail": "{\n  \"requeued\": [],\n  \"blocked_seen\": 0\n}",
+            "stderr_tail": "",
+            "continued_on_error": false,
+            "name": "reenqueue_blocked"
+          },
+          {
+            "cmd": [
+              "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+              "scripts/verify_noos_autonomous_24h_v1.py",
+              "--hours",
+              "6",
+              "--write-receipt"
+            ],
+            "ok": true,
+            "exit_code": 0,
+            "stdout_tail": "autonomous PASS \u00b7 sha 146e8fe1 \u00b7 dispatch=77 schedule=21 manual=0",
+            "stderr_tail": "",
+            "continued_on_error": false,
+            "name": "autonomy_verify"
+          },
+          {
+            "cmd": [
+              "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+              "scripts/autorun_status_v1.py"
+            ],
+            "ok": false,
+            "exit_code": 1,
+            "stdout_tail": "il\": \"stale_supabase_row\"\n      },\n      {\n        \"scope\": \"sourcea_buyer_proof_verify\",\n        \"severity\": \"high\",\n        \"summary\": \"Workflow is not healthy: BLOCKED_WITH_REASON\",\n        \"detail\": \"no_supabase_receipt\"\n      },\n      {\n        \"scope\": \"sourcea_recipe_queue_builder\",\n        \"severity\": \"high\",\n        \"summary\": \"Workflow is not healthy: BLOCKED_WITH_REASON\",\n        \"detail\": \"no_supabase_receipt\"\n      },\n      {\n        \"scope\": \"noos_schedule_canary\",\n        \"severity\": \"high\",\n        \"summary\": \"Workflow is not healthy: FAILED_WITH_RECEIPT\",\n        \"detail\": \"\"\n      },\n      {\n        \"scope\": \"noos_loop_self_heal\",\n        \"severity\": \"high\",\n        \"summary\": \"Workflow is not healthy: BLOCKED_WITH_REASON\",\n        \"detail\": \"stale_supabase_row\"\n      },\n      {\n        \"scope\": \"noos_loop_agent_nerve\",\n        \"severity\": \"high\",\n        \"summary\": \"Workflow is not healthy: BLOCKED_WITH_REASON\",\n        \"detail\": \"stale_supabase_row\"\n      },\n      {\n        \"scope\": \"noos_loop_sourcea_observe\",\n        \"severity\": \"high\",\n        \"summary\": \"Workflow is not healthy: BLOCKED_WITH_REASON\",\n        \"detail\": \"stale_supabase_row\"\n      }\n    ]\n  }\n}",
+            "stderr_tail": "",
+            "continued_on_error": false,
+            "name": "autorun_status"
+          },
+          {
+            "cmd": [
+              "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+              "scripts/noos_loop_heartbeat_v1.py",
+              "--write-receipt"
+            ],
+            "ok": false,
+            "exit_code": 1,
+            "stdout_tail": "heartbeat 2026-07-05 loops=12 drift_mismatches=1 founder_blocked=1 escalations=13\n  DRIFT self_heal: committed=every_10m deployed=0 */1 * * *",
+            "stderr_tail": "",
+            "continued_on_error": false,
+            "name": "loop_heartbeat"
+          }
+        ],
+        "self_heal": [],
+        "cloud_meta": {
+          "processor": "noos_loop_runner_v1",
+          "github_event": "repository_dispatch",
+          "github_run_id": "local-smoke",
+          "github_workflow": "noos-self-heal-loop.yml",
+          "dispatch_source": "cf-cron",
+          "processed_at": "2026-07-05T16:44:30+00:00"
+        },
+        "cloud_trigger": "repository_dispatch"
+      },
+      "guardrails": {
+        "lane": "noos",
+        "read_only_control": false
+      },
+      "supabase_sink": {
+        "ok": true,
+        "exit_code": 0,
+        "detail": {
+          "ok": true,
+          "id": "7b2eaa2a-880e-4e53-a241-53ecaaafda93",
+          "status": 201,
+          "op_key": "d5b05f632a51dca24f03c8fd"
+        }
+      },
+      "finished_at": "2026-07-05T16:44:30+00:00",
+      "state_after": "FAILED_WITH_RECEIPT",
+      "status": "degraded",
+      "exit_code": 1,
+      "blocker_reason": "steps_failed:['autorun_status', 'loop_heartbeat']",
+      "next_action": "self_heal_or_triage",
+      "d4": {
+        "execute_ok": false,
+        "validate_ok": true,
+        "sink_acked": true
+      },
+      "d2": {
+        "cas": {
+          "verdict": "ACCEPTED",
+          "expected": 4,
+          "observed": 4,
+          "new_value": 5
+        }
+      },
+      "transition_log_tail": [
+        {
+          "from": "RUNNING",
+          "to": "FAILED_WITH_RECEIPT",
+          "at": "2026-07-05T16:44:30+00:00",
+          "cycle": 5,
+          "op_key": "d5b05f632a51dca24f03c8fd"
+        }
+      ]
+    },
+    "stderr": null
+  },
+  "rolling_evaluation": {
+    "loop_id": "self_heal",
+    "factory_id": "loop-self-heal",
+    "cycle_count": 4,
+    "invalid_trigger_count": 0,
+    "latest_status": "ok",
+    "ready": true,
+    "blockers": [],
+    "lookback_hours": 24,
+    "lookback_started_at": "2026-07-04T16:44:30Z"
+  },
+  "ok": true,
+  "autonomous_triggers": true
+}

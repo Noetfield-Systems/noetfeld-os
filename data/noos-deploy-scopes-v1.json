@@ -1,0 +1,41 @@
+{
+  "schema": "noos-deploy-scopes-v1",
+  "version": "1.0.0",
+  "scopes": {
+    "fly-inbox": {
+      "title": "Fly always-on inbox runner",
+      "upg": "UPG-0201",
+      "fly_app": "noos-inbox-runner",
+      "fly_config": "ops/fly/noos-inbox-runner/fly.toml",
+      "health_url": "https://noos-inbox-runner.fly.dev/health",
+      "ready_url": "https://noos-inbox-runner.fly.dev/ready",
+      "local_smoke_module": "ops/fly/noos-inbox-runner/server.py"
+    },
+    "fly-self-heal": {
+      "title": "Fly always-on self-heal runner",
+      "upg": "UPG-0206",
+      "fly_app": "noos-self-heal-runner",
+      "fly_config": "ops/fly/noos-self-heal-runner/fly.toml",
+      "health_url": "https://noos-self-heal-runner.fly.dev/health",
+      "ready_url": "https://noos-self-heal-runner.fly.dev/ready",
+      "local_smoke_module": "ops/fly/noos-self-heal-runner/server.py"
+    },
+    "gel-api": {
+      "title": "Railway gel-api (status only until UPG-0213)",
+      "upg": "UPG-0171",
+      "health_url": "https://api.noetfield.com/health",
+      "ready_url": "https://api.noetfield.com/readiness",
+      "internal_health_url": "https://api.noetfield.com/health",
+      "internal_health_note": "Set NOOS_GEL_INTERNAL_HEALTH to Railway private URL when available; loops prefer env over public probe.",
+      "loop_probe_user_agent": "Noetfield-OS-Loop/1.0",
+      "deploy_mode": "status_probe_only"
+    },
+    "www": {
+      "title": "Cloudflare static www",
+      "health_url": "https://www.noetfield.com/",
+      "acg_url": "https://www.noetfield.com/services/agentic-cost-governance",
+      "deploy_mode": "interface_manifest_only",
+      "production": "cloudflare_static"
+    }
+  }
+}

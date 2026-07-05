@@ -1,12 +1,8 @@
+# Retired 2026-07-05 — CF cron → Railway (zero GHA minutes).
 name: NOOS loop — self-heal
 
 on:
-  schedule:
-    # Halved frequency per budget rules: audit 30m, heal 1h, researcher 2h, specialist 4h, orchestrator 6h
-    - cron: "0 */1 * * *" # self-heal hourly (was every 10 minutes; reduced for budget)
-    - cron: "0 0 * * 0" # weekly maintenance placeholder
-  repository_dispatch:
-    types: [noos_self_heal_loop_tick]
+  workflow_dispatch:
 
 permissions:
   contents: read

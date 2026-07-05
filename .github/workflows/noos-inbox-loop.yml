@@ -1,11 +1,8 @@
-# 24/7 domain loop — inbox drain every 5m (CF fleet + schedule backup).
+# Retired 2026-07-05 — CF cron → Railway executes loops (zero GHA minutes).
 name: NOOS loop — inbox
 
 on:
-  schedule:
-    - cron: "*/5 * * * *"
-  repository_dispatch:
-    types: [noos_inbox_loop_tick]
+  workflow_dispatch:
 
 permissions:
   contents: read
