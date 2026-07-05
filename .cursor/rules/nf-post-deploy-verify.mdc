@@ -34,6 +34,7 @@ Use `--surface www`, `platform`, or `both` (default) when only one surface chang
 |---------|------------|
 | Platform | `/api/public/chat/health` → `git_sha` matches `EXPECTED_SHA` |
 | WWW | `verify_chat_greeting_coupling.py --live` PASS |
+| Intake E2E | `nf_intake_e2e.py` — submit + poll `email_archive_status=delivered` (skipped when webhook tracking off) |
 
 ## Telegram alert
 

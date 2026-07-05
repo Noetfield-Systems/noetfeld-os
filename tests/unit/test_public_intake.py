@@ -24,6 +24,7 @@ def test_intake_health() -> None:
         body = response.json()
         assert body["enabled"] is True
         assert "ops_email_configured" in body
+        assert "resend_webhook_configured" in body
         assert "auto_ack_enabled" in body
 
     asyncio.run(run())

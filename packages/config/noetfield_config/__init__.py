@@ -97,6 +97,10 @@ class Settings(BaseSettings):
         default=None,
         description="Resend API key — preferred intake email transport (server-side only).",
     )
+    resend_webhook_secret: SecretStr | None = Field(
+        default=None,
+        description="Resend webhook signing secret (whsec_…) for email.delivered / email.bounced.",
+    )
     intake_smtp_host: str | None = Field(
         default=None,
         description="SMTP host fallback when RESEND_API_KEY is unset (e.g. smtp.gmail.com).",

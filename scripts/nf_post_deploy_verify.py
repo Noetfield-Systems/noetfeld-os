@@ -120,12 +120,42 @@ def send_telegram_alert(*, title: str, lines: list[str]) -> bool:
         return False
 
 
+def verify_intake_e2e(*, www_base: str, platform_base: str, surface: str) -> list[str]:
+    if surface == "platform":
+        intake_url = f"{platform_base.rstrip('/')}/api/intake"
+    else:
+        intake_url = f"{www_base.rstrip('/')}/api/intake"
+
+    result = subprocess.run(
+        [
+            sys.executable,
+            str(ROOT / "scripts" / "nf_intake_e2e.py"),
+            "--intake-url",
+            intake_url,
+            "--platform-base",
+            platform_base.rstrip("/"),
+            "--json",
+        ],
+        cwd=ROOT,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    if result.returncode != 0:
+        detail = (result.stderr or result.stdout).strip().splitlines()
+        line = detail[-1] if detail else "intake e2e failed"
+        return [line]
+    return []
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--expected-sha", default="")
     parser.add_argument("--surface", choices=("www", "platform", "both"), default="both")
     parser.add_argument("--deploy-failed", default="", help="Set when deploy command failed before verify")
     parser.add_argument("--www-base", default=WWW_BASE, help="WWW base URL for live checks")
+    parser.add_argument("--platform-base", default=PLATFORM_BASE, help="Platform base URL for intake status polling")
+    parser.add_argument("--skip-intake-e2e", action="store_true", help="Skip intake webhook E2E check")
     args = parser.parse_args()
 
     sha = expected_sha(args.expected_sha or None)
@@ -138,6 +168,15 @@ def main() -> int:
         failures.extend(verify_platform(sha))
     if args.surface in ("www", "both"):
         failures.extend(verify_www(args.www_base))
+
+    if not failures and not args.skip_intake_e2e and not args.deploy_failed:
+        failures.extend(
+            verify_intake_e2e(
+                www_base=args.www_base,
+                platform_base=args.platform_base,
+                surface=args.surface,
+            )
+        )
 
     if failures:
         title = "Noetfield deploy check FAIL"

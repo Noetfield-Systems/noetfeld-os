@@ -1,6 +1,7 @@
-/** POST /api/intake — forward to platform + deliver to operations inbox (Resend). */
+/** POST /api/intake — platform DB (source of truth) + Telegram ops + Resend archive. */
 
 const { CANONICAL, emailConfigured, sendIntakeEmails, opsBodyText } = require("./_lib/intake-email");
+const { sendIntakeTelegram, telegramConfigured } = require("./_lib/intake-telegram");
 
 function randomIntakeId() {
   const hex = Array.from({ length: 12 }, function () {
@@ -45,26 +46,47 @@ module.exports = async function handler(req, res) {
   }
 
   const intakeId = (platformData && platformData.intake_id) || randomIntakeId();
-  let emailResult = { ops: false, ack: false, configured: emailConfigured() };
 
+  let telegramResult = { ok: false, configured: telegramConfigured() };
+  try {
+    telegramResult = await sendIntakeTelegram(body, intakeId);
+  } catch (err) {
+    console.error("intake_telegram_failed", err && err.message ? err.message : err);
+  }
+
+  let emailResult = { ops: false, ack: false, configured: emailConfigured() };
   try {
     emailResult = await sendIntakeEmails(body, { intakeId: intakeId, rid: body.request_id || null });
   } catch (err) {
-    console.error("intake_email_failed", err && err.message ? err.message : err);
+    console.error("intake_email_archive_failed", err && err.message ? err.message : err);
   }
 
   if (platformOk && platformData) {
     return res.status(200).json({
       ...platformData,
+      telegram_delivered: telegramResult.ok,
       email_delivered: emailResult.ops,
       email_ack: emailResult.ack,
     });
   }
+
+  if (telegramResult.ok) {
+    return res.status(200).json({
+      intake_id: intakeId,
+      request_id: body.request_id || null,
+      message: "Intake recorded — operations notified on Telegram",
+      telegram_delivered: true,
+      email_delivered: emailResult.ops,
+      email_ack: emailResult.ack,
+    });
+  }
+
   if (emailResult.ops) {
     return res.status(200).json({
       intake_id: intakeId,
       request_id: body.request_id || null,
-      message: "Intake recorded — operations notified by email",
+      message: "Intake recorded — operations archive email sent",
+      telegram_delivered: false,
       email_delivered: true,
       email_ack: emailResult.ack,
     });
@@ -76,9 +98,12 @@ module.exports = async function handler(req, res) {
 
   return res.status(502).json({
     detail:
-      "Intake unavailable — email not configured. Use /contact/ or email operations@noetfield.com with your Request ID.",
+      "Intake unavailable — platform record failed and ops notify did not deliver. Use /contact/ or email operations@noetfield.com with your Request ID.",
     intake_id: intakeId,
+    telegram_delivered: false,
+    email_delivered: false,
     mailto: "mailto:" + CANONICAL + "?subject=" + encodeURIComponent(mailSubject) + "&body=" + encodeURIComponent(mailBody),
     www_email_configured: emailResult.configured,
+    www_telegram_configured: telegramResult.configured,
   });
 };

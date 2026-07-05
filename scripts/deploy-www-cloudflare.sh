@@ -20,7 +20,7 @@ read_vault() {
 
 sync_pages_secrets() {
   local key value
-  for key in RESEND_API_KEY INTAKE_EMAIL_FROM INTAKE_EMAIL_TO OPENROUTER_API_KEY; do
+  for key in RESEND_API_KEY INTAKE_EMAIL_FROM INTAKE_EMAIL_TO OPENROUTER_API_KEY TELEGRAM_NOETFIELD_OPS_BOT_TOKEN TELEGRAM_OPS_CHAT_ID; do
     value="$(read_vault "$key" || true)"
     if [[ -n "$value" ]]; then
       log "pages secret ${key}"

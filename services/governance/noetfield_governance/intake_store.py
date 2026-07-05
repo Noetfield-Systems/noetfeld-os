@@ -28,6 +28,9 @@ class IntakeRecord:
     source: str
     message: str
     metadata: dict[str, Any]
+    email_archive_status: str | None = None
+    email_archive_updated_at: str | None = None
+    email_archive_detail: str | None = None
 
 
 def record_intake(
@@ -64,3 +67,37 @@ def list_recent(*, limit: int = 50) -> list[dict[str, Any]]:
     cap = max(1, min(limit, 100))
     with _lock:
         return list(_records)[:cap]
+
+
+def get_by_request_id(request_id: str) -> dict[str, Any] | None:
+    rid = (request_id or "").strip().upper()
+    if not rid:
+        return None
+    with _lock:
+        for rec in _records:
+            if str(rec.get("request_id") or "").upper() == rid:
+                return dict(rec)
+    return None
+
+
+def update_email_archive_status(
+    *,
+    request_id: str,
+    status: str,
+    detail: str | None = None,
+) -> dict[str, Any] | None:
+    rid = (request_id or "").strip().upper()
+    if not rid:
+        return None
+    now = datetime.now(UTC).isoformat()
+    with _lock:
+        for idx, rec in enumerate(_records):
+            if str(rec.get("request_id") or "").upper() != rid:
+                continue
+            updated = dict(rec)
+            updated["email_archive_status"] = status
+            updated["email_archive_updated_at"] = now
+            updated["email_archive_detail"] = detail
+            _records[idx] = updated
+            return updated
+    return None
