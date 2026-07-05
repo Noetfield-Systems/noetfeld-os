@@ -1,0 +1,185 @@
+{
+  "schema_version": "noetfield-service-draft-v1",
+  "generated_at": "2026-07-05T07:28:00Z",
+  "service": {
+    "id": "acg-v1",
+    "name": "Agentic Cost Governance",
+    "status": "DRAFT",
+    "type": "Governance + Audit Service",
+    "created": "2026-07-05",
+    "author": "[NF-LOCAL-REPO-AGENT]"
+  },
+  "positioning": {
+    "commercial_one_liner": "We help companies keep AI automation without letting silent premium-model defaults destroy ROI.",
+    "target_buyer": "Enterprise teams deploying background agents, GitHub Copilot, Cursor, Claude, OpenAI automation",
+    "buyer_pain": [
+      "Auto model selection defaults to expensive models (o1, Claude 3.5, GPT-4o) without intent",
+      "Premium inference modes silently activated on routine tasks",
+      "Background agents consume quota without visibility",
+      "Shared API keys break spend attribution across applications",
+      "Cheap models fail; expensive models invoked as automatic recovery (cost leak)",
+      "Workflow leakage: GitHub Actions, Copilot, Cursor, Claude, OpenAI debit same budget",
+      "Unattributed automation spend; finance cannot tie costs to outcomes"
+    ],
+    "value_promise": "Transparent AI spend ledger + cost-safe routing policies + ROI restored"
+  },
+  "modules": [
+    {
+      "id": "module-1",
+      "name": "AI Spend Leak Audit",
+      "description": "Discover the hidden cost surface",
+      "timeline": "1–2 weeks",
+      "deliverables": [
+        "Spend surface map (APIs, agents, embedded models, fallbacks)",
+        "Model usage breakdown (which models, frequency, by task/workflow)",
+        "Cost attribution (tie spend to outcomes, automation tasks, teams)",
+        "Leak zone identification (auto-escalations, silent premium defaults, shared-key bleed)",
+        "ROI leakage estimate (quantify margin impact from unattributed spend)"
+      ],
+      "output_format": "Spend Leak Audit Receipt (JSON + narrative)"
+    },
+    {
+      "id": "module-2",
+      "name": "Premium Model Firewall",
+      "description": "Lock in cost-safe model routing",
+      "timeline": "2–4 weeks",
+      "deliverables": [
+        "Model policy (cost-safe defaults per task: routine=fast/cheap, complex=pay-as-needed)",
+        "Escalation gates (when/how to escalate to premium models)",
+        "Budget caps (hard limits per service, team, workflow)",
+        "Fallback policy (graceful degradation when cheap models hit limits)",
+        "API key isolation (namespace credentials by application, audit trail per key)"
+      ],
+      "output_format": "Model Firewall Policy + Integration Receipt"
+    },
+    {
+      "id": "module-3",
+      "name": "Automation Cost Ledger",
+      "description": "Every automation action auditable",
+      "timeline": "Ongoing integration",
+      "deliverables": [
+        "Real-time cost per automation (track spend for each agent invocation)",
+        "Model selection reasoning (log why given model was chosen)",
+        "Approval trail (who approved premium escalations, when, why)",
+        "Monthly cost summary (spend by automation, model tier, team)",
+        "Anomaly detection (flag unexpected spend patterns, spike events)"
+      ],
+      "output_format": "Automation Cost Ledger (monthly receipt)"
+    },
+    {
+      "id": "module-4",
+      "name": "Model ROI Router",
+      "description": "Align model selection to business outcomes",
+      "timeline": "4–6 weeks",
+      "deliverables": [
+        "ROI target setting (acceptable cost-per-outcome per automation task)",
+        "Smart routing (select cheapest model meeting outcome quality bar)",
+        "A/B cost comparison (cost difference between model choices)",
+        "Outcome tracking (tie model selection to success metrics)",
+        "Recommendation engine (suggest model downgrades when cheaper models work)"
+      ],
+      "output_format": "ROI Router Recommendations + Cost Savings Forecast"
+    },
+    {
+      "id": "module-5",
+      "name": "Premium Escalation Policy",
+      "description": "Earn the right to expensive models",
+      "timeline": "2–3 weeks",
+      "deliverables": [
+        "Escalation thresholds (when cheap models insufficient)",
+        "Approval workflow (human + policy-based gates before premium use)",
+        "Cost-benefit analysis (show ROI of premium vs. outcome quality)",
+        "Spend tracking (monitor premium escalation rate, cost per escalation)",
+        "Governance trail (full audit log: who, why, when, outcome)"
+      ],
+      "output_format": "Escalation Policy + Integration Receipt"
+    }
+  ],
+  "non_claims": {
+    "what_this_is_not": [
+      "Not a payment custody or banking service",
+      "Not a PSP (Payment Service Provider) or MSB (Money Services Business)",
+      "Not a full agentic platform (governance + audit service only)",
+      "Not a deployment platform (recommends; customers deploy/operate)",
+      "Not financial advisory (operational cost control, not investment advice)",
+      "Not a replacement for CFO/Finance teams",
+      "Not a substitute for budget authority"
+    ],
+    "what_this_is": [
+      "Governance + audit + policy layer for AI cost control",
+      "Operational intelligence (spend surface, attribution, anomaly detection)",
+      "Policy enforcement toolkit (model routing, escalation gates, budget caps)",
+      "Transparency and auditability for AI automation spend"
+    ]
+  },
+  "alignment": {
+    "sg_governance": "VERIFIED",
+    "sg_note": "Service remains governance-only pre-execution layer. No payment, settlement, custody, or banking authority claims. Policy enforcement in customer systems, not Noetfield infrastructure.",
+    "noos_lane": "acg-v1",
+    "noos_status": "DRAFT (not ready for notification until reconciliation complete)",
+    "noos_coordination": "NOOS to be notified after service draft review and reconciliation clear"
+  },
+  "readiness": {
+    "draft_stage": "COMPLETE",
+    "review_stage": "PENDING",
+    "integration_stage": "BLOCKED_BY_RECONCILE",
+    "publication_stage": "BLOCKED_BY_RECONCILE",
+    "go_live_stage": "BLOCKED_BY_RECONCILE"
+  },
+  "dependencies": {
+    "noetfield_repo_reconciliation": "REQUIRED_BEFORE_PUBLICATION",
+    "vercel_live_deployment_verification": "REQUIRED_BEFORE_PUBLICATION",
+    "noos_coordination_clear": "REQUIRED_BEFORE_PUBLICATION",
+    "buyer_audience_verification": "REQUIRED_BEFORE_PUBLICATION",
+    "messaging_coordination": "REQUIRED_BEFORE_PUBLICATION"
+  },
+  "artifacts": {
+    "service_brief": "docs/services/agentic-cost-governance-draft-v1.md",
+    "service_page_component": "apps/web/app/services-draft-acg.tsx",
+    "service_specification": "docs/services/service-draft-specification-acg-v1.json",
+    "integration_checklist": "docs/services/service-integration-checklist-acg-v1.md"
+  },
+  "approval_path": [
+    {
+      "stage": "Founder/Stakeholder Review",
+      "approval_required": true,
+      "status": "PENDING"
+    },
+    {
+      "stage": "Buyer-Audience Team Review",
+      "approval_required": true,
+      "status": "PENDING"
+    },
+    {
+      "stage": "SG Alignment Verification",
+      "approval_required": true,
+      "status": "VERIFIED"
+    },
+    {
+      "stage": "Noetfield Reconciliation Complete",
+      "approval_required": true,
+      "status": "IN_PROGRESS"
+    },
+    {
+      "stage": "Vercel Live Verification",
+      "approval_required": true,
+      "status": "PENDING"
+    },
+    {
+      "stage": "NOOS Coordination Clear",
+      "approval_required": true,
+      "status": "PENDING"
+    },
+    {
+      "stage": "Ready for Publication",
+      "approval_required": true,
+      "status": "BLOCKED"
+    }
+  ],
+  "notes": {
+    "created_by": "[NF-LOCAL-REPO-AGENT]",
+    "created_at": "2026-07-05T07:28:00Z",
+    "status_summary": "Service draft prepared and documented. All artifacts in repo. Awaiting reconciliation complete and stakeholder review before publication. Non-claims verified (governance-only, no payment/banking authority).",
+    "publication_blocker": "Noetfield repo must reconcile with origin/main, Vercel live state verified, NOOS updated with lane receipt, and founder approval obtained before service goes live to www.noetfield.com"
+  }
+}
