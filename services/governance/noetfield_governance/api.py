@@ -168,7 +168,7 @@ chat_telemetry_settings = PublicChatTelemetrySettings(
 
 
 def deploy_git_sha() -> str | None:
-    for key in ("RAILWAY_GIT_COMMIT_SHA", "GIT_SHA", "VERCEL_GIT_COMMIT_SHA"):
+    for key in ("GIT_SHA", "RAILWAY_GIT_COMMIT_SHA", "VERCEL_GIT_COMMIT_SHA"):
         value = (os.environ.get(key) or "").strip()
         if value:
             return value
