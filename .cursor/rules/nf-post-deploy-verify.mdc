@@ -41,7 +41,7 @@ On deploy failure **or** verify failure, `nf_post_deploy_verify.py` messages fou
 
 Requires in `~/.sina/secrets.env` (never commit):
 
-- `TELEGRAM_BOT_TOKEN`
+- `TELEGRAM_NOETFIELD_OPS_BOT_TOKEN`
 - `TELEGRAM_OPS_CHAT_ID` — founder’s numeric chat id
 
 Missing chat id → verify still runs; failure prints to stderr.

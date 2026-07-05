@@ -88,10 +88,13 @@ def verify_www(www_base: str) -> list[str]:
 
 
 def send_telegram_alert(*, title: str, lines: list[str]) -> bool:
-    token = read_vault("TELEGRAM_BOT_TOKEN")
+    token = read_vault("TELEGRAM_NOETFIELD_OPS_BOT_TOKEN")
     chat_id = read_vault("TELEGRAM_OPS_CHAT_ID")
     if not token or not chat_id:
-        print("WARN: TELEGRAM_BOT_TOKEN or TELEGRAM_OPS_CHAT_ID missing in ~/.sina/secrets.env", file=sys.stderr)
+        print(
+            "WARN: TELEGRAM_NOETFIELD_OPS_BOT_TOKEN or TELEGRAM_OPS_CHAT_ID missing in ~/.sina/secrets.env",
+            file=sys.stderr,
+        )
         return False
     text = f"<b>{title}</b>\n" + "\n".join(lines)
     payload = json.dumps(
