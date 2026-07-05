@@ -90,8 +90,6 @@
     { "source": "/reports", "destination": "/404", "statusCode": 404 },
     { "source": "/scripts/:path*", "destination": "/404", "statusCode": 404 },
     { "source": "/scripts", "destination": "/404", "statusCode": 404 },
-    { "source": "/services/:path*", "destination": "/404", "statusCode": 404 },
-    { "source": "/services", "destination": "/404", "statusCode": 404 },
     { "source": "/governance-console/:path*", "destination": "/404", "statusCode": 404 },
     { "source": "/governance-console", "destination": "/404", "statusCode": 404 },
     { "source": "/docs/references/:path*", "destination": "/404", "statusCode": 404 },
