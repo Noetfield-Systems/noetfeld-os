@@ -15,6 +15,7 @@
     "6": "Pilot Revenue & Scale"
   },
   "completed_steps": [
+    "SANDBOX-REGISTRY",
     "UPG-0008",
     "UPG-0009",
     "UPG-0015",
@@ -41,8 +42,11 @@
     "UPG-0161",
     "UPG-0162",
     "UPG-0163",
+    "UPG-0164",
     "UPG-0165",
     "UPG-0166",
+    "UPG-0168",
+    "UPG-0169",
     "UPG-0171",
     "UPG-0172",
     "UPG-0173",
@@ -64,7 +68,10 @@
     "UPG-0205",
     "UPG-0206",
     "UPG-0207",
+    "UPG-0208",
     "UPG-0210",
+    "UPG-0211",
+    "UPG-0212",
     "UPG-0214"
   ],
   "in_progress_steps": [
@@ -88,7 +95,7 @@
     "commercial_c01": "Phase C \u2014 first Trust Brief / AI Value OS briefing"
   },
   "updated_at": "2026-07-05",
-  "notes": "T2 deploy ACG lane closed. Fly L4 honest: see deploy baseline receipt.",
+  "notes": "T3 sandbox fleet lane closed. Fly L4 honest: see deploy baseline. UPG-0209/0213 deferred.",
   "machine_loops": {
     "status": "active",
     "canon": "docs/_NOOS_AGENT/[NOOS-AGENT-20260703-005]_FOUNDER_CANON_INTERFACE_v1.md",
@@ -183,6 +190,15 @@
     "UPG-0210": "receipts/proof/noos-loop-verify-all-v1.json per-sandbox rows",
     "UPG-0203": "scripts/noetfield_deploy_v1.py",
     "UPG-0204": "scripts/noos_deploy_drift_kaizen_v1.py",
-    "UPG-0205": "scripts/noos_inbox_scaler_v1.py"
+    "UPG-0205": "scripts/noos_inbox_scaler_v1.py",
+    "UPG-0164": "packages/noetfield-gate/README.md",
+    "UPG-0168": "docs/examples/noetfield-gate-gha-v1.yml",
+    "UPG-0169": "docs/examples/pre-commit-noetfield-gate-v1.md",
+    "SANDBOX-REGISTRY": "data/noos-sandbox-fleet-v1.json",
+    "UPG-0211": "scripts/noos_improve_kaizen_runner_v1.py",
+    "UPG-0212": "data/noos-runtime-scaling-v1.json",
+    "UPG-0208": "NOOS_GEL_INTERNAL_HEALTH mesh probe",
+    "UPG-0209": "Deferred \u2014 next plan",
+    "UPG-0213": "Deferred \u2014 next plan"
   }
 }

@@ -2,13 +2,13 @@
   "schema": "noos-loop-verify-v1",
   "backlog_id": "LOOP-VERIFY-runtime",
   "loop_id": "runtime",
-  "verified_at": "2026-07-05T15:54:08Z",
+  "verified_at": "2026-07-05T16:44:10Z",
   "verification_state": "VERIFIED",
   "smoke": {
     "loop_id": "runtime",
     "event_type": "noos_runtime_loop_tick",
-    "exit_code": 1,
-    "ok": false,
+    "exit_code": 0,
+    "ok": true,
     "cycle": {
       "schema": "noos-24-7-loop-cycle-v1",
       "receipt_schema": "autorun-cycle-receipt-v2",
@@ -20,9 +20,9 @@
       "event_type": "noos_runtime_loop_tick",
       "domain": "gel-runtime",
       "trigger_source": "repository_dispatch",
-      "cycle_number": 4,
-      "op_key": "c39897ccef618d38d0b2d7cb",
-      "started_at": "2026-07-05T15:54:02+00:00",
+      "cycle_number": 5,
+      "op_key": "67a29bb43c4cf4488a9446b8",
+      "started_at": "2026-07-05T16:44:04+00:00",
       "state_before": "RUNNING",
       "cost": {
         "provider": "github_actions+cloudflare_cron",
@@ -52,19 +52,19 @@
         "count": 1,
         "oldest_id": "NOOS-C-01",
         "priority": "P0",
-        "age_seconds": 302004,
+        "age_seconds": 305007,
         "escalated": true
       },
       "evidence": [
         {
           "command": "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3 -m noetfield_gate.cli gate --json --pytest",
-          "exit_code": 1,
-          "output": "\"name\": \"product_truth_phase\",\n      \"ok\": true,\n      \"reason\": \"PRODUCT_TRUTH phase 4 vs manifest 4\",\n      \"truth_phase\": 4,\n      \"manifest_phase\": 4\n    }\n  ],\n  \"block_reasons\": [\n    \".....................................................................F.. [ 50%]\\n.......................................................................  [100%]\\n=============================== warnings\"\n  ]\n}"
+          "exit_code": 0,
+          "output": "ab99a9a7ee98334f49aa7a5944fd8a1683d099e95fde\"\n    },\n    {\n      \"id\": \"G6\",\n      \"name\": \"pytest_suite\",\n      \"ok\": true,\n      \"reason\": \"145 passed, 2 warnings in 2.40s\"\n    },\n    {\n      \"id\": \"G7\",\n      \"name\": \"product_truth_phase\",\n      \"ok\": true,\n      \"reason\": \"PRODUCT_TRUTH phase 4 vs manifest 4\",\n      \"truth_phase\": 4,\n      \"manifest_phase\": 4\n    }\n  ],\n  \"block_reasons\": []\n}"
         },
         {
           "command": "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3 -m pytest -q",
-          "exit_code": 1,
-          "output": "ing: websockets.server.WebSocketServerProtocol is deprecated\n    from websockets.server import WebSocketServerProtocol\n\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\n=========================== short test summary info ============================\nFAILED tests/test_noos_integrator_sync_v1.py::test_service_status_reads_service_lanes\n1 failed, 142 passed, 2 warnings in 2.45s"
+          "exit_code": 0,
+          "output": "i_against_live_local_server\n  /Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/uvicorn/protocols/websockets/websockets_impl.py:17: DeprecationWarning: websockets.server.WebSocketServerProtocol is deprecated\n    from websockets.server import WebSocketServerProtocol\n\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\n145 passed, 2 warnings in 2.62s"
         }
       ],
       "runner_output": {
@@ -78,10 +78,10 @@
               "--json",
               "--pytest"
             ],
-            "ok": false,
-            "exit_code": 1,
-            "stdout_tail": "\"ok\": true,\n      \"reason\": \"sqlite ok (noetfeld.db)\"\n    },\n    {\n      \"id\": \"G4\",\n      \"name\": \"api_readiness\",\n      \"ok\": true,\n      \"reason\": \"skipped \\u2014 set NOETFIELD_API_URL or --api-url to probe remote runtime\",\n      \"skipped\": true\n    },\n    {\n      \"id\": \"G5\",\n      \"name\": \"policy_registry\",\n      \"ok\": true,\n      \"reason\": \"PolicyRegistry loaded\",\n      \"combined_hash\": \"6ed3dd7180db65bdfce6ab99a9a7ee98334f49aa7a5944fd8a1683d099e95fde\"\n    },\n    {\n      \"id\": \"G6\",\n      \"name\": \"pytest_suite\",\n      \"ok\": false,\n      \"reason\": \".....................................................................F.. [ 50%]\\n.......................................................................  [100%]\\n=============================== warnings\"\n    },\n    {\n      \"id\": \"G7\",\n      \"name\": \"product_truth_phase\",\n      \"ok\": true,\n      \"reason\": \"PRODUCT_TRUTH phase 4 vs manifest 4\",\n      \"truth_phase\": 4,\n      \"manifest_phase\": 4\n    }\n  ],\n  \"block_reasons\": [\n    \".....................................................................F.. [ 50%]\\n.......................................................................  [100%]\\n=============================== warnings\"\n  ]\n}",
-            "stderr_tail": "BLOCK: .....................................................................F.. [ 50%]\n.......................................................................  [100%]\n=============================== warnings",
+            "ok": true,
+            "exit_code": 0,
+            "stdout_tail": "\"G1\",\n      \"name\": \"policy_pack_present\",\n      \"ok\": true,\n      \"reason\": \"base + corridor policy files found\"\n    },\n    {\n      \"id\": \"G2\",\n      \"name\": \"policy_pack_valid\",\n      \"ok\": true,\n      \"reason\": \"policy JSON valid\",\n      \"rule_set_id\": \"noetfeld-credit-v1\",\n      \"rule_set_version\": \"1.0.0\"\n    },\n    {\n      \"id\": \"G3\",\n      \"name\": \"database_writable\",\n      \"ok\": true,\n      \"reason\": \"sqlite ok (noetfeld.db)\"\n    },\n    {\n      \"id\": \"G4\",\n      \"name\": \"api_readiness\",\n      \"ok\": true,\n      \"reason\": \"skipped \\u2014 set NOETFIELD_API_URL or --api-url to probe remote runtime\",\n      \"skipped\": true\n    },\n    {\n      \"id\": \"G5\",\n      \"name\": \"policy_registry\",\n      \"ok\": true,\n      \"reason\": \"PolicyRegistry loaded\",\n      \"combined_hash\": \"6ed3dd7180db65bdfce6ab99a9a7ee98334f49aa7a5944fd8a1683d099e95fde\"\n    },\n    {\n      \"id\": \"G6\",\n      \"name\": \"pytest_suite\",\n      \"ok\": true,\n      \"reason\": \"145 passed, 2 warnings in 2.40s\"\n    },\n    {\n      \"id\": \"G7\",\n      \"name\": \"product_truth_phase\",\n      \"ok\": true,\n      \"reason\": \"PRODUCT_TRUTH phase 4 vs manifest 4\",\n      \"truth_phase\": 4,\n      \"manifest_phase\": 4\n    }\n  ],\n  \"block_reasons\": []\n}",
+            "stderr_tail": "",
             "continued_on_error": false,
             "name": "gate"
           },
@@ -92,9 +92,9 @@
               "pytest",
               "-q"
             ],
-            "ok": false,
-            "exit_code": 1,
-            "stdout_tail": "noetfield-org/SERVICE_LANES.md\",\n  \"monitoring_note\": \"On-demand only; do not poll on timers.\"\n}\n=============================== warnings summary ===============================\ntests/test_decide_integration_ci.py::test_decide_cli_against_live_local_server\n  /Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/websockets/legacy/__init__.py:6: DeprecationWarning: websockets.legacy is deprecated; see https://websockets.readthedocs.io/en/stable/howto/upgrade.html for upgrade instructions\n    warnings.warn(  # deprecated in 14.0 - 2024-11-09\n\ntests/test_decide_integration_ci.py::test_decide_cli_against_live_local_server\n  /Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/uvicorn/protocols/websockets/websockets_impl.py:17: DeprecationWarning: websockets.server.WebSocketServerProtocol is deprecated\n    from websockets.server import WebSocketServerProtocol\n\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\n=========================== short test summary info ============================\nFAILED tests/test_noos_integrator_sync_v1.py::test_service_status_reads_service_lanes\n1 failed, 142 passed, 2 warnings in 2.45s",
+            "ok": true,
+            "exit_code": 0,
+            "stdout_tail": "........................................................................ [ 49%]\n........................................................................ [ 99%]\n.                                                                        [100%]\n=============================== warnings summary ===============================\ntests/test_decide_integration_ci.py::test_decide_cli_against_live_local_server\n  /Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/websockets/legacy/__init__.py:6: DeprecationWarning: websockets.legacy is deprecated; see https://websockets.readthedocs.io/en/stable/howto/upgrade.html for upgrade instructions\n    warnings.warn(  # deprecated in 14.0 - 2024-11-09\n\ntests/test_decide_integration_ci.py::test_decide_cli_against_live_local_server\n  /Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/uvicorn/protocols/websockets/websockets_impl.py:17: DeprecationWarning: websockets.server.WebSocketServerProtocol is deprecated\n    from websockets.server import WebSocketServerProtocol\n\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\n145 passed, 2 warnings in 2.62s",
             "stderr_tail": "",
             "continued_on_error": false,
             "name": "pytest"
@@ -107,7 +107,7 @@
           "github_run_id": "local-smoke",
           "github_workflow": "noos-runtime-loop.yml",
           "dispatch_source": "cf-cron",
-          "processed_at": "2026-07-05T15:54:08+00:00"
+          "processed_at": "2026-07-05T16:44:10+00:00"
         },
         "cloud_trigger": "repository_dispatch"
       },
@@ -120,37 +120,37 @@
         "exit_code": 0,
         "detail": {
           "ok": true,
-          "id": "f83a6d09-ff86-475b-93c9-16993f4646ce",
+          "id": "6e973b85-bc38-4869-a72d-97f87aca07a9",
           "status": 201,
-          "op_key": "c39897ccef618d38d0b2d7cb"
+          "op_key": "67a29bb43c4cf4488a9446b8"
         }
       },
-      "finished_at": "2026-07-05T15:54:07+00:00",
-      "state_after": "FAILED_WITH_RECEIPT",
-      "status": "degraded",
-      "exit_code": 1,
-      "blocker_reason": "steps_failed:['gate', 'pytest']",
-      "next_action": "self_heal_or_triage",
+      "finished_at": "2026-07-05T16:44:10+00:00",
+      "state_after": "COMPLETE",
+      "status": "ok",
+      "exit_code": 0,
+      "blocker_reason": null,
+      "next_action": "await_next_scheduled_tick",
       "d4": {
-        "execute_ok": false,
+        "execute_ok": true,
         "validate_ok": true,
         "sink_acked": true
       },
       "d2": {
         "cas": {
           "verdict": "ACCEPTED",
-          "expected": 3,
-          "observed": 3,
-          "new_value": 4
+          "expected": 4,
+          "observed": 4,
+          "new_value": 5
         }
       },
       "transition_log_tail": [
         {
           "from": "RUNNING",
-          "to": "FAILED_WITH_RECEIPT",
-          "at": "2026-07-05T15:54:07+00:00",
-          "cycle": 4,
-          "op_key": "c39897ccef618d38d0b2d7cb"
+          "to": "COMPLETE",
+          "at": "2026-07-05T16:44:10+00:00",
+          "cycle": 5,
+          "op_key": "67a29bb43c4cf4488a9446b8"
         }
       ]
     },
@@ -159,13 +159,13 @@
   "rolling_evaluation": {
     "loop_id": "runtime",
     "factory_id": "loop-runtime",
-    "cycle_count": 3,
+    "cycle_count": 4,
     "invalid_trigger_count": 0,
     "latest_status": "ok",
     "ready": true,
     "blockers": [],
     "lookback_hours": 24,
-    "lookback_started_at": "2026-07-04T15:54:08Z"
+    "lookback_started_at": "2026-07-04T16:44:10Z"
   },
   "ok": true,
   "autonomous_triggers": true

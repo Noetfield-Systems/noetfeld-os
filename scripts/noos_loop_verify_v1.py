@@ -42,6 +42,31 @@ def utc_now() -> str:
     return datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
 
+def _fly_l4_live() -> bool:
+    baseline = ROOT / "receipts/proof/noos-deploy-baseline-audit-v1.json"
+    if not baseline.is_file():
+        return False
+    try:
+        row = json.loads(baseline.read_text(encoding="utf-8"))
+    except json.JSONDecodeError:
+        return False
+    return bool((row.get("motor_matrix") or {}).get("fly_live"))
+
+
+def _sandbox_fleet_note() -> dict[str, Any]:
+    fleet_path = ROOT / "data/noos-sandbox-fleet-v1.json"
+    receipt_path = ROOT / "receipts/proof/noos-sandbox-registry-v1.json"
+    note: dict[str, Any] = {"registry": str(fleet_path.relative_to(ROOT)) if fleet_path.is_file() else None}
+    if receipt_path.is_file():
+        try:
+            receipt = json.loads(receipt_path.read_text(encoding="utf-8"))
+            note["reconcile_ok"] = receipt.get("ok")
+            note["sandbox_count"] = receipt.get("sandbox_count")
+        except json.JSONDecodeError:
+            pass
+    return note
+
+
 def _loop_motor_note() -> dict[str, Any]:
     if not REGISTRY.is_file():
         return {"secondary_motor": None}
@@ -51,12 +76,13 @@ def _loop_motor_note() -> dict[str, Any]:
         "inbox": (ROOT / "receipts/proof/noos-deploy-fly-inbox-v1.json").is_file(),
         "self_heal": (ROOT / "receipts/proof/noos-deploy-fly-self-heal-v1.json").is_file(),
     }
+    l4 = _fly_l4_live()
     return {
         "primary_motor": "cf-cron → repository_dispatch",
         "secondary_motor": motor.get("secondary_motor"),
         "secondary_motor_note": motor.get("secondary_motor_note"),
         "fly_deploy_receipts": fly_receipts,
-        "fly_l4_live": False,
+        "fly_l4_live": l4,
     }
 
 
@@ -268,6 +294,7 @@ def verify_all(
         "core_loop_count": len(CORE_LOOP_IDS),
         "new_verified_window": window,
         "secondary_motor": _loop_motor_note(),
+        "sandbox_fleet": _sandbox_fleet_note(),
         "ok": verified + stale_allowed >= len(CORE_LOOP_IDS),
         "report_line": (
             f"loop_verify_all · verified={verified} stale_allowed={stale_allowed} "

@@ -1,7 +1,7 @@
 {
   "schema": "noos-deploy-receipt-v1",
-  "deployed_at": "2026-07-05T15:52:17Z",
-  "merge_sha": "5d6fb9aea33b96c4f6c6fb03a11fb1c9e2dfe429",
+  "deployed_at": "2026-07-05T16:41:44Z",
+  "merge_sha": "146e8fe1acee1748cd6b51352e062432e081aa6d",
   "scope": "fly-self-heal",
   "upg": "UPG-0206",
   "dry_run": false,

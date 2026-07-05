@@ -29,10 +29,10 @@
   },
   "summary": {
     "total_items": 63,
-    "done": 30,
+    "done": 37,
     "open_t1": 0,
-    "open_t2": 3,
-    "open_t3": 6,
+    "open_t2": 0,
+    "open_t3": 1,
     "deferred_t4": 7,
     "founder_blocked": 9
   },
@@ -377,44 +377,48 @@
       "id": "UPG-0164",
       "tier": "T2",
       "track": "D",
-      "status": "open",
+      "status": "done",
       "priority": "P2",
       "owner": "machine",
       "title": "3-line PyPI README pointing to full docs",
-      "success_check": "pypi project page links noetfield.com/gel"
+      "success_check": "pypi project page links noetfield.com/gel",
+      "evidence": "packages/noetfield-gate/README.md"
     },
     {
       "id": "UPG-0168",
       "tier": "T2",
       "track": "D",
-      "status": "open",
+      "status": "done",
       "priority": "P2",
       "owner": "machine",
       "title": "GitHub Action example \u2014 noetfield gate before agent job",
-      "success_check": "docs example workflow in repo"
+      "success_check": "docs example workflow in repo",
+      "evidence": "docs/examples/noetfield-gate-gha-v1.yml"
     },
     {
       "id": "UPG-0169",
       "tier": "T2",
       "track": "D",
-      "status": "open",
+      "status": "done",
       "priority": "P2",
       "owner": "machine",
       "title": "Pre-commit hook example in docs",
-      "success_check": "docs snippet + optional .pre-commit-config stub"
+      "success_check": "docs snippet + optional .pre-commit-config stub",
+      "evidence": "docs/examples/pre-commit-noetfield-gate-v1.md"
     },
     {
       "id": "UPG-0208",
       "tier": "T3",
       "track": "G",
-      "status": "open",
+      "status": "done",
       "priority": "P2",
       "owner": "machine",
       "title": "Private mesh gel-api internal URL for loops",
       "success_check": "loops never hit public api for health",
       "depends_on": [
         "UPG-0203"
-      ]
+      ],
+      "evidence": "data/noos-deploy-scopes-v1.json internal_health_url + NOOS_GEL_INTERNAL_HEALTH"
     },
     {
       "id": "UPG-0209",
@@ -427,7 +431,8 @@
       "success_check": "external verify both regions",
       "depends_on": [
         "UPG-0204"
-      ]
+      ],
+      "note": "Deferred to next plan per T3 closeout"
     },
     {
       "id": "UPG-0210",
@@ -447,37 +452,40 @@
       "id": "UPG-0211",
       "tier": "T3",
       "track": "I",
-      "status": "open",
+      "status": "done",
       "priority": "P2",
       "owner": "machine",
       "title": "noos-improve sandbox Kaizen runner (1/day)",
       "success_check": "highest-ROI machine_safe item applied per day",
       "depends_on": [
         "GOV-L7-L12"
-      ]
+      ],
+      "evidence": "scripts/noos_improve_kaizen_runner_v1.py"
     },
     {
       "id": "UPG-0212",
       "tier": "T3",
       "track": "H",
-      "status": "open",
+      "status": "done",
       "priority": "P2",
       "owner": "machine",
       "title": "data/noos-runtime-scaling-v1.json registry",
       "success_check": "THROTTLED_ROI rules per loop",
       "depends_on": [
         "UPG-0205"
-      ]
+      ],
+      "evidence": "data/noos-runtime-scaling-v1.json"
     },
     {
       "id": "SANDBOX-REGISTRY",
       "tier": "T3",
       "track": "I",
-      "status": "open",
+      "status": "done",
       "priority": "P2",
       "owner": "machine",
       "title": "8-sandbox fleet registry (inbox, chain, surface, sourcea, improve, gel-api, www, cf)",
-      "success_check": "one row per sandbox in autorun-workflows"
+      "success_check": "one row per sandbox in autorun-workflows",
+      "evidence": "data/noos-sandbox-fleet-v1.json + scripts/noos_sandbox_registry_reconcile_v1.py"
     },
     {
       "id": "UPG-0213",
@@ -492,7 +500,7 @@
         "UPG-0203",
         "UPG-0204"
       ],
-      "note": "Only if Railway drift/cost hurts"
+      "note": "Deferred to next plan per T3 closeout"
     },
     {
       "id": "UPG-0214",

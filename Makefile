@@ -1,4 +1,4 @@
-.PHONY: test gate demo build-gate-js install inbox cloud-worker autorun-once autorun autorun-status autorun-tick-deploy autorun-tick-dispatch autonomous-verify schedule-verify determinism-verify replay-verify planes supabase-migrate verified-window loop-run loop-fleet-deploy loop-fleet-dispatch loops-status loop-heartbeat loop-baseline loop-registry-reconcile loop-verify-all loop-upgrade-closeout deploy-baseline deploy-status deploy-fly-inbox deploy-fly-selfheal deploy-drift-kaizen inbox-scaler t2-deploy-closeout acg-founder-send-prep backlog urls local-boot local-closeout local-patch-proposal local-heartbeat local-lane local-sweep-stale local-status machine-status machine-reconcile machine-audit machine-verify machine-validate-merge machine-critic machine-research
+.PHONY: test gate demo build-gate-js install inbox cloud-worker autorun-once autorun autorun-status autorun-tick-deploy autorun-tick-dispatch autonomous-verify schedule-verify determinism-verify replay-verify planes supabase-migrate verified-window loop-run loop-fleet-deploy loop-fleet-dispatch loops-status loop-heartbeat loop-baseline loop-registry-reconcile loop-verify-all loop-upgrade-closeout deploy-baseline deploy-status deploy-fly-inbox deploy-fly-selfheal deploy-drift-kaizen inbox-scaler inbox-scaler-evaluate sandbox-registry-reconcile improve-kaizen-daily t2-deploy-closeout t3-sandbox-closeout acg-founder-send-prep backlog urls local-boot local-closeout local-patch-proposal local-heartbeat local-lane local-sweep-stale local-status machine-status machine-reconcile machine-audit machine-verify machine-validate-merge machine-critic machine-research
 
 test:
 	pytest -q
@@ -104,8 +104,20 @@ deploy-drift-kaizen:
 inbox-scaler:
 	python3 scripts/noos_inbox_scaler_v1.py --simulate-pending 11 --write-receipt --json
 
+inbox-scaler-evaluate:
+	python3 scripts/noos_inbox_scaler_v1.py --evaluate-all --write-receipt --json
+
+sandbox-registry-reconcile:
+	python3 scripts/noos_sandbox_registry_reconcile_v1.py --write-receipt --json
+
+improve-kaizen-daily:
+	python3 scripts/noos_improve_kaizen_runner_v1.py --write-receipt --json
+
 t2-deploy-closeout:
 	python3 scripts/noos_t2_deploy_closeout_v1.py --write-receipt --json
+
+t3-sandbox-closeout:
+	python3 scripts/noos_t3_sandbox_closeout_v1.py --write-receipt --json
 
 acg-founder-send-prep:
 	python3 scripts/noos_acg_founder_send_prep_v1.py --write-receipt --json

@@ -1,6 +1,6 @@
 {
   "schema": "noos-deploy-baseline-audit-v1",
-  "audited_at": "2026-07-05T15:51:22Z",
+  "audited_at": "2026-07-05T16:43:56Z",
   "authority": "NOOS_T2_DEPLOY_ACG_STEP_1",
   "motor_matrix": {
     "primary": "cf_loop_fleet",

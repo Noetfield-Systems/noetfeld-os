@@ -57,8 +57,9 @@
 - **Purpose:** Marketing website · investor relations · trust ledger UX
 - **Agent Role:** T1 builder · asset deployment · web frontend
 - **Must-Sync-With:** sina-governance-SSOT (for trust ledger samples)
-- **Workflows:** static-www deploy · buyer-audience-verify (Vercel retired 2026-07-05)
-- **Production:** Cloudflare static www (`www.noetfield.com`; Vercel project deleted)
+- **Workflows:** static-www deploy · CF www-proxy denylist worker · buyer-audience-verify (Vercel retired 2026-07-05)
+- **Production:** Cloudflare Pages `noetfield-www` + edge worker `noetfield-www-proxy` (denylist → Pages origin)
+- **Interface commit:** `573069c1` — `infra/cf-www-proxy/` + `scripts/generate_cf_www_denylist_v1.py`
 - **Owner:** Noetfield-Systems
 
 ### 6. noetfield-studio-ide

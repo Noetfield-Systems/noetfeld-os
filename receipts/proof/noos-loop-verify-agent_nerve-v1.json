@@ -2,7 +2,7 @@
   "schema": "noos-loop-verify-v1",
   "backlog_id": "LOOP-VERIFY-agent_nerve",
   "loop_id": "agent_nerve",
-  "verified_at": "2026-07-05T15:54:30Z",
+  "verified_at": "2026-07-05T16:44:32Z",
   "verification_state": "VERIFIED",
   "smoke": {
     "loop_id": "agent_nerve",
@@ -20,9 +20,9 @@
       "event_type": "noos_agent_nerve_loop_tick",
       "domain": "agent-docs",
       "trigger_source": "repository_dispatch",
-      "cycle_number": 4,
-      "op_key": "3ecf32801ed601b85ad89b9d",
-      "started_at": "2026-07-05T15:54:29+00:00",
+      "cycle_number": 5,
+      "op_key": "2ebba750db96def2e545b3ae",
+      "started_at": "2026-07-05T16:44:31+00:00",
       "state_before": "RUNNING",
       "cost": {
         "provider": "github_actions+cloudflare_cron",
@@ -52,7 +52,7 @@
         "count": 1,
         "oldest_id": "NOOS-C-01",
         "priority": "P0",
-        "age_seconds": 302026,
+        "age_seconds": 305028,
         "escalated": true
       },
       "evidence": [
@@ -101,7 +101,7 @@
           "github_run_id": "local-smoke",
           "github_workflow": "noos-agent-nerve-loop.yml",
           "dispatch_source": "cf-cron",
-          "processed_at": "2026-07-05T15:54:30+00:00"
+          "processed_at": "2026-07-05T16:44:32+00:00"
         },
         "cloud_trigger": "repository_dispatch"
       },
@@ -114,12 +114,12 @@
         "exit_code": 0,
         "detail": {
           "ok": true,
-          "id": "438badd9-a3ba-413b-8bd0-491f322ba37b",
+          "id": "264537e2-990b-48e3-86db-a14aa09844e0",
           "status": 201,
-          "op_key": "3ecf32801ed601b85ad89b9d"
+          "op_key": "2ebba750db96def2e545b3ae"
         }
       },
-      "finished_at": "2026-07-05T15:54:30+00:00",
+      "finished_at": "2026-07-05T16:44:31+00:00",
       "state_after": "COMPLETE",
       "status": "ok",
       "exit_code": 0,
@@ -133,18 +133,18 @@
       "d2": {
         "cas": {
           "verdict": "ACCEPTED",
-          "expected": 3,
-          "observed": 3,
-          "new_value": 4
+          "expected": 4,
+          "observed": 4,
+          "new_value": 5
         }
       },
       "transition_log_tail": [
         {
           "from": "RUNNING",
           "to": "COMPLETE",
-          "at": "2026-07-05T15:54:30+00:00",
-          "cycle": 4,
-          "op_key": "3ecf32801ed601b85ad89b9d"
+          "at": "2026-07-05T16:44:31+00:00",
+          "cycle": 5,
+          "op_key": "2ebba750db96def2e545b3ae"
         }
       ]
     },
@@ -153,13 +153,13 @@
   "rolling_evaluation": {
     "loop_id": "agent_nerve",
     "factory_id": "loop-agent-nerve",
-    "cycle_count": 3,
+    "cycle_count": 4,
     "invalid_trigger_count": 0,
     "latest_status": "ok",
     "ready": true,
     "blockers": [],
     "lookback_hours": 24,
-    "lookback_started_at": "2026-07-04T15:54:30Z"
+    "lookback_started_at": "2026-07-04T16:44:32Z"
   },
   "ok": true,
   "autonomous_triggers": true

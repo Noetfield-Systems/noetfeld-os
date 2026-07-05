@@ -2,7 +2,7 @@
   "schema": "noos-loop-verify-v1",
   "backlog_id": "LOOP-VERIFY-self_heal",
   "loop_id": "self_heal",
-  "verified_at": "2026-07-05T15:54:28Z",
+  "verified_at": "2026-07-05T16:44:30Z",
   "verification_state": "VERIFIED",
   "smoke": {
     "loop_id": "self_heal",
@@ -20,9 +20,9 @@
       "event_type": "noos_self_heal_loop_tick",
       "domain": "self-improvement",
       "trigger_source": "repository_dispatch",
-      "cycle_number": 4,
-      "op_key": "664b6624d0522204be1c1f41",
-      "started_at": "2026-07-05T15:54:11+00:00",
+      "cycle_number": 5,
+      "op_key": "d5b05f632a51dca24f03c8fd",
+      "started_at": "2026-07-05T16:44:13+00:00",
       "state_before": "RUNNING",
       "cost": {
         "provider": "github_actions+cloudflare_cron",
@@ -52,7 +52,7 @@
         "count": 1,
         "oldest_id": "NOOS-C-01",
         "priority": "P0",
-        "age_seconds": 302025,
+        "age_seconds": 305027,
         "escalated": true
       },
       "evidence": [
@@ -64,12 +64,12 @@
         {
           "command": "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3 scripts/verify_noos_autonomous_24h_v1.py --hours 6 --write-receipt",
           "exit_code": 0,
-          "output": "autonomous PASS \u00b7 sha 5d6fb9ae \u00b7 dispatch=79 schedule=21 manual=0"
+          "output": "autonomous PASS \u00b7 sha 146e8fe1 \u00b7 dispatch=77 schedule=21 manual=0"
         },
         {
           "command": "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3 scripts/autorun_status_v1.py",
           "exit_code": 1,
-          "output": "eipt\"\n      },\n      {\n        \"scope\": \"sourcea_recipe_queue_builder\",\n        \"severity\": \"high\",\n        \"summary\": \"Workflow is not healthy: BLOCKED_WITH_REASON\",\n        \"detail\": \"no_supabase_receipt\"\n      },\n      {\n        \"scope\": \"noos_schedule_canary\",\n        \"severity\": \"high\",\n        \"summary\": \"Workflow is not healthy: FAILED_WITH_RECEIPT\",\n        \"detail\": \"\"\n      }\n    ]\n  }\n}"
+          "output": "      {\n        \"scope\": \"noos_loop_agent_nerve\",\n        \"severity\": \"high\",\n        \"summary\": \"Workflow is not healthy: BLOCKED_WITH_REASON\",\n        \"detail\": \"stale_supabase_row\"\n      },\n      {\n        \"scope\": \"noos_loop_sourcea_observe\",\n        \"severity\": \"high\",\n        \"summary\": \"Workflow is not healthy: BLOCKED_WITH_REASON\",\n        \"detail\": \"stale_supabase_row\"\n      }\n    ]\n  }\n}"
         },
         {
           "command": "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3 scripts/noos_loop_heartbeat_v1.py --write-receipt",
@@ -101,7 +101,7 @@
             ],
             "ok": true,
             "exit_code": 0,
-            "stdout_tail": "autonomous PASS \u00b7 sha 5d6fb9ae \u00b7 dispatch=79 schedule=21 manual=0",
+            "stdout_tail": "autonomous PASS \u00b7 sha 146e8fe1 \u00b7 dispatch=77 schedule=21 manual=0",
             "stderr_tail": "",
             "continued_on_error": false,
             "name": "autonomy_verify"
@@ -113,7 +113,7 @@
             ],
             "ok": false,
             "exit_code": 1,
-            "stdout_tail": "proof/noos-kaizen-autorun-status-noos_worker_inbox-20260705.json\",\n      \"expected_roi\": {\n        \"cost_saved_usd\": 0,\n        \"risk_reduced\": \"autorun SLO miss\",\n        \"revenue_unblocked\": \"\",\n        \"build_cost_usd\": 0\n      },\n      \"age_days\": 0\n    },\n    {\n      \"id\": \"receipts/proof/noos-kaizen-autorun-status-noos_schedule_canary-20260705.json\",\n      \"expected_roi\": {\n        \"cost_saved_usd\": 0,\n        \"risk_reduced\": \"autorun SLO miss\",\n        \"revenue_unblocked\": \"\",\n        \"build_cost_usd\": 0\n      },\n      \"age_days\": 0\n    }\n  ],\n  \"critique\": {\n    \"overall_ok\": false,\n    \"findings\": [\n      {\n        \"scope\": \"sourcea_buyer_proof_verify\",\n        \"severity\": \"high\",\n        \"summary\": \"Workflow is not healthy: BLOCKED_WITH_REASON\",\n        \"detail\": \"no_supabase_receipt\"\n      },\n      {\n        \"scope\": \"sourcea_recipe_queue_builder\",\n        \"severity\": \"high\",\n        \"summary\": \"Workflow is not healthy: BLOCKED_WITH_REASON\",\n        \"detail\": \"no_supabase_receipt\"\n      },\n      {\n        \"scope\": \"noos_schedule_canary\",\n        \"severity\": \"high\",\n        \"summary\": \"Workflow is not healthy: FAILED_WITH_RECEIPT\",\n        \"detail\": \"\"\n      }\n    ]\n  }\n}",
+            "stdout_tail": "il\": \"stale_supabase_row\"\n      },\n      {\n        \"scope\": \"sourcea_buyer_proof_verify\",\n        \"severity\": \"high\",\n        \"summary\": \"Workflow is not healthy: BLOCKED_WITH_REASON\",\n        \"detail\": \"no_supabase_receipt\"\n      },\n      {\n        \"scope\": \"sourcea_recipe_queue_builder\",\n        \"severity\": \"high\",\n        \"summary\": \"Workflow is not healthy: BLOCKED_WITH_REASON\",\n        \"detail\": \"no_supabase_receipt\"\n      },\n      {\n        \"scope\": \"noos_schedule_canary\",\n        \"severity\": \"high\",\n        \"summary\": \"Workflow is not healthy: FAILED_WITH_RECEIPT\",\n        \"detail\": \"\"\n      },\n      {\n        \"scope\": \"noos_loop_self_heal\",\n        \"severity\": \"high\",\n        \"summary\": \"Workflow is not healthy: BLOCKED_WITH_REASON\",\n        \"detail\": \"stale_supabase_row\"\n      },\n      {\n        \"scope\": \"noos_loop_agent_nerve\",\n        \"severity\": \"high\",\n        \"summary\": \"Workflow is not healthy: BLOCKED_WITH_REASON\",\n        \"detail\": \"stale_supabase_row\"\n      },\n      {\n        \"scope\": \"noos_loop_sourcea_observe\",\n        \"severity\": \"high\",\n        \"summary\": \"Workflow is not healthy: BLOCKED_WITH_REASON\",\n        \"detail\": \"stale_supabase_row\"\n      }\n    ]\n  }\n}",
             "stderr_tail": "",
             "continued_on_error": false,
             "name": "autorun_status"
@@ -139,7 +139,7 @@
           "github_run_id": "local-smoke",
           "github_workflow": "noos-self-heal-loop.yml",
           "dispatch_source": "cf-cron",
-          "processed_at": "2026-07-05T15:54:28+00:00"
+          "processed_at": "2026-07-05T16:44:30+00:00"
         },
         "cloud_trigger": "repository_dispatch"
       },
@@ -152,12 +152,12 @@
         "exit_code": 0,
         "detail": {
           "ok": true,
-          "id": "664457f8-c6a6-4ac4-b660-f93854564e23",
+          "id": "7b2eaa2a-880e-4e53-a241-53ecaaafda93",
           "status": 201,
-          "op_key": "664b6624d0522204be1c1f41"
+          "op_key": "d5b05f632a51dca24f03c8fd"
         }
       },
-      "finished_at": "2026-07-05T15:54:28+00:00",
+      "finished_at": "2026-07-05T16:44:30+00:00",
       "state_after": "FAILED_WITH_RECEIPT",
       "status": "degraded",
       "exit_code": 1,
@@ -171,18 +171,18 @@
       "d2": {
         "cas": {
           "verdict": "ACCEPTED",
-          "expected": 3,
-          "observed": 3,
-          "new_value": 4
+          "expected": 4,
+          "observed": 4,
+          "new_value": 5
         }
       },
       "transition_log_tail": [
         {
           "from": "RUNNING",
           "to": "FAILED_WITH_RECEIPT",
-          "at": "2026-07-05T15:54:28+00:00",
-          "cycle": 4,
-          "op_key": "664b6624d0522204be1c1f41"
+          "at": "2026-07-05T16:44:30+00:00",
+          "cycle": 5,
+          "op_key": "d5b05f632a51dca24f03c8fd"
         }
       ]
     },
@@ -191,13 +191,13 @@
   "rolling_evaluation": {
     "loop_id": "self_heal",
     "factory_id": "loop-self-heal",
-    "cycle_count": 3,
+    "cycle_count": 4,
     "invalid_trigger_count": 0,
     "latest_status": "ok",
     "ready": true,
     "blockers": [],
     "lookback_hours": 24,
-    "lookback_started_at": "2026-07-04T15:54:28Z"
+    "lookback_started_at": "2026-07-04T16:44:30Z"
   },
   "ok": true,
   "autonomous_triggers": true

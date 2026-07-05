@@ -15,8 +15,19 @@
 ## NOOS role
 
 - Probe only via surface loop + `make urls`
-- Deploy execution lives in **Noetfield** repo (static generator `scripts/rebuild-www-v6.py`)
+- Deploy execution lives in **Noetfield** repo (`infra/cf-www-proxy/` denylist worker → Pages origin)
+- Denylist generator: `scripts/generate_cf_www_denylist_v1.py` (Noetfield repo)
 - `noetfield deploy --scope www` emits probe receipt; does not push assets
+
+## Edge worker contract
+
+| Component | Value |
+|-----------|-------|
+| Worker | `noetfield-www-proxy` |
+| Origin | `https://noetfield-www.pages.dev` |
+| Denylist | `governance/PUBLIC_OUTPUT_DENYLIST.json` → generated `denylist.generated.js` |
+| Route | `www.noetfield.com/*` (proxied) |
+| NOOS commit (interface) | Noetfield `573069c1` — CF denylist worker lane |
 
 ## ACG lane
 

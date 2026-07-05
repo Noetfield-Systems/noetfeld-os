@@ -25,6 +25,9 @@
       "upg": "UPG-0171",
       "health_url": "https://api.noetfield.com/health",
       "ready_url": "https://api.noetfield.com/readiness",
+      "internal_health_url": "https://api.noetfield.com/health",
+      "internal_health_note": "Set NOOS_GEL_INTERNAL_HEALTH to Railway private URL when available; loops prefer env over public probe.",
+      "loop_probe_user_agent": "Noetfield-OS-Loop/1.0",
       "deploy_mode": "status_probe_only"
     },
     "www": {

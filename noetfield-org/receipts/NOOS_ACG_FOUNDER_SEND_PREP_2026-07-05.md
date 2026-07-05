@@ -1,6 +1,6 @@
 # NOOS ACG Founder Send Prep
 
-**Prepared:** 2026-07-05T15:53:54Z
+**Prepared:** 2026-07-05T16:44:44Z
 **Service:** svc-cost-audit-firewall-001
 **Gate:** FT-COMMERCIAL-SEND (UPG-0001)
 
