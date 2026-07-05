@@ -117,10 +117,11 @@ Service lanes are buyer-facing or operational services delivered via mission exe
 - **Delivery Owner:** SourceA
 - **Control Layer:** NOOS
 - **Canon/Ledger:** SG
-- **Status:** PUBLIC_PAGE_LIVE
+- **Status:** PUBLIC_PAGE_LIVE + PROSPECT_PACKET_READY
 - **Live URL:** https://www.noetfield.com/services/agentic-cost-governance
 - **Publish Commit:** 096428e2 (origin/main)
-- **Current Gate:** Public page live ✓ → factory lift ⏳ → full revenue motion
+- **Prospect Packet:** docs/commercial/ACG_FIRST_PROSPECT_PACKET_v1.md (SourceA bfc05dbb, preserve/acg-2026-07-05)
+- **Current Gate:** Public page live ✓ → prospect packet ready ✓ → founder send ⏳
 - **NOOS Blocking:** None
 - **See:** SERVICE_LANES.md for owner planes, receipts, and next actions
 
@@ -138,4 +139,6 @@ Service lanes are buyer-facing or operational services delivered via mission exe
 - [x] SERVICE_LANES.md created and service lanes registered
 - [x] SG service registration confirmed for active lanes (svc-cost-audit-firewall-001)
 - [x] Noetfield.com ACG page live (096428e2, PUBLIC_PAGE_LIVE)
+- [x] SourceA first prospect packet ready (bfc05dbb, PROSPECT_PACKET_READY)
+- [ ] Founder review + first prospect send (FT-COMMERCIAL-SEND)
 - [ ] Factory lift + full revenue motion LIVE
