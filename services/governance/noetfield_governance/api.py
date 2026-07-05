@@ -2,6 +2,7 @@
 
 import asyncio
 import logging
+import os
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any, Literal
@@ -164,6 +165,15 @@ chat_telemetry_settings = PublicChatTelemetrySettings(
     path=settings.public_chat_telemetry_path,
     max_chars=settings.public_chat_telemetry_max_chars,
 )
+
+
+def deploy_git_sha() -> str | None:
+    for key in ("RAILWAY_GIT_COMMIT_SHA", "GIT_SHA", "VERCEL_GIT_COMMIT_SHA"):
+        value = (os.environ.get(key) or "").strip()
+        if value:
+            return value
+    return None
+
 
 app = FastAPI(
     title="Noetfield Platform API",
@@ -384,6 +394,7 @@ async def health() -> dict[str, object]:
     return {
         "status": "ok",
         "service": "noetfield-platform",
+        "git_sha": deploy_git_sha(),
         "runtime": "phase-3.1-backend-core",
         "golden_edge": "v3",
         "control_plane": "v1",
@@ -838,6 +849,7 @@ async def public_chat_health() -> dict[str, object]:
     return {
         "enabled": settings.public_chat_enabled,
         "configured": configured,
+        "git_sha": deploy_git_sha(),
         "provider_preference": settings.public_chat_provider,
         "active_provider": active,
         "gemini": {"configured": bool(gemini_key), "model": settings.gemini_model},
