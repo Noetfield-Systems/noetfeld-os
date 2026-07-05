@@ -12,6 +12,7 @@ from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
 REGISTRY = ROOT / "data/noos-24-7-loops-v1.json"
+DISPATCH_TABLE = ROOT / "data/noos-cf-dispatch-table-v1.json"
 WORKFLOW_DIR = ROOT / ".github/workflows"
 RECEIPT = ROOT / "receipts/proof/noos-loop-registry-reconcile-v1.json"
 
@@ -47,7 +48,16 @@ def workflow_triggers(text: str) -> dict[str, Any]:
     }
 
 
+def cf_dispatch_event_types() -> set[str]:
+    if not DISPATCH_TABLE.is_file():
+        return set()
+    doc = json.loads(DISPATCH_TABLE.read_text(encoding="utf-8"))
+    return {str(t.get("event_type") or "") for t in doc.get("targets") or []}
+
+
 def event_matches_loop(*, loop_id: str, event_type: str, triggers: dict[str, Any]) -> bool:
+    if event_type in cf_dispatch_event_types():
+        return True
     dispatch_types = triggers.get("repository_dispatch_types") or []
     if event_type in dispatch_types:
         return True

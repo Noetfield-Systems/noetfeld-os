@@ -1,8 +1,6 @@
+# Retired 2026-07-05 — CF cron → Railway (zero GHA minutes).
 name: "NOOS Cross-Repo Health Orchestrator"
 on:
-  schedule:
-    # Run every 3 hours to aggregate and coordinate across all repos
-    - cron: "0 */3 * * *"
   workflow_dispatch:
       
 permissions:

@@ -9,7 +9,7 @@
 | Motor | Role | Status |
 |-------|------|--------|
 | `noos-loop-fleet-tick-v1` (CF) | Primary — repository_dispatch every 5m | Active |
-| GitHub `schedule` cron | Backup trigger on each loop workflow | Active |
+| GitHub `schedule` cron | ~~Backup trigger on each loop workflow~~ | **Removed 2026-07-05** (duplicate spend) |
 | `noos-factory-autorun-tick-v1` | Legacy monolith factory autorun | Deprecation candidate |
 | Fly `noos-inbox-runner` | Secondary always-on inbox drain (UPG-0201) | Scaffolded |
 | Fly `noos-self-heal-runner` | Sub-minute self-heal (UPG-0206) | Scaffolded |

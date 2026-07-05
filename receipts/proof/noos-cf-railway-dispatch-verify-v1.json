@@ -1,0 +1,1793 @@
+{
+  "schema": "noos-cf-railway-dispatch-verify-v1",
+  "verified_at": "2026-07-05T17:35:42Z",
+  "runner_url": "http://127.0.0.1:8099",
+  "target_count": 13,
+  "fired_count": 13,
+  "execution_ok_count": 0,
+  "targets": [
+    {
+      "dispatch_id": "inbox",
+      "event_type": "noos_inbox_loop_tick",
+      "handler": "loop",
+      "fired": true,
+      "ok": false,
+      "status": 500,
+      "body": {
+        "handler": "loop",
+        "event_type": "noos_inbox_loop_tick",
+        "exit_code": 1,
+        "ok": false,
+        "cycle": {
+          "schema": "noos-24-7-loop-cycle-v1",
+          "receipt_schema": "autorun-cycle-receipt-v2",
+          "workflow_id": "noos-inbox-loop.yml",
+          "mission_id": "M2",
+          "sandbox_id": "noetfeld-os",
+          "lane": "noos",
+          "loop_id": "inbox",
+          "event_type": "noos_inbox_loop_tick",
+          "domain": "factory-inbox",
+          "trigger_source": "http_loop",
+          "cycle_number": 10,
+          "op_key": "860122f741de5df0792a4edb",
+          "started_at": "2026-07-05T17:35:05+00:00",
+          "state_before": "RUNNING",
+          "cost": {
+            "provider": "github_actions+cloudflare_cron",
+            "model": "none",
+            "tokens_in": 0,
+            "tokens_out": 0,
+            "unit_cost_usd": 0.0,
+            "total_usd": 0.0,
+            "metered_at_call_site": true,
+            "step_count": 1
+          },
+          "value_class": "revenue_path",
+          "sink_invariant": {
+            "law": "sum(origin_counts) == sink_count",
+            "counts": {
+              "steps": 1,
+              "self_heal": 1
+            },
+            "sink_count": 2,
+            "provenance_tags": {
+              "steps": "loop_step",
+              "self_heal": "loop_self_heal"
+            },
+            "verdict": "PASS"
+          },
+          "founder_blocked": {
+            "count": 0,
+            "oldest_id": "",
+            "priority": "",
+            "age_seconds": 0,
+            "escalated": false,
+            "skipped": true
+          },
+          "evidence": [
+            {
+              "command": "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3 scripts/cloud_inbox_worker_v1.py",
+              "exit_code": 1,
+              "output": ""
+            },
+            {
+              "command": "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3 scripts/reenqueue_blocked_upg_inbox_v1.py",
+              "exit_code": 0,
+              "output": "{\n  \"requeued\": [],\n  \"blocked_seen\": 0\n}"
+            }
+          ],
+          "runner_output": {
+            "steps": [
+              {
+                "cmd": [
+                  "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+                  "scripts/cloud_inbox_worker_v1.py"
+                ],
+                "ok": false,
+                "exit_code": 1,
+                "stdout_tail": "",
+                "stderr_tail": "{\"ok\": false, \"error\": \"Supabase not configured\"}",
+                "continued_on_error": false,
+                "name": "cloud_worker"
+              }
+            ],
+            "self_heal": [
+              {
+                "cmd": [
+                  "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+                  "scripts/reenqueue_blocked_upg_inbox_v1.py"
+                ],
+                "ok": true,
+                "exit_code": 0,
+                "stdout_tail": "{\n  \"requeued\": [],\n  \"blocked_seen\": 0\n}",
+                "stderr_tail": "",
+                "continued_on_error": false,
+                "name": "reenqueue_blocked"
+              }
+            ],
+            "cloud_meta": {
+              "processor": "noos_loop_runner_v1",
+              "github_event": "http_loop",
+              "github_run_id": "railway-c09001531e31",
+              "github_workflow": "railway-noos-loop-runner",
+              "dispatch_source": "verify_script",
+              "processed_at": "2026-07-05T17:35:05+00:00"
+            },
+            "cloud_trigger": "http_loop"
+          },
+          "guardrails": {
+            "lane": "noos",
+            "read_only_control": false
+          },
+          "supabase_sink": {
+            "ok": false,
+            "skipped": true,
+            "reason": "supabase_not_configured"
+          },
+          "finished_at": "2026-07-05T17:35:05+00:00",
+          "state_after": "FAILED_WITH_RECEIPT",
+          "status": "degraded",
+          "exit_code": 1,
+          "blocker_reason": "steps_failed:['cloud_worker']",
+          "next_action": "self_heal_or_triage",
+          "d4": {
+            "execute_ok": false,
+            "validate_ok": true,
+            "sink_acked": false
+          },
+          "d2": {
+            "cas": {
+              "verdict": "ACCEPTED",
+              "expected": 9,
+              "observed": 9,
+              "new_value": 10
+            }
+          },
+          "transition_log_tail": [
+            {
+              "from": "RUNNING",
+              "to": "FAILED_WITH_RECEIPT",
+              "at": "2026-07-05T17:35:05+00:00",
+              "cycle": 10,
+              "op_key": "860122f741de5df0792a4edb"
+            }
+          ]
+        },
+        "stderr_tail": "",
+        "run_id": "railway-c09001531e31"
+      }
+    },
+    {
+      "dispatch_id": "runtime",
+      "event_type": "noos_runtime_loop_tick",
+      "handler": "loop",
+      "fired": true,
+      "ok": false,
+      "status": 500,
+      "body": {
+        "handler": "loop",
+        "event_type": "noos_runtime_loop_tick",
+        "exit_code": 1,
+        "ok": false,
+        "cycle": {
+          "schema": "noos-24-7-loop-cycle-v1",
+          "receipt_schema": "autorun-cycle-receipt-v2",
+          "workflow_id": "noos-runtime-loop.yml",
+          "mission_id": "M3",
+          "sandbox_id": "noetfeld-os",
+          "lane": "noos",
+          "loop_id": "runtime",
+          "event_type": "noos_runtime_loop_tick",
+          "domain": "gel-runtime",
+          "trigger_source": "http_loop",
+          "cycle_number": 9,
+          "op_key": "94a1a3fd67a32001da9f3dd2",
+          "started_at": "2026-07-05T17:35:05+00:00",
+          "state_before": "RUNNING",
+          "cost": {
+            "provider": "github_actions+cloudflare_cron",
+            "model": "none",
+            "tokens_in": 0,
+            "tokens_out": 0,
+            "unit_cost_usd": 0.0,
+            "total_usd": 0.0,
+            "metered_at_call_site": true,
+            "step_count": 2
+          },
+          "value_class": "risk_reduction",
+          "sink_invariant": {
+            "law": "sum(origin_counts) == sink_count",
+            "counts": {
+              "steps": 2,
+              "self_heal": 0
+            },
+            "sink_count": 2,
+            "provenance_tags": {
+              "steps": "loop_step",
+              "self_heal": "loop_self_heal"
+            },
+            "verdict": "PASS"
+          },
+          "founder_blocked": {
+            "count": 0,
+            "oldest_id": "",
+            "priority": "",
+            "age_seconds": 0,
+            "escalated": false,
+            "skipped": true
+          },
+          "evidence": [
+            {
+              "command": "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3 -m noetfield_gate.cli gate --json --pytest",
+              "exit_code": 1,
+              "output": "\"name\": \"product_truth_phase\",\n      \"ok\": true,\n      \"reason\": \"PRODUCT_TRUTH phase 4 vs manifest 4\",\n      \"truth_phase\": 4,\n      \"manifest_phase\": 4\n    }\n  ],\n  \"block_reasons\": [\n    \".............................F.......................................... [ 49%]\\n......................................................................F. [ 99%]\\n.                                       \"\n  ]\n}"
+            },
+            {
+              "command": "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3 -m pytest -q",
+              "exit_code": 1,
+              "output": "rt WebSocketServerProtocol\n\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\n=========================== short test summary info ============================\nFAILED tests/test_cursor_local_mac_t2_v1.py::test_full_governance_verify_still_passes\nFAILED tests/test_verify_living_system_governance_v1.py::test_full_governance_verify_passes\n2 failed, 143 passed, 2 warnings in 2.40s"
+            }
+          ],
+          "runner_output": {
+            "steps": [
+              {
+                "cmd": [
+                  "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+                  "-m",
+                  "noetfield_gate.cli",
+                  "gate",
+                  "--json",
+                  "--pytest"
+                ],
+                "ok": false,
+                "exit_code": 1,
+                "stdout_tail": "\"ok\": true,\n      \"reason\": \"sqlite ok (noetfeld.db)\"\n    },\n    {\n      \"id\": \"G4\",\n      \"name\": \"api_readiness\",\n      \"ok\": true,\n      \"reason\": \"skipped \\u2014 set NOETFIELD_API_URL or --api-url to probe remote runtime\",\n      \"skipped\": true\n    },\n    {\n      \"id\": \"G5\",\n      \"name\": \"policy_registry\",\n      \"ok\": true,\n      \"reason\": \"PolicyRegistry loaded\",\n      \"combined_hash\": \"6ed3dd7180db65bdfce6ab99a9a7ee98334f49aa7a5944fd8a1683d099e95fde\"\n    },\n    {\n      \"id\": \"G6\",\n      \"name\": \"pytest_suite\",\n      \"ok\": false,\n      \"reason\": \".............................F.......................................... [ 49%]\\n......................................................................F. [ 99%]\\n.                                       \"\n    },\n    {\n      \"id\": \"G7\",\n      \"name\": \"product_truth_phase\",\n      \"ok\": true,\n      \"reason\": \"PRODUCT_TRUTH phase 4 vs manifest 4\",\n      \"truth_phase\": 4,\n      \"manifest_phase\": 4\n    }\n  ],\n  \"block_reasons\": [\n    \".............................F.......................................... [ 49%]\\n......................................................................F. [ 99%]\\n.                                       \"\n  ]\n}",
+                "stderr_tail": "BLOCK: .............................F.......................................... [ 49%]\n......................................................................F. [ 99%]\n.",
+                "continued_on_error": false,
+                "name": "gate"
+              },
+              {
+                "cmd": [
+                  "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+                  "-m",
+                  "pytest",
+                  "-q"
+                ],
+                "ok": false,
+                "exit_code": 1,
+                "stdout_tail": "rror\n=============================== warnings summary ===============================\ntests/test_decide_integration_ci.py::test_decide_cli_against_live_local_server\n  /Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/websockets/legacy/__init__.py:6: DeprecationWarning: websockets.legacy is deprecated; see https://websockets.readthedocs.io/en/stable/howto/upgrade.html for upgrade instructions\n    warnings.warn(  # deprecated in 14.0 - 2024-11-09\n\ntests/test_decide_integration_ci.py::test_decide_cli_against_live_local_server\n  /Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/uvicorn/protocols/websockets/websockets_impl.py:17: DeprecationWarning: websockets.server.WebSocketServerProtocol is deprecated\n    from websockets.server import WebSocketServerProtocol\n\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\n=========================== short test summary info ============================\nFAILED tests/test_cursor_local_mac_t2_v1.py::test_full_governance_verify_still_passes\nFAILED tests/test_verify_living_system_governance_v1.py::test_full_governance_verify_passes\n2 failed, 143 passed, 2 warnings in 2.40s",
+                "stderr_tail": "",
+                "continued_on_error": false,
+                "name": "pytest"
+              }
+            ],
+            "self_heal": [],
+            "cloud_meta": {
+              "processor": "noos_loop_runner_v1",
+              "github_event": "http_loop",
+              "github_run_id": "railway-5b6b716b9e9d",
+              "github_workflow": "railway-noos-loop-runner",
+              "dispatch_source": "verify_script",
+              "processed_at": "2026-07-05T17:35:11+00:00"
+            },
+            "cloud_trigger": "http_loop"
+          },
+          "guardrails": {
+            "lane": "noos",
+            "read_only_control": false
+          },
+          "supabase_sink": {
+            "ok": false,
+            "skipped": true,
+            "reason": "supabase_not_configured"
+          },
+          "finished_at": "2026-07-05T17:35:11+00:00",
+          "state_after": "FAILED_WITH_RECEIPT",
+          "status": "degraded",
+          "exit_code": 1,
+          "blocker_reason": "steps_failed:['gate', 'pytest']",
+          "next_action": "self_heal_or_triage",
+          "d4": {
+            "execute_ok": false,
+            "validate_ok": true,
+            "sink_acked": false
+          },
+          "d2": {
+            "cas": {
+              "verdict": "ACCEPTED",
+              "expected": 8,
+              "observed": 8,
+              "new_value": 9
+            }
+          },
+          "transition_log_tail": [
+            {
+              "from": "RUNNING",
+              "to": "FAILED_WITH_RECEIPT",
+              "at": "2026-07-05T17:35:11+00:00",
+              "cycle": 9,
+              "op_key": "94a1a3fd67a32001da9f3dd2"
+            }
+          ]
+        },
+        "stderr_tail": "",
+        "run_id": "railway-5b6b716b9e9d"
+      }
+    },
+    {
+      "dispatch_id": "surface",
+      "event_type": "noos_surface_loop_tick",
+      "handler": "loop",
+      "fired": true,
+      "ok": false,
+      "status": 500,
+      "body": {
+        "handler": "loop",
+        "event_type": "noos_surface_loop_tick",
+        "exit_code": 1,
+        "ok": false,
+        "cycle": {
+          "schema": "noos-24-7-loop-cycle-v1",
+          "receipt_schema": "autorun-cycle-receipt-v2",
+          "workflow_id": "noos-surface-loop.yml",
+          "mission_id": "M3",
+          "sandbox_id": "noetfeld-os",
+          "lane": "health",
+          "loop_id": "surface",
+          "event_type": "noos_surface_loop_tick",
+          "domain": "public-nerve",
+          "trigger_source": "http_loop",
+          "cycle_number": 10,
+          "op_key": "7e0c60df5326d24d728a5fca",
+          "started_at": "2026-07-05T17:35:11+00:00",
+          "state_before": "RUNNING",
+          "cost": {
+            "provider": "github_actions+cloudflare_cron",
+            "model": "none",
+            "tokens_in": 0,
+            "tokens_out": 0,
+            "unit_cost_usd": 0.0,
+            "total_usd": 0.0,
+            "metered_at_call_site": true,
+            "step_count": 1
+          },
+          "value_class": "risk_reduction",
+          "sink_invariant": {
+            "law": "sum(origin_counts) == sink_count",
+            "counts": {
+              "steps": 1,
+              "self_heal": 0
+            },
+            "sink_count": 1,
+            "provenance_tags": {
+              "steps": "loop_step",
+              "self_heal": "loop_self_heal"
+            },
+            "verdict": "PASS"
+          },
+          "founder_blocked": {
+            "count": 0,
+            "oldest_id": "",
+            "priority": "",
+            "age_seconds": 0,
+            "escalated": false,
+            "skipped": true
+          },
+          "evidence": [
+            {
+              "command": "bash scripts/check_production_urls.sh",
+              "exit_code": 0,
+              "output": "K   www gel (200) https://www.noetfield.com/gel/\nOK   www ai-value-os (200) https://www.noetfield.com/ai-value-governance-os/\nOK   www acg service (200) https://www.noetfield.com/services/agentic-cost-governance\nOK   platform health (200) https://platform.noetfield.com/health\nOK   gel-api health (200) https://api.noetfield.com/health\nOK   gel-api readiness (200) https://api.noetfield.com/readiness"
+            }
+          ],
+          "runner_output": {
+            "steps": [
+              {
+                "cmd": [
+                  "bash",
+                  "scripts/check_production_urls.sh"
+                ],
+                "ok": true,
+                "exit_code": 0,
+                "stdout_tail": "OK   www home (200) https://www.noetfield.com/\nOK   www gel (200) https://www.noetfield.com/gel/\nOK   www ai-value-os (200) https://www.noetfield.com/ai-value-governance-os/\nOK   www acg service (200) https://www.noetfield.com/services/agentic-cost-governance\nOK   platform health (200) https://platform.noetfield.com/health\nOK   gel-api health (200) https://api.noetfield.com/health\nOK   gel-api readiness (200) https://api.noetfield.com/readiness",
+                "stderr_tail": "",
+                "continued_on_error": false,
+                "name": "production_urls"
+              }
+            ],
+            "self_heal": [],
+            "cloud_meta": {
+              "processor": "noos_loop_runner_v1",
+              "github_event": "http_loop",
+              "github_run_id": "railway-fba5ee01ab57",
+              "github_workflow": "railway-noos-loop-runner",
+              "dispatch_source": "verify_script",
+              "processed_at": "2026-07-05T17:35:12+00:00"
+            },
+            "cloud_trigger": "http_loop"
+          },
+          "guardrails": {
+            "lane": "health",
+            "read_only_control": false
+          },
+          "supabase_sink": {
+            "ok": false,
+            "skipped": true,
+            "reason": "supabase_not_configured"
+          },
+          "finished_at": "2026-07-05T17:35:12+00:00",
+          "state_after": "BLOCKED_WITH_REASON",
+          "status": "degraded",
+          "exit_code": 1,
+          "blocker_reason": "sink_unacked",
+          "next_action": "self_heal_or_triage",
+          "d4": {
+            "execute_ok": true,
+            "validate_ok": true,
+            "sink_acked": false
+          },
+          "d2": {
+            "cas": {
+              "verdict": "ACCEPTED",
+              "expected": 9,
+              "observed": 9,
+              "new_value": 10
+            }
+          },
+          "transition_log_tail": [
+            {
+              "from": "RUNNING",
+              "to": "BLOCKED_WITH_REASON",
+              "at": "2026-07-05T17:35:12+00:00",
+              "cycle": 10,
+              "op_key": "7e0c60df5326d24d728a5fca"
+            }
+          ]
+        },
+        "stderr_tail": "",
+        "run_id": "railway-fba5ee01ab57"
+      }
+    },
+    {
+      "dispatch_id": "chain",
+      "event_type": "noos_chain_loop_tick",
+      "handler": "loop",
+      "fired": true,
+      "ok": false,
+      "status": 500,
+      "body": {
+        "handler": "loop",
+        "event_type": "noos_chain_loop_tick",
+        "exit_code": 1,
+        "ok": false,
+        "cycle": {
+          "schema": "noos-24-7-loop-cycle-v1",
+          "receipt_schema": "autorun-cycle-receipt-v2",
+          "workflow_id": "noos-chain-loop.yml",
+          "mission_id": "M3",
+          "sandbox_id": "noetfeld-os",
+          "lane": "proof",
+          "loop_id": "chain",
+          "event_type": "noos_chain_loop_tick",
+          "domain": "chain-tools",
+          "trigger_source": "http_loop",
+          "cycle_number": 9,
+          "op_key": "881b354fae1b0884f78ac26c",
+          "started_at": "2026-07-05T17:35:12+00:00",
+          "state_before": "RUNNING",
+          "cost": {
+            "provider": "github_actions+cloudflare_cron",
+            "model": "none",
+            "tokens_in": 0,
+            "tokens_out": 0,
+            "unit_cost_usd": 0.0,
+            "total_usd": 0.0,
+            "metered_at_call_site": true,
+            "step_count": 2
+          },
+          "value_class": "proof_asset",
+          "sink_invariant": {
+            "law": "sum(origin_counts) == sink_count",
+            "counts": {
+              "steps": 2,
+              "self_heal": 0
+            },
+            "sink_count": 2,
+            "provenance_tags": {
+              "steps": "loop_step",
+              "self_heal": "loop_self_heal"
+            },
+            "verdict": "PASS"
+          },
+          "founder_blocked": {
+            "count": 0,
+            "oldest_id": "",
+            "priority": "",
+            "age_seconds": 0,
+            "escalated": false,
+            "skipped": true
+          },
+          "evidence": [
+            {
+              "command": "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3 -m noetfield_gate.cli verify --json",
+              "exit_code": 0,
+              "output": "k\": true,\n        \"reason\": \"skipped \\u2014 pass include_pytest=True or use noetfield gate --pytest\",\n        \"skipped\": true\n      },\n      {\n        \"id\": \"G7\",\n        \"name\": \"product_truth_phase\",\n        \"ok\": true,\n        \"reason\": \"PRODUCT_TRUTH phase 4 vs manifest 4\",\n        \"truth_phase\": 4,\n        \"manifest_phase\": 4\n      }\n    ],\n    \"block_reasons\": []\n  },\n  \"block_reasons\": []\n}"
+            },
+            {
+              "command": "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3 -m noetfield_gate.cli decide --file fixtures/demo_intents/approve.json --validate-only",
+              "exit_code": 0,
+              "output": " \"ok\": true,\n  \"schema\": \"decision-request-v1\",\n  \"path\": \"fixtures/demo_intents/approve.json\",\n  \"applicant_id\": \"gate-demo-001\",\n  \"fields\": [\n    \"applicant_id\",\n    \"credit_score\",\n    \"monthly_debt\",\n    \"monthly_income\",\n    \"loan_amount\",\n    \"collateral_value\",\n    \"employment_history_years\",\n    \"liquid_reserves_months\",\n    \"request_id\",\n    \"correlation_id\",\n    \"rule_set_version\"\n  ]\n}"
+            }
+          ],
+          "runner_output": {
+            "steps": [
+              {
+                "cmd": [
+                  "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+                  "-m",
+                  "noetfield_gate.cli",
+                  "verify",
+                  "--json"
+                ],
+                "ok": true,
+                "exit_code": 0,
+                "stdout_tail": "alid\",\n        \"ok\": true,\n        \"reason\": \"policy JSON valid\",\n        \"rule_set_id\": \"noetfeld-credit-v1\",\n        \"rule_set_version\": \"1.0.0\"\n      },\n      {\n        \"id\": \"G3\",\n        \"name\": \"database_writable\",\n        \"ok\": true,\n        \"reason\": \"sqlite ok (noetfeld.db)\"\n      },\n      {\n        \"id\": \"G4\",\n        \"name\": \"api_readiness\",\n        \"ok\": true,\n        \"reason\": \"skipped \\u2014 set NOETFIELD_API_URL or --api-url to probe remote runtime\",\n        \"skipped\": true\n      },\n      {\n        \"id\": \"G5\",\n        \"name\": \"policy_registry\",\n        \"ok\": true,\n        \"reason\": \"PolicyRegistry loaded\",\n        \"combined_hash\": \"6ed3dd7180db65bdfce6ab99a9a7ee98334f49aa7a5944fd8a1683d099e95fde\"\n      },\n      {\n        \"id\": \"G6\",\n        \"name\": \"pytest_suite\",\n        \"ok\": true,\n        \"reason\": \"skipped \\u2014 pass include_pytest=True or use noetfield gate --pytest\",\n        \"skipped\": true\n      },\n      {\n        \"id\": \"G7\",\n        \"name\": \"product_truth_phase\",\n        \"ok\": true,\n        \"reason\": \"PRODUCT_TRUTH phase 4 vs manifest 4\",\n        \"truth_phase\": 4,\n        \"manifest_phase\": 4\n      }\n    ],\n    \"block_reasons\": []\n  },\n  \"block_reasons\": []\n}",
+                "stderr_tail": "",
+                "continued_on_error": false,
+                "name": "verify"
+              },
+              {
+                "cmd": [
+                  "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+                  "-m",
+                  "noetfield_gate.cli",
+                  "decide",
+                  "--file",
+                  "fixtures/demo_intents/approve.json",
+                  "--validate-only"
+                ],
+                "ok": true,
+                "exit_code": 0,
+                "stdout_tail": "{\n  \"ok\": true,\n  \"schema\": \"decision-request-v1\",\n  \"path\": \"fixtures/demo_intents/approve.json\",\n  \"applicant_id\": \"gate-demo-001\",\n  \"fields\": [\n    \"applicant_id\",\n    \"credit_score\",\n    \"monthly_debt\",\n    \"monthly_income\",\n    \"loan_amount\",\n    \"collateral_value\",\n    \"employment_history_years\",\n    \"liquid_reserves_months\",\n    \"request_id\",\n    \"correlation_id\",\n    \"rule_set_version\"\n  ]\n}",
+                "stderr_tail": "",
+                "continued_on_error": false,
+                "name": "decide_validate"
+              }
+            ],
+            "self_heal": [],
+            "cloud_meta": {
+              "processor": "noos_loop_runner_v1",
+              "github_event": "http_loop",
+              "github_run_id": "railway-a130f0fa32e8",
+              "github_workflow": "railway-noos-loop-runner",
+              "dispatch_source": "verify_script",
+              "processed_at": "2026-07-05T17:35:12+00:00"
+            },
+            "cloud_trigger": "http_loop"
+          },
+          "guardrails": {
+            "lane": "proof",
+            "read_only_control": false
+          },
+          "supabase_sink": {
+            "ok": false,
+            "skipped": true,
+            "reason": "supabase_not_configured"
+          },
+          "finished_at": "2026-07-05T17:35:12+00:00",
+          "state_after": "BLOCKED_WITH_REASON",
+          "status": "degraded",
+          "exit_code": 1,
+          "blocker_reason": "sink_unacked",
+          "next_action": "self_heal_or_triage",
+          "d4": {
+            "execute_ok": true,
+            "validate_ok": true,
+            "sink_acked": false
+          },
+          "d2": {
+            "cas": {
+              "verdict": "ACCEPTED",
+              "expected": 8,
+              "observed": 8,
+              "new_value": 9
+            }
+          },
+          "transition_log_tail": [
+            {
+              "from": "RUNNING",
+              "to": "BLOCKED_WITH_REASON",
+              "at": "2026-07-05T17:35:12+00:00",
+              "cycle": 9,
+              "op_key": "881b354fae1b0884f78ac26c"
+            }
+          ]
+        },
+        "stderr_tail": "",
+        "run_id": "railway-a130f0fa32e8"
+      }
+    },
+    {
+      "dispatch_id": "self_heal",
+      "event_type": "noos_self_heal_loop_tick",
+      "handler": "loop",
+      "fired": true,
+      "ok": false,
+      "status": 500,
+      "body": {
+        "handler": "loop",
+        "event_type": "noos_self_heal_loop_tick",
+        "exit_code": 1,
+        "ok": false,
+        "cycle": {
+          "schema": "noos-24-7-loop-cycle-v1",
+          "receipt_schema": "autorun-cycle-receipt-v2",
+          "workflow_id": "noos-self-heal-loop.yml",
+          "mission_id": "M4",
+          "sandbox_id": "noetfeld-os",
+          "lane": "noos",
+          "loop_id": "self_heal",
+          "event_type": "noos_self_heal_loop_tick",
+          "domain": "self-improvement",
+          "trigger_source": "http_loop",
+          "cycle_number": 9,
+          "op_key": "b51865f649d6c847b2e4ca17",
+          "started_at": "2026-07-05T17:35:12+00:00",
+          "state_before": "RUNNING",
+          "cost": {
+            "provider": "github_actions+cloudflare_cron",
+            "model": "none",
+            "tokens_in": 0,
+            "tokens_out": 0,
+            "unit_cost_usd": 0.0,
+            "total_usd": 0.0,
+            "metered_at_call_site": true,
+            "step_count": 4
+          },
+          "value_class": "risk_reduction",
+          "sink_invariant": {
+            "law": "sum(origin_counts) == sink_count",
+            "counts": {
+              "steps": 4,
+              "self_heal": 0
+            },
+            "sink_count": 4,
+            "provenance_tags": {
+              "steps": "loop_step",
+              "self_heal": "loop_self_heal"
+            },
+            "verdict": "PASS"
+          },
+          "founder_blocked": {
+            "count": 0,
+            "oldest_id": "",
+            "priority": "",
+            "age_seconds": 0,
+            "escalated": false,
+            "skipped": true
+          },
+          "evidence": [
+            {
+              "command": "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3 scripts/reenqueue_blocked_upg_inbox_v1.py",
+              "exit_code": 0,
+              "output": "{\n  \"requeued\": [],\n  \"blocked_seen\": 0\n}"
+            },
+            {
+              "command": "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3 scripts/verify_noos_autonomous_24h_v1.py --hours 6 --write-receipt",
+              "exit_code": 0,
+              "output": "autonomous PASS \u00b7 sha 4319a4fc \u00b7 dispatch=78 schedule=19 manual=0"
+            },
+            {
+              "command": "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3 scripts/autorun_status_v1.py",
+              "exit_code": 1,
+              "output": "      {\n        \"scope\": \"noos_loop_agent_nerve\",\n        \"severity\": \"high\",\n        \"summary\": \"Workflow is not healthy: BLOCKED_WITH_REASON\",\n        \"detail\": \"stale_supabase_row\"\n      },\n      {\n        \"scope\": \"noos_loop_sourcea_observe\",\n        \"severity\": \"high\",\n        \"summary\": \"Workflow is not healthy: BLOCKED_WITH_REASON\",\n        \"detail\": \"stale_supabase_row\"\n      }\n    ]\n  }\n}"
+            },
+            {
+              "command": "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3 scripts/noos_loop_heartbeat_v1.py --write-receipt",
+              "exit_code": 1,
+              "output": "y_30m deployed=MISSING\n  DRIFT agent_nerve: committed=hourly deployed=MISSING\n  DRIFT workflow_audit: committed=every_15m deployed=MISSING\n  DRIFT self_heal_safe_fixes: committed=every_30m deployed=MISSING\n  DRIFT researcher_deep_dive: committed=hourly deployed=MISSING\n  DRIFT specialist_proposals: committed=hourly deployed=MISSING\n  DRIFT orchestrator_cross_repo: committed=hourly deployed=MISSING"
+            }
+          ],
+          "runner_output": {
+            "steps": [
+              {
+                "cmd": [
+                  "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+                  "scripts/reenqueue_blocked_upg_inbox_v1.py"
+                ],
+                "ok": true,
+                "exit_code": 0,
+                "stdout_tail": "{\n  \"requeued\": [],\n  \"blocked_seen\": 0\n}",
+                "stderr_tail": "",
+                "continued_on_error": false,
+                "name": "reenqueue_blocked"
+              },
+              {
+                "cmd": [
+                  "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+                  "scripts/verify_noos_autonomous_24h_v1.py",
+                  "--hours",
+                  "6",
+                  "--write-receipt"
+                ],
+                "ok": true,
+                "exit_code": 0,
+                "stdout_tail": "autonomous PASS \u00b7 sha 4319a4fc \u00b7 dispatch=78 schedule=19 manual=0",
+                "stderr_tail": "",
+                "continued_on_error": false,
+                "name": "autonomy_verify"
+              },
+              {
+                "cmd": [
+                  "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+                  "scripts/autorun_status_v1.py"
+                ],
+                "ok": false,
+                "exit_code": 1,
+                "stdout_tail": "    \"detail\": \"stale_supabase_row\"\n      },\n      {\n        \"scope\": \"noos_loop_runtime\",\n        \"severity\": \"high\",\n        \"summary\": \"Workflow is not healthy: BLOCKED_WITH_REASON\",\n        \"detail\": \"stale_supabase_row\"\n      },\n      {\n        \"scope\": \"noos_loop_surface\",\n        \"severity\": \"high\",\n        \"summary\": \"Workflow is not healthy: BLOCKED_WITH_REASON\",\n        \"detail\": \"stale_supabase_row\"\n      },\n      {\n        \"scope\": \"noos_loop_chain\",\n        \"severity\": \"high\",\n        \"summary\": \"Workflow is not healthy: BLOCKED_WITH_REASON\",\n        \"detail\": \"stale_supabase_row\"\n      },\n      {\n        \"scope\": \"noos_loop_self_heal\",\n        \"severity\": \"high\",\n        \"summary\": \"Workflow is not healthy: BLOCKED_WITH_REASON\",\n        \"detail\": \"stale_supabase_row\"\n      },\n      {\n        \"scope\": \"noos_loop_agent_nerve\",\n        \"severity\": \"high\",\n        \"summary\": \"Workflow is not healthy: BLOCKED_WITH_REASON\",\n        \"detail\": \"stale_supabase_row\"\n      },\n      {\n        \"scope\": \"noos_loop_sourcea_observe\",\n        \"severity\": \"high\",\n        \"summary\": \"Workflow is not healthy: BLOCKED_WITH_REASON\",\n        \"detail\": \"stale_supabase_row\"\n      }\n    ]\n  }\n}",
+                "stderr_tail": "",
+                "continued_on_error": false,
+                "name": "autorun_status"
+              },
+              {
+                "cmd": [
+                  "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+                  "scripts/noos_loop_heartbeat_v1.py",
+                  "--write-receipt"
+                ],
+                "ok": false,
+                "exit_code": 1,
+                "stdout_tail": "heartbeat 2026-07-05 loops=12 drift_mismatches=13 founder_blocked=0 escalations=25\n  DRIFT trigger_registry: committed=data/trigger-registry-v1.json deployed=trigger_drift \u00b7 dead=16 unregistered=10\n  DRIFT inbox: committed=every_5m deployed=MISSING\n  DRIFT runtime: committed=every_15m deployed=MISSING\n  DRIFT surface: committed=every_20m deployed=MISSING\n  DRIFT chain: committed=every_30m deployed=MISSING\n  DRIFT self_heal: committed=every_10m deployed=MISSING\n  DRIFT sourcea_observe: committed=every_30m deployed=MISSING\n  DRIFT agent_nerve: committed=hourly deployed=MISSING\n  DRIFT workflow_audit: committed=every_15m deployed=MISSING\n  DRIFT self_heal_safe_fixes: committed=every_30m deployed=MISSING\n  DRIFT researcher_deep_dive: committed=hourly deployed=MISSING\n  DRIFT specialist_proposals: committed=hourly deployed=MISSING\n  DRIFT orchestrator_cross_repo: committed=hourly deployed=MISSING",
+                "stderr_tail": "",
+                "continued_on_error": false,
+                "name": "loop_heartbeat"
+              }
+            ],
+            "self_heal": [],
+            "cloud_meta": {
+              "processor": "noos_loop_runner_v1",
+              "github_event": "http_loop",
+              "github_run_id": "railway-12e12fc87f31",
+              "github_workflow": "railway-noos-loop-runner",
+              "dispatch_source": "verify_script",
+              "processed_at": "2026-07-05T17:35:29+00:00"
+            },
+            "cloud_trigger": "http_loop"
+          },
+          "guardrails": {
+            "lane": "noos",
+            "read_only_control": false
+          },
+          "supabase_sink": {
+            "ok": false,
+            "skipped": true,
+            "reason": "supabase_not_configured"
+          },
+          "finished_at": "2026-07-05T17:35:29+00:00",
+          "state_after": "FAILED_WITH_RECEIPT",
+          "status": "degraded",
+          "exit_code": 1,
+          "blocker_reason": "steps_failed:['autorun_status', 'loop_heartbeat']",
+          "next_action": "self_heal_or_triage",
+          "d4": {
+            "execute_ok": false,
+            "validate_ok": true,
+            "sink_acked": false
+          },
+          "d2": {
+            "cas": {
+              "verdict": "ACCEPTED",
+              "expected": 8,
+              "observed": 8,
+              "new_value": 9
+            }
+          },
+          "transition_log_tail": [
+            {
+              "from": "RUNNING",
+              "to": "FAILED_WITH_RECEIPT",
+              "at": "2026-07-05T17:35:29+00:00",
+              "cycle": 9,
+              "op_key": "b51865f649d6c847b2e4ca17"
+            }
+          ]
+        },
+        "stderr_tail": "",
+        "run_id": "railway-12e12fc87f31"
+      }
+    },
+    {
+      "dispatch_id": "sourcea_observe",
+      "event_type": "noos_sourcea_observe_loop_tick",
+      "handler": "loop",
+      "fired": true,
+      "ok": false,
+      "status": 500,
+      "body": {
+        "handler": "loop",
+        "event_type": "noos_sourcea_observe_loop_tick",
+        "exit_code": 1,
+        "ok": false,
+        "cycle": {
+          "schema": "noos-24-7-loop-cycle-v1",
+          "receipt_schema": "autorun-cycle-receipt-v2",
+          "workflow_id": "noos-sourcea-observe-loop.yml",
+          "mission_id": "M2",
+          "sandbox_id": "noetfeld-os",
+          "lane": "sourcea",
+          "loop_id": "sourcea_observe",
+          "event_type": "noos_sourcea_observe_loop_tick",
+          "domain": "sourcea-observe",
+          "trigger_source": "http_loop",
+          "cycle_number": 9,
+          "op_key": "39c925e8b3f4b80e1cb8981a",
+          "started_at": "2026-07-05T17:35:29+00:00",
+          "state_before": "RUNNING",
+          "cost": {
+            "provider": "github_actions+cloudflare_cron",
+            "model": "none",
+            "tokens_in": 0,
+            "tokens_out": 0,
+            "unit_cost_usd": 0.0,
+            "total_usd": 0.0,
+            "metered_at_call_site": true,
+            "step_count": 1
+          },
+          "value_class": "hygiene",
+          "sink_invariant": {
+            "law": "sum(origin_counts) == sink_count",
+            "counts": {
+              "steps": 1,
+              "self_heal": 0
+            },
+            "sink_count": 1,
+            "provenance_tags": {
+              "steps": "loop_step",
+              "self_heal": "loop_self_heal"
+            },
+            "verdict": "PASS"
+          },
+          "founder_blocked": {
+            "count": 0,
+            "oldest_id": "",
+            "priority": "",
+            "age_seconds": 0,
+            "escalated": false,
+            "skipped": true
+          },
+          "evidence": [
+            {
+              "command": "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3 scripts/observe_sourcea_supabase_v1.py --write-receipt --json",
+              "exit_code": 0,
+              "output": "91ff181-6424-4bd3-bf9f-761f12ad8432\",\n          \"fallback_from\": \"cycle_receipts\",\n          \"trigger_source\": \"cloudflare_cron\",\n          \"queue_head_after\": \"CLOUD-SEC-7966\",\n          \"queue_head_before\": \"CLOUD-SEC-7965\"\n        }\n      }\n    ]\n  },\n  \"receipt_path\": \"/Users/sinakazemnezhad/Desktop/Noetfield-Systems/noetfeld-OS/.noos-runtime/observe/sourcea/sourcea-supabase-observe-v1.json\"\n}"
+            }
+          ],
+          "runner_output": {
+            "steps": [
+              {
+                "cmd": [
+                  "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+                  "scripts/observe_sourcea_supabase_v1.py",
+                  "--write-receipt",
+                  "--json"
+                ],
+                "ok": true,
+                "exit_code": 0,
+                "stdout_tail": "      \"finished_at\": \"2026-07-05T16:01:59Z\",\n          \"execution_id\": \"c91ff181-6424-4bd3-bf9f-761f12ad8432\",\n          \"fallback_from\": \"cycle_receipts\",\n          \"trigger_source\": \"cloudflare_cron\",\n          \"queue_head_after\": \"CLOUD-SEC-7967\",\n          \"queue_head_before\": \"CLOUD-SEC-7966\"\n        }\n      },\n      {\n        \"id\": \"02d415b8-14f9-4192-a299-a114e24ad10d\",\n        \"created_at\": \"2026-07-05T16:01:58.672684+00:00\",\n        \"memory_type\": \"truth_cycle_receipt\",\n        \"metadata\": {\n          \"schema\": \"truth-layer-receipt-v1\",\n          \"verdict\": \"GREEN\",\n          \"cycle_id\": \"cycle-20260705T160158Z-CLOUD-SEC-7965\",\n          \"started_at\": \"2026-07-05T16:01:58Z\",\n          \"duration_ms\": 247,\n          \"finished_at\": \"2026-07-05T16:01:58Z\",\n          \"execution_id\": \"c91ff181-6424-4bd3-bf9f-761f12ad8432\",\n          \"fallback_from\": \"cycle_receipts\",\n          \"trigger_source\": \"cloudflare_cron\",\n          \"queue_head_after\": \"CLOUD-SEC-7966\",\n          \"queue_head_before\": \"CLOUD-SEC-7965\"\n        }\n      }\n    ]\n  },\n  \"receipt_path\": \"/Users/sinakazemnezhad/Desktop/Noetfield-Systems/noetfeld-OS/.noos-runtime/observe/sourcea/sourcea-supabase-observe-v1.json\"\n}",
+                "stderr_tail": "",
+                "continued_on_error": false,
+                "name": "sourcea_supabase_observe"
+              }
+            ],
+            "self_heal": [],
+            "cloud_meta": {
+              "processor": "noos_loop_runner_v1",
+              "github_event": "http_loop",
+              "github_run_id": "railway-f594ed274ce4",
+              "github_workflow": "railway-noos-loop-runner",
+              "dispatch_source": "verify_script",
+              "processed_at": "2026-07-05T17:35:29+00:00"
+            },
+            "cloud_trigger": "http_loop"
+          },
+          "guardrails": {
+            "lane": "sourcea",
+            "read_only_control": true
+          },
+          "supabase_sink": {
+            "ok": false,
+            "skipped": true,
+            "reason": "supabase_not_configured"
+          },
+          "finished_at": "2026-07-05T17:35:29+00:00",
+          "state_after": "BLOCKED_WITH_REASON",
+          "status": "degraded",
+          "exit_code": 1,
+          "blocker_reason": "sink_unacked",
+          "next_action": "self_heal_or_triage",
+          "d4": {
+            "execute_ok": true,
+            "validate_ok": true,
+            "sink_acked": false
+          },
+          "d2": {
+            "cas": {
+              "verdict": "ACCEPTED",
+              "expected": 8,
+              "observed": 8,
+              "new_value": 9
+            }
+          },
+          "transition_log_tail": [
+            {
+              "from": "RUNNING",
+              "to": "BLOCKED_WITH_REASON",
+              "at": "2026-07-05T17:35:29+00:00",
+              "cycle": 9,
+              "op_key": "39c925e8b3f4b80e1cb8981a"
+            }
+          ]
+        },
+        "stderr_tail": "",
+        "run_id": "railway-f594ed274ce4"
+      }
+    },
+    {
+      "dispatch_id": "agent_nerve",
+      "event_type": "noos_agent_nerve_loop_tick",
+      "handler": "loop",
+      "fired": true,
+      "ok": false,
+      "status": 500,
+      "body": {
+        "handler": "loop",
+        "event_type": "noos_agent_nerve_loop_tick",
+        "exit_code": 1,
+        "ok": false,
+        "cycle": {
+          "schema": "noos-24-7-loop-cycle-v1",
+          "receipt_schema": "autorun-cycle-receipt-v2",
+          "workflow_id": "noos-agent-nerve-loop.yml",
+          "mission_id": "M4",
+          "sandbox_id": "noetfeld-os",
+          "lane": "noos",
+          "loop_id": "agent_nerve",
+          "event_type": "noos_agent_nerve_loop_tick",
+          "domain": "agent-docs",
+          "trigger_source": "http_loop",
+          "cycle_number": 9,
+          "op_key": "aebad8406e31ed36e248765a",
+          "started_at": "2026-07-05T17:35:29+00:00",
+          "state_before": "RUNNING",
+          "cost": {
+            "provider": "github_actions+cloudflare_cron",
+            "model": "none",
+            "tokens_in": 0,
+            "tokens_out": 0,
+            "unit_cost_usd": 0.0,
+            "total_usd": 0.0,
+            "metered_at_call_site": true,
+            "step_count": 2
+          },
+          "value_class": "hygiene",
+          "sink_invariant": {
+            "law": "sum(origin_counts) == sink_count",
+            "counts": {
+              "steps": 2,
+              "self_heal": 0
+            },
+            "sink_count": 2,
+            "provenance_tags": {
+              "steps": "loop_step",
+              "self_heal": "loop_self_heal"
+            },
+            "verdict": "PASS"
+          },
+          "founder_blocked": {
+            "count": 0,
+            "oldest_id": "",
+            "priority": "",
+            "age_seconds": 0,
+            "escalated": false,
+            "skipped": true
+          },
+          "evidence": [
+            {
+              "command": "bash scripts/check_noos_agent_docs.sh",
+              "exit_code": 0,
+              "output": "OK: all docs/_NOOS_AGENT/*.md files tagged with NOOS-AGENT-DOC"
+            },
+            {
+              "command": "bash scripts/check_noetfield_business_strategy.sh",
+              "exit_code": 0,
+              "output": "=== check_noetfield_business_strategy ===\nOK   strategy doc (010)\nOK   NW1 one-pager (011)\nOK   SW1 one-pager (013)\nOK   MANIFEST.json entries\n\ncheck_noetfield_business_strategy: PASS"
+            }
+          ],
+          "runner_output": {
+            "steps": [
+              {
+                "cmd": [
+                  "bash",
+                  "scripts/check_noos_agent_docs.sh"
+                ],
+                "ok": true,
+                "exit_code": 0,
+                "stdout_tail": "OK: all docs/_NOOS_AGENT/*.md files tagged with NOOS-AGENT-DOC",
+                "stderr_tail": "",
+                "continued_on_error": false,
+                "name": "agent_docs"
+              },
+              {
+                "cmd": [
+                  "bash",
+                  "scripts/check_noetfield_business_strategy.sh"
+                ],
+                "ok": true,
+                "exit_code": 0,
+                "stdout_tail": "=== check_noetfield_business_strategy ===\nOK   strategy doc (010)\nOK   NW1 one-pager (011)\nOK   SW1 one-pager (013)\nOK   MANIFEST.json entries\n\ncheck_noetfield_business_strategy: PASS",
+                "stderr_tail": "",
+                "continued_on_error": false,
+                "name": "business_strategy"
+              }
+            ],
+            "self_heal": [],
+            "cloud_meta": {
+              "processor": "noos_loop_runner_v1",
+              "github_event": "http_loop",
+              "github_run_id": "railway-4dd94a144c57",
+              "github_workflow": "railway-noos-loop-runner",
+              "dispatch_source": "verify_script",
+              "processed_at": "2026-07-05T17:35:29+00:00"
+            },
+            "cloud_trigger": "http_loop"
+          },
+          "guardrails": {
+            "lane": "noos",
+            "read_only_control": false
+          },
+          "supabase_sink": {
+            "ok": false,
+            "skipped": true,
+            "reason": "supabase_not_configured"
+          },
+          "finished_at": "2026-07-05T17:35:29+00:00",
+          "state_after": "BLOCKED_WITH_REASON",
+          "status": "degraded",
+          "exit_code": 1,
+          "blocker_reason": "sink_unacked",
+          "next_action": "self_heal_or_triage",
+          "d4": {
+            "execute_ok": true,
+            "validate_ok": true,
+            "sink_acked": false
+          },
+          "d2": {
+            "cas": {
+              "verdict": "ACCEPTED",
+              "expected": 8,
+              "observed": 8,
+              "new_value": 9
+            }
+          },
+          "transition_log_tail": [
+            {
+              "from": "RUNNING",
+              "to": "BLOCKED_WITH_REASON",
+              "at": "2026-07-05T17:35:29+00:00",
+              "cycle": 9,
+              "op_key": "aebad8406e31ed36e248765a"
+            }
+          ]
+        },
+        "stderr_tail": "",
+        "run_id": "railway-4dd94a144c57"
+      }
+    },
+    {
+      "dispatch_id": "workflow_audit",
+      "event_type": "noos_workflow_audit_tick",
+      "handler": "loop",
+      "fired": true,
+      "ok": false,
+      "status": 500,
+      "body": {
+        "handler": "loop",
+        "event_type": "noos_workflow_audit_tick",
+        "exit_code": 1,
+        "ok": false,
+        "cycle": {
+          "schema": "noos-24-7-loop-cycle-v1",
+          "receipt_schema": "autorun-cycle-receipt-v2",
+          "workflow_id": "noos-workflow-audit.yml",
+          "mission_id": "M2",
+          "sandbox_id": "noetfeld-os",
+          "lane": "noos",
+          "loop_id": "workflow_audit",
+          "event_type": "noos_workflow_audit_tick",
+          "domain": "workflow-governance",
+          "trigger_source": "http_loop",
+          "cycle_number": 4,
+          "op_key": "4122d0574e9db007c3e6bd2a",
+          "started_at": "2026-07-05T17:35:29+00:00",
+          "state_before": "RUNNING",
+          "cost": {
+            "provider": "github_actions+cloudflare_cron",
+            "model": "none",
+            "tokens_in": 0,
+            "tokens_out": 0,
+            "unit_cost_usd": 0.0,
+            "total_usd": 0.0,
+            "metered_at_call_site": true,
+            "step_count": 1
+          },
+          "value_class": "risk_reduction",
+          "sink_invariant": {
+            "law": "sum(origin_counts) == sink_count",
+            "counts": {
+              "steps": 1,
+              "self_heal": 0
+            },
+            "sink_count": 1,
+            "provenance_tags": {
+              "steps": "loop_step",
+              "self_heal": "loop_self_heal"
+            },
+            "verdict": "PASS"
+          },
+          "founder_blocked": {
+            "count": 0,
+            "oldest_id": "",
+            "priority": "",
+            "age_seconds": 0,
+            "escalated": false,
+            "skipped": true
+          },
+          "evidence": [
+            {
+              "command": "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3 scripts/noos_workflow_audit_v1.py --json",
+              "exit_code": 1,
+              "output": "strator.yml\",\n      \"severity\": \"high\",\n      \"summary\": \"Loop SLO miss\",\n      \"detail\": \"success_rate_miss\"\n    }\n  ],\n  \"dashboard\": {\n    \"schema\": \"autorun-status-dashboard-v1.3\",\n    \"triage_required\": false,\n    \"dirty_total\": 30,\n    \"workflow_count\": 16\n  },\n  \"heartbeat\": {\n    \"schema\": \"autorun-heartbeat-v2\",\n    \"drift_count\": 13,\n    \"escalation_count\": 25,\n    \"loop_count\": 12\n  }\n}"
+            }
+          ],
+          "runner_output": {
+            "steps": [
+              {
+                "cmd": [
+                  "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+                  "scripts/noos_workflow_audit_v1.py",
+                  "--json"
+                ],
+                "ok": false,
+                "exit_code": 1,
+                "stdout_tail": "miss\"\n    },\n    {\n      \"scope\": \"noos-agent-nerve-loop.yml\",\n      \"severity\": \"high\",\n      \"summary\": \"Loop SLO miss\",\n      \"detail\": \"success_rate_miss\"\n    },\n    {\n      \"scope\": \"noos-workflow-audit.yml\",\n      \"severity\": \"high\",\n      \"summary\": \"Loop SLO miss\",\n      \"detail\": \"success_rate_miss\"\n    },\n    {\n      \"scope\": \"noos-self-heal.yml\",\n      \"severity\": \"high\",\n      \"summary\": \"Loop SLO miss\",\n      \"detail\": \"success_rate_miss\"\n    },\n    {\n      \"scope\": \"noos-researcher.yml\",\n      \"severity\": \"high\",\n      \"summary\": \"Loop SLO miss\",\n      \"detail\": \"success_rate_miss\"\n    },\n    {\n      \"scope\": \"noos-specialist.yml\",\n      \"severity\": \"high\",\n      \"summary\": \"Loop SLO miss\",\n      \"detail\": \"success_rate_miss\"\n    },\n    {\n      \"scope\": \"noos-cross-repo-orchestrator.yml\",\n      \"severity\": \"high\",\n      \"summary\": \"Loop SLO miss\",\n      \"detail\": \"success_rate_miss\"\n    }\n  ],\n  \"dashboard\": {\n    \"schema\": \"autorun-status-dashboard-v1.3\",\n    \"triage_required\": false,\n    \"dirty_total\": 30,\n    \"workflow_count\": 16\n  },\n  \"heartbeat\": {\n    \"schema\": \"autorun-heartbeat-v2\",\n    \"drift_count\": 13,\n    \"escalation_count\": 25,\n    \"loop_count\": 12\n  }\n}",
+                "stderr_tail": "",
+                "continued_on_error": false,
+                "name": "workflow_audit"
+              }
+            ],
+            "self_heal": [],
+            "cloud_meta": {
+              "processor": "noos_loop_runner_v1",
+              "github_event": "http_loop",
+              "github_run_id": "railway-98f5664261cf",
+              "github_workflow": "railway-noos-loop-runner",
+              "dispatch_source": "verify_script",
+              "processed_at": "2026-07-05T17:35:42+00:00"
+            },
+            "cloud_trigger": "http_loop"
+          },
+          "guardrails": {
+            "lane": "noos",
+            "read_only_control": false
+          },
+          "supabase_sink": {
+            "ok": false,
+            "skipped": true,
+            "reason": "supabase_not_configured"
+          },
+          "finished_at": "2026-07-05T17:35:42+00:00",
+          "state_after": "FAILED_WITH_RECEIPT",
+          "status": "degraded",
+          "exit_code": 1,
+          "blocker_reason": "steps_failed:['workflow_audit']",
+          "next_action": "self_heal_or_triage",
+          "d4": {
+            "execute_ok": false,
+            "validate_ok": true,
+            "sink_acked": false
+          },
+          "d2": {
+            "cas": {
+              "verdict": "ACCEPTED",
+              "expected": 3,
+              "observed": 3,
+              "new_value": 4
+            }
+          },
+          "transition_log_tail": [
+            {
+              "from": "RUNNING",
+              "to": "FAILED_WITH_RECEIPT",
+              "at": "2026-07-05T17:35:42+00:00",
+              "cycle": 4,
+              "op_key": "4122d0574e9db007c3e6bd2a"
+            }
+          ]
+        },
+        "stderr_tail": "",
+        "run_id": "railway-98f5664261cf"
+      }
+    },
+    {
+      "dispatch_id": "self_heal_safe_fixes",
+      "event_type": "noos_self_heal_safe_fixes_tick",
+      "handler": "loop",
+      "fired": true,
+      "ok": false,
+      "status": 500,
+      "body": {
+        "handler": "loop",
+        "event_type": "noos_self_heal_safe_fixes_tick",
+        "exit_code": 1,
+        "ok": false,
+        "cycle": {
+          "schema": "noos-24-7-loop-cycle-v1",
+          "receipt_schema": "autorun-cycle-receipt-v2",
+          "workflow_id": "noos-self-heal.yml",
+          "mission_id": "M2",
+          "sandbox_id": "noetfeld-os",
+          "lane": "noos",
+          "loop_id": "self_heal_safe_fixes",
+          "event_type": "noos_self_heal_safe_fixes_tick",
+          "domain": "self-improvement",
+          "trigger_source": "http_loop",
+          "cycle_number": 4,
+          "op_key": "863a219c4dffbb6c9b0c1b81",
+          "started_at": "2026-07-05T17:35:42+00:00",
+          "state_before": "RUNNING",
+          "cost": {
+            "provider": "github_actions+cloudflare_cron",
+            "model": "none",
+            "tokens_in": 0,
+            "tokens_out": 0,
+            "unit_cost_usd": 0.0,
+            "total_usd": 0.0,
+            "metered_at_call_site": true,
+            "step_count": 1
+          },
+          "value_class": "risk_reduction",
+          "sink_invariant": {
+            "law": "sum(origin_counts) == sink_count",
+            "counts": {
+              "steps": 1,
+              "self_heal": 0
+            },
+            "sink_count": 1,
+            "provenance_tags": {
+              "steps": "loop_step",
+              "self_heal": "loop_self_heal"
+            },
+            "verdict": "PASS"
+          },
+          "founder_blocked": {
+            "count": 0,
+            "oldest_id": "",
+            "priority": "",
+            "age_seconds": 0,
+            "escalated": false,
+            "skipped": true
+          },
+          "evidence": [
+            {
+              "command": "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3 scripts/noos_self_heal_v1.py --findings-file data/noos-audit-findings-v1.json",
+              "exit_code": 0,
+              "output": "al_findings\": 0,\n    \"findings_fixed\": 0,\n    \"findings_escalated\": 0,\n    \"findings_skipped\": 0\n  },\n  \"fixed_issues\": [],\n  \"escalated_issues\": [],\n  \"metrics\": {\n    \"success_rate\": 0.0,\n    \"escalation_rate\": 0.0,\n    \"total_fixes_attempted\": 0,\n    \"total_fixes_succeeded\": 0\n  },\n  \"critique\": {\n    \"overall_ok\": true,\n    \"findings\": [\n      \"All 0 issues auto-fixed successfully\"\n    ]\n  }\n}"
+            }
+          ],
+          "runner_output": {
+            "steps": [
+              {
+                "cmd": [
+                  "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+                  "scripts/noos_self_heal_v1.py",
+                  "--findings-file",
+                  "data/noos-audit-findings-v1.json"
+                ],
+                "ok": true,
+                "exit_code": 0,
+                "stdout_tail": "{\n  \"version\": \"1.0\",\n  \"timestamp\": \"2026-07-05T17:35:42.674115\",\n  \"audit_source\": \"2026-07-05T17:35:42.673898\",\n  \"summary\": {\n    \"total_findings\": 0,\n    \"findings_fixed\": 0,\n    \"findings_escalated\": 0,\n    \"findings_skipped\": 0\n  },\n  \"fixed_issues\": [],\n  \"escalated_issues\": [],\n  \"metrics\": {\n    \"success_rate\": 0.0,\n    \"escalation_rate\": 0.0,\n    \"total_fixes_attempted\": 0,\n    \"total_fixes_succeeded\": 0\n  },\n  \"critique\": {\n    \"overall_ok\": true,\n    \"findings\": [\n      \"All 0 issues auto-fixed successfully\"\n    ]\n  }\n}",
+                "stderr_tail": "datetime.UTC).\n  return {\"blocking\": [], \"dependencies\": [], \"timestamp\": datetime.utcnow().isoformat()}\n/Users/sinakazemnezhad/Desktop/Noetfield-Systems/noetfeld-OS/scripts/noos_self_heal_v1.py:226: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).\n  \"timestamp\": datetime.utcnow().isoformat(),\n/Users/sinakazemnezhad/Desktop/Noetfield-Systems/noetfeld-OS/scripts/noos_self_heal_v1.py:288: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).\n  handoff[\"last_run\"] = datetime.utcnow().isoformat()",
+                "continued_on_error": false,
+                "name": "execute_safe_fixes"
+              }
+            ],
+            "self_heal": [],
+            "cloud_meta": {
+              "processor": "noos_loop_runner_v1",
+              "github_event": "http_loop",
+              "github_run_id": "railway-3f724ee9a46b",
+              "github_workflow": "railway-noos-loop-runner",
+              "dispatch_source": "verify_script",
+              "processed_at": "2026-07-05T17:35:42+00:00"
+            },
+            "cloud_trigger": "http_loop"
+          },
+          "guardrails": {
+            "lane": "noos",
+            "read_only_control": false
+          },
+          "supabase_sink": {
+            "ok": false,
+            "skipped": true,
+            "reason": "supabase_not_configured"
+          },
+          "finished_at": "2026-07-05T17:35:42+00:00",
+          "state_after": "BLOCKED_WITH_REASON",
+          "status": "degraded",
+          "exit_code": 1,
+          "blocker_reason": "sink_unacked",
+          "next_action": "self_heal_or_triage",
+          "d4": {
+            "execute_ok": true,
+            "validate_ok": true,
+            "sink_acked": false
+          },
+          "d2": {
+            "cas": {
+              "verdict": "ACCEPTED",
+              "expected": 3,
+              "observed": 3,
+              "new_value": 4
+            }
+          },
+          "transition_log_tail": [
+            {
+              "from": "RUNNING",
+              "to": "BLOCKED_WITH_REASON",
+              "at": "2026-07-05T17:35:42+00:00",
+              "cycle": 4,
+              "op_key": "863a219c4dffbb6c9b0c1b81"
+            }
+          ]
+        },
+        "stderr_tail": "",
+        "run_id": "railway-3f724ee9a46b"
+      }
+    },
+    {
+      "dispatch_id": "researcher",
+      "event_type": "noos_researcher_deep_dive_tick",
+      "handler": "loop",
+      "fired": true,
+      "ok": false,
+      "status": 500,
+      "body": {
+        "handler": "loop",
+        "event_type": "noos_researcher_deep_dive_tick",
+        "exit_code": 1,
+        "ok": false,
+        "cycle": {
+          "schema": "noos-24-7-loop-cycle-v1",
+          "receipt_schema": "autorun-cycle-receipt-v2",
+          "workflow_id": "noos-researcher.yml",
+          "mission_id": "M2",
+          "sandbox_id": "noetfeld-os",
+          "lane": "noos",
+          "loop_id": "researcher_deep_dive",
+          "event_type": "noos_researcher_deep_dive_tick",
+          "domain": "self-improvement",
+          "trigger_source": "http_loop",
+          "cycle_number": 4,
+          "op_key": "9fd12702d73d7036d043df27",
+          "started_at": "2026-07-05T17:35:42+00:00",
+          "state_before": "RUNNING",
+          "cost": {
+            "provider": "github_actions+cloudflare_cron",
+            "model": "none",
+            "tokens_in": 0,
+            "tokens_out": 0,
+            "unit_cost_usd": 0.0,
+            "total_usd": 0.0,
+            "metered_at_call_site": true,
+            "step_count": 1
+          },
+          "value_class": "risk_reduction",
+          "sink_invariant": {
+            "law": "sum(origin_counts) == sink_count",
+            "counts": {
+              "steps": 1,
+              "self_heal": 0
+            },
+            "sink_count": 1,
+            "provenance_tags": {
+              "steps": "loop_step",
+              "self_heal": "loop_self_heal"
+            },
+            "verdict": "PASS"
+          },
+          "founder_blocked": {
+            "count": 0,
+            "oldest_id": "",
+            "priority": "",
+            "age_seconds": 0,
+            "escalated": false,
+            "skipped": true
+          },
+          "evidence": [
+            {
+              "command": "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3 scripts/noos_researcher_v1.py --depth standard",
+              "exit_code": 0,
+              "output": "{\"status\": \"no_work\", \"message\": \"No escalated findings to research\"}"
+            }
+          ],
+          "runner_output": {
+            "steps": [
+              {
+                "cmd": [
+                  "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+                  "scripts/noos_researcher_v1.py",
+                  "--depth",
+                  "standard"
+                ],
+                "ok": true,
+                "exit_code": 0,
+                "stdout_tail": "{\"status\": \"no_work\", \"message\": \"No escalated findings to research\"}",
+                "stderr_tail": "",
+                "continued_on_error": false,
+                "name": "investigate_escalations"
+              }
+            ],
+            "self_heal": [],
+            "cloud_meta": {
+              "processor": "noos_loop_runner_v1",
+              "github_event": "http_loop",
+              "github_run_id": "railway-647235972fdd",
+              "github_workflow": "railway-noos-loop-runner",
+              "dispatch_source": "verify_script",
+              "processed_at": "2026-07-05T17:35:42+00:00"
+            },
+            "cloud_trigger": "http_loop"
+          },
+          "guardrails": {
+            "lane": "noos",
+            "read_only_control": false
+          },
+          "supabase_sink": {
+            "ok": false,
+            "skipped": true,
+            "reason": "supabase_not_configured"
+          },
+          "finished_at": "2026-07-05T17:35:42+00:00",
+          "state_after": "BLOCKED_WITH_REASON",
+          "status": "degraded",
+          "exit_code": 1,
+          "blocker_reason": "sink_unacked",
+          "next_action": "self_heal_or_triage",
+          "d4": {
+            "execute_ok": true,
+            "validate_ok": true,
+            "sink_acked": false
+          },
+          "d2": {
+            "cas": {
+              "verdict": "ACCEPTED",
+              "expected": 3,
+              "observed": 3,
+              "new_value": 4
+            }
+          },
+          "transition_log_tail": [
+            {
+              "from": "RUNNING",
+              "to": "BLOCKED_WITH_REASON",
+              "at": "2026-07-05T17:35:42+00:00",
+              "cycle": 4,
+              "op_key": "9fd12702d73d7036d043df27"
+            }
+          ]
+        },
+        "stderr_tail": "",
+        "run_id": "railway-647235972fdd"
+      }
+    },
+    {
+      "dispatch_id": "specialist",
+      "event_type": "noos_specialist_proposals_tick",
+      "handler": "loop",
+      "fired": true,
+      "ok": false,
+      "status": 500,
+      "body": {
+        "handler": "loop",
+        "event_type": "noos_specialist_proposals_tick",
+        "exit_code": 1,
+        "ok": false,
+        "cycle": {
+          "schema": "noos-24-7-loop-cycle-v1",
+          "receipt_schema": "autorun-cycle-receipt-v2",
+          "workflow_id": "noos-specialist.yml",
+          "mission_id": "M2",
+          "sandbox_id": "noetfeld-os",
+          "lane": "noos",
+          "loop_id": "specialist_proposals",
+          "event_type": "noos_specialist_proposals_tick",
+          "domain": "self-improvement",
+          "trigger_source": "http_loop",
+          "cycle_number": 4,
+          "op_key": "e178518013e3f5bae9020e40",
+          "started_at": "2026-07-05T17:35:42+00:00",
+          "state_before": "RUNNING",
+          "cost": {
+            "provider": "github_actions+cloudflare_cron",
+            "model": "none",
+            "tokens_in": 0,
+            "tokens_out": 0,
+            "unit_cost_usd": 0.0,
+            "total_usd": 0.0,
+            "metered_at_call_site": true,
+            "step_count": 1
+          },
+          "value_class": "risk_reduction",
+          "sink_invariant": {
+            "law": "sum(origin_counts) == sink_count",
+            "counts": {
+              "steps": 1,
+              "self_heal": 0
+            },
+            "sink_count": 1,
+            "provenance_tags": {
+              "steps": "loop_step",
+              "self_heal": "loop_self_heal"
+            },
+            "verdict": "PASS"
+          },
+          "founder_blocked": {
+            "count": 0,
+            "oldest_id": "",
+            "priority": "",
+            "age_seconds": 0,
+            "escalated": false,
+            "skipped": true
+          },
+          "evidence": [
+            {
+              "command": "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3 scripts/noos_specialist_v1.py",
+              "exit_code": 0,
+              "output": "{\"status\": \"no_work\", \"message\": \"No research findings to review\"}"
+            }
+          ],
+          "runner_output": {
+            "steps": [
+              {
+                "cmd": [
+                  "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+                  "scripts/noos_specialist_v1.py"
+                ],
+                "ok": true,
+                "exit_code": 0,
+                "stdout_tail": "{\"status\": \"no_work\", \"message\": \"No research findings to review\"}",
+                "stderr_tail": "",
+                "continued_on_error": false,
+                "name": "generate_proposals"
+              }
+            ],
+            "self_heal": [],
+            "cloud_meta": {
+              "processor": "noos_loop_runner_v1",
+              "github_event": "http_loop",
+              "github_run_id": "railway-5d746c50e93a",
+              "github_workflow": "railway-noos-loop-runner",
+              "dispatch_source": "verify_script",
+              "processed_at": "2026-07-05T17:35:42+00:00"
+            },
+            "cloud_trigger": "http_loop"
+          },
+          "guardrails": {
+            "lane": "noos",
+            "read_only_control": false
+          },
+          "supabase_sink": {
+            "ok": false,
+            "skipped": true,
+            "reason": "supabase_not_configured"
+          },
+          "finished_at": "2026-07-05T17:35:42+00:00",
+          "state_after": "BLOCKED_WITH_REASON",
+          "status": "degraded",
+          "exit_code": 1,
+          "blocker_reason": "sink_unacked",
+          "next_action": "self_heal_or_triage",
+          "d4": {
+            "execute_ok": true,
+            "validate_ok": true,
+            "sink_acked": false
+          },
+          "d2": {
+            "cas": {
+              "verdict": "ACCEPTED",
+              "expected": 3,
+              "observed": 3,
+              "new_value": 4
+            }
+          },
+          "transition_log_tail": [
+            {
+              "from": "RUNNING",
+              "to": "BLOCKED_WITH_REASON",
+              "at": "2026-07-05T17:35:42+00:00",
+              "cycle": 4,
+              "op_key": "e178518013e3f5bae9020e40"
+            }
+          ]
+        },
+        "stderr_tail": "",
+        "run_id": "railway-5d746c50e93a"
+      }
+    },
+    {
+      "dispatch_id": "orchestrator",
+      "event_type": "noos_orchestrator_cross_repo_tick",
+      "handler": "loop",
+      "fired": true,
+      "ok": false,
+      "status": 500,
+      "body": {
+        "handler": "loop",
+        "event_type": "noos_orchestrator_cross_repo_tick",
+        "exit_code": 1,
+        "ok": false,
+        "cycle": {
+          "schema": "noos-24-7-loop-cycle-v1",
+          "receipt_schema": "autorun-cycle-receipt-v2",
+          "workflow_id": "noos-cross-repo-orchestrator.yml",
+          "mission_id": "M2",
+          "sandbox_id": "noetfeld-os",
+          "lane": "noos",
+          "loop_id": "orchestrator_cross_repo",
+          "event_type": "noos_orchestrator_cross_repo_tick",
+          "domain": "self-improvement",
+          "trigger_source": "http_loop",
+          "cycle_number": 5,
+          "op_key": "1a3dfe06213171eef32c4596",
+          "started_at": "2026-07-05T17:35:42+00:00",
+          "state_before": "RUNNING",
+          "cost": {
+            "provider": "github_actions+cloudflare_cron",
+            "model": "none",
+            "tokens_in": 0,
+            "tokens_out": 0,
+            "unit_cost_usd": 0.0,
+            "total_usd": 0.0,
+            "metered_at_call_site": true,
+            "step_count": 1
+          },
+          "value_class": "risk_reduction",
+          "sink_invariant": {
+            "law": "sum(origin_counts) == sink_count",
+            "counts": {
+              "steps": 1,
+              "self_heal": 0
+            },
+            "sink_count": 1,
+            "provenance_tags": {
+              "steps": "loop_step",
+              "self_heal": "loop_self_heal"
+            },
+            "verdict": "PASS"
+          },
+          "founder_blocked": {
+            "count": 0,
+            "oldest_id": "",
+            "priority": "",
+            "age_seconds": 0,
+            "escalated": false,
+            "skipped": true
+          },
+          "evidence": [
+            {
+              "command": "echo Aggregating health across all org repos",
+              "exit_code": 0,
+              "output": "Aggregating health across all org repos"
+            }
+          ],
+          "runner_output": {
+            "steps": [
+              {
+                "cmd": [
+                  "echo",
+                  "Aggregating health across all org repos"
+                ],
+                "ok": true,
+                "exit_code": 0,
+                "stdout_tail": "Aggregating health across all org repos",
+                "stderr_tail": "",
+                "continued_on_error": false,
+                "name": "aggregate_health"
+              }
+            ],
+            "self_heal": [],
+            "cloud_meta": {
+              "processor": "noos_loop_runner_v1",
+              "github_event": "http_loop",
+              "github_run_id": "railway-27124036dec5",
+              "github_workflow": "railway-noos-loop-runner",
+              "dispatch_source": "verify_script",
+              "processed_at": "2026-07-05T17:35:42+00:00"
+            },
+            "cloud_trigger": "http_loop"
+          },
+          "guardrails": {
+            "lane": "noos",
+            "read_only_control": false
+          },
+          "supabase_sink": {
+            "ok": false,
+            "skipped": true,
+            "reason": "supabase_not_configured"
+          },
+          "finished_at": "2026-07-05T17:35:42+00:00",
+          "state_after": "BLOCKED_WITH_REASON",
+          "status": "degraded",
+          "exit_code": 1,
+          "blocker_reason": "sink_unacked",
+          "next_action": "self_heal_or_triage",
+          "d4": {
+            "execute_ok": true,
+            "validate_ok": true,
+            "sink_acked": false
+          },
+          "d2": {
+            "cas": {
+              "verdict": "ACCEPTED",
+              "expected": 4,
+              "observed": 4,
+              "new_value": 5
+            }
+          },
+          "transition_log_tail": [
+            {
+              "from": "RUNNING",
+              "to": "BLOCKED_WITH_REASON",
+              "at": "2026-07-05T17:35:42+00:00",
+              "cycle": 5,
+              "op_key": "1a3dfe06213171eef32c4596"
+            }
+          ]
+        },
+        "stderr_tail": "",
+        "run_id": "railway-27124036dec5"
+      }
+    },
+    {
+      "dispatch_id": "factory_autorun",
+      "event_type": "noos_factory_autorun_tick",
+      "handler": "factory",
+      "fired": true,
+      "ok": false,
+      "status": 500,
+      "body": {
+        "handler": "factory",
+        "event_type": "noos_factory_autorun_tick",
+        "ok": false,
+        "steps": [
+          {
+            "name": "enqueue_cloud_inbox",
+            "exit_code": 0,
+            "ok": true,
+            "stderr_tail": ""
+          },
+          {
+            "name": "factory_once",
+            "exit_code": 1,
+            "ok": false,
+            "stderr_tail": ""
+          }
+        ],
+        "run_id": "railway-75f1ad4c4d7f"
+      }
+    }
+  ],
+  "ok": true,
+  "report_line": "cf_railway_dispatch_verify \u00b7 fired=13/13 exec_ok=0/13"
+}
