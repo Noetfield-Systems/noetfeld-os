@@ -1,8 +1,18 @@
+import Link from "next/link";
+
 const principles = [
   "Workflow-first governance",
   "Append-only auditability",
   "Living knowledge graph memory",
   "Human-governed intelligence execution",
+];
+
+const services = [
+  {
+    title: "Agentic Cost Governance",
+    description: "Control silent AI spend leakage from background agents, Copilot, and custom automation.",
+    href: "/services/agentic-cost-governance",
+  },
 ];
 
 export default function HomePage() {
@@ -23,6 +33,21 @@ export default function HomePage() {
               {principle}
             </div>
           ))}
+        </div>
+
+        {/* Services Section */}
+        <div className="mt-20">
+          <h2 className="text-2xl font-semibold mb-6">Services</h2>
+          <div className="space-y-4">
+            {services.map((service) => (
+              <Link key={service.href} href={service.href}>
+                <div className="rounded-lg border border-slate-800 bg-slate-900/50 hover:border-cyan-700 hover:bg-slate-900/70 p-5 transition cursor-pointer">
+                  <h3 className="font-semibold text-cyan-300">{service.title}</h3>
+                  <p className="text-sm text-slate-400 mt-2">{service.description}</p>
+                </div>
+              </Link>
+            ))}
+          </div>
         </div>
       </section>
     </main>
