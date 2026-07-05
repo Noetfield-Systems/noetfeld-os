@@ -12,6 +12,7 @@ tests/
 packages/
 infra/
 ops/
+apps/
 _archive/
 Noetfield-All-Documents/
 .sina-agent/
@@ -35,8 +36,8 @@ ROUTING_CARD.md
 railway.toml
 *_LOCKED.md
 *_SSOT*.md
-/platform/
-/services/
+platform/
+services/
 docs/*.md
 docs/mockups/
 docs/ops/
