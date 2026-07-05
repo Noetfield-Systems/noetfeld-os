@@ -1,0 +1,12 @@
+{
+  "schema": "nf-kaizen-candidate-v1",
+  "filed_at": "2026-07-05T12:24:00Z",
+  "source_audit": "public-chat-greeting-rca-pre-patch-2026-07-05",
+  "title": "Expose deploy git SHA on platform /health",
+  "problem": "platform.noetfield.com /health and /api/public/chat/health do not expose deploy git SHA. Disk-vs-live RCA can only match knowledge manifest stats, not prove running code matches repo HEAD.",
+  "proposal": "Add git_sha (and optional build_id) to GET /health and /api/public/chat/health from RAILWAY_GIT_COMMIT_SHA or equivalent at deploy time.",
+  "founder_gated": true,
+  "reason_gated": "Touches platform deploy surface and health contract consumed by monitors.",
+  "priority": "medium",
+  "lane": "platform-spine"
+}

@@ -35,6 +35,16 @@ def analyze_public_chat_intent(message: str) -> PublicChatIntent:
     text = (message or "").strip()
     lanes = detect_question_lanes(text)
 
+    from noetfield_governance.chatbot_knowledge import is_greeting_message
+
+    if is_greeting_message(text):
+        return PublicChatIntent(
+            primary_intent="greeting",
+            lanes=lanes,
+            outcome_goal="welcome_and_orient",
+            risk_flags=[],
+            required_terms=["Noetfield"],
+        )
     if _PRIVACY_RE.search(text):
         return PublicChatIntent(
             primary_intent="privacy_history",

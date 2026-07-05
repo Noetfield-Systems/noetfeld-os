@@ -84,6 +84,12 @@ _FOLLOW_UP_RE = re.compile(
     re.I,
 )
 
+_GREETING_RE = re.compile(
+    r"^\s*(hi|hello|hey|hiya|howdy|yo|sup|greetings|"
+    r"good\s+(morning|afternoon|evening))\s*[!?.]?\s*$",
+    re.I,
+)
+
 _LIFECYCLE_TERMS = {
     "changed",
     "deprecated",
@@ -193,9 +199,15 @@ def active_subject_from_conversation(conversation_state: dict[str, Any] | None) 
     return None
 
 
+def is_greeting_message(question: str) -> bool:
+    return bool(_GREETING_RE.match((question or "").strip()))
+
+
 def is_follow_up_question(question: str) -> bool:
     text = (question or "").strip()
     if not text:
+        return False
+    if is_greeting_message(text):
         return False
     if detect_entities(text):
         return False
@@ -472,10 +484,13 @@ def select_relevant_excerpt(
         parts.append(full)
     combined = "\n\n---\n\n".join(p for p in parts if p.strip())
 
+    tokens = _word_tokens(query)
+    if not tokens:
+        return pinned[:max_chars] if pinned.strip() else combined[:max_chars]
+
     if len(combined) <= max_chars and not active_subject:
         return combined
 
-    tokens = _word_tokens(query)
     subject_tokens = _word_tokens(active_subject or "")
     lifecycle_follow_up = is_follow_up and bool(tokens & _LIFECYCLE_TERMS)
     remainder = full
@@ -483,7 +498,7 @@ def select_relevant_excerpt(
         remainder = full[len(pinned) :].lstrip("\n-")
     budget = max(6000, max_chars - len(pinned) - len(forced) - 16) if pinned else max_chars
 
-    if not tokens or not remainder.strip():
+    if not remainder.strip():
         return combined[:max_chars]
 
     sections = remainder.split("\n## ")

@@ -13,6 +13,7 @@ from noetfield_governance.chat_errors import ChatAPIError, ChatConfigurationErro
 
 from noetfield_governance.chatbot_knowledge import (
     build_query_with_subject,
+    is_greeting_message,
     select_relevant_excerpt,
 )
 from noetfield_governance.observability import trace_public_chat
@@ -24,7 +25,13 @@ _MAX_MESSAGE_LEN = 2000
 _RATE_LIMIT_WINDOW_SEC = 60
 _RATE_LIMIT_MAX_PER_WINDOW = 30
 
-ChatProvider = Literal["gemini", "openrouter", "auto"]
+ChatProvider = Literal["gemini", "openrouter", "auto", "greeting"]
+
+_GREETING_REPLY = (
+    "Hi. Ask naturally about Noetfield, governance evaluation, GEL, diligence, or what to read next. "
+    "I'll keep it practical."
+)
+_GREETING_CITATIONS = ["/pricing/", "/gel/", "/copilot/pilot/"]
 
 logger = logging.getLogger("noetfield.governance.public_chat")
 
@@ -167,6 +174,9 @@ async def answer_public_question(
         raise ValueError(f"message must be at most {_MAX_MESSAGE_LEN} characters")
 
     await _check_rate_limit(client_key or "anonymous")
+
+    if is_greeting_message(text):
+        return _GREETING_REPLY, "greeting", list(_GREETING_CITATIONS)
 
     query, active_subject, follow_up_resolved = build_query_with_subject(
         text,

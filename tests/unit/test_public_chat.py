@@ -402,3 +402,24 @@ def test_public_chat_rejects_empty_message() -> None:
         assert response.status_code == 400
 
     asyncio.run(run())
+
+
+def test_greeting_short_circuits_without_llm() -> None:
+    async def run() -> None:
+        with patch("noetfield_governance.public_chat._generate_sync") as generate:
+            reply, provider, citations = await answer_public_question(
+                message="HI",
+                provider="auto",
+                gemini_api_key="gemini-key",
+                openrouter_api_key="or-key",
+                gemini_model="gemini-2.0-flash",
+                openrouter_model="google/gemini-2.5-flash",
+                client_key="test-client",
+            )
+            generate.assert_not_called()
+        assert provider == "greeting"
+        assert "Noetfield" in reply
+        assert "Stablecoin" not in reply
+        assert citations == ["/pricing/", "/gel/", "/copilot/pilot/"]
+
+    asyncio.run(run())

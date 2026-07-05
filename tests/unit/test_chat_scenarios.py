@@ -88,6 +88,27 @@ def test_knowledge_corpus_size() -> None:
     assert "gel-runtime.md" in ctx.lower() or "Governance Execution Layer" in ctx
 
 
+def test_zero_token_input_returns_pinned_core_only_bundle() -> None:
+    from noetfield_governance.chatbot_knowledge import _pinned_sections
+
+    pinned = _pinned_sections()
+    assert pinned.strip()
+    for question in ("HI", "hi", "ok", "ty", "??"):
+        ctx = select_relevant_excerpt(question)
+        assert "Stablecoin" not in ctx
+        assert "Canada regulatory context" not in ctx
+        assert len(ctx) <= len(pinned)
+        assert ctx == pinned[: len(ctx)]
+
+
+def test_greeting_is_not_follow_up_question() -> None:
+    from noetfield_governance.chatbot_knowledge import is_follow_up_question, is_greeting_message
+
+    for greeting in ("HI", "hello", "hey", "good morning"):
+        assert is_greeting_message(greeting)
+        assert not is_follow_up_question(greeting)
+
+
 def test_chatbot_knowledge_manifest_is_fail_closed() -> None:
     assert knowledge_manifest_violations() == []
 
