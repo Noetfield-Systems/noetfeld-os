@@ -1,0 +1,92 @@
+{
+  "schema_version": "noetfield-alignment-receipt-v1",
+  "generated_at": "2026-07-05T07:25:28Z",
+  "agent_tag": "nf-local-repo-agent",
+  "agent_display": "[NF-LOCAL-REPO-AGENT]",
+  "preflight": {
+    "noetfield_path_status": "ACTIVE",
+    "path": "/Users/sinakazemnezhad/Desktop/Noetfield-Systems/Noetfield",
+    "git_exists": true,
+    "is_archive": false,
+    "is_stale": false
+  },
+  "repo_state": {
+    "remote": "origin",
+    "remote_url": "https://github.com/Noetfield-Systems/Noetfield.git",
+    "current_branch": "main",
+    "head_sha": "8008d176",
+    "head_oneline": "chore: migrate org slug kazemnezhadsina144-dot → Noetfield-Systems",
+    "working_tree_status": "MODIFIED",
+    "working_tree_files": [
+      "reports/agent-auto/events/nf-mono-nerve-v1.json"
+    ]
+  },
+  "divergence": {
+    "status": "DIVERGED_LOCAL_AHEAD",
+    "local_ahead_remote": 1,
+    "remote_ahead_local": 5,
+    "remote_main_sha": "7fa5864a",
+    "remote_main_oneline": "Merge pull request #82 from Noetfield-Systems/kazemnezhadsina144-dot-noetfield-autorun-audit",
+    "divergence_reason": "Local main does not match remote main; local is 6 commits behind and has 1 local modification"
+  },
+  "github_verification": {
+    "repo_owner": "Noetfield-Systems",
+    "repo_name": "Noetfield",
+    "remote_correctly_configured": true,
+    "default_branch_confidence": "main (aligned with local)"
+  },
+  "deploy_truth": {
+    "platform": "Vercel",
+    "deploy_config_found": true,
+    "vercel_json_path": "vercel.json",
+    "config_status": "VERIFIED",
+    "framework": null,
+    "rewrites": [
+      {
+        "source": "/health",
+        "destination": "/api/health"
+      },
+      {
+        "source": "/evaluate",
+        "destination": "/api/demo/evaluate"
+      }
+    ],
+    "security_redirects_enforced": true,
+    "governance_paths_blocked": [
+      "/docs/ops/*",
+      "/docs/platform/*",
+      "/governance/*",
+      "/platform/*",
+      "/reports/*",
+      "/scripts/*",
+      "/data/*",
+      "/ops/*"
+    ],
+    "sensitive_paths_404_count": 106,
+    "platform_state_note": "Cannot verify live Vercel deployment state from config alone; recommend direct Vercel console check"
+  },
+  "sg_alignment": {
+    "status": "VERIFIED",
+    "governance_scope": "Noetfield platform governance layer - verified",
+    "payment_custody_claim": "NOT FOUND - correct",
+    "psp_msb_claim": "NOT FOUND - correct",
+    "banking_authority_claim": "NOT FOUND - correct",
+    "trustfield_subsidiary_claim": "NOT FOUND - correct",
+    "noos_boundary_claim": "NOT FOUND - correct",
+    "sg_library_dependency": "INDIRECT (via SSOT references)",
+    "evidence": {
+      "project_boundaries_locked": "VERIFIED - states Noetfield = governance execution, AI policy, risk intelligence BEFORE external execution - never touches value",
+      "payment_evidence": "docs/SOURCE_OF_TRUTH contains noetfield-psp-rpaa-lane-analysis-fa-v1.md - ANALYSIS ONLY, NOT EXECUTION",
+      "trustfield_boundary": "PROJECT_BOUNDARIES_LOCKED.md states TrustField is separate path, not this repo"
+    }
+  },
+  "noos_alignment": {
+    "status": "VERIFIED",
+    "noos_canonical_path": "/Users/sinakazemnezhad/Desktop/Noetfield-Systems/noetfeld-OS",
+    "noos_exists": true,
+    "noos_role": "Coordination/control panel - NOT execution repo",
+    "noetfield_role": "Product/governance execution - correct scope",
+    "lane_reporting": "Noetfield.com lane should report state to NOOS after preflight - recommended next step"
+  },
+  "stale_path_risk": "NONE - repo is active, git remote current, working tree is fresh"
+}

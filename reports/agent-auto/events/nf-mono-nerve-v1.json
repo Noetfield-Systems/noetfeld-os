@@ -1,13 +1,13 @@
 {
   "schema_version": "nf-mono-nerve-v1",
-  "generated_at": "2026-06-28T14:08:48Z",
-  "ok": true,
+  "generated_at": "2026-07-05T07:25:28Z",
+  "ok": false,
   "agent_id": "noetfield_cloud",
   "defer_active": true,
   "email_send_defer_line": "email-defer \u00b7 ON \u00b7 main=5/5 \u00b7 sites=RED \u00b7 email=AFTER_MAIN \u00b7 lift=YES",
   "operations_inbox": {
     "schema": "noetfield-operations-inbox-active-v1",
-    "at": "2026-06-28T14:08:47Z",
+    "at": "2026-07-05T07:25:28Z",
     "ok": true,
     "inbox": "operations@noetfield.com",
     "gw_status": "ACTIVE",
@@ -17,27 +17,24 @@
     "ssot_doc": "docs/ops/COMMERCIAL_INBOX_PACKAGING_LOCKED_v1.md",
     "one_law": "GW inbox receive OPEN \u00b7 Resend/form auto-send DEFERRED until after factory"
   },
-  "defer_receipt_at": "2026-06-28T14:08:47Z",
-  "agent_live_surfaces_at": "2026-06-27T19:30:32Z",
+  "defer_receipt_at": null,
+  "agent_live_surfaces_at": "2026-07-02T04:01:49Z",
   "founder_cascade_latest_at": "2026-06-24T08:37:18Z",
   "founder_cascade_newer_than_ship": false,
   "mono_newer_than_live_status": false,
   "trustfield_pulse": {
-    "ok": true,
-    "email_send_defer_line": "email-defer \u00b7 ON \u00b7 main=5/5 \u00b7 sites=RED \u00b7 email=AFTER_MAIN \u00b7 lift=YES \u00b7 TF_MACLAW=ACTIVE \u00b7 attract_users",
-    "defer_active": false,
-    "commercial_send_allowed": true,
-    "synced_at": "2026-06-28T14:08:48Z"
+    "ok": false,
+    "error": "Command '['/Library/Frameworks/Python.framework/Versions/3.12/bin/python3', '/Users/sinakazemnezhad/Desktop/TrustField Technologies/scripts/tf_fleet_live_wire_v1.py', '--json', '--no-refresh']' return"
   },
   "gates": [
     {
       "gate": "defer_ssot",
-      "ok": true,
+      "ok": false,
       "path": "/Users/sinakazemnezhad/Desktop/SourceA/data/commercial-email-send-defer-v1.json"
     },
     {
       "gate": "defer_script",
-      "ok": true,
+      "ok": false,
       "path": "/Users/sinakazemnezhad/Desktop/SourceA/scripts/commercial_email_send_defer_v1.py"
     },
     {
@@ -52,8 +49,8 @@
     },
     {
       "gate": "defer_assess",
-      "ok": true,
-      "detail": null
+      "ok": false,
+      "detail": "missing defer script /Users/sinakazemnezhad/Desktop/SourceA/scripts/commercial_email_send_defer_v1.py"
     },
     {
       "gate": "operations_inbox_receipt",
@@ -72,7 +69,7 @@
     {
       "gate": "agent_live_surfaces",
       "ok": true,
-      "synced_at": "2026-06-27T19:30:32Z"
+      "synced_at": "2026-07-02T04:01:49Z"
     },
     {
       "gate": "founder_cascade_readable",
@@ -81,11 +78,11 @@
     },
     {
       "gate": "trustfield_fleet_wire",
-      "ok": true,
-      "detail": null
+      "ok": false,
+      "detail": "Command '['/Library/Frameworks/Python.framework/Versions/3.12/bin/python3', '/Users/sinakazemnezhad/Desktop/TrustField Technologies/scripts/tf_fleet_live_wire_v1.py', '--json', '--no-refresh']' return"
     }
   ],
   "wiring_ssot": "data/nf_mono_nerve_wiring_v1.json",
-  "heal": null,
+  "heal": "make nf-onboard",
   "quote_rule": "Quote product_now_line AND email_send_defer_line \u2014 not chat memory"
 }
