@@ -1,0 +1,259 @@
+{
+  "schema": "noos-loop-baseline-audit-v1",
+  "audited_at": "2026-07-05T12:29:06Z",
+  "authority": "NOOS_MACHINE_LOOPS_UPGRADE_STEP_1",
+  "motor": {
+    "cf_worker": "noos-loop-fleet-tick-v1",
+    "base_cron": "*/5 * * * *",
+    "health_url": "https://noos-loop-fleet-tick-v1.sina-kazemnezhad-ca.workers.dev/health",
+    "legacy_factory_motor": "noos-factory-autorun-tick-v1"
+  },
+  "motor_health_probe": {
+    "url": "https://noos-loop-fleet-tick-v1.sina-kazemnezhad-ca.workers.dev/health",
+    "ok": true,
+    "status": 200
+  },
+  "core_loop_count": 7,
+  "total_loop_count": 12,
+  "loops": [
+    {
+      "loop_id": "inbox",
+      "title": "Inbox drain loop",
+      "factory_id": "loop-inbox",
+      "github_workflow": "noos-inbox-loop.yml",
+      "event_type": "noos_inbox_loop_tick",
+      "interval_minutes": 5,
+      "core_domain_loop": true,
+      "verification_state": "DECLARED"
+    },
+    {
+      "loop_id": "runtime",
+      "title": "Runtime gate + pytest loop",
+      "factory_id": "loop-runtime",
+      "github_workflow": "noos-runtime-loop.yml",
+      "event_type": "noos_runtime_loop_tick",
+      "interval_minutes": 15,
+      "core_domain_loop": true,
+      "verification_state": "DECLARED"
+    },
+    {
+      "loop_id": "surface",
+      "title": "Public surface health loop",
+      "factory_id": "loop-surface",
+      "github_workflow": "noos-surface-loop.yml",
+      "event_type": "noos_surface_loop_tick",
+      "interval_minutes": 20,
+      "core_domain_loop": true,
+      "verification_state": "DECLARED"
+    },
+    {
+      "loop_id": "chain",
+      "title": "Chain tools verify loop",
+      "factory_id": "loop-chain",
+      "github_workflow": "noos-chain-loop.yml",
+      "event_type": "noos_chain_loop_tick",
+      "interval_minutes": 30,
+      "core_domain_loop": true,
+      "verification_state": "DECLARED"
+    },
+    {
+      "loop_id": "self_heal",
+      "title": "Self-heal + autonomy nerve loop",
+      "factory_id": "loop-self-heal",
+      "github_workflow": "noos-self-heal-loop.yml",
+      "event_type": "noos_self_heal_loop_tick",
+      "interval_minutes": 10,
+      "core_domain_loop": true,
+      "verification_state": "DECLARED"
+    },
+    {
+      "loop_id": "sourcea_observe",
+      "title": "SourceA portfolio-spine observe loop",
+      "factory_id": "loop-sourcea-observe",
+      "github_workflow": "noos-sourcea-observe-loop.yml",
+      "event_type": "noos_sourcea_observe_loop_tick",
+      "interval_minutes": 30,
+      "core_domain_loop": true,
+      "verification_state": "DECLARED"
+    },
+    {
+      "loop_id": "agent_nerve",
+      "title": "Agent vault nerve loop",
+      "factory_id": "loop-agent-nerve",
+      "github_workflow": "noos-agent-nerve-loop.yml",
+      "event_type": "noos_agent_nerve_loop_tick",
+      "interval_minutes": 60,
+      "core_domain_loop": true,
+      "verification_state": "DECLARED"
+    },
+    {
+      "loop_id": "workflow_audit",
+      "title": "Workflow audit + critique loop",
+      "factory_id": "loop-workflow-audit",
+      "github_workflow": "noos-workflow-audit.yml",
+      "event_type": "noos_workflow_audit_tick",
+      "interval_minutes": 15,
+      "core_domain_loop": false,
+      "verification_state": "DECLARED"
+    },
+    {
+      "loop_id": "self_heal_safe_fixes",
+      "title": "Auto-fix safe issues from audit findings",
+      "factory_id": "loop-self-heal-safe-fixes",
+      "github_workflow": "noos-self-heal.yml",
+      "event_type": "noos_self_heal_safe_fixes_tick",
+      "interval_minutes": 30,
+      "core_domain_loop": false,
+      "verification_state": "DECLARED"
+    },
+    {
+      "loop_id": "researcher_deep_dive",
+      "title": "Deep-dive investigation of escalated findings",
+      "factory_id": "loop-researcher",
+      "github_workflow": "noos-researcher.yml",
+      "event_type": "noos_researcher_deep_dive_tick",
+      "interval_minutes": 60,
+      "core_domain_loop": false,
+      "verification_state": "DECLARED"
+    },
+    {
+      "loop_id": "specialist_proposals",
+      "title": "Generate fix proposals from research",
+      "factory_id": "loop-specialist",
+      "github_workflow": "noos-specialist.yml",
+      "event_type": "noos_specialist_proposals_tick",
+      "interval_minutes": 120,
+      "core_domain_loop": false,
+      "verification_state": "DECLARED"
+    },
+    {
+      "loop_id": "orchestrator_cross_repo",
+      "title": "Cross-repo health orchestration & consolidation",
+      "factory_id": "loop-orchestrator",
+      "github_workflow": "noos-cross-repo-orchestrator.yml",
+      "event_type": "noos_orchestrator_cross_repo_tick",
+      "interval_minutes": 180,
+      "core_domain_loop": false,
+      "verification_state": "DECLARED"
+    }
+  ],
+  "core_loops": [
+    {
+      "loop_id": "inbox",
+      "title": "Inbox drain loop",
+      "factory_id": "loop-inbox",
+      "github_workflow": "noos-inbox-loop.yml",
+      "event_type": "noos_inbox_loop_tick",
+      "interval_minutes": 5,
+      "core_domain_loop": true,
+      "verification_state": "DECLARED"
+    },
+    {
+      "loop_id": "runtime",
+      "title": "Runtime gate + pytest loop",
+      "factory_id": "loop-runtime",
+      "github_workflow": "noos-runtime-loop.yml",
+      "event_type": "noos_runtime_loop_tick",
+      "interval_minutes": 15,
+      "core_domain_loop": true,
+      "verification_state": "DECLARED"
+    },
+    {
+      "loop_id": "surface",
+      "title": "Public surface health loop",
+      "factory_id": "loop-surface",
+      "github_workflow": "noos-surface-loop.yml",
+      "event_type": "noos_surface_loop_tick",
+      "interval_minutes": 20,
+      "core_domain_loop": true,
+      "verification_state": "DECLARED"
+    },
+    {
+      "loop_id": "chain",
+      "title": "Chain tools verify loop",
+      "factory_id": "loop-chain",
+      "github_workflow": "noos-chain-loop.yml",
+      "event_type": "noos_chain_loop_tick",
+      "interval_minutes": 30,
+      "core_domain_loop": true,
+      "verification_state": "DECLARED"
+    },
+    {
+      "loop_id": "self_heal",
+      "title": "Self-heal + autonomy nerve loop",
+      "factory_id": "loop-self-heal",
+      "github_workflow": "noos-self-heal-loop.yml",
+      "event_type": "noos_self_heal_loop_tick",
+      "interval_minutes": 10,
+      "core_domain_loop": true,
+      "verification_state": "DECLARED"
+    },
+    {
+      "loop_id": "sourcea_observe",
+      "title": "SourceA portfolio-spine observe loop",
+      "factory_id": "loop-sourcea-observe",
+      "github_workflow": "noos-sourcea-observe-loop.yml",
+      "event_type": "noos_sourcea_observe_loop_tick",
+      "interval_minutes": 30,
+      "core_domain_loop": true,
+      "verification_state": "DECLARED"
+    },
+    {
+      "loop_id": "agent_nerve",
+      "title": "Agent vault nerve loop",
+      "factory_id": "loop-agent-nerve",
+      "github_workflow": "noos-agent-nerve-loop.yml",
+      "event_type": "noos_agent_nerve_loop_tick",
+      "interval_minutes": 60,
+      "core_domain_loop": true,
+      "verification_state": "DECLARED"
+    }
+  ],
+  "commands": {
+    "machine_status": {
+      "cmd": [
+        "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+        "scripts/noos_machine_loops_v1.py",
+        "--json",
+        "status"
+      ],
+      "exit_code": 0,
+      "stdout": "{\n  \"schema\": \"noos-autonomy-status-v1\",\n  \"at\": \"2026-07-05T12:29:06+00:00\",\n  \"canon_version\": \"FOUNDER_CANON_v1+MACHINE_LOOPS_v1\",\n  \"triggers\": [\n    {\n      \"trigger_id\": \"FT-MERGE-T0-T1\",\n      \"class\": \"validation\",\n      \"description\": \"Merge review for docs/tests/receipts/scoped app code\",\n      \"status\": \"bootstrap_founder_reviewed\",\n      \"retirement_condition\": \"10 consecutive machine merge validations where shadow_decision matches founder\",\n      \"evidence_counter\": 0,\n      \"target_status\": \"machine_autonomous\",\n      \"bootstrap_cycles_remaining\": 5\n    },\n    {\n      \"trigger_id\": \"FT-MERGE-T2\",\n      \"class\": \"validation\",\n      \"description\": \"Merge review for dependency/config/CI changes\",\n      \"status\": \"founder_gated\",\n      \"retirement_condition\": \"20 consecutive T2 merges with dual-critic APPROVE and zero post-merge regressions\",\n      \"evidence_counter\": 0,\n      \"target_status\": \"machine_autonomous\"\n    },\n    {\n      \"trigger_id\": \"FT-COMMERCIAL-SEND\",\n      \"class\": \"capital_legal\",\n      \"description\": \"NW1/SW1 outreach send authority\",\n      \"status\": \"founder_only\",\n      \"retirement_condition\": \"agentic send receipts + 30d zero compliance incidents\",\n      \"evidence_counter\": 0,\n      \"target_status\": \"delegated_agentic\",\n      \"backlog_ids\": [\n        \"UPG-0001\",\n        \"UPG-0002\",\n        \"UPG-0003\",\n        \"UPG-0004\"\n      ]\n    },\n    {\n      \"trigger_id\": \"FT-DEMO-RECORD\",\n      \"class\": \"human_presence\",\n      \"description\": \"Demo video / screen capture\",\n      \"status\": \"founder_only\",\n      \"retirement_condition\": \"scripted capture worker + founder 5min gate receipts x10\",\n      \"evidence_counter\": 0,\n      \"target_status\": \"delegated_capture\",\n      \"backlog_ids\": [\n        \"UPG-0005\",\n        \"UPG-0029\",\n        \"UPG-0030\"\n      ]\n    },\n    {\n      \"trigger_id\": \"FT-L5-VERIFY\",\n      \"class\": \"irreversible_l5\",\n      \"description\": \"Founder verify on verifier/gate/law edits\",\n      \"status\": \"founder_only\",\n      \"retirement_condition\": \"never \\u2014 canon \\u00a78 irreversible L5\",\n      \"evidence_counter\": 0,\n      \"target_status\": \"founder_only\",\n      \"backlog_ids\": [\n        \"UPG-0010\"\n      ]\n    },\n    {\n      \"trigger_id\": \"FT-PHASE-UNLOCK\",\n      \"class\": \"phase_unlock\",\n      \"description\": \"Grant new autonomy tier\",\n      \"status\": \"founder_only\",\n      \"retirement_condition\": \"auto-proposal only; unlock act stays founder (ratchet safety)\",\n      \"evidence_counter\": 0,\n      \"target_status\": \"founder_one_click\"\n    },\n    {\n      \"trigger_id\": \"FT-PRODUCTION-SECRETS\",\n      \"class\": \"capital_legal\",\n      \"description\": \"Production vault policy and secret posture\",\n      \"status\": \"founder_only\",\n      \"retirement_condition\": \"vault policy receipt + 90d CI secret-scan green\",\n      \"evidence_counter\": 0,\n      \"target_status\": \"machine_monitored\",\n      \"backlog_ids\": [\n        \"UPG-0174\",\n        \"UPG-0175\"\n      ]\n    },\n    {\n      \"trigger_id\": \"FT-TRUST-BRIEF\",\n      \"class\": \"commercial\",\n      \"description\": \"First Trust Brief / AI Value OS briefing\",\n      \"status\": \"founder_only\",\n      \"retirement_condition\": \"intake receipt + follow-up automation receipts\",\n      \"evidence_counter\": 0,\n      \"target_status\": \"delegated_agentic\",\n      \"backlog_ids\": [\n        \"NOOS-C-01\"\n      ]\n    }\n  ],\n  \"shadow_events\": 0,\n  \"recent_match_rate\": 0.0,\n  \"dispatch_queue\": {\n    \"schema\": \"noos-machine-dispatch-queue-v1\",\n    \"updated_at\": \"2026-07-05T12:29:06+00:00\",\n    \"pending\": [\n      {\n        \"schema\": \"noos-machine-repair-dispatch-v1\",\n        \"template_id\": \"repair-lane-v1\",\n        \"version\": \"1.0.0\",\n        \"canon_version\": \"FOUNDER_CANON_v1+MACHINE_LOOPS_v1\",\n        \"laws\": \"FOUNDER_CANON v1 + governed-autorun v3. Violations = BLOCKED_WITH_REASON.\",\n        \"loop\": \"self_repair\",\n        \"trigger_sources\": [\n          \"FAILED_WITH_RECEIPT\",\n          \"critic_REJECT\",\n          \"DRIFT\",\n          \"gate_event\"\n        ],\n        \"fresh_context_rule\": \"R1\",\n        \"scope_derivation\": \"failure_receipt.files_changed \\u222a failing_test_paths\",\n        \"scope_rule\": \"machine_narrowed_only\",\n        \"max_attempts_before_escalation\": 2,\n        \"escalation_target\": [\n          \"research_memo\",\n          \"outside_audit\"\n        ],\n        \"inputs\": {\n          \"task_id\": \"{{task_id}}-repair-{{attempt}}\",\n          \"failure_receipt\": \"{{failure_receipt}}\",\n          \"allowed_paths\": \"{{derived_paths}}\",\n          \"preserve_lane_read_only\": true\n        },\n        \"outputs\": {\n          \"before_receipt\": \"required\",\n          \"after_receipt\": \"required\"\n        },\n        \"receipt_schema\": \"noos-machine-repair-receipt-v1\",\n        \"instantiated_at\": \"2026-07-05T12:29:06+00:00\",\n        \"params\": {\n          \"task_id\": \"UNKNOWN\",\n          \"attempt\": 1,\n          \"failure_receipt\": \"noetfield-t8-stale-lane-probe-v1\",\n          \"derived_paths\": []\n        },\n        \"allowed_paths\": [],\n        \"ok\": true,\n        \"source_receipt_path\": \"receipts/proof/noos-t8-stale-lane-probe-v1.json\"\n      },\n      {\n        \"schema\": \"noos-machine-repair-dispatch-v1\",\n        \"template_id\": \"repair-lane-v1\",\n        \"version\": \"1.0.0\",\n        \"canon_version\": \"FOUNDER_CANON_v1+MACHINE_LOOPS_v1\",\n        \"laws\": \"FOUNDER_CANON v1 + governed-autorun v3. Violations = BLOCKED_WITH_REASON.\",\n        \"loop\": \"self_repair\",\n        \"trigger_sources\": [\n          \"FAILED_WITH_RECEIPT\",\n          \"critic_REJECT\",\n          \"DRIFT\",\n          \"gate_event\"\n        ],\n        \"fresh_context_rule\": \"R1\",\n        \"scope_derivation\": \"failure_receipt.files_changed \\u222a failing_test_paths\",\n        \"scope_rule\": \"machine_narrowed_only\",\n        \"max_attempts_before_escalation\": 2,\n        \"escalation_target\": [\n          \"research_memo\",\n          \"outside_audit\"\n        ],\n        \"inputs\": {\n          \"task_id\": \"{{task_id}}-repair-{{attempt}}\",\n          \"failure_receipt\": \"{{failure_receipt}}\",\n          \"allowed_paths\": \"{{derived_paths}}\",\n          \"preserve_lane_read_only\": true\n        },\n        \"outputs\": {\n          \"before_receipt\": \"required\",\n          \"after_receipt\": \"required\"\n        },\n        \"receipt_schema\": \"noos-machine-repair-receipt-v1\",\n        \"instantiated_at\": \"2026-07-05T12:29:06+00:00\",\n        \"params\": {\n          \"task_id\": \"UNKNOWN\",\n          \"attempt\": 1,\n          \"failure_receipt\": \"noos-outside-audit-receipt-v1\",\n          \"derived_paths\": []\n        },\n        \"allowed_paths\": [],\n        \"ok\": true,\n        \"source_receipt_path\": \"receipts/proof/noos-outside-audit-20260705T122854Z.json\"\n      },\n      {\n        \"schema\": \"noos-machine-repair-dispatch-v1\",\n        \"template_id\": \"repair-lane-v1\",\n        \"version\": \"1.0.0\",\n        \"canon_version\": \"FOUNDER_CANON_v1+MACHINE_LOOPS_v1\",\n        \"laws\": \"FOUNDER_CANON v1 + governed-autorun v3. Violations = BLOCKED_WITH_REASON.\",\n        \"loop\": \"self_repair\",\n        \"trigger_sources\": [\n          \"FAILED_WITH_RECEIPT\",\n          \"critic_REJECT\",\n          \"DRIFT\",\n          \"gate_event\"\n        ],\n        \"fresh_context_rule\": \"R1\",\n        \"scope_derivation\": \"failure_receipt.files_changed \\u222a failing_test_paths\",\n        \"scope_rule\": \"machine_narrowed_only\",\n        \"max_attempts_before_escalation\": 2,\n        \"escalation_target\": [\n          \"research_memo\",\n          \"outside_audit\"\n        ],\n        \"inputs\": {\n          \"task_id\": \"{{task_id}}-repair-{{attempt}}\",\n          \"failure_receipt\": \"{{failure_receipt}}\",\n          \"allowed_paths\": \"{{derived_paths}}\",\n          \"preserve_lane_read_only\": true\n        },\n        \"outputs\": {\n          \"before_receipt\": \"required\",\n          \"after_receipt\": \"required\"\n        },\n        \"receipt_schema\": \"noos-machine-repair-receipt-v1\",\n        \"instantiated_at\": \"2026-07-05T12:29:06+00:00\",\n        \"params\": {\n          \"task_id\": \"UNKNOWN\",\n          \"attempt\": 1,\n          \"failure_receipt\": \"noos-loop-baseline-audit-v1\",\n          \"derived_paths\": []\n        },\n        \"allowed_paths\": [],\n        \"ok\": true,\n        \"source_receipt_path\": \"receipts/proof/noos-loop-baseline-audit-v1.json\"\n      }\n    ],\n    \"processed\": [],\n    \"new_this_run\": 3,\n    \"ok\": true,\n    \"report_line\": \"reconcile \\u00b7 pending=3 new=3\"\n  },\n  \"ok\": true,\n  \"report_line\": \"autonomy_status \\u00b7 ledger loaded\"\n}",
+      "stderr": ""
+    },
+    "loops_status": {
+      "cmd": [
+        "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+        "-c",
+        "import json; d=json.load(open('data/noos-24-7-loops-v1.json')); print(json.dumps({'motor':d['motor'],'loops':[{'id':x['id'],'interval':x['interval_minutes'],'event':x['event_type']} for x in d['loops']]}))"
+      ],
+      "exit_code": 0,
+      "stdout": "{\"motor\": {\"cf_worker\": \"noos-loop-fleet-tick-v1\", \"base_cron\": \"*/5 * * * *\", \"health_url\": \"https://noos-loop-fleet-tick-v1.sina-kazemnezhad-ca.workers.dev/health\", \"legacy_factory_motor\": \"noos-factory-autorun-tick-v1\"}, \"loops\": [{\"id\": \"inbox\", \"interval\": 5, \"event\": \"noos_inbox_loop_tick\"}, {\"id\": \"runtime\", \"interval\": 15, \"event\": \"noos_runtime_loop_tick\"}, {\"id\": \"surface\", \"interval\": 20, \"event\": \"noos_surface_loop_tick\"}, {\"id\": \"chain\", \"interval\": 30, \"event\": \"noos_chain_loop_tick\"}, {\"id\": \"self_heal\", \"interval\": 10, \"event\": \"noos_self_heal_loop_tick\"}, {\"id\": \"sourcea_observe\", \"interval\": 30, \"event\": \"noos_sourcea_observe_loop_tick\"}, {\"id\": \"agent_nerve\", \"interval\": 60, \"event\": \"noos_agent_nerve_loop_tick\"}, {\"id\": \"workflow_audit\", \"interval\": 15, \"event\": \"noos_workflow_audit_tick\"}, {\"id\": \"self_heal_safe_fixes\", \"interval\": 30, \"event\": \"noos_self_heal_safe_fixes_tick\"}, {\"id\": \"researcher_deep_dive\", \"interval\": 60, \"event\": \"noos_researcher_deep_dive_tick\"}, {\"id\": \"specialist_proposals\", \"interval\": 120, \"event\": \"noos_specialist_proposals_tick\"}, {\"id\": \"orchestrator_cross_repo\", \"interval\": 180, \"event\": \"noos_orchestrator_cross_repo_tick\"}]}",
+      "stderr": ""
+    },
+    "schedule_verify": {
+      "cmd": [
+        "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+        "scripts/verify_noos_github_schedule_v1.py",
+        "--write-receipt",
+        "--json"
+      ],
+      "exit_code": 0,
+      "stdout": "{\n  \"schema\": \"noos-github-schedule-a1-v1\",\n  \"verified_at\": \"2026-07-05T12:29:06Z\",\n  \"proof_source\": \"supabase\",\n  \"table\": \"noetfield_truth_log\",\n  \"ok\": true,\n  \"a1_criterion\": \">=2 rows in noetfield_truth_log with source=noos-factory-autorun, event=schedule, conclusion=success (self-registered by workflow)\",\n  \"schedule_row_count\": 10,\n  \"schedule_rows\": [\n    {\n      \"run_id\": \"28725679810\",\n      \"event\": \"schedule\",\n      \"conclusion\": \"success\",\n      \"at\": \"2026-07-05T01:28:43+00:00\"\n    },\n    {\n      \"run_id\": \"28723472265\",\n      \"event\": \"schedule\",\n      \"conclusion\": \"success\",\n      \"at\": \"2026-07-04T23:47:15+00:00\"\n    },\n    {\n      \"run_id\": \"28722013863\",\n      \"event\": \"schedule\",\n      \"conclusion\": \"success\",\n      \"at\": \"2026-07-04T22:43:00+00:00\"\n    },\n    {\n      \"run_id\": \"28720532293\",\n      \"event\": \"schedule\",\n      \"conclusion\": \"success\",\n      \"at\": \"2026-07-04T21:42:12+00:00\"\n    },\n    {\n      \"run_id\": \"28718982101\",\n      \"event\": \"schedule\",\n      \"conclusion\": \"success\",\n      \"at\": \"2026-07-04T20:39:45+00:00\"\n    }\n  ],\n  \"blocker_reason\": null,\n  \"note\": \"GitHub private-repo cron lags; workflow self-registers every run. No gh polling.\",\n  \"consecutive_factory_pair\": {\n    \"newer_run_id\": \"28725679810\",\n    \"older_run_id\": \"28723472265\",\n    \"newer_at\": \"2026-07-05T01:28:43+00:00\",\n    \"older_at\": \"2026-07-04T23:47:15+00:00\"\n  },\n  \"receipt_path\": \"receipts/proof/noos-github-schedule-a1-v1.json\",\n  \"receipt_tier\": \"proof\"\n}",
+      "stderr": ""
+    },
+    "machine_audit": {
+      "cmd": [
+        "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+        "scripts/noos_machine_loops_v1.py",
+        "--json",
+        "audit"
+      ],
+      "exit_code": 1,
+      "stdout": "{\n  \"schema\": \"noos-outside-audit-receipt-v1\",\n  \"version\": \"1.0.0\",\n  \"at\": \"2026-07-05T12:29:06+00:00\",\n  \"trailing_hours\": 168,\n  \"receipts_scanned\": 66,\n  \"chain\": {\n    \"ok\": false,\n    \"count\": 66,\n    \"chained_count\": 3,\n    \"broken_links\": [\n      {\n        \"index\": 0,\n        \"reason\": \"chain_hash_mismatch\",\n        \"schema\": \"noos-outside-audit-receipt-v1\"\n      },\n      {\n        \"index\": 1,\n        \"reason\": \"chain_hash_mismatch\",\n        \"schema\": \"noos-outside-audit-receipt-v1\"\n      }\n    ],\n    \"tail_hash\": \"479ff41fe282d7999af455e7cb36db0b0e4aea5d9f3868ca965c0c6d7a57a7db\"\n  },\n  \"critic_non_approve\": 0,\n  \"spot_fetches\": [],\n  \"kaizen_candidates\": [\n    {\n      \"class\": \"machine_safe\",\n      \"title\": \"Receipt chain integrity repair\",\n      \"expected_roi\": \"risk_reduced\",\n      \"source\": \"outside_audit\"\n    }\n  ],\n  \"ok\": false,\n  \"report_line\": \"outside_audit \\u00b7 scanned=66 chain_ok=False\",\n  \"prev_chain_hash\": \"479ff41fe282d7999af455e7cb36db0b0e4aea5d9f3868ca965c0c6d7a57a7db\",\n  \"chain_hash\": \"ff013c30e0ded912b93f82e714f4e11e0084a096ea0096f4af2f31db6e9bd04a\",\n  \"receipt_path\": \"receipts/proof/noos-outside-audit-20260705T122906Z.json\"\n}",
+      "stderr": ""
+    }
+  },
+  "ok": true,
+  "report_line": "loop_baseline_audit \u00b7 core=7 motor=ok"
+}

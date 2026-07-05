@@ -19,6 +19,7 @@ check() {
 check "www home" "https://www.noetfield.com/"
 check "www gel" "https://www.noetfield.com/gel/"
 check "www ai-value-os" "https://www.noetfield.com/ai-value-governance-os/"
+check "www acg service" "https://www.noetfield.com/services/agentic-cost-governance"
 check "platform health" "https://platform.noetfield.com/health"
 check "gel-api health" "https://api.noetfield.com/health"
 check "gel-api readiness" "https://api.noetfield.com/readiness"

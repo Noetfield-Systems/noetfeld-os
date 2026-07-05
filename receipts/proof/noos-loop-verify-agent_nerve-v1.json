@@ -1,0 +1,168 @@
+{
+  "schema": "noos-loop-verify-v1",
+  "backlog_id": "LOOP-VERIFY-agent_nerve",
+  "loop_id": "agent_nerve",
+  "verified_at": "2026-07-05T12:32:28Z",
+  "verification_state": "VERIFIED",
+  "smoke": {
+    "loop_id": "agent_nerve",
+    "event_type": "noos_agent_nerve_loop_tick",
+    "exit_code": 0,
+    "ok": true,
+    "cycle": {
+      "schema": "noos-24-7-loop-cycle-v1",
+      "receipt_schema": "autorun-cycle-receipt-v2",
+      "workflow_id": "noos-agent-nerve-loop.yml",
+      "mission_id": "M4",
+      "sandbox_id": "noetfeld-os",
+      "lane": "noos",
+      "loop_id": "agent_nerve",
+      "event_type": "noos_agent_nerve_loop_tick",
+      "domain": "agent-docs",
+      "trigger_source": "repository_dispatch",
+      "cycle_number": 2,
+      "op_key": "2d139df17cf580666020b54f",
+      "started_at": "2026-07-05T12:32:27+00:00",
+      "state_before": "RUNNING",
+      "cost": {
+        "provider": "github_actions+cloudflare_cron",
+        "model": "none",
+        "tokens_in": 0,
+        "tokens_out": 0,
+        "unit_cost_usd": 0.0,
+        "total_usd": 0.0,
+        "metered_at_call_site": true,
+        "step_count": 2
+      },
+      "value_class": "hygiene",
+      "sink_invariant": {
+        "law": "sum(origin_counts) == sink_count",
+        "counts": {
+          "steps": 2,
+          "self_heal": 0
+        },
+        "sink_count": 2,
+        "provenance_tags": {
+          "steps": "loop_step",
+          "self_heal": "loop_self_heal"
+        },
+        "verdict": "PASS"
+      },
+      "founder_blocked": {
+        "count": 1,
+        "oldest_id": "NOOS-C-01",
+        "priority": "P0",
+        "age_seconds": 289904,
+        "escalated": true
+      },
+      "evidence": [
+        {
+          "command": "bash scripts/check_noos_agent_docs.sh",
+          "exit_code": 0,
+          "output": "OK: all docs/_NOOS_AGENT/*.md files tagged with NOOS-AGENT-DOC"
+        },
+        {
+          "command": "bash scripts/check_noetfield_business_strategy.sh",
+          "exit_code": 0,
+          "output": "=== check_noetfield_business_strategy ===\nOK   strategy doc (010)\nOK   NW1 one-pager (011)\nOK   SW1 one-pager (013)\nOK   MANIFEST.json entries\n\ncheck_noetfield_business_strategy: PASS"
+        }
+      ],
+      "runner_output": {
+        "steps": [
+          {
+            "cmd": [
+              "bash",
+              "scripts/check_noos_agent_docs.sh"
+            ],
+            "ok": true,
+            "exit_code": 0,
+            "stdout_tail": "OK: all docs/_NOOS_AGENT/*.md files tagged with NOOS-AGENT-DOC",
+            "stderr_tail": "",
+            "continued_on_error": false,
+            "name": "agent_docs"
+          },
+          {
+            "cmd": [
+              "bash",
+              "scripts/check_noetfield_business_strategy.sh"
+            ],
+            "ok": true,
+            "exit_code": 0,
+            "stdout_tail": "=== check_noetfield_business_strategy ===\nOK   strategy doc (010)\nOK   NW1 one-pager (011)\nOK   SW1 one-pager (013)\nOK   MANIFEST.json entries\n\ncheck_noetfield_business_strategy: PASS",
+            "stderr_tail": "",
+            "continued_on_error": false,
+            "name": "business_strategy"
+          }
+        ],
+        "self_heal": [],
+        "cloud_meta": {
+          "processor": "noos_loop_runner_v1",
+          "github_event": "repository_dispatch",
+          "github_run_id": "local-smoke",
+          "github_workflow": "noos-agent-nerve-loop.yml",
+          "dispatch_source": "cf-cron",
+          "processed_at": "2026-07-05T12:32:28+00:00"
+        },
+        "cloud_trigger": "repository_dispatch"
+      },
+      "guardrails": {
+        "lane": "noos",
+        "read_only_control": false
+      },
+      "supabase_sink": {
+        "ok": true,
+        "exit_code": 0,
+        "detail": {
+          "ok": true,
+          "id": "ddfaffe7-73ae-4222-9f60-f39f349584b5",
+          "status": 201,
+          "op_key": "2d139df17cf580666020b54f"
+        }
+      },
+      "finished_at": "2026-07-05T12:32:28+00:00",
+      "state_after": "COMPLETE",
+      "status": "ok",
+      "exit_code": 0,
+      "blocker_reason": null,
+      "next_action": "await_next_scheduled_tick",
+      "d4": {
+        "execute_ok": true,
+        "validate_ok": true,
+        "sink_acked": true
+      },
+      "d2": {
+        "cas": {
+          "verdict": "ACCEPTED",
+          "expected": 1,
+          "observed": 1,
+          "new_value": 2
+        }
+      },
+      "transition_log_tail": [
+        {
+          "from": "RUNNING",
+          "to": "COMPLETE",
+          "at": "2026-07-05T12:32:28+00:00",
+          "cycle": 2,
+          "op_key": "2d139df17cf580666020b54f"
+        }
+      ]
+    },
+    "stderr": null
+  },
+  "rolling_evaluation": {
+    "loop_id": "agent_nerve",
+    "factory_id": "loop-agent-nerve",
+    "cycle_count": 18,
+    "invalid_trigger_count": 0,
+    "latest_status": "ok",
+    "ready": true,
+    "blockers": [],
+    "lookback_hours": 168,
+    "lookback_started_at": "2026-06-28T12:32:28Z",
+    "lookback_fallback": true,
+    "primary_lookback_hours": 24
+  },
+  "ok": true,
+  "autonomous_triggers": true
+}

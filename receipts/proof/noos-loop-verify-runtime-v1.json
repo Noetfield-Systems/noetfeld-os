@@ -1,0 +1,174 @@
+{
+  "schema": "noos-loop-verify-v1",
+  "backlog_id": "LOOP-VERIFY-runtime",
+  "loop_id": "runtime",
+  "verified_at": "2026-07-05T12:32:05Z",
+  "verification_state": "VERIFIED",
+  "smoke": {
+    "loop_id": "runtime",
+    "event_type": "noos_runtime_loop_tick",
+    "exit_code": 1,
+    "ok": false,
+    "cycle": {
+      "schema": "noos-24-7-loop-cycle-v1",
+      "receipt_schema": "autorun-cycle-receipt-v2",
+      "workflow_id": "noos-runtime-loop.yml",
+      "mission_id": "M3",
+      "sandbox_id": "noetfeld-os",
+      "lane": "noos",
+      "loop_id": "runtime",
+      "event_type": "noos_runtime_loop_tick",
+      "domain": "gel-runtime",
+      "trigger_source": "repository_dispatch",
+      "cycle_number": 2,
+      "op_key": "bbfc920f597a70b64a87e1cc",
+      "started_at": "2026-07-05T12:32:00+00:00",
+      "state_before": "RUNNING",
+      "cost": {
+        "provider": "github_actions+cloudflare_cron",
+        "model": "none",
+        "tokens_in": 0,
+        "tokens_out": 0,
+        "unit_cost_usd": 0.0,
+        "total_usd": 0.0,
+        "metered_at_call_site": true,
+        "step_count": 2
+      },
+      "value_class": "risk_reduction",
+      "sink_invariant": {
+        "law": "sum(origin_counts) == sink_count",
+        "counts": {
+          "steps": 2,
+          "self_heal": 0
+        },
+        "sink_count": 2,
+        "provenance_tags": {
+          "steps": "loop_step",
+          "self_heal": "loop_self_heal"
+        },
+        "verdict": "PASS"
+      },
+      "founder_blocked": {
+        "count": 1,
+        "oldest_id": "NOOS-C-01",
+        "priority": "P0",
+        "age_seconds": 289881,
+        "escalated": true
+      },
+      "evidence": [
+        {
+          "command": "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3 -m noetfield_gate.cli gate --json --pytest",
+          "exit_code": 1,
+          "output": "\"name\": \"product_truth_phase\",\n      \"ok\": true,\n      \"reason\": \"PRODUCT_TRUTH phase 4 vs manifest 4\",\n      \"truth_phase\": 4,\n      \"manifest_phase\": 4\n    }\n  ],\n  \"block_reasons\": [\n    \".............................F.....F.................................... [ 51%]\\n................................................................F.F      [100%]\\n=============================== warnings\"\n  ]\n}"
+        },
+        {
+          "command": "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3 -m pytest -q",
+          "exit_code": 1,
+          "output": "===\nFAILED tests/test_cursor_local_mac_t2_v1.py::test_full_governance_verify_still_passes\nFAILED tests/test_forbidden_markers.py::test_forbidden_slug_only_lives_in_marker_file\nFAILED tests/test_verify_living_system_governance_v1.py::test_full_governance_verify_passes\nFAILED tests/test_verify_living_system_governance_v1.py::test_copilot_instructions_markers\n4 failed, 135 passed, 3 warnings in 1.43s"
+        }
+      ],
+      "runner_output": {
+        "steps": [
+          {
+            "cmd": [
+              "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+              "-m",
+              "noetfield_gate.cli",
+              "gate",
+              "--json",
+              "--pytest"
+            ],
+            "ok": false,
+            "exit_code": 1,
+            "stdout_tail": "\"ok\": true,\n      \"reason\": \"sqlite ok (noetfeld.db)\"\n    },\n    {\n      \"id\": \"G4\",\n      \"name\": \"api_readiness\",\n      \"ok\": true,\n      \"reason\": \"skipped \\u2014 set NOETFIELD_API_URL or --api-url to probe remote runtime\",\n      \"skipped\": true\n    },\n    {\n      \"id\": \"G5\",\n      \"name\": \"policy_registry\",\n      \"ok\": true,\n      \"reason\": \"PolicyRegistry loaded\",\n      \"combined_hash\": \"6ed3dd7180db65bdfce6ab99a9a7ee98334f49aa7a5944fd8a1683d099e95fde\"\n    },\n    {\n      \"id\": \"G6\",\n      \"name\": \"pytest_suite\",\n      \"ok\": false,\n      \"reason\": \".............................F.....F.................................... [ 51%]\\n................................................................F.F      [100%]\\n=============================== warnings\"\n    },\n    {\n      \"id\": \"G7\",\n      \"name\": \"product_truth_phase\",\n      \"ok\": true,\n      \"reason\": \"PRODUCT_TRUTH phase 4 vs manifest 4\",\n      \"truth_phase\": 4,\n      \"manifest_phase\": 4\n    }\n  ],\n  \"block_reasons\": [\n    \".............................F.....F.................................... [ 51%]\\n................................................................F.F      [100%]\\n=============================== warnings\"\n  ]\n}",
+            "stderr_tail": "BLOCK: .............................F.....F.................................... [ 51%]\n................................................................F.F      [100%]\n=============================== warnings",
+            "continued_on_error": false,
+            "name": "gate"
+          },
+          {
+            "cmd": [
+              "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+              "-m",
+              "pytest",
+              "-q"
+            ],
+            "ok": false,
+            "exit_code": 1,
+            "stdout_tail": "e_cli_against_live_local_server\n  /Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/uvicorn/protocols/websockets/websockets_impl.py:17: DeprecationWarning: websockets.server.WebSocketServerProtocol is deprecated\n    from websockets.server import WebSocketServerProtocol\n\ntests/test_phase2_auth.py::test_missing_api_key_returns_401\n  /Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.\n    from starlette.testclient import TestClient as TestClient  # noqa\n\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\n=========================== short test summary info ============================\nFAILED tests/test_cursor_local_mac_t2_v1.py::test_full_governance_verify_still_passes\nFAILED tests/test_forbidden_markers.py::test_forbidden_slug_only_lives_in_marker_file\nFAILED tests/test_verify_living_system_governance_v1.py::test_full_governance_verify_passes\nFAILED tests/test_verify_living_system_governance_v1.py::test_copilot_instructions_markers\n4 failed, 135 passed, 3 warnings in 1.43s",
+            "stderr_tail": "",
+            "continued_on_error": false,
+            "name": "pytest"
+          }
+        ],
+        "self_heal": [],
+        "cloud_meta": {
+          "processor": "noos_loop_runner_v1",
+          "github_event": "repository_dispatch",
+          "github_run_id": "local-smoke",
+          "github_workflow": "noos-runtime-loop.yml",
+          "dispatch_source": "cf-cron",
+          "processed_at": "2026-07-05T12:32:04+00:00"
+        },
+        "cloud_trigger": "repository_dispatch"
+      },
+      "guardrails": {
+        "lane": "noos",
+        "read_only_control": false
+      },
+      "supabase_sink": {
+        "ok": true,
+        "exit_code": 0,
+        "detail": {
+          "ok": true,
+          "id": "dc8df9c7-2266-4261-ad0c-93d88453519f",
+          "status": 201,
+          "op_key": "bbfc920f597a70b64a87e1cc"
+        }
+      },
+      "finished_at": "2026-07-05T12:32:04+00:00",
+      "state_after": "FAILED_WITH_RECEIPT",
+      "status": "degraded",
+      "exit_code": 1,
+      "blocker_reason": "steps_failed:['gate', 'pytest']",
+      "next_action": "self_heal_or_triage",
+      "d4": {
+        "execute_ok": false,
+        "validate_ok": true,
+        "sink_acked": true
+      },
+      "d2": {
+        "cas": {
+          "verdict": "ACCEPTED",
+          "expected": 1,
+          "observed": 1,
+          "new_value": 2
+        }
+      },
+      "transition_log_tail": [
+        {
+          "from": "RUNNING",
+          "to": "FAILED_WITH_RECEIPT",
+          "at": "2026-07-05T12:32:04+00:00",
+          "cycle": 2,
+          "op_key": "bbfc920f597a70b64a87e1cc"
+        }
+      ]
+    },
+    "stderr": null
+  },
+  "rolling_evaluation": {
+    "loop_id": "runtime",
+    "factory_id": "loop-runtime",
+    "cycle_count": 48,
+    "invalid_trigger_count": 0,
+    "latest_status": "ok",
+    "ready": true,
+    "blockers": [],
+    "lookback_hours": 168,
+    "lookback_started_at": "2026-06-28T12:32:05Z",
+    "lookback_fallback": true,
+    "primary_lookback_hours": 24
+  },
+  "ok": true,
+  "autonomous_triggers": true
+}

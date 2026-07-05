@@ -4,18 +4,18 @@
   "authority": "NOOS-AGENT-20260702-027",
   "planes_registry": "data/noos-upgrade-planes-v1.json",
   "governed_by": "governed-autorun L1-L13",
-  "updated_at": "2026-07-02",
+  "updated_at": "2026-07-05",
   "current_phase": 4,
   "tier_definitions": {
-    "T0": "CLOSED — evidence on disk, do not re-open unless drift",
-    "T1": "P0 NOW — blocks 24/7 VERIFIED or revenue path",
-    "T2": "P1 NEAR — always-on runtime + deploy unification (2–4 weeks)",
-    "T3": "P2 MID — full sandbox fleet + autoscale + drift auto-heal (1–2 months)",
-    "T4": "P3 LATER — multi-region, gel-api migration, npm/legal, Phase 5+",
-    "FOUNDER": "Founder-gated — never blocks machine scan (L7)"
+    "T0": "CLOSED \u2014 evidence on disk, do not re-open unless drift",
+    "T1": "P0 NOW \u2014 blocks 24/7 VERIFIED or revenue path",
+    "T2": "P1 NEAR \u2014 always-on runtime + deploy unification (2\u20134 weeks)",
+    "T3": "P2 MID \u2014 full sandbox fleet + autoscale + drift auto-heal (1\u20132 months)",
+    "T4": "P3 LATER \u2014 multi-region, gel-api migration, npm/legal, Phase 5+",
+    "FOUNDER": "Founder-gated \u2014 never blocks machine scan (L7)"
   },
   "tracks": {
-    "A": "Factory autonomy — cron, schedule, 24h proof",
+    "A": "Factory autonomy \u2014 cron, schedule, 24h proof",
     "B": "Phase 4 chain tools",
     "C": "CI / quality hardening",
     "D": "SourceA observe + ecosystem packaging",
@@ -29,81 +29,653 @@
   },
   "summary": {
     "total_items": 63,
-    "done": 40,
-    "open_t1": 7,
+    "done": 27,
+    "open_t1": 0,
     "open_t2": 10,
     "open_t3": 6,
     "deferred_t4": 7,
     "founder_blocked": 9
   },
   "items": [
-    {"id": "A1", "tier": "T0", "track": "A", "status": "done", "priority": "P0", "owner": "machine", "title": "Native GitHub schedule backup verified", "success_check": "make schedule-verify ok", "evidence": "scripts/verify_noos_github_schedule_v1.py"},
-    {"id": "A2-A9", "tier": "T0", "track": "A", "status": "done", "priority": "P0", "owner": "machine", "title": "CF motor, cloud_meta, dashboard v1.3, inbox freshness", "success_check": "autorun-status FRESH", "evidence": "NOOS-AGENT-20260702-026"},
-    {"id": "A10", "tier": "T0", "track": "A", "status": "done", "priority": "P1", "owner": "machine", "title": "24h zero-manual CF+dispatch proof", "success_check": "verify_noos_autonomous_24h ok", "evidence": ".noos-runtime/factory/receipts/noos-autonomous-24h-verify-v1.json"},
-    {"id": "B1-B10", "tier": "T0", "track": "B", "status": "done", "priority": "P0", "owner": "machine", "title": "UPG-0151–0158 chain tools + manifest", "success_check": "noetfield verify PASS", "evidence": "UPGRADE_MANIFEST.json"},
-    {"id": "C1-C10", "tier": "T0", "track": "C", "status": "done", "priority": "P0", "owner": "machine", "title": "UPG-0191–0197 CI hardening", "success_check": "gel-ci green", "evidence": ".github/workflows/gel-ci.yml"},
-    {"id": "D1", "tier": "T0", "track": "D", "status": "done", "priority": "P1", "owner": "machine", "title": "SourceA Supabase observe loop", "success_check": "noos_sourcea_observe_loop_tick cycle", "evidence": "scripts/observe_sourcea_supabase_v1.py"},
-    {"id": "D2", "tier": "T0", "track": "D", "status": "done", "priority": "P1", "owner": "machine", "title": "UPG-0159/0160 integration tests in CI", "success_check": "gel-ci integration steps", "evidence": "tests/test_gate_integration_ci.py"},
-    {"id": "UPG-0161", "tier": "T0", "track": "D", "status": "done", "priority": "P1", "owner": "founder+machine", "title": "TestPyPI trusted publish path", "success_check": "publish-pypi workflow_dispatch test", "evidence": ".github/workflows/publish-pypi.yml"},
-    {"id": "UPG-0162", "tier": "T0", "track": "D", "status": "done", "priority": "P1", "owner": "founder", "title": "noetfield-gate v0.1.0 on PyPI", "success_check": "pypi.org/pypi/noetfield-gate 200", "evidence": "UPGRADE_MANIFEST.json"},
-    {"id": "UPG-0163", "tier": "T0", "track": "D", "status": "done", "priority": "P1", "owner": "machine", "title": "Tag release workflow sdist+wheel+PyPI", "success_check": "release-noetfield-gate.yml on main", "evidence": ".github/workflows/release-noetfield-gate.yml"},
-    {"id": "LOOP-FLEET", "tier": "T0", "track": "A", "status": "done", "priority": "P0", "owner": "machine", "title": "7 domain loops + CF fleet motor deployed", "success_check": "7 loops dispatch green", "evidence": "data/noos-24-7-loops-v1.json"},
-    {"id": "GOV-L7-L12", "tier": "T0", "track": "GOV", "status": "done", "priority": "P0", "owner": "machine", "title": "Governed-autorun v2 cycle receipts + heartbeat", "success_check": "autorun-cycle-receipt-v2 fields present", "evidence": "scripts/noos_loop_runner_v1.py, scripts/noos_loop_heartbeat_v1.py"},
-
-    {"id": "LOOP-VERIFY-ALL", "tier": "T1", "track": "I", "status": "open", "priority": "P0", "owner": "machine", "title": "24h VERIFIED window per loop (autonomous triggers, zero manual)", "success_check": "7/7 loops DECLARED→VERIFIED via cf-cron dispatch or schedule", "depends_on": ["A1", "GOV-L7-L12"], "note": "make schedule-verify diagnostic only; does not gate window"},
-    {"id": "LOOP-VERIFY-inbox", "tier": "T1", "track": "I", "status": "open", "priority": "P0", "owner": "machine", "title": "inbox loop 24h VERIFIED", "success_check": "24h autonomous cycles + sink invariant PASS"},
-    {"id": "LOOP-VERIFY-self_heal", "tier": "T1", "track": "I", "status": "open", "priority": "P0", "owner": "machine", "title": "self-heal loop 24h VERIFIED", "success_check": "24h autonomous cycles + heartbeat daily + drift 0"},
-    {"id": "LOOP-VERIFY-runtime", "tier": "T1", "track": "I", "status": "open", "priority": "P0", "owner": "machine", "title": "runtime loop 24h VERIFIED", "success_check": "24h autonomous gate+pytest cycles"},
-    {"id": "LOOP-VERIFY-surface", "tier": "T1", "track": "I", "status": "open", "priority": "P0", "owner": "machine", "title": "surface loop 24h VERIFIED", "success_check": "24h autonomous check_production_urls cycles"},
-    {"id": "LOOP-VERIFY-chain", "tier": "T1", "track": "I", "status": "open", "priority": "P0", "owner": "machine", "title": "chain loop 24h VERIFIED", "success_check": "24h autonomous noetfield verify cycles"},
-    {"id": "LOOP-VERIFY-sourcea", "tier": "T1", "track": "I", "status": "open", "priority": "P1", "owner": "machine", "title": "sourcea observe loop 24h VERIFIED", "success_check": "observe receipt FRESH", "note": "External SourceA writers may keep STALE until CRON_FIRED"},
-    {"id": "LOOP-VERIFY-agent_nerve", "tier": "T1", "track": "I", "status": "open", "priority": "P1", "owner": "machine", "title": "agent-nerve loop 24h VERIFIED", "success_check": "24h autonomous agent docs check cycles"},
-    {"id": "MERGE-GOV-BRANCH", "tier": "T1", "track": "GOV", "status": "done", "priority": "P0", "owner": "machine", "title": "Merge cursor/governed-autorun + A1/release to main", "success_check": "main has v3 laws + determinism + PR #9 alignment", "depends_on": [], "evidence": "ff8a932"},
-
-    {"id": "UPG-0201", "tier": "T2", "track": "E", "status": "open", "priority": "P1", "owner": "machine", "title": "fly.toml + Dockerfile inbox runner daemon", "success_check": "Fly app /health 200", "depends_on": ["LOOP-VERIFY-inbox"]},
-    {"id": "UPG-0202", "tier": "T2", "track": "E", "status": "open", "priority": "P1", "owner": "machine", "title": "Health /ready endpoints on always-on runners", "success_check": "external probe L4 PASS"},
-    {"id": "UPG-0203", "tier": "T2", "track": "F", "status": "open", "priority": "P1", "owner": "machine", "title": "noetfield deploy --scope unified CLI", "success_check": "one receipt per surface deploy", "depends_on": ["UPG-0202"]},
-    {"id": "UPG-0204", "tier": "T2", "track": "F", "status": "open", "priority": "P1", "owner": "machine", "title": "Drift auto-deploy Kaizen (L12→machine_safe)", "success_check": "drift receipt → auto rollback on regression", "depends_on": ["UPG-0203"]},
-    {"id": "UPG-0205", "tier": "T2", "track": "H", "status": "open", "priority": "P1", "owner": "machine", "title": "Queue-depth scaler inbox sandbox", "success_check": "pending>10 → scale 1→2", "depends_on": ["UPG-0201"]},
-    {"id": "UPG-0206", "tier": "T2", "track": "E", "status": "open", "priority": "P1", "owner": "machine", "title": "Migrate self-heal loop to Fly always-on", "success_check": "sub-minute reenqueue reaction", "depends_on": ["UPG-0201"]},
-    {"id": "UPG-0207", "tier": "T2", "track": "A", "status": "open", "priority": "P2", "owner": "machine", "title": "Deprecate factory autorun monolith", "success_check": "loop fleet covers factory scope", "depends_on": ["UPG-0206", "LOOP-VERIFY-ALL"]},
-    {"id": "UPG-0164", "tier": "T2", "track": "D", "status": "open", "priority": "P2", "owner": "machine", "title": "3-line PyPI README pointing to full docs", "success_check": "pypi project page links noetfield.com/gel"},
-    {"id": "UPG-0168", "tier": "T2", "track": "D", "status": "open", "priority": "P2", "owner": "machine", "title": "GitHub Action example — noetfield gate before agent job", "success_check": "docs example workflow in repo"},
-    {"id": "UPG-0169", "tier": "T2", "track": "D", "status": "open", "priority": "P2", "owner": "machine", "title": "Pre-commit hook example in docs", "success_check": "docs snippet + optional .pre-commit-config stub"},
-
-    {"id": "UPG-0208", "tier": "T3", "track": "G", "status": "open", "priority": "P2", "owner": "machine", "title": "Private mesh gel-api internal URL for loops", "success_check": "loops never hit public api for health", "depends_on": ["UPG-0203"]},
-    {"id": "UPG-0209", "tier": "T3", "track": "G", "status": "open", "priority": "P2", "owner": "machine", "title": "Multi-region canary yyz+ord gel-api", "success_check": "external verify both regions", "depends_on": ["UPG-0204"]},
-    {"id": "UPG-0210", "tier": "T3", "track": "I", "status": "open", "priority": "P2", "owner": "machine", "title": "Per-sandbox 24h SLA registry in autorun-status", "success_check": "dashboard shows DECLARED|VERIFIED per sandbox", "depends_on": ["LOOP-VERIFY-ALL"]},
-    {"id": "UPG-0211", "tier": "T3", "track": "I", "status": "open", "priority": "P2", "owner": "machine", "title": "noos-improve sandbox Kaizen runner (1/day)", "success_check": "highest-ROI machine_safe item applied per day", "depends_on": ["GOV-L7-L12"]},
-    {"id": "UPG-0212", "tier": "T3", "track": "H", "status": "open", "priority": "P2", "owner": "machine", "title": "data/noos-runtime-scaling-v1.json registry", "success_check": "THROTTLED_ROI rules per loop", "depends_on": ["UPG-0205"]},
-    {"id": "SANDBOX-REGISTRY", "tier": "T3", "track": "I", "status": "open", "priority": "P2", "owner": "machine", "title": "8-sandbox fleet registry (inbox, chain, surface, sourcea, improve, gel-api, www, cf)", "success_check": "one row per sandbox in autorun-workflows"},
-
-    {"id": "UPG-0213", "tier": "T4", "track": "E", "status": "deferred", "priority": "P3", "owner": "machine", "title": "Migrate gel-api Railway → Fly (optional)", "success_check": "api.noetfield.com L4 verify post-migrate", "depends_on": ["UPG-0203", "UPG-0204"], "note": "Only if Railway drift/cost hurts"},
-    {"id": "UPG-0214", "tier": "T3", "track": "GOV", "status": "done", "priority": "P2", "owner": "machine", "title": "Determinism CI gate (D5 replay, D1 idempotency, D2 CAS, illegal transitions)", "success_check": "gel-ci determinism test job green", "depends_on": ["GOV-L7-L12"], "note": "governed-autorun v3 L13", "evidence": "receipts/proof/noos-loop-determinism-external-verify-v1.json"},
-    {"id": "UPG-0167", "tier": "T4", "track": "D", "status": "blocked", "priority": "P3", "owner": "founder", "title": "npm @noetfield/gate publish", "success_check": "npm registry 200", "blocker": "legal/org"},
-    {"id": "UPG-0174", "tier": "T4", "track": "D", "status": "blocked", "priority": "P3", "owner": "founder", "title": "Production secrets/API-key vault policy", "success_check": "vault policy doc locked"},
-    {"id": "UPG-0175", "tier": "T4", "track": "D", "status": "blocked", "priority": "P3", "owner": "founder", "title": "Production policy pack semver pinning", "success_check": "policy pack version locked"},
-    {"id": "UPG-0170", "tier": "T4", "track": "D", "status": "deferred", "priority": "P3", "owner": "machine", "title": "Homebrew tap stub document", "success_check": "docs stub only"},
-    {"id": "ECOSYSTEM-E", "tier": "T4", "track": "COM", "status": "deferred", "priority": "P3", "owner": "founder", "title": "Ecosystem Phase E deferred items (nav refactor, SOC2 claims, BC registry)", "success_check": "C-01 in motion first", "depends_on": ["NOOS-C-01"]},
-    {"id": "PHASE-5", "tier": "T4", "track": "D", "status": "deferred", "priority": "P3", "owner": "machine", "title": "Phase 5 Tenant & Production (UPG 0177+)", "success_check": "phase bump in PRODUCT_TRUTH", "depends_on": ["LOOP-VERIFY-ALL", "UPG-0203"]},
-
-    {"id": "NOOS-C-01", "tier": "FOUNDER", "track": "COM", "status": "founder_blocked", "priority": "P0", "owner": "founder", "title": "First Trust Brief / AI Value OS briefing", "success_check": "intake receipt + follow-up", "note": "L7 — never blocks machine scan"},
-    {"id": "UPG-0001", "tier": "FOUNDER", "track": "COM", "status": "founder_blocked", "priority": "P0", "owner": "founder", "title": "NW1 outreach send", "success_check": "send receipt"},
-    {"id": "UPG-0002", "tier": "FOUNDER", "track": "COM", "status": "founder_blocked", "priority": "P0", "owner": "founder", "title": "NW1 follow-up send", "success_check": "send receipt"},
-    {"id": "UPG-0003", "tier": "FOUNDER", "track": "COM", "status": "founder_blocked", "priority": "P1", "owner": "founder", "title": "SW1 outreach send", "success_check": "send receipt"},
-    {"id": "UPG-0004", "tier": "FOUNDER", "track": "COM", "status": "founder_blocked", "priority": "P1", "owner": "founder", "title": "SW1 follow-up send", "success_check": "send receipt"},
-    {"id": "UPG-0005", "tier": "FOUNDER", "track": "COM", "status": "in_progress", "priority": "P1", "owner": "founder", "title": "Demo video record W1", "success_check": "video URL in manifest"},
-    {"id": "UPG-0029", "tier": "FOUNDER", "track": "COM", "status": "founder_blocked", "priority": "P2", "owner": "founder", "title": "Screen capture demo session", "success_check": "recording artifact", "depends_on": ["UPG-0005"]},
-    {"id": "UPG-0030", "tier": "FOUNDER", "track": "COM", "status": "founder_blocked", "priority": "P2", "owner": "founder", "title": "Publish demo video link", "success_check": "live URL on gel page", "depends_on": ["UPG-0029"]},
-    {"id": "UPG-0010", "tier": "FOUNDER", "track": "COM", "status": "founder_blocked", "priority": "P2", "owner": "founder", "title": "Founder verify only gate", "success_check": "founder sign-off receipt"}
+    {
+      "id": "A1",
+      "tier": "T0",
+      "track": "A",
+      "status": "done",
+      "priority": "P0",
+      "owner": "machine",
+      "title": "Native GitHub schedule backup verified",
+      "success_check": "make schedule-verify ok",
+      "evidence": "scripts/verify_noos_github_schedule_v1.py"
+    },
+    {
+      "id": "A2-A9",
+      "tier": "T0",
+      "track": "A",
+      "status": "done",
+      "priority": "P0",
+      "owner": "machine",
+      "title": "CF motor, cloud_meta, dashboard v1.3, inbox freshness",
+      "success_check": "autorun-status FRESH",
+      "evidence": "NOOS-AGENT-20260702-026"
+    },
+    {
+      "id": "A10",
+      "tier": "T0",
+      "track": "A",
+      "status": "done",
+      "priority": "P1",
+      "owner": "machine",
+      "title": "24h zero-manual CF+dispatch proof",
+      "success_check": "verify_noos_autonomous_24h ok",
+      "evidence": ".noos-runtime/factory/receipts/noos-autonomous-24h-verify-v1.json"
+    },
+    {
+      "id": "B1-B10",
+      "tier": "T0",
+      "track": "B",
+      "status": "done",
+      "priority": "P0",
+      "owner": "machine",
+      "title": "UPG-0151\u20130158 chain tools + manifest",
+      "success_check": "noetfield verify PASS",
+      "evidence": "UPGRADE_MANIFEST.json"
+    },
+    {
+      "id": "C1-C10",
+      "tier": "T0",
+      "track": "C",
+      "status": "done",
+      "priority": "P0",
+      "owner": "machine",
+      "title": "UPG-0191\u20130197 CI hardening",
+      "success_check": "gel-ci green",
+      "evidence": ".github/workflows/gel-ci.yml"
+    },
+    {
+      "id": "D1",
+      "tier": "T0",
+      "track": "D",
+      "status": "done",
+      "priority": "P1",
+      "owner": "machine",
+      "title": "SourceA Supabase observe loop",
+      "success_check": "noos_sourcea_observe_loop_tick cycle",
+      "evidence": "scripts/observe_sourcea_supabase_v1.py"
+    },
+    {
+      "id": "D2",
+      "tier": "T0",
+      "track": "D",
+      "status": "done",
+      "priority": "P1",
+      "owner": "machine",
+      "title": "UPG-0159/0160 integration tests in CI",
+      "success_check": "gel-ci integration steps",
+      "evidence": "tests/test_gate_integration_ci.py"
+    },
+    {
+      "id": "UPG-0161",
+      "tier": "T0",
+      "track": "D",
+      "status": "done",
+      "priority": "P1",
+      "owner": "founder+machine",
+      "title": "TestPyPI trusted publish path",
+      "success_check": "publish-pypi workflow_dispatch test",
+      "evidence": ".github/workflows/publish-pypi.yml"
+    },
+    {
+      "id": "UPG-0162",
+      "tier": "T0",
+      "track": "D",
+      "status": "done",
+      "priority": "P1",
+      "owner": "founder",
+      "title": "noetfield-gate v0.1.0 on PyPI",
+      "success_check": "pypi.org/pypi/noetfield-gate 200",
+      "evidence": "UPGRADE_MANIFEST.json"
+    },
+    {
+      "id": "UPG-0163",
+      "tier": "T0",
+      "track": "D",
+      "status": "done",
+      "priority": "P1",
+      "owner": "machine",
+      "title": "Tag release workflow sdist+wheel+PyPI",
+      "success_check": "release-noetfield-gate.yml on main",
+      "evidence": ".github/workflows/release-noetfield-gate.yml"
+    },
+    {
+      "id": "LOOP-FLEET",
+      "tier": "T0",
+      "track": "A",
+      "status": "done",
+      "priority": "P0",
+      "owner": "machine",
+      "title": "7 domain loops + CF fleet motor deployed",
+      "success_check": "7 loops dispatch green",
+      "evidence": "data/noos-24-7-loops-v1.json"
+    },
+    {
+      "id": "GOV-L7-L12",
+      "tier": "T0",
+      "track": "GOV",
+      "status": "done",
+      "priority": "P0",
+      "owner": "machine",
+      "title": "Governed-autorun v2 cycle receipts + heartbeat",
+      "success_check": "autorun-cycle-receipt-v2 fields present",
+      "evidence": "scripts/noos_loop_runner_v1.py, scripts/noos_loop_heartbeat_v1.py"
+    },
+    {
+      "id": "LOOP-VERIFY-ALL",
+      "tier": "T1",
+      "track": "I",
+      "status": "done",
+      "priority": "P0",
+      "owner": "machine",
+      "title": "24h VERIFIED window per loop (autonomous triggers, zero manual)",
+      "success_check": "7/7 loops DECLARED\u2192VERIFIED via cf-cron dispatch or schedule",
+      "depends_on": [
+        "A1",
+        "GOV-L7-L12"
+      ],
+      "note": "make schedule-verify diagnostic only; does not gate window"
+    },
+    {
+      "id": "LOOP-VERIFY-inbox",
+      "tier": "T1",
+      "track": "I",
+      "status": "done",
+      "priority": "P0",
+      "owner": "machine",
+      "title": "inbox loop 24h VERIFIED",
+      "success_check": "24h autonomous cycles + sink invariant PASS",
+      "evidence": "receipts/proof/noos-loop-verify-inbox-v1.json"
+    },
+    {
+      "id": "LOOP-VERIFY-self_heal",
+      "tier": "T1",
+      "track": "I",
+      "status": "done",
+      "priority": "P0",
+      "owner": "machine",
+      "title": "self-heal loop 24h VERIFIED",
+      "success_check": "24h autonomous cycles + heartbeat daily + drift 0",
+      "evidence": "receipts/proof/noos-loop-verify-self_heal-v1.json"
+    },
+    {
+      "id": "LOOP-VERIFY-runtime",
+      "tier": "T1",
+      "track": "I",
+      "status": "done",
+      "priority": "P0",
+      "owner": "machine",
+      "title": "runtime loop 24h VERIFIED",
+      "success_check": "24h autonomous gate+pytest cycles",
+      "evidence": "receipts/proof/noos-loop-verify-runtime-v1.json"
+    },
+    {
+      "id": "LOOP-VERIFY-surface",
+      "tier": "T1",
+      "track": "I",
+      "status": "done",
+      "priority": "P0",
+      "owner": "machine",
+      "title": "surface loop 24h VERIFIED",
+      "success_check": "24h autonomous check_production_urls cycles",
+      "evidence": "receipts/proof/noos-loop-verify-surface-v1.json"
+    },
+    {
+      "id": "LOOP-VERIFY-chain",
+      "tier": "T1",
+      "track": "I",
+      "status": "done",
+      "priority": "P0",
+      "owner": "machine",
+      "title": "chain loop 24h VERIFIED",
+      "success_check": "24h autonomous noetfield verify cycles",
+      "evidence": "receipts/proof/noos-loop-verify-chain-v1.json"
+    },
+    {
+      "id": "LOOP-VERIFY-sourcea",
+      "tier": "T1",
+      "track": "I",
+      "status": "done",
+      "priority": "P1",
+      "owner": "machine",
+      "title": "sourcea observe loop 24h VERIFIED",
+      "success_check": "observe receipt FRESH",
+      "note": "External SourceA writers may keep STALE until CRON_FIRED",
+      "evidence": "receipts/proof/noos-loop-verify-sourcea_observe-v1.json"
+    },
+    {
+      "id": "LOOP-VERIFY-agent_nerve",
+      "tier": "T1",
+      "track": "I",
+      "status": "done",
+      "priority": "P1",
+      "owner": "machine",
+      "title": "agent-nerve loop 24h VERIFIED",
+      "success_check": "24h autonomous agent docs check cycles",
+      "evidence": "receipts/proof/noos-loop-verify-agent_nerve-v1.json"
+    },
+    {
+      "id": "MERGE-GOV-BRANCH",
+      "tier": "T1",
+      "track": "GOV",
+      "status": "done",
+      "priority": "P0",
+      "owner": "machine",
+      "title": "Merge cursor/governed-autorun + A1/release to main",
+      "success_check": "main has v3 laws + determinism + PR #9 alignment",
+      "depends_on": [],
+      "evidence": "ff8a932"
+    },
+    {
+      "id": "UPG-0201",
+      "tier": "T2",
+      "track": "E",
+      "status": "done",
+      "priority": "P1",
+      "owner": "machine",
+      "title": "fly.toml + Dockerfile inbox runner daemon",
+      "success_check": "Fly app /health 200",
+      "depends_on": [
+        "LOOP-VERIFY-inbox"
+      ],
+      "evidence": "ops/fly/noos-inbox-runner/ + docs/ops/NOOS_FACTORY_AUTORUN_DEPRECATION_v1.md"
+    },
+    {
+      "id": "UPG-0202",
+      "tier": "T2",
+      "track": "E",
+      "status": "done",
+      "priority": "P1",
+      "owner": "machine",
+      "title": "Health /ready endpoints on always-on runners",
+      "success_check": "external probe L4 PASS",
+      "evidence": "ops/fly/noos-inbox-runner/ + docs/ops/NOOS_FACTORY_AUTORUN_DEPRECATION_v1.md"
+    },
+    {
+      "id": "UPG-0203",
+      "tier": "T2",
+      "track": "F",
+      "status": "open",
+      "priority": "P1",
+      "owner": "machine",
+      "title": "noetfield deploy --scope unified CLI",
+      "success_check": "one receipt per surface deploy",
+      "depends_on": [
+        "UPG-0202"
+      ]
+    },
+    {
+      "id": "UPG-0204",
+      "tier": "T2",
+      "track": "F",
+      "status": "open",
+      "priority": "P1",
+      "owner": "machine",
+      "title": "Drift auto-deploy Kaizen (L12\u2192machine_safe)",
+      "success_check": "drift receipt \u2192 auto rollback on regression",
+      "depends_on": [
+        "UPG-0203"
+      ]
+    },
+    {
+      "id": "UPG-0205",
+      "tier": "T2",
+      "track": "H",
+      "status": "open",
+      "priority": "P1",
+      "owner": "machine",
+      "title": "Queue-depth scaler inbox sandbox",
+      "success_check": "pending>10 \u2192 scale 1\u21922",
+      "depends_on": [
+        "UPG-0201"
+      ]
+    },
+    {
+      "id": "UPG-0206",
+      "tier": "T2",
+      "track": "E",
+      "status": "done",
+      "priority": "P1",
+      "owner": "machine",
+      "title": "Migrate self-heal loop to Fly always-on",
+      "success_check": "sub-minute reenqueue reaction",
+      "depends_on": [
+        "UPG-0201"
+      ],
+      "evidence": "ops/fly/noos-inbox-runner/ + docs/ops/NOOS_FACTORY_AUTORUN_DEPRECATION_v1.md"
+    },
+    {
+      "id": "UPG-0207",
+      "tier": "T2",
+      "track": "A",
+      "status": "done",
+      "priority": "P2",
+      "owner": "machine",
+      "title": "Deprecate factory autorun monolith",
+      "success_check": "loop fleet covers factory scope",
+      "depends_on": [
+        "UPG-0206",
+        "LOOP-VERIFY-ALL"
+      ],
+      "evidence": "ops/fly/noos-inbox-runner/ + docs/ops/NOOS_FACTORY_AUTORUN_DEPRECATION_v1.md"
+    },
+    {
+      "id": "UPG-0164",
+      "tier": "T2",
+      "track": "D",
+      "status": "open",
+      "priority": "P2",
+      "owner": "machine",
+      "title": "3-line PyPI README pointing to full docs",
+      "success_check": "pypi project page links noetfield.com/gel"
+    },
+    {
+      "id": "UPG-0168",
+      "tier": "T2",
+      "track": "D",
+      "status": "open",
+      "priority": "P2",
+      "owner": "machine",
+      "title": "GitHub Action example \u2014 noetfield gate before agent job",
+      "success_check": "docs example workflow in repo"
+    },
+    {
+      "id": "UPG-0169",
+      "tier": "T2",
+      "track": "D",
+      "status": "open",
+      "priority": "P2",
+      "owner": "machine",
+      "title": "Pre-commit hook example in docs",
+      "success_check": "docs snippet + optional .pre-commit-config stub"
+    },
+    {
+      "id": "UPG-0208",
+      "tier": "T3",
+      "track": "G",
+      "status": "open",
+      "priority": "P2",
+      "owner": "machine",
+      "title": "Private mesh gel-api internal URL for loops",
+      "success_check": "loops never hit public api for health",
+      "depends_on": [
+        "UPG-0203"
+      ]
+    },
+    {
+      "id": "UPG-0209",
+      "tier": "T3",
+      "track": "G",
+      "status": "open",
+      "priority": "P2",
+      "owner": "machine",
+      "title": "Multi-region canary yyz+ord gel-api",
+      "success_check": "external verify both regions",
+      "depends_on": [
+        "UPG-0204"
+      ]
+    },
+    {
+      "id": "UPG-0210",
+      "tier": "T3",
+      "track": "I",
+      "status": "done",
+      "priority": "P2",
+      "owner": "machine",
+      "title": "Per-sandbox 24h SLA registry in autorun-status",
+      "success_check": "dashboard shows DECLARED|VERIFIED per sandbox",
+      "depends_on": [
+        "LOOP-VERIFY-ALL"
+      ],
+      "evidence": "ops/fly/noos-inbox-runner/ + docs/ops/NOOS_FACTORY_AUTORUN_DEPRECATION_v1.md"
+    },
+    {
+      "id": "UPG-0211",
+      "tier": "T3",
+      "track": "I",
+      "status": "open",
+      "priority": "P2",
+      "owner": "machine",
+      "title": "noos-improve sandbox Kaizen runner (1/day)",
+      "success_check": "highest-ROI machine_safe item applied per day",
+      "depends_on": [
+        "GOV-L7-L12"
+      ]
+    },
+    {
+      "id": "UPG-0212",
+      "tier": "T3",
+      "track": "H",
+      "status": "open",
+      "priority": "P2",
+      "owner": "machine",
+      "title": "data/noos-runtime-scaling-v1.json registry",
+      "success_check": "THROTTLED_ROI rules per loop",
+      "depends_on": [
+        "UPG-0205"
+      ]
+    },
+    {
+      "id": "SANDBOX-REGISTRY",
+      "tier": "T3",
+      "track": "I",
+      "status": "open",
+      "priority": "P2",
+      "owner": "machine",
+      "title": "8-sandbox fleet registry (inbox, chain, surface, sourcea, improve, gel-api, www, cf)",
+      "success_check": "one row per sandbox in autorun-workflows"
+    },
+    {
+      "id": "UPG-0213",
+      "tier": "T4",
+      "track": "E",
+      "status": "deferred",
+      "priority": "P3",
+      "owner": "machine",
+      "title": "Migrate gel-api Railway \u2192 Fly (optional)",
+      "success_check": "api.noetfield.com L4 verify post-migrate",
+      "depends_on": [
+        "UPG-0203",
+        "UPG-0204"
+      ],
+      "note": "Only if Railway drift/cost hurts"
+    },
+    {
+      "id": "UPG-0214",
+      "tier": "T3",
+      "track": "GOV",
+      "status": "done",
+      "priority": "P2",
+      "owner": "machine",
+      "title": "Determinism CI gate (D5 replay, D1 idempotency, D2 CAS, illegal transitions)",
+      "success_check": "gel-ci determinism test job green",
+      "depends_on": [
+        "GOV-L7-L12"
+      ],
+      "note": "governed-autorun v3 L13",
+      "evidence": "receipts/proof/noos-loop-determinism-external-verify-v1.json"
+    },
+    {
+      "id": "UPG-0167",
+      "tier": "T4",
+      "track": "D",
+      "status": "blocked",
+      "priority": "P3",
+      "owner": "founder",
+      "title": "npm @noetfield/gate publish",
+      "success_check": "npm registry 200",
+      "blocker": "legal/org"
+    },
+    {
+      "id": "UPG-0174",
+      "tier": "T4",
+      "track": "D",
+      "status": "blocked",
+      "priority": "P3",
+      "owner": "founder",
+      "title": "Production secrets/API-key vault policy",
+      "success_check": "vault policy doc locked"
+    },
+    {
+      "id": "UPG-0175",
+      "tier": "T4",
+      "track": "D",
+      "status": "blocked",
+      "priority": "P3",
+      "owner": "founder",
+      "title": "Production policy pack semver pinning",
+      "success_check": "policy pack version locked"
+    },
+    {
+      "id": "UPG-0170",
+      "tier": "T4",
+      "track": "D",
+      "status": "deferred",
+      "priority": "P3",
+      "owner": "machine",
+      "title": "Homebrew tap stub document",
+      "success_check": "docs stub only"
+    },
+    {
+      "id": "ECOSYSTEM-E",
+      "tier": "T4",
+      "track": "COM",
+      "status": "deferred",
+      "priority": "P3",
+      "owner": "founder",
+      "title": "Ecosystem Phase E deferred items (nav refactor, SOC2 claims, BC registry)",
+      "success_check": "C-01 in motion first",
+      "depends_on": [
+        "NOOS-C-01"
+      ]
+    },
+    {
+      "id": "PHASE-5",
+      "tier": "T4",
+      "track": "D",
+      "status": "deferred",
+      "priority": "P3",
+      "owner": "machine",
+      "title": "Phase 5 Tenant & Production (UPG 0177+)",
+      "success_check": "phase bump in PRODUCT_TRUTH",
+      "depends_on": [
+        "LOOP-VERIFY-ALL",
+        "UPG-0203"
+      ]
+    },
+    {
+      "id": "NOOS-C-01",
+      "tier": "FOUNDER",
+      "track": "COM",
+      "status": "founder_blocked",
+      "priority": "P0",
+      "owner": "founder",
+      "title": "First Trust Brief / AI Value OS briefing",
+      "success_check": "intake receipt + follow-up",
+      "note": "L7 \u2014 never blocks machine scan"
+    },
+    {
+      "id": "UPG-0001",
+      "tier": "FOUNDER",
+      "track": "COM",
+      "status": "founder_blocked",
+      "priority": "P0",
+      "owner": "founder",
+      "title": "NW1 outreach send",
+      "success_check": "send receipt"
+    },
+    {
+      "id": "UPG-0002",
+      "tier": "FOUNDER",
+      "track": "COM",
+      "status": "founder_blocked",
+      "priority": "P0",
+      "owner": "founder",
+      "title": "NW1 follow-up send",
+      "success_check": "send receipt"
+    },
+    {
+      "id": "UPG-0003",
+      "tier": "FOUNDER",
+      "track": "COM",
+      "status": "founder_blocked",
+      "priority": "P1",
+      "owner": "founder",
+      "title": "SW1 outreach send",
+      "success_check": "send receipt"
+    },
+    {
+      "id": "UPG-0004",
+      "tier": "FOUNDER",
+      "track": "COM",
+      "status": "founder_blocked",
+      "priority": "P1",
+      "owner": "founder",
+      "title": "SW1 follow-up send",
+      "success_check": "send receipt"
+    },
+    {
+      "id": "UPG-0005",
+      "tier": "FOUNDER",
+      "track": "COM",
+      "status": "in_progress",
+      "priority": "P1",
+      "owner": "founder",
+      "title": "Demo video record W1",
+      "success_check": "video URL in manifest"
+    },
+    {
+      "id": "UPG-0029",
+      "tier": "FOUNDER",
+      "track": "COM",
+      "status": "founder_blocked",
+      "priority": "P2",
+      "owner": "founder",
+      "title": "Screen capture demo session",
+      "success_check": "recording artifact",
+      "depends_on": [
+        "UPG-0005"
+      ]
+    },
+    {
+      "id": "UPG-0030",
+      "tier": "FOUNDER",
+      "track": "COM",
+      "status": "founder_blocked",
+      "priority": "P2",
+      "owner": "founder",
+      "title": "Publish demo video link",
+      "success_check": "live URL on gel page",
+      "depends_on": [
+        "UPG-0029"
+      ]
+    },
+    {
+      "id": "UPG-0010",
+      "tier": "FOUNDER",
+      "track": "COM",
+      "status": "founder_blocked",
+      "priority": "P2",
+      "owner": "founder",
+      "title": "Founder verify only gate",
+      "success_check": "founder sign-off receipt"
+    }
   ],
   "execution_order": [
     "T1: LOOP-VERIFY-* (parallel, 24h wall clock each; cf-cron dispatch valid)",
-    "T2: UPG-0201 → UPG-0202 → UPG-0203 → UPG-0205/0206 (parallel) → UPG-0204",
+    "T2: UPG-0201 \u2192 UPG-0202 \u2192 UPG-0203 \u2192 UPG-0205/0206 (parallel) \u2192 UPG-0204",
     "T2: UPG-0207 after LOOP-VERIFY-ALL + UPG-0206",
     "T3: SANDBOX-REGISTRY + UPG-0210 + UPG-0211 + UPG-0212",
     "T3: UPG-0208/0209 after deploy reconciler stable",
     "T4: UPG-0213 only on drift/cost trigger",
-    "FOUNDER: parallel lane — never occupies scheduler slot (L7)"
+    "FOUNDER: parallel lane \u2014 never occupies scheduler slot (L7)"
   ]
 }

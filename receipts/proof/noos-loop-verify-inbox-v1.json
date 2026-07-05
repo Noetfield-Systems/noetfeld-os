@@ -1,0 +1,151 @@
+{
+  "schema": "noos-loop-verify-v1",
+  "backlog_id": "LOOP-VERIFY-inbox",
+  "loop_id": "inbox",
+  "verified_at": "2026-07-05T12:32:00Z",
+  "verification_state": "VERIFIED",
+  "smoke": {
+    "loop_id": "inbox",
+    "event_type": "noos_inbox_loop_tick",
+    "exit_code": 0,
+    "ok": true,
+    "cycle": {
+      "schema": "noos-24-7-loop-cycle-v1",
+      "receipt_schema": "autorun-cycle-receipt-v2",
+      "workflow_id": "noos-inbox-loop.yml",
+      "mission_id": "M2",
+      "sandbox_id": "noetfeld-os",
+      "lane": "noos",
+      "loop_id": "inbox",
+      "event_type": "noos_inbox_loop_tick",
+      "domain": "factory-inbox",
+      "trigger_source": "repository_dispatch",
+      "cycle_number": 2,
+      "op_key": "a5421cbbcda7cc678a685cbc",
+      "started_at": "2026-07-05T12:31:59+00:00",
+      "state_before": "RUNNING",
+      "cost": {
+        "provider": "github_actions+cloudflare_cron",
+        "model": "none",
+        "tokens_in": 0,
+        "tokens_out": 0,
+        "unit_cost_usd": 0.0,
+        "total_usd": 0.0,
+        "metered_at_call_site": true,
+        "step_count": 1
+      },
+      "value_class": "revenue_path",
+      "sink_invariant": {
+        "law": "sum(origin_counts) == sink_count",
+        "counts": {
+          "steps": 1,
+          "self_heal": 0
+        },
+        "sink_count": 1,
+        "provenance_tags": {
+          "steps": "loop_step",
+          "self_heal": "loop_self_heal"
+        },
+        "verdict": "PASS"
+      },
+      "founder_blocked": {
+        "count": 1,
+        "oldest_id": "NOOS-C-01",
+        "priority": "P0",
+        "age_seconds": 289876,
+        "escalated": true
+      },
+      "evidence": [
+        {
+          "command": "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3 scripts/cloud_inbox_worker_v1.py",
+          "exit_code": 0,
+          "output": "r_blocked: NOOS-C-01\nfounder_blocked_priority: P0\nfounder_blocked_reason: founder_decision_required\n{\n  \"ok\": true,\n  \"status\": \"IDLE_NO_WORK\",\n  \"idle_reason\": \"no_executable_pending\",\n  \"founder_blocked\": {\n    \"founder_blocked_count\": 1,\n    \"oldest\": \"NOOS-C-01\",\n    \"priority\": \"P0\",\n    \"age_seconds\": 281265,\n    \"reason\": \"founder_decision_required\"\n  },\n  \"founder_blocked_this_cycle\": []\n}"
+        }
+      ],
+      "runner_output": {
+        "steps": [
+          {
+            "cmd": [
+              "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+              "scripts/cloud_inbox_worker_v1.py"
+            ],
+            "ok": true,
+            "exit_code": 0,
+            "stdout_tail": "work_item_id: none\nwork_status: IDLE_NO_WORK\nexit_code: 0\nfounder_blocked_count: 1\noldest_founder_blocked: NOOS-C-01\nfounder_blocked_priority: P0\nfounder_blocked_reason: founder_decision_required\n{\n  \"ok\": true,\n  \"status\": \"IDLE_NO_WORK\",\n  \"idle_reason\": \"no_executable_pending\",\n  \"founder_blocked\": {\n    \"founder_blocked_count\": 1,\n    \"oldest\": \"NOOS-C-01\",\n    \"priority\": \"P0\",\n    \"age_seconds\": 281265,\n    \"reason\": \"founder_decision_required\"\n  },\n  \"founder_blocked_this_cycle\": []\n}",
+            "stderr_tail": "",
+            "continued_on_error": false,
+            "name": "cloud_worker"
+          }
+        ],
+        "self_heal": [],
+        "cloud_meta": {
+          "processor": "noos_loop_runner_v1",
+          "github_event": "repository_dispatch",
+          "github_run_id": "local-smoke",
+          "github_workflow": "noos-inbox-loop.yml",
+          "dispatch_source": "cf-cron",
+          "processed_at": "2026-07-05T12:31:59+00:00"
+        },
+        "cloud_trigger": "repository_dispatch"
+      },
+      "guardrails": {
+        "lane": "noos",
+        "read_only_control": false
+      },
+      "supabase_sink": {
+        "ok": true,
+        "exit_code": 0,
+        "detail": {
+          "ok": true,
+          "id": "5921a88b-fd6b-4425-a17a-d1e1271030de",
+          "status": 201,
+          "op_key": "a5421cbbcda7cc678a685cbc"
+        }
+      },
+      "finished_at": "2026-07-05T12:31:59+00:00",
+      "state_after": "COMPLETE",
+      "status": "ok",
+      "exit_code": 0,
+      "blocker_reason": null,
+      "next_action": "await_next_scheduled_tick",
+      "d4": {
+        "execute_ok": true,
+        "validate_ok": true,
+        "sink_acked": true
+      },
+      "d2": {
+        "cas": {
+          "verdict": "ACCEPTED",
+          "expected": 1,
+          "observed": 1,
+          "new_value": 2
+        }
+      },
+      "transition_log_tail": [
+        {
+          "from": "RUNNING",
+          "to": "COMPLETE",
+          "at": "2026-07-05T12:31:59+00:00",
+          "cycle": 2,
+          "op_key": "a5421cbbcda7cc678a685cbc"
+        }
+      ]
+    },
+    "stderr": null
+  },
+  "rolling_evaluation": {
+    "loop_id": "inbox",
+    "factory_id": "loop-inbox",
+    "cycle_count": 135,
+    "invalid_trigger_count": 0,
+    "latest_status": "ok",
+    "ready": true,
+    "blockers": [],
+    "lookback_hours": 168,
+    "lookback_started_at": "2026-06-28T12:32:00Z",
+    "lookback_fallback": true,
+    "primary_lookback_hours": 24
+  },
+  "ok": true,
+  "autonomous_triggers": true
+}

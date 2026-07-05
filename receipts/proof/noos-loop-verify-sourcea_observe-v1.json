@@ -1,0 +1,153 @@
+{
+  "schema": "noos-loop-verify-v1",
+  "backlog_id": "LOOP-VERIFY-sourcea_observe",
+  "loop_id": "sourcea_observe",
+  "verified_at": "2026-07-05T12:32:27Z",
+  "verification_state": "VERIFIED",
+  "smoke": {
+    "loop_id": "sourcea_observe",
+    "event_type": "noos_sourcea_observe_loop_tick",
+    "exit_code": 0,
+    "ok": true,
+    "cycle": {
+      "schema": "noos-24-7-loop-cycle-v1",
+      "receipt_schema": "autorun-cycle-receipt-v2",
+      "workflow_id": "noos-sourcea-observe-loop.yml",
+      "mission_id": "M2",
+      "sandbox_id": "noetfeld-os",
+      "lane": "sourcea",
+      "loop_id": "sourcea_observe",
+      "event_type": "noos_sourcea_observe_loop_tick",
+      "domain": "sourcea-observe",
+      "trigger_source": "repository_dispatch",
+      "cycle_number": 2,
+      "op_key": "b7358bc83692da50ef18bac4",
+      "started_at": "2026-07-05T12:32:26+00:00",
+      "state_before": "RUNNING",
+      "cost": {
+        "provider": "github_actions+cloudflare_cron",
+        "model": "none",
+        "tokens_in": 0,
+        "tokens_out": 0,
+        "unit_cost_usd": 0.0,
+        "total_usd": 0.0,
+        "metered_at_call_site": true,
+        "step_count": 1
+      },
+      "value_class": "hygiene",
+      "sink_invariant": {
+        "law": "sum(origin_counts) == sink_count",
+        "counts": {
+          "steps": 1,
+          "self_heal": 0
+        },
+        "sink_count": 1,
+        "provenance_tags": {
+          "steps": "loop_step",
+          "self_heal": "loop_self_heal"
+        },
+        "verdict": "PASS"
+      },
+      "founder_blocked": {
+        "count": 1,
+        "oldest_id": "NOOS-C-01",
+        "priority": "P0",
+        "age_seconds": 289903,
+        "escalated": true
+      },
+      "evidence": [
+        {
+          "command": "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3 scripts/observe_sourcea_supabase_v1.py --write-receipt --json",
+          "exit_code": 0,
+          "output": "53fce72-2ea8-42c6-b49e-9ffeda25da86\",\n          \"fallback_from\": \"cycle_receipts\",\n          \"trigger_source\": \"cloudflare_cron\",\n          \"queue_head_after\": \"CLOUD-SEC-7665\",\n          \"queue_head_before\": \"CLOUD-SEC-7664\"\n        }\n      }\n    ]\n  },\n  \"receipt_path\": \"/Users/sinakazemnezhad/Desktop/Noetfield-Systems/noetfeld-OS/.noos-runtime/observe/sourcea/sourcea-supabase-observe-v1.json\"\n}"
+        }
+      ],
+      "runner_output": {
+        "steps": [
+          {
+            "cmd": [
+              "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+              "scripts/observe_sourcea_supabase_v1.py",
+              "--write-receipt",
+              "--json"
+            ],
+            "ok": true,
+            "exit_code": 0,
+            "stdout_tail": "      \"finished_at\": \"2026-07-02T04:27:10Z\",\n          \"execution_id\": \"553fce72-2ea8-42c6-b49e-9ffeda25da86\",\n          \"fallback_from\": \"cycle_receipts\",\n          \"trigger_source\": \"cloudflare_cron\",\n          \"queue_head_after\": \"CLOUD-SEC-7666\",\n          \"queue_head_before\": \"CLOUD-SEC-7665\"\n        }\n      },\n      {\n        \"id\": \"5c04f848-e660-4d01-8e94-91f3de1947f4\",\n        \"created_at\": \"2026-07-02T04:27:09.467737+00:00\",\n        \"memory_type\": \"truth_cycle_receipt\",\n        \"metadata\": {\n          \"schema\": \"truth-layer-receipt-v1\",\n          \"verdict\": \"GREEN\",\n          \"cycle_id\": \"cycle-20260702T042709Z-CLOUD-SEC-7664\",\n          \"started_at\": \"2026-07-02T04:27:09Z\",\n          \"duration_ms\": 384,\n          \"finished_at\": \"2026-07-02T04:27:09Z\",\n          \"execution_id\": \"553fce72-2ea8-42c6-b49e-9ffeda25da86\",\n          \"fallback_from\": \"cycle_receipts\",\n          \"trigger_source\": \"cloudflare_cron\",\n          \"queue_head_after\": \"CLOUD-SEC-7665\",\n          \"queue_head_before\": \"CLOUD-SEC-7664\"\n        }\n      }\n    ]\n  },\n  \"receipt_path\": \"/Users/sinakazemnezhad/Desktop/Noetfield-Systems/noetfeld-OS/.noos-runtime/observe/sourcea/sourcea-supabase-observe-v1.json\"\n}",
+            "stderr_tail": "",
+            "continued_on_error": false,
+            "name": "sourcea_supabase_observe"
+          }
+        ],
+        "self_heal": [],
+        "cloud_meta": {
+          "processor": "noos_loop_runner_v1",
+          "github_event": "repository_dispatch",
+          "github_run_id": "local-smoke",
+          "github_workflow": "noos-sourcea-observe-loop.yml",
+          "dispatch_source": "cf-cron",
+          "processed_at": "2026-07-05T12:32:27+00:00"
+        },
+        "cloud_trigger": "repository_dispatch"
+      },
+      "guardrails": {
+        "lane": "sourcea",
+        "read_only_control": true
+      },
+      "supabase_sink": {
+        "ok": true,
+        "exit_code": 0,
+        "detail": {
+          "ok": true,
+          "id": "b9cf5a84-26b7-4302-8e10-b3ea96b026ac",
+          "status": 201,
+          "op_key": "b7358bc83692da50ef18bac4"
+        }
+      },
+      "finished_at": "2026-07-05T12:32:27+00:00",
+      "state_after": "COMPLETE",
+      "status": "ok",
+      "exit_code": 0,
+      "blocker_reason": null,
+      "next_action": "await_next_scheduled_tick",
+      "d4": {
+        "execute_ok": true,
+        "validate_ok": true,
+        "sink_acked": true
+      },
+      "d2": {
+        "cas": {
+          "verdict": "ACCEPTED",
+          "expected": 1,
+          "observed": 1,
+          "new_value": 2
+        }
+      },
+      "transition_log_tail": [
+        {
+          "from": "RUNNING",
+          "to": "COMPLETE",
+          "at": "2026-07-05T12:32:27+00:00",
+          "cycle": 2,
+          "op_key": "b7358bc83692da50ef18bac4"
+        }
+      ]
+    },
+    "stderr": null
+  },
+  "rolling_evaluation": {
+    "loop_id": "sourcea_observe",
+    "factory_id": "loop-sourcea-observe",
+    "cycle_count": 2,
+    "invalid_trigger_count": 0,
+    "latest_status": "ok",
+    "ready": true,
+    "blockers": [],
+    "lookback_hours": 168,
+    "lookback_started_at": "2026-06-28T12:32:27Z",
+    "lookback_fallback": true,
+    "primary_lookback_hours": 24
+  },
+  "ok": true,
+  "autonomous_triggers": true
+}

@@ -1,4 +1,4 @@
-.PHONY: test gate demo build-gate-js install inbox cloud-worker autorun-once autorun autorun-status autorun-tick-deploy autorun-tick-dispatch autonomous-verify schedule-verify determinism-verify replay-verify planes supabase-migrate verified-window loop-run loop-fleet-deploy loop-fleet-dispatch loops-status loop-heartbeat backlog urls local-boot local-closeout local-patch-proposal local-heartbeat local-lane local-sweep-stale local-status machine-status machine-reconcile machine-audit machine-verify machine-validate-merge machine-critic machine-research
+.PHONY: test gate demo build-gate-js install inbox cloud-worker autorun-once autorun autorun-status autorun-tick-deploy autorun-tick-dispatch autonomous-verify schedule-verify determinism-verify replay-verify planes supabase-migrate verified-window loop-run loop-fleet-deploy loop-fleet-dispatch loops-status loop-heartbeat loop-baseline loop-registry-reconcile loop-verify-all loop-upgrade-closeout backlog urls local-boot local-closeout local-patch-proposal local-heartbeat local-lane local-sweep-stale local-status machine-status machine-reconcile machine-audit machine-verify machine-validate-merge machine-critic machine-research
 
 test:
 	pytest -q
@@ -73,6 +73,18 @@ loops-status:
 
 loop-heartbeat:
 	python3 scripts/noos_loop_heartbeat_v1.py --write-receipt --json
+
+loop-baseline:
+	python3 scripts/noos_loop_baseline_audit_v1.py --write-receipt --json
+
+loop-registry-reconcile:
+	python3 scripts/noos_loop_registry_reconcile_v1.py --write-receipt --json
+
+loop-verify-all:
+	python3 scripts/noos_loop_verify_v1.py --json all --write-receipt --lookback-hours 24 --fallback-hours 168
+
+loop-upgrade-closeout:
+	python3 scripts/noos_loop_upgrade_closeout_v1.py --json --write-receipt
 
 backlog:
 	@python3 -c "import json; d=json.load(open('data/noos-unified-upgrade-backlog-v1.json')); print(json.dumps({'tiers':d['tier_definitions'],'summary':d['summary'],'next':[x['id'] for x in d['items'] if x.get('tier')=='T1' and x.get('status')=='open']}, indent=2))"
