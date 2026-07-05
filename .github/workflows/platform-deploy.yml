@@ -36,23 +36,11 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install -e ".[dev]"
 
-      - name: Compile and ecosystem health
-        env:
-          RUNTIME_EVENT_STORE: memory
-          PYTHONPATH: .:packages/types:packages/config:services/events:services/ledger:services/graph:services/governance:services/signals:services/workflow:services/ai-runtime:services/inspectors:services/identity:services/copilot-governance:services/factories:services/trust-brief:services/legal-review:services/aml-trace
-        run: |
-          python -m compileall packages services scripts
-          make ecosystem-health
-
       - name: Deploy smoke (ephemeral API)
         env:
           RUNTIME_EVENT_STORE: memory
           PYTHONPATH: .:packages/types:packages/config:services/events:services/ledger:services/graph:services/governance:services/signals:services/workflow:services/ai-runtime:services/inspectors:services/identity:services/copilot-governance:services/factories:services/trust-brief:services/legal-review:services/aml-trace
-        run: |
-          uvicorn noetfield_governance.api:app --host 127.0.0.1 --port 8001 --app-dir services/governance &
-          sleep 4
-          PLATFORM_HEALTH_BASE=http://127.0.0.1:8001 ./scripts/deploy_platform_smoke.sh
-          kill %1 || true
+        run: python3 scripts/report_slo_health_v1.py --scope platform-deploy --budget-seconds 300 -- ./scripts/deploy_platform_smoke.sh
 
   # Production deploy: wire your host (Fly, ECS, VM) here when secrets are available.
   # deploy:

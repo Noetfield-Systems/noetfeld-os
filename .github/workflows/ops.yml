@@ -22,7 +22,7 @@ jobs:
 
       - run: pip install pyyaml
 
-      - run: python scripts/run_ops.py
+      - run: python3 scripts/report_slo_health_v1.py --scope repo-ops --budget-seconds 300 -- python scripts/run_ops.py
 
       - uses: peter-evans/create-pull-request@v6
         with:

@@ -1,79 +1,48 @@
 ---
-org: Noetfield-Systems
-repo: Noetfield
-version: "1.0"
-created: "2026-07-03"
-status: active
+schema: noetfield-agent-manifest-v1
 
-# Agent Configuration
-primary_agent: Copilot
-integrator: Vercel deployer
-role: T1 builder · web surface worker
-branch: main
-tier: T1
+repo:
+  name: Noetfield
+  id: Noetfield-Systems/Noetfield
+  lane: cross-repo-contract
+  policy_source: repo-policy.json
 
-# Synchronization
-must_sync_with:
-  - Noetfield-Systems/sina-governance-SSOT (for trust ledger samples)
-  - Noetfield-Systems/TrustField-Technologies (for platform hooks)
+coordination:
+  protocol: integrator-v1
+  mode: support-only
+  contract_boundary: contracts-exports-manifests-apis-receipts
 
-# Execution Context
-workflows:
-  - vercel-www-deploy.yml (T1 web deployment)
-  - verify-www-buyer-audience.sh (T1 audience verification)
-  - trust-ledger-sample-export (M4 asset export)
+agents:
+  - role: repo-integrator
+    owns:
+      - repo-local contracts and manifests
+      - repo-local documentation and policy artifacts
+    must_not_own:
+      - noetfeld-os runtime implementation
+      - studio-ide implementation
+  - role: sync-reporter
+    outputs:
+      - repo-local receipts
+      - repo-local handoff updates
 
-# Governance
-required_receipts:
-  - web_deployment_receipt_v1.json
-  - buyer_audience_verification_receipt_v1.json
-  - tlee_sample_export_receipt_v1.json
-
+# Governance Constraints (from local: org-slug-migration commit)
 forbidden_actions:
   - Deploy without passing buyer-audience-verify gate
-  - Use of old org slug "kazemnezhadsina144-dot" (see ROUTING_MATRIX.md)
+  - Use of old org slug "kazemnezhadsina144-dot" (see docs/FORBIDDEN_MARKERS.txt)
   - Merge to main without passing web checks
   - Modify locked markdown files without HISTORICAL_REFERENCE marker
   - Production mutation without approval
 
-# Mission Assignment
-mission_id: M4
-mission_name: platform_surface
-value_class: market_presence_asset
-spend_cap:
-  - T1
-  - T2
+# Synchronization (Local context)
+must_sync_with:
+  - Noetfield-Systems/sina-governance-SSOT (for trust ledger samples)
+  - Noetfield-Systems/TrustField-Technologies (for platform hooks via contract)
 
-# Tool Access (See ROUTING_MATRIX.md for full L17 tier definitions)
-tool_access:
-  - tier: T1
-    access_type: GitHub-native repo worker
-    allowed_tools:
-      - GitHub Issues API (read/write)
-      - GitHub PR API (read/write)
-      - File Edit (branch only)
-      - Git Commit/Push (branch only)
-      - Copilot Chat
-  - tier: T2
-    access_type: Local builder (Cursor)
-    allowed_tools:
-      - Local Terminal (build, test)
-      - Local File System
-      - Package Managers (npm, pip)
-
-# Pre-Execution Checklist
-pre_exec_checklist:
-  - "[ ] Read repo state before acting"
-  - "[ ] buyer-audience-verify passes before deployment"
-  - "[ ] No old slug 'kazemnezhadsina144-dot' in Vercel config"
-  - "[ ] TLEE samples from SSOT fetched with Noetfield-Systems URLs"
-  - "[ ] Do not edit LOCKED docs (mark HISTORICAL_REFERENCE)"
-  - "[ ] Git clean: all changes committed to branch"
-
-# Copilot Instructions Reference
-copilot_instructions_file: .github/copilot-instructions.md
-
-# Audit Trail
-last_verified: null
-last_verified_sha: null
-verification_window: "INVALIDATED_BY_MIGRATION → Ready for restart"
+metadata:
+  forbidden_active_config_markers_source: .github/copilot-instructions.md
+  forbidden_markers:
+    - kazemnezhadsina144-dot
+    - kazemnezhadsina144_dot
+  merged_at: "2026-07-05T07:27:00Z"
+  merge_note: "Remote schema + coordination + local forbidden_actions for unified governance"
+  copilot_instructions_file: .github/copilot-instructions.md

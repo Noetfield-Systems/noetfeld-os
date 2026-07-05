@@ -34,4 +34,4 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Docker Compose full stack E2E
-        run: make e2e
+        run: python3 ../scripts/report_slo_health_v1.py --scope governance-console-e2e --budget-seconds 900 -- bash -lc 'cd governance-console && make e2e'

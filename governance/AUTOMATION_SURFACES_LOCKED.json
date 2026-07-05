@@ -1,0 +1,144 @@
+{
+  "schema_version": "automation-surfaces-locked-v1",
+  "repo": "Noetfield-Systems/Noetfield",
+  "scope": "repository-local automation only",
+  "boundary": {
+    "noos_runtime_owned_elsewhere": true,
+    "adopt_only_repo_safe_patterns": true,
+    "read_only_status_surface": true
+  },
+  "noos_reference_patterns": [
+    {
+      "id": "read_only_autorun_status",
+      "fit": "adopted",
+      "why": "Safe, boundary-friendly way to observe automation health without taking runtime ownership.",
+      "local_impl": "scripts/verify_automation_surfaces_v1.py + Makefile target"
+    },
+    {
+      "id": "scheduled_heartbeat",
+      "fit": "adopted",
+      "why": "This repo already has weekly GitHub Actions scheduling and benefits from a small observability tick.",
+      "local_impl": ".github/workflows/supabase-heartbeat.yml"
+    },
+    {
+      "id": "deterministic_receipts",
+      "fit": "adopted",
+      "why": "The repo already uses receipts and locked status JSON for E2E and live-nerve checks.",
+      "local_impl": "governance/NOETFIELD_LIVE_NERVE_RECEIPT.json and verification scripts"
+    },
+    {
+      "id": "cloud_cron_dispatcher",
+      "fit": "not_adopted",
+      "why": "That pattern belongs to the runtime-owner repo and would violate repo boundaries here."
+    },
+    {
+      "id": "24_7_loop_fleet",
+      "fit": "not_adopted",
+      "why": "Continuous loop ownership is an OS/runtime concern, not a website/platform repo concern."
+    }
+  ],
+  "surfaces": [
+    {
+      "id": "phase-3-runtime",
+      "kind": "workflow",
+      "path": ".github/workflows/phase-3-runtime.yml",
+      "purpose": "Backend runtime verification with PostgreSQL smoke and ecosystem health."
+    },
+    {
+      "id": "platform-ci",
+      "kind": "workflow",
+      "path": ".github/workflows/platform-deploy.yml",
+      "purpose": "Deploy-ready platform validation and ephemeral API smoke."
+    },
+    {
+      "id": "public-www-ci",
+      "kind": "workflow",
+      "path": ".github/workflows/noetfield-www-ci.yml",
+      "purpose": "Public site health and sitemap verification."
+    },
+    {
+      "id": "supabase-heartbeat",
+      "kind": "scheduled-workflow",
+      "path": ".github/workflows/supabase-heartbeat.yml",
+      "purpose": "Weekly health ping to prevent Supabase auto-pause."
+    },
+    {
+      "id": "governance-console-e2e",
+      "kind": "workflow",
+      "path": ".github/workflows/governance-console-e2e.yml",
+      "purpose": "Governance console unit and end-to-end coverage."
+    },
+    {
+      "id": "trust-ledger-ci",
+      "kind": "workflow",
+      "path": ".github/workflows/trust-ledger-ci.yml",
+      "purpose": "Trust Ledger validation for the evidence surface."
+    },
+    {
+      "id": "repo-ops",
+      "kind": "workflow",
+      "path": ".github/workflows/ops.yml",
+      "purpose": "Command-driven repository operations."
+    },
+    {
+      "id": "verify-live-nerve",
+      "kind": "make-target",
+      "path": "Makefile",
+      "purpose": "Full live nerve receipt verification."
+    },
+    {
+      "id": "verify-www-e2e",
+      "kind": "make-target",
+      "path": "Makefile",
+      "purpose": "Production E2E sweep for public www routes and API contracts."
+    },
+    {
+      "id": "verify-ui-e2e",
+      "kind": "make-target",
+      "path": "Makefile",
+      "purpose": "Local UI content checks across key pages."
+    },
+    {
+      "id": "verify-ui-visual",
+      "kind": "make-target",
+      "path": "Makefile",
+      "purpose": "Visual/content smoke for the governance console."
+    },
+    {
+      "id": "verify-platform-health",
+      "kind": "make-target",
+      "path": "Makefile",
+      "purpose": "Platform health probe for the backend runtime."
+    },
+    {
+      "id": "verify-route-nav-truth",
+      "kind": "make-target",
+      "path": "Makefile",
+      "purpose": "Route truth and navigation alignment check."
+    },
+    {
+      "id": "verify-validator-node-registry",
+      "kind": "make-target",
+      "path": "Makefile",
+      "purpose": "Validator and live-node registry integrity check."
+    },
+    {
+      "id": "verify-automation-surfaces",
+      "kind": "make-target",
+      "path": "Makefile",
+      "purpose": "Read-only automation inventory verifier added from this audit."
+    },
+    {
+      "id": "report-slo-health",
+      "kind": "script",
+      "path": "scripts/report_slo_health_v1.py",
+      "purpose": "Shared SLO-aware command wrapper for workflow health reporting."
+    },
+    {
+      "id": "verify-supabase-heartbeat",
+      "kind": "script",
+      "path": "scripts/verify_supabase_heartbeat_v1.py",
+      "purpose": "Supabase REST and SQL heartbeat verifier used by the scheduled workflow."
+    }
+  ]
+}

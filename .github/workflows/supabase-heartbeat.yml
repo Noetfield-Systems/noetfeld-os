@@ -12,41 +12,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: REST ping
+      - name: Heartbeat SLO report
         env:
           NOETFIELD_SUPABASE_URL: ${{ secrets.NOETFIELD_SUPABASE_URL }}
           NOETFIELD_SUPABASE_ANON_KEY: ${{ secrets.NOETFIELD_SUPABASE_ANON_KEY }}
-        run: |
-          set -euo pipefail
-          test -n "$NOETFIELD_SUPABASE_URL"
-          test -n "$NOETFIELD_SUPABASE_ANON_KEY"
-          code="$(curl -sS -o /dev/null -w '%{http_code}' \
-            "${NOETFIELD_SUPABASE_URL}/rest/v1/" \
-            -H "apikey: ${NOETFIELD_SUPABASE_ANON_KEY}" \
-            -H "Authorization: Bearer ${NOETFIELD_SUPABASE_ANON_KEY}")"
-          echo "REST HTTP ${code}"
-          test "$code" = "200" -o "$code" = "401"
-
-      - name: SQL ping
-        env:
           NOETFIELD_SUPABASE_DATABASE_URL: ${{ secrets.NOETFIELD_SUPABASE_DATABASE_URL }}
-        run: |
-          set -euo pipefail
-          test -n "$NOETFIELD_SUPABASE_DATABASE_URL"
-          python3 -m pip install --quiet asyncpg
-          python3 - <<'PY'
-          import asyncio, os, asyncpg
-
-          async def main() -> None:
-              url = os.environ["NOETFIELD_SUPABASE_DATABASE_URL"].replace(
-                  "postgresql+asyncpg://", "postgresql://"
-              )
-              conn = await asyncpg.connect(url)
-              try:
-                  assert await conn.fetchval("select 1") == 1
-                  print("SQL heartbeat OK")
-              finally:
-                  await conn.close()
-
-          asyncio.run(main())
-          PY
+        run: python3 scripts/report_slo_health_v1.py --scope supabase-heartbeat --budget-seconds 120 -- bash -lc 'python3 -m pip install --quiet asyncpg >/dev/null && python3 scripts/verify_supabase_heartbeat_v1.py'

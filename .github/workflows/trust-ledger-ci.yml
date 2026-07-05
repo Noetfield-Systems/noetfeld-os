@@ -32,10 +32,10 @@ jobs:
           pip install -e ".[dev]"
 
       - name: TLE YAML smoke
-        run: ./scripts/tle-smoke.sh
+        run: python3 scripts/report_slo_health_v1.py --scope trust-ledger-ci-smoke --budget-seconds 300 -- ./scripts/tle-smoke.sh
 
       - name: Trust Ledger unit tests
         env:
           PYTHONPATH: packages/types:packages/config:packages/sdk:services/events:services/ledger:services/graph:services/governance:services/signals:services/workflow:services/ai-runtime:services/inspectors:services/identity:services/copilot-governance
           TLE_REQUIRED_APPROVALS: "2"
-        run: python -m pytest tests/unit/test_trust_ledger_v1.py -q
+        run: python3 scripts/report_slo_health_v1.py --scope trust-ledger-ci-unit --budget-seconds 360 -- python -m pytest tests/unit/test_trust_ledger_v1.py -q

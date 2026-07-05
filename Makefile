@@ -162,6 +162,13 @@ verify-www-e2e:
 	@chmod +x scripts/check_noetfield_com_e2e.py
 	python3 scripts/check_noetfield_com_e2e.py
 
+automation-status:
+	@python3 scripts/verify_automation_surfaces_v1.py --json
+
+verify-automation-surfaces:
+	@chmod +x scripts/verify_automation_surfaces_v1.py
+	python3 scripts/verify_automation_surfaces_v1.py
+
 verify-ui-build-checklist:
 	@chmod +x scripts/verify-ui-build-checklist.sh
 	./scripts/verify-ui-build-checklist.sh
@@ -467,6 +474,7 @@ console-smoke:
 
 site-health:
 	python3 scripts/audit_public_site_health.py
+	python3 scripts/verify_sitemap_committed.py
 	python3 scripts/audit_no_secrets_in_repo.py
 	python3 scripts/smoke_bank_grade_html.py
 	python3 -m pytest tests/unit/test_public_gtm_alignment.py tests/unit/test_public_simplification.py -q
