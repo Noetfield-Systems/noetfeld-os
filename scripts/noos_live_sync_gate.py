@@ -190,13 +190,18 @@ def public_website_status() -> dict[str, Any]:
     }
     checks = {name: fetch_json_or_text(url) for name, url in urls.items()}
     intelligence = fetch_json_or_text("https://www.noetfield.com/intelligence/")
+    intake = fetch_json_or_text("https://www.noetfield.com/intelligence/intake/")
     checks["intelligence_page"] = intelligence
+    checks["intelligence_intake"] = intake
+    intelligence_404 = intelligence.get("status") == 404
+    intake_ok = intake.get("ok") is True
     return {
         "ok": checks["www"].get("ok") is True and checks["platform"].get("ok") is True,
         "checks": checks,
         "known_drift": {
-            "intelligence_page_404": intelligence.get("status") == 404,
-            "meaning": "Intelligence is currently homepage positioning/intake lane unless website repo builds /intelligence/.",
+            "intelligence_page_404": intelligence_404 and not intake_ok,
+            "intelligence_hub_deferred": intelligence_404 and intake_ok,
+            "meaning": "Intelligence hub may defer to /intelligence/intake/ until website repo builds /intelligence/.",
         },
     }
 
@@ -232,6 +237,16 @@ def sourcea_nerve_status() -> dict[str, Any]:
 def studio_boundary_status(*, full: bool) -> dict[str, Any]:
     boundary_module = STUDIO_ROOT / "src" / "lib" / "noetfield-supabase-boundary.ts"
     sql_policy = STUDIO_ROOT / "supabase" / "noetfield-studio-boundary.sql"
+    if not STUDIO_ROOT.is_dir():
+        return {
+            "ok": True,
+            "skipped": True,
+            "reason": "studio_repo_absent",
+            "repo": str(STUDIO_ROOT),
+            "boundary_module_exists": False,
+            "sql_policy_exists": False,
+            "boundary_check": None,
+        }
     result = None
     if full:
         result = run_command(["npm", "run", "boundary:check"], cwd=STUDIO_ROOT, timeout=120)

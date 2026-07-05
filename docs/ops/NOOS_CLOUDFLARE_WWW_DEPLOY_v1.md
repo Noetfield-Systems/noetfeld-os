@@ -1,7 +1,7 @@
 # Cloudflare Static WWW Deploy Contract (v1)
 
 **Updated:** 2026-07-05  
-**Production:** Cloudflare static www (`server: cloudflare`)  
+**Production:** Cloudflare Pages `noetfield-www` + edge worker `noetfield-www-proxy` (denylist → Pages origin)  
 **Retired:** Vercel `noetfield` project (removed 2026-07-05)
 
 ## Surfaces

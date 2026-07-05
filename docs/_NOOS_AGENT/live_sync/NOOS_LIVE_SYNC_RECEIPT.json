@@ -1,6 +1,6 @@
 {
   "gate": "PASS",
-  "generated_at": "2026-07-03T08:00:31.783497Z",
+  "generated_at": "2026-07-05T16:32:44.055354Z",
   "next_safe_action": "use this receipt as current NOOS truth; repair warnings before claiming full ecosystem green",
   "nodes": {
     "GEL_RUNTIME": {
@@ -56,6 +56,13 @@
     },
     "PUBLIC_WEBSITE": {
       "checks": {
+        "intelligence_intake": {
+          "body_preview": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n <meta charset=\"UTF-8\" />\n <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n <title>Noetfield Intelligence \u2014 Book AI Diagnostic Sprint</title>\n <meta name=\"description\" content=\"Book your AI Diagnostic Sprint \u2014 map your top 3 automation",
+          "content_type": "text/html; charset=utf-8",
+          "json": null,
+          "ok": true,
+          "status": 200
+        },
         "intelligence_page": {
           "body_preview": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n <meta charset=\"UTF-8\" />\n <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n <title>Noetfield Intelligence \u2014 AI consulting for Canadian SMEs</title>\n <meta name=\"description\" content=\"Noetfield Intelligence \u2014 Diagnostic Sprint, Automati",
           "content_type": "text/html; charset=utf-8",
@@ -64,10 +71,11 @@
           "status": 200
         },
         "platform": {
-          "body_preview": "{\"status\":\"ok\",\"service\":\"noetfield-platform\",\"runtime\":\"phase-3.1-backend-core\",\"golden_edge\":\"v3\",\"control_plane\":\"v1\",\"governance_api\":\"/api/v1/governance\",\"policy_packs\":[\"copilot-governance-v1\",\"bank-pilot-v1\"],\"system_of_record\":\"postgresql\",\"supabase_authority\":\"optional-tooling-only\",\"intake",
+          "body_preview": "{\"status\":\"ok\",\"service\":\"noetfield-platform\",\"git_sha\":\"315fde187e29e160e7f7f9d363350f08cb8a2b3f\",\"runtime\":\"phase-3.1-backend-core\",\"golden_edge\":\"v3\",\"control_plane\":\"v1\",\"governance_api\":\"/api/v1/governance\",\"policy_packs\":[\"copilot-governance-v1\",\"bank-pilot-v1\"],\"system_of_record\":\"postgresql\"",
           "content_type": "application/json",
           "json": {
             "control_plane": "v1",
+            "git_sha": "315fde187e29e160e7f7f9d363350f08cb8a2b3f",
             "golden_edge": "v3",
             "governance_api": "/api/v1/governance",
             "intake_storage": "postgres",
@@ -94,13 +102,14 @@
         }
       },
       "known_drift": {
+        "intelligence_hub_deferred": false,
         "intelligence_page_404": false,
-        "meaning": "Intelligence is currently homepage positioning/intake lane unless website repo builds /intelligence/."
+        "meaning": "Intelligence hub may defer to /intelligence/intake/ until website repo builds /intelligence/."
       },
       "ok": true
     },
     "SOURCEA_NERVE": {
-      "factory_now_line": "factory-now \u00b7 Cloud Workers.app owns Cloud Forge Run \u00b7 head CLOUD-SEC-7367 \u00b7 batch 75 \u00b7 100 rows/10min \u00b7 100 tasks/row",
+      "factory_now_line": "factory-now \u00b7 Cloud Workers.app owns Cloud Forge Run \u00b7 head CLOUD-SEC-7767 \u00b7 batch 79 \u00b7 100 rows/10min \u00b7 100 tasks/row",
       "form_official_line": "FORM_OFFICIAL \u00b7 third_form \u00b7 80 open PICKs on disk \u00b7 INCIDENT-037 block ON \u00b7 agent-submit forbidden",
       "live_surfaces_path": "/Users/sinakazemnezhad/.sina/agent-live-surfaces-v1.json",
       "nerve_system_line": "nerve \u00b7 queue=idle \u00b7 aligned \u00b7 drift=86 \u00b7 loop=3sys\u00b73comm \u00b7 rules=forbidden_one,lane_forbidden,salvage_pattern,ship_gate:w3_critic_circle+1 \u00b7 fleet90+ \u00b7 research=YES \u00b7 AS=ok \u00b7 ui_fc=BLOCK \u00b7 maclaw=PASS \u00b7 worker=BLOCK",
@@ -113,16 +122,18 @@
     },
     "STUDIO_SUPABASE_BOUNDARY": {
       "boundary_check": null,
-      "boundary_module_exists": true,
+      "boundary_module_exists": false,
       "ok": true,
+      "reason": "studio_repo_absent",
       "repo": "/Users/sinakazemnezhad/Desktop/Noetfield/noetfield-studio-ide",
-      "sql_policy_exists": true
+      "skipped": true,
+      "sql_policy_exists": false
     },
     "WEBSITE_LIVE_NERVE": {
-      "age_hours": 0.0059762386111111105,
+      "age_hours": 0.0013690166666666668,
       "fresh": true,
       "gate": "PASS",
-      "generated_at": "2026-07-03T08:00:09.311990Z",
+      "generated_at": "2026-07-05T16:32:38.129478Z",
       "nodes": {
         "N13_ROUTE_INVENTORY": {
           "command": "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3 scripts/verify-route-inventory.py",
@@ -131,7 +142,7 @@
           "stdout": "verify-route-inventory: PASS mode=structural routes=23\n"
         },
         "N14_RECEIPT_FRESHNESS": {
-          "expires_at": "2026-07-03T08:30:09.311990Z",
+          "expires_at": "2026-07-05T17:02:38.129478Z",
           "ok": true,
           "valid_for_seconds": 1800
         },
@@ -182,7 +193,7 @@
           "base": "https://platform.noetfield.com",
           "ok": true,
           "provider": "openrouter",
-          "reply_preview": "Noetfield provides an AI Governance & Evidence layer specifically designed for Microsoft 365 Copilot adoption. Our purpose is to produce the audit trail that regulated organizations will need for their Copilot rollouts.\n\nFor CCO, CRO, CISO,",
+          "reply_preview": "Noetfield provides an AI Governance & Evidence layer, primarily for Microsoft 365 Copilot adoption. We produce the audit trail that regulated organizations will need for their Copilot rollouts.\n\nThis includes:\n*   **Policy-bound go/no-go de",
           "stale_hits": [],
           "status": 200
         },
@@ -213,12 +224,12 @@
         "ok": true,
         "returncode": 0,
         "stderr": "",
-        "stdout": "verify-public-denylist-sync: PASS\nexact_paths=24 prefix_paths=32 probe_paths=23\nverify-route-nav-truth: PASS\nverify-route-inventory: PASS mode=structural routes=23\nNOETFIELD_LIVE_NERVE PASS receipt=/Users/sinakazemnezhad/Desktop/Noetfield/Noetfield-All-Documents/Noetfield/governance/NOETFIELD_LIVE_NERVE_RECEIPT.json\nN1_PUBLIC_OUTPUT ok=True\nN2_CHAT_TRUTH ok=True\nN3_DOC_FRESHNESS ok=True\nN4_WWW_LIVE_OUTPUT ok=True\nN5_WWW_CHAT_SEMANTIC ok=True\nN6_PLATFORM_CHAT_SEMANTIC ok=True\nN7_GEL_LIVE_RUNTIME ok=True\nN8_ROUTE_NAV_TRUTH ok=True\nN9_VALIDATOR_NODE_REGISTRY ok=True\nN13_ROUTE_INVENTORY ok=True\nN14_RECEIPT_FRESHNESS ok=True\nverify-validator-node-registry: PASS\nmode=full validators=11 nodes=14 live_nodes=11\nverify-live-nerve-receipt: PASS\nscope=website-platform-public gate=PASS expires_at=2026-07-03T08:30:09.311990Z\n"
+        "stdout": "verify-public-denylist-sync: PASS\nexact_paths=24 prefix_paths=32 probe_paths=23\nverify-route-nav-truth: PASS\nverify-route-inventory: PASS mode=structural routes=23\nNOETFIELD_LIVE_NERVE PASS receipt=/Users/sinakazemnezhad/Desktop/Noetfield/Noetfield-All-Documents/Noetfield/governance/NOETFIELD_LIVE_NERVE_RECEIPT.json\nN1_PUBLIC_OUTPUT ok=True\nN2_CHAT_TRUTH ok=True\nN3_DOC_FRESHNESS ok=True\nN4_WWW_LIVE_OUTPUT ok=True\nN5_WWW_CHAT_SEMANTIC ok=True\nN6_PLATFORM_CHAT_SEMANTIC ok=True\nN7_GEL_LIVE_RUNTIME ok=True\nN8_ROUTE_NAV_TRUTH ok=True\nN9_VALIDATOR_NODE_REGISTRY ok=True\nN13_ROUTE_INVENTORY ok=True\nN14_RECEIPT_FRESHNESS ok=True\nverify-validator-node-registry: PASS\nmode=full validators=11 nodes=14 live_nodes=11\nverify-live-nerve-receipt: PASS\nscope=website-platform-public gate=PASS expires_at=2026-07-05T17:02:38.129478Z\n"
       }
     }
   },
   "ok": true,
-  "repo": "/Users/sinakazemnezhad/Projects/noetfeld-os",
+  "repo": "/Users/sinakazemnezhad/Desktop/Noetfield-Systems/noetfeld-OS",
   "required_nodes": [
     "NOOS_REPO",
     "WEBSITE_LIVE_NERVE",

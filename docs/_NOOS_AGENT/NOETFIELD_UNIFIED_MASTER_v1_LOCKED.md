@@ -35,7 +35,7 @@ Noetfield OS / GEL (product runtime)
   → POST /v1/decision → APPROVE / REVIEW / DECLINE
   → TLE v1 (Trust Ledger Entry) — signed, timestamped, policy-versioned
   → Append-only audit trail → board PDF export
-  → ~/Projects/noetfeld-os/ (FastAPI + SQLite, Phase 3 live GEL runtime)
+  → ~/Projects/noetfeld-os/ (FastAPI + SQLite, Phase 4 chain tools + CI; GEL runtime live)
 
 SourceA (engine underneath)
   → Pre-LLM governance execution runtime — never mentioned to customers
@@ -134,10 +134,10 @@ SourceA (engine underneath)
 | FastAPI app | RUNNING | `POST /v1/decision` |
 | SQLite audit | ACTIVE | Local dev persistence |
 | Agent vault | ACTIVE | `docs/_NOOS_AGENT/` + MANIFEST.json |
-| Phase | Phase 3 | Evidence export + TLE mapping |
+| Phase | Phase 4 | Chain tools + CI hardening (PRODUCT_TRUTH live); Phase 3 evidence/TLE in build order |
 | Hosted API | LIVE | `https://api.noetfield.com` on Railway `gel-api` |
 | Local port | ACTIVE | `:8001`; never mono `:8000` |
-| Tests | PASS | 26 pytest checks passing in this workspace |
+| Tests | PASS | 143 pytest checks passing in noetfeld-os |
 
 ---
 
