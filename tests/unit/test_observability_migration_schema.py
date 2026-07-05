@@ -50,4 +50,7 @@ def test_observability_migration_lexical_order() -> None:
     assert names[names.index("0008_observability_tables.sql") + 1 :] == [
         "0009_public_analytics_events.sql",
         "0010_public_analytics_funnel_tables.sql",
+        "0011_public_intake_email_delivery.sql",
+        "0013_improvement_queue_and_probe_receipts.sql",
+        "0014_probe_tables_public_rest.sql",
     ]

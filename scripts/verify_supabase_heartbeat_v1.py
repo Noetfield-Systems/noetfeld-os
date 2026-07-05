@@ -65,7 +65,14 @@ def main() -> int:
         finally:
             await conn.close()
 
-    asyncio.run(ping_sql())
+    try:
+        asyncio.run(ping_sql())
+    except OSError as exc:
+        # GitHub Actions cannot always reach Supabase pooler; REST ping keeps project awake.
+        print(f"SQL heartbeat skipped (REST OK): {exc}")
+    except Exception as exc:
+        print(f"SQL heartbeat FAIL: {exc}", file=sys.stderr)
+        return 1
     return 0
 
 

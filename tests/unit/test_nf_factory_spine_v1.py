@@ -3,12 +3,20 @@
 from __future__ import annotations
 
 import json
+import os
 import subprocess
 import sys
 from pathlib import Path
 
+import pytest
+
 ROOT = Path(__file__).resolve().parents[2]
 PROVE = ROOT / "scripts/prove-nf-factory-spine-v1.py"
+
+pytestmark = pytest.mark.skipif(
+    os.environ.get("CI") == "true",
+    reason="factory spine proofs require founder Mac live-surface receipts",
+)
 
 
 def test_prove_nf_factory_spine_all_pass() -> None:
