@@ -405,9 +405,15 @@ def test_public_chat_rejects_empty_message() -> None:
     asyncio.run(run())
 
 
-def test_greeting_short_circuits_without_llm() -> None:
+def test_greeting_uses_llm_with_pinned_context_only() -> None:
     async def run() -> None:
-        with patch("noetfield_governance.public_chat._generate_sync") as generate:
+        def fake_generate(*, system_instruction: str, user_message: str, **kwargs: object) -> str:
+            assert user_message == "HI"
+            assert "Stablecoin" not in system_instruction
+            assert "brief greeting" in system_instruction.lower()
+            return "Hi — happy to help. Ask about pricing, GEL, or the Copilot Governance Pack."
+
+        with patch("noetfield_governance.public_chat._generate_sync", side_effect=fake_generate) as generate:
             reply, provider, citations = await answer_public_question(
                 message="HI",
                 provider="auto",
@@ -417,11 +423,9 @@ def test_greeting_short_circuits_without_llm() -> None:
                 openrouter_model="google/gemini-2.5-flash",
                 client_key="test-client",
             )
-            generate.assert_not_called()
-        assert provider == "greeting"
-        assert "Noetfield" in reply
-        assert "Stablecoin" not in reply
+            generate.assert_called_once()
+        assert provider == "openrouter"
         assert "ask naturally" not in reply.lower()
-        assert citations == ["/pricing/", "/gel/", "/copilot/pilot/"]
+        assert "Stablecoin" not in reply
 
     asyncio.run(run())

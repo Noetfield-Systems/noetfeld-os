@@ -25,14 +25,7 @@ _MAX_MESSAGE_LEN = 2000
 _RATE_LIMIT_WINDOW_SEC = 60
 _RATE_LIMIT_MAX_PER_WINDOW = 30
 
-ChatProvider = Literal["gemini", "openrouter", "auto", "greeting"]
-
-_GREETING_REPLY = (
-    "Hi — how can I help? "
-    "I can walk you through Noetfield pricing, the Copilot Governance Pack, GEL, Trust Brief, "
-    "or what to read before you apply."
-)
-_GREETING_CITATIONS = ["/pricing/", "/gel/", "/copilot/pilot/"]
+ChatProvider = Literal["gemini", "openrouter", "auto"]
 
 logger = logging.getLogger("noetfield.governance.public_chat")
 
@@ -65,6 +58,7 @@ def _system_instruction(
     *,
     active_subject: str | None = None,
     follow_up_resolved: bool = False,
+    user_greeting: bool = False,
 ) -> str:
     kernel = ""
     if active_subject:
@@ -76,10 +70,18 @@ def _system_instruction(
             "- Do not borrow reasons/details from another entity just because it shares words like retired, renamed, deprecated, old, or changed.\n"
             "- If the active entity has no stated reason/detail in the retrieved facts, say that the public knowledge does not state the detail.\n"
         )
+    greeting = ""
+    if user_greeting:
+        greeting = (
+            "\nThe user sent a brief greeting only. Reply warmly in one or two short sentences — "
+            "offer help with Noetfield pricing, Copilot Governance Pack, GEL, or Trust Brief. "
+            "Do not lecture them on how to ask questions. Do not mention unrelated regulations "
+            "(stablecoin, banking acts) unless they asked.\n"
+        )
     return f"""You are the Noetfield institutional assistant on www.noetfield.com — for buyers, developers, partners, and investors.
 
 Tone: natural, thoughtful, concise, and calm. Sound like a capable human product guide, not a FAQ script or compliance bot. No hype or startup slang.
-
+{greeting}
 Use the knowledge that matches the user's intent:
 - Buyer / SME: public packages, examples, pricing, and intake.
 - Developer: GEL, api.noetfield.com, noetfield-gate, and public docs.
@@ -176,9 +178,6 @@ async def answer_public_question(
 
     await _check_rate_limit(client_key or "anonymous")
 
-    if is_greeting_message(text):
-        return _GREETING_REPLY, "greeting", list(_GREETING_CITATIONS)
-
     query, active_subject, follow_up_resolved = build_query_with_subject(
         text,
         conversation_state=conversation_state,
@@ -191,6 +190,7 @@ async def answer_public_question(
         context,
         active_subject=active_subject,
         follow_up_resolved=follow_up_resolved,
+        user_greeting=is_greeting_message(text),
     )
     user_message = text
     if active_subject and follow_up_resolved:
