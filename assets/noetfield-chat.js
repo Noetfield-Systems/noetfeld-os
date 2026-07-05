@@ -60,7 +60,22 @@
     return node;
   }
 
-  function isSafeHref(href) {
+  var CITATION_LABELS = {
+    "/pricing/": "Pricing",
+    "/gel/": "GEL overview",
+    "/copilot/pilot/": "Copilot Governance Pack",
+    "/trust-brief/": "Trust Brief",
+    "/trust-brief/intake/": "Apply for Trust Brief",
+    "/investors/diligence/": "Investor diligence",
+    "/start/": "Free sandbox",
+    "/copilot/": "Copilot overview",
+  };
+
+  function citationLabel(href) {
+    var key = String(href || "").trim();
+    if (CITATION_LABELS[key]) return CITATION_LABELS[key];
+    return key.replace(/^\/+|\/+$/g, "").replace(/-/g, " ").replace(/\//g, " · ") || key;
+  }
     return (
       href.indexOf("/") === 0 ||
       href.indexOf("https://www.noetfield.com/") === 0 ||
@@ -123,7 +138,7 @@
     publicCitations.forEach(function (citation) {
       var chip = document.createElement("a");
       chip.href = publicHref(citation);
-      chip.textContent = citation;
+      chip.textContent = citationLabel(citation);
       wrap.appendChild(chip);
     });
     msg.appendChild(wrap);
@@ -266,7 +281,7 @@
     appendMsg(
       log,
       "bot",
-      "Hi. Ask naturally about Noetfield, governance evaluation, GEL, diligence, or what to read next. I’ll keep it practical."
+      "I'm the Noetfield site assistant. Ask about pricing, governance evaluation, GEL, pilots, or investor diligence — I'll answer from our public product pages."
     );
 
     function setOpen(open) {

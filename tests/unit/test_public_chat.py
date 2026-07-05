@@ -63,7 +63,8 @@ def test_public_chat_has_no_local_faq_rule_engine() -> None:
     assert "I will not answer" not in vercel_fallback
     assert "deterministic_reply_for_intent" not in intent_helper
     assert "deterministic_policy" not in intent_helper
-    assert "Ask naturally" in frontend
+    assert "Ask naturally" not in frontend
+    assert "site assistant" in frontend
     assert "move money" not in vercel_fallback
     assert "hold custody" not in vercel_fallback
     assert "isInternalSourceLeakReply" in vercel_fallback
@@ -420,6 +421,7 @@ def test_greeting_short_circuits_without_llm() -> None:
         assert provider == "greeting"
         assert "Noetfield" in reply
         assert "Stablecoin" not in reply
+        assert "ask naturally" not in reply.lower()
         assert citations == ["/pricing/", "/gel/", "/copilot/pilot/"]
 
     asyncio.run(run())

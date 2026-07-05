@@ -28,8 +28,9 @@ _RATE_LIMIT_MAX_PER_WINDOW = 30
 ChatProvider = Literal["gemini", "openrouter", "auto", "greeting"]
 
 _GREETING_REPLY = (
-    "Hi. Ask naturally about Noetfield, governance evaluation, GEL, diligence, or what to read next. "
-    "I'll keep it practical."
+    "Hi — how can I help? "
+    "I can walk you through Noetfield pricing, the Copilot Governance Pack, GEL, Trust Brief, "
+    "or what to read before you apply."
 )
 _GREETING_CITATIONS = ["/pricing/", "/gel/", "/copilot/pilot/"]
 
