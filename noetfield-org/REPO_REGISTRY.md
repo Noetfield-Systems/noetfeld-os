@@ -2,7 +2,7 @@
 
 **Org:** Noetfield-Systems  
 **Registry Version:** 1.0  
-**Last Updated:** 2026-07-05T11:26:00Z  
+**Last Updated:** 2026-07-05T15:44:00Z  
 **Status:** Active (Post-Migration + Service Lane Coordination)
 
 ## Core Execution Repos
@@ -57,7 +57,8 @@
 - **Purpose:** Marketing website · investor relations · trust ledger UX
 - **Agent Role:** T1 builder · asset deployment · web frontend
 - **Must-Sync-With:** sina-governance-SSOT (for trust ledger samples)
-- **Workflows:** vercel-www-deploy · buyer-audience-verify
+- **Workflows:** static-www deploy · buyer-audience-verify (Vercel retired 2026-07-05)
+- **Production:** Cloudflare static www (`www.noetfield.com`; Vercel project deleted)
 - **Owner:** Noetfield-Systems
 
 ### 6. noetfield-studio-ide

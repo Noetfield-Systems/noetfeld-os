@@ -9,6 +9,8 @@
 **Previous State:** CLEARED_FOR_PUBLISH  
 **Current State:** PUBLIC_PAGE_LIVE
 
+> **Amendment 2026-07-05:** Production surface is **Cloudflare static www**. The Vercel `noetfield` project was removed from production and deleted; references to Vercel below are historical publish-time notes only.
+
 ---
 
 ## Service Lane Identity

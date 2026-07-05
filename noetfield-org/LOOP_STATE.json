@@ -54,7 +54,7 @@
       "spend_cap": ["T1", "T2"],
       "status": "active",
       "lead_repo": "Noetfield-Systems/Noetfield",
-      "integrator": "Vercel deployment + buyer-audience-verify",
+      "integrator": "Cloudflare static www + buyer-audience-verify",
       "receipt_schema": "web_deployment_receipt_v1",
       "constraint": "Buyer-audience verified before M1 gate deployment"
     },

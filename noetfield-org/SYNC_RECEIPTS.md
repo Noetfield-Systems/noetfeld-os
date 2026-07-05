@@ -128,11 +128,11 @@
 
 **Pre-Restart Checklist:**
 - [ ] Noetfield repo on main
-- [ ] Vercel hook URLs use new org slug
+- [ ] Cloudflare static www deploy path confirmed (Vercel retired 2026-07-05)
 - [ ] buyer-audience-verify script updated
 - [ ] TLE samples from SSOT fetched with new URLs
 
-**Restart Trigger:** Manual Vercel deployment trigger
+**Restart Trigger:** Manual static-www deploy / buyer-audience-verify
 
 ---
 

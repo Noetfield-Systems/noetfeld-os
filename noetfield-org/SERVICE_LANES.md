@@ -2,7 +2,7 @@
 
 **Org:** Noetfield-Systems  
 **Registry Version:** 1.3  
-**Last Updated:** 2026-07-05T12:52:00Z  
+**Last Updated:** 2026-07-05T15:44:00Z  
 **Status:** Active (Service Lane Coordination)
 
 ---
@@ -43,7 +43,8 @@ Noetfield.com:       PUBLIC_PAGE_LIVE
   ├─ Internal Block: ✓ /services/governance/README.md = 404 (backend path blocked)
   ├─ Static Gen:     scripts/rebuild-www-v6.py
   ├─ Static Output:  services/agentic-cost-governance/index.html
-  ├─ Production:     Vercel/static www restored (apps/web is NOT production)
+  ├─ Production:     Cloudflare static www (Vercel project removed 2026-07-05)
+  ├─ Retired:        Vercel `noetfield` project — not production
   └─ Next:           Buyer-audience review; homepage/services discoverability monitoring
 
 SourceA (Delivery):  DELIVERY_KIT_PROTECTED + PROSPECT_PACKET_READY
