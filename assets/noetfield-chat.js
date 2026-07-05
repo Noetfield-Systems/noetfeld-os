@@ -285,7 +285,7 @@
       "Hi — one moment…",
       "typing"
     );
-    fetch((apiBase() || "") + "/api/public/chat/greeting", { headers: { Accept: "application/json" } })
+    fetch((apiBase() || "") + "/api/public/chat", { method: "GET", headers: { Accept: "application/json" } })
       .then(function (res) {
         return res.json();
       })

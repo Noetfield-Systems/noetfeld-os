@@ -1,4 +1,7 @@
-/** POST /api/public/chat — proxies platform chat; local fallback only routes intake. */
+/** POST /api/public/chat — proxies platform chat; GET returns greeting SSOT. */
+
+const fs = require("fs");
+const path = require("path");
 
 const CANONICAL_INTAKE = "operations@noetfield.com";
 const EXECUTIVE_OVERVIEW_REPLY =
@@ -80,13 +83,65 @@ function routeOnlyFallback() {
   };
 }
 
+function localGreetingPayload() {
+  try {
+    const file = path.join(process.cwd(), "data/chatbot/public-chat-greeting.json");
+    const data = JSON.parse(fs.readFileSync(file, "utf8"));
+    return {
+      greeting: String(data.greeting || "").trim(),
+      citations: Array.isArray(data.citations) ? data.citations : [],
+      source: "www-disk-ssot",
+    };
+  } catch (_) {
+    return {
+      greeting: "Hi — what are you working on?",
+      citations: ["/pricing/"],
+      source: "www-minimal-fallback",
+    };
+  }
+}
+
+async function serveGreeting(res, platformBase) {
+  try {
+    const r = await fetch(platformBase + "/api/public/chat/greeting", {
+      headers: { Accept: "application/json" },
+    });
+    if (r.ok) {
+      const body = await r.json().catch(function () {
+        return {};
+      });
+      if (body && body.greeting) {
+        return res.status(200).json({
+          ok: true,
+          mode: "platform-proxy",
+          platform_base: platformBase,
+          ...body,
+        });
+      }
+    }
+  } catch (_) {
+    /* www-local spine */
+  }
+  return res.status(200).json({
+    ok: true,
+    mode: "www-disk-ssot",
+    ...localGreetingPayload(),
+  });
+}
+
 module.exports = async function handler(req, res) {
   res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
 
   if (req.method === "OPTIONS") {
     return res.status(204).end();
+  }
+
+  const platformBase = (process.env.PLATFORM_API_BASE || "https://platform.noetfield.com").replace(/\/$/, "");
+
+  if (req.method === "GET") {
+    return serveGreeting(res, platformBase);
   }
 
   if (req.method !== "POST") {
@@ -105,7 +160,6 @@ module.exports = async function handler(req, res) {
     return res.status(200).json(executiveOverviewReply("www-controlled-executive-overview"));
   }
 
-  const platformBase = (process.env.PLATFORM_API_BASE || "https://platform.noetfield.com").replace(/\/$/, "");
   try {
     const r = await fetch(platformBase + "/api/public/chat", {
       method: "POST",
