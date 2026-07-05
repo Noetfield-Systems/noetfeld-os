@@ -11,3 +11,9 @@ dist/
 node_modules/
 *.egg-info/
 .noos-runtime/
+
+# Machine loop runtime receipts — snapshot on closeout, not working-tree truth
+receipts/proof/noos-kaizen-*.json
+receipts/proof/noos-outside-audit-*T*.json
+receipts/proof/noos-worker-kernel-*T*.json
+receipts/proof/noos-tool-broker-*T*.json

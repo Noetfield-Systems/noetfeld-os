@@ -184,7 +184,7 @@ def test_service_status_reads_service_lanes():
     payload = integrator._parse_service_lane_status("svc-cost-audit-firewall-001")
     assert payload["ok"] is True
     assert payload["service_id"] == "svc-cost-audit-firewall-001"
-    assert payload["status"] == "PUBLIC_PAGE_LIVE"
+    assert payload["status"] == "PUBLIC_PAGE_LIVE + PROSPECT_PACKET_READY"
 
 
 def test_service_status_unknown_service():
