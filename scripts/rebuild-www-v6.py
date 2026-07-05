@@ -2541,6 +2541,63 @@ def ai_automation_body() -> str:
     )
 
 
+def agentic_cost_governance_body() -> str:
+    """Agentic Cost Governance — spend leak audit, model firewall, automation cost ledger."""
+    return hub_page(
+        "Governance-first · AI spend control",
+        "Agentic Cost Governance",
+        "Keep AI automation without silent premium-model bleed",
+        "Organizations running background agents, Copilot, Cursor, and custom workflows face "
+        "<strong>unattributed AI spend leakage</strong> — auto-escalation to premium models, shared API keys, "
+        "and workflow bleed that erodes ROI. Noetfield provides the governance and audit layer: "
+        "spend surface mapping, cost-safe routing policy, and tamper-evident receipts — not a bot catalog.",
+        [("Spend leak audit", True), ("Governance-only · not MSB", False)],
+        [(PILOT_INTAKE, "Apply for pilot", True), ("/contact/?topic=other#contact-form", "Discuss scope", False)],
+        ["Audit · Firewall · Ledger · ROI router · Escalation policy"],
+        panel(
+            "Five modules",
+            [
+                "AI Spend Leak Audit",
+                "Premium Model Firewall",
+                "Automation Cost Ledger",
+                "Model ROI Router",
+                "Premium Escalation Policy",
+            ],
+        ),
+        """
+ <section class="nf-section-block" aria-labelledby="acg-01">
+ <div class="nf-section-block-head"><span class="nf-section-num" aria-hidden="true">01</span><div>
+ <p class="nf-eyebrow" id="acg-01">Buyer pain</p>
+ <h2>Silent cost leaks destroy automation ROI</h2>
+ <p class="nf-section-lead">Auto model selection, high-reasoning defaults, background agents, shared API keys, and fallback escalation debit the same budget without attribution — finance cannot tie spend to outcomes.</p>
+ </div></div>
+ <div class="nf-cards">
+ <article class="nf-card"><p class="nf-card__tag">Leak</p><h3>Auto-escalation</h3><p>Premium models (o1, Claude, GPT-4o) invoked on routine tasks without buyer intent.</p></article>
+ <article class="nf-card"><p class="nf-card__tag">Leak</p><h3>Shared credentials</h3><p>Multiple apps on one API key — spend attribution broken across teams and workflows.</p></article>
+ <article class="nf-card"><p class="nf-card__tag">Leak</p><h3>Workflow bleed</h3><p>GitHub Actions, Copilot, Cursor, and native API calls debit the same invisible budget.</p></article>
+ </div>
+ </section>
+ <section class="nf-section-block" aria-labelledby="acg-02">
+ <div class="nf-section-block-head"><span class="nf-section-num" aria-hidden="true">02</span><div>
+ <p class="nf-eyebrow" id="acg-02">Modules</p>
+ <h2>Governance artifacts — not a deployment platform</h2>
+ <p class="nf-section-lead">Policy, audit, and receipt layer. Customers deploy agents; Noetfield maps spend, enforces routing policy, and exports evidence.</p>
+ </div></div>
+ <table class="nf-table" style="width:100%;border-collapse:collapse;font-size:.9rem">
+ <thead><tr><th style="text-align:left;padding:.5rem">Module</th><th style="text-align:left;padding:.5rem">Outcome</th></tr></thead>
+ <tbody>
+ <tr><td style="padding:.5rem">AI Spend Leak Audit</td><td style="padding:.5rem">Spend surface map, leak zones, ROI leakage estimate</td></tr>
+ <tr><td style="padding:.5rem">Premium Model Firewall</td><td style="padding:.5rem">Cost-safe defaults, escalation gates, budget caps, key isolation</td></tr>
+ <tr><td style="padding:.5rem">Automation Cost Ledger</td><td style="padding:.5rem">Per-invocation cost, model-selection reasoning, anomaly flags</td></tr>
+ <tr><td style="padding:.5rem">Model ROI Router</td><td style="padding:.5rem">Cheapest model that meets outcome bar; savings forecast</td></tr>
+ <tr><td style="padding:.5rem">Premium Escalation Policy</td><td style="padding:.5rem">Approval workflow, cost-benefit trail, governance log</td></tr>
+ </tbody>
+ </table>
+ </section>
+ <aside class="nf-callout"><p><strong>What this is not:</strong> payment custody, MSB, full agentic platform, or financial advice. Governance + audit + policy layer only — customers retain budget authority.</p></aside>""",
+    )
+
+
 def main() -> None:
     # Intelligence homepage: protected hand-maintained at index.html (613 primary GTM)
     write("governance/index.html", "Noetfield — Enterprise AI Governance &amp; Trust Ledger Evidence",
@@ -3264,6 +3321,14 @@ def main() -> None:
         "Governance-first operating reference for SMB AI adoption — evaluate, RID, TLE, audit-ready export before automation runs.",
         "/ai-automation/",
         ai_automation_body(),
+    )
+
+    write(
+        "services/agentic-cost-governance/index.html",
+        "Noetfield — Agentic Cost Governance",
+        "Governance layer for AI automation spend — leak audit, premium model firewall, cost ledger, ROI routing, and escalation policy.",
+        "/services/agentic-cost-governance/",
+        agentic_cost_governance_body(),
     )
 
     # Batch-update remaining shell pages CSS only
