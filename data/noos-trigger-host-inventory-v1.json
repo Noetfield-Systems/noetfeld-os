@@ -1,0 +1,544 @@
+{
+  "schema": "noos-trigger-host-inventory-v1",
+  "inventory_at": "2026-07-06T04:41:14Z",
+  "authority": "LIVING_SYSTEM_99_PLAN_PHASE_A",
+  "founder_sign": {
+    "required": true,
+    "status": "signed",
+    "signed_at": "2026-07-06T04:42:00Z",
+    "signed_by": "founder",
+    "pr": 28,
+    "note": "Phase A gate closed — cloud probes green, inventory ratified"
+  },
+  "loops": [
+    {
+      "kind": "loop",
+      "loop_id": "inbox",
+      "event_type": "noos_inbox_loop_tick",
+      "github_workflow": "noos-inbox-loop.yml",
+      "interval_minutes": 5,
+      "trigger_host": "cf",
+      "execution_host": "railway",
+      "cf_dispatch_id": "inbox",
+      "workflow_triggers": {
+        "exists": true,
+        "schedule": false,
+        "workflow_dispatch": true,
+        "repository_dispatch": false,
+        "push": false
+      },
+      "action": "cloud_ok",
+      "founder_manual_by_design": false
+    },
+    {
+      "kind": "loop",
+      "loop_id": "runtime",
+      "event_type": "noos_runtime_loop_tick",
+      "github_workflow": "noos-runtime-loop.yml",
+      "interval_minutes": 15,
+      "trigger_host": "cf",
+      "execution_host": "railway",
+      "cf_dispatch_id": "runtime",
+      "workflow_triggers": {
+        "exists": true,
+        "schedule": false,
+        "workflow_dispatch": true,
+        "repository_dispatch": false,
+        "push": false
+      },
+      "action": "cloud_ok",
+      "founder_manual_by_design": false
+    },
+    {
+      "kind": "loop",
+      "loop_id": "surface",
+      "event_type": "noos_surface_loop_tick",
+      "github_workflow": "noos-surface-loop.yml",
+      "interval_minutes": 20,
+      "trigger_host": "cf",
+      "execution_host": "railway",
+      "cf_dispatch_id": "surface",
+      "workflow_triggers": {
+        "exists": true,
+        "schedule": false,
+        "workflow_dispatch": true,
+        "repository_dispatch": false,
+        "push": false
+      },
+      "action": "cloud_ok",
+      "founder_manual_by_design": false
+    },
+    {
+      "kind": "loop",
+      "loop_id": "chain",
+      "event_type": "noos_chain_loop_tick",
+      "github_workflow": "noos-chain-loop.yml",
+      "interval_minutes": 30,
+      "trigger_host": "cf",
+      "execution_host": "railway",
+      "cf_dispatch_id": "chain",
+      "workflow_triggers": {
+        "exists": true,
+        "schedule": false,
+        "workflow_dispatch": true,
+        "repository_dispatch": false,
+        "push": false
+      },
+      "action": "cloud_ok",
+      "founder_manual_by_design": false
+    },
+    {
+      "kind": "loop",
+      "loop_id": "self_heal",
+      "event_type": "noos_self_heal_loop_tick",
+      "github_workflow": "noos-self-heal-loop.yml",
+      "interval_minutes": 10,
+      "trigger_host": "cf",
+      "execution_host": "railway",
+      "cf_dispatch_id": "self_heal",
+      "workflow_triggers": {
+        "exists": true,
+        "schedule": false,
+        "workflow_dispatch": true,
+        "repository_dispatch": false,
+        "push": false
+      },
+      "action": "cloud_ok",
+      "founder_manual_by_design": false
+    },
+    {
+      "kind": "loop",
+      "loop_id": "sourcea_observe",
+      "event_type": "noos_sourcea_observe_loop_tick",
+      "github_workflow": "noos-sourcea-observe-loop.yml",
+      "interval_minutes": 30,
+      "trigger_host": "cf",
+      "execution_host": "railway",
+      "cf_dispatch_id": "sourcea_observe",
+      "workflow_triggers": {
+        "exists": true,
+        "schedule": false,
+        "workflow_dispatch": true,
+        "repository_dispatch": false,
+        "push": false
+      },
+      "action": "cloud_ok",
+      "founder_manual_by_design": false
+    },
+    {
+      "kind": "loop",
+      "loop_id": "agent_nerve",
+      "event_type": "noos_agent_nerve_loop_tick",
+      "github_workflow": "noos-agent-nerve-loop.yml",
+      "interval_minutes": 60,
+      "trigger_host": "cf",
+      "execution_host": "railway",
+      "cf_dispatch_id": "agent_nerve",
+      "workflow_triggers": {
+        "exists": true,
+        "schedule": false,
+        "workflow_dispatch": true,
+        "repository_dispatch": false,
+        "push": false
+      },
+      "action": "cloud_ok",
+      "founder_manual_by_design": false
+    },
+    {
+      "kind": "loop",
+      "loop_id": "workflow_audit",
+      "event_type": "noos_workflow_audit_tick",
+      "github_workflow": "noos-workflow-audit.yml",
+      "interval_minutes": 15,
+      "trigger_host": "cf",
+      "execution_host": "railway",
+      "cf_dispatch_id": "workflow_audit",
+      "workflow_triggers": {
+        "exists": true,
+        "schedule": false,
+        "workflow_dispatch": true,
+        "repository_dispatch": false,
+        "push": false
+      },
+      "action": "cloud_ok",
+      "founder_manual_by_design": false
+    },
+    {
+      "kind": "loop",
+      "loop_id": "self_heal_safe_fixes",
+      "event_type": "noos_self_heal_safe_fixes_tick",
+      "github_workflow": "noos-self-heal.yml",
+      "interval_minutes": 30,
+      "trigger_host": "cf",
+      "execution_host": "railway",
+      "cf_dispatch_id": "self_heal_safe_fixes",
+      "workflow_triggers": {
+        "exists": true,
+        "schedule": false,
+        "workflow_dispatch": true,
+        "repository_dispatch": false,
+        "push": false
+      },
+      "action": "cloud_ok",
+      "founder_manual_by_design": false
+    },
+    {
+      "kind": "loop",
+      "loop_id": "researcher_deep_dive",
+      "event_type": "noos_researcher_deep_dive_tick",
+      "github_workflow": "noos-researcher.yml",
+      "interval_minutes": 60,
+      "trigger_host": "cf",
+      "execution_host": "railway",
+      "cf_dispatch_id": "researcher",
+      "workflow_triggers": {
+        "exists": true,
+        "schedule": false,
+        "workflow_dispatch": true,
+        "repository_dispatch": false,
+        "push": false
+      },
+      "action": "cloud_ok",
+      "founder_manual_by_design": false
+    },
+    {
+      "kind": "loop",
+      "loop_id": "specialist_proposals",
+      "event_type": "noos_specialist_proposals_tick",
+      "github_workflow": "noos-specialist.yml",
+      "interval_minutes": 120,
+      "trigger_host": "cf",
+      "execution_host": "railway",
+      "cf_dispatch_id": "specialist",
+      "workflow_triggers": {
+        "exists": true,
+        "schedule": false,
+        "workflow_dispatch": true,
+        "repository_dispatch": false,
+        "push": false
+      },
+      "action": "cloud_ok",
+      "founder_manual_by_design": false
+    },
+    {
+      "kind": "loop",
+      "loop_id": "orchestrator_cross_repo",
+      "event_type": "noos_orchestrator_cross_repo_tick",
+      "github_workflow": "noos-cross-repo-orchestrator.yml",
+      "interval_minutes": 180,
+      "trigger_host": "cf",
+      "execution_host": "railway",
+      "cf_dispatch_id": "orchestrator",
+      "workflow_triggers": {
+        "exists": true,
+        "schedule": false,
+        "workflow_dispatch": true,
+        "repository_dispatch": false,
+        "push": false
+      },
+      "action": "cloud_ok",
+      "founder_manual_by_design": false
+    }
+  ],
+  "autorun_workflows": [
+    {
+      "kind": "autorun_workflow",
+      "workflow_id": "sourcea_cloud_queue",
+      "title": "SourceA cloud queue",
+      "probe_type": "supabase_sourcea_cloud_queue",
+      "trigger_host": "cf",
+      "action": "cloud_ok_when_cf_railway_live",
+      "founder_manual_by_design": false,
+      "note": null
+    },
+    {
+      "kind": "autorun_workflow",
+      "workflow_id": "sourcea_buyer_proof_verify",
+      "title": "SourceA buyer-proof verify",
+      "probe_type": "supabase_sourcea_receipt",
+      "trigger_host": "cf",
+      "action": "cloud_ok_when_cf_railway_live",
+      "founder_manual_by_design": false,
+      "note": "cd ~/Desktop/SourceA && python3 scripts/verify_buyer_proof_hotfix_v1.py --json"
+    },
+    {
+      "kind": "autorun_workflow",
+      "workflow_id": "sourcea_recipe_queue_builder",
+      "title": "SourceA recipe queue builder",
+      "probe_type": "supabase_sourcea_receipt",
+      "trigger_host": "cf",
+      "action": "cloud_ok_when_cf_railway_live",
+      "founder_manual_by_design": false,
+      "note": null
+    },
+    {
+      "kind": "autorun_workflow",
+      "workflow_id": "noos_factory_autorun",
+      "title": "Noetfield OS factory autorun",
+      "probe_type": "supabase_noos_factory",
+      "trigger_host": "cf",
+      "action": "cloud_ok_when_cf_railway_live",
+      "founder_manual_by_design": false,
+      "note": "make autorun-once"
+    },
+    {
+      "kind": "autorun_workflow",
+      "workflow_id": "noos_worker_inbox",
+      "title": "Noetfield worker inbox",
+      "probe_type": "supabase_noos_inbox",
+      "trigger_host": "cf",
+      "action": "cloud_ok_when_cf_railway_live",
+      "founder_manual_by_design": false,
+      "note": "make cloud-worker"
+    },
+    {
+      "kind": "autorun_workflow",
+      "workflow_id": "noos_factory_autorun_tick",
+      "title": "NOOS factory autorun CF tick",
+      "probe_type": "url_sweep_readonly",
+      "trigger_host": "cf",
+      "action": "cloud_ok",
+      "founder_manual_by_design": false,
+      "note": null
+    },
+    {
+      "kind": "autorun_workflow",
+      "workflow_id": "noos_schedule_canary",
+      "title": "NOOS schedule canary",
+      "probe_type": "manual_dispatch_only",
+      "trigger_host": "retired_gha_manual",
+      "action": "cloud_ok_cf_motor_canary",
+      "founder_manual_by_design": false,
+      "note": null
+    },
+    {
+      "kind": "autorun_workflow",
+      "workflow_id": "noos_loop_fleet_tick",
+      "title": "NOOS 24/7 loop fleet CF tick",
+      "probe_type": "url_sweep_readonly",
+      "trigger_host": "cf",
+      "action": "cloud_ok",
+      "founder_manual_by_design": false,
+      "note": null
+    },
+    {
+      "kind": "autorun_workflow",
+      "workflow_id": "noos_loop_inbox",
+      "title": "24/7 loop \u2014 inbox drain",
+      "probe_type": "supabase_noos_loop",
+      "trigger_host": "cf",
+      "action": "cloud_ok_when_cf_railway_live",
+      "founder_manual_by_design": false,
+      "note": "python3 scripts/noos_loop_runner_v1.py --event-type noos_inbox_loop_tick"
+    },
+    {
+      "kind": "autorun_workflow",
+      "workflow_id": "noos_loop_runtime",
+      "title": "24/7 loop \u2014 runtime gate+pytest",
+      "probe_type": "supabase_noos_loop",
+      "trigger_host": "cf",
+      "action": "cloud_ok_when_cf_railway_live",
+      "founder_manual_by_design": false,
+      "note": "python3 scripts/noos_loop_runner_v1.py --event-type noos_runtime_loop_tick"
+    },
+    {
+      "kind": "autorun_workflow",
+      "workflow_id": "noos_loop_surface",
+      "title": "24/7 loop \u2014 public surface",
+      "probe_type": "supabase_noos_loop",
+      "trigger_host": "cf",
+      "action": "cloud_ok_when_cf_railway_live",
+      "founder_manual_by_design": false,
+      "note": "python3 scripts/noos_loop_runner_v1.py --event-type noos_surface_loop_tick"
+    },
+    {
+      "kind": "autorun_workflow",
+      "workflow_id": "noos_loop_chain",
+      "title": "24/7 loop \u2014 chain tools",
+      "probe_type": "supabase_noos_loop",
+      "trigger_host": "cf",
+      "action": "cloud_ok_when_cf_railway_live",
+      "founder_manual_by_design": false,
+      "note": "python3 scripts/noos_loop_runner_v1.py --event-type noos_chain_loop_tick"
+    },
+    {
+      "kind": "autorun_workflow",
+      "workflow_id": "noos_loop_self_heal",
+      "title": "24/7 loop \u2014 self-heal nerve",
+      "probe_type": "supabase_noos_loop",
+      "trigger_host": "cf",
+      "action": "cloud_ok_when_cf_railway_live",
+      "founder_manual_by_design": false,
+      "note": "python3 scripts/noos_loop_runner_v1.py --event-type noos_self_heal_loop_tick"
+    },
+    {
+      "kind": "autorun_workflow",
+      "workflow_id": "noos_loop_agent_nerve",
+      "title": "24/7 loop \u2014 agent vault nerve",
+      "probe_type": "supabase_noos_loop",
+      "trigger_host": "cf",
+      "action": "cloud_ok_when_cf_railway_live",
+      "founder_manual_by_design": false,
+      "note": "python3 scripts/noos_loop_runner_v1.py --event-type noos_agent_nerve_loop_tick"
+    },
+    {
+      "kind": "autorun_workflow",
+      "workflow_id": "noos_loop_sourcea_observe",
+      "title": "24/7 loop \u2014 SourceA observe",
+      "probe_type": "supabase_noos_loop",
+      "trigger_host": "cf",
+      "action": "cloud_ok_when_cf_railway_live",
+      "founder_manual_by_design": false,
+      "note": "python3 scripts/noos_loop_runner_v1.py --event-type noos_sourcea_observe_loop_tick"
+    },
+    {
+      "kind": "autorun_workflow",
+      "workflow_id": "sandbox_health_sweep",
+      "title": "Sandbox health sweep",
+      "probe_type": "url_sweep_readonly",
+      "trigger_host": "observe_only",
+      "action": "no_trigger",
+      "founder_manual_by_design": false,
+      "note": null
+    }
+  ],
+  "founder_manual_entries": [
+    {
+      "kind": "integrator",
+      "id": "cursor_local_mac",
+      "trigger_host": "cursor",
+      "action": "founder_manual_by_design",
+      "founder_manual_by_design": true,
+      "reason": "IDE lane claim/closeout; not a 24/7 loop motor"
+    },
+    {
+      "kind": "integrator",
+      "id": "copilot_cli_mac",
+      "trigger_host": "cursor",
+      "action": "founder_manual_by_design",
+      "founder_manual_by_design": true,
+      "reason": "Cross-IDE integrator mirror ~/.sina/noos-integrator-state-v1.json"
+    },
+    {
+      "kind": "observation",
+      "id": "noos_live_sync_gate",
+      "trigger_host": "mac",
+      "action": "founder_manual_by_design",
+      "founder_manual_by_design": true,
+      "reason": "Reads Mac paths for website/SourceA/studio; run on demand not scheduled"
+    },
+    {
+      "kind": "commercial",
+      "id": "nw1_outbound_send",
+      "trigger_host": "founder",
+      "action": "founder_manual_by_design",
+      "founder_manual_by_design": true,
+      "reason": "L7 founder gate; ~/.sina/nw1-outbound-send-receipt-v1.json"
+    },
+    {
+      "kind": "gha_ci",
+      "id": "gel-ci",
+      "trigger_host": "gha",
+      "action": "cloud_ok",
+      "founder_manual_by_design": false,
+      "reason": "PR/push CI only; not 24/7 loop motor"
+    },
+    {
+      "kind": "gha_ci",
+      "id": "noos_machine_loops_weekly",
+      "trigger_host": "retired_gha_manual",
+      "action": "cloud_ok_manual_dispatch",
+      "founder_manual_by_design": false,
+      "reason": "Weekly GHA schedule retired 2026-07-06; push + workflow_dispatch only"
+    }
+  ],
+  "sina_path_audit": [
+    {
+      "script": "scripts/enqueue_noos_cloud_inbox_v1.py",
+      "patterns": [
+        "Path\\.home\\(\\)\\s*/\\s*[\\\"']\\.sina"
+      ],
+      "loop_critical": true
+    },
+    {
+      "script": "scripts/integrator_runtime_paths_v1.py",
+      "patterns": [
+        "Path\\.home\\(\\)\\s*/\\s*[\\\"']\\.sina"
+      ],
+      "loop_critical": false
+    },
+    {
+      "script": "scripts/noos_acg_founder_send_prep_v1.py",
+      "patterns": [
+        "Path\\.home\\(\\)\\s*/\\s*[\\\"']\\.sina",
+        "~/.sina/"
+      ],
+      "loop_critical": false
+    },
+    {
+      "script": "scripts/noos_live_sync_gate.py",
+      "patterns": [
+        "Path\\.home\\(\\)\\s*/\\s*[\\\"']\\.sina",
+        "\"/Users/sinakazemnezhad"
+      ],
+      "loop_critical": false
+    },
+    {
+      "script": "scripts/noos_trigger_host_inventory_v1.py",
+      "patterns": [
+        "~/.sina/",
+        "\"/Users/sinakazemnezhad",
+        "~/Desktop/SourceA",
+        "~/Projects/noetfeld-os"
+      ],
+      "loop_critical": false
+    },
+    {
+      "script": "scripts/sync_noetfield_secrets_from_vault_v1.py",
+      "patterns": [
+        "Path\\.home\\(\\)\\s*/\\s*[\\\"']\\.sina",
+        "~/.sina/"
+      ],
+      "loop_critical": false
+    }
+  ],
+  "cloud_probes": {
+    "cf_loop_motor": {
+      "url": "https://noos-loop-fleet-tick-v1.sina-kazemnezhad-ca.workers.dev/health",
+      "ok": true,
+      "legacy_github_dispatch": false,
+      "railway_motor_deployed": true,
+      "loop_runner_url_ready": true,
+      "target_count": 13,
+      "step_7_secrets_on_worker": true
+    },
+    "railway_loop_runner": {
+      "url": "https://noos-loop-runner-production.up.railway.app/health",
+      "ok": true,
+      "wrong_image": false,
+      "raw_service": "noos-loop-runner",
+      "step_8_deploy_required": false
+    },
+    "fly_auth": false,
+    "fly_l4_deferred": true,
+    "phase_a_steps_6_10": {
+      "cf_paid_plan": "founder_confirm",
+      "cf_secrets_wired": true,
+      "railway_loop_runner_live": true,
+      "supabase_on_railway": "founder_confirm_railway_dashboard",
+      "fly_l4": "deferred"
+    }
+  },
+  "summary": {
+    "loop_count": 12,
+    "cf_dispatched_loops": 12,
+    "migrate_remaining": 0,
+    "mac_cursor_unmarked": 0,
+    "sina_path_scripts": 6,
+    "phase_a_gate_ok": true
+  },
+  "migrate_remaining": [],
+  "mac_cursor_unmarked": [],
+  "ok": true,
+  "report_line": "trigger_host_inventory \u00b7 cf_loops=12 unmarked_mac=0 gate=True"
+}

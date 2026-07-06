@@ -13,7 +13,9 @@ related_docs: NOOS-AGENT-20260615-014, NOOS-AGENT-20260702-024
 manifest: docs/_NOOS_AGENT/MANIFEST.json
 -->
 
-**Status:** Active · 2026-07-02  
+**Status:** SUPERSEDED for loop/autonomy · 2026-07-02  
+**Superseded by:** `[NOOS-AGENT-20260705-029]_LIVING_SYSTEM_99_PLAN_LOCKED_v1.md` (2026-07-06)  
+**Archive:** Historical sprint tracks only — do not execute Track A GHA schedule steps.
 **Scope:** Three parallel 10-step tracks — Factory Autonomy (A), Phase 4 Chain Tools (B), CI/Quality (C)  
 **Baseline:** Migration `0012` applied · dashboard v1.1 · canary `e2e0b8b` · schedule silence diagnosed
 

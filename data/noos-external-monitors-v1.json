@@ -1,0 +1,80 @@
+{
+  "schema": "noos-external-monitors-v1",
+  "version": "1.0.0",
+  "one_law": "External services alert and probe — they do NOT replace CF loop motor or duplicate loop ticks.",
+  "cf_workers_paid": {
+    "status": "active",
+    "plan_usd_month": 5,
+    "note": "Founder confirmed 2026-07-06. Covers noos-loop-fleet-tick-v1 (*/5) + noos-deadman-v1 (*/30) with predictable cost.",
+    "workers": [
+      "noos-loop-fleet-tick-v1",
+      "noos-deadman-v1"
+    ]
+  },
+  "operator_checklist": [
+    "make cloud-motor-e2e — daily or after any deploy",
+    "make cloud-motor-resync — on CF 401 or secret drift",
+    "make deadman-probe — uses /check?telegram=0 (never messages any chat)",
+    "make deadman-telegram-verify — block Gateway_A / wrong bots before deploy",
+    "UptimeRobot: alert-only on 4 URLs below (no loop dispatches)",
+    "cron-job.org: optional POST deadman /check every 30m (tertiary probe)"
+  ],
+  "uptimerobot": {
+    "roi": "high",
+    "role": "uptime_alerts_only",
+    "dashboard": "https://dashboard.uptimerobot.com/",
+    "do_not": "Do not wire UptimeRobot to trigger loop /loop dispatches — alert only.",
+    "recommended_monitors": [
+      {
+        "name": "Railway noos-loop-runner",
+        "type": "HTTP(S)",
+        "url": "https://noos-loop-runner-production.up.railway.app/health",
+        "keyword": "noos-loop-runner",
+        "interval_minutes": 5
+      },
+      {
+        "name": "CF loop motor",
+        "type": "HTTP(S)",
+        "url": "https://noos-loop-fleet-tick-v1.sina-kazemnezhad-ca.workers.dev/health",
+        "keyword": "noos-loop-fleet-tick-v1",
+        "interval_minutes": 5
+      },
+      {
+        "name": "CF deadman",
+        "type": "HTTP(S)",
+        "url": "https://noos-deadman-v1.sina-kazemnezhad-ca.workers.dev/health",
+        "keyword": "noos-deadman-v1",
+        "interval_minutes": 5
+      },
+      {
+        "name": "Noetfield public home",
+        "type": "HTTP(S)",
+        "url": "https://www.noetfield.com/",
+        "interval_minutes": 15
+      }
+    ],
+    "alert_channels": ["email"],
+    "never_use": ["@Gateway_A", "NF Probe Bot", "Signal Factory", "Noetfield Ops Telegram", "generic TELEGRAM_* env vars"]
+  },
+  "cron_job_org": {
+    "roi": "medium",
+    "role": "tertiary_deadman_probe_only",
+    "dashboard": "https://console.cron-job.org/dashboard",
+    "do_not": "Never schedule loop motor ticks here — duplicates CF */5 and caused GHA+CF double-fire spend.",
+    "allowed_jobs_max": 1,
+    "recommended_jobs": [
+      {
+        "title": "NOOS deadman external probe",
+        "schedule": "every 30 minutes",
+        "method": "POST",
+        "url": "https://noos-deadman-v1.sina-kazemnezhad-ca.workers.dev/check?telegram=0",
+        "purpose": "Independent deadman check WITHOUT Telegram (never Gateway_A or other bots)"
+      }
+    ]
+  },
+  "anti_patterns": [
+    "GHA schedule + CF cron on same loop (retired 2026-07-05)",
+    "cron-job.org firing /loop or repository_dispatch",
+    "UptimeRobot triggering writes — read/alert only"
+  ]
+}

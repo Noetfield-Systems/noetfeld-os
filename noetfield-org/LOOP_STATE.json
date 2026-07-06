@@ -114,5 +114,13 @@
     "Loop fleet state stability",
     "Independent verification pass",
     "Web deployment pass"
-  ]
+  ],
+  "living_system_48h": {
+    "authority": "LIVING_SYSTEM_99_PLAN",
+    "t0_procedure": "make living-system-baseline && founder sends T0 closed to deadman Telegram chat",
+    "verify_command": "make living-system-verify-48h",
+    "baseline_path": "data/noos-living-system-baseline-v1.json",
+    "receipt_path": "receipts/proof/noos-living-system-48h-v1.json",
+    "status": "prep_ready"
+  }
 }

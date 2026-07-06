@@ -9,10 +9,14 @@
   },
   "motor": {
     "cf_worker": "noos-loop-fleet-tick-v1",
+    "cf_deadman": "noos-deadman-v1",
     "dispatch_table": "data/noos-cf-dispatch-table-v1.json",
     "base_cron": "*/5 * * * *",
     "health_url": "https://noos-loop-fleet-tick-v1.sina-kazemnezhad-ca.workers.dev/health",
+    "deadman_health_url": "https://noos-deadman-v1.sina-kazemnezhad-ca.workers.dev/health",
+    "railway_health_url": "https://noos-loop-runner-production.up.railway.app/health",
     "execution_plane": "railway:noos-loop-runner",
+    "motor_restart_recipes": "data/noos-motor-restart-recipes-v1.json",
     "legacy_factory_motor": "noos-factory-autorun-tick-v1",
     "legacy_factory_motor_status": "cron_retired_2026-07-05",
     "secondary_motor": "fly_always_on",
@@ -239,6 +243,27 @@
         {
           "name": "aggregate_health",
           "cmd": ["echo", "Aggregating health across all org repos"]
+        }
+      ]
+    },
+    {
+      "id": "improve_kaizen_daily",
+      "title": "Nightly machine_safe kaizen recipe slot",
+      "domain": "self-improvement",
+      "lane": "noos",
+      "value_class": "risk_reduction",
+      "event_type": "noos_improve_kaizen_daily_tick",
+      "interval_minutes": 1440,
+      "github_workflow": "noos-improve-kaizen-daily.yml",
+      "factory_id": "loop-improve-kaizen",
+      "steps": [
+        {
+          "name": "kaizen_daily",
+          "cmd": ["python3", "scripts/noos_improve_kaizen_runner_v1.py", "--write-receipt", "--json"]
+        },
+        {
+          "name": "recipe_apply_if_matched",
+          "cmd": ["python3", "scripts/noos_kaizen_recipe_apply_v1.py", "--recipe-id", "seed-all-loop-ticks", "--dry-run", "--json"]
         }
       ]
     }

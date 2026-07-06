@@ -19,6 +19,7 @@ RUNTIME = ROOT / ".noos-runtime/loops"
 
 sys.path.insert(0, str(ROOT / "scripts"))
 from noos_loop_determinism_v1 import advance_state, cas_advance, op_key, transition_allowed  # noqa: E402
+from noos_loop_liveness_v1 import detect_execution_host, upsert_loop_liveness  # noqa: E402
 
 
 def utc_now() -> str:
@@ -384,6 +385,17 @@ def execute_loop(loop: dict[str, Any], *, self_heal: bool = True) -> dict[str, A
         "transition_log_tail": [{"from": state_before, "to": state_after, "op_key": op_key_val}],
     }
     loop_state_path(loop_id).write_text(json.dumps(state, indent=2) + "\n", encoding="utf-8")
+
+    if state_after in ("COMPLETE", "IDLE_NO_WORK"):
+        cycle["liveness_upsert"] = upsert_loop_liveness(
+            loop_id=loop_id,
+            event_type=event_type,
+            interval_minutes=int(loop.get("interval_minutes") or 5),
+            last_cycle_status=state_after,
+            host=detect_execution_host(),
+        )
+    else:
+        cycle["liveness_upsert"] = {"ok": False, "skipped": True, "reason": "cycle_not_successful"}
 
     return cycle
 

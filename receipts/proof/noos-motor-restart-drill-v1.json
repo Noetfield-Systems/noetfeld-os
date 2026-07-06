@@ -1,0 +1,18 @@
+{
+  "schema": "noos-motor-restart-drill-v1",
+  "authority": "UPG-LS-05",
+  "drill_at": "2026-07-06T06:00:00Z",
+  "scenario": "sandbox_cf_motor_failure_simulation",
+  "steps": [
+    "deadman probes loop_runner_health + cf_motor_health",
+    "on motor fail POST Railway /motor-restart with machine_safe recipe",
+    "loop stale restart capped by restart_attempts_max"
+  ],
+  "dry_run_verified": true,
+  "founder_sign": {
+    "required": true,
+    "status": "pending",
+    "note": "One-time ratification after live drill"
+  },
+  "ok": true
+}

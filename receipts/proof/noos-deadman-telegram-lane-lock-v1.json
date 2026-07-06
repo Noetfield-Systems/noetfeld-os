@@ -1,0 +1,19 @@
+{
+  "schema": "noos-deadman-telegram-lane-lock-v1",
+  "authority": "NOOS-AGENT-20260706-031",
+  "locked_at": "2026-07-06T06:18:00Z",
+  "pr": 29,
+  "branch": "lane/phase-b-deadman",
+  "head_sha": "7dc79d9f6ef451e6b725dfdf5d55e27c62bba3ba",
+  "live_worker": "noos-deadman-v1",
+  "live_version_note": "deployed f96f5e0a — send_alerts false",
+  "forbidden_bots": ["Gateway_A", "NFProbeBot", "NoetfieldOpsBot"],
+  "probe_verified": {
+    "check_telegram_0_alert_sent": false,
+    "check_telegram_0_reason": "telegram_suppressed",
+    "health_telegram_send_alerts": false
+  },
+  "gha_loop_execution": "retired_cf_railway",
+  "lock_state": "LOCKED_v1",
+  "ok": true
+}

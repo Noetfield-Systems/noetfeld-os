@@ -15,6 +15,9 @@ from pathlib import Path
 from typing import Any
 
 ROOT = Path(__file__).resolve().parents[3]
+sys.path.insert(0, str(ROOT / "scripts"))
+from noos_loop_liveness_v1 import upsert_loop_liveness  # noqa: E402
+
 PORT = int(os.environ.get("PORT", "8080"))
 SECRET = (os.environ.get("LOOP_RUNNER_SECRET") or "").strip()
 FACTORY_EVENT = "noos_factory_autorun_tick"
@@ -82,7 +85,16 @@ def run_factory(*, source: str, run_id: str) -> dict[str, Any]:
             }
         )
     ok = all(s["ok"] for s in steps)
-    return {"handler": "factory", "event_type": FACTORY_EVENT, "ok": ok, "steps": steps}
+    result: dict[str, Any] = {"handler": "factory", "event_type": FACTORY_EVENT, "ok": ok, "steps": steps}
+    if ok:
+        result["liveness_upsert"] = upsert_loop_liveness(
+            loop_id="factory_autorun",
+            event_type=FACTORY_EVENT,
+            interval_minutes=10,
+            last_cycle_status="COMPLETE",
+            host="railway:noos-loop-runner",
+        )
+    return result
 
 
 def execute(event_type: str, *, source: str) -> dict[str, Any]:
@@ -126,7 +138,7 @@ class Handler(BaseHTTPRequestHandler):
         self._json(404, {"ok": False, "error": "not_found"})
 
     def do_POST(self) -> None:  # noqa: N802
-        if self.path != "/loop":
+        if self.path not in ("/loop", "/motor-restart"):
             self._json(404, {"ok": False, "error": "not_found"})
             return
         if not self._auth_ok():
@@ -139,13 +151,39 @@ class Handler(BaseHTTPRequestHandler):
         except json.JSONDecodeError:
             self._json(400, {"ok": False, "error": "invalid_json"})
             return
+        if self.path == "/motor-restart":
+            recipe_id = str(body.get("recipe_id") or "").strip()
+            if not recipe_id:
+                self._json(400, {"ok": False, "error": "recipe_id_required"})
+                return
+            dry_run = bool(body.get("dry_run"))
+            cmd = [
+                sys.executable,
+                "scripts/noos_motor_restart_v1.py",
+                "--recipe",
+                recipe_id,
+                "--json",
+            ]
+            if dry_run:
+                cmd.append("--dry-run")
+            else:
+                cmd.append("--write-receipt")
+            proc = subprocess.run(cmd, cwd=ROOT, capture_output=True, text=True, check=False, timeout=1800)
+            payload: dict[str, Any] | None = None
+            if proc.stdout.strip():
+                try:
+                    payload = json.loads(proc.stdout)
+                except json.JSONDecodeError:
+                    payload = None
+            ok = proc.returncode == 0 and (payload or {}).get("ok", proc.returncode == 0)
+            self._json(200 if ok else 502, {"handler": "motor-restart", "ok": ok, "recipe_id": recipe_id, "result": payload, "stderr_tail": (proc.stderr or "")[-300:]})
+            return
         event_type = str(body.get("event_type") or "").strip()
         if not event_type:
             self._json(400, {"ok": False, "error": "event_type_required"})
             return
         source = str(body.get("source") or "cf-cron")
         result = execute(event_type, source=source)
-        executed = "error" not in result or result.get("error") != "already_running"
         if result.get("error") == "already_running":
             self._json(409, result)
             return

@@ -1,4 +1,4 @@
-.PHONY: test gate demo build-gate-js install inbox cloud-worker autorun-once autorun autorun-status autorun-tick-deploy autorun-tick-dispatch autonomous-verify schedule-verify determinism-verify replay-verify planes supabase-migrate verified-window loop-run loop-fleet-deploy deploy-railway-loop-runner verify-cf-railway-dispatch loop-fleet-dispatch loops-status loop-heartbeat loop-baseline loop-registry-reconcile loop-verify-all loop-upgrade-closeout deploy-baseline deploy-status deploy-fly-inbox deploy-fly-selfheal deploy-drift-kaizen inbox-scaler inbox-scaler-evaluate sandbox-registry-reconcile improve-kaizen-daily t2-deploy-closeout t3-sandbox-closeout acg-founder-send-prep backlog urls local-boot local-closeout local-patch-proposal local-heartbeat local-lane local-sweep-stale local-status machine-status machine-reconcile machine-audit machine-verify machine-validate-merge machine-critic machine-research
+.PHONY: test gate demo build-gate-js install inbox cloud-worker autorun-once autorun autorun-status autorun-tick-deploy autorun-tick-dispatch autonomous-verify schedule-verify determinism-verify replay-verify planes supabase-migrate verified-window loop-run loop-fleet-deploy deploy-railway-loop-runner verify-cf-railway-dispatch loop-fleet-dispatch loops-status loop-heartbeat loop-baseline loop-registry-reconcile loop-verify-all loop-upgrade-closeout trigger-host-inventory deadman-deploy deadman-probe cloud-motor-e2e cloud-motor-resync deploy-baseline deploy-status deploy-fly-inbox deploy-fly-selfheal deploy-drift-kaizen inbox-scaler inbox-scaler-evaluate sandbox-registry-reconcile improve-kaizen-daily t2-deploy-closeout t3-sandbox-closeout acg-founder-send-prep backlog urls local-boot local-closeout local-patch-proposal local-heartbeat local-lane local-sweep-stale local-status machine-status machine-reconcile machine-audit machine-verify machine-validate-merge machine-critic machine-research
 
 test:
 	pytest -q
@@ -85,6 +85,48 @@ loop-baseline:
 
 loop-registry-reconcile:
 	python3 scripts/noos_loop_registry_reconcile_v1.py --write-receipt --json
+
+trigger-host-inventory:
+	python3 scripts/noos_trigger_host_inventory_v1.py --write-data --write-receipt --json
+
+deadman-deploy:
+	bash scripts/deploy_noos_deadman_cf_v1.sh
+
+deadman-probe:
+	curl -fsS -X POST "https://noos-deadman-v1.sina-kazemnezhad-ca.workers.dev/check?telegram=0" | python3 -m json.tool
+
+deadman-telegram-verify:
+	python3 scripts/verify_noos_deadman_telegram_lane_v1.py --fail-on-forbidden --json
+
+deadman-telegram-test:
+	@echo "Founder-only: sends ONE test alert if lane valid and send_alerts=true in config"
+	curl -fsS -X POST "https://noos-deadman-v1.sina-kazemnezhad-ca.workers.dev/check?telegram=1" | python3 -m json.tool
+
+cloud-motor-e2e:
+	bash scripts/verify_noos_cloud_motor_e2e_v1.sh
+
+cloud-motor-resync:
+	bash scripts/phase_a_wire_cloud_motor_v1.sh
+
+motor-restart:
+	python3 scripts/noos_motor_restart_v1.py --recipe $(RECIPE) --write-receipt --json
+
+motor-status:
+	python3 scripts/noos_motor_restart_v1.py --recipe cf-loop-motor --dry-run --json && \
+	python3 scripts/noos_motor_restart_v1.py --recipe cf-deadman --dry-run --json && \
+	python3 scripts/noos_motor_restart_v1.py --recipe railway-loop-runner --dry-run --json
+
+living-system-baseline:
+	python3 scripts/verify_noos_living_system_48h_v1.py --baseline --write-receipt --json
+
+living-system-verify-48h:
+	python3 scripts/verify_noos_living_system_48h_v1.py --final --write-receipt --json
+
+seed-loop-liveness:
+	python3 scripts/seed_noos_loop_liveness_v1.py --tick-all --json
+
+cloud-motor-ops-receipt:
+	python3 scripts/write_noos_cloud_motor_ops_receipt_v1.py
 
 loop-verify-all:
 	python3 scripts/noos_loop_verify_v1.py --json all --write-receipt --lookback-hours 24 --fallback-hours 168
