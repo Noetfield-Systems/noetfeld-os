@@ -17,6 +17,7 @@ from typing import Any
 ROOT = Path(__file__).resolve().parents[1]
 RECIPES = ROOT / "data/noos-motor-restart-recipes-v1.json"
 PROOF_DIR = ROOT / "receipts/proof"
+RAILWAY_BIN = Path(os.environ.get("RAILWAY_BIN", str(Path.home() / ".railway/bin/railway")))
 
 
 def utc_now() -> str:
@@ -52,24 +53,55 @@ def probe_health(url: str, *, timeout: float = 15.0) -> dict[str, Any]:
         return {"ok": False, "error": str(exc)}
 
 
+def _load_secret_from_railway() -> str:
+    service = os.environ.get("RAILWAY_LOOP_RUNNER_SERVICE", "noos-loop-runner")
+    if not RAILWAY_BIN.is_file():
+        return ""
+    try:
+        proc = subprocess.run(
+            [str(RAILWAY_BIN), "variables", "--service", service, "--json"],
+            capture_output=True,
+            text=True,
+            check=False,
+            timeout=30,
+        )
+        if proc.returncode != 0 or not proc.stdout.strip():
+            return ""
+        data = json.loads(proc.stdout)
+        for key in ("NOOS_LOOP_SECRET", "LOOP_RUNNER_SECRET"):
+            val = str(data.get(key) or "").strip()
+            if val:
+                return val
+    except (OSError, json.JSONDecodeError, subprocess.TimeoutExpired):
+        pass
+    return ""
+
+
 def executor_env_for_recipe(recipe: dict[str, Any], *, dry_run: bool = False) -> dict[str, str]:
     env = os.environ.copy()
     if recipe.get("id") != "cf-loop-motor":
         return env
-    env.setdefault(
-        "FLY_LOOP_EXECUTOR_URL",
-        os.environ.get("RAILWAY_LOOP_RUNNER_URL", "https://noos-loop-runner-production.up.railway.app"),
+    railway_url = os.environ.get(
+        "RAILWAY_LOOP_RUNNER_URL",
+        "https://noos-loop-runner-production.up.railway.app",
     )
-    if not env.get("NOOS_LOOP_SECRET"):
-        if dry_run:
-            env["NOOS_LOOP_SECRET"] = "dry-run-placeholder"
-        else:
-            env_file = Path.home() / ".sourcea-secrets/noetfield.env"
-            if env_file.is_file():
-                for line in env_file.read_text(encoding="utf-8").splitlines():
-                    if line.startswith("NOOS_LOOP_SECRET="):
-                        env["NOOS_LOOP_SECRET"] = line.split("=", 1)[1].strip()
-                        break
+    env.setdefault("FLY_LOOP_EXECUTOR_URL", railway_url)
+    env.setdefault("LOOP_RUNNER_URL", env["FLY_LOOP_EXECUTOR_URL"])
+    secret = env.get("NOOS_LOOP_SECRET") or env.get("LOOP_RUNNER_SECRET") or ""
+    if not secret and not dry_run:
+        secret = _load_secret_from_railway()
+    if not secret:
+        env_file = Path.home() / ".sourcea-secrets/noetfield.env"
+        if env_file.is_file():
+            for line in env_file.read_text(encoding="utf-8").splitlines():
+                if line.startswith("NOOS_LOOP_SECRET=") or line.startswith("LOOP_RUNNER_SECRET="):
+                    secret = line.split("=", 1)[1].strip()
+                    break
+    if not secret and dry_run:
+        secret = "dry-run-placeholder"
+    if secret:
+        env["NOOS_LOOP_SECRET"] = secret
+        env["LOOP_RUNNER_SECRET"] = secret
     return env
 
 

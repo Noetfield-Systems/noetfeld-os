@@ -9,8 +9,13 @@
       "gate": "machine_safe",
       "worker": "noos-loop-fleet-tick-v1",
       "health_url": "https://noos-loop-fleet-tick-v1.sina-kazemnezhad-ca.workers.dev/health",
-      "description": "Redeploy CF loop fleet tick → Railway executor (NOOS_LOOP_SECRET synced from Railway; legacy FLY_LOOP_EXECUTOR_URL secret holds Railway URL)",
+      "description": "Sync Railway env → redeploy CF loop fleet tick (NOOS_LOOP_SECRET; legacy FLY_LOOP_EXECUTOR_URL holds Railway URL)",
       "steps": [
+        {
+          "kind": "shell",
+          "cwd": ".",
+          "command": "bash scripts/sync_railway_loop_runner_env_v1.sh"
+        },
         {
           "kind": "shell",
           "cwd": ".",
@@ -42,7 +47,7 @@
       "gate": "machine_safe",
       "service": "noos-loop-runner",
       "health_url": "https://noos-loop-runner-production.up.railway.app/health",
-      "description": "Redeploy Railway loop executor (Option A canonical executor)",
+      "description": "Redeploy Railway loop executor (Option A canonical executor; auto-syncs CF motor)",
       "steps": [
         {
           "kind": "shell",
