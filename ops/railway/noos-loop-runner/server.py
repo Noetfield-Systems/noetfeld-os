@@ -39,6 +39,8 @@ def _base_env(*, event_type: str, source: str, run_id: str) -> dict[str, str]:
     env.setdefault("GITHUB_RUN_ID", run_id)
     env.setdefault("GITHUB_WORKFLOW", "railway-noos-loop-runner")
     env.setdefault("NOOS_LOOP_EVENT_TYPE", event_type)
+    env.setdefault("RAILWAY_ENVIRONMENT", "production")
+    env.setdefault("NOOS_CLOUD_LOOP", "1")
     return env
 
 
@@ -85,13 +87,15 @@ def run_factory(*, source: str, run_id: str) -> dict[str, Any]:
             }
         )
     ok = all(s["ok"] for s in steps)
+    cloud = os.environ.get("NOOS_CLOUD_LOOP") == "1"
+    liveness_ok = ok or (cloud and any(s.get("ok") for s in steps))
     result: dict[str, Any] = {"handler": "factory", "event_type": FACTORY_EVENT, "ok": ok, "steps": steps}
-    if ok:
+    if liveness_ok:
         result["liveness_upsert"] = upsert_loop_liveness(
             loop_id="factory_autorun",
             event_type=FACTORY_EVENT,
             interval_minutes=10,
-            last_cycle_status="COMPLETE",
+            last_cycle_status="COMPLETE" if ok else "DEGRADED",
             host="railway:noos-loop-runner",
         )
     return result

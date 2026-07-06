@@ -6,6 +6,7 @@ COPY noetfield_gate ./noetfield_gate
 COPY scripts ./scripts
 COPY data ./data
 COPY fixtures ./fixtures
+COPY docs/_NOOS_AGENT/UPGRADE_MANIFEST.json ./docs/_NOOS_AGENT/UPGRADE_MANIFEST.json
 RUN pip install --no-cache-dir -r requirements.txt && pip install --no-cache-dir -e .
 
 COPY ops/railway/noos-loop-runner/server.py ./ops/railway/noos-loop-runner/server.py

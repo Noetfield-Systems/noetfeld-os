@@ -50,28 +50,28 @@ function dueTargets(utcMinute) {
   return TARGETS.filter((t) => utcMinute % Number(t.interval_minutes || 5) === 0);
 }
 
+async function dispatchAll(env, targets, meta) {
+  const results = [];
+  for (const target of targets) {
+    results.push(await dispatchTarget(env, target, meta));
+  }
+  return results;
+}
+
 export default {
   async scheduled(event, env, ctx) {
     const minute = new Date().getUTCMinutes();
     const due = dueTargets(minute);
     ctx.waitUntil(
-      (async () => {
-        const results = [];
-        for (const target of due) {
-          results.push(
-            await dispatchTarget(env, target, {
-              source: "cf-cron",
-              cron: event?.cron || dispatchDoc.motor_cron || "*/5 * * * *",
-              utc_minute: minute,
-            }),
-          );
-        }
-        return results;
-      })(),
+      dispatchAll(env, due, {
+        source: "cf-cron",
+        cron: event?.cron || dispatchDoc.motor_cron || "*/5 * * * *",
+        utc_minute: minute,
+      }),
     );
   },
 
-  async fetch(request, env) {
+  async fetch(request, env, ctx) {
     if (request.method === "OPTIONS") {
       return new Response(null, {
         status: 204,
@@ -101,15 +101,27 @@ export default {
     if (url.pathname === "/tick" && request.method === "POST") {
       const minute = new Date().getUTCMinutes();
       const force = url.searchParams.get("all") === "1";
+      const wait = url.searchParams.get("wait") === "1";
       const eventFilter = url.searchParams.get("event_type");
       let targets = force ? TARGETS : dueTargets(minute);
       if (eventFilter) {
         targets = TARGETS.filter((t) => t.event_type === eventFilter);
       }
-      const results = [];
-      for (const target of targets) {
-        results.push(await dispatchTarget(env, target, { source: "http_tick", utc_minute: minute }));
+      const meta = { source: force ? "http_tick_all" : "http_tick", utc_minute: minute };
+      if (force && !wait) {
+        ctx.waitUntil(dispatchAll(env, targets, meta));
+        return json(
+          {
+            ok: true,
+            schema: "noos-loop-motor-tick-v1",
+            status: "dispatched_async",
+            target_count: targets.length,
+            targets: targets.map((t) => t.event_type),
+          },
+          202,
+        );
       }
+      const results = await dispatchAll(env, targets, meta);
       const ok = results.length > 0 && results.every((r) => r.ok);
       return json({ ok, schema: "noos-loop-motor-tick-v1", results }, ok ? 200 : 502);
     }

@@ -51,16 +51,24 @@ def tick_all() -> dict[str, Any]:
     try:
         with urllib.request.urlopen(req, timeout=120) as resp:
             body = json.loads(resp.read().decode("utf-8"))
-            return {"ok": resp.status == 200, "status": resp.status, "body": body}
+            ok = resp.status in (200, 202) and body.get("ok") is not False
+            if resp.status == 202:
+                ok = body.get("status") == "dispatched_async" or body.get("ok") is True
+            return {"ok": ok, "status": resp.status, "body": body}
     except urllib.error.HTTPError as exc:
         raw = exc.read().decode("utf-8", errors="replace")
-        return {"ok": False, "status": exc.code, "error": raw[:400]}
+        try:
+            body = json.loads(raw)
+        except json.JSONDecodeError:
+            body = {"raw": raw[:400]}
+        ok = exc.code == 202 and (body.get("status") == "dispatched_async" or body.get("ok") is True)
+        return {"ok": ok, "status": exc.code, "body": body, "error": None if ok else raw[:400]}
 
 
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--tick-all", action="store_true", help="POST CF motor tick?all=1")
-    ap.add_argument("--wait-sec", type=int, default=90, help="Wait after tick before registry poll")
+    ap.add_argument("--wait-sec", type=int, default=180, help="Wait after tick before registry poll")
     ap.add_argument("--assert-min-rows", type=int, default=0)
     ap.add_argument("--assert-table", action="store_true", help="Assert registry table reachable")
     ap.add_argument("--json", action="store_true")

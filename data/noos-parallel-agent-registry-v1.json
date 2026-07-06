@@ -32,7 +32,8 @@
     "release-noetfield-gate": ["gha-release-noetfield-gate"],
     "noos-agent-vault": ["gha-noos-agent-vault"],
     "noos-schedule-canary": ["gha-noos-schedule-canary"],
-    "noos-machine-loops": ["noos-machine-auditor", "noos-machine-reconciler"]
+    "noos-machine-loops": ["noos-machine-auditor", "noos-machine-reconciler"],
+    "noos-improve-kaizen-daily": ["gha-loop-fleet"]
   },
   "surfaces": {
     "T0_machine": "GitHub Actions schedules, repository_dispatch, CF cron, worker-kernel T0",

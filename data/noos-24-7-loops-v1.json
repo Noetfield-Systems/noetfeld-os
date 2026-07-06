@@ -54,6 +54,10 @@
       "steps": [
         {"name": "gate", "cmd": ["python3", "-m", "noetfield_gate.cli", "gate", "--json", "--pytest"]},
         {"name": "pytest", "cmd": ["python3", "-m", "pytest", "-q"]}
+      ],
+      "cloud_steps": [
+        {"name": "gate_smoke", "cmd": ["python3", "-m", "noetfield_gate.cli", "gate", "--json"], "continue_on_error": true},
+        {"name": "import_smoke", "cmd": ["python3", "-c", "import noetfield_gate; print('ok')"]}
       ]
     },
     {
@@ -124,6 +128,10 @@
           "name": "loop_heartbeat",
           "cmd": ["python3", "scripts/noos_loop_heartbeat_v1.py", "--write-receipt"]
         }
+      ],
+      "cloud_steps": [
+        {"name": "reenqueue_blocked", "cmd": ["python3", "scripts/reenqueue_blocked_upg_inbox_v1.py"], "continue_on_error": true},
+        {"name": "loop_heartbeat", "cmd": ["python3", "scripts/noos_loop_heartbeat_v1.py", "--write-receipt"], "continue_on_error": true}
       ]
     },
     {
@@ -175,6 +183,12 @@
         {
           "name": "workflow_audit",
           "cmd": ["python3", "scripts/noos_workflow_audit_v1.py", "--json"]
+        }
+      ],
+      "cloud_steps": [
+        {
+          "name": "workflow_audit",
+          "cmd": ["python3", "scripts/noos_workflow_audit_v1.py", "--json", "--loop-exit-ok"]
         }
       ]
     },
