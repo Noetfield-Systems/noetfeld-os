@@ -271,7 +271,7 @@ def cloud_probes() -> dict[str, Any]:
         "fly_auth": fly_auth_ok(),
         "fly_l4_deferred": not fly_auth_ok(),
         "phase_a_steps_6_10": {
-            "cf_paid_plan": "founder_confirm",
+            "cf_paid_plan": "active_5usd_month",
             "cf_secrets_wired": cf_health.get("loop_runner_url_ready") is True,
             "railway_loop_runner_live": railway_ok,
             "supabase_on_railway": "founder_confirm_railway_dashboard",

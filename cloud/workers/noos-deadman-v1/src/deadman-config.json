@@ -1,0 +1,21 @@
+{
+  "schema": "noos-deadman-config-v1",
+  "version": "1.0.0",
+  "cron": "*/30 * * * *",
+  "interval_multipliers": {
+    "default": 2
+  },
+  "alert_channels": ["telegram"],
+  "restart_attempts_max": 1,
+  "loop_runner": {
+    "health_path": "/health",
+    "loop_path": "/loop"
+  },
+  "supabase": {
+    "registry_table": "noos_loop_registry",
+    "receipts_table": "noos_deadman_runs"
+  },
+  "cf_worker": "noos-deadman-v1",
+  "health_url": "https://noos-deadman-v1.sina-kazemnezhad-ca.workers.dev/health",
+  "check_url": "https://noos-deadman-v1.sina-kazemnezhad-ca.workers.dev/check"
+}

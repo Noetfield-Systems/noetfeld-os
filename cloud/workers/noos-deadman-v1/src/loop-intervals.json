@@ -1,0 +1,67 @@
+{
+  "inbox": {
+    "loop_id": "inbox",
+    "event_type": "noos_inbox_loop_tick",
+    "interval_minutes": 5
+  },
+  "runtime": {
+    "loop_id": "runtime",
+    "event_type": "noos_runtime_loop_tick",
+    "interval_minutes": 15
+  },
+  "surface": {
+    "loop_id": "surface",
+    "event_type": "noos_surface_loop_tick",
+    "interval_minutes": 20
+  },
+  "chain": {
+    "loop_id": "chain",
+    "event_type": "noos_chain_loop_tick",
+    "interval_minutes": 30
+  },
+  "self_heal": {
+    "loop_id": "self_heal",
+    "event_type": "noos_self_heal_loop_tick",
+    "interval_minutes": 10
+  },
+  "sourcea_observe": {
+    "loop_id": "sourcea_observe",
+    "event_type": "noos_sourcea_observe_loop_tick",
+    "interval_minutes": 30
+  },
+  "agent_nerve": {
+    "loop_id": "agent_nerve",
+    "event_type": "noos_agent_nerve_loop_tick",
+    "interval_minutes": 60
+  },
+  "workflow_audit": {
+    "loop_id": "workflow_audit",
+    "event_type": "noos_workflow_audit_tick",
+    "interval_minutes": 15
+  },
+  "self_heal_safe_fixes": {
+    "loop_id": "self_heal_safe_fixes",
+    "event_type": "noos_self_heal_safe_fixes_tick",
+    "interval_minutes": 30
+  },
+  "researcher_deep_dive": {
+    "loop_id": "researcher_deep_dive",
+    "event_type": "noos_researcher_deep_dive_tick",
+    "interval_minutes": 60
+  },
+  "specialist_proposals": {
+    "loop_id": "specialist_proposals",
+    "event_type": "noos_specialist_proposals_tick",
+    "interval_minutes": 120
+  },
+  "orchestrator_cross_repo": {
+    "loop_id": "orchestrator_cross_repo",
+    "event_type": "noos_orchestrator_cross_repo_tick",
+    "interval_minutes": 180
+  },
+  "factory_autorun": {
+    "loop_id": "factory_autorun",
+    "event_type": "noos_factory_autorun_tick",
+    "interval_minutes": 10
+  }
+}

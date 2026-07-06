@@ -34,7 +34,8 @@
 - **Purpose:** Loop governance · factory dispatch · autonomous tick · receipt spine
 - **Agent Role:** T1/T3 orchestrator · loop state machine · receipt writer
 - **Must-Sync-With:** SourceA, TrustField-Technologies, sina-governance-SSOT
-- **Workflows:** noos-factory-autorun · noos-loop-fleet-tick · verify-autonomous-24h
+- **Workflows:** noos-factory-autorun · noos-loop-fleet-tick · noos-deadman-v1 · verify-autonomous-24h
+- **Cloud Workers:** `noos-loop-fleet-tick-v1` (loop motor, */5) · `noos-deadman-v1` (liveness watchdog, */30)
 - **Org-Sync-Anchors:** noetfield-org/* (this directory)
 - **Owner:** Noetfield-Systems
 

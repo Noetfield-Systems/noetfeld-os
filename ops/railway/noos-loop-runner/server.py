@@ -15,6 +15,9 @@ from pathlib import Path
 from typing import Any
 
 ROOT = Path(__file__).resolve().parents[3]
+sys.path.insert(0, str(ROOT / "scripts"))
+from noos_loop_liveness_v1 import upsert_loop_liveness  # noqa: E402
+
 PORT = int(os.environ.get("PORT", "8080"))
 SECRET = (os.environ.get("LOOP_RUNNER_SECRET") or "").strip()
 FACTORY_EVENT = "noos_factory_autorun_tick"
@@ -82,7 +85,16 @@ def run_factory(*, source: str, run_id: str) -> dict[str, Any]:
             }
         )
     ok = all(s["ok"] for s in steps)
-    return {"handler": "factory", "event_type": FACTORY_EVENT, "ok": ok, "steps": steps}
+    result: dict[str, Any] = {"handler": "factory", "event_type": FACTORY_EVENT, "ok": ok, "steps": steps}
+    if ok:
+        result["liveness_upsert"] = upsert_loop_liveness(
+            loop_id="factory_autorun",
+            event_type=FACTORY_EVENT,
+            interval_minutes=10,
+            last_cycle_status="COMPLETE",
+            host="railway:noos-loop-runner",
+        )
+    return result
 
 
 def execute(event_type: str, *, source: str) -> dict[str, Any]:
