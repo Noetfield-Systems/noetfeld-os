@@ -24,11 +24,52 @@ link_service() {
   railway_cmd link -p "$PROJECT_ID" -e "$ENV_NAME" -s "$name" >/dev/null 2>&1 || true
 }
 
-service_url() {
+# Railway service status JSON has no public URL — use domain list (same as deploy-platform-railway.sh).
+railway_service_url() {
   local name="$1"
   link_service "$name"
-  railway_cmd service status --json 2>/dev/null | python3 -c "import json,sys; d=json.load(sys.stdin); print((d.get('service',{}).get('url') or '').rstrip('/'))" 2>/dev/null || \
-  railway_cmd service list 2>/dev/null | grep -A3 "$name" | grep -Eo 'https://[^ ]+' | head -1
+  railway_cmd domain list --service "$name" --json 2>/dev/null | python3 -c "
+import json, sys
+try:
+    d = json.load(sys.stdin)
+    items = d if isinstance(d, list) else d.get('domains', d.get('result', []))
+    for x in items or []:
+        dom = x.get('domain') if isinstance(x, dict) else x
+        if dom and 'railway.app' in str(dom):
+            print('https://' + str(dom).replace('https://', '').rstrip('/'))
+            break
+except Exception:
+    pass
+" 2>/dev/null
+}
+
+wait_for_railway_url() {
+  local name="$1"
+  local url=""
+  local attempt
+  for attempt in $(seq 1 18); do
+    url="$(railway_service_url "$name" || true)"
+    if [[ -n "$url" ]]; then
+      echo "$url"
+      return 0
+    fi
+    log "waiting for ${name} domain (${attempt}/18)…"
+    sleep 10
+  done
+  return 1
+}
+
+proxy_cfg_origin() {
+  local key="$1"
+  python3 -c "
+import json, sys
+from pathlib import Path
+p = Path('${PROXY_CFG}')
+if not p.is_file():
+    sys.exit(0)
+d = json.loads(p.read_text(encoding='utf-8'))
+print((d.get('${key}') or '').rstrip('/'))
+" 2>/dev/null || true
 }
 
 log "project=${PROJECT_ID} env=${ENV_NAME}"
@@ -75,13 +116,22 @@ link_service "$WEB_SERVICE"
   fi
 )
 
-sleep 15
-API_URL="$(service_url "$API_SERVICE")"
-WEB_URL="$(service_url "$WEB_SERVICE")"
+log "resolve Railway service URLs (domain list + retry)…"
+API_URL="$(wait_for_railway_url "$API_SERVICE" || true)"
+WEB_URL="$(wait_for_railway_url "$WEB_SERVICE" || true)"
+
+if [[ -z "$API_URL" ]]; then
+  API_URL="$(proxy_cfg_origin gov_api_origin)"
+  [[ -n "$API_URL" ]] && log "WARN: using cached gov_api_origin from ${PROXY_CFG}"
+fi
+if [[ -z "$WEB_URL" ]]; then
+  WEB_URL="$(proxy_cfg_origin gov_web_origin)"
+  [[ -n "$WEB_URL" ]] && log "WARN: using cached gov_web_origin from ${PROXY_CFG}"
+fi
 
 if [[ -z "$API_URL" || -z "$WEB_URL" ]]; then
   log "FAIL: could not resolve Railway service URLs"
-  log "Set data/nf-www-gov-proxy-v1.json manually after checking Railway dashboard"
+  log "Check: railway domain list --service ${API_SERVICE} --json"
   exit 2
 fi
 

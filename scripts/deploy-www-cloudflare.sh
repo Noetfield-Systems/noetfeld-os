@@ -62,6 +62,24 @@ if [[ -z "$PREVIEW_URL" ]]; then
 fi
 
 log "preview URL: ${PREVIEW_URL}"
+
+wait_for_preview_health() {
+  local base="$1"
+  local attempt code
+  for attempt in $(seq 1 24); do
+    code="$(curl -sS -o /dev/null -w '%{http_code}' "${base%/}/api/health" 2>/dev/null || echo 000)"
+    if [[ "$code" == "200" ]]; then
+      log "preview /api/health ready (${attempt})"
+      return 0
+    fi
+    log "preview /api/health ${code} — retry ${attempt}/24…"
+    sleep 5
+  done
+  return 1
+}
+
+wait_for_preview_health "$PREVIEW_URL" || log "WARN: preview health still not 200 — verify may fail"
+
 log "smoke preview…"
 curl -sS "${PREVIEW_URL}/health" | head -c 400
 echo
