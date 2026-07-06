@@ -137,17 +137,53 @@ async function restartLoop(env, eventType) {
   return { ok: resp.ok, status: resp.status, event_type: eventType, body };
 }
 
-async function sendTelegram(env, text) {
+async function validateTelegramLane(env) {
+  const lane = config.telegram_lane || {};
+  const forbidden = new Set(
+    (lane.forbidden_bot_usernames || []).map((u) => String(u).toLowerCase().replace(/^@/, ""))
+  );
+  const allowed = String(lane.allowed_bot_username || "")
+    .toLowerCase()
+    .replace(/^@/, "");
+  const token = (env.DEADMAN_TELEGRAM_BOT_TOKEN || "").trim();
+  if (!token) return { ok: false, reason: "token_missing" };
+  if (env.TELEGRAM_BOT_TOKEN || env.GATEWAY_TELEGRAM_BOT_TOKEN || env.NF_PROBE_TELEGRAM_BOT_TOKEN) {
+    return { ok: false, reason: "forbidden_generic_telegram_env" };
+  }
+  const meResp = await fetch(`https://api.telegram.org/bot${token}/getMe`);
+  let me = {};
+  try {
+    me = await meResp.json();
+  } catch {
+    me = {};
+  }
+  if (!me?.ok) return { ok: false, reason: "getMe_failed" };
+  const username = String(me.result?.username || "").toLowerCase();
+  if (forbidden.has(username)) return { ok: false, reason: "forbidden_bot_username", username };
+  if (allowed && username !== allowed) return { ok: false, reason: "bot_username_mismatch", username, expected: allowed };
+  return { ok: true, username };
+}
+
+async function sendTelegram(env, text, { allowSend = false } = {}) {
+  const lane = config.telegram_lane || {};
+  if (!allowSend) return { ok: false, skipped: true, reason: "telegram_suppressed" };
+  if (lane.send_alerts !== true) {
+    return { ok: false, skipped: true, reason: "send_alerts_disabled" };
+  }
   const token = (env.DEADMAN_TELEGRAM_BOT_TOKEN || "").trim();
   const chatId = (env.DEADMAN_TELEGRAM_CHAT_ID || "").trim();
   if (!token || !chatId) return { ok: false, skipped: true, reason: "telegram_not_configured" };
+  const validated = await validateTelegramLane(env);
+  if (!validated.ok) {
+    return { ok: false, skipped: true, reason: validated.reason, ...validated };
+  }
   const url = `https://api.telegram.org/bot${token}/sendMessage`;
   const resp = await fetch(url, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ chat_id: chatId, text }),
   });
-  return { ok: resp.ok, status: resp.status };
+  return { ok: resp.ok, status: resp.status, bot_username: validated.username };
 }
 
 async function sinkReceipt(env, receipt) {
@@ -163,7 +199,7 @@ async function sinkReceipt(env, receipt) {
   return { ok: resp.ok, run_id: runId, status: resp.status };
 }
 
-async function maybeHeartbeatSummary(env, staleCount) {
+async function maybeHeartbeatSummary(env, staleCount, allowTelegram) {
   const hours = config.heartbeat_summary_hours_utc || [];
   const hour = new Date().getUTCHours();
   if (!hours.includes(hour)) return { ok: false, skipped: true, reason: "not_summary_hour" };
@@ -171,7 +207,7 @@ async function maybeHeartbeatSummary(env, staleCount) {
     staleCount === 0
       ? `NOOS deadman heartbeat (T+${hour}h UTC): all loops fresh, motors OK`
       : `NOOS deadman heartbeat (T+${hour}h UTC): stale_count=${staleCount}`;
-  return sendTelegram(env, msg);
+  return sendTelegram(env, msg, { allowSend: allowTelegram });
 }
 
 async function runCheck(env, meta = {}) {
@@ -198,14 +234,17 @@ async function runCheck(env, meta = {}) {
       restartAttempts.push({ ...row, restart: await restartLoop(env, row.event_type) });
     }
   }
+  const allowTelegram =
+    meta.allowTelegram === true &&
+    meta.source === "cf-cron";
   let alertSent = false;
-  let alertResult = { ok: false, skipped: true };
+  let alertResult = { ok: false, skipped: true, reason: "telegram_suppressed" };
   if (stale.length > 0) {
     const msg = `NOOS deadman: ${stale.length} stale loop(s): ${stale.map((s) => s.loop_id).join(", ")}`;
-    alertResult = await sendTelegram(env, msg);
+    alertResult = await sendTelegram(env, msg, { allowSend: allowTelegram });
     alertSent = alertResult.ok === true;
   }
-  const heartbeat = await maybeHeartbeatSummary(env, stale.length);
+  const heartbeat = await maybeHeartbeatSummary(env, stale.length, allowTelegram);
   const receipt = {
     schema: "noos-deadman-run-v1",
     run_at: new Date().toISOString(),
@@ -228,7 +267,7 @@ async function runCheck(env, meta = {}) {
 
 export default {
   async scheduled(event, env, ctx) {
-    ctx.waitUntil(runCheck(env, { source: "cf-cron", cron: event?.cron || config.cron }));
+    ctx.waitUntil(runCheck(env, { source: "cf-cron", allowTelegram: true, cron: event?.cron || config.cron }));
   },
 
   async fetch(request, env) {
@@ -252,12 +291,18 @@ export default {
         supabase_ready: Boolean(supabaseBase(env)),
         loop_runner_ready: Boolean(env.LOOP_RUNNER_URL),
         telegram_ready: Boolean(env.DEADMAN_TELEGRAM_BOT_TOKEN && env.DEADMAN_TELEGRAM_CHAT_ID),
+        telegram_send_alerts: (config.telegram_lane || {}).send_alerts === true,
+        telegram_lane_forbidden: (config.telegram_lane || {}).forbidden_bot_usernames || [],
         interval_multiplier: (config.interval_multipliers || {}).default || 2,
         restart_attempts_max: config.restart_attempts_max || 1,
       });
     }
     if (url.pathname === "/check" && request.method === "POST") {
-      const receipt = await runCheck(env, { source: "http_check" });
+      const explicitTelegram = url.searchParams.get("telegram") === "1";
+      const receipt = await runCheck(env, {
+        source: "http_check",
+        allowTelegram: explicitTelegram,
+      });
       return json(receipt, receipt.ok ? 200 : 502);
     }
     return json({ ok: false, error: "not_found" }, 404);

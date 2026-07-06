@@ -38,11 +38,24 @@ cp "$CONFIG_SRC" "$WORKER_DIR/src/deadman-config.json"
 
 cd "$WORKER_DIR"
 
+echo "== Deadman Telegram lane verify (blocks @Gateway_A and generic TELEGRAM_* env) =="
+if [[ -n "${DEADMAN_TELEGRAM_BOT_TOKEN:-}" ]]; then
+  python3 "$ROOT/scripts/verify_noos_deadman_telegram_lane_v1.py" --fail-on-forbidden || {
+    echo "FAIL: Telegram lane blocked. Use a dedicated deadman bot — NEVER @Gateway_A or NF Probe Bot." >&2
+    exit 1
+  }
+else
+  echo "WARN: DEADMAN_TELEGRAM_BOT_TOKEN not in shell — skipping local lane verify (send_alerts=false in config until founder enables)"
+fi
+
 for key in NOETFIELD_SUPABASE_URL SUPABASE_URL NOETFIELD_SUPABASE_SERVICE_ROLE_KEY SUPABASE_SERVICE_ROLE_KEY \
   LOOP_RUNNER_URL LOOP_RUNNER_SECRET DEADMAN_TELEGRAM_BOT_TOKEN DEADMAN_TELEGRAM_CHAT_ID; do
   val="${!key:-}"
   if [[ -n "$val" ]]; then
-    printf '%s' "$val" | wrangler secret put "$key" 2>/dev/null || true
+    printf '%s' "$val" | wrangler secret put "$key" || {
+      echo "FAIL: wrangler secret put $key" >&2
+      exit 1
+    }
   fi
 done
 

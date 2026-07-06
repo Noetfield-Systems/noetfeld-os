@@ -14,7 +14,8 @@
   "operator_checklist": [
     "make cloud-motor-e2e — daily or after any deploy",
     "make cloud-motor-resync — on CF 401 or secret drift",
-    "make deadman-probe — confirm stale_count and telegram_ready",
+    "make deadman-probe — uses /check?telegram=0 (never messages any chat)",
+    "make deadman-telegram-verify — block Gateway_A / wrong bots before deploy",
     "UptimeRobot: alert-only on 4 URLs below (no loop dispatches)",
     "cron-job.org: optional POST deadman /check every 30m (tertiary probe)"
   ],
@@ -52,7 +53,8 @@
         "interval_minutes": 15
       }
     ],
-    "alert_channels": ["email", "telegram_if_connected"]
+    "alert_channels": ["email"],
+    "never_use": ["@Gateway_A", "NF Probe Bot", "Signal Factory", "Noetfield Ops Telegram", "generic TELEGRAM_* env vars"]
   },
   "cron_job_org": {
     "roi": "medium",
@@ -65,8 +67,8 @@
         "title": "NOOS deadman external probe",
         "schedule": "every 30 minutes",
         "method": "POST",
-        "url": "https://noos-deadman-v1.sina-kazemnezhad-ca.workers.dev/check",
-        "purpose": "Independent path to run deadman check if CF scheduled() misfires (not a second loop motor)"
+        "url": "https://noos-deadman-v1.sina-kazemnezhad-ca.workers.dev/check?telegram=0",
+        "purpose": "Independent deadman check WITHOUT Telegram (never Gateway_A or other bots)"
       }
     ]
   },

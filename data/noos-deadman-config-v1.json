@@ -6,6 +6,21 @@
     "default": 2
   },
   "alert_channels": ["telegram"],
+  "telegram_lane": {
+    "one_law": "NOOS deadman ONLY. Never Gateway_A, NF Probe Bot, Signal Factory, or generic TELEGRAM_* env.",
+    "secret_names_only": ["DEADMAN_TELEGRAM_BOT_TOKEN", "DEADMAN_TELEGRAM_CHAT_ID"],
+    "forbidden_bot_usernames": [
+      "Gateway_A",
+      "gateway_a",
+      "NFProbeBot",
+      "nf_probe_bot",
+      "NoetfieldOpsBot"
+    ],
+    "allowed_bot_username": "",
+    "send_alerts": false,
+    "probe_suppress_telegram": true,
+    "founder_test_query_param": "telegram=1"
+  },
   "restart_attempts_max": 1,
   "loop_runner": {
     "health_path": "/health",

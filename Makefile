@@ -93,7 +93,14 @@ deadman-deploy:
 	bash scripts/deploy_noos_deadman_cf_v1.sh
 
 deadman-probe:
-	curl -fsS -X POST "https://noos-deadman-v1.sina-kazemnezhad-ca.workers.dev/check" | python3 -m json.tool
+	curl -fsS -X POST "https://noos-deadman-v1.sina-kazemnezhad-ca.workers.dev/check?telegram=0" | python3 -m json.tool
+
+deadman-telegram-verify:
+	python3 scripts/verify_noos_deadman_telegram_lane_v1.py --fail-on-forbidden --json
+
+deadman-telegram-test:
+	@echo "Founder-only: sends ONE test alert if lane valid and send_alerts=true in config"
+	curl -fsS -X POST "https://noos-deadman-v1.sina-kazemnezhad-ca.workers.dev/check?telegram=1" | python3 -m json.tool
 
 cloud-motor-e2e:
 	bash scripts/verify_noos_cloud_motor_e2e_v1.sh
