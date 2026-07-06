@@ -1,0 +1,45 @@
+name: NF Kaizen nightly
+
+on:
+  schedule:
+    # 02:00 America/Vancouver (PDT) ≈ 09:00 UTC — after repo-health enqueue window
+    - cron: "0 9 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  kaizen:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e ".[dev]"
+
+      - name: Kaizen tick — highest-ROI machine_safe item
+        env:
+          NOETFIELD_SUPABASE_URL: ${{ secrets.NOETFIELD_SUPABASE_URL }}
+          NOETFIELD_SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.NOETFIELD_SUPABASE_SERVICE_ROLE_KEY }}
+        run: |
+          python3 scripts/report_slo_health_v1.py --scope nf-kaizen-nightly --budget-seconds 600 -- \
+            python3 scripts/nf_kaizen_nightly_tick_v1.py --json
+
+      - name: Commit Kaizen fix (if any)
+        run: |
+          if git diff --quiet; then
+            echo "no kaizen file changes"
+            exit 0
+          fi
+          git config user.name "nf-kaizen-nightly"
+          git config user.email "nf-kaizen-nightly@users.noreply.github.com"
+          git add -A
+          git commit -m "Kaizen nightly: machine_safe queue fix"
+          git push origin HEAD:main || echo "push skipped (branch protection — open PR manually)"

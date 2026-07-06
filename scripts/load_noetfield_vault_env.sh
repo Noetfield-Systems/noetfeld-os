@@ -34,6 +34,12 @@ if [[ -f "$NOETFIELD_VAULT" ]]; then
   set -a && source "$NOETFIELD_VAULT" && set +a
 fi
 
+ADMIN_VAULT="${HOME}/.sourcea-secrets/noetfield-admin-dashboard.env"
+if [[ -f "$ADMIN_VAULT" ]]; then
+  # shellcheck disable=SC1090
+  set -a && source "$ADMIN_VAULT" && set +a
+fi
+
 _nf_vault_apply NOETFIELD_SUPABASE_URL SUPABASE_URL
 _nf_vault_apply NOETFIELD_SUPABASE_ANON_KEY SUPABASE_ANON_KEY
 _nf_vault_apply NOETFIELD_SUPABASE_SERVICE_ROLE_KEY SUPABASE_SERVICE_ROLE_KEY

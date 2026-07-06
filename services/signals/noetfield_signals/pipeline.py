@@ -44,6 +44,7 @@ class IngestedSignal(BaseModel):
     received_at: datetime
     provenance: dict[str, object] = Field(default_factory=dict)
     governance_event_id: UUID
+    source_event_id: str | None = None
 
 
 class SignalStore(Protocol):
@@ -95,18 +96,20 @@ class PostgresSignalStore:
                   tenant_id,
                   organization_id,
                   signal_type,
+                  source_event_id,
                   observed_at,
                   received_at,
                   payload,
                   payload_hash,
                   provenance
                 )
-                values ($1, $2, $3, $4, $5, $6, $7::jsonb, $8, $9::jsonb)
+                values ($1, $2, $3, $4, $5, $6, $7, $8::jsonb, $9, $10::jsonb)
                 """,
                 signal.signal_id,
                 signal.tenant_id,
                 signal.organization_id,
                 signal.signal_type,
+                signal.source_event_id,
                 signal.observed_at,
                 signal.received_at,
                 json.dumps(payload, default=str),
@@ -141,6 +144,7 @@ class PostgresSignalStore:
                 received_at=row["received_at"],
                 provenance=dict(row["provenance"] or {}),
                 governance_event_id=row["id"],
+                source_event_id=row["source_event_id"],
             )
             for row in reversed(rows)
         ]
@@ -194,6 +198,7 @@ class SignalIngestionPipeline:
             received_at=datetime.now(timezone.utc),
             provenance=command.provenance,
             governance_event_id=event.event_id,
+            source_event_id=command.source_event_id,
         )
         await self.store.append(signal, command.payload)
         trace = await self.event_bus.publish(event)

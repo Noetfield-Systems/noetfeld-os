@@ -9,14 +9,19 @@ from noetfield_config.intake import (
 from functools import lru_cache
 from typing import Literal
 
-from pydantic import Field, SecretStr
+from pydantic import AliasChoices, Field, SecretStr
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
     """Environment-backed settings shared by the modular monolith."""
 
-    model_config = SettingsConfigDict(env_file=".env", env_prefix="", extra="ignore")
+    model_config = SettingsConfigDict(
+        env_file=".env",
+        env_prefix="",
+        extra="ignore",
+        populate_by_name=True,
+    )
 
     noetfield_env: Literal["local", "dev", "staging", "prod"] = "local"
     noetfield_service_name: str = "noetfield-platform"
@@ -100,6 +105,79 @@ class Settings(BaseSettings):
     resend_webhook_secret: SecretStr | None = Field(
         default=None,
         description="Resend webhook signing secret (whsec_…) for email.delivered / email.bounced.",
+    )
+    gmail_sweep_enabled: bool = Field(
+        default=False,
+        description="Enable scheduled Gmail sweep for operations@ → signals ingestion.",
+    )
+    gmail_sweep_interval_sec: int = Field(
+        default=300,
+        ge=60,
+        le=3600,
+        description="Background Gmail sweep interval in seconds.",
+    )
+    gmail_sweep_max_messages: int = Field(
+        default=25,
+        ge=1,
+        le=100,
+        description="Max Gmail messages processed per sweep tick.",
+    )
+    gmail_mailbox: str = Field(
+        default="operations@noetfield.com",
+        description="Workspace mailbox for IMAP operations inbox sweep.",
+    )
+    gmail_app_password: SecretStr | None = Field(
+        default=None,
+        description="Workspace app password for Gmail IMAP sweep.",
+        validation_alias=AliasChoices(
+            "GMAIL_APP_PASSWORD",
+            "NF_OPERATIONS_GOOGLE_WORKSPACE_APP_PASSWORD",
+        ),
+    )
+    gmail_processed_label: str = Field(
+        default="nf-processed",
+        description="Gmail label applied after a message is ingested as a signal.",
+    )
+    gmail_sweep_query: str = Field(
+        default="label:INBOX -label:nf-processed",
+        description="Gmail search query for unprocessed inbox messages.",
+    )
+    operations_inbox_tenant_id: str = Field(
+        default="00000000-0000-4000-8000-000000000001",
+        description="Tenant UUID for operations inbox signals.",
+    )
+    operations_inbox_organization_id: str = Field(
+        default="00000000-0000-4000-8000-000000000002",
+        description="Organization UUID for operations inbox signals.",
+    )
+    signal_triage_enabled: bool = Field(
+        default=False,
+        description="Enable Signal Factory rubric triage on operations_inbox_email signals.",
+    )
+    signal_triage_interval_sec: int = Field(
+        default=120,
+        ge=30,
+        le=3600,
+        description="Background signal triage interval in seconds.",
+    )
+    signal_triage_max_signals: int = Field(
+        default=25,
+        ge=1,
+        le=100,
+        description="Max untriaged signals processed per triage tick.",
+    )
+    telegram_ops_bot_token: SecretStr | None = Field(
+        default=None,
+        validation_alias=AliasChoices(
+            "TELEGRAM_NOETFIELD_OPS_BOT_TOKEN",
+            "TELEGRAM_OPS_BOT_TOKEN",
+            "telegram_ops_bot_token",
+        ),
+        description="@noetfield_ops_bot token for operations triage verdicts.",
+    )
+    telegram_ops_chat_id: str = Field(
+        default="8635650894",
+        description="Founder ops Telegram chat id for triage + intake verdicts.",
     )
     intake_smtp_host: str | None = Field(
         default=None,

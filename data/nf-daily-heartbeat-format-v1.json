@@ -1,0 +1,13 @@
+{
+  "schema_version": "nf-daily-heartbeat-format-v1",
+  "line_template": "NF-DAILY-HEARTBEAT v1 | {ts_utc} | supabase_rest={supabase_rest} supabase_sql={supabase_sql} platform={platform} www={www} | slo={slo}",
+  "fields": {
+    "ts_utc": "ISO8601 UTC timestamp",
+    "supabase_rest": "PASS|FAIL|SKIP",
+    "supabase_sql": "PASS|FAIL|SKIP",
+    "platform": "PASS|FAIL|SKIP",
+    "www": "PASS|FAIL|SKIP",
+    "slo": "PASS|FAIL"
+  },
+  "notes": "One line per run — machine-parseable; full JSON receipt written separately."
+}

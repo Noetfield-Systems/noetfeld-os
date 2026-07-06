@@ -53,4 +53,10 @@ def test_improvement_queue_migration_lexical_order() -> None:
     migrations = sorted((ROOT / "infrastructure" / "supabase" / "migrations").glob("*.sql"))
     names = [m.name for m in migrations]
     assert "0013_improvement_queue_and_probe_receipts.sql" in names
-    assert names[-1] == "0014_probe_tables_public_rest.sql"
+    idx = names.index("0013_improvement_queue_and_probe_receipts.sql")
+    tail = names[idx:]
+    assert tail[:3] == [
+        "0013_improvement_queue_and_probe_receipts.sql",
+        "0014_probe_tables_public_rest.sql",
+        "0015_operations_signal_triage.sql",
+    ]

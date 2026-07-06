@@ -29,11 +29,13 @@ EXPECTED_SHA="${LIVE_PLATFORM_SHA:-$GIT_SHA}"
 
 # shellcheck source=scripts/load_noetfield_vault_env.sh
 source "${ROOT}/scripts/load_noetfield_vault_env.sh"
+# shellcheck source=scripts/read_platform_vault.sh
+source "${ROOT}/scripts/read_platform_vault.sh"
 
 SUPABASE_URL="${NOETFIELD_SUPABASE_URL:-}"
 SUPABASE_SERVICE="${NOETFIELD_SUPABASE_SERVICE_ROLE_KEY:-}"
-TELEGRAM_TOKEN="$(read_vault TELEGRAM_NOETFIELD_OPS_BOT_TOKEN || true)"
-TELEGRAM_CHAT="$(read_vault TELEGRAM_OPS_CHAT_ID || true)"
+TELEGRAM_TOKEN="$(read_platform_vault TELEGRAM_NOETFIELD_OPS_BOT_TOKEN 2>/dev/null || read_platform_vault TELEGRAM_BOT_TOKEN 2>/dev/null || true)"
+TELEGRAM_CHAT="$(read_platform_vault TELEGRAM_OPS_CHAT_ID 2>/dev/null || true)"
 [[ -n "$TELEGRAM_CHAT" ]] || TELEGRAM_CHAT="8635650894"
 
 log "deploy nf-probe-cron from ${WORKER_DIR}"

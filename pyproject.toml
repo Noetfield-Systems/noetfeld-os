@@ -22,6 +22,7 @@ dependencies = [
   "temporalio",
   "uvicorn",
   "pyyaml",
+  "requests",
 ]
 
 [build-system]

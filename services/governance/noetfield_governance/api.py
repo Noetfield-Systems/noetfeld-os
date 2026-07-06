@@ -46,6 +46,20 @@ from noetfield_governance.analytics_store import (
     PostgresAnalyticsStore,
     build_analytics_event,
 )
+from noetfield_governance.gmail_sweep_worker import (
+    get_gmail_sweep_worker,
+    init_gmail_sweep_worker,
+    settings_from_platform as gmail_sweep_settings_from_platform,
+    start_gmail_sweep_scheduler,
+    stop_gmail_sweep_scheduler,
+)
+from noetfield_governance.signal_triage_worker import (
+    get_signal_triage_worker,
+    init_signal_triage_worker,
+    settings_from_platform as signal_triage_settings_from_platform,
+    start_signal_triage_scheduler,
+    stop_signal_triage_scheduler,
+)
 from noetfield_governance.public_intake import submit_intake
 from noetfield_governance.sandbox_service import (
     build_board_export_pdf,
@@ -371,10 +385,23 @@ async def startup_platform() -> None:
         enabled=settings.redis_sessions_enabled,
     )
     await event_bus.subscribe(name="audit-ledger-runtime", event_types={"*"}, handler=audit_runtime.record_event)
+    await init_gmail_sweep_worker(
+        settings=settings,
+        signal_pipeline=signal_pipeline,
+        database_url=settings.database_url,
+    )
+    await start_gmail_sweep_scheduler(settings)
+    await init_signal_triage_worker(
+        settings=settings,
+        database_url=settings.database_url,
+    )
+    await start_signal_triage_scheduler(settings)
 
 
 @app.on_event("shutdown")
 async def shutdown_runtime() -> None:
+    await stop_gmail_sweep_scheduler()
+    await stop_signal_triage_scheduler()
     await intake_repository.close_intake_repository()
     await redis_runtime.close()
     stores = [
@@ -1108,6 +1135,68 @@ async def intake_resend_webhook(request: Request) -> dict[str, object]:
         if err == "resend_webhook_not_configured":
             raise HTTPException(status_code=503, detail=err)
         raise HTTPException(status_code=400, detail=err)
+    return result
+
+
+def _require_admin_secret(request: Request) -> None:
+    admin_secret = _admin_dashboard_secret()
+    if not admin_secret:
+        return
+    auth = request.headers.get("X-Admin-Secret", "")
+    if auth != admin_secret:
+        raise HTTPException(status_code=403, detail="Invalid admin secret")
+
+
+@app.get("/api/operations/gmail/sweep/health", tags=["operations"], include_in_schema=False)
+async def gmail_sweep_health() -> dict[str, object]:
+    configured = gmail_sweep_settings_from_platform(settings) is not None
+    worker = get_gmail_sweep_worker()
+    payload: dict[str, object] = {
+        "enabled": bool(settings.gmail_sweep_enabled),
+        "configured": configured,
+        "mailbox": settings.gmail_mailbox,
+        "interval_sec": settings.gmail_sweep_interval_sec,
+    }
+    if worker is not None:
+        payload["worker"] = await worker.health()
+    return payload
+
+
+@app.post("/api/operations/gmail/sweep", tags=["operations"], include_in_schema=False)
+async def gmail_sweep_run(request: Request) -> dict[str, object]:
+    _require_admin_secret(request)
+    worker = get_gmail_sweep_worker()
+    if worker is None:
+        raise HTTPException(status_code=503, detail="gmail_sweep_not_configured")
+    result = await worker.run_once()
+    if not result.get("ok"):
+        raise HTTPException(status_code=502, detail=str(result.get("error") or "gmail_sweep_failed"))
+    return result
+
+
+@app.get("/api/operations/signal-triage/health", tags=["operations"], include_in_schema=False)
+async def signal_triage_health() -> dict[str, object]:
+    configured = signal_triage_settings_from_platform(settings) is not None
+    worker = get_signal_triage_worker()
+    payload: dict[str, object] = {
+        "enabled": bool(settings.signal_triage_enabled),
+        "configured": configured,
+        "interval_sec": settings.signal_triage_interval_sec,
+    }
+    if worker is not None:
+        payload["worker"] = await worker.health()
+    return payload
+
+
+@app.post("/api/operations/signal-triage/run", tags=["operations"], include_in_schema=False)
+async def signal_triage_run(request: Request) -> dict[str, object]:
+    _require_admin_secret(request)
+    worker = get_signal_triage_worker()
+    if worker is None:
+        raise HTTPException(status_code=503, detail="signal_triage_not_configured")
+    result = await worker.run_once()
+    if not result.get("ok"):
+        raise HTTPException(status_code=502, detail=str(result.get("error") or "signal_triage_failed"))
     return result
 
 

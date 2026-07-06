@@ -1,0 +1,24 @@
+{
+  "schema_version": "copilot-scheduled-automations-locked-v1",
+  "policy": "all_disabled",
+  "reason": "Nightly Kaizen tick + 07:00 daily heartbeat replace Copilot scheduled agent automations for Noetfield repo ops.",
+  "replacement_surfaces": [
+    ".github/workflows/nf-kaizen-nightly.yml",
+    ".github/workflows/nf-daily-heartbeat.yml"
+  ],
+  "automations": [
+    {
+      "id": "cursor-copilot-scheduled-agents",
+      "surface": "cursor-automations",
+      "enabled": false,
+      "note": "Disable all scheduled Cursor Agent automations for this repo in Cursor → Automations."
+    },
+    {
+      "id": "cursor-copilot-night-ship",
+      "surface": "cursor-automations",
+      "enabled": false,
+      "note": "Legacy night-ship / autorun Copilot schedules — off; use nf-kaizen-nightly instead."
+    }
+  ],
+  "receipt_path": "~/.sina/nf-copilot-scheduled-automations-disabled-v1.json"
+}

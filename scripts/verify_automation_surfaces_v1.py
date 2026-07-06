@@ -17,6 +17,9 @@ ROOT = Path(__file__).resolve().parents[1]
 MANIFEST = ROOT / "governance" / "AUTOMATION_SURFACES_LOCKED.json"
 MAKEFILE = ROOT / "Makefile"
 HEARTBEAT = ROOT / ".github" / "workflows" / "supabase-heartbeat.yml"
+DAILY_HEARTBEAT = ROOT / ".github" / "workflows" / "nf-daily-heartbeat.yml"
+KAIZEN_NIGHTLY = ROOT / ".github" / "workflows" / "nf-kaizen-nightly.yml"
+COPILOT_DISABLED = ROOT / "governance" / "COPILOT_SCHEDULED_AUTOMATIONS_LOCKED.json"
 
 
 def load_manifest() -> dict[str, Any]:
@@ -70,6 +73,19 @@ def main() -> int:
     require('cron: "0 14 * * 1"' in heartbeat_text, "missing heartbeat cron", failures)
     require("verify_supabase_heartbeat_v1.py" in heartbeat_text, "heartbeat does not invoke heartbeat verifier", failures)
     require("report_slo_health_v1.py" in heartbeat_text, "heartbeat does not invoke SLO reporter", failures)
+
+    daily_text = DAILY_HEARTBEAT.read_text(encoding="utf-8")
+    require('cron: "0 14 * * *"' in daily_text, "missing daily heartbeat cron (07:00 Pacific)", failures)
+    require("nf_daily_heartbeat_v1.py" in daily_text, "daily heartbeat does not invoke nf_daily_heartbeat_v1", failures)
+
+    kaizen_text = KAIZEN_NIGHTLY.read_text(encoding="utf-8")
+    require('cron: "0 9 * * *"' in kaizen_text, "missing kaizen nightly cron", failures)
+    require("nf_kaizen_nightly_tick_v1.py" in kaizen_text, "kaizen nightly does not invoke tick script", failures)
+
+    copilot = json.loads(COPILOT_DISABLED.read_text(encoding="utf-8"))
+    require(copilot.get("policy") == "all_disabled", "copilot scheduled automations not all_disabled", failures)
+    for auto in copilot.get("automations", []):
+        require(auto.get("enabled") is False, f"copilot automation still enabled: {auto.get('id')}", failures)
 
     adopted = {
         item.get("id"): item.get("fit")

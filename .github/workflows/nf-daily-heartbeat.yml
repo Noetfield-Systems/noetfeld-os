@@ -1,0 +1,29 @@
+name: NF daily heartbeat
+
+on:
+  schedule:
+    # 07:00 America/Vancouver (PDT) ≈ 14:00 UTC
+    - cron: "0 14 * * *"
+  workflow_dispatch:
+
+jobs:
+  heartbeat:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install heartbeat deps
+        run: python3 -m pip install --quiet asyncpg
+
+      - name: Daily heartbeat (fixed format)
+        env:
+          NOETFIELD_SUPABASE_URL: ${{ secrets.NOETFIELD_SUPABASE_URL }}
+          NOETFIELD_SUPABASE_ANON_KEY: ${{ secrets.NOETFIELD_SUPABASE_ANON_KEY }}
+          NOETFIELD_SUPABASE_DATABASE_URL: ${{ secrets.NOETFIELD_SUPABASE_DATABASE_URL }}
+        run: |
+          python3 scripts/report_slo_health_v1.py --scope nf-daily-heartbeat --budget-seconds 180 -- \
+            python3 scripts/nf_daily_heartbeat_v1.py

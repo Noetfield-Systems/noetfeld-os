@@ -139,6 +139,36 @@
       "kind": "script",
       "path": "scripts/verify_supabase_heartbeat_v1.py",
       "purpose": "Supabase REST and SQL heartbeat verifier used by the scheduled workflow."
+    },
+    {
+      "id": "nf-daily-heartbeat",
+      "kind": "scheduled-workflow",
+      "path": ".github/workflows/nf-daily-heartbeat.yml",
+      "purpose": "07:00 Pacific daily heartbeat — fixed one-line format + SLO receipt."
+    },
+    {
+      "id": "nf-kaizen-nightly",
+      "kind": "scheduled-workflow",
+      "path": ".github/workflows/nf-kaizen-nightly.yml",
+      "purpose": "Nightly Kaizen — one highest-ROI machine_safe queue item with external verify and rollback."
+    },
+    {
+      "id": "nf-daily-heartbeat-script",
+      "kind": "script",
+      "path": "scripts/nf_daily_heartbeat_v1.py",
+      "purpose": "Emits NF-DAILY-HEARTBEAT v1 fixed-format line and JSON receipt."
+    },
+    {
+      "id": "nf-kaizen-nightly-script",
+      "kind": "script",
+      "path": "scripts/nf_kaizen_nightly_tick_v1.py",
+      "purpose": "Kaizen tick runner — improvement_queue pick, fix, verify, Supabase receipt."
+    },
+    {
+      "id": "copilot-scheduled-disabled",
+      "kind": "policy-manifest",
+      "path": "governance/COPILOT_SCHEDULED_AUTOMATIONS_LOCKED.json",
+      "purpose": "All Copilot scheduled automations disabled — Kaizen + daily heartbeat replace them."
     }
   ]
 }

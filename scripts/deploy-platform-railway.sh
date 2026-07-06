@@ -6,21 +6,17 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT"
 
+# shellcheck source=scripts/read_platform_vault.sh
+source "${ROOT}/scripts/read_platform_vault.sh"
+
 PROJECT_NAME="${RAILWAY_PROJECT_NAME:-noetfield-platform}"
 API_SERVICE="${RAILWAY_API_SERVICE:-platform-api}"
 PG_SERVICE="${RAILWAY_PG_SERVICE:-postgres}"
 REDIS_SERVICE="${RAILWAY_REDIS_SERVICE:-redis}"
 PLATFORM_DOMAIN="${NF_PLATFORM_LIVE_DOMAIN:-platform.noetfield.com}"
-VAULT="${HOME}/.sina/secrets.env"
 CF_ZONE="${CF_NOETFIELD_ZONE_ID:-456aeba6b1a37d1fadbf6443cb929468}"
 
 log() { printf '[upg-www-001] %s\n' "$*"; }
-
-read_vault() {
-  local key="$1"
-  if [[ ! -f "$VAULT" ]]; then return 1; fi
-  grep -E "^${key}=" "$VAULT" | tail -1 | cut -d= -f2- | tr -d '"' || true
-}
 
 railway_cmd() {
   RAILWAY_CALLER="skill:use-railway" RAILWAY_AGENT_SESSION="${RAILWAY_AGENT_SESSION:-upg-www-001-$$}" \
@@ -52,10 +48,10 @@ ensure_data_services() {
 set_platform_variables() {
   log "Setting platform API variables on service ${API_SERVICE}..."
   local or_key resend_key resend_webhook_secret event_secret
-  or_key="$(read_vault OPENROUTER_API_KEY || true)"
-  resend_key="$(read_vault RESEND_API_KEY || true)"
-  resend_webhook_secret="$(read_vault RESEND_WEBHOOK_SECRET || true)"
-  event_secret="$(read_vault EVENT_INTEGRITY_SECRET || true)"
+  or_key="$(read_platform_vault OPENROUTER_API_KEY || true)"
+  resend_key="$(read_platform_vault RESEND_API_KEY || true)"
+  resend_webhook_secret="$(read_platform_vault RESEND_WEBHOOK_SECRET || true)"
+  event_secret="$(read_platform_vault EVENT_INTEGRITY_SECRET || true)"
 
   railway_cmd variable set --service "$API_SERVICE" --skip-deploys \
     NOETFIELD_ENV=prod \
@@ -75,6 +71,30 @@ set_platform_variables() {
   [[ -n "$or_key" ]] && railway_cmd variable set --service "$API_SERVICE" --skip-deploys OPENROUTER_API_KEY="$or_key"
   [[ -n "$resend_key" ]] && railway_cmd variable set --service "$API_SERVICE" --skip-deploys RESEND_API_KEY="$resend_key"
   [[ -n "$resend_webhook_secret" ]] && railway_cmd variable set --service "$API_SERVICE" --skip-deploys RESEND_WEBHOOK_SECRET="$resend_webhook_secret"
+  local gmail_app_pw tg_token tg_chat sweep_enabled triage_enabled admin_secret
+  gmail_app_pw="$(read_gmail_app_password 2>/dev/null || true)"
+  tg_token="$(read_platform_vault TELEGRAM_NOETFIELD_OPS_BOT_TOKEN 2>/dev/null || read_platform_vault TELEGRAM_BOT_TOKEN 2>/dev/null || true)"
+  tg_chat="$(read_platform_vault TELEGRAM_OPS_CHAT_ID 2>/dev/null || true)"
+  admin_secret="$(read_platform_vault ADMIN_DASHBOARD_SECRET 2>/dev/null || true)"
+  sweep_enabled="${GMAIL_SWEEP_ENABLED:-false}"
+  triage_enabled="${SIGNAL_TRIAGE_ENABLED:-false}"
+  if [[ -n "$gmail_app_pw" ]]; then
+    sweep_enabled="${GMAIL_SWEEP_ENABLED:-true}"
+    triage_enabled="${SIGNAL_TRIAGE_ENABLED:-true}"
+    railway_cmd variable set --service "$API_SERVICE" --skip-deploys GMAIL_APP_PASSWORD="$gmail_app_pw"
+    railway_cmd variable set --service "$API_SERVICE" --skip-deploys NF_OPERATIONS_GOOGLE_WORKSPACE_APP_PASSWORD="$gmail_app_pw"
+  fi
+  railway_cmd variable set --service "$API_SERVICE" --skip-deploys \
+    GMAIL_SWEEP_ENABLED="$sweep_enabled" \
+    GMAIL_MAILBOX="${GMAIL_MAILBOX:-operations@noetfield.com}" \
+    OPERATIONS_INBOX_TENANT_ID="${OPERATIONS_INBOX_TENANT_ID:-00000000-0000-4000-8000-000000000001}" \
+    OPERATIONS_INBOX_ORGANIZATION_ID="${OPERATIONS_INBOX_ORGANIZATION_ID:-00000000-0000-4000-8000-000000000002}" \
+    SIGNAL_TRIAGE_ENABLED="$triage_enabled" \
+    SIGNAL_TRIAGE_INTERVAL_SEC="${SIGNAL_TRIAGE_INTERVAL_SEC:-120}"
+  [[ -n "$tg_token" ]] && railway_cmd variable set --service "$API_SERVICE" --skip-deploys TELEGRAM_NOETFIELD_OPS_BOT_TOKEN="$tg_token"
+  [[ -n "$tg_token" ]] && railway_cmd variable set --service "$API_SERVICE" --skip-deploys TELEGRAM_BOT_TOKEN="$tg_token"
+  [[ -n "$tg_chat" ]] && railway_cmd variable set --service "$API_SERVICE" --skip-deploys TELEGRAM_OPS_CHAT_ID="$tg_chat"
+  [[ -n "$admin_secret" ]] && railway_cmd variable set --service "$API_SERVICE" --skip-deploys ADMIN_DASHBOARD_SECRET="$admin_secret"
   [[ -n "$event_secret" ]] && railway_cmd variable set --service "$API_SERVICE" --skip-deploys EVENT_INTEGRITY_SECRET="$event_secret"
 }
 
