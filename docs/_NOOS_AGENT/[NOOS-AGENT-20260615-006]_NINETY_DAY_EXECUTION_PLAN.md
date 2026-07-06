@@ -14,7 +14,7 @@ related_docs: NOOS-AGENT-20260529-002, NOOS-AGENT-20260608-004, NOOS-AGENT-20260
 **Window:** 2026-06-15 → 2026-09-12 (12 weeks)  
 **Product:** Noetfield OS — Governance Execution Layer (GEL)  
 **Parent:** Noetfield Systems Inc. (`noetfield.com`)  
-**Status:** Active — supersedes informal priority lists
+**Status:** Active — commercial/GEL tracks · loop autonomy defers to Living System 99 (`NOOS-AGENT-20260705-029`)
 
 ---
 

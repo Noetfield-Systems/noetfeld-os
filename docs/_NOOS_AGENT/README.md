@@ -51,8 +51,11 @@ See `MANIFEST.json` for machine-readable trace registry.
 
 | trace_id | file | summary |
 |----------|------|---------|
+| `NOOS-AGENT-20260705-029` | `[NOOS-AGENT-20260705-029]_LIVING_SYSTEM_99_PLAN_LOCKED_v1.md` | **Active — loop/autonomy authority** |
+| `NOOS-AGENT-20260706-031` | `[NOOS-AGENT-20260706-031]_DEADMAN_TELEGRAM_LANE_LOCKED_v1.md` | **Telegram lane law (never Gateway_A)** |
+| `NOOS-AGENT-20260706-032` | `[NOOS-AGENT-20260706-032]_STALE_DOC_REGISTER_v1.md` | **Superseded doc register** |
 | `NOOS-AGENT-20260608-005` | `[NOOS-AGENT-20260608-005]_ORIENTATION_START_HERE.md` | **Start here every session** |
-| `NOOS-AGENT-20260615-006` | `[NOOS-AGENT-20260615-006]_NINETY_DAY_EXECUTION_PLAN.md` | **Active 90-day plan** |
+| `NOOS-AGENT-20260615-006` | `[NOOS-AGENT-20260615-006]_NINETY_DAY_EXECUTION_PLAN.md` | GEL/commercial 90-day (not loop motor) |
 | `NOOS-AGENT-20260529-002` | `[NOOS-AGENT-20260529-002]_BUSINESS_PRODUCT_CLIENT_DEFINITION.md` | Business, product & ICP |
 | `NOOS-AGENT-20260615-007` | `[NOOS-AGENT-20260615-007]_GLOSSARY_AND_PLANE_TAGS.md` | GEL glossary + plane tags |
 | `NOOS-AGENT-20260615-008` | `[NOOS-AGENT-20260615-008]_GEL_WEB_URL_STRUCTURE.md` | noetfield.com/gel draft IA |

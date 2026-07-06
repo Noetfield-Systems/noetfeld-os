@@ -260,6 +260,12 @@
       "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260706-031]_DEADMAN_TELEGRAM_LANE_LOCKED_v1.md",
       "doc_type": "DEADMAN_TELEGRAM_LANE_LOCKED",
       "title": "Deadman Telegram lane — LOCKED v1 (never Gateway_A)"
+    },
+    {
+      "trace_id": "NOOS-AGENT-20260706-032",
+      "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260706-032]_STALE_DOC_REGISTER_v1.md",
+      "doc_type": "STALE_DOC_REGISTER",
+      "title": "Stale doc register — superseded plans and stale claims"
     }
   ]
 }

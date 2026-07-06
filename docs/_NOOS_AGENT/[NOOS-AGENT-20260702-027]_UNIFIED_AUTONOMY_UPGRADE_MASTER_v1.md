@@ -14,7 +14,8 @@ machine_backlog: data/noos-unified-upgrade-backlog-v1.json
 manifest: docs/_NOOS_AGENT/MANIFEST.json
 -->
 
-**Status:** ACTIVE · 2026-07-02  
+**Status:** SUPERSEDED for loop/autonomy · 2026-07-02  
+**Superseded by:** `[NOOS-AGENT-20260705-029]_LIVING_SYSTEM_99_PLAN_LOCKED_v1.md` — use `data/noos-unified-upgrade-backlog-v1.json` for tier backlog only.
 **Goal:** Fly.io-grade autonomous full stack — always-on runtime + governed control plane  
 **Machine backlog:** `data/noos-unified-upgrade-backlog-v1.json` (62 items, tiered)  
 **Upgrade planes:** `data/noos-upgrade-planes-v1.json` · [NOOS-AGENT-20260702-028]([NOOS-AGENT-20260702-028]_TEN_UPGRADE_PLANES_v1.md) · `make planes`
