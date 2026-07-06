@@ -33,7 +33,9 @@
     "noos-agent-vault": ["gha-noos-agent-vault"],
     "noos-schedule-canary": ["gha-noos-schedule-canary"],
     "noos-machine-loops": ["noos-machine-auditor", "noos-machine-reconciler"],
-    "noos-improve-kaizen-daily": ["gha-loop-fleet"]
+    "noos-improve-kaizen-daily": ["gha-loop-fleet"],
+    "cost-policy-scan": ["gha-cost-policy-scan"],
+    "noos-discovery": ["gha-noos-discovery"]
   },
   "surfaces": {
     "T0_machine": "GitHub Actions schedules, repository_dispatch, CF cron, worker-kernel T0",
@@ -464,6 +466,33 @@
       "mutex_groups": ["drift-proof"],
       "primary_task_kinds": ["pytest", "gate", "governance_verify"],
       "gha_workflow": "gel-ci"
+    },
+    {
+      "worker_id": "gha-cost-policy-scan",
+      "surface": "github_actions",
+      "tier": "T0_machine",
+      "cadence": "on_push_pr",
+      "mission_id": "M2",
+      "territory": "cost-policy-gate",
+      "write_scope": [],
+      "read_only": true,
+      "mutex_groups": ["drift-proof"],
+      "primary_task_kinds": ["cost_policy_scan", "governance_verify"],
+      "gha_workflow": "cost-policy-scan"
+    },
+    {
+      "worker_id": "gha-noos-discovery",
+      "surface": "github_actions",
+      "tier": "T0_machine",
+      "cadence": "on_push_pr",
+      "mission_id": "M2",
+      "territory": "dispatcher-discovery",
+      "write_scope": [],
+      "read_only": true,
+      "mutex_groups": ["drift-proof"],
+      "primary_task_kinds": ["dispatcher_discovery"],
+      "gha_workflow": "noos-discovery",
+      "notes": "Non-enforcing until ops promotes to blocking gate"
     },
     {
       "worker_id": "gha-deploy-noos-cloud-workers",

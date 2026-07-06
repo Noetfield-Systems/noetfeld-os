@@ -1,0 +1,36 @@
+{
+  "schema": "noos-copilot-dispatcher-mode-v1",
+  "version": "1.0.0",
+  "default_allowed_modes": [
+    "read_status",
+    "publish_receipt",
+    "publish_status",
+    "publish_drift_report",
+    "prepare_draft_branch",
+    "prepare_pr"
+  ],
+  "blocked_modes": [
+    "fleet_rollout",
+    "active_promotion",
+    "direct_main_write",
+    "policy_mutation",
+    "publish_audit_pending_as_active"
+  ],
+  "cloud_write_scopes": [
+    "none",
+    "receipts_only",
+    "status_only",
+    "drift_report_only",
+    "draft_branch",
+    "pr_ready",
+    "release_candidate"
+  ],
+  "enforcement": {
+    "no_single_boolean_authority": true,
+    "fleet_propagation_allowed": false,
+    "main_write_allowed": false,
+    "require_validator_receipt_for_write": true,
+    "validator_receipt_fields": ["validator_id","validation_status","receipt_path","timestamp","cost_policy_pass"]
+  },
+  "notes": "NOOS Copilot may dispatch sync/status/receipt/PR-prep work but is not a policy owner and may not run recurring Copilot automation. Expanding write scopes requires human-approved PR path and validator PASS."
+}

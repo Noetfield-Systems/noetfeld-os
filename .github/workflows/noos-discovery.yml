@@ -1,0 +1,27 @@
+name: NOOS dispatcher discovery (non-enforcing)
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  push:
+    branches: [main, 'copilot/cost-locks-v1', 'lane/copilot-cost-lock-merge']
+
+jobs:
+  discover:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Run NOOS dispatcher discovery (non-enforcing)
+        run: |
+          python3 scripts/ci_discovery_noos_dispatcher.py
+        # non-enforcing: do not fail the job if issues found
+        continue-on-error: true
+      - name: Upload discovery receipt
+        if: always()
+        run: |
+          echo "Discovery run completed. See receipts/ci-discovery-noos-dispatcher.json in the repo for details."

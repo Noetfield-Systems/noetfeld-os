@@ -1,0 +1,15 @@
+{
+  "task": "copilot_policy_request",
+  "timestamp": "2026-07-03T13:58:00Z",
+  "requester": "noos-copilot-github",
+  "summary": "Request org-level cost policy enforcement: forbid premium model routing in scheduled/background jobs; require cost receipt fields on loop runner cycles.",
+  "requested_controls": [
+    "forbidden_models and forbidden_providers denylist in data/cost_policy_machine.json",
+    "CI scanner scripts/cost_policy_scan.py on push and pull_request",
+    "runtime routing guard scripts/runtime_routing_guard.py at worker/kernel entry",
+    "loop runner meter_cost must emit estimated_cost, cost_policy_pass, cost_policy_version"
+  ],
+  "scope": "noetfeld-OS repo + org GHA workflows (read-only audit)",
+  "status": "implemented_on_pr24",
+  "follow_up": "merge PR #24 after scanner PASS; keep fleet_rollout and main_write blocked"
+}
