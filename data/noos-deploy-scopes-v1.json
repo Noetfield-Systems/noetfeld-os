@@ -21,13 +21,15 @@
       "local_smoke_module": "ops/fly/noos-self-heal-runner/server.py"
     },
     "fly-loop-executor": {
-      "title": "Fly Option B HTTP loop executor (one shot per request)",
+      "title": "Fly Option B HTTP loop executor (destroyed — historical only)",
       "upg": "UPG-LS-OPTION-B",
+      "status": "destroyed",
       "fly_app": "noos-loop-executor",
       "fly_config": "ops/fly/noos-loop-executor/fly.toml",
       "health_url": "https://noos-loop-executor.fly.dev/health",
       "loop_url": "https://noos-loop-executor.fly.dev/loop",
-      "local_smoke_module": "ops/fly/noos-loop-executor/server.py"
+      "local_smoke_module": "ops/fly/noos-loop-executor/server.py",
+      "successor": "railway:noos-loop-runner"
     },
     "gel-api": {
       "title": "Railway gel-api (status only until UPG-0213)",

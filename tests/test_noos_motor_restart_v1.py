@@ -34,7 +34,7 @@ def test_unknown_recipe() -> None:
 def test_recipes_file_has_machine_safe_motors() -> None:
     doc = motor.load_recipes()
     ids = {r["id"] for r in doc.get("recipes") or []}
-    assert {"cf-loop-motor", "cf-deadman", "fly-loop-executor"}.issubset(ids)
+    assert {"cf-loop-motor", "cf-deadman", "railway-loop-runner"}.issubset(ids)
 
 
 def test_health_probe_structure() -> None:

@@ -6,6 +6,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import subprocess
 import urllib.error
 import urllib.request
 from datetime import datetime, timezone
@@ -30,6 +31,25 @@ def load_secret() -> str:
         for line in env_file.read_text(encoding="utf-8").splitlines():
             if line.startswith("NOOS_LOOP_SECRET=") or line.startswith("LOOP_RUNNER_SECRET="):
                 return line.split("=", 1)[1].strip()
+    railway = Path.home() / ".railway/bin/railway"
+    service = os.environ.get("RAILWAY_LOOP_RUNNER_SERVICE", "noos-loop-runner")
+    if railway.is_file():
+        try:
+            proc = subprocess.run(
+                [str(railway), "variables", "--service", service, "--json"],
+                capture_output=True,
+                text=True,
+                check=False,
+                timeout=30,
+            )
+            if proc.returncode == 0 and proc.stdout.strip():
+                data = json.loads(proc.stdout)
+                for key in ("NOOS_LOOP_SECRET", "LOOP_RUNNER_SECRET"):
+                    val = str(data.get(key) or "").strip()
+                    if val:
+                        return val
+        except (OSError, json.JSONDecodeError, subprocess.TimeoutExpired):
+            pass
     return ""
 
 

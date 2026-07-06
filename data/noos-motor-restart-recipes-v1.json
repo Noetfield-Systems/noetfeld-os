@@ -9,7 +9,7 @@
       "gate": "machine_safe",
       "worker": "noos-loop-fleet-tick-v1",
       "health_url": "https://noos-loop-fleet-tick-v1.sina-kazemnezhad-ca.workers.dev/health",
-      "description": "Redeploy CF loop fleet tick → Fly executor (NOOS_LOOP_SECRET; no secret rotate)",
+      "description": "Redeploy CF loop fleet tick → Railway executor (NOOS_LOOP_SECRET synced from Railway; legacy FLY_LOOP_EXECUTOR_URL secret holds Railway URL)",
       "steps": [
         {
           "kind": "shell",
@@ -37,20 +37,31 @@
       "external_verify_command": "curl -fsS https://noos-deadman-v1.sina-kazemnezhad-ca.workers.dev/health"
     },
     {
-      "id": "fly-loop-executor",
-      "motor": "fly-loop-executor",
+      "id": "railway-loop-runner",
+      "motor": "railway-loop-runner",
       "gate": "machine_safe",
-      "app": "noos-loop-executor",
-      "health_url": "https://noos-loop-executor.fly.dev/health",
-      "description": "Redeploy Fly loop executor (reuses NOOS_LOOP_SECRET)",
+      "service": "noos-loop-runner",
+      "health_url": "https://noos-loop-runner-production.up.railway.app/health",
+      "description": "Redeploy Railway loop executor (Option A canonical executor)",
       "steps": [
         {
           "kind": "shell",
           "cwd": ".",
-          "command": "bash scripts/deploy_noos_loop_executor_fly_v1.sh"
+          "command": "bash scripts/deploy_noos_loop_runner_railway_v1.sh"
         }
       ],
-      "external_verify_command": "python3 scripts/verify_noos_loop_executor_fly_v1.py --json"
+      "external_verify_command": "python3 scripts/verify_noos_loop_runner_railway_v1.py --json"
+    },
+    {
+      "id": "fly-loop-executor",
+      "motor": "fly-loop-executor",
+      "gate": "founder_gated",
+      "status": "destroyed",
+      "app": "noos-loop-executor",
+      "health_url": "https://noos-loop-executor.fly.dev/health",
+      "description": "DEPRECATED — Fly executor destroyed after Railway cutover; fail-closed",
+      "steps": [],
+      "external_verify_command": null
     },
     {
       "id": "fly-inbox-motor",

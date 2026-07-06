@@ -106,10 +106,14 @@ cloud-motor-e2e:
 	bash scripts/verify_noos_cloud_motor_e2e_v1.sh
 
 cloud-motor-resync:
-	bash scripts/phase_b_wire_cf_fly_motor_v1.sh
+	bash scripts/phase_b_wire_cf_railway_motor_v1.sh
+
+wire-cf-railway-motor:
+	bash scripts/phase_b_wire_cf_railway_motor_v1.sh
 
 wire-cf-fly-motor:
-	bash scripts/phase_b_wire_cf_fly_motor_v1.sh
+	@echo "DEPRECATED: Fly executor destroyed; use wire-cf-railway-motor"
+	bash scripts/phase_b_wire_cf_railway_motor_v1.sh
 
 motor-restart:
 	python3 scripts/noos_motor_restart_v1.py --recipe $(RECIPE) --write-receipt --json

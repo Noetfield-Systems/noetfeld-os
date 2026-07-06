@@ -56,7 +56,10 @@ def executor_env_for_recipe(recipe: dict[str, Any], *, dry_run: bool = False) ->
     env = os.environ.copy()
     if recipe.get("id") != "cf-loop-motor":
         return env
-    env.setdefault("FLY_LOOP_EXECUTOR_URL", "https://noos-loop-executor.fly.dev")
+    env.setdefault(
+        "FLY_LOOP_EXECUTOR_URL",
+        os.environ.get("RAILWAY_LOOP_RUNNER_URL", "https://noos-loop-runner-production.up.railway.app"),
+    )
     if not env.get("NOOS_LOOP_SECRET"):
         if dry_run:
             env["NOOS_LOOP_SECRET"] = "dry-run-placeholder"
@@ -170,7 +173,11 @@ def execute_recipe(
 
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
-    ap.add_argument("--recipe", required=True, help="Recipe id (cf-loop-motor, cf-deadman, fly-loop-executor)")
+    ap.add_argument(
+        "--recipe",
+        required=True,
+        help="Recipe id (cf-loop-motor, cf-deadman, railway-loop-runner)",
+    )
     ap.add_argument("--dry-run", action="store_true")
     ap.add_argument("--force-founder-gated", action="store_true")
     ap.add_argument("--write-receipt", action="store_true")
