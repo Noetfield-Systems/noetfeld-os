@@ -1,0 +1,44 @@
+---
+description: Noetfield public www — research stays in receipts; ship only after verdict (UPG-NF-PUB)
+alwaysApply: true
+---
+
+# Noetfield public site — verdict gate (NOOS integrator)
+
+**Research is input, not output.** Never transfer audit/research findings directly onto noetfield.com or bulk HTML in `Noetfield/`.
+
+## Goal
+
+Public www must stand with best-in-market competitors on **honesty, clarity, and buyer conversion** — not on fabricated proof, internal jargon, or raw research pasted as copy.
+
+## Required pipeline (Track B — UPG-NF-PUB-01/02)
+
+```
+Research / external audit
+  → Verdict doc (ACCEPT | REJECT | DEFER per finding)
+  → Claim–evidence matrix (every strong claim → source or remove)
+  → CTA journey map
+  → Claim-risk matrix P0–P3
+  → Prioritized fix list
+  → P0 www edits only (Small Fix Rule)
+  → Founder gate for copy/IA redesign (P1+)
+  → Receipt + deploy
+```
+
+## Machine-safe outputs (noetfeld-OS / receipts)
+
+- Route inventory, claim matrix, CTA map, risk matrix, fix list → `receipts/proof/` or `docs/_NOOS_AGENT/` only.
+- **Forbidden:** implementing audit copy suggestions in Noetfield repo from NOOS lane without founder verdict.
+
+## PR discipline (when coordinating Noetfield PRs)
+
+- **Split:** tech/verify/CI/asset pins (merge) vs copy/IA (hold until verdict).
+- **Never merge** bulk homepage rewrites titled "per external audit" without claim-evidence sign-off.
+
+## P0 only on www (without founder)
+
+Remove fake claims, fix broken links/routes, stale asset pins, internal language leaks — not redesign from research.
+
+## Authority
+
+`receipts/proof/noos-nf-pub-audit-protocol-v1.json` · `UPG-NF-PUB-01` · `UPG-NF-PUB-02` · unified plan Track B.
