@@ -1,0 +1,21 @@
+{
+  "schema": "noos-nf-pub-audit-protocol-v1",
+  "authority": "UPG-NF-PUB-01",
+  "locked_at": "2026-07-06T10:48:00Z",
+  "topic": "External commercial-readiness and regulatory-safety review of Noetfield public website",
+  "scope": "browser_visible_only",
+  "duration_weeks": "2-4",
+  "deliverables": [
+    "route_inventory",
+    "claim_evidence_matrix",
+    "cta_journey_map",
+    "claim_risk_matrix_p0_p3",
+    "prioritized_fix_list"
+  ],
+  "forbidden": [
+    "backend_probing",
+    "infer_regulated_status_from_copy",
+    "founder_gated_claim_additions_without_signoff"
+  ],
+  "ok": true
+}
