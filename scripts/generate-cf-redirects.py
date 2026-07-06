@@ -14,6 +14,8 @@ OUT = ROOT / "_redirects"
 
 
 def _gov_proxy_rules() -> list[str]:
+    # External-origin proxy is handled by functions/_middleware.js (Cloudflare Pages
+    # _redirects cannot 200-proxy to third-party origins). Keep config read for parity.
     if not PROXY_CFG.is_file():
         return []
     try:
@@ -26,21 +28,9 @@ def _gov_proxy_rules() -> list[str]:
     api = str(cfg.get("gov_api_origin") or "").rstrip("/")
     if not web or not api:
         return []
-    rules: list[str] = [
-        "# Governance workspace proxy (nf-www-gov-proxy-v1)",
-        f"/workspace/* {web}/workspace/:splat 200",
-        f"/workspace {web}/workspace 200",
-        f"/tle/* {api}/tle/:splat 200",
-        f"/tle {api}/tle 200",
-        f"/connectors/* {api}/connectors/:splat 200",
-        f"/connectors {api}/connectors 200",
-        f"/audit/* {api}/audit/:splat 200",
-        f"/audit {api}/audit 200",
-        f"/evidence/* {api}/evidence/:splat 200",
-        f"/api/v1/sandbox/* {api}/api/v1/sandbox/:splat 200",
-        f"/api/v1/sandbox {api}/api/v1/sandbox 200",
+    return [
+        "# Governance workspace proxy: functions/_middleware.js (nf-www-gov-proxy-v1 enabled)",
     ]
-    return rules
 
 
 def main() -> int:
