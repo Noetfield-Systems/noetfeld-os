@@ -1,10 +1,14 @@
 {
   "schema": "noos-trigger-host-inventory-v1",
-  "inventory_at": "2026-07-06T04:10:29Z",
+  "inventory_at": "2026-07-06T04:41:14Z",
   "authority": "LIVING_SYSTEM_99_PLAN_PHASE_A",
   "founder_sign": {
     "required": true,
-    "status": "pending"
+    "status": "signed",
+    "signed_at": "2026-07-06T04:42:00Z",
+    "signed_by": "founder",
+    "pr": 28,
+    "note": "Phase A gate closed — cloud probes green, inventory ratified"
   },
   "loops": [
     {
@@ -502,25 +506,25 @@
     "cf_loop_motor": {
       "url": "https://noos-loop-fleet-tick-v1.sina-kazemnezhad-ca.workers.dev/health",
       "ok": true,
-      "legacy_github_dispatch": true,
-      "railway_motor_deployed": false,
-      "loop_runner_url_ready": null,
-      "target_count": 7,
-      "step_7_secrets_on_worker": false
+      "legacy_github_dispatch": false,
+      "railway_motor_deployed": true,
+      "loop_runner_url_ready": true,
+      "target_count": 13,
+      "step_7_secrets_on_worker": true
     },
     "railway_loop_runner": {
       "url": "https://noos-loop-runner-production.up.railway.app/health",
-      "ok": false,
-      "wrong_image": true,
-      "raw_service": "noetfeld-os",
-      "step_8_deploy_required": true
+      "ok": true,
+      "wrong_image": false,
+      "raw_service": "noos-loop-runner",
+      "step_8_deploy_required": false
     },
     "fly_auth": false,
     "fly_l4_deferred": true,
     "phase_a_steps_6_10": {
       "cf_paid_plan": "founder_confirm",
-      "cf_secrets_wired": false,
-      "railway_loop_runner_live": false,
+      "cf_secrets_wired": true,
+      "railway_loop_runner_live": true,
       "supabase_on_railway": "founder_confirm_railway_dashboard",
       "fly_l4": "deferred"
     }

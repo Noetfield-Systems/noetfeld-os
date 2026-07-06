@@ -280,6 +280,14 @@ def cloud_probes() -> dict[str, Any]:
     }
 
 
+def load_founder_sign() -> dict[str, Any]:
+    if INVENTORY.is_file():
+        row = load_json(INVENTORY).get("founder_sign") or {}
+        if row.get("status") == "signed":
+            return row
+    return {"required": True, "status": "pending"}
+
+
 def build_inventory() -> dict[str, Any]:
     loops = loop_rows()
     autorun = autorun_rows()
@@ -300,7 +308,7 @@ def build_inventory() -> dict[str, Any]:
         "schema": "noos-trigger-host-inventory-v1",
         "inventory_at": utc_now(),
         "authority": "LIVING_SYSTEM_99_PLAN_PHASE_A",
-        "founder_sign": {"required": True, "status": "pending"},
+        "founder_sign": load_founder_sign(),
         "loops": loops,
         "autorun_workflows": autorun,
         "founder_manual_entries": mac_rows,
