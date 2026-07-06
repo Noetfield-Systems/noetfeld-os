@@ -1,0 +1,9 @@
+{
+  "task": "noos_copilot_dispatcher_mode_registration",
+  "timestamp": "2026-07-03T21:45:01-07:00",
+  "summary": "Registered dispatcher machine record in package_map and added non-enforcing discovery CI and changelog.",
+  "package_map_key": "noos-copilot-dispatcher-mode",
+  "machine_record": "data/noos-copilot-dispatcher-mode-v1.json",
+  "discovery_ci_workflow": ".github/workflows/noos-discovery.yml",
+  "changelog": "CHANGELOG.md"
+}

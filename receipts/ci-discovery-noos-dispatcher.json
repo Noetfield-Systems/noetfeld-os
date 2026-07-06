@@ -1,0 +1,17 @@
+{
+  "ok": true,
+  "checks": [
+    {
+      "package_map_has_key": true,
+      "key": "noos-copilot-dispatcher-mode",
+      "value": "data/noos-copilot-dispatcher-mode-v1.json"
+    },
+    {
+      "target_exists": true,
+      "target": "/Users/sinakazemnezhad/Desktop/Noetfield-Systems/noetfeld-OS/data/noos-copilot-dispatcher-mode-v1.json"
+    },
+    {
+      "machine_record_required_fields_present": true
+    }
+  ]
+}

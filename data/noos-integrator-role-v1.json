@@ -28,5 +28,29 @@
     "An agent must not claim a task whose scope overlaps an active non-stale task owned by another agent.",
     "Every mutating command writes the repo-local runtime state and a home mirror for other IDEs/worktrees on the same Mac.",
     "Supabase mirror is optional and should be enabled only when service-role access is available."
-  ]
+  ],
+  "cloud_sync_modes": [
+  "read_status",
+  "publish_receipt",
+  "publish_status",
+  "publish_drift_report",
+  "prepare_draft_branch",
+  "prepare_pr",
+  "fleet_rollout"
+  ],
+  "cloud_write_scopes": [
+  "none",
+  "receipts_only",
+  "status_only",
+  "drift_report_only",
+  "draft_branch",
+  "pr_ready",
+  "release_candidate"
+  ],
+  "dispatcher_authority_rules": {
+  "no_binary_cloud_write_allowed": true,
+  "fleet_propagation_allowed": false,
+  "main_write_allowed": false,
+  "notes": "NOOS Copilot may dispatch sync/status/receipt/PR-prep work but is not a policy owner and may not run recurring Copilot automation. Fleet propagation and main writes remain blocked until validator PASS + receipt + bounded PR path."
+  }
 }

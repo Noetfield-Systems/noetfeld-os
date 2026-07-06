@@ -1,0 +1,13 @@
+{
+  "task": "copilot_policy_admin_comment",
+  "timestamp": "2026-07-03T14:12:22Z",
+  "author": "noos-copilot-github",
+  "summary": "Admin comment: cost-lock is policy-only until merged; do not replace repo-local integrator pointer with external team slug; discovery CI stays non-enforcing until ops approval.",
+  "directives": [
+    "data/noos-integrator-role-v1.json remains canonical integrator protocol",
+    "dispatcher machine record is additive authority, not a replacement pointer",
+    "promote noos-discovery.yml to enforcing only after validator PASS + bounded PR path",
+    "fleet_rollout and direct_main_write remain blocked in data/noos-copilot-dispatcher-mode-v1.json"
+  ],
+  "operator_response": "accepted_by_cursor_local_integrator_20260706"
+}
