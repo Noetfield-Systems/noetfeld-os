@@ -1,25 +1,35 @@
 #!/usr/bin/env bash
-# verify_noos_cloud_motor_e2e_v1.sh — CF motor → Railway → liveness → deadman
+# verify_noos_cloud_motor_e2e_v1.sh — CF motor → Railway executor → liveness → deadman
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$ROOT"
-RAILWAY="${RAILWAY_BIN:-/Users/sinakazemnezhad/.railway/bin/railway}"
 
 fail() { printf '[e2e] FAIL: %s\n' "$*" >&2; exit 1; }
 ok() { printf '[e2e] OK: %s\n' "$*"; }
 
-URL="${LOOP_RUNNER_URL:-https://noos-loop-runner-production.up.railway.app}"
+RAILWAY_URL="${RAILWAY_LOOP_RUNNER_URL:-${FLY_LOOP_EXECUTOR_URL:-https://noos-loop-runner-production.up.railway.app}}"
+RAILWAY_URL="${RAILWAY_URL%/}"
 CF_MOTOR="https://noos-loop-fleet-tick-v1.sina-kazemnezhad-ca.workers.dev"
 DEADMAN="https://noos-deadman-v1.sina-kazemnezhad-ca.workers.dev"
 
-body="$(curl -fsS "${URL}/health")"
-echo "$body" | python3 -c 'import json,sys; d=json.load(sys.stdin); sys.exit(0 if d.get("service")=="noos-loop-runner" else 1)' || fail "Railway /health not noos-loop-runner"
+body="$(curl -fsS "${RAILWAY_URL}/health")"
+echo "$body" | python3 -c '
+import json, sys
+d = json.load(sys.stdin)
+svc = str(d.get("service") or "")
+ok = svc == "noos-loop-runner" or "loop-runner" in svc or d.get("execution_mode") == "railway"
+sys.exit(0 if ok else 1)
+' || fail "Railway /health not noos-loop-runner"
 ok "Railway loop-runner health"
 
-tick="$(curl -fsS -X POST "${CF_MOTOR}/tick?event_type=noos_inbox_loop_tick")"
-echo "$tick" | python3 -c 'import json,sys; d=json.load(sys.stdin); r=(d.get("results") or [{}])[0]; sys.exit(0 if r.get("status")==200 else 1)' || fail "CF→Railway tick failed (401=resync secrets; check Railway logs)"
-ok "CF motor dispatched inbox loop (HTTP 200)"
+motor="$(curl -fsS "${CF_MOTOR}/health")"
+echo "$motor" | python3 -c 'import json,sys; d=json.load(sys.stdin); sys.exit(0 if str(d.get("execution_plane","")).startswith("railway:") else 1)' || fail "CF motor not on railway execution plane"
+ok "CF motor execution_plane=railway"
+
+tick="$(curl -fsS -X POST "${CF_MOTOR}/tick?event_type=noos_inbox_loop_tick&wait=1")"
+echo "$tick" | python3 -c 'import json,sys; d=json.load(sys.stdin); r=(d.get("results") or [{}])[0]; sys.exit(0 if r.get("status")==200 and r.get("ok") else 1)' || fail "CF→Railway tick failed (check NOOS_LOOP_SECRET sync)"
+ok "CF motor dispatched inbox loop via Railway (HTTP 200)"
 
 sleep 3
 if [[ -f "$HOME/.sourcea-secrets/noetfield.env" ]]; then

@@ -77,6 +77,8 @@ def test_workflow_registry_ids():
         "noos_loop_self_heal",
         "noos_loop_agent_nerve",
         "noos_loop_sourcea_observe",
+        "noos_deadman",
+        "noos_loop_liveness_registry",
         "sandbox_health_sweep",
     ]
 

@@ -49,6 +49,18 @@ def loop_by_event(registry: dict[str, Any], event_type: str) -> dict[str, Any]:
     raise SystemExit(f"unknown event_type: {event_type}")
 
 
+def is_cloud_execution() -> bool:
+    return bool(os.environ.get("RAILWAY_ENVIRONMENT") or os.environ.get("NOOS_CLOUD_LOOP") == "1")
+
+
+def resolve_step_specs(loop: dict[str, Any]) -> list[dict[str, Any]]:
+    if is_cloud_execution():
+        cloud = loop.get("cloud_steps")
+        if cloud:
+            return list(cloud)
+    return list(loop.get("steps") or [])
+
+
 def loop_state_path(loop_id: str) -> Path:
     return RUNTIME / loop_id / "state-v1.json"
 
@@ -260,7 +272,7 @@ def execute_loop(loop: dict[str, Any], *, self_heal: bool = True) -> dict[str, A
         }
 
     step_results: list[dict[str, Any]] = []
-    for spec in loop.get("steps") or []:
+    for spec in resolve_step_specs(loop):
         cmd = list(spec.get("cmd") or [])
         if not cmd:
             continue

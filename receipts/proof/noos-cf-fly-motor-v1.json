@@ -1,0 +1,54 @@
+{
+  "schema": "noos-cf-fly-motor-wire-v1",
+  "at": "2026-07-06T07:44:00Z",
+  "ok": true,
+  "worker_name": "noos-loop-fleet-tick-v1",
+  "worker_url": "https://noos-loop-fleet-tick-v1.sina-kazemnezhad-ca.workers.dev",
+  "fly_executor_url": "https://noos-loop-executor.fly.dev",
+  "fly_app": "noos-loop-executor",
+  "cron_status": "enabled",
+  "cron_expression": "*/5 * * * *",
+  "execution_plane": "fly:noos-loop-executor",
+  "executor_status": "TEMPORARY_NON_CANONICAL_TEARDOWN_SCHEDULED",
+  "canonical_execution_plane": "railway:noos-loop-runner",
+  "canonical_executor_url": "https://noos-loop-runner-production.up.railway.app",
+  "railway_verify_receipt": "receipts/proof/noos-railway-loop-runner-v1.json",
+  "fly_temporary_receipt": "receipts/proof/noos-fly-temporary-executor-v1.json",
+  "wiring_pattern": "data/noos-motor-executor-wiring-v1.json",
+  "worker_secrets": {
+    "FLY_LOOP_EXECUTOR_URL": "set",
+    "NOOS_LOOP_SECRET": "set"
+  },
+  "dispatch_auth": {
+    "header": "X-NOOS-Loop-Secret",
+    "target": "POST /loop"
+  },
+  "gha_path_removal": {
+    "worker_dispatches_github_actions": false,
+    "github_token_on_tick_path": false,
+    "evidence": "cloud/workers/noos-loop-fleet-tick-v1/src/index.js — fetch POST ${FLY_LOOP_EXECUTOR_URL}/loop only; zero GITHUB_TOKEN/workflow_dispatch/actions refs"
+  },
+  "health": {
+    "ok": true,
+    "status": 200,
+    "execution_plane": "fly:noos-loop-executor",
+    "fly_executor_url_ready": true,
+    "loop_secret_ready": true,
+    "secret_values_leaked": false
+  },
+  "manual_tick": {
+    "ok": true,
+    "request": "POST /tick?event_type=noos_inbox_loop_tick&wait=1",
+    "http_status": 200,
+    "event_type": "noos_inbox_loop_tick",
+    "execution_plane": "fly:noos-loop-executor",
+    "fly_handler": "loop",
+    "fly_body_ok": true
+  },
+  "deploy_sequence": [
+    "ENABLE_CF_CRON=0 deploy + verify health + manual tick",
+    "ENABLE_CF_CRON=1 deploy — schedule */5 * * * * confirmed"
+  ],
+  "version_id": "a276392d-95cd-4599-9bb8-184492fb4505",
+  "report_line": "cf_fly_motor · worker=noos-loop-fleet-tick-v1 · cron=*/5 · tick=ok · fly=TEMPORARY_teardown_scheduled"
+}

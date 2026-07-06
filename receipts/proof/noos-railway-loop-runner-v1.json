@@ -1,0 +1,180 @@
+{
+  "schema": "noos-railway-loop-runner-verify-v1",
+  "at": "2026-07-06T08:21:36Z",
+  "service": "noos-loop-runner",
+  "railway_url": "https://noos-loop-runner-production.up.railway.app",
+  "ok": true,
+  "health": {
+    "ok": true,
+    "status": 200,
+    "body": {
+      "ok": true,
+      "schema": "noos-railway-loop-runner-health-v1",
+      "service": "noos-loop-runner",
+      "git_sha": "03b55c1f3dea7d9adc5d3f3fbcf47872df60b8df",
+      "uptime_sec": 33,
+      "execution_mode": "one_shot_http"
+    }
+  },
+  "auth_reject_missing": {
+    "ok": true,
+    "status": 401,
+    "body": {
+      "ok": false,
+      "error": "missing_loop_secret"
+    }
+  },
+  "auth_reject_bad": {
+    "ok": true,
+    "status": 403,
+    "body": {
+      "ok": false,
+      "error": "invalid_loop_secret"
+    }
+  },
+  "tick": {
+    "ok": true,
+    "status": 200,
+    "body": {
+      "schema": "noos-railway-loop-runner-tick-v1",
+      "run_id": "railway-a5e1b701960a",
+      "at": "2026-07-06T08:21:38Z",
+      "handler": "loop",
+      "event_type": "noos_orchestrator_cross_repo_tick",
+      "source": "verify-railway-v1",
+      "exit_code": 0,
+      "ok": true,
+      "cycle": {
+        "schema": "noos-24-7-loop-cycle-v1",
+        "receipt_schema": "autorun-cycle-receipt-v2",
+        "workflow_id": "noos-cross-repo-orchestrator.yml",
+        "mission_id": "M2",
+        "sandbox_id": "noetfeld-os",
+        "lane": "noos",
+        "loop_id": "orchestrator_cross_repo",
+        "event_type": "noos_orchestrator_cross_repo_tick",
+        "domain": "self-improvement",
+        "trigger_source": "http_loop",
+        "cycle_number": 2,
+        "op_key": "72a5051cc8c9bbc6d0384a4e",
+        "started_at": "2026-07-06T08:21:37+00:00",
+        "state_before": "RUNNING",
+        "cost": {
+          "provider": "github_actions+cloudflare_cron",
+          "model": "none",
+          "tokens_in": 0,
+          "tokens_out": 0,
+          "unit_cost_usd": 0.0,
+          "total_usd": 0.0,
+          "metered_at_call_site": true,
+          "step_count": 1
+        },
+        "value_class": "risk_reduction",
+        "sink_invariant": {
+          "law": "sum(origin_counts) == sink_count",
+          "counts": {
+            "steps": 1,
+            "self_heal": 0
+          },
+          "sink_count": 1,
+          "provenance_tags": {
+            "steps": "loop_step",
+            "self_heal": "loop_self_heal"
+          },
+          "verdict": "PASS"
+        },
+        "founder_blocked": {
+          "count": 1,
+          "oldest_id": "NOOS-C-01",
+          "priority": "P0",
+          "age_seconds": 361254,
+          "escalated": true
+        },
+        "evidence": [
+          {
+            "command": "echo Aggregating health across all org repos",
+            "exit_code": 0,
+            "output": "Aggregating health across all org repos"
+          }
+        ],
+        "runner_output": {
+          "steps": [
+            {
+              "cmd": [
+                "echo",
+                "Aggregating health across all org repos"
+              ],
+              "ok": true,
+              "exit_code": 0,
+              "stdout_tail": "Aggregating health across all org repos",
+              "stderr_tail": "",
+              "continued_on_error": false,
+              "name": "aggregate_health"
+            }
+          ],
+          "self_heal": [],
+          "cloud_meta": {
+            "processor": "noos_loop_runner_v1",
+            "github_event": "http_loop",
+            "github_run_id": "railway-a5e1b701960a",
+            "github_workflow": "railway-noos-loop-runner",
+            "dispatch_source": "verify-railway-v1",
+            "processed_at": "2026-07-06T08:21:37+00:00"
+          },
+          "cloud_trigger": "http_loop"
+        },
+        "guardrails": {
+          "lane": "noos",
+          "read_only_control": false
+        },
+        "supabase_sink": {
+          "ok": true,
+          "exit_code": 0,
+          "detail": {
+            "ok": true,
+            "idempotent": true,
+            "merged": true,
+            "id": "afe2b5af-a0e3-48b6-8190-0f1fcc94b72f",
+            "op_key": "72a5051cc8c9bbc6d0384a4e"
+          }
+        },
+        "finished_at": "2026-07-06T08:21:37+00:00",
+        "state_after": "COMPLETE",
+        "status": "ok",
+        "exit_code": 0,
+        "blocker_reason": null,
+        "next_action": "await_next_scheduled_tick",
+        "d4": {
+          "execute_ok": true,
+          "validate_ok": true,
+          "sink_acked": true
+        },
+        "d2": {
+          "cas": {
+            "verdict": "ACCEPTED",
+            "expected": 1,
+            "observed": 1,
+            "new_value": 2
+          }
+        },
+        "transition_log_tail": [
+          {
+            "from": "RUNNING",
+            "to": "COMPLETE",
+            "at": "2026-07-06T08:21:37+00:00",
+            "cycle": 2,
+            "op_key": "72a5051cc8c9bbc6d0384a4e"
+          }
+        ],
+        "liveness_upsert": {
+          "ok": true,
+          "loop_id": "orchestrator_cross_repo",
+          "last_fired_at": "2026-07-06T08:21:38.287Z"
+        }
+      },
+      "stderr_tail": "",
+      "receipt_path": ".noos-runtime/railway-loop-runner/receipts/railway-a5e1b701960a.json"
+    }
+  },
+  "report_line": "railway_loop_runner \u00b7 health=ok auth=ok tick=ok"
+}

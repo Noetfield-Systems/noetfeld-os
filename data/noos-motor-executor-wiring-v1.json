@@ -1,0 +1,36 @@
+{
+  "schema": "noos-motor-executor-wiring-v1",
+  "version": "1.0.0",
+  "lock_state": "LOCKED_v1",
+  "authority": "PANEL_GOVERNANCE_2026-07-06",
+  "title": "MOTOR_EXECUTOR_WIRING_v1",
+  "pattern": "CF motor (clock) POSTs one bounded tick to HTTP executor (Python). Executor is swappable via URL secret only.",
+  "deployment_order": [
+    "executor_verified_health_service_git_sha",
+    "executor_auth_rejection_proven_missing_and_bad_secret",
+    "executor_one_real_tick_receipt",
+    "bind_motor_executor_url_secret",
+    "motor_manual_tick_verify_wait_1",
+    "enable_motor_cron_last"
+  ],
+  "never": [
+    "enable_cron_before_executor_green",
+    "disable_working_motor_while_debugging_replacement",
+    "park_second_platform_as_fallback",
+    "add_vendor_without_founder_gate"
+  ],
+  "cutover": {
+    "description": "One env/secret change on CF worker — swap executor URL, manual tick verify, done.",
+    "cf_secret_keys": ["FLY_LOOP_EXECUTOR_URL", "LOOP_RUNNER_URL", "RAILWAY_LOOP_EXECUTOR_URL"],
+    "auth_header": "X-NOOS-Loop-Secret",
+    "auth_secret": "NOOS_LOOP_SECRET"
+  },
+  "founder_gate": {
+    "rule": "New compute vendor → stop dispatch, founder approval, doctrine entry required.",
+    "dispatch_template_check": "does this task add a vendor? → stop, founder"
+  },
+  "teardown": {
+    "rule": "Non-canonical executor: app destroyed, secrets revoked, DNS/URL refs removed, deletion receipt — not parked, not fallback.",
+    "receipt_schema": "noos-executor-teardown-v1"
+  }
+}

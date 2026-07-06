@@ -13,7 +13,7 @@ locked_at: 2026-07-02
 **Status:** LOCKED  
 **Date:** 2026-07-02  
 **Scope:** Noetfield OS + noetfield.com + SourceA contract surfaces  
-**Note (2026-07-06):** Loop/autonomy rows superseded by `NOOS-AGENT-20260705-029`. PyPI/commercial rows remain valid.
+**Note (2026-07-06):** Loop/autonomy rows superseded by `NOOS-AGENT-20260705-029`. **Next-action ordering** superseded by `NOOS-AGENT-20260706-033` (dual-track NOOS 48h + Noetfield public audit). PyPI/commercial rows remain valid.
 **Source:** session status check, PyPI publish, research report synthesis
 
 ---

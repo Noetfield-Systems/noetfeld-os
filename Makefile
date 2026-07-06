@@ -106,7 +106,14 @@ cloud-motor-e2e:
 	bash scripts/verify_noos_cloud_motor_e2e_v1.sh
 
 cloud-motor-resync:
-	bash scripts/phase_a_wire_cloud_motor_v1.sh
+	bash scripts/phase_b_wire_cf_railway_motor_v1.sh
+
+wire-cf-railway-motor:
+	bash scripts/phase_b_wire_cf_railway_motor_v1.sh
+
+wire-cf-fly-motor:
+	@echo "DEPRECATED: Fly executor destroyed; use wire-cf-railway-motor"
+	bash scripts/phase_b_wire_cf_railway_motor_v1.sh
 
 motor-restart:
 	python3 scripts/noos_motor_restart_v1.py --recipe $(RECIPE) --write-receipt --json
@@ -145,6 +152,15 @@ deploy-fly-inbox:
 
 deploy-fly-selfheal:
 	python3 scripts/noetfield_deploy_v1.py deploy --scope fly-self-heal --write-receipt --json
+
+deploy-fly-loop-executor:
+	bash scripts/deploy_noos_loop_executor_fly_v1.sh
+
+verify-fly-loop-executor:
+	python3 scripts/verify_noos_loop_executor_fly_v1.py --write-receipt --json
+
+verify-railway-loop-runner:
+	python3 scripts/verify_noos_loop_runner_railway_v1.py --write-receipt --json
 
 deploy-drift-kaizen:
 	python3 scripts/noos_deploy_drift_kaizen_v1.py --inject-drift --write-receipt --json

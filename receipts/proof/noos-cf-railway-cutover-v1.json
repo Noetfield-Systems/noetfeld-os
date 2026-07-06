@@ -1,0 +1,50 @@
+{
+  "schema": "noos-cf-railway-cutover-v1",
+  "at": "2026-07-06T09:02:30Z",
+  "ok": true,
+  "worker_name": "noos-loop-fleet-tick-v1",
+  "worker_url": "https://noos-loop-fleet-tick-v1.sina-kazemnezhad-ca.workers.dev",
+  "version_id": "606e4cc0-cd6f-4af3-b1d8-ffac414636bb",
+  "execution_plane": "railway:noos-loop-runner",
+  "railway_executor_url": "https://noos-loop-runner-production.up.railway.app",
+  "secrets_set": {
+    "FLY_LOOP_EXECUTOR_URL": "https://noos-loop-runner-production.up.railway.app",
+    "NOOS_LOOP_SECRET": "railway-synced (not noetfield.env)"
+  },
+  "secrets_deleted": [
+    "GITHUB_REPO",
+    "GITHUB_TOKEN",
+    "LOOP_RUNNER_SECRET",
+    "LOOP_RUNNER_URL"
+  ],
+  "cron": {
+    "status": "enabled",
+    "expression": "*/5 * * * *"
+  },
+  "health": {
+    "ok": true,
+    "status": 200,
+    "execution_plane": "railway:noos-loop-runner",
+    "executor_url_ready": true,
+    "loop_secret_ready": true,
+    "secret_values_leaked": false,
+    "cron": "*/5 * * * *"
+  },
+  "manual_tick": {
+    "ok": true,
+    "request": "POST /tick?event_type=noos_inbox_loop_tick&wait=1",
+    "http_status": 200,
+    "event_type": "noos_inbox_loop_tick",
+    "execution_plane": "railway:noos-loop-runner",
+    "railway_body_ok": true
+  },
+  "railway_verify_receipt": "receipts/proof/noos-railway-loop-runner-v1.json",
+  "wiring_pattern": "data/noos-motor-executor-wiring-v1.json",
+  "fly_teardown": {
+    "status": "DESTROYED",
+    "app": "noos-loop-executor",
+    "teardown_receipt": "receipts/proof/noos-fly-executor-teardown-v1.json",
+    "note": "App destroyed; CF dispatches Railway only"
+  },
+  "report_line": "cf_railway_cutover · worker=noos-loop-fleet-tick-v1 · cron=*/5 · plane=railway:noos-loop-runner · tick=ok"
+}

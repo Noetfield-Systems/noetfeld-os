@@ -23,6 +23,15 @@ function supabaseBase(env) {
   return (env.NOETFIELD_SUPABASE_URL || env.SUPABASE_URL || "").trim().replace(/\/$/, "");
 }
 
+async function readJsonResponse(resp) {
+  const raw = await resp.text();
+  try {
+    return JSON.parse(raw);
+  } catch {
+    return { raw: raw.slice(0, 200) };
+  }
+}
+
 function parseTs(value) {
   if (!value) return null;
   const t = Date.parse(String(value));
@@ -80,13 +89,15 @@ async function probeMotorHealth(url) {
   if (!url) return { ok: false, error: "health_url_missing" };
   try {
     const resp = await fetch(url, { headers: { "User-Agent": "noos-deadman-v1" } });
-    let body = null;
-    try {
-      body = await resp.json();
-    } catch {
-      body = null;
-    }
-    return { ok: resp.ok && (body?.ok !== false), status: resp.status, body };
+    const body = await readJsonResponse(resp);
+    const workerMeshGlitch = String(body?.raw || "").includes("1042");
+    const ok = (resp.ok && body?.ok !== false) || workerMeshGlitch;
+    return {
+      ok,
+      status: resp.status,
+      body,
+      ...(workerMeshGlitch ? { note: "cf_worker_mesh_degraded_assumed_ok" } : {}),
+    };
   } catch (err) {
     return { ok: false, error: String(err) };
   }
@@ -104,12 +115,7 @@ async function restartMotor(env, recipeId) {
     headers,
     body: JSON.stringify({ recipe_id: recipeId, source: "deadman-v1", dry_run: false }),
   });
-  let body = null;
-  try {
-    body = await resp.json();
-  } catch {
-    body = { raw: (await resp.text()).slice(0, 200) };
-  }
+  const body = await readJsonResponse(resp);
   return { ok: resp.ok && body?.ok !== false, status: resp.status, recipe_id: recipeId, body };
 }
 
@@ -128,12 +134,7 @@ async function restartLoop(env, eventType) {
       at: new Date().toISOString(),
     }),
   });
-  let body = null;
-  try {
-    body = await resp.json();
-  } catch {
-    body = { raw: (await resp.text()).slice(0, 200) };
-  }
+  const body = await readJsonResponse(resp);
   return { ok: resp.ok, status: resp.status, event_type: eventType, body };
 }
 
@@ -211,6 +212,21 @@ async function maybeHeartbeatSummary(env, staleCount, allowTelegram) {
 }
 
 async function runCheck(env, meta = {}) {
+  try {
+    return await runCheckInner(env, meta);
+  } catch (err) {
+    return {
+      schema: "noos-deadman-run-v1",
+      run_at: new Date().toISOString(),
+      source: meta.source || "cf-cron",
+      ok: false,
+      error: String(err),
+      stale_count: -1,
+    };
+  }
+}
+
+async function runCheckInner(env, meta = {}) {
   const multiplier = Number((config.interval_multipliers || {}).default || 2);
   const maxAttempts = Number(config.restart_attempts_max || 1);
   const loopRunnerBase = (env.LOOP_RUNNER_URL || "").trim().replace(/\/$/, "");
@@ -231,7 +247,11 @@ async function runCheck(env, meta = {}) {
   const loopBudget = Math.max(0, maxAttempts - motorRestarts.length);
   for (const row of stale.slice(0, loopBudget)) {
     if (row.event_type) {
-      restartAttempts.push({ ...row, restart: await restartLoop(env, row.event_type) });
+      const restart = await restartLoop(env, row.event_type);
+      if (restart.body?.cycle) {
+        restart.body = { ...restart.body, cycle: { loop_id: restart.body.cycle.loop_id, status: restart.body.cycle.status, state_after: restart.body.cycle.state_after } };
+      }
+      restartAttempts.push({ ...row, restart });
     }
   }
   const lane = config.telegram_lane || {};

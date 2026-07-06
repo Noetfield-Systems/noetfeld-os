@@ -4,6 +4,7 @@
   "updated_at": "2026-07-05",
   "motor_worker": "noos-loop-fleet-tick-v1",
   "motor_cron": "*/5 * * * *",
+  "canonical_execution_plane": "railway:noos-loop-runner",
   "execution_plane": "railway:noos-loop-runner",
   "targets": [
     {"dispatch_id": "inbox", "event_type": "noos_inbox_loop_tick", "interval_minutes": 5, "handler": "loop"},

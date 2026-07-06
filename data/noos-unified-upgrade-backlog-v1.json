@@ -5,9 +5,17 @@
   "planes_registry": "data/noos-upgrade-planes-v1.json",
   "governed_by": "governed-autorun L1-L13",
   "updated_at": "2026-07-06",
+  "unified_next_plan": {
+    "doc": "docs/_NOOS_AGENT/[NOOS-AGENT-20260706-033]_UNIFIED_NEXT_PLAN_NOOS_NOETFIELD_v1.md",
+    "registry": "data/noos-next-plan-unified-v1.json",
+    "noos_track": "Living System Phase E-G (48h + closeout)",
+    "noetfield_track": "UPG-NF-PUB-01 audit + UPG-0001 NW1 send"
+  },
   "living_system_99": {
     "plan": "docs/_NOOS_AGENT/[NOOS-AGENT-20260705-029]_LIVING_SYSTEM_99_PLAN_LOCKED_v1.md",
-    "upg_ls_status": "UPG-LS-01–08 implemented; UPG-LS-09–10 founder-gated",
+    "upg_ls_status": "UPG-LS-01–08 done; Phase E preflight ok; UPG-LS-09–10 founder-gated",
+    "phase_e_preflight": "receipts/proof/noos-living-system-phase-e-preflight-v1.json",
+    "phase_f_queue": "data/noos-acg-outbound-queue-v1.json",
     "receipt": "receipts/proof/noos-living-system-99-closeout-v1.json"
   },
   "current_phase": 4,
@@ -600,6 +608,28 @@
       "title": "First Trust Brief / AI Value OS briefing",
       "success_check": "intake receipt + follow-up",
       "note": "L7 \u2014 never blocks machine scan"
+    },
+    {
+      "id": "UPG-NF-PUB-01",
+      "tier": "T2",
+      "track": "COM",
+      "status": "open",
+      "priority": "P0",
+      "owner": "machine",
+      "title": "External public-site audit sprint (route inventory + claim-evidence matrix)",
+      "success_check": "audit report + P0 fix list",
+      "plan_ref": "NOOS-AGENT-20260706-033 Track B steps B1-B4"
+    },
+    {
+      "id": "UPG-NF-PUB-02",
+      "tier": "T2",
+      "track": "COM",
+      "status": "blocked",
+      "priority": "P0",
+      "owner": "machine",
+      "title": "P0 public-risk fixes from site audit",
+      "success_check": "verify-static-www PASS + no unsupported claims",
+      "blocked_by": "UPG-NF-PUB-01"
     },
     {
       "id": "UPG-0001",

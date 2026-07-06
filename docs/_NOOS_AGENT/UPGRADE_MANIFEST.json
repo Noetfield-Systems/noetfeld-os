@@ -94,8 +94,14 @@
   "deferred_to_founder": {
     "commercial_c01": "Phase C \u2014 first Trust Brief / AI Value OS briefing"
   },
-  "updated_at": "2026-07-05",
-  "notes": "T3 sandbox fleet lane closed. Fly L4 honest: see deploy baseline. UPG-0209/0213 deferred.",
+  "updated_at": "2026-07-06",
+  "notes": "T3 sandbox fleet lane closed. Fly L4 honest: see deploy baseline. UPG-0209/0213 deferred. Unified next plan: NOOS-AGENT-20260706-033.",
+  "unified_next_plan": {
+    "trace_id": "NOOS-AGENT-20260706-033",
+    "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260706-033]_UNIFIED_NEXT_PLAN_NOOS_NOETFIELD_v1.md",
+    "registry": "data/noos-next-plan-unified-v1.json",
+    "tracks": ["noos-living-system-E-G", "noetfield-public-audit+commercial"]
+  },
   "machine_loops": {
     "status": "active",
     "canon": "docs/_NOOS_AGENT/[NOOS-AGENT-20260703-005]_FOUNDER_CANON_INTERFACE_v1.md",
@@ -203,13 +209,15 @@
     "UPG-LS-01": "receipts/proof/noos-phase-b-closeout-v1.json",
     "UPG-LS-02": "receipts/proof/noos-cloud-motor-ops-v1.json + scripts/phase_a_wire_cloud_motor_v1.sh runbook",
     "UPG-LS-03": "receipts/proof/noos-liveness-registry-green-v1.json (partial — stale_count pending 0)",
-    "UPG-LS-04": "data/noos-motor-restart-recipes-v1.json + scripts/noos_motor_restart_v1.py",
-    "UPG-LS-05": "cloud/workers/noos-deadman-v1 motor restart + receipts/proof/noos-motor-restart-drill-v1.json",
+    "UPG-LS-04": "data/noos-motor-restart-recipes-v1.json (railway-loop-runner) + scripts/noos_motor_restart_v1.py + scripts/phase_b_wire_cf_railway_motor_v1.sh",
+    "UPG-LS-05": "cloud/workers/noos-deadman-v1 motor restart + receipts/proof/noos-motor-restart-drill-railway-v1.json",
     "UPG-LS-06": "data/noos-kaizen-recipes-v1.json + scripts/noos_kaizen_recipe_apply_v1.py",
     "UPG-LS-07": "receipts/proof/noos-autorun-spine-unify-v1.json",
-    "UPG-LS-08": "scripts/verify_noos_living_system_48h_v1.py + data/noos-living-system-baseline-v1.json",
-    "UPG-LS-09": "docs/_NOOS_AGENT/[NOOS-AGENT-20260706-030]_LIVING_SYSTEM_48H_RETRO_v1.md (awaiting 48h)",
+    "UPG-LS-08": "scripts/verify_noos_living_system_48h_v1.py + data/noos-living-system-baseline-v1.json (T0 2026-07-06)",
+    "UPG-LS-09": "docs/_NOOS_AGENT/[NOOS-AGENT-20260706-030]_LIVING_SYSTEM_48H_RETRO_v1.md (T0 baseline captured; awaiting founder 48h)",
     "UPG-LS-10": "receipts/proof/noos-living-system-99-closeout-v1.json (pending founder sign + 48h ok)",
-    "UPG-LS-TG-LOCK": "docs/_NOOS_AGENT/[NOOS-AGENT-20260706-031]_DEADMAN_TELEGRAM_LANE_LOCKED_v1.md + receipts/proof/noos-deadman-telegram-lane-lock-v1.json"
+    "UPG-LS-TG-LOCK": "docs/_NOOS_AGENT/[NOOS-AGENT-20260706-031]_DEADMAN_TELEGRAM_LANE_LOCKED_v1.md + receipts/proof/noos-deadman-telegram-lane-lock-v1.json",
+    "UPG-NF-PUB-01": "External public-site audit sprint (2–4 weeks) — route inventory + claim-evidence matrix",
+    "UPG-NF-PUB-02": "P0 public-risk fixes from audit (Small Fix Rule only)"
   }
 }

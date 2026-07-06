@@ -1,13 +1,42 @@
 {
   "schema": "noos-living-system-99-closeout-v1",
   "authority": "UPG-LS-10",
-  "closeout_at": "2026-07-06T06:00:00Z",
-  "upg_ls_completed": ["UPG-LS-01", "UPG-LS-02", "UPG-LS-03", "UPG-LS-04", "UPG-LS-05", "UPG-LS-06", "UPG-LS-07", "UPG-LS-08"],
+  "closeout_at": "2026-07-06T09:41:00Z",
+  "upg_ls_completed": [
+    "UPG-LS-01",
+    "UPG-LS-02",
+    "UPG-LS-03",
+    "UPG-LS-04",
+    "UPG-LS-05",
+    "UPG-LS-06",
+    "UPG-LS-07",
+    "UPG-LS-08"
+  ],
   "upg_ls_pending_founder": ["UPG-LS-09", "UPG-LS-10"],
+  "railway_canon_lane": {
+    "completed_at": "2026-07-06T09:41:00Z",
+    "evidence": [
+      "receipts/proof/noos-cf-railway-cutover-v1.json",
+      "receipts/proof/noos-motor-restart-drill-railway-v1.json",
+      "scripts/phase_b_wire_cf_railway_motor_v1.sh",
+      "scripts/verify_noos_cloud_motor_e2e_v1.sh"
+    ],
+    "pytest_all_green": true,
+    "execution_plane": "railway:noos-loop-runner"
+  },
   "48h_test": {
     "baseline_ready": true,
+    "baseline_at": "2026-07-06T09:40:00Z",
+    "baseline_receipt": "receipts/proof/noos-living-system-48h-v1.json",
     "executed": false,
     "note": "Founder closes laptop 48h; run make living-system-verify-48h at T+48h"
+  },
+  "pr_merge": {
+    "branch": "lane/phase-b-deadman",
+    "pr_29": { "status": "merged", "sha": "c0b2c29" },
+    "follow_up_pr": "pending — Railway canon + Phase E preflight (eed9f82..HEAD)",
+    "status": "follow_up_pr_needed",
+    "gate": "merge follow-up PR after CI green; 48h receipt ok=true for closeout"
   },
   "founder_sign": {
     "required": true,

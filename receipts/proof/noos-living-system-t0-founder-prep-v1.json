@@ -1,0 +1,16 @@
+{
+  "schema": "noos-living-system-t0-founder-prep-v1",
+  "authority": "UPG-LS-09",
+  "prepared_at": "2026-07-06T09:41:00Z",
+  "t0_baseline_receipt": "receipts/proof/noos-living-system-48h-v1.json",
+  "execution_plane": "railway:noos-loop-runner",
+  "founder_actions_required": [
+    "Close laptop for 48 hours",
+    "Optional: Telegram T0 closed message if lane re-enabled",
+    "Optional: Phase F NW1 send from phone"
+  ],
+  "machine_ready": true,
+  "founder_executed": false,
+  "ok": false,
+  "note": "Machine prep complete; 48h clock starts when founder closes laptop"
+}
