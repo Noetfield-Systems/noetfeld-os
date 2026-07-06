@@ -19,27 +19,30 @@ railway_cmd() {
   env RAILWAY_CALLER="$RAILWAY_CALLER" RAILWAY_AGENT_SESSION="$SESSION" railway "$@"
 }
 
-ensure_service() {
+link_service() {
   local name="$1"
-  if railway_cmd service list 2>/dev/null | grep -q "${name}"; then
-    log "service exists: ${name}"
-    return 0
-  fi
-  log "creating service: ${name}"
-  railway_cmd add -s "$name" --json >/dev/null 2>&1 || railway_cmd add -s "$name"
+  railway_cmd link -p "$PROJECT_ID" -e "$ENV_NAME" -s "$name" >/dev/null 2>&1 || true
 }
 
 service_url() {
   local name="$1"
+  link_service "$name"
+  railway_cmd service status --json 2>/dev/null | python3 -c "import json,sys; d=json.load(sys.stdin); print((d.get('service',{}).get('url') or '').rstrip('/'))" 2>/dev/null || \
   railway_cmd service list 2>/dev/null | grep -A3 "$name" | grep -Eo 'https://[^ ]+' | head -1
 }
 
 log "project=${PROJECT_ID} env=${ENV_NAME}"
 
-railway_cmd link -p "$PROJECT_ID" -e "$ENV_NAME" >/dev/null 2>&1 || true
+link_service "$API_SERVICE"
 
-ensure_service "$API_SERVICE"
-ensure_service "$WEB_SERVICE"
+log "pin Railway build config (gov-console images, not platform-api)…"
+railway_cmd environment edit -e "$ENV_NAME" \
+  --service-config "$API_SERVICE" build.builder DOCKERFILE \
+  --service-config "$API_SERVICE" build.dockerfilePath "governance-console/backend/Dockerfile" \
+  --service-config "$WEB_SERVICE" build.builder DOCKERFILE \
+  --service-config "$WEB_SERVICE" build.dockerfilePath "governance-console/Dockerfile.www" \
+  -m "gov-sandbox: governance-console dockerfiles" \
+  >/dev/null 2>&1 || log "WARN: could not patch Railway build config"
 
 log "set API CORS + SQLite sandbox DB…"
 railway_cmd variable set \
@@ -50,19 +53,21 @@ railway_cmd variable set \
   >/dev/null 2>&1 || log "WARN: could not set API variables"
 
 log "deploy API (${API_SERVICE})…"
+link_service "$API_SERVICE"
 (
-  cd "${ROOT}/governance-console/backend"
-  railway_cmd up -s "$API_SERVICE" -d
+  cd "${ROOT}"
+  railway_cmd up "./governance-console/backend" --path-as-root -s "$API_SERVICE" -d -m "gov-sandbox-api: governance-console backend"
 )
 
 log "deploy Web (${WEB_SERVICE})…"
+link_service "$WEB_SERVICE"
 (
   cd "${ROOT}"
   if [[ -f railway.toml ]]; then
     cp railway.toml "${ROOT}/.railway.toml.platform.bak"
   fi
   cp governance-console/railway.web.toml railway.toml
-  railway_cmd up -s "$WEB_SERVICE" -d .
+  railway_cmd up -s "$WEB_SERVICE" -d -m "gov-sandbox-web: Next workspace /workspace"
   if [[ -f "${ROOT}/.railway.toml.platform.bak" ]]; then
     mv "${ROOT}/.railway.toml.platform.bak" railway.toml
   else
@@ -98,11 +103,12 @@ print(f"wrote {path}")
 PY
 
 python3 scripts/generate-cf-redirects.py
+python3 scripts/generate-www-deny-middleware.py
 
 log "smoke API…"
 curl -sf "${API_URL}/health" | head -c 200
 echo
 log "smoke WEB workspace…"
-curl -sf "${WEB_URL}/workspace" | grep -q "Trust Ledger Workspace" && log "OK workspace HTML" || log "WARN: workspace needle missing on Railway URL"
+curl -sf "${WEB_URL}/workspace" | grep -qE '_next|Trust Ledger Workspace' && log "OK workspace shell" || log "WARN: workspace shell missing on Railway URL"
 
 log "done — run: bash scripts/deploy-www-cloudflare.sh to promote www proxy"

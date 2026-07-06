@@ -1,7 +1,7 @@
 {
   "schema": "nf-www-gov-proxy-v1",
-  "enabled": false,
-  "gov_web_origin": "",
-  "gov_api_origin": "",
-  "notes": "Set enabled=true and origins after: bash scripts/deploy-gov-sandbox-railway.sh"
+  "enabled": true,
+  "gov_web_origin": "https://gov-sandbox-web-production.up.railway.app",
+  "gov_api_origin": "https://gov-sandbox-api-production.up.railway.app",
+  "notes": "Enabled after gov-sandbox Railway deploy 2026-07-06 — workspace at /workspace"
 }
