@@ -15,9 +15,9 @@ lock_state: LOCKED_v1
 
 ## T0 (founder action required)
 
-**Baseline captured:** `2026-07-06T09:40:00Z` via `make living-system-baseline`  
-**Receipt:** `receipts/proof/noos-living-system-48h-v1.json`  
-**Execution plane:** `railway:noos-loop-runner` (Fly executor destroyed)
+**Baseline captured:** `2026-07-06T10:15:00Z` (refreshed) via `make living-system-baseline`  
+**Preflight receipt:** `receipts/proof/noos-living-system-phase-e-preflight-v1.json`  
+**Commits pushed:** `eed9f82` (Railway canon) + `b158ee6` (Phase E/F prep) on `lane/phase-b-deadman`
 
 Founder steps:
 

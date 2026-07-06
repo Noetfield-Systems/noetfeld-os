@@ -7,7 +7,9 @@
   "updated_at": "2026-07-06",
   "living_system_99": {
     "plan": "docs/_NOOS_AGENT/[NOOS-AGENT-20260705-029]_LIVING_SYSTEM_99_PLAN_LOCKED_v1.md",
-    "upg_ls_status": "UPG-LS-01–08 implemented; UPG-LS-09–10 founder-gated",
+    "upg_ls_status": "UPG-LS-01–08 done; Phase E preflight ok; UPG-LS-09–10 founder-gated",
+    "phase_e_preflight": "receipts/proof/noos-living-system-phase-e-preflight-v1.json",
+    "phase_f_queue": "data/noos-acg-outbound-queue-v1.json",
     "receipt": "receipts/proof/noos-living-system-99-closeout-v1.json"
   },
   "current_phase": 4,
