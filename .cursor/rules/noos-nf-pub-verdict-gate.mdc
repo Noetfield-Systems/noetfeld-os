@@ -39,6 +39,10 @@ Research / external audit
 
 Remove fake claims, fix broken links/routes, stale asset pins, internal language leaks — not redesign from research.
 
+## No interactive downgrade (CRITICAL — Noetfield R-012)
+
+When coordinating Noetfield www PRs: **never** remove or shrink live demo/sandbox hooks (`nfSsotDemo`, `nf26-demoStepper`, `nfLiveProofForm`, agent trace, trial evaluate) to pass audit, copy, or asset-pin lanes. Require `scripts/verify-www-interactive-fidelity.sh` PASS before merge. Static `nf-workspace-mock` is not a real client sandbox.
+
 ## Authority
 
 `receipts/proof/noos-nf-pub-audit-protocol-v1.json` · `UPG-NF-PUB-01` · `UPG-NF-PUB-02` · unified plan Track B.
