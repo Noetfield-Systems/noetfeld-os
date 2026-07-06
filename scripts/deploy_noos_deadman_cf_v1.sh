@@ -49,7 +49,7 @@ else
 fi
 
 for key in NOETFIELD_SUPABASE_URL SUPABASE_URL NOETFIELD_SUPABASE_SERVICE_ROLE_KEY SUPABASE_SERVICE_ROLE_KEY \
-  LOOP_RUNNER_URL LOOP_RUNNER_SECRET DEADMAN_TELEGRAM_BOT_TOKEN DEADMAN_TELEGRAM_CHAT_ID; do
+  LOOP_RUNNER_URL LOOP_RUNNER_SECRET; do
   val="${!key:-}"
   if [[ -n "$val" ]]; then
     printf '%s' "$val" | wrangler secret put "$key" || {
@@ -59,8 +59,21 @@ for key in NOETFIELD_SUPABASE_URL SUPABASE_URL NOETFIELD_SUPABASE_SERVICE_ROLE_K
   fi
 done
 
+if [[ "${ALLOW_DEADMAN_TELEGRAM_SECRET_UPLOAD:-}" == "1" ]]; then
+  echo "== Uploading DEADMAN_TELEGRAM_* (opt-in only) =="
+  for key in DEADMAN_TELEGRAM_BOT_TOKEN DEADMAN_TELEGRAM_CHAT_ID; do
+    val="${!key:-}"
+    if [[ -n "$val" ]]; then
+      python3 "$ROOT/scripts/verify_noos_deadman_telegram_lane_v1.py" --fail-on-forbidden
+      printf '%s' "$val" | wrangler secret put "$key" || exit 1
+    fi
+  done
+else
+  echo "SKIP: DEADMAN_TELEGRAM_* secret upload (default off — prevents wrong-bot spam)"
+fi
+
 wrangler deploy
 
 echo "OK deployed noos-deadman-v1"
 echo "Health: curl -fsS https://noos-deadman-v1.sina-kazemnezhad-ca.workers.dev/health"
-echo "Probe:  curl -X POST https://noos-deadman-v1.sina-kazemnezhad-ca.workers.dev/check"
+echo "Probe:  curl -X POST 'https://noos-deadman-v1.sina-kazemnezhad-ca.workers.dev/check?telegram=0'"

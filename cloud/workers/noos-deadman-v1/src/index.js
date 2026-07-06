@@ -234,9 +234,11 @@ async function runCheck(env, meta = {}) {
       restartAttempts.push({ ...row, restart: await restartLoop(env, row.event_type) });
     }
   }
+  const lane = config.telegram_lane || {};
+  const sendEnabled = lane.send_alerts === true;
   const allowTelegram =
-    meta.allowTelegram === true &&
-    meta.source === "cf-cron";
+    sendEnabled &&
+    (meta.source === "cf-cron" || meta.explicitTelegram === true);
   let alertSent = false;
   let alertResult = { ok: false, skipped: true, reason: "telegram_suppressed" };
   if (stale.length > 0) {
@@ -267,7 +269,7 @@ async function runCheck(env, meta = {}) {
 
 export default {
   async scheduled(event, env, ctx) {
-    ctx.waitUntil(runCheck(env, { source: "cf-cron", allowTelegram: true, cron: event?.cron || config.cron }));
+    ctx.waitUntil(runCheck(env, { source: "cf-cron", cron: event?.cron || config.cron }));
   },
 
   async fetch(request, env) {
@@ -301,7 +303,7 @@ export default {
       const explicitTelegram = url.searchParams.get("telegram") === "1";
       const receipt = await runCheck(env, {
         source: "http_check",
-        allowTelegram: explicitTelegram,
+        explicitTelegram,
       });
       return json(receipt, receipt.ok ? 200 : 502);
     }

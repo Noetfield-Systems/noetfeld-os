@@ -59,6 +59,11 @@
     "event_type": "noos_orchestrator_cross_repo_tick",
     "interval_minutes": 180
   },
+  "improve_kaizen_daily": {
+    "loop_id": "improve_kaizen_daily",
+    "event_type": "noos_improve_kaizen_daily_tick",
+    "interval_minutes": 1440
+  },
   "factory_autorun": {
     "loop_id": "factory_autorun",
     "event_type": "noos_factory_autorun_tick",
