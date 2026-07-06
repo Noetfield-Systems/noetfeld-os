@@ -155,6 +155,8 @@ def verify_migration(number: str, *, url: str) -> dict[str, Any]:
         return asyncio.run(_verify_table_exists(url, "noetfield_truth_log"))
     if number == "0014":
         return asyncio.run(_verify_factory_cycle_degraded(url))
+    if number == "0016":
+        return asyncio.run(_verify_table_exists(url, "noos_loop_registry"))
     return {"ok": True, "note": "no specific verifier for migration"}
 
 

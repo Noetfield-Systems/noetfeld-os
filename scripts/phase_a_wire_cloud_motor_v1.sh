@@ -22,10 +22,16 @@ if [[ -z "$SECRET" ]]; then
   exit 1
 fi
 
-echo "== Step 2: deploy CF loop motor with Railway URL + secret =="
+echo "== Step 2: sync Supabase env on Railway loop-runner =="
+bash "$ROOT/scripts/sync_railway_loop_runner_env_v1.sh"
+
+echo "== Step 3: deploy CF loop motor with Railway URL + secret =="
 LOOP_RUNNER_URL="$URL" LOOP_RUNNER_SECRET="$SECRET" bash "$ROOT/scripts/deploy_noos_loop_fleet_tick_cf_v1.sh"
 
-echo "== Step 3: verify =="
+echo "== Step 4: verify health =="
 curl -fsS "https://noos-loop-fleet-tick-v1.sina-kazemnezhad-ca.workers.dev/health" | python3 -m json.tool
 echo
 curl -fsS "${URL}/health" | python3 -m json.tool
+echo
+echo "== Step 5: E2E gate =="
+bash "$ROOT/scripts/verify_noos_cloud_motor_e2e_v1.sh"
