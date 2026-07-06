@@ -1,0 +1,25 @@
+{
+  "schema": "noos-living-system-phase-e-preflight-v1",
+  "authority": "UPG-LS-09",
+  "preflight_at": "2026-07-06T10:15:00Z",
+  "execution_plane": "railway:noos-loop-runner",
+  "checks": {
+    "pytest": { "ok": true, "count": 163 },
+    "motor_status_dry_run": { "ok": true, "recipes": ["cf-loop-motor", "cf-deadman", "railway-loop-runner"] },
+    "verify_railway_loop_runner": { "ok": true, "receipt": "receipts/proof/noos-railway-loop-runner-v1.json" },
+    "cloud_motor_e2e": { "ok": true, "execution_plane": "railway:noos-loop-runner", "stale_count_warn": 3 },
+    "live_sync_gate_runtime": { "ok": true, "scope": "runtime" },
+    "git_commit": { "ok": true, "sha": "eed9f82", "message": "align motor restart and E2E tooling with Railway Option A canon" }
+  },
+  "phase_f_prep": {
+    "acg_lane": "PUBLIC_PAGE_LIVE + PROSPECT_PACKET_READY",
+    "outbound_queue": "data/noos-acg-outbound-queue-v1.json",
+    "founder_send_receipt": "pending"
+  },
+  "founder_next": [
+    "Close laptop for 48h (T0)",
+    "Optional: first NW1 send from phone during test",
+    "At T+48h: make living-system-verify-48h"
+  ],
+  "ok": true
+}

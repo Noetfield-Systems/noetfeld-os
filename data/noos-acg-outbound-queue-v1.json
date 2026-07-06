@@ -1,0 +1,41 @@
+{
+  "schema": "noos-acg-outbound-queue-v1",
+  "version": "1.0.0",
+  "authority": "LIVING_SYSTEM_99_PLAN_PHASE_F",
+  "prepared_at": "2026-07-06T10:15:00Z",
+  "founder_gated": true,
+  "queue": [
+    {
+      "slot": 1,
+      "offer_id": "NW1-ACG-001",
+      "title": "ACG founding pilot — first NW1 send",
+      "packet_path": "docs/commercial/ACG_FIRST_PROSPECT_PACKET_v1.md",
+      "packet_commit": "bfc05dbb2c7ff102dee6380e8a202dae493c11d1",
+      "live_url": "https://www.noetfield.com/services/agentic-cost-governance",
+      "send_at": "2026-07-06T10:15:00Z",
+      "status": "ready",
+      "founder_gated": true
+    },
+    {
+      "slot": 2,
+      "offer_id": "NW1-002",
+      "title": "NW1 Copilot attach — prospect slot 2",
+      "packet_path": "noetfield-org/templates/nw1-copilot-attach-v1.md",
+      "send_at": "2026-07-07T14:00:00Z",
+      "status": "queued",
+      "founder_gated": true
+    },
+    {
+      "slot": 3,
+      "offer_id": "NW1-003",
+      "title": "NW1 Copilot attach — prospect slot 3",
+      "packet_path": "noetfield-org/templates/nw1-copilot-attach-v1.md",
+      "send_at": "2026-07-08T14:00:00Z",
+      "status": "queued",
+      "founder_gated": true
+    }
+  ],
+  "remaining_slots": 22,
+  "note": "Slots 4–25 reserved; expand from noetfield-org commercial backlog during 48h test",
+  "ok": true
+}
