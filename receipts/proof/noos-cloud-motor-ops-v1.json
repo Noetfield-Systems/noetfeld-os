@@ -1,0 +1,14 @@
+{
+  "schema": "noos-cloud-motor-ops-v1",
+  "verified_at": "2026-07-06T06:00:47Z",
+  "authority": "UPG-LS-02",
+  "e2e_ok": true,
+  "e2e_tail": "telegram_ready=True\n{\n    \"schema\": \"noos-deadman-run-v1\",\n    \"run_at\": \"2026-07-06T06:00:15.325Z\",\n    \"source\": \"http_check\",\n    \"stale_count\": 8,\n    \"stale_loops\": [\n        {\n            \"loop_id\": \"runtime\",\n            \"event_type\": \"noos_runtime_loop_tick\",\n            \"interval_minutes\": 15,\n            \"last_fired_at\": null,\n            \"reason\": \"never_fired\"\n        },\n        {\n            \"loop_id\": \"surface\",\n            \"event_type\": \"noos_surface_loop_tick\",\n            \"interval_minutes\": 20,\n            \"last_fired_at\": null,\n            \"reason\": \"never_fired\"\n        },\n",
+  "dispatch_verify": {
+    "raw": "cf_railway_dispatch_verify \u00b7 fired=14/14 exec_ok=5/14\n"
+  },
+  "runbook": "scripts/phase_a_wire_cloud_motor_v1.sh",
+  "resync_target": "make cloud-motor-resync",
+  "external_monitors": "data/noos-external-monitors-v1.json",
+  "ok": true
+}

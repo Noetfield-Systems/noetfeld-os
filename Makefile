@@ -101,6 +101,26 @@ cloud-motor-e2e:
 cloud-motor-resync:
 	bash scripts/phase_a_wire_cloud_motor_v1.sh
 
+motor-restart:
+	python3 scripts/noos_motor_restart_v1.py --recipe $(RECIPE) --write-receipt --json
+
+motor-status:
+	python3 scripts/noos_motor_restart_v1.py --recipe cf-loop-motor --dry-run --json && \
+	python3 scripts/noos_motor_restart_v1.py --recipe cf-deadman --dry-run --json && \
+	python3 scripts/noos_motor_restart_v1.py --recipe railway-loop-runner --dry-run --json
+
+living-system-baseline:
+	python3 scripts/verify_noos_living_system_48h_v1.py --baseline --write-receipt --json
+
+living-system-verify-48h:
+	python3 scripts/verify_noos_living_system_48h_v1.py --final --write-receipt --json
+
+seed-loop-liveness:
+	python3 scripts/seed_noos_loop_liveness_v1.py --tick-all --json
+
+cloud-motor-ops-receipt:
+	python3 scripts/write_noos_cloud_motor_ops_receipt_v1.py
+
 loop-verify-all:
 	python3 scripts/noos_loop_verify_v1.py --json all --write-receipt --lookback-hours 24 --fallback-hours 168
 

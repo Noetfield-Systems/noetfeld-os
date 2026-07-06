@@ -9,8 +9,15 @@
   "restart_attempts_max": 1,
   "loop_runner": {
     "health_path": "/health",
-    "loop_path": "/loop"
+    "loop_path": "/loop",
+    "motor_restart_path": "/motor-restart"
   },
+  "cf_loop_motor": {
+    "health_url": "https://noos-loop-fleet-tick-v1.sina-kazemnezhad-ca.workers.dev/health",
+    "restart_recipe_id": "cf-loop-motor"
+  },
+  "motor_restart_recipes_path": "data/noos-motor-restart-recipes-v1.json",
+  "heartbeat_summary_hours_utc": [6, 12, 18, 0],
   "supabase": {
     "registry_table": "noos_loop_registry",
     "receipts_table": "noos_deadman_runs"

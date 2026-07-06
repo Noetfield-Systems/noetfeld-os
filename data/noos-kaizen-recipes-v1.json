@@ -1,0 +1,61 @@
+{
+  "schema": "noos-kaizen-recipes-v1",
+  "version": "1.0.0",
+  "authority": "LIVING_SYSTEM_99_PLAN_PHASE_D",
+  "recipes": [
+    {
+      "id": "cloud-motor-401-resync",
+      "class": "machine_safe",
+      "match_pattern": "(401|unauthorized|LOOP_RUNNER_SECRET)",
+      "title": "CF→Railway 401 — resync motor secrets",
+      "fix_command": "bash scripts/phase_a_wire_cloud_motor_v1.sh",
+      "external_verify_command": "bash scripts/verify_noos_cloud_motor_e2e_v1.sh",
+      "rollback_command": "echo no_rollback_secret_resync"
+    },
+    {
+      "id": "railway-supabase-env-sync",
+      "class": "machine_safe",
+      "match_pattern": "(supabase_url_missing|liveness.*fail|noos_loop_registry)",
+      "title": "Sync Supabase env to Railway loop-runner",
+      "fix_command": "bash scripts/sync_railway_loop_runner_env_v1.sh",
+      "external_verify_command": "bash scripts/verify_noos_cloud_motor_e2e_v1.sh",
+      "rollback_command": "echo no_rollback_env_sync"
+    },
+    {
+      "id": "seed-all-loop-ticks",
+      "class": "machine_safe",
+      "match_pattern": "(never_fired|stale_count|stale loop)",
+      "title": "Seed all CF loop ticks once",
+      "fix_command": "python3 scripts/seed_noos_loop_liveness_v1.py --tick-all",
+      "external_verify_command": "python3 scripts/seed_noos_loop_liveness_v1.py --assert-min-rows 13",
+      "rollback_command": "echo no_rollback_liveness_seed"
+    },
+    {
+      "id": "deadman-cf-redeploy",
+      "class": "machine_safe",
+      "match_pattern": "(deadman.*502|deadman.*fail|noos-deadman)",
+      "title": "Redeploy CF deadman worker",
+      "fix_command": "bash scripts/deploy_noos_deadman_cf_v1.sh",
+      "external_verify_command": "curl -fsS https://noos-deadman-v1.sina-kazemnezhad-ca.workers.dev/health",
+      "rollback_command": "echo no_rollback_deadman"
+    },
+    {
+      "id": "migration-0016-verify",
+      "class": "machine_safe",
+      "match_pattern": "(0016|noos_loop_registry|noos_deadman_runs)",
+      "title": "Apply/verify Supabase migration 0016",
+      "fix_command": "python3 scripts/apply_supabase_migration_v1.py --migration 0016",
+      "external_verify_command": "python3 scripts/seed_noos_loop_liveness_v1.py --assert-table",
+      "rollback_command": "echo no_rollback_migration"
+    },
+    {
+      "id": "motor-restart-cf-loop",
+      "class": "machine_safe",
+      "match_pattern": "(cf-loop-motor|loop-fleet-tick.*down)",
+      "title": "Machine-safe CF loop motor restart",
+      "fix_command": "python3 scripts/noos_motor_restart_v1.py --recipe cf-loop-motor --write-receipt",
+      "external_verify_command": "bash scripts/verify_noos_cloud_motor_e2e_v1.sh",
+      "rollback_command": "python3 scripts/noos_motor_restart_v1.py --recipe railway-loop-runner --dry-run"
+    }
+  ]
+}

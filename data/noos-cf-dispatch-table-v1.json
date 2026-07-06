@@ -18,6 +18,7 @@
     {"dispatch_id": "researcher", "event_type": "noos_researcher_deep_dive_tick", "interval_minutes": 60, "handler": "loop"},
     {"dispatch_id": "specialist", "event_type": "noos_specialist_proposals_tick", "interval_minutes": 120, "handler": "loop"},
     {"dispatch_id": "orchestrator", "event_type": "noos_orchestrator_cross_repo_tick", "interval_minutes": 180, "handler": "loop"},
-    {"dispatch_id": "factory_autorun", "event_type": "noos_factory_autorun_tick", "interval_minutes": 10, "handler": "factory"}
+    {"dispatch_id": "factory_autorun", "event_type": "noos_factory_autorun_tick", "interval_minutes": 10, "handler": "factory"},
+    {"dispatch_id": "improve_kaizen_daily", "event_type": "noos_improve_kaizen_daily_tick", "interval_minutes": 1440, "handler": "loop", "note": "CF-dispatched nightly kaizen recipe slot (not GHA cron)"}
   ]
 }

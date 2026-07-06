@@ -1,0 +1,69 @@
+{
+  "schema": "noos-motor-restart-recipes-v1",
+  "version": "1.0.0",
+  "authority": "LIVING_SYSTEM_99_PLAN_PHASE_C",
+  "recipes": [
+    {
+      "id": "cf-loop-motor",
+      "motor": "cf-loop-motor",
+      "gate": "machine_safe",
+      "worker": "noos-loop-fleet-tick-v1",
+      "health_url": "https://noos-loop-fleet-tick-v1.sina-kazemnezhad-ca.workers.dev/health",
+      "description": "Redeploy CF loop fleet tick with Railway URL+secret (no secret rotate)",
+      "steps": [
+        {
+          "kind": "shell",
+          "cwd": ".",
+          "command": "bash scripts/sync_railway_loop_runner_env_v1.sh"
+        },
+        {
+          "kind": "shell",
+          "cwd": ".",
+          "command": "bash scripts/deploy_noos_loop_fleet_tick_cf_v1.sh",
+          "requires_env": ["LOOP_RUNNER_URL", "LOOP_RUNNER_SECRET"]
+        }
+      ],
+      "external_verify_command": "bash scripts/verify_noos_cloud_motor_e2e_v1.sh"
+    },
+    {
+      "id": "cf-deadman",
+      "motor": "cf-deadman",
+      "gate": "machine_safe",
+      "worker": "noos-deadman-v1",
+      "health_url": "https://noos-deadman-v1.sina-kazemnezhad-ca.workers.dev/health",
+      "description": "Redeploy CF deadman worker (Supabase + loop runner secrets unchanged)",
+      "steps": [
+        {
+          "kind": "shell",
+          "cwd": ".",
+          "command": "bash scripts/deploy_noos_deadman_cf_v1.sh"
+        }
+      ],
+      "external_verify_command": "curl -fsS https://noos-deadman-v1.sina-kazemnezhad-ca.workers.dev/health"
+    },
+    {
+      "id": "railway-loop-runner",
+      "motor": "railway-loop-runner",
+      "gate": "machine_safe",
+      "service": "noos-loop-runner",
+      "health_url": "https://noos-loop-runner-production.up.railway.app/health",
+      "description": "Redeploy Railway loop runner (reuses LOOP_RUNNER_SECRET; auto-syncs CF motor)",
+      "steps": [
+        {
+          "kind": "shell",
+          "cwd": ".",
+          "command": "bash scripts/deploy_noos_loop_runner_railway_v1.sh"
+        }
+      ],
+      "external_verify_command": "curl -fsS https://noos-loop-runner-production.up.railway.app/health"
+    },
+    {
+      "id": "fly-inbox-motor",
+      "motor": "fly-inbox",
+      "gate": "founder_gated",
+      "description": "Fly L4 inbox motor — deferred; founder deploy only",
+      "steps": [],
+      "external_verify_command": null
+    }
+  ]
+}

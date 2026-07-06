@@ -11,6 +11,13 @@
       "noos-deadman-v1"
     ]
   },
+  "operator_checklist": [
+    "make cloud-motor-e2e — daily or after any deploy",
+    "make cloud-motor-resync — on CF 401 or secret drift",
+    "make deadman-probe — confirm stale_count and telegram_ready",
+    "UptimeRobot: alert-only on 4 URLs below (no loop dispatches)",
+    "cron-job.org: optional POST deadman /check every 30m (tertiary probe)"
+  ],
   "uptimerobot": {
     "roi": "high",
     "role": "uptime_alerts_only",

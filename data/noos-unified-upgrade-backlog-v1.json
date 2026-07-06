@@ -4,7 +4,12 @@
   "authority": "NOOS-AGENT-20260702-027",
   "planes_registry": "data/noos-upgrade-planes-v1.json",
   "governed_by": "governed-autorun L1-L13",
-  "updated_at": "2026-07-05",
+  "updated_at": "2026-07-06",
+  "living_system_99": {
+    "plan": "docs/_NOOS_AGENT/[NOOS-AGENT-20260705-029]_LIVING_SYSTEM_99_PLAN_LOCKED_v1.md",
+    "upg_ls_status": "UPG-LS-01–08 implemented; UPG-LS-09–10 founder-gated",
+    "receipt": "receipts/proof/noos-living-system-99-closeout-v1.json"
+  },
   "current_phase": 4,
   "tier_definitions": {
     "T0": "CLOSED \u2014 evidence on disk, do not re-open unless drift",
@@ -28,8 +33,8 @@
     "COM": "Commercial proof"
   },
   "summary": {
-    "total_items": 63,
-    "done": 37,
+    "total_items": 73,
+    "done": 47,
     "open_t1": 0,
     "open_t2": 0,
     "open_t3": 1,

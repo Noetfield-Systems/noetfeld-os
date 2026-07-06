@@ -799,6 +799,65 @@ def dirty_count(path: Path) -> int:
         return 0
 
 
+def probe_url_motor_health(wf: dict[str, Any]) -> dict[str, Any]:
+    probe = wf.get("probe") or {}
+    urls = probe.get("urls") or []
+    oks = 0
+    details: list[dict[str, Any]] = []
+    for item in urls:
+        url = str(item.get("url") or "")
+        name = item.get("name") or url
+        req = urllib.request.Request(url, headers={"User-Agent": "autorun-status-v1"})
+        try:
+            with urllib.request.urlopen(req, timeout=15) as resp:
+                raw = resp.read().decode("utf-8", errors="replace")
+                try:
+                    body = json.loads(raw)
+                except json.JSONDecodeError:
+                    body = {"raw": raw[:200]}
+                ok = resp.status == 200 and body.get("ok", True)
+                if ok:
+                    oks += 1
+                details.append({"name": name, "url": url, "ok": ok, "status": resp.status, "body_keys": sorted(body.keys())[:8]})
+        except (urllib.error.HTTPError, OSError) as exc:
+            details.append({"name": name, "url": url, "ok": False, "error": str(exc)[:120]})
+    status = "RUNNING" if oks == len(urls) and urls else "FAILED_WITH_RECEIPT"
+    return {
+        "status": status,
+        "evidence": {"checked": len(urls), "oks": oks, "motors": details, "observed_at": utc_now()},
+    }
+
+
+def probe_supabase_noos_liveness_registry(wf: dict[str, Any], wf_doc: dict[str, Any], stale_minutes: float) -> dict[str, Any]:
+    probe = wf.get("probe") or {}
+    cfg = supabase_profile_config(probe.get("supabase_profile", "noetfield"), wf_doc)
+    if not cfg:
+        return blocked("supabase_not_configured", evidence={"table": "noos_loop_registry"})
+    hit = supabase_get(cfg, "noos_loop_registry", query="select=loop_id,last_fired_at,interval_minutes")
+    if not hit.get("ok"):
+        return blocked("supabase_query_failed", evidence={"http": hit.get("status")})
+    rows = hit.get("rows") or []
+    multiplier = float(probe.get("stale_multiplier") or 2.0)
+    stale: list[str] = []
+    for row in rows:
+        interval = int(row.get("interval_minutes") or 5)
+        last = row.get("last_fired_at")
+        age = age_minutes(last)
+        if last is None or age is None or age > interval * multiplier:
+            stale.append(str(row.get("loop_id")))
+    expected = int(probe.get("expected_rows") or 13)
+    if len(rows) < expected:
+        stale.extend([f"missing_rows:{expected - len(rows)}"])
+    status = "RUNNING" if not stale else "FAILED_WITH_RECEIPT"
+    return {
+        "status": status,
+        "stale_count": len(stale),
+        "registry_rows": len(rows),
+        "stale_loops": stale[:20],
+        "evidence": {"observed_at": utc_now(), "expected_rows": expected},
+    }
+
+
 def reconciler_authority_check(wf_doc: dict[str, Any]) -> dict[str, Any]:
     sole_path = (wf_doc.get("control_authority") or {}).get("sole_reconciler")
     noos_hits = list(ROOT.glob("**/phase_reconciler_v1.py"))
@@ -820,7 +879,9 @@ PROBES = {
     "supabase_noos_factory": probe_supabase_noos_factory,
     "supabase_noos_loop": probe_supabase_noos_loop,
     "supabase_noos_inbox": probe_supabase_noos_inbox,
+    "supabase_noos_liveness_registry": probe_supabase_noos_liveness_registry,
     "url_sweep_readonly": probe_url_sweep_readonly,
+    "url_motor_health": probe_url_motor_health,
     "github_schedule_probe": probe_github_schedule,
 }
 
@@ -949,9 +1010,7 @@ def build_dashboard() -> dict[str, Any]:
             )
         else:
             try:
-                if probe_type == "url_sweep_readonly":
-                    row.update(fn(wf))
-                elif probe_type == "github_schedule_probe":
+                if probe_type in {"url_sweep_readonly", "url_motor_health", "github_schedule_probe"}:
                     row.update(fn(wf))
                 else:
                     row.update(fn(wf, wf_doc, stale_minutes))

@@ -1,0 +1,24 @@
+{
+  "schema": "noos-phase-b-closeout-v1",
+  "authority": "UPG-LS-01",
+  "closed_at": "2026-07-06T06:00:00Z",
+  "pr": 29,
+  "branch": "lane/phase-b-deadman",
+  "gates": {
+    "cloud_motor_e2e": true,
+    "deadman_health": true,
+    "telegram_ready": true,
+    "migration_0016": true,
+    "loop_registry_reconcile": "pending_post_merge"
+  },
+  "founder_sign": {
+    "required": true,
+    "status": "pending",
+    "note": "Confirm Telegram alert in deadman bot chat; sign after stale-loop drill"
+  },
+  "stale_loop_drill": {
+    "status": "documented",
+    "procedure": "Block one loop >2x interval; expect restart + alert within 30m"
+  },
+  "ok": true
+}

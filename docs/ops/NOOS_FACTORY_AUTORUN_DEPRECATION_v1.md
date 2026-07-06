@@ -24,6 +24,15 @@ Retire `noos-factory-autorun` monolith when **all** are true:
 4. Fly self-heal runner reaction interval ≤ 60s with heartbeat receipts
 5. No production dependency on `noetfield-factory-v1-*` factory_id sinks for loop cycles
 
+## Motor restart (Phase C — UPG-LS-04/05)
+
+When CF loop motor or Railway loop-runner `/health` fails, deadman triggers machine-safe restart recipes:
+
+- Registry: `data/noos-motor-restart-recipes-v1.json`
+- Executor: `scripts/noos_motor_restart_v1.py` · Railway `POST /motor-restart`
+- Runbook: `docs/ops/NOOS_MOTOR_RESTART_RECIPES_v1.md`
+- Drill receipt: `receipts/proof/noos-motor-restart-drill-v1.json`
+
 ## Action (not yet executed)
 
 - Do **not** delete `.github/workflows/noos-factory-autorun.yml` until Fly secondary motors are deployed and verified live.

@@ -47,6 +47,12 @@ fi
 
 deadman="$(curl -fsS -X POST "${DEADMAN}/check")"
 echo "$deadman" | python3 -c 'import json,sys; d=json.load(sys.stdin); sys.exit(0 if d.get("alert_sent") is not None else 1)' || fail "deadman /check failed"
+stale="$(echo "$deadman" | python3 -c 'import json,sys; print(json.load(sys.stdin).get("stale_count",999))')"
+if [[ "$stale" -gt 1 ]]; then
+  printf '[e2e] WARN: stale_count=%s (target <=1 until all loops seeded)\n' "$stale" >&2
+else
+  ok "deadman stale_count<=${stale}"
+fi
 alert="$(echo "$deadman" | python3 -c 'import json,sys; print(json.load(sys.stdin).get("alert_sent"))')"
 tg="$(curl -fsS "${DEADMAN}/health" | python3 -c 'import json,sys; print(json.load(sys.stdin).get("telegram_ready"))')"
 ok "deadman alert_sent=${alert} telegram_ready=${tg}"

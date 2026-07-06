@@ -36,7 +36,7 @@
 - **Must-Sync-With:** SourceA, TrustField-Technologies, sina-governance-SSOT
 - **Workflows:** noos-factory-autorun · noos-loop-fleet-tick · noos-deadman-v1 · verify-autonomous-24h
 - **Cloud Workers:** `noos-loop-fleet-tick-v1` (loop motor, */5) · `noos-deadman-v1` (liveness watchdog, */30)
-- **Org-Sync-Anchors:** noetfield-org/* (this directory)
+- **Cloud ops runbook:** `scripts/phase_a_wire_cloud_motor_v1.sh` · `make cloud-motor-resync` · `docs/ops/NOOS_MOTOR_RESTART_RECIPES_v1.md`
 - **Owner:** Noetfield-Systems
 
 ### 4. sina-governance-SSOT

@@ -1,6 +1,6 @@
 {
   "schema": "autorun-workflows-v1",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "read_only": true,
   "one_law": "Observe autorun surfaces only. phase_reconciler_v1 remains sole control authority.",
   "slo_defaults": {
@@ -245,6 +245,30 @@
         "github_workflow": "noos-sourcea-observe-loop.yml"
       },
       "run_command": "python3 scripts/noos_loop_runner_v1.py --event-type noos_sourcea_observe_loop_tick"
+    },
+    {
+      "id": "noos_deadman",
+      "title": "NOOS deadman liveness watchdog",
+      "plane": "NOETFELD-OS",
+      "probe": {
+        "type": "url_motor_health",
+        "urls": [
+          {"name": "deadman health", "url": "https://noos-deadman-v1.sina-kazemnezhad-ca.workers.dev/health"},
+          {"name": "deadman check", "url": "https://noos-deadman-v1.sina-kazemnezhad-ca.workers.dev/health"}
+        ]
+      }
+    },
+    {
+      "id": "noos_loop_liveness_registry",
+      "title": "NOOS loop liveness registry (Supabase)",
+      "plane": "NOETFELD-OS",
+      "probe": {
+        "type": "supabase_noos_liveness_registry",
+        "supabase_profile": "noetfield",
+        "expected_rows": 14,
+        "stale_multiplier": 2
+      },
+      "run_command": "python3 scripts/seed_noos_loop_liveness_v1.py --tick-all"
     },
     {
       "id": "sandbox_health_sweep",

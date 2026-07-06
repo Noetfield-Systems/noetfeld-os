@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
-# phase_a_wire_cloud_motor_v1.sh — run from repo root; wires Railway loop-runner + CF motor
+# phase_a_wire_cloud_motor_v1.sh — one-lane cloud motor ops runbook (UPG-LS-02)
+# Run from repo root. Chains: Railway deploy → Supabase env sync → CF motor deploy → E2E gate.
+# On 401/resync: `make cloud-motor-resync` (same script). Never rotate LOOP_RUNNER_SECRET manually.
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"

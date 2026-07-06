@@ -76,6 +76,43 @@ async function fetchRegistry(env) {
   return { ok: true, rows: await resp.json() };
 }
 
+async function probeMotorHealth(url) {
+  if (!url) return { ok: false, error: "health_url_missing" };
+  try {
+    const resp = await fetch(url, { headers: { "User-Agent": "noos-deadman-v1" } });
+    let body = null;
+    try {
+      body = await resp.json();
+    } catch {
+      body = null;
+    }
+    return { ok: resp.ok && (body?.ok !== false), status: resp.status, body };
+  } catch (err) {
+    return { ok: false, error: String(err) };
+  }
+}
+
+async function restartMotor(env, recipeId) {
+  const base = (env.LOOP_RUNNER_URL || "").trim().replace(/\/$/, "");
+  const secret = (env.LOOP_RUNNER_SECRET || "").trim();
+  const path = (config.loop_runner || {}).motor_restart_path || "/motor-restart";
+  if (!base || !recipeId) return { ok: false, error: "loop_runner_or_recipe_missing" };
+  const headers = { "Content-Type": "application/json", "User-Agent": "noos-deadman-v1" };
+  if (secret) headers.Authorization = `Bearer ${secret}`;
+  const resp = await fetch(`${base}${path}`, {
+    method: "POST",
+    headers,
+    body: JSON.stringify({ recipe_id: recipeId, source: "deadman-v1", dry_run: false }),
+  });
+  let body = null;
+  try {
+    body = await resp.json();
+  } catch {
+    body = { raw: (await resp.text()).slice(0, 200) };
+  }
+  return { ok: resp.ok && body?.ok !== false, status: resp.status, recipe_id: recipeId, body };
+}
+
 async function restartLoop(env, eventType) {
   const base = (env.LOOP_RUNNER_URL || "").trim().replace(/\/$/, "");
   const secret = (env.LOOP_RUNNER_SECRET || "").trim();
@@ -126,13 +163,37 @@ async function sinkReceipt(env, receipt) {
   return { ok: resp.ok, run_id: runId, status: resp.status };
 }
 
+async function maybeHeartbeatSummary(env, staleCount) {
+  const hours = config.heartbeat_summary_hours_utc || [];
+  const hour = new Date().getUTCHours();
+  if (!hours.includes(hour)) return { ok: false, skipped: true, reason: "not_summary_hour" };
+  const msg =
+    staleCount === 0
+      ? `NOOS deadman heartbeat (T+${hour}h UTC): all loops fresh, motors OK`
+      : `NOOS deadman heartbeat (T+${hour}h UTC): stale_count=${staleCount}`;
+  return sendTelegram(env, msg);
+}
+
 async function runCheck(env, meta = {}) {
   const multiplier = Number((config.interval_multipliers || {}).default || 2);
   const maxAttempts = Number(config.restart_attempts_max || 1);
+  const loopRunnerBase = (env.LOOP_RUNNER_URL || "").trim().replace(/\/$/, "");
+  const loopHealthPath = (config.loop_runner || {}).health_path || "/health";
+  const loopRunnerHealth = loopRunnerBase
+    ? await probeMotorHealth(`${loopRunnerBase}${loopHealthPath}`)
+    : { ok: false, error: "loop_runner_url_missing" };
+  const cfMotorHealth = await probeMotorHealth((config.cf_loop_motor || {}).health_url);
+  const motorRestarts = [];
+  if (!loopRunnerHealth.ok && maxAttempts > 0) {
+    motorRestarts.push(await restartMotor(env, "railway-loop-runner"));
+  } else if (!cfMotorHealth.ok && maxAttempts > 0) {
+    motorRestarts.push(await restartMotor(env, (config.cf_loop_motor || {}).restart_recipe_id || "cf-loop-motor"));
+  }
   const registry = await fetchRegistry(env);
   const stale = evaluateStale(registry.rows || [], multiplier);
   const restartAttempts = [];
-  for (const row of stale.slice(0, maxAttempts)) {
+  const loopBudget = Math.max(0, maxAttempts - motorRestarts.length);
+  for (const row of stale.slice(0, loopBudget)) {
     if (row.event_type) {
       restartAttempts.push({ ...row, restart: await restartLoop(env, row.event_type) });
     }
@@ -144,16 +205,21 @@ async function runCheck(env, meta = {}) {
     alertResult = await sendTelegram(env, msg);
     alertSent = alertResult.ok === true;
   }
+  const heartbeat = await maybeHeartbeatSummary(env, stale.length);
   const receipt = {
     schema: "noos-deadman-run-v1",
     run_at: new Date().toISOString(),
     source: meta.source || "cf-cron",
+    loop_runner_health: loopRunnerHealth,
+    cf_motor_health: cfMotorHealth,
+    motor_restarts: motorRestarts,
     stale_count: stale.length,
     stale_loops: stale,
     restart_attempts: restartAttempts,
     restart_attempt_count: restartAttempts.length,
     alert_sent: alertSent,
     alert: alertResult,
+    heartbeat_summary: heartbeat,
     ok: registry.ok !== false,
   };
   receipt.supabase_sink = await sinkReceipt(env, receipt);
