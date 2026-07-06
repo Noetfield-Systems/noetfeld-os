@@ -33,9 +33,10 @@
   },
   "pr_merge": {
     "branch": "lane/phase-b-deadman",
-    "pr": 29,
-    "status": "pending_founder_merge",
-    "gate": "make machine-validate-merge after 48h receipt ok=true"
+    "pr_29": { "status": "merged", "sha": "c0b2c29" },
+    "follow_up_pr": "pending — Railway canon + Phase E preflight (eed9f82..HEAD)",
+    "status": "follow_up_pr_needed",
+    "gate": "merge follow-up PR after CI green; 48h receipt ok=true for closeout"
   },
   "founder_sign": {
     "required": true,
