@@ -1,4 +1,4 @@
-.PHONY: test gate demo build-gate-js install inbox cloud-worker autorun-once autorun autorun-status autorun-tick-deploy autorun-tick-dispatch autonomous-verify schedule-verify determinism-verify replay-verify planes supabase-migrate verified-window loop-run loop-fleet-deploy deploy-railway-loop-runner verify-cf-railway-dispatch loop-fleet-dispatch loops-status loop-heartbeat loop-baseline loop-registry-reconcile loop-verify-all loop-upgrade-closeout deploy-baseline deploy-status deploy-fly-inbox deploy-fly-selfheal deploy-drift-kaizen inbox-scaler inbox-scaler-evaluate sandbox-registry-reconcile improve-kaizen-daily t2-deploy-closeout t3-sandbox-closeout acg-founder-send-prep backlog urls local-boot local-closeout local-patch-proposal local-heartbeat local-lane local-sweep-stale local-status machine-status machine-reconcile machine-audit machine-verify machine-validate-merge machine-critic machine-research
+.PHONY: test gate demo build-gate-js install inbox cloud-worker autorun-once autorun autorun-status autorun-tick-deploy autorun-tick-dispatch autonomous-verify schedule-verify determinism-verify replay-verify planes supabase-migrate verified-window loop-run loop-fleet-deploy deploy-railway-loop-runner verify-cf-railway-dispatch loop-fleet-dispatch loops-status loop-heartbeat loop-baseline loop-registry-reconcile loop-verify-all loop-upgrade-closeout trigger-host-inventory deploy-baseline deploy-status deploy-fly-inbox deploy-fly-selfheal deploy-drift-kaizen inbox-scaler inbox-scaler-evaluate sandbox-registry-reconcile improve-kaizen-daily t2-deploy-closeout t3-sandbox-closeout acg-founder-send-prep backlog urls local-boot local-closeout local-patch-proposal local-heartbeat local-lane local-sweep-stale local-status machine-status machine-reconcile machine-audit machine-verify machine-validate-merge machine-critic machine-research
 
 test:
 	pytest -q
@@ -85,6 +85,9 @@ loop-baseline:
 
 loop-registry-reconcile:
 	python3 scripts/noos_loop_registry_reconcile_v1.py --write-receipt --json
+
+trigger-host-inventory:
+	python3 scripts/noos_trigger_host_inventory_v1.py --write-data --write-receipt --json
 
 loop-verify-all:
 	python3 scripts/noos_loop_verify_v1.py --json all --write-receipt --lookback-hours 24 --fallback-hours 168
