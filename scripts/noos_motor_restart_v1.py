@@ -17,7 +17,6 @@ from typing import Any
 ROOT = Path(__file__).resolve().parents[1]
 RECIPES = ROOT / "data/noos-motor-restart-recipes-v1.json"
 PROOF_DIR = ROOT / "receipts/proof"
-RAILWAY_BIN = os.environ.get("RAILWAY_BIN", "/Users/sinakazemnezhad/.railway/bin/railway")
 
 
 def utc_now() -> str:
@@ -53,27 +52,21 @@ def probe_health(url: str, *, timeout: float = 15.0) -> dict[str, Any]:
         return {"ok": False, "error": str(exc)}
 
 
-def railway_env_for_motor(recipe: dict[str, Any]) -> dict[str, str]:
+def executor_env_for_recipe(recipe: dict[str, Any], *, dry_run: bool = False) -> dict[str, str]:
     env = os.environ.copy()
     if recipe.get("id") != "cf-loop-motor":
         return env
-    url = env.get("LOOP_RUNNER_URL", "https://noos-loop-runner-production.up.railway.app")
-    secret = env.get("LOOP_RUNNER_SECRET", "")
-    if not secret and Path(RAILWAY_BIN).is_file():
-        proc = subprocess.run(
-            [RAILWAY_BIN, "variables", "--service", "noos-loop-runner", "--json"],
-            capture_output=True,
-            text=True,
-            check=False,
-        )
-        if proc.returncode == 0 and proc.stdout.strip():
-            try:
-                secret = str(json.loads(proc.stdout).get("LOOP_RUNNER_SECRET") or "")
-            except json.JSONDecodeError:
-                pass
-    env["LOOP_RUNNER_URL"] = url
-    if secret:
-        env["LOOP_RUNNER_SECRET"] = secret
+    env.setdefault("FLY_LOOP_EXECUTOR_URL", "https://noos-loop-executor.fly.dev")
+    if not env.get("NOOS_LOOP_SECRET"):
+        if dry_run:
+            env["NOOS_LOOP_SECRET"] = "dry-run-placeholder"
+        else:
+            env_file = Path.home() / ".sourcea-secrets/noetfield.env"
+            if env_file.is_file():
+                for line in env_file.read_text(encoding="utf-8").splitlines():
+                    if line.startswith("NOOS_LOOP_SECRET="):
+                        env["NOOS_LOOP_SECRET"] = line.split("=", 1)[1].strip()
+                        break
     return env
 
 
@@ -82,7 +75,7 @@ def run_shell_step(step: dict[str, Any], *, dry_run: bool, extra_env: dict[str, 
     cwd = ROOT / str(step.get("cwd") or ".")
     requires = [str(x) for x in step.get("requires_env") or []]
     missing = [k for k in requires if not extra_env.get(k)]
-    if missing:
+    if missing and not dry_run:
         return {"ok": False, "command": cmd, "error": f"missing_env:{','.join(missing)}"}
     if dry_run:
         return {"ok": True, "command": cmd, "dry_run": True}
@@ -142,7 +135,7 @@ def execute_recipe(
         }
 
     health_before = probe_health(str(recipe.get("health_url") or ""))
-    extra_env = railway_env_for_motor(recipe)
+    extra_env = executor_env_for_recipe(recipe, dry_run=dry_run)
     step_results: list[dict[str, Any]] = []
     for step in recipe.get("steps") or []:
         if step.get("kind") != "shell":
@@ -177,7 +170,7 @@ def execute_recipe(
 
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
-    ap.add_argument("--recipe", required=True, help="Recipe id (cf-loop-motor, cf-deadman, railway-loop-runner)")
+    ap.add_argument("--recipe", required=True, help="Recipe id (cf-loop-motor, cf-deadman, fly-loop-executor)")
     ap.add_argument("--dry-run", action="store_true")
     ap.add_argument("--force-founder-gated", action="store_true")
     ap.add_argument("--write-receipt", action="store_true")

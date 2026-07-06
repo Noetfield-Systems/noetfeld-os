@@ -20,6 +20,15 @@
       "ready_url": "https://noos-self-heal-runner.fly.dev/ready",
       "local_smoke_module": "ops/fly/noos-self-heal-runner/server.py"
     },
+    "fly-loop-executor": {
+      "title": "Fly Option B HTTP loop executor (one shot per request)",
+      "upg": "UPG-LS-OPTION-B",
+      "fly_app": "noos-loop-executor",
+      "fly_config": "ops/fly/noos-loop-executor/fly.toml",
+      "health_url": "https://noos-loop-executor.fly.dev/health",
+      "loop_url": "https://noos-loop-executor.fly.dev/loop",
+      "local_smoke_module": "ops/fly/noos-loop-executor/server.py"
+    },
     "gel-api": {
       "title": "Railway gel-api (status only until UPG-0213)",
       "upg": "UPG-0171",

@@ -1,25 +1,28 @@
 #!/usr/bin/env bash
-# verify_noos_cloud_motor_e2e_v1.sh — CF motor → Railway → liveness → deadman
+# verify_noos_cloud_motor_e2e_v1.sh — CF motor → Fly executor → liveness → deadman
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$ROOT"
-RAILWAY="${RAILWAY_BIN:-/Users/sinakazemnezhad/.railway/bin/railway}"
 
 fail() { printf '[e2e] FAIL: %s\n' "$*" >&2; exit 1; }
 ok() { printf '[e2e] OK: %s\n' "$*"; }
 
-URL="${LOOP_RUNNER_URL:-https://noos-loop-runner-production.up.railway.app}"
+FLY_URL="${FLY_LOOP_EXECUTOR_URL:-https://noos-loop-executor.fly.dev}"
 CF_MOTOR="https://noos-loop-fleet-tick-v1.sina-kazemnezhad-ca.workers.dev"
 DEADMAN="https://noos-deadman-v1.sina-kazemnezhad-ca.workers.dev"
 
-body="$(curl -fsS "${URL}/health")"
-echo "$body" | python3 -c 'import json,sys; d=json.load(sys.stdin); sys.exit(0 if d.get("service")=="noos-loop-runner" else 1)' || fail "Railway /health not noos-loop-runner"
-ok "Railway loop-runner health"
+body="$(curl -fsS "${FLY_URL}/health")"
+echo "$body" | python3 -c 'import json,sys; d=json.load(sys.stdin); sys.exit(0 if d.get("service")=="noos-loop-executor" else 1)' || fail "Fly /health not noos-loop-executor"
+ok "Fly loop-executor health"
 
-tick="$(curl -fsS -X POST "${CF_MOTOR}/tick?event_type=noos_inbox_loop_tick")"
-echo "$tick" | python3 -c 'import json,sys; d=json.load(sys.stdin); r=(d.get("results") or [{}])[0]; sys.exit(0 if r.get("status")==200 else 1)' || fail "CF→Railway tick failed (401=resync secrets; check Railway logs)"
-ok "CF motor dispatched inbox loop (HTTP 200)"
+motor="$(curl -fsS "${CF_MOTOR}/health")"
+echo "$motor" | python3 -c 'import json,sys; d=json.load(sys.stdin); sys.exit(0 if d.get("execution_plane","").startswith("fly:") else 1)' || fail "CF motor not on fly execution plane"
+ok "CF motor execution_plane=fly"
+
+tick="$(curl -fsS -X POST "${CF_MOTOR}/tick?event_type=noos_inbox_loop_tick&wait=1")"
+echo "$tick" | python3 -c 'import json,sys; d=json.load(sys.stdin); r=(d.get("results") or [{}])[0]; sys.exit(0 if r.get("status")==200 and r.get("ok") else 1)' || fail "CF→Fly tick failed (check NOOS_LOOP_SECRET sync)"
+ok "CF motor dispatched inbox loop via Fly (HTTP 200)"
 
 sleep 3
 if [[ -f "$HOME/.sourcea-secrets/noetfield.env" ]]; then

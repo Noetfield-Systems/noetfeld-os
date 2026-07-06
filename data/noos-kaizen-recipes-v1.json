@@ -6,9 +6,9 @@
     {
       "id": "cloud-motor-401-resync",
       "class": "machine_safe",
-      "match_pattern": "(401|unauthorized|LOOP_RUNNER_SECRET)",
-      "title": "CF→Railway 401 — resync motor secrets",
-      "fix_command": "bash scripts/phase_a_wire_cloud_motor_v1.sh",
+      "match_pattern": "(401|403|unauthorized|NOOS_LOOP_SECRET|FLY_LOOP_EXECUTOR)",
+      "title": "CF→Fly auth mismatch — resync motor secrets",
+      "fix_command": "bash scripts/phase_b_wire_cf_fly_motor_v1.sh",
       "external_verify_command": "bash scripts/verify_noos_cloud_motor_e2e_v1.sh",
       "rollback_command": "echo no_rollback_secret_resync"
     },
@@ -55,7 +55,7 @@
       "title": "Machine-safe CF loop motor restart",
       "fix_command": "python3 scripts/noos_motor_restart_v1.py --recipe cf-loop-motor --write-receipt",
       "external_verify_command": "bash scripts/verify_noos_cloud_motor_e2e_v1.sh",
-      "rollback_command": "python3 scripts/noos_motor_restart_v1.py --recipe railway-loop-runner --dry-run"
+      "rollback_command": "python3 scripts/noos_motor_restart_v1.py --recipe fly-loop-executor --dry-run"
     }
   ]
 }

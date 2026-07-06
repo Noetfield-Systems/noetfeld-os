@@ -1,28 +1,76 @@
 #!/usr/bin/env bash
-# deploy_noos_loop_fleet_tick_cf_v1.sh — CF */5 cron → Railway loop runner (no GHA)
+# deploy_noos_loop_fleet_tick_cf_v1.sh — CF motor → Railway loop executor (Option A)
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 WORKER_DIR="$ROOT/cloud/workers/noos-loop-fleet-tick-v1"
 TABLE_SRC="$ROOT/data/noos-cf-dispatch-table-v1.json"
 TABLE_DST="$WORKER_DIR/src/dispatch-table.json"
+WRANGLER="$WORKER_DIR/wrangler.toml"
+WRANGLER_BAK="$WORKER_DIR/wrangler.toml.bak-deploy"
+RAILWAY="${RAILWAY_BIN:-$HOME/.railway/bin/railway}"
+RAILWAY_SERVICE="${RAILWAY_LOOP_RUNNER_SERVICE:-noos-loop-runner}"
 
 cp "$TABLE_SRC" "$TABLE_DST"
 
-if [[ -z "${LOOP_RUNNER_URL:-}" ]]; then
-  echo "FAIL: set LOOP_RUNNER_URL (Railway noos-loop-runner public URL)" >&2
+EXECUTOR_URL="${FLY_LOOP_EXECUTOR_URL:-${RAILWAY_LOOP_EXECUTOR_URL:-https://noos-loop-runner-production.up.railway.app}}"
+EXECUTOR_URL="${EXECUTOR_URL%/}"
+
+if [[ -z "${NOOS_LOOP_SECRET:-}" && -x "$RAILWAY" ]]; then
+  NOOS_LOOP_SECRET="$("$RAILWAY" variables --service "$RAILWAY_SERVICE" --json 2>/dev/null | python3 -c "
+import json,sys
+try:
+    d=json.load(sys.stdin)
+except Exception:
+    sys.exit(0)
+print(d.get('NOOS_LOOP_SECRET') or d.get('LOOP_RUNNER_SECRET') or '')
+" 2>/dev/null || true)"
+  [[ -n "${NOOS_LOOP_SECRET:-}" ]] && echo "using NOOS_LOOP_SECRET from Railway ${RAILWAY_SERVICE}"
+fi
+
+if [[ -z "${NOOS_LOOP_SECRET:-}" ]]; then
+  ENV_FILE="${NOETFIELD_ENV:-$HOME/.sourcea-secrets/noetfield.env}"
+  if [[ -f "$ENV_FILE" ]]; then
+    NOOS_LOOP_SECRET="$(grep -E '^NOOS_LOOP_SECRET=' "$ENV_FILE" 2>/dev/null | head -1 | cut -d= -f2- || true)"
+  fi
+fi
+
+if [[ -z "${NOOS_LOOP_SECRET:-}" ]]; then
+  echo "FAIL: set NOOS_LOOP_SECRET or ensure Railway ${RAILWAY_SERVICE} has it" >&2
   exit 1
 fi
-if [[ -z "${LOOP_RUNNER_SECRET:-}" ]]; then
-  echo "FAIL: set LOOP_RUNNER_SECRET (must match Railway service)" >&2
-  exit 1
+
+ENABLE_CF_CRON="${ENABLE_CF_CRON:-1}"
+cp "$WRANGLER" "$WRANGLER_BAK"
+if [[ "$ENABLE_CF_CRON" == "1" ]]; then
+  cat > "$WRANGLER" <<'EOF'
+name = "noos-loop-fleet-tick-v1"
+main = "src/index.js"
+compatibility_date = "2024-06-01"
+
+[triggers]
+crons = ["*/5 * * * *"]
+EOF
+  echo "CF cron ENABLED (*/5)"
+else
+  cat > "$WRANGLER" <<'EOF'
+name = "noos-loop-fleet-tick-v1"
+main = "src/index.js"
+compatibility_date = "2024-06-01"
+EOF
+  echo "CF cron DISABLED"
 fi
 
 cd "$WORKER_DIR"
-printf '%s' "$LOOP_RUNNER_URL" | wrangler secret put LOOP_RUNNER_URL
-printf '%s' "$LOOP_RUNNER_SECRET" | wrangler secret put LOOP_RUNNER_SECRET
+printf '%s' "$EXECUTOR_URL" | wrangler secret put FLY_LOOP_EXECUTOR_URL
+printf '%s' "$NOOS_LOOP_SECRET" | wrangler secret put NOOS_LOOP_SECRET
 wrangler deploy
+mv "$WRANGLER_BAK" "$WRANGLER"
 
-echo "OK deployed noos-loop-fleet-tick-v1 → Railway ($LOOP_RUNNER_URL)"
+for dead in GITHUB_REPO GITHUB_TOKEN LOOP_RUNNER_SECRET LOOP_RUNNER_URL; do
+  wrangler secret delete "$dead" 2>/dev/null && echo "deleted secret $dead" || echo "skip delete $dead (not set)"
+done
+
+echo "OK deployed noos-loop-fleet-tick-v1 → Railway ($EXECUTOR_URL) cron=${ENABLE_CF_CRON}"
 echo "Health: curl -fsS https://noos-loop-fleet-tick-v1.sina-kazemnezhad-ca.workers.dev/health"
-echo "Verify: curl -X POST 'https://noos-loop-fleet-tick-v1.sina-kazemnezhad-ca.workers.dev/tick?all=1'"
+echo "Verify: curl -X POST 'https://noos-loop-fleet-tick-v1.sina-kazemnezhad-ca.workers.dev/tick?event_type=noos_inbox_loop_tick&wait=1'"

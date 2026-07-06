@@ -28,6 +28,9 @@ def _supabase_creds() -> tuple[str, str] | None:
 
 
 def detect_execution_host() -> str:
+    fly_app = (os.environ.get("FLY_APP") or "").strip()
+    if fly_app:
+        return f"fly:{fly_app}"
     if os.environ.get("RAILWAY_ENVIRONMENT"):
         return "railway:noos-loop-runner"
     if os.environ.get("DISPATCH_SOURCE", "").startswith("cf"):
