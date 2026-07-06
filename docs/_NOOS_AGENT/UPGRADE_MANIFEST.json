@@ -209,6 +209,7 @@
     "UPG-LS-07": "receipts/proof/noos-autorun-spine-unify-v1.json",
     "UPG-LS-08": "scripts/verify_noos_living_system_48h_v1.py + data/noos-living-system-baseline-v1.json",
     "UPG-LS-09": "docs/_NOOS_AGENT/[NOOS-AGENT-20260706-030]_LIVING_SYSTEM_48H_RETRO_v1.md (awaiting 48h)",
-    "UPG-LS-10": "receipts/proof/noos-living-system-99-closeout-v1.json (pending founder sign + 48h ok)"
+    "UPG-LS-10": "receipts/proof/noos-living-system-99-closeout-v1.json (pending founder sign + 48h ok)",
+    "UPG-LS-TG-LOCK": "docs/_NOOS_AGENT/[NOOS-AGENT-20260706-031]_DEADMAN_TELEGRAM_LANE_LOCKED_v1.md + receipts/proof/noos-deadman-telegram-lane-lock-v1.json"
   }
 }

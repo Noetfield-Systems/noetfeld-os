@@ -7,18 +7,21 @@
   "gates": {
     "cloud_motor_e2e": true,
     "deadman_health": true,
-    "telegram_ready": true,
+    "telegram_send_alerts": false,
+    "telegram_lane_locked": true,
     "migration_0016": true,
     "loop_registry_reconcile": "pending_post_merge"
   },
   "founder_sign": {
-    "required": true,
-    "status": "pending",
-    "note": "Confirm Telegram alert in deadman bot chat; sign after stale-loop drill"
+    "required": false,
+    "status": "machine_locked",
+    "note": "Telegram lane locked OFF — no @Gateway_A; enable only via dedicated deadman bot + ALLOW_DEADMAN_TELEGRAM_SECRET_UPLOAD=1"
   },
   "stale_loop_drill": {
     "status": "documented",
     "procedure": "Block one loop >2x interval; expect restart + alert within 30m"
   },
+  "lock_state": "LOCKED_v1",
+  "locked_at": "2026-07-06T06:18:00Z",
   "ok": true
 }

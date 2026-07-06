@@ -5,12 +5,13 @@ agent_lane: NOETFELD-OS
 trace_id: NOOS-AGENT-20260706-030
 doc_type: RETRO
 workspace_root: /Users/sinakazemnezhad/Desktop/Noetfield-Systems/noetfeld-OS
+lock_state: LOCKED_v1
 -->
 
 # Living System 48h Retro v1 (placeholder)
 
 **Authority:** UPG-LS-09 · Living System 99-Plan steps 63–75  
-**Status:** Awaiting 48h execution
+**Status:** LOCKED prep · awaiting 48h execution
 
 ## T0
 
