@@ -355,6 +355,11 @@ def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--json", action="store_true")
     ap.add_argument("--write-receipt", action="store_true")
+    ap.add_argument(
+        "--witness-gha",
+        action="store_true",
+        help="GHA secondary witness: fail only on T0 checklist items",
+    )
     args = ap.parse_args()
 
     row = run_checklist()
@@ -378,6 +383,14 @@ def main() -> int:
                 if c.get("fix"):
                     print(f"       fix: {c['fix']}")
 
+    return _exit_code(row, witness_gha=args.witness_gha or os.environ.get("NOOS_GHA_WITNESS") == "1")
+
+
+def _exit_code(row: dict[str, Any], *, witness_gha: bool) -> int:
+    fails = [c for c in row["checks"] if c["status"] == "fail"]
+    if witness_gha:
+        t0_fails = [c for c in fails if c.get("tier") == "T0"]
+        return 0 if not t0_fails else 1
     return 0 if row["overall_status"] == "green" else 1
 
 

@@ -39,7 +39,7 @@ jobs:
       - name: Integrator daily checklist
         run: |
           set -euo pipefail
-          python3 scripts/noos_integrator_daily_checklist_v1.py --write-receipt --json
+          python3 scripts/noos_integrator_daily_checklist_v1.py --write-receipt --json --witness-gha
 
       - name: Upload daily checklist receipt
         if: always()

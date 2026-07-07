@@ -86,7 +86,11 @@ def verify(*, write_receipt: bool = False, motors_only: bool = False) -> dict:
 
 def main() -> int:
     write = "--write-receipt" in sys.argv
-    motors_only = "--motors-only" in sys.argv or os.environ.get("VERIFY_CHAINED_FROM_DEPLOY") == "1"
+    motors_only = (
+        "--motors-only" in sys.argv
+        or os.environ.get("VERIFY_CHAINED_FROM_DEPLOY") == "1"
+        or os.environ.get("NOOS_MOTOR_WITNESS_MOTORS_ONLY") == "1"
+    )
     row = verify(write_receipt=write, motors_only=motors_only)
     print(json.dumps(row, indent=2))
     return 0 if row.get("ok") else 1

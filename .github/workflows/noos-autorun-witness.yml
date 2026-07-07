@@ -34,7 +34,10 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p receipts/proof
+          set +o pipefail
           python3 scripts/autorun_status_v1.py --json | tee receipts/proof/noos-autorun-witness-v1.json
+          set -o pipefail
+          test -s receipts/proof/noos-autorun-witness-v1.json
 
       - name: Upload autorun witness receipt
         if: always()

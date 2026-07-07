@@ -19,6 +19,7 @@ jobs:
     timeout-minutes: 15
     env:
       NOOS_GHA_WITNESS: "1"
+      NOOS_MOTOR_WITNESS_MOTORS_ONLY: "1"
       GITHUB_RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
       CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
       CF_NOETFIELD_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
