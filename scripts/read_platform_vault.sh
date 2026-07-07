@@ -1,12 +1,16 @@
 #!/usr/bin/env bash
 # SSOT: read Noetfield platform secrets from canonical vault files (not chat memory).
-# Order: admin-dashboard → noetfield.env → noetfield-db.env → ~/.sina/secrets.env
+# Order: admin-dashboard → ~/.noetfield-platform-secrets → legacy symlinks → ~/.sina/secrets.env
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
+PLATFORM_SECRETS="${NOETFIELD_PLATFORM_SECRETS:-$HOME/.noetfield-platform-secrets}"
+
 PLATFORM_VAULT_FILES=(
   "${HOME}/.sourcea-secrets/noetfield-admin-dashboard.env"
+  "${PLATFORM_SECRETS}/noetfield.env"
+  "${PLATFORM_SECRETS}/noetfield-db.env"
   "${HOME}/.sourcea-secrets/noetfield.env"
   "${HOME}/.sourcea-secrets/noetfield-db.env"
   "${NF_SECRETS_VAULT:-${HOME}/.sina/secrets.env}"

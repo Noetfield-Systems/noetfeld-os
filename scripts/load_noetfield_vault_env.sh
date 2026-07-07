@@ -1,10 +1,13 @@
 #!/usr/bin/env bash
-# Load Noetfield Supabase keys: ~/.sourcea-secrets/noetfield.env (primary), sina fallback.
+# Load Noetfield Supabase keys: ~/.noetfield-platform-secrets/ (canonical), legacy symlinks OK.
 # Usage: source scripts/load_noetfield_vault_env.sh
 set -euo pipefail
 
-NOETFIELD_VAULT="${HOME}/.sourcea-secrets/noetfield.env"
-NOETFIELD_DB_VAULT="${HOME}/.sourcea-secrets/noetfield-db.env"
+PLATFORM_SECRETS="${NOETFIELD_PLATFORM_SECRETS:-$HOME/.noetfield-platform-secrets}"
+NOETFIELD_VAULT="${NOETFIELD_VAULT:-$PLATFORM_SECRETS/noetfield.env}"
+NOETFIELD_DB_VAULT="${NOETFIELD_DB_VAULT:-$PLATFORM_SECRETS/noetfield-db.env}"
+LEGACY_VAULT="${HOME}/.sourcea-secrets/noetfield.env"
+LEGACY_DB_VAULT="${HOME}/.sourcea-secrets/noetfield-db.env"
 SINA_VAULT="${NF_SECRETS_VAULT:-${HOME}/.sina/secrets.env}"
 
 _nf_vault_read() {
@@ -17,21 +20,24 @@ _nf_vault_apply() {
   local canonical="$1"
   shift
   [[ -n "${!canonical:-}" ]] && return 0
-  local key val
-  for key in "$canonical" "$@"; do
-    val="$(_nf_vault_read "$NOETFIELD_VAULT" "$key" || true)"
-    [[ -z "$val" ]] && val="$(_nf_vault_read "$NOETFIELD_DB_VAULT" "$key" || true)"
-    [[ -z "$val" ]] && val="$(_nf_vault_read "$SINA_VAULT" "$key" || true)"
-    if [[ -n "$val" ]]; then
-      export "${canonical}=${val}"
-      return 0
-    fi
+  local key val file
+  for file in "$NOETFIELD_VAULT" "$LEGACY_VAULT" "$NOETFIELD_DB_VAULT" "$LEGACY_DB_VAULT" "$SINA_VAULT"; do
+    for key in "$canonical" "$@"; do
+      val="$(_nf_vault_read "$file" "$key" || true)"
+      if [[ -n "$val" ]]; then
+        export "${canonical}=${val}"
+        return 0
+      fi
+    done
   done
 }
 
 if [[ -f "$NOETFIELD_VAULT" ]]; then
   # shellcheck disable=SC1090
   set -a && source "$NOETFIELD_VAULT" && set +a
+elif [[ -f "$LEGACY_VAULT" ]]; then
+  # shellcheck disable=SC1090
+  set -a && source "$LEGACY_VAULT" && set +a
 fi
 
 ADMIN_VAULT="${HOME}/.sourcea-secrets/noetfield-admin-dashboard.env"

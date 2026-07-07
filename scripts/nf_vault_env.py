@@ -1,13 +1,16 @@
 #!/usr/bin/env python3
-"""Load Noetfield Supabase keys from ~/.sourcea-secrets/ (primary) and ~/.sina/secrets.env."""
+"""Load Noetfield Supabase keys from ~/.noetfield-platform-secrets/ (canonical)."""
 
 from __future__ import annotations
 
 import os
 from pathlib import Path
 
-NOETFIELD_ENV = Path.home() / ".sourcea-secrets" / "noetfield.env"
-NOETFIELD_DB_ENV = Path.home() / ".sourcea-secrets" / "noetfield-db.env"
+PLATFORM_SECRETS = Path.home() / ".noetfield-platform-secrets"
+NOETFIELD_ENV = PLATFORM_SECRETS / "noetfield.env"
+NOETFIELD_DB_ENV = PLATFORM_SECRETS / "noetfield-db.env"
+LEGACY_NOETFIELD_ENV = Path.home() / ".sourcea-secrets" / "noetfield.env"
+LEGACY_NOETFIELD_DB_ENV = Path.home() / ".sourcea-secrets" / "noetfield-db.env"
 SINA_SECRETS = Path.home() / ".sina" / "secrets.env"
 
 SUPABASE_KEYS = (
@@ -33,6 +36,8 @@ def parse_env_file(path: Path) -> dict[str, str]:
             continue
         key, _, val = line.partition("=")
         key = key.strip()
+        if " " in key:
+            continue
         val = val.strip()
         if len(val) >= 2 and val[0] == val[-1] and val[0] in "\"'":
             val = val[1:-1]
@@ -42,7 +47,7 @@ def parse_env_file(path: Path) -> dict[str, str]:
 
 def load_noetfield_vault() -> dict[str, str]:
     merged: dict[str, str] = {}
-    for path in (SINA_SECRETS, NOETFIELD_ENV, NOETFIELD_DB_ENV):
+    for path in (SINA_SECRETS, LEGACY_NOETFIELD_ENV, LEGACY_NOETFIELD_DB_ENV, NOETFIELD_ENV, NOETFIELD_DB_ENV):
         merged.update(parse_env_file(path))
     return merged
 
@@ -82,8 +87,9 @@ if __name__ == "__main__":
         json.dumps(
             {
                 "paths": {
-                    "noetfield_env": NOETFIELD_ENV.is_file(),
-                    "noetfield_db_env": NOETFIELD_DB_ENV.is_file(),
+                    "platform_noetfield_env": NOETFIELD_ENV.is_file(),
+                    "platform_noetfield_db_env": NOETFIELD_DB_ENV.is_file(),
+                    "legacy_noetfield_env": LEGACY_NOETFIELD_ENV.is_file(),
                     "sina_secrets": SINA_SECRETS.is_file(),
                 },
                 "vault_keys": vault_status(),

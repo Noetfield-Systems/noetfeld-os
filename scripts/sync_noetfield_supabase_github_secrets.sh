@@ -20,7 +20,7 @@ sync_secret() {
   log "OK ${name}"
 }
 
-[[ -n "${NOETFIELD_SUPABASE_URL:-}" ]] || die "NOETFIELD_SUPABASE_URL missing — check ~/.sourcea-secrets/noetfield.env"
+[[ -n "${NOETFIELD_SUPABASE_URL:-}" ]] || die "NOETFIELD_SUPABASE_URL missing — check ~/.noetfield-platform-secrets/noetfield.env"
 
 sync_secret NOETFIELD_SUPABASE_URL "${NOETFIELD_SUPABASE_URL}"
 sync_secret NOETFIELD_SUPABASE_SERVICE_ROLE_KEY "${NOETFIELD_SUPABASE_SERVICE_ROLE_KEY:-}"
