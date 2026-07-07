@@ -189,6 +189,60 @@ async def _verify_founder_blocked(url: str) -> dict[str, Any]:
         await conn.close()
 
 
+async def _verify_security_advisor_warnings(url: str) -> dict[str, Any]:
+    import asyncpg
+
+    conn = await asyncpg.connect(url)
+    try:
+        funcs = [
+            ("noetfield", "prevent_update_delete"),
+            ("noetfield", "tle_entries_immutable_guard"),
+            ("noetfield", "current_tenant_id"),
+        ]
+        func_ok: dict[str, bool] = {}
+        for schema, name in funcs:
+            row = await conn.fetchrow(
+                """
+                select p.proconfig
+                from pg_proc p
+                join pg_namespace n on n.oid = p.pronamespace
+                where n.nspname = $1 and p.proname = $2
+                """,
+                schema,
+                name,
+            )
+            cfg = row["proconfig"] if row else None
+            func_ok[f"{schema}.{name}"] = bool(cfg) and any(
+                str(c).startswith("search_path=") for c in (cfg or [])
+            )
+        ext = await conn.fetchrow(
+            """
+            select n.nspname from pg_extension e
+            join pg_namespace n on n.oid = e.extnamespace where e.extname = 'vector'
+            """
+        )
+        pol = await conn.fetchrow(
+            """
+            select with_check from pg_policies
+            where schemaname='public' and tablename='gateway_leads' limit 1
+            """
+        )
+        wc = (pol["with_check"] or "").strip().lower() if pol else "missing"
+        ok = (
+            all(func_ok.values())
+            and (ext["nspname"] if ext else "") == "extensions"
+            and wc not in ("true", "missing", "")
+        )
+        return {
+            "ok": ok,
+            "functions": func_ok,
+            "vector_schema": ext["nspname"] if ext else None,
+            "gateway_with_check": pol["with_check"] if pol else None,
+        }
+    finally:
+        await conn.close()
+
+
 def verify_migration(number: str, *, url: str) -> dict[str, Any]:
     if number == "0012":
         return asyncio.run(_verify_founder_blocked(url))
@@ -200,6 +254,8 @@ def verify_migration(number: str, *, url: str) -> dict[str, Any]:
         return asyncio.run(_verify_table_exists(url, "noos_loop_registry"))
     if number == "0017":
         return asyncio.run(_verify_rls_machine_tables(url))
+    if number == "0018":
+        return asyncio.run(_verify_security_advisor_warnings(url))
     return {"ok": True, "note": "no specific verifier for migration"}
 
 

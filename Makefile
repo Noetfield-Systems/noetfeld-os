@@ -58,6 +58,10 @@ supabase-migrate:
 supabase-rls-verify:
 	python3 scripts/verify_supabase_rls_machine_tables_v1.py --write-receipt --json
 
+supabase-security-verify:
+	python3 scripts/verify_supabase_security_advisor_warnings_v1.py --write-receipt --json
+	python3 scripts/verify_supabase_rls_machine_tables_v1.py --write-receipt --json
+
 verified-window:
 	python3 scripts/open_noos_verified_window_v1.py --write-receipt --json
 
@@ -131,6 +135,9 @@ icl-p1-verify:
 
 integrator-status:
 	python3 scripts/noos_integrator_status_v1.py --json
+
+integrator-daily:
+	python3 scripts/noos_integrator_daily_checklist_v1.py --write-receipt --json
 
 motor-sustain-verify:
 	python3 scripts/verify_noos_motor_sustain_v1.py --write-receipt --json
