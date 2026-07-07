@@ -1,0 +1,20 @@
+{
+  "schema": "noos-nf-pub-route-inventory-v1",
+  "authority": "UPG-NF-PUB-01",
+  "audited_at": "2026-07-06T10:48:00Z",
+  "routes": [
+    {"route_id": "home", "url": "https://www.noetfield.com/", "status": 200, "ok": true},
+    {"route_id": "gel", "url": "https://www.noetfield.com/gel/", "status": 200, "ok": true},
+    {"route_id": "ai_value_governance_os", "url": "https://www.noetfield.com/ai-value-governance-os/", "status": 200, "ok": true},
+    {"route_id": "acg", "url": "https://www.noetfield.com/services/agentic-cost-governance", "status": 200, "ok": true},
+    {"route_id": "trust", "url": "https://www.noetfield.com/trust/", "status": 200, "ok": true},
+    {"route_id": "about", "url": "https://www.noetfield.com/about/", "status": 200, "ok": true},
+    {"route_id": "intelligence", "url": "https://www.noetfield.com/intelligence/", "status": 200, "ok": true},
+    {"route_id": "root_redirect", "url": "https://noetfield.com/", "status": 404, "ok": false, "finding": "P1 — apex noetfield.com returns 404; www canonical works"}
+  ],
+  "production_smoke": "scripts/check_production_urls.sh ALL PASS",
+  "ok": false,
+  "p0_count": 0,
+  "p1_count": 1,
+  "note": "Full claim-evidence matrix and CTA journey map pending B3-B4"
+}

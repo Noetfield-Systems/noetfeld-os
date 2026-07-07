@@ -1,0 +1,30 @@
+{
+  "schema": "noos-unified-plan-execute-v1",
+  "authority": "NOOS-AGENT-20260706-033",
+  "executed_at": "2026-07-06T14:30:00Z",
+  "batch": "track-b-b3-b5",
+  "track_a": {
+    "A1_pr30_merged": true,
+    "A4_cloud_motor_e2e": "ok_stale_warn_7",
+    "A2_founder_t0": "pending",
+    "A5_48h_verify": "pending"
+  },
+  "track_b": {
+    "B1_audit_protocol": "receipts/proof/noos-nf-pub-audit-protocol-v1.json",
+    "B2_route_inventory": "receipts/proof/noos-nf-pub-route-inventory-v1.json",
+    "B2_claim_matrix": "receipts/proof/noos-nf-pub-claim-evidence-matrix-v1.json",
+    "B3_cta_journey": "receipts/proof/noos-nf-pub-cta-journey-map-v1.json",
+    "B4_claim_risk": "receipts/proof/noos-nf-pub-claim-risk-matrix-v1.json",
+    "B5_fix_list": "receipts/proof/noos-nf-pub-prioritized-fix-list-v1.json",
+    "B6_nw1_send": "founder_gated_pending",
+    "noetfield_pr90": "open_ci_pending",
+    "noetfield_pr89": "draft_copy_hold"
+  },
+  "founder_next": [
+    "Merge Noetfield PR #90 when CI green",
+    "Close laptop 48h (T0) for Track A",
+    "Sign claim matrix DEFER items before PR #89",
+    "Optional: first NW1 send from phone"
+  ],
+  "ok": true
+}
