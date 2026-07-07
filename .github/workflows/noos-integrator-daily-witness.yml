@@ -1,0 +1,51 @@
+# NOOS GHA secondary witness — integrator daily control panel (ICL-D01–D12).
+# Phase 1: workflow_dispatch bootstrap; schedule enabled after smoke (see manifest).
+name: NOOS integrator daily witness
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: noos-integrator-daily-witness-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  witness:
+    name: Integrator daily checklist
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      NOOS_GHA_WITNESS: "1"
+      GITHUB_RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CF_NOETFIELD_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      NOETFIELD_SUPABASE_URL: ${{ secrets.NOETFIELD_SUPABASE_URL }}
+      NOETFIELD_SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.NOETFIELD_SUPABASE_SERVICE_ROLE_KEY }}
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Bootstrap autorun repair (liveness + loop cycles)
+        run: python3 scripts/noos_integrator_repair_autorun_v1.py --json
+
+      - name: Integrator daily checklist
+        run: |
+          set -euo pipefail
+          python3 scripts/noos_integrator_daily_checklist_v1.py --write-receipt --json
+
+      - name: Upload daily checklist receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: noos-integrator-daily-checklist-v1
+          path: receipts/proof/noos-integrator-daily-checklist-v1.json
+          retention-days: 30
+          if-no-files-found: warn

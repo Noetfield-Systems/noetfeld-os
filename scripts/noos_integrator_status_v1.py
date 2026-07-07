@@ -41,17 +41,23 @@ def _run_json(cmd: list[str], *, timeout: int = 120) -> dict:
 
 
 def vault_row() -> dict:
+    from noos_vault_paths_v1 import load_platform_env
+
+    merged = load_platform_env()
     noos = parse_env_file(NOOS_LOCAL_ENV)
     product = parse_env_file(NOETFIELD_LOCAL_ENV)
-    token = workers_api_token(noos)
-    dupes = "CLOUDFLARE_API_TOKEN" in noos and "CF_NOETFIELD_API_TOKEN" in noos
+    token = workers_api_token(merged)
+    dupes = "CLOUDFLARE_API_TOKEN" in merged and "CF_NOETFIELD_API_TOKEN" in merged and merged.get(
+        "CLOUDFLARE_API_TOKEN"
+    ) != merged.get("CF_NOETFIELD_API_TOKEN")
     return {
         "ok": bool(token) and not dupes,
         "noos_local_env": str(NOOS_LOCAL_ENV),
         "cf_token_set": bool(token),
         "duplicate_cloudflare_keys": dupes,
-        "noos_keys": len(noos),
-        "product_keys": len(product),
+        "noos_keys": len(noos) or len([k for k in merged if k.startswith("NOOS_") or k.startswith("CF_")]),
+        "product_keys": len(product) or len([k for k in merged if k.startswith("NOETFIELD_") or k == "SUPABASE_URL"]),
+        "gha_env": bool(__import__("os").environ.get("GITHUB_ACTIONS") == "true"),
     }
 
 

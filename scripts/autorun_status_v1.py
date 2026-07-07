@@ -531,21 +531,23 @@ def probe_cf_schedule_canary(wf: dict[str, Any]) -> dict[str, Any]:
 
 
 def probe_github_schedule(wf: dict[str, Any]) -> dict[str, Any]:
-    workflow_file = (wf.get("probe") or {}).get("github_workflow", "")
+    probe = wf.get("probe") or {}
+    workflow_file = probe.get("github_workflow", "")
+    accept_events = set(probe.get("accept_events") or ["schedule", "repository_dispatch", "workflow_dispatch"])
     sched = github_latest_run(workflow_file, event="schedule")
     any_run = github_latest_run(workflow_file)
-    latest = (sched.get("latest") or any_run.get("latest")) if sched.get("ok") else None
+    latest = (sched.get("latest") or any_run.get("latest")) if sched.get("ok") or any_run.get("ok") else None
     if not latest:
         return blocked(
             "no_github_runs",
-            command=f"PUT .../workflows/enable + wait for schedule on {workflow_file}",
+            command=f"gh workflow run {workflow_file} (bootstrap) then enable schedule",
             evidence={"schedule_probe": sched, "any_probe": any_run},
         )
     event = latest.get("event")
     observed_at = latest.get("created_at") or utc_now()
-    if event == "schedule" and latest.get("conclusion") == "success":
+    if event in accept_events and latest.get("conclusion") == "success":
         status = "COMPLETE"
-    elif event in ("schedule", "repository_dispatch"):
+    elif event in accept_events:
         status = "RUNNING" if latest.get("status") != "completed" else (
             "COMPLETE" if latest.get("conclusion") == "success" else "FAILED_WITH_RECEIPT"
         )

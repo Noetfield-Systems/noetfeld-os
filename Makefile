@@ -139,6 +139,18 @@ integrator-status:
 integrator-daily:
 	python3 scripts/noos_integrator_daily_checklist_v1.py --write-receipt --json
 
+witness-phase1-smoke:
+	bash scripts/noos_gha_witness_phase1_smoke_v1.sh
+
+witness-daily-dispatch:
+	gh workflow run noos-integrator-daily-witness.yml --repo Noetfield-Systems/noetfeld-os
+
+witness-autorun-dispatch:
+	gh workflow run noos-autorun-witness.yml --repo Noetfield-Systems/noetfeld-os
+
+witness-motor-dispatch:
+	gh workflow run noos-motor-sustain-witness.yml --repo Noetfield-Systems/noetfeld-os
+
 motor-sustain-verify:
 	python3 scripts/verify_noos_motor_sustain_v1.py --write-receipt --json
 

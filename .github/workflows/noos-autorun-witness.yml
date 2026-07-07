@@ -1,0 +1,46 @@
+# NOOS GHA secondary witness — autorun registry critique (read-only, no loop dispatch).
+name: NOOS autorun witness
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: noos-autorun-witness-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  witness:
+    name: Autorun status witness
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      NOOS_GHA_WITNESS: "1"
+      GITHUB_RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+      NOETFIELD_SUPABASE_URL: ${{ secrets.NOETFIELD_SUPABASE_URL }}
+      NOETFIELD_SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.NOETFIELD_SUPABASE_SERVICE_ROLE_KEY }}
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Autorun status critique
+        run: |
+          set -euo pipefail
+          mkdir -p receipts/proof
+          python3 scripts/autorun_status_v1.py --json | tee receipts/proof/noos-autorun-witness-v1.json
+
+      - name: Upload autorun witness receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: noos-autorun-witness-v1
+          path: receipts/proof/noos-autorun-witness-v1.json
+          retention-days: 30
+          if-no-files-found: warn

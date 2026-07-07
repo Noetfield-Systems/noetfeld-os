@@ -127,9 +127,17 @@
           "id": "ICL-P2-05",
           "title": "CF-primary / GHA-secondary stack health sustain",
           "status": "in_progress",
-          "command": "make observe-trustfield-layers && make observe-trustfield-registry",
-          "acceptance": "11 layers yellow-or-better; registry overall yellow-or-better; GHA billing unblocked",
-          "evidence": "receipts/proof/noos-stack-automation-health-v1.json"
+          "command": "make integrator-daily",
+          "acceptance": "NOOS_INTEGRATOR_DAILY: green; 11 layers yellow-or-better; registry deadman green",
+          "evidence": "receipts/proof/noos-integrator-daily-checklist-v1.json"
+        },
+        {
+          "id": "ICL-P2-06",
+          "title": "GHA Phase-1 secondary witnesses (daily + autorun + motor)",
+          "status": "in_progress",
+          "command": "bash scripts/noos_gha_witness_phase1_smoke_v1.sh",
+          "acceptance": "workflow_dispatch smoke green on all 3 witnesses; then schedule enabled",
+          "evidence": "data/noos-gha-secondary-witness-manifest-v1.json"
         }
       ]
     }
@@ -144,6 +152,8 @@
     "icl-p1-verify": "scripts/verify_noos_icl_p1_v1.py",
     "icl-p2-verify": "scripts/verify_noos_icl_p2_v1.py",
     "integrator-status": "scripts/noos_integrator_status_v1.py",
+    "integrator-daily": "scripts/noos_integrator_daily_checklist_v1.py",
+    "witness-phase1-smoke": "scripts/noos_gha_witness_phase1_smoke_v1.sh",
     "integrator-tasks-mirror": "scripts/noos_integrator_tasks_mirror_v1.py",
     "upgrade-manifest-publish": "scripts/noos_upgrade_manifest_publish_v1.py",
     "motor-sustain-verify": "scripts/verify_noos_motor_sustain_v1.py",

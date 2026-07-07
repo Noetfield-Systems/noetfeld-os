@@ -1,0 +1,36 @@
+{
+  "schema": "noos-gha-secondary-witness-manifest-v1",
+  "version": "1.0.0",
+  "updated_at": "2026-07-07T23:50:00Z",
+  "lane": "ICL-P2-gha-witness-phase1",
+  "one_law": "Read-only secondary witnesses — observe existing scripts, upload receipts, never dispatch CF/Railway loop motors.",
+  "primary_motor_plane": "cloudflare_workers_cron",
+  "witnesses": [
+    {
+      "id": "noos_gha_integrator_daily_witness",
+      "workflow": "noos-integrator-daily-witness.yml",
+      "schedule_utc": "0 7,13,19 * * *",
+      "script": "scripts/noos_integrator_daily_checklist_v1.py",
+      "receipt": "receipts/proof/noos-integrator-daily-checklist-v1.json",
+      "closure_token": "NOOS_INTEGRATOR_DAILY"
+    },
+    {
+      "id": "noos_gha_autorun_witness",
+      "workflow": "noos-autorun-witness.yml",
+      "schedule_utc": "*/30 * * * *",
+      "script": "scripts/autorun_status_v1.py",
+      "receipt": "receipts/proof/noos-autorun-witness-v1.json",
+      "closure_token": "NOOS_AUTORUN_WITNESS"
+    },
+    {
+      "id": "noos_gha_motor_sustain_witness",
+      "workflow": "noos-motor-sustain-witness.yml",
+      "schedule_utc": "15 */2 * * *",
+      "script": "scripts/verify_noos_motor_sustain_v1.py",
+      "receipt": "receipts/proof/noos-motor-sustain-v1.json",
+      "closure_token": "NOOS_MOTOR_SUSTAIN"
+    }
+  ],
+  "bootstrap": "workflow_dispatch smoke before schedule enable",
+  "verify": "bash scripts/noos_gha_witness_phase1_smoke_v1.sh"
+}

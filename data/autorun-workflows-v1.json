@@ -1,6 +1,6 @@
 {
   "schema": "autorun-workflows-v1",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "read_only": true,
   "one_law": "Observe autorun surfaces only. phase_reconciler_v1 remains sole control authority.",
   "slo_defaults": {
@@ -286,6 +286,39 @@
           {"name": "gel-api readiness", "url": "https://api.noetfield.com/readiness"}
         ]
       }
+    },
+    {
+      "id": "noos_gha_integrator_daily_witness",
+      "title": "GHA integrator daily witness",
+      "plane": "NOETFELD-OS",
+      "probe": {
+        "type": "github_schedule_probe",
+        "github_workflow": "noos-integrator-daily-witness.yml",
+        "accept_events": ["schedule", "workflow_dispatch"]
+      },
+      "verify_command": "python3 scripts/noos_integrator_daily_checklist_v1.py --json"
+    },
+    {
+      "id": "noos_gha_autorun_witness",
+      "title": "GHA autorun registry witness",
+      "plane": "NOETFELD-OS",
+      "probe": {
+        "type": "github_schedule_probe",
+        "github_workflow": "noos-autorun-witness.yml",
+        "accept_events": ["schedule", "workflow_dispatch"]
+      },
+      "verify_command": "python3 scripts/autorun_status_v1.py --json"
+    },
+    {
+      "id": "noos_gha_motor_sustain_witness",
+      "title": "GHA motor sustain witness",
+      "plane": "NOETFELD-OS",
+      "probe": {
+        "type": "github_schedule_probe",
+        "github_workflow": "noos-motor-sustain-witness.yml",
+        "accept_events": ["schedule", "workflow_dispatch"]
+      },
+      "verify_command": "python3 scripts/verify_noos_motor_sustain_v1.py"
     }
   ]
 }
