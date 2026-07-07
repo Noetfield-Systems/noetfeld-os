@@ -65,9 +65,13 @@ EOF
 fi
 
 cd "$WORKER_DIR"
-printf '%s' "$EXECUTOR_URL" | wrangler secret put FLY_LOOP_EXECUTOR_URL
-printf '%s' "$NOOS_LOOP_SECRET" | wrangler secret put NOOS_LOOP_SECRET
-wrangler deploy
+if [[ -n "${GITHUB_ACTIONS:-}" && "${NOOS_WRANGLER_SKIP_SECRET_PUT:-1}" != "0" ]]; then
+  wrangler deploy
+else
+  printf '%s' "$EXECUTOR_URL" | wrangler secret put FLY_LOOP_EXECUTOR_URL
+  printf '%s' "$NOOS_LOOP_SECRET" | wrangler secret put NOOS_LOOP_SECRET
+  wrangler deploy
+fi
 mv "$WRANGLER_BAK" "$WRANGLER"
 
 for dead in GITHUB_REPO GITHUB_TOKEN LOOP_RUNNER_SECRET LOOP_RUNNER_URL; do

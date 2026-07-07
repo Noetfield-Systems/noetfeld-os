@@ -45,6 +45,9 @@ jobs:
             exit 1
           fi
 
+      - name: Verify Cloudflare Workers deploy permission
+        run: python3 scripts/verify_noos_cf_deploy_token_v1.py
+
       - name: Deploy factory autorun tick
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
