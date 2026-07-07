@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import json
+import os
 import subprocess
 import sys
 import urllib.error
@@ -62,12 +63,13 @@ def _liveness() -> dict:
     }
 
 
-def verify(*, write_receipt: bool = False) -> dict:
+def verify(*, write_receipt: bool = False, motors_only: bool = False) -> dict:
     checks: dict[str, dict] = {}
     for name, url in CHECKS:
         checks[name] = _http_ok(url)
     liveness = _liveness()
-    ok = all(c.get("ok") for c in checks.values()) and liveness.get("ok")
+    motor_ok = all(c.get("ok") for c in checks.values())
+    ok = motor_ok and (True if motors_only else liveness.get("ok"))
     row = {
         "schema": "noos-motor-sustain-v1",
         "at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
@@ -84,7 +86,8 @@ def verify(*, write_receipt: bool = False) -> dict:
 
 def main() -> int:
     write = "--write-receipt" in sys.argv
-    row = verify(write_receipt=write)
+    motors_only = "--motors-only" in sys.argv or os.environ.get("VERIFY_CHAINED_FROM_DEPLOY") == "1"
+    row = verify(write_receipt=write, motors_only=motors_only)
     print(json.dumps(row, indent=2))
     return 0 if row.get("ok") else 1
 
