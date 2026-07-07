@@ -27,4 +27,19 @@ KEY="${NOETFIELD_SUPABASE_SERVICE_ROLE_KEY:-${SUPABASE_SERVICE_ROLE_KEY:-}}"
   "SUPABASE_SERVICE_ROLE_KEY=$KEY" \
   --service "$SERVICE"
 
+PORTFOLIO_ENV="${PORTFOLIO_SPINE_ENV:-$HOME/.sourcea-secrets/portfolio-spine.env}"
+if [[ -f "$PORTFOLIO_ENV" ]]; then
+  # shellcheck disable=SC1090
+  set -a
+  source "$PORTFOLIO_ENV" 2>/dev/null || true
+  set +a
+  if [[ -n "${SUPABASE_URL:-}" && -n "${SUPABASE_SERVICE_ROLE_KEY:-}" ]]; then
+    "$RAILWAY" variables set \
+      "PORTFOLIO_SPINE_SUPABASE_URL=$SUPABASE_URL" \
+      "PORTFOLIO_SPINE_SERVICE_ROLE_KEY=$SUPABASE_SERVICE_ROLE_KEY" \
+      --service "$SERVICE"
+    log "OK — portfolio-spine env on $SERVICE"
+  fi
+fi
+
 log "OK — Supabase env on $SERVICE (service will restart)"

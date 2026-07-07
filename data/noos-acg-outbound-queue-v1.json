@@ -8,7 +8,7 @@
     {
       "slot": 1,
       "offer_id": "NW1-ACG-001",
-      "title": "ACG founding pilot — first NW1 send",
+      "title": "ACG founding pilot \u2014 first NW1 send",
       "packet_path": "docs/commercial/ACG_FIRST_PROSPECT_PACKET_v1.md",
       "packet_commit": "bfc05dbb2c7ff102dee6380e8a202dae493c11d1",
       "live_url": "https://www.noetfield.com/services/agentic-cost-governance",
@@ -19,7 +19,7 @@
     {
       "slot": 2,
       "offer_id": "NW1-002",
-      "title": "NW1 Copilot attach — prospect slot 2",
+      "title": "NW1 Copilot attach \u2014 prospect slot 2",
       "packet_path": "noetfield-org/templates/nw1-copilot-attach-v1.md",
       "send_at": "2026-07-07T14:00:00Z",
       "status": "queued",
@@ -28,14 +28,213 @@
     {
       "slot": 3,
       "offer_id": "NW1-003",
-      "title": "NW1 Copilot attach — prospect slot 3",
+      "title": "NW1 Copilot attach \u2014 prospect slot 3",
       "packet_path": "noetfield-org/templates/nw1-copilot-attach-v1.md",
       "send_at": "2026-07-08T14:00:00Z",
       "status": "queued",
       "founder_gated": true
+    },
+    {
+      "slot": 4,
+      "offer_id": "NW1-004",
+      "title": "NW1 Copilot attach \u2014 prospect slot 4",
+      "packet_path": "noetfield-org/templates/nw1-copilot-attach-v1.md",
+      "send_at": "2026-07-10T14:00:00Z",
+      "status": "queued",
+      "founder_gated": true
+    },
+    {
+      "slot": 5,
+      "offer_id": "NW1-005",
+      "title": "NW1 Copilot attach \u2014 prospect slot 5",
+      "packet_path": "noetfield-org/templates/nw1-copilot-attach-v1.md",
+      "send_at": "2026-07-11T14:00:00Z",
+      "status": "queued",
+      "founder_gated": true
+    },
+    {
+      "slot": 6,
+      "offer_id": "NW1-006",
+      "title": "NW1 Copilot attach \u2014 prospect slot 6",
+      "packet_path": "noetfield-org/templates/nw1-copilot-attach-v1.md",
+      "send_at": "2026-07-12T14:00:00Z",
+      "status": "queued",
+      "founder_gated": true
+    },
+    {
+      "slot": 7,
+      "offer_id": "NW1-007",
+      "title": "NW1 Copilot attach \u2014 prospect slot 7",
+      "packet_path": "noetfield-org/templates/nw1-copilot-attach-v1.md",
+      "send_at": "2026-07-13T14:00:00Z",
+      "status": "queued",
+      "founder_gated": true
+    },
+    {
+      "slot": 8,
+      "offer_id": "NW1-008",
+      "title": "NW1 Copilot attach \u2014 prospect slot 8",
+      "packet_path": "noetfield-org/templates/nw1-copilot-attach-v1.md",
+      "send_at": "2026-07-14T14:00:00Z",
+      "status": "queued",
+      "founder_gated": true
+    },
+    {
+      "slot": 9,
+      "offer_id": "NW1-009",
+      "title": "NW1 Copilot attach \u2014 prospect slot 9",
+      "packet_path": "noetfield-org/templates/nw1-copilot-attach-v1.md",
+      "send_at": "2026-07-15T14:00:00Z",
+      "status": "queued",
+      "founder_gated": true
+    },
+    {
+      "slot": 10,
+      "offer_id": "NW1-010",
+      "title": "NW1 Copilot attach \u2014 prospect slot 10",
+      "packet_path": "noetfield-org/templates/nw1-copilot-attach-v1.md",
+      "send_at": "2026-07-16T14:00:00Z",
+      "status": "queued",
+      "founder_gated": true
+    },
+    {
+      "slot": 11,
+      "offer_id": "NW1-011",
+      "title": "NW1 Copilot attach \u2014 prospect slot 11",
+      "packet_path": "noetfield-org/templates/nw1-copilot-attach-v1.md",
+      "send_at": "2026-07-17T14:00:00Z",
+      "status": "queued",
+      "founder_gated": true
+    },
+    {
+      "slot": 12,
+      "offer_id": "NW1-012",
+      "title": "NW1 Copilot attach \u2014 prospect slot 12",
+      "packet_path": "noetfield-org/templates/nw1-copilot-attach-v1.md",
+      "send_at": "2026-07-18T14:00:00Z",
+      "status": "queued",
+      "founder_gated": true
+    },
+    {
+      "slot": 13,
+      "offer_id": "NW1-013",
+      "title": "NW1 Copilot attach \u2014 prospect slot 13",
+      "packet_path": "noetfield-org/templates/nw1-copilot-attach-v1.md",
+      "send_at": "2026-07-19T14:00:00Z",
+      "status": "queued",
+      "founder_gated": true
+    },
+    {
+      "slot": 14,
+      "offer_id": "NW1-014",
+      "title": "NW1 Copilot attach \u2014 prospect slot 14",
+      "packet_path": "noetfield-org/templates/nw1-copilot-attach-v1.md",
+      "send_at": "2026-07-20T14:00:00Z",
+      "status": "queued",
+      "founder_gated": true
+    },
+    {
+      "slot": 15,
+      "offer_id": "NW1-015",
+      "title": "NW1 Copilot attach \u2014 prospect slot 15",
+      "packet_path": "noetfield-org/templates/nw1-copilot-attach-v1.md",
+      "send_at": "2026-07-21T14:00:00Z",
+      "status": "queued",
+      "founder_gated": true
+    },
+    {
+      "slot": 16,
+      "offer_id": "NW1-016",
+      "title": "NW1 Copilot attach \u2014 prospect slot 16",
+      "packet_path": "noetfield-org/templates/nw1-copilot-attach-v1.md",
+      "send_at": "2026-07-22T14:00:00Z",
+      "status": "queued",
+      "founder_gated": true
+    },
+    {
+      "slot": 17,
+      "offer_id": "NW1-017",
+      "title": "NW1 Copilot attach \u2014 prospect slot 17",
+      "packet_path": "noetfield-org/templates/nw1-copilot-attach-v1.md",
+      "send_at": "2026-07-23T14:00:00Z",
+      "status": "queued",
+      "founder_gated": true
+    },
+    {
+      "slot": 18,
+      "offer_id": "NW1-018",
+      "title": "NW1 Copilot attach \u2014 prospect slot 18",
+      "packet_path": "noetfield-org/templates/nw1-copilot-attach-v1.md",
+      "send_at": "2026-07-24T14:00:00Z",
+      "status": "queued",
+      "founder_gated": true
+    },
+    {
+      "slot": 19,
+      "offer_id": "NW1-019",
+      "title": "NW1 Copilot attach \u2014 prospect slot 19",
+      "packet_path": "noetfield-org/templates/nw1-copilot-attach-v1.md",
+      "send_at": "2026-07-25T14:00:00Z",
+      "status": "queued",
+      "founder_gated": true
+    },
+    {
+      "slot": 20,
+      "offer_id": "NW1-020",
+      "title": "NW1 Copilot attach \u2014 prospect slot 20",
+      "packet_path": "noetfield-org/templates/nw1-copilot-attach-v1.md",
+      "send_at": "2026-07-26T14:00:00Z",
+      "status": "queued",
+      "founder_gated": true
+    },
+    {
+      "slot": 21,
+      "offer_id": "NW1-021",
+      "title": "NW1 Copilot attach \u2014 prospect slot 21",
+      "packet_path": "noetfield-org/templates/nw1-copilot-attach-v1.md",
+      "send_at": "2026-07-27T14:00:00Z",
+      "status": "queued",
+      "founder_gated": true
+    },
+    {
+      "slot": 22,
+      "offer_id": "NW1-022",
+      "title": "NW1 Copilot attach \u2014 prospect slot 22",
+      "packet_path": "noetfield-org/templates/nw1-copilot-attach-v1.md",
+      "send_at": "2026-07-28T14:00:00Z",
+      "status": "queued",
+      "founder_gated": true
+    },
+    {
+      "slot": 23,
+      "offer_id": "NW1-023",
+      "title": "NW1 Copilot attach \u2014 prospect slot 23",
+      "packet_path": "noetfield-org/templates/nw1-copilot-attach-v1.md",
+      "send_at": "2026-07-29T14:00:00Z",
+      "status": "queued",
+      "founder_gated": true
+    },
+    {
+      "slot": 24,
+      "offer_id": "NW1-024",
+      "title": "NW1 Copilot attach \u2014 prospect slot 24",
+      "packet_path": "noetfield-org/templates/nw1-copilot-attach-v1.md",
+      "send_at": "2026-07-30T14:00:00Z",
+      "status": "queued",
+      "founder_gated": true
+    },
+    {
+      "slot": 25,
+      "offer_id": "NW1-025",
+      "title": "NW1 Copilot attach \u2014 prospect slot 25",
+      "packet_path": "noetfield-org/templates/nw1-copilot-attach-v1.md",
+      "send_at": "2026-07-31T14:00:00Z",
+      "status": "queued",
+      "founder_gated": true
     }
   ],
-  "remaining_slots": 22,
-  "note": "Slots 4–25 reserved; expand from noetfield-org commercial backlog during 48h test",
-  "ok": true
+  "remaining_slots": 0,
+  "note": "Slots 4\u201325 reserved; expand from noetfield-org commercial backlog during 48h test",
+  "ok": true,
+  "expanded_at": "2026-07-07T16:07:02Z"
 }

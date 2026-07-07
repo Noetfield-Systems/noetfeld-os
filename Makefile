@@ -1,4 +1,4 @@
-.PHONY: test gate demo build-gate-js install inbox cloud-worker autorun-once autorun autorun-status autorun-tick-deploy autorun-tick-dispatch autonomous-verify schedule-verify determinism-verify replay-verify planes supabase-migrate verified-window loop-run loop-fleet-deploy deploy-railway-loop-runner verify-cf-railway-dispatch loop-fleet-dispatch loops-status loop-heartbeat loop-baseline loop-registry-reconcile loop-verify-all loop-upgrade-closeout trigger-host-inventory deadman-deploy deadman-probe cloud-motor-e2e cloud-motor-resync deploy-baseline deploy-status deploy-fly-inbox deploy-fly-selfheal deploy-drift-kaizen inbox-scaler inbox-scaler-evaluate sandbox-registry-reconcile improve-kaizen-daily t2-deploy-closeout t3-sandbox-closeout acg-founder-send-prep backlog urls local-boot local-closeout local-patch-proposal local-heartbeat local-lane local-sweep-stale local-status machine-status machine-reconcile machine-audit machine-verify machine-validate-merge machine-critic machine-research
+.PHONY: test gate demo build-gate-js install inbox cloud-worker autorun-once autorun autorun-status autorun-tick-deploy autorun-tick-dispatch autonomous-verify schedule-verify determinism-verify replay-verify planes supabase-migrate verified-window loop-run loop-fleet-deploy deploy-railway-loop-runner verify-cf-railway-dispatch loop-fleet-dispatch loops-status loop-heartbeat loop-baseline loop-registry-reconcile loop-verify-all loop-upgrade-closeout trigger-host-inventory deadman-deploy deadman-probe cloud-motor-e2e cloud-motor-resync deploy-baseline deploy-status deploy-fly-inbox deploy-fly-selfheal deploy-drift-kaizen inbox-scaler inbox-scaler-evaluate sandbox-registry-reconcile improve-kaizen-daily t2-deploy-closeout t3-sandbox-closeout acg-founder-send-prep backlog urls local-boot local-closeout local-patch-proposal local-heartbeat local-lane local-sweep-stale local-status machine-status machine-reconcile machine-audit machine-verify machine-validate-merge machine-critic machine-research icl-p1-verify integrator-status integrator-repair-autorun motor-sustain-verify nf-pub-verdict-gate living-system-48h-prep acg-weekly-digest gel-api-multi-region-verify phase5-packaging-prep integrator-tasks-mirror upgrade-manifest-publish kaizen-sustain cloud-vault-promote cloud-vault-canonicalize cloud-vault-cleanup cloud-vault-migrate wire-cf-railway-motor wire-cf-fly-motor cloud-secrets-sync cloud-workers-deploy
 
 test:
 	pytest -q
@@ -116,6 +116,40 @@ cloud-workers-deploy:
 
 integrator-repair-autorun:
 	python3 scripts/noos_integrator_repair_autorun_v1.py --write-receipt --json
+
+icl-p1-verify:
+	python3 scripts/verify_noos_icl_p1_v1.py --write-receipt --json
+
+integrator-status:
+	python3 scripts/noos_integrator_status_v1.py --json
+
+motor-sustain-verify:
+	python3 scripts/verify_noos_motor_sustain_v1.py --write-receipt --json
+
+nf-pub-verdict-gate:
+	python3 scripts/noos_nf_pub_verdict_gate_v1.py --write-verdict-stub --json
+
+living-system-48h-prep:
+	python3 scripts/noos_living_system_48h_prep_v1.py --write-receipt --json
+
+acg-weekly-digest:
+	python3 scripts/noos_acg_weekly_digest_v1.py --write-receipt --json
+
+gel-api-multi-region-verify:
+	python3 scripts/verify_noos_gel_api_multi_region_v1.py --write-receipt --json
+
+phase5-packaging-prep:
+	python3 scripts/noos_phase5_packaging_prep_v1.py --write-receipt --json
+
+integrator-tasks-mirror:
+	python3 scripts/noos_integrator_tasks_mirror_v1.py --dry-run --write-receipt --json
+
+upgrade-manifest-publish:
+	python3 scripts/noos_upgrade_manifest_publish_v1.py --json
+
+kaizen-sustain:
+	python3 scripts/noos_sandbox_registry_reconcile_v1.py --write-receipt --json && \
+	python3 scripts/noos_improve_kaizen_runner_v1.py --json
 
 cloud-vault-promote:
 	python3 scripts/noos_promote_vault_keys_v1.py

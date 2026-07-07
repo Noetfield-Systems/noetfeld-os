@@ -1,0 +1,43 @@
+{
+  "schema": "noos-phase5-packaging-prep-v1",
+  "at": "2026-07-07T16:08:10Z",
+  "ok": true,
+  "deferred_items": [
+    {
+      "id": "UPG-0167",
+      "title": "npm @noetfield/gate publish",
+      "gate": "legal/org"
+    },
+    {
+      "id": "UPG-0174",
+      "title": "Production secrets/API-key vault policy",
+      "gate": "founder"
+    },
+    {
+      "id": "UPG-0175",
+      "title": "Production policy pack semver pinning",
+      "gate": "founder"
+    },
+    {
+      "id": "UPG-0170",
+      "title": "Homebrew tap stub document",
+      "gate": "machine_safe"
+    },
+    {
+      "id": "PHASE-5",
+      "title": "Phase 5 Tenant & Production (UPG 0177+)",
+      "gate": "LOOP-VERIFY-ALL"
+    },
+    {
+      "id": "ECOSYSTEM-E",
+      "title": "Ecosystem Phase E deferred",
+      "gate": "NOOS-C-01"
+    }
+  ],
+  "does_not_block": [
+    "ICL-P2",
+    "24/7 motor",
+    "UPG-NF-PUB P0"
+  ],
+  "product_truth": "/Users/sinakazemnezhad/Desktop/Noetfield-Systems/noetfeld-OS/docs/_NOOS_AGENT/PRODUCT_TRUTH.md"
+}

@@ -56,6 +56,9 @@ def merge_product_env() -> int:
 
 
 def merge_noos_env() -> int:
+    from canonicalize_noos_vault_v1 import canonicalize
+
+    canonicalize(NOOS_LOCAL_ENV, write=True, strict=True)
     noos = parse_env_file(NOOS_LOCAL_ENV)
     token = noos.get("CF_NOETFIELD_API_TOKEN") or noos.get("CLOUDFLARE_API_TOKEN")
     if token:
@@ -98,6 +101,20 @@ def backup_and_symlink(src: Path, target: Path) -> None:
     src.symlink_to(target)
 
 
+def sweep_legacy_backups() -> int:
+    removed = 0
+    for parent in (NOETFIELD_PLATFORM_SECRETS, Path.home() / ".sourcea-secrets"):
+        if not parent.is_dir():
+            continue
+        for bak in parent.glob("*.bak-*"):
+            try:
+                bak.unlink()
+                removed += 1
+            except OSError:
+                pass
+    return removed
+
+
 def write_readme() -> None:
     readme = NOETFIELD_PLATFORM_SECRETS / "README.txt"
     readme.write_text(
@@ -105,11 +122,16 @@ def write_readme() -> None:
             [
                 "Noetfield platform local secrets (not SourceA)",
                 "",
-                "  noos-local.env   — NOOS CF motor, GHA deploy, NOOS_LOOP_SECRET",
+                "  noos-local.env   — CF_NOETFIELD_API_TOKEN only (Workers Edit)",
                 "  noetfield.env    — Noetfield product Supabase, intake, Resend",
                 "  noetfield-db.env — DB password / DATABASE_URL for migrations",
                 "",
-                "Bootstrap: make cloud-vault-migrate && make cloud-secrets-sync",
+                "Bootstrap:",
+                "  make cloud-vault-canonicalize",
+                "  make cloud-vault-promote",
+                "  make cloud-secrets-sync",
+                "",
+                "Verify: python3 scripts/verify_noos_cf_deploy_token_v1.py",
                 "",
             ]
         ),
@@ -121,6 +143,7 @@ def main() -> int:
     product_n = merge_product_env()
     noos_n = merge_noos_env()
     db_copied = sync_db_env()
+    removed = sweep_legacy_backups()
     backup_and_symlink(LEGACY_SOURCEA_NOETFIELD_ENV, NOETFIELD_LOCAL_ENV)
     backup_and_symlink(LEGACY_DB, NOETFIELD_DB_ENV)
     write_readme()
@@ -128,6 +151,7 @@ def main() -> int:
     print(f"[cleanup-vault] NOOS keys: {noos_n} → {NOOS_LOCAL_ENV}")
     print(f"[cleanup-vault] db env copied: {db_copied}")
     print(f"[cleanup-vault] legacy symlinks → {NOETFIELD_PLATFORM_SECRETS}")
+    print(f"[cleanup-vault] removed .bak files: {removed}")
     return 0
 
 

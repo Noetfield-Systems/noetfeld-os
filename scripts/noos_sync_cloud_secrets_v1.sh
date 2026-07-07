@@ -9,7 +9,14 @@ REPO="${GITHUB_REPO:-Noetfield-Systems/noetfeld-os}"
 
 log() { printf '[noos-sync-cloud] %s\n' "$*"; }
 
+python3 "$ROOT/scripts/canonicalize_noos_vault_v1.py" >/dev/null
 python3 "$ROOT/scripts/noos_promote_vault_keys_v1.py"
+
+if ! python3 "$ROOT/scripts/verify_noos_cf_deploy_token_v1.py" >/dev/null; then
+  log "FAIL: CF token verify failed — fix CF_NOETFIELD_API_TOKEN before GHA sync"
+  python3 "$ROOT/scripts/verify_noos_cf_deploy_token_v1.py" || true
+  exit 1
+fi
 
 # shellcheck disable=SC1091
 source "$ROOT/scripts/noos_load_noetfield_env_v1.sh"

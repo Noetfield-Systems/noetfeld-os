@@ -23,11 +23,12 @@ KEEP_KEYS = frozenset(
 )
 
 
-def _parse_raw(path: Path) -> tuple[dict[str, str], list[str], list[str]]:
-    """Last-wins key=value parse; collect duplicate warnings and bare CF orphans."""
+def _parse_raw(path: Path, *, strict: bool = True) -> tuple[dict[str, str], list[str], list[str]]:
+    """Parse key=value; strict mode fails on duplicate keys with conflicting values."""
     rows: dict[str, str] = {}
     warnings: list[str] = []
     orphans: list[str] = []
+    errors: list[str] = []
     if not path.is_file():
         return rows, warnings, orphans
     for lineno, raw in enumerate(path.read_text(encoding="utf-8").splitlines(), 1):
@@ -42,11 +43,17 @@ def _parse_raw(path: Path) -> tuple[dict[str, str], list[str], list[str]]:
                 warnings.append(f"line {lineno}: skipped malformed key {key!r}")
                 continue
             if key in rows and rows[key] != val:
-                warnings.append(f"line {lineno}: duplicate {key} (last wins)")
+                msg = f"line {lineno}: duplicate {key} with conflicting value"
+                if strict:
+                    errors.append(msg)
+                else:
+                    warnings.append(f"{msg} (last wins)")
             rows[key] = val
             continue
         if CF_BARE.match(line):
             orphans.append(line)
+    if errors:
+        raise SystemExit("canonicalize FAIL:\n  " + "\n  ".join(errors))
     return rows, warnings, orphans
 
 
@@ -83,8 +90,8 @@ def _pick_workers_token(candidates: list[str]) -> str:
     return candidates[-1]
 
 
-def canonicalize(path: Path = NOOS_LOCAL_ENV, write: bool = True) -> dict[str, object]:
-    rows, warnings, orphans = _parse_raw(path)
+def canonicalize(path: Path = NOOS_LOCAL_ENV, write: bool = True, *, strict: bool = True) -> dict[str, object]:
+    rows, warnings, orphans = _parse_raw(path, strict=strict)
     candidates = _token_candidates(rows, orphans)
     workers = _pick_workers_token(candidates)
 
@@ -128,7 +135,8 @@ def canonicalize(path: Path = NOOS_LOCAL_ENV, write: bool = True) -> dict[str, o
 
 def main() -> int:
     write = "--dry-run" not in sys.argv
-    row = canonicalize(write=write)
+    strict = "--lenient" not in sys.argv
+    row = canonicalize(write=write, strict=strict)
     print(json.dumps(row, indent=2))
     return 0
 

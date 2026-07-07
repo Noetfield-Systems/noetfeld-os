@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# local-boot vault sync — promote NOOS keys + conditional GHA/Railway push (ICL-P1-01)
+# local-boot vault sync — canonicalize + promote + conditional GHA/Railway push (ICL-P1-01 / UPG-PLAN-04)
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
@@ -12,6 +12,7 @@ log() { printf '[local-boot-vault] %s\n' "$*"; }
 
 [[ "$SYNC" == "0" || "$SYNC" == "skip" ]] && { log "SKIP (NOOS_BOOT_VAULT_SYNC=$SYNC)"; exit 0; }
 
+python3 "$ROOT/scripts/canonicalize_noos_vault_v1.py" >/dev/null || log "WARN: vault canonicalize failed"
 python3 "$ROOT/scripts/noos_promote_vault_keys_v1.py" >/dev/null || log "WARN: vault promote failed"
 
 if ! command -v gh >/dev/null 2>&1; then
@@ -19,8 +20,8 @@ if ! command -v gh >/dev/null 2>&1; then
   exit 0
 fi
 
-if [[ ! -f "$NOOS_ENV" ]] || ! grep -qE '^CLOUDFLARE_API_TOKEN=.+' "$NOOS_ENV" 2>/dev/null; then
-  log "SKIP cloud-secrets-sync — no CLOUDFLARE_API_TOKEN in $NOOS_ENV"
+if [[ ! -f "$NOOS_ENV" ]] || ! grep -qE '^CF_NOETFIELD_API_TOKEN=.+' "$NOOS_ENV" 2>/dev/null; then
+  log "SKIP cloud-secrets-sync — no CF_NOETFIELD_API_TOKEN in $NOOS_ENV"
   exit 0
 fi
 

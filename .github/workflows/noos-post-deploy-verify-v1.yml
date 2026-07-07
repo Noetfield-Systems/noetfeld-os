@@ -39,6 +39,9 @@ jobs:
       - name: Production URL smoke (no deploy sleep)
         run: bash scripts/check_production_urls.sh
 
+      - name: Motor sustain verify
+        run: python3 scripts/verify_noos_motor_sustain_v1.py --write-receipt
+
       - name: Trigger registry sweep
         run: /usr/bin/python3 scripts/sandbox_health_sweep_v1.py --json | tee receipts/proof/noos-post-deploy-trigger-sweep-v1.json
 
@@ -58,7 +61,7 @@ jobs:
               "deploy_run_id": os.environ.get("DEPLOY_WORKFLOW_RUN_ID", ""),
               "deploy_completed_at": os.environ.get("DEPLOY_WORKFLOW_COMPLETED_AT", ""),
               "verify_run_url": os.environ.get("GITHUB_RUN_URL", ""),
-              "checks": ["check_production_urls.sh", "sandbox_health_sweep_v1.py"],
+              "checks": ["check_production_urls.sh", "verify_noos_motor_sustain_v1.py", "sandbox_health_sweep_v1.py"],
           }
           out = Path("receipts/proof/noos-post-deploy-verify-v1.json")
           out.write_text(json.dumps(doc, indent=2) + "\n", encoding="utf-8")

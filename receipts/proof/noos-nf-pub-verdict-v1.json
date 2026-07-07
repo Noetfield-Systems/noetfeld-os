@@ -1,0 +1,15 @@
+{
+  "schema": "noos-nf-pub-verdict-v1",
+  "at": "2026-07-07T16:07:57Z",
+  "verdict": "PENDING",
+  "authority": "founder",
+  "note": "Set verdict ACCEPT|REJECT|DEFER per finding before P0 www edits",
+  "artifacts": [
+    "noos-nf-pub-audit-protocol-v1.json",
+    "noos-nf-pub-route-inventory-v1.json",
+    "noos-nf-pub-claim-evidence-matrix-v1.json",
+    "noos-nf-pub-cta-journey-map-v1.json",
+    "noos-nf-pub-claim-risk-matrix-v1.json",
+    "noos-nf-pub-prioritized-fix-list-v1.json"
+  ]
+}

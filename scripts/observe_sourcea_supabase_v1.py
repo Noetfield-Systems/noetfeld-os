@@ -18,6 +18,7 @@ sys.path.insert(0, str(ROOT / "scripts"))
 from noos_portfolio_spine_heartbeat_v1 import write_observe_heartbeat  # noqa: E402
 
 ENV_PATH = Path.home() / ".sourcea-secrets/portfolio-spine.env"
+PLATFORM_ENV = Path.home() / ".noetfield-platform-secrets/portfolio-spine.env"
 OUT_DIR = ROOT / ".noos-runtime/observe/sourcea"
 
 
@@ -37,13 +38,21 @@ def load_env(path: Path) -> dict[str, str]:
 
 
 def supabase_cfg() -> tuple[str, str] | None:
-    vals = load_env(ENV_PATH)
-    url = vals.get("SUPABASE_URL", "").rstrip("/")
-    key = vals.get("SUPABASE_SERVICE_ROLE_KEY") or vals.get("SUPABASE_SERVICE_KEY")
-    if url and key:
-        return url, key
-    url = os.environ.get("SUPABASE_URL", "").rstrip("/")
-    key = os.environ.get("SUPABASE_SERVICE_ROLE_KEY") or os.environ.get("SUPABASE_SERVICE_KEY")
+    vals: dict[str, str] = {}
+    for path in (ENV_PATH, PLATFORM_ENV):
+        vals.update(load_env(path))
+    url = (
+        vals.get("SUPABASE_URL")
+        or os.environ.get("PORTFOLIO_SPINE_SUPABASE_URL")
+        or os.environ.get("SUPABASE_URL")
+        or ""
+    ).rstrip("/")
+    key = (
+        vals.get("SUPABASE_SERVICE_ROLE_KEY")
+        or vals.get("SUPABASE_SERVICE_KEY")
+        or os.environ.get("PORTFOLIO_SPINE_SERVICE_ROLE_KEY")
+        or os.environ.get("SUPABASE_SERVICE_ROLE_KEY")
+    )
     if url and key:
         return url, key
     return None

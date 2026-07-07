@@ -156,6 +156,13 @@
           "name": "sourcea_supabase_observe",
           "cmd": ["python3", "scripts/observe_sourcea_supabase_v1.py", "--write-receipt", "--json"]
         }
+      ],
+      "cloud_steps": [
+        {
+          "name": "sourcea_supabase_observe",
+          "cmd": ["python3", "scripts/observe_sourcea_supabase_v1.py", "--write-receipt", "--json"],
+          "continue_on_error": false
+        }
       ]
     },
     {

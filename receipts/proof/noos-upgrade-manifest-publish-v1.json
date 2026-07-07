@@ -1,0 +1,12 @@
+{
+  "schema": "noos-upgrade-manifest-publish-v1",
+  "at": "2026-07-07T16:08:10Z",
+  "ok": true,
+  "manifest_path": "/Users/sinakazemnezhad/Desktop/Noetfield-Systems/noetfeld-OS/docs/_NOOS_AGENT/UPGRADE_MANIFEST.json",
+  "entry_count": 0,
+  "planes": [
+    "NOOS",
+    "Noetfield-contract-surfaces"
+  ],
+  "note": "Contract-only SourceA deltas; no product repo writes"
+}

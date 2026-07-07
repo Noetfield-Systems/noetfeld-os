@@ -51,6 +51,19 @@
         "type": "HTTP(S)",
         "url": "https://www.noetfield.com/",
         "interval_minutes": 15
+      },
+      {
+        "name": "gel-api yyz",
+        "type": "HTTP(S)",
+        "url": "https://api.noetfield.com/health",
+        "interval_minutes": 5
+      },
+      {
+        "name": "gel-api ord canary",
+        "type": "HTTP(S)",
+        "url": "https://gel-api-ord.noetfield.com/health",
+        "interval_minutes": 5,
+        "note": "UPG-0209 canary — alert until DNS live"
       }
     ],
     "alert_channels": ["email"],

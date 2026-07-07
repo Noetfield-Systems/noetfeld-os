@@ -1,6 +1,6 @@
 {
   "schema": "noos-integrator-autorun-repair-v1",
-  "at": "2026-07-07T15:06:18Z",
+  "at": "2026-07-07T16:09:40Z",
   "ok": true,
   "liveness": {
     "ok": true,
@@ -12,17 +12,17 @@
         {
           "ok": true,
           "loop_id": "cf_loop_motor",
-          "last_fired_at": "2026-07-07T15:06:20.521Z"
+          "last_fired_at": "2026-07-07T16:09:42.371Z"
         },
         {
           "ok": true,
           "loop_id": "executor_railway_canonical",
-          "last_fired_at": "2026-07-07T15:06:20.662Z"
+          "last_fired_at": "2026-07-07T16:09:42.501Z"
         },
         {
           "ok": true,
           "loop_id": "executor_fly_temporary",
-          "last_fired_at": "2026-07-07T15:06:20.791Z"
+          "last_fired_at": "2026-07-07T16:09:42.627Z"
         }
       ]
     },
@@ -34,8 +34,8 @@
       "ok": true,
       "status": 201,
       "row": {
-        "id": "c539f4e0-fc78-4c7f-b2a2-658f9698aa5e",
-        "recorded_at": "2026-07-07T15:06:20+00:00",
+        "id": "8c837494-42eb-409d-858e-43018c0dd48e",
+        "recorded_at": "2026-07-07T16:09:42+00:00",
         "source": "cloudflare_cron",
         "event": "CRON_FIRED",
         "deployment_id": null,
@@ -49,51 +49,51 @@
       "ok": true,
       "status": 201,
       "row": {
-        "id": "a165d93c-3d88-4d76-8000-13b515a373d1",
-        "cycle_id": "cycle-cloud-queue-repair-2026-07-07T15:06:20Z",
+        "id": "6fe83dc1-a48f-427b-9cc3-3ab19960b68e",
+        "cycle_id": "cycle-cloud-queue-repair-2026-07-07T16:09:42Z",
         "execution_id": "cloud-queue-heartbeat-v1",
         "queue_head_before": "CLOUD-SEC-8120",
         "queue_head_after": "CLOUD-SEC-8120",
-        "started_at": "2026-07-07T15:06:20+00:00",
-        "finished_at": "2026-07-07T15:06:20+00:00",
+        "started_at": "2026-07-07T16:09:42+00:00",
+        "finished_at": "2026-07-07T16:09:42+00:00",
         "duration_ms": 1,
         "trigger_source": "noos_repair_one_shot",
         "verdict": "GREEN",
-        "created_at": "2026-07-07T15:06:20+00:00"
+        "created_at": "2026-07-07T16:09:42+00:00"
       }
     },
     "cycle_buyer": {
       "ok": true,
       "status": 201,
       "row": {
-        "id": "e2a9f5be-5102-4451-8a41-b732bef799f4",
-        "cycle_id": "cycle-buyer-proof-repair-2026-07-07T15:06:20Z",
+        "id": "c8977b4f-1508-4e5b-9c27-054e256ba300",
+        "cycle_id": "cycle-buyer-proof-repair-2026-07-07T16:09:42Z",
         "execution_id": "buyer-proof-hotfix-verify-v1-repair",
         "queue_head_before": "CLOUD-SEC-8120",
         "queue_head_after": "CLOUD-SEC-8120",
-        "started_at": "2026-07-07T15:06:20+00:00",
-        "finished_at": "2026-07-07T15:06:20+00:00",
+        "started_at": "2026-07-07T16:09:42+00:00",
+        "finished_at": "2026-07-07T16:09:42+00:00",
         "duration_ms": 1,
         "trigger_source": "noos_repair_one_shot",
         "verdict": "GREEN",
-        "created_at": "2026-07-07T15:06:20+00:00"
+        "created_at": "2026-07-07T16:09:42+00:00"
       }
     },
     "cycle_recipe": {
       "ok": true,
       "status": 201,
       "row": {
-        "id": "0404f44c-ca99-42a8-ab37-abd400c0a48c",
-        "cycle_id": "cycle-recipe-queue-repair-2026-07-07T15:06:20Z",
+        "id": "6b3ffe71-a77c-4680-8c78-1765d633755e",
+        "cycle_id": "cycle-recipe-queue-repair-2026-07-07T16:09:42Z",
         "execution_id": "client-proof-recipe-queue-v1-repair",
         "queue_head_before": "CLOUD-SEC-8120",
         "queue_head_after": "CLOUD-SEC-8120",
-        "started_at": "2026-07-07T15:06:20+00:00",
-        "finished_at": "2026-07-07T15:06:20+00:00",
+        "started_at": "2026-07-07T16:09:42+00:00",
+        "finished_at": "2026-07-07T16:09:42+00:00",
         "duration_ms": 1,
         "trigger_source": "noos_repair_one_shot",
         "verdict": "GREEN",
-        "created_at": "2026-07-07T15:06:20+00:00"
+        "created_at": "2026-07-07T16:09:42+00:00"
       }
     },
     "queue_head": "CLOUD-SEC-8120"
@@ -102,11 +102,11 @@
     "ok": true,
     "status": 201,
     "row": {
-      "id": "4456eb69-34a7-41a6-8564-e1598aab6a56",
+      "id": "aebe5199-ce6a-46e4-8909-b40a8cbd95ec",
       "factory_id": "loop-agent-nerve",
-      "cycle_number": 37,
-      "started_at": "2026-07-07T15:06:21+00:00",
-      "finished_at": "2026-07-07T15:06:21+00:00",
+      "cycle_number": 40,
+      "started_at": "2026-07-07T16:09:43+00:00",
+      "finished_at": "2026-07-07T16:09:43+00:00",
       "exit_code": 0,
       "status": "ok",
       "runner_output": {
@@ -115,7 +115,7 @@
         "cloud_trigger": "noos_integrator_repair"
       },
       "guardrails": {},
-      "recorded_at": "2026-07-07T15:06:21+00:00"
+      "recorded_at": "2026-07-07T16:09:43+00:00"
     }
   }
 }

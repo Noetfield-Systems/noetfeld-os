@@ -1,6 +1,6 @@
 {
   "schema": "noos-sandbox-registry-reconcile-v1",
-  "reconciled_at": "2026-07-05T16:43:56Z",
+  "reconciled_at": "2026-07-07T16:11:26Z",
   "authority": "NOOS_T3_SANDBOX_FLEET_STEP_4",
   "sandbox_count": 8,
   "expected_count": 8,

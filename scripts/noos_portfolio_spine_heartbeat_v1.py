@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import json
+import os
 import urllib.error
 import urllib.request
 from datetime import datetime, timezone
@@ -11,6 +12,7 @@ from pathlib import Path
 from typing import Any
 
 PORTFOLIO_ENV = Path.home() / ".sourcea-secrets/portfolio-spine.env"
+PLATFORM_PORTFOLIO_ENV = Path.home() / ".noetfield-platform-secrets/portfolio-spine.env"
 DEFAULT_QUEUE_HEAD = "CLOUD-SEC-8120"
 
 
@@ -34,9 +36,22 @@ def parse_env_file(path: Path) -> dict[str, str]:
 
 
 def portfolio_cfg() -> tuple[str, str] | None:
-    env = parse_env_file(PORTFOLIO_ENV)
-    url = (env.get("SUPABASE_URL") or "").rstrip("/")
-    key = env.get("SUPABASE_SERVICE_ROLE_KEY") or env.get("SUPABASE_SERVICE_KEY") or ""
+    merged: dict[str, str] = {}
+    for path in (PORTFOLIO_ENV, PLATFORM_PORTFOLIO_ENV):
+        merged.update(parse_env_file(path))
+    url = (
+        merged.get("SUPABASE_URL")
+        or os.environ.get("PORTFOLIO_SPINE_SUPABASE_URL")
+        or os.environ.get("SUPABASE_URL")
+        or ""
+    ).rstrip("/")
+    key = (
+        merged.get("SUPABASE_SERVICE_ROLE_KEY")
+        or merged.get("SUPABASE_SERVICE_KEY")
+        or os.environ.get("PORTFOLIO_SPINE_SERVICE_ROLE_KEY")
+        or os.environ.get("SUPABASE_SERVICE_ROLE_KEY")
+        or ""
+    )
     if url and key:
         return url, key
     return None

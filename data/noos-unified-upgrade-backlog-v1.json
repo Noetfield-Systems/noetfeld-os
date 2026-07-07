@@ -9,6 +9,7 @@
     "doc": "docs/_NOOS_AGENT/[NOOS-AGENT-20260706-033]_UNIFIED_NEXT_PLAN_NOOS_NOETFIELD_v1.md",
     "registry": "data/noos-next-plan-unified-v1.json",
     "integrator_control_plan": "data/noos-integrator-control-plan-v1.json",
+    "ten_upgrade_plans": "data/noos-ten-upgrade-plans-registry-v1.json",
     "integrator_doc": "docs/_NOOS_AGENT/[NOOS-AGENT-20260707-007]_INTEGRATOR_CONTROL_LAYER_UPGRADE_v1.md",
     "noos_track": "Living System Phase E-G (48h + closeout)",
     "noetfield_track": "UPG-NF-PUB-01 audit + UPG-0001 NW1 send"
@@ -447,7 +448,8 @@
       "depends_on": [
         "UPG-0204"
       ],
-      "note": "Deferred to next plan per T3 closeout"
+      "evidence": "scripts/verify_noos_gel_api_multi_region_v1.py; yyz=200; ord DNS pending",
+      "note": "UPG-PLAN-08 prep done; ord canary URL not live"
     },
     {
       "id": "UPG-0210",
@@ -615,12 +617,14 @@
       "id": "UPG-NF-PUB-01",
       "tier": "T2",
       "track": "COM",
-      "status": "open",
+      "status": "done",
       "priority": "P0",
       "owner": "machine",
       "title": "External public-site audit sprint (route inventory + claim-evidence matrix)",
       "success_check": "audit report + P0 fix list",
-      "plan_ref": "NOOS-AGENT-20260706-033 Track B steps B1-B4"
+      "plan_ref": "NOOS-AGENT-20260706-033 Track B steps B1-B4",
+      "evidence": "make nf-pub-verdict-gate; verdict PENDING founder",
+      "note": "P0 www edits blocked until verdict ACCEPT"
     },
     {
       "id": "UPG-NF-PUB-02",
@@ -631,7 +635,7 @@
       "owner": "machine",
       "title": "P0 public-risk fixes from site audit",
       "success_check": "verify-static-www PASS + no unsupported claims",
-      "blocked_by": "UPG-NF-PUB-01"
+      "blocked_by": "founder verdict ACCEPT on noos-nf-pub-verdict-v1.json"
     },
     {
       "id": "UPG-0001",

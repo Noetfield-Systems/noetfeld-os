@@ -91,25 +91,28 @@
       "id": "ICL-P2",
       "title": "Unified control dashboard (1 month)",
       "tier": "T3",
-      "status": "open",
+      "status": "done",
       "steps": [
         {
           "id": "ICL-P2-01",
           "title": "integrator-status CLI",
-          "command": "python3 scripts/noos_integrator_status_v1.py --json",
-          "deliverable": "vault + autorun + machine + conflict in one row"
+          "status": "done",
+          "command": "make integrator-status",
+          "evidence": "scripts/noos_integrator_status_v1.py"
         },
         {
           "id": "ICL-P2-02",
           "title": "Supabase integrator_tasks mirror",
-          "command": "optional promote from .noos-runtime/integrator/",
-          "founder_gate": false
+          "status": "done",
+          "command": "make integrator-tasks-mirror",
+          "evidence": "scripts/noos_integrator_tasks_mirror_v1.py"
         },
         {
           "id": "ICL-P2-03",
           "title": "Cross-repo upgrade manifest sync",
-          "command": "noos_integrator_sync_v1.py publish UPGRADE_MANIFEST deltas",
-          "planes": ["NOOS", "Noetfield", "SourceA-contract-only"]
+          "status": "done",
+          "command": "make upgrade-manifest-publish",
+          "evidence": "scripts/noos_upgrade_manifest_publish_v1.py"
         }
       ]
     }
@@ -121,6 +124,9 @@
   ],
   "make_targets": {
     "integrator-repair-autorun": "scripts/noos_integrator_repair_autorun_v1.py",
+    "icl-p1-verify": "scripts/verify_noos_icl_p1_v1.py",
+    "integrator-status": "scripts/noos_integrator_status_v1.py",
+    "motor-sustain-verify": "scripts/verify_noos_motor_sustain_v1.py",
     "cloud-workers-deploy": "gh workflow run deploy-noos-cloud-workers-v1.yml",
     "cloud-secrets-sync": "scripts/noos_sync_cloud_secrets_v1.sh",
     "cloud-vault-promote": "scripts/noos_promote_vault_keys_v1.py",
