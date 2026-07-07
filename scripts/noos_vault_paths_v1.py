@@ -50,13 +50,19 @@ def resolve_env_paths() -> list[Path]:
     return paths
 
 
+def workers_api_token(env: dict[str, str] | None = None) -> str:
+    """Wrangler deploy token — prefer CF_NOETFIELD_API_TOKEN (Workers Edit) over generic CF token."""
+    row = env if env is not None else load_platform_env()
+    return row.get("CF_NOETFIELD_API_TOKEN") or row.get("CLOUDFLARE_API_TOKEN") or ""
+
+
 def load_platform_env() -> dict[str, str]:
     merged: dict[str, str] = {}
     for path in resolve_env_paths():
         merged.update(parse_env_file(path))
-    token = merged.get("CLOUDFLARE_API_TOKEN") or merged.get("CF_NOETFIELD_API_TOKEN")
+    token = workers_api_token(merged)
     if token:
-        merged.setdefault("CLOUDFLARE_API_TOKEN", token)
+        merged["CLOUDFLARE_API_TOKEN"] = token
     return merged
 
 

@@ -3,6 +3,9 @@
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+# shellcheck disable=SC1091
+source "$ROOT/scripts/noos_load_noetfield_env_v1.sh"
+noos_load_noetfield_env
 WORKER_DIR="$ROOT/cloud/workers/noos-factory-autorun-tick-v1"
 REPO="${GITHUB_REPO:-Noetfield-Systems/noetfeld-os}"
 

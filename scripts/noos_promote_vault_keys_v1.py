@@ -12,6 +12,7 @@ from noos_vault_paths_v1 import (
     NOETFIELD_LOCAL_ENV,
     NOETFIELD_PLATFORM_SECRETS,
     parse_env_file,
+    workers_api_token,
 )
 
 CF_BARE = re.compile(r"^(cfat_|cfut_)[A-Za-z0-9_-]+$")
@@ -65,9 +66,9 @@ def promote() -> dict[str, object]:
         elif orphan.startswith("cfut_") and not noos.get("CF_NOETFIELD_API_TOKEN"):
             noos["CF_NOETFIELD_API_TOKEN"] = orphan
 
-    token = noos.get("CLOUDFLARE_API_TOKEN") or noos.get("CF_NOETFIELD_API_TOKEN")
+    token = workers_api_token(noos)
     if token:
-        noos.setdefault("CLOUDFLARE_API_TOKEN", token)
+        noos["CLOUDFLARE_API_TOKEN"] = token
 
     for key in list(product):
         if key in NOOS_ONLY_KEYS or key.startswith("NOOS_") or key.startswith("CLNOOS"):

@@ -1,6 +1,7 @@
 name = "noos-loop-fleet-tick-v1"
 main = "src/index.js"
 compatibility_date = "2024-06-01"
+account_id = "0d0b967b77e2e5535455d39ff3dae72c"
 
 [triggers]
 crons = ["*/5 * * * *"]

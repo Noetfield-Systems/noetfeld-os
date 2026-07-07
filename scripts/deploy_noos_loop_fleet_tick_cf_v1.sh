@@ -3,7 +3,11 @@
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+# shellcheck disable=SC1091
+source "$ROOT/scripts/noos_load_noetfield_env_v1.sh"
+noos_load_noetfield_env
 WORKER_DIR="$ROOT/cloud/workers/noos-loop-fleet-tick-v1"
+CF_ACCOUNT_ID="${CLOUDFLARE_ACCOUNT_ID:-0d0b967b77e2e5535455d39ff3dae72c}"
 TABLE_SRC="$ROOT/data/noos-cf-dispatch-table-v1.json"
 TABLE_DST="$WORKER_DIR/src/dispatch-table.json"
 WRANGLER="$WORKER_DIR/wrangler.toml"
@@ -29,8 +33,6 @@ print(d.get('NOOS_LOOP_SECRET') or d.get('LOOP_RUNNER_SECRET') or '')
 fi
 
 if [[ -z "${NOOS_LOOP_SECRET:-}" ]]; then
-  # shellcheck disable=SC1091
-  source "$ROOT/scripts/noos_load_noetfield_env_v1.sh"
   noos_load_noetfield_env
 fi
 
@@ -42,20 +44,22 @@ fi
 ENABLE_CF_CRON="${ENABLE_CF_CRON:-1}"
 cp "$WRANGLER" "$WRANGLER_BAK"
 if [[ "$ENABLE_CF_CRON" == "1" ]]; then
-  cat > "$WRANGLER" <<'EOF'
+  cat > "$WRANGLER" <<EOF
 name = "noos-loop-fleet-tick-v1"
 main = "src/index.js"
 compatibility_date = "2024-06-01"
+account_id = "$CF_ACCOUNT_ID"
 
 [triggers]
 crons = ["*/5 * * * *"]
 EOF
   echo "CF cron ENABLED (*/5)"
 else
-  cat > "$WRANGLER" <<'EOF'
+  cat > "$WRANGLER" <<EOF
 name = "noos-loop-fleet-tick-v1"
 main = "src/index.js"
 compatibility_date = "2024-06-01"
+account_id = "$CF_ACCOUNT_ID"
 EOF
   echo "CF cron DISABLED"
 fi
