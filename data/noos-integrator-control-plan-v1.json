@@ -134,10 +134,10 @@
         {
           "id": "ICL-P2-06",
           "title": "GHA Phase-1 secondary witnesses (daily + autorun + motor)",
-          "status": "in_progress",
+          "status": "done",
           "command": "bash scripts/noos_gha_witness_phase1_smoke_v1.sh",
           "acceptance": "workflow_dispatch smoke green on all 3 witnesses; then schedule enabled",
-          "evidence": "data/noos-gha-secondary-witness-manifest-v1.json"
+          "evidence": "receipts/proof/noos-gha-witness-phase1-smoke-v1.json"
         }
       ]
     }

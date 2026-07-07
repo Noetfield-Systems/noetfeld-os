@@ -1,9 +1,10 @@
 # NOOS GHA secondary witness — integrator daily control panel (ICL-D01–D12).
-# Phase 1: workflow_dispatch bootstrap; schedule enabled after smoke (see manifest).
 name: NOOS integrator daily witness
 
 on:
   workflow_dispatch:
+  schedule:
+    - cron: "0 7,13,19 * * *"
 
 permissions:
   contents: read
