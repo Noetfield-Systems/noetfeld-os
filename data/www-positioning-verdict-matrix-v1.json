@@ -1,0 +1,99 @@
+{
+  "schema": "www-positioning-verdict-matrix-v1",
+  "version": "1.0.0",
+  "authored_at": "2026-07-07",
+  "founder_gate": "P0 copy ship — ACCEPT rows only on public www",
+  "positioning_source": "We help companies clean messy AI/agent systems by finding unclear language, conflicting decisions, fake authority, unsafe automation wording, and public-risk claims, then turning the cleanup into machine-enforced rules.",
+  "claims": [
+    {
+      "id": "C1",
+      "claim": "Find unclear policy and automation language before production",
+      "verdict": "ACCEPT",
+      "buyer_wording": "Surface unclear language, conflicting approvals, and unsafe automation wording before Copilot touches production data",
+      "evidence": [
+        "docs/strategy/NOETFIELD_COMMERCIAL_SSOT_LOCKED_v1.md §0",
+        "scripts/verify-static-www.sh",
+        "scripts/verify-ui-build-checklist.sh",
+        "data/nf_cleanup_dimensions_v1.json"
+      ],
+      "scope": "Trust Brief diagnostic + sandbox sample — not certifier"
+    },
+    {
+      "id": "C2",
+      "claim": "Resolve conflicting decisions with named approvers and go/no-go records",
+      "verdict": "ACCEPT",
+      "buyer_wording": "Every go/no-go produces a signed Trust Ledger Entry with confidence score and evidence index",
+      "evidence": [
+        "/copilot/demo/ evaluate path",
+        "scripts/verify-www-interactive-fidelity.sh",
+        "platform POST /evaluate"
+      ],
+      "scope": "Sandbox + Governance Pack — sample TLE on www"
+    },
+    {
+      "id": "C3",
+      "claim": "Remove fake authority and overstated certification on public surfaces",
+      "verdict": "ACCEPT",
+      "buyer_wording": "Honest scope badges — orientation only, not legal advice or certification",
+      "evidence": [
+        ".cursor/rules/noetfield-www-verdict-not-research.mdc",
+        "scripts/site_audit/lenses/noetfield-lenses-v1.json ai_language_hygiene",
+        "make verify-no-vendor-names"
+      ],
+      "scope": "Public www hygiene — internal ops separate"
+    },
+    {
+      "id": "C4",
+      "claim": "Block unsafe automation promises on buyer-facing copy",
+      "verdict": "ACCEPT",
+      "buyer_wording": "Invalid changes blocked · allowed decisions receipted · export fails closed on tamper",
+      "evidence": [
+        "PRODUCT_TRUTH.md",
+        "scripts/verify-commercial-agentic.sh",
+        "infra/nf-probe-cron intake_e2e probe"
+      ],
+      "scope": "Product behavior + copy gates — not full agent platform"
+    },
+    {
+      "id": "C5",
+      "claim": "Scrub public-risk claims that cannot be verified",
+      "verdict": "ACCEPT",
+      "buyer_wording": "Public claims tied to sample receipts, export verify, and procurement artifacts — no fake logos or ARR",
+      "evidence": [
+        "reports/www-audit receipts",
+        "scripts/site_audit/audit.py",
+        ".cursor/rules/noetfield-www-verdict-not-research.mdc Small Fix Rule"
+      ],
+      "scope": "www + intake — claim-evidence matrix required for new claims"
+    },
+    {
+      "id": "C6",
+      "claim": "Turn cleanup into machine-enforced rules",
+      "verdict": "ACCEPT",
+      "buyer_wording": "Machine-enforced rules your auditors can test — evaluate API, TLE export, fail-closed verify",
+      "evidence": [
+        "scripts/verify-static-www.sh",
+        "scripts/nf_intake_e2e.py",
+        "api/_lib/intake-telegram.js probe skip path",
+        ".cursor/rules/*.mdc validators"
+      ],
+      "scope": "Sandbox sample + production Governance Pack — rules enforced in product path"
+    },
+    {
+      "id": "C7",
+      "claim": "We clean every company's messy AI stack end-to-end",
+      "verdict": "REJECT",
+      "buyer_wording": null,
+      "evidence": [],
+      "scope": "Overbroad — use three contract SKUs and honest scope only"
+    },
+    {
+      "id": "C8",
+      "claim": "Generic agent-system cleanup for any vendor",
+      "verdict": "DEFER",
+      "buyer_wording": "Copilot governance primary · agentic workflows via governance specialist lane",
+      "evidence": ["docs/strategy/NOETFIELD_COMMERCIAL_SSOT_LOCKED_v1.md §0"],
+      "scope": "Lead with M365 Copilot; expand copy after founder verdict"
+    }
+  ]
+}

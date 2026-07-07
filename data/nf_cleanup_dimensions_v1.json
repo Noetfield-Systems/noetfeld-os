@@ -1,0 +1,67 @@
+{
+  "schema": "nf-cleanup-dimensions-v1",
+  "version": "1.0.0",
+  "authored_at": "2026-07-07",
+  "law": "Three contract SKUs on www — dimensions route buyers; no fourth contract card on homepage",
+  "outcome_sku": {
+    "id": "machine-rule-pack",
+    "name": "Machine Rule Pack",
+    "buyer_summary": "Encode approved cleanup as evaluate rules, TLE receipts, and fail-closed export — auditors can re-run checks",
+    "contract_sku": "Copilot Governance Pack",
+    "surface_path": "/copilot/pilot/",
+    "surface_cta": "Apply for Governance Pack",
+    "mode": "production"
+  },
+  "dimensions": [
+    {
+      "id": "language-clarity-scan",
+      "name": "Language Clarity Scan",
+      "badge": "Dimension 01",
+      "buyer_summary": "Find unclear policy language, vague automation labels, and buyer-facing wording that auditors will challenge",
+      "contract_sku": "Trust Brief",
+      "surface_path": "/trust-brief/",
+      "surface_cta": "Request Trust Brief",
+      "audit_check_ids": ["ALH-2", "ALH-6"]
+    },
+    {
+      "id": "decision-conflict-review",
+      "name": "Decision Conflict Review",
+      "badge": "Dimension 02",
+      "buyer_summary": "Surface conflicting approvals, duplicate CTAs, and go/no-go paths that disagree across hubs and intake",
+      "contract_sku": "Trust Brief",
+      "surface_path": "/copilot/demo/",
+      "surface_cta": "Run 5-minute demo",
+      "audit_check_ids": ["ALH-5", "BF-3"]
+    },
+    {
+      "id": "authority-claim-audit",
+      "name": "Authority Claim Audit",
+      "badge": "Dimension 03",
+      "buyer_summary": "Remove fake authority — certification, license, and partner claims without receipts or honest scope badges",
+      "contract_sku": "Trust Brief",
+      "surface_path": "/trust/",
+      "surface_cta": "Trust center",
+      "audit_check_ids": ["ALH-4", "RI-2"]
+    },
+    {
+      "id": "automation-safety-wording",
+      "name": "Automation Safety Wording",
+      "badge": "Dimension 04",
+      "buyer_summary": "Replace unsafe automation promises with blocked/allowed/receipted execution language tied to evaluate",
+      "contract_sku": "Copilot Governance Pack",
+      "surface_path": "/ai-automation/",
+      "surface_cta": "Governance specialist workflow",
+      "audit_check_ids": ["ALH-3", "ALH-6"]
+    },
+    {
+      "id": "public-risk-claim-scrub",
+      "name": "Public-Risk Claim Scrub",
+      "badge": "Dimension 05",
+      "buyer_summary": "Scrub public-risk claims that cannot be verified — pricing drift, fake proof counters, draft copy on money pages",
+      "contract_sku": "Trust Brief",
+      "surface_path": "/trust-ledger/verify/",
+      "surface_cta": "Verify export integrity",
+      "audit_check_ids": ["ALH-1", "BF-2", "RH-1"]
+    }
+  ]
+}

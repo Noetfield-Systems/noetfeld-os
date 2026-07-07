@@ -2,6 +2,7 @@
 """Regenerate Noetfield GTM www pages — v6 ground-up rebuild."""
 from __future__ import annotations
 
+import json
 import re
 from pathlib import Path
 
@@ -62,6 +63,17 @@ SCOPE_BADGES = {
 # Commercial narrative — SSOT: docs/strategy/NOETFIELD_COMMERCIAL_SSOT_LOCKED_v1.md · docs/GTM_COPYBOOK.md
 COPY = {
     "meta_home": "Board-grade Copilot governance for EU and US regulated institutions — tamper-evident decision records, signed TLE receipts, fail-closed export. Copilot Governance Pack $2k–10k.",
+    "positioning_oneliner": (
+        "We help regulated teams clean messy AI and agent deployments — "
+        "<strong>unclear language</strong>, <strong>conflicting decisions</strong>, "
+        "<strong>overstated authority</strong>, <strong>unsafe automation promises</strong>, "
+        "and <strong>public claims that cannot be verified</strong> — "
+        "then encode the cleanup as <strong>machine-enforced rules</strong> auditors can test in sandbox."
+    ),
+    "cleanup_dimensions_lead": (
+        "Five cleanup dimensions map to Trust Brief diagnostic work and Copilot Governance Pack enforcement — "
+        "sample evaluate, TLE export, and fail-closed verify before production scope opens."
+    ),
     "hero_h1": "The audit trail your Copilot deployment will be asked for later",
     "hero_lead": (
         "Noetfield is the <strong>AI Governance &amp; Evidence</strong> layer for regulated institutions — "
@@ -141,6 +153,40 @@ FOOT = """
 </body>
 </html>
 """
+
+
+def load_cleanup_dimensions() -> dict:
+    return json.loads((ROOT / "data/nf_cleanup_dimensions_v1.json").read_text(encoding="utf-8"))
+
+
+def cleanup_dimensions_panel() -> str:
+    """Five cleanup dimensions + Machine Rule Pack outcome — product surfaces for buyers."""
+    data = load_cleanup_dimensions()
+    cards: list[str] = []
+    for dim in data["dimensions"]:
+        cards.append(
+            f'<article class="nf-outcome-card"><p class="nf-outcome-label">{dim["badge"]}</p>'
+            f'<h3>{dim["name"]}</h3><p>{dim["buyer_summary"]}</p>'
+            f'<p><span class="nf-signal-badge nf-signal-badge--orientation">{dim["contract_sku"]}</span> · '
+            f'<a href="{dim["surface_path"]}">{dim["surface_cta"]}</a></p></article>'
+        )
+    outcome = data["outcome_sku"]
+    cards.append(
+        f'<article class="nf-outcome-card nf-outcome-card--approved"><p class="nf-outcome-label">Outcome</p>'
+        f'<h3>{outcome["name"]}</h3><p>{outcome["buyer_summary"]}</p>'
+        f'<p><span class="nf-signal-badge nf-signal-badge--available">{outcome["contract_sku"]}</span> · '
+        f'<a href="{outcome["surface_path"]}">{outcome["surface_cta"]}</a></p></article>'
+    )
+    return f"""
+ <div class="nf-block-inner nf-cleanup-dimensions" id="cleanup-dimensions" aria-labelledby="cleanup-dimensions-label">
+ <div class="nf-section-block-head"><span class="nf-section-num" aria-hidden="true">◇</span><div>
+ <p class="nf-eyebrow" id="cleanup-dimensions-label">Language cleanup</p>
+ <h3>Five dimensions we clean before production</h3>
+ <p class="nf-section-lead">{COPY["cleanup_dimensions_lead"]}</p>
+ </div></div>
+ <p class="nf-section-lead">{COPY["positioning_oneliner"]}</p>
+ <div class="nf-outcome-grid">{"".join(cards)}</div>
+ </div>"""
 
 
 def receipt(
@@ -2023,6 +2069,10 @@ def homepage() -> str:
         f'<p class="nf-first-receipt-promise">{COPY["first_receipt_promise"]}</p>\n <p class="nf-lead">',
         1,
     ).replace(
+        '<p class="nf-lead">',
+        f'<p class="nf-positioning-oneliner">{COPY["positioning_oneliner"]}</p>\n <p class="nf-lead">',
+        1,
+    ).replace(
         '<div class="nf-hero-badges">',
         product_lane_strip() + '\n <div class="nf-hero-badges">',
         1,
@@ -2046,6 +2096,7 @@ def homepage() -> str:
  <article class="nf-loop-step"><p class="nf-loop-step-num">04</p><h3>Export</h3><p>Board PDF and procurement ZIP — <strong>export_integrity</strong> fails closed on tamper.</p></article>
  </div>
  {agentic_governance_specialist_block()}
+ {cleanup_dimensions_panel()}
  {proof_grid([
         ("/copilot/demo/", "▶", "5-minute demo", "Evaluate → confidence score → Purview · Entra · SharePoint index"),
         ("/trust-ledger/sample-report/", "TLE", "TLE v1 samples", "Go · conditional · rejected YAML for procurement review"),
