@@ -39,6 +39,17 @@ if command -v gh >/dev/null 2>&1; then
   if [[ -n "${NOETFIELD_SUPABASE_SERVICE_ROLE_KEY:-}" ]]; then
     printf '%s' "$NOETFIELD_SUPABASE_SERVICE_ROLE_KEY" | gh secret set NOETFIELD_SUPABASE_SERVICE_ROLE_KEY --repo "$REPO" 2>/dev/null || true
   fi
+  TF_REPO="${TRUSTFIELD_GITHUB_REPO:-Noetfield-Systems/TrustField-Technologies}"
+  if [[ -n "${NOETFIELD_SUPABASE_URL:-}" ]]; then
+    log "GHA secret NOETFIELD_SUPABASE_URL → $TF_REPO"
+    printf '%s' "$NOETFIELD_SUPABASE_URL" | gh secret set NOETFIELD_SUPABASE_URL --repo "$TF_REPO" 2>/dev/null || true
+    printf '%s' "$NOETFIELD_SUPABASE_URL" | gh secret set SUPABASE_URL --repo "$TF_REPO" 2>/dev/null || true
+  fi
+  if [[ -n "${NOETFIELD_SUPABASE_SERVICE_ROLE_KEY:-}" ]]; then
+    log "GHA secret NOETFIELD_SUPABASE_SERVICE_ROLE_KEY → $TF_REPO"
+    printf '%s' "$NOETFIELD_SUPABASE_SERVICE_ROLE_KEY" | gh secret set NOETFIELD_SUPABASE_SERVICE_ROLE_KEY --repo "$TF_REPO" 2>/dev/null || true
+    printf '%s' "$NOETFIELD_SUPABASE_SERVICE_ROLE_KEY" | gh secret set SUPABASE_SERVICE_ROLE_KEY --repo "$TF_REPO" 2>/dev/null || true
+  fi
   log "GHA secrets synced"
 else
   log "WARN: gh CLI missing — skip GHA secret sync"
