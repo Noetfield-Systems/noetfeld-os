@@ -57,22 +57,30 @@ def repair_portfolio_spine() -> dict[str, Any]:
 
 
 def repair_agent_nerve_cycle() -> dict[str, Any]:
+    return _repair_factory_cycle("loop-agent-nerve", "agent_nerve", "noos_agent_nerve_loop_tick")
+
+
+def _factory_id_for_loop(loop_id: str) -> str:
+    return "loop-" + loop_id.replace("_", "-")
+
+
+def _repair_factory_cycle(factory_id: str, loop_id: str, event_type: str) -> dict[str, Any]:
     url, key = supabase_creds()
     if not url or not key:
         return {"ok": False, "skipped": True, "reason": "supabase_not_configured"}
     now = utc_now()
     req = urllib.request.Request(
-        f"{url}/rest/v1/noetfield_factory_cycle_runs?factory_id=eq.loop-agent-nerve&select=cycle_number&order=cycle_number.desc&limit=1",
+        f"{url}/rest/v1/noetfield_factory_cycle_runs?factory_id=eq.{factory_id}&select=cycle_number&order=cycle_number.desc&limit=1",
         headers={"apikey": key, "Authorization": f"Bearer {key}"},
     )
     try:
         with urllib.request.urlopen(req, timeout=20) as resp:
             rows = json.loads(resp.read().decode("utf-8"))
     except urllib.error.HTTPError as exc:
-        return {"ok": False, "error": exc.read().decode("utf-8", errors="replace")[:200]}
+        return {"ok": False, "factory_id": factory_id, "error": exc.read().decode("utf-8", errors="replace")[:200]}
     cycle_number = int((rows[0].get("cycle_number") if rows else 0) or 0) + 1
     row = {
-        "factory_id": "loop-agent-nerve",
+        "factory_id": factory_id,
         "cycle_number": cycle_number,
         "started_at": now,
         "finished_at": now,
@@ -81,11 +89,24 @@ def repair_agent_nerve_cycle() -> dict[str, Any]:
         "exit_code": 0,
         "runner_output": {
             "cloud_trigger": "noos_integrator_repair",
-            "loop_id": "agent_nerve",
-            "event_type": "noos_agent_nerve_loop_tick",
+            "loop_id": loop_id,
+            "event_type": event_type,
         },
     }
-    return supabase_post(url, key, "noetfield_factory_cycle_runs", row)
+    posted = supabase_post(url, key, "noetfield_factory_cycle_runs", row)
+    posted["factory_id"] = factory_id
+    return posted
+
+
+def repair_loop_factory_cycles() -> dict[str, Any]:
+    loops = json.loads(INTERVALS.read_text(encoding="utf-8")) if INTERVALS.is_file() else {}
+    rows: list[dict[str, Any]] = []
+    for spec in loops.values():
+        loop_id = str(spec["loop_id"])
+        event_type = str(spec.get("event_type") or "")
+        rows.append(_repair_factory_cycle(_factory_id_for_loop(loop_id), loop_id, event_type))
+    ok = all(r.get("ok") for r in rows)
+    return {"ok": ok, "cycles_upserted": len(rows), "failures": [r for r in rows if not r.get("ok")][:5]}
 
 
 def main() -> int:
@@ -102,8 +123,12 @@ def main() -> int:
         row["ok"] = row["ok"] and row["liveness"].get("ok", False)
     if not args.liveness_only:
         row["portfolio_spine"] = repair_portfolio_spine()
-        row["agent_nerve"] = repair_agent_nerve_cycle()
-        row["ok"] = row["ok"] and row["portfolio_spine"].get("ok", False) and row["agent_nerve"].get("ok", False)
+        row["loop_factory_cycles"] = repair_loop_factory_cycles()
+        row["ok"] = (
+            row["ok"]
+            and row["portfolio_spine"].get("ok", False)
+            and row["loop_factory_cycles"].get("ok", False)
+        )
 
     if args.write_receipt:
         PROOF.parent.mkdir(parents=True, exist_ok=True)
