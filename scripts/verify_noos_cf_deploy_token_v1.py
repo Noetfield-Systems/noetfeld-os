@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import json
+import os
 import sys
 import urllib.error
 import urllib.request
@@ -13,6 +14,14 @@ from noos_vault_paths_v1 import workers_api_token
 DEFAULT_ACCOUNT_ID = "0d0b967b77e2e5535455d39ff3dae72c"
 
 
+def resolve_token() -> str:
+    return (
+        os.environ.get("CLOUDFLARE_API_TOKEN")
+        or os.environ.get("CF_NOETFIELD_API_TOKEN")
+        or workers_api_token()
+    )
+
+
 def _get(url: str, token: str) -> dict:
     req = urllib.request.Request(url, headers={"Authorization": f"Bearer {token}"})
     with urllib.request.urlopen(req, timeout=20) as resp:
@@ -20,7 +29,7 @@ def _get(url: str, token: str) -> dict:
 
 
 def verify(token: str | None = None, account_id: str | None = None) -> dict:
-    tok = token or workers_api_token()
+    tok = token or resolve_token()
     aid = account_id or DEFAULT_ACCOUNT_ID
     row: dict[str, object] = {
         "ok": False,
