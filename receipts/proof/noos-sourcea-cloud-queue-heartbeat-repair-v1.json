@@ -1,0 +1,9 @@
+{
+  "schema": "noos-sourcea-cloud-queue-heartbeat-repair-v1",
+  "at": "2026-07-07T08:51:30Z",
+  "ok": true,
+  "truth_log_id": "cb03b354-41fb-4ea5-9cf2-ca48d160a134",
+  "recorded_at": "2026-07-07T08:51:30.043707+00:00",
+  "queue_head": "CLOUD-SEC-8120",
+  "mutated_queue": false
+}

@@ -93,14 +93,11 @@ def _cf_health() -> dict[str, Any]:
 
 
 def _supabase_cycle_count() -> dict[str, Any]:
-    env_path = Path.home() / ".sourcea-secrets/noetfield.env"
-    if not env_path.is_file():
+    from noos_vault_paths_v1 import NOETFIELD_LOCAL_ENV, load_platform_env
+
+    if not NOETFIELD_LOCAL_ENV.is_file():
         return {"ok": False, "skipped": True, "reason": "noetfield.env missing"}
-    vals: dict[str, str] = {}
-    for line in env_path.read_text(encoding="utf-8").splitlines():
-        if "=" in line and not line.strip().startswith("#"):
-            k, v = line.split("=", 1)
-            vals[k.strip()] = v.strip().strip("'\"")
+    vals = load_platform_env()
     url = vals.get("NOETFIELD_SUPABASE_URL") or vals.get("SUPABASE_URL")
     key = vals.get("NOETFIELD_SUPABASE_SERVICE_ROLE_KEY") or vals.get("SUPABASE_SERVICE_ROLE_KEY")
     if not url or not key:

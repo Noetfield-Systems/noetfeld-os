@@ -1,0 +1,32 @@
+{
+  "schema": "noos-integrator-icl-p1-closeout-v1",
+  "at": "2026-07-07T15:00:00Z",
+  "phase": "ICL-P1",
+  "status": "done",
+  "steps": {
+    "ICL-P1-01": {
+      "title": "Agentic cloud bootstrap on boot",
+      "deliverable": "scripts/noos_local_boot_vault_sync_v1.sh",
+      "make": "make local-boot",
+      "verified": true
+    },
+    "ICL-P1-02": {
+      "title": "deploy-noos-cloud-workers GHA",
+      "deliverable": "make cloud-workers-deploy",
+      "github_run": "https://github.com/Noetfield-Systems/noetfeld-os/actions/runs/28876304243",
+      "verified": true
+    },
+    "ICL-P1-03": {
+      "title": "SourceA observe loop writes CRON_FIRED",
+      "deliverable": "scripts/noos_portfolio_spine_heartbeat_v1.py + observe_sourcea_supabase_v1.py",
+      "verified": true
+    },
+    "ICL-P1-04": {
+      "title": "Noetfield vault path migration",
+      "deliverable": "Noetfield/scripts/load_noetfield_vault_env.sh, nf_vault_env.py, read_platform_vault.sh",
+      "canonical_path": "~/.noetfield-platform-secrets/",
+      "verified": true
+    }
+  },
+  "next_phase": "ICL-P2"
+}

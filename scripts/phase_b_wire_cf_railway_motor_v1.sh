@@ -5,16 +5,12 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$ROOT"
 
-ENV_FILE="${NOETFIELD_ENV:-$HOME/.sourcea-secrets/noetfield.env}"
+# shellcheck disable=SC1091
+source "$ROOT/scripts/noos_load_noetfield_env_v1.sh"
+noos_load_noetfield_env
+
 RAILWAY_URL="${RAILWAY_LOOP_RUNNER_URL:-${FLY_LOOP_EXECUTOR_URL:-https://noos-loop-runner-production.up.railway.app}}"
 RAILWAY_URL="${RAILWAY_URL%/}"
-
-if [[ -f "$ENV_FILE" ]]; then
-  set -a
-  # shellcheck disable=SC1090
-  . "$ENV_FILE"
-  set +a
-fi
 
 echo "== Step 1: verify Railway loop runner =="
 python3 scripts/verify_noos_loop_runner_railway_v1.py --json

@@ -102,6 +102,32 @@ def test_dashboard_findings_flags_blocked_and_slo_miss():
     assert any(f["summary"].startswith("Workflow is not healthy") for f in findings)
 
 
+def test_probe_cf_schedule_canary_complete_when_motor_and_a1_ok(monkeypatch):
+    wf = {
+        "probe": {
+            "type": "cf_schedule_canary",
+            "github_workflow": "noos-schedule-canary.yml",
+        }
+    }
+
+    class Resp:
+        status = 200
+
+        def read(self):
+            return b'{"ok": true, "service": "noos-loop-fleet-tick-v1"}'
+
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *args):
+            return False
+
+    monkeypatch.setattr(dash.urllib.request, "urlopen", lambda *a, **k: Resp())
+    row = dash.probe_cf_schedule_canary(wf)
+    assert row["status"] == "COMPLETE"
+    assert row["classification"] == "cf_motor_canary_retired_gha_schedule"
+
+
 def test_sandboxes_no_sourcea_dirty():
     doc = json.loads((ROOT / "data/autorun-sandboxes-v1.json").read_text())
     sourcea = next(sb for sb in doc["sandboxes"] if sb["id"] == "sourcea")

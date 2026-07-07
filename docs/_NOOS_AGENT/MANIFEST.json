@@ -272,6 +272,12 @@
       "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260706-033]_UNIFIED_NEXT_PLAN_NOOS_NOETFIELD_v1.md",
       "doc_type": "UNIFIED_NEXT_PLAN_LOCKED",
       "title": "Unified Next Plan — NOOS + Noetfield v1 (dual-track 48h + public audit)"
+    },
+    {
+      "trace_id": "NOOS-AGENT-20260707-007",
+      "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260707-007]_INTEGRATOR_CONTROL_LAYER_UPGRADE_v1.md",
+      "doc_type": "INTEGRATOR_CONTROL_PLAN",
+      "title": "Integrator control layer upgrade plan v1"
     }
   ]
 }

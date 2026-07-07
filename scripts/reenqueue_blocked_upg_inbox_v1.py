@@ -16,18 +16,11 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 from cloud_inbox_worker_v1 import HANDLERS  # noqa: E402
 
-ENV_PATH = Path.home() / ".sourcea-secrets/noetfield.env"
+from noos_vault_paths_v1 import load_platform_env  # noqa: E402
 
 
 def _load_env() -> dict[str, str]:
-    vals: dict[str, str] = {}
-    if not ENV_PATH.is_file():
-        return vals
-    for line in ENV_PATH.read_text(encoding="utf-8").splitlines():
-        if "=" in line and not line.strip().startswith("#"):
-            k, v = line.split("=", 1)
-            vals[k.strip()] = v.strip().strip("'\"")
-    return vals
+    return load_platform_env()
 
 
 def _supabase_cfg() -> tuple[str, str] | None:

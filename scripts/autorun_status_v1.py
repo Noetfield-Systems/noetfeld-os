@@ -193,6 +193,30 @@ def fetch_truth_log_latest(cfg: tuple[str, str], table: str, event: str | None =
     return supabase_get(cfg, table, query=urllib.parse.urlencode(params))
 
 
+def _filter_cycle_receipt_rows(rows: list[dict[str, Any]], probe: dict[str, Any]) -> list[dict[str, Any]]:
+    needle = (probe.get("cycle_id_contains") or "").lower()
+    schema = (probe.get("receipt_schema") or "").lower()
+    meta_needles = [s.lower() for s in probe.get("metadata_contains") or []]
+    exec_needles = [s.lower() for s in probe.get("execution_id_contains") or []]
+    matched: list[dict[str, Any]] = []
+    for row in rows:
+        md = row.get("metadata") or {}
+        if not isinstance(md, dict):
+            md = {}
+        blob = json.dumps(md).lower()
+        cycle_id = str(row.get("cycle_id") or md.get("cycle_id") or "").lower()
+        execution_id = str(row.get("execution_id") or md.get("execution_id") or "").lower()
+        schema_ok = not schema or str(md.get("schema") or "").lower() == schema or schema in execution_id
+        contains_ok = not meta_needles or any(n in blob for n in meta_needles) or any(
+            n in execution_id or n in cycle_id for n in meta_needles
+        )
+        exec_ok = not exec_needles or any(n in execution_id for n in exec_needles)
+        cycle_ok = not needle or needle in cycle_id
+        if schema_ok and contains_ok and exec_ok and cycle_ok:
+            matched.append(row)
+    return matched
+
+
 def fetch_cycle_receipt_latest(
     cfg: tuple[str, str],
     probe: dict[str, Any],
@@ -202,12 +226,14 @@ def fetch_cycle_receipt_latest(
         {
             "select": "id,created_at,cycle_id,execution_id,verdict,trigger_source,queue_head_before,queue_head_after,started_at,finished_at",
             "order": "created_at.desc",
-            "limit": "5",
+            "limit": "25",
         }
     )
     primary = supabase_get(cfg, table, query=params)
     if primary.get("ok") and primary.get("rows"):
-        return {"source_table": table, **primary}
+        filtered = _filter_cycle_receipt_rows(primary.get("rows") or [], probe)
+        if filtered:
+            return {"source_table": table, **primary, "rows": filtered, "count": len(filtered)}
 
     fb_table = probe.get("cycle_fallback_table", "telemetry_logs")
     mem_type = probe.get("cycle_fallback_memory_type", "truth_cycle_receipt")
@@ -223,38 +249,26 @@ def fetch_cycle_receipt_latest(
     if not fb.get("ok"):
         return {"source_table": fb_table, **fb}
 
-    needle = (probe.get("cycle_id_contains") or "").lower()
-    schema = (probe.get("receipt_schema") or "").lower()
-    meta_needles = [s.lower() for s in probe.get("metadata_contains") or []]
-    exec_needles = [s.lower() for s in probe.get("execution_id_contains") or []]
-
     matched: list[dict[str, Any]] = []
     for row in fb.get("rows") or []:
         md = row.get("metadata") or {}
-        blob = json.dumps(md).lower()
-        cycle_id = str(md.get("cycle_id") or "").lower()
-        execution_id = str(md.get("execution_id") or "").lower()
-        schema_ok = not schema or str(md.get("schema") or "").lower() == schema
-        contains_ok = not meta_needles or any(n in blob for n in meta_needles)
-        exec_ok = not exec_needles or any(n in execution_id for n in exec_needles)
-        cycle_ok = not needle or needle in cycle_id
-        if schema_ok and contains_ok and exec_ok and cycle_ok:
-            matched.append(
-                {
-                    "id": row.get("id"),
-                    "created_at": row.get("created_at"),
-                    "cycle_id": md.get("cycle_id"),
-                    "execution_id": md.get("execution_id"),
-                    "verdict": md.get("verdict"),
-                    "trigger_source": md.get("trigger_source"),
-                    "queue_head_before": md.get("queue_head_before"),
-                    "queue_head_after": md.get("queue_head_after"),
-                    "started_at": md.get("started_at"),
-                    "finished_at": md.get("finished_at"),
-                    "metadata": md,
-                }
-            )
-    return {"source_table": fb_table, "ok": True, "status": 200, "rows": matched, "count": len(matched), "fallback": True}
+        matched.append(
+            {
+                "id": row.get("id"),
+                "created_at": row.get("created_at"),
+                "cycle_id": md.get("cycle_id"),
+                "execution_id": md.get("execution_id"),
+                "verdict": md.get("verdict"),
+                "trigger_source": md.get("trigger_source"),
+                "queue_head_before": md.get("queue_head_before"),
+                "queue_head_after": md.get("queue_head_after"),
+                "started_at": md.get("started_at"),
+                "finished_at": md.get("finished_at"),
+                "metadata": md,
+            }
+        )
+    filtered = _filter_cycle_receipt_rows(matched, probe)
+    return {"source_table": fb_table, "ok": True, "status": 200, "rows": filtered, "count": len(filtered), "fallback": True}
 
 
 def probe_supabase_sourcea_cloud_queue(wf: dict[str, Any], wf_doc: dict[str, Any], stale_minutes: float) -> dict[str, Any]:
@@ -462,6 +476,58 @@ def github_latest_run(workflow_file: str, *, event: str | None = None) -> dict[s
         }
     except Exception as exc:
         return {"ok": False, "error": str(exc)[:200]}
+
+
+def probe_cf_schedule_canary(wf: dict[str, Any]) -> dict[str, Any]:
+    """GHA schedule retired; CF loop motor + Supabase A1 receipt are the canary."""
+    probe = wf.get("probe") or {}
+    motor_url = str(
+        probe.get("cf_motor_health_url")
+        or "https://noos-loop-fleet-tick-v1.sina-kazemnezhad-ca.workers.dev/health"
+    )
+    receipt_path = ROOT / "receipts/proof/noos-github-schedule-a1-v1.json"
+    a1_ok = False
+    a1_at: str | None = None
+    if receipt_path.is_file():
+        try:
+            doc = json.loads(receipt_path.read_text(encoding="utf-8"))
+            a1_ok = bool(doc.get("ok"))
+            a1_at = doc.get("verified_at")
+        except (OSError, json.JSONDecodeError):
+            a1_ok = False
+
+    motor_ok = False
+    motor_body: dict[str, Any] = {}
+    req = urllib.request.Request(motor_url, headers={"User-Agent": "autorun-status-v1"})
+    try:
+        with urllib.request.urlopen(req, timeout=15) as resp:
+            raw = resp.read().decode("utf-8", errors="replace")
+            motor_body = json.loads(raw) if raw.strip().startswith("{") else {}
+            motor_ok = resp.status == 200 and motor_body.get("ok") is True
+    except (urllib.error.HTTPError, OSError, json.JSONDecodeError) as exc:
+        motor_body = {"error": str(exc)[:120]}
+
+    observed_at = utc_now()
+    evidence = {
+        "observed_at": observed_at,
+        "classification": "cf_motor_canary_retired_gha_schedule",
+        "schedule_a1_ok": a1_ok,
+        "schedule_a1_verified_at": a1_at,
+        "cf_loop_motor_url": motor_url,
+        "cf_loop_motor_ok": motor_ok,
+        "gha_workflow": probe.get("github_workflow"),
+        "note": probe.get("note"),
+        "motor_body_keys": sorted(motor_body.keys())[:8] if isinstance(motor_body, dict) else [],
+    }
+    if motor_ok and a1_ok:
+        return {
+            "status": "COMPLETE",
+            "classification": evidence["classification"],
+            "observed_at": observed_at,
+            "evidence": evidence,
+        }
+    reason = "cf_motor_unhealthy" if not motor_ok else "schedule_a1_receipt_missing"
+    return blocked(reason, evidence=evidence)
 
 
 def probe_github_schedule(wf: dict[str, Any]) -> dict[str, Any]:
@@ -883,6 +949,7 @@ PROBES = {
     "url_sweep_readonly": probe_url_sweep_readonly,
     "url_motor_health": probe_url_motor_health,
     "github_schedule_probe": probe_github_schedule,
+    "cf_schedule_canary": probe_cf_schedule_canary,
 }
 
 
@@ -1010,7 +1077,7 @@ def build_dashboard() -> dict[str, Any]:
             )
         else:
             try:
-                if probe_type in {"url_sweep_readonly", "url_motor_health", "github_schedule_probe"}:
+                if probe_type in {"url_sweep_readonly", "url_motor_health", "github_schedule_probe", "cf_schedule_canary"}:
                     row.update(fn(wf))
                 else:
                     row.update(fn(wf, wf_doc, stale_minutes))

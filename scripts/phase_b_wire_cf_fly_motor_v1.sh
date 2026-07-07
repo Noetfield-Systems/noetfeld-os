@@ -5,15 +5,11 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$ROOT"
 
-ENV_FILE="${NOETFIELD_ENV:-$HOME/.sourcea-secrets/noetfield.env}"
-FLY_URL="${FLY_LOOP_EXECUTOR_URL:-https://noos-loop-executor.fly.dev}"
+# shellcheck disable=SC1091
+source "$ROOT/scripts/noos_load_noetfield_env_v1.sh"
+noos_load_noetfield_env
 
-if [[ -f "$ENV_FILE" ]]; then
-  set -a
-  # shellcheck disable=SC1090
-  . "$ENV_FILE"
-  set +a
-fi
+FLY_URL="${FLY_LOOP_EXECUTOR_URL:-https://noos-loop-executor.fly.dev}"
 
 echo "== Step 1: verify Fly loop executor =="
 python3 scripts/verify_noos_loop_executor_fly_v1.py --json

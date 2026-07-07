@@ -17,7 +17,9 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-ENV_PATH = Path.home() / ".sourcea-secrets/noetfield.env"
+sys.path.insert(0, str(ROOT / "scripts"))
+from noos_vault_paths_v1 import load_platform_env  # noqa: E402
+
 SOURCE = "noos-factory-autorun"
 TABLE = "noetfield_truth_log"
 
@@ -27,12 +29,7 @@ def utc_now() -> str:
 
 
 def load_env() -> dict[str, str]:
-    vals: dict[str, str] = {}
-    if ENV_PATH.is_file():
-        for line in ENV_PATH.read_text(encoding="utf-8").splitlines():
-            if "=" in line and not line.strip().startswith("#"):
-                k, v = line.split("=", 1)
-                vals[k.strip()] = v.strip().strip("'\"")
+    vals = load_platform_env()
     for key in (
         "NOETFIELD_SUPABASE_URL",
         "SUPABASE_URL",

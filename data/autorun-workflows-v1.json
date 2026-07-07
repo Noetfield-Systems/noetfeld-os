@@ -16,7 +16,7 @@
   },
   "supabase_profiles": {
     "noetfield": {
-      "env_file": "~/.sourcea-secrets/noetfield.env",
+      "env_file": "~/.noetfield-platform-secrets/noetfield.env",
       "url_env": ["NOETFIELD_SUPABASE_URL", "SUPABASE_URL"],
       "key_env": ["NOETFIELD_SUPABASE_SERVICE_ROLE_KEY", "SUPABASE_SERVICE_ROLE_KEY"]
     },
@@ -135,9 +135,10 @@
       "title": "NOOS schedule canary",
       "plane": "NOETFELD-OS",
       "probe": {
-        "type": "manual_dispatch_only",
+        "type": "cf_schedule_canary",
         "github_workflow": "noos-schedule-canary.yml",
-        "note": "GHA schedule retired 2026-07-05; CF loop motor is schedule canary"
+        "cf_motor_health_url": "https://noos-loop-fleet-tick-v1.sina-kazemnezhad-ca.workers.dev/health",
+        "note": "GHA schedule retired 2026-07-05; CF loop motor + Supabase A1 receipt are schedule canary"
       }
     },
     {

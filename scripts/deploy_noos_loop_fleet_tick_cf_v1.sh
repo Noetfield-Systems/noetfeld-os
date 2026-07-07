@@ -29,10 +29,9 @@ print(d.get('NOOS_LOOP_SECRET') or d.get('LOOP_RUNNER_SECRET') or '')
 fi
 
 if [[ -z "${NOOS_LOOP_SECRET:-}" ]]; then
-  ENV_FILE="${NOETFIELD_ENV:-$HOME/.sourcea-secrets/noetfield.env}"
-  if [[ -f "$ENV_FILE" ]]; then
-    NOOS_LOOP_SECRET="$(grep -E '^NOOS_LOOP_SECRET=' "$ENV_FILE" 2>/dev/null | head -1 | cut -d= -f2- || true)"
-  fi
+  # shellcheck disable=SC1091
+  source "$ROOT/scripts/noos_load_noetfield_env_v1.sh"
+  noos_load_noetfield_env
 fi
 
 if [[ -z "${NOOS_LOOP_SECRET:-}" ]]; then

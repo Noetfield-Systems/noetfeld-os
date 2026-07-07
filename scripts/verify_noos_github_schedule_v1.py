@@ -25,10 +25,11 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 from noos_proof_receipt_paths_v1 import proof_receipt  # noqa: E402
 
+from noos_vault_paths_v1 import load_platform_env  # noqa: E402
+
 PROOF_RECEIPT = proof_receipt("noos-github-schedule-a1-v1.json")
 SOURCE = "noos-factory-autorun"
 TABLE = "noetfield_truth_log"
-ENV_PATH = Path.home() / ".sourcea-secrets/noetfield.env"
 MIN_SCHEDULE_ROWS = 2
 
 
@@ -37,12 +38,7 @@ def utc_now() -> str:
 
 
 def load_env() -> dict[str, str]:
-    vals: dict[str, str] = {}
-    if ENV_PATH.is_file():
-        for line in ENV_PATH.read_text(encoding="utf-8").splitlines():
-            if "=" in line and not line.strip().startswith("#"):
-                k, v = line.split("=", 1)
-                vals[k.strip()] = v.strip().strip("'\"")
+    vals = load_platform_env()
     for key in (
         "NOETFIELD_SUPABASE_URL",
         "SUPABASE_URL",

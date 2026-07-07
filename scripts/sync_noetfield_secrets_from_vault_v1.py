@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Merge Noetfield-related keys from ~/.sina/secrets.env into ~/.sourcea-secrets/."""
+"""Merge Noetfield-related keys from ~/.sina/secrets.env into ~/.noetfield-platform-secrets/."""
 
 from __future__ import annotations
 
@@ -7,9 +7,10 @@ import re
 from pathlib import Path
 from urllib.parse import quote_plus
 
+from noos_vault_paths_v1 import NOETFIELD_DB_ENV, NOETFIELD_LOCAL_ENV
+
 VAULT = Path.home() / ".sina" / "secrets.env"
-NOETFIELD_ENV = Path.home() / ".sourcea-secrets" / "noetfield.env"
-NOETFIELD_DB_ENV = Path.home() / ".sourcea-secrets" / "noetfield-db.env"
+NOETFIELD_ENV = NOETFIELD_LOCAL_ENV
 REF = "tkgpapowwplupyekpivy"
 
 # secrets.env key -> noetfield.env key

@@ -32,9 +32,10 @@ echo "$tick" | python3 -c 'import json,sys; d=json.load(sys.stdin); r=(d.get("re
 ok "CF motor dispatched inbox loop via Railway (HTTP 200)"
 
 sleep 3
-if [[ -f "$HOME/.sourcea-secrets/noetfield.env" ]]; then
-  set -a; . "$HOME/.sourcea-secrets/noetfield.env"; set +a
-fi
+# shellcheck disable=SC1091
+source "$ROOT/scripts/noos_load_noetfield_env_v1.sh"
+noos_load_noetfield_env
+export NOETFIELD_SUPABASE_URL SUPABASE_URL NOETFIELD_SUPABASE_SERVICE_ROLE_KEY SUPABASE_SERVICE_ROLE_KEY
 rows="$(python3 - <<'PY'
 import json, os, urllib.request
 url = (os.environ.get("NOETFIELD_SUPABASE_URL") or os.environ.get("SUPABASE_URL") or "").rstrip("/")

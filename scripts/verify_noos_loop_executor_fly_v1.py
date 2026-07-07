@@ -13,6 +13,9 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "scripts"))
+from noos_vault_paths_v1 import noos_loop_secret  # noqa: E402
+
 PROOF = ROOT / "receipts/proof/noos-fly-loop-executor-v1.json"
 DEFAULT_URL = "https://noos-loop-executor.fly.dev"
 DEFAULT_EVENT = "noos_orchestrator_cross_repo_tick"
@@ -25,12 +28,7 @@ def utc_now() -> str:
 def load_secret() -> str:
     if os.environ.get("NOOS_LOOP_SECRET"):
         return os.environ["NOOS_LOOP_SECRET"].strip()
-    env_file = Path.home() / ".sourcea-secrets/noetfield.env"
-    if env_file.is_file():
-        for line in env_file.read_text(encoding="utf-8").splitlines():
-            if line.startswith("NOOS_LOOP_SECRET="):
-                return line.split("=", 1)[1].strip()
-    return ""
+    return noos_loop_secret()
 
 
 def http_json(

@@ -28,9 +28,9 @@ from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
 REGISTRY = ROOT / "data/noos-24-7-loops-v1.json"
-ENV_PATH = Path.home() / ".sourcea-secrets/noetfield.env"
 sys.path.insert(0, str(ROOT / "scripts"))
 from noos_proof_receipt_paths_v1 import proof_receipt  # noqa: E402
+from noos_vault_paths_v1 import load_platform_env  # noqa: E402
 
 PROOF_RECEIPT = proof_receipt("noos-loop-verified-window-v1.json")
 WINDOW_HOURS = 24
@@ -106,12 +106,7 @@ def open_window(*, merge_sha: str | None = None) -> dict[str, Any]:
 
 
 def load_env() -> dict[str, str]:
-    vals: dict[str, str] = {}
-    if ENV_PATH.is_file():
-        for line in ENV_PATH.read_text(encoding="utf-8").splitlines():
-            if "=" in line and not line.strip().startswith("#"):
-                k, v = line.split("=", 1)
-                vals[k.strip()] = v.strip().strip("'\"")
+    vals = load_platform_env()
     for key in ("NOETFIELD_SUPABASE_URL", "SUPABASE_URL", "NOETFIELD_SUPABASE_SERVICE_ROLE_KEY", "SUPABASE_SERVICE_ROLE_KEY"):
         if os.environ.get(key):
             vals[key] = os.environ[key].strip()

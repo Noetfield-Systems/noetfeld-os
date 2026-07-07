@@ -5,7 +5,7 @@ from __future__ import annotations
 
 import argparse
 import json
-import os
+import sys
 import urllib.error
 import urllib.parse
 import urllib.request
@@ -14,6 +14,9 @@ from pathlib import Path
 from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "scripts"))
+from noos_vault_paths_v1 import supabase_creds  # noqa: E402
+
 BASELINE = ROOT / "data/noos-living-system-baseline-v1.json"
 PROOF = ROOT / "receipts/proof/noos-living-system-48h-v1.json"
 
@@ -27,17 +30,7 @@ def utc_now() -> str:
 
 
 def load_env() -> tuple[str, str]:
-    env_file = Path.home() / ".sourcea-secrets/noetfield.env"
-    if env_file.is_file():
-        for line in env_file.read_text(encoding="utf-8").splitlines():
-            line = line.strip()
-            if not line or line.startswith("#") or "=" not in line:
-                continue
-            k, v = line.split("=", 1)
-            os.environ.setdefault(k.strip(), v.strip())
-    url = (os.environ.get("NOETFIELD_SUPABASE_URL") or os.environ.get("SUPABASE_URL") or "").rstrip("/")
-    key = os.environ.get("NOETFIELD_SUPABASE_SERVICE_ROLE_KEY") or os.environ.get("SUPABASE_SERVICE_ROLE_KEY") or ""
-    return url, key
+    return supabase_creds()
 
 
 def fetch_json(url: str) -> dict[str, Any]:
