@@ -57,9 +57,23 @@ def workers_api_token(env: dict[str, str] | None = None) -> str:
 
 
 def load_platform_env() -> dict[str, str]:
+    import os
+
     merged: dict[str, str] = {}
     for path in resolve_env_paths():
         merged.update(parse_env_file(path))
+    for key in (
+        "NOETFIELD_SUPABASE_URL",
+        "SUPABASE_URL",
+        "NOETFIELD_SUPABASE_SERVICE_ROLE_KEY",
+        "SUPABASE_SERVICE_ROLE_KEY",
+        "NOOS_LOOP_SECRET",
+        "LOOP_RUNNER_SECRET",
+        "CF_NOETFIELD_API_TOKEN",
+        "CLOUDFLARE_API_TOKEN",
+    ):
+        if os.environ.get(key):
+            merged[key] = os.environ[key]
     token = workers_api_token(merged)
     if token:
         merged["CLOUDFLARE_API_TOKEN"] = token

@@ -122,13 +122,12 @@ def main() -> int:
         row["liveness"] = repair_liveness()
         row["ok"] = row["ok"] and row["liveness"].get("ok", False)
     if not args.liveness_only:
-        row["portfolio_spine"] = repair_portfolio_spine()
+        spine = repair_portfolio_spine()
+        row["portfolio_spine"] = spine
+        if not spine.get("skipped"):
+            row["ok"] = row["ok"] and spine.get("ok", False)
         row["loop_factory_cycles"] = repair_loop_factory_cycles()
-        row["ok"] = (
-            row["ok"]
-            and row["portfolio_spine"].get("ok", False)
-            and row["loop_factory_cycles"].get("ok", False)
-        )
+        row["ok"] = row["ok"] and row["loop_factory_cycles"].get("ok", False)
 
     if args.write_receipt:
         PROOF.parent.mkdir(parents=True, exist_ok=True)
