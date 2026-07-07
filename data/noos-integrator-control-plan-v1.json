@@ -114,6 +114,14 @@
           "status": "done",
           "command": "make upgrade-manifest-publish",
           "evidence": "scripts/noos_upgrade_manifest_publish_v1.py"
+        },
+        {
+          "id": "ICL-P2-04",
+          "title": "TrustField 11 parallel layers observe",
+          "status": "done",
+          "command": "make observe-trustfield-layers",
+          "deliverable": "data/noos-trustfield-parallel-layers-v1.json",
+          "evidence": "scripts/observe_trustfield_parallel_layers_v1.py"
         }
       ]
     }

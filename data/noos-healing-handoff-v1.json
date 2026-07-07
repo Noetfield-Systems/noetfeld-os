@@ -15,6 +15,16 @@
       "enqueued_by": "noos_integrator_control_layer",
       "receipt": "receipts/proof/noos-trustfield-partner-access-worker-handoff-v1.json",
       "status": "pending_worker_pickup"
+    },
+    {
+      "id": "TF-11-LAYERS-20260707-001",
+      "repo": "TrustField-Technologies",
+      "priority": "P0",
+      "title": "TrustField 11 parallel layers — Studio IDE autorun architecture",
+      "owner_agent": "trustfield_worker",
+      "enqueued_by": "noos_integrator_control_layer",
+      "receipt": "data/noos-trustfield-parallel-layers-v1.json",
+      "status": "pending_worker_pickup"
     }
   ],
   "research_findings": [],
@@ -39,10 +49,12 @@
       "pending_proposals": []
     },
     "trustfield": {
-      "last_audit": "2026-07-07T16:05:00Z",
-      "pending_escalations": ["TF-PA-WORKER-20260707-001"],
+      "last_audit": "2026-07-07T16:35:00Z",
+      "pending_escalations": ["TF-PA-WORKER-20260707-001", "TF-11-LAYERS-20260707-001"],
       "pending_proposals": [],
       "handoff_receipt": "receipts/proof/noos-trustfield-partner-access-worker-handoff-v1.json",
+      "parallel_layers_manifest": "data/noos-trustfield-parallel-layers-v1.json",
+      "parallel_layers_observe": "receipts/proof/noos-trustfield-parallel-layers-observe-v1.json",
       "worker_lane": "partner-access-credibility-v1"
     }
   },

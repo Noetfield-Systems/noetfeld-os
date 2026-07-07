@@ -117,6 +117,12 @@ cloud-workers-deploy:
 integrator-repair-autorun:
 	python3 scripts/noos_integrator_repair_autorun_v1.py --write-receipt --json
 
+observe-trustfield-registry:
+	python3 scripts/observe_trustfield_loop_registry_v1.py --write-receipt --json
+
+observe-trustfield-layers:
+	python3 scripts/observe_trustfield_parallel_layers_v1.py --write-receipt --json
+
 icl-p1-verify:
 	python3 scripts/verify_noos_icl_p1_v1.py --write-receipt --json
 

@@ -1,0 +1,209 @@
+{
+  "schema": "noos-trustfield-parallel-layers-observe-v1",
+  "at": "2026-07-07T16:33:43Z",
+  "read_only": true,
+  "one_law": "NOOS coordinates eleven TrustField layers \u2014 observe, enqueue, receipt. TrustField CF+Railway motors execute. One exclusive writer per state cell.",
+  "layer_count": 11,
+  "overall_status": "red",
+  "summary": {
+    "green": 7,
+    "yellow": 3,
+    "red": 1,
+    "unknown": 0
+  },
+  "roi_intelligence": {
+    "revenue_path_layers": 4,
+    "revenue_path_green": 3,
+    "hygiene_layers": 3,
+    "plan_worker_status": "degraded",
+    "plan_worker_last_cycle_ok": false,
+    "cycles_completed": 1360
+  },
+  "fleet": {
+    "cf_worker": "tf-cf-fleet-tick-v1",
+    "url": "https://tf-cf-fleet-tick-v1.sina-kazemnezhad-ca.workers.dev",
+    "railway_plan_worker": "https://trustfield-plan-worker-production.up.railway.app",
+    "cycle_seconds": 300,
+    "parallel": true,
+    "jitter_seconds": 60
+  },
+  "plan_worker": {
+    "url": "https://trustfield-plan-worker-production.up.railway.app/health",
+    "status": "degraded",
+    "last_cycle_ok": false,
+    "lane_ok": {
+      "plan_matrix": true,
+      "critic_circle": true,
+      "deep_research": true,
+      "self_heal": false,
+      "www_upgrade_queue": true,
+      "autorun_stack": true
+    },
+    "lanes_run": [
+      "plan_matrix",
+      "critic_circle",
+      "deep_research",
+      "self_heal",
+      "www_upgrade_queue",
+      "autorun_stack"
+    ]
+  },
+  "registry_observe": {
+    "overall_status": "yellow",
+    "row_count": 30,
+    "probe_present": true,
+    "deadman_status": "green"
+  },
+  "layers": [
+    {
+      "layer_id": "TF-L01",
+      "name": "observe_nerve",
+      "value_class": "hygiene",
+      "tier": "T0",
+      "status": "yellow",
+      "motor_state": "DEGRADED",
+      "cf_loop_id": "tf_cf_deadman_v1",
+      "railway_lane": null,
+      "reasons": [
+        "registry_overall=yellow"
+      ]
+    },
+    {
+      "layer_id": "TF-L02",
+      "name": "audit_adversarial",
+      "value_class": "risk_reduction",
+      "tier": "T0",
+      "status": "green",
+      "motor_state": "RUNNING",
+      "cf_loop_id": "tf_cf_lane_critic_circle_v1",
+      "railway_lane": "critic_circle",
+      "reasons": [
+        "staleness_state=data/trustfield_agent_read_staleness_alarm_v1.json"
+      ]
+    },
+    {
+      "layer_id": "TF-L03",
+      "name": "plan_matrix",
+      "value_class": "revenue_path",
+      "tier": "T1",
+      "status": "green",
+      "motor_state": "RUNNING",
+      "cf_loop_id": "tf_cf_lane_plan_matrix_v1",
+      "railway_lane": "plan_matrix",
+      "reasons": [
+        "railway_lane_plan_matrix=true"
+      ]
+    },
+    {
+      "layer_id": "TF-L04",
+      "name": "roi_intelligence",
+      "value_class": "hygiene",
+      "tier": "T1",
+      "status": "yellow",
+      "motor_state": "DEGRADED",
+      "cf_loop_id": "tf_cf_recipe_railway_plan_worker_v1",
+      "railway_lane": "autorun_stack",
+      "reasons": [
+        "loop_id not in registry sample",
+        "plan_worker_degraded"
+      ]
+    },
+    {
+      "layer_id": "TF-L05",
+      "name": "critic_circle",
+      "value_class": "risk_reduction",
+      "tier": "T0",
+      "status": "green",
+      "motor_state": "RUNNING",
+      "cf_loop_id": "tf_cf_lane_critic_circle_v1",
+      "railway_lane": "critic_circle",
+      "reasons": [
+        "railway_lane_critic_circle=true"
+      ]
+    },
+    {
+      "layer_id": "TF-L06",
+      "name": "deep_research",
+      "value_class": "proof_asset",
+      "tier": "T2",
+      "status": "green",
+      "motor_state": "RUNNING",
+      "cf_loop_id": "tf_cf_lane_deep_research_v1",
+      "railway_lane": "deep_research",
+      "reasons": [
+        "railway_lane_deep_research=true"
+      ]
+    },
+    {
+      "layer_id": "TF-L07",
+      "name": "sandbox_execute",
+      "value_class": "revenue_path",
+      "tier": "T1",
+      "status": "green",
+      "motor_state": "RUNNING",
+      "cf_loop_id": "tf_cf_trustfield_loops_v1",
+      "railway_lane": null,
+      "reasons": []
+    },
+    {
+      "layer_id": "TF-L08",
+      "name": "self_heal",
+      "value_class": "hygiene",
+      "tier": "T0",
+      "status": "red",
+      "motor_state": "FAILED_WITH_RECEIPT",
+      "cf_loop_id": "tf_cf_lane_self_heal_v1",
+      "railway_lane": "self_heal",
+      "reasons": [
+        "self_heal_failures=['https://www.trustfield.ca/', 'https://www.trustfield.ca/start', 'https://www.trustfield.ca/trade']"
+      ]
+    },
+    {
+      "layer_id": "TF-L09",
+      "name": "www_upgrade",
+      "value_class": "revenue_path",
+      "tier": "T1",
+      "status": "green",
+      "motor_state": "RUNNING",
+      "cf_loop_id": "tf_cf_lane_www_upgrade_queue_v1",
+      "railway_lane": "www_upgrade_queue",
+      "reasons": [
+        "railway_lane_www_upgrade_queue=true"
+      ]
+    },
+    {
+      "layer_id": "TF-L10",
+      "name": "partner_commercial",
+      "value_class": "revenue_path",
+      "tier": "T1",
+      "status": "yellow",
+      "motor_state": "DEGRADED",
+      "cf_loop_id": "tf_cf_lane_partner_access_v1",
+      "railway_lane": "partner_access",
+      "reasons": [
+        "cf_loop_id not registered in registry yet"
+      ]
+    },
+    {
+      "layer_id": "TF-L11",
+      "name": "closeout_verify",
+      "value_class": "proof_asset",
+      "tier": "T0",
+      "status": "green",
+      "motor_state": "RUNNING",
+      "cf_loop_id": "tf_cf_48h_gate_v1",
+      "railway_lane": "autorun_stack",
+      "reasons": [
+        "railway_lane_autorun_stack=true"
+      ]
+    }
+  ],
+  "trustfield_worker_deliverables": [
+    "Map TF-L04 roi_intelligence motor to plan-worker cost receipt fields",
+    "Register tf_cf_lane_partner_access_v1 in fleet tick if missing",
+    "Wire trustfield-loops L07 sandbox_execute intake to 113-plan queue",
+    "Sustain GHA billing or delegate all witness to CF motors",
+    "Align os/trustfield_cloud_loop_v1.json lanes to this 11-layer registry"
+  ],
+  "closure_token": "NOOS_TF_11_LAYERS: red"
+}
