@@ -108,6 +108,24 @@ cloud-motor-e2e:
 cloud-motor-resync:
 	bash scripts/phase_b_wire_cf_railway_motor_v1.sh
 
+cloud-secrets-sync:
+	bash scripts/noos_sync_cloud_secrets_v1.sh
+
+cloud-workers-deploy:
+	gh workflow run deploy-noos-cloud-workers-v1.yml --repo Noetfield-Systems/noetfeld-os
+
+integrator-repair-autorun:
+	python3 scripts/noos_integrator_repair_autorun_v1.py --write-receipt --json
+
+cloud-vault-promote:
+	python3 scripts/noos_promote_vault_keys_v1.py
+
+cloud-vault-cleanup:
+	python3 scripts/cleanup_noetfield_vault_v1.py
+
+cloud-vault-migrate:
+	bash scripts/migrate_noos_vault_from_sourcea_v1.sh
+
 wire-cf-railway-motor:
 	bash scripts/phase_b_wire_cf_railway_motor_v1.sh
 
@@ -195,6 +213,7 @@ urls:
 local-boot:
 	git status --short
 	git branch --show-current
+	bash scripts/noos_local_boot_vault_sync_v1.sh
 	python3 scripts/noos_integrator_sync_v1.py init
 	python3 scripts/noos_integrator_sync_v1.py register-agent \
 	  --agent-id cursor-local-mac --ide cursor --role local-operator

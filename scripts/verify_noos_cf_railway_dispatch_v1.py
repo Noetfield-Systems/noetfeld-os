@@ -15,20 +15,18 @@ from pathlib import Path
 from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "scripts"))
+from noos_vault_paths_v1 import noos_loop_secret  # noqa: E402
+
 TABLE = ROOT / "data/noos-cf-dispatch-table-v1.json"
 PROOF = ROOT / "receipts/proof/noos-cf-railway-dispatch-verify-v1.json"
 DEFAULT_URL = "https://noos-loop-runner-production.up.railway.app"
 
 
 def load_secret() -> str:
-    for key in ("NOOS_LOOP_SECRET", "LOOP_RUNNER_SECRET"):
-        if os.environ.get(key):
-            return os.environ[key].strip()
-    env_file = Path.home() / ".sourcea-secrets/noetfield.env"
-    if env_file.is_file():
-        for line in env_file.read_text(encoding="utf-8").splitlines():
-            if line.startswith("NOOS_LOOP_SECRET=") or line.startswith("LOOP_RUNNER_SECRET="):
-                return line.split("=", 1)[1].strip()
+    secret = noos_loop_secret()
+    if secret:
+        return secret
     railway = Path.home() / ".railway/bin/railway"
     service = os.environ.get("RAILWAY_LOOP_RUNNER_SERVICE", "noos-loop-runner")
     if railway.is_file():

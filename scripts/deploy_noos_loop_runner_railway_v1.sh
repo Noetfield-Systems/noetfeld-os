@@ -104,7 +104,7 @@ sys.exit(0 if d.get("service")=="noos-loop-runner" and d.get("git_sha") not in (
 ' 2>/dev/null; then
     echo "$body"
     log "PASS — LOOP_RUNNER_URL=${URL}"
-    if [[ -f "$HOME/.sourcea-secrets/noetfield.env" && "${SYNC_RAILWAY_ENV:-1}" == "1" ]]; then
+    if [[ -f "$HOME/.noetfield-platform-secrets/noetfield.env" && "${SYNC_RAILWAY_ENV:-1}" == "1" ]]; then
       bash "$ROOT/scripts/sync_railway_loop_runner_env_v1.sh" || log "WARN: Supabase env sync failed"
     fi
     log "verify: python3 scripts/verify_noos_loop_runner_railway_v1.py --url ${URL} --write-receipt"

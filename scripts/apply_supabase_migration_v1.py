@@ -2,7 +2,7 @@
 """Apply a numbered Supabase migration from infrastructure/supabase/migrations/.
 
 Verifies post-state (e.g. founder_blocked in inbox status check) and writes a receipt.
-Uses ~/.sourcea-secrets/noetfield-db.env + noetfield.env — never prints secret values.
+Uses ~/.noetfield-platform-secrets/noetfield-db.env + noetfield.env — never prints secret values.
 """
 
 from __future__ import annotations
@@ -22,8 +22,9 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 from noos_proof_receipt_paths_v1 import proof_receipt  # noqa: E402
 MIGRATIONS = ROOT / "infrastructure/supabase/migrations"
-NOETFIELD_ENV = Path.home() / ".sourcea-secrets/noetfield.env"
-NOETFIELD_DB_ENV = Path.home() / ".sourcea-secrets/noetfield-db.env"
+from noos_vault_paths_v1 import NOETFIELD_DB_ENV, NOETFIELD_LOCAL_ENV
+
+NOETFIELD_ENV = NOETFIELD_LOCAL_ENV
 DEFAULT_REF = "tkgpapowwplupyekpivy"
 
 

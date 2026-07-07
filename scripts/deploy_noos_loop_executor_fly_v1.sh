@@ -10,7 +10,6 @@ APP="${FLY_LOOP_EXECUTOR_APP:-noos-loop-executor}"
 ORG="${FLY_ORG:-personal}"
 CONFIG="${ROOT}/ops/fly/noos-loop-executor/fly.toml"
 DOCKERFILE="${ROOT}/ops/fly/noos-loop-executor/Dockerfile"
-ENV_FILE="${NOETFIELD_ENV:-$HOME/.sourcea-secrets/noetfield.env}"
 
 log() { printf '[deploy-fly-loop-executor] %s\n' "$*"; }
 
@@ -46,9 +45,9 @@ if ! "$FLY" apps list --json 2>/dev/null | python3 -c "import json,sys; apps=[a.
 fi
 
 if [[ -z "${NOOS_LOOP_SECRET:-}" ]]; then
-  if [[ -f "$ENV_FILE" ]]; then
-    NOOS_LOOP_SECRET="$(grep -E '^NOOS_LOOP_SECRET=' "$ENV_FILE" 2>/dev/null | head -1 | cut -d= -f2- || true)"
-  fi
+  # shellcheck disable=SC1091
+  source "$ROOT/scripts/noos_load_noetfield_env_v1.sh"
+  noos_load_noetfield_env
 fi
 if [[ -z "${NOOS_LOOP_SECRET:-}" ]]; then
   NOOS_LOOP_SECRET="$(python3 -c 'import secrets; print(secrets.token_urlsafe(32))')"
@@ -58,22 +57,16 @@ else
 fi
 
 SECRET_ARGS=("NOOS_LOOP_SECRET=$NOOS_LOOP_SECRET")
-if [[ -f "$ENV_FILE" ]]; then
-  set -a
-  # shellcheck disable=SC1090
-  . "$ENV_FILE"
-  set +a
-  URL="${NOETFIELD_SUPABASE_URL:-${SUPABASE_URL:-}}"
-  KEY="${NOETFIELD_SUPABASE_SERVICE_ROLE_KEY:-${SUPABASE_SERVICE_ROLE_KEY:-}}"
-  if [[ -n "$URL" && -n "$KEY" ]]; then
-    SECRET_ARGS+=(
-      "NOETFIELD_SUPABASE_URL=$URL"
-      "NOETFIELD_SUPABASE_SERVICE_ROLE_KEY=$KEY"
-      "SUPABASE_URL=$URL"
-      "SUPABASE_SERVICE_ROLE_KEY=$KEY"
-    )
-    log "syncing Supabase env to Fly"
-  fi
+URL="${NOETFIELD_SUPABASE_URL:-${SUPABASE_URL:-}}"
+KEY="${NOETFIELD_SUPABASE_SERVICE_ROLE_KEY:-${SUPABASE_SERVICE_ROLE_KEY:-}}"
+if [[ -n "$URL" && -n "$KEY" ]]; then
+  SECRET_ARGS+=(
+    "NOETFIELD_SUPABASE_URL=$URL"
+    "NOETFIELD_SUPABASE_SERVICE_ROLE_KEY=$KEY"
+    "SUPABASE_URL=$URL"
+    "SUPABASE_SERVICE_ROLE_KEY=$KEY"
+  )
+  log "syncing Supabase env to Fly"
 fi
 
 log "deploy ${APP} from ${ROOT}"

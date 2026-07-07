@@ -15,6 +15,11 @@ from pathlib import Path
 from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "scripts"))
+
+from noos_loop_liveness_v1 import sync_meta_liveness_rows  # noqa: E402
+from noos_vault_paths_v1 import supabase_creds  # noqa: E402
+
 CF_MOTOR = "https://noos-loop-fleet-tick-v1.sina-kazemnezhad-ca.workers.dev"
 INTERVALS = ROOT / "cloud/workers/noos-deadman-v1/src/loop-intervals.json"
 
@@ -24,17 +29,7 @@ def utc_now() -> str:
 
 
 def load_env() -> tuple[str, str]:
-    env_file = Path.home() / ".sourcea-secrets/noetfield.env"
-    if env_file.is_file():
-        for line in env_file.read_text(encoding="utf-8").splitlines():
-            line = line.strip()
-            if not line or line.startswith("#") or "=" not in line:
-                continue
-            k, v = line.split("=", 1)
-            os.environ.setdefault(k.strip(), v.strip())
-    url = (os.environ.get("NOETFIELD_SUPABASE_URL") or os.environ.get("SUPABASE_URL") or "").rstrip("/")
-    key = os.environ.get("NOETFIELD_SUPABASE_SERVICE_ROLE_KEY") or os.environ.get("SUPABASE_SERVICE_ROLE_KEY") or ""
-    return url, key
+    return supabase_creds()
 
 
 def supabase_rows(url: str, key: str) -> list[dict[str, Any]]:
@@ -104,6 +99,9 @@ def main() -> int:
         row["ok"] = row.get("registry_rows") is not None and row["ok"]
 
     row["expected_loops"] = expected
+    row["meta_liveness_sync"] = sync_meta_liveness_rows()
+    if args.assert_min_rows and not row["meta_liveness_sync"].get("ok"):
+        row["ok"] = False
     if args.json:
         print(json.dumps(row, indent=2))
     else:

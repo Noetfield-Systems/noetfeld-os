@@ -15,6 +15,9 @@ from pathlib import Path
 from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "scripts"))
+from noos_vault_paths_v1 import noos_loop_secret  # noqa: E402
+
 RECIPES = ROOT / "data/noos-motor-restart-recipes-v1.json"
 PROOF_DIR = ROOT / "receipts/proof"
 RAILWAY_BIN = Path(os.environ.get("RAILWAY_BIN", str(Path.home() / ".railway/bin/railway")))
@@ -91,12 +94,7 @@ def executor_env_for_recipe(recipe: dict[str, Any], *, dry_run: bool = False) ->
     if not secret and not dry_run:
         secret = _load_secret_from_railway()
     if not secret:
-        env_file = Path.home() / ".sourcea-secrets/noetfield.env"
-        if env_file.is_file():
-            for line in env_file.read_text(encoding="utf-8").splitlines():
-                if line.startswith("NOOS_LOOP_SECRET=") or line.startswith("LOOP_RUNNER_SECRET="):
-                    secret = line.split("=", 1)[1].strip()
-                    break
+        secret = noos_loop_secret()
     if not secret and dry_run:
         secret = "dry-run-placeholder"
     if secret:

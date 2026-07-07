@@ -19,7 +19,7 @@ RUNTIME = ROOT / ".noos-runtime/loops"
 
 sys.path.insert(0, str(ROOT / "scripts"))
 from noos_loop_determinism_v1 import advance_state, cas_advance, op_key, transition_allowed  # noqa: E402
-from noos_loop_liveness_v1 import detect_execution_host, upsert_loop_liveness  # noqa: E402
+from noos_loop_liveness_v1 import detect_execution_host, sync_meta_liveness_rows, upsert_loop_liveness  # noqa: E402
 
 
 def utc_now() -> str:
@@ -409,6 +409,7 @@ def execute_loop(loop: dict[str, Any], *, self_heal: bool = True) -> dict[str, A
             last_cycle_status=state_after,
             host=detect_execution_host(),
         )
+        cycle["meta_liveness_sync"] = sync_meta_liveness_rows()
     else:
         cycle["liveness_upsert"] = {"ok": False, "skipped": True, "reason": "cycle_not_successful"}
 

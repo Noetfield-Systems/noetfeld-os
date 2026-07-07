@@ -8,6 +8,8 @@
   "unified_next_plan": {
     "doc": "docs/_NOOS_AGENT/[NOOS-AGENT-20260706-033]_UNIFIED_NEXT_PLAN_NOOS_NOETFIELD_v1.md",
     "registry": "data/noos-next-plan-unified-v1.json",
+    "integrator_control_plan": "data/noos-integrator-control-plan-v1.json",
+    "integrator_doc": "docs/_NOOS_AGENT/[NOOS-AGENT-20260707-007]_INTEGRATOR_CONTROL_LAYER_UPGRADE_v1.md",
     "noos_track": "Living System Phase E-G (48h + closeout)",
     "noetfield_track": "UPG-NF-PUB-01 audit + UPG-0001 NW1 send"
   },

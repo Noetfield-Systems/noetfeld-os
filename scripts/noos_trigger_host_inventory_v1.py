@@ -155,7 +155,7 @@ def autorun_rows() -> list[dict[str, Any]]:
             trigger_host = "gha"
             action = "migrate_to_cloud_or_retire"
             founder_manual = False
-        elif ptype == "manual_dispatch_only":
+        elif ptype in {"manual_dispatch_only", "cf_schedule_canary"}:
             trigger_host = "retired_gha_manual"
             action = "cloud_ok_cf_motor_canary"
             founder_manual = False

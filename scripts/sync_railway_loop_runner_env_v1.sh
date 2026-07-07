@@ -5,18 +5,18 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 RAILWAY="${RAILWAY_BIN:-/Users/sinakazemnezhad/.railway/bin/railway}"
 SERVICE="${RAILWAY_LOOP_RUNNER_SERVICE:-noos-loop-runner}"
-ENV_FILE="${NOETFIELD_ENV:-$HOME/.sourcea-secrets/noetfield.env}"
+# shellcheck disable=SC1091
+source "$ROOT/scripts/noos_resolve_local_env_v1.sh"
 
 log() { printf '[sync-loop-runner-env] %s\n' "$*"; }
 
-[[ -f "$ENV_FILE" ]] || { log "FAIL: missing $ENV_FILE"; exit 1; }
-set -a; # shellcheck disable=SC1090
-. "$ENV_FILE"
-set +a
+# shellcheck disable=SC1091
+source "$ROOT/scripts/noos_load_noetfield_env_v1.sh"
+noos_load_noetfield_env
 
 URL="${NOETFIELD_SUPABASE_URL:-${SUPABASE_URL:-}}"
 KEY="${NOETFIELD_SUPABASE_SERVICE_ROLE_KEY:-${SUPABASE_SERVICE_ROLE_KEY:-}}"
-[[ -n "$URL" && -n "$KEY" ]] || { log "FAIL: Supabase URL/key not in $ENV_FILE"; exit 1; }
+[[ -n "$URL" && -n "$KEY" ]] || { log "FAIL: Supabase URL/key not in $NOETFIELD_LOCAL_ENV"; exit 1; }
 
 "$RAILWAY" link --project "${RAILWAY_PROJECT_NAME:-noetfield-platform}" --environment production --service "$SERVICE" 2>/dev/null || true
 

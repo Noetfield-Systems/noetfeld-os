@@ -84,3 +84,26 @@ def upsert_loop_liveness(
         return {"ok": False, "loop_id": loop_id, "error": f"http_{exc.code}", "detail": body}
     except (urllib.error.URLError, TimeoutError, OSError) as exc:
         return {"ok": False, "loop_id": loop_id, "error": str(exc)}
+
+
+META_LIVENESS_ROWS: tuple[tuple[str, int, str], ...] = (
+    ("cf_loop_motor", 5, "cf:loop-motor"),
+    ("executor_railway_canonical", 5, "railway:noos-loop-runner"),
+    ("executor_fly_temporary", 10080, "fly:retired"),
+)
+
+
+def sync_meta_liveness_rows() -> dict[str, Any]:
+    """Refresh motor/executor registry rows that loop ticks do not write."""
+    rows: list[dict[str, Any]] = []
+    for loop_id, interval, host in META_LIVENESS_ROWS:
+        rows.append(
+            upsert_loop_liveness(
+                loop_id=loop_id,
+                interval_minutes=interval,
+                last_cycle_status="COMPLETE",
+                host=host,
+            )
+        )
+    ok = all(r.get("ok") for r in rows)
+    return {"ok": ok, "schema": "noos-loop-liveness-meta-sync-v1", "rows": rows}
