@@ -51,7 +51,7 @@ def resolve_env_paths() -> list[Path]:
 
 
 def workers_api_token(env: dict[str, str] | None = None) -> str:
-    """Wrangler deploy token — prefer CF_NOETFIELD_API_TOKEN (Workers Edit) over generic CF token."""
+    """Wrangler deploy token — CF_NOETFIELD_API_TOKEN is canonical in noos-local.env."""
     row = env if env is not None else load_platform_env()
     return row.get("CF_NOETFIELD_API_TOKEN") or row.get("CLOUDFLARE_API_TOKEN") or ""
 

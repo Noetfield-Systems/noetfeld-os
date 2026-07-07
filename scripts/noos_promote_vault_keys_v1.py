@@ -49,6 +49,8 @@ def render_env(rows: dict[str, str], header: list[str]) -> str:
 
 
 def promote() -> dict[str, object]:
+    from canonicalize_noos_vault_v1 import canonicalize
+
     NOETFIELD_PLATFORM_SECRETS.mkdir(parents=True, exist_ok=True)
     product = parse_env_file(NOETFIELD_LOCAL_ENV)
     noos = parse_env_file(NOOS_LOCAL_ENV)
@@ -68,7 +70,8 @@ def promote() -> dict[str, object]:
 
     token = workers_api_token(noos)
     if token:
-        noos["CLOUDFLARE_API_TOKEN"] = token
+        noos["CF_NOETFIELD_API_TOKEN"] = token
+        noos.pop("CLOUDFLARE_API_TOKEN", None)
 
     for key in list(product):
         if key in NOOS_ONLY_KEYS or key.startswith("NOOS_") or key.startswith("CLNOOS"):
@@ -94,11 +97,13 @@ def promote() -> dict[str, object]:
         ),
         encoding="utf-8",
     )
+    canon = canonicalize(NOOS_LOCAL_ENV, write=True)
     return {
-        "noos_keys": len(noos),
+        "noos_keys": len(parse_env_file(NOOS_LOCAL_ENV)),
         "product_keys": len(product),
         "orphan_tokens": len(orphans),
-        "cloudflare_set": bool(noos.get("CLOUDFLARE_API_TOKEN")),
+        "cloudflare_set": bool(parse_env_file(NOOS_LOCAL_ENV).get("CF_NOETFIELD_API_TOKEN")),
+        "canonicalize": canon,
     }
 
 

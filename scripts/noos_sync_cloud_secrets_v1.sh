@@ -14,7 +14,7 @@ python3 "$ROOT/scripts/noos_promote_vault_keys_v1.py"
 # shellcheck disable=SC1091
 source "$ROOT/scripts/noos_load_noetfield_env_v1.sh"
 noos_load_noetfield_env
-[[ -n "${CLOUDFLARE_API_TOKEN:-}" ]] || { log "FAIL: set CLOUDFLARE_API_TOKEN in $NOOS_LOCAL_ENV"; exit 1; }
+[[ -n "${CLOUDFLARE_API_TOKEN:-}" ]] || { log "FAIL: set CF_NOETFIELD_API_TOKEN in $NOOS_LOCAL_ENV"; exit 1; }
 [[ -n "${NOETFIELD_SUPABASE_URL:-${SUPABASE_URL:-}}" ]] || {
   log "FAIL: set NOETFIELD_SUPABASE_URL in $NOETFIELD_LOCAL_ENV"; exit 1;
 }

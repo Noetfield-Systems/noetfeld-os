@@ -56,14 +56,11 @@ def merge_product_env() -> int:
 
 
 def merge_noos_env() -> int:
-    legacy = parse_env_file(LEGACY_SOURCEA_NOETFIELD_ENV)
     noos = parse_env_file(NOOS_LOCAL_ENV)
-    for key in NOOS_ONLY_KEYS:
-        if legacy.get(key):
-            noos[key] = legacy[key]
-    token = noos.get("CLOUDFLARE_API_TOKEN") or noos.get("CF_NOETFIELD_API_TOKEN")
+    token = noos.get("CF_NOETFIELD_API_TOKEN") or noos.get("CLOUDFLARE_API_TOKEN")
     if token:
-        noos.setdefault("CLOUDFLARE_API_TOKEN", token)
+        noos["CF_NOETFIELD_API_TOKEN"] = token
+    noos.pop("CLOUDFLARE_API_TOKEN", None)
     NOETFIELD_PLATFORM_SECRETS.mkdir(parents=True, exist_ok=True)
     NOOS_LOCAL_ENV.write_text(
         render_env(

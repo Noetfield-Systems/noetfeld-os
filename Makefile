@@ -120,6 +120,9 @@ integrator-repair-autorun:
 cloud-vault-promote:
 	python3 scripts/noos_promote_vault_keys_v1.py
 
+cloud-vault-canonicalize:
+	python3 scripts/canonicalize_noos_vault_v1.py
+
 cloud-vault-cleanup:
 	python3 scripts/cleanup_noetfield_vault_v1.py
 
