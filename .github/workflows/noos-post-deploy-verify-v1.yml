@@ -39,8 +39,17 @@ jobs:
       - name: Production URL smoke (no deploy sleep)
         run: bash scripts/check_production_urls.sh
 
+      - name: Integrator autorun repair (liveness + loop cycles)
+        run: python3 scripts/noos_integrator_repair_autorun_v1.py --json
+        env:
+          NOETFIELD_SUPABASE_URL: ${{ secrets.NOETFIELD_SUPABASE_URL }}
+          NOETFIELD_SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.NOETFIELD_SUPABASE_SERVICE_ROLE_KEY }}
+
       - name: Motor sustain verify
         run: python3 scripts/verify_noos_motor_sustain_v1.py --write-receipt
+        env:
+          NOETFIELD_SUPABASE_URL: ${{ secrets.NOETFIELD_SUPABASE_URL }}
+          NOETFIELD_SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.NOETFIELD_SUPABASE_SERVICE_ROLE_KEY }}
 
       - name: Trigger registry sweep
         run: /usr/bin/python3 scripts/sandbox_health_sweep_v1.py --json | tee receipts/proof/noos-post-deploy-trigger-sweep-v1.json
