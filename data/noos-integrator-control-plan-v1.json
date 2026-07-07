@@ -98,7 +98,8 @@
           "title": "integrator-status CLI",
           "status": "done",
           "command": "make integrator-status",
-          "evidence": "scripts/noos_integrator_status_v1.py"
+          "evidence": "scripts/noos_integrator_status_v1.py",
+          "verify": "make icl-p2-verify"
         },
         {
           "id": "ICL-P2-02",
@@ -125,7 +126,10 @@
   "make_targets": {
     "integrator-repair-autorun": "scripts/noos_integrator_repair_autorun_v1.py",
     "icl-p1-verify": "scripts/verify_noos_icl_p1_v1.py",
+    "icl-p2-verify": "scripts/verify_noos_icl_p2_v1.py",
     "integrator-status": "scripts/noos_integrator_status_v1.py",
+    "integrator-tasks-mirror": "scripts/noos_integrator_tasks_mirror_v1.py",
+    "upgrade-manifest-publish": "scripts/noos_upgrade_manifest_publish_v1.py",
     "motor-sustain-verify": "scripts/verify_noos_motor_sustain_v1.py",
     "cloud-workers-deploy": "gh workflow run deploy-noos-cloud-workers-v1.yml",
     "cloud-secrets-sync": "scripts/noos_sync_cloud_secrets_v1.sh",

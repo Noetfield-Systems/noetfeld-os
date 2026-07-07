@@ -55,6 +55,16 @@ def vault_row() -> dict:
     }
 
 
+def _receipt_summary(path: Path) -> dict:
+    if not path.is_file():
+        return {"ok": False, "missing": True, "path": str(path)}
+    try:
+        doc = json.loads(path.read_text(encoding="utf-8"))
+        return {"ok": bool(doc.get("ok", True)), "at": doc.get("at"), "schema": doc.get("schema")}
+    except (OSError, json.JSONDecodeError):
+        return {"ok": False, "path": str(path)}
+
+
 def status() -> dict:
     vault = vault_row()
     cf_verify = _run_json([sys.executable, str(ROOT / "scripts/verify_noos_cf_deploy_token_v1.py")])
@@ -83,6 +93,8 @@ def status() -> dict:
         "autorun": (autorun.get("critique") or {}).get("overall_ok"),
         "machine_audit": machine_ok,
         "agent_conflicts": conflict.get("ok", True) if conflict else True,
+        "tasks_mirror": _receipt_summary(ROOT / "receipts/proof/noos-integrator-tasks-mirror-v1.json").get("ok"),
+        "upgrade_manifest": _receipt_summary(ROOT / "receipts/proof/noos-upgrade-manifest-publish-v1.json").get("ok"),
     }
     ok = all(surfaces.values())
     return {
@@ -97,6 +109,10 @@ def status() -> dict:
         "autorun_critique": autorun.get("critique"),
         "machine_audit_line": machine.stdout.strip().splitlines()[-1] if machine.stdout else "",
         "agent_conflicts": conflict,
+        "icl_p2": {
+            "tasks_mirror": _receipt_summary(ROOT / "receipts/proof/noos-integrator-tasks-mirror-v1.json"),
+            "upgrade_manifest": _receipt_summary(ROOT / "receipts/proof/noos-upgrade-manifest-publish-v1.json"),
+        },
     }
 
 

@@ -1,4 +1,4 @@
-.PHONY: test gate demo build-gate-js install inbox cloud-worker autorun-once autorun autorun-status autorun-tick-deploy autorun-tick-dispatch autonomous-verify schedule-verify determinism-verify replay-verify planes supabase-migrate verified-window loop-run loop-fleet-deploy deploy-railway-loop-runner verify-cf-railway-dispatch loop-fleet-dispatch loops-status loop-heartbeat loop-baseline loop-registry-reconcile loop-verify-all loop-upgrade-closeout trigger-host-inventory deadman-deploy deadman-probe cloud-motor-e2e cloud-motor-resync deploy-baseline deploy-status deploy-fly-inbox deploy-fly-selfheal deploy-drift-kaizen inbox-scaler inbox-scaler-evaluate sandbox-registry-reconcile improve-kaizen-daily t2-deploy-closeout t3-sandbox-closeout acg-founder-send-prep backlog urls local-boot local-closeout local-patch-proposal local-heartbeat local-lane local-sweep-stale local-status machine-status machine-reconcile machine-audit machine-verify machine-validate-merge machine-critic machine-research icl-p1-verify integrator-status integrator-repair-autorun motor-sustain-verify nf-pub-verdict-gate living-system-48h-prep acg-weekly-digest gel-api-multi-region-verify phase5-packaging-prep integrator-tasks-mirror upgrade-manifest-publish kaizen-sustain cloud-vault-promote cloud-vault-canonicalize cloud-vault-cleanup cloud-vault-migrate wire-cf-railway-motor wire-cf-fly-motor cloud-secrets-sync cloud-workers-deploy
+.PHONY: test gate demo build-gate-js install inbox cloud-worker autorun-once autorun autorun-status autorun-tick-deploy autorun-tick-dispatch autonomous-verify schedule-verify determinism-verify replay-verify planes supabase-migrate verified-window loop-run loop-fleet-deploy deploy-railway-loop-runner verify-cf-railway-dispatch loop-fleet-dispatch loops-status loop-heartbeat loop-baseline loop-registry-reconcile loop-verify-all loop-upgrade-closeout trigger-host-inventory deadman-deploy deadman-probe cloud-motor-e2e cloud-motor-resync deploy-baseline deploy-status deploy-fly-inbox deploy-fly-selfheal deploy-drift-kaizen inbox-scaler inbox-scaler-evaluate sandbox-registry-reconcile improve-kaizen-daily t2-deploy-closeout t3-sandbox-closeout acg-founder-send-prep backlog urls local-boot local-closeout local-patch-proposal local-heartbeat local-lane local-sweep-stale local-status machine-status machine-reconcile machine-audit machine-verify machine-validate-merge machine-critic machine-research icl-p1-verify icl-p2-verify integrator-status integrator-repair-autorun integrator-tasks-mirror upgrade-manifest-publish motor-sustain-verify nf-pub-verdict-gate living-system-48h-prep acg-weekly-digest gel-api-multi-region-verify phase5-packaging-prep kaizen-sustain cloud-vault-promote cloud-vault-canonicalize cloud-vault-cleanup cloud-vault-migrate wire-cf-railway-motor wire-cf-fly-motor cloud-secrets-sync cloud-workers-deploy
 
 test:
 	pytest -q
@@ -142,10 +142,13 @@ phase5-packaging-prep:
 	python3 scripts/noos_phase5_packaging_prep_v1.py --write-receipt --json
 
 integrator-tasks-mirror:
-	python3 scripts/noos_integrator_tasks_mirror_v1.py --dry-run --write-receipt --json
+	python3 scripts/noos_integrator_tasks_mirror_v1.py --apply --write-receipt --json
 
 upgrade-manifest-publish:
 	python3 scripts/noos_upgrade_manifest_publish_v1.py --json
+
+icl-p2-verify:
+	python3 scripts/verify_noos_icl_p2_v1.py --write-receipt --json
 
 kaizen-sustain:
 	python3 scripts/noos_sandbox_registry_reconcile_v1.py --write-receipt --json && \
