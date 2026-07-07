@@ -1,0 +1,67 @@
+{
+  "schema": "noos-stack-automation-health-v1",
+  "at": "2026-07-07T22:17:21Z",
+  "architecture": {
+    "primary": "cloudflare_workers_cron",
+    "secondary": "github_actions_paid_witness",
+    "tertiary": "railway_plan_worker"
+  },
+  "cf_motors": {
+    "fleet_tick": "green",
+    "deadman": "green",
+    "trustfield_loops": "green",
+    "registry_overall": "green"
+  },
+  "railway_plan_worker": {
+    "url": "https://trustfield-plan-worker-production.up.railway.app/health",
+    "status": "degraded",
+    "last_cycle_ok": false,
+    "lane_ok": {
+      "plan_matrix": true,
+      "critic_circle": true,
+      "deep_research": true,
+      "trustfield_loops_intake": false,
+      "self_heal": true,
+      "www_upgrade_queue": true,
+      "autorun_stack": true,
+      "partner_access": true
+    },
+    "lanes_run": [
+      "plan_matrix",
+      "critic_circle",
+      "deep_research",
+      "trustfield_loops_intake",
+      "self_heal",
+      "www_upgrade_queue",
+      "autorun_stack",
+      "partner_access"
+    ]
+  },
+  "eleven_layers": {
+    "green": 10,
+    "yellow": 1,
+    "red": 0,
+    "unknown": 0
+  },
+  "gha_status": {
+    "billing_blocked": true,
+    "annotation": "recent account payments failed or spending limit \u2014 unblock in org Billing settings",
+    "secondary_workflows_ready": [
+      "autorun-health.yml",
+      "cloud-loop-health.yml",
+      "external-verify.yml",
+      "automation-governance.yml",
+      "railway-plan-worker-deploy.yml"
+    ],
+    "action": "founder: clear GitHub billing then workflow_dispatch autorun-health + cloud-loop-health"
+  },
+  "repairs_this_session": [
+    "L08 self_heal UA + build marker probes",
+    "L10 partner_access CF fleet + registry sync",
+    "L07 loops intake container worktree delegate",
+    "tf_cf_sg_registry_v1 witness refresh",
+    "registry deferred tf_cf_www_pages_v1",
+    "noos integrator autorun repair"
+  ],
+  "closure_token": "NOOS_STACK_AUTOMATION: yellow"
+}

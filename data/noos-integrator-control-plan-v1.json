@@ -122,6 +122,14 @@
           "command": "make observe-trustfield-layers",
           "deliverable": "data/noos-trustfield-parallel-layers-v1.json",
           "evidence": "scripts/observe_trustfield_parallel_layers_v1.py"
+        },
+        {
+          "id": "ICL-P2-05",
+          "title": "CF-primary / GHA-secondary stack health sustain",
+          "status": "in_progress",
+          "command": "make observe-trustfield-layers && make observe-trustfield-registry",
+          "acceptance": "11 layers yellow-or-better; registry overall yellow-or-better; GHA billing unblocked",
+          "evidence": "receipts/proof/noos-stack-automation-health-v1.json"
         }
       ]
     }

@@ -38,6 +38,14 @@ DEADMAN_WATCH_IDS = frozenset(
         "tf_cf_lane_plan_matrix_v1",
         "tf_cf_lane_www_upgrade_queue_v1",
         "tf_cf_lane_autorun_stack_v1",
+        "tf_cf_lane_partner_access_v1",
+    }
+)
+
+# Future / on-hold motors — excluded from deadman; observe as yellow deferred, not red.
+DEFERRED_LOOP_IDS = frozenset(
+    {
+        "tf_cf_www_pages_v1",  # CF Pages migration P0 — Vercel primary until wave ships
     }
 )
 
@@ -137,8 +145,12 @@ def classify_row(row: dict, *, now: datetime) -> dict:
         status = "red"
         reason = "missing_last_fired_at"
     elif age_min is not None and age_min > threshold_min:
-        status = "yellow" if loop_id == GATE_48H_LOOP_ID and age_min <= threshold_min * 1.5 else "red"
-        reason = f"stale age_min={age_min:.1f} threshold_min={threshold_min:.1f}"
+        if loop_id in DEFERRED_LOOP_IDS:
+            status = "yellow"
+            reason = f"deferred_migration age_min={age_min:.1f}"
+        else:
+            status = "yellow" if loop_id == GATE_48H_LOOP_ID and age_min <= threshold_min * 1.5 else "red"
+            reason = f"stale age_min={age_min:.1f} threshold_min={threshold_min:.1f}"
     elif age_min is not None and age_min > threshold_min * 0.75:
         status = "yellow"
         reason = f"aging age_min={age_min:.1f} threshold_min={threshold_min:.1f}"

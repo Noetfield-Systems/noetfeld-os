@@ -224,9 +224,9 @@
   },
   "trustfield_worker_deliverables": [
     "Map TF-L04 roi_intelligence motor to plan-worker cost receipt fields",
-    "Register tf_cf_lane_partner_access_v1 in fleet tick if missing",
+    "Unblock GitHub org billing to activate GHA secondary witnesses (paid tier)",
     "Wire trustfield-loops L07 sandbox_execute intake to 113-plan queue",
-    "Sustain GHA billing or delegate all witness to CF motors",
+    "CF Pages wave for tf_cf_www_pages_v1 when founder gates migration",
     "Align os/trustfield_cloud_loop_v1.json lanes to this 11-layer registry"
   ]
 }

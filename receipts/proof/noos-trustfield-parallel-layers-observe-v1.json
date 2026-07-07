@@ -1,13 +1,13 @@
 {
   "schema": "noos-trustfield-parallel-layers-observe-v1",
-  "at": "2026-07-07T22:14:57Z",
+  "at": "2026-07-07T22:17:16Z",
   "read_only": true,
   "one_law": "NOOS coordinates eleven TrustField layers \u2014 observe, enqueue, receipt. TrustField CF+Railway motors execute. One exclusive writer per state cell.",
   "layer_count": 11,
   "overall_status": "yellow",
   "summary": {
-    "green": 9,
-    "yellow": 2,
+    "green": 10,
+    "yellow": 1,
     "red": 0,
     "unknown": 0
   },
@@ -53,7 +53,7 @@
     ]
   },
   "registry_observe": {
-    "overall_status": "yellow",
+    "overall_status": "green",
     "row_count": 33,
     "probe_present": true,
     "deadman_status": "green"
@@ -64,12 +64,12 @@
       "name": "observe_nerve",
       "value_class": "hygiene",
       "tier": "T0",
-      "status": "yellow",
-      "motor_state": "DEGRADED",
+      "status": "green",
+      "motor_state": "RUNNING",
       "cf_loop_id": "tf_cf_deadman_v1",
       "railway_lane": null,
       "reasons": [
-        "registry_overall=yellow"
+        "registry_overall=green"
       ]
     },
     {
