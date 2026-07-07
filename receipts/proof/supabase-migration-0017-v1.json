@@ -1,0 +1,54 @@
+{
+  "schema": "supabase-migration-receipt-v1",
+  "migration": "0017",
+  "migration_file": "infrastructure/supabase/migrations/0017_enable_rls_machine_tables.sql",
+  "applied_at": "2026-07-07T22:39:01Z",
+  "dry_run": false,
+  "postgres_configured": true,
+  "pre_verify": {
+    "ok": false,
+    "rls_enabled": {
+      "improvement_queue": false,
+      "noetfield_truth_log": false,
+      "noos_deadman_runs": false,
+      "noos_loop_registry": false,
+      "probe_cron_receipts": false,
+      "trustfield_loop_receipts": false,
+      "trustfield_loop_registry": false,
+      "trustfield_verify_recipe_runs": false,
+      "workflow_census_runs_v1": false,
+      "workflow_census_v1": false
+    },
+    "missing_tables": [],
+    "rls_not_enabled": [
+      "improvement_queue",
+      "noetfield_truth_log",
+      "noos_deadman_runs",
+      "noos_loop_registry",
+      "probe_cron_receipts",
+      "trustfield_loop_receipts",
+      "trustfield_loop_registry",
+      "trustfield_verify_recipe_runs",
+      "workflow_census_runs_v1",
+      "workflow_census_v1"
+    ]
+  },
+  "post_verify": {
+    "ok": true,
+    "rls_enabled": {
+      "improvement_queue": true,
+      "noetfield_truth_log": true,
+      "noos_deadman_runs": true,
+      "noos_loop_registry": true,
+      "probe_cron_receipts": true,
+      "trustfield_loop_receipts": true,
+      "trustfield_loop_registry": true,
+      "trustfield_verify_recipe_runs": true,
+      "workflow_census_runs_v1": true,
+      "workflow_census_v1": true
+    },
+    "missing_tables": [],
+    "rls_not_enabled": []
+  },
+  "ok": true
+}

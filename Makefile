@@ -55,6 +55,9 @@ supabase-migrate:
 	@test -n "$(MIGRATION)" || (echo "Usage: make supabase-migrate MIGRATION=0012" && exit 1)
 	python3 scripts/apply_supabase_migration_v1.py --migration $(MIGRATION) --write-receipt --json
 
+supabase-rls-verify:
+	python3 scripts/verify_supabase_rls_machine_tables_v1.py --write-receipt --json
+
 verified-window:
 	python3 scripts/open_noos_verified_window_v1.py --write-receipt --json
 

@@ -128,6 +128,46 @@ async def _verify_factory_cycle_degraded(url: str) -> dict[str, Any]:
         await conn.close()
 
 
+async def _verify_rls_machine_tables(url: str) -> dict[str, Any]:
+    import asyncpg
+
+    tables = [
+        "noetfield_truth_log",
+        "probe_cron_receipts",
+        "improvement_queue",
+        "noos_loop_registry",
+        "noos_deadman_runs",
+        "workflow_census_v1",
+        "workflow_census_runs_v1",
+        "trustfield_loop_registry",
+        "trustfield_loop_receipts",
+        "trustfield_verify_recipe_runs",
+    ]
+    conn = await asyncpg.connect(url)
+    try:
+        rows = await conn.fetch(
+            """
+            select c.relname as table_name, c.relrowsecurity as rls, c.relforcerowsecurity as force_rls
+            from pg_class c
+            join pg_namespace n on n.oid = c.relnamespace
+            where n.nspname = 'public' and c.relname = any($1::text[])
+            """,
+            tables,
+        )
+        by_name = {r["table_name"]: bool(r["rls"] and r["force_rls"]) for r in rows}
+        missing = [t for t in tables if t not in by_name]
+        not_enabled = [t for t, v in by_name.items() if not v]
+        ok = not missing and not not_enabled
+        return {
+            "ok": ok,
+            "rls_enabled": by_name,
+            "missing_tables": missing,
+            "rls_not_enabled": not_enabled,
+        }
+    finally:
+        await conn.close()
+
+
 async def _verify_founder_blocked(url: str) -> dict[str, Any]:
     import asyncpg
 
@@ -158,6 +198,8 @@ def verify_migration(number: str, *, url: str) -> dict[str, Any]:
         return asyncio.run(_verify_factory_cycle_degraded(url))
     if number == "0016":
         return asyncio.run(_verify_table_exists(url, "noos_loop_registry"))
+    if number == "0017":
+        return asyncio.run(_verify_rls_machine_tables(url))
     return {"ok": True, "note": "no specific verifier for migration"}
 
 
