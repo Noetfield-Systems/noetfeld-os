@@ -1,6 +1,6 @@
 {
   "schema": "noos-motor-sustain-v1",
-  "at": "2026-07-07T16:21:57Z",
+  "at": "2026-07-08T01:54:27Z",
   "ok": true,
   "checks": {
     "cf_loop_fleet": {
@@ -16,7 +16,7 @@
     "railway_loop_runner": {
       "ok": true,
       "status": 200,
-      "body": "{\"ok\": true, \"schema\": \"noos-railway-loop-runner-health-v1\", \"service\": \"noos-loop-runner\", \"git_sha\": \"03b55c1f3dea7d9adc5d3f3fbcf47872df60b8df\", \"uptime_sec\": 270, \"execution_mode\": \"one_shot_http\"}"
+      "body": "{\"ok\": true, \"schema\": \"noos-railway-loop-runner-health-v1\", \"service\": \"noos-loop-runner\", \"git_sha\": \"03b55c1f3dea7d9adc5d3f3fbcf47872df60b8df\", \"uptime_sec\": 6696, \"execution_mode\": \"one_shot_http\"}"
     },
     "cf_deadman": {
       "ok": true,

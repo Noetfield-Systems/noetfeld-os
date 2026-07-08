@@ -1,0 +1,29 @@
+---
+description: Mandatory PR conflict resolver — LOCKED governance law for merge conflicts
+alwaysApply: true
+---
+
+# PR Conflict Resolver — MANDATORY (LOCKED)
+
+**Status:** LOCKED · **Authority:** `data/noos-pr-conflict-skill-lock-v1.json`
+
+Before resolving **any** git merge conflict or `UU` file in this repo:
+
+1. **Load skill:** `.cursor/skills/pr-conflict-resolver/SKILL.md` (canonical: SG `skills/pr-conflict-resolver/SKILL.md`)
+2. **Open eval app** (Mac): `~/Desktop/PR-Conflict-Resolver-Report.app` — review with-skill vs baseline on LOCKED/registry cases
+3. **Classify** each conflicted file: registry · receipt · LOCKED · generated · code
+4. **STOP** on L1 duplicate-ownership or LOCKED canon — escalate, do not commit a "final" merge
+5. **Validate:** `python3 scripts/verify_pr_conflict_resolution_v1.py --json`
+6. **Receipt:** `receipts/proof/noos-pr-conflict-resolution-<UTC>.json` before claiming merge-ready
+
+## Forbidden
+
+- Blind `git checkout --ours/--theirs` on `data/*.json`, `receipts/proof/`, or `*_LOCKED.md`
+- Committing conflict markers or hand-merged registry JSON without structural merge
+- Presenting self-resolved LOCKED content as done
+
+## Machine gates
+
+- GEL CI: `verify_pr_conflict_resolution_v1.py`
+- Hook: `.cursor/hooks/noos-pr-conflict-guard.py` (denies writes with `<<<<<<<` markers)
+- Governance: `verify_living_system_governance_v1.py` → `pr_conflict_skill` check

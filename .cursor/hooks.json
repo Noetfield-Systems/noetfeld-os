@@ -6,6 +6,13 @@
         "command": ".cursor/hooks/noos-local-boot.sh"
       }
     ],
+    "preToolUse": [
+      {
+        "command": "python3 .cursor/hooks/noos-pr-conflict-guard.py",
+        "matcher": "Write|StrReplace|Edit",
+        "failClosed": true
+      }
+    ],
     "beforeFileEdit": [
       {
         "command": ".cursor/hooks/noos-claim-reminder.sh"

@@ -1,0 +1,99 @@
+{
+  "schema": "self-heal-policy-v1",
+  "version": "1.0.0",
+  "purpose": "Path-based classification for auto-fix vs proposal-only vs founder-gated. Layer 2 (Heal) consults this before executing any fix.",
+  "policy": {
+    "auto": {
+      "description": "Auto-fix without approval (cache, retries, config resets only)",
+      "paths": [
+        "**/.github/workflows/**/*.yml",
+        "**/.github/actions/**",
+        "**/scripts/noos_*.py",
+        "**/scripts/verify_*.py",
+        "**/tests/**",
+        "**/receipts/**",
+        "**/docs/**",
+        "**.md"
+      ],
+      "constraints": [
+        "Only cache invalidation, retry logic, config reset allowed",
+        "No modification to path patterns themselves",
+        "No secrets or credentials touched"
+      ]
+    },
+    "proposal": {
+      "description": "File as GitHub issue + wait for human review/approval before PR",
+      "paths": [
+        "**/requirements.txt",
+        "**/pyproject.toml",
+        "**/package.json",
+        "**/setup.py",
+        "**/Dockerfile",
+        "**/docker-compose.yml",
+        "**/.env*",
+        "**/*.lock"
+      ],
+      "constraints": [
+        "Dependency updates must match semver constraints",
+        "Config changes must be reversible",
+        "No breaking changes without explicit human approval"
+      ]
+    },
+    "founder_gated": {
+      "description": "Escalate immediately to human; never auto-fix. Requires explicit founder approval.",
+      "paths": [
+        ".github/workflows/**/*.yml",
+        ".github/",
+        "scripts/verify_*.py",
+        "scripts/noos_gate_*.py",
+        "scripts/noos_decide_*.py",
+        "scripts/noos_check_*.py",
+        "scripts/*_verify_*.py",
+        "data/trigger-registry-v1.json",
+        "data/noos-24-7-loops-v1.json",
+        "data/noos-slo-v1.json",
+        "data/*-allowlist*.json",
+        "data/*-policy*.json",
+        "data/*-secret*.json",
+        "data/*-registry*.json",
+        "governance/**",
+        "docs/NOETFIELD_*.md",
+        "docs/WORKFLOW_*.md",
+        "docs/_NOOS_AGENT/**",
+        "scripts/autorun_status_v1.py",
+        "scripts/noos_loop_heartbeat_v1.py",
+        "scripts/noos_workflow_audit_v1.py",
+        "scripts/noos_self_heal_v1.py",
+        "scripts/noos_researcher_v1.py",
+        "scripts/noos_specialist_v1.py",
+        ".github/CODEOWNERS",
+        ".github/SECURITY.md",
+        "wrangler.toml",
+        "*.toml",
+        "*.lock"
+      ],
+      "rationale": [
+        "Core governance: gates, verifiers, decision engines",
+        "Orchestration: trigger registry, loop definitions, SLO targets",
+        "System: healing agent code itself, audit logic",
+        "Security: allowlists, policies, secrets",
+        "Locked docs: architectural decisions, agent guidance"
+      ],
+      "approval_required": "explicit founder review + Slack notification"
+    }
+  },
+  "defaults": {
+    "unmatched_path": "proposal",
+    "unmatched_reason": "Conservative: unknown paths file as proposals, never auto-fixed"
+  },
+  "layer_2_behavior": {
+    "auto_match": "Execute immediately as PR (must pass green existing checks before merge)",
+    "proposal_match": "File GitHub issue + wait for human approval + create PR on approval",
+    "founder_gated_match": "Refuse fix + escalate to human + file founder_gated issue + require explicit approval"
+  },
+  "test_requirements": [
+    "Before enabling schedules: feed Layer 2 fake finding on scripts/verify_* → assert founder_gated refusal",
+    "Drill receipt must show Layer 2 correctly classified protected path",
+    "Include drill output in Phase 1 PR before merge"
+  ]
+}

@@ -37,6 +37,7 @@ workspace_root: /Users/sinakazemnezhad/Projects/noetfeld-os
 - Loops: **`docs/_NOOS_AGENT/[NOOS-AGENT-20260703-006]_MACHINE_LOOPS_v1.md`**
 - Status: `make machine-status` · reconcile: `make machine-reconcile` · audit: `make machine-audit`
 - Merge gate: `make machine-validate-merge` · skill: `.cursor/skills/machine-loops/SKILL.md`
+- **PR conflicts (MANDATORY LOCKED):** `.cursor/skills/pr-conflict-resolver/SKILL.md` · law: **`docs/_NOOS_AGENT/[NOOS-AGENT-20260708-001]_PR_CONFLICT_RESOLVER_MANDATORY_v1_LOCKED.md`** · verify: `make pr-conflict-verify` · eval app: `~/Desktop/PR-Conflict-Resolver-Report.app`
 - Default: route failures to critic/repair/research — not founder
 
 ### Live sync / nerve gate

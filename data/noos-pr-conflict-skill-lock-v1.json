@@ -1,0 +1,35 @@
+{
+  "schema": "noos-pr-conflict-skill-lock-v1",
+  "status": "LOCKED",
+  "locked_at": "2026-07-08T02:30:00Z",
+  "authority": "NOOS_INTEGRATOR",
+  "one_law": "Any PR conflict touching governance paths MUST load pr-conflict-resolver, classify files, validate, and emit a resolution receipt before merge-ready.",
+  "sg_canonical": {
+    "repo": "sina-governance-SSOT",
+    "skill": "skills/pr-conflict-resolver/SKILL.md",
+    "lock_manifest": "data/pr_conflict_skill_lock_v1.json",
+    "lock_doc": "skills/pr-conflict-resolver/PR_CONFLICT_RESOLVER_SKILL_LOCKED_v1.md",
+    "skill_sha256_prefix": "f460c26916385116",
+    "evals_sha256_prefix": "dbc87948eaeb457d"
+  },
+  "noos_lane": {
+    "skill_stub": ".cursor/skills/pr-conflict-resolver/SKILL.md",
+    "lock_doc": "docs/_NOOS_AGENT/[NOOS-AGENT-20260708-001]_PR_CONFLICT_RESOLVER_MANDATORY_v1_LOCKED.md",
+    "cursor_rule": ".cursor/rules/noos-pr-conflict-resolver-mandatory.mdc",
+    "hook": ".cursor/hooks/noos-pr-conflict-guard.py"
+  },
+  "verifier": "scripts/verify_pr_conflict_resolution_v1.py",
+  "governance_sensitive_globs": [
+    "data/noos-*-v1.json",
+    "data/autorun-workflows-v1.json",
+    "data/noos-parallel-agent-registry-v1.json",
+    "receipts/proof/",
+    "docs/_NOOS_AGENT/*_LOCKED.md",
+    ".github/workflows/noos-*.yml"
+  ],
+  "resolution_receipt_glob": "receipts/proof/noos-pr-conflict-resolution-*.json",
+  "post_resolve_validators": [
+    "python3 -m pytest tests/test_noos_loop_registry_reconcile_v1.py tests/test_verify_living_system_governance_v1.py -q",
+    "python3 scripts/noos_loop_registry_reconcile_v1.py --json"
+  ]
+}

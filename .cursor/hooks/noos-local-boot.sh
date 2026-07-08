@@ -20,6 +20,7 @@ run_check() {
 
 run_check "parallel_conflict" python3 scripts/noos_agent_conflict_check_v1.py --json
 run_check "governance_verify" python3 scripts/verify_living_system_governance_v1.py --json
+run_check "pr_conflict_skill" python3 scripts/verify_pr_conflict_resolution_v1.py --json
 run_check "integrator_summary" python3 scripts/noos_integrator_sync_v1.py summary --json
 
 # Fail open: never block session start (plan constraint).

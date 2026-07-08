@@ -40,9 +40,11 @@ if [[ -f "$PORTFOLIO_ENV" ]]; then
   source "$PORTFOLIO_ENV" 2>/dev/null || true
   set +a
   if [[ -n "${SUPABASE_URL:-}" && -n "${SUPABASE_SERVICE_ROLE_KEY:-}" ]]; then
+    PS_URL="${PORTFOLIO_SPINE_SUPABASE_URL:-$SUPABASE_URL}"
+    PS_KEY="${PORTFOLIO_SPINE_SERVICE_ROLE_KEY:-$SUPABASE_SERVICE_ROLE_KEY}"
     "$RAILWAY" variables set \
-      "PORTFOLIO_SPINE_SUPABASE_URL=$SUPABASE_URL" \
-      "PORTFOLIO_SPINE_SERVICE_ROLE_KEY=$SUPABASE_SERVICE_ROLE_KEY" \
+      "PORTFOLIO_SPINE_SUPABASE_URL=$PS_URL" \
+      "PORTFOLIO_SPINE_SERVICE_ROLE_KEY=$PS_KEY" \
       --service "$SERVICE"
     log "OK — portfolio-spine env on $SERVICE"
   fi

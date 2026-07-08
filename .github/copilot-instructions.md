@@ -44,6 +44,11 @@ This repo is the sync-plane hub. Always respect:
 - **L-P5:** claim lane before mutating shared paths.
 - **L-P7:** close lane with receipt; no stale claims.
 
+### 6b. PR Conflict Resolver (MANDATORY LOCKED)
+- Skill: `.cursor/skills/pr-conflict-resolver/SKILL.md`
+- Verify: `scripts/verify_pr_conflict_resolution_v1.py`
+- Classify conflicts on `data/*.json`, `receipts/proof/`, `*_LOCKED.md` before picking sides.
+
 ## Workflow Integration
 
 ### noetfeld-OS Execution Flows

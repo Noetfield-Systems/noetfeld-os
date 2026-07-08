@@ -55,6 +55,9 @@ jobs:
       - name: Living-system governance (GHA + Copilot + integrator + automations)
         run: python3 scripts/verify_living_system_governance_v1.py --json
 
+      - name: PR conflict resolver lock (mandatory skill gate)
+        run: python3 scripts/verify_pr_conflict_resolution_v1.py --json
+
       - name: Machine loops E2E verify
         run: python3 scripts/noos_machine_loops_v1.py --json verify
 

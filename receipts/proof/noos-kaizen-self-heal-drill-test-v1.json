@@ -1,0 +1,18 @@
+{
+  "test_name": "Layer 2 Protected Path Refusal Drill",
+  "timestamp": "2026-07-03T00:07:00Z",
+  "input_finding": {
+    "id": "drill_verify_gate",
+    "type": "workflow_failure",
+    "severity": "medium",
+    "category": "retry_transient",
+    "metadata": {
+      "workflow_file": "scripts/verify_noos_autonomous_24h_v1.py"
+    }
+  },
+  "policy_classification": "founder_gated (scripts/verify_*)",
+  "expected_action": "escalation",
+  "actual_action": "auto_pr or proposal",
+  "test_passed": false,
+  "evidence": {}
+}

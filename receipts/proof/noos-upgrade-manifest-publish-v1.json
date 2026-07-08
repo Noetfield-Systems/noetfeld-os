@@ -1,6 +1,6 @@
 {
   "schema": "noos-upgrade-manifest-publish-v1",
-  "at": "2026-07-07T16:22:36Z",
+  "at": "2026-07-08T01:56:24Z",
   "ok": true,
   "entry_count": 58,
   "planes": [
@@ -19,14 +19,14 @@
     "summary": {
       "open": 0,
       "claimed": 0,
-      "in_progress": 0,
+      "in_progress": 1,
       "blocked": 0,
       "done": 5,
-      "released": 7,
+      "released": 9,
       "cancelled": 0,
-      "stale_claims": 0,
-      "active_agents": 0,
-      "stale_agents": 2
+      "stale_claims": 1,
+      "active_agents": 2,
+      "stale_agents": 0
     },
     "supabase": {
       "ok": false,

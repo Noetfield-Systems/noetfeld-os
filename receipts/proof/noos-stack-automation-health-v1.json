@@ -1,9 +1,9 @@
 {
   "schema": "noos-stack-automation-health-v1",
-  "at": "2026-07-08T00:10:26Z",
-  "ok": false,
-  "overall_status": "yellow",
-  "closure_token": "NOOS_STACK_AUTOMATION: yellow",
+  "at": "2026-07-08T01:56:56Z",
+  "ok": true,
+  "overall_status": "green",
+  "closure_token": "NOOS_STACK_AUTOMATION: green",
   "replaces_workflow": "noos-cross-repo-orchestrator.yml",
   "architecture": {
     "primary": "cloudflare_workers_cron",
@@ -11,49 +11,36 @@
     "tertiary": "railway_plan_worker"
   },
   "signals": {
-    "integrator_status": false,
-    "autorun_critique": false,
+    "integrator_status": true,
+    "autorun_critique": true,
     "gha_health": true,
     "eleven_layers": true,
     "trustfield_registry": true,
     "cf_fleet_tick": true
   },
   "integrator_status": {
-    "ok": false,
+    "ok": true,
     "surfaces": {
       "vault": true,
       "cf_deploy_token": true,
       "integrator_mirror": true,
-      "motor_sustain": false,
-      "autorun": false,
+      "motor_sustain": true,
+      "autorun": true,
       "machine_audit": true,
       "agent_conflicts": true,
       "tasks_mirror": true,
       "upgrade_manifest": true
     },
-    "machine_audit_line": "outside_audit \u00b7 scanned=364 chain_ok=True"
+    "machine_audit_line": "outside_audit \u00b7 scanned=397 chain_ok=True"
   },
   "autorun_critique": {
-    "overall_ok": false,
-    "findings": 2,
-    "findings_sample": [
-      {
-        "scope": "noos_gha_health_witness",
-        "severity": "high",
-        "summary": "Workflow is not healthy: BLOCKED_WITH_REASON",
-        "detail": "no_github_runs"
-      },
-      {
-        "scope": "noos_stack_health_receipt",
-        "severity": "high",
-        "summary": "Workflow is not healthy: BLOCKED_WITH_REASON",
-        "detail": "no_github_runs"
-      }
-    ]
+    "overall_ok": true,
+    "findings": 0,
+    "findings_sample": []
   },
   "gha_health": {
     "schema": "noos-gha-run-health-v1",
-    "at": "2026-07-08T00:10:25Z",
+    "at": "2026-07-08T01:56:55Z",
     "ok": true,
     "overall_status": "green",
     "closure_token": "NOOS_GHA_HEALTH: green",
@@ -81,10 +68,10 @@
             "latest_is_billing_gate": false,
             "latest_real_failure": false,
             "real_failures": [
-              "GEL CI: feat(gha): enable Phase-1 witness cron after smo"
+              "GEL CI: handoff(proof): NF probe drift fix patch bundle "
             ],
-            "latest_conclusion": "success",
-            "latest_duration_s": 43.0,
+            "latest_conclusion": "",
+            "latest_duration_s": 4.0,
             "recent_count": 8
           }
         ]
@@ -93,7 +80,7 @@
         "title": "GHA real workflow failures (not billing)",
         "ok": true,
         "failures": [
-          "GEL CI: feat(gha): enable Phase-1 witness cron after smo"
+          "GEL CI: handoff(proof): NF probe drift fix patch bundle "
         ]
       },
       "ICL-D12": {
@@ -114,19 +101,8 @@
         "ok": true,
         "detail": {
           "ok": true,
-          "witness_count": 5,
-          "warnings": [
-            {
-              "workflow": "noos-gha-health-witness.yml",
-              "ok": false,
-              "error": "HTTP 404: workflow noos-gha-health-witness.yml not found on the default branch (https://api.github.com/repos/Noetfield-Systems/noetfeld-os/actions/workflows/noos-gha-health-witness.yml)\n"
-            },
-            {
-              "workflow": "noos-stack-health-receipt.yml",
-              "ok": false,
-              "error": "HTTP 404: workflow noos-stack-health-receipt.yml not found on the default branch (https://api.github.com/repos/Noetfield-Systems/noetfeld-os/actions/workflows/noos-stack-health-receipt.yml)\n"
-            }
-          ],
+          "witness_count": 10,
+          "warnings": [],
           "billing_gate_precursors": [],
           "one_law": "Jobs failing in <12s with no step logs = billing/spending gate \u2014 not CI red"
         }
@@ -171,8 +147,8 @@
     "unknown": 0
   },
   "trustfield_registry": {
-    "green": 31,
-    "yellow": 2,
+    "green": 32,
+    "yellow": 1,
     "red": 0,
     "last_ok_false": 0,
     "missing_last_fired_at": 0,
@@ -181,8 +157,5 @@
     "gate_48h_status": "green",
     "deadman_watched_red": []
   },
-  "fix_queue": [
-    "integrator_status",
-    "autorun_critique"
-  ]
+  "fix_queue": []
 }

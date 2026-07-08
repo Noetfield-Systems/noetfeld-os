@@ -1,0 +1,23 @@
+{
+  "schema": "noos-pr-conflict-skill-lock-receipt-v1",
+  "locked_at": "2026-07-08T02:30:00Z",
+  "authority": "NOOS_INTEGRATOR",
+  "status": "LOCKED",
+  "verifier": "scripts/verify_pr_conflict_resolution_v1.py",
+  "result": "ALL PASS",
+  "enforcement_layers": [
+    "data/noos-pr-conflict-skill-lock-v1.json",
+    "docs/_NOOS_AGENT/[NOOS-AGENT-20260708-001]_PR_CONFLICT_RESOLVER_MANDATORY_v1_LOCKED.md",
+    ".cursor/skills/pr-conflict-resolver/SKILL.md",
+    ".cursor/rules/noos-pr-conflict-resolver-mandatory.mdc",
+    ".cursor/hooks/noos-pr-conflict-guard.py",
+    ".github/workflows/gel-ci.yml",
+    "scripts/verify_living_system_governance_v1.py"
+  ],
+  "sg_canonical": {
+    "skill_sha256_prefix": "f460c26916385116",
+    "lock_manifest": "sina-governance-SSOT/data/pr_conflict_skill_lock_v1.json",
+    "desktop_app": "desktop-app/PR-Conflict-Resolver-Report.app"
+  },
+  "report_line": "pr_conflict_skill_lock · SAVE AND LOCK complete · machine-enforced"
+}
