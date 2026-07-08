@@ -36,7 +36,7 @@ Only merge **Noetfield GTM / PLAN WITH NO ASF** ship PRs from branches matching:
 
 ## Pending ship PR
 
-_None — 10-step wave merged to main @ 3956afe5; founder: Resend env + SourceA sync._
+_None — queue cleared 2026-07-08; main @ d8bb0e16; gov-sandbox + www audit blockers shipped (#90–#93)._
 
 ## Recently merged
 
@@ -54,11 +54,22 @@ _None — 10-step wave merged to main @ 3956afe5; founder: Resend env + SourceA 
 | #40 | cursor/post-audit-10-phase-fix-37f0 | Post-audit workflow + paths + verify hardening |
 | #39 | cursor/10-phase-audit-fix-37f0 | 10-phase audit — R-011, www 030–032, coherence verify |
 
-## Stale PRs (open until founder closes)
+## Closed stale queue (2026-07-08 sweep)
 
 | PR | Branch | Reason |
 |----|--------|--------|
-| #2 | cursor/governance-console-v1-37f0 | Superseded by main console path |
+| #86 | ci/production-ci-upgrade | Superseded by #87 + #88 on main |
+| #81 | workflow-hardening-v1 | Superseded by #82 + #88 |
+| #89 | cursor/www-audit-homepage-upgrade | Tech split merged #90; copy awaits verdict |
+| #77 | cursor/charter-lock-internal-37f0 | Stale draft |
+| #75 | cursor/sandbox-v2-37f0 | Superseded by gov-sandbox #91–#92 |
+| #74 | cursor/legal-aml-factories-37f0 | Stale factory draft |
+| #73 | cursor/stripe-gtm-setup-37f0 | Superseded by #76 |
+| #65–#53 | cursor/*-37f0 | June UI/commercial/forward-queue drafts |
+| #52 | cursor/eleventh-audit-iter19-37f0 | Superseded by later ship waves |
+| #50 | cursor/plan-with-no-asf-upgrade-37f0 | Superseded by iter 18 merge |
+| #49 | cursor/design-token-migration-37f0 | Conflicts with current console |
 | #7 | cursor/trustfield-scope-37f0 | Out of scope — R-001 |
+| #2 | cursor/governance-console-v1-37f0 | Superseded by main console path |
 
-**Founder action:** Close #2 and #7 on GitHub (cloud agent token cannot close).
+**Open PR count:** 0 (verified `gh pr list --state open` 2026-07-08).
