@@ -2,7 +2,7 @@
 """Apply a numbered Supabase migration from infrastructure/supabase/migrations/.
 
 Verifies post-state (e.g. founder_blocked in inbox status check) and writes a receipt.
-Uses ~/.sourcea-secrets/noetfield-db.env + noetfield.env — never prints secret values.
+Uses ~/.noetfield-platform-secrets/noetfield-db.env + noetfield.env — never prints secret values.
 """
 
 from __future__ import annotations
@@ -22,8 +22,9 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 from noos_proof_receipt_paths_v1 import proof_receipt  # noqa: E402
 MIGRATIONS = ROOT / "infrastructure/supabase/migrations"
-NOETFIELD_ENV = Path.home() / ".sourcea-secrets/noetfield.env"
-NOETFIELD_DB_ENV = Path.home() / ".sourcea-secrets/noetfield-db.env"
+from noos_vault_paths_v1 import NOETFIELD_DB_ENV, NOETFIELD_LOCAL_ENV
+
+NOETFIELD_ENV = NOETFIELD_LOCAL_ENV
 DEFAULT_REF = "tkgpapowwplupyekpivy"
 
 
@@ -127,6 +128,46 @@ async def _verify_factory_cycle_degraded(url: str) -> dict[str, Any]:
         await conn.close()
 
 
+async def _verify_rls_machine_tables(url: str) -> dict[str, Any]:
+    import asyncpg
+
+    tables = [
+        "noetfield_truth_log",
+        "probe_cron_receipts",
+        "improvement_queue",
+        "noos_loop_registry",
+        "noos_deadman_runs",
+        "workflow_census_v1",
+        "workflow_census_runs_v1",
+        "trustfield_loop_registry",
+        "trustfield_loop_receipts",
+        "trustfield_verify_recipe_runs",
+    ]
+    conn = await asyncpg.connect(url)
+    try:
+        rows = await conn.fetch(
+            """
+            select c.relname as table_name, c.relrowsecurity as rls, c.relforcerowsecurity as force_rls
+            from pg_class c
+            join pg_namespace n on n.oid = c.relnamespace
+            where n.nspname = 'public' and c.relname = any($1::text[])
+            """,
+            tables,
+        )
+        by_name = {r["table_name"]: bool(r["rls"] and r["force_rls"]) for r in rows}
+        missing = [t for t in tables if t not in by_name]
+        not_enabled = [t for t, v in by_name.items() if not v]
+        ok = not missing and not not_enabled
+        return {
+            "ok": ok,
+            "rls_enabled": by_name,
+            "missing_tables": missing,
+            "rls_not_enabled": not_enabled,
+        }
+    finally:
+        await conn.close()
+
+
 async def _verify_founder_blocked(url: str) -> dict[str, Any]:
     import asyncpg
 
@@ -148,6 +189,60 @@ async def _verify_founder_blocked(url: str) -> dict[str, Any]:
         await conn.close()
 
 
+async def _verify_security_advisor_warnings(url: str) -> dict[str, Any]:
+    import asyncpg
+
+    conn = await asyncpg.connect(url)
+    try:
+        funcs = [
+            ("noetfield", "prevent_update_delete"),
+            ("noetfield", "tle_entries_immutable_guard"),
+            ("noetfield", "current_tenant_id"),
+        ]
+        func_ok: dict[str, bool] = {}
+        for schema, name in funcs:
+            row = await conn.fetchrow(
+                """
+                select p.proconfig
+                from pg_proc p
+                join pg_namespace n on n.oid = p.pronamespace
+                where n.nspname = $1 and p.proname = $2
+                """,
+                schema,
+                name,
+            )
+            cfg = row["proconfig"] if row else None
+            func_ok[f"{schema}.{name}"] = bool(cfg) and any(
+                str(c).startswith("search_path=") for c in (cfg or [])
+            )
+        ext = await conn.fetchrow(
+            """
+            select n.nspname from pg_extension e
+            join pg_namespace n on n.oid = e.extnamespace where e.extname = 'vector'
+            """
+        )
+        pol = await conn.fetchrow(
+            """
+            select with_check from pg_policies
+            where schemaname='public' and tablename='gateway_leads' limit 1
+            """
+        )
+        wc = (pol["with_check"] or "").strip().lower() if pol else "missing"
+        ok = (
+            all(func_ok.values())
+            and (ext["nspname"] if ext else "") == "extensions"
+            and wc not in ("true", "missing", "")
+        )
+        return {
+            "ok": ok,
+            "functions": func_ok,
+            "vector_schema": ext["nspname"] if ext else None,
+            "gateway_with_check": pol["with_check"] if pol else None,
+        }
+    finally:
+        await conn.close()
+
+
 def verify_migration(number: str, *, url: str) -> dict[str, Any]:
     if number == "0012":
         return asyncio.run(_verify_founder_blocked(url))
@@ -155,6 +250,12 @@ def verify_migration(number: str, *, url: str) -> dict[str, Any]:
         return asyncio.run(_verify_table_exists(url, "noetfield_truth_log"))
     if number == "0014":
         return asyncio.run(_verify_factory_cycle_degraded(url))
+    if number == "0016":
+        return asyncio.run(_verify_table_exists(url, "noos_loop_registry"))
+    if number == "0017":
+        return asyncio.run(_verify_rls_machine_tables(url))
+    if number == "0018":
+        return asyncio.run(_verify_security_advisor_warnings(url))
     return {"ok": True, "note": "no specific verifier for migration"}
 
 

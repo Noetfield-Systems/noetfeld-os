@@ -118,6 +118,10 @@ def _discover_live_gha_triggers() -> list[dict[str, Any]]:
     return live
 
 
+def _trigger_active(entry: dict[str, Any]) -> bool:
+    return entry.get("valid_in_verified_window") is True
+
+
 def _probe_registry_entry(entry: dict[str, Any]) -> dict[str, Any]:
     probe = entry.get("live_probe") if isinstance(entry.get("live_probe"), dict) else {}
     rel_path = str(probe.get("path") or "")
@@ -169,6 +173,16 @@ def _probe_registry_entry(entry: dict[str, Any]) -> dict[str, Any]:
             "live_events": parsed["events"],
             "reason": None if ok else f"missing_events:{','.join(missing)}",
         }
+    if probe_type == "pg_cron_migration":
+        expected = str(entry.get("schedule") or "")
+        ok = expected in text and "noetfield_detect_stale_lanes_v1" in text
+        return {
+            "trigger_id": trigger_id,
+            "ok": ok,
+            "path": rel_path,
+            "expected_schedule": expected,
+            "reason": None if ok else "pg_cron_migration_mismatch",
+        }
     return {"trigger_id": trigger_id, "ok": False, "reason": "unknown_probe_type", "path": rel_path}
 
 
@@ -180,12 +194,13 @@ def run_sweep(*, repo_root: Path | None = None) -> dict[str, Any]:
 
     registry = _read_json(REGISTRY_PATH)
     triggers = registry.get("triggers") if isinstance(registry.get("triggers"), list) else []
-    probe_results = [_probe_registry_entry(t) for t in triggers if isinstance(t, dict)]
+    active = [t for t in triggers if isinstance(t, dict) and _trigger_active(t)]
+    probe_results = [_probe_registry_entry(t) for t in active]
     dead_or_mismatch = [r for r in probe_results if not r.get("ok")]
 
     live_all = _discover_live_wrangler_triggers() + _discover_live_gha_triggers()
     claimed: set[str] = set()
-    for entry in triggers:
+    for entry in active:
         if not isinstance(entry, dict):
             continue
         probe = entry.get("live_probe") if isinstance(entry.get("live_probe"), dict) else {}
@@ -198,8 +213,14 @@ def run_sweep(*, repo_root: Path | None = None) -> dict[str, Any]:
         elif probe_type == "gha_workflow":
             for event in probe.get("expects") or []:
                 claimed.add(f"gha:{rel}:{event}")
+        elif probe_type == "pg_cron_migration":
+            claimed.add(f"pg_cron:{rel}:{entry.get('schedule')}")
 
-    unregistered = [row for row in live_all if row["signature"] not in claimed]
+    unregistered = [
+        row
+        for row in live_all
+        if row["signature"] not in claimed and row.get("type") == "wrangler_cron"
+    ]
 
     ok = not dead_or_mismatch and not unregistered
     return {

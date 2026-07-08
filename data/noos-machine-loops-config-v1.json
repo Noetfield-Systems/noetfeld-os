@@ -1,0 +1,45 @@
+{
+  "schema": "noos-machine-loops-config-v1",
+  "version": "1.0.0",
+  "canon_version": "FOUNDER_CANON_v1+MACHINE_LOOPS_v1",
+  "dispatch_templates_dir": ".agent-policy/dispatch-templates",
+  "receipt_proof_dir": "receipts/proof",
+  "kaizen_dir": "receipts/proof",
+  "shadow_decisions_path": ".noos-runtime/machine-loops/shadow-decisions-v1.json",
+  "dispatch_queue_path": ".noos-runtime/machine-loops/dispatch-queue-v1.json",
+  "research_confidence_threshold": 0.75,
+  "repair_max_attempts_before_escalation": 2,
+  "audit_trailing_hours": 168,
+  "audit_spot_fetch_count": 3,
+  "merge_tiers": {
+    "T0": {
+      "change_classes": ["docs", "tests", "receipts", "lint"],
+      "machine_merge": true,
+      "requires_second_critic": false
+    },
+    "T1": {
+      "change_classes": ["scoped_app_code"],
+      "machine_merge": true,
+      "requires_second_critic": false
+    },
+    "T2": {
+      "change_classes": ["dependency", "config", "ci"],
+      "machine_merge": true,
+      "requires_second_critic": true
+    },
+    "T3": {
+      "change_classes": ["schema", "gates", "governance", "agent_policy"],
+      "machine_merge": false,
+      "requires_second_critic": true
+    }
+  },
+  "motor_restart_recipes_path": "data/noos-motor-restart-recipes-v1.json",
+  "kaizen_recipes_path": "data/noos-kaizen-recipes-v1.json",
+  "autonomy_kernel_path": "data/noos-autonomy-kernel-v1.json",
+  "workers": {
+    "reconciler": "noos-machine-reconciler",
+    "critic": "noos-machine-critic",
+    "auditor": "noos-machine-auditor",
+    "researcher": "noos-machine-researcher"
+  }
+}

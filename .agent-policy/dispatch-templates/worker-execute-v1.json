@@ -1,0 +1,20 @@
+{
+  "schema": "noos-dispatch-template-v1",
+  "template_id": "worker-execute-v1",
+  "version": "1.0.0",
+  "canon_version": "FOUNDER_CANON_v1+MACHINE_LOOPS_v1",
+  "laws": "FOUNDER_CANON v1 + governed-autorun v3. Violations = BLOCKED_WITH_REASON.",
+  "loop": "worker",
+  "cycle": "DISPATCH → [PLAN→PATCH→TEST→REPAIR]×N → RECEIPT → STOP",
+  "walls": ["G1", "G2", "G3", "G4", "G5", "G6", "G7", "G8"],
+  "fresh_context_rule": "R1",
+  "inputs": {
+    "task_id": "{{task_id}}",
+    "allowed_paths": "{{allowed_paths}}",
+    "task_kind": "{{task_kind}}",
+    "source_receipt": "{{source_receipt}}"
+  },
+  "terminal_states": ["COMPLETE", "FAILED_WITH_RECEIPT", "BLOCKED_WITH_REASON"],
+  "verifier": "external_ci",
+  "receipt_schema": "noos-worker-kernel-receipt-v1"
+}

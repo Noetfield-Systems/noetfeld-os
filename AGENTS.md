@@ -18,6 +18,27 @@ workspace_root: /Users/sinakazemnezhad/Projects/noetfeld-os
 2. Search tagged docs: `grep -r "NOOS-AGENT-DOC" docs/_NOOS_AGENT/`
 3. Check `docs/_NOOS_AGENT/MANIFEST.json` for trace IDs before editing any essay or internal note.
 
+### Cursor Local Mac (T2)
+
+- Open lane: `make local-lane TASK=<task-id> SCOPE=path1,path2`
+- Session digest: `make local-status`
+- Boot: `make local-boot` (optional receipt: `make local-boot WRITE_RECEIPT=1`)
+- Operator card: **`docs/_NOOS_AGENT/[NOOS-AGENT-20260703-004]_CURSOR_LOCAL_MAC_OPERATOR_v1.md`**
+- Subagent: `.cursor/agents/noetfield-os-local-operator.md`
+- Claim before edit: `bash scripts/noos_local_claim_lane_v1.sh <task-id> <paths...>` (or `AGENT_ID=copilot-cli-mac IDE=copilot-cli`)
+- Long session: `make local-heartbeat TASK=<task-id>`
+- Stale claims: `make local-sweep-stale`
+- Closeout: `make local-closeout TASK=<task-id>` (optional receipt: `WRITE_RECEIPT=1`)
+- Cannot `git checkout main`? Run `bash scripts/noos_mac_worktree_sync_v1.sh`
+
+### Machine loops (zero-founder process)
+
+- Canon: **`docs/_NOOS_AGENT/[NOOS-AGENT-20260703-005]_FOUNDER_CANON_INTERFACE_v1.md`**
+- Loops: **`docs/_NOOS_AGENT/[NOOS-AGENT-20260703-006]_MACHINE_LOOPS_v1.md`**
+- Status: `make machine-status` · reconcile: `make machine-reconcile` · audit: `make machine-audit`
+- Merge gate: `make machine-validate-merge` · skill: `.cursor/skills/machine-loops/SKILL.md`
+- Default: route failures to critic/repair/research — not founder
+
 ### Live sync / nerve gate
 
 - Before claiming current Noetfield live state, run `bash scripts/check_noos_live_sync_gate.sh`. The wrapper refreshes the website live nerve first; do not rely on an old receipt unless you are explicitly doing read-only archaeology.
@@ -35,6 +56,7 @@ workspace_root: /Users/sinakazemnezhad/Projects/noetfeld-os
 ### Integrator coordination
 
 - Before starting overlapping implementation work, read the integrator summary: `python3 scripts/noos_integrator_sync_v1.py summary --json`
+- Before parallel agent work, run conflict check: `python3 scripts/noos_agent_conflict_check_v1.py --json`
 - Register/claim through `scripts/noos_integrator_sync_v1.py` before editing shared code paths across multiple IDE agents.
 - Respect `scope_files` conflicts. If another non-stale agent owns the same files, do not proceed silently.
 - Repo-local runtime state is primary; `~/.sina/noos-integrator-state-v1.json` is the cross-worktree/home mirror for other IDEs on the same Mac.

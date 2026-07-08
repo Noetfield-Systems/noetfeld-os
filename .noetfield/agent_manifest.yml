@@ -1,16 +1,90 @@
-schema: noetfield-agent-manifest-v1
-repo: Noetfield-Systems/noetfeld-os
-repo_key: noetfeld-os
-plane: DELIVERY
-agent_routing_tier: T1
-coordination_support:
-  integrator_protocol: data/noos-integrator-role-v1.json
-  mode: support-only
-forbidden_active_config_markers:
-  - kazemnezhadsina144[-]dot
-registry_paths:
-  repo_registry: noetfield-org/REPO_REGISTRY.md
-  agent_registry: noetfield-org/AGENT_REGISTRY.md
-  routing_matrix: noetfield-org/ROUTING_MATRIX.md
-  loop_state: noetfield-org/LOOP_STATE.json
-  sync_receipts: noetfield-org/SYNC_RECEIPTS.md
+---
+org: Noetfield-Systems
+repo: noetfeld-OS
+version: "1.0"
+created: "2026-07-03"
+status: active
+
+# Agent Configuration
+primary_agent: Copilot + Codex
+integrator: Loop orchestrator + receipt spine writer
+role: T1/T3 autonomous loop governance
+branch: main
+tier: T1, T3
+
+# Synchronization
+must_sync_with:
+  - Noetfield-Systems/SourceA
+  - Noetfield-Systems/TrustField-Technologies
+  - Noetfield-Systems/sina-governance-SSOT
+
+# Execution Context
+workflows:
+  - noos-factory-autorun-tick-v1 (T0 factory executor)
+  - noos-loop-fleet-tick-v1 (T0 loop state machine tick)
+  - verify_noos_autonomous_24h_v1.py (T3 autonomous verification)
+
+# Governance
+required_receipts:
+  - factory_tick_receipt_v1.json
+  - loop_fleet_state_receipt_v1.json
+  - autonomous_verification_receipt_v1.json
+
+forbidden_actions:
+  - Use of legacy personal org slug (see noetfield-org/FORBIDDEN_MARKERS.txt)
+  - Wait indefinitely on receipt (report blocker instead)
+  - Retroactive mutation of receipt archive
+  - Mutate main branch without PR + 2 approvals
+  - Deploy during M6 surge (M1 is T0 priority)
+
+# Mission Assignment
+mission_id: M2, M3
+mission_name: loop_autonomy + governance_spine
+value_class: autonomy_proof_asset + governance_proof_asset
+spend_cap:
+  - T0
+  - T1
+  - T2
+
+# Tool Access (See ROUTING_MATRIX.md for full L17 tier definitions)
+tool_access:
+  - tier: T1
+    access_type: Repository code modification
+    allowed_tools:
+      - GitHub PR API
+      - File Edit (branch only)
+      - Git Commit/Push (branch only)
+      - Local Terminal (sandbox)
+      - Copilot Chat
+  - tier: T3
+    access_type: Advanced orchestration
+    allowed_tools:
+      - Receipt Reading (all repos)
+      - Receipt Validation
+      - Cross-Repo Analysis (read-only)
+      - GitHub App API (advisory)
+      - Codex reasoning
+
+# Org-Sync Anchors
+org_sync_anchors:
+  - noetfield-org/REPO_REGISTRY.md (foundational)
+  - noetfield-org/AGENT_REGISTRY.md
+  - noetfield-org/ROUTING_MATRIX.md (L17 tool routing)
+  - noetfield-org/LOOP_STATE.json (mission stack + M6)
+  - noetfield-org/SYNC_RECEIPTS.md (verified windows)
+
+# Pre-Execution Checklist
+pre_exec_checklist:
+  - "[ ] Read LOOP_STATE.json for current tick and missions"
+  - "[ ] No legacy org slug from FORBIDDEN_MARKERS.txt in any workflow"
+  - "[ ] LOOP_STATE.json reflects mission priorities (M1 > M6)"
+  - "[ ] All receipt schemas match registries"
+  - "[ ] Git clean before committing to branch"
+
+# Copilot Instructions Reference
+copilot_instructions_file: .github/copilot-instructions.md
+
+# Audit Trail
+last_verified: null
+last_verified_sha: null
+verification_window: "INVALIDATED_BY_MIGRATION → Ready for restart"

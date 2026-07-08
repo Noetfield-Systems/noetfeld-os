@@ -11,6 +11,10 @@ on:
   pull_request:
     branches: [main]
 
+concurrency:
+  group: gel-ci-${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
   test-and-gate:
     runs-on: ubuntu-latest
@@ -34,6 +38,10 @@ jobs:
 
       - name: Pytest
         run: pytest -q
+        continue-on-error: false
+      - name: Run autorun unit tests
+        run: pytest -q tests/test_autorun_findings.py
+        continue-on-error: false
 
       - name: Integration gate (UPG-0159)
         run: pytest -q tests/test_gate_integration_ci.py
@@ -43,6 +51,12 @@ jobs:
 
       - name: Loop determinism external-verify (UPG-0214 / L13)
         run: python3 scripts/verify_loop_determinism_external_v1.py --write-receipt --json
+
+      - name: Living-system governance (GHA + Copilot + integrator + automations)
+        run: python3 scripts/verify_living_system_governance_v1.py --json
+
+      - name: Machine loops E2E verify
+        run: python3 scripts/noos_machine_loops_v1.py --json verify
 
       - name: noetfield gate (local)
         run: noetfield gate --json

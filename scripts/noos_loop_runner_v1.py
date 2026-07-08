@@ -19,6 +19,7 @@ RUNTIME = ROOT / ".noos-runtime/loops"
 
 sys.path.insert(0, str(ROOT / "scripts"))
 from noos_loop_determinism_v1 import advance_state, cas_advance, op_key, transition_allowed  # noqa: E402
+from noos_loop_liveness_v1 import detect_execution_host, sync_meta_liveness_rows, upsert_loop_liveness  # noqa: E402
 
 
 def utc_now() -> str:
@@ -46,6 +47,18 @@ def loop_by_event(registry: dict[str, Any], event_type: str) -> dict[str, Any]:
         if row.get("event_type") == event_type:
             return row
     raise SystemExit(f"unknown event_type: {event_type}")
+
+
+def is_cloud_execution() -> bool:
+    return bool(os.environ.get("RAILWAY_ENVIRONMENT") or os.environ.get("NOOS_CLOUD_LOOP") == "1")
+
+
+def resolve_step_specs(loop: dict[str, Any]) -> list[dict[str, Any]]:
+    if is_cloud_execution():
+        cloud = loop.get("cloud_steps")
+        if cloud:
+            return list(cloud)
+    return list(loop.get("steps") or [])
 
 
 def loop_state_path(loop_id: str) -> Path:
@@ -165,6 +178,9 @@ def meter_cost(step_results: list[dict[str, Any]]) -> dict[str, Any]:
         "tokens_out": 0,
         "unit_cost_usd": 0.0,
         "total_usd": 0.0,
+        "estimated_cost": 0.0,
+        "cost_policy_pass": True,
+        "cost_policy_version": "cost-policy-v1",
         "metered_at_call_site": True,
         "step_count": len(step_results),
     }
@@ -259,7 +275,7 @@ def execute_loop(loop: dict[str, Any], *, self_heal: bool = True) -> dict[str, A
         }
 
     step_results: list[dict[str, Any]] = []
-    for spec in loop.get("steps") or []:
+    for spec in resolve_step_specs(loop):
         cmd = list(spec.get("cmd") or [])
         if not cmd:
             continue
@@ -384,6 +400,18 @@ def execute_loop(loop: dict[str, Any], *, self_heal: bool = True) -> dict[str, A
         "transition_log_tail": [{"from": state_before, "to": state_after, "op_key": op_key_val}],
     }
     loop_state_path(loop_id).write_text(json.dumps(state, indent=2) + "\n", encoding="utf-8")
+
+    if state_after in ("COMPLETE", "IDLE_NO_WORK"):
+        cycle["liveness_upsert"] = upsert_loop_liveness(
+            loop_id=loop_id,
+            event_type=event_type,
+            interval_minutes=int(loop.get("interval_minutes") or 5),
+            last_cycle_status=state_after,
+            host=detect_execution_host(),
+        )
+        cycle["meta_liveness_sync"] = sync_meta_liveness_rows()
+    else:
+        cycle["liveness_upsert"] = {"ok": False, "skipped": True, "reason": "cycle_not_successful"}
 
     return cycle
 

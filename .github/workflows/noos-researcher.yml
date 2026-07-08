@@ -1,8 +1,6 @@
+# Retired 2026-07-05 — CF cron → Railway (zero GHA minutes).
 name: "NOOS Researcher Agent"
 on:
-  schedule:
-    # Run hourly, during even hours
-    - cron: "0 */2 * * *"
   workflow_dispatch:
     inputs:
       depth:

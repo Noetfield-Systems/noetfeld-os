@@ -4,7 +4,7 @@
   "agent_lane": "NOETFELD-OS",
   "workspace_root": "/Users/sinakazemnezhad/Projects/noetfeld-os",
   "search_token": "NOOS-AGENT-DOC",
-  "updated_at": "2026-07-03",
+  "updated_at": "2026-07-06",
   "part8_sync_at": "2026-06-15",
   "canonical_ssot_source": "/Users/sinakazemnezhad/Desktop/Noetfield/Noetfield-All-Documents/",
   "sync_script": "scripts/sync-noos-ssot.sh",
@@ -212,6 +212,78 @@
       "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260703-001]_INTEGRATOR_AGENT_PROTOCOL_v1.md",
       "doc_type": "INTEGRATOR_PROTOCOL",
       "title": "Integrator agent protocol — local cross-IDE task sync"
+    },
+    {
+      "trace_id": "NOOS-AGENT-20260703-002",
+      "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260703-002]_CHEAP_WORKER_KERNEL_v1.md",
+      "doc_type": "WORKER_KERNEL",
+      "title": "Cheap Worker Kernel v1 — headless governed task router"
+    },
+    {
+      "trace_id": "NOOS-AGENT-20260703-003",
+      "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260703-003]_PARALLEL_AGENT_GOVERNANCE_v1.md",
+      "doc_type": "PARALLEL_AGENT_GOVERNANCE",
+      "title": "Parallel agent governance — living system dedup law"
+    },
+    {
+      "trace_id": "NOOS-AGENT-20260703-004",
+      "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260703-004]_CURSOR_LOCAL_MAC_OPERATOR_v1.md",
+      "doc_type": "CURSOR_LOCAL_OPERATOR",
+      "title": "Cursor Local Mac operator — T2 boot, claim, closeout"
+    },
+    {
+      "trace_id": "NOOS-AGENT-20260703-005",
+      "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260703-005]_FOUNDER_CANON_INTERFACE_v1.md",
+      "doc_type": "FOUNDER_CANON_INTERFACE",
+      "title": "Founder canon interface — zero-founder validation law"
+    },
+    {
+      "trace_id": "NOOS-AGENT-20260703-006",
+      "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260703-006]_MACHINE_LOOPS_v1.md",
+      "doc_type": "MACHINE_LOOPS",
+      "title": "Machine loops v1 — critic, repair, audit, autonomy E2E"
+    },
+    {
+      "trace_id": "NOOS-AGENT-20260705-029",
+      "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260705-029]_LIVING_SYSTEM_99_PLAN_LOCKED_v1.md",
+      "doc_type": "LIVING_SYSTEM_99_PLAN_LOCKED",
+      "title": "Living System 99-Plan — locked v1 (cloud triggers + dead-man switch + 48h test)"
+    },
+    {
+      "trace_id": "NOOS-AGENT-20260706-030",
+      "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260706-030]_LIVING_SYSTEM_48H_RETRO_v1.md",
+      "doc_type": "RETRO",
+      "title": "Living System 48h retro v1 (placeholder)"
+    },
+    {
+      "trace_id": "NOOS-AGENT-20260706-031",
+      "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260706-031]_DEADMAN_TELEGRAM_LANE_LOCKED_v1.md",
+      "doc_type": "DEADMAN_TELEGRAM_LANE_LOCKED",
+      "title": "Deadman Telegram lane — LOCKED v1 (never Gateway_A)"
+    },
+    {
+      "trace_id": "NOOS-AGENT-20260706-032",
+      "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260706-032]_STALE_DOC_REGISTER_v1.md",
+      "doc_type": "STALE_DOC_REGISTER",
+      "title": "Stale doc register — superseded plans and stale claims"
+    },
+    {
+      "trace_id": "NOOS-AGENT-20260706-033",
+      "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260706-033]_UNIFIED_NEXT_PLAN_NOOS_NOETFIELD_v1.md",
+      "doc_type": "UNIFIED_NEXT_PLAN_LOCKED",
+      "title": "Unified Next Plan — NOOS + Noetfield v1 (dual-track 48h + public audit)"
+    },
+    {
+      "trace_id": "NOOS-AGENT-20260707-007",
+      "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260707-007]_INTEGRATOR_CONTROL_LAYER_UPGRADE_v1.md",
+      "doc_type": "INTEGRATOR_CONTROL_PLAN",
+      "title": "Integrator control layer upgrade plan v1"
+    },
+    {
+      "trace_id": "NOOS-AGENT-20260707-008",
+      "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260707-008]_INTEGRATOR_DAILY_CHECKLIST_v1.md",
+      "doc_type": "INTEGRATOR_DAILY_CHECKLIST",
+      "title": "Integrator daily mandatory checklist v1 — live probes only"
     }
   ]
 }

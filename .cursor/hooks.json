@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "hooks": {
+    "sessionStart": [
+      {
+        "command": ".cursor/hooks/noos-local-boot.sh"
+      }
+    ],
+    "beforeFileEdit": [
+      {
+        "command": ".cursor/hooks/noos-claim-reminder.sh"
+      }
+    ],
+    "postToolUse": [
+      {
+        "command": ".cursor/hooks/noos-heartbeat-reminder.sh",
+        "matcher": "Write|Edit"
+      }
+    ]
+  }
+}

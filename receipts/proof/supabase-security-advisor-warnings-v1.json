@@ -1,0 +1,16 @@
+{
+  "schema": "supabase-security-advisor-warnings-v1",
+  "at": "2026-07-07T22:43:45Z",
+  "project_ref": "tkgpapowwplupyekpivy",
+  "functions_search_path": {
+    "noetfield.prevent_update_delete": true,
+    "noetfield.tle_entries_immutable_guard": true,
+    "noetfield.current_tenant_id": true
+  },
+  "vector_extension_schema": "extensions",
+  "gateway_leads_policy": {
+    "name": "gateway_leads_anon_insert_v2",
+    "with_check": "((COALESCE(length(TRIM(BOTH FROM name)), 0) > 0) AND (identity IS NOT NULL) AND (intent IS NOT NULL) AND (consent_to_contact IS NOT NULL) AND ((COALESCE(length(TRIM(BOTH FROM email)), 0) > 0) OR (COALESCE(length(TRIM(BOTH FROM contact)), 0) > 0) OR (COALESCE(length(TRIM(BOTH FROM phone)), 0) > 0)))"
+  },
+  "ok": true
+}

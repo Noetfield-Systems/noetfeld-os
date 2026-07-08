@@ -1,0 +1,92 @@
+{
+  "schema": "noos-sandbox-registry-reconcile-v1",
+  "reconciled_at": "2026-07-07T16:11:26Z",
+  "authority": "NOOS_T3_SANDBOX_FLEET_STEP_4",
+  "sandbox_count": 8,
+  "expected_count": 8,
+  "sandboxes": [
+    {
+      "sandbox_id": "inbox",
+      "motor": "fly",
+      "loop_id": "inbox",
+      "workflow_id": "noos-inbox-loop.yml",
+      "deploy_scope": "fly-inbox",
+      "loop_registered": true,
+      "workflow_exists": true,
+      "deploy_scope_ok": true
+    },
+    {
+      "sandbox_id": "chain",
+      "motor": "gha",
+      "loop_id": "chain",
+      "workflow_id": "noos-chain-loop.yml",
+      "deploy_scope": null,
+      "loop_registered": true,
+      "workflow_exists": true,
+      "deploy_scope_ok": null
+    },
+    {
+      "sandbox_id": "surface",
+      "motor": "gha",
+      "loop_id": "surface",
+      "workflow_id": "noos-surface-loop.yml",
+      "deploy_scope": "www",
+      "loop_registered": true,
+      "workflow_exists": true,
+      "deploy_scope_ok": true
+    },
+    {
+      "sandbox_id": "sourcea_observe",
+      "motor": "gha",
+      "loop_id": "sourcea_observe",
+      "workflow_id": "noos-sourcea-observe-loop.yml",
+      "deploy_scope": null,
+      "loop_registered": true,
+      "workflow_exists": true,
+      "deploy_scope_ok": null
+    },
+    {
+      "sandbox_id": "improve",
+      "motor": "gha",
+      "loop_id": null,
+      "workflow_id": null,
+      "deploy_scope": null,
+      "loop_registered": true,
+      "workflow_exists": null,
+      "deploy_scope_ok": null
+    },
+    {
+      "sandbox_id": "gel-api",
+      "motor": "railway",
+      "loop_id": "runtime",
+      "workflow_id": null,
+      "deploy_scope": "gel-api",
+      "loop_registered": true,
+      "workflow_exists": null,
+      "deploy_scope_ok": true
+    },
+    {
+      "sandbox_id": "www",
+      "motor": "pages",
+      "loop_id": "surface",
+      "workflow_id": null,
+      "deploy_scope": "www",
+      "loop_registered": true,
+      "workflow_exists": null,
+      "deploy_scope_ok": true
+    },
+    {
+      "sandbox_id": "cf",
+      "motor": "cf-cron",
+      "loop_id": null,
+      "workflow_id": null,
+      "deploy_scope": null,
+      "loop_registered": true,
+      "workflow_exists": null,
+      "deploy_scope_ok": null
+    }
+  ],
+  "issues": [],
+  "ok": true,
+  "report_line": "sandbox_registry_reconcile \u00b7 sandboxes=8 issues=0"
+}

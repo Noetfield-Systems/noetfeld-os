@@ -5,24 +5,58 @@
   "spec_path": "docs/NOETFIELD_COHERENT_SYSTEM_SPEC_v1.md",
   "triggers": [
     {
+      "trigger_id": "NOOS-T-deploy-workers-push",
+      "system": "noetfeld-os",
+      "kind": "event",
+      "schedule": null,
+      "target": "Deploy NOOS CF workers on push",
+      "valid_in_verified_window": true,
+      "owner_workflow": "deploy-noos-cloud-workers-v1",
+      "live_probe": {
+        "type": "gha_workflow",
+        "path": ".github/workflows/deploy-noos-cloud-workers-v1.yml",
+        "expects": [
+          "push"
+        ]
+      }
+    },
+    {
+      "trigger_id": "NOOS-T-deploy-workers-dispatch",
+      "system": "noetfeld-os",
+      "kind": "manual",
+      "schedule": null,
+      "target": "Manual deploy NOOS CF workers workflow_dispatch",
+      "valid_in_verified_window": false,
+      "owner_workflow": "deploy-noos-cloud-workers-v1",
+      "live_probe": {
+        "type": "gha_workflow",
+        "path": ".github/workflows/deploy-noos-cloud-workers-v1.yml",
+        "expects": [
+          "workflow_dispatch"
+        ]
+      }
+    },
+    {
       "trigger_id": "NOOS-T2-factory-cf",
       "system": "noetfeld-os",
       "kind": "schedule",
       "schedule": "*/10 * * * *",
-      "target": "CF cron → repository_dispatch noos_factory_autorun_tick",
-      "valid_in_verified_window": true,
+      "target": "CF cron \u2192 repository_dispatch noos_factory_autorun_tick",
+      "valid_in_verified_window": false,
       "owner_workflow": "noos-factory-autorun",
       "live_probe": {
         "type": "wrangler_cron",
         "path": "cloud/workers/noos-factory-autorun-tick-v1/wrangler.toml"
-      }
+      },
+      "retired_at": "2026-07-05",
+      "retired_reason": "Phase A \u2014 CF loop motor; GHA schedule removed"
     },
     {
       "trigger_id": "NOOS-T6-fleet-cf",
       "system": "noetfeld-os",
       "kind": "schedule",
       "schedule": "*/5 * * * *",
-      "target": "CF loop fleet motor → repository_dispatch loop ticks",
+      "target": "CF loop fleet motor \u2192 repository_dispatch loop ticks",
       "valid_in_verified_window": true,
       "owner_workflow": "noos-loop-fleet-tick",
       "live_probe": {
@@ -36,12 +70,14 @@
       "kind": "schedule",
       "schedule": "0,10,20,30,40,50 * * * *",
       "target": "GitHub schedule backup for factory autorun",
-      "valid_in_verified_window": true,
+      "valid_in_verified_window": false,
       "owner_workflow": "noos-factory-autorun",
       "live_probe": {
         "type": "gha_schedule",
         "path": ".github/workflows/noos-factory-autorun.yml"
-      }
+      },
+      "retired_at": "2026-07-05",
+      "retired_reason": "Phase A \u2014 CF loop motor; GHA schedule removed"
     },
     {
       "trigger_id": "NOOS-T6-inbox",
@@ -49,12 +85,14 @@
       "kind": "schedule",
       "schedule": "*/5 * * * *",
       "target": "Inbox drain loop schedule backup",
-      "valid_in_verified_window": true,
+      "valid_in_verified_window": false,
       "owner_workflow": "noos-inbox-loop",
       "live_probe": {
         "type": "gha_schedule",
         "path": ".github/workflows/noos-inbox-loop.yml"
-      }
+      },
+      "retired_at": "2026-07-05",
+      "retired_reason": "Phase A \u2014 CF loop motor; GHA schedule removed"
     },
     {
       "trigger_id": "NOOS-T6-runtime",
@@ -62,12 +100,14 @@
       "kind": "schedule",
       "schedule": "5,20,35,50 * * * *",
       "target": "Runtime gate + pytest loop",
-      "valid_in_verified_window": true,
+      "valid_in_verified_window": false,
       "owner_workflow": "noos-runtime-loop",
       "live_probe": {
         "type": "gha_schedule",
         "path": ".github/workflows/noos-runtime-loop.yml"
-      }
+      },
+      "retired_at": "2026-07-05",
+      "retired_reason": "Phase A \u2014 CF loop motor; GHA schedule removed"
     },
     {
       "trigger_id": "NOOS-T6-surface",
@@ -75,12 +115,14 @@
       "kind": "schedule",
       "schedule": "0,20,40 * * * *",
       "target": "Public surface health loop",
-      "valid_in_verified_window": true,
+      "valid_in_verified_window": false,
       "owner_workflow": "noos-surface-loop",
       "live_probe": {
         "type": "gha_schedule",
         "path": ".github/workflows/noos-surface-loop.yml"
-      }
+      },
+      "retired_at": "2026-07-05",
+      "retired_reason": "Phase A \u2014 CF loop motor; GHA schedule removed"
     },
     {
       "trigger_id": "NOOS-T6-chain",
@@ -88,25 +130,44 @@
       "kind": "schedule",
       "schedule": "0,30 * * * *",
       "target": "Chain tools verify loop",
-      "valid_in_verified_window": true,
+      "valid_in_verified_window": false,
       "owner_workflow": "noos-chain-loop",
       "live_probe": {
         "type": "gha_schedule",
         "path": ".github/workflows/noos-chain-loop.yml"
-      }
+      },
+      "retired_at": "2026-07-05",
+      "retired_reason": "Phase A \u2014 CF loop motor; GHA schedule removed"
     },
     {
       "trigger_id": "NOOS-T6-self-heal",
       "system": "noetfeld-os",
       "kind": "schedule",
-      "schedule": "0,10,20,30,40,50 * * * *",
-      "target": "Self-heal + autonomy nerve loop",
-      "valid_in_verified_window": true,
+      "schedule": "0 */1 * * *",
+      "target": "Self-heal + autonomy nerve loop (hourly)",
+      "valid_in_verified_window": false,
       "owner_workflow": "noos-self-heal-loop",
       "live_probe": {
         "type": "gha_schedule",
         "path": ".github/workflows/noos-self-heal-loop.yml"
-      }
+      },
+      "retired_at": "2026-07-05",
+      "retired_reason": "Phase A \u2014 CF loop motor; GHA schedule removed"
+    },
+    {
+      "trigger_id": "NOOS-T6-self-heal-weekly",
+      "system": "noetfeld-os",
+      "kind": "schedule",
+      "schedule": "0 0 * * 0",
+      "target": "Self-heal weekly maintenance placeholder",
+      "valid_in_verified_window": false,
+      "owner_workflow": "noos-self-heal-loop",
+      "live_probe": {
+        "type": "gha_schedule",
+        "path": ".github/workflows/noos-self-heal-loop.yml"
+      },
+      "retired_at": "2026-07-05",
+      "retired_reason": "Phase A \u2014 CF loop motor; GHA schedule removed"
     },
     {
       "trigger_id": "NOOS-T6-sourcea-observe",
@@ -114,12 +175,14 @@
       "kind": "schedule",
       "schedule": "15,45 * * * *",
       "target": "SourceA portfolio-spine observe loop",
-      "valid_in_verified_window": true,
+      "valid_in_verified_window": false,
       "owner_workflow": "noos-sourcea-observe-loop",
       "live_probe": {
         "type": "gha_schedule",
         "path": ".github/workflows/noos-sourcea-observe-loop.yml"
-      }
+      },
+      "retired_at": "2026-07-05",
+      "retired_reason": "Phase A \u2014 CF loop motor; GHA schedule removed"
     },
     {
       "trigger_id": "NOOS-T6-agent-nerve",
@@ -127,12 +190,14 @@
       "kind": "schedule",
       "schedule": "0 * * * *",
       "target": "Agent vault nerve loop",
-      "valid_in_verified_window": true,
+      "valid_in_verified_window": false,
       "owner_workflow": "noos-agent-nerve-loop",
       "live_probe": {
         "type": "gha_schedule",
         "path": ".github/workflows/noos-agent-nerve-loop.yml"
-      }
+      },
+      "retired_at": "2026-07-05",
+      "retired_reason": "Phase A \u2014 CF loop motor; GHA schedule removed"
     },
     {
       "trigger_id": "NOOS-T3-schedule-canary",
@@ -140,12 +205,14 @@
       "kind": "schedule",
       "schedule": "0,10,20,30,40,50 * * * *",
       "target": "GitHub schedule canary probe",
-      "valid_in_verified_window": true,
+      "valid_in_verified_window": false,
       "owner_workflow": "noos-schedule-canary",
       "live_probe": {
         "type": "gha_schedule",
         "path": ".github/workflows/noos-schedule-canary.yml"
-      }
+      },
+      "retired_at": "2026-07-05",
+      "retired_reason": "Phase A \u2014 CF loop motor; GHA schedule removed"
     },
     {
       "trigger_id": "NOOS-T3-workflow-audit",
@@ -153,12 +220,14 @@
       "kind": "schedule",
       "schedule": "*/15 * * * *",
       "target": "Workflow audit + critique loop",
-      "valid_in_verified_window": true,
+      "valid_in_verified_window": false,
       "owner_workflow": "noos-workflow-audit",
       "live_probe": {
         "type": "gha_schedule",
         "path": ".github/workflows/noos-workflow-audit.yml"
-      }
+      },
+      "retired_at": "2026-07-05",
+      "retired_reason": "Phase A \u2014 CF loop motor; GHA schedule removed"
     },
     {
       "trigger_id": "NOOS-T-gel-ci-push",
@@ -171,7 +240,9 @@
       "live_probe": {
         "type": "gha_workflow",
         "path": ".github/workflows/gel-ci.yml",
-        "expects": ["push"]
+        "expects": [
+          "push"
+        ]
       }
     },
     {
@@ -185,7 +256,9 @@
       "live_probe": {
         "type": "gha_workflow",
         "path": ".github/workflows/gel-ci.yml",
-        "expects": ["pull_request"]
+        "expects": [
+          "pull_request"
+        ]
       }
     },
     {
@@ -199,7 +272,9 @@
       "live_probe": {
         "type": "gha_workflow",
         "path": ".github/workflows/noos-agent-vault.yml",
-        "expects": ["push"]
+        "expects": [
+          "push"
+        ]
       }
     },
     {
@@ -213,7 +288,9 @@
       "live_probe": {
         "type": "gha_workflow",
         "path": ".github/workflows/noos-agent-vault.yml",
-        "expects": ["pull_request"]
+        "expects": [
+          "pull_request"
+        ]
       }
     },
     {
@@ -221,13 +298,15 @@
       "system": "noetfeld-os",
       "kind": "event",
       "schedule": null,
-      "target": "Tag push → GitHub Release + PyPI",
+      "target": "Tag push \u2192 GitHub Release + PyPI",
       "valid_in_verified_window": true,
       "owner_workflow": "release-noetfield-gate",
       "live_probe": {
         "type": "gha_workflow",
         "path": ".github/workflows/release-noetfield-gate.yml",
-        "expects": ["push"]
+        "expects": [
+          "push"
+        ]
       }
     },
     {
@@ -241,7 +320,9 @@
       "live_probe": {
         "type": "gha_workflow",
         "path": ".github/workflows/publish-pypi.yml",
-        "expects": ["workflow_dispatch"]
+        "expects": [
+          "workflow_dispatch"
+        ]
       }
     },
     {
@@ -250,12 +331,14 @@
       "kind": "schedule",
       "schedule": "15,45 * * * *",
       "target": "Auto-fix safe issues from audit findings (30-min loop)",
-      "valid_in_verified_window": true,
+      "valid_in_verified_window": false,
       "owner_workflow": "noos-self-heal",
       "live_probe": {
         "type": "gha_schedule",
         "path": ".github/workflows/noos-self-heal.yml"
-      }
+      },
+      "retired_at": "2026-07-05",
+      "retired_reason": "Phase A \u2014 CF loop motor; GHA schedule removed"
     },
     {
       "trigger_id": "NOOS-T-researcher",
@@ -263,12 +346,14 @@
       "kind": "schedule",
       "schedule": "0 * * * *",
       "target": "Deep-dive investigation of escalated findings (hourly)",
-      "valid_in_verified_window": true,
+      "valid_in_verified_window": false,
       "owner_workflow": "noos-researcher",
       "live_probe": {
         "type": "gha_schedule",
         "path": ".github/workflows/noos-researcher.yml"
-      }
+      },
+      "retired_at": "2026-07-05",
+      "retired_reason": "Phase A \u2014 CF loop motor; GHA schedule removed"
     },
     {
       "trigger_id": "NOOS-T-specialist",
@@ -276,12 +361,14 @@
       "kind": "schedule",
       "schedule": "0 */2 * * *",
       "target": "Generate fix proposals from research (2-hour loop)",
-      "valid_in_verified_window": true,
+      "valid_in_verified_window": false,
       "owner_workflow": "noos-specialist",
       "live_probe": {
         "type": "gha_schedule",
         "path": ".github/workflows/noos-specialist.yml"
-      }
+      },
+      "retired_at": "2026-07-05",
+      "retired_reason": "Phase A \u2014 CF loop motor; GHA schedule removed"
     },
     {
       "trigger_id": "NOOS-T-orchestrator",
@@ -289,11 +376,150 @@
       "kind": "schedule",
       "schedule": "0 */3 * * *",
       "target": "Cross-repo health orchestration & consolidation (3-hour loop)",
-      "valid_in_verified_window": true,
+      "valid_in_verified_window": false,
       "owner_workflow": "noos-cross-repo-orchestrator",
       "live_probe": {
         "type": "gha_schedule",
         "path": ".github/workflows/noos-cross-repo-orchestrator.yml"
+      },
+      "retired_at": "2026-07-05",
+      "retired_reason": "Phase A \u2014 CF loop motor; GHA schedule removed"
+    },
+    {
+      "trigger_id": "NOOS-T-self-heal-dispatch",
+      "system": "noetfeld-os",
+      "kind": "manual",
+      "schedule": null,
+      "target": "Manual self-heal workflow_dispatch",
+      "valid_in_verified_window": false,
+      "owner_workflow": "noos-self-heal",
+      "live_probe": {
+        "type": "gha_workflow",
+        "path": ".github/workflows/noos-self-heal.yml",
+        "expects": [
+          "workflow_dispatch"
+        ]
+      }
+    },
+    {
+      "trigger_id": "NOOS-T-researcher-dispatch",
+      "system": "noetfeld-os",
+      "kind": "manual",
+      "schedule": null,
+      "target": "Manual researcher workflow_dispatch",
+      "valid_in_verified_window": false,
+      "owner_workflow": "noos-researcher",
+      "live_probe": {
+        "type": "gha_workflow",
+        "path": ".github/workflows/noos-researcher.yml",
+        "expects": [
+          "workflow_dispatch"
+        ]
+      }
+    },
+    {
+      "trigger_id": "NOOS-T-specialist-dispatch",
+      "system": "noetfeld-os",
+      "kind": "manual",
+      "schedule": null,
+      "target": "Manual specialist workflow_dispatch",
+      "valid_in_verified_window": false,
+      "owner_workflow": "noos-specialist",
+      "live_probe": {
+        "type": "gha_workflow",
+        "path": ".github/workflows/noos-specialist.yml",
+        "expects": [
+          "workflow_dispatch"
+        ]
+      }
+    },
+    {
+      "trigger_id": "NOOS-T-orchestrator-dispatch",
+      "system": "noetfeld-os",
+      "kind": "manual",
+      "schedule": null,
+      "target": "Manual orchestrator workflow_dispatch",
+      "valid_in_verified_window": false,
+      "owner_workflow": "noos-cross-repo-orchestrator",
+      "live_probe": {
+        "type": "gha_workflow",
+        "path": ".github/workflows/noos-cross-repo-orchestrator.yml",
+        "expects": [
+          "workflow_dispatch"
+        ]
+      }
+    },
+    {
+      "trigger_id": "NOOS-T-machine-loops-weekly",
+      "system": "noetfeld-os",
+      "kind": "schedule",
+      "schedule": "0 6 * * 1",
+      "target": "Outside audit + reconcile + autonomy status",
+      "valid_in_verified_window": false,
+      "owner_workflow": "noos-machine-loops",
+      "live_probe": {
+        "type": "gha_schedule",
+        "path": ".github/workflows/noos-machine-loops.yml"
+      },
+      "retired_at": "2026-07-05",
+      "retired_reason": "Phase A \u2014 CF loop motor; GHA schedule removed"
+    },
+    {
+      "trigger_id": "NOOS-T-machine-loops-push",
+      "system": "noetfeld-os",
+      "kind": "event",
+      "schedule": null,
+      "target": "Machine loops verify on main path push",
+      "valid_in_verified_window": true,
+      "owner_workflow": "noos-machine-loops",
+      "live_probe": {
+        "type": "gha_workflow",
+        "path": ".github/workflows/noos-machine-loops.yml",
+        "expects": [
+          "push"
+        ]
+      }
+    },
+    {
+      "trigger_id": "NOOS-T-machine-loops-dispatch",
+      "system": "noetfeld-os",
+      "kind": "manual",
+      "schedule": null,
+      "target": "Manual machine loops workflow_dispatch",
+      "valid_in_verified_window": true,
+      "owner_workflow": "noos-machine-loops",
+      "live_probe": {
+        "type": "gha_workflow",
+        "path": ".github/workflows/noos-machine-loops.yml",
+        "expects": [
+          "workflow_dispatch"
+        ]
+      }
+    },
+    {
+      "trigger_id": "NOOS-T8-stale-lane-pgcron",
+      "system": "noetfeld-os",
+      "kind": "schedule",
+      "schedule": "*/15 * * * *",
+      "target": "Supabase pg_cron stale-lane detector \u2192 noetfield_stale_lane_events + pg_notify spine feed",
+      "valid_in_verified_window": true,
+      "owner_workflow": "pg_cron_t8",
+      "live_probe": {
+        "type": "pg_cron_migration",
+        "path": "infrastructure/supabase/migrations/0015_stale_lane_pgcron_t8.sql"
+      }
+    },
+    {
+      "trigger_id": "NOOS-T-deadman-cf",
+      "system": "noetfeld-os",
+      "kind": "schedule",
+      "schedule": "*/30 * * * *",
+      "target": "CF deadman watches noos_loop_registry staleness",
+      "valid_in_verified_window": true,
+      "owner_workflow": "noos-deadman-v1",
+      "live_probe": {
+        "type": "wrangler_cron",
+        "path": "cloud/workers/noos-deadman-v1/wrangler.toml"
       }
     }
   ]

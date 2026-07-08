@@ -7,7 +7,7 @@ check() {
   local name="$1"
   local url="$2"
   local code
-  code=$(curl -sS -o /dev/null -w '%{http_code}' --max-time 15 "$url" || echo "000")
+  code=$(curl -sSL -o /dev/null -w '%{http_code}' --max-time 15 "$url" || echo "000")
   if [[ "$code" =~ ^2 ]]; then
     echo "OK   $name ($code) $url"
   else
@@ -19,8 +19,24 @@ check() {
 check "www home" "https://www.noetfield.com/"
 check "www gel" "https://www.noetfield.com/gel/"
 check "www ai-value-os" "https://www.noetfield.com/ai-value-governance-os/"
+check "www acg service" "https://www.noetfield.com/services/agentic-cost-governance"
 check "platform health" "https://platform.noetfield.com/health"
-check "gel-api health" "https://api.noetfield.com/health"
-check "gel-api readiness" "https://api.noetfield.com/readiness"
+GEL_HEALTH="${NOOS_GEL_INTERNAL_HEALTH:-https://api.noetfield.com/health}"
+GEL_READY="${NOOS_GEL_INTERNAL_READY:-https://api.noetfield.com/readiness}"
+UA="${NOOS_LOOP_PROBE_USER_AGENT:-Noetfield-OS-Loop/1.0}"
+gel_check() {
+  local name="$1"
+  local url="$2"
+  local code
+  code=$(curl -sSL -o /dev/null -w '%{http_code}' --max-time 15 -A "$UA" "$url" || echo "000")
+  if [[ "$code" =~ ^2 ]]; then
+    echo "OK   $name ($code) $url"
+  else
+    echo "FAIL $name ($code) $url" >&2
+    fail=1
+  fi
+}
+gel_check "gel-api health" "$GEL_HEALTH"
+gel_check "gel-api readiness" "$GEL_READY"
 
 exit "$fail"

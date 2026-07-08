@@ -1,0 +1,218 @@
+{
+  "schema": "noos-autonomy-kernel-v1",
+  "version": "1.0.0",
+  "updated_at": "2026-07-06",
+  "authority": "ADVISOR_1_2026-07-06",
+  "lock_state": "LOCKED_v1",
+  "title": "NOOS Autonomy Kernel v1",
+  "definition": "Closed-loop execution + observation + diagnosis + bounded repair + verification + receipt + ROI gate",
+  "rejected_designs": [
+    "unconstrained_repair_agent",
+    "unconstrained_evolution_agent",
+    "daemon_style_agent_sessions",
+    "infinite_loop_workers",
+    "waiting_process_runtime"
+  ],
+  "required_loop": [
+    "observe",
+    "classify",
+    "decide",
+    "execute_bounded_action",
+    "verify",
+    "write_receipt",
+    "update_state_or_backlog"
+  ],
+  "autonomy_level_target": {
+    "level": "3.5",
+    "label": "self_execute_self_audit_bounded_self_heal_roi_planning_receipt_backed",
+    "capabilities": {
+      "self_execute": true,
+      "self_audit": true,
+      "bounded_self_heal": true,
+      "roi_aware_planning": true,
+      "receipt_backed_operation": true,
+      "full_self_evolution": false
+    },
+    "full_self_evolution_blocked_until": [
+      "stable_state_store",
+      "distributed_locks",
+      "budget_gates",
+      "receipt_chain_integrity",
+      "rollback_paths_proven"
+    ]
+  },
+  "platform_split": {
+    "cloudflare_workers_paid": {
+      "role": "motor_scheduler_dispatcher_light_heartbeat_locks_budget_counters",
+      "forbidden": ["repo_python", "pytest_runtime", "gate_runtime", "infinite_loops"],
+      "workers": {
+        "loop_motor": "noos-loop-fleet-tick-v1",
+        "deadman": "noos-deadman-v1"
+      }
+    },
+    "canonical_executor": {
+      "role": "bounded_repo_runtime_execution_tests_gates_receipts",
+      "service": "noos-loop-runner",
+      "url": "https://noos-loop-runner-production.up.railway.app/health",
+      "plane": "railway:noos-loop-runner",
+      "verify_receipt": "receipts/proof/noos-railway-loop-runner-v1.json",
+      "status": "VERIFIED_GREEN"
+    },
+    "live_temporary_executor": {
+      "app": "noos-loop-executor",
+      "status": "DESTROYED",
+      "teardown_receipt": "receipts/proof/noos-fly-executor-teardown-v1.json",
+      "not": ["fallback", "parked", "canonical", "live"]
+    },
+    "github_actions_pro": {
+      "role": "ci_pr_validation_manual_dispatch_release_deep_audit",
+      "forbidden": ["every_5_minute_runtime_loop_engine"],
+      "allowed_triggers": ["push", "pull_request", "workflow_dispatch", "release", "schedule_deep_audit_only"]
+    },
+    "supabase_kv": {
+      "role": "state_receipts_heartbeat_locks_budget_backlog",
+      "tables": ["noos_loop_registry", "noetfield_truth_log"],
+      "artifacts": [
+        "data/noos-healing-handoff-v1.json",
+        "data/noos-audit-findings-v1.json",
+        "receipts/proof/"
+      ]
+    }
+  },
+  "tick_law": {
+    "one_tick_one_bounded_unit": true,
+    "max_concurrent_ticks_per_executor": 1,
+    "timeout_sec_default": 900
+  },
+  "self_heal_rule": {
+    "allowed_only_when": [
+      "failure_type_classified",
+      "bounded_playbook_matched",
+      "verification_command_defined",
+      "receipt_written",
+      "rollback_path_documented"
+    ],
+    "playbook_sources": [
+      "data/noos-kaizen-recipes-v1.json",
+      "data/noos-motor-restart-recipes-v1.json",
+      "scripts/noos_self_heal_v1.py"
+    ],
+    "safe_failure_types": [
+      "cache_stale",
+      "retry_transient",
+      "config_reset",
+      "dependency_update_within_constraints",
+      "motor_stale",
+      "liveness_never_fired",
+      "cf_motor_auth_mismatch"
+    ],
+    "escalate_not_auto_repair": [
+      "workflow_masking",
+      "trigger_drift",
+      "slo_miss_critical",
+      "security_finding",
+      "integration_broken",
+      "governance_drift",
+      "authority_canon_change"
+    ]
+  },
+  "evolution_rule": {
+    "allowed": [
+      "propose_bounded_patch_through_worker_kernel",
+      "apply_machine_safe_kaizen_with_tests_and_receipt",
+      "widen_machine_safe_recipe_library_with_founder_ratify"
+    ],
+    "forbidden_silent_rewrite": [
+      "authority_canon",
+      "governance_laws",
+      "legal_commercial_claims",
+      "pricing",
+      "production_runtime_policy",
+      "verify_scripts",
+      "noetfield_gate",
+      "agent_policy_without_founder_gate"
+    ],
+    "evolution_entrypoints": [
+      "scripts/noos_worker_kernel_v1.py",
+      "scripts/noos_improve_kaizen_runner_v1.py",
+      "scripts/noos_specialist_v1.py"
+    ],
+    "evolution_gate": "tests_plus_receipt_plus_roi_class_not_silent_merge"
+  },
+  "roi_gate": {
+    "authority": "docs/GOVERNED_AUTORUN_LAWS_v3.md",
+    "law": "L11",
+    "states": ["RUNNING", "IDLE_NO_WORK", "BLOCKED_WITH_REASON", "THROTTLED_ROI"],
+    "registry": "config/model-router.yml"
+  },
+  "kernel_stage_map": {
+    "observe": {
+      "loops": ["workflow_audit", "sourcea_observe", "agent_nerve"],
+      "scripts": ["scripts/noos_workflow_audit_v1.py", "scripts/noos_loop_liveness_v1.py"],
+      "cloud": ["noos-deadman-v1"]
+    },
+    "classify": {
+      "scripts": ["scripts/noos_self_heal_v1.py", "scripts/noos_researcher_v1.py"],
+      "outputs": ["data/noos-audit-findings-v1.json"]
+    },
+    "decide": {
+      "scripts": ["scripts/noos_machine_loops_v1.py", "scripts/noos_motor_restart_v1.py"],
+      "gates": ["machine_safe", "founder_gate", "THROTTLED_ROI"]
+    },
+    "execute_bounded_action": {
+      "primary": "railway:noos-loop-runner POST /loop",
+      "dispatch": "cloudflare:noos-loop-fleet-tick-v1",
+      "runner": "scripts/noos_loop_runner_v1.py",
+      "kernel_sandbox": "scripts/noos_worker_kernel_v1.py"
+    },
+    "verify": {
+      "scripts": [
+        "scripts/verify_noos_loop_executor_fly_v1.py",
+        "scripts/verify_noos_cloud_motor_e2e_v1.sh",
+        "scripts/verify_loop_determinism_external_v1.py"
+      ],
+      "make_targets": ["cloud-motor-e2e", "determinism-verify", "gate"]
+    },
+    "write_receipt": {
+      "dir": "receipts/proof/",
+      "chain": "scripts/noos_receipt_chain_v1.py"
+    },
+    "update_state_or_backlog": {
+      "supabase": ["noos_loop_registry", "noetfield_truth_log"],
+      "json": [
+        "data/noos-healing-handoff-v1.json",
+        "data/noos-unified-upgrade-backlog-v1.json",
+        "data/noos-living-system-baseline-v1.json"
+      ]
+    }
+  },
+  "level_35_status": {
+    "self_execute": {
+      "status": "partial",
+      "evidence": "CF motor → Fly /loop one-tick; cron pending ENABLE_CF_CRON=1"
+    },
+    "self_audit": {
+      "status": "partial",
+      "evidence": "deadman + workflow_audit loop + liveness registry"
+    },
+    "bounded_self_heal": {
+      "status": "partial",
+      "evidence": "kaizen recipes + motor restart + noos_self_heal_v1 safe categories"
+    },
+    "roi_aware_planning": {
+      "status": "partial",
+      "evidence": "L11 model-router + mission registry; backlog ROI not fully automated"
+    },
+    "receipt_backed_operation": {
+      "status": "partial",
+      "evidence": "fly executor receipts + proof dir; chain not universal on all loops"
+    }
+  },
+  "related_docs": [
+    "docs/_NOOS_AGENT/[NOOS-AGENT-20260705-029]_LIVING_SYSTEM_99_PLAN_LOCKED_v1.md",
+    "docs/_NOOS_AGENT/[NOOS-AGENT-20260703-006]_MACHINE_LOOPS_v1.md",
+    "docs/GOVERNED_AUTORUN_LAWS_v3.md",
+    "data/noos-24-7-loops-v1.json",
+    "data/noos-cf-dispatch-table-v1.json"
+  ]
+}

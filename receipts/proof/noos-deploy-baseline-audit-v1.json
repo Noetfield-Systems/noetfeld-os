@@ -1,0 +1,110 @@
+{
+  "schema": "noos-deploy-baseline-audit-v1",
+  "audited_at": "2026-07-05T16:43:56Z",
+  "authority": "NOOS_T2_DEPLOY_ACG_STEP_1",
+  "motor_matrix": {
+    "primary": "cf_loop_fleet",
+    "cf_motor_probe": {
+      "url": "https://noos-loop-fleet-tick-v1.sina-kazemnezhad-ca.workers.dev/health",
+      "ok": true,
+      "status": 200,
+      "server": "cloudflare"
+    },
+    "secondary": "fly_always_on",
+    "fly_live": false,
+    "fly_live_count": 0,
+    "gha_loops": true,
+    "gel_api_railway": true,
+    "www_cloudflare": true
+  },
+  "fly_auth": {
+    "ok": false,
+    "fly_cli": true,
+    "fly_path": "/Users/sinakazemnezhad/.fly/bin/fly",
+    "whoami": "Error: no access token available. Please login with 'flyctl auth login'"
+  },
+  "scaffolds": {
+    "fly_inbox": {
+      "path": "ops/fly/noos-inbox-runner/fly.toml",
+      "exists": true
+    },
+    "fly_self_heal": {
+      "path": "ops/fly/noos-self-heal-runner/fly.toml",
+      "exists": true
+    }
+  },
+  "scopes": {
+    "fly-inbox": {
+      "title": "Fly always-on inbox runner",
+      "upg": "UPG-0201",
+      "health_probe": {
+        "url": "https://noos-inbox-runner.fly.dev/health",
+        "ok": false,
+        "status": null,
+        "error": "<urlopen error [Errno 8] nodename nor servname provided, or not known>"
+      },
+      "ready_probe": {
+        "url": "https://noos-inbox-runner.fly.dev/ready",
+        "ok": false,
+        "status": null,
+        "error": "<urlopen error [Errno 8] nodename nor servname provided, or not known>"
+      },
+      "l4_live": false,
+      "scaffold_only": true
+    },
+    "fly-self-heal": {
+      "title": "Fly always-on self-heal runner",
+      "upg": "UPG-0206",
+      "health_probe": {
+        "url": "https://noos-self-heal-runner.fly.dev/health",
+        "ok": false,
+        "status": null,
+        "error": "<urlopen error [Errno 8] nodename nor servname provided, or not known>"
+      },
+      "ready_probe": {
+        "url": "https://noos-self-heal-runner.fly.dev/ready",
+        "ok": false,
+        "status": null,
+        "error": "<urlopen error [Errno 8] nodename nor servname provided, or not known>"
+      },
+      "l4_live": false,
+      "scaffold_only": true
+    },
+    "gel-api": {
+      "title": "Railway gel-api (status only until UPG-0213)",
+      "upg": "UPG-0171",
+      "health_probe": {
+        "url": "https://api.noetfield.com/health",
+        "ok": true,
+        "status": 200,
+        "server": "railway-hikari"
+      },
+      "ready_probe": {
+        "url": "https://api.noetfield.com/readiness",
+        "ok": true,
+        "status": 200,
+        "server": "railway-hikari"
+      },
+      "l4_live": true,
+      "scaffold_only": false
+    },
+    "www": {
+      "title": "Cloudflare static www",
+      "upg": null,
+      "health_probe": {
+        "url": "https://www.noetfield.com/",
+        "ok": true,
+        "status": 200,
+        "server": "cloudflare"
+      },
+      "ready_probe": {
+        "skipped": true
+      },
+      "l4_live": true,
+      "scaffold_only": false
+    }
+  },
+  "manifest_gap_note": "UPG-0201/0202/0206 marked done on scaffold evidence until Fly L4 probes pass",
+  "ok": true,
+  "report_line": "deploy_baseline \u00b7 fly_l4=0/2 www=True fly_auth=False"
+}

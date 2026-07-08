@@ -1,0 +1,17 @@
+{
+  "schema": "noos-fly-temporary-executor-v1",
+  "at": "2026-07-06T08:25:00Z",
+  "status": "TEMPORARY_NON_CANONICAL_TEARDOWN_SCHEDULED",
+  "app": "noos-loop-executor",
+  "url": "https://noos-loop-executor.fly.dev",
+  "canonical_executor": "railway:noos-loop-runner",
+  "canonical_url": "https://noos-loop-runner-production.up.railway.app",
+  "motor": "cloudflare:noos-loop-fleet-tick-v1",
+  "motor_cron": "enabled",
+  "forbidden": ["fallback", "parked", "second canonical platform"],
+  "teardown_after": "railway_cutover_one_secret_swap",
+  "teardown_receipt_required": "noos-executor-teardown-v1",
+  "no_new_loops_on_fly": true,
+  "panel_note": "Fly keeps ticking until cutover. Availability over doctrine pause.",
+  "report_line": "fly_executor · TEMPORARY · teardown_scheduled · not_fallback"
+}

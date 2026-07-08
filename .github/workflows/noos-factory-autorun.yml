@@ -1,14 +1,8 @@
+# Retired 2026-07-05 — CF cron → Railway (zero GHA minutes).
 name: NOOS factory autorun
 
-# Schedule: GitHub cron */10 UTC on main.
-# Bridge: repository_dispatch type noos_factory_autorun_tick (CF cron → GitHub API).
-# No workflow_dispatch — zero manual Cursor triggers.
 on:
-  schedule:
-    # Explicit UTC minutes — some private repos ignore */10 until re-enabled.
-    - cron: "0,10,20,30,40,50 * * * *"
-  repository_dispatch:
-    types: [noos_factory_autorun_tick]
+  workflow_dispatch:
 
 permissions:
   contents: read

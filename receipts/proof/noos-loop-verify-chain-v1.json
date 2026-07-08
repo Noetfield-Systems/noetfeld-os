@@ -1,0 +1,174 @@
+{
+  "schema": "noos-loop-verify-v1",
+  "backlog_id": "LOOP-VERIFY-chain",
+  "loop_id": "chain",
+  "verified_at": "2026-07-05T16:44:13Z",
+  "verification_state": "VERIFIED",
+  "smoke": {
+    "loop_id": "chain",
+    "event_type": "noos_chain_loop_tick",
+    "exit_code": 0,
+    "ok": true,
+    "cycle": {
+      "schema": "noos-24-7-loop-cycle-v1",
+      "receipt_schema": "autorun-cycle-receipt-v2",
+      "workflow_id": "noos-chain-loop.yml",
+      "mission_id": "M3",
+      "sandbox_id": "noetfeld-os",
+      "lane": "proof",
+      "loop_id": "chain",
+      "event_type": "noos_chain_loop_tick",
+      "domain": "chain-tools",
+      "trigger_source": "repository_dispatch",
+      "cycle_number": 5,
+      "op_key": "abd092d6463fe5de419a675f",
+      "started_at": "2026-07-05T16:44:12+00:00",
+      "state_before": "RUNNING",
+      "cost": {
+        "provider": "github_actions+cloudflare_cron",
+        "model": "none",
+        "tokens_in": 0,
+        "tokens_out": 0,
+        "unit_cost_usd": 0.0,
+        "total_usd": 0.0,
+        "metered_at_call_site": true,
+        "step_count": 2
+      },
+      "value_class": "proof_asset",
+      "sink_invariant": {
+        "law": "sum(origin_counts) == sink_count",
+        "counts": {
+          "steps": 2,
+          "self_heal": 0
+        },
+        "sink_count": 2,
+        "provenance_tags": {
+          "steps": "loop_step",
+          "self_heal": "loop_self_heal"
+        },
+        "verdict": "PASS"
+      },
+      "founder_blocked": {
+        "count": 1,
+        "oldest_id": "NOOS-C-01",
+        "priority": "P0",
+        "age_seconds": 305009,
+        "escalated": true
+      },
+      "evidence": [
+        {
+          "command": "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3 -m noetfield_gate.cli verify --json",
+          "exit_code": 0,
+          "output": "k\": true,\n        \"reason\": \"skipped \\u2014 pass include_pytest=True or use noetfield gate --pytest\",\n        \"skipped\": true\n      },\n      {\n        \"id\": \"G7\",\n        \"name\": \"product_truth_phase\",\n        \"ok\": true,\n        \"reason\": \"PRODUCT_TRUTH phase 4 vs manifest 4\",\n        \"truth_phase\": 4,\n        \"manifest_phase\": 4\n      }\n    ],\n    \"block_reasons\": []\n  },\n  \"block_reasons\": []\n}"
+        },
+        {
+          "command": "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3 -m noetfield_gate.cli decide --file fixtures/demo_intents/approve.json --validate-only",
+          "exit_code": 0,
+          "output": " \"ok\": true,\n  \"schema\": \"decision-request-v1\",\n  \"path\": \"fixtures/demo_intents/approve.json\",\n  \"applicant_id\": \"gate-demo-001\",\n  \"fields\": [\n    \"applicant_id\",\n    \"credit_score\",\n    \"monthly_debt\",\n    \"monthly_income\",\n    \"loan_amount\",\n    \"collateral_value\",\n    \"employment_history_years\",\n    \"liquid_reserves_months\",\n    \"request_id\",\n    \"correlation_id\",\n    \"rule_set_version\"\n  ]\n}"
+        }
+      ],
+      "runner_output": {
+        "steps": [
+          {
+            "cmd": [
+              "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+              "-m",
+              "noetfield_gate.cli",
+              "verify",
+              "--json"
+            ],
+            "ok": true,
+            "exit_code": 0,
+            "stdout_tail": "alid\",\n        \"ok\": true,\n        \"reason\": \"policy JSON valid\",\n        \"rule_set_id\": \"noetfeld-credit-v1\",\n        \"rule_set_version\": \"1.0.0\"\n      },\n      {\n        \"id\": \"G3\",\n        \"name\": \"database_writable\",\n        \"ok\": true,\n        \"reason\": \"sqlite ok (noetfeld.db)\"\n      },\n      {\n        \"id\": \"G4\",\n        \"name\": \"api_readiness\",\n        \"ok\": true,\n        \"reason\": \"skipped \\u2014 set NOETFIELD_API_URL or --api-url to probe remote runtime\",\n        \"skipped\": true\n      },\n      {\n        \"id\": \"G5\",\n        \"name\": \"policy_registry\",\n        \"ok\": true,\n        \"reason\": \"PolicyRegistry loaded\",\n        \"combined_hash\": \"6ed3dd7180db65bdfce6ab99a9a7ee98334f49aa7a5944fd8a1683d099e95fde\"\n      },\n      {\n        \"id\": \"G6\",\n        \"name\": \"pytest_suite\",\n        \"ok\": true,\n        \"reason\": \"skipped \\u2014 pass include_pytest=True or use noetfield gate --pytest\",\n        \"skipped\": true\n      },\n      {\n        \"id\": \"G7\",\n        \"name\": \"product_truth_phase\",\n        \"ok\": true,\n        \"reason\": \"PRODUCT_TRUTH phase 4 vs manifest 4\",\n        \"truth_phase\": 4,\n        \"manifest_phase\": 4\n      }\n    ],\n    \"block_reasons\": []\n  },\n  \"block_reasons\": []\n}",
+            "stderr_tail": "",
+            "continued_on_error": false,
+            "name": "verify"
+          },
+          {
+            "cmd": [
+              "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+              "-m",
+              "noetfield_gate.cli",
+              "decide",
+              "--file",
+              "fixtures/demo_intents/approve.json",
+              "--validate-only"
+            ],
+            "ok": true,
+            "exit_code": 0,
+            "stdout_tail": "{\n  \"ok\": true,\n  \"schema\": \"decision-request-v1\",\n  \"path\": \"fixtures/demo_intents/approve.json\",\n  \"applicant_id\": \"gate-demo-001\",\n  \"fields\": [\n    \"applicant_id\",\n    \"credit_score\",\n    \"monthly_debt\",\n    \"monthly_income\",\n    \"loan_amount\",\n    \"collateral_value\",\n    \"employment_history_years\",\n    \"liquid_reserves_months\",\n    \"request_id\",\n    \"correlation_id\",\n    \"rule_set_version\"\n  ]\n}",
+            "stderr_tail": "",
+            "continued_on_error": false,
+            "name": "decide_validate"
+          }
+        ],
+        "self_heal": [],
+        "cloud_meta": {
+          "processor": "noos_loop_runner_v1",
+          "github_event": "repository_dispatch",
+          "github_run_id": "local-smoke",
+          "github_workflow": "noos-chain-loop.yml",
+          "dispatch_source": "cf-cron",
+          "processed_at": "2026-07-05T16:44:13+00:00"
+        },
+        "cloud_trigger": "repository_dispatch"
+      },
+      "guardrails": {
+        "lane": "proof",
+        "read_only_control": false
+      },
+      "supabase_sink": {
+        "ok": true,
+        "exit_code": 0,
+        "detail": {
+          "ok": true,
+          "id": "44658cba-9296-4668-b281-efc3c8f82b68",
+          "status": 201,
+          "op_key": "abd092d6463fe5de419a675f"
+        }
+      },
+      "finished_at": "2026-07-05T16:44:13+00:00",
+      "state_after": "COMPLETE",
+      "status": "ok",
+      "exit_code": 0,
+      "blocker_reason": null,
+      "next_action": "await_next_scheduled_tick",
+      "d4": {
+        "execute_ok": true,
+        "validate_ok": true,
+        "sink_acked": true
+      },
+      "d2": {
+        "cas": {
+          "verdict": "ACCEPTED",
+          "expected": 4,
+          "observed": 4,
+          "new_value": 5
+        }
+      },
+      "transition_log_tail": [
+        {
+          "from": "RUNNING",
+          "to": "COMPLETE",
+          "at": "2026-07-05T16:44:13+00:00",
+          "cycle": 5,
+          "op_key": "abd092d6463fe5de419a675f"
+        }
+      ]
+    },
+    "stderr": null
+  },
+  "rolling_evaluation": {
+    "loop_id": "chain",
+    "factory_id": "loop-chain",
+    "cycle_count": 4,
+    "invalid_trigger_count": 0,
+    "latest_status": "ok",
+    "ready": true,
+    "blockers": [],
+    "lookback_hours": 24,
+    "lookback_started_at": "2026-07-04T16:44:13Z"
+  },
+  "ok": true,
+  "autonomous_triggers": true
+}

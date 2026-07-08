@@ -1,0 +1,52 @@
+---
+description: Cursor Local Mac T2 operator law — integrator claims, parallel agent dedup, lane closeout
+alwaysApply: true
+---
+
+# Cursor Local Mac (T2)
+
+Surface: **T2 local operator** per `noetfield-org/ROUTING_MATRIX.md` and `data/noos-parallel-agent-registry-v1.json`.
+
+## Session boot (before scoped implementation)
+
+```bash
+make local-boot
+# or one-shot lane open:
+make local-lane TASK=NOOS-LANE-<id> SCOPE=path1,path2
+```
+
+## Parallel laws (L-P1–L-P7)
+
+- **L-P4 Delegate:** Do not re-run trigger sweep, curl smoke, autorun_status, or determinism gates if GHA or a T3 Cursor Automation owns that territory (`delegates_machine_to` in the parallel registry).
+- **L-P5 Claim:** Before mutating shared paths, claim the lane:
+
+```bash
+bash scripts/noos_local_claim_lane_v1.sh NOOS-LANE-<id> <scope-file>...
+```
+
+- **L-P6 Kernel:** `scripts/noos_worker_kernel_v1.py` routes one-shot tasks only; it does not schedule loops or replace automations.
+- **Lane cap:** Max 20–40 files per pass; one atomic commit per coherent lane.
+
+## Direct edit vs kernel sandbox
+
+- **Direct chat edit:** ≤5 files and ≤200 lines changed.
+- **Larger or risky kaizen:** route through worker kernel T2:
+
+```bash
+make local-patch-proposal PAYLOAD_FILE=proposal.json
+# or: make local-patch-proposal PATHS=scripts/foo.py,tests/test_foo.py
+```
+
+Patches land under `.noos-runtime/worker-kernel/patches/` only. Forbidden: `scripts/verify_*`, `noetfield_gate/`, registries, laws docs (see `data/noos-worker-kernel-role-v1.json`).
+
+## Closeout (after lane work)
+
+```bash
+make local-closeout TASK=NOOS-LANE-<id>
+```
+
+Long lanes: `make local-heartbeat TASK=NOOS-LANE-<id>` before the 30m stale threshold.
+
+Integrator: `complete` or `release` if handing off. Never leave stale claims.
+
+**Pre-edit reminder:** `.cursor/hooks/noos-claim-reminder.sh` warns (fail-open) if no claim covers the edited path.

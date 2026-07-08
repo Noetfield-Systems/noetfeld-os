@@ -3,6 +3,9 @@
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+# shellcheck disable=SC1091
+source "$ROOT/scripts/noos_load_noetfield_env_v1.sh"
+noos_load_noetfield_env
 WORKER_DIR="$ROOT/cloud/workers/noos-factory-autorun-tick-v1"
 REPO="${GITHUB_REPO:-Noetfield-Systems/noetfeld-os}"
 
@@ -29,9 +32,13 @@ if [[ -z "$GITHUB_TOKEN_VAL" ]]; then
 fi
 
 cd "$WORKER_DIR"
-printf '%s' "$GITHUB_TOKEN_VAL" | wrangler secret put GITHUB_TOKEN
-printf '%s' "$REPO" | wrangler secret put GITHUB_REPO
-wrangler deploy
+if [[ -n "${GITHUB_ACTIONS:-}" && "${NOOS_WRANGLER_SKIP_SECRET_PUT:-1}" != "0" ]]; then
+  wrangler deploy
+else
+  printf '%s' "$GITHUB_TOKEN_VAL" | wrangler secret put GITHUB_TOKEN
+  printf '%s' "$REPO" | wrangler secret put GITHUB_REPO
+  wrangler deploy
+fi
 
 echo "OK deployed noos-factory-autorun-tick-v1 cron */10 → repository_dispatch ($REPO)"
 echo "Health: curl -fsS https://noos-factory-autorun-tick-v1.sina-kazemnezhad-ca.workers.dev/health"

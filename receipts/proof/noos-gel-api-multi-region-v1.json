@@ -1,0 +1,19 @@
+{
+  "schema": "noos-gel-api-multi-region-v1",
+  "at": "2026-07-07T16:11:26Z",
+  "ok": false,
+  "regions": {
+    "yyz": {
+      "ok": true,
+      "status": 200,
+      "url": "https://api.noetfield.com/health"
+    },
+    "ord": {
+      "ok": false,
+      "url": "https://gel-api-ord.noetfield.com/health",
+      "error": "<urlopen error [Errno 8] nodename nor servname provided, or not known>"
+    }
+  },
+  "backlog_id": "UPG-0209",
+  "note": "ord URL is canary target; configure DNS when region live"
+}

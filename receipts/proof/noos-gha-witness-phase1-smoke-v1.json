@@ -1,0 +1,31 @@
+{
+  "schema": "noos-gha-witness-phase1-smoke-v1",
+  "at": "2026-07-08T00:00:00Z",
+  "ok": true,
+  "closure_token": "NOOS_GHA_WITNESS_PHASE1: green",
+  "lane": "ICL-P2-06",
+  "command": "bash scripts/noos_gha_witness_phase1_smoke_v1.sh",
+  "runs": [
+    {
+      "workflow": "noos-integrator-daily-witness.yml",
+      "run_id": 28906973041,
+      "result": "success"
+    },
+    {
+      "workflow": "noos-autorun-witness.yml",
+      "run_id": 28906974145,
+      "result": "success"
+    },
+    {
+      "workflow": "noos-motor-sustain-witness.yml",
+      "run_id": 28906975168,
+      "result": "success"
+    }
+  ],
+  "schedules_enabled_utc": {
+    "noos-integrator-daily-witness.yml": "0 7,13,19 * * *",
+    "noos-autorun-witness.yml": "*/30 * * * *",
+    "noos-motor-sustain-witness.yml": "15 */2 * * *"
+  },
+  "commits": ["1378d7e", "b0dc5b6", "6f7c719"]
+}

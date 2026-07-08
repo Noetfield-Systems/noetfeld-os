@@ -1,8 +1,12 @@
 name: NOOS schedule canary
 
+# Manual-only diagnostic. Scheduled canary removed 2026-07-05 (duplicate CF/factory crons caused GHA spend).
 on:
-  schedule:
-    - cron: "0,10,20,30,40,50 * * * *"
+  workflow_dispatch:
+
+concurrency:
+  group: noos-schedule-canary-${{ github.ref }}
+  cancel-in-progress: false
 
 permissions:
   contents: read

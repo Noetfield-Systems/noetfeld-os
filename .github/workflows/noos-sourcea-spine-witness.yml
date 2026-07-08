@@ -1,0 +1,47 @@
+# NOOS GHA ecosystem witness — read-only SourceA portfolio-spine freshness (no reconciler).
+# Keys: PORTFOLIO_SPINE_* only — never alias generic SUPABASE_* (no cross-workflow bleed).
+name: NOOS SourceA spine witness
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "25 */2 * * *"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: noos-sourcea-spine-witness-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  witness:
+    name: Portfolio-spine read-only probe
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      NOOS_GHA_WITNESS: "1"
+      GITHUB_RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+      PORTFOLIO_SPINE_SUPABASE_URL: ${{ secrets.PORTFOLIO_SPINE_SUPABASE_URL }}
+      PORTFOLIO_SPINE_SERVICE_ROLE_KEY: ${{ secrets.PORTFOLIO_SPINE_SERVICE_ROLE_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: SourceA spine witness (read-only)
+        run: |
+          set -euo pipefail
+          mkdir -p receipts/proof
+          python3 scripts/noos_sourcea_spine_witness_v1.py --write-receipt --json
+
+      - name: Upload SourceA spine witness receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: noos-sourcea-spine-witness-v1
+          path: receipts/proof/noos-sourcea-spine-witness-v1.json
+          retention-days: 30
+          if-no-files-found: warn

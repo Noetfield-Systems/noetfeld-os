@@ -1,0 +1,25 @@
+# Retired 2026-07-06 — CF loop motor dispatches noos_improve_kaizen_daily_tick (zero GHA minutes).
+name: NOOS improve kaizen daily
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: noos-improve-kaizen-daily
+  cancel-in-progress: false
+
+jobs:
+  kaizen:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements.txt && pip install -e .
+      - name: Run kaizen daily loop
+        run: python3 scripts/noos_loop_runner_v1.py --event-type noos_improve_kaizen_daily_tick --json

@@ -1,0 +1,34 @@
+{
+  "schema": "noos-dispatch-template-v1",
+  "template_id": "research-memo-v1",
+  "version": "1.0.0",
+  "canon_version": "FOUNDER_CANON_v1+MACHINE_LOOPS_v1",
+  "laws": "FOUNDER_CANON v1 + governed-autorun v3. Violations = BLOCKED_WITH_REASON.",
+  "loop": "deep_research",
+  "trigger_sources": [
+    "BLOCKED_WITH_REASON_uncertainty",
+    "critic_UNCERTAIN",
+    "repair_double_failure",
+    "audit_anomaly"
+  ],
+  "fresh_context_rule": "R1",
+  "inputs": {
+    "question": "{{question}}",
+    "source_receipt": "{{source_receipt}}",
+    "confidence_threshold": 0.75
+  },
+  "memo_fields": [
+    "question",
+    "findings",
+    "sources",
+    "options",
+    "recommendation",
+    "confidence",
+    "blast_radius_class"
+  ],
+  "routing": {
+    "high_confidence_low_blast": "machine_apply_with_memo_attached",
+    "otherwise": "founder_gated_with_memo_attached"
+  },
+  "receipt_schema": "noos-research-memo-v1"
+}

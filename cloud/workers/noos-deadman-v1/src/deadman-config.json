@@ -1,0 +1,49 @@
+{
+  "schema": "noos-deadman-config-v1",
+  "version": "1.0.0",
+  "cron": "*/30 * * * *",
+  "interval_multipliers": {
+    "default": 2
+  },
+  "alert_channels": ["telegram"],
+  "telegram_lane": {
+    "one_law": "NOOS deadman ONLY. Never Gateway_A, NF Probe Bot, Signal Factory, or generic TELEGRAM_* env.",
+    "secret_names_only": ["DEADMAN_TELEGRAM_BOT_TOKEN", "DEADMAN_TELEGRAM_CHAT_ID"],
+    "forbidden_bot_usernames": [
+      "Gateway_A",
+      "gateway_a",
+      "NFProbeBot",
+      "nf_probe_bot",
+      "NoetfieldOpsBot"
+    ],
+    "allowed_bot_username": "",
+    "send_alerts": false,
+    "probe_suppress_telegram": true,
+    "founder_test_query_param": "telegram=1"
+  },
+  "restart_attempts_max": 1,
+  "loop_runner": {
+    "health_path": "/health",
+    "loop_path": "/loop",
+    "motor_restart_path": "/motor-restart"
+  },
+  "cf_loop_motor": {
+    "health_url": "https://noos-loop-fleet-tick-v1.sina-kazemnezhad-ca.workers.dev/health",
+    "restart_recipe_id": "cf-loop-motor"
+  },
+  "motor_restart_recipes_path": "data/noos-motor-restart-recipes-v1.json",
+  "heartbeat_summary_hours_utc": [6, 12, 18, 0],
+  "supabase": {
+    "registry_table": "noos_loop_registry",
+    "receipts_table": "noos_deadman_runs"
+  },
+  "cf_worker": "noos-deadman-v1",
+  "health_url": "https://noos-deadman-v1.sina-kazemnezhad-ca.workers.dev/health",
+  "check_url": "https://noos-deadman-v1.sina-kazemnezhad-ca.workers.dev/check",
+  "cf_workers_paid": {
+    "active": true,
+    "plan_usd_month": 5,
+    "confirmed_at": "2026-07-06"
+  },
+  "external_monitors_registry": "data/noos-external-monitors-v1.json"
+}

@@ -1,0 +1,22 @@
+{
+  "schema": "noos-executor-teardown-v1",
+  "at": "2026-07-06T09:08:00Z",
+  "ok": true,
+  "app": "noos-loop-executor",
+  "url_destroyed": "https://noos-loop-executor.fly.dev",
+  "fly_health_http_after_destroy": "000",
+  "action": "fly apps destroy noos-loop-executor --yes",
+  "canonical_executor": "railway:noos-loop-runner",
+  "canonical_url": "https://noos-loop-runner-production.up.railway.app",
+  "cutover_receipt": "receipts/proof/noos-cf-railway-cutover-v1.json",
+  "secrets_revoked_note": "Fly app destroyed; platform secrets removed with app. CF worker uses FLY_LOOP_EXECUTOR_URL name pointing at Railway only.",
+  "not_parked_not_fallback": true,
+  "post_teardown_verify": {
+    "fly_app_absent": true,
+    "railway_health_ok": true,
+    "cf_tick_ok": true,
+    "cf_execution_plane": "railway:noos-loop-runner",
+    "cf_tick_http": 200
+  },
+  "report_line": "fly_executor_teardown · app=destroyed · canonical=railway:noos-loop-runner · cf_tick=ok"
+}

@@ -1,0 +1,35 @@
+{
+  "schema": "noos-sourcea-proof-receipts-repair-v1",
+  "at": "2026-07-07T08:52:06Z",
+  "ok": true,
+  "receipts": [
+    {
+      "workflow": "sourcea_buyer_proof_verify",
+      "write": {
+        "ok": true,
+        "schema": "truth-layer-receipt-write-v1",
+        "at": "2026-07-07T08:52:08Z",
+        "verdict": "GREEN",
+        "contract_complete": true,
+        "receipt_row_id": "600f577b-8ae6-4b2c-8818-a24fbffde522",
+        "execution_id": "buyer-proof-hotfix-verify-v1-repair",
+        "cycle_id": "cycle-buyer-proof-repair-2026-07-07T08:52:06Z",
+        "supabase_status": 201
+      }
+    },
+    {
+      "workflow": "sourcea_recipe_queue_builder",
+      "write": {
+        "ok": true,
+        "schema": "truth-layer-receipt-write-v1",
+        "at": "2026-07-07T08:52:09Z",
+        "verdict": "GREEN",
+        "contract_complete": true,
+        "receipt_row_id": "ba51ed4a-cf8d-4b21-8b7b-d46964523dab",
+        "execution_id": "client-proof-recipe-queue-v1-repair",
+        "cycle_id": "cycle-recipe-queue-repair-2026-07-07T08:52:06Z",
+        "supabase_status": 201
+      }
+    }
+  ]
+}

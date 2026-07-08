@@ -1,0 +1,37 @@
+{
+  "schema": "improvement-receipt-v2",
+  "class": "machine_safe",
+  "source": "failed_check",
+  "diff_summary": "autorun-status SLO miss for noos_worker_inbox: score 65.0 < 80",
+  "expected_effect": "Restore freshness, success rate, and latency SLO compliance for the loop",
+  "expected_roi": {
+    "cost_saved_usd": 0,
+    "risk_reduced": "workflow heartbeat drift / SLO miss",
+    "revenue_unblocked": "",
+    "build_cost_usd": 0
+  },
+  "rollback_command": "revert the SLO target change or fix the underlying loop/runtime issue",
+  "external_verify_before": "",
+  "external_verify_after": "",
+  "auto_rolled_back": false,
+  "source_ref": "autorun-status",
+  "loop_id": "noos_worker_inbox",
+  "score": {
+    "score": 65.0,
+    "misses": [
+      "freshness_missing",
+      "latency_missing"
+    ],
+    "ok": false
+  },
+  "evidence": {
+    "title": "Noetfield worker inbox",
+    "plane": "NOETFELD-OS",
+    "status": "IDLE_NO_WORK",
+    "observed_at": null,
+    "freshness_minutes": null,
+    "success_rate": 1.0,
+    "latency_minutes": null
+  },
+  "generated_at": "2026-07-03T10:17:12Z"
+}

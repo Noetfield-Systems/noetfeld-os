@@ -13,6 +13,8 @@ This registry defines the core repos participating in the org sync plane. It is 
 | TrustField-Technologies | `Noetfield-Systems/TrustField-Technologies` | peer delivery plane | `.noetfield/agent_manifest.yml`, `.github/copilot-instructions.md` |
 | noetfeld-os | `Noetfield-Systems/noetfeld-os` | GEL runtime + control process | `.noetfield/agent_manifest.yml`, `.github/copilot-instructions.md` |
 | sina-governance-SSOT | `kazemnezhadsina144[-]dot/sina-governance-SSOT` | governance registry / SSOT lane | `.noetfield/agent_manifest.yml`, `.github/copilot-instructions.md` |
+
+**NOOS Copilot dispatcher record**: `data/noos-copilot-dispatcher-mode-v1.json` (registered via data/package_map.json key `noos-copilot-dispatcher-mode`). See `docs/NOOS_COPILOT_DISPATCHER_AUTHORITY.md` for authority model and enforcement notes.
 | Noetfield | `Noetfield-Systems/Noetfield` | public brand + commercial surface | `.noetfield/agent_manifest.yml`, `.github/copilot-instructions.md` |
 
 ## Slug migration law

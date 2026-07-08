@@ -1,0 +1,18 @@
+{
+  "schema": "noos-inbox-scaler-v1",
+  "evaluated_at": "2026-07-05T15:52:16Z",
+  "pending": 11,
+  "threshold": 10,
+  "should_scale": true,
+  "action": "scale_fly_machines",
+  "scale_from": 1,
+  "scale_to": 2,
+  "roi_class": "THROTTLED_ROI",
+  "depth_probe": {
+    "pending": 0,
+    "source": "reenqueue_blocked_probe",
+    "ok": true
+  },
+  "ok": true,
+  "report_line": "inbox_scaler \u00b7 pending=11 scale=True"
+}

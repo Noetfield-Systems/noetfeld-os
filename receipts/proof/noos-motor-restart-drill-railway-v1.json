@@ -1,0 +1,29 @@
+{
+  "schema": "noos-motor-restart-drill-railway-v1",
+  "authority": "UPG-LS-05",
+  "drill_at": "2026-07-06T09:40:00Z",
+  "scenario": "railway_era_motor_restart_path_verification",
+  "execution_plane": "railway:noos-loop-runner",
+  "steps": [
+    "motor_status dry-run: cf-loop-motor, cf-deadman, railway-loop-runner all ok",
+    "deadman probes loop_runner_health on Railway /health (200, service=noos-loop-runner)",
+    "deadman on loop_runner fail POSTs railway-loop-runner recipe (machine_safe, not fly-loop-executor)",
+    "fly-loop-executor recipe founder_gated + status destroyed — fail-closed",
+    "cloud-motor-e2e confirms CF execution_plane=railway and tick HTTP 200"
+  ],
+  "evidence": {
+    "motor_restart_recipes": "data/noos-motor-restart-recipes-v1.json",
+    "deadman_worker": "cloud/workers/noos-deadman-v1/src/index.js",
+    "railway_verify_receipt": "receipts/proof/noos-railway-loop-runner-v1.json",
+    "cf_railway_cutover_receipt": "receipts/proof/noos-cf-railway-cutover-v1.json",
+    "e2e_script": "scripts/verify_noos_cloud_motor_e2e_v1.sh"
+  },
+  "dry_run_verified": true,
+  "live_drill_note": "Full kill-and-recover drill deferred to founder ratification; Railway path wiring verified via dry-run + live health probes",
+  "founder_sign": {
+    "required": true,
+    "status": "pending",
+    "note": "One-time ratification after live kill-recover drill optional"
+  },
+  "ok": true
+}

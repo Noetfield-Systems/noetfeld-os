@@ -1,0 +1,72 @@
+{
+  "schema": "noos-receipt-chain-repair-v1",
+  "version": "1.0.0",
+  "at": "2026-07-07T08:52:56Z",
+  "action": "append_corrective_receipt",
+  "historical_rewrite": false,
+  "broken_full_chain": [
+    {
+      "index": 2,
+      "reason": "chain_hash_mismatch",
+      "schema": "noos-outside-audit-receipt-v1"
+    },
+    {
+      "index": 4,
+      "reason": "chain_hash_mismatch",
+      "schema": "noos-outside-audit-receipt-v1"
+    },
+    {
+      "index": 5,
+      "reason": "chain_hash_mismatch",
+      "schema": "noos-outside-audit-receipt-v1"
+    },
+    {
+      "index": 6,
+      "reason": "chain_hash_mismatch",
+      "schema": "noos-outside-audit-receipt-v1"
+    },
+    {
+      "index": 7,
+      "reason": "chain_hash_mismatch",
+      "schema": "noos-outside-audit-receipt-v1"
+    },
+    {
+      "index": 8,
+      "reason": "chain_hash_mismatch",
+      "schema": "noos-outside-audit-receipt-v1"
+    },
+    {
+      "index": 9,
+      "reason": "chain_hash_mismatch",
+      "schema": "noos-outside-audit-receipt-v1"
+    },
+    {
+      "index": 10,
+      "reason": "chain_hash_mismatch",
+      "schema": "noos-outside-audit-receipt-v1"
+    },
+    {
+      "index": 11,
+      "reason": "chain_hash_mismatch",
+      "schema": "noos-outside-audit-receipt-v1"
+    },
+    {
+      "index": 12,
+      "reason": "chain_hash_mismatch",
+      "schema": "noos-outside-audit-receipt-v1"
+    }
+  ],
+  "full_chain_ok": false,
+  "operational_chain_ok": true,
+  "operational_chain": {
+    "chained_count": null,
+    "excluded_count": 47,
+    "excluded_schemas": [
+      "noos-outside-audit-receipt-v1"
+    ]
+  },
+  "law": "Outside-audit receipts excluded from operational chain; forward seals unchanged.",
+  "ok": true,
+  "prev_chain_hash": null,
+  "chain_hash": "73141f5feba126e03afc100f523c85c83b3716b66b74f776c047f41faa561079"
+}

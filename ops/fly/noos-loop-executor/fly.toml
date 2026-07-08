@@ -1,0 +1,24 @@
+# Option B — Fly HTTP loop executor (one request → one tick; no cron/daemon)
+app = "noos-loop-executor"
+primary_region = "yyz"
+
+[build]
+  dockerfile = "Dockerfile"
+  ignorefile = "../../../.dockerignore"
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = "off"
+  auto_start_machines = true
+  min_machines_running = 1
+
+  [[http_service.checks]]
+    grace_period = "30s"
+    interval = "30s"
+    method = "GET"
+    path = "/health"
+    timeout = "5s"
+
+[env]
+  NOOS_LOOP_DEFAULT_EVENT = "noos_orchestrator_cross_repo_tick"

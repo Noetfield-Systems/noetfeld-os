@@ -1,0 +1,31 @@
+{
+  "schema": "noos-next-plan-unified-v1",
+  "version": "1.0.0",
+  "authority": "NOOS-AGENT-20260706-033",
+  "locked_at": "2026-07-06T10:30:00Z",
+  "plan_doc": "docs/_NOOS_AGENT/[NOOS-AGENT-20260706-033]_UNIFIED_NEXT_PLAN_NOOS_NOETFIELD_v1.md",
+  "tracks": {
+    "noos": {
+      "theme": "Living System Phase E-G — 48h autonomy proof",
+      "current_phase": "E",
+      "execution_plane": "railway:noos-loop-runner",
+      "open_pr": 30,
+      "steps": ["A1-merge-pr30", "A2-founder-t0", "A3-machine-48h", "A4-stale-zero", "A5-verify-48h", "A6-loop-verify", "A7-retro", "A8-closeout", "A9-autonomous-mode", "A10-branch-retire"]
+    },
+    "noetfield": {
+      "theme": "Public surface audit + Phase F commercial",
+      "current_phase": "F-prep",
+      "acg_lane": "PUBLIC_PAGE_LIVE + PROSPECT_PACKET_READY",
+      "steps": ["B1-audit-lock", "B2-route-matrix", "B3-cta-journey", "B4-trust-audit", "B5-p0-fixes", "B6-nw1-send", "B7-lane-update", "B8-outbound-queue", "B9-weekly-digest", "B10-defer-deep-research"]
+    }
+  },
+  "upgrade_ids": {
+    "UPG-LS-09": { "track": "noos", "gate": "founder" },
+    "UPG-LS-10": { "track": "noos", "gate": "founder" },
+    "UPG-NF-PUB-01": { "track": "noetfield", "gate": "machine_safe" },
+    "UPG-NF-PUB-02": { "track": "noetfield", "gate": "machine_safe" },
+    "UPG-0001": { "track": "noetfield", "gate": "founder_gated" }
+  },
+  "parallelism": "Track A and Track B run concurrently; neither blocks the other",
+  "forbidden": ["fly-loop-executor-redeploy", "cf-cron-disable", "deadman-telegram-auto-enable", "pass-cosmetics-48h"]
+}

@@ -1,0 +1,232 @@
+{
+  "schema": "noos-trustfield-parallel-layers-v1",
+  "version": "1.0.0",
+  "updated_at": "2026-07-07",
+  "authority": "NOOS-AGENT-20260707-007",
+  "one_law": "NOOS coordinates eleven TrustField layers — observe, enqueue, receipt. TrustField CF+Railway motors execute. One exclusive writer per state cell.",
+  "studio_ide_model": {
+    "phases": ["observe", "audit", "plan", "roi", "critic", "research", "sandbox_execute", "self_heal", "www_upgrade", "partner_commercial", "closeout"],
+    "sandbox_planes": ["cloudflare_worker", "railway_plan_worker", "git_worktree", "trustfield_loops_intake"],
+    "receipt_sink": "trustfield_loop_registry",
+    "receipt_chain": "trustfield_loop_receipts",
+    "noos_role": "control_layer_observe_and_handoff_only",
+    "trustfield_repo": "Noetfield-Systems/TrustField-Technologies",
+    "manifest_ssot": "os/trustfield_cloud_loop_v1.json"
+  },
+  "governed_autorun": {
+    "laws": "L1-L13",
+    "roi_gate": "L11",
+    "determinism": "L13 D1-D8",
+    "idle_state": "IDLE_NO_WORK",
+    "founder_lane": "founder_blocked never occupies motor slot"
+  },
+  "execution_planes": {
+    "primary": "cloudflare_workers_cron",
+    "secondary": "railway_plan_worker",
+    "witness": "github_actions_artifact_only",
+    "local_sandbox": "git_worktree_T2_bounded"
+  },
+  "layers": [
+    {
+      "id": "TF-L01",
+      "name": "observe_nerve",
+      "studio_phase": "inventory",
+      "value_class": "hygiene",
+      "tier": "T0",
+      "description": "Registry read, deadman stale law, partner-access prod probes — read-only nerve.",
+      "owner": "noos_integrator",
+      "motor": {
+        "noos": "scripts/observe_trustfield_loop_registry_v1.py",
+        "trustfield": "scripts/monitor_partner_access_health_v1.py"
+      },
+      "cf_loop_id": "tf_cf_deadman_v1",
+      "slo_minutes": 20,
+      "sandbox": "none_read_only"
+    },
+    {
+      "id": "TF-L02",
+      "name": "audit_adversarial",
+      "studio_phase": "risk",
+      "value_class": "risk_reduction",
+      "tier": "T0",
+      "description": "Workflow audit, agent-read staleness, positioning guard witness — adversarial pass.",
+      "owner": "trustfield_worker",
+      "motor": {
+        "railway_lane": "critic_circle",
+        "trustfield": "scripts/verify_positioning_ci.sh",
+        "state": "data/trustfield_agent_read_staleness_alarm_v1.json"
+      },
+      "cf_loop_id": "tf_cf_lane_critic_circle_v1",
+      "slo_minutes": 10,
+      "sandbox": "cloud_verify_only"
+    },
+    {
+      "id": "TF-L03",
+      "name": "plan_matrix",
+      "studio_phase": "scope",
+      "value_class": "revenue_path",
+      "tier": "T1",
+      "description": "ROI-ranked plan row selection — one bounded upgrade row per cycle.",
+      "owner": "trustfield_worker",
+      "motor": {
+        "railway_lane": "plan_matrix",
+        "trustfield": "scripts/run_trustfield_plan_matrix.py"
+      },
+      "cf_loop_id": "tf_cf_lane_plan_matrix_v1",
+      "slo_minutes": 10,
+      "sandbox": "cloud_queue"
+    },
+    {
+      "id": "TF-L04",
+      "name": "roi_intelligence",
+      "studio_phase": "evidence",
+      "value_class": "hygiene",
+      "tier": "T1",
+      "description": "Cost-per-COMPLETE, value_class rollup, THROTTLED_ROI — spend earns its keep.",
+      "owner": "trustfield_worker",
+      "motor": {
+        "railway_lane": "autorun_stack",
+        "trustfield": "scripts/verify_trustfield_autorun_w1_preview.py",
+        "sink": "trustfield_verify_recipe_runs"
+      },
+      "cf_loop_id": "tf_cf_recipe_railway_plan_worker_v1",
+      "slo_minutes": 30,
+      "sandbox": "cloud_metering"
+    },
+    {
+      "id": "TF-L05",
+      "name": "critic_circle",
+      "studio_phase": "negative",
+      "value_class": "risk_reduction",
+      "tier": "T0",
+      "description": "Prod drift, hero URL, deploy-truth — fail-closed commercial integrity.",
+      "owner": "trustfield_worker",
+      "motor": {
+        "railway_lane": "critic_circle",
+        "trustfield": "scripts/verify_prod_drift.sh"
+      },
+      "cf_loop_id": "tf_cf_lane_critic_circle_v1",
+      "slo_minutes": 10,
+      "sandbox": "cloud_verify_only"
+    },
+    {
+      "id": "TF-L06",
+      "name": "deep_research",
+      "studio_phase": "read",
+      "value_class": "proof_asset",
+      "tier": "T2",
+      "description": "System readiness engine — structured research without live send.",
+      "owner": "trustfield_worker",
+      "motor": {
+        "railway_lane": "deep_research",
+        "trustfield": "scripts/system_readiness_engine.py"
+      },
+      "cf_loop_id": "tf_cf_lane_deep_research_v1",
+      "slo_minutes": 10,
+      "sandbox": "cloud_analysis"
+    },
+    {
+      "id": "TF-L07",
+      "name": "sandbox_execute",
+      "studio_phase": "implement",
+      "value_class": "revenue_path",
+      "tier": "T1",
+      "description": "Cloud/worktree bounded patches — Studio IDE model: one patch, one verify, one receipt.",
+      "owner": "trustfield_worker",
+      "motor": {
+        "cf_worker": "trustfield-loops",
+        "trustfield": "trustfield-loops intake",
+        "worktree": "git worktree per patch lane",
+        "state": "trustfield_loop_receipts"
+      },
+      "cf_loop_id": "tf_cf_trustfield_loops_v1",
+      "slo_minutes": 60,
+      "sandbox": "cloud_worktree"
+    },
+    {
+      "id": "TF-L08",
+      "name": "self_heal",
+      "studio_phase": "positive",
+      "value_class": "hygiene",
+      "tier": "T0",
+      "description": "API + www probe_and_receipt — machine-safe heals only, escalate the rest.",
+      "owner": "trustfield_worker",
+      "motor": {
+        "railway_lane": "self_heal",
+        "trustfield": "scripts/run_trustfield_cloud_loop_v1.py"
+      },
+      "cf_loop_id": "tf_cf_lane_self_heal_v1",
+      "slo_minutes": 10,
+      "sandbox": "cloud_probe_only"
+    },
+    {
+      "id": "TF-L09",
+      "name": "www_upgrade",
+      "studio_phase": "implement",
+      "value_class": "revenue_path",
+      "tier": "T1",
+      "description": "113-plan www upgrade queue — one plan per cycle, external verify before ship.",
+      "owner": "trustfield_worker",
+      "motor": {
+        "railway_lane": "www_upgrade_queue",
+        "trustfield": "scripts/run_trustfield_www_upgrade_loop_v1.py"
+      },
+      "cf_loop_id": "tf_cf_lane_www_upgrade_queue_v1",
+      "slo_minutes": 10,
+      "sandbox": "cloud_queue"
+    },
+    {
+      "id": "TF-L10",
+      "name": "partner_commercial",
+      "studio_phase": "commercial",
+      "value_class": "revenue_path",
+      "tier": "T1",
+      "description": "Partner Access OS + commercial funnel health — partner-access launch lane.",
+      "owner": "trustfield_worker",
+      "motor": {
+        "railway_lane": "partner_access",
+        "trustfield": "scripts/verify_partner_access_os_v1.sh"
+      },
+      "cf_loop_id": "tf_cf_lane_partner_access_v1",
+      "slo_minutes": 15,
+      "sandbox": "cloud_verify_only"
+    },
+    {
+      "id": "TF-L11",
+      "name": "closeout_verify",
+      "studio_phase": "handoff",
+      "value_class": "proof_asset",
+      "tier": "T0",
+      "description": "Autorun stack witness, 48h gate, deploy truth — VERIFIED claims only with external proof.",
+      "owner": "trustfield_worker",
+      "motor": {
+        "railway_lane": "autorun_stack",
+        "trustfield": "scripts/verify_cf_deploy_truth.sh",
+        "gate": "scripts/verify_tf_48h_liveness.sh"
+      },
+      "cf_loop_id": "tf_cf_48h_gate_v1",
+      "slo_minutes": 4320,
+      "sandbox": "cloud_witness"
+    }
+  ],
+  "fleet_dispatcher": {
+    "cf_worker": "tf-cf-fleet-tick-v1",
+    "url": "https://tf-cf-fleet-tick-v1.sina-kazemnezhad-ca.workers.dev",
+    "railway_plan_worker": "https://trustfield-plan-worker-production.up.railway.app",
+    "cycle_seconds": 300,
+    "parallel": true,
+    "jitter_seconds": 60
+  },
+  "noos_commands": {
+    "observe_layers": "make observe-trustfield-layers",
+    "observe_registry": "make observe-trustfield-registry",
+    "handoff": "receipts/proof/noos-trustfield-partner-access-worker-handoff-v1.json"
+  },
+  "trustfield_worker_deliverables": [
+    "Map TF-L04 roi_intelligence motor to plan-worker cost receipt fields",
+    "Unblock GitHub org billing to activate GHA secondary witnesses (paid tier)",
+    "Wire trustfield-loops L07 sandbox_execute intake to 113-plan queue",
+    "CF Pages wave for tf_cf_www_pages_v1 when founder gates migration",
+    "Align os/trustfield_cloud_loop_v1.json lanes to this 11-layer registry"
+  ]
+}

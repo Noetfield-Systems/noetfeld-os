@@ -1,45 +1,126 @@
 {
-  "schema": "noetfield-org-loop-state-v1",
-  "status": "DECLARED",
-  "plane": "L17",
-  "updated_at": "2026-07-03T00:00:00Z",
-  "routes": [
-    {
-      "surface": "github-actions",
-      "tier": "T0",
-      "role": "execute",
-      "state": "active"
-    },
-    {
-      "surface": "copilot",
-      "tier": "T1",
-      "role": "implement",
-      "state": "active"
-    },
-    {
-      "surface": "cursor-local",
-      "tier": "T2",
-      "role": "local-operator",
-      "state": "active"
-    },
-    {
-      "surface": "codex",
-      "tier": "T3",
-      "role": "reasoning",
-      "state": "active"
-    },
-    {
-      "surface": "cloud-integrator",
-      "tier": "T3",
-      "role": "merge",
-      "state": "active"
-    }
-  ],
-  "coordination_support": {
-    "integrator_protocol": "data/noos-integrator-role-v1.json",
-    "mode": "support-only"
+  "org": "Noetfield-Systems",
+  "version": "1.0",
+  "timestamp": "2026-07-03T00:00:00Z",
+  "status": "active_post_migration",
+  "loop_state": {
+    "tick_number": 0,
+    "last_verified_sha": null,
+    "factory_state": "cold_start",
+    "autonomous_mode": false
   },
-  "forbidden_active_config_markers": [
-    "kazemnezhadsina144[-]dot"
-  ]
+  "mission_stack": {
+    "M1": {
+      "mission_id": "M1",
+      "name": "buyer_proof",
+      "description": "Core buyer proof generation and gate enforcement",
+      "value_class": "buyer_proof_asset",
+      "spend_cap": ["T0", "T1"],
+      "status": "active",
+      "lead_repo": "Noetfield-Systems/SourceA",
+      "integrator": "noetfeld-OS loop dispatch",
+      "receipt_schema": "gate_execution_receipt_v1",
+      "constraint": "MUST reach >99% determinism by Month 2 of execution"
+    },
+    "M2": {
+      "mission_id": "M2",
+      "name": "loop_autonomy",
+      "description": "Autonomous factory tick and fleet state management",
+      "value_class": "autonomy_proof_asset",
+      "spend_cap": ["T0", "T1", "T2"],
+      "status": "active",
+      "lead_repo": "Noetfield-Systems/noetfeld-OS",
+      "integrator": "noos-factory-autorun + noos-loop-fleet-tick",
+      "receipt_schema": "factory_tick_receipt_v1",
+      "constraint": "Must sustain ≥8h autonomous runs without manual intervention"
+    },
+    "M3": {
+      "mission_id": "M3",
+      "name": "governance_spine",
+      "description": "SSOT custody, independent verification, receipt validation",
+      "value_class": "governance_proof_asset",
+      "spend_cap": ["T1", "T3"],
+      "status": "active",
+      "lead_repo": "Noetfield-Systems/sina-governance-SSOT",
+      "integrator": "GitHub App advisor + verifier birth receipts",
+      "receipt_schema": "independent_verification_receipt_v1",
+      "constraint": "All gate decisions must pass independent verification before M1 deployment"
+    },
+    "M4": {
+      "mission_id": "M4",
+      "name": "platform_surface",
+      "description": "Marketing website, investor relations, trust ledger UX",
+      "value_class": "market_presence_asset",
+      "spend_cap": ["T1", "T2"],
+      "status": "active",
+      "lead_repo": "Noetfield-Systems/Noetfield",
+      "integrator": "Cloudflare static www + buyer-audience-verify",
+      "receipt_schema": "web_deployment_receipt_v1",
+      "constraint": "Buyer-audience verified before M1 gate deployment"
+    },
+    "M5": {
+      "mission_id": "M5",
+      "name": "infrastructure",
+      "description": "Platform utilities, registry, data models, static site deployment",
+      "value_class": "platform_backbone_asset",
+      "spend_cap": ["T0", "T1"],
+      "status": "active",
+      "lead_repo": "Noetfield-Systems/SinaaiMonoRepo",
+      "integrator": "buildmatch + Railway worker deploy",
+      "receipt_schema": "registry_validate_receipt_v1",
+      "constraint": "Must support M1–M4 deployment without interruption"
+    },
+    "M6": {
+      "mission_id": "M6",
+      "name": "AI_station_hygiene_to_proof_asset",
+      "description": "Parked: Investment docs cleaning, hygiene upgrade to proof asset class",
+      "value_class": "hygiene_to_proof_asset",
+      "spend_cap": ["T0", "T2"],
+      "status": "parked",
+      "lead_repo": "Noetfield-Systems/Noetfield",
+      "integrator": "noetfield-studio-ide (investment doc editor)",
+      "receipt_schema": "m6_hygiene_receipt_v1",
+      "constraint": "MUST NOT outcompete M1 buyer-proof spend, execution priority, or T0 orchestrator cycles. Resume only after M1 reaches >99% determinism gate.",
+      "ai_station_context": {
+        "status": "parked",
+        "reason": "M1 buyer-proof is T0 priority; M6 T0 spend capped at zero until M1 constraint satisfied",
+        "resume_condition": "M1 gate determinism >99% AND all M2-M5 missions in stable_active status",
+        "mission_priority": 6
+      }
+    }
+  },
+  "dependency_graph": {
+    "M1_requires": [],
+    "M2_requires": ["M1"],
+    "M3_requires": ["M1"],
+    "M4_requires": ["M1"],
+    "M5_requires": ["M1"],
+    "M6_requires": ["M1_constraint_satisfied"],
+    "critical_path": ["M1", "M3", "M2"]
+  },
+  "verified_windows": [],
+  "invalidated_windows": [],
+  "slug_migration": {
+    "old_slug": "Noetfield-Systems",
+    "new_slug": "Noetfield-Systems",
+    "status": "complete",
+    "migration_date": "2026-07-03",
+    "hits_migrated": 193,
+    "historical_references_preserved": true
+  },
+  "next_verifications": [
+    "Factory cold-start tick",
+    "Gate execution autonomous determinism",
+    "Loop fleet state stability",
+    "Independent verification pass",
+    "Web deployment pass"
+  ],
+  "living_system_48h": {
+    "authority": "LIVING_SYSTEM_99_PLAN",
+    "t0_procedure": "make living-system-baseline && founder sends T0 closed to deadman Telegram chat",
+    "verify_command": "make living-system-verify-48h",
+    "baseline_path": "data/noos-living-system-baseline-v1.json",
+    "receipt_path": "receipts/proof/noos-living-system-48h-v1.json",
+    "status": "prep_ready"
+  }
 }

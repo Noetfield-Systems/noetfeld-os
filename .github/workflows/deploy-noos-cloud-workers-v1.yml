@@ -1,0 +1,98 @@
+name: deploy-noos-cloud-workers-v1
+
+# Platform-native deploy anchor — post-deploy verify chains via workflow_run.
+# P4 prep: environment production requires founder reviewer in GitHub UI before enforce.
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'cloud/workers/**'
+      - 'scripts/deploy_noos_*_cf_v1.sh'
+      - '.github/workflows/deploy-noos-cloud-workers-v1.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-noos-cloud-workers-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Deploy NOOS CF workers
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    environment: production
+    env:
+      GITHUB_RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      NOOS_LOOP_SECRET: ${{ secrets.NOOS_LOOP_SECRET }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install wrangler
+        run: npm install -g wrangler
+
+      - name: Verify Cloudflare token present
+        run: |
+          if [[ -z "${CLOUDFLARE_API_TOKEN:-}" ]]; then
+            echo "FAIL: CLOUDFLARE_API_TOKEN missing — run make cloud-secrets-sync on Mac" >&2
+            exit 1
+          fi
+
+      - name: Verify Cloudflare Workers deploy permission
+        run: python3 scripts/verify_noos_cf_deploy_token_v1.py
+
+      - name: Deploy factory autorun tick
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPO: ${{ github.repository }}
+        run: bash scripts/deploy_noos_factory_autorun_tick_cf_v1.sh
+
+      - name: Deploy loop fleet tick
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          NOOS_LOOP_SECRET: ${{ secrets.NOOS_LOOP_SECRET }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPO: ${{ github.repository }}
+        run: bash scripts/deploy_noos_loop_fleet_tick_cf_v1.sh
+
+      - name: Write deploy receipt (workflow_run chain anchor)
+        run: |
+          set -euo pipefail
+          mkdir -p receipts/proof
+          python3 - <<'PY'
+          import json, os
+          from datetime import datetime, timezone
+          from pathlib import Path
+          completed_at = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+          doc = {
+              "schema": "noos-deploy-receipt-v1",
+              "version": "1.0.0",
+              "at": completed_at,
+              "platform": "github_actions_workflow_run_chain",
+              "github_run_id": os.environ.get("GITHUB_RUN_ID", ""),
+              "github_run_url": os.environ.get("GITHUB_RUN_URL", ""),
+              "sha": os.environ.get("GITHUB_SHA", ""),
+              "workers": [
+                  "noos-factory-autorun-tick-v1",
+                  "noos-loop-fleet-tick-v1",
+              ],
+          }
+          out = Path("receipts/proof/noos-cloud-workers-deploy-v1.json")
+          out.write_text(json.dumps(doc, indent=2) + "\n", encoding="utf-8")
+          print(json.dumps(doc, indent=2))
+          PY
+
+      - name: Upload deploy receipt
+        uses: actions/upload-artifact@v4
+        with:
+          name: noos-deploy-receipt-v1
+          path: receipts/proof/noos-cloud-workers-deploy-v1.json
+          retention-days: 30

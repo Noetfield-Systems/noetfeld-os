@@ -1,8 +1,6 @@
+# Retired 2026-07-05 — CF cron → Railway (zero GHA minutes).
 name: "NOOS Self-Heal Loop"
 on:
-  schedule:
-    # Run every 30 minutes, staggered 15 minutes after audit completes
-    - cron: "0 * * * * * * * *"
   workflow_dispatch:
     inputs:
       dry_run:

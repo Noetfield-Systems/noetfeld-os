@@ -1,0 +1,78 @@
+{
+  "schema": "noos-runtime-scaling-v1",
+  "version": "1.1.0",
+  "updated_at": "2026-07-05",
+  "authority": "UPG-0212",
+  "rules": [
+    {
+      "id": "inbox-queue-depth",
+      "sandbox": "inbox",
+      "metric": "pending_inbox_depth",
+      "threshold": 10,
+      "action": "scale_fly_machines",
+      "from": 1,
+      "to": 2,
+      "cooldown_minutes": 15,
+      "roi_class": "THROTTLED_ROI"
+    },
+    {
+      "id": "loop-heartbeat-staleness",
+      "sandbox": "cf",
+      "metric": "loop_heartbeat_stale_minutes",
+      "threshold": 30,
+      "action": "bump_cf_dispatch_rate",
+      "cooldown_minutes": 10,
+      "roi_class": "THROTTLED_ROI"
+    },
+    {
+      "id": "surface-nerve-miss",
+      "sandbox": "surface",
+      "metric": "production_url_fail_count",
+      "threshold": 1,
+      "action": "route_repair_loop",
+      "cooldown_minutes": 20,
+      "roi_class": "THROTTLED_ROI"
+    },
+    {
+      "id": "chain-verify-fail",
+      "sandbox": "chain",
+      "metric": "chain_verify_failures",
+      "threshold": 1,
+      "action": "route_repair_loop",
+      "cooldown_minutes": 30,
+      "roi_class": "THROTTLED_ROI"
+    },
+    {
+      "id": "self-heal-backlog",
+      "sandbox": "inbox",
+      "metric": "self_heal_step_failures",
+      "threshold": 2,
+      "action": "scale_fly_machines",
+      "from": 1,
+      "to": 2,
+      "cooldown_minutes": 15,
+      "roi_class": "THROTTLED_ROI"
+    },
+    {
+      "id": "gel-api-latency",
+      "sandbox": "gel-api",
+      "metric": "health_latency_ms",
+      "threshold": 2000,
+      "action": "throttle_loop_probes",
+      "cooldown_minutes": 5,
+      "roi_class": "THROTTLED_ROI"
+    }
+  ],
+  "fly_apps": {
+    "noos-inbox-runner": {
+      "min_machines": 1,
+      "max_machines": 2,
+      "region": "yyz"
+    },
+    "noos-self-heal-runner": {
+      "min_machines": 1,
+      "max_machines": 2,
+      "region": "yyz"
+    }
+  }
+}

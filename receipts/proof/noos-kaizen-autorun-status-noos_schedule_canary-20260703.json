@@ -1,0 +1,37 @@
+{
+  "schema": "improvement-receipt-v2",
+  "class": "machine_safe",
+  "source": "failed_check",
+  "diff_summary": "autorun-status SLO miss for noos_schedule_canary: score 31.85 < 80",
+  "expected_effect": "Restore freshness, success rate, and latency SLO compliance for the loop",
+  "expected_roi": {
+    "cost_saved_usd": 0,
+    "risk_reduced": "workflow heartbeat drift / SLO miss",
+    "revenue_unblocked": "",
+    "build_cost_usd": 0
+  },
+  "rollback_command": "revert the SLO target change or fix the underlying loop/runtime issue",
+  "external_verify_before": "",
+  "external_verify_after": "",
+  "auto_rolled_back": false,
+  "source_ref": "autorun-status",
+  "loop_id": "noos_schedule_canary",
+  "score": {
+    "score": 31.85,
+    "misses": [
+      "freshness_miss",
+      "latency_miss"
+    ],
+    "ok": false
+  },
+  "evidence": {
+    "title": "NOOS schedule canary",
+    "plane": "NOETFELD-OS",
+    "status": "COMPLETE",
+    "observed_at": "2026-07-03T08:21:40Z",
+    "freshness_minutes": 115.57,
+    "success_rate": 1.0,
+    "latency_minutes": 115.57
+  },
+  "generated_at": "2026-07-03T10:17:14Z"
+}

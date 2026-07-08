@@ -1,0 +1,30 @@
+# UPG-0206 — self-heal always-on runner (sub-minute reaction vs 5m CF cron floor)
+app = "noos-self-heal-runner"
+primary_region = "yyz"
+
+[build]
+  dockerfile = "ops/fly/noos-self-heal-runner/Dockerfile"
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = false
+  auto_start_machines = true
+  min_machines_running = 1
+
+  [[http_service.checks]]
+    grace_period = "20s"
+    interval = "15s"
+    method = "GET"
+    path = "/health"
+    timeout = "5s"
+
+  [[http_service.checks]]
+    grace_period = "20s"
+    interval = "15s"
+    method = "GET"
+    path = "/ready"
+    timeout = "5s"
+
+[env]
+  NOOS_SELF_HEAL_INTERVAL_SEC = "60"

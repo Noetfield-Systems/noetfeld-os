@@ -1,0 +1,26 @@
+{
+  "schema": "noos-gha-witness-phase2-smoke-v1",
+  "at": "2026-07-08T00:15:00Z",
+  "ok": true,
+  "closure_token": "NOOS_GHA_WITNESS_PHASE2: green",
+  "lane": "ICL-P2-07",
+  "command": "bash scripts/noos_gha_witness_phase2_smoke_v1.sh",
+  "runs": [
+    {
+      "workflow": "noos-gha-health-witness.yml",
+      "run_id": 28907727648,
+      "result": "success"
+    },
+    {
+      "workflow": "noos-stack-health-receipt.yml",
+      "run_id": 28907731857,
+      "result": "success"
+    }
+  ],
+  "schedules_enabled_utc": {
+    "noos-gha-health-witness.yml": "10 * * * *",
+    "noos-stack-health-receipt.yml": "40 */2 * * *"
+  },
+  "replaces": "noos-cross-repo-orchestrator.yml",
+  "commit": "c3a1ec1"
+}

@@ -77,7 +77,19 @@ def test_workflow_registry_ids():
         "noos_loop_self_heal",
         "noos_loop_agent_nerve",
         "noos_loop_sourcea_observe",
+        "noos_deadman",
+        "noos_loop_liveness_registry",
         "sandbox_health_sweep",
+        "noos_gha_integrator_daily_witness",
+        "noos_gha_autorun_witness",
+        "noos_gha_motor_sustain_witness",
+        "noos_gha_health_witness",
+        "noos_stack_health_receipt",
+    "noos_trustfield_observe_witness",
+    "noos_sourcea_spine_witness",
+    "noos_machine_audit_witness",
+    "noos_liveness_registry_witness",
+    "noos_sandbox_url_sweep_witness",
     ]
 
 
@@ -100,8 +112,69 @@ def test_dashboard_findings_flags_blocked_and_slo_miss():
     assert any(f["summary"].startswith("Workflow is not healthy") for f in findings)
 
 
+def test_probe_cf_schedule_canary_complete_when_motor_and_a1_ok(monkeypatch):
+    wf = {
+        "probe": {
+            "type": "cf_schedule_canary",
+            "github_workflow": "noos-schedule-canary.yml",
+        }
+    }
+
+    class Resp:
+        status = 200
+
+        def read(self):
+            return b'{"ok": true, "service": "noos-loop-fleet-tick-v1"}'
+
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *args):
+            return False
+
+    monkeypatch.setattr(dash.urllib.request, "urlopen", lambda *a, **k: Resp())
+    row = dash.probe_cf_schedule_canary(wf)
+    assert row["status"] == "COMPLETE"
+    assert row["classification"] == "cf_motor_canary_retired_gha_schedule"
+
+
 def test_sandboxes_no_sourcea_dirty():
     doc = json.loads((ROOT / "data/autorun-sandboxes-v1.json").read_text())
     sourcea = next(sb for sb in doc["sandboxes"] if sb["id"] == "sourcea")
     assert sourcea["counts_toward_dirty_total"] is False
     assert sourcea["git"] is False
+
+
+def test_portfolio_spine_profile_reads_gha_env(monkeypatch):
+    wf_doc = json.loads((ROOT / "data/autorun-workflows-v1.json").read_text())
+    monkeypatch.setattr(dash, "load_env_file", lambda _p: {})
+    monkeypatch.setenv("PORTFOLIO_SPINE_SUPABASE_URL", "https://example.supabase.co")
+    monkeypatch.setenv("PORTFOLIO_SPINE_SERVICE_ROLE_KEY", "gha-service-role-key")
+    monkeypatch.delenv("SUPABASE_URL", raising=False)
+    monkeypatch.delenv("SUPABASE_SERVICE_ROLE_KEY", raising=False)
+    cfg = dash.supabase_profile_config("portfolio_spine", wf_doc)
+    assert cfg == ("https://example.supabase.co", "gha-service-role-key")
+
+
+def test_portfolio_spine_profile_rejects_generic_supabase_env(monkeypatch):
+    wf_doc = json.loads((ROOT / "data/autorun-workflows-v1.json").read_text())
+    monkeypatch.setattr(dash, "load_env_file", lambda _p: {})
+    monkeypatch.delenv("PORTFOLIO_SPINE_SUPABASE_URL", raising=False)
+    monkeypatch.delenv("PORTFOLIO_SPINE_SERVICE_ROLE_KEY", raising=False)
+    monkeypatch.setenv("SUPABASE_URL", "https://bleed.supabase.co")
+    monkeypatch.setenv("SUPABASE_SERVICE_ROLE_KEY", "bleed-key")
+    cfg = dash.supabase_profile_config("portfolio_spine", wf_doc)
+    assert cfg is None
+
+
+def test_portfolio_spine_profile_reads_local_file_only(monkeypatch):
+    wf_doc = json.loads((ROOT / "data/autorun-workflows-v1.json").read_text())
+    monkeypatch.setattr(
+        dash,
+        "load_env_file",
+        lambda _p: {"SUPABASE_URL": "https://local.supabase.co", "SUPABASE_SERVICE_ROLE_KEY": "local-key"},
+    )
+    monkeypatch.delenv("PORTFOLIO_SPINE_SUPABASE_URL", raising=False)
+    monkeypatch.delenv("PORTFOLIO_SPINE_SERVICE_ROLE_KEY", raising=False)
+    cfg = dash.supabase_profile_config("portfolio_spine", wf_doc)
+    assert cfg == ("https://local.supabase.co", "local-key")

@@ -1,0 +1,51 @@
+# NOOS GHA secondary witness — CF/Railway/deadman motor sustain (between deploy events).
+name: NOOS motor sustain witness
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "15 */2 * * *"
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: noos-motor-sustain-witness-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  witness:
+    name: Motor sustain verify
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      NOOS_GHA_WITNESS: "1"
+      NOOS_MOTOR_WITNESS_MOTORS_ONLY: "1"
+      GITHUB_RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CF_NOETFIELD_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      NOETFIELD_SUPABASE_URL: ${{ secrets.NOETFIELD_SUPABASE_URL }}
+      NOETFIELD_SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.NOETFIELD_SUPABASE_SERVICE_ROLE_KEY }}
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Bootstrap autorun repair (liveness + loop cycles)
+        run: python3 scripts/noos_integrator_repair_autorun_v1.py --json
+
+      - name: Motor sustain verify
+        run: python3 scripts/verify_noos_motor_sustain_v1.py --write-receipt
+
+      - name: Upload motor sustain receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: noos-motor-sustain-v1
+          path: receipts/proof/noos-motor-sustain-v1.json
+          retention-days: 30
+          if-no-files-found: warn

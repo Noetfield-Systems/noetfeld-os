@@ -1,0 +1,64 @@
+{
+  "schema": "noos-nf-pub-prioritized-fix-list-v1",
+  "authority": "UPG-NF-PUB-02",
+  "drafted_at": "2026-07-06T14:30:00Z",
+  "machine_safe_now": [
+    {
+      "priority": "P0",
+      "id": "FIX-001",
+      "title": "Verify SOC 2 card badge = Planned on live /",
+      "owner": "machine",
+      "lane": "Noetfield PR #90 or hotfix",
+      "status": "done_on_disk",
+      "evidence": "index.html nf-signal-badge--roadmap Planned"
+    },
+    {
+      "priority": "P1",
+      "id": "FIX-002",
+      "title": "Merge Noetfield PR #90 (tech-only: CI, assets, audit machine, sandbox restore)",
+      "owner": "founder",
+      "status": "ci_pending",
+      "blocked_by": "www-health + repo-validate green"
+    },
+    {
+      "priority": "P1",
+      "id": "FIX-003",
+      "title": "CF apex redirect noetfield.com → www.noetfield.com",
+      "owner": "infra",
+      "status": "open"
+    },
+    {
+      "priority": "P1",
+      "id": "FIX-004",
+      "title": "Add og:image sitewide (SM-2)",
+      "owner": "tech",
+      "status": "open"
+    },
+    {
+      "priority": "P1",
+      "id": "FIX-005",
+      "title": "Restore /copilot/demo/ nf26 institutional demo OR deploy live workspace",
+      "owner": "product",
+      "status": "open",
+      "incident": "INCIDENT-2026-07-06-001-www-sandbox-downgrade"
+    }
+  ],
+  "founder_gated": [
+    {
+      "priority": "P2",
+      "id": "FIX-010",
+      "title": "Merge PR #89 copy (stable SKU triad) after claim matrix verdict",
+      "owner": "founder",
+      "status": "draft_hold"
+    },
+    {
+      "priority": "P0",
+      "id": "FIX-020",
+      "title": "First NW1 / ACG send",
+      "owner": "founder",
+      "status": "pending",
+      "gate": "FT-COMMERCIAL-SEND"
+    }
+  ],
+  "ok": true
+}

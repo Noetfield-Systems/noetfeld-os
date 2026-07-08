@@ -1,10 +1,8 @@
+# Retired 2026-07-05 — CF cron → Railway (zero GHA minutes).
 name: NOOS loop — SourceA observe
 
 on:
-  schedule:
-    - cron: "15,45 * * * *"
-  repository_dispatch:
-    types: [noos_sourcea_observe_loop_tick]
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -25,6 +23,8 @@ jobs:
       - run: pip install -r requirements.txt && pip install -e .
       - name: Run SourceA observe loop (read-only)
         env:
+          SUPABASE_URL: ${{ secrets.NOETFIELD_SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.NOETFIELD_SUPABASE_SERVICE_ROLE_KEY }}
           GITHUB_EVENT_NAME: ${{ github.event_name }}
           GITHUB_RUN_ID: ${{ github.run_id }}
           GITHUB_WORKFLOW: ${{ github.workflow }}

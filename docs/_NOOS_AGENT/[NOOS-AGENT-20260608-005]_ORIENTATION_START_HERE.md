@@ -47,6 +47,8 @@ ASF (you — final authority)
 | EXECUTION | SinaaiRuntime :8000 | Isolated — never a submodule |
 | DELIVERY | This code + NOOS docs | **Canonical for our output** |
 
+**Mac Cursor Local (T2):** Operator card `[NOOS-AGENT-20260703-004]_CURSOR_LOCAL_MAC_OPERATOR_v1.md` · open lane: `make local-lane TASK=... SCOPE=...` · subagent: `.cursor/agents/noetfield-os-local-operator.md`
+
 ---
 
 ## 3. What is built (code today)
@@ -101,6 +103,9 @@ python3 scripts/mint_api_key.py
 | **0** | `NOETFIELD-UNIFIED-MASTER-V1` | **NOETFIELD_UNIFIED_MASTER_v1_LOCKED.md** | Map all Noetfield content |
 | **1** | `NOETFIELD-OS-SSOT-V1` | **NOETFIELD_OS_SSOT_v1_LOCKED.md** | Product SSOT — build/GTM |
 | **2** | `NOOS-AGENT-PRODUCT-TRUTH` | **PRODUCT_TRUTH.md** | Live code state |
+| **0b** | `NOOS-AGENT-20260705-029` | **Living System 99-Plan LOCKED** | Loop autonomy · CF/Railway · deadman |
+| **0c** | `NOOS-AGENT-20260706-031` | **Deadman Telegram lane LOCKED** | Never @Gateway_A · send_alerts off |
+| **0d** | `NOOS-AGENT-20260706-032` | **Stale doc register** | Superseded plans — do not execute |
 | 3 | `NOOS-AGENT-20260608-005` | **This file** | Repo orientation |
 | 2 | `NOOS-AGENT-20260529-002` | Business & ICP definition | Who we are / who we sell to |
 | 3 | `NOOS-AGENT-20260608-003` | 10 market success models | Learn from market (not battle) |

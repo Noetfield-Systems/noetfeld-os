@@ -1,0 +1,20 @@
+{
+  "incident_id": "incident-copilot-clone-misinterpretation-20260703T223436Z",
+  "timestamp": "2026-07-03T22:34:36Z",
+  "severity": "medium",
+  "summary": "NOOS Copilot session misinterpreted an external clone/worktree as canonical control-panel authority and attempted dispatcher actions against non-canonical paths.",
+  "canonical_repo": "/Users/sinakazemnezhad/Desktop/Noetfield-Systems/noetfeld-OS",
+  "non_canonical_paths": [
+    "/Users/sinakazemnezhad/Projects/noetfeld-os",
+    "external Copilot GitHub workspace clone"
+  ],
+  "impact": "No main-branch writes occurred; receipts and PR #24 work remained on bounded branch copilot/cost-locks-v1.",
+  "remediation": [
+    "Recorded incident receipt and markdown summary",
+    "Reconfirmed data/noos-integrator-role-v1.json as repo-local integrator pointer",
+    "Blocked fleet_rollout and main_write in dispatcher machine record",
+    "Local integrator sync receipt NOOS_INTEGRATOR_SYNC_RECEIPT_2026-07-05 documents canonical vs WIP paths"
+  ],
+  "status": "remediated",
+  "operator_acceptance": "cursor-local-mac integrator review 2026-07-06"
+}

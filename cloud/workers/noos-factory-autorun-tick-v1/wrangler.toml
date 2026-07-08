@@ -3,10 +3,7 @@ main = "src/index.js"
 compatibility_date = "2024-06-01"
 account_id = "0d0b967b77e2e5535455d39ff3dae72c"
 
-[triggers]
-crons = ["*/10 * * * *"]
-
-# Secrets (deploy script): GITHUB_TOKEN (repo scope PAT), optional GITHUB_REPO
+# Cron retired 2026-07-05 — factory autorun dispatched by noos-loop-fleet-tick-v1 dispatch table.
 
 [observability]
 enabled = true

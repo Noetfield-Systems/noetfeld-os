@@ -1,0 +1,43 @@
+{
+  "schema": "noos-t3-sandbox-closeout-v1",
+  "closed_at": "2026-07-05T16:45:00Z",
+  "authority": "NOOS_T3_SANDBOX_STEP_10",
+  "backlog_update": {
+    "changed": [
+      "UPG-0164",
+      "UPG-0168",
+      "UPG-0169",
+      "UPG-0208",
+      "UPG-0211",
+      "UPG-0212",
+      "SANDBOX-REGISTRY"
+    ],
+    "fly_l4_live": false,
+    "summary": {
+      "total_items": 63,
+      "done": 37,
+      "open_t1": 0,
+      "open_t2": 0,
+      "open_t3": 1,
+      "deferred_t4": 7,
+      "founder_blocked": 9
+    }
+  },
+  "manifest_update": {
+    "completed_added": [
+      "SANDBOX-REGISTRY",
+      "UPG-0164",
+      "UPG-0168",
+      "UPG-0169",
+      "UPG-0208",
+      "UPG-0211",
+      "UPG-0212"
+    ]
+  },
+  "fly_l4_live": false,
+  "sandbox_registry_receipt": true,
+  "improve_kaizen_receipt": true,
+  "loop_verify_receipt": true,
+  "ok": true,
+  "report_line": "t3_sandbox_closeout \u00b7 lane complete"
+}

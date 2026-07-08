@@ -1,0 +1,80 @@
+{
+  "schema": "noos-motor-restart-recipes-v1",
+  "version": "1.0.0",
+  "authority": "LIVING_SYSTEM_99_PLAN_PHASE_C",
+  "recipes": [
+    {
+      "id": "cf-loop-motor",
+      "motor": "cf-loop-motor",
+      "gate": "machine_safe",
+      "worker": "noos-loop-fleet-tick-v1",
+      "health_url": "https://noos-loop-fleet-tick-v1.sina-kazemnezhad-ca.workers.dev/health",
+      "description": "Sync Railway env → redeploy CF loop fleet tick (NOOS_LOOP_SECRET; legacy FLY_LOOP_EXECUTOR_URL holds Railway URL)",
+      "steps": [
+        {
+          "kind": "shell",
+          "cwd": ".",
+          "command": "bash scripts/sync_railway_loop_runner_env_v1.sh"
+        },
+        {
+          "kind": "shell",
+          "cwd": ".",
+          "command": "bash scripts/deploy_noos_loop_fleet_tick_cf_v1.sh",
+          "requires_env": ["FLY_LOOP_EXECUTOR_URL", "NOOS_LOOP_SECRET"]
+        }
+      ],
+      "external_verify_command": "bash scripts/verify_noos_cloud_motor_e2e_v1.sh"
+    },
+    {
+      "id": "cf-deadman",
+      "motor": "cf-deadman",
+      "gate": "machine_safe",
+      "worker": "noos-deadman-v1",
+      "health_url": "https://noos-deadman-v1.sina-kazemnezhad-ca.workers.dev/health",
+      "description": "Redeploy CF deadman worker (Supabase + loop runner secrets unchanged)",
+      "steps": [
+        {
+          "kind": "shell",
+          "cwd": ".",
+          "command": "bash scripts/deploy_noos_deadman_cf_v1.sh"
+        }
+      ],
+      "external_verify_command": "curl -fsS https://noos-deadman-v1.sina-kazemnezhad-ca.workers.dev/health"
+    },
+    {
+      "id": "railway-loop-runner",
+      "motor": "railway-loop-runner",
+      "gate": "machine_safe",
+      "service": "noos-loop-runner",
+      "health_url": "https://noos-loop-runner-production.up.railway.app/health",
+      "description": "Redeploy Railway loop executor (Option A canonical executor; auto-syncs CF motor)",
+      "steps": [
+        {
+          "kind": "shell",
+          "cwd": ".",
+          "command": "bash scripts/deploy_noos_loop_runner_railway_v1.sh"
+        }
+      ],
+      "external_verify_command": "python3 scripts/verify_noos_loop_runner_railway_v1.py --json"
+    },
+    {
+      "id": "fly-loop-executor",
+      "motor": "fly-loop-executor",
+      "gate": "founder_gated",
+      "status": "destroyed",
+      "app": "noos-loop-executor",
+      "health_url": "https://noos-loop-executor.fly.dev/health",
+      "description": "DEPRECATED — Fly executor destroyed after Railway cutover; fail-closed",
+      "steps": [],
+      "external_verify_command": null
+    },
+    {
+      "id": "fly-inbox-motor",
+      "motor": "fly-inbox",
+      "gate": "founder_gated",
+      "description": "Fly L4 inbox motor — deferred; founder deploy only",
+      "steps": [],
+      "external_verify_command": null
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "schema": "noos-motor-sustain-v1",
+  "at": "2026-07-07T16:21:57Z",
+  "ok": true,
+  "checks": {
+    "cf_loop_fleet": {
+      "ok": true,
+      "status": 200,
+      "body": "{\"ok\":true,\"schema\":\"noos-loop-motor-health-v1\",\"service\":\"noos-loop-fleet-tick-v1\",\"cron\":\"*/5 * * * *\",\"execution_plane\":\"railway:noos-loop-runner\",\"executor_url_ready\":true,\"loop_secret_ready\":true,\"target_count\":14,\"targets\":[{\"dispatch_id\":\"inbox\",\"event_type\":\"noos_inbox_loop_tick\",\"interval_minutes\":5,\"handler\":\"loop\"},{\"dispatch_id\":\"runtime\",\"event_type\":\"noos_runtime_loop_tick\",\"interval_minutes\":15,\"handler\":\"loop\"},{\"dispatch_id\":\"surface\",\"event_type\":\"noos_surface_loop_tick\",\"inter"
+    },
+    "cf_factory_tick": {
+      "ok": true,
+      "status": 200,
+      "body": "{\"ok\":true,\"schema\":\"noos-factory-autorun-tick-health-v1\",\"service\":\"noos-factory-autorun-tick-v1\",\"cron\":\"*/10 * * * *\",\"github_token_ready\":true,\"github_repo\":\"kazemnezhadsina144-dot/noetfeld-os\",\"event_type\":\"noos_factory_autorun_tick\"}"
+    },
+    "railway_loop_runner": {
+      "ok": true,
+      "status": 200,
+      "body": "{\"ok\": true, \"schema\": \"noos-railway-loop-runner-health-v1\", \"service\": \"noos-loop-runner\", \"git_sha\": \"03b55c1f3dea7d9adc5d3f3fbcf47872df60b8df\", \"uptime_sec\": 270, \"execution_mode\": \"one_shot_http\"}"
+    },
+    "cf_deadman": {
+      "ok": true,
+      "status": 200,
+      "body": "{\"ok\":true,\"schema\":\"noos-deadman-health-v1\",\"service\":\"noos-deadman-v1\",\"cron\":\"*/30 * * * *\",\"supabase_ready\":true,\"loop_runner_ready\":true,\"telegram_ready\":true,\"telegram_send_alerts\":false,\"telegram_lane_forbidden\":[\"Gateway_A\",\"gateway_a\",\"NFProbeBot\",\"nf_probe_bot\",\"NoetfieldOpsBot\"],\"interval_multiplier\":2,\"restart_attempts_max\":1}"
+    }
+  },
+  "liveness": {
+    "ok": true,
+    "findings": 0,
+    "stale_count": 0
+  }
+}

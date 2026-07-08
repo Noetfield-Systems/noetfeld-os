@@ -1,0 +1,84 @@
+{
+  "schema": "supabase-rls-machine-tables-v1",
+  "at": "2026-07-07T22:39:10Z",
+  "ok": true,
+  "tables": [
+    "noetfield_truth_log",
+    "probe_cron_receipts",
+    "improvement_queue",
+    "noos_loop_registry",
+    "noos_deadman_runs",
+    "workflow_census_v1",
+    "workflow_census_runs_v1",
+    "trustfield_loop_registry",
+    "trustfield_loop_receipts",
+    "trustfield_verify_recipe_runs"
+  ],
+  "pg_rls_enabled": {
+    "improvement_queue": true,
+    "noetfield_truth_log": true,
+    "noos_deadman_runs": true,
+    "noos_loop_registry": true,
+    "probe_cron_receipts": true,
+    "trustfield_loop_receipts": true,
+    "trustfield_loop_registry": true,
+    "trustfield_verify_recipe_runs": true,
+    "workflow_census_runs_v1": true,
+    "workflow_census_v1": true
+  },
+  "anon_probes": {
+    "noetfield_truth_log": {
+      "ok": true,
+      "status": 401,
+      "blocked": true
+    },
+    "probe_cron_receipts": {
+      "ok": true,
+      "status": 401,
+      "blocked": true
+    },
+    "improvement_queue": {
+      "ok": true,
+      "status": 401,
+      "blocked": true
+    },
+    "noos_loop_registry": {
+      "ok": true,
+      "status": 401,
+      "blocked": true
+    },
+    "noos_deadman_runs": {
+      "ok": true,
+      "status": 401,
+      "blocked": true
+    },
+    "workflow_census_v1": {
+      "ok": true,
+      "status": 401,
+      "blocked": true
+    },
+    "workflow_census_runs_v1": {
+      "ok": true,
+      "status": 401,
+      "blocked": true
+    },
+    "trustfield_loop_registry": {
+      "ok": true,
+      "status": 401,
+      "blocked": true
+    },
+    "trustfield_loop_receipts": {
+      "ok": true,
+      "status": 401,
+      "blocked": true
+    },
+    "trustfield_verify_recipe_runs": {
+      "ok": true,
+      "status": 401,
+      "blocked": true
+    }
+  },
+  "anon_blocked": true,
+  "service_role_read_ok": true,
+  "project_ref": "tkgpapowwplupyekpivy"
+}

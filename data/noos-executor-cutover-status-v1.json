@@ -1,0 +1,47 @@
+{
+  "schema": "noos-executor-cutover-status-v1",
+  "version": "1.0.0",
+  "updated_at": "2026-07-06",
+  "authority": "OPTION_A_CANON + PANEL_SEQUENCING_2026-07-06",
+  "canon": {
+    "architecture": "Option A",
+    "motor": "cloudflare:noos-loop-fleet-tick-v1",
+    "executor": "railway:noos-loop-runner",
+    "one_law": "All 24/7 loops → CF cron + Railway HTTP /loop (one bounded tick). No GHA runtime."
+  },
+  "live": {
+    "motor_cron": "enabled",
+    "motor_cron_expression": "*/5 * * * *",
+    "executor_url": "https://noos-loop-runner-production.up.railway.app",
+    "executor_plane": "railway:noos-loop-runner",
+    "executor_status": "CANONICAL_LIVE",
+    "cutover_receipt": "receipts/proof/noos-cf-railway-cutover-v1.json",
+    "cutover_at": "2026-07-06T09:02:30Z"
+  },
+  "canonical_executor": {
+    "url": "https://noos-loop-runner-production.up.railway.app",
+    "plane": "railway:noos-loop-runner",
+    "verify_receipt": "receipts/proof/noos-railway-loop-runner-v1.json",
+    "verify_status": "GREEN",
+    "health": {
+      "service": "noos-loop-runner",
+      "git_sha_required": true,
+      "auth": "X-NOOS-Loop-Secret"
+    }
+  },
+  "cutover_pending": {
+    "action": "COMPLETE",
+    "completed_at": "2026-07-06T09:02:30Z",
+    "receipt": "receipts/proof/noos-cf-railway-cutover-v1.json",
+    "blocker": null
+  },
+  "fly_teardown": {
+    "scheduled": false,
+    "status": "DESTROYED",
+    "app": "noos-loop-executor",
+    "teardown_receipt": "receipts/proof/noos-fly-executor-teardown-v1.json",
+    "destroyed_at": "2026-07-06T09:08:00Z",
+    "forbidden_phrases": ["fallback", "verified proof/fallback", "parked"]
+  },
+  "governance_lesson": "CL executed Option B while Option A/B was still open in advisory layer. Fix: founder gate in dispatch template, not advisor memory."
+}

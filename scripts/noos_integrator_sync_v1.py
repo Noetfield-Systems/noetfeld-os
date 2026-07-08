@@ -8,6 +8,7 @@ import copy
 import fcntl
 import json
 import os
+import re
 import subprocess
 import sys
 import urllib.error
@@ -18,6 +19,7 @@ from pathlib import Path
 from typing import Any, Iterator
 
 ROOT = Path(__file__).resolve().parents[1]
+SERVICE_LANES_PATH = ROOT / "noetfield-org" / "SERVICE_LANES.md"
 sys.path.insert(0, str(ROOT / "scripts"))
 
 from integrator_runtime_paths_v1 import (
@@ -650,6 +652,99 @@ def cmd_sync(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_sweep_stale(args: argparse.Namespace) -> int:
+    released: list[str] = []
+    with locked_state() as state:
+        protocol = load_protocol()
+        now = datetime.now(timezone.utc)
+        for task in state.get("tasks") or []:
+            if not isinstance(task, dict):
+                continue
+            if task.get("status") not in ACTIVE_TASK_STATUSES:
+                continue
+            if not _is_stale_task(task, protocol, now=now):
+                continue
+            task["status"] = "released"
+            task["updated_at"] = utc_now()
+            task["released_at"] = utc_now()
+            task["release_note"] = args.note or "stale_sweep"
+            task["claimed_by"] = None
+            released.append(str(task.get("task_id") or ""))
+        _recompute_summary(state)
+        result = _mirror_outputs(state, force_supabase=args.mirror_supabase)
+        result["released_task_ids"] = [t for t in released if t]
+        result["released_count"] = len(released)
+    print(json.dumps(result, indent=2))
+    return 0
+
+
+def _parse_service_lane_status(service_id: str) -> dict[str, Any]:
+    if not SERVICE_LANES_PATH.is_file():
+        return {
+            "ok": False,
+            "error": "service_lanes_file_missing",
+            "service_id": service_id,
+            "path": str(SERVICE_LANES_PATH.relative_to(ROOT)),
+        }
+
+    text = SERVICE_LANES_PATH.read_text(encoding="utf-8")
+    marker = f"**Service ID:** `{service_id}`"
+    if marker not in text:
+        return {"ok": False, "error": "service_not_found", "service_id": service_id}
+
+    start = text.index(marker)
+    section_start = text.rfind("\n### ", 0, start)
+    name = None
+    if section_start >= 0:
+        name_line = text[section_start + 1 : text.find("\n", section_start + 1)]
+        name_match = re.match(r"### \d+\. (.+)", name_line.strip())
+        if name_match:
+            name = name_match.group(1).strip()
+
+    tail = text[start:]
+    next_heading = re.search(r"\n## ", tail)
+    block = tail[: next_heading.start()] if next_heading else tail
+
+    def _field(label: str) -> str | None:
+        match = re.search(rf"\*\*{re.escape(label)}:\*\* (.+)", block)
+        return match.group(1).strip() if match else None
+
+    registry_updated = None
+    header_match = re.search(r"\*\*Last Updated:\*\* (\S+)", text)
+    if header_match:
+        registry_updated = header_match.group(1)
+
+    return {
+        "ok": True,
+        "service_id": service_id,
+        "name": name or _field("Name") or _extract_service_name(block),
+        "category": _field("Category"),
+        "status": _field("Status"),
+        "registry_updated": registry_updated,
+        "canonical_path": str(SERVICE_LANES_PATH.relative_to(ROOT)),
+        "monitoring_note": "On-demand only; do not poll on timers.",
+    }
+
+
+def _extract_service_name(block: str) -> str | None:
+    match = re.search(r"### \d+\. (.+)", block)
+    return match.group(1).strip() if match else None
+
+
+def cmd_service_status(args: argparse.Namespace) -> int:
+    payload = _parse_service_lane_status(args.service)
+    if args.json:
+        print(json.dumps(payload, indent=2))
+    elif payload.get("ok"):
+        print(
+            f"{payload['service_id']}: {payload.get('status')} "
+            f"({payload.get('canonical_path')})"
+        )
+    else:
+        print(json.dumps(payload, indent=2))
+    return 0 if payload.get("ok") else 1
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="NOOS integrator coordination layer")
     sub = parser.add_subparsers(dest="command", required=True)
@@ -731,6 +826,20 @@ def build_parser() -> argparse.ArgumentParser:
     sync_p = sub.add_parser("sync", help="Refresh mirrors without mutating tasks")
     sync_p.add_argument("--mirror-supabase", action="store_true")
     sync_p.set_defaults(func=cmd_sync)
+
+    service_p = sub.add_parser(
+        "service-status",
+        help="Read current service lane status from SERVICE_LANES.md",
+    )
+    service_p.add_argument("--service", required=True, help="Service ID (e.g. svc-cost-audit-firewall-001)")
+    service_p.add_argument("--json", action="store_true")
+    service_p.set_defaults(func=cmd_service_status)
+
+    sweep_p = sub.add_parser("sweep-stale", help="Release stale claimed/in_progress tasks")
+    sweep_p.add_argument("--agent-id", default="integrator")
+    sweep_p.add_argument("--note", default="stale_sweep")
+    sweep_p.add_argument("--mirror-supabase", action="store_true")
+    sweep_p.set_defaults(func=cmd_sweep_stale)
 
     return parser
 

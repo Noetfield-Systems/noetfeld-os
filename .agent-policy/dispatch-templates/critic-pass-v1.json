@@ -1,0 +1,31 @@
+{
+  "schema": "noos-dispatch-template-v1",
+  "template_id": "critic-pass-v1",
+  "version": "1.0.0",
+  "canon_version": "FOUNDER_CANON_v1+MACHINE_LOOPS_v1",
+  "laws": "FOUNDER_CANON v1 + governed-autorun v3. Violations = BLOCKED_WITH_REASON.",
+  "loop": "adversarial_critic",
+  "actor_constraints": {
+    "read_only": true,
+    "different_model_family_than_worker": true,
+    "fresh_context_rule": "R1"
+  },
+  "checklist": [
+    "timestamp_math",
+    "self_verification_claims",
+    "report_vs_json_contradiction",
+    "prose_as_proof",
+    "verifier_edits_in_diff",
+    "non_discriminating_checks",
+    "count_id_math",
+    "cost_sanity",
+    "public_url_spot_fetch"
+  ],
+  "verdicts": ["APPROVE", "REJECT", "UNCERTAIN"],
+  "routing": {
+    "REJECT": "repair-lane-v1",
+    "UNCERTAIN": "research-memo-v1",
+    "timeout": "dispatch_second_critic_instance"
+  },
+  "receipt_schema": "noos-machine-critic-receipt-v1"
+}

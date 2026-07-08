@@ -11,7 +11,9 @@ body:
     attributes:
       value: |
         **P7 pilot — do not use for founder_gated work.** Copilot may only touch paths outside CODEOWNERS fences.
-        Required gates before merge: `gel-ci` + scoped tests. Founder enables branch protection (P4) before auto-merge.
+        Parallel law: `data/noos-parallel-agent-registry-v1.json` · L-P7 in `.github/copilot-instructions.md`.
+        Boot: `python3 scripts/noos_agent_conflict_check_v1.py --json` before overlapping work.
+        Required gates before merge: `gel-ci` (includes governance verify) + scoped tests. Founder enables branch protection (P4) before auto-merge.
   - type: dropdown
     id: mission_id
     attributes:

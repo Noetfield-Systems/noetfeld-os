@@ -1,0 +1,96 @@
+{
+  "schema": "noos-runtime-scaling-eval-v1",
+  "evaluated_at": "2026-07-05T16:43:56Z",
+  "authority": "UPG-0212",
+  "rule_count": 6,
+  "tripped_count": 0,
+  "evaluations": [
+    {
+      "rule_id": "inbox-queue-depth",
+      "sandbox": "inbox",
+      "metric": "pending_inbox_depth",
+      "value": 0,
+      "threshold": 10,
+      "tripped": false,
+      "action": "scale_fly_machines",
+      "roi_class": "THROTTLED_ROI",
+      "scale_from": 1,
+      "scale_to": 2
+    },
+    {
+      "rule_id": "loop-heartbeat-staleness",
+      "sandbox": "cf",
+      "metric": "loop_heartbeat_stale_minutes",
+      "value": 0,
+      "threshold": 30,
+      "tripped": false,
+      "action": "bump_cf_dispatch_rate",
+      "roi_class": "THROTTLED_ROI",
+      "scale_from": null,
+      "scale_to": null
+    },
+    {
+      "rule_id": "surface-nerve-miss",
+      "sandbox": "surface",
+      "metric": "production_url_fail_count",
+      "value": 0,
+      "threshold": 1,
+      "tripped": false,
+      "action": "route_repair_loop",
+      "roi_class": "THROTTLED_ROI",
+      "scale_from": null,
+      "scale_to": null
+    },
+    {
+      "rule_id": "chain-verify-fail",
+      "sandbox": "chain",
+      "metric": "chain_verify_failures",
+      "value": 0,
+      "threshold": 1,
+      "tripped": false,
+      "action": "route_repair_loop",
+      "roi_class": "THROTTLED_ROI",
+      "scale_from": null,
+      "scale_to": null
+    },
+    {
+      "rule_id": "self-heal-backlog",
+      "sandbox": "inbox",
+      "metric": "self_heal_step_failures",
+      "value": 0,
+      "threshold": 2,
+      "tripped": false,
+      "action": "scale_fly_machines",
+      "roi_class": "THROTTLED_ROI",
+      "scale_from": 1,
+      "scale_to": 2
+    },
+    {
+      "rule_id": "gel-api-latency",
+      "sandbox": "gel-api",
+      "metric": "health_latency_ms",
+      "value": 0,
+      "threshold": 2000,
+      "tripped": false,
+      "action": "throttle_loop_probes",
+      "roi_class": "THROTTLED_ROI",
+      "scale_from": null,
+      "scale_to": null
+    }
+  ],
+  "tripped_rules": [],
+  "fly_apps": {
+    "noos-inbox-runner": {
+      "min_machines": 1,
+      "max_machines": 2,
+      "region": "yyz"
+    },
+    "noos-self-heal-runner": {
+      "min_machines": 1,
+      "max_machines": 2,
+      "region": "yyz"
+    }
+  },
+  "ok": true,
+  "report_line": "runtime_scaling_eval \u00b7 rules=6 tripped=0"
+}
