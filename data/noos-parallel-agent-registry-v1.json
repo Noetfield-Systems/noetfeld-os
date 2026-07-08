@@ -27,6 +27,7 @@
     "noos-self-heal": ["gha-noos-self-heal"],
     "noos-researcher": ["gha-noos-researcher"],
     "noos-specialist": ["gha-noos-specialist"],
+    "noos-cross-repo-orchestrator": ["gha-noos-orchestrator"],
     "publish-pypi": ["gha-publish-pypi"],
     "release-noetfield-gate": ["gha-release-noetfield-gate"],
     "noos-agent-vault": ["gha-noos-agent-vault"],
