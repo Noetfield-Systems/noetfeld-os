@@ -1,0 +1,11 @@
+{
+  "schema": "noos-acg-weekly-digest-v1",
+  "at": "2026-07-07T16:08:09Z",
+  "ok": true,
+  "slots_total": 25,
+  "slots_ready": 1,
+  "slots_queued": 24,
+  "founder_gated": true,
+  "send_receipt_path": "/Users/sinakazemnezhad/.sina/nw1-outbound-send-receipt-v1.json",
+  "note": "NW1 sends require founder; machine prepares queue only"
+}

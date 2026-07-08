@@ -1,0 +1,17 @@
+{
+  "task": "noos_copilot_dispatcher_sync_mode_patch",
+  "timestamp": "2026-07-03T19:58:00-07:00",
+  "summary": "Replaced binary cloud_write_allowed with scoped cloud_sync_mode + cloud_write_scope model. Added dispatcher authority doc and machine record. Updated noos-integrator-role to include modes and rules.",
+  "changed_files": [
+    "docs/NOOS_COPILOT_DISPATCHER_AUTHORITY.md",
+    "data/noos-copilot-dispatcher-mode-v1.json",
+    "data/noos-integrator-role-v1.json",
+    "receipts/noos-copilot-dispatcher-mode-patch-20260703T195800Z.json"
+  ],
+  "next_steps": [
+    "CI: add enforcement that reads data/noos-copilot-dispatcher-mode-v1.json and refuses fleet_rollout without validator receipts",
+    "Update any runtime dispatchers to read this machine record before acting",
+    "Keep fleet_propagation_allowed=false until validator PASS + receipt + bounded PR path"
+  ],
+  "notes": "No fleet propagation, main write, or policy mutation enabled. NOOS Copilot remains a dispatcher not a policy owner."
+}

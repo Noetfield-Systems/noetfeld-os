@@ -1,0 +1,49 @@
+# NOOS GHA sustain witness — Supabase noos_loop_registry stale_count (no /tick).
+name: NOOS liveness registry witness
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "35 */6 * * *"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: noos-liveness-registry-witness-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  witness:
+    name: Loop liveness registry observe
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      NOOS_GHA_WITNESS: "1"
+      GITHUB_RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+      NOETFIELD_SUPABASE_URL: ${{ secrets.NOETFIELD_SUPABASE_URL }}
+      NOETFIELD_SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.NOETFIELD_SUPABASE_SERVICE_ROLE_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Liveness registry witness (read-only)
+        run: |
+          set -euo pipefail
+          mkdir -p receipts/proof
+          set +o pipefail
+          python3 scripts/noos_liveness_registry_witness_v1.py --write-receipt --json | tee receipts/proof/noos-liveness-registry-witness-v1.json
+          set -o pipefail
+          test -s receipts/proof/noos-liveness-registry-witness-v1.json
+
+      - name: Upload liveness registry witness receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: noos-liveness-registry-witness-v1
+          path: receipts/proof/noos-liveness-registry-witness-v1.json
+          retention-days: 30
+          if-no-files-found: warn

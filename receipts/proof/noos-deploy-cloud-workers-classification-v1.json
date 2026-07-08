@@ -1,0 +1,12 @@
+{
+  "schema": "noos-deploy-cloud-workers-classification-v1",
+  "at": "2026-07-07T08:53:00Z",
+  "workflow": "deploy-noos-cloud-workers-v1.yml",
+  "run_id": "28786036630",
+  "conclusion": "failure",
+  "root_cause": "missing_CLOUDFLARE_API_TOKEN",
+  "evidence": "wrangler exit 1: CLOUDFLARE_API_TOKEN required in non-interactive GHA",
+  "blocking_24_7": false,
+  "note": "CF workers already live from prior deploy; founder/admin adds secret later",
+  "status": "classified_non_blocking"
+}

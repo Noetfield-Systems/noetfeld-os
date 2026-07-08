@@ -1,6 +1,6 @@
 {
   "schema": "noos-trigger-host-inventory-v1",
-  "inventory_at": "2026-07-06T04:41:14Z",
+  "inventory_at": "2026-07-07T06:19:42Z",
   "authority": "LIVING_SYSTEM_99_PLAN_PHASE_A",
   "founder_sign": {
     "required": true,
@@ -8,7 +8,7 @@
     "signed_at": "2026-07-06T04:42:00Z",
     "signed_by": "founder",
     "pr": 28,
-    "note": "Phase A gate closed — cloud probes green, inventory ratified"
+    "note": "Phase A gate closed \u2014 cloud probes green, inventory ratified"
   },
   "loops": [
     {
@@ -238,6 +238,25 @@
       },
       "action": "cloud_ok",
       "founder_manual_by_design": false
+    },
+    {
+      "kind": "loop",
+      "loop_id": "improve_kaizen_daily",
+      "event_type": "noos_improve_kaizen_daily_tick",
+      "github_workflow": "noos-improve-kaizen-daily.yml",
+      "interval_minutes": 1440,
+      "trigger_host": "cf",
+      "execution_host": "railway",
+      "cf_dispatch_id": "improve_kaizen_daily",
+      "workflow_triggers": {
+        "exists": true,
+        "schedule": false,
+        "workflow_dispatch": true,
+        "repository_dispatch": false,
+        "push": false
+      },
+      "action": "cloud_ok",
+      "founder_manual_by_design": false
     }
   ],
   "autorun_workflows": [
@@ -393,6 +412,26 @@
     },
     {
       "kind": "autorun_workflow",
+      "workflow_id": "noos_deadman",
+      "title": "NOOS deadman liveness watchdog",
+      "probe_type": "url_motor_health",
+      "trigger_host": "observe_only",
+      "action": "no_trigger",
+      "founder_manual_by_design": false,
+      "note": null
+    },
+    {
+      "kind": "autorun_workflow",
+      "workflow_id": "noos_loop_liveness_registry",
+      "title": "NOOS loop liveness registry (Supabase)",
+      "probe_type": "supabase_noos_liveness_registry",
+      "trigger_host": "cf",
+      "action": "cloud_ok_when_cf_railway_live",
+      "founder_manual_by_design": false,
+      "note": "python3 scripts/seed_noos_loop_liveness_v1.py --tick-all"
+    },
+    {
+      "kind": "autorun_workflow",
       "workflow_id": "sandbox_health_sweep",
       "title": "Sandbox health sweep",
       "probe_type": "url_sweep_readonly",
@@ -508,9 +547,9 @@
       "ok": true,
       "legacy_github_dispatch": false,
       "railway_motor_deployed": true,
-      "loop_runner_url_ready": true,
-      "target_count": 13,
-      "step_7_secrets_on_worker": true
+      "loop_runner_url_ready": null,
+      "target_count": 14,
+      "step_7_secrets_on_worker": false
     },
     "railway_loop_runner": {
       "url": "https://noos-loop-runner-production.up.railway.app/health",
@@ -522,16 +561,16 @@
     "fly_auth": false,
     "fly_l4_deferred": true,
     "phase_a_steps_6_10": {
-      "cf_paid_plan": "founder_confirm",
-      "cf_secrets_wired": true,
+      "cf_paid_plan": "active_5usd_month",
+      "cf_secrets_wired": false,
       "railway_loop_runner_live": true,
       "supabase_on_railway": "founder_confirm_railway_dashboard",
       "fly_l4": "deferred"
     }
   },
   "summary": {
-    "loop_count": 12,
-    "cf_dispatched_loops": 12,
+    "loop_count": 13,
+    "cf_dispatched_loops": 13,
     "migrate_remaining": 0,
     "mac_cursor_unmarked": 0,
     "sina_path_scripts": 6,
@@ -540,6 +579,6 @@
   "migrate_remaining": [],
   "mac_cursor_unmarked": [],
   "ok": true,
-  "report_line": "trigger_host_inventory \u00b7 cf_loops=12 unmarked_mac=0 gate=True",
+  "report_line": "trigger_host_inventory \u00b7 cf_loops=13 unmarked_mac=0 gate=True",
   "data_path": "data/noos-trigger-host-inventory-v1.json"
 }

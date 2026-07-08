@@ -12,6 +12,9 @@ from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
 
+# Meta-audit receipts self-seal per audit run; exclude from operational chain walks.
+CHAIN_EXCLUDED_SCHEMAS = frozenset({"noos-outside-audit-receipt-v1"})
+
 
 def _canonical_json(row: dict[str, Any]) -> bytes:
     body = {k: v for k, v in row.items() if k not in {"chain_hash", "prev_chain_hash", "hmac_seal"}}
@@ -42,6 +45,18 @@ def seal_receipt(row: dict[str, Any], *, prev_hash: str | None = None, key: str 
     if seal:
         out["hmac_seal"] = seal
     return out
+
+
+def chain_eligible(row: dict[str, Any]) -> bool:
+    return str(row.get("schema") or "") not in CHAIN_EXCLUDED_SCHEMAS
+
+
+def verify_chain_operational(receipts: list[dict[str, Any]], *, key: str | None = None) -> dict[str, Any]:
+    eligible = [r for r in receipts if chain_eligible(r)]
+    row = verify_chain(eligible, key=key)
+    row["excluded_schemas"] = sorted(CHAIN_EXCLUDED_SCHEMAS)
+    row["excluded_count"] = len(receipts) - len(eligible)
+    return row
 
 
 def verify_chain(receipts: list[dict[str, Any]], *, key: str | None = None) -> dict[str, Any]:

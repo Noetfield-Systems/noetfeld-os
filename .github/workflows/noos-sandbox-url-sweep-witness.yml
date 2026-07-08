@@ -1,0 +1,47 @@
+# NOOS GHA sustain witness — www/api/platform URL sweep + trigger registry drift.
+name: NOOS sandbox URL sweep witness
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "45 */12 * * *"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: noos-sandbox-url-sweep-witness-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  witness:
+    name: Sandbox URL + trigger sweep
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      NOOS_GHA_WITNESS: "1"
+      GITHUB_RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Sandbox URL sweep witness
+        run: |
+          set -euo pipefail
+          mkdir -p receipts/proof
+          set +o pipefail
+          python3 scripts/noos_sandbox_url_sweep_witness_v1.py --write-receipt --json | tee receipts/proof/noos-sandbox-url-sweep-witness-v1.json
+          set -o pipefail
+          test -s receipts/proof/noos-sandbox-url-sweep-witness-v1.json
+
+      - name: Upload sandbox sweep witness receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: noos-sandbox-url-sweep-witness-v1
+          path: receipts/proof/noos-sandbox-url-sweep-witness-v1.json
+          retention-days: 30
+          if-no-files-found: warn

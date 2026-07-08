@@ -1,0 +1,21 @@
+{
+  "schema": "noos-icl-p2-05-closeout-v1",
+  "at": "2026-07-08T00:03:17Z",
+  "ok": true,
+  "closure_token": "NOOS_INTEGRATOR_DAILY: green",
+  "lane": "ICL-P2-05",
+  "acceptance": {
+    "integrator_daily_green": true,
+    "tf_11_layers": "yellow",
+    "tf_registry_deadman": "green",
+    "tf_registry_red": 0
+  },
+  "fixes_applied": [
+    "integrator-repair-autorun portfolio spine heartbeats",
+    "TrustField record_sg_registry_witness + fleet tick",
+    "parallel registry gha-secondary-witness coverage",
+    "daily checklist D11 latest-only + D12 billing proxy"
+  ],
+  "command": "make integrator-daily --write-receipt",
+  "receipt": "receipts/proof/noos-integrator-daily-checklist-v1.json"
+}

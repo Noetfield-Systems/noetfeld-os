@@ -1,0 +1,166 @@
+{
+  "schema": "noos-nf-pub-claim-evidence-matrix-v1",
+  "authority": "UPG-NF-PUB-02",
+  "drafted_at": "2026-07-06T13:00:00Z",
+  "status": "pending_founder_verdict",
+  "scope": "browser_visible_www_noetfield_com",
+  "inputs": [
+    "receipts/proof/noos-nf-pub-audit-protocol-v1.json",
+    "receipts/proof/noos-nf-pub-route-inventory-v1.json",
+    "Noetfield/reports/www-audit/receipts/audit_20260706T125739Z.json",
+    "Noetfield PR #89 copy delta (draft, base fix/www-tech-only)"
+  ],
+  "verdict_legend": {
+    "ACCEPT": "Ship as-is with cited evidence",
+    "REJECT": "Remove or rewrite before www deploy",
+    "DEFER": "Hold until evidence or founder gate"
+  },
+  "claims": [
+    {
+      "claim_id": "CEM-001",
+      "claim_text": "Diagnostic Sprint from $2,500 · 1 week · roadmap PDF",
+      "surface": "/",
+      "live_main": true,
+      "proposed_copy_pr89": "Demoted to secondary link; lead SKU becomes Copilot Governance Pack",
+      "risk": "P2",
+      "evidence": "pricing/index.html · intelligence/intake/ · L0-law PUBLIC_WWW_BRAND_E2E_LAW",
+      "verdict": "DEFER",
+      "action": "Founder: confirm lead-SKU pivot vs Intelligence-first positioning before merge #89"
+    },
+    {
+      "claim_id": "CEM-002",
+      "claim_text": "Copilot Governance Pack $2k–10k · 90 days · board PDF · procurement ZIP",
+      "surface": "/ · /copilot/pilot/",
+      "live_main": true,
+      "proposed_copy_pr89": "Featured lead offer card + primary CTA",
+      "risk": "P1",
+      "evidence": "copilot/pilot/index.html · pricing table allowed_phrases · SourceA prospect packet bfc05dbb",
+      "verdict": "ACCEPT",
+      "action": "Keep; ensure pricing page and pilot page match exact band copy"
+    },
+    {
+      "claim_id": "CEM-003",
+      "claim_text": "Trust Brief $10,000 · six weeks",
+      "surface": "/ · /trust-brief/",
+      "live_main": true,
+      "proposed_copy_pr89": "Stable triad SKU #2",
+      "risk": "P1",
+      "evidence": "trust-brief/index.html · canonical pricing table $10k/from $10,000",
+      "verdict": "ACCEPT",
+      "action": "Keep; align meta description length (audit SM-2 fail on intake page)"
+    },
+    {
+      "claim_id": "CEM-004",
+      "claim_text": "Free sandbox · 14 days · 50 evaluate calls · no sales call",
+      "surface": "/ · /start/",
+      "live_main": true,
+      "proposed_copy_pr89": "Stable triad SKU #3 · Start sandbox CTA",
+      "risk": "P1",
+      "evidence": "start/index.html · sandbox terms in page copy",
+      "verdict": "ACCEPT",
+      "action": "Keep; reduce above-fold CTA count on /start/ (audit BF-3: 5 CTAs > max 3)"
+    },
+    {
+      "claim_id": "CEM-005",
+      "claim_text": "Three stable entry paths: Apply for pilot · Request Trust Brief · Start sandbox",
+      "surface": "/",
+      "live_main": false,
+      "proposed_copy_pr89": "Hero + footer + sticky bar + nav (PR #89)",
+      "risk": "P2",
+      "evidence": "NF UI build law · site-audit BF-5 (P2 until copy verdict)",
+      "verdict": "DEFER",
+      "action": "Merge #89 only after this matrix ACCEPT; promote BF-5 to P0 post-merge"
+    },
+    {
+      "claim_id": "CEM-006",
+      "claim_text": "EU AI Act Art. 12 · ISO 42001 · DORA · NIST AI RMF · Microsoft Purview alignment",
+      "surface": "/ (marquee + trust strip)",
+      "live_main": true,
+      "proposed_copy_pr89": "Unchanged framework marquee",
+      "risk": "P1",
+      "evidence": "Homepage disclaimer: orientation only, not certification · governance/NODE_CATALOG",
+      "verdict": "ACCEPT",
+      "action": "Keep with orientation qualifier visible above fold (already present)"
+    },
+    {
+      "claim_id": "CEM-007",
+      "claim_text": "Tamper-evident TLE · signed receipt before governance standup (~5 min sandbox)",
+      "surface": "/ (live proof playground)",
+      "live_main": true,
+      "proposed_copy_pr89": "Retained in hero promise",
+      "risk": "P1",
+      "evidence": "trust-ledger/sample-report/ · copilot/demo/ · illustrative badge on receipt mock",
+      "verdict": "ACCEPT",
+      "action": "Keep illustrative sandbox label; do not imply live production RID without nerve receipt"
+    },
+    {
+      "claim_id": "CEM-008",
+      "claim_text": "SOC 2 Type II",
+      "surface": "/ (ciso grid)",
+      "live_main": true,
+      "proposed_copy_pr89": "Unchanged",
+      "risk": "P0",
+      "evidence": "Homepage anti-ICP: do not claim ISO/SOC certification · badge must read Planned/Out of scope",
+      "verdict": "REJECT",
+      "action": "P0 www fix on main: ensure SOC 2 card shows Planned or remove — verify badge text live"
+    },
+    {
+      "claim_id": "CEM-009",
+      "claim_text": "Async intake routes to operations@noetfield.com",
+      "surface": "/ · intake forms",
+      "live_main": true,
+      "proposed_copy_pr89": "Added explicitly in proposed meta/lead",
+      "risk": "P0",
+      "evidence": "Live intake health · contact/index.html · functions/api/intake",
+      "verdict": "ACCEPT",
+      "action": "Verified operational email; keep"
+    },
+    {
+      "claim_id": "CEM-010",
+      "claim_text": "Governed AI operations—from sandbox receipt to board-ready proof (proposed H1)",
+      "surface": "/",
+      "live_main": false,
+      "proposed_copy_pr89": "Replaces Intelligence SME headline (PR #89)",
+      "risk": "P2",
+      "evidence": "Competitor parity audit input only — no third-party buyer test yet",
+      "verdict": "DEFER",
+      "action": "Founder copy review; A/B vs current SME headline"
+    },
+    {
+      "claim_id": "CEM-011",
+      "claim_text": "Title/meta SEO within 60ch title · 50–160ch description · og:image",
+      "surface": "sitewide",
+      "live_main": "partial fail",
+      "proposed_copy_pr89": "Proposed title 74ch — fails SM-2",
+      "risk": "P1",
+      "evidence": "audit_20260706T125739Z SM-2 findings · og:image absent 18/18 pages",
+      "verdict": "DEFER",
+      "action": "Tech follow-up: og:image asset + title trim in copy PR or separate P1 tech lane"
+    },
+    {
+      "claim_id": "CEM-012",
+      "claim_text": "apex noetfield.com resolves (non-www)",
+      "surface": "infra",
+      "live_main": false,
+      "proposed_copy_pr89": "n/a",
+      "risk": "P1",
+      "evidence": "route-inventory: noetfield.com/ → 404 · www canonical OK",
+      "verdict": "ACCEPT",
+      "action": "P1 infra: CF redirect apex → www (tech, not copy PR)"
+    }
+  ],
+  "summary": {
+    "total": 12,
+    "accept": 6,
+    "reject": 1,
+    "defer": 5,
+    "p0_open": 1,
+    "copy_pr_blocked_until": "founder signs DEFER → ACCEPT/REJECT per CEM-001,005,010,011"
+  },
+  "next_artifacts": [
+    "noos-nf-pub-cta-journey-map-v1.json",
+    "noos-nf-pub-claim-risk-matrix-v1.json",
+    "noos-nf-pub-prioritized-fix-list-v1.json"
+  ],
+  "ok": true
+}

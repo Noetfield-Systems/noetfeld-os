@@ -1,23 +1,23 @@
 {
   "schema": "noos-cf-railway-dispatch-verify-v1",
-  "verified_at": "2026-07-05T17:35:42Z",
-  "runner_url": "http://127.0.0.1:8099",
-  "target_count": 13,
-  "fired_count": 13,
-  "execution_ok_count": 0,
+  "verified_at": "2026-07-06T06:00:47Z",
+  "runner_url": "https://noos-loop-runner-production.up.railway.app",
+  "target_count": 14,
+  "fired_count": 14,
+  "execution_ok_count": 5,
   "targets": [
     {
       "dispatch_id": "inbox",
       "event_type": "noos_inbox_loop_tick",
       "handler": "loop",
       "fired": true,
-      "ok": false,
-      "status": 500,
+      "ok": true,
+      "status": 200,
       "body": {
         "handler": "loop",
         "event_type": "noos_inbox_loop_tick",
-        "exit_code": 1,
-        "ok": false,
+        "exit_code": 0,
+        "ok": true,
         "cycle": {
           "schema": "noos-24-7-loop-cycle-v1",
           "receipt_schema": "autorun-cycle-receipt-v2",
@@ -29,9 +29,9 @@
           "event_type": "noos_inbox_loop_tick",
           "domain": "factory-inbox",
           "trigger_source": "http_loop",
-          "cycle_number": 10,
-          "op_key": "860122f741de5df0792a4edb",
-          "started_at": "2026-07-05T17:35:05+00:00",
+          "cycle_number": 9,
+          "op_key": "21ff426d9f1591f81649bd90",
+          "started_at": "2026-07-06T06:00:15+00:00",
           "state_before": "RUNNING",
           "cost": {
             "provider": "github_actions+cloudflare_cron",
@@ -48,9 +48,9 @@
             "law": "sum(origin_counts) == sink_count",
             "counts": {
               "steps": 1,
-              "self_heal": 1
+              "self_heal": 0
             },
-            "sink_count": 2,
+            "sink_count": 1,
             "provenance_tags": {
               "steps": "loop_step",
               "self_heal": "loop_self_heal"
@@ -58,61 +58,42 @@
             "verdict": "PASS"
           },
           "founder_blocked": {
-            "count": 0,
-            "oldest_id": "",
-            "priority": "",
-            "age_seconds": 0,
-            "escalated": false,
-            "skipped": true
+            "count": 1,
+            "oldest_id": "NOOS-C-01",
+            "priority": "P0",
+            "age_seconds": 352773,
+            "escalated": true
           },
           "evidence": [
             {
-              "command": "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3 scripts/cloud_inbox_worker_v1.py",
-              "exit_code": 1,
-              "output": ""
-            },
-            {
-              "command": "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3 scripts/reenqueue_blocked_upg_inbox_v1.py",
+              "command": "/usr/local/bin/python3 scripts/cloud_inbox_worker_v1.py",
               "exit_code": 0,
-              "output": "{\n  \"requeued\": [],\n  \"blocked_seen\": 0\n}"
+              "output": "r_blocked: NOOS-C-01\nfounder_blocked_priority: P0\nfounder_blocked_reason: founder_decision_required\n{\n  \"ok\": true,\n  \"status\": \"IDLE_NO_WORK\",\n  \"idle_reason\": \"no_executable_pending\",\n  \"founder_blocked\": {\n    \"founder_blocked_count\": 1,\n    \"oldest\": \"NOOS-C-01\",\n    \"priority\": \"P0\",\n    \"age_seconds\": 344162,\n    \"reason\": \"founder_decision_required\"\n  },\n  \"founder_blocked_this_cycle\": []\n}"
             }
           ],
           "runner_output": {
             "steps": [
               {
                 "cmd": [
-                  "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+                  "/usr/local/bin/python3",
                   "scripts/cloud_inbox_worker_v1.py"
                 ],
-                "ok": false,
-                "exit_code": 1,
-                "stdout_tail": "",
-                "stderr_tail": "{\"ok\": false, \"error\": \"Supabase not configured\"}",
+                "ok": true,
+                "exit_code": 0,
+                "stdout_tail": "work_item_id: none\nwork_status: IDLE_NO_WORK\nexit_code: 0\nfounder_blocked_count: 1\noldest_founder_blocked: NOOS-C-01\nfounder_blocked_priority: P0\nfounder_blocked_reason: founder_decision_required\n{\n  \"ok\": true,\n  \"status\": \"IDLE_NO_WORK\",\n  \"idle_reason\": \"no_executable_pending\",\n  \"founder_blocked\": {\n    \"founder_blocked_count\": 1,\n    \"oldest\": \"NOOS-C-01\",\n    \"priority\": \"P0\",\n    \"age_seconds\": 344162,\n    \"reason\": \"founder_decision_required\"\n  },\n  \"founder_blocked_this_cycle\": []\n}",
+                "stderr_tail": "",
                 "continued_on_error": false,
                 "name": "cloud_worker"
               }
             ],
-            "self_heal": [
-              {
-                "cmd": [
-                  "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
-                  "scripts/reenqueue_blocked_upg_inbox_v1.py"
-                ],
-                "ok": true,
-                "exit_code": 0,
-                "stdout_tail": "{\n  \"requeued\": [],\n  \"blocked_seen\": 0\n}",
-                "stderr_tail": "",
-                "continued_on_error": false,
-                "name": "reenqueue_blocked"
-              }
-            ],
+            "self_heal": [],
             "cloud_meta": {
               "processor": "noos_loop_runner_v1",
               "github_event": "http_loop",
-              "github_run_id": "railway-c09001531e31",
+              "github_run_id": "railway-ec63ac6b50d7",
               "github_workflow": "railway-noos-loop-runner",
               "dispatch_source": "verify_script",
-              "processed_at": "2026-07-05T17:35:05+00:00"
+              "processed_at": "2026-07-06T06:00:16+00:00"
             },
             "cloud_trigger": "http_loop"
           },
@@ -121,41 +102,51 @@
             "read_only_control": false
           },
           "supabase_sink": {
-            "ok": false,
-            "skipped": true,
-            "reason": "supabase_not_configured"
+            "ok": true,
+            "exit_code": 0,
+            "detail": {
+              "ok": true,
+              "id": "1b94947b-8599-465a-a727-fc20e90814f4",
+              "status": 201,
+              "op_key": "21ff426d9f1591f81649bd90"
+            }
           },
-          "finished_at": "2026-07-05T17:35:05+00:00",
-          "state_after": "FAILED_WITH_RECEIPT",
-          "status": "degraded",
-          "exit_code": 1,
-          "blocker_reason": "steps_failed:['cloud_worker']",
-          "next_action": "self_heal_or_triage",
+          "finished_at": "2026-07-06T06:00:16+00:00",
+          "state_after": "COMPLETE",
+          "status": "ok",
+          "exit_code": 0,
+          "blocker_reason": null,
+          "next_action": "await_next_scheduled_tick",
           "d4": {
-            "execute_ok": false,
+            "execute_ok": true,
             "validate_ok": true,
-            "sink_acked": false
+            "sink_acked": true
           },
           "d2": {
             "cas": {
               "verdict": "ACCEPTED",
-              "expected": 9,
-              "observed": 9,
-              "new_value": 10
+              "expected": 8,
+              "observed": 8,
+              "new_value": 9
             }
           },
           "transition_log_tail": [
             {
               "from": "RUNNING",
-              "to": "FAILED_WITH_RECEIPT",
-              "at": "2026-07-05T17:35:05+00:00",
-              "cycle": 10,
-              "op_key": "860122f741de5df0792a4edb"
+              "to": "COMPLETE",
+              "at": "2026-07-06T06:00:16+00:00",
+              "cycle": 9,
+              "op_key": "21ff426d9f1591f81649bd90"
             }
-          ]
+          ],
+          "liveness_upsert": {
+            "ok": true,
+            "loop_id": "inbox",
+            "last_fired_at": "2026-07-06T06:00:16.944Z"
+          }
         },
         "stderr_tail": "",
-        "run_id": "railway-c09001531e31"
+        "run_id": "railway-ec63ac6b50d7"
       }
     },
     {
@@ -164,7 +155,7 @@
       "handler": "loop",
       "fired": true,
       "ok": false,
-      "status": 500,
+      "status": 200,
       "body": {
         "handler": "loop",
         "event_type": "noos_runtime_loop_tick",
@@ -181,9 +172,9 @@
           "event_type": "noos_runtime_loop_tick",
           "domain": "gel-runtime",
           "trigger_source": "http_loop",
-          "cycle_number": 9,
-          "op_key": "94a1a3fd67a32001da9f3dd2",
-          "started_at": "2026-07-05T17:35:05+00:00",
+          "cycle_number": 3,
+          "op_key": "8420e80a00f32c99f91399ef",
+          "started_at": "2026-07-06T06:00:17+00:00",
           "state_before": "RUNNING",
           "cost": {
             "provider": "github_actions+cloudflare_cron",
@@ -210,53 +201,52 @@
             "verdict": "PASS"
           },
           "founder_blocked": {
-            "count": 0,
-            "oldest_id": "",
-            "priority": "",
-            "age_seconds": 0,
-            "escalated": false,
-            "skipped": true
+            "count": 1,
+            "oldest_id": "NOOS-C-01",
+            "priority": "P0",
+            "age_seconds": 352774,
+            "escalated": true
           },
           "evidence": [
             {
-              "command": "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3 -m noetfield_gate.cli gate --json --pytest",
-              "exit_code": 1,
-              "output": "\"name\": \"product_truth_phase\",\n      \"ok\": true,\n      \"reason\": \"PRODUCT_TRUTH phase 4 vs manifest 4\",\n      \"truth_phase\": 4,\n      \"manifest_phase\": 4\n    }\n  ],\n  \"block_reasons\": [\n    \".............................F.......................................... [ 49%]\\n......................................................................F. [ 99%]\\n.                                       \"\n  ]\n}"
+              "command": "/usr/local/bin/python3 -m noetfield_gate.cli gate --json --pytest",
+              "exit_code": 0,
+              "output": "  {\n      \"id\": \"G6\",\n      \"name\": \"pytest_suite\",\n      \"ok\": true,\n      \"reason\": \"skipped \\u2014 pass include_pytest=True or use noetfield gate --pytest\",\n      \"skipped\": true\n    },\n    {\n      \"id\": \"G7\",\n      \"name\": \"product_truth_phase\",\n      \"ok\": true,\n      \"reason\": \"skipped \\u2014 PRODUCT_TRUTH or UPGRADE_MANIFEST missing\",\n      \"skipped\": true\n    }\n  ],\n  \"block_reasons\": []\n}"
             },
             {
-              "command": "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3 -m pytest -q",
-              "exit_code": 1,
-              "output": "rt WebSocketServerProtocol\n\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\n=========================== short test summary info ============================\nFAILED tests/test_cursor_local_mac_t2_v1.py::test_full_governance_verify_still_passes\nFAILED tests/test_verify_living_system_governance_v1.py::test_full_governance_verify_passes\n2 failed, 143 passed, 2 warnings in 2.40s"
+              "command": "/usr/local/bin/python3 -m pytest -q",
+              "exit_code": 5,
+              "output": "no tests ran in 0.01s"
             }
           ],
           "runner_output": {
             "steps": [
               {
                 "cmd": [
-                  "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+                  "/usr/local/bin/python3",
                   "-m",
                   "noetfield_gate.cli",
                   "gate",
                   "--json",
                   "--pytest"
                 ],
-                "ok": false,
-                "exit_code": 1,
-                "stdout_tail": "\"ok\": true,\n      \"reason\": \"sqlite ok (noetfeld.db)\"\n    },\n    {\n      \"id\": \"G4\",\n      \"name\": \"api_readiness\",\n      \"ok\": true,\n      \"reason\": \"skipped \\u2014 set NOETFIELD_API_URL or --api-url to probe remote runtime\",\n      \"skipped\": true\n    },\n    {\n      \"id\": \"G5\",\n      \"name\": \"policy_registry\",\n      \"ok\": true,\n      \"reason\": \"PolicyRegistry loaded\",\n      \"combined_hash\": \"6ed3dd7180db65bdfce6ab99a9a7ee98334f49aa7a5944fd8a1683d099e95fde\"\n    },\n    {\n      \"id\": \"G6\",\n      \"name\": \"pytest_suite\",\n      \"ok\": false,\n      \"reason\": \".............................F.......................................... [ 49%]\\n......................................................................F. [ 99%]\\n.                                       \"\n    },\n    {\n      \"id\": \"G7\",\n      \"name\": \"product_truth_phase\",\n      \"ok\": true,\n      \"reason\": \"PRODUCT_TRUTH phase 4 vs manifest 4\",\n      \"truth_phase\": 4,\n      \"manifest_phase\": 4\n    }\n  ],\n  \"block_reasons\": [\n    \".............................F.......................................... [ 49%]\\n......................................................................F. [ 99%]\\n.                                       \"\n  ]\n}",
-                "stderr_tail": "BLOCK: .............................F.......................................... [ 49%]\n......................................................................F. [ 99%]\n.",
+                "ok": true,
+                "exit_code": 0,
+                "stdout_tail": "efault policy pack (pip install)\",\n      \"policy_source\": \"bundled\"\n    },\n    {\n      \"id\": \"G2\",\n      \"name\": \"policy_pack_valid\",\n      \"ok\": true,\n      \"reason\": \"policy JSON valid\",\n      \"rule_set_id\": \"noetfeld-credit-v1\",\n      \"rule_set_version\": \"1.0.0\"\n    },\n    {\n      \"id\": \"G3\",\n      \"name\": \"database_writable\",\n      \"ok\": true,\n      \"reason\": \"sqlite ok (noetfeld.db)\"\n    },\n    {\n      \"id\": \"G4\",\n      \"name\": \"api_readiness\",\n      \"ok\": true,\n      \"reason\": \"skipped \\u2014 set NOETFIELD_API_URL or --api-url to probe remote runtime\",\n      \"skipped\": true\n    },\n    {\n      \"id\": \"G5\",\n      \"name\": \"policy_registry\",\n      \"ok\": true,\n      \"reason\": \"skipped \\u2014 portable gate (full PolicyRegistry requires noetfeld-os checkout)\",\n      \"skipped\": true\n    },\n    {\n      \"id\": \"G6\",\n      \"name\": \"pytest_suite\",\n      \"ok\": true,\n      \"reason\": \"skipped \\u2014 pass include_pytest=True or use noetfield gate --pytest\",\n      \"skipped\": true\n    },\n    {\n      \"id\": \"G7\",\n      \"name\": \"product_truth_phase\",\n      \"ok\": true,\n      \"reason\": \"skipped \\u2014 PRODUCT_TRUTH or UPGRADE_MANIFEST missing\",\n      \"skipped\": true\n    }\n  ],\n  \"block_reasons\": []\n}",
+                "stderr_tail": "",
                 "continued_on_error": false,
                 "name": "gate"
               },
               {
                 "cmd": [
-                  "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+                  "/usr/local/bin/python3",
                   "-m",
                   "pytest",
                   "-q"
                 ],
                 "ok": false,
-                "exit_code": 1,
-                "stdout_tail": "rror\n=============================== warnings summary ===============================\ntests/test_decide_integration_ci.py::test_decide_cli_against_live_local_server\n  /Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/websockets/legacy/__init__.py:6: DeprecationWarning: websockets.legacy is deprecated; see https://websockets.readthedocs.io/en/stable/howto/upgrade.html for upgrade instructions\n    warnings.warn(  # deprecated in 14.0 - 2024-11-09\n\ntests/test_decide_integration_ci.py::test_decide_cli_against_live_local_server\n  /Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/uvicorn/protocols/websockets/websockets_impl.py:17: DeprecationWarning: websockets.server.WebSocketServerProtocol is deprecated\n    from websockets.server import WebSocketServerProtocol\n\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\n=========================== short test summary info ============================\nFAILED tests/test_cursor_local_mac_t2_v1.py::test_full_governance_verify_still_passes\nFAILED tests/test_verify_living_system_governance_v1.py::test_full_governance_verify_passes\n2 failed, 143 passed, 2 warnings in 2.40s",
+                "exit_code": 5,
+                "stdout_tail": "no tests ran in 0.01s",
                 "stderr_tail": "",
                 "continued_on_error": false,
                 "name": "pytest"
@@ -266,10 +256,10 @@
             "cloud_meta": {
               "processor": "noos_loop_runner_v1",
               "github_event": "http_loop",
-              "github_run_id": "railway-5b6b716b9e9d",
+              "github_run_id": "railway-e98986ee340a",
               "github_workflow": "railway-noos-loop-runner",
               "dispatch_source": "verify_script",
-              "processed_at": "2026-07-05T17:35:11+00:00"
+              "processed_at": "2026-07-06T06:00:17+00:00"
             },
             "cloud_trigger": "http_loop"
           },
@@ -278,41 +268,52 @@
             "read_only_control": false
           },
           "supabase_sink": {
-            "ok": false,
-            "skipped": true,
-            "reason": "supabase_not_configured"
+            "ok": true,
+            "exit_code": 0,
+            "detail": {
+              "ok": true,
+              "idempotent": true,
+              "merged": true,
+              "id": "6ccab7ac-2218-47ef-9f85-6c146fb5340c",
+              "op_key": "8420e80a00f32c99f91399ef"
+            }
           },
-          "finished_at": "2026-07-05T17:35:11+00:00",
+          "finished_at": "2026-07-06T06:00:17+00:00",
           "state_after": "FAILED_WITH_RECEIPT",
           "status": "degraded",
           "exit_code": 1,
-          "blocker_reason": "steps_failed:['gate', 'pytest']",
+          "blocker_reason": "steps_failed:['pytest']",
           "next_action": "self_heal_or_triage",
           "d4": {
             "execute_ok": false,
             "validate_ok": true,
-            "sink_acked": false
+            "sink_acked": true
           },
           "d2": {
             "cas": {
               "verdict": "ACCEPTED",
-              "expected": 8,
-              "observed": 8,
-              "new_value": 9
+              "expected": 2,
+              "observed": 2,
+              "new_value": 3
             }
           },
           "transition_log_tail": [
             {
               "from": "RUNNING",
               "to": "FAILED_WITH_RECEIPT",
-              "at": "2026-07-05T17:35:11+00:00",
-              "cycle": 9,
-              "op_key": "94a1a3fd67a32001da9f3dd2"
+              "at": "2026-07-06T06:00:17+00:00",
+              "cycle": 3,
+              "op_key": "8420e80a00f32c99f91399ef"
             }
-          ]
+          ],
+          "liveness_upsert": {
+            "ok": false,
+            "skipped": true,
+            "reason": "cycle_not_successful"
+          }
         },
         "stderr_tail": "",
-        "run_id": "railway-5b6b716b9e9d"
+        "run_id": "railway-e98986ee340a"
       }
     },
     {
@@ -321,7 +322,7 @@
       "handler": "loop",
       "fired": true,
       "ok": false,
-      "status": 500,
+      "status": 200,
       "body": {
         "handler": "loop",
         "event_type": "noos_surface_loop_tick",
@@ -338,9 +339,9 @@
           "event_type": "noos_surface_loop_tick",
           "domain": "public-nerve",
           "trigger_source": "http_loop",
-          "cycle_number": 10,
-          "op_key": "7e0c60df5326d24d728a5fca",
-          "started_at": "2026-07-05T17:35:11+00:00",
+          "cycle_number": 3,
+          "op_key": "150ddc7874d7f5d2ac27fa24",
+          "started_at": "2026-07-06T06:00:18+00:00",
           "state_before": "RUNNING",
           "cost": {
             "provider": "github_actions+cloudflare_cron",
@@ -367,18 +368,17 @@
             "verdict": "PASS"
           },
           "founder_blocked": {
-            "count": 0,
-            "oldest_id": "",
-            "priority": "",
-            "age_seconds": 0,
-            "escalated": false,
-            "skipped": true
+            "count": 1,
+            "oldest_id": "NOOS-C-01",
+            "priority": "P0",
+            "age_seconds": 352775,
+            "escalated": true
           },
           "evidence": [
             {
               "command": "bash scripts/check_production_urls.sh",
-              "exit_code": 0,
-              "output": "K   www gel (200) https://www.noetfield.com/gel/\nOK   www ai-value-os (200) https://www.noetfield.com/ai-value-governance-os/\nOK   www acg service (200) https://www.noetfield.com/services/agentic-cost-governance\nOK   platform health (200) https://platform.noetfield.com/health\nOK   gel-api health (200) https://api.noetfield.com/health\nOK   gel-api readiness (200) https://api.noetfield.com/readiness"
+              "exit_code": 1,
+              "output": ""
             }
           ],
           "runner_output": {
@@ -388,10 +388,10 @@
                   "bash",
                   "scripts/check_production_urls.sh"
                 ],
-                "ok": true,
-                "exit_code": 0,
-                "stdout_tail": "OK   www home (200) https://www.noetfield.com/\nOK   www gel (200) https://www.noetfield.com/gel/\nOK   www ai-value-os (200) https://www.noetfield.com/ai-value-governance-os/\nOK   www acg service (200) https://www.noetfield.com/services/agentic-cost-governance\nOK   platform health (200) https://platform.noetfield.com/health\nOK   gel-api health (200) https://api.noetfield.com/health\nOK   gel-api readiness (200) https://api.noetfield.com/readiness",
-                "stderr_tail": "",
+                "ok": false,
+                "exit_code": 1,
+                "stdout_tail": "",
+                "stderr_tail": "ipts/check_production_urls.sh: line 10: curl: command not found\nFAIL www gel (000) https://www.noetfield.com/gel/\nscripts/check_production_urls.sh: line 10: curl: command not found\nFAIL www ai-value-os (000) https://www.noetfield.com/ai-value-governance-os/\nscripts/check_production_urls.sh: line 10: curl: command not found\nFAIL www acg service (000) https://www.noetfield.com/services/agentic-cost-governance\nscripts/check_production_urls.sh: line 10: curl: command not found\nFAIL platform health (000) https://platform.noetfield.com/health\nscripts/check_production_urls.sh: line 31: curl: command not found\nFAIL gel-api health (000) https://api.noetfield.com/health\nscripts/check_production_urls.sh: line 31: curl: command not found\nFAIL gel-api readiness (000) https://api.noetfield.com/readiness",
                 "continued_on_error": false,
                 "name": "production_urls"
               }
@@ -400,10 +400,10 @@
             "cloud_meta": {
               "processor": "noos_loop_runner_v1",
               "github_event": "http_loop",
-              "github_run_id": "railway-fba5ee01ab57",
+              "github_run_id": "railway-b074c8bb0211",
               "github_workflow": "railway-noos-loop-runner",
               "dispatch_source": "verify_script",
-              "processed_at": "2026-07-05T17:35:12+00:00"
+              "processed_at": "2026-07-06T06:00:18+00:00"
             },
             "cloud_trigger": "http_loop"
           },
@@ -412,41 +412,52 @@
             "read_only_control": false
           },
           "supabase_sink": {
-            "ok": false,
-            "skipped": true,
-            "reason": "supabase_not_configured"
+            "ok": true,
+            "exit_code": 0,
+            "detail": {
+              "ok": true,
+              "idempotent": true,
+              "merged": true,
+              "id": "35450719-841a-4931-8964-e13f7c1ab15c",
+              "op_key": "150ddc7874d7f5d2ac27fa24"
+            }
           },
-          "finished_at": "2026-07-05T17:35:12+00:00",
-          "state_after": "BLOCKED_WITH_REASON",
+          "finished_at": "2026-07-06T06:00:18+00:00",
+          "state_after": "FAILED_WITH_RECEIPT",
           "status": "degraded",
           "exit_code": 1,
-          "blocker_reason": "sink_unacked",
+          "blocker_reason": "steps_failed:['production_urls']",
           "next_action": "self_heal_or_triage",
           "d4": {
-            "execute_ok": true,
+            "execute_ok": false,
             "validate_ok": true,
-            "sink_acked": false
+            "sink_acked": true
           },
           "d2": {
             "cas": {
               "verdict": "ACCEPTED",
-              "expected": 9,
-              "observed": 9,
-              "new_value": 10
+              "expected": 2,
+              "observed": 2,
+              "new_value": 3
             }
           },
           "transition_log_tail": [
             {
               "from": "RUNNING",
-              "to": "BLOCKED_WITH_REASON",
-              "at": "2026-07-05T17:35:12+00:00",
-              "cycle": 10,
-              "op_key": "7e0c60df5326d24d728a5fca"
+              "to": "FAILED_WITH_RECEIPT",
+              "at": "2026-07-06T06:00:18+00:00",
+              "cycle": 3,
+              "op_key": "150ddc7874d7f5d2ac27fa24"
             }
-          ]
+          ],
+          "liveness_upsert": {
+            "ok": false,
+            "skipped": true,
+            "reason": "cycle_not_successful"
+          }
         },
         "stderr_tail": "",
-        "run_id": "railway-fba5ee01ab57"
+        "run_id": "railway-b074c8bb0211"
       }
     },
     {
@@ -455,7 +466,7 @@
       "handler": "loop",
       "fired": true,
       "ok": false,
-      "status": 500,
+      "status": 200,
       "body": {
         "handler": "loop",
         "event_type": "noos_chain_loop_tick",
@@ -472,9 +483,9 @@
           "event_type": "noos_chain_loop_tick",
           "domain": "chain-tools",
           "trigger_source": "http_loop",
-          "cycle_number": 9,
-          "op_key": "881b354fae1b0884f78ac26c",
-          "started_at": "2026-07-05T17:35:12+00:00",
+          "cycle_number": 3,
+          "op_key": "32c24ea5aa8362a797d82018",
+          "started_at": "2026-07-06T06:00:19+00:00",
           "state_before": "RUNNING",
           "cost": {
             "provider": "github_actions+cloudflare_cron",
@@ -501,30 +512,29 @@
             "verdict": "PASS"
           },
           "founder_blocked": {
-            "count": 0,
-            "oldest_id": "",
-            "priority": "",
-            "age_seconds": 0,
-            "escalated": false,
-            "skipped": true
+            "count": 1,
+            "oldest_id": "NOOS-C-01",
+            "priority": "P0",
+            "age_seconds": 352776,
+            "escalated": true
           },
           "evidence": [
             {
-              "command": "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3 -m noetfield_gate.cli verify --json",
+              "command": "/usr/local/bin/python3 -m noetfield_gate.cli verify --json",
               "exit_code": 0,
-              "output": "k\": true,\n        \"reason\": \"skipped \\u2014 pass include_pytest=True or use noetfield gate --pytest\",\n        \"skipped\": true\n      },\n      {\n        \"id\": \"G7\",\n        \"name\": \"product_truth_phase\",\n        \"ok\": true,\n        \"reason\": \"PRODUCT_TRUTH phase 4 vs manifest 4\",\n        \"truth_phase\": 4,\n        \"manifest_phase\": 4\n      }\n    ],\n    \"block_reasons\": []\n  },\n  \"block_reasons\": []\n}"
+              "output": "       \"ok\": true,\n        \"reason\": \"skipped \\u2014 pass include_pytest=True or use noetfield gate --pytest\",\n        \"skipped\": true\n      },\n      {\n        \"id\": \"G7\",\n        \"name\": \"product_truth_phase\",\n        \"ok\": true,\n        \"reason\": \"skipped \\u2014 PRODUCT_TRUTH or UPGRADE_MANIFEST missing\",\n        \"skipped\": true\n      }\n    ],\n    \"block_reasons\": []\n  },\n  \"block_reasons\": []\n}"
             },
             {
-              "command": "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3 -m noetfield_gate.cli decide --file fixtures/demo_intents/approve.json --validate-only",
-              "exit_code": 0,
-              "output": " \"ok\": true,\n  \"schema\": \"decision-request-v1\",\n  \"path\": \"fixtures/demo_intents/approve.json\",\n  \"applicant_id\": \"gate-demo-001\",\n  \"fields\": [\n    \"applicant_id\",\n    \"credit_score\",\n    \"monthly_debt\",\n    \"monthly_income\",\n    \"loan_amount\",\n    \"collateral_value\",\n    \"employment_history_years\",\n    \"liquid_reserves_months\",\n    \"request_id\",\n    \"correlation_id\",\n    \"rule_set_version\"\n  ]\n}"
+              "command": "/usr/local/bin/python3 -m noetfield_gate.cli decide --file fixtures/demo_intents/approve.json --validate-only",
+              "exit_code": 1,
+              "output": ""
             }
           ],
           "runner_output": {
             "steps": [
               {
                 "cmd": [
-                  "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+                  "/usr/local/bin/python3",
                   "-m",
                   "noetfield_gate.cli",
                   "verify",
@@ -532,14 +542,14 @@
                 ],
                 "ok": true,
                 "exit_code": 0,
-                "stdout_tail": "alid\",\n        \"ok\": true,\n        \"reason\": \"policy JSON valid\",\n        \"rule_set_id\": \"noetfeld-credit-v1\",\n        \"rule_set_version\": \"1.0.0\"\n      },\n      {\n        \"id\": \"G3\",\n        \"name\": \"database_writable\",\n        \"ok\": true,\n        \"reason\": \"sqlite ok (noetfeld.db)\"\n      },\n      {\n        \"id\": \"G4\",\n        \"name\": \"api_readiness\",\n        \"ok\": true,\n        \"reason\": \"skipped \\u2014 set NOETFIELD_API_URL or --api-url to probe remote runtime\",\n        \"skipped\": true\n      },\n      {\n        \"id\": \"G5\",\n        \"name\": \"policy_registry\",\n        \"ok\": true,\n        \"reason\": \"PolicyRegistry loaded\",\n        \"combined_hash\": \"6ed3dd7180db65bdfce6ab99a9a7ee98334f49aa7a5944fd8a1683d099e95fde\"\n      },\n      {\n        \"id\": \"G6\",\n        \"name\": \"pytest_suite\",\n        \"ok\": true,\n        \"reason\": \"skipped \\u2014 pass include_pytest=True or use noetfield gate --pytest\",\n        \"skipped\": true\n      },\n      {\n        \"id\": \"G7\",\n        \"name\": \"product_truth_phase\",\n        \"ok\": true,\n        \"reason\": \"PRODUCT_TRUTH phase 4 vs manifest 4\",\n        \"truth_phase\": 4,\n        \"manifest_phase\": 4\n      }\n    ],\n    \"block_reasons\": []\n  },\n  \"block_reasons\": []\n}",
+                "stdout_tail": "e\": \"policy_pack_valid\",\n        \"ok\": true,\n        \"reason\": \"policy JSON valid\",\n        \"rule_set_id\": \"noetfeld-credit-v1\",\n        \"rule_set_version\": \"1.0.0\"\n      },\n      {\n        \"id\": \"G3\",\n        \"name\": \"database_writable\",\n        \"ok\": true,\n        \"reason\": \"sqlite ok (noetfeld.db)\"\n      },\n      {\n        \"id\": \"G4\",\n        \"name\": \"api_readiness\",\n        \"ok\": true,\n        \"reason\": \"skipped \\u2014 set NOETFIELD_API_URL or --api-url to probe remote runtime\",\n        \"skipped\": true\n      },\n      {\n        \"id\": \"G5\",\n        \"name\": \"policy_registry\",\n        \"ok\": true,\n        \"reason\": \"skipped \\u2014 portable gate (full PolicyRegistry requires noetfeld-os checkout)\",\n        \"skipped\": true\n      },\n      {\n        \"id\": \"G6\",\n        \"name\": \"pytest_suite\",\n        \"ok\": true,\n        \"reason\": \"skipped \\u2014 pass include_pytest=True or use noetfield gate --pytest\",\n        \"skipped\": true\n      },\n      {\n        \"id\": \"G7\",\n        \"name\": \"product_truth_phase\",\n        \"ok\": true,\n        \"reason\": \"skipped \\u2014 PRODUCT_TRUTH or UPGRADE_MANIFEST missing\",\n        \"skipped\": true\n      }\n    ],\n    \"block_reasons\": []\n  },\n  \"block_reasons\": []\n}",
                 "stderr_tail": "",
                 "continued_on_error": false,
                 "name": "verify"
               },
               {
                 "cmd": [
-                  "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+                  "/usr/local/bin/python3",
                   "-m",
                   "noetfield_gate.cli",
                   "decide",
@@ -547,10 +557,10 @@
                   "fixtures/demo_intents/approve.json",
                   "--validate-only"
                 ],
-                "ok": true,
-                "exit_code": 0,
-                "stdout_tail": "{\n  \"ok\": true,\n  \"schema\": \"decision-request-v1\",\n  \"path\": \"fixtures/demo_intents/approve.json\",\n  \"applicant_id\": \"gate-demo-001\",\n  \"fields\": [\n    \"applicant_id\",\n    \"credit_score\",\n    \"monthly_debt\",\n    \"monthly_income\",\n    \"loan_amount\",\n    \"collateral_value\",\n    \"employment_history_years\",\n    \"liquid_reserves_months\",\n    \"request_id\",\n    \"correlation_id\",\n    \"rule_set_version\"\n  ]\n}",
-                "stderr_tail": "",
+                "ok": false,
+                "exit_code": 1,
+                "stdout_tail": "",
+                "stderr_tail": "Traceback (most recent call last):\n  File \"<frozen runpy>\", line 198, in _run_module_as_main\n  File \"<frozen runpy>\", line 88, in _run_code\n  File \"/app/noetfield_gate/cli.py\", line 164, in <module>\n    raise SystemExit(main())\n                     ^^^^^^\n  File \"/app/noetfield_gate/cli.py\", line 160, in main\n    return int(args.func(args))\n               ^^^^^^^^^^^^^^^\n  File \"/app/noetfield_gate/cli.py\", line 64, in _cmd_decide\n    validation = validate_intent_file(file_path)\n                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/app/noetfield_gate/intent_validate.py\", line 11, in validate_intent_file\n    from router import DecisionRequest\nModuleNotFoundError: No module named 'router'",
                 "continued_on_error": false,
                 "name": "decide_validate"
               }
@@ -559,10 +569,10 @@
             "cloud_meta": {
               "processor": "noos_loop_runner_v1",
               "github_event": "http_loop",
-              "github_run_id": "railway-a130f0fa32e8",
+              "github_run_id": "railway-853cc5e6d044",
               "github_workflow": "railway-noos-loop-runner",
               "dispatch_source": "verify_script",
-              "processed_at": "2026-07-05T17:35:12+00:00"
+              "processed_at": "2026-07-06T06:00:19+00:00"
             },
             "cloud_trigger": "http_loop"
           },
@@ -571,41 +581,52 @@
             "read_only_control": false
           },
           "supabase_sink": {
-            "ok": false,
-            "skipped": true,
-            "reason": "supabase_not_configured"
+            "ok": true,
+            "exit_code": 0,
+            "detail": {
+              "ok": true,
+              "idempotent": true,
+              "merged": true,
+              "id": "379b759b-ad04-4c19-920d-47fdc1a66054",
+              "op_key": "32c24ea5aa8362a797d82018"
+            }
           },
-          "finished_at": "2026-07-05T17:35:12+00:00",
-          "state_after": "BLOCKED_WITH_REASON",
+          "finished_at": "2026-07-06T06:00:19+00:00",
+          "state_after": "FAILED_WITH_RECEIPT",
           "status": "degraded",
           "exit_code": 1,
-          "blocker_reason": "sink_unacked",
+          "blocker_reason": "steps_failed:['decide_validate']",
           "next_action": "self_heal_or_triage",
           "d4": {
-            "execute_ok": true,
+            "execute_ok": false,
             "validate_ok": true,
-            "sink_acked": false
+            "sink_acked": true
           },
           "d2": {
             "cas": {
               "verdict": "ACCEPTED",
-              "expected": 8,
-              "observed": 8,
-              "new_value": 9
+              "expected": 2,
+              "observed": 2,
+              "new_value": 3
             }
           },
           "transition_log_tail": [
             {
               "from": "RUNNING",
-              "to": "BLOCKED_WITH_REASON",
-              "at": "2026-07-05T17:35:12+00:00",
-              "cycle": 9,
-              "op_key": "881b354fae1b0884f78ac26c"
+              "to": "FAILED_WITH_RECEIPT",
+              "at": "2026-07-06T06:00:19+00:00",
+              "cycle": 3,
+              "op_key": "32c24ea5aa8362a797d82018"
             }
-          ]
+          ],
+          "liveness_upsert": {
+            "ok": false,
+            "skipped": true,
+            "reason": "cycle_not_successful"
+          }
         },
         "stderr_tail": "",
-        "run_id": "railway-a130f0fa32e8"
+        "run_id": "railway-853cc5e6d044"
       }
     },
     {
@@ -614,7 +635,7 @@
       "handler": "loop",
       "fired": true,
       "ok": false,
-      "status": 500,
+      "status": 200,
       "body": {
         "handler": "loop",
         "event_type": "noos_self_heal_loop_tick",
@@ -631,9 +652,9 @@
           "event_type": "noos_self_heal_loop_tick",
           "domain": "self-improvement",
           "trigger_source": "http_loop",
-          "cycle_number": 9,
-          "op_key": "b51865f649d6c847b2e4ca17",
-          "started_at": "2026-07-05T17:35:12+00:00",
+          "cycle_number": 4,
+          "op_key": "664b6624d0522204be1c1f41",
+          "started_at": "2026-07-06T06:00:19+00:00",
           "state_before": "RUNNING",
           "cost": {
             "provider": "github_actions+cloudflare_cron",
@@ -660,31 +681,30 @@
             "verdict": "PASS"
           },
           "founder_blocked": {
-            "count": 0,
-            "oldest_id": "",
-            "priority": "",
-            "age_seconds": 0,
-            "escalated": false,
-            "skipped": true
+            "count": 1,
+            "oldest_id": "NOOS-C-01",
+            "priority": "P0",
+            "age_seconds": 352780,
+            "escalated": true
           },
           "evidence": [
             {
-              "command": "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3 scripts/reenqueue_blocked_upg_inbox_v1.py",
+              "command": "/usr/local/bin/python3 scripts/reenqueue_blocked_upg_inbox_v1.py",
               "exit_code": 0,
               "output": "{\n  \"requeued\": [],\n  \"blocked_seen\": 0\n}"
             },
             {
-              "command": "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3 scripts/verify_noos_autonomous_24h_v1.py --hours 6 --write-receipt",
-              "exit_code": 0,
-              "output": "autonomous PASS \u00b7 sha 4319a4fc \u00b7 dispatch=78 schedule=19 manual=0"
-            },
-            {
-              "command": "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3 scripts/autorun_status_v1.py",
+              "command": "/usr/local/bin/python3 scripts/verify_noos_autonomous_24h_v1.py --hours 6 --write-receipt",
               "exit_code": 1,
-              "output": "      {\n        \"scope\": \"noos_loop_agent_nerve\",\n        \"severity\": \"high\",\n        \"summary\": \"Workflow is not healthy: BLOCKED_WITH_REASON\",\n        \"detail\": \"stale_supabase_row\"\n      },\n      {\n        \"scope\": \"noos_loop_sourcea_observe\",\n        \"severity\": \"high\",\n        \"summary\": \"Workflow is not healthy: BLOCKED_WITH_REASON\",\n        \"detail\": \"stale_supabase_row\"\n      }\n    ]\n  }\n}"
+              "output": ""
             },
             {
-              "command": "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3 scripts/noos_loop_heartbeat_v1.py --write-receipt",
+              "command": "/usr/local/bin/python3 scripts/autorun_status_v1.py",
+              "exit_code": 1,
+              "output": ",\n        \"severity\": \"high\",\n        \"summary\": \"Workflow is not healthy: BLOCKED_WITH_REASON\",\n        \"detail\": \"[Errno 2] No such file or directory: 'git'\"\n      },\n      {\n        \"scope\": \"noos_loop_sourcea_observe\",\n        \"severity\": \"high\",\n        \"summary\": \"Workflow is not healthy: BLOCKED_WITH_REASON\",\n        \"detail\": \"[Errno 2] No such file or directory: 'git'\"\n      }\n    ]\n  }\n}"
+            },
+            {
+              "command": "/usr/local/bin/python3 scripts/noos_loop_heartbeat_v1.py --write-receipt",
               "exit_code": 1,
               "output": "y_30m deployed=MISSING\n  DRIFT agent_nerve: committed=hourly deployed=MISSING\n  DRIFT workflow_audit: committed=every_15m deployed=MISSING\n  DRIFT self_heal_safe_fixes: committed=every_30m deployed=MISSING\n  DRIFT researcher_deep_dive: committed=hourly deployed=MISSING\n  DRIFT specialist_proposals: committed=hourly deployed=MISSING\n  DRIFT orchestrator_cross_repo: committed=hourly deployed=MISSING"
             }
@@ -693,7 +713,7 @@
             "steps": [
               {
                 "cmd": [
-                  "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+                  "/usr/local/bin/python3",
                   "scripts/reenqueue_blocked_upg_inbox_v1.py"
                 ],
                 "ok": true,
@@ -705,40 +725,40 @@
               },
               {
                 "cmd": [
-                  "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+                  "/usr/local/bin/python3",
                   "scripts/verify_noos_autonomous_24h_v1.py",
                   "--hours",
                   "6",
                   "--write-receipt"
                 ],
-                "ok": true,
-                "exit_code": 0,
-                "stdout_tail": "autonomous PASS \u00b7 sha 4319a4fc \u00b7 dispatch=78 schedule=19 manual=0",
-                "stderr_tail": "",
+                "ok": false,
+                "exit_code": 1,
+                "stdout_tail": "",
+                "stderr_tail": "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/app/scripts/verify_noos_autonomous_24h_v1.py\", line 67, in _github_runs\n    token = _github_token()\n            ^^^^^^^^^^^^^^^\n  File \"/app/scripts/verify_noos_autonomous_24h_v1.py\", line 50, in _github_token\n    proc = subprocess.run(\n           ^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/subprocess.py\", line 548, in run\n    with Popen(*popenargs, **kwargs) as process:\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/local/lib/python3.12/subprocess.py\", line 1026, in __init__\n    self._execute_child(args, executable, preexec_fn, close_fds,\n  File \"/usr/local/lib/python3.12/subprocess.py\", line 1955, in _execute_child\n    raise child_exception_type(errno_num, err_msg, err_filename)\nFileNotFoundError: [Errno 2] No such file or directory: 'git'",
                 "continued_on_error": false,
                 "name": "autonomy_verify"
               },
               {
                 "cmd": [
-                  "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+                  "/usr/local/bin/python3",
                   "scripts/autorun_status_v1.py"
                 ],
                 "ok": false,
                 "exit_code": 1,
-                "stdout_tail": "    \"detail\": \"stale_supabase_row\"\n      },\n      {\n        \"scope\": \"noos_loop_runtime\",\n        \"severity\": \"high\",\n        \"summary\": \"Workflow is not healthy: BLOCKED_WITH_REASON\",\n        \"detail\": \"stale_supabase_row\"\n      },\n      {\n        \"scope\": \"noos_loop_surface\",\n        \"severity\": \"high\",\n        \"summary\": \"Workflow is not healthy: BLOCKED_WITH_REASON\",\n        \"detail\": \"stale_supabase_row\"\n      },\n      {\n        \"scope\": \"noos_loop_chain\",\n        \"severity\": \"high\",\n        \"summary\": \"Workflow is not healthy: BLOCKED_WITH_REASON\",\n        \"detail\": \"stale_supabase_row\"\n      },\n      {\n        \"scope\": \"noos_loop_self_heal\",\n        \"severity\": \"high\",\n        \"summary\": \"Workflow is not healthy: BLOCKED_WITH_REASON\",\n        \"detail\": \"stale_supabase_row\"\n      },\n      {\n        \"scope\": \"noos_loop_agent_nerve\",\n        \"severity\": \"high\",\n        \"summary\": \"Workflow is not healthy: BLOCKED_WITH_REASON\",\n        \"detail\": \"stale_supabase_row\"\n      },\n      {\n        \"scope\": \"noos_loop_sourcea_observe\",\n        \"severity\": \"high\",\n        \"summary\": \"Workflow is not healthy: BLOCKED_WITH_REASON\",\n        \"detail\": \"stale_supabase_row\"\n      }\n    ]\n  }\n}",
+                "stdout_tail": "ow is not healthy: BLOCKED_WITH_REASON\",\n        \"detail\": \"[Errno 2] No such file or directory: 'git'\"\n      },\n      {\n        \"scope\": \"noos_loop_surface\",\n        \"severity\": \"high\",\n        \"summary\": \"Workflow is not healthy: BLOCKED_WITH_REASON\",\n        \"detail\": \"[Errno 2] No such file or directory: 'git'\"\n      },\n      {\n        \"scope\": \"noos_loop_chain\",\n        \"severity\": \"high\",\n        \"summary\": \"Workflow is not healthy: BLOCKED_WITH_REASON\",\n        \"detail\": \"[Errno 2] No such file or directory: 'git'\"\n      },\n      {\n        \"scope\": \"noos_loop_self_heal\",\n        \"severity\": \"high\",\n        \"summary\": \"Workflow is not healthy: BLOCKED_WITH_REASON\",\n        \"detail\": \"[Errno 2] No such file or directory: 'git'\"\n      },\n      {\n        \"scope\": \"noos_loop_agent_nerve\",\n        \"severity\": \"high\",\n        \"summary\": \"Workflow is not healthy: BLOCKED_WITH_REASON\",\n        \"detail\": \"[Errno 2] No such file or directory: 'git'\"\n      },\n      {\n        \"scope\": \"noos_loop_sourcea_observe\",\n        \"severity\": \"high\",\n        \"summary\": \"Workflow is not healthy: BLOCKED_WITH_REASON\",\n        \"detail\": \"[Errno 2] No such file or directory: 'git'\"\n      }\n    ]\n  }\n}",
                 "stderr_tail": "",
                 "continued_on_error": false,
                 "name": "autorun_status"
               },
               {
                 "cmd": [
-                  "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+                  "/usr/local/bin/python3",
                   "scripts/noos_loop_heartbeat_v1.py",
                   "--write-receipt"
                 ],
                 "ok": false,
                 "exit_code": 1,
-                "stdout_tail": "heartbeat 2026-07-05 loops=12 drift_mismatches=13 founder_blocked=0 escalations=25\n  DRIFT trigger_registry: committed=data/trigger-registry-v1.json deployed=trigger_drift \u00b7 dead=16 unregistered=10\n  DRIFT inbox: committed=every_5m deployed=MISSING\n  DRIFT runtime: committed=every_15m deployed=MISSING\n  DRIFT surface: committed=every_20m deployed=MISSING\n  DRIFT chain: committed=every_30m deployed=MISSING\n  DRIFT self_heal: committed=every_10m deployed=MISSING\n  DRIFT sourcea_observe: committed=every_30m deployed=MISSING\n  DRIFT agent_nerve: committed=hourly deployed=MISSING\n  DRIFT workflow_audit: committed=every_15m deployed=MISSING\n  DRIFT self_heal_safe_fixes: committed=every_30m deployed=MISSING\n  DRIFT researcher_deep_dive: committed=hourly deployed=MISSING\n  DRIFT specialist_proposals: committed=hourly deployed=MISSING\n  DRIFT orchestrator_cross_repo: committed=hourly deployed=MISSING",
+                "stdout_tail": "heartbeat 2026-07-06 loops=12 drift_mismatches=13 founder_blocked=1 escalations=20\n  DRIFT trigger_registry: committed=data/trigger-registry-v1.json deployed=trigger_drift \u00b7 dead=33 unregistered=0\n  DRIFT inbox: committed=every_5m deployed=MISSING\n  DRIFT runtime: committed=every_15m deployed=MISSING\n  DRIFT surface: committed=every_20m deployed=MISSING\n  DRIFT chain: committed=every_30m deployed=MISSING\n  DRIFT self_heal: committed=every_10m deployed=MISSING\n  DRIFT sourcea_observe: committed=every_30m deployed=MISSING\n  DRIFT agent_nerve: committed=hourly deployed=MISSING\n  DRIFT workflow_audit: committed=every_15m deployed=MISSING\n  DRIFT self_heal_safe_fixes: committed=every_30m deployed=MISSING\n  DRIFT researcher_deep_dive: committed=hourly deployed=MISSING\n  DRIFT specialist_proposals: committed=hourly deployed=MISSING\n  DRIFT orchestrator_cross_repo: committed=hourly deployed=MISSING",
                 "stderr_tail": "",
                 "continued_on_error": false,
                 "name": "loop_heartbeat"
@@ -748,10 +768,10 @@
             "cloud_meta": {
               "processor": "noos_loop_runner_v1",
               "github_event": "http_loop",
-              "github_run_id": "railway-12e12fc87f31",
+              "github_run_id": "railway-06c198feb404",
               "github_workflow": "railway-noos-loop-runner",
               "dispatch_source": "verify_script",
-              "processed_at": "2026-07-05T17:35:29+00:00"
+              "processed_at": "2026-07-06T06:00:24+00:00"
             },
             "cloud_trigger": "http_loop"
           },
@@ -760,41 +780,52 @@
             "read_only_control": false
           },
           "supabase_sink": {
-            "ok": false,
-            "skipped": true,
-            "reason": "supabase_not_configured"
+            "ok": true,
+            "exit_code": 0,
+            "detail": {
+              "ok": true,
+              "idempotent": true,
+              "merged": true,
+              "id": "664457f8-c6a6-4ac4-b660-f93854564e23",
+              "op_key": "664b6624d0522204be1c1f41"
+            }
           },
-          "finished_at": "2026-07-05T17:35:29+00:00",
+          "finished_at": "2026-07-06T06:00:24+00:00",
           "state_after": "FAILED_WITH_RECEIPT",
           "status": "degraded",
           "exit_code": 1,
-          "blocker_reason": "steps_failed:['autorun_status', 'loop_heartbeat']",
+          "blocker_reason": "steps_failed:['autonomy_verify', 'autorun_status', 'loop_heartbeat']",
           "next_action": "self_heal_or_triage",
           "d4": {
             "execute_ok": false,
             "validate_ok": true,
-            "sink_acked": false
+            "sink_acked": true
           },
           "d2": {
             "cas": {
               "verdict": "ACCEPTED",
-              "expected": 8,
-              "observed": 8,
-              "new_value": 9
+              "expected": 3,
+              "observed": 3,
+              "new_value": 4
             }
           },
           "transition_log_tail": [
             {
               "from": "RUNNING",
               "to": "FAILED_WITH_RECEIPT",
-              "at": "2026-07-05T17:35:29+00:00",
-              "cycle": 9,
-              "op_key": "b51865f649d6c847b2e4ca17"
+              "at": "2026-07-06T06:00:24+00:00",
+              "cycle": 4,
+              "op_key": "664b6624d0522204be1c1f41"
             }
-          ]
+          ],
+          "liveness_upsert": {
+            "ok": false,
+            "skipped": true,
+            "reason": "cycle_not_successful"
+          }
         },
         "stderr_tail": "",
-        "run_id": "railway-12e12fc87f31"
+        "run_id": "railway-06c198feb404"
       }
     },
     {
@@ -803,7 +834,7 @@
       "handler": "loop",
       "fired": true,
       "ok": false,
-      "status": 500,
+      "status": 200,
       "body": {
         "handler": "loop",
         "event_type": "noos_sourcea_observe_loop_tick",
@@ -820,9 +851,9 @@
           "event_type": "noos_sourcea_observe_loop_tick",
           "domain": "sourcea-observe",
           "trigger_source": "http_loop",
-          "cycle_number": 9,
-          "op_key": "39c925e8b3f4b80e1cb8981a",
-          "started_at": "2026-07-05T17:35:29+00:00",
+          "cycle_number": 3,
+          "op_key": "234a8d1d769642a4f24d81e9",
+          "started_at": "2026-07-06T06:00:25+00:00",
           "state_before": "RUNNING",
           "cost": {
             "provider": "github_actions+cloudflare_cron",
@@ -849,33 +880,32 @@
             "verdict": "PASS"
           },
           "founder_blocked": {
-            "count": 0,
-            "oldest_id": "",
-            "priority": "",
-            "age_seconds": 0,
-            "escalated": false,
-            "skipped": true
+            "count": 1,
+            "oldest_id": "NOOS-C-01",
+            "priority": "P0",
+            "age_seconds": 352782,
+            "escalated": true
           },
           "evidence": [
             {
-              "command": "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3 scripts/observe_sourcea_supabase_v1.py --write-receipt --json",
-              "exit_code": 0,
-              "output": "91ff181-6424-4bd3-bf9f-761f12ad8432\",\n          \"fallback_from\": \"cycle_receipts\",\n          \"trigger_source\": \"cloudflare_cron\",\n          \"queue_head_after\": \"CLOUD-SEC-7966\",\n          \"queue_head_before\": \"CLOUD-SEC-7965\"\n        }\n      }\n    ]\n  },\n  \"receipt_path\": \"/Users/sinakazemnezhad/Desktop/Noetfield-Systems/noetfeld-OS/.noos-runtime/observe/sourcea/sourcea-supabase-observe-v1.json\"\n}"
+              "command": "/usr/local/bin/python3 scripts/observe_sourcea_supabase_v1.py --write-receipt --json",
+              "exit_code": 1,
+              "output": "\n  },\n  \"telemetry_logs\": {\n    \"ok\": false,\n    \"table\": \"telemetry_logs\",\n    \"status\": 404,\n    \"error\": \"{\\\"code\\\":\\\"PGRST205\\\",\\\"details\\\":null,\\\"hint\\\":\\\"Perhaps you meant the table 'public.noetfield_truth_log'\\\",\\\"message\\\":\\\"Could not find the table 'public.telemetry_logs' in the schema cache\\\"}\"\n  },\n  \"receipt_path\": \"/app/.noos-runtime/observe/sourcea/sourcea-supabase-observe-v1.json\"\n}"
             }
           ],
           "runner_output": {
             "steps": [
               {
                 "cmd": [
-                  "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+                  "/usr/local/bin/python3",
                   "scripts/observe_sourcea_supabase_v1.py",
                   "--write-receipt",
                   "--json"
                 ],
-                "ok": true,
-                "exit_code": 0,
-                "stdout_tail": "      \"finished_at\": \"2026-07-05T16:01:59Z\",\n          \"execution_id\": \"c91ff181-6424-4bd3-bf9f-761f12ad8432\",\n          \"fallback_from\": \"cycle_receipts\",\n          \"trigger_source\": \"cloudflare_cron\",\n          \"queue_head_after\": \"CLOUD-SEC-7967\",\n          \"queue_head_before\": \"CLOUD-SEC-7966\"\n        }\n      },\n      {\n        \"id\": \"02d415b8-14f9-4192-a299-a114e24ad10d\",\n        \"created_at\": \"2026-07-05T16:01:58.672684+00:00\",\n        \"memory_type\": \"truth_cycle_receipt\",\n        \"metadata\": {\n          \"schema\": \"truth-layer-receipt-v1\",\n          \"verdict\": \"GREEN\",\n          \"cycle_id\": \"cycle-20260705T160158Z-CLOUD-SEC-7965\",\n          \"started_at\": \"2026-07-05T16:01:58Z\",\n          \"duration_ms\": 247,\n          \"finished_at\": \"2026-07-05T16:01:58Z\",\n          \"execution_id\": \"c91ff181-6424-4bd3-bf9f-761f12ad8432\",\n          \"fallback_from\": \"cycle_receipts\",\n          \"trigger_source\": \"cloudflare_cron\",\n          \"queue_head_after\": \"CLOUD-SEC-7966\",\n          \"queue_head_before\": \"CLOUD-SEC-7965\"\n        }\n      }\n    ]\n  },\n  \"receipt_path\": \"/Users/sinakazemnezhad/Desktop/Noetfield-Systems/noetfeld-OS/.noos-runtime/observe/sourcea/sourcea-supabase-observe-v1.json\"\n}",
-                "stderr_tail": "",
+                "ok": false,
+                "exit_code": 1,
+                "stdout_tail": "{\n  \"schema\": \"noos-sourcea-supabase-observe-v1\",\n  \"at\": \"2026-07-06T06:00:26Z\",\n  \"read_only\": true,\n  \"one_law\": \"Observe only \\u2014 phase_reconciler_v1 remains sole control authority.\",\n  \"ok\": false,\n  \"truth_log\": {\n    \"ok\": false,\n    \"table\": \"truth_log\",\n    \"status\": 404,\n    \"error\": \"{\\\"code\\\":\\\"PGRST205\\\",\\\"details\\\":null,\\\"hint\\\":\\\"Perhaps you meant the table 'public.noetfield_truth_log'\\\",\\\"message\\\":\\\"Could not find the table 'public.truth_log' in the schema cache\\\"}\"\n  },\n  \"cycle_receipts\": {\n    \"ok\": false,\n    \"table\": \"cycle_receipts\",\n    \"status\": 404,\n    \"error\": \"{\\\"code\\\":\\\"PGRST205\\\",\\\"details\\\":null,\\\"hint\\\":\\\"Perhaps you meant the table 'public.probe_cron_receipts'\\\",\\\"message\\\":\\\"Could not find the table 'public.cycle_receipts' in the schema cache\\\"}\"\n  },\n  \"telemetry_logs\": {\n    \"ok\": false,\n    \"table\": \"telemetry_logs\",\n    \"status\": 404,\n    \"error\": \"{\\\"code\\\":\\\"PGRST205\\\",\\\"details\\\":null,\\\"hint\\\":\\\"Perhaps you meant the table 'public.noetfield_truth_log'\\\",\\\"message\\\":\\\"Could not find the table 'public.telemetry_logs' in the schema cache\\\"}\"\n  },\n  \"receipt_path\": \"/app/.noos-runtime/observe/sourcea/sourcea-supabase-observe-v1.json\"\n}",
+                "stderr_tail": "Traceback (most recent call last):\n  File \"/app/scripts/observe_sourcea_supabase_v1.py\", line 128, in <module>\n    raise SystemExit(main())\n                     ^^^^^^\n  File \"/app/scripts/observe_sourcea_supabase_v1.py\", line 120, in main\n    if all_skipped(truth, cycles, telemetry):\n                   ^^^^^\nNameError: name 'truth' is not defined",
                 "continued_on_error": false,
                 "name": "sourcea_supabase_observe"
               }
@@ -884,10 +914,10 @@
             "cloud_meta": {
               "processor": "noos_loop_runner_v1",
               "github_event": "http_loop",
-              "github_run_id": "railway-f594ed274ce4",
+              "github_run_id": "railway-d4082c6987ce",
               "github_workflow": "railway-noos-loop-runner",
               "dispatch_source": "verify_script",
-              "processed_at": "2026-07-05T17:35:29+00:00"
+              "processed_at": "2026-07-06T06:00:26+00:00"
             },
             "cloud_trigger": "http_loop"
           },
@@ -896,41 +926,52 @@
             "read_only_control": true
           },
           "supabase_sink": {
-            "ok": false,
-            "skipped": true,
-            "reason": "supabase_not_configured"
+            "ok": true,
+            "exit_code": 0,
+            "detail": {
+              "ok": true,
+              "idempotent": true,
+              "merged": true,
+              "id": "67d78034-c2a8-4b9a-9729-7969c79a0546",
+              "op_key": "234a8d1d769642a4f24d81e9"
+            }
           },
-          "finished_at": "2026-07-05T17:35:29+00:00",
-          "state_after": "BLOCKED_WITH_REASON",
+          "finished_at": "2026-07-06T06:00:26+00:00",
+          "state_after": "FAILED_WITH_RECEIPT",
           "status": "degraded",
           "exit_code": 1,
-          "blocker_reason": "sink_unacked",
+          "blocker_reason": "steps_failed:['sourcea_supabase_observe']",
           "next_action": "self_heal_or_triage",
           "d4": {
-            "execute_ok": true,
+            "execute_ok": false,
             "validate_ok": true,
-            "sink_acked": false
+            "sink_acked": true
           },
           "d2": {
             "cas": {
               "verdict": "ACCEPTED",
-              "expected": 8,
-              "observed": 8,
-              "new_value": 9
+              "expected": 2,
+              "observed": 2,
+              "new_value": 3
             }
           },
           "transition_log_tail": [
             {
               "from": "RUNNING",
-              "to": "BLOCKED_WITH_REASON",
-              "at": "2026-07-05T17:35:29+00:00",
-              "cycle": 9,
-              "op_key": "39c925e8b3f4b80e1cb8981a"
+              "to": "FAILED_WITH_RECEIPT",
+              "at": "2026-07-06T06:00:26+00:00",
+              "cycle": 3,
+              "op_key": "234a8d1d769642a4f24d81e9"
             }
-          ]
+          ],
+          "liveness_upsert": {
+            "ok": false,
+            "skipped": true,
+            "reason": "cycle_not_successful"
+          }
         },
         "stderr_tail": "",
-        "run_id": "railway-f594ed274ce4"
+        "run_id": "railway-d4082c6987ce"
       }
     },
     {
@@ -939,7 +980,7 @@
       "handler": "loop",
       "fired": true,
       "ok": false,
-      "status": 500,
+      "status": 200,
       "body": {
         "handler": "loop",
         "event_type": "noos_agent_nerve_loop_tick",
@@ -956,9 +997,9 @@
           "event_type": "noos_agent_nerve_loop_tick",
           "domain": "agent-docs",
           "trigger_source": "http_loop",
-          "cycle_number": 9,
-          "op_key": "aebad8406e31ed36e248765a",
-          "started_at": "2026-07-05T17:35:29+00:00",
+          "cycle_number": 3,
+          "op_key": "69eba19ce4c9d5dc6ae20a56",
+          "started_at": "2026-07-06T06:00:27+00:00",
           "state_before": "RUNNING",
           "cost": {
             "provider": "github_actions+cloudflare_cron",
@@ -985,23 +1026,22 @@
             "verdict": "PASS"
           },
           "founder_blocked": {
-            "count": 0,
-            "oldest_id": "",
-            "priority": "",
-            "age_seconds": 0,
-            "escalated": false,
-            "skipped": true
+            "count": 1,
+            "oldest_id": "NOOS-C-01",
+            "priority": "P0",
+            "age_seconds": 352783,
+            "escalated": true
           },
           "evidence": [
             {
               "command": "bash scripts/check_noos_agent_docs.sh",
-              "exit_code": 0,
-              "output": "OK: all docs/_NOOS_AGENT/*.md files tagged with NOOS-AGENT-DOC"
+              "exit_code": 1,
+              "output": "FAIL: vault missing at /app/docs/_NOOS_AGENT"
             },
             {
               "command": "bash scripts/check_noetfield_business_strategy.sh",
-              "exit_code": 0,
-              "output": "=== check_noetfield_business_strategy ===\nOK   strategy doc (010)\nOK   NW1 one-pager (011)\nOK   SW1 one-pager (013)\nOK   MANIFEST.json entries\n\ncheck_noetfield_business_strategy: PASS"
+              "exit_code": 1,
+              "output": "=== check_noetfield_business_strategy ==="
             }
           ],
           "runner_output": {
@@ -1011,9 +1051,9 @@
                   "bash",
                   "scripts/check_noos_agent_docs.sh"
                 ],
-                "ok": true,
-                "exit_code": 0,
-                "stdout_tail": "OK: all docs/_NOOS_AGENT/*.md files tagged with NOOS-AGENT-DOC",
+                "ok": false,
+                "exit_code": 1,
+                "stdout_tail": "FAIL: vault missing at /app/docs/_NOOS_AGENT",
                 "stderr_tail": "",
                 "continued_on_error": false,
                 "name": "agent_docs"
@@ -1023,10 +1063,10 @@
                   "bash",
                   "scripts/check_noetfield_business_strategy.sh"
                 ],
-                "ok": true,
-                "exit_code": 0,
-                "stdout_tail": "=== check_noetfield_business_strategy ===\nOK   strategy doc (010)\nOK   NW1 one-pager (011)\nOK   SW1 one-pager (013)\nOK   MANIFEST.json entries\n\ncheck_noetfield_business_strategy: PASS",
-                "stderr_tail": "",
+                "ok": false,
+                "exit_code": 1,
+                "stdout_tail": "=== check_noetfield_business_strategy ===",
+                "stderr_tail": "FAIL missing strategy doc (010): /app/docs/_NOOS_AGENT/[NOOS-AGENT-20260615-010]_BUSINESS_STRATEGY_PROOF_DENSITY_v1.md\nFAIL missing NW1 one-pager (011): /app/docs/_NOOS_AGENT/[NOOS-AGENT-20260615-011]_FOUNDING_PILOT_ONEPAGER_EXTERNAL_v1.md\nFAIL missing SW1 one-pager (013): /app/docs/_NOOS_AGENT/[NOOS-AGENT-20260615-013]_FOUNDING_PILOT_ONEPAGER_AGENTS_v1.md\nTraceback (most recent call last):\n  File \"<string>\", line 3, in <module>\nFileNotFoundError: [Errno 2] No such file or directory: '/app/docs/_NOOS_AGENT/MANIFEST.json'",
                 "continued_on_error": false,
                 "name": "business_strategy"
               }
@@ -1035,10 +1075,10 @@
             "cloud_meta": {
               "processor": "noos_loop_runner_v1",
               "github_event": "http_loop",
-              "github_run_id": "railway-4dd94a144c57",
+              "github_run_id": "railway-3c2639918265",
               "github_workflow": "railway-noos-loop-runner",
               "dispatch_source": "verify_script",
-              "processed_at": "2026-07-05T17:35:29+00:00"
+              "processed_at": "2026-07-06T06:00:27+00:00"
             },
             "cloud_trigger": "http_loop"
           },
@@ -1047,41 +1087,52 @@
             "read_only_control": false
           },
           "supabase_sink": {
-            "ok": false,
-            "skipped": true,
-            "reason": "supabase_not_configured"
+            "ok": true,
+            "exit_code": 0,
+            "detail": {
+              "ok": true,
+              "idempotent": true,
+              "merged": true,
+              "id": "32a69bdf-dab3-4357-9e3b-6204e34701b8",
+              "op_key": "69eba19ce4c9d5dc6ae20a56"
+            }
           },
-          "finished_at": "2026-07-05T17:35:29+00:00",
-          "state_after": "BLOCKED_WITH_REASON",
+          "finished_at": "2026-07-06T06:00:27+00:00",
+          "state_after": "FAILED_WITH_RECEIPT",
           "status": "degraded",
           "exit_code": 1,
-          "blocker_reason": "sink_unacked",
+          "blocker_reason": "steps_failed:['agent_docs', 'business_strategy']",
           "next_action": "self_heal_or_triage",
           "d4": {
-            "execute_ok": true,
+            "execute_ok": false,
             "validate_ok": true,
-            "sink_acked": false
+            "sink_acked": true
           },
           "d2": {
             "cas": {
               "verdict": "ACCEPTED",
-              "expected": 8,
-              "observed": 8,
-              "new_value": 9
+              "expected": 2,
+              "observed": 2,
+              "new_value": 3
             }
           },
           "transition_log_tail": [
             {
               "from": "RUNNING",
-              "to": "BLOCKED_WITH_REASON",
-              "at": "2026-07-05T17:35:29+00:00",
-              "cycle": 9,
-              "op_key": "aebad8406e31ed36e248765a"
+              "to": "FAILED_WITH_RECEIPT",
+              "at": "2026-07-06T06:00:27+00:00",
+              "cycle": 3,
+              "op_key": "69eba19ce4c9d5dc6ae20a56"
             }
-          ]
+          ],
+          "liveness_upsert": {
+            "ok": false,
+            "skipped": true,
+            "reason": "cycle_not_successful"
+          }
         },
         "stderr_tail": "",
-        "run_id": "railway-4dd94a144c57"
+        "run_id": "railway-3c2639918265"
       }
     },
     {
@@ -1090,7 +1141,7 @@
       "handler": "loop",
       "fired": true,
       "ok": false,
-      "status": 500,
+      "status": 200,
       "body": {
         "handler": "loop",
         "event_type": "noos_workflow_audit_tick",
@@ -1107,9 +1158,9 @@
           "event_type": "noos_workflow_audit_tick",
           "domain": "workflow-governance",
           "trigger_source": "http_loop",
-          "cycle_number": 4,
-          "op_key": "4122d0574e9db007c3e6bd2a",
-          "started_at": "2026-07-05T17:35:29+00:00",
+          "cycle_number": 3,
+          "op_key": "d990c1669fe93afe16ef1d94",
+          "started_at": "2026-07-06T06:00:28+00:00",
           "state_before": "RUNNING",
           "cost": {
             "provider": "github_actions+cloudflare_cron",
@@ -1136,31 +1187,30 @@
             "verdict": "PASS"
           },
           "founder_blocked": {
-            "count": 0,
-            "oldest_id": "",
-            "priority": "",
-            "age_seconds": 0,
-            "escalated": false,
-            "skipped": true
+            "count": 1,
+            "oldest_id": "NOOS-C-01",
+            "priority": "P0",
+            "age_seconds": 352788,
+            "escalated": true
           },
           "evidence": [
             {
-              "command": "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3 scripts/noos_workflow_audit_v1.py --json",
+              "command": "/usr/local/bin/python3 scripts/noos_workflow_audit_v1.py --json",
               "exit_code": 1,
-              "output": "strator.yml\",\n      \"severity\": \"high\",\n      \"summary\": \"Loop SLO miss\",\n      \"detail\": \"success_rate_miss\"\n    }\n  ],\n  \"dashboard\": {\n    \"schema\": \"autorun-status-dashboard-v1.3\",\n    \"triage_required\": false,\n    \"dirty_total\": 30,\n    \"workflow_count\": 16\n  },\n  \"heartbeat\": {\n    \"schema\": \"autorun-heartbeat-v2\",\n    \"drift_count\": 13,\n    \"escalation_count\": 25,\n    \"loop_count\": 12\n  }\n}"
+              "output": "ow-audit.yml\",\n      \"severity\": \"high\",\n      \"summary\": \"Loop SLO miss\",\n      \"detail\": \"success_rate_miss\"\n    }\n  ],\n  \"dashboard\": {\n    \"schema\": \"autorun-status-dashboard-v1.3\",\n    \"triage_required\": false,\n    \"dirty_total\": 0,\n    \"workflow_count\": 16\n  },\n  \"heartbeat\": {\n    \"schema\": \"autorun-heartbeat-v2\",\n    \"drift_count\": 13,\n    \"escalation_count\": 20,\n    \"loop_count\": 12\n  }\n}"
             }
           ],
           "runner_output": {
             "steps": [
               {
                 "cmd": [
-                  "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+                  "/usr/local/bin/python3",
                   "scripts/noos_workflow_audit_v1.py",
                   "--json"
                 ],
                 "ok": false,
                 "exit_code": 1,
-                "stdout_tail": "miss\"\n    },\n    {\n      \"scope\": \"noos-agent-nerve-loop.yml\",\n      \"severity\": \"high\",\n      \"summary\": \"Loop SLO miss\",\n      \"detail\": \"success_rate_miss\"\n    },\n    {\n      \"scope\": \"noos-workflow-audit.yml\",\n      \"severity\": \"high\",\n      \"summary\": \"Loop SLO miss\",\n      \"detail\": \"success_rate_miss\"\n    },\n    {\n      \"scope\": \"noos-self-heal.yml\",\n      \"severity\": \"high\",\n      \"summary\": \"Loop SLO miss\",\n      \"detail\": \"success_rate_miss\"\n    },\n    {\n      \"scope\": \"noos-researcher.yml\",\n      \"severity\": \"high\",\n      \"summary\": \"Loop SLO miss\",\n      \"detail\": \"success_rate_miss\"\n    },\n    {\n      \"scope\": \"noos-specialist.yml\",\n      \"severity\": \"high\",\n      \"summary\": \"Loop SLO miss\",\n      \"detail\": \"success_rate_miss\"\n    },\n    {\n      \"scope\": \"noos-cross-repo-orchestrator.yml\",\n      \"severity\": \"high\",\n      \"summary\": \"Loop SLO miss\",\n      \"detail\": \"success_rate_miss\"\n    }\n  ],\n  \"dashboard\": {\n    \"schema\": \"autorun-status-dashboard-v1.3\",\n    \"triage_required\": false,\n    \"dirty_total\": 30,\n    \"workflow_count\": 16\n  },\n  \"heartbeat\": {\n    \"schema\": \"autorun-heartbeat-v2\",\n    \"drift_count\": 13,\n    \"escalation_count\": 25,\n    \"loop_count\": 12\n  }\n}",
+                "stdout_tail": "s\"\n    },\n    {\n      \"scope\": \"noos-surface-loop.yml\",\n      \"severity\": \"high\",\n      \"summary\": \"Loop SLO miss\",\n      \"detail\": \"success_rate_miss\"\n    },\n    {\n      \"scope\": \"noos-chain-loop.yml\",\n      \"severity\": \"high\",\n      \"summary\": \"Loop SLO miss\",\n      \"detail\": \"success_rate_miss\"\n    },\n    {\n      \"scope\": \"noos-self-heal-loop.yml\",\n      \"severity\": \"high\",\n      \"summary\": \"Loop SLO miss\",\n      \"detail\": \"success_rate_miss\"\n    },\n    {\n      \"scope\": \"noos-sourcea-observe-loop.yml\",\n      \"severity\": \"high\",\n      \"summary\": \"Loop SLO miss\",\n      \"detail\": \"success_rate_miss\"\n    },\n    {\n      \"scope\": \"noos-agent-nerve-loop.yml\",\n      \"severity\": \"high\",\n      \"summary\": \"Loop SLO miss\",\n      \"detail\": \"success_rate_miss\"\n    },\n    {\n      \"scope\": \"noos-workflow-audit.yml\",\n      \"severity\": \"high\",\n      \"summary\": \"Loop SLO miss\",\n      \"detail\": \"success_rate_miss\"\n    }\n  ],\n  \"dashboard\": {\n    \"schema\": \"autorun-status-dashboard-v1.3\",\n    \"triage_required\": false,\n    \"dirty_total\": 0,\n    \"workflow_count\": 16\n  },\n  \"heartbeat\": {\n    \"schema\": \"autorun-heartbeat-v2\",\n    \"drift_count\": 13,\n    \"escalation_count\": 20,\n    \"loop_count\": 12\n  }\n}",
                 "stderr_tail": "",
                 "continued_on_error": false,
                 "name": "workflow_audit"
@@ -1170,10 +1220,10 @@
             "cloud_meta": {
               "processor": "noos_loop_runner_v1",
               "github_event": "http_loop",
-              "github_run_id": "railway-98f5664261cf",
+              "github_run_id": "railway-d4e4b69cba57",
               "github_workflow": "railway-noos-loop-runner",
               "dispatch_source": "verify_script",
-              "processed_at": "2026-07-05T17:35:42+00:00"
+              "processed_at": "2026-07-06T06:00:32+00:00"
             },
             "cloud_trigger": "http_loop"
           },
@@ -1182,11 +1232,16 @@
             "read_only_control": false
           },
           "supabase_sink": {
-            "ok": false,
-            "skipped": true,
-            "reason": "supabase_not_configured"
+            "ok": true,
+            "exit_code": 0,
+            "detail": {
+              "ok": true,
+              "id": "20c5fbd8-106a-4ed1-97d7-1b27dfc5c532",
+              "status": 201,
+              "op_key": "d990c1669fe93afe16ef1d94"
+            }
           },
-          "finished_at": "2026-07-05T17:35:42+00:00",
+          "finished_at": "2026-07-06T06:00:31+00:00",
           "state_after": "FAILED_WITH_RECEIPT",
           "status": "degraded",
           "exit_code": 1,
@@ -1195,28 +1250,33 @@
           "d4": {
             "execute_ok": false,
             "validate_ok": true,
-            "sink_acked": false
+            "sink_acked": true
           },
           "d2": {
             "cas": {
               "verdict": "ACCEPTED",
-              "expected": 3,
-              "observed": 3,
-              "new_value": 4
+              "expected": 2,
+              "observed": 2,
+              "new_value": 3
             }
           },
           "transition_log_tail": [
             {
               "from": "RUNNING",
               "to": "FAILED_WITH_RECEIPT",
-              "at": "2026-07-05T17:35:42+00:00",
-              "cycle": 4,
-              "op_key": "4122d0574e9db007c3e6bd2a"
+              "at": "2026-07-06T06:00:31+00:00",
+              "cycle": 3,
+              "op_key": "d990c1669fe93afe16ef1d94"
             }
-          ]
+          ],
+          "liveness_upsert": {
+            "ok": false,
+            "skipped": true,
+            "reason": "cycle_not_successful"
+          }
         },
         "stderr_tail": "",
-        "run_id": "railway-98f5664261cf"
+        "run_id": "railway-d4e4b69cba57"
       }
     },
     {
@@ -1224,13 +1284,13 @@
       "event_type": "noos_self_heal_safe_fixes_tick",
       "handler": "loop",
       "fired": true,
-      "ok": false,
-      "status": 500,
+      "ok": true,
+      "status": 200,
       "body": {
         "handler": "loop",
         "event_type": "noos_self_heal_safe_fixes_tick",
-        "exit_code": 1,
-        "ok": false,
+        "exit_code": 0,
+        "ok": true,
         "cycle": {
           "schema": "noos-24-7-loop-cycle-v1",
           "receipt_schema": "autorun-cycle-receipt-v2",
@@ -1242,9 +1302,9 @@
           "event_type": "noos_self_heal_safe_fixes_tick",
           "domain": "self-improvement",
           "trigger_source": "http_loop",
-          "cycle_number": 4,
-          "op_key": "863a219c4dffbb6c9b0c1b81",
-          "started_at": "2026-07-05T17:35:42+00:00",
+          "cycle_number": 3,
+          "op_key": "b9bef9d1b5cbf9fa5c04fd67",
+          "started_at": "2026-07-06T06:00:32+00:00",
           "state_before": "RUNNING",
           "cost": {
             "provider": "github_actions+cloudflare_cron",
@@ -1271,16 +1331,15 @@
             "verdict": "PASS"
           },
           "founder_blocked": {
-            "count": 0,
-            "oldest_id": "",
-            "priority": "",
-            "age_seconds": 0,
-            "escalated": false,
-            "skipped": true
+            "count": 1,
+            "oldest_id": "NOOS-C-01",
+            "priority": "P0",
+            "age_seconds": 352789,
+            "escalated": true
           },
           "evidence": [
             {
-              "command": "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3 scripts/noos_self_heal_v1.py --findings-file data/noos-audit-findings-v1.json",
+              "command": "/usr/local/bin/python3 scripts/noos_self_heal_v1.py --findings-file data/noos-audit-findings-v1.json",
               "exit_code": 0,
               "output": "al_findings\": 0,\n    \"findings_fixed\": 0,\n    \"findings_escalated\": 0,\n    \"findings_skipped\": 0\n  },\n  \"fixed_issues\": [],\n  \"escalated_issues\": [],\n  \"metrics\": {\n    \"success_rate\": 0.0,\n    \"escalation_rate\": 0.0,\n    \"total_fixes_attempted\": 0,\n    \"total_fixes_succeeded\": 0\n  },\n  \"critique\": {\n    \"overall_ok\": true,\n    \"findings\": [\n      \"All 0 issues auto-fixed successfully\"\n    ]\n  }\n}"
             }
@@ -1289,15 +1348,15 @@
             "steps": [
               {
                 "cmd": [
-                  "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+                  "/usr/local/bin/python3",
                   "scripts/noos_self_heal_v1.py",
                   "--findings-file",
                   "data/noos-audit-findings-v1.json"
                 ],
                 "ok": true,
                 "exit_code": 0,
-                "stdout_tail": "{\n  \"version\": \"1.0\",\n  \"timestamp\": \"2026-07-05T17:35:42.674115\",\n  \"audit_source\": \"2026-07-05T17:35:42.673898\",\n  \"summary\": {\n    \"total_findings\": 0,\n    \"findings_fixed\": 0,\n    \"findings_escalated\": 0,\n    \"findings_skipped\": 0\n  },\n  \"fixed_issues\": [],\n  \"escalated_issues\": [],\n  \"metrics\": {\n    \"success_rate\": 0.0,\n    \"escalation_rate\": 0.0,\n    \"total_fixes_attempted\": 0,\n    \"total_fixes_succeeded\": 0\n  },\n  \"critique\": {\n    \"overall_ok\": true,\n    \"findings\": [\n      \"All 0 issues auto-fixed successfully\"\n    ]\n  }\n}",
-                "stderr_tail": "datetime.UTC).\n  return {\"blocking\": [], \"dependencies\": [], \"timestamp\": datetime.utcnow().isoformat()}\n/Users/sinakazemnezhad/Desktop/Noetfield-Systems/noetfeld-OS/scripts/noos_self_heal_v1.py:226: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).\n  \"timestamp\": datetime.utcnow().isoformat(),\n/Users/sinakazemnezhad/Desktop/Noetfield-Systems/noetfeld-OS/scripts/noos_self_heal_v1.py:288: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).\n  handoff[\"last_run\"] = datetime.utcnow().isoformat()",
+                "stdout_tail": "{\n  \"version\": \"1.0\",\n  \"timestamp\": \"2026-07-06T06:00:32.898836\",\n  \"audit_source\": \"2026-07-06T06:00:32.898755\",\n  \"summary\": {\n    \"total_findings\": 0,\n    \"findings_fixed\": 0,\n    \"findings_escalated\": 0,\n    \"findings_skipped\": 0\n  },\n  \"fixed_issues\": [],\n  \"escalated_issues\": [],\n  \"metrics\": {\n    \"success_rate\": 0.0,\n    \"escalation_rate\": 0.0,\n    \"total_fixes_attempted\": 0,\n    \"total_fixes_succeeded\": 0\n  },\n  \"critique\": {\n    \"overall_ok\": true,\n    \"findings\": [\n      \"All 0 issues auto-fixed successfully\"\n    ]\n  }\n}",
+                "stderr_tail": "or removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).\n  return {\"blocking\": [], \"dependencies\": [], \"timestamp\": datetime.utcnow().isoformat()}\n/app/scripts/noos_self_heal_v1.py:226: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).\n  \"timestamp\": datetime.utcnow().isoformat(),\n/app/scripts/noos_self_heal_v1.py:288: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).\n  handoff[\"last_run\"] = datetime.utcnow().isoformat()",
                 "continued_on_error": false,
                 "name": "execute_safe_fixes"
               }
@@ -1306,10 +1365,10 @@
             "cloud_meta": {
               "processor": "noos_loop_runner_v1",
               "github_event": "http_loop",
-              "github_run_id": "railway-3f724ee9a46b",
+              "github_run_id": "railway-dad542c82403",
               "github_workflow": "railway-noos-loop-runner",
               "dispatch_source": "verify_script",
-              "processed_at": "2026-07-05T17:35:42+00:00"
+              "processed_at": "2026-07-06T06:00:33+00:00"
             },
             "cloud_trigger": "http_loop"
           },
@@ -1318,41 +1377,51 @@
             "read_only_control": false
           },
           "supabase_sink": {
-            "ok": false,
-            "skipped": true,
-            "reason": "supabase_not_configured"
+            "ok": true,
+            "exit_code": 0,
+            "detail": {
+              "ok": true,
+              "id": "e5f08dc1-9844-4cdf-866a-bc00e91c1dc9",
+              "status": 201,
+              "op_key": "b9bef9d1b5cbf9fa5c04fd67"
+            }
           },
-          "finished_at": "2026-07-05T17:35:42+00:00",
-          "state_after": "BLOCKED_WITH_REASON",
-          "status": "degraded",
-          "exit_code": 1,
-          "blocker_reason": "sink_unacked",
-          "next_action": "self_heal_or_triage",
+          "finished_at": "2026-07-06T06:00:32+00:00",
+          "state_after": "COMPLETE",
+          "status": "ok",
+          "exit_code": 0,
+          "blocker_reason": null,
+          "next_action": "await_next_scheduled_tick",
           "d4": {
             "execute_ok": true,
             "validate_ok": true,
-            "sink_acked": false
+            "sink_acked": true
           },
           "d2": {
             "cas": {
               "verdict": "ACCEPTED",
-              "expected": 3,
-              "observed": 3,
-              "new_value": 4
+              "expected": 2,
+              "observed": 2,
+              "new_value": 3
             }
           },
           "transition_log_tail": [
             {
               "from": "RUNNING",
-              "to": "BLOCKED_WITH_REASON",
-              "at": "2026-07-05T17:35:42+00:00",
-              "cycle": 4,
-              "op_key": "863a219c4dffbb6c9b0c1b81"
+              "to": "COMPLETE",
+              "at": "2026-07-06T06:00:32+00:00",
+              "cycle": 3,
+              "op_key": "b9bef9d1b5cbf9fa5c04fd67"
             }
-          ]
+          ],
+          "liveness_upsert": {
+            "ok": true,
+            "loop_id": "self_heal_safe_fixes",
+            "last_fired_at": "2026-07-06T06:00:33.544Z"
+          }
         },
         "stderr_tail": "",
-        "run_id": "railway-3f724ee9a46b"
+        "run_id": "railway-dad542c82403"
       }
     },
     {
@@ -1360,13 +1429,13 @@
       "event_type": "noos_researcher_deep_dive_tick",
       "handler": "loop",
       "fired": true,
-      "ok": false,
-      "status": 500,
+      "ok": true,
+      "status": 200,
       "body": {
         "handler": "loop",
         "event_type": "noos_researcher_deep_dive_tick",
-        "exit_code": 1,
-        "ok": false,
+        "exit_code": 0,
+        "ok": true,
         "cycle": {
           "schema": "noos-24-7-loop-cycle-v1",
           "receipt_schema": "autorun-cycle-receipt-v2",
@@ -1378,9 +1447,9 @@
           "event_type": "noos_researcher_deep_dive_tick",
           "domain": "self-improvement",
           "trigger_source": "http_loop",
-          "cycle_number": 4,
-          "op_key": "9fd12702d73d7036d043df27",
-          "started_at": "2026-07-05T17:35:42+00:00",
+          "cycle_number": 3,
+          "op_key": "40542f8c024378fa5b00f62a",
+          "started_at": "2026-07-06T06:00:37+00:00",
           "state_before": "RUNNING",
           "cost": {
             "provider": "github_actions+cloudflare_cron",
@@ -1407,16 +1476,15 @@
             "verdict": "PASS"
           },
           "founder_blocked": {
-            "count": 0,
-            "oldest_id": "",
-            "priority": "",
-            "age_seconds": 0,
-            "escalated": false,
-            "skipped": true
+            "count": 1,
+            "oldest_id": "NOOS-C-01",
+            "priority": "P0",
+            "age_seconds": 352794,
+            "escalated": true
           },
           "evidence": [
             {
-              "command": "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3 scripts/noos_researcher_v1.py --depth standard",
+              "command": "/usr/local/bin/python3 scripts/noos_researcher_v1.py --depth standard",
               "exit_code": 0,
               "output": "{\"status\": \"no_work\", \"message\": \"No escalated findings to research\"}"
             }
@@ -1425,7 +1493,7 @@
             "steps": [
               {
                 "cmd": [
-                  "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+                  "/usr/local/bin/python3",
                   "scripts/noos_researcher_v1.py",
                   "--depth",
                   "standard"
@@ -1442,10 +1510,10 @@
             "cloud_meta": {
               "processor": "noos_loop_runner_v1",
               "github_event": "http_loop",
-              "github_run_id": "railway-647235972fdd",
+              "github_run_id": "railway-2da5bfa69cd7",
               "github_workflow": "railway-noos-loop-runner",
               "dispatch_source": "verify_script",
-              "processed_at": "2026-07-05T17:35:42+00:00"
+              "processed_at": "2026-07-06T06:00:37+00:00"
             },
             "cloud_trigger": "http_loop"
           },
@@ -1454,41 +1522,51 @@
             "read_only_control": false
           },
           "supabase_sink": {
-            "ok": false,
-            "skipped": true,
-            "reason": "supabase_not_configured"
+            "ok": true,
+            "exit_code": 0,
+            "detail": {
+              "ok": true,
+              "id": "9c3f7d04-4504-4df1-91b9-65e0f9800af1",
+              "status": 201,
+              "op_key": "40542f8c024378fa5b00f62a"
+            }
           },
-          "finished_at": "2026-07-05T17:35:42+00:00",
-          "state_after": "BLOCKED_WITH_REASON",
-          "status": "degraded",
-          "exit_code": 1,
-          "blocker_reason": "sink_unacked",
-          "next_action": "self_heal_or_triage",
+          "finished_at": "2026-07-06T06:00:37+00:00",
+          "state_after": "COMPLETE",
+          "status": "ok",
+          "exit_code": 0,
+          "blocker_reason": null,
+          "next_action": "await_next_scheduled_tick",
           "d4": {
             "execute_ok": true,
             "validate_ok": true,
-            "sink_acked": false
+            "sink_acked": true
           },
           "d2": {
             "cas": {
               "verdict": "ACCEPTED",
-              "expected": 3,
-              "observed": 3,
-              "new_value": 4
+              "expected": 2,
+              "observed": 2,
+              "new_value": 3
             }
           },
           "transition_log_tail": [
             {
               "from": "RUNNING",
-              "to": "BLOCKED_WITH_REASON",
-              "at": "2026-07-05T17:35:42+00:00",
-              "cycle": 4,
-              "op_key": "9fd12702d73d7036d043df27"
+              "to": "COMPLETE",
+              "at": "2026-07-06T06:00:37+00:00",
+              "cycle": 3,
+              "op_key": "40542f8c024378fa5b00f62a"
             }
-          ]
+          ],
+          "liveness_upsert": {
+            "ok": true,
+            "loop_id": "researcher_deep_dive",
+            "last_fired_at": "2026-07-06T06:00:38.121Z"
+          }
         },
         "stderr_tail": "",
-        "run_id": "railway-647235972fdd"
+        "run_id": "railway-2da5bfa69cd7"
       }
     },
     {
@@ -1496,13 +1574,13 @@
       "event_type": "noos_specialist_proposals_tick",
       "handler": "loop",
       "fired": true,
-      "ok": false,
-      "status": 500,
+      "ok": true,
+      "status": 200,
       "body": {
         "handler": "loop",
         "event_type": "noos_specialist_proposals_tick",
-        "exit_code": 1,
-        "ok": false,
+        "exit_code": 0,
+        "ok": true,
         "cycle": {
           "schema": "noos-24-7-loop-cycle-v1",
           "receipt_schema": "autorun-cycle-receipt-v2",
@@ -1514,9 +1592,9 @@
           "event_type": "noos_specialist_proposals_tick",
           "domain": "self-improvement",
           "trigger_source": "http_loop",
-          "cycle_number": 4,
-          "op_key": "e178518013e3f5bae9020e40",
-          "started_at": "2026-07-05T17:35:42+00:00",
+          "cycle_number": 3,
+          "op_key": "6e856debb7e8ea4920fa0fdf",
+          "started_at": "2026-07-06T06:00:39+00:00",
           "state_before": "RUNNING",
           "cost": {
             "provider": "github_actions+cloudflare_cron",
@@ -1543,16 +1621,15 @@
             "verdict": "PASS"
           },
           "founder_blocked": {
-            "count": 0,
-            "oldest_id": "",
-            "priority": "",
-            "age_seconds": 0,
-            "escalated": false,
-            "skipped": true
+            "count": 1,
+            "oldest_id": "NOOS-C-01",
+            "priority": "P0",
+            "age_seconds": 352795,
+            "escalated": true
           },
           "evidence": [
             {
-              "command": "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3 scripts/noos_specialist_v1.py",
+              "command": "/usr/local/bin/python3 scripts/noos_specialist_v1.py",
               "exit_code": 0,
               "output": "{\"status\": \"no_work\", \"message\": \"No research findings to review\"}"
             }
@@ -1561,7 +1638,7 @@
             "steps": [
               {
                 "cmd": [
-                  "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+                  "/usr/local/bin/python3",
                   "scripts/noos_specialist_v1.py"
                 ],
                 "ok": true,
@@ -1576,10 +1653,10 @@
             "cloud_meta": {
               "processor": "noos_loop_runner_v1",
               "github_event": "http_loop",
-              "github_run_id": "railway-5d746c50e93a",
+              "github_run_id": "railway-0aef0059b1eb",
               "github_workflow": "railway-noos-loop-runner",
               "dispatch_source": "verify_script",
-              "processed_at": "2026-07-05T17:35:42+00:00"
+              "processed_at": "2026-07-06T06:00:39+00:00"
             },
             "cloud_trigger": "http_loop"
           },
@@ -1588,41 +1665,51 @@
             "read_only_control": false
           },
           "supabase_sink": {
-            "ok": false,
-            "skipped": true,
-            "reason": "supabase_not_configured"
+            "ok": true,
+            "exit_code": 0,
+            "detail": {
+              "ok": true,
+              "id": "cd118982-b047-487e-8783-53604c127a5d",
+              "status": 201,
+              "op_key": "6e856debb7e8ea4920fa0fdf"
+            }
           },
-          "finished_at": "2026-07-05T17:35:42+00:00",
-          "state_after": "BLOCKED_WITH_REASON",
-          "status": "degraded",
-          "exit_code": 1,
-          "blocker_reason": "sink_unacked",
-          "next_action": "self_heal_or_triage",
+          "finished_at": "2026-07-06T06:00:39+00:00",
+          "state_after": "COMPLETE",
+          "status": "ok",
+          "exit_code": 0,
+          "blocker_reason": null,
+          "next_action": "await_next_scheduled_tick",
           "d4": {
             "execute_ok": true,
             "validate_ok": true,
-            "sink_acked": false
+            "sink_acked": true
           },
           "d2": {
             "cas": {
               "verdict": "ACCEPTED",
-              "expected": 3,
-              "observed": 3,
-              "new_value": 4
+              "expected": 2,
+              "observed": 2,
+              "new_value": 3
             }
           },
           "transition_log_tail": [
             {
               "from": "RUNNING",
-              "to": "BLOCKED_WITH_REASON",
-              "at": "2026-07-05T17:35:42+00:00",
-              "cycle": 4,
-              "op_key": "e178518013e3f5bae9020e40"
+              "to": "COMPLETE",
+              "at": "2026-07-06T06:00:39+00:00",
+              "cycle": 3,
+              "op_key": "6e856debb7e8ea4920fa0fdf"
             }
-          ]
+          ],
+          "liveness_upsert": {
+            "ok": true,
+            "loop_id": "specialist_proposals",
+            "last_fired_at": "2026-07-06T06:00:39.748Z"
+          }
         },
         "stderr_tail": "",
-        "run_id": "railway-5d746c50e93a"
+        "run_id": "railway-0aef0059b1eb"
       }
     },
     {
@@ -1630,13 +1717,13 @@
       "event_type": "noos_orchestrator_cross_repo_tick",
       "handler": "loop",
       "fired": true,
-      "ok": false,
-      "status": 500,
+      "ok": true,
+      "status": 200,
       "body": {
         "handler": "loop",
         "event_type": "noos_orchestrator_cross_repo_tick",
-        "exit_code": 1,
-        "ok": false,
+        "exit_code": 0,
+        "ok": true,
         "cycle": {
           "schema": "noos-24-7-loop-cycle-v1",
           "receipt_schema": "autorun-cycle-receipt-v2",
@@ -1648,9 +1735,9 @@
           "event_type": "noos_orchestrator_cross_repo_tick",
           "domain": "self-improvement",
           "trigger_source": "http_loop",
-          "cycle_number": 5,
-          "op_key": "1a3dfe06213171eef32c4596",
-          "started_at": "2026-07-05T17:35:42+00:00",
+          "cycle_number": 3,
+          "op_key": "c24bafe7efb87880177e78b1",
+          "started_at": "2026-07-06T06:00:40+00:00",
           "state_before": "RUNNING",
           "cost": {
             "provider": "github_actions+cloudflare_cron",
@@ -1677,12 +1764,11 @@
             "verdict": "PASS"
           },
           "founder_blocked": {
-            "count": 0,
-            "oldest_id": "",
-            "priority": "",
-            "age_seconds": 0,
-            "escalated": false,
-            "skipped": true
+            "count": 1,
+            "oldest_id": "NOOS-C-01",
+            "priority": "P0",
+            "age_seconds": 352797,
+            "escalated": true
           },
           "evidence": [
             {
@@ -1710,10 +1796,10 @@
             "cloud_meta": {
               "processor": "noos_loop_runner_v1",
               "github_event": "http_loop",
-              "github_run_id": "railway-27124036dec5",
+              "github_run_id": "railway-bf48a2a2d03a",
               "github_workflow": "railway-noos-loop-runner",
               "dispatch_source": "verify_script",
-              "processed_at": "2026-07-05T17:35:42+00:00"
+              "processed_at": "2026-07-06T06:00:40+00:00"
             },
             "cloud_trigger": "http_loop"
           },
@@ -1722,41 +1808,51 @@
             "read_only_control": false
           },
           "supabase_sink": {
-            "ok": false,
-            "skipped": true,
-            "reason": "supabase_not_configured"
+            "ok": true,
+            "exit_code": 0,
+            "detail": {
+              "ok": true,
+              "id": "d9e7aba1-92eb-4164-bb3a-e5e4e822f281",
+              "status": 201,
+              "op_key": "c24bafe7efb87880177e78b1"
+            }
           },
-          "finished_at": "2026-07-05T17:35:42+00:00",
-          "state_after": "BLOCKED_WITH_REASON",
-          "status": "degraded",
-          "exit_code": 1,
-          "blocker_reason": "sink_unacked",
-          "next_action": "self_heal_or_triage",
+          "finished_at": "2026-07-06T06:00:40+00:00",
+          "state_after": "COMPLETE",
+          "status": "ok",
+          "exit_code": 0,
+          "blocker_reason": null,
+          "next_action": "await_next_scheduled_tick",
           "d4": {
             "execute_ok": true,
             "validate_ok": true,
-            "sink_acked": false
+            "sink_acked": true
           },
           "d2": {
             "cas": {
               "verdict": "ACCEPTED",
-              "expected": 4,
-              "observed": 4,
-              "new_value": 5
+              "expected": 2,
+              "observed": 2,
+              "new_value": 3
             }
           },
           "transition_log_tail": [
             {
               "from": "RUNNING",
-              "to": "BLOCKED_WITH_REASON",
-              "at": "2026-07-05T17:35:42+00:00",
-              "cycle": 5,
-              "op_key": "1a3dfe06213171eef32c4596"
+              "to": "COMPLETE",
+              "at": "2026-07-06T06:00:40+00:00",
+              "cycle": 3,
+              "op_key": "c24bafe7efb87880177e78b1"
             }
-          ]
+          ],
+          "liveness_upsert": {
+            "ok": true,
+            "loop_id": "orchestrator_cross_repo",
+            "last_fired_at": "2026-07-06T06:00:40.921Z"
+          }
         },
         "stderr_tail": "",
-        "run_id": "railway-27124036dec5"
+        "run_id": "railway-bf48a2a2d03a"
       }
     },
     {
@@ -1765,7 +1861,7 @@
       "handler": "factory",
       "fired": true,
       "ok": false,
-      "status": 500,
+      "status": 200,
       "body": {
         "handler": "factory",
         "event_type": "noos_factory_autorun_tick",
@@ -1773,21 +1869,38 @@
         "steps": [
           {
             "name": "enqueue_cloud_inbox",
-            "exit_code": 0,
-            "ok": true,
-            "stderr_tail": ""
+            "exit_code": 1,
+            "ok": false,
+            "stderr_tail": " \"/usr/local/lib/python3.12/pathlib.py\", line 1013, in open\n    return io.open(self, mode, buffering, encoding, errors, newline)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nFileNotFoundError: [Errno 2] No such file or directory: '/app/docs/_NOOS_AGENT/UPGRADE_MANIFEST.json'\n"
           },
           {
             "name": "factory_once",
-            "exit_code": 1,
-            "ok": false,
+            "exit_code": 0,
+            "ok": true,
             "stderr_tail": ""
           }
         ],
-        "run_id": "railway-75f1ad4c4d7f"
+        "run_id": "railway-165e82d3eadb"
+      }
+    },
+    {
+      "dispatch_id": "improve_kaizen_daily",
+      "event_type": "noos_improve_kaizen_daily_tick",
+      "handler": "loop",
+      "fired": true,
+      "ok": false,
+      "status": 200,
+      "body": {
+        "handler": "loop",
+        "event_type": "noos_improve_kaizen_daily_tick",
+        "exit_code": 1,
+        "ok": false,
+        "cycle": null,
+        "stderr_tail": "unknown event_type: noos_improve_kaizen_daily_tick\n",
+        "run_id": "railway-f3635aec383e"
       }
     }
   ],
   "ok": true,
-  "report_line": "cf_railway_dispatch_verify \u00b7 fired=13/13 exec_ok=0/13"
+  "report_line": "cf_railway_dispatch_verify \u00b7 fired=14/14 exec_ok=5/14"
 }

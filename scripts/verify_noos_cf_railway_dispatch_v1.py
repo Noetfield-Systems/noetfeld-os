@@ -6,6 +6,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import subprocess
 import sys
 import urllib.error
 import urllib.request
@@ -14,8 +15,38 @@ from pathlib import Path
 from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "scripts"))
+from noos_vault_paths_v1 import noos_loop_secret  # noqa: E402
+
 TABLE = ROOT / "data/noos-cf-dispatch-table-v1.json"
 PROOF = ROOT / "receipts/proof/noos-cf-railway-dispatch-verify-v1.json"
+DEFAULT_URL = "https://noos-loop-runner-production.up.railway.app"
+
+
+def load_secret() -> str:
+    secret = noos_loop_secret()
+    if secret:
+        return secret
+    railway = Path.home() / ".railway/bin/railway"
+    service = os.environ.get("RAILWAY_LOOP_RUNNER_SERVICE", "noos-loop-runner")
+    if railway.is_file():
+        try:
+            proc = subprocess.run(
+                [str(railway), "variables", "--service", service, "--json"],
+                capture_output=True,
+                text=True,
+                check=False,
+                timeout=30,
+            )
+            if proc.returncode == 0 and proc.stdout.strip():
+                data = json.loads(proc.stdout)
+                for key in ("NOOS_LOOP_SECRET", "LOOP_RUNNER_SECRET"):
+                    val = str(data.get(key) or "").strip()
+                    if val:
+                        return val
+        except (OSError, json.JSONDecodeError, subprocess.TimeoutExpired):
+            pass
+    return ""
 
 
 def utc_now() -> str:
@@ -32,7 +63,7 @@ def post_loop(*, base_url: str, secret: str, event_type: str) -> dict[str, Any]:
     body = json.dumps({"event_type": event_type, "source": "verify_script"}).encode("utf-8")
     headers = {"Content-Type": "application/json", "User-Agent": "noos-cf-railway-verify-v1"}
     if secret:
-        headers["Authorization"] = f"Bearer {secret}"
+        headers["X-NOOS-Loop-Secret"] = secret
     req = urllib.request.Request(url, data=body, headers=headers, method="POST")
     try:
         with urllib.request.urlopen(req, timeout=900) as resp:
@@ -85,13 +116,17 @@ def verify(*, base_url: str, secret: str, only: str | None) -> dict[str, Any]:
 
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
-    ap.add_argument("--url", default=os.environ.get("LOOP_RUNNER_URL", "http://127.0.0.1:8080"))
-    ap.add_argument("--secret", default=os.environ.get("LOOP_RUNNER_SECRET", ""))
+    ap.add_argument("--url", default=os.environ.get("RAILWAY_LOOP_RUNNER_URL", DEFAULT_URL))
+    ap.add_argument("--secret", default="")
     ap.add_argument("--only", default=None, help="dispatch_id or event_type")
     ap.add_argument("--write-receipt", action="store_true")
     ap.add_argument("--json", action="store_true")
     args = ap.parse_args()
-    row = verify(base_url=args.url, secret=args.secret, only=args.only)
+    secret = args.secret or load_secret()
+    if not secret:
+        print(json.dumps({"ok": False, "error": "NOOS_LOOP_SECRET not available"}), file=sys.stderr)
+        return 1
+    row = verify(base_url=args.url, secret=secret, only=args.only)
     if args.write_receipt:
         PROOF.parent.mkdir(parents=True, exist_ok=True)
         PROOF.write_text(json.dumps(row, indent=2) + "\n", encoding="utf-8")

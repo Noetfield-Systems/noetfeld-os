@@ -1,7 +1,7 @@
 {
   "schema": "noos-24-7-loops-v1",
   "version": "1.0.0",
-  "one_law": "Each loop runs forever via CF loop motor cron → Railway HTTP /loop. No GitHub Actions execution.",
+  "one_law": "All 24/7 loops → CF cron + Railway HTTP /loop (one bounded tick). No GitHub Actions runtime dispatch.",
   "slo_defaults": {
     "freshness_target_minutes": 30,
     "success_rate_target": 0.98,
@@ -9,10 +9,21 @@
   },
   "motor": {
     "cf_worker": "noos-loop-fleet-tick-v1",
+    "cf_deadman": "noos-deadman-v1",
     "dispatch_table": "data/noos-cf-dispatch-table-v1.json",
     "base_cron": "*/5 * * * *",
     "health_url": "https://noos-loop-fleet-tick-v1.sina-kazemnezhad-ca.workers.dev/health",
+    "deadman_health_url": "https://noos-deadman-v1.sina-kazemnezhad-ca.workers.dev/health",
+    "railway_health_url": "https://noos-loop-runner-production.up.railway.app/health",
+    "canonical_execution_plane": "railway:noos-loop-runner",
+    "canonical_executor_url": "https://noos-loop-runner-production.up.railway.app",
+    "live_execution_plane": "railway:noos-loop-runner",
+    "live_executor_url": "https://noos-loop-runner-production.up.railway.app",
+    "live_executor_status": "CANONICAL_LIVE",
     "execution_plane": "railway:noos-loop-runner",
+    "cutover_status": "data/noos-executor-cutover-status-v1.json",
+    "wiring_pattern": "data/noos-motor-executor-wiring-v1.json",
+    "motor_restart_recipes": "data/noos-motor-restart-recipes-v1.json",
     "legacy_factory_motor": "noos-factory-autorun-tick-v1",
     "legacy_factory_motor_status": "cron_retired_2026-07-05",
     "secondary_motor": "fly_always_on",
@@ -50,6 +61,10 @@
       "steps": [
         {"name": "gate", "cmd": ["python3", "-m", "noetfield_gate.cli", "gate", "--json", "--pytest"]},
         {"name": "pytest", "cmd": ["python3", "-m", "pytest", "-q"]}
+      ],
+      "cloud_steps": [
+        {"name": "gate_smoke", "cmd": ["python3", "-m", "noetfield_gate.cli", "gate", "--json"], "continue_on_error": true},
+        {"name": "import_smoke", "cmd": ["python3", "-c", "import noetfield_gate; print('ok')"]}
       ]
     },
     {
@@ -120,6 +135,10 @@
           "name": "loop_heartbeat",
           "cmd": ["python3", "scripts/noos_loop_heartbeat_v1.py", "--write-receipt"]
         }
+      ],
+      "cloud_steps": [
+        {"name": "reenqueue_blocked", "cmd": ["python3", "scripts/reenqueue_blocked_upg_inbox_v1.py"], "continue_on_error": true},
+        {"name": "loop_heartbeat", "cmd": ["python3", "scripts/noos_loop_heartbeat_v1.py", "--write-receipt"], "continue_on_error": true}
       ]
     },
     {
@@ -136,6 +155,13 @@
         {
           "name": "sourcea_supabase_observe",
           "cmd": ["python3", "scripts/observe_sourcea_supabase_v1.py", "--write-receipt", "--json"]
+        }
+      ],
+      "cloud_steps": [
+        {
+          "name": "sourcea_supabase_observe",
+          "cmd": ["python3", "scripts/observe_sourcea_supabase_v1.py", "--write-receipt", "--json"],
+          "continue_on_error": false
         }
       ]
     },
@@ -171,6 +197,12 @@
         {
           "name": "workflow_audit",
           "cmd": ["python3", "scripts/noos_workflow_audit_v1.py", "--json"]
+        }
+      ],
+      "cloud_steps": [
+        {
+          "name": "workflow_audit",
+          "cmd": ["python3", "scripts/noos_workflow_audit_v1.py", "--json", "--loop-exit-ok"]
         }
       ]
     },
@@ -239,6 +271,27 @@
         {
           "name": "aggregate_health",
           "cmd": ["echo", "Aggregating health across all org repos"]
+        }
+      ]
+    },
+    {
+      "id": "improve_kaizen_daily",
+      "title": "Nightly machine_safe kaizen recipe slot",
+      "domain": "self-improvement",
+      "lane": "noos",
+      "value_class": "risk_reduction",
+      "event_type": "noos_improve_kaizen_daily_tick",
+      "interval_minutes": 1440,
+      "github_workflow": "noos-improve-kaizen-daily.yml",
+      "factory_id": "loop-improve-kaizen",
+      "steps": [
+        {
+          "name": "kaizen_daily",
+          "cmd": ["python3", "scripts/noos_improve_kaizen_runner_v1.py", "--write-receipt", "--json"]
+        },
+        {
+          "name": "recipe_apply_if_matched",
+          "cmd": ["python3", "scripts/noos_kaizen_recipe_apply_v1.py", "--recipe-id", "seed-all-loop-ticks", "--dry-run", "--json"]
         }
       ]
     }

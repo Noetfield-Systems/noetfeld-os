@@ -1,0 +1,39 @@
+{
+  "schema": "noos-upgrade-manifest-publish-v1",
+  "at": "2026-07-07T16:22:36Z",
+  "ok": true,
+  "entry_count": 58,
+  "planes": [
+    "NOOS",
+    "Noetfield-contract-surfaces"
+  ],
+  "export_paths": {
+    "full": "/Users/sinakazemnezhad/Desktop/Noetfield-Systems/noetfeld-OS/.noos-runtime/integrator/exports/upgrade-manifest-delta-v1.json",
+    "NOOS": "/Users/sinakazemnezhad/Desktop/Noetfield-Systems/noetfeld-OS/.noos-runtime/integrator/exports/upgrade-manifest-delta-noos-v1.json",
+    "Noetfield-contract-surfaces": "/Users/sinakazemnezhad/Desktop/Noetfield-Systems/noetfeld-OS/.noos-runtime/integrator/exports/upgrade-manifest-delta-noetfield-contract-surfaces-v1.json"
+  },
+  "integrator_sync": {
+    "ok": true,
+    "state_path": "/Users/sinakazemnezhad/Desktop/Noetfield-Systems/noetfeld-OS/.noos-runtime/integrator/noos-integrator-state-v1.json",
+    "home_mirror_path": "/Users/sinakazemnezhad/.sina/noos-integrator-state-v1.json",
+    "summary": {
+      "open": 0,
+      "claimed": 0,
+      "in_progress": 0,
+      "blocked": 0,
+      "done": 5,
+      "released": 7,
+      "cancelled": 0,
+      "stale_claims": 0,
+      "active_agents": 0,
+      "stale_agents": 2
+    },
+    "supabase": {
+      "ok": false,
+      "skipped": true,
+      "reason": "supabase_sync_disabled"
+    },
+    "manifest_marker": "/Users/sinakazemnezhad/Desktop/Noetfield-Systems/noetfeld-OS/.noos-runtime/integrator/upgrade-manifest-delta-v1.json"
+  },
+  "note": "Contract-only SourceA deltas excluded; no product repo writes"
+}

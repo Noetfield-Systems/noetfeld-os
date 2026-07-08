@@ -1,0 +1,40 @@
+{
+  "schema": "noos-integrator-tasks-mirror-v1",
+  "at": "2026-07-07T16:22:35Z",
+  "ok": true,
+  "dry_run": false,
+  "state_path": "/Users/sinakazemnezhad/Desktop/Noetfield-Systems/noetfeld-OS/.noos-runtime/integrator/noos-integrator-state-v1.json",
+  "task_count": 12,
+  "repo_local_ssot": true,
+  "home_mirror": {
+    "ok": true,
+    "state_path": "/Users/sinakazemnezhad/Desktop/Noetfield-Systems/noetfeld-OS/.noos-runtime/integrator/noos-integrator-state-v1.json",
+    "home_mirror_path": "/Users/sinakazemnezhad/.sina/noos-integrator-state-v1.json",
+    "summary": {
+      "open": 0,
+      "claimed": 0,
+      "in_progress": 0,
+      "blocked": 0,
+      "done": 5,
+      "released": 7,
+      "cancelled": 0,
+      "stale_claims": 0,
+      "active_agents": 0,
+      "stale_agents": 2
+    },
+    "supabase": {
+      "ok": false,
+      "skipped": true,
+      "reason": "supabase_table_missing",
+      "status": 404
+    },
+    "exit_code": 0
+  },
+  "tasks_table": {
+    "ok": false,
+    "skipped": true,
+    "reason": "supabase_table_missing",
+    "status": 404
+  },
+  "tasks_table_note": "optional table; full state still in noos_integrator_agent_state via sync"
+}

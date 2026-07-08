@@ -231,8 +231,23 @@ The honest test is not any architecture diagram. It is: **close the laptop for 4
 | `NOOS-AGENT-20260702-027` | Unified Autonomy Upgrade Master — tiered backlog |
 | `NOOS-AGENT-20260703-005` | Founder Canon Interface — zero-founder validation law |
 | `NOOS-AGENT-20260703-004` | Cursor Local Mac operator — claim/closeout |
-| `NOOS-AGENT-20260729-022` | System Fix and Upgrade 100-Plan (predecessor pattern) |
+| `NOOS-AGENT-20260629-022` | System Fix and Upgrade 100-Plan (predecessor pattern) |
 | `NOOS-AGENT-20260702-028` | Ten upgrade planes — execution matrix |
+
+---
+
+## Locked amendments (2026-07-06)
+
+These amend steps above without unlocking the plan:
+
+| Step area | Amendment | Authority |
+|-----------|-----------|-----------|
+| B21, B30, E63–65 | Telegram **OFF** by default; never @Gateway_A | `NOOS-AGENT-20260706-031` |
+| B25, E69 | `deadman-probe` uses `/check?telegram=0` only | deployed worker + Makefile |
+| A–E loops | GHA `schedule` **retired**; CF→Railway only | trigger host inventory receipt |
+| D54 | Nightly kaizen via **CF dispatch**, not GHA cron | `noos-cf-dispatch-table-v1.json` |
+| E73 | Retro doc = `[NOOS-AGENT-20260706-030]_LIVING_SYSTEM_48H_RETRO_v1.md` | MANIFEST |
+| Superseded plans | Do not execute 025/027 Track A schedule wins | `NOOS-AGENT-20260706-032` |
 
 ---
 

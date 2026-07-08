@@ -1,0 +1,80 @@
+{
+  "schema": "noos-ten-upgrade-plans-registry-v1",
+  "version": "1.0.0",
+  "authority": "UPG-PLAN-01–10",
+  "updated_at": "2026-07-07",
+  "baseline": "ICL-P1 done; motor green; GHA deploy green",
+  "plans": [
+    {
+      "id": "UPG-PLAN-01",
+      "title": "ICL-P2 Integrator Control Dashboard",
+      "status": "done",
+      "evidence": "scripts/noos_integrator_status_v1.py",
+      "make": "make integrator-status"
+    },
+    {
+      "id": "UPG-PLAN-02",
+      "title": "Living System Phase E-G 48h prep",
+      "status": "done",
+      "evidence": "scripts/noos_living_system_48h_prep_v1.py",
+      "founder_gate": "UPG-LS-09–10 T0 closeout",
+      "make": "make living-system-48h-prep"
+    },
+    {
+      "id": "UPG-PLAN-03",
+      "title": "NF public verdict gate",
+      "status": "done",
+      "evidence": "scripts/noos_nf_pub_verdict_gate_v1.py",
+      "make": "make nf-pub-verdict-gate"
+    },
+    {
+      "id": "UPG-PLAN-04",
+      "title": "Vault and cloud secrets hardening",
+      "status": "done",
+      "evidence": "scripts/canonicalize_noos_vault_v1.py",
+      "make": "make cloud-vault-canonicalize"
+    },
+    {
+      "id": "UPG-PLAN-05",
+      "title": "24/7 motor sustain and post-deploy verify",
+      "status": "done",
+      "evidence": "scripts/verify_noos_motor_sustain_v1.py",
+      "make": "make motor-sustain-verify"
+    },
+    {
+      "id": "UPG-PLAN-06",
+      "title": "SourceA spine observe-only integration",
+      "status": "done",
+      "evidence": "scripts/observe_sourcea_supabase_v1.py + portfolio_spine env on Railway"
+    },
+    {
+      "id": "UPG-PLAN-07",
+      "title": "ACG outbound queue + weekly digest",
+      "status": "done",
+      "evidence": "data/noos-acg-outbound-queue-v1.json (25 slots)",
+      "founder_gate": "UPG-0001 NW1 send",
+      "make": "make acg-weekly-digest"
+    },
+    {
+      "id": "UPG-PLAN-08",
+      "title": "gel-api multi-region canary UPG-0209",
+      "status": "done",
+      "evidence": "scripts/verify_noos_gel_api_multi_region_v1.py",
+      "make": "make gel-api-multi-region-verify"
+    },
+    {
+      "id": "UPG-PLAN-09",
+      "title": "Sandbox fleet + kaizen sustain",
+      "status": "done",
+      "evidence": "make kaizen-sustain",
+      "make": "make kaizen-sustain"
+    },
+    {
+      "id": "UPG-PLAN-10",
+      "title": "Phase 5 packaging deferred rail",
+      "status": "done",
+      "evidence": "scripts/noos_phase5_packaging_prep_v1.py",
+      "make": "make phase5-packaging-prep"
+    }
+  ]
+}

@@ -1,0 +1,188 @@
+{
+  "schema": "noos-stack-automation-health-v1",
+  "at": "2026-07-08T00:10:26Z",
+  "ok": false,
+  "overall_status": "yellow",
+  "closure_token": "NOOS_STACK_AUTOMATION: yellow",
+  "replaces_workflow": "noos-cross-repo-orchestrator.yml",
+  "architecture": {
+    "primary": "cloudflare_workers_cron",
+    "secondary": "github_actions_enterprise",
+    "tertiary": "railway_plan_worker"
+  },
+  "signals": {
+    "integrator_status": false,
+    "autorun_critique": false,
+    "gha_health": true,
+    "eleven_layers": true,
+    "trustfield_registry": true,
+    "cf_fleet_tick": true
+  },
+  "integrator_status": {
+    "ok": false,
+    "surfaces": {
+      "vault": true,
+      "cf_deploy_token": true,
+      "integrator_mirror": true,
+      "motor_sustain": false,
+      "autorun": false,
+      "machine_audit": true,
+      "agent_conflicts": true,
+      "tasks_mirror": true,
+      "upgrade_manifest": true
+    },
+    "machine_audit_line": "outside_audit \u00b7 scanned=364 chain_ok=True"
+  },
+  "autorun_critique": {
+    "overall_ok": false,
+    "findings": 2,
+    "findings_sample": [
+      {
+        "scope": "noos_gha_health_witness",
+        "severity": "high",
+        "summary": "Workflow is not healthy: BLOCKED_WITH_REASON",
+        "detail": "no_github_runs"
+      },
+      {
+        "scope": "noos_stack_health_receipt",
+        "severity": "high",
+        "summary": "Workflow is not healthy: BLOCKED_WITH_REASON",
+        "detail": "no_github_runs"
+      }
+    ]
+  },
+  "gha_health": {
+    "schema": "noos-gha-run-health-v1",
+    "at": "2026-07-08T00:10:25Z",
+    "ok": true,
+    "overall_status": "green",
+    "closure_token": "NOOS_GHA_HEALTH: green",
+    "billing_gate_max_seconds": 12.0,
+    "checks": {
+      "ICL-D10": {
+        "title": "GHA secondary witness (latest run not billing-gated)",
+        "ok": true,
+        "repos": [
+          {
+            "ok": true,
+            "repo": "TrustField-Technologies",
+            "billing_gate_failures_12s": 0,
+            "latest_is_billing_gate": false,
+            "latest_real_failure": false,
+            "real_failures": [],
+            "latest_conclusion": "success",
+            "latest_duration_s": 41.0,
+            "recent_count": 8
+          },
+          {
+            "ok": true,
+            "repo": "noetfeld-os",
+            "billing_gate_failures_12s": 0,
+            "latest_is_billing_gate": false,
+            "latest_real_failure": false,
+            "real_failures": [
+              "GEL CI: feat(gha): enable Phase-1 witness cron after smo"
+            ],
+            "latest_conclusion": "success",
+            "latest_duration_s": 43.0,
+            "recent_count": 8
+          }
+        ]
+      },
+      "ICL-D11": {
+        "title": "GHA real workflow failures (not billing)",
+        "ok": true,
+        "failures": [
+          "GEL CI: feat(gha): enable Phase-1 witness cron after smo"
+        ]
+      },
+      "ICL-D12": {
+        "title": "GitHub org on Enterprise plan",
+        "ok": true,
+        "plan": {
+          "ok": true,
+          "plan": "team",
+          "enterprise_named": false,
+          "billing_gate_clear": true,
+          "enterprise_slug": "noetfield-systems-inc",
+          "enterprise_url": "https://github.com/enterprises/noetfield-systems-inc",
+          "witness_proxy": true
+        }
+      },
+      "witness_early_warning": {
+        "title": "Witness workflows not dying at billing gate (<12s)",
+        "ok": true,
+        "detail": {
+          "ok": true,
+          "witness_count": 5,
+          "warnings": [
+            {
+              "workflow": "noos-gha-health-witness.yml",
+              "ok": false,
+              "error": "HTTP 404: workflow noos-gha-health-witness.yml not found on the default branch (https://api.github.com/repos/Noetfield-Systems/noetfeld-os/actions/workflows/noos-gha-health-witness.yml)\n"
+            },
+            {
+              "workflow": "noos-stack-health-receipt.yml",
+              "ok": false,
+              "error": "HTTP 404: workflow noos-stack-health-receipt.yml not found on the default branch (https://api.github.com/repos/Noetfield-Systems/noetfeld-os/actions/workflows/noos-stack-health-receipt.yml)\n"
+            }
+          ],
+          "billing_gate_precursors": [],
+          "one_law": "Jobs failing in <12s with no step logs = billing/spending gate \u2014 not CI red"
+        }
+      }
+    },
+    "fix_queue": []
+  },
+  "cf_motors": {
+    "fleet_tick": "green",
+    "deadman": "green",
+    "registry_overall": "green"
+  },
+  "railway_plan_worker": {
+    "url": "https://trustfield-plan-worker-production.up.railway.app/health",
+    "status": "healthy",
+    "last_cycle_ok": true,
+    "lane_ok": {
+      "plan_matrix": true,
+      "critic_circle": true,
+      "deep_research": true,
+      "trustfield_loops_intake": true,
+      "self_heal": true,
+      "www_upgrade_queue": true,
+      "autorun_stack": true,
+      "partner_access": true
+    },
+    "lanes_run": [
+      "plan_matrix",
+      "critic_circle",
+      "deep_research",
+      "trustfield_loops_intake",
+      "self_heal",
+      "www_upgrade_queue",
+      "autorun_stack",
+      "partner_access"
+    ]
+  },
+  "eleven_layers": {
+    "green": 10,
+    "yellow": 1,
+    "red": 0,
+    "unknown": 0
+  },
+  "trustfield_registry": {
+    "green": 31,
+    "yellow": 2,
+    "red": 0,
+    "last_ok_false": 0,
+    "missing_last_fired_at": 0,
+    "probe_present": true,
+    "deadman_status": "green",
+    "gate_48h_status": "green",
+    "deadman_watched_red": []
+  },
+  "fix_queue": [
+    "integrator_status",
+    "autorun_critique"
+  ]
+}

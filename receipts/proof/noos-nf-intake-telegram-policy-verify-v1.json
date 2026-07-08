@@ -1,0 +1,66 @@
+{
+  "schema": "noos-nf-intake-telegram-policy-verify-v1",
+  "verified_at": "2026-07-07T09:03:00Z",
+  "authority": "NOOS verification only",
+  "policy": "Successful probes create receipts; Telegram is for failures, meaningful PASS summaries, or real leads.",
+  "checks": {
+    "1_noetfield_e2e_intake": {
+      "ok": true,
+      "command": "cd Noetfield && python3 scripts/nf_intake_e2e.py --json",
+      "result": "pass",
+      "intake_id": "INT-529F1E3C5F3B",
+      "request_id": "RID-E2E-1783414927"
+    },
+    "2_probe_writes_health_receipt": {
+      "ok": true,
+      "receipt_paths": [
+        "Noetfield/reports/agent-auto/events/nf-intake-e2e-v1.json",
+        "~/.sina/nf-intake-e2e-v1.json"
+      ],
+      "fields": {
+        "telegram_skipped_probe": true,
+        "telegram_mode": "receipt_only",
+        "intake_persisted": true,
+        "dedupe_checked": true
+      }
+    },
+    "3_probe_no_lead_telegram_spam": {
+      "ok": true,
+      "evidence": {
+        "live_submit": "telegram_skipped_probe=true, message=Test intake recorded — health receipt only.",
+        "unit": "node scripts/test_intake_telegram_probe.cjs PASS",
+        "pytest": "tests/unit/test_intake_telegram_probe.py + test_nf_intake_e2e.py — 9 passed",
+        "code": "api/_lib/intake-telegram.js — isTestIntake → telegram_skipped_probe unless probeFail"
+      }
+    },
+    "4_real_customer_telegram_active": {
+      "ok": true,
+      "evidence": {
+        "www_intake_health": {
+          "www_telegram_configured": true,
+          "ops_telegram_configured": true,
+          "storage": "postgres",
+          "delivery_mode": "resend"
+        },
+        "code": "api/_lib/intake-telegram.js — non-test → formatIntakeTelegramText + sendTelegramRaw"
+      }
+    },
+    "5_autorun_health": {
+      "ok": true,
+      "partial": true,
+      "sandbox_health_sweep": "COMPLETE — www home/gel/ai-value-os + platform + gel-api 200",
+      "noos_deadman": "RUNNING — check?telegram=0 alert_sent=false",
+      "overall_autorun_ok": false,
+      "non_intake_findings": [
+        "noos_schedule_canary: manual_dispatch_only",
+        "noos_loop_liveness_registry: 3 stale (Railway upsert drift)"
+      ]
+    }
+  },
+  "deadman_telegram_lane": {
+    "telegram_send_alerts": false,
+    "probe_suppress": "POST /check?telegram=0",
+    "receipt": "receipts/proof/noos-deadman-telegram-lane-lock-v1.json"
+  },
+  "ok": true
+}

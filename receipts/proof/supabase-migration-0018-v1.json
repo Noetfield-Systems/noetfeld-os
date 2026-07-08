@@ -1,0 +1,29 @@
+{
+  "schema": "supabase-migration-receipt-v1",
+  "migration": "0018",
+  "migration_file": "infrastructure/supabase/migrations/0018_security_advisor_warnings.sql",
+  "applied_at": "2026-07-07T22:43:28Z",
+  "dry_run": false,
+  "postgres_configured": true,
+  "pre_verify": {
+    "ok": false,
+    "functions": {
+      "noetfield.prevent_update_delete": false,
+      "noetfield.tle_entries_immutable_guard": false,
+      "noetfield.current_tenant_id": false
+    },
+    "vector_schema": "public",
+    "gateway_with_check": "true"
+  },
+  "post_verify": {
+    "ok": true,
+    "functions": {
+      "noetfield.prevent_update_delete": true,
+      "noetfield.tle_entries_immutable_guard": true,
+      "noetfield.current_tenant_id": true
+    },
+    "vector_schema": "extensions",
+    "gateway_with_check": "((COALESCE(length(TRIM(BOTH FROM name)), 0) > 0) AND (identity IS NOT NULL) AND (intent IS NOT NULL) AND (consent_to_contact IS NOT NULL) AND ((COALESCE(length(TRIM(BOTH FROM email)), 0) > 0) OR (COALESCE(length(TRIM(BOTH FROM contact)), 0) > 0) OR (COALESCE(length(TRIM(BOTH FROM phone)), 0) > 0)))"
+  },
+  "ok": true
+}

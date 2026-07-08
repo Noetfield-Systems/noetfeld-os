@@ -1,0 +1,34 @@
+{
+  "task": "integrator_operator_acceptance",
+  "timestamp": "2026-07-06T11:10:00-07:00",
+  "integrator": "cursor-local-mac",
+  "lane": "NOOS-LANE-copilot-cost-lock-merge",
+  "summary": "Local integrator acceptance for Copilot cost-lock + dispatcher mode promotion onto main.",
+  "checks": {
+    "integrator_pointer_canonical": {
+      "path": "data/noos-integrator-role-v1.json",
+      "ok": true,
+      "note": "Repo-local pointer intact; dispatcher rules additive only"
+    },
+    "cost_lock_receipt": {
+      "path": "receipts/cost-lock-implementation-20260703T133553Z.json",
+      "ok": true
+    },
+    "dispatcher_registration_receipt": {
+      "path": "receipts/noos-copilot-dispatcher-mode-registration-20260703T214501Z.json",
+      "ok": true
+    },
+    "incident_receipt": {
+      "path": "receipts/incident-copilot-clone-misinterpretation-20260703T223436Z.json",
+      "ok": true,
+      "status": "remediated"
+    },
+    "fleet_rollout_blocked": true,
+    "main_write_blocked": true,
+    "discovery_non_enforcing": true,
+    "cost_policy_scan_local": "pass",
+    "cost_policy_scan_exit_code": 0,
+    "ci_discovery_ok": true
+  },
+  "disposition": "accept_merge_after_scanner_pass"
+}

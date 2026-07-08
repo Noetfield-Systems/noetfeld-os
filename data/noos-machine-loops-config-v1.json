@@ -33,7 +33,9 @@
       "requires_second_critic": true
     }
   },
-  "critic_checklist_source": ".cursor/skills/governed-autorun/SKILL.md",
+  "motor_restart_recipes_path": "data/noos-motor-restart-recipes-v1.json",
+  "kaizen_recipes_path": "data/noos-kaizen-recipes-v1.json",
+  "autonomy_kernel_path": "data/noos-autonomy-kernel-v1.json",
   "workers": {
     "reconciler": "noos-machine-reconciler",
     "critic": "noos-machine-critic",

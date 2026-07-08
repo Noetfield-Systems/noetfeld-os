@@ -1,0 +1,37 @@
+{
+  "task": "noos_copilot_step5_merge_readiness",
+  "timestamp": "2026-07-03T21:45:01-07:00",
+  "summary": "Step 5 merge readiness assessment for cost-lock + dispatcher mode lane.",
+  "pr": {
+    "number": 24,
+    "branch": "copilot/cost-locks-v1",
+    "title": "NOOS Copilot Step 5: dispatcher discovery & registration"
+  },
+  "merge_gates": {
+    "cost_policy_scan_ci": {
+      "required": true,
+      "status_at_creation": "failure_self_hit_and_main_drift",
+      "status_after_fix": "pending_ci_rerun"
+    },
+    "integrator_pointer_intact": true,
+    "fleet_rollout_blocked": true,
+    "main_write_blocked": true,
+    "discovery_ci_enforcing": false,
+    "validator_receipt_required_for_write": true
+  },
+  "artifacts_present": [
+    "data/noos-copilot-dispatcher-mode-v1.json",
+    "data/noos-integrator-role-v1.json",
+    "data/package_map.json",
+    "scripts/cost_policy_scan.py",
+    "scripts/ci_discovery_noos_dispatcher.py",
+    ".github/workflows/cost-policy-scan.yml",
+    ".github/workflows/noos-discovery.yml",
+    "receipts/cost-lock-implementation-20260703T133553Z.json",
+    "receipts/noos-copilot-dispatcher-mode-registration-20260703T214501Z.json"
+  ],
+  "operator_disposition": "merge_ready",
+  "accepted_by": "cursor-local-mac",
+  "accepted_at": "2026-07-06T11:10:00-07:00",
+  "scanner_fix": "exclude policy self-hits; allow cheap providers; rebase onto main 404e4c7"
+}

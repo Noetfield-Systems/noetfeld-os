@@ -63,6 +63,10 @@ def already_ran_today() -> bool:
 
 def run(*, force: bool = False) -> dict[str, Any]:
     cfg = json.loads(CONFIG.read_text(encoding="utf-8")) if CONFIG.is_file() else {}
+    kaizen_recipes = ROOT / "data/noos-kaizen-recipes-v1.json"
+    recipe_hint = None
+    if kaizen_recipes.is_file():
+        recipe_hint = {"path": str(kaizen_recipes.relative_to(ROOT)), "count": len(json.loads(kaizen_recipes.read_text()).get("recipes") or [])}
     candidates = load_kaizen_candidates()
     picked = candidates[0] if candidates else None
     skipped = already_ran_today() and not force
@@ -79,6 +83,8 @@ def run(*, force: bool = False) -> dict[str, Any]:
         "roi_class": "THROTTLED_ROI",
         "skipped_today": skipped,
         "candidate_count": len(candidates),
+        "recipe_registry": recipe_hint,
+        "prefer_recipes": bool(recipe_hint),
         "picked": None,
         "repair_route": repair_route if picked and not skipped else None,
         "ok": True,

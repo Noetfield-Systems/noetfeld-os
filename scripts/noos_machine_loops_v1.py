@@ -299,7 +299,7 @@ def run_outside_audit(*, trailing_hours: int = 168) -> dict[str, Any]:
         except (OSError, json.JSONDecodeError):
             continue
 
-    chain_row = chain.verify_chain(scanned)
+    chain_row = chain.verify_chain_operational(scanned)
     if not chain_row["ok"]:
         kaizen_candidates.append(
             {

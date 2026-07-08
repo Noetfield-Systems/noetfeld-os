@@ -1,0 +1,57 @@
+# NOOS org-level stack automation rollup — replaces retired cross-repo orchestrator stub.
+name: NOOS stack health receipt
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "40 */2 * * *"
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: noos-stack-health-receipt-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  rollup:
+    name: Stack automation health rollup
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      NOOS_GHA_WITNESS: "1"
+      NOOS_MOTOR_WITNESS_MOTORS_ONLY: "1"
+      GH_TOKEN: ${{ github.token }}
+      GITHUB_RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CF_NOETFIELD_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      NOETFIELD_SUPABASE_URL: ${{ secrets.NOETFIELD_SUPABASE_URL }}
+      NOETFIELD_SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.NOETFIELD_SUPABASE_SERVICE_ROLE_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Bootstrap autorun repair (liveness + loop cycles)
+        run: python3 scripts/noos_integrator_repair_autorun_v1.py --json
+
+      - name: Stack automation health rollup
+        run: |
+          set -euo pipefail
+          mkdir -p receipts/proof
+          set +o pipefail
+          python3 scripts/noos_stack_automation_health_v1.py --write-receipt --json | tee receipts/proof/noos-stack-automation-health-v1.json
+          set -o pipefail
+          test -s receipts/proof/noos-stack-automation-health-v1.json
+
+      - name: Upload stack health receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: noos-stack-automation-health-v1
+          path: receipts/proof/noos-stack-automation-health-v1.json
+          retention-days: 30
+          if-no-files-found: warn

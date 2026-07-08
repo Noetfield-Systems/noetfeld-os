@@ -1,19 +1,49 @@
 {
   "schema": "noos-github-schedule-a1-v1",
-  "verified_at": "2026-07-02T12:12:37Z",
+  "verified_at": "2026-07-07T06:20:29Z",
   "proof_source": "supabase",
   "table": "noetfield_truth_log",
-  "ok": false,
+  "ok": true,
   "a1_criterion": ">=2 rows in noetfield_truth_log with source=noos-factory-autorun, event=schedule, conclusion=success (self-registered by workflow)",
-  "schedule_row_count": 1,
+  "schedule_row_count": 10,
   "schedule_rows": [
     {
-      "run_id": "28585156058",
+      "run_id": "28725679810",
       "event": "schedule",
       "conclusion": "success",
-      "at": "2026-07-02T11:03:12+00:00"
+      "at": "2026-07-05T01:28:43+00:00"
+    },
+    {
+      "run_id": "28723472265",
+      "event": "schedule",
+      "conclusion": "success",
+      "at": "2026-07-04T23:47:15+00:00"
+    },
+    {
+      "run_id": "28722013863",
+      "event": "schedule",
+      "conclusion": "success",
+      "at": "2026-07-04T22:43:00+00:00"
+    },
+    {
+      "run_id": "28720532293",
+      "event": "schedule",
+      "conclusion": "success",
+      "at": "2026-07-04T21:42:12+00:00"
+    },
+    {
+      "run_id": "28718982101",
+      "event": "schedule",
+      "conclusion": "success",
+      "at": "2026-07-04T20:39:45+00:00"
     }
   ],
-  "blocker_reason": "insufficient_schedule_rows_in_supabase",
-  "note": "GitHub private-repo cron lags; workflow self-registers every run. No gh polling."
+  "blocker_reason": null,
+  "note": "GitHub private-repo cron lags; workflow self-registers every run. No gh polling.",
+  "consecutive_factory_pair": {
+    "newer_run_id": "28725679810",
+    "older_run_id": "28723472265",
+    "newer_at": "2026-07-05T01:28:43+00:00",
+    "older_at": "2026-07-04T23:47:15+00:00"
+  }
 }

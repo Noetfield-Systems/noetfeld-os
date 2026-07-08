@@ -1,0 +1,56 @@
+{
+  "schema": "noos-integrator-icl-p1-closeout-v1",
+  "at": "2026-07-07T16:18:28Z",
+  "phase": "ICL-P1",
+  "status": "done",
+  "ok": true,
+  "steps": {
+    "ICL-P1-01": {
+      "id": "ICL-P1-01",
+      "title": "Agentic cloud bootstrap on boot",
+      "ok": true,
+      "boot_script": "/Users/sinakazemnezhad/Desktop/Noetfield-Systems/noetfeld-OS/scripts/noos_local_boot_vault_sync_v1.sh",
+      "cf_token_ok": true,
+      "duplicate_cloudflare_keys": false,
+      "platform_vault": "/Users/sinakazemnezhad/.noetfield-platform-secrets"
+    },
+    "ICL-P1-02": {
+      "id": "ICL-P1-02",
+      "title": "deploy-noos-cloud-workers GHA",
+      "ok": true,
+      "workflow_hardening": {
+        "job_level_token": true,
+        "pre_deploy_verify": true
+      },
+      "workers_health": {
+        "fleet": true,
+        "factory": true
+      },
+      "latest_gha_run": {
+        "conclusion": "success",
+        "databaseId": 28881254843,
+        "url": "https://github.com/Noetfield-Systems/noetfeld-os/actions/runs/28881254843"
+      }
+    },
+    "ICL-P1-03": {
+      "id": "ICL-P1-03",
+      "title": "SourceA observe loop writes spine",
+      "ok": true,
+      "observe_ok": true,
+      "truth_log_cron_fired": true,
+      "latest_queue_head": "CLOUD-SEC-8120",
+      "autorun_sourcea_observe_running": true,
+      "sourcea_cloud_queue_fresh": true,
+      "sourcea_cloud_queue_cron_fired": true
+    },
+    "ICL-P1-04": {
+      "id": "ICL-P1-04",
+      "title": "Noetfield vault path migration",
+      "ok": true,
+      "noetfield_repo": "/Users/sinakazemnezhad/Desktop/Noetfield-Systems/Noetfield",
+      "canonical_path": "/Users/sinakazemnezhad/.noetfield-platform-secrets/noetfield.env",
+      "product_keys": 20
+    }
+  },
+  "next_phase": "ICL-P2"
+}

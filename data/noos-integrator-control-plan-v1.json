@@ -1,0 +1,199 @@
+{
+  "schema": "noos-integrator-control-plan-v1",
+  "version": "1.0.0",
+  "authority": "NOOS-AGENT-20260707-007",
+  "updated_at": "2026-07-08",
+  "one_law": "NOOS observes and coordinates; SourceA phase_reconciler_v1 remains sole control authority for portfolio queue.",
+  "current_audit": {
+    "at": "2026-07-08T00:45:00Z",
+    "machine_audit_chain_ok": true,
+    "integrator_mirror_clean": true,
+    "cf_motor": "COMPLETE",
+    "schedule_canary": "COMPLETE",
+    "vault": "~/.noetfield-platform-secrets/ (noos-local + noetfield)",
+    "gha_secrets_synced": true,
+    "railway_loop_runner_env": "synced",
+    "phase4_witness_smoke": "green",
+    "icl_p2_complete": true
+  },
+  "phases": [
+    {
+      "id": "ICL-P0",
+      "title": "Control plane green (now)",
+      "tier": "T1",
+      "status": "done",
+      "steps": [
+        {
+          "id": "ICL-P0-01",
+          "title": "Platform vault canonical",
+          "status": "done",
+          "command": "make cloud-vault-cleanup && make cloud-vault-promote",
+          "evidence": "scripts/noos_vault_paths_v1.py"
+        },
+        {
+          "id": "ICL-P0-02",
+          "title": "GHA + Railway secret sync",
+          "status": "done",
+          "command": "make cloud-secrets-sync",
+          "evidence": "scripts/noos_sync_cloud_secrets_v1.sh"
+        },
+        {
+          "id": "ICL-P0-03",
+          "title": "Autorun integrator repair",
+          "status": "done",
+          "command": "make integrator-repair-autorun",
+          "evidence": "receipts/proof/noos-integrator-autorun-repair-v1.json"
+        },
+        {
+          "id": "ICL-P0-04",
+          "title": "Liveness registry sustained via Railway",
+          "status": "done",
+          "command": "CF motor tick + verify stale_count=0",
+          "acceptance": "autorun noos_loop_liveness_registry RUNNING stale_count=0"
+        }
+      ]
+    },
+    {
+      "id": "ICL-P1",
+      "title": "Integrator automation (2 weeks)",
+      "tier": "T2",
+      "status": "done",
+      "steps": [
+        {
+          "id": "ICL-P1-01",
+          "title": "Agentic cloud bootstrap on boot",
+          "status": "done",
+          "command": "make local-boot runs cloud-vault-promote + cloud-secrets-sync when vault dirty",
+          "evidence": "scripts/noos_local_boot_vault_sync_v1.sh"
+        },
+        {
+          "id": "ICL-P1-02",
+          "title": "deploy-noos-cloud-workers on main push",
+          "status": "done",
+          "command": "make cloud-workers-deploy",
+          "evidence": ".github/workflows/deploy-noos-cloud-workers-v1.yml"
+        },
+        {
+          "id": "ICL-P1-03",
+          "title": "SourceA observe loop writes spine (not one-shot repair)",
+          "status": "done",
+          "command": "noos_sourcea_observe_loop_tick → portfolio-spine truth_log",
+          "evidence": "scripts/noos_portfolio_spine_heartbeat_v1.py"
+        },
+        {
+          "id": "ICL-P1-04",
+          "title": "Noetfield product vault path migration",
+          "status": "done",
+          "command": "Noetfield/scripts/load_noetfield_vault_env.sh → ~/.noetfield-platform-secrets/",
+          "evidence": "Noetfield/scripts/nf_vault_env.py"
+        }
+      ]
+    },
+    {
+      "id": "ICL-P2",
+      "title": "Unified control dashboard (1 month)",
+      "tier": "T3",
+      "status": "done",
+      "steps": [
+        {
+          "id": "ICL-P2-01",
+          "title": "integrator-status CLI",
+          "status": "done",
+          "command": "make integrator-status",
+          "evidence": "scripts/noos_integrator_status_v1.py",
+          "verify": "make icl-p2-verify"
+        },
+        {
+          "id": "ICL-P2-02",
+          "title": "Supabase integrator_tasks mirror",
+          "status": "done",
+          "command": "make integrator-tasks-mirror",
+          "evidence": "scripts/noos_integrator_tasks_mirror_v1.py"
+        },
+        {
+          "id": "ICL-P2-03",
+          "title": "Cross-repo upgrade manifest sync",
+          "status": "done",
+          "command": "make upgrade-manifest-publish",
+          "evidence": "scripts/noos_upgrade_manifest_publish_v1.py"
+        },
+        {
+          "id": "ICL-P2-04",
+          "title": "TrustField 11 parallel layers observe",
+          "status": "done",
+          "command": "make observe-trustfield-layers",
+          "deliverable": "data/noos-trustfield-parallel-layers-v1.json",
+          "evidence": "scripts/observe_trustfield_parallel_layers_v1.py"
+        },
+        {
+          "id": "ICL-P2-05",
+          "title": "CF-primary / GHA-secondary stack health sustain",
+          "status": "done",
+          "command": "make integrator-daily",
+          "acceptance": "NOOS_INTEGRATOR_DAILY: green; 11 layers yellow-or-better; registry deadman green",
+          "evidence": "receipts/proof/noos-integrator-daily-checklist-v1.json"
+        },
+        {
+          "id": "ICL-P2-06",
+          "title": "GHA Phase-1 secondary witnesses (daily + autorun + motor)",
+          "status": "done",
+          "command": "bash scripts/noos_gha_witness_phase1_smoke_v1.sh",
+          "acceptance": "workflow_dispatch smoke green on all 3 witnesses; then schedule enabled",
+          "evidence": "receipts/proof/noos-gha-witness-phase1-smoke-v1.json"
+        },
+        {
+          "id": "ICL-P2-07",
+          "title": "GHA Phase-2 stack health dashboard (billing witness + org rollup)",
+          "status": "done",
+          "command": "bash scripts/noos_gha_witness_phase2_smoke_v1.sh",
+          "acceptance": "workflow_dispatch smoke green; noos-gha-health-witness + noos-stack-health-receipt scheduled",
+          "evidence": "receipts/proof/noos-gha-witness-phase2-smoke-v1.json"
+        },
+        {
+          "id": "ICL-P2-08",
+          "title": "GHA Phase-3 ecosystem observe witnesses (TrustField + SourceA spine)",
+          "status": "done",
+          "command": "bash scripts/noos_gha_witness_phase3_smoke_v1.sh",
+          "acceptance": "workflow_dispatch smoke green; handoff-only observe receipts on GHA",
+          "evidence": "receipts/proof/noos-gha-witness-phase3-smoke-v1.json"
+        },
+        {
+          "id": "ICL-P2-09",
+          "title": "GHA Phase-4 sustain/audit witnesses (machine audit + liveness + sandbox URL)",
+          "status": "done",
+          "command": "bash scripts/noos_gha_witness_phase4_smoke_v1.sh",
+          "acceptance": "workflow_dispatch smoke green; weekly machine audit + liveness registry + sandbox URL sweep scheduled",
+          "evidence": "receipts/proof/noos-gha-witness-phase4-smoke-v1.json"
+        }
+      ]
+    }
+  ],
+  "founder_gates": [
+    "NOOS-C-01",
+    "UPG-NF-PUB-01 copy/IA",
+    "UPG-LS-09–10 living system 48h closeout"
+  ],
+  "make_targets": {
+    "integrator-repair-autorun": "scripts/noos_integrator_repair_autorun_v1.py",
+    "icl-p1-verify": "scripts/verify_noos_icl_p1_v1.py",
+    "icl-p2-verify": "scripts/verify_noos_icl_p2_v1.py",
+    "integrator-status": "scripts/noos_integrator_status_v1.py",
+    "integrator-daily": "scripts/noos_integrator_daily_checklist_v1.py",
+    "witness-phase1-smoke": "scripts/noos_gha_witness_phase1_smoke_v1.sh",
+    "witness-phase2-smoke": "scripts/noos_gha_witness_phase2_smoke_v1.sh",
+    "witness-phase3-smoke": "scripts/noos_gha_witness_phase3_smoke_v1.sh",
+    "witness-phase4-smoke": "scripts/noos_gha_witness_phase4_smoke_v1.sh",
+    "trustfield-observe-witness": "scripts/noos_trustfield_observe_witness_v1.py",
+    "sourcea-spine-witness": "scripts/noos_sourcea_spine_witness_v1.py",
+    "gha-health-witness": "scripts/noos_gha_health_witness_v1.py",
+    "stack-health-receipt": "scripts/noos_stack_automation_health_v1.py",
+    "integrator-tasks-mirror": "scripts/noos_integrator_tasks_mirror_v1.py",
+    "upgrade-manifest-publish": "scripts/noos_upgrade_manifest_publish_v1.py",
+    "motor-sustain-verify": "scripts/verify_noos_motor_sustain_v1.py",
+    "cloud-workers-deploy": "gh workflow run deploy-noos-cloud-workers-v1.yml",
+    "cloud-secrets-sync": "scripts/noos_sync_cloud_secrets_v1.sh",
+    "cloud-vault-promote": "scripts/noos_promote_vault_keys_v1.py",
+    "cloud-vault-cleanup": "scripts/cleanup_noetfield_vault_v1.py",
+    "machine-audit": "scripts/noos_machine_loops_v1.py audit"
+  }
+}

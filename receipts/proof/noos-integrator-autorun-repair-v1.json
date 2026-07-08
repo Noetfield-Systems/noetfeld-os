@@ -1,0 +1,121 @@
+{
+  "schema": "noos-integrator-autorun-repair-v1",
+  "at": "2026-07-07T16:21:42Z",
+  "ok": true,
+  "liveness": {
+    "ok": true,
+    "loops_upserted": 14,
+    "meta": {
+      "ok": true,
+      "schema": "noos-loop-liveness-meta-sync-v1",
+      "rows": [
+        {
+          "ok": true,
+          "loop_id": "cf_loop_motor",
+          "last_fired_at": "2026-07-07T16:21:44.930Z"
+        },
+        {
+          "ok": true,
+          "loop_id": "executor_railway_canonical",
+          "last_fired_at": "2026-07-07T16:21:45.074Z"
+        },
+        {
+          "ok": true,
+          "loop_id": "executor_fly_temporary",
+          "last_fired_at": "2026-07-07T16:21:45.215Z"
+        }
+      ]
+    },
+    "failures": []
+  },
+  "portfolio_spine": {
+    "ok": true,
+    "truth_log": {
+      "ok": true,
+      "status": 201,
+      "row": {
+        "id": "577f4201-0c9e-46ae-9415-822c2f2f86de",
+        "recorded_at": "2026-07-07T16:21:45+00:00",
+        "source": "cloudflare_cron",
+        "event": "CRON_FIRED",
+        "deployment_id": null,
+        "queue_head": "CLOUD-SEC-8120",
+        "old_queue_head": "CLOUD-SEC-8120",
+        "receipt_id": "noos-integrator-repair-v1",
+        "payload": null
+      }
+    },
+    "cycle_cloud": {
+      "ok": true,
+      "status": 201,
+      "row": {
+        "id": "ef0b42a6-cdce-4c58-b634-185dda56ba93",
+        "cycle_id": "cycle-cloud-queue-repair-2026-07-07T16:21:45Z",
+        "execution_id": "cloud-queue-heartbeat-v1",
+        "queue_head_before": "CLOUD-SEC-8120",
+        "queue_head_after": "CLOUD-SEC-8120",
+        "started_at": "2026-07-07T16:21:45+00:00",
+        "finished_at": "2026-07-07T16:21:45+00:00",
+        "duration_ms": 1,
+        "trigger_source": "noos_repair_one_shot",
+        "verdict": "GREEN",
+        "created_at": "2026-07-07T16:21:45+00:00"
+      }
+    },
+    "cycle_buyer": {
+      "ok": true,
+      "status": 201,
+      "row": {
+        "id": "b8e3b50a-3a61-4cab-a9c4-0e4fd1f624a9",
+        "cycle_id": "cycle-buyer-proof-repair-2026-07-07T16:21:45Z",
+        "execution_id": "buyer-proof-hotfix-verify-v1-repair",
+        "queue_head_before": "CLOUD-SEC-8120",
+        "queue_head_after": "CLOUD-SEC-8120",
+        "started_at": "2026-07-07T16:21:45+00:00",
+        "finished_at": "2026-07-07T16:21:45+00:00",
+        "duration_ms": 1,
+        "trigger_source": "noos_repair_one_shot",
+        "verdict": "GREEN",
+        "created_at": "2026-07-07T16:21:45+00:00"
+      }
+    },
+    "cycle_recipe": {
+      "ok": true,
+      "status": 201,
+      "row": {
+        "id": "a6801c9d-2140-42f8-b7ba-dd237bb0411d",
+        "cycle_id": "cycle-recipe-queue-repair-2026-07-07T16:21:45Z",
+        "execution_id": "client-proof-recipe-queue-v1-repair",
+        "queue_head_before": "CLOUD-SEC-8120",
+        "queue_head_after": "CLOUD-SEC-8120",
+        "started_at": "2026-07-07T16:21:45+00:00",
+        "finished_at": "2026-07-07T16:21:45+00:00",
+        "duration_ms": 1,
+        "trigger_source": "noos_repair_one_shot",
+        "verdict": "GREEN",
+        "created_at": "2026-07-07T16:21:45+00:00"
+      }
+    },
+    "queue_head": "CLOUD-SEC-8120"
+  },
+  "agent_nerve": {
+    "ok": true,
+    "status": 201,
+    "row": {
+      "id": "cf04a191-d669-42e7-ad4a-29c7251aa592",
+      "factory_id": "loop-agent-nerve",
+      "cycle_number": 41,
+      "started_at": "2026-07-07T16:21:45+00:00",
+      "finished_at": "2026-07-07T16:21:45+00:00",
+      "exit_code": 0,
+      "status": "ok",
+      "runner_output": {
+        "loop_id": "agent_nerve",
+        "event_type": "noos_agent_nerve_loop_tick",
+        "cloud_trigger": "noos_integrator_repair"
+      },
+      "guardrails": {},
+      "recorded_at": "2026-07-07T16:21:45+00:00"
+    }
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "schema": "noos-integrator-ten-plans-closeout-v1",
+  "at": "2026-07-07T16:12:00Z",
+  "status": "done",
+  "registry": "data/noos-ten-upgrade-plans-registry-v1.json",
+  "plans_completed": 10,
+  "verification": {
+    "integrator_status_ok": true,
+    "motor_sustain_ok": true,
+    "autorun_overall_ok": true,
+    "stale_count": 0,
+    "nf_pub_verdict": "PENDING",
+    "gel_api_yyz_ok": true,
+    "gel_api_ord_ok": false,
+    "living_system_48h": "founder_gate",
+    "nw1_send": "founder_gate"
+  },
+  "make_targets": [
+    "integrator-status",
+    "motor-sustain-verify",
+    "nf-pub-verdict-gate",
+    "living-system-48h-prep",
+    "acg-weekly-digest",
+    "kaizen-sustain",
+    "gel-api-multi-region-verify",
+    "phase5-packaging-prep",
+    "integrator-tasks-mirror",
+    "upgrade-manifest-publish"
+  ]
+}

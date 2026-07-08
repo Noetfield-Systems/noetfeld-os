@@ -1,0 +1,115 @@
+{
+  "schema": "noos-cross-repo-worker-handoff-v1",
+  "version": "1.0.0",
+  "handoff_id": "TF-PA-WORKER-20260707-001",
+  "enqueued_at": "2026-07-07T16:05:00Z",
+  "enqueued_by": {
+    "plane": "NOETFELD-OS",
+    "role": "integrator_control_layer",
+    "agent": "noetfeld-os-cursor-chat",
+    "authority": "NOOS-AGENT-20260707-007",
+    "one_law": "NOOS observes and coordinates; TrustField T1 worker executes product lane."
+  },
+  "target": {
+    "repo": "Noetfield-Systems/TrustField-Technologies",
+    "local_path": "~/Desktop/Noetfield-Systems/TrustField-Technologies",
+    "owner_agent": "trustfield_worker",
+    "executor_tier": "T1",
+    "branch_hint": "main",
+    "lane": "partner-access-credibility-v1"
+  },
+  "priority": "P0",
+  "title": "Partner Access launch credibility — TrustField worker lane",
+  "summary": "Sustain www.trustfield.ca/partner-access for partner contributor launch. NOOS observed live v70; credibility gaps routed to TrustField worker — not NOOS implementation.",
+  "observe_only_evidence": {
+    "live_url": "https://www.trustfield.ca/partner-access",
+    "live_build_id": "site-v70-partner-access-2026-07-07",
+    "api_health": "https://api.trustfield.ca/health",
+    "partner_access_os_manifest": "data/trustfield_partner_access_os_v1.json",
+    "runtime_truth": "data/runtime_truth_sync_v1.json#partner_access_os",
+    "noos_autorun_repair": "receipts/proof/noos-integrator-autorun-repair-v1.json"
+  },
+  "scope": {
+    "in": [
+      "/partner-access landing + apply + confirm + verify + room",
+      "/partners dual-funnel (commercial vs Partner Access)",
+      "scripts/monitor_partner_access_health_v1.py",
+      "scripts/smoke_all_pages.sh partner-access routes",
+      "scripts/cf_deploy_www_worker.sh + verify_cf_deploy_truth.sh",
+      "scripts/railway_deploy_api.sh (if API copy changes)"
+    ],
+    "out": [
+      "noetfeld-OS code changes",
+      "Noetfield www copy",
+      "SourceA queue control",
+      "founder equity/cap-table decisions"
+    ]
+  },
+  "tasks": [
+    {
+      "id": "TF-PA-01",
+      "title": "Honest verification copy",
+      "action": "Confirm/apply pages must not say 'check your email' — flow is in-browser token verify, not outbound email.",
+      "acceptance": "PARTNER_ACCESS_COPY.confirm.lead + apply.note + briefing-room verify CTA are honest.",
+      "files_hint": ["web/lib/company-copy.ts", "web/app/partner-access/confirm/page.tsx", "web/components/partner-access/briefing-room.tsx"]
+    },
+    {
+      "id": "TF-PA-02",
+      "title": "Hide internal candidate scores from applicants",
+      "action": "Remove applicant-facing scoring panel from briefing room; scores stay admin-only.",
+      "acceptance": "tests/test_partner_access_os_v1.py pass; room UI has no public score grid.",
+      "files_hint": ["web/components/partner-access/briefing-room.tsx"]
+    },
+    {
+      "id": "TF-PA-03",
+      "title": "Prod smoke covers partner-access",
+      "action": "Add /partner-access + three apply tracks to scripts/smoke_all_pages.sh.",
+      "acceptance": "WEB_BASE=https://www.trustfield.ca ./scripts/smoke_all_pages.sh — all partner-access rows OK."
+    },
+    {
+      "id": "TF-PA-04",
+      "title": "Deploy www closure",
+      "action": "Commit lane atomically; deploy via ./scripts/cf_deploy_www_worker.sh; bump SITE_BUILD_ID; sync runtime_truth_sync_v1.json.",
+      "acceptance": "./scripts/verify_cf_deploy_truth.sh ends CF_DEPLOY_TRUTH: pass; live marker matches git SITE_BUILD_ID."
+    },
+    {
+      "id": "TF-PA-05",
+      "title": "Briefing materials honesty",
+      "action": "Post-NDA docs are metadata-only today — either attach gated files or show explicit 'released after founder review' state (no fake download affordance).",
+      "acceptance": "Briefing room does not imply clickable assets that do not exist.",
+      "files_hint": ["app/partner_access_service.py", "web/components/partner-access/briefing-room.tsx"]
+    },
+    {
+      "id": "TF-PA-06",
+      "title": "W3 Supabase loop_registry probe row",
+      "action": "Run ./scripts/verify_tf_supabase_receipt_sink.sh to seed tf_w3_supabase_sink_probe_v1.",
+      "acceptance": "NOOS observe: NOOS_TF_LOOP_REGISTRY_OBSERVE: green; TF_LOOP_REGISTRY_LIVENESS: pass.",
+      "noos_observe": "python3 scripts/observe_trustfield_loop_registry_v1.py --write-receipt --json"
+    },
+    {
+      "id": "TF-11-LAYERS-20260707-001",
+      "title": "TrustField 11 parallel layers — Studio IDE autorun architecture",
+      "action": "Align os/trustfield_cloud_loop_v1.json + CF fleet tick to data/noos-trustfield-parallel-layers-v1.json (NOOS SSOT). Register partner_access CF loop, ROI metering, trustfield-loops sandbox intake.",
+      "acceptance": "make observe-trustfield-layers (from noetfeld-OS) → NOOS_TF_11_LAYERS: green; all 11 layers RUNNING or IDLE_NO_WORK.",
+      "noos_manifest": "data/noos-trustfield-parallel-layers-v1.json",
+      "noos_observe": "make observe-trustfield-layers"
+    }
+  ],
+  "verify_commands": [
+    "VERIFY_WWW_BASE=https://www.trustfield.ca VERIFY_BASE_URL=https://api.trustfield.ca python3 scripts/monitor_partner_access_health_v1.py",
+    "WEB_BASE=https://www.trustfield.ca API_BASE=https://api.trustfield.ca ./scripts/smoke_all_pages.sh",
+    "./scripts/verify_cf_deploy_truth.sh",
+    "python3 -m pytest tests/test_partner_access_os_v1.py -q"
+  ],
+  "delegation": {
+    "noos_role": "enqueue + receipt only",
+    "trustfield_motors": [
+      "tf_cf_www_pages_v1",
+      "www-prod-audit.yml",
+      "www-upgrade-loop.yml"
+    ],
+    "do_not_duplicate_in_noos": true
+  },
+  "status": "pending",
+  "closeout_receipt_target": "receipts/proof/trustfield-partner-access-credibility-closeout-v1.json"
+}

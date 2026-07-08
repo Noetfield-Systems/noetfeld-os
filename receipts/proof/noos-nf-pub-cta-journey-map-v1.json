@@ -1,0 +1,55 @@
+{
+  "schema": "noos-nf-pub-cta-journey-map-v1",
+  "authority": "UPG-NF-PUB-01",
+  "drafted_at": "2026-07-06T14:30:00Z",
+  "scope": "first_30s_buyer_comprehension",
+  "live_main_journey": [
+    {
+      "step": 1,
+      "seconds": "0-5",
+      "surface": "/",
+      "buyer_sees": "Noetfield Intelligence — Diagnostic Sprint from $2,500",
+      "primary_cta": "Book Diagnostic Sprint",
+      "cta_href": "/intelligence/intake/",
+      "friction": "Multiple SKUs in product lane strip (7 lanes) — comprehension load"
+    },
+    {
+      "step": 2,
+      "seconds": "5-15",
+      "surface": "/",
+      "buyer_sees": "Live proof playground — Evaluate intent",
+      "primary_cta": "Evaluate intent (form submit)",
+      "cta_href": "#nfLiveProofForm",
+      "friction": "Illustrative receipt mock adjacent — must stay labeled sandbox"
+    },
+    {
+      "step": 3,
+      "seconds": "15-30",
+      "surface": "/",
+      "buyer_sees": "Framework alignment marquee + trust strip",
+      "primary_cta": "Apply for pilot ($2k–10k)",
+      "cta_href": "/trust-brief/intake/?interest=pilot&vector=copilot-governance",
+      "friction": "Competing CTAs: Diagnostic vs pilot vs sandbox"
+    }
+  ],
+  "proposed_copy_journey_pr89": [
+    {
+      "step": 1,
+      "buyer_sees": "Three stable SKUs: pilot · Trust Brief · sandbox",
+      "primary_cta": "Apply for pilot",
+      "verdict_gate": "DEFER until CEM-001/005 founder sign-off"
+    }
+  ],
+  "secondary_paths": [
+    { "intent": "Self-serve evaluate", "path": "/start/", "cta": "Start free sandbox" },
+    { "intent": "Institutional diagnostic", "path": "/trust-brief/intake/", "cta": "Request Trust Brief" },
+    { "intent": "5-min demo", "path": "/copilot/demo/", "cta": "Open workspace / interactive demo" },
+    { "intent": "Enterprise spend", "path": "/ai-value-governance-os/", "cta": "AI Value Governance OS" },
+    { "intent": "ACG service", "path": "/services/agentic-cost-governance/", "cta": "Agentic cost governance" }
+  ],
+  "audit_fails": [
+    { "route": "/start/", "check": "BF-3", "issue": "5 CTAs above fold (max 3)" },
+    { "route": "/copilot/pilot/", "check": "BF-3", "issue": "5 CTAs above fold" }
+  ],
+  "ok": true
+}

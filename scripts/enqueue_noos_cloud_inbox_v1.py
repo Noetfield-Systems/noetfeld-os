@@ -86,14 +86,20 @@ def utc_now() -> str:
 
 
 def build_bundle() -> dict:
-    manifest = json.loads(MANIFEST.read_text(encoding="utf-8"))
+    if MANIFEST.is_file():
+        manifest = json.loads(MANIFEST.read_text(encoding="utf-8"))
+        plan_trace = manifest.get("plan_trace_id")
+        completed = len(manifest.get("completed_steps") or [])
+    else:
+        plan_trace = "cloud-fallback-no-manifest"
+        completed = 0
     return {
         "schema": "noos-cloud-worker-inbox-v1",
         "lane": "NOETFELD-OS",
         "saved_at": utc_now(),
         "one_law": "Cloud Workers consume worker_inbox_queue on Supabase; factory autorun every 10 min.",
-        "plan_trace_id": manifest.get("plan_trace_id"),
-        "completed_steps_count": len(manifest.get("completed_steps") or []),
+        "plan_trace_id": plan_trace,
+        "completed_steps_count": completed,
         "items": [{**item, "status": "pending", "lane": "NOETFELD-OS"} for item in INBOX_ITEMS],
     }
 

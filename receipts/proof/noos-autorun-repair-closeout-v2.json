@@ -1,0 +1,35 @@
+{
+  "schema": "noos-autorun-repair-closeout-v2",
+  "closed_at": "2026-07-07T09:10:00Z",
+  "autorun_overall_ok": true,
+  "repairs": {
+    "noos_loop_liveness_registry": {
+      "before": "FAILED_WITH_RECEIPT stale_count=3 (cf_loop_motor, executor_railway_canonical, executor_fly_temporary)",
+      "after": "RUNNING stale_count=0",
+      "fix": "sync_meta_liveness_rows() in noos_loop_liveness_v1.py; wired to seed + loop_runner"
+    },
+    "noos_schedule_canary": {
+      "before": "BLOCKED_WITH_REASON unknown_probe_type:manual_dispatch_only",
+      "after": "COMPLETE classification=cf_motor_canary_retired_gha_schedule",
+      "fix": "probe cf_schedule_canary — CF motor health + noos-github-schedule-a1-v1 receipt"
+    }
+  },
+  "intake_lane": {
+    "status": "GREEN",
+    "note": "Noetfield.com probe Telegram fix verified; do not reopen unless post-fix probe spams lead Telegram",
+    "proof": "receipts/proof/noos-nf-intake-telegram-policy-verify-v1.json"
+  },
+  "commands": [
+    "python3 scripts/seed_noos_loop_liveness_v1.py --json",
+    "python3 scripts/autorun_status_v1.py"
+  ],
+  "files_changed": [
+    "scripts/noos_loop_liveness_v1.py",
+    "scripts/seed_noos_loop_liveness_v1.py",
+    "scripts/noos_loop_runner_v1.py",
+    "scripts/autorun_status_v1.py",
+    "scripts/noos_trigger_host_inventory_v1.py",
+    "data/autorun-workflows-v1.json",
+    "tests/test_autorun_status_v1.py"
+  ]
+}

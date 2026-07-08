@@ -128,6 +128,11 @@ def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--json", action="store_true")
     ap.add_argument("--write-receipt", action="store_true")
+    ap.add_argument(
+        "--loop-exit-ok",
+        action="store_true",
+        help="Exit 0 even when findings exist (cloud loop tick — receipt still records blocking)",
+    )
     args = ap.parse_args()
 
     report = audit_report()
@@ -148,6 +153,8 @@ def main() -> int:
         for finding in report["findings"][:20]:
             print(f"  {finding['severity'].upper()} {finding['scope']}: {finding['summary']}")
 
+    if args.loop_exit_ok:
+        return 0
     return 0 if report["overall_ok"] else 1
 
 

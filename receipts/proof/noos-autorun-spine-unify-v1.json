@@ -1,0 +1,17 @@
+{
+  "schema": "noos-autorun-spine-unify-v1",
+  "authority": "UPG-LS-07",
+  "unified_at": "2026-07-06T06:00:00Z",
+  "surfaces": [
+    "data/autorun-workflows-v1.json",
+    "scripts/autorun_status_v1.py",
+    "data/noos-24-7-loops-v1.json",
+    "data/noos-deadman-config-v1.json",
+    "data/noos-trigger-host-inventory-v1.json"
+  ],
+  "new_probes": [
+    "url_motor_health",
+    "supabase_noos_liveness_registry"
+  ],
+  "ok": true
+}

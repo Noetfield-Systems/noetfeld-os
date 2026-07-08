@@ -128,4 +128,4 @@ jobs:
             console.log("✓ Orchestrator completed");
             console.log("✓ All repos audited");
             console.log("✓ Health data consolidated");
-            console.log("✓ Healing cycles scheduled for next run");
+            console.log("✓ Healing cycles scheduled for next run")

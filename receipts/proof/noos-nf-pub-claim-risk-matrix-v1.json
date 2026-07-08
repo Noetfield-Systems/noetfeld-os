@@ -1,0 +1,23 @@
+{
+  "schema": "noos-nf-pub-claim-risk-matrix-v1",
+  "authority": "UPG-NF-PUB-01",
+  "drafted_at": "2026-07-06T14:30:00Z",
+  "source": "receipts/proof/noos-nf-pub-claim-evidence-matrix-v1.json",
+  "matrix": [
+    { "id": "CR-008", "claim_id": "CEM-008", "risk": "P0", "claim": "SOC 2 Type II", "status": "mitigated_on_branch", "note": "Badge Planned on current index; verify live after deploy" },
+    { "id": "CR-009", "claim_id": "CEM-009", "risk": "P0", "claim": "operations@noetfield.com intake", "status": "ok", "note": "Live intake path verified" },
+    { "id": "CR-012", "claim_id": "CEM-012", "risk": "P1", "claim": "apex noetfield.com 404", "status": "open", "owner": "infra", "fix": "CF redirect apex → www" },
+    { "id": "CR-011", "claim_id": "CEM-011", "risk": "P1", "claim": "og:image absent sitewide", "status": "open", "owner": "tech", "fix": "Add og:image asset + head tags" },
+    { "id": "CR-002", "claim_id": "CEM-002", "risk": "P1", "claim": "Copilot Pack $2k–10k", "status": "ok", "note": "Matches pricing table" },
+    { "id": "CR-003", "claim_id": "CEM-003", "risk": "P1", "claim": "Trust Brief $10k", "status": "open", "note": "Intake meta description length SM-2 fail" },
+    { "id": "CR-004", "claim_id": "CEM-004", "risk": "P1", "claim": "Sandbox 14d/50 eval", "status": "open", "note": "/start/ CTA clutter BF-3" },
+    { "id": "CR-006", "claim_id": "CEM-006", "risk": "P1", "claim": "Framework alignment", "status": "ok", "note": "Orientation disclaimer present" },
+    { "id": "CR-007", "claim_id": "CEM-007", "risk": "P1", "claim": "TLE sandbox receipt", "status": "ok", "note": "Illustrative label required" },
+    { "id": "CR-001", "claim_id": "CEM-001", "risk": "P2", "claim": "Diagnostic Sprint lead SKU", "status": "defer", "owner": "founder" },
+    { "id": "CR-005", "claim_id": "CEM-005", "risk": "P2", "claim": "Stable CTA triad", "status": "defer", "owner": "founder", "blocked_by": "PR #89 draft" },
+    { "id": "CR-010", "claim_id": "CEM-010", "risk": "P2", "claim": "Proposed H1 rewrite", "status": "defer", "owner": "founder" },
+    { "id": "CR-DEMO", "claim_id": "INC-001", "risk": "P1", "claim": "/workspace/ static mock misroutes buyers", "status": "open", "owner": "product", "fix": "Deploy gov-console workspace or retarget CTAs; restore nf26 demo hero" }
+  ],
+  "counts": { "P0": 2, "P1": 8, "P2": 3, "open": 6, "defer": 3, "ok": 4 },
+  "ok": true
+}

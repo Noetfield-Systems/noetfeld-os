@@ -1,6 +1,6 @@
 {
   "schema": "autorun-workflows-v1",
-  "version": "1.3.0",
+  "version": "1.8.1",
   "read_only": true,
   "one_law": "Observe autorun surfaces only. phase_reconciler_v1 remains sole control authority.",
   "slo_defaults": {
@@ -16,14 +16,20 @@
   },
   "supabase_profiles": {
     "noetfield": {
-      "env_file": "~/.sourcea-secrets/noetfield.env",
+      "env_file": "~/.noetfield-platform-secrets/noetfield.env",
       "url_env": ["NOETFIELD_SUPABASE_URL", "SUPABASE_URL"],
       "key_env": ["NOETFIELD_SUPABASE_SERVICE_ROLE_KEY", "SUPABASE_SERVICE_ROLE_KEY"]
     },
     "portfolio_spine": {
       "env_file": "~/.sourcea-secrets/portfolio-spine.env",
-      "url_env": ["SUPABASE_URL"],
-      "key_env": ["SUPABASE_SERVICE_ROLE_KEY", "SUPABASE_SERVICE_KEY"]
+      "file_url_env": ["PORTFOLIO_SPINE_SUPABASE_URL", "SUPABASE_URL"],
+      "file_key_env": [
+        "PORTFOLIO_SPINE_SERVICE_ROLE_KEY",
+        "SUPABASE_SERVICE_ROLE_KEY",
+        "SUPABASE_SERVICE_KEY"
+      ],
+      "url_env": ["PORTFOLIO_SPINE_SUPABASE_URL"],
+      "key_env": ["PORTFOLIO_SPINE_SERVICE_ROLE_KEY"]
     }
   },
   "stale_threshold_minutes": 30,
@@ -135,9 +141,10 @@
       "title": "NOOS schedule canary",
       "plane": "NOETFELD-OS",
       "probe": {
-        "type": "manual_dispatch_only",
+        "type": "cf_schedule_canary",
         "github_workflow": "noos-schedule-canary.yml",
-        "note": "GHA schedule retired 2026-07-05; CF loop motor is schedule canary"
+        "cf_motor_health_url": "https://noos-loop-fleet-tick-v1.sina-kazemnezhad-ca.workers.dev/health",
+        "note": "GHA schedule retired 2026-07-05; CF loop motor + Supabase A1 receipt are schedule canary"
       }
     },
     {
@@ -247,6 +254,30 @@
       "run_command": "python3 scripts/noos_loop_runner_v1.py --event-type noos_sourcea_observe_loop_tick"
     },
     {
+      "id": "noos_deadman",
+      "title": "NOOS deadman liveness watchdog",
+      "plane": "NOETFELD-OS",
+      "probe": {
+        "type": "url_motor_health",
+        "urls": [
+          {"name": "deadman health", "url": "https://noos-deadman-v1.sina-kazemnezhad-ca.workers.dev/health"},
+          {"name": "deadman check", "url": "https://noos-deadman-v1.sina-kazemnezhad-ca.workers.dev/health"}
+        ]
+      }
+    },
+    {
+      "id": "noos_loop_liveness_registry",
+      "title": "NOOS loop liveness registry (Supabase)",
+      "plane": "NOETFELD-OS",
+      "probe": {
+        "type": "supabase_noos_liveness_registry",
+        "supabase_profile": "noetfield",
+        "expected_rows": 14,
+        "stale_multiplier": 2
+      },
+      "run_command": "python3 scripts/seed_noos_loop_liveness_v1.py --tick-all"
+    },
+    {
       "id": "sandbox_health_sweep",
       "title": "Sandbox health sweep",
       "plane": "NOETFELD-OS",
@@ -261,6 +292,126 @@
           {"name": "gel-api readiness", "url": "https://api.noetfield.com/readiness"}
         ]
       }
+    },
+    {
+      "id": "noos_gha_integrator_daily_witness",
+      "title": "GHA integrator daily witness",
+      "plane": "NOETFELD-OS",
+      "slo": {"freshness_target_minutes": 540, "latency_target_minutes": 540},
+      "probe": {
+        "type": "github_schedule_probe",
+        "github_workflow": "noos-integrator-daily-witness.yml",
+        "accept_events": ["schedule", "workflow_dispatch"]
+      },
+      "verify_command": "python3 scripts/noos_integrator_daily_checklist_v1.py --json"
+    },
+    {
+      "id": "noos_gha_autorun_witness",
+      "title": "GHA autorun registry witness",
+      "plane": "NOETFELD-OS",
+      "slo": {"freshness_target_minutes": 90, "latency_target_minutes": 90},
+      "probe": {
+        "type": "github_schedule_probe",
+        "github_workflow": "noos-autorun-witness.yml",
+        "accept_events": ["schedule", "workflow_dispatch"]
+      },
+      "verify_command": "python3 scripts/autorun_status_v1.py --json"
+    },
+    {
+      "id": "noos_gha_motor_sustain_witness",
+      "title": "GHA motor sustain witness",
+      "plane": "NOETFELD-OS",
+      "slo": {"freshness_target_minutes": 130, "latency_target_minutes": 130},
+      "probe": {
+        "type": "github_schedule_probe",
+        "github_workflow": "noos-motor-sustain-witness.yml",
+        "accept_events": ["schedule", "workflow_dispatch"]
+      },
+      "verify_command": "python3 scripts/verify_noos_motor_sustain_v1.py"
+    },
+    {
+      "id": "noos_gha_health_witness",
+      "title": "GHA billing gate + enterprise plan witness",
+      "plane": "NOETFELD-OS",
+      "slo": {"freshness_target_minutes": 70, "latency_target_minutes": 70},
+      "probe": {
+        "type": "github_schedule_probe",
+        "github_workflow": "noos-gha-health-witness.yml",
+        "accept_events": ["schedule", "workflow_dispatch"]
+      },
+      "verify_command": "python3 scripts/noos_gha_health_witness_v1.py --json"
+    },
+    {
+      "id": "noos_stack_health_receipt",
+      "title": "Org stack automation health rollup",
+      "plane": "NOETFELD-OS",
+      "slo": {"freshness_target_minutes": 130, "latency_target_minutes": 130},
+      "probe": {
+        "type": "github_schedule_probe",
+        "github_workflow": "noos-stack-health-receipt.yml",
+        "accept_events": ["schedule", "workflow_dispatch"]
+      },
+      "verify_command": "python3 scripts/noos_stack_automation_health_v1.py --json"
+    },
+    {
+      "id": "noos_trustfield_observe_witness",
+      "title": "GHA TrustField ecosystem observe witness",
+      "plane": "TrustField-Technologies",
+      "slo": {"freshness_target_minutes": 250, "latency_target_minutes": 250},
+      "probe": {
+        "type": "github_schedule_probe",
+        "github_workflow": "noos-trustfield-observe-witness.yml",
+        "accept_events": ["schedule", "workflow_dispatch"]
+      },
+      "verify_command": "python3 scripts/noos_trustfield_observe_witness_v1.py --json"
+    },
+    {
+      "id": "noos_sourcea_spine_witness",
+      "title": "GHA SourceA portfolio-spine witness",
+      "plane": "SourceA",
+      "slo": {"freshness_target_minutes": 130, "latency_target_minutes": 130},
+      "probe": {
+        "type": "github_schedule_probe",
+        "github_workflow": "noos-sourcea-spine-witness.yml",
+        "accept_events": ["schedule", "workflow_dispatch"]
+      },
+      "verify_command": "python3 scripts/noos_sourcea_spine_witness_v1.py --json"
+    },
+    {
+      "id": "noos_machine_audit_witness",
+      "title": "GHA weekly machine loops outside audit witness",
+      "plane": "NOETFELD-OS",
+      "slo": {"freshness_target_minutes": 10140, "latency_target_minutes": 10140},
+      "probe": {
+        "type": "github_schedule_probe",
+        "github_workflow": "noos-machine-audit-witness.yml",
+        "accept_events": ["schedule", "workflow_dispatch"]
+      },
+      "verify_command": "python3 scripts/noos_machine_audit_witness_v1.py --json"
+    },
+    {
+      "id": "noos_liveness_registry_witness",
+      "title": "GHA loop liveness registry witness (no tick)",
+      "plane": "NOETFELD-OS",
+      "slo": {"freshness_target_minutes": 380, "latency_target_minutes": 380},
+      "probe": {
+        "type": "github_schedule_probe",
+        "github_workflow": "noos-liveness-registry-witness.yml",
+        "accept_events": ["schedule", "workflow_dispatch"]
+      },
+      "verify_command": "python3 scripts/noos_liveness_registry_witness_v1.py --json"
+    },
+    {
+      "id": "noos_sandbox_url_sweep_witness",
+      "title": "GHA sandbox URL + trigger sweep witness",
+      "plane": "NOETFELD-OS",
+      "slo": {"freshness_target_minutes": 750, "latency_target_minutes": 750},
+      "probe": {
+        "type": "github_schedule_probe",
+        "github_workflow": "noos-sandbox-url-sweep-witness.yml",
+        "accept_events": ["schedule", "workflow_dispatch"]
+      },
+      "verify_command": "python3 scripts/noos_sandbox_url_sweep_witness_v1.py --json"
     }
   ]
 }

@@ -1,0 +1,17 @@
+{
+  "schema": "noos-liveness-registry-green-v1",
+  "authority": "UPG-LS-03",
+  "verified_at": "2026-07-06T06:00:00Z",
+  "registry_rows": 5,
+  "expected_rows": 14,
+  "rows_with_last_fired": 5,
+  "deadman_stale_count": 8,
+  "gate": {
+    "target_stale_count": 0,
+    "target_rows": 14,
+    "status": "partial",
+    "note": "Registry fills as CF crons + Railway loops complete; run make seed-loop-liveness after deploy"
+  },
+  "seed_command": "make seed-loop-liveness",
+  "ok": false
+}

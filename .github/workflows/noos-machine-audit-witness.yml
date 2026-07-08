@@ -1,0 +1,49 @@
+# NOOS GHA sustain witness — weekly machine loops outside audit.
+name: NOOS machine audit witness
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 6 * * 1"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: noos-machine-audit-witness-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  witness:
+    name: Weekly outside audit
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      NOOS_GHA_WITNESS: "1"
+      GITHUB_RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Machine outside audit witness
+        run: |
+          set -euo pipefail
+          mkdir -p receipts/proof
+          set +o pipefail
+          python3 scripts/noos_machine_audit_witness_v1.py --write-receipt --json | tee receipts/proof/noos-machine-audit-witness-v1.json
+          set -o pipefail
+          test -s receipts/proof/noos-machine-audit-witness-v1.json
+
+      - name: Upload machine audit witness receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: noos-machine-audit-witness-v1
+          path: receipts/proof/noos-machine-audit-witness-v1.json
+          retention-days: 30
+          if-no-files-found: warn
