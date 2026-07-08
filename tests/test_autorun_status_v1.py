@@ -80,6 +80,9 @@ def test_workflow_registry_ids():
         "noos_deadman",
         "noos_loop_liveness_registry",
         "sandbox_health_sweep",
+        "noos_gha_integrator_daily_witness",
+        "noos_gha_autorun_witness",
+        "noos_gha_motor_sustain_witness",
     ]
 
 

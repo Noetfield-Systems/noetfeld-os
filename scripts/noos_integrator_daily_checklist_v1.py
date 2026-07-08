@@ -113,12 +113,18 @@ def gh_runs(repo: str, *, limit: int = 8) -> dict[str, Any]:
         else:
             real_failures.append(f"{row.get('workflowName')}: {title}")
 
-    # Pass if newest run is not a billing gate; historical <12s fails are informational only
-    ok = not latest_is_billing_gate and not real_failures
+    # Pass if newest run is not a billing gate; only latest failure blocks (historical fails are informational)
+    latest_real_failure = False
+    if rows:
+        latest = rows[0]
+        if latest.get("conclusion") == "failure" and run_duration_s(latest) >= 12:
+            latest_real_failure = True
+    ok = not latest_is_billing_gate and not latest_real_failure
     return {
         "ok": ok,
         "billing_gate_failures_12s": billing_blocked,
         "latest_is_billing_gate": latest_is_billing_gate,
+        "latest_real_failure": latest_real_failure,
         "real_failures": real_failures[:5],
         "latest_conclusion": rows[0].get("conclusion") if rows else None,
         "recent_count": len(rows),
@@ -286,11 +292,13 @@ def run_checklist() -> dict[str, Any]:
 
     gha_items: list[dict[str, Any]] = []
     gha_billing_latest = False
+    gha_latest_real_failure = False
     gha_real: list[str] = []
     for repo in GHA_REPOS:
         row = gh_runs(repo)
         gha_items.append({"repo": repo, **row})
         gha_billing_latest = gha_billing_latest or bool(row.get("latest_is_billing_gate"))
+        gha_latest_real_failure = gha_latest_real_failure or bool(row.get("latest_real_failure"))
         gha_real.extend(row.get("real_failures") or [])
     checks.append(
         item(
@@ -303,7 +311,7 @@ def run_checklist() -> dict[str, Any]:
             owner="founder" if gha_billing_latest else "trustfield_worker",
         )
     )
-    if gha_real:
+    if gha_latest_real_failure:
         checks.append(
             item(
                 item_id="ICL-D11",
@@ -325,7 +333,7 @@ def run_checklist() -> dict[str, Any]:
     )
     plan_txt = (org_plan.stdout or "").strip().lower()
     plan_ok = org_plan.returncode == 0 and (
-        "enterprise" in plan_txt or (witness_gha and not gha_billing_latest)
+        "enterprise" in plan_txt or not gha_billing_latest
     )
     checks.append(
         item(

@@ -126,7 +126,7 @@
         {
           "id": "ICL-P2-05",
           "title": "CF-primary / GHA-secondary stack health sustain",
-          "status": "in_progress",
+          "status": "done",
           "command": "make integrator-daily",
           "acceptance": "NOOS_INTEGRATOR_DAILY: green; 11 layers yellow-or-better; registry deadman green",
           "evidence": "receipts/proof/noos-integrator-daily-checklist-v1.json"

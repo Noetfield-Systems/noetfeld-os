@@ -35,7 +35,10 @@
     "noos-machine-loops": ["noos-machine-auditor", "noos-machine-reconciler"],
     "noos-improve-kaizen-daily": ["gha-loop-fleet"],
     "cost-policy-scan": ["gha-cost-policy-scan"],
-    "noos-discovery": ["gha-noos-discovery"]
+    "noos-discovery": ["gha-noos-discovery"],
+    "noos-integrator-daily-witness": ["gha-secondary-witness"],
+    "noos-autorun-witness": ["gha-secondary-witness"],
+    "noos-motor-sustain-witness": ["gha-secondary-witness"]
   },
   "surfaces": {
     "T0_machine": "GitHub Actions schedules, repository_dispatch, CF cron, worker-kernel T0",
@@ -518,6 +521,20 @@
       "mutex_groups": ["deploy-boundary"],
       "primary_task_kinds": ["post_deploy_verify"],
       "gha_workflow": "noos-post-deploy-verify-v1"
+    },
+    {
+      "worker_id": "gha-secondary-witness",
+      "surface": "github_actions",
+      "tier": "T0_machine",
+      "cadence": "witness_schedules",
+      "mission_id": "M3",
+      "territory": "integrator-observe",
+      "write_scope": ["receipts/proof/"],
+      "read_only": true,
+      "mutex_groups": ["integrator-coordination"],
+      "primary_task_kinds": ["integrator_daily_witness", "autorun_witness", "motor_sustain_witness"],
+      "delegates_machine_to": ["cloudflare_cron"],
+      "note": "ICL-P2-06 Phase-1 secondary witnesses — read-only receipts, no loop dispatch"
     },
     {
       "worker_id": "gha-noos-factory-autorun",
