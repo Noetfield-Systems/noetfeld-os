@@ -20,6 +20,8 @@ die() { log "FAIL: $*"; exit 1; }
 rm -rf "$WORKDIR"
 git clone "https://x-access-token:${TOKEN}@github.com/${TARGET_REPO}.git" "$WORKDIR"
 cd "$WORKDIR"
+git config user.email "noos-handoff-bot@noetfield.com"
+git config user.name "NOOS Noetfield Handoff"
 git fetch origin "$BASE"
 git checkout -B "$BRANCH" "origin/$BASE"
 
