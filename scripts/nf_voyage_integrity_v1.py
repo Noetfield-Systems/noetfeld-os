@@ -7,6 +7,7 @@ import argparse
 import json
 import re
 import subprocess
+import sys
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -87,6 +88,48 @@ def run_voyage(root: Path) -> dict:
         except (subprocess.CalledProcessError, FileNotFoundError):
             pass
     gates.append({"gate": "cursor_reply_sha_present", "ok": not sha_drift, "optional": True})
+
+    scripts = root / "scripts"
+    if str(scripts) not in sys.path:
+        sys.path.insert(0, str(scripts))
+    try:
+        from nf_embedding_provider_v1 import provider_payload, voyage_key_on_disk
+
+        payload = provider_payload()
+        semantic = payload.get("semantic") is True
+        mode = str(payload.get("mode") or "")
+        key_on_disk = voyage_key_on_disk()
+        l8_ok = semantic if key_on_disk else True
+        if key_on_disk and mode == "hash_local":
+            l8_ok = False
+        gates.append(
+            {
+                "gate": "l8_voyage_semantic",
+                "ok": l8_ok,
+                "mode": mode,
+                "semantic": semantic,
+                "voyage_key_on_disk": key_on_disk,
+                "model": payload.get("model"),
+            }
+        )
+        if not l8_ok:
+            ok = False
+        if semantic:
+            proc = subprocess.run(
+                [sys.executable, str(scripts / "nf_semantic_drift_v1.py"), "--json"],
+                cwd=root,
+                capture_output=True,
+                text=True,
+                timeout=120,
+            )
+            drift = json.loads(proc.stdout) if proc.stdout.strip() else {}
+            drift_ok = proc.returncode == 0 and bool(drift.get("ok", False))
+            gates.append({"gate": "semantic_drift_anchors", "ok": drift_ok, "checks": drift.get("checks", [])})
+            if not drift_ok:
+                ok = False
+    except Exception as exc:
+        gates.append({"gate": "l8_voyage_semantic", "ok": False, "error": str(exc)})
+        ok = False
 
     out = {
         "schema_version": "nf-voyage-integrity-v1",

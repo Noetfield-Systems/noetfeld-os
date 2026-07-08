@@ -32,6 +32,8 @@ run_gate() {
 
 run_gate session_gate python3 scripts/nf_session_gate_run_v1.py --json
 run_gate voyage_integrity python3 scripts/nf_voyage_integrity_v1.py --json
+run_gate voyage_live_wire bash scripts/verify-nf-voyage-ai-live-wire-v1.sh
+run_gate semantic_drift python3 scripts/nf_semantic_drift_v1.py --json
 run_gate stale_guard python3 scripts/nf_stale_guard_v1.py --json
 
 if [[ "$FAST" != true ]]; then

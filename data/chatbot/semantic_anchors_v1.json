@@ -1,0 +1,42 @@
+{
+  "schema": "nf-semantic-anchors-v1",
+  "version": "1.0.0",
+  "min_similarity": 0.72,
+  "anchors": [
+    {
+      "id": "product_definition",
+      "ssot_path": "PRODUCT_TRUTH.md",
+      "ssot_excerpt": "Noetfield is a Governance Execution & AI Policy Enforcement Infrastructure for regulated organizations.",
+      "knowledge_file": "positioning.md",
+      "knowledge_hint": "Product definition"
+    },
+    {
+      "id": "no_payments",
+      "ssot_path": "PRODUCT_TRUTH.md",
+      "ssot_excerpt": "Not offered. No payment initiation, routing, custody, settlement, or money transmission.",
+      "knowledge_file": "positioning.md",
+      "knowledge_hint": "audit trail"
+    },
+    {
+      "id": "copilot_governance",
+      "ssot_path": "PRODUCT_TRUTH.md",
+      "ssot_excerpt": "evaluates intent against policy, records immutable audit traces, and returns allow / reject decisions",
+      "knowledge_file": "offerings.md",
+      "knowledge_hint": "Copilot"
+    },
+    {
+      "id": "gel_runtime",
+      "ssot_path": "PRODUCT_TRUTH.md",
+      "ssot_excerpt": "Governance Execution Layer",
+      "knowledge_file": "gel-runtime.md",
+      "knowledge_hint": "GEL"
+    },
+    {
+      "id": "trust_ledger",
+      "ssot_path": "PRODUCT_TRUTH.md",
+      "ssot_excerpt": "immutable audit traces",
+      "knowledge_file": "trust-ledger-public.md",
+      "knowledge_hint": "Trust Ledger"
+    }
+  ]
+}

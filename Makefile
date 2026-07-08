@@ -276,6 +276,9 @@ nf-voyage-ai-wire:
 	@chmod +x scripts/verify-nf-voyage-ai-live-wire-v1.sh
 	./scripts/verify-nf-voyage-ai-live-wire-v1.sh
 
+nf-semantic-drift:
+	python3 scripts/nf_semantic_drift_v1.py --json
+
 nf-orient:
 	@python3 scripts/nf_orient_v1.py --json
 

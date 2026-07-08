@@ -133,7 +133,14 @@ def cosine(a: list[float], b: list[float]) -> float:
     dot = sum(x * y for x, y in zip(a, b))
     na = math.sqrt(sum(x * x for x in a)) or 1.0
     nb = math.sqrt(sum(y * y for y in b)) or 1.0
-    return dot / (na * nb)
+    return round(dot / (na * nb), 6)
+
+
+def hybrid_score(*, token_score: float, query: str, chunk_text: str) -> float:
+    qe = embed_text(query, is_query=True)
+    ce = embed_text(chunk_text, is_query=False)
+    sem = cosine(qe, ce)
+    return round(0.55 * token_score + 0.45 * sem, 6)
 
 
 def provider_payload() -> dict[str, Any]:

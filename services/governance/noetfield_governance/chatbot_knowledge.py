@@ -518,6 +518,19 @@ def select_relevant_excerpt(
         for lane in lanes:
             if lane in lower:
                 score += 2
+        try:
+            import sys
+            from pathlib import Path as _Path
+
+            _scripts = _Path(__file__).resolve().parents[3] / "scripts"
+            if str(_scripts) not in sys.path:
+                sys.path.insert(0, str(_scripts))
+            from nf_embedding_provider_v1 import hybrid_score, provider_payload
+
+            if provider_payload().get("semantic"):
+                score = hybrid_score(token_score=float(score), query=query, chunk_text=text)
+        except Exception:
+            pass
         scored.append((score, text))
     scored.sort(key=lambda x: (-x[0], x[1]))
 
