@@ -97,7 +97,8 @@ Your next move?
 | Skill / rule | When |
 |--------------|------|
 | SKILL-006 | Ask step (always) |
-| **SKILL-007** | **This — on conflict** |
+| **SKILL-007** | **This — on rule conflict** |
+| **SKILL-011** | **Git/PR file conflicts (R-013)** |
 | SKILL-001 | After T0 + conflict clear |
 | `noetfield-rule-conflict-resolution.mdc` | alwaysApply pointer |
 

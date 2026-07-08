@@ -178,7 +178,7 @@ if [[ -f docs/ops/plans/no-asf/OPEN_PRS.md ]]; then
     echo "OK   OPEN_PRS stale PR wording"
   fi
   # ship-merged-window-config-056: MERGED_WINDOW from OPEN_PRS header
-  merged_section="$(awk '/^## Recently merged/,/^## Stale PRs/' docs/ops/plans/no-asf/OPEN_PRS.md)"
+  merged_section="$(awk '/^## Recently merged/,/^## (Stale PRs|Closed stale queue)/' docs/ops/plans/no-asf/OPEN_PRS.md)"
   MERGED_WINDOW="$(grep -E '^\*\*MERGED_WINDOW:\*\*' docs/ops/plans/no-asf/OPEN_PRS.md 2>/dev/null | grep -oE '[0-9]+' | head -1 || true)"
   MERGED_WINDOW="${MERGED_WINDOW:-5}"
   if grep -qE '^\*\*MERGED_WINDOW:\*\*' docs/ops/plans/no-asf/OPEN_PRS.md 2>/dev/null; then

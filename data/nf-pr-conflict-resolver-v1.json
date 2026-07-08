@@ -1,0 +1,65 @@
+{
+  "schema": "nf-pr-conflict-resolver-v1",
+  "version": "1.0.0",
+  "locked_at": "2026-07-08",
+  "law_doc": "docs/ops/NF_PR_CONFLICT_RESOLVER_LOCKED_v1.md",
+  "skill_local": ".cursor/skills/SKILL-011-pr-conflict-resolver.md",
+  "skill_upstream": "../sina-governance-SSOT/skills/pr-conflict-resolver/SKILL.md",
+  "cursor_rule": ".cursor/rules/nf-pr-conflict-resolver-mandatory.mdc",
+  "verify_command": "python3 scripts/verify_pr_conflict_resolver_v1.py",
+  "classify_command": "python3 scripts/nf_pr_conflict_classify_v1.py",
+  "report_bundle": "tools/pr-conflict-resolver-report/report.html",
+  "report_open_script": "tools/pr-conflict-resolver-report/open-report.sh",
+  "desktop_app_paths": [
+    "~/Desktop/PR-Conflict-Resolver-Report.app",
+    "~/Desktop/Noetfield-Systems/sina-governance-SSOT/desktop-app/PR-Conflict-Resolver-Report.app"
+  ],
+  "file_classes": [
+    {
+      "id": "receipt",
+      "patterns": ["receipts/*.json", "**/*receipt*.json", "reports/www-audit/receipts/*.json"],
+      "rule": "append_only",
+      "escalate_on_same_path_collision": true
+    },
+    {
+      "id": "registry",
+      "patterns": ["data/*_registry_v1.json", "data/*_surfaces_v1.json", "governance/*_LOCKED.json"],
+      "rule": "structural_json_merge",
+      "escalate_on_duplicate_owner": true
+    },
+    {
+      "id": "locked_canon",
+      "patterns": ["docs/**/*LOCKED*.md", "docs/ops/**/*LOCKED*.md"],
+      "rule": "founder_signoff_required"
+    },
+    {
+      "id": "generated",
+      "patterns": ["reports/agent-auto/**", "reports/www-audit/MANIFEST.json", "sitemap.xml"],
+      "rule": "regenerate_not_hand_merge"
+    },
+    {
+      "id": "www_copy",
+      "patterns": ["index.html", "scripts/rebuild-www-v6.py", "assets/partials/*.html"],
+      "rule": "verdict_matrix_required",
+      "extra_verify": ["bash scripts/verify-ui-build-checklist.sh"]
+    },
+    {
+      "id": "ordinary_code",
+      "patterns": ["scripts/*.py", "scripts/*.sh", ".github/workflows/*.yml", "governance-console/**"],
+      "rule": "standard_merge_then_verify"
+    }
+  ],
+  "post_resolve_verify": [
+    "python3 scripts/verify_pr_conflict_resolver_v1.py",
+    "bash scripts/verify-agent-scope.sh",
+    "git diff --check"
+  ],
+  "pr_merge_verify": [
+    "make validate",
+    "bash scripts/verify-no-asf-coherence.sh"
+  ],
+  "receipt_template": {
+    "schema": "nf-pr-conflict-resolution-receipt-v1",
+    "required_fields": ["resolved_at", "files", "classes", "validators_run", "merge_ready"]
+  }
+}
