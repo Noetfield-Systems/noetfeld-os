@@ -1,0 +1,22 @@
+{
+  "schema": "noos-nf-voyage-semantic-drift-handoff-v1",
+  "generated_at": "2026-07-08T03:08:00Z",
+  "source_pattern": "SourceA/scripts/voyage_ai_live_wire_v1.py + pre_llm/vector_retrieval/embedding_provider.py",
+  "vault_key": "VOYAGE_API_KEY",
+  "vault_paths": [
+    "~/.sina/secrets.env",
+    "~/.noetfield-platform-secrets/noetfield.env",
+    "~/.sourcea-secrets/noetfield.env"
+  ],
+  "noetfield_branch": "cursor/nf-probe-drift-align-72f6",
+  "commits": ["5838515", "8338907"],
+  "patches": "receipts/proof/noetfield-voyage-drift-patches/",
+  "commands": {
+    "live_wire": "make nf-voyage-live-wire",
+    "semantic_drift": "make nf-semantic-drift",
+    "voyage_integrity": "make nf-voyage-integrity"
+  },
+  "anti_fake_green": "If VOYAGE_API_KEY in vault but provider mode=hash_local → FAIL (INCIDENT-036 class)",
+  "semantic_anchors": "data/chatbot/semantic_anchors_v1.json",
+  "apply_on_mac": "cd Noetfield && git am ../noetfeld-os/receipts/proof/noetfield-voyage-drift-patches/*.patch"
+}

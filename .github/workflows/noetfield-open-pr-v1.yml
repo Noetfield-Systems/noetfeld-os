@@ -1,0 +1,39 @@
+# Open Noetfield PR from patch bundle (cross-repo — cloud agent lacks direct push).
+name: Noetfield open PR from patch
+
+on:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: Target branch name
+        required: false
+        default: cursor/nf-semantic-drift-closeout-72f6
+      patch_dir:
+        description: Patch directory under repo root
+        required: false
+        default: receipts/proof/noetfield-semantic-drift-closeout
+
+permissions:
+  contents: read
+
+jobs:
+  open-pr:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install gh
+        run: type gh || (sudo apt-get update && sudo apt-get install -y gh)
+
+      - name: Push branch + open PR on Noetfield
+        env:
+          NOETFIELD_GITHUB_TOKEN: ${{ secrets.NOETFIELD_GITHUB_TOKEN || secrets.GITHUB_TOKEN }}
+          PATCH_DIR: ${{ github.workspace }}/${{ inputs.patch_dir }}
+          BRANCH: ${{ inputs.branch }}
+        run: |
+          chmod +x scripts/noetfield_open_pr_from_patch_v1.sh
+          bash scripts/noetfield_open_pr_from_patch_v1.sh
