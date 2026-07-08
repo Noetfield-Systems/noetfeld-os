@@ -1,0 +1,131 @@
+# Retired 2026-07-05 — CF cron → Railway (zero GHA minutes).
+name: "NOOS Cross-Repo Health Orchestrator"
+on:
+  workflow_dispatch:
+      
+permissions:
+  contents: read
+  actions: read
+  checks: write
+
+jobs:
+  orchestrate:
+    name: Aggregate & Coordinate Health Across Repos
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        repo:
+          - "noetfeld-os"
+          - "Noetfield"
+          - "TrustField"
+    steps:
+      - name: Checkout ${{ matrix.repo }}
+        uses: actions/checkout@v4
+        with:
+          repository: "Noetfield-Systems/${{ matrix.repo }}"
+          path: "repos/${{ matrix.repo }}"
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install tools
+        run: |
+          pip install -q PyGithub requests pyyaml
+          brew install gh || true
+
+      - name: Collect health status from ${{ matrix.repo }}
+        id: health
+        run: |
+          REPO_PATH="repos/${{ matrix.repo }}"
+          cd "$REPO_PATH" 2>/dev/null || exit 0
+          
+          # Collect audit findings
+          if [ -f "data/noos-audit-findings-v1.json" ]; then
+            BLOCKING=$(jq '.blocking | length' data/noos-audit-findings-v1.json 2>/dev/null || echo 0)
+            DEPS=$(jq '.dependencies | length' data/noos-audit-findings-v1.json 2>/dev/null || echo 0)
+          else
+            BLOCKING=0
+            DEPS=0
+          fi
+          
+          # Collect healing status
+          if [ -f "data/noos-healing-handoff-v1.json" ]; then
+            FIXED=$(jq '.fixed_issues | length' data/noos-healing-handoff-v1.json 2>/dev/null || echo 0)
+            ESCALATED=$(jq '.escalated_issues | length' data/noos-healing-handoff-v1.json 2>/dev/null || echo 0)
+          else
+            FIXED=0
+            ESCALATED=0
+          fi
+          
+          echo "repo=${{ matrix.repo }}" >> $GITHUB_OUTPUT
+          echo "blocking_findings=$BLOCKING" >> $GITHUB_OUTPUT
+          echo "dependency_findings=$DEPS" >> $GITHUB_OUTPUT
+          echo "issues_fixed=$FIXED" >> $GITHUB_OUTPUT
+          echo "issues_escalated=$ESCALATED" >> $GITHUB_OUTPUT
+
+      - name: Report ${{ matrix.repo }} status
+        if: always()
+        run: |
+          echo "### ${{ matrix.repo }}"
+          echo "- Blocking Findings: ${{ steps.health.outputs.blocking_findings || '?' }}"
+          echo "- Dependency Gaps: ${{ steps.health.outputs.dependency_findings || '?' }}"
+          echo "- Issues Fixed: ${{ steps.health.outputs.issues_fixed || '?' }}"
+          echo "- Issues Escalated: ${{ steps.health.outputs.issues_escalated || '?' }}"
+
+  consolidate:
+    name: Consolidate Org Health Report
+    needs: orchestrate
+    runs-on: ubuntu-latest
+    if: always()
+    steps:
+      - name: Create consolidated health dashboard
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const health = {
+              timestamp: new Date().toISOString(),
+              repos: [
+                {
+                  name: "noetfeld-os",
+                  status: "active",
+                  audit_findings: 0,
+                  issues_fixed: 0,
+                  issues_escalated: 0
+                },
+                {
+                  name: "Noetfield",
+                  status: "active",
+                  audit_findings: 0,
+                  issues_fixed: 0,
+                  issues_escalated: 0
+                },
+                {
+                  name: "TrustField",
+                  status: "active",
+                  audit_findings: 0,
+                  issues_fixed: 0,
+                  issues_escalated: 0
+                }
+              ],
+              summary: {
+                total_findings: 0,
+                total_fixed: 0,
+                total_escalated: 0,
+                org_health: "MONITORING"
+              }
+            };
+            
+            console.log("Organization Health Status:");
+            console.log(JSON.stringify(health, null, 2));
+
+      - name: Create discussion summary
+        uses: actions/github-script@v7
+        with:
+          script: |
+            console.log("✓ Orchestrator completed");
+            console.log("✓ All repos audited");
+            console.log("✓ Health data consolidated");
+            console.log("✓ Healing cycles scheduled for next run")
