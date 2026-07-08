@@ -795,6 +795,10 @@ class PublicIntakeResponse(BaseModel):
     message: str = "Intake recorded. Operations notified asynchronously — follow-up via email within one business day."
     deduped: bool = False
     intake_kind: Literal["lead", "test"] = "lead"
+    telegram_skipped_probe: bool | None = None
+    intake_persisted: bool | None = None
+    dedupe_checked: bool | None = None
+    telegram_mode: Literal["lead", "receipt_only"] | None = None
 
 
 class PublicAnalyticsEventRequest(BaseModel):
@@ -1260,6 +1264,14 @@ async def public_intake(
     )
     if not deduped:
         background_tasks.add_task(_notify_intake_background, rec)
+    probe_fields: dict[str, object] = {}
+    if intake_kind == "test":
+        probe_fields = {
+            "telegram_skipped_probe": True,
+            "intake_persisted": True,
+            "dedupe_checked": deduped,
+            "telegram_mode": "receipt_only",
+        }
     return PublicIntakeResponse(
         intake_id=rec.intake_id,
         request_id=rec.request_id,
@@ -1270,6 +1282,7 @@ async def public_intake(
             if intake_kind == "test"
             else PublicIntakeResponse.model_fields["message"].default
         ),
+        **probe_fields,
     )
 
 

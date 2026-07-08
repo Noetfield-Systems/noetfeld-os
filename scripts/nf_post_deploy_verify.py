@@ -121,10 +121,8 @@ def send_telegram_alert(*, title: str, lines: list[str]) -> bool:
 
 
 def verify_intake_e2e(*, www_base: str, platform_base: str, surface: str) -> list[str]:
-    if surface == "platform":
-        intake_url = f"{platform_base.rstrip('/')}/api/intake"
-    else:
-        intake_url = f"{www_base.rstrip('/')}/api/intake"
+    # Canonical production path is www /api/intake (Pages → platform), even for platform deploy checks.
+    intake_url = f"{www_base.rstrip('/')}/api/intake"
 
     result = subprocess.run(
         [
