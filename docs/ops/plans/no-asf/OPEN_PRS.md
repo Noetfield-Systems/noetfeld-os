@@ -28,6 +28,17 @@ Only merge **Noetfield GTM / PLAN WITH NO ASF** ship PRs from branches matching:
 
 **Rolling merged window:** coherence verify FAILs if the top `MERGED_WINDOW` rows in `## Recently merged` are missing (dynamic parse, not hardcoded list).
 
+## PR conflict resolver (mandatory — R-013)
+
+Before resolving or merging any conflicting PR:
+
+1. Load `.cursor/skills/SKILL-011-pr-conflict-resolver.md`
+2. Classify files: `python3 scripts/nf_pr_conflict_classify_v1.py --git`
+3. Gate: `python3 scripts/verify_pr_conflict_resolver_v1.py`
+4. Eval UI: `bash tools/pr-conflict-resolver-report/open-report.sh`
+
+**Law:** `docs/ops/NF_PR_CONFLICT_RESOLVER_LOCKED_v1.md` · **SSOT:** `data/nf-pr-conflict-resolver-v1.json`
+
 ## Do not merge from cloud agent
 
 - TrustField scope PRs
@@ -36,12 +47,14 @@ Only merge **Noetfield GTM / PLAN WITH NO ASF** ship PRs from branches matching:
 
 ## Pending ship PR
 
-_None — queue cleared 2026-07-08; main @ d8bb0e16; gov-sandbox + www audit blockers shipped (#90–#93)._
+_None — queue cleared 2026-07-08; main @ a44e5f7e; #94 design tokens + #95 homepage copy merged._
 
 ## Recently merged
 
 | PR | Branch | Notes |
 |----|--------|-------|
+| #95 | cursor/homepage-copy-verdict-37f0 | Homepage verdict-matrix stable CTAs + audit hygiene |
+| #94 | cursor/design-token-migration-v2-37f0 | Governance-console shared noetfield-tokens + Docker E2E |
 | #76 | cursor/google-workspace-intake-37f0 | Ops witness R-013 · Workspace inbox · Stripe hub · 10-step ship |
 | #48 | cursor/tenth-audit-iter18-37f0 | Tenth audit — iter 18 (054–056) @ b822423 |
 | #47 | cursor/ninth-audit-iter17-37f0 | Ninth audit — iter 17 (051–053) @ 46a36a3 |

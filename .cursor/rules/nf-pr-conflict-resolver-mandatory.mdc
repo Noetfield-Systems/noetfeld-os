@@ -1,0 +1,37 @@
+---
+description: Mandatory PR conflict resolution — classify files before merge, use SKILL-011 + machine gates
+alwaysApply: true
+---
+
+# NF PR conflict resolver — mandatory
+
+**Law:** `docs/ops/NF_PR_CONFLICT_RESOLVER_LOCKED_v1.md` · **R-013**  
+**Skill:** `.cursor/skills/SKILL-011-pr-conflict-resolver.md`  
+**SSOT:** `data/nf-pr-conflict-resolver-v1.json`
+
+## Before resolving any PR conflict
+
+1. Load SKILL-011 + upstream `sina-governance-SSOT/skills/pr-conflict-resolver/SKILL.md` §0–§1
+2. Classify each conflicted file: `python3 scripts/nf_pr_conflict_classify_v1.py --git`
+3. Never blind text-merge `data/*.json`, receipts, or `*LOCKED*.md`
+
+## Before claiming merge-ready
+
+```bash
+python3 scripts/verify_pr_conflict_resolver_v1.py
+```
+
+## Eval review UI (founder Mac)
+
+```bash
+bash tools/pr-conflict-resolver-report/open-report.sh
+```
+
+Bundled copy: `tools/pr-conflict-resolver-report/report.html` (synced from SG SSOT desktop app).
+
+## Forbidden
+
+- Silently picking a side on registry duplicate-owner conflicts
+- Dropping receipt files during merge
+- Hand-merging generated reports instead of regenerating
+- WWW copy conflict resolution without verdict matrix ACCEPT rows

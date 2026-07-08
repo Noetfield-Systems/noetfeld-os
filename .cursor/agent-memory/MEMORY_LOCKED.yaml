@@ -1,8 +1,8 @@
 # Noetfield agent memory — LOCKED (versioned in git)
 # Read at EVERY session start. Bump version when adding lessons.
 
-version: 13
-updated: "2026-06-17T12:00:00Z"
+version: 14
+updated: "2026-07-08T02:15:00Z"
 updated_by: NF-LOCAL-REPO-AGENT
 
 packaging_v16:
@@ -95,6 +95,10 @@ hard_rules:
     rule: NEVER downgrade interactive buyer sandbox/demo surfaces (nfSsotDemo, nf26-demoStepper, nfLiveProofForm, agent trace, trial evaluate) when upgrading copy, CI, asset pins, or audit gates. Static nf-workspace-mock is not a real sandbox. Run verify-www-interactive-fidelity.sh before merge.
     incident: INCIDENT-2026-07-06-001-www-sandbox-downgrade
     since: "2026-07-06"
+  - id: R-013
+    rule: Before resolving any PR/git merge conflict, load SKILL-011-pr-conflict-resolver, classify files per data/nf-pr-conflict-resolver-v1.json, and PASS verify_pr_conflict_resolver_v1.py before merge-ready claims.
+    source: docs/ops/NF_PR_CONFLICT_RESOLVER_LOCKED_v1.md
+    since: "2026-07-08"
 
 recurring_mistakes:
   - id: M-001
@@ -150,6 +154,7 @@ pre_commit_checklist:
   - Founder permission received for this edit scope (R-007)
   - ASK step completed this session (R-008)
   - ./scripts/verify-agent-scope.sh
+  - python3 scripts/verify_pr_conflict_resolver_v1.py
   - Confirm diff is Noetfield-only
   - No trustfield.ca / TF-* / UPG TrustField strings in tracked files
 

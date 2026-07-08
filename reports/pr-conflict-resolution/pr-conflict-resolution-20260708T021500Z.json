@@ -1,0 +1,20 @@
+{
+  "schema": "nf-pr-conflict-resolution-receipt-v1",
+  "resolved_at": "2026-07-08T02:15:00Z",
+  "agent": "nf-local-repo-agent",
+  "skill": "SKILL-011-pr-conflict-resolver",
+  "summary": "PR queue sweep #86-#95 — no git conflicts; validator/copy class fixes applied",
+  "files": [
+    {"path": "governance-console/frontend/Dockerfile", "class": "ordinary_code", "resolution": "COPY assets/noetfield-tokens.css for E2E"},
+    {"path": "index.html", "class": "www_copy", "resolution": "verdict-matrix ACCEPT stable CTAs"},
+    {"path": "scripts/audit_public_site_health.py", "class": "generated", "resolution": "aligned validator with copy PR #95"}
+  ],
+  "validators_run": [
+    "verify-static-www.sh",
+    "verify-ui-build-checklist.sh",
+    "make site-health",
+    "governance-console e2e"
+  ],
+  "merge_ready": true,
+  "merged_prs": [94, 95]
+}

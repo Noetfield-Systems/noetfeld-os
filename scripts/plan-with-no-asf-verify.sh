@@ -17,6 +17,8 @@ chmod +x scripts/verify-ui-build-checklist.sh
 chmod +x scripts/verify-agent-scope.sh
 ./scripts/verify-agent-scope.sh
 
+python3 scripts/verify_pr_conflict_resolver_v1.py
+
 health="$(curl -sS -o /dev/null -w "%{http_code}" --connect-timeout 3 "http://127.0.0.1:${NF_DEV_PUBLIC_PORT}/health" 2>/dev/null || echo "000")"
 if [[ "$health" != "200" ]]; then
   echo "Dev stack not up (health ${health}); starting NF_DASHBOARD_MODE=production make dev-local-pro …"
