@@ -484,11 +484,38 @@
     },
     {
       "kind": "gha_ci",
-      "id": "noos_machine_loops_weekly",
-      "trigger_host": "retired_gha_manual",
-      "action": "cloud_ok_manual_dispatch",
+      "id": "noos_machine_loops_push",
+      "trigger_host": "gha",
+      "action": "cloud_ok",
       "founder_manual_by_design": false,
-      "reason": "Weekly GHA schedule retired 2026-07-06; push + workflow_dispatch only"
+      "reason": "Path-triggered machine-loops.yml; weekly audit on noos_machine_audit_witness"
+    },
+    {
+      "kind": "gha_witness",
+      "id": "noos_machine_audit_witness",
+      "trigger_host": "gha",
+      "action": "cloud_ok",
+      "schedule_utc": "0 6 * * 1",
+      "founder_manual_by_design": false,
+      "reason": "ICL-P2-09 weekly outside audit witness — read-only receipt"
+    },
+    {
+      "kind": "gha_witness",
+      "id": "noos_liveness_registry_witness",
+      "trigger_host": "gha",
+      "action": "cloud_ok",
+      "schedule_utc": "35 */6 * * *",
+      "founder_manual_by_design": false,
+      "reason": "ICL-P2-09 Supabase noos_loop_registry stale_count — no /tick"
+    },
+    {
+      "kind": "gha_witness",
+      "id": "noos_sandbox_url_sweep_witness",
+      "trigger_host": "gha",
+      "action": "cloud_ok",
+      "schedule_utc": "45 */12 * * *",
+      "founder_manual_by_design": false,
+      "reason": "ICL-P2-09 www/api/platform URL sweep + trigger registry drift"
     }
   ],
   "sina_path_audit": [

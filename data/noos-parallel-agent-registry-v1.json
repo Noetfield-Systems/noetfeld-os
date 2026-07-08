@@ -41,7 +41,10 @@
     "noos-gha-health-witness": ["gha-secondary-witness"],
     "noos-stack-health-receipt": ["gha-stack-health-rollup"],
     "noos-trustfield-observe-witness": ["gha-ecosystem-observe"],
-    "noos-sourcea-spine-witness": ["gha-ecosystem-observe"]
+    "noos-sourcea-spine-witness": ["gha-ecosystem-observe"],
+    "noos-machine-audit-witness": ["gha-sustain-audit"],
+    "noos-liveness-registry-witness": ["gha-sustain-audit"],
+    "noos-sandbox-url-sweep-witness": ["gha-sustain-audit"]
   },
   "surfaces": {
     "T0_machine": "GitHub Actions schedules, repository_dispatch, CF cron, worker-kernel T0",
@@ -570,6 +573,24 @@
       "primary_task_kinds": ["trustfield_observe_witness", "sourcea_spine_witness"],
       "delegates_machine_to": ["trustfield_worker", "sourcea_portfolio_spine_worker"],
       "note": "ICL-P2-08 Phase-3 — observe + receipt only, never TrustField/SourceA product edits"
+    },
+    {
+      "worker_id": "gha-sustain-audit",
+      "surface": "github_actions",
+      "tier": "T0_machine",
+      "cadence": "sustain_audit_schedules",
+      "mission_id": "M3",
+      "territory": "sustain-audit-observe",
+      "write_scope": ["receipts/proof/"],
+      "read_only": true,
+      "mutex_groups": ["integrator-coordination"],
+      "primary_task_kinds": [
+        "machine_audit_witness",
+        "liveness_registry_witness",
+        "sandbox_url_sweep_witness"
+      ],
+      "delegates_machine_to": ["cloudflare_cron", "noos-machine-auditor"],
+      "note": "ICL-P2-09 Phase-4 — weekly audit + registry/URL observe; never /tick or product edits"
     },
     {
       "worker_id": "gha-noos-factory-autorun",

@@ -1,6 +1,6 @@
 {
   "schema": "autorun-workflows-v1",
-  "version": "1.7.0",
+  "version": "1.8.0",
   "read_only": true,
   "one_law": "Observe autorun surfaces only. phase_reconciler_v1 remains sole control authority.",
   "slo_defaults": {
@@ -363,6 +363,39 @@
         "accept_events": ["schedule", "workflow_dispatch"]
       },
       "verify_command": "python3 scripts/noos_sourcea_spine_witness_v1.py --json"
+    },
+    {
+      "id": "noos_machine_audit_witness",
+      "title": "GHA weekly machine loops outside audit witness",
+      "plane": "NOETFELD-OS",
+      "probe": {
+        "type": "github_schedule_probe",
+        "github_workflow": "noos-machine-audit-witness.yml",
+        "accept_events": ["schedule", "workflow_dispatch"]
+      },
+      "verify_command": "python3 scripts/noos_machine_audit_witness_v1.py --json"
+    },
+    {
+      "id": "noos_liveness_registry_witness",
+      "title": "GHA loop liveness registry witness (no tick)",
+      "plane": "NOETFELD-OS",
+      "probe": {
+        "type": "github_schedule_probe",
+        "github_workflow": "noos-liveness-registry-witness.yml",
+        "accept_events": ["schedule", "workflow_dispatch"]
+      },
+      "verify_command": "python3 scripts/noos_liveness_registry_witness_v1.py --json"
+    },
+    {
+      "id": "noos_sandbox_url_sweep_witness",
+      "title": "GHA sandbox URL + trigger sweep witness",
+      "plane": "NOETFELD-OS",
+      "probe": {
+        "type": "github_schedule_probe",
+        "github_workflow": "noos-sandbox-url-sweep-witness.yml",
+        "accept_events": ["schedule", "workflow_dispatch"]
+      },
+      "verify_command": "python3 scripts/noos_sandbox_url_sweep_witness_v1.py --json"
     }
   ]
 }

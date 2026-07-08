@@ -148,6 +148,18 @@ witness-phase2-smoke:
 witness-phase3-smoke:
 	bash scripts/noos_gha_witness_phase3_smoke_v1.sh
 
+witness-phase4-smoke:
+	bash scripts/noos_gha_witness_phase4_smoke_v1.sh
+
+machine-audit-witness:
+	python3 scripts/noos_machine_audit_witness_v1.py --write-receipt --json
+
+liveness-registry-witness:
+	python3 scripts/noos_liveness_registry_witness_v1.py --write-receipt --json
+
+sandbox-url-sweep-witness:
+	python3 scripts/noos_sandbox_url_sweep_witness_v1.py --write-receipt --json
+
 trustfield-observe-witness:
 	python3 scripts/noos_trustfield_observe_witness_v1.py --write-receipt --json
 

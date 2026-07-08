@@ -154,6 +154,14 @@
           "command": "bash scripts/noos_gha_witness_phase3_smoke_v1.sh",
           "acceptance": "workflow_dispatch smoke green; handoff-only observe receipts on GHA",
           "evidence": "receipts/proof/noos-gha-witness-phase3-smoke-v1.json"
+        },
+        {
+          "id": "ICL-P2-09",
+          "title": "GHA Phase-4 sustain/audit witnesses (machine audit + liveness + sandbox URL)",
+          "status": "ready",
+          "command": "bash scripts/noos_gha_witness_phase4_smoke_v1.sh",
+          "acceptance": "workflow_dispatch smoke green; weekly machine audit + liveness registry + sandbox URL sweep scheduled",
+          "evidence": "receipts/proof/noos-gha-witness-phase4-smoke-v1.json"
         }
       ]
     }
@@ -172,6 +180,7 @@
     "witness-phase1-smoke": "scripts/noos_gha_witness_phase1_smoke_v1.sh",
     "witness-phase2-smoke": "scripts/noos_gha_witness_phase2_smoke_v1.sh",
     "witness-phase3-smoke": "scripts/noos_gha_witness_phase3_smoke_v1.sh",
+    "witness-phase4-smoke": "scripts/noos_gha_witness_phase4_smoke_v1.sh",
     "trustfield-observe-witness": "scripts/noos_trustfield_observe_witness_v1.py",
     "sourcea-spine-witness": "scripts/noos_sourcea_spine_witness_v1.py",
     "gha-health-witness": "scripts/noos_gha_health_witness_v1.py",

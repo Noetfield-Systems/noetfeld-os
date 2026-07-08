@@ -22,6 +22,9 @@ WITNESS_WORKFLOWS = (
     "noos-stack-health-receipt.yml",
     "noos-trustfield-observe-witness.yml",
     "noos-sourcea-spine-witness.yml",
+    "noos-machine-audit-witness.yml",
+    "noos-liveness-registry-witness.yml",
+    "noos-sandbox-url-sweep-witness.yml",
 )
 
 

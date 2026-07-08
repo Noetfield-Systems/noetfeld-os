@@ -85,8 +85,11 @@ def test_workflow_registry_ids():
         "noos_gha_motor_sustain_witness",
         "noos_gha_health_witness",
         "noos_stack_health_receipt",
-        "noos_trustfield_observe_witness",
-        "noos_sourcea_spine_witness",
+    "noos_trustfield_observe_witness",
+    "noos_sourcea_spine_witness",
+    "noos_machine_audit_witness",
+    "noos_liveness_registry_witness",
+    "noos_sandbox_url_sweep_witness",
     ]
 
 
