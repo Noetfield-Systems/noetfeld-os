@@ -1,0 +1,16 @@
+{
+  "schema": "noos-nf-semantic-drift-execution-v1",
+  "executed_at": "2026-07-08T03:22:00Z",
+  "status": "mirror_pushed_pending_noetfield_token",
+  "patch_applied": true,
+  "patch_commit": "c570ec4c",
+  "mirror_branch": "noetfield-mirror/cursor/nf-semantic-drift-closeout-72f6",
+  "mirror_repo": "Noetfield-Systems/noetfeld-os",
+  "noetfield_issue": "https://github.com/Noetfield-Systems/Noetfield/issues/98",
+  "gha_runs": [
+    "https://github.com/Noetfield-Systems/noetfeld-os/actions/runs/28915040091"
+  ],
+  "blocker": "NOETFIELD_GITHUB_TOKEN must be org PAT with push to Noetfield-Systems/Noetfield (GITHUB_TOKEN insufficient)",
+  "noetfeld_os_prs_merged": ["#38", "#39", "#40"],
+  "gel_ci_main": "green"
+}

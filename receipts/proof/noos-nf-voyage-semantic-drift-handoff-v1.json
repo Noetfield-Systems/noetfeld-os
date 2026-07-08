@@ -1,7 +1,7 @@
 {
   "schema": "noos-nf-voyage-semantic-drift-handoff-v1",
   "generated_at": "2026-07-08T03:30:00Z",
-  "status": "pending_noetfield_pr",
+  "status": "mirror_pushed_pending_noetfield_token",
   "source_pattern": "SourceA/scripts/voyage_ai_live_wire_v1.py + pre_llm/vector_retrieval/embedding_provider.py",
   "vault_key": "VOYAGE_API_KEY",
   "vault_paths": [
@@ -40,5 +40,5 @@
     "reason": "Two-patch bundle conflicts with Noetfield main (f71e1f2 voyage wire + ae9bb11 probe loop).",
     "use_instead": "receipts/proof/noetfield-semantic-drift-closeout/0001-*.patch"
   },
-  "cloud_agent_blocker": "cursor[bot] lacks push access to Noetfield-Systems/Noetfield (403)"
+  "cloud_agent_blocker": "NOETFIELD_GITHUB_TOKEN org PAT required — mirror at noetfeld-os@noetfield-mirror/cursor/nf-semantic-drift-closeout-72f6 · Noetfield #98"
 }
