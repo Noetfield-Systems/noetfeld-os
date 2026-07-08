@@ -278,6 +278,12 @@
       "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260707-007]_INTEGRATOR_CONTROL_LAYER_UPGRADE_v1.md",
       "doc_type": "INTEGRATOR_CONTROL_PLAN",
       "title": "Integrator control layer upgrade plan v1"
+    },
+    {
+      "trace_id": "NOOS-AGENT-20260707-008",
+      "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260707-008]_INTEGRATOR_DAILY_CHECKLIST_v1.md",
+      "doc_type": "INTEGRATOR_DAILY_CHECKLIST",
+      "title": "Integrator daily mandatory checklist v1 — live probes only"
     }
   ]
 }
