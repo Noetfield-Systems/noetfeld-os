@@ -1,0 +1,8 @@
+{
+  "schema": "nf-platform-deploy-pin-v1",
+  "git_sha": "8dc7c94cfa0144f2e2f905617bc556bd5661a73f",
+  "pinned_at": "2026-07-08T03:15:08Z",
+  "source": "live_platform_health",
+  "platform_base": "https://platform.noetfield.com",
+  "note": "Updated when platform Railway deploy succeeds or sync_nf_probe_expected_sha.sh runs. Drift probe compares live /api/public/chat/health git_sha to this pin \u2014 not repo main HEAD."
+}

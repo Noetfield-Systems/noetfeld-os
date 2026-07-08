@@ -115,7 +115,7 @@ deploy_api() {
       "$ROOT/scripts/wait-for-platform-sha.sh" --expected-sha "$git_sha" --platform-base "https://${PLATFORM_DOMAIN}"
     python3 "$ROOT/scripts/nf_post_deploy_verify.py" --expected-sha "$git_sha" --surface platform \
       --platform-base "https://${PLATFORM_DOMAIN}"
-    "$ROOT/scripts/sync-probe-expected-sha.sh" "$git_sha" || log "WARN: probe EXPECTED_GIT_SHA sync skipped"
+    "$ROOT/scripts/sync_nf_probe_expected_sha.sh" || log "WARN: probe EXPECTED_GIT_SHA sync skipped"
   fi
 }
 

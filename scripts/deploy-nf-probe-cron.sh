@@ -25,15 +25,17 @@ sync_secret() {
 
 GIT_SHA="$(git -C "$ROOT" rev-parse HEAD 2>/dev/null || true)"
 LIVE_PLATFORM_SHA="$(curl -sS "${PLATFORM_BASE:-https://platform.noetfield.com}/api/public/chat/health" 2>/dev/null | python3 -c "import json,sys; print(json.load(sys.stdin).get('git_sha',''))" 2>/dev/null || true)"
-EXPECTED_SHA="${GIT_SHA:-$LIVE_PLATFORM_SHA}"
 if [[ -n "$GIT_SHA" && -n "$LIVE_PLATFORM_SHA" && "$LIVE_PLATFORM_SHA" != "$GIT_SHA" && "${LIVE_PLATFORM_SHA:0:12}" != "${GIT_SHA:0:12}" ]]; then
-  log "WARN: platform git_sha=${LIVE_PLATFORM_SHA:0:12} lags repo HEAD=${GIT_SHA:0:12} — drift probe will FAIL until platform deploy catches up"
+  log "NOTE: platform git_sha=${LIVE_PLATFORM_SHA:0:12} may lag repo HEAD=${GIT_SHA:0:12} — drift probe uses live platform pin, not HEAD"
 fi
 
 # shellcheck source=scripts/load_noetfield_vault_env.sh
 source "${ROOT}/scripts/load_noetfield_vault_env.sh"
 # shellcheck source=scripts/read_platform_vault.sh
 source "${ROOT}/scripts/read_platform_vault.sh"
+
+bash "$ROOT/scripts/sync_nf_probe_expected_sha.sh" || log "WARN: probe expected SHA sync skipped"
+EXPECTED_SHA="$(python3 "$ROOT/scripts/read_nf_platform_expected_sha.py" 2>/dev/null || true)"
 
 SUPABASE_URL="${NOETFIELD_SUPABASE_URL:-}"
 SUPABASE_SERVICE="${NOETFIELD_SUPABASE_SERVICE_ROLE_KEY:-}"
@@ -56,7 +58,15 @@ sync_secret "SUPABASE_URL" "$SUPABASE_URL"
 sync_secret "SUPABASE_SERVICE_ROLE_KEY" "$SUPABASE_SERVICE"
 sync_secret "TELEGRAM_NOETFIELD_OPS_BOT_TOKEN" "$TELEGRAM_TOKEN"
 sync_secret "TELEGRAM_OPS_CHAT_ID" "$TELEGRAM_CHAT"
-sync_secret "EXPECTED_GIT_SHA" "$EXPECTED_SHA"
+# sync_nf_probe_expected_sha.sh already updated wrangler.toml + secret when token present.
 
-log "PASS — nf-probe-cron deployed (cron */15 * * * *)"
+log "bootstrap recovery telegram on next green probe run"
+cd "$WORKER_DIR"
+printf '1' | wrangler secret put PROBE_BOOTSTRAP_RECOVERY >/dev/null 2>&1 || true
+if curl -fsS -X POST "https://nf-probe-cron.sina-kazemnezhad-ca.workers.dev/run" >/tmp/nf-probe-run.json 2>/dev/null; then
+  python3 -c "import json; d=json.load(open('/tmp/nf-probe-run.json')); print('probe_run ok=', d.get('ok'))"
+fi
+printf '0' | wrangler secret put PROBE_BOOTSTRAP_RECOVERY >/dev/null 2>&1 || true
+
+log "PASS — nf-probe-cron deployed (expected platform sha=${EXPECTED_SHA:0:12})"
 log "manual smoke: wrangler tail nf-probe-cron — or POST /run on workers.dev URL after deploy"

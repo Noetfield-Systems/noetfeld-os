@@ -16,6 +16,7 @@ VAULT = Path.home() / ".sina" / "secrets.env"
 PLATFORM_BASE = "https://platform.noetfield.com"
 WWW_BASE = "https://www.noetfield.com"
 USER_AGENT = "noetfield-post-deploy-verify/1.0"
+PIN_FILE = ROOT / "data" / "nf-platform-deploy-pin-v1.json"
 
 
 def read_vault(key: str) -> str:
@@ -36,9 +37,34 @@ def fetch_json(url: str) -> dict[str, object]:
         return json.loads(resp.read().decode("utf-8"))
 
 
-def expected_sha(value: str | None) -> str:
+def platform_expected_sha() -> str:
+    result = subprocess.run(
+        [sys.executable, str(ROOT / "scripts" / "read_nf_platform_expected_sha.py")],
+        cwd=ROOT,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    if result.returncode == 0:
+        return result.stdout.strip()
+    if PIN_FILE.is_file():
+        try:
+            doc = json.loads(PIN_FILE.read_text(encoding="utf-8"))
+            sha = str(doc.get("git_sha") or "").strip()
+            if sha:
+                return sha
+        except json.JSONDecodeError:
+            pass
+    return ""
+
+
+def expected_sha(value: str | None, *, surface: str) -> str:
     if value and value.strip():
         return value.strip()
+    if surface in ("platform", "both"):
+        pinned = platform_expected_sha()
+        if pinned:
+            return pinned
     return subprocess.check_output(
         ["git", "-C", str(ROOT), "rev-parse", "HEAD"],
         text=True,
@@ -160,7 +186,7 @@ def main() -> int:
     )
     args = parser.parse_args()
 
-    sha = expected_sha(args.expected_sha or None)
+    sha = expected_sha(args.expected_sha or None, surface=args.surface)
     failures: list[str] = []
 
     if args.deploy_failed:

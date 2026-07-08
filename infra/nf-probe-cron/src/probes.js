@@ -2,6 +2,7 @@
 
 const PROBE_NAMES = ["uptime", "greeting", "drift", "intake_e2e"];
 const TELEGRAM_PASS_ON_SUCCESS = (env) => (env.PROBE_TELEGRAM_PASS || "0").trim() === "1";
+const RUN_SUMMARY_PROBE = "_run_summary";
 const _notifiedProbeIntakeIds = new Map();
 
 /**
@@ -32,6 +33,62 @@ async function fetchJson(url, init = {}) {
  * @param {string} table
  * @param {Record<string, unknown>} row
  */
+async function supabaseSelect(env, table, query) {
+  const base = (env.SUPABASE_URL || "").replace(/\/$/, "");
+  const key = env.SUPABASE_SERVICE_ROLE_KEY || "";
+  if (!base || !key) {
+    return { ok: false, error: "supabase_not_configured", rows: [] };
+  }
+  const res = await fetch(`${base}/rest/v1/${table}?${query}`, {
+    headers: {
+      apikey: key,
+      Authorization: `Bearer ${key}`,
+      Accept: "application/json",
+    },
+  });
+  if (!res.ok) {
+    const detail = await res.text();
+    return { ok: false, error: `supabase_${res.status}:${detail.slice(0, 200)}`, rows: [] };
+  }
+  const rows = await res.json().catch(() => []);
+  return { ok: true, rows: Array.isArray(rows) ? rows : [] };
+}
+
+async function fetchLastRunSummary(env) {
+  const query = new URLSearchParams({
+    probe_name: `eq.${RUN_SUMMARY_PROBE}`,
+    order: "checked_at.desc",
+    limit: "1",
+    select: "status,receipt,checked_at",
+  });
+  const result = await supabaseSelect(env, "probe_cron_receipts", query.toString());
+  if (!result.ok || !result.rows.length) {
+    return { ok: false, lastOk: null, failedProbes: [] };
+  }
+  const row = result.rows[0];
+  const receipt = row.receipt && typeof row.receipt === "object" ? row.receipt : {};
+  return {
+    ok: true,
+    lastOk: row.status === "pass",
+    failedProbes: Array.isArray(receipt.failed_probes) ? receipt.failed_probes : [],
+    checkedAt: row.checked_at || null,
+  };
+}
+
+async function saveRunSummary(env, { runId, ok, failedProbes, checkedAt }) {
+  return supabaseInsert(env, "probe_cron_receipts", {
+    run_id: runId,
+    probe_name: RUN_SUMMARY_PROBE,
+    status: ok ? "pass" : "fail",
+    receipt: {
+      ok,
+      failed_probes: failedProbes,
+      checked_at: checkedAt,
+    },
+    checked_at: checkedAt,
+  });
+}
+
 async function supabaseInsert(env, table, row) {
   const base = (env.SUPABASE_URL || "").replace(/\/$/, "");
   const key = env.SUPABASE_SERVICE_ROLE_KEY || "";
@@ -103,6 +160,18 @@ function formatHealthReceiptTelegram(fields) {
   if (fields.supabaseReceiptId) lines.push(`supabase_receipt: ${fields.supabaseReceiptId}`);
   if (fields.runId) lines.push(`run_id: ${fields.runId}`);
   if (fields.reason) lines.push(`reason: ${fields.reason}`);
+  return lines.join("\n");
+}
+
+function formatRecoveryTelegram(fields) {
+  const lines = [
+    "NF RECOVERED · TEST",
+    `pipeline: ${fields.pipeline}`,
+    `at: ${fields.timestamp}`,
+    `previously_failed: ${(fields.previouslyFailed || []).join(", ") || "—"}`,
+    `run_id: ${fields.runId}`,
+    `receipt: probe_cron_receipts/${fields.runId}`,
+  ];
   return lines.join("\n");
 }
 
@@ -338,6 +407,7 @@ export async function runAllProbes(env) {
   const runId = crypto.randomUUID();
   const checkedAt = new Date().toISOString();
   const results = [];
+  const previousSummary = await fetchLastRunSummary(env);
 
   for (const name of PROBE_NAMES) {
     const fn = PROBES[name];
@@ -383,11 +453,13 @@ export async function runAllProbes(env) {
   }
 
   const failures = results.filter((r) => !r.ok);
+  const failedProbeNames = failures.map((f) => f.probe);
   const intakeProbe = results.find((r) => r.probe === "intake_e2e");
   const intakeId =
     intakeProbe && intakeProbe.receipt && intakeProbe.receipt.intake_id
       ? String(intakeProbe.receipt.intake_id)
       : "";
+  const allOk = failures.length === 0;
 
   if (failures.length) {
     for (const failure of failures) {
@@ -413,6 +485,25 @@ export async function runAllProbes(env) {
       await sendTelegram(env, text);
       if (notifyIntakeId) markProbeIntakeNotified(notifyIntakeId);
     }
+  } else if (previousSummary.ok && previousSummary.lastOk === false) {
+    const text = formatRecoveryTelegram({
+      pipeline: "probe_cron:all",
+      timestamp: checkedAt,
+      previouslyFailed: previousSummary.failedProbes,
+      runId,
+    });
+    await sendTelegram(env, text);
+  } else if (
+    allOk &&
+    (env.PROBE_BOOTSTRAP_RECOVERY || "0").trim() === "1"
+  ) {
+    const text = formatRecoveryTelegram({
+      pipeline: "probe_cron:all",
+      timestamp: checkedAt,
+      previouslyFailed: ["bootstrap_after_pin_fix"],
+      runId,
+    });
+    await sendTelegram(env, text);
   } else if (TELEGRAM_PASS_ON_SUCCESS(env)) {
     const text = formatHealthReceiptTelegram({
       pass: true,
@@ -427,5 +518,12 @@ export async function runAllProbes(env) {
     await sendTelegram(env, text);
   }
 
-  return { runId, checkedAt, results, ok: failures.length === 0 };
+  await saveRunSummary(env, {
+    runId,
+    ok: allOk,
+    failedProbes: failedProbeNames,
+    checkedAt,
+  });
+
+  return { runId, checkedAt, results, ok: allOk };
 }

@@ -1,0 +1,41 @@
+# Sync nf-probe-cron EXPECTED_GIT_SHA to live platform.noetfield.com — stops drift false-alarms
+# when www/main advances without a platform Railway deploy.
+name: NF probe sync expected SHA
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "data/nf-platform-deploy-pin-v1.json"
+      - "infra/nf-probe-cron/**"
+      - "scripts/sync_nf_probe_expected_sha.sh"
+      - "scripts/read_nf_platform_expected_sha.py"
+      - ".github/workflows/nf-probe-sync-expected-sha.yml"
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install wrangler
+        run: npm install -g wrangler
+
+      - name: Sync EXPECTED_GIT_SHA to live platform
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          NF_PROBE_CRON_DEPLOY: "1"
+        run: |
+          chmod +x scripts/sync_nf_probe_expected_sha.sh
+          bash scripts/sync_nf_probe_expected_sha.sh
+
+      - name: Smoke drift probe
+        run: |
+          resp="$(curl -sS -X POST "https://nf-probe-cron.sina-kazemnezhad-ca.workers.dev/run")"
+          echo "$resp" | python3 -m json.tool
+          python3 -c "import json,sys; d=json.load(sys.stdin); drift=[p for p in d.get('probes',[]) if p.get('probe')=='drift']; sys.exit(0 if drift and drift[0].get('ok') else 1)" <<<"$resp"
