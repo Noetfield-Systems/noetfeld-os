@@ -1,0 +1,810 @@
+{
+  "schema": "noos-trustfield-observe-witness-v1",
+  "at": "2026-07-08T00:46:41Z",
+  "read_only": true,
+  "witness_mode": true,
+  "one_law": "Observe + receipt only \u2014 TrustField worker owns product/registry writes.",
+  "overall_status": "green",
+  "closure_token": "NOOS_TF_OBSERVE_WITNESS: green",
+  "checks": {
+    "ICL-D06": {
+      "title": "TrustField 11 layers (no red)",
+      "ok": true,
+      "overall": "yellow",
+      "summary": {
+        "green": 10,
+        "yellow": 1,
+        "red": 0,
+        "unknown": 0
+      },
+      "closure": "NOOS_TF_11_LAYERS: yellow"
+    },
+    "ICL-D07": {
+      "title": "TrustField loop registry (deadman motors green)",
+      "ok": true,
+      "overall": "green",
+      "summary": {
+        "green": 32,
+        "yellow": 1,
+        "red": 0,
+        "last_ok_false": 0,
+        "missing_last_fired_at": 0,
+        "probe_present": true,
+        "deadman_status": "green",
+        "gate_48h_status": "green",
+        "deadman_watched_red": []
+      },
+      "closure": "NOOS_TF_LOOP_REGISTRY_OBSERVE: green",
+      "witness_relaxed": true
+    }
+  },
+  "layers": {
+    "schema": "noos-trustfield-parallel-layers-observe-v1",
+    "at": "2026-07-08T00:46:41Z",
+    "read_only": true,
+    "one_law": "NOOS coordinates eleven TrustField layers \u2014 observe, enqueue, receipt. TrustField CF+Railway motors execute. One exclusive writer per state cell.",
+    "layer_count": 11,
+    "overall_status": "yellow",
+    "summary": {
+      "green": 10,
+      "yellow": 1,
+      "red": 0,
+      "unknown": 0
+    },
+    "roi_intelligence": {
+      "revenue_path_layers": 4,
+      "revenue_path_green": 4,
+      "hygiene_layers": 3,
+      "plan_worker_status": "healthy",
+      "plan_worker_last_cycle_ok": true,
+      "cycles_completed": 30
+    },
+    "fleet": {
+      "cf_worker": "tf-cf-fleet-tick-v1",
+      "url": "https://tf-cf-fleet-tick-v1.sina-kazemnezhad-ca.workers.dev",
+      "railway_plan_worker": "https://trustfield-plan-worker-production.up.railway.app",
+      "cycle_seconds": 300,
+      "parallel": true,
+      "jitter_seconds": 60
+    },
+    "plan_worker": {
+      "url": "https://trustfield-plan-worker-production.up.railway.app/health",
+      "status": "healthy",
+      "last_cycle_ok": true,
+      "lane_ok": {
+        "plan_matrix": true,
+        "critic_circle": true,
+        "deep_research": true,
+        "trustfield_loops_intake": true,
+        "self_heal": true,
+        "www_upgrade_queue": true,
+        "autorun_stack": true,
+        "partner_access": true
+      },
+      "lanes_run": [
+        "plan_matrix",
+        "critic_circle",
+        "deep_research",
+        "trustfield_loops_intake",
+        "self_heal",
+        "www_upgrade_queue",
+        "autorun_stack",
+        "partner_access"
+      ]
+    },
+    "registry_observe": {
+      "overall_status": "green",
+      "row_count": 33,
+      "probe_present": true,
+      "deadman_status": "green"
+    },
+    "layers": [
+      {
+        "layer_id": "TF-L01",
+        "name": "observe_nerve",
+        "value_class": "hygiene",
+        "tier": "T0",
+        "status": "green",
+        "motor_state": "RUNNING",
+        "cf_loop_id": "tf_cf_deadman_v1",
+        "railway_lane": null,
+        "reasons": [
+          "registry_overall=green"
+        ]
+      },
+      {
+        "layer_id": "TF-L02",
+        "name": "audit_adversarial",
+        "value_class": "risk_reduction",
+        "tier": "T0",
+        "status": "green",
+        "motor_state": "RUNNING",
+        "cf_loop_id": "tf_cf_lane_critic_circle_v1",
+        "railway_lane": "critic_circle",
+        "reasons": [
+          "staleness_state=data/trustfield_agent_read_staleness_alarm_v1.json"
+        ]
+      },
+      {
+        "layer_id": "TF-L03",
+        "name": "plan_matrix",
+        "value_class": "revenue_path",
+        "tier": "T1",
+        "status": "green",
+        "motor_state": "RUNNING",
+        "cf_loop_id": "tf_cf_lane_plan_matrix_v1",
+        "railway_lane": "plan_matrix",
+        "reasons": [
+          "railway_lane_plan_matrix=true"
+        ]
+      },
+      {
+        "layer_id": "TF-L04",
+        "name": "roi_intelligence",
+        "value_class": "hygiene",
+        "tier": "T1",
+        "status": "yellow",
+        "motor_state": "DEGRADED",
+        "cf_loop_id": "tf_cf_recipe_railway_plan_worker_v1",
+        "railway_lane": "autorun_stack",
+        "reasons": [
+          "loop_id not in registry sample"
+        ]
+      },
+      {
+        "layer_id": "TF-L05",
+        "name": "critic_circle",
+        "value_class": "risk_reduction",
+        "tier": "T0",
+        "status": "green",
+        "motor_state": "RUNNING",
+        "cf_loop_id": "tf_cf_lane_critic_circle_v1",
+        "railway_lane": "critic_circle",
+        "reasons": [
+          "railway_lane_critic_circle=true"
+        ]
+      },
+      {
+        "layer_id": "TF-L06",
+        "name": "deep_research",
+        "value_class": "proof_asset",
+        "tier": "T2",
+        "status": "green",
+        "motor_state": "RUNNING",
+        "cf_loop_id": "tf_cf_lane_deep_research_v1",
+        "railway_lane": "deep_research",
+        "reasons": [
+          "railway_lane_deep_research=true"
+        ]
+      },
+      {
+        "layer_id": "TF-L07",
+        "name": "sandbox_execute",
+        "value_class": "revenue_path",
+        "tier": "T1",
+        "status": "green",
+        "motor_state": "RUNNING",
+        "cf_loop_id": "tf_cf_trustfield_loops_v1",
+        "railway_lane": null,
+        "reasons": []
+      },
+      {
+        "layer_id": "TF-L08",
+        "name": "self_heal",
+        "value_class": "hygiene",
+        "tier": "T0",
+        "status": "green",
+        "motor_state": "RUNNING",
+        "cf_loop_id": "tf_cf_lane_self_heal_v1",
+        "railway_lane": "self_heal",
+        "reasons": [
+          "railway_lane_self_heal=true"
+        ]
+      },
+      {
+        "layer_id": "TF-L09",
+        "name": "www_upgrade",
+        "value_class": "revenue_path",
+        "tier": "T1",
+        "status": "green",
+        "motor_state": "RUNNING",
+        "cf_loop_id": "tf_cf_lane_www_upgrade_queue_v1",
+        "railway_lane": "www_upgrade_queue",
+        "reasons": [
+          "railway_lane_www_upgrade_queue=true"
+        ]
+      },
+      {
+        "layer_id": "TF-L10",
+        "name": "partner_commercial",
+        "value_class": "revenue_path",
+        "tier": "T1",
+        "status": "green",
+        "motor_state": "RUNNING",
+        "cf_loop_id": "tf_cf_lane_partner_access_v1",
+        "railway_lane": "partner_access",
+        "reasons": [
+          "railway_lane_partner_access=true"
+        ]
+      },
+      {
+        "layer_id": "TF-L11",
+        "name": "closeout_verify",
+        "value_class": "proof_asset",
+        "tier": "T0",
+        "status": "green",
+        "motor_state": "RUNNING",
+        "cf_loop_id": "tf_cf_48h_gate_v1",
+        "railway_lane": "autorun_stack",
+        "reasons": [
+          "railway_lane_autorun_stack=true"
+        ]
+      }
+    ],
+    "trustfield_worker_deliverables": [
+      "Map TF-L04 roi_intelligence motor to plan-worker cost receipt fields",
+      "Unblock GitHub org billing to activate GHA secondary witnesses (paid tier)",
+      "Wire trustfield-loops L07 sandbox_execute intake to 113-plan queue",
+      "CF Pages wave for tf_cf_www_pages_v1 when founder gates migration",
+      "Align os/trustfield_cloud_loop_v1.json lanes to this 11-layer registry"
+    ],
+    "closure_token": "NOOS_TF_11_LAYERS: yellow",
+    "receipt_path": "/Users/sinakazemnezhad/Desktop/Noetfield-Systems/noetfeld-OS/receipts/proof/noos-trustfield-parallel-layers-observe-v1.json",
+    "exit_code": 1
+  },
+  "registry": {
+    "schema": "noos-trustfield-loop-registry-observe-v1.1",
+    "at": "2026-07-08T00:46:41Z",
+    "read_only": true,
+    "one_law": "NOOS observes TrustField registry; TrustField worker owns writes and probe seed.",
+    "plane": "TrustField-Technologies",
+    "table": "trustfield_loop_registry",
+    "supabase_project_ref": "tkgpapowwplupyekpivy",
+    "registry_read_ok": true,
+    "row_count": 33,
+    "overall_status": "green",
+    "summary": {
+      "green": 32,
+      "yellow": 1,
+      "red": 0,
+      "last_ok_false": 0,
+      "missing_last_fired_at": 0,
+      "probe_present": true,
+      "deadman_status": "green",
+      "gate_48h_status": "green",
+      "deadman_watched_red": []
+    },
+    "gates": {
+      "w3_probe": {
+        "loop_id": "tf_w3_supabase_sink_probe_v1",
+        "present": true,
+        "row": {
+          "loop_id": "tf_w3_supabase_sink_probe_v1",
+          "name": "W3 Supabase sink probe",
+          "host": "supabase",
+          "value_class": "GUARD",
+          "last_ok": true,
+          "last_fired_at": "2026-07-07T22:18:22+00:00",
+          "interval_seconds": null,
+          "age_minutes": 148.33,
+          "stale_threshold_minutes": 10080,
+          "deadman_watched": false,
+          "status": "green",
+          "reason": "fresh"
+        },
+        "closure": "TF_LOOP_REGISTRY_LIVENESS: pass"
+      },
+      "w5_deadman": {
+        "loop_id": "tf_cf_deadman_v1",
+        "row": {
+          "loop_id": "tf_cf_deadman_v1",
+          "name": "CF deadman liveness",
+          "host": "cloudflare",
+          "value_class": "GUARD",
+          "last_ok": true,
+          "last_fired_at": "2026-07-08T00:41:01.611+00:00",
+          "interval_seconds": 600,
+          "age_minutes": 5.67,
+          "stale_threshold_minutes": 20.0,
+          "deadman_watched": true,
+          "status": "green",
+          "reason": "fresh"
+        },
+        "watched_motors_red": []
+      },
+      "w10_48h_gate": {
+        "loop_id": "tf_cf_48h_gate_v1",
+        "row": {
+          "loop_id": "tf_cf_48h_gate_v1",
+          "name": "CF 188-plan 48h closure gate",
+          "host": "cloudflare",
+          "value_class": "GUARD",
+          "last_ok": true,
+          "last_fired_at": "2026-07-07T22:19:50.547967+00:00",
+          "interval_seconds": null,
+          "age_minutes": 146.85,
+          "stale_threshold_minutes": 4320,
+          "deadman_watched": false,
+          "status": "green",
+          "reason": "fresh"
+        },
+        "note": "W10 uses 72h stale warn \u2014 2.5h age is green under W10 SLO."
+      }
+    },
+    "rows": [
+      {
+        "loop_id": "tf_cf_verify_recipes_v1",
+        "name": "CF verify recipes dispatcher",
+        "host": "cloudflare",
+        "value_class": "GUARD",
+        "last_ok": true,
+        "last_fired_at": "2026-07-08T00:46:13.199+00:00",
+        "interval_seconds": 900,
+        "age_minutes": 0.48,
+        "stale_threshold_minutes": 30.0,
+        "deadman_watched": false,
+        "status": "green",
+        "reason": "fresh"
+      },
+      {
+        "loop_id": "tf_cf_recipe_tracker_honest_gate_v1",
+        "name": "CF recipe tracker_honest_gate",
+        "host": "cloudflare",
+        "value_class": "GUARD",
+        "last_ok": true,
+        "last_fired_at": "2026-07-08T00:46:13.06+00:00",
+        "interval_seconds": 900,
+        "age_minutes": 0.48,
+        "stale_threshold_minutes": 30.0,
+        "deadman_watched": false,
+        "status": "green",
+        "reason": "fresh"
+      },
+      {
+        "loop_id": "tf_cf_recipe_cf_deploy_truth_v1",
+        "name": "CF recipe cf_deploy_truth",
+        "host": "cloudflare",
+        "value_class": "GUARD",
+        "last_ok": true,
+        "last_fired_at": "2026-07-08T00:46:12.798+00:00",
+        "interval_seconds": 900,
+        "age_minutes": 0.48,
+        "stale_threshold_minutes": 30.0,
+        "deadman_watched": false,
+        "status": "green",
+        "reason": "fresh"
+      },
+      {
+        "loop_id": "tf_cf_recipe_railway_api_v1",
+        "name": "CF recipe railway_api",
+        "host": "cloudflare",
+        "value_class": "GUARD",
+        "last_ok": true,
+        "last_fired_at": "2026-07-08T00:46:12.488+00:00",
+        "interval_seconds": 900,
+        "age_minutes": 0.49,
+        "stale_threshold_minutes": 30.0,
+        "deadman_watched": false,
+        "status": "green",
+        "reason": "fresh"
+      },
+      {
+        "loop_id": "tf_cf_recipe_autorun_w1_preview_v1",
+        "name": "CF recipe autorun_w1_preview",
+        "host": "cloudflare",
+        "value_class": "GUARD",
+        "last_ok": true,
+        "last_fired_at": "2026-07-08T00:46:11.928+00:00",
+        "interval_seconds": 900,
+        "age_minutes": 0.5,
+        "stale_threshold_minutes": 30.0,
+        "deadman_watched": false,
+        "status": "green",
+        "reason": "fresh"
+      },
+      {
+        "loop_id": "tf_cf_recipe_www_upgrade_loop_v1",
+        "name": "CF recipe www_upgrade_loop",
+        "host": "cloudflare",
+        "value_class": "GUARD",
+        "last_ok": true,
+        "last_fired_at": "2026-07-08T00:46:11.596+00:00",
+        "interval_seconds": 900,
+        "age_minutes": 0.5,
+        "stale_threshold_minutes": 30.0,
+        "deadman_watched": false,
+        "status": "green",
+        "reason": "fresh"
+      },
+      {
+        "loop_id": "tf_cf_recipe_cloud_loop_v1",
+        "name": "CF recipe cloud_loop",
+        "host": "cloudflare",
+        "value_class": "GUARD",
+        "last_ok": true,
+        "last_fired_at": "2026-07-08T00:46:11.065+00:00",
+        "interval_seconds": 900,
+        "age_minutes": 0.51,
+        "stale_threshold_minutes": 30.0,
+        "deadman_watched": false,
+        "status": "green",
+        "reason": "fresh"
+      },
+      {
+        "loop_id": "tf_cf_recipe_plan_lane_v1",
+        "name": "CF recipe plan_lane",
+        "host": "cloudflare",
+        "value_class": "GUARD",
+        "last_ok": true,
+        "last_fired_at": "2026-07-08T00:46:10.487+00:00",
+        "interval_seconds": 900,
+        "age_minutes": 0.52,
+        "stale_threshold_minutes": 30.0,
+        "deadman_watched": false,
+        "status": "green",
+        "reason": "fresh"
+      },
+      {
+        "loop_id": "tf_cf_lane_partner_access_v1",
+        "name": "CF lane partner_access",
+        "host": "railway",
+        "value_class": "GUARD",
+        "last_ok": true,
+        "last_fired_at": "2026-07-08T00:46:10+00:00",
+        "interval_seconds": 300,
+        "age_minutes": 0.53,
+        "stale_threshold_minutes": 10.0,
+        "deadman_watched": true,
+        "status": "green",
+        "reason": "fresh"
+      },
+      {
+        "loop_id": "tf_cf_recipe_agent_read_staleness_v1",
+        "name": "CF recipe agent_read_staleness",
+        "host": "cloudflare",
+        "value_class": "GUARD",
+        "last_ok": true,
+        "last_fired_at": "2026-07-08T00:46:09.906+00:00",
+        "interval_seconds": 900,
+        "age_minutes": 0.53,
+        "stale_threshold_minutes": 30.0,
+        "deadman_watched": false,
+        "status": "green",
+        "reason": "fresh"
+      },
+      {
+        "loop_id": "tf_cf_recipe_runtime_truth_sync_v1",
+        "name": "CF recipe runtime_truth_sync",
+        "host": "cloudflare",
+        "value_class": "GUARD",
+        "last_ok": true,
+        "last_fired_at": "2026-07-08T00:46:09.206+00:00",
+        "interval_seconds": 900,
+        "age_minutes": 0.54,
+        "stale_threshold_minutes": 30.0,
+        "deadman_watched": false,
+        "status": "green",
+        "reason": "fresh"
+      },
+      {
+        "loop_id": "tf_cf_lane_critic_circle_v1",
+        "name": "CF lane critic_circle",
+        "host": "railway",
+        "value_class": "GUARD",
+        "last_ok": true,
+        "last_fired_at": "2026-07-08T00:46:09+00:00",
+        "interval_seconds": 300,
+        "age_minutes": 0.55,
+        "stale_threshold_minutes": 10.0,
+        "deadman_watched": true,
+        "status": "green",
+        "reason": "fresh"
+      },
+      {
+        "loop_id": "tf_cf_trustfield_loops_v1",
+        "name": "trustfield-loops intake bridge",
+        "host": "railway",
+        "value_class": "GUARD",
+        "last_ok": true,
+        "last_fired_at": "2026-07-08T00:46:09+00:00",
+        "interval_seconds": 300,
+        "age_minutes": 0.55,
+        "stale_threshold_minutes": 10.0,
+        "deadman_watched": false,
+        "status": "green",
+        "reason": "fresh"
+      },
+      {
+        "loop_id": "tf_cf_lane_self_heal_v1",
+        "name": "CF lane self_heal",
+        "host": "railway",
+        "value_class": "GUARD",
+        "last_ok": true,
+        "last_fired_at": "2026-07-08T00:46:09+00:00",
+        "interval_seconds": 300,
+        "age_minutes": 0.55,
+        "stale_threshold_minutes": 10.0,
+        "deadman_watched": true,
+        "status": "green",
+        "reason": "fresh"
+      },
+      {
+        "loop_id": "tf_cf_lane_deep_research_v1",
+        "name": "CF lane deep_research",
+        "host": "railway",
+        "value_class": "GUARD",
+        "last_ok": true,
+        "last_fired_at": "2026-07-08T00:46:09+00:00",
+        "interval_seconds": 300,
+        "age_minutes": 0.55,
+        "stale_threshold_minutes": 10.0,
+        "deadman_watched": true,
+        "status": "green",
+        "reason": "fresh"
+      },
+      {
+        "loop_id": "tf_cf_recipe_p0_ship_v1",
+        "name": "CF recipe p0_ship",
+        "host": "cloudflare",
+        "value_class": "GUARD",
+        "last_ok": true,
+        "last_fired_at": "2026-07-08T00:46:08.74+00:00",
+        "interval_seconds": 900,
+        "age_minutes": 0.55,
+        "stale_threshold_minutes": 30.0,
+        "deadman_watched": false,
+        "status": "green",
+        "reason": "fresh"
+      },
+      {
+        "loop_id": "tf_cf_recipe_smoke_all_pages_v1",
+        "name": "CF recipe smoke_all_pages",
+        "host": "cloudflare",
+        "value_class": "GUARD",
+        "last_ok": true,
+        "last_fired_at": "2026-07-08T00:46:08.326+00:00",
+        "interval_seconds": 900,
+        "age_minutes": 0.56,
+        "stale_threshold_minutes": 30.0,
+        "deadman_watched": false,
+        "status": "green",
+        "reason": "fresh"
+      },
+      {
+        "loop_id": "tf_cf_lane_plan_matrix_v1",
+        "name": "CF lane plan_matrix",
+        "host": "railway",
+        "value_class": "GUARD",
+        "last_ok": true,
+        "last_fired_at": "2026-07-08T00:46:08+00:00",
+        "interval_seconds": 300,
+        "age_minutes": 0.56,
+        "stale_threshold_minutes": 10.0,
+        "deadman_watched": true,
+        "status": "green",
+        "reason": "fresh"
+      },
+      {
+        "loop_id": "tf_cf_lane_autorun_stack_v1",
+        "name": "CF lane autorun_stack",
+        "host": "railway",
+        "value_class": "GUARD",
+        "last_ok": true,
+        "last_fired_at": "2026-07-08T00:46:08+00:00",
+        "interval_seconds": 300,
+        "age_minutes": 0.56,
+        "stale_threshold_minutes": 10.0,
+        "deadman_watched": true,
+        "status": "green",
+        "reason": "fresh"
+      },
+      {
+        "loop_id": "tf_cf_lane_www_upgrade_queue_v1",
+        "name": "CF lane www_upgrade_queue",
+        "host": "railway",
+        "value_class": "GUARD",
+        "last_ok": true,
+        "last_fired_at": "2026-07-08T00:46:08+00:00",
+        "interval_seconds": 300,
+        "age_minutes": 0.56,
+        "stale_threshold_minutes": 10.0,
+        "deadman_watched": true,
+        "status": "green",
+        "reason": "fresh"
+      },
+      {
+        "loop_id": "tf_cf_fleet_tick_v1",
+        "name": "CF fleet tick dispatcher",
+        "host": "cloudflare",
+        "value_class": "GUARD",
+        "last_ok": true,
+        "last_fired_at": "2026-07-08T00:46:07.469+00:00",
+        "interval_seconds": 300,
+        "age_minutes": 0.57,
+        "stale_threshold_minutes": 10.0,
+        "deadman_watched": true,
+        "status": "green",
+        "reason": "fresh"
+      },
+      {
+        "loop_id": "tf_cf_recipe_commercial_spine_v1",
+        "name": "CF recipe commercial_spine",
+        "host": "cloudflare",
+        "value_class": "GUARD",
+        "last_ok": true,
+        "last_fired_at": "2026-07-08T00:46:07.419+00:00",
+        "interval_seconds": 900,
+        "age_minutes": 0.57,
+        "stale_threshold_minutes": 30.0,
+        "deadman_watched": false,
+        "status": "green",
+        "reason": "fresh"
+      },
+      {
+        "loop_id": "tf_cf_recipe_ui_agent_gate_v1",
+        "name": "CF recipe ui_agent_gate",
+        "host": "cloudflare",
+        "value_class": "GUARD",
+        "last_ok": true,
+        "last_fired_at": "2026-07-08T00:46:07.107+00:00",
+        "interval_seconds": 900,
+        "age_minutes": 0.58,
+        "stale_threshold_minutes": 30.0,
+        "deadman_watched": false,
+        "status": "green",
+        "reason": "fresh"
+      },
+      {
+        "loop_id": "tf_cf_recipe_prod_drift_v1",
+        "name": "CF recipe prod_drift",
+        "host": "cloudflare",
+        "value_class": "GUARD",
+        "last_ok": true,
+        "last_fired_at": "2026-07-08T00:46:06.581+00:00",
+        "interval_seconds": 900,
+        "age_minutes": 0.59,
+        "stale_threshold_minutes": 30.0,
+        "deadman_watched": false,
+        "status": "green",
+        "reason": "fresh"
+      },
+      {
+        "loop_id": "tf_cf_recipe_hero_url_v1",
+        "name": "CF recipe hero_url",
+        "host": "cloudflare",
+        "value_class": "GUARD",
+        "last_ok": true,
+        "last_fired_at": "2026-07-08T00:46:06.094+00:00",
+        "interval_seconds": 900,
+        "age_minutes": 0.6,
+        "stale_threshold_minutes": 30.0,
+        "deadman_watched": false,
+        "status": "green",
+        "reason": "fresh"
+      },
+      {
+        "loop_id": "tf_cf_recipe_partner_access_v1",
+        "name": "CF recipe partner_access",
+        "host": "cloudflare",
+        "value_class": "GUARD",
+        "last_ok": true,
+        "last_fired_at": "2026-07-08T00:46:04.821+00:00",
+        "interval_seconds": 900,
+        "age_minutes": 0.62,
+        "stale_threshold_minutes": 30.0,
+        "deadman_watched": false,
+        "status": "green",
+        "reason": "fresh"
+      },
+      {
+        "loop_id": "tf_cf_recipe_positioning_ci_v1",
+        "name": "CF recipe positioning_ci",
+        "host": "cloudflare",
+        "value_class": "GUARD",
+        "last_ok": true,
+        "last_fired_at": "2026-07-08T00:46:04.171+00:00",
+        "interval_seconds": 900,
+        "age_minutes": 0.63,
+        "stale_threshold_minutes": 30.0,
+        "deadman_watched": false,
+        "status": "green",
+        "reason": "fresh"
+      },
+      {
+        "loop_id": "tf_cf_sg_registry_v1",
+        "name": "SG automation surface registry (W9)",
+        "host": "cloudflare",
+        "value_class": "GUARD",
+        "last_ok": true,
+        "last_fired_at": "2026-07-08T00:45:56.973276+00:00",
+        "interval_seconds": null,
+        "age_minutes": 0.75,
+        "stale_threshold_minutes": 10.0,
+        "deadman_watched": false,
+        "status": "green",
+        "reason": "fresh"
+      },
+      {
+        "loop_id": "tf_cf_deadman_v1",
+        "name": "CF deadman liveness",
+        "host": "cloudflare",
+        "value_class": "GUARD",
+        "last_ok": true,
+        "last_fired_at": "2026-07-08T00:41:01.611+00:00",
+        "interval_seconds": 600,
+        "age_minutes": 5.67,
+        "stale_threshold_minutes": 20.0,
+        "deadman_watched": true,
+        "status": "green",
+        "reason": "fresh"
+      },
+      {
+        "loop_id": "tf_cf_48h_gate_v1",
+        "name": "CF 188-plan 48h closure gate",
+        "host": "cloudflare",
+        "value_class": "GUARD",
+        "last_ok": true,
+        "last_fired_at": "2026-07-07T22:19:50.547967+00:00",
+        "interval_seconds": null,
+        "age_minutes": 146.85,
+        "stale_threshold_minutes": 4320,
+        "deadman_watched": false,
+        "status": "green",
+        "reason": "fresh"
+      },
+      {
+        "loop_id": "tf_cf_gha_secondary_v1",
+        "name": "GHA secondary witness plane",
+        "host": "github",
+        "value_class": "GUARD",
+        "last_ok": true,
+        "last_fired_at": "2026-07-07T22:18:37.306982+00:00",
+        "interval_seconds": 21600,
+        "age_minutes": 148.08,
+        "stale_threshold_minutes": 720.0,
+        "deadman_watched": false,
+        "status": "green",
+        "reason": "fresh"
+      },
+      {
+        "loop_id": "tf_w3_supabase_sink_probe_v1",
+        "name": "W3 Supabase sink probe",
+        "host": "supabase",
+        "value_class": "GUARD",
+        "last_ok": true,
+        "last_fired_at": "2026-07-07T22:18:22+00:00",
+        "interval_seconds": null,
+        "age_minutes": 148.33,
+        "stale_threshold_minutes": 10080,
+        "deadman_watched": false,
+        "status": "green",
+        "reason": "fresh"
+      },
+      {
+        "loop_id": "tf_cf_www_pages_v1",
+        "name": "CF www OpenNext worker",
+        "host": "cloudflare",
+        "value_class": "GUARD",
+        "last_ok": true,
+        "last_fired_at": "2026-07-07T07:19:57+00:00",
+        "interval_seconds": null,
+        "age_minutes": 1046.75,
+        "stale_threshold_minutes": 10.0,
+        "deadman_watched": false,
+        "status": "yellow",
+        "reason": "deferred_migration age_min=1046.7"
+      }
+    ],
+    "fails": [],
+    "repair_commands": [
+      "TrustField worker: cd TrustField-Technologies && ./scripts/verify_tf_loop_registry_liveness.sh",
+      "TrustField worker: cd TrustField-Technologies && ./scripts/verify_cf_deadman_v1.sh"
+    ],
+    "closure_token": "NOOS_TF_LOOP_REGISTRY_OBSERVE: green",
+    "receipt_path": "/Users/sinakazemnezhad/Desktop/Noetfield-Systems/noetfeld-OS/receipts/proof/noos-trustfield-loop-registry-observe-v1.json",
+    "exit_code": 0
+  },
+  "handoff_owner": "trustfield_worker",
+  "fix_queue": [],
+  "ok": true
+}

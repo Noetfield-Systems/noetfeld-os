@@ -1,10 +1,10 @@
 {
   "schema": "noos-integrator-tasks-mirror-v1",
-  "at": "2026-07-07T16:22:35Z",
+  "at": "2026-07-08T01:56:24Z",
   "ok": true,
   "dry_run": false,
   "state_path": "/Users/sinakazemnezhad/Desktop/Noetfield-Systems/noetfeld-OS/.noos-runtime/integrator/noos-integrator-state-v1.json",
-  "task_count": 12,
+  "task_count": 15,
   "repo_local_ssot": true,
   "home_mirror": {
     "ok": true,
@@ -13,14 +13,14 @@
     "summary": {
       "open": 0,
       "claimed": 0,
-      "in_progress": 0,
+      "in_progress": 1,
       "blocked": 0,
       "done": 5,
-      "released": 7,
+      "released": 9,
       "cancelled": 0,
-      "stale_claims": 0,
-      "active_agents": 0,
-      "stale_agents": 2
+      "stale_claims": 1,
+      "active_agents": 2,
+      "stale_agents": 0
     },
     "supabase": {
       "ok": false,

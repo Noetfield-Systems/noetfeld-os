@@ -1,6 +1,6 @@
 {
   "schema": "noos-integrator-daily-checklist-v1",
-  "at": "2026-07-08T00:46:04Z",
+  "at": "2026-07-08T01:55:36Z",
   "read_only": false,
   "one_law": "Daily authority = live probes at `at` \u2014 receipts on disk are snapshots only, never closure.",
   "architecture": {
@@ -60,7 +60,7 @@
       "status": "pass",
       "evidence": {
         "schema": "noos-motor-sustain-v1",
-        "at": "2026-07-08T00:46:28Z",
+        "at": "2026-07-08T01:55:59Z",
         "ok": true,
         "checks": {
           "cf_loop_fleet": {
@@ -76,7 +76,7 @@
           "railway_loop_runner": {
             "ok": true,
             "status": 200,
-            "body": "{\"ok\": true, \"schema\": \"noos-railway-loop-runner-health-v1\", \"service\": \"noos-loop-runner\", \"git_sha\": \"03b55c1f3dea7d9adc5d3f3fbcf47872df60b8df\", \"uptime_sec\": 2617, \"execution_mode\": \"one_shot_http\"}"
+            "body": "{\"ok\": true, \"schema\": \"noos-railway-loop-runner-health-v1\", \"service\": \"noos-loop-runner\", \"git_sha\": \"03b55c1f3dea7d9adc5d3f3fbcf47872df60b8df\", \"uptime_sec\": 6789, \"execution_mode\": \"one_shot_http\"}"
           },
           "cf_deadman": {
             "ok": true,
@@ -113,7 +113,7 @@
       "title": "Machine loops audit chain",
       "status": "pass",
       "evidence": {
-        "line": "outside_audit \u00b7 scanned=383 chain_ok=True"
+        "line": "outside_audit \u00b7 scanned=398 chain_ok=True"
       },
       "fix": "make machine-audit && make machine-reconcile",
       "owner": "integrator"
@@ -206,7 +206,7 @@
       "evidence": {
         "status": "healthy",
         "lanes_false": [],
-        "cycles": 30
+        "cycles": 43
       },
       "fix": "cd TrustField-Technologies && ./scripts/railway_deploy_plan_worker.sh",
       "owner": "trustfield_worker"
@@ -234,18 +234,12 @@
             "billing_gate_failures_12s": 0,
             "latest_is_billing_gate": false,
             "latest_real_failure": false,
-            "real_failures": [
-              "GEL CI: feat(gha): Phase-4 sustain/audit witnesses (mach",
-              "GEL CI: chore(icl): enable Phase-3 witness cron and clos"
-            ],
-            "latest_conclusion": "success",
+            "real_failures": [],
+            "latest_conclusion": "",
             "recent_count": 8
           }
         ],
-        "real_failures_sample": [
-          "GEL CI: feat(gha): Phase-4 sustain/audit witnesses (mach",
-          "GEL CI: chore(icl): enable Phase-3 witness cron and clos"
-        ]
+        "real_failures_sample": []
       },
       "fix": "Enterprise billing: spending limit >$0 \u2014 then gh run rerun <id>. Real CI fails: fix workflow logs",
       "owner": "trustfield_worker"

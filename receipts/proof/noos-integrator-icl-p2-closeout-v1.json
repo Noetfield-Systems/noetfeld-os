@@ -1,6 +1,6 @@
 {
   "schema": "noos-integrator-icl-p2-closeout-v1",
-  "at": "2026-07-07T16:22:36Z",
+  "at": "2026-07-08T01:56:24Z",
   "phase": "ICL-P2",
   "status": "done",
   "ok": true,
@@ -16,7 +16,9 @@
         "motor_sustain": true,
         "autorun": true,
         "machine_audit": true,
-        "agent_conflicts": true
+        "agent_conflicts": true,
+        "tasks_mirror": true,
+        "upgrade_manifest": true
       },
       "exit_code": 0
     },
@@ -24,7 +26,7 @@
       "id": "ICL-P2-02",
       "title": "Supabase integrator_tasks mirror",
       "ok": true,
-      "task_count": 12,
+      "task_count": 15,
       "home_mirror_ok": true,
       "tasks_table": {
         "ok": false,
