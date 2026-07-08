@@ -1,6 +1,6 @@
 {
   "schema": "noos-integrator-autorun-repair-v1",
-  "at": "2026-07-08T01:53:06Z",
+  "at": "2026-07-08T03:30:07Z",
   "ok": true,
   "liveness": {
     "ok": true,
@@ -12,17 +12,17 @@
         {
           "ok": true,
           "loop_id": "cf_loop_motor",
-          "last_fired_at": "2026-07-08T01:53:08.568Z"
+          "last_fired_at": "2026-07-08T03:30:09.836Z"
         },
         {
           "ok": true,
           "loop_id": "executor_railway_canonical",
-          "last_fired_at": "2026-07-08T01:53:08.704Z"
+          "last_fired_at": "2026-07-08T03:30:09.979Z"
         },
         {
           "ok": true,
           "loop_id": "executor_fly_temporary",
-          "last_fired_at": "2026-07-08T01:53:08.839Z"
+          "last_fired_at": "2026-07-08T03:30:10.108Z"
         }
       ]
     },
@@ -34,8 +34,8 @@
       "ok": true,
       "status": 201,
       "row": {
-        "id": "09351e0a-c350-4e5a-ac34-ad34f34bd3f7",
-        "recorded_at": "2026-07-08T01:53:08+00:00",
+        "id": "46ba840d-b0a4-4d1a-b34a-02e26d608a12",
+        "recorded_at": "2026-07-08T03:30:10+00:00",
         "source": "cloudflare_cron",
         "event": "CRON_FIRED",
         "deployment_id": null,
@@ -49,51 +49,51 @@
       "ok": true,
       "status": 201,
       "row": {
-        "id": "fc29a382-362e-4da8-8c82-e15bd62da476",
-        "cycle_id": "cycle-cloud-queue-repair-2026-07-08T01:53:08Z",
+        "id": "134a5dd5-d282-438f-84df-c3bea5c8ab12",
+        "cycle_id": "cycle-cloud-queue-repair-2026-07-08T03:30:10Z",
         "execution_id": "cloud-queue-heartbeat-v1",
         "queue_head_before": "CLOUD-SEC-8120",
         "queue_head_after": "CLOUD-SEC-8120",
-        "started_at": "2026-07-08T01:53:08+00:00",
-        "finished_at": "2026-07-08T01:53:08+00:00",
+        "started_at": "2026-07-08T03:30:10+00:00",
+        "finished_at": "2026-07-08T03:30:10+00:00",
         "duration_ms": 1,
         "trigger_source": "noos_repair_one_shot",
         "verdict": "GREEN",
-        "created_at": "2026-07-08T01:53:08+00:00"
+        "created_at": "2026-07-08T03:30:10+00:00"
       }
     },
     "cycle_buyer": {
       "ok": true,
       "status": 201,
       "row": {
-        "id": "30c93700-a263-4dc0-95af-479d1a433679",
-        "cycle_id": "cycle-buyer-proof-repair-2026-07-08T01:53:08Z",
+        "id": "400b891a-f552-46c7-b181-aac9badcda97",
+        "cycle_id": "cycle-buyer-proof-repair-2026-07-08T03:30:10Z",
         "execution_id": "buyer-proof-hotfix-verify-v1-repair",
         "queue_head_before": "CLOUD-SEC-8120",
         "queue_head_after": "CLOUD-SEC-8120",
-        "started_at": "2026-07-08T01:53:08+00:00",
-        "finished_at": "2026-07-08T01:53:08+00:00",
+        "started_at": "2026-07-08T03:30:10+00:00",
+        "finished_at": "2026-07-08T03:30:10+00:00",
         "duration_ms": 1,
         "trigger_source": "noos_repair_one_shot",
         "verdict": "GREEN",
-        "created_at": "2026-07-08T01:53:08+00:00"
+        "created_at": "2026-07-08T03:30:10+00:00"
       }
     },
     "cycle_recipe": {
       "ok": true,
       "status": 201,
       "row": {
-        "id": "6ab71601-d104-4b00-8440-357fa58471fa",
-        "cycle_id": "cycle-recipe-queue-repair-2026-07-08T01:53:08Z",
+        "id": "3ed8543a-ca8e-4e40-a1f3-1939716d7170",
+        "cycle_id": "cycle-recipe-queue-repair-2026-07-08T03:30:10Z",
         "execution_id": "client-proof-recipe-queue-v1-repair",
         "queue_head_before": "CLOUD-SEC-8120",
         "queue_head_after": "CLOUD-SEC-8120",
-        "started_at": "2026-07-08T01:53:08+00:00",
-        "finished_at": "2026-07-08T01:53:08+00:00",
+        "started_at": "2026-07-08T03:30:10+00:00",
+        "finished_at": "2026-07-08T03:30:10+00:00",
         "duration_ms": 1,
         "trigger_source": "noos_repair_one_shot",
         "verdict": "GREEN",
-        "created_at": "2026-07-08T01:53:08+00:00"
+        "created_at": "2026-07-08T03:30:10+00:00"
       }
     },
     "queue_head": "CLOUD-SEC-8120"

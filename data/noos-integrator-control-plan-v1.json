@@ -5,7 +5,8 @@
   "updated_at": "2026-07-08",
   "one_law": "NOOS observes and coordinates; SourceA phase_reconciler_v1 remains sole control authority for portfolio queue.",
   "current_audit": {
-    "at": "2026-07-08T00:45:00Z",
+    "at": "2026-07-08T03:31:00Z",
+    "integrator_daily": "green",
     "machine_audit_chain_ok": true,
     "integrator_mirror_clean": true,
     "cf_motor": "COMPLETE",
