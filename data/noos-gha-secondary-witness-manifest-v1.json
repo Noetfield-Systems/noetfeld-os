@@ -1,8 +1,8 @@
 {
   "schema": "noos-gha-secondary-witness-manifest-v1",
-  "version": "1.1.0",
-  "updated_at": "2026-07-08T00:10:00Z",
-  "lane": "ICL-P2-gha-witness-phase1-phase2",
+  "version": "1.2.0",
+  "updated_at": "2026-07-08T00:25:00Z",
+  "lane": "ICL-P2-gha-witness-phase1-phase2-phase3",
   "one_law": "Read-only secondary witnesses — observe existing scripts, upload receipts, never dispatch CF/Railway loop motors.",
   "primary_motor_plane": "cloudflare_workers_cron",
   "bootstrap": "workflow_dispatch smoke passed 2026-07-08; schedules enabled",
@@ -48,9 +48,25 @@
       "receipt": "receipts/proof/noos-stack-automation-health-v1.json",
       "closure_token": "NOOS_STACK_AUTOMATION",
       "replaces": "noos-cross-repo-orchestrator.yml"
+    },
+    {
+      "id": "noos_trustfield_observe_witness",
+      "workflow": "noos-trustfield-observe-witness.yml",
+      "schedule_utc": "20 */4 * * *",
+      "script": "scripts/noos_trustfield_observe_witness_v1.py",
+      "receipt": "receipts/proof/noos-trustfield-observe-witness-v1.json",
+      "closure_token": "NOOS_TF_OBSERVE_WITNESS"
+    },
+    {
+      "id": "noos_sourcea_spine_witness",
+      "workflow": "noos-sourcea-spine-witness.yml",
+      "schedule_utc": "25 */2 * * *",
+      "script": "scripts/noos_sourcea_spine_witness_v1.py",
+      "receipt": "receipts/proof/noos-sourcea-spine-witness-v1.json",
+      "closure_token": "NOOS_SOURCEA_SPINE_WITNESS"
     }
   ],
-  "phase2_verify": "bash scripts/noos_gha_witness_phase2_smoke_v1.sh",
+  "phase3_verify": "bash scripts/noos_gha_witness_phase3_smoke_v1.sh",
   "verify": "bash scripts/noos_gha_witness_phase1_smoke_v1.sh",
   "smoke_receipt": "receipts/proof/noos-gha-witness-phase1-smoke-v1.json"
 }

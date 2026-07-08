@@ -1,6 +1,6 @@
 {
   "schema": "autorun-workflows-v1",
-  "version": "1.6.0",
+  "version": "1.7.0",
   "read_only": true,
   "one_law": "Observe autorun surfaces only. phase_reconciler_v1 remains sole control authority.",
   "slo_defaults": {
@@ -341,6 +341,28 @@
         "accept_events": ["schedule", "workflow_dispatch"]
       },
       "verify_command": "python3 scripts/noos_stack_automation_health_v1.py --json"
+    },
+    {
+      "id": "noos_trustfield_observe_witness",
+      "title": "GHA TrustField ecosystem observe witness",
+      "plane": "TrustField-Technologies",
+      "probe": {
+        "type": "github_schedule_probe",
+        "github_workflow": "noos-trustfield-observe-witness.yml",
+        "accept_events": ["schedule", "workflow_dispatch"]
+      },
+      "verify_command": "python3 scripts/noos_trustfield_observe_witness_v1.py --json"
+    },
+    {
+      "id": "noos_sourcea_spine_witness",
+      "title": "GHA SourceA portfolio-spine witness",
+      "plane": "SourceA",
+      "probe": {
+        "type": "github_schedule_probe",
+        "github_workflow": "noos-sourcea-spine-witness.yml",
+        "accept_events": ["schedule", "workflow_dispatch"]
+      },
+      "verify_command": "python3 scripts/noos_sourcea_spine_witness_v1.py --json"
     }
   ]
 }

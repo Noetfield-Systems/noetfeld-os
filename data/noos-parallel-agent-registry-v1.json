@@ -39,7 +39,9 @@
     "noos-autorun-witness": ["gha-secondary-witness"],
     "noos-motor-sustain-witness": ["gha-secondary-witness"],
     "noos-gha-health-witness": ["gha-secondary-witness"],
-    "noos-stack-health-receipt": ["gha-stack-health-rollup"]
+    "noos-stack-health-receipt": ["gha-stack-health-rollup"],
+    "noos-trustfield-observe-witness": ["gha-ecosystem-observe"],
+    "noos-sourcea-spine-witness": ["gha-ecosystem-observe"]
   },
   "surfaces": {
     "T0_machine": "GitHub Actions schedules, repository_dispatch, CF cron, worker-kernel T0",
@@ -554,6 +556,20 @@
       "primary_task_kinds": ["integrator_daily_witness", "autorun_witness", "motor_sustain_witness"],
       "delegates_machine_to": ["cloudflare_cron"],
       "note": "ICL-P2-06 Phase-1 secondary witnesses — read-only receipts, no loop dispatch"
+    },
+    {
+      "worker_id": "gha-ecosystem-observe",
+      "surface": "github_actions",
+      "tier": "T0_machine",
+      "cadence": "ecosystem_witness_schedules",
+      "mission_id": "M3",
+      "territory": "ecosystem-handoff",
+      "write_scope": ["receipts/proof/"],
+      "read_only": true,
+      "mutex_groups": ["integrator-coordination"],
+      "primary_task_kinds": ["trustfield_observe_witness", "sourcea_spine_witness"],
+      "delegates_machine_to": ["trustfield_worker", "sourcea_portfolio_spine_worker"],
+      "note": "ICL-P2-08 Phase-3 — observe + receipt only, never TrustField/SourceA product edits"
     },
     {
       "worker_id": "gha-noos-factory-autorun",

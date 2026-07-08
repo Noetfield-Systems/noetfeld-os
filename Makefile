@@ -145,6 +145,15 @@ witness-phase1-smoke:
 witness-phase2-smoke:
 	bash scripts/noos_gha_witness_phase2_smoke_v1.sh
 
+witness-phase3-smoke:
+	bash scripts/noos_gha_witness_phase3_smoke_v1.sh
+
+trustfield-observe-witness:
+	python3 scripts/noos_trustfield_observe_witness_v1.py --write-receipt --json
+
+sourcea-spine-witness:
+	python3 scripts/noos_sourcea_spine_witness_v1.py --write-receipt --json
+
 gha-health-witness:
 	python3 scripts/noos_gha_health_witness_v1.py --write-receipt --json
 

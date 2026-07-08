@@ -1,0 +1,47 @@
+# NOOS GHA ecosystem witness — TrustField 11 layers + loop registry (ICL-D06/D07 handoff).
+name: NOOS TrustField observe witness
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: noos-trustfield-observe-witness-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  witness:
+    name: TrustField layers + registry observe
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      NOOS_GHA_WITNESS: "1"
+      GITHUB_RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+      NOETFIELD_SUPABASE_URL: ${{ secrets.NOETFIELD_SUPABASE_URL }}
+      NOETFIELD_SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.NOETFIELD_SUPABASE_SERVICE_ROLE_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: TrustField observe witness
+        run: |
+          set -euo pipefail
+          mkdir -p receipts/proof
+          set +o pipefail
+          python3 scripts/noos_trustfield_observe_witness_v1.py --write-receipt --json | tee receipts/proof/noos-trustfield-observe-witness-v1.json
+          set -o pipefail
+          test -s receipts/proof/noos-trustfield-observe-witness-v1.json
+
+      - name: Upload TrustField observe receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: noos-trustfield-observe-witness-v1
+          path: receipts/proof/noos-trustfield-observe-witness-v1.json
+          retention-days: 30
+          if-no-files-found: warn

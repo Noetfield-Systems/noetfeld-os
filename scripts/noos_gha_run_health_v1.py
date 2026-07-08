@@ -20,6 +20,8 @@ WITNESS_WORKFLOWS = (
     "noos-motor-sustain-witness.yml",
     "noos-gha-health-witness.yml",
     "noos-stack-health-receipt.yml",
+    "noos-trustfield-observe-witness.yml",
+    "noos-sourcea-spine-witness.yml",
 )
 
 
