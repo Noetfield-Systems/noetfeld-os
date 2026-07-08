@@ -40,16 +40,16 @@ def portfolio_cfg() -> tuple[str, str] | None:
     for path in (PORTFOLIO_ENV, PLATFORM_PORTFOLIO_ENV):
         merged.update(parse_env_file(path))
     url = (
-        merged.get("SUPABASE_URL")
+        merged.get("PORTFOLIO_SPINE_SUPABASE_URL")
+        or merged.get("SUPABASE_URL")
         or os.environ.get("PORTFOLIO_SPINE_SUPABASE_URL")
-        or os.environ.get("SUPABASE_URL")
         or ""
     ).rstrip("/")
     key = (
-        merged.get("SUPABASE_SERVICE_ROLE_KEY")
+        merged.get("PORTFOLIO_SPINE_SERVICE_ROLE_KEY")
+        or merged.get("SUPABASE_SERVICE_ROLE_KEY")
         or merged.get("SUPABASE_SERVICE_KEY")
         or os.environ.get("PORTFOLIO_SPINE_SERVICE_ROLE_KEY")
-        or os.environ.get("SUPABASE_SERVICE_ROLE_KEY")
         or ""
     )
     if url and key:

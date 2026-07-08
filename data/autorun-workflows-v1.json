@@ -22,12 +22,14 @@
     },
     "portfolio_spine": {
       "env_file": "~/.sourcea-secrets/portfolio-spine.env",
-      "url_env": ["PORTFOLIO_SPINE_SUPABASE_URL", "SUPABASE_URL"],
-      "key_env": [
+      "file_url_env": ["PORTFOLIO_SPINE_SUPABASE_URL", "SUPABASE_URL"],
+      "file_key_env": [
         "PORTFOLIO_SPINE_SERVICE_ROLE_KEY",
         "SUPABASE_SERVICE_ROLE_KEY",
         "SUPABASE_SERVICE_KEY"
-      ]
+      ],
+      "url_env": ["PORTFOLIO_SPINE_SUPABASE_URL"],
+      "key_env": ["PORTFOLIO_SPINE_SERVICE_ROLE_KEY"]
     }
   },
   "stale_threshold_minutes": 30,
