@@ -1,4 +1,7 @@
-@import "../../../packages/ui-tokens/tokens.css";
+@layer tokens, product;
+
+@import "../../../assets/noetfield-tokens.css" layer(tokens);
+@import "../../../packages/ui-tokens/tokens.css" layer(product);
 
 @tailwind base;
 @tailwind components;

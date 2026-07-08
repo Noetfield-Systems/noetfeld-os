@@ -15,4 +15,17 @@
   --radius-md: 12px;
   --radius-lg: 14px;
   --radius-xl: 18px;
+
+  /* RGB channels — Tailwind opacity modifiers (governance-console + www v14) */
+  --surface-rgb: 244 245 248;
+  --panel-rgb: 255 255 255;
+  --panel-solid-rgb: 248 249 251;
+  --border-rgb: 226 229 236;
+  --text-rgb: 15 17 23;
+  --muted-rgb: 74 80 96;
+  --muted-2-rgb: 107 114 128;
+  --gold-rgb: 138 107 31;
+  --ok-rgb: 13 122 74;
+  --deny-rgb: 185 28 28;
+  --review-rgb: 180 83 9;
 }

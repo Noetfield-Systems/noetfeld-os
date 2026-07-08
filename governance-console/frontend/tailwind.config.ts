@@ -1,5 +1,4 @@
 import type { Config } from "tailwindcss";
-import tokens from "../../packages/ui-tokens/tokens.json";
 
 const config: Config = {
   content: ["./app/**/*.{js,ts,jsx,tsx}", "./components/**/*.{js,ts,jsx,tsx}"],
@@ -11,24 +10,26 @@ const config: Config = {
         mono: ["ui-monospace", "SFMono-Regular", "Menlo", "monospace"],
       },
       colors: {
-        surface: tokens.colors.surface,
-        panel: tokens.colors.panel,
-        "panel-solid": "#f8f9fb",
-        border: tokens.colors.border,
-        text: tokens.colors.text,
-        muted: tokens.colors.muted,
-        "muted-2": "#6b7280",
-        accent: tokens.colors.gold,
+        surface: "rgb(var(--surface-rgb) / <alpha-value>)",
+        panel: "rgb(var(--panel-rgb) / <alpha-value>)",
+        "panel-solid": "rgb(var(--panel-solid-rgb) / <alpha-value>)",
+        border: "rgb(var(--border-rgb) / <alpha-value>)",
+        text: "rgb(var(--text-rgb) / <alpha-value>)",
+        muted: "rgb(var(--muted-rgb) / <alpha-value>)",
+        "muted-2": "rgb(var(--muted-2-rgb) / <alpha-value>)",
+        accent: "rgb(var(--gold-rgb) / <alpha-value>)",
         "accent-dim": "rgba(138, 107, 31, 0.12)",
-        ok: tokens.colors.ok,
+        ok: "rgb(var(--ok-rgb) / <alpha-value>)",
+        review: "rgb(var(--review-rgb) / <alpha-value>)",
+        deny: "rgb(var(--deny-rgb) / <alpha-value>)",
       },
       boxShadow: {
         panel: "0 4px 24px rgba(15, 17, 23, 0.06)",
         glow: "0 2px 12px rgba(15, 17, 23, 0.04)",
       },
       borderRadius: {
-        xl: "18px",
-        lg: "12px",
+        xl: "var(--radius-xl)",
+        lg: "var(--radius-md)",
       },
       maxWidth: {
         content: "1320px",
