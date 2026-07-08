@@ -1,0 +1,379 @@
+From 99f58a0cfcc351d112d835d844407b7e65cc0dfc Mon Sep 17 00:00:00 2001
+From: Cursor Agent <cursoragent@cursor.com>
+Date: Wed, 8 Jul 2026 03:11:01 +0000
+Subject: [PATCH] feat(L8): semantic drift anchors + hybrid chatbot retrieval
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Wire SourceA Voyage anti-drift into NF factory spine on top of main:
+
+- nf_semantic_drift_v1.py: PRODUCT_TRUTH anchor alignment via Voyage embeddings
+- semantic_anchors_v1.json: SSOT ↔ chatbot knowledge pairs
+- hybrid_score on nf_embedding_provider_v1 + chatbot select_relevant_excerpt
+- L8 + semantic_drift gates in nf_voyage_integrity_v1.py
+- BAVT + make nf-semantic-drift targets
+---
+ Makefile                                      |   3 +
+ data/chatbot/semantic_anchors_v1.json         |  42 ++++++
+ scripts/nf-bavt-run.sh                        |   2 +
+ scripts/nf_embedding_provider_v1.py           |   9 +-
+ scripts/nf_semantic_drift_v1.py               | 127 ++++++++++++++++++
+ scripts/nf_voyage_integrity_v1.py             |  43 ++++++
+ .../noetfield_governance/chatbot_knowledge.py |  13 ++
+ tests/unit/test_nf_semantic_drift_v1.py       |  28 ++++
+ 8 files changed, 266 insertions(+), 1 deletion(-)
+ create mode 100644 data/chatbot/semantic_anchors_v1.json
+ create mode 100644 scripts/nf_semantic_drift_v1.py
+ create mode 100644 tests/unit/test_nf_semantic_drift_v1.py
+
+diff --git a/Makefile b/Makefile
+index 46b8d89..bfdafc7 100644
+--- a/Makefile
++++ b/Makefile
+@@ -276,6 +276,9 @@ nf-voyage-ai-wire:
+ 	@chmod +x scripts/verify-nf-voyage-ai-live-wire-v1.sh
+ 	./scripts/verify-nf-voyage-ai-live-wire-v1.sh
+ 
++nf-semantic-drift:
++	python3 scripts/nf_semantic_drift_v1.py --json
++
+ nf-orient:
+ 	@python3 scripts/nf_orient_v1.py --json
+ 
+diff --git a/data/chatbot/semantic_anchors_v1.json b/data/chatbot/semantic_anchors_v1.json
+new file mode 100644
+index 0000000..a777835
+--- /dev/null
++++ b/data/chatbot/semantic_anchors_v1.json
+@@ -0,0 +1,42 @@
++{
++  "schema": "nf-semantic-anchors-v1",
++  "version": "1.0.0",
++  "min_similarity": 0.72,
++  "anchors": [
++    {
++      "id": "product_definition",
++      "ssot_path": "PRODUCT_TRUTH.md",
++      "ssot_excerpt": "Noetfield is a Governance Execution & AI Policy Enforcement Infrastructure for regulated organizations.",
++      "knowledge_file": "positioning.md",
++      "knowledge_hint": "Product definition"
++    },
++    {
++      "id": "no_payments",
++      "ssot_path": "PRODUCT_TRUTH.md",
++      "ssot_excerpt": "Not offered. No payment initiation, routing, custody, settlement, or money transmission.",
++      "knowledge_file": "positioning.md",
++      "knowledge_hint": "audit trail"
++    },
++    {
++      "id": "copilot_governance",
++      "ssot_path": "PRODUCT_TRUTH.md",
++      "ssot_excerpt": "evaluates intent against policy, records immutable audit traces, and returns allow / reject decisions",
++      "knowledge_file": "offerings.md",
++      "knowledge_hint": "Copilot"
++    },
++    {
++      "id": "gel_runtime",
++      "ssot_path": "PRODUCT_TRUTH.md",
++      "ssot_excerpt": "Governance Execution Layer",
++      "knowledge_file": "gel-runtime.md",
++      "knowledge_hint": "GEL"
++    },
++    {
++      "id": "trust_ledger",
++      "ssot_path": "PRODUCT_TRUTH.md",
++      "ssot_excerpt": "immutable audit traces",
++      "knowledge_file": "trust-ledger-public.md",
++      "knowledge_hint": "Trust Ledger"
++    }
++  ]
++}
+diff --git a/scripts/nf-bavt-run.sh b/scripts/nf-bavt-run.sh
+index 6190d69..e8735ba 100755
+--- a/scripts/nf-bavt-run.sh
++++ b/scripts/nf-bavt-run.sh
+@@ -32,6 +32,8 @@ run_gate() {
+ 
+ run_gate session_gate python3 scripts/nf_session_gate_run_v1.py --json
+ run_gate voyage_integrity python3 scripts/nf_voyage_integrity_v1.py --json
++run_gate voyage_live_wire bash scripts/verify-nf-voyage-ai-live-wire-v1.sh
++run_gate semantic_drift python3 scripts/nf_semantic_drift_v1.py --json
+ run_gate stale_guard python3 scripts/nf_stale_guard_v1.py --json
+ 
+ if [[ "$FAST" != true ]]; then
+diff --git a/scripts/nf_embedding_provider_v1.py b/scripts/nf_embedding_provider_v1.py
+index 86fb04a..e3a7f65 100644
+--- a/scripts/nf_embedding_provider_v1.py
++++ b/scripts/nf_embedding_provider_v1.py
+@@ -133,7 +133,14 @@ def cosine(a: list[float], b: list[float]) -> float:
+     dot = sum(x * y for x, y in zip(a, b))
+     na = math.sqrt(sum(x * x for x in a)) or 1.0
+     nb = math.sqrt(sum(y * y for y in b)) or 1.0
+-    return dot / (na * nb)
++    return round(dot / (na * nb), 6)
++
++
++def hybrid_score(*, token_score: float, query: str, chunk_text: str) -> float:
++    qe = embed_text(query, is_query=True)
++    ce = embed_text(chunk_text, is_query=False)
++    sem = cosine(qe, ce)
++    return round(0.55 * token_score + 0.45 * sem, 6)
+ 
+ 
+ def provider_payload() -> dict[str, Any]:
+diff --git a/scripts/nf_semantic_drift_v1.py b/scripts/nf_semantic_drift_v1.py
+new file mode 100644
+index 0000000..7fdef25
+--- /dev/null
++++ b/scripts/nf_semantic_drift_v1.py
+@@ -0,0 +1,127 @@
++#!/usr/bin/env python3
++"""NF semantic drift — Voyage embeddings align chatbot knowledge to PRODUCT_TRUTH anchors.
++
++SourceA pattern: governance_drift_engine GD-L8 · INCIDENT-036 fake-green guard.
++Receipt: reports/agent-auto/events/nf-semantic-drift-v1.json
++"""
++
++from __future__ import annotations
++
++import argparse
++import json
++import sys
++from datetime import datetime, timezone
++from pathlib import Path
++
++ROOT = Path(__file__).resolve().parents[1]
++SCRIPTS = Path(__file__).resolve().parent
++if str(SCRIPTS) not in sys.path:
++    sys.path.insert(0, str(SCRIPTS))
++
++EVENTS = ROOT / "reports" / "agent-auto" / "events"
++ANCHORS = ROOT / "data" / "chatbot" / "semantic_anchors_v1.json"
++KNOWLEDGE = ROOT / "data" / "chatbot" / "knowledge"
++
++
++def _now() -> str:
++    return datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
++
++
++def _best_excerpt(*, knowledge_text: str, hint: str, ssot: str, embed_text, cosine) -> tuple[str, float]:
++    if not knowledge_text.strip():
++        return "", 0.0
++    ssot_vec = embed_text(ssot, is_query=True)
++    sections = knowledge_text.split("\n## ")
++    best_text = knowledge_text[:800]
++    best_score = cosine(ssot_vec, embed_text(best_text, is_query=False))
++    for i, section in enumerate(sections):
++        text = section if i == 0 else "## " + section
++        if hint.lower() not in text.lower() and i > 0:
++            continue
++        score = cosine(ssot_vec, embed_text(text[:1200], is_query=False))
++        if score > best_score:
++            best_score = score
++            best_text = text[:800]
++    return best_text, best_score
++
++
++def run_semantic_drift(*, min_similarity: float | None = None) -> dict:
++    from nf_embedding_provider_v1 import cosine, embed_text, provider_payload, voyage_key_on_disk
++
++    prov = provider_payload()
++    doc = json.loads(ANCHORS.read_text(encoding="utf-8"))
++    threshold = min_similarity if min_similarity is not None else float(doc.get("min_similarity", 0.72))
++
++    fake_green = voyage_key_on_disk() and not prov.get("semantic")
++    checks: list[dict] = []
++    ok = not fake_green
++
++    if not prov.get("semantic"):
++        for anchor in doc.get("anchors") or []:
++            checks.append(
++                {
++                    "id": anchor.get("id"),
++                    "ok": True,
++                    "reason": "skipped_no_voyage",
++                    "similarity": None,
++                    "semantic": False,
++                }
++            )
++    else:
++        for anchor in doc.get("anchors") or []:
++            ssot = str(anchor.get("ssot_excerpt") or "").strip()
++            kfile = str(anchor.get("knowledge_file") or "")
++            hint = str(anchor.get("knowledge_hint") or "")
++            knowledge = (KNOWLEDGE / kfile).read_text(encoding="utf-8", errors="replace") if kfile else ""
++            if not ssot or not knowledge:
++                checks.append({"id": anchor.get("id"), "ok": False, "reason": "missing_ssot_or_knowledge", "similarity": 0.0})
++                ok = False
++                continue
++            _, similarity = _best_excerpt(
++                knowledge_text=knowledge, hint=hint, ssot=ssot, embed_text=embed_text, cosine=cosine
++            )
++            check_ok = similarity >= threshold
++            if not check_ok:
++                ok = False
++            checks.append(
++                {
++                    "id": anchor.get("id"),
++                    "ok": check_ok,
++                    "similarity": round(similarity, 4),
++                    "threshold": threshold,
++                    "knowledge_file": kfile,
++                    "semantic": True,
++                }
++            )
++
++    receipt = {
++        "schema": "nf-semantic-drift-v1",
++        "ok": ok,
++        "generated_at": _now(),
++        "provider": prov,
++        "fake_green": fake_green,
++        "min_similarity": threshold,
++        "checks": checks,
++        "law": "SourceA GD-L8 · voyage key in vault must not run hash_local",
++    }
++    EVENTS.mkdir(parents=True, exist_ok=True)
++    (EVENTS / "nf-semantic-drift-v1.json").write_text(json.dumps(receipt, indent=2) + "\n", encoding="utf-8")
++    return receipt
++
++
++def main() -> int:
++    parser = argparse.ArgumentParser(description="NF semantic drift — SSOT anchor alignment")
++    parser.add_argument("--min-similarity", type=float, default=None)
++    parser.add_argument("--json", action="store_true")
++    args = parser.parse_args()
++    row = run_semantic_drift(min_similarity=args.min_similarity)
++    if args.json:
++        print(json.dumps(row, indent=2))
++    else:
++        failed = [c["id"] for c in row.get("checks", []) if not c.get("ok")]
++        print(f"nf_semantic_drift: {'PASS' if row['ok'] else 'FAIL'} failed={failed}")
++    return 0 if row.get("ok") else 1
++
++
++if __name__ == "__main__":
++    raise SystemExit(main())
+diff --git a/scripts/nf_voyage_integrity_v1.py b/scripts/nf_voyage_integrity_v1.py
+index 548f613..23cb754 100644
+--- a/scripts/nf_voyage_integrity_v1.py
++++ b/scripts/nf_voyage_integrity_v1.py
+@@ -7,6 +7,7 @@ import argparse
+ import json
+ import re
+ import subprocess
++import sys
+ from datetime import datetime, timezone
+ from pathlib import Path
+ 
+@@ -88,6 +89,48 @@ def run_voyage(root: Path) -> dict:
+             pass
+     gates.append({"gate": "cursor_reply_sha_present", "ok": not sha_drift, "optional": True})
+ 
++    scripts = root / "scripts"
++    if str(scripts) not in sys.path:
++        sys.path.insert(0, str(scripts))
++    try:
++        from nf_embedding_provider_v1 import provider_payload, voyage_key_on_disk
++
++        payload = provider_payload()
++        semantic = payload.get("semantic") is True
++        mode = str(payload.get("mode") or "")
++        key_on_disk = voyage_key_on_disk()
++        l8_ok = semantic if key_on_disk else True
++        if key_on_disk and mode == "hash_local":
++            l8_ok = False
++        gates.append(
++            {
++                "gate": "l8_voyage_semantic",
++                "ok": l8_ok,
++                "mode": mode,
++                "semantic": semantic,
++                "voyage_key_on_disk": key_on_disk,
++                "model": payload.get("model"),
++            }
++        )
++        if not l8_ok:
++            ok = False
++        if semantic:
++            proc = subprocess.run(
++                [sys.executable, str(scripts / "nf_semantic_drift_v1.py"), "--json"],
++                cwd=root,
++                capture_output=True,
++                text=True,
++                timeout=120,
++            )
++            drift = json.loads(proc.stdout) if proc.stdout.strip() else {}
++            drift_ok = proc.returncode == 0 and bool(drift.get("ok", False))
++            gates.append({"gate": "semantic_drift_anchors", "ok": drift_ok, "checks": drift.get("checks", [])})
++            if not drift_ok:
++                ok = False
++    except Exception as exc:
++        gates.append({"gate": "l8_voyage_semantic", "ok": False, "error": str(exc)})
++        ok = False
++
+     out = {
+         "schema_version": "nf-voyage-integrity-v1",
+         "generated_at": _iso_now(),
+diff --git a/services/governance/noetfield_governance/chatbot_knowledge.py b/services/governance/noetfield_governance/chatbot_knowledge.py
+index 4277342..782e95a 100644
+--- a/services/governance/noetfield_governance/chatbot_knowledge.py
++++ b/services/governance/noetfield_governance/chatbot_knowledge.py
+@@ -518,6 +518,19 @@ def select_relevant_excerpt(
+         for lane in lanes:
+             if lane in lower:
+                 score += 2
++        try:
++            import sys
++            from pathlib import Path as _Path
++
++            _scripts = _Path(__file__).resolve().parents[3] / "scripts"
++            if str(_scripts) not in sys.path:
++                sys.path.insert(0, str(_scripts))
++            from nf_embedding_provider_v1 import hybrid_score, provider_payload
++
++            if provider_payload().get("semantic"):
++                score = hybrid_score(token_score=float(score), query=query, chunk_text=text)
++        except Exception:
++            pass
+         scored.append((score, text))
+     scored.sort(key=lambda x: (-x[0], x[1]))
+ 
+diff --git a/tests/unit/test_nf_semantic_drift_v1.py b/tests/unit/test_nf_semantic_drift_v1.py
+new file mode 100644
+index 0000000..e558ae1
+--- /dev/null
++++ b/tests/unit/test_nf_semantic_drift_v1.py
+@@ -0,0 +1,28 @@
++"""Semantic drift + hybrid score helpers."""
++
++from __future__ import annotations
++
++import math
++import sys
++from pathlib import Path
++
++SCRIPTS = Path(__file__).resolve().parents[2] / "scripts"
++if str(SCRIPTS) not in sys.path:
++    sys.path.insert(0, str(SCRIPTS))
++
++from nf_embedding_provider_v1 import cosine, embed_text, hybrid_score, provider_payload  # noqa: E402
++
++
++def test_hybrid_score_bounded() -> None:
++    score = hybrid_score(token_score=0.5, query="gel runtime", chunk_text="GEL governance execution layer")
++    assert 0.0 <= score <= 1.5
++
++
++def test_semantic_drift_skips_without_voyage(monkeypatch) -> None:
++    monkeypatch.chdir(Path(__file__).resolve().parents[2])
++    from scripts.nf_semantic_drift_v1 import run_semantic_drift
++
++    row = run_semantic_drift()
++    assert row["schema"] == "nf-semantic-drift-v1"
++    if not row["provider"].get("semantic"):
++        assert all(c.get("reason") == "skipped_no_voyage" for c in row["checks"])
+-- 
+2.43.0
+
