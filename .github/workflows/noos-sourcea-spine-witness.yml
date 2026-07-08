@@ -23,6 +23,8 @@ jobs:
       GITHUB_RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
       PORTFOLIO_SPINE_SUPABASE_URL: ${{ secrets.PORTFOLIO_SPINE_SUPABASE_URL }}
       PORTFOLIO_SPINE_SERVICE_ROLE_KEY: ${{ secrets.PORTFOLIO_SPINE_SERVICE_ROLE_KEY }}
+      SUPABASE_URL: ${{ secrets.PORTFOLIO_SPINE_SUPABASE_URL }}
+      SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.PORTFOLIO_SPINE_SERVICE_ROLE_KEY }}
     steps:
       - uses: actions/checkout@v4
 

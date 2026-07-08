@@ -39,6 +39,21 @@ if command -v gh >/dev/null 2>&1; then
   if [[ -n "${NOETFIELD_SUPABASE_SERVICE_ROLE_KEY:-}" ]]; then
     printf '%s' "$NOETFIELD_SUPABASE_SERVICE_ROLE_KEY" | gh secret set NOETFIELD_SUPABASE_SERVICE_ROLE_KEY --repo "$REPO" 2>/dev/null || true
   fi
+  PORTFOLIO_ENV="${PORTFOLIO_SPINE_ENV:-$HOME/.sourcea-secrets/portfolio-spine.env}"
+  if [[ -f "$PORTFOLIO_ENV" ]]; then
+    # shellcheck disable=SC1090
+    source "$PORTFOLIO_ENV"
+    if [[ -n "${SUPABASE_URL:-}" ]]; then
+      log "GHA secret PORTFOLIO_SPINE_SUPABASE_URL → $REPO"
+      printf '%s' "$SUPABASE_URL" | gh secret set PORTFOLIO_SPINE_SUPABASE_URL --repo "$REPO"
+    fi
+    if [[ -n "${SUPABASE_SERVICE_ROLE_KEY:-${SUPABASE_SERVICE_KEY:-}}" ]]; then
+      log "GHA secret PORTFOLIO_SPINE_SERVICE_ROLE_KEY → $REPO"
+      printf '%s' "${SUPABASE_SERVICE_ROLE_KEY:-$SUPABASE_SERVICE_KEY}" | gh secret set PORTFOLIO_SPINE_SERVICE_ROLE_KEY --repo "$REPO"
+    fi
+  else
+    log "WARN: portfolio spine env missing — $PORTFOLIO_ENV (spine witness stays yellow on GHA)"
+  fi
   TF_REPO="${TRUSTFIELD_GITHUB_REPO:-Noetfield-Systems/TrustField-Technologies}"
   if [[ -n "${NOETFIELD_SUPABASE_URL:-}" ]]; then
     log "GHA secret NOETFIELD_SUPABASE_URL → $TF_REPO"
