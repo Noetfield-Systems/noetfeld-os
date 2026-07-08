@@ -91,7 +91,7 @@
       "id": "ICL-P2",
       "title": "Unified control dashboard (1 month)",
       "tier": "T3",
-      "status": "in_progress",
+      "status": "done",
       "steps": [
         {
           "id": "ICL-P2-01",
@@ -142,7 +142,7 @@
         {
           "id": "ICL-P2-07",
           "title": "GHA Phase-2 stack health dashboard (billing witness + org rollup)",
-          "status": "in_progress",
+          "status": "done",
           "command": "bash scripts/noos_gha_witness_phase2_smoke_v1.sh",
           "acceptance": "workflow_dispatch smoke green; noos-gha-health-witness + noos-stack-health-receipt scheduled",
           "evidence": "receipts/proof/noos-gha-witness-phase2-smoke-v1.json"

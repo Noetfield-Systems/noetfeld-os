@@ -6,6 +6,7 @@
   "one_law": "Read-only secondary witnesses — observe existing scripts, upload receipts, never dispatch CF/Railway loop motors.",
   "primary_motor_plane": "cloudflare_workers_cron",
   "bootstrap": "workflow_dispatch smoke passed 2026-07-08; schedules enabled",
+  "phase2_smoke_receipt": "receipts/proof/noos-gha-witness-phase2-smoke-v1.json",
   "witnesses": [
     {
       "id": "noos_gha_integrator_daily_witness",
