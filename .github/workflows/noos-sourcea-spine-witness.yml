@@ -3,6 +3,8 @@ name: NOOS SourceA spine witness
 
 on:
   workflow_dispatch:
+  schedule:
+    - cron: "25 */2 * * *"
 
 permissions:
   contents: read

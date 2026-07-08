@@ -3,6 +3,8 @@ name: NOOS TrustField observe witness
 
 on:
   workflow_dispatch:
+  schedule:
+    - cron: "20 */4 * * *"
 
 permissions:
   contents: read

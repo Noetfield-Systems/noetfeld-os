@@ -66,7 +66,9 @@
       "closure_token": "NOOS_SOURCEA_SPINE_WITNESS"
     }
   ],
+  "phase3_smoke_receipt": "receipts/proof/noos-gha-witness-phase3-smoke-v1.json",
   "phase3_verify": "bash scripts/noos_gha_witness_phase3_smoke_v1.sh",
+  "phase2_verify": "bash scripts/noos_gha_witness_phase2_smoke_v1.sh",
   "verify": "bash scripts/noos_gha_witness_phase1_smoke_v1.sh",
   "smoke_receipt": "receipts/proof/noos-gha-witness-phase1-smoke-v1.json"
 }

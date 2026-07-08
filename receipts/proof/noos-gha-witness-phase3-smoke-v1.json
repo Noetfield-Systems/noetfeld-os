@@ -1,0 +1,26 @@
+{
+  "schema": "noos-gha-witness-phase3-smoke-v1",
+  "at": "2026-07-08T00:30:00Z",
+  "ok": true,
+  "closure_token": "NOOS_GHA_WITNESS_PHASE3: green",
+  "lane": "ICL-P2-08",
+  "command": "bash scripts/noos_gha_witness_phase3_smoke_v1.sh",
+  "runs": [
+    {
+      "workflow": "noos-trustfield-observe-witness.yml",
+      "run_id": 28908331997,
+      "result": "success"
+    },
+    {
+      "workflow": "noos-sourcea-spine-witness.yml",
+      "run_id": 28908335282,
+      "result": "success"
+    }
+  ],
+  "schedules_enabled_utc": {
+    "noos-trustfield-observe-witness.yml": "20 */4 * * *",
+    "noos-sourcea-spine-witness.yml": "25 */2 * * *"
+  },
+  "one_law": "Handoff-only — observe + receipt, no TrustField/SourceA product edits",
+  "commit": "66533a6"
+}

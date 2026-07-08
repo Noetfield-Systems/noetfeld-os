@@ -91,7 +91,7 @@
       "id": "ICL-P2",
       "title": "Unified control dashboard (1 month)",
       "tier": "T3",
-      "status": "in_progress",
+      "status": "done",
       "steps": [
         {
           "id": "ICL-P2-01",
@@ -150,7 +150,7 @@
         {
           "id": "ICL-P2-08",
           "title": "GHA Phase-3 ecosystem observe witnesses (TrustField + SourceA spine)",
-          "status": "in_progress",
+          "status": "done",
           "command": "bash scripts/noos_gha_witness_phase3_smoke_v1.sh",
           "acceptance": "workflow_dispatch smoke green; handoff-only observe receipts on GHA",
           "evidence": "receipts/proof/noos-gha-witness-phase3-smoke-v1.json"
