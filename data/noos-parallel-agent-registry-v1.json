@@ -45,7 +45,8 @@
     "noos-sourcea-spine-witness": ["gha-ecosystem-observe"],
     "noos-machine-audit-witness": ["gha-sustain-audit"],
     "noos-liveness-registry-witness": ["gha-sustain-audit"],
-    "noos-sandbox-url-sweep-witness": ["gha-sustain-audit"]
+    "noos-sandbox-url-sweep-witness": ["gha-sustain-audit"],
+    "noetfield-open-pr-v1": ["gha-ecosystem-observe"]
   },
   "surfaces": {
     "T0_machine": "GitHub Actions schedules, repository_dispatch, CF cron, worker-kernel T0",

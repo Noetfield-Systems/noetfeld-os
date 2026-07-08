@@ -26,9 +26,12 @@ git checkout -B "$BRANCH" "origin/$BASE"
 shopt -s nullglob
 patches=("$PATCH_DIR"/*.patch)
 [[ ${#patches[@]} -gt 0 ]] || die "no patches in $PATCH_DIR"
+log "applying ${#patches[@]} patch(es) from $PATCH_DIR"
 git am "${patches[@]}"
 
-git push -u origin "$BRANCH" --force-with-lease
+if ! git push -u origin "$BRANCH" --force-with-lease 2>&1; then
+  die "push denied — set NOETFIELD_GITHUB_TOKEN org secret with push to Noetfield-Systems/Noetfield"
+fi
 
 PR_URL="$(gh pr create \
   --repo "$TARGET_REPO" \
