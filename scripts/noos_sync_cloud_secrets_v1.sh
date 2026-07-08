@@ -43,13 +43,15 @@ if command -v gh >/dev/null 2>&1; then
   if [[ -f "$PORTFOLIO_ENV" ]]; then
     # shellcheck disable=SC1090
     source "$PORTFOLIO_ENV"
-    if [[ -n "${SUPABASE_URL:-}" ]]; then
-      log "GHA secret PORTFOLIO_SPINE_SUPABASE_URL → $REPO"
-      printf '%s' "$SUPABASE_URL" | gh secret set PORTFOLIO_SPINE_SUPABASE_URL --repo "$REPO"
+    PS_URL="${PORTFOLIO_SPINE_SUPABASE_URL:-${SUPABASE_URL:-}}"
+    PS_KEY="${PORTFOLIO_SPINE_SERVICE_ROLE_KEY:-${SUPABASE_SERVICE_ROLE_KEY:-${SUPABASE_SERVICE_KEY:-}}}"
+    if [[ -n "$PS_URL" ]]; then
+      log "GHA secret PORTFOLIO_SPINE_SUPABASE_URL → $REPO (dedicated — not SUPABASE_URL)"
+      printf '%s' "$PS_URL" | gh secret set PORTFOLIO_SPINE_SUPABASE_URL --repo "$REPO"
     fi
-    if [[ -n "${SUPABASE_SERVICE_ROLE_KEY:-${SUPABASE_SERVICE_KEY:-}}" ]]; then
-      log "GHA secret PORTFOLIO_SPINE_SERVICE_ROLE_KEY → $REPO"
-      printf '%s' "${SUPABASE_SERVICE_ROLE_KEY:-$SUPABASE_SERVICE_KEY}" | gh secret set PORTFOLIO_SPINE_SERVICE_ROLE_KEY --repo "$REPO"
+    if [[ -n "$PS_KEY" ]]; then
+      log "GHA secret PORTFOLIO_SPINE_SERVICE_ROLE_KEY → $REPO (dedicated — not shared generic key)"
+      printf '%s' "$PS_KEY" | gh secret set PORTFOLIO_SPINE_SERVICE_ROLE_KEY --repo "$REPO"
     fi
   else
     log "WARN: portfolio spine env missing — $PORTFOLIO_ENV (spine witness stays yellow on GHA)"

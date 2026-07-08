@@ -87,16 +87,33 @@ def supabase_profile_config(profile_name: str, wf_doc: dict[str, Any]) -> tuple[
     spec = profiles.get(profile_name) or {}
     env_path = expand(spec.get("env_file", ""))
     vals = load_env_file(env_path)
+    file_url_keys = spec.get("file_url_env") or spec.get("url_env") or []
+    file_key_keys = spec.get("file_key_env") or spec.get("key_env") or []
+    proc_url_keys = spec.get("url_env") or []
+    proc_key_keys = spec.get("key_env") or []
+
     url = ""
-    for key in spec.get("url_env") or []:
-        url = vals.get(key) or os.environ.get(key, "")
+    for key in file_url_keys:
+        url = vals.get(key) or ""
         if url:
             break
+    if not url:
+        for key in proc_url_keys:
+            url = os.environ.get(key, "")
+            if url:
+                break
+
     secret = ""
-    for key in spec.get("key_env") or []:
-        secret = vals.get(key) or os.environ.get(key, "")
+    for key in file_key_keys:
+        secret = vals.get(key) or ""
         if secret:
             break
+    if not secret:
+        for key in proc_key_keys:
+            secret = os.environ.get(key, "")
+            if secret:
+                break
+
     if url and secret:
         return url.rstrip("/"), secret
     return None

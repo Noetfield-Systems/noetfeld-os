@@ -42,16 +42,17 @@ def supabase_cfg() -> tuple[str, str] | None:
     for path in (ENV_PATH, PLATFORM_ENV):
         vals.update(load_env(path))
     url = (
-        vals.get("SUPABASE_URL")
+        vals.get("PORTFOLIO_SPINE_SUPABASE_URL")
+        or vals.get("SUPABASE_URL")
         or os.environ.get("PORTFOLIO_SPINE_SUPABASE_URL")
-        or os.environ.get("SUPABASE_URL")
         or ""
     ).rstrip("/")
     key = (
-        vals.get("SUPABASE_SERVICE_ROLE_KEY")
+        vals.get("PORTFOLIO_SPINE_SERVICE_ROLE_KEY")
+        or vals.get("SUPABASE_SERVICE_ROLE_KEY")
         or vals.get("SUPABASE_SERVICE_KEY")
         or os.environ.get("PORTFOLIO_SPINE_SERVICE_ROLE_KEY")
-        or os.environ.get("SUPABASE_SERVICE_ROLE_KEY")
+        or ""
     )
     if url and key:
         return url, key

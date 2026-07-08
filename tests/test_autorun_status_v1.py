@@ -147,9 +147,34 @@ def test_sandboxes_no_sourcea_dirty():
 
 def test_portfolio_spine_profile_reads_gha_env(monkeypatch):
     wf_doc = json.loads((ROOT / "data/autorun-workflows-v1.json").read_text())
+    monkeypatch.setattr(dash, "load_env_file", lambda _p: {})
     monkeypatch.setenv("PORTFOLIO_SPINE_SUPABASE_URL", "https://example.supabase.co")
     monkeypatch.setenv("PORTFOLIO_SPINE_SERVICE_ROLE_KEY", "gha-service-role-key")
     monkeypatch.delenv("SUPABASE_URL", raising=False)
     monkeypatch.delenv("SUPABASE_SERVICE_ROLE_KEY", raising=False)
     cfg = dash.supabase_profile_config("portfolio_spine", wf_doc)
     assert cfg == ("https://example.supabase.co", "gha-service-role-key")
+
+
+def test_portfolio_spine_profile_rejects_generic_supabase_env(monkeypatch):
+    wf_doc = json.loads((ROOT / "data/autorun-workflows-v1.json").read_text())
+    monkeypatch.setattr(dash, "load_env_file", lambda _p: {})
+    monkeypatch.delenv("PORTFOLIO_SPINE_SUPABASE_URL", raising=False)
+    monkeypatch.delenv("PORTFOLIO_SPINE_SERVICE_ROLE_KEY", raising=False)
+    monkeypatch.setenv("SUPABASE_URL", "https://bleed.supabase.co")
+    monkeypatch.setenv("SUPABASE_SERVICE_ROLE_KEY", "bleed-key")
+    cfg = dash.supabase_profile_config("portfolio_spine", wf_doc)
+    assert cfg is None
+
+
+def test_portfolio_spine_profile_reads_local_file_only(monkeypatch):
+    wf_doc = json.loads((ROOT / "data/autorun-workflows-v1.json").read_text())
+    monkeypatch.setattr(
+        dash,
+        "load_env_file",
+        lambda _p: {"SUPABASE_URL": "https://local.supabase.co", "SUPABASE_SERVICE_ROLE_KEY": "local-key"},
+    )
+    monkeypatch.delenv("PORTFOLIO_SPINE_SUPABASE_URL", raising=False)
+    monkeypatch.delenv("PORTFOLIO_SPINE_SERVICE_ROLE_KEY", raising=False)
+    cfg = dash.supabase_profile_config("portfolio_spine", wf_doc)
+    assert cfg == ("https://local.supabase.co", "local-key")
