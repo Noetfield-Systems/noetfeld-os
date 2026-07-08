@@ -24,7 +24,7 @@ REQUIRED_TIER = (
 )
 
 REQUIRED_TIER_BY_PAGE = {
-    "index.html": ("Diagnostic Sprint", "Noetfield Intelligence"),
+    "index.html": ("Apply for pilot", "Request Trust Brief", "Start sandbox"),
     "governance/index.html": ("Apply for pilot", "governance"),
 }
 
@@ -73,10 +73,10 @@ def main() -> int:
         for phrase in FORBIDDEN_HOME:
             if phrase in ht:
                 errors.append(f"index.html contains forbidden: {phrase}")
-        if "noetfield intelligence" not in ht.lower():
-            errors.append("index.html missing Intelligence positioning")
-        if "/intelligence/intake/" not in ht:
-            errors.append("index.html missing Diagnostic intake link")
+        if "request trust brief" not in ht.lower():
+            errors.append("index.html missing stable CTA: Request Trust Brief")
+        if "/trust-brief/intake/" not in ht:
+            errors.append("index.html missing Trust Brief intake link")
         for bad in ("Golden Edge", "GCIP", "pre-execution", "audit ledger"):
             if bad in ht:
                 errors.append(f"index.html contains internal term: {bad}")

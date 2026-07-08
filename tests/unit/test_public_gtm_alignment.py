@@ -32,12 +32,12 @@ def test_homepage_has_no_prohibited_payment_language() -> None:
         assert phrase not in text, f"index.html still contains: {phrase}"
 
 
-def test_homepage_states_intelligence_positioning() -> None:
+def test_homepage_states_stable_cta_triad() -> None:
     text = (ROOT / "index.html").read_text(encoding="utf-8").lower()
-    assert "noetfield intelligence" in text
-    assert "automate the work your team still does in spreadsheets" in text
-    assert "diagnostic sprint" in text
-    assert "/intelligence/intake/" in text
+    assert "apply for pilot" in text
+    assert "request trust brief" in text
+    assert "start sandbox" in text
+    assert "/trust-brief/intake/" in text
     assert "governed" in text
 
 
@@ -335,7 +335,9 @@ def test_tier_pages_have_shell_and_cta() -> None:
         text = (ROOT / rel).read_text(encoding="utf-8")
         assert "nfHeader" in text, rel
         if rel == "index.html":
-            assert "Diagnostic Sprint" in text, rel
+            assert PILOT_CTA in text, rel
+            assert "Request Trust Brief" in text, rel
+            assert "Start sandbox" in text, rel
         else:
             assert PILOT_CTA in text, rel
         assert 'name="viewport"' in text, rel
