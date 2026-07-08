@@ -1,0 +1,379 @@
+From 5838515bcfe4a7fa8af16278e942d27c4a6e51d1 Mon Sep 17 00:00:00 2001
+From: Cursor Agent <cursoragent@cursor.com>
+Date: Wed, 8 Jul 2026 01:55:36 +0000
+Subject: [PATCH 1/2] fix(probe): pin drift expected SHA to live platform
+ deploy
+
+NF probe cron drift was failing because EXPECTED_GIT_SHA tracked repo
+main (d8bb0e1) while platform.noetfield.com still serves e0bb318 from
+the last Railway deploy. www-only commits must not trip platform drift.
+
+- Add data/nf-platform-deploy-pin-v1.json as the platform deploy pin
+- Add sync_nf_probe_expected_sha.sh to align wrangler var + CF secret
+- Use pin (not git HEAD) for platform checks in nf_post_deploy_verify
+- Add GHA workflow to sync + redeploy probe worker on dispatch/push
+- Set EXPECTED_GIT_SHA in wrangler.toml to live e0bb318c9ef8
+---
+ .../workflows/nf-probe-sync-expected-sha.yml  | 41 +++++++++
+ data/nf-platform-deploy-pin-v1.json           |  8 ++
+ infra/nf-probe-cron/wrangler.toml             |  2 +
+ scripts/deploy-nf-probe-cron.sh               | 11 +--
+ scripts/deploy-platform-railway.sh            |  1 +
+ scripts/nf_post_deploy_verify.py              | 30 ++++++-
+ scripts/read_nf_platform_expected_sha.py      | 70 +++++++++++++++
+ scripts/sync_nf_probe_expected_sha.sh         | 90 +++++++++++++++++++
+ 8 files changed, 246 insertions(+), 7 deletions(-)
+ create mode 100644 .github/workflows/nf-probe-sync-expected-sha.yml
+ create mode 100644 data/nf-platform-deploy-pin-v1.json
+ create mode 100644 scripts/read_nf_platform_expected_sha.py
+ create mode 100755 scripts/sync_nf_probe_expected_sha.sh
+
+diff --git a/.github/workflows/nf-probe-sync-expected-sha.yml b/.github/workflows/nf-probe-sync-expected-sha.yml
+new file mode 100644
+index 0000000..72c46a4
+--- /dev/null
++++ b/.github/workflows/nf-probe-sync-expected-sha.yml
+@@ -0,0 +1,41 @@
++# Sync nf-probe-cron EXPECTED_GIT_SHA to live platform.noetfield.com — stops drift false-alarms
++# when www/main advances without a platform Railway redeploy.
++name: NF probe sync expected SHA
++
++on:
++  workflow_dispatch:
++  push:
++    branches: [main]
++    paths:
++      - "data/nf-platform-deploy-pin-v1.json"
++      - "infra/nf-probe-cron/**"
++      - "scripts/sync_nf_probe_expected_sha.sh"
++      - "scripts/read_nf_platform_expected_sha.py"
++      - ".github/workflows/nf-probe-sync-expected-sha.yml"
++
++jobs:
++  sync:
++    runs-on: ubuntu-latest
++    steps:
++      - uses: actions/checkout@v4
++
++      - uses: actions/setup-node@v4
++        with:
++          node-version: "20"
++
++      - name: Install wrangler
++        run: npm install -g wrangler
++
++      - name: Sync EXPECTED_GIT_SHA to live platform
++        env:
++          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
++          NF_PROBE_CRON_DEPLOY: "1"
++        run: |
++          chmod +x scripts/sync_nf_probe_expected_sha.sh
++          bash scripts/sync_nf_probe_expected_sha.sh
++
++      - name: Smoke drift probe
++        run: |
++          resp="$(curl -sS -X POST "https://nf-probe-cron.sina-kazemnezhad-ca.workers.dev/run")"
++          echo "$resp" | python3 -m json.tool
++          python3 -c "import json,sys; d=json.load(sys.stdin); drift=[p for p in d.get('probes',[]) if p.get('probe')=='drift']; sys.exit(0 if drift and drift[0].get('ok') else 1)" <<<"$resp"
+diff --git a/data/nf-platform-deploy-pin-v1.json b/data/nf-platform-deploy-pin-v1.json
+new file mode 100644
+index 0000000..1cc54d7
+--- /dev/null
++++ b/data/nf-platform-deploy-pin-v1.json
+@@ -0,0 +1,8 @@
++{
++  "schema": "nf-platform-deploy-pin-v1",
++  "git_sha": "e0bb318c9ef8ea76051646683b337330f47ad673",
++  "pinned_at": "2026-07-08T01:55:23Z",
++  "source": "live_platform_health",
++  "platform_base": "https://platform.noetfield.com",
++  "note": "Updated when platform Railway deploy succeeds or sync_nf_probe_expected_sha.sh runs. Drift probe compares live /api/public/chat/health git_sha to this pin \u2014 not repo main HEAD."
++}
+diff --git a/infra/nf-probe-cron/wrangler.toml b/infra/nf-probe-cron/wrangler.toml
+index 1938e74..bf80e26 100644
+--- a/infra/nf-probe-cron/wrangler.toml
++++ b/infra/nf-probe-cron/wrangler.toml
+@@ -10,3 +10,5 @@ account_id = "0d0b967b77e2e5535455d39ff3dae72c"
+ WWW_BASE = "https://www.noetfield.com"
+ PLATFORM_BASE = "https://platform.noetfield.com"
+ GREETING_SSOT_HASH = "f73217eec3f7b956f10da9bc83bf25522113fa97d3fd9d850eecb5c9d32bb970"
++# Live platform Railway deploy pin — sync via scripts/sync_nf_probe_expected_sha.sh
++EXPECTED_GIT_SHA = "e0bb318c9ef8ea76051646683b337330f47ad673"
+diff --git a/scripts/deploy-nf-probe-cron.sh b/scripts/deploy-nf-probe-cron.sh
+index 387e0d3..11c9897 100755
+--- a/scripts/deploy-nf-probe-cron.sh
++++ b/scripts/deploy-nf-probe-cron.sh
+@@ -23,15 +23,16 @@ sync_secret() {
+   printf '%s' "$val" | wrangler secret put "$key" >/dev/null
+ }
+ 
+-GIT_SHA="$(git -C "$ROOT" rev-parse HEAD 2>/dev/null || true)"
+-LIVE_PLATFORM_SHA="$(curl -sS "${PLATFORM_BASE:-https://platform.noetfield.com}/api/public/chat/health" 2>/dev/null | python3 -c "import json,sys; print(json.load(sys.stdin).get('git_sha',''))" 2>/dev/null || true)"
+-EXPECTED_SHA="${LIVE_PLATFORM_SHA:-$GIT_SHA}"
++# Drift expected SHA tracks live platform deploy — never repo HEAD (www-only commits must not fail drift).
+ 
+ # shellcheck source=scripts/load_noetfield_vault_env.sh
+ source "${ROOT}/scripts/load_noetfield_vault_env.sh"
+ # shellcheck source=scripts/read_platform_vault.sh
+ source "${ROOT}/scripts/read_platform_vault.sh"
+ 
++bash "$ROOT/scripts/sync_nf_probe_expected_sha.sh"
++EXPECTED_SHA="$(python3 "$ROOT/scripts/read_nf_platform_expected_sha.py")"
++
+ SUPABASE_URL="${NOETFIELD_SUPABASE_URL:-}"
+ SUPABASE_SERVICE="${NOETFIELD_SUPABASE_SERVICE_ROLE_KEY:-}"
+ TELEGRAM_TOKEN="$(read_platform_vault TELEGRAM_NOETFIELD_OPS_BOT_TOKEN 2>/dev/null || read_platform_vault TELEGRAM_BOT_TOKEN 2>/dev/null || true)"
+@@ -53,7 +54,7 @@ sync_secret "SUPABASE_URL" "$SUPABASE_URL"
+ sync_secret "SUPABASE_SERVICE_ROLE_KEY" "$SUPABASE_SERVICE"
+ sync_secret "TELEGRAM_NOETFIELD_OPS_BOT_TOKEN" "$TELEGRAM_TOKEN"
+ sync_secret "TELEGRAM_OPS_CHAT_ID" "$TELEGRAM_CHAT"
+-sync_secret "EXPECTED_GIT_SHA" "$EXPECTED_SHA"
++# sync_nf_probe_expected_sha.sh already updated wrangler.toml + secret when token present.
+ 
+-log "PASS — nf-probe-cron deployed (cron */15 * * * *)"
++log "PASS — nf-probe-cron deployed (expected platform sha=${EXPECTED_SHA:0:12})"
+ log "manual smoke: wrangler tail nf-probe-cron — or POST /run on workers.dev URL after deploy"
+diff --git a/scripts/deploy-platform-railway.sh b/scripts/deploy-platform-railway.sh
+index f3e163f..22e35d3 100755
+--- a/scripts/deploy-platform-railway.sh
++++ b/scripts/deploy-platform-railway.sh
+@@ -192,6 +192,7 @@ main() {
+     python3 "$ROOT/scripts/verify_chat_greeting_coupling.py" --live \
+       --platform-base "https://${PLATFORM_DOMAIN}" || \
+       log "WARN: live greeting coupling not yet green on platform"
++    bash "$ROOT/scripts/sync_nf_probe_expected_sha.sh" || log "WARN: probe expected SHA sync failed"
+     python3 "$ROOT/scripts/nf_post_deploy_verify.py" --surface platform || true
+     log "Next: www chat will auto-proxy when PLATFORM_API_BASE resolves (no vercel rewrite needed)"
+     exit 0
+diff --git a/scripts/nf_post_deploy_verify.py b/scripts/nf_post_deploy_verify.py
+index 3b73a9e..0d18934 100755
+--- a/scripts/nf_post_deploy_verify.py
++++ b/scripts/nf_post_deploy_verify.py
+@@ -16,6 +16,7 @@ VAULT = Path.home() / ".sina" / "secrets.env"
+ PLATFORM_BASE = "https://platform.noetfield.com"
+ WWW_BASE = "https://www.noetfield.com"
+ USER_AGENT = "noetfield-post-deploy-verify/1.0"
++PIN_FILE = ROOT / "data" / "nf-platform-deploy-pin-v1.json"
+ 
+ 
+ def read_vault(key: str) -> str:
+@@ -36,9 +37,34 @@ def fetch_json(url: str) -> dict[str, object]:
+         return json.loads(resp.read().decode("utf-8"))
+ 
+ 
+-def expected_sha(value: str | None) -> str:
++def platform_expected_sha() -> str:
++    result = subprocess.run(
++        [sys.executable, str(ROOT / "scripts" / "read_nf_platform_expected_sha.py")],
++        cwd=ROOT,
++        capture_output=True,
++        text=True,
++        check=False,
++    )
++    if result.returncode == 0:
++        return result.stdout.strip()
++    if PIN_FILE.is_file():
++        try:
++            doc = json.loads(PIN_FILE.read_text(encoding="utf-8"))
++            sha = str(doc.get("git_sha") or "").strip()
++            if sha:
++                return sha
++        except json.JSONDecodeError:
++            pass
++    return ""
++
++
++def expected_sha(value: str | None, *, surface: str) -> str:
+     if value and value.strip():
+         return value.strip()
++    if surface in ("platform", "both"):
++        pinned = platform_expected_sha()
++        if pinned:
++            return pinned
+     return subprocess.check_output(
+         ["git", "-C", str(ROOT), "rev-parse", "HEAD"],
+         text=True,
+@@ -162,7 +188,7 @@ def main() -> int:
+     )
+     args = parser.parse_args()
+ 
+-    sha = expected_sha(args.expected_sha or None)
++    sha = expected_sha(args.expected_sha or None, surface=args.surface)
+     failures: list[str] = []
+ 
+     if args.deploy_failed:
+diff --git a/scripts/read_nf_platform_expected_sha.py b/scripts/read_nf_platform_expected_sha.py
+new file mode 100644
+index 0000000..896d1a8
+--- /dev/null
++++ b/scripts/read_nf_platform_expected_sha.py
+@@ -0,0 +1,70 @@
++#!/usr/bin/env python3
++"""Resolve expected platform git SHA for drift/deploy checks (pin file, not repo HEAD)."""
++
++from __future__ import annotations
++
++import json
++import sys
++import urllib.error
++import urllib.request
++from pathlib import Path
++
++ROOT = Path(__file__).resolve().parents[1]
++PIN_FILE = ROOT / "data" / "nf-platform-deploy-pin-v1.json"
++DEFAULT_PLATFORM_BASE = "https://platform.noetfield.com"
++USER_AGENT = "noetfield-platform-expected-sha/1.0"
++
++
++def read_pin() -> str:
++    if not PIN_FILE.is_file():
++        return ""
++    try:
++        doc = json.loads(PIN_FILE.read_text(encoding="utf-8"))
++    except json.JSONDecodeError:
++        return ""
++    return str(doc.get("git_sha") or "").strip()
++
++
++def fetch_live(platform_base: str = DEFAULT_PLATFORM_BASE) -> str:
++    url = f"{platform_base.rstrip('/')}/api/public/chat/health"
++    req = urllib.request.Request(url, headers={"Accept": "application/json", "User-Agent": USER_AGENT})
++    try:
++        with urllib.request.urlopen(req, timeout=25) as resp:
++            body = json.loads(resp.read().decode("utf-8"))
++    except (urllib.error.URLError, TimeoutError, json.JSONDecodeError):
++        return ""
++    return str(body.get("git_sha") or "").strip()
++
++
++def resolve(*, prefer_live: bool = False, platform_base: str = DEFAULT_PLATFORM_BASE) -> str:
++    pin = read_pin()
++    live = fetch_live(platform_base) if prefer_live else ""
++    if prefer_live and live:
++        return live
++    if pin:
++        return pin
++    return live
++
++
++def main() -> int:
++    import argparse
++
++    parser = argparse.ArgumentParser()
++    parser.add_argument("--prefer-live", action="store_true", help="Use live platform health over pin file")
++    parser.add_argument("--platform-base", default=DEFAULT_PLATFORM_BASE)
++    parser.add_argument("--json", action="store_true")
++    args = parser.parse_args()
++
++    sha = resolve(prefer_live=args.prefer_live, platform_base=args.platform_base)
++    if not sha:
++        print("FAIL: no platform expected SHA (pin missing and live health unreachable)", file=sys.stderr)
++        return 1
++    if args.json:
++        print(json.dumps({"git_sha": sha, "pin_file": str(PIN_FILE.relative_to(ROOT))}))
++    else:
++        print(sha)
++    return 0
++
++
++if __name__ == "__main__":
++    raise SystemExit(main())
+diff --git a/scripts/sync_nf_probe_expected_sha.sh b/scripts/sync_nf_probe_expected_sha.sh
+new file mode 100755
+index 0000000..d387b5e
+--- /dev/null
++++ b/scripts/sync_nf_probe_expected_sha.sh
+@@ -0,0 +1,90 @@
++#!/usr/bin/env bash
++# Sync nf-probe-cron EXPECTED_GIT_SHA to live platform.noetfield.com git_sha.
++# Prevents drift false-alarms when www/main advances without a platform Railway deploy.
++set -euo pipefail
++
++ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
++WORKER_DIR="$ROOT/infra/nf-probe-cron"
++PIN_FILE="$ROOT/data/nf-platform-deploy-pin-v1.json"
++PLATFORM_BASE="${PLATFORM_BASE:-https://platform.noetfield.com}"
++WRANGLER_TOML="$WORKER_DIR/wrangler.toml"
++
++log() { printf '[sync-nf-probe-expected-sha] %s\n' "$*"; }
++
++fetch_live_platform_sha() {
++  curl -sS "${PLATFORM_BASE%/}/api/public/chat/health" \
++    | python3 -c "import json,sys; print(json.load(sys.stdin).get('git_sha','').strip())"
++}
++
++write_pin_file() {
++  local sha="$1"
++  local now
++  now="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
++  python3 - "$PIN_FILE" "$sha" "$now" "$PLATFORM_BASE" <<'PY'
++import json, sys
++from pathlib import Path
++
++path, sha, pinned_at, platform_base = sys.argv[1:5]
++doc = {
++    "schema": "nf-platform-deploy-pin-v1",
++    "git_sha": sha,
++    "pinned_at": pinned_at,
++    "source": "live_platform_health",
++    "platform_base": platform_base,
++    "note": "Updated when platform Railway deploy succeeds or sync_nf_probe_expected_sha.sh runs. Drift probe compares live /api/public/chat/health git_sha to this pin — not repo main HEAD.",
++}
++Path(path).write_text(json.dumps(doc, indent=2) + "\n", encoding="utf-8")
++PY
++}
++
++update_wrangler_var() {
++  local sha="$1"
++  python3 - "$WRANGLER_TOML" "$sha" <<'PY'
++import re, sys
++from pathlib import Path
++
++path, sha = sys.argv[1], sys.argv[2]
++text = Path(path).read_text(encoding="utf-8")
++line = f'EXPECTED_GIT_SHA = "{sha}"'
++if "EXPECTED_GIT_SHA" in text:
++    text = re.sub(r'^EXPECTED_GIT_SHA\s*=.*$', line, text, count=1, flags=re.M)
++else:
++    text = text.replace("[vars]\n", f"[vars]\n{line}\n", 1)
++Path(path).write_text(text, encoding="utf-8")
++PY
++}
++
++sync_wrangler_secret() {
++  local sha="$1"
++  if [[ -z "${CLOUDFLARE_API_TOKEN:-}${CF_API_TOKEN:-}" ]]; then
++    log "WARN: no Cloudflare token — skip wrangler secret put (run from Mac vault or GHA with CLOUDFLARE_API_TOKEN)"
++    return 0
++  fi
++  log "wrangler secret put EXPECTED_GIT_SHA"
++  cd "$WORKER_DIR"
++  printf '%s' "$sha" | wrangler secret put EXPECTED_GIT_SHA >/dev/null
++}
++
++main() {
++  local live_sha
++  live_sha="$(fetch_live_platform_sha)"
++  if [[ -z "$live_sha" ]]; then
++    log "FAIL: could not read git_sha from ${PLATFORM_BASE}/api/public/chat/health"
++    exit 1
++  fi
++
++  log "live platform git_sha=${live_sha:0:12}"
++  write_pin_file "$live_sha"
++  update_wrangler_var "$live_sha"
++  sync_wrangler_secret "$live_sha"
++
++  if [[ "${NF_PROBE_CRON_DEPLOY:-0}" == "1" ]]; then
++    log "NF_PROBE_CRON_DEPLOY=1 — wrangler deploy"
++    cd "$WORKER_DIR"
++    wrangler deploy
++  fi
++
++  log "PASS — EXPECTED_GIT_SHA synced to ${live_sha:0:12}"
++}
++
++main "$@"
+-- 
+2.43.0
+
