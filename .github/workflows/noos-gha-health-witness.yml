@@ -1,0 +1,46 @@
+# NOOS GHA secondary witness — ICL-D10–D12 billing gate vs real CI + witness early warning.
+name: NOOS GHA health witness
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "10 * * * *"
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: noos-gha-health-witness-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  witness:
+    name: GHA billing and plan health
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      NOOS_GHA_WITNESS: "1"
+      GH_TOKEN: ${{ github.token }}
+      GITHUB_RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: GHA health witness (ICL-D10–D12)
+        run: |
+          set -euo pipefail
+          mkdir -p receipts/proof
+          python3 scripts/noos_gha_health_witness_v1.py --write-receipt --json
+
+      - name: Upload GHA health witness receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: noos-gha-health-witness-v1
+          path: receipts/proof/noos-gha-health-witness-v1.json
+          retention-days: 30
+          if-no-files-found: warn

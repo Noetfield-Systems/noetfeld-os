@@ -142,6 +142,15 @@ integrator-daily:
 witness-phase1-smoke:
 	bash scripts/noos_gha_witness_phase1_smoke_v1.sh
 
+witness-phase2-smoke:
+	bash scripts/noos_gha_witness_phase2_smoke_v1.sh
+
+gha-health-witness:
+	python3 scripts/noos_gha_health_witness_v1.py --write-receipt --json
+
+stack-health-receipt:
+	python3 scripts/noos_stack_automation_health_v1.py --write-receipt --json
+
 witness-daily-dispatch:
 	gh workflow run noos-integrator-daily-witness.yml --repo Noetfield-Systems/noetfeld-os
 

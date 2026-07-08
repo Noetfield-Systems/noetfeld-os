@@ -1,6 +1,6 @@
 {
   "schema": "autorun-workflows-v1",
-  "version": "1.5.0",
+  "version": "1.6.0",
   "read_only": true,
   "one_law": "Observe autorun surfaces only. phase_reconciler_v1 remains sole control authority.",
   "slo_defaults": {
@@ -319,6 +319,28 @@
         "accept_events": ["schedule", "workflow_dispatch"]
       },
       "verify_command": "python3 scripts/verify_noos_motor_sustain_v1.py"
+    },
+    {
+      "id": "noos_gha_health_witness",
+      "title": "GHA billing gate + enterprise plan witness",
+      "plane": "NOETFELD-OS",
+      "probe": {
+        "type": "github_schedule_probe",
+        "github_workflow": "noos-gha-health-witness.yml",
+        "accept_events": ["schedule", "workflow_dispatch"]
+      },
+      "verify_command": "python3 scripts/noos_gha_health_witness_v1.py --json"
+    },
+    {
+      "id": "noos_stack_health_receipt",
+      "title": "Org stack automation health rollup",
+      "plane": "NOETFELD-OS",
+      "probe": {
+        "type": "github_schedule_probe",
+        "github_workflow": "noos-stack-health-receipt.yml",
+        "accept_events": ["schedule", "workflow_dispatch"]
+      },
+      "verify_command": "python3 scripts/noos_stack_automation_health_v1.py --json"
     }
   ]
 }

@@ -91,7 +91,7 @@
       "id": "ICL-P2",
       "title": "Unified control dashboard (1 month)",
       "tier": "T3",
-      "status": "done",
+      "status": "in_progress",
       "steps": [
         {
           "id": "ICL-P2-01",
@@ -138,6 +138,14 @@
           "command": "bash scripts/noos_gha_witness_phase1_smoke_v1.sh",
           "acceptance": "workflow_dispatch smoke green on all 3 witnesses; then schedule enabled",
           "evidence": "receipts/proof/noos-gha-witness-phase1-smoke-v1.json"
+        },
+        {
+          "id": "ICL-P2-07",
+          "title": "GHA Phase-2 stack health dashboard (billing witness + org rollup)",
+          "status": "in_progress",
+          "command": "bash scripts/noos_gha_witness_phase2_smoke_v1.sh",
+          "acceptance": "workflow_dispatch smoke green; noos-gha-health-witness + noos-stack-health-receipt scheduled",
+          "evidence": "receipts/proof/noos-gha-witness-phase2-smoke-v1.json"
         }
       ]
     }
@@ -154,6 +162,9 @@
     "integrator-status": "scripts/noos_integrator_status_v1.py",
     "integrator-daily": "scripts/noos_integrator_daily_checklist_v1.py",
     "witness-phase1-smoke": "scripts/noos_gha_witness_phase1_smoke_v1.sh",
+    "witness-phase2-smoke": "scripts/noos_gha_witness_phase2_smoke_v1.sh",
+    "gha-health-witness": "scripts/noos_gha_health_witness_v1.py",
+    "stack-health-receipt": "scripts/noos_stack_automation_health_v1.py",
     "integrator-tasks-mirror": "scripts/noos_integrator_tasks_mirror_v1.py",
     "upgrade-manifest-publish": "scripts/noos_upgrade_manifest_publish_v1.py",
     "motor-sustain-verify": "scripts/verify_noos_motor_sustain_v1.py",

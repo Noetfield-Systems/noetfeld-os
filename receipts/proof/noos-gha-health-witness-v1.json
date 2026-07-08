@@ -1,0 +1,84 @@
+{
+  "schema": "noos-gha-health-witness-v1",
+  "at": "2026-07-08T00:09:30Z",
+  "ok": true,
+  "overall_status": "green",
+  "closure_token": "NOOS_GHA_HEALTH_WITNESS: green",
+  "billing_gate_max_seconds": 12.0,
+  "checks": {
+    "ICL-D10": {
+      "title": "GHA secondary witness (latest run not billing-gated)",
+      "ok": true,
+      "repos": [
+        {
+          "ok": true,
+          "repo": "TrustField-Technologies",
+          "billing_gate_failures_12s": 0,
+          "latest_is_billing_gate": false,
+          "latest_real_failure": false,
+          "real_failures": [],
+          "latest_conclusion": "success",
+          "latest_duration_s": 41.0,
+          "recent_count": 8
+        },
+        {
+          "ok": true,
+          "repo": "noetfeld-os",
+          "billing_gate_failures_12s": 0,
+          "latest_is_billing_gate": false,
+          "latest_real_failure": false,
+          "real_failures": [
+            "GEL CI: feat(gha): enable Phase-1 witness cron after smo"
+          ],
+          "latest_conclusion": "success",
+          "latest_duration_s": 43.0,
+          "recent_count": 8
+        }
+      ]
+    },
+    "ICL-D11": {
+      "title": "GHA real workflow failures (not billing)",
+      "ok": true,
+      "failures": [
+        "GEL CI: feat(gha): enable Phase-1 witness cron after smo"
+      ]
+    },
+    "ICL-D12": {
+      "title": "GitHub org on Enterprise plan",
+      "ok": true,
+      "plan": {
+        "ok": true,
+        "plan": "team",
+        "enterprise_named": false,
+        "billing_gate_clear": true,
+        "enterprise_slug": "noetfield-systems-inc",
+        "enterprise_url": "https://github.com/enterprises/noetfield-systems-inc",
+        "witness_proxy": true
+      }
+    },
+    "witness_early_warning": {
+      "title": "Witness workflows not dying at billing gate (<12s)",
+      "ok": true,
+      "detail": {
+        "ok": true,
+        "witness_count": 5,
+        "warnings": [
+          {
+            "workflow": "noos-gha-health-witness.yml",
+            "ok": false,
+            "error": "HTTP 404: workflow noos-gha-health-witness.yml not found on the default branch (https://api.github.com/repos/Noetfield-Systems/noetfeld-os/actions/workflows/noos-gha-health-witness.yml)\n"
+          },
+          {
+            "workflow": "noos-stack-health-receipt.yml",
+            "ok": false,
+            "error": "HTTP 404: workflow noos-stack-health-receipt.yml not found on the default branch (https://api.github.com/repos/Noetfield-Systems/noetfeld-os/actions/workflows/noos-stack-health-receipt.yml)\n"
+          }
+        ],
+        "billing_gate_precursors": [],
+        "one_law": "Jobs failing in <12s with no step logs = billing/spending gate \u2014 not CI red"
+      }
+    }
+  },
+  "fix_queue": [],
+  "witness_mode": true
+}

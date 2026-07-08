@@ -27,7 +27,6 @@
     "noos-self-heal": ["gha-noos-self-heal"],
     "noos-researcher": ["gha-noos-researcher"],
     "noos-specialist": ["gha-noos-specialist"],
-    "noos-cross-repo-orchestrator": ["gha-noos-orchestrator"],
     "publish-pypi": ["gha-publish-pypi"],
     "release-noetfield-gate": ["gha-release-noetfield-gate"],
     "noos-agent-vault": ["gha-noos-agent-vault"],
@@ -38,7 +37,9 @@
     "noos-discovery": ["gha-noos-discovery"],
     "noos-integrator-daily-witness": ["gha-secondary-witness"],
     "noos-autorun-witness": ["gha-secondary-witness"],
-    "noos-motor-sustain-witness": ["gha-secondary-witness"]
+    "noos-motor-sustain-witness": ["gha-secondary-witness"],
+    "noos-gha-health-witness": ["gha-secondary-witness"],
+    "noos-stack-health-receipt": ["gha-stack-health-rollup"]
   },
   "surfaces": {
     "T0_machine": "GitHub Actions schedules, repository_dispatch, CF cron, worker-kernel T0",
@@ -348,14 +349,32 @@
       "primary_task_kinds": ["patch_proposal"]
     },
     {
+      "worker_id": "gha-stack-health-rollup",
+      "surface": "github_actions",
+      "tier": "T0_machine",
+      "cadence": "40 */2 * * *",
+      "mission_id": "M3",
+      "territory": "integrator-observe",
+      "write_scope": ["receipts/proof/noos-stack-automation-health-v1.json"],
+      "read_only": true,
+      "mutex_groups": ["integrator-coordination"],
+      "primary_task_kinds": ["stack_automation_health_rollup"],
+      "gha_workflow": "noos-stack-health-receipt.yml",
+      "replaces": "gha-noos-orchestrator",
+      "note": "Org rollup — integrator-status + autorun + GHA health; replaces cross-repo orchestrator stub"
+    },
+    {
       "worker_id": "gha-noos-orchestrator",
       "surface": "github_actions",
       "tier": "T0_machine",
-      "cadence": "0 */3 * * *",
+      "cadence": "retired",
       "mission_id": "M2",
       "territory": "cross-repo-health",
       "write_scope": [],
       "read_only": true,
+      "retired": true,
+      "retired_at": "2026-07-08",
+      "replaced_by": "gha-stack-health-rollup",
       "mutex_groups": ["self-heal-pipeline"],
       "pipeline_stage": 5,
       "primary_task_kinds": ["orchestrate"]
