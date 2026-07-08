@@ -12,6 +12,16 @@ on:
         description: Patch directory under repo root
         required: false
         default: receipts/proof/noetfield-semantic-drift-closeout
+  push:
+    branches: [main]
+    paths:
+      - receipts/proof/noetfield-semantic-drift-closeout/**
+      - scripts/noetfield_open_pr_from_patch_v1.sh
+      - .github/workflows/noetfield-open-pr-v1.yml
+
+concurrency:
+  group: noetfield-open-pr-v1
+  cancel-in-progress: false
 
 permissions:
   contents: read
@@ -21,6 +31,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
+      - name: Resolve patch dir and branch
+        id: cfg
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "patch_dir=${{ github.workspace }}/${{ inputs.patch_dir }}" >> "$GITHUB_OUTPUT"
+            echo "branch=${{ inputs.branch }}" >> "$GITHUB_OUTPUT"
+          else
+            echo "patch_dir=${{ github.workspace }}/receipts/proof/noetfield-semantic-drift-closeout" >> "$GITHUB_OUTPUT"
+            echo "branch=cursor/nf-semantic-drift-closeout-72f6" >> "$GITHUB_OUTPUT"
+          fi
 
       - uses: actions/setup-node@v4
         with:
@@ -32,8 +53,8 @@ jobs:
       - name: Push branch + open PR on Noetfield
         env:
           NOETFIELD_GITHUB_TOKEN: ${{ secrets.NOETFIELD_GITHUB_TOKEN || secrets.GITHUB_TOKEN }}
-          PATCH_DIR: ${{ github.workspace }}/${{ inputs.patch_dir }}
-          BRANCH: ${{ inputs.branch }}
+          PATCH_DIR: ${{ steps.cfg.outputs.patch_dir }}
+          BRANCH: ${{ steps.cfg.outputs.branch }}
         run: |
           chmod +x scripts/noetfield_open_pr_from_patch_v1.sh
           bash scripts/noetfield_open_pr_from_patch_v1.sh

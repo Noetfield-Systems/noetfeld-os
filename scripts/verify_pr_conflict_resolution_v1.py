@@ -20,7 +20,7 @@ LOCK_DOC = ROOT / "docs/_NOOS_AGENT/[NOOS-AGENT-20260708-001]_PR_CONFLICT_RESOLV
 CURSOR_RULE = ROOT / ".cursor/rules/noos-pr-conflict-resolver-mandatory.mdc"
 HOOK = ROOT / ".cursor/hooks/noos-pr-conflict-guard.py"
 
-CONFLICT_MARKERS = ("<<<<<<<", ">>>>>>>")
+CONFLICT_LINE_PREFIXES = ("<<<<<<< ", ">>>>>>> ", "||||||| ")
 
 
 def sha_prefix(path: Path) -> str:
@@ -59,8 +59,10 @@ def files_with_conflict_markers() -> list[str]:
             text = path.read_text(encoding="utf-8", errors="replace")
         except OSError:
             continue
-        if any(m in text for m in CONFLICT_MARKERS):
-            hits.append(rel)
+        for line in text.splitlines():
+            if line.startswith(CONFLICT_LINE_PREFIXES):
+                hits.append(rel)
+                break
     return hits
 
 
