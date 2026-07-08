@@ -284,6 +284,12 @@
       "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260707-008]_INTEGRATOR_DAILY_CHECKLIST_v1.md",
       "doc_type": "INTEGRATOR_DAILY_CHECKLIST",
       "title": "Integrator daily mandatory checklist v1 — live probes only"
+    },
+    {
+      "trace_id": "NOOS-AGENT-20260708-001",
+      "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260708-001]_PR_CONFLICT_RESOLVER_MANDATORY_v1_LOCKED.md",
+      "doc_type": "LOCKED_LAW",
+      "title": "PR Conflict Resolver — MANDATORY v1 (LOCKED)"
     }
   ]
 }

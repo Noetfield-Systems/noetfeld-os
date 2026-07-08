@@ -34,9 +34,15 @@ COPILOT_MARKERS = [
     "noos-parallel-agent-registry-v1.json",
     "noos_integrator_sync_v1.py",
     "noos_agent_conflict_check_v1.py",
+    "pr-conflict-resolver",
+    "verify_pr_conflict_resolution_v1.py",
     "L-P5",
     "L-P7",
 ]
+
+PR_CONFLICT_LOCK = ROOT / "data/noos-pr-conflict-skill-lock-v1.json"
+PR_CONFLICT_SKILL = ROOT / ".cursor/skills/pr-conflict-resolver/SKILL.md"
+PR_CONFLICT_RULE = ROOT / ".cursor/rules/noos-pr-conflict-resolver-mandatory.mdc"
 
 
 def utc_now() -> str:
@@ -166,6 +172,17 @@ def check_copilot_cli_mac(registry: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def check_pr_conflict_skill() -> dict[str, Any]:
+    import verify_pr_conflict_resolution_v1 as vpr
+
+    row = vpr.verify(require_sg=False, mac_desktop=False)
+    return {
+        "ok": bool(row.get("ok")),
+        "issues": row.get("issues") or [],
+        "report_line": row.get("report_line"),
+    }
+
+
 def check_machine_loops() -> dict[str, Any]:
     required = [
         ROOT / "data/noos-machine-loops-config-v1.json",
@@ -200,6 +217,7 @@ def run_verify(*, write_receipt: bool = False) -> dict[str, Any]:
     t2_row = check_cursor_local_mac(registry)
     copilot_cli_row = check_copilot_cli_mac(registry)
     machine_loops_row = check_machine_loops()
+    pr_conflict_row = check_pr_conflict_skill()
 
     checks = {
         "trigger_sweep": sweep_row.get("ok"),
@@ -211,6 +229,7 @@ def run_verify(*, write_receipt: bool = False) -> dict[str, Any]:
         "cursor_local_mac": t2_row.get("ok"),
         "copilot_cli_mac": copilot_cli_row.get("ok"),
         "machine_loops": machine_loops_row.get("ok"),
+        "pr_conflict_skill": pr_conflict_row.get("ok"),
     }
     ok = all(bool(v) for v in checks.values())
 
@@ -236,6 +255,7 @@ def run_verify(*, write_receipt: bool = False) -> dict[str, Any]:
         "cursor_local_mac": t2_row,
         "copilot_cli_mac": copilot_cli_row,
         "machine_loops": machine_loops_row,
+        "pr_conflict_skill": pr_conflict_row,
         "coordination": registry.get("coordination"),
         "report_line": (
             "living_system_governance_clean · GHA+Copilot+integrator+automations aligned"
