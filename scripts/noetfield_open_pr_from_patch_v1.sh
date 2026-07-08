@@ -32,7 +32,16 @@ log "applying ${#patches[@]} patch(es) from $PATCH_DIR"
 git am "${patches[@]}"
 
 if ! git push -u origin "$BRANCH" --force-with-lease 2>&1; then
-  die "push denied — set NOETFIELD_GITHUB_TOKEN org secret with push to Noetfield-Systems/Noetfield"
+  log "WARN: direct push denied — publishing mirror branch on noetfeld-os"
+  MIRROR_BRANCH="noetfield-mirror/${BRANCH}"
+  NOOS_REMOTE="https://x-access-token:${TOKEN}@github.com/Noetfield-Systems/noetfeld-os.git"
+  if git push "$NOOS_REMOTE" "HEAD:refs/heads/${MIRROR_BRANCH}" 2>&1; then
+    log "mirror pushed: noetfeld-os@${MIRROR_BRANCH}"
+    log "FAIL: set NOETFIELD_GITHUB_TOKEN org PAT with push to ${TARGET_REPO} — see Noetfield issue #98"
+  else
+    die "push denied — set NOETFIELD_GITHUB_TOKEN org secret with push to Noetfield-Systems/Noetfield"
+  fi
+  exit 1
 fi
 
 PR_URL="$(gh pr create \
