@@ -184,13 +184,13 @@ chat_telemetry_settings = PublicChatTelemetrySettings(
 
 
 def deploy_git_sha() -> str | None:
+    for key in ("GIT_SHA", "RAILWAY_GIT_COMMIT_SHA", "VERCEL_GIT_COMMIT_SHA"):
+        value = (os.environ.get(key) or "").strip()
+        if value:
+            return value
     stamp = Path(__file__).resolve().parents[3] / ".deploy_git_sha"
     if stamp.is_file():
         value = stamp.read_text(encoding="utf-8").strip()
-        if value:
-            return value
-    for key in ("GIT_SHA", "RAILWAY_GIT_COMMIT_SHA", "VERCEL_GIT_COMMIT_SHA"):
-        value = (os.environ.get(key) or "").strip()
         if value:
             return value
     return None

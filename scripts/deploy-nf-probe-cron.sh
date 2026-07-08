@@ -25,7 +25,10 @@ sync_secret() {
 
 GIT_SHA="$(git -C "$ROOT" rev-parse HEAD 2>/dev/null || true)"
 LIVE_PLATFORM_SHA="$(curl -sS "${PLATFORM_BASE:-https://platform.noetfield.com}/api/public/chat/health" 2>/dev/null | python3 -c "import json,sys; print(json.load(sys.stdin).get('git_sha',''))" 2>/dev/null || true)"
-EXPECTED_SHA="${LIVE_PLATFORM_SHA:-$GIT_SHA}"
+EXPECTED_SHA="${GIT_SHA:-$LIVE_PLATFORM_SHA}"
+if [[ -n "$GIT_SHA" && -n "$LIVE_PLATFORM_SHA" && "$LIVE_PLATFORM_SHA" != "$GIT_SHA" && "${LIVE_PLATFORM_SHA:0:12}" != "${GIT_SHA:0:12}" ]]; then
+  log "WARN: platform git_sha=${LIVE_PLATFORM_SHA:0:12} lags repo HEAD=${GIT_SHA:0:12} — drift probe will FAIL until platform deploy catches up"
+fi
 
 # shellcheck source=scripts/load_noetfield_vault_env.sh
 source "${ROOT}/scripts/load_noetfield_vault_env.sh"

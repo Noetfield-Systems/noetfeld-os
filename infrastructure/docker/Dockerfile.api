@@ -21,7 +21,7 @@ COPY infrastructure/docker/platform-entrypoint.sh /entrypoint.sh
 RUN pip install --no-cache-dir --upgrade pip \
   && pip install --no-cache-dir -e . \
   && chmod +x /entrypoint.sh \
-  && printf '%s\n' "${RAILWAY_GIT_COMMIT_SHA:-}" > /app/.deploy_git_sha
+  && printf '%s\n' "${RAILWAY_GIT_COMMIT_SHA:-${GIT_SHA}}" > /app/.deploy_git_sha
 
 ENV PYTHONPATH=/app/packages/types:/app/packages/config:/app/services/events:/app/services/ledger:/app/services/graph:/app/services/governance:/app/services/signals:/app/services/workflow:/app/services/ai-runtime:/app/services/inspectors:/app/services/identity:/app/services/copilot-governance
 
