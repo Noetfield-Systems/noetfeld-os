@@ -1,6 +1,7 @@
 {
   "schema": "noos-nf-voyage-semantic-drift-handoff-v1",
-  "generated_at": "2026-07-08T03:08:00Z",
+  "generated_at": "2026-07-08T03:30:00Z",
+  "status": "pending_noetfield_pr",
   "source_pattern": "SourceA/scripts/voyage_ai_live_wire_v1.py + pre_llm/vector_retrieval/embedding_provider.py",
   "vault_key": "VOYAGE_API_KEY",
   "vault_paths": [
@@ -8,15 +9,36 @@
     "~/.noetfield-platform-secrets/noetfield.env",
     "~/.sourcea-secrets/noetfield.env"
   ],
-  "noetfield_branch": "cursor/nf-probe-drift-align-72f6",
-  "commits": ["5838515", "8338907"],
-  "patches": "receipts/proof/noetfield-voyage-drift-patches/",
+  "noetfield_branch": "cursor/nf-semantic-drift-closeout-72f6",
+  "patch_file": "receipts/proof/noetfield-semantic-drift-closeout/0001-feat-L8-semantic-drift-anchors-hybrid-chatbot-retrie.patch",
+  "patch_dir": "receipts/proof/noetfield-semantic-drift-closeout",
   "commands": {
-    "live_wire": "make nf-voyage-live-wire",
+    "live_wire": "make nf-voyage-ai-wire",
     "semantic_drift": "make nf-semantic-drift",
     "voyage_integrity": "make nf-voyage-integrity"
   },
+  "commands_note": "nf-semantic-drift exists only after patch is applied. nf-voyage-live-wire is wrong — use nf-voyage-ai-wire.",
   "anti_fake_green": "If VOYAGE_API_KEY in vault but provider mode=hash_local → FAIL (INCIDENT-036 class)",
   "semantic_anchors": "data/chatbot/semantic_anchors_v1.json",
-  "apply_on_mac": "cd Noetfield && git am ../noetfeld-os/receipts/proof/noetfield-voyage-drift-patches/*.patch"
+  "apply_on_mac": {
+    "noetfeld_os": "cd ~/Projects/noetfeld-os && git pull origin main",
+    "noetfield": "cd ~/Projects/Noetfield && git fetch origin && git checkout main && git pull origin main",
+    "branch": "git checkout -B cursor/nf-semantic-drift-closeout-72f6 origin/main",
+    "patch": "git am ~/Projects/noetfeld-os/receipts/proof/noetfield-semantic-drift-closeout/0001-feat-L8-semantic-drift-anchors-hybrid-chatbot-retrie.patch",
+    "push": "git push -u origin cursor/nf-semantic-drift-closeout-72f6",
+    "verify": "make nf-voyage-ai-wire && make nf-semantic-drift && make nf-voyage-integrity"
+  },
+  "gha_automation": {
+    "workflow": ".github/workflows/noetfield-open-pr-v1.yml",
+    "script": "scripts/noetfield_open_pr_from_patch_v1.sh",
+    "secret": "NOETFIELD_GITHUB_TOKEN",
+    "default_branch": "cursor/nf-semantic-drift-closeout-72f6",
+    "default_patch_dir": "receipts/proof/noetfield-semantic-drift-closeout"
+  },
+  "superseded": {
+    "patch_dir": "receipts/proof/noetfield-voyage-drift-patches/",
+    "reason": "Two-patch bundle conflicts with Noetfield main (f71e1f2 voyage wire + ae9bb11 probe loop).",
+    "use_instead": "receipts/proof/noetfield-semantic-drift-closeout/0001-*.patch"
+  },
+  "cloud_agent_blocker": "cursor[bot] lacks push access to Noetfield-Systems/Noetfield (403)"
 }

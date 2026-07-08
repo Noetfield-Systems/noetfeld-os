@@ -1,29 +1,30 @@
 {
   "schema": "noos-nf-probe-drift-fix-handoff-v1",
-  "generated_at": "2026-07-08T02:00:00Z",
+  "generated_at": "2026-07-08T03:30:00Z",
+  "status": "merged_on_noetfield_main",
   "problem": {
     "pipeline": "probe_cron:drift",
     "reason": "platform_git_sha_drift",
-    "live_platform_git_sha": "e0bb318c9ef8ea76051646683b337330f47ad673",
-    "expected_git_sha_wrong": "d8bb0e16194ef65acb8d356acbf143d539ff3145",
-    "repo_main_head": "d8bb0e16194ef65acb8d356acbf143d539ff3145",
-    "note": "EXPECTED_GIT_SHA CF worker secret tracked repo HEAD after www-only commits; platform Railway still on e0bb318."
+    "note": "EXPECTED_GIT_SHA CF worker secret tracked repo HEAD while platform Railway lagged after www-only commits."
   },
-  "root_cause": "infra/nf-probe-cron EXPECTED_GIT_SHA secret set to git HEAD instead of live platform.noetfield.com git_sha",
-  "pin_location": "Noetfield/data/nf-platform-deploy-pin-v1.json",
-  "probe_logic": "Noetfield/infra/nf-probe-cron/src/probes.js probeDrift() reads env.EXPECTED_GIT_SHA",
+  "noetfield_main_fix": {
+    "commit": "ae9bb11",
+    "script": "scripts/sync-probe-expected-sha.sh",
+    "deploy_hooks": [
+      "scripts/deploy-platform-railway.sh",
+      "scripts/redeploy-platform-api.sh"
+    ]
+  },
   "immediate_unblock": {
-    "command": "LIVE=$(curl -sS https://platform.noetfield.com/api/public/chat/health | python3 -c \"import json,sys; print(json.load(sys.stdin)['git_sha'])\"); cd infra/nf-probe-cron && printf '%s' \"$LIVE\" | wrangler secret put EXPECTED_GIT_SHA && wrangler deploy",
     "repo": "Noetfield-Systems/Noetfield",
-    "requires": "Cloudflare wrangler auth (Mac vault or CLOUDFLARE_API_TOKEN)"
+    "requires": "Cloudflare wrangler auth (Mac vault or CLOUDFLARE_API_TOKEN)",
+    "command": "LIVE=$(curl -sS https://platform.noetfield.com/api/public/chat/health | python3 -c \"import json,sys; print(json.load(sys.stdin)['git_sha'])\"); cd ~/Projects/Noetfield && bash scripts/sync-probe-expected-sha.sh \"$LIVE\" && cd infra/nf-probe-cron && wrangler deploy"
   },
-  "durable_fix": {
-    "branch": "cursor/nf-probe-drift-align-72f6",
-    "commit": "5838515",
-    "workspace_path": "/workspace/Noetfield",
-    "patches": "receipts/proof/noetfield-probe-drift-fix-patches/",
-    "apply": "cd Noetfield && git checkout -b cursor/nf-probe-drift-align-72f6 && git am /path/to/noetfeld-os/receipts/proof/noetfield-probe-drift-fix-patches/*.patch && git push -u origin cursor/nf-probe-drift-align-72f6",
-    "post_merge": "Actions → NF probe sync expected SHA → Run workflow (or bash scripts/sync_nf_probe_expected_sha.sh on Mac)"
+  "post_deploy": "bash scripts/sync-probe-expected-sha.sh \"$(git rev-parse HEAD)\" after platform Railway deploy",
+  "superseded": {
+    "patch_dir": "receipts/proof/noetfield-probe-drift-fix-patches/",
+    "reason": "Conflicts with Noetfield main (ae9bb11). Do not apply.",
+    "use_instead": "Pull Noetfield main; run scripts/sync-probe-expected-sha.sh"
   },
   "cloud_agent_blocker": "cursor[bot] lacks push access to Noetfield-Systems/Noetfield (403)"
 }
