@@ -536,7 +536,12 @@ def probe_github_schedule(wf: dict[str, Any]) -> dict[str, Any]:
     accept_events = set(probe.get("accept_events") or ["schedule", "repository_dispatch", "workflow_dispatch"])
     sched = github_latest_run(workflow_file, event="schedule")
     any_run = github_latest_run(workflow_file)
-    latest = (sched.get("latest") or any_run.get("latest")) if sched.get("ok") or any_run.get("ok") else None
+    candidates: list[dict[str, Any]] = []
+    for hit in (any_run, sched):
+        latest = (hit or {}).get("latest")
+        if hit and hit.get("ok") and latest and latest.get("event") in accept_events:
+            candidates.append(latest)
+    latest = max(candidates, key=lambda row: str(row.get("created_at") or "")) if candidates else None
     if not latest:
         return blocked(
             "no_github_runs",

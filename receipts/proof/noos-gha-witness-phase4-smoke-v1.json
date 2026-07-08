@@ -1,0 +1,32 @@
+{
+  "schema": "noos-gha-witness-phase4-smoke-v1",
+  "at": "2026-07-08T00:39:36Z",
+  "ok": true,
+  "closure_token": "NOOS_GHA_WITNESS_PHASE4: green",
+  "lane": "ICL-P2-09",
+  "command": "bash scripts/noos_gha_witness_phase4_smoke_v1.sh",
+  "runs": [
+    {
+      "workflow": "noos-machine-audit-witness.yml",
+      "run_id": 28908839663,
+      "result": "success"
+    },
+    {
+      "workflow": "noos-liveness-registry-witness.yml",
+      "run_id": 28908843136,
+      "result": "success"
+    },
+    {
+      "workflow": "noos-sandbox-url-sweep-witness.yml",
+      "run_id": 28908846608,
+      "result": "success"
+    }
+  ],
+  "schedules_enabled_utc": {
+    "noos-machine-audit-witness.yml": "0 6 * * 1",
+    "noos-liveness-registry-witness.yml": "35 */6 * * *",
+    "noos-sandbox-url-sweep-witness.yml": "45 */12 * * *"
+  },
+  "one_law": "Sustain/audit observe only — no /tick, no product edits",
+  "commit": "769b193"
+}

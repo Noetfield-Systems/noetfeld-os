@@ -1,6 +1,6 @@
 {
   "schema": "autorun-workflows-v1",
-  "version": "1.8.0",
+  "version": "1.8.1",
   "read_only": true,
   "one_law": "Observe autorun surfaces only. phase_reconciler_v1 remains sole control authority.",
   "slo_defaults": {
@@ -291,6 +291,7 @@
       "id": "noos_gha_integrator_daily_witness",
       "title": "GHA integrator daily witness",
       "plane": "NOETFELD-OS",
+      "slo": {"freshness_target_minutes": 540, "latency_target_minutes": 540},
       "probe": {
         "type": "github_schedule_probe",
         "github_workflow": "noos-integrator-daily-witness.yml",
@@ -302,6 +303,7 @@
       "id": "noos_gha_autorun_witness",
       "title": "GHA autorun registry witness",
       "plane": "NOETFELD-OS",
+      "slo": {"freshness_target_minutes": 90, "latency_target_minutes": 90},
       "probe": {
         "type": "github_schedule_probe",
         "github_workflow": "noos-autorun-witness.yml",
@@ -313,6 +315,7 @@
       "id": "noos_gha_motor_sustain_witness",
       "title": "GHA motor sustain witness",
       "plane": "NOETFELD-OS",
+      "slo": {"freshness_target_minutes": 130, "latency_target_minutes": 130},
       "probe": {
         "type": "github_schedule_probe",
         "github_workflow": "noos-motor-sustain-witness.yml",
@@ -324,6 +327,7 @@
       "id": "noos_gha_health_witness",
       "title": "GHA billing gate + enterprise plan witness",
       "plane": "NOETFELD-OS",
+      "slo": {"freshness_target_minutes": 70, "latency_target_minutes": 70},
       "probe": {
         "type": "github_schedule_probe",
         "github_workflow": "noos-gha-health-witness.yml",
@@ -335,6 +339,7 @@
       "id": "noos_stack_health_receipt",
       "title": "Org stack automation health rollup",
       "plane": "NOETFELD-OS",
+      "slo": {"freshness_target_minutes": 130, "latency_target_minutes": 130},
       "probe": {
         "type": "github_schedule_probe",
         "github_workflow": "noos-stack-health-receipt.yml",
@@ -346,6 +351,7 @@
       "id": "noos_trustfield_observe_witness",
       "title": "GHA TrustField ecosystem observe witness",
       "plane": "TrustField-Technologies",
+      "slo": {"freshness_target_minutes": 250, "latency_target_minutes": 250},
       "probe": {
         "type": "github_schedule_probe",
         "github_workflow": "noos-trustfield-observe-witness.yml",
@@ -357,6 +363,7 @@
       "id": "noos_sourcea_spine_witness",
       "title": "GHA SourceA portfolio-spine witness",
       "plane": "SourceA",
+      "slo": {"freshness_target_minutes": 130, "latency_target_minutes": 130},
       "probe": {
         "type": "github_schedule_probe",
         "github_workflow": "noos-sourcea-spine-witness.yml",
@@ -368,6 +375,7 @@
       "id": "noos_machine_audit_witness",
       "title": "GHA weekly machine loops outside audit witness",
       "plane": "NOETFELD-OS",
+      "slo": {"freshness_target_minutes": 10140, "latency_target_minutes": 10140},
       "probe": {
         "type": "github_schedule_probe",
         "github_workflow": "noos-machine-audit-witness.yml",
@@ -379,6 +387,7 @@
       "id": "noos_liveness_registry_witness",
       "title": "GHA loop liveness registry witness (no tick)",
       "plane": "NOETFELD-OS",
+      "slo": {"freshness_target_minutes": 380, "latency_target_minutes": 380},
       "probe": {
         "type": "github_schedule_probe",
         "github_workflow": "noos-liveness-registry-witness.yml",
@@ -390,6 +399,7 @@
       "id": "noos_sandbox_url_sweep_witness",
       "title": "GHA sandbox URL + trigger sweep witness",
       "plane": "NOETFELD-OS",
+      "slo": {"freshness_target_minutes": 750, "latency_target_minutes": 750},
       "probe": {
         "type": "github_schedule_probe",
         "github_workflow": "noos-sandbox-url-sweep-witness.yml",

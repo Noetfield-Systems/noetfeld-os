@@ -2,17 +2,19 @@
   "schema": "noos-integrator-control-plan-v1",
   "version": "1.0.0",
   "authority": "NOOS-AGENT-20260707-007",
-  "updated_at": "2026-07-07",
+  "updated_at": "2026-07-08",
   "one_law": "NOOS observes and coordinates; SourceA phase_reconciler_v1 remains sole control authority for portfolio queue.",
   "current_audit": {
-    "at": "2026-07-07T14:48:50Z",
+    "at": "2026-07-08T00:45:00Z",
     "machine_audit_chain_ok": true,
     "integrator_mirror_clean": true,
     "cf_motor": "COMPLETE",
     "schedule_canary": "COMPLETE",
     "vault": "~/.noetfield-platform-secrets/ (noos-local + noetfield)",
     "gha_secrets_synced": true,
-    "railway_loop_runner_env": "synced"
+    "railway_loop_runner_env": "synced",
+    "phase4_witness_smoke": "green",
+    "icl_p2_complete": true
   },
   "phases": [
     {
@@ -158,7 +160,7 @@
         {
           "id": "ICL-P2-09",
           "title": "GHA Phase-4 sustain/audit witnesses (machine audit + liveness + sandbox URL)",
-          "status": "ready",
+          "status": "done",
           "command": "bash scripts/noos_gha_witness_phase4_smoke_v1.sh",
           "acceptance": "workflow_dispatch smoke green; weekly machine audit + liveness registry + sandbox URL sweep scheduled",
           "evidence": "receipts/proof/noos-gha-witness-phase4-smoke-v1.json"
