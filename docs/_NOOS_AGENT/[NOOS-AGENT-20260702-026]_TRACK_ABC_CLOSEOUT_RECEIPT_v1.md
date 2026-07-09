@@ -6,7 +6,7 @@ agent_id: noetfeld-os-cursor-chat
 agent_lane: NOETFELD-OS
 trace_id: NOOS-AGENT-20260702-026
 doc_type: CLOSEOUT_RECEIPT
-workspace_root: /Users/sinakazemnezhad/Projects/noetfeld-os
+workspace_root: /Users/sinakazemnezhad/Desktop/Noetfield-Systems/noetfeld-OS
 classification: INTERNAL — Tracks A/B/C v2 exit evidence
 authority: NOOS-AGENT-20260702-025, UPGRADE_MANIFEST.json
 -->

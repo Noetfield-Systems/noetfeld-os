@@ -6,7 +6,7 @@ agent_id: noetfeld-os-cursor-chat
 agent_lane: NOETFELD-OS
 trace_id: NOOS-AGENT-20260615-008
 doc_type: WEB_IA
-workspace_root: /Users/sinakazemnezhad/Projects/noetfeld-os
+workspace_root: /Users/sinakazemnezhad/Desktop/Noetfield-Systems/noetfeld-OS
 classification: INTERNAL — draft for ASF / web lane
 related_docs: NOOS-AGENT-20260529-002, NOOS-AGENT-20260615-006
 -->

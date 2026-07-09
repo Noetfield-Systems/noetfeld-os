@@ -6,7 +6,7 @@ agent_id: noetfeld-os-cursor-chat
 agent_lane: NOETFELD-OS
 trace_id: NOOS-AGENT-20260703-005
 doc_type: FOUNDER_CANON_INTERFACE
-workspace_root: /Users/sinakazemnezhad/Projects/noetfeld-os
+workspace_root: /Users/sinakazemnezhad/Desktop/Noetfield-Systems/noetfeld-OS
 classification: INTERNAL — process law interface (NOOS binding)
 related_registry: data/founder-trigger-ledger-v1.json
 -->

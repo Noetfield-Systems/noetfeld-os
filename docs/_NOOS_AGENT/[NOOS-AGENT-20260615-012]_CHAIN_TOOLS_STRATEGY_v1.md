@@ -6,7 +6,7 @@ agent_id: noetfeld-os-cursor-chat
 agent_lane: NOETFELD-OS
 trace_id: NOOS-AGENT-20260615-012
 doc_type: CHAIN_TOOLS_STRATEGY
-workspace_root: /Users/sinakazemnezhad/Projects/noetfeld-os
+workspace_root: /Users/sinakazemnezhad/Desktop/Noetfield-Systems/noetfeld-OS
 classification: INTERNAL
 related_docs: NOOS-AGENT-20260615-010, NOOS-AGENT-20260529-002
 -->
@@ -46,7 +46,7 @@ SourceA `sourcea-boot` (pip) remains **SourceA Worker scope** — do not merge i
 ## SW1 / Buyer 1 motion
 
 ```bash
-pip install -e ~/Projects/noetfeld-os
+pip install -e ~/Desktop/Noetfield-Systems/noetfeld-OS
 python3 run.py &   # :8001
 export NOETFIELD_API_KEY=$(python3 scripts/mint_api_key.py --print-key 2>/dev/null || echo $KEY)
 noetfield gate

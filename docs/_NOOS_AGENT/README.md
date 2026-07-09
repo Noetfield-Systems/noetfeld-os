@@ -6,11 +6,11 @@ agent_id: noetfeld-os-cursor-chat
 agent_lane: NOETFELD-OS
 trace_id: NOOS-AGENT-VAULT-README
 doc_type: AGENT_VAULT_INDEX
-workspace_root: /Users/sinakazemnezhad/Projects/noetfeld-os
+workspace_root: /Users/sinakazemnezhad/Desktop/Noetfield-Systems/noetfeld-OS
 -->
 
 **Owner:** This Cursor chat agent only (`noetfeld-os-cursor-chat`)  
-**Repo:** `Projects/noetfeld-os`  
+**Repo:** `Desktop/Noetfield-Systems/noetfeld-OS`  
 **Search token:** `NOOS-AGENT-DOC`
 
 ---
@@ -37,7 +37,7 @@ agent_id: noetfeld-os-cursor-chat
 agent_lane: NOETFELD-OS
 trace_id: NOOS-AGENT-YYYYMMDD-NNN
 doc_type: INTERNAL_AGENT_REFERENCE | PRODUCT_NOTE | RUNBOOK
-workspace_root: /Users/sinakazemnezhad/Projects/noetfeld-os
+workspace_root: /Users/sinakazemnezhad/Desktop/Noetfield-Systems/noetfeld-OS
 classification: INTERNAL
 related_code: policy_loader.py, decision_engine.py
 -->

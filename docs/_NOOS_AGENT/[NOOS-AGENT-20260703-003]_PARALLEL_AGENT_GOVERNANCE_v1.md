@@ -6,7 +6,7 @@ agent_id: noetfeld-os-cursor-chat
 agent_lane: NOETFELD-OS
 trace_id: NOOS-AGENT-20260703-003
 doc_type: PARALLEL_AGENT_GOVERNANCE
-workspace_root: /Users/sinakazemnezhad/Projects/noetfeld-os
+workspace_root: /Users/sinakazemnezhad/Desktop/Noetfield-Systems/noetfeld-OS
 classification: INTERNAL — living-system parallel worker law
 related_registry: data/noos-parallel-agent-registry-v1.json
 -->

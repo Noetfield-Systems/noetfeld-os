@@ -4,7 +4,7 @@ agent_id: noetfeld-os-cursor-chat
 agent_lane: NOETFELD-OS
 trace_id: NOOS-AGENT-20260629-022
 doc_type: SYSTEM_FIX_AND_UPGRADE_100_PLAN
-workspace_root: /Users/sinakazemnezhad/Projects/noetfeld-os
+workspace_root: /Users/sinakazemnezhad/Desktop/Noetfield-Systems/noetfeld-OS
 classification: INTERNAL - system repair and upgrade register
 authority: PRODUCT_TRUTH.md, NOOS-AGENT-20260629-021, NOOS live sync gate, SourceA nerve receipts
 -->

@@ -16,7 +16,7 @@ A NOOS Copilot GitHub session treated a non-canonical clone/worktree as the cont
 
 ## Non-canonical (do not use as authority)
 
-- `/Users/sinakazemnezhad/Projects/noetfeld-os` (feature/WIP branches)
+- `/Users/sinakazemnezhad/Desktop/Noetfield-Systems/noetfeld-OS` (feature/WIP branches)
 - External Copilot workspace clones
 
 ## Impact

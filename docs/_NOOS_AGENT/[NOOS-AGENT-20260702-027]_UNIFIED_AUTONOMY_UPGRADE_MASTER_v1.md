@@ -6,7 +6,7 @@ agent_id: noetfeld-os-cursor-chat
 agent_lane: NOETFELD-OS
 trace_id: NOOS-AGENT-20260702-027
 doc_type: UNIFIED_UPGRADE_MASTER
-workspace_root: /Users/sinakazemnezhad/Projects/noetfeld-os
+workspace_root: /Users/sinakazemnezhad/Desktop/Noetfield-Systems/noetfeld-OS
 classification: INTERNAL — combined tiered upgrade backlog
 authority: governed-autorun L1-L12, UPGRADE_MANIFEST.json, NOOS-AGENT-20260702-025
 related_docs: NOOS-AGENT-20260702-025, NOOS-AGENT-20260702-026, NOOS-AGENT-20260702-024, NOOS-AGENT-20260615-014

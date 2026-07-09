@@ -6,7 +6,7 @@ agent_id: noetfeld-os-cursor-chat
 agent_lane: NOETFELD-OS
 trace_id: NOOS-AGENT-20260702-028
 doc_type: UPGRADE_PLANES_10x10
-workspace_root: /Users/sinakazemnezhad/Projects/noetfeld-os
+workspace_root: /Users/sinakazemnezhad/Desktop/Noetfield-Systems/noetfeld-OS
 classification: INTERNAL — 10 parallel upgrade planes × 10 steps
 authority: NOOS-AGENT-20260702-027, governed-autorun L1-L13
 related_docs: NOOS-AGENT-20260702-025, NOOS-AGENT-20260702-027, NOOS-AGENT-20260615-014

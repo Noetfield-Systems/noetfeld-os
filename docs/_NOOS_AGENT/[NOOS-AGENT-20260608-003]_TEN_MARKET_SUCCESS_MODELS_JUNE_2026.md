@@ -6,7 +6,7 @@ agent_id: noetfeld-os-cursor-chat
 agent_lane: NOETFELD-OS
 trace_id: NOOS-AGENT-20260608-003
 doc_type: MARKET_RESEARCH
-workspace_root: /Users/sinakazemnezhad/Projects/noetfeld-os
+workspace_root: /Users/sinakazemnezhad/Desktop/Noetfield-Systems/noetfeld-OS
 classification: INTERNAL — market examples, not competitive battle plan
 parent_brand: Noetfield Systems Inc.
 purpose: Learn from real 2026 success models adjacent to Noetfield OS / GEL

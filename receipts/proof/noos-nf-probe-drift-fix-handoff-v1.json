@@ -18,7 +18,7 @@
   "immediate_unblock": {
     "repo": "Noetfield-Systems/Noetfield",
     "requires": "Cloudflare wrangler auth (Mac vault or CLOUDFLARE_API_TOKEN)",
-    "command": "LIVE=$(curl -sS https://platform.noetfield.com/api/public/chat/health | python3 -c \"import json,sys; print(json.load(sys.stdin)['git_sha'])\"); cd ~/Projects/Noetfield && bash scripts/sync-probe-expected-sha.sh \"$LIVE\" && cd infra/nf-probe-cron && wrangler deploy"
+    "command": "LIVE=$(curl -sS https://platform.noetfield.com/api/public/chat/health | python3 -c \"import json,sys; print(json.load(sys.stdin)['git_sha'])\"); cd ~/Desktop/Noetfield-Systems/Noetfield && bash scripts/sync-probe-expected-sha.sh \"$LIVE\" && cd infra/nf-probe-cron && wrangler deploy"
   },
   "post_deploy": "bash scripts/sync-probe-expected-sha.sh \"$(git rev-parse HEAD)\" after platform Railway deploy",
   "superseded": {

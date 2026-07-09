@@ -4,14 +4,14 @@ agent_id: noetfeld-os-cursor-chat
 agent_lane: NOETFELD-OS
 trace_id: NOOS-AGENT-20260629-021
 doc_type: DIRTY_STATE_DECISION_AUDIT_PLAN
-workspace_root: /Users/sinakazemnezhad/Projects/noetfeld-os
+workspace_root: /Users/sinakazemnezhad/Desktop/Noetfield-Systems/noetfeld-OS
 classification: INTERNAL - dirty state audit and future decision register
 -->
 
 # Dirty State Decision Audit Plan - v1
 
 **Created:** 2026-06-29  
-**Scope:** `/Users/sinakazemnezhad/Projects/noetfeld-os` dirty tree after live-sync and factory-loop work  
+**Scope:** `/Users/sinakazemnezhad/Desktop/Noetfield-Systems/noetfeld-OS` dirty tree after live-sync and factory-loop work  
 **Purpose:** classify every dirty file into obvious action, generated/defer, or founder decision before commit/deploy.
 
 ---

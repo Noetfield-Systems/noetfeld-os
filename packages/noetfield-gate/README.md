@@ -17,7 +17,7 @@ Bundled default policies ship in the wheel. Receipts land in `~/.noetfield/gate-
 ## Install (dev / full runtime)
 
 ```bash
-cd ~/Projects/noetfeld-os
+cd ~/Desktop/Noetfield-Systems/noetfeld-OS
 pip install -e ".[dev]"
 ```
 

@@ -26,7 +26,7 @@ Classification: NOOS_ACTIVE_CONTROL_PANEL_REPO ✓
 
 ### Feature Branch WIP (Confirmed Non-Canonical)
 ```
-Path:          /Users/sinakazemnezhad/Projects/noetfeld-os/
+Path:          /Users/sinakazemnezhad/Desktop/Noetfield-Systems/noetfeld-OS/
 Type:          Real folder (git repo)
 Branch:        cursor/cheap-worker-kernel-v1 (feature, NOT main)
 Status:        Diverged feature branch (development WIP)
@@ -120,7 +120,7 @@ NOOS coordination layer is **READY** to dispatch when above gates pass.
 ### Control-Panel Readiness
 ```
 ✓ Canonical path verified (Desktop/Noetfield-Systems/noetfeld-OS)
-✓ Feature branch isolated (/Projects/noetfeld-os → WIP only)
+✓ Feature branch isolated (/Desktop/Noetfield-Systems/noetfeld-OS → WIP only)
 ✓ Archive workspace confirmed (/Desktop/Noetfield/ → non-NOOS)
 ✓ SourceA lane metadata synced (brain receipt found)
 ✓ SourceA SG_PREFLIGHT_VERIFIED status recorded in this receipt
@@ -155,7 +155,7 @@ NOOS coordination layer is **READY** to dispatch when above gates pass.
 ## Validation Checklist
 
 - [x] NOOS preflight confirmed (canonical repo, main branch, in sync)
-- [x] Feature branch isolated (/Projects/noetfeld-os) — not control panel
+- [x] Feature branch isolated (/Desktop/Noetfield-Systems/noetfeld-OS) — not control panel
 - [x] Archive workspace confirmed (/Desktop/Noetfield) — not NOOS
 - [x] SourceA lane metadata ingested (brain receipt verified)
 - [x] NOOS control-panel state updated (mission stack, revenue-start gate)
