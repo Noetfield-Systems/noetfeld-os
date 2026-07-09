@@ -1,7 +1,7 @@
-# L0 Repo Graph Report — sina-governance-ssot
+# L0 Repo Graph Report — noetfeld-OS
 
-Generated (last indexed): `2026-07-09T07:05:07Z`
-Total files: 962 · Total size: 23.4MB · Edges detected: 1337
+Generated (last indexed): `2026-07-09T08:11:17Z` · template `v1.1.0`
+Total files: 965 · Total size: 23.4MB · Edges detected: 1339
 
 **Read this file first.** Do not spawn broad repo-reading agents ("understand the repo", "map subsystem X", "audit Y") until you have read this report and, if you need more detail, queried the index with `python3 scripts/query_repo_graph_v1.py <subsystem-or-keyword>`. This report + a query response should answer routing questions ("which files touch X", "how big is subsystem Y") without opening every file in the subsystem.
 
@@ -11,10 +11,10 @@ Total files: 962 · Total size: 23.4MB · Edges detected: 1337
 |---|---:|---:|---|
 | docs/ | 95 | 19.3MB | `docs/run_patches/noetfield_run_patch_pack_10100_v1.jsonl`, `docs/run_patches/execution/noetfield_run_patch_execution_receipts_v1.jsonl`, `docs/ops/ECOSYSTEM_CONTROLLED_EXECUTION_1000_PLAN_DRAFT_v1.md`, `docs/_NOOS_AGENT/[NOOS-AGENT-20260608-004]_ROADMAP_1000_STEPS_10_PHASES.md`, `docs/run_patches/noetfield_run_patch_manifest_10100_v1.json`, `docs/ops/NOETFIELD_OS_CONTROL_SCOPE_DISCOVERY_REPORT_v1_20260629-1813.md` |
 | videos/ | 12 | 1.5MB | `videos/noetfeld-governance-motion/snapshots/frame-02-at-5.0s.png`, `videos/noetfeld-governance-motion/snapshots/frame-01-at-2.5s.png`, `videos/noetfeld-governance-motion/snapshots/frame-03-at-7.5s.png`, `videos/noetfeld-governance-motion/snapshots/frame-04-at-10.0s.png`, `videos/noetfeld-governance-motion/snapshots/frame-00-at-0.0s.png`, `videos/noetfeld-governance-motion/snapshots/contact-sheet.jpg` |
-| receipts/ | 455 | 1.0MB | `receipts/proof/noos-cf-railway-dispatch-verify-v1.json`, `receipts/proof/noos-machine-loops-upgrade-closeout-v1.json`, `receipts/proof/noos-loop-verify-all-v1.json`, `receipts/proof/noetfield-voyage-drift-patches/0002-feat-L8-Voyage-AI-semantic-drift-SourceA-pattern-for.patch`, `receipts/proof/noos-trustfield-observe-witness-v1.json`, `receipts/proof/noos-loop-baseline-audit-v1.json` |
-| scripts/ | 155 | 799.7KB | `scripts/autorun_status_v1.py`, `scripts/noos_integrator_sync_v1.py`, `scripts/noos_machine_loops_v1.py`, `scripts/noos_loop_runner_v1.py`, `scripts/noos_integrator_daily_checklist_v1.py`, `scripts/open_noos_verified_window_v1.py` |
+| receipts/ | 458 | 1.0MB | `receipts/proof/noos-cf-railway-dispatch-verify-v1.json`, `receipts/proof/noos-machine-loops-upgrade-closeout-v1.json`, `receipts/proof/noos-loop-verify-all-v1.json`, `receipts/proof/noetfield-voyage-drift-patches/0002-feat-L8-Voyage-AI-semantic-drift-SourceA-pattern-for.patch`, `receipts/proof/noos-trustfield-observe-witness-v1.json`, `receipts/proof/noos-loop-baseline-audit-v1.json` |
+| scripts/ | 155 | 800.1KB | `scripts/autorun_status_v1.py`, `scripts/noos_integrator_sync_v1.py`, `scripts/noos_machine_loops_v1.py`, `scripts/noos_loop_runner_v1.py`, `scripts/noos_integrator_daily_checklist_v1.py`, `scripts/open_noos_verified_window_v1.py` |
 | data/ | 39 | 238.5KB | `data/noos-upgrade-planes-v1.json`, `data/noos-parallel-agent-registry-v1.json`, `data/noos-unified-upgrade-backlog-v1.json`, `data/noos-trigger-host-inventory-v1.json`, `data/trigger-registry-v1.json`, `data/autorun-workflows-v1.json` |
-| noetfield-org/ | 20 | 130.5KB | `noetfield-org/receipts/NOOS_MODEL_OUTCOME_VERIFICATION_RECEIPT_2026-07-05.md`, `noetfield-org/MODEL_OUTCOME_VERIFICATION_LEDGER.md`, `noetfield-org/receipts/NOOS_SERVICE_LANE_REGISTRATION_2026-07-05.md`, `noetfield-org/receipts/NOOS_SERVICE_LANE_TICK_2026-07-05.md`, `noetfield-org/SYNC_RECEIPTS.md`, `noetfield-org/NOOS_CONTROL_PANEL_AUTHORITY_REPORT_2026-07-04.md` |
+| noetfield-org/ | 20 | 130.7KB | `noetfield-org/receipts/NOOS_MODEL_OUTCOME_VERIFICATION_RECEIPT_2026-07-05.md`, `noetfield-org/MODEL_OUTCOME_VERIFICATION_LEDGER.md`, `noetfield-org/receipts/NOOS_SERVICE_LANE_REGISTRATION_2026-07-05.md`, `noetfield-org/receipts/NOOS_SERVICE_LANE_TICK_2026-07-05.md`, `noetfield-org/NOOS_CONTROL_PANEL_AUTHORITY_REPORT_2026-07-04.md`, `noetfield-org/SYNC_RECEIPTS.md` |
 | tests/ | 38 | 91.3KB | `tests/test_noos_worker_kernel_v1.py`, `tests/test_autorun_status_v1.py`, `tests/test_phase2_decision.py`, `tests/test_cursor_local_mac_t2_v1.py`, `tests/test_cloud_inbox_worker_v1.py`, `tests/test_noos_integrator_sync_v1.py` |
 | .github/ | 41 | 76.6KB | `.github/workflows/noos-factory-autorun.yml`, `.github/copilot-instructions.md`, `.github/workflows/noos-specialist.yml`, `.github/workflows/noos-self-heal.yml`, `.github/workflows/noos-cross-repo-orchestrator.yml`, `.github/workflows/noos-researcher.yml` |
 | public_site/ | 15 | 37.1KB | `public_site/static/site.css`, `public_site/routes.py`, `public_site/content/trust-ledger/index.md`, `public_site/templates/base.html`, `public_site/content/gate/partners/index.md`, `public_site/static/cookies.js` |
@@ -32,7 +32,7 @@ Total files: 962 · Total size: 23.4MB · Edges detected: 1337
 
 ## Dependency / reference edges
 
-1337 static repo-relative path references were detected across .py/.sh/.md/.json/.yaml/.yml/.jsonc files (best-effort regex scan, not a real import graph — this is a governance/docs-heavy repo, not a single-language codebase). Full edge list is in `graph_index_v1.json`; query by file or subsystem with the query script rather than reading it directly.
+1339 static repo-relative path references were detected across .py/.sh/.md/.json/.yaml/.yml/.jsonc files (best-effort regex scan, not a real import graph). Full edge list is in `graph_index_v1.json`; query by file or subsystem with the query script rather than reading it directly.
 
 ## Ignored directories
 
@@ -50,4 +50,4 @@ python3 scripts/query_repo_graph_v1.py <subsystem-name|keyword|path-fragment>
 python3 scripts/build_repo_graph_v1.py
 ```
 
-Rebuild whenever the file layout changes materially (new subsystem, large doc/data additions) — this report drifts from truth otherwise. See `docs/L0_REPO_GRAPH_MEMORY_v1.md` for the token budget rule and the broad-read prevention rule.
+Rebuild whenever the file layout changes materially (new subsystem, large doc/data additions). See `docs/L0_REPO_GRAPH_MEMORY_v1.md` for the token budget rule and the broad-read prevention rule.
