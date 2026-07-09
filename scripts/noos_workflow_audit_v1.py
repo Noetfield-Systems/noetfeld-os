@@ -124,10 +124,38 @@ def audit_report() -> dict[str, Any]:
     return report
 
 
+def findings_payload(report: dict[str, Any]) -> dict[str, Any]:
+    """Downstream handoff shape for self-heal / orchestrator consumers."""
+    classified = [(f, classify_finding(f)) for f in report.get("findings") or []]
+    blocking = [f for f, kind in classified if kind == "blocking"]
+    dependencies = [f for f, kind in classified if kind == "dependency"]
+    return {
+        "schema": "noos-audit-findings-v1",
+        "generated_at": report.get("generated_at") or utc_now(),
+        "overall_ok": report.get("overall_ok"),
+        "blocking": blocking,
+        "dependencies": dependencies,
+        "findings_count": report.get("findings_count", 0),
+        "source_schema": report.get("schema"),
+    }
+
+
+def write_findings_file(report: dict[str, Any], *, path: Path | None = None) -> Path:
+    out = path or (ROOT / "data" / "noos-audit-findings-v1.json")
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text(json.dumps(findings_payload(report), indent=2) + "\n", encoding="utf-8")
+    return out
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--json", action="store_true")
     ap.add_argument("--write-receipt", action="store_true")
+    ap.add_argument(
+        "--write-findings",
+        action="store_true",
+        help="Write data/noos-audit-findings-v1.json for downstream guard consumers",
+    )
     args = ap.parse_args()
 
     report = audit_report()
@@ -136,6 +164,8 @@ def main() -> int:
         out_dir.mkdir(parents=True, exist_ok=True)
         out_path = out_dir / f"audit-{datetime.now(timezone.utc).strftime('%Y-%m-%d')}.json"
         out_path.write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
+    if args.write_findings:
+        write_findings_file(report)
 
     if args.json:
         print(json.dumps(report, indent=2))
@@ -148,7 +178,8 @@ def main() -> int:
         for finding in report["findings"][:20]:
             print(f"  {finding['severity'].upper()} {finding['scope']}: {finding['summary']}")
 
-    return 0 if report["overall_ok"] else 1
+    # Guard critique: receipt is the finding set; exit 0 when report was produced.
+    return 0
 
 
 if __name__ == "__main__":

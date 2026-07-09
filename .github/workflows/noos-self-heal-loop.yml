@@ -2,8 +2,8 @@ name: NOOS loop — self-heal
 
 on:
   schedule:
-    # Halved frequency per budget rules: audit 30m, heal 1h, researcher 2h, specialist 4h, orchestrator 6h
-    - cron: "0 */1 * * *" # self-heal hourly (was every 10 minutes; reduced for budget)
+    # Schedule home: data/noos-24-7-loops-v1.json interval_minutes (10). CF/Railway fleet motor is primary.
+    - cron: "*/10 * * * *"
     - cron: "0 0 * * 0" # weekly maintenance placeholder
   repository_dispatch:
     types: [noos_self_heal_loop_tick]

@@ -4,7 +4,7 @@
   "agent_lane": "NOETFELD-OS",
   "workspace_root": "/Users/sinakazemnezhad/Projects/noetfeld-os",
   "search_token": "NOOS-AGENT-DOC",
-  "updated_at": "2026-07-03",
+  "updated_at": "2026-07-04",
   "part8_sync_at": "2026-06-15",
   "canonical_ssot_source": "/Users/sinakazemnezhad/Desktop/Noetfield/Noetfield-All-Documents/",
   "sync_script": "scripts/sync-noos-ssot.sh",
@@ -248,6 +248,12 @@
       "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260703-007]_TOOL_BROKER_v1.md",
       "doc_type": "TOOL_BROKER",
       "title": "Tool broker v1 — allowlist execution wall"
+    },
+    {
+      "trace_id": "NOOS-AGENT-20260703-008",
+      "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260703-008]_STUDIO_IDE_OWNER_v1.md",
+      "doc_type": "STUDIO_IDE_OWNER",
+      "title": "Studio IDE Owner v1 — local-first cheap-worker Agentic IDE charter"
     }
   ]
 }

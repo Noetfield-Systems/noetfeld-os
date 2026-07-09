@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import sys
 from pathlib import Path
 
@@ -39,3 +40,22 @@ def test_audit_report_flags_findings(monkeypatch, tmp_path: Path) -> None:
 
     assert report["overall_ok"] is False
     assert report["findings_count"] == 3
+
+
+def test_write_findings_file_shape(monkeypatch, tmp_path: Path) -> None:
+    monkeypatch.setattr(audit, "ROOT", tmp_path)
+    report = {
+        "schema": "noos-workflow-audit-v1",
+        "generated_at": "2026-07-06T10:00:00Z",
+        "overall_ok": False,
+        "findings_count": 2,
+        "findings": [
+            {"scope": "a.yml", "severity": "high", "summary": "Workflow step masks failures with continue-on-error", "detail": "x"},
+            {"scope": "b.yml", "severity": "medium", "summary": "Workflow SLO miss", "detail": "freshness_missing"},
+        ],
+    }
+    out = audit.write_findings_file(report, path=tmp_path / "data" / "noos-audit-findings-v1.json")
+    payload = json.loads(out.read_text(encoding="utf-8"))
+    assert payload["schema"] == "noos-audit-findings-v1"
+    assert len(payload["blocking"]) == 1
+    assert len(payload["dependencies"]) == 1

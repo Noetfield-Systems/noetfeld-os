@@ -1,0 +1,151 @@
+{
+  "schema": "noos-audit-findings-v1",
+  "generated_at": "2026-07-06T10:08:58Z",
+  "overall_ok": false,
+  "blocking": [
+    {
+      "scope": ".github/workflows/noos-researcher.yml",
+      "severity": "high",
+      "line": 75,
+      "summary": "Workflow step masks failures with continue-on-error",
+      "detail": "continue-on-error: true"
+    },
+    {
+      "scope": ".github/workflows/noos-researcher.yml",
+      "severity": "high",
+      "line": 127,
+      "summary": "Workflow step masks failures with continue-on-error",
+      "detail": "continue-on-error: true"
+    },
+    {
+      "scope": ".github/workflows/noos-self-heal.yml",
+      "severity": "high",
+      "line": 65,
+      "summary": "Workflow step masks failures with continue-on-error",
+      "detail": "continue-on-error: true"
+    },
+    {
+      "scope": ".github/workflows/noos-self-heal.yml",
+      "severity": "high",
+      "line": 107,
+      "summary": "Workflow step masks failures with continue-on-error",
+      "detail": "continue-on-error: true"
+    },
+    {
+      "scope": ".github/workflows/noos-self-heal.yml",
+      "severity": "high",
+      "line": 130,
+      "summary": "Workflow step masks failures with continue-on-error",
+      "detail": "continue-on-error: true"
+    },
+    {
+      "scope": ".github/workflows/noos-specialist.yml",
+      "severity": "high",
+      "line": 58,
+      "summary": "Workflow step masks failures with continue-on-error",
+      "detail": "continue-on-error: true"
+    },
+    {
+      "scope": ".github/workflows/noos-specialist.yml",
+      "severity": "high",
+      "line": 121,
+      "summary": "Workflow step masks failures with continue-on-error",
+      "detail": "continue-on-error: true"
+    },
+    {
+      "scope": ".github/workflows/noos-specialist.yml",
+      "severity": "high",
+      "line": 127,
+      "summary": "Workflow step masks failures with continue-on-error",
+      "detail": "continue-on-error: true"
+    },
+    {
+      "scope": "noos_schedule_canary",
+      "severity": "high",
+      "summary": "Workflow is not healthy: FAILED_WITH_RECEIPT",
+      "detail": ""
+    },
+    {
+      "scope": "trigger_registry",
+      "severity": "high",
+      "summary": "Drift mismatch on trigger_sweep",
+      "detail": "committed=data/trigger-registry-v1.json deployed=trigger_drift \u00b7 dead=1 unregistered=1"
+    },
+    {
+      "scope": "noos-runtime-loop.yml",
+      "severity": "high",
+      "summary": "Loop SLO miss",
+      "detail": "freshness_miss, success_rate_miss, latency_miss"
+    },
+    {
+      "scope": "noos-chain-loop.yml",
+      "severity": "high",
+      "summary": "Loop SLO miss",
+      "detail": "freshness_miss, success_rate_miss, latency_miss"
+    },
+    {
+      "scope": "noos-agent-nerve-loop.yml",
+      "severity": "high",
+      "summary": "Loop SLO miss",
+      "detail": "freshness_miss, success_rate_miss, latency_miss"
+    },
+    {
+      "scope": "noos-workflow-audit.yml",
+      "severity": "high",
+      "summary": "Loop SLO miss",
+      "detail": "success_rate_miss"
+    }
+  ],
+  "dependencies": [
+    {
+      "scope": "sourcea_buyer_proof_verify",
+      "severity": "high",
+      "summary": "Workflow is not healthy: BLOCKED_WITH_REASON",
+      "detail": "no_supabase_receipt"
+    },
+    {
+      "scope": "sourcea_recipe_queue_builder",
+      "severity": "high",
+      "summary": "Workflow is not healthy: BLOCKED_WITH_REASON",
+      "detail": "no_supabase_receipt"
+    },
+    {
+      "scope": "noos_loop_runtime",
+      "severity": "high",
+      "summary": "Workflow is not healthy: BLOCKED_WITH_REASON",
+      "detail": "stale_supabase_row"
+    },
+    {
+      "scope": "noos_loop_surface",
+      "severity": "high",
+      "summary": "Workflow is not healthy: BLOCKED_WITH_REASON",
+      "detail": "stale_supabase_row"
+    },
+    {
+      "scope": "noos_loop_chain",
+      "severity": "high",
+      "summary": "Workflow is not healthy: BLOCKED_WITH_REASON",
+      "detail": "stale_supabase_row"
+    },
+    {
+      "scope": "noos_loop_self_heal",
+      "severity": "high",
+      "summary": "Workflow is not healthy: BLOCKED_WITH_REASON",
+      "detail": "stale_supabase_row"
+    },
+    {
+      "scope": "noos_loop_agent_nerve",
+      "severity": "high",
+      "summary": "Workflow is not healthy: BLOCKED_WITH_REASON",
+      "detail": "stale_supabase_row"
+    },
+    {
+      "scope": "noos_loop_sourcea_observe",
+      "severity": "high",
+      "summary": "Workflow is not healthy: BLOCKED_WITH_REASON",
+      "detail": "stale_supabase_row"
+    }
+  ],
+  "findings_count": 22,
+  "source_schema": "noos-workflow-audit-v1"
+}

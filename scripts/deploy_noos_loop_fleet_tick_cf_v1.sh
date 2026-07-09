@@ -22,6 +22,12 @@ if [[ -z "$GITHUB_TOKEN_VAL" ]]; then
   exit 1
 fi
 
+echo "== L12 schedule gate (registry home) =="
+python3 "$ROOT/scripts/verify_noos_loop_schedule_registry_v1.py" --skip-missing || {
+  echo "FAIL: loop schedule drift — fix data/noos-24-7-loops-v1.json vs .github/workflows before deploy" >&2
+  exit 1
+}
+
 cd "$WORKER_DIR"
 printf '%s' "$GITHUB_TOKEN_VAL" | wrangler secret put GITHUB_TOKEN
 printf '%s' "$REPO" | wrangler secret put GITHUB_REPO

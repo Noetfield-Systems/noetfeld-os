@@ -2,7 +2,7 @@
 
 **Org:** Noetfield-Systems  
 **Registry Version:** 1.0  
-**Last Updated:** 2026-07-03T00:00:00Z  
+**Last Updated:** 2026-07-04T06:10:00Z  
 **Status:** Active (Post-Migration)
 
 ## Core Execution Repos
@@ -64,11 +64,16 @@
 - **Slug:** `Noetfield-Systems/noetfield-studio-ide`
 - **URL:** https://github.com/Noetfield-Systems/noetfield-studio-ide.git
 - **Branch:** main
-- **Purpose:** Local development IDE · gate receipt editor · visual export
-- **Agent Role:** T2 builder · local heavy compute · IDE tooling
-- **Must-Sync-With:** SourceA, noetfeld-OS
-- **Workflows:** export-png-svg
-- **Owner:** Noetfield-Systems
+- **Canonical local path:** `~/Desktop/Noetfield/noetfield-studio-ide/` (product truth — not in `noetfeld-os`)
+- **Founder mirror remote:** `https://github.com/kazemnezhadsina144-dot/noetfield-studio-ide.git` (storage only)
+- **Drift-risk duplicate:** `~/Desktop/Noetfield-Systems/noetfield-studio-ide/` — do not delete until reconciliation confirms no unique work
+- **Purpose:** Local-first Agentic IDE · cheap-worker runtime · model-agnostic agent workbench
+- **Agent Role:** **Studio IDE Owner v1** (T2) · local heavy compute · product implementation
+- **NOOS role:** Observe/govern boundary, kernel handoff, live sync (`NOOS_LIVE_SYNC_SCOPE=studio`) — does not host Studio code
+- **GitHub doctrine:** Mirror/storage only — not worker runtime
+- **Must-Sync-With:** noetfeld-OS (boundary + sync), SourceA (registry authority)
+- **Workflows:** export-png-svg · boundary:check · vitest · playwright (local)
+- **Owner:** Noetfield-Systems · charter `NOOS-AGENT-20260703-008`
 
 ## Platform Infrastructure
 
