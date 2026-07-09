@@ -6,7 +6,7 @@ agent_id: noetfeld-os-cursor-chat
 agent_lane: NOETFELD-OS
 trace_id: NOOS-AGENT-20260615-006
 doc_type: EXECUTION_PLAN
-workspace_root: /Users/sinakazemnezhad/Projects/noetfeld-os
+workspace_root: /Users/sinakazemnezhad/Desktop/Noetfield-Systems/noetfeld-OS
 classification: INTERNAL — canonical Q3 2026 execution plan
 related_docs: NOOS-AGENT-20260529-002, NOOS-AGENT-20260608-004, NOOS-AGENT-20260608-005
 -->

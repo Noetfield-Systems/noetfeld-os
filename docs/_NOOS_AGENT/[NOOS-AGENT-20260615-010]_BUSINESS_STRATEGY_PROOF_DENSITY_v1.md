@@ -6,7 +6,7 @@ agent_id: noetfeld-os-cursor-chat
 agent_lane: NOETFELD-OS
 trace_id: NOOS-AGENT-20260615-010
 doc_type: BUSINESS_STRATEGY
-workspace_root: /Users/sinakazemnezhad/Projects/noetfeld-os
+workspace_root: /Users/sinakazemnezhad/Desktop/Noetfield-Systems/noetfeld-OS
 classification: INTERNAL — commercial motion for Noetfield GEL lane
 authority: SOURCEA_UNIFIED_PORTFOLIO_COMMERCIAL_SSOT_LOCKED_v3.1.md (wins on conflict)
 sources_merged: Desktop/2 PAGER/SOURCEA_NOETFIELD_STRATEGY_PACK_2026-06-15_v1.md

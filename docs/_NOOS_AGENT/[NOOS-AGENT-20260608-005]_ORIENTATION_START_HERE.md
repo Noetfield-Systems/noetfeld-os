@@ -6,7 +6,7 @@ agent_id: noetfeld-os-cursor-chat
 agent_lane: NOETFELD-OS
 trace_id: NOOS-AGENT-20260608-005
 doc_type: ORIENTATION
-workspace_root: /Users/sinakazemnezhad/Projects/noetfeld-os
+workspace_root: /Users/sinakazemnezhad/Desktop/Noetfield-Systems/noetfeld-OS
 classification: INTERNAL — read first in every new session
 -->
 
@@ -18,7 +18,7 @@ classification: INTERNAL — read first in every new session
 
 | | |
 |---|---|
-| **Repo** | `/Users/sinakazemnezhad/Projects/noetfeld-os` |
+| **Repo** | `/Users/sinakazemnezhad/Desktop/Noetfield-Systems/noetfeld-OS` |
 | **Product** | **Noetfield OS** — Governance Execution Layer (GEL) |
 | **Parent brand** | [Noetfield Systems Inc.](https://noetfield.com) — pre-execution governance |
 | **Agent** | `noetfeld-os-cursor-chat` (this Cursor chat lane) |
@@ -72,7 +72,7 @@ noetfeld-os/
 **Run locally:**
 
 ```bash
-cd ~/Projects/noetfeld-os
+cd ~/Desktop/Noetfield-Systems/noetfeld-OS
 python3 scripts/mint_api_key.py
 .venv/bin/uvicorn run:app --reload --port 8001
 # Docs: http://localhost:8001/docs

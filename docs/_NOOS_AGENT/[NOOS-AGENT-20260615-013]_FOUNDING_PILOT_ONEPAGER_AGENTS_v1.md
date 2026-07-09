@@ -6,7 +6,7 @@ agent_id: noetfeld-os-cursor-chat
 agent_lane: NOETFELD-OS
 trace_id: NOOS-AGENT-20260615-013
 doc_type: BUYER_ONEPAGER
-workspace_root: /Users/sinakazemnezhad/Projects/noetfeld-os
+workspace_root: /Users/sinakazemnezhad/Desktop/Noetfield-Systems/noetfeld-OS
 classification: EXTERNAL — SW1 / platform-engineering outreach attach
 sources_merged: Desktop/2 PAGER/NOETFIELD_FOUNDING_CUSTOMER_PILOT_ONEPAGER_2026-06-15_v1.md
 related_docs: NOOS-AGENT-20260615-010, NOOS-AGENT-20260615-011

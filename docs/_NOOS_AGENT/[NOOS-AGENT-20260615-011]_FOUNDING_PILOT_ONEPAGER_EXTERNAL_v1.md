@@ -6,7 +6,7 @@ agent_id: noetfeld-os-cursor-chat
 agent_lane: NOETFELD-OS
 trace_id: NOOS-AGENT-20260615-011
 doc_type: BUYER_ONEPAGER
-workspace_root: /Users/sinakazemnezhad/Projects/noetfeld-os
+workspace_root: /Users/sinakazemnezhad/Desktop/Noetfield-Systems/noetfeld-OS
 sources_merged: Desktop/1 PAGER + Desktop/2 PAGER (NW1 Copilot attach)
 related_docs: NOOS-AGENT-20260615-010, NOOS-AGENT-20260615-013
 classification: EXTERNAL — buyer attach (NW1 outreach)

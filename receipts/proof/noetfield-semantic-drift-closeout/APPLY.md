@@ -4,20 +4,20 @@
 
 ## Prerequisites
 
-- Noetfield clone: `~/Projects/Noetfield`
-- noetfeld-os clone: `~/Projects/noetfeld-os` (this patch lives here)
+- Noetfield clone: `~/Desktop/Noetfield-Systems/Noetfield`
+- noetfeld-os clone: `~/Desktop/Noetfield-Systems/noetfeld-OS` (this patch lives here)
 - `VOYAGE_API_KEY` in Mac vault (for verify steps)
 
 ## Apply (zsh-safe — no globs)
 
 ```bash
-cd ~/Projects/noetfeld-os && git pull origin main
+cd ~/Desktop/Noetfield-Systems/noetfeld-OS && git pull origin main
 
-cd ~/Projects/Noetfield
+cd ~/Desktop/Noetfield-Systems/Noetfield
 git fetch origin && git checkout main && git pull origin main
 git checkout -B cursor/nf-semantic-drift-closeout-72f6 origin/main
 
-git am ~/Projects/noetfeld-os/receipts/proof/noetfield-semantic-drift-closeout/0001-feat-L8-semantic-drift-anchors-hybrid-chatbot-retrie.patch
+git am ~/Desktop/Noetfield-Systems/noetfeld-OS/receipts/proof/noetfield-semantic-drift-closeout/0001-feat-L8-semantic-drift-anchors-hybrid-chatbot-retrie.patch
 
 git push -u origin cursor/nf-semantic-drift-closeout-72f6
 ```

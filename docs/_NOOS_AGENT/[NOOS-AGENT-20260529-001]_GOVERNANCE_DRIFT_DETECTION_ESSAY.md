@@ -6,7 +6,7 @@ agent_id: noetfeld-os-cursor-chat
 agent_lane: NOETFELD-OS
 trace_id: NOOS-AGENT-20260529-001
 doc_type: INTERNAL_AGENT_REFERENCE
-workspace_root: /Users/sinakazemnezhad/Projects/noetfeld-os
+workspace_root: /Users/sinakazemnezhad/Desktop/Noetfield-Systems/noetfeld-OS
 classification: INTERNAL — owned by noetfeld-os Cursor chat agent only
 search_token: NOOS-AGENT-DOC
 related_code: policy_loader.py, decision_engine.py, database.py, base_policy.json

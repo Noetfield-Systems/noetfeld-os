@@ -13,7 +13,7 @@ governing_ssot: Level 0, D4, D5
 
 control_id: `SUMMARY-001`
 asset_or_role: NOOS control boundary
-current_location: `/Users/sinakazemnezhad/Projects/noetfeld-os`
+current_location: `/Users/sinakazemnezhad/Desktop/Noetfield-Systems/noetfeld-OS`
 control_level: OWNER
 governing_ssot: Level 0 / D4 / D5
 allowed_actions: Maintain GEL/runtime code, gates, logs, TLE/audit exports, repo-local control docs, repo policy, manifests, and guard scripts. Observe and route cross-repo state when explicitly authorized.
@@ -296,7 +296,7 @@ next_minimal_action: D4/D5 queue should surface only gated facts to Sina.
 
 control_id: `ROLE-002`
 asset_or_role: NOOS control layer
-current_location: `/Users/sinakazemnezhad/Projects/noetfeld-os`
+current_location: `/Users/sinakazemnezhad/Desktop/Noetfield-Systems/noetfeld-OS`
 control_level: OWNER
 governing_ssot: D4 / D5
 allowed_actions: CHECK / ANALYZE / CRITIQUE / SPEC / route / maintain control assets / build NOOS runtime when authorized.

@@ -6,7 +6,7 @@ agent_id: noetfeld-os-cursor-chat
 agent_lane: NOETFELD-OS
 trace_id: NOOS-AGENT-20260529-002
 doc_type: PRODUCT_POSITIONING
-workspace_root: /Users/sinakazemnezhad/Projects/noetfeld-os
+workspace_root: /Users/sinakazemnezhad/Desktop/Noetfield-Systems/noetfeld-OS
 classification: INTERNAL — canonical positioning for this sub-product
 parent_brand: Noetfield Systems Inc. (noetfield.com)
 product_codename: NOETFELD OS / Governance Execution Layer (GEL)

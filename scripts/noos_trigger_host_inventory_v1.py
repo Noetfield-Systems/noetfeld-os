@@ -27,7 +27,7 @@ SINA_PATH_PATTERNS = (
     r"~/.sina/",
     r'"/Users/sinakazemnezhad',
     r"~/Desktop/SourceA",
-    r"~/Projects/noetfeld-os",
+    r"~/Desktop/Noetfield-Systems/noetfeld-OS",
 )
 
 

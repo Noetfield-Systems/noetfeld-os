@@ -6,7 +6,7 @@ agent_id: noetfeld-os-cursor-chat
 agent_lane: NOETFELD-OS
 trace_id: NOOS-AGENT-20260703-001
 doc_type: INTEGRATOR_PROTOCOL
-workspace_root: /Users/sinakazemnezhad/Projects/noetfeld-os
+workspace_root: /Users/sinakazemnezhad/Desktop/Noetfield-Systems/noetfeld-OS
 classification: INTERNAL — local cross-IDE coordination protocol
 related_code: scripts/noos_integrator_sync_v1.py, scripts/integrator_runtime_paths_v1.py, data/noos-integrator-role-v1.json
 -->

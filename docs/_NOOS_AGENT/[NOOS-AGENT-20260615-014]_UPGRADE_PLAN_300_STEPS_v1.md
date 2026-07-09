@@ -6,7 +6,7 @@ agent_id: noetfeld-os-cursor-chat
 agent_lane: NOETFELD-OS
 trace_id: NOOS-AGENT-20260615-014
 doc_type: UPGRADE_PLAN_300
-workspace_root: /Users/sinakazemnezhad/Projects/noetfeld-os
+workspace_root: /Users/sinakazemnezhad/Desktop/Noetfield-Systems/noetfeld-OS
 classification: INTERNAL — sprint-grade upgrade track
 authority: NOETFIELD_OS_SSOT_v1_LOCKED.md, NOOS-AGENT-20260608-004 (master roadmap)
 related_docs: NOOS-AGENT-20260615-006, NOOS-AGENT-20260615-010, NOOS-AGENT-20260615-012, PRODUCT_TRUTH.md

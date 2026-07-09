@@ -21,10 +21,10 @@
   "anti_fake_green": "If VOYAGE_API_KEY in vault but provider mode=hash_local → FAIL (INCIDENT-036 class)",
   "semantic_anchors": "data/chatbot/semantic_anchors_v1.json",
   "apply_on_mac": {
-    "noetfeld_os": "cd ~/Projects/noetfeld-os && git pull origin main",
-    "noetfield": "cd ~/Projects/Noetfield && git fetch origin && git checkout main && git pull origin main",
+    "noetfeld_os": "cd ~/Desktop/Noetfield-Systems/noetfeld-OS && git pull origin main",
+    "noetfield": "cd ~/Desktop/Noetfield-Systems/Noetfield && git fetch origin && git checkout main && git pull origin main",
     "branch": "git checkout -B cursor/nf-semantic-drift-closeout-72f6 origin/main",
-    "patch": "git am ~/Projects/noetfeld-os/receipts/proof/noetfield-semantic-drift-closeout/0001-feat-L8-semantic-drift-anchors-hybrid-chatbot-retrie.patch",
+    "patch": "git am ~/Desktop/Noetfield-Systems/noetfeld-OS/receipts/proof/noetfield-semantic-drift-closeout/0001-feat-L8-semantic-drift-anchors-hybrid-chatbot-retrie.patch",
     "push": "git push -u origin cursor/nf-semantic-drift-closeout-72f6",
     "verify": "make nf-voyage-ai-wire && make nf-semantic-drift && make nf-voyage-integrity"
   },

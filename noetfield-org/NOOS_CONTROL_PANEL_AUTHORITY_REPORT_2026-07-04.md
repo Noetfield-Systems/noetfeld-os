@@ -10,7 +10,7 @@
 | # | Path | Exists | Type | Git | Origin URL | Branch | Head Commit | Status |
 |---|------|--------|------|-----|------------|--------|------------|--------|
 | 1 | `/Desktop/Noetfield-Systems/noetfeld-OS/` | YES | Dir | YES | github.com/Noetfield-Systems/noetfeld-OS.git | main | 2bbe758 (2026-07-03 05:56:32) | **ACTIVE** |
-| 2 | `/Projects/noetfeld-os/` | YES | Dir | YES | github.com/Noetfield-Systems/noetfeld-os.git | cursor/cheap-worker-kernel-v1 | 473dd6d (2026-07-03 15:29:58) | **DIVERGED** |
+| 2 | `/Desktop/Noetfield-Systems/noetfeld-OS/` | YES | Dir | YES | github.com/Noetfield-Systems/noetfeld-os.git | cursor/cheap-worker-kernel-v1 | 473dd6d (2026-07-03 15:29:58) | **DIVERGED** |
 | 3 | `~/.sina/agent-workspaces/noetfeld_os/` | YES | Dir | NO | — | — | — | Archive/Workspace |
 | 4 | `/Projects/copilot-worktrees/noetfeld-os/` | YES | Dir | NO | — | — | — | Archive/Worktree |
 
@@ -51,11 +51,11 @@ main_vs_origin_main=ahead 0, behind 0 (IN SYNC)
 
 ---
 
-### 2. `/Projects/noetfeld-os/` — DIVERGED FEATURE BRANCH
+### 2. `/Desktop/Noetfield-Systems/noetfeld-OS/` — DIVERGED FEATURE BRANCH
 
 **Preflight Evidence:**
 ```
-path=/Users/sinakazemnezhad/Projects/noetfeld-os
+path=/Users/sinakazemnezhad/Desktop/Noetfield-Systems/noetfeld-OS
 is_git=YES
 origin_url=https://github.com/Noetfield-Systems/noetfeld-os.git
 current_branch=cursor/cheap-worker-kernel-v1 (feature branch, not main)
@@ -94,7 +94,7 @@ commit_count=128 (vs 123 in Desktop variant)
 
 | Aspect | Desktop (Canonical) | Projects (Diverged) |
 |--------|-------------------|-------------------|
-| Path | `/Desktop/Noetfield-Systems/noetfeld-OS/` | `/Projects/noetfeld-os/` |
+| Path | `/Desktop/Noetfield-Systems/noetfeld-OS/` | `/Desktop/Noetfield-Systems/noetfeld-OS/` |
 | Branch | main | cursor/cheap-worker-kernel-v1 |
 | HEAD | 2bbe758 | 473dd6d |
 | Remote sync | in sync (0/0) | behind (on feature) |
@@ -118,7 +118,7 @@ commit_count=128 (vs 123 in Desktop variant)
 - Working tree nearly clean (1 dirty file; likely cache or temp)
 
 **Alternative Path Disposition:**
-- `/Projects/noetfeld-os/`: **DIVERGED FEATURE BRANCH** — do not treat as canonical. Feature work in progress; not yet merged to main. Contains development commits (473dd6d) not on canonical main. Safe to keep as working branch but not control panel authority.
+- `/Desktop/Noetfield-Systems/noetfeld-OS/`: **DIVERGED FEATURE BRANCH** — do not treat as canonical. Feature work in progress; not yet merged to main. Contains development commits (473dd6d) not on canonical main. Safe to keep as working branch but not control panel authority.
 - Old workspace/worktree paths: **ARCHIVE** — no active use.
 
 **Remaining Issues:** NONE (control panel authority resolved).
@@ -160,9 +160,9 @@ commit_count=128 (vs 123 in Desktop variant)
 | **Deploy config evidence** | Cloudflare Workers config files present (`cloud/workers/noos-*.../wrangler.toml`, 2 configs) |
 | **Deploy truth source** | UNVERIFIED (same as before — requires platform API check) |
 | **Preflight rule** | Before any NOOS lane work: `cd /Desktop/Noetfield-Systems/noetfeld-OS && git remote -v && git status -sb && git log -1` |
-| **Stale/forbidden paths** | `/Projects/noetfeld-os/` (feature branch diverged; do not use as canonical control panel). No retired clones. |
+| **Stale/forbidden paths** | `/Desktop/Noetfield-Systems/noetfeld-OS/` (feature branch diverged; do not use as canonical control panel). No retired clones. |
 | **Latest receipt** | NOOS_CONTROL_PANEL_AUTHORITY_REPORT_2026-07-04.md (this file) |
-| **Status** | ✅ ACTIVE CONTROL PANEL. Authority verified. NOOS integrator authority established. Feature branch variant at `/Projects/noetfeld-os/` exists but diverged (not canonical). Execution proceeds with preflight. |
+| **Status** | ✅ ACTIVE CONTROL PANEL. Authority verified. NOOS integrator authority established. Feature branch variant at `/Desktop/Noetfield-Systems/noetfeld-OS/` exists but diverged (not canonical). Execution proceeds with preflight. |
 ```
 
 ---
@@ -173,7 +173,7 @@ commit_count=128 (vs 123 in Desktop variant)
 `**Status** | ACTIVE. No current receipts; remote/branch unverified. Execution proceeds after preflight.`
 
 **After (Recommended):**  
-`**Status** | ✅ VERIFIED. NOOS integrator authority established (canonical main branch, in sync with remote). Feature branch variant at `/Projects/noetfeld-os/` exists but diverged — treat as development WIP, not canonical control panel.`
+`**Status** | ✅ VERIFIED. NOOS integrator authority established (canonical main branch, in sync with remote). Feature branch variant at `/Desktop/Noetfield-Systems/noetfeld-OS/` exists but diverged — treat as development WIP, not canonical control panel.`
 
 ---
 
@@ -187,7 +187,7 @@ commit_count=128 (vs 123 in Desktop variant)
 
 **Authority Claim:** NOOS_ACTIVE_CONTROL_PANEL_REPO  
 **Canonical Path:** `/Users/sinakazemnezhad/Desktop/Noetfield-Systems/noetfeld-OS/`  
-**Remaining Risk:** LOW (feature branch `/Projects/noetfeld-os/` must not be confused with canonical control panel)
+**Remaining Risk:** LOW (feature branch `/Desktop/Noetfield-Systems/noetfeld-OS/` must not be confused with canonical control panel)
 
 ---
 

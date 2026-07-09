@@ -9,7 +9,7 @@
 ## Setup (before room)
 
 ```bash
-cd ~/Projects/noetfeld-os
+cd ~/Desktop/Noetfield-Systems/noetfeld-OS
 pip install -e .
 export NOETFIELD_API_URL=https://api.noetfield.com
 export NOETFIELD_API_KEY=<design-partner-key>

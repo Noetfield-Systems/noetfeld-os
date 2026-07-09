@@ -6,7 +6,7 @@ agent_id: noetfeld-os-cursor-chat
 agent_lane: NOETFELD-OS
 trace_id: NOOS-AGENT-20260608-004
 doc_type: ROADMAP_MASTER
-workspace_root: /Users/sinakazemnezhad/Projects/noetfeld-os
+workspace_root: /Users/sinakazemnezhad/Desktop/Noetfield-Systems/noetfeld-OS
 classification: INTERNAL — master execution roadmap
 related_docs: NOOS-AGENT-20260529-002, NOOS-AGENT-20260608-003, NOOS-AGENT-20260529-001
 -->
