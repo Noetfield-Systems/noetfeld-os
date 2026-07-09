@@ -1,7 +1,8 @@
 {
   "schema": "l0_repo_graph_index_v1",
-  "repo": "sina-governance-ssot",
-  "generated_at": "2026-07-09T07:05:07Z",
+  "template_version": "1.1.0",
+  "repo": "noetfeld-OS",
+  "generated_at": "2026-07-09T08:11:17Z",
   "root": ".",
   "ignored_dirs": [
     ".cache",
@@ -27,740 +28,6 @@
     ".yml"
   ],
   "subsystems": {
-    "audit": {
-      "path": "audit",
-      "file_count": 1,
-      "total_bytes": 971,
-      "files": [
-        {
-          "path": "audit/audit_store.py",
-          "bytes": 971,
-          "mtime": "2026-07-03T12:46:15Z"
-        }
-      ]
-    },
-    "config": {
-      "path": "config",
-      "file_count": 2,
-      "total_bytes": 3816,
-      "files": [
-        {
-          "path": "config/model-router.yml",
-          "bytes": 3086,
-          "mtime": "2026-07-08T01:59:12Z"
-        },
-        {
-          "path": "config/noos-local.env.fill-me",
-          "bytes": 730,
-          "mtime": "2026-07-08T01:59:12Z"
-        }
-      ]
-    },
-    "noetfield-org": {
-      "path": "noetfield-org",
-      "file_count": 20,
-      "total_bytes": 133607,
-      "files": [
-        {
-          "path": "noetfield-org/receipts/NOOS_MODEL_OUTCOME_VERIFICATION_RECEIPT_2026-07-05.md",
-          "bytes": 15375,
-          "mtime": "2026-07-08T01:59:12Z"
-        },
-        {
-          "path": "noetfield-org/MODEL_OUTCOME_VERIFICATION_LEDGER.md",
-          "bytes": 13163,
-          "mtime": "2026-07-08T01:59:12Z"
-        },
-        {
-          "path": "noetfield-org/receipts/NOOS_SERVICE_LANE_REGISTRATION_2026-07-05.md",
-          "bytes": 11099,
-          "mtime": "2026-07-08T01:59:12Z"
-        },
-        {
-          "path": "noetfield-org/receipts/NOOS_SERVICE_LANE_TICK_2026-07-05.md",
-          "bytes": 9654,
-          "mtime": "2026-07-08T01:59:12Z"
-        },
-        {
-          "path": "noetfield-org/SYNC_RECEIPTS.md",
-          "bytes": 9101,
-          "mtime": "2026-07-08T01:59:12Z"
-        },
-        {
-          "path": "noetfield-org/NOOS_CONTROL_PANEL_AUTHORITY_REPORT_2026-07-04.md",
-          "bytes": 9054,
-          "mtime": "2026-07-08T01:59:12Z"
-        },
-        {
-          "path": "noetfield-org/receipts/NOOS_SERVICE_LANE_TICK_2026-07-05_PRESERVATION.md",
-          "bytes": 8744,
-          "mtime": "2026-07-08T01:59:12Z"
-        },
-        {
-          "path": "noetfield-org/receipts/NOOS_PRE_PUBLISH_CLEARANCE_RECEIPT_2026-07-05.md",
-          "bytes": 8017,
-          "mtime": "2026-07-08T01:59:12Z"
-        },
-        {
-          "path": "noetfield-org/SERVICE_LANES.md",
-          "bytes": 7608,
-          "mtime": "2026-07-08T01:59:12Z"
-        },
-        {
-          "path": "noetfield-org/receipts/NOOS_SERVICE_LANE_TICK_2026-07-05_EXTERNAL_VERIFY.md",
-          "bytes": 7318,
-          "mtime": "2026-07-08T01:59:12Z"
-        },
-        {
-          "path": "noetfield-org/ROUTING_MATRIX.md",
-          "bytes": 7150,
-          "mtime": "2026-07-08T01:59:12Z"
-        },
-        {
-          "path": "noetfield-org/receipts/NOOS_INTEGRATOR_SYNC_RECEIPT_2026-07-05.md",
-          "bytes": 6990,
-          "mtime": "2026-07-08T01:59:12Z"
-        },
-        {
-          "path": "noetfield-org/LOOP_STATE.json",
-          "bytes": 4931,
-          "mtime": "2026-07-08T01:59:12Z"
-        },
-        {
-          "path": "noetfield-org/AGENT_REGISTRY.md",
-          "bytes": 4789,
-          "mtime": "2026-07-08T01:59:12Z"
-        },
-        {
-          "path": "noetfield-org/receipts/NOOS_SERVICE_LANE_LIVE_RECEIPT_2026-07-05.md",
-          "bytes": 4326,
-          "mtime": "2026-07-08T01:59:12Z"
-        },
-        {
-          "path": "noetfield-org/NOOS_LOCK_RECEIPT_v1.json",
-          "bytes": 3243,
-          "mtime": "2026-07-08T01:59:12Z"
-        },
-        {
-          "path": "noetfield-org/REPO_REGISTRY.md",
-          "bytes": 1920,
-          "mtime": "2026-07-08T01:59:12Z"
-        },
-        {
-          "path": "noetfield-org/receipts/NOOS_ACG_FOUNDER_SEND_PREP_2026-07-05.md",
-          "bytes": 988,
-          "mtime": "2026-07-08T01:59:12Z"
-        },
-        {
-          "path": "noetfield-org/receipts/NOOS_ACG_FOUNDER_SEND_RECEIPT_TEMPLATE.md",
-          "bytes": 114,
-          "mtime": "2026-07-08T01:59:12Z"
-        },
-        {
-          "path": "noetfield-org/FORBIDDEN_MARKERS.txt",
-          "bytes": 23,
-          "mtime": "2026-07-03T12:56:11Z"
-        }
-      ]
-    },
-    "noetfield_gate": {
-      "path": "noetfield_gate",
-      "file_count": 8,
-      "total_bytes": 24000,
-      "files": [
-        {
-          "path": "noetfield_gate/boot.py",
-          "bytes": 10585,
-          "mtime": "2026-07-03T12:46:15Z"
-        },
-        {
-          "path": "noetfield_gate/cli.py",
-          "bytes": 6285,
-          "mtime": "2026-07-08T01:59:12Z"
-        },
-        {
-          "path": "noetfield_gate/decide.py",
-          "bytes": 3571,
-          "mtime": "2026-07-03T12:46:15Z"
-        },
-        {
-          "path": "noetfield_gate/verify.py",
-          "bytes": 2040,
-          "mtime": "2026-07-03T12:46:15Z"
-        },
-        {
-          "path": "noetfield_gate/policies/corridor_policy.json",
-          "bytes": 627,
-          "mtime": "2026-07-03T12:46:15Z"
-        },
-        {
-          "path": "noetfield_gate/intent_validate.py",
-          "bytes": 605,
-          "mtime": "2026-07-03T12:46:15Z"
-        },
-        {
-          "path": "noetfield_gate/policies/base_policy.json",
-          "bytes": 188,
-          "mtime": "2026-07-03T12:46:15Z"
-        },
-        {
-          "path": "noetfield_gate/__init__.py",
-          "bytes": 99,
-          "mtime": "2026-07-03T12:46:15Z"
-        }
-      ]
-    },
-    "cloud": {
-      "path": "cloud",
-      "file_count": 9,
-      "total_bytes": 26329,
-      "files": [
-        {
-          "path": "cloud/workers/noos-deadman-v1/src/index.js",
-          "bytes": 12636,
-          "mtime": "2026-07-08T01:59:12Z"
-        },
-        {
-          "path": "cloud/workers/noos-loop-fleet-tick-v1/src/index.js",
-          "bytes": 4730,
-          "mtime": "2026-07-08T01:59:12Z"
-        },
-        {
-          "path": "cloud/workers/noos-factory-autorun-tick-v1/src/index.js",
-          "bytes": 2733,
-          "mtime": "2026-07-03T12:56:11Z"
-        },
-        {
-          "path": "cloud/workers/noos-loop-fleet-tick-v1/src/dispatch-table.json",
-          "bytes": 2102,
-          "mtime": "2026-07-08T01:59:12Z"
-        },
-        {
-          "path": "cloud/workers/noos-deadman-v1/src/loop-intervals.json",
-          "bytes": 1888,
-          "mtime": "2026-07-08T01:59:12Z"
-        },
-        {
-          "path": "cloud/workers/noos-deadman-v1/src/deadman-config.json",
-          "bytes": 1594,
-          "mtime": "2026-07-08T01:59:12Z"
-        },
-        {
-          "path": "cloud/workers/noos-factory-autorun-tick-v1/wrangler.toml",
-          "bytes": 275,
-          "mtime": "2026-07-08T01:59:12Z"
-        },
-        {
-          "path": "cloud/workers/noos-deadman-v1/wrangler.toml",
-          "bytes": 198,
-          "mtime": "2026-07-08T01:59:12Z"
-        },
-        {
-          "path": "cloud/workers/noos-loop-fleet-tick-v1/wrangler.toml",
-          "bytes": 173,
-          "mtime": "2026-07-08T07:03:01Z"
-        }
-      ]
-    },
-    "docs": {
-      "path": "docs",
-      "file_count": 95,
-      "total_bytes": 20226963,
-      "files": [
-        {
-          "path": "docs/run_patches/noetfield_run_patch_pack_10100_v1.jsonl",
-          "bytes": 10016135,
-          "mtime": "2026-07-03T02:46:02Z"
-        },
-        {
-          "path": "docs/run_patches/execution/noetfield_run_patch_execution_receipts_v1.jsonl",
-          "bytes": 9002835,
-          "mtime": "2026-07-03T02:46:02Z"
-        },
-        {
-          "path": "docs/ops/ECOSYSTEM_CONTROLLED_EXECUTION_1000_PLAN_DRAFT_v1.md",
-          "bytes": 384532,
-          "mtime": "2026-07-03T12:46:15Z"
-        },
-        {
-          "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260608-004]_ROADMAP_1000_STEPS_10_PHASES.md",
-          "bytes": 97034,
-          "mtime": "2026-07-03T12:46:15Z"
-        },
-        {
-          "path": "docs/run_patches/noetfield_run_patch_manifest_10100_v1.json",
-          "bytes": 41226,
-          "mtime": "2026-07-03T12:46:15Z"
-        },
-        {
-          "path": "docs/ops/NOETFIELD_OS_CONTROL_SCOPE_DISCOVERY_REPORT_v1_20260629-1813.md",
-          "bytes": 40793,
-          "mtime": "2026-07-03T12:46:15Z"
-        },
-        {
-          "path": "docs/output/internal/pitch-deck-noetfield-gel.pptx",
-          "bytes": 39842,
-          "mtime": "2026-07-03T02:46:02Z"
-        },
-        {
-          "path": "docs/output/external/pitch-deck-noetfield-gel.pptx",
-          "bytes": 38635,
-          "mtime": "2026-07-03T02:46:02Z"
-        },
-        {
-          "path": "docs/scripts/generate_roadmap_1000.py",
-          "bytes": 37899,
-          "mtime": "2026-07-03T12:46:15Z"
-        },
-        {
-          "path": "docs/ops/ECOSYSTEM_CONTROLLED_EXECUTION_FIRST_100_LOCKED_v1.md",
-          "bytes": 35815,
-          "mtime": "2026-07-03T12:46:15Z"
-        },
-        {
-          "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260615-014]_UPGRADE_PLAN_300_STEPS_v1.md",
-          "bytes": 25246,
-          "mtime": "2026-07-03T12:46:15Z"
-        },
-        {
-          "path": "docs/scripts/build_documents.py",
-          "bytes": 24532,
-          "mtime": "2026-07-03T12:46:15Z"
-        },
-        {
-          "path": "docs/ops/NOETFIELD_RESEARCH_REMEDIATION_EXECUTION_TRACKER_v1_20260701.md",
-          "bytes": 24250,
-          "mtime": "2026-07-03T12:46:15Z"
-        },
-        {
-          "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260705-029]_LIVING_SYSTEM_99_PLAN_LOCKED_v1.md",
-          "bytes": 18485,
-          "mtime": "2026-07-08T01:59:12Z"
-        },
-        {
-          "path": "docs/_NOOS_AGENT/NOETFIELD_UNIFIED_MASTER_v1_LOCKED.md",
-          "bytes": 18121,
-          "mtime": "2026-07-08T01:59:12Z"
-        },
-        {
-          "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260629-022]_SYSTEM_FIX_AND_UPGRADE_100_PLAN_v1.md",
-          "bytes": 15306,
-          "mtime": "2026-07-03T12:46:15Z"
-        },
-        {
-          "path": "docs/_NOOS_AGENT/NOETFIELD_OS_SSOT_v1_LOCKED.md",
-          "bytes": 13462,
-          "mtime": "2026-07-08T01:59:12Z"
-        },
-        {
-          "path": "docs/_NOOS_AGENT/MANIFEST.json",
-          "bytes": 12511,
-          "mtime": "2026-07-08T02:21:22Z"
-        },
-        {
-          "path": "docs/_NOOS_AGENT/live_sync/NOOS_LIVE_SYNC_RECEIPT.json",
-          "bytes": 12288,
-          "mtime": "2026-07-08T01:59:12Z"
-        },
-        {
-          "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260529-002]_BUSINESS_PRODUCT_CLIENT_DEFINITION.md",
-          "bytes": 12005,
-          "mtime": "2026-07-03T12:46:15Z"
-        },
-        {
-          "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260628-019]_WEBSITE_NOOS_REAL_SYNC_HANDOFF_LOCKED_v1.md",
-          "bytes": 11556,
-          "mtime": "2026-07-03T12:46:15Z"
-        },
-        {
-          "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260615-010]_BUSINESS_STRATEGY_PROOF_DENSITY_v1.md",
-          "bytes": 11468,
-          "mtime": "2026-07-03T12:46:15Z"
-        },
-        {
-          "path": "docs/NOETFIELD_COHERENT_SYSTEM_SPEC_v1.md",
-          "bytes": 11362,
-          "mtime": "2026-07-03T12:46:15Z"
-        },
-        {
-          "path": "docs/WORKFLOW_SELF_HEALING_ECOSYSTEM_v1.md",
-          "bytes": 10368,
-          "mtime": "2026-07-03T12:56:11Z"
-        },
-        {
-          "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260608-003]_TEN_MARKET_SUCCESS_MODELS_JUNE_2026.md",
-          "bytes": 10234,
-          "mtime": "2026-07-03T12:46:15Z"
-        },
-        {
-          "path": "docs/_NOOS_AGENT/UPGRADE_MANIFEST.json",
-          "bytes": 9690,
-          "mtime": "2026-07-08T01:59:12Z"
-        },
-        {
-          "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260629-021]_DIRTY_STATE_DECISION_AUDIT_PLAN_v1.md",
-          "bytes": 9055,
-          "mtime": "2026-07-03T12:46:15Z"
-        },
-        {
-          "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260702-027]_UNIFIED_AUTONOMY_UPGRADE_MASTER_v1.md",
-          "bytes": 8726,
-          "mtime": "2026-07-08T01:59:12Z"
-        },
-        {
-          "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260702-028]_TEN_UPGRADE_PLANES_v1.md",
-          "bytes": 8693,
-          "mtime": "2026-07-03T12:46:15Z"
-        },
-        {
-          "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260627-018]_WEBSITE_REVENUE_OPERATING_IMPLEMENTATION_LOCKED_v1.md",
-          "bytes": 8600,
-          "mtime": "2026-07-03T12:46:15Z"
-        },
-        {
-          "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260529-001]_GOVERNANCE_DRIFT_DETECTION_ESSAY.md",
-          "bytes": 8484,
-          "mtime": "2026-07-03T12:46:15Z"
-        },
-        {
-          "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260703-003]_PARALLEL_AGENT_GOVERNANCE_v1.md",
-          "bytes": 8421,
-          "mtime": "2026-07-08T01:59:12Z"
-        },
-        {
-          "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260608-005]_ORIENTATION_START_HERE.md",
-          "bytes": 8044,
-          "mtime": "2026-07-08T01:59:12Z"
-        },
-        {
-          "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260626-015]_NOETFIELD_CLOUD_ORGANIZE_MASTER_PLAN_LOCKED_v1.md",
-          "bytes": 7970,
-          "mtime": "2026-07-08T01:59:12Z"
-        },
-        {
-          "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260615-006]_NINETY_DAY_EXECUTION_PLAN.md",
-          "bytes": 7583,
-          "mtime": "2026-07-08T01:59:12Z"
-        },
-        {
-          "path": "docs/GOVERNED_AUTORUN_LAWS_v3.md",
-          "bytes": 7293,
-          "mtime": "2026-07-03T12:46:15Z"
-        },
-        {
-          "path": "docs/run_patches/execution/noetfield_factory_cycles_v1.jsonl",
-          "bytes": 6950,
-          "mtime": "2026-07-03T02:46:02Z"
-        },
-        {
-          "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260706-033]_UNIFIED_NEXT_PLAN_NOOS_NOETFIELD_v1.md",
-          "bytes": 6801,
-          "mtime": "2026-07-08T01:59:12Z"
-        },
-        {
-          "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260702-024]_ECOSYSTEM_NEXT_PLAN_LOCKED_v1.md",
-          "bytes": 6136,
-          "mtime": "2026-07-08T01:59:12Z"
-        },
-        {
-          "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260627-017]_NOETFIELD_RUN_PATCH_PACK_10100_v1.md",
-          "bytes": 5309,
-          "mtime": "2026-07-03T12:46:15Z"
-        },
-        {
-          "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260707-007]_INTEGRATOR_CONTROL_LAYER_UPGRADE_v1.md",
-          "bytes": 5130,
-          "mtime": "2026-07-08T01:59:12Z"
-        },
-        {
-          "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260707-008]_INTEGRATOR_DAILY_CHECKLIST_v1.md",
-          "bytes": 4943,
-          "mtime": "2026-07-08T01:59:12Z"
-        },
-        {
-          "path": "docs/output/internal/grant-core-narrative.pdf",
-          "bytes": 4614,
-          "mtime": "2026-07-03T02:46:02Z"
-        },
-        {
-          "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260702-025]_THREE_TRACK_10_STEP_UPGRADE_PLAN_v1.md",
-          "bytes": 4516,
-          "mtime": "2026-07-08T01:59:12Z"
-        },
-        {
-          "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260615-007]_GLOSSARY_AND_PLANE_TAGS.md",
-          "bytes": 4501,
-          "mtime": "2026-07-03T12:46:15Z"
-        },
-        {
-          "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260615-011]_FOUNDING_PILOT_ONEPAGER_EXTERNAL_v1.md",
-          "bytes": 4463,
-          "mtime": "2026-07-03T12:46:15Z"
-        },
-        {
-          "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260703-004]_CURSOR_LOCAL_MAC_OPERATOR_v1.md",
-          "bytes": 4376,
-          "mtime": "2026-07-08T01:59:12Z"
-        },
-        {
-          "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260703-001]_INTEGRATOR_AGENT_PROTOCOL_v1.md",
-          "bytes": 4350,
-          "mtime": "2026-07-03T12:56:11Z"
-        },
-        {
-          "path": "docs/governed-autorun/references/deterministic-loops.md",
-          "bytes": 4223,
-          "mtime": "2026-07-03T12:46:15Z"
-        },
-        {
-          "path": "docs/_NOOS_AGENT/README.md",
-          "bytes": 4055,
-          "mtime": "2026-07-08T01:59:12Z"
-        },
-        {
-          "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260615-013]_FOUNDING_PILOT_ONEPAGER_AGENTS_v1.md",
-          "bytes": 3715,
-          "mtime": "2026-07-03T12:46:15Z"
-        },
-        {
-          "path": "docs/output/internal/loi-template.pdf",
-          "bytes": 3670,
-          "mtime": "2026-07-03T02:46:02Z"
-        },
-        {
-          "path": "docs/governed-autorun/references/receipt-schemas.md",
-          "bytes": 3502,
-          "mtime": "2026-07-03T12:46:15Z"
-        },
-        {
-          "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260629-020]_WEBSITE_PLATFORM_LIVE_NERVE_RESPONSE_LOCKED_v1.md",
-          "bytes": 3472,
-          "mtime": "2026-07-03T12:46:15Z"
-        },
-        {
-          "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260703-006]_MACHINE_LOOPS_v1.md",
-          "bytes": 3447,
-          "mtime": "2026-07-08T01:59:12Z"
-        },
-        {
-          "path": "docs/ops/ECOSYSTEM_CRITIC_NOTE_MISSION_REPORT_20260629_v1.md",
-          "bytes": 3441,
-          "mtime": "2026-07-03T12:46:15Z"
-        },
-        {
-          "path": "docs/output/internal/budget-breakdown.pdf",
-          "bytes": 3364,
-          "mtime": "2026-07-03T02:46:02Z"
-        },
-        {
-          "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260703-005]_FOUNDER_CANON_INTERFACE_v1.md",
-          "bytes": 3275,
-          "mtime": "2026-07-08T01:59:12Z"
-        },
-        {
-          "path": "docs/output/internal/strategic-positioning.pdf",
-          "bytes": 3215,
-          "mtime": "2026-07-03T02:46:02Z"
-        },
-        {
-          "path": "docs/output/internal/reality-check.pdf",
-          "bytes": 3154,
-          "mtime": "2026-07-03T02:46:02Z"
-        },
-        {
-          "path": "docs/output/external/grant-core-narrative.pdf",
-          "bytes": 3084,
-          "mtime": "2026-07-03T02:46:02Z"
-        },
-        {
-          "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260615-008]_GEL_WEB_URL_STRUCTURE.md",
-          "bytes": 2800,
-          "mtime": "2026-07-03T12:46:15Z"
-        },
-        {
-          "path": "docs/output/external/loi-template.pdf",
-          "bytes": 2766,
-          "mtime": "2026-07-03T02:46:02Z"
-        },
-        {
-          "path": "docs/output/internal/pitch-deck-handout.pdf",
-          "bytes": 2697,
-          "mtime": "2026-07-03T02:46:02Z"
-        },
-        {
-          "path": "docs/output/external/pitch-deck-handout.pdf",
-          "bytes": 2632,
-          "mtime": "2026-07-03T02:46:02Z"
-        },
-        {
-          "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260703-002]_CHEAP_WORKER_KERNEL_v1.md",
-          "bytes": 2563,
-          "mtime": "2026-07-08T01:59:12Z"
-        },
-        {
-          "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260708-001]_PR_CONFLICT_RESOLVER_MANDATORY_v1_LOCKED.md",
-          "bytes": 2462,
-          "mtime": "2026-07-08T02:18:45Z"
-        },
-        {
-          "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260615-012]_CHAIN_TOOLS_STRATEGY_v1.md",
-          "bytes": 2387,
-          "mtime": "2026-07-03T12:46:15Z"
-        },
-        {
-          "path": "docs/NOOS_COPILOT_DISPATCHER_AUTHORITY.md",
-          "bytes": 2357,
-          "mtime": "2026-07-08T01:59:12Z"
-        },
-        {
-          "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260706-032]_STALE_DOC_REGISTER_v1.md",
-          "bytes": 2303,
-          "mtime": "2026-07-08T01:59:12Z"
-        },
-        {
-          "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260615-009]_PITCH_ALIGNMENT_NOTES.md",
-          "bytes": 2247,
-          "mtime": "2026-07-03T12:46:15Z"
-        },
-        {
-          "path": "docs/_NOOS_AGENT/PRODUCT_TRUTH.md",
-          "bytes": 2216,
-          "mtime": "2026-07-08T01:59:12Z"
-        },
-        {
-          "path": "docs/output/external/budget-breakdown.pdf",
-          "bytes": 2190,
-          "mtime": "2026-07-03T02:46:02Z"
-        },
-        {
-          "path": "docs/ops/NOOS_FACTORY_AUTORUN_DEPRECATION_v1.md",
-          "bytes": 2169,
-          "mtime": "2026-07-08T01:59:12Z"
-        },
-        {
-          "path": "docs/output/external/strategic-positioning.pdf",
-          "bytes": 2064,
-          "mtime": "2026-07-03T02:46:02Z"
-        },
-        {
-          "path": "docs/README.md",
-          "bytes": 2010,
-          "mtime": "2026-07-03T12:46:15Z"
-        },
-        {
-          "path": "docs/ops/PYPI_PUBLISH_LOCKED_v1.md",
-          "bytes": 1946,
-          "mtime": "2026-07-08T01:59:12Z"
-        },
-        {
-          "path": "docs/demo/GEL_5MIN_SPEAKER_NOTES_v1.md",
-          "bytes": 1899,
-          "mtime": "2026-07-03T12:46:15Z"
-        },
-        {
-          "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260629-023]_NOETFIELD_OS_REPO_POLICY_LOCKED_v1.md",
-          "bytes": 1860,
-          "mtime": "2026-07-03T12:46:15Z"
-        },
-        {
-          "path": "docs/L0_REPO_GRAPH_MEMORY_v1.md",
-          "bytes": 1804,
-          "mtime": "2026-07-09T07:04:56Z"
-        },
-        {
-          "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260702-026]_TRACK_ABC_CLOSEOUT_RECEIPT_v1.md",
-          "bytes": 1799,
-          "mtime": "2026-07-03T12:46:15Z"
-        },
-        {
-          "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260706-030]_LIVING_SYSTEM_48H_RETRO_v1.md",
-          "bytes": 1682,
-          "mtime": "2026-07-08T01:59:12Z"
-        },
-        {
-          "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260706-031]_DEADMAN_TELEGRAM_LANE_LOCKED_v1.md",
-          "bytes": 1550,
-          "mtime": "2026-07-08T01:59:12Z"
-        },
-        {
-          "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260627-016]_STUDIO_SUPABASE_BOUNDARY.md",
-          "bytes": 1473,
-          "mtime": "2026-07-03T12:46:15Z"
-        },
-        {
-          "path": "docs/ops/NOOS_CLOUDFLARE_WWW_DEPLOY_v1.md",
-          "bytes": 1375,
-          "mtime": "2026-07-08T01:59:12Z"
-        },
-        {
-          "path": "docs/ops/NOOS_BASELINE_RECEIPT_PLAN_0007_0008_LOCKED_v1.md",
-          "bytes": 1282,
-          "mtime": "2026-07-03T12:46:15Z"
-        },
-        {
-          "path": "docs/run_patches/execution/noetfield_factory_heartbeat_v1.json",
-          "bytes": 1263,
-          "mtime": "2026-07-03T12:46:15Z"
-        },
-        {
-          "path": "docs/run_patches/execution/noetfield_factory_state_v1.json",
-          "bytes": 1263,
-          "mtime": "2026-07-03T12:46:15Z"
-        },
-        {
-          "path": "docs/_NOOS_AGENT/ROADMAP_MANIFEST.json",
-          "bytes": 1257,
-          "mtime": "2026-07-03T12:46:15Z"
-        },
-        {
-          "path": "docs/ops/NOOS_MOTOR_RESTART_RECIPES_v1.md",
-          "bytes": 1012,
-          "mtime": "2026-07-08T01:59:12Z"
-        },
-        {
-          "path": "docs/run_patches/execution/noetfield_run_patch_execution_state_v1.json",
-          "bytes": 871,
-          "mtime": "2026-07-03T12:46:15Z"
-        },
-        {
-          "path": "docs/examples/pre-commit-noetfield-gate-v1.md",
-          "bytes": 845,
-          "mtime": "2026-07-08T01:59:12Z"
-        },
-        {
-          "path": "docs/examples/noetfield-gate-gha-v1.yml",
-          "bytes": 840,
-          "mtime": "2026-07-08T01:59:12Z"
-        },
-        {
-          "path": "docs/ops/GEL_API_DEPLOY_LOCKED_v1.md",
-          "bytes": 639,
-          "mtime": "2026-07-03T12:46:15Z"
-        },
-        {
-          "path": "docs/GOVERNED_AUTORUN_LAWS_v2.md",
-          "bytes": 235,
-          "mtime": "2026-07-03T12:46:15Z"
-        }
-      ]
-    },
-    "fixtures": {
-      "path": "fixtures",
-      "file_count": 2,
-      "total_bytes": 488,
-      "files": [
-        {
-          "path": "fixtures/demo_intents/decline-dti.json",
-          "bytes": 246,
-          "mtime": "2026-07-03T12:46:15Z"
-        },
-        {
-          "path": "fixtures/demo_intents/approve.json",
-          "bytes": 242,
-          "mtime": "2026-07-03T12:46:15Z"
-        }
-      ]
-    },
     "ops": {
       "path": "ops",
       "file_count": 13,
@@ -833,218 +100,10 @@
         }
       ]
     },
-    "portal": {
-      "path": "portal",
-      "file_count": 2,
-      "total_bytes": 4299,
-      "files": [
-        {
-          "path": "portal/routes.py",
-          "bytes": 3178,
-          "mtime": "2026-07-03T12:46:15Z"
-        },
-        {
-          "path": "portal/schemas.py",
-          "bytes": 1121,
-          "mtime": "2026-07-03T12:46:15Z"
-        }
-      ]
-    },
-    "public_site": {
-      "path": "public_site",
-      "file_count": 15,
-      "total_bytes": 38002,
-      "files": [
-        {
-          "path": "public_site/static/site.css",
-          "bytes": 9576,
-          "mtime": "2026-07-08T07:36:02Z"
-        },
-        {
-          "path": "public_site/routes.py",
-          "bytes": 4612,
-          "mtime": "2026-07-08T07:35:49Z"
-        },
-        {
-          "path": "public_site/content/trust-ledger/index.md",
-          "bytes": 4455,
-          "mtime": "2026-07-03T12:46:15Z"
-        },
-        {
-          "path": "public_site/templates/base.html",
-          "bytes": 4410,
-          "mtime": "2026-07-08T07:35:48Z"
-        },
-        {
-          "path": "public_site/content/gate/partners/index.md",
-          "bytes": 3515,
-          "mtime": "2026-07-03T12:46:15Z"
-        },
-        {
-          "path": "public_site/static/cookies.js",
-          "bytes": 3336,
-          "mtime": "2026-07-08T07:35:27Z"
-        },
-        {
-          "path": "public_site/templates/gateway.html",
-          "bytes": 2497,
-          "mtime": "2026-07-08T07:35:51Z"
-        },
-        {
-          "path": "public_site/renderer.py",
-          "bytes": 2146,
-          "mtime": "2026-07-03T12:46:15Z"
-        },
-        {
-          "path": "public_site/content/privacy/index.md",
-          "bytes": 1363,
-          "mtime": "2026-07-08T07:35:32Z"
-        },
-        {
-          "path": "public_site/content/cookies/index.md",
-          "bytes": 1057,
-          "mtime": "2026-07-08T07:35:34Z"
-        },
-        {
-          "path": "public_site/static/site.js",
-          "bytes": 860,
-          "mtime": "2026-07-08T07:35:28Z"
-        },
-        {
-          "path": "public_site/templates/page.html",
-          "bytes": 90,
-          "mtime": "2026-07-03T02:46:02Z"
-        },
-        {
-          "path": "public_site/__init__.py",
-          "bytes": 61,
-          "mtime": "2026-07-03T12:46:15Z"
-        },
-        {
-          "path": "public_site/data/.gitignore",
-          "bytes": 24,
-          "mtime": "2026-07-03T02:46:02Z"
-        },
-        {
-          "path": "public_site/data/.gitkeep",
-          "bytes": 0,
-          "mtime": "2026-07-03T02:46:02Z"
-        }
-      ]
-    },
-    "export": {
-      "path": "export",
-      "file_count": 3,
-      "total_bytes": 9638,
-      "files": [
-        {
-          "path": "export/tle_mapper.py",
-          "bytes": 7029,
-          "mtime": "2026-07-03T12:46:15Z"
-        },
-        {
-          "path": "export/board_pdf.py",
-          "bytes": 2587,
-          "mtime": "2026-07-03T12:46:15Z"
-        },
-        {
-          "path": "export/__init__.py",
-          "bytes": 22,
-          "mtime": "2026-07-03T12:46:15Z"
-        }
-      ]
-    },
-    "packages": {
-      "path": "packages",
-      "file_count": 16,
-      "total_bytes": 21282,
-      "files": [
-        {
-          "path": "packages/auth-core/package-lock.json",
-          "bytes": 6431,
-          "mtime": "2026-07-08T07:46:26Z"
-        },
-        {
-          "path": "packages/gate/src/index.ts",
-          "bytes": 2792,
-          "mtime": "2026-07-03T02:46:02Z"
-        },
-        {
-          "path": "packages/noetfield-gate/README.md",
-          "bytes": 1622,
-          "mtime": "2026-07-08T01:59:12Z"
-        },
-        {
-          "path": "packages/gate/package-lock.json",
-          "bytes": 1522,
-          "mtime": "2026-07-03T12:46:15Z"
-        },
-        {
-          "path": "packages/auth-core/src/middleware.test.ts",
-          "bytes": 1466,
-          "mtime": "2026-07-08T07:46:38Z"
-        },
-        {
-          "path": "packages/auth-core/src/middleware.ts",
-          "bytes": 1212,
-          "mtime": "2026-07-08T07:46:10Z"
-        },
-        {
-          "path": "packages/auth-core/src/clients.ts",
-          "bytes": 1199,
-          "mtime": "2026-07-08T07:46:33Z"
-        },
-        {
-          "path": "packages/auth-core/package.json",
-          "bytes": 1030,
-          "mtime": "2026-07-08T07:45:56Z"
-        },
-        {
-          "path": "packages/gate/package.json",
-          "bytes": 893,
-          "mtime": "2026-07-03T12:56:11Z"
-        },
-        {
-          "path": "packages/auth-core/README.md",
-          "bytes": 593,
-          "mtime": "2026-07-08T07:46:19Z"
-        },
-        {
-          "path": "packages/auth-core/src/constants.ts",
-          "bytes": 552,
-          "mtime": "2026-07-08T07:46:02Z"
-        },
-        {
-          "path": "packages/auth-core/src/index.ts",
-          "bytes": 490,
-          "mtime": "2026-07-08T07:46:12Z"
-        },
-        {
-          "path": "packages/gate/README.md",
-          "bytes": 471,
-          "mtime": "2026-07-03T12:46:15Z"
-        },
-        {
-          "path": "packages/auth-core/src/types.ts",
-          "bytes": 427,
-          "mtime": "2026-07-08T07:46:00Z"
-        },
-        {
-          "path": "packages/auth-core/tsconfig.json",
-          "bytes": 293,
-          "mtime": "2026-07-08T07:53:49Z"
-        },
-        {
-          "path": "packages/gate/tsconfig.json",
-          "bytes": 289,
-          "mtime": "2026-07-03T12:46:15Z"
-        }
-      ]
-    },
     "scripts": {
       "path": "scripts",
       "file_count": 155,
-      "total_bytes": 818876,
+      "total_bytes": 819255,
       "files": [
         {
           "path": "scripts/autorun_status_v1.py",
@@ -1078,8 +137,8 @@
         },
         {
           "path": "scripts/noos_trigger_host_inventory_v1.py",
-          "bytes": 13798,
-          "mtime": "2026-07-08T01:59:12Z"
+          "bytes": 13815,
+          "mtime": "2026-07-09T07:47:20Z"
         },
         {
           "path": "scripts/noos_live_sync_gate.py",
@@ -1122,14 +181,14 @@
           "mtime": "2026-07-03T12:46:15Z"
         },
         {
+          "path": "scripts/build_repo_graph_v1.py",
+          "bytes": 10395,
+          "mtime": "2026-07-09T08:11:16Z"
+        },
+        {
           "path": "scripts/verify_living_system_governance_v1.py",
           "bytes": 10359,
           "mtime": "2026-07-08T02:19:01Z"
-        },
-        {
-          "path": "scripts/build_repo_graph_v1.py",
-          "bytes": 10135,
-          "mtime": "2026-07-09T07:03:59Z"
         },
         {
           "path": "scripts/noos_researcher_v1.py",
@@ -1359,7 +418,7 @@
         {
           "path": "scripts/verify_l0_repo_graph_memory_v1.sh",
           "bytes": 4775,
-          "mtime": "2026-07-09T07:03:41Z"
+          "mtime": "2026-07-09T08:11:16Z"
         },
         {
           "path": "scripts/noos_acg_founder_send_prep_v1.py",
@@ -1484,7 +543,7 @@
         {
           "path": "scripts/query_repo_graph_v1.py",
           "bytes": 3618,
-          "mtime": "2026-07-09T07:03:41Z"
+          "mtime": "2026-07-09T08:11:16Z"
         },
         {
           "path": "scripts/noos_integrator_mirror_check_v1.py",
@@ -1712,6 +771,11 @@
           "mtime": "2026-07-08T01:59:12Z"
         },
         {
+          "path": "scripts/sync-noos-ssot.sh",
+          "bytes": 1468,
+          "mtime": "2026-07-09T07:47:20Z"
+        },
+        {
           "path": "scripts/noos_receipt_writer_v1.py",
           "bytes": 1444,
           "mtime": "2026-07-08T01:59:12Z"
@@ -1724,11 +788,6 @@
         {
           "path": "scripts/check_upgrade_plan_300.sh",
           "bytes": 1407,
-          "mtime": "2026-07-03T12:46:15Z"
-        },
-        {
-          "path": "scripts/sync-noos-ssot.sh",
-          "bytes": 1366,
           "mtime": "2026-07-03T12:46:15Z"
         },
         {
@@ -1823,112 +882,441 @@
         }
       ]
     },
-    "infrastructure": {
-      "path": "infrastructure",
-      "file_count": 7,
-      "total_bytes": 10685,
+    "tests": {
+      "path": "tests",
+      "file_count": 38,
+      "total_bytes": 93453,
       "files": [
         {
-          "path": "infrastructure/supabase/migrations/0015_stale_lane_pgcron_t8.sql",
-          "bytes": 3751,
+          "path": "tests/test_noos_worker_kernel_v1.py",
+          "bytes": 7269,
           "mtime": "2026-07-08T01:59:12Z"
         },
         {
-          "path": "infrastructure/supabase/migrations/0018_security_advisor_warnings.sql",
-          "bytes": 2310,
+          "path": "tests/test_autorun_status_v1.py",
+          "bytes": 6344,
+          "mtime": "2026-07-08T07:34:59Z"
+        },
+        {
+          "path": "tests/test_phase2_decision.py",
+          "bytes": 6304,
+          "mtime": "2026-07-03T12:46:15Z"
+        },
+        {
+          "path": "tests/test_cursor_local_mac_t2_v1.py",
+          "bytes": 6270,
           "mtime": "2026-07-08T01:59:12Z"
         },
         {
-          "path": "infrastructure/supabase/migrations/0017_enable_rls_machine_tables.sql",
-          "bytes": 1530,
+          "path": "tests/test_cloud_inbox_worker_v1.py",
+          "bytes": 5942,
+          "mtime": "2026-07-03T12:46:15Z"
+        },
+        {
+          "path": "tests/test_noos_integrator_sync_v1.py",
+          "bytes": 5389,
           "mtime": "2026-07-08T01:59:12Z"
         },
         {
-          "path": "infrastructure/supabase/migrations/0016_noos_loop_registry.sql",
-          "bytes": 973,
+          "path": "tests/test_noos_machine_loops_v1.py",
+          "bytes": 5041,
           "mtime": "2026-07-08T01:59:12Z"
         },
         {
-          "path": "infrastructure/supabase/migrations/0014_factory_cycle_status_degraded.sql",
-          "bytes": 806,
-          "mtime": "2026-07-03T02:46:02Z"
+          "path": "tests/test_phase3_export.py",
+          "bytes": 4348,
+          "mtime": "2026-07-03T12:46:15Z"
         },
         {
-          "path": "infrastructure/supabase/migrations/0013_noetfield_truth_log_schedule_register.sql",
-          "bytes": 726,
-          "mtime": "2026-07-03T02:46:02Z"
+          "path": "tests/test_noetfield_gate.py",
+          "bytes": 4309,
+          "mtime": "2026-07-03T12:46:15Z"
         },
         {
-          "path": "infrastructure/supabase/migrations/0012_worker_inbox_founder_blocked.sql",
-          "bytes": 589,
-          "mtime": "2026-07-03T02:46:02Z"
+          "path": "tests/test_noos_slo_v1.py",
+          "bytes": 4245,
+          "mtime": "2026-07-03T12:56:11Z"
+        },
+        {
+          "path": "tests/test_loop_determinism_ci.py",
+          "bytes": 2950,
+          "mtime": "2026-07-03T12:46:15Z"
+        },
+        {
+          "path": "tests/test_noos_workflow_audit_v1.py",
+          "bytes": 2448,
+          "mtime": "2026-07-03T12:56:11Z"
+        },
+        {
+          "path": "tests/test_noos_gha_run_health_v1.py",
+          "bytes": 2239,
+          "mtime": "2026-07-08T01:59:12Z"
+        },
+        {
+          "path": "tests/test_noos_parallel_agent_governance_v1.py",
+          "bytes": 1983,
+          "mtime": "2026-07-08T01:59:12Z"
+        },
+        {
+          "path": "tests/test_noos_ecosystem_observe_witness_v1.py",
+          "bytes": 1967,
+          "mtime": "2026-07-08T01:59:12Z"
+        },
+        {
+          "path": "tests/test_noos_sustain_audit_witness_v1.py",
+          "bytes": 1952,
+          "mtime": "2026-07-08T01:59:12Z"
+        },
+        {
+          "path": "tests/test_noos_deadman_v1.py",
+          "bytes": 1829,
+          "mtime": "2026-07-08T01:59:12Z"
+        },
+        {
+          "path": "tests/conftest.py",
+          "bytes": 1756,
+          "mtime": "2026-07-03T12:46:15Z"
+        },
+        {
+          "path": "tests/test_noos_stack_automation_health_v1.py",
+          "bytes": 1735,
+          "mtime": "2026-07-08T01:59:12Z"
+        },
+        {
+          "path": "tests/test_phase2_auth.py",
+          "bytes": 1693,
+          "mtime": "2026-07-03T12:46:15Z"
+        },
+        {
+          "path": "tests/test_decide_integration_ci.py",
+          "bytes": 1572,
+          "mtime": "2026-07-03T12:46:15Z"
+        },
+        {
+          "path": "tests/test_autorun_findings.py",
+          "bytes": 1310,
+          "mtime": "2026-07-08T01:59:12Z"
+        },
+        {
+          "path": "tests/test_noos_motor_restart_v1.py",
+          "bytes": 1277,
+          "mtime": "2026-07-08T01:59:12Z"
+        },
+        {
+          "path": "tests/test_tool_wrappers.py",
+          "bytes": 1171,
+          "mtime": "2026-07-08T01:59:12Z"
+        },
+        {
+          "path": "tests/test_supabase_jwt.py",
+          "bytes": 1134,
+          "mtime": "2026-07-08T07:53:11Z"
+        },
+        {
+          "path": "tests/test_noos_loop_registry_reconcile_v1.py",
+          "bytes": 1133,
+          "mtime": "2026-07-08T01:59:12Z"
+        },
+        {
+          "path": "tests/test_verify_pr_conflict_resolution_v1.py",
+          "bytes": 1084,
+          "mtime": "2026-07-08T02:18:47Z"
+        },
+        {
+          "path": "tests/test_verify_living_system_governance_v1.py",
+          "bytes": 1074,
+          "mtime": "2026-07-08T01:59:12Z"
+        },
+        {
+          "path": "tests/test_noos_kaizen_recipe_apply_v1.py",
+          "bytes": 983,
+          "mtime": "2026-07-08T01:59:12Z"
+        },
+        {
+          "path": "tests/test_noos_sandbox_registry_reconcile_v1.py",
+          "bytes": 921,
+          "mtime": "2026-07-08T01:59:12Z"
+        },
+        {
+          "path": "tests/test_public_site_v1.py",
+          "bytes": 911,
+          "mtime": "2026-07-08T07:36:04Z"
+        },
+        {
+          "path": "tests/test_tool_broker.py",
+          "bytes": 906,
+          "mtime": "2026-07-08T01:59:12Z"
+        },
+        {
+          "path": "tests/test_supabase_probe.py",
+          "bytes": 776,
+          "mtime": "2026-07-08T01:59:12Z"
+        },
+        {
+          "path": "tests/test_noos_deadman_telegram_lane_v1.py",
+          "bytes": 754,
+          "mtime": "2026-07-08T01:59:12Z"
+        },
+        {
+          "path": "tests/test_gate_integration_ci.py",
+          "bytes": 686,
+          "mtime": "2026-07-03T12:46:15Z"
+        },
+        {
+          "path": "tests/test_forbidden_markers.py",
+          "bytes": 674,
+          "mtime": "2026-07-03T12:56:11Z"
+        },
+        {
+          "path": "tests/test_noos_deploy_baseline_audit_v1.py",
+          "bytes": 593,
+          "mtime": "2026-07-08T01:59:12Z"
+        },
+        {
+          "path": "tests/test_noetfield_deploy_v1.py",
+          "bytes": 481,
+          "mtime": "2026-07-08T01:59:12Z"
         }
       ]
     },
-    "videos": {
-      "path": "videos",
-      "file_count": 12,
-      "total_bytes": 1610220,
+    "cloud": {
+      "path": "cloud",
+      "file_count": 9,
+      "total_bytes": 26329,
       "files": [
         {
-          "path": "videos/noetfeld-governance-motion/snapshots/frame-02-at-5.0s.png",
-          "bytes": 337510,
-          "mtime": "2026-07-03T02:46:02Z"
+          "path": "cloud/workers/noos-deadman-v1/src/index.js",
+          "bytes": 12636,
+          "mtime": "2026-07-08T01:59:12Z"
         },
         {
-          "path": "videos/noetfeld-governance-motion/snapshots/frame-01-at-2.5s.png",
-          "bytes": 323742,
-          "mtime": "2026-07-03T02:46:02Z"
+          "path": "cloud/workers/noos-loop-fleet-tick-v1/src/index.js",
+          "bytes": 4730,
+          "mtime": "2026-07-08T01:59:12Z"
         },
         {
-          "path": "videos/noetfeld-governance-motion/snapshots/frame-03-at-7.5s.png",
-          "bytes": 303010,
-          "mtime": "2026-07-03T02:46:02Z"
+          "path": "cloud/workers/noos-factory-autorun-tick-v1/src/index.js",
+          "bytes": 2733,
+          "mtime": "2026-07-03T12:56:11Z"
         },
         {
-          "path": "videos/noetfeld-governance-motion/snapshots/frame-04-at-10.0s.png",
-          "bytes": 285080,
-          "mtime": "2026-07-03T02:46:02Z"
+          "path": "cloud/workers/noos-loop-fleet-tick-v1/src/dispatch-table.json",
+          "bytes": 2102,
+          "mtime": "2026-07-08T01:59:12Z"
         },
         {
-          "path": "videos/noetfeld-governance-motion/snapshots/frame-00-at-0.0s.png",
-          "bytes": 271255,
-          "mtime": "2026-07-03T02:46:02Z"
+          "path": "cloud/workers/noos-deadman-v1/src/loop-intervals.json",
+          "bytes": 1888,
+          "mtime": "2026-07-08T01:59:12Z"
         },
         {
-          "path": "videos/noetfeld-governance-motion/snapshots/contact-sheet.jpg",
-          "bytes": 70514,
-          "mtime": "2026-07-03T02:46:02Z"
+          "path": "cloud/workers/noos-deadman-v1/src/deadman-config.json",
+          "bytes": 1594,
+          "mtime": "2026-07-08T01:59:12Z"
         },
         {
-          "path": "videos/noetfeld-governance-motion/index.html",
-          "bytes": 7243,
-          "mtime": "2026-07-03T02:46:02Z"
+          "path": "cloud/workers/noos-factory-autorun-tick-v1/wrangler.toml",
+          "bytes": 275,
+          "mtime": "2026-07-08T01:59:12Z"
         },
         {
-          "path": "videos/noetfeld-governance-motion/AGENTS.md",
-          "bytes": 5540,
+          "path": "cloud/workers/noos-deadman-v1/wrangler.toml",
+          "bytes": 198,
+          "mtime": "2026-07-08T01:59:12Z"
+        },
+        {
+          "path": "cloud/workers/noos-loop-fleet-tick-v1/wrangler.toml",
+          "bytes": 173,
+          "mtime": "2026-07-08T07:03:01Z"
+        }
+      ]
+    },
+    "noetfield-org": {
+      "path": "noetfield-org",
+      "file_count": 20,
+      "total_bytes": 133811,
+      "files": [
+        {
+          "path": "noetfield-org/receipts/NOOS_MODEL_OUTCOME_VERIFICATION_RECEIPT_2026-07-05.md",
+          "bytes": 15375,
+          "mtime": "2026-07-08T01:59:12Z"
+        },
+        {
+          "path": "noetfield-org/MODEL_OUTCOME_VERIFICATION_LEDGER.md",
+          "bytes": 13163,
+          "mtime": "2026-07-08T01:59:12Z"
+        },
+        {
+          "path": "noetfield-org/receipts/NOOS_SERVICE_LANE_REGISTRATION_2026-07-05.md",
+          "bytes": 11099,
+          "mtime": "2026-07-08T01:59:12Z"
+        },
+        {
+          "path": "noetfield-org/receipts/NOOS_SERVICE_LANE_TICK_2026-07-05.md",
+          "bytes": 9654,
+          "mtime": "2026-07-08T01:59:12Z"
+        },
+        {
+          "path": "noetfield-org/NOOS_CONTROL_PANEL_AUTHORITY_REPORT_2026-07-04.md",
+          "bytes": 9207,
+          "mtime": "2026-07-09T07:47:20Z"
+        },
+        {
+          "path": "noetfield-org/SYNC_RECEIPTS.md",
+          "bytes": 9101,
+          "mtime": "2026-07-08T01:59:12Z"
+        },
+        {
+          "path": "noetfield-org/receipts/NOOS_SERVICE_LANE_TICK_2026-07-05_PRESERVATION.md",
+          "bytes": 8744,
+          "mtime": "2026-07-08T01:59:12Z"
+        },
+        {
+          "path": "noetfield-org/receipts/NOOS_PRE_PUBLISH_CLEARANCE_RECEIPT_2026-07-05.md",
+          "bytes": 8017,
+          "mtime": "2026-07-08T01:59:12Z"
+        },
+        {
+          "path": "noetfield-org/SERVICE_LANES.md",
+          "bytes": 7608,
+          "mtime": "2026-07-08T01:59:12Z"
+        },
+        {
+          "path": "noetfield-org/receipts/NOOS_SERVICE_LANE_TICK_2026-07-05_EXTERNAL_VERIFY.md",
+          "bytes": 7318,
+          "mtime": "2026-07-08T01:59:12Z"
+        },
+        {
+          "path": "noetfield-org/ROUTING_MATRIX.md",
+          "bytes": 7150,
+          "mtime": "2026-07-08T01:59:12Z"
+        },
+        {
+          "path": "noetfield-org/receipts/NOOS_INTEGRATOR_SYNC_RECEIPT_2026-07-05.md",
+          "bytes": 7041,
+          "mtime": "2026-07-09T07:47:20Z"
+        },
+        {
+          "path": "noetfield-org/LOOP_STATE.json",
+          "bytes": 4931,
+          "mtime": "2026-07-08T01:59:12Z"
+        },
+        {
+          "path": "noetfield-org/AGENT_REGISTRY.md",
+          "bytes": 4789,
+          "mtime": "2026-07-08T01:59:12Z"
+        },
+        {
+          "path": "noetfield-org/receipts/NOOS_SERVICE_LANE_LIVE_RECEIPT_2026-07-05.md",
+          "bytes": 4326,
+          "mtime": "2026-07-08T01:59:12Z"
+        },
+        {
+          "path": "noetfield-org/NOOS_LOCK_RECEIPT_v1.json",
+          "bytes": 3243,
+          "mtime": "2026-07-08T01:59:12Z"
+        },
+        {
+          "path": "noetfield-org/REPO_REGISTRY.md",
+          "bytes": 1920,
+          "mtime": "2026-07-08T01:59:12Z"
+        },
+        {
+          "path": "noetfield-org/receipts/NOOS_ACG_FOUNDER_SEND_PREP_2026-07-05.md",
+          "bytes": 988,
+          "mtime": "2026-07-08T01:59:12Z"
+        },
+        {
+          "path": "noetfield-org/receipts/NOOS_ACG_FOUNDER_SEND_RECEIPT_TEMPLATE.md",
+          "bytes": 114,
+          "mtime": "2026-07-08T01:59:12Z"
+        },
+        {
+          "path": "noetfield-org/FORBIDDEN_MARKERS.txt",
+          "bytes": 23,
+          "mtime": "2026-07-03T12:56:11Z"
+        }
+      ]
+    },
+    "public_site": {
+      "path": "public_site",
+      "file_count": 15,
+      "total_bytes": 38002,
+      "files": [
+        {
+          "path": "public_site/static/site.css",
+          "bytes": 9576,
+          "mtime": "2026-07-08T07:36:02Z"
+        },
+        {
+          "path": "public_site/routes.py",
+          "bytes": 4612,
+          "mtime": "2026-07-08T07:35:49Z"
+        },
+        {
+          "path": "public_site/content/trust-ledger/index.md",
+          "bytes": 4455,
           "mtime": "2026-07-03T12:46:15Z"
         },
         {
-          "path": "videos/noetfeld-governance-motion/CLAUDE.md",
-          "bytes": 5540,
+          "path": "public_site/templates/base.html",
+          "bytes": 4410,
+          "mtime": "2026-07-08T07:35:48Z"
+        },
+        {
+          "path": "public_site/content/gate/partners/index.md",
+          "bytes": 3515,
           "mtime": "2026-07-03T12:46:15Z"
         },
         {
-          "path": "videos/noetfeld-governance-motion/package.json",
-          "bytes": 385,
+          "path": "public_site/static/cookies.js",
+          "bytes": 3336,
+          "mtime": "2026-07-08T07:35:27Z"
+        },
+        {
+          "path": "public_site/templates/gateway.html",
+          "bytes": 2497,
+          "mtime": "2026-07-08T07:35:51Z"
+        },
+        {
+          "path": "public_site/renderer.py",
+          "bytes": 2146,
           "mtime": "2026-07-03T12:46:15Z"
         },
         {
-          "path": "videos/noetfeld-governance-motion/hyperframes.json",
-          "bytes": 278,
+          "path": "public_site/content/privacy/index.md",
+          "bytes": 1363,
+          "mtime": "2026-07-08T07:35:32Z"
+        },
+        {
+          "path": "public_site/content/cookies/index.md",
+          "bytes": 1057,
+          "mtime": "2026-07-08T07:35:34Z"
+        },
+        {
+          "path": "public_site/static/site.js",
+          "bytes": 860,
+          "mtime": "2026-07-08T07:35:28Z"
+        },
+        {
+          "path": "public_site/templates/page.html",
+          "bytes": 90,
+          "mtime": "2026-07-03T02:46:02Z"
+        },
+        {
+          "path": "public_site/__init__.py",
+          "bytes": 61,
           "mtime": "2026-07-03T12:46:15Z"
         },
         {
-          "path": "videos/noetfeld-governance-motion/meta.json",
-          "bytes": 123,
-          "mtime": "2026-07-03T12:46:15Z"
+          "path": "public_site/data/.gitignore",
+          "bytes": 24,
+          "mtime": "2026-07-03T02:46:02Z"
+        },
+        {
+          "path": "public_site/data/.gitkeep",
+          "bytes": 0,
+          "mtime": "2026-07-03T02:46:02Z"
         }
       ]
     },
@@ -2144,10 +1532,672 @@
         }
       ]
     },
+    "packages": {
+      "path": "packages",
+      "file_count": 16,
+      "total_bytes": 21299,
+      "files": [
+        {
+          "path": "packages/auth-core/package-lock.json",
+          "bytes": 6431,
+          "mtime": "2026-07-08T07:46:26Z"
+        },
+        {
+          "path": "packages/gate/src/index.ts",
+          "bytes": 2792,
+          "mtime": "2026-07-03T02:46:02Z"
+        },
+        {
+          "path": "packages/noetfield-gate/README.md",
+          "bytes": 1639,
+          "mtime": "2026-07-09T07:47:20Z"
+        },
+        {
+          "path": "packages/gate/package-lock.json",
+          "bytes": 1522,
+          "mtime": "2026-07-03T12:46:15Z"
+        },
+        {
+          "path": "packages/auth-core/src/middleware.test.ts",
+          "bytes": 1466,
+          "mtime": "2026-07-08T07:46:38Z"
+        },
+        {
+          "path": "packages/auth-core/src/middleware.ts",
+          "bytes": 1212,
+          "mtime": "2026-07-08T07:46:10Z"
+        },
+        {
+          "path": "packages/auth-core/src/clients.ts",
+          "bytes": 1199,
+          "mtime": "2026-07-08T07:46:33Z"
+        },
+        {
+          "path": "packages/auth-core/package.json",
+          "bytes": 1030,
+          "mtime": "2026-07-08T07:45:56Z"
+        },
+        {
+          "path": "packages/gate/package.json",
+          "bytes": 893,
+          "mtime": "2026-07-03T12:56:11Z"
+        },
+        {
+          "path": "packages/auth-core/README.md",
+          "bytes": 593,
+          "mtime": "2026-07-08T07:46:19Z"
+        },
+        {
+          "path": "packages/auth-core/src/constants.ts",
+          "bytes": 552,
+          "mtime": "2026-07-08T07:46:02Z"
+        },
+        {
+          "path": "packages/auth-core/src/index.ts",
+          "bytes": 490,
+          "mtime": "2026-07-08T07:46:12Z"
+        },
+        {
+          "path": "packages/gate/README.md",
+          "bytes": 471,
+          "mtime": "2026-07-03T12:46:15Z"
+        },
+        {
+          "path": "packages/auth-core/src/types.ts",
+          "bytes": 427,
+          "mtime": "2026-07-08T07:46:00Z"
+        },
+        {
+          "path": "packages/auth-core/tsconfig.json",
+          "bytes": 293,
+          "mtime": "2026-07-08T07:53:49Z"
+        },
+        {
+          "path": "packages/gate/tsconfig.json",
+          "bytes": 289,
+          "mtime": "2026-07-03T12:46:15Z"
+        }
+      ]
+    },
+    "audit": {
+      "path": "audit",
+      "file_count": 1,
+      "total_bytes": 971,
+      "files": [
+        {
+          "path": "audit/audit_store.py",
+          "bytes": 971,
+          "mtime": "2026-07-03T12:46:15Z"
+        }
+      ]
+    },
+    "export": {
+      "path": "export",
+      "file_count": 3,
+      "total_bytes": 9638,
+      "files": [
+        {
+          "path": "export/tle_mapper.py",
+          "bytes": 7029,
+          "mtime": "2026-07-03T12:46:15Z"
+        },
+        {
+          "path": "export/board_pdf.py",
+          "bytes": 2587,
+          "mtime": "2026-07-03T12:46:15Z"
+        },
+        {
+          "path": "export/__init__.py",
+          "bytes": 22,
+          "mtime": "2026-07-03T12:46:15Z"
+        }
+      ]
+    },
+    "infrastructure": {
+      "path": "infrastructure",
+      "file_count": 7,
+      "total_bytes": 10685,
+      "files": [
+        {
+          "path": "infrastructure/supabase/migrations/0015_stale_lane_pgcron_t8.sql",
+          "bytes": 3751,
+          "mtime": "2026-07-08T01:59:12Z"
+        },
+        {
+          "path": "infrastructure/supabase/migrations/0018_security_advisor_warnings.sql",
+          "bytes": 2310,
+          "mtime": "2026-07-08T01:59:12Z"
+        },
+        {
+          "path": "infrastructure/supabase/migrations/0017_enable_rls_machine_tables.sql",
+          "bytes": 1530,
+          "mtime": "2026-07-08T01:59:12Z"
+        },
+        {
+          "path": "infrastructure/supabase/migrations/0016_noos_loop_registry.sql",
+          "bytes": 973,
+          "mtime": "2026-07-08T01:59:12Z"
+        },
+        {
+          "path": "infrastructure/supabase/migrations/0014_factory_cycle_status_degraded.sql",
+          "bytes": 806,
+          "mtime": "2026-07-03T02:46:02Z"
+        },
+        {
+          "path": "infrastructure/supabase/migrations/0013_noetfield_truth_log_schedule_register.sql",
+          "bytes": 726,
+          "mtime": "2026-07-03T02:46:02Z"
+        },
+        {
+          "path": "infrastructure/supabase/migrations/0012_worker_inbox_founder_blocked.sql",
+          "bytes": 589,
+          "mtime": "2026-07-03T02:46:02Z"
+        }
+      ]
+    },
+    "docs": {
+      "path": "docs",
+      "file_count": 95,
+      "total_bytes": 20227830,
+      "files": [
+        {
+          "path": "docs/run_patches/noetfield_run_patch_pack_10100_v1.jsonl",
+          "bytes": 10016135,
+          "mtime": "2026-07-03T02:46:02Z"
+        },
+        {
+          "path": "docs/run_patches/execution/noetfield_run_patch_execution_receipts_v1.jsonl",
+          "bytes": 9002835,
+          "mtime": "2026-07-03T02:46:02Z"
+        },
+        {
+          "path": "docs/ops/ECOSYSTEM_CONTROLLED_EXECUTION_1000_PLAN_DRAFT_v1.md",
+          "bytes": 384702,
+          "mtime": "2026-07-09T07:47:20Z"
+        },
+        {
+          "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260608-004]_ROADMAP_1000_STEPS_10_PHASES.md",
+          "bytes": 97051,
+          "mtime": "2026-07-09T07:47:20Z"
+        },
+        {
+          "path": "docs/run_patches/noetfield_run_patch_manifest_10100_v1.json",
+          "bytes": 41243,
+          "mtime": "2026-07-09T07:47:20Z"
+        },
+        {
+          "path": "docs/ops/NOETFIELD_OS_CONTROL_SCOPE_DISCOVERY_REPORT_v1_20260629-1813.md",
+          "bytes": 40827,
+          "mtime": "2026-07-09T07:47:20Z"
+        },
+        {
+          "path": "docs/output/internal/pitch-deck-noetfield-gel.pptx",
+          "bytes": 39842,
+          "mtime": "2026-07-03T02:46:02Z"
+        },
+        {
+          "path": "docs/output/external/pitch-deck-noetfield-gel.pptx",
+          "bytes": 38635,
+          "mtime": "2026-07-03T02:46:02Z"
+        },
+        {
+          "path": "docs/scripts/generate_roadmap_1000.py",
+          "bytes": 37916,
+          "mtime": "2026-07-09T07:47:20Z"
+        },
+        {
+          "path": "docs/ops/ECOSYSTEM_CONTROLLED_EXECUTION_FIRST_100_LOCKED_v1.md",
+          "bytes": 35815,
+          "mtime": "2026-07-03T12:46:15Z"
+        },
+        {
+          "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260615-014]_UPGRADE_PLAN_300_STEPS_v1.md",
+          "bytes": 25263,
+          "mtime": "2026-07-09T07:47:20Z"
+        },
+        {
+          "path": "docs/scripts/build_documents.py",
+          "bytes": 24532,
+          "mtime": "2026-07-03T12:46:15Z"
+        },
+        {
+          "path": "docs/ops/NOETFIELD_RESEARCH_REMEDIATION_EXECUTION_TRACKER_v1_20260701.md",
+          "bytes": 24250,
+          "mtime": "2026-07-03T12:46:15Z"
+        },
+        {
+          "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260705-029]_LIVING_SYSTEM_99_PLAN_LOCKED_v1.md",
+          "bytes": 18485,
+          "mtime": "2026-07-08T01:59:12Z"
+        },
+        {
+          "path": "docs/_NOOS_AGENT/NOETFIELD_UNIFIED_MASTER_v1_LOCKED.md",
+          "bytes": 18121,
+          "mtime": "2026-07-08T01:59:12Z"
+        },
+        {
+          "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260629-022]_SYSTEM_FIX_AND_UPGRADE_100_PLAN_v1.md",
+          "bytes": 15323,
+          "mtime": "2026-07-09T07:47:20Z"
+        },
+        {
+          "path": "docs/_NOOS_AGENT/NOETFIELD_OS_SSOT_v1_LOCKED.md",
+          "bytes": 13462,
+          "mtime": "2026-07-08T01:59:12Z"
+        },
+        {
+          "path": "docs/_NOOS_AGENT/MANIFEST.json",
+          "bytes": 12528,
+          "mtime": "2026-07-09T07:47:20Z"
+        },
+        {
+          "path": "docs/_NOOS_AGENT/live_sync/NOOS_LIVE_SYNC_RECEIPT.json",
+          "bytes": 12288,
+          "mtime": "2026-07-08T01:59:12Z"
+        },
+        {
+          "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260529-002]_BUSINESS_PRODUCT_CLIENT_DEFINITION.md",
+          "bytes": 12022,
+          "mtime": "2026-07-09T07:47:20Z"
+        },
+        {
+          "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260628-019]_WEBSITE_NOOS_REAL_SYNC_HANDOFF_LOCKED_v1.md",
+          "bytes": 11556,
+          "mtime": "2026-07-03T12:46:15Z"
+        },
+        {
+          "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260615-010]_BUSINESS_STRATEGY_PROOF_DENSITY_v1.md",
+          "bytes": 11485,
+          "mtime": "2026-07-09T07:47:20Z"
+        },
+        {
+          "path": "docs/NOETFIELD_COHERENT_SYSTEM_SPEC_v1.md",
+          "bytes": 11362,
+          "mtime": "2026-07-03T12:46:15Z"
+        },
+        {
+          "path": "docs/WORKFLOW_SELF_HEALING_ECOSYSTEM_v1.md",
+          "bytes": 10368,
+          "mtime": "2026-07-03T12:56:11Z"
+        },
+        {
+          "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260608-003]_TEN_MARKET_SUCCESS_MODELS_JUNE_2026.md",
+          "bytes": 10251,
+          "mtime": "2026-07-09T07:47:20Z"
+        },
+        {
+          "path": "docs/_NOOS_AGENT/UPGRADE_MANIFEST.json",
+          "bytes": 9690,
+          "mtime": "2026-07-08T01:59:12Z"
+        },
+        {
+          "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260629-021]_DIRTY_STATE_DECISION_AUDIT_PLAN_v1.md",
+          "bytes": 9089,
+          "mtime": "2026-07-09T07:47:20Z"
+        },
+        {
+          "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260702-027]_UNIFIED_AUTONOMY_UPGRADE_MASTER_v1.md",
+          "bytes": 8743,
+          "mtime": "2026-07-09T07:47:20Z"
+        },
+        {
+          "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260702-028]_TEN_UPGRADE_PLANES_v1.md",
+          "bytes": 8710,
+          "mtime": "2026-07-09T07:47:20Z"
+        },
+        {
+          "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260627-018]_WEBSITE_REVENUE_OPERATING_IMPLEMENTATION_LOCKED_v1.md",
+          "bytes": 8600,
+          "mtime": "2026-07-03T12:46:15Z"
+        },
+        {
+          "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260529-001]_GOVERNANCE_DRIFT_DETECTION_ESSAY.md",
+          "bytes": 8501,
+          "mtime": "2026-07-09T07:47:20Z"
+        },
+        {
+          "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260703-003]_PARALLEL_AGENT_GOVERNANCE_v1.md",
+          "bytes": 8438,
+          "mtime": "2026-07-09T07:47:20Z"
+        },
+        {
+          "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260608-005]_ORIENTATION_START_HERE.md",
+          "bytes": 8095,
+          "mtime": "2026-07-09T07:47:20Z"
+        },
+        {
+          "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260626-015]_NOETFIELD_CLOUD_ORGANIZE_MASTER_PLAN_LOCKED_v1.md",
+          "bytes": 7970,
+          "mtime": "2026-07-08T01:59:12Z"
+        },
+        {
+          "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260615-006]_NINETY_DAY_EXECUTION_PLAN.md",
+          "bytes": 7600,
+          "mtime": "2026-07-09T07:47:20Z"
+        },
+        {
+          "path": "docs/GOVERNED_AUTORUN_LAWS_v3.md",
+          "bytes": 7293,
+          "mtime": "2026-07-03T12:46:15Z"
+        },
+        {
+          "path": "docs/run_patches/execution/noetfield_factory_cycles_v1.jsonl",
+          "bytes": 6950,
+          "mtime": "2026-07-03T02:46:02Z"
+        },
+        {
+          "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260706-033]_UNIFIED_NEXT_PLAN_NOOS_NOETFIELD_v1.md",
+          "bytes": 6801,
+          "mtime": "2026-07-08T01:59:12Z"
+        },
+        {
+          "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260702-024]_ECOSYSTEM_NEXT_PLAN_LOCKED_v1.md",
+          "bytes": 6136,
+          "mtime": "2026-07-08T01:59:12Z"
+        },
+        {
+          "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260627-017]_NOETFIELD_RUN_PATCH_PACK_10100_v1.md",
+          "bytes": 5326,
+          "mtime": "2026-07-09T07:47:20Z"
+        },
+        {
+          "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260707-007]_INTEGRATOR_CONTROL_LAYER_UPGRADE_v1.md",
+          "bytes": 5130,
+          "mtime": "2026-07-08T01:59:12Z"
+        },
+        {
+          "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260707-008]_INTEGRATOR_DAILY_CHECKLIST_v1.md",
+          "bytes": 4943,
+          "mtime": "2026-07-08T01:59:12Z"
+        },
+        {
+          "path": "docs/output/internal/grant-core-narrative.pdf",
+          "bytes": 4614,
+          "mtime": "2026-07-03T02:46:02Z"
+        },
+        {
+          "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260702-025]_THREE_TRACK_10_STEP_UPGRADE_PLAN_v1.md",
+          "bytes": 4533,
+          "mtime": "2026-07-09T07:47:20Z"
+        },
+        {
+          "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260615-007]_GLOSSARY_AND_PLANE_TAGS.md",
+          "bytes": 4518,
+          "mtime": "2026-07-09T07:47:20Z"
+        },
+        {
+          "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260615-011]_FOUNDING_PILOT_ONEPAGER_EXTERNAL_v1.md",
+          "bytes": 4480,
+          "mtime": "2026-07-09T07:47:20Z"
+        },
+        {
+          "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260703-004]_CURSOR_LOCAL_MAC_OPERATOR_v1.md",
+          "bytes": 4393,
+          "mtime": "2026-07-09T07:47:20Z"
+        },
+        {
+          "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260703-001]_INTEGRATOR_AGENT_PROTOCOL_v1.md",
+          "bytes": 4367,
+          "mtime": "2026-07-09T07:47:20Z"
+        },
+        {
+          "path": "docs/governed-autorun/references/deterministic-loops.md",
+          "bytes": 4223,
+          "mtime": "2026-07-03T12:46:15Z"
+        },
+        {
+          "path": "docs/_NOOS_AGENT/README.md",
+          "bytes": 4106,
+          "mtime": "2026-07-09T07:47:20Z"
+        },
+        {
+          "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260615-013]_FOUNDING_PILOT_ONEPAGER_AGENTS_v1.md",
+          "bytes": 3732,
+          "mtime": "2026-07-09T07:47:20Z"
+        },
+        {
+          "path": "docs/output/internal/loi-template.pdf",
+          "bytes": 3670,
+          "mtime": "2026-07-03T02:46:02Z"
+        },
+        {
+          "path": "docs/governed-autorun/references/receipt-schemas.md",
+          "bytes": 3502,
+          "mtime": "2026-07-03T12:46:15Z"
+        },
+        {
+          "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260629-020]_WEBSITE_PLATFORM_LIVE_NERVE_RESPONSE_LOCKED_v1.md",
+          "bytes": 3472,
+          "mtime": "2026-07-03T12:46:15Z"
+        },
+        {
+          "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260703-006]_MACHINE_LOOPS_v1.md",
+          "bytes": 3464,
+          "mtime": "2026-07-09T07:47:20Z"
+        },
+        {
+          "path": "docs/ops/ECOSYSTEM_CRITIC_NOTE_MISSION_REPORT_20260629_v1.md",
+          "bytes": 3441,
+          "mtime": "2026-07-03T12:46:15Z"
+        },
+        {
+          "path": "docs/output/internal/budget-breakdown.pdf",
+          "bytes": 3364,
+          "mtime": "2026-07-03T02:46:02Z"
+        },
+        {
+          "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260703-005]_FOUNDER_CANON_INTERFACE_v1.md",
+          "bytes": 3292,
+          "mtime": "2026-07-09T07:47:20Z"
+        },
+        {
+          "path": "docs/output/internal/strategic-positioning.pdf",
+          "bytes": 3215,
+          "mtime": "2026-07-03T02:46:02Z"
+        },
+        {
+          "path": "docs/output/internal/reality-check.pdf",
+          "bytes": 3154,
+          "mtime": "2026-07-03T02:46:02Z"
+        },
+        {
+          "path": "docs/output/external/grant-core-narrative.pdf",
+          "bytes": 3084,
+          "mtime": "2026-07-03T02:46:02Z"
+        },
+        {
+          "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260615-008]_GEL_WEB_URL_STRUCTURE.md",
+          "bytes": 2817,
+          "mtime": "2026-07-09T07:47:20Z"
+        },
+        {
+          "path": "docs/output/external/loi-template.pdf",
+          "bytes": 2766,
+          "mtime": "2026-07-03T02:46:02Z"
+        },
+        {
+          "path": "docs/output/internal/pitch-deck-handout.pdf",
+          "bytes": 2697,
+          "mtime": "2026-07-03T02:46:02Z"
+        },
+        {
+          "path": "docs/output/external/pitch-deck-handout.pdf",
+          "bytes": 2632,
+          "mtime": "2026-07-03T02:46:02Z"
+        },
+        {
+          "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260703-002]_CHEAP_WORKER_KERNEL_v1.md",
+          "bytes": 2580,
+          "mtime": "2026-07-09T07:47:20Z"
+        },
+        {
+          "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260708-001]_PR_CONFLICT_RESOLVER_MANDATORY_v1_LOCKED.md",
+          "bytes": 2462,
+          "mtime": "2026-07-08T02:18:45Z"
+        },
+        {
+          "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260615-012]_CHAIN_TOOLS_STRATEGY_v1.md",
+          "bytes": 2421,
+          "mtime": "2026-07-09T07:47:20Z"
+        },
+        {
+          "path": "docs/NOOS_COPILOT_DISPATCHER_AUTHORITY.md",
+          "bytes": 2357,
+          "mtime": "2026-07-08T01:59:12Z"
+        },
+        {
+          "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260706-032]_STALE_DOC_REGISTER_v1.md",
+          "bytes": 2303,
+          "mtime": "2026-07-08T01:59:12Z"
+        },
+        {
+          "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260615-009]_PITCH_ALIGNMENT_NOTES.md",
+          "bytes": 2264,
+          "mtime": "2026-07-09T07:47:20Z"
+        },
+        {
+          "path": "docs/_NOOS_AGENT/PRODUCT_TRUTH.md",
+          "bytes": 2216,
+          "mtime": "2026-07-08T01:59:12Z"
+        },
+        {
+          "path": "docs/output/external/budget-breakdown.pdf",
+          "bytes": 2190,
+          "mtime": "2026-07-03T02:46:02Z"
+        },
+        {
+          "path": "docs/ops/NOOS_FACTORY_AUTORUN_DEPRECATION_v1.md",
+          "bytes": 2169,
+          "mtime": "2026-07-08T01:59:12Z"
+        },
+        {
+          "path": "docs/output/external/strategic-positioning.pdf",
+          "bytes": 2064,
+          "mtime": "2026-07-03T02:46:02Z"
+        },
+        {
+          "path": "docs/README.md",
+          "bytes": 2010,
+          "mtime": "2026-07-03T12:46:15Z"
+        },
+        {
+          "path": "docs/ops/PYPI_PUBLISH_LOCKED_v1.md",
+          "bytes": 1946,
+          "mtime": "2026-07-08T01:59:12Z"
+        },
+        {
+          "path": "docs/demo/GEL_5MIN_SPEAKER_NOTES_v1.md",
+          "bytes": 1916,
+          "mtime": "2026-07-09T07:47:20Z"
+        },
+        {
+          "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260629-023]_NOETFIELD_OS_REPO_POLICY_LOCKED_v1.md",
+          "bytes": 1860,
+          "mtime": "2026-07-03T12:46:15Z"
+        },
+        {
+          "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260702-026]_TRACK_ABC_CLOSEOUT_RECEIPT_v1.md",
+          "bytes": 1816,
+          "mtime": "2026-07-09T07:47:20Z"
+        },
+        {
+          "path": "docs/L0_REPO_GRAPH_MEMORY_v1.md",
+          "bytes": 1804,
+          "mtime": "2026-07-09T07:04:56Z"
+        },
+        {
+          "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260706-030]_LIVING_SYSTEM_48H_RETRO_v1.md",
+          "bytes": 1682,
+          "mtime": "2026-07-08T01:59:12Z"
+        },
+        {
+          "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260706-031]_DEADMAN_TELEGRAM_LANE_LOCKED_v1.md",
+          "bytes": 1550,
+          "mtime": "2026-07-08T01:59:12Z"
+        },
+        {
+          "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260627-016]_STUDIO_SUPABASE_BOUNDARY.md",
+          "bytes": 1490,
+          "mtime": "2026-07-09T07:47:20Z"
+        },
+        {
+          "path": "docs/ops/NOOS_CLOUDFLARE_WWW_DEPLOY_v1.md",
+          "bytes": 1375,
+          "mtime": "2026-07-08T01:59:12Z"
+        },
+        {
+          "path": "docs/ops/NOOS_BASELINE_RECEIPT_PLAN_0007_0008_LOCKED_v1.md",
+          "bytes": 1282,
+          "mtime": "2026-07-03T12:46:15Z"
+        },
+        {
+          "path": "docs/run_patches/execution/noetfield_factory_heartbeat_v1.json",
+          "bytes": 1263,
+          "mtime": "2026-07-03T12:46:15Z"
+        },
+        {
+          "path": "docs/run_patches/execution/noetfield_factory_state_v1.json",
+          "bytes": 1263,
+          "mtime": "2026-07-03T12:46:15Z"
+        },
+        {
+          "path": "docs/_NOOS_AGENT/ROADMAP_MANIFEST.json",
+          "bytes": 1257,
+          "mtime": "2026-07-03T12:46:15Z"
+        },
+        {
+          "path": "docs/ops/NOOS_MOTOR_RESTART_RECIPES_v1.md",
+          "bytes": 1012,
+          "mtime": "2026-07-08T01:59:12Z"
+        },
+        {
+          "path": "docs/run_patches/execution/noetfield_run_patch_execution_state_v1.json",
+          "bytes": 871,
+          "mtime": "2026-07-03T12:46:15Z"
+        },
+        {
+          "path": "docs/examples/pre-commit-noetfield-gate-v1.md",
+          "bytes": 845,
+          "mtime": "2026-07-08T01:59:12Z"
+        },
+        {
+          "path": "docs/examples/noetfield-gate-gha-v1.yml",
+          "bytes": 840,
+          "mtime": "2026-07-08T01:59:12Z"
+        },
+        {
+          "path": "docs/ops/GEL_API_DEPLOY_LOCKED_v1.md",
+          "bytes": 639,
+          "mtime": "2026-07-03T12:46:15Z"
+        },
+        {
+          "path": "docs/GOVERNED_AUTORUN_LAWS_v2.md",
+          "bytes": 235,
+          "mtime": "2026-07-03T12:46:15Z"
+        }
+      ]
+    },
+    "portal": {
+      "path": "portal",
+      "file_count": 2,
+      "total_bytes": 4299,
+      "files": [
+        {
+          "path": "portal/routes.py",
+          "bytes": 3178,
+          "mtime": "2026-07-03T12:46:15Z"
+        },
+        {
+          "path": "portal/schemas.py",
+          "bytes": 1121,
+          "mtime": "2026-07-03T12:46:15Z"
+        }
+      ]
+    },
     "data": {
       "path": "data",
       "file_count": 39,
-      "total_bytes": 244227,
+      "total_bytes": 244244,
       "files": [
         {
           "path": "data/noos-upgrade-planes-v1.json",
@@ -2166,8 +2216,8 @@
         },
         {
           "path": "data/noos-trigger-host-inventory-v1.json",
-          "bytes": 19006,
-          "mtime": "2026-07-08T01:59:12Z"
+          "bytes": 19023,
+          "mtime": "2026-07-09T07:47:20Z"
         },
         {
           "path": "data/trigger-registry-v1.json",
@@ -2346,207 +2396,74 @@
         }
       ]
     },
-    "tests": {
-      "path": "tests",
-      "file_count": 38,
-      "total_bytes": 93453,
+    "noetfield_gate": {
+      "path": "noetfield_gate",
+      "file_count": 8,
+      "total_bytes": 24000,
       "files": [
         {
-          "path": "tests/test_noos_worker_kernel_v1.py",
-          "bytes": 7269,
-          "mtime": "2026-07-08T01:59:12Z"
-        },
-        {
-          "path": "tests/test_autorun_status_v1.py",
-          "bytes": 6344,
-          "mtime": "2026-07-08T07:34:59Z"
-        },
-        {
-          "path": "tests/test_phase2_decision.py",
-          "bytes": 6304,
+          "path": "noetfield_gate/boot.py",
+          "bytes": 10585,
           "mtime": "2026-07-03T12:46:15Z"
         },
         {
-          "path": "tests/test_cursor_local_mac_t2_v1.py",
-          "bytes": 6270,
+          "path": "noetfield_gate/cli.py",
+          "bytes": 6285,
           "mtime": "2026-07-08T01:59:12Z"
         },
         {
-          "path": "tests/test_cloud_inbox_worker_v1.py",
-          "bytes": 5942,
+          "path": "noetfield_gate/decide.py",
+          "bytes": 3571,
           "mtime": "2026-07-03T12:46:15Z"
         },
         {
-          "path": "tests/test_noos_integrator_sync_v1.py",
-          "bytes": 5389,
-          "mtime": "2026-07-08T01:59:12Z"
-        },
-        {
-          "path": "tests/test_noos_machine_loops_v1.py",
-          "bytes": 5041,
-          "mtime": "2026-07-08T01:59:12Z"
-        },
-        {
-          "path": "tests/test_phase3_export.py",
-          "bytes": 4348,
+          "path": "noetfield_gate/verify.py",
+          "bytes": 2040,
           "mtime": "2026-07-03T12:46:15Z"
         },
         {
-          "path": "tests/test_noetfield_gate.py",
-          "bytes": 4309,
+          "path": "noetfield_gate/policies/corridor_policy.json",
+          "bytes": 627,
           "mtime": "2026-07-03T12:46:15Z"
         },
         {
-          "path": "tests/test_noos_slo_v1.py",
-          "bytes": 4245,
-          "mtime": "2026-07-03T12:56:11Z"
-        },
-        {
-          "path": "tests/test_loop_determinism_ci.py",
-          "bytes": 2950,
+          "path": "noetfield_gate/intent_validate.py",
+          "bytes": 605,
           "mtime": "2026-07-03T12:46:15Z"
         },
         {
-          "path": "tests/test_noos_workflow_audit_v1.py",
-          "bytes": 2448,
-          "mtime": "2026-07-03T12:56:11Z"
-        },
-        {
-          "path": "tests/test_noos_gha_run_health_v1.py",
-          "bytes": 2239,
-          "mtime": "2026-07-08T01:59:12Z"
-        },
-        {
-          "path": "tests/test_noos_parallel_agent_governance_v1.py",
-          "bytes": 1983,
-          "mtime": "2026-07-08T01:59:12Z"
-        },
-        {
-          "path": "tests/test_noos_ecosystem_observe_witness_v1.py",
-          "bytes": 1967,
-          "mtime": "2026-07-08T01:59:12Z"
-        },
-        {
-          "path": "tests/test_noos_sustain_audit_witness_v1.py",
-          "bytes": 1952,
-          "mtime": "2026-07-08T01:59:12Z"
-        },
-        {
-          "path": "tests/test_noos_deadman_v1.py",
-          "bytes": 1829,
-          "mtime": "2026-07-08T01:59:12Z"
-        },
-        {
-          "path": "tests/conftest.py",
-          "bytes": 1756,
+          "path": "noetfield_gate/policies/base_policy.json",
+          "bytes": 188,
           "mtime": "2026-07-03T12:46:15Z"
         },
         {
-          "path": "tests/test_noos_stack_automation_health_v1.py",
-          "bytes": 1735,
-          "mtime": "2026-07-08T01:59:12Z"
-        },
+          "path": "noetfield_gate/__init__.py",
+          "bytes": 99,
+          "mtime": "2026-07-03T12:46:15Z"
+        }
+      ]
+    },
+    "fixtures": {
+      "path": "fixtures",
+      "file_count": 2,
+      "total_bytes": 488,
+      "files": [
         {
-          "path": "tests/test_phase2_auth.py",
-          "bytes": 1693,
+          "path": "fixtures/demo_intents/decline-dti.json",
+          "bytes": 246,
           "mtime": "2026-07-03T12:46:15Z"
         },
         {
-          "path": "tests/test_decide_integration_ci.py",
-          "bytes": 1572,
+          "path": "fixtures/demo_intents/approve.json",
+          "bytes": 242,
           "mtime": "2026-07-03T12:46:15Z"
-        },
-        {
-          "path": "tests/test_autorun_findings.py",
-          "bytes": 1310,
-          "mtime": "2026-07-08T01:59:12Z"
-        },
-        {
-          "path": "tests/test_noos_motor_restart_v1.py",
-          "bytes": 1277,
-          "mtime": "2026-07-08T01:59:12Z"
-        },
-        {
-          "path": "tests/test_tool_wrappers.py",
-          "bytes": 1171,
-          "mtime": "2026-07-08T01:59:12Z"
-        },
-        {
-          "path": "tests/test_supabase_jwt.py",
-          "bytes": 1134,
-          "mtime": "2026-07-08T07:53:11Z"
-        },
-        {
-          "path": "tests/test_noos_loop_registry_reconcile_v1.py",
-          "bytes": 1133,
-          "mtime": "2026-07-08T01:59:12Z"
-        },
-        {
-          "path": "tests/test_verify_pr_conflict_resolution_v1.py",
-          "bytes": 1084,
-          "mtime": "2026-07-08T02:18:47Z"
-        },
-        {
-          "path": "tests/test_verify_living_system_governance_v1.py",
-          "bytes": 1074,
-          "mtime": "2026-07-08T01:59:12Z"
-        },
-        {
-          "path": "tests/test_noos_kaizen_recipe_apply_v1.py",
-          "bytes": 983,
-          "mtime": "2026-07-08T01:59:12Z"
-        },
-        {
-          "path": "tests/test_noos_sandbox_registry_reconcile_v1.py",
-          "bytes": 921,
-          "mtime": "2026-07-08T01:59:12Z"
-        },
-        {
-          "path": "tests/test_public_site_v1.py",
-          "bytes": 911,
-          "mtime": "2026-07-08T07:36:04Z"
-        },
-        {
-          "path": "tests/test_tool_broker.py",
-          "bytes": 906,
-          "mtime": "2026-07-08T01:59:12Z"
-        },
-        {
-          "path": "tests/test_supabase_probe.py",
-          "bytes": 776,
-          "mtime": "2026-07-08T01:59:12Z"
-        },
-        {
-          "path": "tests/test_noos_deadman_telegram_lane_v1.py",
-          "bytes": 754,
-          "mtime": "2026-07-08T01:59:12Z"
-        },
-        {
-          "path": "tests/test_gate_integration_ci.py",
-          "bytes": 686,
-          "mtime": "2026-07-03T12:46:15Z"
-        },
-        {
-          "path": "tests/test_forbidden_markers.py",
-          "bytes": 674,
-          "mtime": "2026-07-03T12:56:11Z"
-        },
-        {
-          "path": "tests/test_noos_deploy_baseline_audit_v1.py",
-          "bytes": 593,
-          "mtime": "2026-07-08T01:59:12Z"
-        },
-        {
-          "path": "tests/test_noetfield_deploy_v1.py",
-          "bytes": 481,
-          "mtime": "2026-07-08T01:59:12Z"
         }
       ]
     },
     "receipts": {
       "path": "receipts",
-      "file_count": 455,
-      "total_bytes": 1071699,
+      "file_count": 458,
+      "total_bytes": 1077582,
       "files": [
         {
           "path": "receipts/proof/noos-cf-railway-dispatch-verify-v1.json",
@@ -2580,8 +2497,8 @@
         },
         {
           "path": "receipts/proof/noos-trigger-host-inventory-v1.json",
-          "bytes": 18185,
-          "mtime": "2026-07-08T01:59:12Z"
+          "bytes": 18202,
+          "mtime": "2026-07-09T07:47:20Z"
         },
         {
           "path": "receipts/proof/noos-trustfield-loop-registry-observe-v1.json",
@@ -2869,14 +2786,14 @@
           "mtime": "2026-07-05T16:07:24Z"
         },
         {
+          "path": "receipts/proof/noos-nf-voyage-semantic-drift-handoff-v1.json",
+          "bytes": 2616,
+          "mtime": "2026-07-09T07:47:20Z"
+        },
+        {
           "path": "receipts/proof/noos-sourcea-spine-witness-v1.json",
           "bytes": 2588,
           "mtime": "2026-07-08T08:16:49Z"
-        },
-        {
-          "path": "receipts/proof/noos-nf-voyage-semantic-drift-handoff-v1.json",
-          "bytes": 2565,
-          "mtime": "2026-07-08T03:31:57Z"
         },
         {
           "path": "receipts/proof/noos-loop-verified-window-v1.json",
@@ -2967,6 +2884,21 @@
           "path": "receipts/proof/noos-motor-sustain-v1.json",
           "bytes": 1958,
           "mtime": "2026-07-08T08:16:00Z"
+        },
+        {
+          "path": "receipts/l0-repo-graph-verify-20260709T070507Z.json",
+          "bytes": 1893,
+          "mtime": "2026-07-09T07:05:08Z"
+        },
+        {
+          "path": "receipts/l0-repo-graph-verify-20260709T072026Z.json",
+          "bytes": 1893,
+          "mtime": "2026-07-09T07:20:26Z"
+        },
+        {
+          "path": "receipts/l0-repo-graph-verify-20260709T075117Z.json",
+          "bytes": 1893,
+          "mtime": "2026-07-09T07:51:17Z"
         },
         {
           "path": "receipts/proof/scheduled-run-28646550367.json",
@@ -3069,14 +3001,14 @@
           "mtime": "2026-07-08T02:00:10Z"
         },
         {
+          "path": "receipts/proof/noos-nf-probe-drift-fix-handoff-v1.json",
+          "bytes": 1483,
+          "mtime": "2026-07-09T07:47:20Z"
+        },
+        {
           "path": "receipts/proof/noos-outside-audit-20260705T123003Z.json",
           "bytes": 1481,
           "mtime": "2026-07-05T16:07:17Z"
-        },
-        {
-          "path": "receipts/proof/noos-nf-probe-drift-fix-handoff-v1.json",
-          "bytes": 1466,
-          "mtime": "2026-07-08T03:31:57Z"
         },
         {
           "path": "receipts/proof/noos-living-system-99-closeout-v1.json",
@@ -3614,19 +3546,19 @@
           "mtime": "2026-07-08T01:59:42Z"
         },
         {
+          "path": "receipts/proof/noetfield-semantic-drift-closeout/APPLY.md",
+          "bytes": 1320,
+          "mtime": "2026-07-09T07:47:20Z"
+        },
+        {
           "path": "receipts/incident-copilot-clone-misinterpretation-20260703T223436Z.md",
-          "bytes": 1243,
-          "mtime": "2026-07-08T01:59:12Z"
+          "bytes": 1260,
+          "mtime": "2026-07-09T07:47:20Z"
         },
         {
           "path": "receipts/proof/noos-nf-pub-route-inventory-v1.json",
           "bytes": 1238,
           "mtime": "2026-07-08T01:59:12Z"
-        },
-        {
-          "path": "receipts/proof/noetfield-semantic-drift-closeout/APPLY.md",
-          "bytes": 1235,
-          "mtime": "2026-07-08T03:31:57Z"
         },
         {
           "path": "receipts/proof/noos-outside-audit-20260705T123001Z.json",
@@ -3964,6 +3896,11 @@
           "mtime": "2026-07-08T03:27:14Z"
         },
         {
+          "path": "receipts/incident-copilot-clone-misinterpretation-20260703T223436Z.json",
+          "bytes": 1120,
+          "mtime": "2026-07-09T07:47:20Z"
+        },
+        {
           "path": "receipts/proof/noos-kaizen-autorun-status-sourcea_cloud_queue-20260707.json",
           "bytes": 1120,
           "mtime": "2026-07-07T23:59:50Z"
@@ -4001,11 +3938,6 @@
         {
           "path": "receipts/proof/noos-kaizen-autorun-status-noos_schedule_canary-20260703.json",
           "bytes": 1108,
-          "mtime": "2026-07-08T01:59:12Z"
-        },
-        {
-          "path": "receipts/incident-copilot-clone-misinterpretation-20260703T223436Z.json",
-          "bytes": 1103,
           "mtime": "2026-07-08T01:59:12Z"
         },
         {
@@ -4825,6 +4757,90 @@
         }
       ]
     },
+    "videos": {
+      "path": "videos",
+      "file_count": 12,
+      "total_bytes": 1610220,
+      "files": [
+        {
+          "path": "videos/noetfeld-governance-motion/snapshots/frame-02-at-5.0s.png",
+          "bytes": 337510,
+          "mtime": "2026-07-03T02:46:02Z"
+        },
+        {
+          "path": "videos/noetfeld-governance-motion/snapshots/frame-01-at-2.5s.png",
+          "bytes": 323742,
+          "mtime": "2026-07-03T02:46:02Z"
+        },
+        {
+          "path": "videos/noetfeld-governance-motion/snapshots/frame-03-at-7.5s.png",
+          "bytes": 303010,
+          "mtime": "2026-07-03T02:46:02Z"
+        },
+        {
+          "path": "videos/noetfeld-governance-motion/snapshots/frame-04-at-10.0s.png",
+          "bytes": 285080,
+          "mtime": "2026-07-03T02:46:02Z"
+        },
+        {
+          "path": "videos/noetfeld-governance-motion/snapshots/frame-00-at-0.0s.png",
+          "bytes": 271255,
+          "mtime": "2026-07-03T02:46:02Z"
+        },
+        {
+          "path": "videos/noetfeld-governance-motion/snapshots/contact-sheet.jpg",
+          "bytes": 70514,
+          "mtime": "2026-07-03T02:46:02Z"
+        },
+        {
+          "path": "videos/noetfeld-governance-motion/index.html",
+          "bytes": 7243,
+          "mtime": "2026-07-03T02:46:02Z"
+        },
+        {
+          "path": "videos/noetfeld-governance-motion/AGENTS.md",
+          "bytes": 5540,
+          "mtime": "2026-07-03T12:46:15Z"
+        },
+        {
+          "path": "videos/noetfeld-governance-motion/CLAUDE.md",
+          "bytes": 5540,
+          "mtime": "2026-07-03T12:46:15Z"
+        },
+        {
+          "path": "videos/noetfeld-governance-motion/package.json",
+          "bytes": 385,
+          "mtime": "2026-07-03T12:46:15Z"
+        },
+        {
+          "path": "videos/noetfeld-governance-motion/hyperframes.json",
+          "bytes": 278,
+          "mtime": "2026-07-03T12:46:15Z"
+        },
+        {
+          "path": "videos/noetfeld-governance-motion/meta.json",
+          "bytes": 123,
+          "mtime": "2026-07-03T12:46:15Z"
+        }
+      ]
+    },
+    "config": {
+      "path": "config",
+      "file_count": 2,
+      "total_bytes": 3816,
+      "files": [
+        {
+          "path": "config/model-router.yml",
+          "bytes": 3086,
+          "mtime": "2026-07-08T01:59:12Z"
+        },
+        {
+          "path": "config/noos-local.env.fill-me",
+          "bytes": 730,
+          "mtime": "2026-07-08T01:59:12Z"
+        }
+      ]
+    },
     "_root": {
       "path": ".",
       "file_count": 29,
@@ -4980,8 +4996,1256 @@
   },
   "edges": [
     {
-      "from": "config/model-router.yml",
+      "from": "ops/railway/noos-loop-runner/server.py",
+      "to": "scripts/noos_loop_runner_v1.py"
+    },
+    {
+      "from": "ops/railway/noos-loop-runner/server.py",
+      "to": "scripts/enqueue_noos_cloud_inbox_v1.py"
+    },
+    {
+      "from": "ops/railway/noos-loop-runner/server.py",
+      "to": "scripts/run_noetfield_factory_loop_v1.py"
+    },
+    {
+      "from": "ops/railway/noos-loop-runner/server.py",
+      "to": "scripts/noos_motor_restart_v1.py"
+    },
+    {
+      "from": "ops/fly/noos-loop-executor/server.py",
+      "to": "scripts/noos_loop_runner_v1.py"
+    },
+    {
+      "from": "ops/fly/noos-loop-executor/server.py",
+      "to": "scripts/enqueue_noos_cloud_inbox_v1.py"
+    },
+    {
+      "from": "ops/fly/noos-loop-executor/server.py",
+      "to": "scripts/run_noetfield_factory_loop_v1.py"
+    },
+    {
+      "from": "ops/fly/noos-self-heal-runner/server.py",
+      "to": "scripts/reenqueue_blocked_upg_inbox_v1.py"
+    },
+    {
+      "from": "ops/fly/noos-self-heal-runner/server.py",
+      "to": "scripts/noos_loop_heartbeat_v1.py"
+    },
+    {
+      "from": "ops/fly/noos-inbox-runner/server.py",
+      "to": "scripts/cloud_inbox_worker_v1.py"
+    },
+    {
+      "from": "scripts/autorun_status_v1.py",
+      "to": "data/autorun-workflows-v1.json"
+    },
+    {
+      "from": "scripts/autorun_status_v1.py",
+      "to": "data/autorun-sandboxes-v1.json"
+    },
+    {
+      "from": "scripts/autorun_status_v1.py",
+      "to": "receipts/proof/noos-github-schedule-a1-v1.json"
+    },
+    {
+      "from": "scripts/autorun_status_v1.py",
+      "to": "scripts/spine_realtime_feed_v1.py"
+    },
+    {
+      "from": "scripts/noos_machine_loops_v1.py",
+      "to": "data/noos-machine-loops-config-v1.json"
+    },
+    {
+      "from": "scripts/noos_machine_loops_v1.py",
+      "to": "data/founder-trigger-ledger-v1.json"
+    },
+    {
+      "from": "scripts/noos_machine_loops_v1.py",
+      "to": "data/noos-parallel-agent-registry-v1.json"
+    },
+    {
+      "from": "scripts/noos_machine_loops_v1.py",
+      "to": "data/trigger-registry-v1.json"
+    },
+    {
+      "from": "scripts/noos_machine_loops_v1.py",
       "to": "docs/GOVERNED_AUTORUN_LAWS_v3.md"
+    },
+    {
+      "from": "scripts/noos_machine_loops_v1.py",
+      "to": "scripts/verify_living_system_governance_v1.py"
+    },
+    {
+      "from": "scripts/noos_loop_runner_v1.py",
+      "to": "data/noos-24-7-loops-v1.json"
+    },
+    {
+      "from": "scripts/noos_loop_runner_v1.py",
+      "to": "scripts/factory_supabase_sink_v1.py"
+    },
+    {
+      "from": "scripts/noos_loop_runner_v1.py",
+      "to": "data/mission-registry-v1.json"
+    },
+    {
+      "from": "scripts/noos_integrator_daily_checklist_v1.py",
+      "to": "receipts/proof/noos-integrator-daily-checklist-v1.json"
+    },
+    {
+      "from": "scripts/noos_integrator_daily_checklist_v1.py",
+      "to": "scripts/noos_integrator_status_v1.py"
+    },
+    {
+      "from": "scripts/noos_integrator_daily_checklist_v1.py",
+      "to": "scripts/noos_integrator_mirror_check_v1.py"
+    },
+    {
+      "from": "scripts/noos_integrator_daily_checklist_v1.py",
+      "to": "scripts/autorun_status_v1.py"
+    },
+    {
+      "from": "scripts/noos_integrator_daily_checklist_v1.py",
+      "to": "scripts/observe_trustfield_parallel_layers_v1.py"
+    },
+    {
+      "from": "scripts/noos_integrator_daily_checklist_v1.py",
+      "to": "scripts/observe_trustfield_loop_registry_v1.py"
+    },
+    {
+      "from": "scripts/noos_integrator_daily_checklist_v1.py",
+      "to": "scripts/record_sg_registry_witness_v1.py"
+    },
+    {
+      "from": "scripts/open_noos_verified_window_v1.py",
+      "to": "receipts/proof/noos-loop-verified-window-v1.json"
+    },
+    {
+      "from": "scripts/open_noos_verified_window_v1.py",
+      "to": "data/noos-24-7-loops-v1.json"
+    },
+    {
+      "from": "scripts/noos_trigger_host_inventory_v1.py",
+      "to": "data/noos-24-7-loops-v1.json"
+    },
+    {
+      "from": "scripts/noos_trigger_host_inventory_v1.py",
+      "to": "data/noos-cf-dispatch-table-v1.json"
+    },
+    {
+      "from": "scripts/noos_trigger_host_inventory_v1.py",
+      "to": "data/autorun-workflows-v1.json"
+    },
+    {
+      "from": "scripts/noos_trigger_host_inventory_v1.py",
+      "to": "data/noos-trigger-host-inventory-v1.json"
+    },
+    {
+      "from": "scripts/noos_trigger_host_inventory_v1.py",
+      "to": "receipts/proof/noos-trigger-host-inventory-v1.json"
+    },
+    {
+      "from": "scripts/noos_live_sync_gate.py",
+      "to": "scripts/check_noos_agent_docs.sh"
+    },
+    {
+      "from": "scripts/noos_live_sync_gate.py",
+      "to": "docs/_NOOS_AGENT/MANIFEST.json"
+    },
+    {
+      "from": "scripts/noos_loop_verify_v1.py",
+      "to": "data/noos-24-7-loops-v1.json"
+    },
+    {
+      "from": "scripts/noos_loop_verify_v1.py",
+      "to": "receipts/proof/noos-deploy-baseline-audit-v1.json"
+    },
+    {
+      "from": "scripts/noos_loop_verify_v1.py",
+      "to": "data/noos-sandbox-fleet-v1.json"
+    },
+    {
+      "from": "scripts/noos_loop_verify_v1.py",
+      "to": "receipts/proof/noos-sandbox-registry-v1.json"
+    },
+    {
+      "from": "scripts/noos_loop_verify_v1.py",
+      "to": "receipts/proof/noos-deploy-fly-inbox-v1.json"
+    },
+    {
+      "from": "scripts/noos_loop_verify_v1.py",
+      "to": "receipts/proof/noos-deploy-fly-self-heal-v1.json"
+    },
+    {
+      "from": "scripts/noos_loop_verify_v1.py",
+      "to": "scripts/noos_loop_runner_v1.py"
+    },
+    {
+      "from": "scripts/noos_loop_heartbeat_v1.py",
+      "to": "data/noos-24-7-loops-v1.json"
+    },
+    {
+      "from": "scripts/noos_loop_heartbeat_v1.py",
+      "to": "data/trigger-registry-v1.json"
+    },
+    {
+      "from": "scripts/cloud_inbox_worker_v1.py",
+      "to": "fixtures/demo_intents/approve.json"
+    },
+    {
+      "from": "scripts/noos_self_heal_v1.py",
+      "to": "data/noos-audit-findings-v1.json"
+    },
+    {
+      "from": "scripts/noos_self_heal_v1.py",
+      "to": "data/noos-healing-handoff-v1.json"
+    },
+    {
+      "from": "scripts/noos_self_heal_v1.py",
+      "to": "receipts/proof/noos-kaizen-self-heal-report-v1.json"
+    },
+    {
+      "from": "scripts/observe_trustfield_loop_registry_v1.py",
+      "to": "receipts/proof/noos-trustfield-loop-registry-observe-v1.json"
+    },
+    {
+      "from": "scripts/run_noetfield_factory_loop_v1.py",
+      "to": "scripts/run_noetfield_patch_pack_v1.py"
+    },
+    {
+      "from": "scripts/run_noetfield_factory_loop_v1.py",
+      "to": "scripts/cloud_inbox_worker_v1.py"
+    },
+    {
+      "from": "scripts/run_noetfield_factory_loop_v1.py",
+      "to": "scripts/factory_supabase_sink_v1.py"
+    },
+    {
+      "from": "scripts/build_repo_graph_v1.py",
+      "to": "scripts/sync_l0_repo_graph_v1.py"
+    },
+    {
+      "from": "scripts/build_repo_graph_v1.py",
+      "to": "data/l0_repo_graph_registry_v1.json"
+    },
+    {
+      "from": "scripts/build_repo_graph_v1.py",
+      "to": "scripts/query_repo_graph_v1.py"
+    },
+    {
+      "from": "scripts/build_repo_graph_v1.py",
+      "to": "docs/L0_REPO_GRAPH_MEMORY_v1.md"
+    },
+    {
+      "from": "scripts/verify_living_system_governance_v1.py",
+      "to": "data/noos-parallel-agent-registry-v1.json"
+    },
+    {
+      "from": "scripts/verify_living_system_governance_v1.py",
+      "to": "data/noos-integrator-role-v1.json"
+    },
+    {
+      "from": "scripts/verify_living_system_governance_v1.py",
+      "to": ".github/copilot-instructions.md"
+    },
+    {
+      "from": "scripts/verify_living_system_governance_v1.py",
+      "to": "data/noos-pr-conflict-skill-lock-v1.json"
+    },
+    {
+      "from": "scripts/verify_living_system_governance_v1.py",
+      "to": "data/noos-machine-loops-config-v1.json"
+    },
+    {
+      "from": "scripts/verify_living_system_governance_v1.py",
+      "to": "data/founder-trigger-ledger-v1.json"
+    },
+    {
+      "from": "scripts/verify_living_system_governance_v1.py",
+      "to": "scripts/noos_machine_loops_v1.py"
+    },
+    {
+      "from": "scripts/noos_researcher_v1.py",
+      "to": "data/noos-healing-handoff-v1.json"
+    },
+    {
+      "from": "scripts/noos_researcher_v1.py",
+      "to": "data/noos-research-findings-v1.json"
+    },
+    {
+      "from": "scripts/noos_researcher_v1.py",
+      "to": ".github/workflows/noos-workflow-audit.yml"
+    },
+    {
+      "from": "scripts/noos_researcher_v1.py",
+      "to": "receipts/proof/noos-kaizen-researcher-report-v1.json"
+    },
+    {
+      "from": "scripts/run_noetfield_patch_pack_v1.py",
+      "to": "docs/run_patches/noetfield_run_patch_pack_10100_v1.json"
+    },
+    {
+      "from": "scripts/run_noetfield_patch_pack_v1.py",
+      "to": "docs/run_patches/noetfield_run_patch_manifest_10100_v1.json"
+    },
+    {
+      "from": "scripts/run_noetfield_patch_pack_v1.py",
+      "to": "tests/test_phase2_decision.py"
+    },
+    {
+      "from": "scripts/run_noetfield_patch_pack_v1.py",
+      "to": "audit/audit_store.py"
+    },
+    {
+      "from": "scripts/run_noetfield_patch_pack_v1.py",
+      "to": "portal/routes.py"
+    },
+    {
+      "from": "scripts/run_noetfield_patch_pack_v1.py",
+      "to": "scripts/check_noetfield_com_e2e.py"
+    },
+    {
+      "from": "scripts/run_noetfield_patch_pack_v1.py",
+      "to": "docs/ops/GEL_API_DEPLOY_LOCKED_v1.md"
+    },
+    {
+      "from": "scripts/run_noetfield_patch_pack_v1.py",
+      "to": "scripts/deploy-gel-api-railway.sh"
+    },
+    {
+      "from": "scripts/run_noetfield_patch_pack_v1.py",
+      "to": "scripts/setup-gel-api-dns.sh"
+    },
+    {
+      "from": "scripts/run_noetfield_patch_pack_v1.py",
+      "to": "scripts/noetfield_sdk_scaffold.py"
+    },
+    {
+      "from": "scripts/run_noetfield_patch_pack_v1.py",
+      "to": "scripts/publish-gate-pypi.sh"
+    },
+    {
+      "from": "scripts/run_noetfield_patch_pack_v1.py",
+      "to": "scripts/check_noos_agent_docs.sh"
+    },
+    {
+      "from": "scripts/run_noetfield_patch_pack_v1.py",
+      "to": "scripts/check_upgrade_plan_300.sh"
+    },
+    {
+      "from": "scripts/sandbox_health_sweep_v1.py",
+      "to": "data/trigger-registry-v1.json"
+    },
+    {
+      "from": "scripts/noos_specialist_v1.py",
+      "to": "data/noos-research-findings-v1.json"
+    },
+    {
+      "from": "scripts/noos_specialist_v1.py",
+      "to": "data/noos-specialist-proposals-v1.json"
+    },
+    {
+      "from": "scripts/noos_specialist_v1.py",
+      "to": "receipts/proof/noos-kaizen-specialist-proposals-v1.json"
+    },
+    {
+      "from": "scripts/noetfield_deploy_v1.py",
+      "to": "data/noos-deploy-scopes-v1.json"
+    },
+    {
+      "from": "scripts/observe_trustfield_parallel_layers_v1.py",
+      "to": "data/noos-trustfield-parallel-layers-v1.json"
+    },
+    {
+      "from": "scripts/observe_trustfield_parallel_layers_v1.py",
+      "to": "receipts/proof/noos-trustfield-parallel-layers-observe-v1.json"
+    },
+    {
+      "from": "scripts/observe_trustfield_parallel_layers_v1.py",
+      "to": "scripts/observe_trustfield_loop_registry_v1.py"
+    },
+    {
+      "from": "scripts/noos_worker_kernel_v1.py",
+      "to": "config/model-router.yml"
+    },
+    {
+      "from": "scripts/noos_deadman_v1.py",
+      "to": "data/noos-deadman-config-v1.json"
+    },
+    {
+      "from": "scripts/noos_deadman_v1.py",
+      "to": "data/noos-24-7-loops-v1.json"
+    },
+    {
+      "from": "scripts/noos_deadman_v1.py",
+      "to": "data/noos-cf-dispatch-table-v1.json"
+    },
+    {
+      "from": "scripts/noos_motor_restart_v1.py",
+      "to": "data/noos-motor-restart-recipes-v1.json"
+    },
+    {
+      "from": "scripts/verify_noos_icl_p1_v1.py",
+      "to": "receipts/proof/noos-integrator-icl-p1-closeout-v1.json"
+    },
+    {
+      "from": "scripts/verify_noos_icl_p1_v1.py",
+      "to": "scripts/noos_local_boot_vault_sync_v1.sh"
+    },
+    {
+      "from": "scripts/verify_noos_icl_p1_v1.py",
+      "to": "scripts/verify_noos_cf_deploy_token_v1.py"
+    },
+    {
+      "from": "scripts/verify_noos_icl_p1_v1.py",
+      "to": ".github/workflows/deploy-noos-cloud-workers-v1.yml"
+    },
+    {
+      "from": "scripts/verify_noos_icl_p1_v1.py",
+      "to": "scripts/observe_sourcea_supabase_v1.py"
+    },
+    {
+      "from": "scripts/verify_noos_icl_p1_v1.py",
+      "to": "scripts/autorun_status_v1.py"
+    },
+    {
+      "from": "scripts/verify_noos_icl_p1_v1.py",
+      "to": "scripts/nf_vault_env.py"
+    },
+    {
+      "from": "scripts/verify_noos_icl_p1_v1.py",
+      "to": "scripts/load_noetfield_vault_env.sh"
+    },
+    {
+      "from": "scripts/verify_noos_icl_p1_v1.py",
+      "to": "scripts/read_platform_vault.sh"
+    },
+    {
+      "from": "scripts/noos_agent_conflict_check_v1.py",
+      "to": "data/noos-parallel-agent-registry-v1.json"
+    },
+    {
+      "from": "scripts/verify_pr_conflict_resolution_v1.py",
+      "to": "data/noos-pr-conflict-skill-lock-v1.json"
+    },
+    {
+      "from": "scripts/verify_pr_conflict_resolution_v1.py",
+      "to": "receipts/proof/noos-pr-conflict-skill-lock-v1.json"
+    },
+    {
+      "from": "scripts/noos_t3_sandbox_closeout_v1.py",
+      "to": "data/noos-unified-upgrade-backlog-v1.json"
+    },
+    {
+      "from": "scripts/noos_t3_sandbox_closeout_v1.py",
+      "to": "docs/_NOOS_AGENT/UPGRADE_MANIFEST.json"
+    },
+    {
+      "from": "scripts/noos_t3_sandbox_closeout_v1.py",
+      "to": "receipts/proof/noos-t3-sandbox-closeout-v1.json"
+    },
+    {
+      "from": "scripts/noos_t3_sandbox_closeout_v1.py",
+      "to": "receipts/proof/noos-deploy-baseline-audit-v1.json"
+    },
+    {
+      "from": "scripts/noos_t3_sandbox_closeout_v1.py",
+      "to": "packages/noetfield-gate/README.md"
+    },
+    {
+      "from": "scripts/noos_t3_sandbox_closeout_v1.py",
+      "to": "docs/examples/noetfield-gate-gha-v1.yml"
+    },
+    {
+      "from": "scripts/noos_t3_sandbox_closeout_v1.py",
+      "to": "docs/examples/pre-commit-noetfield-gate-v1.md"
+    },
+    {
+      "from": "scripts/noos_t3_sandbox_closeout_v1.py",
+      "to": "data/noos-sandbox-fleet-v1.json"
+    },
+    {
+      "from": "scripts/noos_t3_sandbox_closeout_v1.py",
+      "to": "scripts/noos_sandbox_registry_reconcile_v1.py"
+    },
+    {
+      "from": "scripts/noos_t3_sandbox_closeout_v1.py",
+      "to": "scripts/noos_improve_kaizen_runner_v1.py"
+    },
+    {
+      "from": "scripts/noos_t3_sandbox_closeout_v1.py",
+      "to": "data/noos-runtime-scaling-v1.json"
+    },
+    {
+      "from": "scripts/noos_t3_sandbox_closeout_v1.py",
+      "to": "data/noos-deploy-scopes-v1.json"
+    },
+    {
+      "from": "scripts/noos_t3_sandbox_closeout_v1.py",
+      "to": "receipts/proof/noos-sandbox-registry-v1.json"
+    },
+    {
+      "from": "scripts/noos_t3_sandbox_closeout_v1.py",
+      "to": "receipts/proof/noos-improve-kaizen-daily-v1.json"
+    },
+    {
+      "from": "scripts/noos_t3_sandbox_closeout_v1.py",
+      "to": "receipts/proof/noos-loop-verify-all-v1.json"
+    },
+    {
+      "from": "scripts/verify_noos_loop_runner_railway_v1.py",
+      "to": "receipts/proof/noos-railway-loop-runner-v1.json"
+    },
+    {
+      "from": "scripts/noos_workflow_audit_v1.py",
+      "to": "data/noos-24-7-loops-v1.json"
+    },
+    {
+      "from": "scripts/cost_policy_scan.py",
+      "to": "data/cost_policy_machine.json"
+    },
+    {
+      "from": "scripts/cost_policy_scan.py",
+      "to": "scripts/runtime_routing_guard.py"
+    },
+    {
+      "from": "scripts/cost_policy_scan.py",
+      "to": "docs/NOOS_COPILOT_DISPATCHER_AUTHORITY.md"
+    },
+    {
+      "from": "scripts/cost_policy_scan.py",
+      "to": "config/model-router.yml"
+    },
+    {
+      "from": "scripts/cost_policy_scan.py",
+      "to": "scripts/noos_loop_runner_v1.py"
+    },
+    {
+      "from": "scripts/noos_loop_upgrade_closeout_v1.py",
+      "to": "data/noos-unified-upgrade-backlog-v1.json"
+    },
+    {
+      "from": "scripts/noos_loop_upgrade_closeout_v1.py",
+      "to": "docs/_NOOS_AGENT/UPGRADE_MANIFEST.json"
+    },
+    {
+      "from": "scripts/noos_loop_upgrade_closeout_v1.py",
+      "to": "receipts/proof/noos-machine-loops-upgrade-closeout-v1.json"
+    },
+    {
+      "from": "scripts/noos_loop_upgrade_closeout_v1.py",
+      "to": "receipts/proof/noos-loop-verify-all-v1.json"
+    },
+    {
+      "from": "scripts/noos_loop_upgrade_closeout_v1.py",
+      "to": "docs/ops/NOOS_FACTORY_AUTORUN_DEPRECATION_v1.md"
+    },
+    {
+      "from": "scripts/noos_loop_upgrade_closeout_v1.py",
+      "to": "ops/fly/noos-inbox-runner/server.py"
+    },
+    {
+      "from": "scripts/noos_loop_upgrade_closeout_v1.py",
+      "to": "ops/fly/noos-self-heal-runner/server.py"
+    },
+    {
+      "from": "scripts/verify_noos_living_system_48h_v1.py",
+      "to": "data/noos-living-system-baseline-v1.json"
+    },
+    {
+      "from": "scripts/verify_noos_living_system_48h_v1.py",
+      "to": "receipts/proof/noos-living-system-48h-v1.json"
+    },
+    {
+      "from": "scripts/noos_deploy_baseline_audit_v1.py",
+      "to": "data/noos-deploy-scopes-v1.json"
+    },
+    {
+      "from": "scripts/noos_deploy_baseline_audit_v1.py",
+      "to": "receipts/proof/noos-deploy-baseline-audit-v1.json"
+    },
+    {
+      "from": "scripts/noos_integrator_tasks_mirror_v1.py",
+      "to": "receipts/proof/noos-integrator-tasks-mirror-v1.json"
+    },
+    {
+      "from": "scripts/noos_integrator_tasks_mirror_v1.py",
+      "to": "scripts/noos_integrator_sync_v1.py"
+    },
+    {
+      "from": "scripts/noos_stack_automation_health_v1.py",
+      "to": "receipts/proof/noos-stack-automation-health-v1.json"
+    },
+    {
+      "from": "scripts/noos_stack_automation_health_v1.py",
+      "to": "scripts/noos_integrator_status_v1.py"
+    },
+    {
+      "from": "scripts/noos_stack_automation_health_v1.py",
+      "to": "scripts/autorun_status_v1.py"
+    },
+    {
+      "from": "scripts/noos_stack_automation_health_v1.py",
+      "to": "scripts/observe_trustfield_parallel_layers_v1.py"
+    },
+    {
+      "from": "scripts/noos_stack_automation_health_v1.py",
+      "to": "scripts/observe_trustfield_loop_registry_v1.py"
+    },
+    {
+      "from": "scripts/noos_t2_deploy_closeout_v1.py",
+      "to": "data/noos-unified-upgrade-backlog-v1.json"
+    },
+    {
+      "from": "scripts/noos_t2_deploy_closeout_v1.py",
+      "to": "docs/_NOOS_AGENT/UPGRADE_MANIFEST.json"
+    },
+    {
+      "from": "scripts/noos_t2_deploy_closeout_v1.py",
+      "to": "receipts/proof/noos-t2-deploy-acg-closeout-v1.json"
+    },
+    {
+      "from": "scripts/noos_t2_deploy_closeout_v1.py",
+      "to": "receipts/proof/noos-deploy-baseline-audit-v1.json"
+    },
+    {
+      "from": "scripts/noos_t2_deploy_closeout_v1.py",
+      "to": "scripts/noetfield_deploy_v1.py"
+    },
+    {
+      "from": "scripts/noos_t2_deploy_closeout_v1.py",
+      "to": "data/noos-deploy-scopes-v1.json"
+    },
+    {
+      "from": "scripts/noos_t2_deploy_closeout_v1.py",
+      "to": "receipts/proof/noos-deploy-drift-kaizen-v1.json"
+    },
+    {
+      "from": "scripts/noos_t2_deploy_closeout_v1.py",
+      "to": "receipts/proof/noos-inbox-scaler-v1.json"
+    },
+    {
+      "from": "scripts/noos_t2_deploy_closeout_v1.py",
+      "to": "data/noos-runtime-scaling-v1.json"
+    },
+    {
+      "from": "scripts/noos_t2_deploy_closeout_v1.py",
+      "to": "receipts/proof/noos-deploy-fly-inbox-v1.json"
+    },
+    {
+      "from": "scripts/noos_t2_deploy_closeout_v1.py",
+      "to": "scripts/noos_deploy_drift_kaizen_v1.py"
+    },
+    {
+      "from": "scripts/noos_t2_deploy_closeout_v1.py",
+      "to": "scripts/noos_inbox_scaler_v1.py"
+    },
+    {
+      "from": "scripts/noos_t2_deploy_closeout_v1.py",
+      "to": "noetfield-org/receipts/NOOS_ACG_FOUNDER_SEND_PREP_2026-07-05.md"
+    },
+    {
+      "from": "scripts/noos_integrator_repair_autorun_v1.py",
+      "to": "cloud/workers/noos-deadman-v1/src/loop-intervals.json"
+    },
+    {
+      "from": "scripts/noos_integrator_repair_autorun_v1.py",
+      "to": "receipts/proof/noos-integrator-autorun-repair-v1.json"
+    },
+    {
+      "from": "scripts/demo-gel-5min-v1.sh",
+      "to": "scripts/mint_api_key.py"
+    },
+    {
+      "from": "scripts/demo-gel-5min-v1.sh",
+      "to": "scripts/verify-tle-digest-v1.py"
+    },
+    {
+      "from": "scripts/noos_upgrade_manifest_publish_v1.py",
+      "to": "docs/_NOOS_AGENT/UPGRADE_MANIFEST.json"
+    },
+    {
+      "from": "scripts/noos_upgrade_manifest_publish_v1.py",
+      "to": "data/noos-unified-upgrade-backlog-v1.json"
+    },
+    {
+      "from": "scripts/noos_upgrade_manifest_publish_v1.py",
+      "to": "receipts/proof/noos-upgrade-manifest-publish-v1.json"
+    },
+    {
+      "from": "scripts/noos_upgrade_manifest_publish_v1.py",
+      "to": "scripts/noos_integrator_sync_v1.py"
+    },
+    {
+      "from": "scripts/verify_noos_cf_railway_dispatch_v1.py",
+      "to": "data/noos-cf-dispatch-table-v1.json"
+    },
+    {
+      "from": "scripts/verify_noos_cf_railway_dispatch_v1.py",
+      "to": "receipts/proof/noos-cf-railway-dispatch-verify-v1.json"
+    },
+    {
+      "from": "scripts/noos_loop_registry_reconcile_v1.py",
+      "to": "data/noos-24-7-loops-v1.json"
+    },
+    {
+      "from": "scripts/noos_loop_registry_reconcile_v1.py",
+      "to": "data/noos-cf-dispatch-table-v1.json"
+    },
+    {
+      "from": "scripts/noos_loop_registry_reconcile_v1.py",
+      "to": "receipts/proof/noos-loop-registry-reconcile-v1.json"
+    },
+    {
+      "from": "scripts/noos_loop_baseline_audit_v1.py",
+      "to": "data/noos-24-7-loops-v1.json"
+    },
+    {
+      "from": "scripts/noos_loop_baseline_audit_v1.py",
+      "to": "receipts/proof/noos-loop-baseline-audit-v1.json"
+    },
+    {
+      "from": "scripts/noos_loop_baseline_audit_v1.py",
+      "to": "scripts/noos_machine_loops_v1.py"
+    },
+    {
+      "from": "scripts/noos_loop_baseline_audit_v1.py",
+      "to": "scripts/verify_noos_github_schedule_v1.py"
+    },
+    {
+      "from": "scripts/enqueue_noos_cloud_inbox_v1.py",
+      "to": "docs/_NOOS_AGENT/UPGRADE_MANIFEST.json"
+    },
+    {
+      "from": "scripts/enqueue_noos_cloud_inbox_v1.py",
+      "to": "scripts/factory_supabase_sink_v1.py"
+    },
+    {
+      "from": "scripts/enqueue_noos_cloud_inbox_v1.py",
+      "to": "data/noos-cloud-worker-inbox-v1.json"
+    },
+    {
+      "from": "scripts/cleanup_noetfield_vault_v1.py",
+      "to": "scripts/verify_noos_cf_deploy_token_v1.py"
+    },
+    {
+      "from": "scripts/verify_supabase_rls_machine_tables_v1.py",
+      "to": "receipts/proof/supabase-rls-machine-tables-v1.json"
+    },
+    {
+      "from": "scripts/noos_integrator_status_v1.py",
+      "to": "scripts/verify_noos_cf_deploy_token_v1.py"
+    },
+    {
+      "from": "scripts/noos_integrator_status_v1.py",
+      "to": "scripts/noos_integrator_mirror_check_v1.py"
+    },
+    {
+      "from": "scripts/noos_integrator_status_v1.py",
+      "to": "scripts/verify_noos_motor_sustain_v1.py"
+    },
+    {
+      "from": "scripts/noos_integrator_status_v1.py",
+      "to": "scripts/autorun_status_v1.py"
+    },
+    {
+      "from": "scripts/noos_integrator_status_v1.py",
+      "to": "scripts/noos_machine_loops_v1.py"
+    },
+    {
+      "from": "scripts/noos_integrator_status_v1.py",
+      "to": "scripts/noos_agent_conflict_check_v1.py"
+    },
+    {
+      "from": "scripts/noos_integrator_status_v1.py",
+      "to": "receipts/proof/noos-integrator-tasks-mirror-v1.json"
+    },
+    {
+      "from": "scripts/noos_integrator_status_v1.py",
+      "to": "receipts/proof/noos-upgrade-manifest-publish-v1.json"
+    },
+    {
+      "from": "scripts/deploy_noos_loop_runner_railway_v1.sh",
+      "to": "scripts/verify_noos_loop_runner_railway_v1.py"
+    },
+    {
+      "from": "scripts/verify_l0_repo_graph_memory_v1.sh",
+      "to": "scripts/build_repo_graph_v1.py"
+    },
+    {
+      "from": "scripts/verify_l0_repo_graph_memory_v1.sh",
+      "to": "scripts/query_repo_graph_v1.py"
+    },
+    {
+      "from": "scripts/noos_acg_founder_send_prep_v1.py",
+      "to": "noetfield-org/receipts/NOOS_ACG_FOUNDER_SEND_PREP_2026-07-05.md"
+    },
+    {
+      "from": "scripts/noos_acg_founder_send_prep_v1.py",
+      "to": "noetfield-org/receipts/NOOS_ACG_FOUNDER_SEND_RECEIPT_TEMPLATE.md"
+    },
+    {
+      "from": "scripts/noos_acg_founder_send_prep_v1.py",
+      "to": "docs/commercial/ACG_FIRST_PROSPECT_PACKET_v1.md"
+    },
+    {
+      "from": "scripts/noos_improve_kaizen_runner_v1.py",
+      "to": "data/noos-machine-loops-config-v1.json"
+    },
+    {
+      "from": "scripts/noos_improve_kaizen_runner_v1.py",
+      "to": "receipts/proof/noos-improve-kaizen-daily-v1.json"
+    },
+    {
+      "from": "scripts/noos_improve_kaizen_runner_v1.py",
+      "to": "data/noos-kaizen-recipes-v1.json"
+    },
+    {
+      "from": "scripts/noos_inbox_scaler_v1.py",
+      "to": "data/noos-runtime-scaling-v1.json"
+    },
+    {
+      "from": "scripts/noos_inbox_scaler_v1.py",
+      "to": "receipts/proof/noos-inbox-scaler-v1.json"
+    },
+    {
+      "from": "scripts/noos_inbox_scaler_v1.py",
+      "to": "receipts/proof/noos-runtime-scaling-eval-v1.json"
+    },
+    {
+      "from": "scripts/noos_inbox_scaler_v1.py",
+      "to": "scripts/reenqueue_blocked_upg_inbox_v1.py"
+    },
+    {
+      "from": "scripts/verify_noos_loop_executor_fly_v1.py",
+      "to": "receipts/proof/noos-fly-loop-executor-v1.json"
+    },
+    {
+      "from": "scripts/noos_sourcea_spine_witness_v1.py",
+      "to": "receipts/proof/noos-sourcea-spine-witness-v1.json"
+    },
+    {
+      "from": "scripts/planes_status_v1.py",
+      "to": "data/noos-upgrade-planes-v1.json"
+    },
+    {
+      "from": "scripts/planes_status_v1.py",
+      "to": "data/noos-unified-upgrade-backlog-v1.json"
+    },
+    {
+      "from": "scripts/register_noos_factory_run_truth_v1.py",
+      "to": ".github/workflows/noos-factory-autorun.yml"
+    },
+    {
+      "from": "scripts/seed_noos_loop_liveness_v1.py",
+      "to": "cloud/workers/noos-deadman-v1/src/loop-intervals.json"
+    },
+    {
+      "from": "scripts/noos_local_closeout_receipt_v1.py",
+      "to": "scripts/check_noos_clean_tree.sh"
+    },
+    {
+      "from": "scripts/noos_local_closeout_receipt_v1.py",
+      "to": "scripts/noos_integrator_sync_v1.py"
+    },
+    {
+      "from": "scripts/noos_trustfield_observe_witness_v1.py",
+      "to": "receipts/proof/noos-trustfield-observe-witness-v1.json"
+    },
+    {
+      "from": "scripts/verify_noos_deadman_telegram_lane_v1.py",
+      "to": "data/noos-deadman-config-v1.json"
+    },
+    {
+      "from": "scripts/noos_sandbox_registry_reconcile_v1.py",
+      "to": "data/noos-sandbox-fleet-v1.json"
+    },
+    {
+      "from": "scripts/noos_sandbox_registry_reconcile_v1.py",
+      "to": "data/noos-24-7-loops-v1.json"
+    },
+    {
+      "from": "scripts/noos_sandbox_registry_reconcile_v1.py",
+      "to": "data/noos-deploy-scopes-v1.json"
+    },
+    {
+      "from": "scripts/noos_sandbox_registry_reconcile_v1.py",
+      "to": "receipts/proof/noos-sandbox-registry-v1.json"
+    },
+    {
+      "from": "scripts/noos_local_boot_receipt_v1.py",
+      "to": "scripts/noos_integrator_sync_v1.py"
+    },
+    {
+      "from": "scripts/noos_local_status_v1.py",
+      "to": "scripts/noos_integrator_sync_v1.py"
+    },
+    {
+      "from": "scripts/verify_noos_icl_p2_v1.py",
+      "to": "receipts/proof/noos-integrator-icl-p2-closeout-v1.json"
+    },
+    {
+      "from": "scripts/verify_noos_icl_p2_v1.py",
+      "to": "scripts/noos_integrator_status_v1.py"
+    },
+    {
+      "from": "scripts/verify_noos_icl_p2_v1.py",
+      "to": "scripts/noos_integrator_tasks_mirror_v1.py"
+    },
+    {
+      "from": "scripts/verify_noos_icl_p2_v1.py",
+      "to": "scripts/noos_upgrade_manifest_publish_v1.py"
+    },
+    {
+      "from": "scripts/noos_kaizen_recipe_apply_v1.py",
+      "to": "data/noos-kaizen-recipes-v1.json"
+    },
+    {
+      "from": "scripts/noos_kaizen_recipe_apply_v1.py",
+      "to": "receipts/proof/noos-kaizen-recipe-apply-v1.json"
+    },
+    {
+      "from": "scripts/query_repo_graph_v1.py",
+      "to": "scripts/build_repo_graph_v1.py"
+    },
+    {
+      "from": "scripts/noos_integrator_mirror_check_v1.py",
+      "to": "scripts/noos_integrator_sync_v1.py"
+    },
+    {
+      "from": "scripts/verify_supabase_security_advisor_warnings_v1.py",
+      "to": "receipts/proof/supabase-security-advisor-warnings-v1.json"
+    },
+    {
+      "from": "scripts/verify_loop_determinism_external_v1.py",
+      "to": "tests/test_loop_determinism_ci.py"
+    },
+    {
+      "from": "scripts/verify_noos_motor_sustain_v1.py",
+      "to": "receipts/proof/noos-motor-sustain-v1.json"
+    },
+    {
+      "from": "scripts/verify_noos_motor_sustain_v1.py",
+      "to": "scripts/autorun_status_v1.py"
+    },
+    {
+      "from": "scripts/noos_deploy_drift_kaizen_v1.py",
+      "to": "receipts/proof/noos-deploy-drift-kaizen-v1.json"
+    },
+    {
+      "from": "scripts/noos_deploy_drift_kaizen_v1.py",
+      "to": "receipts/proof/noos-deploy-baseline-audit-v1.json"
+    },
+    {
+      "from": "scripts/noos_deploy_drift_kaizen_v1.py",
+      "to": "scripts/noetfield_deploy_v1.py"
+    },
+    {
+      "from": "scripts/trigger_noos_loop_dispatch_v1.py",
+      "to": "data/noos-24-7-loops-v1.json"
+    },
+    {
+      "from": "scripts/verify_noos_loop_replay_v1.py",
+      "to": "data/noos-24-7-loops-v1.json"
+    },
+    {
+      "from": "scripts/deploy_noos_deadman_cf_v1.sh",
+      "to": "data/noos-24-7-loops-v1.json"
+    },
+    {
+      "from": "scripts/deploy_noos_deadman_cf_v1.sh",
+      "to": "data/noos-cf-dispatch-table-v1.json"
+    },
+    {
+      "from": "scripts/deploy_noos_loop_executor_fly_v1.sh",
+      "to": "scripts/verify_noos_loop_executor_fly_v1.py"
+    },
+    {
+      "from": "scripts/noos_sandbox_url_sweep_witness_v1.py",
+      "to": "receipts/proof/noos-sandbox-url-sweep-witness-v1.json"
+    },
+    {
+      "from": "scripts/noos_sandbox_url_sweep_witness_v1.py",
+      "to": "scripts/sandbox_health_sweep_v1.py"
+    },
+    {
+      "from": "scripts/noos_liveness_registry_witness_v1.py",
+      "to": "receipts/proof/noos-liveness-registry-witness-v1.json"
+    },
+    {
+      "from": "scripts/teardown_noos_fly_loop_executor_v1.sh",
+      "to": "receipts/proof/noos-cf-railway-cutover-v1.json"
+    },
+    {
+      "from": "scripts/noos_living_system_48h_prep_v1.py",
+      "to": "receipts/proof/noos-living-system-48h-prep-v1.json"
+    },
+    {
+      "from": "scripts/noos_living_system_48h_prep_v1.py",
+      "to": "receipts/proof/noos-living-system-48h-v1.json"
+    },
+    {
+      "from": "scripts/noos_living_system_48h_prep_v1.py",
+      "to": "scripts/verify_noos_motor_sustain_v1.py"
+    },
+    {
+      "from": "scripts/ci_discovery_noos_dispatcher.py",
+      "to": "data/package_map.json"
+    },
+    {
+      "from": "scripts/ci_discovery_noos_dispatcher.py",
+      "to": "receipts/ci-discovery-noos-dispatcher.json"
+    },
+    {
+      "from": "scripts/sync_trigger_registry_to_workflows.py",
+      "to": "data/trigger-registry-v1.json"
+    },
+    {
+      "from": "scripts/runtime_routing_guard.py",
+      "to": "data/cost_policy_machine.json"
+    },
+    {
+      "from": "scripts/noos_machine_audit_witness_v1.py",
+      "to": "receipts/proof/noos-machine-audit-witness-v1.json"
+    },
+    {
+      "from": "scripts/check_noos_clean_tree.sh",
+      "to": "docs/run_patches/noetfield_run_patch_manifest_10100_v1.json"
+    },
+    {
+      "from": "scripts/check_noos_clean_tree.sh",
+      "to": "receipts/proof/noos-github-schedule-a1-v1.json"
+    },
+    {
+      "from": "scripts/verify_noos_gel_api_multi_region_v1.py",
+      "to": "receipts/proof/noos-gel-api-multi-region-v1.json"
+    },
+    {
+      "from": "scripts/noos_fly_selfheal_reaction_v1.py",
+      "to": "receipts/proof/noos-fly-selfheal-reaction-v1.json"
+    },
+    {
+      "from": "scripts/noos_fly_selfheal_reaction_v1.py",
+      "to": "scripts/reenqueue_blocked_upg_inbox_v1.py"
+    },
+    {
+      "from": "scripts/write_noos_cloud_motor_ops_receipt_v1.py",
+      "to": "receipts/proof/noos-cloud-motor-ops-v1.json"
+    },
+    {
+      "from": "scripts/write_noos_cloud_motor_ops_receipt_v1.py",
+      "to": "scripts/verify_noos_cloud_motor_e2e_v1.sh"
+    },
+    {
+      "from": "scripts/write_noos_cloud_motor_ops_receipt_v1.py",
+      "to": "scripts/verify_noos_cf_railway_dispatch_v1.py"
+    },
+    {
+      "from": "scripts/write_noos_cloud_motor_ops_receipt_v1.py",
+      "to": "scripts/phase_a_wire_cloud_motor_v1.sh"
+    },
+    {
+      "from": "scripts/write_noos_cloud_motor_ops_receipt_v1.py",
+      "to": "data/noos-external-monitors-v1.json"
+    },
+    {
+      "from": "scripts/noos_phase5_packaging_prep_v1.py",
+      "to": "receipts/proof/noos-phase5-packaging-prep-v1.json"
+    },
+    {
+      "from": "scripts/noos_phase5_packaging_prep_v1.py",
+      "to": "docs/_NOOS_AGENT/PRODUCT_TRUTH.md"
+    },
+    {
+      "from": "scripts/noos_acg_weekly_digest_v1.py",
+      "to": "data/noos-acg-outbound-queue-v1.json"
+    },
+    {
+      "from": "scripts/noos_gha_health_witness_v1.py",
+      "to": "receipts/proof/noos-gha-health-witness-v1.json"
+    },
+    {
+      "from": "scripts/factory_runtime_paths_v1.py",
+      "to": "data/noos-cloud-worker-inbox-v1.json"
+    },
+    {
+      "from": "scripts/factory_runtime_paths_v1.py",
+      "to": "docs/run_patches/noetfield_run_patch_manifest_10100_v1.json"
+    },
+    {
+      "from": "scripts/integrator_runtime_paths_v1.py",
+      "to": "data/noos-integrator-role-v1.json"
+    },
+    {
+      "from": "scripts/publish-gate-pypi.sh",
+      "to": "tests/test_noetfield_gate.py"
+    },
+    {
+      "from": "scripts/phase_b_wire_cf_railway_motor_v1.sh",
+      "to": "scripts/verify_noos_loop_runner_railway_v1.py"
+    },
+    {
+      "from": "scripts/phase_b_wire_cf_railway_motor_v1.sh",
+      "to": "scripts/deploy_noos_loop_fleet_tick_cf_v1.sh"
+    },
+    {
+      "from": "scripts/phase_b_wire_cf_railway_motor_v1.sh",
+      "to": "scripts/verify_noos_cloud_motor_e2e_v1.sh"
+    },
+    {
+      "from": "scripts/phase_b_wire_cf_fly_motor_v1.sh",
+      "to": "scripts/verify_noos_loop_executor_fly_v1.py"
+    },
+    {
+      "from": "scripts/phase_b_wire_cf_fly_motor_v1.sh",
+      "to": "scripts/deploy_noos_loop_executor_fly_v1.sh"
+    },
+    {
+      "from": "scripts/phase_b_wire_cf_fly_motor_v1.sh",
+      "to": "scripts/deploy_noos_loop_fleet_tick_cf_v1.sh"
+    },
+    {
+      "from": "scripts/phase_b_wire_cf_fly_motor_v1.sh",
+      "to": "scripts/verify_noos_cloud_motor_e2e_v1.sh"
+    },
+    {
+      "from": "scripts/noos_local_claim_lane_v1.sh",
+      "to": "scripts/noos_integrator_sync_v1.py"
+    },
+    {
+      "from": "scripts/check_noos_live_sync_gate.sh",
+      "to": "scripts/noos_live_sync_gate.py"
+    },
+    {
+      "from": "scripts/check_noos_live_sync_gate.sh",
+      "to": "docs/_NOOS_AGENT/live_sync/NOOS_LIVE_SYNC_RECEIPT.json"
+    },
+    {
+      "from": "tests/test_noos_worker_kernel_v1.py",
+      "to": "scripts/foo.py"
+    },
+    {
+      "from": "tests/test_noos_worker_kernel_v1.py",
+      "to": "receipts/proof/test-receipt.json"
+    },
+    {
+      "from": "tests/test_noos_worker_kernel_v1.py",
+      "to": "receipts/proof/blocked.json"
+    },
+    {
+      "from": "tests/test_noos_worker_kernel_v1.py",
+      "to": "scripts/kernel_helper_v1.py"
+    },
+    {
+      "from": "tests/test_noos_worker_kernel_v1.py",
+      "to": "noetfield_gate/cli.py"
+    },
+    {
+      "from": "tests/test_autorun_status_v1.py",
+      "to": "data/autorun-workflows-v1.json"
+    },
+    {
+      "from": "tests/test_autorun_status_v1.py",
+      "to": "data/autorun-sandboxes-v1.json"
+    },
+    {
+      "from": "tests/test_cursor_local_mac_t2_v1.py",
+      "to": "scripts/noos_local_claim_lane_v1.sh"
+    },
+    {
+      "from": "tests/test_cursor_local_mac_t2_v1.py",
+      "to": "scripts/noos_mac_worktree_sync_v1.sh"
+    },
+    {
+      "from": "tests/test_cursor_local_mac_t2_v1.py",
+      "to": "scripts/noos_integrator_sync_v1.py"
+    },
+    {
+      "from": "tests/test_cursor_local_mac_t2_v1.py",
+      "to": "scripts/noos_local_status_v1.py"
+    },
+    {
+      "from": "tests/test_noos_integrator_sync_v1.py",
+      "to": "scripts/noos_integrator_sync_v1.py"
+    },
+    {
+      "from": "tests/test_noos_machine_loops_v1.py",
+      "to": "scripts/verify_living_system_governance_v1.py"
+    },
+    {
+      "from": "tests/test_noos_machine_loops_v1.py",
+      "to": "tests/test_foo.py"
+    },
+    {
+      "from": "tests/test_noos_machine_loops_v1.py",
+      "to": "tests/test_noos_integrator_sync_v1.py"
+    },
+    {
+      "from": "tests/test_noos_machine_loops_v1.py",
+      "to": "scripts/foo.py"
+    },
+    {
+      "from": "tests/test_noos_machine_loops_v1.py",
+      "to": "scripts/verify_foo_v1.py"
+    },
+    {
+      "from": "tests/test_noetfield_gate.py",
+      "to": "fixtures/demo_intents/approve.json"
+    },
+    {
+      "from": "tests/test_noos_slo_v1.py",
+      "to": "data/trigger-registry-v1.json"
+    },
+    {
+      "from": "tests/test_noos_slo_v1.py",
+      "to": "data/noos-24-7-loops-v1.json"
+    },
+    {
+      "from": "tests/test_noos_workflow_audit_v1.py",
+      "to": "data/noos-24-7-loops-v1.json"
+    },
+    {
+      "from": "tests/test_noos_parallel_agent_governance_v1.py",
+      "to": "scripts/foo.py"
+    },
+    {
+      "from": "tests/test_noos_ecosystem_observe_witness_v1.py",
+      "to": "data/autorun-workflows-v1.json"
+    },
+    {
+      "from": "tests/test_noos_sustain_audit_witness_v1.py",
+      "to": "data/autorun-workflows-v1.json"
+    },
+    {
+      "from": "tests/test_verify_pr_conflict_resolution_v1.py",
+      "to": "data/noos-pr-conflict-skill-lock-v1.json"
+    },
+    {
+      "from": "tests/test_forbidden_markers.py",
+      "to": "noetfield-org/FORBIDDEN_MARKERS.txt"
+    },
+    {
+      "from": "tests/test_forbidden_markers.py",
+      "to": ".github/copilot-instructions.md"
+    },
+    {
+      "from": "tests/test_forbidden_markers.py",
+      "to": "noetfield-org/REPO_REGISTRY.md"
+    },
+    {
+      "from": "tests/test_forbidden_markers.py",
+      "to": "noetfield-org/LOOP_STATE.json"
+    },
+    {
+      "from": "tests/test_noos_deploy_baseline_audit_v1.py",
+      "to": "data/noos-deploy-scopes-v1.json"
+    },
+    {
+      "from": "cloud/workers/noos-deadman-v1/src/deadman-config.json",
+      "to": "data/noos-motor-restart-recipes-v1.json"
+    },
+    {
+      "from": "cloud/workers/noos-deadman-v1/src/deadman-config.json",
+      "to": "data/noos-external-monitors-v1.json"
     },
     {
       "from": "noetfield-org/receipts/NOOS_MODEL_OUTCOME_VERIFICATION_RECEIPT_2026-07-05.md",
@@ -5002,6 +6266,30 @@
     {
       "from": "noetfield-org/receipts/NOOS_SERVICE_LANE_TICK_2026-07-05.md",
       "to": "noetfield-org/SERVICE_LANES.md"
+    },
+    {
+      "from": "noetfield-org/NOOS_CONTROL_PANEL_AUTHORITY_REPORT_2026-07-04.md",
+      "to": "noetfield-org/REPO_REGISTRY.md"
+    },
+    {
+      "from": "noetfield-org/NOOS_CONTROL_PANEL_AUTHORITY_REPORT_2026-07-04.md",
+      "to": "noetfield-org/LOOP_STATE.json"
+    },
+    {
+      "from": "noetfield-org/NOOS_CONTROL_PANEL_AUTHORITY_REPORT_2026-07-04.md",
+      "to": "noetfield-org/SYNC_RECEIPTS.md"
+    },
+    {
+      "from": "noetfield-org/NOOS_CONTROL_PANEL_AUTHORITY_REPORT_2026-07-04.md",
+      "to": "noetfield-org/ROUTING_MATRIX.md"
+    },
+    {
+      "from": "noetfield-org/NOOS_CONTROL_PANEL_AUTHORITY_REPORT_2026-07-04.md",
+      "to": "scripts/noos_integrator_sync_v1.py"
+    },
+    {
+      "from": "noetfield-org/NOOS_CONTROL_PANEL_AUTHORITY_REPORT_2026-07-04.md",
+      "to": "tests/test_noos_integrator_sync_v1.py"
     },
     {
       "from": "noetfield-org/SYNC_RECEIPTS.md",
@@ -5066,30 +6354,6 @@
     {
       "from": "noetfield-org/SYNC_RECEIPTS.md",
       "to": "scripts/noos_integrator_sync_v1.py"
-    },
-    {
-      "from": "noetfield-org/NOOS_CONTROL_PANEL_AUTHORITY_REPORT_2026-07-04.md",
-      "to": "noetfield-org/REPO_REGISTRY.md"
-    },
-    {
-      "from": "noetfield-org/NOOS_CONTROL_PANEL_AUTHORITY_REPORT_2026-07-04.md",
-      "to": "noetfield-org/LOOP_STATE.json"
-    },
-    {
-      "from": "noetfield-org/NOOS_CONTROL_PANEL_AUTHORITY_REPORT_2026-07-04.md",
-      "to": "noetfield-org/SYNC_RECEIPTS.md"
-    },
-    {
-      "from": "noetfield-org/NOOS_CONTROL_PANEL_AUTHORITY_REPORT_2026-07-04.md",
-      "to": "noetfield-org/ROUTING_MATRIX.md"
-    },
-    {
-      "from": "noetfield-org/NOOS_CONTROL_PANEL_AUTHORITY_REPORT_2026-07-04.md",
-      "to": "scripts/noos_integrator_sync_v1.py"
-    },
-    {
-      "from": "noetfield-org/NOOS_CONTROL_PANEL_AUTHORITY_REPORT_2026-07-04.md",
-      "to": "tests/test_noos_integrator_sync_v1.py"
     },
     {
       "from": "noetfield-org/receipts/NOOS_SERVICE_LANE_TICK_2026-07-05_PRESERVATION.md",
@@ -5180,28 +6444,396 @@
       "to": "docs/commercial/ACG_FIRST_PROSPECT_PACKET_v1.md"
     },
     {
-      "from": "noetfield_gate/boot.py",
-      "to": "docs/_NOOS_AGENT/PRODUCT_TRUTH.md"
+      "from": ".github/workflows/noos-factory-autorun.yml",
+      "to": "scripts/enqueue_noos_cloud_inbox_v1.py"
     },
     {
-      "from": "noetfield_gate/boot.py",
-      "to": "docs/_NOOS_AGENT/UPGRADE_MANIFEST.json"
+      "from": ".github/workflows/noos-factory-autorun.yml",
+      "to": "scripts/register_noos_factory_run_truth_v1.py"
     },
     {
-      "from": "noetfield_gate/cli.py",
-      "to": "scripts/noetfield_deploy_v1.py"
+      "from": ".github/copilot-instructions.md",
+      "to": "noetfield-org/FORBIDDEN_MARKERS.txt"
     },
     {
-      "from": "noetfield_gate/decide.py",
-      "to": "scripts/mint_api_key.py"
+      "from": ".github/copilot-instructions.md",
+      "to": "tests/test_forbidden_markers.py"
     },
     {
-      "from": "cloud/workers/noos-deadman-v1/src/deadman-config.json",
-      "to": "data/noos-motor-restart-recipes-v1.json"
+      "from": ".github/copilot-instructions.md",
+      "to": "noetfield-org/REPO_REGISTRY.md"
     },
     {
-      "from": "cloud/workers/noos-deadman-v1/src/deadman-config.json",
-      "to": "data/noos-external-monitors-v1.json"
+      "from": ".github/copilot-instructions.md",
+      "to": "noetfield-org/AGENT_REGISTRY.md"
+    },
+    {
+      "from": ".github/copilot-instructions.md",
+      "to": "noetfield-org/ROUTING_MATRIX.md"
+    },
+    {
+      "from": ".github/copilot-instructions.md",
+      "to": "noetfield-org/LOOP_STATE.json"
+    },
+    {
+      "from": ".github/copilot-instructions.md",
+      "to": "noetfield-org/SYNC_RECEIPTS.md"
+    },
+    {
+      "from": ".github/copilot-instructions.md",
+      "to": "data/noos-parallel-agent-registry-v1.json"
+    },
+    {
+      "from": ".github/copilot-instructions.md",
+      "to": "scripts/noos_integrator_sync_v1.py"
+    },
+    {
+      "from": ".github/copilot-instructions.md",
+      "to": "scripts/noos_agent_conflict_check_v1.py"
+    },
+    {
+      "from": ".github/copilot-instructions.md",
+      "to": "scripts/verify_pr_conflict_resolution_v1.py"
+    },
+    {
+      "from": ".github/workflows/noos-specialist.yml",
+      "to": "data/noos-research-findings-v1.json"
+    },
+    {
+      "from": ".github/workflows/noos-specialist.yml",
+      "to": "scripts/noos_specialist_v1.py"
+    },
+    {
+      "from": ".github/workflows/noos-specialist.yml",
+      "to": "data/noos-specialist-proposals-v1.json"
+    },
+    {
+      "from": ".github/workflows/noos-specialist.yml",
+      "to": "receipts/proof/noos-kaizen-specialist-proposals-v1.json"
+    },
+    {
+      "from": ".github/workflows/noos-self-heal.yml",
+      "to": "data/noos-audit-findings-v1.json"
+    },
+    {
+      "from": ".github/workflows/noos-self-heal.yml",
+      "to": "scripts/noos_self_heal_v1.py"
+    },
+    {
+      "from": ".github/workflows/noos-self-heal.yml",
+      "to": "data/noos-healing-handoff-v1.json"
+    },
+    {
+      "from": ".github/workflows/noos-self-heal.yml",
+      "to": "receipts/proof/noos-kaizen-self-heal-report-v1.json"
+    },
+    {
+      "from": ".github/workflows/noos-cross-repo-orchestrator.yml",
+      "to": "data/noos-audit-findings-v1.json"
+    },
+    {
+      "from": ".github/workflows/noos-cross-repo-orchestrator.yml",
+      "to": "data/noos-healing-handoff-v1.json"
+    },
+    {
+      "from": ".github/workflows/noos-researcher.yml",
+      "to": "data/noos-healing-handoff-v1.json"
+    },
+    {
+      "from": ".github/workflows/noos-researcher.yml",
+      "to": "scripts/noos_researcher_v1.py"
+    },
+    {
+      "from": ".github/workflows/noos-researcher.yml",
+      "to": "data/noos-research-findings-v1.json"
+    },
+    {
+      "from": ".github/workflows/noos-researcher.yml",
+      "to": "receipts/proof/noos-kaizen-researcher-report-v1.json"
+    },
+    {
+      "from": ".github/workflows/gel-ci.yml",
+      "to": "scripts/check_noos_agent_docs.sh"
+    },
+    {
+      "from": ".github/workflows/gel-ci.yml",
+      "to": "tests/test_autorun_findings.py"
+    },
+    {
+      "from": ".github/workflows/gel-ci.yml",
+      "to": "tests/test_gate_integration_ci.py"
+    },
+    {
+      "from": ".github/workflows/gel-ci.yml",
+      "to": "tests/test_decide_integration_ci.py"
+    },
+    {
+      "from": ".github/workflows/gel-ci.yml",
+      "to": "scripts/verify_loop_determinism_external_v1.py"
+    },
+    {
+      "from": ".github/workflows/gel-ci.yml",
+      "to": "scripts/verify_living_system_governance_v1.py"
+    },
+    {
+      "from": ".github/workflows/gel-ci.yml",
+      "to": "scripts/verify_pr_conflict_resolution_v1.py"
+    },
+    {
+      "from": ".github/workflows/gel-ci.yml",
+      "to": "scripts/noos_machine_loops_v1.py"
+    },
+    {
+      "from": ".github/workflows/gel-ci.yml",
+      "to": "scripts/check_noetfield_business_strategy.sh"
+    },
+    {
+      "from": ".github/workflows/deploy-noos-cloud-workers-v1.yml",
+      "to": "scripts/verify_noos_cf_deploy_token_v1.py"
+    },
+    {
+      "from": ".github/workflows/deploy-noos-cloud-workers-v1.yml",
+      "to": "scripts/deploy_noos_factory_autorun_tick_cf_v1.sh"
+    },
+    {
+      "from": ".github/workflows/deploy-noos-cloud-workers-v1.yml",
+      "to": "scripts/deploy_noos_loop_fleet_tick_cf_v1.sh"
+    },
+    {
+      "from": ".github/workflows/deploy-noos-cloud-workers-v1.yml",
+      "to": "receipts/proof/noos-cloud-workers-deploy-v1.json"
+    },
+    {
+      "from": ".github/workflows/noos-post-deploy-verify-v1.yml",
+      "to": "scripts/check_production_urls.sh"
+    },
+    {
+      "from": ".github/workflows/noos-post-deploy-verify-v1.yml",
+      "to": "scripts/noos_integrator_repair_autorun_v1.py"
+    },
+    {
+      "from": ".github/workflows/noos-post-deploy-verify-v1.yml",
+      "to": "scripts/verify_noos_motor_sustain_v1.py"
+    },
+    {
+      "from": ".github/workflows/noos-post-deploy-verify-v1.yml",
+      "to": "scripts/sandbox_health_sweep_v1.py"
+    },
+    {
+      "from": ".github/workflows/noos-post-deploy-verify-v1.yml",
+      "to": "receipts/proof/noos-post-deploy-trigger-sweep-v1.json"
+    },
+    {
+      "from": ".github/workflows/noos-post-deploy-verify-v1.yml",
+      "to": "receipts/proof/noos-post-deploy-verify-v1.json"
+    },
+    {
+      "from": ".github/ISSUE_TEMPLATE/copilot-kaizen-machine-safe.yml",
+      "to": "data/noos-parallel-agent-registry-v1.json"
+    },
+    {
+      "from": ".github/ISSUE_TEMPLATE/copilot-kaizen-machine-safe.yml",
+      "to": ".github/copilot-instructions.md"
+    },
+    {
+      "from": ".github/ISSUE_TEMPLATE/copilot-kaizen-machine-safe.yml",
+      "to": "scripts/noos_agent_conflict_check_v1.py"
+    },
+    {
+      "from": ".github/ISSUE_TEMPLATE/copilot-kaizen-machine-safe.yml",
+      "to": "scripts/noos_loop_heartbeat_v1.py"
+    },
+    {
+      "from": ".github/ISSUE_TEMPLATE/copilot-kaizen-machine-safe.yml",
+      "to": "scripts/sandbox_health_sweep_v1.py"
+    },
+    {
+      "from": ".github/workflows/noetfield-open-pr-v1.yml",
+      "to": "scripts/noetfield_open_pr_from_patch_v1.sh"
+    },
+    {
+      "from": ".github/workflows/noos-stack-health-receipt.yml",
+      "to": "scripts/noos_integrator_repair_autorun_v1.py"
+    },
+    {
+      "from": ".github/workflows/noos-stack-health-receipt.yml",
+      "to": "scripts/noos_stack_automation_health_v1.py"
+    },
+    {
+      "from": ".github/workflows/noos-stack-health-receipt.yml",
+      "to": "receipts/proof/noos-stack-automation-health-v1.json"
+    },
+    {
+      "from": ".github/workflows/noos-integrator-daily-witness.yml",
+      "to": "scripts/noos_integrator_repair_autorun_v1.py"
+    },
+    {
+      "from": ".github/workflows/noos-integrator-daily-witness.yml",
+      "to": "scripts/noos_integrator_daily_checklist_v1.py"
+    },
+    {
+      "from": ".github/workflows/noos-integrator-daily-witness.yml",
+      "to": "receipts/proof/noos-integrator-daily-checklist-v1.json"
+    },
+    {
+      "from": ".github/workflows/noos-motor-sustain-witness.yml",
+      "to": "scripts/noos_integrator_repair_autorun_v1.py"
+    },
+    {
+      "from": ".github/workflows/noos-motor-sustain-witness.yml",
+      "to": "scripts/verify_noos_motor_sustain_v1.py"
+    },
+    {
+      "from": ".github/workflows/noos-motor-sustain-witness.yml",
+      "to": "receipts/proof/noos-motor-sustain-v1.json"
+    },
+    {
+      "from": ".github/workflows/noos-trustfield-observe-witness.yml",
+      "to": "scripts/noos_trustfield_observe_witness_v1.py"
+    },
+    {
+      "from": ".github/workflows/noos-trustfield-observe-witness.yml",
+      "to": "receipts/proof/noos-trustfield-observe-witness-v1.json"
+    },
+    {
+      "from": ".github/workflows/noos-liveness-registry-witness.yml",
+      "to": "scripts/noos_liveness_registry_witness_v1.py"
+    },
+    {
+      "from": ".github/workflows/noos-liveness-registry-witness.yml",
+      "to": "receipts/proof/noos-liveness-registry-witness-v1.json"
+    },
+    {
+      "from": ".github/workflows/publish-pypi.yml",
+      "to": "tests/test_noetfield_gate.py"
+    },
+    {
+      "from": ".github/workflows/noos-autorun-witness.yml",
+      "to": "scripts/autorun_status_v1.py"
+    },
+    {
+      "from": ".github/workflows/noos-autorun-witness.yml",
+      "to": "receipts/proof/noos-autorun-witness-v1.json"
+    },
+    {
+      "from": ".github/workflows/noos-sourcea-spine-witness.yml",
+      "to": "scripts/noos_sourcea_spine_witness_v1.py"
+    },
+    {
+      "from": ".github/workflows/noos-sourcea-spine-witness.yml",
+      "to": "receipts/proof/noos-sourcea-spine-witness-v1.json"
+    },
+    {
+      "from": ".github/workflows/noos-sandbox-url-sweep-witness.yml",
+      "to": "scripts/noos_sandbox_url_sweep_witness_v1.py"
+    },
+    {
+      "from": ".github/workflows/noos-sandbox-url-sweep-witness.yml",
+      "to": "receipts/proof/noos-sandbox-url-sweep-witness-v1.json"
+    },
+    {
+      "from": ".github/workflows/noos-machine-audit-witness.yml",
+      "to": "scripts/noos_machine_audit_witness_v1.py"
+    },
+    {
+      "from": ".github/workflows/noos-machine-audit-witness.yml",
+      "to": "receipts/proof/noos-machine-audit-witness-v1.json"
+    },
+    {
+      "from": ".github/workflows/release-noetfield-gate.yml",
+      "to": "tests/test_noetfield_gate.py"
+    },
+    {
+      "from": ".github/workflows/noos-machine-loops.yml",
+      "to": "data/founder-trigger-ledger-v1.json"
+    },
+    {
+      "from": ".github/workflows/noos-machine-loops.yml",
+      "to": "data/noos-machine-loops-config-v1.json"
+    },
+    {
+      "from": ".github/workflows/noos-machine-loops.yml",
+      "to": "scripts/noos_machine_loops_v1.py"
+    },
+    {
+      "from": ".github/workflows/noos-machine-loops.yml",
+      "to": "scripts/noos_receipt_chain_v1.py"
+    },
+    {
+      "from": ".github/workflows/noos-machine-loops.yml",
+      "to": "tests/test_noos_machine_loops_v1.py"
+    },
+    {
+      "from": ".github/workflows/noos-gha-health-witness.yml",
+      "to": "scripts/noos_gha_health_witness_v1.py"
+    },
+    {
+      "from": ".github/workflows/noos-gha-health-witness.yml",
+      "to": "receipts/proof/noos-gha-health-witness-v1.json"
+    },
+    {
+      "from": ".github/workflows/noos-workflow-audit.yml",
+      "to": "scripts/noos_loop_runner_v1.py"
+    },
+    {
+      "from": ".github/workflows/noos-workflow-audit.yml",
+      "to": "scripts/verify_living_system_governance_v1.py"
+    },
+    {
+      "from": ".github/workflows/noos-sourcea-observe-loop.yml",
+      "to": "scripts/noos_loop_runner_v1.py"
+    },
+    {
+      "from": ".github/workflows/noos-agent-nerve-loop.yml",
+      "to": "scripts/noos_loop_runner_v1.py"
+    },
+    {
+      "from": ".github/workflows/noos-self-heal-loop.yml",
+      "to": "scripts/noos_loop_runner_v1.py"
+    },
+    {
+      "from": ".github/workflows/noos-inbox-loop.yml",
+      "to": "scripts/noos_loop_runner_v1.py"
+    },
+    {
+      "from": ".github/workflows/noos-runtime-loop.yml",
+      "to": "scripts/noos_loop_runner_v1.py"
+    },
+    {
+      "from": ".github/workflows/noos-surface-loop.yml",
+      "to": "scripts/noos_loop_runner_v1.py"
+    },
+    {
+      "from": ".github/workflows/noos-chain-loop.yml",
+      "to": "scripts/noos_loop_runner_v1.py"
+    },
+    {
+      "from": ".github/workflows/noos-discovery.yml",
+      "to": "scripts/ci_discovery_noos_dispatcher.py"
+    },
+    {
+      "from": ".github/workflows/noos-discovery.yml",
+      "to": "receipts/ci-discovery-noos-dispatcher.json"
+    },
+    {
+      "from": ".github/workflows/noos-improve-kaizen-daily.yml",
+      "to": "scripts/noos_loop_runner_v1.py"
+    },
+    {
+      "from": ".github/workflows/noos-agent-vault.yml",
+      "to": "scripts/check_noos_agent_docs.sh"
+    },
+    {
+      "from": ".github/workflows/cost-policy-scan.yml",
+      "to": "scripts/cost_policy_scan.py"
+    },
+    {
+      "from": ".github/workflows/cost-policy-scan.yml",
+      "to": "data/cost_policy_machine.json"
+    },
+    {
+      "from": ".github/workflows-quarantined/stub/noos-cross-repo-orchestrator.yml",
+      "to": "receipts/proof/noos-stack-automation-health-v1.json"
     },
     {
       "from": "docs/ops/ECOSYSTEM_CONTROLLED_EXECUTION_1000_PLAN_DRAFT_v1.md",
@@ -6540,1514 +8172,6 @@
       "to": "docs/GOVERNED_AUTORUN_LAWS_v3.md"
     },
     {
-      "from": "ops/railway/noos-loop-runner/server.py",
-      "to": "scripts/noos_loop_runner_v1.py"
-    },
-    {
-      "from": "ops/railway/noos-loop-runner/server.py",
-      "to": "scripts/enqueue_noos_cloud_inbox_v1.py"
-    },
-    {
-      "from": "ops/railway/noos-loop-runner/server.py",
-      "to": "scripts/run_noetfield_factory_loop_v1.py"
-    },
-    {
-      "from": "ops/railway/noos-loop-runner/server.py",
-      "to": "scripts/noos_motor_restart_v1.py"
-    },
-    {
-      "from": "ops/fly/noos-loop-executor/server.py",
-      "to": "scripts/noos_loop_runner_v1.py"
-    },
-    {
-      "from": "ops/fly/noos-loop-executor/server.py",
-      "to": "scripts/enqueue_noos_cloud_inbox_v1.py"
-    },
-    {
-      "from": "ops/fly/noos-loop-executor/server.py",
-      "to": "scripts/run_noetfield_factory_loop_v1.py"
-    },
-    {
-      "from": "ops/fly/noos-self-heal-runner/server.py",
-      "to": "scripts/reenqueue_blocked_upg_inbox_v1.py"
-    },
-    {
-      "from": "ops/fly/noos-self-heal-runner/server.py",
-      "to": "scripts/noos_loop_heartbeat_v1.py"
-    },
-    {
-      "from": "ops/fly/noos-inbox-runner/server.py",
-      "to": "scripts/cloud_inbox_worker_v1.py"
-    },
-    {
-      "from": "scripts/autorun_status_v1.py",
-      "to": "data/autorun-workflows-v1.json"
-    },
-    {
-      "from": "scripts/autorun_status_v1.py",
-      "to": "data/autorun-sandboxes-v1.json"
-    },
-    {
-      "from": "scripts/autorun_status_v1.py",
-      "to": "receipts/proof/noos-github-schedule-a1-v1.json"
-    },
-    {
-      "from": "scripts/autorun_status_v1.py",
-      "to": "scripts/spine_realtime_feed_v1.py"
-    },
-    {
-      "from": "scripts/noos_machine_loops_v1.py",
-      "to": "data/noos-machine-loops-config-v1.json"
-    },
-    {
-      "from": "scripts/noos_machine_loops_v1.py",
-      "to": "data/founder-trigger-ledger-v1.json"
-    },
-    {
-      "from": "scripts/noos_machine_loops_v1.py",
-      "to": "data/noos-parallel-agent-registry-v1.json"
-    },
-    {
-      "from": "scripts/noos_machine_loops_v1.py",
-      "to": "data/trigger-registry-v1.json"
-    },
-    {
-      "from": "scripts/noos_machine_loops_v1.py",
-      "to": "docs/GOVERNED_AUTORUN_LAWS_v3.md"
-    },
-    {
-      "from": "scripts/noos_machine_loops_v1.py",
-      "to": "scripts/verify_living_system_governance_v1.py"
-    },
-    {
-      "from": "scripts/noos_loop_runner_v1.py",
-      "to": "data/noos-24-7-loops-v1.json"
-    },
-    {
-      "from": "scripts/noos_loop_runner_v1.py",
-      "to": "scripts/factory_supabase_sink_v1.py"
-    },
-    {
-      "from": "scripts/noos_loop_runner_v1.py",
-      "to": "data/mission-registry-v1.json"
-    },
-    {
-      "from": "scripts/noos_integrator_daily_checklist_v1.py",
-      "to": "receipts/proof/noos-integrator-daily-checklist-v1.json"
-    },
-    {
-      "from": "scripts/noos_integrator_daily_checklist_v1.py",
-      "to": "scripts/noos_integrator_status_v1.py"
-    },
-    {
-      "from": "scripts/noos_integrator_daily_checklist_v1.py",
-      "to": "scripts/noos_integrator_mirror_check_v1.py"
-    },
-    {
-      "from": "scripts/noos_integrator_daily_checklist_v1.py",
-      "to": "scripts/autorun_status_v1.py"
-    },
-    {
-      "from": "scripts/noos_integrator_daily_checklist_v1.py",
-      "to": "scripts/observe_trustfield_parallel_layers_v1.py"
-    },
-    {
-      "from": "scripts/noos_integrator_daily_checklist_v1.py",
-      "to": "scripts/observe_trustfield_loop_registry_v1.py"
-    },
-    {
-      "from": "scripts/noos_integrator_daily_checklist_v1.py",
-      "to": "scripts/record_sg_registry_witness_v1.py"
-    },
-    {
-      "from": "scripts/open_noos_verified_window_v1.py",
-      "to": "receipts/proof/noos-loop-verified-window-v1.json"
-    },
-    {
-      "from": "scripts/open_noos_verified_window_v1.py",
-      "to": "data/noos-24-7-loops-v1.json"
-    },
-    {
-      "from": "scripts/noos_trigger_host_inventory_v1.py",
-      "to": "data/noos-24-7-loops-v1.json"
-    },
-    {
-      "from": "scripts/noos_trigger_host_inventory_v1.py",
-      "to": "data/noos-cf-dispatch-table-v1.json"
-    },
-    {
-      "from": "scripts/noos_trigger_host_inventory_v1.py",
-      "to": "data/autorun-workflows-v1.json"
-    },
-    {
-      "from": "scripts/noos_trigger_host_inventory_v1.py",
-      "to": "data/noos-trigger-host-inventory-v1.json"
-    },
-    {
-      "from": "scripts/noos_trigger_host_inventory_v1.py",
-      "to": "receipts/proof/noos-trigger-host-inventory-v1.json"
-    },
-    {
-      "from": "scripts/noos_live_sync_gate.py",
-      "to": "scripts/check_noos_agent_docs.sh"
-    },
-    {
-      "from": "scripts/noos_live_sync_gate.py",
-      "to": "docs/_NOOS_AGENT/MANIFEST.json"
-    },
-    {
-      "from": "scripts/noos_loop_verify_v1.py",
-      "to": "data/noos-24-7-loops-v1.json"
-    },
-    {
-      "from": "scripts/noos_loop_verify_v1.py",
-      "to": "receipts/proof/noos-deploy-baseline-audit-v1.json"
-    },
-    {
-      "from": "scripts/noos_loop_verify_v1.py",
-      "to": "data/noos-sandbox-fleet-v1.json"
-    },
-    {
-      "from": "scripts/noos_loop_verify_v1.py",
-      "to": "receipts/proof/noos-sandbox-registry-v1.json"
-    },
-    {
-      "from": "scripts/noos_loop_verify_v1.py",
-      "to": "receipts/proof/noos-deploy-fly-inbox-v1.json"
-    },
-    {
-      "from": "scripts/noos_loop_verify_v1.py",
-      "to": "receipts/proof/noos-deploy-fly-self-heal-v1.json"
-    },
-    {
-      "from": "scripts/noos_loop_verify_v1.py",
-      "to": "scripts/noos_loop_runner_v1.py"
-    },
-    {
-      "from": "scripts/noos_loop_heartbeat_v1.py",
-      "to": "data/noos-24-7-loops-v1.json"
-    },
-    {
-      "from": "scripts/noos_loop_heartbeat_v1.py",
-      "to": "data/trigger-registry-v1.json"
-    },
-    {
-      "from": "scripts/cloud_inbox_worker_v1.py",
-      "to": "fixtures/demo_intents/approve.json"
-    },
-    {
-      "from": "scripts/noos_self_heal_v1.py",
-      "to": "data/noos-audit-findings-v1.json"
-    },
-    {
-      "from": "scripts/noos_self_heal_v1.py",
-      "to": "data/noos-healing-handoff-v1.json"
-    },
-    {
-      "from": "scripts/noos_self_heal_v1.py",
-      "to": "receipts/proof/noos-kaizen-self-heal-report-v1.json"
-    },
-    {
-      "from": "scripts/observe_trustfield_loop_registry_v1.py",
-      "to": "receipts/proof/noos-trustfield-loop-registry-observe-v1.json"
-    },
-    {
-      "from": "scripts/run_noetfield_factory_loop_v1.py",
-      "to": "scripts/run_noetfield_patch_pack_v1.py"
-    },
-    {
-      "from": "scripts/run_noetfield_factory_loop_v1.py",
-      "to": "scripts/cloud_inbox_worker_v1.py"
-    },
-    {
-      "from": "scripts/run_noetfield_factory_loop_v1.py",
-      "to": "scripts/factory_supabase_sink_v1.py"
-    },
-    {
-      "from": "scripts/verify_living_system_governance_v1.py",
-      "to": "data/noos-parallel-agent-registry-v1.json"
-    },
-    {
-      "from": "scripts/verify_living_system_governance_v1.py",
-      "to": "data/noos-integrator-role-v1.json"
-    },
-    {
-      "from": "scripts/verify_living_system_governance_v1.py",
-      "to": ".github/copilot-instructions.md"
-    },
-    {
-      "from": "scripts/verify_living_system_governance_v1.py",
-      "to": "data/noos-pr-conflict-skill-lock-v1.json"
-    },
-    {
-      "from": "scripts/verify_living_system_governance_v1.py",
-      "to": "data/noos-machine-loops-config-v1.json"
-    },
-    {
-      "from": "scripts/verify_living_system_governance_v1.py",
-      "to": "data/founder-trigger-ledger-v1.json"
-    },
-    {
-      "from": "scripts/verify_living_system_governance_v1.py",
-      "to": "scripts/noos_machine_loops_v1.py"
-    },
-    {
-      "from": "scripts/build_repo_graph_v1.py",
-      "to": "scripts/query_repo_graph_v1.py"
-    },
-    {
-      "from": "scripts/build_repo_graph_v1.py",
-      "to": "docs/L0_REPO_GRAPH_MEMORY_v1.md"
-    },
-    {
-      "from": "scripts/noos_researcher_v1.py",
-      "to": "data/noos-healing-handoff-v1.json"
-    },
-    {
-      "from": "scripts/noos_researcher_v1.py",
-      "to": "data/noos-research-findings-v1.json"
-    },
-    {
-      "from": "scripts/noos_researcher_v1.py",
-      "to": ".github/workflows/noos-workflow-audit.yml"
-    },
-    {
-      "from": "scripts/noos_researcher_v1.py",
-      "to": "receipts/proof/noos-kaizen-researcher-report-v1.json"
-    },
-    {
-      "from": "scripts/run_noetfield_patch_pack_v1.py",
-      "to": "docs/run_patches/noetfield_run_patch_pack_10100_v1.json"
-    },
-    {
-      "from": "scripts/run_noetfield_patch_pack_v1.py",
-      "to": "docs/run_patches/noetfield_run_patch_manifest_10100_v1.json"
-    },
-    {
-      "from": "scripts/run_noetfield_patch_pack_v1.py",
-      "to": "tests/test_phase2_decision.py"
-    },
-    {
-      "from": "scripts/run_noetfield_patch_pack_v1.py",
-      "to": "audit/audit_store.py"
-    },
-    {
-      "from": "scripts/run_noetfield_patch_pack_v1.py",
-      "to": "portal/routes.py"
-    },
-    {
-      "from": "scripts/run_noetfield_patch_pack_v1.py",
-      "to": "scripts/check_noetfield_com_e2e.py"
-    },
-    {
-      "from": "scripts/run_noetfield_patch_pack_v1.py",
-      "to": "docs/ops/GEL_API_DEPLOY_LOCKED_v1.md"
-    },
-    {
-      "from": "scripts/run_noetfield_patch_pack_v1.py",
-      "to": "scripts/deploy-gel-api-railway.sh"
-    },
-    {
-      "from": "scripts/run_noetfield_patch_pack_v1.py",
-      "to": "scripts/setup-gel-api-dns.sh"
-    },
-    {
-      "from": "scripts/run_noetfield_patch_pack_v1.py",
-      "to": "scripts/noetfield_sdk_scaffold.py"
-    },
-    {
-      "from": "scripts/run_noetfield_patch_pack_v1.py",
-      "to": "scripts/publish-gate-pypi.sh"
-    },
-    {
-      "from": "scripts/run_noetfield_patch_pack_v1.py",
-      "to": "scripts/check_noos_agent_docs.sh"
-    },
-    {
-      "from": "scripts/run_noetfield_patch_pack_v1.py",
-      "to": "scripts/check_upgrade_plan_300.sh"
-    },
-    {
-      "from": "scripts/sandbox_health_sweep_v1.py",
-      "to": "data/trigger-registry-v1.json"
-    },
-    {
-      "from": "scripts/noos_specialist_v1.py",
-      "to": "data/noos-research-findings-v1.json"
-    },
-    {
-      "from": "scripts/noos_specialist_v1.py",
-      "to": "data/noos-specialist-proposals-v1.json"
-    },
-    {
-      "from": "scripts/noos_specialist_v1.py",
-      "to": "receipts/proof/noos-kaizen-specialist-proposals-v1.json"
-    },
-    {
-      "from": "scripts/noetfield_deploy_v1.py",
-      "to": "data/noos-deploy-scopes-v1.json"
-    },
-    {
-      "from": "scripts/observe_trustfield_parallel_layers_v1.py",
-      "to": "data/noos-trustfield-parallel-layers-v1.json"
-    },
-    {
-      "from": "scripts/observe_trustfield_parallel_layers_v1.py",
-      "to": "receipts/proof/noos-trustfield-parallel-layers-observe-v1.json"
-    },
-    {
-      "from": "scripts/observe_trustfield_parallel_layers_v1.py",
-      "to": "scripts/observe_trustfield_loop_registry_v1.py"
-    },
-    {
-      "from": "scripts/noos_worker_kernel_v1.py",
-      "to": "config/model-router.yml"
-    },
-    {
-      "from": "scripts/noos_deadman_v1.py",
-      "to": "data/noos-deadman-config-v1.json"
-    },
-    {
-      "from": "scripts/noos_deadman_v1.py",
-      "to": "data/noos-24-7-loops-v1.json"
-    },
-    {
-      "from": "scripts/noos_deadman_v1.py",
-      "to": "data/noos-cf-dispatch-table-v1.json"
-    },
-    {
-      "from": "scripts/noos_motor_restart_v1.py",
-      "to": "data/noos-motor-restart-recipes-v1.json"
-    },
-    {
-      "from": "scripts/verify_noos_icl_p1_v1.py",
-      "to": "receipts/proof/noos-integrator-icl-p1-closeout-v1.json"
-    },
-    {
-      "from": "scripts/verify_noos_icl_p1_v1.py",
-      "to": "scripts/noos_local_boot_vault_sync_v1.sh"
-    },
-    {
-      "from": "scripts/verify_noos_icl_p1_v1.py",
-      "to": "scripts/verify_noos_cf_deploy_token_v1.py"
-    },
-    {
-      "from": "scripts/verify_noos_icl_p1_v1.py",
-      "to": ".github/workflows/deploy-noos-cloud-workers-v1.yml"
-    },
-    {
-      "from": "scripts/verify_noos_icl_p1_v1.py",
-      "to": "scripts/observe_sourcea_supabase_v1.py"
-    },
-    {
-      "from": "scripts/verify_noos_icl_p1_v1.py",
-      "to": "scripts/autorun_status_v1.py"
-    },
-    {
-      "from": "scripts/verify_noos_icl_p1_v1.py",
-      "to": "scripts/nf_vault_env.py"
-    },
-    {
-      "from": "scripts/verify_noos_icl_p1_v1.py",
-      "to": "scripts/load_noetfield_vault_env.sh"
-    },
-    {
-      "from": "scripts/verify_noos_icl_p1_v1.py",
-      "to": "scripts/read_platform_vault.sh"
-    },
-    {
-      "from": "scripts/noos_agent_conflict_check_v1.py",
-      "to": "data/noos-parallel-agent-registry-v1.json"
-    },
-    {
-      "from": "scripts/verify_pr_conflict_resolution_v1.py",
-      "to": "data/noos-pr-conflict-skill-lock-v1.json"
-    },
-    {
-      "from": "scripts/verify_pr_conflict_resolution_v1.py",
-      "to": "receipts/proof/noos-pr-conflict-skill-lock-v1.json"
-    },
-    {
-      "from": "scripts/noos_t3_sandbox_closeout_v1.py",
-      "to": "data/noos-unified-upgrade-backlog-v1.json"
-    },
-    {
-      "from": "scripts/noos_t3_sandbox_closeout_v1.py",
-      "to": "docs/_NOOS_AGENT/UPGRADE_MANIFEST.json"
-    },
-    {
-      "from": "scripts/noos_t3_sandbox_closeout_v1.py",
-      "to": "receipts/proof/noos-t3-sandbox-closeout-v1.json"
-    },
-    {
-      "from": "scripts/noos_t3_sandbox_closeout_v1.py",
-      "to": "receipts/proof/noos-deploy-baseline-audit-v1.json"
-    },
-    {
-      "from": "scripts/noos_t3_sandbox_closeout_v1.py",
-      "to": "packages/noetfield-gate/README.md"
-    },
-    {
-      "from": "scripts/noos_t3_sandbox_closeout_v1.py",
-      "to": "docs/examples/noetfield-gate-gha-v1.yml"
-    },
-    {
-      "from": "scripts/noos_t3_sandbox_closeout_v1.py",
-      "to": "docs/examples/pre-commit-noetfield-gate-v1.md"
-    },
-    {
-      "from": "scripts/noos_t3_sandbox_closeout_v1.py",
-      "to": "data/noos-sandbox-fleet-v1.json"
-    },
-    {
-      "from": "scripts/noos_t3_sandbox_closeout_v1.py",
-      "to": "scripts/noos_sandbox_registry_reconcile_v1.py"
-    },
-    {
-      "from": "scripts/noos_t3_sandbox_closeout_v1.py",
-      "to": "scripts/noos_improve_kaizen_runner_v1.py"
-    },
-    {
-      "from": "scripts/noos_t3_sandbox_closeout_v1.py",
-      "to": "data/noos-runtime-scaling-v1.json"
-    },
-    {
-      "from": "scripts/noos_t3_sandbox_closeout_v1.py",
-      "to": "data/noos-deploy-scopes-v1.json"
-    },
-    {
-      "from": "scripts/noos_t3_sandbox_closeout_v1.py",
-      "to": "receipts/proof/noos-sandbox-registry-v1.json"
-    },
-    {
-      "from": "scripts/noos_t3_sandbox_closeout_v1.py",
-      "to": "receipts/proof/noos-improve-kaizen-daily-v1.json"
-    },
-    {
-      "from": "scripts/noos_t3_sandbox_closeout_v1.py",
-      "to": "receipts/proof/noos-loop-verify-all-v1.json"
-    },
-    {
-      "from": "scripts/verify_noos_loop_runner_railway_v1.py",
-      "to": "receipts/proof/noos-railway-loop-runner-v1.json"
-    },
-    {
-      "from": "scripts/noos_workflow_audit_v1.py",
-      "to": "data/noos-24-7-loops-v1.json"
-    },
-    {
-      "from": "scripts/cost_policy_scan.py",
-      "to": "data/cost_policy_machine.json"
-    },
-    {
-      "from": "scripts/cost_policy_scan.py",
-      "to": "scripts/runtime_routing_guard.py"
-    },
-    {
-      "from": "scripts/cost_policy_scan.py",
-      "to": "docs/NOOS_COPILOT_DISPATCHER_AUTHORITY.md"
-    },
-    {
-      "from": "scripts/cost_policy_scan.py",
-      "to": "config/model-router.yml"
-    },
-    {
-      "from": "scripts/cost_policy_scan.py",
-      "to": "scripts/noos_loop_runner_v1.py"
-    },
-    {
-      "from": "scripts/noos_loop_upgrade_closeout_v1.py",
-      "to": "data/noos-unified-upgrade-backlog-v1.json"
-    },
-    {
-      "from": "scripts/noos_loop_upgrade_closeout_v1.py",
-      "to": "docs/_NOOS_AGENT/UPGRADE_MANIFEST.json"
-    },
-    {
-      "from": "scripts/noos_loop_upgrade_closeout_v1.py",
-      "to": "receipts/proof/noos-machine-loops-upgrade-closeout-v1.json"
-    },
-    {
-      "from": "scripts/noos_loop_upgrade_closeout_v1.py",
-      "to": "receipts/proof/noos-loop-verify-all-v1.json"
-    },
-    {
-      "from": "scripts/noos_loop_upgrade_closeout_v1.py",
-      "to": "docs/ops/NOOS_FACTORY_AUTORUN_DEPRECATION_v1.md"
-    },
-    {
-      "from": "scripts/noos_loop_upgrade_closeout_v1.py",
-      "to": "ops/fly/noos-inbox-runner/server.py"
-    },
-    {
-      "from": "scripts/noos_loop_upgrade_closeout_v1.py",
-      "to": "ops/fly/noos-self-heal-runner/server.py"
-    },
-    {
-      "from": "scripts/verify_noos_living_system_48h_v1.py",
-      "to": "data/noos-living-system-baseline-v1.json"
-    },
-    {
-      "from": "scripts/verify_noos_living_system_48h_v1.py",
-      "to": "receipts/proof/noos-living-system-48h-v1.json"
-    },
-    {
-      "from": "scripts/noos_deploy_baseline_audit_v1.py",
-      "to": "data/noos-deploy-scopes-v1.json"
-    },
-    {
-      "from": "scripts/noos_deploy_baseline_audit_v1.py",
-      "to": "receipts/proof/noos-deploy-baseline-audit-v1.json"
-    },
-    {
-      "from": "scripts/noos_integrator_tasks_mirror_v1.py",
-      "to": "receipts/proof/noos-integrator-tasks-mirror-v1.json"
-    },
-    {
-      "from": "scripts/noos_integrator_tasks_mirror_v1.py",
-      "to": "scripts/noos_integrator_sync_v1.py"
-    },
-    {
-      "from": "scripts/noos_stack_automation_health_v1.py",
-      "to": "receipts/proof/noos-stack-automation-health-v1.json"
-    },
-    {
-      "from": "scripts/noos_stack_automation_health_v1.py",
-      "to": "scripts/noos_integrator_status_v1.py"
-    },
-    {
-      "from": "scripts/noos_stack_automation_health_v1.py",
-      "to": "scripts/autorun_status_v1.py"
-    },
-    {
-      "from": "scripts/noos_stack_automation_health_v1.py",
-      "to": "scripts/observe_trustfield_parallel_layers_v1.py"
-    },
-    {
-      "from": "scripts/noos_stack_automation_health_v1.py",
-      "to": "scripts/observe_trustfield_loop_registry_v1.py"
-    },
-    {
-      "from": "scripts/noos_t2_deploy_closeout_v1.py",
-      "to": "data/noos-unified-upgrade-backlog-v1.json"
-    },
-    {
-      "from": "scripts/noos_t2_deploy_closeout_v1.py",
-      "to": "docs/_NOOS_AGENT/UPGRADE_MANIFEST.json"
-    },
-    {
-      "from": "scripts/noos_t2_deploy_closeout_v1.py",
-      "to": "receipts/proof/noos-t2-deploy-acg-closeout-v1.json"
-    },
-    {
-      "from": "scripts/noos_t2_deploy_closeout_v1.py",
-      "to": "receipts/proof/noos-deploy-baseline-audit-v1.json"
-    },
-    {
-      "from": "scripts/noos_t2_deploy_closeout_v1.py",
-      "to": "scripts/noetfield_deploy_v1.py"
-    },
-    {
-      "from": "scripts/noos_t2_deploy_closeout_v1.py",
-      "to": "data/noos-deploy-scopes-v1.json"
-    },
-    {
-      "from": "scripts/noos_t2_deploy_closeout_v1.py",
-      "to": "receipts/proof/noos-deploy-drift-kaizen-v1.json"
-    },
-    {
-      "from": "scripts/noos_t2_deploy_closeout_v1.py",
-      "to": "receipts/proof/noos-inbox-scaler-v1.json"
-    },
-    {
-      "from": "scripts/noos_t2_deploy_closeout_v1.py",
-      "to": "data/noos-runtime-scaling-v1.json"
-    },
-    {
-      "from": "scripts/noos_t2_deploy_closeout_v1.py",
-      "to": "receipts/proof/noos-deploy-fly-inbox-v1.json"
-    },
-    {
-      "from": "scripts/noos_t2_deploy_closeout_v1.py",
-      "to": "scripts/noos_deploy_drift_kaizen_v1.py"
-    },
-    {
-      "from": "scripts/noos_t2_deploy_closeout_v1.py",
-      "to": "scripts/noos_inbox_scaler_v1.py"
-    },
-    {
-      "from": "scripts/noos_t2_deploy_closeout_v1.py",
-      "to": "noetfield-org/receipts/NOOS_ACG_FOUNDER_SEND_PREP_2026-07-05.md"
-    },
-    {
-      "from": "scripts/noos_integrator_repair_autorun_v1.py",
-      "to": "cloud/workers/noos-deadman-v1/src/loop-intervals.json"
-    },
-    {
-      "from": "scripts/noos_integrator_repair_autorun_v1.py",
-      "to": "receipts/proof/noos-integrator-autorun-repair-v1.json"
-    },
-    {
-      "from": "scripts/demo-gel-5min-v1.sh",
-      "to": "scripts/mint_api_key.py"
-    },
-    {
-      "from": "scripts/demo-gel-5min-v1.sh",
-      "to": "scripts/verify-tle-digest-v1.py"
-    },
-    {
-      "from": "scripts/noos_upgrade_manifest_publish_v1.py",
-      "to": "docs/_NOOS_AGENT/UPGRADE_MANIFEST.json"
-    },
-    {
-      "from": "scripts/noos_upgrade_manifest_publish_v1.py",
-      "to": "data/noos-unified-upgrade-backlog-v1.json"
-    },
-    {
-      "from": "scripts/noos_upgrade_manifest_publish_v1.py",
-      "to": "receipts/proof/noos-upgrade-manifest-publish-v1.json"
-    },
-    {
-      "from": "scripts/noos_upgrade_manifest_publish_v1.py",
-      "to": "scripts/noos_integrator_sync_v1.py"
-    },
-    {
-      "from": "scripts/verify_noos_cf_railway_dispatch_v1.py",
-      "to": "data/noos-cf-dispatch-table-v1.json"
-    },
-    {
-      "from": "scripts/verify_noos_cf_railway_dispatch_v1.py",
-      "to": "receipts/proof/noos-cf-railway-dispatch-verify-v1.json"
-    },
-    {
-      "from": "scripts/noos_loop_registry_reconcile_v1.py",
-      "to": "data/noos-24-7-loops-v1.json"
-    },
-    {
-      "from": "scripts/noos_loop_registry_reconcile_v1.py",
-      "to": "data/noos-cf-dispatch-table-v1.json"
-    },
-    {
-      "from": "scripts/noos_loop_registry_reconcile_v1.py",
-      "to": "receipts/proof/noos-loop-registry-reconcile-v1.json"
-    },
-    {
-      "from": "scripts/noos_loop_baseline_audit_v1.py",
-      "to": "data/noos-24-7-loops-v1.json"
-    },
-    {
-      "from": "scripts/noos_loop_baseline_audit_v1.py",
-      "to": "receipts/proof/noos-loop-baseline-audit-v1.json"
-    },
-    {
-      "from": "scripts/noos_loop_baseline_audit_v1.py",
-      "to": "scripts/noos_machine_loops_v1.py"
-    },
-    {
-      "from": "scripts/noos_loop_baseline_audit_v1.py",
-      "to": "scripts/verify_noos_github_schedule_v1.py"
-    },
-    {
-      "from": "scripts/enqueue_noos_cloud_inbox_v1.py",
-      "to": "docs/_NOOS_AGENT/UPGRADE_MANIFEST.json"
-    },
-    {
-      "from": "scripts/enqueue_noos_cloud_inbox_v1.py",
-      "to": "scripts/factory_supabase_sink_v1.py"
-    },
-    {
-      "from": "scripts/enqueue_noos_cloud_inbox_v1.py",
-      "to": "data/noos-cloud-worker-inbox-v1.json"
-    },
-    {
-      "from": "scripts/cleanup_noetfield_vault_v1.py",
-      "to": "scripts/verify_noos_cf_deploy_token_v1.py"
-    },
-    {
-      "from": "scripts/verify_supabase_rls_machine_tables_v1.py",
-      "to": "receipts/proof/supabase-rls-machine-tables-v1.json"
-    },
-    {
-      "from": "scripts/noos_integrator_status_v1.py",
-      "to": "scripts/verify_noos_cf_deploy_token_v1.py"
-    },
-    {
-      "from": "scripts/noos_integrator_status_v1.py",
-      "to": "scripts/noos_integrator_mirror_check_v1.py"
-    },
-    {
-      "from": "scripts/noos_integrator_status_v1.py",
-      "to": "scripts/verify_noos_motor_sustain_v1.py"
-    },
-    {
-      "from": "scripts/noos_integrator_status_v1.py",
-      "to": "scripts/autorun_status_v1.py"
-    },
-    {
-      "from": "scripts/noos_integrator_status_v1.py",
-      "to": "scripts/noos_machine_loops_v1.py"
-    },
-    {
-      "from": "scripts/noos_integrator_status_v1.py",
-      "to": "scripts/noos_agent_conflict_check_v1.py"
-    },
-    {
-      "from": "scripts/noos_integrator_status_v1.py",
-      "to": "receipts/proof/noos-integrator-tasks-mirror-v1.json"
-    },
-    {
-      "from": "scripts/noos_integrator_status_v1.py",
-      "to": "receipts/proof/noos-upgrade-manifest-publish-v1.json"
-    },
-    {
-      "from": "scripts/deploy_noos_loop_runner_railway_v1.sh",
-      "to": "scripts/verify_noos_loop_runner_railway_v1.py"
-    },
-    {
-      "from": "scripts/verify_l0_repo_graph_memory_v1.sh",
-      "to": "scripts/build_repo_graph_v1.py"
-    },
-    {
-      "from": "scripts/verify_l0_repo_graph_memory_v1.sh",
-      "to": "scripts/query_repo_graph_v1.py"
-    },
-    {
-      "from": "scripts/noos_acg_founder_send_prep_v1.py",
-      "to": "noetfield-org/receipts/NOOS_ACG_FOUNDER_SEND_PREP_2026-07-05.md"
-    },
-    {
-      "from": "scripts/noos_acg_founder_send_prep_v1.py",
-      "to": "noetfield-org/receipts/NOOS_ACG_FOUNDER_SEND_RECEIPT_TEMPLATE.md"
-    },
-    {
-      "from": "scripts/noos_acg_founder_send_prep_v1.py",
-      "to": "docs/commercial/ACG_FIRST_PROSPECT_PACKET_v1.md"
-    },
-    {
-      "from": "scripts/noos_improve_kaizen_runner_v1.py",
-      "to": "data/noos-machine-loops-config-v1.json"
-    },
-    {
-      "from": "scripts/noos_improve_kaizen_runner_v1.py",
-      "to": "receipts/proof/noos-improve-kaizen-daily-v1.json"
-    },
-    {
-      "from": "scripts/noos_improve_kaizen_runner_v1.py",
-      "to": "data/noos-kaizen-recipes-v1.json"
-    },
-    {
-      "from": "scripts/noos_inbox_scaler_v1.py",
-      "to": "data/noos-runtime-scaling-v1.json"
-    },
-    {
-      "from": "scripts/noos_inbox_scaler_v1.py",
-      "to": "receipts/proof/noos-inbox-scaler-v1.json"
-    },
-    {
-      "from": "scripts/noos_inbox_scaler_v1.py",
-      "to": "receipts/proof/noos-runtime-scaling-eval-v1.json"
-    },
-    {
-      "from": "scripts/noos_inbox_scaler_v1.py",
-      "to": "scripts/reenqueue_blocked_upg_inbox_v1.py"
-    },
-    {
-      "from": "scripts/verify_noos_loop_executor_fly_v1.py",
-      "to": "receipts/proof/noos-fly-loop-executor-v1.json"
-    },
-    {
-      "from": "scripts/noos_sourcea_spine_witness_v1.py",
-      "to": "receipts/proof/noos-sourcea-spine-witness-v1.json"
-    },
-    {
-      "from": "scripts/planes_status_v1.py",
-      "to": "data/noos-upgrade-planes-v1.json"
-    },
-    {
-      "from": "scripts/planes_status_v1.py",
-      "to": "data/noos-unified-upgrade-backlog-v1.json"
-    },
-    {
-      "from": "scripts/register_noos_factory_run_truth_v1.py",
-      "to": ".github/workflows/noos-factory-autorun.yml"
-    },
-    {
-      "from": "scripts/seed_noos_loop_liveness_v1.py",
-      "to": "cloud/workers/noos-deadman-v1/src/loop-intervals.json"
-    },
-    {
-      "from": "scripts/noos_local_closeout_receipt_v1.py",
-      "to": "scripts/check_noos_clean_tree.sh"
-    },
-    {
-      "from": "scripts/noos_local_closeout_receipt_v1.py",
-      "to": "scripts/noos_integrator_sync_v1.py"
-    },
-    {
-      "from": "scripts/noos_trustfield_observe_witness_v1.py",
-      "to": "receipts/proof/noos-trustfield-observe-witness-v1.json"
-    },
-    {
-      "from": "scripts/verify_noos_deadman_telegram_lane_v1.py",
-      "to": "data/noos-deadman-config-v1.json"
-    },
-    {
-      "from": "scripts/noos_sandbox_registry_reconcile_v1.py",
-      "to": "data/noos-sandbox-fleet-v1.json"
-    },
-    {
-      "from": "scripts/noos_sandbox_registry_reconcile_v1.py",
-      "to": "data/noos-24-7-loops-v1.json"
-    },
-    {
-      "from": "scripts/noos_sandbox_registry_reconcile_v1.py",
-      "to": "data/noos-deploy-scopes-v1.json"
-    },
-    {
-      "from": "scripts/noos_sandbox_registry_reconcile_v1.py",
-      "to": "receipts/proof/noos-sandbox-registry-v1.json"
-    },
-    {
-      "from": "scripts/noos_local_boot_receipt_v1.py",
-      "to": "scripts/noos_integrator_sync_v1.py"
-    },
-    {
-      "from": "scripts/noos_local_status_v1.py",
-      "to": "scripts/noos_integrator_sync_v1.py"
-    },
-    {
-      "from": "scripts/verify_noos_icl_p2_v1.py",
-      "to": "receipts/proof/noos-integrator-icl-p2-closeout-v1.json"
-    },
-    {
-      "from": "scripts/verify_noos_icl_p2_v1.py",
-      "to": "scripts/noos_integrator_status_v1.py"
-    },
-    {
-      "from": "scripts/verify_noos_icl_p2_v1.py",
-      "to": "scripts/noos_integrator_tasks_mirror_v1.py"
-    },
-    {
-      "from": "scripts/verify_noos_icl_p2_v1.py",
-      "to": "scripts/noos_upgrade_manifest_publish_v1.py"
-    },
-    {
-      "from": "scripts/noos_kaizen_recipe_apply_v1.py",
-      "to": "data/noos-kaizen-recipes-v1.json"
-    },
-    {
-      "from": "scripts/noos_kaizen_recipe_apply_v1.py",
-      "to": "receipts/proof/noos-kaizen-recipe-apply-v1.json"
-    },
-    {
-      "from": "scripts/query_repo_graph_v1.py",
-      "to": "scripts/build_repo_graph_v1.py"
-    },
-    {
-      "from": "scripts/noos_integrator_mirror_check_v1.py",
-      "to": "scripts/noos_integrator_sync_v1.py"
-    },
-    {
-      "from": "scripts/verify_supabase_security_advisor_warnings_v1.py",
-      "to": "receipts/proof/supabase-security-advisor-warnings-v1.json"
-    },
-    {
-      "from": "scripts/verify_loop_determinism_external_v1.py",
-      "to": "tests/test_loop_determinism_ci.py"
-    },
-    {
-      "from": "scripts/verify_noos_motor_sustain_v1.py",
-      "to": "receipts/proof/noos-motor-sustain-v1.json"
-    },
-    {
-      "from": "scripts/verify_noos_motor_sustain_v1.py",
-      "to": "scripts/autorun_status_v1.py"
-    },
-    {
-      "from": "scripts/noos_deploy_drift_kaizen_v1.py",
-      "to": "receipts/proof/noos-deploy-drift-kaizen-v1.json"
-    },
-    {
-      "from": "scripts/noos_deploy_drift_kaizen_v1.py",
-      "to": "receipts/proof/noos-deploy-baseline-audit-v1.json"
-    },
-    {
-      "from": "scripts/noos_deploy_drift_kaizen_v1.py",
-      "to": "scripts/noetfield_deploy_v1.py"
-    },
-    {
-      "from": "scripts/trigger_noos_loop_dispatch_v1.py",
-      "to": "data/noos-24-7-loops-v1.json"
-    },
-    {
-      "from": "scripts/verify_noos_loop_replay_v1.py",
-      "to": "data/noos-24-7-loops-v1.json"
-    },
-    {
-      "from": "scripts/deploy_noos_deadman_cf_v1.sh",
-      "to": "data/noos-24-7-loops-v1.json"
-    },
-    {
-      "from": "scripts/deploy_noos_deadman_cf_v1.sh",
-      "to": "data/noos-cf-dispatch-table-v1.json"
-    },
-    {
-      "from": "scripts/deploy_noos_loop_executor_fly_v1.sh",
-      "to": "scripts/verify_noos_loop_executor_fly_v1.py"
-    },
-    {
-      "from": "scripts/noos_sandbox_url_sweep_witness_v1.py",
-      "to": "receipts/proof/noos-sandbox-url-sweep-witness-v1.json"
-    },
-    {
-      "from": "scripts/noos_sandbox_url_sweep_witness_v1.py",
-      "to": "scripts/sandbox_health_sweep_v1.py"
-    },
-    {
-      "from": "scripts/noos_liveness_registry_witness_v1.py",
-      "to": "receipts/proof/noos-liveness-registry-witness-v1.json"
-    },
-    {
-      "from": "scripts/teardown_noos_fly_loop_executor_v1.sh",
-      "to": "receipts/proof/noos-cf-railway-cutover-v1.json"
-    },
-    {
-      "from": "scripts/noos_living_system_48h_prep_v1.py",
-      "to": "receipts/proof/noos-living-system-48h-prep-v1.json"
-    },
-    {
-      "from": "scripts/noos_living_system_48h_prep_v1.py",
-      "to": "receipts/proof/noos-living-system-48h-v1.json"
-    },
-    {
-      "from": "scripts/noos_living_system_48h_prep_v1.py",
-      "to": "scripts/verify_noos_motor_sustain_v1.py"
-    },
-    {
-      "from": "scripts/ci_discovery_noos_dispatcher.py",
-      "to": "data/package_map.json"
-    },
-    {
-      "from": "scripts/ci_discovery_noos_dispatcher.py",
-      "to": "receipts/ci-discovery-noos-dispatcher.json"
-    },
-    {
-      "from": "scripts/sync_trigger_registry_to_workflows.py",
-      "to": "data/trigger-registry-v1.json"
-    },
-    {
-      "from": "scripts/runtime_routing_guard.py",
-      "to": "data/cost_policy_machine.json"
-    },
-    {
-      "from": "scripts/noos_machine_audit_witness_v1.py",
-      "to": "receipts/proof/noos-machine-audit-witness-v1.json"
-    },
-    {
-      "from": "scripts/check_noos_clean_tree.sh",
-      "to": "docs/run_patches/noetfield_run_patch_manifest_10100_v1.json"
-    },
-    {
-      "from": "scripts/check_noos_clean_tree.sh",
-      "to": "receipts/proof/noos-github-schedule-a1-v1.json"
-    },
-    {
-      "from": "scripts/verify_noos_gel_api_multi_region_v1.py",
-      "to": "receipts/proof/noos-gel-api-multi-region-v1.json"
-    },
-    {
-      "from": "scripts/noos_fly_selfheal_reaction_v1.py",
-      "to": "receipts/proof/noos-fly-selfheal-reaction-v1.json"
-    },
-    {
-      "from": "scripts/noos_fly_selfheal_reaction_v1.py",
-      "to": "scripts/reenqueue_blocked_upg_inbox_v1.py"
-    },
-    {
-      "from": "scripts/write_noos_cloud_motor_ops_receipt_v1.py",
-      "to": "receipts/proof/noos-cloud-motor-ops-v1.json"
-    },
-    {
-      "from": "scripts/write_noos_cloud_motor_ops_receipt_v1.py",
-      "to": "scripts/verify_noos_cloud_motor_e2e_v1.sh"
-    },
-    {
-      "from": "scripts/write_noos_cloud_motor_ops_receipt_v1.py",
-      "to": "scripts/verify_noos_cf_railway_dispatch_v1.py"
-    },
-    {
-      "from": "scripts/write_noos_cloud_motor_ops_receipt_v1.py",
-      "to": "scripts/phase_a_wire_cloud_motor_v1.sh"
-    },
-    {
-      "from": "scripts/write_noos_cloud_motor_ops_receipt_v1.py",
-      "to": "data/noos-external-monitors-v1.json"
-    },
-    {
-      "from": "scripts/noos_phase5_packaging_prep_v1.py",
-      "to": "receipts/proof/noos-phase5-packaging-prep-v1.json"
-    },
-    {
-      "from": "scripts/noos_phase5_packaging_prep_v1.py",
-      "to": "docs/_NOOS_AGENT/PRODUCT_TRUTH.md"
-    },
-    {
-      "from": "scripts/noos_acg_weekly_digest_v1.py",
-      "to": "data/noos-acg-outbound-queue-v1.json"
-    },
-    {
-      "from": "scripts/noos_gha_health_witness_v1.py",
-      "to": "receipts/proof/noos-gha-health-witness-v1.json"
-    },
-    {
-      "from": "scripts/factory_runtime_paths_v1.py",
-      "to": "data/noos-cloud-worker-inbox-v1.json"
-    },
-    {
-      "from": "scripts/factory_runtime_paths_v1.py",
-      "to": "docs/run_patches/noetfield_run_patch_manifest_10100_v1.json"
-    },
-    {
-      "from": "scripts/integrator_runtime_paths_v1.py",
-      "to": "data/noos-integrator-role-v1.json"
-    },
-    {
-      "from": "scripts/publish-gate-pypi.sh",
-      "to": "tests/test_noetfield_gate.py"
-    },
-    {
-      "from": "scripts/phase_b_wire_cf_railway_motor_v1.sh",
-      "to": "scripts/verify_noos_loop_runner_railway_v1.py"
-    },
-    {
-      "from": "scripts/phase_b_wire_cf_railway_motor_v1.sh",
-      "to": "scripts/deploy_noos_loop_fleet_tick_cf_v1.sh"
-    },
-    {
-      "from": "scripts/phase_b_wire_cf_railway_motor_v1.sh",
-      "to": "scripts/verify_noos_cloud_motor_e2e_v1.sh"
-    },
-    {
-      "from": "scripts/phase_b_wire_cf_fly_motor_v1.sh",
-      "to": "scripts/verify_noos_loop_executor_fly_v1.py"
-    },
-    {
-      "from": "scripts/phase_b_wire_cf_fly_motor_v1.sh",
-      "to": "scripts/deploy_noos_loop_executor_fly_v1.sh"
-    },
-    {
-      "from": "scripts/phase_b_wire_cf_fly_motor_v1.sh",
-      "to": "scripts/deploy_noos_loop_fleet_tick_cf_v1.sh"
-    },
-    {
-      "from": "scripts/phase_b_wire_cf_fly_motor_v1.sh",
-      "to": "scripts/verify_noos_cloud_motor_e2e_v1.sh"
-    },
-    {
-      "from": "scripts/noos_local_claim_lane_v1.sh",
-      "to": "scripts/noos_integrator_sync_v1.py"
-    },
-    {
-      "from": "scripts/check_noos_live_sync_gate.sh",
-      "to": "scripts/noos_live_sync_gate.py"
-    },
-    {
-      "from": "scripts/check_noos_live_sync_gate.sh",
-      "to": "docs/_NOOS_AGENT/live_sync/NOOS_LIVE_SYNC_RECEIPT.json"
-    },
-    {
-      "from": ".github/workflows/noos-factory-autorun.yml",
-      "to": "scripts/enqueue_noos_cloud_inbox_v1.py"
-    },
-    {
-      "from": ".github/workflows/noos-factory-autorun.yml",
-      "to": "scripts/register_noos_factory_run_truth_v1.py"
-    },
-    {
-      "from": ".github/copilot-instructions.md",
-      "to": "noetfield-org/FORBIDDEN_MARKERS.txt"
-    },
-    {
-      "from": ".github/copilot-instructions.md",
-      "to": "tests/test_forbidden_markers.py"
-    },
-    {
-      "from": ".github/copilot-instructions.md",
-      "to": "noetfield-org/REPO_REGISTRY.md"
-    },
-    {
-      "from": ".github/copilot-instructions.md",
-      "to": "noetfield-org/AGENT_REGISTRY.md"
-    },
-    {
-      "from": ".github/copilot-instructions.md",
-      "to": "noetfield-org/ROUTING_MATRIX.md"
-    },
-    {
-      "from": ".github/copilot-instructions.md",
-      "to": "noetfield-org/LOOP_STATE.json"
-    },
-    {
-      "from": ".github/copilot-instructions.md",
-      "to": "noetfield-org/SYNC_RECEIPTS.md"
-    },
-    {
-      "from": ".github/copilot-instructions.md",
-      "to": "data/noos-parallel-agent-registry-v1.json"
-    },
-    {
-      "from": ".github/copilot-instructions.md",
-      "to": "scripts/noos_integrator_sync_v1.py"
-    },
-    {
-      "from": ".github/copilot-instructions.md",
-      "to": "scripts/noos_agent_conflict_check_v1.py"
-    },
-    {
-      "from": ".github/copilot-instructions.md",
-      "to": "scripts/verify_pr_conflict_resolution_v1.py"
-    },
-    {
-      "from": ".github/workflows/noos-specialist.yml",
-      "to": "data/noos-research-findings-v1.json"
-    },
-    {
-      "from": ".github/workflows/noos-specialist.yml",
-      "to": "scripts/noos_specialist_v1.py"
-    },
-    {
-      "from": ".github/workflows/noos-specialist.yml",
-      "to": "data/noos-specialist-proposals-v1.json"
-    },
-    {
-      "from": ".github/workflows/noos-specialist.yml",
-      "to": "receipts/proof/noos-kaizen-specialist-proposals-v1.json"
-    },
-    {
-      "from": ".github/workflows/noos-self-heal.yml",
-      "to": "data/noos-audit-findings-v1.json"
-    },
-    {
-      "from": ".github/workflows/noos-self-heal.yml",
-      "to": "scripts/noos_self_heal_v1.py"
-    },
-    {
-      "from": ".github/workflows/noos-self-heal.yml",
-      "to": "data/noos-healing-handoff-v1.json"
-    },
-    {
-      "from": ".github/workflows/noos-self-heal.yml",
-      "to": "receipts/proof/noos-kaizen-self-heal-report-v1.json"
-    },
-    {
-      "from": ".github/workflows/noos-cross-repo-orchestrator.yml",
-      "to": "data/noos-audit-findings-v1.json"
-    },
-    {
-      "from": ".github/workflows/noos-cross-repo-orchestrator.yml",
-      "to": "data/noos-healing-handoff-v1.json"
-    },
-    {
-      "from": ".github/workflows/noos-researcher.yml",
-      "to": "data/noos-healing-handoff-v1.json"
-    },
-    {
-      "from": ".github/workflows/noos-researcher.yml",
-      "to": "scripts/noos_researcher_v1.py"
-    },
-    {
-      "from": ".github/workflows/noos-researcher.yml",
-      "to": "data/noos-research-findings-v1.json"
-    },
-    {
-      "from": ".github/workflows/noos-researcher.yml",
-      "to": "receipts/proof/noos-kaizen-researcher-report-v1.json"
-    },
-    {
-      "from": ".github/workflows/gel-ci.yml",
-      "to": "scripts/check_noos_agent_docs.sh"
-    },
-    {
-      "from": ".github/workflows/gel-ci.yml",
-      "to": "tests/test_autorun_findings.py"
-    },
-    {
-      "from": ".github/workflows/gel-ci.yml",
-      "to": "tests/test_gate_integration_ci.py"
-    },
-    {
-      "from": ".github/workflows/gel-ci.yml",
-      "to": "tests/test_decide_integration_ci.py"
-    },
-    {
-      "from": ".github/workflows/gel-ci.yml",
-      "to": "scripts/verify_loop_determinism_external_v1.py"
-    },
-    {
-      "from": ".github/workflows/gel-ci.yml",
-      "to": "scripts/verify_living_system_governance_v1.py"
-    },
-    {
-      "from": ".github/workflows/gel-ci.yml",
-      "to": "scripts/verify_pr_conflict_resolution_v1.py"
-    },
-    {
-      "from": ".github/workflows/gel-ci.yml",
-      "to": "scripts/noos_machine_loops_v1.py"
-    },
-    {
-      "from": ".github/workflows/gel-ci.yml",
-      "to": "scripts/check_noetfield_business_strategy.sh"
-    },
-    {
-      "from": ".github/workflows/deploy-noos-cloud-workers-v1.yml",
-      "to": "scripts/verify_noos_cf_deploy_token_v1.py"
-    },
-    {
-      "from": ".github/workflows/deploy-noos-cloud-workers-v1.yml",
-      "to": "scripts/deploy_noos_factory_autorun_tick_cf_v1.sh"
-    },
-    {
-      "from": ".github/workflows/deploy-noos-cloud-workers-v1.yml",
-      "to": "scripts/deploy_noos_loop_fleet_tick_cf_v1.sh"
-    },
-    {
-      "from": ".github/workflows/deploy-noos-cloud-workers-v1.yml",
-      "to": "receipts/proof/noos-cloud-workers-deploy-v1.json"
-    },
-    {
-      "from": ".github/workflows/noos-post-deploy-verify-v1.yml",
-      "to": "scripts/check_production_urls.sh"
-    },
-    {
-      "from": ".github/workflows/noos-post-deploy-verify-v1.yml",
-      "to": "scripts/noos_integrator_repair_autorun_v1.py"
-    },
-    {
-      "from": ".github/workflows/noos-post-deploy-verify-v1.yml",
-      "to": "scripts/verify_noos_motor_sustain_v1.py"
-    },
-    {
-      "from": ".github/workflows/noos-post-deploy-verify-v1.yml",
-      "to": "scripts/sandbox_health_sweep_v1.py"
-    },
-    {
-      "from": ".github/workflows/noos-post-deploy-verify-v1.yml",
-      "to": "receipts/proof/noos-post-deploy-trigger-sweep-v1.json"
-    },
-    {
-      "from": ".github/workflows/noos-post-deploy-verify-v1.yml",
-      "to": "receipts/proof/noos-post-deploy-verify-v1.json"
-    },
-    {
-      "from": ".github/ISSUE_TEMPLATE/copilot-kaizen-machine-safe.yml",
-      "to": "data/noos-parallel-agent-registry-v1.json"
-    },
-    {
-      "from": ".github/ISSUE_TEMPLATE/copilot-kaizen-machine-safe.yml",
-      "to": ".github/copilot-instructions.md"
-    },
-    {
-      "from": ".github/ISSUE_TEMPLATE/copilot-kaizen-machine-safe.yml",
-      "to": "scripts/noos_agent_conflict_check_v1.py"
-    },
-    {
-      "from": ".github/ISSUE_TEMPLATE/copilot-kaizen-machine-safe.yml",
-      "to": "scripts/noos_loop_heartbeat_v1.py"
-    },
-    {
-      "from": ".github/ISSUE_TEMPLATE/copilot-kaizen-machine-safe.yml",
-      "to": "scripts/sandbox_health_sweep_v1.py"
-    },
-    {
-      "from": ".github/workflows/noetfield-open-pr-v1.yml",
-      "to": "scripts/noetfield_open_pr_from_patch_v1.sh"
-    },
-    {
-      "from": ".github/workflows/noos-stack-health-receipt.yml",
-      "to": "scripts/noos_integrator_repair_autorun_v1.py"
-    },
-    {
-      "from": ".github/workflows/noos-stack-health-receipt.yml",
-      "to": "scripts/noos_stack_automation_health_v1.py"
-    },
-    {
-      "from": ".github/workflows/noos-stack-health-receipt.yml",
-      "to": "receipts/proof/noos-stack-automation-health-v1.json"
-    },
-    {
-      "from": ".github/workflows/noos-integrator-daily-witness.yml",
-      "to": "scripts/noos_integrator_repair_autorun_v1.py"
-    },
-    {
-      "from": ".github/workflows/noos-integrator-daily-witness.yml",
-      "to": "scripts/noos_integrator_daily_checklist_v1.py"
-    },
-    {
-      "from": ".github/workflows/noos-integrator-daily-witness.yml",
-      "to": "receipts/proof/noos-integrator-daily-checklist-v1.json"
-    },
-    {
-      "from": ".github/workflows/noos-motor-sustain-witness.yml",
-      "to": "scripts/noos_integrator_repair_autorun_v1.py"
-    },
-    {
-      "from": ".github/workflows/noos-motor-sustain-witness.yml",
-      "to": "scripts/verify_noos_motor_sustain_v1.py"
-    },
-    {
-      "from": ".github/workflows/noos-motor-sustain-witness.yml",
-      "to": "receipts/proof/noos-motor-sustain-v1.json"
-    },
-    {
-      "from": ".github/workflows/noos-trustfield-observe-witness.yml",
-      "to": "scripts/noos_trustfield_observe_witness_v1.py"
-    },
-    {
-      "from": ".github/workflows/noos-trustfield-observe-witness.yml",
-      "to": "receipts/proof/noos-trustfield-observe-witness-v1.json"
-    },
-    {
-      "from": ".github/workflows/noos-liveness-registry-witness.yml",
-      "to": "scripts/noos_liveness_registry_witness_v1.py"
-    },
-    {
-      "from": ".github/workflows/noos-liveness-registry-witness.yml",
-      "to": "receipts/proof/noos-liveness-registry-witness-v1.json"
-    },
-    {
-      "from": ".github/workflows/publish-pypi.yml",
-      "to": "tests/test_noetfield_gate.py"
-    },
-    {
-      "from": ".github/workflows/noos-autorun-witness.yml",
-      "to": "scripts/autorun_status_v1.py"
-    },
-    {
-      "from": ".github/workflows/noos-autorun-witness.yml",
-      "to": "receipts/proof/noos-autorun-witness-v1.json"
-    },
-    {
-      "from": ".github/workflows/noos-sourcea-spine-witness.yml",
-      "to": "scripts/noos_sourcea_spine_witness_v1.py"
-    },
-    {
-      "from": ".github/workflows/noos-sourcea-spine-witness.yml",
-      "to": "receipts/proof/noos-sourcea-spine-witness-v1.json"
-    },
-    {
-      "from": ".github/workflows/noos-sandbox-url-sweep-witness.yml",
-      "to": "scripts/noos_sandbox_url_sweep_witness_v1.py"
-    },
-    {
-      "from": ".github/workflows/noos-sandbox-url-sweep-witness.yml",
-      "to": "receipts/proof/noos-sandbox-url-sweep-witness-v1.json"
-    },
-    {
-      "from": ".github/workflows/noos-machine-audit-witness.yml",
-      "to": "scripts/noos_machine_audit_witness_v1.py"
-    },
-    {
-      "from": ".github/workflows/noos-machine-audit-witness.yml",
-      "to": "receipts/proof/noos-machine-audit-witness-v1.json"
-    },
-    {
-      "from": ".github/workflows/release-noetfield-gate.yml",
-      "to": "tests/test_noetfield_gate.py"
-    },
-    {
-      "from": ".github/workflows/noos-machine-loops.yml",
-      "to": "data/founder-trigger-ledger-v1.json"
-    },
-    {
-      "from": ".github/workflows/noos-machine-loops.yml",
-      "to": "data/noos-machine-loops-config-v1.json"
-    },
-    {
-      "from": ".github/workflows/noos-machine-loops.yml",
-      "to": "scripts/noos_machine_loops_v1.py"
-    },
-    {
-      "from": ".github/workflows/noos-machine-loops.yml",
-      "to": "scripts/noos_receipt_chain_v1.py"
-    },
-    {
-      "from": ".github/workflows/noos-machine-loops.yml",
-      "to": "tests/test_noos_machine_loops_v1.py"
-    },
-    {
-      "from": ".github/workflows/noos-gha-health-witness.yml",
-      "to": "scripts/noos_gha_health_witness_v1.py"
-    },
-    {
-      "from": ".github/workflows/noos-gha-health-witness.yml",
-      "to": "receipts/proof/noos-gha-health-witness-v1.json"
-    },
-    {
-      "from": ".github/workflows/noos-workflow-audit.yml",
-      "to": "scripts/noos_loop_runner_v1.py"
-    },
-    {
-      "from": ".github/workflows/noos-workflow-audit.yml",
-      "to": "scripts/verify_living_system_governance_v1.py"
-    },
-    {
-      "from": ".github/workflows/noos-sourcea-observe-loop.yml",
-      "to": "scripts/noos_loop_runner_v1.py"
-    },
-    {
-      "from": ".github/workflows/noos-agent-nerve-loop.yml",
-      "to": "scripts/noos_loop_runner_v1.py"
-    },
-    {
-      "from": ".github/workflows/noos-self-heal-loop.yml",
-      "to": "scripts/noos_loop_runner_v1.py"
-    },
-    {
-      "from": ".github/workflows/noos-inbox-loop.yml",
-      "to": "scripts/noos_loop_runner_v1.py"
-    },
-    {
-      "from": ".github/workflows/noos-runtime-loop.yml",
-      "to": "scripts/noos_loop_runner_v1.py"
-    },
-    {
-      "from": ".github/workflows/noos-surface-loop.yml",
-      "to": "scripts/noos_loop_runner_v1.py"
-    },
-    {
-      "from": ".github/workflows/noos-chain-loop.yml",
-      "to": "scripts/noos_loop_runner_v1.py"
-    },
-    {
-      "from": ".github/workflows/noos-discovery.yml",
-      "to": "scripts/ci_discovery_noos_dispatcher.py"
-    },
-    {
-      "from": ".github/workflows/noos-discovery.yml",
-      "to": "receipts/ci-discovery-noos-dispatcher.json"
-    },
-    {
-      "from": ".github/workflows/noos-improve-kaizen-daily.yml",
-      "to": "scripts/noos_loop_runner_v1.py"
-    },
-    {
-      "from": ".github/workflows/noos-agent-vault.yml",
-      "to": "scripts/check_noos_agent_docs.sh"
-    },
-    {
-      "from": ".github/workflows/cost-policy-scan.yml",
-      "to": "scripts/cost_policy_scan.py"
-    },
-    {
-      "from": ".github/workflows/cost-policy-scan.yml",
-      "to": "data/cost_policy_machine.json"
-    },
-    {
-      "from": ".github/workflows-quarantined/stub/noos-cross-repo-orchestrator.yml",
-      "to": "receipts/proof/noos-stack-automation-health-v1.json"
-    },
-    {
       "from": "data/noos-upgrade-planes-v1.json",
       "to": "data/noos-unified-upgrade-backlog-v1.json"
     },
@@ -9272,124 +9396,20 @@
       "to": "data/noos-copilot-dispatcher-mode-v1.json"
     },
     {
-      "from": "tests/test_noos_worker_kernel_v1.py",
-      "to": "scripts/foo.py"
+      "from": "noetfield_gate/boot.py",
+      "to": "docs/_NOOS_AGENT/PRODUCT_TRUTH.md"
     },
     {
-      "from": "tests/test_noos_worker_kernel_v1.py",
-      "to": "receipts/proof/test-receipt.json"
+      "from": "noetfield_gate/boot.py",
+      "to": "docs/_NOOS_AGENT/UPGRADE_MANIFEST.json"
     },
     {
-      "from": "tests/test_noos_worker_kernel_v1.py",
-      "to": "receipts/proof/blocked.json"
+      "from": "noetfield_gate/cli.py",
+      "to": "scripts/noetfield_deploy_v1.py"
     },
     {
-      "from": "tests/test_noos_worker_kernel_v1.py",
-      "to": "scripts/kernel_helper_v1.py"
-    },
-    {
-      "from": "tests/test_noos_worker_kernel_v1.py",
-      "to": "noetfield_gate/cli.py"
-    },
-    {
-      "from": "tests/test_autorun_status_v1.py",
-      "to": "data/autorun-workflows-v1.json"
-    },
-    {
-      "from": "tests/test_autorun_status_v1.py",
-      "to": "data/autorun-sandboxes-v1.json"
-    },
-    {
-      "from": "tests/test_cursor_local_mac_t2_v1.py",
-      "to": "scripts/noos_local_claim_lane_v1.sh"
-    },
-    {
-      "from": "tests/test_cursor_local_mac_t2_v1.py",
-      "to": "scripts/noos_mac_worktree_sync_v1.sh"
-    },
-    {
-      "from": "tests/test_cursor_local_mac_t2_v1.py",
-      "to": "scripts/noos_integrator_sync_v1.py"
-    },
-    {
-      "from": "tests/test_cursor_local_mac_t2_v1.py",
-      "to": "scripts/noos_local_status_v1.py"
-    },
-    {
-      "from": "tests/test_noos_integrator_sync_v1.py",
-      "to": "scripts/noos_integrator_sync_v1.py"
-    },
-    {
-      "from": "tests/test_noos_machine_loops_v1.py",
-      "to": "scripts/verify_living_system_governance_v1.py"
-    },
-    {
-      "from": "tests/test_noos_machine_loops_v1.py",
-      "to": "tests/test_foo.py"
-    },
-    {
-      "from": "tests/test_noos_machine_loops_v1.py",
-      "to": "tests/test_noos_integrator_sync_v1.py"
-    },
-    {
-      "from": "tests/test_noos_machine_loops_v1.py",
-      "to": "scripts/foo.py"
-    },
-    {
-      "from": "tests/test_noos_machine_loops_v1.py",
-      "to": "scripts/verify_foo_v1.py"
-    },
-    {
-      "from": "tests/test_noetfield_gate.py",
-      "to": "fixtures/demo_intents/approve.json"
-    },
-    {
-      "from": "tests/test_noos_slo_v1.py",
-      "to": "data/trigger-registry-v1.json"
-    },
-    {
-      "from": "tests/test_noos_slo_v1.py",
-      "to": "data/noos-24-7-loops-v1.json"
-    },
-    {
-      "from": "tests/test_noos_workflow_audit_v1.py",
-      "to": "data/noos-24-7-loops-v1.json"
-    },
-    {
-      "from": "tests/test_noos_parallel_agent_governance_v1.py",
-      "to": "scripts/foo.py"
-    },
-    {
-      "from": "tests/test_noos_ecosystem_observe_witness_v1.py",
-      "to": "data/autorun-workflows-v1.json"
-    },
-    {
-      "from": "tests/test_noos_sustain_audit_witness_v1.py",
-      "to": "data/autorun-workflows-v1.json"
-    },
-    {
-      "from": "tests/test_verify_pr_conflict_resolution_v1.py",
-      "to": "data/noos-pr-conflict-skill-lock-v1.json"
-    },
-    {
-      "from": "tests/test_forbidden_markers.py",
-      "to": "noetfield-org/FORBIDDEN_MARKERS.txt"
-    },
-    {
-      "from": "tests/test_forbidden_markers.py",
-      "to": ".github/copilot-instructions.md"
-    },
-    {
-      "from": "tests/test_forbidden_markers.py",
-      "to": "noetfield-org/REPO_REGISTRY.md"
-    },
-    {
-      "from": "tests/test_forbidden_markers.py",
-      "to": "noetfield-org/LOOP_STATE.json"
-    },
-    {
-      "from": "tests/test_noos_deploy_baseline_audit_v1.py",
-      "to": "data/noos-deploy-scopes-v1.json"
+      "from": "noetfield_gate/decide.py",
+      "to": "scripts/mint_api_key.py"
     },
     {
       "from": "receipts/proof/noos-cf-railway-dispatch-verify-v1.json",
@@ -10248,6 +10268,10 @@
       "to": "data/noos-parallel-agent-registry-v1.json"
     },
     {
+      "from": "config/model-router.yml",
+      "to": "docs/GOVERNED_AUTORUN_LAWS_v3.md"
+    },
+    {
       "from": "AGENTS.md",
       "to": "scripts/query_repo_graph_v1.py"
     },
@@ -10329,9 +10353,9 @@
     }
   ],
   "stats": {
-    "total_files": 962,
-    "total_bytes": 24521762,
-    "total_edges": 1337,
+    "total_files": 965,
+    "total_bytes": 24529129,
+    "total_edges": 1339,
     "subsystem_count": 19
   }
 }
