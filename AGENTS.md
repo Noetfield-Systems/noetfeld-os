@@ -6,8 +6,25 @@ agent_id: noetfeld-os-cursor-chat
 agent_lane: NOETFELD-OS
 trace_id: NOOS-AGENT-AGENTS-MD
 doc_type: AGENT_ENTRYPOINT
-workspace_root: /Users/sinakazemnezhad/Projects/noetfeld-os
+workspace_root: /Users/sinakazemnezhad/Desktop/Noetfield-Systems/noetfeld-OS
 -->
+
+## L0 repo graph memory — broad-read gate
+
+**Read before broad reads:** `graph-out/GRAPH_REPORT.md` · query: `python3 scripts/query_repo_graph_v1.py <term>` · design: `docs/L0_REPO_GRAPH_MEMORY_v1.md`
+
+Do not spawn a broad "understand the repo", "map subsystem X", "architecture
+review", or "audit Y" task (multi-agent or single-agent) by reading files
+directly as the first step. First read `graph-out/GRAPH_REPORT.md` (compact
+subsystem map) and, for anything it doesn't answer, run
+`python3 scripts/query_repo_graph_v1.py <subsystem-or-keyword>` (bounded output,
+no full file reads). Only open — or delegate reading of — the specific files the
+graph names as relevant. Token budget: orientation (the report plus a few
+targeted queries) should cost a few thousand tokens, not the hundreds of
+thousands a blind multi-agent understand pass costs. If the graph is missing or
+stale, rebuild first with `python3 scripts/build_repo_graph_v1.py` (zero-token)
+rather than falling back to a blind read. Verify wiring:
+`bash scripts/verify_l0_repo_graph_memory_v1.sh`.
 
 ## If you are a Cursor agent in **this repo** (`noetfeld-os`)
 
