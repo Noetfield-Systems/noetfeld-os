@@ -1,0 +1,116 @@
+{
+  "schema": "noetfield/custody-authority-pins-v1",
+  "version": "1.1.0",
+  "issued_at": "2026-07-11T00:10:00-07:00",
+  "custody_chain": [
+    "master_ssot_anchor",
+    "library_define",
+    "noos_operationalize",
+    "runtime_execute",
+    "verifier_prove"
+  ],
+  "sg_repo": {
+    "name": "sina-governance-SSOT",
+    "path": "Noetfield-Systems/sina-governance-SSOT",
+    "commit": "c280ff7ebf548ff3a1784502a46436fa0e7bf9c0",
+    "pin_note": "HEAD at Option C absorption; re-pin after commit"
+  },
+  "noos_repo": {
+    "name": "noetfeld-OS",
+    "path": "Noetfield-Systems/noetfeld-OS",
+    "commit": "638b015e97f4e7e4b5a7c7619d3d3012b89d08e0",
+    "pin_note": "HEAD at Option C absorption; schemas uncommitted — re-pin after commit"
+  },
+  "artifacts": [
+    {
+      "role": "master_ssot_anchor",
+      "layer": "sg_master",
+      "path": "ssot/strategy-ssot-v6-split.md",
+      "section": "0.7",
+      "blob_sha": "f70c841c60cf0eed213cca74b4c7505fb9499452",
+      "mirror_path": "SG-Canonical-Library/noetfield-library/P0-FOUNDATION-SPINE/strategy-ssot-v6-split.md"
+    },
+    {
+      "role": "custody_matrix",
+      "layer": "library_p2",
+      "path": "SG-Canonical-Library/noetfield-library/P2-SSOT/LIBRARY_CUSTODY_MATRIX_LOCKED_v1.md",
+      "blob_sha": "3e43ca33ab6582b746cab8289fc331eb7e52899f"
+    },
+    {
+      "role": "authority_graph",
+      "layer": "library_p2",
+      "path": "SG-Canonical-Library/noetfield-library/P2-SSOT/AUTHORITY_GRAPH_FOUNDER_REASONING_LOCKED_v1.md",
+      "blob_sha": "709118cdf9444c9b62f95bac950607ef38b57334"
+    },
+    {
+      "role": "terminology",
+      "layer": "library_p7",
+      "path": "SG-Canonical-Library/noetfield-library/P7-DOCTRINE/NOETFIELD_TERMINOLOGY_v1.md",
+      "section": "11-12",
+      "blob_sha": "86b206f4fc73436214d8e0574ea8ff2de8975667"
+    },
+    {
+      "role": "continuation_doctrine",
+      "layer": "library_p8",
+      "path": "SG-Canonical-Library/noetfield-library/P8-MACHINE-LOOPS/founder-reasoning-continuation-doctrine-LOCKED_v1.md",
+      "blob_sha": "bfdb8d8141b628a86c5ee2480a76b2fc64479067"
+    },
+    {
+      "role": "commissioning_standard",
+      "layer": "library_p8",
+      "path": "SG-Canonical-Library/noetfield-library/P8-MACHINE-LOOPS/MOTOR_COMMISSIONING_AND_ACCEPTANCE_STANDARD_LOCKED_v1.md",
+      "blob_sha": "8d78d7dda2711a21172fc5bfd3171acfdf3ec4a9"
+    },
+    {
+      "role": "cost_execution_doctrine",
+      "layer": "library_p10",
+      "path": "SG-Canonical-Library/noetfield-library/P10-PRODUCT-LAYERS/COST_EXECUTION_DOCTRINE_LOCKED_v1.md",
+      "blob_sha": "10be8cabe96e8e3fc8660af1d0c573af5ea9abb3"
+    },
+    {
+      "role": "operational_binding",
+      "layer": "noos",
+      "path": "noetfield-org/FOUNDER_REASONING_MOTOR_OPERATIONAL_BINDING_v1.md",
+      "blob_sha": "2ac9831e5ca59c71679b7457b408aada803cf113"
+    },
+    {
+      "role": "motor_schemas",
+      "layer": "noos",
+      "path": "noetfield-org/schemas/",
+      "index": "noetfield-org/schemas/SCHEMA_INDEX_v1.md",
+      "index_blob_sha": "3bdff10bb5b21c69aa1e0e0b8e08ff531155461f",
+      "files": [
+        {
+          "name": "founder_reasoning_packet.v1.schema.json",
+          "blob_sha": "202754ed55a3e7da15a99bf06b19067ed3e23ccf"
+        },
+        {
+          "name": "founder_reasoning_result.v1.schema.json",
+          "blob_sha": "67021e76c2a83f2e35393eeccdeb5b1719180b10"
+        },
+        {
+          "name": "motor_job_contract.v1.schema.json",
+          "blob_sha": "0bb6310bbccc9df0ecaf6faa982516adf8d03a5d"
+        },
+        {
+          "name": "private_worker_binding.v1.schema.json",
+          "blob_sha": "372a231c7d4bd33c74dbc6f3fc0c61c3b6767838"
+        }
+      ]
+    }
+  ],
+  "advisor_package_absorption": {
+    "source": "FOUNDER_CONTINUATION_MOTOR_LOCKED_PACKAGE_v1",
+    "source_path": "~/Downloads/FOUNDER_CONTINUATION_MOTOR_LOCKED_PACKAGE_v1",
+    "method": "option_c_selective",
+    "receipt": "sina-governance-SSOT/receipts/custody/CUSTODY_ABSORPTION_ADVISOR_PACKAGE_OPTION_C_v1.json",
+    "not_adopted_as_flat_ssot": true
+  },
+  "verifier": {
+    "script": "sina-governance-SSOT/scripts/verify_founder_reasoning_custody_chain_v1.py",
+    "wiring_receipt": "sina-governance-SSOT/receipts/custody/CUSTODY_WIRING_FOUNDER_REASONING_v1.json"
+  },
+  "runtime_refs": [
+    "noetfeld-OS/.noetfield/agent_manifest.yml#custody_authority_pins"
+  ]
+}

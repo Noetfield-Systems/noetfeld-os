@@ -73,6 +73,18 @@ org_sync_anchors:
   - noetfield-org/LOOP_STATE.json (mission stack + M6)
   - noetfield-org/SYNC_RECEIPTS.md (verified windows)
 
+# Custody authority pins (founder reasoning motor)
+custody_authority_pins:
+  pins_file: noetfield-org/CUSTODY_AUTHORITY_PINS_v1.json
+  operational_binding: noetfield-org/FOUNDER_REASONING_MOTOR_OPERATIONAL_BINDING_v1.md
+  motor_schemas: noetfield-org/schemas/
+  schema_index: noetfield-org/schemas/SCHEMA_INDEX_v1.md
+  wiring_receipt: ../sina-governance-SSOT/receipts/custody/CUSTODY_WIRING_FOUNDER_REASONING_v1.json
+  absorption_receipt: ../sina-governance-SSOT/receipts/custody/CUSTODY_ABSORPTION_ADVISOR_PACKAGE_OPTION_C_v1.json
+  verifier: ../sina-governance-SSOT/scripts/verify_founder_reasoning_custody_chain_v1.py
+  sg_master_anchor: ../sina-governance-SSOT/ssot/strategy-ssot-v6-split.md#07--motor-escalation-continuity-99--1
+  rule: master_ssot_anchors_library_defines_noos_operationalizes_runtime_executes_verifier_proves
+
 # Pre-Execution Checklist
 pre_exec_checklist:
   - "[ ] Read LOOP_STATE.json for current tick and missions"

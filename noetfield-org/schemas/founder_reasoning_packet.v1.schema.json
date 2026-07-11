@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://noetfield.org/schemas/founder_reasoning_packet.v1.json",
+  "title": "Founder Reasoning Packet v1",
+  "description": "Canonical escalation packet. Job park state: WAITING_FOR_FOUNDER_REASONING (alias REASONING_WAIT deprecated). See P7 SSOT terminology section 12.",
+  "type": "object",
+  "required": [
+    "packet_id",
+    "heading_id",
+    "job_id",
+    "unresolved_question",
+    "founder_goal",
+    "current_state",
+    "evidence_summary",
+    "attempted_paths",
+    "constraints",
+    "risk_level",
+    "expected_result",
+    "verification_contract",
+    "ingestion_method"
+  ],
+  "properties": {
+    "packet_id": { "type": "string" },
+    "heading_id": { "type": "string" },
+    "job_id": { "type": "string" },
+    "unresolved_question": { "type": "string" },
+    "founder_goal": { "type": "string" },
+    "current_state": { "type": "string" },
+    "evidence_summary": { "type": "string" },
+    "receipt_refs": { "type": "array", "items": { "type": "string" } },
+    "repository_refs": { "type": "array", "items": { "type": "string" } },
+    "attempted_paths": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "lane": { "type": "string", "description": "W-DET, W-INTEL-LOW, W-INTEL-BOUNDED, or COST-T0..T2" },
+          "outcome": { "type": "string" },
+          "receipt_id": { "type": "string" }
+        }
+      }
+    },
+    "constraints": { "type": "array", "items": { "type": "string" } },
+    "prohibited_actions": { "type": "array", "items": { "type": "string" } },
+    "authority_needed": { "type": "string" },
+    "budget_implication": { "type": "object" },
+    "risk_level": { "enum": ["low", "medium", "high", "critical"] },
+    "candidate_options": { "type": "array", "items": { "type": "object" } },
+    "recommendation": { "type": ["string", "null"] },
+    "expected_result": { "type": "object" },
+    "verification_contract": { "type": "object" },
+    "ingestion_method": { "type": "string" },
+    "queue_stage": {
+      "type": "string",
+      "const": "FOUNDER_REASONING_QUEUE",
+      "description": "Required integrator queue stage when emitted"
+    }
+  },
+  "additionalProperties": true
+}

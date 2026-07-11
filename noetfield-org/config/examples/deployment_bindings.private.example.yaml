@@ -1,0 +1,79 @@
+# NON-CANONICAL PRIVATE DEPLOYMENT EXAMPLE
+# Provider/model names are replaceable bindings, not architecture.
+# Never place secret values in this file.
+# Set canonical_lane + cost_tier on each binding per P7 §12.
+
+bindings:
+  - binding_id: low-cost-openai
+    worker_class: W-INTEL-LOW
+    canonical_lane: W-INTEL-LOW
+    cost_tier: COST-T1
+    mode: callable
+    provider: OpenAI
+    model_or_service: approved-low-cost-model
+    capabilities: [classification, decomposition, skeleton, diagnosis, bounded_repair]
+    invocation:
+      type: https
+      endpoint_ref: OPENAI_ENDPOINT
+    credential_ref: OPENAI_API_KEY
+    max_concurrency: 2
+    timeout_seconds: 90
+    cost:
+      daily_cap_usd: 3
+      monthly_cap_usd: 30
+    enabled: false
+
+  - binding_id: low-cost-gemini
+    worker_class: W-INTEL-LOW
+    canonical_lane: W-INTEL-LOW
+    cost_tier: COST-T1
+    mode: callable
+    provider: Google
+    model_or_service: approved-low-cost-gemini-model
+    capabilities: [classification, extraction, summarization, skeleton]
+    invocation:
+      type: https
+      endpoint_ref: GEMINI_ENDPOINT
+    credential_ref: GEMINI_API_KEY
+    max_concurrency: 2
+    timeout_seconds: 90
+    cost:
+      daily_cap_usd: 2
+      monthly_cap_usd: 20
+    enabled: false
+
+  - binding_id: bounded-openai-strong
+    worker_class: W-INTEL-BOUNDED
+    canonical_lane: W-INTEL-BOUNDED
+    cost_tier: COST-T2
+    mode: callable
+    provider: OpenAI
+    model_or_service: approved-bounded-model
+    capabilities: [bounded_repair, architecture_draft]
+    invocation:
+      type: https
+      endpoint_ref: OPENAI_ENDPOINT
+    credential_ref: OPENAI_API_KEY
+    max_concurrency: 1
+    timeout_seconds: 120
+    cost:
+      daily_cap_usd: 2
+      monthly_cap_usd: 20
+      requires_cheaper_failure_receipt: true
+    enabled: false
+
+  - binding_id: founder-subscription-reasoning
+    worker_class: W-HANDOFF
+    canonical_lane: FOUNDER_REASONING_QUEUE
+    mode: handoff
+    provider: founder-selected-subscription-surface
+    model_or_service: private-selection
+    capabilities: [architecture, hard_repair, conflict_resolution, strategic_reasoning]
+    invocation:
+      type: founder_reasoning_cockpit
+    credential_ref: null
+    max_concurrency: 1
+    timeout_seconds: 86400
+    cost:
+      class: subscription_marginal
+    enabled: true

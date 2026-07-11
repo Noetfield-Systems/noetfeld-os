@@ -1,0 +1,30 @@
+# NON-CANONICAL — runtime cost policy example (NOOS private config)
+# Canonical tiers: COST-T0, COST-T1, COST-T2. Lanes: W-DET, W-INTEL-LOW, W-INTEL-BOUNDED.
+# Advisor aliases W-DET-EXEC etc. map via P7 §12.
+
+routing:
+  order:
+    - W-DET
+    - W-INTEL-LOW
+    - W-INTEL-BOUNDED
+    - FOUNDER_REASONING_QUEUE
+  sort:
+    - cost_tier_ascending
+    - estimated_cost_ascending
+    - reliability_descending
+    - latency_ascending
+
+budgets:
+  default_job_usd: 0.25
+  default_heading_usd: 2.00
+  daily_automatic_usd: 5.00
+  monthly_automatic_usd: 100.00
+  on_exhaustion: FOUNDER_REASONING_QUEUE
+
+rules:
+  require_cheaper_failure_receipt_for_cost_t2: true
+  prohibit_unbounded_retry: true
+  prohibit_duplicate_paid_parallel_calls: true
+  require_cost_receipt: true
+  continue_unrelated_jobs_when_throttled: true
+  degradation_codes: [PARTIAL, SKIPPED_LLM, LLM_PROVIDER_NOT_CONFIGURED]

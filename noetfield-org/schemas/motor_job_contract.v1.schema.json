@@ -1,0 +1,81 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://noetfield.org/schemas/motor_job_contract.v1.json",
+  "title": "Motor Job Contract v1",
+  "description": "Scheduler dispatch unit. Cost tiers: COST-T0..T2 per P10. Executor routing: EXEC-T* per ROUTING_MATRIX (separate namespace).",
+  "type": "object",
+  "required": [
+    "job_id",
+    "run_id",
+    "heading_id",
+    "instruction",
+    "target_repository",
+    "base_sha",
+    "depends_on",
+    "allowed_operations",
+    "allowed_paths",
+    "prohibited_operations",
+    "authority_class",
+    "required_capability",
+    "budget",
+    "timeout_seconds",
+    "retry_limit",
+    "repair_limit",
+    "expected_outputs",
+    "verification_contract",
+    "receipt_destination",
+    "idempotency_key"
+  ],
+  "properties": {
+    "job_id": { "type": "string" },
+    "run_id": { "type": "string" },
+    "heading_id": { "type": "string" },
+    "instruction": { "type": "string" },
+    "context_refs": { "type": "array", "items": { "type": "string" } },
+    "target_repository": { "type": "string" },
+    "base_sha": { "type": "string" },
+    "depends_on": { "type": "array", "items": { "type": "string" } },
+    "allowed_operations": { "type": "array", "items": { "type": "string" } },
+    "allowed_paths": { "type": "array", "items": { "type": "string" } },
+    "prohibited_operations": { "type": "array", "items": { "type": "string" } },
+    "authority_class": {
+      "enum": [
+        "read_only",
+        "artifact_only",
+        "bounded_patch",
+        "branch_and_pr",
+        "deployment_candidate",
+        "founder_only"
+      ]
+    },
+    "required_capability": { "type": "string" },
+    "cost_tier": {
+      "enum": ["COST-T0", "COST-T1", "COST-T2"],
+      "description": "Motor cost lane — not MERGE-T* or EXEC-T*"
+    },
+    "worker_lane": {
+      "enum": ["W-DET", "W-INTEL-LOW", "W-INTEL-BOUNDED", "FOUNDER_REASONING_QUEUE"],
+      "description": "Canonical motor lane per authority graph"
+    },
+    "budget": {
+      "type": "object",
+      "required": ["currency", "max_amount"],
+      "properties": {
+        "currency": { "type": "string" },
+        "max_amount": { "type": "number", "minimum": 0 }
+      }
+    },
+    "timeout_seconds": { "type": "integer", "minimum": 1 },
+    "retry_limit": { "type": "integer", "minimum": 0 },
+    "repair_limit": { "type": "integer", "minimum": 0 },
+    "expected_outputs": { "type": "array", "items": { "type": "string" } },
+    "verification_contract": { "type": "object" },
+    "receipt_destination": { "type": "string" },
+    "idempotency_key": { "type": "string" },
+    "state": {
+      "type": "string",
+      "description": "Canonical park state: WAITING_FOR_FOUNDER_REASONING when blocked on founder packet"
+    }
+  },
+  "additionalProperties": true
+}

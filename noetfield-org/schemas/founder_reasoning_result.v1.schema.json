@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://noetfield.org/schemas/founder_reasoning_result.v1.json",
+  "title": "Founder Reasoning Result v1",
+  "description": "Structured founder reasoning output for RESULT_INGESTION. Field aliases in P7 section 12 (e.g. founder_authorization -> founder_authority_statement).",
+  "type": "object",
+  "required": [
+    "packet_id",
+    "heading_id",
+    "job_id",
+    "diagnosis",
+    "chosen_action",
+    "constraints",
+    "rejected_options",
+    "confidence",
+    "verification_requirements",
+    "founder_authority_statement"
+  ],
+  "properties": {
+    "packet_id": { "type": "string" },
+    "heading_id": { "type": "string" },
+    "job_id": { "type": "string" },
+    "diagnosis": { "type": "string" },
+    "chosen_action": { "type": "string" },
+    "selected_action": {
+      "type": "string",
+      "deprecated": true,
+      "description": "Alias for chosen_action — normalize on ingest"
+    },
+    "proposed_change": { "type": ["string", "object", "array", "null"] },
+    "proposed_patch": {
+      "type": ["string", "object", "array", "null"],
+      "deprecated": true,
+      "description": "Alias for proposed_change — normalize on ingest"
+    },
+    "constraints": { "type": "array", "items": { "type": "string" } },
+    "rejected_options": { "type": "array", "items": { "type": "string" } },
+    "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+    "verification_requirements": { "type": "array", "items": { "type": "string" } },
+    "verification_steps": {
+      "type": "array",
+      "items": { "type": "string" },
+      "deprecated": true,
+      "description": "Alias for verification_requirements — normalize on ingest"
+    },
+    "founder_authority_statement": { "type": "string" },
+    "founder_authorization": {
+      "type": "string",
+      "deprecated": true,
+      "description": "Alias for founder_authority_statement — normalize on ingest"
+    },
+    "follow_on_questions": { "type": "array", "items": { "type": "string" } }
+  },
+  "additionalProperties": true
+}
