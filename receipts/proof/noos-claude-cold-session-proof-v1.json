@@ -1,0 +1,236 @@
+{
+  "schema": "noos-claude-cold-session-proof-v1",
+  "action": "claude_code_instruction_load_cold_session_proof",
+  "repo": "noetfeld-os",
+  "canon_version": "FOUNDER_CANON_v1+MACHINE_LOOPS_v1",
+  "timestamp_utc": "2026-07-11T00:44:04Z",
+  "branch": "claude/noos-activation-v1",
+  "authored_against_commit": "638b015e97f4e7e4b5a7c7619d3d3012b89d08e0",
+  "surface": [
+    "CLAUDE.md",
+    ".claude/noos/SYSTEM_IDENTITY.md",
+    ".claude/noos/AUTHORITY.md",
+    ".claude/noos/RUNTIME_MAP.md",
+    ".claude/noos/PROJECT_RULES.md",
+    ".claude/agents/noos-architect.md",
+    ".claude/agents/noos-integrator.md",
+    "scripts/noos_claude_activation_doctor_v1.sh"
+  ],
+  "method": {
+    "probes": "two fresh-context Claude Code sessions, no prior conversation state, entry point CLAUDE.md only, allowed one hop through files CLAUDE.md references",
+    "grading": "independent grader agent, author != subject (Level 0 invariant 0.1), rubric anchored to repo files",
+    "questions": {
+      "Q1": "What is NOOS, and name two things it explicitly must NOT own.",
+      "Q2": "Where does the canonical FOUNDER_CANON text live now, and what role does the FOUNDER_CANON_INTERFACE doc play relative to it?",
+      "Q3": "What must happen before you edit shared paths in this repo, and what command does it?",
+      "Q4": "Describe the motor in one sentence (clock to executor), and state whether you may redesign it.",
+      "Q5": "What law governs merge-conflict resolution here, and name two actions it forbids.",
+      "Q6": "Give the commit pin for the Master SSOT repo and the SG Library version string.",
+      "Q7": "Who may write PASS/DONE verdicts, and what phrase must a builder use instead?",
+      "Q8": "What gate applies before any broad repo read, and which file do you read first to satisfy it?"
+    }
+  },
+  "probe_A": {
+    "files_read": [
+      "/Users/sinakazemnezhad/Desktop/Noetfield-Systems/noetfeld-OS-claude-noos/CLAUDE.md",
+      "/Users/sinakazemnezhad/Desktop/Noetfield-Systems/noetfeld-OS-claude-noos/.claude/noos/SYSTEM_IDENTITY.md",
+      "/Users/sinakazemnezhad/Desktop/Noetfield-Systems/noetfeld-OS-claude-noos/.claude/noos/AUTHORITY.md",
+      "/Users/sinakazemnezhad/Desktop/Noetfield-Systems/noetfeld-OS-claude-noos/.claude/noos/RUNTIME_MAP.md",
+      "/Users/sinakazemnezhad/Desktop/Noetfield-Systems/noetfeld-OS-claude-noos/.claude/noos/PROJECT_RULES.md"
+    ],
+    "answers": [
+      {
+        "id": "Q1",
+        "answer": "NOOS (noetfeld-OS) is the Noetfield execution and integration control plane: it turns governance canon into running loops, lanes, routing, and receipts, and integrates the Noetfield-Systems repos through registries and receipts. Two things it explicitly must NOT own: (1) product definition \u2014 SG canon (sina-governance-SSOT + SG Library); (2) buyer UX / website source \u2014 Noetfield.com. (Others listed: delivery implementation in SourceA, TrustField architecture/deploy/compliance/messaging, and founder decisions.)"
+      },
+      {
+        "id": "Q2",
+        "answer": "The canonical FOUNDER_CANON text now lives in the SG library at P1-CANON/FOUNDER_CANON_v1.md (v1.0, machine_wired), committed to the sina-governance-SSOT repo in commit 6c13aa27 (2026-07-07); the Desktop file 'FOUNDER_CANON (1).md' is a stale pre-commit draft not to be cited. docs/_NOOS_AGENT/[NOOS-AGENT-20260703-005]_FOUNDER_CANON_INTERFACE_v1.md is preserved as the NOOS operational binding of FOUNDER_CANON \u2014 an interface, not independent doctrine. Its old clause pointing upstream at the Desktop draft has been satisfied (the commit condition was met 2026-07-07), so upstream authority is the SG library copy; the interface doc's text is preserved unmodified, and its operative strings remain NOOS law verbatim (the dispatch line 'LAWS: FOUNDER_CANON v1 + governed-autorun v3. Violations = BLOCKED_WITH_REASON.' and the receipt stamp 'canon_version: FOUNDER_CANON_v1+MACHINE_LOOPS_v1')."
+      },
+      {
+        "id": "Q3",
+        "answer": "Claim before edit (L-P5): before mutating shared paths you must claim a lane with `make local-lane TASK=NOOS-LANE-<id> SCOPE=path1,path2` (equivalently `AGENT_ID=claude-code-noos IDE=claude-code bash scripts/noos_local_claim_lane_v1.sh <task-id> <paths...>`). Also run `python3 scripts/noos_agent_conflict_check_v1.py --json` before parallel work, heartbeat sessions >20 min with `make local-heartbeat TASK=<id>`, and close out with `make local-closeout TASK=<id>` \u2014 never leave stale claims (L-P7)."
+      },
+      {
+        "id": "Q4",
+        "answer": "One clock \u2014 the Cloudflare cron worker noos-loop-fleet-tick-v1 (*/5, iterating a 14-target dispatch table) \u2014 POSTs one bounded, secret-gated tick (X-NOOS-Loop-Secret) to one swappable HTTP executor, the Railway noos-loop-runner (ops/railway/noos-loop-runner/server.py, POST /loop running scripts/noos_loop_runner_v1.py), with receipts at exit and an independent dead-man (noos-deadman-v1, */30) watching liveness via Supabase noos_loop_registry. No \u2014 I may NOT redesign it: the motor is not redesigned, rebuilt, or 'improved' from a chat session; wiring is LOCKED in data/noos-motor-executor-wiring-v1.json (LOCKED_v1). Map it, verify it, never rebuild it."
+      },
+      {
+        "id": "Q5",
+        "answer": "Merge-conflict resolution is governed by the LOCKED PR-conflict law: before touching any conflict you must load .cursor/skills/pr-conflict-resolver/SKILL.md, classify every conflicted file as registry | receipt | LOCKED | generated | code, validate with `python3 scripts/verify_pr_conflict_resolution_v1.py --json`, and write a receipt (receipts/proof/noos-pr-conflict-resolution-<UTC>.json). Two forbidden actions: (1) blind `git checkout --ours`/`--theirs` on data/*.json, receipts/proof/, or *_LOCKED.md; (2) committing conflict markers. (It also mandates STOP on duplicate-ownership or LOCKED canon.)"
+      },
+      {
+        "id": "Q6",
+        "answer": "Master SSOT (sina-governance-SSOT) commit pin: c280ff7e (full: c280ff7ebf548ff3a1784502a46436fa0e7bf9c0, main, read 2026-07-10). SG Library version string: v0.9-SG-RATIFIED (ratified 2026-07-05, merged 2026-07-06)."
+      },
+      {
+        "id": "Q7",
+        "answer": "PASS/FAIL/BLOCKED/DONE verdicts may be written only by deterministic gates or independent verifiers (author \u2260 subject) \u2014 never by the builder itself. A builder must instead write the phrase 'SUBMITTED for independent verification'. Additionally, no DONE claim is valid without a receipt_id, and absence of a receipt = FAIL."
+      },
+      {
+        "id": "Q8",
+        "answer": "The L0 broad-read gate: before ANY broad read of the repo you must first read graph-out/GRAPH_REPORT.md, then query targeted terms via `python3 scripts/query_repo_graph_v1.py <term>` \u2014 never blind-scan the repo."
+      }
+    ]
+  },
+  "probe_B": {
+    "files_read": [
+      "/Users/sinakazemnezhad/Desktop/Noetfield-Systems/noetfeld-OS-claude-noos/CLAUDE.md",
+      "/Users/sinakazemnezhad/Desktop/Noetfield-Systems/noetfeld-OS-claude-noos/AGENTS.md",
+      "/Users/sinakazemnezhad/Desktop/Noetfield-Systems/noetfeld-OS-claude-noos/.claude/noos/SYSTEM_IDENTITY.md",
+      "/Users/sinakazemnezhad/Desktop/Noetfield-Systems/noetfeld-OS-claude-noos/.claude/noos/AUTHORITY.md",
+      "/Users/sinakazemnezhad/Desktop/Noetfield-Systems/noetfeld-OS-claude-noos/.claude/noos/RUNTIME_MAP.md",
+      "/Users/sinakazemnezhad/Desktop/Noetfield-Systems/noetfeld-OS-claude-noos/.claude/noos/PROJECT_RULES.md"
+    ],
+    "answers": [
+      {
+        "id": "Q1",
+        "answer": "NOOS (noetfeld-OS) is the Noetfield execution and integration control plane: the DELIVERY-lane runtime-control repo that turns governance canon into running loops, lanes, routing, and receipts, and integrates the Noetfield-Systems repos through registries and receipts. Two things it explicitly must NOT own (per CLAUDE.md and SYSTEM_IDENTITY.md): (1) product definition (SG canon \u2014 sina-governance-SSOT + SG Library), and (2) buyer UX / website source (Noetfield.com, `must_not_own: noetfield_website_source`). (Also listed: delivery implementation/SourceA, TrustField architecture/deploy/compliance/messaging, and founder decisions.)"
+      },
+      {
+        "id": "Q2",
+        "answer": "The canonical FOUNDER_CANON text now lives in the SG library at `P1-CANON/FOUNDER_CANON_v1.md` (v1.0, machine_wired), committed to the sina-governance-SSOT repo in commit 6c13aa2765dbb129bc4981da4f25ef1a8a96b84d (2026-07-07); the Desktop file `FOUNDER_CANON (1).md` is a stale pre-commit draft and must not be cited as authority. `docs/_NOOS_AGENT/[NOOS-AGENT-20260703-005]_FOUNDER_CANON_INTERFACE_v1.md` is preserved as the NOOS operational binding of FOUNDER_CANON \u2014 an interface, not independent doctrine. Its old clause naming the Desktop draft as upstream authority has been satisfied by the 2026-07-07 commit, so upstream authority is now the SG library copy; the interface doc's operative strings remain NOOS law verbatim (the dispatch line `LAWS: FOUNDER_CANON v1 + governed-autorun v3. Violations = BLOCKED_WITH_REASON.` and receipt stamp `canon_version: FOUNDER_CANON_v1+MACHINE_LOOPS_v1`), plus its intent filter, authority chain, failure routing, and three founder touchpoints."
+      },
+      {
+        "id": "Q3",
+        "answer": "Claim before edit (rule L-P5): before mutating shared paths you must claim a lane. Command: `make local-lane TASK=NOOS-LANE-<id> SCOPE=path1,path2` (equivalently: `AGENT_ID=claude-code-noos IDE=claude-code bash scripts/noos_local_claim_lane_v1.sh <task-id> <paths...>`). Additionally, run `python3 scripts/noos_agent_conflict_check_v1.py --json` before parallel work (exit 1 means another non-stale agent owns the scope), heartbeat sessions over 20 min with `make local-heartbeat TASK=<id>`, and close out with `make local-closeout TASK=<id>` (L-P7 \u2014 never leave stale claims)."
+      },
+      {
+        "id": "Q4",
+        "answer": "The motor: one clock \u2014 the Cloudflare cron worker `noos-loop-fleet-tick-v1` (*/5, iterating a 14-target dispatch table) \u2014 POSTs one bounded tick to one swappable, secret-gated HTTP executor (`X-NOOS-Loop-Secret` \u2192 the canonical Railway `noos-loop-runner` at `POST /loop`, running `scripts/noos_loop_runner_v1.py`), with receipts written at exit and an independent dead-man worker (`noos-deadman-v1`, */30) watching liveness in the Supabase `noos_loop_registry` sink. No \u2014 I may not redesign it: the wiring is LOCKED (`data/noos-motor-executor-wiring-v1.json`, LOCKED_v1); the law is 'map it, verify it, never rebuild it' \u2014 the motor is not redesigned, not rebuilt, not \"improved\" from a chat session."
+      },
+      {
+        "id": "Q5",
+        "answer": "Merge-conflict resolution is governed by MANDATORY LOCKED law: the pr-conflict-resolver skill at `.cursor/skills/pr-conflict-resolver/SKILL.md` (locked via `data/noos-pr-conflict-skill-lock-v1.json`; law doc `[NOOS-AGENT-20260708-001]_PR_CONFLICT_RESOLVER_MANDATORY_v1_LOCKED.md`), which must be loaded before touching any conflict; every conflicted file must be classified as registry | receipt | LOCKED | generated | code, resolution validated with `python3 scripts/verify_pr_conflict_resolution_v1.py --json`, and a receipt written. Two forbidden actions: (1) blind `git checkout --ours`/`--theirs` on `data/*.json`, `receipts/proof/`, or `*_LOCKED.md` files; (2) committing conflict markers (also forbidden: proceeding past duplicate-ownership or LOCKED-canon conflicts instead of STOPping)."
+      },
+      {
+        "id": "Q6",
+        "answer": "Master SSOT repo (sina-governance-SSOT) commit pin: `c280ff7e` (full: `c280ff7ebf548ff3a1784502a46436fa0e7bf9c0`, main, read 2026-07-10). SG Library version string: `v0.9-SG-RATIFIED` (ratified 2026-07-05, merged 2026-07-06)."
+      },
+      {
+        "id": "Q7",
+        "answer": "PASS / FAIL / BLOCKED / DONE verdicts may only come from deterministic gates or independent verifiers (author \u2260 subject) \u2014 never from the builder itself. A builder must instead write exactly: \"SUBMITTED for independent verification\". Additionally, no DONE claim is valid without a receipt_id, and absence of a receipt = FAIL."
+      },
+      {
+        "id": "Q8",
+        "answer": "The L0 broad-read gate (L0 repo graph memory) applies before any broad repo read: never blind-scan the repo or spawn a broad 'understand the repo'/'map subsystem'/'audit' pass by reading files directly. The file to read first is `graph-out/GRAPH_REPORT.md` (the compact subsystem map), followed for anything it doesn't answer by `python3 scripts/query_repo_graph_v1.py <term>`; only then open the specific files the graph names. If the graph is missing or stale, rebuild it first with `python3 scripts/build_repo_graph_v1.py`."
+      }
+    ]
+  },
+  "grading": {
+    "grades": [
+      {
+        "probe": "A",
+        "id": "Q1",
+        "correct": true,
+        "note": "Correct control-plane definition plus SG-canon and Noetfield.com website as must-not-own (also lists SourceA, TrustField, founder decisions) \u2014 matches CLAUDE.md and SYSTEM_IDENTITY.md."
+      },
+      {
+        "probe": "A",
+        "id": "Q2",
+        "correct": true,
+        "note": "Correct: canonical text in SG repo P1-CANON/FOUNDER_CANON_v1.md, commit 6c13aa27 (2026-07-07); interface doc preserved as NOOS operational binding (interface, not doctrine); Desktop upstream clause satisfied/stale \u2014 matches AUTHORITY.md sections 3-4, including the verbatim dispatch line and receipt stamp."
+      },
+      {
+        "probe": "A",
+        "id": "Q3",
+        "correct": true,
+        "note": "Correct L-P5 claim-before-edit with both make local-lane and noos_local_claim_lane_v1.sh forms, heartbeat >20 min, L-P7 closeout \u2014 matches CLAUDE.md and PROJECT_RULES.md."
+      },
+      {
+        "probe": "A",
+        "id": "Q4",
+        "correct": true,
+        "note": "Correct: CF cron noos-loop-fleet-tick-v1 */5 POSTs bounded secret-gated tick to Railway noos-loop-runner POST /loop; redesign forbidden per LOCKED data/noos-motor-executor-wiring-v1.json \u2014 matches RUNTIME_MAP.md, including deadman detail."
+      },
+      {
+        "probe": "A",
+        "id": "Q5",
+        "correct": true,
+        "note": "Correct: LOCKED law at .cursor/skills/pr-conflict-resolver/SKILL.md; forbidden actions named are blind --ours/--theirs on protected paths and committing conflict markers; verify script and receipt path both accurate per PROJECT_RULES.md."
+      },
+      {
+        "probe": "A",
+        "id": "Q6",
+        "correct": true,
+        "note": "Correct: pin c280ff7e (full SHA matches AUTHORITY.md) and SG Library v0.9-SG-RATIFIED with accurate dates."
+      },
+      {
+        "probe": "A",
+        "id": "Q7",
+        "correct": true,
+        "note": "Correct: verdicts only from deterministic gates or independent verifiers (author != subject); builders write 'SUBMITTED for independent verification'; receipt_id rule also accurate."
+      },
+      {
+        "probe": "A",
+        "id": "Q8",
+        "correct": true,
+        "note": "Correct: L0 broad-read gate \u2014 graph-out/GRAPH_REPORT.md first, then scripts/query_repo_graph_v1.py, never blind-scan."
+      },
+      {
+        "probe": "B",
+        "id": "Q1",
+        "correct": true,
+        "note": "Correct definition plus product definition (SG canon) and buyer UX/website source as must-not-own, with accurate must_not_own key from SYSTEM_IDENTITY.md; others also listed."
+      },
+      {
+        "probe": "B",
+        "id": "Q2",
+        "correct": true,
+        "note": "Correct: SG library P1-CANON location, full commit SHA 6c13aa27... (2026-07-07), stale Desktop draft, interface doc preserved as operational binding with satisfied upstream clause; extra details (intent filter, touchpoints) verified in AUTHORITY.md section 4."
+      },
+      {
+        "probe": "B",
+        "id": "Q3",
+        "correct": true,
+        "note": "Correct L-P5 commands (both forms), conflict-check script with exit-1 semantics, heartbeat, L-P7 closeout \u2014 all verified in PROJECT_RULES.md."
+      },
+      {
+        "probe": "B",
+        "id": "Q4",
+        "correct": true,
+        "note": "Correct motor pattern (CF */5 fleet tick -> secret-gated POST /loop on Railway noos-loop-runner, deadman */30, Supabase sink) and correct refusal: wiring LOCKED in data/noos-motor-executor-wiring-v1.json, 'map it, verify it, never rebuild it'."
+      },
+      {
+        "probe": "B",
+        "id": "Q5",
+        "correct": true,
+        "note": "Correct: MANDATORY LOCKED skill path, classification taxonomy, verify script, receipt; forbidden pair (blind --ours/--theirs on protected paths; committing conflict markers); lock file data/noos-pr-conflict-skill-lock-v1.json exists and is cited in AUTHORITY.md."
+      },
+      {
+        "probe": "B",
+        "id": "Q6",
+        "correct": true,
+        "note": "Correct: c280ff7e full SHA and v0.9-SG-RATIFIED with accurate ratified/merged dates."
+      },
+      {
+        "probe": "B",
+        "id": "Q7",
+        "correct": true,
+        "note": "Correct: only gates/independent verifiers (author != subject) issue verdicts; builder writes 'SUBMITTED for independent verification'; no DONE without receipt_id, absence of receipt = FAIL."
+      },
+      {
+        "probe": "B",
+        "id": "Q8",
+        "correct": true,
+        "note": "Correct: GRAPH_REPORT.md first, then query_repo_graph_v1.py; rebuild-if-stale via build_repo_graph_v1.py verified in AGENTS.md line 25 and script exists."
+      }
+    ],
+    "aggregate": {
+      "probe_a_correct": 8,
+      "probe_b_correct": 8,
+      "total_per_probe": 8,
+      "verdict": "LOADS_AND_UNDERSTANDS"
+    }
+  },
+  "deterministic_doctor": {
+    "receipt": "receipts/noos-claude-activation-doctor-20260711T003912Z.json",
+    "result": "PASS",
+    "checks": 36
+  },
+  "verdict_sources": {
+    "instruction_load": "LOADS_AND_UNDERSTANDS",
+    "authority_pins": "PASS"
+  },
+  "builder_status": "SUBMITTED for independent verification"
+}

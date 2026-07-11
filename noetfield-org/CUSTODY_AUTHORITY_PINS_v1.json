@@ -1,7 +1,7 @@
 {
   "schema": "noetfield/custody-authority-pins-v1",
-  "version": "1.1.0",
-  "issued_at": "2026-07-11T00:10:00-07:00",
+  "version": "1.2.0",
+  "issued_at": "2026-07-10T17:57:00-07:00",
   "custody_chain": [
     "master_ssot_anchor",
     "library_define",
@@ -12,14 +12,16 @@
   "sg_repo": {
     "name": "sina-governance-SSOT",
     "path": "Noetfield-Systems/sina-governance-SSOT",
-    "commit": "c280ff7ebf548ff3a1784502a46436fa0e7bf9c0",
-    "pin_note": "HEAD at Option C absorption; re-pin after commit"
+    "commit": "0e2c1ea2849823a9c642ae4fe4f9ec8e52d5482e",
+    "pin_note": "post-custody-commit pin (custody chain + Option C absorption committed); all artifact blob SHAs verified at this commit 2026-07-10",
+    "previous_commit": "c280ff7ebf548ff3a1784502a46436fa0e7bf9c0"
   },
   "noos_repo": {
     "name": "noetfeld-OS",
     "path": "Noetfield-Systems/noetfeld-OS",
-    "commit": "638b015e97f4e7e4b5a7c7619d3d3012b89d08e0",
-    "pin_note": "HEAD at Option C absorption; schemas uncommitted — re-pin after commit"
+    "commit": "c7f39ff39e971a6e10f3bd97e57c16d79d59652a",
+    "pin_note": "post-custody-commit pin (operational binding + schemas committed to main); all artifact blob SHAs verified at this commit 2026-07-10",
+    "previous_commit": "638b015e97f4e7e4b5a7c7619d3d3012b89d08e0"
   },
   "artifacts": [
     {
