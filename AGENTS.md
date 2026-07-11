@@ -26,6 +26,14 @@ stale, rebuild first with `python3 scripts/build_repo_graph_v1.py` (zero-token)
 rather than falling back to a blind read. Verify wiring:
 `bash scripts/verify_l0_repo_graph_memory_v1.sh`.
 
+## If you are a Claude Code agent in this repo
+
+Root **`CLAUDE.md`** is the Claude Code activation surface (NOOS identity,
+commit-pinned authority, runtime map, project rules, `noos-architect` /
+`noos-integrator` agents under `.claude/`). It binds to this file — the two
+surfaces must not contradict. Verify wiring:
+`bash scripts/noos_claude_activation_doctor_v1.sh`.
+
 ## If you are a Cursor agent in **this repo** (`noetfeld-os`)
 
 0. Read **`docs/_NOOS_AGENT/NOETFIELD_UNIFIED_MASTER_v1_LOCKED.md`** + **`NOETFIELD_OS_SSOT_v1_LOCKED.md`** + **`PRODUCT_TRUTH.md`**
