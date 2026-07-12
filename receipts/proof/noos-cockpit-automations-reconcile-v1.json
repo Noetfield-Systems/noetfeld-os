@@ -1,0 +1,38 @@
+{
+  "schema": "noos-cockpit-automations-reconcile-v1",
+  "at": "2026-07-12T07:05:00Z",
+  "lane": "NOOS-LANE-cockpit-automations",
+  "author": "claude-code-noos",
+  "verdict": "SUBMITTED for independent verification",
+  "canon_version": "FOUNDER_CANON_v1+MACHINE_LOOPS_v1",
+  "incident": {
+    "class": "dead_path_automation_failures",
+    "failing_automations": 11,
+    "error": "Failed to read current branch from /Users/sinakazemnezhad/Projects/noetfeld-os: No such file or directory (os error 2)",
+    "root_cause": "automations configured against retired Projects clone; ~/Projects deleted in 2026-07-09 cleanup",
+    "repair": "symlink ~/Projects/noetfeld-os -> /Users/sinakazemnezhad/Desktop/Noetfield-Systems/noetfeld-OS",
+    "repair_verified": "git -C ~/Projects/noetfeld-os resolves to canon main @ 6f8fb9a9",
+    "rollback": "rm ~/Projects/noetfeld-os"
+  },
+  "portfolio_classification": {
+    "automations_reviewed": 21,
+    "executor_class": 0,
+    "cockpit_class": 21,
+    "decision": "KEEP ALL — read-only audits/digests/arbitration; L-P4 respected (machines own execution, cockpit reads receipts)"
+  },
+  "additions": [
+    {
+      "id": "noos-founder-cockpit-digest",
+      "surface": "claude-scheduled-task",
+      "cron_local": "0 7,19 * * *",
+      "mode": "READ+DIGEST only (spec P5)",
+      "registry_row": "proposed only — data/*.json registry edit is founder-gated, not applied"
+    }
+  ],
+  "founder_gates_surfaced": [
+    "Copilot account recurring NOOS automations conflict with data/noos-integrator-role-v1.json ('may not run recurring Copilot automation') — retire them or amend role registry",
+    "Proposed parallel-agent registry row for claude-founder-cockpit-digest (T3 read-only, 2x daily)"
+  ],
+  "doc": "docs/_NOOS_AGENT/[NOOS-AGENT-20260712-001]_COCKPIT_AUTOMATIONS_RECONCILE_v1.md",
+  "ok": true
+}

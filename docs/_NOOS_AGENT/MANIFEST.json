@@ -290,6 +290,12 @@
       "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260708-001]_PR_CONFLICT_RESOLVER_MANDATORY_v1_LOCKED.md",
       "doc_type": "LOCKED_LAW",
       "title": "PR Conflict Resolver — MANDATORY v1 (LOCKED)"
+    },
+    {
+      "trace_id": "NOOS-AGENT-20260712-001",
+      "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260712-001]_COCKPIT_AUTOMATIONS_RECONCILE_v1.md",
+      "doc_type": "COCKPIT_AUTOMATIONS_RECONCILE",
+      "title": "Cockpit automations reconcile v1 — Claude scheduled automations vs NOOS doctrine"
     }
   ]
 }
