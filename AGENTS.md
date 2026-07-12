@@ -91,13 +91,13 @@ surfaces must not contradict. Verify wiring:
 
 - If ASF says `SAVE`, `SAVE AND LOCK`, `LOCK`, or `FILE` for Noetfield / Noetfield OS / noetfeld-os work, the file belongs in this repo, not SourceA.
 - Agent-authored internal docs go under `docs/_NOOS_AGENT/` with a `NOOS-AGENT-DOC` block, `[NOOS-AGENT-YYYYMMDD-NNN]_` filename prefix, and a `MANIFEST.json` row.
-- Product code changes stay in this repo's code paths. Do not save Noetfield implementation docs into `~/Desktop/SourceA/docs/` unless ASF explicitly names that SourceA path.
+- Product code changes stay in this repo's code paths. Do not save Noetfield implementation docs into `~/Desktop/Noetfield-Systems/SourceA/docs/` unless ASF explicitly names that SourceA path.
 
 ## If you are a **different** agent (mono, Noetfield Runtime, SourceA, TrustField)
 
 - **Do not** edit `docs/_NOOS_AGENT/**` unless your task explicitly says merge from `NOOS-AGENT-DOC`.
 - Use your own tag (`NFRT-AGENT-DOC`, etc.) in your own repo/lane.
-- Ecosystem SSOT: `~/Desktop/sourceA/SINA_OS_SSOT_LOCKED.md` (DESIGN plane).
+- Ecosystem SSOT: `~/Desktop/Noetfield-Systems/SourceA/brain-os/law/SINA_OS_SSOT_LOCKED.md` (DESIGN plane).
 
 ## This repo's role
 
