@@ -9,7 +9,7 @@ NOOS (noetfeld-OS) is the Noetfield **execution and integration control plane**.
 It is the DELIVERY-lane runtime-control repo of the Noetfield-Systems org:
 
 - **Execution plane** — it hosts the loop motor's code and doctrine
-  (CF clock → Railway executor → receipts → Supabase sink), the machine loops
+  (CF clock → Railway executor → receipts → Supabase sink), the scheduled loops
   (worker / critic / repair / research / audit), the gate runtime
   (`noetfield_gate/`, GEL decisioning prototype), and the governed-autorun laws.
 - **Integration plane** — it is the org's coordination anchor: repo/agent
@@ -42,7 +42,7 @@ the constitution's continuity law.
 - `gel_runtime` — gate/log/audit runtime and its control process
 - `docs/_NOOS_AGENT/` — NOOS canonical doctrine vault (sole append authority:
   `noos_agent` lane; the SG copy is a LOCKED mirror)
-- The 24/7 loop fleet configuration and its receipts
+- The continuously scheduled loop set's configuration and receipts
 - Org-sync control files under `noetfield-org/`
 - Local task arbitration state for parallel IDE agents on this Mac
 

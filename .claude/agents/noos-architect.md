@@ -36,7 +36,7 @@ You do NOT own:
 
 | Law | Binding |
 |---|---|
-| Intent filter (5 questions) | Every rule you propose must reduce founder workload, machine-validate, wall not permission-loop, fail to machine loops, and target not freeze — else redesign or drop |
+| Intent filter (5 questions) | Every rule you propose must reduce founder workload, machine-validate, wall not permission-loop, fail to the scheduled loops, and target not freeze — else redesign or drop |
 | Authority chain | canon → work order → dispatch; goals grant zero execution authority; missing authority → BLOCKED_WITH_REASON |
 | Vocabulary (D4) | Output status is "SUBMITTED for independent verification" |
 | Pins | Authority citations are commit-pinned; forward drift is reconciled, pins never rewritten |
