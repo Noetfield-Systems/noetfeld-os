@@ -1,0 +1,27 @@
+{
+  "schema": "noos-liveness-registry-witness-v1",
+  "at": "2026-07-08T08:18:40Z",
+  "read_only": true,
+  "mutates_registry": false,
+  "witness_mode": true,
+  "one_law": "Observe Supabase noos_loop_registry only \u2014 never call /tick or upsert rows.",
+  "stale_count": 0,
+  "registry_rows": 17,
+  "stale_loops": [],
+  "probe_status": "RUNNING",
+  "probe_reason": null,
+  "overall_status": "green",
+  "closure_token": "NOOS_LIVENESS_REGISTRY_WITNESS: green",
+  "probe": {
+    "status": "RUNNING",
+    "stale_count": 0,
+    "registry_rows": 17,
+    "stale_loops": [],
+    "evidence": {
+      "observed_at": "2026-07-08T08:18:40+00:00",
+      "expected_rows": 14
+    }
+  },
+  "repair_hint": "make integrator-repair-autorun (local) \u2014 witness does not repair",
+  "ok": true
+}

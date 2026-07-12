@@ -1,6 +1,6 @@
 {
   "schema": "noos-integrator-daily-checklist-v1",
-  "at": "2026-07-08T03:30:42Z",
+  "at": "2026-07-08T08:47:32Z",
   "read_only": false,
   "one_law": "Daily authority = live probes at `at` \u2014 receipts on disk are snapshots only, never closure.",
   "architecture": {
@@ -42,8 +42,8 @@
           "drift": false,
           "repo_path": "/Users/sinakazemnezhad/Desktop/Noetfield-Systems/noetfeld-OS/.noos-runtime/integrator/noos-integrator-state-v1.json",
           "home_mirror_path": "/Users/sinakazemnezhad/.sina/noos-integrator-state-v1.json",
-          "repo_tasks": 15,
-          "home_tasks": 15,
+          "repo_tasks": 16,
+          "home_tasks": 16,
           "repair": null,
           "report_line": "integrator_mirror_clean \u00b7 repo matches home",
           "exit_code": 0
@@ -60,7 +60,7 @@
       "status": "pass",
       "evidence": {
         "schema": "noos-motor-sustain-v1",
-        "at": "2026-07-08T03:31:07Z",
+        "at": "2026-07-08T08:47:59Z",
         "ok": true,
         "checks": {
           "cf_loop_fleet": {
@@ -76,7 +76,7 @@
           "railway_loop_runner": {
             "ok": true,
             "status": 200,
-            "body": "{\"ok\": true, \"schema\": \"noos-railway-loop-runner-health-v1\", \"service\": \"noos-loop-runner\", \"git_sha\": \"03b55c1f3dea7d9adc5d3f3fbcf47872df60b8df\", \"uptime_sec\": 12495, \"execution_mode\": \"one_shot_http\"}"
+            "body": "{\"ok\": true, \"schema\": \"noos-railway-loop-runner-health-v1\", \"service\": \"noos-loop-runner\", \"git_sha\": \"03b55c1f3dea7d9adc5d3f3fbcf47872df60b8df\", \"uptime_sec\": 31505, \"execution_mode\": \"one_shot_http\"}"
           },
           "cf_deadman": {
             "ok": true,
@@ -113,7 +113,7 @@
       "title": "Machine loops audit chain",
       "status": "pass",
       "evidence": {
-        "line": "outside_audit \u00b7 scanned=425 chain_ok=True"
+        "line": "outside_audit \u00b7 scanned=435 chain_ok=True"
       },
       "fix": "make machine-audit && make machine-reconcile",
       "owner": "integrator"
@@ -168,8 +168,8 @@
       "evidence": {
         "overall": "green",
         "summary": {
-          "green": 32,
-          "yellow": 1,
+          "green": 31,
+          "yellow": 2,
           "red": 0,
           "last_ok_false": 0,
           "missing_last_fired_at": 0,
@@ -206,7 +206,7 @@
       "evidence": {
         "status": "healthy",
         "lanes_false": [],
-        "cycles": 1
+        "cycles": 10
       },
       "fix": "cd TrustField-Technologies && ./scripts/railway_deploy_plan_worker.sh",
       "owner": "trustfield_worker"
@@ -224,7 +224,9 @@
             "billing_gate_failures_12s": 0,
             "latest_is_billing_gate": false,
             "latest_real_failure": false,
-            "real_failures": [],
+            "real_failures": [
+              "CI: fix(auth): peer Google + email/password panels o"
+            ],
             "latest_conclusion": "skipped",
             "recent_count": 8
           },
@@ -234,15 +236,13 @@
             "billing_gate_failures_12s": 0,
             "latest_is_billing_gate": false,
             "latest_real_failure": false,
-            "real_failures": [
-              "Noetfield open PR from patch: Merge pull request #41 from Noetfield-Systems/cu"
-            ],
+            "real_failures": [],
             "latest_conclusion": "success",
             "recent_count": 8
           }
         ],
         "real_failures_sample": [
-          "Noetfield open PR from patch: Merge pull request #41 from Noetfield-Systems/cu"
+          "CI: fix(auth): peer Google + email/password panels o"
         ]
       },
       "fix": "Enterprise billing: spending limit >$0 \u2014 then gh run rerun <id>. Real CI fails: fix workflow logs",
