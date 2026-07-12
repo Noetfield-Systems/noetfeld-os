@@ -49,7 +49,7 @@
 - **Repo:** Noetfield-Systems/noetfeld-OS
 - **Primary Agent:** Copilot + Codex (T1/T3)
 - **Integrator:** Loop orchestrator · receipt spine writer
-- **Role:** Autonomous loop governance · factory dispatch · receipt lifecycle
+- **Role:** Scheduled loop governance · dispatch · receipt lifecycle
 - **Branch:** main (main business logic branch)
 - **Must-Sync-With:** SourceA, TrustField-Technologies, sina-governance-SSOT
 - **Forbidden Actions:**

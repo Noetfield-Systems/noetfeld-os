@@ -8,7 +8,7 @@ status: active
 # Agent Configuration
 primary_agent: Copilot + Codex
 integrator: Loop orchestrator + receipt spine writer
-role: T1/T3 autonomous loop governance
+role: T1/T3 scheduled loop governance
 branch: main
 tier: T1, T3
 
