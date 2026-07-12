@@ -7,9 +7,10 @@ from __future__ import annotations
 from fastapi import APIRouter, Depends, HTTPException, Response, status
 from pydantic import BaseModel, ConfigDict, Field
 
-from auth import AuthenticatedClient, require_decision_write
+from auth import AuthenticatedClient
 from decision_engine import DecisionProvenance, DecisionResult, decide
 from exceptions import DuplicateRequestError, GateError, PolicyGateError
+from supabase_jwt import require_decision_write
 
 
 router = APIRouter(prefix="/v1", tags=["decisioning"])

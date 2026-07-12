@@ -1,0 +1,43 @@
+{
+  "name": "@noetfield/auth-core",
+  "version": "1.0.0",
+  "description": "Shared Supabase SSR auth helpers for Noetfield portfolio ventures",
+  "license": "UNLICENSED",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js 2>/dev/null || node --test dist/**/*.test.js",
+    "prepublishOnly": "npm run build"
+  },
+  "peerDependencies": {
+    "@supabase/ssr": "^0.6.0",
+    "@supabase/supabase-js": "^2.49.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.0",
+    "typescript": "^5.8.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Noetfield-Systems/noetfeld-os.git",
+    "directory": "packages/auth-core"
+  },
+  "keywords": [
+    "noetfield",
+    "supabase",
+    "auth",
+    "ssr"
+  ]
+}
