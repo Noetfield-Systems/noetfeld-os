@@ -1,0 +1,26 @@
+{
+  "schema": "noos-spine-verify-activation-v1",
+  "at": "2026-07-12T16:20:00Z",
+  "author": "claude-code-noos",
+  "verdict": "SUBMITTED for independent verification",
+  "canon_version": "FOUNDER_CANON_v1+MACHINE_LOOPS_v1",
+  "activation_chain": [
+    {"pr": "SourceA#34", "what": "spine verify loop: real script + FBE route + */15 dispatch row", "merged": true},
+    {"pr": "SourceA#36", "what": "deploy STAGING allowlist + container-safe external-only buyer checks", "merged": true},
+    {"pr": "SourceA#37", "what": "Dockerfile COPY allowlist (third allowlist in deploy chain)", "merged": true},
+    {"pr": "SourceA#38", "what": "queue_head pass-through (cycle_receipts schema rejects nulls)", "merged": true}
+  ],
+  "deploys": [
+    "FBE Railway x3 (railway up from staging, receipts at ~/.sina/fbe-cloud-deploy-receipt-v1.json)",
+    "loop-specialist CF worker x1 (dispatch job_count 13 -> 14)"
+  ],
+  "end_to_end_proof": {
+    "route": "https://sourcea-fbe-runner-production.up.railway.app/api/fbe/portfolio-spine/verify/v1",
+    "first_real_run": "buyer GREEN (live external HTTPS fetch of sourcea.app + www), recipe GREEN (25 recipes), both cycle_receipts writes ok:true",
+    "panel_flip": "sourcea_buyer_proof_verify COMPLETE + sourcea_recipe_queue_builder COMPLETE (age <1m)",
+    "org_fleet_after": {"COMPLETE": 16, "RUNNING": 10, "IDLE_NO_WORK": 2, "blocked": 0, "failed": 0, "critique_findings": 0}
+  },
+  "sustain_mechanism": "CF cron */15 (sourcea-loop-specialist-tick-v1) -> FBE route -> real verify -> honest GREEN/RED rows; no manufactured green (L2)",
+  "lesson": "FBE deploy chain has THREE allowlists: _STAGING_SCRIPT_FILES/_STAGING_DATA_FILES (deploy script), staging dir on disk, and cloud/Dockerfile.fbe-runner explicit COPY manifest (142 lines, no bulk copy). All three must carry a new file.",
+  "ok": true
+}
