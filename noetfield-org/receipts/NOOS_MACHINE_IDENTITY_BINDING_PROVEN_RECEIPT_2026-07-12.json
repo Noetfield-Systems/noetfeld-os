@@ -1,0 +1,62 @@
+{
+  "schema": "noetfield/machine-identity-binding-install-v1",
+  "supersedes": "NOOS_MACHINE_IDENTITY_BINDING_INSTALL_RECEIPT_2026-07-11.json",
+  "issued_at": "2026-07-12T01:40:00Z",
+  "status": "PROVEN",
+  "design_status": "DESIGN_LOCKED",
+  "closes_blocker": "standing_machine_identity_repo_credential",
+  "identity": {
+    "identity_id": "motor-identity-noetfield-systems",
+    "kind": "github_app",
+    "owner": "Noetfield-Systems",
+    "app_id": "4275961",
+    "app_slug": "noetfield-motor",
+    "actor": "noetfield-motor[bot]",
+    "webhook_active": false,
+    "credential_refs": {
+      "app_id_ref": "org_variable:MOTOR_APP_ID",
+      "private_key_ref": "org_secret:MOTOR_APP_PRIVATE_KEY"
+    },
+    "credential_placement": "repo_level:Noetfield-Systems/noetfield-sandbox-private (gh token lacked admin:org; resolves identically, tighter than org-wide)",
+    "key_material_in_receipt": false
+  },
+  "founder_gates_completed": [
+    "register_app_via_manifest_page",
+    "convert_manifest_code_store_credential_refs",
+    "install_app_on_org_all_repositories",
+    "run_motor_identity_proof_v1_and_judge_receipt"
+  ],
+  "verification": {
+    "identity_proof_run": "https://github.com/Noetfield-Systems/noetfield-sandbox-private/actions/runs/29173419218",
+    "identity_proof_receipt_status": "PASS",
+    "identity_proof_asserts": ["installation_token_minted", "installation_scope_enumerated", "pr_opened_by_app_token", "pr_closed_and_branch_deleted"],
+    "crossrepo_proof_run": "https://github.com/Noetfield-Systems/noetfield-sandbox-private/actions/runs/29173604498",
+    "crossrepo_evidence": "SourceB PR #15 opened+closed by noetfield-motor[bot]; token scope [noetfield-sandbox-private, SourceB] asserted",
+    "reproof_of": "proof1 run 29131189212 failed assert (Actions token blocked from opening PRs) — now PASSES via App token",
+    "shipped_bundle_bugfix": "motor-identity-proof-v1.yml receipt-loss on --delete-branch fixed (RUNNER_TEMP stash); deployed version supersedes the v2 zip's"
+  },
+  "permission_reconciliation": {
+    "binding_doc_requested": "checks:write",
+    "actual_install": "statuses:write (Commit Statuses)",
+    "resolution": "installed reality wins; statuses:write serves the independent-verifier publish intent; binding instance records statuses:write"
+  },
+  "runtime_wiring": {
+    "workflows_on_app_identity": ["motor-intake-v2", "motor-tick-v2", "motor-executor-v2", "motor-proof-v2", "motor-identity-proof-v1", "motor-crossrepo-proof-v1", "motor-watchdog-v1", "motor-panel-v1", "motor-commission-selftest-v1"],
+    "org_wide_executor": true,
+    "watchdog_active": true,
+    "panel_run": "https://github.com/Noetfield-Systems/noetfield-sandbox-private/actions/runs/29175494380",
+    "cold_proofs_under_identity": {
+      "proof1": "run 29174463135 success",
+      "proof2": "run 29174513162 success (repair, handoff, lease recovery)"
+    }
+  },
+  "still_blocked_for_fully_commissioned": [
+    "durable_state_activation (MOTOR_DB_URL/KEY — DurableStore code verified vs PostgREST mock, ALL PASS)",
+    "independent_edge_verifier_deploy (MOTOR_EDGE_VERIFIER_URL)"
+  ],
+  "custody_notes": {
+    "additive_only": true,
+    "pinned_artifacts_modified": false,
+    "supersedes_prior_receipt_by_reference_not_deletion": true
+  }
+}

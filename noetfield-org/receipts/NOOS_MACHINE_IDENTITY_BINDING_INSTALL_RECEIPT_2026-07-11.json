@@ -1,0 +1,72 @@
+{
+  "schema": "noetfield/machine-identity-binding-install-v1",
+  "issued_at": "2026-07-11T01:48:57Z",
+  "status": "INSTALL_PENDING_FOUNDER",
+  "design_status": "DESIGN_LOCKED",
+  "closes_blocker": "standing_machine_identity_repo_credential",
+  "identity": {
+    "identity_id": "motor-identity-noetfield-systems",
+    "kind": "github_app",
+    "owner": "Noetfield-Systems",
+    "planned_app_slug": "noetfield-motor",
+    "actor": "noetfield-motor[bot]",
+    "webhook_active": false,
+    "credential_refs": {
+      "app_id_ref": "org_variable:MOTOR_APP_ID",
+      "private_key_ref": "org_secret:MOTOR_APP_PRIVATE_KEY"
+    },
+    "key_material_in_receipt": false
+  },
+  "artifacts_installed": [
+    {
+      "layer": "noos",
+      "path": "noetfield-org/MACHINE_IDENTITY_BINDING_v1.md",
+      "role": "operational_binding"
+    },
+    {
+      "layer": "noos",
+      "path": "noetfield-org/schemas/machine_identity_binding.v1.schema.json",
+      "role": "schema"
+    },
+    {
+      "layer": "noos",
+      "path": "noetfield-org/config/examples/machine_identity.private.example.yaml",
+      "role": "config_example_non_canonical"
+    }
+  ],
+  "artifacts_delivered_pending_runtime_repo": [
+    {
+      "target_repo": "Noetfield-Systems/noetfield-sandbox-private",
+      "path": ".github/workflows/motor-identity-proof-v1.yml",
+      "role": "cold_proof_workflow",
+      "cost_tier": "COST-T0",
+      "worker_lane": "W-DET"
+    },
+    {
+      "target_repo": "Noetfield-Systems/noetfield-sandbox-private",
+      "path": "motor/identity/app_identity.py",
+      "role": "identity_adapter_non_actions_contexts"
+    },
+    {
+      "target_repo": "Noetfield-Systems/noetfield-sandbox-private",
+      "path": "motor/identity/README.md",
+      "role": "runtime_doc"
+    }
+  ],
+  "founder_gates_remaining": [
+    "register_app_via_manifest_page",
+    "convert_manifest_code_store_credential_refs",
+    "install_app_on_org_all_repositories",
+    "run_motor_identity_proof_v1_and_judge_receipt"
+  ],
+  "custody_notes": {
+    "additive_only": true,
+    "pinned_artifacts_modified": false,
+    "pin_refresh": "deferred to integrator lane after commit",
+    "agent_manifest_update": "deferred — unpushed activation branch amends that surface"
+  },
+  "verification": {
+    "pass_criteria": "motor-identity-proof-v1 run: installation token minted, scope enumerated, PR opened AND closed by noetfield-motor[bot], receipt artifact uploaded",
+    "reproof_of": "proof1 run 29131189212 failed assert (Actions blocked from opening PRs)"
+  }
+}

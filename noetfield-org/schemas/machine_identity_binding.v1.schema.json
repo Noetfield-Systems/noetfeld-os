@@ -1,0 +1,83 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://noetfield.org/schemas/machine_identity_binding.v1.json",
+  "title": "Machine Identity Binding v1",
+  "description": "Standing machine identity for the continuation motor. Credential refs only — key material must never appear in any instance of this schema. Terminology per P7 canonical names.",
+  "type": "object",
+  "required": [
+    "identity_id",
+    "kind",
+    "owner",
+    "credential_refs",
+    "permissions",
+    "token_policy"
+  ],
+  "properties": {
+    "identity_id": { "type": "string" },
+    "kind": {
+      "enum": ["github_app"],
+      "description": "Personal access tokens are forbidden as standing identity"
+    },
+    "owner": {
+      "type": "string",
+      "description": "Org that owns the App, e.g. Noetfield-Systems"
+    },
+    "app_slug": { "type": "string" },
+    "actor": {
+      "type": "string",
+      "description": "Bot actor name for commits/PRs, e.g. noetfield-motor[bot]"
+    },
+    "credential_refs": {
+      "type": "object",
+      "required": ["app_id_ref", "private_key_ref"],
+      "properties": {
+        "app_id_ref": { "type": "string", "description": "e.g. org variable MOTOR_APP_ID" },
+        "private_key_ref": { "type": "string", "description": "e.g. org secret MOTOR_APP_PRIVATE_KEY" }
+      },
+      "additionalProperties": false
+    },
+    "installation_scope": {
+      "enum": ["all_repositories", "selected_repositories"]
+    },
+    "repositories": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Required when installation_scope is selected_repositories"
+    },
+    "permissions": {
+      "type": "object",
+      "description": "GitHub App permission map, e.g. {\"contents\": \"write\", \"pull_requests\": \"write\"}",
+      "additionalProperties": { "enum": ["read", "write", "admin"] }
+    },
+    "webhook_active": {
+      "type": "boolean",
+      "description": "false = identity-first; true = event-driven brain activated"
+    },
+    "token_policy": {
+      "type": "object",
+      "required": ["max_ttl_seconds"],
+      "properties": {
+        "max_ttl_seconds": { "type": "integer", "maximum": 3600 },
+        "downscope_per_job": { "type": "boolean" },
+        "mint_contexts": {
+          "type": "array",
+          "items": { "enum": ["github_actions", "service_runtime", "edge_verifier", "local_tick"] }
+        }
+      }
+    },
+    "rotation": {
+      "type": "object",
+      "properties": {
+        "founder_gate": { "type": "boolean" },
+        "last_rotated": { "type": ["string", "null"] },
+        "rotation_receipt": { "type": ["string", "null"] }
+      }
+    },
+    "proof_workflow": { "type": "string" },
+    "status": {
+      "enum": ["DESIGN_LOCKED", "INSTALL_PENDING_FOUNDER", "INSTALLED", "PROVEN", "REVOKED"]
+    },
+    "enabled": { "type": "boolean" }
+  },
+  "additionalProperties": true
+}

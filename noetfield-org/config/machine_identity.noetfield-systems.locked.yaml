@@ -1,0 +1,60 @@
+# machine_identity.noetfield-systems.locked.yaml — REAL LOCKED BINDING INSTANCE (canonical)
+# Instance of schemas/machine_identity_binding.v1.schema.json. Status PROVEN.
+# Credential refs only — key material never appears here. Supersedes the pending status in
+# the non-canonical example; records the actual installed identity (App ID 4275961).
+identity_id: motor-identity-noetfield-systems
+kind: github_app
+owner: Noetfield-Systems
+app_id: "4275961"
+app_slug: noetfield-motor
+actor: "noetfield-motor[bot]"
+
+credential_refs:
+  app_id_ref: "org_variable:MOTOR_APP_ID"
+  private_key_ref: "org_secret:MOTOR_APP_PRIVATE_KEY"
+
+# NOTE (custody reality 2026-07-12): credentials are set REPO-LEVEL in
+# noetfield-sandbox-private (the gh CLI token lacked admin:org). This resolves identically in
+# vars./secrets. and is tighter than org-wide; the App mints all cross-repo tokens from that
+# one repo. Promote to org-level later via: gh auth refresh -h github.com -s admin:org
+credential_placement: repo_level:Noetfield-Systems/noetfield-sandbox-private
+
+installation_scope: all_repositories
+
+permissions:
+  contents: write
+  pull_requests: write
+  issues: write
+  actions: write
+  workflows: write
+  statuses: write   # ACTUAL install grants Commit Statuses (not `checks`); serves the
+                    # independent-verifier publish intent. Binding doc §3 said checks:write —
+                    # recorded discrepancy, resolved in favor of the installed reality.
+  metadata: read
+
+webhook_active: false
+
+token_policy:
+  max_ttl_seconds: 3600
+  downscope_per_job: true
+  mint_contexts:
+    - github_actions
+    - service_runtime
+    - edge_verifier
+    - local_tick
+
+rotation:
+  founder_gate: true
+  last_rotated: null
+  rotation_receipt: null
+
+proof_workflow: "noetfield-sandbox-private/.github/workflows/motor-identity-proof-v1.yml"
+status: PROVEN
+enabled: true
+
+proof_evidence:
+  identity_proof_run: "https://github.com/Noetfield-Systems/noetfield-sandbox-private/actions/runs/29173419218"
+  identity_proof_receipt_status: PASS
+  crossrepo_proof_run: "https://github.com/Noetfield-Systems/noetfield-sandbox-private/actions/runs/29173604498"
+  crossrepo_pr: "Noetfield-Systems/SourceB#15 opened+closed by noetfield-motor[bot]"
+  proven_receipt: "receipts/NOOS_MACHINE_IDENTITY_BINDING_PROVEN_RECEIPT_2026-07-12.json"

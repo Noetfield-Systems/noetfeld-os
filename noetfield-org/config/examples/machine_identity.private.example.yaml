@@ -1,0 +1,44 @@
+# machine_identity.private.example.yaml — EXAMPLE ONLY (non-canonical)
+# Instance of schemas/machine_identity_binding.v1.schema.json
+# Credential refs only. Key material never appears in any config, repo, or receipt.
+
+identity_id: motor-identity-noetfield-systems
+kind: github_app
+owner: Noetfield-Systems
+app_slug: noetfield-motor
+actor: "noetfield-motor[bot]"
+
+credential_refs:
+  app_id_ref: "org_variable:MOTOR_APP_ID"
+  private_key_ref: "org_secret:MOTOR_APP_PRIVATE_KEY"
+
+installation_scope: all_repositories
+
+permissions:
+  contents: write
+  pull_requests: write
+  issues: write
+  actions: write
+  checks: write
+  workflows: write
+  metadata: read
+
+webhook_active: false   # identity-first; flip in App settings to activate event brain
+
+token_policy:
+  max_ttl_seconds: 3600
+  downscope_per_job: true
+  mint_contexts:
+    - github_actions
+    - service_runtime
+    - edge_verifier
+    - local_tick
+
+rotation:
+  founder_gate: true
+  last_rotated: null
+  rotation_receipt: null
+
+proof_workflow: "noetfield-sandbox-private/.github/workflows/motor-identity-proof-v1.yml"
+status: INSTALL_PENDING_FOUNDER
+enabled: true
