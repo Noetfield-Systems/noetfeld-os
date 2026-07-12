@@ -17,3 +17,4 @@ receipts/proof/noos-kaizen-*.json
 receipts/proof/noos-outside-audit-*T*.json
 receipts/proof/noos-worker-kernel-*T*.json
 receipts/proof/noos-tool-broker-*T*.json
+.DS_Store

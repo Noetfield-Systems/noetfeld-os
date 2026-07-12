@@ -56,7 +56,7 @@ surfaces must not contradict. Verify wiring:
 - Closeout: `make local-closeout TASK=<task-id>` (optional receipt: `WRITE_RECEIPT=1`)
 - Cannot `git checkout main`? Run `bash scripts/noos_mac_worktree_sync_v1.sh`
 
-### Machine loops (zero-founder process)
+### Scheduled jobs (zero-founder process)
 
 - Canon: **`docs/_NOOS_AGENT/[NOOS-AGENT-20260703-005]_FOUNDER_CANON_INTERFACE_v1.md`**
 - Loops: **`docs/_NOOS_AGENT/[NOOS-AGENT-20260703-006]_MACHINE_LOOPS_v1.md`**
