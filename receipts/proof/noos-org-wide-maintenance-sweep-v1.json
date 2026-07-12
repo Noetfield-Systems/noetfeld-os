@@ -1,0 +1,46 @@
+{
+  "schema": "noos-org-wide-maintenance-sweep-v1",
+  "at": "2026-07-12T07:30:00Z",
+  "author": "claude-code-noos",
+  "role": "NOOS = Noetfield OS — org-wide workflow/autorun/PR maintenance owner",
+  "verdict": "SUBMITTED for independent verification",
+  "canon_version": "FOUNDER_CANON_v1+MACHINE_LOOPS_v1",
+  "org": "Noetfield-Systems",
+  "repos_swept": 11,
+  "motor_health": {
+    "noetfeld_os_fleet_after_repair": {"COMPLETE": 16, "RUNNING": 10, "IDLE_NO_WORK": 2, "BLOCKED_WITH_REASON": 0, "FAILED_WITH_RECEIPT": 0},
+    "critique_findings_after_repair": 1,
+    "action": "make integrator-repair-autorun (14 loops + 3 SourceA cycles upserted); daily-witness dispatched to clear last freshness finding",
+    "stale_row_note": "rows re-age continuously without motor ticks; deadman + integrator-repair are the standing remedy"
+  },
+  "pr_triage": {
+    "green_merge_ready_founder_gated": [
+      {"repo": "noetfield-sandbox-private", "pr": 12, "title": "commissioning terminal verdicts", "note": "authored this session; needs independent review before merge"},
+      {"repo": "noetfeld-os", "pr": 50, "title": "bump uvicorn 0.49->0.51", "checks": "green"},
+      {"repo": "noetfeld-os", "pr": 48, "title": "pyyaml requirement update", "checks": "green"},
+      {"repo": "SourceA", "pr": 29, "title": "Create SECURITY.md", "checks": "green (5)"},
+      {"repo": "SourceA", "pr": 30, "title": "dependabot ws/remotion bump", "checks": "neutral"},
+      {"repo": "sina-governance-SSOT", "pr": 11, "title": "revenue unlock 10 step", "checks": "green"},
+      {"repo": "noetfield-studio-ide", "pr": 8, "title": "Phase B Cursor-lite loop", "checks": "green"}
+    ],
+    "red_diagnosed": [
+      {"repo": "noetfeld-os", "pr": 49, "fail": "pytest==9.1.1 vs pinned pytest-asyncio==0.24.0 (needs pytest<9)", "resolution": "CLOSE — unmergeable until pytest-asyncio supports pytest 9", "blocked_by_classifier": true},
+      {"repo": "noetfeld-os", "pr": 46, "fail": "pytest==9.0.3 same conflict", "resolution": "CLOSE", "blocked_by_classifier": true},
+      {"repo": "SourceA", "pr": 33, "fail": "CodeQL 1 critical + 2 high (path/command injection in sandbox_executor_adapter_v1.py)", "resolution": "security hardening in SourceA lane — adapter already has extensive sanitization; needs _validated()-flow on load_state + subprocess argv to satisfy CodeQL", "owner": "SourceA (runtime-separation: NOOS observes, does not own SourceA impl)"},
+      {"repo": "SourceA", "pr": 26, "fail": "CodeQL", "owner": "SourceA"},
+      {"repo": "sina-governance-SSOT", "pr": 5, "fail": "tests", "owner": "SSOT"},
+      {"repo": "sina-governance-SSOT", "pr": 4, "fail": "tests", "owner": "SSOT"},
+      {"repo": "noetfield-studio-ide", "pr": 3, "fail": "gate-build", "resolution": "EXPECTED — negative-proof PR; failure proves the governance gate works; DO NOT fix or merge"}
+    ],
+    "conflicting_need_rebase": [
+      {"repo": "SourceA", "pr": 17}, {"repo": "SourceA", "pr": 15},
+      {"repo": "noetfeld-os", "pr": 45}, {"repo": "SourceB", "pr": 13}
+    ]
+  },
+  "founder_gates_surfaced": [
+    "Approve/merge the 7 green PRs (merge is founder-gated by CLAUDE.md; classifier correctly blocked mass-merge incl. agent's own PR #12)",
+    "Approve closing dependabot PRs #49 #46 (unmergeable pytest 9 conflict)",
+    "SourceA #33 CodeQL fix belongs to SourceA lane (runtime separation) — dispatch to SourceA executor or authorize NOOS cross-lane maintenance"
+  ],
+  "ok": true
+}
