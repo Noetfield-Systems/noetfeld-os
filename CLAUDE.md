@@ -46,7 +46,7 @@ verifier proves.**
   must never appear in active config. Current org slug: `Noetfield-Systems`.
 - **Founder gates.** Deploy, merge to main, spend, external/commercial sends,
   L5/verifier changes, schema/governance (T3-class) merges, and phase unlocks
-  are founder-gated. Failures route to machine loops (`make machine-reconcile`),
+  are founder-gated. Failures route to the scheduled loops (`make machine-reconcile`),
   never to the founder by default.
 - **Dispatched work carries the canon line verbatim:**
   `LAWS: FOUNDER_CANON v1 + governed-autorun v3. Violations = BLOCKED_WITH_REASON.`

@@ -86,7 +86,7 @@ Research/audit findings never ship to noetfield.com or bulk HTML without the
 verdict pipeline; P1+ copy/IA changes are founder-gated. Machine outputs go to
 `receipts/proof/` or `docs/_NOOS_AGENT/` only.
 
-## Machine loops (route failures here, not to the founder)
+## Scheduled loops (route failures here, not to the founder)
 
 `make machine-status` · `make machine-reconcile` · `make machine-audit` ·
 `make machine-validate-merge` · `make machine-critic RECEIPT=...` ·

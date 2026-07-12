@@ -1,11 +1,11 @@
 ---
 name: governed-autorun
-description: Design, run, audit, and repair 24/7 multi-workflow autonomous execution systems — parallel sandboxes, cron loops, queue motors, receipt-backed cycles, ROI-governed spend, and self-improving pipelines under one reconciler. Use this skill whenever the user asks to build or fix autorun loops, cron workers, batch queues, multi-sandbox orchestration, cycle receipts, sink invariants, verification gates, cost/ROI attribution for agents, or says things like "make it run 24/7", "full automation", "parallel workflows", "self-improving system", "where is the spend going", "why did the agent report PASS but live is broken", "audit this agent report", or pastes an agent/worker report for review. Also trigger when writing dispatch prompts for coding agents operating in sandboxes.
+description: Design, run, audit, and repair continuously scheduled, unattended multi-workflow execution systems — parallel sandboxes, cron loops, queue motors, receipt-backed cycles, ROI-governed spend, and receipt-driven maintenance pipelines under one reconciler. Use this skill whenever the user asks to build or fix autorun loops, cron workers, batch queues, multi-sandbox orchestration, cycle receipts, sink invariants, verification gates, cost/ROI attribution for agents, or says things like "make it run 24/7", "full automation", "parallel workflows", "self-improving system", "where is the spend going", "why did the agent report PASS but live is broken", "audit this agent report", or pastes an agent/worker report for review. Also trigger when writing dispatch prompts for coding agents operating in sandboxes.
 ---
 
 # Governed Autorun v3
 
-Operating system for continuous, parallel, self-improving multi-sandbox execution. Every law traces to a real production incident. v2 adds the ROI layer: the machine governs its own spend the way it governs its own state. v3 adds deterministic loop core (L13, D1–D8).
+Operating system for continuous, parallel multi-sandbox execution with receipt-driven maintenance. Every law traces to a real production incident. v2 adds the ROI layer: the machine governs its own spend the way it governs its own state. v3 adds deterministic loop core (L13, D1–D8).
 
 ## The Thirteen Laws
 
@@ -55,7 +55,7 @@ Operating system for continuous, parallel, self-improving multi-sandbox executio
 7. **Receipt** — full schema in `references/receipt-schemas.md`
 8. **Heartbeat** (daily): all loops, states, sink invariants, cost table, drift check (L12), founder_blocked escalations
 
-## Kaizen — ROI-Ranked Self-Improvement
+## Kaizen — ROI-Ranked Receipt-Driven Maintenance
 
 The improvement backlog is a scored queue, not a wishlist:
 
@@ -115,5 +115,5 @@ A loop is DECLARED until its 24h window closes green on external receipts; only 
 
 - Proof receipts: `receipts/proof/` (not `.noos-runtime/`)
 - Schedule proof: Supabase `noetfield_truth_log` via `make schedule-verify`
-- Loop fleet: `data/noos-24-7-loops-v1.json` + CF `repository_dispatch` (`cf-cron`)
+- Loop set: `data/noos-24-7-loops-v1.json` + CF `repository_dispatch` (`cf-cron`)
 - Laws doc: `docs/GOVERNED_AUTORUN_LAWS_v3.md`

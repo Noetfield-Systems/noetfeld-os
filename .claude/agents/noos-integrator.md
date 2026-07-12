@@ -67,6 +67,6 @@ lanes:            # active service-lane states relevant to task
 stale_claims:     # swept / none
 receipts:         # paths written or read as evidence
 status: SUBMITTED for independent verification
-blockers:         # BLOCKED_WITH_REASON items, routed to machine loops
+blockers:         # BLOCKED_WITH_REASON items, routed to the scheduled loops
 next_action:
 ```
