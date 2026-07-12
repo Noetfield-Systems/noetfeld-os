@@ -1,9 +1,9 @@
 {
   "schema": "noos-stack-automation-health-v1",
-  "at": "2026-07-08T01:56:56Z",
-  "ok": true,
-  "overall_status": "green",
-  "closure_token": "NOOS_STACK_AUTOMATION: green",
+  "at": "2026-07-12T02:56:51Z",
+  "ok": false,
+  "overall_status": "red",
+  "closure_token": "NOOS_STACK_AUTOMATION: red",
   "replaces_workflow": "noos-cross-repo-orchestrator.yml",
   "architecture": {
     "primary": "cloudflare_workers_cron",
@@ -11,36 +11,67 @@
     "tertiary": "railway_plan_worker"
   },
   "signals": {
-    "integrator_status": true,
-    "autorun_critique": true,
+    "integrator_status": false,
+    "autorun_critique": false,
     "gha_health": true,
-    "eleven_layers": true,
-    "trustfield_registry": true,
+    "eleven_layers": false,
+    "trustfield_registry": false,
     "cf_fleet_tick": true
   },
   "integrator_status": {
-    "ok": true,
+    "ok": false,
     "surfaces": {
       "vault": true,
       "cf_deploy_token": true,
       "integrator_mirror": true,
-      "motor_sustain": true,
-      "autorun": true,
+      "motor_sustain": false,
+      "autorun": false,
       "machine_audit": true,
       "agent_conflicts": true,
       "tasks_mirror": true,
       "upgrade_manifest": true
     },
-    "machine_audit_line": "outside_audit \u00b7 scanned=397 chain_ok=True"
+    "machine_audit_line": "outside_audit \u00b7 scanned=451 chain_ok=True"
   },
   "autorun_critique": {
-    "overall_ok": true,
-    "findings": 0,
-    "findings_sample": []
+    "overall_ok": false,
+    "findings": 8,
+    "findings_sample": [
+      {
+        "scope": "noos_loop_liveness_registry",
+        "severity": "high",
+        "summary": "Workflow is not healthy: FAILED_WITH_RECEIPT",
+        "detail": ""
+      },
+      {
+        "scope": "noos_gha_motor_sustain_witness",
+        "severity": "high",
+        "summary": "Workflow SLO miss",
+        "detail": "freshness_miss, latency_miss"
+      },
+      {
+        "scope": "noos_gha_health_witness",
+        "severity": "high",
+        "summary": "Workflow SLO miss",
+        "detail": "freshness_miss, latency_miss"
+      },
+      {
+        "scope": "noos_stack_health_receipt",
+        "severity": "high",
+        "summary": "Workflow SLO miss",
+        "detail": "freshness_miss, latency_miss"
+      },
+      {
+        "scope": "noos_trustfield_observe_witness",
+        "severity": "high",
+        "summary": "Workflow SLO miss",
+        "detail": "freshness_miss, latency_miss"
+      }
+    ]
   },
   "gha_health": {
     "schema": "noos-gha-run-health-v1",
-    "at": "2026-07-08T01:56:55Z",
+    "at": "2026-07-12T02:56:50Z",
     "ok": true,
     "overall_status": "green",
     "closure_token": "NOOS_GHA_HEALTH: green",
@@ -58,7 +89,7 @@
             "latest_real_failure": false,
             "real_failures": [],
             "latest_conclusion": "success",
-            "latest_duration_s": 41.0,
+            "latest_duration_s": 14.0,
             "recent_count": 8
           },
           {
@@ -68,10 +99,10 @@
             "latest_is_billing_gate": false,
             "latest_real_failure": false,
             "real_failures": [
-              "GEL CI: handoff(proof): NF probe drift fix patch bundle "
+              "GEL CI: chore(receipts+ops): runtime receipt snapshots +"
             ],
-            "latest_conclusion": "",
-            "latest_duration_s": 4.0,
+            "latest_conclusion": "success",
+            "latest_duration_s": 9.0,
             "recent_count": 8
           }
         ]
@@ -80,7 +111,7 @@
         "title": "GHA real workflow failures (not billing)",
         "ok": true,
         "failures": [
-          "GEL CI: handoff(proof): NF probe drift fix patch bundle "
+          "GEL CI: chore(receipts+ops): runtime receipt snapshots +"
         ]
       },
       "ICL-D12": {
@@ -113,12 +144,12 @@
   "cf_motors": {
     "fleet_tick": "green",
     "deadman": "green",
-    "registry_overall": "green"
+    "registry_overall": "yellow"
   },
   "railway_plan_worker": {
     "url": "https://trustfield-plan-worker-production.up.railway.app/health",
-    "status": "healthy",
-    "last_cycle_ok": true,
+    "status": "degraded",
+    "last_cycle_ok": false,
     "lane_ok": {
       "plan_matrix": true,
       "critic_circle": true,
@@ -127,7 +158,7 @@
       "self_heal": true,
       "www_upgrade_queue": true,
       "autorun_stack": true,
-      "partner_access": true
+      "partner_access": false
     },
     "lanes_run": [
       "plan_matrix",
@@ -141,21 +172,26 @@
     ]
   },
   "eleven_layers": {
-    "green": 10,
-    "yellow": 1,
-    "red": 0,
+    "green": 7,
+    "yellow": 3,
+    "red": 1,
     "unknown": 0
   },
   "trustfield_registry": {
-    "green": 32,
-    "yellow": 1,
-    "red": 0,
+    "green": 29,
+    "yellow": 2,
+    "red": 2,
     "last_ok_false": 0,
     "missing_last_fired_at": 0,
     "probe_present": true,
     "deadman_status": "green",
-    "gate_48h_status": "green",
+    "gate_48h_status": "yellow",
     "deadman_watched_red": []
   },
-  "fix_queue": []
+  "fix_queue": [
+    "integrator_status",
+    "autorun_critique",
+    "eleven_layers",
+    "trustfield_registry"
+  ]
 }

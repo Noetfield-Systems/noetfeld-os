@@ -1,6 +1,6 @@
 {
   "schema": "noos-gha-health-witness-v1",
-  "at": "2026-07-08T02:00:56Z",
+  "at": "2026-07-12T02:53:33Z",
   "ok": true,
   "overall_status": "green",
   "closure_token": "NOOS_GHA_HEALTH_WITNESS: green",
@@ -17,8 +17,8 @@
           "latest_is_billing_gate": false,
           "latest_real_failure": false,
           "real_failures": [],
-          "latest_conclusion": "cancelled",
-          "latest_duration_s": 1.0,
+          "latest_conclusion": "success",
+          "latest_duration_s": 34.0,
           "recent_count": 8
         },
         {
@@ -27,9 +27,11 @@
           "billing_gate_failures_12s": 0,
           "latest_is_billing_gate": false,
           "latest_real_failure": false,
-          "real_failures": [],
+          "real_failures": [
+            "GEL CI: chore(receipts+ops): runtime receipt snapshots +"
+          ],
           "latest_conclusion": "success",
-          "latest_duration_s": 10.0,
+          "latest_duration_s": 9.0,
           "recent_count": 8
         }
       ]
@@ -37,7 +39,9 @@
     "ICL-D11": {
       "title": "GHA real workflow failures (not billing)",
       "ok": true,
-      "failures": []
+      "failures": [
+        "GEL CI: chore(receipts+ops): runtime receipt snapshots +"
+      ]
     },
     "ICL-D12": {
       "title": "GitHub org on Enterprise plan",

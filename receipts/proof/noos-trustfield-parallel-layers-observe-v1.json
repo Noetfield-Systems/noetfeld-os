@@ -1,23 +1,23 @@
 {
   "schema": "noos-trustfield-parallel-layers-observe-v1",
-  "at": "2026-07-08T00:46:41Z",
+  "at": "2026-07-12T02:56:53Z",
   "read_only": true,
   "one_law": "NOOS coordinates eleven TrustField layers \u2014 observe, enqueue, receipt. TrustField CF+Railway motors execute. One exclusive writer per state cell.",
   "layer_count": 11,
-  "overall_status": "yellow",
+  "overall_status": "red",
   "summary": {
-    "green": 10,
-    "yellow": 1,
-    "red": 0,
+    "green": 7,
+    "yellow": 3,
+    "red": 1,
     "unknown": 0
   },
   "roi_intelligence": {
     "revenue_path_layers": 4,
-    "revenue_path_green": 4,
+    "revenue_path_green": 3,
     "hygiene_layers": 3,
-    "plan_worker_status": "healthy",
-    "plan_worker_last_cycle_ok": true,
-    "cycles_completed": 30
+    "plan_worker_status": "degraded",
+    "plan_worker_last_cycle_ok": false,
+    "cycles_completed": 1063
   },
   "fleet": {
     "cf_worker": "tf-cf-fleet-tick-v1",
@@ -29,8 +29,8 @@
   },
   "plan_worker": {
     "url": "https://trustfield-plan-worker-production.up.railway.app/health",
-    "status": "healthy",
-    "last_cycle_ok": true,
+    "status": "degraded",
+    "last_cycle_ok": false,
     "lane_ok": {
       "plan_matrix": true,
       "critic_circle": true,
@@ -39,7 +39,7 @@
       "self_heal": true,
       "www_upgrade_queue": true,
       "autorun_stack": true,
-      "partner_access": true
+      "partner_access": false
     },
     "lanes_run": [
       "plan_matrix",
@@ -53,7 +53,7 @@
     ]
   },
   "registry_observe": {
-    "overall_status": "green",
+    "overall_status": "yellow",
     "row_count": 33,
     "probe_present": true,
     "deadman_status": "green"
@@ -64,12 +64,12 @@
       "name": "observe_nerve",
       "value_class": "hygiene",
       "tier": "T0",
-      "status": "green",
-      "motor_state": "RUNNING",
+      "status": "yellow",
+      "motor_state": "DEGRADED",
       "cf_loop_id": "tf_cf_deadman_v1",
       "railway_lane": null,
       "reasons": [
-        "registry_overall=green"
+        "registry_overall=yellow"
       ]
     },
     {
@@ -108,7 +108,8 @@
       "cf_loop_id": "tf_cf_recipe_railway_plan_worker_v1",
       "railway_lane": "autorun_stack",
       "reasons": [
-        "loop_id not in registry sample"
+        "loop_id not in registry sample",
+        "plan_worker_degraded"
       ]
     },
     {
@@ -179,12 +180,12 @@
       "name": "partner_commercial",
       "value_class": "revenue_path",
       "tier": "T1",
-      "status": "green",
-      "motor_state": "RUNNING",
+      "status": "red",
+      "motor_state": "FAILED_WITH_RECEIPT",
       "cf_loop_id": "tf_cf_lane_partner_access_v1",
       "railway_lane": "partner_access",
       "reasons": [
-        "railway_lane_partner_access=true"
+        "railway_lane_partner_access=false"
       ]
     },
     {
@@ -192,12 +193,12 @@
       "name": "closeout_verify",
       "value_class": "proof_asset",
       "tier": "T0",
-      "status": "green",
-      "motor_state": "RUNNING",
+      "status": "yellow",
+      "motor_state": "DEGRADED",
       "cf_loop_id": "tf_cf_48h_gate_v1",
       "railway_lane": "autorun_stack",
       "reasons": [
-        "railway_lane_autorun_stack=true"
+        "stale age_min=6037.1 threshold_min=4320.0"
       ]
     }
   ],
@@ -208,5 +209,5 @@
     "CF Pages wave for tf_cf_www_pages_v1 when founder gates migration",
     "Align os/trustfield_cloud_loop_v1.json lanes to this 11-layer registry"
   ],
-  "closure_token": "NOOS_TF_11_LAYERS: yellow"
+  "closure_token": "NOOS_TF_11_LAYERS: red"
 }

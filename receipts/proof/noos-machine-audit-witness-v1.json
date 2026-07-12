@@ -1,0 +1,38 @@
+{
+  "schema": "noos-machine-audit-witness-v1",
+  "at": "2026-07-12T02:55:06Z",
+  "read_only": true,
+  "witness_mode": true,
+  "trailing_hours": 168,
+  "closure_token": "NOOS_MACHINE_AUDIT_WITNESS: green",
+  "overall_status": "green",
+  "chain_ok": true,
+  "audit": {
+    "schema": "noos-outside-audit-receipt-v1",
+    "version": "1.0.0",
+    "at": "2026-07-12T02:55:06+00:00",
+    "trailing_hours": 168,
+    "receipts_scanned": 449,
+    "chain": {
+      "ok": true,
+      "count": 341,
+      "chained_count": 1,
+      "broken_links": [],
+      "tail_hash": "73141f5feba126e03afc100f523c85c83b3716b66b74f776c047f41faa561079",
+      "excluded_schemas": [
+        "noos-outside-audit-receipt-v1"
+      ],
+      "excluded_count": 108
+    },
+    "critic_non_approve": 0,
+    "spot_fetches": [],
+    "kaizen_candidates": [],
+    "ok": true,
+    "report_line": "outside_audit \u00b7 scanned=449 chain_ok=True",
+    "prev_chain_hash": "73141f5feba126e03afc100f523c85c83b3716b66b74f776c047f41faa561079",
+    "chain_hash": "b029d61ca564b3abf94803077df7085f1c2fb2ae82f4a0ca1db0495faa3d5961",
+    "receipt_path": "receipts/proof/noos-outside-audit-20260712T025506Z.json"
+  },
+  "one_law": "Outside audit only \u2014 no merge/repair dispatch from witness.",
+  "ok": true
+}
