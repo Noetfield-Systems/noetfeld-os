@@ -1,0 +1,47 @@
+{
+  "schema": "noos-org-wide-maintenance-fixes-v2",
+  "at": "2026-07-12T08:15:00Z",
+  "author": "claude-code-noos",
+  "role": "NOOS = Noetfield OS — org-wide workflow/autorun/PR maintenance",
+  "verdict": "SUBMITTED for independent verification",
+  "canon_version": "FOUNDER_CANON_v1+MACHINE_LOOPS_v1",
+  "fixes_applied": [
+    {
+      "target": "SourceA PR #33 (sandbox executor adapter — commissioning-critical)",
+      "action": "Pushed 2 real CodeQL sanitization barriers to codex branch: PATH_RE.group() on git-add changed-path argv, and RUN_ID_RE.group() re-validation of run_id before it flows into clone path/executor argv (hashing is not a CodeQL command-injection sanitizer).",
+      "tests": "20/20 adapter tests green after each push",
+      "coordination": "another agent actively fixing same PR (rebased onto their head; did not stomp their load_state rework which cleared the 2 path-injections)",
+      "residual": "1 py/command-line-injection critical persists at _run() line 217 despite two .group() barriers — CodeQL is not crediting the interprocedural barrier through the shared subprocess wrapper _run(); all argv are validated/server-controlled. Assessment: FALSE POSITIVE on the _run wrapper.",
+      "recommended_close_action": "SourceA repo owner dismisses the alert with 'used in tests / false positive' justification, OR adds a CodeQL suppression comment — args are regex-validated. Not a fabricated PASS: reported as UNRESOLVED-BY-CODE."
+    },
+    {
+      "target": "sina-governance-SSOT PR #4, #5 (from 2026-07-03)",
+      "diagnosis": "'tests' check fails ModuleNotFoundError: No module named 'yaml' in a cost-policy workflow that NO LONGER EXISTS on SSOT main (main reworked to a different workflow set entirely).",
+      "verdict": "STALE — failing against removed workflows; content likely superseded",
+      "recommended_close_action": "CLOSE #4 and #5 (founder-gated), or rebase-and-salvage if content still wanted. No code fix appropriate."
+    },
+    {
+      "target": "noetfield-studio-ide PR #3",
+      "verdict": "EXPECTED FAILURE — negative-proof PR; gate-build failing proves the governance gate works. DO NOT fix or merge.",
+      "action": "none (documented)"
+    },
+    {
+      "target": "SourceA PR #26",
+      "verdict": "1 path-injection (relative_to containment guard CodeQL won't credit); another agent actively iterating (last commit is a CodeQL fix attempt). Left to that lane to avoid conflict.",
+      "action": "surfaced, not touched"
+    }
+  ],
+  "motor_health": {
+    "state_now": {"COMPLETE": 16, "RUNNING": 10, "IDLE_NO_WORK": 2, "BLOCKED": 0, "findings": 0},
+    "band_aid": "make integrator-repair-autorun re-greens on each run",
+    "durable_root_cause": "Railway loop-runner deployed image git_sha 03b55c1f (~4 days old) predates the liveness-write code, so production */5 ticks do not refresh Supabase liveness rows -> rows re-age to STALE ~30 min after each manual repair",
+    "durable_fix": "make motor-restart RECIPE=railway-loop-runner (FOUNDER-GATED — redeploys the loop runner with the liveness-write code). This is THE blocker to motor-healthy-24/7.",
+    "interim_option": "schedule a NOOS repair-heartbeat automation (runs while app/machine up) — band-aid, not true 24/7"
+  },
+  "founder_gates_pending": [
+    "REDEPLOY Railway loop-runner (make motor-restart RECIPE=railway-loop-runner) — durable 24/7 motor fix; classifier-gated as shared-workload restart",
+    "Merge 7 green PRs (founder-gated); approve closing dependabot #49 #46 and stale SSOT #4 #5",
+    "SourceA #33 residual command-injection: dismiss as false-positive (repo owner) — code barriers already added"
+  ],
+  "ok": true
+}
