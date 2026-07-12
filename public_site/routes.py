@@ -76,6 +76,18 @@ async def trust_ledger(request: Request) -> HTMLResponse:
     return _render(request, "trust-ledger/index.md", active="trust-ledger")
 
 
+@router.get("/privacy", response_class=HTMLResponse)
+@router.get("/privacy/", response_class=HTMLResponse)
+async def privacy(request: Request) -> HTMLResponse:
+    return _render(request, "privacy/index.md", active="privacy")
+
+
+@router.get("/cookies", response_class=HTMLResponse)
+@router.get("/cookies/", response_class=HTMLResponse)
+async def cookies_policy(request: Request) -> HTMLResponse:
+    return _render(request, "cookies/index.md", active="cookies")
+
+
 @router.get("/gate/partners", response_class=HTMLResponse)
 @router.get("/gate/partners/", response_class=HTMLResponse)
 async def partner_hub(

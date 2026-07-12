@@ -25,14 +25,14 @@
     </div>
   </div>
 
-  <form class="intake-form" method="post" action="/gate/partners/submit">
+  <form class="intake-form" method="post" action="/gate/partners/submit" novalidate>
     <div class="form-row">
       <label for="organization">Organization Name</label>
-      <input type="text" id="organization" name="organization" required>
+      <input type="text" id="organization" name="organization" required autocomplete="organization" minlength="2">
     </div>
     <div class="form-row">
       <label for="domain">Corporate Domain</label>
-      <input type="text" id="domain" name="domain" required placeholder="example.com">
+      <input type="text" id="domain" name="domain" required placeholder="example.com" autocomplete="url" inputmode="url" pattern="[a-zA-Z0-9][a-zA-Z0-9.-]*\.[a-zA-Z]{2,}">
     </div>
     <div class="form-row">
       <label for="vector">Primary Integration Vector</label>

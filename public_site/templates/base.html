@@ -3,17 +3,26 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <meta name="theme-color" content="#0a0c0f">
   <title>{{ page.title }}</title>
   <meta name="description" content="{{ page.description }}">
   <link rel="stylesheet" href="/static/site.css">
 </head>
 <body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
   <header class="site-header">
     <div class="site-header-inner">
       <a href="/" class="brand">Noetfield Systems</a>
-      <nav class="site-nav">
+      <button type="button" class="nav-toggle" data-nav-toggle aria-expanded="false" aria-controls="site-nav">
+        <span class="nav-toggle-label">Menu</span>
+        <span class="nav-toggle-icon" aria-hidden="true"></span>
+      </button>
+      <nav class="site-nav" id="site-nav" aria-label="Primary">
         <a href="/trust-ledger/"{% if active == "trust-ledger" %} class="active"{% endif %}>Trust Ledger</a>
         <a href="/gate/partners/"{% if active == "partners" %} class="active"{% endif %}>Partner Gateway</a>
+        <a href="/privacy/"{% if active == "privacy" %} class="active"{% endif %}>Privacy</a>
       </nav>
     </div>
   </header>
@@ -24,12 +33,68 @@
     <p class="hero-sub">{{ page.hero_subheadline }}</p>
   </section>
 
-  <main class="content">
+  <main class="content" id="main-content">
     {% block content %}{% endblock %}
   </main>
 
   <footer class="site-footer">
-    NOETFIELD SYSTEMS INC. // INSTITUTIONAL OPERATING SYSTEM
+    <div class="site-footer-inner">
+      <p class="site-footer-brand">NOETFIELD SYSTEMS INC. // INSTITUTIONAL OPERATING SYSTEM</p>
+      <nav class="site-footer-nav" aria-label="Legal">
+        <a href="/privacy/">Privacy</a>
+        <a href="/cookies/">Cookies</a>
+        <a href="#" data-cookie-manage>Cookie preferences</a>
+      </nav>
+    </div>
   </footer>
+
+  <div id="cookie-banner" class="cookie-banner" role="dialog" aria-labelledby="cookie-banner-title" aria-describedby="cookie-banner-desc" aria-hidden="true" hidden>
+    <div class="cookie-banner-inner">
+      <div class="cookie-banner-copy">
+        <p id="cookie-banner-title" class="cookie-banner-title">Cookie preferences</p>
+        <p id="cookie-banner-desc" class="cookie-banner-desc">
+          We use essential storage to remember your choices. Optional analytics stays off unless you opt in.
+          <a href="/cookies/">Learn more</a>
+        </p>
+      </div>
+      <div class="cookie-banner-actions">
+        <button type="button" class="btn-cookie btn-cookie-ghost" data-cookie-reject>Reject non-essential</button>
+        <button type="button" class="btn-cookie btn-cookie-ghost" data-cookie-customize>Customize</button>
+        <button type="button" class="btn-cookie btn-cookie-primary" data-cookie-accept>Accept all</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="cookie-preferences" class="cookie-modal" role="dialog" aria-labelledby="cookie-modal-title" aria-modal="true" aria-hidden="true" hidden>
+    <div class="cookie-modal-backdrop" data-cookie-modal-backdrop></div>
+    <div class="cookie-modal-panel">
+      <h2 id="cookie-modal-title" class="cookie-modal-title">Cookie preferences</h2>
+      <p class="cookie-modal-desc">Choose which optional categories we may enable. Essential storage is required for this site to function.</p>
+
+      <div class="cookie-option">
+        <div class="cookie-option-head">
+          <strong>Essential</strong>
+          <span class="cookie-pill">Always on</span>
+        </div>
+        <p>Stores your consent decision and supports basic reliability.</p>
+      </div>
+
+      <div class="cookie-option">
+        <label class="cookie-option-head" for="cookie-analytics">
+          <strong>Analytics</strong>
+          <input type="checkbox" id="cookie-analytics" name="analytics">
+        </label>
+        <p>Optional usage measurement on this domain. No third-party scripts are loaded today.</p>
+      </div>
+
+      <div class="cookie-modal-actions">
+        <button type="button" class="btn-cookie btn-cookie-ghost" data-cookie-cancel>Cancel</button>
+        <button type="button" class="btn-cookie btn-cookie-primary" data-cookie-save>Save preferences</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/static/cookies.js" defer></script>
+  <script src="/static/site.js" defer></script>
 </body>
 </html>

@@ -306,14 +306,261 @@ a:hover {
 .site-footer {
   border-top: 1px solid var(--border);
   padding: 1.5rem;
-  text-align: center;
   font-size: 0.75rem;
   color: var(--muted);
   font-family: var(--font-mono);
 }
 
+.site-footer-inner {
+  max-width: 1080px;
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.site-footer-brand {
+  margin: 0;
+}
+
+.site-footer-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem 1.25rem;
+}
+
+.site-footer-nav a {
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 0.75rem;
+}
+
+.site-footer-nav a:hover {
+  color: var(--text);
+}
+
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0.75rem;
+  z-index: 200;
+  background: var(--gold);
+  color: var(--bg);
+  padding: 0.5rem 1rem;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  text-decoration: none;
+}
+
+.skip-link:focus {
+  left: 0.75rem;
+}
+
+.nav-toggle {
+  display: none;
+  align-items: center;
+  gap: 0.5rem;
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 0.45rem 0.75rem;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.nav-toggle-icon {
+  width: 1rem;
+  height: 2px;
+  background: currentColor;
+  box-shadow: 0 -5px 0 currentColor, 0 5px 0 currentColor;
+}
+
+.cookie-banner {
+  position: fixed;
+  inset: auto 0 0 0;
+  z-index: 150;
+  padding: 1rem;
+  background: rgba(10, 12, 15, 0.96);
+  border-top: 1px solid var(--border);
+  backdrop-filter: blur(10px);
+}
+
+.cookie-banner-inner {
+  max-width: 1080px;
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem 1.5rem;
+}
+
+.cookie-banner-title {
+  margin: 0 0 0.35rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.cookie-banner-desc {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--muted);
+  max-width: 42rem;
+}
+
+.cookie-banner-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.btn-cookie {
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 0.6rem 0.9rem;
+  cursor: pointer;
+}
+
+.btn-cookie-primary {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+
+.btn-cookie-primary:hover {
+  background: var(--gold);
+  color: var(--bg);
+}
+
+.btn-cookie-ghost:hover {
+  border-color: var(--gold-dim);
+}
+
+.cookie-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 160;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+}
+
+.cookie-modal[hidden] {
+  display: none;
+}
+
+.cookie-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+}
+
+.cookie-modal-panel {
+  position: relative;
+  width: min(100%, 28rem);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 1.5rem;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
+}
+
+.cookie-modal-title {
+  margin: 0 0 0.5rem;
+  font-size: 1.1rem;
+}
+
+.cookie-modal-desc {
+  margin: 0 0 1rem;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.cookie-option {
+  border: 1px solid var(--border);
+  padding: 0.85rem 1rem;
+  margin-bottom: 0.75rem;
+  font-size: 0.85rem;
+}
+
+.cookie-option p {
+  margin: 0.35rem 0 0;
+  color: var(--muted);
+}
+
+.cookie-option-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.cookie-pill {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--gold-dim);
+}
+
+.cookie-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
 @media (max-width: 640px) {
+  .site-header-inner {
+    flex-wrap: wrap;
+  }
+
+  .nav-toggle {
+    display: inline-flex;
+    margin-left: auto;
+  }
+
   .site-nav {
     display: none;
+    width: 100%;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding-top: 0.5rem;
+  }
+
+  .site-nav.is-open {
+    display: flex;
+  }
+
+  .cookie-banner-actions {
+    width: 100%;
+  }
+
+  .btn-cookie {
+    flex: 1 1 auto;
   }
 }
