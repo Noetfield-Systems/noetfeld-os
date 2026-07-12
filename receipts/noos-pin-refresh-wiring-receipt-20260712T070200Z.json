@@ -1,0 +1,20 @@
+{
+  "receipt_id": "noos-pin-refresh-wiring-receipt-20260712T070200Z",
+  "created_at": "2026-07-12T07:02:00Z",
+  "agent": "noos-architect",
+  "action": "observe_stale_noos_custody_pin_and_propose_refresh",
+  "observed": {
+    "origin_main_sha": "6f8fb9a9",
+    "noos_custody_pin": "c7f39ff3",
+    "doctor_receipt": "receipts/noos-claude-activation-doctor-20260712T070101Z.json",
+    "doctor_status": "DEGRADED",
+    "doctor_note": "noos_pin_freshness is STALE: origin/main != noos pin"
+  },
+  "recommendation": "Refresh NOOS custody pins and update wiring as needed. Produce an updated wiring receipt and open a PR that updates data/noos-*-wiring files or pin files as required. This change is founder-gated if it updates verified SHA entries.",
+  "status": "SUBMITTED for independent verification",
+  "notes": "Integrator/noos-integrator should claim lane, run conflict checks, then coordinate the pin update PR. No direct pin file edits performed in this receipt — it documents the need and evidence.",
+  "evidence": [
+    "activation_doctor: receipts/noos-claude-activation-doctor-20260712T070101Z.json",
+    "integrator_report: output of scripts/noos_agent_conflict_check_v1.py --json"
+  ]
+}
