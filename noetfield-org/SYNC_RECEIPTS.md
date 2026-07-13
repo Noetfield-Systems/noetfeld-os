@@ -239,4 +239,17 @@ Implements ORG SYNC PLANE v1 + SLUG MIGRATION SWEEP
 
 ---
 
+## Proof Page Live — Case Study #1 (2026-07-13)
+
+| Field | Value |
+|-------|-------|
+| Receipt | `receipts/proof-page-live-receipt-v1.md` |
+| Noetfield commit | `f7da5c4f` |
+| Status | PUBLIC_PAGE_LIVE |
+| HTML | https://www.noetfield.com/proof/noetfield → 200 |
+| JSON | https://www.noetfield.com/proof/noetfield.json → 200 |
+| Digest | `045a661a1678403513c6c51e55fa58440196b54d6351a3722cfd9ba5ec415cfd` |
+
+---
+
 **Next:** Merge copilot/org-sync-plane-v1-slug-sweep to main, restart verified windows.

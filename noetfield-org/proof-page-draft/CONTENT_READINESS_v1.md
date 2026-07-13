@@ -1,6 +1,6 @@
 # EXECUTION READINESS v1 (LOCKED)
 
-**Status:** EXECUTION_READY — proof assets landed in Noetfield repo; deploy pending clean main  
+**Status:** PUBLIC_PAGE_LIVE — https://www.noetfield.com/proof/noetfield  
 **Canonical path:** `noetfeld-OS/noetfield-org/proof-page-draft/CONTENT_READINESS_v1.md`  
 **Lock receipt:** `../NOETFIELD_STRATEGY_LOCK_RECEIPT_v1.json`  
 **Deploy plan:** `PUBLISH_PLAN.md`  
@@ -41,10 +41,10 @@ See `PUBLISH_PLAN.md` for step-by-step execution.
 - [x] Compute `integrity.digest`
 - [x] Land assets in `Noetfield/proof/noetfield/` per `PUBLISH_PLAN.md`
 - [ ] `make verify-static-www` PASS (Noetfield repo)
-- [ ] Deploy: `bash scripts/deploy-www-cloudflare.sh` (Noetfield repo, clean main)
-- [ ] Verify `https://www.noetfield.com/proof/noetfield` → 200
-- [ ] Verify `https://www.noetfield.com/proof/noetfield.json` → valid JSON
-- [ ] Emit `proof-page-live-receipt-v1` → status PUBLIC_PAGE_LIVE
+- [x] Deploy: `bash scripts/deploy-www-cloudflare.sh` (Noetfield repo, clean main)
+- [x] Verify `https://www.noetfield.com/proof/noetfield` → 200
+- [x] Verify `https://www.noetfield.com/proof/noetfield.json` → valid JSON
+- [x] Emit `proof-page-live-receipt-v1` → status PUBLIC_PAGE_LIVE
 
 ---
 
