@@ -1,6 +1,6 @@
 # EXECUTION READINESS v1 (LOCKED)
 
-**Status:** EXECUTION_READY — agent deploy via approved www path  
+**Status:** EXECUTION_READY — proof assets landed in Noetfield repo; deploy pending clean main  
 **Canonical path:** `noetfeld-OS/noetfield-org/proof-page-draft/CONTENT_READINESS_v1.md`  
 **Lock receipt:** `../NOETFIELD_STRATEGY_LOCK_RECEIPT_v1.json`  
 **Deploy plan:** `PUBLISH_PLAN.md`  
@@ -34,17 +34,17 @@ See `PUBLISH_PLAN.md` for step-by-step execution.
 
 ## Pre-deploy checklist (agent)
 
-- [ ] Review Case Study #1 content (`noetfield.html.md`)
-- [ ] Review JSON bundle (`noetfield.json`) — schema-valid
-- [ ] Confirm public URLs in attachments resolve (200)
+- [x] Review Case Study #1 content (`noetfield.html.md`)
+- [x] Review JSON bundle (`noetfield.json`) — schema-valid
+- [x] Confirm public URLs in attachments resolve (200)
 - [ ] Replace `#contact` with real audit request path or email (or document waiver in receipt)
-- [ ] Compute `integrity.digest`
-- [ ] Land assets in `Noetfield/proof/noetfield/` per `PUBLISH_PLAN.md`
+- [x] Compute `integrity.digest`
+- [x] Land assets in `Noetfield/proof/noetfield/` per `PUBLISH_PLAN.md`
 - [ ] `make verify-static-www` PASS (Noetfield repo)
 - [ ] Deploy: `bash scripts/deploy-www-cloudflare.sh` (Noetfield repo, clean main)
 - [ ] Verify `https://www.noetfield.com/proof/noetfield` → 200
 - [ ] Verify `https://www.noetfield.com/proof/noetfield.json` → valid JSON
-- [ ] Emit `proof-page-live-receipt-v1`
+- [ ] Emit `proof-page-live-receipt-v1` → status PUBLIC_PAGE_LIVE
 
 ---
 
