@@ -12,7 +12,7 @@ Runtime motor: CF cron → Railway `noos-loop-runner` (Option A; Fly executor de
 Local smoke: 127.0.0.1:8001 /health OK · /readiness OK when uvicorn is running
 Hosted: api.noetfield.com /health OK · /readiness OK (Railway gel-api)
 Website live: www.noetfield.com 200 · /intelligence/ 200 · /services/agentic-cost-governance 200 · platform.noetfield.com/health 200
-Website production: Cloudflare Pages `noetfield-www` + edge denylist worker (`noetfield-www-proxy` → Pages origin; Vercel retired)
+Website production: Cloudflare Pages `noetfield-www` + edge denylist worker (`noetfield-www-proxy` → Pages origin)
 Website E2E: `make verify-www-e2e` / live nerve N4 denylist probes — internal paths 404 on production via CF worker
 Live nerve: website repo `governance/NOETFIELD_LIVE_NERVE_RECEIPT.json` — refresh with `make verify-live-nerve` before doc claims
 NOOS sync gate: `bash scripts/check_noos_live_sync_gate.sh` → `docs/_NOOS_AGENT/live_sync/NOOS_LIVE_SYNC_RECEIPT.json`; scope via `NOOS_LIVE_SYNC_SCOPE=runtime|public|studio|foundation|ecosystem|all`. Ecosystem gate PASS when website nerve + gel-api + public probes green; studio skipped when repo absent on Mac.

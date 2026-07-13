@@ -16,7 +16,7 @@ Tool routing is **L17-exclusive**. No agent may invoke tools outside its tier. T
 |------|--------|---------|-----------|
 | GitHub Dispatch | Full | Trigger factory/loop ticks | `noos-factory-autorun`, `noos-loop-fleet-tick` |
 | GitHub API (repo ops) | Full | Create/merge PRs, manage refs | Deploy hooks, verification gates |
-| Vercel Deploy Hook | Full | Trigger web deployment | `vercel-deploy-hook.yml` |
+| Cloudflare Workers Deploy | Full | Trigger edge/www deployment | `www-static-deploy.yml` |
 | Railway Deploy | Full | Platform services deployment | `railway-plan-worker-deploy.yml` |
 | Cloudflare Workers | Full | Serverless execution | External-verify workers |
 | Receipt Writing (filesystem) | Full | Write gate/state receipts | Factory tick, loop fleet tick |
@@ -121,10 +121,10 @@ Tool routing is **L17-exclusive**. No agent may invoke tools outside its tier. T
 
 | Tool | Access | Purpose | Systems |
 |------|--------|---------|---------|
-| Cloud Platforms (Railway, Vercel, Cloudflare) | Full | Deploy, configure, monitor | Infrastructure as code |
+| Cloud Platforms (Railway, Cloudflare) | Full | Deploy, configure, monitor | Infrastructure as code |
 | External APIs (Supabase, GitHub Enterprise, etc.) | Scoped | OAuth, data sync, webhooks | Third-party services |
 | Merge Conflict Resolution | Full | Resolve deployment conflicts | Deploy → verify cycle |
-| Cross-Platform State Sync | Full | Reconcile state across services | Railway ↔ GitHub ↔ Vercel |
+| Cross-Platform State Sync | Full | Reconcile state across services | Railway ↔ GitHub ↔ Cloudflare |
 | Incident Response | Full | Rollback, emergency fix deploy | Production incidents only |
 
 **Forbidden:**

@@ -92,7 +92,7 @@ NOOS_LIVE_SYNC_SCOPE=all bash scripts/check_noos_live_sync_gate.sh
 
 - `www.noetfield.com`.
 - `platform.noetfield.com` public chat/intake integration.
-- Public pages, nav, copy, Vercel deploy, public output denylist.
+- Public pages, nav, copy, Cloudflare www deploy, public output denylist.
 - Public chatbot truth manifest and live semantic E2E.
 
 ## Current Open Decision

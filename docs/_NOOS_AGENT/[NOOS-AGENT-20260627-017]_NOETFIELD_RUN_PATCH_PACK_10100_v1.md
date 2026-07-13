@@ -52,7 +52,7 @@ Rules:
 | `PATCH-021 to PATCH-030` | `Ops` | Noetfield Supabase/Postgres boundary | tenant isolation, Supabase/Postgres boundaries, and data governance | `NOOS-AGENT-20260627-016` |
 | `PATCH-031 to PATCH-040` | `WWW` | Noetfield web and proof surfaces | Noetfield web, /gel, status, intake, and proof pages | `NOOS-AGENT-20260626-015` |
 | `PATCH-041 to PATCH-050` | `Studio` | noetfield-studio-ide | Studio IDE, local desktop, and admin provider parity | `NOOS-AGENT-20260626-015` |
-| `PATCH-051 to PATCH-060` | `Cloud` | Railway/Cloudflare/Vercel production | Railway, Cloudflare, Vercel, CI, DNS, and production checks | `NOOS-AGENT-20260626-015` |
+| `PATCH-051 to PATCH-060` | `Cloud` | Railway/Cloudflare production | Railway, Cloudflare, CI, DNS, and production checks | `NOOS-AGENT-20260626-015` |
 | `PATCH-061 to PATCH-070` | `Docs` | SDKs, CLI, PyPI, npm, integration docs | SDKs, PyPI, npm, CLI, developer docs, and examples | `NOOS-AGENT-20260615-012` |
 | `PATCH-071 to PATCH-080` | `Commercial` | NW1/SW1/design partner proof | commercial proof, NW1/SW1, design partner, and demo assets | `NOOS-AGENT-20260615-010` |
 | `PATCH-081 to PATCH-090` | `Security` | secret hygiene, RLS, auth, incident drills | security, privacy, secret hygiene, RLS, auth, and incident drills | `NOOS-AGENT-20260627-016` |
@@ -61,7 +61,7 @@ Rules:
 
 ## Execution Rule
 
-Run one patch at a time. A patch is ready for review only when all 100 rows have a disk evidence pointer, command summary, or explicit blocker note. Production systems such as Railway, Cloudflare, Vercel, and Supabase must remain read-only unless a separate deploy/change task is approved.
+Run one patch at a time. A patch is ready for review only when all 100 rows have a disk evidence pointer, command summary, or explicit blocker note. Production systems such as Railway, Cloudflare, and Supabase must remain read-only unless a separate deploy/change task is approved.
 
 ## Guardrails
 

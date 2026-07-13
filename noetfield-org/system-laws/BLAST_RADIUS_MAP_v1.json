@@ -1,0 +1,133 @@
+{
+  "schema": "noos-blast-radius-v1",
+  "map_version": "20260713-0001",
+  "updated_at": "2026-07-13T09:25:00Z",
+  "templates": {
+    "www-production-surface-v1": {
+      "description": "Noetfield www production path and deploy authority",
+      "node_classes": [
+        "agent_entrypoint",
+        "ops_runbook",
+        "service_lane",
+        "routing_matrix",
+        "handoff_doc",
+        "live_sync_receipt",
+        "deploy_script"
+      ]
+    },
+    "canonical-path-v1": {
+      "description": "NOOS control-plane canonical paths and stale pointers",
+      "node_classes": ["doc_index", "stale_pointer", "lock_receipt"]
+    },
+    "forbidden-token-v1": {
+      "description": "Forbidden platform tokens in agent-facing docs",
+      "node_classes": ["agent_doc", "agent_entrypoint", "forbidden_marker_file"]
+    },
+    "brain-taxonomy-v1": {
+      "description": "Qualified brain labels in public copy",
+      "node_classes": ["public_copy", "proof_json", "strategy_blueprint"]
+    },
+    "integrator-authority-v1": {
+      "description": "NOOS integrator vs Studio IDE sandbox scope",
+      "node_classes": ["agent_registry", "repo_registry", "strategy_blueprint"]
+    }
+  },
+  "nodes": [
+    {
+      "node_id": "noos-agents-md",
+      "class": "agent_entrypoint",
+      "repo": "noetfeld-OS",
+      "path": "AGENTS.md",
+      "verify": ["forbidden_scan", "truth_grep"],
+      "law_templates": ["www-production-surface-v1", "canonical-path-v1"]
+    },
+    {
+      "node_id": "noos-doc-index",
+      "class": "doc_index",
+      "repo": "noetfeld-OS",
+      "path": "noetfield-org/DOC_INDEX_v1.md",
+      "verify": ["forbidden_scan", "path_canonical"],
+      "law_templates": ["canonical-path-v1"]
+    },
+    {
+      "node_id": "noos-forbidden-markers",
+      "class": "forbidden_marker_file",
+      "repo": "noetfeld-OS",
+      "path": "noetfield-org/FORBIDDEN_MARKERS.txt",
+      "verify": ["marker_source_of_truth"],
+      "law_templates": ["forbidden-token-v1"]
+    },
+    {
+      "node_id": "noos-cf-www-deploy-runbook",
+      "class": "ops_runbook",
+      "repo": "noetfeld-OS",
+      "path": "docs/ops/NOOS_CLOUDFLARE_WWW_DEPLOY_v1.md",
+      "verify": ["forbidden_scan", "truth_grep"],
+      "law_templates": ["www-production-surface-v1"]
+    },
+    {
+      "node_id": "noos-product-truth",
+      "class": "handoff_doc",
+      "repo": "noetfeld-OS",
+      "path": "docs/_NOOS_AGENT/PRODUCT_TRUTH.md",
+      "verify": ["forbidden_scan", "truth_grep"],
+      "law_templates": ["www-production-surface-v1"]
+    },
+    {
+      "node_id": "noos-service-lanes",
+      "class": "service_lane",
+      "repo": "noetfeld-OS",
+      "path": "noetfield-org/SERVICE_LANES.md",
+      "verify": ["forbidden_scan"],
+      "law_templates": ["www-production-surface-v1"]
+    },
+    {
+      "node_id": "noos-routing-matrix",
+      "class": "routing_matrix",
+      "repo": "noetfeld-OS",
+      "path": "noetfield-org/ROUTING_MATRIX.md",
+      "verify": ["forbidden_scan"],
+      "law_templates": ["www-production-surface-v1"]
+    },
+    {
+      "node_id": "noetfield-deploy-www-cloudflare",
+      "class": "deploy_script",
+      "repo": "Noetfield",
+      "path": "scripts/deploy-www-cloudflare.sh",
+      "verify": ["exists", "deploy_fence"],
+      "law_templates": ["www-production-surface-v1"]
+    },
+    {
+      "node_id": "noetfield-proof-route",
+      "class": "public_copy",
+      "repo": "Noetfield",
+      "path": "proof/noetfield/index.html",
+      "verify": ["live_url_200"],
+      "law_templates": ["brain-taxonomy-v1"]
+    },
+    {
+      "node_id": "noetfield-proof-json",
+      "class": "proof_json",
+      "repo": "Noetfield",
+      "path": "proof/noetfield.json",
+      "verify": ["schema_valid", "integrity_digest"],
+      "law_templates": ["brain-taxonomy-v1"]
+    },
+    {
+      "node_id": "noos-proof-publish-plan",
+      "class": "ops_runbook",
+      "repo": "noetfeld-OS",
+      "path": "noetfield-org/proof-page-draft/PUBLISH_PLAN.md",
+      "verify": ["truth_grep"],
+      "law_templates": ["www-production-surface-v1"]
+    },
+    {
+      "node_id": "noos-law-drift-check",
+      "class": "agent_doc",
+      "repo": "noetfeld-OS",
+      "path": "scripts/noos_law_drift_check_v1.py",
+      "verify": ["exists"],
+      "law_templates": ["forbidden-token-v1"]
+    }
+  ]
+}

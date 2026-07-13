@@ -11,7 +11,7 @@
 
 ## Purpose
 
-Single ordered checklist for every Noetfield asset (local, GitHub, Vercel, Railway, Cloudflare, DNS, docs, lanes).  
+Single ordered checklist for every Noetfield asset (local, GitHub, Railway, Cloudflare, DNS, docs, lanes).  
 **Default stance:** organize + push + fix stale refs — **do not delete live cloud or repos.**
 
 ---
@@ -93,9 +93,9 @@ Single ordered checklist for every Noetfield asset (local, GitHub, Vercel, Railw
 
 | Step | Surface | Status | Action |
 |------|---------|--------|--------|
-| 3.1–3.3 | `www.noetfield.com` | Live Vercel | Keep |
-| 3.4 | `project-gc7lm.vercel.app` | DEAD | Purge (Phase 4) |
-| 3.5–3.7 | Vercel deploy from GitHub main | After 2.6 | Redeploy |
+| 3.1–3.3 | `www.noetfield.com` | Live Cloudflare www | Keep |
+| 3.4 | obsolete preview hostnames | DEAD | Purged |
+| 3.5–3.7 | Cloudflare www deploy from GitHub main | After 2.6 | Redeploy |
 | 3.8–3.14 | Railway `noetfield-platform` | Live | Keep |
 | 3.15–3.19 | Railway `mergepack-api` | SourceA lane | Out of scope |
 | 3.20–3.21 | DNS www + platform | Correct | Keep |
@@ -108,9 +108,9 @@ Single ordered checklist for every Noetfield asset (local, GitHub, Vercel, Railw
 
 ## Phase 4 — Stale URL purge (EXECUTE)
 
-Replace `project-gc7lm.vercel.app` → `www.noetfield.com` in:
+Replace obsolete preview hostnames → `www.noetfield.com` in:
 
-**Noetfield repo:** `infra/cf-www-proxy/*`, `assets/noetfield-intake-core.js`, `trust-brief/intake/index.html`, `scripts/www-vercel-canonical.sh`, `scripts/upgrade-www-production.sh`, `scripts/fix-all-production.sh`, `scripts/diagnose-www-fragmentation.sh`, `scripts/auto-heal-www.sh`, `docs/ops/NF_GAOS_W2_LOCKED_v1.md`
+**Noetfield repo:** `infra/cf-www-proxy/*`, `assets/noetfield-intake-core.js`, `trust-brief/intake/index.html`, obsolete www deploy scripts, `scripts/upgrade-www-production.sh`, `scripts/fix-all-production.sh`, `scripts/diagnose-www-fragmentation.sh`, `scripts/auto-heal-www.sh`, `docs/ops/NF_GAOS_W2_LOCKED_v1.md`
 
 **noetfeld-os repo:** `scripts/check_noetfield_com_e2e.py`, docs 010/011/013/014
 
@@ -122,7 +122,7 @@ Then: commit, push, grep zero matches, re-run E2E.
 
 | Product | Local | Cloud | Port |
 |---------|-------|-------|------|
-| www | Noetfield/ | Vercel | 443 |
+| www | Noetfield/ | Cloudflare www | 443 |
 | platform API | Noetfield/services | Railway platform.noetfield.com | 443 |
 | GEL | noetfeld-os | api.noetfield.com | 8001 |
 | Studio IDE | noetfield-studio-ide | local/desktop | 3005 |
@@ -132,7 +132,7 @@ Then: commit, push, grep zero matches, re-run E2E.
 
 ## Phase 6 — Verify gates
 
-6.1 Studio unit (96) · 6.2 Studio E2E (33) · 6.3 GEL tests · 6.4 www health · 6.5 platform health · 6.6 api health/readiness · 6.7 `noetfield gate` · 6.8 GitHub sync · 6.9 Vercel SHA · 6.10 desktop app optional
+6.1 Studio unit (96) · 6.2 Studio E2E (33) · 6.3 GEL tests · 6.4 www health · 6.5 platform health · 6.6 api health/readiness · 6.7 `noetfield gate` · 6.8 GitHub sync · 6.9 www production SHA · 6.10 desktop app optional
 
 ---
 
@@ -157,7 +157,7 @@ PyPI noetfield-gate publish live · npm @noetfield/gate · chatbot Phases 3-10 �
 ## Phase 10 — Execution order
 
 ```
-0 → 2A push Noetfield → 3.5 Vercel → 2B/2C private push → 4 URL purge → 6 verify → 7 docs → 8 backlog
+0 → 2A push Noetfield → 3.5 Cloudflare www → 2B/2C private push → 4 URL purge → 6 verify → 7 docs → 8 backlog
 ```
 
 **Locked by:** noetfeld-os-cursor-chat · 2026-06-26
@@ -173,7 +173,7 @@ PyPI noetfield-gate publish live · npm @noetfield/gate · chatbot Phases 3-10 �
 | Phase 2A Noetfield | Merged remote cloud commits; pushed `9ec40426` |
 | Phase 2B studio-ide | Private repo created + pushed |
 | Phase 2C noetfeld-os | Private repo created + pushed |
-| Phase 3 CF worker | `noetfield-www-proxy` redeployed; ORIGIN → direct Vercel URL |
+| Phase 3 CF worker | `noetfield-www-proxy` redeployed; ORIGIN → direct Pages origin URL |
 | E2E verify | `check_noetfield_com_e2e.py` PASS; API live status superseded by Phase 8 receipt |
 
 **GitHub remotes:**
@@ -181,18 +181,18 @@ PyPI noetfield-gate publish live · npm @noetfield/gate · chatbot Phases 3-10 �
 - https://github.com/Noetfield-Systems/noetfeld-os (private)
 - https://github.com/Noetfield-Systems/noetfield-studio-ide (private)
 
-| **Vercel www (2026-06-26):**
+| **Cloudflare www (2026-07-05 onward):**
 - Team: `the-777-foundation` · Project: **`noetfield`** (not `www`)
-- Dashboard: https://vercel.com/the-777-foundation/noetfield
+- Dashboard: Cloudflare Pages `noetfield-www`
 - Production: `dpl_4mWNMRWceW9ag4co5S6fsAPqJjj7` → https://www.noetfield.com
 - GitHub auto-deploy: connected to `Noetfield` repo `main`
-- Runbook: `docs/ops/VERCEL_WWW_DEPLOY_LOCKED_v1.md` · `scripts/deploy-www-vercel.sh`
+- Runbook: `docs/ops/NOOS_CLOUDFLARE_WWW_DEPLOY_v1.md`
 
 **CF www proxy (2026-06-26 — Phase 3):**
 - Worker: `noetfield-www-proxy` version `f1864fff-6054-47ec-815a-c0cc14f1bb78`
 - Route: `www.noetfield.com/*` (zone `noetfield.com`)
-- ORIGIN: `https://noetfield-the-777-foundation.vercel.app` (direct Vercel — no loop)
-- Live www today: **direct Vercel DNS** (`server: Vercel`); worker route **dormant**
+- ORIGIN: `https://noetfield-www.pages.dev` (Cloudflare Pages — no loop)
+- Live www today: **Cloudflare static www** (`server: cloudflare`); worker route **active**
 - Runbook: `docs/ops/CF_WWW_PROXY_LOCKED_v1.md` · `scripts/deploy-cf-www-proxy.sh`
 
 | **Phase 6 verify (2026-06-26):**

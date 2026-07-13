@@ -77,7 +77,7 @@ Status:                    Divergence remains unchanged (no push/pull performed)
 ✗ SourceA main branch still diverged (ahead 3 / behind 11)  
 ✓ GitHub/Copilot alignment still awaits preserve branch push  
 ✓ Noetfield.com draft still awaits buyer approval  
-✓ Vercel publish still awaits Noetfield.com owner decision
+✓ www publish still awaits Noetfield.com owner decision
 
 ---
 
@@ -129,7 +129,7 @@ KIT_PROTECTED_LOCALLY + EXTERNAL_VERIFY_PASSED (← CURRENT STATE, 2026-07-05 08
 ### Remaining Gates (No NOOS Blockers)
 ✓ Service draft: READY FOR REVIEW (no blockers)  
 ⏳ Buyer approval: PENDING (Noetfield.com responsibility)  
-⏳ Vercel truth: PENDING (checked at publish time)  
+⏳ www production truth: PENDING (checked at publish time)  
 ⏳ NOOS gate: READY TO CLEAR (one-time action at publish)
 
 ---
@@ -141,9 +141,9 @@ KIT_PROTECTED_LOCALLY + EXTERNAL_VERIFY_PASSED (← CURRENT STATE, 2026-07-05 08
 | **Preparation** | ✓ COMPLETE | Kit ready, draft ready, SG registered, external-verify passed |
 | **Draft Review** | ✓ READY | Noetfield draft ready, no blockers |
 | **External Verify** | ✓ PASS | Run 28683951115 success, truth_log.ok=true confirmed |
-| **Publish** | ⏳ BLOCKED | Buyer approval + Vercel truth (owner decisions) |
+| **Publish** | ⏳ BLOCKED | Buyer approval + www production truth (owner decisions) |
 | **NOOS Publish Gate** | ✓ READY | Ready to clear one-time when Noetfield.com signals |
-| **Service Live** | ⏳ AWAITS | Buyer approval + Vercel decision + factory lift |
+| **Service Live** | ⏳ AWAITS | Buyer approval + www publish decision + factory lift |
 
 ---
 

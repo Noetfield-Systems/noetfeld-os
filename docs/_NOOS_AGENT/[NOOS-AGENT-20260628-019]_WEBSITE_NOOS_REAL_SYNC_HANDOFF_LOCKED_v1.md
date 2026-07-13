@@ -27,9 +27,9 @@ SourceA      = parent engine pattern, not Noetfield implementation storage
 
 | Lane | Canonical owner | Owns | Must not own |
 |------|-----------------|------|--------------|
-| Website | `~/Desktop/Noetfield/Noetfield-All-Documents/Noetfield/` | `www.noetfield.com`, public routes, nav, copy, chatbot behavior, public chatbot knowledge, Vercel deploy, website E2E | GEL runtime implementation |
+| Website | `~/Desktop/Noetfield/Noetfield-All-Documents/Noetfield/` | `www.noetfield.com`, public routes, nav, copy, chatbot behavior, public chatbot knowledge, Cloudflare www deploy, website E2E | GEL runtime implementation |
 | Platform spine | `~/Desktop/Noetfield/Noetfield-All-Documents/Noetfield/` | `platform.noetfield.com`, governance service wrapper, public chat/intake integration, website-facing APIs | SourceA internal runtime |
-| Noetfield OS / GEL | `~/Projects/noetfeld-os/` | `api.noetfield.com`, FastAPI GEL runtime, decision endpoint, idempotency, API auth, health/readiness, noetfield-gate, TLE/audit evidence | Website source, Vercel deploy, public nav |
+| Noetfield OS / GEL | `~/Projects/noetfeld-os/` | `api.noetfield.com`, FastAPI GEL runtime, decision endpoint, idempotency, API auth, health/readiness, noetfield-gate, TLE/audit evidence | Website source, Cloudflare www deploy, public nav |
 | SourceA | SourceA workspace | Engine patterns, receipt/gate invariants, foundational governance laws | Default Noetfield implementation docs |
 
 ## Agreement
@@ -48,7 +48,7 @@ Noetfield OS should not own website implementation plans broadly.
 Correct split:
 
 - NOOS may own GEL/runtime-facing website requirements, for example `/runtime/`, `/gel/`, `api.noetfield.com` truth, SDK/gate copy, and TLE proof requirements.
-- Website repo owns public-site implementation, route files, nav, public chatbot behavior, public copy, Vercel deploy truth, static verification, and live website E2E.
+- Website repo owns public-site implementation, route files, nav, public chatbot behavior, public copy, Cloudflare www deploy truth, static verification, and live website E2E.
 - If NOOS proposes website strategy, it is an input. It becomes website truth only when implemented or locked in the website repo.
 
 ## Sync Rule

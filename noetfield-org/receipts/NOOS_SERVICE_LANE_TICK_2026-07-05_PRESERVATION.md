@@ -138,7 +138,7 @@ KIT_PROTECTED_LOCALLY (← CURRENT STATE, 2026-07-05 01:22)
 ### Next Gates (No Change from Prior Tick)
 ✓ Noetfield.com draft ready for review  
 ⏳ Buyer approval pending (non-NOOS owner decision)  
-⏳ Vercel truth pending (checked at publish time)  
+⏳ www production truth pending (checked at publish time)  
 ⏳ NOOS gate ready to clear (one-time action at publish)  
 ⏳ Mac Worker receipt pending (does not block review)  
 ✗ No NOOS blockers
@@ -178,7 +178,7 @@ KIT_PROTECTED_LOCALLY (← CURRENT STATE, 2026-07-05 01:22)
 
 ### For Noetfield.com
 ⏳ Submit draft for buyer/founder approval  
-⏳ Check Vercel truth at publish time  
+⏳ Check www production truth at publish time  
 ℹ️ No NOOS action until publish signal
 
 ### For SG

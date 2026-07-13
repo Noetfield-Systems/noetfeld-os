@@ -164,10 +164,10 @@ current_location: Website repo path documented in `WEBSITE_NOOS_REAL_SYNC_HANDOF
 control_level: ORCHESTRATOR
 governing_ssot: D4 / D5
 allowed_actions: Provide GEL/runtime requirements, consume website live nerve outputs, route website/platform issues to owning repo.
-forbidden_actions: Edit public route files, nav, chatbot behavior, Vercel deploy truth, website E2E, or public copy from NOOS without explicit lane authorization.
+forbidden_actions: Edit public route files, nav, chatbot behavior, Cloudflare www deploy truth, website E2E, or public copy from NOOS without explicit lane authorization.
 decision_owner: Noetfield website/platform agents; Sina for public claim/deploy DECIDE.
 receipt_requirement: Public claims require external/public probe with independent network path; website repo receipts are not NOOS-owned PASS.
-current_state: Handoff says website owns `www.noetfield.com`, public routes, nav, copy, chatbot, and Vercel deploy; NOOS owns GEL/API runtime truth.
+current_state: Handoff says website owns `www.noetfield.com`, public routes, nav, copy, chatbot, and Cloudflare www deploy; NOOS owns GEL/API runtime truth.
 blocker: Current NOOS live-sync gate observes website state but is not D4-independent final verifier.
 next_minimal_action: Route public-site fixes to website lane after D4 shim exists.
 
@@ -325,7 +325,7 @@ asset_or_role: Noetfield website/platform agents
 current_location: Website/platform repo documented in handoff
 control_level: ORCHESTRATOR
 governing_ssot: D4 / D5
-allowed_actions: Own public website, platform wrapper, chatbot, nav, route files, public copy, Vercel deploy, website E2E.
+allowed_actions: Own public website, platform wrapper, chatbot, nav, route files, public copy, Cloudflare www deploy, website E2E.
 forbidden_actions: Own GEL runtime implementation.
 decision_owner: Website/platform agents; Sina for deploy/public claim DECIDE.
 receipt_requirement: Website receipts need external/public probe and independent network path before D4 PASS.

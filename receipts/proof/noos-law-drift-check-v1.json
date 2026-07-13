@@ -1,6 +1,6 @@
 {
   "schema": "noos-law-drift-check-v1",
-  "at": "2026-07-13T09:18:26Z",
+  "at": "2026-07-13T09:21:40Z",
   "ok": true,
   "markers": [
     "kazemnezhadsina144-dot",
@@ -12,7 +12,7 @@
     "registry_version": "20260713-0001",
     "law_count": 5
   },
-  "files_scanned": 111,
+  "files_scanned": 112,
   "violation_count": 0,
   "violations": [],
   "closure_token": "NOOS_LAW_DRIFT: green",

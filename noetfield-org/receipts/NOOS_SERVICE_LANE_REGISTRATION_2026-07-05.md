@@ -41,12 +41,12 @@ Governance/Canon:       SG (proof assets, service definition, independent verify
 ```
 Status:             VERIFIED_WITH_RECONCILE_REQUIRED
 Last Modified:      2026-07-03 (marketing material prepared)
-Current Blocker:    Brand messaging reconciliation before Vercel publish
+Current Blocker:    Brand messaging reconciliation before www publish
 Work Needed:
   - Reconcile audit kit description with Noetfield.com trust ledger
   - Align firewall feature set with buyer audience messaging
-  - Prepare Vercel deployment (post-reconciliation)
-Vercel Truth:       Non-blocking (will align after publish)
+  - Prepare www deployment (post-reconciliation)
+www production truth:       Non-blocking (will align after publish)
 Next Action:        Complete brand reconciliation (Noetfield.com responsibility)
 NOOS Dependency:    ✗ NONE (independent owner responsibility)
 ```
@@ -120,14 +120,14 @@ SG:                Can prepare service definition proof asset
 2. ⏳ SourceA Mac Worker receipt (pending) — **BLOCKS AUDIT KIT ACTIVATION**
 3. ⏳ SG Independent Verification receipt (pending) — **BLOCKS GATE EXECUTION**
 4. ✓ Noetfield.com Reconciliation (non-NOOS owner responsibility) — **BLOCKS WEB PUBLISH**
-5. ✓ Vercel Publish (post-reconciliation) — **NON-BLOCKING FOR GATE EXECUTION**
+5. ✓ www publish (post-reconciliation) — **NON-BLOCKING FOR GATE EXECUTION**
 
 **NOOS Blocking Condition:** ✗ NONE (control-plane ready, awaiting upstream receipts)
 
 **Service Can Go Live After:**
 - Brain receipt ✓ + Mac Worker receipt ⏳ → audit kit activation
 - SG independent verify ⏳ → gate execution deployment
-- Noetfield.com reconcile ✓ + Vercel publish → web surface live
+- Noetfield.com reconcile ✓ + www publish → web surface live
 
 ---
 
@@ -204,7 +204,7 @@ READY_FOR_DEPLOYMENT
     ├─ SG independent verify ⏳ → ✓
     └─ Noetfield.com reconcile ⏳ → ✓
     
-    ↓ (when all receipts + Vercel publish complete)
+    ↓ (when all receipts + www publish complete)
     
 LIVE (service active, audits running, firewall enforced)
 ```
@@ -257,7 +257,7 @@ NOOS Role:   Monitor verification pass, coordinate gate execution
 ### Noetfield.com (Buyer-Facing Owner) — Priority 2
 ```
 Task:        Reconcile brand messaging with trust ledger
-Task:        Prepare Vercel deployment (post-reconciliation)
+Task:        Prepare www deployment (post-reconciliation)
 Blocker:     Web surface publish (not NOOS responsibility)
 Timeline:    Non-blocking for audit kit activation
 Impact:      Service visible to buyers after publish

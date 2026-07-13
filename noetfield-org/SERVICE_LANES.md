@@ -43,8 +43,7 @@ Noetfield.com:       PUBLIC_PAGE_LIVE
   ├─ Internal Block: ✓ /services/governance/README.md = 404 (backend path blocked)
   ├─ Static Gen:     scripts/rebuild-www-v6.py
   ├─ Static Output:  services/agentic-cost-governance/index.html
-  ├─ Production:     Cloudflare static www (Vercel project removed 2026-07-05)
-  ├─ Retired:        Vercel `noetfield` project — not production
+  ├─ Production:     Cloudflare static www
   └─ Next:           Buyer-audience review; homepage/services discoverability monitoring
 
 SourceA (Delivery):  DELIVERY_KIT_PROTECTED + PROSPECT_PACKET_READY

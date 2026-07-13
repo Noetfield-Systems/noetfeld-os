@@ -36,6 +36,14 @@ surfaces must not contradict. Verify wiring:
 
 ## If you are a Cursor agent in **this repo** (`noetfeld-os`)
 
+**Strategy / proof / www publish — read first (mandatory):**
+
+0. **`noetfield-org/DOC_INDEX_v1.md`** — canonical NOOS control-plane docs index
+0a. **`noetfield-org/FORBIDDEN_MARKERS.txt`** — tokens that must not appear in new docs or deploy plans
+0b. **Do not read** `Noetfield-Systems/noetfield-org/` at workspace root (stale pointer only)
+0c. **Production www:** Cloudflare static www — deploy via `Noetfield/scripts/deploy-www-cloudflare.sh`
+0d. **Agents deploy** via approved www path when execution checklist is green (`proof-page-draft/PUBLISH_PLAN.md`)
+
 0. Read **`docs/_NOOS_AGENT/NOETFIELD_UNIFIED_MASTER_v1_LOCKED.md`** + **`NOETFIELD_OS_SSOT_v1_LOCKED.md`** + **`PRODUCT_TRUTH.md`**
 0b. Commercial / NW1 tasks: also read **`[NOOS-AGENT-20260615-010]_BUSINESS_STRATEGY_PROOF_DENSITY_v1.md`**
 0c. Build / upgrade tasks: read **`[NOOS-AGENT-20260615-014]_UPGRADE_PLAN_300_STEPS_v1.md`** + track in **`UPGRADE_MANIFEST.json`**

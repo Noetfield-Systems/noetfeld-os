@@ -677,7 +677,7 @@
       "patch_id": "PATCH-051",
       "source_trace": "NOOS-AGENT-20260626-015",
       "status": "pending",
-      "surface": "Railway/Cloudflare/Vercel production",
+      "surface": "Railway/Cloudflare production",
       "task_count": 100
     },
     {
@@ -689,7 +689,7 @@
       "patch_id": "PATCH-052",
       "source_trace": "NOOS-AGENT-20260626-015",
       "status": "pending",
-      "surface": "Railway/Cloudflare/Vercel production",
+      "surface": "Railway/Cloudflare production",
       "task_count": 100
     },
     {
@@ -701,7 +701,7 @@
       "patch_id": "PATCH-053",
       "source_trace": "NOOS-AGENT-20260626-015",
       "status": "pending",
-      "surface": "Railway/Cloudflare/Vercel production",
+      "surface": "Railway/Cloudflare production",
       "task_count": 100
     },
     {
@@ -713,19 +713,19 @@
       "patch_id": "PATCH-054",
       "source_trace": "NOOS-AGENT-20260626-015",
       "status": "pending",
-      "surface": "Railway/Cloudflare/Vercel production",
+      "surface": "Railway/Cloudflare production",
       "task_count": 100
     },
     {
       "estimate_minutes": 1000,
       "first_task_id": "NRP-05401",
-      "focus": "Vercel www deployment parity",
+      "focus": "Cloudflare www deployment parity",
       "lane": "Cloud",
       "last_task_id": "NRP-05500",
       "patch_id": "PATCH-055",
       "source_trace": "NOOS-AGENT-20260626-015",
       "status": "pending",
-      "surface": "Railway/Cloudflare/Vercel production",
+      "surface": "Railway/Cloudflare production",
       "task_count": 100
     },
     {
@@ -737,7 +737,7 @@
       "patch_id": "PATCH-056",
       "source_trace": "NOOS-AGENT-20260626-015",
       "status": "pending",
-      "surface": "Railway/Cloudflare/Vercel production",
+      "surface": "Railway/Cloudflare production",
       "task_count": 100
     },
     {
@@ -749,7 +749,7 @@
       "patch_id": "PATCH-057",
       "source_trace": "NOOS-AGENT-20260626-015",
       "status": "pending",
-      "surface": "Railway/Cloudflare/Vercel production",
+      "surface": "Railway/Cloudflare production",
       "task_count": 100
     },
     {
@@ -761,7 +761,7 @@
       "patch_id": "PATCH-058",
       "source_trace": "NOOS-AGENT-20260626-015",
       "status": "pending",
-      "surface": "Railway/Cloudflare/Vercel production",
+      "surface": "Railway/Cloudflare production",
       "task_count": 100
     },
     {
@@ -773,7 +773,7 @@
       "patch_id": "PATCH-059",
       "source_trace": "NOOS-AGENT-20260626-015",
       "status": "pending",
-      "surface": "Railway/Cloudflare/Vercel production",
+      "surface": "Railway/Cloudflare production",
       "task_count": 100
     },
     {
@@ -785,7 +785,7 @@
       "patch_id": "PATCH-060",
       "source_trace": "NOOS-AGENT-20260626-015",
       "status": "pending",
-      "surface": "Railway/Cloudflare/Vercel production",
+      "surface": "Railway/Cloudflare production",
       "task_count": 100
     },
     {

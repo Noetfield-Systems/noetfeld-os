@@ -1,0 +1,286 @@
+{
+  "schema": "noetfield_public_evidence_bundle_v1",
+  "entity": "Noetfield Systems Inc.",
+  "entity_type": "company",
+  "generated_at": "2026-07-13T09:25:00Z",
+  "audit_version": "0.1",
+  "audit_label": "PUBLIC AUDIT v0.1 — Case Study #1. Generated from currently verified public evidence. Not a declaration of final canonical strategy.",
+  "disclosure_level": "public",
+  "canonical_positioning": "Noetfield Systems Inc. is not a single product. It is an AI-native systems company and product studio that builds, operates, and commissions governed AI products, custom motors, and specialized workflows on shared execution infrastructure.",
+  "case_study": {
+    "number": 1,
+    "title": "Noetfield Systems Inc. — Self-Audit Case Study",
+    "story": "Noetfield Systems Inc. is the parent operating company behind three commercial product lines. This case study applies Noetfield's Investor Workflow method to the company itself — demonstrating how claims, evidence, gaps, timeline, and roadmap appear in a live diligence profile.",
+    "commercial_field": "Company (parent entity)"
+  },
+  "commercial_fields": [
+    {
+      "id": "enterprise-governance",
+      "name": "Enterprise AI Governance",
+      "route": "/enterprise",
+      "summary": "Measure, govern, and optimize AI usage, cost, risk, and execution across institutional systems."
+    },
+    {
+      "id": "custom-motors",
+      "name": "Custom AI Motors & Operating Workflows",
+      "route": "/motors",
+      "summary": "Build private workflow motors and governed execution systems around a company's actual processes, tools, people, and policies."
+    },
+    {
+      "id": "investor-workflows",
+      "name": "Investor Workflows & Evidence-Based Audits",
+      "route": "/investor-workflows",
+      "summary": "Audit companies, separate claims from evidence, diagnose gaps, manage diligence, and govern investment decisions."
+    }
+  ],
+  "shared_internal_layer": {
+    "name": "Noetfield Governed Execution Layer",
+    "status": "internal",
+    "public_protocol": false,
+    "summary": "Internal governance and execution substrate underlying Noetfield products and commissioned systems. Not offered as a public protocol in v0.1."
+  },
+  "findings": [
+    {
+      "id": "F-001",
+      "claim": "Noetfield Systems Inc. operates three distinct commercial product lines (Enterprise AI Governance, Custom AI Motors, Investor Workflows).",
+      "status": "PARTIALLY PROVEN",
+      "evidence": [
+        {
+          "tier": "PUBLIC_STATEMENT",
+          "description": "Three fields defined in locked company strategy and this public case study.",
+          "url": null
+        },
+        {
+          "tier": "PUBLIC_URL",
+          "description": "Enterprise AI governance content live on current public site (one field surface today).",
+          "url": "https://www.noetfield.com/ai-value-governance-os/"
+        }
+      ],
+      "gaps": [
+        "Corporate homepage does not yet present all three fields equally.",
+        "Dedicated /motors and /investor-workflows routes not yet live."
+      ],
+      "corrective_actions": [
+        "Ship Case Study #1 proof page.",
+        "Rebuild corporate homepage with three-field architecture.",
+        "Migrate current enterprise content to /enterprise."
+      ],
+      "next_milestone": "Public proof page live at /proof/noetfield.",
+      "capital_or_dependency_required": "Site rebuild capacity (Lane C); not blocked on funding."
+    },
+    {
+      "id": "F-002",
+      "claim": "The current noetfield.com public site represents one commercial offer (Enterprise AI Governance), not the full identity of Noetfield Systems Inc.",
+      "status": "PROVEN",
+      "evidence": [
+        {
+          "tier": "PUBLIC_URL",
+          "description": "Live site content is enterprise AI governance / GEL narrative.",
+          "url": "https://www.noetfield.com/ai-value-governance-os/"
+        },
+        {
+          "tier": "PUBLIC_URL",
+          "description": "Additional enterprise contract surfaces on SourceA domain.",
+          "url": "https://sourcea.app/ai-value-governance"
+        }
+      ],
+      "gaps": [
+        "Site does not yet reflect motors or investor workflow product lines."
+      ],
+      "corrective_actions": [
+        "Rebuild noetfield.com as corporate home.",
+        "Move enterprise content to /enterprise."
+      ],
+      "next_milestone": "Corporate homepage v1 with three-field navigation.",
+      "capital_or_dependency_required": null
+    },
+    {
+      "id": "F-003",
+      "claim": "Noetfield defines a governed execution loop: Observe → Audit → Diagnose → Prioritize → Execute → Verify → Receipt → Improve.",
+      "status": "PARTIALLY PROVEN",
+      "evidence": [
+        {
+          "tier": "PUBLIC_STATEMENT",
+          "description": "Execution loop documented in company strategy and LinkedIn investor workflow thesis.",
+          "url": null
+        }
+      ],
+      "gaps": [
+        "Full end-to-end autonomous execution chain remains under commissioning.",
+        "Mobile command interface and contiguous receipt chain not yet publicly demonstrated."
+      ],
+      "corrective_actions": [
+        "Complete mobile-to-motor execution loop with public receipt demonstration.",
+        "Publish progress updates on timeline."
+      ],
+      "next_milestone": "Verified mobile-to-motor execution with contiguous receipts.",
+      "capital_or_dependency_required": "Runtime commissioning."
+    },
+    {
+      "id": "F-004",
+      "claim": "Noetfield can publish honest public self-audits using the same Investor Workflow format offered to external users.",
+      "status": "PARTIALLY PROVEN",
+      "evidence": [
+        {
+          "tier": "PUBLIC_URL",
+          "description": "This public evidence bundle (Case Study #1) demonstrates the format.",
+          "url": "/proof/noetfield.json"
+        }
+      ],
+      "gaps": [
+        "Independent external verification of audits not yet established.",
+        "Free external audit entry (/audit/start) not yet productized."
+      ],
+      "corrective_actions": [
+        "Ship proof page to production URL.",
+        "Productize /audit/start for external companies and deals."
+      ],
+      "next_milestone": "Proof page live + first external audit request handled.",
+      "capital_or_dependency_required": "Investor Workflow productization."
+    }
+  ],
+  "timeline": [
+    {
+      "date": "2026-07-01",
+      "event": "Investor Workflow thesis articulated: Audit → Diagnose → Prioritize → Execute → Verify → Receipt.",
+      "type": "strategy",
+      "related_finding": "F-003"
+    },
+    {
+      "date": "2026-07-04",
+      "event": "Repo authority and NOOS control panel path verified on disk.",
+      "type": "progress",
+      "related_finding": null
+    },
+    {
+      "date": "2026-07-04",
+      "event": "SourceA canonical path confirmed; library archive paths classified separately.",
+      "type": "progress",
+      "related_finding": null
+    },
+    {
+      "date": "2026-07-13",
+      "event": "Company strategy blueprint revised with advisor corrections; case study model locked.",
+      "type": "strategy",
+      "related_finding": "F-001"
+    },
+    {
+      "date": "2026-07-13",
+      "event": "Case Study #1 (Noetfield Systems Inc.) draft finalized for execution — PUBLIC AUDIT v0.1.",
+      "type": "audit",
+      "related_finding": "F-004"
+    }
+  ],
+  "gaps_summary": [
+    "Corporate site does not yet reflect three-field company identity.",
+    "Full governed execution chain under commissioning.",
+    "Independent external verification not established.",
+    "External free audit product (/audit/start) not yet live.",
+    "Additional case studies (SourceA, SourceB) planned but not yet published."
+  ],
+  "milestones": [
+    {
+      "id": "M-001",
+      "phase": "now",
+      "name": "Public proof page live (Case Study #1)",
+      "status": "IN_COMMISSIONING",
+      "receipt_target": "proof-page-live-receipt-v1",
+      "unlocks": "Credible LinkedIn follow-up; live demo of Investor Workflow format."
+    },
+    {
+      "id": "M-002",
+      "phase": "now",
+      "name": "Mobile command interface for Noetfield Motor",
+      "status": "PLANNED",
+      "receipt_target": "motor-mobile-execution-receipt-v1",
+      "unlocks": "Verified mobile-to-motor execution with contiguous receipts."
+    },
+    {
+      "id": "M-003",
+      "phase": "next",
+      "name": "Corporate homepage rebuild (three fields)",
+      "status": "PLANNED",
+      "receipt_target": "corporate-home-v1-receipt",
+      "unlocks": "Public site matches company identity; enterprise content at /enterprise."
+    },
+    {
+      "id": "M-004",
+      "phase": "next",
+      "name": "Free external audit at /audit/start",
+      "status": "PLANNED",
+      "receipt_target": "investor-workflow-first-external-audit-receipt-v1",
+      "unlocks": "Field 3 productized; first non-self case study."
+    },
+    {
+      "id": "M-005",
+      "phase": "scale",
+      "name": "Case Study #2 — SourceA published",
+      "status": "PLANNED",
+      "receipt_target": "proof-sourcea-v0.2-receipt",
+      "unlocks": "Portfolio diligence folder expands; product demo depth."
+    }
+  ],
+  "capital_unlocks": [
+    {
+      "id": "C-001",
+      "area": "Runtime commissioning",
+      "milestone": "Production motor runtime live",
+      "receipt_when_done": "motor-runtime-v1"
+    },
+    {
+      "id": "C-002",
+      "area": "Investor Workflow productization",
+      "milestone": "First 10 external audit workflows delivered",
+      "receipt_when_done": "investor-workflow-batch-10"
+    },
+    {
+      "id": "C-003",
+      "area": "Independent verification",
+      "milestone": "External verifier signs public audit receipts",
+      "receipt_when_done": "independent-verifier-v1"
+    }
+  ],
+  "attachments": [
+    {
+      "label": "Current enterprise governance surface (noetfield.com)",
+      "url": "https://www.noetfield.com/ai-value-governance-os/"
+    },
+    {
+      "label": "AI Value Governance (sourcea.app)",
+      "url": "https://sourcea.app/ai-value-governance"
+    },
+    {
+      "label": "Operating Brain Install (sourcea.app)",
+      "url": "https://sourcea.app/operating-brain-install"
+    },
+    {
+      "label": "SourceA landing",
+      "url": "https://sourcea.app/"
+    }
+  ],
+  "evidence_links": [
+    {
+      "label": "Case Study #1 page",
+      "url": "/proof/noetfield"
+    },
+    {
+      "label": "Machine-readable evidence bundle",
+      "url": "/proof/noetfield.json"
+    }
+  ],
+  "diagnosis_summary": {
+    "claims_reviewed": 4,
+    "proven": 1,
+    "partially_proven": 3,
+    "claimed_not_verified": 0,
+    "contradicted": 0,
+    "open_gaps": 5
+  },
+  "integrity": {
+    "schema": "noetfield_public_evidence_bundle_v1",
+    "digest_algorithm": "sha256",
+    "digest": "045a661a1678403513c6c51e55fa58440196b54d6351a3722cfd9ba5ec415cfd",
+    "note": "Replace COMPUTE_AT_PUBLISH with sha256 of canonical JSON (excluding integrity.digest) at deploy time."
+  },
+  "exclusions_note": "This public bundle excludes: private repository names, credentials, internal filesystem paths, private commit metadata, security architecture, personal data, undisclosed commercial information, and raw internal prompts or agent traces."
+}

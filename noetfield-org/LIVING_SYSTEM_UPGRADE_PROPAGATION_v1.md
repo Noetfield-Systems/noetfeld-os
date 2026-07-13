@@ -254,7 +254,7 @@ True "all nodes at once" = **one bundle, one mutex, one closeout receipt** — n
 ### v0.1 — Law registry + drift scanner (this week)
 
 - [x] Create `system-laws/SYSTEM_LAW_REGISTRY_v1.json` with first 3 laws (www surface, canonical noetfield-org path, agent deploy authority)
-- [ ] Create `BLAST_RADIUS_MAP_v1.json` with agent entrypoint + ops doc node classes
+- [x] Create `BLAST_RADIUS_MAP_v1.json` with agent entrypoint + ops doc node classes
 - [x] Expand `test_forbidden_markers.py` → read all markers from file, scan `noetfeld-OS/**` agent docs
 - [x] Add `scripts/noos_law_drift_check_v1.py` + `make law-drift-check`
 - [x] Wire `make law-drift-check` into integrator daily witness

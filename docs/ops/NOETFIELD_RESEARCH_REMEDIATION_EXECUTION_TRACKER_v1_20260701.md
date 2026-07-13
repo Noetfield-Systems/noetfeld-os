@@ -379,7 +379,7 @@ This doc is the **single tracker**. Website edits execute in the website repo; N
 | `trust-brief/intake/index.html` | `/trust-brief/intake/` | Instrument by `vector` param; add hero for `ai-value-governance-os` | TRK-008, TRK-014 | pending |
 | `contact/index.html` | `/contact/` | Confirm `enterprise-governance` topic + URL prefill | TRK-008 | done |
 | `assets/noetfield-forms.js` | — | Verify topic prefill + intake vector logging | TRK-014 | pending |
-| `vercel.json` or analytics config | — | Add analytics script (Plausible/Fathom/GA4 — pick one) | TRK-014 | pending |
+| www routing or analytics config | — | Add analytics script (Plausible/Fathom/GA4 — pick one) | TRK-014 | pending |
 
 ### Tier 5 — Brand separation & about (TRK-011, TRK-013)
 

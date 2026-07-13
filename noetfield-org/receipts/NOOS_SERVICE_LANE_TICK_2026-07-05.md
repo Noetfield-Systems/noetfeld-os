@@ -72,12 +72,12 @@ Draft Status:         ✓ AGENTIC COST GOVERNANCE DRAFT COMPLETE
 Content:              Service description, audit kit UX, firewall feature set
 Ready for Review:     ✓ YES
 
-Public Deploy:        ✗ BLOCKED (awaits approval + Vercel truth check)
-Vercel Truth:         ⏳ PENDING (checked at publish decision point, non-blocking)
+Public Deploy:        ✗ BLOCKED (awaits approval + www production truth check)
+www production truth:         ⏳ PENDING (checked at publish decision point, non-blocking)
 Buyer Approval:       ⏳ PENDING (founder/buyer-audience review required)
 
 Status:               ✓ READY FOR REVIEW (approval required before publish)
-Next:                 Submit draft for buyer/founder approval; check Vercel truth at publish time
+Next:                 Submit draft for buyer/founder approval; check www production truth at publish time
 ```
 
 ### NOOS (Control Layer) — ✓ STATE UPDATED
@@ -114,11 +114,11 @@ NOOS Service Tick ✓
     ↓ (2026-07-05 emitted — this receipt)
 ⏳ Buyer Approval (pending, non-NOOS decision)
     ↓
-⏳ Vercel Truth Check (checked at publish time, non-NOOS responsibility)
+⏳ www production truth Check (checked at publish time, non-NOOS responsibility)
     ↓
 NOOS Publish Gate Clear ✓ (ready to clear, one-time action)
     ↓
-⏳ Vercel Publish (Noetfield.com responsibility, non-NOOS owner)
+⏳ www publish (Noetfield.com responsibility, non-NOOS owner)
     ↓
 Service Live
 ```
@@ -160,12 +160,12 @@ NOOS Control:
 
 ### Service Public Publish: ⏳ BLOCKED (NON-NOOS OWNER DECISIONS)
 - ✗ Buyer approval: PENDING (founder/buyer-audience review required)
-- ✗ Vercel truth: PENDING (checked at publish decision point)
+- ✗ www production truth: PENDING (checked at publish decision point)
 - ✓ NOOS gate: READY TO CLEAR (one-time action when Noetfield.com ready)
 
 **Blocking Conditions for Publish:**
 1. ⏳ Buyer/founder approval (Noetfield.com responsibility, non-NOOS owner)
-2. ⏳ Vercel truth alignment check (Noetfield.com responsibility, non-NOOS owner)
+2. ⏳ www production truth alignment check (Noetfield.com responsibility, non-NOOS owner)
 3. ✓ NOOS gate clear (NOOS ready to clear, one-time at publish time)
 
 **NOOS Blocking:** ✗ NONE (ready to support publish decision)
@@ -176,7 +176,7 @@ NOOS Control:
 - ✓ Draft ready (2026-07-05)
 - ✓ SG registered (2026-07-05)
 - ⏳ Buyer approval (pending non-NOOS decision)
-- ⏳ Vercel publish (pending non-NOOS owner)
+- ⏳ www publish (pending non-NOOS owner)
 - ⏳ Factory lift (deferred, email/messaging until after factory activation)
 
 **Status:** Service ready for buyer review and publication. No NOOS blockers. Awaiting owner decisions for publish and factory lift.
@@ -203,7 +203,7 @@ NOOS Control:
 
 ### Polling Removal
 - ✗ Do NOT check every 30–60 minutes for Mac Worker receipt (does not block draft review)
-- ✗ Do NOT poll Vercel state (checked at publish time by Noetfield.com owner)
+- ✗ Do NOT poll www production state (checked at publish time by Noetfield.com owner)
 - ✗ Do NOT poll Noetfield.com repo (monitoring by owner, not NOOS)
 - ✓ Await signal from Noetfield.com (one-time notification) when ready to publish
 

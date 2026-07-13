@@ -29,7 +29,7 @@
 ### TrustField-Technologies Agent
 - **Repo:** Noetfield-Systems/TrustField-Technologies
 - **Primary Agent:** Copilot + Cursor local (T0/T1/T2)
-- **Integrator:** GitHub Actions → Railway/Vercel
+- **Integrator:** GitHub Actions → Railway
 - **Role:** Platform enforcement · external verification · delivery
 - **Branch:** main
 - **Must-Sync-With:** SourceA, noetfeld-OS, sina-governance-SSOT
@@ -39,11 +39,11 @@
   - Deploy without passing external-verify
 - **Workflows:**
   - `external-verify.yml` (T0 gate)
-  - `vercel-deploy-hook.yml` (T1 deployment)
+  - `www-deploy-hook.yml` (T1 deployment)
   - `railway-plan-worker-deploy.yml` (T0 worker)
 - **Required Receipts:**
   - External verification receipt
-  - Deployment receipt (Vercel/Railway)
+  - Deployment receipt (Railway / Cloudflare www)
 
 ### noetfeld-OS Agent
 - **Repo:** Noetfield-Systems/noetfeld-OS
@@ -88,7 +88,7 @@
 ### Noetfield (Website) Agent
 - **Repo:** Noetfield-Systems/Noetfield
 - **Primary Agent:** Copilot (T1 builder)
-- **Integrator:** Vercel deployer
+- **Integrator:** Cloudflare static www (founder-controlled publish)
 - **Role:** Marketing surface · investor UX · trust ledger sample export
 - **Branch:** main
 - **Must-Sync-With:** sina-governance-SSOT (for TLE samples)
@@ -96,7 +96,7 @@
   - Use old slug `Noetfield-Systems`
   - Deploy without passing buyer-audience-verify
 - **Workflows:**
-  - `vercel-www-deploy.yml` (T1 deployment)
+  - `www-static-deploy.yml` (T1 deployment)
   - `verify-www-buyer-audience.sh` (T1 verification)
 - **Required Receipts:**
   - Web deployment receipt

@@ -189,7 +189,7 @@ Currency: **proof + first paid design partner.** Design-partner active usage = p
 | SW1 chain tool | `noetfield gate` · `noetfield decide --sample` | `packages/noetfield-gate/README.md` |
 | GEL health | `/health` `/readiness` `/v1/meta` | Policy `noetfeld-credit-v1` @ 1.0.0 |
 
-**DNS state:** `www.noetfield.com` is live on Vercel project `noetfield`; `api.noetfield.com` is live on Railway `gel-api`.
+**DNS state:** `www.noetfield.com` is live on Cloudflare Pages `noetfield`; `api.noetfield.com` is live on Railway `gel-api`.
 
 ---
 

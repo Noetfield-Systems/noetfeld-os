@@ -9,7 +9,6 @@
 **Previous State:** CLEARED_FOR_PUBLISH  
 **Current State:** PUBLIC_PAGE_LIVE
 
-> **Amendment 2026-07-05:** Production surface is **Cloudflare static www**. The Vercel `noetfield` project was removed from production and deleted; references to Vercel below are historical publish-time notes only.
 
 ---
 
@@ -30,7 +29,7 @@ Publication Target: Noetfield.com (buyer-facing, static www production)
 ```
 Publish Commit:     096428e2 (pushed to origin/main)
 Push Status:        ✓ COMPLETE (on origin/main)
-Production Surface: Vercel/static www (restored)
+Production Surface: Cloudflare static www (restored)
 Non-Production:     apps/web is NOT production
 Static Generator:   scripts/rebuild-www-v6.py
 Static Output:      services/agentic-cost-governance/index.html
@@ -56,7 +55,7 @@ Status:             PUBLIC_PAGE_LIVE
 Publish Commit:     096428e2
 Live URL:           https://www.noetfield.com/services/agentic-cost-governance
 Homepage:           Restored (200)
-Production:         Static www via Vercel (not apps/web)
+Production:         Cloudflare static www (not apps/web)
 Next:               Homepage/services discoverability monitoring; buyer-audience review
 ```
 

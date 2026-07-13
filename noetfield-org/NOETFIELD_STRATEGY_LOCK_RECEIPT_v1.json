@@ -1,0 +1,51 @@
+{
+  "schema": "noos-lock-receipt-v1",
+  "receipt_id": "noetfield-strategy-lock-20260713-0004",
+  "ok": true,
+  "written_at": "2026-07-13T09:20:00Z",
+  "integrator": "noetfeld-OS",
+  "lock": {
+    "document": "NOETFIELD_COMPANY_STRATEGY_v1_BLUEPRINT.md",
+    "status": "LOCKED_FOR_CONTENT",
+    "canonical_path": "noetfeld-OS/noetfield-org/",
+    "stale_path": "Noetfield-Systems/noetfield-org/ (workspace root — do not use)",
+    "canonical_ratification": "pending SG reconcile (Lane B)",
+    "public_publish": "agent_via_approved_www_path",
+    "agent_deploy": "ALLOWED_VIA_CLOUDFLARE_WWW"
+  },
+  "locked_decisions": [
+    "Canonical NOOS strategy docs live in noetfeld-OS/noetfield-org/ only",
+    "Workspace-root noetfield-org/ is STALE — see README_STALE_LOCATION.md",
+    "Agents deploy via approved Noetfield www path (Cloudflare Pages noetfield-www)",
+    "Deploy execution: Noetfield/scripts/deploy-www-cloudflare.sh",
+    "Three commercial fields + internal Governed Execution Layer",
+    "/proof = case-study library; Noetfield = Case Study #1",
+    "TrustField legally separate — not portfolio company",
+    "/protocol and holding-company public framing deferred",
+    "Public JSON: noetfield_public_evidence_bundle_v1 (redacted only)",
+    "Brain taxonomy lock in all public copy"
+  ],
+  "execution_package": {
+    "doc_index": "noetfeld-OS/noetfield-org/DOC_INDEX_v1.md",
+    "blueprint": "noetfeld-OS/noetfield-org/NOETFIELD_COMPANY_STRATEGY_v1_BLUEPRINT.md",
+    "case_study_model": "noetfeld-OS/noetfield-org/proof-page-draft/INVESTOR_CASE_STUDY_MODEL_v1.md",
+    "case_study_template": "noetfeld-OS/noetfield-org/proof-page-draft/CASE_STUDY_TEMPLATE_v1.md",
+    "proof_json": "noetfeld-OS/noetfield-org/proof-page-draft/noetfield.json",
+    "proof_page": "noetfeld-OS/noetfield-org/proof-page-draft/noetfield.html.md",
+    "schema": "noetfeld-OS/noetfield-org/proof-page-draft/noetfield_public_evidence_bundle_v1.schema.json",
+    "publish_plan": "noetfeld-OS/noetfield-org/proof-page-draft/PUBLISH_PLAN.md",
+    "content_readiness": "noetfeld-OS/noetfield-org/proof-page-draft/CONTENT_READINESS_v1.md",
+    "deploy_script": "Noetfield/scripts/deploy-www-cloudflare.sh",
+    "deploy_runbook": "noetfeld-OS/docs/ops/NOOS_CLOUDFLARE_WWW_DEPLOY_v1.md"
+  },
+  "corrections_applied": [
+    "Corrected deploy authority: agents deploy via approved Cloudflare www path (not founder-only)",
+    "PUBLISH_PLAN rewritten as agent execution plan",
+    "CONTENT_READINESS status: EXECUTION_READY",
+    "Purged obsolete deploy targets from agent docs"
+  ],
+  "next_action": "Agent executes PUBLISH_PLAN.md → deploy → verify → proof-page-live-receipt-v1",
+  "author": "assistant",
+  "founder_approval_required_for": ["sg_ratification", "NF_WWW_FOUNDER_OVERRIDE deploy fence bypass"],
+  "agent_forbidden": ["forbidden_tokens", "stale_path_publish", "dirty_tree_deploy"]
+}

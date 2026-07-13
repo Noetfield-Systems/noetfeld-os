@@ -135,7 +135,7 @@ Timeline:               Post-publish, non-blocking for this clearance
 - ✓ Noetfield.com UI ready
 - ✓ Founder approved
 
-**NOOS Role:** Gate clearance complete. Handoff to Noetfield.com agent for publication execution (push to Vercel, promote to live).
+**NOOS Role:** Gate clearance complete. Handoff to Noetfield.com agent for publication execution (publish to production www, promote to live).
 
 ---
 
@@ -144,9 +144,9 @@ Timeline:               Post-publish, non-blocking for this clearance
 ### Publication Execution (Noetfield.com Responsibility)
 
 **Tasks:**
-1. Push Agentic Cost Governance page to Vercel
+1. Publish Agentic Cost Governance page to production www
 2. Promote to production/live
-3. Verify Vercel deployment success
+3. Verify www deployment success
 4. Record post-publish receipt (after go-live confirmation)
 
 **NOOS Support:**
@@ -206,7 +206,7 @@ After Noetfield.com publish completes, NOOS will emit final service-lane-live re
 ---
 
 **Publication Action:** Noetfield.com agent ready to execute:
-1. Push Agentic Cost Governance page to Vercel
+1. Publish Agentic Cost Governance page to production www
 2. Promote to live
 3. Verify deployment success
 4. Record post-publish receipt

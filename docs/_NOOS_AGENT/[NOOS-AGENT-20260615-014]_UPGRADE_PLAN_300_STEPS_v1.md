@@ -47,14 +47,14 @@ manifest: docs/_NOOS_AGENT/UPGRADE_MANIFEST.json
 - **UPG-0005:** Record W1 proof demo — `demo-enforcement-5min-v1.sh` — publish video file path in receipt
 - **UPG-0006:** Name 10 ICP accounts against doc 010 scorecard — store in `.agent-private/icp-list-v1.json`
 - **UPG-0007:** Schedule 15-min live demo date in NW1 reply template
-- **UPG-0008:** Fix `www.noetfield.com` DNS — CNAME to `d2e47b585a01bc61.vercel-dns-017.com`
+- **UPG-0008:** Fix `www.noetfield.com` DNS — CNAME to Cloudflare Pages origin
 - **UPG-0009:** Re-run `scripts/check_noetfield_com_e2e.py` — all routes green on www
 - **UPG-0010:** Verify `/copilot/proof-case/` live on www after DNS cutover
 
 ### 1.2 Cloud ship alignment
 
-- **UPG-0011:** Sync Vercel production env — Resend intake keys on canonical project
-- **UPG-0012:** Deploy `vercel.json` rewrites — `/health`, `/evaluate` → API routes
+- **UPG-0011:** Sync Cloudflare production env — Resend intake keys on canonical project
+- **UPG-0012:** Deploy www routing config rewrites — `/health`, `/evaluate` → API routes
 - **UPG-0013:** Confirm `www.noetfield.com` parity checklist vs www post-cutover
 - **UPG-0014:** Add tamper-evident copy to `index.html` if drifted
 - **UPG-0015:** Stage `platform.noetfield.com` DNS record — document blocker if any

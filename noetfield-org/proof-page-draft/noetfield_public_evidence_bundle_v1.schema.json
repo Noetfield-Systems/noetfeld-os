@@ -1,0 +1,174 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://noetfield.com/schemas/noetfield_public_evidence_bundle_v1.schema.json",
+  "title": "Noetfield Public Evidence Bundle v1",
+  "description": "Redacted public disclosure schema for Investor Workflow case studies. Not raw NOOS receipts.",
+  "type": "object",
+  "required": [
+    "schema",
+    "entity",
+    "generated_at",
+    "audit_version",
+    "audit_label",
+    "disclosure_level",
+    "case_study",
+    "findings",
+    "timeline",
+    "integrity"
+  ],
+  "properties": {
+    "schema": { "const": "noetfield_public_evidence_bundle_v1" },
+    "entity": { "type": "string" },
+    "entity_type": { "enum": ["company", "product", "venture", "internal_system"] },
+    "generated_at": { "type": "string", "format": "date-time" },
+    "audit_version": { "type": "string" },
+    "audit_label": { "type": "string" },
+    "disclosure_level": { "const": "public" },
+    "canonical_positioning": { "type": "string" },
+    "case_study": {
+      "type": "object",
+      "required": ["number", "title", "story"],
+      "properties": {
+        "number": { "type": "integer", "minimum": 1 },
+        "title": { "type": "string" },
+        "story": { "type": "string" },
+        "commercial_field": { "type": "string" }
+      }
+    },
+    "commercial_fields": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "route", "summary"],
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "route": { "type": "string" },
+          "summary": { "type": "string" }
+        }
+      }
+    },
+    "shared_internal_layer": {
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "status": { "enum": ["internal"] },
+        "public_protocol": { "type": "boolean" },
+        "summary": { "type": "string" }
+      }
+    },
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "claim", "status"],
+        "properties": {
+          "id": { "type": "string" },
+          "claim": { "type": "string" },
+          "status": {
+            "enum": [
+              "PROVEN",
+              "PARTIALLY PROVEN",
+              "CLAIMED — NOT VERIFIED",
+              "MISSING",
+              "STALE",
+              "BLOCKED",
+              "CONTRADICTED"
+            ]
+          },
+          "evidence": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["tier", "description"],
+              "properties": {
+                "tier": { "enum": ["PUBLIC_URL", "PUBLIC_STATEMENT", "INTERNAL_COMMISSIONING"] },
+                "description": { "type": "string" },
+                "url": { "type": ["string", "null"], "format": "uri" }
+              }
+            }
+          },
+          "gaps": { "type": "array", "items": { "type": "string" } },
+          "corrective_actions": { "type": "array", "items": { "type": "string" } },
+          "next_milestone": { "type": ["string", "null"] },
+          "capital_or_dependency_required": { "type": ["string", "null"] }
+        }
+      }
+    },
+    "timeline": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["date", "event", "type"],
+        "properties": {
+          "date": { "type": "string", "format": "date" },
+          "event": { "type": "string" },
+          "type": { "enum": ["milestone", "progress", "gap_identified", "strategy", "audit"] },
+          "related_finding": { "type": ["string", "null"] }
+        }
+      }
+    },
+    "gaps_summary": { "type": "array", "items": { "type": "string" } },
+    "milestones": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "status"],
+        "properties": {
+          "id": { "type": "string" },
+          "phase": { "type": "string" },
+          "name": { "type": "string" },
+          "status": { "enum": ["PLANNED", "IN_COMMISSIONING", "VERIFIED", "BLOCKED"] },
+          "receipt_target": { "type": "string" },
+          "unlocks": { "type": "string" }
+        }
+      }
+    },
+    "capital_unlocks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "area", "milestone"],
+        "properties": {
+          "id": { "type": "string" },
+          "area": { "type": "string" },
+          "milestone": { "type": "string" },
+          "receipt_when_done": { "type": "string" }
+        }
+      }
+    },
+    "attachments": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["label", "url"],
+        "properties": {
+          "label": { "type": "string" },
+          "url": { "type": "string", "format": "uri" }
+        }
+      }
+    },
+    "evidence_links": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["label", "url"],
+        "properties": {
+          "label": { "type": "string" },
+          "url": { "type": "string" }
+        }
+      }
+    },
+    "integrity": {
+      "type": "object",
+      "required": ["schema", "digest_algorithm", "digest"],
+      "properties": {
+        "schema": { "const": "noetfield_public_evidence_bundle_v1" },
+        "digest_algorithm": { "const": "sha256" },
+        "digest": { "type": "string" },
+        "note": { "type": "string" }
+      }
+    },
+    "exclusions_note": { "type": "string" }
+  }
+}
