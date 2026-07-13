@@ -43,7 +43,7 @@
   - docs/*, scripts/github_app_remote_check.py, workers/github-app-advisory/index.js, data/brain_domain_sandboxes_v1.json
   
 - ✓ **Noetfield-Systems/TrustField-Technologies** (9 hits)
-  - data/trustfield_platform_native_enforcement_v1.json, docs/VERCEL_*.md, scripts/*
+  - data/trustfield_platform_native_enforcement_v1.json, docs/legacy-www-deploy-*.md, scripts/*
   
 - ✓ **Noetfield-Systems/SinaaiMonoRepo** (2 hits)
   - SinaaiDataBase/governance/system_registry.json, REMOTE_SETUP.md
@@ -128,7 +128,7 @@
 
 **Pre-Restart Checklist:**
 - [ ] Noetfield repo on main
-- [ ] Cloudflare static www deploy path confirmed (Vercel retired 2026-07-05)
+- [ ] Cloudflare static www deploy path confirmed
 - [ ] buyer-audience-verify script updated
 - [ ] TLE samples from SSOT fetched with new URLs
 

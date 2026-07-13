@@ -1,0 +1,53 @@
+{
+  "schema": "noos-system-law-v1",
+  "registry_version": "20260713-0001",
+  "updated_at": "2026-07-13T09:10:00Z",
+  "authority": "noetfeld-OS/noetfield-org/",
+  "laws": [
+    {
+      "law_id": "LAW-20260705-001",
+      "title": "Noetfield www production surface",
+      "truth": "Cloudflare Pages noetfield-www + edge worker noetfield-www-proxy only",
+      "forbidden_tokens": ["vercel"],
+      "blast_radius_template": "www-production-surface-v1",
+      "effective_at": "2026-07-05T00:00:00Z",
+      "propagation_receipt": "pending-retroactive-closeout"
+    },
+    {
+      "law_id": "LAW-20260713-001",
+      "title": "Canonical NOOS control docs path",
+      "truth": "noetfeld-OS/noetfield-org/ only — workspace-root noetfield-org/ is stale",
+      "forbidden_tokens": [],
+      "blast_radius_template": "canonical-path-v1",
+      "effective_at": "2026-07-13T00:00:00Z",
+      "propagation_receipt": "pending-retroactive-closeout"
+    },
+    {
+      "law_id": "LAW-20260713-002",
+      "title": "Agent www deploy authority",
+      "truth": "Agents deploy via approved Noetfield www path — Noetfield/scripts/deploy-www-cloudflare.sh → Cloudflare Pages noetfield-www",
+      "forbidden_tokens": [],
+      "blast_radius_template": "www-production-surface-v1",
+      "effective_at": "2026-07-13T00:00:00Z",
+      "propagation_receipt": "pending-retroactive-closeout"
+    },
+    {
+      "law_id": "LAW-20260713-003",
+      "title": "Brain taxonomy in public copy",
+      "truth": "No unqualified Brain — specify Library Live Brain, SourceA Brain Role, SourceA Website Brain Chat, NOOS Control Brain, or SG Library Spine",
+      "forbidden_tokens": [],
+      "blast_radius_template": "brain-taxonomy-v1",
+      "effective_at": "2026-07-13T00:00:00Z",
+      "propagation_receipt": null
+    },
+    {
+      "law_id": "LAW-20260704-001",
+      "title": "NOOS integrator authority",
+      "truth": "noetfeld-OS is NOOS integrator; noetfield-studio-ide is sandbox manager only",
+      "forbidden_tokens": [],
+      "blast_radius_template": "integrator-authority-v1",
+      "effective_at": "2026-07-04T00:00:00Z",
+      "propagation_receipt": null
+    }
+  ]
+}

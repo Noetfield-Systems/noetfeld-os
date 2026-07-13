@@ -1,0 +1,20 @@
+{
+  "schema": "noos-law-drift-check-v1",
+  "at": "2026-07-13T09:18:26Z",
+  "ok": true,
+  "markers": [
+    "kazemnezhadsina144-dot",
+    "vercel"
+  ],
+  "registry_ok": true,
+  "registry": {
+    "path": "/Users/sinakazemnezhad/Desktop/Noetfield-Systems/noetfeld-OS/noetfield-org/system-laws/SYSTEM_LAW_REGISTRY_v1.json",
+    "registry_version": "20260713-0001",
+    "law_count": 5
+  },
+  "files_scanned": 111,
+  "violation_count": 0,
+  "violations": [],
+  "closure_token": "NOOS_LAW_DRIFT: green",
+  "fix": null
+}

@@ -139,6 +139,9 @@ integrator-status:
 integrator-daily:
 	python3 scripts/noos_integrator_daily_checklist_v1.py --write-receipt --json
 
+law-drift-check:
+	python3 scripts/noos_law_drift_check_v1.py --write-receipt --json
+
 witness-phase1-smoke:
 	bash scripts/noos_gha_witness_phase1_smoke_v1.sh
 

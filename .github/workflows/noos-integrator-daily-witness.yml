@@ -1,4 +1,4 @@
-# NOOS GHA secondary witness — integrator daily control panel (ICL-D01–D12).
+# NOOS GHA secondary witness — integrator daily control panel (ICL-D01–D13).
 name: NOOS integrator daily witness
 
 on:

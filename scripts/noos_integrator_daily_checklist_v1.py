@@ -226,6 +226,23 @@ def run_checklist() -> dict[str, Any]:
         )
     )
 
+    drift = run_json([sys.executable, str(ROOT / "scripts/noos_law_drift_check_v1.py"), "--json"])
+    checks.append(
+        item(
+            item_id="ICL-D13",
+            tier="T0",
+            title="LSUP law drift (forbidden tokens outside marker file)",
+            ok=bool(drift.get("ok")),
+            evidence={
+                "violation_count": drift.get("violation_count"),
+                "files_scanned": drift.get("files_scanned"),
+                "violations": (drift.get("violations") or [])[:5],
+                "registry_ok": drift.get("registry_ok"),
+            },
+            fix="make law-drift-check — purge tokens; keep only in noetfield-org/FORBIDDEN_MARKERS.txt",
+        )
+    )
+
     layers = run_json([sys.executable, str(ROOT / "scripts/observe_trustfield_parallel_layers_v1.py"), "--json"])
     layer_summary = layers.get("summary") or {}
     layers_ok = layers.get("overall_status") in ("green", "yellow") and not layer_summary.get("red")
@@ -377,6 +394,7 @@ def run_checklist() -> dict[str, Any]:
         "commands": {
             "run": "make integrator-daily",
             "status": "make integrator-status",
+            "law_drift": "make law-drift-check",
             "trustfield_layers": "make observe-trustfield-layers",
             "trustfield_registry": "make observe-trustfield-registry",
             "repair_autorun": "make integrator-repair-autorun",
@@ -419,7 +437,7 @@ def main() -> int:
     return _exit_code(row, witness_gha=args.witness_gha or os.environ.get("NOOS_GHA_WITNESS") == "1")
 
 
-WITNESS_GHA_GATE_IDS = frozenset({"ICL-D01", "ICL-D03", "ICL-D05", "ICL-D08"})
+WITNESS_GHA_GATE_IDS = frozenset({"ICL-D01", "ICL-D03", "ICL-D05", "ICL-D08", "ICL-D13"})
 
 
 def _exit_code(row: dict[str, Any], *, witness_gha: bool) -> int:
