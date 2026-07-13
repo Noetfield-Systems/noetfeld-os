@@ -252,4 +252,16 @@ Implements ORG SYNC PLANE v1 + SLUG MIGRATION SWEEP
 
 ---
 
+## Corporate Homepage v1 (2026-07-13)
+
+| Field | Value |
+|-------|-------|
+| Noetfield commit | `9648176a` |
+| Status | PUBLIC_HOME_LIVE |
+| Homepage | https://www.noetfield.com/ → 200 (three-field corporate surface) |
+| Nav | Enterprise · Motors · Investor Workflows · Proof · Company · Investors |
+| Field routes | `/motors/` `/investor-workflows/` `/proof/` live |
+
+---
+
 **Next:** Merge copilot/org-sync-plane-v1-slug-sweep to main, restart verified windows.
