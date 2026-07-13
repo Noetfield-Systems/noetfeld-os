@@ -1,6 +1,6 @@
 # /proof/noetfield — Publish Execution Plan v0.1 (LOCKED)
 
-**Status:** EXECUTION_READY — agent deploy when checklist green  
+**Status:** SHIPPED v0.1 — `/proof/noetfield/` + JSON live; see `WWW_IMPLEMENTATION_STATUS_v1.md` for ongoing www truth  
 **Canonical path:** `noetfeld-OS/noetfield-org/proof-page-draft/PUBLISH_PLAN.md`  
 **Production path:** Cloudflare Pages `noetfield-www` via `Noetfield/scripts/deploy-www-cloudflare.sh`
 

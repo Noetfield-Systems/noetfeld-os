@@ -35,6 +35,7 @@
 | `NOOS_CONTROL_PANEL_AUTHORITY_REPORT_2026-07-04.md` | NOOS path authority |
 | `NOOS_LOCK_RECEIPT_v1.json` | Brain taxonomy lock |
 | `NOETFIELD_COMPANY_STRATEGY_v1_BLUEPRINT.md` | Company strategy (not SG-ratified) |
+| `WWW_IMPLEMENTATION_STATUS_v1.md` | **Live www route truth — read before gate edits** |
 | `NOETFIELD_STRATEGY_LOCK_RECEIPT_v1.json` | Strategy + publish rules |
 | `proof-page-draft/` | Case Study #1 content drafts |
 
@@ -80,4 +81,4 @@
 
 ---
 
-**Next agent action:** Execute `proof-page-draft/PUBLISH_PLAN.md` when checklist green → deploy → verify → emit `proof-page-live-receipt-v1`.
+**Next agent action:** Read `WWW_IMPLEMENTATION_STATUS_v1.md` before www edits. Case Study #1 is live at `/proof/noetfield/`; direction gate at `/` is founder-approved — do not downgrade to marketing homepage.

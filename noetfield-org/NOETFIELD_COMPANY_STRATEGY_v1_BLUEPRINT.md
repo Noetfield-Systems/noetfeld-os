@@ -114,28 +114,34 @@ Do NOT lead with "Invest in Noetfield."
 
 ## 3. SITE ARCHITECTURE (locked for execution)
 
+**Agent SSOT for live www (read first):** `WWW_IMPLEMENTATION_STATUS_v1.md` — route truth, page boundaries, anti-downgrade rules. If this section conflicts with that file on **what is live today**, the status file wins.
+
 ```
-/                       Corporate homepage (3 fields)
-/enterprise             Enterprise AI Governance (current site content migrates here)
+/                       Direction gate (3 tiles + About · Proof) — NOT corporate marketing homepage
+/enterprise             Enterprise AI Governance (FROZEN — current institutional content)
 /motors                 Custom AI Motors & Operating Workflows
-/investor-workflows     Investor Workflows & Evidence-Based Audits
+/investor-workflows     Investor Workflows & Evidence-Based Audits (not linked from / homepage)
+/invest/                Private round materials (gated — Supabase auth)
+/auth/sign-in/          Investor sign-in
 /proof                  Case-study library index
-/proof/noetfield        Case Study #1 — Noetfield Systems Inc.
+/proof/noetfield        Case Study #1 — Noetfield Systems Inc. (v0.1 LIVE)
 /proof/noetfield.json   Public evidence bundle (redacted schema)
 /proof/[entity]         Future case studies (sourcea, sourceb, motor, trustfield)
 /proof/[entity].json    Per-entity public bundles
-/company                What Noetfield is
+/about                  Company + directions (implements /company intent for v1)
 /roadmap                Evidence-linked roadmap
-/investors              Evaluation path (assembled from proof + roadmap)
-/audit/start            Free external audit entry (ship after v0.1 proof)
+/investors               Evaluate Noetfield (proof + roadmap + /invest)
+/audit/start            Free external audit entry — NOT YET BUILT (use /investor-workflows + contact)
+/company                Blueprint name — NOT BUILT (use /about for now)
 ```
 
 **Deferred:** `/protocol`
 
-**Navigation (v1):**
+**Navigation (v1 — target; live `/` is minimal gate):**
 ```
-What We Build → Enterprise | Motors | Investor Workflows
-Proof | Company | Roadmap | Investors | [Start a Free Audit]
+/ homepage gate → Enterprise | Investor | Motor  (+ About · Proof)
+Field 3 entry     → /investor-workflows/ (separate; not on / homepage today)
+Proof | About | Roadmap | Investors | Invest (gated)
 ```
 
 ---
@@ -189,10 +195,13 @@ Proof | Company | Roadmap | Investors | [Start a Free Audit]
 4. Ratify this blueprint into SG → v1.0 company charter
 
 ### Lane C — Corporate site (after proof ships)
-1. Rebuild homepage per §3
-2. Migrate enterprise content → `/enterprise`
-3. Build `/company`, `/roadmap`, `/investors`
-4. Productize `/audit/start`
+1. ~~Rebuild homepage per §3~~ → **Direction gate shipped** (`/` minimal tiles — founder-approved; not marketing homepage)
+2. ~~Migrate enterprise content → `/enterprise`~~ → **Done** (`/enterprise/` frozen)
+3. Build `/about/` (v1 stand-in for `/company`), `/roadmap/`, `/investors/`, gate pages for `/motors/`, `/investor-workflows/`, `/proof/noetfield`
+4. Productize `/audit/start` (not built — `/investor-workflows/` + contact today)
+5. Gate `/invest/` with portfolio-spine auth (**done**)
+
+See `WWW_IMPLEMENTATION_STATUS_v1.md` for live vs backlog.
 
 ---
 
