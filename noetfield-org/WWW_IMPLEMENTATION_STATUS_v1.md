@@ -107,7 +107,7 @@ Strategy positioning (three commercial fields, proof library model, naming table
 
 These still mention Vercel or old architecture; **ignore or fix when touched**, do not treat as SSOT:
 
-- `Noetfield/prompts/loop-suggestions-100.json` — stale vercel.json prompts
+- `Noetfield/prompts/loop-suggestions-100.json` — **fixed** (was vercel.json prompts)
 - `Noetfield/docs/ops/plans/NOETFIELD_E2E_SMART_UPGRADE_321_TASKS_v1.md` — fixed E2E-201 (was `.vercelignore`)
 - `Noetfield/docs/ops/NOETFIELD_SYSTEM_NERVE_UPGRADE_100_PLANS_LOCKED_v1.md` — fixed (was vercel.json references)
 - `Noetfield/graph-out/` — generated; may list deleted paths
