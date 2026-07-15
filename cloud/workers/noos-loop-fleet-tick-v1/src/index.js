@@ -71,9 +71,36 @@ function dueTargets(utcMinute) {
 }
 
 async function dispatchAll(env, targets, meta) {
+  // Repair fix 4: dispatchTarget() had no try/catch here — one thrown fetch()
+  // silently dropped every remaining target in this tick, with zero logging
+  // anywhere in the worker (compounding gap that let staleness go unnoticed).
   const results = [];
   for (const target of targets) {
-    results.push(await dispatchTarget(env, target, meta));
+    let result;
+    try {
+      result = await dispatchTarget(env, target, meta);
+    } catch (err) {
+      result = {
+        ok: false,
+        error: String(err && err.stack ? err.stack : err),
+        event_type: target.event_type,
+        dispatch_id: target.dispatch_id,
+      };
+    }
+    const logLine = {
+      schema: "noos-loop-motor-dispatch-v1",
+      ok: result.ok,
+      event_type: result.event_type,
+      dispatch_id: result.dispatch_id,
+      status: result.status,
+      source: meta.source,
+    };
+    if (result.ok) {
+      console.log(JSON.stringify(logLine));
+    } else {
+      console.error(JSON.stringify({ ...logLine, error: result.error }));
+    }
+    results.push(result);
   }
   return results;
 }

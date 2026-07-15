@@ -28,6 +28,12 @@ _locks: dict[str, threading.Lock] = {}
 _started_at = time.time()
 _ready = False
 _git_sha_cache: str | None = None
+# Repair fix 5: _ready is set once at process start and never reflects whether
+# the write path is actually alive — this is exactly why /health stayed green
+# while writes silently died. These track the real thing staleness probes care
+# about: did the last tick's heartbeat write actually land.
+_last_liveness_ok_at: str | None = None
+_last_liveness_error: str | None = None
 
 
 def utc_now() -> str:
@@ -76,6 +82,7 @@ def _base_env(*, event_type: str, source: str, run_id: str) -> dict[str, str]:
 
 
 def run_loop(event_type: str, *, source: str, run_id: str) -> dict[str, Any]:
+    global _last_liveness_ok_at, _last_liveness_error
     proc = subprocess.run(
         [sys.executable, "scripts/noos_loop_runner_v1.py", "--event-type", event_type, "--json"],
         cwd=ROOT,
@@ -91,6 +98,15 @@ def run_loop(event_type: str, *, source: str, run_id: str) -> dict[str, Any]:
             cycle = json.loads(proc.stdout)
         except json.JSONDecodeError:
             cycle = None
+    # Repair fix 5: record whether the heartbeat write itself actually landed —
+    # independent of whether this cycle's business logic succeeded. Meaningful
+    # now that repair fix 1 makes liveness_upsert populate on every code path.
+    liveness = (cycle or {}).get("liveness_upsert") or {}
+    if liveness.get("ok") is True:
+        _last_liveness_ok_at = utc_now()
+        _last_liveness_error = None
+    elif liveness:
+        _last_liveness_error = str(liveness.get("error") or liveness.get("reason") or "liveness_write_failed")
     ok = proc.returncode == 0 and (cycle or {}).get("status") == "ok"
     return {
         "schema": "noos-railway-loop-runner-tick-v1",
@@ -146,6 +162,35 @@ def run_factory(*, source: str, run_id: str) -> dict[str, Any]:
     return result
 
 
+def probe_supabase() -> dict[str, Any]:
+    """Repair fix 5 — a cheap, bounded, exception-caught real Supabase read.
+    Neither /health nor the old _ready flag ever verified connectivity; this
+    is what /health/deep checks instead. Cannot hang (5s timeout) or crash
+    the handler thread (every failure mode returns a clean dict)."""
+    url = (os.environ.get("NOETFIELD_SUPABASE_URL") or os.environ.get("SUPABASE_URL") or "").strip()
+    key = (
+        os.environ.get("NOETFIELD_SUPABASE_SERVICE_ROLE_KEY")
+        or os.environ.get("SUPABASE_SERVICE_ROLE_KEY")
+        or ""
+    ).strip()
+    if not url or not key:
+        return {"ok": False, "reason": "supabase_not_configured"}
+    import urllib.error
+    import urllib.request
+
+    req = urllib.request.Request(
+        f"{url.rstrip('/')}/rest/v1/noos_loop_registry?select=loop_id&limit=1",
+        headers={"apikey": key, "Authorization": f"Bearer {key}"},
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=5) as resp:
+            return {"ok": 200 <= resp.status < 300, "status": resp.status}
+    except urllib.error.HTTPError as exc:
+        return {"ok": False, "status": exc.code}
+    except (urllib.error.URLError, TimeoutError, OSError) as exc:
+        return {"ok": False, "error": str(exc)[:300]}
+
+
 class Handler(BaseHTTPRequestHandler):
     def log_message(self, format: str, *args: object) -> None:  # noqa: A003
         return
@@ -169,6 +214,20 @@ class Handler(BaseHTTPRequestHandler):
         return True, 0, ""
 
     def do_GET(self) -> None:  # noqa: N802
+        if self.path == "/health/deep":
+            probe = probe_supabase()
+            self._json(
+                200 if probe.get("ok") else 503,
+                {
+                    "ok": bool(probe.get("ok")),
+                    "schema": "noos-railway-loop-runner-health-deep-v1",
+                    "service": "noos-loop-runner",
+                    "supabase_probe": probe,
+                    "last_successful_liveness_write_at": _last_liveness_ok_at,
+                    "last_liveness_error": _last_liveness_error,
+                },
+            )
+            return
         if self.path != "/health":
             self._json(404, {"ok": False, "error": "not_found"})
             return
@@ -181,6 +240,11 @@ class Handler(BaseHTTPRequestHandler):
                 "git_sha": git_sha(),
                 "uptime_sec": int(time.time() - _started_at),
                 "execution_mode": "one_shot_http",
+                # Repair fix 5: additive — /health's status code and existing
+                # fields are unchanged, so verify_noos_motor_sustain_v1.py
+                # (which only checks resp.status == 200) is unaffected.
+                "last_successful_liveness_write_at": _last_liveness_ok_at,
+                "last_liveness_error": _last_liveness_error,
             },
         )
 
