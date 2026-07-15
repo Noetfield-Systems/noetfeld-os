@@ -1,0 +1,48 @@
+{
+  "schema": "noos-motor-restart-v1",
+  "recipe_id": "railway-loop-runner",
+  "motor": "railway-loop-runner",
+  "gate": "machine_safe",
+  "dry_run": false,
+  "executed_at": "2026-07-12T13:52:50Z",
+  "health_before": {
+    "ok": true,
+    "status": 200,
+    "body": {
+      "ok": true,
+      "schema": "noos-railway-loop-runner-health-v1",
+      "service": "noos-loop-runner",
+      "git_sha": "03b55c1f3dea7d9adc5d3f3fbcf47872df60b8df",
+      "uptime_sec": 395408,
+      "execution_mode": "one_shot_http"
+    }
+  },
+  "health_after": {
+    "ok": true,
+    "status": 200,
+    "body": {
+      "ok": true,
+      "schema": "noos-railway-loop-runner-health-v1",
+      "service": "noos-loop-runner",
+      "git_sha": "03b55c1f3dea7d9adc5d3f3fbcf47872df60b8df",
+      "uptime_sec": 395421,
+      "execution_mode": "one_shot_http"
+    }
+  },
+  "steps": [
+    {
+      "ok": true,
+      "command": "bash scripts/deploy_noos_loop_runner_railway_v1.sh",
+      "exit_code": 0,
+      "stdout_tail": "roduction.up.railway.app\n\nProject noetfield-platform linked successfully! \ud83c\udf89\n[sync-loop-runner-env] OK \u2014 Supabase + loop secret on noos-loop-runner (service will restart)\n[sync-loop-runner-env] OK \u2014 portfolio-spine env on noos-loop-runner\n[sync-loop-runner-env] OK \u2014 loop runner env sync complete\n[deploy-loop-runner] verify: python3 scripts/verify_noos_loop_runner_railway_v1.py --url https://noos-loop-runner-production.up.railway.app --write-receipt\n[deploy-loop-runner] restored root railway.toml\n",
+      "stderr_tail": ""
+    }
+  ],
+  "external_verify": {
+    "ok": true,
+    "command": "python3 scripts/verify_noos_loop_runner_railway_v1.py --json",
+    "exit_code": 0,
+    "stderr_tail": ""
+  },
+  "ok": true
+}
