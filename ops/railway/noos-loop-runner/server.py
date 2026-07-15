@@ -248,10 +248,29 @@ class Handler(BaseHTTPRequestHandler):
 
         run_id = f"railway-{uuid.uuid4().hex[:12]}"
         try:
-            if event_type == FACTORY_EVENT or str(body.get("handler") or "") == "factory":
-                result = run_factory(source=source, run_id=run_id)
-            else:
-                result = run_loop(event_type, source=source, run_id=run_id)
+            try:
+                if event_type == FACTORY_EVENT or str(body.get("handler") or "") == "factory":
+                    result = run_factory(source=source, run_id=run_id)
+                else:
+                    result = run_loop(event_type, source=source, run_id=run_id)
+            except Exception as exc:  # noqa: BLE001 — an unhandled exception here (e.g.
+                # subprocess.TimeoutExpired past LOOP_TIMEOUT_SEC) used to propagate raw,
+                # closing the connection without ever calling self._json — the client saw
+                # a bare connection failure. Respond cleanly so the caller can retry on the
+                # next tick. TODO(repair fix 7, founder-gated migration pending): call
+                # log_incident() here once infrastructure/supabase/migrations/
+                # 0019_noos_incident_log.sql is applied, for durable forensics.
+                self._json(
+                    502,
+                    {
+                        "ok": False,
+                        "event_type": event_type,
+                        "error": "unhandled_exception",
+                        "detail": str(exc)[:500],
+                        "run_id": run_id,
+                    },
+                )
+                return
             result["receipt_path"] = write_receipt(run_id, result)
             self._json(200 if result.get("ok") else 502, result)
         finally:

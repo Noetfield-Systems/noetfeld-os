@@ -260,6 +260,17 @@ def execute_loop(loop: dict[str, Any], *, self_heal: bool = True) -> dict[str, A
     started_at = utc_now()
     if cycle_number is None:
         finished_at = utc_now()
+        # Repair fix 1 (CAS-rejection branch): same class of bug as the main
+        # gate below — this early return used to skip the heartbeat entirely,
+        # so a CAS collision could silence last_fired_at just as effectively
+        # as a crashed sink write.
+        liveness_upsert = upsert_loop_liveness(
+            loop_id=loop_id,
+            event_type=event_type,
+            interval_minutes=int(loop.get("interval_minutes") or 5),
+            last_cycle_status="BLOCKED_WITH_REASON",
+            host=detect_execution_host(),
+        )
         return {
             "schema": "noos-24-7-loop-cycle-v1",
             "receipt_schema": "autorun-cycle-receipt-v2",
@@ -277,6 +288,7 @@ def execute_loop(loop: dict[str, Any], *, self_heal: bool = True) -> dict[str, A
             "exit_code": 1,
             "blocker_reason": f"cas_rejected:{cas_meta.get('reason')}",
             "d2": cas_meta,
+            "liveness_upsert": liveness_upsert,
             "runner_output": {"cloud_meta": cloud_meta(), "cas": cas_meta},
         }
 
@@ -407,17 +419,19 @@ def execute_loop(loop: dict[str, Any], *, self_heal: bool = True) -> dict[str, A
     }
     loop_state_path(loop_id).write_text(json.dumps(state, indent=2) + "\n", encoding="utf-8")
 
-    if state_after in ("COMPLETE", "IDLE_NO_WORK"):
-        cycle["liveness_upsert"] = upsert_loop_liveness(
-            loop_id=loop_id,
-            event_type=event_type,
-            interval_minutes=int(loop.get("interval_minutes") or 5),
-            last_cycle_status=state_after,
-            host=detect_execution_host(),
-        )
-        cycle["meta_liveness_sync"] = sync_meta_liveness_rows()
-    else:
-        cycle["liveness_upsert"] = {"ok": False, "skipped": True, "reason": "cycle_not_successful"}
+    # Repair fix 1: the heartbeat must never be gated behind cycle success. A
+    # transient failure in this cycle's own business logic (or its sink write)
+    # is not evidence the motor itself is dead — but skipping this call on
+    # every non-success state is exactly what let staleness go undetected for
+    # hours despite a healthy Railway /health. Always report real state.
+    cycle["liveness_upsert"] = upsert_loop_liveness(
+        loop_id=loop_id,
+        event_type=event_type,
+        interval_minutes=int(loop.get("interval_minutes") or 5),
+        last_cycle_status=state_after,
+        host=detect_execution_host(),
+    )
+    cycle["meta_liveness_sync"] = sync_meta_liveness_rows()
 
     return cycle
 
