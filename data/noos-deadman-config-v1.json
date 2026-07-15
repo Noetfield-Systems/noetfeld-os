@@ -21,7 +21,7 @@
     "probe_suppress_telegram": true,
     "founder_test_query_param": "telegram=1"
   },
-  "restart_attempts_max": 1,
+  "restart_attempts_max": 5,
   "loop_runner": {
     "health_path": "/health",
     "loop_path": "/loop",
