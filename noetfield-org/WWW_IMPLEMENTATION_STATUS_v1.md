@@ -15,7 +15,7 @@
 3. **One page = one subject** — do not cross-link unrelated directions (e.g. no Case Study / Roadmap / TrustField on `/motors/`; no diligence product on `/investors/`).
 4. **Do not revert `/` to a corporate/product marketing homepage** — founder rejected that (2026-07-13).
 5. **Do not change global `header.html`** for gate pages — gate pages use standalone `nf-gate` shell.
-6. **Vercel is removed** — use `www-pages-deploy.exclude` + `governance/www-pages-routes.json`. Never reintroduce `.vercelignore` / `vercel.json`.
+6. **The prior deploy platform is removed** (retired name tracked in `noetfield-org/FORBIDDEN_MARKERS.txt`) — use `www-pages-deploy.exclude` + `governance/www-pages-routes.json`. Never reintroduce its legacy ignore file or platform-config JSON.
 
 ---
 
@@ -69,7 +69,7 @@
 | Session API | `Noetfield/api/auth/invest-session.js` | Sets `nf_invest_auth` cookie |
 | Auth config (public) | `Noetfield/assets/noetfield-platform-auth-config-v1.json` | Supabase anon + URLs |
 
-**Retired:** `.vercelignore`, `vercel.json`, Vercel deploy scripts, `functions/_lib/vercel-adapter.js` → `pages-node-handler-adapter.js`
+**Retired:** the legacy platform's ignore file, its platform-config JSON, its deploy scripts, `functions/_lib/legacy-platform-adapter.js` → `pages-node-handler-adapter.js`
 
 ---
 
@@ -105,11 +105,11 @@ Strategy positioning (three commercial fields, proof library model, naming table
 
 ## 6. Known doc pollution — do not propagate
 
-These still mention Vercel or old architecture; **ignore or fix when touched**, do not treat as SSOT:
+These still mention the legacy deploy platform or old architecture; **ignore or fix when touched**, do not treat as SSOT:
 
-- `Noetfield/prompts/loop-suggestions-100.json` — **fixed** (was vercel.json prompts)
-- `Noetfield/docs/ops/plans/NOETFIELD_E2E_SMART_UPGRADE_321_TASKS_v1.md` — fixed E2E-201 (was `.vercelignore`)
-- `Noetfield/docs/ops/NOETFIELD_SYSTEM_NERVE_UPGRADE_100_PLANS_LOCKED_v1.md` — fixed (was vercel.json references)
+- `Noetfield/prompts/loop-suggestions-100.json` — **fixed** (was legacy-platform-config prompts)
+- `Noetfield/docs/ops/plans/NOETFIELD_E2E_SMART_UPGRADE_321_TASKS_v1.md` — fixed E2E-201 (was the legacy ignore file)
+- `Noetfield/docs/ops/NOETFIELD_SYSTEM_NERVE_UPGRADE_100_PLANS_LOCKED_v1.md` — fixed (was legacy-platform-config references)
 - `Noetfield/graph-out/` — generated; may list deleted paths
 - Historical reports under `Noetfield/reports/` — point-in-time only
 
