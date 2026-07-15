@@ -114,6 +114,8 @@ def _post_row(table: str, row: dict[str, Any], *, merge: bool = False) -> dict[s
             if pg.get("ok") or pg.get("skipped"):
                 return pg
         return {"ok": False, "status": exc.code, "error": detail[:500]}
+    except (urllib.error.URLError, TimeoutError, OSError, json.JSONDecodeError) as exc:
+        return {"ok": False, "error": str(exc)[:500]}
 
 
 def _sink_status(cycle: dict[str, Any]) -> str:

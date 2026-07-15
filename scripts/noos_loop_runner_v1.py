@@ -16,6 +16,7 @@ ROOT = Path(__file__).resolve().parents[1]
 REGISTRY = ROOT / "data/noos-24-7-loops-v1.json"
 SINK = ROOT / "scripts/factory_supabase_sink_v1.py"
 RUNTIME = ROOT / ".noos-runtime/loops"
+SINK_TIMEOUT_SEC = int(os.environ.get("NOOS_SINK_TIMEOUT_SEC", "60"))
 
 sys.path.insert(0, str(ROOT / "scripts"))
 from noos_loop_determinism_v1 import advance_state, cas_advance, op_key, transition_allowed  # noqa: E402
@@ -131,17 +132,22 @@ def sink_cycle(cycle: dict[str, Any], *, factory_id: str) -> dict[str, Any]:
     with tempfile.NamedTemporaryFile("w", suffix=".json", delete=False, encoding="utf-8") as tmp:
         json.dump(cycle, tmp)
         tmp_path = tmp.name
-    proc = subprocess.run(
-        [sys.executable, str(SINK), "cycle", tmp_path, "--factory-id", factory_id],
-        cwd=str(ROOT),
-        capture_output=True,
-        text=True,
-        check=False,
-    )
     try:
-        Path(tmp_path).unlink(missing_ok=True)
-    except OSError:
-        pass
+        proc = subprocess.run(
+            [sys.executable, str(SINK), "cycle", tmp_path, "--factory-id", factory_id],
+            cwd=str(ROOT),
+            capture_output=True,
+            text=True,
+            check=False,
+            timeout=SINK_TIMEOUT_SEC,
+        )
+    except subprocess.TimeoutExpired:
+        return {"ok": False, "exit_code": -1, "error": f"sink_subprocess_timeout_{SINK_TIMEOUT_SEC}s"}
+    finally:
+        try:
+            Path(tmp_path).unlink(missing_ok=True)
+        except OSError:
+            pass
     sink_out: dict[str, Any] = {"ok": proc.returncode == 0, "exit_code": proc.returncode}
     if proc.stdout.strip():
         try:
