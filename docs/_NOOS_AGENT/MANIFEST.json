@@ -296,6 +296,12 @@
       "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260712-001]_COCKPIT_AUTOMATIONS_RECONCILE_v1.md",
       "doc_type": "COCKPIT_AUTOMATIONS_RECONCILE",
       "title": "Cockpit automations reconcile v1 — Claude scheduled automations vs NOOS doctrine"
+    },
+    {
+      "trace_id": "NOOS-AGENT-20260715-001",
+      "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260715-001]_MOTOR_EVENT_REPAIR_FOUNDER_CHECKLIST_v1.md",
+      "doc_type": "FOUNDER_CHECKLIST",
+      "title": "Motor repair + event-based redesign — founder checklist v1"
     }
   ]
 }
