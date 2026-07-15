@@ -1,0 +1,12 @@
+name = "noos-loop-github-events-v1"
+main = "src/index.js"
+compatibility_date = "2024-06-01"
+account_id = "0d0b967b77e2e5535455d39ff3dae72c"
+
+# Event Phase 1b — fetch-only receiver, deliberately no [triggers] block.
+# This worker reacts to the GitHub App webhook (POST /webhook/github), not a
+# cron. Do not add a crons = [...] block here; that would misrepresent this
+# worker's actual (event-driven) execution model to anyone reading the config.
+
+[observability]
+enabled = true

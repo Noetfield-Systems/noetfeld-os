@@ -1,4 +1,4 @@
-.PHONY: test gate demo build-gate-js install inbox cloud-worker autorun-once autorun autorun-status autorun-tick-deploy autorun-tick-dispatch autonomous-verify schedule-verify determinism-verify replay-verify planes supabase-migrate verified-window loop-run loop-fleet-deploy deploy-railway-loop-runner verify-cf-railway-dispatch loop-fleet-dispatch loops-status loop-heartbeat loop-baseline loop-registry-reconcile loop-verify-all loop-upgrade-closeout trigger-host-inventory deadman-deploy deadman-probe cloud-motor-e2e cloud-motor-resync deploy-baseline deploy-status deploy-fly-inbox deploy-fly-selfheal deploy-drift-kaizen inbox-scaler inbox-scaler-evaluate sandbox-registry-reconcile improve-kaizen-daily t2-deploy-closeout t3-sandbox-closeout acg-founder-send-prep backlog urls local-boot local-closeout local-patch-proposal local-heartbeat local-lane local-sweep-stale local-status machine-status machine-reconcile machine-audit machine-verify machine-validate-merge pr-conflict-verify machine-critic machine-research icl-p1-verify icl-p2-verify integrator-status integrator-repair-autorun integrator-tasks-mirror upgrade-manifest-publish motor-sustain-verify nf-pub-verdict-gate living-system-48h-prep acg-weekly-digest gel-api-multi-region-verify phase5-packaging-prep kaizen-sustain cloud-vault-promote cloud-vault-canonicalize cloud-vault-cleanup cloud-vault-migrate wire-cf-railway-motor wire-cf-fly-motor cloud-secrets-sync cloud-workers-deploy
+.PHONY: test gate demo build-gate-js install inbox cloud-worker autorun-once autorun autorun-status autorun-tick-deploy autorun-tick-dispatch autonomous-verify schedule-verify determinism-verify replay-verify planes supabase-migrate verified-window loop-run loop-fleet-deploy deploy-railway-loop-runner verify-cf-railway-dispatch loop-fleet-dispatch loops-status loop-heartbeat loop-baseline loop-registry-reconcile loop-verify-all loop-upgrade-closeout trigger-host-inventory deadman-deploy deadman-probe cloud-motor-e2e cloud-motor-resync deploy-baseline deploy-status deploy-fly-inbox deploy-fly-selfheal deploy-drift-kaizen inbox-scaler inbox-scaler-evaluate sandbox-registry-reconcile improve-kaizen-daily t2-deploy-closeout t3-sandbox-closeout acg-founder-send-prep backlog urls local-boot local-closeout local-patch-proposal local-heartbeat local-lane local-sweep-stale local-status machine-status machine-reconcile machine-audit machine-verify machine-validate-merge pr-conflict-verify machine-critic machine-research icl-p1-verify icl-p2-verify integrator-status integrator-repair-autorun integrator-tasks-mirror upgrade-manifest-publish motor-sustain-verify nf-pub-verdict-gate living-system-48h-prep acg-weekly-digest gel-api-multi-region-verify phase5-packaging-prep kaizen-sustain cloud-vault-promote cloud-vault-canonicalize cloud-vault-cleanup cloud-vault-migrate wire-cf-railway-motor wire-cf-fly-motor cloud-secrets-sync cloud-workers-deploy loop-github-events-deploy verify-github-webhook-receiver
 
 test:
 	pytest -q
@@ -71,6 +71,12 @@ loop-run:
 
 loop-fleet-deploy:
 	bash scripts/deploy_noos_loop_fleet_tick_cf_v1.sh
+
+loop-github-events-deploy:
+	bash scripts/deploy_noos_loop_github_events_cf_v1.sh
+
+verify-github-webhook-receiver:
+	python3 scripts/verify_noos_github_webhook_receiver_v1.py --json
 
 deploy-railway-loop-runner:
 	bash scripts/deploy_noos_loop_runner_railway_v1.sh
