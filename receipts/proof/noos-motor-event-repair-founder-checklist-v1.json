@@ -1,0 +1,28 @@
+{
+  "schema": "noos-motor-event-repair-founder-checklist-v1",
+  "at": "2026-07-15T00:00:00Z",
+  "author": "claude-code-noos",
+  "verdict": "SUBMITTED for independent verification",
+  "canon_version": "FOUNDER_CANON_v1+MACHINE_LOOPS_v1",
+  "plan_file": "/Users/sinakazemnezhad/.claude/plans/indexed-yawning-tome.md",
+  "lane_branch": "repair/motor-heartbeat-decouple-v1",
+  "landed_commits": [
+    {"sha_prefix": "4168ad05", "what": "repair fix 2+3 — sink exception widening + subprocess timeout"},
+    {"sha_prefix": "dcf62e8d", "what": "repair fix 1 — decouple liveness heartbeat from cycle success (root cause)"},
+    {"sha_prefix": "1d647795", "what": "repair fix 5+4 — Railway /health/deep + CF Worker dispatch isolation"},
+    {"sha_prefix": "3450b17d", "what": "event phase 1 — GitHub App webhook receiver worker + deploy/verify scripts"}
+  ],
+  "new_tests": 20,
+  "full_suite_result": "207 passed, 1 pre-existing unrelated failure (LSUP law-drift false positive, confirmed present on main before this work)",
+  "root_cause_confirmed": "noos_loop_runner_v1.py execute_loop() gated upsert_loop_liveness() behind cycle success (state_after in COMPLETE/IDLE_NO_WORK); a transient sink-write failure silently skipped the heartbeat entirely — proven by 5/7 new tests failing against pre-fix code (git stash) and passing against the fix",
+  "founder_gated_items_prepared_not_applied": [
+    {"item": "repair fix 6 — deadman restart_attempts_max 1->5", "file": "data/noos-deadman-config-v1.json", "gate_class": "data/*.json (L5)"},
+    {"item": "repair fix 7 — incident logging migration", "file": "infrastructure/supabase/migrations/0019_noos_incident_log.sql", "gate_class": "Supabase migration", "status": "on disk, uncommitted"},
+    {"item": "event phase 1a — GitHub App webhook activation", "gate_class": "account-level App setting"},
+    {"item": "event phase 2 — Supabase Database Webhook for inbox queue", "gate_class": "project-level Supabase config, embeds secret"},
+    {"item": "event phase 3+4 — trigger registry + dispatch cadence demotion", "files": ["data/trigger-registry-v1.json", "data/noos-cf-dispatch-table-v1.json"], "gate_class": "data/*.json (L5)", "status": "deferred until phase 1/2 are live"}
+  ],
+  "checklist_doc": "docs/_NOOS_AGENT/[NOOS-AGENT-20260715-001]_MOTOR_EVENT_REPAIR_FOUNDER_CHECKLIST_v1.md",
+  "self_correction_note": "Initially attempted to bundle the fix-7 migration into the fix-1 commit; the auto-mode classifier correctly blocked it per CLAUDE.md's Supabase-migration founder gate. Split immediately and proactively applied the same data/*.json reasoning to fix 6 before attempting it, rather than waiting for a second denial.",
+  "ok": true
+}
