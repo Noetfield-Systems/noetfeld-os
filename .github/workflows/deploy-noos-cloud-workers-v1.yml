@@ -63,6 +63,24 @@ jobs:
           GITHUB_REPO: ${{ github.repository }}
         run: bash scripts/deploy_noos_loop_fleet_tick_cf_v1.sh
 
+      # Event Phase 1c — GitHub App webhook receiver. Skips cleanly (no deploy,
+      # exit 0) until the founder provisions MOTOR_APP_WEBHOOK_SECRET (Event
+      # Phase 1a is an account-level App-settings change, not part of this
+      # workflow) — this step does not block factory/fleet deploys above it.
+      - name: Deploy GitHub webhook events receiver
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          NOOS_LOOP_SECRET: ${{ secrets.NOOS_LOOP_SECRET }}
+          MOTOR_APP_WEBHOOK_SECRET: ${{ secrets.MOTOR_APP_WEBHOOK_SECRET }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPO: ${{ github.repository }}
+        run: |
+          if [[ -z "${MOTOR_APP_WEBHOOK_SECRET:-}" ]]; then
+            echo "SKIP: MOTOR_APP_WEBHOOK_SECRET not yet provisioned (Event Phase 1a pending founder action)"
+            exit 0
+          fi
+          bash scripts/deploy_noos_loop_github_events_cf_v1.sh
+
       - name: Write deploy receipt (workflow_run chain anchor)
         run: |
           set -euo pipefail
@@ -84,6 +102,9 @@ jobs:
                   "noos-factory-autorun-tick-v1",
                   "noos-loop-fleet-tick-v1",
               ],
+              "workers_conditional": {
+                  "noos-loop-github-events-v1": "deployed_if_MOTOR_APP_WEBHOOK_SECRET_set_else_skipped",
+              },
           }
           out = Path("receipts/proof/noos-cloud-workers-deploy-v1.json")
           out.write_text(json.dumps(doc, indent=2) + "\n", encoding="utf-8")
