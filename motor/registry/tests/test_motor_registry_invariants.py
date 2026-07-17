@@ -51,7 +51,7 @@ def _semantics_bad(job) -> bool:
 def test_00_shipped_archive_is_valid():
     failures, counts = V.validate_all(REG)
     assert failures == [], failures
-    assert counts["jobs"] >= 1 and counts["recipes"] == 5
+    assert counts["jobs"] >= 1 and counts["recipes"] == 6
 
 
 # ---- I1: PROVEN/FAILED require evidence_ref --------------------------------

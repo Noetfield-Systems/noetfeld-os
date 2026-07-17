@@ -1,0 +1,152 @@
+{
+  "schema": "noos-canonical-roles-v1",
+  "version": "1.0.0",
+  "status": "PROPOSED_SG_REVIEW",
+  "generated_at": "2026-07-17T18:18:00Z",
+  "decision_ref": "NF-UNIFIED-MOTOR-ISSUE-CI-OWNERSHIP-V1",
+  "operational_binding": "noetfield-org/ISSUE_CI_OWNERSHIP_OPERATIONAL_BINDING_v1.md",
+  "sg_addendum": "docs/_NOOS_AGENT/[NOOS-AGENT-20260717-001]_NF-UNIFIED-MOTOR-ISSUE-CI-OWNERSHIP-V1.md",
+  "one_law": "One accountable manager, one specialist per fault domain, and no omnipotent agent: the Issue Manager may never silently classify, patch, verify, approve, and merge its own work (separation of duties).",
+  "not_active_note": "PROPOSED role map. These canonical role IDs are NOT active authority until SG ratifies NF-UNIFIED-MOTOR-ISSUE-CI-OWNERSHIP-V1 and the founder merges the operationalization PR. Until then this registry declares intent + evidence, not live routing.",
+  "roles": [
+    {
+      "role_id": "noetfield:noos.portfolio-owner",
+      "title": "NOOS Portfolio Continuation Owner",
+      "kind": "canonical_owner",
+      "status": "PROPOSED_SG_REVIEW",
+      "implementation": "existing NOOS continuation owner; hosts the issue-manager and ci-reliability-owner capabilities/profiles below (not a new cloud agent)",
+      "responsibilities": [
+        "persistent continuation ownership of the NOOS portfolio",
+        "parent identity for the Issue Manager and CI Reliability Owner capabilities"
+      ]
+    },
+    {
+      "role_id": "noetfield:noos.issue-manager",
+      "title": "NOOS Issue Manager",
+      "kind": "capability_of",
+      "parent": "noetfield:noos.portfolio-owner",
+      "status": "PROPOSED_SG_REVIEW",
+      "implementation": "capability/profile of noetfield:noos.portfolio-owner initially; NOT a sixth independent cloud agent",
+      "responsibilities": [
+        "GitHub issue and PR-failure intake",
+        "deduplication into one canonical issue record",
+        "severity and blast-radius classification",
+        "fault-domain classification and ownership resolution",
+        "stale-issue monitoring",
+        "assignment to the correct Motor recipe or owner",
+        "escalation to the founder only when authority is genuinely required",
+        "confirming evidence-based closure (a green rerun alone does not close a flaky/unknown-cause issue)"
+      ],
+      "does_not": [
+        "normally edit code",
+        "self-approve, self-verify, or merge its own routed work (separation of duties)"
+      ],
+      "subscribes_to": [
+        "issues",
+        "issue_comment",
+        "pull_request",
+        "pull_request_review",
+        "check_run",
+        "check_suite",
+        "workflow_run",
+        "deployment events",
+        "security alerts where authorized"
+      ]
+    },
+    {
+      "role_id": "noetfield:noos.ci-reliability-owner",
+      "title": "NOOS CI Reliability Owner",
+      "kind": "profile_of",
+      "parent": "noetfield:noos.portfolio-owner",
+      "status": "PROPOSED_SG_REVIEW",
+      "implementation": "profile under NOOS initially; not necessarily another core agent",
+      "responsibilities": [
+        "monitor required checks and detect flaky checks",
+        "compare baseline and candidate results",
+        "distinguish infrastructure failures from code failures",
+        "inspect workflow logs",
+        "maintain CI health and retry policy",
+        "open a bounded repair job for genuine CI-system faults",
+        "track failure recurrence",
+        "produce CI incident receipts"
+      ],
+      "forbidden_by_default": [
+        "changing production deployment authority",
+        "widening production triggers",
+        "modifying secrets",
+        "bypassing required checks",
+        "marking failed checks successful",
+        "merging code",
+        "deploying production"
+      ],
+      "founder_or_sg_required_when": "a workflow edit changes permissions, secrets, environments, branch triggers, or production targets"
+    },
+    {
+      "role_id": "noetfield:sandbox.builder-owner",
+      "title": "SANDBOX Builder Owner",
+      "kind": "canonical_owner",
+      "status": "PROPOSED_SG_REVIEW",
+      "owns_recipe": "NF-MOTOR-CI-REPAIR-001",
+      "worker_profile": "ci-repair-worker",
+      "responsibilities": [
+        "owns candidate-caused CI repair execution",
+        "delegates the actual repair to a bounded worker in an isolated branch/worktree",
+        "reruns the exact failed check, commits, and updates the PR"
+      ],
+      "worker_adapters": [
+        "openai.codex-cloud (worker adapter, NOT the institutional CI owner)",
+        "openai.codex-sdk (future programmatic adapter)",
+        "claude-builder"
+      ],
+      "does_not": ["merge", "deploy", "weaken or bypass required checks", "own CI-system reliability"]
+    },
+    {
+      "role_id": "noetfield:sourcea.dispatch-owner",
+      "title": "SourceA Dispatch Owner",
+      "kind": "canonical_owner",
+      "status": "PROPOSED_SG_REVIEW",
+      "responsibilities": [
+        "compiles the bounded repair job from the Issue Manager's classified + routed issue",
+        "binds required inputs before execution (missing input = job invalid at creation)"
+      ]
+    }
+  ],
+  "failure_class_routing": [
+    {"failure_class": "candidate code or test regression", "owner": "noetfield:sandbox.builder-owner"},
+    {"failure_class": "stale test contract from an intentional code change", "owner": "noetfield:sandbox.builder-owner"},
+    {"failure_class": "formatting, lint, type, or build error", "owner": "noetfield:sandbox.builder-owner"},
+    {"failure_class": "GitHub Actions workflow logic defect", "owner": "noetfield:noos.ci-reliability-owner", "founder_gated_if": "deployment authority changes"},
+    {"failure_class": "runner outage or GitHub infrastructure failure", "owner": "NOOS Platform Operations route"},
+    {"failure_class": "secret missing, expired, or incorrectly scoped", "owner": "SG/Secrets authority route", "founder_gated": true},
+    {"failure_class": "production deployment workflow failure", "owner": "Release/Promotion Owner"},
+    {"failure_class": "flaky or nondeterministic test", "owner": "noetfield:noos.ci-reliability-owner"},
+    {"failure_class": "external service outage", "owner": "NOOS observes and retries per policy; no code patch by default"},
+    {"failure_class": "security finding", "owner": "Security recipe + focused independent review"},
+    {"failure_class": "unsupported or ambiguous failure", "owner": "STOP and escalate; do not guess"}
+  ],
+  "issue_lifecycle": [
+    "DETECTED", "INGESTED", "DEDUPLICATED", "CLASSIFIED", "OWNER_ASSIGNED",
+    "RECIPE_SELECTED", "SANDBOXED", "REPAIR_IN_PROGRESS", "CI_RECHECKING",
+    "RESOLVED_CANDIDATE", "PROMOTION_AUTHORIZED", "CLOSED_WITH_EVIDENCE"
+  ],
+  "issue_terminal_states": [
+    "BLOCKED_AUTHORITY", "BLOCKED_EXTERNAL", "DUPLICATE", "NOT_REPRODUCIBLE",
+    "SUPERSEDED", "WONT_FIX_WITH_REASON"
+  ],
+  "separation_of_duties": {
+    "issue_manager": "decides what the problem is and who owns it",
+    "sourcea_dispatch_owner": "compiles the bounded repair job",
+    "sandbox_builder_owner": "owns code repair execution",
+    "ci_reliability_owner": "owns CI-system faults and flaky infrastructure",
+    "ci": "deterministic verification",
+    "verifier": "reviews only when risk justifies it",
+    "founder": "approves consequential authority or promotion changes"
+  },
+  "forbidden": [
+    "self_approval",
+    "check_bypass",
+    "silent_test_weakening",
+    "unauthorized_secret_change",
+    "unauthorized_production_trigger_change"
+  ]
+}

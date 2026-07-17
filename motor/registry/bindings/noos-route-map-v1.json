@@ -36,6 +36,16 @@
       "machine_owner": null,
       "status": "NOT_WIRED",
       "note": "Authoritative source unqueryable \u2014 diagnose the monitoring path, do not touch execution."
+    },
+    {
+      "noos_route": "ci_failure_candidate_repair",
+      "noos_state": "CI_CHECK_FAILED_CANDIDATE_CAUSED",
+      "motor_recipe": "NF-MOTOR-CI-REPAIR-001",
+      "machine_owner": null,
+      "status": "NOT_WIRED",
+      "note": "PROPOSED per NF-UNIFIED-MOTOR-ISSUE-CI-OWNERSHIP-V1 (SG_REVIEW_REQUIRED). The NOOS Issue Manager (noetfield:noos.issue-manager) classifies a failed required check; ONLY failure_classification=candidate_caused routes here \u2014 to the SANDBOX Builder Owner (noetfield:sandbox.builder-owner) running NF-MOTOR-CI-REPAIR-001 in a git_worktree sandbox via a bounded worker (Codex Cloud/SDK). NOT_WIRED = no registered machine owner executes yet: NOOS classifies + surfaces the finding and STOPS (correctly stopping beats wrongly repairing). Non-candidate classes never route here \u2014 workflow-logic defects and flaky tests -> CI Reliability Owner (noetfield:noos.ci-reliability-owner); runner outages -> NOOS Platform Operations; missing/expired secrets -> SG/Secrets + founder gate; production promotion -> Release Owner.",
+      "proposed_at": "2026-07-17T18:18:00Z",
+      "proposed_by_task": "NF-NOOS-ISSUE-CI-OWNERSHIP-001"
     }
   ]
 }

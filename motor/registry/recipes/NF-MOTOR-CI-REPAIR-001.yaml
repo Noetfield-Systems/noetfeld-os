@@ -1,0 +1,162 @@
+# Candidate-caused CI repair. The bounded sibling of SOFTWARE-CHANGE: it does not
+# implement a feature — it turns an ALREADY-CLASSIFIED candidate_caused CI failure
+# green inside an isolated sandbox, then hands a founder-approvable PR back. It never
+# merges, deploys, weakens a check, or touches CI/verifier config. Only failures the
+# NOOS Issue Manager classified as candidate_caused reach this recipe.
+recipe_id: NF-MOTOR-CI-REPAIR-001
+version: 1.0.0
+purpose: >-
+  Repair a candidate-caused CI failure (test regression, a stale test contract left
+  by an intentional code change, or a formatting/lint/type/build error) inside an
+  isolated sandbox and produce a verified, founder-approvable PR update whose exact
+  failed check passes — without weakening any required check, merging, or deploying.
+
+trigger:
+  type: event
+  event_source: "github:check_run.failed"
+  dedupe_key: "ci-repair:{repository}:{pr_number}:{failed_check}:{head_sha}"
+
+required_inputs:
+  - name: repository
+    description: Target repo (exactly one — one repo per job)
+  - name: pull_request
+    description: PR number whose required check failed (the candidate branch under repair)
+  - name: head_sha
+    description: Candidate head SHA the failed check ran on (L6 clean-SHA anchor to branch from)
+  - name: failed_check
+    description: Exact name of the failed required check to reproduce and turn green
+  - name: failure_classification
+    description: >-
+      Set by the NOOS Issue Manager BEFORE this recipe runs. One of
+      candidate_caused | pre_existing | flaky | infrastructure | external_dependency
+      | authority_or_secret | inconclusive. Only candidate_caused is in scope; any
+      other value stops the job and routes back to the Issue Manager.
+  - name: trigger_events
+    description: >-
+      The event classes the Issue Manager may route from into this recipe:
+      github:check_run.failed, github:workflow_run.failed, github:pull_request.check_failed.
+
+authority:
+  machine_may:
+    - inspect_logs
+    - reproduce_failure
+    - create_branch_and_worktree
+    - modify_candidate_branch
+    - add_or_update_tests
+    - rerun_local_checks
+    - create_additive_commit
+    - push_feature_branch
+    - update_pr_description
+  founder_required:
+    - merge_to_main
+    - production_deployment
+    - weaken_or_bypass_required_check     # L5 — stated as authority, not just policy
+    - any_verifier_or_ci_config_change    # L5
+    - any_secret_change
+    - broaden_deployment_authority
+  escalation_route: founder-decision issue in sandbox-private
+
+workers:
+  - type: codex-builder
+    allowed_tools: [file_edit, git, tests, gh_draft_pr]
+  - type: claude-builder
+    allowed_tools: [file_edit, git, tests, gh_draft_pr]
+
+sandbox:
+  type: git_worktree
+  production_write: false
+  network_policy: allowlist
+  network_allowlist: [github.com, registry.npmjs.org, pypi.org]
+  secret_scope: []
+  destroy_on_complete: true
+
+budgets:
+  time_minutes: 90
+  cost_usd: 15
+  retries: 2
+  value_class: risk_reduction
+
+steps:
+  - name: classify_guard
+    action: >-
+      Confirm failure_classification == candidate_caused. If it is anything else
+      (flaky, infrastructure, external, authority_or_secret, inconclusive), stop and
+      route back to the NOOS Issue Manager. Do not guess the fault domain.
+  - name: reproduce
+    action: Check out head_sha in an isolated git worktree and reproduce the exact failed_check locally
+    verify_command: repo-standard command for failed_check (declared per repo manifest)
+  - name: repair
+    action: >-
+      Apply the minimal bounded correction on the candidate branch — fix candidate code,
+      or add/update tests when an intentional change left a stale contract. Never edit
+      verifier scripts, CI workflow logic, required-check config, or secrets.
+  - name: rerun
+    action: Rerun the exact failed check plus the relevant regression suite locally, then push the additive commit and update the PR description from the real diff
+    verify_command: repo-standard command for failed_check
+
+verification:
+  external_proof_required: true
+  checks:
+    - name: exact_failed_check_passes
+      command_or_probe: GitHub re-run of the originally failed required check on the pushed candidate head
+      pass_criterion: The exact failed_check reports success on the new candidate head SHA
+      external: true
+    - name: regression_suite_passes
+      command_or_probe: All GitHub required checks on the new candidate head
+      pass_criterion: All required checks PASS; no previously-passing check newly fails
+      external: true
+    - name: no_required_check_weakened
+      command_or_probe: git diff --name-only head_sha..candidate_sha
+      pass_criterion: No change to scripts/verify_*, .github/workflows/*, noetfield_gate/, or any required-check definition (L5)
+      external: false
+    - name: repair_bounded_to_candidate
+      command_or_probe: git diff --name-only head_sha..candidate_sha
+      pass_criterion: Every changed path is inside the candidate repo's product/test scope; no verifier, secret, or deploy-authority files touched
+      external: false
+
+failure_policy:
+  on_check_fail: repair_and_retry
+  on_budget_breach: block_with_reason
+  repair_scope: [candidate branch product code, candidate branch tests]
+
+human_gate:
+  required: true
+  gate_point: before_promotion
+  approval_evidence: Founder merge of the PR (merge SHA). This recipe never merges or promotes itself.
+
+promotion:
+  condition: founder_approval AND exact_failed_check PASS AND all required checks PASS AND no required check weakened
+  target: the PR's own base branch via founder merge (no direct production deploy from this recipe)
+  clean_sha_required: true
+  post_promotion_checks:
+    - Merge SHA present on the PR base branch
+    - Originally failed check green on the merge commit, probed externally >=60s after merge
+
+rollback:
+  type: revert_exact_merge
+  command: git revert -m 1 <merge_sha>
+  machine_may_rollback: false
+
+receipt:
+  schema_ref: noetfield/motor-job-v1
+  required_fields:
+    - artifacts.baseline_sha
+    - artifacts.candidate_sha
+    - artifacts.files_changed
+    - inputs.failed_check
+    - inputs.failure_classification
+    - verification_results
+    - cost.total_usd
+  storage: in-repo under motor/receipts/
+
+notes: >-
+  Owned per NF-UNIFIED-MOTOR-ISSUE-CI-OWNERSHIP-V1 (SG_REVIEW_REQUIRED). Separation of
+  duties: the NOOS Issue Manager (noetfield:noos.issue-manager) classifies + routes;
+  the SANDBOX Builder Owner (noetfield:sandbox.builder-owner) owns this repair; SourceA
+  (noetfield:sourcea.dispatch-owner) compiles the bounded job; the worker adapter is
+  Codex Cloud / Codex SDK (a bounded worker, NOT the institutional CI owner); CI itself
+  is the deterministic verifier. OUT OF SCOPE (route elsewhere): GitHub Actions workflow
+  logic defects and flaky tests -> CI Reliability Owner (noetfield:noos.ci-reliability-owner);
+  runner outages -> NOOS Platform Operations; missing/expired secrets -> SG/Secrets +
+  founder gate; production promotion -> Release Owner. PROPOSED — not active until SG
+  ratifies the ownership decision and the founder merges this PR.

@@ -1,0 +1,65 @@
+{
+  "schema": "noos-issue-ci-ownership-operationalization-receipt-v1",
+  "task": "NF-NOOS-ISSUE-CI-OWNERSHIP-001",
+  "purpose": "Operationalize the advisor's Issue-Manager / CI-ownership role map as a founder-gated DRAFT: SG decision addendum + NOOS operational binding + canonical role registry + NF-MOTOR-CI-REPAIR-001 recipe + route binding.",
+  "status": "SUBMITTED for independent verification (author != verifier; no self-PASS)",
+  "canon_version": "FOUNDER_CANON_v1+MACHINE_LOOPS_v1",
+  "decision_ref": "NF-UNIFIED-MOTOR-ISSUE-CI-OWNERSHIP-V1",
+  "decision_status": "SG_REVIEW_REQUIRED",
+  "branch": "nf-noos-issue-ci-ownership-001",
+  "generated_at": "2026-07-17T18:20:00Z",
+  "founder_gated": true,
+  "agent": "claude-code-noos",
+  "lane": "NOOS-LANE-issue-ci-ownership",
+
+  "custody_ordering_note": "The custody chain is SG defines -> NOOS operationalizes -> runtime executes -> verifier proves. This is a role DEFINITION; SG ratifies it. The founder explicitly chose 'full operationalization draft', so NOOS drafted the operational artifacts ahead of ratification, but every artifact is marked PROPOSED / NOT_WIRED / SG_REVIEW_REQUIRED and is inert until SG ratifies + the founder merges. Nothing here is active authority.",
+
+  "artifacts": {
+    "sg_addendum": "docs/_NOOS_AGENT/[NOOS-AGENT-20260717-001]_NF-UNIFIED-MOTOR-ISSUE-CI-OWNERSHIP-V1.md (SG_REVIEW_REQUIRED)",
+    "operational_binding": "noetfield-org/ISSUE_CI_OWNERSHIP_OPERATIONAL_BINDING_v1.md (PROPOSED)",
+    "canonical_roles_registry": "data/noos-canonical-roles-v1.json (status PROPOSED_SG_REVIEW; 5 role IDs)",
+    "motor_recipe": "motor/registry/recipes/NF-MOTOR-CI-REPAIR-001.yaml (v1.0.0, schema-valid)",
+    "route_binding": "motor/registry/bindings/noos-route-map-v1.json -> ci_failure_candidate_repair (status NOT_WIRED)",
+    "test_count_update": "motor/registry/tests/test_motor_registry_invariants.py: counts['recipes'] == 5 -> == 6"
+  },
+
+  "roles_declared": [
+    "noetfield:noos.portfolio-owner",
+    "noetfield:noos.issue-manager (capability of portfolio-owner)",
+    "noetfield:noos.ci-reliability-owner (profile under NOOS)",
+    "noetfield:sandbox.builder-owner (owns NF-MOTOR-CI-REPAIR-001)",
+    "noetfield:sourcea.dispatch-owner"
+  ],
+
+  "l5_and_lock_disclosures": [
+    "Recipe NF-MOTOR-CI-REPAIR-001 is an L5/founder-gated artifact by the registry's own rule ('the recipe diff IS the policy review'). Authored as a DRAFT PR = the sanctioned adoption path per motor/registry/docs/README.md.",
+    "test_motor_registry_invariants.py recipe-count assertion bumped 5 -> 6. This is an inventory assertion tracking a legitimately-added, schema-valid recipe — NOT a weakening of a verifier. No check, predicate, or pass-criterion was loosened; validate.py and all 52 invariant tests pass unchanged in logic.",
+    "The motor WIRING (data/noos-motor-executor-wiring-v1.json) was NOT touched. The route binding is NOT_WIRED (no machine owner) — NOOS classifies and stops; it does not auto-execute repair.",
+    "data/noos-canonical-roles-v1.json is a NEW registry (additive), carrying status PROPOSED_SG_REVIEW; it grants no active authority."
+  ],
+
+  "verification": {
+    "motor_registry_validate": "python3 motor/registry/validate.py -> recipes: 6, jobs: 2, All artifacts valid (v1.2 fail-closed).",
+    "motor_registry_tests": "python3 -m pytest motor/registry/tests/test_motor_registry_invariants.py -> 52 passed.",
+    "full_repo_suite": "python3 -m pytest -q -> 291 passed, 2 benign deprecation warnings.",
+    "json_parse": "data/noos-canonical-roles-v1.json and motor/registry/bindings/noos-route-map-v1.json both parse.",
+    "activation_doctor": "exit 0, 0 FAIL, 54 PASS, 2 STALE (noos_pin_freshness + sg_pin_freshness — pre-existing, unrelated: this branch is off main whose NOOS-pin refresh is in PR #81)."
+  },
+
+  "separation_of_duties_preserved": "Issue Manager classifies/routes; SourceA compiles; Builder Owner repairs; CI Reliability Owner owns CI-system faults; CI verifies; founder approves promotion. No role classifies + patches + verifies + approves + merges its own work.",
+
+  "founder_decisions_surfaced": [
+    "SG must ratify NF-UNIFIED-MOTOR-ISSUE-CI-OWNERSHIP-V1 (5 role IDs, capability-vs-agent framing, failure-class routing, recipe authority split, promotion authority).",
+    "Whether/when to WIRE the ci_failure_candidate_repair route (register a machine owner) — a separate later gate; kept NOT_WIRED here.",
+    "Confirm the recipe's authority split and 90-min / $15 / 2-retry budget are acceptable.",
+    "SoD concentration (surfaced by adversarial verification, non-blocking): portfolio-owner hosts BOTH issue-manager (classifier + closure confirmer) AND ci-reliability-owner (adjudicator for flaky/workflow/infra) — for non-candidate classes one identity classifies + adjudicates + confirms closure. Inert today (PROPOSED/NOT_WIRED) and both hats stripped of merge/deploy/bypass. SG should explicitly bless or split the dual hat, and require any future CI-Reliability remediation path to carry the same external-verifier + founder-gate discipline as the candidate-repair recipe before it is wired."
+  ],
+
+  "not_done": [
+    "merge to main (founder gate)",
+    "SG ratification of the ownership decision",
+    "wiring a machine owner to the route (deferred, separately gated)",
+    "any live cloud-agent creation or GitHub event-subscription (implementation, not this draft)"
+  ],
+  "final_status": "ISSUE_CI_OWNERSHIP_OPERATIONALIZATION_PREPARED_FOR_SG_REVIEW_AND_FOUNDER_MERGE"
+}
