@@ -1,0 +1,42 @@
+{
+  "schema": "noos-builder-receipt-v1",
+  "task": "NF-NOOS-OBSERVABILITY-SEMANTICS-001",
+  "title": "Observability semantics: separate dispatch / completion / receipt-writer / observer",
+  "status": "SUBMITTED for independent verification",
+  "verdict": "NONE — builder does not self-certify; author != verifier required for any PASS.",
+  "canon_version": "FOUNDER_CANON_v1+MACHINE_LOOPS_v1",
+  "branch": "nf-noos-observability-semantics-001",
+  "generated_at": "2026-07-17T05:10:00Z",
+  "not_authorized_and_not_done": ["deploy", "merge", "production data mutation", "delete/drain historical queue records", "restart", "redeploy"],
+
+  "objective": "Correct cockpit/autorun status model to distinguish execution dispatch, completion evidence, receipt-writer health, and observer availability, so completion-receipt staleness is never reported as loop failure/success_rate=0.0 and never routes to execution restart.",
+
+  "changes": {
+    "scripts/noos_observability_semantics_v1.py": "NEW pure module: 5-state classifier (RUNNING_CONFIRMED, DISPATCHING_COMPLETION_UNPROVEN, OBSERVER_DIVERGENCE_OR_REPLAY, LOOP_EXECUTION_STALE, OBSERVER_UNAVAILABLE), success_rate/evidence-state rules, per-state routing, and reconciler pending-queue classifier (orphaned_backlog etc.).",
+    "scripts/autorun_status_v1.py": "probe_supabase_noos_loop now reads BOTH dispatch heartbeat (noos_loop_registry.last_fired_at) and completion receipt (noetfield_factory_cycle_runs), classifies into the 5 states, emits cockpit presentation block (dispatch/completion timestamps + freshness, execution state, observation confidence, success-rate window, status source, observed_at). workflow_slo honors explicit success_rate=null and skips execution-kaizen autofile for evidence-insufficient states. dashboard_findings emits honest medium findings + route (never 'loop failed'); main() treats evidence-insufficient findings as non-fatal.",
+    "scripts/noos_slo_v1.py": "status_proxy_success_rate returns None (not 0.0) for evidence-uncertain states; LOOP_EXECUTION_STALE stays 0.0.",
+    "scripts/noos_deadman_v1.py": "explicit OBSERVE_ONLY (default; no INSERT/UPDATE/DELETE/RPC/sink write) vs DIAGNOSTIC_CANARY_WRITE (authorized sink INSERT with persistence/retention disclosure). --mode/--canary CLI. A canary-writing command is no longer labeled read-only.",
+    "scripts/noos_machine_loops_v1.py": "reconcile_queue reports new_dispatches, actionable_pending, active_leases, backoff_pending, deduplicated, completed_unreflected, orphaned_backlog, unknown. July-5 outside-audit items classified orphaned (not deleted/mutated).",
+    "scripts/noos_loop_heartbeat_v1.py": "defensive None-guard for shared status_proxy_success_rate contract change.",
+    "receipts/incident/NF-NOOS-OBSERVABILITY-SEMANTICS-001-incident-diagnostic-v1.json": "corrected incident diagnostic — 'Dispatch remained active, while per-loop completion evidence became stale'; two diagnostic canary inserts disclosed; source-table distinctions + exact UTC timestamps preserved.",
+    "docs/_NOOS_AGENT/OBSERVABILITY_SEMANTICS_RETENTION_PROPOSAL_v1.md": "separate retention/dead-letter proposal (no records mutated)."
+  },
+
+  "tests": {
+    "new": "tests/test_noos_observability_semantics_v1.py — 14 tests covering required fixtures 1-11 (dispatch/receipt fresh matrix, source query failure, no-fake-0.0, evidence staleness != execution restart route, both-stale -> execution reconcile, orphaned queue classification, deadman observe-only no-write, canary discloses write).",
+    "results": "222 passed (full suite). Targeted status/cockpit/reconciler/deadman/slo/governance suites green.",
+    "live_verification": "python3 scripts/autorun_status_v1.py against live Supabase at ~2026-07-17T05:00Z reproduced a live recurrence: all 7 loops dispatch=FRESH, completion=STALE -> classified DISPATCHING_COMPLETION_UNPROVEN, success_rate=null, evidence_state=INSUFFICIENT_RECENT_EVIDENCE, route=receipt_writer_completion_evidence_repair (old code would have said BLOCKED/success_rate=0.0). Reconciler live (read-only): pending=8 actionable=0 orphaned=8. Deadman default live: mode=OBSERVE_ONLY sink_write=False."
+  },
+
+  "invariants_upheld": [
+    "Did NOT suppress receipt staleness because dispatch is fresh (completion staleness surfaced as its own STALE signal + evidence_state).",
+    "Did NOT report a stale/absent sample as success_rate=0.0 (uses null + INSUFFICIENT_RECENT_EVIDENCE).",
+    "Did NOT route evidence-writer staleness to execution restart (route_permits_execution_mutation True only for execution-reconcile).",
+    "Did NOT claim every loop completed during the gap (incident receipt says dispatch active, completion unproven).",
+    "No verifier/law/registry/migration edits; no data/*.json registry mutated; slug law clean.",
+    "Historical July-5 queue records classified, not deleted/archived/mutated."
+  ],
+
+  "founder_gates_pending": ["merge to main", "deploy", "retention/dead-letter implementation (T3/schema)"],
+  "final_status": "BUILDER_COMPLETE_FOR_INDEPENDENT_VERIFICATION"
+}

@@ -205,7 +205,26 @@ def build_receipt(
     }
 
 
-def run_check(*, source: str = "local") -> dict[str, Any]:
+# Probe authority modes. OBSERVE_ONLY performs NO INSERT/UPDATE/DELETE/RPC or
+# diagnostic sink write; DIAGNOSTIC_CANARY_WRITE is explicitly authorized to
+# INSERT into the approved terminal diagnostic sink only. Neither mode can
+# alter execution, dispatch, reconcile or recovery state — the sink table
+# (noos_deadman_runs) is a terminal append-only audit log read by none of
+# those decision paths.
+MODE_OBSERVE_ONLY = "OBSERVE_ONLY"
+MODE_DIAGNOSTIC_CANARY_WRITE = "DIAGNOSTIC_CANARY_WRITE"
+
+CANARY_SINK_DISCLOSURE = {
+    "sink_table": "noos_deadman_runs",
+    "write_kind": "INSERT (append-only; POST, Prefer: return=minimal; new run_id per call)",
+    "persistence": "indefinite — no TTL/expiry in the write path",
+    "automatic_cleanup": "none (retention/dead-letter proposal tracked separately)",
+    "affects_operational_state": False,
+    "operational_state_note": "terminal audit sink; not read by liveness eval, dispatch, reconcile, or recovery",
+}
+
+
+def run_check(*, source: str = "local", mode: str = MODE_OBSERVE_ONLY) -> dict[str, Any]:
     cfg = load_json(CONFIG)
     multiplier = float((cfg.get("interval_multipliers") or {}).get("default") or 2)
     max_attempts = int(cfg.get("restart_attempts_max") or 1)
@@ -220,6 +239,20 @@ def run_check(*, source: str = "local") -> dict[str, Any]:
     )
     if skipped:
         receipt["restart_skipped"] = skipped
+    receipt["probe_mode"] = mode
+    if mode == MODE_DIAGNOSTIC_CANARY_WRITE:
+        sink = sink_deadman_receipt(receipt)
+        sink["disclosure"] = CANARY_SINK_DISCLOSURE
+        receipt["supabase_sink"] = sink
+    else:
+        # OBSERVE_ONLY: no mutation of any kind, including the diagnostic sink.
+        receipt["supabase_sink"] = {
+            "ok": True,
+            "skipped": True,
+            "reason": "observe_only_mode",
+            "write_performed": False,
+            "run_id": receipt.get("run_id"),
+        }
     return receipt
 
 
@@ -227,16 +260,33 @@ def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--write-receipt", action="store_true")
     ap.add_argument("--json", action="store_true")
+    ap.add_argument(
+        "--mode",
+        choices=[MODE_OBSERVE_ONLY, MODE_DIAGNOSTIC_CANARY_WRITE],
+        default=MODE_OBSERVE_ONLY,
+        help="OBSERVE_ONLY performs no writes (default). DIAGNOSTIC_CANARY_WRITE "
+        "inserts one disclosed row into the terminal diagnostic sink.",
+    )
+    ap.add_argument(
+        "--canary",
+        dest="mode",
+        action="store_const",
+        const=MODE_DIAGNOSTIC_CANARY_WRITE,
+        help="Alias for --mode DIAGNOSTIC_CANARY_WRITE (an authorized write).",
+    )
     args = ap.parse_args()
-    receipt = run_check(source="cli")
-    receipt["supabase_sink"] = sink_deadman_receipt(receipt)
+    receipt = run_check(source="cli", mode=args.mode)
     if args.write_receipt:
         path = write_local_receipt(receipt)
         receipt["receipt_path"] = str(path.relative_to(ROOT))
     if args.json:
         print(json.dumps(receipt, indent=2))
     else:
-        print(f"deadman stale={receipt['stale_count']} restarts={receipt['restart_attempt_count']}")
+        wrote = receipt.get("supabase_sink", {}).get("write_performed", True)
+        print(
+            f"deadman mode={receipt.get('probe_mode')} stale={receipt['stale_count']} "
+            f"restarts={receipt['restart_attempt_count']} sink_write={wrote}"
+        )
     return 0
 
 

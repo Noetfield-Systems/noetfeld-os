@@ -16,6 +16,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 
 import noos_receipt_chain_v1 as chain  # noqa: E402
+from noos_observability_semantics_v1 import summarize_pending  # noqa: E402
 
 CONFIG_PATH = ROOT / "data/noos-machine-loops-config-v1.json"
 LEDGER_PATH = ROOT / "data/founder-trigger-ledger-v1.json"
@@ -264,10 +265,26 @@ def reconcile_queue(*, write: bool = True) -> dict[str, Any]:
             memo = build_research_memo(question=f"Uncertain critic verdict on {receipt.get('target_schema')}", source_receipt=receipt)
             new_dispatches.append(memo)
 
+    dedup_count = 0
+    existing_keys = {json.dumps(x, sort_keys=True) for x in pending}
     for d in new_dispatches:
         key = json.dumps(d, sort_keys=True)
-        if key not in {json.dumps(x, sort_keys=True) for x in pending}:
+        if key not in existing_keys:
             pending.append(d)
+            existing_keys.add(key)
+        else:
+            dedup_count += 1
+
+    now_ts = datetime.now(timezone.utc).timestamp()
+    orphan_days = float(config.get("orphan_backlog_age_days") or 3.0)
+    breakdown = summarize_pending(
+        pending,
+        new_dispatches=len(new_dispatches),
+        now_ts=now_ts,
+        orphan_age_days=orphan_days,
+        dedup_count=dedup_count,
+    )
+    counts = breakdown["counts"]
 
     row = {
         "schema": "noos-machine-dispatch-queue-v1",
@@ -275,8 +292,18 @@ def reconcile_queue(*, write: bool = True) -> dict[str, Any]:
         "pending": pending,
         "processed": queue.get("processed") or [],
         "new_this_run": len(new_dispatches),
+        # Explicit reconciler reporting: distinguish genuinely actionable work
+        # from orphaned/historical backlog and other non-actionable buckets so
+        # ``pending=N`` is never mistaken for N live items needing dispatch.
+        "queue_breakdown": counts,
+        "queue_items_classified": breakdown["items"],
         "ok": True,
-        "report_line": f"reconcile · pending={len(pending)} new={len(new_dispatches)}",
+        "report_line": (
+            f"reconcile · pending={len(pending)} new={len(new_dispatches)} "
+            f"actionable={counts['actionable_pending']} orphaned={counts['orphaned_backlog']} "
+            f"dedup={counts['deduplicated']} leases={counts['active_leases']} "
+            f"backoff={counts['backoff_pending']} unknown={counts['unknown']}"
+        ),
     }
     if write:
         save_json(queue_path, row)
