@@ -1,0 +1,38 @@
+{
+  "schema": "noos-pr-conflict-resolution-v1",
+  "receipt_id": "noos-pr-conflict-resolution-20260717T0940Z",
+  "created_at": "2026-07-17T09:40:00Z",
+  "author": "claude-code-noos (builder)",
+  "task": "NF-NOOS-MOTOR-ROUTE-WIRING-001 (PR #76 restack)",
+  "canon_version": "FOUNDER_CANON_v1+MACHINE_LOOPS_v1",
+  "verdict": "SUBMITTED for independent verification",
+
+  "conflict": {
+    "pr": 76,
+    "github_state_before": "mergeable=CONFLICTING, mergeStateStatus=DIRTY",
+    "consequence_observed": "GitHub cannot build the merge ref for a CONFLICTING PR, so ZERO pull_request workflows ran on PR #76 — the GEL CI gate silently never executed. (GEL CI itself is healthy: 91 historical pull_request runs, including on PR #72/#73 heads.)",
+    "root_cause": "PR #76 was stacked on the PR #72 and PR #73 BRANCHES (built before they merged). Founder squash-merged #72 (9258b693, 08:21:37Z) and #73 (12a8cb79, 08:22:12Z); main then advanced further via #75 (MOTOR-WEB-001 RECEIPT_COMPLETE) and #77 (custody re-pin). The stacked branch's carried copies of #72/#73 history collided with main's evolved copies (e.g. motor/registry/jobs/MOTOR-WEB-001.json: branch carried #73's TRIAGE_REQUIRED version; main holds #75's RECEIPT_COMPLETE version)."
+  },
+
+  "resolution": {
+    "method": "RESTACK — fresh base from origin/main (a4bdf1f3) + cherry-pick of the single task commit 973da87d -> 3474e717. The duplicate #72/#73 branch history was discarded in favor of main's founder-merged truth; no conflicted file ever existed in the working tree.",
+    "skill_compliance": ".cursor/skills/pr-conflict-resolver/SKILL.md + canonical SG skill loaded BEFORE touching the conflict. Classification: zero files with class receipt/registry/LOCKED were hand-resolved (git diff --diff-filter=U empty at every step). No --ours/--theirs used anywhere. The one semantically-superseded file (MOTOR-WEB-001.json) is resolved by NOT carrying any version of it — main's #75 version (RECEIPT_COMPLETE, founder-merged) is the registry truth and this PR no longer touches it.",
+    "overlap_check": "The task commit's files (owner script, owner tests, route-map binding, registry README, MOTOR-RWREPAIR-001.json, receipts) have ZERO overlap with #75's files (MOTOR-WEB-001.json, registry invariant tests, receipts) and #77's files (authority pins, CLAUDE.md, doctor script)."
+  },
+
+  "verification": {
+    "cherry_pick": "exit 0, no conflicts (git diff --name-only --diff-filter=U empty)",
+    "validate_py": "python3 motor/registry/validate.py -> exit 0 (recipes: 5, jobs: 2 — MOTOR-RWREPAIR-001 coexists with #75's RECEIPT_COMPLETE MOTOR-WEB-001)",
+    "full_suite": "pytest -q -> 255 passed",
+    "conflict_gate": "python3 scripts/verify_pr_conflict_resolution_v1.py --json -> ALL PASS (no markers, no unmerged paths, lock_status LOCKED)",
+    "governance_tests": "pytest tests/test_noos_loop_registry_reconcile_v1.py tests/test_verify_living_system_governance_v1.py -> 5 passed",
+    "post_push_expectation": "PR #76 flips to MERGEABLE and a gel-ci pull_request run appears on head 3474e717 — recorded in the PR comment after observation."
+  },
+
+  "systemic_finding_disclosed": "A CONFLICTING/DIRTY PR receives no pull_request CI at all and nothing surfaces that absence. Unless branch protection on main REQUIRES the GEL CI check (test-and-gate), a conflicting-then-hand-merged PR could reach main without the fail-closed gate ever running. Branch-protection state and the founder-decision note are recorded separately (settings changes are founder-gated).",
+
+  "not_claimed": [
+    "No PASS/DONE verdict — builder output, SUBMITTED for independent verification",
+    "GEL CI green on PR #76 (expected post-push; verified and recorded in the PR thread, not pre-claimed here)"
+  ]
+}

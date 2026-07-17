@@ -113,17 +113,23 @@ review, source merge, runtime deploy, and live outcome are UNPROVEN/DIVERGED.
 the v1.2 validator blocks `RECEIPT_COMPLETE` while `metered=false`. See the
 record's `notes` for the exact close-out chain.
 
-## Next wiring (out of scope for this PR)
+## Next wiring
 
-- **Track D — NOOS route → recipe binding.** The NOOS route
-  `receipt_writer_completion_evidence_repair` (from the observability-semantics
-  change) should bind to `NF-MOTOR-RECEIPT-WRITER-REPAIR-001` with a registered
-  machine owner. Until then, NOOS classifies correctly but does not auto-repair
-  — which is the safe failure mode (correctly stopping beats wrongly
-  restarting).
+- **Track D — NOOS route → recipe binding: WIRED** (NF-NOOS-MOTOR-ROUTE-WIRING-001).
+  The NOOS route `receipt_writer_completion_evidence_repair` is bound to
+  `NF-MOTOR-RECEIPT-WRITER-REPAIR-001` with registered machine owner
+  `noos-motor-route-owner-v1` (`scripts/noos_motor_route_owner_v1.py`:
+  `diagnose` -> routing row -> `run --phase repair/complete` -> `post-check`).
+  First job: `jobs/MOTOR-RWREPAIR-001.json`. The observer-route and
+  monitoring-availability bindings to `INCIDENT-DIAGNOSE-001` remain NOT_WIRED
+  — for those routes, NOOS classifies correctly but does not auto-repair,
+  which is the safe failure mode (correctly stopping beats wrongly restarting).
 - **Unified `Motor.run(recipe_id, inputs)` executor** that turns these
   declarations into runtime containment (mounts, egress policy, scoped
   credentials, budget cutoffs).
+- **Scoped sink write token.** RECEIPT-WRITER-REPAIR declares `secret_scope:
+  sink_receipts_write_token`; until that token is provisioned the owner falls
+  back to platform credentials and discloses the deviation in its action log.
 
 ## Adopting it
 

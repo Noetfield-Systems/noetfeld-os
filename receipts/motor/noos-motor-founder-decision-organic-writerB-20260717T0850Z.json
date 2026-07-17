@@ -1,0 +1,22 @@
+{
+  "schema": "noos-founder-decision-escalation-v1",
+  "created_at": "2026-07-17T08:50:00Z",
+  "created_by": "noos-motor-route-owner-v1 (scripts/noos_motor_route_owner_v1.py) via NF-NOOS-MOTOR-ROUTE-WIRING-001",
+  "recipe_id": "NF-MOTOR-RECEIPT-WRITER-REPAIR-001",
+  "finding": "PERSISTENT organic writer-B silence: per-loop burst/completion receipts (noetfield_factory_cycle_runs writer B) have produced no ORGANIC rows since 2026-07-17T07:00:47Z across all 7 loops, while dispatch heartbeats stay fresh. This is the third occurrence of the class (incident 2026-07-16T23:32Z, recurrence ~05:00Z, current 07:00Z-ongoing).",
+  "what_the_machine_did": [
+    "Diagnosed DISPATCHING_COMPLETION_UNPROVEN for loop-inbox (receipts/incident/noos-motor-route-owner-diagnosis-20260717T082142Z-inbox.json)",
+    "Ran the machine-safe evidence-path repair (job MOTOR-RWREPAIR-001): one keyed, provenance-labeled sink row; before/after external pair PASSED at 08:29Z — the completion-evidence SIGNAL was restored",
+    "Ran the recipe's post-promotion check (receipts/motor/noos-motor-post-check-20260717T084916Z-inbox.json): FAIL — latest 2 completion receipts are both repair-labeled, 0 organic. Manual/repair green != cron green."
+  ],
+  "why_this_is_founder_gated": "Keyed evidence-path retries can keep the signal alive but cannot make the cloud writer-B (Railway/GHA loop runners) resume writing organic completion receipts. Likely next actions — runner investigation, runtime restart, or redeploy — are founder_required by the recipe (restart_production_runtime / redeploy_any_service). Per escalation_route, the machine STOPS here and does NOT restart execution.",
+  "requested_decision": "Founder decision: investigate/redeploy the writer-B path in the cloud loop runners (compare deployed git_sha vs main; check /health last_successful_liveness_write_at per the repair playbook), or direct a sandbox writer-fix draft PR if the fault is in-repo.",
+  "evidence": {
+    "diagnosis_receipt": "receipts/incident/noos-motor-route-owner-diagnosis-20260717T082142Z-inbox.json",
+    "job_record": "motor/registry/jobs/MOTOR-RWREPAIR-001.json",
+    "post_check_receipt": "receipts/motor/noos-motor-post-check-20260717T084916Z-inbox.json",
+    "prior_incident_diagnostic": "receipts/incident/NF-NOOS-OBSERVABILITY-SEMANTICS-001-incident-diagnostic-v1.json (on PR #72 branch)"
+  },
+  "not_a_verdict": "Escalation artifact, SUBMITTED for independent verification. No PASS/DONE claim.",
+  "canon_version": "FOUNDER_CANON_v1+MACHINE_LOOPS_v1"
+}
