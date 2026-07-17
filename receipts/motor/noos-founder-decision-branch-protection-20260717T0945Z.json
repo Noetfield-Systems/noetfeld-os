@@ -1,0 +1,21 @@
+{
+  "schema": "noos-founder-decision-escalation-v1",
+  "created_at": "2026-07-17T09:45:00Z",
+  "created_by": "claude-code-noos via NF-NOOS-MOTOR-ROUTE-WIRING-001 follow-up (GEL CI PR-enforcement investigation)",
+  "finding": "main has NO branch protection and NO rulesets (GET /branches/main/protection -> 404 'Branch not protected'; GET /rules/branches/main -> []). GEL CI (pytest + motor/registry/validate.py + registry invariant tests) runs on pull_request events and is healthy (91 historical PR runs), but nothing REQUIRES it: a PR can be merged with the gate red — or with the gate never having run at all.",
+  "concrete_failure_mode_observed": "PR #76 sat in mergeable=CONFLICTING state after #72/#73 squash-merged; GitHub cannot build the merge ref for a CONFLICTING PR, so ZERO pull_request workflows ran on it, silently. Nothing in the PR checks UI distinguishes 'gate passed' from 'gate never ran'. With no required status check, such a PR — once conflicts are hand-resolved in the GitHub UI — could be merged to main without GEL CI ever executing on its final content.",
+  "why_founder_gated": "Repository settings / branch-protection changes are founder-gated (CLAUDE.md founder gates; settings mutations are outside machine-safe surface). The machine changed NO settings.",
+  "requested_decision": {
+    "recommendation": "Protect main with a ruleset or classic branch protection requiring status checks to pass before merge, with 'test-and-gate' (the GEL CI job) as a required check; require branches to be up to date before merging so the gate always runs on the final merge-ref content. Optionally add 'scan' (Cost policy) and 'tag-check' (NOOS Agent Vault) as required checks.",
+    "one_liner_cli": "gh api -X PUT repos/Noetfield-Systems/noetfeld-os/branches/main/protection -f 'required_status_checks[strict]=true' -f 'required_status_checks[checks][][context]=test-and-gate' -F enforce_admins=true -F 'required_pull_request_reviews=null' -F 'restrictions=null'  # founder to run/adjust",
+    "note": "This complements (does not replace) the human founder merge gate — it machine-enforces that the fail-closed CI actually ran green on what merges."
+  },
+  "evidence": {
+    "gel_ci_pr_runs_total": 91,
+    "pr76_before": "mergeable=CONFLICTING, mergeStateStatus=DIRTY, zero pull_request runs",
+    "pr76_after_restack": "mergeable=MERGEABLE; gel-ci pull_request run observed on the restacked head (recorded in PR #76 thread)",
+    "branch_protection_probe": "GET /repos/Noetfield-Systems/noetfeld-os/branches/main/protection -> HTTP 404 'Branch not protected'; GET /repos/Noetfield-Systems/noetfeld-os/rules/branches/main -> []"
+  },
+  "not_a_verdict": "Escalation artifact, SUBMITTED for independent verification. No settings were changed by the machine.",
+  "canon_version": "FOUNDER_CANON_v1+MACHINE_LOOPS_v1"
+}
