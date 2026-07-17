@@ -1,7 +1,7 @@
 {
   "schema": "noetfield/custody-authority-pins-v1",
-  "version": "1.2.0",
-  "issued_at": "2026-07-10T17:57:00-07:00",
+  "version": "1.3.0",
+  "issued_at": "2026-07-17T10:28:40-07:00",
   "custody_chain": [
     "master_ssot_anchor",
     "library_define",
@@ -19,9 +19,9 @@
   "noos_repo": {
     "name": "noetfeld-OS",
     "path": "Noetfield-Systems/noetfeld-OS",
-    "commit": "c7f39ff39e971a6e10f3bd97e57c16d79d59652a",
-    "pin_note": "post-custody-commit pin (operational binding + schemas committed to main); all artifact blob SHAs verified at this commit 2026-07-10",
-    "previous_commit": "638b015e97f4e7e4b5a7c7619d3d3012b89d08e0"
+    "commit": "a4bdf1f338a5ecf9de58fb5eda8ef974eee715ca",
+    "pin_note": "NOOS self-pin refresh: advanced c7f39ff3 -> origin/main a4bdf1f3 (tip after #77 Wave 0 SG re-pin). Artifact-neutral: the custody-carried NOOS artifacts (operational binding + 4 motor schemas + SCHEMA_INDEX) are byte-identical between c7f39ff3 and a4bdf1f3 (git diff empty); the pin advances over unrelated motor/canon/receipt/CI commits (one added noetfield-org/schemas/machine_identity_binding.v1.schema.json, which is NOT among the 13 enumerated custody artifacts — pin unaffected). All 13 custody artifact blob SHAs still verify. Verified 2026-07-17.",
+    "previous_commit": "c7f39ff39e971a6e10f3bd97e57c16d79d59652a"
   },
   "artifacts": [
     {

@@ -59,7 +59,7 @@ verifier proves.**
 | Master SSOT (incl. §0.7) | `sina-governance-SSOT` (sibling repo) `ssot/strategy-ssot-v6-split.md` | `dc6080d8` |
 | SG Library | `SG-Canonical-Library/noetfield-library` in the SG repo | `v0.9-SG-RATIFIED` |
 | FOUNDER_CANON | SG library `P1-CANON/FOUNDER_CANON_v1.md` | `6c13aa27` |
-| Custody chain (machine-readable) | `noetfield-org/CUSTODY_AUTHORITY_PINS_v1.json` | NOOS `c7f39ff3` |
+| Custody chain (machine-readable) | `noetfield-org/CUSTODY_AUTHORITY_PINS_v1.json` | NOOS `a4bdf1f3` |
 | NOOS canon binding | `docs/_NOOS_AGENT/[NOOS-AGENT-20260703-005]_FOUNDER_CANON_INTERFACE_v1.md` | `c36aaf14` |
 | Unified Master + Product SSOT | `docs/_NOOS_AGENT/NOETFIELD_UNIFIED_MASTER_v1_LOCKED.md` · `NOETFIELD_OS_SSOT_v1_LOCKED.md` | `146e8fe1` |
 | Autorun laws | `docs/GOVERNED_AUTORUN_LAWS_v3.md` (L1–L13, D1–D8) | in-repo |

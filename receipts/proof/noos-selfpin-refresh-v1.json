@@ -1,0 +1,57 @@
+{
+  "schema": "noos-selfpin-refresh-receipt-v1",
+  "task": "NF-NOOS-SELFPIN-REFRESH-001",
+  "purpose": "Refresh the NOOS operational custody self-pin from c7f39ff3 to origin/main a4bdf1f3, clearing the activation-doctor noos_pin_freshness STALE. This is the follow-up custody operation that #77 (Wave 0 SG re-pin) explicitly deferred as out-of-scope 'NOOS self-pin refresh'.",
+  "status": "SUBMITTED for independent verification (author != verifier; no self-PASS)",
+  "canon_version": "FOUNDER_CANON_v1+MACHINE_LOOPS_v1",
+  "branch": "nf-noos-selfpin-refresh-001",
+  "generated_at": "2026-07-17T17:30:00Z",
+  "founder_gated": true,
+  "agent": "claude-code-noos",
+  "lane": "NOOS-LANE-noos-selfpin-refresh",
+
+  "verification_before_apply": {
+    "old_pin": "c7f39ff39e971a6e10f3bd97e57c16d79d59652a",
+    "new_pin": "a4bdf1f338a5ecf9de58fb5eda8ef974eee715ca",
+    "new_pin_is_origin_main": "YES — a4bdf1f3 == origin/main == HEAD at draft time (clean tree)",
+    "new_pin_ancestor_of_head": "YES — git merge-base --is-ancestor a4bdf1f3 HEAD = true",
+    "artifact_neutral": "YES — the custody-carried NOOS artifacts are BYTE-IDENTICAL between c7f39ff3 and a4bdf1f3 (git diff --stat c7f39ff3 a4bdf1f3 = empty) for: noetfield-org/FOUNDER_REASONING_MOTOR_OPERATIONAL_BINDING_v1.md, noetfield-org/schemas/SCHEMA_INDEX_v1.md, and the four motor schemas (founder_reasoning_packet / founder_reasoning_result / motor_job_contract / private_worker_binding v1). The pin advances only over unrelated motor/receipt/CI commits (incl. #77 SG re-pin).",
+    "artifact_blobs": "all 13 custody artifact blob SHAs still verify at their pinned commits (0 mismatches) — re-pin is artifact-consistent",
+    "sg_pin_untouched_and_correct": "SG pin remains dc6080d8 (unchanged). dc6080d8 IS still an ancestor of SG main 49f17594 and matches the canonical sg-authority pointer. Bumping SG to 49f17594 was deliberately NOT done (#77 adjudicated: 49f17594 is post-merge receipt commits ahead; pinning there would desync from the canonical pointer)."
+  },
+
+  "changes": {
+    "noetfield-org/CUSTODY_AUTHORITY_PINS_v1.json": "noos_repo.commit c7f39ff3 -> a4bdf1f3; previous_commit -> c7f39ff3 (prior live pin); pin_note updated; version 1.2.0 -> 1.3.0 + issued_at refreshed to reflect the new issuance (deviation from #77, which left version/issued_at stale — corrected here for honest metadata)",
+    "scripts/noos_claude_activation_doctor_v1.sh": "hardcoded NOOS_CUSTODY_PIN c7f39ff3 -> a4bdf1f3 (doctor must agree with pins-file; custody_pins_noos_agree)",
+    "CLAUDE.md": "authority table custody-chain cell NOOS c7f39ff3 -> a4bdf1f3 (doctor claude_md_custody_pin_current)",
+    ".claude/noos/AUTHORITY.md": "NOOS operational custody pin citation c7f39ff3 -> a4bdf1f3; stale descriptor ('parent of the activation commit') corrected to 'origin/main tip; self-pin refreshed, artifact-neutral'"
+  },
+
+  "doctor_after": {
+    "receipt": "receipts/noos-claude-activation-doctor-20260717T173000Z.json",
+    "verdict": "DEGRADED (exit 0; 0 FAIL, 55 PASS, 1 STALE)",
+    "all_hard_FAILs_cleared": true,
+    "cleared_by_this_pr": [
+      "noos_pin_freshness — now PASS (NOOS custody pin == origin/main)",
+      "claude_md_custody_pin_current — PASS (cites a4bdf1f3)",
+      "custody_pins_noos_agree — PASS (pins-file == doctor constant == a4bdf1f3)",
+      "noos_custody_pin_ancestor — PASS",
+      "custody_artifact_blobs — PASS (13/13)"
+    ],
+    "residual_STALE": [
+      "sg_pin_freshness — SG main 49f17594 vs pin dc6080d8: EXPECTED/BENIGN, out of scope. Adjudicated by #77 (dc6080d8 = ratified authority-landing commit matching the canonical pointer). NOT this PR's concern."
+    ]
+  },
+
+  "known_post_merge_residual": "Once this PR merges, origin/main advances to the merge commit and noos_pin_freshness will read STALE-by-one-commit (its own merge). This is the inherent self-pin-vs-own-merge residual, benign and identical in class to what #77 documented for the SG side. The pin correctly marks the last main commit at which NOOS custody was re-proven; it is not intended to equal a not-yet-created merge commit.",
+
+  "founder_decisions_surfaced": [
+    "Confirm the self-pin should track origin/main tip a4bdf1f3 (last proven main) — accepting the benign STALE-by-own-merge residual after merge — which matches the doctor's noos_pin_freshness == origin/main check.",
+    "Confirm the pins-file version bump 1.2.0 -> 1.3.0 + issued_at refresh is acceptable (#77 left both stale; corrected here). No verifier asserts these fields.",
+    "Custody-completeness (pre-existing, out of scope for this pin-advance): a NEW schema noetfield-org/schemas/machine_identity_binding.v1.schema.json (added by canon commit b6c2de3a, within the c7f39ff3..a4bdf1f3 range) now sits in the custody-tracked schemas/ directory but is NOT enumerated in this pins file's artifacts[] (only the 4 motor schemas + SCHEMA_INDEX are). custody_artifact_blobs still passes 13/13 (per-file enumeration, not a dir-tree hash), so the pin is unaffected. Decide separately whether machine_identity_binding should be registered as a custody artifact."
+  ],
+
+  "tests": "full repo suite 222 passed (python3 -m pytest -q, 4.83s, 2 benign deprecation warnings); JSON artifacts parse; activation doctor exit 0 with 0 FAIL / 55 PASS / 1 benign STALE.",
+  "not_done": ["merge to main (founder gate)", "SG pin bump (deliberately excluded — benign residual, would desync canonical pointer)"],
+  "final_status": "NOOS_SELFPIN_REFRESH_PREPARED_FOR_FOUNDER_MERGE"
+}
