@@ -1,0 +1,139 @@
+# Machine-safe repair recipe for the exact failure class behind the stale-loops
+# incident: work is dispatching but per-loop completion evidence stops flowing.
+# Repairs the EVIDENCE PATH only. It never restarts execution, never redeploys,
+# never touches production runtime — that separation is the whole point.
+recipe_id: NF-MOTOR-RECEIPT-WRITER-REPAIR-001
+version: 1.1.0
+purpose: >-
+  When a loop is classified DISPATCHING_COMPLETION_UNPROVEN, restore fresh,
+  trustworthy completion evidence — and prove causally that the repair worked
+  via a before/after external check pair.
+
+trigger:
+  type: event
+  event_source: "noos:diagnosis DISPATCHING_COMPLETION_UNPROVEN (from INCIDENT-DIAGNOSE-001)"
+  dedupe_key: "receipt-repair:{loop_id}:{diagnosis_id}"
+
+required_inputs:
+  - name: loop_id
+    description: The loop whose completion evidence is stale
+  - name: diagnosis_receipt
+    description: The routing diagnosis (BEFORE state, with evidence)
+
+authority:
+  machine_may:
+    - read_receipts_and_logs
+    - inspect_receipt_writer_config_in_sandbox
+    - patch_receipt_writer_in_sandbox      # the writer component only
+    - run_writer_smoke_test_in_sandbox
+    - open_draft_pr_for_writer_fix
+    - retry_failed_receipt_writes          # idempotent, keyed (L13)
+  founder_required:
+    - restart_production_runtime           # explicitly NOT machine-safe here
+    - redeploy_any_service
+    - modify_loop_execution_logic
+    - modify_verifiers_or_freshness_thresholds   # L5
+  escalation_route: >-
+    If evidence cannot be restored by writer repair/retry, escalate to
+    founder-decision issue with the diagnosis — do NOT fall back to restarting
+    execution.
+
+# Explicit per-surface authority: this recipe may write the EVIDENCE SINK
+# (receipts table only) fully, but the observed system's runtime and production
+# business state remain deny. This is why production_write:false and a
+# receipts-table write token coexist without contradiction — the write token is
+# scoped to the evidence sink, never to production runtime.
+mutation_policy:
+  observed_system: deny
+  production_business_state: deny
+  runtime: deny                    # restart is founder_required, never here
+  evidence_sink: full              # receipts table only (secret_scope-limited)
+  control_plane_receipts: append_only
+  routing_queue: create_only
+  sandbox_filesystem: full         # git worktree for the writer-component fix
+
+workers:
+  - type: python-script
+    allowed_tools: [sink_readwrite_receipts_table_only, github_api]
+  - type: claude-builder
+    allowed_tools: [file_edit, git, tests, gh_draft_pr]
+
+sandbox:
+  type: git_worktree
+  production_write: false
+  filesystem_scope: [receipt-writer component paths only]
+  network_policy: allowlist
+  network_allowlist: [api.github.com, shared-sink host]
+  secret_scope: [sink_receipts_write_token]   # scoped to the receipts table
+  destroy_on_complete: true
+
+budgets:
+  time_minutes: 60
+  cost_usd: 8
+  retries: 2
+  value_class: risk_reduction
+
+steps:
+  - name: capture_before
+    action: Record the BEFORE state from the diagnosis receipt (staleness age, last good receipt id) — the causality baseline
+  - name: isolate
+    action: Determine why writes stopped (auth expiry, schema drift, dead consumer, silent exception) from logs and a sandbox reproduction
+  - name: repair
+    action: Retry keyed failed writes AND/OR patch the writer in sandbox + draft PR, depending on isolation result
+  - name: capture_after
+    action: >-
+      Wait one full loop cycle, then read fresh completion receipts via the
+      OBSERVER'S read path (not the writer's) — the external AFTER check
+    verify_command: observer read of receipts for loop_id, freshness within window
+
+verification:
+  external_proof_required: true
+  checks:
+    - name: before_after_pair
+      command_or_probe: diagnosis receipt (BEFORE) + observer read (AFTER)
+      pass_criterion: >-
+        AFTER shows fresh completion receipts for loop_id within the freshness
+        window, read via the independent observer path. Without the pair,
+        recovery is UNPROVEN — never claimed. Correlation != causality.
+      external: true
+    - name: no_execution_mutation
+      command_or_probe: audit of actions taken during the job
+      pass_criterion: Zero restarts, redeploys, or loop-logic changes occurred
+    - name: idempotency
+      command_or_probe: receipt table scan for loop_id over the repair window
+      pass_criterion: No duplicate receipts created by retries (keys held, L13)
+
+failure_policy:
+  on_check_fail: escalate      # one repair attempt cycle; then founder, never improvise wider
+  on_budget_breach: block_with_reason
+  repair_scope: [receipt-writer component only]
+
+human_gate:
+  required: true
+  gate_point: before_promotion      # gate applies to the writer-fix PR, if one was needed
+  approval_evidence: Founder merge of the writer-fix PR; pure keyed retries need no gate
+
+promotion:
+  condition: before_after_pair PASS (and founder merge, if a code fix was involved)
+  target: receipt-writer component / receipts table
+  clean_sha_required: true
+  post_promotion_checks:
+    - Next 2 consecutive loop cycles produce fresh completion receipts (schedule-event, not manual — manual green != cron green)
+
+rollback:
+  type: revert_exact_merge
+  command: git revert <merge_sha> (writer component only)
+  machine_may_rollback: true    # writer rollback is machine-safe; it cannot touch execution
+
+receipt:
+  schema_ref: noetfield/motor-job-v1
+  required_fields:
+    - states.recovery
+    - verification_results
+    - cost.total_usd
+  storage: shared sink + in-repo motor/receipts/
+
+notes: >-
+  This recipe gives "self-healing" a definition narrow enough to trust: scoped
+  evidence-path repair with causal proof, and a hard wall between fixing the
+  evidence and touching the execution.

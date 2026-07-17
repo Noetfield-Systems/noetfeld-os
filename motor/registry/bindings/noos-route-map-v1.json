@@ -1,0 +1,39 @@
+{
+  "schema": "noos-motor-route-map-v1",
+  "description": "Declared bindings from NOOS classification routes (from the observability-semantics change) to Motor recipes. This is a DECLARATION of intent, not a live wiring: status=NOT_WIRED means NOOS classifies and routes correctly but no registered machine owner executes the recipe yet. Correctly stopping without repair is safer than incorrectly restarting production.",
+  "not_wired_is_safe": "A route with no machine_owner surfaces the finding and stops. It never falls back to execution restart.",
+  "bindings": [
+    {
+      "noos_route": "receipt_writer_completion_evidence_repair",
+      "noos_state": "DISPATCHING_COMPLETION_UNPROVEN",
+      "motor_recipe": "NF-MOTOR-RECEIPT-WRITER-REPAIR-001",
+      "machine_owner": null,
+      "status": "NOT_WIRED",
+      "note": "Track D. Bind after this registry merges: register a machine owner/handler that consumes an INCIDENT-DIAGNOSE routing row and runs RECEIPT-WRITER-REPAIR-001 in an evidence-path-only sandbox with a before/after external check pair."
+    },
+    {
+      "noos_route": "execution_reconcile_self_heal",
+      "noos_state": "LOOP_EXECUTION_STALE",
+      "motor_recipe": null,
+      "machine_owner": "existing NOOS machine-reconcile / self-heal loop",
+      "status": "EXISTING_NON_RECIPE",
+      "note": "Handled today by the existing reconcile/self-heal loop; not yet a registered Motor recipe/job."
+    },
+    {
+      "noos_route": "observer_reconciliation",
+      "noos_state": "OBSERVER_DIVERGENCE_OR_REPLAY",
+      "motor_recipe": "NF-MOTOR-INCIDENT-DIAGNOSE-001",
+      "machine_owner": null,
+      "status": "NOT_WIRED",
+      "note": "Divergence between dispatch and completion observers routes to a diagnosis, not a repair."
+    },
+    {
+      "noos_route": "monitoring_availability",
+      "noos_state": "OBSERVER_UNAVAILABLE",
+      "motor_recipe": "NF-MOTOR-INCIDENT-DIAGNOSE-001",
+      "machine_owner": null,
+      "status": "NOT_WIRED",
+      "note": "Authoritative source unqueryable — diagnose the monitoring path, do not touch execution."
+    }
+  ]
+}

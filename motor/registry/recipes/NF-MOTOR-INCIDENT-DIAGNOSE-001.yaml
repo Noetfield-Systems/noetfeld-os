@@ -1,0 +1,134 @@
+# Witness/control recipe: turns an alert into a classified, evidence-backed
+# diagnosis and a routed next action. Read-only WITH RESPECT TO THE OBSERVED
+# SYSTEM — it never repairs, restarts, or mutates production. It DOES write its
+# own diagnosis receipt (append-only control plane) and create one routing row;
+# those are control-plane mutations, not observed-system mutations. See
+# mutation_policy for the exact surface authority. Encodes the lesson of the
+# stale-loops incident: "no recent completion evidence" and "the loop failed"
+# are different facts.
+recipe_id: NF-MOTOR-INCIDENT-DIAGNOSE-001
+version: 1.1.0
+purpose: >-
+  Given an operational alert (stale receipts, red workflow, cockpit
+  divergence), collect live evidence, classify the condition using the
+  dual-signal model, and route it — without mutating the observed system or
+  any production state.
+
+trigger:
+  type: event
+  event_source: "noos:alert (stale receipt, deadman, DRIFT, red workflow run)"
+  dedupe_key: "incident:{alert_id}"
+
+required_inputs:
+  - name: alert_payload
+    description: The triggering alert with source, loop/workflow id, timestamps
+
+authority:
+  machine_may:
+    - read_receipts_and_logs
+    - query_github_api_readonly
+    - query_shared_sink_readonly
+    - probe_public_endpoints
+    - write_diagnosis_receipt        # append-only control-plane receipt
+    - file_routing_issue             # create-only routing row
+  founder_required: []               # cannot mutate the observed system or production
+  escalation_route: routing decides; founder-gated findings file a founder-decision issue
+
+# Explicit per-surface mutation authority. This is what makes "read-only"
+# precise: deny on the observed system and production; append/create only on the
+# control plane. Resolves the old contradiction between machine_may
+# (write_diagnosis_receipt) and the no_mutation check.
+mutation_policy:
+  observed_system: deny
+  production_business_state: deny
+  runtime: deny
+  evidence_sink: append_only
+  control_plane_receipts: append_only
+  routing_queue: create_only
+  sandbox_filesystem: deny
+
+workers:
+  - type: python-script
+    allowed_tools: [github_api_readonly, sink_readonly, http_probe]
+  - type: claude-builder
+    allowed_tools: [read_only_analysis]
+    model: fast-tier
+
+sandbox:
+  type: none_readonly
+  production_write: false
+  network_policy: allowlist
+  network_allowlist: [api.github.com, shared-sink host, probed public endpoints]
+  secret_scope: [readonly_status_token]
+  destroy_on_complete: true
+
+budgets:
+  time_minutes: 15
+  cost_usd: 2
+  retries: 0
+  value_class: risk_reduction
+
+steps:
+  - name: collect
+    action: >-
+      Gather the six facts separately — scheduled? started? completed?
+      verified? receipt persisted? receipt readable by observer? — each with
+      its own evidence, none inferred from another
+  - name: classify
+    action: >-
+      Assign dual-signal state: RUNNING_CONFIRMED /
+      DISPATCHING_COMPLETION_UNPROVEN / OBSERVER_DIVERGENCE_OR_REPLAY /
+      LOOP_EXECUTION_STALE / OBSERVER_UNAVAILABLE. Missing evidence ->
+      success_rate=null, never 0%.
+  - name: route
+    action: >-
+      machine_safe condition -> repair queue (e.g. RECEIPT-WRITER-REPAIR);
+      founder_gated -> founder-decision issue; insufficient evidence ->
+      evidence-writer diagnostic. Exactly one route per diagnosis.
+
+verification:
+  external_proof_required: false   # output is a diagnosis receipt, not a deploy
+  checks:
+    - name: evidence_per_fact
+      command_or_probe: schema validation of the diagnosis receipt
+      pass_criterion: Each of the six facts carries its own evidence_ref or is marked UNPROVEN with reason (L3)
+    - name: no_observed_system_mutation
+      command_or_probe: audit of API calls made during the job against mutation_policy
+      pass_criterion: >-
+        Zero writes to the observed system, production business state, or
+        runtime. Only append-only control-plane receipts and one create-only
+        routing row are permitted (per mutation_policy).
+
+failure_policy:
+  on_check_fail: fail_with_receipt   # a diagnosis that can't prove itself is itself a finding
+  on_budget_breach: block_with_reason
+  repair_scope: []
+
+human_gate:
+  required: false
+  gate_point: never
+
+promotion:
+  condition: diagnosis receipt validates against schema
+  target: shared sink + routing destination (issue/queue)
+  clean_sha_required: false
+  post_promotion_checks:
+    - Routed artifact (issue/queue row) exists and references the diagnosis receipt
+
+rollback:
+  type: none_readonly
+
+receipt:
+  schema_ref: noetfield/motor-job-v1
+  required_fields:
+    - verification_results
+    - states.evidence
+    - cost.total_usd
+  storage: shared sink, provenance-tagged (L10)
+
+notes: >-
+  This recipe is the codified version of what the stale-loops incident
+  investigation did by hand. v1.1: added mutation_policy and renamed the
+  no_mutation check to no_observed_system_mutation to resolve the read-only vs
+  write-diagnosis-receipt contradiction — "read-only" is with respect to the
+  observed/production system, not literally zero writes.

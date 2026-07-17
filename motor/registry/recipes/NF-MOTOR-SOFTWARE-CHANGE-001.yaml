@@ -1,0 +1,124 @@
+# General-purpose governed code change to any Noetfield repo. The generic
+# sibling of WEB-PUBLISH: same chain, target is a codebase not the website.
+recipe_id: NF-MOTOR-SOFTWARE-CHANGE-001
+version: 1.0.0
+purpose: >-
+  Implement a bounded software change (feature, fix, refactor) in a named
+  repository, producing a verified, founder-approvable PR and — after
+  approval — a promoted, externally verified deployment or merge.
+
+trigger:
+  type: founder_instruction
+  dedupe_key: "sw-change:{repository}:{instruction_ref}"
+
+required_inputs:
+  - name: repository
+    description: Target repo (exactly one — one repo per job)
+  - name: baseline_sha
+    description: Clean committed SHA to branch from (L6)
+  - name: change_spec
+    description: Bounded change description with acceptance criteria
+  - name: filesystem_scope
+    description: Paths the change is allowed to touch
+
+authority:
+  machine_may:
+    - inspect_repository
+    - create_branch_and_worktree
+    - edit_files_in_scope
+    - run_tests
+    - create_commits
+    - push_branch
+    - open_draft_pr
+    - update_pr_description
+  founder_required:
+    - merge_to_main
+    - production_deployment
+    - any_edit_outside_filesystem_scope
+    - any_verifier_or_ci_config_change     # L5, stated as authority not just policy
+  escalation_route: founder-decision issue in sandbox-private
+
+workers:
+  - type: claude-builder
+    allowed_tools: [file_edit, git, tests, gh_draft_pr]
+  - type: codex-builder
+    allowed_tools: [file_edit, git, tests, gh_draft_pr]
+
+sandbox:
+  type: git_worktree
+  production_write: false
+  network_policy: allowlist
+  network_allowlist: [github.com, registry.npmjs.org, pypi.org]
+  secret_scope: []
+  destroy_on_complete: true
+
+budgets:
+  time_minutes: 180
+  cost_usd: 25
+  retries: 2
+  value_class: risk_reduction
+
+steps:
+  - name: branch
+    action: Create feature branch + worktree from baseline_sha
+  - name: implement
+    action: Apply change_spec within filesystem_scope only
+  - name: test
+    action: Run the repo's full test suite locally in the sandbox
+    verify_command: repo-standard test command (declared per repo manifest)
+  - name: pr
+    action: Push branch, open draft PR, description generated from actual diff
+
+verification:
+  external_proof_required: true
+  checks:
+    - name: ci_green_on_exact_head
+      command_or_probe: GitHub CI on candidate head SHA
+      pass_criterion: All required checks PASS on the exact candidate_sha
+      external: true
+    - name: secret_scan
+      command_or_probe: CI secret-scanning job
+      pass_criterion: Zero findings
+      external: true
+    - name: scope_audit
+      command_or_probe: git diff --name-only baseline_sha..candidate_sha
+      pass_criterion: Every changed path is inside filesystem_scope; verifier/CI files unchanged (L5)
+      external: false
+
+failure_policy:
+  on_check_fail: repair_and_retry
+  on_budget_breach: block_with_reason
+  repair_scope: [files inside filesystem_scope]
+
+human_gate:
+  required: true
+  gate_point: before_promotion
+  approval_evidence: Founder merge of the PR (merge SHA)
+
+promotion:
+  condition: founder_approval AND all verification checks PASS
+  target: main branch (+ repo's own deploy workflow where one exists)
+  clean_sha_required: true
+  post_promotion_checks:
+    - Merge SHA present on main
+    - Where a deploy exists, deployed artifact/version matches merge SHA, probed externally ≥60s after deploy
+
+rollback:
+  type: revert_exact_merge
+  command: git revert -m 1 <merge_sha>
+  machine_may_rollback: false
+
+receipt:
+  schema_ref: noetfield/motor-job-v1
+  required_fields:
+    - artifacts.baseline_sha
+    - artifacts.candidate_sha
+    - artifacts.files_changed
+    - verification_results
+    - approval.approval_artifact
+    - cost.total_usd
+  storage: in-repo under motor/receipts/
+
+notes: >-
+  NOOS PR #72 (nf-noos-observability-semantics-001, head 7e1e9bb0) is an
+  instance of this recipe currently at AWAITING_AUTHORITY.
