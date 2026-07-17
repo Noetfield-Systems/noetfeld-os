@@ -34,7 +34,7 @@ cd "$ROOT"
 SG_REPO="${NOOS_SG_REPO:-$HOME/Desktop/Noetfield-Systems/sina-governance-SSOT}"
 
 SG_PIN="dc6080d8519b8a83dcfaaeefb65392691ce3e33e"  # Wave 0 re-pin: NF-UNIFIED-MOTOR-ARCHITECTURE-V1 clean-land (SG PR #16); must equal custody pins-file sg_repo.commit
-NOOS_CUSTODY_PIN="c7f39ff39e971a6e10f3bd97e57c16d79d59652a"
+NOOS_CUSTODY_PIN="a4bdf1f338a5ecf9de58fb5eda8ef974eee715ca"
 CANON_COMMIT="6c13aa2765dbb129bc4981da4f25ef1a8a96b84d"
 SG_LIB_VERSION="v0.9-SG-RATIFIED"
 SG_LIB_ZIP_SHA256="929d449364c6b4d88931e71f44352953ee243e4cd6e2b6b7e7495ff2d0662cc1"

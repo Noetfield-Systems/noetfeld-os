@@ -124,8 +124,9 @@ artifact blob SHA verified at the pinned commits).
   - Custody receipts `receipts/custody/CUSTODY_ABSORPTION_ADVISOR_PACKAGE_OPTION_C_v1.json`,
     `receipts/custody/CUSTODY_WIRING_FOUNDER_REASONING_v1.json`, and verifier
     `scripts/verify_founder_reasoning_custody_chain_v1.py` (all SG-repo paths)
-- **NOOS operational custody pin `c7f39ff39e971a6e10f3bd97e57c16d79d59652a`**
-  (this repo's main; parent of the activation commit) carries, verified:
+- **NOOS operational custody pin `a4bdf1f338a5ecf9de58fb5eda8ef974eee715ca`**
+  (this repo's origin/main tip; self-pin refreshed from `c7f39ff3`, artifact-neutral
+  advance — the carried files below are byte-identical at both commits) carries, verified:
   - `noetfield-org/FOUNDER_REASONING_MOTOR_OPERATIONAL_BINDING_v1.md`
     (OPERATIONAL_BINDING, LOCKED — implements SG §0.7 + D5; not Library SSOT)
   - `noetfield-org/schemas/SCHEMA_INDEX_v1.md` + the four motor schemas
