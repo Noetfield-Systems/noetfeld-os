@@ -1,0 +1,49 @@
+{
+  "schema": "noos-motor-web-001-receipt-complete-v1",
+  "task": "MOTOR-WEB-001",
+  "title": "Motor Proof Job #1 — RECEIPT_COMPLETE close-out receipt with founder decision artifacts",
+  "status": "SUBMITTED for independent verification",
+  "verdict": "NONE — builder does not self-certify; author != verifier required for any PASS.",
+  "canon_version": "FOUNDER_CANON_v1+MACHINE_LOOPS_v1",
+  "laws": "FOUNDER_CANON v1 + governed-autorun v3. Violations = BLOCKED_WITH_REASON.",
+  "generated_at": "2026-07-17T09:05:00Z",
+  "job_record": {
+    "file": "motor/registry/jobs/MOTOR-WEB-001.json",
+    "lifecycle_status": "RECEIPT_COMPLETE",
+    "receipt_hash": "sha256:cc19d27e4b892d7bb4b76f3f41e994fd7520b7a8964ee253aee6b7378b47e5ee",
+    "receipt_hash_basis": "sha256 over the job record's canonical JSON (sort_keys, compact separators) with the receipt_hash field removed",
+    "validator": "python3 motor/registry/validate.py -> exit 0 (v1.2 fail-closed invariants)",
+    "tests": "motor/registry/tests -> 52 passed"
+  },
+  "closure_law_satisfied": "deployed production SHA == candidate SHA == e0165192cd625366bb95a8f682db14e1facff58f == observed live content (NOT closed on 'copy appears live': deploy receipt binds deployment 05debd27-97ba-40dd-8fca-26a0f47986eb to the SHA; live bodies are byte-identical to the immutable per-deployment origin; X-Noetfield-Release header matches on every probed path)",
+  "founder_decision_artifacts": {
+    "captured_via": "AskUserQuestion in Claude session https://claude.ai/code/session_01LUzuTGJTLLChBhrhTVHqgR, answered by the founder 2026-07-17 (between 08:53Z and 09:05Z)",
+    "decisions": [
+      {
+        "question": "Attribution: which candidate identity should the job record close against?",
+        "answer": "Shipped release e0165192 (Recommended)",
+        "effect": "artifacts.candidate_sha re-candidated from mid-PR build commit defb5506677d4f5b88178b027b7ba6604ea47c42 to e0165192cd625366bb95a8f682db14e1facff58f; lineage disclosed in execution evidence (defb5506 -> 61ea44f2 -> merge a80f828f -> deploy-infra merges #116-#119 -> e0165192; served content byte-identical merge->release)"
+      },
+      {
+        "question": "render_review: do you confirm the live rendering of noetfield.com / and /motors/ is acceptable?",
+        "answer": "Confirmed acceptable",
+        "effect": "render_review verification row -> PASS with this confirmation as the durable founder artifact (recipe pass criterion: 'Founder confirms rendering acceptable')"
+      },
+      {
+        "question": "Real cost for the job (L11 — no placeholder zeros)",
+        "answer": "Subscription flat-rate: $0 marginal",
+        "effect": "cost.metered=true, total_usd=0 — metering basis: founder attestation that the Codex build session was covered by an existing flat-rate subscription (zero marginal spend); a disclosed measured basis, not a placeholder"
+      }
+    ]
+  },
+  "link_check_evidence": {
+    "checked_at": "2026-07-17T08:53:10Z",
+    "method": "extract all href internal links from live https://www.noetfield.com/ and /motors/ (no-cache), GET each, fail on status >= 400",
+    "internal_links_checked": 15,
+    "broken": 0
+  },
+  "evidence_chain_ref": "receipts/proof/noos-motor-web-001-promotion-outcome-update-v1.json (deploy receipt NF-WEB-002, run 29562673649, ancestry, content-identity diffs, live probes with sha256 hashes) and receipts/proof/noos-motor-web-001-production-attribution-probe-v1.json (initial external probes)",
+  "test_fixture_fix_disclosure": "motor/registry/tests/test_motor_registry_invariants.py::test_I9_receipt_complete_while_promotion_not_started_rejected relied on the live record's promotion being unstarted; premise made explicit in the fixture (promotion/outcome UNPROVEN, production_sha cleared). Invariant assertion unchanged; validate.py and schemas untouched (L5).",
+  "social_preview_drift": "Fixed upstream in Noetfield PR #116 (commit 99a747e 'Fix social preview release receipt trigger') before deploy runs 10-11 succeeded — evidenced, not re-done here.",
+  "not_done_and_not_authorized": ["deploy", "merge of any PR", "editing validate.py or schemas", "PASS verdict"]
+}

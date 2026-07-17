@@ -246,6 +246,11 @@ def test_I8_outcome_observed_too_soon_after_promotion_rejected():
 # ---- I9: RECEIPT_COMPLETE cannot be asserted over incomplete truth ---------
 def test_I9_receipt_complete_while_promotion_not_started_rejected():
     j = copy.deepcopy(GOOD_JOB)
+    # Force the premise explicitly instead of relying on the live record's
+    # promotion state (which legitimately progressed to PROVEN).
+    j["states"]["promotion"] = {"state": "UNPROVEN", "reason": "not started"}
+    j["states"]["outcome"] = {"state": "UNPROVEN", "reason": "not started"}
+    j["artifacts"]["production_sha"] = ""
     j["lifecycle_status"] = "RECEIPT_COMPLETE"
     assert _semantics_bad(j)
 
