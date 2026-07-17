@@ -1,0 +1,51 @@
+{
+  "schema": "noos-worker-kernel-receipt-v1",
+  "version": "1.0.0",
+  "written_at": "2026-07-03T08:45:12+00:00",
+  "op_key": "fb4aca5d9557786bec3da23c",
+  "task_kind": "premium_analysis",
+  "mission_id": "M4",
+  "value_class": "hygiene",
+  "started_at": "2026-07-03T08:45:12+00:00",
+  "finished_at": "2026-07-03T08:45:12+00:00",
+  "status": "blocked",
+  "routing": {
+    "task_kind": "premium_analysis",
+    "tier": "T3",
+    "tier_name": "premium_exception",
+    "provider": "openrouter_premium",
+    "model_id": "anthropic/claude",
+    "max_usd": 0.05,
+    "requires_founder_approval": true,
+    "blocked": true,
+    "blocker_reason": "t3_requires_founder_approval",
+    "mode": "llm_proposal"
+  },
+  "cost": {
+    "provider": "openrouter_premium",
+    "model": "anthropic/claude",
+    "total_usd": 0.0,
+    "within_budget": true
+  },
+  "result": {
+    "ok": false,
+    "blocker_reason": "t3_requires_founder_approval",
+    "routing": {
+      "task_kind": "premium_analysis",
+      "tier": "T3",
+      "tier_name": "premium_exception",
+      "provider": "openrouter_premium",
+      "model_id": "anthropic/claude",
+      "max_usd": 0.05,
+      "requires_founder_approval": true,
+      "blocked": true,
+      "blocker_reason": "t3_requires_founder_approval",
+      "mode": "llm_proposal"
+    }
+  },
+  "dry_run": false,
+  "governance": {
+    "no_secrets_to_model": true,
+    "deterministic_verdict": false
+  }
+}

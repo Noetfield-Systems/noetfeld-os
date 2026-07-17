@@ -1,0 +1,38 @@
+{
+  "version": "1.0.0",
+  "written_at": "2026-07-03T12:08:28+00:00",
+  "schema": "noos-tool-broker-receipt-v1",
+  "op_key": "c0d8a956a2e1ced28f1a6017",
+  "agent_id": "noos-worker-kernel",
+  "tool": "grep",
+  "started_at": "2026-07-03T12:08:28+00:00",
+  "finished_at": "2026-07-03T12:08:28+00:00",
+  "status": "ok",
+  "params": {
+    "pattern": "noos_worker_kernel",
+    "path": "scripts"
+  },
+  "worktree_root": "/Users/sinakazemnezhad/Projects/noetfeld-os",
+  "cost": {
+    "tier": "T0",
+    "total_usd": 0.0,
+    "within_budget": true,
+    "value_class": "hygiene",
+    "mission_id": "M4"
+  },
+  "result": {
+    "command": "grep -Rn noos_worker_kernel scripts",
+    "exit_code": 0,
+    "match_count": 1,
+    "matches": [
+      "Binary file scripts/__pycache__/noos_worker_kernel_v1.cpython-312.pyc matches"
+    ],
+    "ok": true
+  },
+  "enforcement": {
+    "allowlist_only": true,
+    "shell_forbidden": true,
+    "egress": "git_remote_only"
+  },
+  "dry_run": false
+}

@@ -1,0 +1,37 @@
+{
+  "schema": "improvement-receipt-v2",
+  "class": "machine_safe",
+  "source": "failed_check",
+  "diff_summary": "autorun-status SLO miss for noos_loop_sourcea_observe: score 63.72 < 80",
+  "expected_effect": "Restore freshness, success rate, and latency SLO compliance for the loop",
+  "expected_roi": {
+    "cost_saved_usd": 0,
+    "risk_reduced": "workflow heartbeat drift / SLO miss",
+    "revenue_unblocked": "",
+    "build_cost_usd": 0
+  },
+  "rollback_command": "revert the SLO target change or fix the underlying loop/runtime issue",
+  "external_verify_before": "",
+  "external_verify_after": "",
+  "auto_rolled_back": false,
+  "source_ref": "autorun-status",
+  "loop_id": "noos_loop_sourcea_observe",
+  "score": {
+    "score": 63.72,
+    "misses": [
+      "freshness_miss",
+      "success_rate_miss"
+    ],
+    "ok": false
+  },
+  "evidence": {
+    "title": "24/7 loop \u2014 SourceA observe",
+    "plane": "SourceA",
+    "status": "BLOCKED_WITH_REASON",
+    "observed_at": "2026-07-06T09:38:06.405856+00:00",
+    "freshness_minutes": 30.85,
+    "success_rate": 0.0,
+    "latency_minutes": 30.85
+  },
+  "generated_at": "2026-07-06T10:08:57Z"
+}

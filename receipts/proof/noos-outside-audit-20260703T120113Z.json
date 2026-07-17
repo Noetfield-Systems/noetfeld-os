@@ -1,0 +1,21 @@
+{
+  "schema": "noos-outside-audit-receipt-v1",
+  "version": "1.0.0",
+  "at": "2026-07-03T12:01:13+00:00",
+  "trailing_hours": 24,
+  "receipts_scanned": 75,
+  "chain": {
+    "ok": true,
+    "count": 75,
+    "chained_count": 1,
+    "broken_links": [],
+    "tail_hash": "7e122380ac779b0ca980047cd3f9d60b1e6479f68e3fd7b6e635501f57250c6e"
+  },
+  "critic_non_approve": 0,
+  "spot_fetches": [],
+  "kaizen_candidates": [],
+  "ok": true,
+  "report_line": "outside_audit \u00b7 scanned=75 chain_ok=True",
+  "prev_chain_hash": "7e122380ac779b0ca980047cd3f9d60b1e6479f68e3fd7b6e635501f57250c6e",
+  "chain_hash": "85c1acaed6d1e6406c51bd4d7400563c2679ac7f54f1c6a109effa5f550abcfa"
+}
