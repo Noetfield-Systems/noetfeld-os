@@ -1,0 +1,119 @@
+{
+  "schema": "noos-motor-web-001-production-attribution-probe-v1",
+  "task": "MOTOR-WEB-001",
+  "title": "Motor Proof Job #1 — production SHA attribution probe (apex/www//motors/) and divergence report",
+  "status": "SUBMITTED for independent verification",
+  "verdict": "NONE — builder does not self-certify; author != verifier required for any PASS.",
+  "canon_version": "FOUNDER_CANON_v1+MACHINE_LOOPS_v1",
+  "laws": "FOUNDER_CANON v1 + governed-autorun v3. Violations = BLOCKED_WITH_REASON.",
+  "generated_at": "2026-07-17T08:01:15Z",
+  "candidate": {
+    "repo": "Noetfield-Systems/Noetfield",
+    "pr": 115,
+    "candidate_sha": "defb5506677d4f5b88178b027b7ba6604ea47c42"
+  },
+  "serving_architecture": {
+    "source": "docs/ops/NOOS_CLOUDFLARE_WWW_DEPLOY_v1.md",
+    "apex": "https://noetfield.com -> HTTP 308 permanent redirect -> https://www.noetfield.com (both / and /motors/)",
+    "www": "Cloudflare edge worker noetfield-www-proxy (route www.noetfield.com/*) -> Pages origin https://noetfield-www.pages.dev",
+    "deploy_execution": "Noetfield repo infra/cf-www-proxy/ (worker) + Cloudflare Pages project noetfield-www (content)",
+    "mechanisms": "TWO distinct release surfaces: (1) Pages content deployment, (2) worker proxy release stamp"
+  },
+  "probes": [
+    {
+      "url": "https://noetfield.com/",
+      "observed_at": "2026-07-17T07:58:44Z",
+      "http_status": 308,
+      "location": "https://www.noetfield.com/",
+      "body_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "note": "empty body (sha256 of empty string); permanent redirect"
+    },
+    {
+      "url": "https://noetfield.com/motors/",
+      "observed_at": "2026-07-17T07:58:44Z",
+      "http_status": 308,
+      "location": "https://www.noetfield.com/motors/",
+      "body_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "url": "https://www.noetfield.com/",
+      "observed_at": "2026-07-17T07:58:44Z",
+      "http_status": 200,
+      "body_sha256": "71d8a5c54923d7ef0061ceab0dc711fd1c13d2863ae27ffa98802976af06b810",
+      "title": "Noetfield Systems Inc. — AI Motors & Governed Execution",
+      "headers": {
+        "x-noetfield-proxy": "cf-www-proxy",
+        "x-noetfield-release": "e0165192cd625366bb95a8f682db14e1facff58f",
+        "x-robots-tag": "noindex",
+        "cache-control": "no-store, max-age=0, must-revalidate",
+        "cdn-cache-control": "no-store"
+      },
+      "stability": "x-noetfield-release identical across 3 samples (no-cache requests)"
+    },
+    {
+      "url": "https://www.noetfield.com/motors/",
+      "observed_at": "2026-07-17T07:58:44Z",
+      "http_status": 200,
+      "body_sha256": "eff1338c6470bf804de9fae10bdd678073578694b3aca1c165de2f3252c32477",
+      "title": "AI Motors for Governed Execution — Noetfield Systems",
+      "headers": {
+        "x-noetfield-proxy": "cf-www-proxy",
+        "x-noetfield-release": "e0165192cd625366bb95a8f682db14e1facff58f",
+        "x-robots-tag": "noindex"
+      }
+    },
+    {
+      "url": "https://noetfield-www.pages.dev/",
+      "observed_at": "2026-07-17T08:00:27Z",
+      "http_status": 200,
+      "body_sha256": "71d8a5c54923d7ef0061ceab0dc711fd1c13d2863ae27ffa98802976af06b810",
+      "note": "byte-identical to www homepage; origin sends no x-noetfield-* headers, no noindex"
+    },
+    {
+      "url": "https://noetfield-www.pages.dev/motors/",
+      "observed_at": "2026-07-17T08:00:27Z",
+      "http_status": 200,
+      "body_sha256": "eff1338c6470bf804de9fae10bdd678073578694b3aca1c165de2f3252c32477",
+      "note": "byte-identical to www /motors/"
+    }
+  ],
+  "findings": [
+    "Apex noetfield.com does not serve content: HTTP 308 permanent redirect to www for / and /motors/. An observer probing apex without following redirects (or with a stale cached redirect target) sees different results than one probing www — plausible cause of the reported observer disagreement (hypothesis, not proven).",
+    "Production www content is byte-identical (sha256) to the current noetfield-www.pages.dev production deployment on both probed paths — the worker proxy is a content pass-through.",
+    "The only SHA-grade serving marker observable externally is the worker header x-noetfield-release: e0165192cd625366bb95a8f682db14e1facff58f, which DOES NOT EQUAL candidate defb5506677d4f5b88178b027b7ba6604ea47c42. Whether it stamps the worker release or the content release is not determinable from outside the Noetfield repo.",
+    "Live titles match the NEW content (AI Motors & Governed Execution), but per job law content appearance is NOT attribution and closes nothing.",
+    "Anomalies on production www: x-robots-tag: noindex (production homepage is asking search engines not to index) and no-store cache-control injected by the proxy layer. Consistent with the proxy fronting a preview-configured artifact; requires Noetfield-repo-side verification."
+  ],
+  "attribution": {
+    "deployed_production_sha": "UNKNOWN — Pages deployment id -> git SHA mapping requires Cloudflare API or Noetfield repo deploy records, neither available in this session",
+    "observed_release_header": "e0165192cd625366bb95a8f682db14e1facff58f",
+    "candidate_sha": "defb5506677d4f5b88178b027b7ba6604ea47c42",
+    "equal": false,
+    "outcome_attribution": "UNPROVEN",
+    "action": "STOP per instruction — MOTOR-WEB-001 not closed; promotion/outcome remain DIVERGED"
+  },
+  "blockers": [
+    "motor/registry/ (jobs/MOTOR-WEB-001.json, validate.py v1.2) does not exist on Noetfield-Systems/noetfeld-os origin/main or any remote branch — it exists only on the founder's local machine; steps 2/6/7 cannot execute in this environment until it is committed and pushed",
+    "add_repo for Noetfield-Systems/Noetfield requires an approval that was not granted in-session — PR #115 workflow runs, infra/cf-www-proxy/ and the social-preview receipt are unreachable",
+    "no Cloudflare API credentials in this environment — Pages deployment id and deployed SHA cannot be read directly"
+  ],
+  "founder_deploy_request": {
+    "gate": "FOUNDER-GATED — builder requests, founder executes; nothing here is self-authorized",
+    "request": "Run ONE exact-main production deployment of Cloudflare Pages project noetfield-www from Noetfield-Systems/Noetfield at the exact candidate/merge SHA, and capture a deploy receipt",
+    "receipt_must_capture": [
+      "source git SHA (40-hex) the artifact was built from",
+      "artifact hash",
+      "Cloudflare Pages deployment id",
+      "project name (noetfield-www) and branch",
+      "canonical hosts served (www.noetfield.com, noetfield.com redirect)",
+      "deploy completion UTC timestamp (outcome probe must be >= 60s later)"
+    ],
+    "also_verify_on_noetfield_side": [
+      "what x-noetfield-release stamps (worker release vs content release) and re-point it at the content deployment SHA if it does not already reflect it",
+      "why production www serves x-robots-tag: noindex and no-store — likely proxy misconfiguration fronting preview settings",
+      "the social-preview receipt drift (receipt lives in Noetfield repo or local motor registry; not present in noetfeld-os)"
+    ]
+  },
+  "next_steps_after_founder_deploy": "Wait >= 60s; re-probe apex+www / and /motors/ no-cache; record hashes+markers; confirm deployed SHA == candidate SHA; only then update MOTOR-WEB-001.json (promotion PROVEN, outcome PROVEN, production_sha, cost.metered=true, receipt_hash, RECEIPT_COMPLETE) and run motor/registry/validate.py to exit 0.",
+  "not_done_and_not_authorized": ["deploy", "merge", "closing MOTOR-WEB-001", "editing motor/registry/validate.py or schemas", "PASS verdict"]
+}
