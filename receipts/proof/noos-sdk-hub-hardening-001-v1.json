@@ -1,0 +1,62 @@
+{
+  "schema": "noos-builder-receipt-v1",
+  "receipt_id": "noos-sdk-hub-hardening-001-v1",
+  "task": "issue #74 — SDK-Hub adapter hardening",
+  "title": "Durable receipt outbox, decision identity, authenticated Hub transport, payload minimization",
+  "created_at": "2026-07-17T10:05:00Z",
+  "author": "claude-code-noos (builder)",
+  "canon_version": "FOUNDER_CANON_v1+MACHINE_LOOPS_v1",
+  "verdict": "SUBMITTED for independent verification — no PASS/DONE claim by the author (author != verifier)",
+
+  "scope": "scripts/noetfield_sdk_scaffold.py (hardened) + tests/test_noetfield_sdk_scaffold_v1.py (new). Follow-up to PR #69's initial adapter, implementing the four workstreams #74 deliberately deferred.",
+
+  "delivered": {
+    "1_durable_outbox": "Append-only JSONL FileOutbox: receipt written (fsync file + dir) BEFORE any Hub POST; separate append-only delivery log; flush_outbox() redelivers pending (bounded attempts + exponential backoff); run_id is the idempotency key and Idempotency-Key header; restart loses nothing (pending = hub-required receipts minus acked); exhausted receipts reported, never dropped.",
+    "2_decision_identity": "Decision carries decision_id/policy_version/decided_at (hub-parsed, locally synthesized, AND synthesized for fail-closed denials); Receipt.decision_id mirrors it for audit joins.",
+    "3_authenticated_transport": "Fail-closed transport policy (https + bearer required, explicit dev opt-outs); optional CA pinning + mTLS; redirects NOT followed (no bearer leak / TLS downgrade); signing-key leak guard (raw + JSON-escaped forms).",
+    "4_payload_minimization": "context_filter/context_allowlist applied exactly once before eval/hash/send; /ledger carries only the signed receipt (hashes + identity)."
+  },
+
+  "invariant_preserved": "Authorization comes ONLY from the /check Decision (allowed honored only when JSON true; any transport/contract error denies); ledger/outbox delivery success never authorizes; delivery or outbox I/O errors never mask a PolicyViolation or change whether fn() runs.",
+
+  "adversarial_review": {
+    "method": "28→34-agent Workflow: 4 dimension reviewers (security, durability, issue-conformance, authorization-invariant) → 30 unique findings → per-finding adversarial verifiers.",
+    "important_caveat": "The verifier phase ERRORED OUT on a session usage limit (all ~30 verify agents returned errors, not refutations). The workflow's confirmed=[] therefore means UNVERIFIED, not clean. The builder manually triaged all 30 raw findings on the reset session; the 4 reviewers had already reproduced most by direct execution against the module.",
+    "outcome": "10 load-bearing findings fixed (3 critical + 7 major), each with a regression test; several minors fixed; the rest documented honestly as out-of-scaffold-scope limitations."
+  },
+
+  "fixes_with_regression_tests": [
+    "CRITICAL: /check allowed=bool(body) fail-opened on {\"allowed\":\"false\"} etc. -> now honored only when JSON true (test_non_boolean_allowed_denies).",
+    "CRITICAL: urllib followed 3xx redirects (bearer-token leak + TLS downgrade + CA-pin bypass) -> _NoRedirect handler, 3xx fails closed (test_redirect_is_not_followed_and_denies).",
+    "CRITICAL/MAJOR: torn newline-less line glued the NEXT receipt onto the fragment -> append isolates a torn final line (test_next_append_after_torn_line_survives).",
+    "MAJOR: no-hub flush false-acked hub-pending receipts as delivered -> hub_required tagging; drift never acks (test_flush_without_hub_does_not_false_ack).",
+    "MAJOR: audit() crashed (Decision(**dec)) on schema drift -> unknown keys filtered (test_audit_tolerates_extra_decision_keys).",
+    "MAJOR: local transport-policy failures burned the network retry cap -> network_attempt_counts excludes local failures (test_local_transport_failures_do_not_burn_network_cap).",
+    "MAJOR: context_filter applied twice (execute->check) could flip deny->allow -> applied exactly once (test_context_filter_applied_exactly_once).",
+    "MAJOR: http.client.HTTPException (IncompleteRead) escaped fail-closed except clauses -> _DELIVERY_ERRORS includes it (test_http_exception_on_check_denies_not_raises).",
+    "MAJOR: outbox OSError (disk full/permission) could mask a PolicyViolation / destroy a run -> contained in log() (test_outbox_io_error_never_masks_denial).",
+    "MAJOR: signing-key guard disabled for keys <8 bytes and bypassed by JSON escaping -> length gate removed + escaped-form check (test_short_signing_key_guard, test_escaped_signing_key_guard).",
+    "MINOR: fail-closed denials lacked decision identity -> deny- decision_id synthesized (test_denial_decisions_carry_identity).",
+    "MINOR: 48-bit run_id collision domain -> full 128-bit uuid4 hex (test_run_id_is_128_bit)."
+  ],
+
+  "documented_limitations_not_silently_claimed_solved": [
+    "Residual crash window between fn() side-effects and the receipt append (needs a two-phase intent/commit tied to the action; §1's receipt-before-POST IS met).",
+    "Durability requires configuring outbox_dir; hub-without-outbox stays best-effort (documented).",
+    "Outbox assumes a single writer on local POSIX fs (not concurrent-multiprocess / NFS safe).",
+    "Local deny reasons quote policy values -> keep context values non-sensitive; docstring corrected to say so.",
+    "HMAC seal is symmetric and not seal-compatible across schema versions (pre-production scaffold; swap for asymmetric before persisting receipts)."
+  ],
+
+  "verification_evidence": {
+    "tests": "pytest tests/test_noetfield_sdk_scaffold_v1.py -> 36 passed (23 behaviors + 13 finding regressions)",
+    "full_suite": "pytest -q -> 258 passed (CI parity, requirements.txt deps only; stdlib-only module)",
+    "demo": "python3 scripts/noetfield_sdk_scaffold.py -> ALLOWED + verify True + BLOCKED $48k, as designed"
+  },
+
+  "not_claimed": [
+    "That the adversarial verifier phase ran to completion (it did not — session-limit errors; builder triaged manually).",
+    "Production-readiness of the symmetric HMAC seal (asymmetric signing is explicitly deferred).",
+    "Any PASS/DONE verdict — this receipt is builder output, SUBMITTED for independent verification."
+  ]
+}
