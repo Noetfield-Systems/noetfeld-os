@@ -1,0 +1,13 @@
+{
+  "schema": "noos-motor-routing-row-v1",
+  "route": "receipt_writer_completion_evidence_repair",
+  "noos_state": "DISPATCHING_COMPLETION_UNPROVEN",
+  "loop_id": "inbox",
+  "factory_id": "loop-inbox",
+  "diagnosis_id": "NOOS-DIAG-20260717T082142Z-inbox",
+  "diagnosis_receipt": "receipts/incident/noos-motor-route-owner-diagnosis-20260717T082142Z-inbox.json",
+  "created_at": "2026-07-17T08:21:42Z",
+  "created_by": "noos-motor-route-owner-v1 diagnose (dual-signal observer classification, INCIDENT-DIAGNOSE-001 semantics)",
+  "consumed_by_recipe": "NF-MOTOR-RECEIPT-WRITER-REPAIR-001",
+  "machine_owner": "noos-motor-route-owner-v1 (scripts/noos_motor_route_owner_v1.py)"
+}

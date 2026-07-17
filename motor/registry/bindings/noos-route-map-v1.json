@@ -1,15 +1,17 @@
 {
   "schema": "noos-motor-route-map-v1",
-  "description": "Declared bindings from NOOS classification routes (from the observability-semantics change) to Motor recipes. This is a DECLARATION of intent, not a live wiring: status=NOT_WIRED means NOOS classifies and routes correctly but no registered machine owner executes the recipe yet. Correctly stopping without repair is safer than incorrectly restarting production.",
+  "description": "Declared bindings from NOOS classification routes (from the observability-semantics change) to Motor recipes. status=WIRED means a registered machine owner consumes the route; status=NOT_WIRED means NOOS classifies and routes correctly but no registered machine owner executes the recipe yet. Correctly stopping without repair is safer than incorrectly restarting production.",
   "not_wired_is_safe": "A route with no machine_owner surfaces the finding and stops. It never falls back to execution restart.",
   "bindings": [
     {
       "noos_route": "receipt_writer_completion_evidence_repair",
       "noos_state": "DISPATCHING_COMPLETION_UNPROVEN",
       "motor_recipe": "NF-MOTOR-RECEIPT-WRITER-REPAIR-001",
-      "machine_owner": null,
-      "status": "NOT_WIRED",
-      "note": "Track D. Bind after this registry merges: register a machine owner/handler that consumes an INCIDENT-DIAGNOSE routing row and runs RECEIPT-WRITER-REPAIR-001 in an evidence-path-only sandbox with a before/after external check pair."
+      "machine_owner": "noos-motor-route-owner-v1 (scripts/noos_motor_route_owner_v1.py)",
+      "status": "WIRED",
+      "note": "Track D \u2014 WIRED. The registered machine owner consumes an INCIDENT-DIAGNOSE routing row (schema noos-motor-routing-row-v1) for DISPATCHING_COMPLETION_UNPROVEN and runs RECEIPT-WRITER-REPAIR-001 in an evidence-path-only git_worktree sandbox: BEFORE from the diagnosis receipt, bounded keyed retries (L13, duplicate-proof), AFTER via the observer read path; states.recovery=PROVEN only from the external before/after pair. Escalates to a founder-decision artifact if evidence is not restored \u2014 never restarts execution.",
+      "wired_at": "2026-07-17T08:20:00Z",
+      "wired_by_task": "NF-NOOS-MOTOR-ROUTE-WIRING-001"
     },
     {
       "noos_route": "execution_reconcile_self_heal",
@@ -33,7 +35,7 @@
       "motor_recipe": "NF-MOTOR-INCIDENT-DIAGNOSE-001",
       "machine_owner": null,
       "status": "NOT_WIRED",
-      "note": "Authoritative source unqueryable — diagnose the monitoring path, do not touch execution."
+      "note": "Authoritative source unqueryable \u2014 diagnose the monitoring path, do not touch execution."
     }
   ]
 }
