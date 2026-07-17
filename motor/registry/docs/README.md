@@ -1,4 +1,4 @@
-# Motor Registry v1.1
+# Motor Registry v1.2
 
 The recipe schema, job-record schema, first five recipes, and the invariant
 validator for the Noetfield Motor. Everything here validates fail-closed:
@@ -18,7 +18,7 @@ schema/recipe.schema.json   what every recipe must declare
 schema/job.schema.json      one execution of a recipe = its receipt (v1.1)
 recipes/*.yaml              the five recipes
 jobs/MOTOR-WEB-001.json     Motor Proof Job #1, honest state (TRIAGE_REQUIRED)
-validate.py                 v1.1 fail-closed invariant validator (exit 0/1)
+validate.py                 v1.2 fail-closed invariant validator (exit 0/1)
 tests/                      negative-transition tests — every invariant fails closed
 ```
 
@@ -110,7 +110,7 @@ writes — and RECEIPT-WRITER-REPAIR's `evidence_sink: full` coexists with
 `TRIAGE_REQUIRED`, not `AWAITING_AUTHORITY`. Build + CI are PROVEN; render
 review, source merge, runtime deploy, and live outcome are UNPROVEN/DIVERGED.
 `cost.metered=false` and the `T00:00:00Z` timestamps are flagged placeholders —
-the v1.1 validator blocks `RECEIPT_COMPLETE` while `metered=false`. See the
+the v1.2 validator blocks `RECEIPT_COMPLETE` while `metered=false`. See the
 record's `notes` for the exact close-out chain.
 
 ## Next wiring (out of scope for this PR)

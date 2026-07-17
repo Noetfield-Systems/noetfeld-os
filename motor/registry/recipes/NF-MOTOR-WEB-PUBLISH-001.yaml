@@ -120,7 +120,10 @@ receipt:
   storage: in-repo under motor/receipts/ (never home directories, L6)
 
 notes: >-
-  Job MOTOR-WEB-001 (PR #115) is currently BUILD=PROVEN,
-  VERIFICATION=substantially proven, PROMOTION=NOT_STARTED,
-  OUTCOME=NOT_STARTED. Completing it under this recipe produces the first
-  end-to-end Motor receipt.
+  Job MOTOR-WEB-001 (PR #115) is currently TRIAGE_REQUIRED: BUILD+CI PROVEN;
+  VERIFICATION UNPROVEN (render_review has no durable artifact yet); AUTHORITY
+  UNPROVEN (no captured merge SHA); PROMOTION DIVERGED (source UNPROVEN, runtime
+  DIVERGED — formal deploy workflows reported failed); OUTCOME DIVERGED
+  (observers disagree, attribution unproven). Completing it under this recipe
+  produces the first end-to-end Motor receipt once a real deploy receipt + a
+  SHA-attributed live probe close promotion.runtime and outcome.
