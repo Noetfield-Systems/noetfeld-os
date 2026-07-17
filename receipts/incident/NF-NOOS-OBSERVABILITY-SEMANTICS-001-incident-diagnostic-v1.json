@@ -1,0 +1,41 @@
+{
+  "schema": "noos-incident-diagnostic-v1",
+  "task": "NF-NOOS-OBSERVABILITY-SEMANTICS-001",
+  "classification": "incident_diagnostic",
+  "not_a_verdict": "This is an incident diagnostic, NOT a PASS or HEALTHY receipt. Proof-ledger promotion only after independent verification (author != verifier). SUBMITTED for independent verification.",
+  "location_note": "Deliberately under receipts/incident/ (NOT receipts/proof/) — it is not a proof-grade receipt.",
+
+  "incident_window_utc": {
+    "start": "2026-07-16T23:32:07Z",
+    "recovery_first_signal": "2026-07-17T03:39:51Z",
+    "recovery_confirmed": "2026-07-17T03:50:20Z"
+  },
+
+  "corrected_finding": "Dispatch remained active, while per-loop completion evidence became stale.",
+  "explicitly_not_claimed": "All loops continued executing successfully. (The evidence proves continued DISPATCH, not confirmed per-loop COMPLETION during the receipt gap.)",
+
+  "evidence_by_source_table": {
+    "noos_loop_registry.last_fired_at": "dispatch heartbeat — remained FRESH throughout the window (execution dispatch signal)",
+    "noos_deadman_runs (append-only)": "14 consecutive 30-min runs 2026-07-16T22:30:50Z..2026-07-17T04:00:52Z, every one stale_count=0, restarts=0",
+    "noetfield_factory_cycle_runs (writer A, cycle_number=1 factory_autorun)": "continuous ~10-min cadence through the window; never gapped",
+    "noetfield_factory_cycle_runs (writer B, per-loop burst/completion receipts)": "last pre-gap rows 2026-07-16T23:32:03..07Z; SILENT until 2026-07-17T03:39:51Z; resumed 03:50:20Z (rows labeled cloud_trigger=noos_integrator_repair)"
+  },
+
+  "what_the_old_cockpit_did_wrong": "Collapsed writer-B (completion-receipt) staleness into BLOCKED_WITH_REASON + success_rate=0.0, reporting 'loop failed / not healthy' when the true state was 'dispatch active, completion evidence unavailable'. This is fixed by the dual-signal status model in this task (DISPATCHING_COMPLETION_UNPROVEN -> success_rate=null / INSUFFICIENT_RECENT_EVIDENCE -> receipt-writer repair route).",
+
+  "diagnostic_canary_write_disclosure": {
+    "operational_mutation": "none",
+    "diagnostic_canary_inserts": [
+      {"at_utc": "2026-07-17T03:50:13.933Z", "sink_table": "noos_deadman_runs", "op": "INSERT", "http_status": 201},
+      {"at_utc": "2026-07-17T03:53:53.555Z", "sink_table": "noos_deadman_runs", "op": "INSERT", "http_status": "201-class"}
+    ],
+    "sink_semantics": "append-only terminal audit log; no TTL/cleanup; NOT read by liveness/dispatch/reconcile/recovery — cannot affect operational state",
+    "prior_receipt_correction": "The first scratch receipt said the probe was fully read-only / 'no mutation occurred'. Corrected: operational mutation = none, but two diagnostic canary INSERTs were performed and are disclosed here."
+  },
+
+  "causality": "Recovery of the completion-evidence signal correlates with machine-reconcile / deadman probe / noos_integrator_repair activity ~03:39-03:50Z. Causation is NOT established (writer-B pre-gap cadence was already irregular 20-92min). No causal claim from chronological proximity.",
+
+  "recurrence_note": "During implementation verification at ~2026-07-17T05:00Z the completion (writer-B) signal was stale again while dispatch was fresh — the new cockpit correctly reported DISPATCHING_COMPLETION_UNPROVEN for all 7 loops (success_rate=null, route=receipt_writer_completion_evidence_repair), demonstrating the fix on a live recurrence.",
+
+  "final_status": "BUILDER_COMPLETE_FOR_INDEPENDENT_VERIFICATION"
+}

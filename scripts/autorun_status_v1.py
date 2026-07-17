@@ -26,6 +26,28 @@ DEFAULT_STALE_MINUTES = 30
 
 sys.path.insert(0, str(ROOT / "scripts"))
 from noos_slo_v1 import autofile_kaizen_receipt, score_slo, slo_config, status_proxy_success_rate  # noqa: E402
+from noos_observability_semantics_v1 import (  # noqa: E402
+    DISPATCHING_COMPLETION_UNPROVEN,
+    EVIDENCE_INSUFFICIENT,
+    LOOP_EXECUTION_STALE,
+    OBSERVER_DIVERGENCE_OR_REPLAY,
+    OBSERVER_UNAVAILABLE,
+    RUNNING_CONFIRMED,
+    classify_loop_state,
+)
+
+# Map the explicit dual-signal execution states onto the legacy cockpit
+# ``status`` vocabulary consumed by SLO scoring, findings and the founder
+# digest. Only LOOP_EXECUTION_STALE is a genuine execution failure; the
+# evidence-uncertain states keep their own status strings so the digest never
+# says "loop failed" when completion evidence is merely unavailable.
+_EXEC_STATE_TO_STATUS = {
+    RUNNING_CONFIRMED: "RUNNING",
+    LOOP_EXECUTION_STALE: "BLOCKED_WITH_REASON",
+    DISPATCHING_COMPLETION_UNPROVEN: DISPATCHING_COMPLETION_UNPROVEN,
+    OBSERVER_DIVERGENCE_OR_REPLAY: OBSERVER_DIVERGENCE_OR_REPLAY,
+    OBSERVER_UNAVAILABLE: OBSERVER_UNAVAILABLE,
+}
 
 
 def utc_now() -> str:
@@ -668,6 +690,49 @@ def probe_supabase_noos_factory(wf: dict[str, Any], wf_doc: dict[str, Any], stal
     return stale_wrap(base, observed_at=observed_at, stale_minutes=stale_minutes, source="noos_factory_autorun")
 
 
+def fetch_dispatch_heartbeat(cfg: tuple[str, str], loop_id: str) -> dict[str, Any]:
+    """Dispatch heartbeat for one loop from noos_loop_registry.last_fired_at.
+
+    This is the *execution dispatch* signal — independent of the per-loop
+    completion receipt. Returns {ok, last_fired_at, interval_minutes}.
+    """
+    hit = supabase_get(
+        cfg,
+        "noos_loop_registry",
+        query=urllib.parse.urlencode(
+            {
+                "select": "loop_id,last_fired_at,interval_minutes",
+                "loop_id": f"eq.{loop_id}",
+                "limit": "1",
+            }
+        ),
+    )
+    if not hit.get("ok"):
+        return {"ok": False, "http": hit.get("status")}
+    rows = hit.get("rows") or []
+    if not rows:
+        return {"ok": True, "last_fired_at": None, "interval_minutes": None, "missing": True}
+    row = rows[0]
+    return {
+        "ok": True,
+        "last_fired_at": row.get("last_fired_at"),
+        "interval_minutes": row.get("interval_minutes"),
+    }
+
+
+def _registry_loop_id(probe: dict[str, Any], factory_id: str, runner: dict[str, Any] | None = None) -> str:
+    """Resolve the noos_loop_registry loop_id for a cockpit loop probe.
+
+    factory_id is typically ``loop-<id>``; the registry keys on ``<id>``.
+    """
+    if probe.get("loop_id"):
+        return str(probe["loop_id"])
+    if runner and runner.get("loop_id"):
+        return str(runner["loop_id"])
+    fid = str(factory_id or "")
+    return fid[len("loop-"):] if fid.startswith("loop-") else fid
+
+
 def probe_supabase_noos_loop(wf: dict[str, Any], wf_doc: dict[str, Any], stale_minutes: float) -> dict[str, Any]:
     probe = wf["probe"]
     cfg = supabase_profile_config(probe.get("supabase_profile", "noetfield"), wf_doc)
@@ -685,47 +750,99 @@ def probe_supabase_noos_loop(wf: dict[str, Any], wf_doc: dict[str, Any], stale_m
         }
     )
     hit = supabase_get(cfg, table, query=params)
-    if not hit.get("ok"):
-        return blocked(
-            "supabase_query_failed",
-            command=command,
-            evidence={"table": table, "factory_id": factory_id, "http": hit.get("status")},
-        )
+    completion_query_ok = bool(hit.get("ok"))
     rows = hit.get("rows") or []
-    if not rows:
-        return {
-            "status": "IDLE_NO_WORK",
-            "reason": "no_loop_cycles",
-            "command": command,
-            "evidence": {"factory_id": factory_id, "table": table},
-        }
-    row = rows[0]
-    observed_at = row.get("recorded_at")
-    cycle_status = str(row.get("status") or "")
+    row = rows[0] if rows else {}
     runner = row.get("runner_output") or {}
-    if cycle_status == "ok":
-        base: dict[str, Any] = {
-            "status": "RUNNING",
-            "cycle_number": row.get("cycle_number"),
-            "evidence": {
-                "factory_id": factory_id,
-                "recorded_at": observed_at,
-                "cloud_trigger": runner.get("cloud_trigger"),
-                "loop_id": runner.get("loop_id") or probe.get("loop_id"),
-            },
-        }
-    elif cycle_status == "degraded":
+    completion_at = row.get("recorded_at") if rows else None
+    cycle_status = str(row.get("status") or "")
+
+    # Independent dispatch-heartbeat signal (execution dispatch, not completion).
+    loop_id = _registry_loop_id(probe, factory_id, runner)
+    hb = fetch_dispatch_heartbeat(cfg, loop_id)
+    dispatch_query_ok = bool(hb.get("ok"))
+    dispatch_at = hb.get("last_fired_at")
+    interval = hb.get("interval_minutes")
+    dispatch_multiplier = float(probe.get("dispatch_stale_multiplier") or 2.0)
+    dispatch_threshold = (float(interval) * dispatch_multiplier) if interval else stale_minutes
+
+    # A degraded completion receipt is a real per-loop failure regardless of
+    # dispatch — keep the explicit failure classification for it.
+    if completion_query_ok and rows and cycle_status == "degraded":
         base = {
             "status": "FAILED_WITH_RECEIPT",
             "command": command,
-            "evidence": {"factory_id": factory_id, "recorded_at": observed_at, "status": cycle_status},
+            "evidence": {"factory_id": factory_id, "recorded_at": completion_at, "status": cycle_status},
         }
-    else:
-        base = {"status": "IDLE_NO_WORK", "evidence": {"factory_id": factory_id, "recorded_at": observed_at}}
-    gh_wf = probe.get("github_workflow")
-    if gh_wf:
-        base["evidence"]["github_dispatch"] = github_latest_run(str(gh_wf), event="repository_dispatch")
-    return stale_wrap(base, observed_at=observed_at, stale_minutes=stale_minutes, source=f"noos_loop:{factory_id}")
+        if probe.get("github_workflow"):
+            base["evidence"]["github_dispatch"] = github_latest_run(str(probe["github_workflow"]), event="repository_dispatch")
+        return stale_wrap(base, observed_at=completion_at, stale_minutes=stale_minutes, source=f"noos_loop:{factory_id}")
+
+    classification = classify_loop_state(
+        dispatch_age_minutes=age_minutes(dispatch_at),
+        dispatch_stale_threshold_minutes=dispatch_threshold,
+        completion_age_minutes=age_minutes(completion_at),
+        completion_stale_threshold_minutes=stale_minutes,
+        dispatch_query_ok=dispatch_query_ok,
+        completion_query_ok=completion_query_ok,
+        dispatch_last_fired_at=dispatch_at,
+        completion_last_recorded_at=completion_at,
+        observed_at=utc_now(),
+        status_source="noos_loop_registry+noetfield_factory_cycle_runs",
+        success_rate_sample_window_minutes=stale_minutes,
+    )
+    exec_state = classification["execution_state"]
+    status = _EXEC_STATE_TO_STATUS.get(exec_state, "BLOCKED_WITH_REASON")
+
+    reason_map = {
+        RUNNING_CONFIRMED: "dispatch_and_completion_fresh",
+        DISPATCHING_COMPLETION_UNPROVEN: "dispatch_fresh_completion_evidence_stale",
+        OBSERVER_DIVERGENCE_OR_REPLAY: "completion_fresh_dispatch_stale_or_impossible",
+        LOOP_EXECUTION_STALE: "dispatch_and_completion_stale",
+        OBSERVER_UNAVAILABLE: "authoritative_source_unavailable",
+    }
+    result: dict[str, Any] = {
+        "status": status,
+        "execution_state": exec_state,
+        "evidence_state": classification["evidence_state"],
+        "success_rate": classification["success_rate"],
+        "route": classification["route"],
+        "route_permits_execution_mutation": classification["route_permits_execution_mutation"],
+        "observation_confidence": classification["observation_confidence"],
+        "reason": reason_map.get(exec_state, exec_state),
+        "cycle_number": row.get("cycle_number") if rows else None,
+        "presentation": classification["presentation"],
+        "evidence": {
+            "factory_id": factory_id,
+            "loop_id": loop_id,
+            "dispatch_last_fired_at": dispatch_at,
+            "completion_last_recorded_at": completion_at,
+            "dispatch_freshness": classification["presentation"]["dispatch_freshness"],
+            "completion_evidence_freshness": classification["presentation"]["completion_evidence_freshness"],
+            "cloud_trigger": runner.get("cloud_trigger"),
+            # observed_at intentionally reflects the FRESHER of the two so the
+            # legacy SLO freshness path does not re-flag a healthy dispatch as
+            # stale; completion staleness is carried explicitly above.
+            "observed_at": _fresher(dispatch_at, completion_at) or completion_at or dispatch_at,
+        },
+        "command": command if status in {"BLOCKED_WITH_REASON"} else None,
+    }
+    if probe.get("github_workflow"):
+        result["evidence"]["github_dispatch"] = github_latest_run(str(probe["github_workflow"]), event="repository_dispatch")
+    if result["command"] is None:
+        result.pop("command")
+    # data_freshness reflects the completion-evidence signal (never suppressed).
+    result["data_freshness"] = (
+        "STALE_DATA" if classification["presentation"]["completion_evidence_freshness"] == "STALE" else "FRESH"
+    )
+    return result
+
+
+def _fresher(a: str | None, b: str | None) -> str | None:
+    da, db = parse_iso(a), parse_iso(b)
+    if da and db:
+        return a if da >= db else b
+    return a or b
 
 
 def probe_supabase_noos_inbox(wf: dict[str, Any], wf_doc: dict[str, Any], stale_minutes: float) -> dict[str, Any]:
@@ -1017,7 +1134,14 @@ def workflow_slo(row: dict[str, Any], wf: dict[str, Any], wf_doc: dict[str, Any]
     evidence = row.get("evidence") or {}
     observed_at = observed_timestamp(evidence)
     freshness_minutes = age_minutes(observed_at)
-    success_rate = status_proxy_success_rate(str(row.get("status") or ""))
+    # Prefer an explicit success_rate the probe attached (dual-signal loop
+    # classifier). ``None`` is meaningful here: it says "no trustworthy recent
+    # sample" and MUST NOT be coerced to 0.0.
+    evidence_state = row.get("evidence_state")
+    if "success_rate" in row or evidence_state == EVIDENCE_INSUFFICIENT:
+        success_rate = row.get("success_rate")
+    else:
+        success_rate = status_proxy_success_rate(str(row.get("status") or ""))
     latency_minutes = freshness_minutes
     score = score_slo(
         freshness_minutes=freshness_minutes,
@@ -1026,7 +1150,11 @@ def workflow_slo(row: dict[str, Any], wf: dict[str, Any], wf_doc: dict[str, Any]
         targets=targets,
     )
     receipt_path = None
-    if not score["ok"]:
+    # Do NOT auto-file an execution-restart kaizen receipt when the evidence is
+    # merely insufficient (dispatch fresh / completion unproven, observer
+    # divergence, observer unavailable). Those route to receipt-writer or
+    # observer repair via findings, never to execution restart.
+    if not score["ok"] and evidence_state != EVIDENCE_INSUFFICIENT:
         receipt_path = autofile_kaizen_receipt(
             root=ROOT,
             source="autorun-status",
@@ -1038,7 +1166,7 @@ def workflow_slo(row: dict[str, Any], wf: dict[str, Any], wf_doc: dict[str, Any]
                 "status": row.get("status"),
                 "observed_at": observed_at,
                 "freshness_minutes": freshness_minutes,
-                "success_rate": round(success_rate, 4),
+                "success_rate": round(success_rate, 4) if success_rate is not None else None,
                 "latency_minutes": latency_minutes,
             },
         )
@@ -1047,9 +1175,12 @@ def workflow_slo(row: dict[str, Any], wf: dict[str, Any], wf_doc: dict[str, Any]
             "targets": targets,
             "observed": {
                 "freshness_minutes": freshness_minutes,
-                "success_rate": round(success_rate, 4),
+                "success_rate": round(success_rate, 4) if success_rate is not None else None,
+                "evidence_state": evidence_state or ("SUFFICIENT_RECENT_EVIDENCE" if success_rate is not None else EVIDENCE_INSUFFICIENT),
+                "success_rate_sample_window_minutes": (row.get("presentation") or {}).get("success_rate_sample_window_minutes"),
                 "latency_minutes": latency_minutes,
             },
+            "route": row.get("route"),
             "score": score["score"],
             "misses": score["misses"],
             "ok": score["ok"],
@@ -1182,18 +1313,49 @@ def dashboard_findings(dash: dict[str, Any]) -> list[dict[str, Any]]:
         )
     for wf in dash.get("workflows") or []:
         status = str(wf.get("status") or "").upper()
+        exec_state = str(wf.get("execution_state") or "").upper()
         slo = wf.get("slo") or {}
         evidence = wf.get("evidence") or {}
         observed_at = observed_timestamp(evidence)
-        if status in {"BLOCKED_WITH_REASON", "FAILED_WITH_RECEIPT", "TRIAGE_REQUIRED"}:
+
+        # Evidence-uncertain execution states: honest summary + explicit route.
+        # These are NOT "loop failed" — completion evidence or observer is the
+        # gap, and they must not route to execution restart.
+        if exec_state in {
+            DISPATCHING_COMPLETION_UNPROVEN,
+            OBSERVER_DIVERGENCE_OR_REPLAY,
+            OBSERVER_UNAVAILABLE,
+        }:
+            summary_map = {
+                DISPATCHING_COMPLETION_UNPROVEN: "Dispatch active; per-loop completion evidence stale/absent",
+                OBSERVER_DIVERGENCE_OR_REPLAY: "Completion evidence fresh but dispatch heartbeat stale/inconsistent",
+                OBSERVER_UNAVAILABLE: "Authoritative source unavailable; execution state not determinable",
+            }
             findings.append(
                 {
                     "scope": wf.get("id"),
-                    "severity": "high",
-                    "summary": f"Workflow is not healthy: {status}",
-                    "detail": wf.get("reason") or wf.get("command") or "",
+                    "severity": "medium",
+                    "summary": summary_map.get(exec_state, exec_state),
+                    "detail": wf.get("reason") or "",
+                    "execution_state": exec_state,
+                    "evidence_state": wf.get("evidence_state"),
+                    "route": wf.get("route"),
                 }
             )
+            continue
+
+        if status in {"BLOCKED_WITH_REASON", "FAILED_WITH_RECEIPT", "TRIAGE_REQUIRED"}:
+            finding = {
+                "scope": wf.get("id"),
+                "severity": "high",
+                "summary": f"Workflow is not healthy: {status}",
+                "detail": wf.get("reason") or wf.get("command") or "",
+            }
+            if wf.get("route"):
+                finding["route"] = wf.get("route")
+            if exec_state == LOOP_EXECUTION_STALE:
+                finding["execution_state"] = exec_state
+            findings.append(finding)
         elif status in {"RUNNING", "COMPLETE"} and not observed_at:
             findings.append(
                 {
@@ -1236,7 +1398,17 @@ def main() -> int:
         d = str(detail).lower()
         return any(sub in d for sub in non_fatal_substrings)
 
-    critical_findings = [f for f in findings if not is_non_fatal(f.get("detail"))]
+    # Evidence-insufficient findings (completion unproven, observer divergence,
+    # observer unavailable) are not execution failures — they route to
+    # receipt-writer / observer repair and must not fail the read-only dashboard.
+    critical_findings = [
+        f
+        for f in findings
+        if not is_non_fatal(f.get("detail"))
+        and f.get("evidence_state") != EVIDENCE_INSUFFICIENT
+        and str(f.get("execution_state") or "").upper()
+        not in {DISPATCHING_COMPLETION_UNPROVEN, OBSERVER_DIVERGENCE_OR_REPLAY, OBSERVER_UNAVAILABLE}
+    ]
 
     # Print full dashboard (critique contains all findings)
     print(json.dumps(dash, indent=2))
