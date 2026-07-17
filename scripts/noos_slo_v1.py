@@ -24,16 +24,26 @@ def slo_config(defaults: dict[str, Any], row: dict[str, Any]) -> dict[str, float
     }
 
 
-def status_proxy_success_rate(status: str) -> float:
+def status_proxy_success_rate(status: str) -> float | None:
     normalized = str(status or "").upper()
-    if normalized == "COMPLETE":
+    if normalized in {"COMPLETE", "RUNNING_CONFIRMED"}:
         return 1.0
     if normalized in {"RUNNING", "IDLE_NO_WORK"}:
         return 1.0
     if normalized == "TRIAGE_REQUIRED":
         return 0.5
-    if normalized in {"BLOCKED_WITH_REASON", "FAILED_WITH_RECEIPT"}:
+    # Genuine execution failure: both dispatch and completion evidence stale.
+    if normalized in {"BLOCKED_WITH_REASON", "FAILED_WITH_RECEIPT", "LOOP_EXECUTION_STALE"}:
         return 0.0
+    # Evidence-uncertain states: no trustworthy recent sample. Return None so
+    # the caller records success_rate=null / INSUFFICIENT_RECENT_EVIDENCE
+    # instead of fabricating a 0.0 failure.
+    if normalized in {
+        "DISPATCHING_COMPLETION_UNPROVEN",
+        "OBSERVER_DIVERGENCE_OR_REPLAY",
+        "OBSERVER_UNAVAILABLE",
+    }:
+        return None
     return 0.6
 
 

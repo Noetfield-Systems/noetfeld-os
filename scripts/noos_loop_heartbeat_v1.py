@@ -217,7 +217,7 @@ def build_heartbeat() -> dict[str, Any]:
                 evidence={
                     "workflow_id": str(loop.get("github_workflow") or loop_id),
                     "freshness_minutes": freshness_minutes,
-                    "success_rate": round(success_rate, 4),
+                    "success_rate": round(success_rate, 4) if success_rate is not None else None,
                     "latency_minutes": latency_minutes,
                     "status": state.get("last_state") or state.get("last_status") or "UNKNOWN",
                 },
