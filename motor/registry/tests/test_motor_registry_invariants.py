@@ -1,9 +1,14 @@
-"""Negative-transition tests for the Motor registry v1.1 validator.
+"""Negative-transition tests for the Motor registry v1.2 validator.
 
 Each documented invariant must FAIL CLOSED. v1.0 accepted all of these; the
 suite exists so a regression that re-loosens the validator turns red in CI
 instead of silently shipping a paper invariant. Run via pytest, or standalone:
     python3 motor/registry/tests/test_motor_registry_invariants.py
+
+Isolation note: several invariants (R2/I5a/I5b/I6) can be tripped incidentally
+by a fixture that violates a *different* invariant first. The tests named after
+a single invariant assert that invariant's own error code appears (e.g.
+"(R2)"), so a regression isolated to that check is actually caught.
 """
 from __future__ import annotations
 
@@ -110,6 +115,24 @@ def test_R2_outcome_proven_promotion_not_rejected():
     assert _semantics_bad(j)
 
 
+def test_R2_isolated_outcome_proven_promotion_not_started():
+    """Isolated to R2: outcome carries observation+attribution PROVEN and an
+    external PASS (so I5b/I6 are satisfied) while promotion is NOT_STARTED —
+    only R2 can fire. Guards against R2 being silently redundant with I5b."""
+    j = copy.deepcopy(GOOD_JOB)
+    j["states"]["promotion"] = {"state": "NOT_STARTED"}
+    j["states"]["outcome"] = {
+        "state": "PROVEN", "evidence_ref": "probe",
+        "observation": {"state": "PROVEN", "evidence_ref": "marker"},
+        "attribution": {"state": "PROVEN", "evidence_ref": "sha match"},
+    }
+    j["verification_results"] = [
+        {"check": "unit_and_site_tests", "decision": "PASS", "reason": "green", "evidence": "ci", "external": True}
+    ]
+    errs = V.check_job_semantics(j, RECIPES, "t")
+    assert any("(R2)" in e for e in errs), errs
+
+
 # ---- I5a: promotion PROVEN needs source+runtime proven ---------------------
 def test_I5a_promotion_proven_but_runtime_unproven_rejected():
     j = copy.deepcopy(GOOD_JOB)
@@ -123,28 +146,43 @@ def test_I5a_promotion_proven_but_runtime_unproven_rejected():
 
 # ---- I5b: outcome PROVEN needs observation+attribution proven --------------
 def test_I5b_outcome_observed_but_unattributed_rejected():
-    j = copy.deepcopy(GOOD_JOB)
-    j["states"]["promotion"] = {"state": "PROVEN", "evidence_ref": "deploy receipt"}
-    j["artifacts"]["production_sha"] = "a" * 40
+    """Isolated to I5b: promotion is fully PROVEN (source+runtime), so I5a is
+    satisfied; only attribution UNPROVEN can trip the check, and we assert the
+    (I5b) code specifically so a regression narrowed to that comparison is
+    caught (not masked by an incidental I5a failure)."""
+    j = _fully_proven_job()
     j["states"]["outcome"] = {
         "state": "PROVEN", "evidence_ref": "probe",
         "observation": {"state": "PROVEN", "evidence_ref": "page shows marker"},
         "attribution": {"state": "UNPROVEN", "reason": "deployed sha unknown"},
     }
-    assert _semantics_bad(j)
+    errs = V.check_job_semantics(j, RECIPES, "t")
+    assert any("(I5b)" in e for e in errs), errs
 
 
 # ---- I6: external proof required but no external PASS -----------------------
 def test_I6_outcome_proven_without_external_pass_rejected():
-    j = copy.deepcopy(GOOD_JOB)
-    j["states"]["promotion"] = {"state": "PROVEN", "evidence_ref": "deploy"}
-    j["artifacts"]["production_sha"] = "b" * 40
-    j["states"]["outcome"] = {"state": "PROVEN", "evidence_ref": "probe"}
-    # strip external PASS rows
+    """Isolated to I6: start from a fully-proven job (I5a/I5b satisfied) and
+    strip the external PASS rows, so only I6 can fire. Assert the (I6) code."""
+    j = _fully_proven_job()
     j["verification_results"] = [
-        {"check": "x", "decision": "PASS", "reason": "r", "evidence": "e", "external": False}
+        {"check": "unit_and_site_tests", "decision": "FAIL", "reason": "red", "evidence": "ci", "external": True}
     ]
-    assert _semantics_bad(j)
+    errs = V.check_job_semantics(j, RECIPES, "t")
+    assert any("(I6)" in e for e in errs), errs
+
+
+def test_I6_verification_proven_with_non_recipe_check_name_rejected():
+    """The verification-PROVEN branch must, like the outcome branch, reject a
+    PASS row whose check name the recipe never declared (closes the asymmetry
+    where verification PROVEN accepted any PASS name)."""
+    j = copy.deepcopy(GOOD_JOB)
+    j["states"]["verification"] = {"state": "PROVEN", "evidence_ref": "some receipt"}
+    j["verification_results"] = [
+        {"check": "totally_unrelated_check", "decision": "PASS", "reason": "x", "evidence": "y", "external": False}
+    ]
+    errs = V.check_job_semantics(j, RECIPES, "t")
+    assert any("(I6)" in e for e in errs), errs
 
 
 # ---- I7: SHA / artifact identity -------------------------------------------
@@ -479,6 +517,52 @@ def test_I9_receipt_complete_missing_recipe_required_field_rejected():
     j["approval"] = {"required": True, "approved_by": "founder", "approval_artifact": ""}  # missing
     j["lifecycle_status"] = "RECEIPT_COMPLETE"
     assert _semantics_bad(j)
+
+
+# ---- U: job_id / idempotency_key uniqueness across job files ---------------
+def _registry_copy_with_extra_job(extra_job: dict, filename: str):
+    """Copy the real registry into a temp dir (schema+recipes+jobs), drop in one
+    extra job file, and run the whole validator over it. Uses tempfile (not the
+    tmp_path fixture) so the standalone __main__ runner still works."""
+    import shutil
+    import tempfile
+
+    with tempfile.TemporaryDirectory() as td:
+        reg = pathlib.Path(td) / "reg"
+        shutil.copytree(REG, reg, ignore=shutil.ignore_patterns("__pycache__", "tests"))
+        (reg / "jobs" / filename).write_text(json.dumps(extra_job))
+        return V.validate_all(reg)[0]
+
+
+def test_U_duplicate_idempotency_key_rejected():
+    dup = copy.deepcopy(GOOD_JOB)
+    dup["job_id"] = "MOTOR-WEB-002"  # distinct id, SAME idempotency_key
+    failures = _registry_copy_with_extra_job(dup, "MOTOR-WEB-002.json")
+    assert any("duplicate idempotency_key" in x for x in failures), failures
+
+
+def test_U_duplicate_job_id_rejected():
+    dup = copy.deepcopy(GOOD_JOB)
+    dup["idempotency_key"] = "distinct-key-so-only-the-job-id-collides"  # SAME job_id
+    failures = _registry_copy_with_extra_job(dup, "MOTOR-WEB-DUP.json")
+    assert any("duplicate job_id" in x for x in failures), failures
+
+
+def test_U_empty_idempotency_key_rejected_by_schema():
+    """An empty idempotency_key must fail schema (minLength:1) so U never
+    receives an empty key to silently skip."""
+    j = copy.deepcopy(GOOD_JOB)
+    j["idempotency_key"] = ""
+    assert _schema_bad(j)
+
+
+def test_U_whitespace_idempotency_key_flagged_not_skipped():
+    """A whitespace-only key passes minLength but must still be flagged by the
+    validator's U backstop rather than silently skipped for dedup."""
+    whitespace_job = copy.deepcopy(GOOD_JOB)
+    whitespace_job["idempotency_key"] = "   "
+    failures = _registry_copy_with_extra_job(whitespace_job, "MOTOR-WEB-WS.json")
+    assert any("cannot dedup" in x for x in failures), failures
 
 
 if __name__ == "__main__":
