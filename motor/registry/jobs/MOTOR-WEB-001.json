@@ -1,0 +1,135 @@
+{
+  "job_id": "MOTOR-WEB-001",
+  "recipe_id": "NF-MOTOR-WEB-PUBLISH-001",
+  "recipe_version": "1.0.0",
+  "idempotency_key": "web-publish:founder-instruction-ai-motor-category",
+  "trigger": {
+    "type": "founder_instruction",
+    "requested_by": "founder",
+    "authorized_by": "founder",
+    "occurred_at": "2026-07-10T00:00:00Z",
+    "instruction_ref": "Founder instruction: define the AI Motor category on Noetfield.com"
+  },
+  "states": {
+    "dispatch": {
+      "state": "PROVEN",
+      "evidence_ref": "codex worktree + branch codex/ai-motor-category-upgrade",
+      "as_of": "2026-07-14T00:00:00Z"
+    },
+    "execution": {
+      "state": "PROVEN",
+      "evidence_ref": "candidate commit defb5506677d4f5b88178b027b7ba6604ea47c42 with real file changes",
+      "as_of": "2026-07-14T00:00:00Z"
+    },
+    "verification": {
+      "state": "UNPROVEN",
+      "as_of": "2026-07-14T00:00:00Z",
+      "reason": "CI + tests PASS on the exact candidate head (external), but the recipe-declared check render_review (founder desktop/mobile visual review) has no durable evidence artifact yet — verification is not complete until every declared check has evidence (L3/L4)."
+    },
+    "evidence": {
+      "state": "IN_PROGRESS",
+      "as_of": "2026-07-16T00:00:00Z",
+      "reason": "This record is the receipt-in-progress; it completes only at RECEIPT_COMPLETE with all truth fields proven."
+    },
+    "authority": {
+      "state": "UNPROVEN",
+      "as_of": "2026-07-16T00:00:00Z",
+      "reason": "Advisors report a founder merge of PR #115, but no durable approval_artifact (merge SHA / /approve URL) is captured in this record and the merge was not independently verified here. Verbal/second-hand report is not approval evidence (L7)."
+    },
+    "promotion": {
+      "state": "DIVERGED",
+      "as_of": "2026-07-16T00:00:00Z",
+      "reason": "Source merge is reported but not evidenced with a merge SHA; the formal production deploy workflows are reported failed; exact production artifact identity is not established. 'Merged' is not 'deployed' — the split below records each truth separately.",
+      "evidence_ref": "advisor reports: formal deploy workflows failed; live-site observers disagree",
+      "source": {
+        "state": "UNPROVEN",
+        "as_of": "2026-07-16T00:00:00Z",
+        "reason": "Merge to main reported by advisors but no merge SHA / approval_artifact captured; not independently verified in this record."
+      },
+      "runtime": {
+        "state": "DIVERGED",
+        "as_of": "2026-07-16T00:00:00Z",
+        "reason": "Formal Cloudflare production deploy workflows reported failed; no successful deployment receipt (deployment id + deployed SHA) exists; live content is inconsistent across observers."
+      }
+    },
+    "outcome": {
+      "state": "DIVERGED",
+      "as_of": "2026-07-16T00:00:00Z",
+      "reason": "One observer reported upgraded Motor content live while another public fetch returned the previous homepage title and the old /motors/ page. Observation is contested and attribution to the candidate SHA is unproven.",
+      "evidence_ref": "advisor probes of https://www.noetfield.com/ and /motors/ returning divergent content",
+      "observation": {
+        "state": "DIVERGED",
+        "as_of": "2026-07-16T00:00:00Z",
+        "reason": "Cursor reported new content live; an independent advisor fetch returned the previous homepage title and old /motors/ heading. Observers disagree — CDN/host/edge divergence or rollback are all possible."
+      },
+      "attribution": {
+        "state": "UNPROVEN",
+        "as_of": "2026-07-16T00:00:00Z",
+        "reason": "No exact deployed SHA is known, so no observed content can be attributed to candidate defb5506. Observation != attribution; the loop cannot close until deployed SHA == candidate SHA is proven."
+      }
+    }
+  },
+  "lifecycle_status": "TRIAGE_REQUIRED",
+  "sandbox": {
+    "sandbox_id": "worktree-ai-motor-category",
+    "type": "git_worktree",
+    "branch": "codex/ai-motor-category-upgrade"
+  },
+  "worker_runs": [
+    {
+      "worker_type": "codex-builder",
+      "started_at": "2026-07-10T00:00:00Z",
+      "log_ref": "codex session transcript (link to be attached by founder tooling)"
+    }
+  ],
+  "artifacts": {
+    "baseline_sha": "a192926",
+    "candidate_sha": "defb5506677d4f5b88178b027b7ba6604ea47c42",
+    "production_sha": "",
+    "pr_ref": "Noetfield-Systems/Noetfield#115",
+    "files_changed": []
+  },
+  "verification_results": [
+    {
+      "check": "unit_and_site_tests",
+      "decision": "PASS",
+      "reason": "Full suite green on exact candidate head",
+      "evidence": "CI run on defb5506: 423 passed, 2 skipped",
+      "external": true,
+      "checked_at": "2026-07-14T00:00:00Z"
+    },
+    {
+      "check": "render_review",
+      "decision": "SKIP_WITH_REASON",
+      "reason": "Founder desktop/mobile visual review not yet performed — no durable evidence artifact",
+      "evidence": "n/a — this row converts to PASS/FAIL when the founder reviews and an artifact is captured",
+      "external": true,
+      "checked_at": "2026-07-16T00:00:00Z"
+    },
+    {
+      "check": "production_deploy_receipt",
+      "decision": "FAIL",
+      "reason": "Formal production deploy workflows reported failed; no deployment receipt (deployment id + deployed SHA) captured",
+      "evidence": "advisor report of failed production workflows",
+      "external": true,
+      "checked_at": "2026-07-16T00:00:00Z"
+    }
+  ],
+  "approval": {
+    "required": true,
+    "approved_by": "",
+    "approval_artifact": ""
+  },
+  "cost": {
+    "provider": "openai",
+    "model": "codex",
+    "total_usd": 0,
+    "metered": false,
+    "value_class": "proof_asset"
+  },
+  "timestamps": {
+    "created_at": "2026-07-10T00:00:00Z",
+    "executing_at": "2026-07-10T00:00:00Z"
+  },
+  "notes": "Motor Proof Job #1 — TRIAGE_REQUIRED, not AWAITING_AUTHORITY. Honest truth split: build+CI proven; render review, source merge, runtime deploy, and live outcome are UNPROVEN/DIVERGED. cost.metered=false and total_usd=0 are PLACEHOLDERS (not metered values, L11); timestamps at T00:00:00Z are date-only anchors, not real event times — both must be replaced with actuals before RECEIPT_COMPLETE (the v1.1 validator blocks RECEIPT_COMPLETE while metered=false). To close: capture merge SHA (authority+promotion.source), obtain a successful deploy receipt with deployment id + deployed SHA (promotion.runtime), wait >=60s, probe apex and www for content markers AND confirm deployed SHA == candidate SHA (outcome.observation + outcome.attribution), fill production_sha (40-hex), receipt_hash, real cost, real timestamps."
+}

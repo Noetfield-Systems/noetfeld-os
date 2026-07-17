@@ -1,0 +1,267 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "noetfield/motor-recipe-v1",
+  "title": "Motor Recipe v1",
+  "description": "Executable contract for one type of governed job. A recipe is not a prompt: it declares trigger, authority, sandbox, budgets, verification, promotion, rollback, and the receipt it must produce. Recipes are founder-gated artifacts (L5 territory): changing verification, authority, or budgets requires founder approval of the diff.",
+  "type": "object",
+  "required": [
+    "recipe_id",
+    "version",
+    "purpose",
+    "trigger",
+    "authority",
+    "sandbox",
+    "budgets",
+    "steps",
+    "verification",
+    "failure_policy",
+    "promotion",
+    "rollback",
+    "receipt"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "recipe_id": {
+      "type": "string",
+      "pattern": "^NF-MOTOR-[A-Z0-9-]+-[0-9]{3}$",
+      "description": "Stable identity, e.g. NF-MOTOR-WEB-PUBLISH-001. Never reused for a different purpose."
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$",
+      "description": "Semver. Any change to verification/authority/budgets is at least a minor bump and founder-gated."
+    },
+    "purpose": {
+      "type": "string",
+      "minLength": 10,
+      "description": "One or two sentences: what business outcome a run of this recipe produces."
+    },
+    "trigger": {
+      "type": "object",
+      "required": ["type", "dedupe_key"],
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "enum": ["founder_instruction", "schedule", "event", "escalation"],
+          "description": "What is allowed to start a job of this recipe. A recipe with type=schedule is an autorun."
+        },
+        "schedule_cron": {
+          "type": "string",
+          "description": "Required iff type=schedule. 5-field cron, UTC."
+        },
+        "event_source": {
+          "type": "string",
+          "description": "Required iff type=event. E.g. 'github:workflow_run.failed', 'noos:DRIFT_receipt'."
+        },
+        "dedupe_key": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Template for the idempotency key so the same trigger never creates two jobs (L13). Required + non-empty on every recipe so a job's idempotency_key always has a template to render."
+        }
+      }
+    },
+    "required_inputs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "description"],
+        "additionalProperties": false,
+        "properties": {
+          "name": {"type": "string"},
+          "description": {"type": "string"},
+          "example": {}
+        }
+      },
+      "description": "Inputs a job instance must bind before EXECUTING. Missing input = job invalid at creation, not discovered mid-run."
+    },
+    "authority": {
+      "type": "object",
+      "required": ["machine_may", "founder_required"],
+      "additionalProperties": false,
+      "properties": {
+        "machine_may": {
+          "type": "array",
+          "items": {"type": "string"},
+          "minItems": 1,
+          "description": "Closed allowlist of machine actions. Anything not listed is denied."
+        },
+        "founder_required": {
+          "type": "array",
+          "items": {"type": "string"},
+          "description": "Actions that hard-stop the job into AWAITING_AUTHORITY. Merge and production promotion live here unless explicitly machine-safe."
+        },
+        "escalation_route": {
+          "type": "string",
+          "description": "Where the job goes when it needs authority it doesn't have (e.g. 'founder-decision issue in sandbox-private')."
+        }
+      }
+    },
+    "workers": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["type"],
+        "additionalProperties": false,
+        "properties": {
+          "type": {"type": "string", "description": "e.g. codex-builder, claude-builder, gh-actions-runner, python-script"},
+          "allowed_tools": {"type": "array", "items": {"type": "string"}},
+          "model": {"type": "string", "description": "Model tier if the worker is model-backed; omit for deterministic workers."}
+        }
+      },
+      "description": "Bounded workers the Motor may assign. Worker output is a proposal, never a transition (L13/D-rules)."
+    },
+    "sandbox": {
+      "type": "object",
+      "required": ["type", "production_write"],
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "enum": ["git_worktree", "ci_runner", "ephemeral_container", "preview_environment", "none_readonly"],
+          "description": "none_readonly is valid only for witness/observe recipes that never mutate anything."
+        },
+        "production_write": {
+          "const": false,
+          "description": "Always false. Production is reached only via promotion, never from inside the sandbox. This field exists so the invariant is machine-checkable."
+        },
+        "filesystem_scope": {"type": "array", "items": {"type": "string"}, "description": "Paths the worker may touch. Empty = repo default."},
+        "network_policy": {"enum": ["none", "allowlist", "full"], "description": "Default allowlist."},
+        "network_allowlist": {"type": "array", "items": {"type": "string"}},
+        "secret_scope": {"type": "array", "items": {"type": "string"}, "description": "Named secrets minted for the job, least privilege. Never production deploy keys."},
+        "destroy_on_complete": {"type": "boolean", "default": true}
+      }
+    },
+    "budgets": {
+      "type": "object",
+      "required": ["time_minutes", "cost_usd"],
+      "additionalProperties": false,
+      "properties": {
+        "time_minutes": {"type": "integer", "minimum": 1},
+        "cost_usd": {"type": "number", "minimum": 0, "description": "Cap breach = BLOCKED_WITH_REASON, not overdraft (L11)."},
+        "retries": {"type": "integer", "minimum": 0, "default": 1},
+        "value_class": {
+          "enum": ["revenue_path", "proof_asset", "risk_reduction", "hygiene", "none"],
+          "description": "Default value_class for cost attribution in cycle receipts (L11)."
+        }
+      }
+    },
+    "steps": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["name", "action"],
+        "additionalProperties": false,
+        "properties": {
+          "name": {"type": "string"},
+          "action": {"type": "string", "description": "Concrete action, not intent. 'Run pytest -q' not 'ensure quality'."},
+          "verify_command": {"type": "string", "description": "Per-step check where applicable."}
+        }
+      },
+      "description": "The bounded execution plan. Steps outside this list require a recipe version bump, not improvisation."
+    },
+    "verification": {
+      "type": "object",
+      "required": ["checks", "external_proof_required"],
+      "additionalProperties": false,
+      "properties": {
+        "checks": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["name", "command_or_probe", "pass_criterion"],
+            "additionalProperties": false,
+            "properties": {
+              "name": {"type": "string"},
+              "command_or_probe": {"type": "string"},
+              "pass_criterion": {"type": "string", "description": "Machine-decidable. Evidence = command + output (L3)."},
+              "external": {"type": "boolean", "default": false, "description": "True = probe the building worker does not control (L4)."}
+            }
+          }
+        },
+        "external_proof_required": {
+          "type": "boolean",
+          "description": "True for any recipe whose outcome is observable outside the sandbox (deploys, publishes). PASS without an external:true check passing = INVALID."
+        },
+        "verifier_freeze_note": {
+          "type": "string",
+          "default": "Verifiers and pass criteria are founder-gated (L5). A failing job fixes the system, never the check.",
+          "description": "Constant reminder; kept in the schema so every recipe carries it."
+        }
+      }
+    },
+    "failure_policy": {
+      "type": "object",
+      "required": ["on_check_fail", "on_budget_breach"],
+      "additionalProperties": false,
+      "properties": {
+        "on_check_fail": {"enum": ["repair_and_retry", "escalate", "fail_with_receipt"], "description": "repair_and_retry is bounded by budgets.retries; then escalate."},
+        "on_budget_breach": {"const": "block_with_reason", "description": "Always BLOCKED_WITH_REASON (L11). Constant by design."},
+        "repair_scope": {"type": "array", "items": {"type": "string"}, "description": "What the machine may change while repairing. Verifiers are never in scope (L5)."}
+      }
+    },
+    "human_gate": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "required": {"type": "boolean"},
+        "gate_point": {"enum": ["before_execution", "before_promotion", "never"], "description": "before_promotion is the default for anything that touches production."},
+        "approval_evidence": {"type": "string", "description": "What counts as approval: e.g. 'founder merge of the PR', 'founder comment /approve on the decision issue'. Verbal approval without artifact = not approval."}
+      }
+    },
+    "mutation_policy": {
+      "type": "object",
+      "description": "Per-surface mutation authority. Resolves the 'read-only recipe that still writes a diagnosis receipt' contradiction: a witness/diagnose recipe denies mutation of the OBSERVED system and production business state, while still being allowed append-only control-plane receipts and create-only routing rows. 'Read-only' means read-only with respect to the observed/production system, never literally zero writes. Absent = strictest interpretation (all deny except sandbox filesystem).",
+      "additionalProperties": false,
+      "properties": {
+        "observed_system": {"enum": ["deny", "read_only", "append_only", "create_only", "full"], "description": "The system under observation/repair. Witness recipes: deny."},
+        "production_business_state": {"enum": ["deny", "read_only", "append_only", "create_only", "full"], "description": "Customer/production data. Almost always deny outside a founder-gated promotion."},
+        "runtime": {"enum": ["deny", "restart_gated", "full"], "description": "Process/service runtime. deny for evidence-path repair (restart is founder-gated elsewhere)."},
+        "evidence_sink": {"enum": ["deny", "read_only", "append_only", "create_only", "full"], "description": "Receipt/evidence tables. Diagnose: append_only. Receipt-writer-repair: full (receipts table only)."},
+        "control_plane_receipts": {"enum": ["deny", "append_only", "create_only", "full"], "description": "Diagnosis receipts, cockpit state. Diagnose: append_only."},
+        "routing_queue": {"enum": ["deny", "create_only", "full"], "description": "Issue/queue rows for routing. Diagnose: create_only."},
+        "sandbox_filesystem": {"enum": ["deny", "full"], "description": "The disposable sandbox worktree. Builders: full; witness: deny."}
+      }
+    },
+    "promotion": {
+      "type": "object",
+      "required": ["condition", "target"],
+      "additionalProperties": false,
+      "properties": {
+        "condition": {"type": "string", "description": "E.g. 'founder_approval AND all verification checks PASS'."},
+        "target": {"type": "string", "description": "E.g. 'main branch + production deploy workflow'."},
+        "clean_sha_required": {"type": "boolean", "default": true, "description": "Deploys run from a clean committed SHA (L6)."},
+        "post_promotion_checks": {
+          "type": "array",
+          "items": {"type": "string"},
+          "description": "External observations proving the promotion landed: deployed SHA match, canonical URL content markers, ≥60s after deploy (L4)."
+        }
+      }
+    },
+    "rollback": {
+      "type": "object",
+      "required": ["type"],
+      "additionalProperties": false,
+      "properties": {
+        "type": {"enum": ["revert_exact_merge", "redeploy_previous_sha", "restore_snapshot", "none_readonly"]},
+        "command": {"type": "string", "description": "The actual command or workflow, pre-written, not composed during the incident."},
+        "machine_may_rollback": {"type": "boolean", "default": false, "description": "Whether rollback is machine-safe or founder-gated for this recipe."}
+      }
+    },
+    "receipt": {
+      "type": "object",
+      "required": ["schema_ref", "required_fields"],
+      "additionalProperties": false,
+      "properties": {
+        "schema_ref": {"type": "string", "description": "Points at the job-record schema, normally 'noetfield/motor-job-v1'."},
+        "required_fields": {
+          "type": "array",
+          "items": {"type": "string"},
+          "description": "Fields that must be non-null before the job may enter RECEIPT_COMPLETE. Cost fields are always required (L11)."
+        },
+        "storage": {"type": "string", "description": "Where receipts persist. In-repo or shared sink, never home directories (L6/L10)."}
+      }
+    },
+    "notes": {"type": "string"}
+  }
+}

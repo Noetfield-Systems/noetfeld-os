@@ -1,0 +1,116 @@
+# Scheduled hygiene autorun: routine dependency updates, machine-safe up to
+# the PR; merge stays founder-gated. Patch/minor only — majors are triaged,
+# never auto-applied.
+recipe_id: NF-MOTOR-DEPENDENCY-UPDATE-001
+version: 1.0.0
+purpose: >-
+  Keep dependencies current across registered repos: detect outdated packages,
+  apply patch/minor updates in a sandbox, verify with the full test suite, and
+  produce a founder-approvable PR per repo.
+
+trigger:
+  type: schedule
+  schedule_cron: "0 6 * * 1"        # Mondays 06:00 UTC
+  dedupe_key: "dep-update:{repository}:{iso_week}"
+
+required_inputs:
+  - name: repository
+    description: One registered repo per job (fan-out creates one job per repo)
+  - name: baseline_sha
+    description: Clean main-branch SHA at job creation (L6)
+
+authority:
+  machine_may:
+    - read_manifests_and_lockfiles
+    - apply_patch_and_minor_updates_in_sandbox
+    - run_tests
+    - create_commits
+    - push_branch
+    - open_draft_pr
+  founder_required:
+    - merge_to_main
+    - any_major_version_update          # majors: file a triage item instead
+    - any_new_dependency_addition
+    - lockfile_only_changes_without_manifest_reason
+  escalation_route: majors and failures file items in the kaizen/triage queue
+
+workers:
+  - type: gh-actions-runner
+    allowed_tools: [package_manager, git, tests, gh_draft_pr]
+
+sandbox:
+  type: ci_runner
+  production_write: false
+  network_policy: allowlist
+  network_allowlist: [github.com, registry.npmjs.org, pypi.org]
+  secret_scope: []
+  destroy_on_complete: true
+
+budgets:
+  time_minutes: 30
+  cost_usd: 1
+  retries: 1
+  value_class: hygiene
+
+steps:
+  - name: detect
+    action: List outdated deps; partition into patch/minor (in scope) vs major (triage item, out of scope)
+  - name: apply
+    action: Apply patch/minor updates in the sandbox
+  - name: test
+    action: Full test suite against updated lockfile
+    verify_command: repo-standard test command
+  - name: pr_or_idle
+    action: >-
+      Changes that pass -> one draft PR with the update table. Nothing
+      outdated -> IDLE_NO_WORK receipt (healthy, L2). Tests fail -> drop the
+      offending update, retry once, else FAILED_WITH_RECEIPT naming the package.
+
+verification:
+  external_proof_required: true
+  checks:
+    - name: ci_green_on_exact_head
+      command_or_probe: GitHub CI on candidate head SHA
+      pass_criterion: All required checks PASS on candidate_sha
+      external: true
+    - name: semver_scope_audit
+      command_or_probe: diff of manifest version ranges
+      pass_criterion: No major bumps, no new packages, no removed packages
+    - name: lockfile_integrity
+      command_or_probe: package-manager integrity/audit check
+      pass_criterion: Lockfile consistent with manifests; no unexpected resolution changes
+
+failure_policy:
+  on_check_fail: repair_and_retry     # by dropping the failing update, never by loosening a check
+  on_budget_breach: block_with_reason
+  repair_scope: [manifest + lockfile only]
+
+human_gate:
+  required: true
+  gate_point: before_promotion
+  approval_evidence: Founder merge of the PR
+
+promotion:
+  condition: founder_approval AND all verification checks PASS
+  target: main branch
+  clean_sha_required: true
+  post_promotion_checks:
+    - Merge SHA on main; next scheduled run reports the updated versions as current
+
+rollback:
+  type: revert_exact_merge
+  command: git revert -m 1 <merge_sha>
+  machine_may_rollback: false
+
+receipt:
+  schema_ref: noetfield/motor-job-v1
+  required_fields:
+    - artifacts.candidate_sha
+    - verification_results
+    - cost.total_usd
+  storage: in-repo under motor/receipts/
+
+notes: >-
+  Canonical example of a scheduled autorun expressed as a recipe: recurring,
+  machine-safe up to the PR, founder-gated at promotion, with IDLE_NO_WORK as
+  an explicitly healthy outcome.

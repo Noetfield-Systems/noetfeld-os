@@ -1,0 +1,46 @@
+{
+  "schema": "noos-builder-receipt-v1",
+  "task": "NF-NOOS-MOTOR-REGISTRY-HARDENING-001",
+  "title": "Motor registry v1.2 — fail-closed invariant validator + honest MOTOR-WEB-001 + CI",
+  "status": "SUBMITTED for independent verification",
+  "verdict": "NONE — builder does not self-certify; author != verifier required for any PASS.",
+  "canon_version": "FOUNDER_CANON_v1+MACHINE_LOOPS_v1",
+  "branch": "nf-noos-motor-registry-hardening-001",
+  "generated_at": "2026-07-17T07:30:00Z",
+  "not_authorized_and_not_done": ["deploy", "merge", "production data mutation", "wiring an executor runtime", "closing MOTOR-WEB-001 (needs a real deploy receipt + external attribution)"],
+
+  "origin": "Uploaded motor-registry-v1.zip (Fable's contract draft). Two advisors disagreed: Fable claimed the validator catches impossible orderings incl. a negative test; the reviewing advisor said the validator ACCEPTS many documented-impossible states. Verified empirically: the reviewer was right — v1.0 enforced only R2; 7 other documented invariants were prose.",
+
+  "what_was_built": {
+    "location": "motor/registry/ (schema, recipes, jobs, validate.py, tests, docs, bindings)",
+    "validator": "validate.py hardened v1.0 -> v1.2. Enforces (fail-closed): M meaningful evidence/reason (category rule, not denylist), I1/I2 evidence_ref/reason, I3 strict RFC3339 (no trailing newline, no date-only, requires offset), R1/I4 recipe+version, R2, I5a/I5b promotion+outcome SPLITS (required on external recipes, not omittable), I6 external-proof + recipe-declared check names + verification tied to PASS rows, I7 SHA identity (fullmatch 40-hex, candidate 7-40 hex), I8 monotonic timestamp ordering (lowercase z handled, non-adjacent enforced, >=60s external), I9 RECEIPT_COMPLETE derivation (dispatch/execution/verification/evidence PROVEN, outcome not NA on external, cost.metered, hash-like receipt_hash, recipe required_fields, required timestamps), B budget cap (L11), T trigger-type match, U job_id/idempotency uniqueness, recovery causation (external before/after pair), RC1-4 recipe-side.",
+    "schema_splits": "job.schema.json v1.1: promotion -> source+runtime; outcome -> observation+attribution (the two splits the real website job forced). Conditional evidence_ref/reason via if/then.",
+    "recipe_fix": "INCIDENT-DIAGNOSE + RECEIPT-WRITER-REPAIR: added mutation_policy (per-surface authority) resolving the 'read-only recipe that writes a diagnosis receipt' contradiction; renamed the no_mutation check to no_observed_system_mutation.",
+    "job_record": "MOTOR-WEB-001.json rewritten HONESTLY: TRIAGE_REQUIRED (not AWAITING_AUTHORITY); build+CI PROVEN; render-review verification UNPROVEN; authority UNPROVEN (no durable merge SHA); promotion DIVERGED (source UNPROVEN, runtime DIVERGED); outcome DIVERGED (observation DIVERGED, attribution UNPROVEN); cost.metered=false + placeholder timestamps flagged; validator blocks RECEIPT_COMPLETE while metered=false.",
+    "bindings": "bindings/noos-route-map-v1.json declares NOOS route -> Motor recipe with status NOT_WIRED (Track D anchor); connects receipt_writer_completion_evidence_repair -> NF-MOTOR-RECEIPT-WRITER-REPAIR-001, machine_owner null.",
+    "ci": "gel-ci.yml gains two steps: `python3 motor/registry/validate.py` and `pytest -q motor/registry/tests/` (repo pytest.ini restricts testpaths=tests, so the invariant tests are wired explicitly). requirements.txt += jsonschema. No new workflow file (avoids the L5-frozen gha-coverage registry)."
+  },
+
+  "adversarial_verification": {
+    "method": "Two red-team rounds against the validator (9-agent workflow, then a focused adversary) tasked to slip invalid artifacts past validate.py.",
+    "round_1_findings_closed": ["whitespace/zero-width evidence_ref & reason", "promotion/outcome split OMISSION on external recipes", "states.evidence unchecked at RECEIPT_COMPLETE", "datetime trailing-newline", "lowercase-z defeating ordering", "production_sha 41-char via $-anchor", "outcome NOT_APPLICABLE on external", "candidate_sha junk/zero-width", "verification PROVEN without PASS", "external PASS name not recipe-declared", "cost over budget", "trigger-type mismatch", "receipt_hash junk"],
+    "round_2_findings_closed": ["invisible Unicode Cf/Mn/So category (U+00AD etc.) — fixed with a visible-character category rule, not a denylist", "non-adjacent timestamp ordering (created after promoted with stages omitted)", "date-only / timezone-less date-time strings", "dangling schedule_cron/event_source on wrong trigger type (RC1 reverse)", "recovery PROVEN without before/after external pair"],
+    "final_sweep": "uppercase-hex SHA rejected; boundary == budget and exactly +60s accepted; negative cost rejected; additionalProperties injection rejected; unicode-digit SHA rejected."
+  },
+
+  "tests": {
+    "file": "motor/registry/tests/test_motor_registry_invariants.py — 46 tests (negative-transition per invariant + both red-team rounds as regressions + positive mirror + fully-green control).",
+    "results": "46 passed. validate.py exit 0 on the honest archive. Full repo suite 208 passed (governance test_gha_workflows_all_mapped stays green — no new workflow file). Verified the shipped/honest artifacts still validate."
+  },
+
+  "invariants_upheld": [
+    "Empirically disproved the overclaim before building (validator accepted 7 of 8 documented-impossible states).",
+    "No verifier/law/registry/migration edits; did NOT touch the L5-frozen data/noos-parallel-agent-registry-v1.json (wired CI into existing gel-ci instead of adding a mapped workflow).",
+    "MOTOR-WEB-001 recorded honestly — did NOT assert PROVEN for merge/deploy/outcome without durable evidence; DIVERGED where observers disagree.",
+    "Registry is the Motor's contract, NOT a runtime — README states this; no Motor.run executor claimed.",
+    "Slug law clean."
+  ],
+
+  "founder_gates_pending": ["merge to main", "MOTOR-WEB-001 closeout (deploy receipt + >=60s external SHA-attributed probe)", "Track D: register a machine owner for receipt_writer_completion_evidence_repair"],
+  "final_status": "BUILDER_COMPLETE_FOR_INDEPENDENT_VERIFICATION"
+}
