@@ -1,3 +1,5 @@
+<!-- NOOS-AGENT-DOC -->
+
 # Retention / Dead-Letter Proposal — dispatch queue & diagnostic sink
 
 Task: **NF-NOOS-OBSERVABILITY-SEMANTICS-001** (proposal only — no records deleted,
