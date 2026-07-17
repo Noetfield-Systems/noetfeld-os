@@ -1,0 +1,126 @@
+# First canonical Motor recipe. Its first job instance (MOTOR-WEB-001, PR #115)
+# is the intended Motor Proof Job #1.
+recipe_id: NF-MOTOR-WEB-PUBLISH-001
+version: 1.0.0
+purpose: >-
+  Publish an approved content/feature change to the production Noetfield.com
+  website, from founder instruction through sandboxed build, CI verification,
+  founder-approved merge, production deploy, and externally observed outcome.
+
+trigger:
+  type: founder_instruction
+  dedupe_key: "web-publish:{instruction_ref}"
+
+required_inputs:
+  - name: repository
+    description: Target repo
+    example: Noetfield-Systems/Noetfield
+  - name: baseline_sha
+    description: Clean committed SHA the change branches from (L6)
+  - name: change_spec
+    description: Founder's bounded description of the content/feature change
+
+authority:
+  machine_may:
+    - inspect_repository
+    - create_branch_and_worktree
+    - edit_files_in_sandbox
+    - run_tests
+    - create_commits
+    - push_branch
+    - open_draft_pr
+    - update_pr_description
+  founder_required:
+    - merge_to_main
+    - production_promotion
+  escalation_route: founder-decision issue in sandbox-private
+
+workers:
+  - type: codex-builder
+    allowed_tools: [file_edit, git, tests, gh_draft_pr]
+  - type: claude-builder
+    allowed_tools: [file_edit, git, tests, gh_draft_pr]
+
+sandbox:
+  type: git_worktree
+  production_write: false
+  network_policy: allowlist
+  network_allowlist: [github.com, registry.npmjs.org]
+  secret_scope: []          # no production secrets in the build sandbox
+  destroy_on_complete: true
+
+budgets:
+  time_minutes: 120
+  cost_usd: 15
+  retries: 1
+  value_class: proof_asset
+
+steps:
+  - name: branch
+    action: Create feature branch + worktree from baseline_sha
+  - name: implement
+    action: Apply change_spec inside sandbox filesystem scope
+  - name: test
+    action: Run the site test suite
+    verify_command: npm test
+  - name: pr
+    action: Push branch, open/refresh draft PR with current description (stale descriptions are a known failure mode — refresh is a step, not a nicety)
+
+verification:
+  external_proof_required: true
+  checks:
+    - name: unit_and_site_tests
+      command_or_probe: CI test job on the exact candidate head SHA
+      pass_criterion: All tests pass on candidate_sha (exact-head, not branch-tip-at-some-point)
+      external: true
+    - name: link_check
+      command_or_probe: CI link-checker job
+      pass_criterion: Zero broken internal links
+      external: true
+    - name: render_review
+      command_or_probe: Founder desktop + mobile visual review of preview
+      pass_criterion: Founder confirms rendering acceptable
+      external: true
+
+failure_policy:
+  on_check_fail: repair_and_retry
+  on_budget_breach: block_with_reason
+  repair_scope: [site content files, templates, styles]   # never CI config, never tests (L5)
+
+human_gate:
+  required: true
+  gate_point: before_promotion
+  approval_evidence: Founder merge of the PR (merge SHA is the approval artifact)
+
+promotion:
+  condition: founder_approval AND all verification checks PASS
+  target: main branch + existing production deploy workflow
+  clean_sha_required: true
+  post_promotion_checks:
+    - Deployed SHA on production == merge SHA
+    - Canonical URL(s) contain the expected content markers, full-body hash recorded
+    - Probe from an external runner, redirects OFF, ≥60s after deploy (L4)
+    - No console errors on homepage and changed pages
+
+rollback:
+  type: revert_exact_merge
+  command: git revert -m 1 <merge_sha> && push (deploy workflow redeploys)
+  machine_may_rollback: false   # founder-gated for the website
+
+receipt:
+  schema_ref: noetfield/motor-job-v1
+  required_fields:
+    - artifacts.baseline_sha
+    - artifacts.candidate_sha
+    - artifacts.production_sha
+    - verification_results
+    - approval.approval_artifact
+    - states.outcome
+    - cost.total_usd
+  storage: in-repo under motor/receipts/ (never home directories, L6)
+
+notes: >-
+  Job MOTOR-WEB-001 (PR #115) is currently BUILD=PROVEN,
+  VERIFICATION=substantially proven, PROMOTION=NOT_STARTED,
+  OUTCOME=NOT_STARTED. Completing it under this recipe produces the first
+  end-to-end Motor receipt.

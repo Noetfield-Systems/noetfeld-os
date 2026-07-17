@@ -1,0 +1,282 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "noetfield/motor-job-v1",
+  "title": "Motor Job Record v1.1",
+  "description": "One execution of a recipe, and simultaneously its receipt. The core design rule: separate truth fields. 'Process alive' != 'job completed'; 'dispatch happened' != 'execution succeeded'; 'receipt stale' != 'execution failed'; 'tests passed' != 'production deployed'; 'PR created' != 'business outcome achieved'; 'outcome observed' != 'outcome attributable to this candidate'. Each of those is its own field with its own evidence. v1.1 makes the previously-prose invariants machine-checkable: PROVEN/FAILED require evidence_ref; BLOCKED/FAILED/DIVERGED/UNPROVEN require reason; promotion splits into source+runtime; outcome splits into observation+attribution.",
+  "type": "object",
+  "required": [
+    "job_id",
+    "recipe_id",
+    "recipe_version",
+    "trigger",
+    "states",
+    "cost",
+    "artifacts",
+    "verification_results"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "job_id": {
+      "type": "string",
+      "pattern": "^MOTOR-[A-Z0-9]+-[0-9]{3,}$",
+      "description": "E.g. MOTOR-WEB-001. Assigned at creation, immutable."
+    },
+    "recipe_id": {"type": "string"},
+    "recipe_version": {"type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"},
+    "idempotency_key": {
+      "type": "string",
+      "description": "Rendered from recipe trigger.dedupe_key. Same key = same job, never a duplicate (L13)."
+    },
+    "trigger": {
+      "type": "object",
+      "required": ["type", "requested_by", "occurred_at"],
+      "additionalProperties": false,
+      "properties": {
+        "type": {"enum": ["founder_instruction", "schedule", "event", "escalation"]},
+        "requested_by": {"type": "string", "description": "founder | scheduler | event source id"},
+        "authorized_by": {"type": "string", "description": "Authority that admitted the job (may differ from requester)."},
+        "occurred_at": {"type": "string", "format": "date-time"},
+        "instruction_ref": {"type": "string", "description": "Link/ID of the instruction, issue, or event payload."}
+      }
+    },
+    "states": {
+      "type": "object",
+      "description": "THE separated truth fields. Every field carries its own evidence pointer; no field may be inferred from another.",
+      "required": ["dispatch", "execution", "verification", "evidence", "authority", "promotion", "outcome"],
+      "additionalProperties": false,
+      "properties": {
+        "dispatch": {
+          "$ref": "#/$defs/stateField",
+          "description": "Was the job handed to a worker? (RUNNING_CONFIRMED-adjacent; says nothing about completion.)"
+        },
+        "execution": {
+          "$ref": "#/$defs/stateField",
+          "description": "Did the worker actually run and finish? Distinct from dispatch — the NOOS incident lived exactly in this gap (DISPATCHING_COMPLETION_UNPROVEN)."
+        },
+        "verification": {
+          "$ref": "#/$defs/stateField",
+          "description": "Did declared checks pass? PASS valid only with evidence; external checks only from probes the builder doesn't control (L4)."
+        },
+        "evidence": {
+          "$ref": "#/$defs/stateField",
+          "description": "Were receipts written AND readable by the observer? Stale here means INSUFFICIENT_RECENT_EVIDENCE, success_rate=null — never inferred failure."
+        },
+        "authority": {
+          "$ref": "#/$defs/stateField",
+          "description": "Has required human/policy approval been given? founder_blocked is a live state, never 'cancelled' (L7)."
+        },
+        "promotion": {
+          "$ref": "#/$defs/promotionField",
+          "description": "Was the accepted artifact promoted? SPLIT: source (merge to main) and runtime (production deploy) are different facts — 'merged' != 'deployed'. Tests passing does not touch this field."
+        },
+        "outcome": {
+          "$ref": "#/$defs/outcomeField",
+          "description": "Was the real-world result observed post-promotion? SPLIT: observation (the page shows new content) and attribution (that content was produced by THIS deployed SHA) are different facts. Only proven attribution closes the loop (≥60s after deploy)."
+        },
+        "recovery": {
+          "$ref": "#/$defs/stateField",
+          "description": "Optional. If repair ran: what, and did an external check confirm it caused recovery? Correlation is not causality — self-healing is PROVEN only by a before/after external check pair."
+        }
+      }
+    },
+    "lifecycle_status": {
+      "enum": [
+        "RECEIVED", "AUTHENTICATED", "POLICY_RESOLVED", "RECIPE_SELECTED",
+        "SANDBOX_CREATED", "EXECUTING", "VERIFYING", "REPAIRING",
+        "AWAITING_AUTHORITY", "PROMOTING", "POST_VERIFYING",
+        "RECEIPT_COMPLETE", "FAILED_WITH_RECEIPT", "BLOCKED_WITH_REASON",
+        "IDLE_NO_WORK", "TRIAGE_REQUIRED", "THROTTLED_ROI"
+      ],
+      "description": "Convenience roll-up for dashboards. Derived from states.*, never authored directly — the states object is the truth. validate.py enforces that RECEIPT_COMPLETE cannot be asserted while underlying states are incomplete."
+    },
+    "sandbox": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "sandbox_id": {"type": "string"},
+        "type": {"type": "string"},
+        "branch": {"type": "string"},
+        "worktree": {"type": "string"},
+        "destroyed_at": {"type": "string", "format": "date-time"}
+      }
+    },
+    "worker_runs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["worker_type", "started_at"],
+        "additionalProperties": false,
+        "properties": {
+          "worker_type": {"type": "string"},
+          "model": {"type": "string"},
+          "started_at": {"type": "string", "format": "date-time"},
+          "ended_at": {"type": "string", "format": "date-time"},
+          "log_ref": {"type": "string", "description": "Pointer to captured stdout/stderr or transcript."}
+        }
+      }
+    },
+    "artifacts": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "baseline_sha": {"type": "string"},
+        "candidate_sha": {"type": "string"},
+        "production_sha": {"type": "string", "description": "Empty until states.promotion.runtime is PROVEN. When set, must be a full 40-hex SHA (validate.py I9)."},
+        "pr_ref": {"type": "string"},
+        "files_changed": {"type": "array", "items": {"type": "string"}},
+        "other": {"type": "array", "items": {"type": "object", "required": ["name", "ref"], "properties": {"name": {"type": "string"}, "ref": {"type": "string"}}, "additionalProperties": false}}
+      }
+    },
+    "verification_results": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["check", "decision", "reason", "evidence"],
+        "additionalProperties": false,
+        "properties": {
+          "check": {"type": "string"},
+          "decision": {"enum": ["PASS", "FAIL", "SKIP_WITH_REASON"]},
+          "reason": {"type": "string", "description": "Bare PASS/FAIL is malformed (L3)."},
+          "evidence": {"type": "string", "description": "Command + output, or probe URL + response markers + hash."},
+          "external": {"type": "boolean", "default": false},
+          "checked_at": {"type": "string", "format": "date-time"}
+        }
+      }
+    },
+    "approval": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "required": {"type": "boolean"},
+        "approved_by": {"type": "string"},
+        "approval_artifact": {"type": "string", "description": "The durable evidence: merge SHA, /approve comment URL. Verbal-only = not approval."},
+        "approved_at": {"type": "string", "format": "date-time"}
+      }
+    },
+    "cost": {
+      "type": "object",
+      "required": ["total_usd", "value_class"],
+      "additionalProperties": false,
+      "properties": {
+        "provider": {"type": "string"},
+        "model": {"type": "string"},
+        "tokens_in": {"type": "integer", "minimum": 0},
+        "tokens_out": {"type": "integer", "minimum": 0},
+        "total_usd": {"type": "number", "minimum": 0, "description": "Metered at the call site, not estimated after (L11). A placeholder zero MUST set metered=false; a RECEIPT_COMPLETE job MUST have metered=true (validate.py)."},
+        "metered": {"type": "boolean", "description": "True = total_usd is a real metered value. False/absent = placeholder; blocks RECEIPT_COMPLETE."},
+        "value_class": {"enum": ["revenue_path", "proof_asset", "risk_reduction", "hygiene", "none"]}
+      }
+    },
+    "timestamps": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "created_at": {"type": "string", "format": "date-time"},
+        "executing_at": {"type": "string", "format": "date-time"},
+        "verified_at": {"type": "string", "format": "date-time"},
+        "promoted_at": {"type": "string", "format": "date-time"},
+        "outcome_observed_at": {"type": "string", "format": "date-time", "description": "Must be >=60s after promoted_at for external-proof recipes (validate.py I8 auto-reject otherwise)."},
+        "receipt_completed_at": {"type": "string", "format": "date-time"}
+      }
+    },
+    "receipt_hash": {
+      "type": "string",
+      "description": "Hash of the canonical serialization of this record at RECEIPT_COMPLETE, for tamper-evidence. Required for RECEIPT_COMPLETE."
+    },
+    "notes": {"type": "string"}
+  },
+  "$defs": {
+    "stateEnum": {
+      "enum": ["NOT_STARTED", "IN_PROGRESS", "PROVEN", "UNPROVEN", "STALE", "DIVERGED", "FAILED", "BLOCKED", "NOT_APPLICABLE"],
+      "description": "UNPROVEN = we believe it happened but lack evidence (maps to DISPATCHING_COMPLETION_UNPROVEN). STALE = evidence exists but is older than the freshness window. DIVERGED = observer and source disagree. These are three different facts; never collapse them into FAILED."
+    },
+    "stateField": {
+      "type": "object",
+      "required": ["state"],
+      "additionalProperties": false,
+      "properties": {
+        "state": {"$ref": "#/$defs/stateEnum"},
+        "evidence_ref": {"type": "string", "description": "Pointer to the receipt/log/probe output backing this state."},
+        "as_of": {"type": "string", "format": "date-time"},
+        "reason": {"type": "string", "description": "Why this state holds."}
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"state": {"enum": ["PROVEN", "FAILED"]}}},
+          "then": {"required": ["state", "evidence_ref"], "properties": {"evidence_ref": {"minLength": 1}}}
+        },
+        {
+          "if": {"properties": {"state": {"enum": ["BLOCKED", "FAILED", "DIVERGED", "UNPROVEN"]}}},
+          "then": {"required": ["state", "reason"], "properties": {"reason": {"minLength": 1}}}
+        }
+      ]
+    },
+    "subState": {
+      "type": "object",
+      "required": ["state"],
+      "additionalProperties": false,
+      "properties": {
+        "state": {"$ref": "#/$defs/stateEnum"},
+        "evidence_ref": {"type": "string"},
+        "as_of": {"type": "string", "format": "date-time"},
+        "reason": {"type": "string"}
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"state": {"enum": ["PROVEN", "FAILED"]}}},
+          "then": {"required": ["state", "evidence_ref"], "properties": {"evidence_ref": {"minLength": 1}}}
+        },
+        {
+          "if": {"properties": {"state": {"enum": ["BLOCKED", "FAILED", "DIVERGED", "UNPROVEN"]}}},
+          "then": {"required": ["state", "reason"], "properties": {"reason": {"minLength": 1}}}
+        }
+      ]
+    },
+    "promotionField": {
+      "type": "object",
+      "required": ["state"],
+      "additionalProperties": false,
+      "properties": {
+        "state": {"$ref": "#/$defs/stateEnum"},
+        "evidence_ref": {"type": "string"},
+        "as_of": {"type": "string", "format": "date-time"},
+        "reason": {"type": "string"},
+        "source": {"$ref": "#/$defs/subState", "description": "Merge/publish to the authoritative source (e.g. merge to main). Proven by a merge SHA."},
+        "runtime": {"$ref": "#/$defs/subState", "description": "Deploy to the running production target. Proven by a deployment receipt (deployment id + deployed SHA). 'merged' does NOT prove this."}
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"state": {"enum": ["PROVEN", "FAILED"]}}},
+          "then": {"required": ["state", "evidence_ref"], "properties": {"evidence_ref": {"minLength": 1}}}
+        },
+        {
+          "if": {"properties": {"state": {"enum": ["BLOCKED", "FAILED", "DIVERGED", "UNPROVEN"]}}},
+          "then": {"required": ["state", "reason"], "properties": {"reason": {"minLength": 1}}}
+        }
+      ]
+    },
+    "outcomeField": {
+      "type": "object",
+      "required": ["state"],
+      "additionalProperties": false,
+      "properties": {
+        "state": {"$ref": "#/$defs/stateEnum"},
+        "evidence_ref": {"type": "string"},
+        "as_of": {"type": "string", "format": "date-time"},
+        "reason": {"type": "string"},
+        "observation": {"$ref": "#/$defs/subState", "description": "The external result was observed (page shows new content, endpoint returns marker)."},
+        "attribution": {"$ref": "#/$defs/subState", "description": "That observed result is attributable to THIS candidate (deployed SHA == candidate SHA). Observation without attribution never closes the loop."}
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"state": {"enum": ["PROVEN", "FAILED"]}}},
+          "then": {"required": ["state", "evidence_ref"], "properties": {"evidence_ref": {"minLength": 1}}}
+        },
+        {
+          "if": {"properties": {"state": {"enum": ["BLOCKED", "FAILED", "DIVERGED", "UNPROVEN"]}}},
+          "then": {"required": ["state", "reason"], "properties": {"reason": {"minLength": 1}}}
+        }
+      ]
+    }
+  }
+}

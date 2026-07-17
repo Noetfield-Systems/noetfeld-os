@@ -36,6 +36,12 @@ jobs:
       - name: Agent vault tags
         run: bash scripts/check_noos_agent_docs.sh
 
+      - name: Motor registry validate (fail-closed invariants)
+        run: python3 motor/registry/validate.py
+
+      - name: Motor registry invariant tests (negative-transition + red-team regressions)
+        run: pytest -q motor/registry/tests/
+
       - name: Pytest
         run: pytest -q
         continue-on-error: false
