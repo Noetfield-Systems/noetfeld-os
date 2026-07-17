@@ -1,0 +1,85 @@
+{
+  "schema": "noos-motor-web-001-promotion-outcome-update-v1",
+  "task": "MOTOR-WEB-001",
+  "title": "Motor Proof Job #1 — authority/promotion/observation proven with deploy receipt; attribution honestly left UNPROVEN (deployed != candidate)",
+  "status": "SUBMITTED for independent verification",
+  "verdict": "NONE — builder does not self-certify; author != verifier required for any PASS.",
+  "canon_version": "FOUNDER_CANON_v1+MACHINE_LOOPS_v1",
+  "laws": "FOUNDER_CANON v1 + governed-autorun v3. Violations = BLOCKED_WITH_REASON.",
+  "generated_at": "2026-07-17T08:25:00Z",
+  "supersedes_partially": "receipts/proof/noos-motor-web-001-production-attribution-probe-v1.json (its blockers 1-3 are resolved: registry found on branch nf-noos-motor-registry-hardening-001, Noetfield repo access granted, deployment identity obtained from the formal deploy receipt instead of the CF API)",
+  "evidence_chain": {
+    "candidate": {
+      "sha": "defb5506677d4f5b88178b027b7ba6604ea47c42",
+      "position": "commit 2 of 3 on PR Noetfield-Systems/Noetfield#115 ('Fix AI Motor release trigger and homepage contract', authored 2026-07-17T04:28:09Z)",
+      "pr_head": "61ea44f264479a3d5d6c1a2bcd0376e036821294 ('Refine AI Motor homepage headline')"
+    },
+    "authority_and_source": {
+      "merge_sha": "a80f828f9d7a2d5735250de22ada4857ff608537",
+      "merged_by": "kazemnezhadsina144-dot (founder)",
+      "merged_at": "2026-07-17T05:31:39Z",
+      "recipe_basis": "NF-MOTOR-WEB-PUBLISH-001 human_gate.approval_evidence: 'Founder merge of the PR (merge SHA is the approval artifact)' — the single WEB-PUBLISH before_promotion founder gate was exercised here; no additional founder action was needed or requested"
+    },
+    "deploy_history": {
+      "merge_triggered_run_7": "run 29557544690 on a80f828f 2026-07-17T05:31:42Z FAILED",
+      "repair_chain": "PR #116 'Fix social preview release receipt trigger' (99a747e — the social-preview receipt drift fix), PR #117/#118 propagation retries, PR #119 exact-SHA anti-stale guard; runs 2-9 all FAILED, run 10 (e3b51d4b) and run 11 (e0165192) SUCCEEDED",
+      "successful_deploy_receipt": {
+        "receipt": "NF-WEB-002 production receipt, github-actions comment 5000098501 on PR #119",
+        "status": "PASS",
+        "deployed_sha": "e0165192cd625366bb95a8f682db14e1facff58f",
+        "cloudflare_pages_deployment_id": "05debd27-97ba-40dd-8fca-26a0f47986eb",
+        "immutable_origin": "https://05debd27.noetfield-www.pages.dev",
+        "cache_action": "scoped purge for noetfield.com, www.noetfield.com",
+        "receipt_sha256": "d7f9e599d1be5380e1f17078083cc8d4aec34ad3e3c416f5e285a9d66ee8ce83",
+        "workflow_run": "https://github.com/Noetfield-Systems/Noetfield/actions/runs/29562673649",
+        "completed_at": "2026-07-17T07:21:07Z"
+      }
+    },
+    "content_identity": {
+      "merge_to_deployed": "git diff a80f828f..e0165192 over served content paths (index.html, motors/, assets/, data/, api/, functions/, robots.txt, sitemap.xml, _redirects) is EMPTY — deployed public content is byte-identical to the founder-approved merge",
+      "candidate_to_deployed": "one character in the homepage h1 (em-dash removed by PR-head refinement 61ea44f2) + social-preview receipt tracking fields; /motors/ identical",
+      "ancestry": "git merge-base --is-ancestor defb5506 e0165192 -> TRUE"
+    },
+    "live_observation": {
+      "observed_at": ["2026-07-17T07:58:44Z", "2026-07-17T08:14:52Z"],
+      "www_home_sha256": "71d8a5c54923d7ef0061ceab0dc711fd1c13d2863ae27ffa98802976af06b810",
+      "www_motors_sha256": "eff1338c6470bf804de9fae10bdd678073578694b3aca1c165de2f3252c32477",
+      "immutable_origin_match": "both paths byte-identical between www.noetfield.com and https://05debd27.noetfield-www.pages.dev",
+      "release_header": "X-Noetfield-Release: e0165192cd625366bb95a8f682db14e1facff58f on www / and /motors/, stable across samples",
+      "apex": "noetfield.com returns 308 -> www.noetfield.com for / and /motors/ (no body)",
+      "titles": {
+        "home": "Noetfield Systems Inc. — AI Motors & Governed Execution",
+        "motors": "AI Motors for Governed Execution — Noetfield Systems"
+      },
+      "i8_spacing": "outcome_observed_at 08:14:52Z >= promoted_at 07:21:07Z + 60s"
+    },
+    "observer_disagreement_explained": "Old-content fetches predated the first successful deploy (runs 2-9 of noetfield-www-production FAILED between 2026-07-16T21:06Z and 2026-07-17T06:23Z; content went live only at run 11, 07:21Z). Apex 308-redirect vs www probing differences additionally diverge for non-redirect-following observers."
+  },
+  "job_record_changes": {
+    "file": "motor/registry/jobs/MOTOR-WEB-001.json",
+    "authority": "UNPROVEN -> PROVEN (merge SHA approval artifact)",
+    "promotion": "DIVERGED -> PROVEN (source PROVEN via merge SHA; runtime PROVEN via deploy receipt)",
+    "production_sha": "'' -> e0165192cd625366bb95a8f682db14e1facff58f (I7: the actually-deployed SHA)",
+    "outcome": "DIVERGED -> UNPROVEN (observation PROVEN with hash evidence; attribution UNPROVEN)",
+    "verification_results.production_deploy_receipt": "FAIL -> PASS with deploy receipt evidence",
+    "approval": "approved_by + approval_artifact filled (founder merge)",
+    "timestamps": "promoted_at 2026-07-17T07:21:07Z, outcome_observed_at 2026-07-17T08:14:52Z added",
+    "unchanged_honest": "verification stays UNPROVEN (render_review lacks durable founder artifact; link_check has no row); cost stays metered=false placeholder; lifecycle_status stays TRIAGE_REQUIRED; NOT promoted to RECEIPT_COMPLETE"
+  },
+  "test_fixture_fix_disclosure": "motor/registry/tests/test_motor_registry_invariants.py::test_I7_production_sha_set_without_runtime_proven_rejected relied on the live job record's promotion state being DIVERGED. The record legitimately progressed, so the test premise (not its invariant) broke. Fixed by explicitly setting promotion DIVERGED in the test fixture — the same self-contained pattern its sibling test already uses. validate.py and both schemas are untouched (L5). Validator: exit 0. Registry tests: 52 passed.",
+  "attribution_verdict": {
+    "deployed_sha": "e0165192cd625366bb95a8f682db14e1facff58f",
+    "candidate_sha": "defb5506677d4f5b88178b027b7ba6604ea47c42",
+    "equal": false,
+    "outcome_attribution": "UNPROVEN — left open, not forced",
+    "founder_decision_point": "Strict doctrine (registry README: 'attribution PROVEN (deployed SHA == candidate SHA)') can never be satisfied for a mid-PR candidate because production deploys main merge commits. Options: (a) re-candidate the job artifact to the founder-approved merge a80f828f (or PR head 61ea44f2) with a doctrine note, after which attribution is provable TODAY from the existing deploy receipt + probes; (b) keep candidate defb5506 and accept MOTOR-WEB-001 can never reach RECEIPT_COMPLETE. Registry/doctrine choice is founder territory — not machine-decided."
+  },
+  "remaining_to_close": [
+    "founder/doctrine decision on candidate identity (above)",
+    "render_review durable founder artifact (recipe-declared check)",
+    "link_check evidence row",
+    "real metered cost (cost.metered=true, L11)",
+    "receipt_hash + real created/executing timestamps at completion"
+  ],
+  "not_done_and_not_authorized": ["forcing attribution equality", "RECEIPT_COMPLETE", "editing validate.py or schemas", "re-candidating the job without founder decision", "PASS verdict"]
+}

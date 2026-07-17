@@ -188,7 +188,10 @@ def test_I6_verification_proven_with_non_recipe_check_name_rejected():
 # ---- I7: SHA / artifact identity -------------------------------------------
 def test_I7_production_sha_set_without_runtime_proven_rejected():
     j = copy.deepcopy(GOOD_JOB)
-    j["artifacts"]["production_sha"] = "c" * 40  # but promotion is DIVERGED
+    # Force the premise explicitly instead of relying on the live record's
+    # promotion state (which legitimately progressed to PROVEN).
+    j["states"]["promotion"] = {"state": "DIVERGED", "reason": "runtime not proven"}
+    j["artifacts"]["production_sha"] = "c" * 40
     assert _semantics_bad(j)
 
 
