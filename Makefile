@@ -381,6 +381,12 @@ machine-status:
 machine-reconcile:
 	python3 scripts/noos_machine_loops_v1.py reconcile
 
+# Track D machine owner: receipt_writer_completion_evidence_repair ->
+# NF-MOTOR-RECEIPT-WRITER-REPAIR-001 (evidence-path-only; escalates, never restarts)
+receipt-writer-repair:
+	@test -n "$(LOOP)" || (echo "Usage: make receipt-writer-repair LOOP=<loop_id> [OUTBOX=path.json]" && exit 1)
+	python3 scripts/noos_receipt_writer_repair_v1.py run --loop-id $(LOOP) $${OUTBOX:+--outbox $$OUTBOX}
+
 machine-audit:
 	python3 scripts/noos_machine_loops_v1.py audit
 

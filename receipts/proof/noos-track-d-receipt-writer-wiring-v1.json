@@ -1,0 +1,35 @@
+{
+  "schema": "noos-track-d-receipt-writer-wiring-v1",
+  "task": "NOOS-TRACK-D-ROUTE-BINDING",
+  "title": "Track D: NOOS route receipt_writer_completion_evidence_repair wired to NF-MOTOR-RECEIPT-WRITER-REPAIR-001 with a registered machine owner",
+  "status": "SUBMITTED for independent verification",
+  "verdict": "NONE — builder does not self-certify; author != verifier required for any PASS.",
+  "canon_version": "FOUNDER_CANON_v1+MACHINE_LOOPS_v1",
+  "laws": "FOUNDER_CANON v1 + governed-autorun v3. Violations = BLOCKED_WITH_REASON.",
+  "generated_at": "2026-07-17T10:35:00Z",
+  "founder_direction": "Founder instruction in-session 2026-07-17: 'CHECK IT AND FINISH IT' following the offer to wire the registry's declared Track D next step.",
+  "what_was_wired": {
+    "route": "receipt_writer_completion_evidence_repair (state DISPATCHING_COMPLETION_UNPROVEN)",
+    "recipe": "NF-MOTOR-RECEIPT-WRITER-REPAIR-001 v1.1.0",
+    "machine_owner": "scripts/noos_receipt_writer_repair_v1.py — invocable via `make receipt-writer-repair LOOP=<loop_id> [OUTBOX=path.json]`",
+    "binding_file": "motor/registry/bindings/noos-route-map-v1.json (status NOT_WIRED -> WIRED with disclosure note)"
+  },
+  "recipe_conformance": {
+    "diagnose_before": "observer read path only — dual-signal classification via noos_observability_semantics_v1.classify_loop_state over noos_loop_registry (dispatch heartbeat) + noetfield_factory_cycle_runs (completion receipt)",
+    "repair": "ONLY keyed idempotent retries of failed evidence-sink writes (read-before-write on run_id, L13); the sole writable table is the evidence sink noetfield_factory_cycle_runs (mutation_policy evidence_sink: full)",
+    "no_outbox_behavior": "ESCALATE_FOUNDER_DECISION with the diagnosis attached — never re-dispatches loop execution, never improvises wider (recipe failure_policy: escalate)",
+    "verify_after": "before/after external check pair via the observer read path; recovery PROVEN only when AFTER shows RUNNING_CONFIRMED — missing/stale AFTER stays UNPROVEN (correlation != causality)",
+    "receipts": "every run writes a SUBMITTED receipt under receipts/ including forbidden_actions_not_taken",
+    "hard_walls_test_enforced": "module contains no runner restart endpoint reference and no run_loop/run_factory dispatch calls — asserted by tests/test_noos_receipt_writer_repair_v1.py::test_module_has_no_execution_mutation_vocabulary"
+  },
+  "verification": {
+    "new_tests": "tests/test_noos_receipt_writer_repair_v1.py — 5 hermetic tests (route-gated intent, escalation without outbox, run_id idempotency incl. missing-key rejection, before/after pair proves only on fresh AFTER, no execution-mutation vocabulary)",
+    "cli_fail_closed": "python3 scripts/noos_receipt_writer_repair_v1.py run --loop-id demo (no creds) -> BLOCKED_WITH_REASON supabase_not_configured, exit 2",
+    "registry_validator": "python3 motor/registry/validate.py -> exit 0 (bindings file is registry metadata; recipes/jobs unchanged)"
+  },
+  "explicitly_not_done": [
+    "scheduling the owner onto trigger hosts / the CF loop fleet — data/ trigger registries are verifier-frozen and worker deploys are founder-gated; the binding note discloses this",
+    "any restart, redeploy, or loop-execution change",
+    "any live Supabase write from this session (no credentials present; fail-closed verified)"
+  ]
+}

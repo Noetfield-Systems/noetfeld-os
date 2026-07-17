@@ -7,9 +7,9 @@
       "noos_route": "receipt_writer_completion_evidence_repair",
       "noos_state": "DISPATCHING_COMPLETION_UNPROVEN",
       "motor_recipe": "NF-MOTOR-RECEIPT-WRITER-REPAIR-001",
-      "machine_owner": null,
-      "status": "NOT_WIRED",
-      "note": "Track D. Bind after this registry merges: register a machine owner/handler that consumes an INCIDENT-DIAGNOSE routing row and runs RECEIPT-WRITER-REPAIR-001 in an evidence-path-only sandbox with a before/after external check pair."
+      "machine_owner": "scripts/noos_receipt_writer_repair_v1.py (make receipt-writer-repair LOOP=<loop_id>)",
+      "status": "WIRED",
+      "note": "Track D wired 2026-07-17: the owner consumes a DISPATCHING_COMPLETION_UNPROVEN diagnosis, performs ONLY keyed idempotent retries of failed evidence-sink writes (read-before-write on run_id, L13), proves recovery solely via the before/after external check pair through the observer read path, and ESCALATES to a founder-decision issue when no retryable outbox exists — it contains no execution-dispatch or restart vocabulary (test-enforced in tests/test_noos_receipt_writer_repair_v1.py). Scheduling onto trigger hosts / the CF loop fleet remains founder-gated (frozen data/ registries + deploy gate); until then NOOS consumers and operators invoke it on route findings."
     },
     {
       "noos_route": "execution_reconcile_self_heal",
