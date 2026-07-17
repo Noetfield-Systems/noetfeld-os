@@ -21,7 +21,7 @@ Enforced invariants
     R2  outcome PROVEN -> promotion PROVEN
     I5a promotion PROVEN -> source PROVEN & runtime PROVEN/NA; on external recipes the split is REQUIRED (not omittable)
     I5b outcome PROVEN -> observation PROVEN & attribution PROVEN; on external recipes the split is REQUIRED
-    I6  external_proof_required -> recipe has an external check; verification PROVEN needs a PASS row; outcome PROVEN needs a PASS external row whose check name is recipe-declared
+    I6  external_proof_required -> recipe has an external check; verification PROVEN needs a PASS row for a recipe-declared check; outcome PROVEN needs a PASS external row whose check name is recipe-declared
     I7  production_sha set iff runtime PROVEN, exact 40-hex (fullmatch); candidate_sha hex[7..40] when execution PROVEN
     I8  timestamp ordering (lowercase 'z' handled); outcome_observed >= promoted+60s for external recipes
     I9  RECEIPT_COMPLETE: dispatch/execution/verification/evidence/promotion PROVEN; authority PROVEN/NA; outcome PROVEN (never NA on external recipes); cost.metered; receipt_hash hashlike; recipe receipt.required_fields non-blank; required timestamps present+ordered
@@ -225,8 +225,13 @@ def check_job_semantics(job: dict[str, Any], recipes: dict[str, dict[str, Any]],
     recipe_check_names = {c.get("name") for c in ((recipe.get("verification") or {}).get("checks") or [])}
     vrs = job.get("verification_results") or []
     if _state(states, "verification") == "PROVEN":
-        if not [v for v in vrs if v.get("decision") == "PASS"]:
+        pass_rows = [v for v in vrs if v.get("decision") == "PASS"]
+        if not pass_rows:
             f.append(f"{label}: verification PROVEN but no verification_result with decision PASS (I6)")
+        elif recipe_check_names and not any(v.get("check") in recipe_check_names for v in pass_rows):
+            # symmetry with the outcome branch below: a PASS row for a check the
+            # recipe never declared cannot prove verification of the declared surface.
+            f.append(f"{label}: verification PROVEN but no PASS row for a recipe-declared check (I6)")
     if ext_required and out_state == "PROVEN":
         ext_pass = [v for v in vrs if v.get("external") and v.get("decision") == "PASS"]
         if not ext_pass:
@@ -351,9 +356,15 @@ def validate_all(root: pathlib.Path) -> tuple[list[str], dict[str, int]]:
         elif jid:
             seen_job_ids[jid] = fp.name
         key = data.get("idempotency_key")
-        if key and key in seen_keys:
+        # Fail closed on a blank/whitespace/zero-width key instead of silently
+        # skipping dedup for it (the old truthy gate let "" and "   " bypass the
+        # duplicate check entirely). Schema also requires it present+non-empty,
+        # so this is the semantic backstop.
+        if not _meaningful(key):
+            failures.append(f"{fp.name}: idempotency_key is blank/whitespace/zero-width — cannot dedup (U/L13)")
+        elif key in seen_keys:
             failures.append(f"{fp.name}: duplicate idempotency_key (also in {seen_keys[key]}) (U/L13)")
-        elif key:
+        else:
             seen_keys[key] = fp.name
         if not errs:
             failures += check_job_semantics(data, recipes, fp.name)

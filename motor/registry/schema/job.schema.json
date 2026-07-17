@@ -8,6 +8,7 @@
     "job_id",
     "recipe_id",
     "recipe_version",
+    "idempotency_key",
     "trigger",
     "states",
     "cost",
@@ -25,7 +26,8 @@
     "recipe_version": {"type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"},
     "idempotency_key": {
       "type": "string",
-      "description": "Rendered from recipe trigger.dedupe_key. Same key = same job, never a duplicate (L13)."
+      "minLength": 1,
+      "description": "Rendered from recipe trigger.dedupe_key. Same key = same job, never a duplicate (L13). Required + non-empty so U dedup can never be silently skipped."
     },
     "trigger": {
       "type": "object",

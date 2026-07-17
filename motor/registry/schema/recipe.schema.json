@@ -38,7 +38,7 @@
     },
     "trigger": {
       "type": "object",
-      "required": ["type"],
+      "required": ["type", "dedupe_key"],
       "additionalProperties": false,
       "properties": {
         "type": {
@@ -55,7 +55,8 @@
         },
         "dedupe_key": {
           "type": "string",
-          "description": "Template for the idempotency key so the same trigger never creates two jobs (L13)."
+          "minLength": 1,
+          "description": "Template for the idempotency key so the same trigger never creates two jobs (L13). Required + non-empty on every recipe so a job's idempotency_key always has a template to render."
         }
       }
     },
