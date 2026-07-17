@@ -1,0 +1,48 @@
+{
+  "schema": "noos-wave0-custody-repin-receipt-v1",
+  "task": "NF-NOOS-WAVE0-CUSTODY-REPIN",
+  "purpose": "Wave 0 — re-pin NOOS custody to the SG-canonical authority for NF-UNIFIED-MOTOR-ARCHITECTURE-V1 and install the sg-authority-ref pointer.",
+  "status": "SUBMITTED for independent verification (author != verifier; no self-PASS)",
+  "canon_version": "FOUNDER_CANON_v1+MACHINE_LOOPS_v1",
+  "branch": "nf-noos-wave0-custody-repin-001",
+  "generated_at": "2026-07-17T09:15:00Z",
+  "founder_gated": true,
+  "applied_from_lane": "noos (per SG instruction: do_not_apply_from_sg_lane=true)",
+
+  "sg_instruction_source": "sina-governance-SSOT@main:docs/dispatch/noos-wave0-custody-repin-instruction.md",
+
+  "verification_before_apply": {
+    "authority_decision_real": "YES — SG commit dc6080d8 'Wave 0 clean land of Unified Motor architecture (#16)'; packet NF_UNIFIED_MOTOR_ARCHITECTURE_LOCKED_v1.md status SG_ACCEPTED / IMPLEMENTATION_AUTHORIZED",
+    "authority_sha_canonical": "dc6080d8519b8a83dcfaaeefb65392691ce3e33e IS an ancestor of sina-governance-SSOT@main (49f17594) — canonical, not merely a doctrine branch",
+    "supersedes": "doctrine-branch commit 8b476f7 (not merged; the clean-land dc6080d8 is the canonical authority; SG re-landed only the Unified Motor packet, dropping the bundled unrelated decisions)",
+    "pointer_file": "data/sg-authority-ref-unified-motor-v1.json copied BYTE-IDENTICAL from SG main (sha256 ec29a0d5...); sg_authority_sha=dc6080d8, status=ACTIVE",
+    "artifact_blobs": "all 13 custody artifact blob SHAs verify at dc6080d8 (0 mismatches) — re-pin is artifact-consistent"
+  },
+
+  "changes": {
+    "noetfield-org/CUSTODY_AUTHORITY_PINS_v1.json": "sg_repo.commit 0e2c1ea2 -> dc6080d8; previous_commit -> 0e2c1ea2 (prior live pin); pin_note updated",
+    "data/sg-authority-ref-unified-motor-v1.json": "NEW — canonical sg-authority-ref pointer from SG main (verbatim)",
+    "scripts/noos_claude_activation_doctor_v1.sh": "hardcoded SG_PIN 0e2c1ea2 -> dc6080d8 (doctor must agree with pins-file; part of the pin refresh — NOT in SG's 2-item instruction but required for a consistent surface)",
+    "CLAUDE.md": "authority table Master SSOT pin cell 0e2c1ea2 -> dc6080d8 (doctor claude_md_sg_pin_current)",
+    ".claude/noos/AUTHORITY.md": "SG pin citations (§ pin line, §7 custody pin) 0e2c1ea2 -> dc6080d8"
+  },
+
+  "doctor_after": {
+    "verdict": "DEGRADED (was FAIL)",
+    "all_hard_FAILs_cleared": true,
+    "passing": ["claude_md_sg_pin_current", "authority_records_pin:dc6080d8", "sg_pin_commit", "custody_pins_sg_agree", "custody_artifact_blobs (13/13)", "sg_pin_ssot_section_0_7", "sg custody files at pin"],
+    "residual_STALE": [
+      "sg_pin_freshness — SG main 49f17594 vs pin dc6080d8: EXPECTED/BENIGN. SG pins to the authority-landing commit dc6080d8 (matches canonical pointer); main advanced 2 post-merge receipt commits (c4a55a0 stamp + 49f17594 merge). Pinning to 49f17594 would desync from the canonical pointer — not done.",
+      "noos_pin_freshness — noos pin c7f39ff3 vs origin/main 12a8cb79: PRE-EXISTING, unrelated to Wave 0. SG's instruction was SG-side only; the NOOS self-pin refresh is a separate custody operation."
+    ]
+  },
+
+  "founder_decisions_surfaced": [
+    "SG's 2-item instruction (custody file + pointer) did not mention the doctor SG_PIN constant, CLAUDE.md, or AUTHORITY.md — but the activation doctor requires all of them to cite the current pin. Applied all for consistency; confirm this is intended (vs SG issuing a broader instruction).",
+    "Confirm dc6080d8 (authority-landing commit, matches canonical pointer) is the intended custody pin vs SG main tip 49f17594 (would clear sg_pin_freshness but desync from the pointer)."
+  ],
+
+  "tests": "full repo suite 208 passed; JSON artifacts parse; pointer byte-identical to SG canonical.",
+  "not_done": ["merge to main (founder gate)", "NOOS self-pin refresh (out of scope)", "T0 foundation build (builders lane, after this merges)"],
+  "final_status": "WAVE0_REPIN_PREPARED_FOR_FOUNDER_MERGE"
+}

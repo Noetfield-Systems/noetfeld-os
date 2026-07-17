@@ -56,7 +56,7 @@ verifier proves.**
 
 | Authority | Where | Pin |
 |---|---|---|
-| Master SSOT (incl. §0.7) | `sina-governance-SSOT` (sibling repo) `ssot/strategy-ssot-v6-split.md` | `0e2c1ea2` |
+| Master SSOT (incl. §0.7) | `sina-governance-SSOT` (sibling repo) `ssot/strategy-ssot-v6-split.md` | `dc6080d8` |
 | SG Library | `SG-Canonical-Library/noetfield-library` in the SG repo | `v0.9-SG-RATIFIED` |
 | FOUNDER_CANON | SG library `P1-CANON/FOUNDER_CANON_v1.md` | `6c13aa27` |
 | Custody chain (machine-readable) | `noetfield-org/CUSTODY_AUTHORITY_PINS_v1.json` | NOOS `c7f39ff3` |

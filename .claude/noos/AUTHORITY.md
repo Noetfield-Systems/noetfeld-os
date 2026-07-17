@@ -14,9 +14,11 @@ forward is expected — reconcile forward, never rewrite pins.
 
 - Repo: `https://github.com/Noetfield-Systems/sina-governance-SSOT.git`
   · local sibling `~/Desktop/Noetfield-Systems/sina-governance-SSOT`
-- Pin: `0e2c1ea2849823a9c642ae4fe4f9ec8e52d5482e` (main — "Install
-  founder-reasoning custody chain and Option C advisor absorption",
-  2026-07-10; supersedes lineage pin `c280ff7ebf548ff3a1784502a46436fa0e7bf9c0`)
+- Pin: `dc6080d8519b8a83dcfaaeefb65392691ce3e33e` (main — Wave 0 clean-land of
+  NF-UNIFIED-MOTOR-ARCHITECTURE-V1, SG PR #16, 2026-07-17; supersedes
+  `0e2c1ea2849823a9c642ae4fe4f9ec8e52d5482e`. Note: SG main has since advanced
+  to `49f17594` with post-merge receipt commits; the pin tracks the
+  authority-landing commit dc6080d8, which is an ancestor of SG main.)
 - Anchor files at pin:
   - `ssot/strategy-ssot-v6-split.md` — Level 0 constitution + D1–D5 domain SSOTs;
     stamped REMOTE CANONICAL, LOCKED/CANONICAL (2026-07-05)
@@ -100,7 +102,7 @@ Unpinned but binding in-repo law (versioned by their own LOCKED status):
   (Railway executor is CANONICAL_LIVE since 2026-07-06).
 - RESOLVED 2026-07-10: the previously uncommitted SG LOCKED docs (P2 custody
   matrix, P8 continuation/commissioning, P10 cost doctrine) are now committed
-  and covered by the `0e2c1ea2` pin — see §7.
+  and covered by the `dc6080d8` pin — see §7.
 
 ## 7. Founder-reasoning custody chain (post-custody pins, 2026-07-10)
 
@@ -109,7 +111,7 @@ Machine-readable pins: `noetfield-org/CUSTODY_AUTHORITY_PINS_v1.json` (v1.2.0 �
 both repo pins refreshed here after its own "re-pin after commit" notes; every
 artifact blob SHA verified at the pinned commits).
 
-- **SG custody pin `0e2c1ea2849823a9c642ae4fe4f9ec8e52d5482e`** carries, verified:
+- **SG custody pin `dc6080d8519b8a83dcfaaeefb65392691ce3e33e`** carries, verified:
   - Master SSOT `ssot/strategy-ssot-v6-split.md` **§0.7 — Motor escalation
     continuity (99/1)** (also mirrored in the library P0 spine)
   - `P2-SSOT/LIBRARY_CUSTODY_MATRIX_LOCKED_v1.md` and
