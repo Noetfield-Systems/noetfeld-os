@@ -18,58 +18,56 @@
     },
     "execution": {
       "state": "PROVEN",
-      "evidence_ref": "candidate commit defb5506677d4f5b88178b027b7ba6604ea47c42 with real file changes",
-      "as_of": "2026-07-14T00:00:00Z"
+      "evidence_ref": "Build commit defb5506677d4f5b88178b027b7ba6604ea47c42 with real file changes (PR #115 commit 2 of 3). Founder re-candidated the job 2026-07-17 (recorded decision artifact in receipts/proof/noos-motor-web-001-receipt-complete-v1.json) to the shipped release e0165192cd625366bb95a8f682db14e1facff58f — lineage: defb5506 -> PR head 61ea44f2 -> founder merge a80f828f -> deploy-infra merges #116-#119 -> e0165192; served public content byte-identical merge->release (git diff over content paths EMPTY); defb5506 differs from live tree only by the founder's own h1 refinement in 61ea44f2.",
+      "as_of": "2026-07-17T09:05:00Z"
     },
     "verification": {
-      "state": "UNPROVEN",
-      "as_of": "2026-07-14T00:00:00Z",
-      "reason": "CI + tests PASS on the exact candidate head (external), but the recipe-declared check render_review (founder desktop/mobile visual review) has no durable evidence artifact yet — verification is not complete until every declared check has evidence (L3/L4)."
+      "state": "PROVEN",
+      "evidence_ref": "All three recipe-declared checks have evidence rows: unit_and_site_tests PASS (CI on exact candidate head, 423 passed 2 skipped), link_check PASS (live probe 2026-07-17T08:53:10Z: 15 internal links on / and /motors/, zero broken), render_review PASS (founder confirmation 2026-07-17, recorded as durable artifact in receipts/proof/noos-motor-web-001-receipt-complete-v1.json). Verification evidence completed post-promotion; timestamps.verified_at intentionally omitted rather than backdated (I8 canonical ordering assumes verify-before-promote).",
+      "as_of": "2026-07-17T09:05:00Z"
     },
     "evidence": {
-      "state": "IN_PROGRESS",
-      "as_of": "2026-07-16T00:00:00Z",
-      "reason": "This record is the receipt-in-progress; it completes only at RECEIPT_COMPLETE with all truth fields proven."
+      "state": "PROVEN",
+      "evidence_ref": "This record (receipt) + receipts/proof/noos-motor-web-001-production-attribution-probe-v1.json + receipts/proof/noos-motor-web-001-promotion-outcome-update-v1.json + receipts/proof/noos-motor-web-001-receipt-complete-v1.json + Noetfield-side NF-WEB-002 deploy receipt (PR #119 comment 5000098501, receipt sha256 d7f9e599d1be5380e1f17078083cc8d4aec34ad3e3c416f5e285a9d66ee8ce83)",
+      "as_of": "2026-07-17T09:05:00Z"
     },
     "authority": {
-      "state": "UNPROVEN",
-      "as_of": "2026-07-16T00:00:00Z",
-      "reason": "Advisors report a founder merge of PR #115, but no durable approval_artifact (merge SHA / /approve URL) is captured in this record and the merge was not independently verified here. Verbal/second-hand report is not approval evidence (L7)."
+      "state": "PROVEN",
+      "evidence_ref": "PR Noetfield-Systems/Noetfield#115 merged by founder (kazemnezhadsina144-dot) at 2026-07-17T05:31:39Z; merge commit a80f828f9d7a2d5735250de22ada4857ff608537 on main — the recipe defines the founder merge SHA as the approval artifact (human_gate before_promotion)",
+      "as_of": "2026-07-17T08:14:52Z"
     },
     "promotion": {
-      "state": "DIVERGED",
-      "as_of": "2026-07-16T00:00:00Z",
-      "reason": "Source merge is reported but not evidenced with a merge SHA; the formal production deploy workflows are reported failed; exact production artifact identity is not established. 'Merged' is not 'deployed' — the split below records each truth separately.",
-      "evidence_ref": "advisor reports: formal deploy workflows failed; live-site observers disagree",
+      "state": "PROVEN",
+      "as_of": "2026-07-17T08:14:52Z",
+      "evidence_ref": "Merge a80f828f9d7a2d5735250de22ada4857ff608537 (PR #115) on main; formal production deploy receipt NF-WEB-002 PASS: workflow run 29562673649 (noetfield-www-production deploy-exact-main, completed 2026-07-17T07:21:07Z), Cloudflare Pages deployment 05debd27-97ba-40dd-8fca-26a0f47986eb, release e0165192cd625366bb95a8f682db14e1facff58f, immutable origin https://05debd27.noetfield-www.pages.dev, scoped cache purge confirmed. git diff a80f828f..e0165192 over served content paths (index.html, motors/, assets/, data/, api/, functions/, robots.txt, sitemap.xml, _redirects) is EMPTY — the deployed release's public content is byte-identical to the founder-approved merge.",
       "source": {
-        "state": "UNPROVEN",
-        "as_of": "2026-07-16T00:00:00Z",
-        "reason": "Merge to main reported by advisors but no merge SHA / approval_artifact captured; not independently verified in this record."
+        "state": "PROVEN",
+        "evidence_ref": "PR #115 merge commit a80f828f9d7a2d5735250de22ada4857ff608537 on main, merged_at 2026-07-17T05:31:39Z, merged_by founder (kazemnezhadsina144-dot); candidate defb5506677d4f5b88178b027b7ba6604ea47c42 is the second of the PR's three commits and an ancestor of the merge (git merge-base --is-ancestor verified)",
+        "as_of": "2026-07-17T08:14:52Z"
       },
       "runtime": {
-        "state": "DIVERGED",
-        "as_of": "2026-07-16T00:00:00Z",
-        "reason": "Formal Cloudflare production deploy workflows reported failed; no successful deployment receipt (deployment id + deployed SHA) exists; live content is inconsistent across observers."
+        "state": "PROVEN",
+        "evidence_ref": "Deploy receipt on PR #119 (github-actions comment 5000098501): run 29562673649 PASS, deployment_id 05debd27-97ba-40dd-8fca-26a0f47986eb, deployed SHA e0165192cd625366bb95a8f682db14e1facff58f, immutable origin https://05debd27.noetfield-www.pages.dev; edge worker serves X-Noetfield-Release: e0165192... on www (deploy chain after the merge-triggered run 7 on a80f828f FAILED: repair PRs #116 social-preview receipt trigger, #117/#118 propagation retries, #119 anti-stale guard; runs 10 and 11 then succeeded — all repair merges touched deploy infrastructure only, zero served-content changes)",
+        "as_of": "2026-07-17T08:14:52Z"
       }
     },
     "outcome": {
-      "state": "DIVERGED",
-      "as_of": "2026-07-16T00:00:00Z",
-      "reason": "One observer reported upgraded Motor content live while another public fetch returned the previous homepage title and the old /motors/ page. Observation is contested and attribution to the candidate SHA is unproven.",
-      "evidence_ref": "advisor probes of https://www.noetfield.com/ and /motors/ returning divergent content",
+      "state": "PROVEN",
+      "as_of": "2026-07-17T09:05:00Z",
+      "evidence_ref": "observation PROVEN (hash-attributed live probes) AND attribution PROVEN (deployed production SHA == candidate SHA == e0165192cd625366bb95a8f682db14e1facff58f, observed content byte-identical to the immutable deployment origin). Earlier observer disagreement explained: old-content fetches predated the first successful deploy (production runs 2-9 FAILED; content went live at run 11, 07:21Z); apex 308-redirect vs www probing added divergence for non-redirect-following observers.",
       "observation": {
-        "state": "DIVERGED",
-        "as_of": "2026-07-16T00:00:00Z",
-        "reason": "Cursor reported new content live; an independent advisor fetch returned the previous homepage title and old /motors/ heading. Observers disagree — CDN/host/edge divergence or rollback are all possible."
+        "state": "PROVEN",
+        "evidence_ref": "No-cache probes 2026-07-17T07:58:44Z and 08:14:52Z: www.noetfield.com/ sha256 71d8a5c54923d7ef0061ceab0dc711fd1c13d2863ae27ffa98802976af06b810 title 'Noetfield Systems Inc. — AI Motors & Governed Execution'; /motors/ sha256 eff1338c6470bf804de9fae10bdd678073578694b3aca1c165de2f3252c32477 title 'AI Motors for Governed Execution — Noetfield Systems'; both byte-identical to immutable deployment origin https://05debd27.noetfield-www.pages.dev (same hashes) and both stamped X-Noetfield-Release: e0165192cd625366bb95a8f682db14e1facff58f; apex noetfield.com returns 308 to www for both paths. Full probe set in receipts/proof/noos-motor-web-001-promotion-outcome-update-v1.json",
+        "as_of": "2026-07-17T08:14:52Z"
       },
       "attribution": {
-        "state": "UNPROVEN",
-        "as_of": "2026-07-16T00:00:00Z",
-        "reason": "No exact deployed SHA is known, so no observed content can be attributed to candidate defb5506. Observation != attribution; the loop cannot close until deployed SHA == candidate SHA is proven."
+        "state": "PROVEN",
+        "as_of": "2026-07-17T09:05:00Z",
+        "evidence_ref": "deployed production SHA e0165192cd625366bb95a8f682db14e1facff58f == candidate_sha e0165192cd625366bb95a8f682db14e1facff58f (founder re-candidated 2026-07-17 to the shipped release; decision artifact in receipts/proof/noos-motor-web-001-receipt-complete-v1.json). Live content attributed to this exact SHA three independent ways: (1) formal deploy receipt NF-WEB-002 PASS binds deployment 05debd27-97ba-40dd-8fca-26a0f47986eb to release e0165192; (2) www responses stamp X-Noetfield-Release: e0165192... on / and /motors/; (3) live bodies are byte-identical (sha256 71d8a5c5... and eff1338c...) to the immutable per-deployment origin https://05debd27.noetfield-www.pages.dev. Lineage to the original build candidate defb5506 (mid-PR ancestor, content-identical except founder's own h1 refinement) fully disclosed in execution evidence."
       }
     }
   },
-  "lifecycle_status": "TRIAGE_REQUIRED",
+  "lifecycle_status": "RECEIPT_COMPLETE",
   "sandbox": {
     "sandbox_id": "worktree-ai-motor-category",
     "type": "git_worktree",
@@ -84,8 +82,8 @@
   ],
   "artifacts": {
     "baseline_sha": "a192926",
-    "candidate_sha": "defb5506677d4f5b88178b027b7ba6604ea47c42",
-    "production_sha": "",
+    "candidate_sha": "e0165192cd625366bb95a8f682db14e1facff58f",
+    "production_sha": "e0165192cd625366bb95a8f682db14e1facff58f",
     "pr_ref": "Noetfield-Systems/Noetfield#115",
     "files_changed": []
   },
@@ -100,36 +98,49 @@
     },
     {
       "check": "render_review",
-      "decision": "SKIP_WITH_REASON",
-      "reason": "Founder desktop/mobile visual review not yet performed — no durable evidence artifact",
-      "evidence": "n/a — this row converts to PASS/FAIL when the founder reviews and an artifact is captured",
+      "decision": "PASS",
+      "reason": "Founder confirmed the live rendering of / and /motors/ acceptable (recipe pass criterion: 'Founder confirms rendering acceptable')",
+      "evidence": "Founder confirmation 2026-07-17, captured as a recorded decision artifact in receipts/proof/noos-motor-web-001-receipt-complete-v1.json (question + answer + timestamp + session ref); builder-side desktop/mobile browser QA (0 console errors) in PR #115 builder receipt corroborates",
       "external": true,
-      "checked_at": "2026-07-16T00:00:00Z"
+      "checked_at": "2026-07-17T09:05:00Z"
+    },
+    {
+      "check": "link_check",
+      "decision": "PASS",
+      "reason": "Zero broken internal links on the changed surfaces",
+      "evidence": "Live probe 2026-07-17T08:53:10Z: all internal links extracted from https://www.noetfield.com/ and /motors/ (15 unique) returned < 400; script + output archived in receipts/proof/noos-motor-web-001-receipt-complete-v1.json",
+      "external": true,
+      "checked_at": "2026-07-17T08:53:10Z"
     },
     {
       "check": "production_deploy_receipt",
-      "decision": "FAIL",
-      "reason": "Formal production deploy workflows reported failed; no deployment receipt (deployment id + deployed SHA) captured",
-      "evidence": "advisor report of failed production workflows",
+      "decision": "PASS",
+      "reason": "Formal exact-main production deploy succeeded after deploy-infra repairs: NF-WEB-002 receipt PASS, deployed SHA e0165192cd625366bb95a8f682db14e1facff58f, Cloudflare Pages deployment 05debd27-97ba-40dd-8fca-26a0f47986eb, immutable origin https://05debd27.noetfield-www.pages.dev (merge-triggered run 7 on a80f828f failed; runs 10-11 green)",
+      "evidence": "workflow run 29562673649 (deploy-exact-main, completed 2026-07-17T07:21:07Z); receipt comment 5000098501 on PR #119; live X-Noetfield-Release header matches deployed SHA",
       "external": true,
-      "checked_at": "2026-07-16T00:00:00Z"
+      "checked_at": "2026-07-17T08:14:52Z"
     }
   ],
   "approval": {
     "required": true,
-    "approved_by": "",
-    "approval_artifact": ""
+    "approved_by": "founder (kazemnezhadsina144-dot)",
+    "approval_artifact": "PR Noetfield-Systems/Noetfield#115 merge commit a80f828f9d7a2d5735250de22ada4857ff608537, merged_at 2026-07-17T05:31:39Z",
+    "approved_at": "2026-07-17T05:31:39Z"
   },
   "cost": {
     "provider": "openai",
     "model": "codex",
     "total_usd": 0,
-    "metered": false,
+    "metered": true,
     "value_class": "proof_asset"
   },
   "timestamps": {
     "created_at": "2026-07-10T00:00:00Z",
-    "executing_at": "2026-07-10T00:00:00Z"
+    "executing_at": "2026-07-10T00:00:00Z",
+    "promoted_at": "2026-07-17T07:21:07Z",
+    "outcome_observed_at": "2026-07-17T08:14:52Z",
+    "receipt_completed_at": "2026-07-17T09:05:00Z"
   },
-  "notes": "Motor Proof Job #1 — TRIAGE_REQUIRED, not AWAITING_AUTHORITY. Honest truth split: build+CI proven; render review, source merge, runtime deploy, and live outcome are UNPROVEN/DIVERGED. cost.metered=false and total_usd=0 are PLACEHOLDERS (not metered values, L11); timestamps at T00:00:00Z are date-only anchors, not real event times — both must be replaced with actuals before RECEIPT_COMPLETE (the v1.1 validator blocks RECEIPT_COMPLETE while metered=false). To close: capture merge SHA (authority+promotion.source), obtain a successful deploy receipt with deployment id + deployed SHA (promotion.runtime), wait >=60s, probe apex and www for content markers AND confirm deployed SHA == candidate SHA (outcome.observation + outcome.attribution), fill production_sha (40-hex), receipt_hash, real cost, real timestamps."
+  "notes": "Motor Proof Job #1 — RECEIPT_COMPLETE 2026-07-17T09:05:00Z (machine-assembled, SUBMITTED for independent verification; author != verifier). Founder decisions of 2026-07-17 (recorded Q&A artifact in receipts/proof/noos-motor-web-001-receipt-complete-v1.json): (1) job re-candidated from mid-PR build commit defb5506 to the shipped release e0165192 — full lineage disclosed in execution evidence, served content byte-identical from approved merge a80f828f to release, defb5506 differs from live tree only by the founder's own h1 refinement 61ea44f2; (2) render_review confirmed acceptable by founder (durable artifact in the same receipt); (3) cost metered as USD 0 marginal — founder attests the Codex build session was covered by an existing flat-rate subscription (metering basis: subscription, zero marginal spend; L11 disclosure, not a placeholder). timestamps.verified_at intentionally omitted: verification evidence completed post-promotion (real time in states.verification.as_of 2026-07-17T09:05:00Z); backdating to satisfy the verify-before-promote canonical order would be dishonest. created_at/executing_at T00:00:00Z remain the original record's date-only anchors, disclosed as such. Closure law satisfied exactly: deployed production SHA == candidate SHA == e0165192 == observed live content (deploy receipt + X-Noetfield-Release header + byte-identity with immutable deployment origin 05debd27).",
+  "receipt_hash": "sha256:cc19d27e4b892d7bb4b76f3f41e994fd7520b7a8964ee253aee6b7378b47e5ee"
 }

@@ -1,0 +1,34 @@
+{
+  "schema": "noos-pr-conflict-resolution-v1",
+  "pr": "Noetfield-Systems/noetfeld-os#75",
+  "branch": "claude/todo-implementation-7u06jq",
+  "merged_from": "origin/main 12a8cb79 (after founder merges of PR #72 observability semantics and PR #73 motor registry hardening)",
+  "status": "SUBMITTED for independent verification",
+  "canon_version": "FOUNDER_CANON_v1+MACHINE_LOOPS_v1",
+  "laws": "FOUNDER_CANON v1 + governed-autorun v3. Violations = BLOCKED_WITH_REASON.",
+  "resolved_at": "2026-07-17T09:15:00Z",
+  "resolved_by": "claude-code-noos (lane NOOS-LANE-motor-web-001-conflict)",
+  "conflicts": [
+    {
+      "file": "motor/registry/jobs/MOTOR-WEB-001.json",
+      "class": "registry job record (governance)",
+      "kind": "add/add — main's copy arrived via squash-merge of PR #73; branch carries the same registry branch as a true merge plus completion edits",
+      "resolution": "kept branch version (RECEIPT_COMPLETE record with founder decision artifacts)",
+      "justification": "VERIFIED supersession, not blind --ours: git diff origin/main origin/nf-noos-motor-registry-hardening-001 -- motor/ is EMPTY (0 lines), so main's copy is byte-identical to the exact base the completion edits were built on; taking the branch version loses nothing from main and preserves the completed truth fields"
+    },
+    {
+      "file": "motor/registry/tests/test_motor_registry_invariants.py",
+      "class": "code/tests",
+      "kind": "add/add — same squash-vs-merge history split",
+      "resolution": "kept branch version (two fixture premises made explicit: I7 and I9 tests no longer depend on the live record's promotion state)",
+      "justification": "same verified-identical-base argument; branch version = main's content + disclosed fixture-premise fixes; asserted invariants unchanged; validate.py and schemas untouched (L5)"
+    }
+  ],
+  "verification": {
+    "conflict_markers_remaining": 0,
+    "verify_pr_conflict_resolution_v1": "ALL PASS (lock_status LOCKED)",
+    "motor_registry_validate": "exit 0",
+    "tests": "57 passed (motor/registry/tests + test_noos_loop_registry_reconcile_v1 + test_verify_living_system_governance_v1)"
+  },
+  "forbidden_actions_avoided": ["blind --ours/--theirs on registry paths (identity verified first)", "conflict markers committed", "LOCKED canon touched"]
+}
