@@ -1,3 +1,4 @@
+<!-- NOOS-AGENT-DOC -->
 # NF-UNIFIED-MOTOR-ISSUE-CI-OWNERSHIP-V1 — SG architectural addendum (proposal)
 
 **Status:** `SG_REVIEW_REQUIRED`
