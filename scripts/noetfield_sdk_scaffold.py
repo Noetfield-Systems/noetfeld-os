@@ -13,8 +13,9 @@ Pure stdlib. Works fully offline against a local policy dict. Set
 NOETFIELD_HUB_URL to enforce centrally instead, and NOETFIELD_SIGNING_KEY
 to seal receipts with your own key.
 
-This is a scaffold: wire `_hub_check` / `_hub_log` to your real endpoints,
-and swap the HMAC seal for asymmetric signing before production.
+This is a scaffold: `_hub_check` / `_hub_log` POST JSON to
+`{hub_url}/check` and `{hub_url}/ledger` — adapt the payloads to your Hub's
+contract, and swap the HMAC seal for asymmetric signing before production.
 """
 
 from __future__ import annotations
@@ -24,6 +25,7 @@ import hmac
 import json
 import os
 import time
+import urllib.request
 import uuid
 from dataclasses import dataclass, field, asdict
 from typing import Any, Callable, Optional
@@ -68,6 +70,20 @@ def _seal(payload: dict, key: bytes) -> str:
     return "hmac:" + hmac.new(key, _canonical(payload), hashlib.sha256).hexdigest()
 
 
+_HUB_TIMEOUT_S = 10
+
+
+def _hub_post(url: str, payload: Any) -> Any:
+    req = urllib.request.Request(
+        url,
+        data=_canonical(payload),
+        headers={"Content-Type": "application/json"},
+        method="POST",
+    )
+    with urllib.request.urlopen(req, timeout=_HUB_TIMEOUT_S) as resp:
+        return json.loads(resp.read() or b"null")
+
+
 class Governance:
     def __init__(
         self,
@@ -104,8 +120,16 @@ class Governance:
         return Decision(True, "no policy matched; allowed", "default-allow")
 
     def _hub_check(self, action: str, ctx: dict) -> Decision:
-        # TODO: POST {action, ctx} to f"{self.hub_url}/check"; parse Decision.
-        raise NotImplementedError("wire _hub_check to your Hub /check endpoint")
+        # Fail closed: any transport or contract error denies the action.
+        try:
+            body = _hub_post(f"{self.hub_url}/check", {"action": action, "context": ctx})
+            return Decision(
+                allowed=bool(body["allowed"]),
+                reason=str(body.get("reason", "")),
+                policy=str(body.get("policy", "hub")),
+            )
+        except (OSError, ValueError, KeyError, TypeError) as e:
+            return Decision(False, f"hub check failed: {e}", "hub.error")
 
     # --- execution ------------------------------------------------------
     def execute(self, action: str, fn: Callable[[], Any], context: dict | None = None) -> tuple[Any, Receipt]:
@@ -138,7 +162,17 @@ class Governance:
 
     # --- ledger ---------------------------------------------------------
     def log(self, receipt: Receipt) -> None:
-        self.ledger.append(receipt)  # TODO: also POST to f"{self.hub_url}/ledger"
+        self.ledger.append(receipt)
+        if self.hub_url:
+            self._hub_log(receipt)
+
+    def _hub_log(self, receipt: Receipt) -> None:
+        # Best-effort: the in-memory ledger stays authoritative, so a hub
+        # outage must not mask the PolicyViolation raised for denied runs.
+        try:
+            _hub_post(f"{self.hub_url}/ledger", asdict(receipt))
+        except (OSError, ValueError):
+            pass
 
     def audit(self, run_id: str) -> Optional[Receipt]:
         return next((r for r in self.ledger if r.run_id == run_id), None)
