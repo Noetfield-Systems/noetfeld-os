@@ -1,0 +1,54 @@
+{
+  "schema": "noos-worker-kernel-receipt-v1",
+  "version": "1.0.0",
+  "written_at": "2026-07-03T09:09:02+00:00",
+  "op_key": "176834215b0c9938de5e5a6a",
+  "task_kind": "grep",
+  "mission_id": "M4",
+  "value_class": "hygiene",
+  "started_at": "2026-07-03T09:09:02+00:00",
+  "finished_at": "2026-07-03T09:09:02+00:00",
+  "status": "ok",
+  "routing": {
+    "task_kind": "grep",
+    "tier": "T0",
+    "tier_name": "deterministic",
+    "provider": "local_shell",
+    "model_id": null,
+    "max_usd": 0.0,
+    "requires_founder_approval": false,
+    "blocked": false,
+    "blocker_reason": null,
+    "mode": "deterministic"
+  },
+  "cost": {
+    "provider": "local_shell",
+    "model": "none",
+    "total_usd": 0.0,
+    "within_budget": true
+  },
+  "result": {
+    "command": "rg -n --max-count 20 noos_worker_kernel scripts",
+    "exit_code": 1,
+    "match_count": 0,
+    "matches": [],
+    "ok": true,
+    "routing": {
+      "task_kind": "grep",
+      "tier": "T0",
+      "tier_name": "deterministic",
+      "provider": "local_shell",
+      "model_id": null,
+      "max_usd": 0.0,
+      "requires_founder_approval": false,
+      "blocked": false,
+      "blocker_reason": null,
+      "mode": "deterministic"
+    }
+  },
+  "dry_run": false,
+  "governance": {
+    "no_secrets_to_model": true,
+    "deterministic_verdict": true
+  }
+}

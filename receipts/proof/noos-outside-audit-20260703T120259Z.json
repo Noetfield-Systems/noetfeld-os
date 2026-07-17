@@ -1,0 +1,49 @@
+{
+  "schema": "noos-outside-audit-receipt-v1",
+  "version": "1.0.0",
+  "at": "2026-07-03T12:02:59+00:00",
+  "trailing_hours": 24,
+  "receipts_scanned": 82,
+  "chain": {
+    "ok": false,
+    "count": 82,
+    "chained_count": 4,
+    "broken_links": [
+      {
+        "index": 0,
+        "reason": "chain_hash_mismatch",
+        "schema": "noos-outside-audit-receipt-v1"
+      },
+      {
+        "index": 1,
+        "reason": "chain_hash_mismatch",
+        "schema": "noos-outside-audit-receipt-v1"
+      },
+      {
+        "index": 2,
+        "reason": "chain_hash_mismatch",
+        "schema": "noos-outside-audit-receipt-v1"
+      },
+      {
+        "index": 3,
+        "reason": "chain_hash_mismatch",
+        "schema": "noos-outside-audit-receipt-v1"
+      }
+    ],
+    "tail_hash": "85c1acaed6d1e6406c51bd4d7400563c2679ac7f54f1c6a109effa5f550abcfa"
+  },
+  "critic_non_approve": 0,
+  "spot_fetches": [],
+  "kaizen_candidates": [
+    {
+      "class": "machine_safe",
+      "title": "Receipt chain integrity repair",
+      "expected_roi": "risk_reduced",
+      "source": "outside_audit"
+    }
+  ],
+  "ok": false,
+  "report_line": "outside_audit \u00b7 scanned=82 chain_ok=False",
+  "prev_chain_hash": "85c1acaed6d1e6406c51bd4d7400563c2679ac7f54f1c6a109effa5f550abcfa",
+  "chain_hash": "547a891002ae44053f45d2fe4ee9f5ac3eaba0ba3f88f234b15eeed5247f1b8f"
+}

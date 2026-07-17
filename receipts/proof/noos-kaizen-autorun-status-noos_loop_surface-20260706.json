@@ -1,0 +1,37 @@
+{
+  "schema": "improvement-receipt-v2",
+  "class": "machine_safe",
+  "source": "failed_check",
+  "diff_summary": "autorun-status SLO miss for noos_loop_surface: score 63.41 < 80",
+  "expected_effect": "Restore freshness, success rate, and latency SLO compliance for the loop",
+  "expected_roi": {
+    "cost_saved_usd": 0,
+    "risk_reduced": "workflow heartbeat drift / SLO miss",
+    "revenue_unblocked": "",
+    "build_cost_usd": 0
+  },
+  "rollback_command": "revert the SLO target change or fix the underlying loop/runtime issue",
+  "external_verify_before": "",
+  "external_verify_after": "",
+  "auto_rolled_back": false,
+  "source_ref": "autorun-status",
+  "loop_id": "noos_loop_surface",
+  "score": {
+    "score": 63.41,
+    "misses": [
+      "freshness_miss",
+      "success_rate_miss"
+    ],
+    "ok": false
+  },
+  "evidence": {
+    "title": "24/7 loop \u2014 public surface",
+    "plane": "NOETFELD-OS",
+    "status": "BLOCKED_WITH_REASON",
+    "observed_at": "2026-07-06T09:37:49.472788+00:00",
+    "freshness_minutes": 31.06,
+    "success_rate": 0.0,
+    "latency_minutes": 31.06
+  },
+  "generated_at": "2026-07-06T10:08:53Z"
+}
