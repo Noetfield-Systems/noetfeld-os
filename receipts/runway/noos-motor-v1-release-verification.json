@@ -1,0 +1,37 @@
+{
+  "schema": "noos-motor-v1-release-verification-v1",
+  "not_a_verdict": "Release verification of the OFFLINE path + built artifact. Cloud http_loop acceptance is EXTERNAL_ACTIVATION_REQUIRED. SUBMITTED for independent verification (author != subject).",
+  "canon_version": "FOUNDER_CANON_v1+MACHINE_LOOPS_v1",
+  "verified_at": "2026-07-18T04:07:09Z",
+  "product_version": "1.0.0",
+  "git_commit": "b9003b7add9870529d406fe8359f00ef4aff2288",
+  "bundle_sha256": "b4487df5e6f16d1b4d1a12513168adc30d458a40de36079b138cb4d7cc022a20",
+  "components_present": 16,
+  "components_missing": [],
+  "offline_verify": {
+    "local_organic_cycles_consecutive_pass": true,
+    "cycle_execution_ids": [
+      "exe_60ac7afe1a2b40b1",
+      "exe_db37dfadd7ff4c37",
+      "exe_5f06bf5f93d44b41"
+    ],
+    "masking_regression_ok": true,
+    "masking_repair_state": "DEGRADED_REPAIR_SUSTAINED",
+    "masking_restored_state": "RUNNING_CONFIRMED",
+    "truthful_failure_ok": true,
+    "all_ok": true
+  },
+  "test_gate": "59 passed in 0.13s",
+  "canonical_commands": {
+    "install": "./bin/noos install",
+    "demo": "./bin/noos demo",
+    "verify": "./bin/noos verify",
+    "package": "./bin/noos package"
+  },
+  "external_activation_required": [
+    "Restart cloud http_loop producer (Railway noos-loop-runner) \u2014 needs cloud deploy creds",
+    "Apply Supabase migration 0020 (make supabase-migrate) \u2014 founder-gated, needs DB creds",
+    "Run 3 consecutive real cloud organic http_loop cycles \u2014 depends on producer restart"
+  ],
+  "final_status": "SUBMITTED for independent verification"
+}

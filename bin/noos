@@ -1,0 +1,62 @@
+#!/usr/bin/env bash
+# NOOS Motor v1 — one obvious product-operations entrypoint.
+# NF-NOOS-MOTOR-V1-FULL-RUNWAY, Phase 6.
+#
+# Usage:
+#   noos install     # check runtime + deps, no network
+#   noos start        # print how to start (local reference executor is on-demand)
+#   noos status <id>  # retrieve an execution's status + provenance + integrity
+#   noos demo         # run the representative customer input -> real output
+#   noos verify       # deterministic self-verification (3 local cycles + masking)
+#   noos package      # build the versioned release bundle + manifest
+#   noos rollback     # print the tested rollback commands
+#
+# This wraps the repo's existing Python tooling; it adds no new vendor.
+set -euo pipefail
+
+HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+PY="${PYTHON:-python3}"
+SAMPLE="$HERE/docs/product/samples/sample-input.json"
+
+cmd="${1:-help}"; shift || true
+
+case "$cmd" in
+  install)
+    echo "noos install: checking runtime ..."
+    "$PY" --version
+    "$PY" -c "import sys; assert sys.version_info>=(3,10), 'need Python >=3.10'; print('python OK')"
+    "$PY" -c "import json, hashlib, tarfile; print('stdlib OK (no third-party runtime deps)')"
+    echo "install OK — motor is stdlib-only; cloud features need ~/.noetfield-platform-secrets (see .env.example)"
+    ;;
+  start)
+    echo "noos start: the local reference executor is on-demand (no daemon)."
+    echo "  run a job:  noos demo   OR   $PY $HERE/scripts/noos_motor_local_executor_v1.py --input <job.json> --json"
+    echo "  cloud producer (http_loop) start is EXTERNAL_ACTIVATION_REQUIRED — see docs/runway/NOOS-MOTOR-V1-FULL-RUNWAY.md"
+    ;;
+  status)
+    [ $# -ge 1 ] || { echo "usage: noos status <execution_id>"; exit 2; }
+    exec "$PY" "$HERE/scripts/noos_motor_local_executor_v1.py" --status "$1" --json
+    ;;
+  demo)
+    echo "noos demo: submitting representative customer input ..."
+    exec "$PY" "$HERE/scripts/noos_motor_local_executor_v1.py" --input "$SAMPLE" --json
+    ;;
+  verify)
+    exec "$PY" "$HERE/scripts/noos_motor_v1_verify_v1.py" "$@"
+    ;;
+  package)
+    exec "$PY" "$HERE/scripts/noos_motor_v1_package_v1.py" "$@"
+    ;;
+  rollback)
+    echo "noos rollback:"
+    echo "  code:      git log --oneline | grep NF-NOOS-MOTOR-V1 ; git revert <commit>   (branch only; no main merge was done)"
+    echo "  migration: 0020 is additive/nullable — run the DROP COLUMN block at the foot of"
+    echo "             infrastructure/supabase/migrations/0020_motor_provenance_fields.sql"
+    ;;
+  help|--help|-h)
+    sed -n '2,20p' "${BASH_SOURCE[0]}"
+    ;;
+  *)
+    echo "unknown command: $cmd (try: noos help)"; exit 2
+    ;;
+esac

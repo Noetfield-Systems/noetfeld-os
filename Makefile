@@ -404,3 +404,16 @@ machine-research:
 	else \
 		python3 scripts/noos_machine_loops_v1.py research-memo --question "$(QUESTION)"; \
 	fi
+
+# ---- NOOS Motor v1 product ops (NF-NOOS-MOTOR-V1-FULL-RUNWAY) ----
+.PHONY: motor-demo motor-verify motor-package motor-status motor-install
+motor-install:
+	./bin/noos install
+motor-demo:
+	./bin/noos demo
+motor-verify:
+	./bin/noos verify $(ARGS)
+motor-package:
+	./bin/noos package
+motor-status:
+	./bin/noos status $(ID)

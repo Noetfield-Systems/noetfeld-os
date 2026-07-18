@@ -69,3 +69,24 @@ External-activation (delivered as commands, gated on cloud creds):
 | 2026-07-18T03:50Z | 4 | Provenance-aware classifier in `noos_observability_semantics_v1.py` (new states DEGRADED_REPAIR_SUSTAINED/COMPLETION_UNPROVEN/EVIDENCE_INCONSISTENT/STOPPED_OR_IDLE, `normalize_receipt_origin`, `derive_completion_provenance`); backward-compatible (14/14 legacy fixtures green) | yes (revert file) |
 | 2026-07-18T03:52Z | 4 | Wired live projection `autorun_status_v1.py` to pass provenance (fetch 50-row window, organic-only liveness); 13/13 autorun tests green | yes (revert file) |
 | 2026-07-18T03:54Z | 4 | Gate `tests/test_noos_motor_provenance_v1.py` — 11/11 incl. property: no non-organic origin ever RUNNING_CONFIRMED | yes (new file) |
+| 2026-07-18T04:05Z | 3 | `noos_motor_state_machine_v1.py` FSM + invariants 1-13; 15/15 tests | yes (new file) |
+| 2026-07-18T04:10Z | 5 | `noos_motor_local_executor_v1.py` offline slice; real artifact+receipt; 8/8 tests | yes (new file) |
+| 2026-07-18T04:20Z | 4b | Migration `0020_motor_provenance_fields.sql` (additive; NOT applied, founder-gated) | yes (drop-column block) |
+| 2026-07-18T04:25Z | 6 | `noos_motor_v1_verify_v1.py`, `noos_motor_v1_package_v1.py`, `bin/noos`, `.env.example`, Makefile motor-* targets | yes (new files) |
+| 2026-07-18T04:35Z | 6 | 7 product docs + product README (parallel authored, accuracy-reviewed) | yes (new files) |
+| 2026-07-18T04:40Z | 8 | Release bundle built (dist/, 16 components, sha recorded); runway receipts emitted (3 local cycles, masking, repair, e2e, cloud-external-activation, release-verification, release-manifest) | yes |
+| 2026-07-18T04:45Z | — | Full repo suite 324 passed; motor+affected 59 passed; `noos verify` OVERALL ALL_OK | — |
+
+## Result
+
+**In-repo runway: COMPLETE and test-proven offline.** The false-green bug is
+fixed at the classifier AND the live projection; the motor has an explicit
+deterministic FSM with all 13 invariants enforced; a real customer input runs
+end-to-end to a hash-bound output artifact; the release bundle is built.
+
+**Cloud steps remain `EXTERNAL_ACTIVATION_REQUIRED`** (objectively — no
+cloud CLI/creds on this host): restart the `http_loop` producer, apply migration
+0020, and run 3 real cloud organic cycles. Exact commands in
+[`receipts/runway/noos-motor-v1-cloud-cycles-external-activation.json`](../../receipts/runway/noos-motor-v1-cloud-cycles-external-activation.json).
+
+Final state: **PRODUCT_RELEASE_BUILT_EXTERNAL_ACTIVATION_REQUIRED**.

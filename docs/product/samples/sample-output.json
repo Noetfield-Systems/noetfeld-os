@@ -1,0 +1,13 @@
+{
+  "field_frequency": {
+    "cycles": 3,
+    "loop": 3,
+    "status": 3
+  },
+  "numeric_totals": {
+    "cycles": 25.0
+  },
+  "record_count": 3,
+  "records_sha256": "d2b79b88f4a85bb0fa12d2ed18f175fca7750a91c0011a5f83afebb4aca1f2e4",
+  "title": "Q3 receipts digest"
+}

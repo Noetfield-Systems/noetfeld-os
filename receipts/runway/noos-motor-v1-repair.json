@@ -1,0 +1,36 @@
+{
+  "schema": "noos-motor-v1-runway-repair-v1",
+  "not_a_verdict": "Repair record. SUBMITTED for independent verification (author != subject).",
+  "canon_version": "FOUNDER_CANON_v1+MACHINE_LOOPS_v1",
+  "repaired_at": "2026-07-18T04:00:00Z",
+  "smallest_confirmed_failing_component_fixed": {
+    "component": "completion classifier (provenance-blind, age-only)",
+    "file": "scripts/noos_observability_semantics_v1.py",
+    "change": "Added provenance-aware classification: RUNNING_CONFIRMED now requires FRESH ORGANIC evidence. Repair/replay/manual completions classify as DEGRADED_REPAIR_SUSTAINED / COMPLETION_UNPROVEN and route to organic_producer_reconcile_escalation (NOT receipt-writer repair, which was the masking loop). Backward compatible (14/14 legacy fixtures green).",
+    "wiring": "scripts/autorun_status_v1.py now fetches a 50-row window and passes organic/repair provenance into classify_loop_state (organic-only liveness)."
+  },
+  "organic_producer_restart": {
+    "status": "EXTERNAL_ACTIVATION_REQUIRED",
+    "why": "The dead component is the cloud http_loop loop-execution worker (Railway noos-loop-runner). Restart/redeploy needs cloud deploy credentials that are objectively not present on this host (no fly/supabase/psql CLI, no cloud cred env vars; secrets live outside the repo in ~/.noetfield-platform-secrets/).",
+    "exact_activation_commands": [
+      "# 1. verify + restart the canonical Railway executor (from an authed host):",
+      "make deploy-railway-loop-runner",
+      "# 2. prove one real organic tick end-to-end:",
+      "make cloud-motor-e2e",
+      "# 3. (schema) apply the additive provenance migration (founder-gated):",
+      "make supabase-migrate   # applies infrastructure/supabase/migrations/0020_motor_provenance_fields.sql"
+    ],
+    "preserved_before_state": "receipts/runway/noos-motor-v1-before-state.json (commit + revision + rollback target captured)",
+    "safety": "No broad platform restart. The isolated producer is the only target. Integrator-repair keeps cockpit evidence surfaced (now correctly labelled DEGRADED_REPAIR_SUSTAINED, not RUNNING_CONFIRMED) in the interim."
+  },
+  "reversibility": {
+    "code": "git revert the motor commits on branch nf-noos-repin-gateway-v2-b72f5a3 (no merge to main performed)",
+    "migration": "0020 additive/nullable; DROP COLUMN block at foot of the .sql reverses it",
+    "rollback_target_commit": "8ba1af9ca89499330603047e00a6ddcfb7fa9fd3"
+  },
+  "verification_of_repair": {
+    "masking_regression": "receipts/runway/noos-motor-v1-masking-regression.json — repair-fresh => DEGRADED_REPAIR_SUSTAINED, organic-fresh => RUNNING_CONFIRMED",
+    "unit_gate": "tests/test_noos_motor_provenance_v1.py (property: no non-organic origin can EVER be RUNNING_CONFIRMED)"
+  },
+  "final_status": "SUBMITTED for independent verification"
+}

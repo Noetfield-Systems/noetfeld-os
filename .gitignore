@@ -18,3 +18,6 @@ receipts/proof/noos-outside-audit-*T*.json
 receipts/proof/noos-worker-kernel-*T*.json
 receipts/proof/noos-tool-broker-*T*.json
 .DS_Store
+
+# NOOS Motor v1 release bundle (binary; manifest is the committed evidence)
+dist/noos-motor-v1-*.tar.gz
