@@ -1,0 +1,18 @@
+{
+  "schema": "software-repair-v1-schema-applied-v1",
+  "not_a_verdict": "Schema application status. NOT applied by the machine. SUBMITTED for independent verification.",
+  "canon_version": "FOUNDER_CANON_v1+MACHINE_LOOPS_v1",
+  "recorded_at": "2026-07-18T05:30:00Z",
+  "migration": "infrastructure/supabase/migrations/0021_software_repair_runway.sql",
+  "status": "PROTECTED_ENVIRONMENT_APPROVAL_REQUIRED",
+  "why": "Applying needs the production-gated supabase-migrate workflow. Adding that workflow live requires founder registration in the L5-frozen parallel-agent registry; it is delivered as docs/product/proposed-workflows/supabase-migrate-v1.yml.",
+  "exact_activation": [
+    "move proposed-workflows/supabase-migrate-v1.yml -> .github/workflows/",
+    "register in data/noos-parallel-agent-registry-v1.json (founder gate)",
+    "merge to default branch (founder gate)",
+    "gh workflow run supabase-migrate-v1.yml -f migration=0021_software_repair_runway.sql",
+    "approve the production environment gate"
+  ],
+  "verify_after_apply": "psql \"$DATABASE_URL\" -Atc \"select to_regclass('public.repair_jobs');\"",
+  "final_status": "SUBMITTED for independent verification"
+}
