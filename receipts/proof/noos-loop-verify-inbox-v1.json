@@ -2,7 +2,7 @@
   "schema": "noos-loop-verify-v1",
   "backlog_id": "LOOP-VERIFY-inbox",
   "loop_id": "inbox",
-  "verified_at": "2026-07-05T16:44:04Z",
+  "verified_at": "2026-07-06T09:37:37Z",
   "verification_state": "VERIFIED",
   "smoke": {
     "loop_id": "inbox",
@@ -20,9 +20,9 @@
       "event_type": "noos_inbox_loop_tick",
       "domain": "factory-inbox",
       "trigger_source": "repository_dispatch",
-      "cycle_number": 6,
-      "op_key": "87b91cbe9e979d84bfa93ec0",
-      "started_at": "2026-07-05T16:44:02+00:00",
+      "cycle_number": 11,
+      "op_key": "ba53204667989653ad71047a",
+      "started_at": "2026-07-06T09:37:36+00:00",
       "state_before": "RUNNING",
       "cost": {
         "provider": "github_actions+cloudflare_cron",
@@ -52,14 +52,14 @@
         "count": 1,
         "oldest_id": "NOOS-C-01",
         "priority": "P0",
-        "age_seconds": 305000,
+        "age_seconds": 365814,
         "escalated": true
       },
       "evidence": [
         {
           "command": "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3 scripts/cloud_inbox_worker_v1.py",
           "exit_code": 0,
-          "output": "r_blocked: NOOS-C-01\nfounder_blocked_priority: P0\nfounder_blocked_reason: founder_decision_required\n{\n  \"ok\": true,\n  \"status\": \"IDLE_NO_WORK\",\n  \"idle_reason\": \"no_executable_pending\",\n  \"founder_blocked\": {\n    \"founder_blocked_count\": 1,\n    \"oldest\": \"NOOS-C-01\",\n    \"priority\": \"P0\",\n    \"age_seconds\": 296388,\n    \"reason\": \"founder_decision_required\"\n  },\n  \"founder_blocked_this_cycle\": []\n}"
+          "output": "r_blocked: NOOS-C-01\nfounder_blocked_priority: P0\nfounder_blocked_reason: founder_decision_required\n{\n  \"ok\": true,\n  \"status\": \"IDLE_NO_WORK\",\n  \"idle_reason\": \"no_executable_pending\",\n  \"founder_blocked\": {\n    \"founder_blocked_count\": 1,\n    \"oldest\": \"NOOS-C-01\",\n    \"priority\": \"P0\",\n    \"age_seconds\": 357203,\n    \"reason\": \"founder_decision_required\"\n  },\n  \"founder_blocked_this_cycle\": []\n}"
         }
       ],
       "runner_output": {
@@ -71,7 +71,7 @@
             ],
             "ok": true,
             "exit_code": 0,
-            "stdout_tail": "work_item_id: none\nwork_status: IDLE_NO_WORK\nexit_code: 0\nfounder_blocked_count: 1\noldest_founder_blocked: NOOS-C-01\nfounder_blocked_priority: P0\nfounder_blocked_reason: founder_decision_required\n{\n  \"ok\": true,\n  \"status\": \"IDLE_NO_WORK\",\n  \"idle_reason\": \"no_executable_pending\",\n  \"founder_blocked\": {\n    \"founder_blocked_count\": 1,\n    \"oldest\": \"NOOS-C-01\",\n    \"priority\": \"P0\",\n    \"age_seconds\": 296388,\n    \"reason\": \"founder_decision_required\"\n  },\n  \"founder_blocked_this_cycle\": []\n}",
+            "stdout_tail": "work_item_id: none\nwork_status: IDLE_NO_WORK\nexit_code: 0\nfounder_blocked_count: 1\noldest_founder_blocked: NOOS-C-01\nfounder_blocked_priority: P0\nfounder_blocked_reason: founder_decision_required\n{\n  \"ok\": true,\n  \"status\": \"IDLE_NO_WORK\",\n  \"idle_reason\": \"no_executable_pending\",\n  \"founder_blocked\": {\n    \"founder_blocked_count\": 1,\n    \"oldest\": \"NOOS-C-01\",\n    \"priority\": \"P0\",\n    \"age_seconds\": 357203,\n    \"reason\": \"founder_decision_required\"\n  },\n  \"founder_blocked_this_cycle\": []\n}",
             "stderr_tail": "",
             "continued_on_error": false,
             "name": "cloud_worker"
@@ -84,7 +84,7 @@
           "github_run_id": "local-smoke",
           "github_workflow": "noos-inbox-loop.yml",
           "dispatch_source": "cf-cron",
-          "processed_at": "2026-07-05T16:44:03+00:00"
+          "processed_at": "2026-07-06T09:37:37+00:00"
         },
         "cloud_trigger": "repository_dispatch"
       },
@@ -97,12 +97,13 @@
         "exit_code": 0,
         "detail": {
           "ok": true,
-          "id": "8e0884ce-09f4-4883-9352-559212ecf95a",
-          "status": 201,
-          "op_key": "87b91cbe9e979d84bfa93ec0"
+          "idempotent": true,
+          "merged": true,
+          "id": "59a63aef-61af-4113-be57-cf0507055c8f",
+          "op_key": "ba53204667989653ad71047a"
         }
       },
-      "finished_at": "2026-07-05T16:44:03+00:00",
+      "finished_at": "2026-07-06T09:37:37+00:00",
       "state_after": "COMPLETE",
       "status": "ok",
       "exit_code": 0,
@@ -116,33 +117,38 @@
       "d2": {
         "cas": {
           "verdict": "ACCEPTED",
-          "expected": 5,
-          "observed": 5,
-          "new_value": 6
+          "expected": 10,
+          "observed": 10,
+          "new_value": 11
         }
       },
       "transition_log_tail": [
         {
           "from": "RUNNING",
           "to": "COMPLETE",
-          "at": "2026-07-05T16:44:03+00:00",
-          "cycle": 6,
-          "op_key": "87b91cbe9e979d84bfa93ec0"
+          "at": "2026-07-06T09:37:37+00:00",
+          "cycle": 11,
+          "op_key": "ba53204667989653ad71047a"
         }
-      ]
+      ],
+      "liveness_upsert": {
+        "ok": true,
+        "loop_id": "inbox",
+        "last_fired_at": "2026-07-06T09:37:37.651Z"
+      }
     },
     "stderr": null
   },
   "rolling_evaluation": {
     "loop_id": "inbox",
     "factory_id": "loop-inbox",
-    "cycle_count": 4,
+    "cycle_count": 18,
     "invalid_trigger_count": 0,
     "latest_status": "ok",
     "ready": true,
     "blockers": [],
     "lookback_hours": 24,
-    "lookback_started_at": "2026-07-04T16:44:03Z"
+    "lookback_started_at": "2026-07-05T09:37:37Z"
   },
   "ok": true,
   "autonomous_triggers": true
