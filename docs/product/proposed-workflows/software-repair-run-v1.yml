@@ -43,10 +43,18 @@ jobs:
       - uses: actions/setup-python@v5
         with: { python-version: "3.12" }
       - run: pip install pytest ruff
-      - name: Plan + candidate patch (GitHub Models)
+      - name: Plan + candidate patch (SG cost-tiered provider chain)
+        # SG cost-tiered fail-over chain (cheapest-capable-first): github_models
+        # (free, GITHUB_TOKEN) -> deepseek -> glm -> moonshot -> huggingface. Keys
+        # are org Actions secrets (private bindings, D-8); circuit-breaker trips a
+        # failing provider to the next; final fallback = deterministic engine.
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_MODELS_MODEL: openai/gpt-4o-mini
+          DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+          GLM_API_KEY: ${{ secrets.GLM_API_KEY }}
+          MOONSHOT_API_KEY: ${{ secrets.MOONSHOT_API_KEY }}
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: |
           python3 scripts/noos_software_repair_actions_v1.py \
             --job "${{ inputs.job_spec_path }}" \
