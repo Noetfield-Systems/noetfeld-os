@@ -1,0 +1,31 @@
+{
+  "schema": "noos-provenance-classifier-correction-v1",
+  "not_a_verdict": "Minimal, isolated provenance-classifier correction off current main. This is a builder receipt — SUBMITTED for independent verification (author != subject). It is NOT a PASS/HEALTHY verdict; a PASS comes only from deterministic gates or an independent verifier.",
+  "canon_version": "FOUNDER_CANON_v1+MACHINE_LOOPS_v1",
+  "task": "NF-NOOS-PROVENANCE-CLASSIFIER-CORRECTION",
+  "created_at": "2026-07-18T07:10:00Z",
+  "branch": "nf-noos-provenance-classifier-correction",
+  "base": "origin/main @ 291789bc3d40dad8ea165f68a29ff026a000bd26",
+  "scope_exactly": [
+    "scripts/noos_observability_semantics_v1.py — provenance-aware classifier",
+    "scripts/autorun_status_v1.py — projection wiring (pass provenance into classify_loop_state)",
+    "tests/test_noos_motor_provenance_v1.py — false-green regression",
+    "tests/test_software_repair_provenance_v1.py — production-liveness / local_reference regression",
+    "receipts/proof/noos-provenance-classifier-correction-v1.json — this receipt"
+  ],
+  "explicitly_excluded": [
+    "motor state machine (noos_motor_state_machine_v1.py)",
+    "local reference executor (noos_motor_local_executor_v1.py)",
+    "software-repair product (recipe/engine/adapter/runner/API)",
+    "Supabase migrations (0020/0021)",
+    "CLI (bin/noos)",
+    "sellable-product / motor product documentation"
+  ],
+  "what_it_corrects": {
+    "false_green": "classify_loop_state is provenance-aware: a repair-labelled completion (cloud_trigger=noos_integrator_repair) can no longer produce RUNNING_CONFIRMED; it classifies DEGRADED_REPAIR_SUSTAINED and routes to organic-producer escalation (not the receipt-writer repair loop that masked the 2026-07-12 stall).",
+    "local_reference": "local_reference is a distinct origin, never organic. production_running_confirmed() requires organic + producer allowlist + canonical plane + real dispatch + valid lifecycle + valid terminal evidence + freshness SLO. local_reference/test/repair/replay/manual/migration/legacy can NEVER produce a PRODUCTION RUNNING_CONFIRMED for the http_loop producer."
+  },
+  "deterministic_gate": "python3 -m pytest tests/test_noos_motor_provenance_v1.py tests/test_software_repair_provenance_v1.py tests/test_noos_observability_semantics_v1.py tests/test_autorun_status_v1.py -q  => 49 passed (local); CI is the independent gate on the PR.",
+  "real_cloud_blocker_unchanged": "cloud http_loop restart -> actual organic completion rows -> three consecutive real cloud cycles -> independent verification remains EXTERNAL_ACTIVATION_REQUIRED. This correction does NOT and cannot substitute for that.",
+  "final_status": "SUBMITTED for independent verification"
+}
