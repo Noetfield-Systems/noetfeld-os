@@ -38,7 +38,7 @@ case "$cmd" in
     exec "$PY" "$HERE/scripts/noos_motor_local_executor_v1.py" --status "$1" --json
     ;;
   demo)
-    echo "noos demo: submitting representative customer input ..."
+    echo "noos demo: submitting representative customer input ..." >&2
     exec "$PY" "$HERE/scripts/noos_motor_local_executor_v1.py" --input "$SAMPLE" --json
     ;;
   verify)
