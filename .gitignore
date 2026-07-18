@@ -21,3 +21,6 @@ receipts/proof/noos-tool-broker-*T*.json
 
 # NOOS Motor v1 release bundle (binary; manifest is the committed evidence)
 dist/noos-motor-v1-*.tar.gz
+
+# transient per-run repair job receipts (named software-repair-v1-* are the acceptance receipts)
+receipts/runway/software-repair-job-exe_*.json
