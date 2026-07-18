@@ -90,6 +90,7 @@ META_LIVENESS_ROWS: tuple[tuple[str, int, str], ...] = (
     ("cf_loop_motor", 5, "cf:loop-motor"),
     ("executor_railway_canonical", 5, "railway:noos-loop-runner"),
     ("executor_fly_temporary", 10080, "fly:retired"),
+    ("unified_motor_event_bridge", 15, "noos:unified-motor-event-bridge"),
 )
 
 

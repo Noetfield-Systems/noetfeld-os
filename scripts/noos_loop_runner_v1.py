@@ -21,6 +21,7 @@ SINK_TIMEOUT_SEC = int(os.environ.get("NOOS_SINK_TIMEOUT_SEC", "60"))
 sys.path.insert(0, str(ROOT / "scripts"))
 from noos_loop_determinism_v1 import advance_state, cas_advance, op_key, transition_allowed  # noqa: E402
 from noos_loop_liveness_v1 import detect_execution_host, sync_meta_liveness_rows, upsert_loop_liveness  # noqa: E402
+from unified_motor_event_client_v1 import maybe_emit_loop_cycle_event  # noqa: E402
 
 
 def utc_now() -> str:
@@ -432,6 +433,10 @@ def execute_loop(loop: dict[str, Any], *, self_heal: bool = True) -> dict[str, A
         host=detect_execution_host(),
     )
     cycle["meta_liveness_sync"] = sync_meta_liveness_rows()
+
+    # Unified Motor Event Bridge — after durable state + liveness (fail-open).
+    # Integration call site documented in data/noos-unified-motor-event-bridge-v1.json
+    cycle["unified_motor_event"] = maybe_emit_loop_cycle_event(cycle)
 
     return cycle
 

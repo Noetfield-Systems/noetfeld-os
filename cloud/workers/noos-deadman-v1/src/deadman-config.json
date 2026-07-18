@@ -5,10 +5,15 @@
   "interval_multipliers": {
     "default": 2
   },
-  "alert_channels": ["telegram"],
+  "alert_channels": [
+    "telegram"
+  ],
   "telegram_lane": {
     "one_law": "NOOS deadman ONLY. Never Gateway_A, NF Probe Bot, Signal Factory, or generic TELEGRAM_* env.",
-    "secret_names_only": ["DEADMAN_TELEGRAM_BOT_TOKEN", "DEADMAN_TELEGRAM_CHAT_ID"],
+    "secret_names_only": [
+      "DEADMAN_TELEGRAM_BOT_TOKEN",
+      "DEADMAN_TELEGRAM_CHAT_ID"
+    ],
     "forbidden_bot_usernames": [
       "Gateway_A",
       "gateway_a",
@@ -32,7 +37,12 @@
     "restart_recipe_id": "cf-loop-motor"
   },
   "motor_restart_recipes_path": "data/noos-motor-restart-recipes-v1.json",
-  "heartbeat_summary_hours_utc": [6, 12, 18, 0],
+  "heartbeat_summary_hours_utc": [
+    6,
+    12,
+    18,
+    0
+  ],
   "supabase": {
     "registry_table": "noos_loop_registry",
     "receipts_table": "noos_deadman_runs"
@@ -45,5 +55,20 @@
     "plan_usd_month": 5,
     "confirmed_at": "2026-07-06"
   },
-  "external_monitors_registry": "data/noos-external-monitors-v1.json"
+  "external_monitors_registry": "data/noos-external-monitors-v1.json",
+  "unified_motor_event_gateway": {
+    "health_url_env": "MOTOR_EVENT_GATEWAY_URL",
+    "health_path": "/health",
+    "readiness_path": "/readiness",
+    "role_id": "noetfield:noos.portfolio-owner",
+    "bridge_loop_id": "unified_motor_event_bridge",
+    "bridge_interval_minutes": 15,
+    "receipt_path": "receipts/proof/noos-unified-motor-event-bridge-v1.json",
+    "note": "Deadman probes gateway health/readiness at 2x bridge interval; bridge liveness via noos_loop_registry"
+  },
+  "github_events_receiver": {
+    "worker": "noos-loop-github-events-v1",
+    "active": false,
+    "mode": "rollback_fallback_only"
+  }
 }
