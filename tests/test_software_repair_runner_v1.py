@@ -98,3 +98,17 @@ def test_unknown_recipe_job_rejected():
     job = _job("job1-unit-regression.json") | {"recipe_id": "nope"}
     res = runner.run_repair_job(job)
     assert res["job_status"] == "rejected_recipe"
+
+
+def test_hosted_provider_failure_falls_back_to_deterministic(monkeypatch):
+    """Independent-CI regression: a GITHUB_TOKEN without models:read (or any hosted
+    provider failure) must fall back to the deterministic engine, not fail the job.
+    Caught by GEL CI on the product PR head."""
+    # Force the router to prefer a hosted provider whose call cannot succeed.
+    monkeypatch.setenv("GITHUB_TOKEN", "broken_token_no_models_scope")
+    monkeypatch.setenv("GITHUB_MODELS_BASE", "https://models.github.ai/inference")
+    res = runner.run_repair_job(_job("job3-integration-data.json"), prefer_model="auto")
+    assert res["ok"] is True
+    assert res["job_status"] == "repaired"
+    receipt = json.loads(Path(res["receipt_path"]).read_text())
+    assert (receipt.get("repaired") or {}).get("strategy") == "deterministic-local"

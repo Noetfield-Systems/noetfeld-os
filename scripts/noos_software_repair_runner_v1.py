@@ -145,8 +145,12 @@ def run_repair_job(
             failure_output=before["output"], recipe=recipe, prefer=prefer_model,
             timeout=recipe["limits"]["execution_timeout_seconds"],
         )
+        # record the hosted attempt too when the router fell back to deterministic
+        if proposal.get("hosted_attempt", {}).get("model_call"):
+            model_calls.append(proposal["hosted_attempt"]["model_call"])
         model_calls.append(proposal.get("model_call", {}))
-        attempts_log.append({"attempt": attempt, "strategy": proposal.get("strategy"), "ok": proposal.get("ok")})
+        attempts_log.append({"attempt": attempt, "strategy": proposal.get("strategy"),
+                             "ok": proposal.get("ok"), "fell_back_from_hosted": proposal.get("fell_back_from_hosted", False)})
         if proposal.get("ok") and proposal.get("patch"):
             # enforce recipe path + limits on the proposed file
             rel = proposal["file"]

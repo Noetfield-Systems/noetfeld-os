@@ -95,7 +95,21 @@ def propose_repair(
 
     if provider is None:
         return _deterministic(repo_dir, test_cmd, allowed_files, recipe, timeout)
-    return _hosted(provider, repo_dir, test_cmd, allowed_files, failure_output, recipe, timeout)
+    hosted = _hosted(provider, repo_dir, test_cmd, allowed_files, failure_output, recipe, timeout)
+    if hosted.get("ok"):
+        return hosted
+    # DETERMINISTIC FALLBACK: the hosted provider was unavailable (e.g. a CI
+    # GITHUB_TOKEN without models:read -> 403), returned an invalid/forbidden
+    # proposal, or its patch failed the tests. The deterministic-local engine is a
+    # valid fallback candidate generator (never described as a hosted AI call).
+    # Both model-call records are preserved for the receipt.
+    if prefer in PROVIDER_ENV:
+        # An explicit provider was requested; still fall back so a repair can land.
+        pass
+    fb = _deterministic(repo_dir, test_cmd, allowed_files, recipe, timeout)
+    fb["hosted_attempt"] = {"provider": provider, "reason": hosted.get("reason"), "model_call": hosted.get("model_call")}
+    fb["fell_back_from_hosted"] = True
+    return fb
 
 
 def _deterministic(repo_dir, test_cmd, allowed_files, recipe, timeout) -> dict[str, Any]:
