@@ -1,0 +1,45 @@
+{
+  "schema": "software-repair-v1-commercial-pilot-v2",
+  "not_a_verdict": "Managed pilot offer with MEASURED variable cost. SUBMITTED for independent verification.",
+  "canon_version": "FOUNDER_CANON_v1+MACHINE_LOOPS_v1",
+  "recorded_at": "2026-07-18T08:35:00Z",
+  "product": "NOOS Software Repair Runway \u2014 Managed Pilot",
+  "customer_provides": [
+    "one authorized repository (NOOS-owned or allowlisted for the pilot)",
+    "one reproducible failure (failing test/CI/defect)",
+    "target branch",
+    "repair constraints"
+  ],
+  "noos_provides": [
+    "failure diagnosis",
+    "bounded repair attempt (model-primary via GitHub Models; deterministic fallback)",
+    "test-verified patch",
+    "draft PR or patch bundle",
+    "repair report",
+    "audit receipt",
+    "human approval before merge"
+  ],
+  "supported_stack": [
+    "python/pytest (verified, model-primary)",
+    "node/node:test (node available; acceptance pending)"
+  ],
+  "measured_variable_cost": {
+    "model": "GitHub Models FREE-TIER (rate-limited) => $0 charged; attributable ~ $0.00014/repair at gpt-4o-mini public rates (456-513 in / 99-123 out tokens)",
+    "github_actions_minutes": "~1-2 min/repair on ubuntu-latest (free tier for public repo)",
+    "storage": "artifacts retained 30 days (negligible)",
+    "total_variable_cost": "~$0 on free tiers; attributable < $0.01/repair"
+  },
+  "gross_margin_estimate": "near-100% on compute at any positive price while on free tiers; conservative >95% if metered.",
+  "pilot_price_proposal_founder_editable": "PROPOSAL ONLY (founder to set): e.g. onboarding trial (first 3 repairs free) then a per-verified-repair fee or small monthly managed fee. No payment automation for the first pilot.",
+  "exclusions": [
+    "no universal repository/language support",
+    "no guaranteed repair of every issue",
+    "no autonomous production deployment of customer software",
+    "no security certification"
+  ],
+  "artifact_retention": "30 days",
+  "security_model": "trust-zoned workflow; untrusted execution has no secrets/write token; forbidden paths never touched; human approval before merge",
+  "support_channel": "managed (founder-operated) pilot",
+  "success_definition": "a customer-authorized failing repo yields a test-verified patch/draft PR with an audit receipt",
+  "final_status": "SUBMITTED for independent verification"
+}

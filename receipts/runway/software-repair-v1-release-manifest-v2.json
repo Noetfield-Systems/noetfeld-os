@@ -1,0 +1,29 @@
+{
+  "schema": "software-repair-v1-release-manifest-v2",
+  "not_a_verdict": "RC2 manifest \u2014 BUILT artifact, not a deployment. SUBMITTED for independent verification.",
+  "canon_version": "FOUNDER_CANON_v1+MACHINE_LOOPS_v1",
+  "product": "NOOS Software Repair Runway",
+  "product_version": "1.0.0-rc2",
+  "git_commit": "68c6ca42f76feb2c229d033b759a6a8c1720cc2f",
+  "schema_version": "noos-motor-execution-v1",
+  "gateway_version": "noos-software-repair-api-v1 (stdlib dev adapter; Gateway deploy pending)",
+  "workflow_version": "software-repair-run-v1 (proposed)",
+  "recipe_version": "software_repair_ci_v1@1.0.0",
+  "model_provider_config": {
+    "default": "github_models",
+    "endpoint": "https://models.github.ai/inference",
+    "auth": "GITHUB_TOKEN + models:read",
+    "model": "openai/gpt-4o-mini",
+    "fallback": "deterministic-local"
+  },
+  "supported_stack_matrix": [
+    "python/pytest (verified, model-primary)",
+    "node/node:test (node v24 available; acceptance job pending)"
+  ],
+  "components_present": 14,
+  "components_missing": [],
+  "bundle_sha256": "832dc2f67f5109e4d47b02ff26b67fb993d93ca797cd1e31d383927259d0a81e",
+  "promote_to": "1.0.0 after managed-pilot acceptance (Supabase persistence + organic cycles)",
+  "rollback": "delete branch; migration 0021 reversible",
+  "final_status": "SUBMITTED for independent verification"
+}
