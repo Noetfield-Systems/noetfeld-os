@@ -68,5 +68,10 @@
     "loop_id": "factory_autorun",
     "event_type": "noos_factory_autorun_tick",
     "interval_minutes": 10
+  },
+  "unified_motor_event_bridge": {
+    "loop_id": "unified_motor_event_bridge",
+    "event_type": "noos_unified_motor_event_bridge_tick",
+    "interval_minutes": 15
   }
 }

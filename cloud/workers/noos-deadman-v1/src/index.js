@@ -85,6 +85,26 @@ async function fetchRegistry(env) {
   return { ok: true, rows: await resp.json() };
 }
 
+
+function motorGatewayBase(env) {
+  return (env.MOTOR_EVENT_GATEWAY_URL || "").trim().replace(/\/$/, "");
+}
+
+async function probeUnifiedMotorGateway(env) {
+  const base = motorGatewayBase(env);
+  if (!base) {
+    return { ok: false, skipped: true, reason: "motor_event_gateway_url_missing" };
+  }
+  const health = await probeMotorHealth(`${base}/health`);
+  const readiness = await probeMotorHealth(`${base}/readiness`);
+  return {
+    ok: health.ok && readiness.ok,
+    health,
+    readiness,
+    role_id: (config.unified_motor_event_gateway || {}).role_id || "noetfield:noos.portfolio-owner",
+  };
+}
+
 async function probeMotorHealth(url) {
   if (!url) return { ok: false, error: "health_url_missing" };
   try {
@@ -235,6 +255,7 @@ async function runCheckInner(env, meta = {}) {
     ? await probeMotorHealth(`${loopRunnerBase}${loopHealthPath}`)
     : { ok: false, error: "loop_runner_url_missing" };
   const cfMotorHealth = await probeMotorHealth((config.cf_loop_motor || {}).health_url);
+  const unifiedMotorGateway = await probeUnifiedMotorGateway(env);
   const motorRestarts = [];
   if (!loopRunnerHealth.ok && maxAttempts > 0) {
     motorRestarts.push(await restartMotor(env, "railway-loop-runner"));
@@ -273,6 +294,7 @@ async function runCheckInner(env, meta = {}) {
     source: meta.source || "cf-cron",
     loop_runner_health: loopRunnerHealth,
     cf_motor_health: cfMotorHealth,
+    unified_motor_gateway: unifiedMotorGateway,
     motor_restarts: motorRestarts,
     stale_count: stale.length,
     stale_loops: stale,
@@ -312,6 +334,7 @@ export default {
         cron: config.cron || "*/30 * * * *",
         supabase_ready: Boolean(supabaseBase(env)),
         loop_runner_ready: Boolean(env.LOOP_RUNNER_URL),
+        motor_event_gateway_ready: Boolean(motorGatewayBase(env)),
         telegram_ready: Boolean(env.DEADMAN_TELEGRAM_BOT_TOKEN && env.DEADMAN_TELEGRAM_CHAT_ID),
         telegram_send_alerts: (config.telegram_lane || {}).send_alerts === true,
         telegram_lane_forbidden: (config.telegram_lane || {}).forbidden_bot_usernames || [],

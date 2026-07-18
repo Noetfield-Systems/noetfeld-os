@@ -8,6 +8,11 @@ import eventMap from "./event-map.json";
 
 const RULES = eventMap.rules || [];
 
+function receiverDisabled(env) {
+  const flag = String(env.GITHUB_EVENTS_RECEIVER_DISABLED || "true").trim().toLowerCase();
+  return flag === "1" || flag === "true" || flag === "yes";
+}
+
 function json(body, status = 200) {
   return Response.json(body, {
     status,
@@ -132,10 +137,25 @@ export default {
         loop_secret_ready: Boolean(secret),
         webhook_secret_ready: Boolean((env.MOTOR_APP_WEBHOOK_SECRET || "").trim()),
         rule_count: RULES.length,
+        active: !receiverDisabled(env),
+        mode: receiverDisabled(env) ? "rollback_fallback_only" : "live",
+        disabled_reason:
+          "Unified Motor Event Gateway owns GitHub delivery; keep this worker disabled to prevent duplicate /loop dispatch",
       });
     }
 
     if (url.pathname === "/webhook/github" && request.method === "POST") {
+      if (receiverDisabled(env)) {
+        return json(
+          {
+            ok: false,
+            action: "disabled_rollback_fallback_only",
+            service: "noos-loop-github-events-v1",
+            note: "GitHub App should point at Unified Motor Event Gateway; this worker is intentionally inactive",
+          },
+          503,
+        );
+      }
       const rawBody = await request.text();
       const signature = request.headers.get("X-Hub-Signature-256") || "";
       const webhookSecret = (env.MOTOR_APP_WEBHOOK_SECRET || "").trim();

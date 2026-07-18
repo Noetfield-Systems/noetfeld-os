@@ -1,0 +1,35 @@
+{
+  "schema": "noos-unified-motor-event-bridge-v1",
+  "version": "1.0.0",
+  "one_law": "NOOS durable loop cycles → signed POST /v1/events → noetfield:noos.portfolio-owner. GitHub App webhook worker stays DISABLED once Unified Motor owns delivery.",
+  "loop_id": "unified_motor_event_bridge",
+  "event_type": "noos_unified_motor_event_bridge_tick",
+  "interval_minutes": 15,
+  "deadman_watcher": "noos-deadman-v1",
+  "noos_source_id": "noos.portfolio",
+  "gateway_source": "api.motor",
+  "gateway_source_note": "Unified Motor ALLOWED_EVENT_SOURCES today; propose adding noos.portfolio in gateway PR",
+  "role_id": "noetfield:noos.portfolio-owner",
+  "recipe_id": "NOOS-PORTFOLIO-LOOP-CYCLE-001",
+  "recipe_version": "1.0.0",
+  "integration_call_site": "scripts/noos_loop_runner_v1.py:execute_loop after loop_state_path + liveness upsert",
+  "env_enable": "NOOS_UNIFIED_MOTOR_EVENT_BRIDGE=1",
+  "env_secrets": ["MOTOR_EVENT_GATEWAY_URL", "MOTOR_EVENT_API_SECRET"],
+  "routes": {
+    "default": "noos.portfolio.loop_cycle",
+    "inbox": "noos.portfolio.inbox_observe",
+    "sourcea_observe": "noos.portfolio.sourcea_observe",
+    "self_heal": "noos.portfolio.self_heal_route"
+  },
+  "github_events_receiver": {
+    "worker": "noos-loop-github-events-v1",
+    "active": false,
+    "mode": "rollback_fallback_only",
+    "reason": "Prevent duplicate delivery into /loop and Resident Role path once GitHub App points at Unified Motor Event Gateway"
+  },
+  "deadman_probes": {
+    "health_path": "/health",
+    "readiness_path": "/readiness",
+    "receipt_path": "receipts/proof/noos-unified-motor-event-bridge-v1.json"
+  }
+}
