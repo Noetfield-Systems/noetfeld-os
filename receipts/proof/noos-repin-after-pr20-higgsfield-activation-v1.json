@@ -1,0 +1,42 @@
+{
+  "schema": "noetfield/noos-sg-authority-repin-receipt-v1",
+  "task_id": "NF-NOOS-REPIN-HIGGSFIELD-D2C2E6A",
+  "status": "PASS_SCOPED_CHANGE",
+  "sg_authority_sha": "d2c2e6ab9de8d91179aed694abac649866950b33",
+  "sg_decision_artifact_sha": "0a4094321eb24497422f9239b935e7f395257e3c",
+  "sg_main_observed": "b3c3cde356087e232fdc100724be9f4557a8480e",
+  "previous_sg_authority_sha": "dc6080d8519b8a83dcfaaeefb65392691ce3e33e",
+  "authority_is_ancestor_of_sg_main": true,
+  "decisions": [
+    "NF-HIGGSFIELD-MEDIA-ADAPTER-AND-RESULT-MOTOR-V1",
+    "NF-ACTIVATION-CYCLE-V1",
+    "NF-CIRCUIT-A-DETERMINISTIC-MOTOR-PROOF-001",
+    "NF-CIRCUIT-B-HIGGSFIELD-CAMPAIGN-PROOF-001"
+  ],
+  "updated_surfaces": [
+    "noetfield-org/CUSTODY_AUTHORITY_PINS_v1.json",
+    "CLAUDE.md",
+    ".claude/noos/AUTHORITY.md",
+    "scripts/noos_claude_activation_doctor_v1.sh",
+    "data/sg-authority-ref-higgsfield-activation-v1.json"
+  ],
+  "verification": {
+    "targeted_repin_verify": "PASS",
+    "json_parse": "PASS",
+    "git_diff_check": "PASS",
+    "claude_activation_doctor": "DEGRADED",
+    "claude_activation_doctor_receipt": "receipts/noos-claude-activation-doctor-20260718T005722Z.json",
+    "doctor_degraded_reasons": [
+      "NOOS self-pin a4bdf1f3 is an ancestor of origin/main 8ba1af9c, not equal to tip",
+      "SG decision authority d2c2e6ab is an ancestor of SG main b3c3cde3, not equal to post-merge receipt tip"
+    ],
+    "doctor_all_non_freshness_checks": "PASS"
+  },
+  "activation_order": [
+    "Circuit A deterministic Motor proof",
+    "Higgsfield adapter scaffold",
+    "Circuit B campaign proof after founder policy packet"
+  ],
+  "wip_limit": 2,
+  "created_at": "2026-07-18T00:58:00Z"
+}

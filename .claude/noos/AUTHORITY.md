@@ -14,11 +14,14 @@ forward is expected — reconcile forward, never rewrite pins.
 
 - Repo: `https://github.com/Noetfield-Systems/sina-governance-SSOT.git`
   · local sibling `~/Desktop/Noetfield-Systems/sina-governance-SSOT`
-- Pin: `dc6080d8519b8a83dcfaaeefb65392691ce3e33e` (main — Wave 0 clean-land of
-  NF-UNIFIED-MOTOR-ARCHITECTURE-V1, SG PR #16, 2026-07-17; supersedes
-  `0e2c1ea2849823a9c642ae4fe4f9ec8e52d5482e`. Note: SG main has since advanced
-  to `49f17594` with post-merge receipt commits; the pin tracks the
-  authority-landing commit dc6080d8, which is an ancestor of SG main.)
+- Pin: `d2c2e6ab9de8d91179aed694abac649866950b33` (main — Activation Cycle +
+  Higgsfield Media Adapter / Result Motor, SG PR #20, 2026-07-17; supersedes
+  `dc6080d8519b8a83dcfaaeefb65392691ce3e33e`. SG main has since advanced to
+  `b3c3cde3` with PR #21 post-merge authority receipt; this pin tracks the
+  decision-landing commit d2c2e6ab, which remains an ancestor of SG main.)
+- Authority pointer: `data/sg-authority-ref-higgsfield-activation-v1.json`.
+- Activation posture: Circuit A first; WIP limit two; Circuit B only after the
+  media adapter scaffold and founder campaign policy packet.
 - Anchor files at pin:
   - `ssot/strategy-ssot-v6-split.md` — Level 0 constitution + D1–D5 domain SSOTs;
     stamped REMOTE CANONICAL, LOCKED/CANONICAL (2026-07-05)
