@@ -406,7 +406,9 @@ machine-research:
 	fi
 
 # ---- NOOS Motor v1 product ops (NF-NOOS-MOTOR-V1-FULL-RUNWAY) ----
-.PHONY: motor-demo motor-verify motor-package motor-status motor-install
+# Note: `motor-status` already exists (motor restart dry-run); the Motor v1 CLI
+# uses `motor-run-status` to avoid clobbering it.
+.PHONY: motor-demo motor-verify motor-package motor-run-status motor-install
 motor-install:
 	./bin/noos install
 motor-demo:
@@ -415,5 +417,5 @@ motor-verify:
 	./bin/noos verify $(ARGS)
 motor-package:
 	./bin/noos package
-motor-status:
+motor-run-status:
 	./bin/noos status $(ID)
