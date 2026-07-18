@@ -233,6 +233,40 @@ def is_organic_origin(origin: str | None) -> bool:
     return origin == ORIGIN_ORGANIC
 
 
+# ---- Live-projection wiring status (NF-NOOS-PROVENANCE-CLASSIFIER-CORRECTION §4) ----
+# production_running_confirmed() is a COMPLETE gate, but its full inputs
+# (producer allowlist, canonical execution plane, dispatch correlation, lifecycle
+# validity) are NOT present in the trusted Supabase completion row. It is
+# therefore NOT wired into the live projection (probe_supabase_noos_loop) and is
+# DECLARED_NOT_WIRED. The live projection enforces the trustable SUBSET via
+# classify_loop_state: organic origin + successful terminal + freshness +
+# repair-only-repair-sustained. Do not claim the full live production gate is
+# enforced until the missing inputs exist.
+PRODUCTION_GATE_LIVE_WIRED = False
+PRODUCTION_GATE_LIVE_STATUS = "DECLARED_NOT_WIRED"
+PRODUCTION_GATE_MISSING_INPUTS = (
+    "producer_allowlisted", "execution_plane_canonical",
+    "dispatch_correlated", "lifecycle_valid",
+)
+
+
+def production_gate_wiring_status() -> dict[str, Any]:
+    """Honest declaration of what the LIVE projection enforces vs. what the full
+    production gate would require but cannot (inputs absent from the trusted row)."""
+    return {
+        "production_running_confirmed_wired_into_live_projection": PRODUCTION_GATE_LIVE_WIRED,
+        "status": PRODUCTION_GATE_LIVE_STATUS,
+        "live_enforced_subset": [
+            "receipt_origin == organic",
+            "organic row is a successful terminal (status/exit)",
+            "freshness within SLO",
+            "only ORIGIN_REPAIR counts as repair-sustained",
+        ],
+        "not_wired_predicates": list(PRODUCTION_GATE_MISSING_INPUTS),
+        "reason": "producer / execution_plane / dispatch correlation / lifecycle validity are not present in the trusted noetfield_factory_cycle_runs row; production_running_confirmed() remains test-only until those inputs exist.",
+    }
+
+
 def production_running_confirmed(
     *,
     receipt_origin: str | None,
@@ -244,6 +278,10 @@ def production_running_confirmed(
     freshness_within_slo: bool,
 ) -> dict[str, Any]:
     """The PRODUCTION liveness gate (NF-NOOS-SOFTWARE-REPAIR-RUNWAY-V1 §2).
+
+    NOTE: this is TEST-ONLY / DECLARED_NOT_WIRED in the live projection — see
+    production_gate_wiring_status(). The live probe enforces only the trustable
+    subset via classify_loop_state.
 
     A PRODUCTION ``RUNNING_CONFIRMED`` requires ALL of:
       * ``receipt_origin == organic``;
@@ -297,6 +335,29 @@ def _row_cloud_trigger(row: dict[str, Any]) -> str | None:
     return row.get("receipt_origin")
 
 
+# Statuses that represent a successful terminal completion.
+_SUCCESS_TERMINAL_STATUSES = frozenset({"ok", "success", "succeeded", "completed", "passed"})
+
+
+def row_successful_terminal(row: dict[str, Any]) -> bool:
+    """True only if the row carries evidence of a SUCCESSFUL terminal completion:
+    a success status AND a non-failing exit code. A fresh organic row that FAILED
+    (e.g. status=degraded / exit!=0) must NOT contribute to RUNNING_CONFIRMED
+    (NF-NOOS-PROVENANCE-CLASSIFIER-CORRECTION §1)."""
+    status = str(row.get("status") or "").strip().lower()
+    if status and status not in _SUCCESS_TERMINAL_STATUSES:
+        return False
+    exit_code = row.get("exit_code")
+    if exit_code is not None:
+        try:
+            if int(exit_code) != 0:
+                return False
+        except (TypeError, ValueError):
+            return False
+    # Require at least one positive terminal signal (a success status or exit 0).
+    return status in _SUCCESS_TERMINAL_STATUSES or row.get("exit_code") == 0
+
+
 def derive_completion_provenance(
     rows: list[dict[str, Any]],
     *,
@@ -320,18 +381,22 @@ def derive_completion_provenance(
             "metrics": {},
         }
     newest_origin = normalize_receipt_origin(_row_cloud_trigger(rows[0]))
-    organic_at: str | None = None
-    repair_at: str | None = None
+    newest_terminal_valid = row_successful_terminal(rows[0])
+    organic_at: str | None = None          # newest SUCCESSFUL-terminal organic (§1)
+    repair_at: str | None = None           # newest ORIGIN_REPAIR row only (§2)
     repair_since_organic = 0
     seen_organic = False
     for row in rows:  # newest-first
         origin = normalize_receipt_origin(_row_cloud_trigger(row))
         recorded_at = row.get("recorded_at")
-        if is_organic_origin(origin):
+        # §1: an organic row contributes ONLY if it is a successful terminal.
+        if is_organic_origin(origin) and row_successful_terminal(row):
             if organic_at is None:
                 organic_at = recorded_at
             seen_organic = True
-        elif origin in NON_ORGANIC_ORIGINS:
+        # §2: only ORIGIN_REPAIR counts as repair-sustained evidence.
+        # local_reference/manual/test/replay/migration stay separate non-production.
+        elif origin == ORIGIN_REPAIR:
             if repair_at is None:
                 repair_at = recorded_at
             if not seen_organic:
@@ -340,6 +405,7 @@ def derive_completion_provenance(
     repair_age = age_fn(repair_at) if repair_at is not None else None
     return {
         "completion_origin": newest_origin,
+        "completion_terminal_valid": newest_terminal_valid,
         "organic_completion_age_minutes": organic_age,
         "repair_completion_age_minutes": repair_age,
         "metrics": {
@@ -377,6 +443,7 @@ def classify_loop_state(
     completion_origin: str | None = None,
     organic_completion_age_minutes: float | None = None,
     repair_completion_age_minutes: float | None = None,
+    completion_terminal_valid: bool = True,
     consistency_ok: bool = True,
     expected_idle: bool = False,
     provenance_metrics: dict[str, Any] | None = None,
@@ -417,6 +484,7 @@ def classify_loop_state(
         completion_origin is not None
         or organic_completion_age_minutes is not None
         or repair_completion_age_minutes is not None
+        or completion_terminal_valid is False
         or consistency_ok is False
         or expected_idle is True
     )
@@ -470,17 +538,25 @@ def classify_loop_state(
         # ---- Provenance-aware path ------------------------------------------
         thresh = completion_stale_threshold_minutes
         if organic_completion_age_minutes is not None and thresh is not None:
+            # derive_completion_provenance already restricts this to a SUCCESSFUL
+            # terminal organic row (§1), so age within SLO is sufficient here.
             organic_fresh = organic_completion_age_minutes <= thresh
         elif norm_origin is not None:
-            # No separate organic age: the newest completion is organic-fresh
-            # only if the newest row is genuinely organic AND fresh by age.
-            organic_fresh = is_organic_origin(norm_origin) and completion_fresh
+            # No separate organic age: the newest completion is organic-fresh only
+            # if it is genuinely organic, fresh by age, AND a SUCCESSFUL terminal
+            # (§1 — a fresh but failed organic row must not confirm).
+            organic_fresh = (
+                is_organic_origin(norm_origin) and completion_fresh and completion_terminal_valid
+            )
         else:
             organic_fresh = False
 
+        # §2: ONLY ORIGIN_REPAIR is repair-sustained evidence. local_reference /
+        # manual / test / replay / migration are separate non-production evidence
+        # and never count as repair masking.
         if repair_completion_age_minutes is not None and thresh is not None:
             repair_fresh = repair_completion_age_minutes <= thresh
-        elif norm_origin is not None and norm_origin in NON_ORGANIC_ORIGINS:
+        elif norm_origin == ORIGIN_REPAIR:
             repair_fresh = completion_fresh
         else:
             repair_fresh = False

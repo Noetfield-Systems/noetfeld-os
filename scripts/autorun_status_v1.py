@@ -52,13 +52,15 @@ _EXEC_STATE_TO_STATUS = {
     DISPATCHING_COMPLETION_UNPROVEN: DISPATCHING_COMPLETION_UNPROVEN,
     OBSERVER_DIVERGENCE_OR_REPLAY: OBSERVER_DIVERGENCE_OR_REPLAY,
     OBSERVER_UNAVAILABLE: OBSERVER_UNAVAILABLE,
-    # Provenance-aware states. DEGRADED_REPAIR_SUSTAINED / COMPLETION_UNPROVEN are
-    # the organic-stall-masked-by-repair cases the age-only critic missed — they
-    # are NOT "RUNNING" (that is the whole fix) and carry their own status.
-    DEGRADED_REPAIR_SUSTAINED: DEGRADED_REPAIR_SUSTAINED,
-    COMPLETION_UNPROVEN: COMPLETION_UNPROVEN,
+    # Provenance-aware states map into the EXISTING canonical status vocabulary
+    # (NF-NOOS-PROVENANCE-CLASSIFIER-CORRECTION §3): degraded / unproven /
+    # inconsistent -> BLOCKED_WITH_REASON; expected idle -> IDLE_NO_WORK. The
+    # explicit execution_state / evidence_state / route are preserved on the
+    # result and in dashboard_findings so no detail is lost.
+    DEGRADED_REPAIR_SUSTAINED: "BLOCKED_WITH_REASON",
+    COMPLETION_UNPROVEN: "BLOCKED_WITH_REASON",
     EVIDENCE_INCONSISTENT: "BLOCKED_WITH_REASON",
-    STOPPED_OR_IDLE: STOPPED_OR_IDLE,
+    STOPPED_OR_IDLE: "IDLE_NO_WORK",
 }
 
 
@@ -813,9 +815,12 @@ def probe_supabase_noos_loop(wf: dict[str, Any], wf_doc: dict[str, Any], stale_m
         status_source="noos_loop_registry+noetfield_factory_cycle_runs",
         success_rate_sample_window_minutes=stale_minutes,
         # Provenance-aware: organic-only liveness; repair rows can never confirm.
+        # §1 the newest organic row must be a SUCCESSFUL terminal to contribute;
+        # §2 only ORIGIN_REPAIR is repair-sustained evidence.
         completion_origin=prov["completion_origin"],
         organic_completion_age_minutes=prov["organic_completion_age_minutes"],
         repair_completion_age_minutes=prov["repair_completion_age_minutes"],
+        completion_terminal_valid=prov.get("completion_terminal_valid", True),
         provenance_metrics=prov["metrics"],
     )
     exec_state = classification["execution_state"]

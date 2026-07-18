@@ -143,7 +143,7 @@ def test_derive_provenance_incident_shape():
     rows = [
         {"recorded_at": "2026-07-18T02:00:00Z", "runner_output": {"cloud_trigger": "noos_integrator_repair"}},
         {"recorded_at": "2026-07-18T01:50:00Z", "runner_output": {"cloud_trigger": "noos_integrator_repair"}},
-        {"recorded_at": "2026-07-12T13:50:49Z", "runner_output": {"cloud_trigger": "http_loop"}},
+        {"recorded_at": "2026-07-12T13:50:49Z", "status": "ok", "exit_code": 0, "runner_output": {"cloud_trigger": "http_loop"}},
     ]
     p = sem.derive_completion_provenance(rows, age_fn=_age_fn("2026-07-18T02:06:00Z"))
     assert p["completion_origin"] == sem.ORIGIN_REPAIR
@@ -155,7 +155,7 @@ def test_derive_provenance_incident_shape():
 def test_derive_then_classify_incident_end_to_end():
     rows = [
         {"recorded_at": "2026-07-18T02:00:00Z", "runner_output": {"cloud_trigger": "noos_integrator_repair"}},
-        {"recorded_at": "2026-07-12T13:50:49Z", "runner_output": {"cloud_trigger": "http_loop"}},
+        {"recorded_at": "2026-07-12T13:50:49Z", "status": "ok", "exit_code": 0, "runner_output": {"cloud_trigger": "http_loop"}},
     ]
     p = sem.derive_completion_provenance(rows, age_fn=_age_fn("2026-07-18T02:06:00Z"))
     r = sem.classify_loop_state(
