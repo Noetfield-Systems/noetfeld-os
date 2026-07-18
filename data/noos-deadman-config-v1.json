@@ -70,5 +70,16 @@
     "worker": "noos-loop-github-events-v1",
     "active": false,
     "mode": "rollback_fallback_only"
+  },
+  "external_loops": {
+    "nf_commissioning_specialist": {
+      "loop_id": "nf-commissioning-specialist-tick-v1",
+      "interval_minutes": 5,
+      "health_url": "https://nf-commissioning-specialist-tick-v1.sina-kazemnezhad-ca.workers.dev/health",
+      "restart_url": "https://nf-commissioning-specialist-tick-v1.sina-kazemnezhad-ca.workers.dev/tick",
+      "restart_method": "POST",
+      "staleness_multiplier": 2,
+      "note": "SG commissioning specialist CF cron every 5m; deadman at 2x interval"
+    }
   }
 }
