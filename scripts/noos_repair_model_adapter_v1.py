@@ -130,6 +130,7 @@ def _deterministic(repo_dir, test_cmd, allowed_files, recipe, timeout) -> dict[s
         "ok": bool(res.get("repaired")),
         "strategy": "deterministic-local",
         "patch": res.get("patch"),
+        "new_content": res.get("new_content"),
         "file": res.get("file"),
         "tests_before": res.get("tests_before"),
         "tests_after": res.get("tests_after"),
@@ -221,6 +222,7 @@ def _hosted(provider, repo_dir, test_cmd, allowed_files, failure_output, recipe,
         mc["cost_usd"] = round((mc["prompt_tokens"] * 0.14 + mc["completion_tokens"] * 0.28) / 1_000_000, 6)
     return {
         "ok": ok, "strategy": f"hosted:{provider}", "patch": patch,
+        "new_content": proposal["new_content"] if ok else None,
         "file": rel if ok else None, "tests_before": before, "tests_after": after if ok else None,
         "reason": None if ok else "model_patch_failed_tests", "model_call": mc,
     }

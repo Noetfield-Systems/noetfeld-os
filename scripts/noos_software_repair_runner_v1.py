@@ -170,9 +170,16 @@ def run_repair_job(
                          tests_before=before, failure_class=failure_class,
                          attempts=attempts_log, model_calls=model_calls)
 
-    # apply verified patch to the isolated repo + confirm full suite green
-    engine.apply_patch_to_repo(repo_dir, repaired["file"],
-                               _apply_unified(repo_dir / repaired["file"], repaired["patch"]))
+    # Apply the ALREADY-VERIFIED full file content directly. The proposal was
+    # verified in an isolated copy, so new_content is authoritative; reconstructing
+    # from a unified diff (_apply_unified) is fragile for model-generated multi-line
+    # patches (this failed on the product-PR GEL CI). Fall back to diff-apply only
+    # if new_content is absent.
+    if repaired.get("new_content") is not None:
+        engine.apply_patch_to_repo(repo_dir, repaired["file"], repaired["new_content"])
+    else:
+        engine.apply_patch_to_repo(repo_dir, repaired["file"],
+                                   _apply_unified(repo_dir / repaired["file"], repaired["patch"]))
     after = engine.run_tests(repo_dir, test_cmd, timeout=recipe["limits"]["execution_timeout_seconds"])
 
     # patch bundle + hashes

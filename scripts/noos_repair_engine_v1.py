@@ -180,7 +180,8 @@ def propose_and_verify_repair(
                 ok, after = _try_candidate(repo_dir, path, "".join(new_lines), test_cmd, timeout)
                 attempts.append({"file": _rel(path, repo_dir), "line": probe, "passed": ok})
                 if ok:
-                    patch = _unified_diff(repo_dir, path, original, "".join(new_lines))
+                    new_content = "".join(new_lines)
+                    patch = _unified_diff(repo_dir, path, original, new_content)
                     return {
                         "repaired": True,
                         "strategy": "fault_localized_mutation_search",
@@ -189,6 +190,7 @@ def propose_and_verify_repair(
                         "tests_before": before,
                         "tests_after": after,
                         "patch": patch,
+                        "new_content": new_content,  # verified full file — apply directly
                         "candidates_tried": tried,
                         "attempts": attempts[-10:],
                     }
