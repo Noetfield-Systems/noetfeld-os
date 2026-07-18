@@ -1,0 +1,33 @@
+{
+  "schema": "software-repair-v1-sg-realignment-audit-v1",
+  "not_a_verdict": "SG canon -> NOOS re-alignment audit. SUBMITTED for independent verification (author != subject).",
+  "canon_version": "FOUNDER_CANON_v1+MACHINE_LOOPS_v1",
+  "audited_at": "2026-07-18T10:45:00Z",
+  "sg_canon_head": "b3c3cde (PR #21); current NOOS pin b72f5a3 (PR #18) is an ANCESTOR -> still valid per valid_only_when",
+  "advanced_canon_delta": "PR #20/#21 added the Higgsfield MEDIA adapter + activation \u2014 a media decision domain, NOT the Command Gateway / model / cost authority. No model/cost/capability drift arises from it.",
+  "alignment": [
+    {
+      "sg_rule": "COST_EXECUTION_DOCTRINE (T0/T1/T2, cheapest-first, private bindings, LLM_PROVIDER_NOT_CONFIGURED)",
+      "noos_state": "ALIGNED \u2014 model router tiered + new providers registered as private bindings; config/model-router.yml T1 updated; cost_policy_scan.py + cost-policy-scan.yml present",
+      "action": "updated this session (commit 46292b70)"
+    },
+    {
+      "sg_rule": "capability-router-circuit-breaker (dispatcher not brain; trip->failover->half-open; vendor-neutral D-8)",
+      "noos_state": "ALIGNED \u2014 repair adapter now has cost-ordered circuit-breaker fail-over chain -> deterministic fallback; NOOS_PROVIDER_ORDER swap point",
+      "action": "updated this session"
+    },
+    {
+      "sg_rule": "provider names in private bindings only",
+      "noos_state": "ALIGNED \u2014 keys are org Actions secrets; code uses binding aliases; no key value printed",
+      "action": "verified"
+    },
+    {
+      "sg_rule": "SG authority pin (custody chain)",
+      "noos_state": "VALID + FOUNDER-EDITING \u2014 b72f5a3 (PR #18) pinned and ancestor of SSOT head; founder is actively editing noetfield-org/CUSTODY_AUTHORITY_PINS_v1.json (v1.3.0->v1.4.0, same b72f5a3 pin) + CLAUDE.md in the working tree",
+      "action": "NOT MODIFIED \u2014 surfaced to founder; do not clobber in-progress custody work; advancing to b3c3cde (media) not clearly intended"
+    }
+  ],
+  "doctrine_mirror": "docs/_NOOS_AGENT/ has 50 docs; the model/cost doctrine mirror is current with the advanced canon (the delta is media). A full 50-doc re-sync to b3c3cde is a separate founder-gated custody operation.",
+  "recommendation": "model/cost/capability rules are aligned. If NOOS should ADVANCE its custody pin to b3c3cde (PR #21) or fold in the Higgsfield media doctrine, that is a custody re-pin the founder is already editing \u2014 confirm before the machine touches CUSTODY_AUTHORITY_PINS/CLAUDE.md.",
+  "final_status": "SUBMITTED for independent verification"
+}

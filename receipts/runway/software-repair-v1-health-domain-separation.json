@@ -1,0 +1,16 @@
+{
+  "canon_version": "FOUNDER_CANON_v1+MACHINE_LOOPS_v1",
+  "final_status": "SUBMITTED for independent verification",
+  "schema": "software-repair-v1-health-domain-separation-v1",
+  "not_a_verdict": "Three independent health domains. SUBMITTED for independent verification.",
+  "module": "scripts/noos_software_repair_health_v1.py",
+  "tests": "tests/test_software_repair_health_v1.py (10 passed)",
+  "A_platform_loop": "Railway/Fly http_loop \u2014 may remain degraded; separate operations incident; does NOT gate product",
+  "B_product": "github_actions_software_repair_v1 chain; RUNNING_CONFIRMED only from product-organic (16-condition) evidence",
+  "C_customer_job": "one commission terminal result",
+  "invariants": [
+    "platform degradation does not fail a completed product job",
+    "a product job does not mark platform healthy",
+    "repair/manual/test rows never establish product liveness"
+  ]
+}

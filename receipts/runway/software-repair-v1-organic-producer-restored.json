@@ -1,0 +1,21 @@
+{
+  "schema": "software-repair-v1-organic-producer-restored-v1",
+  "not_a_verdict": "Producer status via SANCTIONED remote workflow. The canonical http_loop producer is NOT restored (Railway-token-gated); the deployed sink+factory+projection ARE proven live today. NO canonical organic cycle is claimed. SUBMITTED for independent verification.",
+  "canon_version": "FOUNDER_CANON_v1+MACHINE_LOOPS_v1",
+  "recorded_at": "2026-07-18T05:30:00Z",
+  "sanctioned_action_taken": "gh workflow run noos-factory-autorun.yml --ref main",
+  "run_id": 29632171486,
+  "run_conclusion": "success",
+  "real_evidence": {
+    "github_event": "workflow_dispatch",
+    "factory_id": "noetfield-factory-v1-20260718T052340Z",
+    "cycle": 1,
+    "status": "ok",
+    "supabase_row_landed": "noetfield_factory_cycle_runs status=ok (verified in-run)",
+    "cloud_trigger": "workflow_dispatch"
+  },
+  "provenance_verdict": "cloud_trigger=workflow_dispatch normalizes to MANUAL origin => production_running_confirmed()=False. This proves the SINK + FACTORY BODY + PROJECTION are LIVE, but is NOT canonical organic (http_loop) liveness.",
+  "canonical_restore_status": "PROTECTED \u2014 the http_loop producer is the Railway noos-loop-runner; its redeploy needs a Railway token absent from all 8 GH Actions secrets and the local host.",
+  "exact_canonical_activation": "make deploy-railway-loop-runner   # from a host/CI with RAILWAY_TOKEN, then observe 3 http_loop rows via autorun_status_v1.py",
+  "final_status": "SUBMITTED for independent verification"
+}

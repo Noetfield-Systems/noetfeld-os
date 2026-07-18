@@ -1,0 +1,48 @@
+{
+  "schema": "software-repair-v1-product-integration-before-v1",
+  "not_a_verdict": "Before-state for the product PR integration. SUBMITTED for independent verification.",
+  "canon_version": "FOUNDER_CANON_v1+MACHINE_LOOPS_v1",
+  "captured_at": "2026-07-18T09:00:00Z",
+  "repo_root": "/Users/sinakazemnezhad/Desktop/Noetfield-Systems (worktree noos-software-repair)",
+  "local_branch": "nf-noos-software-repair-runway-v1",
+  "local_head": "75f042cece20c985d9236f3abab2304e457e46a9",
+  "origin_main": "291789bc3d40dad8ea165f68a29ff026a000bd26",
+  "product_branch_remote_head": "75f042cece20c985d9236f3abab2304e457e46a9",
+  "working_tree_dirty": 0,
+  "worktrees": [
+    "/Users/sinakazemnezhad/Desktop/Noetfield-Systems/noetfeld-OS                                          f52cd6b0 [nf-noos-repin-gateway-v2-b72f5a3]",
+    "/Users/sinakazemnezhad/Desktop/Noetfield-Systems/_wt-noos-circuit-b-higgsfield                        291789bc [nf-circuit-b-higgsfield-001]",
+    "/Users/sinakazemnezhad/Desktop/Noetfield-Systems/_wt-noos-cpl-v1.1                                    ac4041e5 [rules/autonomous-change-preservation-v1.1]",
+    "/Users/sinakazemnezhad/Desktop/Noetfield-Systems/_wt-noos-repin-higgsfield-d2c2e6a                    53da5fc1 [nf-noos-repin-higgsfield-d2c2e6a]",
+    "/Users/sinakazemnezhad/Desktop/Noetfield-Systems/noetfeld-OS/_wt-noos-circuit-a-t0                    291789bc [nf-circuit-a-t0-proof-001]",
+    "/Users/sinakazemnezhad/Desktop/Noetfield-Systems/noos-minimal-correction                              7f7e382c [nf-noos-provenance-classifier-correction]",
+    "/Users/sinakazemnezhad/Desktop/Noetfield-Systems/noos-software-repair                                 75f042ce [nf-noos-software-repair-runway-v1]",
+    "/Users/sinakazemnezhad/Projects/copilot-worktrees/noetfeld-OS/kazemnezhadsina144-dot-fuzzy-guacamole  15e94b47 [kazemnezhadsina144-dot-fuzzy-guacamole]",
+    "/Users/sinakazemnezhad/Projects/copilot-worktrees/noetfeld-OS/kazemnezhadsina144-dot-shiny-umbrella   616efe36 [kazemnezhadsina144-dot-shiny-umbrella]",
+    "/Users/sinakazemnezhad/Projects/copilot-worktrees/noetfeld-OS/kazemnezhadsina144-dot-solid-meme       233e9593 [kazemnezhadsina144-dot-solid-meme]"
+  ],
+  "stashes": 3,
+  "migration_head": "0021_software_repair_runway.sql",
+  "release_rc2": "noos-software-repair-runway-v1.0.0-rc2 (draft release untagged-670d312b...)",
+  "pr_84": {
+    "baseRefName": "nf-noos-software-repair-runway-v1",
+    "headRefName": "noos/repair/demo-integration-data",
+    "headRefOid": "9fbc6ed85fb0d53f6ecf0c9c7c28dea4521f176a",
+    "isDraft": true,
+    "number": 84
+  },
+  "pr_85": {
+    "baseRefName": "main",
+    "headRefName": "nf-noos-repin-gateway-v2-b72f5a3",
+    "headRefOid": "f52cd6b0b1ca3d706ac5340e0dffc29bc894198c",
+    "isDraft": true,
+    "number": 85
+  },
+  "pr_86": {
+    "baseRefName": "main",
+    "headRefName": "nf-noos-provenance-classifier-correction",
+    "headRefOid": "7f7e382c5c1d9e11a1f93041738cf4fc0a02f79f",
+    "isDraft": true,
+    "number": 86
+  }
+}

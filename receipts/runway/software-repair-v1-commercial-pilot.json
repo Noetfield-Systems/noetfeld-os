@@ -1,0 +1,39 @@
+{
+  "schema": "software-repair-v1-commercial-pilot-v1",
+  "not_a_verdict": "Commercial pilot readiness. SUBMITTED for independent verification.",
+  "canon_version": "FOUNDER_CANON_v1+MACHINE_LOOPS_v1",
+  "recorded_at": "2026-07-18T06:40:00Z",
+  "product": "NOOS Software Repair Runway \u2014 Managed Pilot",
+  "offer": {
+    "customer_provides": [
+      "an authorized repository (github or bundled fixture)",
+      "a reproducible failure (failing test command / CI run / defect)",
+      "target branch + constraints"
+    ],
+    "customer_receives": [
+      "root-cause analysis",
+      "verified draft repair (test-proven)",
+      "passing test evidence",
+      "draft PR or patch bundle",
+      "audit receipt with full lineage",
+      "human approval before merge"
+    ]
+  },
+  "proven_scope": "3 real fixture repair jobs across 3 defect classes (off-by-one, unused-import lint, wrong-operator data defect); each failing->passing with a verified patch. Python(pytest)+Node(node:test) pilot stacks only.",
+  "explicitly_not_claimed": [
+    "universal repository/language compatibility",
+    "guaranteed repair of every issue",
+    "autonomous production deployment",
+    "security certification",
+    "unmeasured reliability metrics"
+  ],
+  "cost_model": {
+    "deterministic_local": "$0 compute-only per repair",
+    "hosted_model_estimate": "$0.001-0.02 per repair (~2-8k tokens) once a provider key is set"
+  },
+  "pricing_proposal_founder_editable": "PROPOSAL ONLY (founder to set): e.g. managed-pilot at a per-verified-repair fee or a small monthly managed fee; first pilot is manually sold + onboarded; no payment automation required.",
+  "gross_margin_model": "deterministic-local pilot: margin \u2248 price \u2212 (CI compute \u2248 cents); hosted: margin \u2248 price \u2212 (model cost $0.001-0.02 + CI compute).",
+  "sales_demo": "docs/product/NOOS-SOFTWARE-REPAIR-DEMO-SCRIPT.md",
+  "readiness": "manually-sold managed pilot is READY (offline/deterministic). Hosted-model repairs and production canonical liveness are gated (see cloud receipts).",
+  "final_status": "SUBMITTED for independent verification"
+}

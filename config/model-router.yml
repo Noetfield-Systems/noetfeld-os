@@ -27,15 +27,30 @@ tiers:
 
   T1:
     name: cheap_summary
-    description: Summary and classification via free/cheap models
-    providers: [openrouter_free, deepseek_cheap]
+    description: Summary and classification via free/cheap models (SG COST-T1)
+    # Cheapest-capable-first (SG COST_EXECUTION_DOCTRINE). github_models is free via
+    # the Actions GITHUB_TOKEN (no separate secret). Provider names are binding
+    # aliases only; keys live in org Actions secrets (private bindings, D-8).
+    providers: [github_models, openrouter_free, deepseek_cheap, glm_flash, moonshot_cheap, hf_cheap]
     models:
+      - id: openai/gpt-4o-mini
+        provider: github_models
+        unit_cost_usd_per_1k_tokens: 0.0
       - id: openrouter/google/gemma-2-9b-it:free
         provider: openrouter_free
         unit_cost_usd_per_1k_tokens: 0.0
       - id: deepseek/deepseek-chat
         provider: deepseek_cheap
         unit_cost_usd_per_1k_tokens: 0.00014
+      - id: glm-4-flash
+        provider: glm_flash
+        unit_cost_usd_per_1k_tokens: 0.0001
+      - id: moonshot-v1-8k
+        provider: moonshot_cheap
+        unit_cost_usd_per_1k_tokens: 0.00015
+      - id: Qwen/Qwen2.5-Coder-32B-Instruct
+        provider: hf_cheap
+        unit_cost_usd_per_1k_tokens: 0.0002
     max_usd: 0.01
     requires_founder_approval: false
     task_kinds:

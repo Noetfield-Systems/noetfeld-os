@@ -1,0 +1,32 @@
+{
+  "schema": "software-repair-v1-ui-e2e-v1",
+  "not_a_verdict": "Customer API/UI end-to-end (stdlib HTTP server, local). SUBMITTED for independent verification.",
+  "canon_version": "FOUNDER_CANON_v1+MACHINE_LOOPS_v1",
+  "verified_at": "2026-07-18T06:20:00Z",
+  "endpoints_exercised": [
+    "GET /",
+    "GET /health",
+    "POST /repair/commissions",
+    "GET /repair/jobs/<id>",
+    "GET .../events",
+    "GET .../verification",
+    "GET .../cost",
+    "GET .../report",
+    "POST .../replay"
+  ],
+  "submit_job_status": "repaired",
+  "lifecycle": [
+    "ACCEPTED",
+    "PLANNED",
+    "DISPATCHED",
+    "CLAIMED",
+    "RUNNING",
+    "OUTPUT_COMMITTED",
+    "COMPLETED"
+  ],
+  "verification_passed": true,
+  "receipt_origin": "local_reference",
+  "replay_status": "repaired",
+  "note": "UI served at / (single page). Submission synchronous in pilot. receipt_origin=local_reference (NOT production organic).",
+  "final_status": "SUBMITTED for independent verification"
+}

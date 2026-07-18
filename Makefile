@@ -404,3 +404,18 @@ machine-research:
 	else \
 		python3 scripts/noos_machine_loops_v1.py research-memo --question "$(QUESTION)"; \
 	fi
+
+# ---- NOOS Motor v1 product ops (NF-NOOS-MOTOR-V1-FULL-RUNWAY) ----
+# Note: `motor-status` already exists (motor restart dry-run); the Motor v1 CLI
+# uses `motor-run-status` to avoid clobbering it.
+.PHONY: motor-demo motor-verify motor-package motor-run-status motor-install
+motor-install:
+	./bin/noos install
+motor-demo:
+	./bin/noos demo
+motor-verify:
+	./bin/noos verify $(ARGS)
+motor-package:
+	./bin/noos package
+motor-run-status:
+	./bin/noos status $(ID)

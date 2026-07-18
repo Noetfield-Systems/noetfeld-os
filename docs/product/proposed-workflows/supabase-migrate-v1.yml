@@ -1,0 +1,59 @@
+name: supabase-migrate-v1
+# NF-NOOS-SOFTWARE-REPAIR-RUNWAY-V1 §4 — narrow, additive-only Supabase migration.
+# Gated on the protected `production` environment => a dispatched run WAITS for
+# founder approval before it can touch the database. Never applies destructive SQL.
+#
+# Activation (after this workflow reaches the default branch via the product PR):
+#   gh workflow run supabase-migrate-v1.yml -f migration=0021_software_repair_runway.sql
+# then approve the pending `production` environment gate.
+
+on:
+  workflow_dispatch:
+    inputs:
+      migration:
+        description: "Migration filename under infrastructure/supabase/migrations (additive only)"
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  migrate:
+    runs-on: ubuntu-latest
+    environment: production   # protected → requires founder approval before running
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Guard — additive-only allowlist
+        run: |
+          set -euo pipefail
+          f="infrastructure/supabase/migrations/${{ inputs.migration }}"
+          test -f "$f" || { echo "migration not found: $f"; exit 1; }
+          case "${{ inputs.migration }}" in
+            0020_motor_provenance_fields.sql|0021_software_repair_runway.sql) : ;;
+            *) echo "migration not in additive allowlist"; exit 1 ;;
+          esac
+          # reject destructive statements outside comments
+          if grep -viE '^\s*--' "$f" | grep -iE '\b(DROP|TRUNCATE|DELETE\s+FROM|ALTER\s+TABLE\s+\w+\s+DROP)\b'; then
+            echo "destructive statement detected — refusing"; exit 1
+          fi
+          echo "additive guard passed for $f"
+
+      - name: Install psql
+        run: sudo apt-get update -y && sudo apt-get install -y postgresql-client
+
+      - name: Apply migration
+        env:
+          DATABASE_URL: ${{ secrets.NOETFIELD_SUPABASE_DATABASE_URL }}
+        run: |
+          set -euo pipefail
+          test -n "${DATABASE_URL:-}" || { echo "NOETFIELD_SUPABASE_DATABASE_URL secret missing"; exit 1; }
+          psql "$DATABASE_URL" -v ON_ERROR_STOP=1 -f "infrastructure/supabase/migrations/${{ inputs.migration }}"
+
+      - name: Verify applied (query the new objects)
+        env:
+          DATABASE_URL: ${{ secrets.NOETFIELD_SUPABASE_DATABASE_URL }}
+        run: |
+          set -euo pipefail
+          psql "$DATABASE_URL" -Atc "select to_regclass('public.repair_jobs'), to_regclass('public.repair_commissions');"

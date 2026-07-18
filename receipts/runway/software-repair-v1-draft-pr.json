@@ -1,0 +1,16 @@
+{
+  "schema": "software-repair-v1-draft-pr-v1",
+  "not_a_verdict": "Real draft PR delivering a verified repair. SUBMITTED for independent verification.",
+  "canon_version": "FOUNDER_CANON_v1+MACHINE_LOOPS_v1",
+  "created_at": "2026-07-18T06:45:00Z",
+  "pr_url": "https://github.com/Noetfield-Systems/noetfeld-os/pull/84",
+  "pr_number": 84,
+  "state": "draft (NOT merged; human approval required)",
+  "commission": "SR-JOB-3-integration-data",
+  "defect_class": "integration_data_handling_defect",
+  "head_branch": "noos/repair/demo-integration-data",
+  "base_branch": "nf-noos-software-repair-runway-v1",
+  "verification": "fixture tests PASS on the head branch (2 passed); repair = 1-line operator fix",
+  "delivery_mode": "draft_pull_request (recipe draft_pr_policy honored; open_pr+pr_authorized)",
+  "final_status": "SUBMITTED for independent verification"
+}

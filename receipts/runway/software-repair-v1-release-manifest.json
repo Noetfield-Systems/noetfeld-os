@@ -1,0 +1,42 @@
+{
+  "schema": "software-repair-v1-release-manifest-v1",
+  "not_a_verdict": "Release manifest \u2014 describes a BUILT rc artifact, not a deployment. SUBMITTED for independent verification.",
+  "canon_version": "FOUNDER_CANON_v1+MACHINE_LOOPS_v1",
+  "product": "NOOS Software Repair Runway",
+  "product_version": "1.0.0-rc1",
+  "promote_to": "1.0.0 only after production acceptance (canonical 3 http_loop cycles + migration applied)",
+  "git_commit": "c0a91cfefa9fbe6a37c46269b364716246e08c28",
+  "schema_version": "noos-motor-execution-v1",
+  "recipe_version": "software_repair_ci_v1@1.0.0",
+  "runner_version": "noos-software-repair-runner-v1",
+  "frontend_version": "noos-software-repair-api-v1 (stdlib)",
+  "components_present": 14,
+  "components_missing": [],
+  "checksums_sha256": {
+    "data/recipes/software_repair_ci_v1.json": "c20d05586616c0f50dc7b72877816ed09142df73c46d34d3816390d0e95f93a8",
+    "scripts/noos_recipe_registry_v1.py": "eeb68031bb0c6e4bc026342ccaeaec9486d5295b3715dfc5eac145214516c61e",
+    "scripts/noos_repair_engine_v1.py": "2a618a35ede1848a538cb1683938c42cb7ce249212642bddf7fbb9d62395a625",
+    "scripts/noos_repair_model_adapter_v1.py": "74072b723940e3534b8dfefb0aca626597be1a24d43d3edee7b7aede3c1b0459",
+    "scripts/noos_software_repair_runner_v1.py": "349d63afe4abcdc7719c3e4e791175e25e2d535520e46f58cc80f3e0df5c3c10",
+    "scripts/noos_software_repair_api_v1.py": "24fff1e567abf23e64aa4e9980cac74335ece590fd7cf50e91caa02630cb4889",
+    "scripts/noos_observability_semantics_v1.py": "fd930292447a30b6e7051c4d63486ca0fdc5ffb36c9c58ba2ba04d33d140a295",
+    "infrastructure/supabase/migrations/0021_software_repair_runway.sql": "9e137fdd191b03cca5b83b01523436ac104459bd5d9dc99d6b5c5f9febabeb3a",
+    "docs/product/proposed-workflows/supabase-migrate-v1.yml": "e8f553383e2406a514f3abe8c6ca85ea3c9feb14db6bbf415164c123ddfa7290",
+    "fixtures/repair/jobs/job1-unit-regression.json": "9d1622de4f9eae77e3ecd15eea845fefd7cf120df89bd69fc797509ce9df20db",
+    "fixtures/repair/jobs/job2-lint-failure.json": "fed165a67e726a594c3f3a2ccbdbff3e70485a01e4106c851da84e27ef1958d9",
+    "fixtures/repair/jobs/job3-integration-data.json": "fcf9ac1bf9ca644076bfffd5727a4be79d77459e6e6afdeefc3c2846fd63d7d0",
+    "tests/test_software_repair_runner_v1.py": "0ba35883a6b87fb520f5ce3337cf5c591be2230724e5016eda0a7a10adc3fb5b",
+    "tests/test_software_repair_provenance_v1.py": "f8a22e8671fb19e807392c3e404353e65554dfe60588f60586cae19d766ed046"
+  },
+  "bundle_path": "dist/noos-software-repair-runway-v1.0.0-rc1.tar.gz",
+  "bundle_sha256": "85db43064cd6c2f6866a0e326fa7b241e289260953d505a78fde3aad4a2b5ca0",
+  "durable_publish": "draft GitHub release",
+  "rollback": "delete branch; no merge to main; migration 0021 reversible",
+  "external_activation_required": [
+    "apply migration 0021 (production-gated)",
+    "restore canonical http_loop producer (Railway token)",
+    "3 canonical organic cycles",
+    "enable hosted model (gh secret set DEEPSEEK_API_KEY)"
+  ],
+  "final_status": "SUBMITTED for independent verification"
+}

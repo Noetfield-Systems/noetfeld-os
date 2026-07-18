@@ -1,0 +1,36 @@
+{
+  "schema": "noos-motor-v1-e2e-product-output-v1",
+  "not_a_verdict": "End-to-end product-output evidence for the OFFLINE local reference slice (execution_plane=local_reference; NOT cloud http_loop). SUBMITTED for independent verification.",
+  "canon_version": "FOUNDER_CANON_v1+MACHINE_LOOPS_v1",
+  "produced_at": "2026-07-18T04:04:21Z",
+  "customer_input": "docs/product/samples/sample-input.json (task_kind=digest, 3 records)",
+  "execution_id": "exe_22e41d55af5b4b1c",
+  "correlation_id": "cor_811cf5f052cc4b6a",
+  "dispatch_id": "dsp_22e41d55",
+  "idempotency_key": "3cab0f467b43bbdf058e70e0",
+  "producer": "noos-motor-local-executor-v1",
+  "execution_origin": "organic",
+  "receipt_origin": "organic",
+  "execution_plane": "local_reference",
+  "lifecycle_history": [
+    "ACCEPTED",
+    "PLANNED",
+    "DISPATCHED",
+    "CLAIMED",
+    "RUNNING",
+    "OUTPUT_COMMITTED",
+    "COMPLETED"
+  ],
+  "final_status": "COMPLETED",
+  "real_output_artifacts": [
+    "docs/product/samples/sample-output.json (normalized digest)",
+    "docs/product/samples/sample-output.report.md (customer-visible Markdown report)"
+  ],
+  "input_hash": "ca450a02fa9424e0",
+  "output_hash": "adf3576e50596c87",
+  "retrieval_path": "./bin/noos status <execution_id>  (verifies output_integrity_ok against output_hash)",
+  "replay": "supported \u2014 new attempt preserves root_execution_id + correlation_id lineage",
+  "truthful_failure": "invalid input => FAILED, no artifact",
+  "cloud_http_loop_note": "This is the LOCAL reference vertical slice. The 3 consecutive CLOUD organic http_loop cycles remain EXTERNAL_ACTIVATION_REQUIRED.",
+  "final_status_line": "SUBMITTED for independent verification"
+}

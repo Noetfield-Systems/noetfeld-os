@@ -1,0 +1,52 @@
+{
+  "schema": "software-repair-v1-cloud-route-discovery-v1",
+  "not_a_verdict": "Read-only discovery of sanctioned remote activation paths. No secret VALUE was printed or accessed. SUBMITTED for independent verification.",
+  "canon_version": "FOUNDER_CANON_v1+MACHINE_LOOPS_v1",
+  "discovered_at": "2026-07-18T05:10:00Z",
+  "gh_auth": {
+    "authenticated": true,
+    "accounts": ["kazemnezhadsina144-dot (active)", "sinakazemnezhadca-eng"],
+    "token_scopes": ["gist", "read:org", "repo", "workflow"],
+    "repo_permissions": {"admin": true, "maintain": true, "push": true, "pull": true, "triage": true},
+    "consequence": "Remote sanctioned paths ARE available: dispatch workflows, open draft PRs, create draft releases, list secret names. 'No local credentials' is NOT the end."
+  },
+  "secret_names_available_to_actions": [
+    "NOETFIELD_SUPABASE_DATABASE_URL", "NOETFIELD_SUPABASE_SERVICE_ROLE_KEY",
+    "NOETFIELD_SUPABASE_URL", "SUPABASE_DB_PASSWORD", "NOOS_LOOP_SECRET",
+    "CLOUDFLARE_API_TOKEN", "PORTFOLIO_SPINE_SERVICE_ROLE_KEY", "PORTFOLIO_SPINE_SUPABASE_URL"
+  ],
+  "secret_names_ABSENT": {
+    "model_provider_key": "NONE (no OPENROUTER/DEEPSEEK/OPENAI/MOONSHOT/KIMI secret) — a real hosted-model call is unavailable even in CI; adapter + exact secret-injection action delivered instead.",
+    "railway_token": "NONE (no RAILWAY_TOKEN) — the canonical http_loop producer (Railway noos-loop-runner) cannot be redeployed from any reachable environment.",
+    "fly_token": "NONE — Fly executor cutover also unreachable."
+  },
+  "protected_environments": ["production"],
+  "relevant_workflows": {
+    "producer": {"name": "NOOS factory autorun", "file": "noos-factory-autorun.yml", "triggers": ["workflow_dispatch", "repository_dispatch"], "recent": "workflow_dispatch SUCCESS 2026-07-07; repository_dispatch FAILING since 2026-07-05"},
+    "cloud_workers_deploy": {"name": "deploy-noos-cloud-workers-v1", "uses_secret": "CLOUDFLARE_API_TOKEN", "note": "deploys the Cloudflare motor CLOCK, NOT the Railway executor that stamps http_loop"},
+    "post_deploy_verify": {"name": "NOOS post-deploy verify", "trigger": "workflow_run"},
+    "open_pr_from_patch": {"name": "Noetfield open PR from patch", "file": "noetfield-open-pr-v1.yml", "trigger": "workflow_dispatch/repository_dispatch", "use": "sanctioned draft-PR-from-patch path for repair output"}
+  },
+  "fresh_trace_conclusion": {
+    "canonical_organic_producer": "Railway noos-loop-runner (stamps GITHUB_EVENT_NAME=http_loop in ops/railway/noos-loop-runner/server.py::_base_env)",
+    "first_failed_hop_by_live_evidence": "CF-cron -> Railway executor path: the repository_dispatch factory-autorun tick has failed since 2026-07-05 and no http_loop row has landed since 2026-07-12; the GHA workflow_dispatch path succeeds but stamps cloud_trigger=workflow_dispatch (manual origin), NOT http_loop.",
+    "why_gha_cannot_produce_canonical_organic": "http_loop is stamped only by the Railway executor. A GitHub-dispatched factory run stamps the github event name (manual/repository_dispatch), which by the corrected provenance gate is NON_PRODUCTION and cannot establish canonical organic liveness.",
+    "canonical_restore_boundary": "Redeploying the Railway executor needs a Railway token present in NO reachable environment (not in the 8 GH Actions secrets, not local). This is a genuine protected/external boundary."
+  },
+  "sanctioned_activation_paths": {
+    "supabase_migration_apply": {
+      "status": "NO existing migration workflow; secrets (NOETFIELD_SUPABASE_DATABASE_URL, SUPABASE_DB_PASSWORD) ARE available to Actions",
+      "plan": "Add a NARROW workflow_dispatch migration workflow gated on the `production` environment (founder-approval), additive-only. Dispatch leaves it waiting at the protected gate.",
+      "command_after_creation": "gh workflow run supabase-migrate-v1.yml -f migration=0021_software_repair_runway.sql"
+    },
+    "canonical_producer_restart": {
+      "status": "PROTECTED_EXTERNAL — Railway token absent everywhere reachable",
+      "command": "make deploy-railway-loop-runner   # from a host with RAILWAY_TOKEN"
+    },
+    "integration_producer_proof": {
+      "status": "AVAILABLE — gh workflow run noos-factory-autorun.yml (writes a real row via Supabase secret, cloud_trigger=workflow_dispatch=manual). Proves sink+factory-body+projection TODAY, but is NOT canonical organic liveness."
+    },
+    "draft_pr_from_repair": {"status": "AVAILABLE — gh pr create --draft, or the noetfield-open-pr-v1 workflow"}
+  },
+  "final_status": "SUBMITTED for independent verification"
+}

@@ -1,0 +1,17 @@
+{
+  "canon_version": "FOUNDER_CANON_v1+MACHINE_LOOPS_v1",
+  "final_status": "SUBMITTED for independent verification",
+  "schema": "software-repair-v1-pr-reconciliation-v1",
+  "not_a_verdict": "PR #85/#86 reconciliation vs the product PR. SUBMITTED for independent verification.",
+  "pr_85": {
+    "disposition": "CONTAINED \u2014 foundation f52cd6b0 is an ANCESTOR of the product branch; retained as review-slice evidence; not merged separately",
+    "proof": "git merge-base --is-ancestor f52cd6b0 HEAD => true"
+  },
+  "pr_86": {
+    "disposition": "INTEGRATED \u2014 its live-projection refinements (row_successful_terminal, production_gate_wiring_status, organic-terminal/repair-only/canonical-status, live-probe tests) were NOT in the product branch; now ported so the product PR carries the unified classifier; #86 retained as focused review slice",
+    "proof": "92-line classifier diff before port; product suite 368 passed after"
+  },
+  "no_duplicate_migrations": true,
+  "no_divergent_classifier_after_integration": true,
+  "recommendation": "merge the complete product PR #87; #85/#86 retained for review, not merged separately."
+}

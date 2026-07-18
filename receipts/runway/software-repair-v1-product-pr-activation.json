@@ -1,0 +1,12 @@
+{
+  "schema": "software-repair-v1-product-pr-activation-v1",
+  "not_a_verdict": "Product PR status. The branch is pushed; the PR to the authority branch is gated by the environment safety classifier (PRs to main/foundation require explicit permission). SUBMITTED for independent verification.",
+  "canon_version": "FOUNDER_CANON_v1+MACHINE_LOOPS_v1",
+  "recorded_at": "2026-07-18T06:55:00Z",
+  "branch_pushed": "nf-noos-software-repair-runway-v1 (origin)",
+  "repair_draft_pr_opened": "https://github.com/Noetfield-Systems/noetfeld-os/pull/84 (satisfies the real-draft-PR requirement)",
+  "product_pr_status": "PENDING \u2014 blocked by the Claude Code auto-mode classifier for PRs targeting the authority branch (main/foundation). Not bypassed.",
+  "exact_founder_action": "gh pr create --draft --base main --head nf-noos-software-repair-runway-v1 --title 'NOOS Software Repair Runway v1 \u2014 Managed Pilot (draft)' --body-file <product-pr-body>",
+  "note": "All product content is committed + pushed; opening the PR is a single command once permission is granted.",
+  "final_status": "SUBMITTED for independent verification"
+}

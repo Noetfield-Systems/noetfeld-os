@@ -1,0 +1,18 @@
+{
+  "schema": "noos-motor-v1-local-reference-cycle-v1",
+  "not_a_verdict": "LOCAL reference cycle (receipt_origin=local_reference, execution_plane=local_reference). Proves product behavior, NOT deployed liveness; this is NOT a canonical cloud http_loop cycle. SUBMITTED for independent verification.",
+  "verified_at": "2026-07-18T05:05:28Z",
+  "cycle": 1,
+  "execution_id": "exe_f7e0dcb0a9d0496a",
+  "attempt_id": "att_474bfdc5ec17",
+  "correlation_id": "cor_983526ae9c0d4960",
+  "dispatch_id": "dsp_f7e0dcb0",
+  "producer": "noos-motor-local-executor-v1",
+  "receipt_origin": "local_reference",
+  "execution_plane": "local_reference",
+  "final_state": "COMPLETED",
+  "output_hash": "0c996efe87a69ce4",
+  "artifact_uri": "file:///var/folders/5g/rd684wbd1q52sngycytqr5n00000gn/T/noos-motor-verify-m_ngil7m/art/exe_f7e0dcb0a9d0496a.output.json",
+  "integrity_ok": true,
+  "ok": true
+}

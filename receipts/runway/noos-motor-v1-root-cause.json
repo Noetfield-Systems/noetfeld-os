@@ -1,0 +1,46 @@
+{
+  "schema": "noos-motor-v1-runway-root-cause-v1",
+  "not_a_verdict": "Root-cause revalidation. SUBMITTED for independent verification (author != verifier).",
+  "canon_version": "FOUNDER_CANON_v1+MACHINE_LOOPS_v1",
+  "analyzed_at": "2026-07-18T03:42:00Z",
+  "method": "Revalidated the prior incident diagnosis (NF-NOOS-COMPLETION-EVIDENCE-REFRESH-001) against current repo + reachability, then read the classifier source directly. Live Supabase re-query was NOT possible from this host (no creds/CLI) so the live-timestamp facts are carried from the prior diagnosis receipt and the in-repo cockpit read; they are labelled as such below.",
+  "failed_hop": {
+    "hop": "worker execution -> completion callback (the ORGANIC producer that executes each loop body and POSTs the http_loop completion)",
+    "component": "cloud loop-execution worker, cloud_trigger=http_loop ('writer-B')",
+    "code": ["ops/railway/noos-loop-runner/server.py", "ops/fly/noos-loop-executor/server.py"],
+    "not_the_failure": [
+      "authoritative store / sink (repair path writes 246+ rows successfully on same token => sink auth+schema healthy)",
+      "dispatch heartbeat (firing every 5 min)",
+      "projection / cockpit read (live/current)"
+    ],
+    "evidence_carried_from_prior_diagnosis": {
+      "last_successful_organic_write": "2026-07-12T13:50:49.571276+00:00 (cloud_trigger=http_loop)",
+      "latest_row_at_prior_observation": "2026-07-17T19:42:34Z cloud_trigger=noos_integrator_repair (repair-labeled, NOT organic)",
+      "producer_scheduler_state": "repository_dispatch loop-execution GHA last run FAILURE 2026-07-05; no successful organic completion since 2026-07-12",
+      "source_receipt": "receipts/incident/noos-completion-evidence-refresh-001-diagnosis-v1.json"
+    }
+  },
+  "second_fault_detection_gap": {
+    "summary": "The completion classifier keys on freshness AGE ONLY, not provenance. Repair-labeled rows (cloud_trigger=noos_integrator_repair) are counted as sufficient recent completion evidence, so the classifier returns RUNNING_CONFIRMED for a loop whose ORGANIC producer is dead.",
+    "exact_location": {
+      "file": "scripts/noos_observability_semantics_v1.py",
+      "function": "classify_loop_state",
+      "lines": "121-200",
+      "defect_line": "177-180: `if dispatch_fresh and completion_fresh: state = RUNNING_CONFIRMED` — completion_fresh (line 175) derives only from completion_age_minutes vs threshold; the row's cloud_trigger / receipt_origin provenance is never an input to this function"
+    },
+    "why_repair_receipts_masked_it": "classify_loop_state has no provenance parameter. A repair write refreshes noetfield_factory_cycle_runs.recorded_at, driving completion_age_minutes below the 30-min threshold, so completion_fresh=True and the loop is reported RUNNING_CONFIRMED. The route for RUNNING_CONFIRMED is None, so the real (organic) stall never triggers a repair/escalation route. This is the false-green.",
+    "corroborating_prior_finding": "receipts/incident/noos-completion-evidence-refresh-001-diagnosis-v1.json remaining_findings[0]: 'the completion classifier keys on freshness AGE only, not provenance ... Recommend that classification treat repair-sustained freshness as DEGRADED/UNPROVEN, distinct from organic freshness.'"
+  },
+  "fix_plan": {
+    "in_repo_now": [
+      "Backward-compatibly extend classify_loop_state with organic-vs-repair completion separation + new states DEGRADED_REPAIR_SUSTAINED / COMPLETION_UNPROVEN / EVIDENCE_INCONSISTENT / STOPPED_OR_IDLE (Phase 4). Invariant: no repair/replay/manual completion can EVER yield RUNNING_CONFIRMED.",
+      "Deterministic motor state machine + invariants (Phase 3), local reference executor for the offline sellable slice (Phase 5), additive provenance migration FILE (Phase 4b), tests + product package (Phases 6-7)."
+    ],
+    "external_activation_required": [
+      "Restart/redeploy the cloud http_loop producer (Railway/Fly) — needs cloud deploy creds not present on this host",
+      "Apply the Supabase provenance migration (make supabase-migrate) — needs DB creds + is L5-frozen",
+      "Run 3 consecutive real cloud organic http_loop cycles + deployed-revision verification — depends on the producer restart above"
+    ]
+  },
+  "final_status": "SUBMITTED for independent verification"
+}
