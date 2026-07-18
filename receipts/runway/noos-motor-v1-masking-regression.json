@@ -1,6 +1,6 @@
 {
   "schema": "noos-motor-v1-masking-regression-v1",
-  "verified_at": "2026-07-18T04:03:17Z",
+  "verified_at": "2026-07-18T05:05:28Z",
   "check": "masking_regression",
   "repair_state": "DEGRADED_REPAIR_SUSTAINED",
   "restored_state": "RUNNING_CONFIRMED",

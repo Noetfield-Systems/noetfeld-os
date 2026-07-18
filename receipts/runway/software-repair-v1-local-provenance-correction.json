@@ -1,0 +1,21 @@
+{
+  "schema": "software-repair-v1-local-provenance-correction-v1",
+  "not_a_verdict": "Provenance correction record. SUBMITTED for independent verification.",
+  "canon_version": "FOUNDER_CANON_v1+MACHINE_LOOPS_v1",
+  "corrected_at": "2026-07-18T05:20:00Z",
+  "defect": "The motor foundation labelled local reference executor cycles receipt_origin=organic. organic must be reserved for the PRODUCTION canonical producer.",
+  "correction": {
+    "code": [
+      "scripts/noos_observability_semantics_v1.py (ORIGIN_LOCAL_REFERENCE, NON_PRODUCTION_LIVENESS_ORIGINS, PRODUCTION_ORGANIC_PRODUCERS, CANONICAL_EXECUTION_PLANES, production_running_confirmed())",
+      "scripts/noos_motor_state_machine_v1.py (ORIGIN_LOCAL_REFERENCE)",
+      "scripts/noos_motor_local_executor_v1.py (receipt_origin=local_reference, default execution_origin=local_reference)",
+      "scripts/noos_motor_v1_verify_v1.py (emits local-reference-cycle receipts)"
+    ],
+    "receipts_relabelled": [
+      "noos-motor-v1-organic-cycle-{1,2,3}.json REMOVED and re-emitted as noos-motor-v1-local-reference-cycle-{1,2,3}.json with receipt_origin=local_reference"
+    ],
+    "tests": "tests/test_software_repair_provenance_v1.py \u2014 12 tests incl. property: no non-production origin can EVER establish production RUNNING_CONFIRMED"
+  },
+  "production_liveness_gate": "production_running_confirmed() requires ALL of: origin=organic, producer in PRODUCTION_ORGANIC_PRODUCERS, plane in CANONICAL_EXECUTION_PLANES, dispatch_correlated, lifecycle_valid, terminal_evidence_valid, freshness_within_slo",
+  "final_status": "SUBMITTED for independent verification"
+}

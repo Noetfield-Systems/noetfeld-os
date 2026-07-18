@@ -40,9 +40,10 @@ def test_end_to_end_produces_real_output_and_receipt(tmp_path):
     output = json.loads(art.read_text())
     assert output["record_count"] == 2
     assert output["numeric_totals"]["a"] == 3.0
-    # receipt is provenance-honest
+    # receipt is provenance-honest: local execution is local_reference, NOT organic
     receipt = json.loads(Path(res["receipt_path"]).read_text())
-    assert receipt["receipt_origin"] == fsm.ORIGIN_ORGANIC
+    assert receipt["receipt_origin"] == fsm.ORIGIN_LOCAL_REFERENCE
+    assert receipt["receipt_origin"] != fsm.ORIGIN_ORGANIC
     assert receipt["execution_plane"] == "local_reference"
     assert receipt["producer"] == "noos-motor-local-executor-v1"
     assert receipt["state"] == fsm.COMPLETED

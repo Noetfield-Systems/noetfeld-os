@@ -68,7 +68,10 @@ TERMINAL_STATES = frozenset({COMPLETED, FAILED, TIMED_OUT, CANCELLED, DEAD_LETTE
 RECOVERABLE_STATES = frozenset({FAILED, TIMED_OUT, RETRY_SCHEDULED, REPLAY_REQUESTED})
 
 # ---- Execution origins / provenance (aligned with the classifier) ----------
+# ``organic`` is reserved for the PRODUCTION canonical producer only; local /
+# offline execution is ``local_reference`` and never proves deployed liveness.
 ORIGIN_ORGANIC = "organic"
+ORIGIN_LOCAL_REFERENCE = "local_reference"
 ORIGIN_REPAIR = "repair"
 ORIGIN_REPLAY = "replay"
 ORIGIN_MANUAL = "manual"

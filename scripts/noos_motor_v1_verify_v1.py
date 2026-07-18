@@ -56,7 +56,7 @@ def _cycle(i: int, art: Path, rcp: Path) -> dict[str, Any]:
         res["ok"]
         and res["status"] == fsm.COMPLETED
         and got["output_integrity_ok"] is True
-        and res["record"]["execution_origin"] == fsm.ORIGIN_ORGANIC
+        and res["record"]["execution_origin"] == fsm.ORIGIN_LOCAL_REFERENCE
         and res["record"]["producer"] == lx.PRODUCER
     )
     return {
@@ -66,7 +66,7 @@ def _cycle(i: int, art: Path, rcp: Path) -> dict[str, Any]:
         "correlation_id": res["record"]["correlation_id"],
         "dispatch_id": res["record"]["dispatch_id"],
         "producer": res["record"]["producer"],
-        "receipt_origin": "organic",
+        "receipt_origin": "local_reference",
         "execution_plane": "local_reference",
         "final_state": res["status"],
         "output_hash": res["output_hash"],
@@ -128,7 +128,7 @@ def verify(*, cycles: int = 3, emit_receipts: bool = False, workdir: Path | None
     art, rcp = tmp / "art", tmp / "rcp"
     results = {
         "schema": "noos-motor-v1-verify-v1",
-        "not_a_verdict": "Deterministic self-verification of the OFFLINE organic path. Cloud http_loop 3-cycle is EXTERNAL_ACTIVATION_REQUIRED and is NOT covered here. SUBMITTED for independent verification.",
+        "not_a_verdict": "Deterministic self-verification of the OFFLINE local-reference path (receipt_origin=local_reference; NOT production organic). Canonical cloud http_loop 3-cycle is a separate production step and is NOT covered here. SUBMITTED for independent verification.",
         "canon_version": "FOUNDER_CANON_v1+MACHINE_LOOPS_v1",
         "verified_at": utc_now(),
         "checks": [
@@ -142,10 +142,10 @@ def verify(*, cycles: int = 3, emit_receipts: bool = False, workdir: Path | None
         RUNWAY.mkdir(parents=True, exist_ok=True)
         cyc = results["checks"][0]["cycles"]
         for c in cyc:
-            (RUNWAY / f"noos-motor-v1-organic-cycle-{c['cycle']}.json").write_text(
+            (RUNWAY / f"noos-motor-v1-local-reference-cycle-{c['cycle']}.json").write_text(
                 json.dumps({
-                    "schema": "noos-motor-v1-organic-cycle-v1",
-                    "not_a_verdict": "LOCAL reference organic cycle (execution_plane=local_reference). This is NOT a cloud http_loop cycle; the cloud 3-cycle is EXTERNAL_ACTIVATION_REQUIRED. SUBMITTED for independent verification.",
+                    "schema": "noos-motor-v1-local-reference-cycle-v1",
+                    "not_a_verdict": "LOCAL reference cycle (receipt_origin=local_reference, execution_plane=local_reference). Proves product behavior, NOT deployed liveness; this is NOT a canonical cloud http_loop cycle. SUBMITTED for independent verification.",
                     "verified_at": results["verified_at"],
                     **c,
                 }, indent=2) + "\n", encoding="utf-8"

@@ -45,7 +45,13 @@ EVIDENCE_INCONSISTENT = "EVIDENCE_INCONSISTENT"
 STOPPED_OR_IDLE = "STOPPED_OR_IDLE"
 
 # ---- Receipt provenance origins (aligned with noos_motor_route_owner_v1) ----
+# CORRECTION (NF-NOOS-SOFTWARE-REPAIR-RUNWAY-V1): ``organic`` is reserved for the
+# PRODUCTION canonical producer only. Local/offline reference execution is
+# ``local_reference`` — it proves product behavior, NEVER deployed-system
+# liveness. This closes the earlier defect where the local reference executor
+# stamped ``receipt_origin=organic``.
 ORIGIN_ORGANIC = "organic"
+ORIGIN_LOCAL_REFERENCE = "local_reference"
 ORIGIN_REPAIR = "repair"
 ORIGIN_REPLAY = "replay"
 ORIGIN_MANUAL = "manual"
@@ -55,7 +61,24 @@ ORIGIN_LEGACY_UNKNOWN = "legacy_unknown"
 
 # Non-organic origins can never satisfy the RUNNING_CONFIRMED organic gate.
 NON_ORGANIC_ORIGINS = frozenset(
-    {ORIGIN_REPAIR, ORIGIN_REPLAY, ORIGIN_MANUAL, ORIGIN_MIGRATION, ORIGIN_TEST}
+    {ORIGIN_LOCAL_REFERENCE, ORIGIN_REPAIR, ORIGIN_REPLAY, ORIGIN_MANUAL,
+     ORIGIN_MIGRATION, ORIGIN_TEST}
+)
+# Origins that may NEVER establish PRODUCTION liveness (everything except a
+# genuine production organic completion). legacy_unknown included — never guess.
+NON_PRODUCTION_LIVENESS_ORIGINS = frozenset(
+    {ORIGIN_LOCAL_REFERENCE, ORIGIN_REPAIR, ORIGIN_REPLAY, ORIGIN_MANUAL,
+     ORIGIN_MIGRATION, ORIGIN_TEST, ORIGIN_LEGACY_UNKNOWN}
+)
+
+# Production allowlist: only these producers on these execution planes may
+# establish a PRODUCTION RUNNING_CONFIRMED. A workflow_dispatch / GHA factory run
+# (manual origin) or the local reference executor is deliberately excluded.
+PRODUCTION_ORGANIC_PRODUCERS = frozenset(
+    {"railway:noos-loop-runner", "cf:noos-loop-fleet-tick", "http_loop"}
+)
+CANONICAL_EXECUTION_PLANES = frozenset(
+    {"railway:noos-loop-runner", "production"}
 )
 
 # Raw cloud_trigger labels the repair path stamps (must match
@@ -182,7 +205,7 @@ def normalize_receipt_origin(cloud_trigger: str | None) -> str:
         return ORIGIN_LEGACY_UNKNOWN
     # Already-normalized values pass through.
     if raw in {
-        ORIGIN_ORGANIC, ORIGIN_REPAIR, ORIGIN_REPLAY,
+        ORIGIN_ORGANIC, ORIGIN_LOCAL_REFERENCE, ORIGIN_REPAIR, ORIGIN_REPLAY,
         ORIGIN_MANUAL, ORIGIN_MIGRATION, ORIGIN_TEST, ORIGIN_LEGACY_UNKNOWN,
     }:
         return raw
@@ -190,6 +213,8 @@ def normalize_receipt_origin(cloud_trigger: str | None) -> str:
         return ORIGIN_REPAIR
     if raw in _ORGANIC_TRIGGER_LABELS:
         return ORIGIN_ORGANIC
+    if "local_reference" in raw or "local-reference" in raw or raw.startswith("local"):
+        return ORIGIN_LOCAL_REFERENCE
     if "replay" in raw:
         return ORIGIN_REPLAY
     if "migration" in raw or "backfill" in raw:
@@ -202,9 +227,62 @@ def normalize_receipt_origin(cloud_trigger: str | None) -> str:
 
 
 def is_organic_origin(origin: str | None) -> bool:
-    """True only for a genuinely organic origin. Repair/replay/manual/migration/
-    test are never organic. ``legacy_unknown`` is NOT organic (do not guess)."""
+    """True only for a genuinely organic origin. local_reference/repair/replay/
+    manual/migration/test are never organic. ``legacy_unknown`` is NOT organic
+    (do not guess)."""
     return origin == ORIGIN_ORGANIC
+
+
+def production_running_confirmed(
+    *,
+    receipt_origin: str | None,
+    producer: str | None,
+    execution_plane: str | None,
+    dispatch_correlated: bool,
+    lifecycle_valid: bool,
+    terminal_evidence_valid: bool,
+    freshness_within_slo: bool,
+) -> dict[str, Any]:
+    """The PRODUCTION liveness gate (NF-NOOS-SOFTWARE-REPAIR-RUNWAY-V1 §2).
+
+    A PRODUCTION ``RUNNING_CONFIRMED`` requires ALL of:
+      * ``receipt_origin == organic``;
+      * producer in ``PRODUCTION_ORGANIC_PRODUCERS``;
+      * execution plane in ``CANONICAL_EXECUTION_PLANES``;
+      * dispatch correlates to a real production dispatch;
+      * lifecycle ordering valid;
+      * terminal evidence valid (output exists OR a valid failure terminal);
+      * freshness within the configured SLO.
+
+    local_reference / test / repair / replay / manual / migration / legacy_unknown
+    can NEVER pass this gate — they may prove local product behavior, never
+    deployed-system health. Returns the decision plus a per-predicate breakdown
+    so a caller can see exactly which production predicate failed."""
+    origin = normalize_receipt_origin(receipt_origin)
+    checks = {
+        "origin_is_organic": is_organic_origin(origin),
+        "origin_is_production_eligible": origin not in NON_PRODUCTION_LIVENESS_ORIGINS,
+        "producer_allowlisted": producer in PRODUCTION_ORGANIC_PRODUCERS,
+        "execution_plane_canonical": execution_plane in CANONICAL_EXECUTION_PLANES,
+        "dispatch_correlated": bool(dispatch_correlated),
+        "lifecycle_valid": bool(lifecycle_valid),
+        "terminal_evidence_valid": bool(terminal_evidence_valid),
+        "freshness_within_slo": bool(freshness_within_slo),
+    }
+    confirmed = all(checks.values())
+    failed = [k for k, v in checks.items() if not v]
+    return {
+        "production_running_confirmed": confirmed,
+        "execution_state": RUNNING_CONFIRMED if confirmed else COMPLETION_UNPROVEN,
+        "normalized_origin": origin,
+        "checks": checks,
+        "failed_predicates": failed,
+        # A non-production origin is the single most common masking vector — name it.
+        "blocked_reason": None if confirmed else (
+            f"non_production_origin:{origin}" if origin in NON_PRODUCTION_LIVENESS_ORIGINS
+            else f"failed:{','.join(failed)}"
+        ),
+    }
 
 
 def _row_cloud_trigger(row: dict[str, Any]) -> str | None:

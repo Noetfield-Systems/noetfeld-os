@@ -8,13 +8,13 @@ and sold today:
     CUSTOMER INPUT -> VALIDATION -> PLAN -> MOTOR EXECUTION (FSM) ->
     REAL OUTPUT ARTIFACT -> AUTHORITATIVE RECEIPT -> RETRIEVAL -> REPLAY
 
-PROVENANCE HONESTY: this executor performs REAL organic work, so its receipts
-carry ``receipt_origin=organic``. It is NOT the cloud ``http_loop`` producer, so
-it also carries ``producer=noos-motor-local-executor-v1`` and
-``execution_plane=local_reference``. Its receipts are written under
-receipts/runway/ and are never stamped ``cloud_trigger=http_loop`` — they must
-never be mistaken for cloud organic completion. The cloud 3-cycle verification
-(Phase 8) remains a separate, external-activation step.
+PROVENANCE HONESTY (CORRECTED, NF-NOOS-SOFTWARE-REPAIR-RUNWAY-V1 §2): this
+executor performs REAL work, but it is NOT the production canonical producer, so
+its receipts carry ``receipt_origin=local_reference`` (NOT ``organic``),
+``producer=noos-motor-local-executor-v1`` and ``execution_plane=local_reference``.
+A local_reference receipt proves product BEHAVIOR; it can NEVER establish
+deployed-system liveness (see production_running_confirmed in the classifier).
+The cloud canonical ``http_loop`` cycles remain a separate production step.
 
 The representative product task is ``digest``: given a set of records it computes
 a deterministic, integrity-hashed summary artifact (real customer value) — a
@@ -131,7 +131,7 @@ def run_job(
     artifact_dir: Path | None = None,
     receipt_dir: Path | None = None,
     ledger: "fsm.MotorLedger | None" = None,
-    execution_origin: str = fsm.ORIGIN_ORGANIC,
+    execution_origin: str = fsm.ORIGIN_LOCAL_REFERENCE,
 ) -> dict[str, Any]:
     """Drive one customer input through the entire organic motor path.
 
@@ -225,9 +225,9 @@ def build_receipt(
     rec = ex.to_record()
     return {
         "schema": "noos-motor-execution-receipt-v1",
-        "not_a_verdict": "Local reference execution receipt. receipt_origin=organic, execution_plane=local_reference (NOT cloud http_loop). SUBMITTED for independent verification.",
+        "not_a_verdict": "Local reference execution receipt. receipt_origin=local_reference (NOT organic, NOT cloud http_loop); proves product behavior, never deployed liveness. SUBMITTED for independent verification.",
         "canon_version": "FOUNDER_CANON_v1+MACHINE_LOOPS_v1",
-        "receipt_origin": fsm.ORIGIN_ORGANIC,
+        "receipt_origin": fsm.ORIGIN_LOCAL_REFERENCE,
         "execution_plane": EXECUTION_PLANE,
         "producer": PRODUCER,
         "deduplicated": deduplicated,
