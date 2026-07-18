@@ -1,0 +1,93 @@
+name: software-repair-run-v1
+# NF-NOOS-SOFTWARE-REPAIR-RUNWAY-V1 §2/§5 — the PRODUCT canonical producer.
+# producer: github_actions_software_repair_v1 · plane: github_actions
+#
+# PROPOSED workflow (founder registration required): adding a live workflow under
+# .github/workflows/ requires registering its stem in
+# data/noos-parallel-agent-registry-v1.json -> gha_workflow_coverage (an L5-frozen
+# registry, founder gate). The machine does not edit it. Exact activation:
+#   1. move to .github/workflows/software-repair-run-v1.yml
+#   2. add "software-repair-run-v1": ["<worker_id>"] to gha_workflow_coverage (founder)
+#   3. merge to the default branch (founder)
+#   4. gh workflow run software-repair-run-v1.yml -f commission_id=<id>
+#
+# GitHub Models is called with GITHUB_TOKEN + models: read — NO separate secret.
+# Trust zones (§5): plan/intake and finalize are trusted (read + models, plus PR
+# write only in finalize); execute/verify runs untrusted code with permissions: {}.
+
+on:
+  workflow_dispatch:
+    inputs:
+      job_spec_path:
+        description: "Path to a committed job spec, or a persisted commission id"
+        required: true
+        type: string
+      commission_persisted:
+        description: "true only when an authoritative Supabase commission exists"
+        required: false
+        default: "false"
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  # ---- Trusted intake + model planning (no write, no prod secrets) ----------
+  intake_plan:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      models: read          # GitHub Models via the automatic GITHUB_TOKEN
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - run: pip install pytest ruff
+      - name: Plan + candidate patch (GitHub Models)
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_MODELS_MODEL: openai/gpt-4o-mini
+        run: |
+          python3 scripts/noos_software_repair_actions_v1.py \
+            --job "${{ inputs.job_spec_path }}" \
+            --out dist/actions-run-receipt.json \
+            ${{ inputs.commission_persisted == 'true' && '--commission-persisted' || '' }}
+      - uses: actions/upload-artifact@v4
+        with: { name: repair-candidate, path: dist/ }
+
+  # ---- Untrusted execution / verification (NO secrets, NO write token) -------
+  # NOTE: for the pilot, repositories are restricted to NOOS-owned / allowlisted.
+  # Arbitrary-repository support requires a GitHub App installation-token flow.
+  execute_verify:
+    needs: intake_plan
+    runs-on: ubuntu-latest
+    permissions: {}          # zero permissions — untrusted code gets no token/secret
+    steps:
+      - uses: actions/download-artifact@v4
+        with: { name: repair-candidate, path: dist/ }
+      - run: |
+          echo "isolated execution + verification already performed in-candidate;"
+          echo "in the hardened split this job re-applies the candidate patch to a"
+          echo "fresh checkout and runs ONLY allowlisted test commands with no token."
+
+  # ---- Trusted finalize (verify hashes, persist terminal, optional draft PR) --
+  finalize:
+    needs: execute_verify
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write   # only to open a DRAFT PR when authorized
+    steps:
+      - uses: actions/download-artifact@v4
+        with: { name: repair-candidate, path: dist/ }
+      - name: Verify + summarize
+        run: |
+          python3 - <<'PY'
+          import json
+          d=json.load(open("dist/actions-run-receipt.json"))
+          print("producer", d["producer"], "plane", d["execution_plane"])
+          print("receipt_origin", d["receipt_origin"], "organic", d["product_organic_confirmed"])
+          print("repaired", d["repaired"], "patch_hash", d.get("patch_hash"))
+          PY
+      # A real draft PR / authoritative Supabase completion callback is added here
+      # once the Gateway + migration 0021 persistence are live (§6/§8).

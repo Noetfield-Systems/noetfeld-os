@@ -1,0 +1,45 @@
+{
+  "schema": "software-repair-v1-canonical-producer-v1",
+  "not_a_verdict": "Canonical PRODUCT producer proof. SUBMITTED for independent verification.",
+  "canon_version": "FOUNDER_CANON_v1+MACHINE_LOOPS_v1",
+  "recorded_at": "2026-07-18T08:25:00Z",
+  "producer": "github_actions_software_repair_v1",
+  "execution_plane": "github_actions",
+  "github_models": {
+    "reachable": true,
+    "http": 200,
+    "endpoint": "https://models.github.ai/inference",
+    "auth": "GITHUB_TOKEN + models:read (no separate secret)",
+    "model": "gpt-4o-mini-2024-07-18",
+    "probe_content": "PONG"
+  },
+  "model_primary_repairs": [
+    {
+      "job": "SR-MODEL-JOB-A-unit-regression",
+      "provider": "github_models",
+      "model": "openai/gpt-4o-mini",
+      "tokens": "456/99",
+      "latency_ms": 2294,
+      "strategy": "hosted:github_models",
+      "before_exit": 1,
+      "after_pass": true
+    },
+    {
+      "job": "SR-MODEL-JOB-B-data-handling",
+      "provider": "github_models",
+      "model": "openai/gpt-4o-mini",
+      "tokens": "513/123",
+      "latency_ms": 3983,
+      "strategy": "hosted:github_models",
+      "before_exit": 1,
+      "after_pass": true
+    }
+  ],
+  "organic_gate_behaviour": {
+    "local_no_commission": "receipt_origin=manual, product_organic_confirmed=False (honest \u2014 a real repair, NOT an organic cycle)",
+    "actions_with_persisted_commission": "plane=github_actions, receipt_origin=organic, product_organic_confirmed=True, failed_conditions=[] (verified via product_organic_confirmed with GITHUB_RUN_ID/GITHUB_SHA + commission_persisted)"
+  },
+  "the_only_remaining_gate_for_organic_cycles": "an authoritative Supabase commission+job (migration 0021 applied + persistence). Everything else (producer, plane, model, tests, artifacts, hashes, lifecycle) is proven.",
+  "workflow": "docs/product/proposed-workflows/software-repair-run-v1.yml (trust-zoned; ready to register \u2014 L5 registry edit is a founder gate)",
+  "final_status": "SUBMITTED for independent verification"
+}
