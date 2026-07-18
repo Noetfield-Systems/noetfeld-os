@@ -76,6 +76,7 @@ External-activation (delivered as commands, gated on cloud creds):
 | 2026-07-18T04:35Z | 6 | 7 product docs + product README (parallel authored, accuracy-reviewed) | yes (new files) |
 | 2026-07-18T04:40Z | 8 | Release bundle built (dist/, 16 components, sha recorded); runway receipts emitted (3 local cycles, masking, repair, e2e, cloud-external-activation, release-verification, release-manifest) | yes |
 | 2026-07-18T04:45Z | — | Full repo suite 324 passed; motor+affected 59 passed; `noos verify` OVERALL ALL_OK | — |
+| 2026-07-18T04:55Z | 8 | Adversarial verification (4 skeptics): false-green fix / receipts / docs NOT REFUTED; FSM invariant-2 bug FOUND (terminal lease-reclaim resurrection) and FIXED (lease cleared on terminal, reclaim gated to live states, replay=new-attempt, DEAD_LETTERED inert) + BFS property test. Full suite 327 passed | yes (revert) |
 
 ## Result
 

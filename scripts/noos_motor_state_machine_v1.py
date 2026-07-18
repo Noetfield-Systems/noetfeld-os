@@ -18,7 +18,10 @@ Recovery:               RETRY_SCHEDULED, REPLAY_REQUESTED, REPAIR_APPLIED
 
 Enforced invariants (directive Phase 3):
   1  a run cannot complete before it starts
-  2  a terminal run cannot return to RUNNING
+  2  a RUN-FINAL run (COMPLETED / CANCELLED / DEAD_LETTERED) cannot return to
+     RUNNING by ANY sequence, and no lease reclaim can resurrect a terminal run.
+     FAILED / TIMED_OUT are recoverable attempt outcomes: retry re-runs the same
+     logical run; replay spawns a NEW attempt (never the same object)
   3  a duplicate idempotency key cannot create a second logical run
   4  a lease has an owner and an expiry
   5  an expired lease can be recovered deterministically
@@ -77,20 +80,34 @@ VALID_TRANSITIONS: dict[str, frozenset[str]] = {
     ACCEPTED: frozenset({PLANNED, CANCELLED, FAILED}),
     PLANNED: frozenset({DISPATCHED, CANCELLED, FAILED}),
     DISPATCHED: frozenset({CLAIMED, TIMED_OUT, CANCELLED, FAILED}),
-    CLAIMED: frozenset({RUNNING, TIMED_OUT, CANCELLED, FAILED}),
-    RUNNING: frozenset({OUTPUT_COMMITTED, FAILED, TIMED_OUT, CANCELLED}),
+    # CLAIMED / RUNNING may return to DISPATCHED ONLY as a lease-lost requeue
+    # (worker died); reclaim() gates this on an expired lease + non-terminal state.
+    CLAIMED: frozenset({RUNNING, DISPATCHED, TIMED_OUT, CANCELLED, FAILED}),
+    RUNNING: frozenset({OUTPUT_COMMITTED, DISPATCHED, FAILED, TIMED_OUT, CANCELLED}),
     OUTPUT_COMMITTED: frozenset({COMPLETED, FAILED}),
     # Terminals: only failure terminals may enter recovery; COMPLETED is final.
     COMPLETED: frozenset(),
     FAILED: frozenset({RETRY_SCHEDULED, REPLAY_REQUESTED, DEAD_LETTERED, REPAIR_APPLIED}),
     TIMED_OUT: frozenset({RETRY_SCHEDULED, REPLAY_REQUESTED, DEAD_LETTERED, REPAIR_APPLIED}),
     CANCELLED: frozenset(),
-    DEAD_LETTERED: frozenset({REPLAY_REQUESTED}),
-    # Recovery states re-enter the pipeline via a NEW attempt (see replay()).
+    # DEAD_LETTERED is RUN-FINAL and inert: recovery is a NEW attempt object
+    # (MotorLedger.replay leaves the dead-lettered object untouched). The
+    # dead-lettered object itself never transitions anywhere.
+    DEAD_LETTERED: frozenset(),
+    # RETRY_SCHEDULED re-dispatches the SAME logical run's next attempt (FAILED /
+    # TIMED_OUT are recoverable attempt outcomes; retry_count bounds it).
     RETRY_SCHEDULED: frozenset({DISPATCHED, DEAD_LETTERED, CANCELLED}),
-    REPLAY_REQUESTED: frozenset({ACCEPTED, DISPATCHED, CANCELLED}),
+    # REPLAY_REQUESTED is a DEAD-END marker: replay creates a NEW attempt object
+    # (invariant 10), so the marked object cannot itself re-enter the pipeline.
+    REPLAY_REQUESTED: frozenset(),
     REPAIR_APPLIED: frozenset({REPLAY_REQUESTED, DEAD_LETTERED}),
 }
+
+# RUN-FINAL states: no sequence of transitions on the SAME object may return
+# these to RUNNING (invariant 2). FAILED / TIMED_OUT are recoverable attempt
+# outcomes and are intentionally NOT run-final (retry re-runs the same logical
+# run; replay spawns a new attempt).
+RUN_FINAL_STATES = frozenset({COMPLETED, CANCELLED, DEAD_LETTERED})
 
 # Fields whose provenance is immutable once set (invariant 11).
 _IMMUTABLE_PROVENANCE = ("producer", "execution_origin", "correlation_id", "root_execution_id")
@@ -181,6 +198,11 @@ class MotorExecution:
             setattr(self, k, v)
         self.state = to
         self.updated_at = now
+        # Entering a terminal state releases any held lease: a terminal run must
+        # never be lease-reclaimable back into RUNNING (invariant 2). Recovery
+        # from a terminal state goes through the explicit retry/replay path.
+        if to in TERMINAL_STATES:
+            self.lease = None
         self.history.append({"state": to, "at": now, "note": note})
         return self
 
@@ -245,12 +267,17 @@ class MotorExecution:
         return _iso_to_epoch(now) >= _iso_to_epoch(self.lease["expires_at"])
 
     def reclaim(self, *, now: str, owner: str, lease_ttl_seconds: float) -> "MotorExecution":
-        """Deterministically recover an expired lease by re-claiming."""
+        """Deterministically recover an expired lease by re-queuing then
+        re-claiming. Only a LIVE leased state (CLAIMED or RUNNING) is
+        reclaimable — a terminal run holds no lease (cleared on terminal entry)
+        and can never be forced back to RUNNING via reclaim (invariant 2)."""
+        if self.state not in {CLAIMED, RUNNING}:
+            raise InvalidTransition(f"reclaim only from a live leased state, not {self.state}")
         if not self.lease_expired(now=now):
             raise InvalidTransition("lease not expired; cannot reclaim")
         prior = self.lease.get("owner") if self.lease else None
-        self.state = DISPATCHED  # return to the queue before re-claiming
-        self.history.append({"state": DISPATCHED, "at": now, "note": f"lease_expired_reclaim_from:{prior}"})
+        # Requeue through the validated transition table (no direct assignment).
+        self.transition(DISPATCHED, now=now, note=f"lease_expired_reclaim_from:{prior}")
         return self.claim(now=now, owner=owner, lease_ttl_seconds=lease_ttl_seconds)
 
     # ---- retry (invariants 6, 7) ------------------------------------------

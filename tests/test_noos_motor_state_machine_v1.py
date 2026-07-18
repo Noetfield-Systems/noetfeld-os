@@ -188,6 +188,51 @@ def test_inv13_record_is_complete_for_critic():
     assert required.issubset(rec.keys())
 
 
+# ---- regression: terminal run must NOT be lease-reclaimable into RUNNING ---
+def test_inv2_terminal_lease_expiry_cannot_reclaim_into_running():
+    # Counterexample found by adversarial verification: a TIMED_OUT/FAILED run
+    # still held its lease, so an expired lease let reclaim() force it back to
+    # DISPATCHED -> CLAIMED -> RUNNING. Must now raise and never re-run.
+    for terminal in ("time_out", "fail"):
+        ex = _run()
+        ex.plan(now=T0).dispatch(now=T0).claim(now=T0, owner="w1", lease_ttl_seconds=60)
+        if terminal == "time_out":
+            ex.time_out(now="2026-07-18T00:02:00Z")
+        else:
+            ex.fail(now="2026-07-18T00:02:00Z", error_code="e", error_summary="s")
+        assert ex.state in m.TERMINAL_STATES
+        assert ex.lease is None  # lease released on terminal entry
+        with pytest.raises(m.InvalidTransition):
+            ex.reclaim(now="2026-07-18T00:05:00Z", owner="w2", lease_ttl_seconds=60)
+        assert ex.state != m.RUNNING
+
+
+# ---- property: NO run-final state can reach RUNNING by any path ------------
+def test_property_run_final_states_never_reach_running():
+    for start in m.RUN_FINAL_STATES:
+        # BFS over the transition graph from each run-final state.
+        seen, frontier = {start}, [start]
+        while frontier:
+            s = frontier.pop()
+            for nxt in m.VALID_TRANSITIONS.get(s, frozenset()):
+                assert nxt != m.RUNNING, f"{start} can reach RUNNING via {s}->RUNNING"
+                if nxt not in seen:
+                    seen.add(nxt)
+                    frontier.append(nxt)
+
+
+def test_replay_from_dead_letter_is_new_attempt_not_same_object():
+    led = m.MotorLedger()
+    ex, _ = led.submit(task_kind="demo", payload={"x": 1}, now=T0, producer="p", max_retries=0)
+    ex.plan(now=T0).dispatch(now=T0).fail(now=T1, error_code="e", error_summary="s")
+    ex.dead_letter(now=T1, reason="exhausted")
+    child = led.replay(ex.execution_id, now=T2, payload={"x": 1})
+    assert child.execution_id != ex.execution_id  # new object
+    assert ex.state in m.RUN_FINAL_STATES  # parent stays run-final (marked)
+    # the dead-lettered parent object can never itself walk to RUNNING
+    assert m.RUNNING not in m.VALID_TRANSITIONS[m.REPLAY_REQUESTED]
+
+
 # ---- the invalid-transition wall (exhaustive) ------------------------------
 def test_invalid_transitions_rejected_exhaustively():
     all_states = set(m.VALID_TRANSITIONS)
