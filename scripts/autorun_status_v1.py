@@ -27,13 +27,18 @@ DEFAULT_STALE_MINUTES = 30
 sys.path.insert(0, str(ROOT / "scripts"))
 from noos_slo_v1 import autofile_kaizen_receipt, score_slo, slo_config, status_proxy_success_rate  # noqa: E402
 from noos_observability_semantics_v1 import (  # noqa: E402
+    COMPLETION_UNPROVEN,
+    DEGRADED_REPAIR_SUSTAINED,
     DISPATCHING_COMPLETION_UNPROVEN,
+    EVIDENCE_INCONSISTENT,
     EVIDENCE_INSUFFICIENT,
     LOOP_EXECUTION_STALE,
     OBSERVER_DIVERGENCE_OR_REPLAY,
     OBSERVER_UNAVAILABLE,
     RUNNING_CONFIRMED,
+    STOPPED_OR_IDLE,
     classify_loop_state,
+    derive_completion_provenance,
 )
 
 # Map the explicit dual-signal execution states onto the legacy cockpit
@@ -47,6 +52,15 @@ _EXEC_STATE_TO_STATUS = {
     DISPATCHING_COMPLETION_UNPROVEN: DISPATCHING_COMPLETION_UNPROVEN,
     OBSERVER_DIVERGENCE_OR_REPLAY: OBSERVER_DIVERGENCE_OR_REPLAY,
     OBSERVER_UNAVAILABLE: OBSERVER_UNAVAILABLE,
+    # Provenance-aware states map into the EXISTING canonical status vocabulary
+    # (NF-NOOS-PROVENANCE-CLASSIFIER-CORRECTION §3): degraded / unproven /
+    # inconsistent -> BLOCKED_WITH_REASON; expected idle -> IDLE_NO_WORK. The
+    # explicit execution_state / evidence_state / route are preserved on the
+    # result and in dashboard_findings so no detail is lost.
+    DEGRADED_REPAIR_SUSTAINED: "BLOCKED_WITH_REASON",
+    COMPLETION_UNPROVEN: "BLOCKED_WITH_REASON",
+    EVIDENCE_INCONSISTENT: "BLOCKED_WITH_REASON",
+    STOPPED_OR_IDLE: "IDLE_NO_WORK",
 }
 
 
@@ -741,12 +755,16 @@ def probe_supabase_noos_loop(wf: dict[str, Any], wf_doc: dict[str, Any], stale_m
     factory_id = probe.get("factory_id", "")
     if not cfg:
         return blocked("supabase_not_configured", command=command, evidence={"table": table, "factory_id": factory_id})
+    # Fetch a bounded window (not just the newest row) so provenance can be
+    # separated: a fresh repair row must not read as organic liveness. The
+    # newest row is still rows[0]; the window lets us find the newest ORGANIC
+    # and newest REPAIR completions independently.
     params = urllib.parse.urlencode(
         {
             "select": "cycle_number,status,recorded_at,runner_output,exit_code,factory_id",
             "factory_id": f"eq.{factory_id}",
             "order": "recorded_at.desc",
-            "limit": "1",
+            "limit": "50",
         }
     )
     hit = supabase_get(cfg, table, query=params)
@@ -756,6 +774,12 @@ def probe_supabase_noos_loop(wf: dict[str, Any], wf_doc: dict[str, Any], stale_m
     runner = row.get("runner_output") or {}
     completion_at = row.get("recorded_at") if rows else None
     cycle_status = str(row.get("status") or "")
+
+    # Provenance-aware inputs (NF-NOOS-MOTOR-V1-FULL-RUNWAY, Phase 4): repair rows
+    # keep the newest-row age fresh; the classifier must decide RUNNING_CONFIRMED
+    # on ORGANIC evidence only. derive_completion_provenance is pure — inject the
+    # module's own age helper.
+    prov = derive_completion_provenance(rows, age_fn=age_minutes)
 
     # Independent dispatch-heartbeat signal (execution dispatch, not completion).
     loop_id = _registry_loop_id(probe, factory_id, runner)
@@ -790,16 +814,28 @@ def probe_supabase_noos_loop(wf: dict[str, Any], wf_doc: dict[str, Any], stale_m
         observed_at=utc_now(),
         status_source="noos_loop_registry+noetfield_factory_cycle_runs",
         success_rate_sample_window_minutes=stale_minutes,
+        # Provenance-aware: organic-only liveness; repair rows can never confirm.
+        # §1 the newest organic row must be a SUCCESSFUL terminal to contribute;
+        # §2 only ORIGIN_REPAIR is repair-sustained evidence.
+        completion_origin=prov["completion_origin"],
+        organic_completion_age_minutes=prov["organic_completion_age_minutes"],
+        repair_completion_age_minutes=prov["repair_completion_age_minutes"],
+        completion_terminal_valid=prov.get("completion_terminal_valid", True),
+        provenance_metrics=prov["metrics"],
     )
     exec_state = classification["execution_state"]
     status = _EXEC_STATE_TO_STATUS.get(exec_state, "BLOCKED_WITH_REASON")
 
     reason_map = {
-        RUNNING_CONFIRMED: "dispatch_and_completion_fresh",
+        RUNNING_CONFIRMED: "organic_completion_and_dispatch_fresh",
         DISPATCHING_COMPLETION_UNPROVEN: "dispatch_fresh_completion_evidence_stale",
         OBSERVER_DIVERGENCE_OR_REPLAY: "completion_fresh_dispatch_stale_or_impossible",
         LOOP_EXECUTION_STALE: "dispatch_and_completion_stale",
         OBSERVER_UNAVAILABLE: "authoritative_source_unavailable",
+        DEGRADED_REPAIR_SUSTAINED: "organic_completion_stale_repair_sustained_masking",
+        COMPLETION_UNPROVEN: "dispatch_fresh_no_organic_completion_proof",
+        EVIDENCE_INCONSISTENT: "completion_evidence_inconsistent_ordering_or_correlation",
+        STOPPED_OR_IDLE: "inactive_by_configuration",
     }
     result: dict[str, Any] = {
         "status": status,
@@ -812,6 +848,7 @@ def probe_supabase_noos_loop(wf: dict[str, Any], wf_doc: dict[str, Any], stale_m
         "reason": reason_map.get(exec_state, exec_state),
         "cycle_number": row.get("cycle_number") if rows else None,
         "presentation": classification["presentation"],
+        "provenance": classification.get("provenance"),
         "evidence": {
             "factory_id": factory_id,
             "loop_id": loop_id,

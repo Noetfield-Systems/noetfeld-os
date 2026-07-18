@@ -1,0 +1,41 @@
+{
+  "schema": "noos-provenance-classifier-correction-v1",
+  "not_a_verdict": "Minimal, isolated provenance-classifier correction off current main. Builder receipt — SUBMITTED for independent verification (author != subject). NOT a PASS/HEALTHY verdict.",
+  "canon_version": "FOUNDER_CANON_v1+MACHINE_LOOPS_v1",
+  "task": "NF-NOOS-PROVENANCE-CLASSIFIER-CORRECTION",
+  "created_at": "2026-07-18T07:10:00Z",
+  "updated_at": "2026-07-18T07:40:00Z",
+  "branch": "nf-noos-provenance-classifier-correction",
+  "base": "origin/main @ 291789bc3d40dad8ea165f68a29ff026a000bd26",
+  "scope_exactly": [
+    "scripts/noos_observability_semantics_v1.py — provenance-aware classifier",
+    "scripts/autorun_status_v1.py — live projection wiring",
+    "tests/test_noos_motor_provenance_v1.py — false-green + derive regression",
+    "tests/test_software_repair_provenance_v1.py — production-liveness + LIVE-PROBE regression",
+    "receipts/proof/noos-provenance-classifier-correction-v1.json — this receipt"
+  ],
+  "explicitly_excluded": [
+    "motor state machine", "local reference executor", "software-repair product (recipe/engine/adapter/runner/API)",
+    "Supabase migrations (0020/0021)", "CLI (bin/noos)", "sellable-product / motor product documentation"
+  ],
+  "what_is_WIRED_into_the_live_projection": {
+    "organic_only_liveness": "probe_supabase_noos_loop -> derive_completion_provenance -> classify_loop_state. RUNNING_CONFIRMED requires a fresh ORGANIC completion.",
+    "successful_terminal_required": "(§1) an organic row contributes to RUNNING_CONFIRMED ONLY if it is a SUCCESSFUL terminal (success status AND non-failing exit). A fresh-but-failed or mislabeled organic row does NOT confirm.",
+    "repair_is_repair_only": "(§2) ONLY ORIGIN_REPAIR counts as repair-sustained (DEGRADED_REPAIR_SUSTAINED). local_reference/manual/test/replay/migration are separate non-production evidence and yield COMPLETION_UNPROVEN, never repair-masking.",
+    "canonical_status_vocabulary": "(§3) DEGRADED_REPAIR_SUSTAINED / COMPLETION_UNPROVEN / EVIDENCE_INCONSISTENT -> BLOCKED_WITH_REASON; STOPPED_OR_IDLE -> IDLE_NO_WORK. execution_state, evidence_state and route are preserved on the result and in dashboard_findings."
+  },
+  "what_is_NOT_wired": {
+    "production_running_confirmed": "DECLARED_NOT_WIRED (§4). It is a complete gate but is TEST-ONLY: its full inputs (producer allowlist, canonical execution plane, dispatch correlation, lifecycle validity) are NOT present in the trusted noetfield_factory_cycle_runs row. See production_gate_wiring_status(). No claim is made that the full live production gate is enforced.",
+    "live_enforced_subset": "receipt_origin=organic + successful terminal + freshness + repair-only-repair-sustained (the trustable subset)."
+  },
+  "live_probe_regression_tests": [
+    "fresh repair + FAILED organic -> DEGRADED_REPAIR_SUSTAINED / BLOCKED_WITH_REASON",
+    "local_reference -> COMPLETION_UNPROVEN (not repair)",
+    "manual / test / replay -> COMPLETION_UNPROVEN (not repair)",
+    "mislabeled organic (http_loop, exit!=0) -> COMPLETION_UNPROVEN, never RUNNING_CONFIRMED",
+    "successful valid organic -> RUNNING_CONFIRMED / RUNNING"
+  ],
+  "deterministic_gate": "python3 -m pytest tests/test_software_repair_provenance_v1.py tests/test_noos_motor_provenance_v1.py tests/test_noos_observability_semantics_v1.py tests/test_autorun_status_v1.py -q => 58 passed (local); full worktree suite 323 passed; CI test-and-gate is the independent gate on the PR.",
+  "real_cloud_blocker_unchanged": "cloud http_loop restart -> actual organic completion rows -> three consecutive real cloud cycles -> independent verification remains EXTERNAL_ACTIVATION_REQUIRED. This correction does not substitute for it.",
+  "final_status": "SUBMITTED for independent verification"
+}
