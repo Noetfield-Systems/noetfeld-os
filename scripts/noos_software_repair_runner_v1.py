@@ -127,6 +127,14 @@ def run_repair_job(
     ex.claim(now=now, owner="repair-worker-1", lease_ttl_seconds=recipe["limits"]["execution_timeout_seconds"])
     ex.start(now=now)
 
+    # A repair is only meaningful if the test command's tool is actually present.
+    # Fail TRUTHFULLY (not "unrepaired") when the runner environment lacks the tool.
+    import shutil as _shutil
+    tool = test_cmd[0] if test_cmd else ""
+    if tool and tool not in ("python", "python3") and _shutil.which(tool) is None:
+        ex.fail(now=now, error_code="tool_unavailable", error_summary=f"test command tool not available: {tool}")
+        return _finalize(ex, job, now, status="tool_unavailable", recipe=recipe)
+
     # reproduce failure (tests BEFORE) — must actually fail
     before = engine.run_tests(repo_dir, test_cmd, timeout=recipe["limits"]["execution_timeout_seconds"])
     failure_class = _classify_failure(before["output"])

@@ -54,6 +54,13 @@ def test_recipe_path_and_limit_policy():
     ("job3-integration-data.json", "unit_test_regression"),  # data bug surfaces as assertion
 ])
 def test_real_repair_jobs(spec, expect_class):
+    import shutil
+    # job2 exercises a ruff lint failure; skip where the ruff binary is not
+    # installed (e.g. gel-ci, which installs only requirements.txt). This is an
+    # environment dependency, not a product defect — the product workflow
+    # (software-repair-run-v1) installs ruff for lint jobs.
+    if spec == "job2-lint-failure.json" and shutil.which("ruff") is None:
+        pytest.skip("ruff not installed in this environment")
     res = runner.run_repair_job(_job(spec))
     assert res["ok"] is True
     assert res["job_status"] == "repaired"
