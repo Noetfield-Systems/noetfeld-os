@@ -6,5 +6,5 @@ def totals_by_key(rows):
     out = {}
     for row in rows:
         k = row["key"]
-        out[k] = out.get(k, 0) - row["amount"]  # BUG: should be + row["amount"]
+        out[k] = out.get(k, 0) + row["amount"]  # repaired by NOOS software_repair_ci_v1
     return out
