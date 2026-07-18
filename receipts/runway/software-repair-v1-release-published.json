@@ -1,0 +1,12 @@
+{
+  "schema": "software-repair-v1-release-published-v1",
+  "not_a_verdict": "Durable draft release published to GitHub. SUBMITTED for independent verification.",
+  "canon_version": "FOUNDER_CANON_v1+MACHINE_LOOPS_v1",
+  "published_at": "2026-07-18T06:55:00Z",
+  "release_url": "https://github.com/Noetfield-Systems/noetfeld-os/releases/tag/untagged-04a8c32b3f1dc14da9ca",
+  "release_state": "draft",
+  "artifact": "noos-software-repair-runway-v1.0.0-rc1.tar.gz (attached)",
+  "product_version": "1.0.0-rc1",
+  "promote_to": "1.0.0 after production acceptance",
+  "final_status": "SUBMITTED for independent verification"
+}
