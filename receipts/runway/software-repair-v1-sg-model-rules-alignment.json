@@ -1,0 +1,43 @@
+{
+  "schema": "software-repair-v1-sg-model-rules-alignment-v1",
+  "not_a_verdict": "Model router aligned to SG canon after new provider secrets. SUBMITTED for independent verification (author != subject).",
+  "canon_version": "FOUNDER_CANON_v1+MACHINE_LOOPS_v1",
+  "aligned_at": "2026-07-18T10:30:00Z",
+  "sg_rules_read": [
+    "SG-Canonical-Library/.../P10-PRODUCT-LAYERS/COST_EXECUTION_DOCTRINE_LOCKED_v1.md \u2014 T0 deterministic / T1 free-very-low-cost / T2 bounded-approved; cheapest-capable-first; provider names in PRIVATE bindings only (never canonical law); degradation code LLM_PROVIDER_NOT_CONFIGURED",
+    "SG-Canonical-Library/.../P5-LINE-ENGINE/capability-router-circuit-breaker.md \u2014 router is a DISPATCHER not brain; circuit breaker (trip after N failures -> fail over to declared fallback -> half-open probe); vendor-neutral swap point (D-8)"
+  ],
+  "sg_authority_sha": "b72f5a3 (data/sg-authority-ref-sinagpt-gateway-v2.json); canon advanced to b3c3cde",
+  "new_org_actions_secrets_recognized_names_only": [
+    "DEEPSEEK_API_KEY",
+    "GLM_API_KEY",
+    "MOONSHOT_API_KEY",
+    "HF_TOKEN",
+    "(MOTOR_APP_PRIVATE_KEY/MOTOR_DB_KEY/MOTOR_DB_URL are motor/DB, not model providers)"
+  ],
+  "updates_made": {
+    "scripts/noos_repair_model_adapter_v1.py": [
+      "registered 6 providers as PRIVATE bindings (keys=secrets, never printed): github_models(T1 free), deepseek(T1), glm(T1), moonshot(T1), huggingface(T1), openai_compatible(T2)",
+      "cost tier tag per provider (COST-T1/T2) per COST_EXECUTION_DOCTRINE",
+      "cheapest-capable-first order (github_models free first); NOOS_PROVIDER_ORDER env override (vendor-neutral swap)",
+      "CIRCUIT-BREAKER fail-over CHAIN: try each configured binding in cost order; trip to next on failure; final fallback = deterministic engine (COST-T0)",
+      "SG degradation code LLM_PROVIDER_NOT_CONFIGURED when no binding is configured"
+    ],
+    "config/model-router.yml": [
+      "added github_models/glm_flash/moonshot_cheap/hf_cheap to T1 (SG COST-T1 free/very-low-cost); provider names are binding aliases, keys in org secrets"
+    ],
+    "scripts/noos_software_repair_runner_v1.py": [
+      "record every tripped provider in the circuit-breaker chain (model-call evidence)"
+    ]
+  },
+  "compliance": {
+    "providers_in_private_bindings_not_canonical_law": true,
+    "cheapest_capable_first": true,
+    "circuit_breaker_failover": true,
+    "vendor_neutral_swap_point": true,
+    "deterministic_verify_still_authoritative": "tests, not the model, prove correctness"
+  },
+  "tests": "full worktree suite 368 passed; worker-kernel 16 passed",
+  "scope_note": "Applied to model ROUTING (the new secrets' purpose). If 'update all' means a broader SG-canon re-alignment sweep beyond model routing, confirm scope.",
+  "final_status": "SUBMITTED for independent verification"
+}

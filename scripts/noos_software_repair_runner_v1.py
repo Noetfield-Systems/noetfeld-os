@@ -153,8 +153,12 @@ def run_repair_job(
             failure_output=before["output"], recipe=recipe, prefer=prefer_model,
             timeout=recipe["limits"]["execution_timeout_seconds"],
         )
-        # record the hosted attempt too when the router fell back to deterministic
-        if proposal.get("hosted_attempt", {}).get("model_call"):
+        # record every tripped provider in the circuit-breaker chain, then the
+        # winning/final model call (SG capability-router fail-over evidence).
+        for t in proposal.get("tripped_providers", []) or []:
+            if t.get("model_call"):
+                model_calls.append(t["model_call"])
+        if proposal.get("hosted_attempt", {}).get("model_call") and not proposal.get("tripped_providers"):
             model_calls.append(proposal["hosted_attempt"]["model_call"])
         model_calls.append(proposal.get("model_call", {}))
         attempts_log.append({"attempt": attempt, "strategy": proposal.get("strategy"),

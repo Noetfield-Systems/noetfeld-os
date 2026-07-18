@@ -36,30 +36,51 @@ sys.path.insert(0, str(ROOT / "scripts"))
 
 import noos_repair_engine_v1 as engine  # noqa: E402
 
-# Provider env-var contract (values NEVER read into logs/receipts).
-# github_models is the SANCTIONED default: it uses the GitHub Actions GITHUB_TOKEN
-# (permissions: models: read) — no separate provider secret required. It is
-# OpenAI-compatible, so it reuses _hosted().
+# Provider env-var contract — PRIVATE DEPLOYMENT BINDINGS (SG rule: provider names
+# live in private bindings only, never in canonical law; the router is a
+# vendor-neutral DISPATCHER, D-8). Values are NEVER read into logs/receipts.
+# ``tier`` follows COST_EXECUTION_DOCTRINE_LOCKED_v1: T1 = free / very-low-cost,
+# T2 = bounded/approved. All are OpenAI-compatible, so they reuse _hosted().
 PROVIDER_ENV = {
-    "github_models": {"key": "GITHUB_TOKEN", "base": os.environ.get("GITHUB_MODELS_BASE", "https://models.github.ai/inference"), "model": os.environ.get("GITHUB_MODELS_MODEL", "openai/gpt-4o-mini")},
-    "deepseek": {"key": "DEEPSEEK_API_KEY", "base": "https://api.deepseek.com/v1", "model": "deepseek-chat"},
-    "moonshot": {"key": "MOONSHOT_API_KEY", "base": "https://api.moonshot.cn/v1", "model": "moonshot-v1-8k"},
-    "openai_compatible": {"key": "OPENAI_API_KEY", "base": os.environ.get("OPENAI_BASE_URL", "https://api.openai.com/v1"), "model": os.environ.get("OPENAI_MODEL", "gpt-4o-mini")},
+    # ---- COST-T1: free / very-low-cost (preferred; cheapest-capable-first) ----
+    "github_models": {"key": "GITHUB_TOKEN", "base": os.environ.get("GITHUB_MODELS_BASE", "https://models.github.ai/inference"), "model": os.environ.get("GITHUB_MODELS_MODEL", "openai/gpt-4o-mini"), "tier": "COST-T1"},
+    "deepseek": {"key": "DEEPSEEK_API_KEY", "base": os.environ.get("DEEPSEEK_BASE_URL", "https://api.deepseek.com/v1"), "model": os.environ.get("DEEPSEEK_MODEL", "deepseek-chat"), "tier": "COST-T1"},
+    "glm": {"key": "GLM_API_KEY", "base": os.environ.get("GLM_BASE_URL", "https://open.bigmodel.cn/api/paas/v4"), "model": os.environ.get("GLM_MODEL", "glm-4-flash"), "tier": "COST-T1"},
+    "moonshot": {"key": "MOONSHOT_API_KEY", "base": os.environ.get("MOONSHOT_BASE_URL", "https://api.moonshot.cn/v1"), "model": os.environ.get("MOONSHOT_MODEL", "moonshot-v1-8k"), "tier": "COST-T1"},
+    "huggingface": {"key": "HF_TOKEN", "base": os.environ.get("HF_BASE_URL", "https://router.huggingface.co/v1"), "model": os.environ.get("HF_MODEL", "Qwen/Qwen2.5-Coder-32B-Instruct"), "tier": "COST-T1"},
+    # ---- COST-T2: bounded / approved (only after T0/T1 insufficiency) ----
+    "openai_compatible": {"key": "OPENAI_API_KEY", "base": os.environ.get("OPENAI_BASE_URL", "https://api.openai.com/v1"), "model": os.environ.get("OPENAI_MODEL", "gpt-4o-mini"), "tier": "COST-T2"},
 }
-# github_models first — the sanctioned zero-extra-secret path.
-DEFAULT_PROVIDER_ORDER = ["github_models", "deepseek", "moonshot", "openai_compatible"]
+# Cheapest-capable-first (SG COST_EXECUTION_DOCTRINE): T1 free (github_models, no
+# extra secret) → T1 cheap API bindings → T2 bounded. Env NOOS_PROVIDER_ORDER
+# overrides (vendor-neutral swap point).
+DEFAULT_PROVIDER_ORDER = (
+    os.environ.get("NOOS_PROVIDER_ORDER", "").split(",")
+    if os.environ.get("NOOS_PROVIDER_ORDER")
+    else ["github_models", "deepseek", "glm", "moonshot", "huggingface", "openai_compatible"]
+)
+# Circuit-breaker: after this many consecutive failures a provider is tripped
+# for the run and traffic fails over to the next binding (SG capability-router).
+CIRCUIT_BREAKER_MAX_FAILURES = int(os.environ.get("NOOS_CB_MAX_FAILURES", "1"))
+# SG degradation vocabulary.
+LLM_PROVIDER_NOT_CONFIGURED = "LLM_PROVIDER_NOT_CONFIGURED"
 
 
 def _hash(obj: Any) -> str:
     return hashlib.sha256(json.dumps(obj, sort_keys=True, default=str).encode()).hexdigest()[:16]
 
 
+def configured_providers() -> list[str]:
+    """Ordered list (cheapest-capable-first) of providers whose secret is present.
+    This is the circuit-breaker fail-over chain (SG capability-router)."""
+    return [n for n in DEFAULT_PROVIDER_ORDER
+            if n in PROVIDER_ENV and os.environ.get(PROVIDER_ENV[n]["key"])]
+
+
 def configured_provider() -> str | None:
-    """Return the first provider whose API key env var is set, else None."""
-    for name in DEFAULT_PROVIDER_ORDER:
-        if os.environ.get(PROVIDER_ENV[name]["key"]):
-            return name
-    return None
+    """First configured provider (cheapest capable), else None."""
+    chain = configured_providers()
+    return chain[0] if chain else None
 
 
 def _new_model_call(provider: str, model: str, purpose: str) -> dict[str, Any]:
@@ -87,28 +108,47 @@ def propose_repair(
     ``prefer`` = 'auto' (hosted if key else deterministic), 'deterministic-local',
     or a provider name. Returns {ok, strategy, patch, file, tests_before,
     tests_after, model_call}."""
-    provider = None
+    # Resolve the provider CHAIN (cheapest-capable-first). An explicit provider is
+    # a single-element chain; 'auto' uses the full configured chain; anything else
+    # is deterministic-only.
     if prefer in PROVIDER_ENV:
-        provider = prefer if os.environ.get(PROVIDER_ENV[prefer]["key"]) else None
+        chain = [prefer] if os.environ.get(PROVIDER_ENV[prefer]["key"]) else []
     elif prefer == "auto":
-        provider = configured_provider()
+        chain = configured_providers()
+    else:
+        chain = []
 
-    if provider is None:
-        return _deterministic(repo_dir, test_cmd, allowed_files, recipe, timeout)
-    hosted = _hosted(provider, repo_dir, test_cmd, allowed_files, failure_output, recipe, timeout)
-    if hosted.get("ok"):
-        return hosted
-    # DETERMINISTIC FALLBACK: the hosted provider was unavailable (e.g. a CI
-    # GITHUB_TOKEN without models:read -> 403), returned an invalid/forbidden
-    # proposal, or its patch failed the tests. The deterministic-local engine is a
-    # valid fallback candidate generator (never described as a hosted AI call).
-    # Both model-call records are preserved for the receipt.
-    if prefer in PROVIDER_ENV:
-        # An explicit provider was requested; still fall back so a repair can land.
-        pass
+    if not chain:
+        # SG degradation vocabulary: no LLM provider binding is configured.
+        det = _deterministic(repo_dir, test_cmd, allowed_files, recipe, timeout)
+        det["provider_chain_reason"] = LLM_PROVIDER_NOT_CONFIGURED
+        return det
+
+    # Circuit-breaker fail-over chain: try each binding in cost order; on failure
+    # trip to the next; final fallback is the deterministic engine (COST-T0).
+    tripped: list[dict[str, Any]] = []
+    for provider in chain:
+        hosted = _hosted(provider, repo_dir, test_cmd, allowed_files, failure_output, recipe, timeout)
+        if hosted.get("ok"):
+            hosted["tripped_providers"] = tripped
+            hosted["tier"] = PROVIDER_ENV[provider].get("tier")
+            return hosted
+        tripped.append({"provider": provider, "tier": PROVIDER_ENV[provider].get("tier"),
+                        "reason": hosted.get("reason"), "model_call": hosted.get("model_call")})
+    hosted = tripped[-1] if tripped else {}
+    return _fallback_after_chain(repo_dir, test_cmd, allowed_files, recipe, timeout, tripped)
+
+
+def _fallback_after_chain(repo_dir, test_cmd, allowed_files, recipe, timeout, tripped) -> dict[str, Any]:
+    """Every hosted binding in the chain tripped (unavailable / invalid / patch
+    failed tests). Fall over to the deterministic engine (COST-T0). The tripped
+    hosted attempts are preserved for the receipt."""
     fb = _deterministic(repo_dir, test_cmd, allowed_files, recipe, timeout)
-    fb["hosted_attempt"] = {"provider": provider, "reason": hosted.get("reason"), "model_call": hosted.get("model_call")}
-    fb["fell_back_from_hosted"] = True
+    fb["tripped_providers"] = tripped
+    if tripped:
+        last = tripped[-1]
+        fb["hosted_attempt"] = {"provider": last.get("provider"), "reason": last.get("reason"), "model_call": last.get("model_call")}
+        fb["fell_back_from_hosted"] = True
     return fb
 
 
