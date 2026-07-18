@@ -1,0 +1,39 @@
+{
+  "schema": "software-repair-v1-model-cost-v2",
+  "not_a_verdict": "MEASURED model cost from REAL GitHub Models repair jobs. SUBMITTED for independent verification.",
+  "canon_version": "FOUNDER_CANON_v1+MACHINE_LOOPS_v1",
+  "recorded_at": "2026-07-18T08:10:00Z",
+  "provider": "github_models (GitHub Models via GITHUB_TOKEN, models:read \u2014 no separate secret)",
+  "endpoint": "https://models.github.ai/inference/chat/completions",
+  "model_probe": {
+    "content": "PONG",
+    "model": "gpt-4o-mini-2024-07-18",
+    "http": 200,
+    "usage": {
+      "prompt_tokens": 15,
+      "completion_tokens": 3
+    }
+  },
+  "billing": "GitHub Models is FREE-TIER, rate-limited; per-job dollar figures are ATTRIBUTABLE estimates at public gpt-4o-mini rates, not charged.",
+  "jobs": [
+    {
+      "job": "SR-MODEL-JOB-A-unit-regression",
+      "model": "openai/gpt-4o-mini",
+      "prompt_tokens": 456,
+      "completion_tokens": 99,
+      "latency_ms": 2294,
+      "attributable_usd": 0.000128
+    },
+    {
+      "job": "SR-MODEL-JOB-B-data-handling",
+      "model": "openai/gpt-4o-mini",
+      "prompt_tokens": 513,
+      "completion_tokens": 123,
+      "latency_ms": 3983,
+      "attributable_usd": 0.000151
+    }
+  ],
+  "avg_attributable_usd_per_repair": 0.00014,
+  "deterministic_fallback": "$0 compute-only; used as candidate generator + fallback (NOT described as a hosted model call).",
+  "final_status": "SUBMITTED for independent verification"
+}

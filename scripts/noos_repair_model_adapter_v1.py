@@ -37,12 +37,17 @@ sys.path.insert(0, str(ROOT / "scripts"))
 import noos_repair_engine_v1 as engine  # noqa: E402
 
 # Provider env-var contract (values NEVER read into logs/receipts).
+# github_models is the SANCTIONED default: it uses the GitHub Actions GITHUB_TOKEN
+# (permissions: models: read) — no separate provider secret required. It is
+# OpenAI-compatible, so it reuses _hosted().
 PROVIDER_ENV = {
+    "github_models": {"key": "GITHUB_TOKEN", "base": os.environ.get("GITHUB_MODELS_BASE", "https://models.github.ai/inference"), "model": os.environ.get("GITHUB_MODELS_MODEL", "openai/gpt-4o-mini")},
     "deepseek": {"key": "DEEPSEEK_API_KEY", "base": "https://api.deepseek.com/v1", "model": "deepseek-chat"},
     "moonshot": {"key": "MOONSHOT_API_KEY", "base": "https://api.moonshot.cn/v1", "model": "moonshot-v1-8k"},
     "openai_compatible": {"key": "OPENAI_API_KEY", "base": os.environ.get("OPENAI_BASE_URL", "https://api.openai.com/v1"), "model": os.environ.get("OPENAI_MODEL", "gpt-4o-mini")},
 }
-DEFAULT_PROVIDER_ORDER = ["deepseek", "moonshot", "openai_compatible"]
+# github_models first — the sanctioned zero-extra-secret path.
+DEFAULT_PROVIDER_ORDER = ["github_models", "deepseek", "moonshot", "openai_compatible"]
 
 
 def _hash(obj: Any) -> str:
