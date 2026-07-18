@@ -1,0 +1,10 @@
+{
+  "schema": "software-repair-v1-masking-regression-v1",
+  "not_a_verdict": "Masking regression: a repaired JOB (local_reference) can never read as production liveness. SUBMITTED for independent verification.",
+  "canon_version": "FOUNDER_CANON_v1+MACHINE_LOOPS_v1",
+  "verified_at": "2026-07-18T06:25:00Z",
+  "claim": "A successful repair job with receipt_origin=local_reference must NOT establish production RUNNING_CONFIRMED.",
+  "proof": "production_running_confirmed(receipt_origin='local_reference', ...) => False, blocked_reason=non_production_origin:local_reference (tests/test_software_repair_provenance_v1.py: test_local_reference_cannot_confirm_production + property test across all non-production origins).",
+  "separation": "Customer-job success (repaired) and infrastructure liveness (RUNNING_CONFIRMED) are distinct predicates \u2014 proven in test_customer_job_success_is_separate_from_infra_liveness.",
+  "final_status": "SUBMITTED for independent verification"
+}

@@ -1,0 +1,21 @@
+{
+  "schema": "software-repair-v1-failure-recovery-v1",
+  "not_a_verdict": "Failure & recovery verification for the repair pipeline (offline/integration). SUBMITTED for independent verification.",
+  "canon_version": "FOUNDER_CANON_v1+MACHINE_LOOPS_v1",
+  "verified_at": "2026-07-18T06:25:00Z",
+  "results": {
+    "duplicate_commission_one_logical_job": "PASS (idempotency dedupe \u2014 test_idempotent_commission; runner MotorLedger.submit)",
+    "duplicate_dispatch_no_duplicate_execution": "PASS (FSM idempotency key \u2014 test_inv3)",
+    "retry_bounded": "PASS (FSM backoff_seconds + max_retries \u2014 test_inv6_7)",
+    "terminal_jobs_cannot_resurrect": "PASS (run-final states BFS-proven \u2014 test_property_run_final_states_never_reach_running)",
+    "replay_new_attempt_preserves_lineage": "PASS (FSM ledger.replay \u2014 test_inv10; API /replay)",
+    "parent_lineage_immutable": "PASS (immutable provenance \u2014 test_inv11)",
+    "callback_idempotent": "PASS (idempotency_key dedupe on re-submit)",
+    "failure_produces_terminal_evidence": "PASS (truthful FAILED \u2014 test_unrepairable_fails_truthfully)",
+    "output_corruption_detected": "PASS (output_hash integrity \u2014 motor test_output_hash_mismatch_detected)",
+    "repair_evidence_cannot_establish_production_liveness": "PASS (production_running_confirmed \u2014 test_software_repair_provenance property)",
+    "invalid_repo_branch": "PASS (repo_unavailable / validation \u2014 runner validate_job)",
+    "unknown_recipe_rejected": "PASS (registry.load_recipe rejects)"
+  },
+  "final_status": "SUBMITTED for independent verification"
+}
