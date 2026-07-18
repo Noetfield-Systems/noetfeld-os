@@ -1,0 +1,31 @@
+{
+  "canon_version": "FOUNDER_CANON_v1+MACHINE_LOOPS_v1",
+  "final_status": "SUBMITTED for independent verification",
+  "schema": "software-repair-v1-github-models-probe-v1",
+  "not_a_verdict": "GitHub Models sanctioned-path probe. SUBMITTED for independent verification.",
+  "http": 200,
+  "endpoint": "https://models.github.ai/inference/chat/completions",
+  "auth": "GITHUB_TOKEN + models:read (no separate secret; no value printed)",
+  "probe": {
+    "model": "gpt-4o-mini-2024-07-18",
+    "content": "PONG",
+    "usage": {
+      "prompt_tokens": 15,
+      "completion_tokens": 3
+    }
+  },
+  "models_evaluated": [
+    "openai/gpt-4o-mini (used, 2 model-primary repairs)",
+    "catalog incl. gpt-4.1-mini/gpt-5-mini/o1 (alternates)",
+    "deterministic-local fallback"
+  ],
+  "acceptance": {
+    "real_remote_inference": true,
+    "schema_validated": true,
+    "no_secret_printed": true,
+    "output_treated_untrusted": true,
+    "tests_proved_correctness_not_model": true
+  },
+  "org_policy_note": "In gel-ci (no models:read granted), the GITHUB_TOKEN cannot call Models -> router falls back to deterministic (now fixed). The product workflow software-repair-run-v1 declares permissions: models: read so the model path is live there.",
+  "founder_model_enablement_action": "none required for the deterministic pilot; to use GitHub Models in the product workflow, ensure org GitHub Models policy allows Actions tokens (models: read) \u2014 no paid provider key needed."
+}

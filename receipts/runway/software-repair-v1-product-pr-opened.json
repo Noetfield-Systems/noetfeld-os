@@ -1,0 +1,16 @@
+{
+  "canon_version": "FOUNDER_CANON_v1+MACHINE_LOOPS_v1",
+  "final_status": "SUBMITTED for independent verification",
+  "schema": "software-repair-v1-product-pr-opened-v1",
+  "not_a_verdict": "Product PR opened to main. SUBMITTED for independent verification.",
+  "product_pr": 87,
+  "url": "https://github.com/Noetfield-Systems/noetfeld-os/pull/87",
+  "base": "main",
+  "head": "nf-noos-software-repair-runway-v1",
+  "head_sha_at_open": "37d5a16371e163956e769f0b48ec21e70796eb9b",
+  "current_head": "c8a58ade",
+  "merge_base": "8ba1af9ca89499330603047e00a6ddcfb7fa9fd3",
+  "changed_files": 95,
+  "commit_count": "22 (product) + integration fixes",
+  "draft": true
+}

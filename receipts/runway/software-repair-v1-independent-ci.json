@@ -1,0 +1,33 @@
+{
+  "canon_version": "FOUNDER_CANON_v1+MACHINE_LOOPS_v1",
+  "final_status": "SUBMITTED for independent verification",
+  "schema": "software-repair-v1-independent-ci-v1",
+  "not_a_verdict": "Independent GEL CI on the exact product head. SUBMITTED for independent verification.",
+  "product_pr": 87,
+  "head": "c8a58ade",
+  "gate_test_and_gate": "PASS (1m21s) \u2014 full product suite incl. motor invariants, provenance, live-probe, repair pipeline",
+  "other_checks": {
+    "Analyze(actions/js-ts/python)": "pass",
+    "discover": "pass",
+    "scan x2": "pass"
+  },
+  "real_failures_found_and_fixed": [
+    {
+      "defect": "router did not fall back to deterministic when hosted model unavailable (CI GITHUB_TOKEN lacks models:read)",
+      "fix": "propose_repair deterministic fallback",
+      "regression": "test_hosted_provider_failure_falls_back_to_deterministic"
+    },
+    {
+      "defect": "runner reconstructed model MULTI-LINE patch via fragile _apply_unified -> re-verify failed",
+      "fix": "carry verified new_content through engine->adapter->runner, apply directly",
+      "regression": "covered by test_real_repair_jobs"
+    },
+    {
+      "defect": "job2 lint repair needs ruff binary absent in gel-ci -> no candidate could validate",
+      "fix": "skip job2 when ruff absent (env dep) + runner reports truthful tool_unavailable status",
+      "regression": "test_real_repair_jobs skipif + tool_unavailable path"
+    }
+  ],
+  "codeql_note": "the 2-3s 'CodeQL' aggregator fail is a billing/quota gate (repo law: <12s fail = billing gate, not CI red); the REAL CodeQL Analyze jobs PASS; non-required (mergeState UNSTABLE, not BLOCKED); separate PLATFORM incident, not a product defect.",
+  "did_not_silence_tests": true
+}
