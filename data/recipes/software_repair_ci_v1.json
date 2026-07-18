@@ -1,0 +1,52 @@
+{
+  "schema": "noos-recipe-v1",
+  "recipe_id": "software_repair_ci_v1",
+  "recipe_version": "1.0.0",
+  "title": "Software Repair — CI/test failure, bounded verified patch",
+  "status": "pilot",
+  "accepted_repository_providers": ["github", "local_fixture"],
+  "required_repository_authorization": "read+write to a customer-authorized repo, or a bundled local fixture; NOOS never touches a repo it was not explicitly given",
+  "accepted_failure_inputs": ["failing_test_command", "failing_ci_run_id", "reproducible_defect_description"],
+  "supported_stacks_pilot": [
+    {"language": "python", "test_runner": "pytest", "discovery": "pytest -q"},
+    {"language": "node", "test_runner": "node --test", "discovery": "node --test"}
+  ],
+  "not_supported_pilot_note": "Pilot is narrow: Python(pytest) and Node(node:test) only. NO claim of universal repository or language support.",
+  "limits": {
+    "max_repository_size_mb": 50,
+    "max_changed_files": 3,
+    "max_patch_bytes": 20000,
+    "max_model_calls": 4,
+    "max_repair_attempts": 3,
+    "execution_timeout_seconds": 300,
+    "per_model_call_timeout_seconds": 60,
+    "artifact_retention_days": 30
+  },
+  "allowed_file_paths": ["src/**", "lib/**", "app/**", "*.py", "*.js", "*.ts", "tests/**", "test/**"],
+  "forbidden_file_paths": [
+    ".github/**", "**/secrets*", "**/*.pem", "**/*.key", "**/.env*",
+    "**/Dockerfile", "**/deploy/**", "**/infrastructure/**", "**/*.tf",
+    "**/package-lock.json", "**/poetry.lock", "**/.git/**", "**/CODEOWNERS",
+    "**/branch-protection*", "**/billing*"
+  ],
+  "allowed_commands": ["pytest", "python", "python3", "node", "npm test", "ruff", "mypy", "git diff", "git apply"],
+  "network_policy": "worker: no outbound network except the configured model provider endpoint; repair patches may not add network calls to forbidden hosts",
+  "test_discovery_policy": "explicit test command from the job spec wins; otherwise pytest -q (python) / node --test (node)",
+  "branch_policy": "all changes on an isolated branch noos/repair/<job_id>; base branch and main are never modified in place",
+  "draft_pr_policy": "open a DRAFT pull request only when the job spec grants pr:write and open_pr=true; otherwise emit a downloadable patch bundle",
+  "human_approval_boundary": [
+    "no auto-merge", "no auto-deploy", "no secret/credential change", "no branch-protection change",
+    "no repository-ownership change", "no billing change", "no modification of forbidden_file_paths"
+  ],
+  "output_contract": {
+    "verified_patch": "unified diff constrained to allowed paths + limits",
+    "verification_evidence": "tests-before (failing) and tests-after (passing) captured output + exit codes",
+    "customer_report": "root cause, changed files, test evidence, provenance, cost",
+    "audit_receipt": "full lifecycle + hashes + model-call records",
+    "delivery": "draft PR url OR patch bundle path"
+  },
+  "provenance": {
+    "receipt_origin_for_repair_execution": "local_reference (pilot runner) or organic (only from the production canonical runner)",
+    "note": "A repair JOB succeeding is a customer outcome; it is NOT infrastructure liveness (see production_running_confirmed)."
+  }
+}

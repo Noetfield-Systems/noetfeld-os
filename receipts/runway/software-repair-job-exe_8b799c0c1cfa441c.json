@@ -1,0 +1,152 @@
+{
+  "schema": "software-repair-job-receipt-v1",
+  "not_a_verdict": "Repair job receipt. A repaired JOB is a customer outcome, NOT infrastructure liveness. SUBMITTED for independent verification.",
+  "canon_version": "FOUNDER_CANON_v1+MACHINE_LOOPS_v1",
+  "commission_id": "SR-JOB-3-integration-data",
+  "customer_id": "fixture-customer",
+  "recipe_id": "software_repair_ci_v1",
+  "job_status": "repaired",
+  "receipt_origin": "local_reference",
+  "producer": "noos-software-repair-runner-local",
+  "failure_class": "unit_test_regression",
+  "tests_before": {
+    "passed": false,
+    "exit_code": 1,
+    "output": "FF                                                                       [100%]\n=================================== FAILURES ===================================\n_________________________________ test_totals __________________________________\n\n    def test_totals():\n        rows = [\n            {\"key\": \"a\", \"amount\": 10},\n            {\"key\": \"b\", \"amount\": 5},\n            {\"key\": \"a\", \"amount\": 3},\n        ]\n>       assert totals_by_key(rows) == {\"a\": 13, \"b\": 5}\nE       AssertionError: assert {'a': -13, 'b': -5} == {'a': 13, 'b': 5}\nE         \nE         Differing items:\nE         {'b': -5} != {'b': 5}\nE         {'a': -13} != {'a': 13}\nE         Use -v to get more diff\n\ntests/test_aggregate.py:15: AssertionError\n_________________________________ test_single __________________________________\n\n    def test_single():\n>       assert totals_by_key([{\"key\": \"x\", \"amount\": 7}]) == {\"x\": 7}\nE       AssertionError: assert {'x': -7} == {'x': 7}\nE         \nE         Differing items:\nE         {'x': -7} != {'x': 7}\nE         Use -v to get more diff\n\ntests/test_aggregate.py:19: AssertionError\n=========================== short test summary info ============================\nFAILED tests/test_aggregate.py::test_totals - AssertionError: assert {'a': -1...\nFAILED tests/test_aggregate.py::test_single - AssertionError: assert {'x': -7...\n2 failed in 0.02s\n"
+  },
+  "tests_after": {
+    "passed": true,
+    "exit_code": 0,
+    "output": "..                                                                       [100%]\n2 passed in 0.00s\n"
+  },
+  "repaired": {
+    "ok": true,
+    "strategy": "deterministic-local",
+    "patch": "--- a/src/aggregate.py\n+++ b/src/aggregate.py\n@@ -6,5 +6,5 @@\n     out = {}\n     for row in rows:\n         k = row[\"key\"]\n-        out[k] = out.get(k, 0) - row[\"amount\"]  # BUG: should be + row[\"amount\"]\n+        out[k] = out.get(k, 0) + row[\"amount\"]  # BUG: should be + row[\"amount\"]\n     return out\n",
+    "file": "src/aggregate.py",
+    "tests_before": {
+      "passed": false,
+      "exit_code": 1,
+      "output": "FF                                                                       [100%]\n=================================== FAILURES ===================================\n_________________________________ test_totals __________________________________\n\n    def test_totals():\n        rows = [\n            {\"key\": \"a\", \"amount\": 10},\n            {\"key\": \"b\", \"amount\": 5},\n            {\"key\": \"a\", \"amount\": 3},\n        ]\n>       assert totals_by_key(rows) == {\"a\": 13, \"b\": 5}\nE       AssertionError: assert {'a': -13, 'b': -5} == {'a': 13, 'b': 5}\nE         \nE         Differing items:\nE         {'a': -13} != {'a': 13}\nE         {'b': -5} != {'b': 5}\nE         Use -v to get more diff\n\ntests/test_aggregate.py:15: AssertionError\n_________________________________ test_single __________________________________\n\n    def test_single():\n>       assert totals_by_key([{\"key\": \"x\", \"amount\": 7}]) == {\"x\": 7}\nE       AssertionError: assert {'x': -7} == {'x': 7}\nE         \nE         Differing items:\nE         {'x': -7} != {'x': 7}\nE         Use -v to get more diff\n\ntests/test_aggregate.py:19: AssertionError\n=========================== short test summary info ============================\nFAILED tests/test_aggregate.py::test_totals - AssertionError: assert {'a': -1...\nFAILED tests/test_aggregate.py::test_single - AssertionError: assert {'x': -7...\n2 failed in 0.02s\n"
+    },
+    "tests_after": {
+      "passed": true,
+      "exit_code": 0,
+      "output": "..                                                                       [100%]\n2 passed in 0.01s\n"
+    },
+    "reason": null,
+    "model_call": {
+      "provider": "deterministic-local",
+      "model": "fault-localized-mutation-search",
+      "purpose": "repair_proposal",
+      "input_hash": null,
+      "output_hash": null,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "latency_ms": 4953,
+      "timeout_s": null,
+      "retries": 0,
+      "schema_valid": true,
+      "ok": true,
+      "candidates_tried": 11
+    }
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "strategy": "deterministic-local",
+      "ok": true
+    }
+  ],
+  "model_calls": [
+    {
+      "provider": "deterministic-local",
+      "model": "fault-localized-mutation-search",
+      "purpose": "repair_proposal",
+      "input_hash": null,
+      "output_hash": null,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "latency_ms": 4953,
+      "timeout_s": null,
+      "retries": 0,
+      "schema_valid": true,
+      "ok": true,
+      "candidates_tried": 11
+    }
+  ],
+  "patch_path": "/Users/sinakazemnezhad/Desktop/Noetfield-Systems/noos-software-repair/dist/repair-bundles/exe_8b799c0c1cfa441c.patch",
+  "patch_hash": "e3617f3be4e05849effdc801b46b8cf915bb74b1fc896349c0dfb07a6a682165",
+  "report_path": "/Users/sinakazemnezhad/Desktop/Noetfield-Systems/noos-software-repair/dist/repair-bundles/exe_8b799c0c1cfa441c.report.md",
+  "delivery": {
+    "patch_bundle": "/Users/sinakazemnezhad/Desktop/Noetfield-Systems/noos-software-repair/dist/repair-bundles/exe_8b799c0c1cfa441c.patch",
+    "draft_pr": null,
+    "pr_command": "git checkout -b noos/repair/exe_8b799c0c1cfa441c && git apply <patch> && git commit -am 'fix: SR-JOB-3-integration-data' && git push -u origin noos/repair/exe_8b799c0c1cfa441c && gh pr create --draft --title 'NOOS repair: SR-JOB-3-integration-data' --body-file <report>"
+  },
+  "execution": {
+    "schema_version": "noos-motor-execution-v1",
+    "workflow_version": "noos-motor-v1",
+    "execution_id": "exe_8b799c0c1cfa441c",
+    "attempt_id": "att_5800ea7f0320",
+    "attempt": 1,
+    "root_execution_id": "exe_8b799c0c1cfa441c",
+    "correlation_id": "cor_7affe319bbd54556",
+    "dispatch_id": "dsp_8b799c0c",
+    "idempotency_key": "d15389d26283efd524712264",
+    "task_kind": "repair:software_repair_ci_v1",
+    "producer": "noos-software-repair-runner-local",
+    "execution_origin": "local_reference",
+    "state": "COMPLETED",
+    "is_terminal": true,
+    "retry_count": 0,
+    "max_retries": 3,
+    "lease": null,
+    "input_hash": "5ad184a98a0103d3",
+    "output_hash": "9213b47310c9225d",
+    "artifact_uri": "file:///Users/sinakazemnezhad/Desktop/Noetfield-Systems/noos-software-repair/dist/repair-bundles/exe_8b799c0c1cfa441c.patch",
+    "error_code": null,
+    "error_summary": null,
+    "created_at": "2026-07-18T05:18:06Z",
+    "updated_at": "2026-07-18T05:18:06Z",
+    "history": [
+      {
+        "state": "ACCEPTED",
+        "at": "2026-07-18T05:18:06Z",
+        "note": "accepted"
+      },
+      {
+        "state": "PLANNED",
+        "at": "2026-07-18T05:18:06Z",
+        "note": "deterministic_plan"
+      },
+      {
+        "state": "DISPATCHED",
+        "at": "2026-07-18T05:18:06Z",
+        "note": "dispatched"
+      },
+      {
+        "state": "CLAIMED",
+        "at": "2026-07-18T05:18:06Z",
+        "note": "claimed_by:repair-worker-1"
+      },
+      {
+        "state": "RUNNING",
+        "at": "2026-07-18T05:18:06Z",
+        "note": "worker_started"
+      },
+      {
+        "state": "OUTPUT_COMMITTED",
+        "at": "2026-07-18T05:18:06Z",
+        "note": "output_committed"
+      },
+      {
+        "state": "COMPLETED",
+        "at": "2026-07-18T05:18:06Z",
+        "note": "completed"
+      }
+    ],
+    "repairs": []
+  }
+}

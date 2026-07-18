@@ -1,0 +1,144 @@
+{
+  "schema": "software-repair-job-receipt-v1",
+  "not_a_verdict": "Repair job receipt. A repaired JOB is a customer outcome, NOT infrastructure liveness. SUBMITTED for independent verification.",
+  "canon_version": "FOUNDER_CANON_v1+MACHINE_LOOPS_v1",
+  "commission_id": "SR-NEG",
+  "customer_id": null,
+  "recipe_id": "software_repair_ci_v1",
+  "declared_defect_class": null,
+  "job_status": "unrepaired",
+  "receipt_origin": "local_reference",
+  "producer": "noos-software-repair-runner-local",
+  "tests_before": {
+    "passed": false,
+    "exit_code": 3,
+    "output": ""
+  },
+  "failure_class": "test_failure",
+  "attempts": [
+    {
+      "attempt": 1,
+      "strategy": "deterministic-local",
+      "ok": false
+    },
+    {
+      "attempt": 2,
+      "strategy": "deterministic-local",
+      "ok": false
+    },
+    {
+      "attempt": 3,
+      "strategy": "deterministic-local",
+      "ok": false
+    }
+  ],
+  "model_calls": [
+    {
+      "provider": "deterministic-local",
+      "model": "fault-localized-mutation-search",
+      "purpose": "repair_proposal",
+      "input_hash": null,
+      "output_hash": null,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "latency_ms": 576,
+      "timeout_s": null,
+      "retries": 0,
+      "schema_valid": true,
+      "ok": false,
+      "candidates_tried": 23
+    },
+    {
+      "provider": "deterministic-local",
+      "model": "fault-localized-mutation-search",
+      "purpose": "repair_proposal",
+      "input_hash": null,
+      "output_hash": null,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "latency_ms": 584,
+      "timeout_s": null,
+      "retries": 0,
+      "schema_valid": true,
+      "ok": false,
+      "candidates_tried": 23
+    },
+    {
+      "provider": "deterministic-local",
+      "model": "fault-localized-mutation-search",
+      "purpose": "repair_proposal",
+      "input_hash": null,
+      "output_hash": null,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "latency_ms": 554,
+      "timeout_s": null,
+      "retries": 0,
+      "schema_valid": true,
+      "ok": false,
+      "candidates_tried": 23
+    }
+  ],
+  "execution": {
+    "schema_version": "noos-motor-execution-v1",
+    "workflow_version": "noos-motor-v1",
+    "execution_id": "exe_16c7e9ae54144f35",
+    "attempt_id": "att_1c42af86c5b3",
+    "attempt": 1,
+    "root_execution_id": "exe_16c7e9ae54144f35",
+    "correlation_id": "cor_4099890b55f043fe",
+    "dispatch_id": "dsp_16c7e9ae",
+    "idempotency_key": "d0d8f410bcd480e24ad86ada",
+    "task_kind": "repair:software_repair_ci_v1",
+    "producer": "noos-software-repair-runner-local",
+    "execution_origin": "local_reference",
+    "state": "FAILED",
+    "is_terminal": true,
+    "retry_count": 0,
+    "max_retries": 3,
+    "lease": null,
+    "input_hash": "4a191cc288923af8",
+    "output_hash": null,
+    "artifact_uri": null,
+    "error_code": "unrepaired",
+    "error_summary": "no verified patch within 3 attempts",
+    "created_at": "2026-07-18T05:20:21Z",
+    "updated_at": "2026-07-18T05:20:21Z",
+    "history": [
+      {
+        "state": "ACCEPTED",
+        "at": "2026-07-18T05:20:21Z",
+        "note": "accepted"
+      },
+      {
+        "state": "PLANNED",
+        "at": "2026-07-18T05:20:21Z",
+        "note": "deterministic_plan"
+      },
+      {
+        "state": "DISPATCHED",
+        "at": "2026-07-18T05:20:21Z",
+        "note": "dispatched"
+      },
+      {
+        "state": "CLAIMED",
+        "at": "2026-07-18T05:20:21Z",
+        "note": "claimed_by:repair-worker-1"
+      },
+      {
+        "state": "RUNNING",
+        "at": "2026-07-18T05:20:21Z",
+        "note": "worker_started"
+      },
+      {
+        "state": "FAILED",
+        "at": "2026-07-18T05:20:21Z",
+        "note": "failed"
+      }
+    ],
+    "repairs": []
+  }
+}

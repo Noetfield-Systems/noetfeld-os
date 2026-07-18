@@ -1,0 +1,153 @@
+{
+  "schema": "software-repair-job-receipt-v1",
+  "not_a_verdict": "Repair job receipt. A repaired JOB is a customer outcome, NOT infrastructure liveness. SUBMITTED for independent verification.",
+  "canon_version": "FOUNDER_CANON_v1+MACHINE_LOOPS_v1",
+  "commission_id": "SR-JOB-2-lint-failure",
+  "customer_id": "fixture-customer",
+  "recipe_id": "software_repair_ci_v1",
+  "declared_defect_class": "lint_type_failure",
+  "job_status": "repaired",
+  "receipt_origin": "local_reference",
+  "producer": "noos-software-repair-runner-local",
+  "failure_class": "lint_failure",
+  "tests_before": {
+    "passed": false,
+    "exit_code": 1,
+    "output": "src/textutil.py:3:8: F401 [*] `os` imported but unused\nFound 1 error.\n[*] 1 fixable with the `--fix` option.\n"
+  },
+  "tests_after": {
+    "passed": true,
+    "exit_code": 0,
+    "output": "All checks passed!\n"
+  },
+  "repaired": {
+    "ok": true,
+    "strategy": "deterministic-local",
+    "patch": "--- a/src/textutil.py\n+++ b/src/textutil.py\n@@ -1,6 +1,5 @@\n \"\"\"Fixture: a real lint failure \u2014 an unused import (ruff F401).\"\"\"\n \n-import os  # BUG: unused import; ruff F401 fails CI\n \n \n def slugify(text):\n",
+    "file": "src/textutil.py",
+    "tests_before": {
+      "passed": false,
+      "exit_code": 1,
+      "output": "src/textutil.py:3:8: F401 [*] `os` imported but unused\nFound 1 error.\n[*] 1 fixable with the `--fix` option.\n"
+    },
+    "tests_after": {
+      "passed": true,
+      "exit_code": 0,
+      "output": "All checks passed!\n"
+    },
+    "reason": null,
+    "model_call": {
+      "provider": "deterministic-local",
+      "model": "fault-localized-mutation-search",
+      "purpose": "repair_proposal",
+      "input_hash": null,
+      "output_hash": null,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "latency_ms": 52,
+      "timeout_s": null,
+      "retries": 0,
+      "schema_valid": true,
+      "ok": true,
+      "candidates_tried": 3
+    }
+  },
+  "attempts": [
+    {
+      "attempt": 1,
+      "strategy": "deterministic-local",
+      "ok": true
+    }
+  ],
+  "model_calls": [
+    {
+      "provider": "deterministic-local",
+      "model": "fault-localized-mutation-search",
+      "purpose": "repair_proposal",
+      "input_hash": null,
+      "output_hash": null,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "latency_ms": 52,
+      "timeout_s": null,
+      "retries": 0,
+      "schema_valid": true,
+      "ok": true,
+      "candidates_tried": 3
+    }
+  ],
+  "patch_path": "/Users/sinakazemnezhad/Desktop/Noetfield-Systems/noos-software-repair/dist/repair-bundles/exe_503eeb4fd3244bea.patch",
+  "patch_hash": "321b49b117d2b882c03165b605fb3c220a4c3854f4a03b89c6099df38a3d6691",
+  "report_path": "/Users/sinakazemnezhad/Desktop/Noetfield-Systems/noos-software-repair/dist/repair-bundles/exe_503eeb4fd3244bea.report.md",
+  "delivery": {
+    "patch_bundle": "/Users/sinakazemnezhad/Desktop/Noetfield-Systems/noos-software-repair/dist/repair-bundles/exe_503eeb4fd3244bea.patch",
+    "draft_pr": null,
+    "pr_command": null
+  },
+  "execution": {
+    "schema_version": "noos-motor-execution-v1",
+    "workflow_version": "noos-motor-v1",
+    "execution_id": "exe_503eeb4fd3244bea",
+    "attempt_id": "att_62ce4ced2dad",
+    "attempt": 1,
+    "root_execution_id": "exe_503eeb4fd3244bea",
+    "correlation_id": "cor_0fb5adc8e6e74d71",
+    "dispatch_id": "dsp_503eeb4f",
+    "idempotency_key": "68989273e57351bb392c4d79",
+    "task_kind": "repair:software_repair_ci_v1",
+    "producer": "noos-software-repair-runner-local",
+    "execution_origin": "local_reference",
+    "state": "COMPLETED",
+    "is_terminal": true,
+    "retry_count": 0,
+    "max_retries": 3,
+    "lease": null,
+    "input_hash": "16cdb553e903d57e",
+    "output_hash": "a40ad4a080361d00",
+    "artifact_uri": "file:///Users/sinakazemnezhad/Desktop/Noetfield-Systems/noos-software-repair/dist/repair-bundles/exe_503eeb4fd3244bea.patch",
+    "error_code": null,
+    "error_summary": null,
+    "created_at": "2026-07-18T05:20:05Z",
+    "updated_at": "2026-07-18T05:20:05Z",
+    "history": [
+      {
+        "state": "ACCEPTED",
+        "at": "2026-07-18T05:20:05Z",
+        "note": "accepted"
+      },
+      {
+        "state": "PLANNED",
+        "at": "2026-07-18T05:20:05Z",
+        "note": "deterministic_plan"
+      },
+      {
+        "state": "DISPATCHED",
+        "at": "2026-07-18T05:20:05Z",
+        "note": "dispatched"
+      },
+      {
+        "state": "CLAIMED",
+        "at": "2026-07-18T05:20:05Z",
+        "note": "claimed_by:repair-worker-1"
+      },
+      {
+        "state": "RUNNING",
+        "at": "2026-07-18T05:20:05Z",
+        "note": "worker_started"
+      },
+      {
+        "state": "OUTPUT_COMMITTED",
+        "at": "2026-07-18T05:20:05Z",
+        "note": "output_committed"
+      },
+      {
+        "state": "COMPLETED",
+        "at": "2026-07-18T05:20:05Z",
+        "note": "completed"
+      }
+    ],
+    "repairs": []
+  }
+}

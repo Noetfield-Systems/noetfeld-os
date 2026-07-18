@@ -1,0 +1,54 @@
+{
+  "schema": "software-repair-job-receipt-v1",
+  "not_a_verdict": "Repair job receipt. A repaired JOB is a customer outcome, NOT infrastructure liveness. SUBMITTED for independent verification.",
+  "canon_version": "FOUNDER_CANON_v1+MACHINE_LOOPS_v1",
+  "commission_id": "SR-JOB-1-unit-regression",
+  "customer_id": "fixture-customer",
+  "recipe_id": "nope",
+  "declared_defect_class": "unit_test_regression",
+  "job_status": "rejected_recipe",
+  "receipt_origin": "local_reference",
+  "producer": "noos-software-repair-runner-local",
+  "validation_errors": [
+    "unknown recipe 'nope' (no nope.json)"
+  ],
+  "execution": {
+    "schema_version": "noos-motor-execution-v1",
+    "workflow_version": "noos-motor-v1",
+    "execution_id": "exe_a59c3acae9e74b5c",
+    "attempt_id": "att_817434f4a339",
+    "attempt": 1,
+    "root_execution_id": "exe_a59c3acae9e74b5c",
+    "correlation_id": "cor_97ba458fff474085",
+    "dispatch_id": null,
+    "idempotency_key": "1fa9991e6194a693e9356189",
+    "task_kind": "repair:nope",
+    "producer": "noos-software-repair-runner-local",
+    "execution_origin": "local_reference",
+    "state": "FAILED",
+    "is_terminal": true,
+    "retry_count": 0,
+    "max_retries": 3,
+    "lease": null,
+    "input_hash": "c54bb7bdfbd14c0a",
+    "output_hash": null,
+    "artifact_uri": null,
+    "error_code": "unknown_recipe",
+    "error_summary": "unknown recipe 'nope' (no nope.json)",
+    "created_at": "2026-07-18T05:20:23Z",
+    "updated_at": "2026-07-18T05:20:23Z",
+    "history": [
+      {
+        "state": "ACCEPTED",
+        "at": "2026-07-18T05:20:23Z",
+        "note": "accepted"
+      },
+      {
+        "state": "FAILED",
+        "at": "2026-07-18T05:20:23Z",
+        "note": "failed"
+      }
+    ],
+    "repairs": []
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "schema": "software-repair-v1-before-state-v1",
+  "not_a_verdict": "Before-state for the Software Repair Runway build. SUBMITTED for independent verification.",
+  "canon_version": "FOUNDER_CANON_v1+MACHINE_LOOPS_v1",
+  "captured_at": "2026-07-18T05:00:00Z",
+  "foundation": {
+    "foundation_branch": "nf-noos-repin-gateway-v2-b72f5a3",
+    "foundation_head": "f52cd6b0b1ca3d706ac5340e0dffc29bc894198c",
+    "six_motor_foundation_commits": [
+      "71fc582a provenance-aware classifier",
+      "b9003b7a state machine + local reference executor",
+      "7904edde product package (evidence model, verify/package CLI, docs, release)",
+      "de8416ee terminal lease-reclaim fix",
+      "c825861e makefile target rename",
+      "f52cd6b0 noos-cli stdout fix"
+    ],
+    "regression_at_start": "327 passed (full existing suite)",
+    "migration_head": "0020_motor_provenance_fields.sql",
+    "release_manifest": "receipts/runway/noos-motor-v1-release-manifest.json + dist/noos-motor-v1-1.0.0.tar.gz",
+    "pre_existing_uncommitted_files_in_main_checkout": 24
+  },
+  "implementation_isolation": {
+    "worktree": "/Users/sinakazemnezhad/Desktop/Noetfield-Systems/noos-software-repair",
+    "branch": "nf-noos-software-repair-runway-v1",
+    "clean_tree_at_creation": true,
+    "note": "The 24 unrelated pre-existing dirty files stay in the main checkout; the worktree does not absorb them."
+  },
+  "rollback_target": "git branch nf-noos-software-repair-runway-v1 is deletable; foundation branch untouched; no merge to main.",
+  "final_status": "SUBMITTED for independent verification"
+}

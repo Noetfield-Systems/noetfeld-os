@@ -1,0 +1,101 @@
+{
+  "schema": "software-repair-v1-model-cost-v1",
+  "not_a_verdict": "Model-call cost record across the 3 repair jobs. SUBMITTED for independent verification.",
+  "canon_version": "FOUNDER_CANON_v1+MACHINE_LOOPS_v1",
+  "recorded_at": "2026-07-18T06:00:00Z",
+  "provider_used": "deterministic-local (no hosted model-provider key in any sanctioned environment)",
+  "hosted_model_secret_injection": {
+    "why": "No model-provider secret exists in any sanctioned environment; the hosted path is complete but idle.",
+    "exact_action": "gh secret set DEEPSEEK_API_KEY --repo Noetfield-Systems/noetfeld-OS   # (or MOONSHOT_API_KEY / OPENAI_API_KEY)",
+    "then": "the software_repair_ci workflow / runner auto-selects the hosted provider (configured_provider()).",
+    "no_value_here": "This tool never stores or prints a key value."
+  },
+  "model_calls": [
+    {
+      "provider": "deterministic-local",
+      "model": "fault-localized-mutation-search",
+      "purpose": "repair_proposal",
+      "input_hash": null,
+      "output_hash": null,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "latency_ms": 8513,
+      "timeout_s": null,
+      "retries": 0,
+      "schema_valid": true,
+      "ok": true,
+      "candidates_tried": 19
+    },
+    {
+      "provider": "deterministic-local",
+      "model": "fault-localized-mutation-search",
+      "purpose": "repair_proposal",
+      "input_hash": null,
+      "output_hash": null,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "latency_ms": 49,
+      "timeout_s": null,
+      "retries": 0,
+      "schema_valid": true,
+      "ok": true,
+      "candidates_tried": 3
+    },
+    {
+      "provider": "deterministic-local",
+      "model": "fault-localized-mutation-search",
+      "purpose": "repair_proposal",
+      "input_hash": null,
+      "output_hash": null,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "latency_ms": 5063,
+      "timeout_s": null,
+      "retries": 0,
+      "schema_valid": true,
+      "ok": true,
+      "candidates_tried": 11
+    }
+  ],
+  "total_cost_usd": 0,
+  "per_job_cost_model": "deterministic-local: $0 compute-only. With a hosted provider (e.g. DeepSeek), est. $0.001-0.02 per repair at ~2-8k tokens.",
+  "jobs": [
+    {
+      "job": 1,
+      "commission": "SR-JOB-1-unit-regression",
+      "defect_class": "unit_test_regression",
+      "status": "repaired",
+      "file": "src/mathutil.py",
+      "before_exit": 1,
+      "after_pass": true,
+      "patch_hash": "4b5a62afd5d04b29a03634cce3d7e4124da2306b7cef688b708d3d9b910e6275",
+      "strategy": "deterministic-local"
+    },
+    {
+      "job": 2,
+      "commission": "SR-JOB-2-lint-failure",
+      "defect_class": "lint_type_failure",
+      "status": "repaired",
+      "file": "src/textutil.py",
+      "before_exit": 1,
+      "after_pass": true,
+      "patch_hash": "321b49b117d2b882c03165b605fb3c220a4c3854f4a03b89c6099df38a3d6691",
+      "strategy": "deterministic-local"
+    },
+    {
+      "job": 3,
+      "commission": "SR-JOB-3-integration-data",
+      "defect_class": "integration_data_handling_defect",
+      "status": "repaired",
+      "file": "src/aggregate.py",
+      "before_exit": 1,
+      "after_pass": true,
+      "patch_hash": "e3617f3be4e05849effdc801b46b8cf915bb74b1fc896349c0dfb07a6a682165",
+      "strategy": "deterministic-local"
+    }
+  ],
+  "final_status": "SUBMITTED for independent verification"
+}
