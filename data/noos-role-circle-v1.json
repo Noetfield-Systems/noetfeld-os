@@ -1,8 +1,8 @@
 {
   "schema": "noos-role-circle-v1",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "status": "ACTIVE",
-  "one_law": "Hourly CF cron → Railway /loop → NOOS role circle. One bounded tick. NOOS categories only (fleet supervision). Never copies NOETFIELD-RUNWAY Motor/Router/recipes. No GitHub Actions runtime dispatch.",
+  "one_law": "Hourly CF cron → Railway /loop → NOOS role circle executes EVERY required NOOS operational loop end-to-end (input → process → durable valuable output). Supervision roles wrap the portfolio. Never copies NOETFIELD-RUNWAY Motor/Router/recipes. No GitHub Actions as primary motor.",
   "trigger": {
     "plane": "cloudflare_workers_cron",
     "worker": "noos-loop-fleet-tick-v1",
@@ -16,61 +16,177 @@
     "railway_health": "https://noos-loop-runner-production.up.railway.app/health",
     "deadman_health": "https://noos-deadman-v1.sina-kazemnezhad-ca.workers.dev/health"
   },
-  "roles": [
+  "loops_registry": "data/noos-24-7-loops-v1.json",
+  "required_loop_ids": [
+    "inbox",
+    "runtime",
+    "surface",
+    "chain",
+    "self_heal",
+    "sourcea_observe",
+    "agent_nerve",
+    "workflow_audit",
+    "self_heal_safe_fixes",
+    "researcher_deep_dive",
+    "specialist_proposals",
+    "orchestrator_cross_repo"
+  ],
+  "excluded_loop_ids": ["role_circle", "improve_kaizen_daily"],
+  "io_law": "Every required loop MUST declare and produce: input → process → valuable_output. A probe-only role without a durable artifact is NOT sufficient.",
+  "valuable_output_requirements": {
+    "min_fields": ["loop_id", "event_type", "cycle_number", "state_after", "value_class", "artifact"],
+    "accepted_states": ["COMPLETE", "IDLE_NO_WORK", "FAILED_WITH_RECEIPT", "BLOCKED_WITH_REASON"],
+    "artifact_kinds": [
+      "loop_cycle_receipt",
+      "liveness_upsert",
+      "proof_receipt",
+      "dispatch_queue",
+      "audit_receipt",
+      "incident_dispatch",
+      "health_receipt"
+    ]
+  },
+  "loop_io": {
+    "inbox": {
+      "role_id": "noos.inbox_worker",
+      "input": "cloud worker inbox queue / blocked UPG items",
+      "process": "drain inbox + reenqueue blocked",
+      "valuable_output": "inbox drain cycle receipt + queue movement evidence",
+      "value_class": "revenue_path"
+    },
+    "runtime": {
+      "role_id": "noos.runtime_gate",
+      "input": "repo gate + import surface",
+      "process": "cloud gate smoke + import smoke (full pytest on non-cloud)",
+      "valuable_output": "gate/import evidence in cycle receipt",
+      "value_class": "risk_reduction"
+    },
+    "surface": {
+      "role_id": "noos.surface_nerve",
+      "input": "production URL checklist",
+      "process": "check_production_urls",
+      "valuable_output": "public surface pass/fail evidence",
+      "value_class": "risk_reduction"
+    },
+    "chain": {
+      "role_id": "noos.chain_verifier",
+      "input": "demo intents + gate verify",
+      "process": "noetfield_gate verify + decide validate-only",
+      "valuable_output": "chain proof asset in cycle receipt",
+      "value_class": "proof_asset"
+    },
+    "self_heal": {
+      "role_id": "noos.self_heal",
+      "input": "blocked inbox + autonomy window + loop heartbeats",
+      "process": "reenqueue + heartbeat (+ cloud-bounded steps)",
+      "valuable_output": "self-heal cycle + heartbeat receipt",
+      "value_class": "risk_reduction"
+    },
+    "sourcea_observe": {
+      "role_id": "noos.sourcea_observer",
+      "input": "SourceA/portfolio-spine Supabase surfaces",
+      "process": "observe_sourcea_supabase --write-receipt",
+      "valuable_output": "SourceA observe receipt (or exact missing-secret blocker)",
+      "value_class": "hygiene"
+    },
+    "agent_nerve": {
+      "role_id": "noos.agent_nerve",
+      "input": "agent vault + business strategy docs",
+      "process": "agent-docs + business-strategy checks",
+      "valuable_output": "agent nerve pass/fail evidence",
+      "value_class": "hygiene"
+    },
+    "workflow_audit": {
+      "role_id": "noos.workflow_auditor",
+      "input": "workflow registry + live critique signals",
+      "process": "noos_workflow_audit_v1",
+      "valuable_output": "workflow audit JSON findings",
+      "value_class": "risk_reduction"
+    },
+    "self_heal_safe_fixes": {
+      "role_id": "noos.safe_fixer",
+      "input": "data/noos-audit-findings-v1.json",
+      "process": "noos_self_heal_v1 safe fixes",
+      "valuable_output": "safe-fix execution receipt / no-op with reason",
+      "value_class": "risk_reduction"
+    },
+    "researcher_deep_dive": {
+      "role_id": "noos.researcher",
+      "input": "escalated findings",
+      "process": "noos_researcher_v1 --depth standard",
+      "valuable_output": "research memo / investigation artifact",
+      "value_class": "risk_reduction"
+    },
+    "specialist_proposals": {
+      "role_id": "noos.specialist",
+      "input": "research outputs",
+      "process": "noos_specialist_v1 proposals",
+      "valuable_output": "fix proposal set",
+      "value_class": "risk_reduction"
+    },
+    "orchestrator_cross_repo": {
+      "role_id": "noos.orchestrator",
+      "input": "org health signals",
+      "process": "cross-repo health aggregate",
+      "valuable_output": "orchestration cycle receipt",
+      "value_class": "risk_reduction"
+    }
+  },
+  "supervision_roles": [
     {
-      "role_id": "noos.observer",
-      "title": "Fleet Observer",
+      "role_id": "noos.fleet_observer",
       "category": "observe",
       "task": "Probe live motor/deadman/executor health endpoints",
-      "kind": "live_http"
+      "kind": "live_http",
+      "valuable_output": "live API probe matrix"
     },
     {
       "role_id": "noos.reconciler",
-      "title": "Machine Reconciler",
       "category": "reconcile",
       "task": "Reconcile durable failure receipts into dispatch queue",
       "kind": "local_cli",
-      "command": ["python3", "scripts/noos_machine_loops_v1.py", "--json", "reconcile"]
+      "command": ["python3", "scripts/noos_machine_loops_v1.py", "--json", "reconcile"],
+      "valuable_output": "dispatch queue with actionable/orphaned breakdown"
     },
     {
       "role_id": "noos.critic",
-      "title": "Machine Critic / Autonomy Digest",
       "category": "classify",
-      "task": "Emit autonomy status digest (fresh role context)",
+      "task": "Autonomy status digest (fresh role context)",
       "kind": "local_cli",
-      "command": ["python3", "scripts/noos_machine_loops_v1.py", "--json", "status"]
+      "command": ["python3", "scripts/noos_machine_loops_v1.py", "--json", "status"],
+      "valuable_output": "autonomy status receipt"
     },
     {
       "role_id": "noos.auditor",
-      "title": "Outside Auditor",
       "category": "verify",
       "task": "Outside audit over trailing receipts",
       "kind": "local_cli",
-      "command": ["python3", "scripts/noos_machine_loops_v1.py", "--json", "audit"]
+      "command": ["python3", "scripts/noos_machine_loops_v1.py", "--json", "audit"],
+      "valuable_output": "outside audit sealed receipt"
     },
     {
       "role_id": "noos.health_supervisor",
-      "title": "Stack Health Supervisor",
       "category": "health",
-      "task": "Compute stack automation health and surface fix_queue",
+      "task": "Stack automation health + fix_queue",
       "kind": "local_cli",
-      "command": ["python3", "scripts/noos_stack_automation_health_v1.py", "--json", "--write-receipt"]
+      "command": ["python3", "scripts/noos_stack_automation_health_v1.py", "--json", "--write-receipt"],
+      "valuable_output": "stack-health receipt + fix_queue"
     },
     {
       "role_id": "noos.incident_router",
-      "title": "Durable Incident Router",
       "category": "route",
-      "task": "File durable incidents from last health fix_queue and attempt machine-safe dispatch",
+      "task": "File durable incidents from fix_queue and dispatch machine-safe handlers",
       "kind": "python_hook",
-      "hook": "route_health_incidents"
+      "hook": "route_health_incidents",
+      "valuable_output": "durable incident IDs + worker run IDs"
     },
     {
       "role_id": "noos.runway_supervisor",
-      "title": "Runway Supervision Adapter",
       "category": "supervise_runway",
-      "task": "Preflight NOETFIELD-RUNWAY API; observe-only when live",
+      "task": "Preflight NOETFIELD-RUNWAY API",
       "kind": "python_hook",
-      "hook": "runway_preflight"
+      "hook": "runway_preflight",
+      "valuable_output": "runway preflight verdict (live or BLOCKED_RUNWAY_API_NOT_LIVE)"
     }
   ],
   "category_coverage": [
@@ -80,7 +196,19 @@
     "verify",
     "health",
     "route",
-    "supervise_runway"
+    "supervise_runway",
+    "inbox",
+    "runtime",
+    "surface",
+    "chain",
+    "self_heal",
+    "sourcea_observe",
+    "agent_nerve",
+    "workflow_audit",
+    "safe_fix",
+    "research",
+    "specialist",
+    "orchestrate"
   ],
   "not_in_scope": [
     "sellable_software_repair_recipes",

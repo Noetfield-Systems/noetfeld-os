@@ -276,7 +276,7 @@
     },
     {
       "id": "role_circle",
-      "title": "Hourly NOOS role circle — all supervision categories",
+      "title": "Hourly NOOS role circle — all required loops input→valuable output",
       "domain": "fleet-supervision",
       "lane": "noos",
       "value_class": "risk_reduction",
@@ -286,6 +286,12 @@
       "factory_id": "loop-role-circle",
       "registry": "data/noos-role-circle-v1.json",
       "steps": [
+        {
+          "name": "role_circle",
+          "cmd": ["python3", "scripts/noos_role_circle_tick_v1.py", "--json"]
+        }
+      ],
+      "cloud_steps": [
         {
           "name": "role_circle",
           "cmd": ["python3", "scripts/noos_role_circle_tick_v1.py", "--json"]
