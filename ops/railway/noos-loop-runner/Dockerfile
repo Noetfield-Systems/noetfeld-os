@@ -10,11 +10,10 @@ COPY .agent-policy ./.agent-policy
 COPY ops/railway/noos-loop-runner/BUILD_SHA ./BUILD_SHA
 RUN pip install --no-cache-dir -r requirements.txt && pip install --no-cache-dir -e .
 
-# Explicit mkdir — Railway Metal builder sometimes drops nested COPY parents.
-RUN mkdir -p /app/ops/railway/noos-loop-runner
-COPY ops/railway/noos-loop-runner/server.py /app/ops/railway/noos-loop-runner/server.py
-RUN test -f /app/ops/railway/noos-loop-runner/server.py
+# Flat entrypoint — nested ops/... path was missing at Railway runtime.
+COPY ops/railway/noos-loop-runner/server.py ./server.py
+RUN test -f /app/server.py && test -d /app/scripts && test -d /app/data
 
 ENV PORT=8080
 EXPOSE 8080
-CMD ["python3", "/app/ops/railway/noos-loop-runner/server.py"]
+CMD ["python3", "/app/server.py"]
