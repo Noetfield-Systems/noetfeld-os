@@ -345,6 +345,14 @@ def process_cycle() -> dict[str, Any]:
     pending = _fetch_pending()
     target = select_executable(pending)
     if not target:
+        from noos_plan_motor_v1 import try_execute_next_step
+
+        plan = try_execute_next_step()
+        if plan:
+            summary = founder_blocked_summary(_fetch_founder_blocked())
+            plan["founder_blocked"] = summary
+            plan["founder_blocked_this_cycle"] = [row["item_id"] for row in blocked_founder]
+            return plan
         pending_total = len(pending)
         idle_reason = (
             "empty_inbox"
@@ -357,6 +365,7 @@ def process_cycle() -> dict[str, Any]:
             "idle_reason": idle_reason,
             "founder_blocked": summary,
             "founder_blocked_this_cycle": [row["item_id"] for row in blocked_founder],
+            "plan_motor_checked": True,
         }
 
     executed = _execute_item(target)

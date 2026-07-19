@@ -158,7 +158,8 @@ def test_empty_inbox_idle_no_work():
         raise AssertionError(f"unexpected request: {method} {path}")
 
     worker._request_fn = fake_request
-    result = process_cycle()
+    with patch("noos_plan_motor_v1.try_execute_next_step", return_value=None):
+        result = process_cycle()
     worker._request_fn = None
     assert result["status"] == "IDLE_NO_WORK"
     assert result["idle_reason"] == "empty_inbox"

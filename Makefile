@@ -193,6 +193,9 @@ witness-motor-dispatch:
 motor-sustain-verify:
 	python3 scripts/verify_noos_motor_sustain_v1.py --write-receipt --json
 
+plan-motor-verify:
+	python3 scripts/verify_noos_plan_motor_wiring_v1.py --write-receipt --json
+
 nf-pub-verdict-gate:
 	python3 scripts/noos_nf_pub_verdict_gate_v1.py --write-verdict-stub --json
 
