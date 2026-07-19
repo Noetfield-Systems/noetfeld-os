@@ -3,8 +3,10 @@ name: NOOS autorun witness
 
 on:
   workflow_dispatch:
+  # Demoted from */30 — witness-on-witness churn without customer beneficiary.
+  # Weekly freshness check is enough for autorun registry critique.
   schedule:
-    - cron: "*/30 * * * *"
+    - cron: "0 9 * * 1"
 
 permissions:
   contents: read
