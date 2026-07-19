@@ -1,7 +1,7 @@
 FROM python:3.12-slim
 
 WORKDIR /app
-ARG NOOS_CACHEBUST=role-circle-v2-20260719
+ARG NOOS_CACHEBUST=force-1784428730
 COPY requirements.txt pyproject.toml ./
 COPY noetfield_gate ./noetfield_gate
 COPY scripts ./scripts
