@@ -1,0 +1,91 @@
+{
+  "schema": "noos-role-circle-v1",
+  "version": "1.0.0",
+  "status": "ACTIVE",
+  "one_law": "Hourly CF cron → Railway /loop → NOOS role circle. One bounded tick. NOOS categories only (fleet supervision). Never copies NOETFIELD-RUNWAY Motor/Router/recipes. No GitHub Actions runtime dispatch.",
+  "trigger": {
+    "plane": "cloudflare_workers_cron",
+    "worker": "noos-loop-fleet-tick-v1",
+    "event_type": "noos_role_circle_tick",
+    "interval_minutes": 60,
+    "executor": "railway:noos-loop-runner",
+    "forbidden": ["github_actions_runtime_cron_as_primary_motor"]
+  },
+  "live_apis": {
+    "fleet_health": "https://noos-loop-fleet-tick-v1.sina-kazemnezhad-ca.workers.dev/health",
+    "railway_health": "https://noos-loop-runner-production.up.railway.app/health",
+    "deadman_health": "https://noos-deadman-v1.sina-kazemnezhad-ca.workers.dev/health"
+  },
+  "roles": [
+    {
+      "role_id": "noos.observer",
+      "title": "Fleet Observer",
+      "category": "observe",
+      "task": "Probe live motor/deadman/executor health endpoints",
+      "kind": "live_http"
+    },
+    {
+      "role_id": "noos.reconciler",
+      "title": "Machine Reconciler",
+      "category": "reconcile",
+      "task": "Reconcile durable failure receipts into dispatch queue",
+      "kind": "local_cli",
+      "command": ["python3", "scripts/noos_machine_loops_v1.py", "--json", "reconcile"]
+    },
+    {
+      "role_id": "noos.critic",
+      "title": "Machine Critic / Autonomy Digest",
+      "category": "classify",
+      "task": "Emit autonomy status digest (fresh role context)",
+      "kind": "local_cli",
+      "command": ["python3", "scripts/noos_machine_loops_v1.py", "--json", "status"]
+    },
+    {
+      "role_id": "noos.auditor",
+      "title": "Outside Auditor",
+      "category": "verify",
+      "task": "Outside audit over trailing receipts",
+      "kind": "local_cli",
+      "command": ["python3", "scripts/noos_machine_loops_v1.py", "--json", "audit"]
+    },
+    {
+      "role_id": "noos.health_supervisor",
+      "title": "Stack Health Supervisor",
+      "category": "health",
+      "task": "Compute stack automation health and surface fix_queue",
+      "kind": "local_cli",
+      "command": ["python3", "scripts/noos_stack_automation_health_v1.py", "--json", "--write-receipt"]
+    },
+    {
+      "role_id": "noos.incident_router",
+      "title": "Durable Incident Router",
+      "category": "route",
+      "task": "File durable incidents from last health fix_queue and attempt machine-safe dispatch",
+      "kind": "python_hook",
+      "hook": "route_health_incidents"
+    },
+    {
+      "role_id": "noos.runway_supervisor",
+      "title": "Runway Supervision Adapter",
+      "category": "supervise_runway",
+      "task": "Preflight NOETFIELD-RUNWAY API; observe-only when live",
+      "kind": "python_hook",
+      "hook": "runway_preflight"
+    }
+  ],
+  "category_coverage": [
+    "observe",
+    "reconcile",
+    "classify",
+    "verify",
+    "health",
+    "route",
+    "supervise_runway"
+  ],
+  "not_in_scope": [
+    "sellable_software_repair_recipes",
+    "unified_motor_implementation",
+    "provider_router_cost_matrix",
+    "runway_sdk"
+  ]
+}

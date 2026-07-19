@@ -1,0 +1,67 @@
+# NOOS hourly role circle — manual/dispatch witness only.
+# Primary live trigger is CF fleet cron (60m) → Railway /loop (see data/noos-24-7-loops-v1.json).
+# GitHub Actions must NOT be the runtime motor (one_law). This workflow exists for
+# workflow_dispatch proof and CI path validation only.
+name: NOOS role circle
+
+on:
+  workflow_dispatch:
+  # Deep-audit witness: if CF fails to fire for >90m, this schedule still runs the
+  # circle once as a scheduled deep audit (allowed), not as the primary 24/7 motor.
+  schedule:
+    - cron: "15 * * * *"
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: noos-role-circle
+  cancel-in-progress: false
+
+jobs:
+  role-circle:
+    name: Hourly NOOS role circle
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      GITHUB_RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+      NOOS_GIT_SHA: ${{ github.sha }}
+      NOETFIELD_SUPABASE_URL: ${{ secrets.NOETFIELD_SUPABASE_URL }}
+      NOETFIELD_SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.NOETFIELD_SUPABASE_SERVICE_ROLE_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run NOOS role circle (all categories)
+        id: circle
+        run: |
+          set -euo pipefail
+          set +e
+          python3 scripts/noos_role_circle_tick_v1.py --json > /tmp/role-circle-stdout.json
+          rc=$?
+          set -e
+          if [ -f receipts/proof/noos-role-circle-latest.json ]; then
+            cat receipts/proof/noos-role-circle-latest.json
+          else
+            cat /tmp/role-circle-stdout.json
+          fi
+          echo "circle_exit=${rc}" >> "$GITHUB_OUTPUT"
+          exit "${rc}"
+
+      - name: Upload role-circle receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: noos-role-circle-latest
+          path: |
+            receipts/proof/noos-role-circle-latest.json
+            receipts/proof/noos-role-circle-cycle-*.json
+          retention-days: 30
+          if-no-files-found: warn

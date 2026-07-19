@@ -34,6 +34,11 @@
     "event_type": "noos_agent_nerve_loop_tick",
     "interval_minutes": 60
   },
+  "role_circle": {
+    "loop_id": "role_circle",
+    "event_type": "noos_role_circle_tick",
+    "interval_minutes": 60
+  },
   "workflow_audit": {
     "loop_id": "workflow_audit",
     "event_type": "noos_workflow_audit_tick",

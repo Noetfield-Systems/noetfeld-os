@@ -1,0 +1,731 @@
+{
+  "schema": "noos-role-circle-cycle-v1",
+  "at": "2026-07-19T01:48:44Z",
+  "started_at": "2026-07-19T01:47:11Z",
+  "finished_at": "2026-07-19T01:48:44Z",
+  "ok": true,
+  "coverage_ok": true,
+  "categories_run": [
+    "classify",
+    "health",
+    "observe",
+    "reconcile",
+    "route",
+    "supervise_runway",
+    "verify"
+  ],
+  "categories_expected": [
+    "observe",
+    "reconcile",
+    "classify",
+    "verify",
+    "health",
+    "route",
+    "supervise_runway"
+  ],
+  "role_count": 7,
+  "roles_ok": 7,
+  "roles_failed": [],
+  "trigger": {
+    "plane": "cloudflare_workers_cron",
+    "worker": "noos-loop-fleet-tick-v1",
+    "event_type": "noos_role_circle_tick",
+    "interval_minutes": 60,
+    "executor": "railway:noos-loop-runner",
+    "forbidden": [
+      "github_actions_runtime_cron_as_primary_motor"
+    ]
+  },
+  "roles": [
+    {
+      "role_id": "noos.observer",
+      "title": "Fleet Observer",
+      "category": "observe",
+      "kind": "live_http",
+      "started_at": "2026-07-19T01:47:11Z",
+      "finished_at": "2026-07-19T01:47:12Z",
+      "ok": true,
+      "result": {
+        "ok": true,
+        "probes": {
+          "fleet_health": {
+            "ok": true,
+            "status": 200,
+            "body": {
+              "ok": true,
+              "schema": "noos-loop-motor-health-v1",
+              "service": "noos-loop-fleet-tick-v1",
+              "cron": "*/5 * * * *",
+              "execution_plane": "railway:noos-loop-runner",
+              "executor_url_ready": true,
+              "loop_secret_ready": true,
+              "target_count": 14,
+              "targets": [
+                {
+                  "dispatch_id": "inbox",
+                  "event_type": "noos_inbox_loop_tick",
+                  "interval_minutes": 5,
+                  "handler": "loop"
+                },
+                {
+                  "dispatch_id": "runtime",
+                  "event_type": "noos_runtime_loop_tick",
+                  "interval_minutes": 15,
+                  "handler": "loop"
+                },
+                {
+                  "dispatch_id": "surface",
+                  "event_type": "noos_surface_loop_tick",
+                  "interval_minutes": 20,
+                  "handler": "loop"
+                },
+                {
+                  "dispatch_id": "chain",
+                  "event_type": "noos_chain_loop_tick",
+                  "interval_minutes": 30,
+                  "handler": "loop"
+                },
+                {
+                  "dispatch_id": "self_heal",
+                  "event_type": "noos_self_heal_loop_tick",
+                  "interval_minutes": 10,
+                  "handler": "loop"
+                },
+                {
+                  "dispatch_id": "sourcea_observe",
+                  "event_type": "noos_sourcea_observe_loop_tick",
+                  "interval_minutes": 30,
+                  "handler": "loop"
+                },
+                {
+                  "dispatch_id": "agent_nerve",
+                  "event_type": "noos_agent_nerve_loop_tick",
+                  "interval_minutes": 60,
+                  "handler": "loop"
+                },
+                {
+                  "dispatch_id": "workflow_audit",
+                  "event_type": "noos_workflow_audit_tick",
+                  "interval_minutes": 15,
+                  "handler": "loop"
+                },
+                {
+                  "dispatch_id": "self_heal_safe_fixes",
+                  "event_type": "noos_self_heal_safe_fixes_tick",
+                  "interval_minutes": 30,
+                  "handler": "loop"
+                },
+                {
+                  "dispatch_id": "researcher",
+                  "event_type": "noos_researcher_deep_dive_tick",
+                  "interval_minutes": 60,
+                  "handler": "loop"
+                },
+                {
+                  "dispatch_id": "specialist",
+                  "event_type": "noos_specialist_proposals_tick",
+                  "interval_minutes": 120,
+                  "handler": "loop"
+                },
+                {
+                  "dispatch_id": "orchestrator",
+                  "event_type": "noos_orchestrator_cross_repo_tick",
+                  "interval_minutes": 180,
+                  "handler": "loop"
+                },
+                {
+                  "dispatch_id": "factory_autorun",
+                  "event_type": "noos_factory_autorun_tick",
+                  "interval_minutes": 10,
+                  "handler": "factory"
+                },
+                {
+                  "dispatch_id": "improve_kaizen_daily",
+                  "event_type": "noos_improve_kaizen_daily_tick",
+                  "interval_minutes": 1440,
+                  "handler": "loop",
+                  "note": "CF-dispatched nightly kaizen recipe slot (not GHA cron)"
+                }
+              ],
+              "due_now": [],
+              "utc_minute": 47
+            }
+          },
+          "railway_health": {
+            "ok": true,
+            "status": 200,
+            "body": {
+              "ok": true,
+              "schema": "noos-railway-loop-runner-health-v1",
+              "service": "noos-loop-runner",
+              "git_sha": "2cb65699e2ad6ef647dc7daccb778977d2e011b7",
+              "uptime_sec": 44915,
+              "execution_mode": "one_shot_http",
+              "last_successful_liveness_write_at": "2026-07-19T01:46:09Z",
+              "last_liveness_error": null
+            }
+          },
+          "deadman_health": {
+            "ok": true,
+            "status": 200,
+            "body": {
+              "ok": true,
+              "schema": "noos-deadman-health-v1",
+              "service": "noos-deadman-v1",
+              "cron": "*/30 * * * *",
+              "supabase_ready": true,
+              "loop_runner_ready": true,
+              "motor_event_gateway_ready": false,
+              "telegram_ready": true,
+              "telegram_send_alerts": false,
+              "telegram_lane_forbidden": [
+                "Gateway_A",
+                "gateway_a",
+                "NFProbeBot",
+                "nf_probe_bot",
+                "NoetfieldOpsBot"
+              ],
+              "interval_multiplier": 2,
+              "restart_attempts_max": 1
+            }
+          }
+        },
+        "live_api_count": 3
+      }
+    },
+    {
+      "role_id": "noos.reconciler",
+      "title": "Machine Reconciler",
+      "category": "reconcile",
+      "kind": "local_cli",
+      "started_at": "2026-07-19T01:47:12Z",
+      "finished_at": "2026-07-19T01:47:12Z",
+      "ok": true,
+      "result": {
+        "ok": true,
+        "exit_code": 0,
+        "cmd": [
+          "python3",
+          "scripts/noos_machine_loops_v1.py",
+          "--json",
+          "reconcile"
+        ],
+        "stdout_json": {
+          "schema": "noos-machine-dispatch-queue-v1",
+          "updated_at": "2026-07-19T01:47:12+00:00",
+          "pending": [],
+          "processed": [],
+          "new_this_run": 0,
+          "queue_breakdown": {
+            "new_dispatches": 0,
+            "actionable_pending": 0,
+            "active_leases": 0,
+            "backoff_pending": 0,
+            "deduplicated": 0,
+            "completed_unreflected": 0,
+            "orphaned_backlog": 0,
+            "unknown": 0
+          },
+          "queue_items_classified": [],
+          "ok": true,
+          "report_line": "reconcile \u00b7 pending=0 new=0 actionable=0 orphaned=0 dedup=0 leases=0 backoff=0 unknown=0"
+        }
+      }
+    },
+    {
+      "role_id": "noos.critic",
+      "title": "Machine Critic / Autonomy Digest",
+      "category": "classify",
+      "kind": "local_cli",
+      "started_at": "2026-07-19T01:47:12Z",
+      "finished_at": "2026-07-19T01:47:12Z",
+      "ok": true,
+      "result": {
+        "ok": true,
+        "exit_code": 0,
+        "cmd": [
+          "python3",
+          "scripts/noos_machine_loops_v1.py",
+          "--json",
+          "status"
+        ],
+        "stdout_json": {
+          "schema": "noos-autonomy-status-v1",
+          "at": "2026-07-19T01:47:12+00:00",
+          "canon_version": "FOUNDER_CANON_v1+MACHINE_LOOPS_v1",
+          "triggers": [
+            {
+              "trigger_id": "FT-MERGE-T0-T1",
+              "class": "validation",
+              "description": "Merge review for docs/tests/receipts/scoped app code",
+              "status": "bootstrap_founder_reviewed",
+              "retirement_condition": "10 consecutive machine merge validations where shadow_decision matches founder",
+              "evidence_counter": 0,
+              "target_status": "machine_autonomous",
+              "bootstrap_cycles_remaining": 5
+            },
+            {
+              "trigger_id": "FT-MERGE-T2",
+              "class": "validation",
+              "description": "Merge review for dependency/config/CI changes",
+              "status": "founder_gated",
+              "retirement_condition": "20 consecutive T2 merges with dual-critic APPROVE and zero post-merge regressions",
+              "evidence_counter": 0,
+              "target_status": "machine_autonomous"
+            },
+            {
+              "trigger_id": "FT-COMMERCIAL-SEND",
+              "class": "capital_legal",
+              "description": "NW1/SW1 outreach send authority",
+              "status": "founder_only",
+              "retirement_condition": "agentic send receipts + 30d zero compliance incidents",
+              "evidence_counter": 0,
+              "target_status": "delegated_agentic",
+              "backlog_ids": [
+                "UPG-0001",
+                "UPG-0002",
+                "UPG-0003",
+                "UPG-0004"
+              ]
+            },
+            {
+              "trigger_id": "FT-DEMO-RECORD",
+              "class": "human_presence",
+              "description": "Demo video / screen capture",
+              "status": "founder_only",
+              "retirement_condition": "scripted capture worker + founder 5min gate receipts x10",
+              "evidence_counter": 0,
+              "target_status": "delegated_capture",
+              "backlog_ids": [
+                "UPG-0005",
+                "UPG-0029",
+                "UPG-0030"
+              ]
+            },
+            {
+              "trigger_id": "FT-L5-VERIFY",
+              "class": "irreversible_l5",
+              "description": "Founder verify on verifier/gate/law edits",
+              "status": "founder_only",
+              "retirement_condition": "never \u2014 canon \u00a78 irreversible L5",
+              "evidence_counter": 0,
+              "target_status": "founder_only",
+              "backlog_ids": [
+                "UPG-0010"
+              ]
+            },
+            {
+              "trigger_id": "FT-PHASE-UNLOCK",
+              "class": "phase_unlock",
+              "description": "Grant new autonomy tier",
+              "status": "founder_only",
+              "retirement_condition": "auto-proposal only; unlock act stays founder (ratchet safety)",
+              "evidence_counter": 0,
+              "target_status": "founder_one_click"
+            },
+            {
+              "trigger_id": "FT-PRODUCTION-SECRETS",
+              "class": "capital_legal",
+              "description": "Production vault policy and secret posture",
+              "status": "founder_only",
+              "retirement_condition": "vault policy receipt + 90d CI secret-scan green",
+              "evidence_counter": 0,
+              "target_status": "machine_monitored",
+              "backlog_ids": [
+                "UPG-0174",
+                "UPG-0175"
+              ]
+            },
+            {
+              "trigger_id": "FT-TRUST-BRIEF",
+              "class": "commercial",
+              "description": "First Trust Brief / AI Value OS briefing",
+              "status": "founder_only",
+              "retirement_condition": "intake receipt + follow-up automation receipts",
+              "evidence_counter": 0,
+              "target_status": "delegated_agentic",
+              "backlog_ids": [
+                "NOOS-C-01"
+              ]
+            }
+          ],
+          "shadow_events": 0,
+          "recent_match_rate": 0.0,
+          "dispatch_queue": {
+            "schema": "noos-machine-dispatch-queue-v1",
+            "updated_at": "2026-07-19T01:47:12+00:00",
+            "pending": [],
+            "processed": [],
+            "new_this_run": 0,
+            "queue_breakdown": {
+              "new_dispatches": 0,
+              "actionable_pending": 0,
+              "active_leases": 0,
+              "backoff_pending": 0,
+              "deduplicated": 0,
+              "completed_unreflected": 0,
+              "orphaned_backlog": 0,
+              "unknown": 0
+            },
+            "queue_items_classified": [],
+            "ok": true,
+            "report_line": "reconcile \u00b7 pending=0 new=0 actionable=0 orphaned=0 dedup=0 leases=0 backoff=0 unknown=0"
+          },
+          "ok": true,
+          "report_line": "autonomy_status \u00b7 ledger loaded"
+        }
+      }
+    },
+    {
+      "role_id": "noos.auditor",
+      "title": "Outside Auditor",
+      "category": "verify",
+      "kind": "local_cli",
+      "started_at": "2026-07-19T01:47:12Z",
+      "finished_at": "2026-07-19T01:47:12Z",
+      "ok": true,
+      "result": {
+        "ok": true,
+        "exit_code": 0,
+        "cmd": [
+          "python3",
+          "scripts/noos_machine_loops_v1.py",
+          "--json",
+          "audit"
+        ],
+        "stdout_json": {
+          "schema": "noos-outside-audit-receipt-v1",
+          "version": "1.0.0",
+          "at": "2026-07-19T01:47:12+00:00",
+          "trailing_hours": 168,
+          "receipts_scanned": 304,
+          "chain": {
+            "ok": true,
+            "count": 288,
+            "chained_count": 1,
+            "broken_links": [],
+            "tail_hash": "73141f5feba126e03afc100f523c85c83b3716b66b74f776c047f41faa561079",
+            "excluded_schemas": [
+              "noos-outside-audit-receipt-v1"
+            ],
+            "excluded_count": 16
+          },
+          "critic_non_approve": 0,
+          "spot_fetches": [],
+          "kaizen_candidates": [],
+          "ok": true,
+          "report_line": "outside_audit \u00b7 scanned=304 chain_ok=True",
+          "prev_chain_hash": "73141f5feba126e03afc100f523c85c83b3716b66b74f776c047f41faa561079",
+          "chain_hash": "d0c0d0232941d643386464c68fa20e6c357889b9825377c90d094dee3a30ede6",
+          "receipt_path": "receipts/proof/noos-outside-audit-20260719T014712Z.json"
+        }
+      }
+    },
+    {
+      "role_id": "noos.health_supervisor",
+      "title": "Stack Health Supervisor",
+      "category": "health",
+      "kind": "local_cli",
+      "started_at": "2026-07-19T01:47:12Z",
+      "finished_at": "2026-07-19T01:48:44Z",
+      "ok": true,
+      "result": {
+        "ok": true,
+        "exit_code": 1,
+        "cmd": [
+          "python3",
+          "scripts/noos_stack_automation_health_v1.py",
+          "--json",
+          "--write-receipt"
+        ],
+        "stdout_json": {
+          "schema": "noos-stack-automation-health-v1",
+          "at": "2026-07-19T01:48:44Z",
+          "ok": false,
+          "overall_status": "red",
+          "closure_token": "NOOS_STACK_AUTOMATION: red",
+          "replaces_workflow": "noos-cross-repo-orchestrator.yml",
+          "architecture": {
+            "primary": "cloudflare_workers_cron",
+            "secondary": "github_actions_enterprise",
+            "tertiary": "railway_plan_worker"
+          },
+          "signals": {
+            "integrator_status": false,
+            "autorun_critique": false,
+            "gha_health": true,
+            "eleven_layers": false,
+            "trustfield_registry": false,
+            "cf_fleet_tick": true
+          },
+          "integrator_status": {
+            "ok": false,
+            "surfaces": {
+              "vault": true,
+              "cf_deploy_token": false,
+              "integrator_mirror": true,
+              "motor_sustain": false,
+              "autorun": false,
+              "machine_audit": true,
+              "agent_conflicts": true,
+              "tasks_mirror": true,
+              "upgrade_manifest": true
+            },
+            "machine_audit_line": "outside_audit \u00b7 scanned=306 chain_ok=True"
+          },
+          "autorun_critique": {
+            "overall_ok": false,
+            "findings": 9,
+            "findings_sample": [
+              {
+                "scope": "sourcea_cloud_queue",
+                "severity": "high",
+                "summary": "Workflow is not healthy: BLOCKED_WITH_REASON",
+                "detail": "stale_supabase_row"
+              },
+              {
+                "scope": "noos_loop_chain",
+                "severity": "high",
+                "summary": "Workflow is not healthy: BLOCKED_WITH_REASON",
+                "detail": "dispatch_and_completion_stale",
+                "route": "execution_reconcile_self_heal",
+                "execution_state": "LOOP_EXECUTION_STALE"
+              },
+              {
+                "scope": "noos_loop_agent_nerve",
+                "severity": "medium",
+                "summary": "Dispatch active; per-loop completion evidence stale/absent",
+                "detail": "dispatch_fresh_completion_evidence_stale",
+                "execution_state": "DISPATCHING_COMPLETION_UNPROVEN",
+                "evidence_state": "INSUFFICIENT_RECENT_EVIDENCE",
+                "route": "receipt_writer_completion_evidence_repair"
+              },
+              {
+                "scope": "noos_loop_sourcea_observe",
+                "severity": "medium",
+                "summary": "Dispatch active; per-loop completion evidence stale/absent",
+                "detail": "dispatch_fresh_completion_evidence_stale",
+                "execution_state": "DISPATCHING_COMPLETION_UNPROVEN",
+                "evidence_state": "INSUFFICIENT_RECENT_EVIDENCE",
+                "route": "receipt_writer_completion_evidence_repair"
+              },
+              {
+                "scope": "noos_gha_motor_sustain_witness",
+                "severity": "high",
+                "summary": "Workflow SLO miss",
+                "detail": "freshness_miss, latency_miss"
+              }
+            ]
+          },
+          "gha_health": {
+            "schema": "noos-gha-run-health-v1",
+            "at": "2026-07-19T01:48:43Z",
+            "ok": true,
+            "overall_status": "green",
+            "closure_token": "NOOS_GHA_HEALTH: green",
+            "billing_gate_max_seconds": 12.0,
+            "checks": {
+              "ICL-D10": {
+                "title": "GHA secondary witness (latest run not billing-gated)",
+                "ok": true,
+                "repos": [
+                  {
+                    "ok": true,
+                    "repo": "TrustField-Technologies",
+                    "billing_gate_failures_12s": 0,
+                    "latest_is_billing_gate": false,
+                    "latest_real_failure": false,
+                    "real_failures": [],
+                    "latest_conclusion": "success",
+                    "latest_duration_s": 17.0,
+                    "recent_count": 8
+                  },
+                  {
+                    "ok": true,
+                    "repo": "noetfeld-os",
+                    "billing_gate_failures_12s": 0,
+                    "latest_is_billing_gate": false,
+                    "latest_real_failure": false,
+                    "real_failures": [],
+                    "latest_conclusion": "success",
+                    "latest_duration_s": 20.0,
+                    "recent_count": 8
+                  }
+                ]
+              },
+              "ICL-D11": {
+                "title": "GHA real workflow failures (not billing)",
+                "ok": true,
+                "failures": []
+              },
+              "ICL-D12": {
+                "title": "GitHub org on Enterprise plan",
+                "ok": true,
+                "plan": {
+                  "ok": true,
+                  "plan": "team",
+                  "enterprise_named": false,
+                  "billing_gate_clear": true,
+                  "enterprise_slug": "noetfield-systems-inc",
+                  "enterprise_url": "https://github.com/enterprises/noetfield-systems-inc",
+                  "witness_proxy": true
+                }
+              },
+              "witness_early_warning": {
+                "title": "Witness workflows not dying at billing gate (<12s)",
+                "ok": true,
+                "detail": {
+                  "ok": true,
+                  "witness_count": 10,
+                  "warnings": [],
+                  "billing_gate_precursors": [],
+                  "one_law": "Jobs failing in <12s with no step logs = billing/spending gate \u2014 not CI red"
+                }
+              }
+            },
+            "fix_queue": []
+          },
+          "cf_motors": {
+            "fleet_tick": "green",
+            "deadman": "green",
+            "registry_overall": "red"
+          },
+          "railway_plan_worker": {
+            "url": "https://trustfield-plan-worker-production.up.railway.app/health",
+            "status": "degraded",
+            "last_cycle_ok": false,
+            "lane_ok": {
+              "critic_circle": true,
+              "deep_research": true,
+              "trustfield_loops_intake": true,
+              "self_heal": true,
+              "www_upgrade_queue": true,
+              "autorun_stack": true,
+              "partner_access": false
+            },
+            "lanes_run": [
+              "critic_circle",
+              "deep_research",
+              "trustfield_loops_intake",
+              "self_heal",
+              "www_upgrade_queue",
+              "autorun_stack",
+              "partner_access"
+            ]
+          },
+          "eleven_layers": {
+            "green": 8,
+            "yellow": 1,
+            "red": 2,
+            "unknown": 0
+          },
+          "trustfield_registry": {
+            "green": 29,
+            "yellow": 1,
+            "red": 4,
+            "last_ok_false": 1,
+            "missing_last_fired_at": 0,
+            "probe_present": true,
+            "deadman_status": "green",
+            "gate_48h_status": "green",
+            "deadman_watched_red": [
+              "tf_cf_lane_partner_access_v1"
+            ]
+          },
+          "fix_queue": [
+            "integrator_status",
+            "autorun_critique",
+            "eleven_layers",
+            "trustfield_registry"
+          ],
+          "receipt_path": "/Users/sinakazemnezhad/Desktop/Noetfield-Systems/noos-wt-runway-supervision/receipts/proof/noos-stack-automation-health-v1.json"
+        },
+        "health_ok": false,
+        "overall_status": "red",
+        "fix_queue": [
+          "integrator_status",
+          "autorun_critique",
+          "eleven_layers",
+          "trustfield_registry"
+        ]
+      }
+    },
+    {
+      "role_id": "noos.incident_router",
+      "title": "Durable Incident Router",
+      "category": "route",
+      "kind": "python_hook",
+      "started_at": "2026-07-19T01:48:44Z",
+      "finished_at": "2026-07-19T01:48:44Z",
+      "ok": true,
+      "result": {
+        "ok": true,
+        "transport": "file_proof_double",
+        "filed": {
+          "ok": true,
+          "created": [],
+          "duplicates": 4,
+          "count": 0
+        },
+        "actionable_before": 1,
+        "dispatched": [
+          {
+            "incident_id": "NOOS-HEALTH-AUTORUN_CRITIQUE-d69d54305f14a083",
+            "ok": false,
+            "state": "OPEN",
+            "reason": "handler_unavailable",
+            "attempt": 2
+          }
+        ],
+        "actionable_after": 1
+      }
+    },
+    {
+      "role_id": "noos.runway_supervisor",
+      "title": "Runway Supervision Adapter",
+      "category": "supervise_runway",
+      "kind": "python_hook",
+      "started_at": "2026-07-19T01:48:44Z",
+      "finished_at": "2026-07-19T01:48:44Z",
+      "ok": true,
+      "result": {
+        "ok": true,
+        "preflight": {
+          "ok": false,
+          "verdict": "BLOCKED_RUNWAY_API_NOT_LIVE",
+          "required_url_env": "NOETFIELD_RUNWAY_API_URL",
+          "required_auth_env": "NOETFIELD_RUNWAY_API_TOKEN",
+          "auth_interface": "Authorization: Bearer <NOETFIELD_RUNWAY_API_TOKEN>",
+          "endpoints": {
+            "list_jobs": "GET /v1/jobs?state=active",
+            "get_job": "GET /v1/jobs/{job_id}",
+            "job_events": "GET /v1/jobs/{job_id}/events",
+            "dispatch_repair": "POST /v1/jobs/{job_id}/repair",
+            "dispatch_fallback": "POST /v1/jobs/{job_id}/fallback"
+          },
+          "event_schema": {
+            "job_id": "string",
+            "recipe_id": "string",
+            "state": "one of: RUNNING|COMPLETE|FAILED|BLOCKED|STALE",
+            "started_at": "iso8601",
+            "updated_at": "iso8601",
+            "budget": {
+              "spent_usd": "number",
+              "ceiling_usd": "number"
+            },
+            "provider": {
+              "name": "string",
+              "healthy": "boolean"
+            },
+            "terminal_receipt": "string|null"
+          },
+          "owner_repository": "Noetfield-Systems/NOETFIELD-RUNWAY",
+          "unblock_action": "Deploy NOETFIELD-RUNWAY and set NOETFIELD_RUNWAY_API_URL + NOETFIELD_RUNWAY_API_TOKEN in the noetfeld-os supervision environment."
+        },
+        "runway_live": false
+      }
+    }
+  ],
+  "cost": "NO_EXTERNAL_MODEL_CALL",
+  "canon_version": "FOUNDER_CANON_v1+MACHINE_LOOPS_v1"
+}
