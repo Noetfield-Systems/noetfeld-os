@@ -63,6 +63,48 @@ def http_json(url: str, *, timeout: int = HTTP_TIMEOUT) -> dict[str, Any]:
         return {"ok": False, "error": str(exc)[:240]}
 
 
+def post_role_circle_report(circle: dict[str, Any], row: dict[str, Any]) -> dict[str, Any]:
+    deadman_health = str((circle.get("live_apis") or {}).get("deadman_health") or "")
+    secret = (os.environ.get("NOOS_LOOP_SECRET") or os.environ.get("LOOP_RUNNER_SECRET") or "").strip()
+    if not deadman_health:
+        return {"ok": False, "skipped": True, "reason": "deadman_url_missing"}
+    if not secret:
+        return {"ok": False, "skipped": True, "reason": "loop_secret_missing"}
+    url = deadman_health.removesuffix("/health") + "/role-circle-report"
+    payload = {
+        "ok": row.get("ok"),
+        "portfolio_productive": row.get("portfolio_productive"),
+        "loop_count": row.get("loop_count"),
+        "loops_valuable": row.get("loops_valuable"),
+        "loops_productive": row.get("loops_productive"),
+        "loops_failed": row.get("loops_failed"),
+        "loops_not_productive": row.get("loops_not_productive"),
+        "receipt_path": row.get("receipt_path"),
+    }
+    request = urllib.request.Request(
+        url,
+        data=json.dumps(payload).encode("utf-8"),
+        method="POST",
+        headers={
+            "Content-Type": "application/json",
+            "X-NOOS-Loop-Secret": secret,
+            "User-Agent": "noos-role-circle-v2",
+        },
+    )
+    try:
+        with urllib.request.urlopen(request, timeout=HTTP_TIMEOUT) as response:
+            body = json.loads(response.read().decode("utf-8"))
+            return {"ok": response.status < 300 and body.get("ok") is True, "status": response.status, "body": body}
+    except urllib.error.HTTPError as exc:
+        return {
+            "ok": False,
+            "status": exc.code,
+            "error": exc.read().decode("utf-8", errors="replace")[:240],
+        }
+    except (OSError, json.JSONDecodeError) as exc:
+        return {"ok": False, "error": str(exc)[:240]}
+
+
 def run_cli(cmd: list[str], *, timeout: int = 480) -> dict[str, Any]:
     try:
         proc = subprocess.run(
@@ -555,6 +597,7 @@ def run_circle(*, write_receipt: bool = True) -> dict[str, Any]:
             row["receipt_path"] = str(path)
             row["alias_path"] = str(alias)
             row["value_ledger_path"] = str(ledger_path)
+    row["telegram_delivery"] = post_role_circle_report(circle, row)
     return row
 
 
@@ -579,6 +622,7 @@ def main(argv: list[str] | None = None) -> int:
         "by_value_class": (row.get("value_ledger") or {}).get("by_value_class"),
         "receipt_path": row.get("receipt_path"),
         "value_ledger_path": row.get("value_ledger_path"),
+        "telegram_delivery": row.get("telegram_delivery"),
         "cost": row.get("cost"),
         "loop_briefs": [
             {
