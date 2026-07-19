@@ -1,8 +1,8 @@
 {
   "schema": "noos-loop-registry-reconcile-v1",
-  "reconciled_at": "2026-07-06T04:08:24Z",
+  "reconciled_at": "2026-07-06T09:37:33Z",
   "authority": "NOOS_MACHINE_LOOPS_UPGRADE_STEP_2",
-  "loop_count": 12,
+  "loop_count": 13,
   "core_loop_count": 7,
   "loops": [
     {
@@ -184,11 +184,26 @@
         "workflow_dispatch": true,
         "repository_dispatch_types": []
       }
+    },
+    {
+      "loop_id": "improve_kaizen_daily",
+      "github_workflow": "noos-improve-kaizen-daily.yml",
+      "event_type": "noos_improve_kaizen_daily_tick",
+      "factory_id": "loop-improve-kaizen",
+      "core_domain_loop": false,
+      "workflow_exists": true,
+      "event_match": true,
+      "factory_id_ok": true,
+      "triggers": {
+        "schedule": false,
+        "workflow_dispatch": true,
+        "repository_dispatch_types": []
+      }
     }
   ],
   "orphan_loop_workflows": [],
   "issues": [],
   "core_issues": [],
   "ok": true,
-  "report_line": "loop_registry_reconcile \u00b7 loops=12 core_issues=0"
+  "report_line": "loop_registry_reconcile \u00b7 loops=13 core_issues=0"
 }

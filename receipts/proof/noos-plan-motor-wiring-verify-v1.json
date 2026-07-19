@@ -1,0 +1,90 @@
+{
+  "schema": "noos-plan-motor-wiring-verify-v1",
+  "lock_state": "LOCKED_v1",
+  "ok": true,
+  "checks": [
+    {
+      "path": "docs/_NOOS_AGENT/UPGRADE_MANIFEST.json",
+      "ok": true,
+      "exists": true
+    },
+    {
+      "path": "data/noos-upgrade-planes-v1.json",
+      "ok": true,
+      "exists": true
+    },
+    {
+      "path": "scripts/cloud_inbox_worker_v1.py",
+      "ok": true,
+      "exists": true
+    },
+    {
+      "path": "scripts/noos_plan_motor_v1.py",
+      "ok": true,
+      "exists": true
+    },
+    {
+      "path": "scripts/noos_researcher_v1.py",
+      "ok": true,
+      "exists": true
+    },
+    {
+      "path": "scripts/noos_specialist_v1.py",
+      "ok": true,
+      "exists": true
+    },
+    {
+      "path": "scripts/noos_orchestrator_v1.py",
+      "ok": true,
+      "exists": true
+    },
+    {
+      "path": "scripts/noos_plan_motor_kernel_bridge_v1.py",
+      "ok": true,
+      "exists": true
+    },
+    {
+      "path": "config/model-router.yml",
+      "ok": true,
+      "exists": true
+    },
+    {
+      "path": "data/noos-cf-dispatch-table-v1.json",
+      "ok": true,
+      "exists": true
+    },
+    {
+      "name": "inbox_imports_plan_motor",
+      "ok": true
+    },
+    {
+      "name": "researcher_kernel_bridge",
+      "ok": true
+    },
+    {
+      "name": "specialist_kernel_bridge",
+      "ok": true
+    },
+    {
+      "name": "orchestrator_real_script",
+      "ok": true
+    },
+    {
+      "name": "cf_dispatch_inbox",
+      "ok": true
+    },
+    {
+      "name": "cf_dispatch_researcher",
+      "ok": true
+    },
+    {
+      "name": "cf_dispatch_specialist",
+      "ok": true
+    },
+    {
+      "name": "cf_dispatch_orchestrator",
+      "ok": true
+    }
+  ],
+  "closure_token": "NOOS_PLAN_MOTOR_WIRING: PASS"
+}

@@ -1,0 +1,61 @@
+{
+  "schema": "noos-motor-v1-release-manifest-v1",
+  "not_a_verdict": "Release manifest. Describes a BUILT artifact only \u2014 not a deployment claim. SUBMITTED for independent verification.",
+  "canon_version": "FOUNDER_CANON_v1+MACHINE_LOOPS_v1",
+  "product": "NOOS Motor v1",
+  "product_version": "1.0.0",
+  "git_commit": "7904edde79c7a29cb21b32c8d9cc87e350a06d78",
+  "build_time": "2026-07-18T04:22:25Z",
+  "schema_version": "noos-motor-execution-v1",
+  "workflow_version": "noos-motor-v1",
+  "migration_version": "0020_motor_provenance_fields",
+  "components_present": [
+    "scripts/noos_motor_state_machine_v1.py",
+    "scripts/noos_motor_local_executor_v1.py",
+    "scripts/noos_observability_semantics_v1.py",
+    "scripts/noos_motor_v1_verify_v1.py",
+    "scripts/noos_motor_v1_package_v1.py",
+    "infrastructure/supabase/migrations/0020_motor_provenance_fields.sql",
+    "docs/product/NOOS-MOTOR-V1.md",
+    "docs/product/NOOS-MOTOR-V1-ARCHITECTURE.md",
+    "docs/product/NOOS-MOTOR-V1-QUICKSTART.md",
+    "docs/product/NOOS-MOTOR-V1-RUNBOOK.md",
+    "docs/product/samples/sample-input.json",
+    "bin/noos",
+    ".env.example",
+    "tests/test_noos_motor_state_machine_v1.py",
+    "tests/test_noos_motor_local_executor_v1.py",
+    "tests/test_noos_motor_provenance_v1.py"
+  ],
+  "components_missing": [],
+  "checksums_sha256": {
+    "scripts/noos_motor_state_machine_v1.py": "4aeab8402d47a3bcb365c7d7258cc9427aa6b32627734a8e24329b099cd9910d",
+    "scripts/noos_motor_local_executor_v1.py": "7ba9afc6987aadfd8637ef8791dbbedf9f81d14c7ce23d1221ace2829fcf6d1d",
+    "scripts/noos_observability_semantics_v1.py": "ca428aaf2106103903e97a4ca6028697b88a16adf9aa68bdcddba2edf45b2192",
+    "scripts/noos_motor_v1_verify_v1.py": "e9e47481e9f9ea0dd5f1ba75a4c4360cea4012475787425f22dfa8cda4ce4a05",
+    "scripts/noos_motor_v1_package_v1.py": "4fc414f3addfa4f3215c194bdb19f36094cda29783a6524c6e370c75b63861c2",
+    "infrastructure/supabase/migrations/0020_motor_provenance_fields.sql": "eecd538beb1d1d712de84a7fe8629db86558b605d3af65614453a4dba0d05585",
+    "docs/product/NOOS-MOTOR-V1.md": "075f7bbec6954690db90079b5fb108da60a1faa1980806af0a974f8e700f5d58",
+    "docs/product/NOOS-MOTOR-V1-ARCHITECTURE.md": "7aaa3746d126e0c0ba918a6d556b1e9c3d7b17325d9b64b09821410d66667eef",
+    "docs/product/NOOS-MOTOR-V1-QUICKSTART.md": "f52356891dbb8f3c45804f95f5e80bdae5030a5f6b89e202c56ba8f3229b5a90",
+    "docs/product/NOOS-MOTOR-V1-RUNBOOK.md": "213d1c0d6e43d6d02a02534bdf0cb886ca51ef9effb8d8cb7578166a3cd49019",
+    "docs/product/samples/sample-input.json": "05cf481a99355f1d5f0454eccdd2cbc7a895b19a504a8cfb91eb84333fa3b8d1",
+    "bin/noos": "4377de6bd027ec3ab0d44cc102d27af5a82cff1c61fb54184bfebf2a00b6d5c1",
+    ".env.example": "9b507f47d6c3c1ca67829b9fed8f7304d19267a24289a33a6026cd078033709b",
+    "tests/test_noos_motor_state_machine_v1.py": "8330d25efe5a7e559f7643514d6b753d8a9849213f2364611eb9d15f346751cf",
+    "tests/test_noos_motor_local_executor_v1.py": "eebbadc9b01c05566a72fcb4640f863e9b60fabb5d505302d6dbaec0e40fe661",
+    "tests/test_noos_motor_provenance_v1.py": "66aff4e4f29ffc80d69e2ed4c43f1892de5ba11740bafab4a81678ffe49cb586"
+  },
+  "external_activation_required": [
+    "Restart cloud http_loop producer (Railway noos-loop-runner) \u2014 needs cloud deploy creds",
+    "Apply Supabase migration 0020 (make supabase-migrate) \u2014 founder-gated, needs DB creds",
+    "Run 3 consecutive real cloud organic http_loop cycles \u2014 depends on producer restart"
+  ],
+  "rollback": {
+    "code": "git revert the motor commits on this branch (no merge to main was performed)",
+    "migration": "0020 is additive/nullable; DROP COLUMN IF EXISTS block at the foot of the .sql reverses it"
+  },
+  "bundle_path": "/Users/sinakazemnezhad/Desktop/Noetfield-Systems/noetfeld-OS/dist/noos-motor-v1-1.0.0.tar.gz",
+  "bundle_sha256": "e3f4236300fac1ddbb7d966845b9062dcbada44d5f0eaca7f7d16c6799c4ac39",
+  "manifest_path": "/Users/sinakazemnezhad/Desktop/Noetfield-Systems/noetfeld-OS/dist/noos-motor-v1-release-manifest.json"
+}

@@ -20,6 +20,7 @@ import pytest
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
 import noos_loop_runner_v1 as runner  # noqa: E402
+import noos_vault_paths_v1  # noqa: E402
 
 
 @pytest.fixture(autouse=True)
@@ -28,6 +29,7 @@ def _isolated_runtime(tmp_path, monkeypatch):
     ensure no real Supabase credentials leak in from the environment (sink_cycle
     must naturally fail-closed to BLOCKED_WITH_REASON without them)."""
     monkeypatch.setattr(runner, "RUNTIME", tmp_path)
+    monkeypatch.setattr(noos_vault_paths_v1, "load_platform_env", lambda: {})
     for key in (
         "NOETFIELD_SUPABASE_URL",
         "SUPABASE_URL",

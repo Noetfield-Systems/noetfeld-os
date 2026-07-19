@@ -270,7 +270,7 @@
       "steps": [
         {
           "name": "aggregate_health",
-          "cmd": ["echo", "Aggregating health across all org repos"]
+          "cmd": ["python3", "scripts/noos_orchestrator_v1.py", "--write-receipt", "--json"]
         }
       ]
     },

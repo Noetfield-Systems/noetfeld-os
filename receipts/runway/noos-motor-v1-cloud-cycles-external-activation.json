@@ -1,0 +1,33 @@
+{
+  "schema": "noos-motor-v1-cloud-external-activation-v1",
+  "not_a_verdict": "Honest EXTERNAL_ACTIVATION record. These cloud steps were NOT executed because the required credentials/CLIs are objectively absent on this host. NO organic cloud cycle is claimed or fabricated. SUBMITTED for independent verification.",
+  "canon_version": "FOUNDER_CANON_v1+MACHINE_LOOPS_v1",
+  "recorded_at": "2026-07-18T04:02:00Z",
+  "status": "EXTERNAL_ACTIVATION_REQUIRED",
+  "reachability_evidence": {
+    "supabase_cli": false,
+    "fly_flyctl_cli": false,
+    "psql": false,
+    "cloud_credential_env_vars_present": false,
+    "secrets_location": "~/.noetfield-platform-secrets/ (outside repo; not loaded)"
+  },
+  "pending_cloud_acceptance": {
+    "requirement": "3 consecutive REAL cloud organic http_loop cycles with receipt_origin=organic, producer=cloud http_loop, unique execution/dispatch IDs, valid lifecycle ordering, retrievable output, hash verified, within 30-min SLO, critic RUNNING_CONFIRMED on organic evidence.",
+    "not_faked": "These will NOT be produced from repair-labeled rows. The local reference cycles (noos-motor-v1-organic-cycle-{1,2,3}.json) demonstrate the MOTOR end-to-end but are execution_plane=local_reference and are explicitly NOT a substitute for the cloud http_loop acceptance."
+  },
+  "exact_activation_then_verification": [
+    "# From a host with cloud creds (~/.noetfield-platform-secrets populated):",
+    "make deploy-railway-loop-runner        # restart/redeploy the canonical organic producer",
+    "make supabase-migrate                  # apply migration 0020 (founder-gated)",
+    "make cloud-motor-e2e                   # prove one real organic tick",
+    "# then observe 3 consecutive organic completions land with cloud_trigger=http_loop:",
+    "python3 scripts/autorun_status_v1.py --json   # expect execution_state=RUNNING_CONFIRMED with provenance.completion_origin=organic",
+    "# masking regression in the deployed env: pause organic, write a repair row, confirm DEGRADED_REPAIR_SUSTAINED (not RUNNING_CONFIRMED), then restore."
+  ],
+  "cloud_failure_recovery_tests_pending_activation": [
+    "duplicate dispatch (idempotency) — proven offline in tests/test_noos_motor_state_machine_v1.py::test_inv3; cloud re-run pending",
+    "worker crash / callback timeout / expired lease — FSM proven offline (inv 5,7,8); cloud re-run pending",
+    "repair receipt while organic stale — proven offline (masking regression); cloud re-run pending"
+  ],
+  "final_status": "EXTERNAL_ACTIVATION_REQUIRED — SUBMITTED for independent verification"
+}

@@ -1,0 +1,42 @@
+{
+  "schema": "noos-motor-v1-adversarial-verification-v1",
+  "not_a_verdict": "Independent adversarial verification (workflow of skeptics + a fresh re-check). This is INDEPENDENT-of-author evidence but is NOT a founder PASS gate. SUBMITTED for independent verification.",
+  "canon_version": "FOUNDER_CANON_v1+MACHINE_LOOPS_v1",
+  "verified_at": "2026-07-18T04:55:00Z",
+  "method": "4 parallel adversarial verifiers (effort=high) each trying to REFUTE one claim, then a fresh focused re-check of the fix.",
+  "claims": [
+    {
+      "claim": "No repair/replay/manual/migration/test completion can EVER produce RUNNING_CONFIRMED (classifier + live projection)",
+      "result": "NOT REFUTED (high confidence)",
+      "note": "Verifier ran classify_loop_state + simulated the live 50-row derive path; repair-only window => organic_age None => DEGRADED_REPAIR_SUSTAINED. RUNNING_CONFIRMED only with a genuine coexisting fresh organic completion."
+    },
+    {
+      "claim": "No runway receipt fabricates a cloud organic http_loop cycle or claims deployment/verification that did not happen",
+      "result": "NOT REFUTED (high confidence)",
+      "note": "All 11 receipts honestly labelled; local cycles marked execution_plane=local_reference; cloud marked EXTERNAL_ACTIVATION_REQUIRED."
+    },
+    {
+      "claim": "Motor FSM: COMPLETED only via RUNNING+OUTPUT_COMMITTED; no terminal->RUNNING; duplicate idempotency dedupes",
+      "result": "REFUTED then FIXED",
+      "note": "Verifier found reclaim() ignored current state and terminal FAILED/TIMED_OUT held their lease => expired lease forced terminal->DISPATCHED->CLAIMED->RUNNING. FIX: clear lease on terminal entry; reclaim() gated to live CLAIMED/RUNNING only; replay is a dead-end marker (recovery = new attempt); DEAD_LETTERED made inert. Regression + BFS property tests added. Re-check found no counterexample."
+    },
+    {
+      "claim": "Product docs contain no unsupported/marketing overclaim; cloud correctly marked EXTERNAL_ACTIVATION_REQUIRED",
+      "result": "NOT REFUTED (high confidence)",
+      "note": "All 8 docs audited; every RUNNING_CONFIRMED mention describes the fixed false-positive, not a live claim."
+    }
+  ],
+  "bug_found_and_fixed": {
+    "severity": "invariant-2 violation (terminal run could be resurrected to RUNNING via expired-lease reclaim)",
+    "files": [
+      "scripts/noos_motor_state_machine_v1.py"
+    ],
+    "regression_tests": [
+      "tests/test_noos_motor_state_machine_v1.py::test_inv2_terminal_lease_expiry_cannot_reclaim_into_running",
+      "::test_property_run_final_states_never_reach_running",
+      "::test_replay_from_dead_letter_is_new_attempt_not_same_object"
+    ]
+  },
+  "post_fix_gate": "full repo suite 327 passed; motor FSM suite 18 passed; BFS proof: no RUN_FINAL state reaches RUNNING",
+  "final_status": "SUBMITTED for independent verification"
+}

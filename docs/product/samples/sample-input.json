@@ -1,0 +1,9 @@
+{
+  "task_kind": "digest",
+  "title": "Q3 receipts digest",
+  "records": [
+    {"loop": "inbox", "cycles": 12, "status": "ok"},
+    {"loop": "runtime", "cycles": 8, "status": "ok"},
+    {"loop": "surface", "cycles": 5, "status": "degraded"}
+  ]
+}
