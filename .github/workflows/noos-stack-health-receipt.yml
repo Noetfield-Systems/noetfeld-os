@@ -38,14 +38,32 @@ jobs:
       - name: Bootstrap autorun repair (liveness + loop cycles)
         run: python3 scripts/noos_integrator_repair_autorun_v1.py --json
 
-      - name: Stack automation health rollup
+      # Enforcing health gate. The receipt is always written and uploaded, but a
+      # computed RED (Python exit != 0) MUST fail this job. Neither a tee pipe nor
+      # a disabled-pipefail shim may sit between the health script and the job
+      # result — that was the false-green defect (run 29664359403 concluded
+      # success while the script computed ok=false / overall_status=red).
+      - name: Stack automation health rollup (enforcing)
+        id: rollup
         run: |
           set -euo pipefail
           mkdir -p receipts/proof
-          set +o pipefail
-          python3 scripts/noos_stack_automation_health_v1.py --write-receipt --json | tee receipts/proof/noos-stack-automation-health-v1.json
-          set -o pipefail
+          # `--write-receipt` is the authoritative writer of the receipt file, so
+          # stdout (--json) goes to a temp path — no pipe and no same-file race.
+          # Capture the REAL Python exit code without letting `set -e` abort first.
+          set +e
+          python3 scripts/noos_stack_automation_health_v1.py --write-receipt --json \
+            > /tmp/noos-stack-health-stdout.json
+          rc=$?
+          set -e
+          # Surface the receipt in the log and prove it is non-empty.
+          cat receipts/proof/noos-stack-automation-health-v1.json
           test -s receipts/proof/noos-stack-automation-health-v1.json
+          echo "health_exit_code=${rc}" >> "$GITHUB_OUTPUT"
+          if [ "${rc}" -ne 0 ]; then
+            echo "::error::NOOS stack automation health computed RED/degraded (exit ${rc}); failing enforcing job."
+            exit "${rc}"
+          fi
 
       - name: Upload stack health receipt
         if: always()

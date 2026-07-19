@@ -37,6 +37,16 @@ DEFAULT_ROLE_ID = "noetfield:noos.portfolio-owner"
 DEFAULT_ROUTE = "noos.portfolio.loop_cycle"
 MAX_TIMESTAMP_SKEW_SEC = 300
 
+# Loop-cycle terminal states NOOS is allowed to emit to the Unified Motor gateway.
+# Extended (Mission 3) to route health failures/blocks, not only success/idle.
+EMITTABLE_STATES = ("COMPLETE", "IDLE_NO_WORK", "FAILED_WITH_RECEIPT", "BLOCKED_WITH_REASON")
+
+# Required runtime configuration for live emission. Presence-only — never printed.
+REQUIRED_ENABLE_VAR = "NOOS_UNIFIED_MOTOR_EVENT_BRIDGE"
+REQUIRED_SECRET_VARS = ("MOTOR_EVENT_GATEWAY_URL", "MOTOR_EVENT_API_SECRET")
+
+CONFIG_BLOCKER_VERDICT = "BLOCKED_MOTOR_EVENT_GATEWAY_CONFIGURATION"
+
 
 def utc_now() -> str:
     return datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
@@ -60,14 +70,62 @@ def gateway_config() -> tuple[str, str] | None:
     return None
 
 
-def gateway_source_id() -> str:
-    doc = load_bridge_map()
-    return str(doc.get("gateway_source") or "api.motor")
-
-
 def noos_source_id() -> str:
     doc = load_bridge_map()
     return str(doc.get("noos_source_id") or "noos.portfolio")
+
+
+def canonical_source_id() -> str:
+    """Honest event ``source`` NOOS emits.
+
+    The bridge previously emitted ``api.motor`` (a masquerade) so the gateway
+    allowlist would accept it. That is corrected here: NOOS emits its own
+    canonical source ``noos.portfolio``. Adding ``noos.portfolio`` to the Unified
+    Motor gateway ALLOWED_EVENT_SOURCES is a NOETFIELD-RUNWAY change (see
+    ``gateway_allowlist_pending`` in the bridge map), not a NOOS masquerade.
+    """
+    doc = load_bridge_map()
+    return str(doc.get("canonical_source") or doc.get("noos_source_id") or "noos.portfolio")
+
+
+def gateway_allowlist_pending() -> bool:
+    return bool(load_bridge_map().get("gateway_allowlist_pending", True))
+
+
+def preflight_config(*, deployment: str = "github-actions:noetfeld-os") -> dict[str, Any]:
+    """Verify runtime config presence WITHOUT reading/printing any secret value.
+
+    Returns an ``ok`` result when the bridge is enabled and both gateway secrets
+    are present; otherwise returns the exact ``BLOCKED_MOTOR_EVENT_GATEWAY_CONFIGURATION``
+    verdict with the exact missing variable names, the deployment, and one
+    concrete unblock action.
+    """
+    missing: list[str] = []
+    if os.environ.get(REQUIRED_ENABLE_VAR, "").strip() not in ("1", "true", "yes"):
+        missing.append(REQUIRED_ENABLE_VAR)
+    for var in REQUIRED_SECRET_VARS:
+        if not (os.environ.get(var) or "").strip():
+            missing.append(var)
+    if missing:
+        return {
+            "ok": False,
+            "verdict": CONFIG_BLOCKER_VERDICT,
+            "missing": missing,
+            "deployment": deployment,
+            "unblock_action": (
+                f"Set {', '.join(missing)} in the {deployment} environment "
+                "(repository/environment secrets), then re-run with "
+                f"{REQUIRED_ENABLE_VAR}=1."
+            ),
+            "gateway_allowlist_pending": gateway_allowlist_pending(),
+        }
+    return {
+        "ok": True,
+        "verdict": "MOTOR_EVENT_GATEWAY_CONFIGURED",
+        "missing": [],
+        "deployment": deployment,
+        "gateway_allowlist_pending": gateway_allowlist_pending(),
+    }
 
 
 def sign_motor_event_body(*, secret: str, timestamp: str, raw_body: str) -> str:
@@ -97,10 +155,18 @@ def build_motor_event_payload(
     state_after: str,
     op_key: str | None = None,
     extra_payload: dict[str, Any] | None = None,
+    route_override: str | None = None,
 ) -> dict[str, Any]:
     doc = load_bridge_map()
     routes = doc.get("routes") or {}
-    route = str(routes.get(loop_id) or routes.get("default") or DEFAULT_ROUTE)
+    if route_override:
+        route = route_override
+    elif state_after == "FAILED_WITH_RECEIPT":
+        route = str(routes.get("health_failed") or routes.get("default") or DEFAULT_ROUTE)
+    elif state_after == "BLOCKED_WITH_REASON":
+        route = str(routes.get("health_blocked") or routes.get("default") or DEFAULT_ROUTE)
+    else:
+        route = str(routes.get(loop_id) or routes.get("default") or DEFAULT_ROUTE)
     payload: dict[str, Any] = {
         "noos_source_id": noos_source_id(),
         "loop_id": loop_id,
@@ -115,7 +181,7 @@ def build_motor_event_payload(
         payload.update(extra_payload)
     event: dict[str, Any] = {
         "event_id": build_event_id(loop_id=loop_id, cycle_number=cycle_number),
-        "source": gateway_source_id(),
+        "source": canonical_source_id(),
         "schema_version": EVENT_SCHEMA_VERSION,
         "role_id": str(doc.get("role_id") or DEFAULT_ROLE_ID),
         "route": route,
@@ -204,11 +270,15 @@ def post_signed_event(
 
 
 def maybe_emit_loop_cycle_event(cycle: dict[str, Any]) -> dict[str, Any]:
-    """Emit portfolio-owner event after durable NOOS loop cycle write (fail-open)."""
+    """Emit portfolio-owner event after durable NOOS loop cycle write (fail-open).
+
+    Emits terminal success/idle AND health failures/blocks (Mission 3):
+    ``COMPLETE``, ``IDLE_NO_WORK``, ``FAILED_WITH_RECEIPT``, ``BLOCKED_WITH_REASON``.
+    """
     if not bridge_enabled():
         return {"ok": False, "skipped": True, "reason": "bridge_disabled"}
     state_after = str(cycle.get("state_after") or "")
-    if state_after not in ("COMPLETE", "IDLE_NO_WORK"):
+    if state_after not in EMITTABLE_STATES:
         return {"ok": False, "skipped": True, "reason": f"state_not_emittable:{state_after}"}
     loop_id = str(cycle.get("loop_id") or "")
     cycle_number = int(cycle.get("cycle_number") or 0)
@@ -236,7 +306,7 @@ def maybe_emit_loop_cycle_event(cycle: dict[str, Any]) -> dict[str, Any]:
                 loop_id=str(doc.get("loop_id") or "unified_motor_event_bridge"),
                 event_type=str(doc.get("event_type") or "noos_unified_motor_event_bridge_tick"),
                 interval_minutes=int(doc.get("interval_minutes") or 15),
-                last_cycle_status="COMPLETE",
+                last_cycle_status=state_after,
                 host="noos:unified-motor-event-bridge",
             )
         except Exception as exc:
@@ -251,3 +321,25 @@ def verify_timestamp_fresh(timestamp: str, *, now_sec: int | None = None) -> boo
     except (TypeError, ValueError):
         return False
     return abs(now - ts) <= MAX_TIMESTAMP_SKEW_SEC
+
+
+def verify_inbound_signature(
+    *,
+    secret: str,
+    timestamp: str,
+    raw_body: str,
+    signature: str,
+    now_sec: int | None = None,
+) -> dict[str, Any]:
+    """Verify an inbound signed event: constant-time HMAC + replay/skew rejection.
+
+    Returns ``{ok, reason}``. ``ok`` is True only when the signature matches AND
+    the timestamp is within the freshness window (replay/stale rejected). Uses
+    ``hmac.compare_digest`` so signature comparison is not timing-variable.
+    """
+    if not verify_timestamp_fresh(timestamp, now_sec=now_sec):
+        return {"ok": False, "reason": "replay_or_stale_timestamp"}
+    expected = sign_motor_event_body(secret=secret, timestamp=timestamp, raw_body=raw_body)
+    if not hmac.compare_digest(expected, str(signature or "")):
+        return {"ok": False, "reason": "invalid_signature"}
+    return {"ok": True, "reason": "verified"}
