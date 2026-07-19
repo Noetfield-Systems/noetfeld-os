@@ -1,0 +1,22 @@
+{
+  "schema": "noos-health-incident-recovery-proof-v1",
+  "at": "2026-07-19T01:19:15Z",
+  "proof_kind": "deterministic_offline_mechanism_proof",
+  "no_external_model_call": true,
+  "chain": {
+    "fresh_red_source_sha": "proofsha1784423955",
+    "incident_id": "NOOS-HEALTH-INTEGRATOR_STATUS-7cb7f482ae64283b",
+    "reconciler_actionable_before": 1,
+    "handler_id": "noos.integrator_mirror_repair",
+    "worker_run_id": "noos-run-1784423955-64283b",
+    "terminal_state": "RESOLVED",
+    "terminal_receipt": ".noos-runtime/health-incident-proof/correction-NOOS-HEALTH-INTEGRATOR_STATUS-7cb7f482ae64283b.json",
+    "reconciler_actionable_after": 0
+  },
+  "independent_verifier_ok": true,
+  "live_activation": {
+    "durable_store": "BLOCKED_DURABLE_STORE_NOT_CONFIGURED (Supabase env absent)",
+    "note": "Mechanism proven over the durable-store contract; production authority is the Supabase control table (migration 0020)."
+  },
+  "ok": true
+}

@@ -1,0 +1,140 @@
+{
+  "schema": "noos-health-incident-routing-v1",
+  "version": "1.0.0",
+  "one_law": "NOOS observes and dispatches cross-repo repairs by owner boundary. It never edits SourceA or TrustField product code from the supervision branch. Owner=noos → registered local machine handler; owner=sourcea/trustfield/railway → external owner endpoint dispatch.",
+  "authority_classes": {
+    "machine_safe": "NOOS registered handler may act autonomously and record a receipt.",
+    "external_owner": "Dispatch to the owning repo/worker endpoint; NOOS records the run/job id it returns.",
+    "founder_gated": "Only after authorized machine remedies are exhausted."
+  },
+  "routes": {
+    "integrator_status": {
+      "owner": "noos",
+      "target_repository": "Noetfield-Systems/noetfeld-os",
+      "handler_id": "noos.integrator_mirror_repair",
+      "authority_class": "machine_safe",
+      "failure_type": "integrator_status_or_mirror",
+      "verify_commands": ["python3 scripts/noos_integrator_status_v1.py --json"]
+    },
+    "integrator_mirror": {
+      "owner": "noos",
+      "target_repository": "Noetfield-Systems/noetfeld-os",
+      "handler_id": "noos.integrator_mirror_repair",
+      "authority_class": "machine_safe",
+      "failure_type": "integrator_mirror_false",
+      "verify_commands": ["python3 scripts/noos_integrator_status_v1.py --json"]
+    },
+    "autorun_critique": {
+      "owner": "noos",
+      "target_repository": "Noetfield-Systems/noetfeld-os",
+      "handler_id": "noos.autorun_reconcile",
+      "authority_class": "machine_safe",
+      "failure_type": "autorun_critique_findings",
+      "verify_commands": ["python3 scripts/autorun_status_v1.py --json"]
+    },
+    "gha_health": {
+      "owner": "noos",
+      "target_repository": "Noetfield-Systems/noetfeld-os",
+      "handler_id": "noos.gha_health_reconcile",
+      "authority_class": "machine_safe",
+      "failure_type": "gha_run_health",
+      "verify_commands": ["python3 scripts/noos_gha_run_health_v1.py"]
+    },
+    "cf_fleet_tick": {
+      "owner": "noos",
+      "target_repository": "Noetfield-Systems/noetfeld-os",
+      "handler_id": "noos.witness_dispatch_repair",
+      "authority_class": "machine_safe",
+      "failure_type": "cf_fleet_tick_witness_no_run",
+      "verify_commands": ["./scripts/verify_cf_deadman_v1.sh"]
+    },
+    "eleven_layers": {
+      "owner": "trustfield",
+      "target_repository": "Noetfield-Systems/TrustField",
+      "handler_id": "trustfield.parallel_layers_owner",
+      "authority_class": "external_owner",
+      "failure_type": "eleven_layer_rollup_red",
+      "verify_commands": [
+        "./scripts/verify_tf_loop_registry_liveness.sh",
+        "python3 scripts/observe_trustfield_parallel_layers_v1.py --json"
+      ]
+    },
+    "trustfield_registry": {
+      "owner": "trustfield",
+      "target_repository": "Noetfield-Systems/TrustField",
+      "handler_id": "trustfield.loop_registry_owner",
+      "authority_class": "external_owner",
+      "failure_type": "trustfield_registry_red_rows",
+      "verify_commands": [
+        "./scripts/verify_tf_supabase_receipt_sink.sh",
+        "./scripts/verify_tf_loop_registry_liveness.sh",
+        "./scripts/verify_cf_deadman_v1.sh"
+      ]
+    },
+    "trustfield_partner_access": {
+      "owner": "railway",
+      "target_repository": "Noetfield-Systems/TrustField",
+      "handler_id": "trustfield.railway_partner_access_owner",
+      "authority_class": "external_owner",
+      "failure_type": "railway_partner_access_false",
+      "verify_commands": ["python3 scripts/noos_stack_automation_health_v1.py --json"]
+    },
+    "trustfield_github_404": {
+      "owner": "trustfield",
+      "target_repository": "Noetfield-Systems/TrustField",
+      "handler_id": "trustfield.github_actions_lookup_owner",
+      "authority_class": "external_owner",
+      "failure_type": "trustfield_github_actions_404",
+      "diagnosis_hypotheses": [
+        "wrong_repository_name",
+        "missing_github_app_installation",
+        "missing_actions_read_permission"
+      ],
+      "verify_commands": ["gh api repos/Noetfield-Systems/TrustField/actions/runs?per_page=1"]
+    },
+    "sourcea_cloud_queue": {
+      "owner": "sourcea",
+      "target_repository": "Noetfield-Systems/SourceA",
+      "handler_id": "sourcea.portfolio_spine_owner",
+      "authority_class": "external_owner",
+      "failure_type": "supabase_not_configured",
+      "required_secret_names": ["NOETFIELD_SUPABASE_URL", "NOETFIELD_SUPABASE_SERVICE_ROLE_KEY"],
+      "target_environment": "SourceA/portfolio-spine Supabase project",
+      "note": "Trace the exact expected Supabase project + secret names; verify current NOETFIELD Supabase secrets are the correct database; never alias blindly."
+    },
+    "sourcea_buyer_proof_verify": {
+      "owner": "sourcea",
+      "target_repository": "Noetfield-Systems/SourceA",
+      "handler_id": "sourcea.portfolio_spine_owner",
+      "authority_class": "external_owner",
+      "failure_type": "supabase_not_configured",
+      "required_secret_names": ["NOETFIELD_SUPABASE_URL", "NOETFIELD_SUPABASE_SERVICE_ROLE_KEY"],
+      "target_environment": "SourceA/portfolio-spine Supabase project"
+    },
+    "sourcea_recipe_queue_builder": {
+      "owner": "sourcea",
+      "target_repository": "Noetfield-Systems/SourceA",
+      "handler_id": "sourcea.portfolio_spine_owner",
+      "authority_class": "external_owner",
+      "failure_type": "supabase_not_configured",
+      "required_secret_names": ["NOETFIELD_SUPABASE_URL", "NOETFIELD_SUPABASE_SERVICE_ROLE_KEY"],
+      "target_environment": "SourceA/portfolio-spine Supabase project"
+    },
+    "portfolio_spine": {
+      "owner": "sourcea",
+      "target_repository": "Noetfield-Systems/SourceA",
+      "handler_id": "sourcea.portfolio_spine_owner",
+      "authority_class": "external_owner",
+      "failure_type": "portfolio_spine_not_configured",
+      "required_secret_names": ["NOETFIELD_SUPABASE_URL", "NOETFIELD_SUPABASE_SERVICE_ROLE_KEY"],
+      "target_environment": "SourceA/portfolio-spine Supabase project"
+    }
+  },
+  "default_route": {
+    "owner": "noos",
+    "target_repository": "Noetfield-Systems/noetfeld-os",
+    "handler_id": "noos.unknown_failure_triage",
+    "authority_class": "machine_safe",
+    "failure_type": "unclassified"
+  }
+}

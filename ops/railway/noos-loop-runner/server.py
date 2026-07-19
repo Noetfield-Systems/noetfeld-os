@@ -15,7 +15,17 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 from pathlib import Path
 from typing import Any
 
-ROOT = Path(__file__).resolve().parents[3]
+def _resolve_root() -> Path:
+    here = Path(__file__).resolve().parent
+    candidates = [here, *list(here.parents)[:4]]
+    for cand in candidates:
+        if (cand / "scripts").is_dir() and (cand / "data").is_dir():
+            return cand
+    # Fallback: historical image path ops/railway/noos-loop-runner/server.py → /app
+    return Path(__file__).resolve().parents[3]
+
+
+ROOT = _resolve_root()
 sys.path.insert(0, str(ROOT / "scripts"))
 from noos_loop_liveness_v1 import upsert_loop_liveness  # noqa: E402
 

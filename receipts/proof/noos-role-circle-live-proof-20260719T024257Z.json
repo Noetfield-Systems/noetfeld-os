@@ -1,0 +1,40 @@
+{
+  "schema": "noos-role-circle-live-proof-v1",
+  "at": "2026-07-19T02:43:07Z",
+  "verdict": "SUBMITTED for independent verification",
+  "claim": "Live Railway role_circle tick executed v2 I\u2192O portfolio (productive loop_briefs present) and parent cycle COMPLETE with sink_acked",
+  "run_id": "railway-106f329adb72",
+  "http_ok": true,
+  "exit_code": 0,
+  "role_circle": {
+    "loop_id": "role_circle",
+    "state_after": "COMPLETE",
+    "status": "ok",
+    "cycle_number": 2,
+    "d4": {
+      "execute_ok": true,
+      "validate_ok": true,
+      "sink_acked": true
+    },
+    "supabase_sink_ok": true,
+    "step_ok": true,
+    "step_exit": 0
+  },
+  "stdout_tail_evidence": {
+    "contains_productive_field": true,
+    "observed_loop_ids": [
+      "researcher_deep_dive",
+      "specialist_proposals",
+      "orchestrator_cross_repo"
+    ],
+    "observed_states": [
+      "COMPLETE"
+    ],
+    "note": "stdout_tail truncated at 1200 chars; tail shows final required loops COMPLETE+productive+valuable"
+  },
+  "deploy": {
+    "railway_deployment": "1d8d76cc-9a58-425f-a63a-20f29b4d2849",
+    "branch": "codex/noos-runway-supervision-v1"
+  },
+  "canon_version": "FOUNDER_CANON_v1+MACHINE_LOOPS_v1"
+}

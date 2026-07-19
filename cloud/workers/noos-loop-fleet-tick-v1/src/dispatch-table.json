@@ -1,25 +1,103 @@
 {
   "schema": "noos-cf-dispatch-table-v1",
   "version": "1.0.0",
-  "updated_at": "2026-07-05",
+  "updated_at": "2026-07-19",
   "motor_worker": "noos-loop-fleet-tick-v1",
   "motor_cron": "*/5 * * * *",
   "canonical_execution_plane": "railway:noos-loop-runner",
   "execution_plane": "railway:noos-loop-runner",
   "targets": [
-    {"dispatch_id": "inbox", "event_type": "noos_inbox_loop_tick", "interval_minutes": 5, "handler": "loop"},
-    {"dispatch_id": "runtime", "event_type": "noos_runtime_loop_tick", "interval_minutes": 15, "handler": "loop"},
-    {"dispatch_id": "surface", "event_type": "noos_surface_loop_tick", "interval_minutes": 20, "handler": "loop"},
-    {"dispatch_id": "chain", "event_type": "noos_chain_loop_tick", "interval_minutes": 30, "handler": "loop"},
-    {"dispatch_id": "self_heal", "event_type": "noos_self_heal_loop_tick", "interval_minutes": 10, "handler": "loop"},
-    {"dispatch_id": "sourcea_observe", "event_type": "noos_sourcea_observe_loop_tick", "interval_minutes": 30, "handler": "loop"},
-    {"dispatch_id": "agent_nerve", "event_type": "noos_agent_nerve_loop_tick", "interval_minutes": 60, "handler": "loop"},
-    {"dispatch_id": "workflow_audit", "event_type": "noos_workflow_audit_tick", "interval_minutes": 15, "handler": "loop"},
-    {"dispatch_id": "self_heal_safe_fixes", "event_type": "noos_self_heal_safe_fixes_tick", "interval_minutes": 30, "handler": "loop"},
-    {"dispatch_id": "researcher", "event_type": "noos_researcher_deep_dive_tick", "interval_minutes": 60, "handler": "loop"},
-    {"dispatch_id": "specialist", "event_type": "noos_specialist_proposals_tick", "interval_minutes": 120, "handler": "loop"},
-    {"dispatch_id": "orchestrator", "event_type": "noos_orchestrator_cross_repo_tick", "interval_minutes": 180, "handler": "loop"},
-    {"dispatch_id": "factory_autorun", "event_type": "noos_factory_autorun_tick", "interval_minutes": 10, "handler": "factory"},
-    {"dispatch_id": "improve_kaizen_daily", "event_type": "noos_improve_kaizen_daily_tick", "interval_minutes": 1440, "handler": "loop", "note": "CF-dispatched nightly kaizen recipe slot (not GHA cron)"}
+    {
+      "dispatch_id": "inbox",
+      "event_type": "noos_inbox_loop_tick",
+      "interval_minutes": 5,
+      "handler": "loop"
+    },
+    {
+      "dispatch_id": "runtime",
+      "event_type": "noos_runtime_loop_tick",
+      "interval_minutes": 15,
+      "handler": "loop"
+    },
+    {
+      "dispatch_id": "surface",
+      "event_type": "noos_surface_loop_tick",
+      "interval_minutes": 20,
+      "handler": "loop"
+    },
+    {
+      "dispatch_id": "chain",
+      "event_type": "noos_chain_loop_tick",
+      "interval_minutes": 30,
+      "handler": "loop"
+    },
+    {
+      "dispatch_id": "self_heal",
+      "event_type": "noos_self_heal_loop_tick",
+      "interval_minutes": 10,
+      "handler": "loop"
+    },
+    {
+      "dispatch_id": "sourcea_observe",
+      "event_type": "noos_sourcea_observe_loop_tick",
+      "interval_minutes": 30,
+      "handler": "loop"
+    },
+    {
+      "dispatch_id": "agent_nerve",
+      "event_type": "noos_agent_nerve_loop_tick",
+      "interval_minutes": 60,
+      "handler": "loop"
+    },
+    {
+      "dispatch_id": "role_circle",
+      "event_type": "noos_role_circle_tick",
+      "interval_minutes": 60,
+      "handler": "loop",
+      "note": "Hourly NOOS supervision role circle (all categories)"
+    },
+    {
+      "dispatch_id": "workflow_audit",
+      "event_type": "noos_workflow_audit_tick",
+      "interval_minutes": 15,
+      "handler": "loop"
+    },
+    {
+      "dispatch_id": "self_heal_safe_fixes",
+      "event_type": "noos_self_heal_safe_fixes_tick",
+      "interval_minutes": 30,
+      "handler": "loop"
+    },
+    {
+      "dispatch_id": "researcher",
+      "event_type": "noos_researcher_deep_dive_tick",
+      "interval_minutes": 60,
+      "handler": "loop"
+    },
+    {
+      "dispatch_id": "specialist",
+      "event_type": "noos_specialist_proposals_tick",
+      "interval_minutes": 120,
+      "handler": "loop"
+    },
+    {
+      "dispatch_id": "orchestrator",
+      "event_type": "noos_orchestrator_cross_repo_tick",
+      "interval_minutes": 180,
+      "handler": "loop"
+    },
+    {
+      "dispatch_id": "factory_autorun",
+      "event_type": "noos_factory_autorun_tick",
+      "interval_minutes": 10,
+      "handler": "factory"
+    },
+    {
+      "dispatch_id": "improve_kaizen_daily",
+      "event_type": "noos_improve_kaizen_daily_tick",
+      "interval_minutes": 1440,
+      "handler": "loop",
+      "note": "CF-dispatched nightly kaizen recipe slot (not GHA cron)"
+    }
   ]
 }

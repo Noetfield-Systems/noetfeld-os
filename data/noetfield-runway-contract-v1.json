@@ -1,0 +1,33 @@
+{
+  "schema": "noetfield-runway-supervision-contract-v1",
+  "version": "1.0.0",
+  "one_law": "NOOS supervises the canonical NOETFIELD-RUNWAY runtime; it never copies a Runway recipe or Motor implementation. Observation → stale/budget/provider detection → machine repair/fallback dispatch → terminal receipt observation → founder only for genuine authority.",
+  "owner_repository": "Noetfield-Systems/NOETFIELD-RUNWAY",
+  "required_runtime": {
+    "url_env": "NOETFIELD_RUNWAY_API_URL",
+    "auth_env": "NOETFIELD_RUNWAY_API_TOKEN",
+    "auth_interface": "Authorization: Bearer <NOETFIELD_RUNWAY_API_TOKEN>",
+    "endpoints": {
+      "list_jobs": "GET /v1/jobs?state=active",
+      "get_job": "GET /v1/jobs/{job_id}",
+      "job_events": "GET /v1/jobs/{job_id}/events",
+      "dispatch_repair": "POST /v1/jobs/{job_id}/repair",
+      "dispatch_fallback": "POST /v1/jobs/{job_id}/fallback"
+    }
+  },
+  "job_event_schema": {
+    "job_id": "string",
+    "recipe_id": "string",
+    "state": "one of: RUNNING|COMPLETE|FAILED|BLOCKED|STALE",
+    "started_at": "iso8601",
+    "updated_at": "iso8601",
+    "budget": {"spent_usd": "number", "ceiling_usd": "number"},
+    "provider": {"name": "string", "healthy": "boolean"},
+    "terminal_receipt": "string|null"
+  },
+  "detection_defaults": {
+    "stale_after_minutes": 30,
+    "budget_warn_ratio": 0.8,
+    "budget_stop_ratio": 1.0
+  }
+}

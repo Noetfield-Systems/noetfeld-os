@@ -23,6 +23,7 @@
     "noos-self-heal-loop": ["gha-noos-self-heal-loop"],
     "noos-sourcea-observe-loop": ["gha-loop-fleet"],
     "noos-agent-nerve-loop": ["gha-loop-fleet"],
+    "noos-role-circle": ["gha-loop-fleet"],
     "noos-workflow-audit": ["gha-noos-workflow-audit"],
     "noos-self-heal": ["gha-noos-self-heal"],
     "noos-researcher": ["gha-noos-researcher"],
@@ -474,13 +475,14 @@
       "mission_id": "M2",
       "territory": "domain-loops",
       "write_scope": [".noos-runtime/loops/"],
-      "primary_task_kinds": ["inbox_drain", "runtime_gate", "chain_verify", "sourcea_observe"],
+      "primary_task_kinds": ["inbox_drain", "runtime_gate", "chain_verify", "sourcea_observe", "role_circle"],
       "gha_workflows": [
         "noos-inbox-loop",
         "noos-runtime-loop",
         "noos-chain-loop",
         "noos-sourcea-observe-loop",
-        "noos-agent-nerve-loop"
+        "noos-agent-nerve-loop",
+        "noos-role-circle"
       ]
     },
     {

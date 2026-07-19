@@ -275,6 +275,36 @@
       ]
     },
     {
+      "id": "role_circle",
+      "title": "Hourly NOOS role circle — all required loops input→valuable output",
+      "domain": "fleet-supervision",
+      "lane": "noos",
+      "value_class": "risk_reduction",
+      "event_type": "noos_role_circle_tick",
+      "interval_minutes": 60,
+      "github_workflow": "noos-role-circle.yml",
+      "factory_id": "loop-role-circle",
+      "registry": "data/noos-role-circle-v1.json",
+      "steps": [
+        {
+          "name": "role_circle",
+          "cmd": ["python3", "scripts/noos_role_circle_tick_v1.py", "--json"]
+        }
+      ],
+      "cloud_steps": [
+        {
+          "name": "role_circle",
+          "cmd": ["python3", "scripts/noos_role_circle_tick_v1.py", "--json"]
+        }
+      ],
+      "self_heal": [
+        {
+          "name": "reconcile_retry",
+          "cmd": ["python3", "scripts/noos_machine_loops_v1.py", "--json", "reconcile"]
+        }
+      ]
+    },
+    {
       "id": "improve_kaizen_daily",
       "title": "Nightly machine_safe kaizen recipe slot",
       "domain": "self-improvement",
