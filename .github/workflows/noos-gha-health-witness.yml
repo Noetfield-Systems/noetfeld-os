@@ -4,7 +4,8 @@ name: NOOS GHA health witness
 on:
   workflow_dispatch:
   schedule:
-    - cron: "10 * * * *"
+    # Demoted from hourly — GUARD freshness weekly + manual dispatch.
+    - cron: "10 8 * * 1"
 
 permissions:
   contents: read

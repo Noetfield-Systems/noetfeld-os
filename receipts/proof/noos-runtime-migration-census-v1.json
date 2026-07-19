@@ -1,0 +1,204 @@
+{
+  "schema": "noos_runtime_migration_census_v1",
+  "generated_at": "2026-07-19T06:56:47Z",
+  "active_loops": [
+    {
+      "id": "inbox",
+      "value_class": "revenue_path",
+      "interval_minutes": 5,
+      "schedule_status": "active",
+      "enabled": true
+    },
+    {
+      "id": "runtime",
+      "value_class": "risk_reduction",
+      "interval_minutes": 15,
+      "schedule_status": "active",
+      "enabled": true
+    },
+    {
+      "id": "surface",
+      "value_class": "risk_reduction",
+      "interval_minutes": 20,
+      "schedule_status": "active",
+      "enabled": true
+    },
+    {
+      "id": "chain",
+      "value_class": "proof_asset",
+      "interval_minutes": 30,
+      "schedule_status": "active",
+      "enabled": true
+    },
+    {
+      "id": "self_heal",
+      "value_class": "risk_reduction",
+      "interval_minutes": 10,
+      "schedule_status": "active",
+      "enabled": true
+    },
+    {
+      "id": "sourcea_observe",
+      "value_class": "hygiene",
+      "interval_minutes": 30,
+      "schedule_status": "active",
+      "enabled": true
+    },
+    {
+      "id": "agent_nerve",
+      "value_class": "hygiene",
+      "interval_minutes": 60,
+      "schedule_status": "active",
+      "enabled": true
+    },
+    {
+      "id": "workflow_audit",
+      "value_class": "risk_reduction",
+      "interval_minutes": 15,
+      "schedule_status": "active",
+      "enabled": true
+    },
+    {
+      "id": "self_heal_safe_fixes",
+      "value_class": "risk_reduction",
+      "interval_minutes": 30,
+      "schedule_status": "active",
+      "enabled": true
+    },
+    {
+      "id": "researcher_deep_dive",
+      "value_class": "risk_reduction",
+      "interval_minutes": 60,
+      "schedule_status": "active",
+      "enabled": true
+    },
+    {
+      "id": "specialist_proposals",
+      "value_class": "risk_reduction",
+      "interval_minutes": 120,
+      "schedule_status": "active",
+      "enabled": true
+    },
+    {
+      "id": "improve_kaizen_daily",
+      "value_class": "risk_reduction",
+      "interval_minutes": 1440,
+      "schedule_status": "active",
+      "enabled": true
+    }
+  ],
+  "quarantined_loops": [
+    {
+      "id": "orchestrator_cross_repo",
+      "value_class": "hygiene",
+      "interval_minutes": 180,
+      "schedule_status": "quarantined",
+      "enabled": false
+    }
+  ],
+  "active_targets": [
+    {
+      "dispatch_id": "inbox",
+      "event_type": "noos_inbox_loop_tick",
+      "interval_minutes": 5,
+      "enabled": true,
+      "schedule_status": "active"
+    },
+    {
+      "dispatch_id": "runtime",
+      "event_type": "noos_runtime_loop_tick",
+      "interval_minutes": 15,
+      "enabled": true,
+      "schedule_status": "active"
+    },
+    {
+      "dispatch_id": "surface",
+      "event_type": "noos_surface_loop_tick",
+      "interval_minutes": 20,
+      "enabled": true,
+      "schedule_status": "active"
+    },
+    {
+      "dispatch_id": "chain",
+      "event_type": "noos_chain_loop_tick",
+      "interval_minutes": 30,
+      "enabled": true,
+      "schedule_status": "active"
+    },
+    {
+      "dispatch_id": "self_heal",
+      "event_type": "noos_self_heal_loop_tick",
+      "interval_minutes": 10,
+      "enabled": true,
+      "schedule_status": "active"
+    },
+    {
+      "dispatch_id": "sourcea_observe",
+      "event_type": "noos_sourcea_observe_loop_tick",
+      "interval_minutes": 30,
+      "enabled": true,
+      "schedule_status": "active"
+    },
+    {
+      "dispatch_id": "agent_nerve",
+      "event_type": "noos_agent_nerve_loop_tick",
+      "interval_minutes": 60,
+      "enabled": true,
+      "schedule_status": "active"
+    },
+    {
+      "dispatch_id": "workflow_audit",
+      "event_type": "noos_workflow_audit_tick",
+      "interval_minutes": 15,
+      "enabled": true,
+      "schedule_status": "active"
+    },
+    {
+      "dispatch_id": "self_heal_safe_fixes",
+      "event_type": "noos_self_heal_safe_fixes_tick",
+      "interval_minutes": 30,
+      "enabled": true,
+      "schedule_status": "active"
+    },
+    {
+      "dispatch_id": "researcher",
+      "event_type": "noos_researcher_deep_dive_tick",
+      "interval_minutes": 60,
+      "enabled": true,
+      "schedule_status": "active"
+    },
+    {
+      "dispatch_id": "specialist",
+      "event_type": "noos_specialist_proposals_tick",
+      "interval_minutes": 120,
+      "enabled": true,
+      "schedule_status": "active"
+    },
+    {
+      "dispatch_id": "improve_kaizen_daily",
+      "event_type": "noos_improve_kaizen_daily_tick",
+      "interval_minutes": 1440,
+      "enabled": true,
+      "schedule_status": "active"
+    }
+  ],
+  "quarantined_targets": [
+    {
+      "dispatch_id": "orchestrator",
+      "event_type": "noos_orchestrator_cross_repo_tick",
+      "interval_minutes": 180,
+      "enabled": false,
+      "schedule_status": "quarantined"
+    },
+    {
+      "dispatch_id": "factory_autorun",
+      "event_type": "noos_factory_autorun_tick",
+      "interval_minutes": 10,
+      "enabled": false,
+      "schedule_status": "quarantined"
+    }
+  ],
+  "idle_law": "queue empty => no write, no LLM, no notification",
+  "errors": [],
+  "verdict": "PASS"
+}

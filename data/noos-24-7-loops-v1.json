@@ -1,7 +1,7 @@
 {
   "schema": "noos-24-7-loops-v1",
-  "version": "1.0.0",
-  "one_law": "All 24/7 loops → CF cron + Railway HTTP /loop (one bounded tick). No GitHub Actions runtime dispatch.",
+  "version": "1.1.0",
+  "one_law": "All 24/7 loops \u2192 CF cron + Railway HTTP /loop (one bounded tick). No GitHub Actions runtime dispatch.",
   "slo_defaults": {
     "freshness_target_minutes": 30,
     "success_rate_target": 0.98,
@@ -42,11 +42,30 @@
       "factory_id": "loop-inbox",
       "secondary_motor": "fly:noos-inbox-runner",
       "steps": [
-        {"name": "cloud_worker", "cmd": ["python3", "scripts/cloud_inbox_worker_v1.py"]}
+        {
+          "name": "cloud_worker",
+          "cmd": [
+            "python3",
+            "scripts/cloud_inbox_worker_v1.py"
+          ]
+        }
       ],
       "self_heal": [
-        {"name": "reenqueue_blocked", "cmd": ["python3", "scripts/reenqueue_blocked_upg_inbox_v1.py"]}
-      ]
+        {
+          "name": "reenqueue_blocked",
+          "cmd": [
+            "python3",
+            "scripts/reenqueue_blocked_upg_inbox_v1.py"
+          ]
+        }
+      ],
+      "schedule_status": "active",
+      "enabled": true,
+      "no_work_behavior": {
+        "no_write": true,
+        "no_llm": true,
+        "no_notification": true
+      }
     },
     {
       "id": "runtime",
@@ -59,13 +78,55 @@
       "github_workflow": "noos-runtime-loop.yml",
       "factory_id": "loop-runtime",
       "steps": [
-        {"name": "gate", "cmd": ["python3", "-m", "noetfield_gate.cli", "gate", "--json", "--pytest"]},
-        {"name": "pytest", "cmd": ["python3", "-m", "pytest", "-q"]}
+        {
+          "name": "gate",
+          "cmd": [
+            "python3",
+            "-m",
+            "noetfield_gate.cli",
+            "gate",
+            "--json",
+            "--pytest"
+          ]
+        },
+        {
+          "name": "pytest",
+          "cmd": [
+            "python3",
+            "-m",
+            "pytest",
+            "-q"
+          ]
+        }
       ],
       "cloud_steps": [
-        {"name": "gate_smoke", "cmd": ["python3", "-m", "noetfield_gate.cli", "gate", "--json"], "continue_on_error": true},
-        {"name": "import_smoke", "cmd": ["python3", "-c", "import noetfield_gate; print('ok')"]}
-      ]
+        {
+          "name": "gate_smoke",
+          "cmd": [
+            "python3",
+            "-m",
+            "noetfield_gate.cli",
+            "gate",
+            "--json"
+          ],
+          "continue_on_error": true
+        },
+        {
+          "name": "import_smoke",
+          "cmd": [
+            "python3",
+            "-c",
+            "import noetfield_gate; print('ok')"
+          ]
+        }
+      ],
+      "schedule_status": "active",
+      "enabled": true,
+      "no_work_behavior": {
+        "no_write": true,
+        "no_llm": true,
+        "no_notification": true
+      }
     },
     {
       "id": "surface",
@@ -78,8 +139,21 @@
       "github_workflow": "noos-surface-loop.yml",
       "factory_id": "loop-surface",
       "steps": [
-        {"name": "production_urls", "cmd": ["bash", "scripts/check_production_urls.sh"]}
-      ]
+        {
+          "name": "production_urls",
+          "cmd": [
+            "bash",
+            "scripts/check_production_urls.sh"
+          ]
+        }
+      ],
+      "schedule_status": "active",
+      "enabled": true,
+      "no_work_behavior": {
+        "no_write": true,
+        "no_llm": true,
+        "no_notification": true
+      }
     },
     {
       "id": "chain",
@@ -92,7 +166,16 @@
       "github_workflow": "noos-chain-loop.yml",
       "factory_id": "loop-chain",
       "steps": [
-        {"name": "verify", "cmd": ["python3", "-m", "noetfield_gate.cli", "verify", "--json"]},
+        {
+          "name": "verify",
+          "cmd": [
+            "python3",
+            "-m",
+            "noetfield_gate.cli",
+            "verify",
+            "--json"
+          ]
+        },
         {
           "name": "decide_validate",
           "cmd": [
@@ -105,7 +188,14 @@
             "--validate-only"
           ]
         }
-      ]
+      ],
+      "schedule_status": "active",
+      "enabled": true,
+      "no_work_behavior": {
+        "no_write": true,
+        "no_llm": true,
+        "no_notification": true
+      }
     },
     {
       "id": "self_heal",
@@ -121,25 +211,63 @@
       "steps": [
         {
           "name": "reenqueue_blocked",
-          "cmd": ["python3", "scripts/reenqueue_blocked_upg_inbox_v1.py"]
+          "cmd": [
+            "python3",
+            "scripts/reenqueue_blocked_upg_inbox_v1.py"
+          ]
         },
         {
           "name": "autonomy_verify",
-          "cmd": ["python3", "scripts/verify_noos_autonomous_24h_v1.py", "--hours", "6", "--write-receipt"]
+          "cmd": [
+            "python3",
+            "scripts/verify_noos_autonomous_24h_v1.py",
+            "--hours",
+            "6",
+            "--write-receipt"
+          ]
         },
         {
           "name": "autorun_status",
-          "cmd": ["python3", "scripts/autorun_status_v1.py"]
+          "cmd": [
+            "python3",
+            "scripts/autorun_status_v1.py"
+          ]
         },
         {
           "name": "loop_heartbeat",
-          "cmd": ["python3", "scripts/noos_loop_heartbeat_v1.py", "--write-receipt"]
+          "cmd": [
+            "python3",
+            "scripts/noos_loop_heartbeat_v1.py",
+            "--write-receipt"
+          ]
         }
       ],
       "cloud_steps": [
-        {"name": "reenqueue_blocked", "cmd": ["python3", "scripts/reenqueue_blocked_upg_inbox_v1.py"], "continue_on_error": true},
-        {"name": "loop_heartbeat", "cmd": ["python3", "scripts/noos_loop_heartbeat_v1.py", "--write-receipt"], "continue_on_error": true}
-      ]
+        {
+          "name": "reenqueue_blocked",
+          "cmd": [
+            "python3",
+            "scripts/reenqueue_blocked_upg_inbox_v1.py"
+          ],
+          "continue_on_error": true
+        },
+        {
+          "name": "loop_heartbeat",
+          "cmd": [
+            "python3",
+            "scripts/noos_loop_heartbeat_v1.py",
+            "--write-receipt"
+          ],
+          "continue_on_error": true
+        }
+      ],
+      "schedule_status": "active",
+      "enabled": true,
+      "no_work_behavior": {
+        "no_write": true,
+        "no_llm": true,
+        "no_notification": true
+      }
     },
     {
       "id": "sourcea_observe",
@@ -154,16 +282,33 @@
       "steps": [
         {
           "name": "sourcea_supabase_observe",
-          "cmd": ["python3", "scripts/observe_sourcea_supabase_v1.py", "--write-receipt", "--json"]
+          "cmd": [
+            "python3",
+            "scripts/observe_sourcea_supabase_v1.py",
+            "--write-receipt",
+            "--json"
+          ]
         }
       ],
       "cloud_steps": [
         {
           "name": "sourcea_supabase_observe",
-          "cmd": ["python3", "scripts/observe_sourcea_supabase_v1.py", "--write-receipt", "--json"],
+          "cmd": [
+            "python3",
+            "scripts/observe_sourcea_supabase_v1.py",
+            "--write-receipt",
+            "--json"
+          ],
           "continue_on_error": false
         }
-      ]
+      ],
+      "schedule_status": "active",
+      "enabled": true,
+      "no_work_behavior": {
+        "no_write": true,
+        "no_llm": true,
+        "no_notification": true
+      }
     },
     {
       "id": "agent_nerve",
@@ -176,12 +321,28 @@
       "github_workflow": "noos-agent-nerve-loop.yml",
       "factory_id": "loop-agent-nerve",
       "steps": [
-        {"name": "agent_docs", "cmd": ["bash", "scripts/check_noos_agent_docs.sh"]},
+        {
+          "name": "agent_docs",
+          "cmd": [
+            "bash",
+            "scripts/check_noos_agent_docs.sh"
+          ]
+        },
         {
           "name": "business_strategy",
-          "cmd": ["bash", "scripts/check_noetfield_business_strategy.sh"]
+          "cmd": [
+            "bash",
+            "scripts/check_noetfield_business_strategy.sh"
+          ]
         }
-      ]
+      ],
+      "schedule_status": "active",
+      "enabled": true,
+      "no_work_behavior": {
+        "no_write": true,
+        "no_llm": true,
+        "no_notification": true
+      }
     },
     {
       "id": "workflow_audit",
@@ -196,15 +357,31 @@
       "steps": [
         {
           "name": "workflow_audit",
-          "cmd": ["python3", "scripts/noos_workflow_audit_v1.py", "--json"]
+          "cmd": [
+            "python3",
+            "scripts/noos_workflow_audit_v1.py",
+            "--json"
+          ]
         }
       ],
       "cloud_steps": [
         {
           "name": "workflow_audit",
-          "cmd": ["python3", "scripts/noos_workflow_audit_v1.py", "--json", "--loop-exit-ok"]
+          "cmd": [
+            "python3",
+            "scripts/noos_workflow_audit_v1.py",
+            "--json",
+            "--loop-exit-ok"
+          ]
         }
-      ]
+      ],
+      "schedule_status": "active",
+      "enabled": true,
+      "no_work_behavior": {
+        "no_write": true,
+        "no_llm": true,
+        "no_notification": true
+      }
     },
     {
       "id": "self_heal_safe_fixes",
@@ -219,9 +396,21 @@
       "steps": [
         {
           "name": "execute_safe_fixes",
-          "cmd": ["python3", "scripts/noos_self_heal_v1.py", "--findings-file", "data/noos-audit-findings-v1.json"]
+          "cmd": [
+            "python3",
+            "scripts/noos_self_heal_v1.py",
+            "--findings-file",
+            "data/noos-audit-findings-v1.json"
+          ]
         }
-      ]
+      ],
+      "schedule_status": "active",
+      "enabled": true,
+      "no_work_behavior": {
+        "no_write": true,
+        "no_llm": true,
+        "no_notification": true
+      }
     },
     {
       "id": "researcher_deep_dive",
@@ -236,9 +425,21 @@
       "steps": [
         {
           "name": "investigate_escalations",
-          "cmd": ["python3", "scripts/noos_researcher_v1.py", "--depth", "standard"]
+          "cmd": [
+            "python3",
+            "scripts/noos_researcher_v1.py",
+            "--depth",
+            "standard"
+          ]
         }
-      ]
+      ],
+      "schedule_status": "active",
+      "enabled": true,
+      "no_work_behavior": {
+        "no_write": true,
+        "no_llm": true,
+        "no_notification": true
+      }
     },
     {
       "id": "specialist_proposals",
@@ -253,16 +454,26 @@
       "steps": [
         {
           "name": "generate_proposals",
-          "cmd": ["python3", "scripts/noos_specialist_v1.py"]
+          "cmd": [
+            "python3",
+            "scripts/noos_specialist_v1.py"
+          ]
         }
-      ]
+      ],
+      "schedule_status": "active",
+      "enabled": true,
+      "no_work_behavior": {
+        "no_write": true,
+        "no_llm": true,
+        "no_notification": true
+      }
     },
     {
       "id": "orchestrator_cross_repo",
       "title": "Cross-repo health orchestration & consolidation",
       "domain": "self-improvement",
       "lane": "noos",
-      "value_class": "risk_reduction",
+      "value_class": "hygiene",
       "event_type": "noos_orchestrator_cross_repo_tick",
       "interval_minutes": 180,
       "github_workflow": "noos-cross-repo-orchestrator.yml",
@@ -270,9 +481,15 @@
       "steps": [
         {
           "name": "aggregate_health",
-          "cmd": ["echo", "Aggregating health across all org repos"]
+          "cmd": [
+            "echo",
+            "Aggregating health across all org repos"
+          ]
         }
-      ]
+      ],
+      "schedule_status": "quarantined",
+      "enabled": false,
+      "quarantine_reason": "Echo/cross-repo health aggregation without customer output; event-driven only."
     },
     {
       "id": "improve_kaizen_daily",
@@ -287,13 +504,45 @@
       "steps": [
         {
           "name": "kaizen_daily",
-          "cmd": ["python3", "scripts/noos_improve_kaizen_runner_v1.py", "--write-receipt", "--json"]
+          "cmd": [
+            "python3",
+            "scripts/noos_improve_kaizen_runner_v1.py",
+            "--write-receipt",
+            "--json"
+          ]
         },
         {
           "name": "recipe_apply_if_matched",
-          "cmd": ["python3", "scripts/noos_kaizen_recipe_apply_v1.py", "--recipe-id", "seed-all-loop-ticks", "--dry-run", "--json"]
+          "cmd": [
+            "python3",
+            "scripts/noos_kaizen_recipe_apply_v1.py",
+            "--recipe-id",
+            "seed-all-loop-ticks",
+            "--dry-run",
+            "--json"
+          ]
         }
-      ]
+      ],
+      "schedule_status": "active",
+      "enabled": true,
+      "no_work_behavior": {
+        "no_write": true,
+        "no_llm": true,
+        "no_notification": true
+      }
     }
-  ]
+  ],
+  "runtime_migration": {
+    "schema": "noos_runtime_migration_v1",
+    "as_of": "2026-07-19T07:00:00Z",
+    "law": "Justified schedules only; quarantined loops require explicit event resume.",
+    "quarantined_loop_ids": [
+      "orchestrator_cross_repo"
+    ],
+    "quarantined_dispatch_ids": [
+      "orchestrator",
+      "factory_autorun"
+    ],
+    "witness_policy": "High-churn GHA witnesses demoted to weekly or workflow_dispatch-only."
+  }
 }
