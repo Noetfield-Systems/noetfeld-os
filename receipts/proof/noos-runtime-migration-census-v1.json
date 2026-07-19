@@ -1,6 +1,6 @@
 {
   "schema": "noos_runtime_migration_census_v1",
-  "generated_at": "2026-07-19T06:56:47Z",
+  "generated_at": "2026-07-19T23:08:29Z",
   "active_loops": [
     {
       "id": "inbox",
@@ -39,7 +39,7 @@
     },
     {
       "id": "sourcea_observe",
-      "value_class": "hygiene",
+      "value_class": "risk_reduction",
       "interval_minutes": 30,
       "schedule_status": "active",
       "enabled": true

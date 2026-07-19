@@ -274,7 +274,7 @@
       "title": "SourceA portfolio-spine observe loop",
       "domain": "sourcea-observe",
       "lane": "sourcea",
-      "value_class": "hygiene",
+      "value_class": "risk_reduction",
       "event_type": "noos_sourcea_observe_loop_tick",
       "interval_minutes": 30,
       "github_workflow": "noos-sourcea-observe-loop.yml",
@@ -482,14 +482,16 @@
         {
           "name": "aggregate_health",
           "cmd": [
-            "echo",
-            "Aggregating health across all org repos"
+            "python3",
+            "scripts/noos_orchestrator_v1.py",
+            "--write-receipt",
+            "--json"
           ]
         }
       ],
       "schedule_status": "quarantined",
       "enabled": false,
-      "quarantine_reason": "Echo/cross-repo health aggregation without customer output; event-driven only."
+      "quarantine_reason": "Cross-repo Plan Motor aggregation remains manual/event-only pending explicit schedule commissioning."
     },
     {
       "id": "improve_kaizen_daily",

@@ -168,7 +168,7 @@
       "handler": "loop",
       "enabled": false,
       "schedule_status": "quarantined",
-      "quarantine_reason": "Purposeless finite/echo loop without customer beneficiary; convert to explicit events."
+      "quarantine_reason": "Cross-repo Plan Motor aggregation remains manual/event-only pending explicit schedule commissioning."
     },
     {
       "dispatch_id": "factory_autorun",

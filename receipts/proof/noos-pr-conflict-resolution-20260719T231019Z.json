@@ -1,0 +1,31 @@
+{
+  "schema": "noos-pr-conflict-resolution-receipt-v1",
+  "at": "2026-07-19T23:10:19Z",
+  "repository": "Noetfield-Systems/noetfeld-os",
+  "pull_request": 91,
+  "authority": "founder-requested merge under HOLD",
+  "head_before_resolution": "eb51d0c197f5eae94bb45285ede0c6d5d47f12a9",
+  "main_reconciled": "8b646d00dc496066539e7f67c6569b157097dd8c",
+  "conflicts": [
+    {
+      "path": "data/noos-24-7-loops-v1.json",
+      "class": "structured_registry",
+      "key": "orchestrator_cross_repo",
+      "resolution": "Preserved the newer main Plan Motor command while retaining PR #91 HOLD quarantine semantics. Updated the quarantine rationale in the loop registry and both dispatch-table copies; non-overlapping registry entries were retained.",
+      "scheduled_execution_enabled": false,
+      "locked_canon_modified": false,
+      "receipt_dropped": false
+    }
+  ],
+  "validation": {
+    "runtime_migration_census": "PASS",
+    "dispatch_tables_identical": true,
+    "pr_conflict_resolution_verifier": "ALL PASS",
+    "plan_motor_wiring": "PASS",
+    "living_system_governance": "PASS",
+    "governance_pytest_subset": "9 passed",
+    "full_pytest": "343 passed, 2 warnings"
+  },
+  "deployment_performed": false,
+  "verdict": "PASS"
+}

@@ -1,0 +1,77 @@
+{
+  "schema": "noos-plan-motor-wiring-v1",
+  "version": "1.0.0",
+  "lock_state": "LOCKED_v1",
+  "authority": "NOOS-LANE-PLAN-MOTOR-WIRE-001",
+  "title": "Plan Motor — deterministic 24/7 runway wiring",
+  "canon_version": "FOUNDER_CANON_v1+MACHINE_LOOPS_v1",
+  "one_law": "CF cron dispatches → Railway executes one bounded tick → roles consume plan SSOT → worker kernel (DeepSeek T1/T2) proposes only inside sandbox → verify + receipt → next row. GHA is witness/CI only.",
+  "dispatch": {
+    "motor_worker": "noos-loop-fleet-tick-v1",
+    "motor_cron": "*/5 * * * *",
+    "dispatch_table": "data/noos-cf-dispatch-table-v1.json",
+    "executor": "railway:noos-loop-runner",
+    "executor_url": "https://noos-loop-runner-production.up.railway.app"
+  },
+  "plan_ssot": {
+    "manifest": "docs/_NOOS_AGENT/UPGRADE_MANIFEST.json",
+    "planes": "data/noos-upgrade-planes-v1.json",
+    "backlog": "data/noos-unified-upgrade-backlog-v1.json",
+    "runtime_state": "data/noos-plan-motor-state-v1.json"
+  },
+  "roles": {
+    "inbox": {
+      "loop_id": "inbox",
+      "event_type": "noos_inbox_loop_tick",
+      "script": "scripts/cloud_inbox_worker_v1.py",
+      "plan_dequeue": "scripts/noos_plan_motor_v1.py",
+      "interval_minutes": 5
+    },
+    "researcher": {
+      "loop_id": "researcher_deep_dive",
+      "event_type": "noos_researcher_deep_dive_tick",
+      "script": "scripts/noos_researcher_v1.py",
+      "kernel_bridge": "scripts/noos_plan_motor_kernel_bridge_v1.py",
+      "kernel_tier": "T1",
+      "task_kind": "classify",
+      "interval_minutes": 60
+    },
+    "specialist": {
+      "loop_id": "specialist_proposals",
+      "event_type": "noos_specialist_proposals_tick",
+      "script": "scripts/noos_specialist_v1.py",
+      "kernel_bridge": "scripts/noos_plan_motor_kernel_bridge_v1.py",
+      "kernel_tier": "T2",
+      "task_kind": "patch_proposal",
+      "interval_minutes": 120
+    },
+    "orchestrator": {
+      "loop_id": "orchestrator_cross_repo",
+      "event_type": "noos_orchestrator_cross_repo_tick",
+      "script": "scripts/noos_orchestrator_v1.py",
+      "interval_minutes": 180
+    }
+  },
+  "kernel": {
+    "router": "config/model-router.yml",
+    "executor": "scripts/noos_worker_kernel_v1.py",
+    "bridge": "scripts/noos_plan_motor_kernel_bridge_v1.py",
+    "sandbox": "scripts/noos_patch_sandbox_v1.py",
+    "deepseek_models": ["deepseek/deepseek-chat"]
+  },
+  "store": {
+    "completion_runs": "noetfield_factory_cycle_runs",
+    "dispatch_registry": "noos_loop_registry",
+    "receipts": "receipts/proof/"
+  },
+  "verify": {
+    "script": "scripts/verify_noos_plan_motor_wiring_v1.py",
+    "make_target": "plan-motor-verify"
+  },
+  "forbidden": [
+    "integrator_repair_factory_cycles_by_default",
+    "gha_as_5min_runtime_motor",
+    "llm_direct_main_edit",
+    "founder_blocked_auto_execute"
+  ]
+}

@@ -1,6 +1,6 @@
 {
   "schema": "noos-railway-loop-runner-verify-v1",
-  "at": "2026-07-06T08:21:36Z",
+  "at": "2026-07-06T10:14:12Z",
   "service": "noos-loop-runner",
   "railway_url": "https://noos-loop-runner-production.up.railway.app",
   "ok": true,
@@ -12,7 +12,7 @@
       "schema": "noos-railway-loop-runner-health-v1",
       "service": "noos-loop-runner",
       "git_sha": "03b55c1f3dea7d9adc5d3f3fbcf47872df60b8df",
-      "uptime_sec": 33,
+      "uptime_sec": 6789,
       "execution_mode": "one_shot_http"
     }
   },
@@ -37,8 +37,8 @@
     "status": 200,
     "body": {
       "schema": "noos-railway-loop-runner-tick-v1",
-      "run_id": "railway-a5e1b701960a",
-      "at": "2026-07-06T08:21:38Z",
+      "run_id": "railway-7973f580a8e9",
+      "at": "2026-07-06T10:14:14Z",
       "handler": "loop",
       "event_type": "noos_orchestrator_cross_repo_tick",
       "source": "verify-railway-v1",
@@ -55,9 +55,9 @@
         "event_type": "noos_orchestrator_cross_repo_tick",
         "domain": "self-improvement",
         "trigger_source": "http_loop",
-        "cycle_number": 2,
-        "op_key": "72a5051cc8c9bbc6d0384a4e",
-        "started_at": "2026-07-06T08:21:37+00:00",
+        "cycle_number": 8,
+        "op_key": "d1d783a9b7289f03c743cbe6",
+        "started_at": "2026-07-06T10:14:13+00:00",
         "state_before": "RUNNING",
         "cost": {
           "provider": "github_actions+cloudflare_cron",
@@ -87,7 +87,7 @@
           "count": 1,
           "oldest_id": "NOOS-C-01",
           "priority": "P0",
-          "age_seconds": 361254,
+          "age_seconds": 368011,
           "escalated": true
         },
         "evidence": [
@@ -116,10 +116,10 @@
           "cloud_meta": {
             "processor": "noos_loop_runner_v1",
             "github_event": "http_loop",
-            "github_run_id": "railway-a5e1b701960a",
+            "github_run_id": "railway-7973f580a8e9",
             "github_workflow": "railway-noos-loop-runner",
             "dispatch_source": "verify-railway-v1",
-            "processed_at": "2026-07-06T08:21:37+00:00"
+            "processed_at": "2026-07-06T10:14:14+00:00"
           },
           "cloud_trigger": "http_loop"
         },
@@ -134,11 +134,11 @@
             "ok": true,
             "idempotent": true,
             "merged": true,
-            "id": "afe2b5af-a0e3-48b6-8190-0f1fcc94b72f",
-            "op_key": "72a5051cc8c9bbc6d0384a4e"
+            "id": "3e393224-15e6-4bf4-a9d2-6456018d02dd",
+            "op_key": "d1d783a9b7289f03c743cbe6"
           }
         },
-        "finished_at": "2026-07-06T08:21:37+00:00",
+        "finished_at": "2026-07-06T10:14:13+00:00",
         "state_after": "COMPLETE",
         "status": "ok",
         "exit_code": 0,
@@ -152,28 +152,28 @@
         "d2": {
           "cas": {
             "verdict": "ACCEPTED",
-            "expected": 1,
-            "observed": 1,
-            "new_value": 2
+            "expected": 7,
+            "observed": 7,
+            "new_value": 8
           }
         },
         "transition_log_tail": [
           {
             "from": "RUNNING",
             "to": "COMPLETE",
-            "at": "2026-07-06T08:21:37+00:00",
-            "cycle": 2,
-            "op_key": "72a5051cc8c9bbc6d0384a4e"
+            "at": "2026-07-06T10:14:13+00:00",
+            "cycle": 8,
+            "op_key": "d1d783a9b7289f03c743cbe6"
           }
         ],
         "liveness_upsert": {
           "ok": true,
           "loop_id": "orchestrator_cross_repo",
-          "last_fired_at": "2026-07-06T08:21:38.287Z"
+          "last_fired_at": "2026-07-06T10:14:14.592Z"
         }
       },
       "stderr_tail": "",
-      "receipt_path": ".noos-runtime/railway-loop-runner/receipts/railway-a5e1b701960a.json"
+      "receipt_path": ".noos-runtime/railway-loop-runner/receipts/railway-7973f580a8e9.json"
     }
   },
   "report_line": "railway_loop_runner \u00b7 health=ok auth=ok tick=ok"

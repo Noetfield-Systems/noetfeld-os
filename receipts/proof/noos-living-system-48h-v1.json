@@ -1,6 +1,6 @@
 {
   "schema": "noos-living-system-baseline-v1",
-  "captured_at": "2026-07-06T06:00:09Z",
+  "captured_at": "2026-07-06T10:51:47Z",
   "motors": {
     "cf_loop_motor": {
       "ok": true,
@@ -11,8 +11,9 @@
         "service": "noos-loop-fleet-tick-v1",
         "cron": "*/5 * * * *",
         "execution_plane": "railway:noos-loop-runner",
-        "loop_runner_url_ready": true,
-        "target_count": 13,
+        "executor_url_ready": true,
+        "loop_secret_ready": true,
+        "target_count": 14,
         "targets": [
           {
             "dispatch_id": "inbox",
@@ -91,24 +92,17 @@
             "event_type": "noos_factory_autorun_tick",
             "interval_minutes": 10,
             "handler": "factory"
+          },
+          {
+            "dispatch_id": "improve_kaizen_daily",
+            "event_type": "noos_improve_kaizen_daily_tick",
+            "interval_minutes": 1440,
+            "handler": "loop",
+            "note": "CF-dispatched nightly kaizen recipe slot (not GHA cron)"
           }
         ],
-        "due_now": [
-          "noos_inbox_loop_tick",
-          "noos_runtime_loop_tick",
-          "noos_surface_loop_tick",
-          "noos_chain_loop_tick",
-          "noos_self_heal_loop_tick",
-          "noos_sourcea_observe_loop_tick",
-          "noos_agent_nerve_loop_tick",
-          "noos_workflow_audit_tick",
-          "noos_self_heal_safe_fixes_tick",
-          "noos_researcher_deep_dive_tick",
-          "noos_specialist_proposals_tick",
-          "noos_orchestrator_cross_repo_tick",
-          "noos_factory_autorun_tick"
-        ],
-        "utc_minute": 0
+        "due_now": [],
+        "utc_minute": 51
       }
     },
     "cf_deadman": {
@@ -122,6 +116,14 @@
         "supabase_ready": true,
         "loop_runner_ready": true,
         "telegram_ready": true,
+        "telegram_send_alerts": false,
+        "telegram_lane_forbidden": [
+          "Gateway_A",
+          "gateway_a",
+          "NFProbeBot",
+          "nf_probe_bot",
+          "NoetfieldOpsBot"
+        ],
         "interval_multiplier": 2,
         "restart_attempts_max": 1
       }
@@ -131,45 +133,120 @@
       "status": 200,
       "body": {
         "ok": true,
+        "schema": "noos-railway-loop-runner-health-v1",
         "service": "noos-loop-runner",
-        "uptime_sec": 788
+        "git_sha": "03b55c1f3dea7d9adc5d3f3fbcf47872df60b8df",
+        "uptime_sec": 9044,
+        "execution_mode": "one_shot_http"
       }
     }
   },
   "registry_rows": [
     {
-      "loop_id": "inbox",
-      "last_fired_at": "2026-07-06T05:59:16.497+00:00",
+      "loop_id": "cf_loop_motor",
+      "last_fired_at": "2026-07-06T08:22:40.446+00:00",
       "interval_minutes": 5,
+      "last_cycle_status": "LIVE"
+    },
+    {
+      "loop_id": "surface",
+      "last_fired_at": "2026-07-06T09:37:49.47+00:00",
+      "interval_minutes": 20,
+      "last_cycle_status": "COMPLETE"
+    },
+    {
+      "loop_id": "chain",
+      "last_fired_at": "2026-07-06T09:37:50.507+00:00",
+      "interval_minutes": 30,
+      "last_cycle_status": "COMPLETE"
+    },
+    {
+      "loop_id": "sourcea_observe",
+      "last_fired_at": "2026-07-06T09:38:06.392+00:00",
+      "interval_minutes": 30,
+      "last_cycle_status": "COMPLETE"
+    },
+    {
+      "loop_id": "agent_nerve",
+      "last_fired_at": "2026-07-06T09:38:07.357+00:00",
+      "interval_minutes": 60,
+      "last_cycle_status": "COMPLETE"
+    },
+    {
+      "loop_id": "executor_railway_canonical",
+      "last_fired_at": "2026-07-06T09:03:40.953+00:00",
+      "interval_minutes": 5,
+      "last_cycle_status": "LIVE"
+    },
+    {
+      "loop_id": "runtime",
+      "last_fired_at": "2026-07-06T10:48:30.797+00:00",
+      "interval_minutes": 15,
+      "last_cycle_status": "COMPLETE"
+    },
+    {
+      "loop_id": "workflow_audit",
+      "last_fired_at": "2026-07-06T10:48:38.814+00:00",
+      "interval_minutes": 15,
       "last_cycle_status": "COMPLETE"
     },
     {
       "loop_id": "self_heal_safe_fixes",
-      "last_fired_at": "2026-07-06T05:59:29.572+00:00",
+      "last_fired_at": "2026-07-06T10:48:39.673+00:00",
       "interval_minutes": 30,
       "last_cycle_status": "COMPLETE"
     },
     {
       "loop_id": "researcher_deep_dive",
-      "last_fired_at": "2026-07-06T05:59:30.386+00:00",
+      "last_fired_at": "2026-07-06T10:48:40.455+00:00",
       "interval_minutes": 60,
       "last_cycle_status": "COMPLETE"
     },
     {
       "loop_id": "specialist_proposals",
-      "last_fired_at": "2026-07-06T05:59:31.294+00:00",
+      "last_fired_at": "2026-07-06T10:48:41.108+00:00",
       "interval_minutes": 120,
       "last_cycle_status": "COMPLETE"
     },
     {
       "loop_id": "orchestrator_cross_repo",
-      "last_fired_at": "2026-07-06T05:59:32.122+00:00",
+      "last_fired_at": "2026-07-06T10:48:41.959+00:00",
       "interval_minutes": 180,
+      "last_cycle_status": "COMPLETE"
+    },
+    {
+      "loop_id": "executor_fly_temporary",
+      "last_fired_at": "2026-07-06T09:09:08.265+00:00",
+      "interval_minutes": 5,
+      "last_cycle_status": "DESTROYED"
+    },
+    {
+      "loop_id": "improve_kaizen_daily",
+      "last_fired_at": "2026-07-06T10:48:45.028+00:00",
+      "interval_minutes": 1440,
+      "last_cycle_status": "COMPLETE"
+    },
+    {
+      "loop_id": "inbox",
+      "last_fired_at": "2026-07-06T10:50:49.144+00:00",
+      "interval_minutes": 5,
+      "last_cycle_status": "COMPLETE"
+    },
+    {
+      "loop_id": "self_heal",
+      "last_fired_at": "2026-07-06T10:50:50.032+00:00",
+      "interval_minutes": 10,
+      "last_cycle_status": "COMPLETE"
+    },
+    {
+      "loop_id": "factory_autorun",
+      "last_fired_at": "2026-07-06T10:50:52.044+00:00",
+      "interval_minutes": 10,
       "last_cycle_status": "COMPLETE"
     }
   ],
-  "registry_count": 5,
-  "rows_with_last_fired": 5,
+  "registry_count": 17,
+  "rows_with_last_fired": 17,
   "ok": true,
   "baseline_path": "data/noos-living-system-baseline-v1.json"
 }

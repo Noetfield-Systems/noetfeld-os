@@ -174,6 +174,12 @@ def build_specialist_report(research_output: Dict[str, Any]) -> Dict[str, Any]:
         # Evaluate each proposal
         evaluation = evaluate_proposal_confidence(proposal)
         proposal.update(evaluation)
+        try:
+            from noos_plan_motor_kernel_bridge_v1 import kernel_proposal_review
+
+            proposal["kernel_review"] = kernel_proposal_review(proposal)
+        except Exception as exc:
+            proposal["kernel_review"] = {"ok": False, "error": str(exc)[:200]}
         proposals.append(proposal)
 
     # Aggregate critique

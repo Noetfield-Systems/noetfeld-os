@@ -2,7 +2,7 @@
   "schema": "noos-loop-verify-v1",
   "backlog_id": "LOOP-VERIFY-sourcea_observe",
   "loop_id": "sourcea_observe",
-  "verified_at": "2026-07-05T16:44:31Z",
+  "verified_at": "2026-07-06T09:38:06Z",
   "verification_state": "VERIFIED",
   "smoke": {
     "loop_id": "sourcea_observe",
@@ -20,9 +20,9 @@
       "event_type": "noos_sourcea_observe_loop_tick",
       "domain": "sourcea-observe",
       "trigger_source": "repository_dispatch",
-      "cycle_number": 5,
-      "op_key": "70c15b3e5dd347a019babc0a",
-      "started_at": "2026-07-05T16:44:30+00:00",
+      "cycle_number": 11,
+      "op_key": "565bfd41686946f844879d11",
+      "started_at": "2026-07-06T09:38:05+00:00",
       "state_before": "RUNNING",
       "cost": {
         "provider": "github_actions+cloudflare_cron",
@@ -52,14 +52,14 @@
         "count": 1,
         "oldest_id": "NOOS-C-01",
         "priority": "P0",
-        "age_seconds": 305028,
+        "age_seconds": 365842,
         "escalated": true
       },
       "evidence": [
         {
           "command": "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3 scripts/observe_sourcea_supabase_v1.py --write-receipt --json",
           "exit_code": 0,
-          "output": "91ff181-6424-4bd3-bf9f-761f12ad8432\",\n          \"fallback_from\": \"cycle_receipts\",\n          \"trigger_source\": \"cloudflare_cron\",\n          \"queue_head_after\": \"CLOUD-SEC-7966\",\n          \"queue_head_before\": \"CLOUD-SEC-7965\"\n        }\n      }\n    ]\n  },\n  \"receipt_path\": \"/Users/sinakazemnezhad/Desktop/Noetfield-Systems/noetfeld-OS/.noos-runtime/observe/sourcea/sourcea-supabase-observe-v1.json\"\n}"
+          "output": "3863298-16c2-4f90-bc9f-6a2e324724e4\",\n          \"fallback_from\": \"cycle_receipts\",\n          \"trigger_source\": \"cloudflare_cron\",\n          \"queue_head_after\": \"CLOUD-SEC-8070\",\n          \"queue_head_before\": \"CLOUD-SEC-8069\"\n        }\n      }\n    ]\n  },\n  \"receipt_path\": \"/Users/sinakazemnezhad/Desktop/Noetfield-Systems/noetfeld-OS/.noos-runtime/observe/sourcea/sourcea-supabase-observe-v1.json\"\n}"
         }
       ],
       "runner_output": {
@@ -73,7 +73,7 @@
             ],
             "ok": true,
             "exit_code": 0,
-            "stdout_tail": "      \"finished_at\": \"2026-07-05T16:01:59Z\",\n          \"execution_id\": \"c91ff181-6424-4bd3-bf9f-761f12ad8432\",\n          \"fallback_from\": \"cycle_receipts\",\n          \"trigger_source\": \"cloudflare_cron\",\n          \"queue_head_after\": \"CLOUD-SEC-7967\",\n          \"queue_head_before\": \"CLOUD-SEC-7966\"\n        }\n      },\n      {\n        \"id\": \"02d415b8-14f9-4192-a299-a114e24ad10d\",\n        \"created_at\": \"2026-07-05T16:01:58.672684+00:00\",\n        \"memory_type\": \"truth_cycle_receipt\",\n        \"metadata\": {\n          \"schema\": \"truth-layer-receipt-v1\",\n          \"verdict\": \"GREEN\",\n          \"cycle_id\": \"cycle-20260705T160158Z-CLOUD-SEC-7965\",\n          \"started_at\": \"2026-07-05T16:01:58Z\",\n          \"duration_ms\": 247,\n          \"finished_at\": \"2026-07-05T16:01:58Z\",\n          \"execution_id\": \"c91ff181-6424-4bd3-bf9f-761f12ad8432\",\n          \"fallback_from\": \"cycle_receipts\",\n          \"trigger_source\": \"cloudflare_cron\",\n          \"queue_head_after\": \"CLOUD-SEC-7966\",\n          \"queue_head_before\": \"CLOUD-SEC-7965\"\n        }\n      }\n    ]\n  },\n  \"receipt_path\": \"/Users/sinakazemnezhad/Desktop/Noetfield-Systems/noetfeld-OS/.noos-runtime/observe/sourcea/sourcea-supabase-observe-v1.json\"\n}",
+            "stdout_tail": "      \"finished_at\": \"2026-07-06T09:20:48Z\",\n          \"execution_id\": \"4780d157-5377-454d-9eaa-e960cebac4f6\",\n          \"fallback_from\": \"cycle_receipts\",\n          \"trigger_source\": \"cloudflare_cron\",\n          \"queue_head_after\": \"CLOUD-SEC-8071\",\n          \"queue_head_before\": \"CLOUD-SEC-8070\"\n        }\n      },\n      {\n        \"id\": \"2b6c1584-ee58-4d32-8be9-72aea953d5b4\",\n        \"created_at\": \"2026-07-06T09:10:48.871325+00:00\",\n        \"memory_type\": \"truth_cycle_receipt\",\n        \"metadata\": {\n          \"schema\": \"truth-layer-receipt-v1\",\n          \"verdict\": \"GREEN\",\n          \"cycle_id\": \"cycle-20260706T091048Z-CLOUD-SEC-8069\",\n          \"started_at\": \"2026-07-06T09:10:48Z\",\n          \"duration_ms\": 672,\n          \"finished_at\": \"2026-07-06T09:10:48Z\",\n          \"execution_id\": \"a3863298-16c2-4f90-bc9f-6a2e324724e4\",\n          \"fallback_from\": \"cycle_receipts\",\n          \"trigger_source\": \"cloudflare_cron\",\n          \"queue_head_after\": \"CLOUD-SEC-8070\",\n          \"queue_head_before\": \"CLOUD-SEC-8069\"\n        }\n      }\n    ]\n  },\n  \"receipt_path\": \"/Users/sinakazemnezhad/Desktop/Noetfield-Systems/noetfeld-OS/.noos-runtime/observe/sourcea/sourcea-supabase-observe-v1.json\"\n}",
             "stderr_tail": "",
             "continued_on_error": false,
             "name": "sourcea_supabase_observe"
@@ -86,7 +86,7 @@
           "github_run_id": "local-smoke",
           "github_workflow": "noos-sourcea-observe-loop.yml",
           "dispatch_source": "cf-cron",
-          "processed_at": "2026-07-05T16:44:31+00:00"
+          "processed_at": "2026-07-06T09:38:06+00:00"
         },
         "cloud_trigger": "repository_dispatch"
       },
@@ -99,12 +99,12 @@
         "exit_code": 0,
         "detail": {
           "ok": true,
-          "id": "627366b2-b120-40f4-830c-92e061079514",
+          "id": "d665a2d0-9646-4015-a588-edc52eaea2f4",
           "status": 201,
-          "op_key": "70c15b3e5dd347a019babc0a"
+          "op_key": "565bfd41686946f844879d11"
         }
       },
-      "finished_at": "2026-07-05T16:44:31+00:00",
+      "finished_at": "2026-07-06T09:38:05+00:00",
       "state_after": "COMPLETE",
       "status": "ok",
       "exit_code": 0,
@@ -118,33 +118,38 @@
       "d2": {
         "cas": {
           "verdict": "ACCEPTED",
-          "expected": 4,
-          "observed": 4,
-          "new_value": 5
+          "expected": 10,
+          "observed": 10,
+          "new_value": 11
         }
       },
       "transition_log_tail": [
         {
           "from": "RUNNING",
           "to": "COMPLETE",
-          "at": "2026-07-05T16:44:31+00:00",
-          "cycle": 5,
-          "op_key": "70c15b3e5dd347a019babc0a"
+          "at": "2026-07-06T09:38:05+00:00",
+          "cycle": 11,
+          "op_key": "565bfd41686946f844879d11"
         }
-      ]
+      ],
+      "liveness_upsert": {
+        "ok": true,
+        "loop_id": "sourcea_observe",
+        "last_fired_at": "2026-07-06T09:38:06.392Z"
+      }
     },
     "stderr": null
   },
   "rolling_evaluation": {
     "loop_id": "sourcea_observe",
     "factory_id": "loop-sourcea-observe",
-    "cycle_count": 4,
+    "cycle_count": 7,
     "invalid_trigger_count": 0,
     "latest_status": "ok",
     "ready": true,
     "blockers": [],
     "lookback_hours": 24,
-    "lookback_started_at": "2026-07-04T16:44:31Z"
+    "lookback_started_at": "2026-07-05T09:38:06Z"
   },
   "ok": true,
   "autonomous_triggers": true
