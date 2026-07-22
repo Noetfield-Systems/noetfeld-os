@@ -3,6 +3,9 @@ builder = "DOCKERFILE"
 dockerfilePath = "ops/railway/noos-loop-runner/Dockerfile"
 
 [deploy]
+# Pin to /app/server.py — Railway service settings historically use this path.
+# Dockerfile copies the entrypoint there (and under ops/...) so either works.
+startCommand = "python3 /app/server.py"
 healthcheckPath = "/health"
 healthcheckTimeout = 180
 restartPolicyType = "ON_FAILURE"
