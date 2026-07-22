@@ -48,14 +48,18 @@ def git_sha() -> str:
     global _git_sha_cache
     if _git_sha_cache is not None:
         return _git_sha_cache
+    # Prefer the image BUILD_SHA (true deployed code) over NOOS_GIT_SHA env,
+    # which deploy scripts may update before the new image is live.
+    for path in (ROOT / "BUILD_SHA", ROOT / "ops/railway/noos-loop-runner/BUILD_SHA"):
+        if path.is_file():
+            val = path.read_text(encoding="utf-8").strip()
+            if val:
+                _git_sha_cache = val[:40]
+                return _git_sha_cache
     env = (os.environ.get("NOOS_GIT_SHA") or os.environ.get("RAILWAY_GIT_COMMIT_SHA") or "").strip()
     if env:
         _git_sha_cache = env[:40]
         return _git_sha_cache
-    for path in (ROOT / "BUILD_SHA", ROOT / "ops/railway/noos-loop-runner/BUILD_SHA"):
-        if path.is_file():
-            _git_sha_cache = path.read_text(encoding="utf-8").strip()[:40]
-            return _git_sha_cache
     _git_sha_cache = "unknown"
     return _git_sha_cache
 
