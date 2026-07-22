@@ -135,7 +135,7 @@ def test_cas_rejection_branch_still_heartbeats(monkeypatch) -> None:
     early return that used to skip the heartbeat entirely."""
     calls: list[dict[str, Any]] = []
     monkeypatch.setattr(runner, "upsert_loop_liveness", _recording_liveness_stub(calls))
-    monkeypatch.setattr(runner, "acquire_cycle_number", lambda loop_id: (None, {"reason": "cas_mismatch"}))
+    monkeypatch.setattr(runner, "acquire_cycle_number", lambda loop_id, factory_id=None: (None, {"reason": "cas_mismatch"}))
 
     cycle = runner.execute_loop(_passing_step_loop("liveness-decouple-e"), self_heal=False)
 

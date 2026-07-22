@@ -71,20 +71,61 @@ def factory_id_for_loop(loop_id: str) -> str:
     return f"loop-{loop_id.replace('_', '-')}"
 
 
-def supabase_max_cycle_number(factory_id: str) -> int | None:
+def ensure_supabase_env() -> dict[str, Any]:
+    """Inject vault/platform Supabase creds into os.environ before any cloud CAS/sink call.
+
+    Railway images often have service secrets, but local vault files are absent.
+    Acquire used to run before sink_cycle's env injection — when REST max-seed
+    failed closed to None, local CAS lagged repair rows and organic writes
+    idempotent-skipped forever (COMPLETION_UNPROVEN).
+    """
+    from noos_vault_paths_v1 import load_platform_env
+
+    loaded = 0
+    for key, val in load_platform_env().items():
+        if not val:
+            continue
+        if key not in os.environ or not str(os.environ.get(key) or "").strip():
+            os.environ[key] = val
+            loaded += 1
+        else:
+            os.environ.setdefault(key, val)
+    url = (os.environ.get("NOETFIELD_SUPABASE_URL") or os.environ.get("SUPABASE_URL") or "").strip()
+    key = (
+        os.environ.get("NOETFIELD_SUPABASE_SERVICE_ROLE_KEY")
+        or os.environ.get("SUPABASE_SERVICE_ROLE_KEY")
+        or ""
+    ).strip()
+    return {
+        "ok": bool(url and key),
+        "loaded_keys": loaded,
+        "has_url": bool(url),
+        "has_key": bool(key),
+    }
+
+
+def supabase_max_cycle_number(factory_id: str) -> tuple[int | None, dict[str, Any]]:
     """Authoritative high-water mark for cycle_number (repair rows can outpace local CAS)."""
     import urllib.error
+    import urllib.parse
     import urllib.request
 
-    from noos_vault_paths_v1 import load_platform_env, supabase_creds
-
-    load_platform_env()
-    url, key = supabase_creds()
+    ensure_supabase_env()
+    url = (os.environ.get("NOETFIELD_SUPABASE_URL") or os.environ.get("SUPABASE_URL") or "").strip()
+    key = (
+        os.environ.get("NOETFIELD_SUPABASE_SERVICE_ROLE_KEY")
+        or os.environ.get("SUPABASE_SERVICE_ROLE_KEY")
+        or ""
+    ).strip()
     if not url or not key:
-        return None
-    params = (
-        f"select=cycle_number&factory_id=eq.{factory_id}"
-        "&order=cycle_number.desc&limit=1"
+        return None, {"ok": False, "reason": "supabase_not_configured"}
+    params = urllib.parse.urlencode(
+        {
+            "select": "cycle_number",
+            "factory_id": f"eq.{factory_id}",
+            "order": "cycle_number.desc",
+            "limit": "1",
+        }
     )
     req = urllib.request.Request(
         f"{url.rstrip('/')}/rest/v1/noetfield_factory_cycle_runs?{params}",
@@ -93,19 +134,24 @@ def supabase_max_cycle_number(factory_id: str) -> int | None:
     try:
         with urllib.request.urlopen(req, timeout=20) as resp:
             rows = json.loads(resp.read().decode("utf-8"))
-    except (urllib.error.HTTPError, urllib.error.URLError, TimeoutError, OSError, json.JSONDecodeError):
-        return None
+    except urllib.error.HTTPError as exc:
+        detail = exc.read().decode("utf-8", errors="replace")[:300]
+        return None, {"ok": False, "reason": "http_error", "status": exc.code, "detail": detail}
+    except (urllib.error.URLError, TimeoutError, OSError, json.JSONDecodeError) as exc:
+        return None, {"ok": False, "reason": "request_failed", "error": str(exc)[:300]}
     if not rows:
-        return None
+        return 0, {"ok": True, "empty": True, "factory_id": factory_id}
     try:
-        return int(rows[0].get("cycle_number") or 0)
+        floor = int(rows[0].get("cycle_number") or 0)
     except (TypeError, ValueError):
-        return None
+        return None, {"ok": False, "reason": "invalid_cycle_number", "row": rows[0]}
+    return floor, {"ok": True, "factory_id": factory_id, "floor": floor}
 
 
-def acquire_cycle_number(loop_id: str) -> tuple[int | None, dict[str, Any]]:
+def acquire_cycle_number(loop_id: str, *, factory_id: str | None = None) -> tuple[int | None, dict[str, Any]]:
     """D2 — CAS on cycle_number before side effects."""
     path = loop_state_path(loop_id)
+    fid = factory_id or factory_id_for_loop(loop_id)
     expected = 0
     if path.is_file():
         try:
@@ -114,9 +160,19 @@ def acquire_cycle_number(loop_id: str) -> tuple[int | None, dict[str, Any]]:
         except (OSError, json.JSONDecodeError, ValueError):
             expected = 0
     supabase_floor: int | None = None
+    floor_meta: dict[str, Any] = {}
     if is_cloud_execution():
-        supabase_floor = supabase_max_cycle_number(factory_id_for_loop(loop_id))
-        if supabase_floor is not None and supabase_floor > expected:
+        supabase_floor, floor_meta = supabase_max_cycle_number(fid)
+        # Fail closed on cloud: never invent a lagging local cycle that will
+        # idempotent-skip against repair-advanced rows.
+        if supabase_floor is None:
+            return None, {
+                "reason": "supabase_floor_unavailable",
+                "factory_id": fid,
+                "local_expected": expected,
+                "floor": floor_meta,
+            }
+        if supabase_floor > expected:
             expected = supabase_floor
     observed = expected
     if path.is_file():
@@ -130,8 +186,8 @@ def acquire_cycle_number(loop_id: str) -> tuple[int | None, dict[str, Any]]:
     new_number = observed + 1
     cas = cas_advance(expected=expected, observed=observed, new_value=new_number)
     if cas.get("verdict") != "ACCEPTED":
-        return None, {"cas": cas, "reason": "cas_mismatch"}
-    return new_number, {"cas": cas}
+        return None, {"cas": cas, "reason": "cas_mismatch", "floor": floor_meta, "factory_id": fid}
+    return new_number, {"cas": cas, "floor": floor_meta, "factory_id": fid, "supabase_floor": supabase_floor}
 
 
 def next_cycle_number(loop_id: str) -> int:
@@ -171,12 +227,7 @@ def sink_cycle(cycle: dict[str, Any], *, factory_id: str) -> dict[str, Any]:
         return {"ok": False, "skipped": True, "reason": "sink_missing"}
     import tempfile
 
-    from noos_vault_paths_v1 import load_platform_env
-
-    if not (os.environ.get("NOETFIELD_SUPABASE_URL") or os.environ.get("SUPABASE_URL")):
-        for key, val in load_platform_env().items():
-            if val:
-                os.environ.setdefault(key, val)
+    ensure_supabase_env()
     if not (os.environ.get("NOETFIELD_SUPABASE_URL") or os.environ.get("SUPABASE_URL")):
         return {"ok": False, "skipped": True, "reason": "supabase_not_configured"}
     with tempfile.NamedTemporaryFile("w", suffix=".json", delete=False, encoding="utf-8") as tmp:
@@ -206,6 +257,15 @@ def sink_cycle(cycle: dict[str, Any], *, factory_id: str) -> dict[str, Any]:
             sink_out["stdout"] = proc.stdout[-500:]
     if proc.stderr.strip():
         sink_out["stderr"] = proc.stderr[-500:]
+    detail = sink_out.get("detail") if isinstance(sink_out.get("detail"), dict) else {}
+    # Idempotent skip = cycle_number already exists. On cloud that is CAS desync;
+    # never treat it as a fresh organic sink ack.
+    if detail.get("idempotent") and is_cloud_execution():
+        sink_out["ok"] = False
+        sink_out["reason"] = "cycle_number_collision_idempotent_skip"
+        sink_out["collision"] = True
+    elif detail.get("ok") is False:
+        sink_out["ok"] = False
     return sink_out
 
 
@@ -305,8 +365,9 @@ def sink_invariant(step_results: list[dict[str, Any]], heal_results: list[dict[s
 def execute_loop(loop: dict[str, Any], *, self_heal: bool = True) -> dict[str, Any]:
     loop_id = str(loop["id"])
     event_type = str(loop["event_type"])
-    factory_id = str(loop.get("factory_id") or f"loop-{loop_id}")
-    cycle_number, cas_meta = acquire_cycle_number(loop_id)
+    factory_id = str(loop.get("factory_id") or factory_id_for_loop(loop_id))
+    env_meta = ensure_supabase_env() if is_cloud_execution() else {"ok": True, "skipped": True}
+    cycle_number, cas_meta = acquire_cycle_number(loop_id, factory_id=factory_id)
     started_at = utc_now()
     if cycle_number is None:
         finished_at = utc_now()
@@ -338,6 +399,7 @@ def execute_loop(loop: dict[str, Any], *, self_heal: bool = True) -> dict[str, A
             "exit_code": 1,
             "blocker_reason": f"cas_rejected:{cas_meta.get('reason')}",
             "d2": cas_meta,
+            "supabase_env": env_meta,
             "liveness_upsert": liveness_upsert,
             "runner_output": {"cloud_meta": cloud_meta(), "cas": cas_meta},
         }
@@ -407,7 +469,45 @@ def execute_loop(loop: dict[str, Any], *, self_heal: bool = True) -> dict[str, A
     }
 
     cycle["supabase_sink"] = sink_cycle(cycle, factory_id=factory_id)
+    # One-shot reseed: if local CAS collided with an existing row, bump past
+    # Supabase max and rewrite once so organic http_loop rows can land.
+    if cycle["supabase_sink"].get("collision") and is_cloud_execution():
+        floor, floor_meta = supabase_max_cycle_number(factory_id)
+        if floor is not None:
+            state_path = loop_state_path(loop_id)
+            state_path.parent.mkdir(parents=True, exist_ok=True)
+            state_path.write_text(
+                json.dumps(
+                    {
+                        "loop_id": loop_id,
+                        "event_type": event_type,
+                        "cycle_number": floor,
+                        "last_status": "reseed_after_collision",
+                        "last_state": "RUNNING",
+                        "last_finished_at": utc_now(),
+                    },
+                    indent=2,
+                )
+                + "\n",
+                encoding="utf-8",
+            )
+            reseed_number, reseed_meta = acquire_cycle_number(loop_id, factory_id=factory_id)
+            if reseed_number is not None:
+                cycle_number = reseed_number
+                cas_meta = reseed_meta
+                op_key_val = op_key(workflow_id=workflow_id, loop_id=loop_id, cycle_number=cycle_number)
+                cycle["cycle_number"] = cycle_number
+                cycle["op_key"] = op_key_val
+                cycle["cas_reseed"] = {
+                    "from_collision": True,
+                    "floor": floor,
+                    "floor_meta": floor_meta,
+                    "new_cycle": cycle_number,
+                }
+                cycle["supabase_sink"] = sink_cycle(cycle, factory_id=factory_id)
     sink_acked = cycle["supabase_sink"].get("ok") is True
+    cycle["supabase_env"] = env_meta
+    cycle["d2"] = cas_meta
 
     if no_work:
         state_before = "IDLE_NO_WORK"
