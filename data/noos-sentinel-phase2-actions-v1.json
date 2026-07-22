@@ -1,0 +1,51 @@
+{
+  "schema": "noos-sentinel-phase2-actions-v1",
+  "version": "1.0.0",
+  "one_law": "Sentinel is external observer evidence only. These actions ingest receipts and watch liveness — never dispatch, repair, or become a second reconciler.",
+  "actions": [
+    {
+      "id": "sentinel-p2-receipt-ingest",
+      "title": "Ingest sentinel_receipts.jsonl into NOOS evidence sink",
+      "status": "open",
+      "tier": "T2",
+      "lane": "sentinel",
+      "role": "incident_diagnose",
+      "value_class": "proof_asset",
+      "depends_on": [],
+      "acceptance": ["schema-validated receipts in truth_log or receipts/proof", "dedupe_key uniqueness"]
+    },
+    {
+      "id": "sentinel-p2-external-heartbeat",
+      "title": "External heartbeat for old-laptop silence",
+      "status": "open",
+      "tier": "T2",
+      "lane": "sentinel",
+      "role": "incident_diagnose",
+      "value_class": "risk_reduction",
+      "depends_on": [],
+      "acceptance": ["dead-man alert on sentinel silence", "liveness row in noos_loop_registry"]
+    },
+    {
+      "id": "sentinel-p2-schema-validate",
+      "title": "Validate sentinel receipts against receipt_schema_v1",
+      "status": "open",
+      "tier": "T2",
+      "lane": "sentinel",
+      "role": "research",
+      "value_class": "hygiene",
+      "depends_on": ["sentinel-p2-receipt-ingest"],
+      "acceptance": ["schema_status=validated or exact fail receipt"]
+    },
+    {
+      "id": "sentinel-p3-escalation-queue",
+      "title": "Phase 3: trigger_cloud_repair becomes inbox queue item only",
+      "status": "founder_blocked",
+      "tier": "FOUNDER",
+      "lane": "sentinel",
+      "role": "orchestrator",
+      "value_class": "risk_reduction",
+      "depends_on": ["sentinel-p2-schema-validate"],
+      "acceptance": ["auth gates stamped", "no direct repair from sentinel scripts"]
+    }
+  ]
+}

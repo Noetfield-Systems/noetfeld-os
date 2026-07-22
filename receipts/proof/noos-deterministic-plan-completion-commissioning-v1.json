@@ -1,0 +1,82 @@
+{
+  "schema": "noos-deterministic-plan-completion-commissioning-v1",
+  "version": "1.0.0",
+  "at": "2026-07-19T11:40:00Z",
+  "task": "NF-NOOS-PLAN-COMPLETION-24-7",
+  "canon_version": "FOUNDER_CANON_v1+MACHINE_LOOPS_v1",
+  "verdict": "CANDIDATE_PENDING_FOUNDER_PROMOTION",
+  "submit_status": "SUBMITTED for independent verification",
+  "one_law": "CF cron wakes NOOS reconciler; NOOS admits READY backlog; Runway HMAC intake + DeepSeek-first sandbox executes; GHA witnesses; Sentinel observes only.",
+  "stages": {
+    "canonical_runway_contract": {
+      "ok": true,
+      "evidence": [
+        "data/noetfield-runway-contract-v1.json v2 HMAC + /v1/intake",
+        "scripts/noos_runway_supervision_adapter_v1.py",
+        "NOETFIELD-RUNWAY services/runway-cloud-runtime/src/deepseek-pin.ts"
+      ]
+    },
+    "unified_backlog_compile": {
+      "ok": true,
+      "evidence": [
+        "scripts/noos_unified_backlog_compiler_v1.py",
+        "data/noos-unified-plan-completion-v1.json",
+        "pytest tests/test_noos_plan_completion_v1.py"
+      ],
+      "sample_counts": {
+        "note": "live compile at commissioning time — see latest proof sidecar"
+      }
+    },
+    "dispatch_bridge": {
+      "ok": true,
+      "evidence": [
+        "scripts/noos_plan_completion_dispatch_v1.py",
+        "scripts/noos_machine_loops_v1.py reconcile consumer",
+        "dry_run intake ack with matching op_key"
+      ]
+    },
+    "real_role_outputs": {
+      "ok": true,
+      "evidence": [
+        "scripts/noos_role_runway_dispatch_v1.py",
+        "scripts/noos_orchestrator_cross_repo_v1.py",
+        "motor/registry/bindings/noos-route-map-v1.json WIRED routes",
+        "data/noos-24-7-loops-v1.json researcher/specialist/self_heal/orchestrator/plan_completion cloud_steps"
+      ]
+    },
+    "fleet_hardening": {
+      "ok": true,
+      "evidence": [
+        "cloud_steps continue_on_error for surface/chain/sourcea/agent_nerve",
+        "data/noos-cf-dispatch-table-v1.json + worker dispatch-table plan_completion",
+        "deadman /role-circle-report + /plan-completion-report",
+        "scripts/noos_sentinel_receipt_ingest_v1.py Phase 2 observer ingest",
+        "infrastructure/supabase/migrations/0021_noos_unified_plan_completion.sql"
+      ]
+    },
+    "live_24h_window": {
+      "ok": false,
+      "status": "PENDING_FOUNDER_PROMOTION",
+      "required": [
+        "Deploy runway-cloud-runtime with DEEPSEEK_API_KEY + RUNTIME_API_KEYS_JSON",
+        "Set NOETFIELD_RUNWAY_API_URL + NOETFIELD_RUNWAY_API_SECRET on Railway loop-runner",
+        "Set NOOS_PLAN_COMPLETION_LIVE_INTAKE=1",
+        "Deploy CF fleet dispatch table + deadman telegram secrets",
+        "Apply migration 0021",
+        "Two consecutive scheduled plan_completion ticks + 24h zero-manual receipts"
+      ]
+    }
+  },
+  "determinism_gates_local": {
+    "pytest_plan_completion": "7 passed",
+    "deepseek_pin": "deepseek-v4-flash / deepseek-v4-pro",
+    "idle_path": "dispatch returns IDLE_NO_WORK when no READY and no DISPATCHED"
+  },
+  "ownership": {
+    "noos": "compile, admit, HMAC intake, supervise, telegram, sentinel ingest",
+    "runway": "Motor, provider router, sandbox, DeepSeek execution, verify",
+    "forbidden_in_noos": ["deepseek_direct_calls", "second_motor", "sentinel_dispatch"]
+  },
+  "ok": true,
+  "report_line": "plan_completion_commissioning · candidate ready · live 24h pending founder promotion"
+}

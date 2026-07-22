@@ -1,0 +1,69 @@
+{
+  "schema": "noos-runway-build-backlog-seed-v1",
+  "version": "1.0.0",
+  "source": "NOETFIELD-RUNWAY services/runway-cloud-runtime/src/backlog-seed.ts",
+  "note": "NOOS mirror for unified backlog compilation. Execution remains Runway-owned.",
+  "tasks": [
+    {
+      "id": "spine-intake-normalize",
+      "title": "Shared intake + file upload + normalization + source fingerprinting",
+      "status": "founder_blocked",
+      "tier": "FOUNDER",
+      "lane": "runway",
+      "role": "orchestrator",
+      "value_class": "revenue_path",
+      "depends_on": [],
+      "acceptance": ["intake schema verified", "source fingerprint stable"]
+    },
+    {
+      "id": "spine-artifact-qa",
+      "title": "Shared Artifact QA spine",
+      "status": "founder_blocked",
+      "tier": "FOUNDER",
+      "lane": "runway",
+      "role": "specialist",
+      "value_class": "proof_asset",
+      "depends_on": ["spine-intake-normalize"],
+      "acceptance": ["citation/formula/requirement gates green"]
+    },
+    {
+      "id": "commercial-decision-brief",
+      "title": "Decision Brief commercial candidate journey",
+      "status": "open",
+      "tier": "T2",
+      "lane": "runway",
+      "role": "research",
+      "runway_id": "research",
+      "recipe_id": "vendor-decision-brief",
+      "recipe_version": "0.1.0",
+      "value_class": "revenue_path",
+      "depends_on": ["spine-artifact-qa"],
+      "acceptance": ["job COMPLETE", "artifact downloadable"]
+    },
+    {
+      "id": "commercial-software-repair-sandbox",
+      "title": "Software Repair sandbox fixture journey",
+      "status": "open",
+      "tier": "T1",
+      "lane": "runway",
+      "role": "self_heal",
+      "runway_id": "software-repair",
+      "recipe_id": "sandbox-fixture-repair",
+      "recipe_version": "0.1.0",
+      "value_class": "risk_reduction",
+      "depends_on": [],
+      "acceptance": ["sandbox repair COMPLETE", "independent verify PASS"]
+    },
+    {
+      "id": "stripe-entitlement-gate",
+      "title": "Stripe entitlement + payment gate",
+      "status": "founder_blocked",
+      "tier": "FOUNDER",
+      "lane": "runway",
+      "role": "orchestrator",
+      "value_class": "revenue_path",
+      "depends_on": ["commercial-decision-brief"],
+      "acceptance": ["entitlement active before intake"]
+    }
+  ]
+}

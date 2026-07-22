@@ -1,0 +1,63 @@
+{
+  "schema": "noos-unified-plan-completion-v1",
+  "version": "1.0.0",
+  "status": "ACTIVE",
+  "one_law": "One reconciler compiles every governed plan into one deduplicated backlog, admits READY items, dispatches HMAC intake to NOETFIELD-RUNWAY, and advances only after sink ack. DeepSeek runs inside Runway only. Sentinel remains observer evidence.",
+  "canon_version": "FOUNDER_CANON_v1+MACHINE_LOOPS_v1",
+  "governed_by": ["governed-autorun L1-L13", "deterministic-loops D1-D8"],
+  "compiler": "scripts/noos_unified_backlog_compiler_v1.py",
+  "dispatcher": "scripts/noos_plan_completion_dispatch_v1.py",
+  "runway_adapter": "scripts/noos_runway_supervision_adapter_v1.py",
+  "runway_contract": "data/noetfield-runway-contract-v1.json",
+  "event_bridge": "data/noos-unified-motor-event-bridge-v1.json",
+  "runtime_queue_path": ".noos-runtime/plan-completion/backlog-v1.json",
+  "dispatch_events_path": ".noos-runtime/plan-completion/dispatch-events-v1.jsonl",
+  "source_adapters": [
+    {
+      "source_id": "noos_unified_upgrade_backlog",
+      "path": "data/noos-unified-upgrade-backlog-v1.json",
+      "kind": "json_items",
+      "items_key": "items"
+    },
+    {
+      "source_id": "noos_next_plan_unified",
+      "path": "data/noos-next-plan-unified-v1.json",
+      "kind": "json_items",
+      "items_key": "items",
+      "optional": true
+    },
+    {
+      "source_id": "noos_ten_upgrade_plans",
+      "path": "data/noos-ten-upgrade-plans-registry-v1.json",
+      "kind": "json_items",
+      "items_key": "plans",
+      "optional": true
+    },
+    {
+      "source_id": "runway_build_backlog_seed",
+      "path": "data/noos-runway-build-backlog-seed-v1.json",
+      "kind": "json_items",
+      "items_key": "tasks"
+    },
+    {
+      "source_id": "sentinel_phase2",
+      "path": "data/noos-sentinel-phase2-actions-v1.json",
+      "kind": "json_items",
+      "items_key": "actions"
+    }
+  ],
+  "terminal_states": ["COMPLETE", "BLOCKED_WITH_REASON", "FOUNDER_BLOCKED"],
+  "ready_states": ["READY"],
+  "idle_when": "no READY items and no DISPATCHED in-flight",
+  "concurrency": {
+    "default_key": "plan-completion",
+    "max_inflight_per_key": 1
+  },
+  "value_classes": ["revenue_path", "proof_asset", "risk_reduction", "hygiene"],
+  "forbidden": [
+    "llm_state_transition",
+    "second_motor_in_noos",
+    "deepseek_calls_from_noos_scripts",
+    "sentinel_dispatch_or_repair"
+  ]
+}

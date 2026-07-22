@@ -79,6 +79,13 @@
       "factory_id": "loop-surface",
       "steps": [
         {"name": "production_urls", "cmd": ["bash", "scripts/check_production_urls.sh"]}
+      ],
+      "cloud_steps": [
+        {
+          "name": "production_urls_bounded",
+          "cmd": ["bash", "scripts/check_production_urls.sh"],
+          "continue_on_error": true
+        }
       ]
     },
     {
@@ -104,6 +111,26 @@
             "fixtures/demo_intents/approve.json",
             "--validate-only"
           ]
+        }
+      ],
+      "cloud_steps": [
+        {
+          "name": "gate_verify_smoke",
+          "cmd": ["python3", "-m", "noetfield_gate.cli", "verify", "--json"],
+          "continue_on_error": true
+        },
+        {
+          "name": "decide_validate",
+          "cmd": [
+            "python3",
+            "-m",
+            "noetfield_gate.cli",
+            "decide",
+            "--file",
+            "fixtures/demo_intents/approve.json",
+            "--validate-only"
+          ],
+          "continue_on_error": true
         }
       ]
     },
@@ -161,7 +188,7 @@
         {
           "name": "sourcea_supabase_observe",
           "cmd": ["python3", "scripts/observe_sourcea_supabase_v1.py", "--write-receipt", "--json"],
-          "continue_on_error": false
+          "continue_on_error": true
         }
       ]
     },
@@ -180,6 +207,18 @@
         {
           "name": "business_strategy",
           "cmd": ["bash", "scripts/check_noetfield_business_strategy.sh"]
+        }
+      ],
+      "cloud_steps": [
+        {
+          "name": "agent_docs",
+          "cmd": ["bash", "scripts/check_noos_agent_docs.sh"],
+          "continue_on_error": true
+        },
+        {
+          "name": "business_strategy",
+          "cmd": ["bash", "scripts/check_noetfield_business_strategy.sh"],
+          "continue_on_error": true
         }
       ]
     },
@@ -220,6 +259,16 @@
         {
           "name": "execute_safe_fixes",
           "cmd": ["python3", "scripts/noos_self_heal_v1.py", "--findings-file", "data/noos-audit-findings-v1.json"]
+        },
+        {
+          "name": "runway_self_heal_dispatch",
+          "cmd": ["python3", "scripts/noos_role_runway_dispatch_v1.py", "--role", "self_heal", "--subject", "safe-fixes"]
+        }
+      ],
+      "cloud_steps": [
+        {
+          "name": "runway_self_heal_dispatch",
+          "cmd": ["python3", "scripts/noos_role_runway_dispatch_v1.py", "--role", "self_heal", "--subject", "safe-fixes"]
         }
       ]
     },
@@ -235,8 +284,14 @@
       "factory_id": "loop-researcher",
       "steps": [
         {
-          "name": "investigate_escalations",
-          "cmd": ["python3", "scripts/noos_researcher_v1.py", "--depth", "standard"]
+          "name": "runway_research_dispatch",
+          "cmd": ["python3", "scripts/noos_role_runway_dispatch_v1.py", "--role", "research", "--subject", "escalated-findings"]
+        }
+      ],
+      "cloud_steps": [
+        {
+          "name": "runway_research_dispatch",
+          "cmd": ["python3", "scripts/noos_role_runway_dispatch_v1.py", "--role", "research", "--subject", "escalated-findings"]
         }
       ]
     },
@@ -252,8 +307,14 @@
       "factory_id": "loop-specialist",
       "steps": [
         {
-          "name": "generate_proposals",
-          "cmd": ["python3", "scripts/noos_specialist_v1.py"]
+          "name": "runway_specialist_dispatch",
+          "cmd": ["python3", "scripts/noos_role_runway_dispatch_v1.py", "--role", "specialist", "--subject", "research-outputs"]
+        }
+      ],
+      "cloud_steps": [
+        {
+          "name": "runway_specialist_dispatch",
+          "cmd": ["python3", "scripts/noos_role_runway_dispatch_v1.py", "--role", "specialist", "--subject", "research-outputs"]
         }
       ]
     },
@@ -270,7 +331,36 @@
       "steps": [
         {
           "name": "aggregate_health",
-          "cmd": ["echo", "Aggregating health across all org repos"]
+          "cmd": ["python3", "scripts/noos_orchestrator_cross_repo_v1.py", "--json"]
+        }
+      ],
+      "cloud_steps": [
+        {
+          "name": "aggregate_health",
+          "cmd": ["python3", "scripts/noos_orchestrator_cross_repo_v1.py", "--json"]
+        }
+      ]
+    },
+    {
+      "id": "plan_completion",
+      "title": "Unified plan backlog compile + Runway intake dispatch",
+      "domain": "plan-completion",
+      "lane": "noos",
+      "value_class": "revenue_path",
+      "event_type": "noos_plan_completion_tick",
+      "interval_minutes": 15,
+      "github_workflow": "noos-machine-audit-witness.yml",
+      "factory_id": "loop-plan-completion",
+      "steps": [
+        {
+          "name": "reconcile_dispatch",
+          "cmd": ["python3", "scripts/noos_plan_completion_dispatch_v1.py", "reconcile"]
+        }
+      ],
+      "cloud_steps": [
+        {
+          "name": "reconcile_dispatch",
+          "cmd": ["python3", "scripts/noos_plan_completion_dispatch_v1.py", "reconcile"]
         }
       ]
     },

@@ -207,6 +207,50 @@ async function sendTelegram(env, text, { allowSend = false } = {}) {
   return { ok: resp.ok, status: resp.status, bot_username: validated.username };
 }
 
+function authorizedLoopReporter(request, env) {
+  const expected = (env.LOOP_RUNNER_SECRET || "").trim();
+  if (!expected) return false;
+  const direct = (request.headers.get("X-NOOS-Loop-Secret") || "").trim();
+  const authorization = (request.headers.get("Authorization") || "").trim();
+  const bearer = authorization.startsWith("Bearer ") ? authorization.slice(7).trim() : "";
+  return direct === expected || bearer === expected;
+}
+
+function roleCircleMessage(payload) {
+  const valuable = Number(payload.loops_valuable || 0);
+  const total = Number(payload.loop_count || 0);
+  const productive = Number(payload.loops_productive || 0);
+  const failed = Array.isArray(payload.loops_failed) ? payload.loops_failed : [];
+  const notProductive = Array.isArray(payload.loops_not_productive)
+    ? payload.loops_not_productive
+    : [];
+  const status =
+    payload.ok === true && payload.portfolio_productive === true ? "COMPLETE" : "DEGRADED";
+  const details = [
+    `NOOS role-circle ${status}`,
+    `valuable=${valuable}/${total} productive=${productive}/${total}`,
+  ];
+  if (failed.length) details.push(`failed=${failed.join(",")}`);
+  if (notProductive.length) details.push(`not_productive=${notProductive.join(",")}`);
+  if (payload.receipt_path) details.push(`receipt=${payload.receipt_path}`);
+  return details.join("\n");
+}
+
+function planCompletionMessage(payload) {
+  const verdict = String(payload.verdict || "UNKNOWN");
+  const ready = Number(payload.ready || 0);
+  const complete = Number(payload.complete || 0);
+  const founder = Number(payload.founder_blocked || 0);
+  const details = [
+    `NOOS plan-completion ${verdict}`,
+    `ready=${ready} complete=${complete} founder_blocked=${founder}`,
+  ];
+  if (payload.item_id) details.push(`item=${payload.item_id}`);
+  if (payload.job_id) details.push(`job=${payload.job_id}`);
+  if (payload.receipt_path) details.push(`receipt=${payload.receipt_path}`);
+  return details.join("\n");
+}
+
 async function sinkReceipt(env, receipt) {
   const base = supabaseBase(env);
   if (!base) return { ok: false, skipped: true, reason: "supabase_url_missing" };
@@ -349,6 +393,46 @@ export default {
         explicitTelegram,
       });
       return json(receipt, receipt.ok ? 200 : 502);
+    }
+    if (url.pathname === "/role-circle-report" && request.method === "POST") {
+      if (!authorizedLoopReporter(request, env)) {
+        return json({ ok: false, error: "unauthorized" }, 401);
+      }
+      let payload = {};
+      try {
+        payload = await request.json();
+      } catch {
+        return json({ ok: false, error: "invalid_json" }, 400);
+      }
+      const telegram = await sendTelegram(env, roleCircleMessage(payload), { allowSend: true });
+      return json(
+        {
+          ok: telegram.ok === true || telegram.skipped === true,
+          schema: "noos-role-circle-telegram-report-v1",
+          telegram,
+        },
+        telegram.ok || telegram.skipped ? 200 : 502
+      );
+    }
+    if (url.pathname === "/plan-completion-report" && request.method === "POST") {
+      if (!authorizedLoopReporter(request, env)) {
+        return json({ ok: false, error: "unauthorized" }, 401);
+      }
+      let payload = {};
+      try {
+        payload = await request.json();
+      } catch {
+        return json({ ok: false, error: "invalid_json" }, 400);
+      }
+      const telegram = await sendTelegram(env, planCompletionMessage(payload), { allowSend: true });
+      return json(
+        {
+          ok: telegram.ok === true || telegram.skipped === true,
+          schema: "noos-plan-completion-telegram-report-v1",
+          telegram,
+        },
+        telegram.ok || telegram.skipped ? 200 : 502
+      );
     }
     return json({ ok: false, error: "not_found" }, 404);
   },
