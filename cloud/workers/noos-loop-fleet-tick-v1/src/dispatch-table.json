@@ -1,7 +1,7 @@
 {
   "schema": "noos-cf-dispatch-table-v1",
   "version": "1.1.0",
-  "updated_at": "2026-07-19",
+  "updated_at": "2026-07-22",
   "motor_worker": "noos-loop-fleet-tick-v1",
   "motor_cron": "*/5 * * * *",
   "canonical_execution_plane": "railway:noos-loop-runner",
@@ -169,6 +169,21 @@
       "enabled": false,
       "schedule_status": "quarantined",
       "quarantine_reason": "Cross-repo Plan Motor aggregation remains manual/event-only pending explicit schedule commissioning."
+    },
+    {
+      "dispatch_id": "plan_completion",
+      "event_type": "noos_plan_completion_tick",
+      "interval_minutes": 15,
+      "handler": "loop",
+      "enabled": true,
+      "schedule_status": "active",
+      "time_dependent_reason": "Unified backlog compile + Runway HMAC intake cadence.",
+      "no_work_behavior": {
+        "no_write": true,
+        "no_llm": true,
+        "no_notification": true
+      },
+      "note": "Unified backlog compile + HMAC Runway intake"
     },
     {
       "dispatch_id": "factory_autorun",

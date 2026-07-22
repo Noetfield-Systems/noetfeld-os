@@ -1,0 +1,2237 @@
+{
+  "schema": "noos-unified-backlog-items-v1",
+  "items": [
+    {
+      "schema": "noos-unified-backlog-item-v1",
+      "plan_id": "noos_ten_upgrade_plans",
+      "item_id": "UPG-PLAN-01",
+      "source_revision": "1.0.0",
+      "title": "ICL-P2 Integrator Control Dashboard",
+      "status": "COMPLETE",
+      "lane": "noos_ten_upgrade_plans",
+      "role": "research",
+      "repository": "Noetfield-Systems/noetfeld-os",
+      "authority_class": "T2",
+      "acceptance_checks": [
+        "scripts/noos_integrator_status_v1.py"
+      ],
+      "budget_usd": 0.25,
+      "value_class": "hygiene",
+      "depends_on": [],
+      "runway_id": null,
+      "recipe_id": null,
+      "recipe_version": null,
+      "content_hash": "89961324aecdd7c9a9f1cd4b6a266136f20a038f7fb153ac5ce152a0c863759f",
+      "op_key": "ca6226fb878ca67d169e7af907bcc0516752ac255ae2503069f5f595b803e540",
+      "source_ref": {
+        "source_id": "noos_ten_upgrade_plans",
+        "raw_id": "UPG-PLAN-01",
+        "priority": null,
+        "owner": null
+      }
+    },
+    {
+      "schema": "noos-unified-backlog-item-v1",
+      "plan_id": "noos_ten_upgrade_plans",
+      "item_id": "UPG-PLAN-02",
+      "source_revision": "1.0.0",
+      "title": "Living System Phase E-G 48h prep",
+      "status": "COMPLETE",
+      "lane": "noos_ten_upgrade_plans",
+      "role": "research",
+      "repository": "Noetfield-Systems/noetfeld-os",
+      "authority_class": "T2",
+      "acceptance_checks": [
+        "scripts/noos_living_system_48h_prep_v1.py"
+      ],
+      "budget_usd": 0.25,
+      "value_class": "hygiene",
+      "depends_on": [],
+      "runway_id": null,
+      "recipe_id": null,
+      "recipe_version": null,
+      "content_hash": "fe74ff039cddf3a58679c2e1f4e5554d7595f75fdd910830069caf07fa92c95c",
+      "op_key": "45990e95200412412275f20f4d754d2e5ccf0822c36cc6540708e5eaf1675a16",
+      "source_ref": {
+        "source_id": "noos_ten_upgrade_plans",
+        "raw_id": "UPG-PLAN-02",
+        "priority": null,
+        "owner": null
+      }
+    },
+    {
+      "schema": "noos-unified-backlog-item-v1",
+      "plan_id": "noos_ten_upgrade_plans",
+      "item_id": "UPG-PLAN-03",
+      "source_revision": "1.0.0",
+      "title": "NF public verdict gate",
+      "status": "COMPLETE",
+      "lane": "noos_ten_upgrade_plans",
+      "role": "research",
+      "repository": "Noetfield-Systems/noetfeld-os",
+      "authority_class": "T2",
+      "acceptance_checks": [
+        "scripts/noos_nf_pub_verdict_gate_v1.py"
+      ],
+      "budget_usd": 0.25,
+      "value_class": "hygiene",
+      "depends_on": [],
+      "runway_id": null,
+      "recipe_id": null,
+      "recipe_version": null,
+      "content_hash": "b9b476944bf6481adeaf204f61543b684e598143e759f633e3c1a7a0647ae49b",
+      "op_key": "bd8d5b95ecc8dc2015a7edfab51a4e1eb5e5641c90d336e3842e85490bb84d45",
+      "source_ref": {
+        "source_id": "noos_ten_upgrade_plans",
+        "raw_id": "UPG-PLAN-03",
+        "priority": null,
+        "owner": null
+      }
+    },
+    {
+      "schema": "noos-unified-backlog-item-v1",
+      "plan_id": "noos_ten_upgrade_plans",
+      "item_id": "UPG-PLAN-04",
+      "source_revision": "1.0.0",
+      "title": "Vault and cloud secrets hardening",
+      "status": "COMPLETE",
+      "lane": "noos_ten_upgrade_plans",
+      "role": "research",
+      "repository": "Noetfield-Systems/noetfeld-os",
+      "authority_class": "T2",
+      "acceptance_checks": [
+        "scripts/canonicalize_noos_vault_v1.py"
+      ],
+      "budget_usd": 0.25,
+      "value_class": "hygiene",
+      "depends_on": [],
+      "runway_id": null,
+      "recipe_id": null,
+      "recipe_version": null,
+      "content_hash": "ef7d73de63b7d5fa3c336ccd94f5c8c7ca13520c3013b504ac7cc22368b452d3",
+      "op_key": "9be441b22b00f4043cb6e7df306b152338c8bac66c927c145c4ed2fa8e4507ae",
+      "source_ref": {
+        "source_id": "noos_ten_upgrade_plans",
+        "raw_id": "UPG-PLAN-04",
+        "priority": null,
+        "owner": null
+      }
+    },
+    {
+      "schema": "noos-unified-backlog-item-v1",
+      "plan_id": "noos_ten_upgrade_plans",
+      "item_id": "UPG-PLAN-05",
+      "source_revision": "1.0.0",
+      "title": "24/7 motor sustain and post-deploy verify",
+      "status": "COMPLETE",
+      "lane": "noos_ten_upgrade_plans",
+      "role": "research",
+      "repository": "Noetfield-Systems/noetfeld-os",
+      "authority_class": "T2",
+      "acceptance_checks": [
+        "scripts/verify_noos_motor_sustain_v1.py"
+      ],
+      "budget_usd": 0.25,
+      "value_class": "hygiene",
+      "depends_on": [],
+      "runway_id": null,
+      "recipe_id": null,
+      "recipe_version": null,
+      "content_hash": "2f7faaeee87276037173a062221783dab7a4ede000636b4901a4620d6b652a0b",
+      "op_key": "fb7baa46e43975969b15ed8b0999701fb9ef6e1d1c8edef716b0d606dcf75ea3",
+      "source_ref": {
+        "source_id": "noos_ten_upgrade_plans",
+        "raw_id": "UPG-PLAN-05",
+        "priority": null,
+        "owner": null
+      }
+    },
+    {
+      "schema": "noos-unified-backlog-item-v1",
+      "plan_id": "noos_ten_upgrade_plans",
+      "item_id": "UPG-PLAN-06",
+      "source_revision": "1.0.0",
+      "title": "SourceA spine observe-only integration",
+      "status": "COMPLETE",
+      "lane": "noos_ten_upgrade_plans",
+      "role": "incident_diagnose",
+      "repository": "Noetfield-Systems/noetfeld-os",
+      "authority_class": "T2",
+      "acceptance_checks": [
+        "scripts/observe_sourcea_supabase_v1.py + portfolio_spine env on Railway"
+      ],
+      "budget_usd": 0.25,
+      "value_class": "hygiene",
+      "depends_on": [],
+      "runway_id": null,
+      "recipe_id": null,
+      "recipe_version": null,
+      "content_hash": "6213e8329df2ab4c3b894f8eac0fe0628788b4caaa112e0cb2ac789457f28774",
+      "op_key": "ebe3d6457662a3dd9755fd7bc75ed14c3e758b283c5f39bd8a3b9453bd665bc4",
+      "source_ref": {
+        "source_id": "noos_ten_upgrade_plans",
+        "raw_id": "UPG-PLAN-06",
+        "priority": null,
+        "owner": null
+      }
+    },
+    {
+      "schema": "noos-unified-backlog-item-v1",
+      "plan_id": "noos_ten_upgrade_plans",
+      "item_id": "UPG-PLAN-07",
+      "source_revision": "1.0.0",
+      "title": "ACG outbound queue + weekly digest",
+      "status": "COMPLETE",
+      "lane": "noos_ten_upgrade_plans",
+      "role": "research",
+      "repository": "Noetfield-Systems/noetfeld-os",
+      "authority_class": "T2",
+      "acceptance_checks": [
+        "data/noos-acg-outbound-queue-v1.json (25 slots)"
+      ],
+      "budget_usd": 0.25,
+      "value_class": "hygiene",
+      "depends_on": [],
+      "runway_id": null,
+      "recipe_id": null,
+      "recipe_version": null,
+      "content_hash": "1f18fa1e2df7780970285c612a670eefc77cae1140e2152a89ef602d13e27f84",
+      "op_key": "f56e775d158007e4f115b7cc89064143b9a533fdd52350ed2052d6d551eaa1e7",
+      "source_ref": {
+        "source_id": "noos_ten_upgrade_plans",
+        "raw_id": "UPG-PLAN-07",
+        "priority": null,
+        "owner": null
+      }
+    },
+    {
+      "schema": "noos-unified-backlog-item-v1",
+      "plan_id": "noos_ten_upgrade_plans",
+      "item_id": "UPG-PLAN-08",
+      "source_revision": "1.0.0",
+      "title": "gel-api multi-region canary UPG-0209",
+      "status": "COMPLETE",
+      "lane": "noos_ten_upgrade_plans",
+      "role": "research",
+      "repository": "Noetfield-Systems/noetfeld-os",
+      "authority_class": "T2",
+      "acceptance_checks": [
+        "scripts/verify_noos_gel_api_multi_region_v1.py"
+      ],
+      "budget_usd": 0.25,
+      "value_class": "hygiene",
+      "depends_on": [],
+      "runway_id": null,
+      "recipe_id": null,
+      "recipe_version": null,
+      "content_hash": "f28dbfc0232ab9bdd55a0139c113ab90fac7e4cf5d701444e7e8e9e9790cf210",
+      "op_key": "b9fefcbf38947b0f0abb41c5008a953377efc237441908377cf371d33d0efec9",
+      "source_ref": {
+        "source_id": "noos_ten_upgrade_plans",
+        "raw_id": "UPG-PLAN-08",
+        "priority": null,
+        "owner": null
+      }
+    },
+    {
+      "schema": "noos-unified-backlog-item-v1",
+      "plan_id": "noos_ten_upgrade_plans",
+      "item_id": "UPG-PLAN-09",
+      "source_revision": "1.0.0",
+      "title": "Sandbox fleet + kaizen sustain",
+      "status": "COMPLETE",
+      "lane": "noos_ten_upgrade_plans",
+      "role": "research",
+      "repository": "Noetfield-Systems/noetfeld-os",
+      "authority_class": "T2",
+      "acceptance_checks": [
+        "make kaizen-sustain"
+      ],
+      "budget_usd": 0.25,
+      "value_class": "hygiene",
+      "depends_on": [],
+      "runway_id": null,
+      "recipe_id": null,
+      "recipe_version": null,
+      "content_hash": "ec1dcdbcf39dee577e7ad4b8083bc5873b64230ab96f3863bc53578e32edf766",
+      "op_key": "35702583cb6383d0c76ccfc5e3996875a15dc792b199b123ed21f426530d0cc8",
+      "source_ref": {
+        "source_id": "noos_ten_upgrade_plans",
+        "raw_id": "UPG-PLAN-09",
+        "priority": null,
+        "owner": null
+      }
+    },
+    {
+      "schema": "noos-unified-backlog-item-v1",
+      "plan_id": "noos_ten_upgrade_plans",
+      "item_id": "UPG-PLAN-10",
+      "source_revision": "1.0.0",
+      "title": "Phase 5 packaging deferred rail",
+      "status": "COMPLETE",
+      "lane": "noos_ten_upgrade_plans",
+      "role": "research",
+      "repository": "Noetfield-Systems/noetfeld-os",
+      "authority_class": "T2",
+      "acceptance_checks": [
+        "scripts/noos_phase5_packaging_prep_v1.py"
+      ],
+      "budget_usd": 0.25,
+      "value_class": "hygiene",
+      "depends_on": [],
+      "runway_id": null,
+      "recipe_id": null,
+      "recipe_version": null,
+      "content_hash": "4e8385e2d35399dfcf916c9650cfe0c7b328ec07154720923d9b3d5b9d22b400",
+      "op_key": "6fb29472c99ff5a813a6b094a73ee267c2bb93f110b7b1a8b1c897bb5cc5daad",
+      "source_ref": {
+        "source_id": "noos_ten_upgrade_plans",
+        "raw_id": "UPG-PLAN-10",
+        "priority": null,
+        "owner": null
+      }
+    },
+    {
+      "schema": "noos-unified-backlog-item-v1",
+      "plan_id": "noos_unified_upgrade_backlog",
+      "item_id": "A1",
+      "source_revision": "1.0.0",
+      "title": "Native GitHub schedule backup verified",
+      "status": "COMPLETE",
+      "lane": "A",
+      "role": "research",
+      "repository": "Noetfield-Systems/noetfeld-os",
+      "authority_class": "T0",
+      "acceptance_checks": [
+        "make schedule-verify ok"
+      ],
+      "budget_usd": 0.25,
+      "value_class": "risk_reduction",
+      "depends_on": [],
+      "runway_id": null,
+      "recipe_id": null,
+      "recipe_version": null,
+      "content_hash": "2408127ea343397e58d3c35821bf6b33097a0937cd2d8b467e605323ef1d5935",
+      "op_key": "63b3d83ce8b67051d887598d2b8aeef80c1d1318d5b2b61ae9c34a960459bec0",
+      "source_ref": {
+        "source_id": "noos_unified_upgrade_backlog",
+        "raw_id": "A1",
+        "priority": "P0",
+        "owner": "machine"
+      }
+    },
+    {
+      "schema": "noos-unified-backlog-item-v1",
+      "plan_id": "noos_unified_upgrade_backlog",
+      "item_id": "A10",
+      "source_revision": "1.0.0",
+      "title": "24h zero-manual CF+dispatch proof",
+      "status": "COMPLETE",
+      "lane": "A",
+      "role": "specialist",
+      "repository": "Noetfield-Systems/noetfeld-os",
+      "authority_class": "T0",
+      "acceptance_checks": [
+        "verify_noos_autonomous_24h ok"
+      ],
+      "budget_usd": 0.25,
+      "value_class": "hygiene",
+      "depends_on": [],
+      "runway_id": null,
+      "recipe_id": null,
+      "recipe_version": null,
+      "content_hash": "579fd3e09c43a50a20d55ae8556a089c2d5ea781eee4d5255c057179048923cc",
+      "op_key": "73f2d5be24759f4aed6a678122c659d7c366607ab8cad13035f95c59c6bac64a",
+      "source_ref": {
+        "source_id": "noos_unified_upgrade_backlog",
+        "raw_id": "A10",
+        "priority": "P1",
+        "owner": "machine"
+      }
+    },
+    {
+      "schema": "noos-unified-backlog-item-v1",
+      "plan_id": "noos_unified_upgrade_backlog",
+      "item_id": "A2-A9",
+      "source_revision": "1.0.0",
+      "title": "CF motor, cloud_meta, dashboard v1.3, inbox freshness",
+      "status": "COMPLETE",
+      "lane": "A",
+      "role": "research",
+      "repository": "Noetfield-Systems/noetfeld-os",
+      "authority_class": "T0",
+      "acceptance_checks": [
+        "autorun-status FRESH"
+      ],
+      "budget_usd": 0.25,
+      "value_class": "risk_reduction",
+      "depends_on": [],
+      "runway_id": null,
+      "recipe_id": null,
+      "recipe_version": null,
+      "content_hash": "777396102c2bb4260bf8a853509bb767c25ec6eb84352cabef601d8e083d007d",
+      "op_key": "af12c4a4229fc2461b19f063a14e956c87d6a6cbf5648a4e71fc9069255e68e4",
+      "source_ref": {
+        "source_id": "noos_unified_upgrade_backlog",
+        "raw_id": "A2-A9",
+        "priority": "P0",
+        "owner": "machine"
+      }
+    },
+    {
+      "schema": "noos-unified-backlog-item-v1",
+      "plan_id": "noos_unified_upgrade_backlog",
+      "item_id": "B1-B10",
+      "source_revision": "1.0.0",
+      "title": "UPG-0151\u20130158 chain tools + manifest",
+      "status": "COMPLETE",
+      "lane": "B",
+      "role": "research",
+      "repository": "Noetfield-Systems/noetfeld-os",
+      "authority_class": "T0",
+      "acceptance_checks": [
+        "noetfield verify PASS"
+      ],
+      "budget_usd": 0.25,
+      "value_class": "risk_reduction",
+      "depends_on": [],
+      "runway_id": null,
+      "recipe_id": null,
+      "recipe_version": null,
+      "content_hash": "d6209079059c9cfb80b967b2fd84038280d7594b581bcea504b7e1ec451536be",
+      "op_key": "ca6aaed742bb3ff9c1a551c9b189941eccf530b1e72081acb8085eee3a181a81",
+      "source_ref": {
+        "source_id": "noos_unified_upgrade_backlog",
+        "raw_id": "B1-B10",
+        "priority": "P0",
+        "owner": "machine"
+      }
+    },
+    {
+      "schema": "noos-unified-backlog-item-v1",
+      "plan_id": "noos_unified_upgrade_backlog",
+      "item_id": "C1-C10",
+      "source_revision": "1.0.0",
+      "title": "UPG-0191\u20130197 CI hardening",
+      "status": "COMPLETE",
+      "lane": "C",
+      "role": "specialist",
+      "repository": "Noetfield-Systems/noetfeld-os",
+      "authority_class": "T0",
+      "acceptance_checks": [
+        "gel-ci green"
+      ],
+      "budget_usd": 0.25,
+      "value_class": "risk_reduction",
+      "depends_on": [],
+      "runway_id": null,
+      "recipe_id": null,
+      "recipe_version": null,
+      "content_hash": "610ae168dfbeff6fa7b08151faf81eca4182552a60f00b14e2e266798213484b",
+      "op_key": "103cb44846907a554be475a8efa885a2f2dc74f0b96901db8ec689933c283c8d",
+      "source_ref": {
+        "source_id": "noos_unified_upgrade_backlog",
+        "raw_id": "C1-C10",
+        "priority": "P0",
+        "owner": "machine"
+      }
+    },
+    {
+      "schema": "noos-unified-backlog-item-v1",
+      "plan_id": "noos_unified_upgrade_backlog",
+      "item_id": "D1",
+      "source_revision": "1.0.0",
+      "title": "SourceA Supabase observe loop",
+      "status": "COMPLETE",
+      "lane": "D",
+      "role": "incident_diagnose",
+      "repository": "Noetfield-Systems/noetfeld-os",
+      "authority_class": "T0",
+      "acceptance_checks": [
+        "noos_sourcea_observe_loop_tick cycle"
+      ],
+      "budget_usd": 0.25,
+      "value_class": "hygiene",
+      "depends_on": [],
+      "runway_id": null,
+      "recipe_id": null,
+      "recipe_version": null,
+      "content_hash": "69f8d0b3d071aa72439d883dc99b5ffef8ec9aaa0371901908daed358cc76955",
+      "op_key": "a8464c6cf9fda3a9c39082455cdd47e7a06e813e7abbef4a602724f7c6dd0858",
+      "source_ref": {
+        "source_id": "noos_unified_upgrade_backlog",
+        "raw_id": "D1",
+        "priority": "P1",
+        "owner": "machine"
+      }
+    },
+    {
+      "schema": "noos-unified-backlog-item-v1",
+      "plan_id": "noos_unified_upgrade_backlog",
+      "item_id": "D2",
+      "source_revision": "1.0.0",
+      "title": "UPG-0159/0160 integration tests in CI",
+      "status": "COMPLETE",
+      "lane": "D",
+      "role": "specialist",
+      "repository": "Noetfield-Systems/noetfeld-os",
+      "authority_class": "T0",
+      "acceptance_checks": [
+        "gel-ci integration steps"
+      ],
+      "budget_usd": 0.25,
+      "value_class": "hygiene",
+      "depends_on": [],
+      "runway_id": null,
+      "recipe_id": null,
+      "recipe_version": null,
+      "content_hash": "2f84da1e2f9a5f629900635e0ec18423c3bc685f53032e35a11a8c2b19b924d3",
+      "op_key": "8fbbe34a833d26c5e698e39e6fbcf165b705e5a274cfddf811330777e4d58dbf",
+      "source_ref": {
+        "source_id": "noos_unified_upgrade_backlog",
+        "raw_id": "D2",
+        "priority": "P1",
+        "owner": "machine"
+      }
+    },
+    {
+      "schema": "noos-unified-backlog-item-v1",
+      "plan_id": "noos_unified_upgrade_backlog",
+      "item_id": "ECOSYSTEM-E",
+      "source_revision": "1.0.0",
+      "title": "Ecosystem Phase E deferred items (nav refactor, SOC2 claims, BC registry)",
+      "status": "BLOCKED_WITH_REASON",
+      "lane": "COM",
+      "role": "research",
+      "repository": "Noetfield-Systems/noetfeld-os",
+      "authority_class": "T4",
+      "acceptance_checks": [
+        "C-01 in motion first"
+      ],
+      "budget_usd": 0.25,
+      "value_class": "hygiene",
+      "depends_on": [
+        "NOOS-C-01"
+      ],
+      "runway_id": null,
+      "recipe_id": null,
+      "recipe_version": null,
+      "content_hash": "20e1b23d720f28313096d48fad0d2bd3a3c24af4e11f3215f5555af91ef5d59e",
+      "op_key": "4c66d1bd7949be2d3afb5c2e4dde7684f9af9265a009b29a70f3868ed81084f4",
+      "source_ref": {
+        "source_id": "noos_unified_upgrade_backlog",
+        "raw_id": "ECOSYSTEM-E",
+        "priority": "P3",
+        "owner": "founder"
+      }
+    },
+    {
+      "schema": "noos-unified-backlog-item-v1",
+      "plan_id": "noos_unified_upgrade_backlog",
+      "item_id": "GOV-L7-L12",
+      "source_revision": "1.0.0",
+      "title": "Governed-autorun v2 cycle receipts + heartbeat",
+      "status": "COMPLETE",
+      "lane": "GOV",
+      "role": "research",
+      "repository": "Noetfield-Systems/noetfeld-os",
+      "authority_class": "T0",
+      "acceptance_checks": [
+        "autorun-cycle-receipt-v2 fields present"
+      ],
+      "budget_usd": 0.25,
+      "value_class": "risk_reduction",
+      "depends_on": [],
+      "runway_id": null,
+      "recipe_id": null,
+      "recipe_version": null,
+      "content_hash": "31feda9b0a29753e766eec4e28dd2087425fab6aef9c02e3cd3a830e5c29bfd2",
+      "op_key": "4e2e1b593122644558191bea67a30657fb0f226b7290db0173c510580be74c16",
+      "source_ref": {
+        "source_id": "noos_unified_upgrade_backlog",
+        "raw_id": "GOV-L7-L12",
+        "priority": "P0",
+        "owner": "machine"
+      }
+    },
+    {
+      "schema": "noos-unified-backlog-item-v1",
+      "plan_id": "noos_unified_upgrade_backlog",
+      "item_id": "LOOP-FLEET",
+      "source_revision": "1.0.0",
+      "title": "7 domain loops + CF fleet motor deployed",
+      "status": "COMPLETE",
+      "lane": "A",
+      "role": "research",
+      "repository": "Noetfield-Systems/noetfeld-os",
+      "authority_class": "T0",
+      "acceptance_checks": [
+        "7 loops dispatch green"
+      ],
+      "budget_usd": 0.25,
+      "value_class": "risk_reduction",
+      "depends_on": [],
+      "runway_id": null,
+      "recipe_id": null,
+      "recipe_version": null,
+      "content_hash": "5de21ec1f5e625ec6ec2df2417882234e9db9d54313187e42e16f88ca4e3447c",
+      "op_key": "ebc8aa365cbed3ca15bd30be0dc51da981edf7c7cabdfbe5af1293629ed92cd0",
+      "source_ref": {
+        "source_id": "noos_unified_upgrade_backlog",
+        "raw_id": "LOOP-FLEET",
+        "priority": "P0",
+        "owner": "machine"
+      }
+    },
+    {
+      "schema": "noos-unified-backlog-item-v1",
+      "plan_id": "noos_unified_upgrade_backlog",
+      "item_id": "LOOP-VERIFY-ALL",
+      "source_revision": "1.0.0",
+      "title": "24h VERIFIED window per loop (autonomous triggers, zero manual)",
+      "status": "COMPLETE",
+      "lane": "I",
+      "role": "research",
+      "repository": "Noetfield-Systems/noetfeld-os",
+      "authority_class": "T1",
+      "acceptance_checks": [
+        "7/7 loops DECLARED\u2192VERIFIED via cf-cron dispatch or schedule"
+      ],
+      "budget_usd": 0.25,
+      "value_class": "risk_reduction",
+      "depends_on": [
+        "A1",
+        "GOV-L7-L12"
+      ],
+      "runway_id": null,
+      "recipe_id": null,
+      "recipe_version": null,
+      "content_hash": "44d308ebbcbcaa9abdad3292eb534d9b050cdbde9ea10ed477eea39601959c66",
+      "op_key": "f914aec9c09cbb578fa6b592d58ff5292443efede9c010d946b157f243272463",
+      "source_ref": {
+        "source_id": "noos_unified_upgrade_backlog",
+        "raw_id": "LOOP-VERIFY-ALL",
+        "priority": "P0",
+        "owner": "machine"
+      }
+    },
+    {
+      "schema": "noos-unified-backlog-item-v1",
+      "plan_id": "noos_unified_upgrade_backlog",
+      "item_id": "LOOP-VERIFY-agent_nerve",
+      "source_revision": "1.0.0",
+      "title": "agent-nerve loop 24h VERIFIED",
+      "status": "COMPLETE",
+      "lane": "I",
+      "role": "research",
+      "repository": "Noetfield-Systems/noetfeld-os",
+      "authority_class": "T1",
+      "acceptance_checks": [
+        "24h autonomous agent docs check cycles"
+      ],
+      "budget_usd": 0.25,
+      "value_class": "hygiene",
+      "depends_on": [],
+      "runway_id": null,
+      "recipe_id": null,
+      "recipe_version": null,
+      "content_hash": "70ee7b76df7a95d3430bf9c26302d1e5e7647693235ee780d19806cc06dec5e9",
+      "op_key": "c088c4d621e5cb9716630abc197adae5ed59b747725479b4170db97a09eb7ab8",
+      "source_ref": {
+        "source_id": "noos_unified_upgrade_backlog",
+        "raw_id": "LOOP-VERIFY-agent_nerve",
+        "priority": "P1",
+        "owner": "machine"
+      }
+    },
+    {
+      "schema": "noos-unified-backlog-item-v1",
+      "plan_id": "noos_unified_upgrade_backlog",
+      "item_id": "LOOP-VERIFY-chain",
+      "source_revision": "1.0.0",
+      "title": "chain loop 24h VERIFIED",
+      "status": "COMPLETE",
+      "lane": "I",
+      "role": "research",
+      "repository": "Noetfield-Systems/noetfeld-os",
+      "authority_class": "T1",
+      "acceptance_checks": [
+        "24h autonomous noetfield verify cycles"
+      ],
+      "budget_usd": 0.25,
+      "value_class": "risk_reduction",
+      "depends_on": [],
+      "runway_id": null,
+      "recipe_id": null,
+      "recipe_version": null,
+      "content_hash": "3b42994c2c06bf8d9312a1feaaa06dc7b563ce946d849f40e35ad178a1238a3a",
+      "op_key": "eb8a0c2729edbf8601645ebd3362cc58b26415a05ef76e187dabcc767ce3d2f7",
+      "source_ref": {
+        "source_id": "noos_unified_upgrade_backlog",
+        "raw_id": "LOOP-VERIFY-chain",
+        "priority": "P0",
+        "owner": "machine"
+      }
+    },
+    {
+      "schema": "noos-unified-backlog-item-v1",
+      "plan_id": "noos_unified_upgrade_backlog",
+      "item_id": "LOOP-VERIFY-inbox",
+      "source_revision": "1.0.0",
+      "title": "inbox loop 24h VERIFIED",
+      "status": "COMPLETE",
+      "lane": "I",
+      "role": "research",
+      "repository": "Noetfield-Systems/noetfeld-os",
+      "authority_class": "T1",
+      "acceptance_checks": [
+        "24h autonomous cycles + sink invariant PASS"
+      ],
+      "budget_usd": 0.25,
+      "value_class": "risk_reduction",
+      "depends_on": [],
+      "runway_id": null,
+      "recipe_id": null,
+      "recipe_version": null,
+      "content_hash": "5c92d03c242196439f6a467282e4b915a5e41bc1d7c67974f426156c4b70d242",
+      "op_key": "a04899d8fb234f14b8b0105d1a8d2a96ff2154660092af369533a0c9d34c4b9b",
+      "source_ref": {
+        "source_id": "noos_unified_upgrade_backlog",
+        "raw_id": "LOOP-VERIFY-inbox",
+        "priority": "P0",
+        "owner": "machine"
+      }
+    },
+    {
+      "schema": "noos-unified-backlog-item-v1",
+      "plan_id": "noos_unified_upgrade_backlog",
+      "item_id": "LOOP-VERIFY-runtime",
+      "source_revision": "1.0.0",
+      "title": "runtime loop 24h VERIFIED",
+      "status": "COMPLETE",
+      "lane": "I",
+      "role": "research",
+      "repository": "Noetfield-Systems/noetfeld-os",
+      "authority_class": "T1",
+      "acceptance_checks": [
+        "24h autonomous gate+pytest cycles"
+      ],
+      "budget_usd": 0.25,
+      "value_class": "risk_reduction",
+      "depends_on": [],
+      "runway_id": null,
+      "recipe_id": null,
+      "recipe_version": null,
+      "content_hash": "71b1d2a6f397281919437092d3d203ec167a1a5af72e835c0d64523ca95f7b44",
+      "op_key": "f82fc09e72c8abb85d29e01d9606a69a3e5181e242a0131c71f68a86c1dcd004",
+      "source_ref": {
+        "source_id": "noos_unified_upgrade_backlog",
+        "raw_id": "LOOP-VERIFY-runtime",
+        "priority": "P0",
+        "owner": "machine"
+      }
+    },
+    {
+      "schema": "noos-unified-backlog-item-v1",
+      "plan_id": "noos_unified_upgrade_backlog",
+      "item_id": "LOOP-VERIFY-self_heal",
+      "source_revision": "1.0.0",
+      "title": "self-heal loop 24h VERIFIED",
+      "status": "COMPLETE",
+      "lane": "I",
+      "role": "self_heal",
+      "repository": "Noetfield-Systems/noetfeld-os",
+      "authority_class": "T1",
+      "acceptance_checks": [
+        "24h autonomous cycles + heartbeat daily + drift 0"
+      ],
+      "budget_usd": 0.25,
+      "value_class": "risk_reduction",
+      "depends_on": [],
+      "runway_id": null,
+      "recipe_id": null,
+      "recipe_version": null,
+      "content_hash": "3efc8510007929557253a2e5df349bb4f71e29f41814bf3b074b5d0cf921a884",
+      "op_key": "e87b2789369fab304938383fbe0e0802986ffd0c91746d1b7a18e76e513514a5",
+      "source_ref": {
+        "source_id": "noos_unified_upgrade_backlog",
+        "raw_id": "LOOP-VERIFY-self_heal",
+        "priority": "P0",
+        "owner": "machine"
+      }
+    },
+    {
+      "schema": "noos-unified-backlog-item-v1",
+      "plan_id": "noos_unified_upgrade_backlog",
+      "item_id": "LOOP-VERIFY-sourcea",
+      "source_revision": "1.0.0",
+      "title": "sourcea observe loop 24h VERIFIED",
+      "status": "COMPLETE",
+      "lane": "I",
+      "role": "incident_diagnose",
+      "repository": "Noetfield-Systems/noetfeld-os",
+      "authority_class": "T1",
+      "acceptance_checks": [
+        "observe receipt FRESH"
+      ],
+      "budget_usd": 0.25,
+      "value_class": "hygiene",
+      "depends_on": [],
+      "runway_id": null,
+      "recipe_id": null,
+      "recipe_version": null,
+      "content_hash": "1e5bfc59e2b756bb39cb076a723d304f9c6ce72ee7abc9c99174525899f5f63a",
+      "op_key": "85b5f089fdbedc322c59cc700ffb704d1a1bf44d61ad64709926e797af7bec39",
+      "source_ref": {
+        "source_id": "noos_unified_upgrade_backlog",
+        "raw_id": "LOOP-VERIFY-sourcea",
+        "priority": "P1",
+        "owner": "machine"
+      }
+    },
+    {
+      "schema": "noos-unified-backlog-item-v1",
+      "plan_id": "noos_unified_upgrade_backlog",
+      "item_id": "LOOP-VERIFY-surface",
+      "source_revision": "1.0.0",
+      "title": "surface loop 24h VERIFIED",
+      "status": "COMPLETE",
+      "lane": "I",
+      "role": "research",
+      "repository": "Noetfield-Systems/noetfeld-os",
+      "authority_class": "T1",
+      "acceptance_checks": [
+        "24h autonomous check_production_urls cycles"
+      ],
+      "budget_usd": 0.25,
+      "value_class": "risk_reduction",
+      "depends_on": [],
+      "runway_id": null,
+      "recipe_id": null,
+      "recipe_version": null,
+      "content_hash": "9cc00aac9ec9ff742185ed1295fbba6bb140fbb311c19a8c785e916bc77bef57",
+      "op_key": "77a78dd46709aecb8eae333a3ffda83f72a8a301baf03376cafc853ab967e99e",
+      "source_ref": {
+        "source_id": "noos_unified_upgrade_backlog",
+        "raw_id": "LOOP-VERIFY-surface",
+        "priority": "P0",
+        "owner": "machine"
+      }
+    },
+    {
+      "schema": "noos-unified-backlog-item-v1",
+      "plan_id": "noos_unified_upgrade_backlog",
+      "item_id": "MERGE-GOV-BRANCH",
+      "source_revision": "1.0.0",
+      "title": "Merge cursor/governed-autorun + A1/release to main",
+      "status": "COMPLETE",
+      "lane": "GOV",
+      "role": "research",
+      "repository": "Noetfield-Systems/noetfeld-os",
+      "authority_class": "T1",
+      "acceptance_checks": [
+        "main has v3 laws + determinism + PR #9 alignment"
+      ],
+      "budget_usd": 0.25,
+      "value_class": "risk_reduction",
+      "depends_on": [],
+      "runway_id": null,
+      "recipe_id": null,
+      "recipe_version": null,
+      "content_hash": "98af88c4a445814b48719e335372ccf9225b1676c7cb50388bc0dd9c93d01f9c",
+      "op_key": "452eee1e1c85c2186b63d7b9f04bfe5df02102fef4e8ff21a6210b2c0cd58071",
+      "source_ref": {
+        "source_id": "noos_unified_upgrade_backlog",
+        "raw_id": "MERGE-GOV-BRANCH",
+        "priority": "P0",
+        "owner": "machine"
+      }
+    },
+    {
+      "schema": "noos-unified-backlog-item-v1",
+      "plan_id": "noos_unified_upgrade_backlog",
+      "item_id": "NOOS-C-01",
+      "source_revision": "1.0.0",
+      "title": "First Trust Brief / AI Value OS briefing",
+      "status": "FOUNDER_BLOCKED",
+      "lane": "COM",
+      "role": "research",
+      "repository": "Noetfield-Systems/noetfeld-os",
+      "authority_class": "FOUNDER",
+      "acceptance_checks": [
+        "intake receipt + follow-up"
+      ],
+      "budget_usd": 0.25,
+      "value_class": "risk_reduction",
+      "depends_on": [],
+      "runway_id": null,
+      "recipe_id": null,
+      "recipe_version": null,
+      "content_hash": "2fa0445c3538376da351293cc55b1c05ceefe97197b6e150cbbb6ea15805100a",
+      "op_key": "d520b0ac1ea6d201b6634218877ccc7e57879a5cb3ae212138a099e460c10db6",
+      "source_ref": {
+        "source_id": "noos_unified_upgrade_backlog",
+        "raw_id": "NOOS-C-01",
+        "priority": "P0",
+        "owner": "founder"
+      }
+    },
+    {
+      "schema": "noos-unified-backlog-item-v1",
+      "plan_id": "noos_unified_upgrade_backlog",
+      "item_id": "PHASE-5",
+      "source_revision": "1.0.0",
+      "title": "Phase 5 Tenant & Production (UPG 0177+)",
+      "status": "BLOCKED_WITH_REASON",
+      "lane": "D",
+      "role": "research",
+      "repository": "Noetfield-Systems/noetfeld-os",
+      "authority_class": "T4",
+      "acceptance_checks": [
+        "phase bump in PRODUCT_TRUTH"
+      ],
+      "budget_usd": 0.25,
+      "value_class": "hygiene",
+      "depends_on": [
+        "LOOP-VERIFY-ALL",
+        "UPG-0203"
+      ],
+      "runway_id": null,
+      "recipe_id": null,
+      "recipe_version": null,
+      "content_hash": "f350f0cf01aa01fd104c1c2678dac94b5c350efd2eb4b61349d774417dfee5cd",
+      "op_key": "e2e82cd91159ee82f1bf4708d2a91b3eb86aabfecda3a9c82124bf426d85e168",
+      "source_ref": {
+        "source_id": "noos_unified_upgrade_backlog",
+        "raw_id": "PHASE-5",
+        "priority": "P3",
+        "owner": "machine"
+      }
+    },
+    {
+      "schema": "noos-unified-backlog-item-v1",
+      "plan_id": "noos_unified_upgrade_backlog",
+      "item_id": "SANDBOX-REGISTRY",
+      "source_revision": "1.0.0",
+      "title": "8-sandbox fleet registry (inbox, chain, surface, sourcea, improve, gel-api, www, cf)",
+      "status": "COMPLETE",
+      "lane": "I",
+      "role": "research",
+      "repository": "Noetfield-Systems/noetfeld-os",
+      "authority_class": "T3",
+      "acceptance_checks": [
+        "one row per sandbox in autorun-workflows"
+      ],
+      "budget_usd": 0.25,
+      "value_class": "hygiene",
+      "depends_on": [],
+      "runway_id": null,
+      "recipe_id": null,
+      "recipe_version": null,
+      "content_hash": "d9d8e3e486e36a9709ad93b7dc8a8164a722d618fabf8629176d95563150e0be",
+      "op_key": "2c4862f55cb206a9722900a9e82e4380057186c734c20f0e7ffadc727334a06a",
+      "source_ref": {
+        "source_id": "noos_unified_upgrade_backlog",
+        "raw_id": "SANDBOX-REGISTRY",
+        "priority": "P2",
+        "owner": "machine"
+      }
+    },
+    {
+      "schema": "noos-unified-backlog-item-v1",
+      "plan_id": "noos_unified_upgrade_backlog",
+      "item_id": "UPG-0001",
+      "source_revision": "1.0.0",
+      "title": "NW1 outreach send",
+      "status": "FOUNDER_BLOCKED",
+      "lane": "COM",
+      "role": "research",
+      "repository": "Noetfield-Systems/noetfeld-os",
+      "authority_class": "FOUNDER",
+      "acceptance_checks": [
+        "send receipt"
+      ],
+      "budget_usd": 0.25,
+      "value_class": "risk_reduction",
+      "depends_on": [],
+      "runway_id": null,
+      "recipe_id": null,
+      "recipe_version": null,
+      "content_hash": "2e2926997a412c8fd11bf24560ea473f4d4117df613ecbfb3575767c2a91705f",
+      "op_key": "fe55c29a9863e73b866b19a24d708fa1f006c77fb9089b36270d32015a68ad2b",
+      "source_ref": {
+        "source_id": "noos_unified_upgrade_backlog",
+        "raw_id": "UPG-0001",
+        "priority": "P0",
+        "owner": "founder"
+      }
+    },
+    {
+      "schema": "noos-unified-backlog-item-v1",
+      "plan_id": "noos_unified_upgrade_backlog",
+      "item_id": "UPG-0002",
+      "source_revision": "1.0.0",
+      "title": "NW1 follow-up send",
+      "status": "FOUNDER_BLOCKED",
+      "lane": "COM",
+      "role": "research",
+      "repository": "Noetfield-Systems/noetfeld-os",
+      "authority_class": "FOUNDER",
+      "acceptance_checks": [
+        "send receipt"
+      ],
+      "budget_usd": 0.25,
+      "value_class": "risk_reduction",
+      "depends_on": [],
+      "runway_id": null,
+      "recipe_id": null,
+      "recipe_version": null,
+      "content_hash": "90e0ac136d8eec682b7045b54ec7981739c2cad3522cc972cdfd616b56c0df6a",
+      "op_key": "55f7831ebd978f95cfc94e1f40993603b363e6aa8934c57a3bda1b0b65cdf635",
+      "source_ref": {
+        "source_id": "noos_unified_upgrade_backlog",
+        "raw_id": "UPG-0002",
+        "priority": "P0",
+        "owner": "founder"
+      }
+    },
+    {
+      "schema": "noos-unified-backlog-item-v1",
+      "plan_id": "noos_unified_upgrade_backlog",
+      "item_id": "UPG-0003",
+      "source_revision": "1.0.0",
+      "title": "SW1 outreach send",
+      "status": "FOUNDER_BLOCKED",
+      "lane": "COM",
+      "role": "research",
+      "repository": "Noetfield-Systems/noetfeld-os",
+      "authority_class": "FOUNDER",
+      "acceptance_checks": [
+        "send receipt"
+      ],
+      "budget_usd": 0.25,
+      "value_class": "hygiene",
+      "depends_on": [],
+      "runway_id": null,
+      "recipe_id": null,
+      "recipe_version": null,
+      "content_hash": "3bb23175cdcdcd67084dc1f9311fba1a267d338694e03740e82dd3df125b9d63",
+      "op_key": "2ecd9df57b40f10be5e04cdfa0e12bf2e1401ad2021dd7c33c09dd4179751e79",
+      "source_ref": {
+        "source_id": "noos_unified_upgrade_backlog",
+        "raw_id": "UPG-0003",
+        "priority": "P1",
+        "owner": "founder"
+      }
+    },
+    {
+      "schema": "noos-unified-backlog-item-v1",
+      "plan_id": "noos_unified_upgrade_backlog",
+      "item_id": "UPG-0004",
+      "source_revision": "1.0.0",
+      "title": "SW1 follow-up send",
+      "status": "FOUNDER_BLOCKED",
+      "lane": "COM",
+      "role": "research",
+      "repository": "Noetfield-Systems/noetfeld-os",
+      "authority_class": "FOUNDER",
+      "acceptance_checks": [
+        "send receipt"
+      ],
+      "budget_usd": 0.25,
+      "value_class": "hygiene",
+      "depends_on": [],
+      "runway_id": null,
+      "recipe_id": null,
+      "recipe_version": null,
+      "content_hash": "ff52d7f6c774e62c2127707a2d74d29b843abade33a275a32ad81799e324702a",
+      "op_key": "a15dbb29baaf1dc32486ff037fac5f28d05993e8fb3ac02bee123b5e95c2681e",
+      "source_ref": {
+        "source_id": "noos_unified_upgrade_backlog",
+        "raw_id": "UPG-0004",
+        "priority": "P1",
+        "owner": "founder"
+      }
+    },
+    {
+      "schema": "noos-unified-backlog-item-v1",
+      "plan_id": "noos_unified_upgrade_backlog",
+      "item_id": "UPG-0005",
+      "source_revision": "1.0.0",
+      "title": "Demo video record W1",
+      "status": "FOUNDER_BLOCKED",
+      "lane": "COM",
+      "role": "research",
+      "repository": "Noetfield-Systems/noetfeld-os",
+      "authority_class": "FOUNDER",
+      "acceptance_checks": [
+        "video URL in manifest"
+      ],
+      "budget_usd": 0.25,
+      "value_class": "hygiene",
+      "depends_on": [],
+      "runway_id": null,
+      "recipe_id": null,
+      "recipe_version": null,
+      "content_hash": "1bb6ac9769ac67865a15489939de9b46c04df8995d5f212a5c122f667e43ad4b",
+      "op_key": "39ebe351a1459a62e530457e7383dff25a0839283595b58f7964ab3abf039348",
+      "source_ref": {
+        "source_id": "noos_unified_upgrade_backlog",
+        "raw_id": "UPG-0005",
+        "priority": "P1",
+        "owner": "founder"
+      }
+    },
+    {
+      "schema": "noos-unified-backlog-item-v1",
+      "plan_id": "noos_unified_upgrade_backlog",
+      "item_id": "UPG-0010",
+      "source_revision": "1.0.0",
+      "title": "Founder verify only gate",
+      "status": "FOUNDER_BLOCKED",
+      "lane": "COM",
+      "role": "research",
+      "repository": "Noetfield-Systems/noetfeld-os",
+      "authority_class": "FOUNDER",
+      "acceptance_checks": [
+        "founder sign-off receipt"
+      ],
+      "budget_usd": 0.25,
+      "value_class": "hygiene",
+      "depends_on": [],
+      "runway_id": null,
+      "recipe_id": null,
+      "recipe_version": null,
+      "content_hash": "5cb6e27ca025e608d79d0ea56b2ae2a3ac4c6a66fc655a84622abb8a100fbea7",
+      "op_key": "e5137698db14c59b631adb4210e51b0d86132c1fff6f7a8c2b262f46f87c59b4",
+      "source_ref": {
+        "source_id": "noos_unified_upgrade_backlog",
+        "raw_id": "UPG-0010",
+        "priority": "P2",
+        "owner": "founder"
+      }
+    },
+    {
+      "schema": "noos-unified-backlog-item-v1",
+      "plan_id": "noos_unified_upgrade_backlog",
+      "item_id": "UPG-0029",
+      "source_revision": "1.0.0",
+      "title": "Screen capture demo session",
+      "status": "FOUNDER_BLOCKED",
+      "lane": "COM",
+      "role": "research",
+      "repository": "Noetfield-Systems/noetfeld-os",
+      "authority_class": "FOUNDER",
+      "acceptance_checks": [
+        "recording artifact"
+      ],
+      "budget_usd": 0.25,
+      "value_class": "hygiene",
+      "depends_on": [
+        "UPG-0005"
+      ],
+      "runway_id": null,
+      "recipe_id": null,
+      "recipe_version": null,
+      "content_hash": "299d77ef0b5fcec8514a2320deca887e8d13a3dbcb56e5892b0e2a6900dc72f3",
+      "op_key": "b83c6c55380580dfc2a52c56c476245f47a26a178802e1eb979ada68de4f1989",
+      "source_ref": {
+        "source_id": "noos_unified_upgrade_backlog",
+        "raw_id": "UPG-0029",
+        "priority": "P2",
+        "owner": "founder"
+      }
+    },
+    {
+      "schema": "noos-unified-backlog-item-v1",
+      "plan_id": "noos_unified_upgrade_backlog",
+      "item_id": "UPG-0030",
+      "source_revision": "1.0.0",
+      "title": "Publish demo video link",
+      "status": "FOUNDER_BLOCKED",
+      "lane": "COM",
+      "role": "research",
+      "repository": "Noetfield-Systems/noetfeld-os",
+      "authority_class": "FOUNDER",
+      "acceptance_checks": [
+        "live URL on gel page"
+      ],
+      "budget_usd": 0.25,
+      "value_class": "hygiene",
+      "depends_on": [
+        "UPG-0029"
+      ],
+      "runway_id": null,
+      "recipe_id": null,
+      "recipe_version": null,
+      "content_hash": "6af52b1159a71fc26084f344271c318c0df905f3ada6b2e829de7666e0ca3e02",
+      "op_key": "1a0021b149a94ed807d2f216dfec5da4b4b10630aedbcdfadb5d011633015d2b",
+      "source_ref": {
+        "source_id": "noos_unified_upgrade_backlog",
+        "raw_id": "UPG-0030",
+        "priority": "P2",
+        "owner": "founder"
+      }
+    },
+    {
+      "schema": "noos-unified-backlog-item-v1",
+      "plan_id": "noos_unified_upgrade_backlog",
+      "item_id": "UPG-0161",
+      "source_revision": "1.0.0",
+      "title": "TestPyPI trusted publish path",
+      "status": "COMPLETE",
+      "lane": "D",
+      "role": "research",
+      "repository": "Noetfield-Systems/noetfeld-os",
+      "authority_class": "T0",
+      "acceptance_checks": [
+        "publish-pypi workflow_dispatch test"
+      ],
+      "budget_usd": 0.25,
+      "value_class": "hygiene",
+      "depends_on": [],
+      "runway_id": null,
+      "recipe_id": null,
+      "recipe_version": null,
+      "content_hash": "4f9751db6c84cd750880ae0803dc2bdf31f840002b7fcdf6ca7b04e0ed8faa01",
+      "op_key": "f869a399879a17ffa4c950e3d4316b234b6d238e473b016401310ae0efae150c",
+      "source_ref": {
+        "source_id": "noos_unified_upgrade_backlog",
+        "raw_id": "UPG-0161",
+        "priority": "P1",
+        "owner": "founder+machine"
+      }
+    },
+    {
+      "schema": "noos-unified-backlog-item-v1",
+      "plan_id": "noos_unified_upgrade_backlog",
+      "item_id": "UPG-0162",
+      "source_revision": "1.0.0",
+      "title": "noetfield-gate v0.1.0 on PyPI",
+      "status": "COMPLETE",
+      "lane": "D",
+      "role": "research",
+      "repository": "Noetfield-Systems/noetfeld-os",
+      "authority_class": "T0",
+      "acceptance_checks": [
+        "pypi.org/pypi/noetfield-gate 200"
+      ],
+      "budget_usd": 0.25,
+      "value_class": "hygiene",
+      "depends_on": [],
+      "runway_id": null,
+      "recipe_id": null,
+      "recipe_version": null,
+      "content_hash": "b01f5dff90be9027686e02cb22647230d5f8e9089fab9a0e9f4fa4a5ca61d7fa",
+      "op_key": "bd39e817b3a744d6cf380c786219d888830b3f7c631b7b35e4e42b08e3f563b7",
+      "source_ref": {
+        "source_id": "noos_unified_upgrade_backlog",
+        "raw_id": "UPG-0162",
+        "priority": "P1",
+        "owner": "founder"
+      }
+    },
+    {
+      "schema": "noos-unified-backlog-item-v1",
+      "plan_id": "noos_unified_upgrade_backlog",
+      "item_id": "UPG-0163",
+      "source_revision": "1.0.0",
+      "title": "Tag release workflow sdist+wheel+PyPI",
+      "status": "COMPLETE",
+      "lane": "D",
+      "role": "research",
+      "repository": "Noetfield-Systems/noetfeld-os",
+      "authority_class": "T0",
+      "acceptance_checks": [
+        "release-noetfield-gate.yml on main"
+      ],
+      "budget_usd": 0.25,
+      "value_class": "hygiene",
+      "depends_on": [],
+      "runway_id": null,
+      "recipe_id": null,
+      "recipe_version": null,
+      "content_hash": "319ef9ab7916bc2fafd3924694946c0deb45bd89c8cd39d7d18c73436627785e",
+      "op_key": "c7657db4318dbfe3b50b1230a881fb0f63b7e6b020c0fe7556bac807ed591822",
+      "source_ref": {
+        "source_id": "noos_unified_upgrade_backlog",
+        "raw_id": "UPG-0163",
+        "priority": "P1",
+        "owner": "machine"
+      }
+    },
+    {
+      "schema": "noos-unified-backlog-item-v1",
+      "plan_id": "noos_unified_upgrade_backlog",
+      "item_id": "UPG-0164",
+      "source_revision": "1.0.0",
+      "title": "3-line PyPI README pointing to full docs",
+      "status": "COMPLETE",
+      "lane": "D",
+      "role": "research",
+      "repository": "Noetfield-Systems/noetfeld-os",
+      "authority_class": "T2",
+      "acceptance_checks": [
+        "pypi project page links noetfield.com/gel"
+      ],
+      "budget_usd": 0.25,
+      "value_class": "hygiene",
+      "depends_on": [],
+      "runway_id": null,
+      "recipe_id": null,
+      "recipe_version": null,
+      "content_hash": "0e3ed9e643250df385610c6686c68d9cba310e56f9bf542fc6fb8cc92b055194",
+      "op_key": "f8eb3b76e29c118cbc16681537ecc7e5efae549fc7138f761b1deca402b82d96",
+      "source_ref": {
+        "source_id": "noos_unified_upgrade_backlog",
+        "raw_id": "UPG-0164",
+        "priority": "P2",
+        "owner": "machine"
+      }
+    },
+    {
+      "schema": "noos-unified-backlog-item-v1",
+      "plan_id": "noos_unified_upgrade_backlog",
+      "item_id": "UPG-0167",
+      "source_revision": "1.0.0",
+      "title": "npm @noetfield/gate publish",
+      "status": "BLOCKED_WITH_REASON",
+      "lane": "D",
+      "role": "research",
+      "repository": "Noetfield-Systems/noetfeld-os",
+      "authority_class": "T4",
+      "acceptance_checks": [
+        "npm registry 200"
+      ],
+      "budget_usd": 0.25,
+      "value_class": "hygiene",
+      "depends_on": [],
+      "runway_id": null,
+      "recipe_id": null,
+      "recipe_version": null,
+      "content_hash": "34eb18018d33405bc181945f7488a5ed115a31c7c0f55567596c0e1e4e824dc8",
+      "op_key": "2d62c4edc7a97bf6119ce171445d4961365d4fa327a3cee697a709ef1d73fdc0",
+      "source_ref": {
+        "source_id": "noos_unified_upgrade_backlog",
+        "raw_id": "UPG-0167",
+        "priority": "P3",
+        "owner": "founder"
+      }
+    },
+    {
+      "schema": "noos-unified-backlog-item-v1",
+      "plan_id": "noos_unified_upgrade_backlog",
+      "item_id": "UPG-0168",
+      "source_revision": "1.0.0",
+      "title": "GitHub Action example \u2014 noetfield gate before agent job",
+      "status": "COMPLETE",
+      "lane": "D",
+      "role": "research",
+      "repository": "Noetfield-Systems/noetfeld-os",
+      "authority_class": "T2",
+      "acceptance_checks": [
+        "docs example workflow in repo"
+      ],
+      "budget_usd": 0.25,
+      "value_class": "hygiene",
+      "depends_on": [],
+      "runway_id": null,
+      "recipe_id": null,
+      "recipe_version": null,
+      "content_hash": "c239671ac864a42a394dfa5ca5349e241fa8593a18c854d7e54a36b98a65d1f9",
+      "op_key": "5669d392b517a7b4698637f9857776e0dba85f857e1e4a624b8cb1ff6172f697",
+      "source_ref": {
+        "source_id": "noos_unified_upgrade_backlog",
+        "raw_id": "UPG-0168",
+        "priority": "P2",
+        "owner": "machine"
+      }
+    },
+    {
+      "schema": "noos-unified-backlog-item-v1",
+      "plan_id": "noos_unified_upgrade_backlog",
+      "item_id": "UPG-0169",
+      "source_revision": "1.0.0",
+      "title": "Pre-commit hook example in docs",
+      "status": "COMPLETE",
+      "lane": "D",
+      "role": "research",
+      "repository": "Noetfield-Systems/noetfeld-os",
+      "authority_class": "T2",
+      "acceptance_checks": [
+        "docs snippet + optional .pre-commit-config stub"
+      ],
+      "budget_usd": 0.25,
+      "value_class": "hygiene",
+      "depends_on": [],
+      "runway_id": null,
+      "recipe_id": null,
+      "recipe_version": null,
+      "content_hash": "e11a1598775e7f4ca27735492098882196a6dc0d056fe62fc52b19d0cdcfc5d9",
+      "op_key": "8325adfc423b001cbf4496cce6365bebc74f9a15743c8182131c2855d3efd19c",
+      "source_ref": {
+        "source_id": "noos_unified_upgrade_backlog",
+        "raw_id": "UPG-0169",
+        "priority": "P2",
+        "owner": "machine"
+      }
+    },
+    {
+      "schema": "noos-unified-backlog-item-v1",
+      "plan_id": "noos_unified_upgrade_backlog",
+      "item_id": "UPG-0170",
+      "source_revision": "1.0.0",
+      "title": "Homebrew tap stub document",
+      "status": "BLOCKED_WITH_REASON",
+      "lane": "D",
+      "role": "research",
+      "repository": "Noetfield-Systems/noetfeld-os",
+      "authority_class": "T4",
+      "acceptance_checks": [
+        "docs stub only"
+      ],
+      "budget_usd": 0.25,
+      "value_class": "hygiene",
+      "depends_on": [],
+      "runway_id": null,
+      "recipe_id": null,
+      "recipe_version": null,
+      "content_hash": "9de9dfcb2a7f9383d96570255fc5dd7032f724f7735a73a753d84f81282cbfa9",
+      "op_key": "fafdc324f2d5c4a45b752a95f0ec544189794d67989edbc2f2a6bbb278dc1d94",
+      "source_ref": {
+        "source_id": "noos_unified_upgrade_backlog",
+        "raw_id": "UPG-0170",
+        "priority": "P3",
+        "owner": "machine"
+      }
+    },
+    {
+      "schema": "noos-unified-backlog-item-v1",
+      "plan_id": "noos_unified_upgrade_backlog",
+      "item_id": "UPG-0174",
+      "source_revision": "1.0.0",
+      "title": "Production secrets/API-key vault policy",
+      "status": "BLOCKED_WITH_REASON",
+      "lane": "D",
+      "role": "research",
+      "repository": "Noetfield-Systems/noetfeld-os",
+      "authority_class": "T4",
+      "acceptance_checks": [
+        "vault policy doc locked"
+      ],
+      "budget_usd": 0.25,
+      "value_class": "hygiene",
+      "depends_on": [],
+      "runway_id": null,
+      "recipe_id": null,
+      "recipe_version": null,
+      "content_hash": "bdc026a609a0f5aa180278ec5e21057e115a96d8d753411794fc9166fc4aff92",
+      "op_key": "1ab835141b616ab1df24be24b510888493be30383a50c24b25d9702c4ae58ca2",
+      "source_ref": {
+        "source_id": "noos_unified_upgrade_backlog",
+        "raw_id": "UPG-0174",
+        "priority": "P3",
+        "owner": "founder"
+      }
+    },
+    {
+      "schema": "noos-unified-backlog-item-v1",
+      "plan_id": "noos_unified_upgrade_backlog",
+      "item_id": "UPG-0175",
+      "source_revision": "1.0.0",
+      "title": "Production policy pack semver pinning",
+      "status": "BLOCKED_WITH_REASON",
+      "lane": "D",
+      "role": "research",
+      "repository": "Noetfield-Systems/noetfeld-os",
+      "authority_class": "T4",
+      "acceptance_checks": [
+        "policy pack version locked"
+      ],
+      "budget_usd": 0.25,
+      "value_class": "hygiene",
+      "depends_on": [],
+      "runway_id": null,
+      "recipe_id": null,
+      "recipe_version": null,
+      "content_hash": "021701a4da60ba629e34a4ad868acd3807cb782d26b55682773d32c61b77ee52",
+      "op_key": "0af1da83fc223338d275c10695474a25a65a4c220acb83fc828ca900d532742a",
+      "source_ref": {
+        "source_id": "noos_unified_upgrade_backlog",
+        "raw_id": "UPG-0175",
+        "priority": "P3",
+        "owner": "founder"
+      }
+    },
+    {
+      "schema": "noos-unified-backlog-item-v1",
+      "plan_id": "noos_unified_upgrade_backlog",
+      "item_id": "UPG-0201",
+      "source_revision": "1.0.0",
+      "title": "fly.toml + Dockerfile inbox runner daemon",
+      "status": "COMPLETE",
+      "lane": "E",
+      "role": "research",
+      "repository": "Noetfield-Systems/noetfeld-os",
+      "authority_class": "T2",
+      "acceptance_checks": [
+        "Fly app /health 200"
+      ],
+      "budget_usd": 0.25,
+      "value_class": "hygiene",
+      "depends_on": [
+        "LOOP-VERIFY-inbox"
+      ],
+      "runway_id": null,
+      "recipe_id": null,
+      "recipe_version": null,
+      "content_hash": "db5196ddecceecfaa76747c3718a181f3d73b5470b099a98f2cfaa8054da99b3",
+      "op_key": "29ee618e58380f06dbc23992f459e537d28a057afb714062d3271bbe23408c9d",
+      "source_ref": {
+        "source_id": "noos_unified_upgrade_backlog",
+        "raw_id": "UPG-0201",
+        "priority": "P1",
+        "owner": "machine"
+      }
+    },
+    {
+      "schema": "noos-unified-backlog-item-v1",
+      "plan_id": "noos_unified_upgrade_backlog",
+      "item_id": "UPG-0202",
+      "source_revision": "1.0.0",
+      "title": "Health /ready endpoints on always-on runners",
+      "status": "COMPLETE",
+      "lane": "E",
+      "role": "self_heal",
+      "repository": "Noetfield-Systems/noetfeld-os",
+      "authority_class": "T2",
+      "acceptance_checks": [
+        "external probe L4 PASS"
+      ],
+      "budget_usd": 0.25,
+      "value_class": "hygiene",
+      "depends_on": [],
+      "runway_id": null,
+      "recipe_id": null,
+      "recipe_version": null,
+      "content_hash": "cdd03049b536dd17b898dc9dcde690d6444c994d9e8ddeca27fa63f536f26a47",
+      "op_key": "e7c81b337a5e8d8a0051fca2b3858b6ec4748fb1fadae845132808ddf1af2477",
+      "source_ref": {
+        "source_id": "noos_unified_upgrade_backlog",
+        "raw_id": "UPG-0202",
+        "priority": "P1",
+        "owner": "machine"
+      }
+    },
+    {
+      "schema": "noos-unified-backlog-item-v1",
+      "plan_id": "noos_unified_upgrade_backlog",
+      "item_id": "UPG-0203",
+      "source_revision": "1.0.0",
+      "title": "noetfield deploy --scope unified CLI",
+      "status": "COMPLETE",
+      "lane": "F",
+      "role": "research",
+      "repository": "Noetfield-Systems/noetfeld-os",
+      "authority_class": "T2",
+      "acceptance_checks": [
+        "one receipt per surface deploy"
+      ],
+      "budget_usd": 0.25,
+      "value_class": "hygiene",
+      "depends_on": [
+        "UPG-0202"
+      ],
+      "runway_id": null,
+      "recipe_id": null,
+      "recipe_version": null,
+      "content_hash": "61a1cf88a8c7e92b5e2c57c12474aa7e33c8995078ca9fbb2210db026abb6e82",
+      "op_key": "ff7bce1d22918cfe5dc5f44695c4e4dff89ef7619b5ef68c1056d321a7f5f8f5",
+      "source_ref": {
+        "source_id": "noos_unified_upgrade_backlog",
+        "raw_id": "UPG-0203",
+        "priority": "P1",
+        "owner": "machine"
+      }
+    },
+    {
+      "schema": "noos-unified-backlog-item-v1",
+      "plan_id": "noos_unified_upgrade_backlog",
+      "item_id": "UPG-0204",
+      "source_revision": "1.0.0",
+      "title": "Drift auto-deploy Kaizen (L12\u2192machine_safe)",
+      "status": "COMPLETE",
+      "lane": "F",
+      "role": "research",
+      "repository": "Noetfield-Systems/noetfeld-os",
+      "authority_class": "T2",
+      "acceptance_checks": [
+        "drift receipt \u2192 auto rollback on regression"
+      ],
+      "budget_usd": 0.25,
+      "value_class": "hygiene",
+      "depends_on": [
+        "UPG-0203"
+      ],
+      "runway_id": null,
+      "recipe_id": null,
+      "recipe_version": null,
+      "content_hash": "3abcc547df09247d0373c47762939105aa4c3e701c666c283bdd9dc34c08b40d",
+      "op_key": "a1ae6edf590fc49559d8563450b45cce5862d8392bb6a51f4b8aacc6280ca897",
+      "source_ref": {
+        "source_id": "noos_unified_upgrade_backlog",
+        "raw_id": "UPG-0204",
+        "priority": "P1",
+        "owner": "machine"
+      }
+    },
+    {
+      "schema": "noos-unified-backlog-item-v1",
+      "plan_id": "noos_unified_upgrade_backlog",
+      "item_id": "UPG-0205",
+      "source_revision": "1.0.0",
+      "title": "Queue-depth scaler inbox sandbox",
+      "status": "COMPLETE",
+      "lane": "H",
+      "role": "research",
+      "repository": "Noetfield-Systems/noetfeld-os",
+      "authority_class": "T2",
+      "acceptance_checks": [
+        "pending>10 \u2192 scale 1\u21922"
+      ],
+      "budget_usd": 0.25,
+      "value_class": "hygiene",
+      "depends_on": [
+        "UPG-0201"
+      ],
+      "runway_id": null,
+      "recipe_id": null,
+      "recipe_version": null,
+      "content_hash": "2e4fa1a81101a4ba7c4fbfad6b60f2df2fe118031b8e9e3bef17c90e00a1a951",
+      "op_key": "3c017afb4ef5e282dd3c01ceb7b4d93cb7749e38f26a4f878bcdfb1d6bc16f91",
+      "source_ref": {
+        "source_id": "noos_unified_upgrade_backlog",
+        "raw_id": "UPG-0205",
+        "priority": "P1",
+        "owner": "machine"
+      }
+    },
+    {
+      "schema": "noos-unified-backlog-item-v1",
+      "plan_id": "noos_unified_upgrade_backlog",
+      "item_id": "UPG-0206",
+      "source_revision": "1.0.0",
+      "title": "Migrate self-heal loop to Fly always-on",
+      "status": "COMPLETE",
+      "lane": "E",
+      "role": "self_heal",
+      "repository": "Noetfield-Systems/noetfeld-os",
+      "authority_class": "T2",
+      "acceptance_checks": [
+        "sub-minute reenqueue reaction"
+      ],
+      "budget_usd": 0.25,
+      "value_class": "hygiene",
+      "depends_on": [
+        "UPG-0201"
+      ],
+      "runway_id": null,
+      "recipe_id": null,
+      "recipe_version": null,
+      "content_hash": "99d528fbce3f2f20bdfda95eb98e21bfe950513026a546344c1bfbcf4426aeca",
+      "op_key": "1b6578aadb2b5909cc30fd6bb6b69e302f05d7f8c6f97133fc9bf0222a306ace",
+      "source_ref": {
+        "source_id": "noos_unified_upgrade_backlog",
+        "raw_id": "UPG-0206",
+        "priority": "P1",
+        "owner": "machine"
+      }
+    },
+    {
+      "schema": "noos-unified-backlog-item-v1",
+      "plan_id": "noos_unified_upgrade_backlog",
+      "item_id": "UPG-0207",
+      "source_revision": "1.0.0",
+      "title": "Deprecate factory autorun monolith",
+      "status": "COMPLETE",
+      "lane": "A",
+      "role": "research",
+      "repository": "Noetfield-Systems/noetfeld-os",
+      "authority_class": "T2",
+      "acceptance_checks": [
+        "loop fleet covers factory scope"
+      ],
+      "budget_usd": 0.25,
+      "value_class": "hygiene",
+      "depends_on": [
+        "UPG-0206",
+        "LOOP-VERIFY-ALL"
+      ],
+      "runway_id": null,
+      "recipe_id": null,
+      "recipe_version": null,
+      "content_hash": "922e7305b163b41feedb81e2c89d5f57c50f79483d62f5f8b54e6c8c4087f20f",
+      "op_key": "b8afee3b82e9a9a7ae2f8942ee37401250938bbc2b6f46863f5fe200c403bff3",
+      "source_ref": {
+        "source_id": "noos_unified_upgrade_backlog",
+        "raw_id": "UPG-0207",
+        "priority": "P2",
+        "owner": "machine"
+      }
+    },
+    {
+      "schema": "noos-unified-backlog-item-v1",
+      "plan_id": "noos_unified_upgrade_backlog",
+      "item_id": "UPG-0208",
+      "source_revision": "1.0.0",
+      "title": "Private mesh gel-api internal URL for loops",
+      "status": "COMPLETE",
+      "lane": "G",
+      "role": "research",
+      "repository": "Noetfield-Systems/noetfeld-os",
+      "authority_class": "T3",
+      "acceptance_checks": [
+        "loops never hit public api for health"
+      ],
+      "budget_usd": 0.25,
+      "value_class": "hygiene",
+      "depends_on": [
+        "UPG-0203"
+      ],
+      "runway_id": null,
+      "recipe_id": null,
+      "recipe_version": null,
+      "content_hash": "b98a1662e22e121e8c226ff003376eab20a49fd4a9097ed7da17316f3473c6ac",
+      "op_key": "43c53a1f1a29668cfcad333b9f4a36cfac935b3260e10115b856eccef0f0b1a9",
+      "source_ref": {
+        "source_id": "noos_unified_upgrade_backlog",
+        "raw_id": "UPG-0208",
+        "priority": "P2",
+        "owner": "machine"
+      }
+    },
+    {
+      "schema": "noos-unified-backlog-item-v1",
+      "plan_id": "noos_unified_upgrade_backlog",
+      "item_id": "UPG-0209",
+      "source_revision": "1.0.0",
+      "title": "Multi-region canary yyz+ord gel-api",
+      "status": "READY",
+      "lane": "G",
+      "role": "research",
+      "repository": "Noetfield-Systems/noetfeld-os",
+      "authority_class": "T3",
+      "acceptance_checks": [
+        "external verify both regions"
+      ],
+      "budget_usd": 0.25,
+      "value_class": "hygiene",
+      "depends_on": [
+        "UPG-0204"
+      ],
+      "runway_id": null,
+      "recipe_id": null,
+      "recipe_version": null,
+      "content_hash": "4c93f1196a2f2140d385472c5a414bc91642885420742e312abd346fd42220c6",
+      "op_key": "252a7bdd5c17cc51b251cf43add91dd957df493ac051a46c65568e93a94bac10",
+      "source_ref": {
+        "source_id": "noos_unified_upgrade_backlog",
+        "raw_id": "UPG-0209",
+        "priority": "P2",
+        "owner": "machine"
+      }
+    },
+    {
+      "schema": "noos-unified-backlog-item-v1",
+      "plan_id": "noos_unified_upgrade_backlog",
+      "item_id": "UPG-0210",
+      "source_revision": "1.0.0",
+      "title": "Per-sandbox 24h SLA registry in autorun-status",
+      "status": "COMPLETE",
+      "lane": "I",
+      "role": "research",
+      "repository": "Noetfield-Systems/noetfeld-os",
+      "authority_class": "T3",
+      "acceptance_checks": [
+        "dashboard shows DECLARED|VERIFIED per sandbox"
+      ],
+      "budget_usd": 0.25,
+      "value_class": "hygiene",
+      "depends_on": [
+        "LOOP-VERIFY-ALL"
+      ],
+      "runway_id": null,
+      "recipe_id": null,
+      "recipe_version": null,
+      "content_hash": "026f4db8a2ff7e9a57aed7d11d91e7bf3f2a4f60072f193ae184580dacac12f1",
+      "op_key": "5191522888373d3757be6044e91d348a71440922f5a153ff41448e947b06eb0c",
+      "source_ref": {
+        "source_id": "noos_unified_upgrade_backlog",
+        "raw_id": "UPG-0210",
+        "priority": "P2",
+        "owner": "machine"
+      }
+    },
+    {
+      "schema": "noos-unified-backlog-item-v1",
+      "plan_id": "noos_unified_upgrade_backlog",
+      "item_id": "UPG-0211",
+      "source_revision": "1.0.0",
+      "title": "noos-improve sandbox Kaizen runner (1/day)",
+      "status": "COMPLETE",
+      "lane": "I",
+      "role": "research",
+      "repository": "Noetfield-Systems/noetfeld-os",
+      "authority_class": "T3",
+      "acceptance_checks": [
+        "highest-ROI machine_safe item applied per day"
+      ],
+      "budget_usd": 0.25,
+      "value_class": "hygiene",
+      "depends_on": [
+        "GOV-L7-L12"
+      ],
+      "runway_id": null,
+      "recipe_id": null,
+      "recipe_version": null,
+      "content_hash": "d6cbf600e0807a5c3746aab2e270010f2e0d0c512c0004f3101fd49f1e4362a8",
+      "op_key": "b9334533dcb053443385f13da1efb038daf7bba712bc799daf5045162c03e598",
+      "source_ref": {
+        "source_id": "noos_unified_upgrade_backlog",
+        "raw_id": "UPG-0211",
+        "priority": "P2",
+        "owner": "machine"
+      }
+    },
+    {
+      "schema": "noos-unified-backlog-item-v1",
+      "plan_id": "noos_unified_upgrade_backlog",
+      "item_id": "UPG-0212",
+      "source_revision": "1.0.0",
+      "title": "data/noos-runtime-scaling-v1.json registry",
+      "status": "COMPLETE",
+      "lane": "H",
+      "role": "research",
+      "repository": "Noetfield-Systems/noetfeld-os",
+      "authority_class": "T3",
+      "acceptance_checks": [
+        "THROTTLED_ROI rules per loop"
+      ],
+      "budget_usd": 0.25,
+      "value_class": "hygiene",
+      "depends_on": [
+        "UPG-0205"
+      ],
+      "runway_id": null,
+      "recipe_id": null,
+      "recipe_version": null,
+      "content_hash": "dd804edea84e1b0f83d58b5bd16d637af47c6292478c03a059fca0b4f0929abe",
+      "op_key": "6c46078c05b6f6898eb4545b3b3b9ab7b72c8494d4f44d0f09213d41187ebf3a",
+      "source_ref": {
+        "source_id": "noos_unified_upgrade_backlog",
+        "raw_id": "UPG-0212",
+        "priority": "P2",
+        "owner": "machine"
+      }
+    },
+    {
+      "schema": "noos-unified-backlog-item-v1",
+      "plan_id": "noos_unified_upgrade_backlog",
+      "item_id": "UPG-0213",
+      "source_revision": "1.0.0",
+      "title": "Migrate gel-api Railway \u2192 Fly (optional)",
+      "status": "BLOCKED_WITH_REASON",
+      "lane": "E",
+      "role": "research",
+      "repository": "Noetfield-Systems/noetfeld-os",
+      "authority_class": "T4",
+      "acceptance_checks": [
+        "api.noetfield.com L4 verify post-migrate"
+      ],
+      "budget_usd": 0.25,
+      "value_class": "hygiene",
+      "depends_on": [
+        "UPG-0203",
+        "UPG-0204"
+      ],
+      "runway_id": null,
+      "recipe_id": null,
+      "recipe_version": null,
+      "content_hash": "adf33f8e0a1ad4d785688dd9e8b6c082fbbca3182e47723f35b6d7262fd0bc23",
+      "op_key": "a294617c6b408fc308c1a739fdad7386434edb3ffc69ab820b88f38803487624",
+      "source_ref": {
+        "source_id": "noos_unified_upgrade_backlog",
+        "raw_id": "UPG-0213",
+        "priority": "P3",
+        "owner": "machine"
+      }
+    },
+    {
+      "schema": "noos-unified-backlog-item-v1",
+      "plan_id": "noos_unified_upgrade_backlog",
+      "item_id": "UPG-0214",
+      "source_revision": "1.0.0",
+      "title": "Determinism CI gate (D5 replay, D1 idempotency, D2 CAS, illegal transitions)",
+      "status": "COMPLETE",
+      "lane": "GOV",
+      "role": "research",
+      "repository": "Noetfield-Systems/noetfeld-os",
+      "authority_class": "T3",
+      "acceptance_checks": [
+        "gel-ci determinism test job green"
+      ],
+      "budget_usd": 0.25,
+      "value_class": "hygiene",
+      "depends_on": [
+        "GOV-L7-L12"
+      ],
+      "runway_id": null,
+      "recipe_id": null,
+      "recipe_version": null,
+      "content_hash": "fa4ea23ce3af24df78056e04d738b3c1f3bfd8bfd1529e0622baf570b332bcb1",
+      "op_key": "5d1ab0257eaefcaa07fa2adb858db92469038db68a5a0024a24b84e5b9af49e5",
+      "source_ref": {
+        "source_id": "noos_unified_upgrade_backlog",
+        "raw_id": "UPG-0214",
+        "priority": "P2",
+        "owner": "machine"
+      }
+    },
+    {
+      "schema": "noos-unified-backlog-item-v1",
+      "plan_id": "noos_unified_upgrade_backlog",
+      "item_id": "UPG-NF-PUB-01",
+      "source_revision": "1.0.0",
+      "title": "External public-site audit sprint (route inventory + claim-evidence matrix)",
+      "status": "COMPLETE",
+      "lane": "COM",
+      "role": "research",
+      "repository": "Noetfield-Systems/noetfeld-os",
+      "authority_class": "T2",
+      "acceptance_checks": [
+        "audit report + P0 fix list"
+      ],
+      "budget_usd": 0.25,
+      "value_class": "risk_reduction",
+      "depends_on": [],
+      "runway_id": null,
+      "recipe_id": null,
+      "recipe_version": null,
+      "content_hash": "35ef3cfa311353ad8acdae5ec33bdefc888c39ab4dc84a26140370fde87a07a2",
+      "op_key": "1ea3cf929c2606d9d6ba5ff863517bc3745ee0ccc60903f30ca820a5337128f6",
+      "source_ref": {
+        "source_id": "noos_unified_upgrade_backlog",
+        "raw_id": "UPG-NF-PUB-01",
+        "priority": "P0",
+        "owner": "machine"
+      }
+    },
+    {
+      "schema": "noos-unified-backlog-item-v1",
+      "plan_id": "noos_unified_upgrade_backlog",
+      "item_id": "UPG-NF-PUB-02",
+      "source_revision": "1.0.0",
+      "title": "P0 public-risk fixes from site audit",
+      "status": "BLOCKED_WITH_REASON",
+      "lane": "COM",
+      "role": "research",
+      "repository": "Noetfield-Systems/noetfeld-os",
+      "authority_class": "T2",
+      "acceptance_checks": [
+        "verify-static-www PASS + no unsupported claims"
+      ],
+      "budget_usd": 0.25,
+      "value_class": "risk_reduction",
+      "depends_on": [],
+      "runway_id": null,
+      "recipe_id": null,
+      "recipe_version": null,
+      "content_hash": "05651a746414a4c412a400ddf37368f7f1bf30035ee79c277d9250cd9a6be984",
+      "op_key": "ca3aa98192cf15817f45aa9264e8bd1a63b9a535ca4bf120a0800d0803b72d7e",
+      "source_ref": {
+        "source_id": "noos_unified_upgrade_backlog",
+        "raw_id": "UPG-NF-PUB-02",
+        "priority": "P0",
+        "owner": "machine"
+      }
+    },
+    {
+      "schema": "noos-unified-backlog-item-v1",
+      "plan_id": "runway_build_backlog_seed",
+      "item_id": "commercial-decision-brief",
+      "source_revision": "1.0.0",
+      "title": "Decision Brief commercial candidate journey",
+      "status": "READY",
+      "lane": "runway",
+      "role": "research",
+      "repository": "Noetfield-Systems/noetfeld-os",
+      "authority_class": "T2",
+      "acceptance_checks": [
+        "job COMPLETE",
+        "artifact downloadable"
+      ],
+      "budget_usd": 0.25,
+      "value_class": "revenue_path",
+      "depends_on": [
+        "spine-artifact-qa"
+      ],
+      "runway_id": "research",
+      "recipe_id": "vendor-decision-brief",
+      "recipe_version": "0.1.0",
+      "content_hash": "543174f8fef6df4148aceccc0aef885598ad332c365fb57e6dc82d3cc066d995",
+      "op_key": "fd2b44949d0775313f9dea6135b56fe834ae34431f0863a378392f0dcff7b970",
+      "source_ref": {
+        "source_id": "runway_build_backlog_seed",
+        "raw_id": "commercial-decision-brief",
+        "priority": null,
+        "owner": null
+      }
+    },
+    {
+      "schema": "noos-unified-backlog-item-v1",
+      "plan_id": "runway_build_backlog_seed",
+      "item_id": "commercial-software-repair-sandbox",
+      "source_revision": "1.0.0",
+      "title": "Software Repair sandbox fixture journey",
+      "status": "READY",
+      "lane": "runway",
+      "role": "self_heal",
+      "repository": "Noetfield-Systems/noetfeld-os",
+      "authority_class": "T1",
+      "acceptance_checks": [
+        "sandbox repair COMPLETE",
+        "independent verify PASS"
+      ],
+      "budget_usd": 0.25,
+      "value_class": "risk_reduction",
+      "depends_on": [],
+      "runway_id": "software-repair",
+      "recipe_id": "sandbox-fixture-repair",
+      "recipe_version": "0.1.0",
+      "content_hash": "b8dfadb0ad3c638937509247692aed6f8440f3b800ebd1e1809200d744c64bc2",
+      "op_key": "c36dc510c7a6d368f70f5937df1d0d012ab82eb0b8a98a8ffe0d3f22500d976d",
+      "source_ref": {
+        "source_id": "runway_build_backlog_seed",
+        "raw_id": "commercial-software-repair-sandbox",
+        "priority": null,
+        "owner": null
+      }
+    },
+    {
+      "schema": "noos-unified-backlog-item-v1",
+      "plan_id": "runway_build_backlog_seed",
+      "item_id": "spine-artifact-qa",
+      "source_revision": "1.0.0",
+      "title": "Shared Artifact QA spine",
+      "status": "FOUNDER_BLOCKED",
+      "lane": "runway",
+      "role": "specialist",
+      "repository": "Noetfield-Systems/noetfeld-os",
+      "authority_class": "FOUNDER",
+      "acceptance_checks": [
+        "citation/formula/requirement gates green"
+      ],
+      "budget_usd": 0.25,
+      "value_class": "proof_asset",
+      "depends_on": [
+        "spine-intake-normalize"
+      ],
+      "runway_id": null,
+      "recipe_id": null,
+      "recipe_version": null,
+      "content_hash": "c1f5d0abd605f245a7ecca67fba093d1e71745050e1fee6bee4bbf5235ab1e53",
+      "op_key": "634de3af014013572d72b9db4d07afbbd4711ac9a88d7cba34ac8167682644c6",
+      "source_ref": {
+        "source_id": "runway_build_backlog_seed",
+        "raw_id": "spine-artifact-qa",
+        "priority": null,
+        "owner": null
+      }
+    },
+    {
+      "schema": "noos-unified-backlog-item-v1",
+      "plan_id": "runway_build_backlog_seed",
+      "item_id": "spine-intake-normalize",
+      "source_revision": "1.0.0",
+      "title": "Shared intake + file upload + normalization + source fingerprinting",
+      "status": "FOUNDER_BLOCKED",
+      "lane": "runway",
+      "role": "orchestrator",
+      "repository": "Noetfield-Systems/noetfeld-os",
+      "authority_class": "FOUNDER",
+      "acceptance_checks": [
+        "intake schema verified",
+        "source fingerprint stable"
+      ],
+      "budget_usd": 0.25,
+      "value_class": "revenue_path",
+      "depends_on": [],
+      "runway_id": null,
+      "recipe_id": null,
+      "recipe_version": null,
+      "content_hash": "c99fbfac74109f9cbe8badfa8ed064cfd6cc0115328e05600b74d006762f8039",
+      "op_key": "8a373f9e10be95a9c2a09be1269fcd38ac53de6b19a52178737f4bacbdcb5e79",
+      "source_ref": {
+        "source_id": "runway_build_backlog_seed",
+        "raw_id": "spine-intake-normalize",
+        "priority": null,
+        "owner": null
+      }
+    },
+    {
+      "schema": "noos-unified-backlog-item-v1",
+      "plan_id": "runway_build_backlog_seed",
+      "item_id": "stripe-entitlement-gate",
+      "source_revision": "1.0.0",
+      "title": "Stripe entitlement + payment gate",
+      "status": "FOUNDER_BLOCKED",
+      "lane": "runway",
+      "role": "orchestrator",
+      "repository": "Noetfield-Systems/noetfeld-os",
+      "authority_class": "FOUNDER",
+      "acceptance_checks": [
+        "entitlement active before intake"
+      ],
+      "budget_usd": 0.25,
+      "value_class": "revenue_path",
+      "depends_on": [
+        "commercial-decision-brief"
+      ],
+      "runway_id": null,
+      "recipe_id": null,
+      "recipe_version": null,
+      "content_hash": "28b609ea6c48c1e5c79bf3715f25ec313c5c1cec8627be50d67e200aae338aad",
+      "op_key": "17601dc48eca3b9a7da913d5256ccd719c52061a6752f36c9565a73d1363b140",
+      "source_ref": {
+        "source_id": "runway_build_backlog_seed",
+        "raw_id": "stripe-entitlement-gate",
+        "priority": null,
+        "owner": null
+      }
+    },
+    {
+      "schema": "noos-unified-backlog-item-v1",
+      "plan_id": "sentinel_phase2",
+      "item_id": "sentinel-p2-external-heartbeat",
+      "source_revision": "1.0.0",
+      "title": "External heartbeat for old-laptop silence",
+      "status": "READY",
+      "lane": "sentinel",
+      "role": "incident_diagnose",
+      "repository": "Noetfield-Systems/noetfeld-os",
+      "authority_class": "T2",
+      "acceptance_checks": [
+        "dead-man alert on sentinel silence",
+        "liveness row in noos_loop_registry"
+      ],
+      "budget_usd": 0.25,
+      "value_class": "risk_reduction",
+      "depends_on": [],
+      "runway_id": null,
+      "recipe_id": null,
+      "recipe_version": null,
+      "content_hash": "f85277e3324d23ea592fb635b136a6acd5feeed275ca8edb8510b818f565c36e",
+      "op_key": "c16d3c9d5d0c0df73dd74a6f1adba8907a2010963c11dc15da609fd633f47928",
+      "source_ref": {
+        "source_id": "sentinel_phase2",
+        "raw_id": "sentinel-p2-external-heartbeat",
+        "priority": null,
+        "owner": null
+      }
+    },
+    {
+      "schema": "noos-unified-backlog-item-v1",
+      "plan_id": "sentinel_phase2",
+      "item_id": "sentinel-p2-receipt-ingest",
+      "source_revision": "1.0.0",
+      "title": "Ingest sentinel_receipts.jsonl into NOOS evidence sink",
+      "status": "READY",
+      "lane": "sentinel",
+      "role": "incident_diagnose",
+      "repository": "Noetfield-Systems/noetfeld-os",
+      "authority_class": "T2",
+      "acceptance_checks": [
+        "schema-validated receipts in truth_log or receipts/proof",
+        "dedupe_key uniqueness"
+      ],
+      "budget_usd": 0.25,
+      "value_class": "proof_asset",
+      "depends_on": [],
+      "runway_id": null,
+      "recipe_id": null,
+      "recipe_version": null,
+      "content_hash": "ab4eab281fa97485e454ce493f173cd7e2c2a7ca8186d92781939b061e00f63b",
+      "op_key": "684337ee588d18dc504315060caa1d11c177aa84207a6408982d471a5e801f71",
+      "source_ref": {
+        "source_id": "sentinel_phase2",
+        "raw_id": "sentinel-p2-receipt-ingest",
+        "priority": null,
+        "owner": null
+      }
+    },
+    {
+      "schema": "noos-unified-backlog-item-v1",
+      "plan_id": "sentinel_phase2",
+      "item_id": "sentinel-p2-schema-validate",
+      "source_revision": "1.0.0",
+      "title": "Validate sentinel receipts against receipt_schema_v1",
+      "status": "BLOCKED_WITH_REASON",
+      "lane": "sentinel",
+      "role": "research",
+      "repository": "Noetfield-Systems/noetfeld-os",
+      "authority_class": "T2",
+      "acceptance_checks": [
+        "schema_status=validated or exact fail receipt"
+      ],
+      "budget_usd": 0.25,
+      "value_class": "hygiene",
+      "depends_on": [
+        "sentinel-p2-receipt-ingest"
+      ],
+      "runway_id": null,
+      "recipe_id": null,
+      "recipe_version": null,
+      "content_hash": "8a733192c1bbdf99ff21ca49c59f439b80c5eb79bd5286c7c041d855994d8a19",
+      "op_key": "583848701e39014e9049055d70b9c04bbf57a13c66b71dac8a314f5dc4641d11",
+      "source_ref": {
+        "source_id": "sentinel_phase2",
+        "raw_id": "sentinel-p2-schema-validate",
+        "priority": null,
+        "owner": null
+      },
+      "blocker_reason": "unmet_deps:sentinel-p2-receipt-ingest"
+    },
+    {
+      "schema": "noos-unified-backlog-item-v1",
+      "plan_id": "sentinel_phase2",
+      "item_id": "sentinel-p3-escalation-queue",
+      "source_revision": "1.0.0",
+      "title": "Phase 3: trigger_cloud_repair becomes inbox queue item only",
+      "status": "FOUNDER_BLOCKED",
+      "lane": "sentinel",
+      "role": "orchestrator",
+      "repository": "Noetfield-Systems/noetfeld-os",
+      "authority_class": "FOUNDER",
+      "acceptance_checks": [
+        "auth gates stamped",
+        "no direct repair from sentinel scripts"
+      ],
+      "budget_usd": 0.25,
+      "value_class": "risk_reduction",
+      "depends_on": [
+        "sentinel-p2-schema-validate"
+      ],
+      "runway_id": null,
+      "recipe_id": null,
+      "recipe_version": null,
+      "content_hash": "cad0c78dfd0865f07cf392631733fa3f5ac52423b890bdaaebfeddd3090d6fa3",
+      "op_key": "506b2396cdc1494f47ad5db97ad3b81acc8953acdd44a1a28022b3c279b34496",
+      "source_ref": {
+        "source_id": "sentinel_phase2",
+        "raw_id": "sentinel-p3-escalation-queue",
+        "priority": null,
+        "owner": null
+      }
+    }
+  ]
+}

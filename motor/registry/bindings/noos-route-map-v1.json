@@ -1,6 +1,6 @@
 {
   "schema": "noos-motor-route-map-v1",
-  "description": "Declared bindings from NOOS classification routes (from the observability-semantics change) to Motor recipes. status=WIRED means a registered machine owner consumes the route; status=NOT_WIRED means NOOS classifies and routes correctly but no registered machine owner executes the recipe yet. Correctly stopping without repair is safer than incorrectly restarting production.",
+  "description": "Declared bindings from NOOS classification routes to Motor recipes. status=WIRED means a registered machine owner consumes the route via Runway intake or local evidence-path owner; status=NOT_WIRED means NOOS classifies and stops.",
   "not_wired_is_safe": "A route with no machine_owner surfaces the finding and stops. It never falls back to execution restart.",
   "bindings": [
     {
@@ -9,43 +9,59 @@
       "motor_recipe": "NF-MOTOR-RECEIPT-WRITER-REPAIR-001",
       "machine_owner": "noos-motor-route-owner-v1 (scripts/noos_motor_route_owner_v1.py)",
       "status": "WIRED",
-      "note": "Track D \u2014 WIRED. The registered machine owner consumes an INCIDENT-DIAGNOSE routing row (schema noos-motor-routing-row-v1) for DISPATCHING_COMPLETION_UNPROVEN and runs RECEIPT-WRITER-REPAIR-001 in an evidence-path-only git_worktree sandbox: BEFORE from the diagnosis receipt, bounded keyed retries (L13, duplicate-proof), AFTER via the observer read path; states.recovery=PROVEN only from the external before/after pair. Escalates to a founder-decision artifact if evidence is not restored \u2014 never restarts execution.",
+      "note": "Evidence-path-only git_worktree sandbox; never restarts execution.",
       "wired_at": "2026-07-17T08:20:00Z",
       "wired_by_task": "NF-NOOS-MOTOR-ROUTE-WIRING-001"
     },
     {
       "noos_route": "execution_reconcile_self_heal",
       "noos_state": "LOOP_EXECUTION_STALE",
-      "motor_recipe": null,
-      "machine_owner": "existing NOOS machine-reconcile / self-heal loop",
-      "status": "EXISTING_NON_RECIPE",
-      "note": "Handled today by the existing reconcile/self-heal loop; not yet a registered Motor recipe/job."
+      "motor_recipe": "sandbox-fixture-repair",
+      "machine_owner": "noos_plan_completion_dispatch_v1 + noos_role_runway_dispatch_v1 --role self_heal → Runway /v1/intake",
+      "status": "WIRED",
+      "wired_at": "2026-07-19T11:30:00Z",
+      "wired_by_task": "NF-NOOS-PLAN-COMPLETION-24-7",
+      "note": "Machine reconcile consumer dispatches self_heal role to Runway; NOOS does not execute DeepSeek."
     },
     {
       "noos_route": "observer_reconciliation",
       "noos_state": "OBSERVER_DIVERGENCE_OR_REPLAY",
-      "motor_recipe": "NF-MOTOR-INCIDENT-DIAGNOSE-001",
-      "machine_owner": null,
-      "status": "NOT_WIRED",
-      "note": "Divergence between dispatch and completion observers routes to a diagnosis, not a repair."
+      "motor_recipe": "noos-incident-diagnose",
+      "machine_owner": "noos_role_runway_dispatch_v1 --role incident_diagnose → Runway research intake",
+      "status": "WIRED",
+      "wired_at": "2026-07-19T11:30:00Z",
+      "wired_by_task": "NF-NOOS-PLAN-COMPLETION-24-7",
+      "note": "Diagnosis only — no execution restart."
     },
     {
       "noos_route": "monitoring_availability",
       "noos_state": "OBSERVER_UNAVAILABLE",
-      "motor_recipe": "NF-MOTOR-INCIDENT-DIAGNOSE-001",
-      "machine_owner": null,
-      "status": "NOT_WIRED",
-      "note": "Authoritative source unqueryable \u2014 diagnose the monitoring path, do not touch execution."
+      "motor_recipe": "noos-incident-diagnose",
+      "machine_owner": "noos_role_runway_dispatch_v1 --role incident_diagnose → Runway research intake",
+      "status": "WIRED",
+      "wired_at": "2026-07-19T11:30:00Z",
+      "wired_by_task": "NF-NOOS-PLAN-COMPLETION-24-7",
+      "note": "Diagnose monitoring path; do not touch execution."
     },
     {
       "noos_route": "ci_failure_candidate_repair",
       "noos_state": "CI_CHECK_FAILED_CANDIDATE_CAUSED",
-      "motor_recipe": "NF-MOTOR-CI-REPAIR-001",
-      "machine_owner": null,
-      "status": "NOT_WIRED",
-      "note": "PROPOSED per NF-UNIFIED-MOTOR-ISSUE-CI-OWNERSHIP-V1 (SG_REVIEW_REQUIRED). The NOOS Issue Manager (noetfield:noos.issue-manager) classifies a failed required check; ONLY failure_classification=candidate_caused routes here \u2014 to the SANDBOX Builder Owner (noetfield:sandbox.builder-owner) running NF-MOTOR-CI-REPAIR-001 in a git_worktree sandbox via a bounded worker (Codex Cloud/SDK). NOT_WIRED = no registered machine owner executes yet: NOOS classifies + surfaces the finding and STOPS (correctly stopping beats wrongly repairing). Non-candidate classes never route here \u2014 workflow-logic defects and flaky tests -> CI Reliability Owner (noetfield:noos.ci-reliability-owner); runner outages -> NOOS Platform Operations; missing/expired secrets -> SG/Secrets + founder gate; production promotion -> Release Owner.",
-      "proposed_at": "2026-07-17T18:18:00Z",
-      "proposed_by_task": "NF-NOOS-ISSUE-CI-OWNERSHIP-001"
+      "motor_recipe": "sandbox-fixture-repair",
+      "machine_owner": "noos_role_runway_dispatch_v1 --role specialist → Runway software-repair intake (sandbox)",
+      "status": "WIRED",
+      "wired_at": "2026-07-19T11:30:00Z",
+      "wired_by_task": "NF-NOOS-PLAN-COMPLETION-24-7",
+      "note": "Only candidate_caused failures; sandbox intake via Runway. Production promotion remains founder-gated."
+    },
+    {
+      "noos_route": "plan_completion_intake",
+      "noos_state": "READY_BACKLOG_ITEM",
+      "motor_recipe": "role-mapped via data/noetfield-runway-contract-v1.json role_recipe_map",
+      "machine_owner": "scripts/noos_plan_completion_dispatch_v1.py",
+      "status": "WIRED",
+      "wired_at": "2026-07-19T11:30:00Z",
+      "wired_by_task": "NF-NOOS-PLAN-COMPLETION-24-7",
+      "note": "Unified backlog READY → HMAC POST /v1/intake; advance only on matching op_key ack."
     }
   ]
 }

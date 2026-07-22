@@ -384,6 +384,16 @@ machine-status:
 machine-reconcile:
 	python3 scripts/noos_machine_loops_v1.py reconcile
 
+plan-completion-compile:
+	python3 scripts/noos_unified_backlog_compiler_v1.py --json
+
+plan-completion-dispatch:
+	python3 scripts/noos_plan_completion_dispatch_v1.py reconcile
+
+plan-completion-preflight:
+	python3 scripts/noos_runway_supervision_adapter_v1.py --json preflight
+	python3 scripts/noos_runway_supervision_adapter_v1.py --json verify-deepseek-pin
+
 machine-audit:
 	python3 scripts/noos_machine_loops_v1.py audit
 

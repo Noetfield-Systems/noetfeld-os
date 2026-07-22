@@ -153,7 +153,17 @@
         "no_write": true,
         "no_llm": true,
         "no_notification": true
-      }
+      },
+      "cloud_steps": [
+        {
+          "name": "production_urls_bounded",
+          "cmd": [
+            "bash",
+            "scripts/check_production_urls.sh"
+          ],
+          "continue_on_error": true
+        }
+      ]
     },
     {
       "id": "chain",
@@ -195,7 +205,33 @@
         "no_write": true,
         "no_llm": true,
         "no_notification": true
-      }
+      },
+      "cloud_steps": [
+        {
+          "name": "gate_verify_smoke",
+          "cmd": [
+            "python3",
+            "-m",
+            "noetfield_gate.cli",
+            "verify",
+            "--json"
+          ],
+          "continue_on_error": true
+        },
+        {
+          "name": "decide_validate",
+          "cmd": [
+            "python3",
+            "-m",
+            "noetfield_gate.cli",
+            "decide",
+            "--file",
+            "fixtures/demo_intents/approve.json",
+            "--validate-only"
+          ],
+          "continue_on_error": true
+        }
+      ]
     },
     {
       "id": "self_heal",
@@ -274,7 +310,7 @@
       "title": "SourceA portfolio-spine observe loop",
       "domain": "sourcea-observe",
       "lane": "sourcea",
-      "value_class": "risk_reduction",
+      "value_class": "hygiene",
       "event_type": "noos_sourcea_observe_loop_tick",
       "interval_minutes": 30,
       "github_workflow": "noos-sourcea-observe-loop.yml",
@@ -299,7 +335,7 @@
             "--write-receipt",
             "--json"
           ],
-          "continue_on_error": false
+          "continue_on_error": true
         }
       ],
       "schedule_status": "active",
@@ -342,7 +378,25 @@
         "no_write": true,
         "no_llm": true,
         "no_notification": true
-      }
+      },
+      "cloud_steps": [
+        {
+          "name": "agent_docs",
+          "cmd": [
+            "bash",
+            "scripts/check_noos_agent_docs.sh"
+          ],
+          "continue_on_error": true
+        },
+        {
+          "name": "business_strategy",
+          "cmd": [
+            "bash",
+            "scripts/check_noetfield_business_strategy.sh"
+          ],
+          "continue_on_error": true
+        }
+      ]
     },
     {
       "id": "workflow_audit",
@@ -402,6 +456,17 @@
             "--findings-file",
             "data/noos-audit-findings-v1.json"
           ]
+        },
+        {
+          "name": "runway_self_heal_dispatch",
+          "cmd": [
+            "python3",
+            "scripts/noos_role_runway_dispatch_v1.py",
+            "--role",
+            "self_heal",
+            "--subject",
+            "safe-fixes"
+          ]
         }
       ],
       "schedule_status": "active",
@@ -410,7 +475,20 @@
         "no_write": true,
         "no_llm": true,
         "no_notification": true
-      }
+      },
+      "cloud_steps": [
+        {
+          "name": "runway_self_heal_dispatch",
+          "cmd": [
+            "python3",
+            "scripts/noos_role_runway_dispatch_v1.py",
+            "--role",
+            "self_heal",
+            "--subject",
+            "safe-fixes"
+          ]
+        }
+      ]
     },
     {
       "id": "researcher_deep_dive",
@@ -424,12 +502,14 @@
       "factory_id": "loop-researcher",
       "steps": [
         {
-          "name": "investigate_escalations",
+          "name": "runway_research_dispatch",
           "cmd": [
             "python3",
-            "scripts/noos_researcher_v1.py",
-            "--depth",
-            "standard"
+            "scripts/noos_role_runway_dispatch_v1.py",
+            "--role",
+            "research",
+            "--subject",
+            "escalated-findings"
           ]
         }
       ],
@@ -439,7 +519,20 @@
         "no_write": true,
         "no_llm": true,
         "no_notification": true
-      }
+      },
+      "cloud_steps": [
+        {
+          "name": "runway_research_dispatch",
+          "cmd": [
+            "python3",
+            "scripts/noos_role_runway_dispatch_v1.py",
+            "--role",
+            "research",
+            "--subject",
+            "escalated-findings"
+          ]
+        }
+      ]
     },
     {
       "id": "specialist_proposals",
@@ -453,10 +546,14 @@
       "factory_id": "loop-specialist",
       "steps": [
         {
-          "name": "generate_proposals",
+          "name": "runway_specialist_dispatch",
           "cmd": [
             "python3",
-            "scripts/noos_specialist_v1.py"
+            "scripts/noos_role_runway_dispatch_v1.py",
+            "--role",
+            "specialist",
+            "--subject",
+            "research-outputs"
           ]
         }
       ],
@@ -466,14 +563,27 @@
         "no_write": true,
         "no_llm": true,
         "no_notification": true
-      }
+      },
+      "cloud_steps": [
+        {
+          "name": "runway_specialist_dispatch",
+          "cmd": [
+            "python3",
+            "scripts/noos_role_runway_dispatch_v1.py",
+            "--role",
+            "specialist",
+            "--subject",
+            "research-outputs"
+          ]
+        }
+      ]
     },
     {
       "id": "orchestrator_cross_repo",
       "title": "Cross-repo health orchestration & consolidation",
       "domain": "self-improvement",
       "lane": "noos",
-      "value_class": "hygiene",
+      "value_class": "risk_reduction",
       "event_type": "noos_orchestrator_cross_repo_tick",
       "interval_minutes": 180,
       "github_workflow": "noos-cross-repo-orchestrator.yml",
@@ -483,15 +593,55 @@
           "name": "aggregate_health",
           "cmd": [
             "python3",
-            "scripts/noos_orchestrator_v1.py",
-            "--write-receipt",
+            "scripts/noos_orchestrator_cross_repo_v1.py",
             "--json"
           ]
         }
       ],
       "schedule_status": "quarantined",
       "enabled": false,
-      "quarantine_reason": "Cross-repo Plan Motor aggregation remains manual/event-only pending explicit schedule commissioning."
+      "quarantine_reason": "Cross-repo Plan Motor aggregation remains manual/event-only pending explicit schedule commissioning.",
+      "cloud_steps": [
+        {
+          "name": "aggregate_health",
+          "cmd": [
+            "python3",
+            "scripts/noos_orchestrator_cross_repo_v1.py",
+            "--json"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "plan_completion",
+      "title": "Unified plan backlog compile + Runway intake dispatch",
+      "domain": "plan-completion",
+      "lane": "noos",
+      "value_class": "revenue_path",
+      "event_type": "noos_plan_completion_tick",
+      "interval_minutes": 15,
+      "github_workflow": "noos-machine-audit-witness.yml",
+      "factory_id": "loop-plan-completion",
+      "steps": [
+        {
+          "name": "reconcile_dispatch",
+          "cmd": [
+            "python3",
+            "scripts/noos_plan_completion_dispatch_v1.py",
+            "reconcile"
+          ]
+        }
+      ],
+      "cloud_steps": [
+        {
+          "name": "reconcile_dispatch",
+          "cmd": [
+            "python3",
+            "scripts/noos_plan_completion_dispatch_v1.py",
+            "reconcile"
+          ]
+        }
+      ]
     },
     {
       "id": "improve_kaizen_daily",

@@ -1,0 +1,28 @@
+{
+  "schema": "noos-role-runway-dispatch-artifact-v1",
+  "at": "2026-07-22T06:09:22Z",
+  "role": "research",
+  "subject": "unit-test",
+  "op_key": "e4fc17b8ddf0bb5d2ae9e20333ed00d3d819b3d7c4d8340ce3139a5497c273d0",
+  "artifact_kind": "research_memo",
+  "value_class": "risk_reduction",
+  "acceptance_checks": [
+    "cited_sources",
+    "schema_valid_memo",
+    "no_state_mutation"
+  ],
+  "recipe": {
+    "runway_id": "research",
+    "recipe_id": "noos-research-memo",
+    "recipe_version": "1.0.0"
+  },
+  "ack": {
+    "ok": true,
+    "status": 202,
+    "dry_run": true,
+    "job_id": "rj_e4fc17b8ddf0bb5d2ae9e20333ed00d3"
+  },
+  "productive": true,
+  "ok": true,
+  "report_line": "role_dispatch \u00b7 research \u00b7 productive=True dry_run=True"
+}

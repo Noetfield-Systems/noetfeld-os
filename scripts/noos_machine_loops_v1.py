@@ -229,12 +229,73 @@ def build_research_memo(*, question: str, source_receipt: dict[str, Any] | None 
     }
 
 
-def reconcile_queue(*, write: bool = True) -> dict[str, Any]:
+def consume_dispatch_queue(
+    pending: list[dict[str, Any]],
+    processed: list[dict[str, Any]],
+    *,
+    max_items: int = 1,
+) -> dict[str, Any]:
+    """Bridge actionable queue rows to Runway role intake (no local LLM execution)."""
+    try:
+        import noos_role_runway_dispatch_v1 as role_dispatch
+        import noos_plan_completion_dispatch_v1 as plan_dispatch
+    except ImportError as exc:
+        return {"ok": False, "error": str(exc), "consumed": 0}
+
+    consumed: list[dict[str, Any]] = []
+    remaining: list[dict[str, Any]] = []
+    for item in pending:
+        if len(consumed) >= max_items:
+            remaining.append(item)
+            continue
+        schema = str(item.get("schema") or "")
+        role = None
+        subject = str(item.get("task_id") or item.get("target_schema") or item.get("action") or "reconcile")
+        if schema == "noos-machine-repair-dispatch-v1":
+            role = "self_heal"
+        elif schema == "noos-research-memo-v1":
+            role = "research"
+        elif schema == "noos-machine-reconcile-event-v1":
+            role = "incident_diagnose"
+        else:
+            remaining.append(item)
+            continue
+        artifact = role_dispatch.dispatch_role(role, subject=subject, context={"source_schema": schema})
+        processed.append(
+            {
+                "at": utc_now(),
+                "schema": schema,
+                "role": role,
+                "subject": subject,
+                "dispatch_ok": bool(artifact.get("ok")),
+                "receipt_path": artifact.get("receipt_path"),
+                "job_id": (artifact.get("ack") or {}).get("job_id"),
+            }
+        )
+        consumed.append(artifact)
+
+    plan = plan_dispatch.reconcile_and_dispatch(write=True)
+    return {
+        "ok": True,
+        "consumed": len(consumed),
+        "remaining": len(remaining),
+        "artifacts": consumed,
+        "plan_completion": {
+            "ok": plan.get("ok"),
+            "verdict": (plan.get("dispatch") or {}).get("verdict"),
+            "report_line": plan.get("report_line"),
+        },
+        "pending_out": remaining,
+    }
+
+
+def reconcile_queue(*, write: bool = True, consume: bool = True) -> dict[str, Any]:
     config = load_json(CONFIG_PATH)
     queue_path = ROOT / config["dispatch_queue_path"]
     queue = load_json(queue_path) if queue_path.is_file() else {"pending": [], "processed": []}
 
     pending: list[dict[str, Any]] = list(queue.get("pending") or [])
+    processed: list[dict[str, Any]] = list(queue.get("processed") or [])
     new_dispatches: list[dict[str, Any]] = []
 
     for fp in sorted(PROOF_DIR.glob("*.json"), key=lambda p: p.stat().st_mtime)[-50:]:
@@ -275,6 +336,11 @@ def reconcile_queue(*, write: bool = True) -> dict[str, Any]:
         else:
             dedup_count += 1
 
+    consumer: dict[str, Any] = {"ok": True, "consumed": 0, "skipped": True}
+    if consume:
+        consumer = consume_dispatch_queue(pending, processed, max_items=1)
+        pending = list(consumer.get("pending_out") or pending)
+
     now_ts = datetime.now(timezone.utc).timestamp()
     orphan_days = float(config.get("orphan_backlog_age_days") or 3.0)
     breakdown = summarize_pending(
@@ -290,8 +356,13 @@ def reconcile_queue(*, write: bool = True) -> dict[str, Any]:
         "schema": "noos-machine-dispatch-queue-v1",
         "updated_at": utc_now(),
         "pending": pending,
-        "processed": queue.get("processed") or [],
+        "processed": processed[-200:],
         "new_this_run": len(new_dispatches),
+        "consumer": {
+            "consumed": consumer.get("consumed"),
+            "plan_completion": consumer.get("plan_completion"),
+            "ok": consumer.get("ok"),
+        },
         # Explicit reconciler reporting: distinguish genuinely actionable work
         # from orphaned/historical backlog and other non-actionable buckets so
         # ``pending=N`` is never mistaken for N live items needing dispatch.
@@ -300,6 +371,7 @@ def reconcile_queue(*, write: bool = True) -> dict[str, Any]:
         "ok": True,
         "report_line": (
             f"reconcile · pending={len(pending)} new={len(new_dispatches)} "
+            f"consumed={consumer.get('consumed', 0)} "
             f"actionable={counts['actionable_pending']} orphaned={counts['orphaned_backlog']} "
             f"dedup={counts['deduplicated']} leases={counts['active_leases']} "
             f"backoff={counts['backoff_pending']} unknown={counts['unknown']}"
@@ -585,7 +657,12 @@ def build_parser() -> argparse.ArgumentParser:
     sub = p.add_subparsers(dest="command", required=True)
 
     sub.add_parser("status", help="Human/machine loops status digest").set_defaults(func=lambda a: autonomy_status())
-    sub.add_parser("reconcile", help="Instantiate dispatches from failure receipts").set_defaults(func=lambda a: reconcile_queue())
+    sub.add_parser("reconcile", help="Instantiate dispatches + consume into Runway intake").set_defaults(
+        func=lambda a: reconcile_queue(consume=True)
+    )
+    sub.add_parser("reconcile-enqueue-only", help="Enqueue only (no Runway consume)").set_defaults(
+        func=lambda a: reconcile_queue(consume=False)
+    )
     sub.add_parser("audit", help="Outside audit over trailing receipts").set_defaults(func=lambda a: run_outside_audit())
 
     c = sub.add_parser("critic", help="Adversarial critic on receipt file")

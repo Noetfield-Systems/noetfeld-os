@@ -1,0 +1,68 @@
+{
+  "schema": "noetfield-runway-supervision-contract-v1",
+  "version": "2.0.0",
+  "one_law": "NOOS supervises the canonical NOETFIELD-RUNWAY runtime; it never copies a Runway recipe or Motor implementation. Observation → stale/budget/provider detection → machine intake/requeue decision → terminal receipt observation → founder only for genuine authority.",
+  "owner_repository": "Noetfield-Systems/NOETFIELD-RUNWAY",
+  "canonical_runtime_branch": "upgrade/deterministic-runway-production-v2",
+  "deepseek_first_branch": "codex/deepseek-first-ladder",
+  "required_runtime": {
+    "url_env": "NOETFIELD_RUNWAY_API_URL",
+    "auth_env": "NOETFIELD_RUNWAY_API_SECRET",
+    "key_id_env": "NOETFIELD_RUNWAY_API_KEY_ID",
+    "auth_interface": "Authorization: NOETFIELD-HMAC <keyId>:<hex_hmac_sha256>; headers x-noetfield-timestamp + x-noetfield-nonce",
+    "auth_legacy_env": "NOETFIELD_RUNWAY_API_TOKEN",
+    "auth_legacy_note": "Bearer token is obsolete for runway-cloud-runtime; HMAC is required.",
+    "endpoints": {
+      "health": "GET /healthz",
+      "queue_summary": "GET /v1/queue/summary",
+      "intake": "POST /v1/intake",
+      "list_jobs_alias": "POST /v1/jobs",
+      "get_job": "GET /v1/jobs/{job_id}",
+      "job_events": "GET /v1/jobs/{job_id}/events",
+      "job_result": "GET /v1/jobs/{job_id}/result"
+    },
+    "internal_only": {
+      "repair_requeue": "store RPC requeue_runway_runtime_job_for_repair_v1 (not a public POST)",
+      "fallback": "provider ladder inside ResilientRouter — NOOS never calls DeepSeek directly"
+    }
+  },
+  "deepseek_pin": {
+    "provider_id": "deepseek",
+    "base_url": "https://api.deepseek.com",
+    "api_key_env": "DEEPSEEK_API_KEY",
+    "cheap_primary": "deepseek-v4-flash",
+    "standard_fallback": "deepseek-v4-pro",
+    "fail_closed_if_unavailable": true,
+    "forbidden": ["silent_frontier_fallback", "fictional_model_ids", "deepseek-chat_as_production_pin"]
+  },
+  "job_event_schema": {
+    "job_id": "string (rj_[0-9a-f]{32})",
+    "recipe_id": "string",
+    "state": "one of: queued|leased|running|COMPLETE|FAILED|BLOCKED|STALE",
+    "started_at": "iso8601",
+    "updated_at": "iso8601",
+    "budget": {"spent_usd": "number", "ceiling_usd": "number"},
+    "provider": {"name": "string", "healthy": "boolean", "model_id": "string"},
+    "terminal_receipt": "string|null",
+    "op_key": "idempotency_key"
+  },
+  "intake_defaults": {
+    "tenant_id": "noetfield.noos",
+    "entitlement_id": "noos.plan-completion.v1",
+    "caller_site": "internal",
+    "budget_usd_default": 0.25
+  },
+  "role_recipe_map": {
+    "research": {"runway_id": "research", "recipe_id": "noos-research-memo", "recipe_version": "1.0.0"},
+    "specialist": {"runway_id": "software-repair", "recipe_id": "sandbox-fixture-repair", "recipe_version": "0.1.0"},
+    "self_heal": {"runway_id": "software-repair", "recipe_id": "sandbox-fixture-repair", "recipe_version": "0.1.0"},
+    "orchestrator": {"runway_id": "research", "recipe_id": "noos-cross-repo-health", "recipe_version": "1.0.0"},
+    "incident_diagnose": {"runway_id": "research", "recipe_id": "noos-incident-diagnose", "recipe_version": "1.0.0"},
+    "ci_repair": {"runway_id": "software-repair", "recipe_id": "sandbox-fixture-repair", "recipe_version": "0.1.0"}
+  },
+  "detection_defaults": {
+    "stale_after_minutes": 30,
+    "budget_warn_ratio": 0.8,
+    "budget_stop_ratio": 1.0
+  }
+}

@@ -1,0 +1,181 @@
+{
+  "schema": "noos-role-circle-v1",
+  "version": "2.1.0",
+  "status": "ACTIVE",
+  "one_law": "Hourly CF cron → Railway /loop → NOOS role circle executes required loops end-to-end; mock LLM roles dispatch HMAC intake to NOETFIELD-RUNWAY. DeepSeek stays inside Runway. Never copies Motor/Router/recipes.",
+  "trigger": {
+    "plane": "cloudflare_workers_cron",
+    "worker": "noos-loop-fleet-tick-v1",
+    "event_type": "noos_role_circle_tick",
+    "interval_minutes": 60,
+    "executor": "railway:noos-loop-runner",
+    "forbidden": ["github_actions_runtime_cron_as_primary_motor"]
+  },
+  "live_apis": {
+    "fleet_health": "https://noos-loop-fleet-tick-v1.sina-kazemnezhad-ca.workers.dev/health",
+    "railway_health": "https://noos-loop-runner-production.up.railway.app/health",
+    "deadman_health": "https://noos-deadman-v1.sina-kazemnezhad-ca.workers.dev/health"
+  },
+  "loops_registry": "data/noos-24-7-loops-v1.json",
+  "required_loop_ids": [
+    "inbox",
+    "runtime",
+    "surface",
+    "chain",
+    "self_heal",
+    "sourcea_observe",
+    "agent_nerve",
+    "workflow_audit",
+    "self_heal_safe_fixes",
+    "researcher_deep_dive",
+    "specialist_proposals",
+    "orchestrator_cross_repo",
+    "plan_completion"
+  ],
+  "excluded_loop_ids": ["role_circle", "improve_kaizen_daily"],
+  "io_law": "Every required loop MUST declare and produce: input → process → valuable_output. A probe-only role without a durable artifact is NOT sufficient.",
+  "valuable_output_requirements": {
+    "min_fields": ["loop_id", "event_type", "cycle_number", "state_after", "value_class", "artifact"],
+    "accepted_states": ["COMPLETE", "IDLE_NO_WORK", "FAILED_WITH_RECEIPT", "BLOCKED_WITH_REASON"],
+    "artifact_kinds": [
+      "loop_cycle_receipt",
+      "liveness_upsert",
+      "proof_receipt",
+      "dispatch_queue",
+      "audit_receipt",
+      "incident_dispatch",
+      "health_receipt",
+      "runway_intake_ack"
+    ]
+  },
+  "loop_io": {
+    "inbox": {
+      "role_id": "noos.inbox_worker",
+      "input": "cloud worker inbox queue / blocked UPG items",
+      "process": "drain inbox + reenqueue blocked",
+      "valuable_output": "inbox drain cycle receipt + queue movement evidence",
+      "value_class": "revenue_path"
+    },
+    "runtime": {
+      "role_id": "noos.runtime_gate",
+      "input": "repo gate + import surface",
+      "process": "cloud gate smoke + import smoke",
+      "valuable_output": "gate/import evidence in cycle receipt",
+      "value_class": "risk_reduction"
+    },
+    "surface": {
+      "role_id": "noos.surface_nerve",
+      "input": "production URL checklist",
+      "process": "check_production_urls",
+      "valuable_output": "public surface pass/fail evidence",
+      "value_class": "risk_reduction"
+    },
+    "chain": {
+      "role_id": "noos.chain_verifier",
+      "input": "demo intents + gate verify",
+      "process": "noetfield_gate verify + decide validate-only",
+      "valuable_output": "chain proof asset in cycle receipt",
+      "value_class": "proof_asset"
+    },
+    "self_heal": {
+      "role_id": "noos.self_heal",
+      "input": "blocked inbox + autonomy window + loop heartbeats",
+      "process": "reenqueue + heartbeat (+ cloud-bounded steps)",
+      "valuable_output": "self-heal cycle + heartbeat receipt",
+      "value_class": "risk_reduction"
+    },
+    "sourcea_observe": {
+      "role_id": "noos.sourcea_observer",
+      "input": "SourceA/portfolio-spine Supabase surfaces",
+      "process": "observe_sourcea_supabase --write-receipt",
+      "valuable_output": "SourceA observe receipt (or exact missing-secret blocker)",
+      "value_class": "hygiene"
+    },
+    "agent_nerve": {
+      "role_id": "noos.agent_nerve",
+      "input": "agent vault + business strategy docs",
+      "process": "agent-docs + business-strategy checks",
+      "valuable_output": "agent nerve pass/fail evidence",
+      "value_class": "hygiene"
+    },
+    "workflow_audit": {
+      "role_id": "noos.workflow_auditor",
+      "input": "workflow registry + live critique signals",
+      "process": "noos_workflow_audit_v1",
+      "valuable_output": "workflow audit JSON findings",
+      "value_class": "risk_reduction"
+    },
+    "self_heal_safe_fixes": {
+      "role_id": "noos.safe_fixer",
+      "input": "audit findings + Runway self_heal recipe",
+      "process": "noos_role_runway_dispatch_v1 --role self_heal",
+      "valuable_output": "runway intake ack + repair attempt artifact",
+      "value_class": "risk_reduction"
+    },
+    "researcher_deep_dive": {
+      "role_id": "noos.researcher",
+      "input": "escalated findings",
+      "process": "noos_role_runway_dispatch_v1 --role research (DeepSeek inside Runway)",
+      "valuable_output": "research memo intake ack + durable artifact path",
+      "value_class": "risk_reduction"
+    },
+    "specialist_proposals": {
+      "role_id": "noos.specialist",
+      "input": "research outputs",
+      "process": "noos_role_runway_dispatch_v1 --role specialist",
+      "valuable_output": "patch proposal intake ack",
+      "value_class": "risk_reduction"
+    },
+    "orchestrator_cross_repo": {
+      "role_id": "noos.orchestrator",
+      "input": "org health signals / shared sink",
+      "process": "noos_orchestrator_cross_repo_v1",
+      "valuable_output": "probe matrix + runway orchestrator dispatch",
+      "value_class": "risk_reduction"
+    },
+    "plan_completion": {
+      "role_id": "noos.plan_completion",
+      "input": "unified governed backlog",
+      "process": "compile → select READY → HMAC /v1/intake",
+      "valuable_output": "dispatch event + backlog CAS advance",
+      "value_class": "revenue_path"
+    }
+  },
+  "supervision_roles": [
+    {
+      "role_id": "noos.fleet_observer",
+      "category": "observe",
+      "task": "Probe live motor/deadman/executor health endpoints",
+      "kind": "live_http",
+      "valuable_output": "live API probe matrix"
+    },
+    {
+      "role_id": "noos.reconciler",
+      "category": "reconcile",
+      "task": "Reconcile durable failure receipts into dispatch queue and consume to Runway",
+      "kind": "local_cli",
+      "command": ["python3", "scripts/noos_machine_loops_v1.py", "--json", "reconcile"],
+      "valuable_output": "dispatch queue with consumer + plan_completion bridge"
+    },
+    {
+      "role_id": "noos.runway_supervisor",
+      "category": "supervise_runway",
+      "task": "Preflight NOETFIELD-RUNWAY HMAC API + DeepSeek pin",
+      "kind": "local_cli",
+      "command": ["python3", "scripts/noos_runway_supervision_adapter_v1.py", "--json", "preflight"],
+      "valuable_output": "runway preflight verdict"
+    }
+  ],
+  "telegram": {
+    "allowed_bot_username": "NOOS_cycle_bot",
+    "send_alerts": true,
+    "via": "noos-deadman-v1 /role-circle-report"
+  },
+  "not_in_scope": [
+    "sellable_software_repair_recipes",
+    "unified_motor_implementation",
+    "provider_router_cost_matrix",
+    "runway_sdk",
+    "deepseek_calls_from_noos"
+  ]
+}

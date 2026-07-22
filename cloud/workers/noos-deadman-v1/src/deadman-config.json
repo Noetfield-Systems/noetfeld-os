@@ -21,8 +21,8 @@
       "nf_probe_bot",
       "NoetfieldOpsBot"
     ],
-    "allowed_bot_username": "",
-    "send_alerts": false,
+    "allowed_bot_username": "NOOS_cycle_bot",
+    "send_alerts": true,
     "probe_suppress_telegram": true,
     "founder_test_query_param": "telegram=1"
   },

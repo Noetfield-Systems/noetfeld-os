@@ -1,0 +1,55 @@
+{
+  "schema": "noos-unified-backlog-v1",
+  "version": "1.0.0",
+  "compiled_at": "2026-07-22T06:09:22Z",
+  "canon_version": "FOUNDER_CANON_v1+MACHINE_LOOPS_v1",
+  "sources": [
+    {
+      "source_id": "noos_unified_upgrade_backlog",
+      "ok": true,
+      "path": "data/noos-unified-upgrade-backlog-v1.json",
+      "count": 56,
+      "source_revision": "1.0.0"
+    },
+    {
+      "source_id": "noos_next_plan_unified",
+      "ok": true,
+      "path": "data/noos-next-plan-unified-v1.json",
+      "count": 0,
+      "source_revision": "1.0.0"
+    },
+    {
+      "source_id": "noos_ten_upgrade_plans",
+      "ok": true,
+      "path": "data/noos-ten-upgrade-plans-registry-v1.json",
+      "count": 10,
+      "source_revision": "1.0.0"
+    },
+    {
+      "source_id": "runway_build_backlog_seed",
+      "ok": true,
+      "path": "data/noos-runway-build-backlog-seed-v1.json",
+      "count": 5,
+      "source_revision": "1.0.0"
+    },
+    {
+      "source_id": "sentinel_phase2",
+      "ok": true,
+      "path": "data/noos-sentinel-phase2-actions-v1.json",
+      "count": 4,
+      "source_revision": "1.0.0"
+    }
+  ],
+  "counts": {
+    "READY": 5,
+    "DISPATCHED": 0,
+    "COMPLETE": 48,
+    "BLOCKED_WITH_REASON": 9,
+    "FOUNDER_BLOCKED": 13
+  },
+  "aliases_collapsed": 0,
+  "idle_no_work": false,
+  "ok": true,
+  "report_line": "unified_backlog \u00b7 total=75 ready=5 complete=48 founder_blocked=13 blocked=9 aliases=0 idle=False",
+  "receipt_path": ".noos-runtime/plan-completion/backlog-v1.json"
+}
