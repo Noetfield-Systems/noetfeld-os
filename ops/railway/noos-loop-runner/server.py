@@ -15,16 +15,11 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 from pathlib import Path
 from typing import Any
 
-def _repo_root() -> Path:
-    here = Path(__file__).resolve().parent
-    if (here / "scripts").is_dir() and (here / "data").is_dir():
-        return here
-    if len(here.parents) > 2 and (here.parents[2] / "scripts").is_dir():
-        return here.parents[2]
-    raise RuntimeError(f"cannot locate noetfeld-os root from {here}")
-
-
-ROOT = _repo_root()
+ROOT_CANDIDATES = [Path(__file__).resolve().parent, *Path(__file__).resolve().parents]
+ROOT = next(
+    (p for p in ROOT_CANDIDATES if (p / "scripts" / "noos_loop_runner_v1.py").is_file()),
+    Path(__file__).resolve().parents[3],
+)
 sys.path.insert(0, str(ROOT / "scripts"))
 from noos_loop_liveness_v1 import upsert_loop_liveness  # noqa: E402
 
