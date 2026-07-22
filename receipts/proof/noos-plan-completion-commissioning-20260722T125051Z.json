@@ -1,0 +1,108 @@
+{
+  "schema": "noos-deterministic-plan-completion-commissioning-v1",
+  "at": "2026-07-22T12:50:51Z",
+  "canon_version": "FOUNDER_CANON_v1+MACHINE_LOOPS_v1",
+  "live_intake": true,
+  "deepseek_pin": {
+    "schema": "noos-deepseek-pin-verify-v1",
+    "ok": true,
+    "cheap_primary": "deepseek-v4-flash",
+    "standard_fallback": "deepseek-v4-pro",
+    "fail_closed_if_unavailable": true,
+    "report_line": "deepseek_pin_ok"
+  },
+  "pytest": {
+    "ok": true,
+    "returncode": 0,
+    "tail": ".........                                                                [100%]\n9 passed in 0.55s\n"
+  },
+  "compile_counts": {
+    "READY": 0,
+    "DISPATCHED": 0,
+    "COMPLETE": 54,
+    "BLOCKED_WITH_REASON": 8,
+    "FOUNDER_BLOCKED": 13
+  },
+  "role_cycle": {
+    "ok": true,
+    "roles": [
+      {
+        "role": "research",
+        "ok": true,
+        "productive": true,
+        "value_class": "risk_reduction",
+        "receipt_path": "receipts/proof/noos-role-dispatch-research-20260722T125048Z.json"
+      },
+      {
+        "role": "specialist",
+        "ok": true,
+        "productive": true,
+        "value_class": "risk_reduction",
+        "receipt_path": "receipts/proof/noos-role-dispatch-specialist-20260722T125049Z.json"
+      },
+      {
+        "role": "self_heal",
+        "ok": true,
+        "productive": true,
+        "value_class": "risk_reduction",
+        "receipt_path": "receipts/proof/noos-role-dispatch-self_heal-20260722T125049Z.json"
+      },
+      {
+        "role": "orchestrator",
+        "ok": true,
+        "productive": true,
+        "value_class": "risk_reduction",
+        "receipt_path": "receipts/proof/noos-role-dispatch-orchestrator-20260722T125050Z.json"
+      },
+      {
+        "role": "incident_diagnose",
+        "ok": true,
+        "productive": true,
+        "value_class": "proof_asset",
+        "receipt_path": "receipts/proof/noos-role-dispatch-incident_diagnose-20260722T125050Z.json"
+      }
+    ]
+  },
+  "drain": {
+    "ok": true,
+    "idle": true,
+    "tick_count": 1,
+    "final_verdict": "IDLE_NO_WORK",
+    "final_counts": {
+      "READY": 0,
+      "DISPATCHED": 0,
+      "COMPLETE": 54,
+      "BLOCKED_WITH_REASON": 8,
+      "FOUNDER_BLOCKED": 13
+    }
+  },
+  "live_smoke": {
+    "ok": true,
+    "skipped": null,
+    "verdict": "ROLE_LIVE_INTAKE",
+    "job_id": "rj_54539ae7abb38f53585bbef946cc23e1",
+    "dry_run": null,
+    "receipt_path": "receipts/proof/noos-role-dispatch-research-20260722T125051Z.json"
+  },
+  "window": {
+    "started_at": "2026-07-22T12:50:51Z",
+    "ends_at": "2026-07-23T12:50:51Z",
+    "acceptance": "eligible items COMPLETE|BLOCKED_WITH_REASON|FOUNDER_BLOCKED; next tick IDLE_NO_WORK; no duplicate op_key dispatch"
+  },
+  "gaps": [],
+  "ok": true,
+  "fleet_observers": {
+    "telegram_path": "deadman /plan-completion-report + /role-circle-report",
+    "telegram_ready_requires": [
+      "DEADMAN_TELEGRAM_BOT_TOKEN",
+      "DEADMAN_TELEGRAM_CHAT_ID"
+    ],
+    "telegram_lane_forbidden": [
+      "Gateway_A",
+      "NFProbeBot",
+      "NoetfieldOpsBot"
+    ]
+  },
+  "verdict": "COMMISSIONED_LIVE_WINDOW_OPEN",
+  "report_line": "plan_completion_commissioning \u00b7 COMMISSIONED_LIVE_WINDOW_OPEN \u00b7 idle=True ticks=1 live=True"
+}

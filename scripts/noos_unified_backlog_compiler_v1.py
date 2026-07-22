@@ -229,13 +229,42 @@ def compile_backlog(*, write: bool = True) -> dict[str, Any]:
             by_hash[ch] = item["op_key"]
         unified.append(item)
 
+    # Preserve runtime CAS state (DISPATCHED/COMPLETE/job_id) across recompiles.
+    out_path = ROOT / str(config.get("runtime_queue_path") or ".noos-runtime/plan-completion/backlog-v1.json")
+    prior_by_op: dict[str, dict[str, Any]] = {}
+    if out_path.is_file():
+        try:
+            prior = load_json(out_path)
+            for pitem in prior.get("items") or []:
+                if isinstance(pitem, dict) and pitem.get("op_key"):
+                    prior_by_op[str(pitem["op_key"])] = pitem
+        except (OSError, json.JSONDecodeError, TypeError):
+            prior_by_op = {}
+    for item in unified:
+        prior = prior_by_op.get(item["op_key"])
+        if not prior:
+            continue
+        prior_status = str(prior.get("status") or "")
+        # Never revive COMPLETE; never drop in-flight DISPATCHED back to READY.
+        if prior_status == "COMPLETE":
+            item["status"] = "COMPLETE"
+            item["job_id"] = prior.get("job_id")
+            item["completed_at"] = prior.get("completed_at")
+            item["dispatched_at"] = prior.get("dispatched_at")
+            item["fencing_token"] = prior.get("fencing_token") or item.get("fencing_token") or 1
+        elif prior_status == "DISPATCHED" and item["status"] == "READY":
+            item["status"] = "DISPATCHED"
+            item["job_id"] = prior.get("job_id")
+            item["dispatched_at"] = prior.get("dispatched_at")
+            item["concurrency_key"] = prior.get("concurrency_key")
+            item["fencing_token"] = prior.get("fencing_token") or item.get("fencing_token") or 1
+
     # Dependency readiness: FOUNDER_BLOCKED never READY for dispatch
     id_to_status = {i["item_id"]: i["status"] for i in unified}
     for item in unified:
         if item["status"] != "READY":
             continue
         deps = item.get("depends_on") or []
-        unmet = [d for d in deps if id_to_status.get(d) not in {"COMPLETE", "FOUNDER_BLOCKED", None} and d in id_to_status and id_to_status[d] != "COMPLETE"]
         # deps that exist and are not COMPLETE block readiness
         blocking = [d for d in deps if d in id_to_status and id_to_status[d] not in {"COMPLETE", "FOUNDER_BLOCKED"}]
         if blocking:
@@ -272,9 +301,8 @@ def compile_backlog(*, write: bool = True) -> dict[str, Any]:
         ),
     }
     if write:
-        out = ROOT / str(config.get("runtime_queue_path") or ".noos-runtime/plan-completion/backlog-v1.json")
-        save_json(out, row)
-        row["receipt_path"] = str(out.relative_to(ROOT))
+        save_json(out_path, row)
+        row["receipt_path"] = str(out_path.relative_to(ROOT))
         proof = ROOT / "receipts/proof" / f"noos-unified-backlog-compile-{datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%SZ')}.json"
         proof.parent.mkdir(parents=True, exist_ok=True)
         proof.write_text(json.dumps({k: v for k, v in row.items() if k != "items"}, indent=2) + "\n", encoding="utf-8")
@@ -284,6 +312,12 @@ def compile_backlog(*, write: bool = True) -> dict[str, Any]:
             encoding="utf-8",
         )
         row["proof_path"] = str(proof.relative_to(ROOT))
+        try:
+            import noos_plan_completion_supabase_sink_v1 as sink  # noqa: PLC0415
+
+            row["supabase_sink"] = sink.sync_compile(row["items"])
+        except Exception as exc:  # noqa: BLE001 — sink must never fail compile
+            row["supabase_sink"] = {"ok": False, "error": str(exc)[:240]}
     return row
 
 

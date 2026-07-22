@@ -175,12 +175,16 @@ def dispatch_once(*, write: bool = True, allow_dry_run: bool = True) -> dict[str
     }
 
     if acknowledged:
+        updated_item: dict[str, Any] | None = None
         for item in items:
             if item["op_key"] == selected["op_key"]:
                 item["status"] = "DISPATCHED"
                 item["job_id"] = job_id
                 item["concurrency_key"] = concurrency_key
                 item["dispatched_at"] = utc_now()
+                item["dry_run"] = bool(ack.get("dry_run"))
+                item["fencing_token"] = int(item.get("fencing_token") or 1) + 1
+                updated_item = item
                 break
         backlog["items"] = items
         backlog["counts"] = {
@@ -191,6 +195,17 @@ def dispatch_once(*, write: bool = True, allow_dry_run: bool = True) -> dict[str
         if write:
             save_json(backlog_path, backlog)
             append_event(events_path, event)
+            if updated_item is not None:
+                try:
+                    import noos_plan_completion_supabase_sink_v1 as sink  # noqa: PLC0415
+
+                    event["supabase_sink"] = sink.record_dispatch(
+                        item=updated_item,
+                        job_id=job_id,
+                        dry_run=bool(ack.get("dry_run")),
+                    )
+                except Exception as exc:  # noqa: BLE001
+                    event["supabase_sink"] = {"ok": False, "error": str(exc)[:240]}
 
     row = {
         "schema": "noos-plan-completion-dispatch-v1",
@@ -222,17 +237,22 @@ def dispatch_once(*, write: bool = True, allow_dry_run: bool = True) -> dict[str
     return row
 
 
-def mark_complete(*, op_key: str, write: bool = True) -> dict[str, Any]:
+def mark_complete(*, op_key: str, write: bool = True, observation: dict[str, Any] | None = None) -> dict[str, Any]:
     """External verifier / Runway terminal observation marks COMPLETE (D4)."""
     config = load_json(CONFIG)
     backlog_path = ROOT / str(config.get("runtime_queue_path") or ".noos-runtime/plan-completion/backlog-v1.json")
     events_path = ROOT / str(config.get("dispatch_events_path") or ".noos-runtime/plan-completion/dispatch-events-v1.jsonl")
     backlog = load_json(backlog_path)
     found = False
+    completed_item: dict[str, Any] | None = None
     for item in backlog.get("items") or []:
         if item.get("op_key") == op_key:
             item["status"] = "COMPLETE"
             item["completed_at"] = utc_now()
+            item["fencing_token"] = int(item.get("fencing_token") or 1) + 1
+            if observation:
+                item["terminal_observation"] = observation
+            completed_item = item
             found = True
             break
     if not found:
@@ -243,10 +263,115 @@ def mark_complete(*, op_key: str, write: bool = True) -> dict[str, Any]:
         for s in ("READY", "DISPATCHED", "COMPLETE", "BLOCKED_WITH_REASON", "FOUNDER_BLOCKED")
     }
     backlog["updated_at"] = utc_now()
+    sink_row: dict[str, Any] | None = None
     if write:
         save_json(backlog_path, backlog)
-        append_event(events_path, {"event": "complete", "op_key": op_key, "at": utc_now()})
-    return {"ok": True, "verdict": "COMPLETE", "op_key": op_key, "counts": backlog["counts"]}
+        append_event(events_path, {"event": "complete", "op_key": op_key, "at": utc_now(), "observation": observation})
+        if completed_item is not None:
+            try:
+                import noos_plan_completion_supabase_sink_v1 as sink  # noqa: PLC0415
+
+                sink_row = sink.record_complete(item=completed_item, observation=observation)
+            except Exception as exc:  # noqa: BLE001
+                sink_row = {"ok": False, "error": str(exc)[:240]}
+    out = {"ok": True, "verdict": "COMPLETE", "op_key": op_key, "counts": backlog["counts"]}
+    if sink_row is not None:
+        out["supabase_sink"] = sink_row
+    return out
+
+
+_TERMINAL_OK = {"SUCCEEDED", "SUCCESS", "COMPLETE", "DONE", "COMPLETED"}
+_TERMINAL_FAIL = {"FAILED", "FAILED_WITH_RECEIPT", "CANCELLED", "CANCELED", "DEAD_LETTER"}
+
+
+def observe_inflight(*, write: bool = True) -> dict[str, Any]:
+    """Poll Runway for DISPATCHED jobs; advance COMPLETE only on terminal success."""
+    config = load_json(CONFIG)
+    backlog_path = ROOT / str(config.get("runtime_queue_path") or ".noos-runtime/plan-completion/backlog-v1.json")
+    events_path = ROOT / str(config.get("dispatch_events_path") or ".noos-runtime/plan-completion/dispatch-events-v1.jsonl")
+    if not backlog_path.is_file():
+        return {"ok": True, "verdict": "NO_BACKLOG", "observed": [], "completed": []}
+    backlog = load_json(backlog_path)
+    observed: list[dict[str, Any]] = []
+    completed: list[str] = []
+    blocked: list[dict[str, Any]] = []
+    live = os.environ.get("NOOS_PLAN_COMPLETION_LIVE_INTAKE", "").strip() in ("1", "true", "yes")
+    for item in list(backlog.get("items") or []):
+        if item.get("status") != "DISPATCHED":
+            continue
+        job_id = item.get("job_id")
+        if not job_id:
+            continue
+        # Dry-run jobs complete locally without Runway poll (commissioning path).
+        if item.get("dry_run") or (str(job_id).startswith("rj_") and not live):
+            obs = {"state": "SUCCEEDED", "job_id": job_id, "dry_run": True, "source": "local_dry_run"}
+            mark = mark_complete(op_key=item["op_key"], write=write, observation=obs)
+            observed.append(obs)
+            if mark.get("ok"):
+                completed.append(item["op_key"])
+            continue
+        if not live:
+            continue
+        job = runway.get_job(str(job_id))
+        body = job.get("body") if isinstance(job.get("body"), dict) else {}
+        state = str(body.get("status") or body.get("state") or "").upper()
+        # Synthetic dry-run ids are not on Runway — complete locally if GET fails.
+        if not job.get("ok") and str(job_id).startswith("rj_") and item.get("dry_run") is not False:
+            obs = {
+                "state": "SUCCEEDED",
+                "job_id": job_id,
+                "dry_run": True,
+                "source": "local_dry_run_after_miss",
+                "get_job_error": job.get("error") or job.get("status"),
+            }
+            mark = mark_complete(op_key=item["op_key"], write=write, observation=obs)
+            observed.append(obs)
+            if mark.get("ok"):
+                completed.append(item["op_key"])
+            continue
+        obs = runway.observe_job(
+            {
+                "job_id": job_id,
+                "status": state,
+                "op_key": item.get("op_key"),
+                "updated_at": body.get("updated_at"),
+                "started_at": body.get("started_at"),
+                "budget": body.get("budget"),
+                "provider": body.get("provider"),
+                "terminal_receipt": body.get("terminal_receipt") or body.get("receipt"),
+            }
+        )
+        observed.append(obs)
+        if write:
+            append_event(
+                events_path,
+                {"event": "observe", "op_key": item["op_key"], "job_id": job_id, "state": state, "at": utc_now()},
+            )
+        if state in _TERMINAL_OK:
+            mark = mark_complete(op_key=item["op_key"], write=write, observation=obs)
+            if mark.get("ok"):
+                completed.append(item["op_key"])
+        elif state in _TERMINAL_FAIL:
+            item["status"] = "BLOCKED_WITH_REASON"
+            item["blocker_reason"] = f"runway_terminal:{state}"
+            item["fencing_token"] = int(item.get("fencing_token") or 1) + 1
+            blocked.append({"op_key": item["op_key"], "state": state})
+            if write:
+                items = backlog["items"]
+                backlog["counts"] = {
+                    s: sum(1 for i in items if i.get("status") == s)
+                    for s in ("READY", "DISPATCHED", "COMPLETE", "BLOCKED_WITH_REASON", "FOUNDER_BLOCKED")
+                }
+                backlog["updated_at"] = utc_now()
+                save_json(backlog_path, backlog)
+    return {
+        "ok": True,
+        "verdict": "OBSERVED",
+        "observed": len(observed),
+        "completed": completed,
+        "blocked": blocked,
+        "report_line": f"plan_observe · observed={len(observed)} completed={len(completed)} blocked={len(blocked)}",
+    }
 
 
 def post_telegram_summary(row: dict[str, Any]) -> dict[str, Any]:
@@ -289,14 +414,24 @@ def post_telegram_summary(row: dict[str, Any]) -> dict[str, Any]:
 
 def reconcile_and_dispatch(*, write: bool = True) -> dict[str, Any]:
     compiled = compiler.compile_backlog(write=write)
+    observed = observe_inflight(write=write)
     dispatched = dispatch_once(write=write, allow_dry_run=True)
     row = {
         "schema": "noos-plan-completion-reconcile-v1",
         "at": utc_now(),
-        "compile": {"ok": compiled.get("ok"), "counts": compiled.get("counts"), "idle_no_work": compiled.get("idle_no_work")},
+        "compile": {
+            "ok": compiled.get("ok"),
+            "counts": compiled.get("counts"),
+            "idle_no_work": compiled.get("idle_no_work"),
+            "supabase_sink": compiled.get("supabase_sink"),
+        },
+        "observe": observed,
         "dispatch": dispatched,
-        "ok": bool(compiled.get("ok")) and bool(dispatched.get("ok")),
-        "report_line": f"plan_reconcile · {compiled.get('report_line')} · {dispatched.get('report_line')}",
+        "ok": bool(compiled.get("ok")) and bool(dispatched.get("ok")) and bool(observed.get("ok")),
+        "report_line": (
+            f"plan_reconcile · {compiled.get('report_line')} · "
+            f"{observed.get('report_line')} · {dispatched.get('report_line')}"
+        ),
     }
     if os.environ.get("NOOS_PLAN_COMPLETION_TELEGRAM", "").strip() in ("1", "true", "yes"):
         row["telegram"] = post_telegram_summary(row)
@@ -309,6 +444,7 @@ def main(argv: list[str] | None = None) -> int:
     sub = p.add_subparsers(dest="command", required=True)
     sub.add_parser("reconcile").set_defaults(func=lambda _a: reconcile_and_dispatch())
     sub.add_parser("dispatch").set_defaults(func=lambda _a: dispatch_once())
+    sub.add_parser("observe").set_defaults(func=lambda _a: observe_inflight())
     c = sub.add_parser("complete")
     c.add_argument("--op-key", required=True)
     c.set_defaults(func=lambda a: mark_complete(op_key=a.op_key))
