@@ -256,6 +256,14 @@ def verify_migration(number: str, *, url: str) -> dict[str, Any]:
         return asyncio.run(_verify_rls_machine_tables(url))
     if number == "0018":
         return asyncio.run(_verify_security_advisor_warnings(url))
+    if number == "0021":
+        events = asyncio.run(_verify_table_exists(url, "noos_plan_completion_events"))
+        backlog = asyncio.run(_verify_table_exists(url, "noos_plan_completion_backlog"))
+        return {
+            "ok": bool(events.get("ok") and backlog.get("ok")),
+            "events": events,
+            "backlog": backlog,
+        }
     return {"ok": True, "note": "no specific verifier for migration"}
 
 
