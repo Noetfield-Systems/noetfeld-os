@@ -17,9 +17,10 @@ def test_forbidden_list_includes_gateway_a() -> None:
     assert "gateway_a" in names
 
 
-def test_send_alerts_disabled_by_default() -> None:
+def test_send_alerts_requires_allowed_bot() -> None:
     cfg = lane.load_lane()
-    assert cfg.get("send_alerts") is not True
+    assert lane.normalize_username(cfg.get("allowed_bot_username") or "") == "noos_cycle_bot"
+    assert cfg.get("send_alerts") is True
 
 
 def test_verify_fails_without_token() -> None:
