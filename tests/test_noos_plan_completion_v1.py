@@ -97,3 +97,33 @@ def test_route_map_wired():
     assert statuses["monitoring_availability"] == "WIRED"
     assert statuses["ci_failure_candidate_repair"] == "WIRED"
     assert statuses["plan_completion_intake"] == "WIRED"
+
+
+def test_runtime_state_preserved_across_compile(monkeypatch):
+    monkeypatch.chdir(ROOT)
+    monkeypatch.delenv("NOOS_PLAN_COMPLETION_LIVE_INTAKE", raising=False)
+    compiler.compile_backlog(write=True)
+    first = dispatch.dispatch_once(write=True, allow_dry_run=True)
+    if first["verdict"] != "DISPATCHED":
+        return
+    op = first["selected"]["op_key"]
+    again = compiler.compile_backlog(write=True)
+    matched = [i for i in again["items"] if i["op_key"] == op]
+    assert matched and matched[0]["status"] == "DISPATCHED"
+    obs = dispatch.observe_inflight(write=True)
+    assert op in obs["completed"]
+    final = compiler.compile_backlog(write=True)
+    matched2 = [i for i in final["items"] if i["op_key"] == op]
+    assert matched2 and matched2[0]["status"] == "COMPLETE"
+
+
+def test_supabase_sink_skips_without_env(monkeypatch):
+    monkeypatch.chdir(ROOT)
+    monkeypatch.delenv("NOETFIELD_SUPABASE_URL", raising=False)
+    monkeypatch.delenv("SUPABASE_URL", raising=False)
+    monkeypatch.delenv("NOETFIELD_SUPABASE_SERVICE_ROLE_KEY", raising=False)
+    monkeypatch.delenv("SUPABASE_SERVICE_ROLE_KEY", raising=False)
+    import noos_plan_completion_supabase_sink_v1 as sink
+
+    row = sink.sync_compile([])
+    assert row.get("skipped") is True
