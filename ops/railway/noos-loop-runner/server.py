@@ -15,7 +15,11 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 from pathlib import Path
 from typing import Any
 
-ROOT = Path(__file__).resolve().parents[3]
+ROOT_CANDIDATES = [Path(__file__).resolve().parent, *Path(__file__).resolve().parents]
+ROOT = next(
+    (p for p in ROOT_CANDIDATES if (p / "scripts" / "noos_loop_runner_v1.py").is_file()),
+    Path(__file__).resolve().parents[3],
+)
 sys.path.insert(0, str(ROOT / "scripts"))
 from noos_loop_liveness_v1 import upsert_loop_liveness  # noqa: E402
 

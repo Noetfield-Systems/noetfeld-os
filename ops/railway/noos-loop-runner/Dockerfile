@@ -10,6 +10,8 @@ COPY ops/railway/noos-loop-runner/BUILD_SHA ./BUILD_SHA
 RUN pip install --no-cache-dir -r requirements.txt && pip install --no-cache-dir -e .
 
 COPY ops/railway/noos-loop-runner/server.py ./ops/railway/noos-loop-runner/server.py
+# Compatibility: some Railway service settings still invoke /app/server.py.
+COPY ops/railway/noos-loop-runner/server.py ./server.py
 
 ENV PORT=8080
 EXPOSE 8080
