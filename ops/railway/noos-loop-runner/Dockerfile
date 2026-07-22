@@ -1,7 +1,9 @@
 FROM python:3.12-slim
 
 WORKDIR /app
-COPY requirements.txt pyproject.toml ./
+RUN apt-get update && apt-get install -y --no-install-recommends make \
+  && rm -rf /var/lib/apt/lists/*
+COPY requirements.txt pyproject.toml Makefile ./
 COPY noetfield_gate ./noetfield_gate
 COPY scripts ./scripts
 COPY data ./data
