@@ -14,6 +14,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 
 from noos_plan_motor_v1 import burn_down_summary  # noqa: E402
+import noos_role_runway_dispatch_v1 as role_dispatch  # noqa: E402
 
 OUT = ROOT / "data/noos-orchestrator-health-v1.json"
 PROOF = ROOT / "receipts/proof/noos-orchestrator-health-v1.json"
@@ -69,6 +70,7 @@ def aggregate() -> dict[str, Any]:
         "plan_motor": burn_down_summary(),
         "autorun": _autorun_core_loops(),
         "wiring": "data/noos-plan-motor-wiring-v1.json",
+        "role_dispatch": role_dispatch.dispatch_role("orchestrator", subject="cross-repo-health"),
         "not_a_verdict": "SUBMITTED for independent verification",
     }
 
