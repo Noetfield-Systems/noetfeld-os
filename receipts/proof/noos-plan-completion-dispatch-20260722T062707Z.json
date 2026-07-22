@@ -1,0 +1,31 @@
+{
+  "schema": "noos-plan-completion-dispatch-v1",
+  "at": "2026-07-22T06:27:07Z",
+  "verdict": "DISPATCHED",
+  "ok": true,
+  "selected": {
+    "item_id": "commercial-software-repair-sandbox",
+    "plan_id": "runway_build_backlog_seed",
+    "op_key": "9e9ffd69ad80955acf0793d7385738cb91691964a05e961b71f4199109a077a5",
+    "role": "self_heal",
+    "title": "Software Repair sandbox fixture journey"
+  },
+  "job_id": "rj_18584c6b0ddc97bb567205dc82cdb638",
+  "ack": {
+    "ok": true,
+    "status": 202,
+    "dry_run": null,
+    "error": null
+  },
+  "recipe": {
+    "runway_id": "software-repair",
+    "recipe_id": "sandbox-repair",
+    "recipe_version": "0.1.0"
+  },
+  "preflight": {
+    "ok": true,
+    "verdict": "RUNWAY_API_CONFIGURED"
+  },
+  "dry_run": false,
+  "report_line": "plan_dispatch \u00b7 DISPATCHED item=commercial-software-repair-sandbox job=rj_18584c6b0ddc97bb567205dc82cdb638 dry_run=False"
+}

@@ -48,7 +48,7 @@
       "lane": "runway",
       "role": "self_heal",
       "runway_id": "software-repair",
-      "recipe_id": "sandbox-fixture-repair",
+      "recipe_id": "sandbox-repair",
       "recipe_version": "0.1.0",
       "value_class": "risk_reduction",
       "depends_on": [],

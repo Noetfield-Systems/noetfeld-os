@@ -1,0 +1,19 @@
+{
+  "schema": "supabase-migration-receipt-v1",
+  "migration": "0021",
+  "migration_file": "infrastructure/supabase/migrations/0021_noos_unified_plan_completion.sql",
+  "applied_at": "2026-07-22T06:27:45Z",
+  "dry_run": false,
+  "postgres_configured": true,
+  "pre_verify": {
+    "ok": true,
+    "note": "no specific verifier for migration"
+  },
+  "ok": true,
+  "skipped": true,
+  "reason": "already_applied",
+  "post_verify": {
+    "ok": true,
+    "note": "no specific verifier for migration"
+  }
+}

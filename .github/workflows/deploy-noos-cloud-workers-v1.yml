@@ -70,7 +70,7 @@ jobs:
           NOETFIELD_SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.NOETFIELD_SUPABASE_SERVICE_ROLE_KEY }}
           LOOP_RUNNER_URL: https://noos-loop-runner-production.up.railway.app
           LOOP_RUNNER_SECRET: ${{ secrets.NOOS_LOOP_SECRET }}
-          DEADMAN_TELEGRAM_BOT_TOKEN: ${{ secrets.DEADMAN_TELEGRAM_BOT_TOKEN || secrets.NOOS_CYCLE_BOT_TOKEN || secrets.NOOS_TELEGRAM_BOT_TOKEN || secrets.TELEGRAM_NOOS_CYCLE_BOT_TOKEN || secrets.TELEGRAM_BOT_TOKEN }}
+          DEADMAN_TELEGRAM_BOT_TOKEN: ${{ secrets.DEADMAN_TELEGRAM_BOT_TOKEN || secrets.NOOS_CYCLE_BOT_TOKEN || secrets.NOOS_TELEGRAM_BOT_TOKEN || secrets.TELEGRAM_NOOS_CYCLE_BOT_TOKEN }}
           DEADMAN_TELEGRAM_CHAT_ID: ${{ vars.DEADMAN_TELEGRAM_CHAT_ID }}
           ALLOW_DEADMAN_TELEGRAM_SECRET_UPLOAD: "1"
         run: |
@@ -83,7 +83,16 @@ jobs:
             echo "WARN: DEADMAN_TELEGRAM_BOT_TOKEN not visible to this workflow — deploying worker without secret re-upload (existing CF secret retained)"
             unset ALLOW_DEADMAN_TELEGRAM_SECRET_UPLOAD || true
           else
-            export ALLOW_DEADMAN_TELEGRAM_SECRET_UPLOAD=1
+            ME="$(curl -fsS "https://api.telegram.org/bot${DEADMAN_TELEGRAM_BOT_TOKEN}/getMe")"
+            USER="$(python3 -c 'import json,sys; print(((json.load(sys.stdin).get("result") or {}).get("username") or "").lower())' <<<"$ME")"
+            if [[ "$USER" != "noos_cycle_bot" ]]; then
+              echo "FAIL: DEADMAN_TELEGRAM_BOT_TOKEN getMe username=$USER expected=noos_cycle_bot — refusing upload" >&2
+              unset ALLOW_DEADMAN_TELEGRAM_SECRET_UPLOAD || true
+              unset DEADMAN_TELEGRAM_BOT_TOKEN || true
+            else
+              echo "OK: deadman Telegram lane bot=@${USER}"
+              export ALLOW_DEADMAN_TELEGRAM_SECRET_UPLOAD=1
+            fi
           fi
           bash scripts/deploy_noos_deadman_cf_v1.sh
 
