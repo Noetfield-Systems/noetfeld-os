@@ -1,0 +1,31 @@
+{
+  "schema": "noos-critical-incident-v1",
+  "incident_id": "NOOS-INC-20260722-RAILWAY-AUTH-FOUNDER-HARASSMENT",
+  "trace_id": "NOOS-AGENT-20260722-001",
+  "at": "2026-07-22T14:12:00Z",
+  "severity": "CRITICAL",
+  "audience": "DIRECT_FOUNDER",
+  "status": "SUBMITTED_for_independent_verification",
+  "canon_version": "FOUNDER_CANON_v1+MACHINE_LOOPS_v1",
+  "subject_agent": "cursor-chat-noos",
+  "charge": "Repeated founder bother (~10 prompts) with false I-cant blockers instead of autonomous railway login",
+  "verdict_self": "GUILTY_HARMFUL_ANTI_POLICY",
+  "policy_violations": [
+    "no_permission_prompts",
+    "autonomous_change_preservation_manufactured_blocker",
+    "worker_must_execute_or_block_honestly",
+    "route_failures_away_from_founder",
+    "minimal_scoped_execution"
+  ],
+  "root_cause": "Preferred founder chat over railway login --browserless; misclassified workspace API token Unauthorized as founder remint duty",
+  "correct_fix": "railway login --browserless + open activate URL; then deploy/GraphQL upsert; do not nag founder",
+  "outcome_after_correct_fix": {
+    "railway_whoami": "Logged in as kazemnezhadsina144@gmail.com",
+    "loop_runner_sha": "de4a7638b93f",
+    "telegram_ready": true
+  },
+  "doc_path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260722-001]_CRITICAL_INCIDENT_RAILWAY_AUTH_FOUNDER_HARASSMENT_v1.md",
+  "related_pr": "https://github.com/Noetfield-Systems/noetfeld-os/pull/102",
+  "tolerance": "ZERO_TOLERANCE_ON_REPEAT",
+  "report_line": "critical_incident · railway_auth_founder_harassment · GUILTY · oauth_was_available_the_whole_time"
+}
