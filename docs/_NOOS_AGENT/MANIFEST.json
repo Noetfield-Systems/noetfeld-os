@@ -4,7 +4,7 @@
   "agent_lane": "NOETFELD-OS",
   "workspace_root": "/Users/sinakazemnezhad/Desktop/Noetfield-Systems/noetfeld-OS",
   "search_token": "NOOS-AGENT-DOC",
-  "updated_at": "2026-07-06",
+  "updated_at": "2026-07-22",
   "part8_sync_at": "2026-06-15",
   "canonical_ssot_source": "/Users/sinakazemnezhad/Desktop/Noetfield/Noetfield-All-Documents/",
   "sync_script": "scripts/sync-noos-ssot.sh",
@@ -302,6 +302,12 @@
       "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260715-001]_MOTOR_EVENT_REPAIR_FOUNDER_CHECKLIST_v1.md",
       "doc_type": "FOUNDER_CHECKLIST",
       "title": "Motor repair + event-based redesign — founder checklist v1"
+    },
+    {
+      "trace_id": "NOOS-AGENT-20260722-001",
+      "path": "docs/_NOOS_AGENT/[NOOS-AGENT-20260722-001]_CRITICAL_INCIDENT_RAILWAY_AUTH_FOUNDER_HARASSMENT_v1.md",
+      "doc_type": "CRITICAL_INCIDENT_FOUNDER",
+      "title": "CRITICAL INCIDENT — Railway auth founder-harassment / false I-cant blockers"
     }
   ]
 }

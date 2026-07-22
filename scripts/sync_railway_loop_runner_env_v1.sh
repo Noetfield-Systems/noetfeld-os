@@ -13,6 +13,13 @@ log() { printf '[sync-loop-runner-env] %s\n' "$*"; }
 # shellcheck disable=SC1091
 source "$ROOT/scripts/noos_load_noetfield_env_v1.sh"
 noos_load_noetfield_env
+# Workspace API tokens in RAILWAY_TOKEN break `railway whoami`; Mac uses OAuth session.
+# Prefer session when RAILWAY_TOKEN is empty/invalid for CLI.
+if [[ -z "${RAILWAY_TOKEN:-}" || "${#RAILWAY_TOKEN}" -eq 0 ]]; then unset RAILWAY_TOKEN; fi
+if [[ -z "${RAILWAY_API_TOKEN:-}" || "${#RAILWAY_API_TOKEN}" -eq 0 ]]; then unset RAILWAY_API_TOKEN; fi
+# If only GraphQL/GHA token present, do not export it as RAILWAY_TOKEN for CLI.
+if [[ -n "${RAILWAY_GHA_TOKEN:-}" ]]; then unset RAILWAY_TOKEN RAILWAY_API_TOKEN; fi
+
 
 URL="${NOETFIELD_SUPABASE_URL:-${SUPABASE_URL:-}}"
 KEY="${NOETFIELD_SUPABASE_SERVICE_ROLE_KEY:-${SUPABASE_SERVICE_ROLE_KEY:-}}"
