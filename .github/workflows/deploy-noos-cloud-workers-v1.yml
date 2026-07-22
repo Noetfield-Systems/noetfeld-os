@@ -75,14 +75,16 @@ jobs:
           ALLOW_DEADMAN_TELEGRAM_SECRET_UPLOAD: "1"
         run: |
           set -euo pipefail
-          test -n "${DEADMAN_TELEGRAM_BOT_TOKEN:-}" || {
-            echo "FAIL: DEADMAN_TELEGRAM_BOT_TOKEN missing from org/repo Actions secrets" >&2
-            exit 1
-          }
-          test -n "${DEADMAN_TELEGRAM_CHAT_ID:-}" || {
+          if [[ -z "${DEADMAN_TELEGRAM_CHAT_ID:-}" ]]; then
             echo "FAIL: DEADMAN_TELEGRAM_CHAT_ID missing from repository Actions variables" >&2
             exit 1
-          }
+          fi
+          if [[ -z "${DEADMAN_TELEGRAM_BOT_TOKEN:-}" ]]; then
+            echo "WARN: DEADMAN_TELEGRAM_BOT_TOKEN not visible to this workflow — deploying worker without secret re-upload (existing CF secret retained)"
+            unset ALLOW_DEADMAN_TELEGRAM_SECRET_UPLOAD || true
+          else
+            export ALLOW_DEADMAN_TELEGRAM_SECRET_UPLOAD=1
+          fi
           bash scripts/deploy_noos_deadman_cf_v1.sh
 
       # Event Phase 1c — GitHub App webhook receiver. Skips cleanly (no deploy,
