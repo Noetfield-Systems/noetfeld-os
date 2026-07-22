@@ -593,7 +593,7 @@
           "name": "aggregate_health",
           "cmd": [
             "python3",
-            "scripts/noos_orchestrator_cross_repo_v1.py",
+            "scripts/noos_orchestrator_v1.py",
             "--json"
           ]
         }
@@ -606,7 +606,7 @@
           "name": "aggregate_health",
           "cmd": [
             "python3",
-            "scripts/noos_orchestrator_cross_repo_v1.py",
+            "scripts/noos_orchestrator_v1.py",
             "--json"
           ]
         }
