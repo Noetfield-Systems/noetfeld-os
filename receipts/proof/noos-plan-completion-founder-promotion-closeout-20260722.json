@@ -1,0 +1,56 @@
+{
+  "schema": "noos-plan-completion-founder-promotion-closeout-v1",
+  "at": "2026-07-22T14:22:08Z",
+  "canon_version": "FOUNDER_CANON_v1+MACHINE_LOOPS_v1",
+  "authority": "founder_go_ahead_on_prior_CANDIDATE_PENDING_FOUNDER_PROMOTION",
+  "prior_gaps_closed": [
+    {
+      "gap": "DEADMAN_TELEGRAM_BOT_TOKEN for @NOOS_cycle_bot",
+      "status": "CLOSED",
+      "evidence": {
+        "bot_username": "NOOS_cycle_bot",
+        "telegram_ready": true,
+        "telegram_send_alerts": true,
+        "lane_verify_ok": true
+      }
+    },
+    {
+      "gap": "Refresh RAILWAY_TOKEN / GHA sync",
+      "status": "CLOSED",
+      "evidence": {
+        "gh_secrets_updated": "2026-07-22T14:10:39Z",
+        "oauth_session": "kazemnezhadsina144@gmail.com",
+        "loop_runner_env_sync": "OK",
+        "auth_path": "CLI OAuth session + RAILWAY_GHA_TOKEN GraphQL upsert"
+      }
+    },
+    {
+      "gap": "Merge #101 so Railway picks up observe/sink",
+      "status": "CLOSED",
+      "evidence": {
+        "pr_101": "merged 2026-07-22T13:35:02Z",
+        "pr_102": "merged 2026-07-22T14:17:17Z",
+        "live_loop_runner_sha": "de4a7638b93f",
+        "on_main": true,
+        "post_merge_tick": "ok state=COMPLETE (THROTTLED_INFLIGHT observed)"
+      }
+    }
+  ],
+  "live": {
+    "loop_runner": "https://noos-loop-runner-production.up.railway.app/health",
+    "deadman": "https://noos-deadman-v1.sina-kazemnezhad-ca.workers.dev/health",
+    "runway_staging_healthz": "https://noetfield-runway-runtime-api-staging.sina-kazemnezhad-ca.workers.dev/healthz"
+  },
+  "commission_window": {
+    "started_at": "2026-07-22T12:50:51Z",
+    "ends_at": "2026-07-23T12:50:51Z",
+    "status": "RUNNING_UNATTENDED",
+    "acceptance": "eligible items COMPLETE|BLOCKED_WITH_REASON|FOUNDER_BLOCKED; next tick IDLE_NO_WORK; no duplicate op_key dispatch"
+  },
+  "known_non_blockers": [
+    "motor_event_gateway_ready=false (MOTOR_EVENT_GATEWAY_URL unset) \u2014 out of this promotion scope"
+  ],
+  "verdict": "PASS_SCOPED_CHANGE",
+  "promotion": "FOUNDER_GAPS_CLOSED_WINDOW_RUNNING",
+  "report_line": "plan_completion_promotion \u00b7 FOUNDER_GAPS_CLOSED_WINDOW_RUNNING \u00b7 pr101+102 merged \u00b7 @NOOS_cycle_bot ready \u00b7 railway auth fixed"
+}
