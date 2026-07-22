@@ -129,7 +129,7 @@ async function restartMotor(env, recipeId) {
   const path = (config.loop_runner || {}).motor_restart_path || "/motor-restart";
   if (!base || !recipeId) return { ok: false, error: "loop_runner_or_recipe_missing" };
   const headers = { "Content-Type": "application/json", "User-Agent": "noos-deadman-v1" };
-  if (secret) headers.Authorization = `Bearer ${secret}`;
+  if (secret) headers["X-NOOS-Loop-Secret"] = secret;
   const resp = await fetch(`${base}${path}`, {
     method: "POST",
     headers,
@@ -144,7 +144,7 @@ async function restartLoop(env, eventType) {
   const secret = (env.LOOP_RUNNER_SECRET || "").trim();
   if (!base || !eventType) return { ok: false, error: "loop_runner_or_event_missing" };
   const headers = { "Content-Type": "application/json", "User-Agent": "noos-deadman-v1" };
-  if (secret) headers.Authorization = `Bearer ${secret}`;
+  if (secret) headers["X-NOOS-Loop-Secret"] = secret;
   const resp = await fetch(`${base}/loop`, {
     method: "POST",
     headers,

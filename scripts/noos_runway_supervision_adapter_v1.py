@@ -64,7 +64,10 @@ def runtime_env() -> dict[str, str]:
     secret = (os.environ.get(str(req.get("auth_env") or "NOETFIELD_RUNWAY_API_SECRET")) or "").strip()
     if not secret:
         secret = (os.environ.get(str(req.get("auth_legacy_env") or "NOETFIELD_RUNWAY_API_TOKEN")) or "").strip()
-    key_id = (os.environ.get(str(req.get("key_id_env") or "NOETFIELD_RUNWAY_API_KEY_ID")) or "noos").strip()
+    key_id = (
+        os.environ.get(str(req.get("key_id_env") or "NOETFIELD_RUNWAY_API_KEY_ID"))
+        or str(req.get("key_id_default") or "staging-proof")
+    ).strip()
     return {"url": url, "secret": secret, "key_id": key_id}
 
 

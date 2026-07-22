@@ -45,13 +45,14 @@ def append_event(path: Path, event: dict[str, Any]) -> None:
 
 
 def resolve_recipe(item: dict[str, Any], contract: dict[str, Any]) -> dict[str, str]:
+    """Contract role_recipe_map is supervision SSOT; item fields are fallback only."""
     role_map = contract.get("role_recipe_map") or {}
     role = str(item.get("role") or "research")
     mapped = role_map.get(role) or role_map.get("research") or {}
     return {
-        "runway_id": str(item.get("runway_id") or mapped.get("runway_id") or "research"),
-        "recipe_id": str(item.get("recipe_id") or mapped.get("recipe_id") or "noos-research-memo"),
-        "recipe_version": str(item.get("recipe_version") or mapped.get("recipe_version") or "1.0.0"),
+        "runway_id": str(mapped.get("runway_id") or item.get("runway_id") or "research"),
+        "recipe_id": str(mapped.get("recipe_id") or item.get("recipe_id") or "vendor-decision-brief"),
+        "recipe_version": str(mapped.get("recipe_version") or item.get("recipe_version") or "0.1.0"),
     }
 
 
