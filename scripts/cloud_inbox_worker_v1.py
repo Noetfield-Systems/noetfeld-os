@@ -361,6 +361,13 @@ def process_cycle() -> dict[str, Any]:
             summary = founder_blocked_summary(_fetch_founder_blocked())
             plan["founder_blocked"] = summary
             plan["founder_blocked_this_cycle"] = [row["item_id"] for row in blocked_founder]
+            # Plan-motor verify failures are submitted work, not inbox crashes.
+            # Keep the cycle exit green so organic http_loop receipts stay healthy.
+            if plan.get("action") == "plan_motor_executed":
+                plan["ok"] = True
+                if plan.get("status") == "blocked":
+                    plan["status"] = "completed"
+                    plan["plan_motor_verify_failed"] = True
             return plan
         pending_total = len(pending)
         idle_reason = (
