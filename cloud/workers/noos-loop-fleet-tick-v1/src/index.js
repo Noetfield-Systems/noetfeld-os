@@ -67,7 +67,10 @@ async function dispatchTarget(env, target, meta = {}) {
 }
 
 function dueTargets(utcMinute) {
-  return TARGETS.filter((t) => utcMinute % Number(t.interval_minutes || 5) === 0);
+  return TARGETS.filter((t) => {
+    if (t.enabled === false || t.schedule_status === "quarantined") return false;
+    return utcMinute % Number(t.interval_minutes || 5) === 0;
+  });
 }
 
 async function dispatchAll(env, targets, meta) {

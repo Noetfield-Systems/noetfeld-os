@@ -2,7 +2,7 @@
   "schema": "noos-loop-verify-v1",
   "backlog_id": "LOOP-VERIFY-chain",
   "loop_id": "chain",
-  "verified_at": "2026-07-05T16:44:13Z",
+  "verified_at": "2026-07-06T09:37:50Z",
   "verification_state": "VERIFIED",
   "smoke": {
     "loop_id": "chain",
@@ -20,9 +20,9 @@
       "event_type": "noos_chain_loop_tick",
       "domain": "chain-tools",
       "trigger_source": "repository_dispatch",
-      "cycle_number": 5,
-      "op_key": "abd092d6463fe5de419a675f",
-      "started_at": "2026-07-05T16:44:12+00:00",
+      "cycle_number": 11,
+      "op_key": "2e5876c39a08b74fde548557",
+      "started_at": "2026-07-06T09:37:49+00:00",
       "state_before": "RUNNING",
       "cost": {
         "provider": "github_actions+cloudflare_cron",
@@ -52,7 +52,7 @@
         "count": 1,
         "oldest_id": "NOOS-C-01",
         "priority": "P0",
-        "age_seconds": 305009,
+        "age_seconds": 365826,
         "escalated": true
       },
       "evidence": [
@@ -109,7 +109,7 @@
           "github_run_id": "local-smoke",
           "github_workflow": "noos-chain-loop.yml",
           "dispatch_source": "cf-cron",
-          "processed_at": "2026-07-05T16:44:13+00:00"
+          "processed_at": "2026-07-06T09:37:50+00:00"
         },
         "cloud_trigger": "repository_dispatch"
       },
@@ -122,12 +122,12 @@
         "exit_code": 0,
         "detail": {
           "ok": true,
-          "id": "44658cba-9296-4668-b281-efc3c8f82b68",
+          "id": "6984b0df-194b-417c-bf0c-3e9237374b31",
           "status": 201,
-          "op_key": "abd092d6463fe5de419a675f"
+          "op_key": "2e5876c39a08b74fde548557"
         }
       },
-      "finished_at": "2026-07-05T16:44:13+00:00",
+      "finished_at": "2026-07-06T09:37:50+00:00",
       "state_after": "COMPLETE",
       "status": "ok",
       "exit_code": 0,
@@ -141,33 +141,38 @@
       "d2": {
         "cas": {
           "verdict": "ACCEPTED",
-          "expected": 4,
-          "observed": 4,
-          "new_value": 5
+          "expected": 10,
+          "observed": 10,
+          "new_value": 11
         }
       },
       "transition_log_tail": [
         {
           "from": "RUNNING",
           "to": "COMPLETE",
-          "at": "2026-07-05T16:44:13+00:00",
-          "cycle": 5,
-          "op_key": "abd092d6463fe5de419a675f"
+          "at": "2026-07-06T09:37:50+00:00",
+          "cycle": 11,
+          "op_key": "2e5876c39a08b74fde548557"
         }
-      ]
+      ],
+      "liveness_upsert": {
+        "ok": true,
+        "loop_id": "chain",
+        "last_fired_at": "2026-07-06T09:37:50.507Z"
+      }
     },
     "stderr": null
   },
   "rolling_evaluation": {
     "loop_id": "chain",
     "factory_id": "loop-chain",
-    "cycle_count": 4,
+    "cycle_count": 7,
     "invalid_trigger_count": 0,
     "latest_status": "ok",
     "ready": true,
     "blockers": [],
     "lookback_hours": 24,
-    "lookback_started_at": "2026-07-04T16:44:13Z"
+    "lookback_started_at": "2026-07-05T09:37:50Z"
   },
   "ok": true,
   "autonomous_triggers": true

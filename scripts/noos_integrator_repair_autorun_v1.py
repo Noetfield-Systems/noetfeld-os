@@ -1,5 +1,11 @@
 #!/usr/bin/env python3
-"""NOOS integrator — one-shot autorun repair (liveness + SourceA spine heartbeats)."""
+"""NOOS integrator — one-shot autorun repair (liveness + SourceA spine heartbeats).
+
+Factory-cycle repair writes are gated off by default: they advance
+noetfield_factory_cycle_runs with cloud_trigger=noos_integrator_repair and can
+mask organic http_loop producer stalls. Use --factory-cycles only for explicit
+legacy/founder repair, never as routine sustain.
+"""
 
 from __future__ import annotations
 
@@ -109,12 +115,31 @@ def repair_loop_factory_cycles() -> dict[str, Any]:
     return {"ok": ok, "cycles_upserted": len(rows), "failures": [r for r in rows if not r.get("ok")][:5]}
 
 
+def gated_loop_factory_cycles(*, enabled: bool) -> dict[str, Any]:
+    if not enabled:
+        return {
+            "ok": True,
+            "skipped": True,
+            "reason": "gated_by_default_provenance_law",
+            "note": (
+                "Routine integrator repair must not write noetfield_factory_cycle_runs; "
+                "repair rows mask organic http_loop stalls. Pass --factory-cycles to opt in."
+            ),
+        }
+    return repair_loop_factory_cycles()
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--json", action="store_true")
     ap.add_argument("--write-receipt", action="store_true")
     ap.add_argument("--liveness-only", action="store_true")
     ap.add_argument("--spine-only", action="store_true")
+    ap.add_argument(
+        "--factory-cycles",
+        action="store_true",
+        help="Opt in to writing repair-labeled noetfield_factory_cycle_runs rows (masks organic stalls; founder/legacy only)",
+    )
     args = ap.parse_args()
 
     row: dict[str, Any] = {"schema": "noos-integrator-autorun-repair-v1", "at": utc_now(), "ok": True}
@@ -126,8 +151,9 @@ def main() -> int:
         row["portfolio_spine"] = spine
         if not spine.get("skipped"):
             row["ok"] = row["ok"] and spine.get("ok", False)
-        row["loop_factory_cycles"] = repair_loop_factory_cycles()
-        row["ok"] = row["ok"] and row["loop_factory_cycles"].get("ok", False)
+        row["loop_factory_cycles"] = gated_loop_factory_cycles(enabled=args.factory_cycles)
+        if not row["loop_factory_cycles"].get("skipped"):
+            row["ok"] = row["ok"] and row["loop_factory_cycles"].get("ok", False)
 
     if args.write_receipt:
         PROOF.parent.mkdir(parents=True, exist_ok=True)

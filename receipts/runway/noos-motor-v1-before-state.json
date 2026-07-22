@@ -1,0 +1,55 @@
+{
+  "schema": "noos-motor-v1-runway-before-state-v1",
+  "not_a_verdict": "Before-state capture for reversible production restoration. SUBMITTED for independent verification (author != verifier).",
+  "canon_version": "FOUNDER_CANON_v1+MACHINE_LOOPS_v1",
+  "captured_at": "2026-07-18T03:41:00Z",
+  "authorization": {
+    "granted_by": "founder (chat directive: NOOS FULL-RUNWAY EXECUTION DIRECTIVE)",
+    "scope": "bounded production restoration of isolated organic http_loop producer + in-repo motor/classifier/product work",
+    "lane_claim": "NOOS-LANE-motor-v1-runway (claude-code-noos, claimed 2026-07-18T03:40:39Z)"
+  },
+  "repo": {
+    "root": "/Users/sinakazemnezhad/Desktop/Noetfield-Systems/noetfeld-OS",
+    "branch": "nf-noos-repin-gateway-v2-b72f5a3",
+    "commit_sha": "8ba1af9ca89499330603047e00a6ddcfb7fa9fd3",
+    "origin_main": "291789bc3d40dad8ea165f68a29ff026a000bd26",
+    "dirty_worktree_count": 24,
+    "rollback_target_commit": "8ba1af9ca89499330603047e00a6ddcfb7fa9fd3"
+  },
+  "authoritative_store": {
+    "kind": "Supabase (Postgres)",
+    "completion_table": "noetfield_factory_cycle_runs",
+    "dispatch_registry_table": "noos_loop_registry",
+    "one_law": "Supabase authoritative rows + repo-local receipts are source of truth; home mirror + cockpit projections are read replicas"
+  },
+  "organic_producer": {
+    "identity": "cloud_trigger=http_loop ('writer-B') — cloud loop-execution worker",
+    "code": ["ops/railway/noos-loop-runner/server.py", "ops/fly/noos-loop-executor/server.py"],
+    "clock": "Cloudflare motor worker POSTs bounded ticks (data/noos-motor-executor-wiring-v1.json, LOCKED_v1)",
+    "last_organic_completion_at": "2026-07-12T13:50:49.571276+00:00",
+    "state_at_capture": "STALLED (no organic http_loop completion since 2026-07-12)"
+  },
+  "dispatch_mechanism": "5-min heartbeat (noos_loop_registry.last_fired_at); healthy/firing at capture",
+  "completion_writer_repair_path": "cloud_trigger=noos_integrator_repair + noos-motor-route-owner-v1 (NF-MOTOR-RECEIPT-WRITER-REPAIR-001) — masking the stall by keeping row age fresh",
+  "projection_path": "scripts/autorun_status_v1.py -> noetfield_factory_cycle_runs (cockpit read); receipts/proof archive projection lags separately",
+  "critic_path": "scripts/noos_observability_semantics_v1.py classify_loop_state()",
+  "current_schema": {
+    "migrations_dir": "infrastructure/supabase/migrations",
+    "latest_applied_migration_file": "0019_noos_incident_log.sql",
+    "next_free_migration_number": "0020"
+  },
+  "current_known_failure": "Organic http_loop producer stalled 2026-07-12T13:50:49Z; completion classifier is provenance-BLIND (age-only) so repair-labeled rows produce false RUNNING_CONFIRMED",
+  "cloud_reachability_from_this_host": {
+    "supabase_cli": false,
+    "fly_flyctl_cli": false,
+    "psql": false,
+    "railway_cli": true,
+    "curl": true,
+    "gh": true,
+    "cloud_credential_env_vars_present": false,
+    "secrets_location": "~/.noetfield-platform-secrets/noos-local.env (outside repo; NOT loaded into this environment)",
+    "consequence": "Cloud producer restart, Supabase migration apply, and real cloud organic cycles are EXTERNAL_ACTIVATION_REQUIRED from this host — objectively unreachable, not deferred by choice"
+  },
+  "acceptance_criteria_ref": "docs/runway/NOOS-MOTOR-V1-FULL-RUNWAY.md",
+  "final_status": "SUBMITTED for independent verification"
+}

@@ -4,7 +4,7 @@ name: NOOS motor sustain witness
 on:
   workflow_dispatch:
   schedule:
-    - cron: "15 */2 * * *"
+    - cron: "15 6 * * *"
 
 permissions:
   contents: read

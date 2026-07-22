@@ -1,6 +1,6 @@
 {
   "schema": "noos-loop-verify-all-v1",
-  "verified_at": "2026-07-05T16:44:33Z",
+  "verified_at": "2026-07-06T09:38:08Z",
   "authority": "NOOS_MACHINE_LOOPS_UPGRADE_STEPS_3_7",
   "lookback_hours": 24,
   "fallback_hours": 168,
@@ -9,7 +9,7 @@
       "schema": "noos-loop-verify-v1",
       "backlog_id": "LOOP-VERIFY-inbox",
       "loop_id": "inbox",
-      "verified_at": "2026-07-05T16:44:04Z",
+      "verified_at": "2026-07-06T09:37:37Z",
       "verification_state": "VERIFIED",
       "smoke": {
         "loop_id": "inbox",
@@ -27,9 +27,9 @@
           "event_type": "noos_inbox_loop_tick",
           "domain": "factory-inbox",
           "trigger_source": "repository_dispatch",
-          "cycle_number": 6,
-          "op_key": "87b91cbe9e979d84bfa93ec0",
-          "started_at": "2026-07-05T16:44:02+00:00",
+          "cycle_number": 11,
+          "op_key": "ba53204667989653ad71047a",
+          "started_at": "2026-07-06T09:37:36+00:00",
           "state_before": "RUNNING",
           "cost": {
             "provider": "github_actions+cloudflare_cron",
@@ -59,14 +59,14 @@
             "count": 1,
             "oldest_id": "NOOS-C-01",
             "priority": "P0",
-            "age_seconds": 305000,
+            "age_seconds": 365814,
             "escalated": true
           },
           "evidence": [
             {
               "command": "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3 scripts/cloud_inbox_worker_v1.py",
               "exit_code": 0,
-              "output": "r_blocked: NOOS-C-01\nfounder_blocked_priority: P0\nfounder_blocked_reason: founder_decision_required\n{\n  \"ok\": true,\n  \"status\": \"IDLE_NO_WORK\",\n  \"idle_reason\": \"no_executable_pending\",\n  \"founder_blocked\": {\n    \"founder_blocked_count\": 1,\n    \"oldest\": \"NOOS-C-01\",\n    \"priority\": \"P0\",\n    \"age_seconds\": 296388,\n    \"reason\": \"founder_decision_required\"\n  },\n  \"founder_blocked_this_cycle\": []\n}"
+              "output": "r_blocked: NOOS-C-01\nfounder_blocked_priority: P0\nfounder_blocked_reason: founder_decision_required\n{\n  \"ok\": true,\n  \"status\": \"IDLE_NO_WORK\",\n  \"idle_reason\": \"no_executable_pending\",\n  \"founder_blocked\": {\n    \"founder_blocked_count\": 1,\n    \"oldest\": \"NOOS-C-01\",\n    \"priority\": \"P0\",\n    \"age_seconds\": 357203,\n    \"reason\": \"founder_decision_required\"\n  },\n  \"founder_blocked_this_cycle\": []\n}"
             }
           ],
           "runner_output": {
@@ -78,7 +78,7 @@
                 ],
                 "ok": true,
                 "exit_code": 0,
-                "stdout_tail": "work_item_id: none\nwork_status: IDLE_NO_WORK\nexit_code: 0\nfounder_blocked_count: 1\noldest_founder_blocked: NOOS-C-01\nfounder_blocked_priority: P0\nfounder_blocked_reason: founder_decision_required\n{\n  \"ok\": true,\n  \"status\": \"IDLE_NO_WORK\",\n  \"idle_reason\": \"no_executable_pending\",\n  \"founder_blocked\": {\n    \"founder_blocked_count\": 1,\n    \"oldest\": \"NOOS-C-01\",\n    \"priority\": \"P0\",\n    \"age_seconds\": 296388,\n    \"reason\": \"founder_decision_required\"\n  },\n  \"founder_blocked_this_cycle\": []\n}",
+                "stdout_tail": "work_item_id: none\nwork_status: IDLE_NO_WORK\nexit_code: 0\nfounder_blocked_count: 1\noldest_founder_blocked: NOOS-C-01\nfounder_blocked_priority: P0\nfounder_blocked_reason: founder_decision_required\n{\n  \"ok\": true,\n  \"status\": \"IDLE_NO_WORK\",\n  \"idle_reason\": \"no_executable_pending\",\n  \"founder_blocked\": {\n    \"founder_blocked_count\": 1,\n    \"oldest\": \"NOOS-C-01\",\n    \"priority\": \"P0\",\n    \"age_seconds\": 357203,\n    \"reason\": \"founder_decision_required\"\n  },\n  \"founder_blocked_this_cycle\": []\n}",
                 "stderr_tail": "",
                 "continued_on_error": false,
                 "name": "cloud_worker"
@@ -91,7 +91,7 @@
               "github_run_id": "local-smoke",
               "github_workflow": "noos-inbox-loop.yml",
               "dispatch_source": "cf-cron",
-              "processed_at": "2026-07-05T16:44:03+00:00"
+              "processed_at": "2026-07-06T09:37:37+00:00"
             },
             "cloud_trigger": "repository_dispatch"
           },
@@ -104,12 +104,13 @@
             "exit_code": 0,
             "detail": {
               "ok": true,
-              "id": "8e0884ce-09f4-4883-9352-559212ecf95a",
-              "status": 201,
-              "op_key": "87b91cbe9e979d84bfa93ec0"
+              "idempotent": true,
+              "merged": true,
+              "id": "59a63aef-61af-4113-be57-cf0507055c8f",
+              "op_key": "ba53204667989653ad71047a"
             }
           },
-          "finished_at": "2026-07-05T16:44:03+00:00",
+          "finished_at": "2026-07-06T09:37:37+00:00",
           "state_after": "COMPLETE",
           "status": "ok",
           "exit_code": 0,
@@ -123,33 +124,38 @@
           "d2": {
             "cas": {
               "verdict": "ACCEPTED",
-              "expected": 5,
-              "observed": 5,
-              "new_value": 6
+              "expected": 10,
+              "observed": 10,
+              "new_value": 11
             }
           },
           "transition_log_tail": [
             {
               "from": "RUNNING",
               "to": "COMPLETE",
-              "at": "2026-07-05T16:44:03+00:00",
-              "cycle": 6,
-              "op_key": "87b91cbe9e979d84bfa93ec0"
+              "at": "2026-07-06T09:37:37+00:00",
+              "cycle": 11,
+              "op_key": "ba53204667989653ad71047a"
             }
-          ]
+          ],
+          "liveness_upsert": {
+            "ok": true,
+            "loop_id": "inbox",
+            "last_fired_at": "2026-07-06T09:37:37.651Z"
+          }
         },
         "stderr": null
       },
       "rolling_evaluation": {
         "loop_id": "inbox",
         "factory_id": "loop-inbox",
-        "cycle_count": 4,
+        "cycle_count": 18,
         "invalid_trigger_count": 0,
         "latest_status": "ok",
         "ready": true,
         "blockers": [],
         "lookback_hours": 24,
-        "lookback_started_at": "2026-07-04T16:44:03Z"
+        "lookback_started_at": "2026-07-05T09:37:37Z"
       },
       "ok": true,
       "autonomous_triggers": true
@@ -158,7 +164,7 @@
       "schema": "noos-loop-verify-v1",
       "backlog_id": "LOOP-VERIFY-runtime",
       "loop_id": "runtime",
-      "verified_at": "2026-07-05T16:44:10Z",
+      "verified_at": "2026-07-06T09:37:47Z",
       "verification_state": "VERIFIED",
       "smoke": {
         "loop_id": "runtime",
@@ -176,9 +182,9 @@
           "event_type": "noos_runtime_loop_tick",
           "domain": "gel-runtime",
           "trigger_source": "repository_dispatch",
-          "cycle_number": 5,
-          "op_key": "67a29bb43c4cf4488a9446b8",
-          "started_at": "2026-07-05T16:44:04+00:00",
+          "cycle_number": 11,
+          "op_key": "276480030f26c5243ca84158",
+          "started_at": "2026-07-06T09:37:37+00:00",
           "state_before": "RUNNING",
           "cost": {
             "provider": "github_actions+cloudflare_cron",
@@ -208,19 +214,19 @@
             "count": 1,
             "oldest_id": "NOOS-C-01",
             "priority": "P0",
-            "age_seconds": 305007,
+            "age_seconds": 365823,
             "escalated": true
           },
           "evidence": [
             {
               "command": "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3 -m noetfield_gate.cli gate --json --pytest",
               "exit_code": 0,
-              "output": "ab99a9a7ee98334f49aa7a5944fd8a1683d099e95fde\"\n    },\n    {\n      \"id\": \"G6\",\n      \"name\": \"pytest_suite\",\n      \"ok\": true,\n      \"reason\": \"145 passed, 2 warnings in 2.40s\"\n    },\n    {\n      \"id\": \"G7\",\n      \"name\": \"product_truth_phase\",\n      \"ok\": true,\n      \"reason\": \"PRODUCT_TRUTH phase 4 vs manifest 4\",\n      \"truth_phase\": 4,\n      \"manifest_phase\": 4\n    }\n  ],\n  \"block_reasons\": []\n}"
+              "output": "ab99a9a7ee98334f49aa7a5944fd8a1683d099e95fde\"\n    },\n    {\n      \"id\": \"G6\",\n      \"name\": \"pytest_suite\",\n      \"ok\": true,\n      \"reason\": \"163 passed, 2 warnings in 3.79s\"\n    },\n    {\n      \"id\": \"G7\",\n      \"name\": \"product_truth_phase\",\n      \"ok\": true,\n      \"reason\": \"PRODUCT_TRUTH phase 4 vs manifest 4\",\n      \"truth_phase\": 4,\n      \"manifest_phase\": 4\n    }\n  ],\n  \"block_reasons\": []\n}"
             },
             {
               "command": "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3 -m pytest -q",
               "exit_code": 0,
-              "output": "i_against_live_local_server\n  /Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/uvicorn/protocols/websockets/websockets_impl.py:17: DeprecationWarning: websockets.server.WebSocketServerProtocol is deprecated\n    from websockets.server import WebSocketServerProtocol\n\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\n145 passed, 2 warnings in 2.62s"
+              "output": "i_against_live_local_server\n  /Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/uvicorn/protocols/websockets/websockets_impl.py:17: DeprecationWarning: websockets.server.WebSocketServerProtocol is deprecated\n    from websockets.server import WebSocketServerProtocol\n\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\n163 passed, 2 warnings in 3.72s"
             }
           ],
           "runner_output": {
@@ -236,7 +242,7 @@
                 ],
                 "ok": true,
                 "exit_code": 0,
-                "stdout_tail": "\"G1\",\n      \"name\": \"policy_pack_present\",\n      \"ok\": true,\n      \"reason\": \"base + corridor policy files found\"\n    },\n    {\n      \"id\": \"G2\",\n      \"name\": \"policy_pack_valid\",\n      \"ok\": true,\n      \"reason\": \"policy JSON valid\",\n      \"rule_set_id\": \"noetfeld-credit-v1\",\n      \"rule_set_version\": \"1.0.0\"\n    },\n    {\n      \"id\": \"G3\",\n      \"name\": \"database_writable\",\n      \"ok\": true,\n      \"reason\": \"sqlite ok (noetfeld.db)\"\n    },\n    {\n      \"id\": \"G4\",\n      \"name\": \"api_readiness\",\n      \"ok\": true,\n      \"reason\": \"skipped \\u2014 set NOETFIELD_API_URL or --api-url to probe remote runtime\",\n      \"skipped\": true\n    },\n    {\n      \"id\": \"G5\",\n      \"name\": \"policy_registry\",\n      \"ok\": true,\n      \"reason\": \"PolicyRegistry loaded\",\n      \"combined_hash\": \"6ed3dd7180db65bdfce6ab99a9a7ee98334f49aa7a5944fd8a1683d099e95fde\"\n    },\n    {\n      \"id\": \"G6\",\n      \"name\": \"pytest_suite\",\n      \"ok\": true,\n      \"reason\": \"145 passed, 2 warnings in 2.40s\"\n    },\n    {\n      \"id\": \"G7\",\n      \"name\": \"product_truth_phase\",\n      \"ok\": true,\n      \"reason\": \"PRODUCT_TRUTH phase 4 vs manifest 4\",\n      \"truth_phase\": 4,\n      \"manifest_phase\": 4\n    }\n  ],\n  \"block_reasons\": []\n}",
+                "stdout_tail": "\"G1\",\n      \"name\": \"policy_pack_present\",\n      \"ok\": true,\n      \"reason\": \"base + corridor policy files found\"\n    },\n    {\n      \"id\": \"G2\",\n      \"name\": \"policy_pack_valid\",\n      \"ok\": true,\n      \"reason\": \"policy JSON valid\",\n      \"rule_set_id\": \"noetfeld-credit-v1\",\n      \"rule_set_version\": \"1.0.0\"\n    },\n    {\n      \"id\": \"G3\",\n      \"name\": \"database_writable\",\n      \"ok\": true,\n      \"reason\": \"sqlite ok (noetfeld.db)\"\n    },\n    {\n      \"id\": \"G4\",\n      \"name\": \"api_readiness\",\n      \"ok\": true,\n      \"reason\": \"skipped \\u2014 set NOETFIELD_API_URL or --api-url to probe remote runtime\",\n      \"skipped\": true\n    },\n    {\n      \"id\": \"G5\",\n      \"name\": \"policy_registry\",\n      \"ok\": true,\n      \"reason\": \"PolicyRegistry loaded\",\n      \"combined_hash\": \"6ed3dd7180db65bdfce6ab99a9a7ee98334f49aa7a5944fd8a1683d099e95fde\"\n    },\n    {\n      \"id\": \"G6\",\n      \"name\": \"pytest_suite\",\n      \"ok\": true,\n      \"reason\": \"163 passed, 2 warnings in 3.79s\"\n    },\n    {\n      \"id\": \"G7\",\n      \"name\": \"product_truth_phase\",\n      \"ok\": true,\n      \"reason\": \"PRODUCT_TRUTH phase 4 vs manifest 4\",\n      \"truth_phase\": 4,\n      \"manifest_phase\": 4\n    }\n  ],\n  \"block_reasons\": []\n}",
                 "stderr_tail": "",
                 "continued_on_error": false,
                 "name": "gate"
@@ -250,7 +256,7 @@
                 ],
                 "ok": true,
                 "exit_code": 0,
-                "stdout_tail": "........................................................................ [ 49%]\n........................................................................ [ 99%]\n.                                                                        [100%]\n=============================== warnings summary ===============================\ntests/test_decide_integration_ci.py::test_decide_cli_against_live_local_server\n  /Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/websockets/legacy/__init__.py:6: DeprecationWarning: websockets.legacy is deprecated; see https://websockets.readthedocs.io/en/stable/howto/upgrade.html for upgrade instructions\n    warnings.warn(  # deprecated in 14.0 - 2024-11-09\n\ntests/test_decide_integration_ci.py::test_decide_cli_against_live_local_server\n  /Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/uvicorn/protocols/websockets/websockets_impl.py:17: DeprecationWarning: websockets.server.WebSocketServerProtocol is deprecated\n    from websockets.server import WebSocketServerProtocol\n\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\n145 passed, 2 warnings in 2.62s",
+                "stdout_tail": "........................................................................ [ 44%]\n........................................................................ [ 88%]\n...................                                                      [100%]\n=============================== warnings summary ===============================\ntests/test_decide_integration_ci.py::test_decide_cli_against_live_local_server\n  /Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/websockets/legacy/__init__.py:6: DeprecationWarning: websockets.legacy is deprecated; see https://websockets.readthedocs.io/en/stable/howto/upgrade.html for upgrade instructions\n    warnings.warn(  # deprecated in 14.0 - 2024-11-09\n\ntests/test_decide_integration_ci.py::test_decide_cli_against_live_local_server\n  /Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/uvicorn/protocols/websockets/websockets_impl.py:17: DeprecationWarning: websockets.server.WebSocketServerProtocol is deprecated\n    from websockets.server import WebSocketServerProtocol\n\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\n163 passed, 2 warnings in 3.72s",
                 "stderr_tail": "",
                 "continued_on_error": false,
                 "name": "pytest"
@@ -263,7 +269,7 @@
               "github_run_id": "local-smoke",
               "github_workflow": "noos-runtime-loop.yml",
               "dispatch_source": "cf-cron",
-              "processed_at": "2026-07-05T16:44:10+00:00"
+              "processed_at": "2026-07-06T09:37:46+00:00"
             },
             "cloud_trigger": "repository_dispatch"
           },
@@ -276,12 +282,12 @@
             "exit_code": 0,
             "detail": {
               "ok": true,
-              "id": "6e973b85-bc38-4869-a72d-97f87aca07a9",
+              "id": "340b311c-dcde-4abf-9aa8-7b6cc2bd18ff",
               "status": 201,
-              "op_key": "67a29bb43c4cf4488a9446b8"
+              "op_key": "276480030f26c5243ca84158"
             }
           },
-          "finished_at": "2026-07-05T16:44:10+00:00",
+          "finished_at": "2026-07-06T09:37:46+00:00",
           "state_after": "COMPLETE",
           "status": "ok",
           "exit_code": 0,
@@ -295,33 +301,38 @@
           "d2": {
             "cas": {
               "verdict": "ACCEPTED",
-              "expected": 4,
-              "observed": 4,
-              "new_value": 5
+              "expected": 10,
+              "observed": 10,
+              "new_value": 11
             }
           },
           "transition_log_tail": [
             {
               "from": "RUNNING",
               "to": "COMPLETE",
-              "at": "2026-07-05T16:44:10+00:00",
-              "cycle": 5,
-              "op_key": "67a29bb43c4cf4488a9446b8"
+              "at": "2026-07-06T09:37:46+00:00",
+              "cycle": 11,
+              "op_key": "276480030f26c5243ca84158"
             }
-          ]
+          ],
+          "liveness_upsert": {
+            "ok": true,
+            "loop_id": "runtime",
+            "last_fired_at": "2026-07-06T09:37:47.181Z"
+          }
         },
         "stderr": null
       },
       "rolling_evaluation": {
         "loop_id": "runtime",
         "factory_id": "loop-runtime",
-        "cycle_count": 4,
+        "cycle_count": 8,
         "invalid_trigger_count": 0,
         "latest_status": "ok",
         "ready": true,
         "blockers": [],
         "lookback_hours": 24,
-        "lookback_started_at": "2026-07-04T16:44:10Z"
+        "lookback_started_at": "2026-07-05T09:37:47Z"
       },
       "ok": true,
       "autonomous_triggers": true
@@ -330,7 +341,7 @@
       "schema": "noos-loop-verify-v1",
       "backlog_id": "LOOP-VERIFY-surface",
       "loop_id": "surface",
-      "verified_at": "2026-07-05T16:44:12Z",
+      "verified_at": "2026-07-06T09:37:49Z",
       "verification_state": "VERIFIED",
       "smoke": {
         "loop_id": "surface",
@@ -348,9 +359,9 @@
           "event_type": "noos_surface_loop_tick",
           "domain": "public-nerve",
           "trigger_source": "repository_dispatch",
-          "cycle_number": 5,
-          "op_key": "10c8abb260319aaea2d24fba",
-          "started_at": "2026-07-05T16:44:10+00:00",
+          "cycle_number": 12,
+          "op_key": "fdeee1319b6a95ec9827dea7",
+          "started_at": "2026-07-06T09:37:47+00:00",
           "state_before": "RUNNING",
           "cost": {
             "provider": "github_actions+cloudflare_cron",
@@ -380,7 +391,7 @@
             "count": 1,
             "oldest_id": "NOOS-C-01",
             "priority": "P0",
-            "age_seconds": 305008,
+            "age_seconds": 365825,
             "escalated": true
           },
           "evidence": [
@@ -412,7 +423,7 @@
               "github_run_id": "local-smoke",
               "github_workflow": "noos-surface-loop.yml",
               "dispatch_source": "cf-cron",
-              "processed_at": "2026-07-05T16:44:12+00:00"
+              "processed_at": "2026-07-06T09:37:49+00:00"
             },
             "cloud_trigger": "repository_dispatch"
           },
@@ -425,12 +436,12 @@
             "exit_code": 0,
             "detail": {
               "ok": true,
-              "id": "49318f17-1d40-4bea-8172-d7811f1d9e37",
+              "id": "587a63e9-0923-4aea-8ca6-274f2810642b",
               "status": 201,
-              "op_key": "10c8abb260319aaea2d24fba"
+              "op_key": "fdeee1319b6a95ec9827dea7"
             }
           },
-          "finished_at": "2026-07-05T16:44:12+00:00",
+          "finished_at": "2026-07-06T09:37:48+00:00",
           "state_after": "COMPLETE",
           "status": "ok",
           "exit_code": 0,
@@ -444,33 +455,38 @@
           "d2": {
             "cas": {
               "verdict": "ACCEPTED",
-              "expected": 4,
-              "observed": 4,
-              "new_value": 5
+              "expected": 11,
+              "observed": 11,
+              "new_value": 12
             }
           },
           "transition_log_tail": [
             {
               "from": "RUNNING",
               "to": "COMPLETE",
-              "at": "2026-07-05T16:44:12+00:00",
-              "cycle": 5,
-              "op_key": "10c8abb260319aaea2d24fba"
+              "at": "2026-07-06T09:37:48+00:00",
+              "cycle": 12,
+              "op_key": "fdeee1319b6a95ec9827dea7"
             }
-          ]
+          ],
+          "liveness_upsert": {
+            "ok": true,
+            "loop_id": "surface",
+            "last_fired_at": "2026-07-06T09:37:49.470Z"
+          }
         },
         "stderr": null
       },
       "rolling_evaluation": {
         "loop_id": "surface",
         "factory_id": "loop-surface",
-        "cycle_count": 4,
+        "cycle_count": 8,
         "invalid_trigger_count": 0,
         "latest_status": "ok",
         "ready": true,
         "blockers": [],
         "lookback_hours": 24,
-        "lookback_started_at": "2026-07-04T16:44:12Z"
+        "lookback_started_at": "2026-07-05T09:37:49Z"
       },
       "ok": true,
       "autonomous_triggers": true
@@ -479,7 +495,7 @@
       "schema": "noos-loop-verify-v1",
       "backlog_id": "LOOP-VERIFY-chain",
       "loop_id": "chain",
-      "verified_at": "2026-07-05T16:44:13Z",
+      "verified_at": "2026-07-06T09:37:50Z",
       "verification_state": "VERIFIED",
       "smoke": {
         "loop_id": "chain",
@@ -497,9 +513,9 @@
           "event_type": "noos_chain_loop_tick",
           "domain": "chain-tools",
           "trigger_source": "repository_dispatch",
-          "cycle_number": 5,
-          "op_key": "abd092d6463fe5de419a675f",
-          "started_at": "2026-07-05T16:44:12+00:00",
+          "cycle_number": 11,
+          "op_key": "2e5876c39a08b74fde548557",
+          "started_at": "2026-07-06T09:37:49+00:00",
           "state_before": "RUNNING",
           "cost": {
             "provider": "github_actions+cloudflare_cron",
@@ -529,7 +545,7 @@
             "count": 1,
             "oldest_id": "NOOS-C-01",
             "priority": "P0",
-            "age_seconds": 305009,
+            "age_seconds": 365826,
             "escalated": true
           },
           "evidence": [
@@ -586,7 +602,7 @@
               "github_run_id": "local-smoke",
               "github_workflow": "noos-chain-loop.yml",
               "dispatch_source": "cf-cron",
-              "processed_at": "2026-07-05T16:44:13+00:00"
+              "processed_at": "2026-07-06T09:37:50+00:00"
             },
             "cloud_trigger": "repository_dispatch"
           },
@@ -599,12 +615,12 @@
             "exit_code": 0,
             "detail": {
               "ok": true,
-              "id": "44658cba-9296-4668-b281-efc3c8f82b68",
+              "id": "6984b0df-194b-417c-bf0c-3e9237374b31",
               "status": 201,
-              "op_key": "abd092d6463fe5de419a675f"
+              "op_key": "2e5876c39a08b74fde548557"
             }
           },
-          "finished_at": "2026-07-05T16:44:13+00:00",
+          "finished_at": "2026-07-06T09:37:50+00:00",
           "state_after": "COMPLETE",
           "status": "ok",
           "exit_code": 0,
@@ -618,33 +634,38 @@
           "d2": {
             "cas": {
               "verdict": "ACCEPTED",
-              "expected": 4,
-              "observed": 4,
-              "new_value": 5
+              "expected": 10,
+              "observed": 10,
+              "new_value": 11
             }
           },
           "transition_log_tail": [
             {
               "from": "RUNNING",
               "to": "COMPLETE",
-              "at": "2026-07-05T16:44:13+00:00",
-              "cycle": 5,
-              "op_key": "abd092d6463fe5de419a675f"
+              "at": "2026-07-06T09:37:50+00:00",
+              "cycle": 11,
+              "op_key": "2e5876c39a08b74fde548557"
             }
-          ]
+          ],
+          "liveness_upsert": {
+            "ok": true,
+            "loop_id": "chain",
+            "last_fired_at": "2026-07-06T09:37:50.507Z"
+          }
         },
         "stderr": null
       },
       "rolling_evaluation": {
         "loop_id": "chain",
         "factory_id": "loop-chain",
-        "cycle_count": 4,
+        "cycle_count": 7,
         "invalid_trigger_count": 0,
         "latest_status": "ok",
         "ready": true,
         "blockers": [],
         "lookback_hours": 24,
-        "lookback_started_at": "2026-07-04T16:44:13Z"
+        "lookback_started_at": "2026-07-05T09:37:50Z"
       },
       "ok": true,
       "autonomous_triggers": true
@@ -653,7 +674,7 @@
       "schema": "noos-loop-verify-v1",
       "backlog_id": "LOOP-VERIFY-self_heal",
       "loop_id": "self_heal",
-      "verified_at": "2026-07-05T16:44:30Z",
+      "verified_at": "2026-07-06T09:38:05Z",
       "verification_state": "VERIFIED",
       "smoke": {
         "loop_id": "self_heal",
@@ -671,9 +692,9 @@
           "event_type": "noos_self_heal_loop_tick",
           "domain": "self-improvement",
           "trigger_source": "repository_dispatch",
-          "cycle_number": 5,
-          "op_key": "d5b05f632a51dca24f03c8fd",
-          "started_at": "2026-07-05T16:44:13+00:00",
+          "cycle_number": 12,
+          "op_key": "b79a5e3c48eba1d1398b4f39",
+          "started_at": "2026-07-06T09:37:50+00:00",
           "state_before": "RUNNING",
           "cost": {
             "provider": "github_actions+cloudflare_cron",
@@ -703,7 +724,7 @@
             "count": 1,
             "oldest_id": "NOOS-C-01",
             "priority": "P0",
-            "age_seconds": 305027,
+            "age_seconds": 365841,
             "escalated": true
           },
           "evidence": [
@@ -714,18 +735,18 @@
             },
             {
               "command": "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3 scripts/verify_noos_autonomous_24h_v1.py --hours 6 --write-receipt",
-              "exit_code": 0,
-              "output": "autonomous PASS \u00b7 sha 146e8fe1 \u00b7 dispatch=77 schedule=21 manual=0"
+              "exit_code": 1,
+              "output": "autonomous FAIL \u00b7 sha 8de0e3c4 \u00b7 dispatch=0 schedule=0 manual=0"
             },
             {
               "command": "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3 scripts/autorun_status_v1.py",
               "exit_code": 1,
-              "output": "      {\n        \"scope\": \"noos_loop_agent_nerve\",\n        \"severity\": \"high\",\n        \"summary\": \"Workflow is not healthy: BLOCKED_WITH_REASON\",\n        \"detail\": \"stale_supabase_row\"\n      },\n      {\n        \"scope\": \"noos_loop_sourcea_observe\",\n        \"severity\": \"high\",\n        \"summary\": \"Workflow is not healthy: BLOCKED_WITH_REASON\",\n        \"detail\": \"stale_supabase_row\"\n      }\n    ]\n  }\n}"
+              "output": "w\"\n      },\n      {\n        \"scope\": \"noos_loop_sourcea_observe\",\n        \"severity\": \"high\",\n        \"summary\": \"Workflow is not healthy: BLOCKED_WITH_REASON\",\n        \"detail\": \"stale_supabase_row\"\n      },\n      {\n        \"scope\": \"noos_loop_liveness_registry\",\n        \"severity\": \"high\",\n        \"summary\": \"Workflow is not healthy: FAILED_WITH_RECEIPT\",\n        \"detail\": \"\"\n      }\n    ]\n  }\n}"
             },
             {
               "command": "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3 scripts/noos_loop_heartbeat_v1.py --write-receipt",
               "exit_code": 1,
-              "output": "heartbeat 2026-07-05 loops=12 drift_mismatches=1 founder_blocked=1 escalations=13\n  DRIFT self_heal: committed=every_10m deployed=0 */1 * * *"
+              "output": "loyed=MISSING\n  DRIFT workflow_audit: committed=every_15m deployed=MISSING\n  DRIFT self_heal_safe_fixes: committed=every_30m deployed=MISSING\n  DRIFT researcher_deep_dive: committed=hourly deployed=MISSING\n  DRIFT specialist_proposals: committed=hourly deployed=MISSING\n  DRIFT orchestrator_cross_repo: committed=hourly deployed=MISSING\n  DRIFT improve_kaizen_daily: committed=hourly deployed=MISSING"
             }
           ],
           "runner_output": {
@@ -750,9 +771,9 @@
                   "6",
                   "--write-receipt"
                 ],
-                "ok": true,
-                "exit_code": 0,
-                "stdout_tail": "autonomous PASS \u00b7 sha 146e8fe1 \u00b7 dispatch=77 schedule=21 manual=0",
+                "ok": false,
+                "exit_code": 1,
+                "stdout_tail": "autonomous FAIL \u00b7 sha 8de0e3c4 \u00b7 dispatch=0 schedule=0 manual=0",
                 "stderr_tail": "",
                 "continued_on_error": false,
                 "name": "autonomy_verify"
@@ -764,7 +785,7 @@
                 ],
                 "ok": false,
                 "exit_code": 1,
-                "stdout_tail": "il\": \"stale_supabase_row\"\n      },\n      {\n        \"scope\": \"sourcea_buyer_proof_verify\",\n        \"severity\": \"high\",\n        \"summary\": \"Workflow is not healthy: BLOCKED_WITH_REASON\",\n        \"detail\": \"no_supabase_receipt\"\n      },\n      {\n        \"scope\": \"sourcea_recipe_queue_builder\",\n        \"severity\": \"high\",\n        \"summary\": \"Workflow is not healthy: BLOCKED_WITH_REASON\",\n        \"detail\": \"no_supabase_receipt\"\n      },\n      {\n        \"scope\": \"noos_schedule_canary\",\n        \"severity\": \"high\",\n        \"summary\": \"Workflow is not healthy: FAILED_WITH_RECEIPT\",\n        \"detail\": \"\"\n      },\n      {\n        \"scope\": \"noos_loop_self_heal\",\n        \"severity\": \"high\",\n        \"summary\": \"Workflow is not healthy: BLOCKED_WITH_REASON\",\n        \"detail\": \"stale_supabase_row\"\n      },\n      {\n        \"scope\": \"noos_loop_agent_nerve\",\n        \"severity\": \"high\",\n        \"summary\": \"Workflow is not healthy: BLOCKED_WITH_REASON\",\n        \"detail\": \"stale_supabase_row\"\n      },\n      {\n        \"scope\": \"noos_loop_sourcea_observe\",\n        \"severity\": \"high\",\n        \"summary\": \"Workflow is not healthy: BLOCKED_WITH_REASON\",\n        \"detail\": \"stale_supabase_row\"\n      }\n    ]\n  }\n}",
+                "stdout_tail": "_supabase_receipt\"\n      },\n      {\n        \"scope\": \"noos_schedule_canary\",\n        \"severity\": \"high\",\n        \"summary\": \"Workflow is not healthy: BLOCKED_WITH_REASON\",\n        \"detail\": \"unknown_probe_type:manual_dispatch_only\"\n      },\n      {\n        \"scope\": \"noos_loop_inbox\",\n        \"severity\": \"high\",\n        \"summary\": \"Workflow is not healthy: BLOCKED_WITH_REASON\",\n        \"detail\": \"stale_supabase_row\"\n      },\n      {\n        \"scope\": \"noos_loop_self_heal\",\n        \"severity\": \"high\",\n        \"summary\": \"Workflow is not healthy: BLOCKED_WITH_REASON\",\n        \"detail\": \"stale_supabase_row\"\n      },\n      {\n        \"scope\": \"noos_loop_agent_nerve\",\n        \"severity\": \"high\",\n        \"summary\": \"Workflow is not healthy: BLOCKED_WITH_REASON\",\n        \"detail\": \"stale_supabase_row\"\n      },\n      {\n        \"scope\": \"noos_loop_sourcea_observe\",\n        \"severity\": \"high\",\n        \"summary\": \"Workflow is not healthy: BLOCKED_WITH_REASON\",\n        \"detail\": \"stale_supabase_row\"\n      },\n      {\n        \"scope\": \"noos_loop_liveness_registry\",\n        \"severity\": \"high\",\n        \"summary\": \"Workflow is not healthy: FAILED_WITH_RECEIPT\",\n        \"detail\": \"\"\n      }\n    ]\n  }\n}",
                 "stderr_tail": "",
                 "continued_on_error": false,
                 "name": "autorun_status"
@@ -777,7 +798,7 @@
                 ],
                 "ok": false,
                 "exit_code": 1,
-                "stdout_tail": "heartbeat 2026-07-05 loops=12 drift_mismatches=1 founder_blocked=1 escalations=13\n  DRIFT self_heal: committed=every_10m deployed=0 */1 * * *",
+                "stdout_tail": "heartbeat 2026-07-06 loops=13 drift_mismatches=13 founder_blocked=1 escalations=26\n  DRIFT inbox: committed=every_5m deployed=MISSING\n  DRIFT runtime: committed=every_15m deployed=MISSING\n  DRIFT surface: committed=every_20m deployed=MISSING\n  DRIFT chain: committed=every_30m deployed=MISSING\n  DRIFT self_heal: committed=every_10m deployed=MISSING\n  DRIFT sourcea_observe: committed=every_30m deployed=MISSING\n  DRIFT agent_nerve: committed=hourly deployed=MISSING\n  DRIFT workflow_audit: committed=every_15m deployed=MISSING\n  DRIFT self_heal_safe_fixes: committed=every_30m deployed=MISSING\n  DRIFT researcher_deep_dive: committed=hourly deployed=MISSING\n  DRIFT specialist_proposals: committed=hourly deployed=MISSING\n  DRIFT orchestrator_cross_repo: committed=hourly deployed=MISSING\n  DRIFT improve_kaizen_daily: committed=hourly deployed=MISSING",
                 "stderr_tail": "",
                 "continued_on_error": false,
                 "name": "loop_heartbeat"
@@ -790,7 +811,7 @@
               "github_run_id": "local-smoke",
               "github_workflow": "noos-self-heal-loop.yml",
               "dispatch_source": "cf-cron",
-              "processed_at": "2026-07-05T16:44:30+00:00"
+              "processed_at": "2026-07-06T09:38:05+00:00"
             },
             "cloud_trigger": "repository_dispatch"
           },
@@ -803,16 +824,16 @@
             "exit_code": 0,
             "detail": {
               "ok": true,
-              "id": "7b2eaa2a-880e-4e53-a241-53ecaaafda93",
+              "id": "e336951e-3ad6-41a6-90b0-4be25af0afb4",
               "status": 201,
-              "op_key": "d5b05f632a51dca24f03c8fd"
+              "op_key": "b79a5e3c48eba1d1398b4f39"
             }
           },
-          "finished_at": "2026-07-05T16:44:30+00:00",
+          "finished_at": "2026-07-06T09:38:04+00:00",
           "state_after": "FAILED_WITH_RECEIPT",
           "status": "degraded",
           "exit_code": 1,
-          "blocker_reason": "steps_failed:['autorun_status', 'loop_heartbeat']",
+          "blocker_reason": "steps_failed:['autonomy_verify', 'autorun_status', 'loop_heartbeat']",
           "next_action": "self_heal_or_triage",
           "d4": {
             "execute_ok": false,
@@ -822,33 +843,38 @@
           "d2": {
             "cas": {
               "verdict": "ACCEPTED",
-              "expected": 4,
-              "observed": 4,
-              "new_value": 5
+              "expected": 11,
+              "observed": 11,
+              "new_value": 12
             }
           },
           "transition_log_tail": [
             {
               "from": "RUNNING",
               "to": "FAILED_WITH_RECEIPT",
-              "at": "2026-07-05T16:44:30+00:00",
-              "cycle": 5,
-              "op_key": "d5b05f632a51dca24f03c8fd"
+              "at": "2026-07-06T09:38:04+00:00",
+              "cycle": 12,
+              "op_key": "b79a5e3c48eba1d1398b4f39"
             }
-          ]
+          ],
+          "liveness_upsert": {
+            "ok": false,
+            "skipped": true,
+            "reason": "cycle_not_successful"
+          }
         },
         "stderr": null
       },
       "rolling_evaluation": {
         "loop_id": "self_heal",
         "factory_id": "loop-self-heal",
-        "cycle_count": 4,
+        "cycle_count": 11,
         "invalid_trigger_count": 0,
         "latest_status": "ok",
         "ready": true,
         "blockers": [],
         "lookback_hours": 24,
-        "lookback_started_at": "2026-07-04T16:44:30Z"
+        "lookback_started_at": "2026-07-05T09:38:05Z"
       },
       "ok": true,
       "autonomous_triggers": true
@@ -857,7 +883,7 @@
       "schema": "noos-loop-verify-v1",
       "backlog_id": "LOOP-VERIFY-sourcea_observe",
       "loop_id": "sourcea_observe",
-      "verified_at": "2026-07-05T16:44:31Z",
+      "verified_at": "2026-07-06T09:38:06Z",
       "verification_state": "VERIFIED",
       "smoke": {
         "loop_id": "sourcea_observe",
@@ -875,9 +901,9 @@
           "event_type": "noos_sourcea_observe_loop_tick",
           "domain": "sourcea-observe",
           "trigger_source": "repository_dispatch",
-          "cycle_number": 5,
-          "op_key": "70c15b3e5dd347a019babc0a",
-          "started_at": "2026-07-05T16:44:30+00:00",
+          "cycle_number": 11,
+          "op_key": "565bfd41686946f844879d11",
+          "started_at": "2026-07-06T09:38:05+00:00",
           "state_before": "RUNNING",
           "cost": {
             "provider": "github_actions+cloudflare_cron",
@@ -907,14 +933,14 @@
             "count": 1,
             "oldest_id": "NOOS-C-01",
             "priority": "P0",
-            "age_seconds": 305028,
+            "age_seconds": 365842,
             "escalated": true
           },
           "evidence": [
             {
               "command": "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3 scripts/observe_sourcea_supabase_v1.py --write-receipt --json",
               "exit_code": 0,
-              "output": "91ff181-6424-4bd3-bf9f-761f12ad8432\",\n          \"fallback_from\": \"cycle_receipts\",\n          \"trigger_source\": \"cloudflare_cron\",\n          \"queue_head_after\": \"CLOUD-SEC-7966\",\n          \"queue_head_before\": \"CLOUD-SEC-7965\"\n        }\n      }\n    ]\n  },\n  \"receipt_path\": \"/Users/sinakazemnezhad/Desktop/Noetfield-Systems/noetfeld-OS/.noos-runtime/observe/sourcea/sourcea-supabase-observe-v1.json\"\n}"
+              "output": "3863298-16c2-4f90-bc9f-6a2e324724e4\",\n          \"fallback_from\": \"cycle_receipts\",\n          \"trigger_source\": \"cloudflare_cron\",\n          \"queue_head_after\": \"CLOUD-SEC-8070\",\n          \"queue_head_before\": \"CLOUD-SEC-8069\"\n        }\n      }\n    ]\n  },\n  \"receipt_path\": \"/Users/sinakazemnezhad/Desktop/Noetfield-Systems/noetfeld-OS/.noos-runtime/observe/sourcea/sourcea-supabase-observe-v1.json\"\n}"
             }
           ],
           "runner_output": {
@@ -928,7 +954,7 @@
                 ],
                 "ok": true,
                 "exit_code": 0,
-                "stdout_tail": "      \"finished_at\": \"2026-07-05T16:01:59Z\",\n          \"execution_id\": \"c91ff181-6424-4bd3-bf9f-761f12ad8432\",\n          \"fallback_from\": \"cycle_receipts\",\n          \"trigger_source\": \"cloudflare_cron\",\n          \"queue_head_after\": \"CLOUD-SEC-7967\",\n          \"queue_head_before\": \"CLOUD-SEC-7966\"\n        }\n      },\n      {\n        \"id\": \"02d415b8-14f9-4192-a299-a114e24ad10d\",\n        \"created_at\": \"2026-07-05T16:01:58.672684+00:00\",\n        \"memory_type\": \"truth_cycle_receipt\",\n        \"metadata\": {\n          \"schema\": \"truth-layer-receipt-v1\",\n          \"verdict\": \"GREEN\",\n          \"cycle_id\": \"cycle-20260705T160158Z-CLOUD-SEC-7965\",\n          \"started_at\": \"2026-07-05T16:01:58Z\",\n          \"duration_ms\": 247,\n          \"finished_at\": \"2026-07-05T16:01:58Z\",\n          \"execution_id\": \"c91ff181-6424-4bd3-bf9f-761f12ad8432\",\n          \"fallback_from\": \"cycle_receipts\",\n          \"trigger_source\": \"cloudflare_cron\",\n          \"queue_head_after\": \"CLOUD-SEC-7966\",\n          \"queue_head_before\": \"CLOUD-SEC-7965\"\n        }\n      }\n    ]\n  },\n  \"receipt_path\": \"/Users/sinakazemnezhad/Desktop/Noetfield-Systems/noetfeld-OS/.noos-runtime/observe/sourcea/sourcea-supabase-observe-v1.json\"\n}",
+                "stdout_tail": "      \"finished_at\": \"2026-07-06T09:20:48Z\",\n          \"execution_id\": \"4780d157-5377-454d-9eaa-e960cebac4f6\",\n          \"fallback_from\": \"cycle_receipts\",\n          \"trigger_source\": \"cloudflare_cron\",\n          \"queue_head_after\": \"CLOUD-SEC-8071\",\n          \"queue_head_before\": \"CLOUD-SEC-8070\"\n        }\n      },\n      {\n        \"id\": \"2b6c1584-ee58-4d32-8be9-72aea953d5b4\",\n        \"created_at\": \"2026-07-06T09:10:48.871325+00:00\",\n        \"memory_type\": \"truth_cycle_receipt\",\n        \"metadata\": {\n          \"schema\": \"truth-layer-receipt-v1\",\n          \"verdict\": \"GREEN\",\n          \"cycle_id\": \"cycle-20260706T091048Z-CLOUD-SEC-8069\",\n          \"started_at\": \"2026-07-06T09:10:48Z\",\n          \"duration_ms\": 672,\n          \"finished_at\": \"2026-07-06T09:10:48Z\",\n          \"execution_id\": \"a3863298-16c2-4f90-bc9f-6a2e324724e4\",\n          \"fallback_from\": \"cycle_receipts\",\n          \"trigger_source\": \"cloudflare_cron\",\n          \"queue_head_after\": \"CLOUD-SEC-8070\",\n          \"queue_head_before\": \"CLOUD-SEC-8069\"\n        }\n      }\n    ]\n  },\n  \"receipt_path\": \"/Users/sinakazemnezhad/Desktop/Noetfield-Systems/noetfeld-OS/.noos-runtime/observe/sourcea/sourcea-supabase-observe-v1.json\"\n}",
                 "stderr_tail": "",
                 "continued_on_error": false,
                 "name": "sourcea_supabase_observe"
@@ -941,7 +967,7 @@
               "github_run_id": "local-smoke",
               "github_workflow": "noos-sourcea-observe-loop.yml",
               "dispatch_source": "cf-cron",
-              "processed_at": "2026-07-05T16:44:31+00:00"
+              "processed_at": "2026-07-06T09:38:06+00:00"
             },
             "cloud_trigger": "repository_dispatch"
           },
@@ -954,12 +980,12 @@
             "exit_code": 0,
             "detail": {
               "ok": true,
-              "id": "627366b2-b120-40f4-830c-92e061079514",
+              "id": "d665a2d0-9646-4015-a588-edc52eaea2f4",
               "status": 201,
-              "op_key": "70c15b3e5dd347a019babc0a"
+              "op_key": "565bfd41686946f844879d11"
             }
           },
-          "finished_at": "2026-07-05T16:44:31+00:00",
+          "finished_at": "2026-07-06T09:38:05+00:00",
           "state_after": "COMPLETE",
           "status": "ok",
           "exit_code": 0,
@@ -973,33 +999,38 @@
           "d2": {
             "cas": {
               "verdict": "ACCEPTED",
-              "expected": 4,
-              "observed": 4,
-              "new_value": 5
+              "expected": 10,
+              "observed": 10,
+              "new_value": 11
             }
           },
           "transition_log_tail": [
             {
               "from": "RUNNING",
               "to": "COMPLETE",
-              "at": "2026-07-05T16:44:31+00:00",
-              "cycle": 5,
-              "op_key": "70c15b3e5dd347a019babc0a"
+              "at": "2026-07-06T09:38:05+00:00",
+              "cycle": 11,
+              "op_key": "565bfd41686946f844879d11"
             }
-          ]
+          ],
+          "liveness_upsert": {
+            "ok": true,
+            "loop_id": "sourcea_observe",
+            "last_fired_at": "2026-07-06T09:38:06.392Z"
+          }
         },
         "stderr": null
       },
       "rolling_evaluation": {
         "loop_id": "sourcea_observe",
         "factory_id": "loop-sourcea-observe",
-        "cycle_count": 4,
+        "cycle_count": 7,
         "invalid_trigger_count": 0,
         "latest_status": "ok",
         "ready": true,
         "blockers": [],
         "lookback_hours": 24,
-        "lookback_started_at": "2026-07-04T16:44:31Z"
+        "lookback_started_at": "2026-07-05T09:38:06Z"
       },
       "ok": true,
       "autonomous_triggers": true
@@ -1008,7 +1039,7 @@
       "schema": "noos-loop-verify-v1",
       "backlog_id": "LOOP-VERIFY-agent_nerve",
       "loop_id": "agent_nerve",
-      "verified_at": "2026-07-05T16:44:32Z",
+      "verified_at": "2026-07-06T09:38:07Z",
       "verification_state": "VERIFIED",
       "smoke": {
         "loop_id": "agent_nerve",
@@ -1026,9 +1057,9 @@
           "event_type": "noos_agent_nerve_loop_tick",
           "domain": "agent-docs",
           "trigger_source": "repository_dispatch",
-          "cycle_number": 5,
-          "op_key": "2ebba750db96def2e545b3ae",
-          "started_at": "2026-07-05T16:44:31+00:00",
+          "cycle_number": 11,
+          "op_key": "3cf3f1885577b576eb41bdf2",
+          "started_at": "2026-07-06T09:38:06+00:00",
           "state_before": "RUNNING",
           "cost": {
             "provider": "github_actions+cloudflare_cron",
@@ -1058,7 +1089,7 @@
             "count": 1,
             "oldest_id": "NOOS-C-01",
             "priority": "P0",
-            "age_seconds": 305028,
+            "age_seconds": 365843,
             "escalated": true
           },
           "evidence": [
@@ -1107,7 +1138,7 @@
               "github_run_id": "local-smoke",
               "github_workflow": "noos-agent-nerve-loop.yml",
               "dispatch_source": "cf-cron",
-              "processed_at": "2026-07-05T16:44:32+00:00"
+              "processed_at": "2026-07-06T09:38:06+00:00"
             },
             "cloud_trigger": "repository_dispatch"
           },
@@ -1120,12 +1151,12 @@
             "exit_code": 0,
             "detail": {
               "ok": true,
-              "id": "264537e2-990b-48e3-86db-a14aa09844e0",
+              "id": "4aac0db9-8347-4469-afbc-b02128e3c1f5",
               "status": 201,
-              "op_key": "2ebba750db96def2e545b3ae"
+              "op_key": "3cf3f1885577b576eb41bdf2"
             }
           },
-          "finished_at": "2026-07-05T16:44:31+00:00",
+          "finished_at": "2026-07-06T09:38:06+00:00",
           "state_after": "COMPLETE",
           "status": "ok",
           "exit_code": 0,
@@ -1139,33 +1170,38 @@
           "d2": {
             "cas": {
               "verdict": "ACCEPTED",
-              "expected": 4,
-              "observed": 4,
-              "new_value": 5
+              "expected": 10,
+              "observed": 10,
+              "new_value": 11
             }
           },
           "transition_log_tail": [
             {
               "from": "RUNNING",
               "to": "COMPLETE",
-              "at": "2026-07-05T16:44:31+00:00",
-              "cycle": 5,
-              "op_key": "2ebba750db96def2e545b3ae"
+              "at": "2026-07-06T09:38:06+00:00",
+              "cycle": 11,
+              "op_key": "3cf3f1885577b576eb41bdf2"
             }
-          ]
+          ],
+          "liveness_upsert": {
+            "ok": true,
+            "loop_id": "agent_nerve",
+            "last_fired_at": "2026-07-06T09:38:07.357Z"
+          }
         },
         "stderr": null
       },
       "rolling_evaluation": {
         "loop_id": "agent_nerve",
         "factory_id": "loop-agent-nerve",
-        "cycle_count": 4,
+        "cycle_count": 6,
         "invalid_trigger_count": 0,
         "latest_status": "ok",
         "ready": true,
         "blockers": [],
         "lookback_hours": 24,
-        "lookback_started_at": "2026-07-04T16:44:32Z"
+        "lookback_started_at": "2026-07-05T09:38:07Z"
       },
       "ok": true,
       "autonomous_triggers": true
@@ -1173,86 +1209,86 @@
   ],
   "rolling_summary": {
     "schema": "noos-loop-verify-rolling-v1",
-    "evaluated_at": "2026-07-05T16:44:33Z",
+    "evaluated_at": "2026-07-06T09:38:08Z",
     "lookback_hours": 24,
     "fallback_hours": 168,
     "loop_evaluations": [
       {
         "loop_id": "inbox",
         "factory_id": "loop-inbox",
-        "cycle_count": 4,
+        "cycle_count": 18,
         "invalid_trigger_count": 0,
         "latest_status": "ok",
         "ready": true,
         "blockers": [],
         "lookback_hours": 24,
-        "lookback_started_at": "2026-07-04T16:44:32Z"
+        "lookback_started_at": "2026-07-05T09:38:07Z"
       },
       {
         "loop_id": "runtime",
         "factory_id": "loop-runtime",
-        "cycle_count": 4,
+        "cycle_count": 8,
         "invalid_trigger_count": 0,
         "latest_status": "ok",
         "ready": true,
         "blockers": [],
         "lookback_hours": 24,
-        "lookback_started_at": "2026-07-04T16:44:32Z"
+        "lookback_started_at": "2026-07-05T09:38:07Z"
       },
       {
         "loop_id": "surface",
         "factory_id": "loop-surface",
-        "cycle_count": 4,
+        "cycle_count": 8,
         "invalid_trigger_count": 0,
         "latest_status": "ok",
         "ready": true,
         "blockers": [],
         "lookback_hours": 24,
-        "lookback_started_at": "2026-07-04T16:44:32Z"
+        "lookback_started_at": "2026-07-05T09:38:07Z"
       },
       {
         "loop_id": "chain",
         "factory_id": "loop-chain",
-        "cycle_count": 4,
+        "cycle_count": 7,
         "invalid_trigger_count": 0,
         "latest_status": "ok",
         "ready": true,
         "blockers": [],
         "lookback_hours": 24,
-        "lookback_started_at": "2026-07-04T16:44:33Z"
+        "lookback_started_at": "2026-07-05T09:38:08Z"
       },
       {
         "loop_id": "self_heal",
         "factory_id": "loop-self-heal",
-        "cycle_count": 4,
+        "cycle_count": 11,
         "invalid_trigger_count": 0,
         "latest_status": "ok",
         "ready": true,
         "blockers": [],
         "lookback_hours": 24,
-        "lookback_started_at": "2026-07-04T16:44:33Z"
+        "lookback_started_at": "2026-07-05T09:38:08Z"
       },
       {
         "loop_id": "sourcea_observe",
         "factory_id": "loop-sourcea-observe",
-        "cycle_count": 4,
+        "cycle_count": 7,
         "invalid_trigger_count": 0,
         "latest_status": "ok",
         "ready": true,
         "blockers": [],
         "lookback_hours": 24,
-        "lookback_started_at": "2026-07-04T16:44:33Z"
+        "lookback_started_at": "2026-07-05T09:38:08Z"
       },
       {
         "loop_id": "agent_nerve",
         "factory_id": "loop-agent-nerve",
-        "cycle_count": 4,
+        "cycle_count": 6,
         "invalid_trigger_count": 0,
         "latest_status": "ok",
         "ready": true,
         "blockers": [],
         "lookback_hours": 24,
-        "lookback_started_at": "2026-07-04T16:44:33Z"
+        "lookback_started_at": "2026-07-05T09:38:08Z"
       }
     ],
     "verified_count": 7,
@@ -1265,10 +1301,10 @@
   "core_loop_count": 7,
   "new_verified_window": {
     "schema": "noos-loop-verified-window-v1",
-    "merge_sha": "146e8fe1acee1748cd6b51352e062432e081aa6d",
+    "merge_sha": "8de0e3c4f8f43cb26761e11f3293d31d716375fe",
     "window_hours": 24,
-    "window_started_at": "2026-07-05T16:44:33Z",
-    "window_closes_at": "2026-07-06T16:44:33Z",
+    "window_started_at": "2026-07-06T09:38:08Z",
+    "window_closes_at": "2026-07-07T09:38:08Z",
     "overall_state": "VERIFIED",
     "law": "Primary motor = CF repository_dispatch. schedule = backup. Manual/workflow_dispatch green \u2260 autonomous green (L4).",
     "founder_blocked_note": "NOOS-C-01 remains founder_blocked; does not block window.",
@@ -1278,49 +1314,49 @@
         "github_workflow": "noos-inbox-loop.yml",
         "interval_minutes": 5,
         "verification_state": "VERIFIED",
-        "verified_at": "2026-07-05T16:44:04Z"
+        "verified_at": "2026-07-06T09:37:37Z"
       },
       {
         "loop_id": "runtime",
         "github_workflow": "noos-runtime-loop.yml",
         "interval_minutes": 15,
         "verification_state": "VERIFIED",
-        "verified_at": "2026-07-05T16:44:10Z"
+        "verified_at": "2026-07-06T09:37:47Z"
       },
       {
         "loop_id": "surface",
         "github_workflow": "noos-surface-loop.yml",
         "interval_minutes": 20,
         "verification_state": "VERIFIED",
-        "verified_at": "2026-07-05T16:44:12Z"
+        "verified_at": "2026-07-06T09:37:49Z"
       },
       {
         "loop_id": "chain",
         "github_workflow": "noos-chain-loop.yml",
         "interval_minutes": 30,
         "verification_state": "VERIFIED",
-        "verified_at": "2026-07-05T16:44:13Z"
+        "verified_at": "2026-07-06T09:37:50Z"
       },
       {
         "loop_id": "self_heal",
         "github_workflow": "noos-self-heal-loop.yml",
         "interval_minutes": 10,
         "verification_state": "VERIFIED",
-        "verified_at": "2026-07-05T16:44:30Z"
+        "verified_at": "2026-07-06T09:38:05Z"
       },
       {
         "loop_id": "sourcea_observe",
         "github_workflow": "noos-sourcea-observe-loop.yml",
         "interval_minutes": 30,
         "verification_state": "VERIFIED",
-        "verified_at": "2026-07-05T16:44:31Z"
+        "verified_at": "2026-07-06T09:38:06Z"
       },
       {
         "loop_id": "agent_nerve",
         "github_workflow": "noos-agent-nerve-loop.yml",
         "interval_minutes": 60,
         "verification_state": "VERIFIED",
-        "verified_at": "2026-07-05T16:44:32Z"
+        "verified_at": "2026-07-06T09:38:07Z"
       }
     ],
     "loop_count": 7,
@@ -1351,7 +1387,7 @@
   "secondary_motor": {
     "primary_motor": "cf-cron \u2192 repository_dispatch",
     "secondary_motor": "fly_always_on",
-    "secondary_motor_note": "noos-inbox-runner + noos-self-heal-runner on Fly (CF fleet remains primary)",
+    "secondary_motor_note": "noos-inbox-runner + noos-self-heal-runner on Fly (optional redundancy)",
     "fly_deploy_receipts": {
       "inbox": true,
       "self_heal": true

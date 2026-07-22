@@ -1,0 +1,31 @@
+{
+  "schema": "noos-pr-conflict-resolution-v1",
+  "at": "2026-07-22T06:09:21Z",
+  "branch": "feat/deterministic-plan-completion-24-7",
+  "base": "origin/main",
+  "skill": ".cursor/skills/pr-conflict-resolver/SKILL.md",
+  "files": [
+    {
+      "path": "data/noos-cf-dispatch-table-v1.json",
+      "class": "registry",
+      "resolution": "structural_merge",
+      "method": "main_schema_plus_plan_completion"
+    },
+    {
+      "path": "cloud/workers/noos-loop-fleet-tick-v1/src/dispatch-table.json",
+      "class": "generated_mirror",
+      "resolution": "structural_merge",
+      "method": "sync_with_data_table"
+    },
+    {
+      "path": "data/noos-24-7-loops-v1.json",
+      "class": "registry",
+      "resolution": "structural_merge",
+      "method": "main_plus_role_dispatch_overlays_plus_plan_completion"
+    }
+  ],
+  "forbidden_used": false,
+  "markers_remain": false,
+  "ok": true,
+  "report_line": "pr_conflict_resolution \u00b7 structural merge registries + plan_completion"
+}

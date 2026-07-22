@@ -193,6 +193,9 @@ witness-motor-dispatch:
 motor-sustain-verify:
 	python3 scripts/verify_noos_motor_sustain_v1.py --write-receipt --json
 
+plan-motor-verify:
+	python3 scripts/verify_noos_plan_motor_wiring_v1.py --write-receipt --json
+
 nf-pub-verdict-gate:
 	python3 scripts/noos_nf_pub_verdict_gate_v1.py --write-verdict-stub --json
 
@@ -414,3 +417,18 @@ machine-research:
 	else \
 		python3 scripts/noos_machine_loops_v1.py research-memo --question "$(QUESTION)"; \
 	fi
+
+# ---- NOOS Motor v1 product ops (NF-NOOS-MOTOR-V1-FULL-RUNWAY) ----
+# Note: `motor-status` already exists (motor restart dry-run); the Motor v1 CLI
+# uses `motor-run-status` to avoid clobbering it.
+.PHONY: motor-demo motor-verify motor-package motor-run-status motor-install
+motor-install:
+	./bin/noos install
+motor-demo:
+	./bin/noos demo
+motor-verify:
+	./bin/noos verify $(ARGS)
+motor-package:
+	./bin/noos package
+motor-run-status:
+	./bin/noos status $(ID)

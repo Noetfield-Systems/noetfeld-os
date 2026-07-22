@@ -63,6 +63,28 @@ jobs:
           GITHUB_REPO: ${{ github.repository }}
         run: bash scripts/deploy_noos_loop_fleet_tick_cf_v1.sh
 
+      - name: Deploy deadman + NOOS Telegram lane
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          NOETFIELD_SUPABASE_URL: ${{ secrets.NOETFIELD_SUPABASE_URL }}
+          NOETFIELD_SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.NOETFIELD_SUPABASE_SERVICE_ROLE_KEY }}
+          LOOP_RUNNER_URL: https://noos-loop-runner-production.up.railway.app
+          LOOP_RUNNER_SECRET: ${{ secrets.NOOS_LOOP_SECRET }}
+          DEADMAN_TELEGRAM_BOT_TOKEN: ${{ secrets.DEADMAN_TELEGRAM_BOT_TOKEN || secrets.NOOS_CYCLE_BOT_TOKEN || secrets.NOOS_TELEGRAM_BOT_TOKEN || secrets.TELEGRAM_NOOS_CYCLE_BOT_TOKEN || secrets.TELEGRAM_BOT_TOKEN }}
+          DEADMAN_TELEGRAM_CHAT_ID: ${{ vars.DEADMAN_TELEGRAM_CHAT_ID }}
+          ALLOW_DEADMAN_TELEGRAM_SECRET_UPLOAD: "1"
+        run: |
+          set -euo pipefail
+          test -n "${DEADMAN_TELEGRAM_BOT_TOKEN:-}" || {
+            echo "FAIL: DEADMAN_TELEGRAM_BOT_TOKEN missing from org/repo Actions secrets" >&2
+            exit 1
+          }
+          test -n "${DEADMAN_TELEGRAM_CHAT_ID:-}" || {
+            echo "FAIL: DEADMAN_TELEGRAM_CHAT_ID missing from repository Actions variables" >&2
+            exit 1
+          }
+          bash scripts/deploy_noos_deadman_cf_v1.sh
+
       # Event Phase 1c — GitHub App webhook receiver. Skips cleanly (no deploy,
       # exit 0) until the founder provisions MOTOR_APP_WEBHOOK_SECRET (Event
       # Phase 1a is an account-level App-settings change, not part of this
@@ -101,6 +123,7 @@ jobs:
               "workers": [
                   "noos-factory-autorun-tick-v1",
                   "noos-loop-fleet-tick-v1",
+                  "noos-deadman-v1",
               ],
               "workers_conditional": {
                   "noos-loop-github-events-v1": "deployed_if_MOTOR_APP_WEBHOOK_SECRET_set_else_skipped",

@@ -67,6 +67,42 @@ def loop_state_path(loop_id: str) -> Path:
     return RUNTIME / loop_id / "state-v1.json"
 
 
+def factory_id_for_loop(loop_id: str) -> str:
+    return f"loop-{loop_id.replace('_', '-')}"
+
+
+def supabase_max_cycle_number(factory_id: str) -> int | None:
+    """Authoritative high-water mark for cycle_number (repair rows can outpace local CAS)."""
+    import urllib.error
+    import urllib.request
+
+    from noos_vault_paths_v1 import load_platform_env, supabase_creds
+
+    load_platform_env()
+    url, key = supabase_creds()
+    if not url or not key:
+        return None
+    params = (
+        f"select=cycle_number&factory_id=eq.{factory_id}"
+        "&order=cycle_number.desc&limit=1"
+    )
+    req = urllib.request.Request(
+        f"{url.rstrip('/')}/rest/v1/noetfield_factory_cycle_runs?{params}",
+        headers={"apikey": key, "Authorization": f"Bearer {key}"},
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=20) as resp:
+            rows = json.loads(resp.read().decode("utf-8"))
+    except (urllib.error.HTTPError, urllib.error.URLError, TimeoutError, OSError, json.JSONDecodeError):
+        return None
+    if not rows:
+        return None
+    try:
+        return int(rows[0].get("cycle_number") or 0)
+    except (TypeError, ValueError):
+        return None
+
+
 def acquire_cycle_number(loop_id: str) -> tuple[int | None, dict[str, Any]]:
     """D2 — CAS on cycle_number before side effects."""
     path = loop_state_path(loop_id)
@@ -77,6 +113,11 @@ def acquire_cycle_number(loop_id: str) -> tuple[int | None, dict[str, Any]]:
             expected = int(state.get("cycle_number") or 0)
         except (OSError, json.JSONDecodeError, ValueError):
             expected = 0
+    supabase_floor: int | None = None
+    if is_cloud_execution():
+        supabase_floor = supabase_max_cycle_number(factory_id_for_loop(loop_id))
+        if supabase_floor is not None and supabase_floor > expected:
+            expected = supabase_floor
     observed = expected
     if path.is_file():
         try:
@@ -84,6 +125,8 @@ def acquire_cycle_number(loop_id: str) -> tuple[int | None, dict[str, Any]]:
             observed = int(live.get("cycle_number") or 0)
         except (OSError, json.JSONDecodeError, ValueError):
             observed = expected
+    if supabase_floor is not None and supabase_floor > observed:
+        observed = supabase_floor
     new_number = observed + 1
     cas = cas_advance(expected=expected, observed=observed, new_value=new_number)
     if cas.get("verdict") != "ACCEPTED":
@@ -128,6 +171,12 @@ def sink_cycle(cycle: dict[str, Any], *, factory_id: str) -> dict[str, Any]:
         return {"ok": False, "skipped": True, "reason": "sink_missing"}
     import tempfile
 
+    from noos_vault_paths_v1 import load_platform_env
+
+    if not (os.environ.get("NOETFIELD_SUPABASE_URL") or os.environ.get("SUPABASE_URL")):
+        for key, val in load_platform_env().items():
+            if val:
+                os.environ.setdefault(key, val)
     if not (os.environ.get("NOETFIELD_SUPABASE_URL") or os.environ.get("SUPABASE_URL")):
         return {"ok": False, "skipped": True, "reason": "supabase_not_configured"}
     with tempfile.NamedTemporaryFile("w", suffix=".json", delete=False, encoding="utf-8") as tmp:

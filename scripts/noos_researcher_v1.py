@@ -240,6 +240,12 @@ def main() -> int:
         }
 
         report = build_investigation_report(finding, depth=args.depth)
+        try:
+            from noos_plan_motor_kernel_bridge_v1 import kernel_triage_finding
+
+            report["kernel_triage"] = kernel_triage_finding(finding)
+        except Exception as exc:
+            report["kernel_triage"] = {"ok": False, "error": str(exc)[:200]}
         research_reports.append(report)
 
     # Write research findings
