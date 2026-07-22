@@ -345,6 +345,15 @@ def main() -> None:
     global _ready
     if not SECRET:
         print("WARN: NOOS_LOOP_SECRET unset — POST /loop will return 503", file=sys.stderr)
+    # Ensure Supabase service env is visible before the first tick's CAS seed.
+    try:
+        from noos_vault_paths_v1 import load_platform_env
+
+        for key, val in load_platform_env().items():
+            if val:
+                os.environ.setdefault(key, val)
+    except Exception as exc:  # noqa: BLE001 — boot must not die on vault miss
+        print(f"WARN: vault env load failed: {exc}", file=sys.stderr)
     _ready = True
     HTTPServer(("0.0.0.0", PORT), Handler).serve_forever()
 
