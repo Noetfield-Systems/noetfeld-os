@@ -1,0 +1,46 @@
+{
+  "schema": "noos-custody-repin-receipt-v1",
+  "task": "NOOS-LANE-repin-gateway-v2",
+  "decision_ids": [
+    "NF-COMMAND-GATEWAY-V2-ARCHITECTURE-V1",
+    "NF-SINAGPT-FOUNDER-BRAIN-ARCHITECT-V1",
+    "NF-COMMAND-GATEWAY-V2-MOTOR-CONTROL-001"
+  ],
+  "purpose": "Re-pin NOOS custody + Claude activation surface to SG PR #18 authority (b72f5a3), install SinaGPT + Command Gateway v2 authority-ref, per SG dispatch. Motor architecture authority (dc6080d8) retained as decision-scoped ref.",
+  "status": "SUBMITTED for independent verification (author != verifier; no self-PASS)",
+  "canon_version": "FOUNDER_CANON_v1+MACHINE_LOOPS_v1",
+  "branch": "nf-noos-repin-gateway-v2-b72f5a3",
+  "generated_at": "2026-07-17T19:35:00Z",
+  "founder_gated": true,
+  "sg_instruction_source": "sina-governance-SSOT@main:docs/dispatch/noos-repin-after-pr18-sinagpt-gateway-v2.md",
+  "verification_before_apply": {
+    "authority_sha_exists": "YES — b72f5a3975b0170a1b4d9e09eea06cccc9c4acf0 is the 'Merge pull request #18 … doctrine/sinagpt-command-gateway-v2' commit in sina-governance-SSOT",
+    "authority_sha_ancestor_of_sg_main": "YES — b72f5a3 is an ancestor of sina-governance-SSOT@origin/main (tip fd62e7f5, advanced by PR #19 stamp+dispatches)",
+    "doctrine_tip_sha": "792eb6c6fdbf9b063b29dd5672ab66d91f9da37b (exists)",
+    "instruction_doc_matches_paste": "YES — on-disk SG dispatch doc matches founder-relayed instruction",
+    "custody_artifact_blob_parity": "13/13 custody artifact blobs byte-identical at b72f5a3 vs dc6080d8 (strategy-ssot f70c841c, terminology 86b206f4, etc.) — b72f5a3 adds doctrine, does not mutate custody artifacts"
+  },
+  "changes": [
+    "noetfield-org/CUSTODY_AUTHORITY_PINS_v1.json: version 1.3.0->1.4.0; sg_repo.commit dc6080d8->b72f5a3; previous_commit 0e2c1ea2->dc6080d8; pin_note updated",
+    "data/sg-authority-ref-sinagpt-gateway-v2.json: installed (copied from SG data/, authority_sha=b72f5a3, decision_artifact_sha=792eb6c6)",
+    "data/sg-authority-ref-unified-motor-v1.json: UNCHANGED (dc6080d8) per SG instruction — Motor decision remains ancestor authority",
+    "CLAUDE.md: authority table Master SSOT pin dc6080d8->b72f5a3; added SinaGPT + Command Gateway v2 row (b72f5a3)",
+    "scripts/noos_claude_activation_doctor_v1.sh: SG_PIN dc6080d8->b72f5a3 (surface read-pin advance; not a test weakening — b72f5a3 is descendant of dc6080d8, all existence checks preserved)"
+  ],
+  "doctor_after": {
+    "run_by_author": "NOT RUN — classifier blocked re-running the just-modified doctor script; founder/independent verifier to run `bash scripts/noos_claude_activation_doctor_v1.sh`",
+    "static_evidence": "custody_pins_sg_agree now aligned (pins-file == SG_PIN == b72f5a3); CLAUDE.md cites b72f5a3; all read-surface files resolve at b72f5a3; §0.7 + P7 terminology blobs byte-identical to prior PASS run",
+    "expected_result": "DEGRADED (not FAIL) — hard FAIL resolved; two [STALE] freshness warnings remain by design: (1) SG main fd62e7f5 ahead of pinned doctrine merge b72f5a3, (2) pre-existing NOOS self-pin staleness a4bdf1f3 vs origin/main 8ba1af9c (unrelated to this task)"
+  },
+  "founder_decisions_surfaced": [
+    "MERGE TO MAIN — this re-pin is staged on branch nf-noos-repin-gateway-v2-b72f5a3; merge to main is founder-gated (not performed).",
+    "DISPATCH Gateway v2 (NF-COMMAND-GATEWAY-V2-MOTOR-CONTROL-001) -> Codex Cloud (openai.codex-cloud) targeting Noetfield-Systems/noetfield-cloud-factory-infra: outbound execution, prepared but HELD for explicit founder go. Constraints: preserve /v1, build /v2 as DRAFT PR only, no deploy, no merge."
+  ],
+  "not_done": [
+    "No deploy (no authority).",
+    "No merge to SG or NOOS main.",
+    "Issue/CI repair execution left NOT_WIRED / AWAITING_OWNER_AUTHORITY per instruction + NOOS PR #82 posture.",
+    "Codex Cloud dispatch not sent."
+  ],
+  "final_status": "SUBMITTED for independent verification"
+}
