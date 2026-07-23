@@ -1,0 +1,64 @@
+{
+  "schema": "noos.p08-rewitness-ingest.v1",
+  "receipt_id": "noos-p08-rewitness-ingest-20260722T211201Z",
+  "canon_version": "FOUNDER_CANON_v1+MACHINE_LOOPS_v1",
+  "ingested_at_utc": "2026-07-22T21:12:01Z",
+  "ingested_by": "claude-code-noos (cockpit ingest lane NOOS-LANE-p08-rewitness-ingest; NOTE: this agent authored commit ea34b10 on the graded branch and therefore did NOT act as witness — record-and-verify only)",
+  "witness_receipt_source": {
+    "path": "/private/tmp/claude-501/-Users-sinakazemnezhad-Desktop-Noetfield-Systems-noetfield-cloud-factory-infra/9a72049a-3609-4413-a7c5-b2c0ff100987/scratchpad/p08-rewitness-receipt.json",
+    "schema": "noetfield.p08-rewitness-receipt.v1",
+    "role": "independent_read_only_rewitness",
+    "witness_agent": "Claude Code 2 (session 9a72049a; own verifier worktree)",
+    "observed_utc": "2026-07-22T15:2x"
+  },
+  "recorded_fields": {
+    "deployed_sha": "bbd85189f0107aa1ad368fb1bd67c1ecc3965bc2 (matches live /healthz at ingest)",
+    "audited_sha_claimed": "3b4ac7a92b3ee77b8bfe64f71de6438d5dcda07f",
+    "sha_provenance": "FOUR_WAY_MISMATCH: audited=3b4ac7a, deployed=bbd8518, proof01_live_health=1c11b447, wrangler_var=ea34b100",
+    "tests": {
+      "01_database_restart": "PASS",
+      "02_complete_motor_path": "PASS",
+      "03_duplicate_triggers": "PASS",
+      "04_duplicate_queue_delivery": "PASS",
+      "05_worker_termination": "FAIL",
+      "06_outbox_failure": "PASS",
+      "07_append_only_ledger": "DISPUTED_BUNDLE_FAIL_VERDICT_PASS",
+      "08_zero_llm_idle": "PASS_SINGLE_SOURCE",
+      "09_server_side_hold": "PASS"
+    },
+    "independent_verdict": "NOT_PASS_P05 — remains CANDIDATE_READY_FOR_REWITNESS (re-witness CONFIRMS the builder's non-award)"
+  },
+  "cockpit_verification_of_witness_claims": {
+    "method": "read-only artifact cross-checks on main/worktree at bbd8518; no test reruns",
+    "provenance_divergence": "CONFIRMED — bundle/live-tests.json (frozen in-session record) states 05_worker_termination=FAIL ('kill=0 reap=PENDING fence 2→0 stale=409') and 07_append_only_ledger=FAIL ('deleteDenied=false runtimeUser=graph_kernel_runtime') while per-test files, P08_VERDICT.json and manifest.json claim PASS. Proof set is internally inconsistent.",
+    "fencing_regression": "CONFIRMED — 05 per-test artifact itself records fencing_before=2, fencing_after=0 (non-monotonic; replacement not higher-generation).",
+    "sha_drift": "CONFIRMED — 01 artifact embeds healthz commit_sha=1c11b447 (the pre-merge deploy); no proof ran against deployed bbd8518; the #162 fencing-preserve change (reap DELETE→UPDATE) landed AFTER proofgen and alters exactly the test-05 path. Cockpit had independently flagged this in the prior CHECK.",
+    "role_wash": "CONFIRMED — services/graph-kernel-staging/src/server.ts:504 hardcodes process.env.GRAPH_KERNEL_SKIP_SET_ROLE=\"1\"; service connects as owner; graph_kernel_runtime separation is cosmetic.",
+    "healthz_env_asserted": "CONFIRMED by construction — deploy script sets GRAPH_KERNEL_COMMIT_SHA env from git HEAD; /healthz reports the env value, not a build-derived hash."
+  },
+  "genuinely_fixed_per_witness": [
+    "queue_delivery_no_bypass (real CF message ids, consumer-acked)",
+    "outbox_atomicity_real_tx",
+    "hold_authz_real_allowlist",
+    "append_only_owner_proof_triggers",
+    "dedupe",
+    "builder_did_not_self_award (verdict discipline held both rounds)"
+  ],
+  "hard_blockers_remaining": [
+    "05_fencing_still_washed: disjunctive PASS predicate (queue_message_id && finalSucceeded) can carry PASS around fencing failure; fencing_after=0; commit path TOCTOU (no atomic WHERE fencing_token=$n); reaper transition SQL-forced so the real railway kill was inert",
+    "provenance_divergence: internally inconsistent proof set (bundle FAIL vs per-test PASS for 05, 07)",
+    "sha_drift_not_inert: no proof ran against deployed bbd8518; healthz commit_sha env-asserted"
+  ],
+  "lesser_findings": [
+    "07 role wash (append-only enforcement itself is real via owner-proof triggers; runtime-role claim cosmetic)",
+    "08 single telemetry source (needs >=2 independent sources incl. run_events LLM_USAGE)"
+  ],
+  "gate_decision": {
+    "p1_canvas_gate": "REMAINS_CLOSED",
+    "rule": "Open only on PASS_P05_CONFIRMED or PASS_P05_WITH_NONBLOCKING_FINDINGS.",
+    "actual_independent_verdict": "NOT_PASS_P05",
+    "decision": "Gate stays closed. Two independent witness rounds now agree with each other and with the builder's own non-award."
+  },
+  "machine_route": "Runway builder lane: (1) fix 05 for real — monotonic fencing on reclaim, atomic fenced commit (WHERE fencing_token=$n), reaper must act on genuinely expired leases without SQL-forcing, kill via real process termination; (2) make the proof pipeline single-source so bundle and per-test files cannot diverge (one writer, fail-closed on mismatch); (3) derive healthz commit_sha from build, not env; (4) drop the GRAPH_KERNEL_SKIP_SET_ROLE=1 wash or re-scope the 07 claim; (5) add second zero-LLM telemetry source; (6) rerun the full suite against the deployed SHA so audited == deployed == proof-embedded healthz; then re-witness round 3.",
+  "status": "SUBMITTED for independent verification"
+}

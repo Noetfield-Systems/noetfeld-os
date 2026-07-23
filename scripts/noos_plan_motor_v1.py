@@ -151,6 +151,8 @@ def write_step_receipt(*, plane_id: str, step: dict[str, Any], execution: dict[s
 
 def try_execute_next_step(*, dry_run: bool = False) -> dict[str, Any] | None:
     """Execute one machine_safe plan step. Returns None when no eligible work."""
+    if not PLANES.is_file() or not MANIFEST.is_file():
+        return None
     state = load_state()
     picked = select_next_step(state=state)
     if not picked:

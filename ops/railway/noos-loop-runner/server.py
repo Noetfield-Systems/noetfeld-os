@@ -15,16 +15,11 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 from pathlib import Path
 from typing import Any
 
-def _repo_root() -> Path:
-    here = Path(__file__).resolve().parent
-    if (here / "scripts").is_dir() and (here / "data").is_dir():
-        return here
-    if len(here.parents) > 2 and (here.parents[2] / "scripts").is_dir():
-        return here.parents[2]
-    raise RuntimeError(f"cannot locate noetfeld-os root from {here}")
-
-
-ROOT = _repo_root()
+ROOT_CANDIDATES = [Path(__file__).resolve().parent, *Path(__file__).resolve().parents]
+ROOT = next(
+    (p for p in ROOT_CANDIDATES if (p / "scripts" / "noos_loop_runner_v1.py").is_file()),
+    Path(__file__).resolve().parents[3],
+)
 sys.path.insert(0, str(ROOT / "scripts"))
 from noos_loop_liveness_v1 import upsert_loop_liveness  # noqa: E402
 
@@ -53,14 +48,18 @@ def git_sha() -> str:
     global _git_sha_cache
     if _git_sha_cache is not None:
         return _git_sha_cache
+    # Prefer the image BUILD_SHA (true deployed code) over NOOS_GIT_SHA env,
+    # which deploy scripts may update before the new image is live.
+    for path in (ROOT / "BUILD_SHA", ROOT / "ops/railway/noos-loop-runner/BUILD_SHA"):
+        if path.is_file():
+            val = path.read_text(encoding="utf-8").strip()
+            if val:
+                _git_sha_cache = val[:40]
+                return _git_sha_cache
     env = (os.environ.get("NOOS_GIT_SHA") or os.environ.get("RAILWAY_GIT_COMMIT_SHA") or "").strip()
     if env:
         _git_sha_cache = env[:40]
         return _git_sha_cache
-    for path in (ROOT / "BUILD_SHA", ROOT / "ops/railway/noos-loop-runner/BUILD_SHA"):
-        if path.is_file():
-            _git_sha_cache = path.read_text(encoding="utf-8").strip()[:40]
-            return _git_sha_cache
     _git_sha_cache = "unknown"
     return _git_sha_cache
 
@@ -354,6 +353,15 @@ def main() -> None:
     global _ready
     if not SECRET:
         print("WARN: NOOS_LOOP_SECRET unset — POST /loop will return 503", file=sys.stderr)
+    # Ensure Supabase service env is visible before the first tick's CAS seed.
+    try:
+        from noos_vault_paths_v1 import load_platform_env
+
+        for key, val in load_platform_env().items():
+            if val:
+                os.environ.setdefault(key, val)
+    except Exception as exc:  # noqa: BLE001 — boot must not die on vault miss
+        print(f"WARN: vault env load failed: {exc}", file=sys.stderr)
     _ready = True
     HTTPServer(("0.0.0.0", PORT), Handler).serve_forever()
 

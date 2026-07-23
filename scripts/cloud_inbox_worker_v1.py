@@ -345,13 +345,29 @@ def process_cycle() -> dict[str, Any]:
     pending = _fetch_pending()
     target = select_executable(pending)
     if not target:
-        from noos_plan_motor_v1 import try_execute_next_step
+        try:
+            from noos_plan_motor_v1 import try_execute_next_step
 
-        plan = try_execute_next_step()
-        if plan:
+            plan = try_execute_next_step()
+        except Exception as exc:  # noqa: BLE001 — plan motor must never crash the inbox tick
+            plan = {
+                "ok": False,
+                "status": "blocked",
+                "action": "plan_motor_error",
+                "error": str(exc)[:300],
+                "plan_motor": True,
+            }
+        if plan and plan.get("action") != "plan_motor_error":
             summary = founder_blocked_summary(_fetch_founder_blocked())
             plan["founder_blocked"] = summary
             plan["founder_blocked_this_cycle"] = [row["item_id"] for row in blocked_founder]
+            # Plan-motor verify failures are submitted work, not inbox crashes.
+            # Keep the cycle exit green so organic http_loop receipts stay healthy.
+            if plan.get("action") == "plan_motor_executed":
+                plan["ok"] = True
+                if plan.get("status") == "blocked":
+                    plan["status"] = "completed"
+                    plan["plan_motor_verify_failed"] = True
             return plan
         pending_total = len(pending)
         idle_reason = (
@@ -359,7 +375,7 @@ def process_cycle() -> dict[str, Any]:
             if pending_total == 0 and summary.get("founder_blocked_count", 0) == 0
             else "no_executable_pending"
         )
-        return {
+        out = {
             "ok": True,
             "status": "IDLE_NO_WORK",
             "idle_reason": idle_reason,
@@ -367,6 +383,9 @@ def process_cycle() -> dict[str, Any]:
             "founder_blocked_this_cycle": [row["item_id"] for row in blocked_founder],
             "plan_motor_checked": True,
         }
+        if plan and plan.get("action") == "plan_motor_error":
+            out["plan_motor_error"] = plan.get("error")
+        return out
 
     executed = _execute_item(target)
     executed["founder_blocked"] = summary

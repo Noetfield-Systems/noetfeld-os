@@ -1,0 +1,74 @@
+{
+  "schema": "noos-pr-conflict-resolution-receipt-v1",
+  "task": "NOOS-LANE-post85-consolidation",
+  "generated_at": "2026-07-23T07:40:00Z",
+  "status": "SUBMITTED for independent verification (author != verifier; no self-PASS)",
+  "canon_version": "FOUNDER_CANON_v1+MACHINE_LOOPS_v1",
+  "skill": ".cursor/skills/pr-conflict-resolver/SKILL.md (LOCKED, loaded before resolution)",
+  "operation": "Restack of branch nf-noos-repin-gateway-v2-b72f5a3 onto origin/main 730ed192 as nf-noos-post85-delta-v1 (fresh base + cherry-pick per playbook; PR #85 squash-merge destroyed patch-id equivalence for the first 12 branch commits)",
+  "cherry_pick_range": "674476a9^..cb390342 (14 commits; 13 applied, 1 skipped as superseded)",
+  "excluded_commit": {
+    "sha": "eecfe711",
+    "subject": "W5-03: apex-404 P1 close receipt",
+    "reason": "Parallel builder lane's mid-flight work on the live checkout; not this lane's to consolidate"
+  },
+  "conflicts_resolved": [
+    {
+      "commit": "03923a66",
+      "file": "ops/railway/noos-loop-runner/railway.toml",
+      "class": "code/infra (motor truth)",
+      "resolution": "ours (main)",
+      "reason": "main's PR #100 (2026-07-22, newer) pinned startCommand=/app/server.py to match Railway service-settings history; image copies entrypoint to both paths so /app pin is safe and newer-truth"
+    },
+    {
+      "commit": "03923a66",
+      "file": "ops/railway/noos-loop-runner/Dockerfile",
+      "class": "code/infra (motor truth)",
+      "resolution": "ours (main) for dual-copy + RUN test guard; branch additions (make, Makefile, UPGRADE_MANIFEST COPY) arrived via later picks e4595da7/fbbbd2ab and auto-merged",
+      "reason": "main's guard is a superset safety assertion; final merged Dockerfile verified to contain make+Makefile+UPGRADE_MANIFEST+dual-copy+guard+CMD /app"
+    },
+    {
+      "commit": "03923a66",
+      "file": "ops/railway/noos-loop-runner/server.py",
+      "class": "code",
+      "resolution": "theirs (branch)",
+      "reason": "branch version is a superset: truthful git_sha (BUILD_SHA preferred over env, commit e94e8eef), vault env preload before first CAS seed (companion to fail-closed CAS fix 674476a9), ROOT_CANDIDATES resolver works under both /app and repo layouts"
+    },
+    {
+      "commit": "4b43a279",
+      "files": ["CLAUDE.md", "noetfield-org/CUSTODY_AUTHORITY_PINS_v1.json", "scripts/noos_claude_activation_doctor_v1.sh"],
+      "class": "registry/governance",
+      "resolution": "SKIPPED commit (L1 DUPLICATE-OWNERSHIP STOP finding); main side kept",
+      "reason": "Both lanes independently bumped custody pins to v1.4.0: branch to b72f5a3 (SG PR #18 re-pin), main to d2c2e6ab (SG PR #20 re-pin) whose pin_note explicitly lists the PR #18 SinaGPT/Gateway-v2 authorities as prior ancestors. Main's pin supersedes; branch pin changes dropped. FOUNDER ADJUDICATION REQUESTED in PR body.",
+      "salvaged_additive": "commit 0d687863 carries only data/sg-authority-ref-sinagpt-gateway-v2.json (authority-ref main never installed) + branch proof receipt noos-repin-after-pr18-sinagpt-gateway-v2-v1.json (historical record)"
+    },
+    {
+      "commit": "cb390342",
+      "file": "receipts/proof/noos-integrator-autorun-repair-v1.json",
+      "class": "rolling proof receipt",
+      "resolution": "auto-merged by git (branch side newest: 2026-07-23T06:51Z repair run)",
+      "reason": "rolling receipt; branch copy is the most recent deterministic run"
+    }
+  ],
+  "build_sha_decision": {
+    "file": "ops/railway/noos-loop-runner/BUILD_SHA",
+    "main_value": "482cf5dd",
+    "branch_value": "c70ab85a",
+    "resolved_value": "de4a7638b93f5083b048f557a24156b8b4cd3f74",
+    "evidence": "live https://noos-loop-runner-production.up.railway.app/health at 2026-07-23T07:31Z reports git_sha de4a7638 (= PR #101 merge commit, ancestor of main); last_successful_liveness_write_at 2026-07-23T07:31:18Z, last_liveness_error null",
+    "note": "both prior pins were stale vs live; founder should re-verify /health at merge time"
+  },
+  "verifier": {
+    "command": "python3 scripts/verify_pr_conflict_resolution_v1.py --json",
+    "result": "FAIL (1): sg_skill_hash_drift:87326b94b3b22738!=f460c26916385116, sg_lock_exists:false",
+    "resolution_checks_clean": "conflict_markers_in_tree=[], unmerged_paths=[], governance_unmerged=[], merge_in_progress=false",
+    "pre_existing": "identical FAIL reproduced in the untouched main checkout on branch nf-noos-repin-gateway-v2-b72f5a3 — SG-side skill copy drifted from NOOS lock manifest; environmental, not introduced by this resolution; separate finding for founder/SG lane"
+  },
+  "tests": "see PR body — skill-mandated pair + touched loop-runner tests run post-receipt; results reported verbatim",
+  "forbidden_checks": {
+    "blind_ours_theirs_on_registry": false,
+    "conflict_markers_committed": false,
+    "verifier_files_touched": false,
+    "locked_wiring_touched": false
+  }
+}

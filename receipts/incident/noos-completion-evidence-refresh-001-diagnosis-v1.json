@@ -1,0 +1,59 @@
+{
+  "schema": "noos-incident-diagnostic-v1",
+  "incident_id": "NF-NOOS-COMPLETION-EVIDENCE-REFRESH-001",
+  "classification": "incident_diagnostic",
+  "not_a_verdict": "Incident diagnostic + founder escalation. NOT a PASS/HEALTHY receipt. SUBMITTED for independent verification (author != verifier).",
+  "canon_version": "FOUNDER_CANON_v1+MACHINE_LOOPS_v1",
+  "opened_at": "2026-07-17T19:47:00Z",
+  "scope": "completion-evidence refresh path: cloud loop completion -> completion receipt creation -> authoritative store write -> projection/archive -> cockpit read -> critic finding",
+  "guardrails_honored": [
+    "No broad runtime recovery run",
+    "No loop runtime restart or redeploy",
+    "No verifier/threshold edits (L5)",
+    "Read + create-only diagnosis; no destructive mutation"
+  ],
+  "final_classification": "EVIDENCE_WRITER_TRIGGER_STALLED",
+  "root_cause": {
+    "summary": "The ORGANIC completion producer (cloud_trigger=http_loop, 'writer-B') stalled at 2026-07-12T13:50:49Z (~125.9h before observation). Dispatch keeps firing (5-min heartbeat), so loops sit in DISPATCHING_COMPLETION_UNPROVEN, but per-loop organic completion receipts stopped flowing. The authoritative store, its write path, projection, and cockpit read are all HEALTHY (the sink accepts writes). Completion freshness is being sustained entirely by the integrator-repair path (cloud_trigger=noos_integrator_repair), which writes on an irregular 8-158 min cadence; every gap that exceeds the 30-min freshness threshold produces a transient dispatch_fresh_completion_evidence_stale critic finding. That is the oscillation observed across noos_loop_{inbox,runtime,surface,chain,self_heal,agent_nerve,sourcea_observe}.",
+    "isolation": "NOT isolated to the machine-repairable evidence path. The evidence sink/store/projection are writable and current (246 repair writes succeeded on the same token => no sink auth/schema failure). The dead component is the upstream organic producer (loop runtime worker that executes the loop body and POSTs the http_loop completion). Restoring it requires touching loop runtime / deployment / production permissions — explicitly forbidden by this task and founder-gated per recipe NF-MOTOR-RECEIPT-WRITER-REPAIR-001 (restart_production_runtime / redeploy_any_service = founder_required)."
+  },
+  "identify": {
+    "writer_owner_organic": "cloud loop http_loop producer ('writer-B') — the worker that executes each loop cycle and writes the organic completion receipt to noetfield_factory_cycle_runs",
+    "writer_owner_repair": "noos-motor-route-owner-v1 (scripts/noos_motor_route_owner_v1.py) executing recipe NF-MOTOR-RECEIPT-WRITER-REPAIR-001; plus the integrator-repair path (cloud_trigger=noos_integrator_repair) currently masking the stall",
+    "expected_cadence": "dispatch interval 5 min; completion freshness threshold 30 min; organic http_loop expected once per cycle",
+    "last_successful_organic_write": "2026-07-12T13:50:49.571276+00:00 (cloud_trigger=http_loop), age ~125.9h at observation",
+    "authoritative_row_freshness": "FRESH by age (newest loop-inbox row 2026-07-17T19:42:34Z, age 2.3m) BUT repair-labeled (cloud_trigger=noos_integrator_repair) — not organic",
+    "archive_projection_freshness": "Cockpit read (autorun_status_v1 -> noetfield_factory_cycle_runs) is live/current. In-repo receipts/proof archive projection lags (kaizen/witness receipts 195-836 min old per founder digest) — projection-to-disk is a separate lag, not the completion-evidence root cause",
+    "queue_lease_state": "Dispatch heartbeat healthy (last_fired 2026-07-17T19:45:51Z, interval 5m). No stuck lease observed on the dispatch side; the failure is on the completion return, not the dispatch queue",
+    "scheduler_state": "Dispatcher firing (5-min). Actual loop-execution worker (repository_dispatch) last GHA run for this loop was a FAILURE dated 2026-07-05; no successful organic loop-execution completion since 2026-07-12 — producer scheduler/worker is the stalled element",
+    "credential_auth_failures": "None on the evidence sink (repair writes succeed with sink token). Any auth failure would be producer-side (writer-B), not diagnosable/repairable from the evidence path without runtime access",
+    "mirror_drift": "Integrator home-mirror flagged mirror_ok=False earlier this session. Non-authoritative: repo-local + authoritative store are source of truth; mirror is a read replica. Not the completion-evidence root cause",
+    "route_owner": "receipt_writer_completion_evidence_repair -> NF-MOTOR-RECEIPT-WRITER-REPAIR-001, machine_owner noos-motor-route-owner-v1, status WIRED (Track D, NF-NOOS-MOTOR-ROUTE-WIRING-001)"
+  },
+  "repair_performed": {
+    "action": "NONE — bounded receipt-writer repair NOT executed",
+    "why_not": [
+      "Sanctioned diagnose (loop inbox) returned execution_state=RUNNING_CONFIRMED, route=null, no routing row — the repair-sustained freshness masks the route trigger, so `run` has no qualifying routing row to consume.",
+      "Root cause is the organic producer (loop runtime/deployment), which is forbidden to restart/redeploy and is founder-gated.",
+      "Recipe escalation_route mandates escalation when writer repair/retry cannot restore evidence; additional keyed writes are cosmetic and cannot produce the required 2-3 consecutive ORGANIC completion cycles."
+    ],
+    "owner_recipe_used": "diagnose only via noos-motor-route-owner-v1 (read + create-only). No `run` phase invoked."
+  },
+  "before_after": {
+    "before": "last organic completion 2026-07-12T13:50:49Z; critic oscillating (7 loops dispatch_fresh_completion_evidence_stale during repair-cadence gaps; gha_health_witness freshness_miss/latency_miss)",
+    "after": "UNCHANGED by this diagnostic (no repair applied). Evidence remains repair-sustained; organic producer still stalled"
+  },
+  "three_cycle_evidence": "UNPROVEN / BLOCKED — recovery across three consecutive ORGANIC completion cycles cannot be demonstrated while the http_loop producer is stalled. Verification is blocked pending founder-gated runtime restoration; it will NOT be faked from repair-labeled rows.",
+  "founder_escalation": {
+    "required_because": "Diagnosis reaches deployment / production permissions (organic loop-execution worker restoration) — the task's stated condition for founder action.",
+    "decision_requested": "Authorize restoration of the organic http_loop loop-execution producer (restart/redeploy of the loop runtime worker), which the machine is forbidden to do. Machine will not restart runtime autonomously.",
+    "safe_interim_state": "Integrator-repair keeps cockpit evidence mostly fresh; correctly stopping (surfacing) beats wrongly restarting production."
+  },
+  "remaining_findings": [
+    "Detection gap: the completion classifier keys on freshness AGE only, not provenance. Repair-labeled rows (noos_integrator_repair) are counted as sufficient recent evidence, so diagnose returns RUNNING_CONFIRMED and the repair route never fires for the real (organic) stall. Recommend (founder/L5 review) that classification treat repair-sustained freshness as DEGRADED/UNPROVEN, distinct from organic freshness.",
+    "Repair cadence: integrator-repair fires irregularly (8-158 min); tightening to <30 min would stop the critic oscillation but would further MASK the organic stall — not recommended without the provenance-aware classifier above.",
+    "Projection-to-disk lag: receipts/proof witness/kaizen archive is stale vs the live store; separate from this incident but worth a projection-refresh owner.",
+    "Integrator mirror_ok=False: read-replica drift; separate lane."
+  ],
+  "final_status": "SUBMITTED for independent verification"
+}

@@ -4,6 +4,8 @@ __pycache__
 .pytest_cache
 .git
 docs
+!docs/_NOOS_AGENT/
+!docs/_NOOS_AGENT/UPGRADE_MANIFEST.json
 .agent-private
 *.db
 api_keys.local.json

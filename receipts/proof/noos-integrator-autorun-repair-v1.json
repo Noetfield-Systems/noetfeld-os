@@ -1,6 +1,6 @@
 {
   "schema": "noos-integrator-autorun-repair-v1",
-  "at": "2026-07-15T07:13:51Z",
+  "at": "2026-07-23T06:51:15Z",
   "ok": true,
   "liveness": {
     "ok": true,
@@ -12,17 +12,17 @@
         {
           "ok": true,
           "loop_id": "cf_loop_motor",
-          "last_fired_at": "2026-07-15T07:13:53.779Z"
+          "last_fired_at": "2026-07-23T06:51:17.925Z"
         },
         {
           "ok": true,
           "loop_id": "executor_railway_canonical",
-          "last_fired_at": "2026-07-15T07:13:53.917Z"
+          "last_fired_at": "2026-07-23T06:51:18.056Z"
         },
         {
           "ok": true,
           "loop_id": "executor_fly_temporary",
-          "last_fired_at": "2026-07-15T07:13:54.062Z"
+          "last_fired_at": "2026-07-23T06:51:18.188Z"
         }
       ]
     },
@@ -34,8 +34,8 @@
       "ok": true,
       "status": 201,
       "row": {
-        "id": "20b8fae6-2dac-4dab-95fd-785ee5ec2c6a",
-        "recorded_at": "2026-07-15T07:13:54+00:00",
+        "id": "ea9d7c18-ff74-4fa7-9977-cf0031c44d6f",
+        "recorded_at": "2026-07-23T06:51:18+00:00",
         "source": "cloudflare_cron",
         "event": "CRON_FIRED",
         "deployment_id": null,
@@ -49,58 +49,59 @@
       "ok": true,
       "status": 201,
       "row": {
-        "id": "3a0a420f-4359-4840-b5a2-a8621961b788",
-        "cycle_id": "cycle-cloud-queue-repair-2026-07-15T07:13:54Z",
+        "id": "e4fed449-8ac5-4e7a-9523-9e029c58a463",
+        "cycle_id": "cycle-cloud-queue-repair-2026-07-23T06:51:18Z",
         "execution_id": "cloud-queue-heartbeat-v1",
         "queue_head_before": "CLOUD-SEC-8120",
         "queue_head_after": "CLOUD-SEC-8120",
-        "started_at": "2026-07-15T07:13:54+00:00",
-        "finished_at": "2026-07-15T07:13:54+00:00",
+        "started_at": "2026-07-23T06:51:18+00:00",
+        "finished_at": "2026-07-23T06:51:18+00:00",
         "duration_ms": 1,
         "trigger_source": "noos_repair_one_shot",
         "verdict": "GREEN",
-        "created_at": "2026-07-15T07:13:54+00:00"
+        "created_at": "2026-07-23T06:51:18+00:00"
       }
     },
     "cycle_buyer": {
       "ok": true,
       "status": 201,
       "row": {
-        "id": "c9687576-1651-489f-89b1-472576e34ff4",
-        "cycle_id": "cycle-buyer-proof-repair-2026-07-15T07:13:54Z",
+        "id": "6c84627f-a275-4caa-a528-e495901d19f7",
+        "cycle_id": "cycle-buyer-proof-repair-2026-07-23T06:51:18Z",
         "execution_id": "buyer-proof-hotfix-verify-v1-repair",
         "queue_head_before": "CLOUD-SEC-8120",
         "queue_head_after": "CLOUD-SEC-8120",
-        "started_at": "2026-07-15T07:13:54+00:00",
-        "finished_at": "2026-07-15T07:13:54+00:00",
+        "started_at": "2026-07-23T06:51:18+00:00",
+        "finished_at": "2026-07-23T06:51:18+00:00",
         "duration_ms": 1,
         "trigger_source": "noos_repair_one_shot",
         "verdict": "GREEN",
-        "created_at": "2026-07-15T07:13:54+00:00"
+        "created_at": "2026-07-23T06:51:18+00:00"
       }
     },
     "cycle_recipe": {
       "ok": true,
       "status": 201,
       "row": {
-        "id": "53e39793-7a7c-4602-89fb-0273c065c9d7",
-        "cycle_id": "cycle-recipe-queue-repair-2026-07-15T07:13:54Z",
+        "id": "74bee6c6-97ab-4d1a-a8b2-726864ef1bd3",
+        "cycle_id": "cycle-recipe-queue-repair-2026-07-23T06:51:18Z",
         "execution_id": "client-proof-recipe-queue-v1-repair",
         "queue_head_before": "CLOUD-SEC-8120",
         "queue_head_after": "CLOUD-SEC-8120",
-        "started_at": "2026-07-15T07:13:54+00:00",
-        "finished_at": "2026-07-15T07:13:54+00:00",
+        "started_at": "2026-07-23T06:51:18+00:00",
+        "finished_at": "2026-07-23T06:51:18+00:00",
         "duration_ms": 1,
         "trigger_source": "noos_repair_one_shot",
         "verdict": "GREEN",
-        "created_at": "2026-07-15T07:13:54+00:00"
+        "created_at": "2026-07-23T06:51:18+00:00"
       }
     },
     "queue_head": "CLOUD-SEC-8120"
   },
   "loop_factory_cycles": {
     "ok": true,
-    "cycles_upserted": 14,
-    "failures": []
+    "skipped": true,
+    "reason": "gated_by_default_provenance_law",
+    "note": "Routine integrator repair must not write noetfield_factory_cycle_runs; repair rows mask organic http_loop stalls. Pass --factory-cycles to opt in."
   }
 }
