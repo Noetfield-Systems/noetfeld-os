@@ -20,6 +20,9 @@ jobs:
     name: GHA billing and plan health
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    permissions:
+      contents: write
+      actions: read
     env:
       NOOS_GHA_WITNESS: "1"
       GH_TOKEN: ${{ github.token }}
@@ -35,7 +38,33 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p receipts/proof
-          python3 scripts/noos_gha_health_witness_v1.py --write-receipt --json
+          rc=0
+          python3 scripts/noos_gha_health_witness_v1.py --write-receipt --json || rc=$?
+          echo "WITNESS_RC=${rc}" >> "$GITHUB_ENV"
+
+      - name: Commit witness receipt to main
+        if: always()
+        run: |
+          set -euo pipefail
+          git config user.name "noos-witness-bot"
+          git config user.email "noos-witness-bot@users.noreply.github.com"
+          git add receipts/proof/noos-gha-health-witness-v1.json
+          if git diff --cached --quiet; then
+            echo "No receipt change to commit."
+          else
+            git commit -m "witness: noos-gha-health-witness receipt $(date -u +%Y-%m-%dT%H:%M:%SZ) [skip ci]"
+            for attempt in 1 2 3; do
+              if git pull --rebase origin main && git push origin HEAD:main; then
+                echo "Receipt pushed to main (attempt ${attempt})."
+                break
+              fi
+              if [ "${attempt}" -eq 3 ]; then
+                echo "Receipt push failed after 3 attempts." >&2
+                exit 1
+              fi
+              sleep 7
+            done
+          fi
 
       - name: Upload GHA health witness receipt
         if: always()
@@ -45,3 +74,10 @@ jobs:
           path: receipts/proof/noos-gha-health-witness-v1.json
           retention-days: 30
           if-no-files-found: warn
+
+      - name: Fail run on red witness verdict
+        if: always()
+        run: |
+          rc="${WITNESS_RC:-1}"
+          echo "Witness exit code: ${rc}"
+          exit "${rc}"

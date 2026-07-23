@@ -1,0 +1,68 @@
+{
+  "receipt_id": "noos-witness-plumbing-proposal-v1",
+  "schema": "noos-proof-receipt-v1",
+  "created_utc": "2026-07-23T07:35:00Z",
+  "author": "claude-code-noos-witness",
+  "task_id": "NOOS-LANE-witness-plumbing",
+  "branch": "nf-noos-witness-receipt-plumbing-v1",
+  "base": "730ed19226bf905b62ca4e5ded3b8819928cc711",
+  "status": "SUBMITTED for independent verification (author != verifier; no self-PASS)",
+  "canon_version": "FOUNDER_CANON_v1+MACHINE_LOOPS_v1",
+  "laws": "LAWS: FOUNDER_CANON v1 + governed-autorun v3. Violations = BLOCKED_WITH_REASON.",
+  "founder_gate": "FOUNDER-GATED: workflow edits; draft PR only; DO NOT MERGE without explicit founder approval. Explicit policy question: scheduled witnesses would commit receipts DIRECTLY to main (matching manual snapshot precedent commit 6f8fb9a9) — founder must confirm this exception to the no-direct-main-mutation rule.",
+  "problem": {
+    "summary": "Scheduled witness/receipt workflows only actions/upload-artifact their receipts (permissions contents:read, no push), so receipts/proof/*.json on main is frozen at 2026-07-12/15 while witnesses keep running. noos-stack-health-receipt.yml (and noos-autorun-witness.yml and other tee'd witnesses) wrap the script in 'set +o pipefail', so a red verdict (non-zero exit) is masked and the run reports success.",
+    "evidence": [
+      "PR #91 (founder-merged 2026-07-19, 9a3e3607) demoted witness crons; data/autorun-workflows-v1.json still pins 70-540 min freshness/latency targets -> permanent false SLO misses in scripts/autorun_status_v1.py critique.",
+      "set +o pipefail false-green: runs success while receipt red since 2026-07-12 (noos-stack-health-receipt.yml et al).",
+      "main currently has NO branch protection, so GITHUB_TOKEN push to main works."
+    ]
+  },
+  "change_pattern_per_workflow": [
+    "(a) job-level permissions: contents: write (plus actions: read where the workflow-level block already granted it — job-level permissions fully replace workflow-level for the job).",
+    "(b) witness script runs under 'set -euo pipefail' with rc captured via '|| rc=$?' — no masking; tee kept where it existed; rc exported via $GITHUB_ENV as WITNESS_RC.",
+    "(c) guarded commit step (if: always()): git config user noos-witness-bot <noos-witness-bot@users.noreply.github.com>; git add ONLY that workflow's receipt path; commit only if staged diff non-empty with message 'witness: <name> receipt <UTC> [skip ci]'; then up to 3 retries of 'git pull --rebase origin main && git push origin HEAD:main'.",
+    "(d) final step (if: always()) exits with captured WITNESS_RC (default 1 if unset) so a red verdict fails the run AFTER the receipt is committed.",
+    "Existing actions/upload-artifact steps kept as belt-and-braces. Existing style/indentation preserved."
+  ],
+  "workflows_enumerated": {
+    "changed": [
+      {"file": ".github/workflows/noos-autorun-witness.yml", "receipt": "receipts/proof/noos-autorun-witness-v1.json", "had_pipefail_mask": true, "job_permissions": "contents: write, actions: read"},
+      {"file": ".github/workflows/noos-gha-health-witness.yml", "receipt": "receipts/proof/noos-gha-health-witness-v1.json", "had_pipefail_mask": false, "job_permissions": "contents: write, actions: read"},
+      {"file": ".github/workflows/noos-motor-sustain-witness.yml", "receipt": "receipts/proof/noos-motor-sustain-v1.json", "had_pipefail_mask": false, "job_permissions": "contents: write, actions: read"},
+      {"file": ".github/workflows/noos-sourcea-spine-witness.yml", "receipt": "receipts/proof/noos-sourcea-spine-witness-v1.json", "had_pipefail_mask": false, "job_permissions": "contents: write"},
+      {"file": ".github/workflows/noos-stack-health-receipt.yml", "receipt": "receipts/proof/noos-stack-automation-health-v1.json", "had_pipefail_mask": true, "job_permissions": "contents: write, actions: read"},
+      {"file": ".github/workflows/noos-integrator-daily-witness.yml", "receipt": "receipts/proof/noos-integrator-daily-checklist-v1.json", "had_pipefail_mask": false, "job_permissions": "contents: write, actions: read"},
+      {"file": ".github/workflows/noos-liveness-registry-witness.yml", "receipt": "receipts/proof/noos-liveness-registry-witness-v1.json", "had_pipefail_mask": true, "job_permissions": "contents: write"},
+      {"file": ".github/workflows/noos-trustfield-observe-witness.yml", "receipt": "receipts/proof/noos-trustfield-observe-witness-v1.json", "had_pipefail_mask": true, "job_permissions": "contents: write"},
+      {"file": ".github/workflows/noos-sandbox-url-sweep-witness.yml", "receipt": "receipts/proof/noos-sandbox-url-sweep-witness-v1.json", "had_pipefail_mask": true, "job_permissions": "contents: write"},
+      {"file": ".github/workflows/noos-machine-audit-witness.yml", "receipt": "receipts/proof/noos-machine-audit-witness-v1.json", "had_pipefail_mask": true, "job_permissions": "contents: write"}
+    ],
+    "matched_grep_but_not_changed": [
+      {"file": ".github/workflows/gel-ci.yml", "reason": "CI test-artifact upload, not a witness/receipt workflow"},
+      {"file": ".github/workflows/deploy-noos-cloud-workers-v1.yml", "reason": "deploy workflow; receipt tied to deploy event, not a scheduled witness"},
+      {"file": ".github/workflows/noos-post-deploy-verify-v1.yml", "reason": "deploy-verification workflow, not a scheduled witness"},
+      {"file": ".github/workflows/noos-researcher.yml", "reason": "kaizen agent workflow with its own PR-based flow"},
+      {"file": ".github/workflows/noos-specialist.yml", "reason": "kaizen agent workflow with its own PR-based flow"}
+    ]
+  },
+  "validation": {
+    "yaml_parse": "python3 -c \"import yaml,glob; [yaml.safe_load(open(f)) for f in glob.glob('.github/workflows/*.yml')]\" -> PASS (all workflow files parse)",
+    "pytest": {
+      "command": "python3 -m pytest -q",
+      "result": "3 failed, 349 passed, 2 warnings in 18.43s",
+      "failures": [
+        "tests/test_cursor_local_mac_t2_v1.py::test_full_governance_verify_still_passes",
+        "tests/test_verify_living_system_governance_v1.py::test_full_governance_verify_passes",
+        "tests/test_verify_pr_conflict_resolution_v1.py::test_verify_passes_on_clean_tree"
+      ],
+      "pre_existing": "All 3 failures reproduce on pristine origin/main 730ed192 with this branch's changes stashed (3 failed in 0.48s). Root cause per scripts/verify_pr_conflict_resolution_v1.py --json: sg_skill_hash_drift:87326b94b3b22738!=f460c26916385116 plus sg_lock_exists:false — cross-repo drift with the sibling SG repo's pr-conflict-resolver skill copy on this machine, unrelated to workflow files."
+    },
+    "churn_hygiene": "pytest spawned 7 untracked receipts/proof/*dispatch*/backlog* JSONs in the worktree; removed via git clean before commit — only the 10 workflow files plus this receipt are committed."
+  },
+  "risk_notes": [
+    "Receipt commits use [skip ci] to avoid triggering push-based CI; witness workflows themselves are schedule/workflow_dispatch only, so no self-trigger loop.",
+    "Concurrent witnesses near 06:15-07:00 UTC race on push; handled by 3x pull --rebase retry.",
+    "actions/checkout default fetch-depth 1 is sufficient: the rebase merge-base is the checked-out main tip, which the shallow clone contains."
+  ]
+}
