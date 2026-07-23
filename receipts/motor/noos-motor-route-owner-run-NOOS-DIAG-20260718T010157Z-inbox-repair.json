@@ -1,0 +1,110 @@
+{
+  "schema": "noos-motor-route-owner-run-v1",
+  "owner": "noos-motor-route-owner-v1 (scripts/noos_motor_route_owner_v1.py)",
+  "job_id": "MOTOR-CIRCUITA-001",
+  "idempotency_key": "receipt-repair:inbox:NOOS-DIAG-20260718T010157Z-inbox",
+  "routing_row_ref": "receipts/motor/noos-motor-routing-row-20260718T010157Z-inbox.json",
+  "phase": "repair",
+  "created_at": "2026-07-18T01:02:05Z",
+  "executing_at": "2026-07-18T01:02:06Z",
+  "worker_started_at": "2026-07-18T01:02:05Z",
+  "before": {
+    "captured_from": "receipts/incident/noos-motor-route-owner-diagnosis-20260718T010157Z-inbox.json",
+    "diagnosis_id": "NOOS-DIAG-20260718T010157Z-inbox",
+    "execution_state": "DISPATCHING_COMPLETION_UNPROVEN",
+    "last_good_completion_recorded_at": "2026-07-17T23:31:08+00:00",
+    "last_good_completion_cloud_trigger": "noos_integrator_repair",
+    "completion_staleness_age_minutes": 90.83,
+    "completion_stale_threshold_minutes": 30.0,
+    "dispatch_last_fired_at": "2026-07-18T01:00:52.311+00:00",
+    "dispatch_age_minutes": 1.09,
+    "observed_at": "2026-07-18T01:01:57Z"
+  },
+  "sandbox": {
+    "sandbox_id": "sbx-noos-diag-20260718t010157z-inbox",
+    "type": "git_worktree",
+    "worktree": "/var/folders/5g/rd684wbd1q52sngycytqr5n00000gn/T/noos-motor-sbx-noos-diag-20260718t010157z-inbox-iob0saw_/worktree",
+    "head_sha": "291789bc3d40dad8ea165f68a29ff026a000bd26",
+    "production_write": false,
+    "filesystem_scope": [
+      "scripts/factory_supabase_sink_v1.py",
+      "scripts/noos_loop_liveness_v1.py"
+    ]
+  },
+  "sandbox_destroyed_at": "2026-07-18T01:02:06Z",
+  "isolation": {
+    "conclusion": "Writer component imports and exposes its config entrypoint in sandbox; sink is reachable via observer reads. Root cause of the cloud writer-B silence is not locally establishable (writer-B runs in cloud runners); selected machine-safe repair: keyed evidence-sink retry (machine_may retry_failed_receipt_writes). Escalation, never restart, if the retry does not restore evidence.",
+    "writer_smoke": {
+      "ok": true,
+      "stdout": "writer-module-import-ok config-entrypoint-present",
+      "stderr": ""
+    }
+  },
+  "repair": {
+    "ok": true,
+    "written": true,
+    "cycle_number": 1351,
+    "http": 201,
+    "attempt": 1,
+    "credential": "platform_service_role_FALLBACK_exceeds_declared_secret_scope"
+  },
+  "baseline_sha": "291789bc3d40dad8ea165f68a29ff026a000bd26",
+  "dry_run": false,
+  "action_log": [
+    {
+      "at": "2026-07-18T01:02:05Z",
+      "action": "routing_row_consumed",
+      "mutation_surface": "read_only",
+      "detail": "receipts/motor/noos-motor-routing-row-20260718T010157Z-inbox.json"
+    },
+    {
+      "at": "2026-07-18T01:02:05Z",
+      "action": "execution_mutation_guard",
+      "mutation_surface": "read_only",
+      "detail": "route_permits_execution_mutation=False (must be False)"
+    },
+    {
+      "at": "2026-07-18T01:02:05Z",
+      "action": "before_captured",
+      "mutation_surface": "read_only",
+      "detail": "last_good=2026-07-17T23:31:08+00:00 age=90.83m provenance=noos_integrator_repair"
+    },
+    {
+      "at": "2026-07-18T01:02:05Z",
+      "action": "sandbox_created",
+      "mutation_surface": "sandbox_filesystem",
+      "detail": "git_worktree at /var/folders/5g/rd684wbd1q52sngycytqr5n00000gn/T/noos-motor-sbx-noos-diag-20260718t010157z-inbox-iob0saw_/worktree; declared scope: scripts/factory_supabase_sink_v1.py, scripts/noos_loop_liveness_v1.py (declared, audited, not runtime-enforced)"
+    },
+    {
+      "at": "2026-07-18T01:02:05Z",
+      "action": "writer_smoke_test_in_sandbox",
+      "mutation_surface": "sandbox_filesystem",
+      "detail": "writer-module-import-ok config-entrypoint-present"
+    },
+    {
+      "at": "2026-07-18T01:02:05Z",
+      "action": "sink_precheck_repair_key",
+      "mutation_surface": "read_only",
+      "detail": "repair_key=receipt-repair:inbox:NOOS-DIAG-20260718T010157Z-inbox"
+    },
+    {
+      "at": "2026-07-18T01:02:06Z",
+      "action": "sink_write_credential_selected",
+      "mutation_surface": "read_only",
+      "detail": "credential=platform_service_role_FALLBACK_exceeds_declared_secret_scope"
+    },
+    {
+      "at": "2026-07-18T01:02:06Z",
+      "action": "sink_keyed_repair_write",
+      "mutation_surface": "evidence_sink",
+      "detail": "attempt=1 repair_key=receipt-repair:inbox:NOOS-DIAG-20260718T010157Z-inbox credential=platform_service_role_FALLBACK_exceeds_declared_secret_scope"
+    },
+    {
+      "at": "2026-07-18T01:02:06Z",
+      "action": "sandbox_destroyed",
+      "mutation_surface": "sandbox_filesystem",
+      "detail": "/var/folders/5g/rd684wbd1q52sngycytqr5n00000gn/T/noos-motor-sbx-noos-diag-20260718t010157z-inbox-iob0saw_/worktree"
+    }
+  ],
+  "canon_version": "FOUNDER_CANON_v1+MACHINE_LOOPS_v1"
+}

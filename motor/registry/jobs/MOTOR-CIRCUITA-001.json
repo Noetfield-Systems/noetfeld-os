@@ -1,0 +1,138 @@
+{
+  "job_id": "MOTOR-CIRCUITA-001",
+  "recipe_id": "NF-MOTOR-RECEIPT-WRITER-REPAIR-001",
+  "recipe_version": "1.1.0",
+  "idempotency_key": "receipt-repair:inbox:NOOS-DIAG-20260718T010157Z-inbox",
+  "trigger": {
+    "type": "event",
+    "requested_by": "noos:diagnosis DISPATCHING_COMPLETION_UNPROVEN routing row (noos-motor-route-owner-v1 diagnose (dual-signal observer classification, INCIDENT-DIAGNOSE-001 semantics))",
+    "authorized_by": "motor/registry/bindings/noos-route-map-v1.json \u2014 receipt_writer_completion_evidence_repair binding (WIRED)",
+    "occurred_at": "2026-07-18T01:01:57Z",
+    "instruction_ref": "receipts/motor/noos-motor-routing-row-20260718T010157Z-inbox.json"
+  },
+  "states": {
+    "dispatch": {
+      "state": "PROVEN",
+      "evidence_ref": "routing row receipts/motor/noos-motor-routing-row-20260718T010157Z-inbox.json consumed by registered machine owner noos-motor-route-owner-v1; run log receipts/motor/noos-motor-route-owner-run-NOOS-DIAG-20260718T010157Z-inbox-complete.json",
+      "as_of": "2026-07-18T01:02:06Z"
+    },
+    "execution": {
+      "state": "PROVEN",
+      "evidence_ref": "owner run log receipts/motor/noos-motor-route-owner-run-NOOS-DIAG-20260718T010157Z-inbox-complete.json: sandbox smoke + keyed repair phase completed; worker python-script ran to completion",
+      "as_of": "2026-07-18T01:08:41Z"
+    },
+    "verification": {
+      "state": "PROVEN",
+      "evidence_ref": "verification_results in this record (3 recipe-declared checks) + receipts/motor/noos-motor-route-owner-run-NOOS-DIAG-20260718T010157Z-inbox-complete.json",
+      "as_of": "2026-07-18T01:08:41Z"
+    },
+    "evidence": {
+      "state": "PROVEN",
+      "evidence_ref": "this job record (motor/registry/jobs/MOTOR-CIRCUITA-001.json) + receipts/motor/noos-motor-route-owner-run-NOOS-DIAG-20260718T010157Z-inbox-complete.json, both in-repo and observer-readable",
+      "as_of": "2026-07-18T01:08:41Z"
+    },
+    "authority": {
+      "state": "NOT_APPLICABLE",
+      "reason": "Pure keyed evidence-path retries need no founder gate (recipe human_gate: 'pure keyed retries need no gate'); no writer-fix PR was required.",
+      "as_of": "2026-07-18T01:02:06Z"
+    },
+    "promotion": {
+      "state": "NOT_APPLICABLE",
+      "reason": "Nothing was promoted: isolation selected keyed evidence-sink retry; no writer-component patch / draft PR was needed, so the human_gate at before_promotion never armed.",
+      "as_of": "2026-07-18T01:02:06Z"
+    },
+    "outcome": {
+      "state": "NOT_APPLICABLE",
+      "reason": "No promotion occurred; the repair result is carried by states.recovery (before/after external pair), not by a post-promotion business outcome.",
+      "as_of": "2026-07-18T01:02:06Z"
+    },
+    "recovery": {
+      "state": "PROVEN",
+      "evidence_ref": "verification_results[before_after_pair] external PASS + receipts/motor/noos-motor-route-owner-run-NOOS-DIAG-20260718T010157Z-inbox-complete.json",
+      "as_of": "2026-07-18T01:08:42Z",
+      "reason": "Keyed evidence-path repair performed, then fresh completion evidence read via the independent observer path (before/after external pair). Attribution: the AFTER row IS this job's keyed repair row (repair_key match) \u2014 the repair restored the signal."
+    }
+  },
+  "lifecycle_status": "POST_VERIFYING",
+  "sandbox": {
+    "sandbox_id": "sbx-noos-diag-20260718t010157z-inbox",
+    "type": "git_worktree",
+    "worktree": "/var/folders/5g/rd684wbd1q52sngycytqr5n00000gn/T/noos-motor-sbx-noos-diag-20260718t010157z-inbox-iob0saw_/worktree",
+    "destroyed_at": "2026-07-18T01:02:06Z"
+  },
+  "worker_runs": [
+    {
+      "worker_type": "python-script",
+      "started_at": "2026-07-18T01:02:05Z",
+      "ended_at": "2026-07-18T01:08:41Z",
+      "log_ref": "receipts/motor/noos-motor-route-owner-run-NOOS-DIAG-20260718T010157Z-inbox-complete.json"
+    }
+  ],
+  "artifacts": {
+    "baseline_sha": "291789bc3d40dad8ea165f68a29ff026a000bd26",
+    "candidate_sha": "291789bc3d40dad8ea165f68a29ff026a000bd26",
+    "production_sha": "",
+    "pr_ref": "",
+    "files_changed": [],
+    "other": [
+      {
+        "name": "routing_row",
+        "ref": "receipts/motor/noos-motor-routing-row-20260718T010157Z-inbox.json"
+      },
+      {
+        "name": "diagnosis_receipt",
+        "ref": "receipts/incident/noos-motor-route-owner-diagnosis-20260718T010157Z-inbox.json"
+      },
+      {
+        "name": "run_log",
+        "ref": "receipts/motor/noos-motor-route-owner-run-NOOS-DIAG-20260718T010157Z-inbox-complete.json"
+      }
+    ]
+  },
+  "verification_results": [
+    {
+      "check": "before_after_pair",
+      "decision": "PASS",
+      "reason": "BEFORE: completion evidence stale (last good 2026-07-17T23:31:08+00:00, provenance cloud_trigger='noos_integrator_repair', age 90.83m > 30.0m). AFTER: latest completion receipt 2026-07-18T01:02:06+00:00 age 6.6m <= threshold 30.0m, read via the observer path (not the writer). AFTER row provenance: cloud_trigger='noos_motor_receipt_writer_repair' (repair-written \u2014 disclosed, never presented as organic).",
+      "evidence": "{\"after\": {\"age_minutes\": 6.6, \"cloud_trigger\": \"noos_motor_receipt_writer_repair\", \"cycle_number\": 1351, \"ok\": true, \"read_path\": \"observer:autorun_status_v1.supabase_get noetfield_factory_cycle_runs factory_id=loop-inbox\", \"recorded_at\": \"2026-07-18T01:02:06+00:00\", \"repair_key\": \"receipt-repair:inbox:NOOS-DIAG-20260718T010157Z-inbox\", \"status\": \"ok\"}, \"before\": {\"captured_from\": \"receipts/incident/noos-motor-route-owner-diagnosis-20260718T010157Z-inbox.json\", \"completion_stale_threshold_minutes\": 30.0, \"completion_staleness_age_minutes\": 90.83, \"diagnosis_id\": \"NOOS-DIAG-20260718T010157Z-inbox\", \"dispatch_age_minutes\": 1.09, \"dispatch_last_fired_at\": \"2026-07-18T01:00:52.311+00:00\", \"execution_state\": \"DISPATCHING_COMPLETION_UNPROVEN\", \"last_good_completion_cloud_trigger\": \"noos_integrator_repair\", \"last_good_completion_recorded_at\": \"2026-07-17T23:31:08+00:00\", \"observed_at\": \"2026-07-18T01:01:57Z\"}}",
+      "external": true,
+      "checked_at": "2026-07-18T01:08:41Z"
+    },
+    {
+      "check": "no_execution_mutation",
+      "decision": "PASS",
+      "reason": "Action-log audit (self-reported ledger, per recipe an internal check): zero restarts, redeploys, or loop-logic changes; every action's mutation surface is within the recipe mutation_policy (read_only / evidence_sink / control_plane_receipts / sandbox_filesystem).",
+      "evidence": "{\"violations\": []}",
+      "external": false,
+      "checked_at": "2026-07-18T01:08:41Z"
+    },
+    {
+      "check": "idempotency",
+      "decision": "PASS",
+      "reason": "Receipt-table scan for the repair key returned 1 row(s) (<=1) and the jobs registry holds 1 job(s) for the idempotency key (<=1): keyed retries created no duplicate receipts (L13).",
+      "evidence": "{\"jobs_with_idempotency_key\": 1, \"sink_repair_key_rows\": {\"count\": 1, \"ok\": true, \"rows\": [{\"cycle_number\": 1351, \"recorded_at\": \"2026-07-18T01:02:06+00:00\"}]}}",
+      "external": false,
+      "checked_at": "2026-07-18T01:08:41Z"
+    }
+  ],
+  "approval": {
+    "required": false,
+    "approved_by": "",
+    "approval_artifact": ""
+  },
+  "cost": {
+    "provider": "local",
+    "model": "deterministic-python",
+    "tokens_in": 0,
+    "tokens_out": 0,
+    "total_usd": 0.0,
+    "metered": true,
+    "value_class": "risk_reduction"
+  },
+  "timestamps": {
+    "created_at": "2026-07-18T01:02:05Z",
+    "executing_at": "2026-07-18T01:02:06Z",
+    "verified_at": "2026-07-18T01:08:41Z"
+  },
+  "notes": "First-class run of the Track D wiring (NF-NOOS-MOTOR-ROUTE-WIRING-001): the receipt_writer_completion_evidence_repair route now has a registered machine owner (noos-motor-route-owner-v1 (scripts/noos_motor_route_owner_v1.py)). Evidence-path-only: mutation_policy runtime=deny was honored \u2014 zero restarts, zero redeploys, zero loop-logic changes (see no_execution_mutation; self-reported ledger, disclosed). candidate_sha is the sandbox worktree HEAD (the exact handler+writer code that executed); no code was changed, so promotion/outcome are NOT_APPLICABLE and this record deliberately does NOT claim RECEIPT_COMPLETE: the recipe post-promotion checks (2 consecutive ORGANIC cron completion receipts \u2014 manual green != cron green; runnable via this owner's post-check subcommand) remain pending, and cost is a real metered zero (deterministic local python + Supabase REST; no model calls). AFTER-row provenance is disclosed in before_after_pair evidence and in states.recovery attribution: repair-written rows carry cloud_trigger=noos_motor_receipt_writer_repair and are never presented as organic writer-B output. SUBMITTED for independent verification. canon_version: FOUNDER_CANON_v1+MACHINE_LOOPS_v1"
+}

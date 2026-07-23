@@ -1,0 +1,89 @@
+{
+  "schema": "noos-builder-receipt-v1",
+  "receipt_id": "nf-circuit-a-deterministic-motor-proof-001-v1",
+  "commission_id": "NF-CIRCUIT-A-DETERMINISTIC-MOTOR-PROOF-001",
+  "task": "NF-CIRCUIT-A-DETERMINISTIC-MOTOR-PROOF-001",
+  "title": "Circuit A — live T0 Motor job (receipt_writer_completion_evidence_repair) with before/after evidence",
+  "created_at": "2026-07-18T01:09:30Z",
+  "author": "sg_sssot_cursor (Circuit A runner on NOOS main pin)",
+  "canon_version": "FOUNDER_CANON_v1+MACHINE_LOOPS_v1",
+  "authority": {
+    "sg_authority_sha": "d2c2e6ab9de8d91179aed694abac649866950b33",
+    "noos_main_sha": "291789bc3d40dad8ea165f68a29ff026a000bd26",
+    "worktree_branch": "nf-circuit-a-t0-proof-001",
+    "recipe_id": "NF-MOTOR-RECEIPT-WRITER-REPAIR-001",
+    "recipe_version": "1.1.0",
+    "route": "receipt_writer_completion_evidence_repair",
+    "owner": "noos-motor-route-owner-v1 (scripts/noos_motor_route_owner_v1.py)"
+  },
+  "final_status": "CIRCUIT_A_PROVEN",
+  "verdict": "SUBMITTED for independent verification — builder claims Circuit A success criteria met; not an organic writer-B cron-green claim",
+  "live_condition": {
+    "observed_at": "2026-07-18T01:01:57Z",
+    "execution_state": "DISPATCHING_COMPLETION_UNPROVEN",
+    "loop_id": "inbox",
+    "factory_id": "loop-inbox",
+    "dispatch": "FRESH (age 1.09m; last_fired_at 2026-07-18T01:00:52Z)",
+    "completion": "STALE (age 90.83m; last_recorded_at 2026-07-17T23:31:08Z; cloud_trigger=noos_integrator_repair)"
+  },
+  "run": {
+    "diagnosis_receipt": "receipts/incident/noos-motor-route-owner-diagnosis-20260718T010157Z-inbox.json",
+    "routing_row": "receipts/motor/noos-motor-routing-row-20260718T010157Z-inbox.json",
+    "repair_log": "receipts/motor/noos-motor-route-owner-run-NOOS-DIAG-20260718T010157Z-inbox-repair.json",
+    "complete_log": "receipts/motor/noos-motor-route-owner-run-NOOS-DIAG-20260718T010157Z-inbox-complete.json",
+    "job_id": "MOTOR-CIRCUITA-001",
+    "job_record": "motor/registry/jobs/MOTOR-CIRCUITA-001.json",
+    "idempotency_key": "receipt-repair:inbox:NOOS-DIAG-20260718T010157Z-inbox",
+    "before": {
+      "completion_recorded_at": "2026-07-17T23:31:08+00:00",
+      "completion_staleness_age_minutes": 90.83,
+      "dispatch_age_minutes": 1.09
+    },
+    "repair": {
+      "ok": true,
+      "written": true,
+      "cycle_number": 1351,
+      "http": 201,
+      "attempt": 1,
+      "cloud_trigger": "noos_motor_receipt_writer_repair",
+      "credential_disclosure": "platform_service_role_FALLBACK_exceeds_declared_secret_scope (NOOS_SINK_RECEIPTS_WRITE_TOKEN unset)"
+    },
+    "wait": "one full loop-inbox cycle (interval 5m; waited ~6.5m) per recipe capture_after",
+    "after": {
+      "source": "observer read path (autorun_status_v1.supabase_get), NOT the writer's code path",
+      "recorded_at": "2026-07-18T01:02:06+00:00",
+      "age_minutes": 6.6,
+      "provenance_disclosed": "AFTER row is the labeled repair row (cloud_trigger=noos_motor_receipt_writer_repair) — repair-labeled green disclosed"
+    },
+    "checks": {
+      "before_after_pair": "PASS (external)",
+      "no_execution_mutation": "PASS",
+      "idempotency": "PASS"
+    },
+    "recovery": "states.recovery = PROVEN",
+    "lifecycle_status": "POST_VERIFYING — not RECEIPT_COMPLETE; organic cron post-check not claimed"
+  },
+  "seven_truth_dimensions": {
+    "dispatch": "PROVEN",
+    "execution": "PROVEN",
+    "verification": "PROVEN",
+    "evidence": "PROVEN",
+    "authority": "NOT_APPLICABLE",
+    "promotion": "NOT_APPLICABLE",
+    "recovery": "PROVEN"
+  },
+  "success_criteria": {
+    "no_founder_mid_job": true,
+    "no_runtime_restart": true,
+    "no_test_weakening": true,
+    "no_missing_evidence": true,
+    "exact_before_after": true,
+    "seven_truth_dimensions_populated": true
+  },
+  "validate_py": "python3 motor/registry/validate.py -> exit 0 after job_id rename to MOTOR-CIRCUITA-001 (regex ^MOTOR-[A-Z0-9]+-[0-9]{3,}$)",
+  "not_claimed": [
+    "Organic writer-B cron recovery (manual/repair green != cron green)",
+    "Circuit B / Higgsfield campaign",
+    "Any production promote beyond keyed evidence-sink write already authorized by the recipe"
+  ]
+}
