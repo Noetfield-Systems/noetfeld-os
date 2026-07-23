@@ -1,7 +1,7 @@
 {
   "schema": "noetfield/custody-authority-pins-v1",
-  "version": "1.3.0",
-  "issued_at": "2026-07-17T10:28:40-07:00",
+  "version": "1.4.0",
+  "issued_at": "2026-07-17T12:30:00-07:00",
   "custody_chain": [
     "master_ssot_anchor",
     "library_define",
@@ -12,9 +12,9 @@
   "sg_repo": {
     "name": "sina-governance-SSOT",
     "path": "Noetfield-Systems/sina-governance-SSOT",
-    "commit": "dc6080d8519b8a83dcfaaeefb65392691ce3e33e",
-    "pin_note": "Wave 0 re-pin: NF-UNIFIED-MOTOR-ARCHITECTURE-V1 clean-landed on SG main (PR #16, authority SHA dc6080d8, ancestor of SG main). Supersedes doctrine-branch commit 8b476f7. Verified 2026-07-17.",
-    "previous_commit": "0e2c1ea2849823a9c642ae4fe4f9ec8e52d5482e"
+    "commit": "b72f5a3975b0170a1b4d9e09eea06cccc9c4acf0",
+    "pin_note": "Re-pin after SG PR #18: NF-COMMAND-GATEWAY-V2-ARCHITECTURE-V1 + NF-SINAGPT-FOUNDER-BRAIN-ARCHITECT-V1 landed on SG main via merge_commit (authority SHA b72f5a3, ancestor of SG main; SG main tip fd62e7f5 after PR #19 stamp+dispatches). Doctrine tip 792eb6c6. Motor architecture authority (dc6080d8) unchanged and remains ancestor. Per SG dispatch noos-repin-after-pr18-sinagpt-gateway-v2.md. Verified 2026-07-17.",
+    "previous_commit": "dc6080d8519b8a83dcfaaeefb65392691ce3e33e"
   },
   "noos_repo": {
     "name": "noetfeld-OS",

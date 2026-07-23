@@ -33,7 +33,7 @@ cd "$ROOT"
 
 SG_REPO="${NOOS_SG_REPO:-$HOME/Desktop/Noetfield-Systems/sina-governance-SSOT}"
 
-SG_PIN="dc6080d8519b8a83dcfaaeefb65392691ce3e33e"  # Wave 0 re-pin: NF-UNIFIED-MOTOR-ARCHITECTURE-V1 clean-land (SG PR #16); must equal custody pins-file sg_repo.commit
+SG_PIN="b72f5a3975b0170a1b4d9e09eea06cccc9c4acf0"  # Re-pin after SG PR #18: NF-COMMAND-GATEWAY-V2-ARCHITECTURE-V1 + SinaGPT founder-brain land on SG main (merge_commit b72f5a3, ancestor of SG main; dc6080d8 motor authority remains ancestor); must equal custody pins-file sg_repo.commit
 NOOS_CUSTODY_PIN="a4bdf1f338a5ecf9de58fb5eda8ef974eee715ca"
 CANON_COMMIT="6c13aa2765dbb129bc4981da4f25ef1a8a96b84d"
 SG_LIB_VERSION="v0.9-SG-RATIFIED"
