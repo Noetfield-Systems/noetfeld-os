@@ -1,0 +1,88 @@
+{
+  "schema": "noos.p05-witness-ingest.v1",
+  "receipt_id": "noos-p05-witness-ingest-20260722T141024Z",
+  "canon_version": "FOUNDER_CANON_v1+MACHINE_LOOPS_v1",
+  "ingested_at_utc": "2026-07-22T14:10:24Z",
+  "ingested_by": "claude-code-noos (cockpit ingest lane NOOS-LANE-p05-witness-ingest)",
+  "ingest_scope": "Record-only ingestion of the Claude Code 2 independent P05 witness receipt. No commissioning rerun. No reinterpretation of missing or failing evidence.",
+  "witness_receipt_source": {
+    "path": "/private/tmp/claude-501/-Users-sinakazemnezhad-Desktop-Noetfield-Systems-noetfield-cloud-factory-infra/9a72049a-3609-4413-a7c5-b2c0ff100987/scratchpad/p05-witness-receipt.json",
+    "schema": "noetfield.p05-witness-receipt.v1",
+    "role": "independent_read_only_witness",
+    "witness_agent": "Claude Code 2 (session 9a72049a, noetfield-cloud-factory-infra project)",
+    "embedded_verbatim": {
+      "schema": "noetfield.p05-witness-receipt.v1",
+      "role": "independent_read_only_witness",
+      "repository": "Noetfield-Systems/NOETFIELD-RUNWAY",
+      "authoritative_main_sha": "fa2e2e0741626a0d165711e892e4625d504dd836",
+      "audited_kernel_merge_sha": "060c522371e1c70fb66375d6832a1af83ae3444a",
+      "kernel_tree_equals_audited_merge": true,
+      "deployed_sha": "UNVERIFIABLE_no_commit_in_healthz",
+      "deployed_schema_binding": "migration checksums 001=be6a0865.. 002=d5128833.. match origin/main byte-for-byte (binds SCHEMA, not service code)",
+      "proof_manifest_hash_sha256": "8e37b9449dac4047eaef3142d34db7241eb12b34e533836480debcaf115b0124",
+      "proof_manifest_files": 16,
+      "proof_producing_commit": "a3578d9",
+      "tests": {
+        "01_database_restart": "PASS_WEAK",
+        "02_complete_motor_path": "FAIL",
+        "03_duplicate_triggers": "PASS",
+        "04_duplicate_queue_delivery": "INDETERMINATE",
+        "05_worker_termination": "FAIL",
+        "06_outbox_failure": "FAIL",
+        "07_append_only_ledger": "PASS_SCOPED",
+        "08_zero_llm_idle": "PASS",
+        "09_server_side_hold": "FAIL"
+      },
+      "tally": { "PASS": 3, "PASS_WEAK": 1, "PASS_SCOPED": 1, "INDETERMINATE": 1, "FAIL": 4 },
+      "observation_start_utc": "2026-07-22T13:14:04Z",
+      "final_verdict": "FAIL_P05"
+    }
+  },
+  "cockpit_verification_of_witness_claims": {
+    "method": "read-only cross-checks; commissioning NOT rerun",
+    "authoritative_main_sha_at_witness_time": "fa2e2e0741626a0d165711e892e4625d504dd836 = PR #155 merge (12:59:52Z) — was origin/main during witness window 13:14Z (pre PR #156 13:51Z). VERIFIED",
+    "authoritative_main_sha_at_ingest_time": "43c754f6b084b2c73ce5655c4cd9fbec414b79fa (PR #158 merge, 14:06:45Z, GITHUB_API+ORIGIN_MAIN)",
+    "kernel_tree_continuity": "git diff fa2e2e0..43c754f -- packages/runway-graph-kernel/ is EMPTY: the witnessed kernel tree is byte-identical on current main; witness verdict applies to current main's kernel. VERIFIED",
+    "audited_kernel_merge_sha": "060c522 = PR #154 merge (2026-07-22T12:55:40Z). VERIFIED",
+    "proof_manifest_files": "16 files under packages/runway-graph-kernel/proofs/p07/ at 060c522. VERIFIED",
+    "proof_manifest_hash": "REPRODUCED EXACTLY: sha256 over sorted '<sha256>  <repo-relative-path>' lines of the 16 proof files at 060c522 = 8e37b944...b124. VERIFIED",
+    "deployed_sha_unverifiable": "CONFIRMED: /healthz exposes no commit SHA; witness honestly recorded UNVERIFIABLE rather than inferring. Migration checksums in live /healthz (001=be6a0865..., 002=d5128833...) match witness record and origin/main. VERIFIED",
+    "witness_hygiene_note": "Witness is read-only, author != subject (builder of #154 was the Cursor lane 'kazemnezhadsina144-dot'), records UNVERIFIABLE where evidence is missing, and grades tests below PASS (PASS_WEAK/PASS_SCOPED/INDETERMINATE) rather than rounding up."
+  },
+  "recorded_fields": {
+    "authoritative_runway_main_sha": {
+      "at_witness_time": "fa2e2e0741626a0d165711e892e4625d504dd836",
+      "at_ingest_time": "43c754f6b084b2c73ce5655c4cd9fbec414b79fa"
+    },
+    "deployed_staging_sha": "UNVERIFIABLE_no_commit_in_healthz (schema bound via migration checksums only; service-code SHA unbound)",
+    "proof_manifest_hash_sha256": "8e37b9449dac4047eaef3142d34db7241eb12b34e533836480debcaf115b0124 (reproduced by cockpit)",
+    "tests_01_09": {
+      "01_database_restart": "PASS_WEAK",
+      "02_complete_motor_path": "FAIL",
+      "03_duplicate_triggers": "PASS",
+      "04_duplicate_queue_delivery": "INDETERMINATE",
+      "05_worker_termination": "FAIL",
+      "06_outbox_failure": "FAIL",
+      "07_append_only_ledger": "PASS_SCOPED",
+      "08_zero_llm_idle": "PASS",
+      "09_server_side_hold": "FAIL"
+    },
+    "witness_timestamp_utc": "2026-07-22T13:14:04Z (observation start)",
+    "independent_verdict": "FAIL_P05",
+    "remaining_nonblocking_findings": "NOT_APPLICABLE — verdict is FAIL_P05; the 4 FAIL results (02, 05, 06, 09) and 1 INDETERMINATE (04) are BLOCKING findings, not nonblocking. No nonblocking-findings list exists to record."
+  },
+  "separated_verdicts": {
+    "builder_verdict": "PASS_P05 — P07_VERDICT.json at proof-producing commit a3578d9 (PR #154, merged 060c522), audited_at 2026-07-22T12:53:11.842Z, claims tests 01-09 all PASS, remaining_blockers []. Author = builder lane (author == subject); under NOOS law this is a SUBMITTED claim, not a governing verdict.",
+    "independent_witness_verdict": "FAIL_P05 — Claude Code 2 read-only witness, observation start 13:14:04Z, tally 3 PASS / 1 PASS_WEAK / 1 PASS_SCOPED / 1 INDETERMINATE / 4 FAIL. GOVERNS THE GATE (author != subject).",
+    "live_service_health": "LIVE/HEALTHY at ingest (14:0xZ probes): staging /healthz 200 ok:true worker gk-staging-68340357, migrations 001+002 checksummed, hmac_configured, cf_queue_configured, loops:true; CF consumer HTTP 200. Liveness is NOT commissioning proof.",
+    "evidence_health": "CONFLICTED: builder claims 9/9 PASS on the same proof set the independent witness grades 4x FAIL. Exact-head CI verify on current main 43c754f is now GREEN (PR #153 pg-shim fix) — the prior S0 TS-gate blocker is cleared, but the builder-vs-witness proof conflict is open and unresolved."
+  },
+  "gate_decision": {
+    "p1_canvas_gate": "REMAINS_CLOSED",
+    "rule": "Founder directive: open only if independent verdict is PASS_P05_CONFIRMED or PASS_P05_WITH_NONBLOCKING_FINDINGS.",
+    "actual_independent_verdict": "FAIL_P05",
+    "decision": "FAIL_P05 is not in the permitted set. Gate stays closed. Missing/failed evidence is NOT reinterpreted as PASS."
+  },
+  "machine_route": "Builder-vs-witness conflict on tests 02/04/05/06/09 routes to the Runway builder lane for remediation with fresh independently witnessable evidence; re-witness after remediation. Not a founder decision until machine retries are exhausted.",
+  "status": "SUBMITTED for independent verification"
+}

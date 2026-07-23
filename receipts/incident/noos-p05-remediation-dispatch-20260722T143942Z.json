@@ -1,0 +1,80 @@
+{
+  "schema": "noos.p05-remediation-dispatch.v1",
+  "receipt_id": "noos-p05-remediation-dispatch-20260722T143942Z",
+  "canon_version": "FOUNDER_CANON_v1+MACHINE_LOOPS_v1",
+  "laws": "LAWS: FOUNDER_CANON v1 + governed-autorun v3. Violations = BLOCKED_WITH_REASON.",
+  "dispatched_at_utc": "2026-07-22T14:39:42Z",
+  "dispatched_by": "claude-code-noos (NOOS-LANE-p05-remediation-dispatch)",
+  "route": "NOOS control plane -> Runway builder lane (Cursor/Codex; author of PR #154). NOOS does not edit NOETFIELD-RUNWAY (runtime separation) and does not re-witness its own dispatch (author != subject).",
+  "predicate_receipts": [
+    "receipts/incident/noos-p05-witness-ingest-20260722T141024Z.json (independent verdict FAIL_P05; P1 canvas gate CLOSED)",
+    "receipts/incident/noos-p05-conflict-diagnosis-20260722T143942Z.json (full 7-agent per-test diagnosis, 75.8KB, all witness grades held defensible 7/7)"
+  ],
+  "subject": {
+    "repository": "Noetfield-Systems/NOETFIELD-RUNWAY",
+    "audited_kernel_merge_sha": "060c522371e1c70fb66375d6832a1af83ae3444a",
+    "proof_producing_commit": "a3578d9",
+    "proof_set": "packages/runway-graph-kernel/proofs/p07/ (16 files, manifest sha256 8e37b9449dac4047eaef3142d34db7241eb12b34e533836480debcaf115b0124)",
+    "builder_claim": "P07_VERDICT.json PASS_P05, 9/9 PASS",
+    "independent_witness_verdict": "FAIL_P05 (3 PASS / 1 PASS_WEAK / 1 PASS_SCOPED / 1 INDETERMINATE / 4 FAIL)"
+  },
+  "cross_cutting_root_causes": {
+    "RC1_code_attribution_unbound": "At audit time /healthz exposed no commit SHA (deployed_sha UNVERIFIABLE); no behavior could be attributed to the audited merge. PARTIALLY REMEDIATED post-audit: live /healthz now reports commit_sha (observed 7a64a355) and migration 003_graph_kernel_append_only_runtime_v1 — but that deploy postdates the audited proofs, so existing artifacts remain unattributed. All re-proofs must run against a deploy whose healthz commit_sha equals the SHA under grade.",
+    "RC2_self_reported_verdicts": "Artifacts are producer-authored conclusions (3-field self-reports; PASS booleans computed inside the harness, evidence not exported). No HTTP transcripts, no timestamps, no SQL row snapshots, no DB identity. A third party can re-derive nothing. Repo law: builders write SUBMITTED for independent verification; PASS is the witness's word only.",
+    "RC3_broken_queue_path_inside_PASS_evidence": "The CF queue publish leg was completely broken during the proof session (cf_queue_publish_failed status=400; delivered=0/failed=2; OUTBOX_FAILED with queue_message_id=null) yet tests claiming queue laws (02, 04, 06) were graded PASS by the builder. Any queue publish failure in a proof session must fail the run, never sit inside passing evidence.",
+    "RC4_harness_simulated_preconditions": "Test preconditions were manufactured via direct DB inserts with privileged producer credentials, bypassing the kernel write path (01 rows, 09 held node). Proofs must create state through the governed service path or explicitly label seeded state.",
+    "RC5_no_discriminating_power": "Negative-only probes (09: two denials, no valid-approval release) cannot distinguish a governed gate from a hardcoded/dead endpoint. Every control test needs a positive-path release case."
+  },
+  "per_test_orders": {
+    "01_database_restart": {
+      "witness_grade": "PASS_WEAK",
+      "defect": "Client reconnect masquerading as restart; rows test-fabricated via raw SQL; PASS predicate values not in artifact.",
+      "order": "Real restart of the deployed surface with before/after /healthz (build_id/deployment_id differ, commit_sha identical = audited SHA); state created via signed service API; full SQL row snapshots so the PASS predicate is recomputable from the artifact; non-secret DB identity binding to the manifest project."
+    },
+    "02_complete_motor_path": {
+      "witness_grade": "FAIL",
+      "defect": "Artifact self-declares PASS while its own payload shows the outbox->CF-queue leg failed completely (delivered=0, failed=2, dlq=0); path was harness-simulated on an unidentifiable build.",
+      "order": "Re-prove end-to-end with the queue leg actually delivering (delivered>=1, failed=0), full transcripts (trigger, dispatch, consumer ack, wake, settle), all against healthz commit_sha == SHA under grade."
+    },
+    "04_duplicate_queue_delivery": {
+      "witness_grade": "INDETERMINATE",
+      "defect": "Two direct POSTs self-reported CLAIMED/ALREADY_SETTLED; the actual CF queue delivery path (the thing the law governs) was bypassed and was broken in-session.",
+      "order": "Duplicate delivery through the real CF queue (same queue_message_id delivered twice or two enqueues of identical payload), consumer-side transcripts + server-appended run_events proving single settlement; direct-POST simulation is not acceptance evidence."
+    },
+    "05_worker_termination": {
+      "witness_grade": "FAIL",
+      "defect": "3-field self-report (node_status=PENDING, lease_expired_events=1, fencing_before=3); no transcripts, no row snapshots, no re-derivable evidence of kill, lease expiry, fencing increment, or safe reclaim.",
+      "order": "Evidence package: worker kill event with timestamps, lease row before/expiry/after snapshots with exact read-only SQL, fencing_generation increment, reaper action in run_events with worker_id, stale-writer rejection transcript (old fencing token refused)."
+    },
+    "06_outbox_failure": {
+      "witness_grade": "FAIL",
+      "defect": "Proof of failure-handling ran while the queue path itself was broken (cf_queue_publish_failed 400 on every attempt; OUTBOX_FAILED; queue_message_id=null); crash-resume claim rests on rows the witness cannot re-derive.",
+      "order": "Fix the CF queue publish 400 first; then re-prove: induced transient failure -> OUTBOX_FAILED with captured error -> retry/dispatch-once -> delivered with queue_message_id non-null + consumer ack; full row lifecycle snapshots with SQL; zero unexplained publish failures in-session."
+    },
+    "07_append_only_ledger": {
+      "witness_grade": "PASS_SCOPED",
+      "defect": "Grants-only, single-table/single-role inference; denied=true manufactured from ANY caught exception (no SQLSTATE discrimination); runtime DB principal and service code unbound; claim ('append-only ledger') wider than property proven (worker role lacks 2 grants on run_events).",
+      "order": "SQLSTATE-42501-only denial discrimination with verbatim transcripts incl. TRUNCATE; unfiltered grant enumeration via has_table_privilege across memberships; runtime principal evidence (service session role == graph_kernel_worker); migration 003 (append-only runtime enforcement) checksum-verified against origin/main and its trigger-raised rejection captured, or claim explicitly scoped to worker role; self-binding artifact metadata."
+    },
+    "09_server_side_hold": {
+      "witness_grade": "FAIL",
+      "defect": "Negative-only probes (missing + malformed approval), precondition hand-inserted via producer credentials, no HTTP status codes, no server-appended HOLD ledger rows, no valid-approval release case — a hardcoded HOLD endpoint passes identically.",
+      "order": "Four-way discrimination matrix (missing / malformed / well-formed-nonexistent-or-revoked / VALID approval releasing the hold), full redacted HTTP transcripts, server-appended run_events HOLD + release rows with worker_id, approvals-ledger row for the valid case, precondition via kernel trigger path, at least one denial via the real CF queue consumer."
+    }
+  },
+  "universal_acceptance_criteria": [
+    "Every re-proof runs against a deployment whose /healthz commit_sha equals the SHA under grade, captured before and after in the artifact (kills RC1).",
+    "Every artifact is self-binding: UTC timestamps, full redacted HTTP transcripts, exact read-only SQL with result-row snapshots, non-secret DB/project identity, producing commit SHA, sha256 manifest over the proof set (kills RC2).",
+    "Zero queue publish failures embedded inside passing evidence; queue-law tests deliver through the real CF consumer (kills RC3).",
+    "State under test created via the governed service path, or seeded state explicitly labeled (kills RC4).",
+    "Every control test includes the positive release case, not just denials (kills RC5).",
+    "Builder verdict field reads exactly 'SUBMITTED for independent verification' with a receipt_id; PASS appears only in the independent witness's receipt (author != subject).",
+    "After resubmission: independent re-witness (Claude Code 2 pattern — read-only, manifest-hash-reproducing). P1 canvas gate opens only on PASS_P05_CONFIRMED or PASS_P05_WITH_NONBLOCKING_FINDINGS."
+  ],
+  "gate_state": {
+    "p1_canvas_gate": "REMAINS_CLOSED",
+    "reopens_via": "independent re-witness verdict in the permitted set — never via builder self-grade"
+  },
+  "founder_touch_required": "NONE at this step. This dispatch is machine-routed to the builder lane. Founder gates remain: any Runway merge policy change (required checks), and final phase decisions.",
+  "status": "SUBMITTED for independent verification"
+}

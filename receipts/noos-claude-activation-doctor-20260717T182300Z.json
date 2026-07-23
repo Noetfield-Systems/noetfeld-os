@@ -1,0 +1,299 @@
+{
+  "schema": "noos-claude-activation-doctor-v1",
+  "action": "claude_activation_instruction_load_and_authority_doctor",
+  "repo": "noetfeld-os",
+  "canon_version": "FOUNDER_CANON_v1+MACHINE_LOOPS_v1",
+  "timestamp_utc": "2026-07-17T18:23:02Z",
+  "branch": "nf-noos-issue-ci-ownership-001",
+  "repo_sha": "6bd37f301bbe1fef3b6491a871740359eaed415b",
+  "custody_pins": {
+    "sg": "dc6080d8519b8a83dcfaaeefb65392691ce3e33e",
+    "noos": "c7f39ff39e971a6e10f3bd97e57c16d79d59652a",
+    "registry": "noetfield-org/CUSTODY_AUTHORITY_PINS_v1.json"
+  },
+  "result": "DEGRADED",
+  "stale_pins": true,
+  "degraded_means": "local surface verified; sibling-repo checks skipped offline or a custody pin is stale \u2014 not fully green",
+  "checks": [
+    {
+      "name": "surface_file:CLAUDE.md",
+      "status": "pass",
+      "detail": "exists"
+    },
+    {
+      "name": "surface_file:.claude/noos/SYSTEM_IDENTITY.md",
+      "status": "pass",
+      "detail": "exists"
+    },
+    {
+      "name": "surface_file:.claude/noos/AUTHORITY.md",
+      "status": "pass",
+      "detail": "exists"
+    },
+    {
+      "name": "surface_file:.claude/noos/RUNTIME_MAP.md",
+      "status": "pass",
+      "detail": "exists"
+    },
+    {
+      "name": "surface_file:.claude/noos/PROJECT_RULES.md",
+      "status": "pass",
+      "detail": "exists"
+    },
+    {
+      "name": "surface_file:.claude/agents/noos-architect.md",
+      "status": "pass",
+      "detail": "exists"
+    },
+    {
+      "name": "surface_file:.claude/agents/noos-integrator.md",
+      "status": "pass",
+      "detail": "exists"
+    },
+    {
+      "name": "claude_md_concise",
+      "status": "pass",
+      "detail": "CLAUDE.md is 4885 bytes (cap 10000)"
+    },
+    {
+      "name": "claude_md_anchor:execution and integration control plane",
+      "status": "pass",
+      "detail": "CLAUDE.md contains 'execution and integration control plane'"
+    },
+    {
+      "name": "claude_md_anchor:graph-out/GRAPH_REPORT.md",
+      "status": "pass",
+      "detail": "CLAUDE.md contains 'graph-out/GRAPH_REPORT.md'"
+    },
+    {
+      "name": "claude_md_anchor:.claude/noos/AUTHORITY.md",
+      "status": "pass",
+      "detail": "CLAUDE.md contains '.claude/noos/AUTHORITY.md'"
+    },
+    {
+      "name": "claude_md_anchor:Hard rules",
+      "status": "pass",
+      "detail": "CLAUDE.md contains 'Hard rules'"
+    },
+    {
+      "name": "claude_md_dispatch_line",
+      "status": "pass",
+      "detail": "dispatch line verbatim in CLAUDE.md"
+    },
+    {
+      "name": "claude_md_canon_version",
+      "status": "pass",
+      "detail": "canon_version string in CLAUDE.md"
+    },
+    {
+      "name": "claude_md_sg_pin_current",
+      "status": "pass",
+      "detail": "CLAUDE.md authority table cites current SG pin dc6080d8"
+    },
+    {
+      "name": "claude_md_custody_pin_current",
+      "status": "pass",
+      "detail": "CLAUDE.md authority table cites current NOOS custody pin c7f39ff3"
+    },
+    {
+      "name": "agent_frontmatter:noos-architect",
+      "status": "pass",
+      "detail": "frontmatter name matches filename"
+    },
+    {
+      "name": "agent_frontmatter:noos-integrator",
+      "status": "pass",
+      "detail": "frontmatter name matches filename"
+    },
+    {
+      "name": "cited_paths_exist",
+      "status": "pass",
+      "detail": "all 111 cited paths exist locally or in the SG repo"
+    },
+    {
+      "name": "local_pin:146e8fe1:docs/_NOOS_AGENT/NOETFIELD_UNIFIED_MASTER_v1_LOCKED.md",
+      "status": "pass",
+      "detail": "commit resolves and file exists at pin"
+    },
+    {
+      "name": "local_pin:146e8fe1:docs/_NOOS_AGENT/NOETFIELD_OS_SSOT_v1_LOCKED.md",
+      "status": "pass",
+      "detail": "commit resolves and file exists at pin"
+    },
+    {
+      "name": "local_pin:404e4c71:docs/_NOOS_AGENT/PRODUCT_TRUTH.md",
+      "status": "pass",
+      "detail": "commit resolves and file exists at pin"
+    },
+    {
+      "name": "local_pin:c36aaf14:docs/_NOOS_AGENT/[NOOS-AGENT-20260703-005]_FOUNDER_CANON_INTERFACE_v1.md",
+      "status": "pass",
+      "detail": "commit resolves and file exists at pin"
+    },
+    {
+      "name": "authority_records_pin:dc6080d8",
+      "status": "pass",
+      "detail": "AUTHORITY.md cites the pin"
+    },
+    {
+      "name": "authority_records_pin:c7f39ff3",
+      "status": "pass",
+      "detail": "AUTHORITY.md cites the pin"
+    },
+    {
+      "name": "authority_records_pin:6c13aa27",
+      "status": "pass",
+      "detail": "AUTHORITY.md cites the pin"
+    },
+    {
+      "name": "authority_records_pin:146e8fe1",
+      "status": "pass",
+      "detail": "AUTHORITY.md cites the pin"
+    },
+    {
+      "name": "authority_records_pin:404e4c71",
+      "status": "pass",
+      "detail": "AUTHORITY.md cites the pin"
+    },
+    {
+      "name": "authority_records_pin:c36aaf14",
+      "status": "pass",
+      "detail": "AUTHORITY.md cites the pin"
+    },
+    {
+      "name": "authority_records_library",
+      "status": "pass",
+      "detail": "AUTHORITY.md cites SG Library version + zip sha256"
+    },
+    {
+      "name": "sg_pin_commit",
+      "status": "pass",
+      "detail": "Master SSOT pin dc6080d8 resolves in /Users/sinakazemnezhad/Desktop/Noetfield-Systems/sina-governance-SSOT"
+    },
+    {
+      "name": "sg_pin_strategy_ssot",
+      "status": "pass",
+      "detail": "strategy-ssot-v6-split.md exists at pin"
+    },
+    {
+      "name": "sg_pin_founder_canon_file",
+      "status": "pass",
+      "detail": "P1-CANON/FOUNDER_CANON_v1.md exists at pin"
+    },
+    {
+      "name": "sg_canon_commit",
+      "status": "pass",
+      "detail": "FOUNDER_CANON commit 6c13aa27 resolves"
+    },
+    {
+      "name": "sg_library_registry_at_pin",
+      "status": "pass",
+      "detail": "registry at pin carries v0.9-SG-RATIFIED + zip sha256"
+    },
+    {
+      "name": "laws_payload_in_templates",
+      "status": "pass",
+      "detail": "laws payload + canon_version in 4 dispatch templates"
+    },
+    {
+      "name": "canon_version_in_config",
+      "status": "pass",
+      "detail": "canon_version string in machine-loops config"
+    },
+    {
+      "name": "forbidden_slug_absent",
+      "status": "pass",
+      "detail": "legacy slug not present in Claude surface"
+    },
+    {
+      "name": "agents_md_cross_link",
+      "status": "pass",
+      "detail": "AGENTS.md references CLAUDE.md"
+    },
+    {
+      "name": "custody_pins_valid_json",
+      "status": "pass",
+      "detail": "noetfield-org/CUSTODY_AUTHORITY_PINS_v1.json parses"
+    },
+    {
+      "name": "custody_pins_sg_agree",
+      "status": "pass",
+      "detail": "pins-file SG commit dc6080d8 == doctor SG pin dc6080d8 (mismatch = stale surface = FAIL)"
+    },
+    {
+      "name": "custody_pins_noos_agree",
+      "status": "pass",
+      "detail": "pins-file NOOS commit c7f39ff3 == doctor NOOS pin c7f39ff3 (mismatch = stale surface = FAIL)"
+    },
+    {
+      "name": "noos_custody_pin_ancestor",
+      "status": "pass",
+      "detail": "NOOS custody pin c7f39ff3 resolves and is an ancestor of HEAD"
+    },
+    {
+      "name": "custody_artifact_blobs",
+      "status": "pass",
+      "detail": "all 13 custody artifact blob SHAs verify at their pinned commits"
+    },
+    {
+      "name": "sg_pin_ssot_section_0_7",
+      "status": "pass",
+      "detail": "Master SSOT \u00a70.7 (motor escalation continuity) present at SG pin"
+    },
+    {
+      "name": "sg_pin_p7_terminology_11_12",
+      "status": "pass",
+      "detail": "P7 terminology \u00a711-\u00a712 motor terms present at SG pin"
+    },
+    {
+      "name": "sg_pin_custody_file:LIBRARY_CUSTODY_MATRIX_LOCKED_v1.md",
+      "status": "pass",
+      "detail": "exists at SG pin"
+    },
+    {
+      "name": "sg_pin_custody_file:AUTHORITY_GRAPH_FOUNDER_REASONING_LOCKED_v1.md",
+      "status": "pass",
+      "detail": "exists at SG pin"
+    },
+    {
+      "name": "sg_pin_custody_file:founder-reasoning-continuation-doctrine-LOCKED_v1.md",
+      "status": "pass",
+      "detail": "exists at SG pin"
+    },
+    {
+      "name": "sg_pin_custody_file:MOTOR_COMMISSIONING_AND_ACCEPTANCE_STANDARD_LOCKED_v1.md",
+      "status": "pass",
+      "detail": "exists at SG pin"
+    },
+    {
+      "name": "sg_pin_custody_file:COST_EXECUTION_DOCTRINE_LOCKED_v1.md",
+      "status": "pass",
+      "detail": "exists at SG pin"
+    },
+    {
+      "name": "sg_pin_custody_file:CUSTODY_ABSORPTION_ADVISOR_PACKAGE_OPTION_C_v1.json",
+      "status": "pass",
+      "detail": "exists at SG pin"
+    },
+    {
+      "name": "sg_pin_custody_file:CUSTODY_WIRING_FOUNDER_REASONING_v1.json",
+      "status": "pass",
+      "detail": "exists at SG pin"
+    },
+    {
+      "name": "sg_pin_custody_file:verify_founder_reasoning_custody_chain_v1.py",
+      "status": "pass",
+      "detail": "exists at SG pin"
+    },
+    {
+      "name": "noos_pin_freshness",
+      "status": "stale_pin",
+      "detail": "origin/main is 6bd37f30, pin is c7f39ff3 \u2014 refresh pins + wiring receipt before claiming custody compliance"
+    },
+    {
+      "name": "sg_pin_freshness",
+      "status": "stale_pin",
+      "detail": "SG main is 49f17594, pin is dc6080d8 \u2014 refresh pins + wiring receipt before claiming custody compliance"
+    }
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  "schema": "noos-incident-diagnostic-v1",
+  "diagnosis_id": "NOOS-DIAG-20260717T194711Z-inbox",
+  "task": "NF-NOOS-MOTOR-ROUTE-WIRING-001",
+  "classification": "incident_diagnostic",
+  "not_a_verdict": "Incident diagnostic, NOT a PASS/HEALTHY receipt. SUBMITTED for independent verification.",
+  "loop_id": "inbox",
+  "factory_id": "loop-inbox",
+  "observed_at": "2026-07-17T19:47:10Z",
+  "execution_state": "RUNNING_CONFIRMED",
+  "success_rate": 1.0,
+  "evidence_state": "SUFFICIENT_RECENT_EVIDENCE",
+  "route": null,
+  "route_permits_execution_mutation": false,
+  "signals": {
+    "dispatch": {
+      "last_fired_at": "2026-07-17T19:45:51.026+00:00",
+      "age_minutes": 1.33,
+      "interval_minutes": 5,
+      "stale_threshold_minutes": 10.0,
+      "query_ok": true,
+      "source": "noos_loop_registry.last_fired_at (observer read)"
+    },
+    "completion": {
+      "last_recorded_at": "2026-07-17T19:42:34+00:00",
+      "age_minutes": 4.62,
+      "stale_threshold_minutes": 30.0,
+      "query_ok": true,
+      "last_row_cloud_trigger": "noos_integrator_repair",
+      "source": "noetfield_factory_cycle_runs.recorded_at (observer read)"
+    }
+  },
+  "presentation": {
+    "dispatch_last_fired_at": "2026-07-17T19:45:51.026+00:00",
+    "completion_last_recorded_at": "2026-07-17T19:42:34+00:00",
+    "dispatch_freshness": "FRESH",
+    "completion_evidence_freshness": "FRESH",
+    "dispatch_age_minutes": 1.33,
+    "completion_age_minutes": 4.62,
+    "current_execution_state": "RUNNING_CONFIRMED",
+    "observation_confidence": "HIGH",
+    "success_rate_sample_window_minutes": 30.0,
+    "status_source": "noos_loop_registry+noetfield_factory_cycle_runs",
+    "observed_at": "2026-07-17T19:47:10Z"
+  },
+  "note": "",
+  "canon_version": "FOUNDER_CANON_v1+MACHINE_LOOPS_v1"
+}
