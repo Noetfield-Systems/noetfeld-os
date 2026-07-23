@@ -1,0 +1,36 @@
+{
+ "schema": "nf_apex_route_close_v1",
+ "job_id": "W5-03",
+ "contract_ref": "sina-governance-SSOT/product/WIRING_COMMISSIONING_CONTRACT_v1.json",
+ "probed_at": "2026-07-23T11:27:56Z",
+ "status": "PASS",
+ "p1": "noetfield.com apex-404",
+ "observations": [
+  {
+   "url": "https://noetfield.com/",
+   "method": "GET no-follow",
+   "http_code": 308,
+   "location": "https://www.noetfield.com/"
+  },
+  {
+   "url": "https://noetfield.com/",
+   "method": "GET follow",
+   "final_url": "https://www.noetfield.com/",
+   "http_code": 200,
+   "size_bytes": 17123
+  },
+  {
+   "url": "http://noetfield.com/",
+   "method": "GET no-follow",
+   "http_code": 308,
+   "location": "https://www.noetfield.com/"
+  },
+  {
+   "url": "https://www.noetfield.com/",
+   "method": "GET",
+   "http_code": 200
+  }
+ ],
+ "conclusion": "Apex no longer 404s: both http and https apex answer 308 permanent-redirect to https://www.noetfield.com/ which serves HTTP 200 (17123 bytes). The proxy worker's apex-redirect logic is OBSERVED live post-fix; P1 closed on observation, not attestation.",
+ "auditor_notes": "All four probes executed fresh at 2026-07-23T11:27:56Z in one session."
+}
