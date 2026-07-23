@@ -1,27 +1,34 @@
 {
   "schema": "noos-liveness-registry-witness-v1",
-  "at": "2026-07-12T02:53:22Z",
+  "at": "2026-07-23T09:11:50Z",
   "read_only": true,
   "mutates_registry": false,
   "witness_mode": true,
   "one_law": "Observe Supabase noos_loop_registry only \u2014 never call /tick or upsert rows.",
-  "stale_count": 0,
-  "registry_rows": 17,
-  "stale_loops": [],
-  "probe_status": "RUNNING",
+  "stale_count": 2,
+  "registry_rows": 20,
+  "stale_loops": [
+    "factory_autorun",
+    "role_circle"
+  ],
+  "probe_status": "FAILED_WITH_RECEIPT",
   "probe_reason": null,
-  "overall_status": "green",
-  "closure_token": "NOOS_LIVENESS_REGISTRY_WITNESS: green",
+  "overall_status": "yellow",
+  "closure_token": "NOOS_LIVENESS_REGISTRY_WITNESS: yellow",
   "probe": {
-    "status": "RUNNING",
-    "stale_count": 0,
-    "registry_rows": 17,
-    "stale_loops": [],
+    "status": "FAILED_WITH_RECEIPT",
+    "stale_count": 2,
+    "registry_rows": 20,
+    "stale_loops": [
+      "factory_autorun",
+      "role_circle"
+    ],
     "evidence": {
-      "observed_at": "2026-07-12T02:53:22+00:00",
+      "observed_at": "2026-07-23T09:11:50+00:00",
       "expected_rows": 14
     }
   },
   "repair_hint": "make integrator-repair-autorun (local) \u2014 witness does not repair",
-  "ok": true
+  "ok": true,
+  "receipt_path": "/home/runner/work/noetfeld-os/noetfeld-os/receipts/proof/noos-liveness-registry-witness-v1.json"
 }
