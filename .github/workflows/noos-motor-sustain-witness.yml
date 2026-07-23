@@ -19,6 +19,9 @@ jobs:
     name: Motor sustain verify
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    permissions:
+      contents: write
+      actions: read
     env:
       NOOS_GHA_WITNESS: "1"
       NOOS_MOTOR_WITNESS_MOTORS_ONLY: "1"
@@ -39,7 +42,35 @@ jobs:
         run: python3 scripts/noos_integrator_repair_autorun_v1.py --json
 
       - name: Motor sustain verify
-        run: python3 scripts/verify_noos_motor_sustain_v1.py --write-receipt
+        run: |
+          set -euo pipefail
+          rc=0
+          python3 scripts/verify_noos_motor_sustain_v1.py --write-receipt || rc=$?
+          echo "WITNESS_RC=${rc}" >> "$GITHUB_ENV"
+
+      - name: Commit witness receipt to main
+        if: always()
+        run: |
+          set -euo pipefail
+          git config user.name "noos-witness-bot"
+          git config user.email "noos-witness-bot@users.noreply.github.com"
+          git add receipts/proof/noos-motor-sustain-v1.json
+          if git diff --cached --quiet; then
+            echo "No receipt change to commit."
+          else
+            git commit -m "witness: noos-motor-sustain-witness receipt $(date -u +%Y-%m-%dT%H:%M:%SZ) [skip ci]"
+            for attempt in 1 2 3; do
+              if git pull --rebase origin main && git push origin HEAD:main; then
+                echo "Receipt pushed to main (attempt ${attempt})."
+                break
+              fi
+              if [ "${attempt}" -eq 3 ]; then
+                echo "Receipt push failed after 3 attempts." >&2
+                exit 1
+              fi
+              sleep 7
+            done
+          fi
 
       - name: Upload motor sustain receipt
         if: always()
@@ -49,3 +80,10 @@ jobs:
           path: receipts/proof/noos-motor-sustain-v1.json
           retention-days: 30
           if-no-files-found: warn
+
+      - name: Fail run on red witness verdict
+        if: always()
+        run: |
+          rc="${WITNESS_RC:-1}"
+          echo "Witness exit code: ${rc}"
+          exit "${rc}"

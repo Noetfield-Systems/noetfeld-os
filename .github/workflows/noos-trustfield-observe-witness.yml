@@ -18,6 +18,8 @@ jobs:
     name: TrustField layers + registry observe
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    permissions:
+      contents: write
     env:
       NOOS_GHA_WITNESS: "1"
       GITHUB_RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
@@ -34,10 +36,34 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p receipts/proof
-          set +o pipefail
-          python3 scripts/noos_trustfield_observe_witness_v1.py --write-receipt --json | tee receipts/proof/noos-trustfield-observe-witness-v1.json
-          set -o pipefail
+          rc=0
+          python3 scripts/noos_trustfield_observe_witness_v1.py --write-receipt --json | tee receipts/proof/noos-trustfield-observe-witness-v1.json || rc=$?
           test -s receipts/proof/noos-trustfield-observe-witness-v1.json
+          echo "WITNESS_RC=${rc}" >> "$GITHUB_ENV"
+
+      - name: Commit witness receipt to main
+        if: always()
+        run: |
+          set -euo pipefail
+          git config user.name "noos-witness-bot"
+          git config user.email "noos-witness-bot@users.noreply.github.com"
+          git add receipts/proof/noos-trustfield-observe-witness-v1.json
+          if git diff --cached --quiet; then
+            echo "No receipt change to commit."
+          else
+            git commit -m "witness: noos-trustfield-observe-witness receipt $(date -u +%Y-%m-%dT%H:%M:%SZ) [skip ci]"
+            for attempt in 1 2 3; do
+              if git pull --rebase origin main && git push origin HEAD:main; then
+                echo "Receipt pushed to main (attempt ${attempt})."
+                break
+              fi
+              if [ "${attempt}" -eq 3 ]; then
+                echo "Receipt push failed after 3 attempts." >&2
+                exit 1
+              fi
+              sleep 7
+            done
+          fi
 
       - name: Upload TrustField observe receipt
         if: always()
@@ -47,3 +73,10 @@ jobs:
           path: receipts/proof/noos-trustfield-observe-witness-v1.json
           retention-days: 30
           if-no-files-found: warn
+
+      - name: Fail run on red witness verdict
+        if: always()
+        run: |
+          rc="${WITNESS_RC:-1}"
+          echo "Witness exit code: ${rc}"
+          exit "${rc}"
