@@ -1,0 +1,67 @@
+{
+  "schema": "nf_apex_route_close_receipt_v1",
+  "job_id": "W5-03",
+  "generated_by": "ready-lane-execution-v1 undefined",
+  "probed_at_utc": "2026-07-23T07:22:30Z",
+  "status": "PASS",
+  "pass_condition": "apex serves 200 or a clean 301/308 to www that lands 200",
+  "observed": "https://noetfield.com/ returned HTTP 308 with Location: https://www.noetfield.com/ (single hop), and the follow landed HTTP 200 text/html at https://www.noetfield.com/. Direct probe of https://www.noetfield.com/ returned HTTP 200. Apex 404 is no longer reproducible.",
+  "closed_finding": "noos-nf-pub-route-inventory-v1 apex-404",
+  "probes": [
+    {
+      "url": "https://noetfield.com/",
+      "hop": 1,
+      "code": 308,
+      "location": "https://www.noetfield.com/",
+      "server": "cloudflare",
+      "cf_ray": "a1f8ef33eff5e813-YVR",
+      "x_noetfield_proxy": "cf-www-proxy",
+      "x_noetfield_release": "3cfd4fea46b79e31195d9712de860ca82c3f5b3f"
+    },
+    {
+      "url": "https://www.noetfield.com/",
+      "hop": 2,
+      "code": 200,
+      "location": null,
+      "content_type": "text/html; charset=utf-8",
+      "server": "cloudflare",
+      "cf_ray": "a1f8ef346a44981c-YVR",
+      "x_noetfield_proxy": "cf-www-proxy",
+      "x_noetfield_release": "3cfd4fea46b79e31195d9712de860ca82c3f5b3f",
+      "note": "reached by following the hop-1 308; an HTTP/2 103 early-hints interim response preceded the 200 (informational, not a hop)"
+    },
+    {
+      "url": "https://www.noetfield.com/",
+      "hop": 1,
+      "code": 200,
+      "location": null,
+      "content_type": "text/html; charset=utf-8",
+      "server": "cloudflare",
+      "cf_ray": "a1f8ef3ea827eef3-YVR",
+      "x_noetfield_proxy": "cf-www-proxy",
+      "x_noetfield_release": "3cfd4fea46b79e31195d9712de860ca82c3f5b3f",
+      "note": "independent comparison probe of www directly (separate curl invocation)"
+    }
+  ],
+  "evidence": {
+    "commands": [
+      "curl -sSI -L --max-redirs 5 https://noetfield.com/",
+      "curl -sSI -L --max-redirs 5 https://www.noetfield.com/",
+      "curl -sS -o /dev/null -w 'code=%{http_code} location=%{redirect_url}' https://noetfield.com/  -> code=308 location=https://www.noetfield.com/",
+      "curl -sSL -o /dev/null -w 'final_code=%{http_code} final_url=%{url_effective} num_redirects=%{num_redirects}' https://noetfield.com/  -> final_code=200 final_url=https://www.noetfield.com/ num_redirects=1",
+      "curl -sS -o /dev/null -w 'code=%{http_code}' https://www.noetfield.com/  -> code=200"
+    ],
+    "final_url": "https://www.noetfield.com/",
+    "final_code": 200,
+    "num_redirects": 1,
+    "redirect_chain": [
+      "https://noetfield.com/ [308] -> https://www.noetfield.com/ [200]"
+    ],
+    "body_check": "GET https://noetfield.com/ (followed) returned an HTML document starting '<!DOCTYPE html>' with title 'Noetfield Systems Inc. — AI Motors & Governed Executio...' — a real page, not an error body",
+    "serving_worker_header": "x-noetfield-proxy: cf-www-proxy on every hop, confirming the proxy worker with apex-redirect logic is the responder",
+    "release_sha_header": "x-noetfield-release: 3cfd4fea46b79e31195d9712de860ca82c3f5b3f"
+  },
+  "repo": "noetfeld-OS",
+  "branch_at_commit": "nf-noos-repin-gateway-v2-b72f5a3",
+  "notes": "P1 finding 'apex 404' from noos-nf-pub-route-inventory-v1 is CLOSED: the apex now issues a clean single-hop 308 to www which lands 200. 103 responses seen in curl -I output are HTTP early hints, not redirect hops."
+}
