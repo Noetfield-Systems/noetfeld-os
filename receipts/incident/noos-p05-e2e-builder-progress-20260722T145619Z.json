@@ -1,0 +1,46 @@
+{
+  "schema": "noos.p05-e2e-builder-progress.v1",
+  "receipt_id": "noos-p05-e2e-builder-progress-20260722T145619Z",
+  "canon_version": "FOUNDER_CANON_v1+MACHINE_LOOPS_v1",
+  "laws": "LAWS: FOUNDER_CANON v1 + governed-autorun v3. Violations = BLOCKED_WITH_REASON.",
+  "recorded_at_utc": "2026-07-22T14:56:19Z",
+  "actor": "claude-code-noos, acting as Runway BUILDER on founder instruction 'FIX ALL FULLY E2E' (role switch from cockpit; all outputs SUBMITTED, never self-PASS)",
+  "predicate_receipts": [
+    "receipts/incident/noos-p05-witness-ingest-20260722T141024Z.json",
+    "receipts/incident/noos-p05-remediation-dispatch-20260722T143942Z.json",
+    "receipts/incident/noos-p05-conflict-diagnosis-20260722T143942Z.json"
+  ],
+  "parallel_lane_reconciliation": {
+    "finding": "The Cursor builder lane had already authored P0.8 witness remediation before this session's dispatch execution: branch feat/graph-kernel-p08-witness-remediation in worktree _wt-graph-kernel-p08, commits 1c11b44 (P0.8 remediation: queue, TX, HOLD, identity; deployed to staging 14:39Z) and 3b4ac7a (CF consumer identity pins). Worktree was clean and parked; no co-editing conflict occurred.",
+    "remediation_quality": "Addresses all 5 dispatch root causes: RC1 healthz commit_sha/build_id/deployment_id/cf_worker_version binding; RC2 1126-line self-binding run-p08-live-acceptance.ts + WITNESS_BASELINE.json preserving FAIL_P05 + fail-closed test (OUTBOX_FAILED never success-terminal); RC3 CF 400 root-caused as payload encoding (string body + content_type=json -> CF error 10207; fix = object-body /messages/batch; OUTBOX_DELIVERED requires real consumer-acked queue_message_id, invented cfq_* ids forbidden; documented with live trials A-F in proofs/p08/01_queue_root_cause.json); RC4 GRAPH_KERNEL_RUNTIME_ROLE=graph_kernel_runtime separation + migration 003_graph_kernel_append_only_runtime_v1 (live checksum 1d27968b); RC5 approver allowlist vars enabling four-way HOLD matrix incl. valid-approval release."
+  },
+  "work_completed_this_session": [
+    "Preflight: package tests 24/24 PASS in _wt-graph-kernel-p08.",
+    "Found 3 exact-head type errors on the branch that would re-redden ci/verify (2x TS2352 postgres-store.ts pool.connect casts, 1x TS2353 p08-fail-closed.test.ts invalid constructor arg). Fixed minimally (cast via unknown; drop bogus arg). tsc clean; tests re-run 24/24. Commit ea34b10.",
+    "Pushed branch feat/graph-kernel-p08-witness-remediation to origin.",
+    "Opened draft PR #161 'fix(graph-kernel): P0.8 witness remediation' marked SUBMITTED for independent verification, with full RC1-RC5 mapping and remaining-steps checklist.",
+    "Exact-head ci/verify on PR #161 head (ea34b10): PASS (2m05s, run 29930710483)."
+  ],
+  "blocked_with_reason": {
+    "actions": [
+      "Deploy graph-kernel-staging at graded SHA (bash services/graph-kernel-staging/scripts/deploy-staging.sh)",
+      "Run packages/runway-graph-kernel/scripts/run-p08-live-acceptance.ts against staging (requires GRAPH_KERNEL_DATABASE_URL + GRAPH_KERNEL_WAKE_HMAC_SECRET in env; performs live service restart in test 01)"
+    ],
+    "reason": "Auto-mode classifier denied production-secret extraction + live-infra mutation from agent hands. Consistent with standing founder gates (FT-PRODUCTION-SECRETS; deploy gate; playbook precedent: make motor-restart is user-gated). Machine retries NOT applicable — this is an explicit authority boundary, so per canon it correctly routes to the founder.",
+    "founder_commands": [
+      "cd /Users/sinakazemnezhad/Desktop/Noetfield-Systems/worktrees/runway/_wt-graph-kernel-p08",
+      "eval \"$(railway variables --project 0e629c7a-9d6c-41dd-9bbc-055a3a173636 --environment 72b001bf-198a-4e59-b78a-99dbadcc8508 --service 107631a3-aa14-4630-852e-8ebc05c30c3c --json | python3 -c 'import json,sys; d=json.load(sys.stdin); print(\"\\n\".join(f\"export {k}={repr(d[k])}\" for k in [\"GRAPH_KERNEL_DATABASE_URL\",\"GRAPH_KERNEL_WAKE_HMAC_SECRET\",\"CLOUDFLARE_API_TOKEN\",\"GRAPH_KERNEL_CF_QUEUE_ID\"]))')\"",
+      "bash services/graph-kernel-staging/scripts/deploy-staging.sh",
+      "node --experimental-strip-types packages/runway-graph-kernel/scripts/run-p08-live-acceptance.ts",
+      "git add packages/runway-graph-kernel/proofs/p08 && git commit -m 'proof(p08): live acceptance artifacts — SUBMITTED for independent verification' && git push"
+    ]
+  },
+  "next_steps_after_founder_runs": [
+    "Verify P08 artifacts are self-binding (healthz commit_sha == graded SHA inside artifacts).",
+    "Mark PR #161 ready; merge after ci/verify green on final head (founder merge gate).",
+    "Independent re-witness (read-only, manifest-hash-reproducing, author != subject) re-grades tests 01-09.",
+    "P1 canvas gate opens ONLY on PASS_P05_CONFIRMED or PASS_P05_WITH_NONBLOCKING_FINDINGS in the witness receipt; cockpit ingests via the noos-p05-witness-ingest pattern."
+  ],
+  "gate_state": { "p1_canvas_gate": "REMAINS_CLOSED" },
+  "status": "SUBMITTED for independent verification"
+}
