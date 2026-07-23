@@ -1,6 +1,6 @@
 {
   "schema": "noos-integrator-daily-checklist-v1",
-  "at": "2026-07-08T08:47:32Z",
+  "at": "2026-07-23T09:25:43Z",
   "read_only": false,
   "one_law": "Daily authority = live probes at `at` \u2014 receipts on disk are snapshots only, never closure.",
   "architecture": {
@@ -8,11 +8,11 @@
     "secondary": "github_actions_enterprise",
     "tertiary": "railway_plan_worker"
   },
-  "overall_status": "green",
+  "overall_status": "red",
   "summary": {
-    "total": 11,
-    "pass": 11,
-    "fail": 0
+    "total": 12,
+    "pass": 9,
+    "fail": 3
   },
   "checks": [
     {
@@ -35,20 +35,16 @@
       "title": "Integrator mirror + agent conflicts clean",
       "status": "pass",
       "evidence": {
-        "integrator_mirror": true,
+        "integrator_mirror": false,
         "agent_conflicts": true,
         "mirror": {
-          "ok": true,
-          "drift": false,
-          "repo_path": "/Users/sinakazemnezhad/Desktop/Noetfield-Systems/noetfeld-OS/.noos-runtime/integrator/noos-integrator-state-v1.json",
-          "home_mirror_path": "/Users/sinakazemnezhad/.sina/noos-integrator-state-v1.json",
-          "repo_tasks": 16,
-          "home_tasks": 16,
-          "repair": null,
-          "report_line": "integrator_mirror_clean \u00b7 repo matches home",
+          "ok": false,
+          "error": "missing_repo_state",
+          "repo_path": "/home/runner/work/noetfeld-os/noetfeld-os/.noos-runtime/integrator/noos-integrator-state-v1.json",
+          "home_mirror_path": "/home/runner/.sina/noos-integrator-state-v1.json",
           "exit_code": 0
         },
-        "witness_skip": false
+        "witness_skip": true
       },
       "fix": "python3 scripts/noos_integrator_mirror_check_v1.py --json && make local-sweep-stale",
       "owner": "integrator"
@@ -60,13 +56,13 @@
       "status": "pass",
       "evidence": {
         "schema": "noos-motor-sustain-v1",
-        "at": "2026-07-08T08:47:59Z",
+        "at": "2026-07-23T09:25:49Z",
         "ok": true,
         "checks": {
           "cf_loop_fleet": {
             "ok": true,
             "status": 200,
-            "body": "{\"ok\":true,\"schema\":\"noos-loop-motor-health-v1\",\"service\":\"noos-loop-fleet-tick-v1\",\"cron\":\"*/5 * * * *\",\"execution_plane\":\"railway:noos-loop-runner\",\"executor_url_ready\":true,\"loop_secret_ready\":true,\"target_count\":14,\"targets\":[{\"dispatch_id\":\"inbox\",\"event_type\":\"noos_inbox_loop_tick\",\"interval_minutes\":5,\"handler\":\"loop\"},{\"dispatch_id\":\"runtime\",\"event_type\":\"noos_runtime_loop_tick\",\"interval_minutes\":15,\"handler\":\"loop\"},{\"dispatch_id\":\"surface\",\"event_type\":\"noos_surface_loop_tick\",\"inter"
+            "body": "{\"ok\":true,\"schema\":\"noos-loop-motor-health-v1\",\"service\":\"noos-loop-fleet-tick-v1\",\"cron\":\"*/5 * * * *\",\"execution_plane\":\"railway:noos-loop-runner\",\"executor_url_ready\":true,\"loop_secret_ready\":true,\"target_count\":15,\"targets\":[{\"dispatch_id\":\"inbox\",\"event_type\":\"noos_inbox_loop_tick\",\"interval_minutes\":5,\"handler\":\"loop\",\"enabled\":true,\"schedule_status\":\"active\",\"time_dependent_reason\":\"Freshness/lease/monitoring SLA for NOOS loop fleet.\",\"no_work_behavior\":{\"no_write\":true,\"no_llm\":true,\"no"
           },
           "cf_factory_tick": {
             "ok": true,
@@ -76,18 +72,18 @@
           "railway_loop_runner": {
             "ok": true,
             "status": 200,
-            "body": "{\"ok\": true, \"schema\": \"noos-railway-loop-runner-health-v1\", \"service\": \"noos-loop-runner\", \"git_sha\": \"03b55c1f3dea7d9adc5d3f3fbcf47872df60b8df\", \"uptime_sec\": 31505, \"execution_mode\": \"one_shot_http\"}"
+            "body": "{\"ok\": true, \"schema\": \"noos-railway-loop-runner-health-v1\", \"service\": \"noos-loop-runner\", \"git_sha\": \"de4a7638b93f5083b048f557a24156b8b4cd3f74\", \"uptime_sec\": 69524, \"execution_mode\": \"one_shot_http\", \"last_successful_liveness_write_at\": \"2026-07-23T09:20:59Z\", \"last_liveness_error\": null}"
           },
           "cf_deadman": {
             "ok": true,
             "status": 200,
-            "body": "{\"ok\":true,\"schema\":\"noos-deadman-health-v1\",\"service\":\"noos-deadman-v1\",\"cron\":\"*/30 * * * *\",\"supabase_ready\":true,\"loop_runner_ready\":true,\"telegram_ready\":true,\"telegram_send_alerts\":false,\"telegram_lane_forbidden\":[\"Gateway_A\",\"gateway_a\",\"NFProbeBot\",\"nf_probe_bot\",\"NoetfieldOpsBot\"],\"interval_multiplier\":2,\"restart_attempts_max\":1}"
+            "body": "{\"ok\":true,\"schema\":\"noos-deadman-health-v1\",\"service\":\"noos-deadman-v1\",\"cron\":\"*/30 * * * *\",\"supabase_ready\":true,\"loop_runner_ready\":true,\"motor_event_gateway_ready\":false,\"telegram_ready\":true,\"telegram_send_alerts\":true,\"telegram_lane_forbidden\":[\"Gateway_A\",\"gateway_a\",\"NFProbeBot\",\"nf_probe_bot\",\"NoetfieldOpsBot\"],\"interval_multiplier\":2,\"restart_attempts_max\":5}"
           }
         },
         "liveness": {
-          "ok": true,
-          "findings": 0,
-          "stale_count": 0
+          "ok": false,
+          "findings": 14,
+          "stale_count": 1
         },
         "exit_code": 0
       },
@@ -100,9 +96,94 @@
       "title": "NOOS autorun critique overall green",
       "status": "pass",
       "evidence": {
-        "overall_ok": true,
-        "findings": [],
-        "witness_delegated": false
+        "overall_ok": false,
+        "findings": [
+          {
+            "scope": "sourcea_cloud_queue",
+            "severity": "high",
+            "summary": "Workflow is not healthy: BLOCKED_WITH_REASON",
+            "detail": "supabase_not_configured"
+          },
+          {
+            "scope": "sourcea_buyer_proof_verify",
+            "severity": "high",
+            "summary": "Workflow is not healthy: BLOCKED_WITH_REASON",
+            "detail": "supabase_not_configured"
+          },
+          {
+            "scope": "sourcea_recipe_queue_builder",
+            "severity": "high",
+            "summary": "Workflow is not healthy: BLOCKED_WITH_REASON",
+            "detail": "supabase_not_configured"
+          },
+          {
+            "scope": "noos_loop_liveness_registry",
+            "severity": "high",
+            "summary": "Workflow is not healthy: FAILED_WITH_RECEIPT",
+            "detail": ""
+          },
+          {
+            "scope": "noos_gha_integrator_daily_witness",
+            "severity": "high",
+            "summary": "Workflow is not healthy: BLOCKED_WITH_REASON",
+            "detail": "no_github_runs"
+          },
+          {
+            "scope": "noos_gha_autorun_witness",
+            "severity": "high",
+            "summary": "Workflow is not healthy: BLOCKED_WITH_REASON",
+            "detail": "no_github_runs"
+          },
+          {
+            "scope": "noos_gha_motor_sustain_witness",
+            "severity": "high",
+            "summary": "Workflow is not healthy: BLOCKED_WITH_REASON",
+            "detail": "no_github_runs"
+          },
+          {
+            "scope": "noos_gha_health_witness",
+            "severity": "high",
+            "summary": "Workflow is not healthy: BLOCKED_WITH_REASON",
+            "detail": "no_github_runs"
+          },
+          {
+            "scope": "noos_stack_health_receipt",
+            "severity": "high",
+            "summary": "Workflow is not healthy: BLOCKED_WITH_REASON",
+            "detail": "no_github_runs"
+          },
+          {
+            "scope": "noos_trustfield_observe_witness",
+            "severity": "high",
+            "summary": "Workflow is not healthy: BLOCKED_WITH_REASON",
+            "detail": "no_github_runs"
+          },
+          {
+            "scope": "noos_sourcea_spine_witness",
+            "severity": "high",
+            "summary": "Workflow is not healthy: BLOCKED_WITH_REASON",
+            "detail": "no_github_runs"
+          },
+          {
+            "scope": "noos_machine_audit_witness",
+            "severity": "high",
+            "summary": "Workflow is not healthy: BLOCKED_WITH_REASON",
+            "detail": "no_github_runs"
+          },
+          {
+            "scope": "noos_liveness_registry_witness",
+            "severity": "high",
+            "summary": "Workflow is not healthy: BLOCKED_WITH_REASON",
+            "detail": "no_github_runs"
+          },
+          {
+            "scope": "noos_sandbox_url_sweep_witness",
+            "severity": "high",
+            "summary": "Workflow is not healthy: BLOCKED_WITH_REASON",
+            "detail": "no_github_runs"
+          }
+        ],
+        "witness_delegated": true
       },
       "fix": "make integrator-repair-autorun && python3 scripts/autorun_status_v1.py --json",
       "owner": "integrator"
@@ -113,40 +194,52 @@
       "title": "Machine loops audit chain",
       "status": "pass",
       "evidence": {
-        "line": "outside_audit \u00b7 scanned=435 chain_ok=True"
+        "line": "outside_audit \u00b7 scanned=319 chain_ok=True"
       },
       "fix": "make machine-audit && make machine-reconcile",
+      "owner": "integrator"
+    },
+    {
+      "id": "ICL-D13",
+      "tier": "T0",
+      "title": "LSUP law drift (forbidden tokens outside marker file)",
+      "status": "pass",
+      "evidence": {
+        "violation_count": 0,
+        "files_scanned": 120,
+        "violations": [],
+        "registry_ok": true
+      },
+      "fix": "make law-drift-check \u2014 purge tokens; keep only in noetfield-org/FORBIDDEN_MARKERS.txt",
       "owner": "integrator"
     },
     {
       "id": "ICL-D06",
       "tier": "T1",
       "title": "TrustField 11 layers (no red)",
-      "status": "pass",
+      "status": "fail",
       "evidence": {
-        "closure": "NOOS_TF_11_LAYERS: yellow",
+        "closure": "NOOS_TF_11_LAYERS: red",
         "summary": {
-          "green": 10,
+          "green": 7,
           "yellow": 1,
-          "red": 0,
+          "red": 3,
           "unknown": 0
         },
         "plan_worker": {
           "url": "https://trustfield-plan-worker-production.up.railway.app/health",
-          "status": "healthy",
-          "last_cycle_ok": true,
+          "status": "degraded",
+          "last_cycle_ok": false,
           "lane_ok": {
-            "plan_matrix": true,
             "critic_circle": true,
             "deep_research": true,
             "trustfield_loops_intake": true,
             "self_heal": true,
             "www_upgrade_queue": true,
             "autorun_stack": true,
-            "partner_access": true
+            "partner_access": false
           },
           "lanes_run": [
-            "plan_matrix",
             "critic_circle",
             "deep_research",
             "trustfield_loops_intake",
@@ -164,21 +257,23 @@
       "id": "ICL-D07",
       "tier": "T0",
       "title": "TrustField loop registry (deadman motors green)",
-      "status": "pass",
+      "status": "fail",
       "evidence": {
-        "overall": "green",
+        "overall": "red",
         "summary": {
-          "green": 31,
+          "green": 27,
           "yellow": 2,
-          "red": 0,
-          "last_ok_false": 0,
+          "red": 5,
+          "last_ok_false": 1,
           "missing_last_fired_at": 0,
           "probe_present": true,
           "deadman_status": "green",
-          "gate_48h_status": "green",
-          "deadman_watched_red": []
+          "gate_48h_status": "red",
+          "deadman_watched_red": [
+            "tf_cf_lane_partner_access_v1"
+          ]
         },
-        "witness_relaxed": false
+        "witness_relaxed": true
       },
       "fix": "cd TrustField-Technologies && python3 scripts/record_sg_registry_witness_v1.py && curl -sS .../tf-cf-fleet-tick-v1.../tick",
       "owner": "trustfield_worker"
@@ -202,11 +297,13 @@
       "id": "ICL-D09",
       "tier": "T1",
       "title": "Railway plan-worker all lanes green",
-      "status": "pass",
+      "status": "fail",
       "evidence": {
-        "status": "healthy",
-        "lanes_false": [],
-        "cycles": 10
+        "status": "degraded",
+        "lanes_false": [
+          "partner_access"
+        ],
+        "cycles": 4234
       },
       "fix": "cd TrustField-Technologies && ./scripts/railway_deploy_plan_worker.sh",
       "owner": "trustfield_worker"
@@ -220,15 +317,8 @@
         "repos": [
           {
             "repo": "TrustField-Technologies",
-            "ok": true,
-            "billing_gate_failures_12s": 0,
-            "latest_is_billing_gate": false,
-            "latest_real_failure": false,
-            "real_failures": [
-              "CI: fix(auth): peer Google + email/password panels o"
-            ],
-            "latest_conclusion": "skipped",
-            "recent_count": 8
+            "ok": false,
+            "error": "failed to get runs: HTTP 404: Not Found (https://api.github.com/repos/Noetfield-Systems/TrustField-Technologies/actions/runs?per_page=8&exclude_pull_requests=true)\n"
           },
           {
             "repo": "noetfeld-os",
@@ -236,13 +326,15 @@
             "billing_gate_failures_12s": 0,
             "latest_is_billing_gate": false,
             "latest_real_failure": false,
-            "real_failures": [],
-            "latest_conclusion": "success",
+            "real_failures": [
+              "NOOS stack health receipt: NOOS stack health receipt"
+            ],
+            "latest_conclusion": "",
             "recent_count": 8
           }
         ],
         "real_failures_sample": [
-          "CI: fix(auth): peer Google + email/password panels o"
+          "NOOS stack health receipt: NOOS stack health receipt"
         ]
       },
       "fix": "Enterprise billing: spending limit >$0 \u2014 then gh run rerun <id>. Real CI fails: fix workflow logs",
@@ -254,20 +346,37 @@
       "title": "GitHub org on Enterprise plan",
       "status": "pass",
       "evidence": {
-        "plan": "team",
+        "plan": "",
         "enterprise_url": "https://github.com/enterprises/noetfield-systems-inc",
         "billing_gate_clear": true,
-        "witness_proxy": false
+        "witness_proxy": true
       },
       "fix": "Attach Noetfield-Systems org to enterprise noetfield-systems-inc",
       "owner": "founder"
     }
   ],
-  "fix_queue": [],
-  "closure_token": "NOOS_INTEGRATOR_DAILY: green",
+  "fix_queue": [
+    {
+      "id": "ICL-D06",
+      "fix": "make observe-trustfield-layers \u2014 route red layers to TrustField worker",
+      "owner": "trustfield_worker"
+    },
+    {
+      "id": "ICL-D07",
+      "fix": "cd TrustField-Technologies && python3 scripts/record_sg_registry_witness_v1.py && curl -sS .../tf-cf-fleet-tick-v1.../tick",
+      "owner": "trustfield_worker"
+    },
+    {
+      "id": "ICL-D09",
+      "fix": "cd TrustField-Technologies && ./scripts/railway_deploy_plan_worker.sh",
+      "owner": "trustfield_worker"
+    }
+  ],
+  "closure_token": "NOOS_INTEGRATOR_DAILY: red",
   "commands": {
     "run": "make integrator-daily",
     "status": "make integrator-status",
+    "law_drift": "make law-drift-check",
     "trustfield_layers": "make observe-trustfield-layers",
     "trustfield_registry": "make observe-trustfield-registry",
     "repair_autorun": "make integrator-repair-autorun"
