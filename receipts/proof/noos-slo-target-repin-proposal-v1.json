@@ -1,0 +1,95 @@
+{
+  "receipt_id": "noos-slo-target-repin-proposal-v1",
+  "schema": "noos-proof-receipt-v1",
+  "created_at_utc": "2026-07-23T07:35:00Z",
+  "status": "SUBMITTED for independent verification (author != verifier; no self-PASS)",
+  "canon_version": "FOUNDER_CANON_v1+MACHINE_LOOPS_v1",
+  "agent_id": "claude-code-noos-slo",
+  "task_id": "NOOS-LANE-slo-target-repin",
+  "branch": "nf-noos-slo-target-repin-v1",
+  "base_commit": "730ed19226bf905b62ca4e5ded3b8819928cc711",
+  "class": "L5_VERIFIER_FREEZE_PROPOSAL",
+  "founder_gate": "REQUIRED — data/autorun-workflows-v1.json is a verifier-freeze (L5) registry. This branch + draft PR is a PROPOSAL only; merge requires explicit founder approval.",
+  "summary": "Recalibrate ONLY the SLO freshness/latency targets in data/autorun-workflows-v1.json to match the witness cron demotion the founder already approved and merged in PR #91 (2026-07-19, 9a3e3607). The old targets were pinned to the pre-#91 cadences and now guarantee 6 permanent false SLO misses in scripts/autorun_status_v1.py. This is calibration to approved cadence, not test weakening: every new target = worst-case cron gap + a bounded drift allowance, following the existing noos_machine_audit_witness precedent (weekly cadence, target 10140).",
+  "changes": [
+    {
+      "id": "noos_gha_autorun_witness",
+      "workflow": "noos-autorun-witness.yml",
+      "cron": "0 9 * * 1 (weekly Mon, per PR #91)",
+      "old": {"freshness_target_minutes": 90, "latency_target_minutes": 90},
+      "new": {"freshness_target_minutes": 10320, "latency_target_minutes": 10320},
+      "math": "weekly worst-case gap 10080 min + 240 min drift allowance = 10320",
+      "observed_before": "freshness 4072.38 min vs target 90 -> permanent false miss"
+    },
+    {
+      "id": "noos_gha_health_witness",
+      "workflow": "noos-gha-health-witness.yml",
+      "cron": "10 8 * * 1 (weekly Mon, per PR #91)",
+      "old": {"freshness_target_minutes": 70, "latency_target_minutes": 70},
+      "new": {"freshness_target_minutes": 10320, "latency_target_minutes": 10320},
+      "math": "weekly worst-case gap 10080 min + 240 min drift allowance = 10320",
+      "observed_before": "freshness 4096.57 min vs target 70 -> permanent false miss"
+    },
+    {
+      "id": "noos_gha_motor_sustain_witness",
+      "workflow": "noos-motor-sustain-witness.yml",
+      "cron": "15 6 * * * (daily, per PR #91)",
+      "old": {"freshness_target_minutes": 130, "latency_target_minutes": 130},
+      "new": {"freshness_target_minutes": 1560, "latency_target_minutes": 1560},
+      "math": "daily worst-case gap 1440 min + 120 min drift allowance = 1560",
+      "observed_before": "freshness 1361.63 min vs target 130 -> permanent false miss"
+    },
+    {
+      "id": "noos_stack_health_receipt",
+      "workflow": "noos-stack-health-receipt.yml",
+      "cron": "40 6 * * * (daily, per PR #91)",
+      "old": {"freshness_target_minutes": 130, "latency_target_minutes": 130},
+      "new": {"freshness_target_minutes": 1560, "latency_target_minutes": 1560},
+      "math": "daily worst-case gap 1440 min + 120 min drift allowance = 1560",
+      "observed_before": "freshness 1334.32 min vs target 130 -> permanent false miss"
+    },
+    {
+      "id": "noos_sourcea_spine_witness",
+      "workflow": "noos-sourcea-spine-witness.yml",
+      "cron": "25 6 * * * (daily, per PR #91)",
+      "old": {"freshness_target_minutes": 130, "latency_target_minutes": 130},
+      "new": {"freshness_target_minutes": 1560, "latency_target_minutes": 1560},
+      "math": "daily worst-case gap 1440 min + 120 min drift allowance = 1560",
+      "observed_before": "freshness 1343.49 min vs target 130 -> permanent false miss"
+    },
+    {
+      "id": "noos_gha_integrator_daily_witness",
+      "workflow": "noos-integrator-daily-witness.yml",
+      "cron": "0 7,13,19 * * * (3x/day, per PR #91)",
+      "old": {"freshness_target_minutes": 540, "latency_target_minutes": 540},
+      "new": {"freshness_target_minutes": 800, "latency_target_minutes": 800},
+      "math": "worst overnight gap 19:00->07:00 = 720 min + 80 min drift allowance = 800; observed miss 674.98 min (and previously 585.7) vs old 540",
+      "observed_before": "freshness 674.98 min vs target 540 -> recurring false miss every overnight window"
+    },
+    {
+      "id": "noos_loop_agent_nerve",
+      "workflow": "noos-agent-nerve-loop.yml (hourly loop)",
+      "old": "no per-row slo -> inherited slo_defaults freshness 30 / latency 60 (global stale_threshold_minutes 30)",
+      "new": {"freshness_target_minutes": 130, "latency_target_minutes": 130},
+      "math": "hourly loop worst-case gap 60 min + drift; 30-min default guarantees false stale ~half of every hour. Global stale_threshold_minutes deliberately NOT changed.",
+      "observed_before": "freshness 26.13 min at probe time (green only because probed in first half of the hour)"
+    }
+  ],
+  "not_changed": [
+    "slo_defaults (freshness 30 / success_rate 0.98 / latency 60)",
+    "stale_threshold_minutes (30) — global threshold untouched per task instruction",
+    "success_rate_target on every row",
+    "all other workflow rows (incl. noos_trustfield_observe_witness, noos_machine_audit_witness)",
+    "scripts/verify_*, noetfield_gate/, migrations, LOCKED docs — untouched"
+  ],
+  "precedent": "noos_machine_audit_witness already pins a weekly-cadence target of 10140 (10080 + 60) in the same registry; this change extends the same cadence-derived pattern to the rows PR #91 demoted.",
+  "validation": {
+    "json_round_trip": "python3 -c json.load -> OK",
+    "autorun_status_before": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/autorun_status_v1.py --json (worktree @ 730ed192, 2026-07-23T07:29Z): critique overall_ok=false, 7 findings = 6x 'Workflow SLO miss' (noos_gha_integrator_daily_witness, noos_gha_autorun_witness, noos_gha_motor_sustain_witness, noos_gha_health_witness, noos_stack_health_receipt, noos_sourcea_spine_witness) + 1x noos_loop_liveness_registry FAILED_WITH_RECEIPT",
+    "autorun_status_after": "same command post-edit (2026-07-23T07:31Z): critique 1 finding — only the pre-existing, unrelated noos_loop_liveness_registry FAILED_WITH_RECEIPT remains; all six witness rows now ok=true with misses=[] (observed 4074.31/10320, 4098.49/10320, 1363.55/1560, 1336.24/1560, 1345.41/1560, 676.91/800; agent_nerve 28.06/130). Exit stays 1 solely due to the liveness-registry finding, out of scope here.",
+    "pytest": "PYTHONDONTWRITEBYTECODE=1 python3 -m pytest -q -> '3 failed, 349 passed, 2 warnings in 22.74s'. Failures: tests/test_cursor_local_mac_t2_v1.py::test_full_governance_verify_still_passes, tests/test_verify_living_system_governance_v1.py::test_full_governance_verify_passes, tests/test_verify_pr_conflict_resolution_v1.py::test_verify_passes_on_clean_tree. All three reproduce identically on pristine origin/main with the change stashed (root cause: governance check pr_conflict_skill=false in this environment) — pre-existing, not introduced by this change.",
+    "churn_cleanup": "7 untracked receipts/proof/* dispatch/backlog receipts spawned by the status runs were removed with git clean before commit; git status shows only data/autorun-workflows-v1.json modified plus this receipt."
+  },
+  "argument": "PR #91 was a founder-approved cadence decision; the SLO registry simply was never re-pinned to it. Leaving 90/70/130/540-minute targets on weekly/daily/3x-daily crons produces guaranteed red findings that carry zero information and train operators to ignore the critique (false-green risk inverted: permanent false-red). Re-pinning targets to cadence + bounded drift restores the SLO's ability to detect a genuinely missed run: e.g. a weekly witness that skips one schedule now trips at >10320 min, a daily one at >1560 min. No verifier logic, thresholds outside these rows, or success-rate gates were touched.",
+  "verifier_instruction": "Independent verifier: re-run PYTHONDONTWRITEBYTECODE=1 python3 scripts/autorun_status_v1.py --json on this branch, confirm the six witness SLO-miss findings are absent and no new findings appear, cross-check each target against the crons in .github/workflows/, and confirm the diff touches only the seven rows listed above."
+}

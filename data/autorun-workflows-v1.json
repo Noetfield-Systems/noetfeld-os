@@ -231,6 +231,7 @@
       "id": "noos_loop_agent_nerve",
       "title": "24/7 loop — agent vault nerve",
       "plane": "NOETFELD-OS",
+      "slo": {"freshness_target_minutes": 130, "latency_target_minutes": 130},
       "probe": {
         "type": "supabase_noos_loop",
         "supabase_profile": "noetfield",
@@ -297,7 +298,7 @@
       "id": "noos_gha_integrator_daily_witness",
       "title": "GHA integrator daily witness",
       "plane": "NOETFELD-OS",
-      "slo": {"freshness_target_minutes": 540, "latency_target_minutes": 540},
+      "slo": {"freshness_target_minutes": 800, "latency_target_minutes": 800},
       "probe": {
         "type": "github_schedule_probe",
         "github_workflow": "noos-integrator-daily-witness.yml",
@@ -309,7 +310,7 @@
       "id": "noos_gha_autorun_witness",
       "title": "GHA autorun registry witness",
       "plane": "NOETFELD-OS",
-      "slo": {"freshness_target_minutes": 90, "latency_target_minutes": 90},
+      "slo": {"freshness_target_minutes": 10320, "latency_target_minutes": 10320},
       "probe": {
         "type": "github_schedule_probe",
         "github_workflow": "noos-autorun-witness.yml",
@@ -321,7 +322,7 @@
       "id": "noos_gha_motor_sustain_witness",
       "title": "GHA motor sustain witness",
       "plane": "NOETFELD-OS",
-      "slo": {"freshness_target_minutes": 130, "latency_target_minutes": 130},
+      "slo": {"freshness_target_minutes": 1560, "latency_target_minutes": 1560},
       "probe": {
         "type": "github_schedule_probe",
         "github_workflow": "noos-motor-sustain-witness.yml",
@@ -333,7 +334,7 @@
       "id": "noos_gha_health_witness",
       "title": "GHA billing gate + enterprise plan witness",
       "plane": "NOETFELD-OS",
-      "slo": {"freshness_target_minutes": 70, "latency_target_minutes": 70},
+      "slo": {"freshness_target_minutes": 10320, "latency_target_minutes": 10320},
       "probe": {
         "type": "github_schedule_probe",
         "github_workflow": "noos-gha-health-witness.yml",
@@ -345,7 +346,7 @@
       "id": "noos_stack_health_receipt",
       "title": "Org stack automation health rollup",
       "plane": "NOETFELD-OS",
-      "slo": {"freshness_target_minutes": 130, "latency_target_minutes": 130},
+      "slo": {"freshness_target_minutes": 1560, "latency_target_minutes": 1560},
       "probe": {
         "type": "github_schedule_probe",
         "github_workflow": "noos-stack-health-receipt.yml",
@@ -369,7 +370,7 @@
       "id": "noos_sourcea_spine_witness",
       "title": "GHA SourceA portfolio-spine witness",
       "plane": "SourceA",
-      "slo": {"freshness_target_minutes": 130, "latency_target_minutes": 130},
+      "slo": {"freshness_target_minutes": 1560, "latency_target_minutes": 1560},
       "probe": {
         "type": "github_schedule_probe",
         "github_workflow": "noos-sourcea-spine-witness.yml",
