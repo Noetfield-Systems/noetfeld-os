@@ -1,12 +1,12 @@
 {
   "schema": "noos-motor-sustain-v1",
-  "at": "2026-07-15T07:14:37Z",
+  "at": "2026-07-23T08:45:27Z",
   "ok": true,
   "checks": {
     "cf_loop_fleet": {
       "ok": true,
       "status": 200,
-      "body": "{\"ok\":true,\"schema\":\"noos-loop-motor-health-v1\",\"service\":\"noos-loop-fleet-tick-v1\",\"cron\":\"*/5 * * * *\",\"execution_plane\":\"railway:noos-loop-runner\",\"executor_url_ready\":true,\"loop_secret_ready\":true,\"target_count\":14,\"targets\":[{\"dispatch_id\":\"inbox\",\"event_type\":\"noos_inbox_loop_tick\",\"interval_minutes\":5,\"handler\":\"loop\"},{\"dispatch_id\":\"runtime\",\"event_type\":\"noos_runtime_loop_tick\",\"interval_minutes\":15,\"handler\":\"loop\"},{\"dispatch_id\":\"surface\",\"event_type\":\"noos_surface_loop_tick\",\"inter"
+      "body": "{\"ok\":true,\"schema\":\"noos-loop-motor-health-v1\",\"service\":\"noos-loop-fleet-tick-v1\",\"cron\":\"*/5 * * * *\",\"execution_plane\":\"railway:noos-loop-runner\",\"executor_url_ready\":true,\"loop_secret_ready\":true,\"target_count\":15,\"targets\":[{\"dispatch_id\":\"inbox\",\"event_type\":\"noos_inbox_loop_tick\",\"interval_minutes\":5,\"handler\":\"loop\",\"enabled\":true,\"schedule_status\":\"active\",\"time_dependent_reason\":\"Freshness/lease/monitoring SLA for NOOS loop fleet.\",\"no_work_behavior\":{\"no_write\":true,\"no_llm\":true,\"no"
     },
     "cf_factory_tick": {
       "ok": true,
@@ -16,17 +16,17 @@
     "railway_loop_runner": {
       "ok": true,
       "status": 200,
-      "body": "{\"ok\": true, \"schema\": \"noos-railway-loop-runner-health-v1\", \"service\": \"noos-loop-runner\", \"git_sha\": \"e7730d319332be091d6f5bf27dae4fb20979b800\", \"uptime_sec\": 675, \"execution_mode\": \"one_shot_http\", \"last_successful_liveness_write_at\": \"2026-07-15T07:10:21Z\", \"last_liveness_error\": null}"
+      "body": "{\"ok\": true, \"schema\": \"noos-railway-loop-runner-health-v1\", \"service\": \"noos-loop-runner\", \"git_sha\": \"de4a7638b93f5083b048f557a24156b8b4cd3f74\", \"uptime_sec\": 67102, \"execution_mode\": \"one_shot_http\", \"last_successful_liveness_write_at\": \"2026-07-23T08:41:00Z\", \"last_liveness_error\": null}"
     },
     "cf_deadman": {
       "ok": true,
       "status": 200,
-      "body": "{\"ok\":true,\"schema\":\"noos-deadman-health-v1\",\"service\":\"noos-deadman-v1\",\"cron\":\"*/30 * * * *\",\"supabase_ready\":true,\"loop_runner_ready\":true,\"telegram_ready\":true,\"telegram_send_alerts\":false,\"telegram_lane_forbidden\":[\"Gateway_A\",\"gateway_a\",\"NFProbeBot\",\"nf_probe_bot\",\"NoetfieldOpsBot\"],\"interval_multiplier\":2,\"restart_attempts_max\":1}"
+      "body": "{\"ok\":true,\"schema\":\"noos-deadman-health-v1\",\"service\":\"noos-deadman-v1\",\"cron\":\"*/30 * * * *\",\"supabase_ready\":true,\"loop_runner_ready\":true,\"motor_event_gateway_ready\":false,\"telegram_ready\":true,\"telegram_send_alerts\":true,\"telegram_lane_forbidden\":[\"Gateway_A\",\"gateway_a\",\"NFProbeBot\",\"nf_probe_bot\",\"NoetfieldOpsBot\"],\"interval_multiplier\":2,\"restart_attempts_max\":5}"
     }
   },
   "liveness": {
-    "ok": true,
-    "findings": 0,
-    "stale_count": 0
+    "ok": false,
+    "findings": 15,
+    "stale_count": 1
   }
 }
