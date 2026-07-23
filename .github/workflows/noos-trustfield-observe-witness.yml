@@ -47,7 +47,9 @@ jobs:
           set -euo pipefail
           git config user.name "noos-witness-bot"
           git config user.email "noos-witness-bot@users.noreply.github.com"
-          git add receipts/proof/noos-trustfield-observe-witness-v1.json
+          git add receipts/proof/noos-trustfield-observe-witness-v1.json \
+                  receipts/proof/noos-trustfield-parallel-layers-observe-v1.json \
+                  receipts/proof/noos-trustfield-loop-registry-observe-v1.json
           if git diff --cached --quiet; then
             echo "No receipt change to commit."
           else

@@ -31,6 +31,8 @@ jobs:
       CF_NOETFIELD_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
       NOETFIELD_SUPABASE_URL: ${{ secrets.NOETFIELD_SUPABASE_URL }}
       NOETFIELD_SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.NOETFIELD_SUPABASE_SERVICE_ROLE_KEY }}
+      PORTFOLIO_SPINE_SUPABASE_URL: ${{ secrets.PORTFOLIO_SPINE_SUPABASE_URL }}
+      PORTFOLIO_SPINE_SERVICE_ROLE_KEY: ${{ secrets.PORTFOLIO_SPINE_SERVICE_ROLE_KEY }}
     steps:
       - uses: actions/checkout@v4
 
@@ -56,7 +58,8 @@ jobs:
           set -euo pipefail
           git config user.name "noos-witness-bot"
           git config user.email "noos-witness-bot@users.noreply.github.com"
-          git add receipts/proof/noos-stack-automation-health-v1.json
+          git add receipts/proof/noos-stack-automation-health-v1.json \
+                  receipts/proof/noos-integrator-autorun-repair-v1.json
           if git diff --cached --quiet; then
             echo "No receipt change to commit."
           else
