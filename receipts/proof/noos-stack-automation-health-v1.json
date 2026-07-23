@@ -1,6 +1,6 @@
 {
   "schema": "noos-stack-automation-health-v1",
-  "at": "2026-07-12T02:56:51Z",
+  "at": "2026-07-23T09:12:36Z",
   "ok": false,
   "overall_status": "red",
   "closure_token": "NOOS_STACK_AUTOMATION: red",
@@ -23,20 +23,38 @@
     "surfaces": {
       "vault": true,
       "cf_deploy_token": true,
-      "integrator_mirror": true,
-      "motor_sustain": false,
+      "integrator_mirror": false,
+      "motor_sustain": true,
       "autorun": false,
       "machine_audit": true,
       "agent_conflicts": true,
       "tasks_mirror": true,
       "upgrade_manifest": true
     },
-    "machine_audit_line": "outside_audit \u00b7 scanned=451 chain_ok=True"
+    "machine_audit_line": "outside_audit \u00b7 scanned=318 chain_ok=True"
   },
   "autorun_critique": {
     "overall_ok": false,
-    "findings": 8,
+    "findings": 14,
     "findings_sample": [
+      {
+        "scope": "sourcea_cloud_queue",
+        "severity": "high",
+        "summary": "Workflow is not healthy: BLOCKED_WITH_REASON",
+        "detail": "supabase_not_configured"
+      },
+      {
+        "scope": "sourcea_buyer_proof_verify",
+        "severity": "high",
+        "summary": "Workflow is not healthy: BLOCKED_WITH_REASON",
+        "detail": "supabase_not_configured"
+      },
+      {
+        "scope": "sourcea_recipe_queue_builder",
+        "severity": "high",
+        "summary": "Workflow is not healthy: BLOCKED_WITH_REASON",
+        "detail": "supabase_not_configured"
+      },
       {
         "scope": "noos_loop_liveness_registry",
         "severity": "high",
@@ -44,34 +62,16 @@
         "detail": ""
       },
       {
-        "scope": "noos_gha_motor_sustain_witness",
+        "scope": "noos_gha_integrator_daily_witness",
         "severity": "high",
-        "summary": "Workflow SLO miss",
-        "detail": "freshness_miss, latency_miss"
-      },
-      {
-        "scope": "noos_gha_health_witness",
-        "severity": "high",
-        "summary": "Workflow SLO miss",
-        "detail": "freshness_miss, latency_miss"
-      },
-      {
-        "scope": "noos_stack_health_receipt",
-        "severity": "high",
-        "summary": "Workflow SLO miss",
-        "detail": "freshness_miss, latency_miss"
-      },
-      {
-        "scope": "noos_trustfield_observe_witness",
-        "severity": "high",
-        "summary": "Workflow SLO miss",
-        "detail": "freshness_miss, latency_miss"
+        "summary": "Workflow is not healthy: BLOCKED_WITH_REASON",
+        "detail": "no_github_runs"
       }
     ]
   },
   "gha_health": {
     "schema": "noos-gha-run-health-v1",
-    "at": "2026-07-12T02:56:50Z",
+    "at": "2026-07-23T09:12:35Z",
     "ok": true,
     "overall_status": "green",
     "closure_token": "NOOS_GHA_HEALTH: green",
@@ -82,15 +82,10 @@
         "ok": true,
         "repos": [
           {
-            "ok": true,
+            "ok": false,
             "repo": "TrustField-Technologies",
-            "billing_gate_failures_12s": 0,
-            "latest_is_billing_gate": false,
-            "latest_real_failure": false,
-            "real_failures": [],
-            "latest_conclusion": "success",
-            "latest_duration_s": 14.0,
-            "recent_count": 8
+            "workflow": null,
+            "error": "failed to get runs: HTTP 404: Not Found (https://api.github.com/repos/Noetfield-Systems/TrustField-Technologies/actions/runs?per_page=8&exclude_pull_requests=true)\n"
           },
           {
             "ok": true,
@@ -98,11 +93,9 @@
             "billing_gate_failures_12s": 0,
             "latest_is_billing_gate": false,
             "latest_real_failure": false,
-            "real_failures": [
-              "GEL CI: chore(receipts+ops): runtime receipt snapshots +"
-            ],
-            "latest_conclusion": "success",
-            "latest_duration_s": 9.0,
+            "real_failures": [],
+            "latest_conclusion": "",
+            "latest_duration_s": 4.0,
             "recent_count": 8
           }
         ]
@@ -110,16 +103,14 @@
       "ICL-D11": {
         "title": "GHA real workflow failures (not billing)",
         "ok": true,
-        "failures": [
-          "GEL CI: chore(receipts+ops): runtime receipt snapshots +"
-        ]
+        "failures": []
       },
       "ICL-D12": {
         "title": "GitHub org on Enterprise plan",
         "ok": true,
         "plan": {
           "ok": true,
-          "plan": "team",
+          "plan": "",
           "enterprise_named": false,
           "billing_gate_clear": true,
           "enterprise_slug": "noetfield-systems-inc",
@@ -151,7 +142,6 @@
     "status": "degraded",
     "last_cycle_ok": false,
     "lane_ok": {
-      "plan_matrix": true,
       "critic_circle": true,
       "deep_research": true,
       "trustfield_loops_intake": true,
@@ -161,7 +151,6 @@
       "partner_access": false
     },
     "lanes_run": [
-      "plan_matrix",
       "critic_circle",
       "deep_research",
       "trustfield_loops_intake",
@@ -173,19 +162,19 @@
   },
   "eleven_layers": {
     "green": 7,
-    "yellow": 3,
-    "red": 1,
+    "yellow": 2,
+    "red": 2,
     "unknown": 0
   },
   "trustfield_registry": {
-    "green": 29,
+    "green": 28,
     "yellow": 2,
-    "red": 2,
+    "red": 4,
     "last_ok_false": 0,
     "missing_last_fired_at": 0,
     "probe_present": true,
     "deadman_status": "green",
-    "gate_48h_status": "yellow",
+    "gate_48h_status": "red",
     "deadman_watched_red": []
   },
   "fix_queue": [
@@ -193,5 +182,6 @@
     "autorun_critique",
     "eleven_layers",
     "trustfield_registry"
-  ]
+  ],
+  "receipt_path": "/home/runner/work/noetfeld-os/noetfeld-os/receipts/proof/noos-stack-automation-health-v1.json"
 }
