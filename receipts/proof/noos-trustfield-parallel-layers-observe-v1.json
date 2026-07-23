@@ -1,14 +1,14 @@
 {
   "schema": "noos-trustfield-parallel-layers-observe-v1",
-  "at": "2026-07-23T17:50:14Z",
+  "at": "2026-07-23T21:30:21Z",
   "read_only": true,
   "one_law": "NOOS coordinates eleven TrustField layers \u2014 observe, enqueue, receipt. TrustField CF+Railway motors execute. One exclusive writer per state cell.",
   "layer_count": 11,
   "overall_status": "red",
   "summary": {
     "green": 7,
-    "yellow": 2,
-    "red": 2,
+    "yellow": 1,
+    "red": 3,
     "unknown": 0
   },
   "roi_intelligence": {
@@ -17,7 +17,7 @@
     "hygiene_layers": 3,
     "plan_worker_status": "degraded",
     "plan_worker_last_cycle_ok": false,
-    "cycles_completed": 4332
+    "cycles_completed": 4375
   },
   "fleet": {
     "cf_worker": "tf-cf-fleet-tick-v1",
@@ -51,7 +51,7 @@
     ]
   },
   "registry_observe": {
-    "overall_status": "yellow",
+    "overall_status": "red",
     "row_count": 34,
     "probe_present": true,
     "deadman_status": "green"
@@ -62,12 +62,12 @@
       "name": "observe_nerve",
       "value_class": "hygiene",
       "tier": "T0",
-      "status": "yellow",
-      "motor_state": "DEGRADED",
+      "status": "red",
+      "motor_state": "FAILED_WITH_RECEIPT",
       "cf_loop_id": "tf_cf_deadman_v1",
       "railway_lane": null,
       "reasons": [
-        "registry_overall=yellow"
+        "registry_overall=red"
       ]
     },
     {
@@ -181,6 +181,7 @@
       "cf_loop_id": "tf_cf_lane_partner_access_v1",
       "railway_lane": "partner_access",
       "reasons": [
+        "last_ok=false",
         "railway_lane_partner_access=false"
       ]
     },
@@ -194,7 +195,7 @@
       "cf_loop_id": "tf_cf_48h_gate_v1",
       "railway_lane": "autorun_stack",
       "reasons": [
-        "stale age_min=8175.3 threshold_min=4320.0"
+        "stale age_min=8395.5 threshold_min=4320.0"
       ]
     }
   ],
