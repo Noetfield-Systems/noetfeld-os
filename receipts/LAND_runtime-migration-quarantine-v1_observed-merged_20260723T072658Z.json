@@ -1,0 +1,48 @@
+{
+ "receipt_type": "LAND_OBSERVED",
+ "job_id": "W1-03",
+ "contract": "sina-governance-SSOT/worktrees/_wt-sg-product-lock/product/WIRING_COMMISSIONING_CONTRACT_v1.json",
+ "generated_by": "ready-lane-execution-v1 undefined",
+ "generated_at_utc": "2026-07-23T07:26:58Z",
+ "agent_note": "Prep-only agent (W1-03/W1-04 lane). This receipt documents an OBSERVED, pre-existing founder merge. The prep agent performed no merge, no push, no PR creation.",
+ "status": "PASS",
+ "exit_gate_checked": {
+  "type": "git_merged",
+  "repo": "noetfeld-OS",
+  "ref": "feat/runtime-migration-quarantine-v1",
+  "into": "main",
+  "result": "MERGED (squash) \u2014 observed via gh + git ancestry/tree checks on 2026-07-23"
+ },
+ "evidence": {
+  "remote": "https://github.com/Noetfield-Systems/noetfeld-os.git",
+  "ls_remote_branch_sha": "d808b8975706369018006a1224d560d6eccd32df",
+  "local_stale_branch_sha": "eb51d0c197f5eae94bb45285ede0c6d5d47f12a9",
+  "commits_remote_ahead_of_local": 4,
+  "pr": {
+   "number": 91,
+   "url": "https://github.com/Noetfield-Systems/noetfeld-os/pull/91",
+   "title": "fix(runtime): quarantine purposeless NOOS loops",
+   "state": "MERGED",
+   "merged_at": "2026-07-19T23:13:51Z",
+   "merged_by": "kazemnezhadsina144-dot",
+   "base": "main",
+   "head_ref_oid": "d808b8975706369018006a1224d560d6eccd32df",
+   "merge_commit": "9a3e360791c3aea06888b7d0086d736fbfbb717b"
+  },
+  "checks": [
+   "git ls-remote origin feat/runtime-migration-quarantine-v1 -> d808b897 (branch exists on remote)",
+   "PR #91 headRefOid d808b897 == current remote tip (no commits pushed after merge)",
+   "merge commit 9a3e3607 IS ancestor of origin/main (730ed19226bf905b62ca4e5ded3b8819928cc711) \u2014 verified via git merge-base --is-ancestor",
+   "git diff d808b897 9a3e3607 is EMPTY \u2014 branch-tip tree is byte-identical to the squash-merge commit tree; all 4 remote-ahead commits' content is fully landed in main",
+   "merge was a squash merge (merge commit has single parent 8b646d00), which is why d808b897 itself is not an ancestor of main"
+  ]
+ },
+ "action_taken": "NO new PR created. gh pr list --head feat/runtime-migration-quarantine-v1 --state all returned exactly one PR (#91, MERGED) whose frozen head oid equals the current remote tip; the land seam has already landed via founder merge. Creating a fresh PR would present already-merged content as pending and invite a double-land. PR URL recorded instead.",
+ "recorded_pr_url": "https://github.com/Noetfield-Systems/noetfeld-os/pull/91",
+ "open_items": [
+  "Remote branch feat/runtime-migration-quarantine-v1 still exists on origin (not auto-deleted after squash merge); safe to delete at founder's discretion \u2014 content fully in main.",
+  "Local branch copy remains stale at eb51d0c (4 behind); do not commit on it (contract note)."
+ ],
+ "merge_commit_sha": "9a3e360791c3aea06888b7d0086d736fbfbb717b",
+ "merge_commit_sha_added_by": "orchestrator 2026-07-23T07:40Z \u2014 squash-merge sha verified as ancestor of origin/main via merge-base --is-ancestor this session"
+}

@@ -1,0 +1,30 @@
+{
+ "receipt_type": "BUILDER_SUBMISSION",
+ "receipt_id": "NOOS-WITNESS-STAGING-PIN-FIX-20260723",
+ "task_id": "NOOS-LANE-witness-staging-fix",
+ "generated_at_utc": "2026-07-23T11:33:23Z",
+ "canon_version": "FOUNDER_CANON_v1+MACHINE_LOOPS_v1",
+ "status": "SUBMITTED for independent verification",
+ "changes": [
+  {
+   "file": ".github/workflows/noos-trustfield-observe-witness.yml",
+   "fix": "stage sub-observer receipts (parallel-layers, loop-registry) in commit step; removes deterministic pull--rebase jam introduced with PR #105 plumbing"
+  },
+  {
+   "file": ".github/workflows/noos-stack-health-receipt.yml",
+   "fix": "add PORTFOLIO_SPINE_SUPABASE_URL/PORTFOLIO_SPINE_SERVICE_ROLE_KEY env from existing org secrets; stage bootstrap repair receipt to preempt same jam"
+  },
+  {
+   "file": "data/noos-pr-conflict-skill-lock-v1.json",
+   "fix": "re-pin sg skill_sha256_prefix f460c26916385116->87326b94b3b22738 after SG commit 3daf70b (NF-WAKE-PATH-CONFLICT-POLICY-V1 locked append); clears living-system governance FAIL that blocked all lane claims"
+  }
+ ],
+ "evidence": {
+  "trustfield_failed_run": "https://github.com/Noetfield-Systems/noetfeld-os/actions/runs/29999916632",
+  "governance_before": "pr_conflict_skill FAIL sg_skill_hash_drift:87326b94b3b22738!=f460c26916385116",
+  "governance_after": "ok=true all checks pass (local, this branch)",
+  "sg_provenance": "sina-governance-SSOT 3daf70b 'Lock NF-WAKE-PATH-CONFLICT-POLICY-V1' \u2014 9-line section-6 append, evals hash unchanged dbc87948eaeb457d",
+  "liveness_repair": "make integrator-repair-autorun run 2026-07-23T11:26Z GREEN \u2014 factory_autorun refreshed; role_circle remains stale by adjudication (PR #90 lane owns deregistration)"
+ },
+ "laws": "LAWS: FOUNDER_CANON v1 + governed-autorun v3. Violations = BLOCKED_WITH_REASON."
+}
