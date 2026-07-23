@@ -1,14 +1,14 @@
 {
   "schema": "noos-trustfield-parallel-layers-observe-v1",
-  "at": "2026-07-12T02:56:53Z",
+  "at": "2026-07-23T14:36:59Z",
   "read_only": true,
   "one_law": "NOOS coordinates eleven TrustField layers \u2014 observe, enqueue, receipt. TrustField CF+Railway motors execute. One exclusive writer per state cell.",
   "layer_count": 11,
   "overall_status": "red",
   "summary": {
     "green": 7,
-    "yellow": 3,
-    "red": 1,
+    "yellow": 2,
+    "red": 2,
     "unknown": 0
   },
   "roi_intelligence": {
@@ -17,7 +17,7 @@
     "hygiene_layers": 3,
     "plan_worker_status": "degraded",
     "plan_worker_last_cycle_ok": false,
-    "cycles_completed": 1063
+    "cycles_completed": 4295
   },
   "fleet": {
     "cf_worker": "tf-cf-fleet-tick-v1",
@@ -32,7 +32,6 @@
     "status": "degraded",
     "last_cycle_ok": false,
     "lane_ok": {
-      "plan_matrix": true,
       "critic_circle": true,
       "deep_research": true,
       "trustfield_loops_intake": true,
@@ -42,7 +41,6 @@
       "partner_access": false
     },
     "lanes_run": [
-      "plan_matrix",
       "critic_circle",
       "deep_research",
       "trustfield_loops_intake",
@@ -54,7 +52,7 @@
   },
   "registry_observe": {
     "overall_status": "yellow",
-    "row_count": 33,
+    "row_count": 34,
     "probe_present": true,
     "deadman_status": "green"
   },
@@ -94,9 +92,7 @@
       "motor_state": "RUNNING",
       "cf_loop_id": "tf_cf_lane_plan_matrix_v1",
       "railway_lane": "plan_matrix",
-      "reasons": [
-        "railway_lane_plan_matrix=true"
-      ]
+      "reasons": []
     },
     {
       "layer_id": "TF-L04",
@@ -193,12 +189,12 @@
       "name": "closeout_verify",
       "value_class": "proof_asset",
       "tier": "T0",
-      "status": "yellow",
-      "motor_state": "DEGRADED",
+      "status": "red",
+      "motor_state": "FAILED_WITH_RECEIPT",
       "cf_loop_id": "tf_cf_48h_gate_v1",
       "railway_lane": "autorun_stack",
       "reasons": [
-        "stale age_min=6037.1 threshold_min=4320.0"
+        "stale age_min=7982.1 threshold_min=4320.0"
       ]
     }
   ],
