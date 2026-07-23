@@ -53,7 +53,7 @@ jobs:
           else
             git commit -m "witness: noos-liveness-registry-witness receipt $(date -u +%Y-%m-%dT%H:%M:%SZ) [skip ci]"
             for attempt in 1 2 3; do
-              if git pull --rebase origin main && git push origin HEAD:main; then
+              if git pull --rebase --autostash origin main && git push origin HEAD:main; then
                 echo "Receipt pushed to main (attempt ${attempt})."
                 break
               fi
