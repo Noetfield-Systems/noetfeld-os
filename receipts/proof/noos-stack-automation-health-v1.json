@@ -1,6 +1,6 @@
 {
   "schema": "noos-stack-automation-health-v1",
-  "at": "2026-07-23T09:12:36Z",
+  "at": "2026-07-24T09:07:06Z",
   "ok": false,
   "overall_status": "red",
   "closure_token": "NOOS_STACK_AUTOMATION: red",
@@ -31,30 +31,12 @@
       "tasks_mirror": true,
       "upgrade_manifest": true
     },
-    "machine_audit_line": "outside_audit \u00b7 scanned=318 chain_ok=True"
+    "machine_audit_line": "outside_audit \u00b7 scanned=316 chain_ok=True"
   },
   "autorun_critique": {
     "overall_ok": false,
-    "findings": 14,
+    "findings": 11,
     "findings_sample": [
-      {
-        "scope": "sourcea_cloud_queue",
-        "severity": "high",
-        "summary": "Workflow is not healthy: BLOCKED_WITH_REASON",
-        "detail": "supabase_not_configured"
-      },
-      {
-        "scope": "sourcea_buyer_proof_verify",
-        "severity": "high",
-        "summary": "Workflow is not healthy: BLOCKED_WITH_REASON",
-        "detail": "supabase_not_configured"
-      },
-      {
-        "scope": "sourcea_recipe_queue_builder",
-        "severity": "high",
-        "summary": "Workflow is not healthy: BLOCKED_WITH_REASON",
-        "detail": "supabase_not_configured"
-      },
       {
         "scope": "noos_loop_liveness_registry",
         "severity": "high",
@@ -66,12 +48,30 @@
         "severity": "high",
         "summary": "Workflow is not healthy: BLOCKED_WITH_REASON",
         "detail": "no_github_runs"
+      },
+      {
+        "scope": "noos_gha_autorun_witness",
+        "severity": "high",
+        "summary": "Workflow is not healthy: BLOCKED_WITH_REASON",
+        "detail": "no_github_runs"
+      },
+      {
+        "scope": "noos_gha_motor_sustain_witness",
+        "severity": "high",
+        "summary": "Workflow is not healthy: BLOCKED_WITH_REASON",
+        "detail": "no_github_runs"
+      },
+      {
+        "scope": "noos_gha_health_witness",
+        "severity": "high",
+        "summary": "Workflow is not healthy: BLOCKED_WITH_REASON",
+        "detail": "no_github_runs"
       }
     ]
   },
   "gha_health": {
     "schema": "noos-gha-run-health-v1",
-    "at": "2026-07-23T09:12:35Z",
+    "at": "2026-07-24T09:07:05Z",
     "ok": true,
     "overall_status": "green",
     "closure_token": "NOOS_GHA_HEALTH: green",
