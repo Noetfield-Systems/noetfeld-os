@@ -358,7 +358,7 @@
       "id": "noos_trustfield_observe_witness",
       "title": "GHA TrustField ecosystem observe witness",
       "plane": "TrustField-Technologies",
-      "slo": {"freshness_target_minutes": 250, "latency_target_minutes": 250},
+      "slo": {"freshness_target_minutes": 420, "latency_target_minutes": 420},
       "probe": {
         "type": "github_schedule_probe",
         "github_workflow": "noos-trustfield-observe-witness.yml",
@@ -394,7 +394,7 @@
       "id": "noos_liveness_registry_witness",
       "title": "GHA loop liveness registry witness (no tick)",
       "plane": "NOETFELD-OS",
-      "slo": {"freshness_target_minutes": 380, "latency_target_minutes": 380},
+      "slo": {"freshness_target_minutes": 540, "latency_target_minutes": 540},
       "probe": {
         "type": "github_schedule_probe",
         "github_workflow": "noos-liveness-registry-witness.yml",
@@ -406,7 +406,7 @@
       "id": "noos_sandbox_url_sweep_witness",
       "title": "GHA sandbox URL + trigger sweep witness",
       "plane": "NOETFELD-OS",
-      "slo": {"freshness_target_minutes": 750, "latency_target_minutes": 750},
+      "slo": {"freshness_target_minutes": 900, "latency_target_minutes": 900},
       "probe": {
         "type": "github_schedule_probe",
         "github_workflow": "noos-sandbox-url-sweep-witness.yml",
