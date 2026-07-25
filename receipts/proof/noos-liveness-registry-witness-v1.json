@@ -1,6 +1,6 @@
 {
   "schema": "noos-liveness-registry-witness-v1",
-  "at": "2026-07-25T14:12:44Z",
+  "at": "2026-07-25T19:47:37Z",
   "read_only": true,
   "mutates_registry": false,
   "witness_mode": true,
@@ -8,8 +8,8 @@
   "stale_count": 2,
   "registry_rows": 20,
   "stale_loops": [
-    "factory_autorun",
-    "role_circle"
+    "role_circle",
+    "factory_autorun"
   ],
   "probe_status": "FAILED_WITH_RECEIPT",
   "probe_reason": null,
@@ -20,11 +20,11 @@
     "stale_count": 2,
     "registry_rows": 20,
     "stale_loops": [
-      "factory_autorun",
-      "role_circle"
+      "role_circle",
+      "factory_autorun"
     ],
     "evidence": {
-      "observed_at": "2026-07-25T14:12:44+00:00",
+      "observed_at": "2026-07-25T19:47:37+00:00",
       "expected_rows": 14
     }
   },
