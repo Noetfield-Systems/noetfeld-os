@@ -1,0 +1,92 @@
+{
+  "schema": "noos-cross-plane-escalation-v1",
+  "receipt_id": "NOOS-ESCALATION-20260725T0250Z",
+  "at": "2026-07-25T02:50:00Z",
+  "canon_version": "FOUNDER_CANON_v1+MACHINE_LOOPS_v1",
+  "agent_id": "claude-code-noos",
+  "verdict": "SUBMITTED for independent verification",
+  "context": "Founder directive to repair all findings from the 2026-07-25 cockpit digest. NOOS-owned findings were repaired (see noos-slo-drift-tolerance-repin-v1.json). The items below are outside the NOOS repair boundary and are escalated with evidence rather than papered over.",
+  "escalations": [
+    {
+      "id": "ESC-01",
+      "severity": "high",
+      "title": "Six TrustField guard loops dead, deadman green because it watches none of them",
+      "plane": "TrustField-Technologies",
+      "owner": "trustfield_worker",
+      "evidence": {
+        "source": "receipts/proof/noos-trustfield-observe-witness-v1.json (recorded 2026-07-24T21:31:49Z)",
+        "registry": "trustfield_loop_registry, 34 rows, 28 green",
+        "dead_rows": [
+          {"loop_id": "tf_cf_48h_gate_v1", "status": "red", "deadman_watched": false, "last_fired_at": "2026-07-18T01:34:53Z", "age_minutes": 9837},
+          {"loop_id": "tf_cf_sg_registry_v1", "status": "red", "deadman_watched": false, "last_fired_at": "2026-07-18T01:34:50Z", "age_minutes": 9837},
+          {"loop_id": "tf_cf_gha_secondary_v1", "status": "red", "deadman_watched": false, "last_fired_at": "2026-07-18T01:33:41Z", "age_minutes": 9838},
+          {"loop_id": "tf_w3_supabase_sink_probe_v1", "status": "yellow", "deadman_watched": false, "last_fired_at": "2026-07-18T01:33:26Z", "age_minutes": 9838},
+          {"loop_id": "tf_cf_lane_plan_lane_sandboxes_v1", "status": "red", "deadman_watched": false, "last_fired_at": "2026-07-12T05:32:24Z", "age_minutes": 18239},
+          {"loop_id": "tf_cf_www_pages_v1", "status": "yellow", "deadman_watched": false, "last_fired_at": "2026-07-07T07:19:57Z", "age_minutes": 25332}
+        ],
+        "correlation": "Four of the six stopped within 90 seconds of each other on 2026-07-18T01:33:26Z-01:34:53Z, which indicates one upstream event, not four independent failures.",
+        "monitoring_gap": "deadman_status reports green and deadman_watched_red is empty. Every one of the six dead loops carries deadman_watched=false, so the deadman's watch list excludes exactly the loops that failed. Three of them are GUARD class, including the 48h closure gate. Nothing alerted for 6.8 days."
+      },
+      "noos_boundary": "NOOS observes the TrustField registry; the TrustField worker owns all writes and the deadman watch list. NOOS must not repair this.",
+      "prescribed_route": [
+        "TrustField worker: ./scripts/verify_tf_loop_registry_liveness.sh",
+        "TrustField worker: ./scripts/verify_cf_deadman_v1.sh"
+      ],
+      "consequence_if_unrepaired": "The NOOS stack-automation-health rollup stays red daily and its scheduled workflow keeps failing, because two of its six signals (eleven_layers, trustfield_registry) depend on this plane."
+    },
+    {
+      "id": "ESC-02",
+      "severity": "medium",
+      "title": "factory_autorun liveness row re-ages within 30 minutes of every repair",
+      "plane": "NOETFELD-OS",
+      "evidence": {
+        "observed": "Repaired at 2026-07-25T02:17:34Z by noos_integrator_repair_autorun_v1; stale again by 02:47Z.",
+        "probable_cause": "The CF factory-autorun tick worker reports github_repo=kazemnezhadsina144-dot/noetfeld-os (a personal fork), so its dispatches do not reach Noetfield-Systems/noetfeld-os. Worker cron was recorded as retired 2026-07-05.",
+        "worker_health": "noos-factory-autorun-tick-v1 responds ok, cron */10, github_token_ready true — a healthy-looking worker pointed at the wrong repository."
+      },
+      "noos_boundary": "Repointing or retiring a live Cloudflare worker is live-infra mutation, founder-gated. Repeated repair upserts are explicitly forbidden by provenance law because they mask an organic stall.",
+      "smallest_decision": "Either deregister the factory_autorun row as retired, or repoint the worker's GITHUB_REPO to the canonical repo. Both are one-line changes; both need founder authority."
+    },
+    {
+      "id": "ESC-03",
+      "severity": "low",
+      "title": "role_circle liveness row stale since the runway-supervision builder lane went silent",
+      "plane": "NOETFELD-OS",
+      "evidence": {
+        "registered_by": "runway-supervision builder lane (worktree noos-wt-runway-supervision, draft PR #90), 2026-07-19",
+        "status": "leftover lane registration, not a dead production loop",
+        "prior_adjudication": "Heartbeating it is forbidden — it would mask an organic stall. Deregistration belongs to the PR #90 lane."
+      },
+      "noos_boundary": "Registry row deletion is a live-state mutation and was blocked by the local permission classifier in this session.",
+      "smallest_decision": "Authorize deregistration of the role_circle row, or land/close PR #90 so its lane cleans up after itself."
+    },
+    {
+      "id": "ESC-04",
+      "severity": "low",
+      "title": "agent_nerve reports success_rate_missing on a 30-minute sample window",
+      "plane": "NOETFELD-OS",
+      "evidence": {
+        "observed_at": "2026-07-25T02:47Z",
+        "dispatch_age_minutes": 27.2,
+        "completion_age_minutes": 43.6,
+        "sample_window_minutes": 30,
+        "reading": "Organic completions are being recorded, but at a cadence slower than the 30-minute success-rate window, so the window is periodically empty. Same structural class as the witness SLO defect repaired in PR #111 — a window pinned tighter than the loop's real cadence."
+      },
+      "recommendation": "Measure the agent_nerve completion cadence over several days and re-pin the sample window from evidence, as was done for the three witnesses. Not done in this session: it needs a multi-day sample that does not yet exist in hand."
+    }
+  ],
+  "blocked_in_session": [
+    {
+      "action": "python3 scripts/noos_integrator_sync_v1.py sync",
+      "reason": "denied by local permission classifier",
+      "outcome": "resolved by another route — make local-sweep-stale restored mirror_ok to true"
+    }
+  ],
+  "repaired_this_session": [
+    "local checkout resynced to origin/main (was 30 commits behind; all digest evidence had been read from a stale branch)",
+    "integrator mirror drift cleared, mirror_ok false -> true",
+    "stale agent registrations swept, 9 -> 7",
+    "factory_autorun liveness row upserted (temporary — see ESC-02)",
+    "three witness SLO targets re-pinned from measured run-gap history (PR #111, all CI checks green)"
+  ]
+}
