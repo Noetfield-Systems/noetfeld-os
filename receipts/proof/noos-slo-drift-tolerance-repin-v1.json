@@ -1,0 +1,93 @@
+{
+  "schema": "noos-slo-drift-tolerance-repin-v1",
+  "receipt_id": "NOOS-SLO-DRIFT-20260725T0240Z",
+  "at": "2026-07-25T02:40:00Z",
+  "canon_version": "FOUNDER_CANON_v1+MACHINE_LOOPS_v1",
+  "lane": "NOOS-LANE-slo-drift-fix",
+  "agent_id": "claude-code-noos",
+  "verdict": "SUBMITTED for independent verification",
+  "class": "registry_slo_repin",
+  "problem": {
+    "summary": "Three witness workflows carried freshness/latency SLO targets below their own observed steady-state inter-run gap, producing permanent false freshness_miss/latency_miss findings while the witnesses were in fact firing normally.",
+    "root_cause": "GitHub hosted cron does not fire every scheduled slot for sub-daily crons. Observed over 5+ days, one slot per day is consistently dropped on each of these workflows, so the real inter-run gap ceiling is well above the nominal cron cadence. Targets had been pinned near cadence (4-6% margin), so the miss was structural, not incidental.",
+    "prior_false_alarm_history": "Same alert class previously re-pinned in PR #104; these three entries were not covered."
+  },
+  "evidence": {
+    "method": "GitHub Actions scheduled-run history (event=schedule) read via gh run list; gaps computed between consecutive fires.",
+    "observed_at": "2026-07-25T02:35:00Z",
+    "workflows": [
+      {
+        "id": "noos_trustfield_observe_witness",
+        "cron": "20 */4 * * *",
+        "nominal_cadence_minutes": 240,
+        "sample_size_gaps": 23,
+        "observed_min_gap_minutes": 173,
+        "observed_median_gap_minutes": 227,
+        "observed_max_gap_minutes": 379,
+        "pattern": "repeating 6-fire daily cycle with one dropped slot: 173/231/233/200/227/376",
+        "old_target_minutes": 250,
+        "new_target_minutes": 420,
+        "target_vs_observed_max": "+41 min headroom",
+        "target_vs_double_cadence": "420 < 480, two consecutive genuine misses still trip"
+      },
+      {
+        "id": "noos_liveness_registry_witness",
+        "cron": "35 */6 * * *",
+        "nominal_cadence_minutes": 360,
+        "sample_size_gaps": 15,
+        "observed_min_gap_minutes": 306,
+        "observed_median_gap_minutes": 323,
+        "observed_max_gap_minutes": 483,
+        "pattern": "repeating 4-fire daily cycle with one dropped slot: 315/323/327/475",
+        "old_target_minutes": 380,
+        "new_target_minutes": 540,
+        "target_vs_observed_max": "+57 min headroom",
+        "target_vs_double_cadence": "540 < 720, two consecutive genuine misses still trip"
+      },
+      {
+        "id": "noos_sandbox_url_sweep_witness",
+        "cron": "45 */12 * * *",
+        "nominal_cadence_minutes": 720,
+        "sample_size_gaps": 15,
+        "observed_min_gap_minutes": 603,
+        "observed_median_gap_minutes": 655,
+        "observed_max_gap_minutes": 856,
+        "pattern": "alternating 620/800 gaps",
+        "old_target_minutes": 750,
+        "new_target_minutes": 900,
+        "target_vs_observed_max": "+44 min headroom",
+        "target_vs_double_cadence": "900 < 1440, two consecutive genuine misses still trip",
+        "note": "not yet flagging at time of repair; same structural defect, fixed preventively"
+      }
+    ]
+  },
+  "non_weakening_argument": {
+    "claim": "This is a detector correction, not a test weakening.",
+    "reasons": [
+      "Every new target remains strictly below 2x the nominal cron cadence, so a genuinely stopped loop (two consecutive missed fires) still trips the SLO.",
+      "Every new target is set from the measured steady-state maximum gap plus a small headroom, not from a desired-green value.",
+      "The prior targets could not be satisfied by a healthy system, so they carried zero detection signal and desensitized the critique surface."
+    ]
+  },
+  "not_touched": [
+    "daily witnesses (motor_sustain, sourcea_spine, stack_health) — measured gaps ~1440 min against 1560 targets, stable, left unchanged",
+    "weekly witnesses (autorun, gha_health, machine_audit) — not flagging, left unchanged",
+    "success_rate targets and all non-SLO registry fields"
+  ],
+  "verification_after_change": {
+    "command": "python3 scripts/autorun_status_v1.py",
+    "before_findings": [
+      "noos_loop_liveness_registry FAILED_WITH_RECEIPT",
+      "noos_stack_health_receipt FAILED_WITH_RECEIPT",
+      "noos_trustfield_observe_witness freshness_miss latency_miss",
+      "noos_liveness_registry_witness freshness_miss latency_miss"
+    ],
+    "after_findings": [
+      "noos_loop_agent_nerve success_rate_missing (transient 30-min window artifact, unrelated)",
+      "noos_loop_liveness_registry FAILED_WITH_RECEIPT (role_circle stale row, separate item)",
+      "noos_stack_health_receipt FAILED_WITH_RECEIPT (rollup depends on TrustField-owned signals, separate item)"
+    ],
+    "witness_slo_misses_cleared": true
+  },
+  "founder_gate": "merge to main"
+}

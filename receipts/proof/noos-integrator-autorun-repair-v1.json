@@ -1,6 +1,6 @@
 {
   "schema": "noos-integrator-autorun-repair-v1",
-  "at": "2026-07-23T11:26:25Z",
+  "at": "2026-07-25T02:17:31Z",
   "ok": true,
   "liveness": {
     "ok": true,
@@ -12,22 +12,22 @@
         {
           "ok": true,
           "loop_id": "cf_loop_motor",
-          "last_fired_at": "2026-07-23T11:26:27.217Z"
+          "last_fired_at": "2026-07-25T02:17:34.053Z"
         },
         {
           "ok": true,
           "loop_id": "executor_railway_canonical",
-          "last_fired_at": "2026-07-23T11:26:27.360Z"
+          "last_fired_at": "2026-07-25T02:17:34.187Z"
         },
         {
           "ok": true,
           "loop_id": "executor_fly_temporary",
-          "last_fired_at": "2026-07-23T11:26:27.496Z"
+          "last_fired_at": "2026-07-25T02:17:34.327Z"
         },
         {
           "ok": true,
           "loop_id": "unified_motor_event_bridge",
-          "last_fired_at": "2026-07-23T11:26:27.623Z"
+          "last_fired_at": "2026-07-25T02:17:34.458Z"
         }
       ]
     },
@@ -39,8 +39,8 @@
       "ok": true,
       "status": 201,
       "row": {
-        "id": "e4634030-2c32-49d4-9357-a3f60827ad84",
-        "recorded_at": "2026-07-23T11:26:27+00:00",
+        "id": "12c79a8d-1bcc-4260-b1b1-4403c854dada",
+        "recorded_at": "2026-07-25T02:17:34+00:00",
         "source": "cloudflare_cron",
         "event": "CRON_FIRED",
         "deployment_id": null,
@@ -54,51 +54,51 @@
       "ok": true,
       "status": 201,
       "row": {
-        "id": "c1790855-9bde-4912-817e-319262c38da2",
-        "cycle_id": "cycle-cloud-queue-repair-2026-07-23T11:26:27Z",
+        "id": "bdbcde98-fe55-4921-8aa6-7b9608fdcf2c",
+        "cycle_id": "cycle-cloud-queue-repair-2026-07-25T02:17:34Z",
         "execution_id": "cloud-queue-heartbeat-v1",
         "queue_head_before": "CLOUD-SEC-8120",
         "queue_head_after": "CLOUD-SEC-8120",
-        "started_at": "2026-07-23T11:26:27+00:00",
-        "finished_at": "2026-07-23T11:26:27+00:00",
+        "started_at": "2026-07-25T02:17:34+00:00",
+        "finished_at": "2026-07-25T02:17:34+00:00",
         "duration_ms": 1,
         "trigger_source": "noos_repair_one_shot",
         "verdict": "GREEN",
-        "created_at": "2026-07-23T11:26:27+00:00"
+        "created_at": "2026-07-25T02:17:34+00:00"
       }
     },
     "cycle_buyer": {
       "ok": true,
       "status": 201,
       "row": {
-        "id": "ae6d099c-ad63-4389-b404-4f21a0efa981",
-        "cycle_id": "cycle-buyer-proof-repair-2026-07-23T11:26:27Z",
+        "id": "2ff9764f-90ed-4d61-adae-1ddf280e0488",
+        "cycle_id": "cycle-buyer-proof-repair-2026-07-25T02:17:34Z",
         "execution_id": "buyer-proof-hotfix-verify-v1-repair",
         "queue_head_before": "CLOUD-SEC-8120",
         "queue_head_after": "CLOUD-SEC-8120",
-        "started_at": "2026-07-23T11:26:27+00:00",
-        "finished_at": "2026-07-23T11:26:27+00:00",
+        "started_at": "2026-07-25T02:17:34+00:00",
+        "finished_at": "2026-07-25T02:17:34+00:00",
         "duration_ms": 1,
         "trigger_source": "noos_repair_one_shot",
         "verdict": "GREEN",
-        "created_at": "2026-07-23T11:26:27+00:00"
+        "created_at": "2026-07-25T02:17:34+00:00"
       }
     },
     "cycle_recipe": {
       "ok": true,
       "status": 201,
       "row": {
-        "id": "f96707e8-eef3-4a26-ab03-0e16f32ab9ac",
-        "cycle_id": "cycle-recipe-queue-repair-2026-07-23T11:26:27Z",
+        "id": "e8cca1f6-90c5-40c5-9416-6a75872e4fdf",
+        "cycle_id": "cycle-recipe-queue-repair-2026-07-25T02:17:34Z",
         "execution_id": "client-proof-recipe-queue-v1-repair",
         "queue_head_before": "CLOUD-SEC-8120",
         "queue_head_after": "CLOUD-SEC-8120",
-        "started_at": "2026-07-23T11:26:27+00:00",
-        "finished_at": "2026-07-23T11:26:27+00:00",
+        "started_at": "2026-07-25T02:17:34+00:00",
+        "finished_at": "2026-07-25T02:17:34+00:00",
         "duration_ms": 1,
         "trigger_source": "noos_repair_one_shot",
         "verdict": "GREEN",
-        "created_at": "2026-07-23T11:26:27+00:00"
+        "created_at": "2026-07-25T02:17:34+00:00"
       }
     },
     "queue_head": "CLOUD-SEC-8120"
