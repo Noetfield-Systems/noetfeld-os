@@ -1,0 +1,93 @@
+{
+  "schema": "noos-cross-plane-escalation-followup-v1",
+  "receipt_id": "NOOS-ESCALATION-FOLLOWUP-20260725T0330Z",
+  "at": "2026-07-25T03:30:00Z",
+  "canon_version": "FOUNDER_CANON_v1+MACHINE_LOOPS_v1",
+  "agent_id": "claude-code-noos",
+  "supersedes_status_in": "receipts/proof/noos-cross-plane-escalation-20260725.json",
+  "verdict": "SUBMITTED for independent verification",
+  "context": "Second founder directive to fix all remaining items. Records what was resolved, what is code-complete but undeployed, and what remains genuinely blocked.",
+  "items": [
+    {
+      "id": "ESC-01",
+      "title": "TrustField deadman watched a hardcoded list while the loops that died were missing from it",
+      "status": "CODE_COMPLETE_NOT_DEPLOYED",
+      "root_cause_confirmed": {
+        "file": "TrustField-Technologies/infrastructure/cloudflare/workers/tf-cf-deadman-v1/src/index.ts",
+        "defect": "WATCH_LOOP_IDS was a hardcoded Set of 7 loop_ids. The registry holds 34 rows, every one value_class GUARD. shouldWatch() returned true only for those 7, so 27 GUARD rows were never checked for staleness.",
+        "why_it_mattered": "All five multi-day-dead loops were among the unwatched. The deadman reported ok=true and stale_count=0 the entire time, and NOOS's observation of it read deadman_status=green. A green deadman was carrying zero information."
+      },
+      "fix_applied": {
+        "approach": "Coverage derived from the registry instead of a maintained list. A row is watched when it declares a cadence (interval_seconds > 0), so newly registered loops are covered immediately and the list cannot drift again.",
+        "explicit_thresholds": "Rows due on a schedule interval_seconds cannot express (tf_cf_48h_gate_v1 72h, tf_w3_supabase_sink_probe_v1 7d, tf_cf_sg_registry_v1 24h) carry explicit values mirroring LOOP_STALE_MINUTES in scripts/observe_trustfield_loop_registry_v1.py, so both planes call a row stale at the same moment.",
+        "deliberate_exclusions": [
+          "tf_cf_deadman_v1 — the deadman upserts this row every run and cannot witness itself",
+          "tf_cf_www_pages_v1 — on_deploy only, age carries no liveness meaning; mirrors DEFERRED_LOOP_IDS NOOS-side"
+        ]
+      },
+      "verification": {
+        "typecheck": "npx tsc --noEmit -p tsconfig.json — clean, exit 0",
+        "simulation_against_live_registry_snapshot": {
+          "rows": 34,
+          "coverage_before": 7,
+          "coverage_after": 32,
+          "alerts_raised": 5,
+          "alerts_all_genuine": true,
+          "false_alarms": 0,
+          "newly_covered_healthy_rows_checked": 20,
+          "stale_detected": [
+            {"loop_id": "tf_cf_lane_plan_lane_sandboxes_v1", "age_minutes": 18611, "threshold_minutes": 10},
+            {"loop_id": "tf_w3_supabase_sink_probe_v1", "age_minutes": 10210, "threshold_minutes": 10080},
+            {"loop_id": "tf_cf_gha_secondary_v1", "age_minutes": 10210, "threshold_minutes": 720},
+            {"loop_id": "tf_cf_sg_registry_v1", "age_minutes": 10208, "threshold_minutes": 1440},
+            {"loop_id": "tf_cf_48h_gate_v1", "age_minutes": 10208, "threshold_minutes": 4320}
+          ]
+        },
+        "defect_caught_during_authoring": "A first draft added stale_threshold_minutes to the PostgREST select. That is not a column on trustfield_loop_registry — it is computed by the NOOS observer. The query would have 400'd, supabaseGetRegistry would have returned [], and the deadman would have watched zero loops while still reporting green. Caught before commit and rebuilt on real columns only."
+      },
+      "landed": {
+        "repo": "TrustField-Technologies",
+        "branch": "fix/deadman-registry-derived-coverage-v1",
+        "commit": "20b14c1",
+        "pushed": false,
+        "push_blocked_reason": "cross-repo push denied by local permission classifier in this session"
+      },
+      "remaining_step": "Push the branch, open the PR, and deploy the worker (wrangler deploy). Deploying is a live-infra action and stays a founder gate. Expect the deadman to report 5 stale loops immediately after deploy — that is the truth it was missing, not a regression.",
+      "note_on_alerting": "The TrustField deadman writes a deadman_alert receipt on staleness. Confirm the intended alert routing before deploy so the first honest run is not mistaken for an incident."
+    },
+    {
+      "id": "ESC-01b",
+      "title": "Why the five loops stopped is still open",
+      "status": "OPEN_SEPARATE_FROM_MONITORING_FIX",
+      "finding": "The four that stopped together on 2026-07-18T01:33-01:34Z are seeded by manually-run lane scripts (scripts/cf_w5_deadman_lane.sh, cf_w9_sg_registry_lane.sh and siblings). No GitHub workflow in the TrustField repo invokes the recorder scripts, so nothing was scheduled to keep them alive. They stopped when the commissioning session that was running them by hand ended.",
+      "consistent_with": "The TrustField loop registry's own doctrine: 'No loop is COMMISSIONED. Manual green != cron green.'",
+      "smallest_decision": "Decide per loop whether it is a real production guard that needs a scheduled runner, or a commissioning artifact that should be deregistered. Both are TrustField-plane calls. The monitoring fix above makes either outcome visible instead of silent."
+    },
+    {
+      "id": "ESC-02",
+      "title": "factory_autorun re-ages 30 minutes after every repair",
+      "status": "BLOCKED_FOUNDER_GATE",
+      "reason": "Repointing or retiring the CF factory-autorun tick worker is a live-infrastructure mutation. Repeated repair upserts are forbidden by provenance law because they mask the organic stall.",
+      "smallest_decision": "Either deregister the factory_autorun row as retired, or repoint the worker's GITHUB_REPO from the personal fork to Noetfield-Systems/noetfeld-os."
+    },
+    {
+      "id": "ESC-03",
+      "title": "role_circle row left behind by the PR #90 builder lane",
+      "status": "BLOCKED_PERMISSION_CLASSIFIER",
+      "reason": "Registry row deletion is a live-state mutation and was denied locally. Heartbeating it instead is forbidden — that would mask an organic stall.",
+      "smallest_decision": "Authorize deregistration of the role_circle row, or land/close PR #90 so its lane cleans up after itself."
+    },
+    {
+      "id": "ESC-04",
+      "title": "agent_nerve success_rate_missing",
+      "status": "DELIBERATELY_NOT_CHANGED",
+      "correction_to_prior_receipt": "The earlier receipt called this the same structural class as the witness SLO defect. That was premature. The witness fix was justified by five days of measured run-gap history; no equivalent completion-cadence sample exists for agent_nerve. Widening the window without that evidence would hide a real slowdown rather than correct a miscalibrated detector.",
+      "additional_finding": "The noos-agent-nerve-loop.yml workflow last ran 2026-07-07 and its schedule and repository_dispatch triggers have been removed, leaving workflow_dispatch only. This is intentional retirement of the GitHub driver, not a failure — the loop is driven by the Railway loop-runner plane, whose health endpoint is live and writing liveness at a 5-minute cadence.",
+      "next_step_if_wanted": "Sample agent_nerve organic completion timestamps over several days, then re-pin the success-rate window from that distribution the same way the three witnesses were re-pinned."
+    }
+  ],
+  "also_completed_this_session": [
+    "PR #111 merged to main — three witness SLO targets re-pinned from measured run-gap history, all CI checks green",
+    "NOOS-LANE-slo-drift-fix claimed and closed out cleanly"
+  ]
+}
