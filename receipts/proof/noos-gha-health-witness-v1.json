@@ -1,6 +1,6 @@
 {
   "schema": "noos-gha-health-witness-v1",
-  "at": "2026-07-12T02:53:33Z",
+  "at": "2026-07-27T11:36:07Z",
   "ok": true,
   "overall_status": "green",
   "closure_token": "NOOS_GHA_HEALTH_WITNESS: green",
@@ -11,15 +11,10 @@
       "ok": true,
       "repos": [
         {
-          "ok": true,
+          "ok": false,
           "repo": "TrustField-Technologies",
-          "billing_gate_failures_12s": 0,
-          "latest_is_billing_gate": false,
-          "latest_real_failure": false,
-          "real_failures": [],
-          "latest_conclusion": "success",
-          "latest_duration_s": 34.0,
-          "recent_count": 8
+          "workflow": null,
+          "error": "failed to get runs: HTTP 404: Not Found (https://api.github.com/repos/Noetfield-Systems/TrustField-Technologies/actions/runs?per_page=8&exclude_pull_requests=true)\n"
         },
         {
           "ok": true,
@@ -28,10 +23,10 @@
           "latest_is_billing_gate": false,
           "latest_real_failure": false,
           "real_failures": [
-            "GEL CI: chore(receipts+ops): runtime receipt snapshots +"
+            "NOOS stack health receipt: NOOS stack health receipt"
           ],
-          "latest_conclusion": "success",
-          "latest_duration_s": 9.0,
+          "latest_conclusion": "",
+          "latest_duration_s": 4.0,
           "recent_count": 8
         }
       ]
@@ -40,7 +35,7 @@
       "title": "GHA real workflow failures (not billing)",
       "ok": true,
       "failures": [
-        "GEL CI: chore(receipts+ops): runtime receipt snapshots +"
+        "NOOS stack health receipt: NOOS stack health receipt"
       ]
     },
     "ICL-D12": {
@@ -48,7 +43,7 @@
       "ok": true,
       "plan": {
         "ok": true,
-        "plan": "team",
+        "plan": "",
         "enterprise_named": false,
         "billing_gate_clear": true,
         "enterprise_slug": "noetfield-systems-inc",
@@ -62,7 +57,16 @@
       "detail": {
         "ok": true,
         "witness_count": 10,
-        "warnings": [],
+        "warnings": [
+          {
+            "workflow": "noos-stack-health-receipt.yml",
+            "ok": false,
+            "billing_gate_precursor": false,
+            "duration_s": 34.0,
+            "run_id": 30258161011,
+            "conclusion": "failure"
+          }
+        ],
         "billing_gate_precursors": [],
         "one_law": "Jobs failing in <12s with no step logs = billing/spending gate \u2014 not CI red"
       }
