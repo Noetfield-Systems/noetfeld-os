@@ -1,11 +1,12 @@
 # Issue & CI Ownership — NOOS Operational Binding v1
 
-**Status:** PROPOSED — pending SG ratification of `NF-UNIFIED-MOTOR-ISSUE-CI-OWNERSHIP-V1`
-and founder merge of the operationalization PR. Not active authority until both land.
+**Status:** SG_RATIFIED — SG ratified `NF-UNIFIED-MOTOR-ISSUE-CI-OWNERSHIP-V1` on 2026-07-28
+after NOOS PR #82 merge. Ownership map active for classify/route/repair boundaries;
+merge/deploy/secret/CI-config changes remain founder-gated.
 **Kind:** OPERATIONAL_BINDING (NOOS operationalizes; SG defines; this is not Library SSOT).
 **Decision:** `NF-UNIFIED-MOTOR-ISSUE-CI-OWNERSHIP-V1` (`docs/_NOOS_AGENT/[NOOS-AGENT-20260717-001]_NF-UNIFIED-MOTOR-ISSUE-CI-OWNERSHIP-V1.md`)
 **Registry:** `data/noos-canonical-roles-v1.json` · **Recipe:** `motor/registry/recipes/NF-MOTOR-CI-REPAIR-001.yaml`
-**Route:** `motor/registry/bindings/noos-route-map-v1.json` → `ci_failure_candidate_repair` (NOT_WIRED)
+**Route:** `motor/registry/bindings/noos-route-map-v1.json` → `ci_failure_candidate_repair` (WIRED — sandbox-fixture-repair via Runway; promotion founder-gated)
 
 This binding operationalizes the advisor role map for GitHub-issue / CI-failure /
 incident ownership. It gives Noetfield **one accountable manager**, the **correct

@@ -1,19 +1,27 @@
 {
   "schema": "noos-canonical-roles-v1",
-  "version": "1.0.0",
-  "status": "PROPOSED_SG_REVIEW",
+  "version": "1.0.1",
+  "status": "SG_RATIFIED",
   "generated_at": "2026-07-17T18:18:00Z",
+  "ratified_at": "2026-07-28T12:00:00Z",
   "decision_ref": "NF-UNIFIED-MOTOR-ISSUE-CI-OWNERSHIP-V1",
+  "sg_ratification": {
+    "status": "SG_RATIFIED",
+    "sg_decision_artifact": "sina-governance-SSOT/data/nf_unified_motor_issue_ci_ownership_v1_LOCKED.json",
+    "sg_receipt": "sina-governance-SSOT/receipts/noos/NOOS_PR82_ISSUE_CI_OWNERSHIP_SG_RATIFICATION_20260728.json",
+    "ratified_by": "sg_sssot_cursor",
+    "noos_pr": 82
+  },
   "operational_binding": "noetfield-org/ISSUE_CI_OWNERSHIP_OPERATIONAL_BINDING_v1.md",
   "sg_addendum": "docs/_NOOS_AGENT/[NOOS-AGENT-20260717-001]_NF-UNIFIED-MOTOR-ISSUE-CI-OWNERSHIP-V1.md",
   "one_law": "One accountable manager, one specialist per fault domain, and no omnipotent agent: the Issue Manager may never silently classify, patch, verify, approve, and merge its own work (separation of duties).",
-  "not_active_note": "PROPOSED role map. These canonical role IDs are NOT active authority until SG ratifies NF-UNIFIED-MOTOR-ISSUE-CI-OWNERSHIP-V1 and the founder merges the operationalization PR. Until then this registry declares intent + evidence, not live routing.",
+  "not_active_note": "Ownership map SG-ratified 2026-07-28. Roles define classification, routing, and separation-of-duties. Merge, deploy, secret changes, CI-config weaken/bypass, and production promotion remain founder-gated. Candidate repair may route through bounded sandbox/Runway paths already wired in noos-route-map-v1.json.",
   "roles": [
     {
       "role_id": "noetfield:noos.portfolio-owner",
       "title": "NOOS Portfolio Continuation Owner",
       "kind": "canonical_owner",
-      "status": "PROPOSED_SG_REVIEW",
+      "status": "SG_RATIFIED",
       "implementation": "existing NOOS continuation owner; hosts the issue-manager and ci-reliability-owner capabilities/profiles below (not a new cloud agent)",
       "responsibilities": [
         "persistent continuation ownership of the NOOS portfolio",
@@ -25,7 +33,7 @@
       "title": "NOOS Issue Manager",
       "kind": "capability_of",
       "parent": "noetfield:noos.portfolio-owner",
-      "status": "PROPOSED_SG_REVIEW",
+      "status": "SG_RATIFIED",
       "implementation": "capability/profile of noetfield:noos.portfolio-owner initially; NOT a sixth independent cloud agent",
       "responsibilities": [
         "GitHub issue and PR-failure intake",
@@ -58,7 +66,7 @@
       "title": "NOOS CI Reliability Owner",
       "kind": "profile_of",
       "parent": "noetfield:noos.portfolio-owner",
-      "status": "PROPOSED_SG_REVIEW",
+      "status": "SG_RATIFIED",
       "implementation": "profile under NOOS initially; not necessarily another core agent",
       "responsibilities": [
         "monitor required checks and detect flaky checks",
@@ -85,7 +93,7 @@
       "role_id": "noetfield:sandbox.builder-owner",
       "title": "SANDBOX Builder Owner",
       "kind": "canonical_owner",
-      "status": "PROPOSED_SG_REVIEW",
+      "status": "SG_RATIFIED",
       "owns_recipe": "NF-MOTOR-CI-REPAIR-001",
       "worker_profile": "ci-repair-worker",
       "responsibilities": [
@@ -104,7 +112,7 @@
       "role_id": "noetfield:sourcea.dispatch-owner",
       "title": "SourceA Dispatch Owner",
       "kind": "canonical_owner",
-      "status": "PROPOSED_SG_REVIEW",
+      "status": "SG_RATIFIED",
       "responsibilities": [
         "compiles the bounded repair job from the Issue Manager's classified + routed issue",
         "binds required inputs before execution (missing input = job invalid at creation)"
