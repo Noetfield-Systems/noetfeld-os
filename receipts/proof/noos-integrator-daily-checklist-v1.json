@@ -1,6 +1,6 @@
 {
   "schema": "noos-integrator-daily-checklist-v1",
-  "at": "2026-07-29T09:39:36Z",
+  "at": "2026-07-29T15:09:50Z",
   "read_only": false,
   "one_law": "Daily authority = live probes at `at` \u2014 receipts on disk are snapshots only, never closure.",
   "architecture": {
@@ -56,7 +56,7 @@
       "status": "pass",
       "evidence": {
         "schema": "noos-motor-sustain-v1",
-        "at": "2026-07-29T09:39:42Z",
+        "at": "2026-07-29T15:09:56Z",
         "ok": true,
         "checks": {
           "cf_loop_fleet": {
@@ -72,7 +72,7 @@
           "railway_loop_runner": {
             "ok": true,
             "status": 200,
-            "body": "{\"ok\": true, \"schema\": \"noos-railway-loop-runner-health-v1\", \"service\": \"noos-loop-runner\", \"git_sha\": \"de4a7638b93f5083b048f557a24156b8b4cd3f74\", \"uptime_sec\": 588757, \"execution_mode\": \"one_shot_http\", \"last_successful_liveness_write_at\": \"2026-07-29T09:35:50Z\", \"last_liveness_error\": null}"
+            "body": "{\"ok\": true, \"schema\": \"noos-railway-loop-runner-health-v1\", \"service\": \"noos-loop-runner\", \"git_sha\": \"de4a7638b93f5083b048f557a24156b8b4cd3f74\", \"uptime_sec\": 608571, \"execution_mode\": \"one_shot_http\", \"last_successful_liveness_write_at\": \"2026-07-29T15:05:10Z\", \"last_liveness_error\": null}"
           },
           "cf_deadman": {
             "ok": true,
@@ -82,7 +82,7 @@
         },
         "liveness": {
           "ok": false,
-          "findings": 15,
+          "findings": 14,
           "stale_count": 1
         },
         "exit_code": 0
@@ -115,12 +115,6 @@
             "severity": "high",
             "summary": "Workflow is not healthy: BLOCKED_WITH_REASON",
             "detail": "supabase_not_configured"
-          },
-          {
-            "scope": "noos_loop_agent_nerve",
-            "severity": "high",
-            "summary": "Workflow SLO miss",
-            "detail": "success_rate_missing"
           },
           {
             "scope": "noos_loop_liveness_registry",
@@ -309,7 +303,7 @@
         "lanes_false": [
           "partner_access"
         ],
-        "cycles": 5925
+        "cycles": 5989
       },
       "fix": "cd TrustField-Technologies && ./scripts/railway_deploy_plan_worker.sh",
       "owner": "trustfield_worker"
@@ -332,16 +326,12 @@
             "billing_gate_failures_12s": 0,
             "latest_is_billing_gate": false,
             "latest_real_failure": false,
-            "real_failures": [
-              "NOOS stack health receipt: NOOS stack health receipt"
-            ],
+            "real_failures": [],
             "latest_conclusion": "",
             "recent_count": 8
           }
         ],
-        "real_failures_sample": [
-          "NOOS stack health receipt: NOOS stack health receipt"
-        ]
+        "real_failures_sample": []
       },
       "fix": "Enterprise billing: spending limit >$0 \u2014 then gh run rerun <id>. Real CI fails: fix workflow logs",
       "owner": "trustfield_worker"
