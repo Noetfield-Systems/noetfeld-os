@@ -1,0 +1,41 @@
+{
+  "receipt_id": "supabase-security-advisor-warns-v1-20260729",
+  "verdict": "PASS_SCOPED_CHANGE",
+  "applied_at": "2026-07-29T04:08:00Z",
+  "scope": "Supabase Security Advisor WARN remediation (SQL-fixable items)",
+  "projects": {
+    "noetfield_systems": {
+      "ref": "tkgpapowwplupyekpivy",
+      "migration": "0023_supabase_security_advisor_warns_v1",
+      "migration_file": "noetfeld-OS/infrastructure/supabase/migrations/0023_supabase_security_advisor_warns_v1.sql",
+      "warn_before": 24,
+      "warn_after": 1,
+      "fixes": [
+        "gallery_set_updated_at search_path",
+        "graph_kernel.reject_run_events_mutation search_path",
+        "gateway_utm_clicks validated anon insert policy",
+        "revoke SECURITY DEFINER RPC execute from anon/authenticated (10 functions)"
+      ],
+      "remaining_warn": {
+        "name": "auth_leaked_password_protection",
+        "reason": "Auth dashboard setting; not SQL-mutable. Enable at Auth → Providers → Email → Prevent use of leaked passwords.",
+        "url": "https://supabase.com/dashboard/project/tkgpapowwplupyekpivy/auth/providers?provider=Email",
+        "api_field": "password_hibp_enabled",
+        "requires": "Supabase Management API PATCH /v1/projects/{ref}/config/auth or founder dashboard toggle (Pro plan entitlement)"
+      }
+    },
+    "graph_studio": {
+      "ref": "ldfruywifqnfpwsfgmdl",
+      "migration": "019_supabase_security_advisor_warns_v1",
+      "migration_file": "SourceA/infra/supabase/portfolio-spine/migrations/019_supabase_security_advisor_warns_v1.sql",
+      "warn_before": 4,
+      "warn_after": 0,
+      "fixes": [
+        "vector extension moved to extensions schema",
+        "match_documents / match_telemetry search_path",
+        "telemetry_logs validated anon insert policy"
+      ]
+    }
+  },
+  "info_only_remaining": "rls_enabled_no_policy on service-role-only machine tables (expected INFO)"
+}
