@@ -1,7 +1,7 @@
 <!-- NOOS-AGENT-DOC -->
 # NF-UNIFIED-MOTOR-ISSUE-CI-OWNERSHIP-V1 — SG architectural addendum (proposal)
 
-**Status:** `SG_REVIEW_REQUIRED`
+**Status:** `SG_RATIFIED` (2026-07-28 — SG receipt `NOOS_PR82_ISSUE_CI_OWNERSHIP_SG_RATIFICATION_20260728.json`)
 **Origin:** advisor role-map directive, relayed by the founder 2026-07-17.
 **Authored by:** NOOS (`claude-code-noos`), lane `NOOS-LANE-issue-ci-ownership`.
 **Custody:** SG **defines** this role map → NOOS **operationalizes** (this PR drafts the
@@ -17,7 +17,7 @@ own work. It does not create a sixth resident cloud agent.
 
 ```yaml
 decision_id: NF-UNIFIED-MOTOR-ISSUE-CI-OWNERSHIP-V1
-status: SG_REVIEW_REQUIRED
+status: SG_RATIFIED
 issue_manager:
   canonical_owner: noetfield:noos.portfolio-owner
   capability_id: noetfield:noos.issue-manager
@@ -55,15 +55,16 @@ forbidden: [self_approval, check_bypass, silent_test_weakening, unauthorized_sec
 
 | Artifact | Path | State |
 |---|---|---|
-| Canonical roles registry | `data/noos-canonical-roles-v1.json` | `PROPOSED_SG_REVIEW` |
-| Operational binding | `noetfield-org/ISSUE_CI_OWNERSHIP_OPERATIONAL_BINDING_v1.md` | PROPOSED |
-| CI-repair Motor recipe | `motor/registry/recipes/NF-MOTOR-CI-REPAIR-001.yaml` | validated, `NOT_WIRED` |
-| Route binding | `motor/registry/bindings/noos-route-map-v1.json` → `ci_failure_candidate_repair` | `NOT_WIRED` (safe: classify + stop) |
+| Canonical roles registry | `data/noos-canonical-roles-v1.json` | `SG_RATIFIED` |
+| Operational binding | `noetfield-org/ISSUE_CI_OWNERSHIP_OPERATIONAL_BINDING_v1.md` | SG_RATIFIED |
+| CI-repair Motor recipe | `motor/registry/recipes/NF-MOTOR-CI-REPAIR-001.yaml` | validated, recipe authority ratified |
+| Route binding | `motor/registry/bindings/noos-route-map-v1.json` → `ci_failure_candidate_repair` | `WIRED` (plan-completion; sandbox-fixture-repair → Runway; promotion founder-gated) |
 | Recipe-count test | `motor/registry/tests/test_motor_registry_invariants.py` | `== 5` → `== 6` (inventory, not a weakening) |
 
-`NOT_WIRED` is deliberate and safe: NOOS classifies and surfaces a candidate-caused CI
-failure but no registered machine owner auto-executes the repair yet — correctly stopping
-beats wrongly repairing. Wiring a machine owner is a later, separately-gated step.
+`WIRED` for candidate-caused repair via plan-completion binding (`sandbox-fixture-repair` → Runway
+dispatch). Production promotion, merge, and authority-plane changes remain founder-gated.
+Wiring additional CI-Reliability remediation executors requires a separate gate with external
+verifier discipline per SG ratification constraints.
 
 ## What SG must decide
 

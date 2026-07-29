@@ -1,0 +1,38 @@
+{
+  "schema": "noos-issue-ci-ownership-sg-ratification-receipt-v1",
+  "task": "NF-NOOS-ISSUE-CI-OWNERSHIP-SG-RATIFY",
+  "purpose": "Sync NOOS operational artifacts to SG ratification of NF-UNIFIED-MOTOR-ISSUE-CI-OWNERSHIP-V1 after PR #82 merge.",
+  "status": "SUBMITTED",
+  "generated_at": "2026-07-28T12:00:00Z",
+  "decision_ref": "NF-UNIFIED-MOTOR-ISSUE-CI-OWNERSHIP-V1",
+  "decision_status": "SG_RATIFIED",
+  "noos_pr_82": {
+    "number": 82,
+    "url": "https://github.com/Noetfield-Systems/noetfeld-os/pull/82",
+    "state": "MERGED"
+  },
+  "sg_ratification": {
+    "artifact": "sina-governance-SSOT/data/nf_unified_motor_issue_ci_ownership_v1_LOCKED.json",
+    "receipt": "sina-governance-SSOT/receipts/noos/NOOS_PR82_ISSUE_CI_OWNERSHIP_SG_RATIFICATION_20260728.json",
+    "ratified_at": "2026-07-28T12:00:00Z"
+  },
+  "artifacts_updated": [
+    "data/noos-canonical-roles-v1.json — status PROPOSED_SG_REVIEW → SG_RATIFIED (all 5 roles)",
+    "docs/_NOOS_AGENT/[NOOS-AGENT-20260717-001]_NF-UNIFIED-MOTOR-ISSUE-CI-OWNERSHIP-V1.md",
+    "noetfield-org/ISSUE_CI_OWNERSHIP_OPERATIONAL_BINDING_v1.md",
+    "receipts/proof/noos-issue-ci-ownership-sg-ratification-v1.json"
+  ],
+  "route_truth": {
+    "ci_failure_candidate_repair": "WIRED",
+    "motor_recipe": "sandbox-fixture-repair",
+    "wired_by": "NF-NOOS-PLAN-COMPLETION-24-7",
+    "note": "Candidate repair routes through Runway sandbox intake; production promotion remains founder-gated."
+  },
+  "does_not_activate": [
+    "unsupervised_merge",
+    "unsupervised_production_deploy",
+    "check_bypass",
+    "unauthorized_secret_change"
+  ],
+  "final_status": "ISSUE_CI_OWNERSHIP_SG_RATIFIED_STATUS_SYNC"
+}
