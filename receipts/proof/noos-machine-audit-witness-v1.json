@@ -1,6 +1,6 @@
 {
   "schema": "noos-machine-audit-witness-v1",
-  "at": "2026-07-27T09:39:56Z",
+  "at": "2026-08-03T09:32:53Z",
   "read_only": true,
   "witness_mode": true,
   "trailing_hours": 168,
@@ -10,12 +10,12 @@
   "audit": {
     "schema": "noos-outside-audit-receipt-v1",
     "version": "1.0.0",
-    "at": "2026-07-27T09:39:56+00:00",
+    "at": "2026-08-03T09:32:53+00:00",
     "trailing_hours": 168,
-    "receipts_scanned": 307,
+    "receipts_scanned": 310,
     "chain": {
       "ok": true,
-      "count": 294,
+      "count": 297,
       "chained_count": 1,
       "broken_links": [],
       "tail_hash": "73141f5feba126e03afc100f523c85c83b3716b66b74f776c047f41faa561079",
@@ -28,10 +28,10 @@
     "spot_fetches": [],
     "kaizen_candidates": [],
     "ok": true,
-    "report_line": "outside_audit \u00b7 scanned=307 chain_ok=True",
+    "report_line": "outside_audit \u00b7 scanned=310 chain_ok=True",
     "prev_chain_hash": "73141f5feba126e03afc100f523c85c83b3716b66b74f776c047f41faa561079",
-    "chain_hash": "b870d2a8abde771bc0f03a1ef2fb5b8113d600f10b2c0fc9714daa3fece3180b",
-    "receipt_path": "receipts/proof/noos-outside-audit-20260727T093956Z.json"
+    "chain_hash": "396474afc664cda93392d64a514cde2d4b4a364d15d04706e4e0b073f3b090a3",
+    "receipt_path": "receipts/proof/noos-outside-audit-20260803T093253Z.json"
   },
   "one_law": "Outside audit only \u2014 no merge/repair dispatch from witness.",
   "ok": true,
