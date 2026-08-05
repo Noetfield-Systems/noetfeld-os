@@ -1,6 +1,6 @@
 {
   "schema": "noos-integrator-daily-checklist-v1",
-  "at": "2026-08-05T15:15:51Z",
+  "at": "2026-08-05T20:27:55Z",
   "read_only": false,
   "one_law": "Daily authority = live probes at `at` \u2014 receipts on disk are snapshots only, never closure.",
   "architecture": {
@@ -8,11 +8,11 @@
     "secondary": "github_actions_enterprise",
     "tertiary": "railway_plan_worker"
   },
-  "overall_status": "yellow",
+  "overall_status": "red",
   "summary": {
     "total": 12,
-    "pass": 10,
-    "fail": 2
+    "pass": 9,
+    "fail": 3
   },
   "checks": [
     {
@@ -56,7 +56,7 @@
       "status": "pass",
       "evidence": {
         "schema": "noos-motor-sustain-v1",
-        "at": "2026-08-05T15:16:03Z",
+        "at": "2026-08-05T20:28:00Z",
         "ok": true,
         "checks": {
           "cf_loop_fleet": {
@@ -72,7 +72,7 @@
           "railway_loop_runner": {
             "ok": true,
             "status": 200,
-            "body": "{\"ok\": true, \"schema\": \"noos-railway-loop-runner-health-v1\", \"service\": \"noos-loop-runner\", \"git_sha\": \"de4a7638b93f5083b048f557a24156b8b4cd3f74\", \"uptime_sec\": 1213733, \"execution_mode\": \"one_shot_http\", \"last_successful_liveness_write_at\": \"2026-08-05T15:15:50Z\", \"last_liveness_error\": null}"
+            "body": "{\"ok\": true, \"schema\": \"noos-railway-loop-runner-health-v1\", \"service\": \"noos-loop-runner\", \"git_sha\": \"de4a7638b93f5083b048f557a24156b8b4cd3f74\", \"uptime_sec\": 1232456, \"execution_mode\": \"one_shot_http\", \"last_successful_liveness_write_at\": \"2026-08-05T20:25:39Z\", \"last_liveness_error\": null}"
           },
           "cf_deadman": {
             "ok": true,
@@ -222,8 +222,8 @@
         "closure": "NOOS_TF_11_LAYERS: red",
         "summary": {
           "green": 7,
-          "yellow": 2,
-          "red": 2,
+          "yellow": 1,
+          "red": 3,
           "unknown": 0
         },
         "plan_worker": {
@@ -257,19 +257,21 @@
       "id": "ICL-D07",
       "tier": "T0",
       "title": "TrustField loop registry (deadman motors green)",
-      "status": "pass",
+      "status": "fail",
       "evidence": {
-        "overall": "yellow",
+        "overall": "red",
         "summary": {
-          "green": 28,
+          "green": 27,
           "yellow": 1,
-          "red": 5,
-          "last_ok_false": 0,
+          "red": 6,
+          "last_ok_false": 1,
           "missing_last_fired_at": 0,
           "probe_present": true,
           "deadman_status": "green",
           "gate_48h_status": "red",
-          "deadman_watched_red": []
+          "deadman_watched_red": [
+            "tf_cf_lane_partner_access_v1"
+          ]
         },
         "witness_relaxed": true
       },
@@ -301,7 +303,7 @@
         "lanes_false": [
           "partner_access"
         ],
-        "cycles": 7957
+        "cycles": 8018
       },
       "fix": "cd TrustField-Technologies && ./scripts/railway_deploy_plan_worker.sh",
       "owner": "trustfield_worker"
@@ -356,12 +358,17 @@
       "owner": "trustfield_worker"
     },
     {
+      "id": "ICL-D07",
+      "fix": "cd TrustField-Technologies && python3 scripts/record_sg_registry_witness_v1.py && curl -sS .../tf-cf-fleet-tick-v1.../tick",
+      "owner": "trustfield_worker"
+    },
+    {
       "id": "ICL-D09",
       "fix": "cd TrustField-Technologies && ./scripts/railway_deploy_plan_worker.sh",
       "owner": "trustfield_worker"
     }
   ],
-  "closure_token": "NOOS_INTEGRATOR_DAILY: yellow",
+  "closure_token": "NOOS_INTEGRATOR_DAILY: red",
   "commands": {
     "run": "make integrator-daily",
     "status": "make integrator-status",
