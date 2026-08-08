@@ -1,6 +1,6 @@
 {
   "schema": "noos-integrator-daily-checklist-v1",
-  "at": "2026-08-08T13:48:04Z",
+  "at": "2026-08-08T19:32:15Z",
   "read_only": false,
   "one_law": "Daily authority = live probes at `at` \u2014 receipts on disk are snapshots only, never closure.",
   "architecture": {
@@ -56,7 +56,7 @@
       "status": "pass",
       "evidence": {
         "schema": "noos-motor-sustain-v1",
-        "at": "2026-08-08T13:48:10Z",
+        "at": "2026-08-08T19:32:21Z",
         "ok": true,
         "checks": {
           "cf_loop_fleet": {
@@ -72,7 +72,7 @@
           "railway_loop_runner": {
             "ok": true,
             "status": 200,
-            "body": "{\"ok\": true, \"schema\": \"noos-railway-loop-runner-health-v1\", \"service\": \"noos-loop-runner\", \"git_sha\": \"de4a7638b93f5083b048f557a24156b8b4cd3f74\", \"uptime_sec\": 1467664, \"execution_mode\": \"one_shot_http\", \"last_successful_liveness_write_at\": \"2026-08-08T13:46:04Z\", \"last_liveness_error\": null}"
+            "body": "{\"ok\": true, \"schema\": \"noos-railway-loop-runner-health-v1\", \"service\": \"noos-loop-runner\", \"git_sha\": \"de4a7638b93f5083b048f557a24156b8b4cd3f74\", \"uptime_sec\": 1488315, \"execution_mode\": \"one_shot_http\", \"last_successful_liveness_write_at\": \"2026-08-08T19:31:14Z\", \"last_liveness_error\": null}"
           },
           "cf_deadman": {
             "ok": true,
@@ -307,7 +307,7 @@
         "lanes_false": [
           "partner_access"
         ],
-        "cycles": 8782
+        "cycles": 8849
       },
       "fix": "cd TrustField-Technologies && ./scripts/railway_deploy_plan_worker.sh",
       "owner": "trustfield_worker"
