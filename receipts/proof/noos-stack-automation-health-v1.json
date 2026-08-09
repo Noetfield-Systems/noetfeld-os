@@ -1,6 +1,6 @@
 {
   "schema": "noos-stack-automation-health-v1",
-  "at": "2026-08-08T07:33:08Z",
+  "at": "2026-08-09T07:38:08Z",
   "ok": false,
   "overall_status": "red",
   "closure_token": "NOOS_STACK_AUTOMATION: red",
@@ -71,7 +71,7 @@
   },
   "gha_health": {
     "schema": "noos-gha-run-health-v1",
-    "at": "2026-08-08T07:33:07Z",
+    "at": "2026-08-09T07:38:07Z",
     "ok": true,
     "overall_status": "green",
     "closure_token": "NOOS_GHA_HEALTH: green",
@@ -95,7 +95,7 @@
             "latest_real_failure": false,
             "real_failures": [],
             "latest_conclusion": "",
-            "latest_duration_s": 10.0,
+            "latest_duration_s": 4.0,
             "recent_count": 8
           }
         ]
