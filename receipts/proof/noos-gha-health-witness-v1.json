@@ -1,6 +1,6 @@
 {
   "schema": "noos-gha-health-witness-v1",
-  "at": "2026-08-03T11:39:56Z",
+  "at": "2026-08-10T09:44:18Z",
   "ok": true,
   "overall_status": "green",
   "closure_token": "NOOS_GHA_HEALTH_WITNESS: green",
@@ -26,7 +26,7 @@
             "NOOS stack health receipt: NOOS stack health receipt"
           ],
           "latest_conclusion": "",
-          "latest_duration_s": 10.0,
+          "latest_duration_s": 4.0,
           "recent_count": 8
         }
       ]
@@ -62,16 +62,16 @@
             "workflow": "noos-autorun-witness.yml",
             "ok": false,
             "billing_gate_precursor": false,
-            "duration_s": 16.0,
-            "run_id": 30264806277,
+            "duration_s": 20.0,
+            "run_id": 30812549853,
             "conclusion": "failure"
           },
           {
             "workflow": "noos-stack-health-receipt.yml",
             "ok": false,
             "billing_gate_precursor": false,
-            "duration_s": 41.0,
-            "run_id": 30805508901,
+            "duration_s": 53.0,
+            "run_id": 31369214996,
             "conclusion": "failure"
           }
         ],
