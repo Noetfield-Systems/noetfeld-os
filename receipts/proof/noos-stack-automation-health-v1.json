@@ -1,6 +1,6 @@
 {
   "schema": "noos-stack-automation-health-v1",
-  "at": "2026-08-10T08:15:35Z",
+  "at": "2026-08-11T07:50:47Z",
   "ok": false,
   "overall_status": "red",
   "closure_token": "NOOS_STACK_AUTOMATION: red",
@@ -35,8 +35,14 @@
   },
   "autorun_critique": {
     "overall_ok": false,
-    "findings": 11,
+    "findings": 12,
     "findings_sample": [
+      {
+        "scope": "noos_loop_agent_nerve",
+        "severity": "high",
+        "summary": "Workflow SLO miss",
+        "detail": "success_rate_missing"
+      },
       {
         "scope": "noos_loop_liveness_registry",
         "severity": "high",
@@ -60,18 +66,12 @@
         "severity": "high",
         "summary": "Workflow is not healthy: BLOCKED_WITH_REASON",
         "detail": "no_github_runs"
-      },
-      {
-        "scope": "noos_gha_health_witness",
-        "severity": "high",
-        "summary": "Workflow is not healthy: BLOCKED_WITH_REASON",
-        "detail": "no_github_runs"
       }
     ]
   },
   "gha_health": {
     "schema": "noos-gha-run-health-v1",
-    "at": "2026-08-10T08:15:34Z",
+    "at": "2026-08-11T07:50:46Z",
     "ok": true,
     "overall_status": "green",
     "closure_token": "NOOS_GHA_HEALTH: green",
@@ -129,8 +129,8 @@
               "workflow": "noos-autorun-witness.yml",
               "ok": false,
               "billing_gate_precursor": false,
-              "duration_s": 20.0,
-              "run_id": 30812549853,
+              "duration_s": 15.0,
+              "run_id": 31377750497,
               "conclusion": "failure"
             }
           ],
@@ -144,7 +144,7 @@
   "cf_motors": {
     "fleet_tick": "green",
     "deadman": "green",
-    "registry_overall": "red"
+    "registry_overall": "yellow"
   },
   "railway_plan_worker": {
     "url": "https://trustfield-plan-worker-production.up.railway.app/health",
@@ -171,22 +171,20 @@
   },
   "eleven_layers": {
     "green": 7,
-    "yellow": 1,
-    "red": 3,
+    "yellow": 2,
+    "red": 2,
     "unknown": 0
   },
   "trustfield_registry": {
-    "green": 27,
+    "green": 28,
     "yellow": 1,
-    "red": 6,
-    "last_ok_false": 1,
+    "red": 5,
+    "last_ok_false": 0,
     "missing_last_fired_at": 0,
     "probe_present": true,
     "deadman_status": "green",
     "gate_48h_status": "red",
-    "deadman_watched_red": [
-      "tf_cf_lane_partner_access_v1"
-    ]
+    "deadman_watched_red": []
   },
   "fix_queue": [
     "integrator_status",
