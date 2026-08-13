@@ -1,6 +1,6 @@
 {
   "schema": "noos-sourcea-spine-witness-v1",
-  "at": "2026-08-12T07:56:33Z",
+  "at": "2026-08-13T07:58:17Z",
   "read_only": true,
   "mutates_spine": false,
   "witness_mode": true,
@@ -13,8 +13,8 @@
     "stale": false,
     "status": "IDLE_NO_WORK",
     "reason": "queue_head_unchanged",
-    "age_minutes": 25.94,
-    "observed_at": "2026-08-12T07:30:37+00:00",
+    "age_minutes": 27.7,
+    "observed_at": "2026-08-13T07:30:36+00:00",
     "queue_head": "CLOUD-SEC-8120"
   },
   "probes": {
@@ -27,7 +27,7 @@
       "queue_head": "CLOUD-SEC-8120",
       "heartbeat_event": "CRON_FIRED",
       "evidence": {
-        "observed_at": "2026-08-12T07:30:37+00:00",
+        "observed_at": "2026-08-13T07:30:36+00:00",
         "source_table": "telemetry_logs",
         "cycle_id": "cycle-20260706T174048Z-CLOUD-SEC-8120",
         "trigger_source": "cloudflare_cron",
@@ -35,7 +35,7 @@
         "fallback": true
       },
       "data_freshness": "FRESH",
-      "age_minutes": 25.94
+      "age_minutes": 27.7
     },
     "sourcea_buyer_proof_verify": {
       "id": "sourcea_buyer_proof_verify",
@@ -44,15 +44,15 @@
       "status": "COMPLETE",
       "receipt_schema": "buyer-proof-hotfix-verify-v1",
       "evidence": {
-        "observed_at": "2026-08-12T07:45:27+00:00",
-        "cycle_id": "cycle-buyer-proof-hotfix-verify-v1-2026-08-12T07:45:27Z",
+        "observed_at": "2026-08-13T07:45:27+00:00",
+        "cycle_id": "cycle-buyer-proof-hotfix-verify-v1-2026-08-13T07:45:27Z",
         "verdict": "GREEN",
         "source_table": "cycle_receipts",
         "pending_count": 0,
         "fallback": null
       },
       "data_freshness": "FRESH",
-      "age_minutes": 11.1
+      "age_minutes": 12.85
     },
     "sourcea_recipe_queue_builder": {
       "id": "sourcea_recipe_queue_builder",
@@ -61,15 +61,15 @@
       "status": "COMPLETE",
       "receipt_schema": "client-proof-recipe-queue-v1",
       "evidence": {
-        "observed_at": "2026-08-12T07:45:27+00:00",
-        "cycle_id": "cycle-client-proof-recipe-queue-v1-2026-08-12T07:45:27Z",
+        "observed_at": "2026-08-13T07:45:27+00:00",
+        "cycle_id": "cycle-client-proof-recipe-queue-v1-2026-08-13T07:45:27Z",
         "verdict": "GREEN",
         "source_table": "cycle_receipts",
         "pending_count": 0,
         "fallback": null
       },
       "data_freshness": "FRESH",
-      "age_minutes": 11.11
+      "age_minutes": 12.85
     }
   },
   "handoff_owner": "sourcea_portfolio_spine_worker",
