@@ -8,6 +8,8 @@ from datetime import datetime, timezone
 from typing import Any
 from uuid import uuid4
 
+from types import SimpleNamespace
+
 from fastapi import APIRouter, Form, Query, Request
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
@@ -15,6 +17,7 @@ from fastapi.templating import Jinja2Templates
 from starlette.applications import Starlette
 
 from public_site.renderer import SITE_ROOT, load_page
+from public_site.tools import CARDS, EMBED_BLOCKS, PUBLIC_ORIGIN, canonical, get_page
 
 logger = logging.getLogger(__name__)
 
@@ -74,6 +77,42 @@ async def home() -> RedirectResponse:
 @router.get("/trust-ledger/", response_class=HTMLResponse)
 async def trust_ledger(request: Request) -> HTMLResponse:
     return _render(request, "trust-ledger/index.md", active="trust-ledger")
+
+
+def _tools_page_context(tool) -> dict:
+    return {
+        "page": SimpleNamespace(
+            title=tool.title,
+            description=tool.description,
+            page_type="operator-tool",
+            version="2026.8",
+            hero_headline=tool.hero_headline,
+            hero_subheadline=tool.hero_subheadline,
+            layout="tools",
+        ),
+        "tool": tool,
+        "cards": CARDS,
+        "embed_blocks": EMBED_BLOCKS,
+        "origin": PUBLIC_ORIGIN,
+        "canonical_url": canonical(tool.slug),
+        "active": "tools",
+    }
+
+
+@router.get("/tools", response_class=HTMLResponse)
+@router.get("/tools/", response_class=HTMLResponse)
+async def tools_hub(request: Request) -> HTMLResponse:
+    tool = get_page("hub")
+    return templates.TemplateResponse(request, "tools.html", _tools_page_context(tool))
+
+
+@router.get("/tools/{slug}", response_class=HTMLResponse)
+@router.get("/tools/{slug}/", response_class=HTMLResponse)
+async def tools_item(request: Request, slug: str) -> HTMLResponse:
+    tool = get_page(slug)
+    if tool is None or tool.slug == "hub":
+        return HTMLResponse("Not found", status_code=404)
+    return templates.TemplateResponse(request, "tools.html", _tools_page_context(tool))
 
 
 @router.get("/privacy", response_class=HTMLResponse)

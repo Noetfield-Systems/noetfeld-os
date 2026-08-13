@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% block extra_head %}
+  <meta name="robots" content="index,follow" />
+  <link rel="canonical" href="{{ canonical_url }}" />
+{% endblock %}
+
+{% block body_class %}tools-page{% endblock %}
+{% block body_attrs %}data-tool="{{ tool.slug }}"{% endblock %}
+
+{% block extra_scripts %}
+  <script src="/static/tools.js" defer></script>
+{% endblock %}
+
+{% block content %}
+{% if tool.kind == "hub" %}
+  <div class="tools-grid">
+    {% for slug, num, name, blurb in cards %}
+    <a href="/tools/{{ slug }}/"><span>{{ num }}</span><h3>{{ name }}</h3><p>{{ blurb }}</p></a>
+    {% endfor %}
+  </div>
+  <div class="tools-notes">
+    <article>
+      <h3>How the math stays honest</h3>
+      <p>Loaded employer cost is 1.3× the hourly rate. Year is 48 working weeks. Errors, rework, and lateness are ignored on purpose. That keeps the number conservative, not theatrical.</p>
+    </article>
+    <article>
+      <h3>What this is not</h3>
+      <p>Not a quote. Not certification. Not a claim of customers or revenue. The Noetfield app is a founder-operated alpha. A receipt is not certification.</p>
+    </article>
+  </div>
+{% elif tool.kind == "embed" %}
+  {% for slug, name in embed_blocks %}
+  <div class="tools-embed-block" data-embed-src="{{ origin }}/tools/{{ slug }}/?embed=1">
+    <h3>{{ name }}</h3>
+    <pre><code></code></pre>
+    <button type="button" class="btn-submit" data-copy-embed>Copy embed</button>
+  </div>
+  {% endfor %}
+  <p>If you advise operators, send them a check that is willing to say leave it alone. That is the whole point.</p>
+{% else %}
+  {% if tool.presets %}
+  <div class="tools-presets" aria-label="Example inputs">
+    {% for payload, label in tool.presets %}
+    <button type="button" data-preset='{{ payload }}'>{{ label }}</button>
+    {% endfor %}
+  </div>
+  {% endif %}
+  <div class="tools-layout">
+    <div class="tools-card">
+      <form id="nf-tools-form" class="tools-form" action="#" method="get">
+        {{ tool.form_html | safe }}
+      </form>
+    </div>
+    <aside class="tools-result" id="nf-tools-result" aria-live="polite">
+      <p class="tools-kicker">Honest answer</p>
+      <p class="tools-amount" data-result-amount{% if tool.hide_amount %} hidden{% endif %}>$0</p>
+      <h2 data-result-headline>Fill the four numbers.</h2>
+      <p data-result-body>The honest answer updates as you type. Under the hobby line, it will tell you to leave it alone.</p>
+      <p data-result-extra hidden></p>
+      <div class="tools-actions">
+        <a class="btn-submit" data-result-cta href="/tools/">See the other checks</a>
+        <button type="button" class="btn-submit" id="nf-tools-share">Copy share link</button>
+        <button type="button" class="btn-submit" id="nf-tools-copy">Copy result</button>
+      </div>
+    </aside>
+  </div>
+  <p class="tools-math">{{ tool.math_line }}</p>
+  <div class="tools-notes">
+    {% for heading, body in tool.notes %}
+    <article><h3>{{ heading }}</h3><p>{{ body }}</p></article>
+    {% endfor %}
+  </div>
+{% endif %}
+
+  <section class="tools-related" aria-labelledby="more-tools">
+    <p class="hero-label" id="more-tools">More free checks</p>
+    <div class="tools-grid">
+      {% for slug, num, name, blurb in cards %}
+      <a href="/tools/{{ slug }}/"><span>{{ num }}</span><h3>{{ name }}</h3><p>{{ blurb }}</p></a>
+      {% endfor %}
+    </div>
+  </section>
+{% endblock %}

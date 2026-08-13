@@ -8,8 +8,9 @@
   <title>{{ page.title }}</title>
   <meta name="description" content="{{ page.description }}">
   <link rel="stylesheet" href="/static/site.css">
+  {% block extra_head %}{% endblock %}
 </head>
-<body>
+<body class="{% block body_class %}{% endblock %}" {% block body_attrs %}{% endblock %}>
   <a class="skip-link" href="#main-content">Skip to main content</a>
 
   <header class="site-header">
@@ -21,6 +22,7 @@
       </button>
       <nav class="site-nav" id="site-nav" aria-label="Primary">
         <a href="/trust-ledger/"{% if active == "trust-ledger" %} class="active"{% endif %}>Trust Ledger</a>
+        <a href="/tools/"{% if active == "tools" %} class="active"{% endif %}>Tools</a>
         <a href="/gate/partners/"{% if active == "partners" %} class="active"{% endif %}>Partner Gateway</a>
         <a href="/privacy/"{% if active == "privacy" %} class="active"{% endif %}>Privacy</a>
       </nav>
@@ -41,6 +43,7 @@
     <div class="site-footer-inner">
       <p class="site-footer-brand">NOETFIELD SYSTEMS INC. // INSTITUTIONAL OPERATING SYSTEM</p>
       <nav class="site-footer-nav" aria-label="Legal">
+        <a href="/tools/">Tools</a>
         <a href="/privacy/">Privacy</a>
         <a href="/cookies/">Cookies</a>
         <a href="#" data-cookie-manage>Cookie preferences</a>
@@ -96,5 +99,6 @@
 
   <script src="/static/cookies.js" defer></script>
   <script src="/static/site.js" defer></script>
+  {% block extra_scripts %}{% endblock %}
 </body>
 </html>

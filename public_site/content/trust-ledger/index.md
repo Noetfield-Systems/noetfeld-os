@@ -8,6 +8,8 @@ hero_headline: "Continuous Trust Telemetry for Institutional Capital"
 hero_subheadline: "Transition from backward-looking audits to real-time, policy-bounded verification. The Trust Ledger records every state change across code, infrastructure, and asset layers with zero governance latency."
 ---
 
+Operators who want a one-minute check before they buy anything can use the free [operator tools](/tools/). Those pages will tell you to leave a process alone when the number is a hobby.
+
 Traditional engineering relies on retrospective auditing—verifying actions hours, days, or months after they occur. The **Noetfield Operating System (NOS) Trust Ledger** fundamentally shifts this dynamic by introducing continuous, deterministic trust telemetry.
 
 Every architectural state change, infrastructure mutation, and capital allocation across the system is intercepted, verified against the Noetfield Policy Language (NPL) core, and immutably recorded with near-zero governance latency.
