@@ -1,14 +1,13 @@
 {
   "schema": "noos-liveness-registry-witness-v1",
-  "at": "2026-08-14T03:09:10Z",
+  "at": "2026-08-14T07:59:11Z",
   "read_only": true,
   "mutates_registry": false,
   "witness_mode": true,
   "one_law": "Observe Supabase noos_loop_registry only \u2014 never call /tick or upsert rows.",
-  "stale_count": 2,
+  "stale_count": 1,
   "registry_rows": 20,
   "stale_loops": [
-    "factory_autorun",
     "role_circle"
   ],
   "probe_status": "FAILED_WITH_RECEIPT",
@@ -17,14 +16,13 @@
   "closure_token": "NOOS_LIVENESS_REGISTRY_WITNESS: yellow",
   "probe": {
     "status": "FAILED_WITH_RECEIPT",
-    "stale_count": 2,
+    "stale_count": 1,
     "registry_rows": 20,
     "stale_loops": [
-      "factory_autorun",
       "role_circle"
     ],
     "evidence": {
-      "observed_at": "2026-08-14T03:09:10+00:00",
+      "observed_at": "2026-08-14T07:59:11+00:00",
       "expected_rows": 14
     }
   },
