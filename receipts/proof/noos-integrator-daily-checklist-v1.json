@@ -1,6 +1,6 @@
 {
   "schema": "noos-integrator-daily-checklist-v1",
-  "at": "2026-08-16T13:33:12Z",
+  "at": "2026-08-16T19:22:18Z",
   "read_only": false,
   "one_law": "Daily authority = live probes at `at` \u2014 receipts on disk are snapshots only, never closure.",
   "architecture": {
@@ -56,7 +56,7 @@
       "status": "pass",
       "evidence": {
         "schema": "noos-motor-sustain-v1",
-        "at": "2026-08-16T13:33:19Z",
+        "at": "2026-08-16T19:22:25Z",
         "ok": true,
         "checks": {
           "cf_loop_fleet": {
@@ -72,7 +72,7 @@
           "railway_loop_runner": {
             "ok": true,
             "status": 200,
-            "body": "{\"ok\": true, \"schema\": \"noos-railway-loop-runner-health-v1\", \"service\": \"noos-loop-runner\", \"git_sha\": \"de4a7638b93f5083b048f557a24156b8b4cd3f74\", \"uptime_sec\": 2157972, \"execution_mode\": \"one_shot_http\", \"last_successful_liveness_write_at\": \"2026-08-16T13:30:41Z\", \"last_liveness_error\": null}"
+            "body": "{\"ok\": true, \"schema\": \"noos-railway-loop-runner-health-v1\", \"service\": \"noos-loop-runner\", \"git_sha\": \"de4a7638b93f5083b048f557a24156b8b4cd3f74\", \"uptime_sec\": 2178919, \"execution_mode\": \"one_shot_http\", \"last_successful_liveness_write_at\": \"2026-08-16T19:20:21Z\", \"last_liveness_error\": null}"
           },
           "cf_deadman": {
             "ok": true,
@@ -82,7 +82,7 @@
         },
         "liveness": {
           "ok": false,
-          "findings": 15,
+          "findings": 14,
           "stale_count": 1
         },
         "exit_code": 0
@@ -115,12 +115,6 @@
             "severity": "high",
             "summary": "Workflow is not healthy: BLOCKED_WITH_REASON",
             "detail": "supabase_not_configured"
-          },
-          {
-            "scope": "noos_loop_agent_nerve",
-            "severity": "high",
-            "summary": "Workflow SLO miss",
-            "detail": "success_rate_missing"
           },
           {
             "scope": "noos_loop_liveness_registry",
@@ -309,7 +303,7 @@
         "lanes_false": [
           "partner_access"
         ],
-        "cycles": 11023
+        "cycles": 11091
       },
       "fix": "cd TrustField-Technologies && ./scripts/railway_deploy_plan_worker.sh",
       "owner": "trustfield_worker"
