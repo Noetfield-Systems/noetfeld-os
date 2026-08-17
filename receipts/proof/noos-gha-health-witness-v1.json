@@ -1,6 +1,6 @@
 {
   "schema": "noos-gha-health-witness-v1",
-  "at": "2026-08-10T09:44:18Z",
+  "at": "2026-08-17T08:56:59Z",
   "ok": true,
   "overall_status": "green",
   "closure_token": "NOOS_GHA_HEALTH_WITNESS: green",
@@ -14,7 +14,7 @@
           "ok": false,
           "repo": "TrustField-Technologies",
           "workflow": null,
-          "error": "failed to get runs: HTTP 404: Not Found (https://api.github.com/repos/Noetfield-Systems/TrustField-Technologies/actions/runs?per_page=8&exclude_pull_requests=true)\n"
+          "error": "failed to get runs: HTTP 404: Not Found (https://api.github.com/repos/Noetfield-Systems/TrustField-Technologies/actions/runs?exclude_pull_requests=true&per_page=8)\n"
         },
         {
           "ok": true,
@@ -62,16 +62,16 @@
             "workflow": "noos-autorun-witness.yml",
             "ok": false,
             "billing_gate_precursor": false,
-            "duration_s": 20.0,
-            "run_id": 30812549853,
+            "duration_s": 15.0,
+            "run_id": 31377750497,
             "conclusion": "failure"
           },
           {
             "workflow": "noos-stack-health-receipt.yml",
             "ok": false,
             "billing_gate_precursor": false,
-            "duration_s": 53.0,
-            "run_id": 31369214996,
+            "duration_s": 37.0,
+            "run_id": 32006527815,
             "conclusion": "failure"
           }
         ],
