@@ -1,6 +1,6 @@
 {
   "schema": "noos-integrator-daily-checklist-v1",
-  "at": "2026-08-18T07:39:48Z",
+  "at": "2026-08-18T13:43:47Z",
   "read_only": false,
   "one_law": "Daily authority = live probes at `at` \u2014 receipts on disk are snapshots only, never closure.",
   "architecture": {
@@ -11,19 +11,19 @@
   "overall_status": "red",
   "summary": {
     "total": 12,
-    "pass": 9,
-    "fail": 3
+    "pass": 8,
+    "fail": 4
   },
   "checks": [
     {
       "id": "ICL-D01",
       "tier": "T0",
       "title": "NOOS vault + CF deploy token",
-      "status": "pass",
+      "status": "fail",
       "evidence": {
         "surfaces": {
           "vault": true,
-          "cf_deploy_token": true
+          "cf_deploy_token": false
         }
       },
       "fix": "make cloud-vault-promote && make cloud-secrets-sync",
@@ -56,7 +56,7 @@
       "status": "pass",
       "evidence": {
         "schema": "noos-motor-sustain-v1",
-        "at": "2026-08-18T07:39:55Z",
+        "at": "2026-08-18T13:43:55Z",
         "ok": true,
         "checks": {
           "cf_loop_fleet": {
@@ -72,7 +72,7 @@
           "railway_loop_runner": {
             "ok": true,
             "status": 200,
-            "body": "{\"ok\": true, \"schema\": \"noos-railway-loop-runner-health-v1\", \"service\": \"noos-loop-runner\", \"git_sha\": \"de4a7638b93f5083b048f557a24156b8b4cd3f74\", \"uptime_sec\": 2309569, \"execution_mode\": \"one_shot_http\", \"last_successful_liveness_write_at\": \"2026-08-18T07:35:20Z\", \"last_liveness_error\": null}"
+            "body": "{\"ok\": true, \"schema\": \"noos-railway-loop-runner-health-v1\", \"service\": \"noos-loop-runner\", \"git_sha\": \"de4a7638b93f5083b048f557a24156b8b4cd3f74\", \"uptime_sec\": 2331409, \"execution_mode\": \"one_shot_http\", \"last_successful_liveness_write_at\": \"2026-08-18T13:40:26Z\", \"last_liveness_error\": null}"
           },
           "cf_deadman": {
             "ok": true,
@@ -309,7 +309,7 @@
         "lanes_false": [
           "partner_access"
         ],
-        "cycles": 11510
+        "cycles": 11581
       },
       "fix": "cd TrustField-Technologies && ./scripts/railway_deploy_plan_worker.sh",
       "owner": "trustfield_worker"
@@ -332,16 +332,12 @@
             "billing_gate_failures_12s": 0,
             "latest_is_billing_gate": false,
             "latest_real_failure": false,
-            "real_failures": [
-              "NOOS stack health receipt: NOOS stack health receipt"
-            ],
+            "real_failures": [],
             "latest_conclusion": "",
             "recent_count": 8
           }
         ],
-        "real_failures_sample": [
-          "NOOS stack health receipt: NOOS stack health receipt"
-        ]
+        "real_failures_sample": []
       },
       "fix": "Enterprise billing: spending limit >$0 \u2014 then gh run rerun <id>. Real CI fails: fix workflow logs",
       "owner": "trustfield_worker"
@@ -362,6 +358,11 @@
     }
   ],
   "fix_queue": [
+    {
+      "id": "ICL-D01",
+      "fix": "make cloud-vault-promote && make cloud-secrets-sync",
+      "owner": "integrator"
+    },
     {
       "id": "ICL-D06",
       "fix": "make observe-trustfield-layers \u2014 route red layers to TrustField worker",
