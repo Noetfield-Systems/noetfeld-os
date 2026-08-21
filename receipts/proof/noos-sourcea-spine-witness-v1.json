@@ -1,20 +1,20 @@
 {
   "schema": "noos-sourcea-spine-witness-v1",
-  "at": "2026-08-20T07:12:00Z",
+  "at": "2026-08-21T07:12:42Z",
   "read_only": true,
   "mutates_spine": false,
   "witness_mode": true,
   "one_law": "Read-only portfolio-spine probe \u2014 phase_reconciler_v1 remains sole control authority.",
   "stale_threshold_minutes": 30.0,
-  "overall_status": "yellow",
-  "closure_token": "NOOS_SOURCEA_SPINE_WITNESS: yellow",
+  "overall_status": "green",
+  "closure_token": "NOOS_SOURCEA_SPINE_WITNESS: green",
   "sourcea_cloud_queue": {
-    "fresh": false,
-    "stale": true,
-    "status": "BLOCKED_WITH_REASON",
-    "reason": "stale_supabase_row",
-    "age_minutes": 40.8,
-    "observed_at": "2026-08-20T06:31:12+00:00",
+    "fresh": true,
+    "stale": false,
+    "status": "IDLE_NO_WORK",
+    "reason": "queue_head_unchanged",
+    "age_minutes": 11.45,
+    "observed_at": "2026-08-21T07:01:15+00:00",
     "queue_head": "CLOUD-SEC-8120"
   },
   "probes": {
@@ -22,23 +22,20 @@
       "id": "sourcea_cloud_queue",
       "title": "SourceA cloud queue",
       "plane": "SourceA",
-      "status": "BLOCKED_WITH_REASON",
-      "reason": "stale_supabase_row",
+      "status": "IDLE_NO_WORK",
+      "reason": "queue_head_unchanged",
       "queue_head": "CLOUD-SEC-8120",
       "heartbeat_event": "CRON_FIRED",
       "evidence": {
-        "observed_at": "2026-08-20T06:31:12+00:00",
+        "observed_at": "2026-08-21T07:01:15+00:00",
         "source_table": "telemetry_logs",
         "cycle_id": "cycle-20260706T174048Z-CLOUD-SEC-8120",
         "trigger_source": "cloudflare_cron",
         "truth_log_table": "truth_log",
-        "fallback": true,
-        "age_minutes": 40.8,
-        "stale_threshold_minutes": 30.0
+        "fallback": true
       },
-      "data_freshness": "STALE_DATA",
-      "age_minutes": 40.8,
-      "command": "Refresh sourcea_cloud_queue cloud writer; row older than 30.0m"
+      "data_freshness": "FRESH",
+      "age_minutes": 11.45
     },
     "sourcea_buyer_proof_verify": {
       "id": "sourcea_buyer_proof_verify",
@@ -47,15 +44,15 @@
       "status": "COMPLETE",
       "receipt_schema": "buyer-proof-hotfix-verify-v1",
       "evidence": {
-        "observed_at": "2026-08-20T06:46:02+00:00",
-        "cycle_id": "cycle-buyer-proof-hotfix-verify-v1-2026-08-20T06:46:02Z",
+        "observed_at": "2026-08-21T07:01:02+00:00",
+        "cycle_id": "cycle-buyer-proof-hotfix-verify-v1-2026-08-21T07:01:02Z",
         "verdict": "GREEN",
         "source_table": "cycle_receipts",
         "pending_count": 0,
         "fallback": null
       },
       "data_freshness": "FRESH",
-      "age_minutes": 25.97
+      "age_minutes": 11.67
     },
     "sourcea_recipe_queue_builder": {
       "id": "sourcea_recipe_queue_builder",
@@ -64,15 +61,15 @@
       "status": "COMPLETE",
       "receipt_schema": "client-proof-recipe-queue-v1",
       "evidence": {
-        "observed_at": "2026-08-20T06:46:02+00:00",
-        "cycle_id": "cycle-client-proof-recipe-queue-v1-2026-08-20T06:46:02Z",
+        "observed_at": "2026-08-21T07:01:02+00:00",
+        "cycle_id": "cycle-client-proof-recipe-queue-v1-2026-08-21T07:01:02Z",
         "verdict": "GREEN",
         "source_table": "cycle_receipts",
         "pending_count": 0,
         "fallback": null
       },
       "data_freshness": "FRESH",
-      "age_minutes": 25.97
+      "age_minutes": 11.67
     }
   },
   "handoff_owner": "sourcea_portfolio_spine_worker",
