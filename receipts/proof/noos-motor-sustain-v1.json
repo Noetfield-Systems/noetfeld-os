@@ -1,6 +1,6 @@
 {
   "schema": "noos-motor-sustain-v1",
-  "at": "2026-08-20T07:07:16Z",
+  "at": "2026-08-21T07:08:38Z",
   "ok": true,
   "checks": {
     "cf_loop_fleet": {
@@ -16,7 +16,7 @@
     "railway_loop_runner": {
       "ok": true,
       "status": 200,
-      "body": "{\"ok\": true, \"schema\": \"noos-railway-loop-runner-health-v1\", \"service\": \"noos-loop-runner\", \"git_sha\": \"de4a7638b93f5083b048f557a24156b8b4cd3f74\", \"uptime_sec\": 2480411, \"execution_mode\": \"one_shot_http\", \"last_successful_liveness_write_at\": \"2026-08-20T07:06:04Z\", \"last_liveness_error\": null}"
+      "body": "{\"ok\": true, \"schema\": \"noos-railway-loop-runner-health-v1\", \"service\": \"noos-loop-runner\", \"git_sha\": \"de4a7638b93f5083b048f557a24156b8b4cd3f74\", \"uptime_sec\": 2566892, \"execution_mode\": \"one_shot_http\", \"last_successful_liveness_write_at\": \"2026-08-21T07:06:04Z\", \"last_liveness_error\": null}"
     },
     "cf_deadman": {
       "ok": true,
@@ -26,7 +26,7 @@
   },
   "liveness": {
     "ok": false,
-    "findings": 17,
+    "findings": 14,
     "stale_count": 1
   }
 }
