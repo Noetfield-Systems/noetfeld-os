@@ -1,6 +1,6 @@
 {
   "schema": "noos-stack-automation-health-v1",
-  "at": "2026-08-21T07:26:39Z",
+  "at": "2026-08-22T07:17:30Z",
   "ok": false,
   "overall_status": "red",
   "closure_token": "NOOS_STACK_AUTOMATION: red",
@@ -71,7 +71,7 @@
   },
   "gha_health": {
     "schema": "noos-gha-run-health-v1",
-    "at": "2026-08-21T07:26:38Z",
+    "at": "2026-08-22T07:17:29Z",
     "ok": true,
     "overall_status": "green",
     "closure_token": "NOOS_GHA_HEALTH: green",
@@ -144,13 +144,14 @@
   "cf_motors": {
     "fleet_tick": "green",
     "deadman": "green",
-    "registry_overall": "yellow"
+    "registry_overall": "red"
   },
   "railway_plan_worker": {
     "url": "https://trustfield-plan-worker-production.up.railway.app/health",
     "status": "degraded",
     "last_cycle_ok": false,
     "lane_ok": {
+      "plan_matrix": true,
       "critic_circle": true,
       "deep_research": true,
       "trustfield_loops_intake": true,
@@ -160,6 +161,7 @@
       "partner_access": false
     },
     "lanes_run": [
+      "plan_matrix",
       "critic_circle",
       "deep_research",
       "trustfield_loops_intake",
@@ -171,20 +173,22 @@
   },
   "eleven_layers": {
     "green": 7,
-    "yellow": 2,
-    "red": 2,
+    "yellow": 1,
+    "red": 3,
     "unknown": 0
   },
   "trustfield_registry": {
-    "green": 28,
+    "green": 27,
     "yellow": 1,
-    "red": 5,
-    "last_ok_false": 0,
+    "red": 6,
+    "last_ok_false": 1,
     "missing_last_fired_at": 0,
     "probe_present": true,
     "deadman_status": "green",
     "gate_48h_status": "red",
-    "deadman_watched_red": []
+    "deadman_watched_red": [
+      "tf_cf_lane_partner_access_v1"
+    ]
   },
   "fix_queue": [
     "integrator_status",
