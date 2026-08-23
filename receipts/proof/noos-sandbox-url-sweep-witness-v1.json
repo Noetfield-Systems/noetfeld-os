@@ -1,6 +1,6 @@
 {
   "schema": "noos-sandbox-url-sweep-witness-v1",
-  "at": "2026-08-23T02:12:26Z",
+  "at": "2026-08-23T13:17:40Z",
   "read_only": true,
   "witness_mode": true,
   "one_law": "URL + trigger drift observe only \u2014 no deploy or product edits.",
@@ -18,7 +18,7 @@
         "OK gel-api health (200)",
         "OK gel-api readiness (200)"
       ],
-      "observed_at": "2026-08-23T02:12:26+00:00"
+      "observed_at": "2026-08-23T13:17:40+00:00"
     },
     "urls_checked": 6
   },
