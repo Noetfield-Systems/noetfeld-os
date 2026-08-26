@@ -1,23 +1,23 @@
 {
   "schema": "noos-trustfield-parallel-layers-observe-v1",
-  "at": "2026-08-26T18:07:42Z",
+  "at": "2026-08-26T23:43:39Z",
   "read_only": true,
   "one_law": "NOOS coordinates eleven TrustField layers \u2014 observe, enqueue, receipt. TrustField CF+Railway motors execute. One exclusive writer per state cell.",
   "layer_count": 11,
   "overall_status": "red",
   "summary": {
-    "green": 7,
-    "yellow": 1,
-    "red": 3,
+    "green": 0,
+    "yellow": 0,
+    "red": 11,
     "unknown": 0
   },
   "roi_intelligence": {
     "revenue_path_layers": 4,
-    "revenue_path_green": 3,
+    "revenue_path_green": 0,
     "hygiene_layers": 3,
-    "plan_worker_status": "degraded",
-    "plan_worker_last_cycle_ok": false,
-    "cycles_completed": 1348
+    "plan_worker_status": "unreachable",
+    "plan_worker_last_cycle_ok": null,
+    "cycles_completed": null
   },
   "fleet": {
     "cf_worker": "tf-cf-fleet-tick-v1",
@@ -29,28 +29,10 @@
   },
   "plan_worker": {
     "url": "https://trustfield-plan-worker-production.up.railway.app/health",
-    "status": "degraded",
-    "last_cycle_ok": false,
-    "lane_ok": {
-      "plan_matrix": true,
-      "critic_circle": true,
-      "deep_research": true,
-      "trustfield_loops_intake": true,
-      "self_heal": true,
-      "www_upgrade_queue": true,
-      "autorun_stack": true,
-      "partner_access": false
-    },
-    "lanes_run": [
-      "plan_matrix",
-      "critic_circle",
-      "deep_research",
-      "trustfield_loops_intake",
-      "self_heal",
-      "www_upgrade_queue",
-      "autorun_stack",
-      "partner_access"
-    ]
+    "status": "unreachable",
+    "last_cycle_ok": null,
+    "lane_ok": null,
+    "lanes_run": null
   },
   "registry_observe": {
     "overall_status": "red",
@@ -69,7 +51,8 @@
       "cf_loop_id": "tf_cf_deadman_v1",
       "railway_lane": null,
       "reasons": [
-        "registry_overall=red"
+        "registry_overall=red",
+        "plan_worker_unreachable"
       ]
     },
     {
@@ -77,12 +60,13 @@
       "name": "audit_adversarial",
       "value_class": "risk_reduction",
       "tier": "T0",
-      "status": "green",
-      "motor_state": "RUNNING",
+      "status": "red",
+      "motor_state": "FAILED_WITH_RECEIPT",
       "cf_loop_id": "tf_cf_lane_critic_circle_v1",
       "railway_lane": "critic_circle",
       "reasons": [
-        "staleness_state=data/trustfield_agent_read_staleness_alarm_v1.json"
+        "staleness_state=data/trustfield_agent_read_staleness_alarm_v1.json",
+        "plan_worker_unreachable"
       ]
     },
     {
@@ -90,12 +74,13 @@
       "name": "plan_matrix",
       "value_class": "revenue_path",
       "tier": "T1",
-      "status": "green",
-      "motor_state": "RUNNING",
+      "status": "red",
+      "motor_state": "FAILED_WITH_RECEIPT",
       "cf_loop_id": "tf_cf_lane_plan_matrix_v1",
       "railway_lane": "plan_matrix",
       "reasons": [
-        "railway_lane_plan_matrix=true"
+        "last_ok=false",
+        "plan_worker_unreachable"
       ]
     },
     {
@@ -103,13 +88,13 @@
       "name": "roi_intelligence",
       "value_class": "hygiene",
       "tier": "T1",
-      "status": "yellow",
-      "motor_state": "DEGRADED",
+      "status": "red",
+      "motor_state": "FAILED_WITH_RECEIPT",
       "cf_loop_id": "tf_cf_recipe_railway_plan_worker_v1",
       "railway_lane": "autorun_stack",
       "reasons": [
         "loop_id not in registry sample",
-        "plan_worker_degraded"
+        "plan_worker_unreachable"
       ]
     },
     {
@@ -117,12 +102,12 @@
       "name": "critic_circle",
       "value_class": "risk_reduction",
       "tier": "T0",
-      "status": "green",
-      "motor_state": "RUNNING",
+      "status": "red",
+      "motor_state": "FAILED_WITH_RECEIPT",
       "cf_loop_id": "tf_cf_lane_critic_circle_v1",
       "railway_lane": "critic_circle",
       "reasons": [
-        "railway_lane_critic_circle=true"
+        "plan_worker_unreachable"
       ]
     },
     {
@@ -130,12 +115,13 @@
       "name": "deep_research",
       "value_class": "proof_asset",
       "tier": "T2",
-      "status": "green",
-      "motor_state": "RUNNING",
+      "status": "red",
+      "motor_state": "FAILED_WITH_RECEIPT",
       "cf_loop_id": "tf_cf_lane_deep_research_v1",
       "railway_lane": "deep_research",
       "reasons": [
-        "railway_lane_deep_research=true"
+        "last_ok=false",
+        "plan_worker_unreachable"
       ]
     },
     {
@@ -143,23 +129,27 @@
       "name": "sandbox_execute",
       "value_class": "revenue_path",
       "tier": "T1",
-      "status": "green",
-      "motor_state": "RUNNING",
+      "status": "red",
+      "motor_state": "FAILED_WITH_RECEIPT",
       "cf_loop_id": "tf_cf_trustfield_loops_v1",
       "railway_lane": null,
-      "reasons": []
+      "reasons": [
+        "stale age_min=47.8 threshold_min=10.0",
+        "plan_worker_unreachable"
+      ]
     },
     {
       "layer_id": "TF-L08",
       "name": "self_heal",
       "value_class": "hygiene",
       "tier": "T0",
-      "status": "green",
-      "motor_state": "RUNNING",
+      "status": "red",
+      "motor_state": "FAILED_WITH_RECEIPT",
       "cf_loop_id": "tf_cf_lane_self_heal_v1",
       "railway_lane": "self_heal",
       "reasons": [
-        "railway_lane_self_heal=true"
+        "last_ok=false",
+        "plan_worker_unreachable"
       ]
     },
     {
@@ -167,12 +157,13 @@
       "name": "www_upgrade",
       "value_class": "revenue_path",
       "tier": "T1",
-      "status": "green",
-      "motor_state": "RUNNING",
+      "status": "red",
+      "motor_state": "FAILED_WITH_RECEIPT",
       "cf_loop_id": "tf_cf_lane_www_upgrade_queue_v1",
       "railway_lane": "www_upgrade_queue",
       "reasons": [
-        "railway_lane_www_upgrade_queue=true"
+        "last_ok=false",
+        "plan_worker_unreachable"
       ]
     },
     {
@@ -186,7 +177,7 @@
       "railway_lane": "partner_access",
       "reasons": [
         "last_ok=false",
-        "railway_lane_partner_access=false"
+        "plan_worker_unreachable"
       ]
     },
     {
@@ -199,7 +190,8 @@
       "cf_loop_id": "tf_cf_48h_gate_v1",
       "railway_lane": "autorun_stack",
       "reasons": [
-        "stale age_min=57152.8 threshold_min=4320.0"
+        "stale age_min=57488.8 threshold_min=4320.0",
+        "plan_worker_unreachable"
       ]
     }
   ],
