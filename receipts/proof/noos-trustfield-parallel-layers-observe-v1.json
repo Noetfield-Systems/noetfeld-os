@@ -1,6 +1,6 @@
 {
   "schema": "noos-trustfield-parallel-layers-observe-v1",
-  "at": "2026-08-25T20:49:42Z",
+  "at": "2026-08-26T02:01:35Z",
   "read_only": true,
   "one_law": "NOOS coordinates eleven TrustField layers \u2014 observe, enqueue, receipt. TrustField CF+Railway motors execute. One exclusive writer per state cell.",
   "layer_count": 11,
@@ -17,7 +17,7 @@
     "hygiene_layers": 3,
     "plan_worker_status": "degraded",
     "plan_worker_last_cycle_ok": false,
-    "cycles_completed": 1099
+    "cycles_completed": 1160
   },
   "fleet": {
     "cf_worker": "tf-cf-fleet-tick-v1",
@@ -198,7 +198,7 @@
       "cf_loop_id": "tf_cf_48h_gate_v1",
       "railway_lane": "autorun_stack",
       "reasons": [
-        "stale age_min=55874.8 threshold_min=4320.0"
+        "stale age_min=56186.7 threshold_min=4320.0"
       ]
     }
   ],
