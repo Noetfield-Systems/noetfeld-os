@@ -1,11 +1,11 @@
 {
   "schema": "noos-trustfield-observe-witness-v1",
-  "at": "2026-08-26T04:58:58Z",
+  "at": "2026-08-26T09:05:51Z",
   "read_only": true,
   "witness_mode": true,
   "one_law": "Observe + receipt only \u2014 TrustField worker owns product/registry writes.",
-  "overall_status": "yellow",
-  "closure_token": "NOOS_TF_OBSERVE_WITNESS: yellow",
+  "overall_status": "red",
+  "closure_token": "NOOS_TF_OBSERVE_WITNESS: red",
   "checks": {
     "ICL-D06": {
       "title": "TrustField 11 layers (no red)",
@@ -13,42 +13,44 @@
       "overall": "red",
       "summary": {
         "green": 7,
-        "yellow": 2,
-        "red": 2,
+        "yellow": 1,
+        "red": 3,
         "unknown": 0
       },
       "closure": "NOOS_TF_11_LAYERS: red"
     },
     "ICL-D07": {
       "title": "TrustField loop registry (deadman motors green)",
-      "ok": true,
-      "overall": "yellow",
+      "ok": false,
+      "overall": "red",
       "summary": {
-        "green": 28,
+        "green": 27,
         "yellow": 1,
-        "red": 5,
-        "last_ok_false": 0,
+        "red": 6,
+        "last_ok_false": 1,
         "missing_last_fired_at": 0,
         "probe_present": true,
         "deadman_status": "green",
         "gate_48h_status": "red",
-        "deadman_watched_red": []
+        "deadman_watched_red": [
+          "tf_cf_lane_partner_access_v1"
+        ]
       },
-      "closure": "NOOS_TF_LOOP_REGISTRY_OBSERVE: yellow",
+      "closure": "NOOS_TF_LOOP_REGISTRY_OBSERVE: red",
       "witness_relaxed": true
     }
   },
   "layers": {
     "schema": "noos-trustfield-parallel-layers-observe-v1",
-    "at": "2026-08-26T04:58:58Z",
+    "at": "2026-08-26T09:05:51Z",
     "read_only": true,
     "one_law": "NOOS coordinates eleven TrustField layers \u2014 observe, enqueue, receipt. TrustField CF+Railway motors execute. One exclusive writer per state cell.",
     "layer_count": 11,
     "overall_status": "red",
     "summary": {
       "green": 7,
-      "yellow": 2,
-      "red": 2,
+      "yellow": 1,
+      "red": 3,
       "unknown": 0
     },
     "roi_intelligence": {
@@ -57,7 +59,7 @@
       "hygiene_layers": 3,
       "plan_worker_status": "degraded",
       "plan_worker_last_cycle_ok": false,
-      "cycles_completed": 1194
+      "cycles_completed": 1242
     },
     "fleet": {
       "cf_worker": "tf-cf-fleet-tick-v1",
@@ -93,7 +95,7 @@
       ]
     },
     "registry_observe": {
-      "overall_status": "yellow",
+      "overall_status": "red",
       "row_count": 34,
       "probe_present": true,
       "deadman_status": "green"
@@ -104,12 +106,12 @@
         "name": "observe_nerve",
         "value_class": "hygiene",
         "tier": "T0",
-        "status": "yellow",
-        "motor_state": "DEGRADED",
+        "status": "red",
+        "motor_state": "FAILED_WITH_RECEIPT",
         "cf_loop_id": "tf_cf_deadman_v1",
         "railway_lane": null,
         "reasons": [
-          "registry_overall=yellow"
+          "registry_overall=red"
         ]
       },
       {
@@ -225,6 +227,7 @@
         "cf_loop_id": "tf_cf_lane_partner_access_v1",
         "railway_lane": "partner_access",
         "reasons": [
+          "last_ok=false",
           "railway_lane_partner_access=false"
         ]
       },
@@ -238,7 +241,7 @@
         "cf_loop_id": "tf_cf_48h_gate_v1",
         "railway_lane": "autorun_stack",
         "reasons": [
-          "stale age_min=56364.1 threshold_min=4320.0"
+          "stale age_min=56611.0 threshold_min=4320.0"
         ]
       }
     ],
@@ -255,7 +258,7 @@
   },
   "registry": {
     "schema": "noos-trustfield-loop-registry-observe-v1.1",
-    "at": "2026-08-26T04:58:58Z",
+    "at": "2026-08-26T09:05:51Z",
     "read_only": true,
     "one_law": "NOOS observes TrustField registry; TrustField worker owns writes and probe seed.",
     "plane": "TrustField-Technologies",
@@ -263,17 +266,19 @@
     "supabase_project_ref": "tkgpapowwplupyekpivy",
     "registry_read_ok": true,
     "row_count": 34,
-    "overall_status": "yellow",
+    "overall_status": "red",
     "summary": {
-      "green": 28,
+      "green": 27,
       "yellow": 1,
-      "red": 5,
-      "last_ok_false": 0,
+      "red": 6,
+      "last_ok_false": 1,
       "missing_last_fired_at": 0,
       "probe_present": true,
       "deadman_status": "green",
       "gate_48h_status": "red",
-      "deadman_watched_red": []
+      "deadman_watched_red": [
+        "tf_cf_lane_partner_access_v1"
+      ]
     },
     "gates": {
       "w3_probe": {
@@ -287,11 +292,11 @@
           "last_ok": true,
           "last_fired_at": "2026-07-18T01:33:26+00:00",
           "interval_seconds": null,
-          "age_minutes": 56365.55,
+          "age_minutes": 56612.42,
           "stale_threshold_minutes": 10080,
           "deadman_watched": false,
           "status": "red",
-          "reason": "stale age_min=56365.5 threshold_min=10080.0"
+          "reason": "stale age_min=56612.4 threshold_min=10080.0"
         },
         "closure": "TF_LOOP_REGISTRY_LIVENESS: fail"
       },
@@ -303,15 +308,17 @@
           "host": "cloudflare",
           "value_class": "GUARD",
           "last_ok": true,
-          "last_fired_at": "2026-08-26T04:50:58.975+00:00",
+          "last_fired_at": "2026-08-26T09:01:01.027+00:00",
           "interval_seconds": 600,
-          "age_minutes": 8.0,
+          "age_minutes": 4.84,
           "stale_threshold_minutes": 20.0,
           "deadman_watched": true,
           "status": "green",
           "reason": "fresh"
         },
-        "watched_motors_red": []
+        "watched_motors_red": [
+          "tf_cf_lane_partner_access_v1"
+        ]
       },
       "w10_48h_gate": {
         "loop_id": "tf_cf_48h_gate_v1",
@@ -323,25 +330,25 @@
           "last_ok": true,
           "last_fired_at": "2026-07-18T01:34:53.499825+00:00",
           "interval_seconds": null,
-          "age_minutes": 56364.09,
+          "age_minutes": 56610.96,
           "stale_threshold_minutes": 4320,
           "deadman_watched": false,
           "status": "red",
-          "reason": "stale age_min=56364.1 threshold_min=4320.0"
+          "reason": "stale age_min=56611.0 threshold_min=4320.0"
         },
         "note": "W10 uses 72h stale warn \u2014 2.5h age is green under W10 SLO."
       }
     },
     "rows": [
       {
-        "loop_id": "tf_cf_fleet_tick_v1",
-        "name": "CF fleet tick dispatcher",
-        "host": "cloudflare",
+        "loop_id": "tf_cf_lane_deep_research_v1",
+        "name": "CF lane deep_research",
+        "host": "railway",
         "value_class": "GUARD",
         "last_ok": true,
-        "last_fired_at": "2026-08-26T04:56:02.587+00:00",
+        "last_fired_at": "2026-08-26T09:02:26+00:00",
         "interval_seconds": 300,
-        "age_minutes": 2.94,
+        "age_minutes": 3.42,
         "stale_threshold_minutes": 10.0,
         "deadman_watched": true,
         "status": "green",
@@ -350,40 +357,12 @@
       {
         "loop_id": "tf_cf_lane_autorun_stack_v1",
         "name": "CF lane autorun_stack",
-        "host": "cloudflare",
+        "host": "railway",
         "value_class": "GUARD",
         "last_ok": true,
-        "last_fired_at": "2026-08-26T04:56:02.334+00:00",
+        "last_fired_at": "2026-08-26T09:02:25+00:00",
         "interval_seconds": 300,
-        "age_minutes": 2.94,
-        "stale_threshold_minutes": 10.0,
-        "deadman_watched": true,
-        "status": "green",
-        "reason": "fresh"
-      },
-      {
-        "loop_id": "tf_cf_lane_www_upgrade_queue_v1",
-        "name": "CF lane www_upgrade_queue",
-        "host": "cloudflare",
-        "value_class": "GUARD",
-        "last_ok": true,
-        "last_fired_at": "2026-08-26T04:56:02.055+00:00",
-        "interval_seconds": 300,
-        "age_minutes": 2.95,
-        "stale_threshold_minutes": 10.0,
-        "deadman_watched": true,
-        "status": "green",
-        "reason": "fresh"
-      },
-      {
-        "loop_id": "tf_cf_lane_plan_matrix_v1",
-        "name": "CF lane plan_matrix",
-        "host": "cloudflare",
-        "value_class": "GUARD",
-        "last_ok": true,
-        "last_fired_at": "2026-08-26T04:56:01.789+00:00",
-        "interval_seconds": 300,
-        "age_minutes": 2.95,
+        "age_minutes": 3.44,
         "stale_threshold_minutes": 10.0,
         "deadman_watched": true,
         "status": "green",
@@ -392,40 +371,26 @@
       {
         "loop_id": "tf_cf_lane_partner_access_v1",
         "name": "CF lane partner_access",
-        "host": "cloudflare",
+        "host": "railway",
         "value_class": "GUARD",
-        "last_ok": true,
-        "last_fired_at": "2026-08-26T04:56:01.523+00:00",
+        "last_ok": false,
+        "last_fired_at": "2026-08-26T09:02:25+00:00",
         "interval_seconds": 300,
-        "age_minutes": 2.96,
+        "age_minutes": 3.44,
         "stale_threshold_minutes": 10.0,
         "deadman_watched": true,
-        "status": "green",
-        "reason": "fresh"
-      },
-      {
-        "loop_id": "tf_cf_lane_deep_research_v1",
-        "name": "CF lane deep_research",
-        "host": "cloudflare",
-        "value_class": "GUARD",
-        "last_ok": true,
-        "last_fired_at": "2026-08-26T04:56:01.249+00:00",
-        "interval_seconds": 300,
-        "age_minutes": 2.96,
-        "stale_threshold_minutes": 10.0,
-        "deadman_watched": true,
-        "status": "green",
-        "reason": "fresh"
+        "status": "red",
+        "reason": "last_ok=false"
       },
       {
         "loop_id": "tf_cf_lane_critic_circle_v1",
         "name": "CF lane critic_circle",
-        "host": "cloudflare",
+        "host": "railway",
         "value_class": "GUARD",
         "last_ok": true,
-        "last_fired_at": "2026-08-26T04:56:00.969+00:00",
+        "last_fired_at": "2026-08-26T09:02:25+00:00",
         "interval_seconds": 300,
-        "age_minutes": 2.97,
+        "age_minutes": 3.44,
         "stale_threshold_minutes": 10.0,
         "deadman_watched": true,
         "status": "green",
@@ -434,12 +399,12 @@
       {
         "loop_id": "tf_cf_lane_self_heal_v1",
         "name": "CF lane self_heal",
-        "host": "cloudflare",
+        "host": "railway",
         "value_class": "GUARD",
         "last_ok": true,
-        "last_fired_at": "2026-08-26T04:56:00.664+00:00",
+        "last_fired_at": "2026-08-26T09:02:25+00:00",
         "interval_seconds": 300,
-        "age_minutes": 2.97,
+        "age_minutes": 3.44,
         "stale_threshold_minutes": 10.0,
         "deadman_watched": true,
         "status": "green",
@@ -451,24 +416,38 @@
         "host": "railway",
         "value_class": "GUARD",
         "last_ok": true,
-        "last_fired_at": "2026-08-26T04:55:49+00:00",
+        "last_fired_at": "2026-08-26T09:02:25+00:00",
         "interval_seconds": 300,
-        "age_minutes": 3.16,
+        "age_minutes": 3.44,
         "stale_threshold_minutes": 10.0,
         "deadman_watched": false,
         "status": "green",
         "reason": "fresh"
       },
       {
-        "loop_id": "tf_cf_deadman_v1",
-        "name": "CF deadman liveness",
-        "host": "cloudflare",
+        "loop_id": "tf_cf_lane_www_upgrade_queue_v1",
+        "name": "CF lane www_upgrade_queue",
+        "host": "railway",
         "value_class": "GUARD",
         "last_ok": true,
-        "last_fired_at": "2026-08-26T04:50:58.975+00:00",
-        "interval_seconds": 600,
-        "age_minutes": 8.0,
-        "stale_threshold_minutes": 20.0,
+        "last_fired_at": "2026-08-26T09:02:24+00:00",
+        "interval_seconds": 300,
+        "age_minutes": 3.45,
+        "stale_threshold_minutes": 10.0,
+        "deadman_watched": true,
+        "status": "green",
+        "reason": "fresh"
+      },
+      {
+        "loop_id": "tf_cf_lane_plan_matrix_v1",
+        "name": "CF lane plan_matrix",
+        "host": "railway",
+        "value_class": "GUARD",
+        "last_ok": true,
+        "last_fired_at": "2026-08-26T09:02:24+00:00",
+        "interval_seconds": 300,
+        "age_minutes": 3.45,
+        "stale_threshold_minutes": 10.0,
         "deadman_watched": true,
         "status": "green",
         "reason": "fresh"
@@ -479,9 +458,9 @@
         "host": "cloudflare",
         "value_class": "GUARD",
         "last_ok": true,
-        "last_fired_at": "2026-08-26T04:46:07.185+00:00",
+        "last_fired_at": "2026-08-26T09:01:11.829+00:00",
         "interval_seconds": 900,
-        "age_minutes": 12.86,
+        "age_minutes": 4.66,
         "stale_threshold_minutes": 30.0,
         "deadman_watched": false,
         "status": "green",
@@ -493,9 +472,9 @@
         "host": "cloudflare",
         "value_class": "GUARD",
         "last_ok": true,
-        "last_fired_at": "2026-08-26T04:46:07.05+00:00",
+        "last_fired_at": "2026-08-26T09:01:11.7+00:00",
         "interval_seconds": 900,
-        "age_minutes": 12.86,
+        "age_minutes": 4.66,
         "stale_threshold_minutes": 30.0,
         "deadman_watched": false,
         "status": "green",
@@ -507,9 +486,9 @@
         "host": "cloudflare",
         "value_class": "GUARD",
         "last_ok": true,
-        "last_fired_at": "2026-08-26T04:46:06.752+00:00",
+        "last_fired_at": "2026-08-26T09:01:11.342+00:00",
         "interval_seconds": 900,
-        "age_minutes": 12.87,
+        "age_minutes": 4.66,
         "stale_threshold_minutes": 30.0,
         "deadman_watched": false,
         "status": "green",
@@ -521,9 +500,9 @@
         "host": "cloudflare",
         "value_class": "GUARD",
         "last_ok": true,
-        "last_fired_at": "2026-08-26T04:46:06.44+00:00",
+        "last_fired_at": "2026-08-26T09:01:10.965+00:00",
         "interval_seconds": 900,
-        "age_minutes": 12.87,
+        "age_minutes": 4.67,
         "stale_threshold_minutes": 30.0,
         "deadman_watched": false,
         "status": "green",
@@ -535,9 +514,9 @@
         "host": "cloudflare",
         "value_class": "GUARD",
         "last_ok": true,
-        "last_fired_at": "2026-08-26T04:46:05.835+00:00",
+        "last_fired_at": "2026-08-26T09:01:10.355+00:00",
         "interval_seconds": 900,
-        "age_minutes": 12.88,
+        "age_minutes": 4.68,
         "stale_threshold_minutes": 30.0,
         "deadman_watched": false,
         "status": "green",
@@ -549,9 +528,9 @@
         "host": "cloudflare",
         "value_class": "GUARD",
         "last_ok": true,
-        "last_fired_at": "2026-08-26T04:46:05.441+00:00",
+        "last_fired_at": "2026-08-26T09:01:09.941+00:00",
         "interval_seconds": 900,
-        "age_minutes": 12.89,
+        "age_minutes": 4.69,
         "stale_threshold_minutes": 30.0,
         "deadman_watched": false,
         "status": "green",
@@ -563,9 +542,9 @@
         "host": "cloudflare",
         "value_class": "GUARD",
         "last_ok": true,
-        "last_fired_at": "2026-08-26T04:46:04.884+00:00",
+        "last_fired_at": "2026-08-26T09:01:09.316+00:00",
         "interval_seconds": 900,
-        "age_minutes": 12.9,
+        "age_minutes": 4.7,
         "stale_threshold_minutes": 30.0,
         "deadman_watched": false,
         "status": "green",
@@ -577,9 +556,9 @@
         "host": "cloudflare",
         "value_class": "GUARD",
         "last_ok": true,
-        "last_fired_at": "2026-08-26T04:46:04.475+00:00",
+        "last_fired_at": "2026-08-26T09:01:08.908+00:00",
         "interval_seconds": 900,
-        "age_minutes": 12.91,
+        "age_minutes": 4.7,
         "stale_threshold_minutes": 30.0,
         "deadman_watched": false,
         "status": "green",
@@ -591,9 +570,9 @@
         "host": "cloudflare",
         "value_class": "GUARD",
         "last_ok": true,
-        "last_fired_at": "2026-08-26T04:46:04.054+00:00",
+        "last_fired_at": "2026-08-26T09:01:08.265+00:00",
         "interval_seconds": 900,
-        "age_minutes": 12.91,
+        "age_minutes": 4.72,
         "stale_threshold_minutes": 30.0,
         "deadman_watched": false,
         "status": "green",
@@ -605,9 +584,9 @@
         "host": "cloudflare",
         "value_class": "GUARD",
         "last_ok": true,
-        "last_fired_at": "2026-08-26T04:46:03.532+00:00",
+        "last_fired_at": "2026-08-26T09:01:07.402+00:00",
         "interval_seconds": 900,
-        "age_minutes": 12.92,
+        "age_minutes": 4.73,
         "stale_threshold_minutes": 30.0,
         "deadman_watched": false,
         "status": "green",
@@ -619,9 +598,9 @@
         "host": "cloudflare",
         "value_class": "GUARD",
         "last_ok": true,
-        "last_fired_at": "2026-08-26T04:46:03.064+00:00",
+        "last_fired_at": "2026-08-26T09:01:06.893+00:00",
         "interval_seconds": 900,
-        "age_minutes": 12.93,
+        "age_minutes": 4.74,
         "stale_threshold_minutes": 30.0,
         "deadman_watched": false,
         "status": "green",
@@ -633,9 +612,9 @@
         "host": "cloudflare",
         "value_class": "GUARD",
         "last_ok": true,
-        "last_fired_at": "2026-08-26T04:46:02.634+00:00",
+        "last_fired_at": "2026-08-26T09:01:06.256+00:00",
         "interval_seconds": 900,
-        "age_minutes": 12.94,
+        "age_minutes": 4.75,
         "stale_threshold_minutes": 30.0,
         "deadman_watched": false,
         "status": "green",
@@ -647,9 +626,9 @@
         "host": "cloudflare",
         "value_class": "GUARD",
         "last_ok": true,
-        "last_fired_at": "2026-08-26T04:46:01.799+00:00",
+        "last_fired_at": "2026-08-26T09:01:05.157+00:00",
         "interval_seconds": 900,
-        "age_minutes": 12.95,
+        "age_minutes": 4.77,
         "stale_threshold_minutes": 30.0,
         "deadman_watched": false,
         "status": "green",
@@ -661,11 +640,25 @@
         "host": "cloudflare",
         "value_class": "GUARD",
         "last_ok": true,
-        "last_fired_at": "2026-08-26T04:46:01.468+00:00",
+        "last_fired_at": "2026-08-26T09:01:04.705+00:00",
         "interval_seconds": 900,
-        "age_minutes": 12.96,
+        "age_minutes": 4.77,
         "stale_threshold_minutes": 30.0,
         "deadman_watched": false,
+        "status": "green",
+        "reason": "fresh"
+      },
+      {
+        "loop_id": "tf_cf_fleet_tick_v1",
+        "name": "CF fleet tick dispatcher",
+        "host": "cloudflare",
+        "value_class": "GUARD",
+        "last_ok": true,
+        "last_fired_at": "2026-08-26T09:01:04.359+00:00",
+        "interval_seconds": 300,
+        "age_minutes": 4.78,
+        "stale_threshold_minutes": 10.0,
+        "deadman_watched": true,
         "status": "green",
         "reason": "fresh"
       },
@@ -675,9 +668,9 @@
         "host": "cloudflare",
         "value_class": "GUARD",
         "last_ok": true,
-        "last_fired_at": "2026-08-26T04:46:00.9+00:00",
+        "last_fired_at": "2026-08-26T09:01:04.003+00:00",
         "interval_seconds": 900,
-        "age_minutes": 12.97,
+        "age_minutes": 4.79,
         "stale_threshold_minutes": 30.0,
         "deadman_watched": false,
         "status": "green",
@@ -689,9 +682,9 @@
         "host": "cloudflare",
         "value_class": "GUARD",
         "last_ok": true,
-        "last_fired_at": "2026-08-26T04:46:00.578+00:00",
+        "last_fired_at": "2026-08-26T09:01:03.618+00:00",
         "interval_seconds": 900,
-        "age_minutes": 12.97,
+        "age_minutes": 4.79,
         "stale_threshold_minutes": 30.0,
         "deadman_watched": false,
         "status": "green",
@@ -703,9 +696,9 @@
         "host": "cloudflare",
         "value_class": "GUARD",
         "last_ok": true,
-        "last_fired_at": "2026-08-26T04:45:59.651+00:00",
+        "last_fired_at": "2026-08-26T09:01:02.667+00:00",
         "interval_seconds": 900,
-        "age_minutes": 12.99,
+        "age_minutes": 4.81,
         "stale_threshold_minutes": 30.0,
         "deadman_watched": false,
         "status": "green",
@@ -717,11 +710,25 @@
         "host": "cloudflare",
         "value_class": "GUARD",
         "last_ok": true,
-        "last_fired_at": "2026-08-26T04:45:58.844+00:00",
+        "last_fired_at": "2026-08-26T09:01:01.744+00:00",
         "interval_seconds": 900,
-        "age_minutes": 13.0,
+        "age_minutes": 4.82,
         "stale_threshold_minutes": 30.0,
         "deadman_watched": false,
+        "status": "green",
+        "reason": "fresh"
+      },
+      {
+        "loop_id": "tf_cf_deadman_v1",
+        "name": "CF deadman liveness",
+        "host": "cloudflare",
+        "value_class": "GUARD",
+        "last_ok": true,
+        "last_fired_at": "2026-08-26T09:01:01.027+00:00",
+        "interval_seconds": 600,
+        "age_minutes": 4.84,
+        "stale_threshold_minutes": 20.0,
+        "deadman_watched": true,
         "status": "green",
         "reason": "fresh"
       },
@@ -733,11 +740,11 @@
         "last_ok": true,
         "last_fired_at": "2026-07-18T01:34:53.499825+00:00",
         "interval_seconds": null,
-        "age_minutes": 56364.09,
+        "age_minutes": 56610.96,
         "stale_threshold_minutes": 4320,
         "deadman_watched": false,
         "status": "red",
-        "reason": "stale age_min=56364.1 threshold_min=4320.0"
+        "reason": "stale age_min=56611.0 threshold_min=4320.0"
       },
       {
         "loop_id": "tf_cf_sg_registry_v1",
@@ -747,11 +754,11 @@
         "last_ok": true,
         "last_fired_at": "2026-07-18T01:34:50.427074+00:00",
         "interval_seconds": null,
-        "age_minutes": 56364.14,
+        "age_minutes": 56611.01,
         "stale_threshold_minutes": 10.0,
         "deadman_watched": false,
         "status": "red",
-        "reason": "stale age_min=56364.1 threshold_min=10.0"
+        "reason": "stale age_min=56611.0 threshold_min=10.0"
       },
       {
         "loop_id": "tf_cf_gha_secondary_v1",
@@ -761,11 +768,11 @@
         "last_ok": true,
         "last_fired_at": "2026-07-18T01:33:41.142509+00:00",
         "interval_seconds": 21600,
-        "age_minutes": 56365.3,
+        "age_minutes": 56612.17,
         "stale_threshold_minutes": 720.0,
         "deadman_watched": false,
         "status": "red",
-        "reason": "stale age_min=56365.3 threshold_min=720.0"
+        "reason": "stale age_min=56612.2 threshold_min=720.0"
       },
       {
         "loop_id": "tf_w3_supabase_sink_probe_v1",
@@ -775,11 +782,11 @@
         "last_ok": true,
         "last_fired_at": "2026-07-18T01:33:26+00:00",
         "interval_seconds": null,
-        "age_minutes": 56365.55,
+        "age_minutes": 56612.42,
         "stale_threshold_minutes": 10080,
         "deadman_watched": false,
         "status": "red",
-        "reason": "stale age_min=56365.5 threshold_min=10080.0"
+        "reason": "stale age_min=56612.4 threshold_min=10080.0"
       },
       {
         "loop_id": "tf_cf_lane_plan_lane_sandboxes_v1",
@@ -789,11 +796,11 @@
         "last_ok": true,
         "last_fired_at": "2026-07-12T05:32:24+00:00",
         "interval_seconds": 300,
-        "age_minutes": 64766.58,
+        "age_minutes": 65013.45,
         "stale_threshold_minutes": 10.0,
         "deadman_watched": false,
         "status": "red",
-        "reason": "stale age_min=64766.6 threshold_min=10.0"
+        "reason": "stale age_min=65013.5 threshold_min=10.0"
       },
       {
         "loop_id": "tf_cf_www_pages_v1",
@@ -803,21 +810,22 @@
         "last_ok": true,
         "last_fired_at": "2026-07-07T07:19:57+00:00",
         "interval_seconds": null,
-        "age_minutes": 71859.03,
+        "age_minutes": 72105.9,
         "stale_threshold_minutes": 10.0,
         "deadman_watched": false,
         "status": "yellow",
-        "reason": "deferred_migration age_min=71859.0"
+        "reason": "deferred_migration age_min=72105.9"
       }
     ],
     "fails": [
-      "probe row red: stale age_min=56365.5 threshold_min=10080.0"
+      "probe row red: stale age_min=56612.4 threshold_min=10080.0",
+      "deadman-watched motor red: tf_cf_lane_partner_access_v1 (last_ok=false)"
     ],
     "repair_commands": [
       "TrustField worker: cd TrustField-Technologies && ./scripts/verify_tf_loop_registry_liveness.sh",
       "TrustField worker: cd TrustField-Technologies && ./scripts/verify_cf_deadman_v1.sh"
     ],
-    "closure_token": "NOOS_TF_LOOP_REGISTRY_OBSERVE: yellow",
+    "closure_token": "NOOS_TF_LOOP_REGISTRY_OBSERVE: red",
     "receipt_path": "/home/runner/work/noetfeld-os/noetfeld-os/receipts/proof/noos-trustfield-loop-registry-observe-v1.json",
     "exit_code": 1
   },
@@ -825,6 +833,10 @@
   "fix_queue": [
     {
       "id": "ICL-D06",
+      "fix": "Route to TrustField worker \u2014 NOOS does not edit TrustField product/www"
+    },
+    {
+      "id": "ICL-D07",
       "fix": "Route to TrustField worker \u2014 NOOS does not edit TrustField product/www"
     }
   ],
