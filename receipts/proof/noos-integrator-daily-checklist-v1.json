@@ -1,6 +1,6 @@
 {
   "schema": "noos-integrator-daily-checklist-v1",
-  "at": "2026-08-26T21:42:11Z",
+  "at": "2026-08-27T18:08:47Z",
   "read_only": false,
   "one_law": "Daily authority = live probes at `at` \u2014 receipts on disk are snapshots only, never closure.",
   "architecture": {
@@ -8,11 +8,11 @@
     "secondary": "github_actions_enterprise",
     "tertiary": "railway_plan_worker"
   },
-  "overall_status": "yellow",
+  "overall_status": "red",
   "summary": {
     "total": 12,
-    "pass": 10,
-    "fail": 2
+    "pass": 8,
+    "fail": 4
   },
   "checks": [
     {
@@ -53,11 +53,11 @@
       "id": "ICL-D03",
       "tier": "T0",
       "title": "NOOS motor sustain (CF autorun tick)",
-      "status": "pass",
+      "status": "fail",
       "evidence": {
         "schema": "noos-motor-sustain-v1",
-        "at": "2026-08-26T21:42:20Z",
-        "ok": true,
+        "at": "2026-08-27T18:08:56Z",
+        "ok": false,
         "checks": {
           "cf_loop_fleet": {
             "ok": true,
@@ -70,9 +70,9 @@
             "body": "{\"ok\":true,\"schema\":\"noos-factory-autorun-tick-health-v1\",\"service\":\"noos-factory-autorun-tick-v1\",\"cron\":\"*/10 * * * *\",\"github_token_ready\":true,\"github_repo\":\"kazemnezhadsina144-dot/noetfeld-os\",\"event_type\":\"noos_factory_autorun_tick\"}"
           },
           "railway_loop_runner": {
-            "ok": true,
-            "status": 200,
-            "body": "{\"ok\": true, \"schema\": \"noos-railway-loop-runner-health-v1\", \"service\": \"noos-loop-runner\", \"git_sha\": \"de4a7638b93f5083b048f557a24156b8b4cd3f74\", \"uptime_sec\": 428167, \"execution_mode\": \"one_shot_http\", \"last_successful_liveness_write_at\": \"2026-08-26T21:41:07Z\", \"last_liveness_error\": null}"
+            "ok": false,
+            "status": 404,
+            "error": "HTTP Error 404: Not Found"
           },
           "cf_deadman": {
             "ok": true,
@@ -82,10 +82,10 @@
         },
         "liveness": {
           "ok": false,
-          "findings": 15,
-          "stale_count": 1
+          "findings": 24,
+          "stale_count": 2
         },
-        "exit_code": 0
+        "exit_code": 1
       },
       "fix": "make motor-sustain-verify && make integrator-repair-autorun",
       "owner": "integrator"
@@ -117,7 +117,55 @@
             "detail": "supabase_not_configured"
           },
           {
+            "scope": "noos_factory_autorun",
+            "severity": "high",
+            "summary": "Workflow is not healthy: BLOCKED_WITH_REASON",
+            "detail": "stale_supabase_row"
+          },
+          {
+            "scope": "noos_worker_inbox",
+            "severity": "high",
+            "summary": "Workflow is not healthy: BLOCKED_WITH_REASON",
+            "detail": "stale_supabase_row"
+          },
+          {
+            "scope": "noos_loop_inbox",
+            "severity": "high",
+            "summary": "Workflow SLO miss",
+            "detail": "success_rate_missing"
+          },
+          {
+            "scope": "noos_loop_runtime",
+            "severity": "high",
+            "summary": "Workflow SLO miss",
+            "detail": "success_rate_missing"
+          },
+          {
+            "scope": "noos_loop_surface",
+            "severity": "high",
+            "summary": "Workflow SLO miss",
+            "detail": "success_rate_missing"
+          },
+          {
+            "scope": "noos_loop_chain",
+            "severity": "high",
+            "summary": "Workflow SLO miss",
+            "detail": "success_rate_missing"
+          },
+          {
+            "scope": "noos_loop_self_heal",
+            "severity": "high",
+            "summary": "Workflow SLO miss",
+            "detail": "success_rate_missing"
+          },
+          {
             "scope": "noos_loop_agent_nerve",
+            "severity": "high",
+            "summary": "Workflow SLO miss",
+            "detail": "success_rate_missing"
+          },
+          {
+            "scope": "noos_loop_sourcea_observe",
             "severity": "high",
             "summary": "Workflow SLO miss",
             "detail": "success_rate_missing"
@@ -127,6 +175,12 @@
             "severity": "high",
             "summary": "Workflow is not healthy: FAILED_WITH_RECEIPT",
             "detail": ""
+          },
+          {
+            "scope": "sandbox_health_sweep",
+            "severity": "high",
+            "summary": "Workflow is not healthy: FAILED_WITH_RECEIPT",
+            "detail": "make urls"
           },
           {
             "scope": "noos_gha_integrator_daily_witness",
@@ -200,7 +254,7 @@
       "title": "Machine loops audit chain",
       "status": "pass",
       "evidence": {
-        "line": "outside_audit \u00b7 scanned=326 chain_ok=True"
+        "line": "outside_audit \u00b7 scanned=328 chain_ok=True"
       },
       "fix": "make machine-audit && make machine-reconcile",
       "owner": "integrator"
@@ -227,33 +281,17 @@
       "evidence": {
         "closure": "NOOS_TF_11_LAYERS: red",
         "summary": {
-          "green": 7,
-          "yellow": 2,
-          "red": 2,
+          "green": 0,
+          "yellow": 0,
+          "red": 11,
           "unknown": 0
         },
         "plan_worker": {
           "url": "https://trustfield-plan-worker-production.up.railway.app/health",
-          "status": "degraded",
-          "last_cycle_ok": false,
-          "lane_ok": {
-            "critic_circle": true,
-            "deep_research": true,
-            "trustfield_loops_intake": true,
-            "self_heal": true,
-            "www_upgrade_queue": true,
-            "autorun_stack": true,
-            "partner_access": false
-          },
-          "lanes_run": [
-            "critic_circle",
-            "deep_research",
-            "trustfield_loops_intake",
-            "self_heal",
-            "www_upgrade_queue",
-            "autorun_stack",
-            "partner_access"
-          ]
+          "status": "unreachable",
+          "last_cycle_ok": null,
+          "lane_ok": null,
+          "lanes_run": null
         }
       },
       "fix": "make observe-trustfield-layers \u2014 route red layers to TrustField worker",
@@ -263,19 +301,27 @@
       "id": "ICL-D07",
       "tier": "T0",
       "title": "TrustField loop registry (deadman motors green)",
-      "status": "pass",
+      "status": "fail",
       "evidence": {
-        "overall": "yellow",
+        "overall": "red",
         "summary": {
-          "green": 28,
+          "green": 11,
           "yellow": 1,
-          "red": 5,
-          "last_ok_false": 0,
+          "red": 22,
+          "last_ok_false": 16,
           "missing_last_fired_at": 0,
           "probe_present": true,
           "deadman_status": "green",
           "gate_48h_status": "red",
-          "deadman_watched_red": []
+          "deadman_watched_red": [
+            "tf_cf_fleet_tick_v1",
+            "tf_cf_lane_autorun_stack_v1",
+            "tf_cf_lane_www_upgrade_queue_v1",
+            "tf_cf_lane_plan_matrix_v1",
+            "tf_cf_lane_partner_access_v1",
+            "tf_cf_lane_deep_research_v1",
+            "tf_cf_lane_self_heal_v1"
+          ]
         },
         "witness_relaxed": true
       },
@@ -303,11 +349,9 @@
       "title": "Railway plan-worker all lanes green",
       "status": "fail",
       "evidence": {
-        "status": "degraded",
-        "lanes_false": [
-          "partner_access"
-        ],
-        "cycles": 1389
+        "status": null,
+        "lanes_false": [],
+        "cycles": null
       },
       "fix": "cd TrustField-Technologies && ./scripts/railway_deploy_plan_worker.sh",
       "owner": "trustfield_worker"
@@ -330,12 +374,18 @@
             "billing_gate_failures_12s": 0,
             "latest_is_billing_gate": false,
             "latest_real_failure": false,
-            "real_failures": [],
+            "real_failures": [
+              "NOOS stack health receipt: NOOS stack health receipt",
+              "NOOS motor sustain witness: NOOS motor sustain witness"
+            ],
             "latest_conclusion": "",
             "recent_count": 8
           }
         ],
-        "real_failures_sample": []
+        "real_failures_sample": [
+          "NOOS stack health receipt: NOOS stack health receipt",
+          "NOOS motor sustain witness: NOOS motor sustain witness"
+        ]
       },
       "fix": "Enterprise billing: spending limit >$0 \u2014 then gh run rerun <id>. Real CI fails: fix workflow logs",
       "owner": "trustfield_worker"
@@ -357,8 +407,18 @@
   ],
   "fix_queue": [
     {
+      "id": "ICL-D03",
+      "fix": "make motor-sustain-verify && make integrator-repair-autorun",
+      "owner": "integrator"
+    },
+    {
       "id": "ICL-D06",
       "fix": "make observe-trustfield-layers \u2014 route red layers to TrustField worker",
+      "owner": "trustfield_worker"
+    },
+    {
+      "id": "ICL-D07",
+      "fix": "cd TrustField-Technologies && python3 scripts/record_sg_registry_witness_v1.py && curl -sS .../tf-cf-fleet-tick-v1.../tick",
       "owner": "trustfield_worker"
     },
     {
@@ -367,7 +427,7 @@
       "owner": "trustfield_worker"
     }
   ],
-  "closure_token": "NOOS_INTEGRATOR_DAILY: yellow",
+  "closure_token": "NOOS_INTEGRATOR_DAILY: red",
   "commands": {
     "run": "make integrator-daily",
     "status": "make integrator-status",
