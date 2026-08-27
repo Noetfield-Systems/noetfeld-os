@@ -1,6 +1,6 @@
 {
   "schema": "noos-stack-automation-health-v1",
-  "at": "2026-08-26T07:29:26Z",
+  "at": "2026-08-27T17:53:16Z",
   "ok": false,
   "overall_status": "red",
   "closure_token": "NOOS_STACK_AUTOMATION: red",
@@ -24,54 +24,54 @@
       "vault": true,
       "cf_deploy_token": true,
       "integrator_mirror": false,
-      "motor_sustain": true,
+      "motor_sustain": false,
       "autorun": false,
       "machine_audit": true,
       "agent_conflicts": true,
       "tasks_mirror": true,
       "upgrade_manifest": true
     },
-    "machine_audit_line": "outside_audit \u00b7 scanned=322 chain_ok=True"
+    "machine_audit_line": "outside_audit \u00b7 scanned=324 chain_ok=True"
   },
   "autorun_critique": {
     "overall_ok": false,
-    "findings": 11,
+    "findings": 21,
     "findings_sample": [
       {
-        "scope": "noos_loop_liveness_registry",
-        "severity": "high",
-        "summary": "Workflow is not healthy: FAILED_WITH_RECEIPT",
-        "detail": ""
-      },
-      {
-        "scope": "noos_gha_integrator_daily_witness",
+        "scope": "noos_factory_autorun",
         "severity": "high",
         "summary": "Workflow is not healthy: BLOCKED_WITH_REASON",
-        "detail": "no_github_runs"
+        "detail": "stale_supabase_row"
       },
       {
-        "scope": "noos_gha_autorun_witness",
+        "scope": "noos_worker_inbox",
         "severity": "high",
         "summary": "Workflow is not healthy: BLOCKED_WITH_REASON",
-        "detail": "no_github_runs"
+        "detail": "stale_supabase_row"
       },
       {
-        "scope": "noos_gha_motor_sustain_witness",
+        "scope": "noos_loop_inbox",
         "severity": "high",
-        "summary": "Workflow is not healthy: BLOCKED_WITH_REASON",
-        "detail": "no_github_runs"
+        "summary": "Workflow SLO miss",
+        "detail": "success_rate_missing"
       },
       {
-        "scope": "noos_gha_health_witness",
+        "scope": "noos_loop_runtime",
         "severity": "high",
-        "summary": "Workflow is not healthy: BLOCKED_WITH_REASON",
-        "detail": "no_github_runs"
+        "summary": "Workflow SLO miss",
+        "detail": "success_rate_missing"
+      },
+      {
+        "scope": "noos_loop_surface",
+        "severity": "high",
+        "summary": "Workflow SLO miss",
+        "detail": "success_rate_missing"
       }
     ]
   },
   "gha_health": {
     "schema": "noos-gha-run-health-v1",
-    "at": "2026-08-26T07:29:25Z",
+    "at": "2026-08-27T17:53:15Z",
     "ok": true,
     "overall_status": "green",
     "closure_token": "NOOS_GHA_HEALTH: green",
@@ -93,7 +93,9 @@
             "billing_gate_failures_12s": 0,
             "latest_is_billing_gate": false,
             "latest_real_failure": false,
-            "real_failures": [],
+            "real_failures": [
+              "NOOS motor sustain witness: NOOS motor sustain witness"
+            ],
             "latest_conclusion": "",
             "latest_duration_s": 4.0,
             "recent_count": 8
@@ -103,7 +105,9 @@
       "ICL-D11": {
         "title": "GHA real workflow failures (not billing)",
         "ok": true,
-        "failures": []
+        "failures": [
+          "NOOS motor sustain witness: NOOS motor sustain witness"
+        ]
       },
       "ICL-D12": {
         "title": "GitHub org on Enterprise plan",
@@ -132,6 +136,14 @@
               "duration_s": 24.0,
               "run_id": 32712335420,
               "conclusion": "failure"
+            },
+            {
+              "workflow": "noos-motor-sustain-witness.yml",
+              "ok": false,
+              "billing_gate_precursor": false,
+              "duration_s": 31.0,
+              "run_id": 33099474155,
+              "conclusion": "failure"
             }
           ],
           "billing_gate_precursors": [],
@@ -144,49 +156,39 @@
   "cf_motors": {
     "fleet_tick": "green",
     "deadman": "green",
-    "registry_overall": "yellow"
+    "registry_overall": "red"
   },
   "railway_plan_worker": {
     "url": "https://trustfield-plan-worker-production.up.railway.app/health",
-    "status": "degraded",
-    "last_cycle_ok": false,
-    "lane_ok": {
-      "plan_matrix": true,
-      "critic_circle": true,
-      "deep_research": true,
-      "trustfield_loops_intake": true,
-      "self_heal": true,
-      "www_upgrade_queue": true,
-      "autorun_stack": true,
-      "partner_access": false
-    },
-    "lanes_run": [
-      "plan_matrix",
-      "critic_circle",
-      "deep_research",
-      "trustfield_loops_intake",
-      "self_heal",
-      "www_upgrade_queue",
-      "autorun_stack",
-      "partner_access"
-    ]
+    "status": null,
+    "last_cycle_ok": null,
+    "lane_ok": null,
+    "lanes_run": null
   },
   "eleven_layers": {
-    "green": 7,
-    "yellow": 2,
-    "red": 2,
+    "green": 0,
+    "yellow": 0,
+    "red": 11,
     "unknown": 0
   },
   "trustfield_registry": {
-    "green": 28,
+    "green": 11,
     "yellow": 1,
-    "red": 5,
-    "last_ok_false": 0,
+    "red": 22,
+    "last_ok_false": 16,
     "missing_last_fired_at": 0,
     "probe_present": true,
     "deadman_status": "green",
     "gate_48h_status": "red",
-    "deadman_watched_red": []
+    "deadman_watched_red": [
+      "tf_cf_fleet_tick_v1",
+      "tf_cf_lane_autorun_stack_v1",
+      "tf_cf_lane_www_upgrade_queue_v1",
+      "tf_cf_lane_plan_matrix_v1",
+      "tf_cf_lane_partner_access_v1",
+      "tf_cf_lane_deep_research_v1",
+      "tf_cf_lane_self_heal_v1"
+    ]
   },
   "fix_queue": [
     "integrator_status",
