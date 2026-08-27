@@ -1,15 +1,31 @@
 {
   "schema": "noos-liveness-registry-witness-v1",
-  "at": "2026-08-26T21:04:00Z",
+  "at": "2026-08-27T10:26:28Z",
   "read_only": true,
   "mutates_registry": false,
   "witness_mode": true,
   "one_law": "Observe Supabase noos_loop_registry only \u2014 never call /tick or upsert rows.",
-  "stale_count": 2,
+  "stale_count": 18,
   "registry_rows": 20,
   "stale_loops": [
+    "specialist_proposals",
+    "runtime",
+    "workflow_audit",
+    "chain",
+    "plan_completion",
+    "inbox",
+    "sourcea_observe",
+    "self_heal",
+    "cf_loop_motor",
+    "executor_railway_canonical",
+    "unified_motor_event_bridge",
     "role_circle",
-    "factory_autorun"
+    "self_heal_safe_fixes",
+    "orchestrator_cross_repo",
+    "factory_autorun",
+    "agent_nerve",
+    "surface",
+    "researcher_deep_dive"
   ],
   "probe_status": "FAILED_WITH_RECEIPT",
   "probe_reason": null,
@@ -17,14 +33,30 @@
   "closure_token": "NOOS_LIVENESS_REGISTRY_WITNESS: yellow",
   "probe": {
     "status": "FAILED_WITH_RECEIPT",
-    "stale_count": 2,
+    "stale_count": 18,
     "registry_rows": 20,
     "stale_loops": [
+      "specialist_proposals",
+      "runtime",
+      "workflow_audit",
+      "chain",
+      "plan_completion",
+      "inbox",
+      "sourcea_observe",
+      "self_heal",
+      "cf_loop_motor",
+      "executor_railway_canonical",
+      "unified_motor_event_bridge",
       "role_circle",
-      "factory_autorun"
+      "self_heal_safe_fixes",
+      "orchestrator_cross_repo",
+      "factory_autorun",
+      "agent_nerve",
+      "surface",
+      "researcher_deep_dive"
     ],
     "evidence": {
-      "observed_at": "2026-08-26T21:04:00+00:00",
+      "observed_at": "2026-08-27T10:26:28+00:00",
       "expected_rows": 14
     }
   },
