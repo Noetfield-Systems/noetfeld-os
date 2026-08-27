@@ -1,7 +1,7 @@
 {
   "schema": "noos-motor-sustain-v1",
-  "at": "2026-08-26T07:09:54Z",
-  "ok": true,
+  "at": "2026-08-27T17:39:20Z",
+  "ok": false,
   "checks": {
     "cf_loop_fleet": {
       "ok": true,
@@ -14,9 +14,9 @@
       "body": "{\"ok\":true,\"schema\":\"noos-factory-autorun-tick-health-v1\",\"service\":\"noos-factory-autorun-tick-v1\",\"cron\":\"*/10 * * * *\",\"github_token_ready\":true,\"github_repo\":\"kazemnezhadsina144-dot/noetfeld-os\",\"event_type\":\"noos_factory_autorun_tick\"}"
     },
     "railway_loop_runner": {
-      "ok": true,
-      "status": 200,
-      "body": "{\"ok\": true, \"schema\": \"noos-railway-loop-runner-health-v1\", \"service\": \"noos-loop-runner\", \"git_sha\": \"de4a7638b93f5083b048f557a24156b8b4cd3f74\", \"uptime_sec\": 375823, \"execution_mode\": \"one_shot_http\", \"last_successful_liveness_write_at\": \"2026-08-26T07:06:04Z\", \"last_liveness_error\": null}"
+      "ok": false,
+      "status": 404,
+      "error": "HTTP Error 404: Not Found"
     },
     "cf_deadman": {
       "ok": true,
@@ -26,7 +26,7 @@
   },
   "liveness": {
     "ok": false,
-    "findings": 14,
-    "stale_count": 1
+    "findings": 24,
+    "stale_count": 2
   }
 }
