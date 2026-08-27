@@ -1,24 +1,26 @@
 {
   "schema": "noos-sandbox-url-sweep-witness-v1",
-  "at": "2026-08-26T13:38:21Z",
+  "at": "2026-08-27T10:29:13Z",
   "read_only": true,
   "witness_mode": true,
   "one_law": "URL + trigger drift observe only \u2014 no deploy or product edits.",
-  "overall_status": "green",
-  "closure_token": "NOOS_SANDBOX_URL_SWEEP_WITNESS: green",
+  "overall_status": "yellow",
+  "closure_token": "NOOS_SANDBOX_URL_SWEEP_WITNESS: yellow",
   "url_sweep": {
-    "status": "COMPLETE",
+    "status": "FAILED_WITH_RECEIPT",
     "evidence": {
-      "checked": 6,
+      "fails": [
+        "FAIL platform health (HTTP Error 404: Not Found)",
+        "FAIL gel-api health (HTTP Error 404: Not Found)",
+        "FAIL gel-api readiness (HTTP Error 404: Not Found)"
+      ],
       "oks": [
         "OK www home (200)",
         "OK www gel (200)",
-        "OK www ai-value-os (200)",
-        "OK platform health (200)",
-        "OK gel-api health (200)",
-        "OK gel-api readiness (200)"
+        "OK www ai-value-os (200)"
       ],
-      "observed_at": "2026-08-26T13:38:21+00:00"
+      "checked": 6,
+      "observed_at": "2026-08-27T10:29:13+00:00"
     },
     "urls_checked": 6
   },
