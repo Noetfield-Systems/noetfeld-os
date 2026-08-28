@@ -1,6 +1,6 @@
 {
   "schema": "noos-stack-automation-health-v1",
-  "at": "2026-08-27T17:53:16Z",
+  "at": "2026-08-28T18:59:12Z",
   "ok": false,
   "overall_status": "red",
   "closure_token": "NOOS_STACK_AUTOMATION: red",
@@ -71,7 +71,7 @@
   },
   "gha_health": {
     "schema": "noos-gha-run-health-v1",
-    "at": "2026-08-27T17:53:15Z",
+    "at": "2026-08-28T18:59:11Z",
     "ok": true,
     "overall_status": "green",
     "closure_token": "NOOS_GHA_HEALTH: green",
@@ -130,6 +130,14 @@
           "witness_count": 10,
           "warnings": [
             {
+              "workflow": "noos-integrator-daily-witness.yml",
+              "ok": false,
+              "billing_gate_precursor": false,
+              "duration_s": 25.0,
+              "run_id": 33135903166,
+              "conclusion": "failure"
+            },
+            {
               "workflow": "noos-autorun-witness.yml",
               "ok": false,
               "billing_gate_precursor": false,
@@ -141,8 +149,8 @@
               "workflow": "noos-motor-sustain-witness.yml",
               "ok": false,
               "billing_gate_precursor": false,
-              "duration_s": 31.0,
-              "run_id": 33099474155,
+              "duration_s": 19.0,
+              "run_id": 33200650078,
               "conclusion": "failure"
             }
           ],
