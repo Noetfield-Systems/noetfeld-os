@@ -1,6 +1,6 @@
 {
   "schema": "noos-liveness-registry-witness-v1",
-  "at": "2026-08-29T21:07:41Z",
+  "at": "2026-08-30T05:43:47Z",
   "read_only": true,
   "mutates_registry": false,
   "witness_mode": true,
@@ -9,6 +9,7 @@
   "registry_rows": 20,
   "stale_loops": [
     "plan_completion",
+    "role_circle",
     "inbox",
     "runtime",
     "surface",
@@ -24,7 +25,6 @@
     "factory_autorun",
     "cf_loop_motor",
     "executor_railway_canonical",
-    "role_circle",
     "unified_motor_event_bridge"
   ],
   "probe_status": "FAILED_WITH_RECEIPT",
@@ -37,6 +37,7 @@
     "registry_rows": 20,
     "stale_loops": [
       "plan_completion",
+      "role_circle",
       "inbox",
       "runtime",
       "surface",
@@ -52,11 +53,10 @@
       "factory_autorun",
       "cf_loop_motor",
       "executor_railway_canonical",
-      "role_circle",
       "unified_motor_event_bridge"
     ],
     "evidence": {
-      "observed_at": "2026-08-29T21:07:41+00:00",
+      "observed_at": "2026-08-30T05:43:47+00:00",
       "expected_rows": 14
     }
   },
