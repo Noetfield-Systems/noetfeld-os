@@ -1,6 +1,6 @@
 {
   "schema": "noos-sourcea-spine-witness-v1",
-  "at": "2026-08-30T12:01:48Z",
+  "at": "2026-08-31T14:07:30Z",
   "read_only": true,
   "mutates_spine": false,
   "witness_mode": true,
@@ -13,8 +13,8 @@
     "stale": true,
     "status": "BLOCKED_WITH_REASON",
     "reason": "stale_supabase_row",
-    "age_minutes": 1392.93,
-    "observed_at": "2026-08-29T12:48:52+00:00",
+    "age_minutes": 1556.48,
+    "observed_at": "2026-08-30T12:11:00+00:00",
     "queue_head": "CLOUD-SEC-8120"
   },
   "probes": {
@@ -27,17 +27,17 @@
       "queue_head": "CLOUD-SEC-8120",
       "heartbeat_event": "CRON_FIRED",
       "evidence": {
-        "observed_at": "2026-08-29T12:48:52+00:00",
+        "observed_at": "2026-08-30T12:11:00+00:00",
         "source_table": "telemetry_logs",
         "cycle_id": "cycle-20260706T174048Z-CLOUD-SEC-8120",
         "trigger_source": "cloudflare_cron",
         "truth_log_table": "truth_log",
         "fallback": true,
-        "age_minutes": 1392.93,
+        "age_minutes": 1556.48,
         "stale_threshold_minutes": 30.0
       },
       "data_freshness": "STALE_DATA",
-      "age_minutes": 1392.93,
+      "age_minutes": 1556.48,
       "command": "Refresh sourcea_cloud_queue cloud writer; row older than 30.0m"
     },
     "sourcea_buyer_proof_verify": {
@@ -47,17 +47,17 @@
       "status": "BLOCKED_WITH_REASON",
       "receipt_schema": "buyer-proof-hotfix-verify-v1",
       "evidence": {
-        "observed_at": "2026-08-29T12:48:52+00:00",
-        "cycle_id": "cycle-buyer-proof-repair-2026-08-29T12:48:52Z",
+        "observed_at": "2026-08-30T12:11:00+00:00",
+        "cycle_id": "cycle-buyer-proof-repair-2026-08-30T12:11:00Z",
         "verdict": "GREEN",
         "source_table": "cycle_receipts",
         "pending_count": 0,
         "fallback": null,
-        "age_minutes": 1392.93,
+        "age_minutes": 1556.49,
         "stale_threshold_minutes": 30.0
       },
       "data_freshness": "STALE_DATA",
-      "age_minutes": 1392.93,
+      "age_minutes": 1556.49,
       "reason": "stale_supabase_row",
       "command": "Refresh sourcea_buyer_proof_verify cloud writer; row older than 30.0m"
     },
@@ -68,17 +68,17 @@
       "status": "BLOCKED_WITH_REASON",
       "receipt_schema": "client-proof-recipe-queue-v1",
       "evidence": {
-        "observed_at": "2026-08-29T12:48:52+00:00",
-        "cycle_id": "cycle-recipe-queue-repair-2026-08-29T12:48:52Z",
+        "observed_at": "2026-08-30T12:11:00+00:00",
+        "cycle_id": "cycle-recipe-queue-repair-2026-08-30T12:11:00Z",
         "verdict": "GREEN",
         "source_table": "cycle_receipts",
         "pending_count": 0,
         "fallback": null,
-        "age_minutes": 1392.94,
+        "age_minutes": 1556.51,
         "stale_threshold_minutes": 30.0
       },
       "data_freshness": "STALE_DATA",
-      "age_minutes": 1392.94,
+      "age_minutes": 1556.51,
       "reason": "stale_supabase_row",
       "command": "Refresh sourcea_recipe_queue_builder cloud writer; row older than 30.0m"
     }
