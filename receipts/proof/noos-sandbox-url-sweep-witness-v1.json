@@ -1,6 +1,6 @@
 {
   "schema": "noos-sandbox-url-sweep-witness-v1",
-  "at": "2026-08-31T06:06:19Z",
+  "at": "2026-08-31T19:13:46Z",
   "read_only": true,
   "witness_mode": true,
   "one_law": "URL + trigger drift observe only \u2014 no deploy or product edits.",
@@ -20,7 +20,7 @@
         "OK www ai-value-os (200)"
       ],
       "checked": 6,
-      "observed_at": "2026-08-31T06:06:19+00:00"
+      "observed_at": "2026-08-31T19:13:46+00:00"
     },
     "urls_checked": 6
   },
