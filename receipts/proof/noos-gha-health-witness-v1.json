@@ -1,6 +1,6 @@
 {
   "schema": "noos-gha-health-witness-v1",
-  "at": "2026-08-24T09:00:16Z",
+  "at": "2026-08-31T16:07:31Z",
   "ok": true,
   "overall_status": "green",
   "closure_token": "NOOS_GHA_HEALTH_WITNESS: green",
@@ -23,10 +23,11 @@
           "latest_is_billing_gate": false,
           "latest_real_failure": false,
           "real_failures": [
+            "NOOS integrator daily witness: NOOS integrator daily witness",
             "NOOS stack health receipt: NOOS stack health receipt"
           ],
           "latest_conclusion": "",
-          "latest_duration_s": 5.0,
+          "latest_duration_s": 4.0,
           "recent_count": 8
         }
       ]
@@ -35,6 +36,7 @@
       "title": "GHA real workflow failures (not billing)",
       "ok": true,
       "failures": [
+        "NOOS integrator daily witness: NOOS integrator daily witness",
         "NOOS stack health receipt: NOOS stack health receipt"
       ]
     },
@@ -59,19 +61,35 @@
         "witness_count": 10,
         "warnings": [
           {
+            "workflow": "noos-integrator-daily-witness.yml",
+            "ok": false,
+            "billing_gate_precursor": false,
+            "duration_s": 39.0,
+            "run_id": 33405471698,
+            "conclusion": "failure"
+          },
+          {
             "workflow": "noos-autorun-witness.yml",
             "ok": false,
             "billing_gate_precursor": false,
-            "duration_s": 22.0,
-            "run_id": 32015458232,
+            "duration_s": 24.0,
+            "run_id": 32712335420,
+            "conclusion": "failure"
+          },
+          {
+            "workflow": "noos-motor-sustain-witness.yml",
+            "ok": false,
+            "billing_gate_precursor": false,
+            "duration_s": 28.0,
+            "run_id": 33399574983,
             "conclusion": "failure"
           },
           {
             "workflow": "noos-stack-health-receipt.yml",
             "ok": false,
             "billing_gate_precursor": false,
-            "duration_s": 36.0,
-            "run_id": 32702672932,
+            "duration_s": 40.0,
+            "run_id": 33402219350,
             "conclusion": "failure"
           }
         ],
