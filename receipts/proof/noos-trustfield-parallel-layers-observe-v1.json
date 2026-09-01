@@ -1,6 +1,6 @@
 {
   "schema": "noos-trustfield-parallel-layers-observe-v1",
-  "at": "2026-09-01T19:25:38Z",
+  "at": "2026-09-01T22:38:49Z",
   "read_only": true,
   "one_law": "NOOS coordinates eleven TrustField layers \u2014 observe, enqueue, receipt. TrustField CF+Railway motors execute. One exclusive writer per state cell.",
   "layer_count": 11,
@@ -134,7 +134,7 @@
       "cf_loop_id": "tf_cf_trustfield_loops_v1",
       "railway_lane": null,
       "reasons": [
-        "stale age_min=8429.7 threshold_min=10.0",
+        "stale age_min=8622.9 threshold_min=10.0",
         "plan_worker_unreachable"
       ]
     },
@@ -190,7 +190,7 @@
       "cf_loop_id": "tf_cf_48h_gate_v1",
       "railway_lane": "autorun_stack",
       "reasons": [
-        "stale age_min=65870.7 threshold_min=4320.0",
+        "stale age_min=66063.9 threshold_min=4320.0",
         "plan_worker_unreachable"
       ]
     }
