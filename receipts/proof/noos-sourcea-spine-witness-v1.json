@@ -1,6 +1,6 @@
 {
   "schema": "noos-sourcea-spine-witness-v1",
-  "at": "2026-09-03T11:26:08Z",
+  "at": "2026-09-04T11:28:55Z",
   "read_only": true,
   "mutates_spine": false,
   "witness_mode": true,
@@ -10,12 +10,12 @@
   "closure_token": "NOOS_SOURCEA_SPINE_WITNESS: yellow",
   "sourcea_cloud_queue": {
     "fresh": false,
-    "stale": true,
+    "stale": false,
     "status": "BLOCKED_WITH_REASON",
-    "reason": "stale_supabase_row",
-    "age_minutes": 1425.33,
-    "observed_at": "2026-09-02T11:40:48+00:00",
-    "queue_head": "CLOUD-SEC-8120"
+    "reason": "supabase_truth_tables_missing",
+    "age_minutes": null,
+    "observed_at": null,
+    "queue_head": null
   },
   "probes": {
     "sourcea_cloud_queue": {
@@ -23,64 +23,38 @@
       "title": "SourceA cloud queue",
       "plane": "SourceA",
       "status": "BLOCKED_WITH_REASON",
-      "reason": "stale_supabase_row",
-      "queue_head": "CLOUD-SEC-8120",
-      "heartbeat_event": "CRON_FIRED",
+      "reason": "supabase_truth_tables_missing",
       "evidence": {
-        "observed_at": "2026-09-02T11:40:48+00:00",
-        "source_table": "telemetry_logs",
-        "cycle_id": "cycle-20260706T174048Z-CLOUD-SEC-8120",
-        "trigger_source": "cloudflare_cron",
-        "truth_log_table": "truth_log",
-        "fallback": true,
-        "age_minutes": 1425.33,
-        "stale_threshold_minutes": 30.0
+        "truth_log": "truth_log",
+        "cycle": "telemetry_logs",
+        "http": 402,
+        "error": "{\"message\":\"Service for this project is restricted due to the following violations: exceed_db_size_quota. The project owner must upgrade their plan or remove spend caps to restore service.\"}"
       },
-      "data_freshness": "STALE_DATA",
-      "age_minutes": 1425.33,
-      "command": "Refresh sourcea_cloud_queue cloud writer; row older than 30.0m"
+      "command": "Apply portfolio-spine truth_log migration; cloud writers emit CRON_FIRED + cycle receipts."
     },
     "sourcea_buyer_proof_verify": {
       "id": "sourcea_buyer_proof_verify",
       "title": "SourceA buyer-proof verify",
       "plane": "SourceA",
       "status": "BLOCKED_WITH_REASON",
-      "receipt_schema": "buyer-proof-hotfix-verify-v1",
+      "reason": "no_supabase_receipt",
       "evidence": {
-        "observed_at": "2026-09-02T11:40:48+00:00",
-        "cycle_id": "cycle-buyer-proof-repair-2026-09-02T11:40:48Z",
-        "verdict": "GREEN",
-        "source_table": "cycle_receipts",
-        "pending_count": 0,
-        "fallback": null,
-        "age_minutes": 1425.34,
-        "stale_threshold_minutes": 30.0
+        "schema": "buyer-proof-hotfix-verify-v1",
+        "source_table": "telemetry_logs"
       },
-      "data_freshness": "STALE_DATA",
-      "age_minutes": 1425.34,
-      "reason": "stale_supabase_row",
-      "command": "Refresh sourcea_buyer_proof_verify cloud writer; row older than 30.0m"
+      "command": "cd ~/Desktop/SourceA && python3 scripts/verify_buyer_proof_hotfix_v1.py --json"
     },
     "sourcea_recipe_queue_builder": {
       "id": "sourcea_recipe_queue_builder",
       "title": "SourceA recipe queue builder",
       "plane": "SourceA",
       "status": "BLOCKED_WITH_REASON",
-      "receipt_schema": "client-proof-recipe-queue-v1",
+      "reason": "no_supabase_receipt",
       "evidence": {
-        "observed_at": "2026-09-02T11:40:48+00:00",
-        "cycle_id": "cycle-recipe-queue-repair-2026-09-02T11:40:48Z",
-        "verdict": "GREEN",
-        "source_table": "cycle_receipts",
-        "pending_count": 0,
-        "fallback": null,
-        "age_minutes": 1425.34,
-        "stale_threshold_minutes": 30.0
+        "schema": "client-proof-recipe-queue-v1",
+        "source_table": "telemetry_logs"
       },
-      "data_freshness": "STALE_DATA",
-      "age_minutes": 1425.34,
-      "reason": "stale_supabase_row",
-      "command": "Refresh sourcea_recipe_queue_builder cloud writer; row older than 30.0m"
+      "command": "cd ~/Desktop/SourceA && python3 scripts/build_client_proof_recipe_queue_v1.py"
     }
   },
   "handoff_owner": "sourcea_portfolio_spine_worker",
