@@ -1,6 +1,6 @@
 {
   "schema": "noos-trustfield-parallel-layers-observe-v1",
-  "at": "2026-09-03T22:38:44Z",
+  "at": "2026-09-04T04:42:22Z",
   "read_only": true,
   "one_law": "NOOS coordinates eleven TrustField layers \u2014 observe, enqueue, receipt. TrustField CF+Railway motors execute. One exclusive writer per state cell.",
   "layer_count": 11,
@@ -35,10 +35,10 @@
     "lanes_run": null
   },
   "registry_observe": {
-    "overall_status": "red",
-    "row_count": 34,
-    "probe_present": true,
-    "deadman_status": "green"
+    "overall_status": "yellow",
+    "row_count": 0,
+    "probe_present": false,
+    "deadman_status": "missing"
   },
   "layers": [
     {
@@ -51,7 +51,8 @@
       "cf_loop_id": "tf_cf_deadman_v1",
       "railway_lane": null,
       "reasons": [
-        "registry_overall=red",
+        "loop_id not in registry sample",
+        "registry_overall=yellow",
         "plan_worker_unreachable"
       ]
     },
@@ -65,6 +66,7 @@
       "cf_loop_id": "tf_cf_lane_critic_circle_v1",
       "railway_lane": "critic_circle",
       "reasons": [
+        "loop_id not in registry sample",
         "staleness_state=data/trustfield_agent_read_staleness_alarm_v1.json",
         "plan_worker_unreachable"
       ]
@@ -79,7 +81,7 @@
       "cf_loop_id": "tf_cf_lane_plan_matrix_v1",
       "railway_lane": "plan_matrix",
       "reasons": [
-        "last_ok=false",
+        "loop_id not in registry sample",
         "plan_worker_unreachable"
       ]
     },
@@ -107,6 +109,7 @@
       "cf_loop_id": "tf_cf_lane_critic_circle_v1",
       "railway_lane": "critic_circle",
       "reasons": [
+        "loop_id not in registry sample",
         "plan_worker_unreachable"
       ]
     },
@@ -120,7 +123,7 @@
       "cf_loop_id": "tf_cf_lane_deep_research_v1",
       "railway_lane": "deep_research",
       "reasons": [
-        "last_ok=false",
+        "loop_id not in registry sample",
         "plan_worker_unreachable"
       ]
     },
@@ -134,7 +137,7 @@
       "cf_loop_id": "tf_cf_trustfield_loops_v1",
       "railway_lane": null,
       "reasons": [
-        "stale age_min=11502.9 threshold_min=10.0",
+        "loop_id not in registry sample",
         "plan_worker_unreachable"
       ]
     },
@@ -148,7 +151,7 @@
       "cf_loop_id": "tf_cf_lane_self_heal_v1",
       "railway_lane": "self_heal",
       "reasons": [
-        "last_ok=false",
+        "loop_id not in registry sample",
         "plan_worker_unreachable"
       ]
     },
@@ -162,7 +165,7 @@
       "cf_loop_id": "tf_cf_lane_www_upgrade_queue_v1",
       "railway_lane": "www_upgrade_queue",
       "reasons": [
-        "last_ok=false",
+        "loop_id not in registry sample",
         "plan_worker_unreachable"
       ]
     },
@@ -176,7 +179,7 @@
       "cf_loop_id": "tf_cf_lane_partner_access_v1",
       "railway_lane": "partner_access",
       "reasons": [
-        "last_ok=false",
+        "cf_loop_id not registered in registry yet",
         "plan_worker_unreachable"
       ]
     },
@@ -190,7 +193,7 @@
       "cf_loop_id": "tf_cf_48h_gate_v1",
       "railway_lane": "autorun_stack",
       "reasons": [
-        "stale age_min=68943.8 threshold_min=4320.0",
+        "loop_id not in registry sample",
         "plan_worker_unreachable"
       ]
     }
