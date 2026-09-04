@@ -1,6 +1,6 @@
 {
   "schema": "noos-liveness-registry-witness-v1",
-  "at": "2026-09-04T05:00:39Z",
+  "at": "2026-09-04T11:40:25Z",
   "read_only": true,
   "mutates_registry": false,
   "witness_mode": true,
