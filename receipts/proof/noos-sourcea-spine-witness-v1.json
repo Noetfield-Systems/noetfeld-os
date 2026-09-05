@@ -1,6 +1,6 @@
 {
   "schema": "noos-sourcea-spine-witness-v1",
-  "at": "2026-09-04T11:28:55Z",
+  "at": "2026-09-05T10:45:07Z",
   "read_only": true,
   "mutates_spine": false,
   "witness_mode": true,
