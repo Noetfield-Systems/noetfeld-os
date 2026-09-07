@@ -1,7 +1,7 @@
 {
   "schema": "autorun-status-dashboard-v1.3",
   "read_only": true,
-  "generated_at": "2026-08-31T16:29:52+00:00",
+  "generated_at": "2026-09-07T14:33:57+00:00",
   "dirty_total": 1,
   "triage_threshold": 200,
   "triage_required": false,
@@ -87,7 +87,7 @@
           "latency_missing"
         ],
         "ok": false,
-        "kaizen_receipt": "receipts/proof/noos-kaizen-autorun-status-sourcea_cloud_queue-20260831.json"
+        "kaizen_receipt": "receipts/proof/noos-kaizen-autorun-status-sourcea_cloud_queue-20260907.json"
       }
     },
     {
@@ -121,7 +121,7 @@
           "latency_missing"
         ],
         "ok": false,
-        "kaizen_receipt": "receipts/proof/noos-kaizen-autorun-status-sourcea_buyer_proof_verify-20260831.json"
+        "kaizen_receipt": "receipts/proof/noos-kaizen-autorun-status-sourcea_buyer_proof_verify-20260907.json"
       }
     },
     {
@@ -155,7 +155,7 @@
           "latency_missing"
         ],
         "ok": false,
-        "kaizen_receipt": "receipts/proof/noos-kaizen-autorun-status-sourcea_recipe_queue_builder-20260831.json"
+        "kaizen_receipt": "receipts/proof/noos-kaizen-autorun-status-sourcea_recipe_queue_builder-20260907.json"
       }
     },
     {
@@ -163,27 +163,13 @@
       "title": "Noetfield OS factory autorun",
       "plane": "NOETFELD-OS",
       "status": "BLOCKED_WITH_REASON",
-      "cycle_number": 5969,
+      "reason": "supabase_query_failed",
       "evidence": {
-        "recorded_at": "2026-08-26T22:51:06.45121+00:00",
-        "exit_code": null,
-        "cloud_trigger": "http_loop",
-        "github_event": "http_loop",
-        "github_schedule": {
-          "noos-factory-autorun.yml": {
-            "ok": false,
-            "error": "github_credential_unavailable"
-          }
-        },
-        "observed_at": "2026-08-26T22:51:06.45121+00:00",
-        "age_minutes": 6818.61,
-        "stale_threshold_minutes": 30.0
+        "table": "noetfield_factory_cycle_runs",
+        "http": 402,
+        "error": "{\"message\":\"Service for this project is restricted due to the following violations: exceed_db_size_quota. The project owner must upgrade their plan or remove spend caps to restore service.\"}"
       },
-      "supabase_cycle_count": 48106,
-      "data_freshness": "STALE_DATA",
-      "age_minutes": 6818.61,
-      "reason": "stale_supabase_row",
-      "command": "Refresh noos_factory_autorun cloud writer; row older than 30.0m",
+      "command": "make autorun-once",
       "slo": {
         "targets": {
           "freshness_target_minutes": 30.0,
@@ -191,21 +177,21 @@
           "latency_target_minutes": 60.0
         },
         "observed": {
-          "freshness_minutes": 6818.61,
+          "freshness_minutes": null,
           "success_rate": 0.0,
           "evidence_state": "SUFFICIENT_RECENT_EVIDENCE",
           "success_rate_sample_window_minutes": null,
-          "latency_minutes": 6818.61
+          "latency_minutes": null
         },
         "route": null,
-        "score": 0.0,
+        "score": 30.0,
         "misses": [
-          "freshness_miss",
+          "freshness_missing",
           "success_rate_miss",
-          "latency_miss"
+          "latency_missing"
         ],
         "ok": false,
-        "kaizen_receipt": "receipts/proof/noos-kaizen-autorun-status-noos_factory_autorun-20260831.json"
+        "kaizen_receipt": "receipts/proof/noos-kaizen-autorun-status-noos_factory_autorun-20260907.json"
       }
     },
     {
@@ -213,23 +199,12 @@
       "title": "Noetfield worker inbox",
       "plane": "NOETFELD-OS",
       "status": "BLOCKED_WITH_REASON",
-      "reason": "stale_supabase_row",
-      "founder_blocked": {
-        "count": 1,
-        "oldest": "NOOS-C-01",
-        "priority": "P0",
-        "age_seconds": 5228940,
-        "reason": "founder_decision_required"
-      },
+      "reason": "supabase_query_failed",
       "evidence": {
-        "pending_total": 0,
-        "observed_at": "2026-08-26T22:51:06.45121+00:00",
-        "age_minutes": 6818.64,
-        "stale_threshold_minutes": 30.0
+        "http_pending": 402,
+        "http_founder": 402
       },
-      "data_freshness": "STALE_DATA",
-      "age_minutes": 6818.64,
-      "command": "Refresh noos_worker_inbox cloud writer; row older than 30.0m",
+      "command": "make cloud-worker",
       "slo": {
         "targets": {
           "freshness_target_minutes": 30.0,
@@ -237,21 +212,21 @@
           "latency_target_minutes": 60.0
         },
         "observed": {
-          "freshness_minutes": 6818.64,
+          "freshness_minutes": null,
           "success_rate": 0.0,
           "evidence_state": "SUFFICIENT_RECENT_EVIDENCE",
           "success_rate_sample_window_minutes": null,
-          "latency_minutes": 6818.64
+          "latency_minutes": null
         },
         "route": null,
-        "score": 0.0,
+        "score": 30.0,
         "misses": [
-          "freshness_miss",
+          "freshness_missing",
           "success_rate_miss",
-          "latency_miss"
+          "latency_missing"
         ],
         "ok": false,
-        "kaizen_receipt": "receipts/proof/noos-kaizen-autorun-status-noos_worker_inbox-20260831.json"
+        "kaizen_receipt": "receipts/proof/noos-kaizen-autorun-status-noos_worker_inbox-20260907.json"
       }
     },
     {
@@ -259,13 +234,13 @@
       "title": "NOOS factory autorun CF tick",
       "plane": "NOETFELD-OS",
       "status": "COMPLETE",
-      "observed_at": "2026-08-31T16:29:45+00:00",
+      "observed_at": "2026-09-07T14:33:55+00:00",
       "evidence": {
         "checked": 1,
         "oks": [
           "OK cf tick health (200)"
         ],
-        "observed_at": "2026-08-31T16:29:45+00:00"
+        "observed_at": "2026-09-07T14:33:55+00:00"
       },
       "slo": {
         "targets": {
@@ -274,11 +249,11 @@
           "latency_target_minutes": 60.0
         },
         "observed": {
-          "freshness_minutes": 0.0,
+          "freshness_minutes": 0.01,
           "success_rate": 1.0,
           "evidence_state": "SUFFICIENT_RECENT_EVIDENCE",
           "success_rate_sample_window_minutes": null,
-          "latency_minutes": 0.0
+          "latency_minutes": 0.01
         },
         "route": null,
         "score": 100.0,
@@ -293,9 +268,9 @@
       "plane": "NOETFELD-OS",
       "status": "COMPLETE",
       "classification": "cf_motor_canary_retired_gha_schedule",
-      "observed_at": "2026-08-31T16:29:45+00:00",
+      "observed_at": "2026-09-07T14:33:55+00:00",
       "evidence": {
-        "observed_at": "2026-08-31T16:29:45+00:00",
+        "observed_at": "2026-09-07T14:33:55+00:00",
         "classification": "cf_motor_canary_retired_gha_schedule",
         "schedule_a1_ok": true,
         "schedule_a1_verified_at": "2026-07-07T06:20:29Z",
@@ -321,11 +296,11 @@
           "latency_target_minutes": 60.0
         },
         "observed": {
-          "freshness_minutes": 0.01,
+          "freshness_minutes": 0.02,
           "success_rate": 1.0,
           "evidence_state": "SUFFICIENT_RECENT_EVIDENCE",
           "success_rate_sample_window_minutes": null,
-          "latency_minutes": 0.01
+          "latency_minutes": 0.02
         },
         "route": null,
         "score": 100.0,
@@ -339,13 +314,13 @@
       "title": "NOOS 24/7 loop fleet CF tick",
       "plane": "NOETFELD-OS",
       "status": "COMPLETE",
-      "observed_at": "2026-08-31T16:29:45+00:00",
+      "observed_at": "2026-09-07T14:33:56+00:00",
       "evidence": {
         "checked": 1,
         "oks": [
           "OK loop fleet health (200)"
         ],
-        "observed_at": "2026-08-31T16:29:45+00:00"
+        "observed_at": "2026-09-07T14:33:56+00:00"
       },
       "slo": {
         "targets": {
@@ -354,11 +329,11 @@
           "latency_target_minutes": 60.0
         },
         "observed": {
-          "freshness_minutes": 0.01,
+          "freshness_minutes": 0.0,
           "success_rate": 1.0,
           "evidence_state": "SUFFICIENT_RECENT_EVIDENCE",
           "success_rate_sample_window_minutes": null,
-          "latency_minutes": 0.01
+          "latency_minutes": 0.0
         },
         "route": null,
         "score": 100.0,
@@ -371,62 +346,44 @@
       "id": "noos_loop_inbox",
       "title": "24/7 loop \u2014 inbox drain",
       "plane": "NOETFELD-OS",
-      "status": "BLOCKED_WITH_REASON",
-      "execution_state": "LOOP_EXECUTION_STALE",
-      "evidence_state": "SUFFICIENT_RECENT_EVIDENCE",
-      "success_rate": 0.0,
-      "route": "execution_reconcile_self_heal",
-      "route_permits_execution_mutation": true,
-      "observation_confidence": "HIGH",
-      "reason": "dispatch_and_completion_stale",
-      "cycle_number": 11812,
+      "status": "OBSERVER_UNAVAILABLE",
+      "execution_state": "OBSERVER_UNAVAILABLE",
+      "evidence_state": "INSUFFICIENT_RECENT_EVIDENCE",
+      "success_rate": null,
+      "route": "monitoring_availability",
+      "route_permits_execution_mutation": false,
+      "observation_confidence": "NONE",
+      "reason": "authoritative_source_unavailable",
+      "cycle_number": null,
       "presentation": {
-        "dispatch_last_fired_at": "2026-08-31T14:55:44.02+00:00",
-        "completion_last_recorded_at": "2026-08-26T22:51:04.750087+00:00",
-        "dispatch_freshness": "STALE",
-        "completion_evidence_freshness": "STALE",
-        "dispatch_age_minutes": 94.04,
-        "completion_age_minutes": 6818.69,
-        "current_execution_state": "LOOP_EXECUTION_STALE",
-        "observation_confidence": "HIGH",
+        "dispatch_last_fired_at": null,
+        "completion_last_recorded_at": null,
+        "dispatch_freshness": "UNKNOWN",
+        "completion_evidence_freshness": "UNKNOWN",
+        "dispatch_age_minutes": null,
+        "completion_age_minutes": null,
+        "current_execution_state": "OBSERVER_UNAVAILABLE",
+        "observation_confidence": "NONE",
         "success_rate_sample_window_minutes": 30.0,
         "status_source": "noos_loop_registry+noetfield_factory_cycle_runs",
-        "observed_at": "2026-08-31T16:29:46+00:00",
-        "completion_origin": "organic",
-        "organic_completion_fresh": false,
-        "repair_sustained_fresh": false
+        "observed_at": "2026-09-07T14:33:56+00:00"
       },
-      "provenance": {
-        "completion_origin": "organic",
-        "organic_completion_fresh": false,
-        "repair_sustained_fresh": false,
-        "consistency_ok": true,
-        "last_organic_completion_at": "2026-08-26T22:51:04.750087+00:00",
-        "organic_completion_age_minutes": 6818.69,
-        "last_repair_receipt_at": null,
-        "repair_receipt_age_minutes": null,
-        "repair_receipts_since_last_organic": 0,
-        "last_dispatch_at": null,
-        "oldest_unresolved_dispatch_at": null,
-        "unresolved_dispatch_count": null,
-        "dead_letter_count": null
-      },
+      "provenance": null,
       "evidence": {
         "factory_id": "loop-inbox",
         "loop_id": "inbox",
-        "dispatch_last_fired_at": "2026-08-31T14:55:44.02+00:00",
-        "completion_last_recorded_at": "2026-08-26T22:51:04.750087+00:00",
-        "dispatch_freshness": "STALE",
-        "completion_evidence_freshness": "STALE",
-        "cloud_trigger": "http_loop",
-        "observed_at": "2026-08-31T14:55:44.02+00:00",
+        "dispatch_last_fired_at": null,
+        "completion_last_recorded_at": null,
+        "dispatch_freshness": "UNKNOWN",
+        "completion_evidence_freshness": "UNKNOWN",
+        "cloud_trigger": null,
+        "observed_at": null,
         "github_dispatch": {
           "ok": false,
           "error": "github_credential_unavailable"
         }
       },
-      "command": "python3 scripts/noos_loop_runner_v1.py --event-type noos_inbox_loop_tick",
-      "data_freshness": "STALE_DATA",
+      "data_freshness": "FRESH",
       "slo": {
         "targets": {
           "freshness_target_minutes": 30.0,
@@ -434,83 +391,65 @@
           "latency_target_minutes": 60.0
         },
         "observed": {
-          "freshness_minutes": 94.04,
-          "success_rate": 0.0,
-          "evidence_state": "SUFFICIENT_RECENT_EVIDENCE",
+          "freshness_minutes": null,
+          "success_rate": null,
+          "evidence_state": "INSUFFICIENT_RECENT_EVIDENCE",
           "success_rate_sample_window_minutes": 30.0,
-          "latency_minutes": 94.04
+          "latency_minutes": null
         },
-        "route": "execution_reconcile_self_heal",
-        "score": 5.82,
+        "route": "monitoring_availability",
+        "score": 45.0,
         "misses": [
-          "freshness_miss",
-          "success_rate_miss",
-          "latency_miss"
+          "freshness_missing",
+          "success_rate_missing",
+          "latency_missing"
         ],
         "ok": false,
-        "kaizen_receipt": "receipts/proof/noos-kaizen-autorun-status-noos_loop_inbox-20260831.json"
+        "kaizen_receipt": null
       }
     },
     {
       "id": "noos_loop_runtime",
       "title": "24/7 loop \u2014 runtime gate+pytest",
       "plane": "NOETFELD-OS",
-      "status": "BLOCKED_WITH_REASON",
-      "execution_state": "LOOP_EXECUTION_STALE",
-      "evidence_state": "SUFFICIENT_RECENT_EVIDENCE",
-      "success_rate": 0.0,
-      "route": "execution_reconcile_self_heal",
-      "route_permits_execution_mutation": true,
-      "observation_confidence": "HIGH",
-      "reason": "dispatch_and_completion_stale",
-      "cycle_number": 4026,
+      "status": "OBSERVER_UNAVAILABLE",
+      "execution_state": "OBSERVER_UNAVAILABLE",
+      "evidence_state": "INSUFFICIENT_RECENT_EVIDENCE",
+      "success_rate": null,
+      "route": "monitoring_availability",
+      "route_permits_execution_mutation": false,
+      "observation_confidence": "NONE",
+      "reason": "authoritative_source_unavailable",
+      "cycle_number": null,
       "presentation": {
-        "dispatch_last_fired_at": "2026-08-31T14:55:44.546+00:00",
-        "completion_last_recorded_at": "2026-08-26T22:46:05.705687+00:00",
-        "dispatch_freshness": "STALE",
-        "completion_evidence_freshness": "STALE",
-        "dispatch_age_minutes": 94.04,
-        "completion_age_minutes": 6823.69,
-        "current_execution_state": "LOOP_EXECUTION_STALE",
-        "observation_confidence": "HIGH",
+        "dispatch_last_fired_at": null,
+        "completion_last_recorded_at": null,
+        "dispatch_freshness": "UNKNOWN",
+        "completion_evidence_freshness": "UNKNOWN",
+        "dispatch_age_minutes": null,
+        "completion_age_minutes": null,
+        "current_execution_state": "OBSERVER_UNAVAILABLE",
+        "observation_confidence": "NONE",
         "success_rate_sample_window_minutes": 30.0,
         "status_source": "noos_loop_registry+noetfield_factory_cycle_runs",
-        "observed_at": "2026-08-31T16:29:46+00:00",
-        "completion_origin": "organic",
-        "organic_completion_fresh": false,
-        "repair_sustained_fresh": false
+        "observed_at": "2026-09-07T14:33:56+00:00"
       },
-      "provenance": {
-        "completion_origin": "organic",
-        "organic_completion_fresh": false,
-        "repair_sustained_fresh": false,
-        "consistency_ok": true,
-        "last_organic_completion_at": "2026-08-26T22:46:05.705687+00:00",
-        "organic_completion_age_minutes": 6823.68,
-        "last_repair_receipt_at": null,
-        "repair_receipt_age_minutes": null,
-        "repair_receipts_since_last_organic": 0,
-        "last_dispatch_at": null,
-        "oldest_unresolved_dispatch_at": null,
-        "unresolved_dispatch_count": null,
-        "dead_letter_count": null
-      },
+      "provenance": null,
       "evidence": {
         "factory_id": "loop-runtime",
         "loop_id": "runtime",
-        "dispatch_last_fired_at": "2026-08-31T14:55:44.546+00:00",
-        "completion_last_recorded_at": "2026-08-26T22:46:05.705687+00:00",
-        "dispatch_freshness": "STALE",
-        "completion_evidence_freshness": "STALE",
-        "cloud_trigger": "http_loop",
-        "observed_at": "2026-08-31T14:55:44.546+00:00",
+        "dispatch_last_fired_at": null,
+        "completion_last_recorded_at": null,
+        "dispatch_freshness": "UNKNOWN",
+        "completion_evidence_freshness": "UNKNOWN",
+        "cloud_trigger": null,
+        "observed_at": null,
         "github_dispatch": {
           "ok": false,
           "error": "github_credential_unavailable"
         }
       },
-      "command": "python3 scripts/noos_loop_runner_v1.py --event-type noos_runtime_loop_tick",
-      "data_freshness": "STALE_DATA",
+      "data_freshness": "FRESH",
       "slo": {
         "targets": {
           "freshness_target_minutes": 30.0,
@@ -518,83 +457,65 @@
           "latency_target_minutes": 60.0
         },
         "observed": {
-          "freshness_minutes": 94.04,
-          "success_rate": 0.0,
-          "evidence_state": "SUFFICIENT_RECENT_EVIDENCE",
+          "freshness_minutes": null,
+          "success_rate": null,
+          "evidence_state": "INSUFFICIENT_RECENT_EVIDENCE",
           "success_rate_sample_window_minutes": 30.0,
-          "latency_minutes": 94.04
+          "latency_minutes": null
         },
-        "route": "execution_reconcile_self_heal",
-        "score": 5.82,
+        "route": "monitoring_availability",
+        "score": 45.0,
         "misses": [
-          "freshness_miss",
-          "success_rate_miss",
-          "latency_miss"
+          "freshness_missing",
+          "success_rate_missing",
+          "latency_missing"
         ],
         "ok": false,
-        "kaizen_receipt": "receipts/proof/noos-kaizen-autorun-status-noos_loop_runtime-20260831.json"
+        "kaizen_receipt": null
       }
     },
     {
       "id": "noos_loop_surface",
       "title": "24/7 loop \u2014 public surface",
       "plane": "NOETFELD-OS",
-      "status": "BLOCKED_WITH_REASON",
-      "execution_state": "LOOP_EXECUTION_STALE",
-      "evidence_state": "SUFFICIENT_RECENT_EVIDENCE",
-      "success_rate": 0.0,
-      "route": "execution_reconcile_self_heal",
-      "route_permits_execution_mutation": true,
-      "observation_confidence": "HIGH",
-      "reason": "dispatch_and_completion_stale",
-      "cycle_number": 3058,
+      "status": "OBSERVER_UNAVAILABLE",
+      "execution_state": "OBSERVER_UNAVAILABLE",
+      "evidence_state": "INSUFFICIENT_RECENT_EVIDENCE",
+      "success_rate": null,
+      "route": "monitoring_availability",
+      "route_permits_execution_mutation": false,
+      "observation_confidence": "NONE",
+      "reason": "authoritative_source_unavailable",
+      "cycle_number": null,
       "presentation": {
-        "dispatch_last_fired_at": "2026-08-31T14:55:44.878+00:00",
-        "completion_last_recorded_at": "2026-08-26T22:41:05.660092+00:00",
-        "dispatch_freshness": "STALE",
-        "completion_evidence_freshness": "STALE",
-        "dispatch_age_minutes": 94.04,
-        "completion_age_minutes": 6828.69,
-        "current_execution_state": "LOOP_EXECUTION_STALE",
-        "observation_confidence": "HIGH",
+        "dispatch_last_fired_at": null,
+        "completion_last_recorded_at": null,
+        "dispatch_freshness": "UNKNOWN",
+        "completion_evidence_freshness": "UNKNOWN",
+        "dispatch_age_minutes": null,
+        "completion_age_minutes": null,
+        "current_execution_state": "OBSERVER_UNAVAILABLE",
+        "observation_confidence": "NONE",
         "success_rate_sample_window_minutes": 30.0,
         "status_source": "noos_loop_registry+noetfield_factory_cycle_runs",
-        "observed_at": "2026-08-31T16:29:47+00:00",
-        "completion_origin": "organic",
-        "organic_completion_fresh": false,
-        "repair_sustained_fresh": false
+        "observed_at": "2026-09-07T14:33:56+00:00"
       },
-      "provenance": {
-        "completion_origin": "organic",
-        "organic_completion_fresh": false,
-        "repair_sustained_fresh": false,
-        "consistency_ok": true,
-        "last_organic_completion_at": "2026-08-26T22:41:05.660092+00:00",
-        "organic_completion_age_minutes": 6828.69,
-        "last_repair_receipt_at": null,
-        "repair_receipt_age_minutes": null,
-        "repair_receipts_since_last_organic": 0,
-        "last_dispatch_at": null,
-        "oldest_unresolved_dispatch_at": null,
-        "unresolved_dispatch_count": null,
-        "dead_letter_count": null
-      },
+      "provenance": null,
       "evidence": {
         "factory_id": "loop-surface",
         "loop_id": "surface",
-        "dispatch_last_fired_at": "2026-08-31T14:55:44.878+00:00",
-        "completion_last_recorded_at": "2026-08-26T22:41:05.660092+00:00",
-        "dispatch_freshness": "STALE",
-        "completion_evidence_freshness": "STALE",
-        "cloud_trigger": "http_loop",
-        "observed_at": "2026-08-31T14:55:44.878+00:00",
+        "dispatch_last_fired_at": null,
+        "completion_last_recorded_at": null,
+        "dispatch_freshness": "UNKNOWN",
+        "completion_evidence_freshness": "UNKNOWN",
+        "cloud_trigger": null,
+        "observed_at": null,
         "github_dispatch": {
           "ok": false,
           "error": "github_credential_unavailable"
         }
       },
-      "command": "python3 scripts/noos_loop_runner_v1.py --event-type noos_surface_loop_tick",
-      "data_freshness": "STALE_DATA",
+      "data_freshness": "FRESH",
       "slo": {
         "targets": {
           "freshness_target_minutes": 30.0,
@@ -602,83 +523,65 @@
           "latency_target_minutes": 60.0
         },
         "observed": {
-          "freshness_minutes": 94.04,
-          "success_rate": 0.0,
-          "evidence_state": "SUFFICIENT_RECENT_EVIDENCE",
+          "freshness_minutes": null,
+          "success_rate": null,
+          "evidence_state": "INSUFFICIENT_RECENT_EVIDENCE",
           "success_rate_sample_window_minutes": 30.0,
-          "latency_minutes": 94.04
+          "latency_minutes": null
         },
-        "route": "execution_reconcile_self_heal",
-        "score": 5.82,
+        "route": "monitoring_availability",
+        "score": 45.0,
         "misses": [
-          "freshness_miss",
-          "success_rate_miss",
-          "latency_miss"
+          "freshness_missing",
+          "success_rate_missing",
+          "latency_missing"
         ],
         "ok": false,
-        "kaizen_receipt": "receipts/proof/noos-kaizen-autorun-status-noos_loop_surface-20260831.json"
+        "kaizen_receipt": null
       }
     },
     {
       "id": "noos_loop_chain",
       "title": "24/7 loop \u2014 chain tools",
       "plane": "NOETFELD-OS",
-      "status": "BLOCKED_WITH_REASON",
-      "execution_state": "LOOP_EXECUTION_STALE",
-      "evidence_state": "SUFFICIENT_RECENT_EVIDENCE",
-      "success_rate": 0.0,
-      "route": "execution_reconcile_self_heal",
-      "route_permits_execution_mutation": true,
-      "observation_confidence": "HIGH",
-      "reason": "dispatch_and_completion_stale",
-      "cycle_number": 2082,
+      "status": "OBSERVER_UNAVAILABLE",
+      "execution_state": "OBSERVER_UNAVAILABLE",
+      "evidence_state": "INSUFFICIENT_RECENT_EVIDENCE",
+      "success_rate": null,
+      "route": "monitoring_availability",
+      "route_permits_execution_mutation": false,
+      "observation_confidence": "NONE",
+      "reason": "authoritative_source_unavailable",
+      "cycle_number": null,
       "presentation": {
-        "dispatch_last_fired_at": "2026-08-31T14:55:45.193+00:00",
-        "completion_last_recorded_at": "2026-08-26T22:31:10.257831+00:00",
-        "dispatch_freshness": "STALE",
-        "completion_evidence_freshness": "STALE",
-        "dispatch_age_minutes": 94.04,
-        "completion_age_minutes": 6838.63,
-        "current_execution_state": "LOOP_EXECUTION_STALE",
-        "observation_confidence": "HIGH",
+        "dispatch_last_fired_at": null,
+        "completion_last_recorded_at": null,
+        "dispatch_freshness": "UNKNOWN",
+        "completion_evidence_freshness": "UNKNOWN",
+        "dispatch_age_minutes": null,
+        "completion_age_minutes": null,
+        "current_execution_state": "OBSERVER_UNAVAILABLE",
+        "observation_confidence": "NONE",
         "success_rate_sample_window_minutes": 30.0,
         "status_source": "noos_loop_registry+noetfield_factory_cycle_runs",
-        "observed_at": "2026-08-31T16:29:47+00:00",
-        "completion_origin": "organic",
-        "organic_completion_fresh": false,
-        "repair_sustained_fresh": false
+        "observed_at": "2026-09-07T14:33:56+00:00"
       },
-      "provenance": {
-        "completion_origin": "organic",
-        "organic_completion_fresh": false,
-        "repair_sustained_fresh": false,
-        "consistency_ok": true,
-        "last_organic_completion_at": "2026-08-26T22:31:10.257831+00:00",
-        "organic_completion_age_minutes": 6838.62,
-        "last_repair_receipt_at": null,
-        "repair_receipt_age_minutes": null,
-        "repair_receipts_since_last_organic": 0,
-        "last_dispatch_at": null,
-        "oldest_unresolved_dispatch_at": null,
-        "unresolved_dispatch_count": null,
-        "dead_letter_count": null
-      },
+      "provenance": null,
       "evidence": {
         "factory_id": "loop-chain",
         "loop_id": "chain",
-        "dispatch_last_fired_at": "2026-08-31T14:55:45.193+00:00",
-        "completion_last_recorded_at": "2026-08-26T22:31:10.257831+00:00",
-        "dispatch_freshness": "STALE",
-        "completion_evidence_freshness": "STALE",
-        "cloud_trigger": "http_loop",
-        "observed_at": "2026-08-31T14:55:45.193+00:00",
+        "dispatch_last_fired_at": null,
+        "completion_last_recorded_at": null,
+        "dispatch_freshness": "UNKNOWN",
+        "completion_evidence_freshness": "UNKNOWN",
+        "cloud_trigger": null,
+        "observed_at": null,
         "github_dispatch": {
           "ok": false,
           "error": "github_credential_unavailable"
         }
       },
-      "command": "python3 scripts/noos_loop_runner_v1.py --event-type noos_chain_loop_tick",
-      "data_freshness": "STALE_DATA",
+      "data_freshness": "FRESH",
       "slo": {
         "targets": {
           "freshness_target_minutes": 30.0,
@@ -686,83 +589,65 @@
           "latency_target_minutes": 60.0
         },
         "observed": {
-          "freshness_minutes": 94.04,
-          "success_rate": 0.0,
-          "evidence_state": "SUFFICIENT_RECENT_EVIDENCE",
+          "freshness_minutes": null,
+          "success_rate": null,
+          "evidence_state": "INSUFFICIENT_RECENT_EVIDENCE",
           "success_rate_sample_window_minutes": 30.0,
-          "latency_minutes": 94.04
+          "latency_minutes": null
         },
-        "route": "execution_reconcile_self_heal",
-        "score": 5.82,
+        "route": "monitoring_availability",
+        "score": 45.0,
         "misses": [
-          "freshness_miss",
-          "success_rate_miss",
-          "latency_miss"
+          "freshness_missing",
+          "success_rate_missing",
+          "latency_missing"
         ],
         "ok": false,
-        "kaizen_receipt": "receipts/proof/noos-kaizen-autorun-status-noos_loop_chain-20260831.json"
+        "kaizen_receipt": null
       }
     },
     {
       "id": "noos_loop_self_heal",
       "title": "24/7 loop \u2014 self-heal nerve",
       "plane": "NOETFELD-OS",
-      "status": "BLOCKED_WITH_REASON",
-      "execution_state": "LOOP_EXECUTION_STALE",
-      "evidence_state": "SUFFICIENT_RECENT_EVIDENCE",
-      "success_rate": 0.0,
-      "route": "execution_reconcile_self_heal",
-      "route_permits_execution_mutation": true,
-      "observation_confidence": "HIGH",
-      "reason": "dispatch_and_completion_stale",
-      "cycle_number": 5969,
+      "status": "OBSERVER_UNAVAILABLE",
+      "execution_state": "OBSERVER_UNAVAILABLE",
+      "evidence_state": "INSUFFICIENT_RECENT_EVIDENCE",
+      "success_rate": null,
+      "route": "monitoring_availability",
+      "route_permits_execution_mutation": false,
+      "observation_confidence": "NONE",
+      "reason": "authoritative_source_unavailable",
+      "cycle_number": null,
       "presentation": {
-        "dispatch_last_fired_at": "2026-08-31T14:55:45.556+00:00",
-        "completion_last_recorded_at": "2026-08-26T22:51:06.45121+00:00",
-        "dispatch_freshness": "STALE",
-        "completion_evidence_freshness": "STALE",
-        "dispatch_age_minutes": 94.05,
-        "completion_age_minutes": 6818.7,
-        "current_execution_state": "LOOP_EXECUTION_STALE",
-        "observation_confidence": "HIGH",
+        "dispatch_last_fired_at": null,
+        "completion_last_recorded_at": null,
+        "dispatch_freshness": "UNKNOWN",
+        "completion_evidence_freshness": "UNKNOWN",
+        "dispatch_age_minutes": null,
+        "completion_age_minutes": null,
+        "current_execution_state": "OBSERVER_UNAVAILABLE",
+        "observation_confidence": "NONE",
         "success_rate_sample_window_minutes": 30.0,
         "status_source": "noos_loop_registry+noetfield_factory_cycle_runs",
-        "observed_at": "2026-08-31T16:29:48+00:00",
-        "completion_origin": "organic",
-        "organic_completion_fresh": false,
-        "repair_sustained_fresh": false
+        "observed_at": "2026-09-07T14:33:56+00:00"
       },
-      "provenance": {
-        "completion_origin": "organic",
-        "organic_completion_fresh": false,
-        "repair_sustained_fresh": false,
-        "consistency_ok": true,
-        "last_organic_completion_at": "2026-08-26T22:51:06.45121+00:00",
-        "organic_completion_age_minutes": 6818.7,
-        "last_repair_receipt_at": null,
-        "repair_receipt_age_minutes": null,
-        "repair_receipts_since_last_organic": 0,
-        "last_dispatch_at": null,
-        "oldest_unresolved_dispatch_at": null,
-        "unresolved_dispatch_count": null,
-        "dead_letter_count": null
-      },
+      "provenance": null,
       "evidence": {
         "factory_id": "loop-self-heal",
         "loop_id": "self_heal",
-        "dispatch_last_fired_at": "2026-08-31T14:55:45.556+00:00",
-        "completion_last_recorded_at": "2026-08-26T22:51:06.45121+00:00",
-        "dispatch_freshness": "STALE",
-        "completion_evidence_freshness": "STALE",
-        "cloud_trigger": "http_loop",
-        "observed_at": "2026-08-31T14:55:45.556+00:00",
+        "dispatch_last_fired_at": null,
+        "completion_last_recorded_at": null,
+        "dispatch_freshness": "UNKNOWN",
+        "completion_evidence_freshness": "UNKNOWN",
+        "cloud_trigger": null,
+        "observed_at": null,
         "github_dispatch": {
           "ok": false,
           "error": "github_credential_unavailable"
         }
       },
-      "command": "python3 scripts/noos_loop_runner_v1.py --event-type noos_self_heal_loop_tick",
-      "data_freshness": "STALE_DATA",
+      "data_freshness": "FRESH",
       "slo": {
         "targets": {
           "freshness_target_minutes": 30.0,
@@ -770,82 +655,65 @@
           "latency_target_minutes": 60.0
         },
         "observed": {
-          "freshness_minutes": 94.05,
-          "success_rate": 0.0,
-          "evidence_state": "SUFFICIENT_RECENT_EVIDENCE",
+          "freshness_minutes": null,
+          "success_rate": null,
+          "evidence_state": "INSUFFICIENT_RECENT_EVIDENCE",
           "success_rate_sample_window_minutes": 30.0,
-          "latency_minutes": 94.05
+          "latency_minutes": null
         },
-        "route": "execution_reconcile_self_heal",
-        "score": 5.81,
+        "route": "monitoring_availability",
+        "score": 45.0,
         "misses": [
-          "freshness_miss",
-          "success_rate_miss",
-          "latency_miss"
+          "freshness_missing",
+          "success_rate_missing",
+          "latency_missing"
         ],
         "ok": false,
-        "kaizen_receipt": "receipts/proof/noos-kaizen-autorun-status-noos_loop_self_heal-20260831.json"
+        "kaizen_receipt": null
       }
     },
     {
       "id": "noos_loop_agent_nerve",
       "title": "24/7 loop \u2014 agent vault nerve",
       "plane": "NOETFELD-OS",
-      "status": "COMPLETION_UNPROVEN",
-      "execution_state": "COMPLETION_UNPROVEN",
+      "status": "OBSERVER_UNAVAILABLE",
+      "execution_state": "OBSERVER_UNAVAILABLE",
       "evidence_state": "INSUFFICIENT_RECENT_EVIDENCE",
       "success_rate": null,
-      "route": "organic_producer_reconcile_escalation",
+      "route": "monitoring_availability",
       "route_permits_execution_mutation": false,
-      "observation_confidence": "MEDIUM",
-      "reason": "dispatch_fresh_no_organic_completion_proof",
-      "cycle_number": 1182,
+      "observation_confidence": "NONE",
+      "reason": "authoritative_source_unavailable",
+      "cycle_number": null,
       "presentation": {
-        "dispatch_last_fired_at": "2026-08-31T14:55:46.275+00:00",
-        "completion_last_recorded_at": "2026-08-26T22:01:13.571916+00:00",
-        "dispatch_freshness": "FRESH",
-        "completion_evidence_freshness": "STALE",
-        "dispatch_age_minutes": 94.04,
-        "completion_age_minutes": 6868.59,
-        "current_execution_state": "COMPLETION_UNPROVEN",
-        "observation_confidence": "MEDIUM",
+        "dispatch_last_fired_at": null,
+        "completion_last_recorded_at": null,
+        "dispatch_freshness": "UNKNOWN",
+        "completion_evidence_freshness": "UNKNOWN",
+        "dispatch_age_minutes": null,
+        "completion_age_minutes": null,
+        "current_execution_state": "OBSERVER_UNAVAILABLE",
+        "observation_confidence": "NONE",
         "success_rate_sample_window_minutes": 30.0,
         "status_source": "noos_loop_registry+noetfield_factory_cycle_runs",
-        "observed_at": "2026-08-31T16:29:48+00:00",
-        "completion_origin": "organic",
-        "organic_completion_fresh": false,
-        "repair_sustained_fresh": false
+        "observed_at": "2026-09-07T14:33:56+00:00"
       },
-      "provenance": {
-        "completion_origin": "organic",
-        "organic_completion_fresh": false,
-        "repair_sustained_fresh": false,
-        "consistency_ok": true,
-        "last_organic_completion_at": "2026-08-26T22:01:13.571916+00:00",
-        "organic_completion_age_minutes": 6868.58,
-        "last_repair_receipt_at": null,
-        "repair_receipt_age_minutes": null,
-        "repair_receipts_since_last_organic": 0,
-        "last_dispatch_at": null,
-        "oldest_unresolved_dispatch_at": null,
-        "unresolved_dispatch_count": null,
-        "dead_letter_count": null
-      },
+      "provenance": null,
       "evidence": {
         "factory_id": "loop-agent-nerve",
         "loop_id": "agent_nerve",
-        "dispatch_last_fired_at": "2026-08-31T14:55:46.275+00:00",
-        "completion_last_recorded_at": "2026-08-26T22:01:13.571916+00:00",
-        "dispatch_freshness": "FRESH",
-        "completion_evidence_freshness": "STALE",
-        "cloud_trigger": "http_loop",
-        "observed_at": "2026-08-31T14:55:46.275+00:00",
+        "dispatch_last_fired_at": null,
+        "completion_last_recorded_at": null,
+        "dispatch_freshness": "UNKNOWN",
+        "completion_evidence_freshness": "UNKNOWN",
+        "cloud_trigger": null,
+        "observed_at": null,
         "github_dispatch": {
           "ok": false,
           "error": "github_credential_unavailable"
         }
       },
-      "data_freshness": "STALE_DATA",
+      "data_freshness": "FRESH",
       "slo": {
         "targets": {
           "freshness_target_minutes": 130.0,
@@ -853,16 +721,18 @@
           "latency_target_minutes": 130.0
         },
         "observed": {
-          "freshness_minutes": 94.04,
+          "freshness_minutes": null,
           "success_rate": null,
           "evidence_state": "INSUFFICIENT_RECENT_EVIDENCE",
           "success_rate_sample_window_minutes": 30.0,
-          "latency_minutes": 94.04
+          "latency_minutes": null
         },
-        "route": "organic_producer_reconcile_escalation",
-        "score": 80.0,
+        "route": "monitoring_availability",
+        "score": 45.0,
         "misses": [
-          "success_rate_missing"
+          "freshness_missing",
+          "success_rate_missing",
+          "latency_missing"
         ],
         "ok": false,
         "kaizen_receipt": null
@@ -872,62 +742,44 @@
       "id": "noos_loop_sourcea_observe",
       "title": "24/7 loop \u2014 SourceA observe",
       "plane": "SourceA",
-      "status": "BLOCKED_WITH_REASON",
-      "execution_state": "LOOP_EXECUTION_STALE",
-      "evidence_state": "SUFFICIENT_RECENT_EVIDENCE",
-      "success_rate": 0.0,
-      "route": "execution_reconcile_self_heal",
-      "route_permits_execution_mutation": true,
-      "observation_confidence": "HIGH",
-      "reason": "dispatch_and_completion_stale",
-      "cycle_number": 2081,
+      "status": "OBSERVER_UNAVAILABLE",
+      "execution_state": "OBSERVER_UNAVAILABLE",
+      "evidence_state": "INSUFFICIENT_RECENT_EVIDENCE",
+      "success_rate": null,
+      "route": "monitoring_availability",
+      "route_permits_execution_mutation": false,
+      "observation_confidence": "NONE",
+      "reason": "authoritative_source_unavailable",
+      "cycle_number": null,
       "presentation": {
-        "dispatch_last_fired_at": "2026-08-31T14:55:45.924+00:00",
-        "completion_last_recorded_at": "2026-08-26T22:31:14.003765+00:00",
-        "dispatch_freshness": "STALE",
-        "completion_evidence_freshness": "STALE",
-        "dispatch_age_minutes": 94.06,
-        "completion_age_minutes": 6838.59,
-        "current_execution_state": "LOOP_EXECUTION_STALE",
-        "observation_confidence": "HIGH",
+        "dispatch_last_fired_at": null,
+        "completion_last_recorded_at": null,
+        "dispatch_freshness": "UNKNOWN",
+        "completion_evidence_freshness": "UNKNOWN",
+        "dispatch_age_minutes": null,
+        "completion_age_minutes": null,
+        "current_execution_state": "OBSERVER_UNAVAILABLE",
+        "observation_confidence": "NONE",
         "success_rate_sample_window_minutes": 30.0,
         "status_source": "noos_loop_registry+noetfield_factory_cycle_runs",
-        "observed_at": "2026-08-31T16:29:49+00:00",
-        "completion_origin": "organic",
-        "organic_completion_fresh": false,
-        "repair_sustained_fresh": false
+        "observed_at": "2026-09-07T14:33:56+00:00"
       },
-      "provenance": {
-        "completion_origin": "organic",
-        "organic_completion_fresh": false,
-        "repair_sustained_fresh": false,
-        "consistency_ok": true,
-        "last_organic_completion_at": "2026-08-26T22:31:14.003765+00:00",
-        "organic_completion_age_minutes": 6838.59,
-        "last_repair_receipt_at": null,
-        "repair_receipt_age_minutes": null,
-        "repair_receipts_since_last_organic": 0,
-        "last_dispatch_at": null,
-        "oldest_unresolved_dispatch_at": null,
-        "unresolved_dispatch_count": null,
-        "dead_letter_count": null
-      },
+      "provenance": null,
       "evidence": {
         "factory_id": "loop-sourcea-observe",
         "loop_id": "sourcea_observe",
-        "dispatch_last_fired_at": "2026-08-31T14:55:45.924+00:00",
-        "completion_last_recorded_at": "2026-08-26T22:31:14.003765+00:00",
-        "dispatch_freshness": "STALE",
-        "completion_evidence_freshness": "STALE",
-        "cloud_trigger": "http_loop",
-        "observed_at": "2026-08-31T14:55:45.924+00:00",
+        "dispatch_last_fired_at": null,
+        "completion_last_recorded_at": null,
+        "dispatch_freshness": "UNKNOWN",
+        "completion_evidence_freshness": "UNKNOWN",
+        "cloud_trigger": null,
+        "observed_at": null,
         "github_dispatch": {
           "ok": false,
           "error": "github_credential_unavailable"
         }
       },
-      "command": "python3 scripts/noos_loop_runner_v1.py --event-type noos_sourcea_observe_loop_tick",
-      "data_freshness": "STALE_DATA",
+      "data_freshness": "FRESH",
       "slo": {
         "targets": {
           "freshness_target_minutes": 30.0,
@@ -935,21 +787,21 @@
           "latency_target_minutes": 60.0
         },
         "observed": {
-          "freshness_minutes": 94.06,
-          "success_rate": 0.0,
-          "evidence_state": "SUFFICIENT_RECENT_EVIDENCE",
+          "freshness_minutes": null,
+          "success_rate": null,
+          "evidence_state": "INSUFFICIENT_RECENT_EVIDENCE",
           "success_rate_sample_window_minutes": 30.0,
-          "latency_minutes": 94.06
+          "latency_minutes": null
         },
-        "route": "execution_reconcile_self_heal",
-        "score": 5.81,
+        "route": "monitoring_availability",
+        "score": 45.0,
         "misses": [
-          "freshness_miss",
-          "success_rate_miss",
-          "latency_miss"
+          "freshness_missing",
+          "success_rate_missing",
+          "latency_missing"
         ],
         "ok": false,
-        "kaizen_receipt": "receipts/proof/noos-kaizen-autorun-status-noos_loop_sourcea_observe-20260831.json"
+        "kaizen_receipt": null
       }
     },
     {
@@ -994,7 +846,7 @@
             ]
           }
         ],
-        "observed_at": "2026-08-31T16:29:49+00:00"
+        "observed_at": "2026-09-07T14:33:56+00:00"
       },
       "slo": {
         "targets": {
@@ -1020,28 +872,10 @@
       "id": "noos_loop_liveness_registry",
       "title": "NOOS loop liveness registry (Supabase)",
       "plane": "NOETFELD-OS",
-      "status": "FAILED_WITH_RECEIPT",
-      "stale_count": 14,
-      "registry_rows": 20,
-      "stale_loops": [
-        "plan_completion",
-        "inbox",
-        "runtime",
-        "surface",
-        "chain",
-        "self_heal",
-        "sourcea_observe",
-        "workflow_audit",
-        "self_heal_safe_fixes",
-        "factory_autorun",
-        "cf_loop_motor",
-        "executor_railway_canonical",
-        "role_circle",
-        "unified_motor_event_bridge"
-      ],
+      "status": "BLOCKED_WITH_REASON",
+      "reason": "supabase_query_failed",
       "evidence": {
-        "observed_at": "2026-08-31T16:29:50+00:00",
-        "expected_rows": 14
+        "http": 402
       },
       "slo": {
         "targets": {
@@ -1050,19 +884,21 @@
           "latency_target_minutes": 60.0
         },
         "observed": {
-          "freshness_minutes": 0.0,
+          "freshness_minutes": null,
           "success_rate": 0.0,
           "evidence_state": "SUFFICIENT_RECENT_EVIDENCE",
           "success_rate_sample_window_minutes": null,
-          "latency_minutes": 0.0
+          "latency_minutes": null
         },
         "route": null,
-        "score": 65.0,
+        "score": 30.0,
         "misses": [
-          "success_rate_miss"
+          "freshness_missing",
+          "success_rate_miss",
+          "latency_missing"
         ],
         "ok": false,
-        "kaizen_receipt": "receipts/proof/noos-kaizen-autorun-status-noos_loop_liveness_registry-20260831.json"
+        "kaizen_receipt": "receipts/proof/noos-kaizen-autorun-status-noos_loop_liveness_registry-20260907.json"
       }
     },
     {
@@ -1071,7 +907,7 @@
       "plane": "NOETFELD-OS",
       "status": "FAILED_WITH_RECEIPT",
       "command": "make urls",
-      "observed_at": "2026-08-31T16:29:52+00:00",
+      "observed_at": "2026-09-07T14:33:57+00:00",
       "evidence": {
         "fails": [
           "FAIL platform health (HTTP Error 404: Not Found)",
@@ -1084,7 +920,7 @@
           "OK www ai-value-os (200)"
         ],
         "checked": 6,
-        "observed_at": "2026-08-31T16:29:52+00:00"
+        "observed_at": "2026-09-07T14:33:57+00:00"
       },
       "slo": {
         "targets": {
@@ -1093,11 +929,11 @@
           "latency_target_minutes": 60.0
         },
         "observed": {
-          "freshness_minutes": 0.01,
+          "freshness_minutes": 0.02,
           "success_rate": 0.0,
           "evidence_state": "SUFFICIENT_RECENT_EVIDENCE",
           "success_rate_sample_window_minutes": null,
-          "latency_minutes": 0.01
+          "latency_minutes": 0.02
         },
         "route": null,
         "score": 65.0,
@@ -1105,7 +941,7 @@
           "success_rate_miss"
         ],
         "ok": false,
-        "kaizen_receipt": "receipts/proof/noos-kaizen-autorun-status-sandbox_health_sweep-20260831.json"
+        "kaizen_receipt": "receipts/proof/noos-kaizen-autorun-status-sandbox_health_sweep-20260907.json"
       }
     },
     {
@@ -1146,7 +982,7 @@
           "latency_missing"
         ],
         "ok": false,
-        "kaizen_receipt": "receipts/proof/noos-kaizen-autorun-status-noos_gha_integrator_daily_witness-20260831.json"
+        "kaizen_receipt": "receipts/proof/noos-kaizen-autorun-status-noos_gha_integrator_daily_witness-20260907.json"
       }
     },
     {
@@ -1187,7 +1023,7 @@
           "latency_missing"
         ],
         "ok": false,
-        "kaizen_receipt": "receipts/proof/noos-kaizen-autorun-status-noos_gha_autorun_witness-20260831.json"
+        "kaizen_receipt": "receipts/proof/noos-kaizen-autorun-status-noos_gha_autorun_witness-20260907.json"
       }
     },
     {
@@ -1228,7 +1064,7 @@
           "latency_missing"
         ],
         "ok": false,
-        "kaizen_receipt": "receipts/proof/noos-kaizen-autorun-status-noos_gha_motor_sustain_witness-20260831.json"
+        "kaizen_receipt": "receipts/proof/noos-kaizen-autorun-status-noos_gha_motor_sustain_witness-20260907.json"
       }
     },
     {
@@ -1269,7 +1105,7 @@
           "latency_missing"
         ],
         "ok": false,
-        "kaizen_receipt": "receipts/proof/noos-kaizen-autorun-status-noos_gha_health_witness-20260831.json"
+        "kaizen_receipt": "receipts/proof/noos-kaizen-autorun-status-noos_gha_health_witness-20260907.json"
       }
     },
     {
@@ -1310,7 +1146,7 @@
           "latency_missing"
         ],
         "ok": false,
-        "kaizen_receipt": "receipts/proof/noos-kaizen-autorun-status-noos_stack_health_receipt-20260831.json"
+        "kaizen_receipt": "receipts/proof/noos-kaizen-autorun-status-noos_stack_health_receipt-20260907.json"
       }
     },
     {
@@ -1351,7 +1187,7 @@
           "latency_missing"
         ],
         "ok": false,
-        "kaizen_receipt": "receipts/proof/noos-kaizen-autorun-status-noos_trustfield_observe_witness-20260831.json"
+        "kaizen_receipt": "receipts/proof/noos-kaizen-autorun-status-noos_trustfield_observe_witness-20260907.json"
       }
     },
     {
@@ -1392,7 +1228,7 @@
           "latency_missing"
         ],
         "ok": false,
-        "kaizen_receipt": "receipts/proof/noos-kaizen-autorun-status-noos_sourcea_spine_witness-20260831.json"
+        "kaizen_receipt": "receipts/proof/noos-kaizen-autorun-status-noos_sourcea_spine_witness-20260907.json"
       }
     },
     {
@@ -1433,7 +1269,7 @@
           "latency_missing"
         ],
         "ok": false,
-        "kaizen_receipt": "receipts/proof/noos-kaizen-autorun-status-noos_machine_audit_witness-20260831.json"
+        "kaizen_receipt": "receipts/proof/noos-kaizen-autorun-status-noos_machine_audit_witness-20260907.json"
       }
     },
     {
@@ -1474,7 +1310,7 @@
           "latency_missing"
         ],
         "ok": false,
-        "kaizen_receipt": "receipts/proof/noos-kaizen-autorun-status-noos_liveness_registry_witness-20260831.json"
+        "kaizen_receipt": "receipts/proof/noos-kaizen-autorun-status-noos_liveness_registry_witness-20260907.json"
       }
     },
     {
@@ -1515,7 +1351,7 @@
           "latency_missing"
         ],
         "ok": false,
-        "kaizen_receipt": "receipts/proof/noos-kaizen-autorun-status-noos_sandbox_url_sweep_witness-20260831.json"
+        "kaizen_receipt": "receipts/proof/noos-kaizen-autorun-status-noos_sandbox_url_sweep_witness-20260907.json"
       }
     }
   ],
@@ -1555,7 +1391,7 @@
   ],
   "founder_gated_improvements": [
     {
-      "id": "receipts/proof/noos-kaizen-autorun-status-sourcea_cloud_queue-20260831.json",
+      "id": "receipts/proof/noos-kaizen-autorun-status-sourcea_cloud_queue-20260907.json",
       "expected_roi": {
         "cost_saved_usd": 0,
         "risk_reduced": "autorun SLO miss",
@@ -1565,7 +1401,7 @@
       "age_days": 0
     },
     {
-      "id": "receipts/proof/noos-kaizen-autorun-status-sourcea_buyer_proof_verify-20260831.json",
+      "id": "receipts/proof/noos-kaizen-autorun-status-sourcea_buyer_proof_verify-20260907.json",
       "expected_roi": {
         "cost_saved_usd": 0,
         "risk_reduced": "autorun SLO miss",
@@ -1575,7 +1411,7 @@
       "age_days": 0
     },
     {
-      "id": "receipts/proof/noos-kaizen-autorun-status-sourcea_recipe_queue_builder-20260831.json",
+      "id": "receipts/proof/noos-kaizen-autorun-status-sourcea_recipe_queue_builder-20260907.json",
       "expected_roi": {
         "cost_saved_usd": 0,
         "risk_reduced": "autorun SLO miss",
@@ -1585,7 +1421,7 @@
       "age_days": 0
     },
     {
-      "id": "receipts/proof/noos-kaizen-autorun-status-noos_factory_autorun-20260831.json",
+      "id": "receipts/proof/noos-kaizen-autorun-status-noos_factory_autorun-20260907.json",
       "expected_roi": {
         "cost_saved_usd": 0,
         "risk_reduced": "autorun SLO miss",
@@ -1595,7 +1431,7 @@
       "age_days": 0
     },
     {
-      "id": "receipts/proof/noos-kaizen-autorun-status-noos_worker_inbox-20260831.json",
+      "id": "receipts/proof/noos-kaizen-autorun-status-noos_worker_inbox-20260907.json",
       "expected_roi": {
         "cost_saved_usd": 0,
         "risk_reduced": "autorun SLO miss",
@@ -1605,7 +1441,7 @@
       "age_days": 0
     },
     {
-      "id": "receipts/proof/noos-kaizen-autorun-status-noos_loop_inbox-20260831.json",
+      "id": "receipts/proof/noos-kaizen-autorun-status-noos_loop_liveness_registry-20260907.json",
       "expected_roi": {
         "cost_saved_usd": 0,
         "risk_reduced": "autorun SLO miss",
@@ -1615,7 +1451,7 @@
       "age_days": 0
     },
     {
-      "id": "receipts/proof/noos-kaizen-autorun-status-noos_loop_runtime-20260831.json",
+      "id": "receipts/proof/noos-kaizen-autorun-status-sandbox_health_sweep-20260907.json",
       "expected_roi": {
         "cost_saved_usd": 0,
         "risk_reduced": "autorun SLO miss",
@@ -1625,7 +1461,7 @@
       "age_days": 0
     },
     {
-      "id": "receipts/proof/noos-kaizen-autorun-status-noos_loop_surface-20260831.json",
+      "id": "receipts/proof/noos-kaizen-autorun-status-noos_gha_integrator_daily_witness-20260907.json",
       "expected_roi": {
         "cost_saved_usd": 0,
         "risk_reduced": "autorun SLO miss",
@@ -1635,7 +1471,7 @@
       "age_days": 0
     },
     {
-      "id": "receipts/proof/noos-kaizen-autorun-status-noos_loop_chain-20260831.json",
+      "id": "receipts/proof/noos-kaizen-autorun-status-noos_gha_autorun_witness-20260907.json",
       "expected_roi": {
         "cost_saved_usd": 0,
         "risk_reduced": "autorun SLO miss",
@@ -1645,7 +1481,7 @@
       "age_days": 0
     },
     {
-      "id": "receipts/proof/noos-kaizen-autorun-status-noos_loop_self_heal-20260831.json",
+      "id": "receipts/proof/noos-kaizen-autorun-status-noos_gha_motor_sustain_witness-20260907.json",
       "expected_roi": {
         "cost_saved_usd": 0,
         "risk_reduced": "autorun SLO miss",
@@ -1655,7 +1491,7 @@
       "age_days": 0
     },
     {
-      "id": "receipts/proof/noos-kaizen-autorun-status-noos_loop_sourcea_observe-20260831.json",
+      "id": "receipts/proof/noos-kaizen-autorun-status-noos_gha_health_witness-20260907.json",
       "expected_roi": {
         "cost_saved_usd": 0,
         "risk_reduced": "autorun SLO miss",
@@ -1665,7 +1501,7 @@
       "age_days": 0
     },
     {
-      "id": "receipts/proof/noos-kaizen-autorun-status-noos_loop_liveness_registry-20260831.json",
+      "id": "receipts/proof/noos-kaizen-autorun-status-noos_stack_health_receipt-20260907.json",
       "expected_roi": {
         "cost_saved_usd": 0,
         "risk_reduced": "autorun SLO miss",
@@ -1675,7 +1511,7 @@
       "age_days": 0
     },
     {
-      "id": "receipts/proof/noos-kaizen-autorun-status-sandbox_health_sweep-20260831.json",
+      "id": "receipts/proof/noos-kaizen-autorun-status-noos_trustfield_observe_witness-20260907.json",
       "expected_roi": {
         "cost_saved_usd": 0,
         "risk_reduced": "autorun SLO miss",
@@ -1685,7 +1521,7 @@
       "age_days": 0
     },
     {
-      "id": "receipts/proof/noos-kaizen-autorun-status-noos_gha_integrator_daily_witness-20260831.json",
+      "id": "receipts/proof/noos-kaizen-autorun-status-noos_sourcea_spine_witness-20260907.json",
       "expected_roi": {
         "cost_saved_usd": 0,
         "risk_reduced": "autorun SLO miss",
@@ -1695,7 +1531,7 @@
       "age_days": 0
     },
     {
-      "id": "receipts/proof/noos-kaizen-autorun-status-noos_gha_autorun_witness-20260831.json",
+      "id": "receipts/proof/noos-kaizen-autorun-status-noos_machine_audit_witness-20260907.json",
       "expected_roi": {
         "cost_saved_usd": 0,
         "risk_reduced": "autorun SLO miss",
@@ -1705,7 +1541,7 @@
       "age_days": 0
     },
     {
-      "id": "receipts/proof/noos-kaizen-autorun-status-noos_gha_motor_sustain_witness-20260831.json",
+      "id": "receipts/proof/noos-kaizen-autorun-status-noos_liveness_registry_witness-20260907.json",
       "expected_roi": {
         "cost_saved_usd": 0,
         "risk_reduced": "autorun SLO miss",
@@ -1715,67 +1551,7 @@
       "age_days": 0
     },
     {
-      "id": "receipts/proof/noos-kaizen-autorun-status-noos_gha_health_witness-20260831.json",
-      "expected_roi": {
-        "cost_saved_usd": 0,
-        "risk_reduced": "autorun SLO miss",
-        "revenue_unblocked": "",
-        "build_cost_usd": 0
-      },
-      "age_days": 0
-    },
-    {
-      "id": "receipts/proof/noos-kaizen-autorun-status-noos_stack_health_receipt-20260831.json",
-      "expected_roi": {
-        "cost_saved_usd": 0,
-        "risk_reduced": "autorun SLO miss",
-        "revenue_unblocked": "",
-        "build_cost_usd": 0
-      },
-      "age_days": 0
-    },
-    {
-      "id": "receipts/proof/noos-kaizen-autorun-status-noos_trustfield_observe_witness-20260831.json",
-      "expected_roi": {
-        "cost_saved_usd": 0,
-        "risk_reduced": "autorun SLO miss",
-        "revenue_unblocked": "",
-        "build_cost_usd": 0
-      },
-      "age_days": 0
-    },
-    {
-      "id": "receipts/proof/noos-kaizen-autorun-status-noos_sourcea_spine_witness-20260831.json",
-      "expected_roi": {
-        "cost_saved_usd": 0,
-        "risk_reduced": "autorun SLO miss",
-        "revenue_unblocked": "",
-        "build_cost_usd": 0
-      },
-      "age_days": 0
-    },
-    {
-      "id": "receipts/proof/noos-kaizen-autorun-status-noos_machine_audit_witness-20260831.json",
-      "expected_roi": {
-        "cost_saved_usd": 0,
-        "risk_reduced": "autorun SLO miss",
-        "revenue_unblocked": "",
-        "build_cost_usd": 0
-      },
-      "age_days": 0
-    },
-    {
-      "id": "receipts/proof/noos-kaizen-autorun-status-noos_liveness_registry_witness-20260831.json",
-      "expected_roi": {
-        "cost_saved_usd": 0,
-        "risk_reduced": "autorun SLO miss",
-        "revenue_unblocked": "",
-        "build_cost_usd": 0
-      },
-      "age_days": 0
-    },
-    {
-      "id": "receipts/proof/noos-kaizen-autorun-status-noos_sandbox_url_sweep_witness-20260831.json",
+      "id": "receipts/proof/noos-kaizen-autorun-status-noos_sandbox_url_sweep_witness-20260907.json",
       "expected_roi": {
         "cost_saved_usd": 0,
         "risk_reduced": "autorun SLO miss",
@@ -1810,73 +1586,82 @@
         "scope": "noos_factory_autorun",
         "severity": "high",
         "summary": "Workflow is not healthy: BLOCKED_WITH_REASON",
-        "detail": "stale_supabase_row"
+        "detail": "supabase_query_failed"
       },
       {
         "scope": "noos_worker_inbox",
         "severity": "high",
         "summary": "Workflow is not healthy: BLOCKED_WITH_REASON",
-        "detail": "stale_supabase_row"
+        "detail": "supabase_query_failed"
       },
       {
         "scope": "noos_loop_inbox",
-        "severity": "high",
-        "summary": "Workflow is not healthy: BLOCKED_WITH_REASON",
-        "detail": "dispatch_and_completion_stale",
-        "route": "execution_reconcile_self_heal",
-        "execution_state": "LOOP_EXECUTION_STALE"
+        "severity": "medium",
+        "summary": "Authoritative source unavailable; execution state not determinable",
+        "detail": "authoritative_source_unavailable",
+        "execution_state": "OBSERVER_UNAVAILABLE",
+        "evidence_state": "INSUFFICIENT_RECENT_EVIDENCE",
+        "route": "monitoring_availability"
       },
       {
         "scope": "noos_loop_runtime",
-        "severity": "high",
-        "summary": "Workflow is not healthy: BLOCKED_WITH_REASON",
-        "detail": "dispatch_and_completion_stale",
-        "route": "execution_reconcile_self_heal",
-        "execution_state": "LOOP_EXECUTION_STALE"
+        "severity": "medium",
+        "summary": "Authoritative source unavailable; execution state not determinable",
+        "detail": "authoritative_source_unavailable",
+        "execution_state": "OBSERVER_UNAVAILABLE",
+        "evidence_state": "INSUFFICIENT_RECENT_EVIDENCE",
+        "route": "monitoring_availability"
       },
       {
         "scope": "noos_loop_surface",
-        "severity": "high",
-        "summary": "Workflow is not healthy: BLOCKED_WITH_REASON",
-        "detail": "dispatch_and_completion_stale",
-        "route": "execution_reconcile_self_heal",
-        "execution_state": "LOOP_EXECUTION_STALE"
+        "severity": "medium",
+        "summary": "Authoritative source unavailable; execution state not determinable",
+        "detail": "authoritative_source_unavailable",
+        "execution_state": "OBSERVER_UNAVAILABLE",
+        "evidence_state": "INSUFFICIENT_RECENT_EVIDENCE",
+        "route": "monitoring_availability"
       },
       {
         "scope": "noos_loop_chain",
-        "severity": "high",
-        "summary": "Workflow is not healthy: BLOCKED_WITH_REASON",
-        "detail": "dispatch_and_completion_stale",
-        "route": "execution_reconcile_self_heal",
-        "execution_state": "LOOP_EXECUTION_STALE"
+        "severity": "medium",
+        "summary": "Authoritative source unavailable; execution state not determinable",
+        "detail": "authoritative_source_unavailable",
+        "execution_state": "OBSERVER_UNAVAILABLE",
+        "evidence_state": "INSUFFICIENT_RECENT_EVIDENCE",
+        "route": "monitoring_availability"
       },
       {
         "scope": "noos_loop_self_heal",
-        "severity": "high",
-        "summary": "Workflow is not healthy: BLOCKED_WITH_REASON",
-        "detail": "dispatch_and_completion_stale",
-        "route": "execution_reconcile_self_heal",
-        "execution_state": "LOOP_EXECUTION_STALE"
+        "severity": "medium",
+        "summary": "Authoritative source unavailable; execution state not determinable",
+        "detail": "authoritative_source_unavailable",
+        "execution_state": "OBSERVER_UNAVAILABLE",
+        "evidence_state": "INSUFFICIENT_RECENT_EVIDENCE",
+        "route": "monitoring_availability"
       },
       {
         "scope": "noos_loop_agent_nerve",
-        "severity": "high",
-        "summary": "Workflow SLO miss",
-        "detail": "success_rate_missing"
+        "severity": "medium",
+        "summary": "Authoritative source unavailable; execution state not determinable",
+        "detail": "authoritative_source_unavailable",
+        "execution_state": "OBSERVER_UNAVAILABLE",
+        "evidence_state": "INSUFFICIENT_RECENT_EVIDENCE",
+        "route": "monitoring_availability"
       },
       {
         "scope": "noos_loop_sourcea_observe",
-        "severity": "high",
-        "summary": "Workflow is not healthy: BLOCKED_WITH_REASON",
-        "detail": "dispatch_and_completion_stale",
-        "route": "execution_reconcile_self_heal",
-        "execution_state": "LOOP_EXECUTION_STALE"
+        "severity": "medium",
+        "summary": "Authoritative source unavailable; execution state not determinable",
+        "detail": "authoritative_source_unavailable",
+        "execution_state": "OBSERVER_UNAVAILABLE",
+        "evidence_state": "INSUFFICIENT_RECENT_EVIDENCE",
+        "route": "monitoring_availability"
       },
       {
         "scope": "noos_loop_liveness_registry",
         "severity": "high",
-        "summary": "Workflow is not healthy: FAILED_WITH_RECEIPT",
-        "detail": ""
+        "summary": "Workflow is not healthy: BLOCKED_WITH_REASON",
+        "detail": "supabase_query_failed"
       },
       {
         "scope": "sandbox_health_sweep",
