@@ -1,9 +1,9 @@
 {
   "schema": "noos-gha-health-witness-v1",
-  "at": "2026-08-31T16:07:31Z",
-  "ok": true,
-  "overall_status": "green",
-  "closure_token": "NOOS_GHA_HEALTH_WITNESS: green",
+  "at": "2026-09-07T14:12:46Z",
+  "ok": false,
+  "overall_status": "yellow",
+  "closure_token": "NOOS_GHA_HEALTH_WITNESS: yellow",
   "billing_gate_max_seconds": 12.0,
   "checks": {
     "ICL-D10": {
@@ -19,15 +19,15 @@
         {
           "ok": true,
           "repo": "noetfeld-os",
-          "billing_gate_failures_12s": 0,
+          "billing_gate_failures_12s": 2,
           "latest_is_billing_gate": false,
           "latest_real_failure": false,
           "real_failures": [
             "NOOS integrator daily witness: NOOS integrator daily witness",
-            "NOOS stack health receipt: NOOS stack health receipt"
+            "NOOS liveness registry witness: NOOS liveness registry witness"
           ],
           "latest_conclusion": "",
-          "latest_duration_s": 4.0,
+          "latest_duration_s": 5.0,
           "recent_count": 8
         }
       ]
@@ -37,7 +37,7 @@
       "ok": true,
       "failures": [
         "NOOS integrator daily witness: NOOS integrator daily witness",
-        "NOOS stack health receipt: NOOS stack health receipt"
+        "NOOS liveness registry witness: NOOS liveness registry witness"
       ]
     },
     "ICL-D12": {
@@ -55,49 +55,87 @@
     },
     "witness_early_warning": {
       "title": "Witness workflows not dying at billing gate (<12s)",
-      "ok": true,
+      "ok": false,
       "detail": {
-        "ok": true,
+        "ok": false,
         "witness_count": 10,
         "warnings": [
           {
             "workflow": "noos-integrator-daily-witness.yml",
             "ok": false,
             "billing_gate_precursor": false,
-            "duration_s": 39.0,
-            "run_id": 33405471698,
+            "duration_s": 15.0,
+            "run_id": 34126938422,
             "conclusion": "failure"
           },
           {
             "workflow": "noos-autorun-witness.yml",
             "ok": false,
             "billing_gate_precursor": false,
-            "duration_s": 24.0,
-            "run_id": 32712335420,
+            "duration_s": 27.0,
+            "run_id": 33414383800,
             "conclusion": "failure"
           },
           {
             "workflow": "noos-motor-sustain-witness.yml",
             "ok": false,
-            "billing_gate_precursor": false,
-            "duration_s": 28.0,
-            "run_id": 33399574983,
+            "billing_gate_precursor": true,
+            "duration_s": 10.0,
+            "run_id": 34122799212,
             "conclusion": "failure"
           },
           {
             "workflow": "noos-stack-health-receipt.yml",
             "ok": false,
+            "billing_gate_precursor": true,
+            "duration_s": 11.0,
+            "run_id": 34124786601,
+            "conclusion": "failure"
+          },
+          {
+            "workflow": "noos-trustfield-observe-witness.yml",
+            "ok": false,
             "billing_gate_precursor": false,
-            "duration_s": 40.0,
-            "run_id": 33402219350,
+            "duration_s": 14.0,
+            "run_id": 34084750028,
+            "conclusion": "failure"
+          },
+          {
+            "workflow": "noos-liveness-registry-witness.yml",
+            "ok": false,
+            "billing_gate_precursor": false,
+            "duration_s": 14.0,
+            "run_id": 34124707565,
             "conclusion": "failure"
           }
         ],
-        "billing_gate_precursors": [],
+        "billing_gate_precursors": [
+          {
+            "workflow": "noos-motor-sustain-witness.yml",
+            "ok": false,
+            "billing_gate_precursor": true,
+            "duration_s": 10.0,
+            "run_id": 34122799212,
+            "conclusion": "failure"
+          },
+          {
+            "workflow": "noos-stack-health-receipt.yml",
+            "ok": false,
+            "billing_gate_precursor": true,
+            "duration_s": 11.0,
+            "run_id": 34124786601,
+            "conclusion": "failure"
+          }
+        ],
         "one_law": "Jobs failing in <12s with no step logs = billing/spending gate \u2014 not CI red"
       }
     }
   },
-  "fix_queue": [],
+  "fix_queue": [
+    {
+      "id": "witness_early_warning",
+      "fix": "Enterprise billing spending limit >$0; gh run rerun <id> for real CI"
+    }
+  ],
   "witness_mode": true
 }
