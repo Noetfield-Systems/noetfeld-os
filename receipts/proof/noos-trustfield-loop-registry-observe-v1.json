@@ -1,6 +1,6 @@
 {
   "schema": "noos-trustfield-loop-registry-observe-v1.1",
-  "at": "2026-09-09T13:00:06Z",
+  "at": "2026-09-09T19:19:07Z",
   "read_only": true,
   "one_law": "NOOS observes TrustField registry; TrustField worker owns writes and probe seed.",
   "plane": "TrustField-Technologies",
