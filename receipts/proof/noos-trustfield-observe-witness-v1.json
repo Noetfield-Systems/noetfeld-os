@@ -1,6 +1,6 @@
 {
   "schema": "noos-trustfield-observe-witness-v1",
-  "at": "2026-09-10T12:57:30Z",
+  "at": "2026-09-10T19:08:48Z",
   "read_only": true,
   "witness_mode": true,
   "one_law": "Observe + receipt only \u2014 TrustField worker owns product/registry writes.",
@@ -22,25 +22,15 @@
     "ICL-D07": {
       "title": "TrustField loop registry (deadman motors green)",
       "ok": true,
-      "overall": "yellow",
-      "summary": {
-        "green": 0,
-        "yellow": 0,
-        "red": 0,
-        "last_ok_false": 0,
-        "missing_last_fired_at": 0,
-        "probe_present": false,
-        "deadman_status": "missing",
-        "gate_48h_status": "missing",
-        "deadman_watched_red": []
-      },
-      "closure": "NOOS_TF_LOOP_REGISTRY_OBSERVE: yellow",
+      "overall": null,
+      "summary": {},
+      "closure": null,
       "witness_relaxed": true
     }
   },
   "layers": {
     "schema": "noos-trustfield-parallel-layers-observe-v1",
-    "at": "2026-09-10T12:57:30Z",
+    "at": "2026-09-10T19:08:48Z",
     "read_only": true,
     "one_law": "NOOS coordinates eleven TrustField layers \u2014 observe, enqueue, receipt. TrustField CF+Railway motors execute. One exclusive writer per state cell.",
     "layer_count": 11,
@@ -75,10 +65,10 @@
       "lanes_run": null
     },
     "registry_observe": {
-      "overall_status": "yellow",
-      "row_count": 0,
-      "probe_present": false,
-      "deadman_status": "missing"
+      "overall_status": null,
+      "row_count": null,
+      "probe_present": null,
+      "deadman_status": null
     },
     "layers": [
       {
@@ -92,7 +82,7 @@
         "railway_lane": null,
         "reasons": [
           "loop_id not in registry sample",
-          "registry_overall=yellow",
+          "registry_overall=unknown",
           "plan_worker_unreachable"
         ]
       },
@@ -250,58 +240,9 @@
     "exit_code": 1
   },
   "registry": {
-    "schema": "noos-trustfield-loop-registry-observe-v1.1",
-    "at": "2026-09-10T12:57:30Z",
-    "read_only": true,
-    "one_law": "NOOS observes TrustField registry; TrustField worker owns writes and probe seed.",
-    "plane": "TrustField-Technologies",
-    "table": "trustfield_loop_registry",
-    "supabase_project_ref": "tkgpapowwplupyekpivy",
-    "registry_read_ok": false,
-    "row_count": 0,
-    "overall_status": "yellow",
-    "summary": {
-      "green": 0,
-      "yellow": 0,
-      "red": 0,
-      "last_ok_false": 0,
-      "missing_last_fired_at": 0,
-      "probe_present": false,
-      "deadman_status": "missing",
-      "gate_48h_status": "missing",
-      "deadman_watched_red": []
-    },
-    "gates": {
-      "w3_probe": {
-        "loop_id": "tf_w3_supabase_sink_probe_v1",
-        "present": false,
-        "row": null,
-        "closure": "TF_LOOP_REGISTRY_LIVENESS: fail"
-      },
-      "w5_deadman": {
-        "loop_id": "tf_cf_deadman_v1",
-        "row": null,
-        "watched_motors_red": []
-      },
-      "w10_48h_gate": {
-        "loop_id": "tf_cf_48h_gate_v1",
-        "row": null,
-        "note": "W10 uses 72h stale warn \u2014 2.5h age is green under W10 SLO."
-      }
-    },
-    "rows": [],
-    "fails": [
-      "registry read failed: {\"message\":\"Service for this project is restricted due to the following violations: exceed_db_size_quota. The project owner must upgrade their plan or remove spend caps to restore service.\"}",
-      "missing probe row tf_w3_supabase_sink_probe_v1"
-    ],
-    "repair_commands": [
-      "TrustField worker: cd TrustField-Technologies && ./scripts/verify_tf_supabase_receipt_sink.sh",
-      "TrustField worker: cd TrustField-Technologies && ./scripts/verify_tf_loop_registry_liveness.sh",
-      "TrustField worker: cd TrustField-Technologies && ./scripts/verify_cf_deadman_v1.sh"
-    ],
-    "closure_token": "NOOS_TF_LOOP_REGISTRY_OBSERVE: yellow",
-    "receipt_path": "/home/runner/work/noetfeld-os/noetfeld-os/receipts/proof/noos-trustfield-loop-registry-observe-v1.json",
-    "exit_code": 1
+    "ok": false,
+    "exit_code": 1,
+    "stderr": "Python/3.12.14/x64/lib/python3.12/urllib/request.py\", line 1392, in https_open\n    return self.do_open(http.client.HTTPSConnection, req,\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/hostedtoolcache/Python/3.12.14/x64/lib/python3.12/urllib/request.py\", line 1347, in do_open\n    raise URLError(err)\nurllib.error.URLError: <urlopen error [Errno -2] Name or service not known>\n"
   },
   "handoff_owner": "trustfield_worker",
   "fix_queue": [
@@ -310,6 +251,6 @@
       "fix": "Route to TrustField worker \u2014 NOOS does not edit TrustField product/www"
     }
   ],
-  "ok": false,
+  "ok": true,
   "receipt_path": "/home/runner/work/noetfeld-os/noetfeld-os/receipts/proof/noos-trustfield-observe-witness-v1.json"
 }
