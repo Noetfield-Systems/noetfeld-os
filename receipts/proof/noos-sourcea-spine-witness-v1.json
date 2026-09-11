@@ -1,6 +1,6 @@
 {
   "schema": "noos-sourcea-spine-witness-v1",
-  "at": "2026-09-10T11:31:24Z",
+  "at": "2026-09-11T11:33:01Z",
   "read_only": true,
   "mutates_spine": false,
   "witness_mode": true,
@@ -12,7 +12,7 @@
     "fresh": false,
     "stale": false,
     "status": "BLOCKED_WITH_REASON",
-    "reason": "supabase_truth_tables_missing",
+    "reason": "no_supabase_rows",
     "age_minutes": null,
     "observed_at": null,
     "queue_head": null
@@ -23,12 +23,10 @@
       "title": "SourceA cloud queue",
       "plane": "SourceA",
       "status": "BLOCKED_WITH_REASON",
-      "reason": "supabase_truth_tables_missing",
+      "reason": "no_supabase_rows",
       "evidence": {
-        "truth_log": "truth_log",
-        "cycle": "telemetry_logs",
-        "http": 402,
-        "error": "{\"message\":\"Service for this project is restricted due to the following violations: exceed_db_size_quota. The project owner must upgrade their plan or remove spend caps to restore service.\"}"
+        "truth_log_table": "truth_log",
+        "cycle_source": "telemetry_logs"
       },
       "command": "Apply portfolio-spine truth_log migration; cloud writers emit CRON_FIRED + cycle receipts."
     },
