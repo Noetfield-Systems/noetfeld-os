@@ -1,6 +1,6 @@
 {
   "schema": "noos-gha-health-witness-v1",
-  "at": "2026-09-07T14:12:46Z",
+  "at": "2026-09-14T14:59:18Z",
   "ok": false,
   "overall_status": "yellow",
   "closure_token": "NOOS_GHA_HEALTH_WITNESS: yellow",
@@ -19,12 +19,13 @@
         {
           "ok": true,
           "repo": "noetfeld-os",
-          "billing_gate_failures_12s": 2,
+          "billing_gate_failures_12s": 1,
           "latest_is_billing_gate": false,
           "latest_real_failure": false,
           "real_failures": [
             "NOOS integrator daily witness: NOOS integrator daily witness",
-            "NOOS liveness registry witness: NOOS liveness registry witness"
+            "NOOS liveness registry witness: NOOS liveness registry witness",
+            "NOOS motor sustain witness: NOOS motor sustain witness"
           ],
           "latest_conclusion": "",
           "latest_duration_s": 5.0,
@@ -37,7 +38,8 @@
       "ok": true,
       "failures": [
         "NOOS integrator daily witness: NOOS integrator daily witness",
-        "NOOS liveness registry witness: NOOS liveness registry witness"
+        "NOOS liveness registry witness: NOOS liveness registry witness",
+        "NOOS motor sustain witness: NOOS motor sustain witness"
       ]
     },
     "ICL-D12": {
@@ -64,24 +66,24 @@
             "workflow": "noos-integrator-daily-witness.yml",
             "ok": false,
             "billing_gate_precursor": false,
-            "duration_s": 15.0,
-            "run_id": 34126938422,
+            "duration_s": 13.0,
+            "run_id": 34851112632,
             "conclusion": "failure"
           },
           {
             "workflow": "noos-autorun-witness.yml",
             "ok": false,
             "billing_gate_precursor": false,
-            "duration_s": 27.0,
-            "run_id": 33414383800,
+            "duration_s": 13.0,
+            "run_id": 34133629949,
             "conclusion": "failure"
           },
           {
             "workflow": "noos-motor-sustain-witness.yml",
             "ok": false,
-            "billing_gate_precursor": true,
-            "duration_s": 10.0,
-            "run_id": 34122799212,
+            "billing_gate_precursor": false,
+            "duration_s": 14.0,
+            "run_id": 34845674618,
             "conclusion": "failure"
           },
           {
@@ -89,15 +91,7 @@
             "ok": false,
             "billing_gate_precursor": true,
             "duration_s": 11.0,
-            "run_id": 34124786601,
-            "conclusion": "failure"
-          },
-          {
-            "workflow": "noos-trustfield-observe-witness.yml",
-            "ok": false,
-            "billing_gate_precursor": false,
-            "duration_s": 14.0,
-            "run_id": 34084750028,
+            "run_id": 34848255281,
             "conclusion": "failure"
           },
           {
@@ -105,25 +99,17 @@
             "ok": false,
             "billing_gate_precursor": false,
             "duration_s": 14.0,
-            "run_id": 34124707565,
+            "run_id": 34848149928,
             "conclusion": "failure"
           }
         ],
         "billing_gate_precursors": [
           {
-            "workflow": "noos-motor-sustain-witness.yml",
-            "ok": false,
-            "billing_gate_precursor": true,
-            "duration_s": 10.0,
-            "run_id": 34122799212,
-            "conclusion": "failure"
-          },
-          {
             "workflow": "noos-stack-health-receipt.yml",
             "ok": false,
             "billing_gate_precursor": true,
             "duration_s": 11.0,
-            "run_id": 34124786601,
+            "run_id": 34848255281,
             "conclusion": "failure"
           }
         ],
