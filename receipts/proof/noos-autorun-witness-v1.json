@@ -1,7 +1,7 @@
 {
   "schema": "autorun-status-dashboard-v1.3",
   "read_only": true,
-  "generated_at": "2026-09-14T15:23:03+00:00",
+  "generated_at": "2026-09-21T15:27:00+00:00",
   "dirty_total": 1,
   "triage_threshold": 200,
   "triage_required": false,
@@ -87,7 +87,7 @@
           "latency_missing"
         ],
         "ok": false,
-        "kaizen_receipt": "receipts/proof/noos-kaizen-autorun-status-sourcea_cloud_queue-20260914.json"
+        "kaizen_receipt": "receipts/proof/noos-kaizen-autorun-status-sourcea_cloud_queue-20260921.json"
       }
     },
     {
@@ -121,7 +121,7 @@
           "latency_missing"
         ],
         "ok": false,
-        "kaizen_receipt": "receipts/proof/noos-kaizen-autorun-status-sourcea_buyer_proof_verify-20260914.json"
+        "kaizen_receipt": "receipts/proof/noos-kaizen-autorun-status-sourcea_buyer_proof_verify-20260921.json"
       }
     },
     {
@@ -155,7 +155,7 @@
           "latency_missing"
         ],
         "ok": false,
-        "kaizen_receipt": "receipts/proof/noos-kaizen-autorun-status-sourcea_recipe_queue_builder-20260914.json"
+        "kaizen_receipt": "receipts/proof/noos-kaizen-autorun-status-sourcea_recipe_queue_builder-20260921.json"
       }
     },
     {
@@ -191,7 +191,7 @@
           "latency_missing"
         ],
         "ok": false,
-        "kaizen_receipt": "receipts/proof/noos-kaizen-autorun-status-noos_factory_autorun-20260914.json"
+        "kaizen_receipt": "receipts/proof/noos-kaizen-autorun-status-noos_factory_autorun-20260921.json"
       }
     },
     {
@@ -226,7 +226,7 @@
           "latency_missing"
         ],
         "ok": false,
-        "kaizen_receipt": "receipts/proof/noos-kaizen-autorun-status-noos_worker_inbox-20260914.json"
+        "kaizen_receipt": "receipts/proof/noos-kaizen-autorun-status-noos_worker_inbox-20260921.json"
       }
     },
     {
@@ -234,13 +234,13 @@
       "title": "NOOS factory autorun CF tick",
       "plane": "NOETFELD-OS",
       "status": "COMPLETE",
-      "observed_at": "2026-09-14T15:23:01+00:00",
+      "observed_at": "2026-09-21T15:26:57+00:00",
       "evidence": {
         "checked": 1,
         "oks": [
           "OK cf tick health (200)"
         ],
-        "observed_at": "2026-09-14T15:23:01+00:00"
+        "observed_at": "2026-09-21T15:26:57+00:00"
       },
       "slo": {
         "targets": {
@@ -249,11 +249,11 @@
           "latency_target_minutes": 60.0
         },
         "observed": {
-          "freshness_minutes": 0.01,
+          "freshness_minutes": 0.0,
           "success_rate": 1.0,
           "evidence_state": "SUFFICIENT_RECENT_EVIDENCE",
           "success_rate_sample_window_minutes": null,
-          "latency_minutes": 0.01
+          "latency_minutes": 0.0
         },
         "route": null,
         "score": 100.0,
@@ -268,9 +268,9 @@
       "plane": "NOETFELD-OS",
       "status": "COMPLETE",
       "classification": "cf_motor_canary_retired_gha_schedule",
-      "observed_at": "2026-09-14T15:23:01+00:00",
+      "observed_at": "2026-09-21T15:26:57+00:00",
       "evidence": {
-        "observed_at": "2026-09-14T15:23:01+00:00",
+        "observed_at": "2026-09-21T15:26:57+00:00",
         "classification": "cf_motor_canary_retired_gha_schedule",
         "schedule_a1_ok": true,
         "schedule_a1_verified_at": "2026-07-07T06:20:29Z",
@@ -314,13 +314,13 @@
       "title": "NOOS 24/7 loop fleet CF tick",
       "plane": "NOETFELD-OS",
       "status": "COMPLETE",
-      "observed_at": "2026-09-14T15:23:01+00:00",
+      "observed_at": "2026-09-21T15:26:57+00:00",
       "evidence": {
         "checked": 1,
         "oks": [
           "OK loop fleet health (200)"
         ],
-        "observed_at": "2026-09-14T15:23:01+00:00"
+        "observed_at": "2026-09-21T15:26:57+00:00"
       },
       "slo": {
         "targets": {
@@ -366,7 +366,7 @@
         "observation_confidence": "NONE",
         "success_rate_sample_window_minutes": 30.0,
         "status_source": "noos_loop_registry+noetfield_factory_cycle_runs",
-        "observed_at": "2026-09-14T15:23:01+00:00"
+        "observed_at": "2026-09-21T15:26:57+00:00"
       },
       "provenance": null,
       "evidence": {
@@ -432,7 +432,7 @@
         "observation_confidence": "NONE",
         "success_rate_sample_window_minutes": 30.0,
         "status_source": "noos_loop_registry+noetfield_factory_cycle_runs",
-        "observed_at": "2026-09-14T15:23:01+00:00"
+        "observed_at": "2026-09-21T15:26:57+00:00"
       },
       "provenance": null,
       "evidence": {
@@ -498,7 +498,7 @@
         "observation_confidence": "NONE",
         "success_rate_sample_window_minutes": 30.0,
         "status_source": "noos_loop_registry+noetfield_factory_cycle_runs",
-        "observed_at": "2026-09-14T15:23:01+00:00"
+        "observed_at": "2026-09-21T15:26:57+00:00"
       },
       "provenance": null,
       "evidence": {
@@ -564,7 +564,7 @@
         "observation_confidence": "NONE",
         "success_rate_sample_window_minutes": 30.0,
         "status_source": "noos_loop_registry+noetfield_factory_cycle_runs",
-        "observed_at": "2026-09-14T15:23:01+00:00"
+        "observed_at": "2026-09-21T15:26:57+00:00"
       },
       "provenance": null,
       "evidence": {
@@ -630,7 +630,7 @@
         "observation_confidence": "NONE",
         "success_rate_sample_window_minutes": 30.0,
         "status_source": "noos_loop_registry+noetfield_factory_cycle_runs",
-        "observed_at": "2026-09-14T15:23:01+00:00"
+        "observed_at": "2026-09-21T15:26:57+00:00"
       },
       "provenance": null,
       "evidence": {
@@ -696,7 +696,7 @@
         "observation_confidence": "NONE",
         "success_rate_sample_window_minutes": 30.0,
         "status_source": "noos_loop_registry+noetfield_factory_cycle_runs",
-        "observed_at": "2026-09-14T15:23:01+00:00"
+        "observed_at": "2026-09-21T15:26:57+00:00"
       },
       "provenance": null,
       "evidence": {
@@ -762,7 +762,7 @@
         "observation_confidence": "NONE",
         "success_rate_sample_window_minutes": 30.0,
         "status_source": "noos_loop_registry+noetfield_factory_cycle_runs",
-        "observed_at": "2026-09-14T15:23:01+00:00"
+        "observed_at": "2026-09-21T15:26:57+00:00"
       },
       "provenance": null,
       "evidence": {
@@ -846,7 +846,7 @@
             ]
           }
         ],
-        "observed_at": "2026-09-14T15:23:02+00:00"
+        "observed_at": "2026-09-21T15:26:58+00:00"
       },
       "slo": {
         "targets": {
@@ -855,11 +855,11 @@
           "latency_target_minutes": 60.0
         },
         "observed": {
-          "freshness_minutes": 0.0,
+          "freshness_minutes": 0.01,
           "success_rate": 1.0,
           "evidence_state": "SUFFICIENT_RECENT_EVIDENCE",
           "success_rate_sample_window_minutes": null,
-          "latency_minutes": 0.0
+          "latency_minutes": 0.01
         },
         "route": null,
         "score": 100.0,
@@ -898,7 +898,7 @@
           "latency_missing"
         ],
         "ok": false,
-        "kaizen_receipt": "receipts/proof/noos-kaizen-autorun-status-noos_loop_liveness_registry-20260914.json"
+        "kaizen_receipt": "receipts/proof/noos-kaizen-autorun-status-noos_loop_liveness_registry-20260921.json"
       }
     },
     {
@@ -907,7 +907,7 @@
       "plane": "NOETFELD-OS",
       "status": "FAILED_WITH_RECEIPT",
       "command": "make urls",
-      "observed_at": "2026-09-14T15:23:03+00:00",
+      "observed_at": "2026-09-21T15:27:00+00:00",
       "evidence": {
         "fails": [
           "FAIL platform health (HTTP Error 404: Not Found)",
@@ -920,7 +920,7 @@
           "OK www ai-value-os (200)"
         ],
         "checked": 6,
-        "observed_at": "2026-09-14T15:23:03+00:00"
+        "observed_at": "2026-09-21T15:27:00+00:00"
       },
       "slo": {
         "targets": {
@@ -941,7 +941,7 @@
           "success_rate_miss"
         ],
         "ok": false,
-        "kaizen_receipt": "receipts/proof/noos-kaizen-autorun-status-sandbox_health_sweep-20260914.json"
+        "kaizen_receipt": "receipts/proof/noos-kaizen-autorun-status-sandbox_health_sweep-20260921.json"
       }
     },
     {
@@ -982,7 +982,7 @@
           "latency_missing"
         ],
         "ok": false,
-        "kaizen_receipt": "receipts/proof/noos-kaizen-autorun-status-noos_gha_integrator_daily_witness-20260914.json"
+        "kaizen_receipt": "receipts/proof/noos-kaizen-autorun-status-noos_gha_integrator_daily_witness-20260921.json"
       }
     },
     {
@@ -1023,7 +1023,7 @@
           "latency_missing"
         ],
         "ok": false,
-        "kaizen_receipt": "receipts/proof/noos-kaizen-autorun-status-noos_gha_autorun_witness-20260914.json"
+        "kaizen_receipt": "receipts/proof/noos-kaizen-autorun-status-noos_gha_autorun_witness-20260921.json"
       }
     },
     {
@@ -1064,7 +1064,7 @@
           "latency_missing"
         ],
         "ok": false,
-        "kaizen_receipt": "receipts/proof/noos-kaizen-autorun-status-noos_gha_motor_sustain_witness-20260914.json"
+        "kaizen_receipt": "receipts/proof/noos-kaizen-autorun-status-noos_gha_motor_sustain_witness-20260921.json"
       }
     },
     {
@@ -1105,7 +1105,7 @@
           "latency_missing"
         ],
         "ok": false,
-        "kaizen_receipt": "receipts/proof/noos-kaizen-autorun-status-noos_gha_health_witness-20260914.json"
+        "kaizen_receipt": "receipts/proof/noos-kaizen-autorun-status-noos_gha_health_witness-20260921.json"
       }
     },
     {
@@ -1146,7 +1146,7 @@
           "latency_missing"
         ],
         "ok": false,
-        "kaizen_receipt": "receipts/proof/noos-kaizen-autorun-status-noos_stack_health_receipt-20260914.json"
+        "kaizen_receipt": "receipts/proof/noos-kaizen-autorun-status-noos_stack_health_receipt-20260921.json"
       }
     },
     {
@@ -1187,7 +1187,7 @@
           "latency_missing"
         ],
         "ok": false,
-        "kaizen_receipt": "receipts/proof/noos-kaizen-autorun-status-noos_trustfield_observe_witness-20260914.json"
+        "kaizen_receipt": "receipts/proof/noos-kaizen-autorun-status-noos_trustfield_observe_witness-20260921.json"
       }
     },
     {
@@ -1228,7 +1228,7 @@
           "latency_missing"
         ],
         "ok": false,
-        "kaizen_receipt": "receipts/proof/noos-kaizen-autorun-status-noos_sourcea_spine_witness-20260914.json"
+        "kaizen_receipt": "receipts/proof/noos-kaizen-autorun-status-noos_sourcea_spine_witness-20260921.json"
       }
     },
     {
@@ -1269,7 +1269,7 @@
           "latency_missing"
         ],
         "ok": false,
-        "kaizen_receipt": "receipts/proof/noos-kaizen-autorun-status-noos_machine_audit_witness-20260914.json"
+        "kaizen_receipt": "receipts/proof/noos-kaizen-autorun-status-noos_machine_audit_witness-20260921.json"
       }
     },
     {
@@ -1310,7 +1310,7 @@
           "latency_missing"
         ],
         "ok": false,
-        "kaizen_receipt": "receipts/proof/noos-kaizen-autorun-status-noos_liveness_registry_witness-20260914.json"
+        "kaizen_receipt": "receipts/proof/noos-kaizen-autorun-status-noos_liveness_registry_witness-20260921.json"
       }
     },
     {
@@ -1351,7 +1351,7 @@
           "latency_missing"
         ],
         "ok": false,
-        "kaizen_receipt": "receipts/proof/noos-kaizen-autorun-status-noos_sandbox_url_sweep_witness-20260914.json"
+        "kaizen_receipt": "receipts/proof/noos-kaizen-autorun-status-noos_sandbox_url_sweep_witness-20260921.json"
       }
     }
   ],
@@ -1391,7 +1391,7 @@
   ],
   "founder_gated_improvements": [
     {
-      "id": "receipts/proof/noos-kaizen-autorun-status-sourcea_cloud_queue-20260914.json",
+      "id": "receipts/proof/noos-kaizen-autorun-status-sourcea_cloud_queue-20260921.json",
       "expected_roi": {
         "cost_saved_usd": 0,
         "risk_reduced": "autorun SLO miss",
@@ -1401,7 +1401,7 @@
       "age_days": 0
     },
     {
-      "id": "receipts/proof/noos-kaizen-autorun-status-sourcea_buyer_proof_verify-20260914.json",
+      "id": "receipts/proof/noos-kaizen-autorun-status-sourcea_buyer_proof_verify-20260921.json",
       "expected_roi": {
         "cost_saved_usd": 0,
         "risk_reduced": "autorun SLO miss",
@@ -1411,7 +1411,7 @@
       "age_days": 0
     },
     {
-      "id": "receipts/proof/noos-kaizen-autorun-status-sourcea_recipe_queue_builder-20260914.json",
+      "id": "receipts/proof/noos-kaizen-autorun-status-sourcea_recipe_queue_builder-20260921.json",
       "expected_roi": {
         "cost_saved_usd": 0,
         "risk_reduced": "autorun SLO miss",
@@ -1421,7 +1421,7 @@
       "age_days": 0
     },
     {
-      "id": "receipts/proof/noos-kaizen-autorun-status-noos_factory_autorun-20260914.json",
+      "id": "receipts/proof/noos-kaizen-autorun-status-noos_factory_autorun-20260921.json",
       "expected_roi": {
         "cost_saved_usd": 0,
         "risk_reduced": "autorun SLO miss",
@@ -1431,7 +1431,7 @@
       "age_days": 0
     },
     {
-      "id": "receipts/proof/noos-kaizen-autorun-status-noos_worker_inbox-20260914.json",
+      "id": "receipts/proof/noos-kaizen-autorun-status-noos_worker_inbox-20260921.json",
       "expected_roi": {
         "cost_saved_usd": 0,
         "risk_reduced": "autorun SLO miss",
@@ -1441,7 +1441,7 @@
       "age_days": 0
     },
     {
-      "id": "receipts/proof/noos-kaizen-autorun-status-noos_loop_liveness_registry-20260914.json",
+      "id": "receipts/proof/noos-kaizen-autorun-status-noos_loop_liveness_registry-20260921.json",
       "expected_roi": {
         "cost_saved_usd": 0,
         "risk_reduced": "autorun SLO miss",
@@ -1451,7 +1451,7 @@
       "age_days": 0
     },
     {
-      "id": "receipts/proof/noos-kaizen-autorun-status-sandbox_health_sweep-20260914.json",
+      "id": "receipts/proof/noos-kaizen-autorun-status-sandbox_health_sweep-20260921.json",
       "expected_roi": {
         "cost_saved_usd": 0,
         "risk_reduced": "autorun SLO miss",
@@ -1461,7 +1461,7 @@
       "age_days": 0
     },
     {
-      "id": "receipts/proof/noos-kaizen-autorun-status-noos_gha_integrator_daily_witness-20260914.json",
+      "id": "receipts/proof/noos-kaizen-autorun-status-noos_gha_integrator_daily_witness-20260921.json",
       "expected_roi": {
         "cost_saved_usd": 0,
         "risk_reduced": "autorun SLO miss",
@@ -1471,7 +1471,7 @@
       "age_days": 0
     },
     {
-      "id": "receipts/proof/noos-kaizen-autorun-status-noos_gha_autorun_witness-20260914.json",
+      "id": "receipts/proof/noos-kaizen-autorun-status-noos_gha_autorun_witness-20260921.json",
       "expected_roi": {
         "cost_saved_usd": 0,
         "risk_reduced": "autorun SLO miss",
@@ -1481,7 +1481,7 @@
       "age_days": 0
     },
     {
-      "id": "receipts/proof/noos-kaizen-autorun-status-noos_gha_motor_sustain_witness-20260914.json",
+      "id": "receipts/proof/noos-kaizen-autorun-status-noos_gha_motor_sustain_witness-20260921.json",
       "expected_roi": {
         "cost_saved_usd": 0,
         "risk_reduced": "autorun SLO miss",
@@ -1491,7 +1491,7 @@
       "age_days": 0
     },
     {
-      "id": "receipts/proof/noos-kaizen-autorun-status-noos_gha_health_witness-20260914.json",
+      "id": "receipts/proof/noos-kaizen-autorun-status-noos_gha_health_witness-20260921.json",
       "expected_roi": {
         "cost_saved_usd": 0,
         "risk_reduced": "autorun SLO miss",
@@ -1501,7 +1501,7 @@
       "age_days": 0
     },
     {
-      "id": "receipts/proof/noos-kaizen-autorun-status-noos_stack_health_receipt-20260914.json",
+      "id": "receipts/proof/noos-kaizen-autorun-status-noos_stack_health_receipt-20260921.json",
       "expected_roi": {
         "cost_saved_usd": 0,
         "risk_reduced": "autorun SLO miss",
@@ -1511,7 +1511,7 @@
       "age_days": 0
     },
     {
-      "id": "receipts/proof/noos-kaizen-autorun-status-noos_trustfield_observe_witness-20260914.json",
+      "id": "receipts/proof/noos-kaizen-autorun-status-noos_trustfield_observe_witness-20260921.json",
       "expected_roi": {
         "cost_saved_usd": 0,
         "risk_reduced": "autorun SLO miss",
@@ -1521,7 +1521,7 @@
       "age_days": 0
     },
     {
-      "id": "receipts/proof/noos-kaizen-autorun-status-noos_sourcea_spine_witness-20260914.json",
+      "id": "receipts/proof/noos-kaizen-autorun-status-noos_sourcea_spine_witness-20260921.json",
       "expected_roi": {
         "cost_saved_usd": 0,
         "risk_reduced": "autorun SLO miss",
@@ -1531,7 +1531,7 @@
       "age_days": 0
     },
     {
-      "id": "receipts/proof/noos-kaizen-autorun-status-noos_machine_audit_witness-20260914.json",
+      "id": "receipts/proof/noos-kaizen-autorun-status-noos_machine_audit_witness-20260921.json",
       "expected_roi": {
         "cost_saved_usd": 0,
         "risk_reduced": "autorun SLO miss",
@@ -1541,7 +1541,7 @@
       "age_days": 0
     },
     {
-      "id": "receipts/proof/noos-kaizen-autorun-status-noos_liveness_registry_witness-20260914.json",
+      "id": "receipts/proof/noos-kaizen-autorun-status-noos_liveness_registry_witness-20260921.json",
       "expected_roi": {
         "cost_saved_usd": 0,
         "risk_reduced": "autorun SLO miss",
@@ -1551,7 +1551,7 @@
       "age_days": 0
     },
     {
-      "id": "receipts/proof/noos-kaizen-autorun-status-noos_sandbox_url_sweep_witness-20260914.json",
+      "id": "receipts/proof/noos-kaizen-autorun-status-noos_sandbox_url_sweep_witness-20260921.json",
       "expected_roi": {
         "cost_saved_usd": 0,
         "risk_reduced": "autorun SLO miss",
