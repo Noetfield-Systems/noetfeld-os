@@ -109,6 +109,16 @@ def rollup() -> dict[str, Any]:
         "autorun_critique": {
             "overall_ok": critique.get("overall_ok"),
             "findings": len(critique.get("findings") or []),
+            # Every affected scope is recorded. The 5-item sample alone made the
+            # remaining findings unrecoverable once the run log aged out.
+            "findings_scopes": [
+                {
+                    "scope": f.get("scope"),
+                    "severity": f.get("severity"),
+                    "detail": f.get("detail") or "",
+                }
+                for f in (critique.get("findings") or [])
+            ],
             "findings_sample": (critique.get("findings") or [])[:5],
         },
         "gha_health": gha,

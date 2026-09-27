@@ -1,0 +1,180 @@
+{
+  "schema": "noos-degraded-lane-repair-v1",
+  "version": "1.0.0",
+  "at": "2026-07-30T14:52:00Z",
+  "lane": "NOOS-LANE-degraded-repair-v1",
+  "agent_id": "claude-code-noos",
+  "canon_version": "FOUNDER_CANON_v1+MACHINE_LOOPS_v1",
+  "verdict": "SUBMITTED for independent verification",
+  "author_is_not_verifier": true,
+  "base_commit": "75245656371ad42004759f4b6cb425e36e82602e",
+  "branch": "nf-noos-degraded-lane-repair-v1",
+  "scope_boundary": {
+    "noos_owned_repaired": true,
+    "trustfield_products_edited": false,
+    "railway_products_edited": false,
+    "pr_110_touched": false,
+    "frozen_surfaces_edited": false,
+    "frozen_surfaces_note": "No scripts/verify_*, laws docs, data/*.json registries or locks, noetfield_gate/, or Supabase migrations were modified."
+  },
+
+  "task_1_findings_recovery": {
+    "source_of_the_11": {
+      "receipt": "receipts/proof/noos-stack-automation-health-v1.json",
+      "recorded_at": "2026-07-30T09:16:20Z",
+      "github_run": "https://github.com/Noetfield-Systems/noetfeld-os/actions/runs/30529980107",
+      "reported_findings_count": 11
+    },
+    "recovery_method": "Read the receipt on main and the full run log for run 30529980107. Both carry only a 5-item findings_sample; the other 6 were never serialized anywhere.",
+    "named_from_recorded_evidence": [
+      {"n": 1, "scope": "noos_loop_liveness_registry", "severity": "high", "detail": "FAILED_WITH_RECEIPT"},
+      {"n": 2, "scope": "noos_gha_integrator_daily_witness", "severity": "high", "detail": "no_github_runs"},
+      {"n": 3, "scope": "noos_gha_autorun_witness", "severity": "high", "detail": "no_github_runs"},
+      {"n": 4, "scope": "noos_gha_motor_sustain_witness", "severity": "high", "detail": "no_github_runs"},
+      {"n": 5, "scope": "noos_gha_health_witness", "severity": "high", "detail": "no_github_runs"}
+    ],
+    "unrecovered": [
+      {"n": 6, "scope": "UNKNOWN", "reason": "not_serialized_in_receipt_or_run_log"},
+      {"n": 7, "scope": "UNKNOWN", "reason": "not_serialized_in_receipt_or_run_log"},
+      {"n": 8, "scope": "UNKNOWN", "reason": "not_serialized_in_receipt_or_run_log"},
+      {"n": 9, "scope": "UNKNOWN", "reason": "not_serialized_in_receipt_or_run_log"},
+      {"n": 10, "scope": "UNKNOWN", "reason": "not_serialized_in_receipt_or_run_log"},
+      {"n": 11, "scope": "UNKNOWN", "reason": "not_serialized_in_receipt_or_run_log"}
+    ],
+    "inference_prohibited": "A same-class witness receipt (receipts/proof/noos-autorun-witness-v1.json, generated_at 2026-07-27T12:10:24Z) lists 14 findings of the same classes. It is NOT used to fill positions 6-11: different run, different time. Those six stay UNKNOWN.",
+    "evidence_loss_cause": {
+      "file": "scripts/noos_stack_automation_health_v1.py",
+      "line_before": "\"findings_sample\": (critique.get(\"findings\") or [])[:5]",
+      "effect": "Findings beyond the first five were counted but never named, so they became unrecoverable once emitted."
+    }
+  },
+
+  "task_2_probe_timeout": {
+    "symptom": "TIMEOUT_EXPIRED after 30s on python3 scripts/autorun_status_v1.py (cockpit digest, 2026-07-30T14:19Z)",
+    "diagnosis": "Not a hang and not a deadlock. autorun_status_v1.py is network-bound: roughly twenty serialized HTTP probes with per-request timeouts of 15-25s. Measured wall-clock on main is 31s, one second over the digest's 30s probe bound.",
+    "measurement": {"command_measured": "python3 scripts/autorun_status_v1.py", "base": "main @ 75245656", "elapsed_seconds": 31, "exit_code": 1, "exit_code_meaning": "critical findings present, not a timeout"},
+    "smallest_bounded_repair": {
+      "file": "~/.claude/scheduled-tasks/noos-founder-cockpit-digest/SKILL.md",
+      "change": "probe bound 30s -> 90s, with the measured runtimes recorded inline so the bound is never re-guessed",
+      "rejected_alternatives": [
+        "Retrying the probe (forbidden by the digest contract and would not help a legitimate 31s runtime)",
+        "Editing autorun_status_v1.py timeouts (would reduce evidence, not fix the bound)"
+      ]
+    },
+    "rerun_proof": {
+      "bound_seconds": 90,
+      "elapsed_seconds": 30,
+      "timeout_expired": false,
+      "generated_at": "2026-07-30T14:50:00+00:00",
+      "findings_returned": 4
+    }
+  },
+
+  "task_3_lane_repairs": {
+    "integrator_mirror": {
+      "state": "FIXED",
+      "before": {"source": "receipts/proof/noos-stack-automation-health-v1.json @ 2026-07-30T09:16:20Z", "integrator_mirror": false},
+      "after": {"source": "scripts/noos_integrator_status_v1.py run on the canonical checkout @ 2026-07-30T14:43:35Z", "integrator_mirror": true, "drift": false, "repo_tasks": 48, "home_tasks": 48, "report_line": "integrator_mirror_clean - repo matches home"},
+      "root_cause": "The mirror surface reads .noos-runtime/integrator/noos-integrator-state-v1.json, which is gitignored and local-only. On a fresh GitHub Actions checkout it is structurally absent, so the surface returns missing_repo_state and reports false regardless of the real mirror state. Reproduced independently in a clean worktree, which showed the same false red until the real runtime state was made visible.",
+      "action_taken": "None on the mirror itself - it was already clean. The false red is an environment artifact, recorded here rather than silenced.",
+      "not_changed_and_why": "Making the surface NOT_OBSERVED in CI would flip scripts/verify_noos_icl_p2_v1.py (ICL-P2-01) from FAIL to PASS in CI. That verifier is L5 frozen, so changing its verdict indirectly is a founder gate, not a machine repair. Flagged, not applied."
+    },
+    "autorun_critique": {
+      "state": "FIXED_PENDING_MERGE",
+      "root_cause": "scripts/autorun_status_v1.py resolved its GitHub token only via 'git credential fill'. GitHub Actions installs an http.extraheader instead of a credential-helper entry, so in CI the call returned no password, github_latest_run returned ok:false, and probe_github_schedule degraded every schedule-probed witness to BLOCKED_WITH_REASON/no_github_runs. That is the origin of the no_github_runs findings, and it made the autorun witness exit 1, which then failed the witness, which then reddened the stack rollup.",
+      "repair": "github_token() now prefers GH_TOKEN/GITHUB_TOKEN and falls back to the credential helper. All five witness workflows already export GH_TOKEN with actions: read.",
+      "before_after_pair": {
+        "before_no_env_token_no_helper": {"ok": false, "error": "github_token_missing", "downstream": "no_github_runs"},
+        "after_env_token_no_helper": {"ok": true, "runs": 5, "latest_conclusion": "success"}
+      },
+      "note": "The pair was produced with the credential helper disabled, which reproduces the CI condition. Full confirmation requires the fix on main and one witness rerun."
+    },
+    "liveness_registry": {
+      "state": "PARTIALLY_FIXED",
+      "action": "make integrator-repair-autorun (sanctioned one-shot)",
+      "repair_receipt": "receipts/proof/noos-integrator-autorun-repair-v1.json @ 2026-07-30T14:45:38Z",
+      "before": {"observed_at": "2026-07-30T14:38:00Z", "stale_count": 2, "stale_loops": ["factory_autorun", "role_circle"], "registry_rows": 20},
+      "after": {"observed_at": "2026-07-30T14:46:32Z", "stale_count": 1, "stale_loops": ["role_circle"], "registry_rows": 20},
+      "loops_upserted": 15,
+      "provenance_law_respected": "loop_factory_cycles writes were skipped by the repair itself (gated_by_default_provenance_law) so no repair row masks an organic stall.",
+      "remaining": "role_circle is not machine-repairable here. It is a lane registration left by the runway-supervision builder lane (draft PR #90) that went silent on 2026-07-19. Upserting its heartbeat would mask an organic stall; deregistration belongs to that lane."
+    },
+    "gha_health_witness": {
+      "state": "FIXED_PENDING_MERGE",
+      "own_runs_healthy": {"last_run": "2026-07-27T11:35:51Z", "conclusion": "success", "receipt_at": "2026-07-27T11:36:07Z", "overall_status": "green"},
+      "freshness": {"age_hours_at_digest": 74.7, "configured_target_minutes": 10320, "verdict": "within_SLO"},
+      "actual_defect": "Its observations, not its runs. The same no_github_runs blindness above made it report BLOCKED_WITH_REASON inside CI. Repaired by the token fix.",
+      "config_drift_found_not_fixed": {
+        "file": "data/noos-gha-secondary-witness-manifest-v1.json",
+        "claims": {"noos_gha_health_witness": "10 * * * *", "noos_gha_autorun_witness": "*/30 * * * *", "noos_stack_health_receipt": "40 */2 * * *"},
+        "actual_workflow_cron": {"noos-gha-health-witness.yml": "10 8 * * 1", "noos-autorun-witness.yml": "0 9 * * 1", "noos-stack-health-receipt.yml": "40 6 * * *"},
+        "why_not_fixed": "data/*.json is verifier-freeze class. The SLO targets in data/autorun-workflows-v1.json were already re-pinned to the real cadence (PR #111); this manifest was not. Founder-gated correction."
+      }
+    },
+    "evidence_completeness": {
+      "state": "FIXED",
+      "file": "scripts/noos_stack_automation_health_v1.py",
+      "change": "autorun_critique now carries findings_scopes with every affected scope, severity and detail, alongside the existing 5-item sample.",
+      "verified": "Post-repair rollup at 2026-07-30T14:48:55Z recorded all 4 scopes, none dropped."
+    }
+  },
+
+  "task_4_owner_routing": {
+    "mechanism": "data/noos-healing-handoff-v1.json (read, not modified - freeze class)",
+    "trustfield_eleven_layers": {
+      "state": "OWNER_ROUTED",
+      "handoff_id": "TF-11-LAYERS-20260707-001",
+      "owner_agent": "trustfield_worker",
+      "repo": "TrustField-Technologies",
+      "enqueued_by": "noos_integrator_control_layer",
+      "enqueued_at": "2026-07-07T16:35:00Z",
+      "status": "pending_worker_pickup",
+      "age_days_at_this_receipt": 23,
+      "observed_now": {"green": 7, "yellow": 2, "red": 2}
+    },
+    "trustfield_loop_registry": {
+      "state": "OWNER_ROUTED",
+      "covered_by": "TF-11-LAYERS-20260707-001 and TF-PA-WORKER-20260707-001",
+      "owner_agent": "trustfield_worker",
+      "observed_now": {"green": 28, "yellow": 1, "red": 5, "deadman_status": "green", "gate_48h_status": "red"},
+      "witness_fix_queue": "Route to TrustField worker - NOOS does not edit TrustField product/www"
+    },
+    "railway_partner_access": {
+      "state": "OWNER_ROUTED",
+      "handoff_id": "TF-PA-WORKER-20260707-001",
+      "owner_agent": "trustfield_worker",
+      "priority": "P0",
+      "enqueued_at": "2026-07-07T16:05:00Z",
+      "status": "pending_worker_pickup",
+      "age_days_at_this_receipt": 23,
+      "observed_now": {"worker_status": "degraded", "last_cycle_ok": false, "partner_access_lane_ok": false, "other_lanes_ok": 6},
+      "noos_action": "observation only; no product edit, no redeploy, no restart"
+    }
+  },
+
+  "task_5_pr_110": {"state": "UNTOUCHED", "merged": false, "action_taken": "none"},
+
+  "task_6_cost": {
+    "actual_cost": "NOT_OBSERVED",
+    "estimated_cost": "NOT_OBSERVED",
+    "reason": "No cost, spend, provider/model or Actions-billing receipt exists in receipts/proof on main or locally. Absence of billing evidence is recorded as NOT_OBSERVED, never as zero.",
+    "policy_ceilings_only": {"max_cost_per_cycle_usd": 5.0, "gha_billing_gate_max_seconds": 12.0, "source": "data/cost_policy_machine.json and the gha-health witness"}
+  },
+
+  "stack_health_rerun": {
+    "before": {"at": "2026-07-30T09:16:20Z", "overall_status": "red", "failing_signals": ["integrator_status", "autorun_critique", "eleven_layers", "trustfield_registry"], "integrator_mirror": false, "autorun_findings": 11, "autorun_scopes_recorded": 5},
+    "after": {"at": "2026-07-30T14:48:55Z", "overall_status": "red", "failing_signals": ["integrator_status", "autorun_critique", "eleven_layers", "trustfield_registry"], "integrator_mirror": true, "autorun_findings": 4, "autorun_scopes_recorded": 4},
+    "overall_verdict": "STILL_RED",
+    "honest_reading": "Overall status did not improve. Two of the four failing signals are TrustField-owned and out of NOOS scope. The two NOOS-side signals still fail because their remaining causes are a builder-lane registration (role_circle), an evidence-insufficiency on agent_nerve, and two witnesses whose last recorded runs failed before this fix existed and which cannot re-verify until it is on main.",
+    "not_claimed": "No improvement is claimed from the current snapshot alone. Every improvement above is stated as an explicit before/after pair with recorded timestamps."
+  },
+
+  "remaining_autorun_findings": [
+    {"scope": "noos_loop_agent_nerve", "detail": "success_rate_missing", "class": "EVIDENCE_INSUFFICIENT", "recorded_route": "organic_producer_reconcile_escalation", "mutation_permitted": false},
+    {"scope": "noos_loop_liveness_registry", "detail": "role_circle stale", "route": "draft PR #90 lane (builder-owned deregistration)"},
+    {"scope": "noos_gha_autorun_witness", "detail": "last run 2026-07-27T12:10:13Z failed with WITNESS_RC=1", "route": "clears when the token fix is on main and the witness reruns"},
+    {"scope": "noos_stack_health_receipt", "detail": "last run 2026-07-30T09:15:43Z failed (fail-visible red verdict by design, PR #105)", "route": "clears when the rollup returns green"}
+  ],
+
+  "tests": {"command": "pytest tests/test_autorun_status_v1.py tests/test_autorun_findings.py tests/test_noos_stack_automation_health_v1.py", "result": "14 passed"}
+}
