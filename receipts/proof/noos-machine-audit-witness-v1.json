@@ -1,6 +1,6 @@
 {
   "schema": "noos-machine-audit-witness-v1",
-  "at": "2026-09-21T11:45:32Z",
+  "at": "2026-09-28T12:40:31Z",
   "read_only": true,
   "witness_mode": true,
   "trailing_hours": 168,
@@ -10,7 +10,7 @@
   "audit": {
     "schema": "noos-outside-audit-receipt-v1",
     "version": "1.0.0",
-    "at": "2026-09-21T11:45:32+00:00",
+    "at": "2026-09-28T12:40:31+00:00",
     "trailing_hours": 168,
     "receipts_scanned": 310,
     "chain": {
@@ -30,8 +30,8 @@
     "ok": true,
     "report_line": "outside_audit \u00b7 scanned=310 chain_ok=True",
     "prev_chain_hash": "73141f5feba126e03afc100f523c85c83b3716b66b74f776c047f41faa561079",
-    "chain_hash": "8e6881daddd16e0c2801722cab320c9d2c3a82bd1c296cd6eeeb1e464944a829",
-    "receipt_path": "receipts/proof/noos-outside-audit-20260921T114532Z.json"
+    "chain_hash": "2b2060a9ae850f89aeb2cb534022ef3474ae0c7f7c1299b567ae46ef8f6f7504",
+    "receipt_path": "receipts/proof/noos-outside-audit-20260928T124031Z.json"
   },
   "one_law": "Outside audit only \u2014 no merge/repair dispatch from witness.",
   "ok": true,
