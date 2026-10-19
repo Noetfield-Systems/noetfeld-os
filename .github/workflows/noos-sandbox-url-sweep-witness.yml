@@ -3,8 +3,8 @@ name: NOOS sandbox URL sweep witness
 
 on:
   workflow_dispatch:
-  schedule:
-    - cron: "45 */12 * * *"
+  # schedule paused: org project hold 2026-10-19 (restore from git history)
+  # - cron: "45 */12 * * *"
 
 permissions:
   contents: read
