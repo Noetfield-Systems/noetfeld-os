@@ -5,8 +5,8 @@ on:
   workflow_dispatch:
   # Demoted from */30 — witness-on-witness churn without customer beneficiary.
   # Weekly freshness check is enough for autorun registry critique.
-  schedule:
-    - cron: "0 9 * * 1"
+  # schedule paused: org project hold 2026-10-19 (restore from git history)
+  # - cron: "0 9 * * 1"
 
 permissions:
   contents: read

@@ -3,8 +3,8 @@ name: NOOS motor sustain witness
 
 on:
   workflow_dispatch:
-  schedule:
-    - cron: "15 6 * * *"
+  # schedule paused: org project hold 2026-10-19 (restore from git history)
+  # - cron: "15 6 * * *"
 
 permissions:
   contents: read

@@ -3,9 +3,9 @@ name: NOOS GHA health witness
 
 on:
   workflow_dispatch:
-  schedule:
-    # Demoted from hourly — GUARD freshness weekly + manual dispatch.
-    - cron: "10 8 * * 1"
+  # schedule paused: org project hold 2026-10-19 (restore from git history)
+  # # Demoted from hourly — GUARD freshness weekly + manual dispatch.
+  # - cron: "10 8 * * 1"
 
 permissions:
   contents: read
