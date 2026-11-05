@@ -31,6 +31,8 @@
 | `LOOP_STATE.json` | Loop / integrator state |
 | `SYNC_RECEIPTS.md` | Sync ledger |
 | `AGENT_REGISTRY.md` | Agent roles |
+| `COMPANY_WORKFORCE_CHARTER_v1.md` | Human/digital company organization, role contracts, and operating rules |
+| `COMPANY_WORKFORCE_REGISTRY_v1.json` | Machine-readable company workforce roles, authority, and runtime mappings |
 | `SERVICE_LANES.md` | Service lane registry |
 | `NOOS_CONTROL_PANEL_AUTHORITY_REPORT_2026-07-04.md` | NOOS path authority |
 | `NOOS_LOCK_RECEIPT_v1.json` | Brain taxonomy lock |
