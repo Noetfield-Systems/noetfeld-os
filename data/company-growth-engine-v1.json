@@ -1,0 +1,38 @@
+{
+  "schema": "noetfield-company-growth-engine-v1",
+  "version": "1.0.0",
+  "status": "manual_on_demand",
+  "roles": {
+    "intelligence": "N-02",
+    "revenue": "N-05"
+  },
+  "source_registry": "data/company-intelligence-source-registry-v1.json",
+  "source_schema": "schemas/company-signal-analysis-v1.schema.json",
+  "opportunity_schema": "schemas/company-opportunity-v1.schema.json",
+  "runtime_entrypoint": "scripts/noetfield_company_growth_engine_v1.py",
+  "runbook": "docs/company-workforce/GROWTH_ENGINE_RUNBOOK_v1.md",
+  "persistence": {
+    "default": ".noos-runtime/workforce/company-growth-v1.sqlite3",
+    "durable_storage_required_before_scheduling": true
+  },
+  "execution": {
+    "feed_ingestion": "explicit_cli_https_allowlist_only",
+    "signal_analysis": {
+      "task_kind": "classify",
+      "executor_tier": "T1",
+      "provider": "openrouter_free",
+      "requires_secret": "OPENROUTER_API_KEY",
+      "tool_access": false,
+      "max_per_run_usd": 0.01,
+      "max_rolling_24h_usd": 0.5
+    },
+    "revenue_pipeline": "deterministic_sqlite_internal_records",
+    "external_actions": "prohibited"
+  },
+  "activation_gaps": [
+    "Provision OPENROUTER_API_KEY in the approved secret store.",
+    "Validate provider model availability and actual usage-cost reporting.",
+    "Mount or provision durable database storage before recurring execution.",
+    "Only then map fetch/analyze invocations onto existing NOOS loop machinery."
+  ]
+}
