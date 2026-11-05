@@ -175,7 +175,7 @@
           "items": {
             "type": "string"
           },
-          "minItems": 8
+          "minItems": 7
         },
         "distinction_from_executor_tiers": {
           "type": "string"
