@@ -1,0 +1,80 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://noetfield.com/schemas/company-signal-analysis-v1.schema.json",
+  "title": "Noetfield Company Intelligence Signal Analysis",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "relevance_score",
+    "commercial_field",
+    "event_type",
+    "fact_summary",
+    "business_implication",
+    "buyer_role",
+    "recommended_next_research",
+    "confidence",
+    "source_refs"
+  ],
+  "properties": {
+    "relevance_score": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100
+    },
+    "commercial_field": {
+      "enum": [
+        "enterprise_ai_governance",
+        "custom_ai_motors",
+        "investor_workflows",
+        "irrelevant",
+        "uncertain"
+      ]
+    },
+    "event_type": {
+      "enum": [
+        "standard_or_policy",
+        "product_or_capability",
+        "security_or_incident",
+        "partnership_or_market_move",
+        "funding_or_corporate_event",
+        "customer_or_buyer_signal",
+        "other",
+        "uncertain"
+      ]
+    },
+    "fact_summary": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1200
+    },
+    "business_implication": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1200
+    },
+    "buyer_role": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200
+    },
+    "recommended_next_research": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 800
+    },
+    "confidence": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "source_refs": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 5,
+      "items": {
+        "type": "string",
+        "format": "uri"
+      }
+    }
+  }
+}
