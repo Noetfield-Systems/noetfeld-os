@@ -821,6 +821,11 @@ def transition_opportunity(
         independent_sources = {str(ref.get("source_id") or "") for ref in record["evidence_refs"]}
         if len(independent_sources) < 2:
             raise ValueError("qualification_requires_two_independent_source_ids")
+        if not any(
+            ref.get("evidence_type") in {"customer_interview", "customer_email", "meeting_note"}
+            for ref in record["evidence_refs"]
+        ):
+            raise ValueError("qualification_requires_direct_customer_evidence")
         if not record["buyer_role"] or not record["problem_statement"] or not record["access_path"]:
             raise ValueError("qualification_requires_buyer_problem_and_access_path")
         if not evidence.get("qualification_note") or evidence.get("reviewer_id") != ROLE_FOUNDER:
