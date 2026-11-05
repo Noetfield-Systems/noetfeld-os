@@ -982,6 +982,7 @@ def main(argv: list[str] | None = None) -> int:
     signals.add_argument("--limit", type=int, default=20)
     traces = sub.add_parser("traces", help="List N-02 run traces (hashes and metadata only)")
     traces.add_argument("--limit", type=int, default=20)
+    add_json_flag(traces)
     add_json_flag(signals)
 
     args = parser.parse_args(argv)
