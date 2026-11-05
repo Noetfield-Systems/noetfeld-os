@@ -311,6 +311,26 @@ def init_db(conn: sqlite3.Connection) -> None:
             FOREIGN KEY(signal_id) REFERENCES signals(signal_id)
         );
         CREATE INDEX IF NOT EXISTS idx_model_runs_started ON model_runs(started_at);
+        CREATE TABLE IF NOT EXISTS agent_run_traces (
+            run_id TEXT PRIMARY KEY,
+            role_id TEXT NOT NULL,
+            task_kind TEXT NOT NULL,
+            source_id TEXT NOT NULL,
+            source_url TEXT NOT NULL,
+            source_digest TEXT NOT NULL,
+            prompt_digest TEXT NOT NULL,
+            output_digest TEXT,
+            model_id TEXT NOT NULL,
+            started_at TEXT NOT NULL,
+            finished_at TEXT,
+            status TEXT NOT NULL,
+            policy_decision TEXT NOT NULL,
+            tool_calls_json TEXT NOT NULL DEFAULT '[]',
+            reserved_usd REAL NOT NULL,
+            actual_usd REAL,
+            error_code TEXT
+        );
+        CREATE INDEX IF NOT EXISTS idx_agent_traces_role_started ON agent_run_traces(role_id, started_at);
         CREATE TABLE IF NOT EXISTS opportunities (
             opportunity_id TEXT PRIMARY KEY,
             account_name TEXT NOT NULL,
@@ -602,6 +622,9 @@ def analyze_signal(
         return {"ok": False, "status": "blocked", "reason": str(exc)}
 
     source = _signal_payload(row)
+    source_digest = hashlib.sha256(
+        json.dumps(source, sort_keys=True, ensure_ascii=False).encode("utf-8")
+    ).hexdigest()
     system_prompt = (
         "You are Noetfield's Strategic Intelligence Analyst (N-02). "
         "Analyze one public-source signal and return one JSON object matching the supplied schema. "
@@ -622,6 +645,23 @@ def analyze_signal(
         + json.dumps(source, ensure_ascii=False)
         + "\\n</untrusted_source_material>"
     )
+    prompt_digest = hashlib.sha256(
+        (system_prompt + "\\n" + user_prompt).encode("utf-8")
+    ).hexdigest()
+    conn.execute(
+        """
+        INSERT INTO agent_run_traces(
+          run_id,role_id,task_kind,source_id,source_url,source_digest,prompt_digest,
+          model_id,started_at,status,policy_decision,tool_calls_json,reserved_usd
+        ) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)
+        """,
+        (
+            run_id, ROLE_INTELLIGENCE, "classify", row["source_id"], row["url"],
+            source_digest, prompt_digest, model_id, utc_now(), "started",
+            "ALLOW_T1_NO_TOOLS", "[]", reserved_usd
+        ),
+    )
+    conn.commit()
     call = completion_fn or openrouter_completion
     try:
         response = call(
@@ -645,7 +685,15 @@ def analyze_signal(
             (json.dumps(analysis, ensure_ascii=False), signal_id),
         )
         conn.commit()
+        output_digest = hashlib.sha256(
+            json.dumps(analysis, sort_keys=True, ensure_ascii=False).encode("utf-8")
+        ).hexdigest()
         _complete_model_run(conn, run_id, status="succeeded", actual_usd=actual_cost_value)
+        conn.execute(
+            "UPDATE agent_run_traces SET output_digest=?,finished_at=?,status=?,actual_usd=? WHERE run_id=?",
+            (output_digest, utc_now(), "succeeded", actual_cost_value, run_id),
+        )
+        conn.commit()
         return {
             "ok": True,
             "status": "human_review_required",
@@ -658,6 +706,11 @@ def analyze_signal(
         }
     except Exception as exc:
         _complete_model_run(conn, run_id, status="failed", error_code=type(exc).__name__)
+        conn.execute(
+            "UPDATE agent_run_traces SET finished_at=?,status=?,error_code=? WHERE run_id=?",
+            (utc_now(), "failed", type(exc).__name__, run_id),
+        )
+        conn.commit()
         conn.execute(
             "UPDATE signals SET analysis_state='error',last_error=? WHERE signal_id=?",
             (str(exc)[:500], signal_id),
@@ -920,6 +973,8 @@ def main(argv: list[str] | None = None) -> int:
     add_json_flag(listing)
     signals = sub.add_parser("signals", help="List ingested market signals")
     signals.add_argument("--limit", type=int, default=20)
+    traces = sub.add_parser("traces", help="List N-02 run traces (hashes and metadata only)")
+    traces.add_argument("--limit", type=int, default=20)
     add_json_flag(signals)
 
     args = parser.parse_args(argv)
@@ -966,6 +1021,17 @@ def main(argv: list[str] | None = None) -> int:
                         for row in conn.execute(
                             "SELECT signal_id,source_id,title,url,published_at,analysis_state,analysis_json,last_error "
                             "FROM signals ORDER BY published_at DESC, first_seen_at DESC LIMIT ?",
+                            (max(1, min(args.limit, 100)),),
+                        ).fetchall()
+                    ]
+                elif args.command == "traces":
+                    result = [
+                        dict(row)
+                        for row in conn.execute(
+                            "SELECT run_id,role_id,task_kind,source_id,source_url,source_digest,prompt_digest,"
+                            "output_digest,model_id,started_at,finished_at,status,policy_decision,"
+                            "reserved_usd,actual_usd,error_code "
+                            "FROM agent_run_traces ORDER BY started_at DESC LIMIT ?",
                             (max(1, min(args.limit, 100)),),
                         ).fetchall()
                     ]
