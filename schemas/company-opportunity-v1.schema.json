@@ -1,0 +1,229 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://noetfield.com/schemas/company-opportunity-v1.schema.json",
+  "title": "Noetfield Company Opportunity",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "account_name",
+    "commercial_field",
+    "offer_line",
+    "problem_statement",
+    "buyer_role",
+    "economic_buyer_role",
+    "buyer_validation",
+    "budget_status",
+    "trigger",
+    "urgency",
+    "access_path",
+    "evidence_refs",
+    "score_inputs",
+    "next_action",
+    "owner_role"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 100
+    },
+    "account_name": {
+      "type": "string",
+      "minLength": 2,
+      "maxLength": 200
+    },
+    "account_domain": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "maxLength": 253
+    },
+    "commercial_field": {
+      "enum": [
+        "enterprise_ai_governance",
+        "custom_ai_motors",
+        "investor_workflows"
+      ]
+    },
+    "offer_line": {
+      "type": "string",
+      "minLength": 2,
+      "maxLength": 200
+    },
+    "problem_statement": {
+      "type": "string",
+      "minLength": 10,
+      "maxLength": 2000
+    },
+    "buyer_role": {
+      "type": "string",
+      "minLength": 2,
+      "maxLength": 200
+    },
+    "economic_buyer_role": {
+      "type": "string",
+      "minLength": 2,
+      "maxLength": 200
+    },
+    "buyer_validation": {
+      "enum": [
+        "unverified",
+        "reported",
+        "confirmed"
+      ]
+    },
+    "budget_status": {
+      "enum": [
+        "unknown",
+        "indicative",
+        "verified",
+        "approved"
+      ]
+    },
+    "trigger": {
+      "type": "string",
+      "minLength": 5,
+      "maxLength": 1200
+    },
+    "urgency": {
+      "enum": [
+        "unknown",
+        "low",
+        "medium",
+        "high",
+        "time_critical"
+      ]
+    },
+    "access_path": {
+      "type": "string",
+      "minLength": 2,
+      "maxLength": 1000
+    },
+    "evidence_refs": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 30,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "source_id",
+          "title",
+          "url",
+          "observed_at",
+          "evidence_type"
+        ],
+        "properties": {
+          "source_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 300
+          },
+          "url": {
+            "type": "string",
+            "format": "uri"
+          },
+          "observed_at": {
+            "type": "string",
+            "minLength": 10,
+            "maxLength": 40
+          },
+          "evidence_type": {
+            "enum": [
+              "public_source",
+              "customer_interview",
+              "customer_email",
+              "meeting_note",
+              "company_record",
+              "other"
+            ]
+          }
+        }
+      }
+    },
+    "score_inputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "strategic_fit",
+        "buyer_pain",
+        "timing_trigger",
+        "buyer_access",
+        "commercial_path",
+        "evidence_strength"
+      ],
+      "properties": {
+        "strategic_fit": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0,
+          "maximum": 5
+        },
+        "buyer_pain": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0,
+          "maximum": 5
+        },
+        "timing_trigger": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0,
+          "maximum": 5
+        },
+        "buyer_access": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0,
+          "maximum": 5
+        },
+        "commercial_path": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0,
+          "maximum": 5
+        },
+        "evidence_strength": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0,
+          "maximum": 5
+        }
+      }
+    },
+    "next_action": {
+      "type": "string",
+      "minLength": 2,
+      "maxLength": 1000
+    },
+    "owner_role": {
+      "enum": [
+        "N-02",
+        "N-05",
+        "H-001"
+      ]
+    },
+    "notes": {
+      "type": "string",
+      "maxLength": 3000
+    }
+  }
+}
