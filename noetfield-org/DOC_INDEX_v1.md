@@ -33,6 +33,8 @@
 | `AGENT_REGISTRY.md` | Agent roles |
 | `COMPANY_WORKFORCE_CHARTER_v1.md` | Human/digital company organization, role contracts, and operating rules |
 | `COMPANY_WORKFORCE_REGISTRY_v1.json` | Machine-readable company workforce roles, authority, and runtime mappings |
+| `../docs/company-workforce/GROWTH_ENGINE_RUNBOOK_v1.md` | N-02 public-source intelligence and N-05 evidence-backed revenue pipeline runbook |
+| `../data/company-growth-engine-v1.json` | Company growth engine runtime and authority manifest |
 | `SERVICE_LANES.md` | Service lane registry |
 | `NOOS_CONTROL_PANEL_AUTHORITY_REPORT_2026-07-04.md` | NOOS path authority |
 | `NOOS_LOCK_RECEIPT_v1.json` | Brain taxonomy lock |
