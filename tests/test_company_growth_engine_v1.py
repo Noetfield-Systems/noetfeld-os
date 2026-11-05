@@ -253,6 +253,13 @@ def test_model_output_cannot_invent_a_source_reference() -> None:
     )
     assert result["status"] == "failed"
     assert "source_refs" in result["error"]
+    trace = conn.execute(
+        "SELECT status,error_code,output_digest FROM agent_run_traces WHERE run_id=?",
+        (result["run_id"],),
+    ).fetchone()
+    assert trace["status"] == "failed"
+    assert trace["error_code"] == "ValueError"
+    assert trace["output_digest"] is None
 
 
 def test_prompt_injection_material_is_not_executed_as_a_tool() -> None:
