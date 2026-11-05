@@ -122,3 +122,14 @@ Tools are strictly routed per L17 executor classification. No agent may invoke a
 ---
 
 **Next:** Verify manifests exist in all 5 core repos (`.noetfield/agent_manifest.yml`).
+
+## Registry boundary — company workforce vs repository agents
+
+This file is the **repository-agent and cross-repository synchronization registry**. It does not define Noetfield's business-function org chart or employee roles.
+
+The company-level human/digital workforce is defined separately in:
+
+- `noetfield-org/COMPANY_WORKFORCE_CHARTER_v1.md`
+- `noetfield-org/COMPANY_WORKFORCE_REGISTRY_v1.json`
+
+A company role (N-01 through N-08) may be fulfilled by one or more already-registered repository agents or machine workers. Do not create a duplicate scheduler, dispatcher, or worker merely because a company role exists. The company workforce registry records the mapping and its evidence maturity.
