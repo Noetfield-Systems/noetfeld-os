@@ -72,6 +72,8 @@ org_sync_anchors:
   - noetfield-org/ROUTING_MATRIX.md (L17 tool routing)
   - noetfield-org/LOOP_STATE.json (mission stack + M6)
   - noetfield-org/SYNC_RECEIPTS.md (verified windows)
+  - noetfield-org/COMPANY_WORKFORCE_CHARTER_v1.md (company workforce operating law)
+  - noetfield-org/COMPANY_WORKFORCE_REGISTRY_v1.json (machine-readable roles and runtime mappings)
 
 # Custody authority pins (founder reasoning motor)
 custody_authority_pins:
