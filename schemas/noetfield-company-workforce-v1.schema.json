@@ -1,0 +1,548 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://noetfield.com/schemas/noetfield-company-workforce-v1.schema.json",
+  "title": "Noetfield Company Workforce Registry v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "version",
+    "status",
+    "company",
+    "canonical_strategy",
+    "founder_canon",
+    "runtime_routing_authority",
+    "design_boundary",
+    "founder",
+    "authority_model",
+    "operating_principles",
+    "roles",
+    "future_human_seats",
+    "specialist_pool",
+    "activation_waves",
+    "global_controls"
+  ],
+  "properties": {
+    "schema": {
+      "const": "noetfield-company-workforce-v1"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "status": {
+      "const": "internal_operating_design"
+    },
+    "company": {
+      "type": "string",
+      "minLength": 1
+    },
+    "canonical_strategy": {
+      "type": "string",
+      "minLength": 1
+    },
+    "founder_canon": {
+      "type": "string",
+      "minLength": 1
+    },
+    "runtime_routing_authority": {
+      "type": "string",
+      "minLength": 1
+    },
+    "design_boundary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "purpose",
+        "does_not_do",
+        "strategy_basis_status"
+      ],
+      "properties": {
+        "purpose": {
+          "type": "string"
+        },
+        "does_not_do": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1
+        },
+        "strategy_basis_status": {
+          "type": "string"
+        }
+      }
+    },
+    "founder": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "principal_id",
+        "name",
+        "worker_type",
+        "status",
+        "responsibilities",
+        "retained_authority",
+        "operating_rule"
+      ],
+      "properties": {
+        "principal_id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "worker_type": {
+          "const": "human"
+        },
+        "status": {
+          "const": "active"
+        },
+        "responsibilities": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1
+        },
+        "retained_authority": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1
+        },
+        "operating_rule": {
+          "type": "string"
+        }
+      }
+    },
+    "authority_model": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "levels",
+        "digital_worker_maximum",
+        "default_digital_worker_level",
+        "rules",
+        "distinction_from_executor_tiers"
+      ],
+      "properties": {
+        "levels": {
+          "type": "array",
+          "minItems": 5,
+          "maxItems": 5,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "name",
+              "description"
+            ],
+            "properties": {
+              "id": {
+                "enum": [
+                  "A0",
+                  "A1",
+                  "A2",
+                  "A3",
+                  "A4"
+                ]
+              },
+              "name": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "digital_worker_maximum": {
+          "const": "A3"
+        },
+        "default_digital_worker_level": {
+          "enum": [
+            "A0",
+            "A1",
+            "A2",
+            "A3"
+          ]
+        },
+        "rules": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 8
+        },
+        "distinction_from_executor_tiers": {
+          "type": "string"
+        }
+      }
+    },
+    "operating_principles": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 8
+    },
+    "roles": {
+      "type": "array",
+      "minItems": 8,
+      "maxItems": 8,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "role_id",
+          "title",
+          "function",
+          "reports_to",
+          "mission",
+          "primary_outcomes",
+          "responsibilities",
+          "execution_modes",
+          "target_cadence",
+          "context_sources",
+          "memory_scope",
+          "tool_allowlist",
+          "max_authority",
+          "autonomous_actions",
+          "human_approval_required_for",
+          "forbidden_actions",
+          "success_metrics",
+          "activation"
+        ],
+        "properties": {
+          "role_id": {
+            "enum": [
+              "N-01",
+              "N-02",
+              "N-03",
+              "N-04",
+              "N-05",
+              "N-06",
+              "N-07",
+              "N-08"
+            ]
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1
+          },
+          "function": {
+            "type": "string",
+            "minLength": 1
+          },
+          "reports_to": {
+            "type": "string",
+            "minLength": 1
+          },
+          "mission": {
+            "type": "string",
+            "minLength": 1
+          },
+          "primary_outcomes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "minItems": 1
+          },
+          "responsibilities": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "minItems": 1
+          },
+          "execution_modes": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "enum": [
+                "event_driven",
+                "scheduled",
+                "request_driven",
+                "long_running"
+              ]
+            },
+            "minItems": 1
+          },
+          "target_cadence": {
+            "type": "string",
+            "minLength": 1
+          },
+          "context_sources": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "memory_scope": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "tool_allowlist": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "max_authority": {
+            "enum": [
+              "A0",
+              "A1",
+              "A2",
+              "A3"
+            ]
+          },
+          "autonomous_actions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "minItems": 1
+          },
+          "human_approval_required_for": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "minItems": 1
+          },
+          "forbidden_actions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "minItems": 1
+          },
+          "success_metrics": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "minItems": 1
+          },
+          "activation": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "status",
+              "meaning",
+              "runtime_bindings",
+              "gaps"
+            ],
+            "properties": {
+              "status": {
+                "enum": [
+                  "mapped_existing",
+                  "partial_existing",
+                  "draft_only",
+                  "not_wired"
+                ]
+              },
+              "meaning": {
+                "type": "string"
+              },
+              "runtime_bindings": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "reference",
+                    "maturity"
+                  ],
+                  "properties": {
+                    "reference": {
+                      "type": "string"
+                    },
+                    "maturity": {
+                      "enum": [
+                        "existing",
+                        "partial",
+                        "not_connected"
+                      ]
+                    }
+                  }
+                }
+              },
+              "gaps": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "future_human_seats": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "seat_id",
+          "title",
+          "activation_condition",
+          "scope"
+        ],
+        "properties": {
+          "seat_id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "activation_condition": {
+            "type": "string"
+          },
+          "scope": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "specialist_pool": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "specialist_id",
+          "title",
+          "parent_role",
+          "mode"
+        ],
+        "properties": {
+          "specialist_id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "parent_role": {
+            "enum": [
+              "N-01",
+              "N-02",
+              "N-03",
+              "N-04",
+              "N-05",
+              "N-06",
+              "N-07",
+              "N-08"
+            ]
+          },
+          "mode": {
+            "const": "ephemeral_task_worker"
+          }
+        }
+      }
+    },
+    "activation_waves": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "wave_id",
+          "name",
+          "roles",
+          "state",
+          "exit_criteria"
+        ],
+        "properties": {
+          "wave_id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "roles": {
+            "type": "array",
+            "items": {
+              "enum": [
+                "N-01",
+                "N-02",
+                "N-03",
+                "N-04",
+                "N-05",
+                "N-06",
+                "N-07",
+                "N-08"
+              ]
+            },
+            "minItems": 1
+          },
+          "state": {
+            "type": "string"
+          },
+          "exit_criteria": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "minItems": 1
+          }
+        }
+      }
+    },
+    "global_controls": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "model_routing_source",
+        "execution_tier_source",
+        "machine_loop_source",
+        "integrator_source",
+        "secret_handling",
+        "memory_controls",
+        "observability",
+        "failure_policy"
+      ],
+      "properties": {
+        "model_routing_source": {
+          "type": "string"
+        },
+        "execution_tier_source": {
+          "type": "string"
+        },
+        "machine_loop_source": {
+          "type": "string"
+        },
+        "integrator_source": {
+          "type": "string"
+        },
+        "secret_handling": {
+          "type": "string"
+        },
+        "memory_controls": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1
+        },
+        "observability": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1
+        },
+        "failure_policy": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}
