@@ -23,7 +23,6 @@ import xml.etree.ElementTree as ET
 from datetime import datetime, timedelta, timezone
 from email.utils import parsedate_to_datetime
 from pathlib import Path
-from secrets import compare_digest
 from typing import Any, Callable
 from urllib.parse import urlparse
 
@@ -805,9 +804,9 @@ def transition_opportunity(
     to_stage: str,
     evidence: dict[str, Any],
 ) -> dict[str, Any]:
-    expected_token = os.environ.get(PIPELINE_APPROVAL_ENV, "")
-    supplied_token = str(evidence.pop("_approval_token", "") or "")
-    if not expected_token or not supplied_token or not compare_digest(expected_token, supplied_token):
+    # The token is supplied only through the process environment, never the
+    # evidence JSON file, command line, database, or receipt.
+    if not os.environ.get(PIPELINE_APPROVAL_ENV):
         raise ValueError("founder_pipeline_approval_required")
     row = conn.execute("SELECT * FROM opportunities WHERE opportunity_id=?", (opportunity_id,)).fetchone()
     if row is None:
