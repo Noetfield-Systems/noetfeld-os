@@ -23,6 +23,8 @@ import xml.etree.ElementTree as ET
 from datetime import datetime, timedelta, timezone
 from email.utils import parsedate_to_datetime
 from pathlib import Path
+from getpass import getpass
+from secrets import compare_digest
 from typing import Any, Callable
 from urllib.parse import urlparse
 
@@ -856,10 +858,14 @@ def transition_opportunity(
     opportunity_id: str,
     to_stage: str,
     evidence: dict[str, Any],
+    *,
+    approval_token: str | None = None,
 ) -> dict[str, Any]:
-    # The token is supplied only through the process environment, never the
-    # evidence JSON file, command line, database, or receipt.
-    if not os.environ.get(PIPELINE_APPROVAL_ENV):
+    # Expected token is provisioned by the secret manager. The supplied token
+    # is entered through a hidden prompt and never stored or logged.
+    expected_token = os.environ.get(PIPELINE_APPROVAL_ENV, "")
+    supplied_token = str(approval_token or "")
+    if not expected_token or not supplied_token or not compare_digest(expected_token, supplied_token):
         raise ValueError("founder_pipeline_approval_required")
     row = conn.execute("SELECT * FROM opportunities WHERE opportunity_id=?", (opportunity_id,)).fetchone()
     if row is None:
@@ -1005,7 +1011,10 @@ def main(argv: list[str] | None = None) -> int:
                     result["receipt_path"] = str(write_receipt({"operation": "opportunity_add", **result}).relative_to(ROOT))
                 elif args.command == "opportunity-advance":
                     evidence = load_json(args.evidence)
-                    result = transition_opportunity(conn, args.id, args.to, evidence)
+                    supplied_approval = getpass("Founder pipeline approval token: ")
+                    result = transition_opportunity(
+                        conn, args.id, args.to, evidence, approval_token=supplied_approval
+                    )
                     result["receipt_path"] = str(write_receipt({"operation": "opportunity_advance", **result}).relative_to(ROOT))
                 elif args.command == "opportunities":
                     query = "SELECT opportunity_id,account_name,commercial_field,stage,priority_score,buyer_validation,updated_at FROM opportunities"
