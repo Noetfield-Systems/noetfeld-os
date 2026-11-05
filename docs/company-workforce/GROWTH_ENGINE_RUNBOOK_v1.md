@@ -27,8 +27,8 @@
 - Closed-won and external-send actions are deliberately not autonomous transitions.
 - Model execution follows the existing `config/model-router.yml` T1 route, per-run ceiling, and rolling daily ceiling. A run reserves the T1 per-run cap before making a provider call.
 - Pipeline qualification requires confirmed buyer validation, at least two independent source IDs, direct customer evidence (interview/email/meeting note), a Founder approval secret, and a recorded H-001 review note.
-- Proposal review requires confirmed buyer validation, a verified or approved budget, the proposal draft, commercial assumptions, and the Founder approval secret.
-- Any stage transition requires a Founder-only environment secret. The secret is not stored in the database or evidence bundle.
+- Proposal readiness requires confirmed buyer validation, a verified or approved budget, the proposal draft, and explicit commercial assumptions. It remains a Founder review queue, not an approved external proposal.
+- The Founder secret is not stored in the database or evidence bundle.
 - Feed redirects, non-HTTPS URLs, unapproved domains, IP-literal URLs, non-public DNS results, oversized payloads, DTDs, and XML entity declarations are rejected.
 - The local database is idempotent and lives in a gitignored runtime directory. Do not run it from an ephemeral container and call it persistent.
 
@@ -76,7 +76,7 @@ Inspect N-02 traces (metadata and hashes only):
 python3 scripts/noetfield_company_growth_engine_v1.py traces --limit 30 --json
 ```
 
-Advance a record only from the Founder-controlled environment with `NOETFIELD_PIPELINE_APPROVAL_TOKEN` provisioned by an approved secret manager. Do not put the token in the evidence file or terminal command. The evidence object must include the required review note and, for qualified/proposal-review stages, `"reviewer_id": "H-001"`.
+Most N-05 pipeline updates are evidence-driven and do not require Founder intervention. The `qualified` transition is different: it asserts that a real buyer, problem, and access path have been validated, so it requires the Founder-controlled environment, `NOETFIELD_PIPELINE_APPROVAL_TOKEN` provisioned by an approved secret manager, and a hidden token prompt. Do not put the token in the evidence file or terminal command. The evidence object must include the required review note and `"reviewer_id": "H-001"`. Marking a proposal `proposal_ready_for_founder_review` only queues it for review; it does not approve or send it.
 
 ```bash
 python3 scripts/noetfield_company_growth_engine_v1.py opportunity-advance --id opp_ID --to researching --evidence path/to/evidence.json --json
@@ -88,7 +88,7 @@ Set `NOETFIELD_WORKFORCE_DB` to a durable approved path before using the CLI in 
 
 - `OPENROUTER_API_KEY`: provider credential in the approved secret store; never in Git, JSON config, agent prompts, or receipt payloads.
 - Model identity and pricing are taken only from `config/model-router.yml`. Environment-based model overrides are disabled.
-- `NOETFIELD_PIPELINE_APPROVAL_TOKEN`: Founder-only environment secret required for any pipeline-stage transition. It is never passed on the command line or stored in evidence JSON, SQLite, or receipts. A stage transition also requires the matching review evidence in the opportunity record.
+- `NOETFIELD_PIPELINE_APPROVAL_TOKEN`: Founder-only expected secret, provisioned in the approved runtime environment. It is checked against a hidden interactive prompt only when N-05 requests the `qualified` stage. It is never passed on the command line or stored in evidence JSON, SQLite, or receipts.
 - `NOETFIELD_WORKFORCE_DB`: durable SQLite path or future approved database mount.
 
 No credentials were provisioned as part of this change. A missing key causes analysis to return `BLOCKED`; the system does not fall back to fake model output.
