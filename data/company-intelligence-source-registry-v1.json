@@ -1,0 +1,111 @@
+{
+  "schema": "noetfield-company-intelligence-source-registry-v1",
+  "version": "1.0.0",
+  "status": "approved_public_feeds_manual_on_demand",
+  "refresh_mode": "manual_only_until_persistent_runtime_is_verified",
+  "feeds": [
+    {
+      "source_id": "nist-cybersecurity",
+      "publisher": "NIST",
+      "feed_url": "https://www.nist.gov/news-events/cybersecurity/rss.xml",
+      "verification_url": "https://www.nist.gov/coo/nist-rss-feeds",
+      "allowed_link_domains": [
+        "nist.gov"
+      ],
+      "commercial_fields": [
+        "enterprise_ai_governance",
+        "custom_ai_motors"
+      ],
+      "topics": [
+        "cybersecurity",
+        "standards",
+        "risk",
+        "identity",
+        "authorization"
+      ],
+      "trust_tier": "first_party",
+      "enabled": true,
+      "max_items_per_fetch": 30
+    },
+    {
+      "source_id": "github-changelog",
+      "publisher": "GitHub",
+      "feed_url": "https://github.blog/changelog/feed/",
+      "verification_url": "https://github.blog/changelog/",
+      "allowed_link_domains": [
+        "github.blog"
+      ],
+      "commercial_fields": [
+        "custom_ai_motors",
+        "enterprise_ai_governance"
+      ],
+      "topics": [
+        "developer-platform",
+        "agents",
+        "devsecops",
+        "supply-chain",
+        "security"
+      ],
+      "trust_tier": "first_party",
+      "enabled": true,
+      "max_items_per_fetch": 30
+    },
+    {
+      "source_id": "openai-news",
+      "publisher": "OpenAI",
+      "feed_url": "https://openai.com/news/rss.xml",
+      "verification_url": "https://openai.com/news/",
+      "allowed_link_domains": [
+        "openai.com"
+      ],
+      "commercial_fields": [
+        "enterprise_ai_governance",
+        "custom_ai_motors",
+        "investor_workflows"
+      ],
+      "topics": [
+        "enterprise-ai",
+        "agents",
+        "models",
+        "partnerships",
+        "research"
+      ],
+      "trust_tier": "first_party_domain_feed",
+      "enabled": true,
+      "max_items_per_fetch": 25
+    },
+    {
+      "source_id": "microsoft-security",
+      "publisher": "Microsoft Security",
+      "feed_url": "https://www.microsoft.com/en-us/security/blog/feed/",
+      "verification_url": "https://www.microsoft.com/en-us/security/blog/",
+      "allowed_link_domains": [
+        "microsoft.com"
+      ],
+      "commercial_fields": [
+        "enterprise_ai_governance",
+        "custom_ai_motors"
+      ],
+      "topics": [
+        "identity",
+        "cybersecurity",
+        "agent-security",
+        "enterprise-risk",
+        "cloud-security"
+      ],
+      "trust_tier": "first_party_domain_feed",
+      "enabled": true,
+      "max_items_per_fetch": 25
+    }
+  ],
+  "guardrails": {
+    "https_only": true,
+    "redirects_allowed": false,
+    "maximum_feed_bytes": 2000000,
+    "maximum_entry_text_chars": 5000,
+    "maximum_entries_per_source": 30,
+    "reject_doctype_and_entity_declarations": true,
+    "untrusted_source_content_is_data_not_instructions": true,
+    "no_external_actions": true
+  }
+}
