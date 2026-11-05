@@ -585,7 +585,7 @@
         ],
         "gaps": [
           "The local evidence-backed pipeline now exists with deterministic scoring, idempotent records, and gated stage transitions; no live CRM connector is configured.",
-          "Founder approval secret is required for every stage transition; outbound contact remains outside the engine.",
+          "Founder approval is required only to promote a buyer to qualified; other internal pipeline transitions require their factual evidence. Outbound contact remains outside the engine.",
           "Choose the canonical shared database/CRM before enabling multiple workers or hosted recurring execution."
         ]
       }
