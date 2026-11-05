@@ -861,12 +861,14 @@ def transition_opportunity(
     *,
     approval_token: str | None = None,
 ) -> dict[str, Any]:
-    # Expected token is provisioned by the secret manager. The supplied token
-    # is entered through a hidden prompt and never stored or logged.
-    expected_token = os.environ.get(PIPELINE_APPROVAL_ENV, "")
-    supplied_token = str(approval_token or "")
-    if not expected_token or not supplied_token or not compare_digest(expected_token, supplied_token):
-        raise ValueError("founder_pipeline_approval_required")
+    # Buyer qualification is a material commercial assertion. Only this
+    # transition requires a Founder token; factual research/discovery updates
+    # remain bounded N-05 operations with evidence.
+    if to_stage == "qualified":
+        expected_token = os.environ.get(PIPELINE_APPROVAL_ENV, "")
+        supplied_token = str(approval_token or "")
+        if not expected_token or not supplied_token or not compare_digest(expected_token, supplied_token):
+            raise ValueError("founder_pipeline_approval_required")
     row = conn.execute("SELECT * FROM opportunities WHERE opportunity_id=?", (opportunity_id,)).fetchone()
     if row is None:
         raise ValueError(f"unknown opportunity_id: {opportunity_id}")
@@ -922,7 +924,8 @@ def transition_opportunity(
         "INSERT INTO pipeline_events(event_id,opportunity_id,event_type,from_stage,to_stage,event_at,actor_role,evidence_json) VALUES(?,?,?,?,?,?,?,?)",
         (
             str(uuid.uuid4()), opportunity_id, "stage_transition", current, to_stage, now,
-            ROLE_REVENUE, json.dumps(evidence, ensure_ascii=False),
+            (ROLE_FOUNDER if to_stage == "qualified" else ROLE_REVENUE),
+            json.dumps(evidence, ensure_ascii=False),
         ),
     )
     conn.commit()
@@ -1011,7 +1014,11 @@ def main(argv: list[str] | None = None) -> int:
                     result["receipt_path"] = str(write_receipt({"operation": "opportunity_add", **result}).relative_to(ROOT))
                 elif args.command == "opportunity-advance":
                     evidence = load_json(args.evidence)
-                    supplied_approval = getpass("Founder pipeline approval token: ")
+                    supplied_approval = (
+                        getpass("Founder pipeline approval token: ")
+                        if args.to == "qualified"
+                        else None
+                    )
                     result = transition_opportunity(
                         conn, args.id, args.to, evidence, approval_token=supplied_approval
                     )
