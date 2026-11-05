@@ -144,12 +144,19 @@ def test_qualification_requires_founder_token_and_direct_customer_evidence(monke
     with pytest.raises(ValueError, match="founder_pipeline_approval_required"):
         engine.transition_opportunity(conn, created["opportunity_id"], "qualified", {})
     monkeypatch.setenv(engine.PIPELINE_APPROVAL_ENV, "test-founder-approval")
+    with pytest.raises(ValueError, match="founder_pipeline_approval_required"):
+        engine.transition_opportunity(
+            conn, created["opportunity_id"], "qualified",
+            {"qualification_note": "Evidence reviewed."},
+            approval_token="wrong-token"
+        )
     with pytest.raises(ValueError, match="reviewer_id"):
         engine.transition_opportunity(
             conn,
             created["opportunity_id"],
             "qualified",
-            {"qualification_note": "Evidence reviewed."}
+            {"qualification_note": "Evidence reviewed."},
+            approval_token="test-founder-approval"
         )
     result = engine.transition_opportunity(
         conn,
@@ -158,7 +165,8 @@ def test_qualification_requires_founder_token_and_direct_customer_evidence(monke
         {
             "qualification_note": "Founder reviewed buyer confirmation and direct evidence.",
             "reviewer_id": "H-001"
-        }
+        },
+        approval_token="test-founder-approval"
     )
     assert result["to_stage"] == "qualified"
     event = conn.execute("SELECT actor_role FROM pipeline_events ORDER BY event_at DESC LIMIT 1").fetchone()
@@ -182,18 +190,23 @@ def test_discovery_stage_requires_real_meeting_reference(monkeypatch: pytest.Mon
     created = engine.create_opportunity(conn, record)
     engine.transition_opportunity(
         conn, created["opportunity_id"], "qualified",
-        {"qualification_note": "Reviewed.", "reviewer_id": "H-001"}
+        {"qualification_note": "Reviewed.", "reviewer_id": "H-001"},
+        approval_token="test-founder-approval"
     )
     with pytest.raises(ValueError, match="actual_meeting_reference"):
         engine.transition_opportunity(conn, created["opportunity_id"], "discovery_scheduled", {})
 
 
-def test_closed_won_is_not_an_autonomous_pipeline_transition() -> None:
+def test_closed_won_is_not_an_autonomous_pipeline_transition(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setenv(engine.PIPELINE_APPROVAL_ENV, "test-founder-approval")
     conn = memory_db()
     record = valid_record()
     created = engine.create_opportunity(conn, record)
     with pytest.raises(ValueError, match="transition_not_allowed"):
-        engine.transition_opportunity(conn, created["opportunity_id"], "closed_won", {})
+        engine.transition_opportunity(
+            conn, created["opportunity_id"], "closed_won", {},
+            approval_token="test-founder-approval"
+        )
 
 
 def test_analysis_is_blocked_without_openrouter_credential() -> None:
