@@ -88,7 +88,7 @@ Set `NOETFIELD_WORKFORCE_DB` to a durable approved path before using the CLI in 
 
 - `OPENROUTER_API_KEY`: provider credential in the approved secret store; never in Git, JSON config, agent prompts, or receipt payloads.
 - Model identity and pricing are taken only from `config/model-router.yml`. Environment-based model overrides are disabled.
-- `NOETFIELD_PIPELINE_APPROVAL_TOKEN`: Founder-only expected secret, provisioned in the approved runtime environment. It is checked against a hidden interactive prompt only when N-05 requests the `qualified` stage. It is never passed on the command line or stored in evidence JSON, SQLite, or receipts.
+- `NOETFIELD_PIPELINE_APPROVAL_TOKEN`: Founder-only expected secret, provisioned in the approved runtime environment. The CLI compares it with a hidden interactive prompt only when N-05 requests the `qualified` stage. The supplied value is never passed on the command line or stored in evidence JSON, SQLite, or receipts.
 - `NOETFIELD_WORKFORCE_DB`: durable SQLite path or future approved database mount.
 
 No credentials were provisioned as part of this change. A missing key causes analysis to return `BLOCKED`; the system does not fall back to fake model output.
