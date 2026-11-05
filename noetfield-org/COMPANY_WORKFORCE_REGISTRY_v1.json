@@ -215,12 +215,15 @@
         "Approved source watchlists",
         "Noetfield commercial-field definitions",
         "Existing account and partner records",
-        "Public standards and market evidence"
+        "Public standards and market evidence",
+        "data/company-intelligence-source-registry-v1.json",
+        "data/company-growth-engine-v1.json"
       ],
       "memory_scope": [
         "Source provenance and dated findings",
         "Company-specific opportunity history",
-        "Account and partner research"
+        "Account and partner research",
+        "Source-attributed signal history and run-trace metadata"
       ],
       "tool_allowlist": [
         "Approved web/search sources",
@@ -268,12 +271,24 @@
           {
             "reference": "scripts/ci_discovery_noos_dispatcher.py",
             "maturity": "partial"
+          },
+          {
+            "reference": "data/company-growth-engine-v1.json",
+            "maturity": "partial"
+          },
+          {
+            "reference": "data/company-intelligence-source-registry-v1.json",
+            "maturity": "partial"
+          },
+          {
+            "reference": "scripts/noetfield_company_growth_engine_v1.py",
+            "maturity": "partial"
           }
         ],
         "gaps": [
-          "Create a governed source watchlist and opportunity record schema.",
-          "Verify a daily digest trigger and source freshness.",
-          "Connect validated opportunities to the Revenue role without enabling automated outbound contact."
+          "The growth engine now has explicit RSS ingestion, T1 OpenRouter model adapter, schema validation, source attribution, and trace metadata; it is implemented but not yet connected to an approved API secret or durable hosted storage.",
+          "Confirm live source feed health from an approved runtime, then verify the configured T1 model is currently available.",
+          "Establish a durable database path and Founder-approved model credential before adding a recurring schedule."
         ]
       }
     },
@@ -496,13 +511,16 @@
         "Validated opportunity briefs",
         "Approved commercial offers and pricing",
         "CRM or pipeline records once connected",
-        "Current product truth and case evidence"
+        "Current product truth and case evidence",
+        "data/company-growth-engine-v1.json",
+        "schemas/company-opportunity-v1.schema.json"
       ],
       "memory_scope": [
         "Account history",
         "Buying committee and stakeholder facts",
         "Opportunity stage and next action",
-        "Approved proposal history"
+        "Approved proposal history",
+        "Internal opportunity stages, next actions, and source evidence references"
       ],
       "tool_allowlist": [
         "Internal account and pipeline registry",
@@ -551,12 +569,24 @@
           {
             "reference": "noetfield-org/AGENT_REGISTRY.md#M1",
             "maturity": "existing"
+          },
+          {
+            "reference": "data/company-growth-engine-v1.json",
+            "maturity": "partial"
+          },
+          {
+            "reference": "schemas/company-opportunity-v1.schema.json",
+            "maturity": "existing"
+          },
+          {
+            "reference": "scripts/noetfield_company_growth_engine_v1.py#opportunity-pipeline",
+            "maturity": "partial"
           }
         ],
         "gaps": [
-          "Verify the current pipeline data source and owner.",
-          "Connect a CRM or structured opportunity registry.",
-          "Keep outbound sends human-approved even after CRM integration."
+          "The local evidence-backed pipeline now exists with deterministic scoring, idempotent records, and gated stage transitions; no live CRM connector is configured.",
+          "Founder approval secret is required for every stage transition; outbound contact remains outside the engine.",
+          "Choose the canonical shared database/CRM before enabling multiple workers or hosted recurring execution."
         ]
       }
     },
