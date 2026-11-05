@@ -35,6 +35,7 @@ sys.path.insert(0, str(ROOT / "scripts"))
 import noos_model_router_v1 as model_router  # noqa: E402
 
 SOURCE_REGISTRY_PATH = ROOT / "data" / "company-intelligence-source-registry-v1.json"
+SOURCE_SCHEMA_PATH = ROOT / "schemas" / "company-intelligence-source-registry-v1.schema.json"
 SIGNAL_SCHEMA_PATH = ROOT / "schemas" / "company-signal-analysis-v1.schema.json"
 OPPORTUNITY_SCHEMA_PATH = ROOT / "schemas" / "company-opportunity-v1.schema.json"
 DEFAULT_DB_PATH = ROOT / ".noos-runtime" / "workforce" / "company-growth-v1.sqlite3"
@@ -98,6 +99,11 @@ def load_source_registry(path: Path = SOURCE_REGISTRY_PATH) -> dict[str, Any]:
     registry = load_json(path)
     if registry.get("schema") != "noetfield-company-intelligence-source-registry-v1":
         raise ValueError("Unexpected source registry schema")
+    schema = load_json(SOURCE_SCHEMA_PATH)
+    Draft202012Validator.check_schema(schema)
+    schema_errors = list(Draft202012Validator(schema, format_checker=FormatChecker()).iter_errors(registry))
+    if schema_errors:
+        raise ValueError("source_registry_schema_invalid: " + "; ".join(error.message for error in schema_errors))
     seen: set[str] = set()
     for source in registry.get("feeds", []):
         source_id = str(source.get("source_id") or "")
@@ -413,6 +419,7 @@ def fetch_feeds(
     finally:
         if owns_client:
             http.close()
+    result["ok"] = not result["errors"]
     return result
 
 
@@ -679,11 +686,15 @@ def analyze_pending(
         analyze_signal(conn, item["signal_id"], completion_fn=completion_fn, api_key=api_key, router_config=router_config)
         for item in signals
     ]
+    succeeded = sum(1 for item in results if item.get("ok"))
+    blocked = sum(1 for item in results if item.get("status") == "blocked")
+    failed = sum(1 for item in results if item.get("status") == "failed")
     return {
+        "ok": blocked == 0 and failed == 0,
         "attempted": len(results),
-        "succeeded": sum(1 for item in results if item.get("ok")),
-        "blocked": sum(1 for item in results if item.get("status") == "blocked"),
-        "failed": sum(1 for item in results if item.get("status") == "failed"),
+        "succeeded": succeeded,
+        "blocked": blocked,
+        "failed": failed,
         "results": results,
         "at": utc_now(),
     }
@@ -900,7 +911,7 @@ def main(argv: list[str] | None = None) -> int:
     try:
         if args.command == "validate":
             registry = load_source_registry()
-            for schema_path in (SIGNAL_SCHEMA_PATH, OPPORTUNITY_SCHEMA_PATH):
+            for schema_path in (SOURCE_SCHEMA_PATH, SIGNAL_SCHEMA_PATH, OPPORTUNITY_SCHEMA_PATH):
                 schema = load_json(schema_path)
                 Draft202012Validator.check_schema(schema)
             result = {
