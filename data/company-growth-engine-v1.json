@@ -7,7 +7,7 @@
     "revenue": "N-05"
   },
   "source_registry": "data/company-intelligence-source-registry-v1.json",
-  "source_schema": "schemas/company-signal-analysis-v1.schema.json",
+  "source_schema": "schemas/company-intelligence-source-registry-v1.schema.json",
   "opportunity_schema": "schemas/company-opportunity-v1.schema.json",
   "runtime_entrypoint": "scripts/noetfield_company_growth_engine_v1.py",
   "runbook": "docs/company-workforce/GROWTH_ENGINE_RUNBOOK_v1.md",
@@ -34,5 +34,36 @@
     "Validate provider model availability and actual usage-cost reporting.",
     "Mount or provision durable database storage before recurring execution.",
     "Only then map fetch/analyze invocations onto existing NOOS loop machinery."
-  ]
+  ],
+  "observability": {
+    "trace_table": "agent_run_traces",
+    "cli_command": "traces",
+    "stored_fields": [
+      "role_id",
+      "task_kind",
+      "source_id",
+      "source_url",
+      "source_digest",
+      "prompt_digest",
+      "output_digest",
+      "model_id",
+      "status",
+      "policy_decision",
+      "tool_calls_json",
+      "reserved_usd",
+      "actual_usd",
+      "error_code"
+    ],
+    "raw_prompts_stored": false,
+    "chain_of_thought_stored": false,
+    "tool_access": false
+  },
+  "pipeline_authority": {
+    "stage_transitions_require": "NOETFIELD_PIPELINE_APPROVAL_TOKEN",
+    "reviewer_role": "H-001",
+    "token_location": "process_environment_only",
+    "token_in_arguments": false,
+    "token_in_evidence": false,
+    "token_in_receipts": false
+  }
 }
