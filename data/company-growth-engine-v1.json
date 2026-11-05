@@ -59,11 +59,13 @@
     "tool_access": false
   },
   "pipeline_authority": {
-    "stage_transitions_require": "NOETFIELD_PIPELINE_APPROVAL_TOKEN",
+    "qualification_transition_requires": "NOETFIELD_PIPELINE_APPROVAL_TOKEN",
     "reviewer_role": "H-001",
-    "token_location": "process_environment_only",
+    "token_location": "expected value in approved process environment; supplied value entered by hidden interactive prompt",
     "token_in_arguments": false,
     "token_in_evidence": false,
-    "token_in_receipts": false
+    "token_in_receipts": false,
+    "other_stage_transitions": "N-05 evidence-driven bounded updates",
+    "proposal_ready_for_founder_review": "queues a draft for review; does not approve or send"
   }
 }
