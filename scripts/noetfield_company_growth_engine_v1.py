@@ -871,21 +871,30 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--db", type=Path, default=Path(os.environ.get("NOETFIELD_WORKFORCE_DB", DEFAULT_DB_PATH)))
     sub = parser.add_subparsers(dest="command", required=True)
 
-    sub.add_parser("validate", help="Validate source registry and schemas without network calls")
-    sub.add_parser("fetch", help="Fetch allowlisted public RSS/Atom feeds (explicit network action)")
+    def add_json_flag(command_parser: argparse.ArgumentParser) -> None:
+        command_parser.add_argument("--json", action="store_true", help="Emit JSON")
+
+    validate_parser = sub.add_parser("validate", help="Validate source registry and schemas without network calls")
+    add_json_flag(validate_parser)
+    fetch_parser = sub.add_parser("fetch", help="Fetch allowlisted public RSS/Atom feeds (explicit network action)")
+    add_json_flag(fetch_parser)
     analyze = sub.add_parser("analyze", help="Analyze unprocessed signals with the configured T1 OpenRouter model")
     analyze.add_argument("--limit", type=int, default=10)
+    add_json_flag(analyze)
     add = sub.add_parser("opportunity-add", help="Add an internal opportunity from a JSON record")
     add.add_argument("--record", type=Path, required=True)
+    add_json_flag(add)
     advance = sub.add_parser("opportunity-advance", help="Advance a pipeline record with evidence")
     advance.add_argument("--id", required=True)
     advance.add_argument("--to", required=True, choices=STAGES)
     advance.add_argument("--evidence", type=Path, required=True)
+    add_json_flag(advance)
     listing = sub.add_parser("opportunities", help="List the internal revenue pipeline")
     listing.add_argument("--stage", choices=STAGES)
+    add_json_flag(listing)
     signals = sub.add_parser("signals", help="List ingested market signals")
     signals.add_argument("--limit", type=int, default=20)
-    parser.add_argument("--json", action="store_true", help="Emit JSON")
+    add_json_flag(signals)
 
     args = parser.parse_args(argv)
     try:
@@ -937,7 +946,7 @@ def main(argv: list[str] | None = None) -> int:
                 else:
                     raise ValueError(f"unknown command: {args.command}")
         _print(result, args.json)
-        return 0 if result.get("ok", True) if isinstance(result, dict) else 0 else 1
+        return 0 if (not isinstance(result, dict) or result.get("ok", True)) else 1
     except Exception as exc:
         error = {"ok": False, "error": str(exc)[:1000], "at": utc_now()}
         _print(error, getattr(args, "json", False))
