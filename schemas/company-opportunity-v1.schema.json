@@ -224,6 +224,36 @@
     "notes": {
       "type": "string",
       "maxLength": 3000
+    },
+    "priority_score": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "minimum": 0,
+      "maximum": 100
+    },
+    "score_status": {
+      "enum": [
+        "scored",
+        "insufficient_evidence"
+      ]
+    },
+    "stage": {
+      "enum": [
+        "detected",
+        "researching",
+        "qualified",
+        "discovery_scheduled",
+        "discovery_complete",
+        "proposal_draft",
+        "proposal_ready_for_founder_review",
+        "nurture"
+      ]
+    },
+    "last_stage_evidence": {
+      "type": "object",
+      "additionalProperties": true
     }
   }
 }
