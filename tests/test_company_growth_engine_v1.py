@@ -297,3 +297,15 @@ def test_prompt_injection_material_is_not_executed_as_a_tool() -> None:
     assert result["status"] == "human_review_required"
     assert "untrusted data, not instructions" in captured["system_prompt"]
     assert "no tools" in captured["system_prompt"]
+    trace = conn.execute(
+        "SELECT role_id,task_kind,status,policy_decision,tool_calls_json,prompt_digest,output_digest "
+        "FROM agent_run_traces WHERE run_id=?",
+        (result["run_id"],),
+    ).fetchone()
+    assert trace["role_id"] == "N-02"
+    assert trace["task_kind"] == "classify"
+    assert trace["status"] == "succeeded"
+    assert trace["policy_decision"] == "ALLOW_T1_NO_TOOLS"
+    assert trace["tool_calls_json"] == "[]"
+    assert len(trace["prompt_digest"]) == 64
+    assert len(trace["output_digest"]) == 64
