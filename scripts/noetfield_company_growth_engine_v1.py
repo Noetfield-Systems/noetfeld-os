@@ -909,8 +909,6 @@ def transition_opportunity(
             raise ValueError("proposal_review_requires_verified_or_approved_budget")
         if not evidence.get("proposal_document_ref") or not evidence.get("commercial_assumptions"):
             raise ValueError("founder_review_requires_proposal_draft_and_explicit_commercial_assumptions")
-        if evidence.get("reviewer_id") != ROLE_FOUNDER:
-            raise ValueError("proposal_review_requires_founder_reviewer_id")
     elif to_stage == "nurture":
         if not evidence.get("nurture_reason"):
             raise ValueError("nurture_requires_reason")
