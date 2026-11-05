@@ -23,6 +23,7 @@ import xml.etree.ElementTree as ET
 from datetime import datetime, timedelta, timezone
 from email.utils import parsedate_to_datetime
 from pathlib import Path
+from secrets import compare_digest
 from typing import Any, Callable
 from urllib.parse import urlparse
 
@@ -42,6 +43,8 @@ DEFAULT_DB_PATH = ROOT / ".noos-runtime" / "workforce" / "company-growth-v1.sqli
 RECEIPT_DIR = ROOT / "receipts" / "proof"
 ROLE_INTELLIGENCE = "N-02"
 ROLE_REVENUE = "N-05"
+ROLE_FOUNDER = "H-001"
+PIPELINE_APPROVAL_ENV = "NOETFIELD_PIPELINE_APPROVAL_TOKEN"
 ALLOWED_FIELDS = {
     "enterprise_ai_governance",
     "custom_ai_motors",
@@ -114,6 +117,11 @@ def load_source_registry(path: Path = SOURCE_REGISTRY_PATH) -> dict[str, Any]:
         if not isinstance(allowed, list) or not allowed:
             raise ValueError(f"{source_id}: allowed_link_domains is required")
         validate_feed_url(str(source.get("feed_url") or ""), allowed, resolve_dns=False)
+        verification_url = validate_feed_url(
+            str(source.get("verification_url") or ""), allowed, resolve_dns=False
+        )
+        if not verification_url:
+            raise ValueError(f"{source_id}: verification_url is required")
     return registry
 
 
@@ -571,19 +579,8 @@ def analyze_signal(
     if not key:
         return {"ok": False, "status": "blocked", "reason": "OPENROUTER_API_KEY_not_configured"}
     model_id = str(routing.get("model_id") or "")
-    override_model = os.environ.get("OPENROUTER_MODEL")
-    if override_model and override_model != model_id:
-        price = os.environ.get("OPENROUTER_MODEL_MAX_USD_PER_1K_TOKENS")
-        if not price:
-            return {"ok": False, "status": "blocked", "reason": "model_override_requires_explicit_price_cap"}
-        try:
-            price_per_1k = float(price)
-        except ValueError:
-            return {"ok": False, "status": "blocked", "reason": "invalid_model_price_cap"}
-        if price_per_1k < 0:
-            return {"ok": False, "status": "blocked", "reason": "invalid_model_price_cap"}
-        model_id = override_model
-
+    # Provider/model overrides are intentionally disabled. The model identity and
+    # price must come from the reviewed model-router SSOT, not ambient environment.
     budget_cfg = config.get("budget") if isinstance(config.get("budget"), dict) else {}
     tier_cfg = config.get("tiers", {}).get("T1", {})
     daily_limit = float(budget_cfg.get("max_usd_per_day") or 0.50)
@@ -678,9 +675,12 @@ def analyze_pending(
     api_key: str | None = None,
     router_config: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
+    cutoff = (datetime.now(timezone.utc) - timedelta(days=90)).isoformat(timespec="seconds")
     signals = conn.execute(
-        "SELECT signal_id FROM signals WHERE analysis_state='new' ORDER BY published_at DESC, first_seen_at DESC LIMIT ?",
-        (max(1, min(limit, 50)),),
+        "SELECT signal_id FROM signals WHERE analysis_state='new' "
+        "AND (published_at IS NULL OR published_at >= ?) "
+        "ORDER BY published_at DESC, first_seen_at DESC LIMIT ?",
+        (cutoff, max(1, min(limit, 50))),
     ).fetchall()
     results = [
         analyze_signal(conn, item["signal_id"], completion_fn=completion_fn, api_key=api_key, router_config=router_config)
@@ -805,6 +805,10 @@ def transition_opportunity(
     to_stage: str,
     evidence: dict[str, Any],
 ) -> dict[str, Any]:
+    expected_token = os.environ.get(PIPELINE_APPROVAL_ENV, "")
+    supplied_token = str(evidence.pop("_approval_token", "") or "")
+    if not expected_token or not supplied_token or not compare_digest(expected_token, supplied_token):
+        raise ValueError("founder_pipeline_approval_required")
     row = conn.execute("SELECT * FROM opportunities WHERE opportunity_id=?", (opportunity_id,)).fetchone()
     if row is None:
         raise ValueError(f"unknown opportunity_id: {opportunity_id}")
@@ -815,12 +819,13 @@ def transition_opportunity(
     if to_stage == "qualified":
         if record["buyer_validation"] != "confirmed":
             raise ValueError("qualification_requires_confirmed_buyer_validation")
-        if len(record["evidence_refs"]) < 2:
-            raise ValueError("qualification_requires_two_independent_evidence_refs")
+        independent_sources = {str(ref.get("source_id") or "") for ref in record["evidence_refs"]}
+        if len(independent_sources) < 2:
+            raise ValueError("qualification_requires_two_independent_source_ids")
         if not record["buyer_role"] or not record["problem_statement"] or not record["access_path"]:
             raise ValueError("qualification_requires_buyer_problem_and_access_path")
-        if evidence.get("qualification_note") is None:
-            raise ValueError("qualification_requires_human_review_note")
+        if not evidence.get("qualification_note") or evidence.get("reviewer_id") != ROLE_FOUNDER:
+            raise ValueError("qualification_requires_founder_review_note_and_reviewer_id")
     elif to_stage == "discovery_scheduled":
         if not evidence.get("meeting_reference") or not evidence.get("scheduled_at"):
             raise ValueError("discovery_scheduled_requires_actual_meeting_reference_and_time")
@@ -833,8 +838,14 @@ def transition_opportunity(
         if not evidence.get("economic_buyer_role") or not evidence.get("scope_summary") or not evidence.get("success_metric"):
             raise ValueError("proposal_draft_requires_economic_buyer_scope_and_success_metric")
     elif to_stage == "proposal_ready_for_founder_review":
+        if record["buyer_validation"] != "confirmed":
+            raise ValueError("proposal_review_requires_confirmed_buyer_validation")
+        if record["budget_status"] not in {"verified", "approved"}:
+            raise ValueError("proposal_review_requires_verified_or_approved_budget")
         if not evidence.get("proposal_document_ref") or not evidence.get("commercial_assumptions"):
             raise ValueError("founder_review_requires_proposal_draft_and_explicit_commercial_assumptions")
+        if evidence.get("reviewer_id") != ROLE_FOUNDER:
+            raise ValueError("proposal_review_requires_founder_reviewer_id")
     elif to_stage == "nurture":
         if not evidence.get("nurture_reason"):
             raise ValueError("nurture_requires_reason")
