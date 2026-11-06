@@ -43,6 +43,13 @@ fi
 
 ENABLE_CF_CRON="${ENABLE_CF_CRON:-1}"
 cp "$WRANGLER" "$WRANGLER_BAK"
+restore_wrangler_config() {
+  if [[ -f "$WRANGLER_BAK" ]]; then
+    mv "$WRANGLER_BAK" "$WRANGLER"
+  fi
+}
+trap restore_wrangler_config EXIT
+
 if [[ "$ENABLE_CF_CRON" == "1" ]]; then
   cat > "$WRANGLER" <<EOF
 name = "noos-loop-fleet-tick-v1"
@@ -66,13 +73,18 @@ fi
 
 cd "$WORKER_DIR"
 if [[ -n "${GITHUB_ACTIONS:-}" && "${NOOS_WRANGLER_SKIP_SECRET_PUT:-1}" != "0" ]]; then
-  wrangler deploy
+  # Do not mutate cron triggers in the CI deployment path. The account is
+  # already at the Workers Free cron-trigger cap; an ordinary wrangler deploy
+  # tries to rewrite the schedule and fails with Cloudflare API 10072.
+  # Version upload + promotion deploys code while preserving the live schedule.
+  VERSION_TAG="noos-loop-${GITHUB_SHA:-$(date -u +%Y%m%dT%H%M%SZ)}"
+  wrangler versions upload --tag "$VERSION_TAG" --message "NOOS loop fleet tick ${GITHUB_SHA:-manual}" --keep-vars
+  wrangler versions deploy --version-tag "${VERSION_TAG}@100%" --yes --message "Activate NOOS loop fleet tick ${GITHUB_SHA:-manual}"
 else
   printf '%s' "$EXECUTOR_URL" | wrangler secret put FLY_LOOP_EXECUTOR_URL
   printf '%s' "$NOOS_LOOP_SECRET" | wrangler secret put NOOS_LOOP_SECRET
   wrangler deploy
 fi
-mv "$WRANGLER_BAK" "$WRANGLER"
 
 for dead in GITHUB_REPO GITHUB_TOKEN LOOP_RUNNER_SECRET LOOP_RUNNER_URL; do
   wrangler secret delete "$dead" 2>/dev/null && echo "deleted secret $dead" || echo "skip delete $dead (not set)"
