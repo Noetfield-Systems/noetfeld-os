@@ -52,7 +52,8 @@ def test_probe_supabase_url_error_returns_clean_dict(monkeypatch) -> None:
     monkeypatch.setattr(_urllib_request, "urlopen", _raise)
     result = server.probe_supabase()
     assert result["ok"] is False
-    assert "connection reset" in result["error"]
+    assert result["tables"]["noos_loop_registry"]["ok"] is False
+    assert result["tables"]["noos_loop_registry"]["reason"] == "URLError"
 
 
 def test_probe_supabase_success(monkeypatch) -> None:
@@ -70,9 +71,17 @@ def test_probe_supabase_success(monkeypatch) -> None:
 
     import urllib.request as _urllib_request
 
-    monkeypatch.setattr(_urllib_request, "urlopen", lambda *_a, **_k: _FakeResp())
+    calls = []
+
+    def _fake_urlopen(*_args, **_kwargs):
+        calls.append(True)
+        return _FakeResp()
+
+    monkeypatch.setattr(_urllib_request, "urlopen", _fake_urlopen)
     result = server.probe_supabase()
-    assert result == {"ok": True, "status": 200}
+    assert result["ok"] is True
+    assert result["incident_logging_ready"] is True
+    assert len(calls) == 3
 
 
 def test_probe_supabase_never_raises_on_bounded_timeout(monkeypatch) -> None:
@@ -131,3 +140,76 @@ def test_run_loop_missing_liveness_upsert_does_not_crash(monkeypatch) -> None:
     monkeypatch.setattr(server.subprocess, "run", lambda *_a, **_k: _FakeCompletedProcess())
     result = server.run_loop("test_tick", source="test", run_id="run-3")  # must not raise
     assert result["ok"] is False
+
+
+
+def test_probe_supabase_factory_cycle_table_is_required(monkeypatch) -> None:
+    monkeypatch.setenv("NOETFIELD_SUPABASE_URL", "https://example.supabase.co")
+    monkeypatch.setenv("NOETFIELD_SUPABASE_SERVICE_ROLE_KEY", "test-key")
+
+    class _FakeResp:
+        status = 200
+
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *_exc) -> None:
+            return None
+
+    calls = 0
+
+    def _fake_urlopen(*_args, **_kwargs):
+        nonlocal calls
+        calls += 1
+        if calls == 2:
+            raise urllib.error.HTTPError(
+                "https://example.supabase.co/rest/v1/noetfield_factory_cycle_runs",
+                404,
+                "missing cycle table",
+                hdrs=None,
+                fp=None,
+            )
+        return _FakeResp()
+
+    import urllib.request as _urllib_request
+
+    monkeypatch.setattr(_urllib_request, "urlopen", _fake_urlopen)
+    result = server.probe_supabase()
+    assert result["ok"] is False
+    assert result["tables"]["noetfield_factory_cycle_runs"]["status"] == 404
+
+
+def test_probe_supabase_incident_table_is_optional(monkeypatch) -> None:
+    monkeypatch.setenv("NOETFIELD_SUPABASE_URL", "https://example.supabase.co")
+    monkeypatch.setenv("NOETFIELD_SUPABASE_SERVICE_ROLE_KEY", "test-key")
+
+    class _FakeResp:
+        status = 200
+
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *_exc) -> None:
+            return None
+
+    calls = 0
+
+    def _fake_urlopen(*_args, **_kwargs):
+        nonlocal calls
+        calls += 1
+        if calls == 3:
+            raise urllib.error.HTTPError(
+                "https://example.supabase.co/rest/v1/noos_incident_log",
+                404,
+                "optional incident table is not migrated",
+                hdrs=None,
+                fp=None,
+            )
+        return _FakeResp()
+
+    import urllib.request as _urllib_request
+
+    monkeypatch.setattr(_urllib_request, "urlopen", _fake_urlopen)
+    result = server.probe_supabase()
+    assert result["ok"] is True
+    assert result["incident_logging_ready"] is False
