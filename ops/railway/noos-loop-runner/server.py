@@ -17,9 +17,19 @@ from typing import Any
 
 ROOT_CANDIDATES = [Path(__file__).resolve().parent, *Path(__file__).resolve().parents]
 ROOT = next(
-    (p for p in ROOT_CANDIDATES if (p / "scripts" / "noos_loop_runner_v1.py").is_file()),
-    Path(__file__).resolve().parents[3],
+    (candidate for candidate in ROOT_CANDIDATES
+     if (candidate / "scripts" / "noos_loop_runner_v1.py").is_file()),
+    None,
 )
+if ROOT is None:
+    # Do not eagerly evaluate a brittle parents[n] fallback: both supported
+    # Docker layouts place the copied runner at /app/server.py or below /app.
+    ROOT = Path(__file__).resolve().parent
+if not (ROOT / "scripts" / "noos_loop_runner_v1.py").is_file():
+    raise RuntimeError(
+        f"NOOS runtime root not found from {Path(__file__).resolve()}; "
+        "expected scripts/noos_loop_runner_v1.py"
+    )
 sys.path.insert(0, str(ROOT / "scripts"))
 from noos_loop_liveness_v1 import upsert_loop_liveness  # noqa: E402
 
