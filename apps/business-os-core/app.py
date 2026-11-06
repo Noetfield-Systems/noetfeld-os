@@ -247,11 +247,22 @@ def create_task(body:dict[str,Any],authorization:str|None=Header(default=None)):
     if role not in {a[0] for a in core.AGENTS}: raise HTTPException(400,"Unknown role.")
     title=core.clean(body.get("title"),160);objective=core.clean(body.get("objective"),1200)
     if len(title)<3 or len(objective)<10: raise HTTPException(400,"Title and objective are required.")
+    brand=body.get("brand") if body.get("brand") in core.BRANDS else "noetfield"
+    dependencies=body.get("depends_on",[])
+    if not isinstance(dependencies,list):
+        raise HTTPException(422,"depends_on must be an array of task IDs.")
+    if len(dependencies)>20:
+        raise HTTPException(422,"A task may depend on at most 20 tasks.")
     with core.connect() as db:
-        task_id=core.add_task(db,None,None,body.get("brand") if body.get("brand") in core.BRANDS else "noetfield",role,title,objective,"Prepare internal recommendation only.")
-        for dependency_id in body.get("depends_on",[]) if isinstance(body.get("depends_on",[]),list) else []:
-            exists=db.execute("SELECT id FROM tasks WHERE id=?",(dependency_id,)).fetchone()
-            if not exists: raise HTTPException(422,"Dependency task does not exist.")
+        task_id=core.add_task(db,None,None,brand,role,title,objective,"Prepare internal recommendation only.")
+        for dependency_id in dependencies:
+            if not isinstance(dependency_id,str) or not dependency_id.strip():
+                raise HTTPException(422,"Each dependency must be a non-empty task ID.")
+            exists=db.execute("SELECT id,brand FROM tasks WHERE id=?",(dependency_id,)).fetchone()
+            if not exists:
+                raise HTTPException(422,"Dependency task does not exist.")
+            if exists["brand"] != brand:
+                raise HTTPException(422,"Dependency must belong to the same brand lane.")
             core.add_task_dependency(db,task_id,dependency_id)
     return {"created":True,"task_id":task_id}
 @app.delete("/api/control/opportunities/{oid}")
