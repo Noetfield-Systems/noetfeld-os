@@ -1,3 +1,4 @@
+import json
 import tempfile
 import unittest
 from pathlib import Path
@@ -100,6 +101,14 @@ class BusinessOSCycleTests(unittest.TestCase):
         self.assertEqual(attempts, 2)
 
 class BusinessOSGovernanceTests(unittest.TestCase):
+    def setUp(self):
+        self.temp = tempfile.TemporaryDirectory()
+        core.DB = Path(self.temp.name) / "test.sqlite"
+        core.init()
+
+    def tearDown(self):
+        self.temp.cleanup()
+
     def test_canonical_workforce_has_eight_roles_and_valid_reporting_lines(self):
         roster = core.company_workforce_roster()
         role_ids = {row["role_id"] for row in roster}
