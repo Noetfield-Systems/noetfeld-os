@@ -1,0 +1,208 @@
+import asyncio, os, re, time
+from contextlib import asynccontextmanager
+from pathlib import Path
+from typing import Any
+from fastapi import FastAPI, Header, HTTPException, Request
+from fastapi.responses import FileResponse, JSONResponse
+from pydantic import BaseModel, ConfigDict, Field
+import core
+
+TOKEN=os.getenv("FOUNDER_API_TOKEN","")
+INTERVAL=max(2,int(os.getenv("WORKER_INTERVAL_SECONDS","5")))
+STATIC=Path(__file__).parent/"static"
+RATE:dict[str,list[float]]={}
+STOP=asyncio.Event()
+
+def authorize(value:str|None):
+    import hmac
+    if not TOKEN: raise HTTPException(503,"Founder access is not configured.")
+    supplied=(value or "").removeprefix("Bearer ").strip()
+    if not supplied or not hmac.compare_digest(supplied,TOKEN):
+        raise HTTPException(401,"Founder authentication required.")
+
+def throttle(req:Request):
+    import hashlib
+    ip=req.client.host if req.client else "unknown"
+    key=hashlib.sha256(ip.encode()).hexdigest()
+    now=time.time()
+    hits=[x for x in RATE.get(key,[]) if now-x<600]
+    if len(hits)>=6: raise HTTPException(429,"Too many submissions. Try later.")
+    hits.append(now);RATE[key]=hits
+    if len(RATE)>4000:RATE.clear()
+
+async def worker():
+    while not STOP.is_set():
+        try:
+            await asyncio.to_thread(core.daily_tick)
+            event=await asyncio.to_thread(core.claim,"events")
+            if event:
+                await asyncio.to_thread(core.process_event,event)
+                continue
+            task=await asyncio.to_thread(core.claim,"tasks")
+            if task:
+                await asyncio.to_thread(core.process_task,task)
+                continue
+            await asyncio.sleep(INTERVAL)
+        except asyncio.CancelledError: raise
+        except Exception: await asyncio.sleep(INTERVAL)
+
+@asynccontextmanager
+async def lifespan(app):
+    core.init();STOP.clear()
+    job=asyncio.create_task(worker())
+    yield
+    STOP.set();job.cancel()
+    try: await job
+    except asyncio.CancelledError: pass
+
+app=FastAPI(title="Noetfield Business OS",version="0.1.0",lifespan=lifespan)
+
+class Intake(BaseModel):
+    model_config=ConfigDict(extra="ignore")
+    brand:str="noetfield"
+    audience:str="other"
+    intent:str="other"
+    name:str=Field(min_length=2,max_length=120)
+    email:str=Field(min_length=5,max_length=254)
+    company:str=Field(default="",max_length=140)
+    role:str=Field(default="",max_length=100)
+    problem:str=Field(min_length=10,max_length=2500)
+    urgency:str="exploring"
+    estimated_value:float=Field(default=0,ge=0,le=50000000)
+    consent:bool=False
+    ai_consent:bool=False
+    website:str=""
+class Feedback(BaseModel):
+    model_config=ConfigDict(extra="ignore")
+    brand:str="noetfield"
+    rating:int=Field(ge=1,le=5)
+    comment:str=Field(min_length=5,max_length=2000)
+    consent:bool=False
+
+@app.get("/")
+def home(): return FileResponse(STATIC/"index.html")
+@app.get("/control")
+def control(): return FileResponse(STATIC/"control.html")
+@app.get("/health")
+@app.get("/api/health")
+def health():
+    try:
+        with core.connect() as db: db.execute("SELECT 1")
+        return {"ok":True,"service":"business-os-core","version":"0.1.0","storage":"ready","worker_interval_seconds":INTERVAL}
+    except Exception: return JSONResponse({"ok":False,"storage":"unavailable"},status_code=503)
+@app.get("/ready")
+def ready(): return {"ready":True}
+
+@app.post("/api/intake")
+async def intake(data:Intake,request:Request):
+    throttle(request)
+    if int(request.headers.get("content-length","0") or 0)>24000: raise HTTPException(413,"Submission too large.")
+    if data.website.strip(): return {"accepted":True}
+    if not data.consent: raise HTTPException(400,"Consent is required.")
+    if not re.match(r"^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$",data.email): raise HTTPException(400,"Enter a valid email.")
+    brand=data.brand if data.brand in core.BRANDS else "noetfield"
+    audience=data.audience if data.audience in core.AUDIENCES else "other"
+    intent=data.intent if data.intent in core.INTENTS else "other"
+    urgency=data.urgency if data.urgency in {"now","30_days","quarter","exploring"} else "exploring"
+    payload=data.model_dump()
+    payload.update({"brand":brand,"audience":audience,"intent":intent,"urgency":urgency,
+      "name":core.clean(data.name,120),"email":core.clean(data.email,254).lower(),
+      "company":core.clean(data.company,140),"role":core.clean(data.role,100),
+      "problem":core.clean(data.problem,2500)})
+    route,_,_=core.route_for(brand,audience,intent)
+    event_id=core.add_event("intake.received","public_web",brand,payload)
+    return JSONResponse({"accepted":True,"reference":event_id,"route":route,
+      "message":"Request accepted and queued for its specialist workflow."},status_code=202)
+
+@app.post("/api/feedback")
+async def feedback(data:Feedback,request:Request):
+    throttle(request)
+    if not data.consent: raise HTTPException(400,"Consent is required.")
+    brand=data.brand if data.brand in core.BRANDS else "noetfield"
+    event_id=core.add_event("feedback.received","public_feedback",brand,
+      {"brand":brand,"rating":data.rating,"comment":core.clean(data.comment,2000)})
+    return JSONResponse({"accepted":True,"reference":event_id},status_code=202)
+
+@app.get("/api/control/overview")
+def overview(authorization:str|None=Header(default=None)):
+    authorize(authorization)
+    result=core.overview()
+    result.update({"worker_interval_seconds":INTERVAL,
+      "llm_configured":bool(os.getenv("LLM_BASE_URL") and os.getenv("LLM_API_KEY") and os.getenv("LLM_MODEL")),
+      "policy":"Analysis and internal reversible tasks are autonomous. External messaging, payments, deployments, legal/investment commitments require Founder approval."})
+    return result
+@app.get("/api/control/agents")
+def agents(authorization:str|None=Header(default=None)):
+    authorize(authorization)
+    return {"agents":[{"role":a[0],"name":a[1],"mission":a[2],"tier":a[3]} for a in core.AGENTS]}
+@app.get("/api/control/opportunities")
+def opportunities(authorization:str|None=Header(default=None),brand:str|None=None):
+    authorize(authorization)
+    with core.connect() as db:
+        query="SELECT o.*,c.name,c.email,c.company,c.audience,c.role FROM opportunities o JOIN contacts c ON c.id=o.contact_id"
+        rows=db.execute(query+(" WHERE o.brand=? " if brand in core.BRANDS else " ")+
+           "ORDER BY o.created_at DESC LIMIT 150",(brand,) if brand in core.BRANDS else ()).fetchall()
+    return {"opportunities":[dict(r) for r in rows]}
+@app.get("/api/control/tasks")
+def tasks(authorization:str|None=Header(default=None)):
+    authorize(authorization)
+    with core.connect() as db:
+        rows=db.execute("SELECT t.*,o.title AS opportunity_title FROM tasks t LEFT JOIN opportunities o ON o.id=t.opportunity_id ORDER BY t.created_at DESC LIMIT 150").fetchall()
+    return {"tasks":[dict(r) for r in rows]}
+@app.get("/api/control/events")
+def events(authorization:str|None=Header(default=None)):
+    authorize(authorization)
+    with core.connect() as db:
+        rows=db.execute("SELECT id,event_type,source,brand,status,attempts,created_at,processed_at,error FROM events ORDER BY created_at DESC LIMIT 100").fetchall()
+    return {"events":[dict(r) for r in rows]}
+@app.get("/api/control/runs")
+def runs(authorization:str|None=Header(default=None)):
+    authorize(authorization)
+    with core.connect() as db:
+        rows=db.execute("SELECT id,task_id,role,provider,model,status,input_tokens,output_tokens,started_at,finished_at FROM runs ORDER BY started_at DESC LIMIT 100").fetchall()
+    return {"runs":[dict(r) for r in rows]}
+@app.get("/api/control/roi")
+def roi(authorization:str|None=Header(default=None)):
+    authorize(authorization)
+    with core.connect() as db:
+        rows=db.execute("SELECT brand,COUNT(*) leads,SUM(CASE WHEN score>=65 THEN 1 ELSE 0 END) qualified,SUM(CASE WHEN stage='won' THEN 1 ELSE 0 END) won,COALESCE(SUM(CASE WHEN stage NOT IN ('won','lost') THEN estimated_value*CASE WHEN score>=80 THEN .35 WHEN score>=65 THEN .2 ELSE .08 END ELSE 0 END),0) weighted_pipeline FROM opportunities GROUP BY brand").fetchall()
+        count=db.execute("SELECT COUNT(*) n FROM events WHERE created_at>=datetime('now','-7 days')").fetchone()["n"]
+    return {"brands":[dict(r) for r in rows],"events_last_7d":count,
+      "actual_revenue":"Not connected. Weighted pipeline is not booked revenue.",
+      "cost_tracking":"Token usage is logged. Infrastructure spend is not connected yet."}
+@app.get("/api/control/memory")
+def memory(authorization:str|None=Header(default=None),brand:str="noetfield",q:str=""):
+    authorize(authorization);brand=brand if brand in core.BRANDS else "noetfield"
+    if q: chunks=core.retrieve(brand,q,20)
+    else:
+        with core.connect() as db:
+            chunks=[r["content"] for r in db.execute("SELECT content FROM memories WHERE brand=? ORDER BY created_at DESC LIMIT 20",(brand,)).fetchall()]
+    return {"brand":brand,"retrieval":"SQLite FTS5 lexical retrieval; vector embeddings are not configured in this release.","chunks":chunks}
+@app.patch("/api/control/opportunities/{oid}")
+def update_opportunity(oid:str,body:dict[str,Any],authorization:str|None=Header(default=None)):
+    authorize(authorization);stage=body.get("stage")
+    if stage not in {"new","qualified","proposal","negotiation","won","lost","nurture"}: raise HTTPException(400,"Unsupported stage.")
+    with core.connect() as db:
+        cursor=db.execute("UPDATE opportunities SET stage=?,updated_at=? WHERE id=?",(stage,core.now(),oid))
+        if not cursor.rowcount: raise HTTPException(404,"Opportunity not found.")
+    return {"updated":True,"stage":stage}
+@app.post("/api/control/tasks")
+def create_task(body:dict[str,Any],authorization:str|None=Header(default=None)):
+    authorize(authorization);role=body.get("role")
+    if role not in {a[0] for a in core.AGENTS}: raise HTTPException(400,"Unknown role.")
+    title=core.clean(body.get("title"),160);objective=core.clean(body.get("objective"),1200)
+    if len(title)<3 or len(objective)<10: raise HTTPException(400,"Title and objective are required.")
+    with core.connect() as db:
+        task_id=core.add_task(db,None,None,body.get("brand") if body.get("brand") in core.BRANDS else "noetfield",role,title,objective,"Prepare internal recommendation only.")
+    return {"created":True,"task_id":task_id}
+@app.post("/api/control/tasks/{tid}/approve")
+def approve_task(tid:str,authorization:str|None=Header(default=None)):
+    authorize(authorization)
+    with core.connect() as db:
+        row=db.execute("SELECT id,status FROM tasks WHERE id=?",(tid,)).fetchone()
+        if not row: raise HTTPException(404,"Task not found.")
+        if row["status"]!="drafted": raise HTTPException(409,"Only completed drafts can be ratified.")
+        db.execute("UPDATE tasks SET status='approved',updated_at=? WHERE id=?",(core.now(),tid))
+        db.execute("INSERT INTO events(id,event_type,source,brand,payload,status,created_at,processed_at) VALUES(?,?,?,?,?,'processed',?,?)",
+         (core.idof("evt"),"founder.approval.recorded","founder_control","portfolio",'{"task_id":"'+tid+'"}',core.now(),core.now()))
+    return {"approved":True,"execution":"Approval recorded only; no external action was performed."}
