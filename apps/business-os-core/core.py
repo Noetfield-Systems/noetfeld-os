@@ -26,7 +26,7 @@ def now(): return datetime.now(timezone.utc).isoformat(timespec="seconds")
 def idof(p): return p+"_"+uuid.uuid4().hex[:16]
 def clean(v,n=1500): return re.sub(r"[\x00-\x1f\x7f]"," ",str(v or "")).strip()[:n]
 def connect():
- DB.parent.mkdir(parents=True,exist_ok=True); d=sqlite3.connect(DB,timeout=10,isolation_level=None);d.row_factory=sqlite3.Row
+ DB.parent.mkdir(parents=True,exist_ok=True); d=sqlite3.connect(DB,timeout=10);d.row_factory=sqlite3.Row
  d.execute("PRAGMA busy_timeout=10000");d.execute("PRAGMA foreign_keys=ON");return d
 def init():
  with connect() as d:
@@ -120,6 +120,8 @@ def process_learning(e):
 def claim(table):
  with connect() as d:
   d.execute("BEGIN IMMEDIATE")
+  d.execute("UPDATE events SET status=CASE WHEN attempts>=4 THEN 'dead_letter' ELSE 'queued' END,claimed_at=NULL,error=COALESCE(error,'processing lease expired') WHERE status='processing' AND claimed_at IS NOT NULL AND datetime(claimed_at)<datetime('now','-3 minutes')")
+  d.execute("UPDATE tasks SET status='queued',updated_at=? WHERE status='running' AND datetime(updated_at)<datetime('now','-5 minutes')",(now(),))
   if table=="tasks":
    r=d.execute("SELECT t.*,o.intent,o.problem,o.estimated_value,o.ai_consent,o.route,o.score,o.urgency FROM tasks t LEFT JOIN opportunities o ON o.id=t.opportunity_id WHERE t.status='queued' ORDER BY t.created_at LIMIT 1").fetchone()
   else:
