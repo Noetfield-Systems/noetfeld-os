@@ -62,8 +62,10 @@ def test_heartbeat_called_when_sink_write_fails(monkeypatch) -> None:
     BLOCKED_WITH_REASON, and the heartbeat must STILL have been called with
     that real state — not silently skipped."""
     calls: list[dict[str, Any]] = []
+    incidents: list[dict[str, Any]] = []
     monkeypatch.setattr(runner, "upsert_loop_liveness", _recording_liveness_stub(calls))
     monkeypatch.setattr(runner, "sync_meta_liveness_rows", lambda: {"ok": True})
+    monkeypatch.setattr(runner, "log_incident", lambda **kwargs: incidents.append(kwargs) or {"ok": True})
 
     cycle = runner.execute_loop(_passing_step_loop("liveness-decouple-a"), self_heal=False)
 
@@ -73,6 +75,9 @@ def test_heartbeat_called_when_sink_write_fails(monkeypatch) -> None:
     assert calls[0]["last_cycle_status"] == "BLOCKED_WITH_REASON"
     assert calls[0]["loop_id"] == "liveness-decouple-a"
     assert cycle["liveness_upsert"] == {"ok": True}
+    assert len(incidents) == 1
+    assert incidents[0]["loop_id"] == "liveness-decouple-a"
+    assert incidents[0]["detail"]["phase"] == "cycle_execution"
 
 
 def test_heartbeat_called_on_step_failure(monkeypatch) -> None:
@@ -134,7 +139,9 @@ def test_cas_rejection_branch_still_heartbeats(monkeypatch) -> None:
     """The smaller, second instance of the same bug: a CAS collision took an
     early return that used to skip the heartbeat entirely."""
     calls: list[dict[str, Any]] = []
+    incidents: list[dict[str, Any]] = []
     monkeypatch.setattr(runner, "upsert_loop_liveness", _recording_liveness_stub(calls))
+    monkeypatch.setattr(runner, "log_incident", lambda **kwargs: incidents.append(kwargs) or {"ok": True})
     monkeypatch.setattr(runner, "acquire_cycle_number", lambda loop_id, factory_id=None: (None, {"reason": "cas_mismatch"}))
 
     cycle = runner.execute_loop(_passing_step_loop("liveness-decouple-e"), self_heal=False)
@@ -144,3 +151,6 @@ def test_cas_rejection_branch_still_heartbeats(monkeypatch) -> None:
     assert len(calls) == 1
     assert calls[0]["last_cycle_status"] == "BLOCKED_WITH_REASON"
     assert cycle["liveness_upsert"] == {"ok": True}
+    assert len(incidents) == 1
+    assert incidents[0]["detail"]["phase"] == "cycle_acquire"
+    assert incidents[0]["detail"]["d2_reason"] == "cas_mismatch"
