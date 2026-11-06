@@ -1,19 +1,89 @@
+import tempfile
 import unittest
-from core import route_for, score, AGENTS
+from pathlib import Path
+
+import core
+
 
 class BusinessOSRoutingTests(unittest.TestCase):
-    def test_brand_specific_routes(self):
-        self.assertEqual(route_for("buildworkflow","operator","buildworkflow")[0],"trade_operations")
-        self.assertEqual(route_for("trustfield","enterprise","trustfield")[0],"regulated_enterprise")
-        self.assertEqual(route_for("buildrelay","investor","investment")[0],"capital_partner")
-    def test_urgency_increases_fit_score(self):
-        low=score("operator","automation","exploring",10000,"Improve operations and workflow")
-        high=score("operator","automation","now",10000,"Improve operations and workflow")
-        self.assertGreater(high,low)
-    def test_agent_roles_are_unique(self):
-        roles=[a[0] for a in AGENTS]
-        self.assertEqual(len(roles),len(set(roles)))
-        self.assertIn("roi_analyst",roles)
-        self.assertIn("risk_governance",roles)
+    def test_brand_routes_are_separate(self):
+        self.assertEqual(core.route_for("buildworkflow", "operator", "buildworkflow")[0], "trade_operations")
+        self.assertEqual(core.route_for("trustfield", "enterprise", "trustfield")[0], "regulated_enterprise")
+        self.assertEqual(core.route_for("buildrelay", "investor", "investment")[0], "capital_partner")
 
-if __name__=="__main__": unittest.main()
+    def test_urgency_increases_fit_score(self):
+        low = core.score("operator", "automation", "exploring", 10000, "Improve operations and workflow")
+        high = core.score("operator", "automation", "now", 10000, "Improve operations and workflow")
+        self.assertGreater(high, low)
+
+    def test_agent_roles_are_unique(self):
+        roles = [agent[0] for agent in core.AGENTS]
+        self.assertEqual(len(roles), len(set(roles)))
+        self.assertIn("roi_analyst", roles)
+        self.assertIn("risk_governance", roles)
+
+
+class BusinessOSCycleTests(unittest.TestCase):
+    def setUp(self):
+        self.temp = tempfile.TemporaryDirectory()
+        core.DB = Path(self.temp.name) / "test.sqlite"
+        core.init()
+
+    def tearDown(self):
+        self.temp.cleanup()
+
+    def test_intake_event_routes_creates_tasks_and_executes_agent(self):
+        payload = {
+            "brand": "buildworkflow",
+            "audience": "operator",
+            "intent": "buildworkflow",
+            "name": "Test Operator",
+            "email": "operator@example.test",
+            "company": "Test Mechanical",
+            "role": "Operations Manager",
+            "problem": "HVAC extra work tickets are delayed before reaching the office.",
+            "urgency": "now",
+            "estimated_value": 12000,
+            "consent": True,
+            "ai_consent": False,
+        }
+        event_id = core.add_event("intake.received", "unit_test", "buildworkflow", payload)
+        event = core.claim("events")
+        self.assertEqual(event["id"], event_id)
+        core.process_event(event)
+
+        with core.connect() as db:
+            stored = db.execute("SELECT status FROM events WHERE id=?", (event_id,)).fetchone()
+            opp = db.execute("SELECT * FROM opportunities WHERE source='unit_test'").fetchone()
+            tasks = db.execute("SELECT COUNT(*) n FROM tasks WHERE event_id=?", (event_id,)).fetchone()["n"]
+        self.assertEqual(stored["status"], "processed")
+        self.assertEqual(opp["route"], "trade_operations")
+        self.assertEqual(opp["score"] >= 65, True)
+        self.assertEqual(tasks, 3)
+
+        drafted_task = core.claim("tasks")
+        self.assertEqual(drafted_task["ai_consent"], 0)
+        core.process_task(drafted_task)
+        with core.connect() as db:
+            status = db.execute("SELECT status FROM tasks WHERE id=?", (drafted_task["id"],)).fetchone()["status"]
+            run = db.execute("SELECT provider FROM runs WHERE task_id=?", (drafted_task["id"],)).fetchone()
+        self.assertEqual(status, "drafted")
+        self.assertEqual(run["provider"], "deterministic")
+
+        self.assertTrue(core.retrieve("buildworkflow", "HVAC extra work tickets"))
+        self.assertFalse(core.retrieve("trustfield", "HVAC extra work tickets"))
+
+    def test_stale_event_lease_is_recovered(self):
+        event_id = core.add_event("unsupported.test", "unit_test", "portfolio", {})
+        first = core.claim("events")
+        self.assertEqual(first["id"], event_id)
+        with core.connect() as db:
+            db.execute("UPDATE events SET claimed_at=datetime('now','-4 minutes') WHERE id=?", (event_id,))
+        second = core.claim("events")
+        self.assertEqual(second["id"], event_id)
+        with core.connect() as db:
+            attempts = db.execute("SELECT attempts FROM events WHERE id=?", (event_id,)).fetchone()["attempts"]
+        self.assertEqual(attempts, 2)
+
+if __name__ == "__main__":
+    unittest.main()
