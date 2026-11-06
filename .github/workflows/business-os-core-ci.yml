@@ -17,4 +17,4 @@ jobs:
         with:
           python-version: "3.12"
       - run: python -m py_compile apps/business-os-core/app.py apps/business-os-core/core.py
-      - run: python -m unittest apps.business-os-core.test_routing
+      - run: python -m unittest discover -s apps/business-os-core -p "test_*.py"
