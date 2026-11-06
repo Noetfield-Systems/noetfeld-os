@@ -83,6 +83,8 @@ class Feedback(BaseModel):
 def home(): return FileResponse(STATIC/"index.html")
 @app.get("/control")
 def control(): return FileResponse(STATIC/"control.html")
+@app.get("/privacy")
+def privacy(): return FileResponse(STATIC/"privacy.html")
 @app.get("/health")
 @app.get("/api/health")
 def health():
@@ -99,7 +101,7 @@ async def intake(data:Intake,request:Request):
     if int(request.headers.get("content-length","0") or 0)>24000: raise HTTPException(413,"Submission too large.")
     if data.website.strip(): return {"accepted":True}
     if not data.consent: raise HTTPException(400,"Consent is required.")
-    if not re.match(r"^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$",data.email): raise HTTPException(400,"Enter a valid email.")
+    if not re.match(r"^[^\s@]+@[^\s@]+\.[^\s@]+$",data.email): raise HTTPException(400,"Enter a valid email.")
     brand=data.brand if data.brand in core.BRANDS else "noetfield"
     audience=data.audience if data.audience in core.AUDIENCES else "other"
     intent=data.intent if data.intent in core.INTENTS else "other"
