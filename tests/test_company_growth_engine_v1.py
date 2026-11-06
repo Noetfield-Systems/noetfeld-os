@@ -169,7 +169,9 @@ def test_qualification_requires_founder_token_and_direct_customer_evidence(monke
         approval_token="test-founder-approval"
     )
     assert result["to_stage"] == "qualified"
-    event = conn.execute("SELECT actor_role FROM pipeline_events ORDER BY event_at DESC LIMIT 1").fetchone()
+    event = conn.execute(
+        "SELECT actor_role FROM pipeline_events WHERE event_type='stage_transition' AND to_stage='qualified'"
+    ).fetchone()
     assert event["actor_role"] == "H-001"
 
 
