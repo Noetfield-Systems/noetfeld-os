@@ -59,7 +59,8 @@ class BusinessOSCycleTests(unittest.TestCase):
         self.assertEqual(stored["status"], "processed")
         self.assertEqual(opp["route"], "trade_operations")
         self.assertEqual(opp["score"] >= 65, True)
-        self.assertEqual(tasks, 3)
+        # Three specialist roles plus the dependency-gated executive synthesis.
+        self.assertEqual(tasks, 4)
 
         drafted_task = core.claim("tasks")
         self.assertEqual(drafted_task["ai_consent"], 0)
@@ -97,11 +98,6 @@ class BusinessOSCycleTests(unittest.TestCase):
         with core.connect() as db:
             attempts = db.execute("SELECT attempts FROM events WHERE id=?", (event_id,)).fetchone()["attempts"]
         self.assertEqual(attempts, 2)
-
-if __name__ == "__main__":
-    unittest.main()
-
-
 
 class BusinessOSGovernanceTests(unittest.TestCase):
     def test_agent_roster_is_complete_and_managers_exist(self):
@@ -145,3 +141,8 @@ class BusinessOSGovernanceTests(unittest.TestCase):
         roster = core.agent_roster()
         self.assertEqual(max(row["layer"] for row in roster), 2)
         self.assertIn("chief_of_staff", {row["role"] for row in roster})
+
+
+
+if __name__ == "__main__":
+    unittest.main()
