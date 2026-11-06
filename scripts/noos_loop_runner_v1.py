@@ -21,6 +21,7 @@ SINK_TIMEOUT_SEC = int(os.environ.get("NOOS_SINK_TIMEOUT_SEC", "60"))
 sys.path.insert(0, str(ROOT / "scripts"))
 from noos_loop_determinism_v1 import advance_state, cas_advance, op_key, transition_allowed  # noqa: E402
 from noos_loop_liveness_v1 import detect_execution_host, sync_meta_liveness_rows, upsert_loop_liveness  # noqa: E402
+from noos_incident_log_v1 import log_incident  # noqa: E402
 from unified_motor_event_client_v1 import maybe_emit_loop_cycle_event  # noqa: E402
 
 
@@ -382,6 +383,24 @@ def execute_loop(loop: dict[str, Any], *, self_heal: bool = True) -> dict[str, A
             last_cycle_status="BLOCKED_WITH_REASON",
             host=detect_execution_host(),
         )
+        floor_meta = cas_meta.get("floor") if isinstance(cas_meta.get("floor"), dict) else {}
+        log_incident(
+            source="noos-loop-runner",
+            severity="error",
+            message=str(cas_meta.get("reason") or "cycle_acquire_blocked"),
+            loop_id=loop_id,
+            event_type=event_type,
+            detail={
+                "phase": "cycle_acquire",
+                "factory_id": factory_id,
+                "blocker_reason": f"cas_rejected:{cas_meta.get('reason')}",
+                "d2_reason": cas_meta.get("reason"),
+                "supabase_floor_reason": floor_meta.get("reason"),
+                "supabase_floor_status": floor_meta.get("status"),
+                "supabase_env": {key: env_meta.get(key) for key in ("ok", "has_url", "has_key")},
+            },
+            run_id=(os.environ.get("GITHUB_RUN_ID") or None),
+        )
         return {
             "schema": "noos-24-7-loop-cycle-v1",
             "receipt_schema": "autorun-cycle-receipt-v2",
@@ -586,6 +605,50 @@ def execute_loop(loop: dict[str, Any], *, self_heal: bool = True) -> dict[str, A
     # Unified Motor Event Bridge — after durable state + liveness (fail-open).
     # Integration call site documented in data/noos-unified-motor-event-bridge-v1.json
     cycle["unified_motor_event"] = maybe_emit_loop_cycle_event(cycle)
+
+    # Repair fix 7: persist non-success cycles and failed liveness writes.
+    # The incident helper is deliberately fail-open; it must never change the
+    # loop's execution result or block the next scheduled tick.
+    liveness_ok = (cycle.get("liveness_upsert") or {}).get("ok") is True
+    meta_liveness_ok = (cycle.get("meta_liveness_sync") or {}).get("ok") is True
+    if state_after not in ("COMPLETE", "IDLE_NO_WORK") or not liveness_ok or not meta_liveness_ok:
+        sink = cycle.get("supabase_sink") if isinstance(cycle.get("supabase_sink"), dict) else {}
+        d2 = cycle.get("d2") if isinstance(cycle.get("d2"), dict) else {}
+        floor = d2.get("floor") if isinstance(d2.get("floor"), dict) else {}
+        failed_steps = [
+            {"name": row.get("name"), "exit_code": row.get("exit_code"), "error": str(row.get("error") or "")[:240]}
+            for row in step_results + heal_results
+            if row.get("ok") is False
+        ][:8]
+        log_incident(
+            source="noos-loop-runner",
+            severity="error" if state_after not in ("COMPLETE", "IDLE_NO_WORK") else "warning",
+            message=str(blocker_reason or "loop_liveness_write_failed"),
+            loop_id=loop_id,
+            event_type=event_type,
+            detail={
+                "phase": "cycle_execution",
+                "factory_id": factory_id,
+                "cycle_number": cycle_number,
+                "state_after": state_after,
+                "blocker_reason": blocker_reason,
+                "d2_reason": d2.get("reason"),
+                "supabase_floor_reason": floor.get("reason"),
+                "supabase_floor_status": floor.get("status"),
+                "supabase_sink": {
+                    "ok": sink.get("ok"),
+                    "reason": sink.get("reason"),
+                    "status": sink.get("status"),
+                    "exit_code": sink.get("exit_code"),
+                    "error": str(sink.get("error") or "")[:240],
+                },
+                "failed_steps": failed_steps,
+                "liveness_upsert_ok": liveness_ok,
+                "meta_liveness_sync_ok": meta_liveness_ok,
+                "supabase_env": {key: env_meta.get(key) for key in ("ok", "has_url", "has_key")},
+            },
+            run_id=(os.environ.get("GITHUB_RUN_ID") or None),
+        )
 
     return cycle
 
