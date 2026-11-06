@@ -66,6 +66,40 @@ async function dispatchTarget(env, target, meta = {}) {
   };
 }
 
+function dispatchDiagnostic(result) {
+  const body = result?.body && typeof result.body === "object" ? result.body : {};
+  const cycle = body.cycle && typeof body.cycle === "object" ? body.cycle : {};
+  const steps = Array.isArray(cycle.runner_output?.steps) ? cycle.runner_output.steps : [];
+  const failedSteps = steps
+    .filter((step) => step?.ok === false)
+    .slice(0, 8)
+    .map((step) => ({
+      name: String(step.name || "unknown"),
+      exit_code: Number.isFinite(step.exit_code) ? step.exit_code : null,
+      error: String(step.error || "").slice(0, 180) || null,
+    }));
+  const floor = cycle.d2?.floor && typeof cycle.d2.floor === "object" ? cycle.d2.floor : {};
+  const sink = cycle.supabase_sink && typeof cycle.supabase_sink === "object"
+    ? cycle.supabase_sink
+    : {};
+  return {
+    transport_error: String(result?.error || "").slice(0, 180) || null,
+    response_status: Number.isFinite(result?.status) ? result.status : null,
+    run_id: String(body.run_id || "").slice(0, 80) || null,
+    exit_code: Number.isFinite(body.exit_code) ? body.exit_code : null,
+    cycle_status: String(cycle.status || "").slice(0, 80) || null,
+    state_after: String(cycle.state_after || "").slice(0, 80) || null,
+    blocker_reason: String(cycle.blocker_reason || "").slice(0, 240) || null,
+    d2_reason: String(cycle.d2?.reason || "").slice(0, 120) || null,
+    supabase_floor_reason: String(floor.reason || "").slice(0, 120) || null,
+    supabase_floor_status: Number.isFinite(floor.status) ? floor.status : null,
+    sink_ok: typeof sink.ok === "boolean" ? sink.ok : null,
+    sink_reason: String(sink.reason || "").slice(0, 120) || null,
+    sink_status: Number.isFinite(sink.status) ? sink.status : null,
+    failed_steps: failedSteps,
+  };
+}
+
 function dueTargets(utcMinute) {
   return TARGETS.filter((t) => {
     if (t.enabled === false || t.schedule_status === "quarantined") return false;
@@ -101,7 +135,12 @@ async function dispatchAll(env, targets, meta) {
     if (result.ok) {
       console.log(JSON.stringify(logLine));
     } else {
-      console.error(JSON.stringify({ ...logLine, error: result.error }));
+      // Preserve a bounded, secret-free projection of the Railway cycle body.
+      // The prior log discarded body, hiding D2 / Supabase sink blockers.
+      console.error(JSON.stringify({
+        ...logLine,
+        diagnostic: dispatchDiagnostic(result),
+      }));
     }
     results.push(result);
   }
