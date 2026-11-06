@@ -127,7 +127,8 @@ def deep_health():
         ok=not missing and worker_running
         payload={"ok":ok,"service":"business-os-core","schema_missing":missing,
             "worker_running":worker_running,"worker_interval_seconds":INTERVAL,"queue":counts,
-            "agent_count":len(core.AGENTS),"dependency_gating":True}
+            "company_role_count":len(core.COMPANY_ROLES),
+            "runtime_executor_count":len(core.AGENTS),"dependency_gating":True}
         return payload if ok else JSONResponse(payload,status_code=503)
     except Exception as exc:
         return JSONResponse({"ok":False,"error":type(exc).__name__},status_code=503)
@@ -178,10 +179,20 @@ def agents(authorization:str|None=Header(default=None)):
 @app.get("/api/control/org")
 def organization(authorization:str|None=Header(default=None)):
     authorize(authorization)
+    seats=core.company_workforce_roster()
     agents=core.agent_roster()
-    return {"organization":{"layers":3,"agents":len(agents),"executive_role":"chief_of_staff",
-        "operating_model":"specialist drafts -> dependency gate -> executive synthesis -> Founder ratification"},
-        "agents":agents}
+    return {
+        "organization":{
+            "founder":core.FOUNDER_SEAT,
+            "layers":3,
+            "company_role_count":len(seats),
+            "runtime_executor_count":len(agents),
+            "canonical_registry":core.WORKFORCE_BINDING["canonical_source"],
+            "operating_model":"canonical company seats -> bounded runtime capabilities -> specialist drafts -> dependency gate -> N-01 synthesis -> Founder ratification"
+        },
+        "seats":seats,
+        "runtime_agents":agents
+    }
 @app.get("/api/control/opportunities")
 def opportunities(authorization:str|None=Header(default=None),brand:str|None=None):
     authorize(authorization)
@@ -203,7 +214,14 @@ def tasks(authorization:str|None=Header(default=None)):
             FROM tasks t LEFT JOIN opportunities o ON o.id=t.opportunity_id
             ORDER BY t.created_at DESC LIMIT 150
         """).fetchall()
-    return {"tasks":[dict(r) for r in rows]}
+    tasks_out=[]
+    for row in rows:
+        item=dict(row)
+        seat=core.company_role_for_runtime(item["role"])
+        item["company_role_id"]=seat["role_id"]
+        item["company_role_title"]=seat["title"]
+        tasks_out.append(item)
+    return {"tasks":tasks_out}
 @app.get("/api/control/events")
 def events(authorization:str|None=Header(default=None)):
     authorize(authorization)
