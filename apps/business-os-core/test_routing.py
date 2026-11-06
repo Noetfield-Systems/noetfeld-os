@@ -100,3 +100,48 @@ class BusinessOSCycleTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+
+class BusinessOSGovernanceTests(unittest.TestCase):
+    def test_agent_roster_is_complete_and_managers_exist(self):
+        roster = core.agent_roster()
+        roles = {row["role"] for row in roster}
+        self.assertEqual(roles, {row[0] for row in core.AGENTS})
+        for row in roster:
+            manager = row["reports_to"]
+            if manager is not None:
+                self.assertIn(manager, roles)
+        self.assertIsNone(next(row for row in roster if row["role"] == "chief_of_staff")["reports_to"])
+
+    def test_executive_task_waits_for_specialist_dependencies(self):
+        with core.connect() as db:
+            specialist_a = core.add_task(
+                db, None, None, "noetfield", "sales_qualification",
+                "Qualify lead", "Assess buyer fit and urgency", "Draft next action"
+            )
+            specialist_b = core.add_task(
+                db, None, None, "noetfield", "risk_governance",
+                "Review risk", "Assess consent and privacy risks", "Flag blockers"
+            )
+            executive = core.add_task(
+                db, None, None, "noetfield", "chief_of_staff",
+                "Executive synthesis", "Consolidate specialist findings", "Prepare brief"
+            )
+            core.add_task_dependency(db, executive, specialist_a)
+            core.add_task_dependency(db, executive, specialist_b)
+
+        first = core.claim("tasks")
+        self.assertIn(first["id"], {specialist_a, specialist_b})
+        core.process_task(first)
+        second = core.claim("tasks")
+        self.assertIn(second["id"], {specialist_a, specialist_b})
+        self.assertNotEqual(second["id"], first["id"])
+        core.process_task(second)
+        third = core.claim("tasks")
+        self.assertEqual(third["id"], executive)
+
+    def test_agent_hierarchy_is_three_layers_and_executive_review_is_a_role(self):
+        roster = core.agent_roster()
+        self.assertEqual(max(row["layer"] for row in roster), 2)
+        self.assertIn("chief_of_staff", {row["role"] for row in roster})
