@@ -182,7 +182,8 @@ class BusinessOSGovernanceTests(unittest.TestCase):
                 db, None, None, "noetfield", "sales_qualification",
                 "Qualify buyer", "Assess urgency and buyer authority", "Draft next step"
             )
-            claimed = core.claim("tasks")
+        claimed = core.claim("tasks")
+        self.assertEqual(claimed["id"], task)
         core.process_task(claimed)
         with core.connect() as db:
             row = db.execute("SELECT result FROM tasks WHERE id=?", (task,)).fetchone()
