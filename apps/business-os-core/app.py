@@ -198,28 +198,28 @@ def create_task(body:dict[str,Any],authorization:str|None=Header(default=None)):
         task_id=core.add_task(db,None,None,body.get("brand") if body.get("brand") in core.BRANDS else "noetfield",role,title,objective,"Prepare internal recommendation only.")
     return {"created":True,"task_id":task_id}
 @app.delete("/api/control/opportunities/{oid}")
-def delete_opportunity(oid:str,authorization:str|None=Header(default=None)):
+def delete_contact_data(oid:str,authorization:str|None=Header(default=None)):
     authorize(authorization)
     with core.connect() as db:
         row=db.execute("SELECT contact_id FROM opportunities WHERE id=?",(oid,)).fetchone()
         if not row: raise HTTPException(404,"Opportunity not found.")
-        task_rows=db.execute("SELECT event_id FROM tasks WHERE opportunity_id=? AND event_id IS NOT NULL",(oid,)).fetchall()
-        event_ids=[r["event_id"] for r in task_rows]
-        memory_rows=db.execute("SELECT id FROM memories WHERE source_id=?",(oid,)).fetchall()
+        contact_id=row["contact_id"]
+        opportunity_rows=db.execute("SELECT id FROM opportunities WHERE contact_id=?",(contact_id,)).fetchall()
+        opportunity_ids=[r["id"] for r in opportunity_rows]
+        placeholders=",".join("?" for _ in opportunity_ids)
+        task_rows=db.execute("SELECT event_id FROM tasks WHERE opportunity_id IN ("+placeholders+") AND event_id IS NOT NULL",opportunity_ids).fetchall()
+        event_ids=list({r["event_id"] for r in task_rows})
+        memory_rows=db.execute("SELECT id FROM memories WHERE source_id IN ("+placeholders+")",opportunity_ids).fetchall()
         memory_ids=[r["id"] for r in memory_rows]
         if memory_ids:
-            try:
-                db.executemany("DELETE FROM memory_fts WHERE memory_id=?",[(x,) for x in memory_ids])
-            except Exception:
-                pass
-            db.execute("DELETE FROM memories WHERE source_id=?",(oid,))
-        db.execute("DELETE FROM tasks WHERE opportunity_id=?",(oid,))
-        if event_ids:
-            db.executemany("DELETE FROM events WHERE id=?",[(x,) for x in set(event_ids)])
-        db.execute("DELETE FROM opportunities WHERE id=?",(oid,))
-        left=db.execute("SELECT COUNT(*) n FROM opportunities WHERE contact_id=?",(row["contact_id"],)).fetchone()["n"]
-        if left==0: db.execute("DELETE FROM contacts WHERE id=?",(row["contact_id"],))
-    return {"deleted":True,"opportunity_id":oid,"contact_removed":left==0}
+            try: db.executemany("DELETE FROM memory_fts WHERE memory_id=?",[(x,) for x in memory_ids])
+            except Exception: pass
+            db.executemany("DELETE FROM memories WHERE id=?",[(x,) for x in memory_ids])
+        db.execute("DELETE FROM tasks WHERE opportunity_id IN ("+placeholders+")",opportunity_ids)
+        if event_ids: db.executemany("DELETE FROM events WHERE id=?",[(x,) for x in event_ids])
+        db.execute("DELETE FROM opportunities WHERE contact_id=?",(contact_id,))
+        db.execute("DELETE FROM contacts WHERE id=?",(contact_id,))
+    return {"deleted":True,"contact_removed":True,"opportunities_removed":len(opportunity_ids)}
 
 @app.post("/api/control/tasks/{tid}/approve")
 def approve_task(tid:str,authorization:str|None=Header(default=None)):
