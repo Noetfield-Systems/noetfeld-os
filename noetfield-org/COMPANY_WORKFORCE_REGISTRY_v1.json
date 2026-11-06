@@ -1,0 +1,999 @@
+{
+  "schema": "noetfield-company-workforce-v1",
+  "version": "1.0.0",
+  "status": "internal_operating_design",
+  "company": "Noetfield Systems Inc.",
+  "canonical_strategy": "noetfield-org/NOETFIELD_COMPANY_STRATEGY_v1_BLUEPRINT.md",
+  "founder_canon": "docs/_NOOS_AGENT/[NOOS-AGENT-20260703-005]_FOUNDER_CANON_INTERFACE_v1.md",
+  "runtime_routing_authority": "noetfield-org/ROUTING_MATRIX.md",
+  "design_boundary": {
+    "purpose": "Define company functions, digital-worker roles, human authority, and verified mappings to existing NOOS capabilities.",
+    "does_not_do": [
+      "Replace the existing NOOS machine-loop, worker-kernel, or integrator systems.",
+      "Create a second scheduler, dispatcher, memory platform, or tool-routing doctrine.",
+      "Claim that every defined role is already deployed as an autonomous runtime.",
+      "Change Noetfield's company strategy, product SSOT, or public website claims.",
+      "Grant agents legal personhood, employee status, signature authority, or independent financial authority."
+    ],
+    "strategy_basis_status": "The company strategy blueprint is locked for content but is still marked pending SG ratification."
+  },
+  "founder": {
+    "principal_id": "H-001",
+    "name": "Founder / CEO",
+    "worker_type": "human",
+    "status": "active",
+    "responsibilities": [
+      "Set company direction, commercial priorities, and risk appetite.",
+      "Approve capital, legal commitments, contracts, irreversible high-impact actions, and autonomy-tier changes.",
+      "Own executive relationships and strategic exceptions.",
+      "Remain accountable for the corporation and its external commitments."
+    ],
+    "retained_authority": [
+      "A4",
+      "mission_priority",
+      "budget_ceiling",
+      "policy_ratification",
+      "legal_signature",
+      "production_release_exception"
+    ],
+    "operating_rule": "Founder is the control-plane principal and ratifier, not the default operator, QA worker, or routine escalation inbox."
+  },
+  "authority_model": {
+    "levels": [
+      {
+        "id": "A0",
+        "name": "observe",
+        "description": "Read approved sources and report facts; no writes."
+      },
+      {
+        "id": "A1",
+        "name": "analyze_recommend",
+        "description": "Analyze evidence and recommend decisions; no external side effects."
+      },
+      {
+        "id": "A2",
+        "name": "draft_internal_write",
+        "description": "Create drafts, internal records, issues, plans, and non-authoritative working artifacts."
+      },
+      {
+        "id": "A3",
+        "name": "bounded_reversible_execution",
+        "description": "Execute a specific, revocable, reversible task inside an approved sandbox, branch, or internal workflow."
+      },
+      {
+        "id": "A4",
+        "name": "human_reserved_high_impact",
+        "description": "External, legal, financial, production, irreversible, or policy-changing authority. Human approval and an explicit permit are mandatory."
+      }
+    ],
+    "digital_worker_maximum": "A3",
+    "default_digital_worker_level": "A1",
+    "rules": [
+      "Role membership does not grant tool permission; every run requires a task-scoped mandate.",
+      "The task originator, repository, data domain, action, resource, and expiry must be explicit.",
+      "Delegation is monotonic: a child worker cannot receive broader authority, data, tools, budget, or lifetime than its parent mandate.",
+      "A prompt, retrieved document, memory item, email, web page, or tool output cannot grant authority.",
+      "A4 is never autonomously granted to a digital worker.",
+      "External sends, public publishing, contracts, legal filings, money movement, production deployment, protected-branch merge, and policy or verifier weakening require human approval.",
+      "Failure routes to contain, critique, audit, research, repair, validate, and record evidence; not automatically to Founder."
+    ],
+    "distinction_from_executor_tiers": "A0-A4 are company authority levels. NOOS T0-T3 are executor/tool-routing tiers in ROUTING_MATRIX.md. They are orthogonal and must never be treated as interchangeable."
+  },
+  "operating_principles": [
+    "One business role may map to multiple existing workers; do not create a second runtime when a current NOOS worker already performs the function.",
+    "One primary writer owns each scope cell; other workers observe or critique downstream.",
+    "Use event-driven, scheduled, request-driven, and bounded long-running execution as appropriate; do not keep an LLM thinking continuously to simulate 24/7 availability.",
+    "Deterministic code handles polling, routing, schema checks, cost limits, idempotency, and simple state transitions. LLMs are reserved for ambiguity, synthesis, and language tasks.",
+    "Each run receives fresh task context from approved SSOT, mandate, role charter, and current task state.",
+    "Separate Company SSOT, role memory, task state, episodic event history, and retrieved external knowledge.",
+    "Never store or request private chain-of-thought. Store task inputs, tool calls, decisions, references, outputs, and evidence needed for audit.",
+    "No shared unrestricted memory across roles. Access follows data-domain permissions and least privilege.",
+    "Provider and model are replaceable implementation details; role identity and authority remain stable.",
+    "A role's activation status must reflect verified runtime wiring, not the existence of a prompt or design document."
+  ],
+  "roles": [
+    {
+      "role_id": "N-01",
+      "title": "Chief of Staff & Operations Officer",
+      "function": "Company coordination and execution control",
+      "reports_to": "H-001",
+      "mission": "Turn Founder-approved priorities into bounded work orders, coordinate existing company and NOOS workers, maintain a reliable company operating picture, and surface only decisions that genuinely require the Founder.",
+      "primary_outcomes": [
+        "One prioritized execution queue",
+        "Daily executive digest",
+        "Clear ownership and next action for every active mission",
+        "Reduced routine Founder coordination load"
+      ],
+      "responsibilities": [
+        "Translate approved goals into work orders with owner, scope, due condition, and acceptance criteria.",
+        "Route work to existing role owners and NOOS execution surfaces.",
+        "Reconcile status, dependencies, blockers, and completion evidence.",
+        "Prepare one concise Founder digest instead of forwarding multiple worker reports.",
+        "Maintain decision log and identify stale or conflicting mandates."
+      ],
+      "execution_modes": [
+        "event_driven",
+        "scheduled",
+        "request_driven"
+      ],
+      "target_cadence": "Event-driven on new work, status changes, failures, and approvals; one daily consolidated digest. Existing system cadences remain authoritative.",
+      "context_sources": [
+        "Company strategy and current Founder-approved priorities",
+        "NOOS mission and task state",
+        "Integrator claims and worker receipts",
+        "Current product and commercial truth"
+      ],
+      "memory_scope": [
+        "Company operating decisions",
+        "Mission and task history",
+        "Role ownership and handoff patterns"
+      ],
+      "tool_allowlist": [
+        "Existing NOOS integrator and machine-loop interfaces",
+        "Task and issue APIs within granted repository scope",
+        "Read-only repository and evidence inspection"
+      ],
+      "max_authority": "A3",
+      "autonomous_actions": [
+        "Create and update bounded internal work orders",
+        "Assign work to an already-authorized role or worker",
+        "Prepare internal summaries and blocker reports",
+        "Reconcile task state where the existing integrator contract allows it"
+      ],
+      "human_approval_required_for": [
+        "Changing company strategy or mission priority",
+        "Increasing budgets or authority tiers",
+        "External commitments",
+        "Protected-branch merge or production release",
+        "Policy, verifier, or governance-law changes"
+      ],
+      "forbidden_actions": [
+        "Create a parallel scheduler or integrator",
+        "Override mission priority or Founder canon",
+        "Treat a status report as proof without its underlying receipt",
+        "Route ordinary operational failures to Founder before machine critique and repair"
+      ],
+      "success_metrics": [
+        "Percentage of active work orders with owner, scope, and acceptance criteria",
+        "On-time completion rate",
+        "Age of blocked tasks",
+        "Founder coordination minutes saved",
+        "Digest signal-to-noise ratio"
+      ],
+      "activation": {
+        "status": "mapped_existing",
+        "meaning": "Logical company role mapped onto existing NOOS coordination capabilities; not a separate continuously running LLM service.",
+        "runtime_bindings": [
+          {
+            "reference": "data/noos-integrator-role-v1.json",
+            "maturity": "existing"
+          },
+          {
+            "reference": "scripts/noos_integrator_sync_v1.py",
+            "maturity": "existing"
+          },
+          {
+            "reference": "scripts/noos_machine_loops_v1.py",
+            "maturity": "existing"
+          },
+          {
+            "reference": "data/noos-parallel-agent-registry-v1.json#cursor-integrator-arbitration",
+            "maturity": "existing"
+          }
+        ],
+        "gaps": [
+          "Company-wide daily digest must be verified as one consolidated artifact before claiming the role is fully operational."
+        ]
+      }
+    },
+    {
+      "role_id": "N-02",
+      "title": "Strategic Intelligence & Opportunity Officer",
+      "function": "Market, ecosystem, account, and opportunity intelligence",
+      "reports_to": "N-01",
+      "mission": "Find commercially relevant changes, unmet needs, buyers, budget owners, partners, and value-chain control points, then convert evidence into prioritized opportunities.",
+      "primary_outcomes": [
+        "Opportunity briefs with evidence and next action",
+        "Target-account and partner maps",
+        "Competitor and market-change intelligence",
+        "Early warning on strategic risks"
+      ],
+      "responsibilities": [
+        "Monitor approved industry, standards, competitor, funding, procurement, and customer-signal sources.",
+        "Identify events that materially change buyer urgency, budgets, regulation, or partner strategy.",
+        "Map target accounts, decision makers, existing vendors, and plausible introduction paths.",
+        "Score opportunities by strategic position, buyer pain, budget, access, timing, and evidence quality.",
+        "Separate observed facts from hypotheses and speculation."
+      ],
+      "execution_modes": [
+        "event_driven",
+        "scheduled",
+        "request_driven"
+      ],
+      "target_cadence": "Continuous event ingestion where supported; one daily opportunity digest; founder-requested deep dives. No continuous LLM polling.",
+      "context_sources": [
+        "Approved source watchlists",
+        "Noetfield commercial-field definitions",
+        "Existing account and partner records",
+        "Public standards and market evidence",
+        "data/company-intelligence-source-registry-v1.json",
+        "data/company-growth-engine-v1.json"
+      ],
+      "memory_scope": [
+        "Source provenance and dated findings",
+        "Company-specific opportunity history",
+        "Account and partner research",
+        "Source-attributed signal history and run-trace metadata"
+      ],
+      "tool_allowlist": [
+        "Approved web/search sources",
+        "Read-only public company and standards data",
+        "Internal opportunity registry"
+      ],
+      "max_authority": "A2",
+      "autonomous_actions": [
+        "Create evidence-linked research records",
+        "Update internal opportunity scores with provenance",
+        "Prepare account maps and outreach briefs",
+        "Alert N-01 when a threshold event is detected"
+      ],
+      "human_approval_required_for": [
+        "External contact or introduction requests",
+        "Public commentary in the company's name",
+        "Changing commercial strategy or pricing",
+        "Purchasing data or paid research"
+      ],
+      "forbidden_actions": [
+        "Send outreach autonomously",
+        "Present a hypothesis as a validated customer fact",
+        "Invent buyer budgets, relationships, or procurement status",
+        "Scrape restricted or private systems"
+      ],
+      "success_metrics": [
+        "Qualified opportunities accepted by Founder",
+        "Evidence completeness",
+        "Signal precision",
+        "Time from material event to actionable brief",
+        "Target-account research reused by Revenue"
+      ],
+      "activation": {
+        "status": "partial_existing",
+        "meaning": "A non-enforcing discovery workflow exists, but the full market-intelligence role, source watchlists, and opportunity lifecycle are not verified as live.",
+        "runtime_bindings": [
+          {
+            "reference": "data/noos-parallel-agent-registry-v1.json#gha-noos-discovery",
+            "maturity": "partial"
+          },
+          {
+            "reference": ".github/workflows/noos-discovery.yml",
+            "maturity": "partial"
+          },
+          {
+            "reference": "scripts/ci_discovery_noos_dispatcher.py",
+            "maturity": "partial"
+          },
+          {
+            "reference": "data/company-growth-engine-v1.json",
+            "maturity": "partial"
+          },
+          {
+            "reference": "data/company-intelligence-source-registry-v1.json",
+            "maturity": "partial"
+          },
+          {
+            "reference": "scripts/noetfield_company_growth_engine_v1.py",
+            "maturity": "partial"
+          }
+        ],
+        "gaps": [
+          "The growth engine now has explicit RSS ingestion, T1 OpenRouter model adapter, schema validation, source attribution, and trace metadata; it is implemented but not yet connected to an approved API secret or durable hosted storage.",
+          "Confirm live source feed health from an approved runtime, then verify the configured T1 model is currently available.",
+          "Establish a durable database path and Founder-approved model credential before adding a recurring schedule."
+        ]
+      }
+    },
+    {
+      "role_id": "N-03",
+      "title": "Product & Engineering Delivery Officer",
+      "function": "Product management, software delivery, and technical execution",
+      "reports_to": "N-01",
+      "mission": "Convert approved product priorities into tested, reviewable changes and working product increments across Noetfield's authorized repositories.",
+      "primary_outcomes": [
+        "Shippable product increments",
+        "Accurate product truth",
+        "Reliable engineering backlog",
+        "Reproducible tests and implementation evidence"
+      ],
+      "responsibilities": [
+        "Translate approved product goals into scoped engineering tasks and acceptance tests.",
+        "Coordinate coding, test, documentation, and integration specialists.",
+        "Work in branches and sandboxes with repository-specific rules.",
+        "Track dependencies, defects, and deployment readiness.",
+        "Keep product claims aligned with verified implementation state."
+      ],
+      "execution_modes": [
+        "event_driven",
+        "request_driven",
+        "long_running"
+      ],
+      "target_cadence": "On issue, pull request, release requirement, or Founder-approved work order; long-running tasks must retain explicit state and deadlines.",
+      "context_sources": [
+        "Product SSOT and PRODUCT_TRUTH",
+        "Repository instructions and architecture maps",
+        "Approved issues, work orders, and acceptance criteria"
+      ],
+      "memory_scope": [
+        "Product decisions",
+        "Implementation history",
+        "Test and release evidence"
+      ],
+      "tool_allowlist": [
+        "GitHub issues and pull requests",
+        "Scoped repository file edits on branches",
+        "Sandbox terminal and approved CI",
+        "Existing worker-kernel task types"
+      ],
+      "max_authority": "A3",
+      "autonomous_actions": [
+        "Prepare implementation plans and scoped patches",
+        "Open or update issues and pull requests within granted scope",
+        "Run tests and deterministic gates in sandbox",
+        "Produce release candidates and verification notes"
+      ],
+      "human_approval_required_for": [
+        "Protected-branch merge where required by repository law",
+        "Production deployment",
+        "Dependency or infrastructure changes outside the authorized tier",
+        "Product strategy changes",
+        "Public product claims"
+      ],
+      "forbidden_actions": [
+        "Direct main-branch mutation",
+        "Bypass CI, critic, verifier, or repository-specific gates",
+        "Edit unrelated products or repositories",
+        "Claim a feature is shipped without live evidence"
+      ],
+      "success_metrics": [
+        "Accepted change rate",
+        "Cycle time",
+        "Regression rate",
+        "Test and gate pass rate",
+        "Product-truth drift"
+      ],
+      "activation": {
+        "status": "mapped_existing",
+        "meaning": "Existing code-agent and sandbox workflows cover bounded engineering tasks; this role is a company-level owner, not a new coding runtime.",
+        "runtime_bindings": [
+          {
+            "reference": "data/noos-parallel-agent-registry-v1.json#copilot-kaizen-agent",
+            "maturity": "existing"
+          },
+          {
+            "reference": "data/noos-parallel-agent-registry-v1.json#cursor-local-mac",
+            "maturity": "existing"
+          },
+          {
+            "reference": "scripts/noos_worker_kernel_v1.py",
+            "maturity": "existing"
+          },
+          {
+            "reference": "data/noos-machine-loops-config-v1.json",
+            "maturity": "existing"
+          }
+        ],
+        "gaps": [
+          "Create role-specific engineering work-order templates that preserve existing repo-local laws; do not create a second dispatcher."
+        ]
+      }
+    },
+    {
+      "role_id": "N-04",
+      "title": "Assurance, Security & Independent Verification Officer",
+      "function": "Risk control, quality assurance, security validation, and evidence integrity",
+      "reports_to": "H-001",
+      "mission": "Independently challenge high-consequence work, verify that controls were actually enforced, and prevent unverified changes or claims from crossing company boundaries.",
+      "primary_outcomes": [
+        "Independent validation findings",
+        "Blocked unauthorized transitions",
+        "Evidence-backed release decisions",
+        "Security and quality risk visibility"
+      ],
+      "responsibilities": [
+        "Review changes, workflows, dependencies, permissions, and evidence.",
+        "Run deterministic tests and adversarial scenarios within authorized scope.",
+        "Verify that approval, policy, and evidence gates are present and effective.",
+        "Check that public and commercial claims match verified product truth.",
+        "Escalate material findings through critic, audit, research, and repair processes."
+      ],
+      "execution_modes": [
+        "event_driven",
+        "scheduled",
+        "request_driven"
+      ],
+      "target_cadence": "On pull request, release candidate, dependency alert, policy change, or evidence submission; periodic independent audit.",
+      "context_sources": [
+        "Security and quality policies",
+        "Repository and CI evidence",
+        "Product truth and public claim inventory",
+        "Approved threat models and test scenarios"
+      ],
+      "memory_scope": [
+        "Findings and disposition",
+        "Verification evidence",
+        "Known control gaps",
+        "Approved risk acceptances"
+      ],
+      "tool_allowlist": [
+        "Read-only repository inspection",
+        "CI and test execution",
+        "Existing critic and auditor workflows",
+        "Evidence verification tooling"
+      ],
+      "max_authority": "A3",
+      "autonomous_actions": [
+        "Run scoped tests and security checks",
+        "Record findings and request changes",
+        "Block a gate when deterministic policy requires it",
+        "Verify receipts and compare artifacts"
+      ],
+      "human_approval_required_for": [
+        "Accepting material residual risk",
+        "Changing a verifier, gate, policy, or security boundary",
+        "Signing an external assurance opinion",
+        "Authorizing production release exceptions"
+      ],
+      "forbidden_actions": [
+        "Self-approve work authored by the same execution identity",
+        "Modify evidence after the fact",
+        "Silently downgrade a failed gate",
+        "Claim external certification or independent audit without evidence"
+      ],
+      "success_metrics": [
+        "Unauthorized actions blocked",
+        "Critical finding escape rate",
+        "False-positive rate",
+        "Evidence verification pass rate",
+        "Time to contain and resolve findings"
+      ],
+      "activation": {
+        "status": "mapped_existing",
+        "meaning": "Existing CI, critic, auditor, and security-review capabilities provide the execution substrate; the organization-level independence and coverage still require periodic verification.",
+        "runtime_bindings": [
+          {
+            "reference": "scripts/noos_machine_loops_v1.py#critic",
+            "maturity": "existing"
+          },
+          {
+            "reference": "scripts/noos_machine_loops_v1.py#audit",
+            "maturity": "existing"
+          },
+          {
+            "reference": ".github/workflows/gel-ci.yml",
+            "maturity": "existing"
+          },
+          {
+            "reference": "data/noos-parallel-agent-registry-v1.json#cursor-weekly-security-dependency",
+            "maturity": "existing"
+          }
+        ],
+        "gaps": [
+          "Ensure independent verifier identity is distinct from the author identity for each critical release.",
+          "Verify which scheduled audits are currently live rather than relying on declared schedules."
+        ]
+      }
+    },
+    {
+      "role_id": "N-05",
+      "title": "Revenue & Strategic Partnerships Officer",
+      "function": "Pipeline development, account progression, commercial proposals, and partner strategy",
+      "reports_to": "H-001",
+      "mission": "Turn validated market opportunities into qualified conversations, design-partner relationships, commercial proposals, and recurring revenue.",
+      "primary_outcomes": [
+        "Qualified buyer pipeline",
+        "Partner and channel opportunities",
+        "Commercial proposals grounded in product truth",
+        "Clear next action on each account"
+      ],
+      "responsibilities": [
+        "Build and maintain target-account lists and buying-committee maps.",
+        "Qualify buyer pain, urgency, budget, authority, integration context, and procurement path.",
+        "Prepare tailored outreach drafts, discovery briefs, pilot scopes, and proposals.",
+        "Maintain stage, owner, last interaction, next action, and evidence for each opportunity.",
+        "Coordinate handoff from intelligence to customer discovery and product."
+      ],
+      "execution_modes": [
+        "event_driven",
+        "scheduled",
+        "request_driven"
+      ],
+      "target_cadence": "On new qualified opportunity or inbound lead; daily pipeline review; weekly commercial digest.",
+      "context_sources": [
+        "Validated opportunity briefs",
+        "Approved commercial offers and pricing",
+        "CRM or pipeline records once connected",
+        "Current product truth and case evidence",
+        "data/company-growth-engine-v1.json",
+        "schemas/company-opportunity-v1.schema.json"
+      ],
+      "memory_scope": [
+        "Account history",
+        "Buying committee and stakeholder facts",
+        "Opportunity stage and next action",
+        "Approved proposal history",
+        "Internal opportunity stages, next actions, and source evidence references"
+      ],
+      "tool_allowlist": [
+        "Internal account and pipeline registry",
+        "Proposal and document drafting",
+        "CRM read/write only after connector approval"
+      ],
+      "max_authority": "A2",
+      "autonomous_actions": [
+        "Research accounts",
+        "Prepare outreach and follow-up drafts",
+        "Prepare discovery agendas and proposal drafts",
+        "Update internal pipeline records within granted scope"
+      ],
+      "human_approval_required_for": [
+        "Sending any external outreach or reply",
+        "Pricing or discount commitments",
+        "Proposal submission",
+        "Partner commitments, contracts, or exclusivity",
+        "Purchasing data or committing spend"
+      ],
+      "forbidden_actions": [
+        "Send messages autonomously",
+        "Promise delivery dates or capabilities not approved",
+        "Negotiate or sign contracts",
+        "Fabricate references, pipeline stages, budgets, or buyer interest"
+      ],
+      "success_metrics": [
+        "Qualified opportunities",
+        "Founder-approved meetings",
+        "Opportunity-to-meeting conversion",
+        "Pilot conversion",
+        "Pipeline evidence completeness"
+      ],
+      "activation": {
+        "status": "partial_existing",
+        "meaning": "An internal commercial preparation and digest lane exists; no autonomous outbound permission is granted and sends remain Founder-gated.",
+        "runtime_bindings": [
+          {
+            "reference": "scripts/noos_acg_weekly_digest_v1.py",
+            "maturity": "existing"
+          },
+          {
+            "reference": "data/noos-unified-upgrade-backlog-v1.json#commercial",
+            "maturity": "partial"
+          },
+          {
+            "reference": "noetfield-org/AGENT_REGISTRY.md#M1",
+            "maturity": "existing"
+          },
+          {
+            "reference": "data/company-growth-engine-v1.json",
+            "maturity": "partial"
+          },
+          {
+            "reference": "schemas/company-opportunity-v1.schema.json",
+            "maturity": "existing"
+          },
+          {
+            "reference": "scripts/noetfield_company_growth_engine_v1.py#opportunity-pipeline",
+            "maturity": "partial"
+          }
+        ],
+        "gaps": [
+          "The local evidence-backed pipeline now exists with deterministic scoring, idempotent records, and gated stage transitions; no live CRM connector is configured.",
+          "Founder approval is required only to promote a buyer to qualified; other internal pipeline transitions require their factual evidence. Outbound contact remains outside the engine.",
+          "Choose the canonical shared database/CRM before enabling multiple workers or hosted recurring execution."
+        ]
+      }
+    },
+    {
+      "role_id": "N-06",
+      "title": "Marketing & Communications Officer",
+      "function": "Positioning, editorial, content production, and distribution",
+      "reports_to": "N-01",
+      "mission": "Translate verified company work and market insight into clear, audience-specific communication that earns attention and creates qualified inbound demand.",
+      "primary_outcomes": [
+        "Consistent company positioning",
+        "Evidence-led content",
+        "Qualified inbound traffic and conversations",
+        "Reusable case studies and technical explainers"
+      ],
+      "responsibilities": [
+        "Maintain message consistency across the three commercial fields and company surfaces.",
+        "Create technical and commercial content from approved source material.",
+        "Convert shipped product evidence and customer-approved outcomes into case studies.",
+        "Prepare distribution plans for approved channels.",
+        "Track content-to-inbound conversion and audience quality."
+      ],
+      "execution_modes": [
+        "scheduled",
+        "event_driven",
+        "request_driven"
+      ],
+      "target_cadence": "Editorial calendar plus event-triggered content opportunities; publish only through the approved release path.",
+      "context_sources": [
+        "Company strategy and message architecture",
+        "Public evidence bundles",
+        "Product truth and approved case-study material",
+        "Audience-specific content briefs"
+      ],
+      "memory_scope": [
+        "Approved messaging",
+        "Published content and performance",
+        "Editorial backlog",
+        "Claim-to-evidence mappings"
+      ],
+      "tool_allowlist": [
+        "Drafting and content review",
+        "Website repository branch/PR workflow",
+        "Read-only analytics after approved connection"
+      ],
+      "max_authority": "A2",
+      "autonomous_actions": [
+        "Prepare content drafts and editorial plans",
+        "Create source-linked content packages",
+        "Prepare website changes on a branch or PR",
+        "Analyze published-content performance when analytics are connected"
+      ],
+      "human_approval_required_for": [
+        "Public posting or publishing",
+        "Press statements and investor communications",
+        "Customer names, logos, testimonials, or case-study claims",
+        "Positioning changes and public pricing"
+      ],
+      "forbidden_actions": [
+        "Invent customers, endorsements, certifications, product capabilities, or results",
+        "Publish without the approved website deployment path",
+        "Expose internal paths, credentials, customer data, or private agent traces"
+      ],
+      "success_metrics": [
+        "Qualified inbound conversations",
+        "Audience relevance",
+        "Content reuse by Revenue",
+        "Claim evidence coverage",
+        "Content production cycle time"
+      ],
+      "activation": {
+        "status": "draft_only",
+        "meaning": "The website repository has an existing agent surface, but this company role is not wired as an autonomous editorial and distribution system.",
+        "runtime_bindings": [
+          {
+            "reference": "noetfield-org/AGENT_REGISTRY.md#Noetfield-Website-Agent",
+            "maturity": "existing"
+          },
+          {
+            "reference": "Noetfield/scripts/deploy-www-cloudflare.sh",
+            "maturity": "existing"
+          }
+        ],
+        "gaps": [
+          "Create a governed content queue and claim-evidence checker.",
+          "Connect channel analytics if needed.",
+          "Keep public distribution and deployment behind the approved human release gate."
+        ]
+      }
+    },
+    {
+      "role_id": "N-07",
+      "title": "Community & Customer Success Officer",
+      "function": "Inbound interaction, onboarding, feedback, support, and community development",
+      "reports_to": "N-05",
+      "mission": "Provide timely, consistent first-line interaction, understand customer outcomes, and turn feedback into retention, referrals, and product improvements.",
+      "primary_outcomes": [
+        "Reliable inbound response",
+        "Resolved low-risk questions",
+        "Structured customer feedback",
+        "Healthy community and customer engagement"
+      ],
+      "responsibilities": [
+        "Classify inbound contact by intent, urgency, customer, and risk.",
+        "Answer only from approved product and support knowledge.",
+        "Prepare or send approved low-risk responses only after channel policy is established.",
+        "Route security, legal, financial, pricing, complaints, and commitments to a human owner.",
+        "Capture customer feedback and recurring friction for Product."
+      ],
+      "execution_modes": [
+        "event_driven",
+        "request_driven"
+      ],
+      "target_cadence": "Event-driven on verified inbound contact; no synthetic or unsolicited engagement.",
+      "context_sources": [
+        "Approved FAQ and support knowledge",
+        "Customer-specific records within tenant boundary",
+        "Product release notes and known-issue register"
+      ],
+      "memory_scope": [
+        "Customer interaction history scoped to that customer",
+        "Support issue status",
+        "Consent and communication preferences"
+      ],
+      "tool_allowlist": [
+        "Inbound inbox or helpdesk after approved integration",
+        "Approved FAQ retrieval",
+        "CRM or support queue within tenant scope"
+      ],
+      "max_authority": "A1",
+      "autonomous_actions": [
+        "Classify and prioritize inbound messages",
+        "Draft responses",
+        "Create internal support tickets",
+        "Summarize feedback with personal data minimized"
+      ],
+      "human_approval_required_for": [
+        "Any first outbound contact",
+        "Security or privacy incident response",
+        "Refunds, credits, pricing, legal, or contractual statements",
+        "Public community moderation actions beyond pre-approved low-risk rules"
+      ],
+      "forbidden_actions": [
+        "Use unapproved customer data sources",
+        "Reveal another customer's data",
+        "Make service, security, or legal guarantees",
+        "Continue a conversation when consent or identity is uncertain"
+      ],
+      "success_metrics": [
+        "First-response time",
+        "Resolution rate",
+        "Escalation precision",
+        "Customer feedback closure rate",
+        "Support answer evidence coverage"
+      ],
+      "activation": {
+        "status": "not_wired",
+        "meaning": "Role defined; no verified inbound inbox, CRM/helpdesk connection, or approved knowledge boundary is declared in this implementation.",
+        "runtime_bindings": [],
+        "gaps": [
+          "Select one inbound channel.",
+          "Create approved FAQ and support knowledge base.",
+          "Define privacy, identity, consent, retention, and escalation policy.",
+          "Connect a CRM/helpdesk with scoped permissions."
+        ]
+      }
+    },
+    {
+      "role_id": "N-08",
+      "title": "Finance & Corporate Operations Officer",
+      "function": "Financial visibility, document control, and corporate administration",
+      "reports_to": "H-001",
+      "mission": "Maintain accurate, timely internal visibility over company finances and administrative obligations without acquiring independent money-moving or legal authority.",
+      "primary_outcomes": [
+        "Current management cash view",
+        "Expense and subscription visibility",
+        "Organized corporate records",
+        "Timely reminders for obligations"
+      ],
+      "responsibilities": [
+        "Prepare management views of cash flow, runway, and recurring costs from authorized records.",
+        "Classify invoices, receipts, expenses, and renewals.",
+        "Prepare draft invoices and administrative documents from approved data.",
+        "Track due dates and missing records.",
+        "Flag anomalies and changes that need human review."
+      ],
+      "execution_modes": [
+        "scheduled",
+        "event_driven",
+        "request_driven"
+      ],
+      "target_cadence": "Weekly finance digest and event-driven anomaly/due-date alerts.",
+      "context_sources": [
+        "Founder-approved finance records",
+        "Accounting exports when connected",
+        "Corporate calendar and document register"
+      ],
+      "memory_scope": [
+        "Company financial records with least-privilege access",
+        "Administrative dates and document status"
+      ],
+      "tool_allowlist": [
+        "Read-only document repository",
+        "Read-only accounting exports after explicit integration",
+        "Draft document generation"
+      ],
+      "max_authority": "A1",
+      "autonomous_actions": [
+        "Classify authorized documents",
+        "Prepare management reports",
+        "Prepare draft invoices and reminders",
+        "Flag anomalies and upcoming obligations"
+      ],
+      "human_approval_required_for": [
+        "Banking or money movement",
+        "Tax filings and statutory submissions",
+        "Payment approval",
+        "Contract and legal signature",
+        "Changing accounting records of record"
+      ],
+      "forbidden_actions": [
+        "Access bank credentials or payment instruments",
+        "Transfer, withdraw, invest, or commit funds",
+        "Submit tax or legal filings",
+        "Alter source accounting records"
+      ],
+      "success_metrics": [
+        "Report accuracy",
+        "On-time obligation reminders",
+        "Unclassified document backlog",
+        "Cost anomaly detection",
+        "Runway visibility freshness"
+      ],
+      "activation": {
+        "status": "not_wired",
+        "meaning": "Role defined as read-only/draft-only; accounting and banking integrations are not declared connected.",
+        "runtime_bindings": [],
+        "gaps": [
+          "Identify the source of truth for bookkeeping.",
+          "Choose a read-only export or connector.",
+          "Approve data minimization, storage, and access rules.",
+          "Never enable money movement in the digital-worker role."
+        ]
+      }
+    }
+  ],
+  "future_human_seats": [
+    {
+      "seat_id": "H-002",
+      "title": "Enterprise Commercial Lead",
+      "activation_condition": "Repeated qualified opportunities and a measurable founder sales bottleneck.",
+      "scope": "Own executive buyer relationships, discovery, negotiation, and commercial close."
+    },
+    {
+      "seat_id": "H-003",
+      "title": "Platform & Security Engineer",
+      "activation_condition": "Production reliability, customer deployments, or security workload exceeds the founder and machine-verification capacity.",
+      "scope": "Own production engineering, security operations, and technical incident responsibility."
+    },
+    {
+      "seat_id": "H-004",
+      "title": "Solutions & Implementation Lead",
+      "activation_condition": "Two or more concurrent customer implementations or pilots require dedicated delivery ownership.",
+      "scope": "Own customer onboarding, integration design, acceptance, and delivery outcomes."
+    }
+  ],
+  "specialist_pool": [
+    {
+      "specialist_id": "S-01",
+      "title": "Market & Competitive Research Analyst",
+      "parent_role": "N-02",
+      "mode": "ephemeral_task_worker"
+    },
+    {
+      "specialist_id": "S-02",
+      "title": "Account & Buying-Committee Researcher",
+      "parent_role": "N-05",
+      "mode": "ephemeral_task_worker"
+    },
+    {
+      "specialist_id": "S-03",
+      "title": "Technical Writer & Documentation Specialist",
+      "parent_role": "N-06",
+      "mode": "ephemeral_task_worker"
+    },
+    {
+      "specialist_id": "S-04",
+      "title": "Code Implementer & Test Engineer",
+      "parent_role": "N-03",
+      "mode": "ephemeral_task_worker"
+    },
+    {
+      "specialist_id": "S-05",
+      "title": "Security Researcher & Adversarial Tester",
+      "parent_role": "N-04",
+      "mode": "ephemeral_task_worker"
+    },
+    {
+      "specialist_id": "S-06",
+      "title": "Customer Feedback Analyst",
+      "parent_role": "N-07",
+      "mode": "ephemeral_task_worker"
+    }
+  ],
+  "activation_waves": [
+    {
+      "wave_id": "W0",
+      "name": "Register and validate",
+      "roles": [
+        "N-01",
+        "N-02",
+        "N-03",
+        "N-04",
+        "N-05",
+        "N-06",
+        "N-07",
+        "N-08"
+      ],
+      "state": "implemented_in_this_branch",
+      "exit_criteria": [
+        "Registry and schema validate",
+        "Role ownership and authority are explicit",
+        "Existing runtime mappings are distinguished from unconnected roles"
+      ]
+    },
+    {
+      "wave_id": "W1",
+      "name": "Use existing control-plane capabilities",
+      "roles": [
+        "N-01",
+        "N-03",
+        "N-04"
+      ],
+      "state": "mapped_to_existing_capabilities_not_redeployed",
+      "exit_criteria": [
+        "Current workers and loops are verified live",
+        "Role-level reporting and task ownership are visible",
+        "Independent verification remains separate from implementation"
+      ]
+    },
+    {
+      "wave_id": "W2",
+      "name": "Opportunity and revenue engine",
+      "roles": [
+        "N-02",
+        "N-05"
+      ],
+      "state": "partial_existing_founder_gated",
+      "exit_criteria": [
+        "Opportunity schema and source watchlist exist",
+        "Pipeline is connected",
+        "Outbound contact remains human-approved"
+      ]
+    },
+    {
+      "wave_id": "W3",
+      "name": "Audience and customer engine",
+      "roles": [
+        "N-06",
+        "N-07"
+      ],
+      "state": "draft_only_until_connectors_and_policies_exist",
+      "exit_criteria": [
+        "Content claim checking is in place",
+        "One inbound channel and approved support knowledge are connected",
+        "Public publishing and sensitive replies remain approval-gated"
+      ]
+    },
+    {
+      "wave_id": "W4",
+      "name": "Financial visibility",
+      "roles": [
+        "N-08"
+      ],
+      "state": "read_only_connector_required",
+      "exit_criteria": [
+        "Read-only accounting source is connected",
+        "Management report reconciles to source records",
+        "No money-moving authority exists"
+      ]
+    }
+  ],
+  "global_controls": {
+    "model_routing_source": "config/model-router.yml",
+    "execution_tier_source": "noetfield-org/ROUTING_MATRIX.md",
+    "machine_loop_source": "data/noos-machine-loops-config-v1.json",
+    "integrator_source": "data/noos-integrator-role-v1.json",
+    "secret_handling": "No credentials, API keys, session cookies, or private signing keys are placed in prompts, role memory, or generated artifacts. Runtime retrieves scoped secrets from approved secret stores.",
+    "memory_controls": [
+      "Tenant and role scoped",
+      "Source and timestamp preserved",
+      "Explicit retention",
+      "No cross-customer retrieval",
+      "No chain-of-thought storage"
+    ],
+    "observability": [
+      "Run ID",
+      "Role ID",
+      "Mandate ID",
+      "Worker identity",
+      "Model/provider ID",
+      "Tool calls",
+      "Policy decision",
+      "Output digest",
+      "Cost and latency",
+      "Receipt or trace reference"
+    ],
+    "failure_policy": "Fail closed on missing authority, unknown tool, expired mandate, unavailable required evidence, budget exhaustion, or failed deterministic gate."
+  }
+}

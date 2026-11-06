@@ -36,6 +36,12 @@ jobs:
       - name: Agent vault tags
         run: bash scripts/check_noos_agent_docs.sh
 
+      - name: Company workforce registry and authority validation
+        run: make company-workforce-verify
+
+      - name: Company intelligence and revenue workflow validation
+        run: make company-growth-verify
+
       - name: Motor registry validate (fail-closed invariants)
         run: python3 motor/registry/validate.py
 
