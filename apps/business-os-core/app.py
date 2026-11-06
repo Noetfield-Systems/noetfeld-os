@@ -12,6 +12,7 @@ INTERVAL=max(2,int(os.getenv("WORKER_INTERVAL_SECONDS","5")))
 STATIC=Path(__file__).parent/"static"
 RATE:dict[str,list[float]]={}
 STOP=asyncio.Event()
+WORKER_JOB:asyncio.Task|None=None
 
 def authorize(value:str|None):
     import hmac
@@ -44,16 +45,21 @@ async def worker():
                 continue
             await asyncio.sleep(INTERVAL)
         except asyncio.CancelledError: raise
-        except Exception: await asyncio.sleep(INTERVAL)
+        except Exception:
+            import logging
+            logging.exception("business_os_worker_iteration_failed")
+            await asyncio.sleep(INTERVAL)
 
 @asynccontextmanager
 async def lifespan(app):
+    global WORKER_JOB
     core.init();STOP.clear()
-    job=asyncio.create_task(worker())
+    WORKER_JOB=asyncio.create_task(worker())
     yield
-    STOP.set();job.cancel()
-    try: await job
+    STOP.set();WORKER_JOB.cancel()
+    try: await WORKER_JOB
     except asyncio.CancelledError: pass
+    WORKER_JOB=None
 
 app=FastAPI(title="Noetfield Business OS",version="0.1.0",lifespan=lifespan)
 
@@ -93,7 +99,39 @@ def health():
         return {"ok":True,"service":"business-os-core","version":"0.1.0","storage":"ready","worker_interval_seconds":INTERVAL}
     except Exception: return JSONResponse({"ok":False,"storage":"unavailable"},status_code=503)
 @app.get("/ready")
-def ready(): return {"ready":True}
+def ready():
+    try:
+        with core.connect() as db:
+            db.execute("SELECT 1")
+        running=WORKER_JOB is not None and not WORKER_JOB.done()
+        if not running:
+            return JSONResponse({"ready":False,"worker":"not_running"},status_code=503)
+        return {"ready":True,"worker":"running"}
+    except Exception:
+        return JSONResponse({"ready":False,"storage":"unavailable"},status_code=503)
+
+@app.get("/health/deep")
+def deep_health():
+    try:
+        with core.connect() as db:
+            tables={r["name"] for r in db.execute("SELECT name FROM sqlite_master WHERE type='table'").fetchall()}
+            required={"contacts","opportunities","events","tasks","runs","memories","task_dependencies"}
+            missing=sorted(required-tables)
+            counts={
+                "queued_events":db.execute("SELECT COUNT(*) n FROM events WHERE status='queued'").fetchone()["n"],
+                "queued_tasks":db.execute("SELECT COUNT(*) n FROM tasks WHERE status='queued'").fetchone()["n"],
+                "blocked_tasks":db.execute("SELECT COUNT(*) n FROM tasks WHERE status='blocked'").fetchone()["n"],
+                "dead_letter_events":db.execute("SELECT COUNT(*) n FROM events WHERE status='dead_letter'").fetchone()["n"],
+            }
+        worker_running=WORKER_JOB is not None and not WORKER_JOB.done()
+        ok=not missing and worker_running
+        payload={"ok":ok,"service":"business-os-core","schema_missing":missing,
+            "worker_running":worker_running,"worker_interval_seconds":INTERVAL,"queue":counts,
+            "company_role_count":len(core.COMPANY_ROLES),
+            "runtime_executor_count":len(core.AGENTS),"dependency_gating":True}
+        return payload if ok else JSONResponse(payload,status_code=503)
+    except Exception as exc:
+        return JSONResponse({"ok":False,"error":type(exc).__name__},status_code=503)
 
 @app.post("/api/intake")
 async def intake(data:Intake,request:Request):
@@ -136,7 +174,25 @@ def overview(authorization:str|None=Header(default=None)):
 @app.get("/api/control/agents")
 def agents(authorization:str|None=Header(default=None)):
     authorize(authorization)
-    return {"agents":[{"role":a[0],"name":a[1],"mission":a[2],"tier":a[3]} for a in core.AGENTS]}
+    return {"agents":core.agent_roster()}
+
+@app.get("/api/control/org")
+def organization(authorization:str|None=Header(default=None)):
+    authorize(authorization)
+    seats=core.company_workforce_roster()
+    agents=core.agent_roster()
+    return {
+        "organization":{
+            "founder":core.FOUNDER_SEAT,
+            "layers":3,
+            "company_role_count":len(seats),
+            "runtime_executor_count":len(agents),
+            "canonical_registry":core.WORKFORCE_BINDING["canonical_source"],
+            "operating_model":"canonical company seats -> bounded runtime capabilities -> specialist drafts -> dependency gate -> N-01 synthesis -> Founder ratification"
+        },
+        "seats":seats,
+        "runtime_agents":agents
+    }
 @app.get("/api/control/opportunities")
 def opportunities(authorization:str|None=Header(default=None),brand:str|None=None):
     authorize(authorization)
@@ -149,8 +205,23 @@ def opportunities(authorization:str|None=Header(default=None),brand:str|None=Non
 def tasks(authorization:str|None=Header(default=None)):
     authorize(authorization)
     with core.connect() as db:
-        rows=db.execute("SELECT t.*,o.title AS opportunity_title FROM tasks t LEFT JOIN opportunities o ON o.id=t.opportunity_id ORDER BY t.created_at DESC LIMIT 150").fetchall()
-    return {"tasks":[dict(r) for r in rows]}
+        rows=db.execute("""
+            SELECT t.*,o.title AS opportunity_title,
+                (SELECT COUNT(*) FROM task_dependencies td WHERE td.task_id=t.id) dependency_count,
+                (SELECT COUNT(*) FROM task_dependencies td
+                 JOIN tasks dep ON dep.id=td.depends_on_task_id
+                 WHERE td.task_id=t.id AND dep.status NOT IN ('drafted','approved')) pending_dependencies
+            FROM tasks t LEFT JOIN opportunities o ON o.id=t.opportunity_id
+            ORDER BY t.created_at DESC LIMIT 150
+        """).fetchall()
+    tasks_out=[]
+    for row in rows:
+        item=dict(row)
+        seat=core.company_role_for_runtime(item["role"])
+        item["company_role_id"]=seat["role_id"]
+        item["company_role_title"]=seat["title"]
+        tasks_out.append(item)
+    return {"tasks":tasks_out}
 @app.get("/api/control/events")
 def events(authorization:str|None=Header(default=None)):
     authorize(authorization)
@@ -194,8 +265,23 @@ def create_task(body:dict[str,Any],authorization:str|None=Header(default=None)):
     if role not in {a[0] for a in core.AGENTS}: raise HTTPException(400,"Unknown role.")
     title=core.clean(body.get("title"),160);objective=core.clean(body.get("objective"),1200)
     if len(title)<3 or len(objective)<10: raise HTTPException(400,"Title and objective are required.")
+    brand=body.get("brand") if body.get("brand") in core.BRANDS else "noetfield"
+    dependencies=body.get("depends_on",[])
+    if not isinstance(dependencies,list):
+        raise HTTPException(422,"depends_on must be an array of task IDs.")
+    if len(dependencies)>20:
+        raise HTTPException(422,"A task may depend on at most 20 tasks.")
     with core.connect() as db:
-        task_id=core.add_task(db,None,None,body.get("brand") if body.get("brand") in core.BRANDS else "noetfield",role,title,objective,"Prepare internal recommendation only.")
+        task_id=core.add_task(db,None,None,brand,role,title,objective,"Prepare internal recommendation only.")
+        for dependency_id in dependencies:
+            if not isinstance(dependency_id,str) or not dependency_id.strip():
+                raise HTTPException(422,"Each dependency must be a non-empty task ID.")
+            exists=db.execute("SELECT id,brand FROM tasks WHERE id=?",(dependency_id,)).fetchone()
+            if not exists:
+                raise HTTPException(422,"Dependency task does not exist.")
+            if exists["brand"] != brand:
+                raise HTTPException(422,"Dependency must belong to the same brand lane.")
+            core.add_task_dependency(db,task_id,dependency_id)
     return {"created":True,"task_id":task_id}
 @app.delete("/api/control/opportunities/{oid}")
 def delete_contact_data(oid:str,authorization:str|None=Header(default=None)):
