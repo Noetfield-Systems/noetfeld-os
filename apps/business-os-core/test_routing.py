@@ -73,6 +73,19 @@ class BusinessOSCycleTests(unittest.TestCase):
         self.assertTrue(core.retrieve("buildworkflow", "HVAC extra work tickets"))
         self.assertFalse(core.retrieve("trustfield", "HVAC extra work tickets"))
 
+    def test_memory_is_chunked_and_pii_redacted(self):
+        long_text = ("Operational workflow evidence. " * 70) + " UNIQUE FINAL HVAC ROUTING SIGNAL. "
+        core.add_memory("buildworkflow", "test", "source-1",
+            "Contact user@example.test at +1 (604) 555-1234. " + long_text)
+        with core.connect() as db:
+            chunks = db.execute("SELECT content FROM memories WHERE source_id='source-1'").fetchall()
+        self.assertGreater(len(chunks), 1)
+        joined = " ".join(row["content"] for row in chunks)
+        self.assertNotIn("user@example.test", joined)
+        self.assertNotIn("604) 555-1234", joined)
+        self.assertIn("[redacted email]", joined)
+        self.assertTrue(core.retrieve("buildworkflow", "UNIQUE FINAL HVAC ROUTING SIGNAL"))
+
     def test_stale_event_lease_is_recovered(self):
         event_id = core.add_event("unsupported.test", "unit_test", "portfolio", {})
         first = core.claim("events")
