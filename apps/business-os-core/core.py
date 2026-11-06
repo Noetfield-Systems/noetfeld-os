@@ -72,8 +72,8 @@ def add_task(d,event,opp,brand,role,title,obj,action):
  tid=idof("task");d.execute("INSERT INTO tasks VALUES(?,?,?,?,?,?,?,?,?,'queued','{}',?,?)",(tid,event,opp,brand,role,title,obj,action,"draft",now(),now()));return tid
 def scrub_for_model(text):
  value=clean(text,5000)
- value=re.sub(r"\\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,}\\b","[redacted email]",value,flags=re.I)
- value=re.sub(r"(?<!\\d)(?:\\+?\\d[\\d\\s().-]{8,}\\d)(?!\\d)","[redacted phone]",value)
+ value=re.sub(r"\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b","[redacted email]",value,flags=re.I)
+ value=re.sub(r"(?<!\d)(?:\+?\d[\d\s().-]{8,}\d)(?!\d)","[redacted phone]",value)
  return value
 def add_memory(brand,category,source,text):
  value=scrub_for_model(text)
