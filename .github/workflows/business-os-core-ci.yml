@@ -1,5 +1,9 @@
 name: business-os-core-ci
 on:
+  pull_request:
+    paths:
+      - "apps/business-os-core/**"
+      - ".github/workflows/business-os-core-ci.yml"
   push:
     branches: [platform/business-os-core-v1]
     paths:
