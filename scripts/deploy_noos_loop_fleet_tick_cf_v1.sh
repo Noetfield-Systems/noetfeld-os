@@ -78,7 +78,7 @@ if [[ -n "${GITHUB_ACTIONS:-}" && "${NOOS_WRANGLER_SKIP_SECRET_PUT:-1}" != "0" ]
   # tries to rewrite the schedule and fails with Cloudflare API 10072.
   # Version upload + promotion deploys code while preserving the live schedule.
   VERSION_TAG="noos-loop-${GITHUB_SHA:-$(date -u +%Y%m%dT%H%M%SZ)}"
-  wrangler versions upload --tag "$VERSION_TAG" --message "NOOS loop fleet tick ${GITHUB_SHA:-manual}" --keep-vars
+  wrangler versions upload --tag "$VERSION_TAG" --message "NOOS loop fleet tick ${GITHUB_SHA:-manual}" --keep-secrets
   wrangler versions deploy --version-tag "${VERSION_TAG}@100%" --yes --message "Activate NOOS loop fleet tick ${GITHUB_SHA:-manual}"
 else
   printf '%s' "$EXECUTOR_URL" | wrangler secret put FLY_LOOP_EXECUTOR_URL
