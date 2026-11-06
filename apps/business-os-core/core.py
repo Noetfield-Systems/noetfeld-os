@@ -70,12 +70,30 @@ def add_event(kind,source,brand,payload):
  return eid
 def add_task(d,event,opp,brand,role,title,obj,action):
  tid=idof("task");d.execute("INSERT INTO tasks VALUES(?,?,?,?,?,?,?,?,?,'queued','{}',?,?)",(tid,event,opp,brand,role,title,obj,action,"draft",now(),now()));return tid
+def scrub_for_model(text):
+ value=clean(text,5000)
+ value=re.sub(r"\\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,}\\b","[redacted email]",value,flags=re.I)
+ value=re.sub(r"(?<!\\d)(?:\\+?\\d[\\d\\s().-]{8,}\\d)(?!\\d)","[redacted phone]",value)
+ return value
 def add_memory(brand,category,source,text):
- mid=idof("mem");content=clean(text,5000)
+ value=scrub_for_model(text)
+ chunks=[]
+ start=0
+ while start<len(value):
+  end=min(start+900,len(value))
+  if end<len(value):
+   boundary=value.rfind(" ",start,end)
+   if boundary>start+500:end=boundary
+  part=value[start:end].strip()
+  if part:chunks.append(part)
+  if end>=len(value):break
+  start=max(start+1,end-120)
  with connect() as d:
-  d.execute("INSERT INTO memories VALUES(?,?,?,?,?,?)",(mid,brand,category,source,content,now()))
-  try:d.execute("INSERT INTO memory_fts VALUES(?,?,?)",(mid,brand,content))
-  except sqlite3.OperationalError:pass
+  for content in chunks:
+   mid=idof("mem")
+   d.execute("INSERT INTO memories VALUES(?,?,?,?,?,?)",(mid,brand,category,source,content,now()))
+   try:d.execute("INSERT INTO memory_fts VALUES(?,?,?)",(mid,brand,content))
+   except sqlite3.OperationalError:pass
 def retrieve(brand,q,limit=4):
  terms=re.findall(r"[a-z0-9_]{3,}",q.lower())[:10]
  if not terms:return []
@@ -133,6 +151,7 @@ def claim(table):
 def process_task(t):
  role=t["role"];mem=retrieve(t["brand"],t["title"]+" "+t["objective"]+" "+(t.get("problem") or ""))
  ctx={k:t.get(k) for k in ("brand","intent","problem","estimated_value","route","score","urgency")}
+ ctx["problem"]=scrub_for_model(ctx.get("problem"))
  provider="deterministic";model="none";it=ot=0
  result={"assessment":"Deterministic processing. Third-party AI is used only when the user opted in and provider is configured.","next_best_action":t["next_action"],"risk_flags":[],"priority":"normal","success_metric":"human response or evidence-backed feedback"}
  if t.get("ai_consent") and os.getenv("LLM_BASE_URL") and os.getenv("LLM_API_KEY") and os.getenv("LLM_MODEL"):
