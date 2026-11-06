@@ -119,7 +119,11 @@ def process_learning(e):
   d.execute("UPDATE events SET status='processed',processed_at=? WHERE id=?",(now(),e["id"]))
 def claim(table):
  with connect() as d:
-  d.execute("BEGIN IMMEDIATE");r=d.execute(f"SELECT * FROM {table} WHERE status='queued' ORDER BY created_at LIMIT 1").fetchone()
+  d.execute("BEGIN IMMEDIATE")
+  if table=="tasks":
+   r=d.execute("SELECT t.*,o.intent,o.problem,o.estimated_value,o.ai_consent,o.route,o.score,o.urgency FROM tasks t LEFT JOIN opportunities o ON o.id=t.opportunity_id WHERE t.status='queued' ORDER BY t.created_at LIMIT 1").fetchone()
+  else:
+   r=d.execute("SELECT * FROM events WHERE status='queued' ORDER BY created_at LIMIT 1").fetchone()
   if not r:d.execute("COMMIT");return None
   if table=="events":d.execute("UPDATE events SET status='processing',attempts=attempts+1,claimed_at=? WHERE id=?",(now(),r["id"]))
   else:d.execute("UPDATE tasks SET status='running',updated_at=? WHERE id=?",(now(),r["id"]))
