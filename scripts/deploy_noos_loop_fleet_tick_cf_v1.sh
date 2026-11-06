@@ -78,8 +78,19 @@ if [[ -n "${GITHUB_ACTIONS:-}" && "${NOOS_WRANGLER_SKIP_SECRET_PUT:-1}" != "0" ]
   # tries to rewrite the schedule and fails with Cloudflare API 10072.
   # Version upload + promotion deploys code while preserving the live schedule.
   VERSION_TAG="noos-loop-${GITHUB_SHA:-$(date -u +%Y%m%dT%H%M%SZ)}"
-  wrangler versions upload --tag "$VERSION_TAG" --message "NOOS loop fleet tick ${GITHUB_SHA:-manual}"
-  wrangler versions deploy --version-tag "${VERSION_TAG}@100%" --yes --message "Activate NOOS loop fleet tick ${GITHUB_SHA:-manual}"
+  UPLOAD_OUTPUT="$(wrangler versions upload --tag "$VERSION_TAG" --message "NOOS loop fleet tick ${GITHUB_SHA:-manual}" 2>&1)" || {
+    printf '%s\n' "$UPLOAD_OUTPUT" >&2
+    exit 1
+  }
+  printf '%s\n' "$UPLOAD_OUTPUT"
+  VERSION_ID="$(printf '%s\n' "$UPLOAD_OUTPUT" | sed -nE 's/^Worker Version ID: ([0-9a-fA-F-]{36})$/\1/p' | tail -n 1)"
+  if [[ ! "$VERSION_ID" =~ ^[0-9a-fA-F-]{36}$ ]]; then
+    echo "FAIL: could not parse Worker Version ID from Wrangler upload output" >&2
+    exit 1
+  fi
+  # Wrangler 4.86 uses positional [version-id@percentage], not --version-tag.
+  # This activates code only; the already configured Cron Trigger is unchanged.
+  wrangler versions deploy "${VERSION_ID}@100%" --yes --message "Activate NOOS loop fleet tick ${GITHUB_SHA:-manual}"
 else
   printf '%s' "$EXECUTOR_URL" | wrangler secret put FLY_LOOP_EXECUTOR_URL
   printf '%s' "$NOOS_LOOP_SECRET" | wrangler secret put NOOS_LOOP_SECRET
