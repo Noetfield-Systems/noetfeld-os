@@ -1,0 +1,111 @@
+{
+  "schema": "noetfield-business-os-workforce-binding-v1",
+  "canonical_source": {
+    "path": "noetfield-org/COMPANY_WORKFORCE_REGISTRY_v1.json",
+    "git_blob_sha": "5664f6aa87ee24b7eb1d703baee09b2c16ebe164"
+  },
+  "founder": {
+    "role_id": "H-001",
+    "title": "Founder / CEO"
+  },
+  "roles": [
+    {
+      "role_id": "N-01",
+      "title": "Chief of Staff & Operations Officer",
+      "function": "Company coordination and execution control",
+      "reports_to": "H-001",
+      "mission": "Turn Founder-approved priorities into bounded work orders, coordinate existing company and NOOS workers, maintain a reliable company operating picture, and surface only decisions that genuinely require the Founder.",
+      "max_authority": "A3",
+      "activation_status": "mapped_existing",
+      "activation_meaning": "Logical company role mapped onto existing NOOS coordination capabilities; not a separate continuously running LLM service."
+    },
+    {
+      "role_id": "N-02",
+      "title": "Strategic Intelligence & Opportunity Officer",
+      "function": "Market, ecosystem, account, and opportunity intelligence",
+      "reports_to": "N-01",
+      "mission": "Find commercially relevant changes, unmet needs, buyers, budget owners, partners, and value-chain control points, then convert evidence into prioritized opportunities.",
+      "max_authority": "A2",
+      "activation_status": "partial_existing",
+      "activation_meaning": "A non-enforcing discovery workflow exists, but the full market-intelligence role, source watchlists, and opportunity lifecycle are not verified as live."
+    },
+    {
+      "role_id": "N-03",
+      "title": "Product & Engineering Delivery Officer",
+      "function": "Product management, software delivery, and technical execution",
+      "reports_to": "N-01",
+      "mission": "Convert approved product priorities into tested, reviewable changes and working product increments across Noetfield's authorized repositories.",
+      "max_authority": "A3",
+      "activation_status": "mapped_existing",
+      "activation_meaning": "Existing code-agent and sandbox workflows cover bounded engineering tasks; this role is a company-level owner, not a new coding runtime."
+    },
+    {
+      "role_id": "N-04",
+      "title": "Assurance, Security & Independent Verification Officer",
+      "function": "Risk control, quality assurance, security validation, and evidence integrity",
+      "reports_to": "H-001",
+      "mission": "Independently challenge high-consequence work, verify that controls were actually enforced, and prevent unverified changes or claims from crossing company boundaries.",
+      "max_authority": "A3",
+      "activation_status": "mapped_existing",
+      "activation_meaning": "Existing CI, critic, auditor, and security-review capabilities provide the execution substrate; the organization-level independence and coverage still require periodic verification."
+    },
+    {
+      "role_id": "N-05",
+      "title": "Revenue & Strategic Partnerships Officer",
+      "function": "Pipeline development, account progression, commercial proposals, and partner strategy",
+      "reports_to": "H-001",
+      "mission": "Turn validated market opportunities into qualified conversations, design-partner relationships, commercial proposals, and recurring revenue.",
+      "max_authority": "A2",
+      "activation_status": "partial_existing",
+      "activation_meaning": "An internal commercial preparation and digest lane exists; no autonomous outbound permission is granted and sends remain Founder-gated."
+    },
+    {
+      "role_id": "N-06",
+      "title": "Marketing & Communications Officer",
+      "function": "Positioning, editorial, content production, and distribution",
+      "reports_to": "N-01",
+      "mission": "Translate verified company work and market insight into clear, audience-specific communication that earns attention and creates qualified inbound demand.",
+      "max_authority": "A2",
+      "activation_status": "draft_only",
+      "activation_meaning": "The website repository has an existing agent surface, but this company role is not wired as an autonomous editorial and distribution system."
+    },
+    {
+      "role_id": "N-07",
+      "title": "Community & Customer Success Officer",
+      "function": "Inbound interaction, onboarding, feedback, support, and community development",
+      "reports_to": "N-05",
+      "mission": "Provide timely, consistent first-line interaction, understand customer outcomes, and turn feedback into retention, referrals, and product improvements.",
+      "max_authority": "A1",
+      "activation_status": "not_wired",
+      "activation_meaning": "Role defined; no verified inbound inbox, CRM/helpdesk connection, or approved knowledge boundary is declared in this implementation."
+    },
+    {
+      "role_id": "N-08",
+      "title": "Finance & Corporate Operations Officer",
+      "function": "Financial visibility, document control, and corporate administration",
+      "reports_to": "H-001",
+      "mission": "Maintain accurate, timely internal visibility over company finances and administrative obligations without acquiring independent money-moving or legal authority.",
+      "max_authority": "A1",
+      "activation_status": "not_wired",
+      "activation_meaning": "Role defined as read-only/draft-only; accounting and banking integrations are not declared connected."
+    }
+  ],
+  "runtime_role_bindings": {
+    "chief_of_staff": "N-01",
+    "audience_router": "N-01",
+    "market_intelligence": "N-02",
+    "product_strategy": "N-03",
+    "engineering_operator": "N-03",
+    "risk_governance": "N-04",
+    "sales_qualification": "N-05",
+    "partnerships": "N-05",
+    "customer_success": "N-07",
+    "roi_analyst": "N-08"
+  },
+  "runtime_scope_notes": {
+    "customer_success": "Internal draft/task execution only. N-07 remains not_wired until an approved inbound inbox, helpdesk/CRM and knowledge boundary are connected.",
+    "roi_analyst": "Pipeline and weighted-opportunity metrics only. This is not accounting, banking, bookkeeping or payment authority.",
+    "chief_of_staff": "Internal synthesis and coordination only; Founder decisions and release approvals remain human-controlled.",
+    "sales_qualification": "Commercial preparation only; external contact, pricing and proposals remain Founder-gated."
+  }
+}
