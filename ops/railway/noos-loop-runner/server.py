@@ -17,11 +17,22 @@ from typing import Any
 
 ROOT_CANDIDATES = [Path(__file__).resolve().parent, *Path(__file__).resolve().parents]
 ROOT = next(
-    (p for p in ROOT_CANDIDATES if (p / "scripts" / "noos_loop_runner_v1.py").is_file()),
-    Path(__file__).resolve().parents[3],
+    (candidate for candidate in ROOT_CANDIDATES
+     if (candidate / "scripts" / "noos_loop_runner_v1.py").is_file()),
+    None,
 )
+if ROOT is None:
+    # Do not eagerly evaluate a brittle parents[n] fallback: both supported
+    # Docker layouts place the copied runner at /app/server.py or below /app.
+    ROOT = Path(__file__).resolve().parent
+if not (ROOT / "scripts" / "noos_loop_runner_v1.py").is_file():
+    raise RuntimeError(
+        f"NOOS runtime root not found from {Path(__file__).resolve()}; "
+        "expected scripts/noos_loop_runner_v1.py"
+    )
 sys.path.insert(0, str(ROOT / "scripts"))
 from noos_loop_liveness_v1 import upsert_loop_liveness  # noqa: E402
+from noos_incident_log_v1 import log_incident  # noqa: E402
 
 RECEIPT_DIR = ROOT / ".noos-runtime/railway-loop-runner/receipts"
 PORT = int(os.environ.get("PORT", "8080"))
@@ -171,10 +182,12 @@ def run_factory(*, source: str, run_id: str) -> dict[str, Any]:
 
 
 def probe_supabase() -> dict[str, Any]:
-    """Repair fix 5 — a cheap, bounded, exception-caught real Supabase read.
-    Neither /health nor the old _ready flag ever verified connectivity; this
-    is what /health/deep checks instead. Cannot hang (5s timeout) or crash
-    the handler thread (every failure mode returns a clean dict)."""
+    """Probe the exact Supabase tables required by real loop execution.
+
+    Process liveness is not motor readiness. Cycle allocation reads
+    noetfield_factory_cycle_runs; loop heartbeat reads noos_loop_registry.
+    The incident table is optional because migration 0019 may still be pending.
+    """
     url = (os.environ.get("NOETFIELD_SUPABASE_URL") or os.environ.get("SUPABASE_URL") or "").strip()
     key = (
         os.environ.get("NOETFIELD_SUPABASE_SERVICE_ROLE_KEY")
@@ -183,20 +196,39 @@ def probe_supabase() -> dict[str, Any]:
     ).strip()
     if not url or not key:
         return {"ok": False, "reason": "supabase_not_configured"}
+
     import urllib.error
     import urllib.request
 
-    req = urllib.request.Request(
-        f"{url.rstrip('/')}/rest/v1/noos_loop_registry?select=loop_id&limit=1",
-        headers={"apikey": key, "Authorization": f"Bearer {key}"},
+    base = url.rstrip("/")
+
+    def probe_table(table: str, select: str) -> dict[str, Any]:
+        req = urllib.request.Request(
+            f"{base}/rest/v1/{table}?select={select}&limit=1",
+            headers={"apikey": key, "Authorization": f"Bearer {key}"},
+        )
+        try:
+            with urllib.request.urlopen(req, timeout=5) as resp:
+                return {"ok": 200 <= resp.status < 300, "status": resp.status}
+        except urllib.error.HTTPError as exc:
+            return {"ok": False, "status": exc.code, "reason": "http_error"}
+        except (urllib.error.URLError, TimeoutError, OSError) as exc:
+            return {"ok": False, "reason": type(exc).__name__}
+
+    tables = {
+        "noos_loop_registry": probe_table("noos_loop_registry", "loop_id"),
+        "noetfield_factory_cycle_runs": probe_table("noetfield_factory_cycle_runs", "cycle_number"),
+        "noos_incident_log": probe_table("noos_incident_log", "id"),
+    }
+    core_ok = (
+        tables["noos_loop_registry"].get("ok") is True
+        and tables["noetfield_factory_cycle_runs"].get("ok") is True
     )
-    try:
-        with urllib.request.urlopen(req, timeout=5) as resp:
-            return {"ok": 200 <= resp.status < 300, "status": resp.status}
-    except urllib.error.HTTPError as exc:
-        return {"ok": False, "status": exc.code}
-    except (urllib.error.URLError, TimeoutError, OSError) as exc:
-        return {"ok": False, "error": str(exc)[:300]}
+    return {
+        "ok": core_ok,
+        "tables": tables,
+        "incident_logging_ready": tables["noos_incident_log"].get("ok") is True,
+    }
 
 
 class Handler(BaseHTTPRequestHandler):
@@ -329,9 +361,17 @@ class Handler(BaseHTTPRequestHandler):
                 # subprocess.TimeoutExpired past LOOP_TIMEOUT_SEC) used to propagate raw,
                 # closing the connection without ever calling self._json — the client saw
                 # a bare connection failure. Respond cleanly so the caller can retry on the
-                # next tick. TODO(repair fix 7, founder-gated migration pending): call
-                # log_incident() here once infrastructure/supabase/migrations/
-                # 0019_noos_incident_log.sql is applied, for durable forensics.
+                # next tick. Logging is fail-open: a missing migration 0019 must
+                # never make the loop handler fail a second time.
+                log_incident(
+                    source="railway:noos-loop-runner",
+                    severity="error",
+                    message="unhandled_loop_handler_exception",
+                    loop_id=str(body.get("loop_id") or "") or None,
+                    event_type=event_type,
+                    detail={"error_type": type(exc).__name__, "error": str(exc)[:300]},
+                    run_id=run_id,
+                )
                 self._json(
                     502,
                     {
