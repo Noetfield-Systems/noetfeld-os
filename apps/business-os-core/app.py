@@ -171,7 +171,9 @@ async def intake(data:Intake,request:Request):
     if not data.consent:
         raise HTTPException(400,"Consent is required.")
     email=core.clean(data.email,254).lower()
-    if not re.fullmatch(r"[^\\s@]+@[^\\s@]+\\.[^\\s@]+",email):
+    local_part,separator,domain=email.partition("@")
+    if (not separator or not local_part or not domain or any(char.isspace() for char in email)
+        or "." not in domain or domain.startswith(".") or domain.endswith(".")):
         raise HTTPException(400,"Enter a valid email.")
     if data.idempotency_key and not re.fullmatch(r"[A-Za-z0-9._:-]{8,64}",data.idempotency_key):
         raise HTTPException(400,"Invalid idempotency key.")
