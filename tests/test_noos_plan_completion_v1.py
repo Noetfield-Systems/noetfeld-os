@@ -28,7 +28,7 @@ def test_hmac_sign_stable():
     sig = runway.sign_hmac_request(
         secret="x" * 32,
         method="POST",
-        path="/v1/intake",
+        path="/v1/jobs",
         timestamp="2026-07-19T00:00:00Z",
         nonce="n" * 16,
         body=body,
@@ -81,7 +81,7 @@ def test_contract_hmac_not_bearer():
     contract = json.loads((ROOT / "data/noetfield-runway-contract-v1.json").read_text())
     auth = contract["required_runtime"]["auth_interface"]
     assert "NOETFIELD-HMAC" in auth
-    assert contract["required_runtime"]["endpoints"]["intake"] == "POST /v1/intake"
+    assert contract["required_runtime"]["endpoints"]["intake"] == "POST /v1/jobs"
     assert "dispatch_repair" not in contract["required_runtime"]["endpoints"]
 
 
