@@ -1,5 +1,5 @@
 import importlib.util
-import json
+import unittest
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
@@ -29,52 +29,41 @@ def valid_payload():
         "idempotency_key": "test-idempotency-001"
     }
 
-def test_valid_envelope_validates_without_dispatch():
-    result = module.validate(valid_payload())
-    assert result["valid"] is True
-    assert result["dispatch"] == "NOT_PERFORMED"
+class FounderEnvelopeTests(unittest.TestCase):
+    def test_valid_envelope_validates_without_dispatch(self):
+        result = module.validate(valid_payload())
+        self.assertTrue(result["valid"])
+        self.assertEqual(result["dispatch"], "NOT_PERFORMED")
 
-def test_missing_workpacket_is_rejected():
-    payload = valid_payload()
-    payload.pop("workpacket_ref")
-    try:
-        module.validate(payload)
-        assert False, "expected missing workpacket rejection"
-    except ValueError as exc:
-        assert "workpacket_ref" in str(exc)
+    def test_missing_workpacket_is_rejected(self):
+        payload = valid_payload()
+        payload.pop("workpacket_ref")
+        with self.assertRaisesRegex(ValueError, "workpacket_ref"):
+            module.validate(payload)
 
-def test_wrong_company_tenant_is_rejected():
-    payload = valid_payload()
-    payload["company_id"] = "other-company"
-    try:
-        module.validate(payload)
-        assert False, "expected tenant mismatch rejection"
-    except ValueError as exc:
-        assert "tenant mismatch" in str(exc)
+    def test_wrong_company_tenant_is_rejected(self):
+        payload = valid_payload()
+        payload["company_id"] = "other-company"
+        with self.assertRaisesRegex(ValueError, "tenant mismatch"):
+            module.validate(payload)
 
-def test_a4_authority_is_rejected():
-    payload = valid_payload()
-    payload["authority_level"] = "A4"
-    try:
-        module.validate(payload)
-        assert False, "expected A4 rejection"
-    except ValueError as exc:
-        assert "A4" in str(exc)
+    def test_a4_authority_is_rejected(self):
+        payload = valid_payload()
+        payload["authority_level"] = "A4"
+        with self.assertRaisesRegex(ValueError, "A4"):
+            module.validate(payload)
 
-def test_secret_field_is_rejected():
-    payload = valid_payload()
-    payload["provider_api_key"] = "do-not-accept"
-    try:
-        module.validate(payload)
-        assert False, "expected secret rejection"
-    except ValueError as exc:
-        assert "secret-like" in str(exc)
+    def test_secret_field_is_rejected(self):
+        payload = valid_payload()
+        payload["provider_api_key"] = "not-allowed"
+        with self.assertRaisesRegex(ValueError, "secret-like"):
+            module.validate(payload)
 
-def test_expired_mandate_is_rejected():
-    payload = valid_payload()
-    payload["expires_at"] = (datetime.now(timezone.utc) - timedelta(minutes=1)).isoformat()
-    try:
-        module.validate(payload)
-        assert False, "expected expiry rejection"
-    except ValueError as exc:
-        assert "expired" in str(exc)
+    def test_expired_mandate_is_rejected(self):
+        payload = valid_payload()
+        payload["expires_at"] = (datetime.now(timezone.utc) - timedelta(minutes=1)).isoformat()
+        with self.assertRaisesRegex(ValueError, "expired"):
+            module.validate(payload)
+
+if __name__ == "__main__":
+    unittest.main()
