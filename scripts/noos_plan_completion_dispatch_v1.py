@@ -65,18 +65,13 @@ def pick_ready(items: list[dict[str, Any]], *, concurrency_key: str, max_infligh
     return ready[0] if ready else None
 
 
-def dry_run_ack(intake: dict[str, Any]) -> dict[str, Any]:
-    """Offline deterministic ack when Runway API is not live (commissioning / CI)."""
-    job_id = "rj_" + intake["idempotency_key"][:32]
+def dry_run_preview(intake: dict[str, Any]) -> dict[str, Any]:
+    """Return a side-effect-free preview; never fabricate a job id or acknowledgement."""
     return {
-        "ok": True,
-        "status": 202,
         "dry_run": True,
-        "op_key": intake["idempotency_key"],
-        "body": {"job_id": job_id, "status": "queued", "created": True},
+        "expected_op_key": intake.get("idempotency_key"),
         "intake": intake,
     }
-
 
 def dispatch_once(*, write: bool = True, allow_dry_run: bool = True) -> dict[str, Any]:
     config = load_json(CONFIG)
@@ -143,25 +138,73 @@ def dispatch_once(*, write: bool = True, allow_dry_run: bool = True) -> dict[str
         },
     }
 
-    live = os.environ.get("NOOS_PLAN_COMPLETION_LIVE_INTAKE", "").strip() in ("1", "true", "yes")
-    if pf.get("ok") and live:
-        ack = runway.submit_intake(intake)
-    elif allow_dry_run:
-        ack = dry_run_ack(intake)
-    else:
+    live = os.environ.get("NOOS_PLAN_COMPLETION_LIVE_INTAKE", "").strip().lower() in ("1", "true", "yes")
+    # Read-only calls and disabled/unhealthy intake may preview, but never
+    # create a synthetic job id, event, receipt or state transition.
+    if not write or not (pf.get("ok") and live):
+        if allow_dry_run:
+            preview = dry_run_preview(intake)
+            return {
+                "schema": "noos-plan-completion-dispatch-v1",
+                "at": utc_now(),
+                "verdict": "DRY_RUN_ONLY",
+                "ok": True,
+                "selected": {
+                    "item_id": selected["item_id"],
+                    "plan_id": selected["plan_id"],
+                    "op_key": selected["op_key"],
+                    "role": selected["role"],
+                    "title": selected["title"],
+                },
+                "job_id": None,
+                "ack": None,
+                "preflight": {"ok": pf.get("ok"), "verdict": pf.get("verdict")},
+                "dry_run": True,
+                "would_submit": preview["intake"],
+                "report_line": f"plan_dispatch · DRY_RUN_ONLY item={selected['item_id']} no_state_change=true",
+            }
         return {
             "ok": False,
-            "verdict": runway.BLOCKED_RUNWAY_API_NOT_LIVE,
+            "verdict": pf.get("verdict") or runway.BLOCKED_RUNWAY_API_NOT_LIVE,
             "preflight": pf,
             "selected": selected,
             "report_line": "plan_dispatch · runway not live",
         }
 
-    acknowledged = bool(ack.get("ok")) and str(ack.get("op_key") or "") == selected["op_key"]
-    job_id = None
-    if isinstance(ack.get("body"), dict):
-        job_id = ack["body"].get("job_id")
-
+    ack = runway.submit_intake(intake)
+    ack_body = ack.get("body") if isinstance(ack.get("body"), dict) else {}
+    job_id = ack_body.get("job_id")
+    valid_job_id = (
+        isinstance(job_id, str)
+        and len(job_id) == 35
+        and job_id.startswith("rj_")
+        and all(char in "0123456789abcdef" for char in job_id[3:])
+    )
+    http_accepted = ack.get("ok") is True and ack.get("status") in (200, 202) and ack.get("dry_run") is not True
+    readback = runway.get_job(job_id) if http_accepted and valid_job_id else {"ok": False, "error": "invalid_or_missing_job_id"}
+    readback_body = readback.get("body") if isinstance(readback.get("body"), dict) else {}
+    readback_request = readback_body.get("request") if isinstance(readback_body.get("request"), dict) else {}
+    readback_key = readback_request.get("idempotency_key")
+    readback_matches = (
+        readback.get("ok") is True
+        and readback_body.get("job_id") == job_id
+        and readback_key == selected["op_key"]
+        and readback_body.get("status") in (
+            "QUEUED", "LEASED", "EXECUTION_SUBMITTED", "VERIFYING", "SUCCEEDED", "FAILED", "BLOCKED"
+        )
+    )
+    acknowledged = bool(http_accepted and valid_job_id and readback_matches)
+    ack_note = {
+        "ok": ack.get("ok"),
+        "status": ack.get("status"),
+        "dry_run": False,
+        "error": ack.get("error"),
+        "job_id_valid": valid_job_id,
+        "readback_ok": readback.get("ok"),
+        "readback_key_matches": readback_key == selected["op_key"],
+        "readback_status": readback_body.get("status"),
+        "readback_error": readback.get("error"),
+    }
     event = {
         "schema": "noos-plan-completion-dispatch-event-v1",
         "event": "intake_submitted" if acknowledged else "intake_rejected",
@@ -170,10 +213,9 @@ def dispatch_once(*, write: bool = True, allow_dry_run: bool = True) -> dict[str
         "item_id": selected["item_id"],
         "plan_id": selected["plan_id"],
         "job_id": job_id,
-        "ack": {"ok": ack.get("ok"), "status": ack.get("status"), "dry_run": ack.get("dry_run"), "error": ack.get("error")},
+        "ack": ack_note,
         "recipe": recipe,
     }
-
     if acknowledged:
         updated_item: dict[str, Any] | None = None
         for item in items:
@@ -182,7 +224,7 @@ def dispatch_once(*, write: bool = True, allow_dry_run: bool = True) -> dict[str
                 item["job_id"] = job_id
                 item["concurrency_key"] = concurrency_key
                 item["dispatched_at"] = utc_now()
-                item["dry_run"] = bool(ack.get("dry_run"))
+                item["dry_run"] = False
                 item["fencing_token"] = int(item.get("fencing_token") or 1) + 1
                 updated_item = item
                 break
@@ -192,25 +234,40 @@ def dispatch_once(*, write: bool = True, allow_dry_run: bool = True) -> dict[str
             for s in ("READY", "DISPATCHED", "COMPLETE", "BLOCKED_WITH_REASON", "FOUNDER_BLOCKED")
         }
         backlog["updated_at"] = utc_now()
-        if write:
+
+        sink_row: dict[str, Any] = {"ok": False, "skipped": True, "reason": "not_attempted"}
+        try:
+            import noos_plan_completion_supabase_sink_v1 as sink  # noqa: PLC0415
+
+            if updated_item is not None:
+                sink_row = sink.record_dispatch(item=updated_item, job_id=job_id, dry_run=False)
+        except Exception as exc:  # noqa: BLE001
+            sink_row = {"ok": False, "error": str(exc)[:240]}
+
+        require_sink = (
+            os.environ.get("NOOS_REQUIRE_SUPABASE_SINK", "").strip().lower() in ("1", "true", "yes")
+            or os.environ.get("RAILWAY_ENVIRONMENT", "").strip().lower() == "production"
+        )
+        sink_durable = sink_row.get("ok") is True and not (require_sink and sink_row.get("skipped") is True)
+        event["supabase_sink"] = sink_row
+        if sink_durable:
             save_json(backlog_path, backlog)
             append_event(events_path, event)
-            if updated_item is not None:
-                try:
-                    import noos_plan_completion_supabase_sink_v1 as sink  # noqa: PLC0415
-
-                    event["supabase_sink"] = sink.record_dispatch(
-                        item=updated_item,
-                        job_id=job_id,
-                        dry_run=bool(ack.get("dry_run")),
-                    )
-                except Exception as exc:  # noqa: BLE001
-                    event["supabase_sink"] = {"ok": False, "error": str(exc)[:240]}
+        else:
+            # Runway has an idempotent job already. Leave the item READY so the
+            # same op_key can safely replay and reconcile after persistence recovers.
+            acknowledged = False
+            event["event"] = "intake_ack_persistence_failed"
+            event["recovery"] = "retry_same_op_key; Runway idempotency prevents duplicate job creation"
+            append_event(events_path, event)
+    else:
+        if write:
+            append_event(events_path, event)
 
     row = {
         "schema": "noos-plan-completion-dispatch-v1",
         "at": utc_now(),
-        "verdict": "DISPATCHED" if acknowledged else "BLOCKED_WITH_REASON",
+        "verdict": "DISPATCHED" if acknowledged else ("BLOCKED_SUPABASE_PERSISTENCE" if event.get("event") == "intake_ack_persistence_failed" else "BLOCKED_WITH_REASON"),
         "ok": acknowledged,
         "selected": {
             "item_id": selected["item_id"],
@@ -223,10 +280,10 @@ def dispatch_once(*, write: bool = True, allow_dry_run: bool = True) -> dict[str
         "ack": event["ack"],
         "recipe": recipe,
         "preflight": {"ok": pf.get("ok"), "verdict": pf.get("verdict")},
-        "dry_run": bool(ack.get("dry_run")),
+        "dry_run": False,
         "report_line": (
-            f"plan_dispatch · {'DISPATCHED' if acknowledged else 'REJECTED'} "
-            f"item={selected['item_id']} job={job_id} dry_run={bool(ack.get('dry_run'))}"
+            f"plan_dispatch · {'DISPATCHED' if acknowledged else 'BLOCKED'} "
+            f"item={selected['item_id']} job={job_id} readback_verified=true"
         ),
     }
     if write:
@@ -238,47 +295,87 @@ def dispatch_once(*, write: bool = True, allow_dry_run: bool = True) -> dict[str
 
 
 def mark_complete(*, op_key: str, write: bool = True, observation: dict[str, Any] | None = None) -> dict[str, Any]:
-    """External verifier / Runway terminal observation marks COMPLETE (D4)."""
+    """Mark COMPLETE only from a matching, independently verified Runway terminal receipt."""
     config = load_json(CONFIG)
     backlog_path = ROOT / str(config.get("runtime_queue_path") or ".noos-runtime/plan-completion/backlog-v1.json")
     events_path = ROOT / str(config.get("dispatch_events_path") or ".noos-runtime/plan-completion/dispatch-events-v1.jsonl")
     backlog = load_json(backlog_path)
-    found = False
-    completed_item: dict[str, Any] | None = None
+    matched: dict[str, Any] | None = None
     for item in backlog.get("items") or []:
         if item.get("op_key") == op_key:
-            item["status"] = "COMPLETE"
-            item["completed_at"] = utc_now()
-            item["fencing_token"] = int(item.get("fencing_token") or 1) + 1
-            if observation:
-                item["terminal_observation"] = observation
-            completed_item = item
-            found = True
+            matched = item
             break
-    if not found:
+    if matched is None:
         return {"ok": False, "verdict": "BLOCKED_UNKNOWN_OP_KEY", "op_key": op_key}
+    if matched.get("status") == "COMPLETE":
+        return {"ok": True, "verdict": "ALREADY_COMPLETE", "op_key": op_key}
+    if matched.get("status") != "DISPATCHED":
+        return {"ok": False, "verdict": "BLOCKED_ITEM_NOT_DISPATCHED", "op_key": op_key, "status": matched.get("status")}
+    if matched.get("dry_run") is True:
+        return {"ok": False, "verdict": "BLOCKED_DRY_RUN_HAS_NO_EXECUTION", "op_key": op_key}
+
+    proof = observation if isinstance(observation, dict) else {}
+    expected_job_id = matched.get("job_id")
+    state = str(proof.get("state") or "").upper()
+    evidence_ok = (
+        bool(expected_job_id)
+        and proof.get("job_id") == expected_job_id
+        and proof.get("op_key") == op_key
+        and state in _TERMINAL_OK
+        and str(proof.get("verification_verdict") or "").upper() == "SUCCEEDED"
+        and bool(proof.get("verified_at"))
+        and bool(proof.get("terminal_receipt"))
+        and proof.get("dry_run") is not True
+    )
+    if not evidence_ok:
+        return {
+            "ok": False,
+            "verdict": "BLOCKED_TERMINAL_EVIDENCE_REQUIRED",
+            "op_key": op_key,
+            "expected_job_id": expected_job_id,
+            "observed_job_id": proof.get("job_id"),
+            "state": state or None,
+            "verification_verdict": proof.get("verification_verdict"),
+            "receipt_present": bool(proof.get("terminal_receipt")),
+        }
+
+    matched["status"] = "COMPLETE"
+    matched["completed_at"] = utc_now()
+    matched["fencing_token"] = int(matched.get("fencing_token") or 1) + 1
+    matched["terminal_observation"] = proof
     items = backlog["items"]
     backlog["counts"] = {
         s: sum(1 for i in items if i.get("status") == s)
         for s in ("READY", "DISPATCHED", "COMPLETE", "BLOCKED_WITH_REASON", "FOUNDER_BLOCKED")
     }
     backlog["updated_at"] = utc_now()
+
     sink_row: dict[str, Any] | None = None
     if write:
-        save_json(backlog_path, backlog)
-        append_event(events_path, {"event": "complete", "op_key": op_key, "at": utc_now(), "observation": observation})
-        if completed_item is not None:
-            try:
-                import noos_plan_completion_supabase_sink_v1 as sink  # noqa: PLC0415
+        try:
+            import noos_plan_completion_supabase_sink_v1 as sink  # noqa: PLC0415
 
-                sink_row = sink.record_complete(item=completed_item, observation=observation)
-            except Exception as exc:  # noqa: BLE001
-                sink_row = {"ok": False, "error": str(exc)[:240]}
-    out = {"ok": True, "verdict": "COMPLETE", "op_key": op_key, "counts": backlog["counts"]}
+            sink_row = sink.record_complete(item=matched, observation=proof)
+        except Exception as exc:  # noqa: BLE001
+            sink_row = {"ok": False, "error": str(exc)[:240]}
+        require_sink = (
+            os.environ.get("NOOS_REQUIRE_SUPABASE_SINK", "").strip().lower() in ("1", "true", "yes")
+            or os.environ.get("RAILWAY_ENVIRONMENT", "").strip().lower() == "production"
+        )
+        sink_durable = sink_row.get("ok") is True and not (require_sink and sink_row.get("skipped") is True)
+        if not sink_durable:
+            return {
+                "ok": False,
+                "verdict": "BLOCKED_SUPABASE_PERSISTENCE",
+                "op_key": op_key,
+                "supabase_sink": sink_row,
+            }
+        save_json(backlog_path, backlog)
+        append_event(events_path, {"event": "complete", "op_key": op_key, "at": utc_now(), "observation": proof})
+    out = {"ok": True, "verdict": "COMPLETE" if write else "WOULD_COMPLETE", "op_key": op_key, "counts": backlog["counts"]}
     if sink_row is not None:
         out["supabase_sink"] = sink_row
     return out
-
 
 _TERMINAL_OK = {"SUCCEEDED", "SUCCESS", "COMPLETE", "DONE", "COMPLETED"}
 _TERMINAL_FAIL = {"FAILED", "FAILED_WITH_RECEIPT", "CANCELLED", "CANCELED", "DEAD_LETTER"}
@@ -301,33 +398,54 @@ def observe_inflight(*, write: bool = True) -> dict[str, Any]:
             continue
         job_id = item.get("job_id")
         if not job_id:
+            item["status"] = "BLOCKED_WITH_REASON"
+            item["blocker_reason"] = "dispatched_missing_job_id"
+            item["fencing_token"] = int(item.get("fencing_token") or 1) + 1
+            blocked.append({"op_key": item.get("op_key"), "state": "MISSING_JOB_ID"})
+            if write:
+                backlog["counts"] = {
+                    s: sum(1 for i in backlog.get("items") or [] if i.get("status") == s)
+                    for s in ("READY", "DISPATCHED", "COMPLETE", "BLOCKED_WITH_REASON", "FOUNDER_BLOCKED")
+                }
+                backlog["updated_at"] = utc_now()
+                save_json(backlog_path, backlog)
+                append_event(events_path, {"event": "dispatched_missing_job_id", "op_key": item.get("op_key"), "at": utc_now()})
             continue
-        # Dry-run jobs complete locally without Runway poll (commissioning path).
-        if item.get("dry_run") or (str(job_id).startswith("rj_") and not live):
-            obs = {"state": "SUCCEEDED", "job_id": job_id, "dry_run": True, "source": "local_dry_run"}
-            mark = mark_complete(op_key=item["op_key"], write=write, observation=obs)
+        # Historical synthetic dispatches from the old dry-run path were never
+        # real jobs. Return them to READY; never manufacture terminal success.
+        if item.get("dry_run") is True:
+            old_job_id = job_id
+            item["status"] = "READY"
+            item["simulation_job_id"] = old_job_id
+            item["job_id"] = None
+            item["dry_run_reset_at"] = utc_now()
+            item["fencing_token"] = int(item.get("fencing_token") or 1) + 1
+            obs = {"state": "DRY_RUN_RESET_TO_READY", "job_id": old_job_id, "dry_run": True, "op_key": item.get("op_key")}
             observed.append(obs)
-            if mark.get("ok"):
-                completed.append(item["op_key"])
+            if write:
+                backlog["counts"] = {
+                    s: sum(1 for i in backlog.get("items") or [] if i.get("status") == s)
+                    for s in ("READY", "DISPATCHED", "COMPLETE", "BLOCKED_WITH_REASON", "FOUNDER_BLOCKED")
+                }
+                backlog["updated_at"] = utc_now()
+                save_json(backlog_path, backlog)
+                append_event(events_path, {"event": "dry_run_reset_to_ready", "op_key": item["op_key"], "at": utc_now(), "simulation_job_id": old_job_id})
             continue
         if not live:
             continue
         job = runway.get_job(str(job_id))
         body = job.get("body") if isinstance(job.get("body"), dict) else {}
         state = str(body.get("status") or body.get("state") or "").upper()
-        # Synthetic dry-run ids are not on Runway — complete locally if GET fails.
-        if not job.get("ok") and str(job_id).startswith("rj_") and item.get("dry_run") is not False:
+        if not job.get("ok"):
             obs = {
-                "state": "SUCCEEDED",
+                "state": "LOOKUP_FAILED",
                 "job_id": job_id,
-                "dry_run": True,
-                "source": "local_dry_run_after_miss",
-                "get_job_error": job.get("error") or job.get("status"),
+                "op_key": item.get("op_key"),
+                "error": job.get("error") or job.get("status"),
             }
-            mark = mark_complete(op_key=item["op_key"], write=write, observation=obs)
             observed.append(obs)
-            if mark.get("ok"):
-                completed.append(item["op_key"])
+            if write:
+                append_event(events_path, {"event": "job_lookup_failed", "op_key": item["op_key"], "job_id": job_id, "at": utc_now(), "error": obs["error"]})
             continue
         obs = runway.observe_job(
             {
@@ -338,7 +456,15 @@ def observe_inflight(*, write: bool = True) -> dict[str, Any]:
                 "started_at": body.get("started_at"),
                 "budget": body.get("budget"),
                 "provider": body.get("provider"),
-                "terminal_receipt": body.get("terminal_receipt") or body.get("receipt"),
+                "terminal_receipt": (
+                    body.get("receipt_ref")
+                    or (body.get("result") or {}).get("receipt_ref")
+                    or ((body.get("candidate") or {}).get("receipt_ref") if isinstance(body.get("candidate"), dict) else None)
+                    or body.get("terminal_receipt")
+                    or body.get("receipt")
+                ),
+                "verification_verdict": (body.get("verification") or {}).get("verdict") if isinstance(body.get("verification"), dict) else None,
+                "verified_at": (body.get("verification") or {}).get("verified_at") if isinstance(body.get("verification"), dict) else None,
             }
         )
         observed.append(obs)
@@ -349,8 +475,26 @@ def observe_inflight(*, write: bool = True) -> dict[str, Any]:
             )
         if state in _TERMINAL_OK:
             mark = mark_complete(op_key=item["op_key"], write=write, observation=obs)
-            if mark.get("ok"):
+            if mark.get("ok") and mark.get("verdict") == "COMPLETE":
                 completed.append(item["op_key"])
+                # Keep the current in-memory snapshot consistent if a later
+                # item in this same batch causes the backlog file to be saved.
+                item["status"] = "COMPLETE"
+                item["completed_at"] = utc_now()
+                item["terminal_observation"] = obs
+            elif mark.get("verdict") == "BLOCKED_TERMINAL_EVIDENCE_REQUIRED":
+                item["status"] = "BLOCKED_WITH_REASON"
+                item["blocker_reason"] = "runway_success_missing_independent_verification_receipt"
+                item["fencing_token"] = int(item.get("fencing_token") or 1) + 1
+                blocked.append({"op_key": item["op_key"], "state": state, "reason": item["blocker_reason"]})
+                if write:
+                    backlog["counts"] = {
+                        s: sum(1 for i in backlog.get("items") or [] if i.get("status") == s)
+                        for s in ("READY", "DISPATCHED", "COMPLETE", "BLOCKED_WITH_REASON", "FOUNDER_BLOCKED")
+                    }
+                    backlog["updated_at"] = utc_now()
+                    save_json(backlog_path, backlog)
+                    append_event(events_path, {"event": "terminal_success_missing_proof", "op_key": item["op_key"], "job_id": job_id, "at": utc_now()})
         elif state in _TERMINAL_FAIL:
             item["status"] = "BLOCKED_WITH_REASON"
             item["blocker_reason"] = f"runway_terminal:{state}"
@@ -447,7 +591,13 @@ def main(argv: list[str] | None = None) -> int:
     sub.add_parser("observe").set_defaults(func=lambda _a: observe_inflight())
     c = sub.add_parser("complete")
     c.add_argument("--op-key", required=True)
-    c.set_defaults(func=lambda a: mark_complete(op_key=a.op_key))
+    c.add_argument("--observation-json", help="JSON read-back from the canonical Runway job and independent verifier")
+    c.set_defaults(
+        func=lambda a: mark_complete(
+            op_key=a.op_key,
+            observation=json.loads(a.observation_json) if a.observation_json else None,
+        )
+    )
     args = p.parse_args(argv)
     row = args.func(args)
     print(json.dumps(row, indent=2))
