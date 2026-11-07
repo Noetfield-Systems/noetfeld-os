@@ -102,7 +102,6 @@ def init():
   CREATE INDEX IF NOT EXISTS op_idx ON opportunities(brand,stage,created_at);
   CREATE TABLE IF NOT EXISTS events(id TEXT PRIMARY KEY,event_type TEXT,source TEXT,brand TEXT,payload TEXT,status TEXT,attempts INT DEFAULT 0,created_at TEXT,claimed_at TEXT,processed_at TEXT,error TEXT,idempotency_key TEXT);
   CREATE INDEX IF NOT EXISTS ev_idx ON events(status,created_at);
-  CREATE UNIQUE INDEX IF NOT EXISTS events_idempotency_key_idx ON events(idempotency_key) WHERE idempotency_key IS NOT NULL;
   CREATE TABLE IF NOT EXISTS tasks(id TEXT PRIMARY KEY,event_id TEXT,opportunity_id TEXT,brand TEXT,role TEXT,title TEXT,objective TEXT,next_action TEXT,autonomy TEXT,status TEXT,result TEXT,created_at TEXT,updated_at TEXT);
   CREATE INDEX IF NOT EXISTS task_idx ON tasks(status,created_at);
   CREATE TABLE IF NOT EXISTS runs(id TEXT PRIMARY KEY,task_id TEXT,role TEXT,provider TEXT,model TEXT,status TEXT,input_tokens INT,output_tokens INT,started_at TEXT,finished_at TEXT,result TEXT);
