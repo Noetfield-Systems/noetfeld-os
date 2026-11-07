@@ -100,6 +100,68 @@ def _base_env(*, event_type: str, source: str, run_id: str) -> dict[str, str]:
     return env
 
 
+def _tick_diagnostic(
+    *,
+    event_type: str,
+    source: str,
+    run_id: str,
+    proc: subprocess.CompletedProcess[str],
+    cycle: dict[str, Any] | None,
+    ok: bool,
+) -> dict[str, Any]:
+    """Return a bounded, secret-free projection for Railway runtime logs."""
+    cycle = cycle if isinstance(cycle, dict) else {}
+    d2 = cycle.get("d2") if isinstance(cycle.get("d2"), dict) else {}
+    floor = d2.get("floor") if isinstance(d2.get("floor"), dict) else {}
+    sink = cycle.get("supabase_sink") if isinstance(cycle.get("supabase_sink"), dict) else {}
+    runner_output = cycle.get("runner_output") if isinstance(cycle.get("runner_output"), dict) else {}
+    steps = runner_output.get("steps") if isinstance(runner_output.get("steps"), list) else []
+    failed_steps = [
+        {
+            "name": str(step.get("name") or "unknown")[:80],
+            "exit_code": step.get("exit_code"),
+            "error": str(step.get("error") or "")[:160] or None,
+        }
+        for step in steps
+        if isinstance(step, dict) and step.get("ok") is False
+    ][:8]
+    liveness = cycle.get("liveness_upsert") if isinstance(cycle.get("liveness_upsert"), dict) else {}
+    meta_liveness = cycle.get("meta_liveness_sync") if isinstance(cycle.get("meta_liveness_sync"), dict) else {}
+    supabase_env = cycle.get("supabase_env") if isinstance(cycle.get("supabase_env"), dict) else {}
+    return {
+        "schema": "noos-loop-runner-diagnostic-v1",
+        "run_id": run_id,
+        "event_type": event_type,
+        "source": source,
+        "ok": ok,
+        "process_exit_code": proc.returncode,
+        "cycle_status": cycle.get("status"),
+        "state_after": cycle.get("state_after"),
+        "cycle_number": cycle.get("cycle_number"),
+        "blocker_reason": str(cycle.get("blocker_reason") or "")[:240] or None,
+        "d2_reason": d2.get("reason"),
+        "supabase_floor_reason": floor.get("reason"),
+        "supabase_floor_status": floor.get("status"),
+        "supabase_env": {
+            "ok": supabase_env.get("ok"),
+            "has_url": supabase_env.get("has_url"),
+            "has_key": supabase_env.get("has_key"),
+        },
+        "sink": {
+            "ok": sink.get("ok"),
+            "reason": sink.get("reason"),
+            "status": sink.get("status"),
+            "exit_code": sink.get("exit_code"),
+        },
+        "failed_steps": failed_steps,
+        "liveness_write_ok": liveness.get("ok"),
+        "liveness_error": str(liveness.get("error") or liveness.get("reason") or "")[:160] or None,
+        "meta_liveness_ok": meta_liveness.get("ok"),
+        "stderr_present": bool(proc.stderr and proc.stderr.strip()),
+        "stdout_present": bool(proc.stdout and proc.stdout.strip()),
+    }
+
+
 def run_loop(event_type: str, *, source: str, run_id: str) -> dict[str, Any]:
     global _last_liveness_ok_at, _last_liveness_error
     proc = subprocess.run(
@@ -127,6 +189,17 @@ def run_loop(event_type: str, *, source: str, run_id: str) -> dict[str, Any]:
     elif liveness:
         _last_liveness_error = str(liveness.get("error") or liveness.get("reason") or "liveness_write_failed")
     ok = proc.returncode == 0 and (cycle or {}).get("status") == "ok"
+    # Keep the actual cycle failure visible in Railway logs; HTTP status alone
+    # hides whether the blocker is cycle acquisition, a command, or the sink.
+    diagnostic = _tick_diagnostic(
+        event_type=event_type,
+        source=source,
+        run_id=run_id,
+        proc=proc,
+        cycle=cycle,
+        ok=ok,
+    )
+    print("NOOS_TICK_DIAGNOSTIC " + json.dumps(diagnostic, separators=(",", ":"), sort_keys=True), flush=True)
     return {
         "schema": "noos-railway-loop-runner-tick-v1",
         "run_id": run_id,
