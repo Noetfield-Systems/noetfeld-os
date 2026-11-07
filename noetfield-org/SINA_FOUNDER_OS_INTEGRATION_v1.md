@@ -29,6 +29,9 @@ Return only company/project/task IDs, lifecycle state, blocker code, bounded act
 ## Current live boundary
 SINA Governance currently records `NOT_DISPATCHED_SHADOW_ONLY`; its optional Paperclip bridge is default-off and backlog-only. This contract does not enable it. A live Founder OS→NOOS transport is NOT_ACTIVE until an existing endpoint is identified in deployed code, a least-privilege service identity is provisioned, and transport/auth/idempotency/tenant isolation/permit checks pass independently.
 
+## Validation placement
+The MissionEnvelope regression tests run inside the existing mapped `.github/workflows/gel-ci.yml` (`Founder OS MissionEnvelope contract validation`). The contract does not create a new unmapped GitHub Actions workflow or touch the frozen `data/noos-parallel-agent-registry-v1.json`.
+
 ## Required activation sequence
 1. Consume the versioned JSON contract and schema in CI.
 2. Verify the actual upstream contract commit/digest and schema compatibility.
