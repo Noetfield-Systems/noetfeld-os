@@ -40,22 +40,25 @@
     ]
   },
   "job_event_schema": {
-    "job_id": "string (rj_[0-9a-f]{32})",
-    "recipe_id": "string",
-    "state": "one of: queued|leased|running|COMPLETE|FAILED|BLOCKED|STALE",
-    "started_at": "iso8601",
+    "job_id": "string matching rj_[0-9a-f]{32}",
+    "request": {
+      "idempotency_key": "canonical NOOS op_key",
+      "runway_id": "canonical runway identifier",
+      "input": "durable job payload"
+    },
+    "status": "one of QUEUED|LEASED|EXECUTION_SUBMITTED|VERIFYING|SUCCEEDED|FAILED|BLOCKED",
+    "created_at": "iso8601",
     "updated_at": "iso8601",
-    "budget": {
-      "spent_usd": "number",
-      "ceiling_usd": "number"
+    "candidate": {
+      "provider_evidence": "array of provider_id/model_id/cost_usd/cost_basis",
+      "receipt_ref": "string|null"
     },
-    "provider": {
-      "name": "string",
-      "healthy": "boolean",
-      "model_id": "string"
+    "verification": {
+      "verdict": "SUCCEEDED|FAILED|BLOCKED",
+      "verified_at": "iso8601",
+      "verification_hash": "sha256"
     },
-    "terminal_receipt": "string|null",
-    "op_key": "idempotency_key"
+    "receipt_ref": "string|null"
   },
   "intake_defaults": {
     "tenant_id": "tenant-staging-proof",
