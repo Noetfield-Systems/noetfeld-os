@@ -475,7 +475,7 @@ def observe_inflight(*, write: bool = True) -> dict[str, Any]:
             )
         if state in _TERMINAL_OK:
             mark = mark_complete(op_key=item["op_key"], write=write, observation=obs)
-            if mark.get("ok"):
+            if mark.get("ok") and mark.get("verdict") == "COMPLETE":
                 completed.append(item["op_key"])
                 # Keep the current in-memory snapshot consistent if a later
                 # item in this same batch causes the backlog file to be saved.
