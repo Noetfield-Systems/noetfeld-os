@@ -1,0 +1,34 @@
+name: SINA Founder OS Contract v1
+
+on:
+  push:
+    branches: [main, "feat/**"]
+    paths:
+      - "noetfield-org/sina-founder-os-*"
+      - "scripts/validate_sina_founder_os_mission_envelope_v1.py"
+      - "tests/test_sina_founder_os_mission_envelope_v1.py"
+      - ".github/workflows/sina-founder-os-contract-v1.yml"
+  pull_request:
+    branches: [main]
+    paths:
+      - "noetfield-org/sina-founder-os-*"
+      - "scripts/validate_sina_founder_os_mission_envelope_v1.py"
+      - "tests/test_sina_founder_os_mission_envelope_v1.py"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  contract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Validate contract structure and no-dispatch boundary
+        run: python3 -m json.tool noetfield-org/sina-founder-os-mission-envelope-v1.json > /dev/null
+      - name: Run fail-closed regression tests
+        run: |
+          python3 tests/test_sina_founder_os_mission_envelope_v1.py

@@ -1,0 +1,56 @@
+{
+  "schema": "sina-founder-os.mission-envelope.v1",
+  "contract_version": "1.0.0",
+  "upstream_repository": "Noetfield-Systems/sina_founder_os",
+  "upstream_contract_path": "integrations/noetfeld-os/mission-envelope-v1.json",
+  "purpose": "Authorized post-Governor company-scoped task handoff only; not raw founder-intent intake.",
+  "required_fields": [
+    "schema",
+    "envelope_id",
+    "company_id",
+    "project_id",
+    "origin",
+    "objective",
+    "scope",
+    "constraints",
+    "acceptance_criteria",
+    "priority",
+    "requested_by",
+    "decision_record_ref",
+    "workpacket_ref",
+    "authority_level",
+    "budget_limit",
+    "expires_at",
+    "idempotency_key"
+  ],
+  "invariants": {
+    "company_scope_required": true,
+    "project_scope_required": true,
+    "decision_record_required": true,
+    "workpacket_required": true,
+    "paperclip_assignment_is_not_permit": true,
+    "max_digital_authority": "A3",
+    "cross_company_context": "deny",
+    "secrets_allowed": false,
+    "unknown_fields": "reject"
+  },
+  "states": [
+    "APPROVED",
+    "WORKPACKET_ISSUED",
+    "ASSIGNED",
+    "EXECUTING",
+    "BLOCKED",
+    "SUBMITTED_FOR_VERIFICATION",
+    "VERIFIED_PASS",
+    "VERIFIED_FAIL",
+    "RECONCILED",
+    "CANCELLED",
+    "EXPIRED"
+  ],
+  "runtime": {
+    "adapter_state": "NOT_ACTIVE",
+    "network_dispatch": false,
+    "existing_integrator_reuse": true,
+    "second_dispatcher": false
+  }
+}
