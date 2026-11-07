@@ -100,8 +100,9 @@ def init():
   CREATE TABLE IF NOT EXISTS contacts(id TEXT PRIMARY KEY,brand TEXT,email TEXT,name TEXT,company TEXT,audience TEXT,role TEXT,consent INT,created_at TEXT,last_seen TEXT,UNIQUE(brand,email));
   CREATE TABLE IF NOT EXISTS opportunities(id TEXT PRIMARY KEY,contact_id TEXT,brand TEXT,title TEXT,intent TEXT,problem TEXT,estimated_value REAL,urgency TEXT,ai_consent INT,route TEXT,score INT,stage TEXT,source TEXT,created_at TEXT,updated_at TEXT);
   CREATE INDEX IF NOT EXISTS op_idx ON opportunities(brand,stage,created_at);
-  CREATE TABLE IF NOT EXISTS events(id TEXT PRIMARY KEY,event_type TEXT,source TEXT,brand TEXT,payload TEXT,status TEXT,attempts INT DEFAULT 0,created_at TEXT,claimed_at TEXT,processed_at TEXT,error TEXT);
+  CREATE TABLE IF NOT EXISTS events(id TEXT PRIMARY KEY,event_type TEXT,source TEXT,brand TEXT,payload TEXT,status TEXT,attempts INT DEFAULT 0,created_at TEXT,claimed_at TEXT,processed_at TEXT,error TEXT,idempotency_key TEXT);
   CREATE INDEX IF NOT EXISTS ev_idx ON events(status,created_at);
+  CREATE UNIQUE INDEX IF NOT EXISTS events_idempotency_key_idx ON events(idempotency_key) WHERE idempotency_key IS NOT NULL;
   CREATE TABLE IF NOT EXISTS tasks(id TEXT PRIMARY KEY,event_id TEXT,opportunity_id TEXT,brand TEXT,role TEXT,title TEXT,objective TEXT,next_action TEXT,autonomy TEXT,status TEXT,result TEXT,created_at TEXT,updated_at TEXT);
   CREATE INDEX IF NOT EXISTS task_idx ON tasks(status,created_at);
   CREATE TABLE IF NOT EXISTS runs(id TEXT PRIMARY KEY,task_id TEXT,role TEXT,provider TEXT,model TEXT,status TEXT,input_tokens INT,output_tokens INT,started_at TEXT,finished_at TEXT,result TEXT);
@@ -117,6 +118,10 @@ def init():
   );
   CREATE INDEX IF NOT EXISTS task_dependencies_parent_idx ON task_dependencies(task_id);
   """)
+  event_columns={row["name"] for row in d.execute("PRAGMA table_info(events)").fetchall()}
+  if "idempotency_key" not in event_columns:
+   d.execute("ALTER TABLE events ADD COLUMN idempotency_key TEXT")
+  d.execute("CREATE UNIQUE INDEX IF NOT EXISTS events_idempotency_key_idx ON events(idempotency_key) WHERE idempotency_key IS NOT NULL")
   try:d.execute("CREATE VIRTUAL TABLE IF NOT EXISTS memory_fts USING fts5(memory_id UNINDEXED,brand UNINDEXED,content)")
   except sqlite3.OperationalError:pass
 def route_for(brand,aud,intent):
@@ -136,9 +141,18 @@ def score(aud,intent,urgency,value,problem):
  n+=12 if value>=25000 else 8 if value>=5000 else 0
  n+=7 if len(problem)>=100 else 3 if len(problem)>=30 else 0
  return min(100,n)
-def add_event(kind,source,brand,payload):
+def add_event(kind,source,brand,payload,idempotency_key=None):
+ key=clean(idempotency_key,64) if idempotency_key else None
+ if key and not re.fullmatch(r"[A-Za-z0-9._:-]{8,64}",key):
+  raise ValueError("invalid_idempotency_key")
  eid=idof("evt")
- with connect() as d:d.execute("INSERT INTO events(id,event_type,source,brand,payload,status,created_at) VALUES(?,?,?,?,?,'queued',?)",(eid,kind,source,brand,json.dumps(payload,ensure_ascii=False),now()))
+ with connect() as d:
+  if key:
+   d.execute("BEGIN IMMEDIATE")
+   existing=d.execute("SELECT id FROM events WHERE idempotency_key=?",(key,)).fetchone()
+   if existing:return existing["id"]
+  d.execute("INSERT INTO events(id,event_type,source,brand,payload,status,created_at,idempotency_key) VALUES(?,?,?,?,?,'queued',?,?)",
+   (eid,kind,source,brand,json.dumps(payload,ensure_ascii=False),now(),key))
  return eid
 def add_task(d,event,opp,brand,role,title,obj,action):
  tid=idof("task");d.execute("INSERT INTO tasks VALUES(?,?,?,?,?,?,?,?,?,'queued','{}',?,?)",(tid,event,opp,brand,role,title,obj,action,"draft",now(),now()));return tid
