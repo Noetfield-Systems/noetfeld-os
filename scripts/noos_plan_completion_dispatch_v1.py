@@ -65,18 +65,13 @@ def pick_ready(items: list[dict[str, Any]], *, concurrency_key: str, max_infligh
     return ready[0] if ready else None
 
 
-def dry_run_ack(intake: dict[str, Any]) -> dict[str, Any]:
-    """Offline deterministic ack when Runway API is not live (commissioning / CI)."""
-    job_id = "rj_" + intake["idempotency_key"][:32]
+def dry_run_preview(intake: dict[str, Any]) -> dict[str, Any]:
+    """Return a side-effect-free preview; never fabricate a job id or acknowledgement."""
     return {
-        "ok": True,
-        "status": 202,
         "dry_run": True,
-        "op_key": intake["idempotency_key"],
-        "body": {"job_id": job_id, "status": "queued", "created": True},
+        "expected_op_key": intake.get("idempotency_key"),
         "intake": intake,
     }
-
 
 def dispatch_once(*, write: bool = True, allow_dry_run: bool = True) -> dict[str, Any]:
     config = load_json(CONFIG)
@@ -143,25 +138,73 @@ def dispatch_once(*, write: bool = True, allow_dry_run: bool = True) -> dict[str
         },
     }
 
-    live = os.environ.get("NOOS_PLAN_COMPLETION_LIVE_INTAKE", "").strip() in ("1", "true", "yes")
-    if pf.get("ok") and live:
-        ack = runway.submit_intake(intake)
-    elif allow_dry_run:
-        ack = dry_run_ack(intake)
-    else:
+    live = os.environ.get("NOOS_PLAN_COMPLETION_LIVE_INTAKE", "").strip().lower() in ("1", "true", "yes")
+    # Read-only calls and disabled/unhealthy intake may preview, but never
+    # create a synthetic job id, event, receipt or state transition.
+    if not write or not (pf.get("ok") and live):
+        if allow_dry_run:
+            preview = dry_run_preview(intake)
+            return {
+                "schema": "noos-plan-completion-dispatch-v1",
+                "at": utc_now(),
+                "verdict": "DRY_RUN_ONLY",
+                "ok": True,
+                "selected": {
+                    "item_id": selected["item_id"],
+                    "plan_id": selected["plan_id"],
+                    "op_key": selected["op_key"],
+                    "role": selected["role"],
+                    "title": selected["title"],
+                },
+                "job_id": None,
+                "ack": None,
+                "preflight": {"ok": pf.get("ok"), "verdict": pf.get("verdict")},
+                "dry_run": True,
+                "would_submit": preview["intake"],
+                "report_line": f"plan_dispatch · DRY_RUN_ONLY item={selected['item_id']} no_state_change=true",
+            }
         return {
             "ok": False,
-            "verdict": runway.BLOCKED_RUNWAY_API_NOT_LIVE,
+            "verdict": pf.get("verdict") or runway.BLOCKED_RUNWAY_API_NOT_LIVE,
             "preflight": pf,
             "selected": selected,
             "report_line": "plan_dispatch · runway not live",
         }
 
-    acknowledged = bool(ack.get("ok")) and str(ack.get("op_key") or "") == selected["op_key"]
-    job_id = None
-    if isinstance(ack.get("body"), dict):
-        job_id = ack["body"].get("job_id")
-
+    ack = runway.submit_intake(intake)
+    ack_body = ack.get("body") if isinstance(ack.get("body"), dict) else {}
+    job_id = ack_body.get("job_id")
+    valid_job_id = (
+        isinstance(job_id, str)
+        and len(job_id) == 35
+        and job_id.startswith("rj_")
+        and all(char in "0123456789abcdef" for char in job_id[3:])
+    )
+    http_accepted = ack.get("ok") is True and ack.get("status") in (200, 202) and ack.get("dry_run") is not True
+    readback = runway.get_job(job_id) if http_accepted and valid_job_id else {"ok": False, "error": "invalid_or_missing_job_id"}
+    readback_body = readback.get("body") if isinstance(readback.get("body"), dict) else {}
+    readback_request = readback_body.get("request") if isinstance(readback_body.get("request"), dict) else {}
+    readback_key = readback_request.get("idempotency_key")
+    readback_matches = (
+        readback.get("ok") is True
+        and readback_body.get("job_id") == job_id
+        and readback_key == selected["op_key"]
+        and readback_body.get("status") in (
+            "QUEUED", "LEASED", "EXECUTION_SUBMITTED", "VERIFYING", "SUCCEEDED", "FAILED", "BLOCKED"
+        )
+    )
+    acknowledged = bool(http_accepted and valid_job_id and readback_matches)
+    ack_note = {
+        "ok": ack.get("ok"),
+        "status": ack.get("status"),
+        "dry_run": False,
+        "error": ack.get("error"),
+        "job_id_valid": valid_job_id,
+        "readback_ok": readback.get("ok"),
+        "readback_key_matches": readback_key == selected["op_key"],
+        "readback_status": readback_body.get("status"),
+        "readback_error": readback.get("error"),
+    }
     event = {
         "schema": "noos-plan-completion-dispatch-event-v1",
         "event": "intake_submitted" if acknowledged else "intake_rejected",
@@ -170,10 +213,9 @@ def dispatch_once(*, write: bool = True, allow_dry_run: bool = True) -> dict[str
         "item_id": selected["item_id"],
         "plan_id": selected["plan_id"],
         "job_id": job_id,
-        "ack": {"ok": ack.get("ok"), "status": ack.get("status"), "dry_run": ack.get("dry_run"), "error": ack.get("error")},
+        "ack": ack_note,
         "recipe": recipe,
     }
-
     if acknowledged:
         updated_item: dict[str, Any] | None = None
         for item in items:
@@ -182,7 +224,7 @@ def dispatch_once(*, write: bool = True, allow_dry_run: bool = True) -> dict[str
                 item["job_id"] = job_id
                 item["concurrency_key"] = concurrency_key
                 item["dispatched_at"] = utc_now()
-                item["dry_run"] = bool(ack.get("dry_run"))
+                item["dry_run"] = False
                 item["fencing_token"] = int(item.get("fencing_token") or 1) + 1
                 updated_item = item
                 break
@@ -192,25 +234,40 @@ def dispatch_once(*, write: bool = True, allow_dry_run: bool = True) -> dict[str
             for s in ("READY", "DISPATCHED", "COMPLETE", "BLOCKED_WITH_REASON", "FOUNDER_BLOCKED")
         }
         backlog["updated_at"] = utc_now()
-        if write:
+
+        sink_row: dict[str, Any] = {"ok": False, "skipped": True, "reason": "not_attempted"}
+        try:
+            import noos_plan_completion_supabase_sink_v1 as sink  # noqa: PLC0415
+
+            if updated_item is not None:
+                sink_row = sink.record_dispatch(item=updated_item, job_id=job_id, dry_run=False)
+        except Exception as exc:  # noqa: BLE001
+            sink_row = {"ok": False, "error": str(exc)[:240]}
+
+        require_sink = (
+            os.environ.get("NOOS_REQUIRE_SUPABASE_SINK", "").strip().lower() in ("1", "true", "yes")
+            or os.environ.get("RAILWAY_ENVIRONMENT", "").strip().lower() == "production"
+        )
+        sink_durable = sink_row.get("ok") is True and not (require_sink and sink_row.get("skipped") is True)
+        event["supabase_sink"] = sink_row
+        if sink_durable:
             save_json(backlog_path, backlog)
             append_event(events_path, event)
-            if updated_item is not None:
-                try:
-                    import noos_plan_completion_supabase_sink_v1 as sink  # noqa: PLC0415
-
-                    event["supabase_sink"] = sink.record_dispatch(
-                        item=updated_item,
-                        job_id=job_id,
-                        dry_run=bool(ack.get("dry_run")),
-                    )
-                except Exception as exc:  # noqa: BLE001
-                    event["supabase_sink"] = {"ok": False, "error": str(exc)[:240]}
+        else:
+            # Runway has an idempotent job already. Leave the item READY so the
+            # same op_key can safely replay and reconcile after persistence recovers.
+            acknowledged = False
+            event["event"] = "intake_ack_persistence_failed"
+            event["recovery"] = "retry_same_op_key; Runway idempotency prevents duplicate job creation"
+            append_event(events_path, event)
+    else:
+        if write:
+            append_event(events_path, event)
 
     row = {
         "schema": "noos-plan-completion-dispatch-v1",
         "at": utc_now(),
-        "verdict": "DISPATCHED" if acknowledged else "BLOCKED_WITH_REASON",
+        "verdict": "DISPATCHED" if acknowledged else ("BLOCKED_SUPABASE_PERSISTENCE" if event.get("event") == "intake_ack_persistence_failed" else "BLOCKED_WITH_REASON"),
         "ok": acknowledged,
         "selected": {
             "item_id": selected["item_id"],
@@ -223,9 +280,9 @@ def dispatch_once(*, write: bool = True, allow_dry_run: bool = True) -> dict[str
         "ack": event["ack"],
         "recipe": recipe,
         "preflight": {"ok": pf.get("ok"), "verdict": pf.get("verdict")},
-        "dry_run": bool(ack.get("dry_run")),
+        "dry_run": False,
         "report_line": (
-            f"plan_dispatch · {'DISPATCHED' if acknowledged else 'REJECTED'} "
+            f"plan_dispatch · {'DISPATCHED' if acknowledged else 'BLOCKED'} "
             f"item={selected['item_id']} job={job_id} dry_run={bool(ack.get('dry_run'))}"
         ),
     }
