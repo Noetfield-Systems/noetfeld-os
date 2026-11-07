@@ -20,6 +20,6 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - run: python -m pip install httpx==0.28.1
+      - run: python -m pip install -r apps/business-os-core/requirements.txt httpx==0.28.1
       - run: python -m py_compile apps/business-os-core/app.py apps/business-os-core/core.py
       - run: python -m unittest discover -s apps/business-os-core -p "test_*.py"
