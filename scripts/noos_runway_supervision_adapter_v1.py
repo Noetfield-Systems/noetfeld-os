@@ -170,23 +170,31 @@ def submit_intake(intake: dict[str, Any]) -> dict[str, Any]:
     """POST /v1/intake with a validated job-intake envelope. Advance only on ack."""
     contract = load_contract()
     defaults = contract.get("intake_defaults") or {}
+    runtime_input = dict(intake.get("input") or {})
+    goal = runtime_input.get("goal") if isinstance(runtime_input.get("goal"), dict) else {}
+    # Preserve the API's explicit repository-execution kill gate. Do not bury
+    # a repository identifier inside goal where the runtime cannot see it.
+    if goal.get("repository"):
+        runtime_input["repository"] = goal["repository"]
     payload = {
-        "schema": "noetfield.job-intake.v0.1",
-        "tenant_id": intake.get("tenant_id") or defaults.get("tenant_id") or "noetfield.noos",
-        "entitlement_id": intake.get("entitlement_id") or defaults.get("entitlement_id") or "noos.plan-completion.v1",
+        "schema_version": "1.0",
         "runway_id": intake["runway_id"],
-        "recipe_id": intake["recipe_id"],
-        "recipe_version": intake["recipe_version"],
         "idempotency_key": intake["idempotency_key"],
         "requested_at": intake.get("requested_at") or utc_now(),
-        "caller_site": intake.get("caller_site") or defaults.get("caller_site") or "internal",
         "budget_usd": float(intake.get("budget_usd") or defaults.get("budget_usd_default") or 0.25),
-        "input": intake.get("input") or {},
+        "input": {
+            **runtime_input,
+            "tenant_id": intake.get("tenant_id") or defaults.get("tenant_id") or "noetfield.noos",
+            "entitlement_id": intake.get("entitlement_id") or defaults.get("entitlement_id") or "noos.plan-completion.v1",
+            "recipe_id": intake["recipe_id"],
+            "recipe_version": intake["recipe_version"],
+            "caller_site": intake.get("caller_site") or defaults.get("caller_site") or "internal",
+        },
     }
-    if intake.get("callback_url"):
-        payload["callback_url"] = intake["callback_url"]
-    result = hmac_request("POST", "/v1/intake", payload=payload)
-    result["op_key"] = payload["idempotency_key"]
+    result = hmac_request("POST", "/v1/jobs", payload=payload)
+    # Caller expectation only: the server acknowledgement is verified by GET
+    # /v1/jobs/{job_id} and comparing its persisted request.idempotency_key.
+    result["expected_op_key"] = payload["idempotency_key"]
     result["intake"] = payload
     return result
 
@@ -203,7 +211,10 @@ def observe_job(job_event: dict[str, Any]) -> dict[str, Any]:
         "budget": job_event.get("budget") or {},
         "provider": job_event.get("provider") or {},
         "terminal_receipt": job_event.get("terminal_receipt"),
+        "verification_verdict": job_event.get("verification_verdict"),
+        "verified_at": job_event.get("verified_at"),
         "op_key": job_event.get("op_key") or job_event.get("idempotency_key"),
+        "source": "runway",
     }
 
 
