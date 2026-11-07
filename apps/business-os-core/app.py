@@ -1,4 +1,4 @@
-import asyncio, os, re, time
+import asyncio, os, re, time, hmac
 from contextlib import asynccontextmanager
 from pathlib import Path
 from typing import Any
@@ -21,15 +21,32 @@ def authorize(value:str|None):
     if not supplied or not hmac.compare_digest(supplied,TOKEN):
         raise HTTPException(401,"Founder authentication required.")
 
-def throttle(req:Request):
+def throttle(req:Request,key_override:str|None=None):
     import hashlib
     ip=req.client.host if req.client else "unknown"
-    key=hashlib.sha256(ip.encode()).hexdigest()
+    key=key_override or hashlib.sha256(ip.encode()).hexdigest()
     now=time.time()
     hits=[x for x in RATE.get(key,[]) if now-x<600]
     if len(hits)>=6: raise HTTPException(429,"Too many submissions. Try later.")
     hits.append(now);RATE[key]=hits
-    if len(RATE)>4000:RATE.clear()
+    if len(RATE)>4000:
+        RATE.clear()
+        RATE[key]=hits
+
+def authorize_public_intake_proxy(request:Request)->str|None:
+    required=os.getenv("COMPANY_OS_REQUIRE_PROXY_AUTH","false").lower()=="true"
+    expected=os.getenv("COMPANY_OS_PROXY_TOKEN","")
+    supplied=request.headers.get("x-company-os-proxy-token","")
+    if required and not expected:
+        raise HTTPException(503,"Secure intake gateway is not configured.")
+    if required or supplied:
+        if not expected or not supplied or not hmac.compare_digest(supplied,expected):
+            raise HTTPException(401,"Authenticated intake gateway required.")
+        client_hash=request.headers.get("x-company-os-client-hash","")
+        if not re.fullmatch(r"[a-f0-9]{64}",client_hash):
+            raise HTTPException(400,"Invalid intake client fingerprint.")
+        return client_hash
+    return None
 
 async def worker():
     while not STOP.is_set():
@@ -63,8 +80,19 @@ async def lifespan(app):
 
 app=FastAPI(title="Noetfield Business OS",version="0.1.0",lifespan=lifespan)
 
+@app.middleware("http")
+async def public_body_limit(request:Request,call_next):
+    if request.url.path in {"/api/intake","/api/feedback"} and request.method=="POST":
+        try:
+            size=int(request.headers.get("content-length","0") or 0)
+        except ValueError:
+            return JSONResponse({"detail":"Invalid Content-Length."},status_code=400)
+        if size>24000:
+            return JSONResponse({"detail":"Submission too large."},status_code=413)
+    return await call_next(request)
+
 class Intake(BaseModel):
-    model_config=ConfigDict(extra="ignore")
+    model_config=ConfigDict(extra="forbid")
     brand:str="noetfield"
     audience:str="other"
     intent:str="other"
@@ -77,7 +105,8 @@ class Intake(BaseModel):
     estimated_value:float=Field(default=0,ge=0,le=50000000)
     consent:bool=False
     ai_consent:bool=False
-    website:str=""
+    website:str=Field(default="",max_length=200)
+    idempotency_key:str|None=Field(default=None,min_length=8,max_length=64,pattern=r"^[A-Za-z0-9._:-]+$")
 class Feedback(BaseModel):
     model_config=ConfigDict(extra="ignore")
     brand:str="noetfield"
@@ -135,23 +164,32 @@ def deep_health():
 
 @app.post("/api/intake")
 async def intake(data:Intake,request:Request):
-    throttle(request)
-    if int(request.headers.get("content-length","0") or 0)>24000: raise HTTPException(413,"Submission too large.")
-    if data.website.strip(): return {"accepted":True}
-    if not data.consent: raise HTTPException(400,"Consent is required.")
-    if not re.match(r"^[^\s@]+@[^\s@]+\.[^\s@]+$",data.email): raise HTTPException(400,"Enter a valid email.")
+    if data.website.strip():
+        return {"accepted":True}
+    client_hash=authorize_public_intake_proxy(request)
+    throttle(request,client_hash)
+    if not data.consent:
+        raise HTTPException(400,"Consent is required.")
+    email=core.clean(data.email,254).lower()
+    if not re.fullmatch(r"[^\\s@]+@[^\\s@]+\\.[^\\s@]+",email):
+        raise HTTPException(400,"Enter a valid email.")
+    if data.idempotency_key and not re.fullmatch(r"[A-Za-z0-9._:-]{8,64}",data.idempotency_key):
+        raise HTTPException(400,"Invalid idempotency key.")
     brand=data.brand if data.brand in core.BRANDS else "noetfield"
     audience=data.audience if data.audience in core.AUDIENCES else "other"
     intent=data.intent if data.intent in core.INTENTS else "other"
     urgency=data.urgency if data.urgency in {"now","30_days","quarter","exploring"} else "exploring"
     payload=data.model_dump()
     payload.update({"brand":brand,"audience":audience,"intent":intent,"urgency":urgency,
-      "name":core.clean(data.name,120),"email":core.clean(data.email,254).lower(),
+      "name":core.clean(data.name,120),"email":email,
       "company":core.clean(data.company,140),"role":core.clean(data.role,100),
-      "problem":core.clean(data.problem,2500)})
+      "problem":core.clean(data.problem,2500),"ai_consent":bool(data.ai_consent)})
     route,_,_=core.route_for(brand,audience,intent)
-    event_id=core.add_event("intake.received","public_web",brand,payload)
+    event_id=core.add_event("intake.received",
+        "company_os_staging_proxy" if client_hash else "public_web",
+        brand,payload,idempotency_key=data.idempotency_key)
     return JSONResponse({"accepted":True,"reference":event_id,"route":route,
+      "idempotent":bool(data.idempotency_key),
       "message":"Request accepted and queued for its specialist workflow."},status_code=202)
 
 @app.post("/api/feedback")
