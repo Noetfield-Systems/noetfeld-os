@@ -31,5 +31,4 @@ jobs:
         run: python3 -m json.tool noetfield-org/sina-founder-os-mission-envelope-v1.json > /dev/null
       - name: Run fail-closed regression tests
         run: |
-          python3 -m pip install pytest
-          pytest -q tests/test_sina_founder_os_mission_envelope_v1.py
+          python3 tests/test_sina_founder_os_mission_envelope_v1.py
