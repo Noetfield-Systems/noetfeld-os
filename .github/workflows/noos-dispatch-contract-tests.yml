@@ -1,0 +1,41 @@
+name: NOOS dispatch contract tests
+
+on:
+  pull_request:
+    branches: [deploy/noos-loop-runner-entrypoint]
+    paths:
+      - 'scripts/noos_plan_completion_dispatch_v1.py'
+      - 'scripts/noos_runway_supervision_adapter_v1.py'
+      - 'data/noetfield-runway-contract-v1.json'
+      - 'tests/test_noos_plan_completion_v1.py'
+      - '.github/workflows/noos-dispatch-contract-tests.yml'
+  push:
+    branches: [fix/noos-dispatch-runway-contract-2026-11-06]
+    paths:
+      - 'scripts/noos_plan_completion_dispatch_v1.py'
+      - 'scripts/noos_runway_supervision_adapter_v1.py'
+      - 'data/noetfield-runway-contract-v1.json'
+      - 'tests/test_noos_plan_completion_v1.py'
+      - '.github/workflows/noos-dispatch-contract-tests.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: noos-dispatch-contract-tests-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  dispatcher-contract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+      - name: Install test dependencies
+        run: python -m pip install --upgrade pip && python -m pip install -e ".[dev]"
+      - name: Run NOOS dispatcher and Runway contract tests
+        run: pytest -q tests/test_noos_plan_completion_v1.py
