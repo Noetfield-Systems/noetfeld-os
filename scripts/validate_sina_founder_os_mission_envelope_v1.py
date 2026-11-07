@@ -18,7 +18,7 @@ SECRET_KEYS = {"api_key", "token", "secret", "password", "credential", "private_
 def reject_secret_fields(value, path="$"):
     if isinstance(value, dict):
         for key, child in value.items():
-            if key.lower() in SECRET_KEYS or any(word in key.lower() for word in ("secret_value", "token_value", "api_key_value")):
+            if key.lower() in SECRET_KEYS or any(word in key.lower() for word in ("secret", "token", "api_key", "password", "credential", "private_key")):
                 raise ValueError(f"secret-like field is forbidden at {path}.{key}")
             reject_secret_fields(child, f"{path}.{key}")
     elif isinstance(value, list):
