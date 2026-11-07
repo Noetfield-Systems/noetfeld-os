@@ -91,14 +91,12 @@ def dispatch_role(role: str, *, subject: str, context: dict[str, Any] | None = N
             }
         },
     }
-    pf = runway.preflight()
-    if pf.get("ok") and __import__("os").environ.get("NOOS_PLAN_COMPLETION_LIVE_INTAKE", "").strip() in ("1", "true", "yes"):
-        ack = runway.submit_intake(intake)
-    else:
-        ack = dispatch.dry_run_ack(intake)
-
+    # Role adapters are proposal generators, not a second dispatch path.
+    # All real intake is owned by the unified backlog dispatcher, which performs
+    # HMAC submission, job read-back, idempotency checks and durable sink writes.
+    preview = dispatch.dry_run_preview(intake)
     artifact = {
-        "schema": "noos-role-runway-dispatch-artifact-v1",
+        "schema": "noos-role-runway-dispatch-artifact-v2",
         "at": utc_now(),
         "role": role,
         "subject": subject,
@@ -111,10 +109,16 @@ def dispatch_role(role: str, *, subject: str, context: dict[str, Any] | None = N
             "recipe_id": intake["recipe_id"],
             "recipe_version": intake["recipe_version"],
         },
-        "ack": {"ok": ack.get("ok"), "status": ack.get("status"), "dry_run": ack.get("dry_run"), "job_id": (ack.get("body") or {}).get("job_id")},
-        "productive": bool(ack.get("ok")) and spec["value_class"] != "none",
-        "ok": bool(ack.get("ok")),
-        "report_line": f"role_dispatch · {role} · productive={bool(ack.get('ok'))} dry_run={bool(ack.get('dry_run'))}",
+        "status": "PREVIEW_ONLY",
+        "dispatch": {
+            "dry_run": True,
+            "job_id": None,
+            "expected_op_key": preview["expected_op_key"],
+            "would_submit": preview["intake"],
+        },
+        "productive": False,
+        "ok": True,
+        "report_line": f"role_dispatch · {role} · PREVIEW_ONLY · no_runway_job_created=true",
     }
     PROOF.mkdir(parents=True, exist_ok=True)
     out = PROOF / f"noos-role-dispatch-{role}-{datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%SZ')}.json"
