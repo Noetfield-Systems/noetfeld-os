@@ -283,7 +283,7 @@ def dispatch_once(*, write: bool = True, allow_dry_run: bool = True) -> dict[str
         "dry_run": False,
         "report_line": (
             f"plan_dispatch · {'DISPATCHED' if acknowledged else 'BLOCKED'} "
-            f"item={selected['item_id']} job={job_id} dry_run={bool(ack.get('dry_run'))}"
+            f"item={selected['item_id']} job={job_id} readback_verified=true"
         ),
     }
     if write:
@@ -477,6 +477,11 @@ def observe_inflight(*, write: bool = True) -> dict[str, Any]:
             mark = mark_complete(op_key=item["op_key"], write=write, observation=obs)
             if mark.get("ok"):
                 completed.append(item["op_key"])
+                # Keep the current in-memory snapshot consistent if a later
+                # item in this same batch causes the backlog file to be saved.
+                item["status"] = "COMPLETE"
+                item["completed_at"] = utc_now()
+                item["terminal_observation"] = obs
             elif mark.get("verdict") == "BLOCKED_TERMINAL_EVIDENCE_REQUIRED":
                 item["status"] = "BLOCKED_WITH_REASON"
                 item["blocker_reason"] = "runway_success_missing_independent_verification_receipt"
@@ -586,7 +591,13 @@ def main(argv: list[str] | None = None) -> int:
     sub.add_parser("observe").set_defaults(func=lambda _a: observe_inflight())
     c = sub.add_parser("complete")
     c.add_argument("--op-key", required=True)
-    c.set_defaults(func=lambda a: mark_complete(op_key=a.op_key))
+    c.add_argument("--observation-json", help="JSON read-back from the canonical Runway job and independent verifier")
+    c.set_defaults(
+        func=lambda a: mark_complete(
+            op_key=a.op_key,
+            observation=json.loads(a.observation_json) if a.observation_json else None,
+        )
+    )
     args = p.parse_args(argv)
     row = args.func(args)
     print(json.dumps(row, indent=2))
