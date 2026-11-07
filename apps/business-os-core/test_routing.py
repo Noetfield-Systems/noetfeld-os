@@ -6,6 +6,31 @@ from pathlib import Path
 import core
 
 
+class BusinessOSMigrationTests(unittest.TestCase):
+    def test_existing_events_table_gets_nullable_idempotency_migration(self):
+        temp = tempfile.TemporaryDirectory()
+        previous = core.DB
+        try:
+            core.DB = Path(temp.name) / "legacy.sqlite"
+            with core.connect() as db:
+                db.execute("""
+                    CREATE TABLE events(
+                        id TEXT PRIMARY KEY,event_type TEXT,source TEXT,brand TEXT,payload TEXT,
+                        status TEXT,attempts INT DEFAULT 0,created_at TEXT,claimed_at TEXT,
+                        processed_at TEXT,error TEXT
+                    )
+                """)
+            core.init()
+            with core.connect() as db:
+                columns = {row["name"] for row in db.execute("PRAGMA table_info(events)").fetchall()}
+                indexes = {row["name"] for row in db.execute("PRAGMA index_list(events)").fetchall()}
+            self.assertIn("idempotency_key", columns)
+            self.assertIn("events_idempotency_key_idx", indexes)
+        finally:
+            core.DB = previous
+            temp.cleanup()
+
+
 class BusinessOSRoutingTests(unittest.TestCase):
     def test_brand_routes_are_separate(self):
         self.assertEqual(core.route_for("buildworkflow", "operator", "buildworkflow")[0], "trade_operations")
