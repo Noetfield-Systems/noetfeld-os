@@ -34,7 +34,7 @@ def test_hmac_sign_stable():
         body=body,
     )
     body_hash = hashlib.sha256(body).hexdigest()
-    canonical = f"POST\n/v1/intake\n2026-07-19T00:00:00Z\n{'n' * 16}\n{body_hash}"
+    canonical = f"POST\n/v1/jobs\n2026-07-19T00:00:00Z\n{'n' * 16}\n{body_hash}"
     expected = hmac.new(b"x" * 32, canonical.encode(), hashlib.sha256).hexdigest()
     assert sig == expected
 
