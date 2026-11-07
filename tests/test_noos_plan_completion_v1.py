@@ -134,7 +134,7 @@ def test_mark_complete_requires_verified_runway_receipt(monkeypatch):
     item["status"] = "DISPATCHED"
     item["job_id"] = "rj_" + "a" * 32
     item["dry_run"] = False
-    backlog_path.write_text(json.dumps(backlog, indent=2) + "\\n")
+    backlog_path.write_text(json.dumps(backlog, indent=2) + "\n")
     result = dispatch.mark_complete(
         op_key=item["op_key"],
         write=False,
