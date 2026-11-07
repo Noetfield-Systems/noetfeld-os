@@ -85,13 +85,17 @@ def test_contract_hmac_not_bearer():
     assert "dispatch_repair" not in contract["required_runtime"]["endpoints"]
 
 
-def test_role_dispatch_produces_artifact(monkeypatch):
+def test_role_dispatch_produces_preview_artifact_without_bypassing_canonical_dispatch(monkeypatch):
     monkeypatch.chdir(ROOT)
+    monkeypatch.delenv("NOOS_PLAN_COMPLETION_LIVE_INTAKE", raising=False)
     import noos_role_runway_dispatch_v1 as role_dispatch
 
     row = role_dispatch.dispatch_role("research", subject="unit-test")
     assert row["ok"] is True
-    assert row["productive"] is True
+    assert row["status"] == "PREVIEW_ONLY"
+    assert row["productive"] is False
+    assert row["dispatch"]["dry_run"] is True
+    assert row["dispatch"]["job_id"] is None
     assert row["value_class"] == "risk_reduction"
     assert Path(ROOT / row["receipt_path"]).is_file()
 
