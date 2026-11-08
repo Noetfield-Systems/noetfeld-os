@@ -1,6 +1,9 @@
-import json, os, re, sqlite3, time, uuid, hashlib, hmac
+import json, os, re, sqlite3, time, uuid, hashlib, hmac, logging
+import urllib.error, urllib.parse, urllib.request
 from pathlib import Path
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
+
+logger=logging.getLogger("noetfield.business_os.core")
 
 DB=Path(os.getenv("DATABASE_PATH","/data/business-os.sqlite"))
 BRANDS={"noetfield":"Noetfield Systems","buildworkflow":"BuildWorkflow","trustfield":"TrustField","buildrelay":"BuildRelay","portfolio":"Portfolio"}
@@ -109,6 +112,20 @@ def init():
   CREATE TABLE IF NOT EXISTS feedback(id TEXT PRIMARY KEY,brand TEXT,rating INT,comment TEXT,created_at TEXT);
   CREATE TABLE IF NOT EXISTS roi_snapshots(id TEXT PRIMARY KEY,brand TEXT,leads INT,qualified INT,won INT,weighted_pipeline REAL,snapshot_at TEXT);
   CREATE TABLE IF NOT EXISTS state(key TEXT PRIMARY KEY,value TEXT);
+  CREATE TABLE IF NOT EXISTS platform_intake_signals(
+    intake_id TEXT PRIMARY KEY,
+    request_id TEXT,
+    source_created_at TEXT NOT NULL,
+    received_at TEXT NOT NULL,
+    sku TEXT NOT NULL,
+    vector TEXT NOT NULL,
+    qualification_json TEXT,
+    status TEXT NOT NULL DEFAULT 'queued',
+    event_id TEXT NOT NULL UNIQUE,
+    processed_at TEXT
+  );
+  CREATE INDEX IF NOT EXISTS platform_intake_signal_status_idx
+    ON platform_intake_signals(status, source_created_at);
   CREATE TABLE IF NOT EXISTS task_dependencies(
     task_id TEXT NOT NULL REFERENCES tasks(id) ON DELETE CASCADE,
     depends_on_task_id TEXT NOT NULL REFERENCES tasks(id) ON DELETE CASCADE,
@@ -117,6 +134,9 @@ def init():
   );
   CREATE INDEX IF NOT EXISTS task_dependencies_parent_idx ON task_dependencies(task_id);
   """)
+  task_columns={row["name"] for row in d.execute("PRAGMA table_info(tasks)").fetchall()}
+  if "priority_rank" not in task_columns:
+   d.execute("ALTER TABLE tasks ADD COLUMN priority_rank INTEGER NOT NULL DEFAULT 100")
   try:d.execute("CREATE VIRTUAL TABLE IF NOT EXISTS memory_fts USING fts5(memory_id UNINDEXED,brand UNINDEXED,content)")
   except sqlite3.OperationalError:pass
 def route_for(brand,aud,intent):
@@ -141,7 +161,12 @@ def add_event(kind,source,brand,payload):
  with connect() as d:d.execute("INSERT INTO events(id,event_type,source,brand,payload,status,created_at) VALUES(?,?,?,?,?,'queued',?)",(eid,kind,source,brand,json.dumps(payload,ensure_ascii=False),now()))
  return eid
 def add_task(d,event,opp,brand,role,title,obj,action):
- tid=idof("task");d.execute("INSERT INTO tasks VALUES(?,?,?,?,?,?,?,?,?,'queued','{}',?,?)",(tid,event,opp,brand,role,title,obj,action,"draft",now(),now()));return tid
+ tid=idof("task")
+ d.execute(
+  "INSERT INTO tasks(id,event_id,opportunity_id,brand,role,title,objective,next_action,autonomy,status,result,created_at,updated_at) VALUES(?,?,?,?,?,?,?,?,?,'queued','{}',?,?)",
+  (tid,event,opp,brand,role,title,obj,action,"draft",now(),now())
+ )
+ return tid
 
 def add_task_dependency(d,task_id,depends_on_task_id):
  if task_id==depends_on_task_id:raise ValueError("A task cannot depend on itself.")
@@ -180,6 +205,285 @@ def retrieve(brand,q,limit=4):
    return [x["content"] for x in rows]
   except sqlite3.OperationalError: rows=d.execute("SELECT content FROM memories WHERE brand=? ORDER BY created_at DESC LIMIT 100",(brand,)).fetchall()
  return [x["content"] for x in sorted(rows,key=lambda r:sum(t in r["content"].lower() for t in terms),reverse=True)[:limit]]
+
+
+_PLATFORM_SIGNAL_SKUS={"trust_brief","copilot","bank_pilot","general"}
+_PLATFORM_SIGNAL_VECTORS={
+    "ai-value-governance-os","enterprise","copilot-governance","copilot",
+    "bank-pilot","partner-msb","work-with-us","web-intake","general","trust-brief",
+}
+_PLATFORM_SIGNAL_TIERS={"A","B","C","defer"}
+_PLATFORM_SIGNAL_URGENCY={"immediate","standard","low"}
+_PLATFORM_SIGNAL_NEXT_STEPS={
+    "schedule_briefing","founder_review","async_nurture",
+    "clarify_scope","polite_decline",
+}
+_PLATFORM_SIGNAL_BLOCKERS={
+    "payment_rails","certification_claim","mailbox_surveillance",
+    "generic_chatbot","consumer_email_domain","missing_organization",
+}
+
+
+def validate_platform_intake_projection(item):
+    """Accept only the deliberately PII-free projection emitted by Platform API."""
+    if not isinstance(item,dict) or set(item)!={"intake_id","request_id","created_at","sku","vector","qualification"}:
+        raise ValueError("platform_intake_projection_shape_invalid")
+    intake_id=str(item.get("intake_id") or "")
+    if not re.fullmatch(r"INT-[A-Z0-9]{12}",intake_id):
+        raise ValueError("platform_intake_id_invalid")
+    rid=item.get("request_id")
+    if rid is not None and not re.fullmatch(r"RID-[A-Z0-9-]{6,64}",str(rid),flags=re.I):
+        raise ValueError("platform_intake_request_id_invalid")
+    created_at=str(item.get("created_at") or "")
+    try:
+        datetime.fromisoformat(created_at.replace("Z","+00:00"))
+    except ValueError as exc:
+        raise ValueError("platform_intake_created_at_invalid") from exc
+    sku=item.get("sku")
+    vector=item.get("vector")
+    if sku not in _PLATFORM_SIGNAL_SKUS or vector not in _PLATFORM_SIGNAL_VECTORS:
+        raise ValueError("platform_intake_classification_invalid")
+    qualification=item.get("qualification")
+    safe_qualification=None
+    if qualification is not None:
+        allowed_fields={"tier","fit_score","urgency","next_step","owner_sla_hours","blockers","qualifier_version"}
+        if not isinstance(qualification,dict) or set(qualification)!=allowed_fields:
+            raise ValueError("platform_intake_qualification_shape_invalid")
+        tier=qualification.get("tier")
+        urgency=qualification.get("urgency")
+        next_step=qualification.get("next_step")
+        if tier not in _PLATFORM_SIGNAL_TIERS or urgency not in _PLATFORM_SIGNAL_URGENCY or next_step not in _PLATFORM_SIGNAL_NEXT_STEPS:
+            raise ValueError("platform_intake_qualification_enum_invalid")
+        fit_score=qualification.get("fit_score")
+        if fit_score is not None and (isinstance(fit_score,bool) or not isinstance(fit_score,(int,float)) or not 0<=fit_score<=100):
+            raise ValueError("platform_intake_fit_score_invalid")
+        sla=qualification.get("owner_sla_hours")
+        if sla is not None and (isinstance(sla,bool) or not isinstance(sla,int) or not 1<=sla<=720):
+            raise ValueError("platform_intake_sla_invalid")
+        blockers=qualification.get("blockers")
+        if not isinstance(blockers,list) or any(x not in _PLATFORM_SIGNAL_BLOCKERS for x in blockers):
+            raise ValueError("platform_intake_blockers_invalid")
+        if qualification.get("qualifier_version")!="enterprise-intake-qualifier-v1":
+            raise ValueError("platform_intake_qualifier_version_invalid")
+        safe_qualification={
+            "tier":tier,
+            "fit_score":int(fit_score) if fit_score is not None else None,
+            "urgency":urgency,
+            "next_step":next_step,
+            "owner_sla_hours":sla,
+            "blockers":list(dict.fromkeys(blockers)),
+            "qualifier_version":"enterprise-intake-qualifier-v1",
+        }
+    return {
+        "intake_id":intake_id,
+        "request_id":rid,
+        "created_at":created_at,
+        "sku":sku,
+        "vector":vector,
+        "qualification":safe_qualification,
+    }
+
+
+def queue_platform_intake_projection(item):
+    """Persist an idempotent non-PII receipt and event in the existing worker queue."""
+    projection=validate_platform_intake_projection(item)
+    intake_id=projection["intake_id"]
+    event_id="evt_platform_"+hashlib.sha256(intake_id.encode()).hexdigest()[:24]
+    qualification=projection["qualification"]
+    received=now()
+    with connect() as d:
+        d.execute("BEGIN IMMEDIATE")
+        existing=d.execute(
+            "SELECT intake_id FROM platform_intake_signals WHERE intake_id=?",
+            (intake_id,)
+        ).fetchone()
+        if existing:
+            d.execute("COMMIT")
+            return {"created":False,"event_id":event_id}
+        d.execute(
+            """INSERT INTO platform_intake_signals
+               (intake_id,request_id,source_created_at,received_at,sku,vector,qualification_json,status,event_id)
+               VALUES(?,?,?,?,?,?,?,'queued',?)""",
+            (
+                intake_id,projection["request_id"],projection["created_at"],received,
+                projection["sku"],projection["vector"],
+                json.dumps(qualification,ensure_ascii=False,separators=(",",":")) if qualification else None,
+                event_id,
+            )
+        )
+        event_payload=json.dumps(projection,ensure_ascii=False,separators=(",",":"))
+        d.execute(
+            """INSERT INTO events
+               (id,event_type,source,brand,payload,status,attempts,created_at)
+               VALUES(?,?,?,?,?,'queued',0,?)""",
+            (event_id,"platform.intake.signal.received","platform_public_intake","noetfield",event_payload,received)
+        )
+        d.execute("COMMIT")
+    return {"created":True,"event_id":event_id}
+
+
+def process_platform_intake_signal(e):
+    """Create internal-only N-05/N-04/N-01 work; never create a customer/contact record."""
+    p=validate_platform_intake_projection(json.loads(e["payload"]))
+    qualification=p["qualification"] or {}
+    tier=qualification.get("tier") or "unclassified"
+    fit=qualification.get("fit_score")
+    urgency=qualification.get("urgency") or "unknown"
+    next_step=qualification.get("next_step") or "founder_review"
+    blockers=qualification.get("blockers") or []
+    priority={"A":10,"B":20,"C":50,"defer":90}.get(tier,60)
+    intake_id=p["intake_id"]
+    score_label=f"{fit}/100" if fit is not None else "not scored"
+    sku=p["sku"]
+    vector=p["vector"]
+    with connect() as d:
+        row=d.execute(
+            "SELECT status FROM platform_intake_signals WHERE intake_id=?",
+            (intake_id,)
+        ).fetchone()
+        if row is None:
+            raise ValueError("platform_intake_signal_receipt_missing")
+        if row["status"] in {"tasks_created","processed"}:
+            d.execute("UPDATE events SET status='processed',processed_at=? WHERE id=?",(now(),e["id"]))
+            return
+        n05=add_task(
+            d,e["id"],None,"noetfield","sales_qualification",
+            f"Inbound qualification · {intake_id}",
+            (
+                f"Review the PII-free inbound signal {intake_id}. Product SKU: {sku}; vector: {vector}; "
+                f"deterministic tier: {tier}; fit score: {score_label}; urgency: {urgency}; "
+                f"deterministic next step: {next_step}; blocker codes: {', '.join(blockers) or 'none'}. "
+                "This is an enquiry signal only: it is not a qualified opportunity, proposal, contract or revenue. "
+                "Prepare the internal qualification recommendation and list the missing buyer, budget and willingness-to-pay evidence."
+            ),
+            (
+                f"Open the canonical Operations record using intake ID {intake_id}; draft internal response options "
+                "and measurable next questions. Do not send any external message or contact the submitter, make pricing promises or advance commercial stage."
+            )
+        )
+        d.execute("UPDATE tasks SET priority_rank=? WHERE id=?",(priority,n05))
+        specialist_ids=[n05]
+        if blockers or tier=="defer":
+            n04=add_task(
+                d,e["id"],None,"noetfield","risk_governance",
+                f"Boundary review · {intake_id}",
+                f"Review the deterministic blocker codes for anonymized intake {intake_id}: {', '.join(blockers) or 'defer tier'}. "
+                "Determine whether the requested service fits Noetfield's authorized product and risk boundaries.",
+                "Record internal permitted/prohibited scope and escalation questions only; do not make legal conclusions or contact the submitter."
+            )
+            d.execute("UPDATE tasks SET priority_rank=? WHERE id=?",(priority,n04))
+            specialist_ids.append(n04)
+        executive=add_task(
+            d,e["id"],None,"noetfield","chief_of_staff",
+            f"Founder decision brief · {intake_id}",
+            f"Synthesize the N-05 qualification and any risk review for anonymized intake {intake_id}. "
+            "Distinguish enquiry from qualified demand, proposal, signed commitment and cash received.",
+            "Prepare one concise evidence-linked next action for Founder ratification. Do not send, spend, sign or commit."
+        )
+        d.execute("UPDATE tasks SET priority_rank=? WHERE id=?",(priority,executive))
+        for task_id in specialist_ids:
+            add_task_dependency(d,executive,task_id)
+        d.execute(
+            "UPDATE platform_intake_signals SET status='tasks_created',processed_at=? WHERE intake_id=?",
+            (now(),intake_id)
+        )
+        d.execute("UPDATE events SET status='processed',processed_at=? WHERE id=?",(now(),e["id"]))
+    add_memory(
+        "noetfield","platform_intake_signal",intake_id,
+        f"Anonymized inbound signal {intake_id}; SKU {sku}; vector {vector}; tier {tier}; "
+        f"fit {score_label}; urgency {urgency}; next step {next_step}; no customer PII or free-form message was projected."
+    )
+
+
+def sync_platform_intake_feed():
+    """Cursor-based PII-free pull from the canonical Platform API using the existing worker."""
+    feed_url=(os.getenv("PLATFORM_INTAKE_SYNC_URL") or "").strip()
+    token=(os.getenv("PLATFORM_INTAKE_SYNC_TOKEN") or "").strip()
+    if not feed_url or not token:
+        return {"state":"not_configured","imported":0}
+    interval=max(30,min(3600,int(os.getenv("PLATFORM_INTAKE_SYNC_INTERVAL_SECONDS","120"))))
+    moment=time.time()
+    with connect() as d:
+        last=d.execute("SELECT value FROM state WHERE key='platform_intake_sync_last_attempt'").fetchone()
+        if last and moment-float(last["value"])<interval:
+            return {"state":"throttled","imported":0}
+        d.execute(
+            "INSERT INTO state(key,value) VALUES('platform_intake_sync_last_attempt',?) "
+            "ON CONFLICT(key) DO UPDATE SET value=excluded.value",
+            (str(moment),)
+        )
+        cursor_created=d.execute("SELECT value FROM state WHERE key='platform_intake_cursor_created_at'").fetchone()
+        cursor_intake=d.execute("SELECT value FROM state WHERE key='platform_intake_cursor_intake_id'").fetchone()
+    created_after=cursor_created["value"] if cursor_created else (
+        datetime.now(timezone.utc)-timedelta(days=7)
+    ).isoformat(timespec="seconds")
+    intake_after=cursor_intake["value"] if cursor_intake else ""
+    imported=0
+    fetched=0
+    try:
+        for _page in range(3):
+            query=urllib.parse.urlencode({
+                "created_after":created_after,
+                "intake_after":intake_after,
+                "limit":50,
+            })
+            request=urllib.request.Request(
+                feed_url+("&" if "?" in feed_url else "?")+query,
+                headers={"Accept":"application/json","X-Business-OS-Token":token},
+                method="GET",
+            )
+            with urllib.request.urlopen(request,timeout=10) as response:
+                payload=json.loads(response.read().decode("utf-8"))
+            if not isinstance(payload,dict) or payload.get("schema")!="noetfield.business-os-intake-feed.v1":
+                raise ValueError("platform_intake_feed_schema_invalid")
+            items=payload.get("items")
+            if not isinstance(items,list) or len(items)>50:
+                raise ValueError("platform_intake_feed_page_invalid")
+            for item in items:
+                result=queue_platform_intake_projection(item)
+                fetched+=1
+                imported+=1 if result["created"] else 0
+            next_cursor=payload.get("next_cursor")
+            if not isinstance(next_cursor,dict) or not next_cursor.get("created_at") or not next_cursor.get("intake_id"):
+                raise ValueError("platform_intake_feed_cursor_invalid")
+            next_created=str(next_cursor["created_at"])
+            next_intake=str(next_cursor["intake_id"])
+            advanced=(next_created,next_intake)>(created_after,intake_after)
+            with connect() as d:
+                d.execute("BEGIN IMMEDIATE")
+                d.execute(
+                    "INSERT INTO state(key,value) VALUES('platform_intake_cursor_created_at',?) "
+                    "ON CONFLICT(key) DO UPDATE SET value=excluded.value",
+                    (next_created,)
+                )
+                d.execute(
+                    "INSERT INTO state(key,value) VALUES('platform_intake_cursor_intake_id',?) "
+                    "ON CONFLICT(key) DO UPDATE SET value=excluded.value",
+                    (next_intake,)
+                )
+                d.execute(
+                    "INSERT INTO state(key,value) VALUES('platform_intake_sync_last_success',?) "
+                    "ON CONFLICT(key) DO UPDATE SET value=excluded.value",
+                    (now(),)
+                )
+                d.execute("DELETE FROM state WHERE key='platform_intake_sync_last_error'")
+                d.execute("COMMIT")
+            created_after,intake_after=next_created,next_intake
+            if not payload.get("has_more") or not items or not advanced:
+                break
+        return {"state":"ok","fetched":fetched,"imported":imported}
+    except Exception as exc:
+        # Do not log URL, credentials, customer data or request payloads.
+        error_code=type(exc).__name__
+        with connect() as d:
+            d.execute(
+                "INSERT INTO state(key,value) VALUES('platform_intake_sync_last_error',?) "
+                "ON CONFLICT(key) DO UPDATE SET value=excluded.value",
+                (error_code,)
+            )
+        logger.warning("business_os_platform_intake_sync_failed error_type=%s",error_code)
+        return {"state":"error","error_type":error_code,"fetched":fetched,"imported":imported}
+
 def process_intake(e):
  p=json.loads(e["payload"]);brand=p["brand"];aud=p["audience"];intent=p["intent"];urg=p["urgency"];value=float(p.get("estimated_value") or 0);route,primary,support=route_for(brand,aud,intent);fit=score(aud,intent,urg,value,p["problem"])
  cid=idof("con");oid=idof("opp");title=clean(p["problem"],100)
@@ -251,7 +555,7 @@ def claim(table):
         WHERE td.task_id=t.id
           AND (dep.id IS NULL OR dep.status NOT IN ('drafted','approved'))
       )
-    ORDER BY t.created_at LIMIT 1
+    ORDER BY COALESCE(t.priority_rank,100) ASC,t.created_at ASC LIMIT 1
    """).fetchone()
   else:
    r=d.execute("SELECT * FROM events WHERE status='queued' ORDER BY created_at LIMIT 1").fetchone()
@@ -306,11 +610,19 @@ def process_event(e):
   if e["event_type"]=="intake.received":process_intake(e)
   elif e["event_type"]=="feedback.received":process_feedback(e)
   elif e["event_type"]=="system.learning_tick":process_learning(e)
+  elif e["event_type"]=="platform.intake.signal.received":process_platform_intake_signal(e)
   else:
    with connect() as d:d.execute("UPDATE events SET status='ignored',processed_at=? WHERE id=?",(now(),e["id"]))
  except Exception as ex:
-  with connect() as d:d.execute("UPDATE events SET status='failed',error=?,processed_at=? WHERE id=?",(clean(ex,400),now(),e["id"]))
+  with connect() as d:
+   row=d.execute("SELECT attempts,event_type FROM events WHERE id=?",(e["id"],)).fetchone()
+   if row and row["event_type"]=="platform.intake.signal.received":
+    status="dead_letter" if int(row["attempts"] or 0)>=4 else "queued"
+    d.execute("UPDATE events SET status=?,error=?,processed_at=NULL WHERE id=?",(status,clean(type(ex).__name__,120),e["id"]))
+   else:
+    d.execute("UPDATE events SET status='failed',error=?,processed_at=? WHERE id=?",(clean(ex,400),now(),e["id"]))
 def daily_tick():
+ sync_platform_intake_feed()
  with connect() as d:r=d.execute("SELECT value FROM state WHERE key='last_learning'").fetchone()
  last=float(r["value"]) if r else 0
  if time.time()-last>=86400:
@@ -318,7 +630,10 @@ def daily_tick():
   with connect() as d:d.execute("INSERT INTO state VALUES('last_learning',?) ON CONFLICT(key) DO UPDATE SET value=excluded.value",(str(time.time()),))
 def overview():
  with connect() as d:
-  q={"contacts":"SELECT COUNT(*) n FROM contacts","opportunities":"SELECT COUNT(*) n FROM opportunities","qualified":"SELECT COUNT(*) n FROM opportunities WHERE score>=65","won":"SELECT COUNT(*) n FROM opportunities WHERE stage='won'","queued_events":"SELECT COUNT(*) n FROM events WHERE status IN ('queued','processing')","pending_tasks":"SELECT COUNT(*) n FROM tasks WHERE status IN ('queued','running','drafted')","feedback":"SELECT COUNT(*) n FROM feedback"}
+  q={"contacts":"SELECT COUNT(*) n FROM contacts","opportunities":"SELECT COUNT(*) n FROM opportunities","qualified":"SELECT COUNT(*) n FROM opportunities WHERE score>=65","won":"SELECT COUNT(*) n FROM opportunities WHERE stage='won'","queued_events":"SELECT COUNT(*) n FROM events WHERE status IN ('queued','processing')","pending_tasks":"SELECT COUNT(*) n FROM tasks WHERE status IN ('queued','running','drafted')","feedback":"SELECT COUNT(*) n FROM feedback",
+   "platform_intake_signals":"SELECT COUNT(*) n FROM platform_intake_signals",
+   "platform_intake_pending":"SELECT COUNT(*) n FROM platform_intake_signals WHERE status='queued'",
+   "platform_intake_tasks_created":"SELECT COUNT(*) n FROM platform_intake_signals WHERE status='tasks_created'"}
   counts={k:d.execute(v).fetchone()["n"] for k,v in q.items()}
   pipe=d.execute("SELECT COALESCE(SUM(estimated_value*CASE WHEN score>=80 THEN .35 WHEN score>=65 THEN .2 ELSE .08 END),0) v FROM opportunities WHERE stage NOT IN ('won','lost')").fetchone()["v"]
   brands=[]
