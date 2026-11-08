@@ -358,7 +358,7 @@ def process_platform_intake_signal(e):
             ),
             (
                 f"Open the canonical Operations record using intake ID {intake_id}; draft internal response options "
-                "and measurable next questions. Do not contact the submitter, send messages, make pricing promises or advance commercial stage."
+                "and measurable next questions. Do not send any external message or contact the submitter, make pricing promises or advance commercial stage."
             )
         )
         d.execute("UPDATE tasks SET priority_rank=? WHERE id=?",(priority,n05))
