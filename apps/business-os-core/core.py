@@ -614,7 +614,13 @@ def process_event(e):
   else:
    with connect() as d:d.execute("UPDATE events SET status='ignored',processed_at=? WHERE id=?",(now(),e["id"]))
  except Exception as ex:
-  with connect() as d:d.execute("UPDATE events SET status='failed',error=?,processed_at=? WHERE id=?",(clean(ex,400),now(),e["id"]))
+  with connect() as d:
+   row=d.execute("SELECT attempts,event_type FROM events WHERE id=?",(e["id"],)).fetchone()
+   if row and row["event_type"]=="platform.intake.signal.received":
+    status="dead_letter" if int(row["attempts"] or 0)>=4 else "queued"
+    d.execute("UPDATE events SET status=?,error=?,processed_at=NULL WHERE id=?",(status,clean(type(ex).__name__,120),e["id"]))
+   else:
+    d.execute("UPDATE events SET status='failed',error=?,processed_at=? WHERE id=?",(clean(ex,400),now(),e["id"]))
 def daily_tick():
  sync_platform_intake_feed()
  with connect() as d:r=d.execute("SELECT value FROM state WHERE key='last_learning'").fetchone()
