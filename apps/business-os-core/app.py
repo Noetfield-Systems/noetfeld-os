@@ -1,4 +1,4 @@
-import asyncio, os, re, time
+import asyncio, json, os, re, time
 from contextlib import asynccontextmanager
 from pathlib import Path
 from typing import Any
@@ -115,7 +115,7 @@ def deep_health():
     try:
         with core.connect() as db:
             tables={r["name"] for r in db.execute("SELECT name FROM sqlite_master WHERE type='table'").fetchall()}
-            required={"contacts","opportunities","events","tasks","runs","memories","task_dependencies"}
+            required={"contacts","opportunities","events","tasks","runs","memories","task_dependencies","platform_intake_signals"}
             missing=sorted(required-tables)
             counts={
                 "queued_events":db.execute("SELECT COUNT(*) n FROM events WHERE status='queued'").fetchone()["n"],
@@ -201,6 +201,30 @@ def opportunities(authorization:str|None=Header(default=None),brand:str|None=Non
         rows=db.execute(query+(" WHERE o.brand=? " if brand in core.BRANDS else " ")+
            "ORDER BY o.created_at DESC LIMIT 150",(brand,) if brand in core.BRANDS else ()).fetchall()
     return {"opportunities":[dict(r) for r in rows]}
+
+@app.get("/api/control/intake-signals")
+def intake_signals(authorization:str|None=Header(default=None),limit:int=50):
+    authorize(authorization)
+    cap=max(1,min(int(limit),100))
+    with core.connect() as db:
+        rows=db.execute(
+            """SELECT intake_id,request_id,source_created_at,received_at,sku,vector,
+                      qualification_json,status,event_id,processed_at
+               FROM platform_intake_signals
+               ORDER BY source_created_at DESC,intake_id DESC LIMIT ?""",
+            (cap,)
+        ).fetchall()
+        output=[]
+        for row in rows:
+            item=dict(row)
+            item["qualification"]=json.loads(item.pop("qualification_json")) if item.get("qualification_json") else None
+            item["task_count"]=db.execute(
+                "SELECT COUNT(*) n FROM tasks WHERE event_id=?",
+                (item["event_id"],)
+            ).fetchone()["n"]
+            output.append(item)
+    return {"signals":output,"source_of_truth":"Noetfield Platform API public_intakes","pii_included":False}
+
 @app.get("/api/control/tasks")
 def tasks(authorization:str|None=Header(default=None)):
     authorize(authorization)

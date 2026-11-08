@@ -100,6 +100,111 @@ class BusinessOSCycleTests(unittest.TestCase):
             attempts = db.execute("SELECT attempts FROM events WHERE id=?", (event_id,)).fetchone()["attempts"]
         self.assertEqual(attempts, 2)
 
+
+
+    def test_platform_intake_projection_is_idempotent_pii_free_and_not_a_sales_opportunity(self):
+        item = {
+            "intake_id": "INT-ABCDEF123456",
+            "request_id": "RID-TEST123-ABC",
+            "created_at": "2026-11-08T10:00:00+00:00",
+            "sku": "trust_brief",
+            "vector": "ai-value-governance-os",
+            "qualification": {
+                "tier": "A",
+                "fit_score": 88,
+                "urgency": "immediate",
+                "next_step": "schedule_briefing",
+                "owner_sla_hours": 24,
+                "blockers": [],
+                "qualifier_version": "enterprise-intake-qualifier-v1",
+            },
+        }
+        first = core.queue_platform_intake_projection(item)
+        second = core.queue_platform_intake_projection(item)
+        self.assertTrue(first["created"])
+        self.assertFalse(second["created"])
+        self.assertEqual(first["event_id"], second["event_id"])
+        with core.connect() as db:
+            signals = db.execute("SELECT COUNT(*) n FROM platform_intake_signals").fetchone()["n"]
+            events = db.execute("SELECT COUNT(*) n FROM events WHERE event_type='platform.intake.signal.received'").fetchone()["n"]
+        self.assertEqual(signals, 1)
+        self.assertEqual(events, 1)
+
+        event = core.claim("events")
+        core.process_event(event)
+        with core.connect() as db:
+            signal = db.execute("SELECT status FROM platform_intake_signals WHERE intake_id=?", (item["intake_id"],)).fetchone()
+            contacts = db.execute("SELECT COUNT(*) n FROM contacts").fetchone()["n"]
+            opportunities = db.execute("SELECT COUNT(*) n FROM opportunities").fetchone()["n"]
+            tasks = db.execute("SELECT role,priority_rank FROM tasks WHERE event_id=? ORDER BY role", (event["id"],)).fetchall()
+            task_event = db.execute("SELECT status FROM events WHERE id=?", (event["id"],)).fetchone()
+        self.assertEqual(signal["status"], "tasks_created")
+        self.assertEqual(contacts, 0)
+        self.assertEqual(opportunities, 0)
+        self.assertEqual(task_event["status"], "processed")
+        self.assertEqual({row["role"] for row in tasks}, {"sales_qualification", "chief_of_staff"})
+        self.assertTrue(all(row["priority_rank"] == 10 for row in tasks))
+
+        task = core.claim("tasks")
+        self.assertEqual(task["role"], "sales_qualification")
+        core.process_task(task)
+        with core.connect() as db:
+            run = db.execute("SELECT provider FROM runs WHERE task_id=?", (task["id"],)).fetchone()
+            task_row = db.execute("SELECT objective,next_action FROM tasks WHERE id=?", (task["id"],)).fetchone()
+        self.assertEqual(run["provider"], "deterministic")
+        self.assertNotIn("email", task_row["objective"].lower())
+        self.assertNotIn("contact", task_row["objective"].lower())
+        self.assertIn("do not send", task_row["next_action"].lower())
+
+    def test_platform_intake_projection_rejects_pii_and_untrusted_extra_fields(self):
+        base = {
+            "intake_id": "INT-ABCDEF123456",
+            "request_id": None,
+            "created_at": "2026-11-08T10:00:00+00:00",
+            "sku": "trust_brief",
+            "vector": "ai-value-governance-os",
+            "qualification": None,
+        }
+        injected = dict(base)
+        injected["contact_email"] = "private@example.com"
+        with self.assertRaises(ValueError):
+            core.validate_platform_intake_projection(injected)
+        injected = dict(base)
+        injected["vector"] = "private@example.com"
+        with self.assertRaises(ValueError):
+            core.validate_platform_intake_projection(injected)
+
+    def test_platform_intake_tier_priority_precedes_older_low_value_internal_work(self):
+        low = {
+            "intake_id": "INT-ABCDEF123456",
+            "request_id": None,
+            "created_at": "2026-11-08T10:00:00+00:00",
+            "sku": "trust_brief",
+            "vector": "ai-value-governance-os",
+            "qualification": {
+                "tier": "C", "fit_score": 40, "urgency": "low", "next_step": "async_nurture",
+                "owner_sla_hours": 72, "blockers": [], "qualifier_version": "enterprise-intake-qualifier-v1"
+            },
+        }
+        high = {
+            **low,
+            "intake_id": "INT-BCDEF1234567",
+            "qualification": {
+                "tier": "A", "fit_score": 90, "urgency": "immediate", "next_step": "schedule_briefing",
+                "owner_sla_hours": 24, "blockers": [], "qualifier_version": "enterprise-intake-qualifier-v1"
+            },
+        }
+        core.queue_platform_intake_projection(low)
+        core.queue_platform_intake_projection(high)
+        with core.connect() as db:
+            old_task = core.add_task(db,None,None,"noetfield","market_intelligence","Old routine task","Routine task objective","Internal note")
+        core.process_event(core.claim("events"))
+        core.process_event(core.claim("events"))
+        first = core.claim("tasks")
+        self.assertEqual(first["role"], "sales_qualification")
+        self.assertEqual(first["priority_rank"], 10)
+
+
 class BusinessOSGovernanceTests(unittest.TestCase):
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory()
