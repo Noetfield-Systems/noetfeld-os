@@ -127,6 +127,10 @@ def init():
   try:d.execute("CREATE VIRTUAL TABLE IF NOT EXISTS memory_fts USING fts5(memory_id UNINDEXED,brand UNINDEXED,content)")
   except sqlite3.OperationalError:pass
   product_loops.init(d)
+ # Default off for tests and uncommissioned customer deployments. Staging can
+ # activate an idempotent source-provenance portfolio after a scoped rollout.
+ if os.getenv("COMPANY_OS_PORTFOLIO_AUTOSTART","").lower() in {"1","true"}:
+  product_loops.bootstrap_internal()
 def route_for(brand,aud,intent):
  route=ROUTES.get(brand,ROUTES["noetfield"]).get(aud,"guided_discovery")
  if intent=="support" or aud=="customer": primary="customer_success"
