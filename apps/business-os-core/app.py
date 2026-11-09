@@ -70,6 +70,14 @@ async def department_worker(worker_slot:int):
 async def lifespan(app):
     global WORKER_JOB,TASK_WORKERS
     core.init();STOP.clear()
+    restored=portfolio_studio.overview()
+    print("company_portfolio_resume="+json.dumps({
+        "state":restored["state"].get("portfolio_studio_state"),
+        "cycles":len(restored["project_cycles"]),
+        "projects":list(dict.fromkeys(x["project_id"] for x in restored["project_cycles"]))[:22],
+        "department_workers":TASK_WORKER_COUNT,
+        "external_product_deploys_claimed":0,
+    },sort_keys=True),flush=True)
     WORKER_JOB=asyncio.create_task(worker())
     TASK_WORKERS=[asyncio.create_task(department_worker(n)) for n in range(TASK_WORKER_COUNT)]
     yield
