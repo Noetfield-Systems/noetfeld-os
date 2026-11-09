@@ -300,6 +300,33 @@ def process_task(t):
   "confidence":0.25,"owner_role":role,"company_role_id":company_seat["role_id"],
   "company_role_title":company_seat["title"],"company_role_authority":company_seat["max_authority"],
   "reviewer_role":manager_role}
+ # Deterministic internal work products don't send customer data to a model.
+ # They are internal drafts, never outbound or published.
+ if role=="sales_qualification":
+  result["draft_artifact"]={
+   "type":"sales_qualification_brief","status":"FOUNDER_REVIEW",
+   "evidence_source":"consented_inbound_event",
+   "buyer_fit_questions":[
+    "What is the immediate operational impact and decision timeline?",
+    "Who owns authorization, procurement and budget for the paid pilot?",
+    "What evidence would define a successful scoped deployment?"
+   ],"next_step":"Prepare a qualified pilot discovery agenda for human review",
+   "no_outbound_action":True}
+ elif role=="customer_success":
+  result["draft_artifact"]={
+   "type":"support_triage_draft","status":"FOUNDER_REVIEW",
+   "reply_draft":"Thank you for sharing the issue. We will review the details and respond with an appropriate next step.",
+   "escalation":"Escalate account, security, payment and regulatory matters to an authorized human",
+   "no_outbound_action":True}
+ elif role=="marketing_content":
+  result["draft_artifact"]={
+   "type":"marketing_campaign_draft","status":"FOUNDER_REVIEW",
+   "evidence_source":"consented_inbound_demand_signal",
+   "campaign_hypothesis":"An evidence-led comparison of bounded AI delivery versus unverified agent demos may improve qualified inbound interest.",
+   "headline":"AI workflows you can authorize, verify and inspect.",
+   "cta":"Request a scoped workflow review",
+   "success_metric":"Qualified consented inbound requests, excluding tests",
+   "approval_required_before_publishing":True,"no_outbound_action":True}
  if t.get("ai_consent") and os.getenv("LLM_BASE_URL") and os.getenv("LLM_API_KEY") and os.getenv("LLM_MODEL"):
   try:
    from urllib.request import Request,urlopen
