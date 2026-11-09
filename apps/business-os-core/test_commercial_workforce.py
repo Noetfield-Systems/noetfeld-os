@@ -5,6 +5,7 @@ import tempfile
 import unittest
 from pathlib import Path
 import core
+import commercial_team
 
 
 class CommercialWorkforceTests(unittest.TestCase):
@@ -59,6 +60,32 @@ class CommercialWorkforceTests(unittest.TestCase):
         self.assertIn("customer_success", roles)
         self.assertIn("chief_of_staff", roles)
         self.assertNotIn("sales_qualification", roles)
+
+
+    def test_commercial_team_commission_is_idempotent_and_bounded(self):
+        for brand in ("noetfield", "trustfield", "signalforge"):
+            before = commercial_team.status(brand)
+            self.assertEqual(before["state"], "not_commissioned")
+            first = commercial_team.commission(brand)
+            second = commercial_team.commission(brand)
+            self.assertFalse(first["already_commissioned"])
+            self.assertTrue(second["already_commissioned"])
+            self.assertEqual(first["task_ids"], second["task_ids"])
+            self.assertEqual(first["external_actions"], 0)
+            self.assertEqual(len(first["task_ids"]), 3)
+            status = commercial_team.status(brand)
+            self.assertEqual(status["state"], "internal_commissioning")
+            self.assertEqual({r["task_state"] for r in status["roles"]}, {"queued"})
+            self.assertTrue(all(not r["live_connector_verified"] for r in status["roles"]))
+
+        with core.connect() as db:
+            count = db.execute("SELECT COUNT(*) n FROM tasks").fetchone()["n"]
+        self.assertEqual(count, 9)
+
+    def test_commercial_team_rejects_unknown_brand(self):
+        with self.assertRaises(ValueError):
+            commercial_team.commission("portfolio")
+        self.assertEqual(core.route_for("signalforge", "customer", "support")[1], "customer_success")
 
     def test_marketing_agent_is_internal_draft_only(self):
         with core.connect() as db:
