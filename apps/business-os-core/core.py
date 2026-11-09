@@ -1,6 +1,7 @@
 import json, os, re, sqlite3, time, uuid, hashlib, hmac
 from pathlib import Path
 from datetime import datetime, timezone
+import product_loops
 
 DB=Path(os.getenv("DATABASE_PATH","/data/business-os.sqlite"))
 BRANDS={"noetfield":"Noetfield Systems","buildworkflow":"BuildWorkflow","trustfield":"TrustField","signalforge":"SignalForge","buildrelay":"BuildRelay","portfolio":"Portfolio"}
@@ -125,6 +126,7 @@ def init():
   d.execute("CREATE UNIQUE INDEX IF NOT EXISTS events_idempotency_key_idx ON events(idempotency_key) WHERE idempotency_key IS NOT NULL")
   try:d.execute("CREATE VIRTUAL TABLE IF NOT EXISTS memory_fts USING fts5(memory_id UNINDEXED,brand UNINDEXED,content)")
   except sqlite3.OperationalError:pass
+  product_loops.init(d)
 def route_for(brand,aud,intent):
  route=ROUTES.get(brand,ROUTES["noetfield"]).get(aud,"guided_discovery")
  if intent=="support" or aud=="customer": primary="customer_success"
@@ -159,7 +161,10 @@ def add_event(kind,source,brand,payload,idempotency_key=None):
    (eid,kind,source,brand,json.dumps(payload,ensure_ascii=False),now(),key))
  return eid
 def add_task(d,event,opp,brand,role,title,obj,action):
- tid=idof("task");d.execute("INSERT INTO tasks VALUES(?,?,?,?,?,?,?,?,?,'queued','{}',?,?)",(tid,event,opp,brand,role,title,obj,action,"draft",now(),now()));return tid
+ tid=idof("task");d.execute("""INSERT INTO tasks
+(id,event_id,opportunity_id,brand,role,title,objective,next_action,autonomy,status,result,created_at,updated_at)
+VALUES(?,?,?,?,?,?,?,?,?,'queued','{}',?,?)""",
+(tid,event,opp,brand,role,title,obj,action,"draft",now(),now()));return tid
 
 def add_task_dependency(d,task_id,depends_on_task_id):
  if task_id==depends_on_task_id:raise ValueError("A task cannot depend on itself.")
@@ -276,17 +281,24 @@ def claim(table):
         WHERE td.task_id=t.id
           AND (dep.id IS NULL OR dep.status NOT IN ('drafted','approved'))
       )
-    ORDER BY t.created_at LIMIT 1
+    ORDER BY
+      (SELECT COUNT(*) FROM tasks active
+       WHERE active.company_id=t.company_id AND active.project_id=t.project_id
+         AND active.status='running') ASC,
+      t.created_at LIMIT 1
    """).fetchone()
   else:
-   r=d.execute("SELECT * FROM events WHERE status='queued' ORDER BY created_at LIMIT 1").fetchone()
+   r=d.execute("SELECT * FROM events WHERE status='queued' ORDER BY priority_score DESC,created_at LIMIT 1").fetchone()
   if not r:d.execute("COMMIT");return None
   if table=="events":d.execute("UPDATE events SET status='processing',attempts=attempts+1,claimed_at=? WHERE id=?",(now(),r["id"]))
   else:d.execute("UPDATE tasks SET status='running',updated_at=? WHERE id=?",(now(),r["id"]))
   d.execute("COMMIT");return dict(r)
 def process_task(t):
- role=t["role"];mem=retrieve(t["brand"],t["title"]+" "+t["objective"]+" "+(t.get("problem") or ""))
- ctx={k:t.get(k) for k in ("brand","intent","problem","estimated_value","route","score","urgency")}
+ role=t["role"]
+ scoped_product=bool(t.get("company_id") and t.get("project_id"))
+ memory_scope=(t["company_id"]+":"+t["project_id"]) if scoped_product else t["brand"]
+ mem=retrieve(memory_scope,t["title"]+" "+t["objective"]+" "+(t.get("problem") or ""))
+ ctx={k:t.get(k) for k in ("brand","intent","problem","estimated_value","route","score","urgency","company_id","project_id","observation_id")}
  ctx["problem"]=scrub_for_model(ctx.get("problem"))
  provider="deterministic";model="none";it=ot=0
  profile=next((a for a in AGENTS if a[0]==role),None)
@@ -353,11 +365,17 @@ def process_task(t):
  with connect() as d:
   d.execute("INSERT INTO runs VALUES(?,?,?,?,?,?,?,?,?,?,?)",(idof("run"),t["id"],role,provider,model,"degraded" if provider=="provider_error" else "completed",it,ot,now(),now(),json.dumps(result,ensure_ascii=False)))
   d.execute("UPDATE tasks SET status='drafted',result=?,updated_at=? WHERE id=?",(json.dumps({"provider":provider,"recommendation":result,"memory_hits":len(mem),"external_action":"not_executed"}),now(),t["id"]))
+ if scoped_product:
+  add_memory(memory_scope,"bounded_internal_draft",t["id"],
+    json.dumps({"role":role,"source_task":t["id"],
+       "next_best_action":str(result.get("next_best_action",""))[:500],
+       "signal_evidence":t.get("observation_id")},sort_keys=True))
 def process_event(e):
  try:
   if e["event_type"]=="intake.received":process_intake(e)
   elif e["event_type"]=="feedback.received":process_feedback(e)
   elif e["event_type"]=="system.learning_tick":process_learning(e)
+  elif e["event_type"]=="product.signal_observed":product_loops.process_signal(e)
   else:
    with connect() as d:d.execute("UPDATE events SET status='ignored',processed_at=? WHERE id=?",(now(),e["id"]))
  except Exception as ex:
@@ -368,6 +386,8 @@ def daily_tick():
  if time.time()-last>=86400:
   add_event("system.learning_tick","system","portfolio",{"trigger":"daily"})
   with connect() as d:d.execute("INSERT INTO state VALUES('last_learning',?) ON CONFLICT(key) DO UPDATE SET value=excluded.value",(str(time.time()),))
+ # Same durable Company OS cycle, not a new polling service.
+ product_loops.tick_due()
 def overview():
  with connect() as d:
   q={"contacts":"SELECT COUNT(*) n FROM contacts","opportunities":"SELECT COUNT(*) n FROM opportunities","qualified":"SELECT COUNT(*) n FROM opportunities WHERE score>=65","won":"SELECT COUNT(*) n FROM opportunities WHERE stage='won'","queued_events":"SELECT COUNT(*) n FROM events WHERE status IN ('queued','processing')","pending_tasks":"SELECT COUNT(*) n FROM tasks WHERE status IN ('queued','running','drafted')","feedback":"SELECT COUNT(*) n FROM feedback"}
