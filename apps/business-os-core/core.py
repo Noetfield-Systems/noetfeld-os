@@ -2,6 +2,7 @@ import json, os, re, sqlite3, time, uuid, hashlib, hmac
 from pathlib import Path
 from datetime import datetime, timezone
 import product_loops
+import founder_portfolio_bridge
 
 DB=Path(os.getenv("DATABASE_PATH","/data/business-os.sqlite"))
 BRANDS={"noetfield":"Noetfield Systems","buildworkflow":"BuildWorkflow","trustfield":"TrustField","signalforge":"SignalForge","buildrelay":"BuildRelay","portfolio":"Portfolio"}
@@ -382,12 +383,65 @@ def process_task(t):
    "company_id":t["company_id"],"project_id":t["project_id"],
    "role":role,"provider":provider,"state":"DRAFTED_NOT_DISPATCHED",
    "model_tokens":it+ot,"external_action":False},sort_keys=True),flush=True)
+def process_founder_portfolio_event(e):
+ # The Founder owns the canonical registry. Company OS owns ONLY the task
+ # and receipt lifecycle, never a second portfolio/company tenant registry.
+ payload=json.loads(e["payload"])
+ required={
+  "schema","source_owner","source_schema","source_version","source_sha256",
+  "project_count","matched_program_count","unmapped_project_count",
+  "unmapped_project_ids","authority","external_execution_authorized",
+  "legal_entity_creation_authorized","paid_customer_claimed",
+ }
+ if (e["source"]!="sina_founder_os_pinned_portfolio"
+     or not isinstance(payload,dict) or set(payload)!=required
+     or payload["schema"]!="noetfield.company-os.founder-ssot-observation.v1"
+     or payload["source_owner"]!="sina_founder_os"
+     or payload["source_schema"]!="sina.company-os.portfolio-projection.v1"
+     or payload["authority"]!="READ_ONLY_PROJECTION"
+     or any(payload[x] is not False for x in (
+       "external_execution_authorized","legal_entity_creation_authorized","paid_customer_claimed"))
+     or not re.fullmatch("[0-9a-f]{64}",str(payload["source_sha256"]))
+     or not 1<=payload["project_count"]<=100
+     or not 0<=payload["matched_program_count"]<=payload["project_count"]
+     or payload["unmapped_project_count"]!=payload["project_count"]-payload["matched_program_count"]
+     or not isinstance(payload["unmapped_project_ids"],list)
+     or len(payload["unmapped_project_ids"])>12
+     or any(not isinstance(x,str) or not re.fullmatch("[a-z0-9][a-z0-9-]{2,90}",x)
+            for x in payload["unmapped_project_ids"])):
+  raise ValueError("untrusted_founder_portfolio_projection")
+ with connect() as d:
+  d.execute("BEGIN IMMEDIATE")
+  count=d.execute("SELECT count(*) n FROM tasks WHERE event_id=?",(e["id"],)).fetchone()["n"]
+  if count:
+   d.execute("UPDATE events SET status='processed',processed_at=? WHERE id=?",(now(),e["id"]))
+   return
+  summary=("Founder canonical portfolio revision "+payload["source_sha256"][:16]+
+   " · projects="+str(payload["project_count"])+
+   ", matched Company programs="+str(payload["matched_program_count"])+
+   ", unmapped="+str(payload["unmapped_project_count"])+
+   ". Source is a versioned catalog, not live deployment, customer or payment evidence.")
+  risk=add_task(
+   d,e["id"],None,"portfolio","risk_governance",
+   "Sina SSOT · cross-company ownership and tenant scope",
+   summary+" Independently flag project/company ownership drift and missing source evidence.",
+   "Draft bounded ownership and connector validation; do not create tenants or edit canonical registry.")
+  lead=add_task(
+   d,e["id"],None,"portfolio","chief_of_staff",
+   "Sina SSOT · reconcile operating priorities",
+   summary+" Compare this with actual Company OS program ownership and current operational outcomes.",
+   "Propose ONE highest-leverage next observation or Founder decision, citing actual source boundaries.")
+  add_task_dependency(d,lead,risk)
+  d.execute("UPDATE events SET status='processed',processed_at=? WHERE id=?",(now(),e["id"]))
+
+
 def process_event(e):
  try:
   if e["event_type"]=="intake.received":process_intake(e)
   elif e["event_type"]=="feedback.received":process_feedback(e)
   elif e["event_type"]=="system.learning_tick":process_learning(e)
   elif e["event_type"]=="product.signal_observed":product_loops.process_signal(e)
+  elif e["event_type"]==founder_portfolio_bridge.EVENT:process_founder_portfolio_event(e)
   else:
    with connect() as d:d.execute("UPDATE events SET status='ignored',processed_at=? WHERE id=?",(now(),e["id"]))
  except Exception as ex:
@@ -398,6 +452,17 @@ def daily_tick():
  if time.time()-last>=86400:
   add_event("system.learning_tick","system","portfolio",{"trigger":"daily"})
   with connect() as d:d.execute("INSERT INTO state VALUES('last_learning',?) ON CONFLICT(key) DO UPDATE SET value=excluded.value",(str(time.time()),))
+ # Read the Founder canonical source on the SAME existing Company worker tick.
+ # A version change becomes one idempotent existing-queue event; never a
+ # duplicate product registry, new scheduler or autonomous write permit.
+ founder_bridge=founder_portfolio_bridge.tick()
+ if founder_bridge.get("state") in ("OBSERVED","DEGRADED"):
+  print("COMPANY_OS_SINA_PORTFOLIO_FEDERATION "+json.dumps({
+   "state":founder_bridge["state"],
+   "source_sha256":founder_bridge.get("source_sha256"),
+   "canonical_queue":founder_bridge.get("canonical_queue"),
+   "error_type":founder_bridge.get("error_type"),
+   "external_execution_authorized":False},sort_keys=True),flush=True)
  # Same durable Company OS cycle, not a new polling service.
  product_loops.tick_due()
  market=product_loops.scan_public_market()
