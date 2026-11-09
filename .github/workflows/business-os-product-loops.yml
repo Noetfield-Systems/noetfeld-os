@@ -1,0 +1,36 @@
+name: Company OS product operating loops
+on:
+  pull_request:
+    paths:
+      - "apps/business-os-core/**"
+      - ".github/workflows/business-os-product-loops.yml"
+  push:
+    branches: [main, "feat/**", "fix/**"]
+    paths:
+      - "apps/business-os-core/**"
+      - ".github/workflows/business-os-product-loops.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  core:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install runtime and HTTP test dependency
+        run: python -m pip install -r apps/business-os-core/requirements.txt "httpx==0.28.1"
+      - name: Compile Company OS core and bounded product loops
+        run: python -m compileall -q apps/business-os-core
+      - name: All Company OS core and multi-product operational tests
+        run: python -m unittest discover -s apps/business-os-core -p "test_*.py" -v
+      - name: Verify app image includes real operational loop
+        run: |
+          grep -q "COPY app.py core.py product_loops.py" apps/business-os-core/Dockerfile
+          grep -q "product.signal_observed" apps/business-os-core/core.py
+          grep -q "COMPANY_OS_WORKER_PARALLELISM" apps/business-os-core/app.py
