@@ -18,6 +18,7 @@ import sqlite3
 import time
 import urllib.error
 import urllib.request
+import xml.etree.ElementTree as ET
 from datetime import datetime, timezone
 from urllib.parse import urlsplit
 
@@ -39,6 +40,8 @@ SAFE_ID = re.compile(r"^[a-z][a-z0-9-]{2,79}$")
 SAFE_METRIC = re.compile(r"^[a-z][a-z0-9_-]{2,79}$")
 EVIDENCE_REF = re.compile(r"^(https://[^\s]{8,220}|[a-z][a-z0-9_.:-]{7,220})$")
 HEALTH_PATHS = frozenset({"/health", "/healthz", "/api/health", "/ready"})
+PUBLIC_MARKET_RSS = "https://news.ycombinator.com/rss"
+MARKET_POLL_SECONDS = 21600
 
 ROLES = {
     "onboarding": ("customer_success", "product_strategy", "engineering_operator", "marketing_content"),
@@ -136,6 +139,15 @@ def init(db: sqlite3.Connection) -> None:
          ON product_observations(company_id, project_id, recorded_at DESC);
        CREATE INDEX IF NOT EXISTS ix_product_programs_live
          ON product_programs(status, priority DESC);
+       CREATE TABLE IF NOT EXISTS product_public_market_watch (
+           company_id TEXT NOT NULL,
+           project_id TEXT NOT NULL,
+           keywords_json TEXT NOT NULL,
+           updated_at TEXT NOT NULL,
+           PRIMARY KEY(company_id,project_id),
+           FOREIGN KEY(company_id,project_id)
+               REFERENCES product_programs(company_id,project_id)
+       );
     """)
     # Existing company queue is the single canonical queue. One additive
     # column supports prioritizing product events without altering old writes.
@@ -156,7 +168,7 @@ def register(data: dict) -> dict:
     import core
     if not isinstance(data, dict) or set(data) - {
         "company_id", "project_id", "name", "vertical", "objective",
-        "priority", "health_url", "max_tasks_per_cycle"}:
+        "priority", "health_url", "max_tasks_per_cycle","market_keywords"}:
         raise ValueError("product_program_shape_invalid")
     company = require_id(data.get("company_id"), "company_id")
     project = require_id(data.get("project_id"), "project_id")
@@ -176,6 +188,12 @@ def register(data: dict) -> dict:
     if type(cap) is not int or not 2 <= cap <= 7:
         raise ValueError("product_cycle_budget_invalid")
     health = validate_health_url(data.get("health_url"))
+    keywords = data.get("market_keywords", [])
+    if not isinstance(keywords,list) or len(keywords)>8 or any(
+        not isinstance(k,str) or not re.fullmatch(r"[a-z0-9][a-z0-9 .-]{2,29}",k)
+        for k in keywords):
+        raise ValueError("market_keywords_invalid")
+    keywords = sorted(set(x.lower().strip() for x in keywords))
     status = ("INTERNAL_ACTIVE" if company == INTERNAL_COMPANY else
               "FOUNDER_PROJECT_ACTIVE_NOT_LEGAL_TENANT" if company == FOUNDER_PORTFOLIO
               else "CLIENT_OWNER_VERIFICATION_REQUIRED")
@@ -199,6 +217,14 @@ def register(data: dict) -> dict:
                (company, project, name.strip(), vertical, objective.strip(), status,
                 priority, health, cap, utc(), utc()))
             created = True
+        if keywords and status in ACTIVE_STATES:
+            db.execute("""INSERT INTO product_public_market_watch
+                 (company_id,project_id,keywords_json,updated_at)
+                 VALUES(?,?,?,?)
+                 ON CONFLICT(company_id,project_id)
+                 DO UPDATE SET keywords_json=excluded.keywords_json,
+                               updated_at=excluded.updated_at""",
+                 (company,project,canonical(keywords),utc()))
         # A first baseline is a genuine internal readiness gap, NOT customer
         # traction. Auto-detect without requiring a Founder prompt each day.
         if created and status in ACTIVE_STATES:
@@ -241,7 +267,7 @@ def bootstrap_internal() -> dict:
             raise ValueError("client_program_cannot_be_autoseeded")
         program = {key: value for key, value in entry.items()
                    if key in {"company_id","project_id","name","vertical",
-                              "objective","priority","health_url","max_tasks_per_cycle"}}
+                              "objective","priority","health_url","max_tasks_per_cycle","market_keywords"}}
         try:
             record = register(program)
             outcomes["created" if record["created"] else "unchanged"] += 1
@@ -584,6 +610,99 @@ def tick_due() -> dict:
     return {"state": "OBSERVED", "new_health_signals": polled,
             "deferred_resumed": resumed,
             "event_queue": "EXISTING_COMPANY_OS", "real_users_claimed": 0}
+
+
+def _parse_market_rss(data: bytes) -> list[dict]:
+    """Bounded public headline extraction. No page crawling or private profiles."""
+    if len(data)>65536 or b"<!DOCTYPE" in data.upper() or b"<!ENTITY" in data.upper():
+        raise ValueError("public_market_rss_rejected")
+    root=ET.fromstring(data)
+    items=[]
+    for node in root.findall(".//item")[:30]:
+        title=" ".join((node.findtext("title") or "").split())[:170]
+        url=(node.findtext("comments") or node.findtext("link") or "").strip()
+        if (not 12<=len(title)<=170 or "@" in title or
+            not url.startswith("https://") or len(url)>220):
+            continue
+        items.append({"title":title,"url":url})
+    return items
+
+
+def _market_matches(title: str, keywords: list[str]) -> bool:
+    return any(re.search(r"\\b"+re.escape(term)+r"\\b",title,re.I)
+               for term in keywords)
+
+
+def scan_public_market() -> dict:
+    """Six-hour evidence collection using the EXISTING Company OS cycle.
+
+    Single explicitly approved public RSS source. A headline suggests a
+    hypothesis for a department; it never proves market demand or users.
+    No arbitrary URLs, personal scraping, search-result execution or ad spend.
+    """
+    import core
+    if os.getenv("COMPANY_OS_PUBLIC_MARKET_RSS_ENABLED","").lower()!="true":
+        return {"state":"DISABLED"}
+    allow={x.strip().lower() for x in
+           os.getenv("COMPANY_OS_APPROVED_PUBLIC_MARKET_HOSTS","").split(",") if x.strip()}
+    if "news.ycombinator.com" not in allow:
+        return {"state":"BLOCKED_SOURCE_NOT_ALLOWLISTED"}
+    with core.connect() as db:
+        previous=db.execute(
+            "SELECT value FROM state WHERE key='public_market_rss_polled_at'").fetchone()
+        if previous and time.time()-float(previous["value"])<MARKET_POLL_SECONDS:
+            return {"state":"NOT_DUE"}
+        # Reserve before the network request; avoid concurrent worker
+        # instances flooding HN or repeatedly retrying an outage.
+        db.execute("""INSERT INTO state(key,value) VALUES('public_market_rss_polled_at',?)
+            ON CONFLICT(key) DO UPDATE SET value=excluded.value""",(str(time.time()),))
+        watched=[dict(x) for x in db.execute(
+            """SELECT w.company_id,w.project_id,w.keywords_json,p.priority
+               FROM product_public_market_watch w
+               JOIN product_programs p USING(company_id,project_id)
+               WHERE p.status IN ('INTERNAL_ACTIVE','FOUNDER_PROJECT_ACTIVE_NOT_LEGAL_TENANT')
+               ORDER BY p.priority DESC,w.project_id LIMIT 50""")]
+    if not watched:
+        return {"state":"NO_APPROVED_PRODUCT_WATCHES"}
+    request=urllib.request.Request(PUBLIC_MARKET_RSS,method="GET",
+             headers={"Accept":"application/rss+xml,application/xml",
+                      "User-Agent":"Noetfield-CompanyOS-Research/1"})
+    try:
+        with urllib.request.build_opener(_NoRedirect).open(request,timeout=5) as resp:
+            if resp.status!=200:
+                return {"state":"UPSTREAM_NON_200","status":resp.status}
+            raw=resp.read(65537)
+        stories=_parse_market_rss(raw)
+    except (urllib.error.URLError,TimeoutError,OSError,ValueError,ET.ParseError) as exc:
+        return {"state":"SOURCE_UNAVAILABLE","failure_type":type(exc).__name__}
+    created=0
+    matched_products=0
+    for entry in watched:
+        if created>=8:
+            break
+        keywords=json.loads(entry["keywords_json"])
+        for story in stories:
+            if not _market_matches(story["title"],keywords):
+                continue
+            sample_id="rss-"+hashlib.sha256(
+                (entry["company_id"]+":"+entry["project_id"]+":"+story["url"]
+                 +":"+story["title"]).encode()).hexdigest()[:24]
+            summary=("Public HN developer-market headline: "+story["title"]+
+                     ". Investigate product relevance and customer need; not proof of demand.")[:490]
+            with core.connect() as db:
+                db.execute("BEGIN IMMEDIATE")
+                result=_insert_observation(db,entry["company_id"],entry["project_id"],{
+                    "source_event_id":sample_id,"source_kind":"REPORTED_PUBLIC_MARKET",
+                    "source_ref":story["url"],"signal":"market_shift",
+                    "summary":summary,"severity":1},verified=False)
+                db.commit()
+            if not result["idempotent"]:
+                created+=1
+                matched_products+=1
+            break
+    return {"state":"OBSERVED","public_stories_scanned":len(stories),
+            "new_market_signals":created,"products_with_new_signal":matched_products,
+            "source":PUBLIC_MARKET_RSS,"independent_demand_verified":False}
 
 
 def _directional_forecasts(signals: list[dict]) -> list[dict]:
