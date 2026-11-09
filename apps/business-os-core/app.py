@@ -6,9 +6,11 @@ from fastapi import FastAPI, Header, HTTPException, Request
 from fastapi.responses import FileResponse, JSONResponse
 from pydantic import BaseModel, ConfigDict, Field
 import core
+import product_loops
 
 TOKEN=os.getenv("FOUNDER_API_TOKEN","")
 INTERVAL=max(2,int(os.getenv("WORKER_INTERVAL_SECONDS","5")))
+WORKER_PARALLELISM=max(1,min(4,int(os.getenv("COMPANY_OS_WORKER_PARALLELISM","3"))))
 STATIC=Path(__file__).parent/"static"
 RATE:dict[str,list[float]]={}
 STOP=asyncio.Event()
@@ -56,9 +58,21 @@ async def worker():
             if event:
                 await asyncio.to_thread(core.process_event,event)
                 continue
-            task=await asyncio.to_thread(core.claim,"tasks")
-            if task:
-                await asyncio.to_thread(core.process_task,task)
+            # Distinct eligible Company OS tasks execute concurrently while
+            # atomic SQLite claims and dependency checks remain canonical.
+            batch=[]
+            for _ in range(WORKER_PARALLELISM):
+                task=await asyncio.to_thread(core.claim,"tasks")
+                if task is None: break
+                batch.append(task)
+            if batch:
+                results=await asyncio.gather(
+                    *(asyncio.to_thread(core.process_task,t) for t in batch),
+                    return_exceptions=True)
+                for error in results:
+                    if isinstance(error,Exception):
+                        import logging
+                        logging.error("company_os_specialist_failed error_type=%s",type(error).__name__)
                 continue
             await asyncio.sleep(INTERVAL)
         except asyncio.CancelledError: raise
@@ -114,6 +128,32 @@ class Feedback(BaseModel):
     comment:str=Field(min_length=5,max_length=2000)
     consent:bool=False
 
+class ProductProgram(BaseModel):
+    model_config=ConfigDict(extra="forbid")
+    company_id:str=Field(pattern=r"^[a-z][a-z0-9-]{2,79}$")
+    project_id:str=Field(pattern=r"^[a-z][a-z0-9-]{2,79}$")
+    name:str=Field(min_length=3,max_length=100)
+    vertical:str=Field(pattern=r"^[a-z][a-z0-9-]{2,79}$")
+    objective:str=Field(min_length=18,max_length=1200)
+    priority:int=Field(default=3,ge=1,le=5)
+    max_tasks_per_cycle:int=Field(default=7,ge=2,le=7)
+    health_url:str|None=Field(default=None,max_length=220)
+
+class ProductObservation(BaseModel):
+    model_config=ConfigDict(extra="forbid")
+    company_id:str=Field(pattern=r"^[a-z][a-z0-9-]{2,79}$")
+    project_id:str=Field(pattern=r"^[a-z][a-z0-9-]{2,79}$")
+    source_event_id:str=Field(min_length=8,max_length=128)
+    source_kind:str
+    source_ref:str=Field(min_length=8,max_length=220)
+    signal:str
+    summary:str=Field(min_length=12,max_length=500)
+    severity:int=Field(default=1,ge=0,le=4)
+    observed_at:str|None=None
+    metric_name:str|None=None
+    metric_value:float|None=None
+    sample_count:int|None=Field(default=None,ge=0,le=100000000)
+
 @app.get("/")
 def home(): return FileResponse(STATIC/"index.html")
 @app.get("/control")
@@ -125,7 +165,8 @@ def privacy(): return FileResponse(STATIC/"privacy.html")
 def health():
     try:
         with core.connect() as db: db.execute("SELECT 1")
-        return {"ok":True,"service":"business-os-core","version":"0.1.0","storage":"ready","worker_interval_seconds":INTERVAL}
+        return {"ok":True,"service":"business-os-core","version":"0.1.0","storage":"ready","worker_interval_seconds":INTERVAL,
+                "company_worker_parallelism":WORKER_PARALLELISM}
     except Exception: return JSONResponse({"ok":False,"storage":"unavailable"},status_code=503)
 @app.get("/ready")
 def ready():
@@ -157,7 +198,9 @@ def deep_health():
         payload={"ok":ok,"service":"business-os-core","schema_missing":missing,
             "worker_running":worker_running,"worker_interval_seconds":INTERVAL,"queue":counts,
             "company_role_count":len(core.COMPANY_ROLES),
-            "runtime_executor_count":len(core.AGENTS),"dependency_gating":True}
+            "runtime_executor_count":len(core.AGENTS),"dependency_gating":True,
+            "company_worker_parallelism":WORKER_PARALLELISM,
+            "product_operating_loops":"EXISTING_EVENTS_TASKS_WORKER"}
         return payload if ok else JSONResponse(payload,status_code=503)
     except Exception as exc:
         return JSONResponse({"ok":False,"error":type(exc).__name__},status_code=503)
@@ -202,6 +245,35 @@ async def feedback(data:Feedback,request:Request):
     event_id=core.add_event("feedback.received","public_feedback",brand,
       {"brand":brand,"rating":data.rating,"comment":core.clean(data.comment,2000)})
     return JSONResponse({"accepted":True,"reference":event_id},status_code=202)
+
+@app.get("/api/control/product-programs")
+def product_programs(authorization:str|None=Header(default=None),company_id:str|None=None):
+    authorize(authorization)
+    try:
+        return product_loops.portfolio(company_id)
+    except ValueError as exc:
+        raise HTTPException(400,str(exc)) from None
+
+@app.post("/api/control/product-programs")
+def create_product_program(payload:ProductProgram,authorization:str|None=Header(default=None)):
+    authorize(authorization)
+    try:
+        return product_loops.register(payload.model_dump())
+    except ValueError as exc:
+        raise HTTPException(409 if "existing_product" in str(exc) else 400,str(exc)) from None
+
+@app.post("/api/control/product-observations")
+def submit_product_observation(payload:ProductObservation,authorization:str|None=Header(default=None)):
+    authorize(authorization)
+    body=payload.model_dump(exclude_none=True)
+    company,project=body.pop("company_id"),body.pop("project_id")
+    try:
+        result=product_loops.observe(company,project,body)
+    except ValueError as exc:
+        raise HTTPException(409 if ("conflicts" in str(exc) or "not_operational" in str(exc)) else 400,str(exc)) from None
+    return JSONResponse({"accepted":True,**result,"external_actions":"NOT_AUTHORIZED",
+                         "real_user_traction_verified":False},
+                        status_code=200 if result["idempotent"] else 202)
 
 @app.get("/api/control/overview")
 def overview(authorization:str|None=Header(default=None)):
