@@ -778,6 +778,8 @@ def requeue_legacy_platform_drafts():
             )
 
 def process_task(t):
+ import portfolio_studio
+ if portfolio_studio.process_task(t): return
  role=t["role"];mem=retrieve(t["brand"],t["title"]+" "+t["objective"]+" "+(t.get("problem") or ""))
  ctx={k:t.get(k) for k in ("brand","intent","problem","estimated_value","route","score","urgency")}
  ctx["problem"]=scrub_for_model(ctx.get("problem"))
@@ -824,7 +826,10 @@ def process_task(t):
   d.execute("UPDATE tasks SET status='drafted',result=?,updated_at=? WHERE id=?",(json.dumps({"provider":provider,"recommendation":result,"memory_hits":len(mem),"external_action":"not_executed"}),now(),t["id"]))
 def process_event(e):
  try:
-  if e["event_type"]=="intake.received":process_intake(e)
+  if e["event_type"]=="portfolio.studio.cycle":
+   import portfolio_studio
+   portfolio_studio.process_event(e)
+  elif e["event_type"]=="intake.received":process_intake(e)
   elif e["event_type"]=="feedback.received":process_feedback(e)
   elif e["event_type"]=="system.learning_tick":process_learning(e)
   elif e["event_type"]=="platform.intake.signal.received":process_platform_intake_signal(e)
@@ -839,6 +844,8 @@ def process_event(e):
    else:
     d.execute("UPDATE events SET status='failed',error=?,processed_at=? WHERE id=?",(clean(ex,400),now(),e["id"]))
 def daily_tick():
+ import portfolio_studio
+ portfolio_studio.tick()
  sync_platform_intake_feed()
  requeue_legacy_platform_drafts()
  with connect() as d:r=d.execute("SELECT value FROM state WHERE key='last_learning'").fetchone()
