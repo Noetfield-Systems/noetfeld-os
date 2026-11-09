@@ -563,6 +563,169 @@ def claim(table):
   if table=="events":d.execute("UPDATE events SET status='processing',attempts=attempts+1,claimed_at=? WHERE id=?",(now(),r["id"]))
   else:d.execute("UPDATE tasks SET status='running',updated_at=? WHERE id=?",(now(),r["id"]))
   d.execute("COMMIT");return dict(r)
+
+def platform_commercial_action(t):
+    """Produce real internal sales next-actions from the anonymized signal, never a fake lead."""
+    event_id=t.get("event_id")
+    role=t.get("role")
+    if not event_id or role not in {"sales_qualification","risk_governance","chief_of_staff"}:
+        return None
+    with connect() as d:
+        row=d.execute(
+            "SELECT intake_id,source_created_at,sku,vector,qualification_json "
+            "FROM platform_intake_signals WHERE event_id=?",(event_id,)
+        ).fetchone()
+        if row is None:
+            return None
+        specialists=d.execute(
+            "SELECT role,status,result FROM tasks WHERE event_id=? AND role IN "
+            "('sales_qualification','risk_governance')",(event_id,)
+        ).fetchall() if role=="chief_of_staff" else []
+    qualification=json.loads(row["qualification_json"]) if row["qualification_json"] else {}
+    tier=qualification.get("tier") or "unclassified"
+    blockers=qualification.get("blockers") or []
+    urgency=qualification.get("urgency") or "unknown"
+    next_step=qualification.get("next_step") or "founder_review"
+    sku=row["sku"]
+    intake_id=row["intake_id"]
+    sla=qualification.get("owner_sla_hours")
+    due_at=None
+    if isinstance(sla,int) and not isinstance(sla,bool):
+        due_at=(datetime.fromisoformat(row["source_created_at"].replace("Z","+00:00"))+
+                timedelta(hours=sla)).isoformat()
+    topics={
+        "copilot":"Microsoft Copilot and agent governance",
+        "trust_brief":"AI governance and independent assurance",
+        "bank_pilot":"a governed AI readiness pilot",
+        "general":"your business and AI operating needs",
+    }
+    topic=topics.get(sku,"your AI governance needs")
+    candidate={
+        "copilot":"NF-QS Copilot QuickScan",
+        "trust_brief":"NF-QS governance-focused QuickScan (scope to validate)",
+        "bank_pilot":"NF-RD Copilot Readiness Pilot (scope to validate)",
+        "general":"Paid diagnostic only after scope and willingness-to-pay verification",
+    }.get(sku)
+    buyer_questions=[
+        "What specific operational risk or outcome needs to change?",
+        "Who owns the purchase decision and budget?",
+        "What is the target timeline and what evidence would justify a paid pilot?",
+    ]
+    if sku in {"copilot","trust_brief","bank_pilot"}:
+        buyer_questions.insert(1,"Which AI system, workflow, users and regulatory boundary are in scope?")
+    can_prepare_draft=tier in {"A","B"} and not blockers
+    if can_prepare_draft:
+        draft={
+            "subject":"Re: your Noetfield inquiry — "+topic,
+            "body":(
+                "Thank you for contacting Noetfield about "+topic+". "
+                "Before suggesting a paid assessment or pilot, we would like to confirm the "
+                "specific workflow and the business outcome you need. "
+                "Could you share the scope, the decision owner and the expected timeline? "
+                "If the fit is confirmed, we can discuss a short scoping call and a bounded paid engagement."
+            ),
+            "state":"internal_draft_not_sent",
+            "recipient":"resolve_in_canonical_platform_operations_record",
+        }
+    else:
+        draft=None
+    action={
+        "source":"Noetfield Platform public_intakes",
+        "intake_id":intake_id,
+        "source_created_at":row["source_created_at"],
+        "response_due_at":due_at,
+        "qualification_tier":tier,
+        "urgency":urgency,
+        "deterministic_next_step":next_step,
+        "commercial_state":"unverified_inquiry",
+        "buyer_identity_verified":False,
+        "buyer_authority_verified":False,
+        "willingness_to_pay_verified":False,
+        "consent_verified_for_followup":False,
+        "offer_candidate":candidate,
+        "offer_state":"internal_hypothesis_not_quoted",
+        "buyer_questions":buyer_questions,
+        "response_draft":draft,
+        "founder_approval_required":True,
+        "external_action_executed":False,
+        "blocking_codes":blockers,
+    }
+    status="highest" if tier=="A" else "high" if tier=="B" else "low"
+    common={
+        "priority":status,
+        "risk_flags":["unverified_buyer","unverified_consent","unverified_paid_demand",
+                      "external_approval_required"]+blockers,
+        "evidence":[{"type":"canonical_intake_reference","id":intake_id}],
+        "confidence":0.3,
+        "success_metric":"Verified buyer and buyer-approved paid discovery or signed pilot; cash must be evidenced separately",
+        "commercial_action":action,
+    }
+    if role=="sales_qualification":
+        return {
+            **common,
+            "assessment":("Deterministic "+tier+"-tier intake only; no buyer identity, authority, "
+                          "consent or actual budget has been verified."),
+            "next_best_action":(
+                "Review canonical Operations record "+intake_id+
+                "; verify genuine buyer, consent, purchasing authority, budget and stated problem. "
+                "Prepare the enclosed draft only if fit is established; Founder must approve any send."
+            ) if can_prepare_draft else (
+                "Review canonical Operations record "+intake_id+
+                "; resolve risk/defer conditions. Do not initiate sales outreach."
+            ),
+        }
+    if role=="risk_governance":
+        return {
+            **common,
+            "assessment":"Only deterministic boundary codes are available: "+(", ".join(blockers) or "defer tier")+
+                         ". Full customer request has not been independently evaluated.",
+            "next_best_action":"Check the original Operations record and resolve scope/consent before any offer or reply.",
+            "commercial_action":{**action,"response_draft":None},
+        }
+    specialist_drafts={}
+    for specialist in specialists:
+        try:
+            stored=json.loads(specialist["result"] or "{}").get("recommendation") or {}
+        except (ValueError,TypeError):
+            stored={}
+        specialist_drafts[specialist["role"]]={
+            "status":specialist["status"],
+            "assessment":stored.get("assessment") if specialist["status"] in {"drafted","approved"} else None,
+        }
+    return {
+        **common,
+        "assessment":"Founder commercial decision is needed for anonymized intake "+intake_id+
+                     "; no external action has occurred and paid demand is unverified.",
+        "next_best_action":(
+            "Confirm that "+intake_id+" is a real in-scope buyer request in Platform Operations. "
+            "If genuine, verify buyer, consent and budget, review N-05's exact response draft, "
+            "then authorize one personalized follow-up. Track reply, paid proposal and cash separately."
+        ),
+        "specialist_drafts":specialist_drafts,
+    }
+
+
+def requeue_legacy_platform_drafts():
+    """Upgrade generic completed internal drafts after deploy; preserve existing run history."""
+    with connect() as d:
+        rows=d.execute(
+            "SELECT t.id,t.result FROM tasks t "
+            "JOIN platform_intake_signals s ON s.event_id=t.event_id "
+            "WHERE t.status='drafted' AND t.role IN "
+            "('sales_qualification','risk_governance','chief_of_staff')"
+        ).fetchall()
+        for row in rows:
+            try:
+                recommendation=json.loads(row["result"] or "{}").get("recommendation") or {}
+            except (ValueError,TypeError):
+                recommendation={}
+            if "commercial_action" in recommendation:
+                continue
+            d.execute(
+                "UPDATE tasks SET status='queued',result='{}',updated_at=? WHERE id=?",
+                (now(),row["id"])
+            )
+
 def process_task(t):
  role=t["role"];mem=retrieve(t["brand"],t["title"]+" "+t["objective"]+" "+(t.get("problem") or ""))
  ctx={k:t.get(k) for k in ("brand","intent","problem","estimated_value","route","score","urgency")}
@@ -579,7 +742,10 @@ def process_task(t):
   "confidence":0.25,"owner_role":role,"company_role_id":company_seat["role_id"],
   "company_role_title":company_seat["title"],"company_role_authority":company_seat["max_authority"],
   "reviewer_role":manager_role}
- if t.get("ai_consent") and os.getenv("LLM_BASE_URL") and os.getenv("LLM_API_KEY") and os.getenv("LLM_MODEL"):
+ commercial=platform_commercial_action(t)
+ if commercial is not None:
+  result=commercial
+ elif t.get("ai_consent") and os.getenv("LLM_BASE_URL") and os.getenv("LLM_API_KEY") and os.getenv("LLM_MODEL"):
   try:
    from urllib.request import Request,urlopen
    base=os.getenv("LLM_BASE_URL").rstrip("/");model=os.getenv("LLM_MODEL")
@@ -623,6 +789,7 @@ def process_event(e):
     d.execute("UPDATE events SET status='failed',error=?,processed_at=? WHERE id=?",(clean(ex,400),now(),e["id"]))
 def daily_tick():
  sync_platform_intake_feed()
+ requeue_legacy_platform_drafts()
  with connect() as d:r=d.execute("SELECT value FROM state WHERE key='last_learning'").fetchone()
  last=float(r["value"]) if r else 0
  if time.time()-last>=86400:
