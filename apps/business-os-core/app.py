@@ -507,3 +507,19 @@ def nexus_growth_observation(payload:NexusGrowthObservation,x_nexus_bridge_token
                          "canonical_queue":True,"external_actions":"FOUNDER_RESERVED",
                          "real_user_traction_verified":False},
                         status_code=200 if outcome["idempotent"] else 202)
+
+@app.get("/api/integrations/nexus/status")
+def nexus_bridge_status(x_nexus_bridge_token:str|None=Header(default=None)):
+    expected=os.environ.get("COMPANY_OS_NEXUS_OBSERVATION_TOKEN","")
+    if len(expected)<32:
+        raise HTTPException(503,"NEXUS growth bridge not configured")
+    if not x_nexus_bridge_token or not hmac.compare_digest(x_nexus_bridge_token,expected):
+        raise HTTPException(401,"NEXUS bridge authentication required")
+    with core.connect() as db:
+        row=db.execute("SELECT status FROM product_programs WHERE company_id=? AND project_id=?",
+                       ("noetfield-systems-inc","nexus-economic-rail")).fetchone()
+    return {"ready":bool(row and row["status"]=="INTERNAL_ACTIVE"),
+            "program":"nexus-economic-rail",
+            "canonical_queue":"existing_company_os_events_tasks",
+            "outbound_marketing":"FOUNDER_APPROVAL_REQUIRED",
+            "verified_customer_revenue":None}
