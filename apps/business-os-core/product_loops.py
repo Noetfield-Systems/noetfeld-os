@@ -586,6 +586,37 @@ def tick_due() -> dict:
             "event_queue": "EXISTING_COMPANY_OS", "real_users_claimed": 0}
 
 
+def _directional_forecasts(signals: list[dict]) -> list[dict]:
+    """Transparent one-sample trend from source-reported aggregates, not ML or truth.
+
+    Synthetic QA, health checks and self-asserted sales outcomes can never be
+    represented as customer count or independently verified business forecasts.
+    """
+    groups: dict[str,list[float]] = {}
+    for item in reversed(signals):
+        if (item["source_kind"] not in ("REPORTED_REAL_USER_ANALYTICS","REPORTED_OPERATIONAL")
+                or item["metric_name"] is None
+                or item["metric_value"] is None):
+            continue
+        groups.setdefault(item["metric_name"],[]).append(float(item["metric_value"]))
+    forecasts = []
+    for metric, series in sorted(groups.items()):
+        if len(series) < 3:
+            continue
+        latest = series[-5:]
+        slope = (latest[-1] - latest[0]) / (len(latest)-1)
+        direction = "INCREASING" if slope > 1e-8 else "DECREASING" if slope < -1e-8 else "FLAT"
+        forecasts.append({
+            "metric": metric, "recent_samples": len(latest),
+            "direction": direction, "one_next_sample_heuristic": round(latest[-1]+slope,4),
+            "change_per_observation": round(slope,4),
+            "evidence_quality": "SOURCE_REPORTED_NOT_INDEPENDENTLY_VERIFIED",
+            "confidence": "LOW", "causal_claim": False,
+            "business_forecast_verified": False,
+        })
+    return forecasts[:15]
+
+
 def portfolio(company_id: str | None = None) -> dict:
     """Company-scoped operations, user/synthetic separation, and real run status."""
     import core
@@ -626,6 +657,7 @@ def portfolio(company_id: str | None = None) -> dict:
                 "specialist_tasks_by_state": {s["status"]: s["count"] for s in statuses},
                 "latest_task": dict(latest) if latest else None,
                 "last_signals": signals,
+                "directional_signal_forecasts": _directional_forecasts(signals),
                 "synthetic_qa_observations": synthetic,
                 "reported_real_user_observations_unverified": real_reports,
                 "verified_real_users": None,
