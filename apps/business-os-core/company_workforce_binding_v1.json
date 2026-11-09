@@ -66,8 +66,8 @@
       "reports_to": "N-01",
       "mission": "Translate verified company work and market insight into clear, audience-specific communication that earns attention and creates qualified inbound demand.",
       "max_authority": "A2",
-      "activation_status": "draft_only",
-      "activation_meaning": "The website repository has an existing agent surface, but this company role is not wired as an autonomous editorial and distribution system."
+      "activation_status": "mapped_existing",
+      "activation_meaning": "Existing Company OS internal task executor now creates evidence-grounded marketing drafts from actual inbound demand; no publication, mailing or outbound authority is granted."
     },
     {
       "role_id": "N-07",
@@ -76,8 +76,8 @@
       "reports_to": "N-05",
       "mission": "Provide timely, consistent first-line interaction, understand customer outcomes, and turn feedback into retention, referrals, and product improvements.",
       "max_authority": "A1",
-      "activation_status": "not_wired",
-      "activation_meaning": "Role defined; no verified inbound inbox, CRM/helpdesk connection, or approved knowledge boundary is declared in this implementation."
+      "activation_status": "partial_existing",
+      "activation_meaning": "Existing Company OS inbound web-intake and feedback workflows create Customer Success review tasks; a live external support inbox and automatic replies are not connected."
     },
     {
       "role_id": "N-08",
@@ -100,12 +100,14 @@
     "sales_qualification": "N-05",
     "partnerships": "N-05",
     "customer_success": "N-07",
-    "roi_analyst": "N-08"
+    "roi_analyst": "N-08",
+    "marketing_content": "N-06"
   },
   "runtime_scope_notes": {
-    "customer_success": "Internal draft/task execution only. N-07 remains not_wired until an approved inbound inbox, helpdesk/CRM and knowledge boundary are connected.",
+    "customer_success": "Inbound web-intake and feedback reviews are supported as internal drafts. Support inbox/helpdesk connection and external replies are not yet verified; no automatic sending is authorized.",
     "roi_analyst": "Pipeline and weighted-opportunity metrics only. This is not accounting, banking, bookkeeping or payment authority.",
     "chief_of_staff": "Internal synthesis and coordination only; Founder decisions and release approvals remain human-controlled.",
-    "sales_qualification": "Commercial preparation only; external contact, pricing and proposals remain Founder-gated."
+    "sales_qualification": "Commercial preparation only; external contact, pricing and proposals remain Founder-gated.",
+    "marketing_content": "Marketing drafting is an existing Company OS model/deterministic task role. External publishing, outreach, media spend and invented case studies are prohibited."
   }
 }

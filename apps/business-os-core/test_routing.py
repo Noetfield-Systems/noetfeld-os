@@ -37,6 +37,20 @@ class BusinessOSRoutingTests(unittest.TestCase):
         self.assertEqual(core.route_for("trustfield", "enterprise", "trustfield")[0], "regulated_enterprise")
         self.assertEqual(core.route_for("buildrelay", "investor", "investment")[0], "capital_partner")
 
+    def test_commercial_agents_have_owned_company_seats(self):
+        self.assertEqual(core.company_role_for_runtime("sales_qualification")["role_id"], "N-05")
+        self.assertEqual(core.company_role_for_runtime("marketing_content")["role_id"], "N-06")
+        self.assertEqual(core.company_role_for_runtime("customer_success")["role_id"], "N-07")
+
+    def test_support_has_priority_over_regulated_brand_sales(self):
+        self.assertEqual(core.route_for("trustfield", "customer", "support")[1], "customer_success")
+        self.assertEqual(core.route_for("signalforge", "customer", "support")[1], "customer_success")
+
+    def test_signalforge_has_separate_sales_and_product_market_routes(self):
+        self.assertEqual(core.route_for("signalforge", "enterprise", "pilot")[1], "sales_qualification")
+        self.assertEqual(core.route_for("signalforge", "researcher", "research")[1], "market_intelligence")
+        self.assertEqual(core.route_for("signalforge", "enterprise", "pilot")[0], "market_data_enterprise")
+
     def test_urgency_increases_fit_score(self):
         low = core.score("operator", "automation", "exploring", 10000, "Improve operations and workflow")
         high = core.score("operator", "automation", "now", 10000, "Improve operations and workflow")
@@ -100,6 +114,43 @@ class BusinessOSCycleTests(unittest.TestCase):
         self.assertTrue(core.retrieve("buildworkflow", "HVAC extra work tickets"))
         self.assertFalse(core.retrieve("trustfield", "HVAC extra work tickets"))
 
+    def test_genuine_noetfield_sales_intake_dispatches_three_commercial_roles(self):
+        payload = {
+            "brand":"noetfield","audience":"enterprise","intent":"governance",
+            "name":"Example Buyer","email":"buyer@example.test",
+            "company":"Example Company","role":"Engineering Lead",
+            "problem":"We need independent verification and reviewed AI deployment controls.",
+            "urgency":"30_days","estimated_value":0,"consent":True,"ai_consent":False,
+        }
+        event_id=core.add_event("intake.received","isolated_qa","noetfield",payload,
+                                idempotency_key="web-noetfield-qa-0001")
+        self.assertEqual(core.add_event("intake.received","isolated_qa","noetfield",payload,
+                                        idempotency_key="web-noetfield-qa-0001"),event_id)
+        event=core.claim("events")
+        core.process_event(event)
+        with core.connect() as db:
+            tasks=db.execute("SELECT id,role,status FROM tasks WHERE event_id=?",(event_id,)).fetchall()
+            contacts=db.execute("SELECT COUNT(*) n FROM contacts WHERE brand='noetfield'").fetchone()["n"]
+        roles={x["role"] for x in tasks}
+        self.assertTrue({"sales_qualification","marketing_content","customer_success","chief_of_staff"}.issubset(roles))
+        self.assertEqual(contacts,1)
+        self.assertEqual(sum(x["role"]=="marketing_content" for x in tasks),1)
+        self.assertTrue(all(x["status"]=="queued" for x in tasks))
+        self.assertEqual(len(tasks),5)
+        # No external outreach or publishing: run is an internal draft only.
+        claimed=core.claim("tasks")
+        core.process_task(claimed)
+        with core.connect() as db:
+            result=json.loads(db.execute("SELECT result FROM tasks WHERE id=?",(claimed["id"],)).fetchone()["result"])
+        self.assertEqual(result["external_action"],"not_executed")
+        self.assertEqual(result["recommendation"]["draft_artifact"]["type"],"sales_qualification_brief")
+        self.assertTrue(result["recommendation"]["draft_artifact"]["no_outbound_action"])
+        # The marketing specialist is an existing canonical task, not a new agent engine.
+        with core.connect() as db:
+            marketing=db.execute("SELECT id FROM tasks WHERE event_id=? AND role='marketing_content'",(event_id,)).fetchone()
+        self.assertIsNotNone(marketing)
+
+
     def test_memory_is_chunked_and_pii_redacted(self):
         long_text = ("Operational workflow evidence. " * 70) + " UNIQUE FINAL HVAC ROUTING SIGNAL. "
         core.add_memory("buildworkflow", "test", "source-1",
@@ -147,8 +198,11 @@ class BusinessOSGovernanceTests(unittest.TestCase):
             "5664f6aa87ee24b7eb1d703baee09b2c16ebe164",
         )
         n06 = next(row for row in roster if row["role_id"] == "N-06")
-        self.assertEqual(n06["runtime_role_count"], 0)
-        self.assertEqual(n06["activation_status"], "draft_only")
+        self.assertEqual(n06["runtime_role_count"], 1)
+        self.assertEqual(n06["runtime_role_ids"], ["marketing_content"])
+        self.assertEqual(n06["activation_status"], "mapped_existing")
+        n07 = next(row for row in roster if row["role_id"] == "N-07")
+        self.assertEqual(n07["activation_status"], "partial_existing")
 
     def test_every_runtime_capability_maps_to_a_canonical_company_seat(self):
         roster = core.agent_roster()

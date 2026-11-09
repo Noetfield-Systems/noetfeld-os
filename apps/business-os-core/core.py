@@ -1,17 +1,19 @@
 import json, os, re, sqlite3, time, uuid, hashlib, hmac
 from pathlib import Path
 from datetime import datetime, timezone
+import product_loops
 
 DB=Path(os.getenv("DATABASE_PATH","/data/business-os.sqlite"))
-BRANDS={"noetfield":"Noetfield Systems","buildworkflow":"BuildWorkflow","trustfield":"TrustField","buildrelay":"BuildRelay","portfolio":"Portfolio"}
+BRANDS={"noetfield":"Noetfield Systems","buildworkflow":"BuildWorkflow","trustfield":"TrustField","signalforge":"SignalForge","buildrelay":"BuildRelay","portfolio":"Portfolio"}
 AUDIENCES={"enterprise","operator","developer","founder","investor","partner","customer","researcher","other"}
-INTENTS={"governance","automation","buildworkflow","trustfield","buildrelay","developer","partnership","investment","support","research","other"}
+INTENTS={"governance","automation","buildworkflow","trustfield","buildrelay","developer","partnership","investment","support","research","marketing","pilot","other"}
 AGENTS=[
 ("chief_of_staff","Chief of Staff","Executive priorities, cross-functional synthesis and Founder decision briefs","draft"),
 ("audience_router","Audience & Routing","Classify audience, intent and specialist journey","internal"),
 ("sales_qualification","Revenue & Qualification","Qualify urgency, authority, budget and next commercial action","draft"),
 ("customer_success","Customer Success","Onboarding, friction, retention and customer outcomes","draft"),
 ("market_intelligence","Market Intelligence","Evidence-ranked market signals and opportunity discovery","draft"),
+ ("marketing_content","Marketing & Communications","Create evidence-grounded launch content, landing-page hypotheses and marketing drafts. Never publish or send without Founder approval.","draft"),
 ("product_strategy","Product Strategy","Product hypotheses, experiments and journey improvement","draft"),
 ("roi_analyst","ROI & Finance Intelligence","Actual funnel, weighted pipeline and unit economics","internal"),
 ("engineering_operator","Engineering & Reliability","Quality, reliability and bounded technical work","draft"),
@@ -86,6 +88,7 @@ ROUTES={
 "noetfield":{"enterprise":"enterprise_solution","operator":"operations_diagnostic","developer":"developer_evaluation","founder":"founder_pathway","investor":"partnerships_review","partner":"partner_integration","customer":"customer_success","researcher":"research_brief","other":"guided_discovery"},
 "buildworkflow":{"enterprise":"construction_enterprise","operator":"trade_operations","developer":"integration_evaluation","founder":"trade_founder_pathway","investor":"partnerships_review","partner":"implementation_partner","customer":"customer_success","researcher":"product_research","other":"trade_discovery"},
 "trustfield":{"enterprise":"regulated_enterprise","operator":"compliance_operations","developer":"integration_evaluation","founder":"fintech_founder_pathway","investor":"partnerships_review","partner":"compliance_partner","customer":"customer_success","researcher":"research_brief","other":"compliance_discovery"},
+"signalforge":{"enterprise":"market_data_enterprise","operator":"market_research_operator","developer":"signals_integration","founder":"trading_research_founder","investor":"partner_review","partner":"data_partner","customer":"signalforge_support","researcher":"signal_research","other":"signal_discovery"},
 "buildrelay":{"enterprise":"ecosystem_partner","operator":"community_operator","developer":"protocol_builder","founder":"founder_pathway","investor":"capital_partner","partner":"ecosystem_partner","customer":"community_member","researcher":"market_research","other":"guided_discovery"}}
 def now(): return datetime.now(timezone.utc).isoformat(timespec="seconds")
 def idof(p): return p+"_"+uuid.uuid4().hex[:16]
@@ -123,9 +126,21 @@ def init():
   d.execute("CREATE UNIQUE INDEX IF NOT EXISTS events_idempotency_key_idx ON events(idempotency_key) WHERE idempotency_key IS NOT NULL")
   try:d.execute("CREATE VIRTUAL TABLE IF NOT EXISTS memory_fts USING fts5(memory_id UNINDEXED,brand UNINDEXED,content)")
   except sqlite3.OperationalError:pass
+  product_loops.init(d)
+ # Default off for tests and uncommissioned customer deployments. Staging can
+ # activate an idempotent source-provenance portfolio after a scoped rollout.
+ if os.getenv("COMPANY_OS_PORTFOLIO_AUTOSTART","").lower() in {"1","true"}:
+  boot=product_loops.bootstrap_internal()
+  print("COMPANY_OS_PORTFOLIO_BOOTSTRAP "+json.dumps({
+   "created":boot["created"],"unchanged":boot["unchanged"],
+   "drift_blocked":boot["drift_blocked"],"queue":boot["queue"],
+   "source_snapshot_sha":boot["source_snapshot_sha"]},sort_keys=True),flush=True)
 def route_for(brand,aud,intent):
  route=ROUTES.get(brand,ROUTES["noetfield"]).get(aud,"guided_discovery")
- if brand=="buildworkflow" or intent=="buildworkflow": primary="sales_qualification" if aud in {"operator","enterprise","founder"} else "customer_success" if aud=="customer" else "market_intelligence"
+ if intent=="support" or aud=="customer": primary="customer_success"
+ elif intent=="marketing": primary="marketing_content"
+ elif brand=="signalforge": primary="sales_qualification" if aud in {"enterprise","operator","founder","partner"} or intent=="pilot" else "market_intelligence"
+ elif brand=="buildworkflow" or intent=="buildworkflow": primary="sales_qualification" if aud in {"operator","enterprise","founder"} else "customer_success" if aud=="customer" else "market_intelligence"
  elif brand=="trustfield" or intent=="trustfield": primary="sales_qualification" if aud in {"enterprise","operator","founder"} else "risk_governance"
  elif brand=="buildrelay" or intent=="buildrelay": primary="partnerships" if aud in {"investor","partner"} else "customer_success" if aud=="customer" else "market_intelligence"
  elif aud=="developer" or intent=="developer":primary="engineering_operator"
@@ -154,7 +169,10 @@ def add_event(kind,source,brand,payload,idempotency_key=None):
    (eid,kind,source,brand,json.dumps(payload,ensure_ascii=False),now(),key))
  return eid
 def add_task(d,event,opp,brand,role,title,obj,action):
- tid=idof("task");d.execute("INSERT INTO tasks VALUES(?,?,?,?,?,?,?,?,?,'queued','{}',?,?)",(tid,event,opp,brand,role,title,obj,action,"draft",now(),now()));return tid
+ tid=idof("task");d.execute("""INSERT INTO tasks
+(id,event_id,opportunity_id,brand,role,title,objective,next_action,autonomy,status,result,created_at,updated_at)
+VALUES(?,?,?,?,?,?,?,?,?,'queued','{}',?,?)""",
+(tid,event,opp,brand,role,title,obj,action,"draft",now(),now()));return tid
 
 def add_task_dependency(d,task_id,depends_on_task_id):
  if task_id==depends_on_task_id:raise ValueError("A task cannot depend on itself.")
@@ -203,7 +221,14 @@ def process_intake(e):
   else:d.execute("INSERT INTO contacts VALUES(?,?,?,?,?,?,?,?,?,?)",(cid,brand,p["email"],p["name"],p["company"],aud,p["role"],1,now(),now()))
   d.execute("INSERT INTO opportunities VALUES(?,?,?,?,?,?,?,?,?,?,?,'new',?,?,?)",(oid,cid,brand,title,intent,p["problem"],value,urg,int(p["ai_consent"]),route,fit,e["source"],now(),now()))
   specialist_ids=[]
-  specialist_ids.append(add_task(d,e["id"],oid,brand,primary,"Qualify: "+title,"Assess fit, urgency, authority, evidence and best next interaction.","Prepare a personalized response draft and measurable next step; do not send."))
+  specialist_title="Qualify: "+title if primary=="sales_qualification" else "Handle: "+title
+  specialist_ids.append(add_task(d,e["id"],oid,brand,primary,specialist_title,
+   "Assess the request using the established company role, factual evidence and consent boundaries.",
+   "Produce a useful internal draft for Founder review. No automatic outbound response, posting or outreach."))
+  if primary=="sales_qualification" and brand in {"noetfield","trustfield","signalforge"}:
+   specialist_ids.append(add_task(d,e["id"],oid,brand,"marketing_content","Demand signal: "+title,
+    "Turn this real, consented inbound need into a generalized, privacy-safe content or landing-page hypothesis without customer identifiers.",
+    "Draft evidence-backed marketing copy and measurable CTA improvement for Founder review; do not publish."))
   for role in support:
    specialist_ids.append(add_task(d,e["id"],oid,brand,role,"Support review: "+title,"Assess the opportunity from your specialist role.","Add internal recommendation only."))
   executive_id=add_task(d,e["id"],oid,brand,"chief_of_staff","Executive synthesis: "+title,
@@ -264,17 +289,24 @@ def claim(table):
         WHERE td.task_id=t.id
           AND (dep.id IS NULL OR dep.status NOT IN ('drafted','approved'))
       )
-    ORDER BY t.created_at LIMIT 1
+    ORDER BY
+      (SELECT COUNT(*) FROM tasks active
+       WHERE active.company_id=t.company_id AND active.project_id=t.project_id
+         AND active.status='running') ASC,
+      t.created_at LIMIT 1
    """).fetchone()
   else:
-   r=d.execute("SELECT * FROM events WHERE status='queued' ORDER BY created_at LIMIT 1").fetchone()
+   r=d.execute("SELECT * FROM events WHERE status='queued' ORDER BY priority_score DESC,created_at LIMIT 1").fetchone()
   if not r:d.execute("COMMIT");return None
   if table=="events":d.execute("UPDATE events SET status='processing',attempts=attempts+1,claimed_at=? WHERE id=?",(now(),r["id"]))
   else:d.execute("UPDATE tasks SET status='running',updated_at=? WHERE id=?",(now(),r["id"]))
   d.execute("COMMIT");return dict(r)
 def process_task(t):
- role=t["role"];mem=retrieve(t["brand"],t["title"]+" "+t["objective"]+" "+(t.get("problem") or ""))
- ctx={k:t.get(k) for k in ("brand","intent","problem","estimated_value","route","score","urgency")}
+ role=t["role"]
+ scoped_product=bool(t.get("company_id") and t.get("project_id"))
+ memory_scope=(t["company_id"]+":"+t["project_id"]) if scoped_product else t["brand"]
+ mem=retrieve(memory_scope,t["title"]+" "+t["objective"]+" "+(t.get("problem") or ""))
+ ctx={k:t.get(k) for k in ("brand","intent","problem","estimated_value","route","score","urgency","company_id","project_id","observation_id")}
  ctx["problem"]=scrub_for_model(ctx.get("problem"))
  provider="deterministic";model="none";it=ot=0
  profile=next((a for a in AGENTS if a[0]==role),None)
@@ -288,6 +320,33 @@ def process_task(t):
   "confidence":0.25,"owner_role":role,"company_role_id":company_seat["role_id"],
   "company_role_title":company_seat["title"],"company_role_authority":company_seat["max_authority"],
   "reviewer_role":manager_role}
+ # Deterministic internal work products don't send customer data to a model.
+ # They are internal drafts, never outbound or published.
+ if role=="sales_qualification":
+  result["draft_artifact"]={
+   "type":"sales_qualification_brief","status":"FOUNDER_REVIEW",
+   "evidence_source":"consented_inbound_event",
+   "buyer_fit_questions":[
+    "What is the immediate operational impact and decision timeline?",
+    "Who owns authorization, procurement and budget for the paid pilot?",
+    "What evidence would define a successful scoped deployment?"
+   ],"next_step":"Prepare a qualified pilot discovery agenda for human review",
+   "no_outbound_action":True}
+ elif role=="customer_success":
+  result["draft_artifact"]={
+   "type":"support_triage_draft","status":"FOUNDER_REVIEW",
+   "reply_draft":"Thank you for sharing the issue. We will review the details and respond with an appropriate next step.",
+   "escalation":"Escalate account, security, payment and regulatory matters to an authorized human",
+   "no_outbound_action":True}
+ elif role=="marketing_content":
+  result["draft_artifact"]={
+   "type":"marketing_campaign_draft","status":"FOUNDER_REVIEW",
+   "evidence_source":"consented_inbound_demand_signal",
+   "campaign_hypothesis":"An evidence-led comparison of bounded AI delivery versus unverified agent demos may improve qualified inbound interest.",
+   "headline":"AI workflows you can authorize, verify and inspect.",
+   "cta":"Request a scoped workflow review",
+   "success_metric":"Qualified consented inbound requests, excluding tests",
+   "approval_required_before_publishing":True,"no_outbound_action":True}
  if t.get("ai_consent") and os.getenv("LLM_BASE_URL") and os.getenv("LLM_API_KEY") and os.getenv("LLM_MODEL"):
   try:
    from urllib.request import Request,urlopen
@@ -314,11 +373,21 @@ def process_task(t):
  with connect() as d:
   d.execute("INSERT INTO runs VALUES(?,?,?,?,?,?,?,?,?,?,?)",(idof("run"),t["id"],role,provider,model,"degraded" if provider=="provider_error" else "completed",it,ot,now(),now(),json.dumps(result,ensure_ascii=False)))
   d.execute("UPDATE tasks SET status='drafted',result=?,updated_at=? WHERE id=?",(json.dumps({"provider":provider,"recommendation":result,"memory_hits":len(mem),"external_action":"not_executed"}),now(),t["id"]))
+ if scoped_product:
+  add_memory(memory_scope,"bounded_internal_draft",t["id"],
+    json.dumps({"role":role,"source_task":t["id"],
+       "next_best_action":str(result.get("next_best_action",""))[:500],
+       "signal_evidence":t.get("observation_id")},sort_keys=True))
+  print("COMPANY_OS_SPECIALIST_DRAFT "+json.dumps({
+   "company_id":t["company_id"],"project_id":t["project_id"],
+   "role":role,"provider":provider,"state":"DRAFTED_NOT_DISPATCHED",
+   "model_tokens":it+ot,"external_action":False},sort_keys=True),flush=True)
 def process_event(e):
  try:
   if e["event_type"]=="intake.received":process_intake(e)
   elif e["event_type"]=="feedback.received":process_feedback(e)
   elif e["event_type"]=="system.learning_tick":process_learning(e)
+  elif e["event_type"]=="product.signal_observed":product_loops.process_signal(e)
   else:
    with connect() as d:d.execute("UPDATE events SET status='ignored',processed_at=? WHERE id=?",(now(),e["id"]))
  except Exception as ex:
@@ -329,6 +398,17 @@ def daily_tick():
  if time.time()-last>=86400:
   add_event("system.learning_tick","system","portfolio",{"trigger":"daily"})
   with connect() as d:d.execute("INSERT INTO state VALUES('last_learning',?) ON CONFLICT(key) DO UPDATE SET value=excluded.value",(str(time.time()),))
+ # Same durable Company OS cycle, not a new polling service.
+ product_loops.tick_due()
+ market=product_loops.scan_public_market()
+ if market.get("state") not in ("DISABLED","NOT_DUE"):
+  print("COMPANY_OS_PUBLIC_MARKET_OBSERVATION "+json.dumps({
+   "state":market["state"],
+   "new_market_signals":market.get("new_market_signals",0),
+   "products_with_new_signal":market.get("products_with_new_signal",0),
+   "source":market.get("source","not_fetched"),
+   "failure_type":market.get("failure_type"),
+   "independent_demand_verified":False},sort_keys=True),flush=True)
 def overview():
  with connect() as d:
   q={"contacts":"SELECT COUNT(*) n FROM contacts","opportunities":"SELECT COUNT(*) n FROM opportunities","qualified":"SELECT COUNT(*) n FROM opportunities WHERE score>=65","won":"SELECT COUNT(*) n FROM opportunities WHERE stage='won'","queued_events":"SELECT COUNT(*) n FROM events WHERE status IN ('queued','processing')","pending_tasks":"SELECT COUNT(*) n FROM tasks WHERE status IN ('queued','running','drafted')","feedback":"SELECT COUNT(*) n FROM feedback"}
