@@ -629,7 +629,7 @@ def _parse_market_rss(data: bytes) -> list[dict]:
 
 
 def _market_matches(title: str, keywords: list[str]) -> bool:
-    return any(re.search(r"\\b"+re.escape(term)+r"\\b",title,re.I)
+    return any(re.search(r"\b"+re.escape(term)+r"\b",title,re.I)
                for term in keywords)
 
 
