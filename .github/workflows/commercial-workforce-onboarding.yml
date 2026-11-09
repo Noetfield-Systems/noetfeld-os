@@ -1,0 +1,39 @@
+name: Company OS commercial workforce onboarding
+on:
+  push:
+    branches: [feat/commercial-web-agent-onboarding-20261109]
+    paths:
+      - "apps/business-os-core/core.py"
+      - "apps/business-os-core/app.py"
+      - "apps/business-os-core/company_workforce_binding_v1.json"
+      - "apps/business-os-core/test_routing.py"
+      - ".github/workflows/commercial-workforce-onboarding.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  commercial-agents:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Compile Company OS source
+        run: python -m py_compile apps/business-os-core/core.py apps/business-os-core/app.py
+      - name: Canonical Sales / Marketing / Support role and intake lifecycle tests
+        working-directory: apps/business-os-core
+        run: python -m unittest discover -s . -p test_routing.py -v
+      - name: Reject fake actor or outbound authority
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          s=Path('apps/business-os-core/core.py').read_text()
+          b=Path('apps/business-os-core/company_workforce_binding_v1.json').read_text()
+          assert '"marketing_content": "N-06"' in b
+          assert '"customer_success": "N-07"' in b
+          assert 'no_outbound_action":True' in s
+          assert 'Do not invent facts' in s
+          print('Company OS canonical workforce and draft-only authority preserved')
+          PY
