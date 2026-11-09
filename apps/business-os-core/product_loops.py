@@ -23,6 +23,8 @@ from urllib.parse import urlsplit
 
 SCHEMA = "noetfield.company-os.product-operating-loop.v1"
 INTERNAL_COMPANY = "noetfield-systems-inc"
+FOUNDER_PORTFOLIO = "founder-portfolio"
+ACTIVE_STATES = frozenset({"INTERNAL_ACTIVE", "FOUNDER_PROJECT_ACTIVE_NOT_LEGAL_TENANT"})
 KINDS = frozenset({
     "REPORTED_REAL_USER_ANALYTICS", "REPORTED_PUBLIC_MARKET",
     "REPORTED_OPERATIONAL", "SYNTHETIC_AGENT_QA",
@@ -174,7 +176,9 @@ def register(data: dict) -> dict:
     if type(cap) is not int or not 2 <= cap <= 7:
         raise ValueError("product_cycle_budget_invalid")
     health = validate_health_url(data.get("health_url"))
-    status = "INTERNAL_ACTIVE" if company == INTERNAL_COMPANY else "CLIENT_OWNER_VERIFICATION_REQUIRED"
+    status = ("INTERNAL_ACTIVE" if company == INTERNAL_COMPANY else
+              "FOUNDER_PROJECT_ACTIVE_NOT_LEGAL_TENANT" if company == FOUNDER_PORTFOLIO
+              else "CLIENT_OWNER_VERIFICATION_REQUIRED")
     created = False
     with core.connect() as db:
         db.execute("BEGIN IMMEDIATE")
@@ -197,7 +201,7 @@ def register(data: dict) -> dict:
             created = True
         # A first baseline is a genuine internal readiness gap, NOT customer
         # traction. Auto-detect without requiring a Founder prompt each day.
-        if created and status == "INTERNAL_ACTIVE":
+        if created and status in ACTIVE_STATES:
             _insert_observation(db, company, project, {
                 "source_event_id": "initial-product-baseline",
                 "source_kind": "REPORTED_OPERATIONAL",
@@ -209,9 +213,45 @@ def register(data: dict) -> dict:
         db.commit()
         row = db.execute("SELECT * FROM product_programs WHERE company_id=? AND project_id=?",
                          (company, project)).fetchone()
-        return {"program": dict(row), "created": created, "operating": status == "INTERNAL_ACTIVE",
+        return {"program": dict(row), "created": created, "operating": status in ACTIVE_STATES,
                 "execution_queue": "EXISTING_COMPANY_OS_EVENTS_AND_TASKS",
-                "customer_tenant_live": False if company != INTERNAL_COMPANY else None}
+                "customer_tenant_live": False,
+                "legal_entity_claimed": False if company == FOUNDER_PORTFOLIO else None}
+
+
+def bootstrap_internal() -> dict:
+    """Deploy-time replay-safe Company OS bootstrap from a read-only source snapshot.
+
+    This file is a projected portfolio operating plan, not a replacement for
+    Sina's canonical portfolio registry or company/customer SSOT. Client scopes
+    are NEVER automatically activated.
+    """
+    from pathlib import Path
+    manifest_path = Path(__file__).with_name("product_portfolio_seed_v1.json")
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    if (manifest.get("schema") != "noetfield.company-os.portfolio-projection.v1"
+            or manifest.get("source_of_truth") !=
+            "Noetfield-Systems/sina_founder_os/portfolio/PROJECT-AND-ASSET-REGISTRY.json"
+            or not isinstance(manifest.get("programs"), list)
+            or len(manifest["programs"]) > 25):
+        raise ValueError("company_operating_projection_invalid")
+    outcomes = {"created": 0, "unchanged": 0, "drift_blocked": 0}
+    for entry in manifest["programs"]:
+        if entry.get("company_id") not in (INTERNAL_COMPANY, FOUNDER_PORTFOLIO):
+            raise ValueError("client_program_cannot_be_autoseeded")
+        program = {key: value for key, value in entry.items()
+                   if key in {"company_id","project_id","name","vertical",
+                              "objective","priority","health_url","max_tasks_per_cycle"}}
+        try:
+            record = register(program)
+            outcomes["created" if record["created"] else "unchanged"] += 1
+        except ValueError as exc:
+            if str(exc) != "existing_product_program_requires_versioned_change":
+                raise
+            outcomes["drift_blocked"] += 1
+    return {**outcomes, "source": manifest["source_of_truth"],
+            "source_snapshot_sha": manifest.get("source_git_blob_sha"),
+            "queue": "EXISTING_COMPANY_OS_EVENTS"}
 
 
 def _priority(program, signal, severity, kind):
@@ -231,7 +271,7 @@ def _insert_observation(db, company: str, project: str, payload: dict, verified:
         "SELECT * FROM product_programs WHERE company_id=? AND project_id=?",
         (company, project),
     ).fetchone()
-    if not program or program["status"] != "INTERNAL_ACTIVE":
+    if not program or program["status"] not in ACTIVE_STATES:
         raise ValueError("product_program_not_operational")
     if not isinstance(payload, dict) or set(payload) - {
         "source_event_id", "source_kind", "source_ref", "signal",
@@ -355,7 +395,7 @@ def process_signal(event: dict) -> dict:
             "SELECT * FROM product_programs WHERE company_id=? AND project_id=?",
             (payload["company_id"], payload["project_id"]),
         ).fetchone()
-        if not o or not p or p["status"] != "INTERNAL_ACTIVE":
+        if not o or not p or p["status"] not in ACTIVE_STATES:
             raise ValueError("product_evidence_or_owner_unavailable")
         existing = db.execute(
             "SELECT COUNT(*) n FROM tasks WHERE event_id=?", (event["id"],)
@@ -465,7 +505,8 @@ def tick_due() -> dict:
     import core
     with core.connect() as db:
         programs = [dict(x) for x in db.execute(
-            "SELECT * FROM product_programs WHERE status='INTERNAL_ACTIVE' "
+            "SELECT * FROM product_programs WHERE status IN "
+            "('INTERNAL_ACTIVE','FOUNDER_PROJECT_ACTIVE_NOT_LEGAL_TENANT') "
             "AND health_url IS NOT NULL ORDER BY priority DESC LIMIT 20")]
         state = db.execute(
             "SELECT value FROM state WHERE key='product_health_poll_at'"
