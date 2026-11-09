@@ -468,3 +468,42 @@ def approve_task(tid:str,authorization:str|None=Header(default=None)):
         db.execute("INSERT INTO events(id,event_type,source,brand,payload,status,created_at,processed_at) VALUES(?,?,?,?,?,'processed',?,?)",
          (core.idof("evt"),"founder.approval.recorded","founder_control","portfolio",'{"task_id":"'+tid+'"}',core.now(),core.now()))
     return {"approved":True,"execution":"Approval recorded only; no external action was performed."}
+
+# NEXUS commercial bridge: narrowly scoped, PII-free input to the CANONICAL Company OS queue.
+# No founder token delegation, payment authority, new scheduler, CRM, or autonomous outbound action.
+class NexusGrowthObservation(BaseModel):
+    model_config=ConfigDict(extra="forbid")
+    source_event_id:str=Field(pattern=r"^nexus\.lead\.nxlead_[0-9a-f]{32}$",min_length=32,max_length=128)
+    source_kind:str
+    source_ref:str=Field(min_length=20,max_length=220)
+    signal:str
+    summary:str=Field(min_length=12,max_length=500)
+    severity:int=Field(default=2,ge=0,le=4)
+    observed_at:str
+    metric_name:str
+    metric_value:float=Field(ge=0,le=1)
+    sample_count:int=Field(ge=0,le=1)
+
+@app.post("/api/integrations/nexus/observations")
+def nexus_growth_observation(payload:NexusGrowthObservation,x_nexus_bridge_token:str|None=Header(default=None)):
+    expected=os.environ.get("COMPANY_OS_NEXUS_OBSERVATION_TOKEN","")
+    if len(expected)<32:
+        raise HTTPException(503,"NEXUS growth bridge not configured")
+    if not x_nexus_bridge_token or not hmac.compare_digest(x_nexus_bridge_token,expected):
+        raise HTTPException(401,"NEXUS bridge authentication required")
+    data=payload.model_dump()
+    if (data["source_kind"]!="REPORTED_OPERATIONAL" or
+        data["signal"]!="acquisition" or
+        data["metric_name"]!="inbound_inquiries" or
+        data["metric_value"]!=1 or data["sample_count"]!=1 or
+        data["source_ref"]!="nexus:growth-lead:"+data["source_event_id"].removeprefix("nexus.lead.")):
+        raise HTTPException(422,"NEXUS acquisition signal not supported")
+    try:
+        outcome=product_loops.observe("noetfield-systems-inc","nexus-economic-rail",data)
+    except ValueError as exc:
+        raise HTTPException(409 if "not_operational" in str(exc) else 422,str(exc)) from None
+    return JSONResponse({"accepted":True,**outcome,
+                         "company_id":"noetfield-systems-inc","project_id":"nexus-economic-rail",
+                         "canonical_queue":True,"external_actions":"FOUNDER_RESERVED",
+                         "real_user_traction_verified":False},
+                        status_code=200 if outcome["idempotent"] else 202)
