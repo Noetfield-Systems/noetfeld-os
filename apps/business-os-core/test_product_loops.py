@@ -194,6 +194,33 @@ class CompanyProductLoops(unittest.TestCase):
             row=db.execute("SELECT COUNT(*) n FROM product_observations WHERE source_kind='FIRST_PARTY_HTTP_HEALTH'").fetchone()
             self.assertEqual(row["n"],1)
 
+    def test_ssot_project_projection_bootstraps_all_internal_lanes_once(self):
+        # The Founder-owned portfolio scope is an operating workspace,
+        # explicitly NOT a claim about legal entity formation or customers.
+        with patch.dict(os.environ, {"COMPANY_OS_PORTFOLIO_AUTOSTART":"true"}):
+            core.init()
+            reread=product_loops.bootstrap_internal()
+        self.assertEqual(reread["created"],0)
+        self.assertEqual(reread["drift_blocked"],0)
+        self.assertGreaterEqual(reread["unchanged"],12)
+        portfolio=product_loops.portfolio()
+        self.assertGreaterEqual(portfolio["program_count"],12)
+        by_id={p["project_id"]:p for p in portfolio["programs"]}
+        for project in ("atelier","venture-formation-lab","signalforge",
+                        "misenorth","interior-match","social-games-lab",
+                        "trading-exchange-lab","buildworkflow-field-change-handoff"):
+            self.assertIn(project,by_id)
+            self.assertIn(by_id[project]["status"],
+                          ("INTERNAL_ACTIVE","FOUNDER_PROJECT_ACTIVE_NOT_LEGAL_TENANT"))
+            self.assertIsNone(by_id[project]["verified_real_users"])
+            self.assertIsNone(by_id[project]["verified_revenue"])
+        self.assertEqual(by_id["atelier"]["company_id"],"founder-portfolio")
+        self.assertFalse(by_id["atelier"]["customer_tenant_verified"])
+        with core.connect() as db:
+            self.assertEqual(db.execute(
+                "SELECT COUNT(*) n FROM events WHERE event_type='product.signal_observed'"
+            ).fetchone()["n"],portfolio["program_count"])
+
     def test_reject_untrusted_source_urls_private_network_and_malformed_metrics(self):
         self.register("example-app")
         for url in ("http://127.0.0.1/health","https://localhost/health",
