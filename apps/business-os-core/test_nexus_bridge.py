@@ -65,6 +65,16 @@ class NexusCompanyOSBridgeTests(unittest.TestCase):
             self.assertEqual(row["signal"],"acquisition")
             self.assertEqual(row["verification"],"SOURCE_REPORTED_UNVERIFIED")
 
+    def test_handshake_reports_canonical_program_and_never_invents_revenue(self):
+        url="/api/integrations/nexus/status"
+        self.assertEqual(self.client.get(url).status_code,401)
+        h={"X-Nexus-Bridge-Token":os.environ["COMPANY_OS_NEXUS_OBSERVATION_TOKEN"]}
+        result=self.client.get(url,headers=h)
+        self.assertEqual(result.status_code,200,result.text)
+        self.assertTrue(result.json()["ready"])
+        self.assertEqual(result.json()["program"],"nexus-economic-rail")
+        self.assertIsNone(result.json()["verified_customer_revenue"])
+
     def test_rejects_impersonation_and_fabrication(self):
         url="/api/integrations/nexus/observations"
         h={"X-Nexus-Bridge-Token":os.environ["COMPANY_OS_NEXUS_OBSERVATION_TOKEN"]}
