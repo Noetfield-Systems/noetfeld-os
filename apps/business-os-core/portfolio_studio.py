@@ -71,6 +71,55 @@ def _read_json(request, limit=120_000, timeout=8):
     return json.loads(raw)
 
 
+def validate_product_aggregates(payload):
+    """No PII, no fake cohorts; allowlist only the known source model."""
+    aggregates = payload.get("product_aggregates", {})
+    if not isinstance(aggregates, dict) or set(aggregates) - {"atelier-community"}:
+        raise ValueError("unknown_product_observation")
+    supplied_digest = payload.get("product_aggregates_sha256")
+    if supplied_digest is not None:
+        canonical = json.dumps(aggregates, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+        if not hmac.compare_digest(
+            hashlib.sha256(canonical.encode("utf-8")).hexdigest(), str(supplied_digest)
+        ):
+            raise ValueError("product_observation_digest_invalid")
+    elif aggregates:
+        raise ValueError("missing_product_observation_digest")
+    for pid, obs in aggregates.items():
+        if not isinstance(obs, dict) or set(obs) != {
+                "schema","source","state","source_state","source_receipt_sha256",
+                "source_age_seconds","human","disclosed_ai","synthetic_test_included",
+                "personal_data_included","external_action_performed"}:
+            raise ValueError("invalid_product_observation_shape")
+        if (obs["schema"] != "sina.company-os.product-aggregate.v1" or
+                obs["source"] != "existing_atelier_authenticated_aggregate_adapter" or
+                obs["synthetic_test_included"] is not False or
+                obs["personal_data_included"] is not False or
+                obs["external_action_performed"] is not False):
+            raise ValueError("invalid_product_observation_provenance")
+        if obs["state"] not in ("FRESH_AGGREGATE","UNAVAILABLE_OR_STALE"):
+            raise ValueError("invalid_product_observation_state")
+        if obs["state"] == "FRESH_AGGREGATE":
+            expected_human = {"verifiedAccounts","communityMembers",
+                              "newCommunityMembers7d","communityActive7d",
+                              "posts7d","replies7d","reactions7d"}
+            expected_ai = {"activeHosts","posts7d","replies7d","completedRuns7d"}
+            if (not isinstance(obs["human"], dict) or
+                    not isinstance(obs["disclosed_ai"], dict) or
+                    set(obs["human"]) != expected_human or
+                    set(obs["disclosed_ai"]) != expected_ai or
+                    type(obs["source_age_seconds"]) is not int or
+                    not 0 <= obs["source_age_seconds"] <= 1800 or
+                    not re.fullmatch(r"[a-f0-9]{64}",obs["source_receipt_sha256"])):
+                raise ValueError("product_observation_evidence_invalid")
+            for count in [*obs["human"].values(),*obs["disclosed_ai"].values()]:
+                if type(count) is not int or not 0 <= count <= 1_000_000_000:
+                    raise ValueError("product_observation_count_invalid")
+        elif obs["human"] is not None or obs["disclosed_ai"] is not None:
+            raise ValueError("stale_observation_contains_counts")
+    return aggregates
+
+
 def fetch_portfolio():
     if not configured():
         raise ValueError("portfolio_feed_not_configured")
@@ -113,6 +162,7 @@ def fetch_portfolio():
     fingerprint = hashlib.sha256(canonical.encode("utf-8")).hexdigest()
     if not hmac.compare_digest(fingerprint, str(payload.get("projection_sha256", ""))):
         raise ValueError("portfolio_projection_digest_invalid")
+    validate_product_aggregates(payload)
     return payload
 
 
@@ -143,7 +193,7 @@ def probe_public_repository(project):
         return {**observation, "status": "REPO_UNAVAILABLE"}
 
 
-def score_hypothesis(project, observation, feedback_count=0):
+def score_hypothesis(project, observation, feedback_count=0, aggregate=None):
     """Prioritize opportunity for investigation, never invent market validation."""
     kind = (project["type"] + " " + project["name"]).lower()
     score = 30
@@ -156,6 +206,16 @@ def score_hypothesis(project, observation, feedback_count=0):
     if observation.get("status") == "PUBLIC_REPO_OBSERVED":
         score += 5  # Accessible source, NOT product-market fit
     score += min(12, 4 * feedback_count)  # Only actual stored product feedback
+    # Validated real community aggregate influences opportunity priority, never
+    # converts AI agent/test activity into human growth or PMF proof.
+    if aggregate and aggregate.get("state") == "FRESH_AGGREGATE":
+        human = aggregate["human"]
+        if human["communityActive7d"] > 0:
+            score += 8
+        if human["newCommunityMembers7d"] > 0:
+            score += 7
+        if human["posts7d"] + human["replies7d"] > 0:
+            score += 5
     return min(100, score)
 
 
@@ -191,6 +251,7 @@ def tick(fetcher=None, probe=None, timestamp=None):
     try:
         feed = (fetcher or fetch_portfolio)()
         projects = feed["projects"]
+        aggregates = validate_product_aggregates(feed)
         # Always validate injected test fetchers as strictly as the live HTTP path.
         if fetcher is not None:
             encoded = json.dumps(projects, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
@@ -211,16 +272,17 @@ def tick(fetcher=None, probe=None, timestamp=None):
                         "SELECT COUNT(*) n FROM feedback WHERE brand=?",
                         ("project:" + item["project_id"],)).fetchone()["n"]
                     # Sorting before probes keeps expensive calls capped to 4.
-                    estimated = score_hypothesis(item, {"status": "NOT_PROBED"}, feedback)
+                    estimated = score_hypothesis(item, {"status": "NOT_PROBED"}, feedback, aggregates.get(item["project_id"]))
                     pending.append((-estimated, item["project_id"], event_id, item, feedback))
         pending.sort()
         selected = pending[:MAX_PROJECTS_PER_TICK]
         generated = []
         for _, pid, eid, item, feedback in selected:
             signal = (probe or probe_public_repository)(item)
-            score = score_hypothesis(item, signal, feedback)
+            score = score_hypothesis(item, signal, feedback, aggregates.get(pid))
             generated.append((eid, {
                 "schema": EVENT_SCHEMA, "project": item, "observation": signal,
+                "product_aggregate": aggregates.get(pid),
                 "hypothesis_score": score, "score_basis": "STRATEGIC_HEURISTIC_NOT_TRACTION",
                 "feedback_events_observed": feedback, "cycle_day": today,
                 "registry_source_sha256": feed["projection_sha256"],
@@ -321,6 +383,10 @@ def process_task(task):
             (task["event_id"],task["id"])).fetchall()
     role = task["role"]
     project,obs = payload["project"],payload["observation"]
+    aggregate = payload.get("product_aggregate")
+    genuine = aggregate and aggregate.get("state") == "FRESH_AGGREGATE"
+    real = aggregate["human"] if genuine else None
+    ai = aggregate["disclosed_ai"] if genuine else None
     evidence = {
         "source": obs.get("source"), "observed_at": obs.get("observed_at"),
         "repo_status": obs.get("status"), "registry_projection_sha256": payload["registry_source_sha256"],
@@ -333,7 +399,7 @@ def process_task(task):
         "marketing_editorial": "Draft useful free-content and participation pathways, SEO and transparent invitations; no messages were sent and no campaign launched.",
         "customer_success": "Prepare member activation, moderation, genuine retention and clearly identified synthetic/agentic QA cohorts. No fake human traction.",
         "partnerships": "Identify opt-in communities and creator ecosystems after evidence review; no outreach performed.",
-        "roi_analyst": "Signups, activated humans, verified retention, product events, conversions and revenue are UNKNOWN until a scoped analytics connector supplies real data.",
+        "roi_analyst": ("An authenticated, fresh community aggregate is available for source-reported human activity; retention cohort calculations and paid conversion remain UNKNOWN." if genuine else "Signups, activated humans, verified retention, product events, conversions and revenue are UNKNOWN until a scoped analytics connector supplies real data."),
         "risk_governance": "External action requires valid Governor permit and separate QA; synthetic accounts must never masquerade as real users.",
         "chief_of_staff": "Departmental internal drafts are gathered; select two reversible development/PLG experiments when Governor and runtime are ready.",
     }
@@ -346,7 +412,12 @@ def process_task(task):
         "strategic_hypothesis_score": payload["hypothesis_score"],
         "score_is_market_validation": False,
         "verified_human_users": None, "synthetic_user_count": None,
-        "revenue_collected": None,
+        "source_reported_verified_accounts": real["verifiedAccounts"] if real else None,
+        "source_reported_active_humans_7d": real["communityActive7d"] if real else None,
+        "source_reported_new_humans_7d": real["newCommunityMembers7d"] if real else None,
+        "disclosed_ai_hosts": ai["activeHosts"] if ai else None,
+        "product_aggregate_receipt_sha256": aggregate["source_receipt_sha256"] if genuine else None,
+        "retention_d7": None, "revenue_collected": None,
         "departments_completed_before_synthesis": dependencies if role=="chief_of_staff" else [],
         "next_best_action": task["next_action"],
         "requires_governor_for_external_effect": True,
