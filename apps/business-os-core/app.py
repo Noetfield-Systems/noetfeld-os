@@ -8,6 +8,7 @@ from pydantic import BaseModel, ConfigDict, Field
 import core
 import floor_projection
 import commercial_team
+import portfolio_studio
 
 TOKEN=os.getenv("FOUNDER_API_TOKEN","")
 INTERVAL=max(2,int(os.getenv("WORKER_INTERVAL_SECONDS","5")))
@@ -15,6 +16,8 @@ STATIC=Path(__file__).parent/"static"
 RATE:dict[str,list[float]]={}
 STOP=asyncio.Event()
 WORKER_JOB:asyncio.Task|None=None
+TASK_WORKERS:list[asyncio.Task]=[]
+TASK_WORKER_COUNT=3
 
 def authorize(value:str|None):
     import hmac
@@ -41,6 +44,17 @@ async def worker():
             if event:
                 await asyncio.to_thread(core.process_event,event)
                 continue
+            await asyncio.sleep(INTERVAL)
+        except asyncio.CancelledError: raise
+        except Exception:
+            import logging
+            logging.exception("business_os_worker_iteration_failed")
+            await asyncio.sleep(INTERVAL)
+
+async def department_worker(worker_slot:int):
+    """Three parallel claimers, same canonical SQLite task queue and lease logic."""
+    while not STOP.is_set():
+        try:
             task=await asyncio.to_thread(core.claim,"tasks")
             if task:
                 await asyncio.to_thread(core.process_task,task)
@@ -49,19 +63,22 @@ async def worker():
         except asyncio.CancelledError: raise
         except Exception:
             import logging
-            logging.exception("business_os_worker_iteration_failed")
+            logging.exception("company_department_worker_failed slot=%s",worker_slot)
             await asyncio.sleep(INTERVAL)
 
 @asynccontextmanager
 async def lifespan(app):
-    global WORKER_JOB
+    global WORKER_JOB,TASK_WORKERS
     core.init();STOP.clear()
     WORKER_JOB=asyncio.create_task(worker())
+    TASK_WORKERS=[asyncio.create_task(department_worker(n)) for n in range(TASK_WORKER_COUNT)]
     yield
-    STOP.set();WORKER_JOB.cancel()
-    try: await WORKER_JOB
-    except asyncio.CancelledError: pass
+    STOP.set()
+    for job in [WORKER_JOB,*TASK_WORKERS]:
+        job.cancel()
+    await asyncio.gather(WORKER_JOB,*TASK_WORKERS,return_exceptions=True)
     WORKER_JOB=None
+    TASK_WORKERS=[]
 
 app=FastAPI(title="Noetfield Business OS",version="0.1.0",lifespan=lifespan)
 
@@ -105,7 +122,8 @@ def ready():
     try:
         with core.connect() as db:
             db.execute("SELECT 1")
-        running=WORKER_JOB is not None and not WORKER_JOB.done()
+        running=(WORKER_JOB is not None and not WORKER_JOB.done() and
+                 len(TASK_WORKERS)==TASK_WORKER_COUNT and all(not x.done() for x in TASK_WORKERS))
         if not running:
             return JSONResponse({"ready":False,"worker":"not_running"},status_code=503)
         return {"ready":True,"worker":"running"}
@@ -164,6 +182,12 @@ async def feedback(data:Feedback,request:Request):
     event_id=core.add_event("feedback.received","public_feedback",brand,
       {"brand":brand,"rating":data.rating,"comment":core.clean(data.comment,2000)})
     return JSONResponse({"accepted":True,"reference":event_id},status_code=202)
+
+@app.get("/api/control/portfolio-studio")
+def portfolio_studio_overview(authorization:str|None=Header(default=None)):
+    authorize(authorization)
+    return portfolio_studio.overview()
+
 
 @app.get("/api/control/overview")
 def overview(authorization:str|None=Header(default=None)):
