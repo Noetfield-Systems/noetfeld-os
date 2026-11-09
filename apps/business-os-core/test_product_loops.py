@@ -4,6 +4,7 @@ No mock company tenants are represented as customers; test fixtures stay in
 temporary SQLite. Every queued product task remains an internal draft.
 """
 import json
+import io
 import os
 import tempfile
 import unittest
@@ -237,6 +238,73 @@ class CompanyProductLoops(unittest.TestCase):
             self.assertEqual(db.execute(
                 "SELECT COUNT(*) n FROM events WHERE event_type='product.signal_observed'"
             ).fetchone()["n"],portfolio["program_count"])
+
+    def test_public_market_watch_is_real_source_scoped_deduplicated_and_multi_product(self):
+        self.register("community-market",market_keywords=["matchmaking","community"])
+        self.register("startup-engine",market_keywords=["founder","startup"])
+        feed=b"""<?xml version="1.0"?>
+          <rss><channel>
+            <item><title>Open source community matchmaking tools</title>
+              <link>https://news.ycombinator.com/item?id=4401</link></item>
+            <item><title>How a founder grows a startup</title>
+              <link>https://news.ycombinator.com/item?id=4402</link></item>
+          </channel></rss>"""
+        class Response(io.BytesIO):
+            status=200
+        class Opener:
+            def open(self,request,timeout):
+                self.request=request
+                self.timeout=timeout
+                return Response(feed)
+        stub=Opener()
+        env={"COMPANY_OS_PUBLIC_MARKET_RSS_ENABLED":"true",
+             "COMPANY_OS_APPROVED_PUBLIC_MARKET_HOSTS":"news.ycombinator.com"}
+        with patch.dict(os.environ,env), patch.object(
+                product_loops.urllib.request,"build_opener",return_value=stub) as built:
+            first=product_loops.scan_public_market()
+            self.assertEqual(first["state"],"OBSERVED")
+            self.assertEqual(first["new_market_signals"],2)
+            self.assertEqual(first["products_with_new_signal"],2)
+            self.assertFalse(first["independent_demand_verified"])
+            self.assertEqual(stub.timeout,5)
+            self.assertEqual(stub.request.full_url,"https://news.ycombinator.com/rss")
+            unchanged=product_loops.scan_public_market()
+            self.assertEqual(unchanged["state"],"NOT_DUE")
+            with core.connect() as db:
+                db.execute("UPDATE state SET value='0' WHERE key='public_market_rss_polled_at'")
+            repeated=product_loops.scan_public_market()
+            self.assertEqual(repeated["new_market_signals"],0)
+        with core.connect() as db:
+            rows=db.execute(
+                "SELECT project_id,source_kind,verification FROM product_observations "
+                "WHERE source_kind='REPORTED_PUBLIC_MARKET'").fetchall()
+            self.assertEqual({x["project_id"] for x in rows},
+                             {"community-market","startup-engine"})
+            self.assertTrue(all(x["verification"]=="SOURCE_REPORTED_UNVERIFIED"
+                                for x in rows))
+            events=db.execute(
+                "SELECT COUNT(*) n FROM events WHERE event_type='product.signal_observed'"
+            ).fetchone()["n"]
+            self.assertEqual(events,4) # 2 baselines + 2 news stories
+
+    def test_public_market_source_denies_unsafe_host_xml_and_fabricated_signal(self):
+        self.register("news-lab",market_keywords=["founder"])
+        feed=b"""<!DOCTYPE r [<!ENTITY leaked SYSTEM "file:///etc/passwd">]>
+            <rss><channel><item><title>&leaked;</title></item></channel></rss>"""
+        self.assertRaises(ValueError,product_loops._parse_market_rss,feed)
+        self.assertFalse(product_loops._market_matches("Animal companion stories",["ai"]))
+        env={"COMPANY_OS_PUBLIC_MARKET_RSS_ENABLED":"true",
+             "COMPANY_OS_APPROVED_PUBLIC_MARKET_HOSTS":""}
+        with patch.dict(os.environ,env), patch.object(
+                product_loops.urllib.request,"build_opener") as opener:
+            rejected=product_loops.scan_public_market()
+            self.assertEqual(rejected["state"],"BLOCKED_SOURCE_NOT_ALLOWLISTED")
+            opener.assert_not_called()
+        with core.connect() as db:
+            count=db.execute(
+                "SELECT COUNT(*) n FROM product_observations "
+                "WHERE source_kind='REPORTED_PUBLIC_MARKET'").fetchone()["n"]
+            self.assertEqual(count,0)
 
     def test_reject_untrusted_source_urls_private_network_and_malformed_metrics(self):
         self.register("example-app")
