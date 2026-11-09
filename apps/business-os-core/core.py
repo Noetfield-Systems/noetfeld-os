@@ -14,6 +14,7 @@ AGENTS=[
 ("audience_router","Audience & Routing","Classify audience, intent and specialist journey","internal"),
 ("sales_qualification","Revenue & Qualification","Qualify urgency, authority, budget and next commercial action","draft"),
 ("customer_success","Customer Success","Onboarding, friction, retention and customer outcomes","draft"),
+("marketing_editorial","Marketing & Communications","Evidence-backed content preparation, page copy and channel drafts; external publication forbidden","draft"),
 ("market_intelligence","Market Intelligence","Evidence-ranked market signals and opportunity discovery","draft"),
 ("product_strategy","Product Strategy","Product hypotheses, experiments and journey improvement","draft"),
 ("roi_analyst","ROI & Finance Intelligence","Actual funnel, weighted pipeline and unit economics","internal"),
@@ -141,7 +142,9 @@ def init():
   except sqlite3.OperationalError:pass
 def route_for(brand,aud,intent):
  route=ROUTES.get(brand,ROUTES["noetfield"]).get(aud,"guided_discovery")
- if brand=="buildworkflow" or intent=="buildworkflow": primary="sales_qualification" if aud in {"operator","enterprise","founder"} else "customer_success" if aud=="customer" else "market_intelligence"
+ if intent=="support" or aud=="customer":
+  primary="customer_success"
+ elif brand=="buildworkflow" or intent=="buildworkflow": primary="sales_qualification" if aud in {"operator","enterprise","founder"} else "customer_success" if aud=="customer" else "market_intelligence"
  elif brand=="trustfield" or intent=="trustfield": primary="sales_qualification" if aud in {"enterprise","operator","founder"} else "risk_governance"
  elif brand=="buildrelay" or intent=="buildrelay": primary="partnerships" if aud in {"investor","partner"} else "customer_success" if aud=="customer" else "market_intelligence"
  elif aud=="developer" or intent=="developer":primary="engineering_operator"
