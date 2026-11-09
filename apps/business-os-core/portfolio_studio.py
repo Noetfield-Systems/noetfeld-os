@@ -240,7 +240,11 @@ def tick(fetcher=None, probe=None, timestamp=None):
             _state_put(db, "portfolio_studio_last_success", utc_now())
             _state_put(db, "portfolio_studio_source_sha", feed["projection_sha256"])
             _state_put(db, "portfolio_studio_last_error", "")
-        log.info("portfolio_cycle registry_projects=%d queued=%d read_only=true", len(projects), len(generated))
+        print("company_portfolio_cycle=" + json.dumps({
+            "registry_projects": len(projects), "new_project_cycles": len(generated),
+            "project_ids": [p["project"]["project_id"] for _, p in generated],
+            "read_only": True, "source_sha": feed["projection_sha256"][:16],
+        }, sort_keys=True), flush=True)
         return {"state": "QUEUED" if generated else "CURRENT", "queued": len(generated)}
     except Exception as exc:
         with connect() as db:
@@ -297,7 +301,7 @@ def process_event(event):
                 specialist_ids.append(task_id)
         db.execute("UPDATE events SET status='processed',processed_at=? WHERE id=?",
                    (now(),event["id"]))
-    log.info("portfolio_departments_started project_id=%s departments=%d",pid,len(DEPARTMENTS))
+    print("company_departments_started="+json.dumps({"project_id":pid,"departments":len(DEPARTMENTS),"external_effect":False},sort_keys=True),flush=True)
     return {"created": len(DEPARTMENTS), "project_id": pid}
 
 
@@ -357,6 +361,12 @@ def process_task(task):
                    (json.dumps({"provider":"deterministic-evidence",
                      "recommendation":recommendation,"external_action":"not_executed"},
                     ensure_ascii=False),now(),task["id"]))
+    if role == "chief_of_staff":
+        print("company_executive_synthesis=" + json.dumps({
+            "project_id": project["project_id"],
+            "specialist_drafts_read": len(dependencies),
+            "governor_permit": False, "public_actions": 0
+        },sort_keys=True),flush=True)
     return True
 
 
