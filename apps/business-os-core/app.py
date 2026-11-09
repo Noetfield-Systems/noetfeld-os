@@ -6,6 +6,7 @@ from fastapi import FastAPI, Header, HTTPException, Request
 from fastapi.responses import FileResponse, JSONResponse
 from pydantic import BaseModel, ConfigDict, Field
 import core
+import floor_projection
 
 TOKEN=os.getenv("FOUNDER_API_TOKEN","")
 INTERVAL=max(2,int(os.getenv("WORKER_INTERVAL_SECONDS","5")))
@@ -201,6 +202,15 @@ def opportunities(authorization:str|None=Header(default=None),brand:str|None=Non
         rows=db.execute(query+(" WHERE o.brand=? " if brand in core.BRANDS else " ")+
            "ORDER BY o.created_at DESC LIMIT 150",(brand,) if brand in core.BRANDS else ()).fetchall()
     return {"opportunities":[dict(r) for r in rows]}
+
+@app.get("/api/internal/company-floor/snapshot", include_in_schema=False)
+def company_floor_snapshot(x_company_floor_token:str|None=Header(default=None)):
+    if not (os.getenv("COMPANY_FLOOR_CORE_READ_TOKEN") or "").strip():
+        raise HTTPException(503,"Company Floor service identity not configured")
+    if not floor_projection.authorized(x_company_floor_token):
+        raise HTTPException(401,"Company Floor service identity required")
+    return floor_projection.snapshot()
+
 
 @app.get("/api/internal/sina/revenue-queue", include_in_schema=False)
 def sina_revenue_queue(x_sina_bridge_token:str|None=Header(default=None),limit:int=50):
