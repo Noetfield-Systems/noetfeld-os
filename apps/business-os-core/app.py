@@ -138,6 +138,7 @@ class ProductProgram(BaseModel):
     priority:int=Field(default=3,ge=1,le=5)
     max_tasks_per_cycle:int=Field(default=7,ge=2,le=7)
     health_url:str|None=Field(default=None,max_length=220)
+    market_keywords:list[str]=Field(default_factory=list,max_length=8)
 
 class ProductObservation(BaseModel):
     model_config=ConfigDict(extra="forbid")

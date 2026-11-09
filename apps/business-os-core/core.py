@@ -130,7 +130,11 @@ def init():
  # Default off for tests and uncommissioned customer deployments. Staging can
  # activate an idempotent source-provenance portfolio after a scoped rollout.
  if os.getenv("COMPANY_OS_PORTFOLIO_AUTOSTART","").lower() in {"1","true"}:
-  product_loops.bootstrap_internal()
+  boot=product_loops.bootstrap_internal()
+  print("COMPANY_OS_PORTFOLIO_BOOTSTRAP "+json.dumps({
+   "created":boot["created"],"unchanged":boot["unchanged"],
+   "drift_blocked":boot["drift_blocked"],"queue":boot["queue"],
+   "source_snapshot_sha":boot["source_snapshot_sha"]},sort_keys=True),flush=True)
 def route_for(brand,aud,intent):
  route=ROUTES.get(brand,ROUTES["noetfield"]).get(aud,"guided_discovery")
  if intent=="support" or aud=="customer": primary="customer_success"
@@ -374,6 +378,10 @@ def process_task(t):
     json.dumps({"role":role,"source_task":t["id"],
        "next_best_action":str(result.get("next_best_action",""))[:500],
        "signal_evidence":t.get("observation_id")},sort_keys=True))
+  print("COMPANY_OS_SPECIALIST_DRAFT "+json.dumps({
+   "company_id":t["company_id"],"project_id":t["project_id"],
+   "role":role,"provider":provider,"state":"DRAFTED_NOT_DISPATCHED",
+   "model_tokens":it+ot,"external_action":False},sort_keys=True),flush=True)
 def process_event(e):
  try:
   if e["event_type"]=="intake.received":process_intake(e)
@@ -392,6 +400,15 @@ def daily_tick():
   with connect() as d:d.execute("INSERT INTO state VALUES('last_learning',?) ON CONFLICT(key) DO UPDATE SET value=excluded.value",(str(time.time()),))
  # Same durable Company OS cycle, not a new polling service.
  product_loops.tick_due()
+ market=product_loops.scan_public_market()
+ if market.get("state") not in ("DISABLED","NOT_DUE"):
+  print("COMPANY_OS_PUBLIC_MARKET_OBSERVATION "+json.dumps({
+   "state":market["state"],
+   "new_market_signals":market.get("new_market_signals",0),
+   "products_with_new_signal":market.get("products_with_new_signal",0),
+   "source":market.get("source","not_fetched"),
+   "failure_type":market.get("failure_type"),
+   "independent_demand_verified":False},sort_keys=True),flush=True)
 def overview():
  with connect() as d:
   q={"contacts":"SELECT COUNT(*) n FROM contacts","opportunities":"SELECT COUNT(*) n FROM opportunities","qualified":"SELECT COUNT(*) n FROM opportunities WHERE score>=65","won":"SELECT COUNT(*) n FROM opportunities WHERE stage='won'","queued_events":"SELECT COUNT(*) n FROM events WHERE status IN ('queued','processing')","pending_tasks":"SELECT COUNT(*) n FROM tasks WHERE status IN ('queued','running','drafted')","feedback":"SELECT COUNT(*) n FROM feedback"}
