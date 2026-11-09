@@ -204,48 +204,16 @@ def opportunities(authorization:str|None=Header(default=None),brand:str|None=Non
 
 @app.get("/api/internal/sina/revenue-queue", include_in_schema=False)
 def sina_revenue_queue(x_sina_bridge_token:str|None=Header(default=None),limit:int=50):
-    """Least-privilege, PII-free internal queue for the Founder OS Seed."""
-    import hmac
-    expected=(os.getenv("SINA_SEED_BRIDGE_TOKEN") or "").strip()
-    if not expected:
+    """Service-authenticated read-only observation; returns no buyer personal data."""
+    if not (os.getenv("SINA_SEED_BRIDGE_TOKEN") or "").strip():
         raise HTTPException(503,"Sina revenue bridge is not configured")
-    if not x_sina_bridge_token or not hmac.compare_digest(x_sina_bridge_token,expected):
+    if not core.sina_bridge_authorized(x_sina_bridge_token):
         raise HTTPException(401,"Service authentication required")
-    cap=max(1,min(int(limit),100))
-    with core.connect() as db:
-        rows=db.execute(
-            """SELECT s.intake_id,s.source_created_at,s.sku,s.vector,s.qualification_json,
-                      s.status,
-                      (SELECT t.status FROM tasks t
-                       WHERE t.event_id=s.event_id AND t.role='sales_qualification'
-                       ORDER BY t.created_at DESC LIMIT 1) AS sales_task_status
-               FROM platform_intake_signals s
-               ORDER BY s.source_created_at DESC,s.intake_id DESC LIMIT ?""",
-            (cap,)
-        ).fetchall()
-    items=[]
-    for r in rows:
-        qualification=json.loads(r["qualification_json"]) if r["qualification_json"] else {}
-        tier=qualification.get("tier") or "unclassified"
-        if tier not in {"A","B","C","defer","unclassified"}:
-            continue
-        items.append({
-            "intake_id":r["intake_id"],
-            "source_created_at":r["source_created_at"],
-            "sku":r["sku"],
-            "vector":r["vector"],
-            "tier":tier,
-            "fit_score":qualification.get("fit_score"),
-            "next_step":qualification.get("next_step"),
-            "blockers":qualification.get("blockers") or [],
-            "signal_status":r["status"],
-            "sales_task_status":r["sales_task_status"] or "not_created",
-        })
     return {
         "schema":"noetfield.sina-seed.revenue-queue.v1",
         "source":"Noetfield Business OS Core platform_intake_signals",
         "pii_included":False,
-        "items":items,
+        "items":core.sina_seed_revenue_items(limit),
     }
 
 
