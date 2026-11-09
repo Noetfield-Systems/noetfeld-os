@@ -183,7 +183,9 @@ def tick(fetcher=None, probe=None, timestamp=None):
         return {"state": "NOT_CONFIGURED", "queued": 0}
     with connect() as db:
         last = float(_state_get(db, "portfolio_studio_last_attempt") or 0)
-        if current - last < CADENCE_SECONDS:
+        # Recover provider/auth outages promptly without spawning a second timer.
+        retry_window = 90 if _state_get(db, "portfolio_studio_state") == "BLOCKED" else CADENCE_SECONDS
+        if current - last < retry_window:
             return {"state": "DEFERRED", "queued": 0}
         _state_put(db, "portfolio_studio_last_attempt", current)
     try:
