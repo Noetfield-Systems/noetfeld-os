@@ -5,7 +5,7 @@ on:
       - "apps/business-os-core/**"
       - ".github/workflows/business-os-core-ci.yml"
   push:
-    branches: [platform/business-os-core-v1]
+    branches: [platform/business-os-core-v1, "feat/commercial-web-agent-onboarding-20261109"]
     paths:
       - "apps/business-os-core/**"
       - ".github/workflows/business-os-core-ci.yml"
@@ -23,3 +23,48 @@ jobs:
       - run: python -m pip install -r apps/business-os-core/requirements.txt httpx==0.28.1
       - run: python -m py_compile apps/business-os-core/app.py apps/business-os-core/core.py
       - run: python -m unittest discover -s apps/business-os-core -p "test_*.py"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Validate Company OS browser scripts and release routes
+        run: |
+          python - <<'PY'
+          import re, subprocess
+          from pathlib import Path
+          folder=Path("apps/business-os-core/static")
+          for name in ("index.html","control.html","company-os.html"):
+              html=(folder/name).read_text()
+              assert "<!doctype html>" in html.lower(), name
+              scripts=re.findall(r"<script(?:\\s[^>]*)?>(.*?)</script>",html,re.S)
+              for i,script in enumerate(scripts):
+                  if script.strip():
+                      Path(f"/tmp/{name}.{i}.js").write_text(script)
+                      subprocess.run(["node","--check",f"/tmp/{name}.{i}.js"],check=True)
+          source=Path("apps/business-os-core/app.py").read_text()
+          for route in ("/company-os","/api/control/paperclip/status",
+                        "/api/control/paperclip/snapshot","/api/control/paperclip/backlog"):
+              assert route in source, route
+          PY
+      - name: Smoke deployed staging Company OS and protected Paperclip endpoints
+        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/feat/commercial-web-agent-onboarding-20261109' }}
+        env:
+          BASE: https://company-os-staging-staging.up.railway.app
+        run: |
+          set -euo pipefail
+          for n in $(seq 1 20); do
+            if curl --fail --silent --show-error --max-time 8 "$BASE/ready" | grep -q '"ready":true' &&
+               curl --fail --silent --show-error --max-time 8 "$BASE/company-os" | grep -q "Your company" &&
+               curl --fail --silent --show-error --max-time 8 "$BASE/control" | grep -q "Paperclip workforce"; then
+              break
+            fi
+            if [ "$n" = 20 ]; then echo "STAGING_COMPANY_OS_READINESS_OR_UI_FAILED"; exit 1; fi
+            sleep 4
+          done
+          for url in /api/control/paperclip/status /api/control/paperclip/snapshot; do
+            code=$(curl -sS --max-time 8 -o /dev/null -w '%{http_code}' "$BASE$url")
+            if [ "$code" != "401" ]; then echo "PAPERCLIP_AUTH_BOUNDARY_FAILED path=$url code=$code"; exit 1; fi
+          done
+          code=$(curl -sS --max-time 8 -o /dev/null -w '%{http_code}' -X POST "$BASE/api/control/paperclip/backlog" -H 'Content-Type: application/json' --data '{"title":"Review scoped operations","objective":"Review one internal company workflow without any contact data","source_ref":"https://github.com/Noetfield-Systems/noetfeld-os/issues/1","idempotency_key":"smoke-company-os-2026-11-09"}')
+          if [ "$code" != "401" ]; then echo "PAPERCLIP_BACKLOG_AUTH_FAILED code=$code"; exit 1; fi
+          echo "COMPANY_OS_STAGING_SMOKE_PASS ui=served readiness=true paperclip_private_routes=401"
+
