@@ -6,6 +6,7 @@ from fastapi import FastAPI, Header, HTTPException, Request
 from fastapi.responses import FileResponse, JSONResponse
 from pydantic import BaseModel, ConfigDict, Field
 import core
+import paperclip_bridge as paperclip
 import product_loops
 
 TOKEN=os.getenv("FOUNDER_API_TOKEN","")
@@ -85,6 +86,8 @@ async def worker():
 async def lifespan(app):
     global WORKER_JOB
     core.init();STOP.clear()
+    with core.connect() as db:
+        paperclip.create_binding_table(db)
     WORKER_JOB=asyncio.create_task(worker())
     yield
     STOP.set();WORKER_JOB.cancel()
@@ -158,6 +161,8 @@ class ProductObservation(BaseModel):
 def home(): return FileResponse(STATIC/"index.html")
 @app.get("/control")
 def control(): return FileResponse(STATIC/"control.html")
+@app.get("/company-os")
+def company_os_product(): return FileResponse(STATIC/"company-os.html")
 @app.get("/privacy")
 def privacy(): return FileResponse(STATIC/"privacy.html")
 @app.get("/health")
@@ -274,6 +279,38 @@ def submit_product_observation(payload:ProductObservation,authorization:str|None
     return JSONResponse({"accepted":True,**result,"external_actions":"NOT_AUTHORIZED",
                          "real_user_traction_verified":False},
                         status_code=200 if result["idempotent"] else 202)
+
+class PaperclipBacklog(BaseModel):
+    model_config=ConfigDict(extra="forbid")
+    title:str=Field(min_length=12,max_length=140)
+    objective:str=Field(min_length=12,max_length=1100)
+    source_ref:str=Field(min_length=12,max_length=300)
+    idempotency_key:str=Field(min_length=12,max_length=100,pattern=r"^[A-Za-z0-9._:-]+$")
+
+@app.get("/api/control/paperclip/status")
+def paperclip_status(authorization:str|None=Header(default=None)):
+    authorize(authorization)
+    return paperclip.status()
+
+@app.get("/api/control/paperclip/snapshot")
+def paperclip_snapshot(authorization:str|None=Header(default=None)):
+    authorize(authorization)
+    try:
+        return paperclip.snapshot()
+    except paperclip.PaperclipError as exc:
+        raise HTTPException(exc.http_status,exc.code) from None
+
+@app.post("/api/control/paperclip/backlog")
+def paperclip_backlog(body:PaperclipBacklog,authorization:str|None=Header(default=None)):
+    authorize(authorization)
+    try:
+        with core.connect() as db:
+            return paperclip.submit_backlog(
+                db,title=body.title,objective=body.objective,source_ref=body.source_ref,
+                idempotency_key=body.idempotency_key
+            )
+    except paperclip.PaperclipError as exc:
+        raise HTTPException(exc.http_status,exc.code) from None
 
 @app.get("/api/control/overview")
 def overview(authorization:str|None=Header(default=None)):
