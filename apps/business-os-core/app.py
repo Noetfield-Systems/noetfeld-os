@@ -225,6 +225,7 @@ def sina_revenue_queue(x_sina_bridge_token:str|None=Header(default=None),limit:i
         "source":"Noetfield Business OS Core platform_intake_signals",
         "pii_included":False,
         "items":core.sina_seed_revenue_items(limit),
+        "commercial_workforce":{brand:commercial_team.status(brand) for brand in commercial_team.BRANDS},
     }
 
 
