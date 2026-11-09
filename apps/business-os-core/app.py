@@ -74,6 +74,9 @@ async def lifespan(app):
     print("company_portfolio_resume="+json.dumps({
         "state":restored["state"].get("portfolio_studio_state"),
         "cycles":len(restored["project_cycles"]),
+        "department_tasks":sum(x["department_tasks"] for x in restored["project_cycles"]),
+        "internal_drafts":sum(x["internal_drafts"] for x in restored["project_cycles"]),
+        "blocked_tasks":sum(x["blocked_tasks"] or 0 for x in restored["project_cycles"]),
         "projects":list(dict.fromkeys(x["project_id"] for x in restored["project_cycles"]))[:22],
         "department_workers":TASK_WORKER_COUNT,
         "external_product_deploys_claimed":0,
