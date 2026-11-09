@@ -401,11 +401,13 @@ def daily_tick():
  # Same durable Company OS cycle, not a new polling service.
  product_loops.tick_due()
  market=product_loops.scan_public_market()
- if market.get("new_market_signals",0):
-  print("COMPANY_OS_PUBLIC_MARKET_SIGNAL "+json.dumps({
-   "new_market_signals":market["new_market_signals"],
-   "products_with_new_signal":market["products_with_new_signal"],
-   "source":market["source"],
+ if market.get("state") not in ("DISABLED","NOT_DUE"):
+  print("COMPANY_OS_PUBLIC_MARKET_OBSERVATION "+json.dumps({
+   "state":market["state"],
+   "new_market_signals":market.get("new_market_signals",0),
+   "products_with_new_signal":market.get("products_with_new_signal",0),
+   "source":market.get("source","not_fetched"),
+   "failure_type":market.get("failure_type"),
    "independent_demand_verified":False},sort_keys=True),flush=True)
 def overview():
  with connect() as d:
