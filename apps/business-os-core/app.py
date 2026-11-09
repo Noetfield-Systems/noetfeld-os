@@ -473,7 +473,7 @@ def approve_task(tid:str,authorization:str|None=Header(default=None)):
 # No founder token delegation, payment authority, new scheduler, CRM, or autonomous outbound action.
 class NexusGrowthObservation(BaseModel):
     model_config=ConfigDict(extra="forbid")
-    source_event_id:str=Field(pattern=r"^nexus\.lead\.nxlead_[0-9a-f]{32}$",min_length=32,max_length=128)
+    source_event_id:str=Field(pattern=r"^nexus\.(lead\.nxlead_[0-9a-f]{32}|order\.nx_[0-9a-f]{32}\.(created|paid))$",min_length=32,max_length=128)
     source_kind:str
     source_ref:str=Field(min_length=20,max_length=220)
     signal:str
@@ -492,12 +492,24 @@ def nexus_growth_observation(payload:NexusGrowthObservation,x_nexus_bridge_token
     if not x_nexus_bridge_token or not hmac.compare_digest(x_nexus_bridge_token,expected):
         raise HTTPException(401,"NEXUS bridge authentication required")
     data=payload.model_dump()
+    eid=data["source_event_id"]
+    if eid.startswith("nexus.lead."):
+        expected_signal=("acquisition","inbound_inquiries",
+                         "nexus:growth-lead:"+eid.removeprefix("nexus.lead."))
+    elif eid.endswith(".created"):
+        expected_signal=("conversion","orders_created",
+                         "nexus:economic-order:"+eid.removeprefix("nexus.order.").removesuffix(".created"))
+    elif eid.endswith(".paid"):
+        expected_signal=("revenue","stripe_paid_reported",
+                         "nexus:economic-order:"+eid.removeprefix("nexus.order.").removesuffix(".paid"))
+    else:
+        raise HTTPException(422,"Unknown NEXUS event kind")
     if (data["source_kind"]!="REPORTED_OPERATIONAL" or
-        data["signal"]!="acquisition" or
-        data["metric_name"]!="inbound_inquiries" or
+        data["signal"]!=expected_signal[0] or
+        data["metric_name"]!=expected_signal[1] or
         data["metric_value"]!=1 or data["sample_count"]!=1 or
-        data["source_ref"]!="nexus:growth-lead:"+data["source_event_id"].removeprefix("nexus.lead.")):
-        raise HTTPException(422,"NEXUS acquisition signal not supported")
+        data["source_ref"]!=expected_signal[2]):
+        raise HTTPException(422,"NEXUS source event mismatch")
     try:
         outcome=product_loops.observe("noetfield-systems-inc","nexus-economic-rail",data)
     except ValueError as exc:
