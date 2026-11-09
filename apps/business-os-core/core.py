@@ -224,6 +224,47 @@ _PLATFORM_SIGNAL_BLOCKERS={
 }
 
 
+def sina_bridge_authorized(supplied):
+    """Separate least-privilege service identity; do not reuse Founder API token."""
+    expected=(os.getenv("SINA_SEED_BRIDGE_TOKEN") or "").strip()
+    return bool(expected and supplied and hmac.compare_digest(str(supplied), expected))
+
+
+def sina_seed_revenue_items(limit=50):
+    """Return only typed PII-free signals, never free-form task or customer data."""
+    cap=max(1,min(int(limit),100))
+    with connect() as db:
+        rows=db.execute(
+            """SELECT s.intake_id,s.source_created_at,s.sku,s.vector,s.qualification_json,
+                      s.status,
+                      (SELECT t.status FROM tasks t
+                       WHERE t.event_id=s.event_id AND t.role='sales_qualification'
+                       ORDER BY t.created_at DESC LIMIT 1) AS sales_task_status
+               FROM platform_intake_signals s
+               ORDER BY s.source_created_at DESC,s.intake_id DESC LIMIT ?""",
+            (cap,)
+        ).fetchall()
+    items=[]
+    for r in rows:
+        qualification=json.loads(r["qualification_json"]) if r["qualification_json"] else {}
+        tier=qualification.get("tier") or "unclassified"
+        if tier not in {"A","B","C","defer","unclassified"}:
+            continue
+        items.append({
+            "intake_id":r["intake_id"],
+            "source_created_at":r["source_created_at"],
+            "sku":r["sku"],
+            "vector":r["vector"],
+            "tier":tier,
+            "fit_score":qualification.get("fit_score"),
+            "next_step":qualification.get("next_step"),
+            "blockers":qualification.get("blockers") or [],
+            "signal_status":r["status"],
+            "sales_task_status":r["sales_task_status"] or "not_created",
+        })
+    return items
+
+
 def validate_platform_intake_projection(item):
     """Accept only the deliberately PII-free projection emitted by Platform API."""
     if not isinstance(item,dict) or set(item)!={"intake_id","request_id","created_at","sku","vector","qualification"}:

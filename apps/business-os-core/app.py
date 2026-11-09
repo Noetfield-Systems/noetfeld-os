@@ -202,6 +202,21 @@ def opportunities(authorization:str|None=Header(default=None),brand:str|None=Non
            "ORDER BY o.created_at DESC LIMIT 150",(brand,) if brand in core.BRANDS else ()).fetchall()
     return {"opportunities":[dict(r) for r in rows]}
 
+@app.get("/api/internal/sina/revenue-queue", include_in_schema=False)
+def sina_revenue_queue(x_sina_bridge_token:str|None=Header(default=None),limit:int=50):
+    """Service-authenticated read-only observation; returns no buyer personal data."""
+    if not (os.getenv("SINA_SEED_BRIDGE_TOKEN") or "").strip():
+        raise HTTPException(503,"Sina revenue bridge is not configured")
+    if not core.sina_bridge_authorized(x_sina_bridge_token):
+        raise HTTPException(401,"Service authentication required")
+    return {
+        "schema":"noetfield.sina-seed.revenue-queue.v1",
+        "source":"Noetfield Business OS Core platform_intake_signals",
+        "pii_included":False,
+        "items":core.sina_seed_revenue_items(limit),
+    }
+
+
 @app.get("/api/control/intake-signals")
 def intake_signals(authorization:str|None=Header(default=None),limit:int=50):
     authorize(authorization)
