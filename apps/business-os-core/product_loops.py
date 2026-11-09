@@ -636,7 +636,7 @@ def portfolio(company_id: str | None = None) -> dict:
                 """SELECT signal,source_kind,verification,metric_name,metric_value,
                    sample_count,severity,recorded_at,source_ref
                    FROM product_observations WHERE company_id=? AND project_id=?
-                   ORDER BY recorded_at DESC LIMIT 25""", (company, project))]
+                   ORDER BY recorded_at DESC,id DESC LIMIT 25""", (company, project))]
             statuses = [dict(x) for x in db.execute(
                 """SELECT status,COUNT(*) AS count
                    FROM tasks WHERE company_id=? AND project_id=?
