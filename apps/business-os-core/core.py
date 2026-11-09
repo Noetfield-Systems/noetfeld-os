@@ -6,7 +6,7 @@ from datetime import datetime, timezone, timedelta
 logger=logging.getLogger("noetfield.business_os.core")
 
 DB=Path(os.getenv("DATABASE_PATH","/data/business-os.sqlite"))
-BRANDS={"noetfield":"Noetfield Systems","buildworkflow":"BuildWorkflow","trustfield":"TrustField","buildrelay":"BuildRelay","portfolio":"Portfolio"}
+BRANDS={"noetfield":"Noetfield Systems","buildworkflow":"BuildWorkflow","trustfield":"TrustField","signalforge":"SignalForge","buildrelay":"BuildRelay","portfolio":"Portfolio"}
 AUDIENCES={"enterprise","operator","developer","founder","investor","partner","customer","researcher","other"}
 INTENTS={"governance","automation","buildworkflow","trustfield","buildrelay","developer","partnership","investment","support","research","other"}
 AGENTS=[
@@ -90,6 +90,7 @@ ROUTES={
 "noetfield":{"enterprise":"enterprise_solution","operator":"operations_diagnostic","developer":"developer_evaluation","founder":"founder_pathway","investor":"partnerships_review","partner":"partner_integration","customer":"customer_success","researcher":"research_brief","other":"guided_discovery"},
 "buildworkflow":{"enterprise":"construction_enterprise","operator":"trade_operations","developer":"integration_evaluation","founder":"trade_founder_pathway","investor":"partnerships_review","partner":"implementation_partner","customer":"customer_success","researcher":"product_research","other":"trade_discovery"},
 "trustfield":{"enterprise":"regulated_enterprise","operator":"compliance_operations","developer":"integration_evaluation","founder":"fintech_founder_pathway","investor":"partnerships_review","partner":"compliance_partner","customer":"customer_success","researcher":"research_brief","other":"compliance_discovery"},
+"signalforge":{"enterprise":"market_data_team","operator":"trading_research","developer":"developer_evaluation","founder":"research_founder","investor":"partnerships_review","partner":"market_research_partner","customer":"customer_success","researcher":"research_brief","other":"market_research_discovery"},
 "buildrelay":{"enterprise":"ecosystem_partner","operator":"community_operator","developer":"protocol_builder","founder":"founder_pathway","investor":"capital_partner","partner":"ecosystem_partner","customer":"community_member","researcher":"market_research","other":"guided_discovery"}}
 def now(): return datetime.now(timezone.utc).isoformat(timespec="seconds")
 def idof(p): return p+"_"+uuid.uuid4().hex[:16]
