@@ -17,6 +17,11 @@ class CommercialWorkforceTests(unittest.TestCase):
     def tearDown(self):
         self.tmp.cleanup()
 
+    def test_production_image_includes_every_imported_commercial_module(self):
+        docker = (Path(__file__).resolve().parent / "Dockerfile").read_text()
+        self.assertIn("COPY app.py core.py floor_projection.py commercial_team.py", docker)
+        self.assertIn("py_compile app.py core.py floor_projection.py commercial_team.py", docker)
+
     def test_existing_seats_reused_without_new_scheduler(self):
         role_map = {r["role"]: r for r in core.agent_roster()}
         self.assertEqual(role_map["sales_qualification"]["company_role_id"], "N-05")
