@@ -304,7 +304,7 @@ class BusinessOSGovernanceTests(unittest.TestCase):
         )
         n06 = next(row for row in roster if row["role_id"] == "N-06")
         self.assertEqual(n06["runtime_role_count"], 1)
-        self.assertIn("marketing_editorial", n06["runtime_role_names"])
+        self.assertIn("Marketing & Communications", n06["runtime_role_names"])
         self.assertEqual(core.company_role_for_runtime("marketing_editorial")["role_id"], "N-06")
         self.assertEqual(n06["activation_status"], "draft_only")
 
