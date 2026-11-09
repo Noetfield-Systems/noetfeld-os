@@ -651,7 +651,13 @@ def platform_commercial_action(t):
         "blocking_codes":blockers,
     }
     status="highest" if tier=="A" else "high" if tier=="B" else "low"
+    seat=company_role_for_runtime(role)
     common={
+        "owner_role":role,
+        "company_role_id":seat["role_id"],
+        "company_role_title":seat["title"],
+        "company_role_authority":seat["max_authority"],
+        "reviewer_role":seat["reports_to"],
         "priority":status,
         "risk_flags":["unverified_buyer","unverified_consent","unverified_paid_demand",
                       "external_approval_required"]+blockers,
