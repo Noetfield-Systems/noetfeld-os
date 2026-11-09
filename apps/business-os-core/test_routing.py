@@ -143,6 +143,13 @@ class BusinessOSCycleTests(unittest.TestCase):
         with core.connect() as db:
             result=json.loads(db.execute("SELECT result FROM tasks WHERE id=?",(claimed["id"],)).fetchone()["result"])
         self.assertEqual(result["external_action"],"not_executed")
+        self.assertEqual(result["recommendation"]["draft_artifact"]["type"],"sales_qualification_brief")
+        self.assertTrue(result["recommendation"]["draft_artifact"]["no_outbound_action"])
+        # The marketing specialist is an existing canonical task, not a new agent engine.
+        with core.connect() as db:
+            marketing=db.execute("SELECT id FROM tasks WHERE event_id=? AND role='marketing_content'",(event_id,)).fetchone()
+        self.assertIsNotNone(marketing)
+
 
     def test_memory_is_chunked_and_pii_redacted(self):
         long_text = ("Operational workflow evidence. " * 70) + " UNIQUE FINAL HVAC ROUTING SIGNAL. "
