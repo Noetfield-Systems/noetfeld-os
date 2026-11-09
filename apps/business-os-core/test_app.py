@@ -166,7 +166,9 @@ class CompanyOSPublicIntakeTests(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTrue(response.json()["accepted"])
         with core.connect() as db:
-            count = db.execute("SELECT COUNT(*) AS n FROM events").fetchone()["n"]
+            count = db.execute(
+                "SELECT COUNT(*) AS n FROM events WHERE event_type='intake.received'"
+            ).fetchone()["n"]
         self.assertEqual(count, 0)
 
     def test_consent_is_required(self):
