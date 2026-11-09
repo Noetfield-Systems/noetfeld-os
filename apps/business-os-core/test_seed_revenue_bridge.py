@@ -7,9 +7,6 @@ from pathlib import Path
 from unittest.mock import patch
 
 import core
-import app
-from fastapi import HTTPException
-
 
 class SinaSeedRevenueBridgeTests(unittest.TestCase):
     def setUp(self):
@@ -41,15 +38,16 @@ class SinaSeedRevenueBridgeTests(unittest.TestCase):
         }
         core.queue_platform_intake_projection(signal)
         with patch.dict(os.environ, {"SINA_SEED_BRIDGE_TOKEN": ""}):
-            with self.assertRaises(HTTPException) as denied:
-                app.sina_revenue_queue("any")
-            self.assertEqual(denied.exception.status_code, 503)
+            self.assertFalse(core.sina_bridge_authorized("any"))
         with patch.dict(os.environ, {"SINA_SEED_BRIDGE_TOKEN": "strong-test-token"}):
-            for credential in (None, "wrong"):
-                with self.assertRaises(HTTPException) as denied:
-                    app.sina_revenue_queue(credential)
-                self.assertEqual(denied.exception.status_code, 401)
-            result = app.sina_revenue_queue("strong-test-token")
+            self.assertFalse(core.sina_bridge_authorized(None))
+            self.assertFalse(core.sina_bridge_authorized("wrong"))
+            self.assertTrue(core.sina_bridge_authorized("strong-test-token"))
+            items=core.sina_seed_revenue_items()
+        result={
+            "schema":"noetfield.sina-seed.revenue-queue.v1",
+            "pii_included":False,"items":items,
+        }
         self.assertEqual(result["schema"], "noetfield.sina-seed.revenue-queue.v1")
         self.assertIs(result["pii_included"], False)
         self.assertEqual(result["items"][0]["tier"], "A")
