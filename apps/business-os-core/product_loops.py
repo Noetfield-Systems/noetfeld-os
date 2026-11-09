@@ -496,6 +496,25 @@ def _probe(url: str) -> tuple[int, str]:
         return 0, "UPSTREAM_UNAVAILABLE"
 
 
+def _resume_deferred(db: sqlite3.Connection) -> int:
+    """Reclaim bounded paused signals after the existing project's backlog clears."""
+    deferred = db.execute(
+        "SELECT id,payload FROM events WHERE event_type='product.signal_observed' "
+        "AND status='deferred' ORDER BY priority_score DESC LIMIT 20").fetchall()
+    count = 0
+    for event in deferred:
+        payload = json.loads(event["payload"])
+        running = db.execute(
+            """SELECT COUNT(*) n FROM tasks WHERE company_id=? AND project_id=?
+               AND status IN ('queued','running')""",
+            (payload["company_id"], payload["project_id"])).fetchone()["n"]
+        if running <= 15:
+            db.execute("UPDATE events SET status='queued',processed_at=NULL,error=NULL WHERE id=?",
+                       (event["id"],))
+            count += 1
+    return count
+
+
 def tick_due() -> dict:
     """Called by existing core.daily_tick(); no parallel scheduler.
 
@@ -504,6 +523,9 @@ def tick_due() -> dict:
     """
     import core
     with core.connect() as db:
+        db.execute("BEGIN IMMEDIATE")
+        resumed = _resume_deferred(db)
+        db.commit()
         programs = [dict(x) for x in db.execute(
             "SELECT * FROM product_programs WHERE status IN "
             "('INTERNAL_ACTIVE','FOUNDER_PROJECT_ACTIVE_NOT_LEGAL_TENANT') "
@@ -539,11 +561,28 @@ def tick_due() -> dict:
         }
         with core.connect() as db:
             db.execute("BEGIN IMMEDIATE")
+            prior = db.execute(
+                """SELECT metric_value,summary,recorded_at FROM product_observations
+                   WHERE company_id=? AND project_id=? AND source_kind='FIRST_PARTY_HTTP_HEALTH'
+                   ORDER BY recorded_at DESC LIMIT 1""",
+                (p["company_id"], p["project_id"])).fetchone()
+            unchanged = (prior is not None and prior["metric_value"] == status
+                         and outcome in prior["summary"])
+            if unchanged:
+                try:
+                    age = time.time()-datetime.fromisoformat(
+                        prior["recorded_at"].replace("Z","+00:00")).timestamp()
+                except ValueError:
+                    age = 86400
+                if age < 86400:
+                    db.commit()
+                    continue
             _insert_observation(db, p["company_id"], p["project_id"],
                                 payload, verified=True)
             db.commit()
         polled += 1
-    return {"state": "OBSERVED", "checked_sources": polled,
+    return {"state": "OBSERVED", "new_health_signals": polled,
+            "deferred_resumed": resumed,
             "event_queue": "EXISTING_COMPANY_OS", "real_users_claimed": 0}
 
 
