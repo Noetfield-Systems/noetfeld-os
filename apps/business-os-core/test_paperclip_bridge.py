@@ -147,13 +147,18 @@ class PaperclipBridgeTests(unittest.TestCase):
 
 class CompanyOSPaperclipAPITests(unittest.TestCase):
     def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.old_db = core.DB
+        core.DB = Path(self.tmp.name) / "paperclip-api-test.sqlite"
         self.token=app.TOKEN
         app.TOKEN="test-founder-token-not-public"
         self.client=TestClient(app.app)
         self.client.__enter__()
     def tearDown(self):
         self.client.__exit__(None,None,None)
+        core.DB=self.old_db
         app.TOKEN=self.token
+        self.tmp.cleanup()
 
     def test_configuration_surface_does_not_leak_board_key(self):
         with patch.dict(os.environ,{"PAPERCLIP_COMPANY_OS_BOARD_API_KEY":"pcp_board_"+"x"*40}):
