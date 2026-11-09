@@ -156,6 +156,82 @@ class BusinessOSCycleTests(unittest.TestCase):
         self.assertNotIn("contact", task_row["objective"].lower())
         self.assertIn("do not send", task_row["next_action"].lower())
 
+    def test_revenue_agent_creates_real_action_packet_without_fabricating_buyer_or_sending(self):
+        item = {
+            "intake_id": "INT-ABCDEF123456",
+            "request_id": "RID-TEST123-ABC",
+            "created_at": "2026-11-08T10:00:00+00:00",
+            "sku": "copilot",
+            "vector": "copilot-governance",
+            "qualification": {
+                "tier": "A", "fit_score": 91, "urgency": "immediate",
+                "next_step": "schedule_briefing", "owner_sla_hours": 24,
+                "blockers": [], "qualifier_version": "enterprise-intake-qualifier-v1",
+            },
+        }
+        core.queue_platform_intake_projection(item)
+        core.process_event(core.claim("events"))
+        sales=core.claim("tasks")
+        self.assertEqual(sales["role"],"sales_qualification")
+        core.process_task(sales)
+        with core.connect() as db:
+            sales_row=db.execute("SELECT result FROM tasks WHERE id=?",(sales["id"],)).fetchone()
+        drafted=json.loads(sales_row["result"])
+        action=drafted["recommendation"]["commercial_action"]
+        self.assertEqual(action["intake_id"],item["intake_id"])
+        self.assertEqual(action["commercial_state"],"unverified_inquiry")
+        self.assertEqual(action["response_due_at"],"2026-11-09T10:00:00+00:00")
+        self.assertEqual(action["offer_candidate"],"NF-QS Copilot QuickScan")
+        self.assertFalse(action["buyer_identity_verified"])
+        self.assertFalse(action["willingness_to_pay_verified"])
+        self.assertTrue(action["founder_approval_required"])
+        self.assertFalse(action["external_action_executed"])
+        self.assertEqual(action["response_draft"]["state"],"internal_draft_not_sent")
+        executive=core.claim("tasks")
+        self.assertEqual(executive["role"],"chief_of_staff")
+        core.process_task(executive)
+        with core.connect() as db:
+            executive_row=db.execute("SELECT result FROM tasks WHERE id=?",(executive["id"],)).fetchone()
+            count=db.execute("SELECT COUNT(*) n FROM opportunities").fetchone()["n"]
+        executive_result=json.loads(executive_row["result"])["recommendation"]
+        self.assertEqual(executive_result["specialist_drafts"]["sales_qualification"]["status"],"drafted")
+        self.assertEqual(executive_result["commercial_action"]["intake_id"],item["intake_id"])
+        self.assertEqual(count,0)
+        self.assertEqual(executive_result["commercial_action"]["response_draft"]["state"],"internal_draft_not_sent")
+
+    def test_blocked_signal_never_generates_outreach_and_legacy_draft_gets_requeued(self):
+        item = {
+            "intake_id":"INT-BCDEF1234567",
+            "request_id":None,"created_at":"2026-11-08T10:00:00+00:00",
+            "sku":"bank_pilot","vector":"bank-pilot",
+            "qualification":{
+                "tier":"A","fit_score":90,"urgency":"immediate",
+                "next_step":"founder_review","owner_sla_hours":24,
+                "blockers":["payment_rails"],
+                "qualifier_version":"enterprise-intake-qualifier-v1",
+            },
+        }
+        core.queue_platform_intake_projection(item)
+        core.process_event(core.claim("events"))
+        sales=core.claim("tasks")
+        core.process_task(sales)
+        with core.connect() as db:
+            first=json.loads(db.execute("SELECT result FROM tasks WHERE id=?",(sales["id"],)).fetchone()["result"])
+            self.assertIsNone(first["recommendation"]["commercial_action"]["response_draft"])
+            db.execute("UPDATE tasks SET result=? WHERE id=?",(
+                json.dumps({"recommendation":{"assessment":"Deterministic processing."}}),sales["id"]
+            ))
+        core.requeue_legacy_platform_drafts()
+        with core.connect() as db:
+            self.assertEqual(db.execute("SELECT status FROM tasks WHERE id=?",(sales["id"],)).fetchone()["status"],"queued")
+        rerun=core.claim("tasks")
+        self.assertEqual(rerun["id"],sales["id"])
+        core.process_task(rerun)
+        with core.connect() as db:
+            updated=json.loads(db.execute("SELECT result FROM tasks WHERE id=?",(sales["id"],)).fetchone()["result"])
+        self.assertIsNone(updated["recommendation"]["commercial_action"]["response_draft"])
+        self.assertIn("external_approval_required",updated["recommendation"]["risk_flags"])
+
     def test_platform_intake_projection_rejects_pii_and_untrusted_extra_fields(self):
         base = {
             "intake_id": "INT-ABCDEF123456",
