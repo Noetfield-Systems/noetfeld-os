@@ -7,6 +7,7 @@ from fastapi.responses import FileResponse, JSONResponse
 from pydantic import BaseModel, ConfigDict, Field
 import core
 import floor_projection
+import commercial_team
 
 TOKEN=os.getenv("FOUNDER_API_TOKEN","")
 INTERVAL=max(2,int(os.getenv("WORKER_INTERVAL_SECONDS","5")))
@@ -224,6 +225,7 @@ def sina_revenue_queue(x_sina_bridge_token:str|None=Header(default=None),limit:i
         "source":"Noetfield Business OS Core platform_intake_signals",
         "pii_included":False,
         "items":core.sina_seed_revenue_items(limit),
+        "commercial_workforce":{brand:commercial_team.status(brand) for brand in commercial_team.BRANDS},
     }
 
 
@@ -308,6 +310,22 @@ def update_opportunity(oid:str,body:dict[str,Any],authorization:str|None=Header(
         cursor=db.execute("UPDATE opportunities SET stage=?,updated_at=? WHERE id=?",(stage,core.now(),oid))
         if not cursor.rowcount: raise HTTPException(404,"Opportunity not found.")
     return {"updated":True,"stage":stage}
+@app.get("/api/control/commercial-team")
+def commercial_team_status(brand:str="noetfield",authorization:str|None=Header(default=None)):
+    authorize(authorization)
+    if brand not in commercial_team.BRANDS:
+        raise HTTPException(400,"Unsupported commercial product.")
+    return commercial_team.status(brand)
+
+@app.post("/api/control/commercial-team/commission")
+def commission_commercial_team(body:dict[str,Any],authorization:str|None=Header(default=None)):
+    """Founder-authenticated internal onboarding; never sends or publishes."""
+    authorize(authorization)
+    brand=body.get("brand","noetfield")
+    if type(brand) is not str or brand not in commercial_team.BRANDS:
+        raise HTTPException(400,"Unsupported commercial product.")
+    return commercial_team.commission(brand)
+
 @app.post("/api/control/tasks")
 def create_task(body:dict[str,Any],authorization:str|None=Header(default=None)):
     authorize(authorization);role=body.get("role")

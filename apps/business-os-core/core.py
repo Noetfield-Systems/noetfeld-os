@@ -6,7 +6,7 @@ from datetime import datetime, timezone, timedelta
 logger=logging.getLogger("noetfield.business_os.core")
 
 DB=Path(os.getenv("DATABASE_PATH","/data/business-os.sqlite"))
-BRANDS={"noetfield":"Noetfield Systems","buildworkflow":"BuildWorkflow","trustfield":"TrustField","buildrelay":"BuildRelay","portfolio":"Portfolio"}
+BRANDS={"noetfield":"Noetfield Systems","buildworkflow":"BuildWorkflow","trustfield":"TrustField","signalforge":"SignalForge","buildrelay":"BuildRelay","portfolio":"Portfolio"}
 AUDIENCES={"enterprise","operator","developer","founder","investor","partner","customer","researcher","other"}
 INTENTS={"governance","automation","buildworkflow","trustfield","buildrelay","developer","partnership","investment","support","research","other"}
 AGENTS=[
@@ -14,6 +14,7 @@ AGENTS=[
 ("audience_router","Audience & Routing","Classify audience, intent and specialist journey","internal"),
 ("sales_qualification","Revenue & Qualification","Qualify urgency, authority, budget and next commercial action","draft"),
 ("customer_success","Customer Success","Onboarding, friction, retention and customer outcomes","draft"),
+("marketing_editorial","Marketing & Communications","Evidence-backed content preparation, page copy and channel drafts; external publication forbidden","draft"),
 ("market_intelligence","Market Intelligence","Evidence-ranked market signals and opportunity discovery","draft"),
 ("product_strategy","Product Strategy","Product hypotheses, experiments and journey improvement","draft"),
 ("roi_analyst","ROI & Finance Intelligence","Actual funnel, weighted pipeline and unit economics","internal"),
@@ -89,6 +90,7 @@ ROUTES={
 "noetfield":{"enterprise":"enterprise_solution","operator":"operations_diagnostic","developer":"developer_evaluation","founder":"founder_pathway","investor":"partnerships_review","partner":"partner_integration","customer":"customer_success","researcher":"research_brief","other":"guided_discovery"},
 "buildworkflow":{"enterprise":"construction_enterprise","operator":"trade_operations","developer":"integration_evaluation","founder":"trade_founder_pathway","investor":"partnerships_review","partner":"implementation_partner","customer":"customer_success","researcher":"product_research","other":"trade_discovery"},
 "trustfield":{"enterprise":"regulated_enterprise","operator":"compliance_operations","developer":"integration_evaluation","founder":"fintech_founder_pathway","investor":"partnerships_review","partner":"compliance_partner","customer":"customer_success","researcher":"research_brief","other":"compliance_discovery"},
+"signalforge":{"enterprise":"market_data_team","operator":"trading_research","developer":"developer_evaluation","founder":"research_founder","investor":"partnerships_review","partner":"market_research_partner","customer":"customer_success","researcher":"research_brief","other":"market_research_discovery"},
 "buildrelay":{"enterprise":"ecosystem_partner","operator":"community_operator","developer":"protocol_builder","founder":"founder_pathway","investor":"capital_partner","partner":"ecosystem_partner","customer":"community_member","researcher":"market_research","other":"guided_discovery"}}
 def now(): return datetime.now(timezone.utc).isoformat(timespec="seconds")
 def idof(p): return p+"_"+uuid.uuid4().hex[:16]
@@ -141,7 +143,9 @@ def init():
   except sqlite3.OperationalError:pass
 def route_for(brand,aud,intent):
  route=ROUTES.get(brand,ROUTES["noetfield"]).get(aud,"guided_discovery")
- if brand=="buildworkflow" or intent=="buildworkflow": primary="sales_qualification" if aud in {"operator","enterprise","founder"} else "customer_success" if aud=="customer" else "market_intelligence"
+ if intent=="support" or aud=="customer":
+  primary="customer_success"
+ elif brand=="buildworkflow" or intent=="buildworkflow": primary="sales_qualification" if aud in {"operator","enterprise","founder"} else "customer_success" if aud=="customer" else "market_intelligence"
  elif brand=="trustfield" or intent=="trustfield": primary="sales_qualification" if aud in {"enterprise","operator","founder"} else "risk_governance"
  elif brand=="buildrelay" or intent=="buildrelay": primary="partnerships" if aud in {"investor","partner"} else "customer_success" if aud=="customer" else "market_intelligence"
  elif aud=="developer" or intent=="developer":primary="engineering_operator"

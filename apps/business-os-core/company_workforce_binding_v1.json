@@ -100,12 +100,14 @@
     "sales_qualification": "N-05",
     "partnerships": "N-05",
     "customer_success": "N-07",
-    "roi_analyst": "N-08"
+    "roi_analyst": "N-08",
+    "marketing_editorial": "N-06"
   },
   "runtime_scope_notes": {
     "customer_success": "Internal draft/task execution only. N-07 remains not_wired until an approved inbound inbox, helpdesk/CRM and knowledge boundary are connected.",
     "roi_analyst": "Pipeline and weighted-opportunity metrics only. This is not accounting, banking, bookkeeping or payment authority.",
     "chief_of_staff": "Internal synthesis and coordination only; Founder decisions and release approvals remain human-controlled.",
-    "sales_qualification": "Commercial preparation only; external contact, pricing and proposals remain Founder-gated."
+    "sales_qualification": "Commercial preparation only; external contact, pricing and proposals remain Founder-gated.",
+    "marketing_editorial": "Internal claim-grounded drafts and content planning. No public publishing, direct messages or customer-data reuse without specific approval. A configured runtime task is not an autonomous channel integration."
   }
 }
