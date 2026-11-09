@@ -473,7 +473,7 @@ def approve_task(tid:str,authorization:str|None=Header(default=None)):
 # No founder token delegation, payment authority, new scheduler, CRM, or autonomous outbound action.
 class NexusGrowthObservation(BaseModel):
     model_config=ConfigDict(extra="forbid")
-    source_event_id:str=Field(pattern=r"^nexus\.(lead\.nxlead_[0-9a-f]{32}|order\.nx_[0-9a-f]{32}\.(created|paid))$",min_length=32,max_length=128)
+    source_event_id:str=Field(pattern=r"^nexus\.(lead\.nxlead_[0-9a-f]{32}|order\.nx_[0-9a-f]{32}\.(created|paid)|intent\.nxi_[0-9a-f]{32})$",min_length=32,max_length=128)
     source_kind:str
     source_ref:str=Field(min_length=20,max_length=220)
     signal:str
@@ -502,6 +502,9 @@ def nexus_growth_observation(payload:NexusGrowthObservation,x_nexus_bridge_token
     elif eid.endswith(".paid"):
         expected_signal=("revenue","stripe_paid_reported",
                          "nexus:economic-order:"+eid.removeprefix("nexus.order.").removesuffix(".paid"))
+    elif eid.startswith("nexus.intent."):
+        expected_signal=("activation","intent_drafts_generated",
+                         "nexus:economic-intent:"+eid.removeprefix("nexus.intent."))
     else:
         raise HTTPException(422,"Unknown NEXUS event kind")
     if (data["source_kind"]!="REPORTED_OPERATIONAL" or
