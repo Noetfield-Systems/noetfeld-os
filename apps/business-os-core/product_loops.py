@@ -34,6 +34,7 @@ SIGNALS = frozenset({
     "service_health", "baseline", "competition", "support",
 })
 SAFE_ID = re.compile(r"^[a-z][a-z0-9-]{2,79}$")
+SAFE_METRIC = re.compile(r"^[a-z][a-z0-9_-]{2,79}$")
 EVIDENCE_REF = re.compile(r"^(https://[^\s]{8,220}|[a-z][a-z0-9_.:-]{7,220})$")
 HEALTH_PATHS = frozenset({"/health", "/healthz", "/api/health", "/ready"})
 
@@ -256,8 +257,9 @@ def _insert_observation(db, company: str, project: str, payload: dict, verified:
     if "@" in summary or re.search(r"(?i)(password|authorization:|bearer\s|api[_-]?key\s*=)", summary):
         raise ValueError("sensitive_signal_rejected")
     metric_name = payload.get("metric_name")
-    if metric_name is not None:
-        require_id(metric_name, "metric_name")
+    if metric_name is not None and (
+        not isinstance(metric_name, str) or not SAFE_METRIC.fullmatch(metric_name)):
+        raise ValueError("invalid_metric_name")
     metric_value = payload.get("metric_value")
     if metric_value is not None and (
         type(metric_value) not in (float, int) or
@@ -269,7 +271,14 @@ def _insert_observation(db, company: str, project: str, payload: dict, verified:
     severity = payload.get("severity", 1)
     if type(severity) is not int or not 0 <= severity <= 4:
         raise ValueError("severity_invalid")
-    observed_at = payload.get("observed_at") or utc()
+    # Same source event with omitted timestamp reuses its original time, even
+    # when a retry arrives hours later; divergent evidence still conflicts.
+    previous = db.execute(
+        """SELECT id,payload_sha256,observed_at FROM product_observations
+           WHERE company_id=? AND project_id=? AND source_event_id=?""",
+        (company, project, source_event_id),
+    ).fetchone()
+    observed_at = payload.get("observed_at") or (previous["observed_at"] if previous else utc())
     try:
         dt = datetime.fromisoformat(observed_at.replace("Z", "+00:00"))
         if dt.tzinfo is None or dt.timestamp() > time.time() + 300:
@@ -283,11 +292,7 @@ def _insert_observation(db, company: str, project: str, payload: dict, verified:
         "sample_count": samples, "severity": severity, "observed_at": observed_at,
     }
     sha = fingerprint(normalized)
-    old = db.execute(
-        """SELECT id,payload_sha256 FROM product_observations
-           WHERE company_id=? AND project_id=? AND source_event_id=?""",
-        (company, project, source_event_id),
-    ).fetchone()
+    old = previous
     if old:
         if old["payload_sha256"] != sha:
             raise ValueError("source_event_id_conflicts_with_existing_evidence")
