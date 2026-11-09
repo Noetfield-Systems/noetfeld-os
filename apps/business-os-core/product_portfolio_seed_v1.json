@@ -1,0 +1,155 @@
+{
+  "schema": "noetfield.company-os.portfolio-projection.v1",
+  "version": "1.0.0",
+  "updated_at": "2026-11-09",
+  "source_of_truth": "Noetfield-Systems/sina_founder_os/portfolio/PROJECT-AND-ASSET-REGISTRY.json",
+  "source_git_blob_sha": "9999b14beb7fbe1740073d37b605e539dd3582cd",
+  "further_projects_basis": "Founder instruction 2026-11-09: dating, match, startup, games, community, messenger, market/trader and customer ventures. Founder-portfolio is a logical operating scope only, not a legal entity or verified external tenant.",
+  "no_legal_entity_inference": true,
+  "not_authoritative_ssot": true,
+  "automated_execution_limit": "Internal drafted specialist operations only. Governed WorkPacket required for code writes; A4 reserved for external campaigns, payments, legal and material production.",
+  "programs": [
+    {
+      "company_id": "noetfield-systems-inc",
+      "project_id": "buildworkflow-field-change-handoff",
+      "name": "BuildWorkflow",
+      "vertical": "construction-workflow-saas",
+      "priority": 4,
+      "health_url": "https://fieldchange-desk-production.up.railway.app/health",
+      "objective": "Operate real self-service trade workflows, acquisition by genuinely useful free tools and referrals, onboarding activation, quality, retention and subscription experiments. Improve the code and community from real usage; never invent leads or claim revenue from simulated data.",
+      "max_tasks_per_cycle": 7
+    },
+    {
+      "company_id": "noetfield-systems-inc",
+      "project_id": "noetfield-web3-launchpad",
+      "name": "RHEVO Creator Studio",
+      "vertical": "web3-creator-community",
+      "priority": 3,
+      "health_url": "https://web3-launchpad-staging.up.railway.app/api/health",
+      "objective": "Grow a useful and safe creator education and verified discovery community on Devnet, improve onboarding and content, measure real wallet-authorized activity separately from synthetic QA, and retain explicit approval boundaries before any Mainnet exchange or paid token activity.",
+      "max_tasks_per_cycle": 7
+    },
+    {
+      "company_id": "noetfield-systems-inc",
+      "project_id": "noetfield-company-os-commercial-product",
+      "name": "Company OS Product",
+      "vertical": "agentic-company-platform",
+      "priority": 4,
+      "health_url": "https://company-os-staging-staging.up.railway.app/api/health",
+      "objective": "Build and operate a real reusable customer Company OS, with product onboarding, tenant boundaries, departments, CRM, growth, support, pricing, evidence and managed operations for genuine customer demand; build the product, not just sales presentations.",
+      "max_tasks_per_cycle": 7
+    },
+    {
+      "company_id": "founder-portfolio",
+      "project_id": "atelier",
+      "name": "Atelier Social",
+      "vertical": "dating-match-social-community",
+      "priority": 5,
+      "health_url": "https://atelier-production-3bd2.up.railway.app/health",
+      "objective": "Operate a privacy-respecting adult dating and social community: self-serve free joining, matching relevance, thoughtful UX, community engagement, peer learning and referrals, acquisition experiments, retention, reporting and iterative product engineering. Keep test personas distinguishable from real members.",
+      "max_tasks_per_cycle": 7
+    },
+    {
+      "company_id": "founder-portfolio",
+      "project_id": "venture-formation-lab",
+      "name": "Venture Formation Lab",
+      "vertical": "startup-founder-builder-investor-matching",
+      "priority": 5,
+      "health_url": "https://venture-formation-public-site-production.up.railway.app/health",
+      "objective": "Run a useful free and paid founder-builder-operator-investor network with authentic profiles, startup matching, idea validation, mentor education, community events, referral/network effects, product experiments, conversion and retention based on real members and transparent test agents.",
+      "max_tasks_per_cycle": 7
+    },
+    {
+      "company_id": "founder-portfolio",
+      "project_id": "signalforge",
+      "name": "SignalForge",
+      "vertical": "market-research-signals-social-learning",
+      "priority": 4,
+      "health_url": "https://signalforge-web-production.up.railway.app/health",
+      "objective": "Operate a trading research and learning product with data quality and signal reliability, self-serve activation, free education, community, creator distribution, retention, subscription experiments and customer support; never claim trading returns without independent evidence.",
+      "max_tasks_per_cycle": 7
+    },
+    {
+      "company_id": "founder-portfolio",
+      "project_id": "misenorth",
+      "name": "MiseNorth",
+      "vertical": "restaurant-operations-saas",
+      "priority": 4,
+      "health_url": "https://misenorth-web-production.up.railway.app/health",
+      "objective": "Operate a production-grade restaurant product with real restaurant owner onboarding, menu, ordering and retention workflows, self-service experiences, referrals, community education, product improvements, verified adoption and paid conversion; synthetic venues never count as customers.",
+      "max_tasks_per_cycle": 7
+    },
+    {
+      "company_id": "founder-portfolio",
+      "project_id": "interior-match",
+      "name": "Interior Match",
+      "vertical": "interior-design-marketplace",
+      "priority": 4,
+      "objective": "Build a useful matching marketplace and community for interior designers, studios, property owners and clients, including free authentic profiles, portfolios, discovery, messaging, growth loops, trust, retention and experience-led product improvements.",
+      "max_tasks_per_cycle": 7
+    },
+    {
+      "company_id": "founder-portfolio",
+      "project_id": "buildrelay-bridge-economy",
+      "name": "BuildRelay",
+      "vertical": "founder-network-bridge-economy",
+      "priority": 4,
+      "objective": "Operate a founder/startup builder network and contribution economy with useful learning, genuine participation, open challenges, verified contribution, matching, community and iterative growth; do not conflate this product with Cairn or a DEX.",
+      "max_tasks_per_cycle": 7
+    },
+    {
+      "company_id": "founder-portfolio",
+      "project_id": "cairn-season-0",
+      "name": "Cairn",
+      "vertical": "web3-community-experiments",
+      "priority": 3,
+      "objective": "Research and build a real creator/developer BNB community product with education, social challenges, participant feedback, gated token experiments and authentic community growth; never represent simulated test participants as real holders.",
+      "max_tasks_per_cycle": 7
+    },
+    {
+      "company_id": "founder-portfolio",
+      "project_id": "trustfield-msb-workflow",
+      "name": "TrustField",
+      "vertical": "fintech-workflow-regulated-services",
+      "priority": 3,
+      "objective": "Develop workflow assurance for regulated financial services using real stakeholder research, product usability, developer onboarding, content learning loops, community and careful pilot evidence; preserve separate independent venture identity and human authorization for regulated operations.",
+      "max_tasks_per_cycle": 7
+    },
+    {
+      "company_id": "founder-portfolio",
+      "project_id": "trade-radar",
+      "name": "Trade Radar",
+      "vertical": "markets-research-community",
+      "priority": 4,
+      "objective": "Create accessible real market intelligence briefs and learning/community tools to attract genuine users organically, measure usage, trust and retention, and explore premium research conversions with source-backed financial data rather than hypothetical PnL.",
+      "max_tasks_per_cycle": 7
+    },
+    {
+      "company_id": "founder-portfolio",
+      "project_id": "founders-room-messenger",
+      "name": "Founders Room Messenger",
+      "vertical": "community-messaging",
+      "priority": 4,
+      "objective": "Build a reliable and useful founder community messenger with onboarding, matching, moderation, group learning and trustworthy real-user retention and referral loops while isolating synthetic QA users.",
+      "max_tasks_per_cycle": 7
+    },
+    {
+      "company_id": "founder-portfolio",
+      "project_id": "social-games-lab",
+      "name": "Social Games Lab",
+      "vertical": "social-community-games",
+      "priority": 3,
+      "objective": "Discover, prototype and improve multiplayer social games and cooperative challenges with free access, sharing, organic community growth, retention and real-user validation; agentic gameplay QA must remain clearly synthetic.",
+      "max_tasks_per_cycle": 7
+    },
+    {
+      "company_id": "founder-portfolio",
+      "project_id": "trading-exchange-lab",
+      "name": "Trading and Exchange Lab",
+      "vertical": "digital-markets-exchange-research",
+      "priority": 2,
+      "objective": "Explore legitimate user needs and production-grade product patterns for trading, digital assets and exchange research, education and social portfolios; do not execute real trades, custody funds, move money or claim regulatory approval without separate authorization.",
+      "max_tasks_per_cycle": 7
+    }
+  ]
+}
