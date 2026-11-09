@@ -118,6 +118,23 @@ class CompanyProductLoops(unittest.TestCase):
         self.assertNotIn("sales_qualification", roles)
         self.assertNotIn("roi_analyst", roles)
 
+    def test_directional_forecasting_uses_real_reported_metrics_not_synthetic(self):
+        self.register("social-learning-app")
+        for i,metric in enumerate((5,12,23),1):
+            self.observe("social-learning-app","real-usage-000"+str(i),
+                kind="REPORTED_REAL_USER_ANALYTICS",signal="activation",
+                metric_name="activation_rate",metric_value=metric,sample_count=100)
+        self.observe("social-learning-app","synthetic-usage-0001",
+            kind="SYNTHETIC_AGENT_QA",signal="synthetic_qa",
+            metric_name="activation_rate",metric_value=100000,sample_count=100000)
+        forecast=product_loops.portfolio()["programs"][0]["directional_signal_forecasts"]
+        self.assertEqual(len(forecast),1)
+        self.assertEqual(forecast[0]["metric"],"activation_rate")
+        self.assertEqual(forecast[0]["direction"],"INCREASING")
+        self.assertLess(forecast[0]["one_next_sample_heuristic"],40)
+        self.assertFalse(forecast[0]["business_forecast_verified"])
+        self.assertEqual(forecast[0]["confidence"],"LOW")
+
     def test_duplicate_exact_event_is_idempotent_conflicting_source_id_denied(self):
         self.register("matcher")
         a = self.observe("matcher", "event-000001")
@@ -172,7 +189,7 @@ class CompanyProductLoops(unittest.TestCase):
         with patch.dict(os.environ,{"COMPANY_OS_APPROVED_OBSERVATION_HOSTS":""}):
             with patch.object(product_loops,"_probe") as probe:
                 result=product_loops.tick_due()
-                self.assertEqual(result["checked_sources"],0)
+                self.assertEqual(result["new_health_signals"],0)
                 probe.assert_not_called()
         state=product_loops.portfolio()["programs"][0]
         self.assertFalse(state["health_monitoring_authorized"])
@@ -183,7 +200,7 @@ class CompanyProductLoops(unittest.TestCase):
         with patch.dict(os.environ,{"COMPANY_OS_APPROVED_OBSERVATION_HOSTS":host}):
             with patch.object(product_loops,"_probe",return_value=(200,"HTTP_OK")) as probe:
                 out=product_loops.tick_due()
-                self.assertEqual(out["checked_sources"],1)
+                self.assertEqual(out["new_health_signals"],1)
                 probe.assert_called_once()
             report=product_loops.portfolio()["programs"][0]
             self.assertTrue(report["health_monitoring_authorized"])
