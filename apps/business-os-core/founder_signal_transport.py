@@ -105,7 +105,9 @@ def enqueue_in_existing_events(db: sqlite3.Connection, observation: dict) -> str
       (event_id, EVENT, "company-os-federation", "portfolio",
        json.dumps(body, sort_keys=True, separators=(",", ":")),
        datetime.now(timezone.utc).isoformat(), key,
-       90 if body["event_type"] == "service_degraded" else 30))
+       # Process the owning product signal FIRST, then federate the outcome.
+       # A feedback event cannot starve the original Company OS work.
+       1 if body["event_type"] == "service_degraded" else 0))
     return event_id
 
 
