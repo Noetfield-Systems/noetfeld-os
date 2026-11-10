@@ -19,6 +19,7 @@ from datetime import datetime, timezone
 SOURCE_URL = "https://sina-founder-os-staging-staging.up.railway.app"
 GET_PATH = "/api/v2/organization/company/requests"
 MANDATES_PATH = "/api/v2/organization/company/mandates"
+AGENT_DECISION_PATH = "/api/v2/agent/decision"
 ACK_PATH = "/api/v2/organization/company/ack"
 TOKEN_ENV = "SINA_ORG_BRIDGE_TOKEN"
 LIMIT = 8
@@ -72,7 +73,7 @@ def init(db):
 def _request(path, method="GET", body=None, fetch=None):
     if not configured():
         raise RuntimeError("sina_organization_bridge_not_configured")
-    if path not in (GET_PATH, ACK_PATH, MANDATES_PATH):
+    if path not in (GET_PATH, ACK_PATH, MANDATES_PATH, AGENT_DECISION_PATH):
         raise ValueError("destination outside fixed Sina Organization bridge")
     raw=None if body is None else json.dumps(
         body, sort_keys=True, separators=(",",":")).encode("utf-8")
