@@ -41,7 +41,8 @@ class LocalCompanyOSRuntimeTests(unittest.TestCase):
 
     def test_runtime_docker_image_includes_local_company_os(self):
         docker=(Path(__file__).with_name("Dockerfile")).read_text()
-        self.assertIn("COPY app.py core.py venture_company_os.py",docker)
+        copy_line=next(x for x in docker.splitlines() if x.startswith("COPY app.py "))
+        self.assertIn("venture_company_os.py",copy_line)
         self.assertIn("python -m py_compile app.py core.py venture_company_os.py",docker)
 
     def test_local_instances_have_distinct_teams_goals_and_scoped_memory(self):
