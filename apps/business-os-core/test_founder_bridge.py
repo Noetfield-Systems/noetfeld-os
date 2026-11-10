@@ -144,7 +144,7 @@ class CompanyFounderContinuousBridgeTests(unittest.TestCase):
         payload={"error":"invalid_company_ack",
                  "message":"workstream_already_bound_to_different_task"}
         def conflict(*args,**kwargs):
-            return HTTPError("https://sina-founder-os-staging-staging.up.railway.app/api/v2/organization/company/ack",
+            raise HTTPError("https://sina-founder-os-staging-staging.up.railway.app/api/v2/organization/company/ack",
                              400,"Conflict",{},io.BytesIO(json.dumps(payload).encode()))
         with patch.object(founder_bridge,"_request",side_effect=conflict):
             self.assertEqual(founder_bridge.reconcile(),0)
@@ -164,7 +164,7 @@ class CompanyFounderContinuousBridgeTests(unittest.TestCase):
         from urllib.error import HTTPError
         founder_bridge.admit(request(),founder_bridge._allowed_projects())
         def other(*args,**kwargs):
-            return HTTPError("https://sina-founder-os-staging-staging.up.railway.app/api/v2/organization/company/ack",
+            raise HTTPError("https://sina-founder-os-staging-staging.up.railway.app/api/v2/organization/company/ack",
                               400,"Bad Request",{},io.BytesIO(
                                   b'{"error":"invalid_company_ack","message":"unknown_workstream"}'))
         with patch.object(founder_bridge,"_request",side_effect=other):
