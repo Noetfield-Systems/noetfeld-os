@@ -85,8 +85,16 @@ def _get_decision(body, *,fetch=None):
 def _store_answer(db,scope,project,result,*,task_id=None,event_id=None):
     from datetime import datetime,timezone
     init(db)
-    h=hashlib.sha256(canonical({k:v for k,v in result.items()
-                               if k!="audit_record_updated"}).encode()).hexdigest()
+    # Feedback counters and transport audit flags may change on a replay,
+    # but the decision's actual authority and directive may not.
+    stable={key:result.get(key) for key in (
+        "schema","decision_ref","decision","project_id","company_scope",
+        "next_action","founder_question_required","founder_question",
+        "policy_version","authority","governor_permit_issued",
+        "external_effect_authorized")}
+    stable["founder_policy_digest"]=(
+        (result.get("founder_intent_memory") or {}).get("digest"))
+    h=hashlib.sha256(canonical(stable).encode()).hexdigest()
     record=db.execute("""SELECT response_hash,event_id,task_id FROM venture_company_os_decisions
        WHERE company_id=? AND project_id=? AND decision_ref=?""",
        (scope,project,result["decision_ref"])).fetchone()
