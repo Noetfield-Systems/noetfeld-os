@@ -137,7 +137,7 @@ def submit_question(data,*,fetch=None):
                 "source_kind":"REPORTED_OPERATIONAL",
                 "source_ref":"company-os:local-agent-decision",
                 "signal":"feature_request" if data.get("proposed_action") in (
-                    "IMPLEMENT_CODE","PREPARE_DEPLOY","INTERNAL_RESEARCH") else "quality_issue",
+                    "IMPLEMENT_CODE","PREPARE_DEPLOY","INTERNAL_RESEARCH") else "feedback",
                 "summary":summary,"severity":2
             }
             observed=product_loops._insert_observation(db,local_scope,local_project,source,verified=False)
