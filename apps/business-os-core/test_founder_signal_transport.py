@@ -46,7 +46,7 @@ class FounderFeedbackBridgeTests(unittest.TestCase):
         self.tmp.cleanup()
 
     def make(self, eid, kind="FIRST_PARTY_HTTP_HEALTH", signal="service_health", severity=3):
-        return product_loops.observe("noetfield-systems-inc", "signal-forge", {
+        payload = {
             "source_event_id": eid, "source_kind": kind,
             "source_ref": "https://signalforge-web-production.up.railway.app/api/health"
             if kind == "FIRST_PARTY_HTTP_HEALTH" else "company-os:real-reported-source",
@@ -54,7 +54,17 @@ class FounderFeedbackBridgeTests(unittest.TestCase):
             "summary": "Observed genuine bounded operation without any external code or money changes.",
             "severity": severity,
             "observed_at": datetime.now(timezone.utc).isoformat(),
-        })
+        }
+        if kind == "FIRST_PARTY_HTTP_HEALTH":
+            # This is exactly the verified-health poll's existing transaction.
+            with core.connect() as db:
+                db.execute("BEGIN IMMEDIATE")
+                result = product_loops._insert_observation(
+                    db, "noetfield-systems-inc", "signal-forge", payload, verified=True,
+                )
+                db.commit()
+                return result
+        return product_loops.observe("noetfield-systems-inc", "signal-forge", payload)
 
     def federation_rows(self):
         with core.connect() as db:
