@@ -353,6 +353,7 @@ def cycle(fetch=None):
     if os.environ.get("SINA_ORG_WORKPACKET_EXECUTION_OWNER","").strip().upper()=="AGENT_FABRIC":
         import venture_decision_bridge
         feedback=venture_decision_bridge.flush_feedback(fetch=fetch,limit=3)
+        import core
         with core.connect() as db:
             init(db)
             legacy=db.execute("""SELECT COUNT(*) FROM sina_workstream_bindings
