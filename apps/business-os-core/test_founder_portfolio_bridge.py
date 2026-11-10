@@ -133,9 +133,14 @@ class SinaPortfolioCompanyEventTests(unittest.TestCase):
 
     def test_production_image_includes_the_bridge_and_compiles_before_start(self):
         dockerfile = Path(__file__).with_name("Dockerfile").read_text(encoding="utf-8")
-        self.assertIn("COPY app.py core.py product_loops.py founder_portfolio_bridge.py", dockerfile)
-        self.assertIn("python -m py_compile app.py core.py paperclip_bridge.py product_loops.py founder_portfolio_bridge.py",
-                      dockerfile)
+        copy_line=next(x for x in dockerfile.splitlines() if x.startswith("COPY app.py "))
+        compile_line=next(x for x in dockerfile.splitlines()
+                          if "python -m py_compile " in x)
+        for module in ("app.py","core.py","venture_company_os.py",
+                       "product_loops.py","founder_portfolio_bridge.py",
+                       "sina_work_bridge.py"):
+            self.assertIn(module,copy_line)
+            self.assertIn(module,compile_line)
 
     def test_disabled_without_private_token_and_no_extra_scheduler(self):
         self.assertEqual(bridge.tick()["state"], "NOT_CONFIGURED")
