@@ -134,6 +134,7 @@ def init():
   product_loops.init(d)
   sina_work_bridge.init(d)
   venture_company_os.init(d)
+  venture_decision_bridge.init(d)
  # Default off for tests and uncommissioned customer deployments. Staging can
  # activate an idempotent source-provenance portfolio after a scoped rollout.
  if os.getenv("COMPANY_OS_PORTFOLIO_AUTOSTART","").lower() in {"1","true"}:
