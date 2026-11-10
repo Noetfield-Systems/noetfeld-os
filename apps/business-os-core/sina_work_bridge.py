@@ -122,54 +122,131 @@ def _validated(item):
         raise ValueError("company_authority_scope_violation")
     return scope, role
 
-def receive(item):
-    """Claim exactly once into existing Company OS tasks; no parallel state."""
+def _founder_project_record(projection, project_id, scope):
+    """Use the authenticated Founder SSOT, never a Company-invented entity."""
+    if not isinstance(projection, dict) or not isinstance(projection.get("projects"), list):
+        return None
+    items = [p for p in projection["projects"] if p.get("project_id") == project_id]
+    if len(items) != 1:
+        return None
+    row = items[0]
+    if (row.get("company_id") or "founder-portfolio") != scope:
+        raise ValueError("sina_canonical_owner_scope_mismatch")
+    return row
+
+
+def receive(item, projection=None):
+    """One approved advisory request -> one canonical Company task.
+
+    Existing operating programs are reused. Missing scopes are admitted to
+    analysis-only Company OS programs *only* when independently read from the
+    canonical authenticated Founder portfolio. No company/legal tenant creation,
+    external execution capability, new queue, or product-live assertion.
+    """
     import core
-    scope,role=_validated(item)
-    wid=item["request_id"]
+    scope, role = _validated(item)
+    wid = item["request_id"]
+    canonical_project = item["project_id"]
+    canonical = _founder_project_record(projection, canonical_project, scope)
     with core.connect() as db:
         db.execute("BEGIN IMMEDIATE")
         init(db)
-        existing=db.execute(
+        original = db.execute(
             "SELECT task_id,company_id,project_id FROM sina_workstream_bindings WHERE workstream_id=?",
-            (wid,)).fetchone()
-        if existing:
-            if existing["company_id"]!=scope or existing["project_id"]!=item["project_id"]:
+            (wid,),
+        ).fetchone()
+        # A previously accepted binding survives an upstream outage/restart.
+        # Its canonical project is cryptographically tied to the stable
+        # Founder-issued WorkRequest id; never recreate its task.
+        if original:
+            if original["company_id"] != scope:
                 raise ValueError("reused_workstream_mismatched_tenant")
-            return {"state":"EXISTING","task_id":existing["task_id"],
-                    "company_id":scope,"workstream_id":wid}
-        program=db.execute(
+            if original["project_id"] != canonical_project:
+                from founder_signal_transport import CANONICAL_ALIASES
+                if CANONICAL_ALIASES.get(original["project_id"]) != canonical_project:
+                    raise ValueError("reused_workstream_mismatched_project")
+            return {"state": "EXISTING", "task_id": original["task_id"],
+                    "company_id": scope, "workstream_id": wid}
+
+        operating_id = canonical_project
+        program = db.execute(
             "SELECT status FROM product_programs WHERE company_id=? AND project_id=?",
-            (scope,item["project_id"])).fetchone()
+            (scope, operating_id),
+        ).fetchone()
+        if (not program or program["status"] not in ACTIVE) and canonical is not None:
+            # Three explicit legacy *product display aliases*, validated
+            # against live Founder SSOT on every first admission. Prefer the
+            # already-running Company program over a duplicate operating row.
+            from founder_signal_transport import CANONICAL_ALIASES
+            aliases = [local for local, target in CANONICAL_ALIASES.items()
+                       if target == canonical_project]
+            for alias in aliases:
+                found = db.execute(
+                    "SELECT status FROM product_programs WHERE company_id=? AND project_id=?",
+                    (scope, alias),
+                ).fetchone()
+                if found and found["status"] in ACTIVE:
+                    operating_id, program = alias, found
+                    break
+
         if not program or program["status"] not in ACTIVE:
-            return {"state":"PROJECT_NOT_COMMISSIONED","company_id":scope,
-                    "workstream_id":wid}
-        # Product scope is never inferred from a brand; workstream specifies it.
-        title=(item["functional_unit"].replace("_"," ").title()+": "+
-               item["project_id"])[:140]
-        objective=(
-            "Founder OS organizational WorkPacket *request* "+wid+
-            ". Source program "+item["program_id"]+
-            ". "+item["task"]+
-            ". Produce a concrete internal artifact and a next-action with evidence. "+
-            "No external outreach, code mutation, finance movement, legal commitments "+
+            if canonical is None:
+                return {"state": "PROJECT_NOT_COMMISSIONED", "company_id": scope,
+                        "workstream_id": wid}
+            # Advisory-only registration is a Company work SCOPE, not a
+            # customer, new legal company, active product or marketing launch.
+            # No health URL, baseline fanout, credentials or paid claims.
+            when = datetime.now(timezone.utc).isoformat()
+            name = str(canonical.get("name") or canonical_project)[:100]
+            if len(name) < 3 or "@" in name:
+                name = canonical_project
+            db.execute(
+                """INSERT OR IGNORE INTO product_programs
+                   (company_id,project_id,name,vertical,objective,status,priority,
+                    health_url,max_tasks_per_cycle,created_at,updated_at)
+                   VALUES (?,?,?,?,?,?,?,?,?,?,?)""",
+                (scope, canonical_project, name, "founder-advisory",
+                 "Complete bounded internal evidence-based analysis for an existing "
+                 "Founder portfolio project; no external effects without Governor permit.",
+                 "SINA_ADVISORY_INTAKE_ONLY", 1, None, 2, when, when),
+            )
+            operating_id = canonical_project
+            program = db.execute(
+                "SELECT status FROM product_programs WHERE company_id=? AND project_id=?",
+                (scope, operating_id),
+            ).fetchone()
+        if not program or program["status"] not in (ACTIVE | {"SINA_ADVISORY_INTAKE_ONLY"}):
+            return {"state": "PROJECT_NOT_COMMISSIONED", "company_id": scope,
+                    "workstream_id": wid}
+        title = (item["functional_unit"].replace("_", " ").title() + ": " +
+                 canonical_project)[:140]
+        objective = (
+            "Founder OS organizational WorkPacket *request* " + wid +
+            ". Source program " + item["program_id"] +
+            ". " + item["task"] +
+            ". Produce a concrete internal artifact and a next-action with evidence. "
+            "No external outreach, code mutation, finance movement, legal commitments "
             "or production deployment without the separate Governor permit."
         )[:1800]
-        task_id=core.add_task(
-            db,None,None,"portfolio",role,title,objective,
-            "Draft evidence-backed actionable work using existing Company OS workflow. "+
-            "Independent verification and governance remain external.")
+        task_id = core.add_task(
+            db, None, None, "portfolio", role, title, objective,
+            "Draft evidence-backed actionable work using existing Company OS workflow. "
+            "Independent verification and governance remain external.",
+        )
         db.execute(
             "UPDATE tasks SET company_id=?,project_id=?,observation_id=NULL WHERE id=?",
-            (scope,item["project_id"],task_id))
-        now=datetime.now(timezone.utc).isoformat()
-        db.execute("""
-            INSERT INTO sina_workstream_bindings
-            (workstream_id,task_id,company_id,project_id,created_at,updated_at)
-            VALUES (?,?,?,?,?,?)""",
-            (wid,task_id,scope,item["project_id"],now,now))
-        return {"state":"CREATED_CANONICAL_TASK","task_id":task_id,
-                "company_id":scope,"workstream_id":wid}
+            (scope, operating_id, task_id),
+        )
+        when = datetime.now(timezone.utc).isoformat()
+        db.execute(
+            """INSERT INTO sina_workstream_bindings
+               (workstream_id,task_id,company_id,project_id,created_at,updated_at)
+               VALUES (?,?,?,?,?,?)""",
+            (wid, task_id, scope, operating_id, when, when),
+        )
+        return {"state": "CREATED_CANONICAL_TASK", "task_id": task_id,
+                "company_id": scope, "workstream_id": wid}
+
 
 def _ack(workstream_id,task_id,scope,status,fetch=None):
     data={"workstream_id":workstream_id,"task_id":task_id,
@@ -220,10 +297,17 @@ def cycle(fetch=None):
     items=result.get("items")
     if not isinstance(items,list) or len(items)>20:
         raise ValueError("work_intake_size_invalid")
+    # The portfolio read endpoint already validates the canonical SSOT SHA.
+    # One bounded read supplies scope evidence for the entire batch.
+    import founder_portfolio_bridge
+    try:
+        projection = founder_portfolio_bridge.fetch_projection()
+    except (ValueError, RuntimeError, OSError, urllib.error.URLError):
+        projection = None
     created=0; unmapped=0
     for item in items:
         try:
-            response=receive(item)
+            response=receive(item, projection=projection)
             if response["state"]=="PROJECT_NOT_COMMISSIONED":
                 unmapped+=1
             elif response["state"]=="CREATED_CANONICAL_TASK":
