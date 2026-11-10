@@ -5,6 +5,7 @@ import product_loops
 import founder_portfolio_bridge
 import sina_work_bridge
 import founder_signal_transport
+import venture_company_os
 
 DB=Path(os.getenv("DATABASE_PATH","/data/business-os.sqlite"))
 BRANDS={"noetfield":"Noetfield Systems","buildworkflow":"BuildWorkflow","trustfield":"TrustField","signalforge":"SignalForge","buildrelay":"BuildRelay","portfolio":"Portfolio"}
@@ -131,6 +132,7 @@ def init():
   except sqlite3.OperationalError:pass
   product_loops.init(d)
   sina_work_bridge.init(d)
+  venture_company_os.init(d)
  # Default off for tests and uncommissioned customer deployments. Staging can
  # activate an idempotent source-provenance portfolio after a scoped rollout.
  if os.getenv("COMPANY_OS_PORTFOLIO_AUTOSTART","").lower() in {"1","true"}:
@@ -212,8 +214,12 @@ def retrieve(brand,q,limit=4):
   try:
    expr=" OR ".join('"'+x+'"' for x in terms)
    rows=d.execute("SELECT m.content FROM memory_fts f JOIN memories m ON m.id=f.memory_id WHERE f.brand=? AND memory_fts MATCH ? LIMIT ?",(brand,expr,limit)).fetchall()
-   return [x["content"] for x in rows]
-  except sqlite3.OperationalError: rows=d.execute("SELECT content FROM memories WHERE brand=? ORDER BY created_at DESC LIMIT 100",(brand,)).fetchall()
+   if rows:return [x["content"] for x in rows]
+  except sqlite3.OperationalError:
+   pass
+  # FTS may return no hits on hashed IDs or tokenization edge cases.
+  # Fall back ONLY within the exact venture memory scope, never across teams.
+  rows=d.execute("SELECT content FROM memories WHERE brand=? ORDER BY created_at DESC LIMIT 100",(brand,)).fetchall()
  return [x["content"] for x in sorted(rows,key=lambda r:sum(t in r["content"].lower() for t in terms),reverse=True)[:limit]]
 def process_intake(e):
  p=json.loads(e["payload"]);brand=p["brand"];aud=p["audience"];intent=p["intent"];urg=p["urgency"];value=float(p.get("estimated_value") or 0);route,primary,support=route_for(brand,aud,intent);fit=score(aud,intent,urg,value,p["problem"])
@@ -316,6 +322,13 @@ def process_task(t):
  profile=next((a for a in AGENTS if a[0]==role),None)
  agent_name=profile[1] if profile else role
  agent_mission=profile[2] if profile else "Complete the assigned specialist task."
+ if scoped_product:
+  with connect() as d:
+   venture_specialist=venture_company_os.specialist(d,t["company_id"],t["project_id"],role)
+  if venture_specialist:
+   agent_mission=venture_specialist["remit"]
+   ctx["venture_company_os_instance"]=venture_specialist["instance_id"]
+   ctx["venture_source_asset"]=venture_specialist["source_asset"]
  company_seat=company_role_for_runtime(role)
  manager_role=company_seat["reports_to"]
  result={"assessment":"Deterministic processing. Third-party AI is used only when the user opted in and provider is configured.",
@@ -354,7 +367,7 @@ def process_task(t):
  # The existing Company OS task engine may invoke the Agent Fabric model
  # only for authenticated Founder-originated, scoped, internal WorkPackets.
  # Do not forward raw customer messages, contacts or memory to this inference.
- if scoped_product and sina_work_bridge.specialist_configured() and sina_work_bridge.is_sina_task(t["id"]):
+ if scoped_product and sina_work_bridge.specialist_configured() and sina_work_bridge.is_company_os_task(t["id"]):
   try:
    generated=sina_work_bridge.specialist_proposal(t)
    result=generated["result"]
@@ -493,6 +506,14 @@ def daily_tick():
    "external_execution_authorized":False},sort_keys=True),flush=True)
  # Same durable Company OS cycle, not a new polling service.
  product_loops.tick_due()
+ # Each venture has its OWN Company OS mission, team and cadence. Sina only
+ # owns portfolio-level intent and observes outcomes; it is not the task CEO.
+ local_cycles=venture_company_os.tick()
+ if local_cycles.get("events_created",0):
+  print("VENTURE_COMPANY_OS_LOCAL_CYCLES "+json.dumps({
+   "projects":local_cycles["local_companies_advanced"],
+   "canonical_events":local_cycles["events_created"],
+   "external_actions":False},sort_keys=True),flush=True)
  sina_work=sina_work_bridge.tick()
  if sina_work.get("state") in ("OBSERVED","DEGRADED"):
   print("COMPANY_OS_SINA_WORK_HANDOFF "+json.dumps({
