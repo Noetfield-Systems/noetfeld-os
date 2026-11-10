@@ -76,5 +76,72 @@ class CompanySinaOrgBridgeTests(unittest.TestCase):
         unsafe["resources"]["budget_usd"]=10000
         with self.assertRaises(ValueError):bridge.receive(unsafe)
 
+
+    def test_unknown_canonical_project_becomes_analysis_only_when_ssot_owner_verified(self):
+        item=self.work("f"*32)
+        item["project_id"]="noetfield-verification-layer"
+        canonical={"projects":[{
+          "project_id":"noetfield-verification-layer",
+          "company_id":"noetfield-systems-inc",
+          "name":"Noetfield Verification Layer",
+        }]}
+        self.assertEqual(bridge.receive(item)["state"],"PROJECT_NOT_COMMISSIONED")
+        result=bridge.receive(item,projection=canonical)
+        self.assertEqual(result["state"],"CREATED_CANONICAL_TASK")
+        self.assertEqual(bridge.receive(item,projection=canonical)["task_id"],result["task_id"])
+        with core.connect() as db:
+            program=db.execute(
+               "SELECT status,health_url FROM product_programs WHERE company_id=? AND project_id=?",
+               ("noetfield-systems-inc","noetfield-verification-layer")).fetchone()
+            self.assertEqual(program["status"],"SINA_ADVISORY_INTAKE_ONLY")
+            self.assertIsNone(program["health_url"])
+            task=db.execute("SELECT role,project_id,status FROM tasks WHERE id=?",
+                            (result["task_id"],)).fetchone()
+            self.assertEqual(task["role"],"marketing_content")
+            self.assertEqual(task["status"],"queued")
+        self.assertNotIn("SINA_ADVISORY_INTAKE_ONLY",product_loops.ACTIVE_STATES)
+        core.process_task(core.claim("tasks"))
+        with core.connect() as db:
+            self.assertEqual(db.execute(
+                "SELECT count(*) FROM tasks WHERE project_id='noetfield-verification-layer'"
+            ).fetchone()[0],1)
+
+    def test_existing_alias_is_reused_without_duplicate_company_program(self):
+        product_loops.register({
+          "company_id":"founder-portfolio","project_id":"signalforge",
+          "name":"SignalForge","vertical":"market-intelligence",
+          "objective":"Improve genuine market intelligence and product usage without invented customers",
+          "priority":4,
+        })
+        item=self.work("1"*32)
+        item["company_id"]=None
+        item["tenant_scope"]="founder-portfolio"
+        item["project_id"]="signal-forge"
+        canonical={"projects":[{"project_id":"signal-forge","company_id":None,"name":"SignalForge"}]}
+        result=bridge.receive(item,projection=canonical)
+        self.assertEqual(result["state"],"CREATED_CANONICAL_TASK")
+        self.assertEqual(bridge.receive(item)["task_id"],result["task_id"])
+        with core.connect() as db:
+            task=db.execute("SELECT company_id,project_id FROM tasks WHERE id=?",
+                            (result["task_id"],)).fetchone()
+            self.assertEqual(task["company_id"],"founder-portfolio")
+            self.assertEqual(task["project_id"],"signalforge")
+            self.assertIsNone(db.execute(
+               "SELECT 1 FROM product_programs WHERE project_id='signal-forge'").fetchone())
+
+    def test_canonical_owner_conflict_never_creates_legal_tenant(self):
+        item=self.work("2"*32)
+        item["project_id"]="noetfield-verification-layer"
+        false_owner={"projects":[{
+          "project_id":"noetfield-verification-layer",
+          "company_id":None,"name":"Wrong Owner",
+        }]}
+        with self.assertRaisesRegex(ValueError,"owner_scope_mismatch"):
+            bridge.receive(item,projection=false_owner)
+        with core.connect() as db:
+            self.assertIsNone(db.execute(
+               "SELECT 1 FROM product_programs WHERE project_id='noetfield-verification-layer'"
+            ).fetchone())
+
 if __name__=="__main__":
     unittest.main()
