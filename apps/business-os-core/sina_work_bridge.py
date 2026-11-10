@@ -410,10 +410,69 @@ def is_company_os_task(task_id: str) -> bool:
             db,row["company_id"],row["project_id"],row["role"]) is not None
 
 
+SPECIALIST_CIRCUIT_KEY="company_os_specialist_retry_after_utc"
+SPECIALIST_CIRCUIT_REASON_KEY="company_os_specialist_backpressure_reason"
+
+def specialist_backpressure(now_ts=None):
+    """Shared persistent budget window, no new scheduler or rate registry."""
+    import core
+    now_ts=time.time() if now_ts is None else now_ts
+    with core.connect() as db:
+        row=db.execute("SELECT value FROM state WHERE key=?",
+                       (SPECIALIST_CIRCUIT_KEY,)).fetchone()
+        reason=db.execute("SELECT value FROM state WHERE key=?",
+                          (SPECIALIST_CIRCUIT_REASON_KEY,)).fetchone()
+    until=float(row["value"]) if row else 0
+    return {"blocked":until>now_ts,
+            "retry_after_seconds":max(0,int(until-now_ts)),
+            "reason":reason["value"] if reason else "NONE"}
+
+def record_specialist_backpressure(reason,*,now_ts=None):
+    """Do not increase model spending or ignore upstream price limits."""
+    import core
+    now_ts=time.time() if now_ts is None else now_ts
+    if reason=="DAILY_BUDGET_CAP":
+        # Agent Fabric daily window begins at 00:00 UTC. Skip calls until
+        # the NEXT window, not 1000 futile attempts to the same budget.
+        until=(int(now_ts)//86400+1)*86400+15
+    elif reason=="RATE_LIMIT":
+        until=now_ts+300
+    else:
+        return {"blocked":False,"retry_after_seconds":0,"reason":reason}
+    with core.connect() as db:
+        old=db.execute("SELECT value FROM state WHERE key=?",
+                       (SPECIALIST_CIRCUIT_KEY,)).fetchone()
+        until=max(until,float(old["value"]) if old else 0)
+        db.execute("INSERT INTO state(key,value) VALUES(?,?) ON CONFLICT(key) "
+                   "DO UPDATE SET value=excluded.value",
+                   (SPECIALIST_CIRCUIT_KEY,str(until)))
+        db.execute("INSERT INTO state(key,value) VALUES(?,?) ON CONFLICT(key) "
+                   "DO UPDATE SET value=excluded.value",
+                   (SPECIALIST_CIRCUIT_REASON_KEY,reason))
+    return {"blocked":True,"retry_after_seconds":max(0,int(until-now_ts)),
+            "reason":reason}
+
+def _read_429_detail(error):
+    if getattr(error,"code",None)!=429:
+        return None
+    try:
+        raw=error.read(512)
+        detail=json.loads(raw.decode("utf-8")).get("detail","")
+    except (ValueError,TypeError,AttributeError,UnicodeDecodeError):
+        return "RATE_LIMIT"
+    if detail=="organization_specialist_daily_budget_cap":
+        return "DAILY_BUDGET_CAP"
+    if detail=="specialist_inference_cost_cap":
+        return "PER_CALL_COST_CAP"
+    return "RATE_LIMIT"
+
 def specialist_proposal(task: dict, *, fetch=None) -> dict:
     """Return a useful model-produced internal artifact for a *real* Company task."""
     if not specialist_configured():
         raise RuntimeError("organization_specialist_not_configured")
+    state=specialist_backpressure()
+    if state["blocked"]:
+        raise RuntimeError("specialist_backpressure_"+state["reason"].lower())
     if not is_company_os_task(task.get("id")):
         raise ValueError("non_local_company_os_task_not_authorized")
     for key in ("company_id","project_id","role","objective"):
@@ -453,10 +512,20 @@ def specialist_proposal(task: dict, *, fetch=None) -> dict:
             "Content-Type":"application/json","Accept":"application/json",
         })
     opener=fetch or urllib.request.build_opener(NoRedirect())
-    with opener.open(request,timeout=43) as response:
-        if response.status!=200:
-            raise RuntimeError("specialist_model_http_not_ok")
-        data=response.read(SPECIALIST_MAX_BYTES+1)
+    try:
+        with opener.open(request,timeout=43) as response:
+            if response.status!=200:
+                raise RuntimeError("specialist_model_http_not_ok")
+            data=response.read(SPECIALIST_MAX_BYTES+1)
+    except urllib.error.HTTPError as error:
+        kind=_read_429_detail(error)
+        if kind is not None:
+            if kind!="PER_CALL_COST_CAP":
+                record_specialist_backpressure(kind)
+            # The per-call cap is a task budget condition, not a reason to
+            # pause EVERY company's model attempts until tomorrow.
+            raise RuntimeError("specialist_upstream_"+kind.lower()) from None
+        raise
         if len(data)>SPECIALIST_MAX_BYTES:
             raise ValueError("specialist_model_result_too_large")
         payload=json.loads(data.decode("utf-8"))
