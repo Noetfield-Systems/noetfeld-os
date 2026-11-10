@@ -38,6 +38,14 @@ def init(db):
       updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
       PRIMARY KEY(company_id,project_id,decision_ref))""")
     db.execute("CREATE INDEX IF NOT EXISTS idx_local_decision_project ON venture_company_os_decisions(company_id,project_id,updated_at DESC)")
+    db.execute("""CREATE TABLE IF NOT EXISTS venture_company_os_decision_feedback (
+      feedback_id TEXT PRIMARY KEY,decision_ref TEXT NOT NULL,
+      company_id TEXT NOT NULL,project_id TEXT NOT NULL,
+      status TEXT NOT NULL,source_ref TEXT NOT NULL,
+      delivery_state TEXT NOT NULL DEFAULT 'PENDING',
+      attempts INTEGER NOT NULL DEFAULT 0,delivered_at TEXT,
+      created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP)""")
+    db.execute("CREATE INDEX IF NOT EXISTS idx_company_decision_feedback_outbox ON venture_company_os_decision_feedback(delivery_state,created_at)")
 
 def _canonical_project(db,scope,local_project):
     """Alias must have an existing, scoped Founder mandate, never guessed."""
@@ -122,6 +130,9 @@ def submit_question(data,*,fetch=None):
     if local_scope is None:
         local_scope="founder-portfolio"
     canonical_project,instance=_assert_local(local_scope,local_project)
+    if not data.get("request_id"):
+        request_hash=hashlib.sha256(canonical(data).encode()).hexdigest()[:32]
+        data={**data,"request_id":"company-decision:"+request_hash}
     body={**data,"schema":QUESTION_SCHEMA,"project_id":canonical_project,
           "company_id":None if local_scope=="founder-portfolio" else local_scope}
     # Only read-only questions are forwarded; caller cannot insert permission
@@ -153,6 +164,12 @@ def submit_question(data,*,fetch=None):
         else:
             event_id=None
         stored=_store_answer(db,local_scope,local_project,answer,event_id=event_id)
+        if proceed:
+            _enqueue_feedback(db,
+                feedback_id="company-decision:"+answer["decision_ref"]+":STARTED",
+                decision_ref=answer["decision_ref"],company=local_scope,
+                project=canonical_project,status="STARTED",
+                source_ref="companyos:decision:"+answer["decision_ref"])
         db.commit()
     return {
         "schema":COMPANY_DECISION_SCHEMA,
@@ -215,6 +232,71 @@ def consult_existing_task(task,*,fetch=None):
         "external_permit":False,"company_os_instance_id":instance,
         "source":"SINA_AUTHENTICATED_GOALKEEPER",
     }
+
+def _enqueue_feedback(db,*,feedback_id,decision_ref,company,project,status,source_ref):
+    init(db)
+    db.execute("""INSERT OR IGNORE INTO venture_company_os_decision_feedback
+       (feedback_id,decision_ref,company_id,project_id,status,source_ref)
+       VALUES(?,?,?,?,?,?)""",
+       (feedback_id,decision_ref,company,project,status,source_ref))
+
+def record_task_feedback(task_id,provider):
+    """Existing worker calls AFTER it committed the real draft/run."""
+    import core
+    if not SAFE_TASK_ID.fullmatch(str(task_id or "")):
+        return {"queued":False,"reason":"INVALID_TASK"}
+    with core.connect() as db:
+        init(db)
+        row=db.execute("""SELECT company_id,project_id,decision_ref FROM venture_company_os_decisions
+            WHERE task_id=? ORDER BY updated_at DESC LIMIT 1""",(task_id,)).fetchone()
+        if not row:
+            return {"queued":False,"reason":"TASK_HAS_NO_AUTHENTICATED_DECISION"}
+        status="FAILED" if provider in ("specialist_degraded","provider_error") else "DRAFTED"
+        fid="company-task:"+task_id+":"+status
+        _enqueue_feedback(db,feedback_id=fid,decision_ref=row["decision_ref"],
+                          company=row["company_id"],project=row["project_id"],
+                          status=status,source_ref="companyos:task:"+task_id)
+        return {"queued":True,"feedback_id":fid,"status":status,
+                "verified":False}
+
+def flush_feedback(*,fetch=None,limit=3):
+    """Use the EXISTING Company OS 40s tick. No extra scheduler or queue worker."""
+    import core
+    import sina_work_bridge
+    with core.connect() as db:
+        init(db)
+        rows=db.execute("""SELECT * FROM venture_company_os_decision_feedback
+          WHERE delivery_state='PENDING' ORDER BY created_at,feedback_id LIMIT ?""",
+          (max(1,min(limit,5)),)).fetchall()
+    delivered=0
+    retry=0
+    for row in rows:
+        data={
+            "schema":"sina.agent-decision-feedback.v1",
+            "feedback_id":row["feedback_id"],"decision_ref":row["decision_ref"],
+            "project_id":row["project_id"],"company_scope":row["company_id"],
+            "status":row["status"],"source_ref":row["source_ref"]
+        }
+        try:
+            result=sina_work_bridge._request(
+                sina_work_bridge.AGENT_FEEDBACK_PATH,method="POST",body=data,fetch=fetch)
+            if result.get("evidence_status")!="SOURCE_REPORTED_UNVERIFIED":
+                raise ValueError("Sina feedback receipt lacks source-reported boundary")
+            with core.connect() as db:
+                db.execute("""UPDATE venture_company_os_decision_feedback
+                  SET delivery_state='DELIVERED',attempts=attempts+1,
+                      delivered_at=CURRENT_TIMESTAMP WHERE feedback_id=?""",
+                  (row["feedback_id"],))
+            delivered+=1
+        except Exception:
+            # Keep pending for replay, never assert the Founder received it.
+            with core.connect() as db:
+                db.execute("""UPDATE venture_company_os_decision_feedback
+                    SET attempts=attempts+1 WHERE feedback_id=?""",
+                    (row["feedback_id"],))
+            retry+=1
+    return {"delivered":delivered,"pending_retry":retry,
+            "independent_verification":False,"new_scheduler":False}
 
 def history(scope,project,limit=20):
     import core
