@@ -3,6 +3,7 @@ import os
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 import core
 import product_loops
@@ -70,7 +71,11 @@ class CompanySinaOrgBridgeTests(unittest.TestCase):
         new["company_id"]=None
         new["tenant_scope"]="founder-portfolio"
         new["project_id"]="venture-formation-lab"
-        first=bridge.receive(new)
+        owner_verified={"projects":[
+          {"project_id":"venture-formation-lab","company_id":None,"name":"Venture Formation Lab"}
+        ]}
+        with patch("founder_portfolio_bridge.fetch_projection",return_value=owner_verified):
+            first=bridge.receive(new)
         self.assertEqual(first["state"],"CREATED_CANONICAL_TASK")
         self.assertEqual(first["operational_project_id"],"venture-formation-lab")
         with core.connect() as db:
@@ -93,6 +98,26 @@ class CompanySinaOrgBridgeTests(unittest.TestCase):
         self.assertEqual(result["operational_project_id"],"atelier")
         with core.connect() as db:
             self.assertIsNone(db.execute("SELECT * FROM product_programs WHERE project_id='atelier-community'").fetchone())
+
+    def test_new_company_scope_requires_independently_read_founder_owner(self):
+        item=self.work("9"*32)
+        item["project_id"]="noetfield-verification-layer"
+        for source in (
+            {"projects":[]},
+            {"projects":[{"project_id":"noetfield-verification-layer",
+                          "company_id":None,"name":"Not a Noetfield company product"}]},
+        ):
+            with patch("founder_portfolio_bridge.fetch_projection",return_value=source):
+                with self.assertRaises(ValueError):
+                    bridge.receive(item)
+            with core.connect() as db:
+                self.assertIsNone(db.execute(
+                    "SELECT 1 FROM product_programs WHERE project_id='noetfield-verification-layer'"
+                ).fetchone())
+        with patch("founder_portfolio_bridge.fetch_projection",
+                   side_effect=RuntimeError("upstream offline")):
+            with self.assertRaises(RuntimeError):
+                bridge.receive(item)
 
     def test_no_cross_tenant_or_self_verification(self):
         wrong=self.work("c"*32)
