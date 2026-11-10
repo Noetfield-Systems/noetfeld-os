@@ -20,6 +20,7 @@ SOURCE_URL = "https://sina-founder-os-staging-staging.up.railway.app"
 GET_PATH = "/api/v2/organization/company/requests"
 MANDATES_PATH = "/api/v2/organization/company/mandates"
 AGENT_DECISION_PATH = "/api/v2/agent/decision"
+AGENT_FEEDBACK_PATH = "/api/v2/agent/feedback"
 ACK_PATH = "/api/v2/organization/company/ack"
 TOKEN_ENV = "SINA_ORG_BRIDGE_TOKEN"
 LIMIT = 8
@@ -73,7 +74,7 @@ def init(db):
 def _request(path, method="GET", body=None, fetch=None):
     if not configured():
         raise RuntimeError("sina_organization_bridge_not_configured")
-    if path not in (GET_PATH, ACK_PATH, MANDATES_PATH, AGENT_DECISION_PATH):
+    if path not in (GET_PATH, ACK_PATH, MANDATES_PATH, AGENT_DECISION_PATH, AGENT_FEEDBACK_PATH):
         raise ValueError("destination outside fixed Sina Organization bridge")
     raw=None if body is None else json.dumps(
         body, sort_keys=True, separators=(",",":")).encode("utf-8")
@@ -339,6 +340,8 @@ def cycle(fetch=None):
             print("SINA_ORG_WORK_REJECTED "+type(exc).__name__,flush=True)
     acknowledged=sync_existing(fetch)
     retry_scheduled=retry_degraded()
+    import venture_decision_bridge
+    agent_feedback=venture_decision_bridge.flush_feedback(fetch=fetch,limit=3)
     return {"state":"OBSERVED","canonical_tasks_created":created,
             "venture_mandates_adopted":directives["adopted"],
             "venture_mandates_blocked":directives["blocked"],
@@ -346,6 +349,8 @@ def cycle(fetch=None):
             "awaiting_product_registration":unmapped,
             "execution_states_reported":acknowledged,
             "specialist_retry_scheduled":retry_scheduled,
+            "agent_feedback_delivered":agent_feedback["delivered"],
+            "agent_feedback_pending_retry":agent_feedback["pending_retry"],
             "external_actions_performed":False}
 
 def tick(fetch=None,clock=None,force=False):

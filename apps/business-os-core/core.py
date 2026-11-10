@@ -441,6 +441,12 @@ def process_task(t):
   d.execute("INSERT INTO runs VALUES(?,?,?,?,?,?,?,?,?,?,?)",(idof("run"),t["id"],role,provider,model,"degraded" if provider=="provider_error" else "completed",it,ot,now(),now(),json.dumps(result,ensure_ascii=False)))
   d.execute("UPDATE tasks SET status='drafted',result=?,updated_at=? WHERE id=?",(json.dumps({"provider":provider,"recommendation":result,"memory_hits":len(mem),"external_action":"not_executed"}),now(),t["id"]))
  if scoped_product:
+  try:
+   # The actual Company OS run is committed above. Only a source-reported
+   # result is queued; no model can manufacture independent verification.
+   venture_decision_bridge.record_task_feedback(t["id"],provider)
+  except Exception as feedback_error:
+   print("COMPANY_OS_DECISION_FEEDBACK_DEGRADED "+type(feedback_error).__name__,flush=True)
   add_memory(memory_scope,"bounded_internal_draft",t["id"],
     json.dumps({"role":role,"source_task":t["id"],
        "next_best_action":str(result.get("next_best_action",""))[:500],

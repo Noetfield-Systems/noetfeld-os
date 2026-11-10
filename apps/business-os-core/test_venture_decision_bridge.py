@@ -104,6 +104,50 @@ class LocalDecisionContinuationTests(unittest.TestCase):
             self.assertTrue(all(t["company_id"]=="noetfield-systems-inc" and
                                 t["project_id"]=="noetfield-web3-launchpad" for t in tasks))
         self.assertEqual(bridge.history("noetfield-systems-inc","noetfield-web3-launchpad")["items"][0]["decision_ref"],"a"*32)
+    def test_outcome_feedback_is_durable_idempotent_and_never_verified_by_model(self):
+        source=FakeFetcher(self.answer())
+        first=bridge.submit_question(self.ask(),fetch=source)
+        with core.connect() as db:
+            items=db.execute("""SELECT * FROM venture_company_os_decision_feedback
+                WHERE decision_ref=?""",(first["decision_ref"],)).fetchall()
+            self.assertEqual(len(items),1)
+            self.assertEqual(items[0]["status"],"STARTED")
+            self.assertEqual(items[0]["delivery_state"],"PENDING")
+        class FeedbackFetcher:
+            def __init__(self):self.calls=0
+            def open(self,req,timeout=0):
+                self.calls+=1
+                self.url=req.full_url
+                self.body=json.loads(req.data.decode())
+                return FakeResponse({"recorded":True,
+                                     "evidence_status":"SOURCE_REPORTED_UNVERIFIED",
+                                     "policy_auto_modified":False})
+        transport=FeedbackFetcher()
+        delivered=bridge.flush_feedback(fetch=transport)
+        self.assertEqual(delivered["delivered"],1)
+        self.assertFalse(delivered["independent_verification"])
+        self.assertEqual(transport.url,sina_work_bridge.SOURCE_URL+
+                          sina_work_bridge.AGENT_FEEDBACK_PATH)
+        self.assertEqual(transport.body["decision_ref"],first["decision_ref"])
+        self.assertEqual(bridge.flush_feedback(fetch=transport)["delivered"],0)
+        self.assertEqual(transport.calls,1)
+        with core.connect() as db:
+            self.assertEqual(db.execute("SELECT COUNT(*) FROM venture_company_os_decision_feedback "
+                "WHERE delivery_state='DELIVERED'").fetchone()[0],1)
+
+    def test_degraded_sina_feedback_retries_original_source_report(self):
+        first=bridge.submit_question(self.ask(),fetch=FakeFetcher(self.answer()))
+        class FailTransport:
+            def open(self,*args,**kwargs):
+                raise TimeoutError("upstream unavailable")
+        pending=bridge.flush_feedback(fetch=FailTransport())
+        self.assertEqual(pending["pending_retry"],1)
+        with core.connect() as db:
+            row=db.execute("SELECT delivery_state,attempts FROM venture_company_os_decision_feedback "
+                "WHERE decision_ref=?",(first["decision_ref"],)).fetchone()
+            self.assertEqual(row["delivery_state"],"PENDING")
+            self.assertEqual(row["attempts"],1)
+
     def test_founder_reserved_response_does_not_create_tasks(self):
         response=self.answer(decision="GOVERNOR_AND_OWNER_AUTHORIZATION_REQUIRED")
         response["founder_question_required"]=True

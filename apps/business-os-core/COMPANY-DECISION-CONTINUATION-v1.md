@@ -48,3 +48,8 @@ Current PR unit and integration tests exercise real local SQLite events and cano
 7. Observe model route and independent receipt separately. \`specialist_degraded\` with zero model tokens is not a working coding agent, however healthy the decision bridge may be.
 
 If the user-facing agent lacks Sina tool connection, report \`GATEWAY_NOT_CONNECTED\`; use existing policies and read-only research, not a fabricated successful API response.
+
+
+## Automatic closed-loop feedback
+
+When an allowed local decision creates a Company OS product event, its STARTED feedback is stored atomically. After a genuine canonical specialist task completes, the worker queues a DRAFTED or FAILED status, never a model-invented verification receipt. The EXISTING Company OS 40-second Sina bridge tick replays outstanding feedback to POST /api/v2/agent/feedback over the pinned authenticated endpoint. Retry failures remain pending and are visible in the existing decision-history API. Replays use stable feedback IDs and never create duplicate tasks or alter Founder policy. The real independent verifier remains the only source of independently verified completion.
