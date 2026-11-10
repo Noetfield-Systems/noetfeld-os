@@ -72,8 +72,10 @@ class CompanySinaOrgBridgeTests(unittest.TestCase):
         self.assertEqual(first["state"],"CREATED_CANONICAL_TASK")
         self.assertEqual(bridge.receive(item)["task_id"],first["task_id"])
         with core.connect() as db:
-            row=db.execute("SELECT role,status,company_id,project_id FROM tasks WHERE id=?",
+            row=db.execute("SELECT role,status,company_id,project_id,objective FROM tasks WHERE id=?",
                            (first["task_id"],)).fetchone()
+            self.assertIn("M01-PAID-PILOTS",row["objective"])
+            self.assertIn("verified_signed_pilots_and_collected_cash",row["objective"])
             self.assertEqual(row["role"],"sales_qualification")
             self.assertEqual(row["status"],"queued")
             self.assertEqual(row["project_id"],item["project_id"])
