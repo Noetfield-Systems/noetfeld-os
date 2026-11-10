@@ -9,6 +9,7 @@ import tempfile
 import unittest
 from datetime import datetime, timezone
 from pathlib import Path
+from unittest.mock import patch
 
 import core
 import founder_signal_transport as bridge
@@ -140,6 +141,62 @@ class FounderFeedbackBridgeTests(unittest.TestCase):
         self.assertEqual(claimed["event_type"], bridge.EVENT)
         bridge.process(claimed, sender=lambda _: {"status": "DELIVERED_TO_SINA_INGRESS"})
         self.assertEqual(self.federation_rows()[0]["status"], "processed")
+
+    def test_live_ssot_resolves_product_alias_and_blocks_wrong_legal_scope(self):
+        observation = {
+            "id": "obs_" + "a" * 32,
+            "company_id": "founder-portfolio",
+            "project_id": "signalforge",
+            "source_kind": "FIRST_PARTY_HTTP_HEALTH",
+            "signal": "service_health",
+            "severity": 3,
+            "observed_at": datetime.now(timezone.utc).isoformat(),
+        }
+        body = bridge.make_signal(observation)
+        self.assertEqual(body["project_id"], "signalforge")
+        self.assertEqual(body["company_id"], "founder-portfolio")
+        incoming = {
+            "id": "evt_" + "c" * 32,
+            "event_type": bridge.EVENT,
+            "source": "company-os-federation",
+            "payload": json.dumps(body),
+        }
+        os.environ[bridge.TOKEN_ENV] = "s" * 60
+
+        class Ack:
+            status = 200
+            def __enter__(self): return self
+            def __exit__(self, *args): return False
+            def read(self, length):
+                return json.dumps({
+                    "created": True,
+                    "signal": {
+                        "source_id": "companyos",
+                        "source_event_id": body["source_event_id"],
+                    },
+                }).encode("utf-8")
+
+        class Opener:
+            def open(self, request, timeout):
+                forwarded = json.loads(request.data)
+                self_seen.append(forwarded)
+                return Ack()
+
+        self_seen = []
+        with patch("founder_portfolio_bridge.fetch_projection",
+                   return_value={"projects": [
+                       {"project_id": "signal-forge", "company_id": None},
+                   ]}):
+            accepted = bridge.deliver(incoming, opener=Opener())
+            self.assertEqual(accepted["status"], "DELIVERED_TO_SINA_INGRESS")
+            self.assertEqual(self_seen[0]["project_id"], "signal-forge")
+            self.assertIsNone(self_seen[0]["company_id"])
+        with patch("founder_portfolio_bridge.fetch_projection",
+                   return_value={"projects": [
+                       {"project_id": "signal-forge", "company_id": "different-company"},
+                   ]}):
+            with self.assertRaisesRegex(ValueError, "owner_scope_conflict"):
+                bridge.deliver(incoming, opener=Opener())
 
     def test_sina_requires_scoped_config_and_exact_own_event(self):
         self.make("health-failure-scope1")
