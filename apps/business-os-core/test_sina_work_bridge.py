@@ -54,6 +54,33 @@ class CompanySinaOrgBridgeTests(unittest.TestCase):
           },
           "routing_state":"NOT_DISPATCHED_COMPANY_OS_OWNS_EXECUTION",
         }
+    def test_agent_fabric_daily_cap_stops_repeat_network_requests_until_next_utc_day(self):
+        result=bridge.record_specialist_backpressure("DAILY_BUDGET_CAP",
+                                                      now_ts=86400.0*200+60.0)
+        self.assertTrue(result["blocked"])
+        self.assertGreater(result["retry_after_seconds"],85000)
+        during=bridge.specialist_backpressure(now_ts=86400.0*200+120.0)
+        self.assertTrue(during["blocked"])
+        self.assertEqual(during["reason"],"DAILY_BUDGET_CAP")
+        after=bridge.specialist_backpressure(now_ts=86400.0*201+20.0)
+        self.assertFalse(after["blocked"])
+
+    def test_429_cost_cap_does_not_disable_other_venture_model_requests(self):
+        from io import BytesIO
+        import urllib.error
+        error=urllib.error.HTTPError("https://provider.invalid/locked",429,"cap",{},
+                                     BytesIO(b'{"detail":"specialist_inference_cost_cap"}'))
+        self.assertEqual(bridge._read_429_detail(error),"PER_CALL_COST_CAP")
+        self.assertFalse(bridge.record_specialist_backpressure("PER_CALL_COST_CAP")["blocked"])
+        self.assertFalse(bridge.specialist_backpressure()["blocked"])
+
+    def test_transient_429_uses_five_minute_backpressure_without_changing_budgets(self):
+        base=86400.0*222+100.0
+        result=bridge.record_specialist_backpressure("RATE_LIMIT",now_ts=base)
+        self.assertEqual(result["retry_after_seconds"],300)
+        self.assertTrue(bridge.specialist_backpressure(now_ts=base+100)["blocked"])
+        self.assertFalse(bridge.specialist_backpressure(now_ts=base+301)["blocked"])
+
     def test_canonical_strategic_workpacket_admitted_and_metric_preserved(self):
         packet=self.work("2"*32)
         packet["strategic_mission_id"]="M09-RHEVO-LAUNCH"
