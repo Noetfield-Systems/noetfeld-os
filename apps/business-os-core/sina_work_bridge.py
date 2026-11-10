@@ -59,9 +59,13 @@ def init(db):
         company_id TEXT NOT NULL,
         project_id TEXT NOT NULL,
         last_reported_state TEXT NOT NULL DEFAULT 'PENDING',
+        specialist_retry_count INTEGER NOT NULL DEFAULT 0,
         created_at TEXT NOT NULL,
         updated_at TEXT NOT NULL
       )""")
+    cols={r["name"] for r in db.execute("PRAGMA table_info(sina_workstream_bindings)")}
+    if "specialist_retry_count" not in cols:
+        db.execute("ALTER TABLE sina_workstream_bindings ADD COLUMN specialist_retry_count INTEGER NOT NULL DEFAULT 0")
     db.execute("CREATE INDEX IF NOT EXISTS ix_sina_binding_task ON sina_workstream_bindings(task_id)")
 
 def _request(path, method="GET", body=None, fetch=None):
@@ -287,9 +291,11 @@ def cycle(fetch=None):
         except (ValueError,TypeError) as exc:
             print("SINA_ORG_WORK_REJECTED "+type(exc).__name__,flush=True)
     acknowledged=sync_existing(fetch)
+    retry_scheduled=retry_degraded()
     return {"state":"OBSERVED","canonical_tasks_created":created,
             "awaiting_product_registration":unmapped,
             "execution_states_reported":acknowledged,
+            "specialist_retry_scheduled":retry_scheduled,
             "external_actions_performed":False}
 
 def tick(fetch=None,clock=None,force=False):
@@ -374,3 +380,35 @@ def specialist_proposal(task: dict, *, fetch=None) -> dict:
         or payload["result"].get("external_action")!="NOT_EXECUTED"):
         raise ValueError("specialist_result_not_attested_to_task")
     return payload
+
+
+def retry_degraded(limit=2):
+    """One automatic recovery per genuine Sina-origin Company OS task.
+
+    Uses the original canonical task, the original role and the existing
+    Company OS worker; no additional scheduler, agents, queue or arbitrary
+    external mutation. Failed model results remain internal-only drafts.
+    """
+    if not specialist_configured():return 0
+    import core
+    with core.connect() as db:
+        db.execute("BEGIN IMMEDIATE")
+        init(db)
+        rows=db.execute("""
+            SELECT b.workstream_id,b.task_id FROM sina_workstream_bindings b
+            JOIN tasks t ON t.id=b.task_id
+            WHERE b.specialist_retry_count=0
+              AND t.status='drafted'
+              AND datetime(t.updated_at) < datetime('now','-2 minutes')
+              AND EXISTS (SELECT 1 FROM runs r WHERE r.task_id=t.id
+                          AND r.provider='specialist_degraded')
+            ORDER BY t.updated_at LIMIT ?""",(max(1,min(int(limit),3)),)).fetchall()
+        for row in rows:
+            db.execute("""UPDATE sina_workstream_bindings
+                          SET specialist_retry_count=1,updated_at=?
+                          WHERE workstream_id=? AND specialist_retry_count=0""",
+                       (datetime.now(timezone.utc).isoformat(),row["workstream_id"]))
+            db.execute("""UPDATE tasks SET status='queued',updated_at=?
+                          WHERE id=? AND status='drafted'""",
+                       (datetime.now(timezone.utc).isoformat(),row["task_id"]))
+    return len(rows)
