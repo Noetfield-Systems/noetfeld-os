@@ -148,17 +148,27 @@ def _resolve_operating_project(scope, canonical_project, item):
                 (scope,alias)).fetchone()
             if previous and previous["status"] in ACTIVE:
                 return alias
-    # Only an authenticated, typed Founder OS organizational work request can
-    # commission a scoped Company OS product program. Explicitly stop treating
-    # the legacy static seed list as an exhaustive portfolio allowlist.
+    # This is a new operating scope. Its name and legal owner MUST come from
+    # the independently fetched, hash-verified canonical Founder SSOT. A
+    # signed advisory request alone is not permission to invent a company.
+    import founder_portfolio_bridge
+    projection = founder_portfolio_bridge.fetch_projection()
+    matches = [p for p in projection["projects"]
+               if p["project_id"] == canonical_project]
+    if len(matches) != 1:
+        raise ValueError("sina_workstream_project_not_in_canonical_ssot")
+    canonical_owner = matches[0]["company_id"] or "founder-portfolio"
+    if canonical_owner != scope:
+        raise ValueError("sina_workstream_owner_conflicts_with_ssot")
     priority=int(item["priority_score"])
     product_loops.register({
         "company_id":scope,
         "project_id":canonical_project,
-        "name":canonical_project.replace("-"," ").title()[:100],
+        "name":str(matches[0]["name"])[:100],
         "vertical":"founder-managed-operating-program",
-        "objective":("Advance the registered Founder OS venture with genuine "
-                     "product, user, commercial, engineering and operational work."),
+        "objective":("Advance the canonical Founder portfolio project with genuine "
+                     "internal product, user, commercial and engineering evidence. "
+                     "No external action without separately issued Governor permit."),
         "priority":max(1,min(5,round(priority/20))),
         "max_tasks_per_cycle":6,
     })
