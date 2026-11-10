@@ -214,8 +214,12 @@ def retrieve(brand,q,limit=4):
   try:
    expr=" OR ".join('"'+x+'"' for x in terms)
    rows=d.execute("SELECT m.content FROM memory_fts f JOIN memories m ON m.id=f.memory_id WHERE f.brand=? AND memory_fts MATCH ? LIMIT ?",(brand,expr,limit)).fetchall()
-   return [x["content"] for x in rows]
-  except sqlite3.OperationalError: rows=d.execute("SELECT content FROM memories WHERE brand=? ORDER BY created_at DESC LIMIT 100",(brand,)).fetchall()
+   if rows:return [x["content"] for x in rows]
+  except sqlite3.OperationalError:
+   pass
+  # FTS may return no hits on hashed IDs or tokenization edge cases.
+  # Fall back ONLY within the exact venture memory scope, never across teams.
+  rows=d.execute("SELECT content FROM memories WHERE brand=? ORDER BY created_at DESC LIMIT 100",(brand,)).fetchall()
  return [x["content"] for x in sorted(rows,key=lambda r:sum(t in r["content"].lower() for t in terms),reverse=True)[:limit]]
 def process_intake(e):
  p=json.loads(e["payload"]);brand=p["brand"];aud=p["audience"];intent=p["intent"];urg=p["urgency"];value=float(p.get("estimated_value") or 0);route,primary,support=route_for(brand,aud,intent);fit=score(aud,intent,urg,value,p["problem"])
