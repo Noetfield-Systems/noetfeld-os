@@ -267,7 +267,7 @@ def sync_existing(fetch=None):
         rows=db.execute("""
           SELECT b.*,t.status FROM sina_workstream_bindings b
           JOIN tasks t ON t.id=b.task_id
-          WHERE b.last_reported_state NOT IN ('DRAFTED','BLOCKED')
+          WHERE b.last_reported_state NOT IN ('DRAFTED','BLOCKED','ACK_REJECTED')
           ORDER BY b.created_at LIMIT 20""").fetchall()
     for r in rows:
         if r["status"] in ("failed","blocked"):
@@ -280,7 +280,30 @@ def sync_existing(fetch=None):
             continue
         try:
             _ack(r["workstream_id"],r["task_id"],r["company_id"],state,fetch)
-        except (ValueError,OSError,RuntimeError,urllib.error.URLError):
+        except urllib.error.HTTPError as exc:
+            # A 4xx is a permanent canonical identity, scope, policy or
+            # WorkPacket-owner conflict. Retrying it every 40 seconds cannot
+            # make a bad Founder task binding valid, and starves real work.
+            # Preserve the original local task as an auditable rejected binding.
+            if exc.code in (400,403,404,409,422):
+                with core.connect() as db:
+                    db.execute("""UPDATE sina_workstream_bindings
+                        SET last_reported_state='ACK_REJECTED',updated_at=?
+                        WHERE workstream_id=? AND task_id=?
+                        AND last_reported_state NOT IN ('ACK_REJECTED','DRAFTED','BLOCKED')""",
+                        (datetime.now(timezone.utc).isoformat(),
+                         r["workstream_id"],r["task_id"]))
+            continue
+        except ValueError as exc:
+            if str(exc)=="company_ack_ref_mismatch":
+                with core.connect() as db:
+                    db.execute("""UPDATE sina_workstream_bindings
+                        SET last_reported_state='ACK_REJECTED',updated_at=?
+                        WHERE workstream_id=? AND task_id=?""",
+                        (datetime.now(timezone.utc).isoformat(),
+                         r["workstream_id"],r["task_id"]))
+            continue
+        except (OSError,RuntimeError,urllib.error.URLError):
             continue
         with core.connect() as db:
             db.execute(
@@ -322,6 +345,32 @@ def cycle(fetch=None):
     if not configured():
         return {"state":"NOT_CONFIGURED","task_creations":0}
     directives=sync_venture_mandates(fetch)
+    # Exactly ONE owner admits Founder WorkPacket requests. Agent Fabric has
+    # the canonical source-bound task ID and verified Sina decision preflight.
+    # This product-local Company OS still owns its own project mandates,
+    # operating plans, workers, user events and commercial operations, but
+    # must not clone or ACK the same Founder workstream as a rival executor.
+    if os.environ.get("SINA_ORG_WORKPACKET_EXECUTION_OWNER","").strip().upper()=="AGENT_FABRIC":
+        import venture_decision_bridge
+        feedback=venture_decision_bridge.flush_feedback(fetch=fetch,limit=3)
+        import core
+        with core.connect() as db:
+            init(db)
+            legacy=db.execute("""SELECT COUNT(*) FROM sina_workstream_bindings
+                WHERE last_reported_state='ACK_REJECTED'""").fetchone()[0]
+        return {
+            "state":"MANDATES_ONLY_AGENT_FABRIC_OWNS_WORKPACKETS",
+            "canonical_workpacket_owner":"AGENT_FABRIC",
+            "venture_mandates_adopted":directives["adopted"],
+            "venture_mandates_blocked":directives["blocked"],
+            "local_company_os_execution":True,
+            "canonical_tasks_created":0,"execution_states_reported":0,
+            "legacy_ack_rejected":int(legacy),
+            "agent_feedback_delivered":feedback["delivered"],
+            "agent_feedback_pending_retry":feedback["pending_retry"],
+            "agent_feedback_contract_rejected":feedback.get("contract_rejected",0),
+            "external_actions_performed":False,
+        }
     result=_request(GET_PATH,fetch=fetch)
     if result.get("schema")!="sina.company-os.work-intake.v1":
         raise ValueError("work_intake_invalid")

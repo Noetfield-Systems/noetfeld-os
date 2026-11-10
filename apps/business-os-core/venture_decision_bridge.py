@@ -10,6 +10,7 @@ import hashlib
 import json
 import re
 import sqlite3
+import urllib.error
 
 QUESTION_SCHEMA="sina.agent-question.v1"
 DECISION_SCHEMA="sina.agent-decision.v1"
@@ -270,6 +271,7 @@ def flush_feedback(*,fetch=None,limit=3):
           (max(1,min(limit,5)),)).fetchall()
     delivered=0
     retry=0
+    contract_rejected=0
     for row in rows:
         data={
             "schema":"sina.agent-decision-feedback.v1",
@@ -288,14 +290,32 @@ def flush_feedback(*,fetch=None,limit=3):
                       delivered_at=CURRENT_TIMESTAMP WHERE feedback_id=?""",
                   (row["feedback_id"],))
             delivered+=1
+        except urllib.error.HTTPError as exc:
+            if exc.code in (400,403,404,409,422):
+                # The Founder rejected this exact decision/scope/identity.
+                # Retrying unchanged every tick cannot repair permanent bad
+                # source data. Keep it auditable, not falsely delivered.
+                with core.connect() as db:
+                    db.execute("""UPDATE venture_company_os_decision_feedback
+                      SET delivery_state='REJECTED_CONTRACT',attempts=attempts+1
+                      WHERE feedback_id=? AND delivery_state='PENDING'""",
+                      (row["feedback_id"],))
+                contract_rejected+=1
+            else:
+                with core.connect() as db:
+                    db.execute("""UPDATE venture_company_os_decision_feedback
+                      SET attempts=attempts+1 WHERE feedback_id=?""",
+                      (row["feedback_id"],))
+                retry+=1
         except Exception:
-            # Keep pending for replay, never assert the Founder received it.
+            # Only transient failures remain eligible for normal replay.
             with core.connect() as db:
                 db.execute("""UPDATE venture_company_os_decision_feedback
                     SET attempts=attempts+1 WHERE feedback_id=?""",
                     (row["feedback_id"],))
             retry+=1
     return {"delivered":delivered,"pending_retry":retry,
+            "contract_rejected":contract_rejected,
             "independent_verification":False,"new_scheduler":False}
 
 def history(scope,project,limit=20):

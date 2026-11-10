@@ -167,6 +167,36 @@ class LocalDecisionContinuationTests(unittest.TestCase):
             bridge.submit_question(self.ask(),fetch=FakeFetcher(bad))
         with core.connect() as db:
             self.assertEqual(db.execute("SELECT COUNT(*) FROM venture_company_os_decisions").fetchone()[0],0)
+    def test_permanent_founder_feedback_400_quarantined_not_retried(self):
+        from urllib.error import HTTPError
+        feedback_id="company-task:original-real-task:STARTED"
+        with core.connect() as db:
+            bridge._enqueue_feedback(
+                db,feedback_id=feedback_id,decision_ref="a"*32,
+                company="noetfield-systems-inc",
+                project="noetfield-web3-launchpad",status="STARTED",
+                source_ref="companyos:task:source-reported")
+        calls=[]
+        def reject(*args,**kwargs):
+            calls.append(1)
+            raise HTTPError("https://sina-founder-os-staging-staging.up.railway.app/api/v2/agent/feedback",
+                            400,"invalid or stale decision reference",{},None)
+        with patch.object(sina_work_bridge,"_request",side_effect=reject):
+            result=bridge.flush_feedback(limit=3)
+            self.assertEqual(result["delivered"],0)
+            self.assertEqual(result["pending_retry"],0)
+            self.assertEqual(result["contract_rejected"],1)
+            self.assertEqual(len(calls),1)
+            again=bridge.flush_feedback(limit=3)
+            self.assertEqual(again["contract_rejected"],0)
+            self.assertEqual(len(calls),1)
+        with core.connect() as db:
+            state=db.execute("""SELECT delivery_state,attempts
+                FROM venture_company_os_decision_feedback WHERE feedback_id=?""",
+                (feedback_id,)).fetchone()
+            self.assertEqual(state["delivery_state"],"REJECTED_CONTRACT")
+            self.assertEqual(state["attempts"],1)
+
     def test_permit_escalation_from_remote_response_refused(self):
         response=self.answer()
         response["governor_permit_issued"]=True

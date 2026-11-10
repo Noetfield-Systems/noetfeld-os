@@ -108,6 +108,50 @@ class CompanySinaOrgBridgeTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError,"destination outside"):
                 bridge._request("/unapproved-path",fetch=fetch)
 
+    def test_agent_fabric_is_sole_founder_workpacket_owner_but_local_mandates_continue(self):
+        self.assertTrue(bridge.configured() is False or isinstance(bridge.configured(),bool))
+        with patch.dict(os.environ,{
+            "SINA_ORG_BRIDGE_TOKEN":"p"*48,
+            "SINA_ORG_WORKPACKET_EXECUTION_OWNER":"AGENT_FABRIC"
+        }):
+            with patch.object(bridge,"sync_venture_mandates",
+                              return_value={"adopted":1,"blocked":0}), \
+                 patch.object(bridge,"_request",
+                              side_effect=AssertionError("RIVAL_WORKPACKET_FETCH_FORBIDDEN")):
+                result=bridge.cycle()
+        self.assertEqual(result["state"],"MANDATES_ONLY_AGENT_FABRIC_OWNS_WORKPACKETS")
+        self.assertEqual(result["canonical_workpacket_owner"],"AGENT_FABRIC")
+        self.assertEqual(result["venture_mandates_adopted"],1)
+        self.assertEqual(result["canonical_tasks_created"],0)
+        with core.connect() as db:
+            self.assertEqual(db.execute("SELECT COUNT(*) FROM sina_workstream_bindings").fetchone()[0],0)
+
+    def test_permanent_founder_ack_400_quarantined_once_with_original_task_retained(self):
+        from urllib.error import HTTPError
+        original=bridge.receive(self.work("e"*32))
+        self.assertEqual(original["state"],"CREATED_CANONICAL_TASK")
+        class Rejected:
+            calls=0
+            def open(self,req,timeout=0):
+                self.calls+=1
+                raise HTTPError(req.full_url,400,"canonical task conflict",{},None)
+        fetch=Rejected()
+        with patch.dict(os.environ,{"SINA_ORG_BRIDGE_TOKEN":"p"*48}):
+            self.assertEqual(bridge.sync_existing(fetch=fetch),0)
+            self.assertEqual(fetch.calls,1)
+            self.assertEqual(bridge.sync_existing(fetch=fetch),0)
+            self.assertEqual(fetch.calls,1)
+        with core.connect() as db:
+            saved=db.execute("""SELECT last_reported_state FROM sina_workstream_bindings
+                WHERE workstream_id=?""",("e"*32,)).fetchone()
+            self.assertEqual(saved["last_reported_state"],"ACK_REJECTED")
+            task=db.execute("SELECT id,status FROM tasks WHERE id=?",
+                            (original["task_id"],)).fetchone()
+            self.assertIsNotNone(task)
+            self.assertNotEqual(task["status"],"verified")
+            self.assertEqual(db.execute("SELECT COUNT(*) FROM tasks WHERE id=?",
+                                        (original["task_id"],)).fetchone()[0],1)
+
     def test_real_company_queue_receives_typed_work_once(self):
         x=bridge.receive(self.work())
         self.assertEqual(x["state"],"CREATED_CANONICAL_TASK")
