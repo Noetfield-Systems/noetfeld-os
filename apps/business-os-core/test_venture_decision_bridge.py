@@ -41,7 +41,7 @@ class LocalDecisionContinuationTests(unittest.TestCase):
             ("cairn-season-0","founder-portfolio","Cairn")):
             product_loops.register({
                 "company_id":scope,"project_id":project,"name":name,
-                "vertical":"creator_web3","objective":"Genuine free user activation and utility",
+                "vertical":"creator-web3","objective":"Genuine free user activation and utility",
                 "priority":3,"max_tasks_per_cycle":5})
         with core.connect() as db:
             venture_company_os.reconcile(db)
