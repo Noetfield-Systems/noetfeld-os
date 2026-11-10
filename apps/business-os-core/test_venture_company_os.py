@@ -1,0 +1,112 @@
+"""Real local Company OS boundaries on the existing canonical worker/DB.
+
+These tests prove distinct per-venture executive/team configurations, strict
+project-scoped inference admission and autonomous event-to-task continuation.
+They do NOT treat synthetic fixtures as users or claim actual code deployments.
+"""
+import os
+import tempfile
+import unittest
+from pathlib import Path
+from unittest.mock import patch
+
+import core
+import product_loops
+import venture_company_os as venture
+import sina_work_bridge
+
+class LocalCompanyOSRuntimeTests(unittest.TestCase):
+    def setUp(self):
+        self.tmp=tempfile.TemporaryDirectory()
+        self.prev=core.DB
+        self.previous_autostart=os.environ.pop("COMPANY_OS_PORTFOLIO_AUTOSTART",None)
+        core.DB=Path(self.tmp.name)/"company-os.sqlite3"
+        core.init()
+        for project,name,domain,company in (
+            ("noetfield-web3-launchpad","RHEVO Creator Studio","creator-web3","noetfield-systems-inc"),
+            ("cairn-season-0","Cairn Season Zero","community-web3","founder-portfolio"),
+            ("social-games-lab","Social Games Lab","social-games","founder-portfolio"),
+        ):
+            product_loops.register({
+                "company_id":company,"project_id":project,
+                "name":name,"vertical":domain,
+                "objective":"Build a useful authentic community product with real user evidence",
+                "priority":3,"max_tasks_per_cycle":5,
+            })
+    def tearDown(self):
+        core.DB=self.prev
+        if self.previous_autostart is not None:
+            os.environ["COMPANY_OS_PORTFOLIO_AUTOSTART"]=self.previous_autostart
+        self.tmp.cleanup()
+
+    def test_local_instances_have_distinct_teams_goals_and_scoped_memory(self):
+        with core.connect() as db:
+            synced=venture.reconcile(db)
+            self.assertEqual(synced["instances_created"],3)
+            self.assertEqual(venture.reconcile(db)["instances_created"],0)
+            db.commit()
+            rhevo=venture.specialist(db,"noetfield-systems-inc",
+                                      "noetfield-web3-launchpad","engineering_operator")
+            cairn=venture.specialist(db,"founder-portfolio",
+                                      "cairn-season-0","engineering_operator")
+            self.assertNotEqual(rhevo["instance_id"],cairn["instance_id"])
+            self.assertIn("Devnet mint",rhevo["remit"])
+            self.assertIn("BNB Season",cairn["remit"])
+            self.assertIsNone(venture.specialist(db,"noetfield-systems-inc",
+                                                  "cairn-season-0","engineering_operator"))
+            self.assertIsNone(venture.specialist(db,"founder-portfolio",
+                                                  "social-games-lab","sales_qualification"))
+        snapshot=venture.portfolio(project_id="social-games-lab")
+        self.assertEqual(snapshot["count"],1)
+        self.assertEqual(snapshot["instances"][0]["memory_scope"],"founder-portfolio:social-games-lab")
+        self.assertEqual(snapshot["instances"][0]["physical_isolation"],
+                         "SHARED_RUNTIME_SCOPED_PROJECT_INSTANCE")
+
+    def test_each_local_director_continues_without_sina_workpacket(self):
+        now=1730600000.0
+        first=venture.tick(clock=lambda:now,limit=1)
+        self.assertEqual(first["state"],"COMPANY_LOOPS_ADVANCED")
+        self.assertEqual(first["events_created"],1)
+        self.assertEqual(venture.tick(clock=lambda:now+20,limit=1)["state"],"NOT_DUE")
+        with core.connect() as db:
+            rows=db.execute("SELECT company_id,project_id,source_event_id "
+                            "FROM product_observations WHERE source_kind='REPORTED_OPERATIONAL' "
+                            "AND source_event_id LIKE 'venture_company_os:%'").fetchall()
+            self.assertEqual(len(rows),1)
+            row=rows[0]
+            self.assertTrue(venture.specialist(db,row["company_id"],row["project_id"],
+                                               "chief_of_staff"))
+        after=venture.tick(clock=lambda:now+301,limit=1)
+        self.assertEqual(after["events_created"],1)
+        with core.connect() as db:
+            events=db.execute("SELECT COUNT(*) FROM events WHERE event_type='product.signal_observed'").fetchone()[0]
+            self.assertGreaterEqual(events,2)
+
+    def test_model_inference_bound_to_real_local_company_task_not_founder_only(self):
+        with core.connect() as db:
+            venture.reconcile(db)
+            task_id=core.add_task(db,None,None,"portfolio","engineering_operator",
+                                   "Cairn build next playable challenge",
+                                   "Implement a real quest UI and test it against the existing Cairn community",
+                                   "Draft engineering acceptance and artifact details")
+            db.execute("UPDATE tasks SET company_id=?,project_id=?,status='running' WHERE id=?",
+                       ("founder-portfolio","cairn-season-0",task_id))
+            db.commit()
+        self.assertFalse(sina_work_bridge.is_sina_task(task_id))
+        self.assertTrue(sina_work_bridge.is_company_os_task(task_id))
+        with core.connect() as db:
+            db.execute("UPDATE tasks SET project_id=? WHERE id=?",("unknown-uncommissioned",task_id))
+            db.commit()
+        self.assertFalse(sina_work_bridge.is_company_os_task(task_id))
+
+    def test_drafts_never_become_external_mutations_or_verified_revenue(self):
+        self.assertFalse(venture.portfolio()["external_permit_issued"])
+        with core.connect() as db:
+            venture.reconcile(db);db.commit()
+        state=venture.portfolio(company_id="founder-portfolio")
+        self.assertEqual(state["count"],2)
+        self.assertTrue(all(x["permitted_effects"]=="INTERNAL_DRAFTS_ONLY"
+                            and not x["independent_verification"] for x in state["instances"]))
+
+if __name__=="__main__":
+    unittest.main()
