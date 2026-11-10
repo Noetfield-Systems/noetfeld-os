@@ -8,6 +8,7 @@ from pydantic import BaseModel, ConfigDict, Field
 import core
 import paperclip_bridge as paperclip
 import product_loops
+import founder_signal_transport
 
 TOKEN=os.getenv("FOUNDER_API_TOKEN","")
 INTERVAL=max(2,int(os.getenv("WORKER_INTERVAL_SECONDS","5")))
@@ -251,6 +252,11 @@ async def feedback(data:Feedback,request:Request):
     event_id=core.add_event("feedback.received","public_feedback",brand,
       {"brand":brand,"rating":data.rating,"comment":core.clean(data.comment,2000)})
     return JSONResponse({"accepted":True,"reference":event_id},status_code=202)
+
+@app.get("/api/control/sina-federation")
+def sina_federation_status(authorization:str|None=Header(default=None)):
+    authorize(authorization)
+    return founder_signal_transport.snapshot()
 
 @app.get("/api/control/product-programs")
 def product_programs(authorization:str|None=Header(default=None),company_id:str|None=None):

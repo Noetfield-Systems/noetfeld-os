@@ -3,6 +3,7 @@ from pathlib import Path
 from datetime import datetime, timezone
 import product_loops
 import founder_portfolio_bridge
+import founder_signal_transport
 
 DB=Path(os.getenv("DATABASE_PATH","/data/business-os.sqlite"))
 BRANDS={"noetfield":"Noetfield Systems","buildworkflow":"BuildWorkflow","trustfield":"TrustField","signalforge":"SignalForge","buildrelay":"BuildRelay","portfolio":"Portfolio"}
@@ -442,6 +443,7 @@ def process_event(e):
   elif e["event_type"]=="system.learning_tick":process_learning(e)
   elif e["event_type"]=="product.signal_observed":product_loops.process_signal(e)
   elif e["event_type"]==founder_portfolio_bridge.EVENT:process_founder_portfolio_event(e)
+  elif e["event_type"]==founder_signal_transport.EVENT:founder_signal_transport.process(e)
   else:
    with connect() as d:d.execute("UPDATE events SET status='ignored',processed_at=? WHERE id=?",(now(),e["id"]))
  except Exception as ex:
@@ -452,6 +454,10 @@ def daily_tick():
  if time.time()-last>=86400:
   add_event("system.learning_tick","system","portfolio",{"trigger":"daily"})
   with connect() as d:d.execute("INSERT INTO state VALUES('last_learning',?) ON CONFLICT(key) DO UPDATE SET value=excluded.value",(str(time.time()),))
+ # Resume deferred Sina federation signals on the SAME canonical events queue.
+ # Persistent attempts/backoff survive restarts; one failing destination cannot
+ # stop product, engineering, growth, market or portfolio loops.
+ founder_signal_transport.resume_deferred()
  # Read the Founder canonical source on the SAME existing Company worker tick.
  # A version change becomes one idempotent existing-queue event; never a
  # duplicate product registry, new scheduler or autonomous write permit.
