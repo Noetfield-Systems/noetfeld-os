@@ -45,6 +45,63 @@ class LocalCompanyOSRuntimeTests(unittest.TestCase):
         self.assertIn("venture_company_os.py",copy_line)
         self.assertIn("python -m py_compile app.py core.py venture_company_os.py",docker)
 
+    def test_founder_sends_one_goal_and_cairn_company_os_creates_own_tasks(self):
+        goal={
+          "schema":"sina.company-os.venture-mandate.v1",
+          "program_id":"a"*32,"mission_id":"M12-CAIRN-WEB3",
+          "project_id":"cairn-season-0","company_id":None,
+          "tenant_scope":"founder-portfolio",
+          "objective":"Develop a genuinely useful BNB community challenge product with repeatable developer contribution and real participant retention",
+          "priority_score":90,
+          "success_metric":"authentic_bnb_community_activation_and_repeat_participation",
+          "authority":"PORTFOLIO_DIRECTIVE_ONLY_NO_PERMIT",
+          "execution_owner":"PROJECT_LOCAL_COMPANY_OS",
+          "source_ref":"strategic:M12-CAIRN-WEB3:v1",
+        }
+        first=venture.adopt_founder_mandate(goal)
+        self.assertEqual(first["state"],"ADOPTED_LOCAL_COMPANY_OS")
+        self.assertEqual(venture.adopt_founder_mandate(goal)["state"],"UNCHANGED")
+        with core.connect() as db:
+            mandate=db.execute("SELECT * FROM venture_company_os_mandates "
+                "WHERE project_id='cairn-season-0'").fetchone()
+            self.assertEqual(mandate["success_metric"],goal["success_metric"])
+            self.assertIsNone(db.execute("SELECT * FROM venture_company_os_mandates "
+                "WHERE project_id='noetfield-web3-launchpad'").fetchone())
+            event=db.execute("SELECT * FROM events WHERE id=?",(first["event_id"],)).fetchone()
+        self.assertEqual(event["source"],"company_operating_program")
+        produced=product_loops.process_signal(dict(event))
+        self.assertIn("engineering_operator",produced["specialists"])
+        with core.connect() as db:
+            tasks=db.execute("SELECT company_id,project_id,role FROM tasks WHERE event_id=?",
+                (first["event_id"],)).fetchall()
+            self.assertEqual(len(tasks),produced["task_count"])
+            self.assertTrue(all(x["project_id"]=="cairn-season-0"
+                                and x["company_id"]=="founder-portfolio" for x in tasks))
+            self.assertIn("chief_of_staff",{x["role"] for x in tasks})
+        self.assertFalse(first["external_actions"])
+
+    def test_mandate_rejects_fake_permit_and_cross_product_scope(self):
+        item={
+          "schema":"sina.company-os.venture-mandate.v1",
+          "program_id":"a"*32,"mission_id":"M12-CAIRN-WEB3",
+          "project_id":"cairn-season-0","company_id":None,
+          "tenant_scope":"founder-portfolio",
+          "objective":"Build genuine BNB developer challenges and real user participation in Cairn without simulated token holders",
+          "priority_score":90,
+          "success_metric":"authentic_bnb_community_activation_and_repeat_participation",
+          "authority":"PORTFOLIO_DIRECTIVE_ONLY_NO_PERMIT",
+          "execution_owner":"PROJECT_LOCAL_COMPANY_OS",
+          "source_ref":"strategic:M12-CAIRN-WEB3:v1",
+        }
+        for changes in ({"authority":"PRODUCTION_PERMIT_GRANTED"},
+                        {"tenant_scope":"noetfield-systems-inc"},
+                        {"success_metric":"not a safe metric"},
+                        {"extra_funding":10000}):
+            wrong=dict(item,**changes)
+            with self.subTest(wrong=changes):
+                with self.assertRaises(ValueError):
+                    venture.adopt_founder_mandate(wrong)
+
     def test_local_instances_have_distinct_teams_goals_and_scoped_memory(self):
         with core.connect() as db:
             synced=venture.reconcile(db)

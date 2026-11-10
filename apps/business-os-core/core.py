@@ -519,6 +519,9 @@ def daily_tick():
   print("COMPANY_OS_SINA_WORK_HANDOFF "+json.dumps({
    "state":sina_work["state"],
    "canonical_tasks_created":sina_work.get("canonical_tasks_created",0),
+   "venture_mandates_adopted":sina_work.get("venture_mandates_adopted",0),
+   "venture_mandates_blocked":sina_work.get("venture_mandates_blocked",0),
+   "execution_owned_by":"VENTURE_LOCAL_COMPANY_OS",
    "awaiting_product_registration":sina_work.get("awaiting_product_registration",0),
    "execution_states_reported":sina_work.get("execution_states_reported",0),
    "error_type":sina_work.get("error_type"),
