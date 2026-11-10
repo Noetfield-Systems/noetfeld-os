@@ -95,8 +95,23 @@ def _validated(item):
         "task","priority_score","resources","dependencies","acceptance",
         "governance","routing_state","tenant_scope"
     }
-    if not isinstance(item,dict) or set(item)!=required:
+    # Sina emits these two fields for its canonical M01-M11 strategic goals.
+    # They are advisory context, NOT authority, a job permit or a new registry.
+    # Preserve strict rejection of unknown keys rather than widening the wire
+    # format to accept arbitrary model-supplied payload fields.
+    strategic_fields={"strategic_mission_id","success_metric"}
+    if (not isinstance(item,dict) or not required.issubset(item)
+            or set(item)-required-strategic_fields
+            or (("strategic_mission_id" in item)!=("success_metric" in item))):
         raise ValueError("company_request_schema_invalid")
+    if "strategic_mission_id" in item:
+        mission_id=item["strategic_mission_id"]
+        metric=item["success_metric"]
+        if (not isinstance(mission_id,str)
+                or not re.fullmatch(r"M[0-9]{2}-[A-Z0-9-]{3,61}",mission_id)
+                or not isinstance(metric,str)
+                or not re.fullmatch(r"[a-z][a-z0-9_]{7,119}",metric)):
+            raise ValueError("company_strategic_context_invalid")
     if item["schema"]!="sina.company-os.workpacket-request.v1" or \
        item["origin"]!="sina_autonomous_organization" or \
        item["authority"]!="ADVISORY_ONLY_NO_PERMIT" or \
@@ -205,10 +220,19 @@ def receive(item):
         # Product scope is never inferred from a brand; workstream specifies it.
         title=(item["functional_unit"].replace("_"," ").title()+": "+
                item["project_id"])[:140]
+        # Carry the Founder-approved strategic goal and measurement criterion
+        # into the EXISTING task objective before any specialist/context switch.
+        # These IDs are validated advisory fields, never execution authority.
+        mission_context=(
+            " Strategic goal "+item["strategic_mission_id"]+
+            "; success metric "+item["success_metric"]+";"
+            if "strategic_mission_id" in item else ""
+        )
         objective=(
             "Founder OS organizational WorkPacket *request* "+wid+
-            ". Source program "+item["program_id"]+
-            ". "+item["task"]+
+            ". Source program "+item["program_id"]+"."+
+            mission_context+
+            " Original Founder work: "+item["task"]+
             ". Produce a concrete internal artifact and a next-action with evidence. "+
             "No external outreach, code mutation, finance movement, legal commitments "+
             "or production deployment without the separate Governor permit."
@@ -280,7 +304,8 @@ def cycle(fetch=None):
     items=result.get("items")
     if not isinstance(items,list) or len(items)>20:
         raise ValueError("work_intake_size_invalid")
-    created=0; unmapped=0
+    created=0; unmapped=0; rejected=0
+    rejection_codes={}
     for item in items:
         try:
             response=receive(item)
@@ -289,10 +314,37 @@ def cycle(fetch=None):
             elif response["state"]=="CREATED_CANONICAL_TASK":
                 created+=1
         except (ValueError,TypeError) as exc:
-            print("SINA_ORG_WORK_REJECTED "+type(exc).__name__,flush=True)
+            # Safe code-only diagnostics: never print raw request text, user
+            # PII, model output, tokens or arbitrary exception messages.
+            codes={
+                "company_request_schema_invalid","company_strategic_context_invalid",
+                "company_request_authority_invalid","company_request_id_invalid",
+                "company_project_id_invalid","company_tenant_denied",
+                "independent_verification_not_in_company_workforce",
+                "company_task_invalid","sensitive_task_rejected",
+                "company_authority_scope_violation",
+                "sina_workstream_project_not_in_canonical_ssot",
+                "sina_workstream_owner_conflicts_with_ssot",
+                "reused_workstream_mismatched_tenant",
+            }
+            reason=str(exc)
+            code=reason if reason in codes else "UNCLASSIFIED_VALIDATION_FAILURE"
+            rejection_codes[code]=rejection_codes.get(code,0)+1
+            rejected+=1
+            print("SINA_ORG_WORK_REJECTED "+code,flush=True)
     acknowledged=sync_existing(fetch)
     retry_scheduled=retry_degraded()
-    return {"state":"OBSERVED","canonical_tasks_created":created,
+    # A heartbeat that rejected every packet is NOT healthy "OBSERVED" work.
+    # Project registration and specialist/verification ownership remain
+    # distinct blockers, without forging a Founder verdict or new dispatcher.
+    state=("BLOCKED_WORKPACKET_VALIDATION" if rejected and not created else
+           "PARTIAL_WITH_REJECTIONS" if rejected else
+           "BLOCKED_PROJECT_REGISTRATION" if unmapped and not created else
+           "PARTIAL_WITH_UNREGISTERED_PROJECTS" if unmapped else "OBSERVED")
+    return {"state":state,"canonical_tasks_created":created,
+            "source_requests_received":len(items),
+            "requests_rejected":rejected,
+            "rejection_codes":rejection_codes,
             "awaiting_product_registration":unmapped,
             "execution_states_reported":acknowledged,
             "specialist_retry_scheduled":retry_scheduled,
