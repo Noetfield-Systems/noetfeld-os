@@ -9,6 +9,7 @@ import core
 import paperclip_bridge as paperclip
 import product_loops
 import founder_signal_transport
+import sina_work_bridge
 
 TOKEN=os.getenv("FOUNDER_API_TOKEN","")
 INTERVAL=max(2,int(os.getenv("WORKER_INTERVAL_SECONDS","5")))
@@ -318,6 +319,27 @@ def paperclip_backlog(body:PaperclipBacklog,authorization:str|None=Header(defaul
             )
     except paperclip.PaperclipError as exc:
         raise HTTPException(exc.http_status,exc.code) from None
+
+@app.post("/api/internal/sina/work-results")
+def sina_mission_work_results(body:dict[str,Any],authorization:str|None=Header(default=None)):
+    """Scoped service-only projection of our existing Sina-origin task results.
+
+    Does not accept project/user names, arbitrary SQL, customer files or any
+    task outside the canonical Sina-bound Company OS task IDs.
+    """
+    key=os.getenv("SINA_COMPANY_RESULTS_TOKEN","")
+    token=(authorization or "").removeprefix("Bearer ").strip()
+    if len(key)<40 or not token or not hmac.compare_digest(token,key):
+        raise HTTPException(401,"sina_company_results_service_identity_required")
+    if not isinstance(body,dict) or set(body)!={"task_ids"}:
+        raise HTTPException(400,"only task_ids may be requested")
+    task_ids=body["task_ids"]
+    if not isinstance(task_ids,list) or len(task_ids)>20 or len(str(body))>3500:
+        raise HTTPException(400,"invalid or oversized task lookup")
+    try:
+        return sina_work_bridge.results_for_founder(task_ids)
+    except (TypeError,ValueError):
+        raise HTTPException(400,"non-canonical organization task ID") from None
 
 @app.get("/api/control/overview")
 def overview(authorization:str|None=Header(default=None)):

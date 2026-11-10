@@ -142,6 +142,34 @@ class CompanySinaOrgBridgeTests(unittest.TestCase):
             self.assertEqual(db.execute("SELECT COUNT(*) FROM tasks WHERE id=?",
                                         (x["task_id"],)).fetchone()[0],1)
 
+    def test_mission_artifacts_use_real_canonical_tasks_only_and_redact_private_data(self):
+        import json
+        x=bridge.receive(self.work("7"*32))
+        example={"provider":"sina-deepseek","recommendation":{
+            "assessment":"Founder user interview identified an onboarding opportunity",
+            "draft_artifact":{"deliverables":[
+                "Draft a product onboarding experiment with precise conversion metrics for the platform",
+                "Contact alice@example.com by email with the private token sk-abcdefghijklmnop"]},
+            "next_best_action":"Develop evidence-linked landing page conversion experiment",
+            "success_metric":"Observed legitimate activation rate"}}
+        with core.connect() as db:
+            db.execute("UPDATE tasks SET result=?,status='drafted' WHERE id=?",
+                       (json.dumps(example),x["task_id"]))
+        artifact=bridge.results_for_founder([x["task_id"],"task_"+"f"*16])
+        self.assertEqual(artifact["found"],1)
+        self.assertEqual(artifact["verified_receipts"],0)
+        item=artifact["items"][0]
+        self.assertEqual(item["task_id"],x["task_id"])
+        self.assertEqual(item["provider"],"sina-deepseek")
+        self.assertFalse(item["external_action_executed"])
+        self.assertIn("[email redacted]",item["deliverables"][1])
+        self.assertNotIn("alice@example.com",json.dumps(artifact))
+        self.assertNotIn("sk-abcdefghijklmnop",json.dumps(artifact))
+        with self.assertRaises(ValueError):
+            bridge.results_for_founder(["task_BAD_ID"])
+        with self.assertRaises(ValueError):
+            bridge.results_for_founder([x["task_id"]]*2)
+
     def test_no_cross_tenant_or_self_verification(self):
         wrong=self.work("c"*32)
         wrong["tenant_scope"]="other"
