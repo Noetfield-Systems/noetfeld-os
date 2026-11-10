@@ -295,7 +295,8 @@ def cycle(fetch=None):
     items=result.get("items")
     if not isinstance(items,list) or len(items)>20:
         raise ValueError("work_intake_size_invalid")
-    created=0; unmapped=0
+    created=0; unmapped=0; rejected=0
+    rejection_codes={}
     for item in items:
         try:
             response=receive(item)
@@ -319,10 +320,22 @@ def cycle(fetch=None):
             }
             reason=str(exc)
             code=reason if reason in codes else "UNCLASSIFIED_VALIDATION_FAILURE"
+            rejection_codes[code]=rejection_codes.get(code,0)+1
+            rejected+=1
             print("SINA_ORG_WORK_REJECTED "+code,flush=True)
     acknowledged=sync_existing(fetch)
     retry_scheduled=retry_degraded()
-    return {"state":"OBSERVED","canonical_tasks_created":created,
+    # A heartbeat that rejected every packet is NOT healthy "OBSERVED" work.
+    # Project registration and specialist/verification ownership remain
+    # distinct blockers, without forging a Founder verdict or new dispatcher.
+    state=("BLOCKED_WORKPACKET_VALIDATION" if rejected and not created else
+           "PARTIAL_WITH_REJECTIONS" if rejected else
+           "BLOCKED_PROJECT_REGISTRATION" if unmapped and not created else
+           "PARTIAL_WITH_UNREGISTERED_PROJECTS" if unmapped else "OBSERVED")
+    return {"state":state,"canonical_tasks_created":created,
+            "source_requests_received":len(items),
+            "requests_rejected":rejected,
+            "rejection_codes":rejection_codes,
             "awaiting_product_registration":unmapped,
             "execution_states_reported":acknowledged,
             "specialist_retry_scheduled":retry_scheduled,
