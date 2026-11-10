@@ -6,6 +6,7 @@ from fastapi import FastAPI, Header, HTTPException, Request
 from fastapi.responses import FileResponse, JSONResponse
 from pydantic import BaseModel, ConfigDict, Field
 import core
+import founder_bridge
 import client_status
 import floor_projection
 import commercial_team
@@ -41,6 +42,16 @@ async def worker():
     while not STOP.is_set():
         try:
             await asyncio.to_thread(core.daily_tick)
+            # Reuse the running Company OS event worker. An upstream outage
+            # must not halt local intake, departments or the canonical queue.
+            try:
+                outcome=await asyncio.to_thread(founder_bridge.tick)
+                if outcome.get("state")=="LIVE" and any(outcome.get(k,0)
+                        for k in ("accepted","acknowledged","source_signals","rejected")):
+                    print("sina_company_org_bridge="+json.dumps(outcome,sort_keys=True),flush=True)
+            except Exception as exc:
+                import logging
+                logging.warning("sina_company_org_bridge_retryable_error type=%s",type(exc).__name__)
             event=await asyncio.to_thread(core.claim,"events")
             if event:
                 await asyncio.to_thread(core.process_event,event)
@@ -70,7 +81,7 @@ async def department_worker(worker_slot:int):
 @asynccontextmanager
 async def lifespan(app):
     global WORKER_JOB,TASK_WORKERS
-    core.init();client_status.init();STOP.clear()
+    core.init();client_status.init();founder_bridge.init();STOP.clear()
     restored=portfolio_studio.overview()
     print("company_portfolio_resume="+json.dumps({
         "state":restored["state"].get("portfolio_studio_state"),
