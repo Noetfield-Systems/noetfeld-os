@@ -54,6 +54,36 @@ class CompanySinaOrgBridgeTests(unittest.TestCase):
           },
           "routing_state":"NOT_DISPATCHED_COMPANY_OS_OWNS_EXECUTION",
         }
+    def test_canonical_strategic_workpacket_admitted_and_metric_preserved(self):
+        packet=self.work("2"*32)
+        packet["strategic_mission_id"]="M09-RHEVO-LAUNCH"
+        packet["success_metric"]="real_creator_launches_real_users_retention_and_verified_fee_flow"
+        result=bridge.receive(packet)
+        self.assertEqual(result["state"],"CREATED_CANONICAL_TASK")
+        with core.connect() as db:
+            task=db.execute("SELECT objective FROM tasks WHERE id=?",
+                            (result["task_id"],)).fetchone()
+            self.assertIn("M09-RHEVO-LAUNCH",task["objective"])
+            self.assertIn("real_creator_launches",task["objective"])
+        self.assertEqual(bridge.receive(packet)["task_id"],result["task_id"])
+
+    def test_unknown_or_unpaired_strategic_fields_still_rejected(self):
+        for suffix in (
+            {"success_metric":"verified_real_user_retention"},
+            {"strategic_mission_id":"M09-RHEVO-LAUNCH"},
+            {"strategic_mission_id":"../unsafe","success_metric":"verified_real_user_retention"},
+            {"strategic_mission_id":"M09-RHEVO-LAUNCH","success_metric":"not valid metric"},
+            {"strategic_mission_id":"M09-RHEVO-LAUNCH","success_metric":"verified_real_user_retention",
+             "new_permit":"ALLOW_ALL"}
+        ):
+            with self.subTest(suffix=suffix):
+                packet=self.work("3"*32)
+                packet.update(suffix)
+                with self.assertRaises(ValueError):
+                    bridge.receive(packet)
+        with core.connect() as db:
+            self.assertEqual(db.execute("SELECT COUNT(*) FROM sina_workstream_bindings").fetchone()[0],0)
+
     def test_real_company_queue_receives_typed_work_once(self):
         x=bridge.receive(self.work())
         self.assertEqual(x["state"],"CREATED_CANONICAL_TASK")
