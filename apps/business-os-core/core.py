@@ -6,6 +6,7 @@ import founder_portfolio_bridge
 import sina_work_bridge
 import founder_signal_transport
 import venture_company_os
+import venture_decision_bridge
 
 DB=Path(os.getenv("DATABASE_PATH","/data/business-os.sqlite"))
 BRANDS={"noetfield":"Noetfield Systems","buildworkflow":"BuildWorkflow","trustfield":"TrustField","signalforge":"SignalForge","buildrelay":"BuildRelay","portfolio":"Portfolio"}
@@ -133,6 +134,7 @@ def init():
   product_loops.init(d)
   sina_work_bridge.init(d)
   venture_company_os.init(d)
+  venture_decision_bridge.init(d)
  # Default off for tests and uncommissioned customer deployments. Staging can
  # activate an idempotent source-provenance portfolio after a scoped rollout.
  if os.getenv("COMPANY_OS_PORTFOLIO_AUTOSTART","").lower() in {"1","true"}:
@@ -364,10 +366,34 @@ def process_task(t):
    "cta":"Request a scoped workflow review",
    "success_metric":"Qualified consented inbound requests, excluding tests",
    "approval_required_before_publishing":True,"no_outbound_action":True}
+ # Before acting on a normal specialist task, consult Sina's ONE
+ # Founder Goalkeeper using this local Company's actual canonical task.
+ # No new task is minted here. Model advice cannot create an external permit.
+ decision_context={"state":"NOT_CONSULTED"}
+ decision_allows_internal=True
+ if (scoped_product and role in (
+       "chief_of_staff","engineering_operator","product_strategy",
+       "market_intelligence","marketing_content","customer_success",
+       "risk_governance","roi_analyst") and sina_work_bridge.configured()):
+  try:
+   decision_context=venture_decision_bridge.consult_existing_task(t)
+   decision_allows_internal=decision_context.get("disposition") in (
+       "PROCEED_IN_LOCAL_COMPANY_OS","CHECK_EVIDENCE_AND_CONTINUE",
+       "CLARIFY_FROM_EVIDENCE_NOT_FOUNDER","RESEARCH_IN_LOCAL_COMPANY_OS")
+  except Exception as decision_error:
+   decision_context={"state":"DEGRADED_NO_TRUSTED_GOALKEEPER_RESPONSE",
+                     "error_class":type(decision_error).__name__}
+   # Safe internal deterministic drafts may continue, but no trusted
+   # Founder decision can be asserted when the source is unavailable.
+   decision_allows_internal=False
+ result["founder_goalkeeper"] = decision_context
+ if not decision_allows_internal:
+  result["risk_flags"].append("awaiting_canonical_founder_goalkeeper")
+  result["assessment"]="Company OS will keep local evidence only until the authenticated Goalkeeper decision is available."
  # The existing Company OS task engine may invoke the Agent Fabric model
  # only for authenticated Founder-originated, scoped, internal WorkPackets.
  # Do not forward raw customer messages, contacts or memory to this inference.
- if scoped_product and sina_work_bridge.specialist_configured() and sina_work_bridge.is_company_os_task(t["id"]):
+ if scoped_product and decision_allows_internal and sina_work_bridge.specialist_configured() and sina_work_bridge.is_company_os_task(t["id"]):
   try:
    generated=sina_work_bridge.specialist_proposal(t)
    result=generated["result"]
@@ -384,7 +410,7 @@ def process_task(t):
    result["model_issue_class"]=type(specialist_error).__name__[:70]
  # Legacy user-consented model lane remains separate; never allow two model
  # requests or use customer data in the new Company internal specialist path.
- if provider=="deterministic" and t.get("ai_consent") and os.getenv("LLM_BASE_URL") and os.getenv("LLM_API_KEY") and os.getenv("LLM_MODEL"):
+ if decision_allows_internal and provider=="deterministic" and t.get("ai_consent") and os.getenv("LLM_BASE_URL") and os.getenv("LLM_API_KEY") and os.getenv("LLM_MODEL"):
   try:
    from urllib.request import Request,urlopen
    base=os.getenv("LLM_BASE_URL").rstrip("/");model=os.getenv("LLM_MODEL")
@@ -407,6 +433,10 @@ def process_task(t):
    except Exception:result={"assessment":clean(out,1500),"next_best_action":t["next_action"],"risk_flags":[],"priority":"normal"}
    use=data.get("usage") or {};it=int(use.get("prompt_tokens") or 0);ot=int(use.get("completion_tokens") or 0);provider="openai-compatible"
   except Exception as ex:provider="provider_error";result["assessment"]="Model unavailable: "+clean(ex,120);result["risk_flags"]=["model_unavailable"]
+ # Always retain the real Goalkeeper result after a model artifact overwrites
+ # the specialist result object; model-generated text is never the authority.
+ if scoped_product:
+  result["founder_goalkeeper"]=decision_context
  with connect() as d:
   d.execute("INSERT INTO runs VALUES(?,?,?,?,?,?,?,?,?,?,?)",(idof("run"),t["id"],role,provider,model,"degraded" if provider=="provider_error" else "completed",it,ot,now(),now(),json.dumps(result,ensure_ascii=False)))
   d.execute("UPDATE tasks SET status='drafted',result=?,updated_at=? WHERE id=?",(json.dumps({"provider":provider,"recommendation":result,"memory_hits":len(mem),"external_action":"not_executed"}),now(),t["id"]))

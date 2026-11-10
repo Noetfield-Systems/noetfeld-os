@@ -11,6 +11,7 @@ import product_loops
 import founder_signal_transport
 import sina_work_bridge
 import venture_company_os
+import venture_decision_bridge
 
 TOKEN=os.getenv("FOUNDER_API_TOKEN","")
 INTERVAL=max(2,int(os.getenv("WORKER_INTERVAL_SECONDS","5")))
@@ -372,6 +373,38 @@ def organization(authorization:str|None=Header(default=None)):
         "seats":seats,
         "runtime_agents":agents
     }
+@app.post("/api/control/venture-company-os/decisions")
+async def local_company_agent_answer_and_continue(
+    request:Request,authorization:str|None=Header(default=None)
+):
+    """Authorized agents ask Sina, then queue in their OWN Company OS."""
+    authorize(authorization)
+    raw=await request.body()
+    if len(raw)>8192: raise HTTPException(413,"Agent question too large")
+    try:
+        import json
+        data=json.loads(raw)
+        if not isinstance(data,dict):
+            raise ValueError("Expected a typed agent question")
+        result=venture_decision_bridge.submit_question(data)
+        return result
+    except ValueError as exc:
+        raise HTTPException(400,str(exc)[:160])
+    except RuntimeError:
+        raise HTTPException(503,"Authenticated Sina Goalkeeper not configured")
+    except Exception:
+        raise HTTPException(503,"Trusted Goalkeeper or Company OS queue unavailable")
+
+@app.get("/api/control/venture-company-os/decisions")
+def local_company_decision_history(
+    company_id:str,project_id:str,authorization:str|None=Header(default=None)
+):
+    authorize(authorization)
+    try:
+        return venture_decision_bridge.history(company_id,project_id)
+    except ValueError as exc:
+        raise HTTPException(400,str(exc)[:160])
+
 @app.get("/api/control/venture-company-os")
 def venture_company_os_instances(
     authorization:str|None=Header(default=None),
