@@ -95,8 +95,21 @@ def _validated(item):
         "task","priority_score","resources","dependencies","acceptance",
         "governance","routing_state","tenant_scope"
     }
-    if not isinstance(item,dict) or set(item)!=required:
+    # Founder OS strategic-mission WorkPackets carry these two canonical
+    # bounded outcome fields. Previously the exact-key check rejected every
+    # strategic request before it could become a Company OS task.
+    optional={"strategic_mission_id","success_metric"}
+    if not isinstance(item,dict) or not required.issubset(item) or set(item)-required-optional:
         raise ValueError("company_request_schema_invalid")
+    if ("strategic_mission_id" in item) != ("success_metric" in item):
+        raise ValueError("company_strategic_context_incomplete")
+    if "strategic_mission_id" in item:
+        if (not isinstance(item["strategic_mission_id"],str)
+                or not re.fullmatch(r"M[0-9]{2}-[A-Z0-9-]{3,58}",item["strategic_mission_id"])):
+            raise ValueError("company_strategic_mission_id_invalid")
+        if (not isinstance(item["success_metric"],str)
+                or not re.fullmatch(r"[a-z][a-z0-9_]{7,119}",item["success_metric"])):
+            raise ValueError("company_success_metric_invalid")
     if item["schema"]!="sina.company-os.workpacket-request.v1" or \
        item["origin"]!="sina_autonomous_organization" or \
        item["authority"]!="ADVISORY_ONLY_NO_PERMIT" or \
@@ -209,6 +222,9 @@ def receive(item):
             "Founder OS organizational WorkPacket *request* "+wid+
             ". Source program "+item["program_id"]+
             ". "+item["task"]+
+            ((". Strategic mission "+item["strategic_mission_id"]+
+              "; evidence-based success metric "+item["success_metric"]+".")
+             if "strategic_mission_id" in item else "")+
             ". Produce a concrete internal artifact and a next-action with evidence. "+
             "No external outreach, code mutation, finance movement, legal commitments "+
             "or production deployment without the separate Governor permit."
