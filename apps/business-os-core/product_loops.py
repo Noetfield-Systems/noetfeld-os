@@ -385,6 +385,15 @@ def _insert_observation(db, company: str, project: str, payload: dict, verified:
         "portfolio", canonical({"company_id": company, "project_id": project,
                                 "observation_id": obs_id, "priority_score": score}),
         utc(), "product-signal:" + obs_id, score))
+    # One real observation may also wake Sina's EXISTING organizational loops.
+    # Insert into the SAME Company events transaction; never direct network
+    # delivery from this writer and never duplicate Company job ownership.
+    import founder_signal_transport
+    founder_signal_transport.enqueue_in_existing_events(db, {
+        "id": obs_id, "company_id": company, "project_id": project,
+        "source_kind": source_kind, "signal": signal, "severity": severity,
+        "observed_at": observed_at,
+    })
     return {"observation_id": obs_id, "event_id": eid, "idempotent": False,
             "priority_score": score, "verification": verification}
 
