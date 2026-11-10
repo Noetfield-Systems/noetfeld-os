@@ -18,6 +18,7 @@ import product_loops
 class FounderFeedbackBridgeTests(unittest.TestCase):
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory()
+        self.observation_times = {}
         self.old_db = core.DB
         self.old_token = os.environ.get(bridge.TOKEN_ENV)
         self.old_autostart = os.environ.pop("COMPANY_OS_PORTFOLIO_AUTOSTART", None)
@@ -53,7 +54,7 @@ class FounderFeedbackBridgeTests(unittest.TestCase):
             "signal": signal,
             "summary": "Observed genuine bounded operation without any external code or money changes.",
             "severity": severity,
-            "observed_at": datetime.now(timezone.utc).isoformat(),
+            "observed_at": self.observation_times.setdefault(eid, datetime.now(timezone.utc).isoformat()),
         }
         if kind == "FIRST_PARTY_HTTP_HEALTH":
             # This is exactly the verified-health poll's existing transaction.
