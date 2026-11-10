@@ -10,6 +10,7 @@ import paperclip_bridge as paperclip
 import product_loops
 import founder_signal_transport
 import sina_work_bridge
+import venture_company_os
 
 TOKEN=os.getenv("FOUNDER_API_TOKEN","")
 INTERVAL=max(2,int(os.getenv("WORKER_INTERVAL_SECONDS","5")))
@@ -371,6 +372,23 @@ def organization(authorization:str|None=Header(default=None)):
         "seats":seats,
         "runtime_agents":agents
     }
+@app.get("/api/control/venture-company-os")
+def venture_company_os_instances(
+    authorization:str|None=Header(default=None),
+    company_id:str|None=None,
+    project_id:str|None=None,
+):
+    """Per-project Company OS executive, specialist team and own work state.
+
+    This is an operational instance, not a separate incorporated company or
+    physical Railway deployment. All data is read under Founder auth.
+    """
+    authorize(authorization)
+    for identifier in (company_id,project_id):
+        if identifier is not None and not re.fullmatch(r"[a-z0-9][a-z0-9-]{2,90}",identifier):
+            raise HTTPException(400,"Invalid company/project selector")
+    return venture_company_os.portfolio(company_id=company_id,project_id=project_id)
+
 @app.get("/api/control/opportunities")
 def opportunities(authorization:str|None=Header(default=None),brand:str|None=None):
     authorize(authorization)
