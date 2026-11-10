@@ -188,5 +188,33 @@ class CompanyFounderContinuousBridgeTests(unittest.TestCase):
             self.assertEqual(db.execute("SELECT COUNT(*) FROM tasks").fetchone()[0], 1)
 
 
+    def test_live_observability_uses_stored_success_and_never_exposes_credentials(self):
+        before=founder_bridge.health()
+        self.assertTrue(before["configured"])
+        self.assertEqual(before["connection"], "AWAITING_FIRST_CYCLE")
+        def wire(method,path,payload=None):
+            if method=="GET":
+                return {"schema":"sina.company-os.work-intake.v1","items":[request()]}
+            return {"workstream_id":payload["workstream_id"]}
+        with patch.object(founder_bridge,"_request",side_effect=wire):
+            self.assertEqual(founder_bridge.tick()["state"],"LIVE")
+        live=founder_bridge.health()
+        self.assertEqual(live["connection"],"LIVE")
+        self.assertEqual(live["work_packets_claimed"],1)
+        self.assertEqual(live["pending_ack"],0)
+        self.assertEqual(live["verified_outcomes"],0)
+        self.assertEqual(live["external_effects"],0)
+        self.assertNotIn(os.environ["SINA_ORG_CONTINUOUS_TOKEN"],str(live))
+        founder_bridge.record_failure(ConnectionError("Bearer secret ignored"))
+        degraded=founder_bridge.health()
+        self.assertEqual(degraded["connection"],"DEGRADED")
+        self.assertEqual(degraded["last_error_type"],"ConnectionError")
+        self.assertNotIn("Bearer",str(degraded))
+        with core.connect() as db:
+            db.execute("UPDATE state SET value='2000-01-01T00:00:00+00:00' WHERE key='founder_bridge_last_success'")
+        self.assertEqual(founder_bridge.health()["connection"],"STALE")
+
+
+
 if __name__ == "__main__":
     unittest.main()
