@@ -1,0 +1,31 @@
+name: Business OS customer progress CI
+on:
+  pull_request:
+    paths:
+      - "apps/business-os-core/**"
+      - ".github/workflows/business-os-intake-progress-ci.yml"
+  push:
+    branches: ["platform/business-os-core-v1"]
+    paths:
+      - "apps/business-os-core/**"
+      - ".github/workflows/business-os-intake-progress-ci.yml"
+permissions:
+  contents: read
+jobs:
+  customer-progress:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: apps/business-os-core
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install Business OS service dependencies
+        run: python -m pip install -r requirements.txt
+      - name: Compile production image module inputs
+        run: python -m py_compile app.py core.py client_status.py floor_projection.py commercial_team.py portfolio_studio.py
+      - name: Run existing and new service tests
+        run: python -m unittest discover -s . -p "test_*.py" -v

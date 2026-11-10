@@ -6,6 +6,7 @@ from fastapi import FastAPI, Header, HTTPException, Request
 from fastapi.responses import FileResponse, JSONResponse
 from pydantic import BaseModel, ConfigDict, Field
 import core
+import client_status
 import floor_projection
 import commercial_team
 import portfolio_studio
@@ -69,7 +70,7 @@ async def department_worker(worker_slot:int):
 @asynccontextmanager
 async def lifespan(app):
     global WORKER_JOB,TASK_WORKERS
-    core.init();STOP.clear()
+    core.init();client_status.init();STOP.clear()
     restored=portfolio_studio.overview()
     print("company_portfolio_resume="+json.dumps({
         "state":restored["state"].get("portfolio_studio_state"),
@@ -182,8 +183,30 @@ async def intake(data:Intake,request:Request):
       "problem":core.clean(data.problem,2500)})
     route,_,_=core.route_for(brand,audience,intent)
     event_id=core.add_event("intake.received","public_web",brand,payload)
-    return JSONResponse({"accepted":True,"reference":event_id,"route":route,
+    status_token=client_status.issue(event_id)
+    return JSONResponse({"accepted":True,"reference":event_id,"status_token":status_token,"route":route,
       "message":"Request accepted and queued for its specialist workflow."},status_code=202)
+
+class IntakeProgressQuery(BaseModel):
+    model_config=ConfigDict(extra="forbid")
+    reference:str=Field(min_length=20,max_length=30)
+    status_token:str=Field(min_length=40,max_length=96)
+
+@app.post("/api/intake/progress")
+async def intake_progress(payload:IntakeProgressQuery,request:Request):
+    # Never put the opaque read capability in a GET query string or browser URL.
+    try:
+        size=int(request.headers.get("content-length","0") or 0)
+    except ValueError:
+        raise HTTPException(400,"Invalid content length")
+    if size>2048:
+        raise HTTPException(413,"Status request too large")
+    result=client_status.snapshot(payload.reference,payload.status_token)
+    if result is None:
+        raise HTTPException(404,"Status reference not found")
+    if result.get("rate_limited"):
+        raise HTTPException(429,"Polling rate exceeded")
+    return JSONResponse(result,headers={"Cache-Control":"no-store"})
 
 @app.post("/api/feedback")
 async def feedback(data:Feedback,request:Request):
