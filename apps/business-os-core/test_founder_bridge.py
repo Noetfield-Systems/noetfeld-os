@@ -136,6 +136,44 @@ class CompanyFounderContinuousBridgeTests(unittest.TestCase):
         with core.connect() as db:
             self.assertEqual(db.execute("SELECT COUNT(*) FROM tasks").fetchone()[0], 1)
 
+    def test_duplicate_workstream_ack_conflict_is_quarantined_not_retried(self):
+        import io
+        from urllib.error import HTTPError
+        item=request()
+        task_id,_=founder_bridge.admit(item, founder_bridge._allowed_projects())
+        payload={"error":"invalid_company_ack",
+                 "message":"workstream_already_bound_to_different_task"}
+        def conflict(*args,**kwargs):
+            raise HTTPError("https://sina-founder-os-staging-staging.up.railway.app/api/v2/organization/company/ack",
+                             400,"Conflict",{},io.BytesIO(json.dumps(payload).encode()))
+        with patch.object(founder_bridge,"_request",side_effect=conflict):
+            self.assertEqual(founder_bridge.reconcile(),0)
+        with core.connect() as db:
+            row=db.execute("SELECT last_acked FROM founder_org_bindings").fetchone()
+            self.assertEqual(row["last_acked"],"ACK_CONFLICT")
+            task=db.execute("SELECT status FROM tasks WHERE id=?",(task_id,)).fetchone()
+            self.assertEqual(task["status"],"blocked")
+            self.assertEqual(db.execute("SELECT COUNT(*) FROM tasks").fetchone()[0],1)
+        self.assertEqual(founder_bridge.health()["ack_conflicts_quarantined"],1)
+        # Even when status changes, stale duplicate ACK cannot re-enter retries.
+        with patch.object(founder_bridge,"_request",side_effect=AssertionError("should not retry")):
+            self.assertEqual(founder_bridge.reconcile(),0)
+
+    def test_unrelated_ack_http_error_does_not_get_misclassified(self):
+        import io
+        from urllib.error import HTTPError
+        founder_bridge.admit(request(),founder_bridge._allowed_projects())
+        def other(*args,**kwargs):
+            raise HTTPError("https://sina-founder-os-staging-staging.up.railway.app/api/v2/organization/company/ack",
+                              400,"Bad Request",{},io.BytesIO(
+                                  b'{"error":"invalid_company_ack","message":"unknown_workstream"}'))
+        with patch.object(founder_bridge,"_request",side_effect=other):
+            with self.assertRaises(HTTPError):
+                founder_bridge.reconcile()
+        with core.connect() as db:
+            self.assertEqual(db.execute(
+                "SELECT last_acked FROM founder_org_bindings").fetchone()[0],"")
+
     def test_commercial_signal_only_on_real_processed_public_intake(self):
         def add(source):
             payload = {

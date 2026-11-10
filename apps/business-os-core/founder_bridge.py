@@ -207,13 +207,32 @@ def _due():
         db.commit()
         return True
 
+def _conflicting_upstream_binding(exc):
+    """Exact, typed first-writer-wins conflict; never suppress other HTTP errors.
+
+    A different Company OS worker already bound the Founder workstream to its
+    own canonical task. Our duplicate task must not be ACKed or retried as if
+    the Founder accepted it, nor may this client replace the canonical owner.
+    """
+    if not isinstance(exc,HTTPError) or exc.code!=400:
+        return False
+    try:
+        payload=json.loads(exc.read(2048).decode("utf-8"))
+    except (ValueError,UnicodeError,TypeError):
+        return False
+    return (isinstance(payload,dict) and
+            payload.get("error")=="invalid_company_ack" and
+            payload.get("message")=="workstream_already_bound_to_different_task")
+
+
 def reconcile(limit=40):
     rows=[]
     with core.connect() as db:
         rows=db.execute("""SELECT b.request_id,b.tenant_scope,b.project_id,b.canonical_task_id,
                    b.last_acked,t.status
             FROM founder_org_bindings b JOIN tasks t ON t.id=b.canonical_task_id
-            WHERE b.last_acked != CASE
+            WHERE b.last_acked != 'ACK_CONFLICT'
+              AND b.last_acked != CASE
               WHEN t.status IN ('drafted','approved') THEN 'DRAFTED'
               WHEN t.status IN ('blocked','failed') THEN 'BLOCKED'
               ELSE 'ACCEPTED' END
@@ -224,12 +243,28 @@ def reconcile(limit=40):
                 "approved":"DRAFTED","blocked":"BLOCKED","failed":"BLOCKED"}.get(row["status"],"ACCEPTED")
         if status==row["last_acked"]:
             continue
-        result=_request("POST","/api/v2/organization/company/ack",{
-            "workstream_id":row["request_id"],
-            "task_id":row["canonical_task_id"],
-            "company_id":row["tenant_scope"],
-            "status":status,
-        })
+        try:
+            result=_request("POST","/api/v2/organization/company/ack",{
+                "workstream_id":row["request_id"],
+                "task_id":row["canonical_task_id"],
+                "company_id":row["tenant_scope"],
+                "status":status,
+            })
+        except HTTPError as exc:
+            if not _conflicting_upstream_binding(exc):
+                raise
+            # Durable quarantine in the EXISTING workstream-binding table.
+            # Suppress an unstarted duplicate task, not another owner's task.
+            with core.connect() as db:
+                db.execute("BEGIN IMMEDIATE")
+                db.execute("""UPDATE founder_org_bindings
+                    SET last_acked='ACK_CONFLICT',last_ack_at=?
+                    WHERE request_id=? AND canonical_task_id=?""",
+                    (core.now(),row["request_id"],row["canonical_task_id"]))
+                db.execute("""UPDATE tasks SET status='blocked'
+                    WHERE id=? AND status='queued'""",(row["canonical_task_id"],))
+                db.commit()
+            continue
         if result.get("workstream_id")!=row["request_id"]:
             raise ValueError("ack_response_mismatch")
         with core.connect() as db:
@@ -327,6 +362,7 @@ def health():
         stats=db.execute("""SELECT
             COUNT(*) AS total,
             COALESCE(SUM(CASE WHEN b.last_acked='' THEN 1 ELSE 0 END),0) AS pending_ack,
+            COALESCE(SUM(CASE WHEN b.last_acked='ACK_CONFLICT' THEN 1 ELSE 0 END),0) AS ack_conflicts,
             COALESCE(SUM(CASE WHEN t.status IN ('drafted','approved') THEN 1 ELSE 0 END),0) AS drafts,
             COALESCE(SUM(CASE WHEN t.status IN ('failed','blocked') THEN 1 ELSE 0 END),0) AS blocked
           FROM founder_org_bindings b JOIN tasks t ON t.id=b.canonical_task_id""").fetchone()
@@ -352,6 +388,7 @@ def health():
         "internal_drafts":int(stats["drafts"]),
         "blocked_tasks":int(stats["blocked"]),
         "pending_ack":int(stats["pending_ack"]),
+        "ack_conflicts_quarantined":int(stats["ack_conflicts"]),
         "commercial_signals_sent":source_count,
         "verified_outcomes":0,"external_effects":0,
     }
