@@ -78,7 +78,7 @@ class CustomerIntakeStatusTests(unittest.TestCase):
         with core.connect() as db:
             db.execute("UPDATE events SET status='failed' WHERE id=?", (self.event_id,))
         self.assertEqual(client_status.snapshot(self.event_id, self.token)["stage"], "intake_failed")
-        for _ in range(18):
+        for _ in range(19):
             self.assertNotIn("rate_limited",client_status.snapshot(self.event_id, self.token))
         self.assertTrue(client_status.snapshot(self.event_id, self.token)["rate_limited"])
         with core.connect() as db:
