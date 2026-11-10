@@ -25,6 +25,13 @@ MAX_BODY = 4096
 MAX_RESPONSE = 16000
 RETRY_LIMIT = 6
 SOURCE_ID = "companyos"
+# Only aliases independently identified across both repos. Sina's live SSOT
+# projection resolves ownership, not this list. Unknown aliases fail closed.
+CANONICAL_ALIASES = {
+    "signalforge": "signal-forge",
+    "atelier": "atelier-community",
+    "trade-radar": "trade-radar-platform",
+}
 _ID = re.compile(r"^[a-z0-9][a-z0-9-]{2,90}$")
 _OBS = re.compile(r"^obs_[0-9a-f]{32}$")
 
@@ -132,6 +139,23 @@ def deliver(event: dict, *, opener=None) -> dict:
     # The exact event is from our own insert transaction and must be immutable.
     if not body["source_event_id"].startswith("companyos:obs_"):
         raise ValueError("sina_federation_origin_invalid")
+
+    # Do not trust Company OS's local product aliases as canonical legal scope.
+    # Recheck the actual authenticated Founder SSOT through the existing
+    # read-only portfolio adapter (outside all SQLite write transactions).
+    import founder_portfolio_bridge
+    canonical_id = CANONICAL_ALIASES.get(body["project_id"], body["project_id"])
+    source = founder_portfolio_bridge.fetch_projection()
+    matching = [p for p in source["projects"] if p["project_id"] == canonical_id]
+    if len(matching) != 1:
+        raise ValueError("sina_federation_project_unmapped_in_canonical_ssot")
+    canonical_company = matching[0]["company_id"]
+    company_scope = None if body["company_id"] == "founder-portfolio" else body["company_id"]
+    if canonical_company != company_scope:
+        raise ValueError("sina_federation_owner_scope_conflict")
+    body["project_id"] = canonical_id
+    body["company_id"] = canonical_company
+
     raw = json.dumps(body, sort_keys=True, separators=(",", ":")).encode("utf-8")
     if len(raw) > MAX_BODY:
         raise ValueError("sina_federation_body_too_large")
