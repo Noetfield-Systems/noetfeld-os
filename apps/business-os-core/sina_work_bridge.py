@@ -220,10 +220,19 @@ def receive(item):
         # Product scope is never inferred from a brand; workstream specifies it.
         title=(item["functional_unit"].replace("_"," ").title()+": "+
                item["project_id"])[:140]
+        # Carry the Founder-approved strategic goal and measurement criterion
+        # into the EXISTING task objective before any specialist/context switch.
+        # These IDs are validated advisory fields, never execution authority.
+        mission_context=(
+            " Strategic goal "+item["strategic_mission_id"]+
+            "; success metric "+item["success_metric"]+";"
+            if "strategic_mission_id" in item else ""
+        )
         objective=(
             "Founder OS organizational WorkPacket *request* "+wid+
-            ". Source program "+item["program_id"]+
-            ". "+item["task"]+
+            ". Source program "+item["program_id"]+"."+
+            mission_context+
+            " Original Founder work: "+item["task"]+
             ". Produce a concrete internal artifact and a next-action with evidence. "+
             "No external outreach, code mutation, finance movement, legal commitments "+
             "or production deployment without the separate Governor permit."
