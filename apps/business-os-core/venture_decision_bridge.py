@@ -307,7 +307,12 @@ def history(scope,project,limit=20):
             FROM venture_company_os_decisions
             WHERE company_id=? AND project_id=? ORDER BY updated_at DESC LIMIT ?""",
             (scope,project,max(1,min(limit,100)))).fetchall()
+        counts=db.execute("""SELECT delivery_state,COUNT(*) n
+            FROM venture_company_os_decision_feedback WHERE company_id=?
+            AND project_id=? GROUP BY delivery_state""",(scope,project)).fetchall()
         return {"schema":"noetfield.company-os.local-decision-history.v1",
                 "project_id":project,"company_scope":scope,
                 "items":[dict(x) for x in rows],
+                "feedback_transport":{x["delivery_state"]:x["n"] for x in counts},
+                "feedback_receipts_source_reported_only":True,
                 "completion_verified":False}
