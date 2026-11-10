@@ -18,6 +18,7 @@ from datetime import datetime, timezone
 
 SOURCE_URL = "https://sina-founder-os-staging-staging.up.railway.app"
 GET_PATH = "/api/v2/organization/company/requests"
+MANDATES_PATH = "/api/v2/organization/company/mandates"
 ACK_PATH = "/api/v2/organization/company/ack"
 TOKEN_ENV = "SINA_ORG_BRIDGE_TOKEN"
 LIMIT = 8
@@ -286,10 +287,39 @@ def sync_existing(fetch=None):
         sent+=1
     return sent
 
+def sync_venture_mandates(fetch=None, max_new=2):
+    """Import portfolio goals, then let EACH Company OS create its own tasks."""
+    import venture_company_os
+    payload=_request(MANDATES_PATH,fetch=fetch)
+    if (not isinstance(payload,dict)
+        or payload.get("schema")!="sina.company-os.venture-directives.v1"
+        or payload.get("execution_owner")!="EACH_PROJECT_COMPANY_OS"
+        or payload.get("governor_permit_issued") is not False):
+        raise ValueError("portfolio_company_mandates_contract_invalid")
+    items=payload.get("items")
+    if not isinstance(items,list) or len(items)>32:
+        raise ValueError("portfolio_company_mandates_length_invalid")
+    adopted=0;unchanged=0;blocked=0
+    for item in items:
+        if adopted>=max(1,min(max_new,4)):
+            break
+        try:
+            result=venture_company_os.adopt_founder_mandate(item)
+        except (ValueError,TypeError):
+            blocked+=1
+            continue
+        if result["state"]=="ADOPTED_LOCAL_COMPANY_OS":
+            adopted+=1
+        else:
+            unchanged+=1
+    return {"adopted":adopted,"unchanged":unchanged,"blocked":blocked,
+            "source":"SINA_PORTFOLIO_HEAD","execution_owner":"LOCAL_COMPANY_OS"}
+
 def cycle(fetch=None):
     """Piggyback existing Company OS core.daily_tick() and worker; no new loop."""
     if not configured():
         return {"state":"NOT_CONFIGURED","task_creations":0}
+    directives=sync_venture_mandates(fetch)
     result=_request(GET_PATH,fetch=fetch)
     if result.get("schema")!="sina.company-os.work-intake.v1":
         raise ValueError("work_intake_invalid")
@@ -309,6 +339,9 @@ def cycle(fetch=None):
     acknowledged=sync_existing(fetch)
     retry_scheduled=retry_degraded()
     return {"state":"OBSERVED","canonical_tasks_created":created,
+            "venture_mandates_adopted":directives["adopted"],
+            "venture_mandates_blocked":directives["blocked"],
+            "local_company_os_execution":True,
             "awaiting_product_registration":unmapped,
             "execution_states_reported":acknowledged,
             "specialist_retry_scheduled":retry_scheduled,
