@@ -131,6 +131,12 @@ class SinaPortfolioCompanyEventTests(unittest.TestCase):
         with core.connect() as db:
             self.assertEqual(db.execute("SELECT count(*) n FROM events").fetchone()["n"], 0)
 
+    def test_production_image_includes_the_bridge_and_compiles_before_start(self):
+        dockerfile = Path(__file__).with_name("Dockerfile").read_text(encoding="utf-8")
+        self.assertIn("COPY app.py core.py product_loops.py founder_portfolio_bridge.py", dockerfile)
+        self.assertIn("python -m py_compile app.py core.py paperclip_bridge.py product_loops.py founder_portfolio_bridge.py",
+                      dockerfile)
+
     def test_disabled_without_private_token_and_no_extra_scheduler(self):
         self.assertEqual(bridge.tick()["state"], "NOT_CONFIGURED")
         with core.connect() as db:
