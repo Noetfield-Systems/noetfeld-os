@@ -99,7 +99,8 @@ def init(db:sqlite3.Connection):
 
 def reconcile(db:sqlite3.Connection):
     """Materialize actual product-specific management/team scope, not new agents."""
-    init(db)
+    # Caller initializes the schema before transaction admission. An
+    # executescript here would implicitly COMMIT a BEGIN IMMEDIATE transaction.
     rows=db.execute("SELECT * FROM product_programs ORDER BY company_id,project_id").fetchall()
     created=0
     for p in rows:
@@ -149,6 +150,7 @@ def tick(clock=None,limit=1):
     import product_loops
     epoch=(clock or time.time)()
     with core.connect() as db:
+        init(db)
         db.execute("BEGIN IMMEDIATE")
         sync=reconcile(db)
         last=db.execute("SELECT value FROM state WHERE key='venture_os_cycle_at'").fetchone()
