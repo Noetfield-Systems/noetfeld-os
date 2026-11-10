@@ -412,3 +412,65 @@ def retry_degraded(limit=2):
                           WHERE id=? AND status='drafted'""",
                        (datetime.now(timezone.utc).isoformat(),row["task_id"]))
     return len(rows)
+
+
+# Deliver actual Company OS work artifacts to their Founder missions. This is a
+# scoped read projection over existing canonical tasks, not another result store.
+def results_for_founder(task_ids: list[str]):
+    """Only internally prepared, Sina-originated work; no contact, raw source
+    text, credentials, customer PII, or invented independent verification."""
+    if not isinstance(task_ids,list) or len(task_ids)>20 or len(set(task_ids))!=len(task_ids):
+        raise ValueError("invalid_organization_task_ids")
+    if any(not isinstance(t,str) or not re.fullmatch(r"task_[0-9a-f]{16}",t) for t in task_ids):
+        raise ValueError("organization_task_ids_must_be_canonical")
+    import core
+    def safe(value, size=350):
+        if not isinstance(value,str):return ""
+        value=value[:size*3]
+        value=re.sub(r"[\w.+-]+@[\w.-]+\.[A-Za-z]{2,}","[email redacted]",value)
+        value=re.sub(r"(?i)(bearer\s+|api[_-]?key\s*[=:]\s*|sk-)[A-Za-z0-9_.-]{16,}","[credential redacted]",value)
+        value=re.sub(r"[\r\n\t]+"," ",value)
+        return value[:size]
+    out=[]
+    if not task_ids:
+        return {"schema":"sina.company-os.mission-artifacts.v1","items":[],"verified_receipts":0}
+    with core.connect() as db:
+        init(db)
+        placeholders=",".join("?" for _ in task_ids)
+        rows=db.execute(f"""
+          SELECT t.id,t.role,t.company_id,t.project_id,t.status,t.result,t.updated_at
+          FROM tasks t JOIN sina_workstream_bindings b ON b.task_id=t.id
+          WHERE t.id IN ({placeholders}) ORDER BY t.updated_at DESC LIMIT 20
+        """,task_ids).fetchall()
+    for r in rows:
+        try:
+            envelope=json.loads(r["result"] or "{}")
+            if not isinstance(envelope,dict):envelope={}
+        except (ValueError,TypeError):
+            envelope={}
+        rec=envelope.get("recommendation")
+        if not isinstance(rec,dict):rec={}
+        draft=rec.get("draft_artifact")
+        if not isinstance(draft,dict):draft={}
+        deliverables=draft.get("deliverables",[])
+        if not isinstance(deliverables,list):deliverables=[]
+        deliverables=[safe(x,530) for x in deliverables if isinstance(x,str)][:6]
+        # Only output artifacts, never raw task inputs or potentially sensitive
+        # internal customer records from other Company OS workstreams.
+        provider=envelope.get("provider","unknown")
+        out.append({
+          "task_id":r["id"],"project_id":r["project_id"],"company_id":r["company_id"],
+          "role":r["role"],"state":r["status"],
+          "updated_at":r["updated_at"],
+          "provider":safe(provider,60),
+          "assessment":safe(rec.get("assessment"),700),
+          "deliverables":deliverables,
+          "next_best_action":safe(rec.get("next_best_action"),420),
+          "success_metric":safe(rec.get("success_metric"),270),
+          "result_class":"INTERNAL_DRAFT_NOT_INDEPENDENTLY_VERIFIED",
+          "external_action_executed":False,
+          "independent_receipt":None,
+        })
+    return {"schema":"sina.company-os.mission-artifacts.v1","items":out,
+            "verified_receipts":0,"truth_boundary":"COMPANY_OS_INTERNAL_WORK_ONLY",
+            "requested":len(task_ids),"found":len(out)}
