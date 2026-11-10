@@ -213,6 +213,10 @@ def reconcile(limit=40):
         rows=db.execute("""SELECT b.request_id,b.tenant_scope,b.project_id,b.canonical_task_id,
                    b.last_acked,t.status
             FROM founder_org_bindings b JOIN tasks t ON t.id=b.canonical_task_id
+            WHERE b.last_acked != CASE
+              WHEN t.status IN ('drafted','approved') THEN 'DRAFTED'
+              WHEN t.status IN ('blocked','failed') THEN 'BLOCKED'
+              ELSE 'ACCEPTED' END
             ORDER BY b.created_at LIMIT ?""",(limit,)).fetchall()
     published=0
     for row in rows:
