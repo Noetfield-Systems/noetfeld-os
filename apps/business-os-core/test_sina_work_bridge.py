@@ -158,7 +158,8 @@ class CompanySinaOrgBridgeTests(unittest.TestCase):
         bad=self.work("a"*32)
         bad["extra_field"]="pretend completed paid pilot"
         payload={"schema":"sina.company-os.work-intake.v1","items":[bad]}
-        with patch.object(bridge,"_request",return_value=payload),\
+        with patch.dict(os.environ,{"SINA_ORG_BRIDGE_TOKEN":"x"*48}),\
+                patch.object(bridge,"_request",return_value=payload),\
                 patch.object(bridge,"sync_existing",return_value=0),\
                 patch.object(bridge,"retry_degraded",return_value=0):
             report=bridge.cycle()
@@ -176,7 +177,8 @@ class CompanySinaOrgBridgeTests(unittest.TestCase):
         item["functional_unit"]="revenue"
         item["task"]="Prepare an evidence-backed commercial paid pilot shortlist and proposal outline only"
         payload={"schema":"sina.company-os.work-intake.v1","items":[item]}
-        with patch.object(bridge,"_request",return_value=payload),\
+        with patch.dict(os.environ,{"SINA_ORG_BRIDGE_TOKEN":"x"*48}),\
+                patch.object(bridge,"_request",return_value=payload),\
                 patch.object(bridge,"sync_existing",return_value=0),\
                 patch.object(bridge,"retry_degraded",return_value=0):
             report=bridge.cycle()
