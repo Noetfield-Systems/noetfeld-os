@@ -122,11 +122,55 @@ def _validated(item):
         raise ValueError("company_authority_scope_violation")
     return scope, role
 
+def _resolve_operating_project(scope, canonical_project, item):
+    """Use the EXISTING Company operating program for known canonical aliases.
+
+    When an authenticated Founder scope introduces a valid new ACTIVE venture,
+    enroll it through Company OS's existing program registration mechanism,
+    instead of leaving seven real multi-venture workstreams stranded.
+    No new tenant, role registry, scheduler, or Company OS executor.
+    """
+    import core
+    import product_loops
+    import founder_signal_transport
+    with core.connect() as db:
+        found=db.execute(
+            "SELECT status FROM product_programs WHERE company_id=? AND project_id=?",
+            (scope,canonical_project)).fetchone()
+        if found and found["status"] in ACTIVE:
+            return canonical_project
+        aliases=[source for source,target in
+                 founder_signal_transport.CANONICAL_ALIASES.items()
+                 if target==canonical_project]
+        for alias in aliases:
+            previous=db.execute(
+                "SELECT status FROM product_programs WHERE company_id=? AND project_id=?",
+                (scope,alias)).fetchone()
+            if previous and previous["status"] in ACTIVE:
+                return alias
+    # Only an authenticated, typed Founder OS organizational work request can
+    # commission a scoped Company OS product program. Explicitly stop treating
+    # the legacy static seed list as an exhaustive portfolio allowlist.
+    priority=int(item["priority_score"])
+    product_loops.register({
+        "company_id":scope,
+        "project_id":canonical_project,
+        "name":canonical_project.replace("-"," ").title()[:100],
+        "vertical":"founder-managed-operating-program",
+        "objective":("Advance the registered Founder OS venture with genuine "
+                     "product, user, commercial, engineering and operational work."),
+        "priority":max(1,min(5,round(priority/20))),
+        "max_tasks_per_cycle":6,
+    })
+    return canonical_project
+
+
 def receive(item):
     """Claim exactly once into existing Company OS tasks; no parallel state."""
     import core
     scope,role=_validated(item)
     wid=item["request_id"]
+    operational_project=_resolve_operating_project(scope,item["project_id"],item)
     with core.connect() as db:
         db.execute("BEGIN IMMEDIATE")
         init(db)
@@ -140,7 +184,7 @@ def receive(item):
                     "company_id":scope,"workstream_id":wid}
         program=db.execute(
             "SELECT status FROM product_programs WHERE company_id=? AND project_id=?",
-            (scope,item["project_id"])).fetchone()
+            (scope,operational_project)).fetchone()
         if not program or program["status"] not in ACTIVE:
             return {"state":"PROJECT_NOT_COMMISSIONED","company_id":scope,
                     "workstream_id":wid}
@@ -161,7 +205,7 @@ def receive(item):
             "Independent verification and governance remain external.")
         db.execute(
             "UPDATE tasks SET company_id=?,project_id=?,observation_id=NULL WHERE id=?",
-            (scope,item["project_id"],task_id))
+            (scope,operational_project,task_id))
         now=datetime.now(timezone.utc).isoformat()
         db.execute("""
             INSERT INTO sina_workstream_bindings
@@ -169,7 +213,9 @@ def receive(item):
             VALUES (?,?,?,?,?,?)""",
             (wid,task_id,scope,item["project_id"],now,now))
         return {"state":"CREATED_CANONICAL_TASK","task_id":task_id,
-                "company_id":scope,"workstream_id":wid}
+                "company_id":scope,"operational_project_id":operational_project,
+                "founder_canonical_project_id":item["project_id"],
+                "workstream_id":wid}
 
 def _ack(workstream_id,task_id,scope,status,fetch=None):
     data={"workstream_id":workstream_id,"task_id":task_id,
