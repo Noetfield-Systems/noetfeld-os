@@ -84,6 +84,30 @@ class CompanySinaOrgBridgeTests(unittest.TestCase):
         with core.connect() as db:
             self.assertEqual(db.execute("SELECT COUNT(*) FROM sina_workstream_bindings").fetchone()[0],0)
 
+    def test_mandate_feed_is_pinned_authenticated_destination(self):
+        import json
+        class FakeResponse:
+            status=200
+            def read(self,n):return json.dumps({
+                "schema":"sina.company-os.venture-directives.v1",
+                "execution_owner":"EACH_PROJECT_COMPANY_OS",
+                "governor_permit_issued":False,"items":[]}).encode()
+            def __enter__(self):return self
+            def __exit__(self,*args):return False
+        class Fetch:
+            def open(self,req,timeout):
+                self.url=req.full_url
+                self.authorization=req.headers.get("Authorization")
+                return FakeResponse()
+        fetch=Fetch()
+        with patch.dict(os.environ,{"SINA_ORG_BRIDGE_TOKEN":"p"*48}):
+            payload=bridge._request(bridge.MANDATES_PATH,fetch=fetch)
+            self.assertEqual(payload["schema"],"sina.company-os.venture-directives.v1")
+            self.assertEqual(fetch.url,bridge.SOURCE_URL+bridge.MANDATES_PATH)
+            self.assertEqual(fetch.authorization,"Bearer "+"p"*48)
+            with self.assertRaisesRegex(ValueError,"destination outside"):
+                bridge._request("/unapproved-path",fetch=fetch)
+
     def test_real_company_queue_receives_typed_work_once(self):
         x=bridge.receive(self.work())
         self.assertEqual(x["state"],"CREATED_CANONICAL_TASK")
