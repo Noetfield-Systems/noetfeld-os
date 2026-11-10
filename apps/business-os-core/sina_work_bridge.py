@@ -295,3 +295,72 @@ def tick(fetch=None,clock=None,force=False):
     except (ValueError,OSError,RuntimeError,urllib.error.URLError) as exc:
         return {"state":"DEGRADED","error_type":type(exc).__name__}
 
+
+
+# Model specialization uses the existing Agent Fabric provider and Company OS
+# task identity. It never becomes a second Company OS task engine.
+SPECIALIST_ENDPOINT = "https://noetfield-agent-fabric-staging-staging.up.railway.app/api/internal/v1/organization/specialist"
+SPECIALIST_TOKEN_ENV = "SINA_ORG_SPECIALIST_TOKEN"
+SPECIALIST_MAX_BYTES = 22000
+EMAIL_LIKE = re.compile(r"[\w.+-]+@[\w.-]+\.[A-Za-z]{2,}")
+CREDENTIAL_LIKE = re.compile(r"(?i)(api[_-]?key|bearer\s+[A-Za-z0-9_-]{16}|sk-[A-Za-z0-9_-]{16})")
+
+def specialist_configured():
+    return len(os.environ.get(SPECIALIST_TOKEN_ENV, "")) >= 40
+
+def is_sina_task(task_id: str) -> bool:
+    import core
+    if not isinstance(task_id, str) or not re.fullmatch(r"task_[a-f0-9]{16}", task_id):
+        return False
+    with core.connect() as db:
+        result=db.execute(
+            "SELECT 1 FROM sina_workstream_bindings WHERE task_id=?", (task_id,)
+        ).fetchone()
+    return result is not None
+
+def specialist_proposal(task: dict, *, fetch=None) -> dict:
+    """Return a useful model-produced internal artifact for a *real* Company task."""
+    if not specialist_configured():
+        raise RuntimeError("organization_specialist_not_configured")
+    if not is_sina_task(task.get("id")):
+        raise ValueError("non_sina_work_task_not_authorized")
+    for key in ("company_id","project_id","role","objective"):
+        if not isinstance(task.get(key),str):
+            raise ValueError("specialist_task_scope_missing")
+    objective=task["objective"].strip()
+    if EMAIL_LIKE.search(objective) or CREDENTIAL_LIKE.search(objective):
+        raise ValueError("sensitive_company_work_task_rejected")
+    body={
+        "task_id":task["id"],
+        "company_id":task["company_id"],
+        "project_id":task["project_id"],
+        "role":task["role"],
+        "objective":objective[:1800],
+        "max_cost_usd":0.015,
+    }
+    raw=json.dumps(body,separators=(",",":"),sort_keys=True).encode("utf-8")
+    request=urllib.request.Request(SPECIALIST_ENDPOINT,method="POST",data=raw,
+        headers={
+            "Authorization":"Bearer "+os.environ[SPECIALIST_TOKEN_ENV],
+            "Content-Type":"application/json","Accept":"application/json",
+        })
+    opener=fetch or urllib.request.build_opener(NoRedirect())
+    with opener.open(request,timeout=43) as response:
+        if response.status!=200:
+            raise RuntimeError("specialist_model_http_not_ok")
+        data=response.read(SPECIALIST_MAX_BYTES+1)
+        if len(data)>SPECIALIST_MAX_BYTES:
+            raise ValueError("specialist_model_result_too_large")
+        payload=json.loads(data.decode("utf-8"))
+    if (not isinstance(payload,dict)
+        or payload.get("schema")!="sina.organization.specialist-draft.v1"
+        or payload.get("task_id")!=task["id"]
+        or payload.get("company_id")!=task["company_id"]
+        or payload.get("project_id")!=task["project_id"]
+        or payload.get("role")!=task["role"]
+        or payload.get("authority")!="ADVISORY_INTERNAL_ONLY"
+        or payload.get("external_actions_executed") is not False
+        or not isinstance(payload.get("result"),dict)
+        or payload["result"].get("external_action")!="NOT_EXECUTED"):
+        raise ValueError("specialist_result_not_attested_to_task")
+    return payload
