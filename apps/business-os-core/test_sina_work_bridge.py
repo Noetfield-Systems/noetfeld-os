@@ -119,6 +119,29 @@ class CompanySinaOrgBridgeTests(unittest.TestCase):
             with self.assertRaises(RuntimeError):
                 bridge.receive(item)
 
+    def test_real_degraded_specialist_task_retries_once_in_same_canonical_queue(self):
+        import json
+        x=bridge.receive(self.work("8"*32))
+        with core.connect() as db:
+            db.execute("UPDATE tasks SET status='drafted',updated_at=? WHERE id=?",
+                       ("2024-01-01T00:00:00+00:00",x["task_id"]))
+            db.execute("""INSERT INTO runs VALUES (?,?,?,?,?,?,?,?,?,?,?)""",
+                       ("run_"+"8"*16,x["task_id"],"marketing_content",
+                        "specialist_degraded","none","completed",0,0,
+                        "2024-01-01T00:00:00+00:00","2024-01-01T00:00:00+00:00",
+                        json.dumps({"error":"temporary model response unavailable"})))
+        with patch.dict(os.environ,{"SINA_ORG_SPECIALIST_TOKEN":"s"*48}):
+            self.assertEqual(bridge.retry_degraded(limit=2),1)
+            self.assertEqual(bridge.retry_degraded(limit=2),0)
+        with core.connect() as db:
+            t=db.execute("SELECT status FROM tasks WHERE id=?",(x["task_id"],)).fetchone()
+            self.assertEqual(t["status"],"queued")
+            b=db.execute("SELECT specialist_retry_count FROM sina_workstream_bindings WHERE task_id=?",
+                         (x["task_id"],)).fetchone()
+            self.assertEqual(b["specialist_retry_count"],1)
+            self.assertEqual(db.execute("SELECT COUNT(*) FROM tasks WHERE id=?",
+                                        (x["task_id"],)).fetchone()[0],1)
+
     def test_no_cross_tenant_or_self_verification(self):
         wrong=self.work("c"*32)
         wrong["tenant_scope"]="other"
