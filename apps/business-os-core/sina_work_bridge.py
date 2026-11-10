@@ -95,8 +95,23 @@ def _validated(item):
         "task","priority_score","resources","dependencies","acceptance",
         "governance","routing_state","tenant_scope"
     }
-    if not isinstance(item,dict) or set(item)!=required:
+    # Sina emits these two fields for its canonical M01-M11 strategic goals.
+    # They are advisory context, NOT authority, a job permit or a new registry.
+    # Preserve strict rejection of unknown keys rather than widening the wire
+    # format to accept arbitrary model-supplied payload fields.
+    strategic_fields={"strategic_mission_id","success_metric"}
+    if (not isinstance(item,dict) or not required.issubset(item)
+            or set(item)-required-strategic_fields
+            or (("strategic_mission_id" in item)!=("success_metric" in item))):
         raise ValueError("company_request_schema_invalid")
+    if "strategic_mission_id" in item:
+        mission_id=item["strategic_mission_id"]
+        metric=item["success_metric"]
+        if (not isinstance(mission_id,str)
+                or not re.fullmatch(r"M[0-9]{2}-[A-Z0-9-]{3,61}",mission_id)
+                or not isinstance(metric,str)
+                or not re.fullmatch(r"[a-z][a-z0-9_]{7,119}",metric)):
+            raise ValueError("company_strategic_context_invalid")
     if item["schema"]!="sina.company-os.workpacket-request.v1" or \
        item["origin"]!="sina_autonomous_organization" or \
        item["authority"]!="ADVISORY_ONLY_NO_PERMIT" or \
@@ -289,7 +304,22 @@ def cycle(fetch=None):
             elif response["state"]=="CREATED_CANONICAL_TASK":
                 created+=1
         except (ValueError,TypeError) as exc:
-            print("SINA_ORG_WORK_REJECTED "+type(exc).__name__,flush=True)
+            # Safe code-only diagnostics: never print raw request text, user
+            # PII, model output, tokens or arbitrary exception messages.
+            codes={
+                "company_request_schema_invalid","company_strategic_context_invalid",
+                "company_request_authority_invalid","company_request_id_invalid",
+                "company_project_id_invalid","company_tenant_denied",
+                "independent_verification_not_in_company_workforce",
+                "company_task_invalid","sensitive_task_rejected",
+                "company_authority_scope_violation",
+                "sina_workstream_project_not_in_canonical_ssot",
+                "sina_workstream_owner_conflicts_with_ssot",
+                "reused_workstream_mismatched_tenant",
+            }
+            reason=str(exc)
+            code=reason if reason in codes else "UNCLASSIFIED_VALIDATION_FAILURE"
+            print("SINA_ORG_WORK_REJECTED "+code,flush=True)
     acknowledged=sync_existing(fetch)
     retry_scheduled=retry_degraded()
     return {"state":"OBSERVED","canonical_tasks_created":created,
