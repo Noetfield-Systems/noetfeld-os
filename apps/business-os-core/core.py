@@ -351,7 +351,27 @@ def process_task(t):
    "cta":"Request a scoped workflow review",
    "success_metric":"Qualified consented inbound requests, excluding tests",
    "approval_required_before_publishing":True,"no_outbound_action":True}
- if t.get("ai_consent") and os.getenv("LLM_BASE_URL") and os.getenv("LLM_API_KEY") and os.getenv("LLM_MODEL"):
+ # The existing Company OS task engine may invoke the Agent Fabric model
+ # only for authenticated Founder-originated, scoped, internal WorkPackets.
+ # Do not forward raw customer messages, contacts or memory to this inference.
+ if scoped_product and sina_work_bridge.specialist_configured() and sina_work_bridge.is_sina_task(t["id"]):
+  try:
+   generated=sina_work_bridge.specialist_proposal(t)
+   result=generated["result"]
+   result["company_role_id"]=company_seat["role_id"]
+   result["company_role_title"]=company_seat["title"]
+   result["reviewer_role"]=manager_role
+   provider="sina-"+generated["provider"]
+   model=generated["model"]
+   it=int(generated.get("tokens_in") or 0)
+   ot=int(generated.get("tokens_out") or 0)
+  except Exception as specialist_error:
+   provider="specialist_degraded"
+   result["risk_flags"]=["specialist_model_unavailable"]
+   result["model_issue_class"]=type(specialist_error).__name__[:70]
+ # Legacy user-consented model lane remains separate; never allow two model
+ # requests or use customer data in the new Company internal specialist path.
+ if provider=="deterministic" and t.get("ai_consent") and os.getenv("LLM_BASE_URL") and os.getenv("LLM_API_KEY") and os.getenv("LLM_MODEL"):
   try:
    from urllib.request import Request,urlopen
    base=os.getenv("LLM_BASE_URL").rstrip("/");model=os.getenv("LLM_MODEL")
