@@ -72,7 +72,7 @@ def init(db):
 def _request(path, method="GET", body=None, fetch=None):
     if not configured():
         raise RuntimeError("sina_organization_bridge_not_configured")
-    if path not in (GET_PATH, ACK_PATH):
+    if path not in (GET_PATH, ACK_PATH, MANDATES_PATH):
         raise ValueError("destination outside fixed Sina Organization bridge")
     raw=None if body is None else json.dumps(
         body, sort_keys=True, separators=(",",":")).encode("utf-8")
