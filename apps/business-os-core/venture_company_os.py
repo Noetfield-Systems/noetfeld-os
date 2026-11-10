@@ -95,6 +95,15 @@ def init(db:sqlite3.Connection):
       FOREIGN KEY(company_id,project_id) REFERENCES venture_company_os(company_id,project_id)
     );
     CREATE INDEX IF NOT EXISTS idx_venture_os_state ON venture_company_os(operating_state,last_heartbeat);
+    CREATE TABLE IF NOT EXISTS venture_company_os_mandates(
+      company_id TEXT NOT NULL,project_id TEXT NOT NULL,
+      founder_project_id TEXT NOT NULL,program_id TEXT NOT NULL,
+      mission_id TEXT NOT NULL,objective TEXT NOT NULL,
+      success_metric TEXT NOT NULL,priority_score INTEGER NOT NULL,
+      payload_sha256 TEXT NOT NULL,created_at TEXT NOT NULL,updated_at TEXT NOT NULL,
+      PRIMARY KEY(company_id,project_id,program_id),
+      FOREIGN KEY(company_id,project_id) REFERENCES venture_company_os(company_id,project_id)
+    );
     """)
 
 def reconcile(db:sqlite3.Connection):
@@ -127,6 +136,96 @@ def reconcile(db:sqlite3.Connection):
                 (company,project,role,remit,utc()))
     return {"instances_created":created,"instances_total":db.execute(
         "SELECT COUNT(*) FROM venture_company_os").fetchone()[0]}
+
+def adopt_founder_mandate(item):
+    """One portfolio objective enters the product's OWN Company OS.
+
+    The Company OS, not Sina, decomposes that outcome through its local
+    executive and specialist roles into canonical tasks. Founder never
+    appoints per-project engineering or marketing agents through this feed.
+    """
+    import core
+    import product_loops
+    import sina_work_bridge
+    import hashlib
+    required={"schema","program_id","mission_id","project_id","company_id",
+              "tenant_scope","objective","priority_score","success_metric",
+              "authority","execution_owner","source_ref"}
+    if not isinstance(item,dict) or set(item)!=required:
+        raise ValueError("venture_mandate_shape_invalid")
+    if item["schema"]!="sina.company-os.venture-mandate.v1" or (
+        item["authority"]!="PORTFOLIO_DIRECTIVE_ONLY_NO_PERMIT" or
+        item["execution_owner"]!="PROJECT_LOCAL_COMPANY_OS"):
+        raise ValueError("venture_mandate_authority_invalid")
+    scope=item["company_id"] or "founder-portfolio"
+    if scope not in ("noetfield-systems-inc","founder-portfolio") or item["tenant_scope"]!=scope:
+        raise ValueError("venture_mandate_tenant_invalid")
+    if (not re.fullmatch(r"[a-f0-9]{32}",str(item["program_id"]))
+        or not re.fullmatch(r"M[0-9]{2}-[A-Z0-9-]{3,58}",str(item["mission_id"]))
+        or not re.fullmatch(r"[a-z][a-z0-9-]{2,90}",str(item["project_id"]))
+        or not re.fullmatch(r"strategic:M[0-9]{2}-[A-Z0-9-]{3,58}:v[0-9]{1,4}",str(item["source_ref"]))):
+        raise ValueError("venture_mandate_identity_invalid")
+    if (not isinstance(item["objective"],str) or
+        not 30<=len(item["objective"])<=1400 or
+        not re.fullmatch(r"[a-z][a-z0-9_]{7,119}",str(item["success_metric"])) or
+        type(item["priority_score"]) is not int or not 60<=item["priority_score"]<=100):
+        raise ValueError("venture_mandate_goal_invalid")
+    if "@" in item["objective"] or re.search(r"(?i)(bearer\s|api[_-]?key|password)",item["objective"]):
+        raise ValueError("venture_mandate_private_text")
+    # Resolve the product against independently fetched Founder SSOT; existing
+    # internal operational aliases are reused, never cloned or cast as a new
+    # legal tenant. The private source identity alone cannot invent projects.
+    operational=sina_work_bridge._resolve_operating_project(
+        scope,item["project_id"],{"priority_score":item["priority_score"]})
+    digest=hashlib.sha256(json.dumps(item,sort_keys=True,
+        ensure_ascii=False,separators=(",",":")).encode()).hexdigest()
+    with core.connect() as db:
+        init(db)
+        db.execute("BEGIN IMMEDIATE")
+        reconcile(db)
+        local= db.execute(
+            "SELECT instance_id,operating_state FROM venture_company_os "
+            "WHERE company_id=? AND project_id=?",(scope,operational)).fetchone()
+        if not local or local["operating_state"]!="ACTIVE_LOCAL_EXECUTIVE":
+            db.rollback()
+            raise ValueError("local_company_os_not_active")
+        old=db.execute("SELECT payload_sha256 FROM venture_company_os_mandates "
+            "WHERE company_id=? AND project_id=? AND program_id=?",
+            (scope,operational,item["program_id"])).fetchone()
+        if old and old["payload_sha256"]==digest:
+            db.commit()
+            return {"state":"UNCHANGED","company_os_instance_id":local["instance_id"]}
+        db.execute("""INSERT INTO venture_company_os_mandates VALUES (?,?,?,?,?,?,?,?,?,?,?)
+             ON CONFLICT(company_id,project_id,program_id) DO UPDATE SET
+               objective=excluded.objective,success_metric=excluded.success_metric,
+               priority_score=excluded.priority_score,payload_sha256=excluded.payload_sha256,
+               updated_at=excluded.updated_at""",(
+             scope,operational,item["project_id"],item["program_id"],
+             item["mission_id"],item["objective"],item["success_metric"],
+             item["priority_score"],digest,utc(),utc()))
+        # The local Company OS director owns the product plan. This goal does
+        # NOT become one specialist task per Founder departmental suggestion.
+        db.execute("""UPDATE venture_company_os
+           SET operating_objective=?,updated_at=? WHERE company_id=? AND project_id=?""",
+           (item["objective"],utc(),scope,operational))
+        # One local company-owned signal triggers its own developer, product,
+        # customer and executive task graph. Changes are idempotent by digest.
+        obs=product_loops._insert_observation(db,scope,operational,{
+           "source_event_id":"company_mandate:"+item["program_id"]+":"+digest[:12],
+           "source_kind":"REPORTED_OPERATIONAL",
+           "source_ref":"company-os:portfolio-directive",
+           "signal":"feature_request",
+           "summary":("Local Company OS "+operational+" received strategic goal "+
+             item["mission_id"]+". Its own director must plan engineering, "
+             "onboarding and user evidence for the measurable outcome. "
+             "No external authority or verified result is conveyed."),
+           "severity":2,
+        },verified=False)
+        db.commit()
+        return {"state":"ADOPTED_LOCAL_COMPANY_OS",
+            "company_os_instance_id":local["instance_id"],
+            "event_id":obs.get("event_id"),"external_actions":False}
+
 
 def specialist(db,company,project,role):
     if not all(isinstance(x,str) for x in (company,project,role)):
@@ -228,6 +327,10 @@ def portfolio(company_id=None,project_id=None):
                 "SELECT id,role,status,updated_at FROM tasks WHERE company_id=? AND project_id=? "
                 "ORDER BY updated_at DESC LIMIT 1",(c,p)).fetchone()) else None
             item["memory_scope"]=c+":"+p
+            item["active_mandates"]=[dict(x) for x in db.execute(
+                "SELECT founder_project_id,program_id,mission_id,objective,success_metric,priority_score,updated_at "
+                "FROM venture_company_os_mandates WHERE company_id=? AND project_id=? ORDER BY priority_score DESC",
+                (c,p))]
             item["permitted_effects"]="INTERNAL_DRAFTS_ONLY"
             item["independent_verification"]=False
             item["physical_isolation"]="SHARED_RUNTIME_SCOPED_PROJECT_INSTANCE"
