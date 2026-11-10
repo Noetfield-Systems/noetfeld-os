@@ -350,18 +350,55 @@ def is_sina_task(task_id: str) -> bool:
         ).fetchone()
     return result is not None
 
+def is_company_os_task(task_id: str) -> bool:
+    """Company-owned specialist lane; Sina is NOT a per-product executive.
+
+    Requires an actual canonical task, a matching active venture Company OS
+    instance, and the locally bound role. No tenant may borrow another
+    company's specialist mission or model context.
+    """
+    import core
+    import venture_company_os
+    if not isinstance(task_id,str) or not re.fullmatch(r"task_[a-f0-9]{16}",task_id):
+        return False
+    with core.connect() as db:
+        row=db.execute(
+            "SELECT company_id,project_id,role,status FROM tasks WHERE id=?",
+            (task_id,)).fetchone()
+        if not row or row["status"] not in ("queued","running"):
+            return False
+        return venture_company_os.specialist(
+            db,row["company_id"],row["project_id"],row["role"]) is not None
+
+
 def specialist_proposal(task: dict, *, fetch=None) -> dict:
     """Return a useful model-produced internal artifact for a *real* Company task."""
     if not specialist_configured():
         raise RuntimeError("organization_specialist_not_configured")
-    if not is_sina_task(task.get("id")):
-        raise ValueError("non_sina_work_task_not_authorized")
+    if not is_company_os_task(task.get("id")):
+        raise ValueError("non_local_company_os_task_not_authorized")
     for key in ("company_id","project_id","role","objective"):
         if not isinstance(task.get(key),str):
             raise ValueError("specialist_task_scope_missing")
     objective=task["objective"].strip()
     if EMAIL_LIKE.search(objective) or CREDENTIAL_LIKE.search(objective):
         raise ValueError("sensitive_company_work_task_rejected")
+    # The local company director's specialization is applied to every product
+    # task, including tasks discovered by its own signals and not just ones
+    # originating at Sina. No cross-project memory or unrestricted prompt.
+    import venture_company_os
+    import core
+    with core.connect() as db:
+        specialist=venture_company_os.specialist(
+            db,task["company_id"],task["project_id"],task["role"])
+    if specialist is None:
+        raise ValueError("venture_company_os_specialist_not_eligible")
+    local_context=("You serve Company OS "+specialist["instance_id"]+
+        ". Local specialist remit: "+specialist["remit"]+
+        " Source asset: "+specialist["source_asset"]+
+        ". Standing product outcome: "+specialist["operating_objective"]+
+        ". Current task: ")
+    objective=(local_context+objective)[:1800]
     body={
         "task_id":task["id"],
         "company_id":task["company_id"],
