@@ -295,6 +295,63 @@ def tick():
             rejected+=1
     acknowledgements+=reconcile()
     signals=publish_commercial_signals()
+    with core.connect() as db:
+        db.execute("""INSERT INTO state(key,value) VALUES('founder_bridge_last_success',?)
+          ON CONFLICT(key) DO UPDATE SET value=excluded.value""",(core.now(),))
+        db.execute("""INSERT INTO state(key,value) VALUES('founder_bridge_last_error_type','')
+          ON CONFLICT(key) DO UPDATE SET value=excluded.value""")
     return {"state":"LIVE","accepted":accepted,"rejected":rejected,
             "acknowledged":acknowledgements,"source_signals":signals,
             "external_effects":0,"independent_receipts":0}
+
+
+def record_failure(exc):
+    """Persist a safe diagnostic category; never raw network exception or token."""
+    if not configured():
+        return
+    kind=type(exc).__name__[:64]
+    with core.connect() as db:
+        db.execute("""INSERT INTO state(key,value) VALUES('founder_bridge_last_error_type',?)
+          ON CONFLICT(key) DO UPDATE SET value=excluded.value""",(kind,))
+
+
+def health():
+    """Aggregate truth only; use with the existing read-only deep health API."""
+    if not configured():
+        return {"configured":False,"connection":"NOT_CONFIGURED",
+                "work_packets_claimed":0,"pending_ack":0,
+                "verified_outcomes":0,"external_effects":0}
+    with core.connect() as db:
+        rows={r["key"]:r["value"] for r in db.execute(
+            "SELECT key,value FROM state WHERE key LIKE 'founder_bridge_%'")}
+        stats=db.execute("""SELECT
+            COUNT(*) AS total,
+            COALESCE(SUM(CASE WHEN b.last_acked='' THEN 1 ELSE 0 END),0) AS pending_ack,
+            COALESCE(SUM(CASE WHEN t.status IN ('drafted','approved') THEN 1 ELSE 0 END),0) AS drafts,
+            COALESCE(SUM(CASE WHEN t.status IN ('failed','blocked') THEN 1 ELSE 0 END),0) AS blocked
+          FROM founder_org_bindings b JOIN tasks t ON t.id=b.canonical_task_id""").fetchone()
+        source_count=db.execute("SELECT COUNT(*) FROM founder_org_signals").fetchone()[0]
+    last_success=rows.get("founder_bridge_last_success")
+    freshness=None
+    if last_success:
+        try:
+            freshness=max(0,int((datetime.now(timezone.utc)-
+                datetime.fromisoformat(last_success.replace("Z","+00:00"))).total_seconds()))
+        except ValueError:
+            freshness=None
+    error_type=rows.get("founder_bridge_last_error_type") or None
+    connection=("LIVE" if freshness is not None and freshness<=180 and not error_type
+                else "DEGRADED" if error_type or freshness is not None else "AWAITING_FIRST_CYCLE")
+    if freshness is not None and freshness>180:
+        connection="STALE"
+    return {
+        "configured":True,"connection":connection,
+        "last_success":last_success,"seconds_since_success":freshness,
+        "last_error_type":error_type,
+        "work_packets_claimed":int(stats["total"]),
+        "internal_drafts":int(stats["drafts"]),
+        "blocked_tasks":int(stats["blocked"]),
+        "pending_ack":int(stats["pending_ack"]),
+        "commercial_signals_sent":source_count,
+        "verified_outcomes":0,"external_effects":0,
+    }

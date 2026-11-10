@@ -46,11 +46,14 @@ async def worker():
             # must not halt local intake, departments or the canonical queue.
             try:
                 outcome=await asyncio.to_thread(founder_bridge.tick)
-                if outcome.get("state")=="LIVE" and any(outcome.get(k,0)
-                        for k in ("accepted","acknowledged","source_signals","rejected")):
+                if outcome.get("state")=="LIVE":
                     print("sina_company_org_bridge="+json.dumps(outcome,sort_keys=True),flush=True)
             except Exception as exc:
                 import logging
+                try:
+                    await asyncio.to_thread(founder_bridge.record_failure,exc)
+                except Exception:
+                    logging.warning("sina_company_org_bridge_failure_record_failed")
                 logging.warning("sina_company_org_bridge_retryable_error type=%s",type(exc).__name__)
             event=await asyncio.to_thread(core.claim,"events")
             if event:
@@ -171,7 +174,8 @@ def deep_health():
         payload={"ok":ok,"service":"business-os-core","schema_missing":missing,
             "worker_running":worker_running,"worker_interval_seconds":INTERVAL,"queue":counts,
             "company_role_count":len(core.COMPANY_ROLES),
-            "runtime_executor_count":len(core.AGENTS),"dependency_gating":True}
+            "runtime_executor_count":len(core.AGENTS),"dependency_gating":True,
+            "founder_mesh":founder_bridge.health()}
         return payload if ok else JSONResponse(payload,status_code=503)
     except Exception as exc:
         return JSONResponse({"ok":False,"error":type(exc).__name__},status_code=503)
