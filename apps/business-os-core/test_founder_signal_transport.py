@@ -132,6 +132,10 @@ class FounderFeedbackBridgeTests(unittest.TestCase):
         with core.connect() as db:
             self.assertEqual(db.execute("SELECT COUNT(*) n FROM events WHERE event_type=?",
                                         (bridge.EVENT,)).fetchone()["n"], 1)
+        # Canonical product signal has precedence over feedback to Sina.
+        claimed = core.claim("events")
+        self.assertEqual(claimed["event_type"], "product.signal_observed")
+        core.process_event(claimed)
         claimed = core.claim("events")
         self.assertEqual(claimed["event_type"], bridge.EVENT)
         bridge.process(claimed, sender=lambda _: {"status": "DELIVERED_TO_SINA_INGRESS"})
