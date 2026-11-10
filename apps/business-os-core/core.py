@@ -3,6 +3,7 @@ from pathlib import Path
 from datetime import datetime, timezone
 import product_loops
 import founder_portfolio_bridge
+import sina_work_bridge
 import founder_signal_transport
 
 DB=Path(os.getenv("DATABASE_PATH","/data/business-os.sqlite"))
@@ -129,6 +130,7 @@ def init():
   try:d.execute("CREATE VIRTUAL TABLE IF NOT EXISTS memory_fts USING fts5(memory_id UNINDEXED,brand UNINDEXED,content)")
   except sqlite3.OperationalError:pass
   product_loops.init(d)
+  sina_work_bridge.init(d)
  # Default off for tests and uncommissioned customer deployments. Staging can
  # activate an idempotent source-provenance portfolio after a scoped rollout.
  if os.getenv("COMPANY_OS_PORTFOLIO_AUTOSTART","").lower() in {"1","true"}:
@@ -471,6 +473,15 @@ def daily_tick():
    "external_execution_authorized":False},sort_keys=True),flush=True)
  # Same durable Company OS cycle, not a new polling service.
  product_loops.tick_due()
+ sina_work=sina_work_bridge.tick()
+ if sina_work.get("state") in ("OBSERVED","DEGRADED"):
+  print("COMPANY_OS_SINA_WORK_HANDOFF "+json.dumps({
+   "state":sina_work["state"],
+   "canonical_tasks_created":sina_work.get("canonical_tasks_created",0),
+   "awaiting_product_registration":sina_work.get("awaiting_product_registration",0),
+   "execution_states_reported":sina_work.get("execution_states_reported",0),
+   "error_type":sina_work.get("error_type"),
+   "external_actions_performed":False},sort_keys=True),flush=True)
  market=product_loops.scan_public_market()
  if market.get("state") not in ("DISABLED","NOT_DUE"):
   print("COMPANY_OS_PUBLIC_MARKET_OBSERVATION "+json.dumps({
