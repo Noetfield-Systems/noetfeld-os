@@ -93,7 +93,7 @@ class LocalDecisionContinuationTests(unittest.TestCase):
         self.assertTrue(repeat["replay"])
         with core.connect() as db:
             self.assertEqual(db.execute("SELECT COUNT(*) FROM venture_company_os_decisions").fetchone()[0],1)
-            events=db.execute("SELECT * FROM events WHERE event_type='product.signal_observed'").fetchall()
+            events=db.execute("SELECT * FROM events WHERE id=?",(first["event_id"],)).fetchall()
             self.assertEqual(len(events),1)
         result=product_loops.process_signal(dict(events[0]))
         self.assertIn("engineering_operator",result["specialists"])
@@ -113,7 +113,9 @@ class LocalDecisionContinuationTests(unittest.TestCase):
         self.assertFalse(result["queued_for_company_os"])
         self.assertTrue(result["founder_question_required"])
         with core.connect() as db:
-            self.assertEqual(db.execute("SELECT COUNT(*) FROM events WHERE event_type='product.signal_observed'").fetchone()[0],0)
+            self.assertEqual(db.execute(
+                "SELECT COUNT(*) FROM product_observations WHERE source_event_id LIKE 'venture_agent_decision:%'"
+                ).fetchone()[0],0)
             self.assertEqual(db.execute("SELECT COUNT(*) FROM venture_company_os_decisions").fetchone()[0],1)
     def test_cross_tenant_spoofed_goalkeeper_response_is_refused(self):
         bad=self.answer(scope="founder-portfolio")
