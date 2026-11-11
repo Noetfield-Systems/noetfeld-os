@@ -5,6 +5,7 @@ project-scoped inference admission and autonomous event-to-task continuation.
 They do NOT treat synthetic fixtures as users or claim actual code deployments.
 """
 import os
+import json
 import tempfile
 import unittest
 from pathlib import Path
@@ -406,6 +407,11 @@ class LocalCompanyOSRuntimeTests(unittest.TestCase):
             self.assertEqual(record["provider"],"specialist_degraded")
             self.assertEqual(record["status"],"degraded")
             self.assertNotEqual(record["status"],"completed")
+            full=db.execute("SELECT result FROM runs WHERE task_id=? ORDER BY rowid DESC LIMIT 1",
+                            (task_id,)).fetchone()
+            details=json.loads(full["result"])
+            self.assertEqual(details["model_issue_code"],"MODEL_RUNTIME_ERROR")
+            self.assertNotIn("model_unavailable",json.dumps(details.get("model_issue_code")))
 
     def test_drafts_never_become_external_mutations_or_verified_revenue(self):
         self.assertFalse(venture.portfolio()["external_permit_issued"])
