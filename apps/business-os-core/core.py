@@ -7,6 +7,7 @@ import sina_work_bridge
 import founder_signal_transport
 import venture_company_os
 import venture_decision_bridge
+import brain_pulse
 
 DB=Path(os.getenv("DATABASE_PATH","/data/business-os.sqlite"))
 BRANDS={"noetfield":"Noetfield Systems","buildworkflow":"BuildWorkflow","trustfield":"TrustField","signalforge":"SignalForge","buildrelay":"BuildRelay","portfolio":"Portfolio"}
@@ -135,6 +136,7 @@ def init():
   sina_work_bridge.init(d)
   venture_company_os.init(d)
   venture_decision_bridge.init(d)
+  brain_pulse.init(d)
  # Default off for tests and uncommissioned customer deployments. Staging can
  # activate an idempotent source-provenance portfolio after a scoped rollout.
  if os.getenv("COMPANY_OS_PORTFOLIO_AUTOSTART","").lower() in {"1","true"}:
@@ -440,6 +442,9 @@ def process_task(t):
  with connect() as d:
   d.execute("INSERT INTO runs VALUES(?,?,?,?,?,?,?,?,?,?,?)",(idof("run"),t["id"],role,provider,model,"degraded" if provider=="provider_error" else "completed",it,ot,now(),now(),json.dumps(result,ensure_ascii=False)))
   d.execute("UPDATE tasks SET status='drafted',result=?,updated_at=? WHERE id=?",(json.dumps({"provider":provider,"recommendation":result,"memory_hits":len(mem),"external_action":"not_executed"}),now(),t["id"]))
+  if scoped_product:
+   brain_pulse.record_specialist(d,task=t,goalkeeper=decision_context,
+     provider=provider,input_tokens=it,output_tokens=ot)
  if scoped_product:
   try:
    # The actual Company OS run is committed above. Only a source-reported
@@ -575,6 +580,16 @@ def daily_tick():
    "source":market.get("source","not_fetched"),
    "failure_type":market.get("failure_type"),
    "independent_demand_verified":False},sort_keys=True),flush=True)
+ # One compact management beat from the EXISTING worker. No new agent
+ # scheduler, no trace of every product action or every source event.
+ try:
+  with connect() as d:
+   beat=brain_pulse.capture_cycle(d,portfolio=founder_bridge,
+     mandate=sina_work,local=local_cycles,market=market)
+  if beat.get("recorded"):
+   print("COMPANY_OS_BRAIN_PULSE "+json.dumps(beat,sort_keys=True),flush=True)
+ except Exception as brain_error:
+  print("COMPANY_OS_BRAIN_PULSE_FAILED "+type(brain_error).__name__,flush=True)
 def overview():
  with connect() as d:
   q={"contacts":"SELECT COUNT(*) n FROM contacts","opportunities":"SELECT COUNT(*) n FROM opportunities","qualified":"SELECT COUNT(*) n FROM opportunities WHERE score>=65","won":"SELECT COUNT(*) n FROM opportunities WHERE stage='won'","queued_events":"SELECT COUNT(*) n FROM events WHERE status IN ('queued','processing')","pending_tasks":"SELECT COUNT(*) n FROM tasks WHERE status IN ('queued','running','drafted')","feedback":"SELECT COUNT(*) n FROM feedback"}
