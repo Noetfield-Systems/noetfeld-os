@@ -22,6 +22,22 @@ workspace_root: /Users/sinakazemnezhad/Desktop/Noetfield-Systems/noetfeld-OS
 
 **Scope and precedence:** This corrects business-risk interpretation and discretionary process friction. It does not waive existing real authorization, security, legally required controls, project isolation, independent verification or applicable repo ownership rules. Use the current Founder OS decision doctrine rather than an old generic autorun or minimum-risk default.
 
+## Every-task execution contract — read by every agent
+
+The high-risk Founder Intent rule above is mandatory **at every task start and
+dispatch**, not only when a human repeats it. Cursor always applies
+`.cursor/rules/001-founder-intent-execution-first.mdc`; Claude Code reads this
+file via `CLAUDE.md`; Runway receives `founder_execution_contract` inside
+`scripts/noos_role_runway_dispatch_v1.py`; and all four worker/critic/repair/
+research templates carry it under `.agent-policy/dispatch-templates/`.
+Where a role lacks the full project Goal, retrieve existing project canon and
+continue the authorized scoped work rather than inventing a new goal.
+
+**FOUNDER INTENT DRIFT** is a repairable mission defect. Repair the assignment
+before doing another general audit. There is no market-risk-only STOP gate.
+Retain actual permissions, legal obligations, tenant security and settlement
+controls. Keep coded, tested, deployed and real-economic results distinct.
+
 ## L0 repo graph memory — broad-read gate
 
 **Read before broad reads:** `graph-out/GRAPH_REPORT.md` · query: `python3 scripts/query_repo_graph_v1.py <term>` · design: `docs/L0_REPO_GRAPH_MEMORY_v1.md`
