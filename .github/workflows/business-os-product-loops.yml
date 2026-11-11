@@ -31,6 +31,10 @@ jobs:
         run: python -m unittest discover -s apps/business-os-core -p "test_*.py" -v
       - name: Verify app image includes real operational loop
         run: |
-          grep -q "COPY app.py core.py product_loops.py" apps/business-os-core/Dockerfile
+          copy_line="$(grep '^COPY app.py ' apps/business-os-core/Dockerfile)"
+          test -n "$copy_line"
+          for module in app.py core.py product_loops.py venture_company_os.py sina_work_bridge.py; do
+            case " $copy_line " in *" $module "*) ;; *) echo "Missing runtime module: $module"; exit 1;; esac
+          done
           grep -q "product.signal_observed" apps/business-os-core/core.py
           grep -q "COMPANY_OS_WORKER_PARALLELISM" apps/business-os-core/app.py
