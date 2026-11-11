@@ -513,6 +513,13 @@ def _manager_source_history(db,company,project,role="chief_of_staff"):
         "original_role_task_and_run_history_latest":latest,
         "degraded_original_model_runs_visible":sum(
             1 for row in latest if row.get("provider")=="specialist_degraded"),
+        # Specialist failures are TEAM evidence, never silently attributed as
+        # the named manager's own model run or an individually failed decision.
+        "team_degraded_model_runs_recorded":db.execute("""
+           SELECT COUNT(*) FROM runs r JOIN tasks t ON t.id=r.task_id
+           WHERE t.company_id=? AND t.project_id=? AND t.role!=?
+             AND r.provider='specialist_degraded'
+        """,(company,project,seat["role"])).fetchone()[0],
         "one_shot_original_task_recoveries_visible":db.execute("""
            SELECT COUNT(*) FROM venture_company_os_manager_recovery
            WHERE manager_actor_id=?""",(seat["actor_id"],)).fetchone()[0],
