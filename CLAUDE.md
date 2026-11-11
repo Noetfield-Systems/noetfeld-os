@@ -8,6 +8,14 @@ delivery implementation (SourceA). Custody chain: **Master SSOT anchors →
 SG Library defines → NOOS operationalizes → product runtime executes →
 verifier proves.**
 
+**Founder execution directive (2026-11-11):** For every Claude Code turn,
+apply `AGENTS.md` section "Founder Intent" and the activated
+`.cursor/rules/001-founder-intent-execution-first.mdc`. Carry
+`founder_execution_contract` into every role assignment. The Founder accepts
+high commercial risk; do not replace a requested Web3/community thesis with a
+low-risk service or analysis task. Flag and repair **FOUNDER INTENT DRIFT**.
+Genuine authorization and externally consequential controls remain in force.
+
 ## Session start (in order)
 
 1. This file, then `AGENTS.md` (shared agent canon — surface-neutral, binding).

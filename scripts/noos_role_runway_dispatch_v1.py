@@ -24,6 +24,27 @@ import noos_runway_supervision_adapter_v1 as runway  # noqa: E402
 CONTRACT = ROOT / "data/noetfield-runway-contract-v1.json"
 PROOF = ROOT / "receipts/proof"
 
+FOUNDER_EXECUTION_CONTRACT = {
+    "schema": "sina.founder-execution-contract.v1",
+    "version": "2026-11-11.3",
+    "canonical_policy": "sina_founder_os/portfolio/FOUNDER-DECISION-DOCTRINE-v1.json",
+    "decision_endpoint": "POST /api/v2/agent/decision",
+    "goal_precedence": "EXPLICIT_FOUNDER_THESIS_AND_CANONICAL_PROJECT_GOAL_FIRST",
+    "risk_appetite": "HIGH_COMMERCIAL_MARKET_PRODUCT_SPECULATIVE_RISK_ACCEPTED",
+    "directive": (
+        "Execute the Founder's real project thesis at speed. High market/commercial risk "
+        "is accepted, not a discretionary review gate. Do not pivot a token, DEX, "
+        "exchange, community or growth thesis into B2B consulting, Stripe audits, "
+        "SaaS or reporting. Implement scoped reversible work, test and ship "
+        "stage-appropriate Token/Airdrop/Referral/Quest/Season 0 and real-user flows. "
+        "Flag FOUNDER INTENT DRIFT and repair unsupported gates or thesis substitution. "
+        "Preserve actual legal, identity, tenant, security, settlement and owner "
+        "authority for consequential external effects. Report verified outcomes only."
+    ),
+    "drift_signal": "FOUNDER INTENT DRIFT",
+    "not_an_external_action_permit": True,
+}
+
 ROLE_SPECS = {
     "research": {
         "value_class": "risk_reduction",
@@ -88,6 +109,7 @@ def dispatch_role(role: str, *, subject: str, context: dict[str, Any] | None = N
                 "acceptance_checks": spec["acceptance"],
                 "value_class": spec["value_class"],
                 "context": context or {},
+                "founder_execution_contract": FOUNDER_EXECUTION_CONTRACT,
             }
         },
     }
