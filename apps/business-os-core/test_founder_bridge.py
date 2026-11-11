@@ -60,6 +60,72 @@ class CompanyFounderContinuousBridgeTests(unittest.TestCase):
         core.DB = self.old_db
         self.tmp.cleanup()
 
+    def test_real_persisted_contributor_flows_into_existing_founder_signal_outbox_once(self):
+        from datetime import datetime, timezone
+        source={
+            "intake_id":"INT-ABCDEF123456",
+            "request_id":"RID-CONTRIBUTOR-ABC123",
+            "created_at":datetime.now(timezone.utc).isoformat(),
+            "sku":"general",
+            "vector":"work-with-us-contributor",
+            "qualification":None,
+            "contributor":{
+                "application_kind":"agent","project_id":"buildrelay","role":"qa",
+            },
+        }
+        receipt=core.queue_platform_intake_projection(source)
+        with core.connect() as db:
+            event=dict(db.execute(
+                "SELECT * FROM events WHERE id=?",(receipt["event_id"],)
+            ).fetchone())
+        seen=[]
+        def deliver(method,path,payload=None):
+            self.assertEqual(method,"POST")
+            self.assertEqual(path,"/api/v2/organization/company/signal")
+            seen.append(payload)
+            return {"signal_id":"f"*32}
+        with patch.object(founder_bridge,"_request",side_effect=deliver):
+            # Queued Platform records alone are NOT evidence of a handled application.
+            self.assertEqual(founder_bridge.publish_contributor_signals(),0)
+            core.process_platform_intake_signal(event)
+            self.assertEqual(founder_bridge.publish_contributor_signals(),1)
+            self.assertEqual(founder_bridge.publish_contributor_signals(),0)
+        self.assertEqual(len(seen),1)
+        data=seen[0]
+        self.assertEqual(data["source_event_id"],"contributor:INT-ABCDEF123456")
+        self.assertEqual(data["event_type"],"contributor_application")
+        self.assertEqual(data["evidence_ref"],"receipt:noetfield/intake/INT-ABCDEF123456")
+        self.assertNotIn("buildrelay",json.dumps(data))
+        self.assertNotIn("@",json.dumps(data))
+        with core.connect() as db:
+            row=db.execute(
+                "SELECT source_event_id FROM founder_org_signals"
+            ).fetchone()
+            self.assertEqual(row["source_event_id"],"contributor:INT-ABCDEF123456")
+
+    def test_contributor_publishing_failure_retries_without_phantom_delivery(self):
+        from datetime import datetime, timezone
+        source={
+            "intake_id":"INT-ABCDEF123457","request_id":None,
+            "created_at":datetime.now(timezone.utc).isoformat(),
+            "sku":"general","vector":"work-with-us-contributor",
+            "qualification":None,
+            "contributor":{"application_kind":"human","project_id":"noetfield","role":"design"},
+        }
+        receipt=core.queue_platform_intake_projection(source)
+        with core.connect() as db:
+            event=dict(db.execute("SELECT * FROM events WHERE id=?",
+                                  (receipt["event_id"],)).fetchone())
+        core.process_platform_intake_signal(event)
+        with patch.object(founder_bridge,"_request",side_effect=OSError("transport down")):
+            with self.assertRaises(OSError):
+                founder_bridge.publish_contributor_signals()
+        with core.connect() as db:
+            self.assertEqual(db.execute("SELECT COUNT(*) FROM founder_org_signals").fetchone()[0],0)
+        with patch.object(founder_bridge,"_request",return_value={"signal_id":"e"*32}):
+            self.assertEqual(founder_bridge.publish_contributor_signals(),1)
+            self.assertEqual(founder_bridge.publish_contributor_signals(),0)
+
     def test_exact_scope_advisory_only_no_unlicensed_effect(self):
         item = request()
         for bad in [

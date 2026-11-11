@@ -308,6 +308,65 @@ def publish_commercial_signals(limit=8):
         delivered+=1
     return delivered
 
+def publish_contributor_signals(limit=8):
+    """Publish actual processed contributor applications through EXISTING Founder bridge.
+
+    The Platform DB record and Company OS specialist task must already exist.
+    This is a source-reported observation, NOT hiring, agent activation,
+    work completion, independent verification, or Governor authority.
+    """
+    project="noetfield-company-os-commercial-product"
+    if project not in _allowed_projects():
+        return 0
+    stamp=(datetime.now(timezone.utc)-timedelta(days=1)).isoformat()
+    with core.connect() as db:
+        rows=db.execute("""SELECT p.intake_id,p.source_created_at
+            FROM platform_intake_signals p
+            LEFT JOIN founder_org_signals s
+              ON s.source_event_id=('contributor:' || p.intake_id)
+            WHERE p.vector='work-with-us-contributor'
+              AND p.status='tasks_created'
+              AND p.source_created_at>=?
+              AND s.source_event_id IS NULL
+              AND EXISTS (
+                SELECT 1 FROM events e
+                WHERE e.id=p.event_id AND e.status='processed'
+              )
+            ORDER BY p.source_created_at,p.intake_id LIMIT ?""",
+            (stamp,max(1,min(int(limit),40)))).fetchall()
+    delivered=0
+    for row in rows:
+        intake_id=row["intake_id"]
+        if not re.fullmatch(r"INT-[A-Z0-9]{12}",intake_id):
+            continue
+        key="contributor:"+intake_id
+        payload={
+            "source_id":"companyos",
+            "source_event_id":key,
+            "event_type":"contributor_application",
+            "company_id":"noetfield-systems-inc",
+            "project_id":project,
+            "observed_at":row["source_created_at"],
+            "summary":("A persisted contributor application entered the existing Company OS "
+                       "specialist matching queue; trial assignment and delivery remain unverified."),
+            "evidence_ref":"receipt:noetfield/intake/"+intake_id,
+            "metrics":{},
+            "confidence":0,
+            "impact":2,
+        }
+        result=_request("POST","/api/v2/organization/company/signal",payload)
+        if not isinstance(result.get("signal_id"),str) or not re.fullmatch(
+            r"[0-9a-f]{32}",result["signal_id"]
+        ):
+            raise ValueError("contributor_signal_receipt_invalid")
+        # Mark the existing outbox ledger only AFTER Founder OS persisted it.
+        with core.connect() as db:
+            db.execute("INSERT OR IGNORE INTO founder_org_signals VALUES(?,?)",
+                       (key,core.now()))
+        delivered+=1
+    return delivered
+
+
 def tick():
     if not configured():
         return {"state":"NOT_CONFIGURED"}
@@ -330,13 +389,16 @@ def tick():
             rejected+=1
     acknowledgements+=reconcile()
     signals=publish_commercial_signals()
+    contributor_signals=publish_contributor_signals()
     with core.connect() as db:
         db.execute("""INSERT INTO state(key,value) VALUES('founder_bridge_last_success',?)
           ON CONFLICT(key) DO UPDATE SET value=excluded.value""",(core.now(),))
         db.execute("""INSERT INTO state(key,value) VALUES('founder_bridge_last_error_type','')
           ON CONFLICT(key) DO UPDATE SET value=excluded.value""")
     return {"state":"LIVE","accepted":accepted,"rejected":rejected,
-            "acknowledged":acknowledgements,"source_signals":signals,
+            "acknowledged":acknowledgements,
+            "source_signals":signals+contributor_signals,
+            "contributor_signals":contributor_signals,
             "external_effects":0,"independent_receipts":0}
 
 
