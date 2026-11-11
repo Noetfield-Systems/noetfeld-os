@@ -439,6 +439,17 @@ def process_task(t):
  # the specialist result object; model-generated text is never the authority.
  if scoped_product:
   result["founder_goalkeeper"]=decision_context
+ # Claim a named manager run ONLY if this real Company OS source task
+ # was sent through its existing model route with the stable name in the
+ # request. Prior role runs are deliberately NOT credited to the person.
+ if scoped_product and role=="chief_of_staff" and (provider.startswith("sina-") or provider=="openai-compatible"):
+  named=venture_company_os.named_manager(t["company_id"],t["project_id"],role)
+  if named:
+   result["manager_actor_id"]=named["actor_id"]
+   result["manager_display_name"]=named["display_name"]
+   result["manager_identity_evidence"]="NAMED_ROLE_CONTEXT_IN_ACTUAL_MODEL_INVOCATION"
+   result["external_execution_verified"]=False
+   result["independent_business_outcome_verified"]=False
  with connect() as d:
   d.execute("INSERT INTO runs VALUES(?,?,?,?,?,?,?,?,?,?,?)",(idof("run"),t["id"],role,provider,model,"degraded" if provider=="provider_error" else "completed",it,ot,now(),now(),json.dumps(result,ensure_ascii=False)))
   d.execute("UPDATE tasks SET status='drafted',result=?,updated_at=? WHERE id=?",(json.dumps({"provider":provider,"recommendation":result,"memory_hits":len(mem),"external_action":"not_executed"}),now(),t["id"]))
