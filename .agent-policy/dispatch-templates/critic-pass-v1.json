@@ -21,11 +21,25 @@
     "cost_sanity",
     "public_url_spot_fetch"
   ],
-  "verdicts": ["APPROVE", "REJECT", "UNCERTAIN"],
+  "verdicts": [
+    "APPROVE",
+    "REJECT",
+    "UNCERTAIN"
+  ],
   "routing": {
     "REJECT": "repair-lane-v1",
     "UNCERTAIN": "research-memo-v1",
     "timeout": "dispatch_second_critic_instance"
   },
-  "receipt_schema": "noos-machine-critic-receipt-v1"
+  "receipt_schema": "noos-machine-critic-receipt-v1",
+  "founder_execution_contract": {
+    "schema": "sina.founder-execution-contract.v1",
+    "version": "2026-11-11.3",
+    "upstream": "sina_founder_os/portfolio/FOUNDER-DECISION-DOCTRINE-v1.json",
+    "risk": "HIGH_COMMERCIAL_MARKET_PRODUCT_SPECULATIVE_RISK_ACCEPTED",
+    "intent": "PRESERVE_EXPLICIT_FOUNDER_THESIS_AND_PROJECT_GOAL",
+    "directive": "Do the actual authorized scoped work. Do not pivot Web3/token/DEX/community growth to B2B, Stripe, SaaS, audits or reports. Include Token, Airdrop, Referral, Quest, Season 0 and real-user flows when required. Market risk alone never blocks. Flag FOUNDER INTENT DRIFT and repair invented gates. Preserve actual authority, security, legal and settlement boundaries; never fabricate outcomes.",
+    "default": "BUILD_LAUNCH_ACQUIRE_ENGAGE_REFER_VALUE_SCALE",
+    "permit_granted": false
+  }
 }
