@@ -350,7 +350,7 @@ def company_brain_source_read(
     hours:int=48, limit:int=120,
 ):
     """Only the local Company OS management/team actions, not product internals."""
-    expected=(os.getenv("SINA_COMPANY_RESULTS_TOKEN") or "").strip()
+    expected=(os.getenv("COMPANY_BRAIN_READ_TOKEN") or "").strip()
     if len(expected)<40:
         raise HTTPException(503,"company_brain_identity_not_configured")
     if not x_company_floor_token or not hmac.compare_digest(
