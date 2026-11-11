@@ -12,6 +12,7 @@ import founder_signal_transport
 import sina_work_bridge
 import venture_company_os
 import venture_decision_bridge
+import brain_pulse
 
 TOKEN=os.getenv("FOUNDER_API_TOKEN","")
 INTERVAL=max(2,int(os.getenv("WORKER_INTERVAL_SECONDS","5")))
@@ -342,6 +343,26 @@ def sina_mission_work_results(body:dict[str,Any],authorization:str|None=Header(d
         return sina_work_bridge.results_for_founder(task_ids)
     except (TypeError,ValueError):
         raise HTTPException(400,"non-canonical organization task ID") from None
+
+@app.get("/api/internal/company-floor/brain-pulse", include_in_schema=False)
+def company_brain_source_read(
+    x_company_floor_token:str|None=Header(default=None),
+    hours:int=48, limit:int=120,
+):
+    """Only the local Company OS management/team actions, not product internals."""
+    expected=(os.getenv("SINA_COMPANY_RESULTS_TOKEN") or "").strip()
+    if len(expected)<40:
+        raise HTTPException(503,"company_brain_identity_not_configured")
+    if not x_company_floor_token or not hmac.compare_digest(
+          x_company_floor_token,expected):
+        raise HTTPException(401,"company_brain_service_identity_required")
+    if hours not in brain_pulse.WINDOWS or not 1<=limit<=240:
+        raise HTTPException(400,"invalid_brain_window")
+    try:
+        with core.connect() as db:
+            return brain_pulse.read(db,hours=hours,limit=limit)
+    except (ValueError,OSError):
+        raise HTTPException(503,"company_brain_history_unavailable") from None
 
 @app.get("/api/control/overview")
 def overview(authorization:str|None=Header(default=None)):
