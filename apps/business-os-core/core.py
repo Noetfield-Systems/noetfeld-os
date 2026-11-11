@@ -451,7 +451,7 @@ def process_task(t):
    result["external_execution_verified"]=False
    result["independent_business_outcome_verified"]=False
  with connect() as d:
-  d.execute("INSERT INTO runs VALUES(?,?,?,?,?,?,?,?,?,?,?)",(idof("run"),t["id"],role,provider,model,"degraded" if provider=="provider_error" else "completed",it,ot,now(),now(),json.dumps(result,ensure_ascii=False)))
+  d.execute("INSERT INTO runs VALUES(?,?,?,?,?,?,?,?,?,?,?)",(idof("run"),t["id"],role,provider,model,"degraded" if provider in ("provider_error","specialist_degraded") else "completed",it,ot,now(),now(),json.dumps(result,ensure_ascii=False)))
   d.execute("UPDATE tasks SET status='drafted',result=?,updated_at=? WHERE id=?",(json.dumps({"provider":provider,"recommendation":result,"memory_hits":len(mem),"external_action":"not_executed"}),now(),t["id"]))
   if scoped_product:
    brain_pulse.record_specialist(d,task=t,goalkeeper=decision_context,
