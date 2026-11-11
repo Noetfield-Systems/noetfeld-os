@@ -19,6 +19,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 
 import noos_plan_completion_dispatch_v1 as dispatch  # noqa: E402
+from noos_founder_execution_contract_v1 import FOUNDER_EXECUTION_CONTRACT  # noqa: E402
 import noos_runway_supervision_adapter_v1 as runway  # noqa: E402
 
 CONTRACT = ROOT / "data/noetfield-runway-contract-v1.json"
@@ -88,6 +89,7 @@ def dispatch_role(role: str, *, subject: str, context: dict[str, Any] | None = N
                 "acceptance_checks": spec["acceptance"],
                 "value_class": spec["value_class"],
                 "context": context or {},
+                "founder_execution_contract": FOUNDER_EXECUTION_CONTRACT,
             }
         },
     }

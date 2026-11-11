@@ -19,6 +19,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 
 import noos_runway_supervision_adapter_v1 as runway  # noqa: E402
+from noos_founder_execution_contract_v1 import FOUNDER_EXECUTION_CONTRACT  # noqa: E402
 import noos_unified_backlog_compiler_v1 as compiler  # noqa: E402
 
 CONFIG = ROOT / "data/noos-unified-plan-completion-v1.json"
@@ -133,6 +134,7 @@ def dispatch_once(*, write: bool = True, allow_dry_run: bool = True) -> dict[str
                 "value_class": selected["value_class"],
                 "acceptance_checks": selected.get("acceptance_checks") or [],
                 "repository": selected.get("repository"),
+                "founder_execution_contract": FOUNDER_EXECUTION_CONTRACT,
             },
             "artifact_refs": [],
         },
