@@ -9,6 +9,19 @@ doc_type: AGENT_ENTRYPOINT
 workspace_root: /Users/sinakazemnezhad/Desktop/Noetfield-Systems/noetfeld-OS
 -->
 
+## Founder Intent: execute high-upside thesis, no artificial market-risk gates (2026-11-11)
+
+**Founder risk posture:** Founder explicitly accepts HIGH commercial, market, product and speculative downside to pursue the original thesis at speed. Market risk by itself is **not** a reason for an agent to stop, require repeated permission, or substitute a low-risk B2B/SaaS/Stripe-audit/dashboard project. This is a founder-level execution preference, not a grant of legal or financial authority.
+
+**Rule for NOOS and downstream Company OS agents:**
+1. Resolve the project's existing Founder Goal, current mission and product SSOT. Deliver the *actual* requested product, not a risk-minimized proxy. For Web3/community ventures requiring Token, Airdrop, Referral, Quest, Season 0 and viral onboarding, those are first-order product capabilities. Keep Cairn, BuildRelay and Earnloop separate in ownership, customer data and economy.
+2. Execute reversible, scoped engineering immediately: competitor-backed implementation, devnet/sandbox and truthful preview, actual user-facing flows, tests, bug fixes, onboarding, referral/quest tracking, and release preparation. Do not demand repeated strategic reviews or new governance infrastructure as prerequisites.
+3. Treat a discretionary or unsupported risk/compliance/production-readiness stop as `FOUNDER INTENT DRIFT`; identify the missing concrete requirement, repair self-imposed obstacles, and resume the original task. Escalate only an actual legal requirement, identity/permissions boundary, critical security or tenant boundary, payment/token settlement integrity issue, or externally consequential action that genuinely requires a real owner/Governor permit.
+4. Do not fabricate proof of real users, payout, sale, token issuance, token value, mainnet execution or revenue. Distinguish CODED / TESTED / DEPLOYED / REAL USERS / ON-CHAIN EXECUTED / SETTLED CASH.
+5. The desired loop is **BUILD → LAUNCH → ACQUIRE REAL USERS → ENGAGE → REFER → CREATE VALUE → SCALE**. Company OS performs local product execution; Sina Founder OS maintains portfolio intent. This NOOS repo is an integration control plane, not a reason to centralize the products or introduce a parallel Governor.
+
+**Scope and precedence:** This corrects business-risk interpretation and discretionary process friction. It does not waive existing real authorization, security, legally required controls, project isolation, independent verification or applicable repo ownership rules. Use the current Founder OS decision doctrine rather than an old generic autorun or minimum-risk default.
+
 ## L0 repo graph memory — broad-read gate
 
 **Read before broad reads:** `graph-out/GRAPH_REPORT.md` · query: `python3 scripts/query_repo_graph_v1.py <term>` · design: `docs/L0_REPO_GRAPH_MEMORY_v1.md`
