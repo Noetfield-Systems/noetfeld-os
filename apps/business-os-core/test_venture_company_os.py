@@ -317,6 +317,96 @@ class LocalCompanyOSRuntimeTests(unittest.TestCase):
         self.assertFalse(first["external_actions"])
         self.assertFalse(first["independently_verified"])
 
+    def test_farid_degraded_source_task_recovers_once_without_new_queue(self):
+        product_loops.register({
+            "company_id":"founder-portfolio","project_id":"buildrelay-bridge-economy",
+            "name":"BuildRelay","vertical":"founder-network",
+            "objective":"Enable authentic founder matching and bilateral collaboration",
+            "priority":3,"max_tasks_per_cycle":5})
+        with core.connect() as db:
+            venture.reconcile(db)
+            db.commit()
+        original=product_loops.observe("founder-portfolio","buildrelay-bridge-economy",{
+            "source_event_id":"br-test-source-only",
+            "source_kind":"REPORTED_OPERATIONAL",
+            "source_ref":"https://buildrelay.example.test/test-source",
+            "signal":"activation","metric_name":"ready_profiles",
+            "metric_value":0,"sample_count":1,
+            "summary":"TEST FIXTURE ONLY — source observation, not real users",
+            "severity":1})
+        with core.connect() as db:
+            queued=venture._queue_first_named_manager_source_assignment(db)
+            self.assertEqual(queued["original_source_observation_id"],original["observation_id"])
+            event=dict(db.execute("SELECT * FROM events WHERE id=?",
+                                  (queued["original_queue_event_id"],)).fetchone())
+            db.commit()
+        dispatched=product_loops.process_signal(event)
+        self.assertGreaterEqual(dispatched["task_count"],2)
+        with core.connect() as db:
+            row=db.execute("SELECT id FROM tasks WHERE event_id=? AND role='engineering_operator'",
+                           (event["id"],)).fetchone()
+            self.assertIsNotNone(row)
+            task_id=row["id"]
+            db.execute("UPDATE tasks SET status='drafted',updated_at=datetime('now','-4 minutes') WHERE id=?",
+                       (task_id,))
+            db.execute("""INSERT INTO runs(id,task_id,role,provider,model,status,
+                         input_tokens,output_tokens,started_at,finished_at,result)
+                         VALUES (?,?,?,?,?,?,?,?,?,?,?)""",
+                       ("run_failed",task_id,"engineering_operator","specialist_degraded",
+                        "none","degraded",0,0,"2026-11-11T23:31:00Z",
+                        "2026-11-11T23:31:01Z",'{"model_issue_class":"HTTPError"}'))
+            db.commit()
+        with patch.object(sina_work_bridge,"specialist_configured",return_value=True):
+            with core.connect() as db:
+                first=venture._recover_named_manager_tasks(db)
+                self.assertEqual(first["state"],"ONE_SHOT_ORIGINAL_TASK_RECOVERY")
+                self.assertEqual(first["original_task_ids"],[task_id])
+                db.commit()
+            with core.connect() as db:
+                self.assertEqual(db.execute("SELECT status FROM tasks WHERE id=?",
+                                            (task_id,)).fetchone()["status"],"queued")
+                db.execute("UPDATE tasks SET status='drafted',updated_at=datetime('now','-4 minutes') WHERE id=?",
+                           (task_id,))
+                # A repeated degraded result cannot resurrect work indefinitely.
+                second=venture._recover_named_manager_tasks(db)
+                self.assertEqual(second["requeued_count"],0)
+                self.assertEqual(db.execute("SELECT status FROM tasks WHERE id=?",
+                                            (task_id,)).fetchone()["status"],"drafted")
+                db.commit()
+        manager=venture.portfolio(project_id="buildrelay-bridge-economy")["instances"][0]["manager"]
+        self.assertEqual(manager["one_shot_original_task_recoveries_visible"],1)
+        self.assertGreaterEqual(manager["degraded_original_model_runs_visible"],1)
+        self.assertFalse(manager["independent_product_delivery_verified"])
+
+    def test_actual_failed_specialist_model_run_is_not_completed(self):
+        product_loops.register({
+            "company_id":"founder-portfolio","project_id":"buildrelay-bridge-economy",
+            "name":"BuildRelay","vertical":"founder-network",
+            "objective":"Build working first useful founder matching experience",
+            "priority":3,"max_tasks_per_cycle":5})
+        with core.connect() as db:
+            venture.reconcile(db)
+            task_id=core.add_task(db,None,None,"portfolio","engineering_operator",
+                "BuildRelay real task with unavailable specialist provider",
+                "Investigate authentic BuildRelay activation evidence",
+                "Draft the next engineering acceptance criteria")
+            db.execute("UPDATE tasks SET company_id=?,project_id=?,status='running' WHERE id=?",
+                       ("founder-portfolio","buildrelay-bridge-economy",task_id))
+            row=db.execute("SELECT * FROM tasks WHERE id=?",(task_id,)).fetchone()
+            task=dict(row)
+            db.commit()
+        with patch.object(sina_work_bridge,"configured",return_value=False), \
+             patch.object(sina_work_bridge,"specialist_configured",return_value=True), \
+             patch.object(sina_work_bridge,"is_company_os_task",return_value=True), \
+             patch.object(sina_work_bridge,"specialist_proposal",side_effect=RuntimeError("model_unavailable")):
+            core.process_task(task)
+        with core.connect() as db:
+            record=db.execute("SELECT status,provider FROM runs WHERE task_id=? ORDER BY rowid DESC LIMIT 1",
+                              (task_id,)).fetchone()
+            self.assertEqual(record["provider"],"specialist_degraded")
+            self.assertEqual(record["status"],"degraded")
+            self.assertNotEqual(record["status"],"completed")
+
     def test_drafts_never_become_external_mutations_or_verified_revenue(self):
         self.assertFalse(venture.portfolio()["external_permit_issued"])
         with core.connect() as db:
