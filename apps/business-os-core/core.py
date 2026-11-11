@@ -591,6 +591,15 @@ def daily_tick():
    "state":recovery["state"],
    "external_actions":False,
    "verified_delivery":False},sort_keys=True),flush=True)
+ cap_recovery=local_cycles.get("manager_capacity_recovery") or {}
+ if cap_recovery.get("requeued_count"):
+  print("COMPANY_OS_NAMED_MANAGER_CAPACITY_RECOVERY "+json.dumps({
+   "actor_id":cap_recovery["actor_id"],
+   "original_task_ids":cap_recovery["original_task_ids"],
+   "state":cap_recovery["state"],
+   "policy_revision":cap_recovery["policy_revision"],
+   "external_actions":False,
+   "verified_delivery":False},sort_keys=True),flush=True)
  if local_cycles.get("events_created",0):
   print("VENTURE_COMPANY_OS_LOCAL_CYCLES "+json.dumps({
    "projects":local_cycles["local_companies_advanced"],
