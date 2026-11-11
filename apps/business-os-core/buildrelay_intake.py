@@ -107,6 +107,9 @@ def status() -> dict:
             "FROM product_observations WHERE company_id=? AND project_id=? "
             "AND source_event_id LIKE 'br-%' ORDER BY recorded_at DESC LIMIT 12",
             (COMPANY, PROJECT)).fetchall()]
+        total = db.execute(
+            "SELECT COUNT(*) AS n FROM product_observations WHERE company_id=? AND project_id=? "
+            "AND source_event_id LIKE 'br-%'", (COMPANY, PROJECT)).fetchone()["n"]
         states = [dict(x) for x in db.execute(
             "SELECT status,COUNT(*) AS count FROM tasks "
             "WHERE company_id=? AND project_id=? GROUP BY status",
@@ -118,7 +121,7 @@ def status() -> dict:
     return {
         "schema": "buildrelay.company-os.execution-status.v1",
         "company_scope": COMPANY, "project_scope": PROJECT,
-        "observation_count": len(observations), "observations": observations,
+        "observation_count": total, "observations": observations,
         "task_states": {x["status"]: x["count"] for x in states},
         "latest_tasks": latest, "worker_queue": "EXISTING_COMPANY_OS_EVENTS_TASKS",
         "independent_business_outcome_verification": False,
