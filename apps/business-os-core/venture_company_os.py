@@ -65,6 +65,26 @@ TEAM_BY_DOMAIN={
  "saas":("chief_of_staff","engineering_operator","product_strategy","market_intelligence","marketing_content","customer_success","sales_qualification","roi_analyst"),
 }
 DEFAULT_TEAM=("chief_of_staff","engineering_operator","product_strategy","market_intelligence","marketing_content","customer_success","risk_governance")
+# A stable person-to-role mapping on the ORIGINAL local Company OS executive.
+# The alias is NOT a Paperclip commissioned agent, a legal entity, or a new
+# runtime. Only original model runs created after this mapping is passed into
+# the real inference request can demonstrate the named person participated.
+NAMED_MANAGER_SEATS={
+    ("founder-portfolio","buildrelay-bridge-economy"):{
+        "actor_id":"gm-buildrelay-farid",
+        "display_name":"Farid",
+        "role":"chief_of_staff",
+        "reports_to_actor_id":"sina-founder-os",
+        "mandate":"BuildRelay's real founder activation, matching, seven-day collaborations, referral growth and bilateral evidence, retaining Web3 Season 0 original Founder mission",
+    }
+}
+
+def named_manager(company,project,role):
+    """Person identity for a mapped *real* local company role, not a new agent."""
+    seat=NAMED_MANAGER_SEATS.get((company,project))
+    return dict(seat) if seat and role==seat["role"] else None
+
+
 INTERVAL_SECONDS=300
 MAX_ACTIVE_TASKS=10
 GLOBAL_BACKPRESSURE=80
@@ -302,6 +322,72 @@ def tick(clock=None,limit=1):
                 "events_created":queued,"external_actions":False,
                 "reported_real_users":0,"verified_cash":0,**sync}
 
+def _manager_source_history(db,company,project,role="chief_of_staff"):
+    """Read original task/run records: no generated conversation or work hours.
+
+    Legacy role runs must not be credited to a new named identity. The
+    manager_actor_id is source-recorded inside the original run result only
+    when the runtime actually used the identity after commissioning changes.
+    """
+    seat=named_manager(company,project,role)
+    if seat is None:
+        return None
+    rows=db.execute("""
+       SELECT t.id AS task_id,t.event_id,t.status AS task_status,
+              t.created_at AS task_created_at,t.updated_at AS task_updated_at,
+              r.id AS run_id,r.provider,r.model,r.status AS run_status,
+              r.input_tokens,r.output_tokens,r.started_at,r.finished_at,
+              r.result AS original_run_result
+       FROM tasks t LEFT JOIN runs r ON r.task_id=t.id AND r.role=t.role
+       WHERE t.company_id=? AND t.project_id=? AND t.role=?
+       ORDER BY COALESCE(r.started_at,t.updated_at) DESC LIMIT 30
+    """,(company,project,role)).fetchall()
+    latest=[]
+    confirmed_invocations=0
+    mapped_run_count=0
+    for raw in rows:
+        x=dict(raw)
+        payload={}
+        try:
+            payload=json.loads(x.pop("original_run_result") or "{}")
+        except (ValueError,TypeError):
+            x.pop("original_run_result",None)
+        if not isinstance(payload,dict):
+            payload={}
+        tagged=payload.get("manager_actor_id")==seat["actor_id"]
+        # Only recorded successful existing model inference counts as the
+        # executive personality responding. Deterministic/degraded drafts
+        # are correctly retained as role activities but not person inference.
+        provider=str(x.get("provider") or "")
+        model_reply=tagged and x.get("run_status")=="completed" and (
+            provider.startswith("sina-") or provider=="openai-compatible")
+        mapped_run_count+=int(tagged and bool(x.get("run_id")))
+        confirmed_invocations+=int(model_reply)
+        x["named_identity_in_original_run"]=tagged
+        x["named_manager_model_reply_observed"]=model_reply
+        x["external_action_verified"]=False
+        x["verified_delivery"]=False
+        x["actual_active_minutes"]=None
+        latest.append(x)
+    return {
+        "actor_id":seat["actor_id"],"display_name":seat["display_name"],
+        "role":seat["role"],"reports_to_actor_id":seat["reports_to_actor_id"],
+        "company_id":company,"project_id":project,
+        "mandate":seat["mandate"],
+        "identity_basis":"MAPPED_EXISTING_COMPANY_OS_ROLE_NOT_PAPERCLIP_AGENT",
+        "status":("MODEL_RESPONSE_OBSERVED" if confirmed_invocations else
+                   "ROLE_MAPPED_AWAITING_NAMED_RUNTIME_RESPONSE"),
+        "named_model_reply_count_visible":confirmed_invocations,
+        "original_runtime_records_with_identity_visible":mapped_run_count,
+        "historical_role_runs_not_attributed_to_named_person":True,
+        "original_role_task_and_run_history_latest":latest,
+        "executive_delegation_verified":False,
+        "sina_to_manager_mandate_ack_verified":False,
+        "independent_product_delivery_verified":False,
+        "caveat":"Original role tasks and model runs do not prove an autonomous manager's acceptance, delegation, independent delivery, or reply to SinaOS. Pre-mapping runs are not credited to Farid.",
+    }
+
+
 def portfolio(company_id=None,project_id=None):
     """Read each project's OWN work state, executive and specialist configuration."""
     import core
@@ -321,6 +407,7 @@ def portfolio(company_id=None,project_id=None):
             item["specialists"]=[dict(x) for x in db.execute(
                 "SELECT role,remit FROM venture_company_os_specialists WHERE company_id=? AND project_id=? ORDER BY role",
                 (c,p))]
+            item["manager"]=_manager_source_history(db,c,p,item["director_role"])
             item["work"]={r["status"]:r["n"] for r in db.execute(
                 "SELECT status,COUNT(*) n FROM tasks WHERE company_id=? AND project_id=? GROUP BY status",(c,p))}
             item["last_activity"]=dict(x) if (x:=db.execute(
