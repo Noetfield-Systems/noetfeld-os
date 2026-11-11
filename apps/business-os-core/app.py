@@ -13,6 +13,7 @@ import sina_work_bridge
 import venture_company_os
 import venture_decision_bridge
 import brain_pulse
+import buildrelay_intake
 
 TOKEN=os.getenv("FOUNDER_API_TOKEN","")
 INTERVAL=max(2,int(os.getenv("WORKER_INTERVAL_SECONDS","5")))
@@ -277,6 +278,23 @@ def create_product_program(payload:ProductProgram,authorization:str|None=Header(
         return product_loops.register(payload.model_dump())
     except ValueError as exc:
         raise HTTPException(409 if "existing_product" in str(exc) else 400,str(exc)) from None
+
+@app.post("/api/integrations/buildrelay/observations")
+def buildrelay_scoped_intake(payload:dict[str,Any],authorization:str|None=Header(default=None)):
+    if not buildrelay_intake.authorized(authorization):
+        raise HTTPException(401,"BuildRelay source authorization required.")
+    try:
+        result=buildrelay_intake.accept(payload)
+    except ValueError as exc:
+        raise HTTPException(409 if "conflicts" in str(exc) or "not_operational" in str(exc)
+                            else 400,str(exc)) from None
+    return JSONResponse(result,status_code=200 if result["idempotent"] else 202)
+
+@app.get("/api/integrations/buildrelay/status")
+def buildrelay_scoped_status(authorization:str|None=Header(default=None)):
+    if not buildrelay_intake.authorized(authorization):
+        raise HTTPException(401,"BuildRelay source authorization required.")
+    return buildrelay_intake.status()
 
 @app.post("/api/control/product-observations")
 def submit_product_observation(payload:ProductObservation,authorization:str|None=Header(default=None)):
