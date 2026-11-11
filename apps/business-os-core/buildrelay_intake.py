@@ -115,15 +115,28 @@ def status() -> dict:
             "WHERE company_id=? AND project_id=? GROUP BY status",
             (COMPANY, PROJECT)).fetchall()]
         latest = [dict(x) for x in db.execute(
-            "SELECT t.id,t.role,t.status,t.updated_at FROM tasks t "
+            "SELECT t.id,t.role,t.status,t.updated_at,t.observation_id FROM tasks t "
             "WHERE t.company_id=? AND t.project_id=? ORDER BY t.updated_at DESC LIMIT 12",
             (COMPANY, PROJECT)).fetchall()]
+    recommendations = []
+    for item in latest:
+        brief = specialist_continuity(item)
+        if brief:
+            recommendations.append({
+                "role": item["role"], "task_status": item["status"],
+                "task_id": item["id"], "observed_metric": brief["observed_metric"],
+                "next_best_action": brief["next_best_action"],
+                "acceptance_criteria": brief["acceptance_criteria"],
+                "success_metric": brief["success_metric"],
+                "kind": "DETERMINISTIC_RULE_CANDIDATE_NOT_EXECUTED",
+            })
     return {
         "schema": "buildrelay.company-os.execution-status.v1",
         "company_scope": COMPANY, "project_scope": PROJECT,
         "observation_count": total, "observations": observations,
         "task_states": {x["status"]: x["count"] for x in states},
-        "latest_tasks": latest, "worker_queue": "EXISTING_COMPANY_OS_EVENTS_TASKS",
+        "latest_tasks": latest, "recommended_work": recommendations,
+        "worker_queue": "EXISTING_COMPANY_OS_EVENTS_TASKS",
         "independent_business_outcome_verification": False,
     }
 
