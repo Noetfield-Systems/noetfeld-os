@@ -303,7 +303,11 @@ class LocalCompanyOSRuntimeTests(unittest.TestCase):
             self.assertEqual(count,1)
             db.commit()
         dispatched=product_loops.process_signal(dict(event))
-        self.assertIn("chief_of_staff",dispatched["specialists"])
+        # The source queue creates specialist tasks first, then a dependency-
+        # gated chief_of_staff executive synthesis task, not a specialist
+        # listed as "chief_of_staff" inside the specialist array.
+        self.assertTrue(dispatched["executive_task"])
+        self.assertGreaterEqual(dispatched["task_count"],2)
         with core.connect() as db:
             original=db.execute("""SELECT role,company_id,project_id,status
                 FROM tasks WHERE event_id=?""",(first["original_queue_event_id"],)).fetchall()
