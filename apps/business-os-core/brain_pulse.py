@@ -107,10 +107,19 @@ def capture_cycle(db,*,portfolio,mandate,local,market,clock=None):
     if previous:
         p=dict(previous)
         old=[p[k] for k in list(p)[1:]]
-        if tuple(old)==values[1:] and not any(values[i] for i in (5,6,7,8,9,10,11)):
+        material_action=any(values[i] for i in (5,6,7,8,9,10,11))
+        urgent_failure=reason not in (
+            "NO_NEW_EXECUTIVE_ACTION",
+            "FABRIC_IS_CANONICAL_WORKPACKET_OWNER",
+        )
+        # A frequent NOT_DUE response alternating with the normal Fabric
+        # ownership state is not a new executive decision. Still record every
+        # actual handoff, material team event, or failure without delay.
+        if not material_action and not urgent_failure:
             try:
-                if (datetime.fromisoformat(at.replace("Z","+00:00"))-
-                    datetime.fromisoformat(p["at"].replace("Z","+00:00"))).total_seconds()<300:
+                elapsed=(datetime.fromisoformat(at.replace("Z","+00:00"))-
+                    datetime.fromisoformat(p["at"].replace("Z","+00:00"))).total_seconds()
+                if 0<=elapsed<300:
                     return {"state":"NOT_MATERIAL","recorded":False,"reason_code":reason}
             except ValueError:pass
     db.execute("""INSERT INTO company_brain_pulses(
