@@ -54,6 +54,16 @@ class CompanySinaOrgBridgeTests(unittest.TestCase):
           },
           "routing_state":"NOT_DISPATCHED_COMPANY_OS_OWNS_EXECUTION",
         }
+    def test_source_rejections_preserve_reason_without_logging_untrusted_payload(self):
+        self.assertEqual(
+            bridge.rejection_code(ValueError("sina_workstream_project_not_in_canonical_ssot")),
+            "sina_workstream_project_not_in_canonical_ssot")
+        self.assertEqual(
+            bridge.rejection_code(ValueError("customer=sensitive@example.com")),
+            "UNKNOWN_VALIDATION_ERROR")
+        self.assertEqual(bridge.rejection_code(TypeError("arbitrary secret")),
+                         "INVALID_TYPE")
+
     def test_canonical_strategic_workpacket_admitted_and_metric_preserved(self):
         packet=self.work("2"*32)
         packet["strategic_mission_id"]="M09-RHEVO-LAUNCH"
