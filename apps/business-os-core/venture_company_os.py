@@ -259,6 +259,73 @@ def specialist(db,company,project,role):
                  (company,project,role)).fetchone()
     return dict(row) if row else None
 
+def _queue_first_named_manager_source_assignment(db):
+    """One true source-backed BuildRelay manager assignment through the ORIGINAL
+    Company OS observations/events/tasks queue. Never a fabricated member signal.
+
+    Requires a pre-existing accepted BuildRelay-to-CompanyOS source observation.
+    When that source is absent, return no work rather than inventing evidence.
+    This is an internal source triage task; it is NOT CEO mandate ACK, a
+    Paperclip commissioning event, external delivery or manager success.
+    """
+    company,project="founder-portfolio","buildrelay-bridge-economy"
+    seat=named_manager(company,project,"chief_of_staff")
+    if seat is None:
+        return {"state":"NO_NAMED_MANAGER_MAPPING","queued":False}
+    local=db.execute("""SELECT operating_state FROM venture_company_os
+        WHERE company_id=? AND project_id=?""",(company,project)).fetchone()
+    if not local or local["operating_state"]!="ACTIVE_LOCAL_EXECUTIVE":
+        return {"state":"LOCAL_MANAGER_NOT_ACTIVE","queued":False}
+    event_key="manager-first-source:"+seat["actor_id"]+":v1"
+    existing=db.execute("""SELECT id FROM product_observations
+        WHERE company_id=? AND project_id=? AND source_event_id=?""",
+        (company,project,event_key)).fetchone()
+    if existing:
+        return {"state":"ALREADY_QUEUED","queued":False,
+                "new_observation_id":existing["id"],"actor_id":seat["actor_id"],
+                "external_actions":False,"independently_verified":False}
+    original=db.execute("""
+        SELECT id,source_event_id,metric_name,verification
+        FROM product_observations
+        WHERE company_id=? AND project_id=?
+          AND source_event_id LIKE 'br-%'
+          AND source_kind='REPORTED_OPERATIONAL'
+        ORDER BY recorded_at DESC,id DESC LIMIT 1
+    """,(company,project)).fetchone()
+    if not original:
+        return {"state":"NO_BUILDRELAY_SOURCE_OBSERVATION","queued":False}
+    # Reserve only one original source-derived event for this stable seat;
+    # process_signal decides which existing specialist tasks to create.
+    import product_loops
+    result=product_loops._insert_observation(db,company,project,{
+        "source_event_id":event_key,
+        "source_kind":"REPORTED_OPERATIONAL",
+        "source_ref":"company-os:buildrelay-source-manager-assignment",
+        "signal":"feature_request",
+        "summary":(
+            "BuildRelay local manager "+seat["actor_id"]+
+            " must investigate original source observation "+
+            original["source_event_id"]+
+            " and choose a useful first member activation or collaboration "+
+            "task with measurable evidence and proper specialist owner. "+
+            "This is operational triage, not verified member growth, "+
+            "deployment, cash or independent verification."
+        )[:500],
+        "severity":2,
+    },verified=False)
+    return {
+        "state":"ALREADY_QUEUED" if result.get("idempotent") else "QUEUED_IN_ORIGINAL_COMPANY_OS",
+        "queued":not result.get("idempotent",False),
+        "original_source_observation_id":original["id"],
+        "original_event_id":original["source_event_id"],
+        "new_observation_id":result.get("observation_id"),
+        "original_queue_event_id":result.get("event_id"),
+        "actor_id":seat["actor_id"],
+        "external_actions":False,
+        "independently_verified":False,
+    }
+
+
 def tick(clock=None,limit=1):
     """Continue each local company's daily operational mission without Founder prompts.
 
@@ -282,6 +349,7 @@ def tick(clock=None,limit=1):
         if running>=GLOBAL_BACKPRESSURE:
             db.commit()
             return {"state":"BACKPRESSURE","queued":running,**sync}
+        manager_activation=_queue_first_named_manager_source_assignment(db)
         candidates=db.execute("""SELECT i.*,p.name FROM venture_company_os i
           JOIN product_programs p ON p.company_id=i.company_id AND p.project_id=i.project_id
           WHERE i.operating_state='ACTIVE_LOCAL_EXECUTIVE'
@@ -319,7 +387,7 @@ def tick(clock=None,limit=1):
                 started.append(project)
         db.commit()
         return {"state":"COMPANY_LOOPS_ADVANCED","local_companies_advanced":started,
-                "events_created":queued,"external_actions":False,
+                "events_created":queued,"manager_source_assignment":manager_activation,"external_actions":False,
                 "reported_real_users":0,"verified_cash":0,**sync}
 
 def _manager_source_history(db,company,project,role="chief_of_staff"):

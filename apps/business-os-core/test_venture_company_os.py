@@ -263,6 +263,60 @@ class LocalCompanyOSRuntimeTests(unittest.TestCase):
         self.assertEqual(captured["body"]["company_id"],"founder-portfolio")
         self.assertEqual(captured["body"]["max_cost_usd"],0.015)
 
+    def test_first_named_manager_mission_requires_original_buildrelay_source_and_is_once_only(self):
+        product_loops.register({
+            "company_id":"founder-portfolio","project_id":"buildrelay-bridge-economy",
+            "name":"BuildRelay","vertical":"founder-network",
+            "objective":"Real founder matching and bilateral collaboration after qualified onboarding",
+            "priority":3,"max_tasks_per_cycle":5})
+        with core.connect() as db:
+            venture.reconcile(db)
+            self.assertEqual(
+                venture._queue_first_named_manager_source_assignment(db)["state"],
+                "NO_BUILDRELAY_SOURCE_OBSERVATION")
+            db.commit()
+        # A reported aggregate is authentic source transport, not a
+        # qualified-human metric. This is synthetic UNIT-TEST input only.
+        source=product_loops.observe("founder-portfolio","buildrelay-bridge-economy",{
+            "source_event_id":"br-20261111-ready-profiles",
+            "source_kind":"REPORTED_OPERATIONAL",
+            "source_ref":"https://buildrelay-staging-staging.up.railway.app/api/v1/growth-ops/snapshot",
+            "signal":"activation","metric_name":"ready_profiles",
+            "metric_value":0,"sample_count":1,
+            "summary":"BuildRelay qualified profile source reports count zero; synthetic test fixture only",
+            "severity":1,
+        })
+        with core.connect() as db:
+            first=venture._queue_first_named_manager_source_assignment(db)
+            self.assertEqual(first["state"],"QUEUED_IN_ORIGINAL_COMPANY_OS")
+            self.assertTrue(first["queued"])
+            self.assertEqual(first["original_source_observation_id"],source["observation_id"])
+            assert first["original_queue_event_id"]
+            again=venture._queue_first_named_manager_source_assignment(db)
+            self.assertEqual(again["state"],"ALREADY_QUEUED")
+            self.assertFalse(again["queued"])
+            event=db.execute("SELECT * FROM events WHERE id=?",(
+                first["original_queue_event_id"],)).fetchone()
+            self.assertEqual(event["status"],"queued")
+            count=db.execute("""SELECT COUNT(*) FROM product_observations
+                WHERE source_event_id='manager-first-source:gm-buildrelay-farid:v1'""").fetchone()[0]
+            self.assertEqual(count,1)
+            db.commit()
+        dispatched=product_loops.process_signal(dict(event))
+        # The source queue creates specialist tasks first, then a dependency-
+        # gated chief_of_staff executive synthesis task, not a specialist
+        # listed as "chief_of_staff" inside the specialist array.
+        self.assertTrue(dispatched["executive_task"])
+        self.assertGreaterEqual(dispatched["task_count"],2)
+        with core.connect() as db:
+            original=db.execute("""SELECT role,company_id,project_id,status
+                FROM tasks WHERE event_id=?""",(first["original_queue_event_id"],)).fetchall()
+        self.assertTrue(any(x["role"]=="chief_of_staff"
+            and x["company_id"]=="founder-portfolio"
+            and x["project_id"]=="buildrelay-bridge-economy" for x in original))
+        self.assertFalse(first["external_actions"])
+        self.assertFalse(first["independently_verified"])
+
     def test_drafts_never_become_external_mutations_or_verified_revenue(self):
         self.assertFalse(venture.portfolio()["external_permit_issued"])
         with core.connect() as db:
