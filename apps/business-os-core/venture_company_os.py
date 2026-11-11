@@ -14,6 +14,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
 import re
 import sqlite3
 import time
@@ -120,6 +121,13 @@ def init(db:sqlite3.Connection):
     CREATE TABLE IF NOT EXISTS venture_company_os_manager_recovery(
       task_id TEXT PRIMARY KEY,
       manager_actor_id TEXT NOT NULL,
+      original_failure_run_id TEXT NOT NULL,
+      retried_at TEXT NOT NULL
+    );
+    -- Bounded cap-revision readmission bookkeeping, not a second task queue.
+    CREATE TABLE IF NOT EXISTS venture_company_os_manager_capacity_recovery(
+      task_id TEXT PRIMARY KEY,
+      policy_revision TEXT NOT NULL,
       original_failure_run_id TEXT NOT NULL,
       retried_at TEXT NOT NULL
     );
@@ -354,7 +362,7 @@ def _recover_named_manager_tasks(db,limit=3):
     if not local or local["operating_state"]!="ACTIVE_LOCAL_EXECUTIVE":
         return {"state":"MANAGER_SCOPE_NOT_ACTIVE","requeued_count":0}
     rows=db.execute("""
-        SELECT t.id AS task_id,r.id AS failed_run_id
+        SELECT t.id AS task_id,r.id AS failed_run_id,r.result AS failure_result
         FROM tasks t JOIN product_observations o
           ON o.id=t.observation_id AND o.company_id=t.company_id
          AND o.project_id=t.project_id
@@ -373,6 +381,14 @@ def _recover_named_manager_tasks(db,limit=3):
     """,(company,project,max(1,min(int(limit),3)))).fetchall()
     recovered=[]
     for row in rows:
+        try:
+            failure=json.loads(row["failure_result"] or "{}")
+        except (ValueError,TypeError):
+            failure={}
+        # HTTP 429 is capacity/limit evidence, not a reason to burn a blind
+        # two-minute retry. Wait for explicit operator cap revision instead.
+        if isinstance(failure,dict) and failure.get("model_issue_code")=="MODEL_HTTP_429":
+            continue
         db.execute("""INSERT OR IGNORE INTO venture_company_os_manager_recovery
             (task_id,manager_actor_id,original_failure_run_id,retried_at)
             VALUES (?,?,?,?)""",(row["task_id"],actor,row["failed_run_id"],utc()))
@@ -384,6 +400,68 @@ def _recover_named_manager_tasks(db,limit=3):
             "requeued_count":len(recovered),"original_task_ids":recovered,
             "actor_id":actor,"external_actions":False,
             "verified_delivery":False}
+
+
+def _recover_named_manager_capacity(db,limit=3):
+    """Reopen exact ORIGINAL BuildRelay tasks once after an explicit cap revision.
+
+    The specialist daily cap is owned by Agent Fabric. This method cannot
+    change the cap, issue a permit or invent a fresh task. It only requeues a
+    source-linked task with an observed HTTP 429 after an operator sets the
+    matching deployment revision on the existing Company OS service.
+    """
+    revision=os.getenv("COMPANY_OS_FARID_CAPACITY_REVISION","").strip()
+    if not re.fullmatch(r"[a-z0-9_-]{1,40}",revision):
+        return {"state":"AWAITING_EXPLICIT_CAPACITY_REVISION","requeued_count":0}
+    import sina_work_bridge
+    if not sina_work_bridge.specialist_configured():
+        return {"state":"SPECIALIST_PROVIDER_NOT_CONFIGURED","requeued_count":0}
+    company,project="founder-portfolio","buildrelay-bridge-economy"
+    if named_manager(company,project,"chief_of_staff") is None:
+        return {"state":"NO_NAMED_MANAGER_MAPPING","requeued_count":0}
+    local=db.execute("""SELECT operating_state FROM venture_company_os
+        WHERE company_id=? AND project_id=?""",(company,project)).fetchone()
+    if not local or local["operating_state"]!="ACTIVE_LOCAL_EXECUTIVE":
+        return {"state":"MANAGER_SCOPE_NOT_ACTIVE","requeued_count":0}
+    candidates=db.execute("""
+        SELECT t.id AS task_id,r.id AS failure_run_id,r.result AS failure_result
+        FROM tasks t JOIN product_observations o
+          ON o.id=t.observation_id AND o.company_id=t.company_id
+         AND o.project_id=t.project_id
+        JOIN runs r ON r.task_id=t.id
+        WHERE t.company_id=? AND t.project_id=? AND t.status='drafted'
+          AND (o.source_event_id='manager-first-source:gm-buildrelay-farid:v1'
+               OR o.source_event_id LIKE 'company_mandate:%')
+          AND r.id=(SELECT r2.id FROM runs r2 WHERE r2.task_id=t.id
+                    ORDER BY r2.finished_at DESC,r2.id DESC LIMIT 1)
+          AND r.provider='specialist_degraded'
+          AND datetime(t.updated_at)<datetime('now','-2 minutes')
+          AND NOT EXISTS(
+            SELECT 1 FROM venture_company_os_manager_capacity_recovery c
+            WHERE c.task_id=t.id)
+        ORDER BY t.updated_at,t.id LIMIT 30
+    """,(company,project)).fetchall()
+    queued=[]
+    for row in candidates:
+        if len(queued)>=max(1,min(int(limit),3)):
+            break
+        try:
+            issue=json.loads(row["failure_result"] or "{}")
+        except (ValueError,TypeError):
+            issue={}
+        if not isinstance(issue,dict) or issue.get("model_issue_code")!="MODEL_HTTP_429":
+            continue
+        db.execute("""INSERT OR IGNORE INTO venture_company_os_manager_capacity_recovery
+           (task_id,policy_revision,original_failure_run_id,retried_at)
+           VALUES (?,?,?,?)""",(row["task_id"],revision,row["failure_run_id"],utc()))
+        changed=db.execute("""UPDATE tasks SET status='queued',updated_at=?
+           WHERE id=? AND status='drafted'""",(utc(),row["task_id"]))
+        if changed.rowcount==1:
+            queued.append(row["task_id"])
+    return {"state":"CAPACITY_REOPENED_ORIGINAL_TASKS" if queued else "NO_CAPACITY_TASKS_ELIGIBLE",
+            "requeued_count":len(queued),"original_task_ids":queued,
+            "actor_id":"gm-buildrelay-farid","policy_revision":revision,
+            "external_actions":False,"independently_verified":False}
 
 
 def tick(clock=None,limit=1):
@@ -411,6 +489,7 @@ def tick(clock=None,limit=1):
             return {"state":"BACKPRESSURE","queued":running,**sync}
         manager_activation=_queue_first_named_manager_source_assignment(db)
         manager_recovery=_recover_named_manager_tasks(db)
+        capacity_recovery=_recover_named_manager_capacity(db)
         candidates=db.execute("""SELECT i.*,p.name FROM venture_company_os i
           JOIN product_programs p ON p.company_id=i.company_id AND p.project_id=i.project_id
           WHERE i.operating_state='ACTIVE_LOCAL_EXECUTIVE'
@@ -449,7 +528,8 @@ def tick(clock=None,limit=1):
         db.commit()
         return {"state":"COMPANY_LOOPS_ADVANCED","local_companies_advanced":started,
                 "events_created":queued,"manager_source_assignment":manager_activation,
-                "manager_recovery":manager_recovery,"external_actions":False,
+                "manager_recovery":manager_recovery,
+                "manager_capacity_recovery":capacity_recovery,"external_actions":False,
                 "reported_real_users":0,"verified_cash":0,**sync}
 
 def _manager_founder_mandate_cases(db,company,project,seat,limit=8):
@@ -628,6 +708,10 @@ def _manager_source_history(db,company,project,role="chief_of_staff"):
            WHERE manager_actor_id=?""",(seat["actor_id"],)).fetchone()[0],
         "original_founder_mandate_cases":_manager_founder_mandate_cases(
             db,company,project,seat),
+        "capacity_recovery_count_visible":db.execute("""
+           SELECT COUNT(*) FROM venture_company_os_manager_capacity_recovery
+           WHERE task_id IN (SELECT id FROM tasks WHERE company_id=? AND project_id=?)
+        """,(company,project)).fetchone()[0],
         "executive_delegation_verified":False,
         "sina_to_manager_mandate_ack_verified":False,
         "independent_product_delivery_verified":False,
