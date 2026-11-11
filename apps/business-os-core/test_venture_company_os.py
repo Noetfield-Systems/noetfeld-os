@@ -414,6 +414,65 @@ class LocalCompanyOSRuntimeTests(unittest.TestCase):
             self.assertEqual(details["model_issue_code"],"MODEL_RUNTIME_ERROR")
             self.assertNotIn("model_unavailable",json.dumps(details.get("model_issue_code")))
 
+    def test_real_founder_mandate_is_linked_to_farid_without_forged_ack(self):
+        product_loops.register({
+            "company_id":"founder-portfolio","project_id":"buildrelay-bridge-economy",
+            "name":"BuildRelay","vertical":"founder-network",
+            "objective":"Authentic founder matching and bilateral 7 day collaboration",
+            "priority":3,"max_tasks_per_cycle":5})
+        directive={
+            "schema":"sina.company-os.venture-mandate.v1",
+            "program_id":"b"*32,"mission_id":"M35-BUILDRELAY-GLOBAL",
+            "project_id":"buildrelay-bridge-economy","company_id":None,
+            "tenant_scope":"founder-portfolio",
+            "objective":"Make BuildRelay onboarding and founder matching work for actual users with trustworthy seven day sprint outcomes",
+            "priority_score":91,"success_metric":"genuine_founder_matches_with_bilateral_receipts",
+            "authority":"PORTFOLIO_DIRECTIVE_ONLY_NO_PERMIT",
+            "execution_owner":"PROJECT_LOCAL_COMPANY_OS",
+            "source_ref":"strategic:M35-BUILDRELAY-GLOBAL:v1"}
+        with patch.object(sina_work_bridge,"_resolve_operating_project",
+                          return_value="buildrelay-bridge-economy"):
+            admitted=venture.adopt_founder_mandate(directive)
+        self.assertEqual(admitted["state"],"ADOPTED_LOCAL_COMPANY_OS")
+        with core.connect() as db:
+            original_event=dict(db.execute("SELECT * FROM events WHERE id=?",
+                                           (admitted["event_id"],)).fetchone())
+        out=product_loops.process_signal(original_event)
+        self.assertGreaterEqual(out["task_count"],2)
+        manager=venture.portfolio(project_id="buildrelay-bridge-economy")["instances"][0]["manager"]
+        self.assertEqual(len(manager["original_founder_mandate_cases"]),1)
+        before=manager["original_founder_mandate_cases"][0]
+        self.assertEqual(before["founder_program_id"],directive["program_id"])
+        self.assertEqual(before["mission_id"],directive["mission_id"])
+        self.assertEqual(before["state"],"TASKS_CREATED_NO_NAMED_MANAGER_REPLY")
+        self.assertIn(out["executive_task"],before["original_manager_task_ids"])
+        self.assertFalse(before["manager_ack_verified"])
+        self.assertFalse(before["independent_product_delivery_verified"])
+        self.assertFalse(before["autonomous_next_action_verified"])
+        with core.connect() as db:
+            db.execute("""INSERT INTO runs
+                (id,task_id,role,provider,model,status,input_tokens,
+                 output_tokens,started_at,finished_at,result)
+                VALUES(?,?,?,?,?,?,?,?,?,?,?)""",
+                ("run_farid_mandate_reply",out["executive_task"],
+                 "chief_of_staff","sina-deepseek","deepseek-v4-flash",
+                 "completed",120,180,"2026-11-11T23:42:00Z",
+                 "2026-11-11T23:42:08Z",
+                 '{"manager_actor_id":"gm-buildrelay-farid","assessment":"internal recommendation"}'))
+            db.commit()
+        after=venture.portfolio(project_id="buildrelay-bridge-economy")["instances"][0]["manager"]
+        case=after["original_founder_mandate_cases"][0]
+        self.assertEqual(case["state"],"MANAGER_MODEL_REPLY_OBSERVED_REVIEW_PENDING")
+        self.assertEqual(case["original_manager_model_reply_count_visible"],1)
+        self.assertEqual(case["manager_model_reply_refs"][0]["original_manager_run_id"],
+                         "run_farid_mandate_reply")
+        self.assertFalse(case["manager_ack_verified"])
+        self.assertFalse(case["manager_reviewed_team_verified"])
+        self.assertFalse(case["independent_product_delivery_verified"])
+        self.assertFalse(case["autonomous_next_action_verified"])
+        other=venture.portfolio(project_id="cairn-season-0")["instances"][0]
+        self.assertIsNone(other["manager"])
+
     def test_drafts_never_become_external_mutations_or_verified_revenue(self):
         self.assertFalse(venture.portfolio()["external_permit_issued"])
         with core.connect() as db:
