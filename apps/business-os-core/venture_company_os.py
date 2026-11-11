@@ -115,6 +115,14 @@ def init(db:sqlite3.Connection):
       FOREIGN KEY(company_id,project_id) REFERENCES venture_company_os(company_id,project_id)
     );
     CREATE INDEX IF NOT EXISTS idx_venture_os_state ON venture_company_os(operating_state,last_heartbeat);
+    -- A bounded recovery ledger, NOT a task queue or a new autonomous worker.
+    -- Original Company OS tasks and runs remain the source of truth.
+    CREATE TABLE IF NOT EXISTS venture_company_os_manager_recovery(
+      task_id TEXT PRIMARY KEY,
+      manager_actor_id TEXT NOT NULL,
+      original_failure_run_id TEXT NOT NULL,
+      retried_at TEXT NOT NULL
+    );
     CREATE TABLE IF NOT EXISTS venture_company_os_mandates(
       company_id TEXT NOT NULL,project_id TEXT NOT NULL,
       founder_project_id TEXT NOT NULL,program_id TEXT NOT NULL,
@@ -326,6 +334,58 @@ def _queue_first_named_manager_source_assignment(db):
     }
 
 
+def _recover_named_manager_tasks(db,limit=3):
+    """Retry a failed named BuildRelay management-chain task ONCE in the original queue.
+
+    This never creates a new task, permit, model call, customer event or success.
+    Original CEO-mandate or BuildRelay-source provenance must be present.
+    Retry candidates have a real failed model run, an elapsed cooldown, an
+    ACTIVE local company, and existing configured specialist inference.
+    """
+    import sina_work_bridge
+    actor="gm-buildrelay-farid"
+    company,project="founder-portfolio","buildrelay-bridge-economy"
+    if named_manager(company,project,"chief_of_staff") is None:
+        return {"state":"NO_NAMED_MANAGER_MAPPING","requeued_count":0}
+    if not sina_work_bridge.specialist_configured():
+        return {"state":"SPECIALIST_PROVIDER_NOT_CONFIGURED","requeued_count":0}
+    local=db.execute("""SELECT operating_state FROM venture_company_os
+        WHERE company_id=? AND project_id=?""",(company,project)).fetchone()
+    if not local or local["operating_state"]!="ACTIVE_LOCAL_EXECUTIVE":
+        return {"state":"MANAGER_SCOPE_NOT_ACTIVE","requeued_count":0}
+    rows=db.execute("""
+        SELECT t.id AS task_id,r.id AS failed_run_id
+        FROM tasks t JOIN product_observations o
+          ON o.id=t.observation_id AND o.company_id=t.company_id
+         AND o.project_id=t.project_id
+        JOIN runs r ON r.task_id=t.id
+        WHERE t.company_id=? AND t.project_id=? AND t.status='drafted'
+          AND (o.source_event_id='manager-first-source:gm-buildrelay-farid:v1'
+               OR o.source_event_id LIKE 'company_mandate:%')
+          AND r.id=(SELECT r2.id FROM runs r2 WHERE r2.task_id=t.id
+                    ORDER BY r2.finished_at DESC,r2.id DESC LIMIT 1)
+          AND r.provider='specialist_degraded'
+          AND datetime(t.updated_at)<datetime('now','-2 minutes')
+          AND NOT EXISTS (
+             SELECT 1 FROM venture_company_os_manager_recovery rec
+             WHERE rec.task_id=t.id)
+        ORDER BY t.updated_at,t.id LIMIT ?
+    """,(company,project,max(1,min(int(limit),3)))).fetchall()
+    recovered=[]
+    for row in rows:
+        db.execute("""INSERT OR IGNORE INTO venture_company_os_manager_recovery
+            (task_id,manager_actor_id,original_failure_run_id,retried_at)
+            VALUES (?,?,?,?)""",(row["task_id"],actor,row["failed_run_id"],utc()))
+        updated=db.execute("""UPDATE tasks SET status='queued',updated_at=?
+            WHERE id=? AND status='drafted'""",(utc(),row["task_id"]))
+        if updated.rowcount==1:
+            recovered.append(row["task_id"])
+    return {"state":"ONE_SHOT_ORIGINAL_TASK_RECOVERY" if recovered else "NO_RECOVERABLE_TASKS",
+            "requeued_count":len(recovered),"original_task_ids":recovered,
+            "actor_id":actor,"external_actions":False,
+            "verified_delivery":False}
+
+
 def tick(clock=None,limit=1):
     """Continue each local company's daily operational mission without Founder prompts.
 
@@ -350,6 +410,7 @@ def tick(clock=None,limit=1):
             db.commit()
             return {"state":"BACKPRESSURE","queued":running,**sync}
         manager_activation=_queue_first_named_manager_source_assignment(db)
+        manager_recovery=_recover_named_manager_tasks(db)
         candidates=db.execute("""SELECT i.*,p.name FROM venture_company_os i
           JOIN product_programs p ON p.company_id=i.company_id AND p.project_id=i.project_id
           WHERE i.operating_state='ACTIVE_LOCAL_EXECUTIVE'
@@ -387,7 +448,8 @@ def tick(clock=None,limit=1):
                 started.append(project)
         db.commit()
         return {"state":"COMPANY_LOOPS_ADVANCED","local_companies_advanced":started,
-                "events_created":queued,"manager_source_assignment":manager_activation,"external_actions":False,
+                "events_created":queued,"manager_source_assignment":manager_activation,
+                "manager_recovery":manager_recovery,"external_actions":False,
                 "reported_real_users":0,"verified_cash":0,**sync}
 
 def _manager_source_history(db,company,project,role="chief_of_staff"):
@@ -449,6 +511,18 @@ def _manager_source_history(db,company,project,role="chief_of_staff"):
         "original_runtime_records_with_identity_visible":mapped_run_count,
         "historical_role_runs_not_attributed_to_named_person":True,
         "original_role_task_and_run_history_latest":latest,
+        "degraded_original_model_runs_visible":sum(
+            1 for row in latest if row.get("provider")=="specialist_degraded"),
+        # Specialist failures are TEAM evidence, never silently attributed as
+        # the named manager's own model run or an individually failed decision.
+        "team_degraded_model_runs_recorded":db.execute("""
+           SELECT COUNT(*) FROM runs r JOIN tasks t ON t.id=r.task_id
+           WHERE t.company_id=? AND t.project_id=? AND t.role!=?
+             AND r.provider='specialist_degraded'
+        """,(company,project,seat["role"])).fetchone()[0],
+        "one_shot_original_task_recoveries_visible":db.execute("""
+           SELECT COUNT(*) FROM venture_company_os_manager_recovery
+           WHERE manager_actor_id=?""",(seat["actor_id"],)).fetchone()[0],
         "executive_delegation_verified":False,
         "sina_to_manager_mandate_ack_verified":False,
         "independent_product_delivery_verified":False,

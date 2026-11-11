@@ -409,7 +409,19 @@ def process_task(t):
   except Exception as specialist_error:
    provider="specialist_degraded"
    result["risk_flags"]=["specialist_model_unavailable"]
-   result["model_issue_class"]=type(specialist_error).__name__[:70]
+   # Only allowlisted classes / numeric HTTP status. Never log provider
+   # response bodies, task text, API tokens or arbitrary exception messages.
+   klass=type(specialist_error).__name__
+   status=getattr(specialist_error,"code",None)
+   if type(status) is int and 400<=status<=599:
+    result["model_issue_code"]="MODEL_HTTP_"+str(status)
+   else:
+    result["model_issue_code"]={
+     "TimeoutError":"MODEL_TIMEOUT","HTTPError":"MODEL_HTTP_UNKNOWN",
+     "URLError":"MODEL_TRANSPORT","ValueError":"MODEL_INVALID_RESPONSE",
+     "RuntimeError":"MODEL_RUNTIME_ERROR"}.get(klass,"MODEL_OTHER_FAILURE")
+   result["model_issue_class"]=klass if klass in (
+    "TimeoutError","HTTPError","URLError","ValueError","RuntimeError") else "OTHER"
  # Legacy user-consented model lane remains separate; never allow two model
  # requests or use customer data in the new Company internal specialist path.
  if decision_allows_internal and provider=="deterministic" and t.get("ai_consent") and os.getenv("LLM_BASE_URL") and os.getenv("LLM_API_KEY") and os.getenv("LLM_MODEL"):
@@ -451,7 +463,7 @@ def process_task(t):
    result["external_execution_verified"]=False
    result["independent_business_outcome_verified"]=False
  with connect() as d:
-  d.execute("INSERT INTO runs VALUES(?,?,?,?,?,?,?,?,?,?,?)",(idof("run"),t["id"],role,provider,model,"degraded" if provider=="provider_error" else "completed",it,ot,now(),now(),json.dumps(result,ensure_ascii=False)))
+  d.execute("INSERT INTO runs VALUES(?,?,?,?,?,?,?,?,?,?,?)",(idof("run"),t["id"],role,provider,model,"degraded" if provider in ("provider_error","specialist_degraded") else "completed",it,ot,now(),now(),json.dumps(result,ensure_ascii=False)))
   d.execute("UPDATE tasks SET status='drafted',result=?,updated_at=? WHERE id=?",(json.dumps({"provider":provider,"recommendation":result,"memory_hits":len(mem),"external_action":"not_executed"}),now(),t["id"]))
   if scoped_product:
    brain_pulse.record_specialist(d,task=t,goalkeeper=decision_context,
@@ -470,7 +482,9 @@ def process_task(t):
   print("COMPANY_OS_SPECIALIST_DRAFT "+json.dumps({
    "company_id":t["company_id"],"project_id":t["project_id"],
    "role":role,"provider":provider,"state":"DRAFTED_NOT_DISPATCHED",
-   "model_tokens":it+ot,"external_action":False},sort_keys=True),flush=True)
+   "model_tokens":it+ot,
+   "model_issue_code":result.get("model_issue_code"),
+   "external_action":False},sort_keys=True),flush=True)
 def process_founder_portfolio_event(e):
  # The Founder owns the canonical registry. Company OS owns ONLY the task
  # and receipt lifecycle, never a second portfolio/company tenant registry.
@@ -561,6 +575,22 @@ def daily_tick():
  # Each venture has its OWN Company OS mission, team and cadence. Sina only
  # owns portfolio-level intent and observes outcomes; it is not the task CEO.
  local_cycles=venture_company_os.tick()
+ activation=local_cycles.get("manager_source_assignment") or {}
+ if activation.get("queued"):
+  print("COMPANY_OS_NAMED_MANAGER_ACTIVATION "+json.dumps({
+   "actor_id":activation.get("actor_id"),
+   "state":activation.get("state"),
+   "original_source_observation_id":activation.get("original_source_observation_id"),
+   "original_queue_event_id":activation.get("original_queue_event_id"),
+   "external_actions":False},sort_keys=True),flush=True)
+ recovery=local_cycles.get("manager_recovery") or {}
+ if recovery.get("requeued_count"):
+  print("COMPANY_OS_NAMED_MANAGER_RECOVERY "+json.dumps({
+   "actor_id":recovery["actor_id"],
+   "original_task_ids":recovery["original_task_ids"],
+   "state":recovery["state"],
+   "external_actions":False,
+   "verified_delivery":False},sort_keys=True),flush=True)
  if local_cycles.get("events_created",0):
   print("VENTURE_COMPANY_OS_LOCAL_CYCLES "+json.dumps({
    "projects":local_cycles["local_companies_advanced"],
