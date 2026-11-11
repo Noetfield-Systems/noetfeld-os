@@ -514,7 +514,21 @@ def specialist_proposal(task: dict, *, fetch=None) -> dict:
             db,task["company_id"],task["project_id"],task["role"])
     if specialist is None:
         raise ValueError("venture_company_os_specialist_not_eligible")
-    local_context=("You serve Company OS "+specialist["instance_id"]+
+    # A real manager seat can have a stable operational name; it is still
+    # the original company-scoped chief_of_staff runtime, not a Paperclip
+    # identity or a newly minted executive permit.
+    manager=venture_company_os.named_manager(
+        task["company_id"],task["project_id"],task["role"])
+    person_context=(
+        "You are "+manager["display_name"]+" (actor "+manager["actor_id"]+
+        "), BuildRelay General Manager reporting to SinaOS. "+
+        "Work within this exact local Company OS; choose real useful work, "+
+        "give specific evidence-backed reasons, compare alternatives, "+
+        "coordinate specialists and review their results. "+
+        "Do not claim manager acceptance, delegation, member outcomes, "+
+        "external execution or independent verification without original evidence. "
+    ) if manager is not None else ""
+    local_context=(person_context+"You serve Company OS "+specialist["instance_id"]+
         ". Local specialist remit: "+specialist["remit"]+
         " Source asset: "+specialist["source_asset"]+
         ". Standing product outcome: "+specialist["operating_objective"]+
