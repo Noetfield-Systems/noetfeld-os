@@ -211,7 +211,7 @@ def specialist_continuity(task: dict) -> dict | None:
             "verification,observed_at FROM product_observations "
             "WHERE id=? AND company_id=? AND project_id=?",
             (task["observation_id"], COMPANY, PROJECT)).fetchone()
-    if not row:
+    if not row or not str(row["source_event_id"]).startswith("br-"):
         return None
     p = ROLE_PLANS[task["role"]]
     current = {
