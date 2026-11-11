@@ -54,6 +54,19 @@ class BuildRelayInbound(unittest.TestCase):
             queued=db.execute("SELECT COUNT(*) AS n FROM events WHERE event_type='product.signal_observed'").fetchone()
             self.assertGreaterEqual(queued["n"],1)
 
+    def test_deterministic_role_brief_preserves_real_evidence(self):
+        intake=buildrelay_intake.accept(self.body())
+        task=dict(company_id="founder-portfolio",project_id="buildrelay-bridge-economy",
+                  observation_id=intake["observation_id"],role="marketing_content")
+        brief=buildrelay_intake.specialist_continuity(task)
+        self.assertEqual(brief["status"],"INTERNAL_DRAFT_NOT_EXECUTED")
+        self.assertEqual(brief["observed_metric"]["value"],0)
+        self.assertIn("7-day",brief["next_best_action"])
+        self.assertFalse(brief["model_inference_performed_by_fallback"])
+        self.assertFalse(brief["independent_outcome_verified"])
+        self.assertIsNone(buildrelay_intake.specialist_continuity(dict(task,project_id="cairn-season-0")))
+        self.assertIsNone(buildrelay_intake.specialist_continuity(dict(task,role="payment_executor")))
+
     def test_rejects_cross_scope_and_false_growth(self):
         b=self.body()
         for bad in [
