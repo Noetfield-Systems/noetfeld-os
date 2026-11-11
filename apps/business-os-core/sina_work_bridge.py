@@ -46,6 +46,30 @@ ACTIVE = {"INTERNAL_ACTIVE", "FOUNDER_PROJECT_ACTIVE_NOT_LEGAL_TENANT"}
 SAFE_ID = re.compile(r"^[a-z0-9][a-z0-9-]{2,90}$")
 SHA_ID = re.compile(r"^[0-9a-f]{32}$")
 
+# Pure, bounded rejection reasons. Never log raw task text or untrusted errors.
+REJECTION_CODES=frozenset({
+    "company_request_schema_invalid",
+    "company_strategic_context_incomplete",
+    "company_strategic_mission_id_invalid",
+    "company_success_metric_invalid",
+    "company_request_authority_invalid",
+    "company_request_id_invalid",
+    "company_project_id_invalid",
+    "company_tenant_denied",
+    "independent_verification_not_in_company_workforce",
+    "company_task_invalid",
+    "sensitive_task_rejected",
+    "company_authority_scope_violation",
+    "sina_workstream_project_not_in_canonical_ssot",
+    "sina_workstream_owner_conflicts_with_ssot",
+    "reused_workstream_mismatched_tenant",
+})
+def rejection_code(exc):
+    if isinstance(exc,TypeError):
+        return "INVALID_TYPE"
+    code=str(exc)
+    return code if code in REJECTION_CODES else "UNKNOWN_VALIDATION_ERROR"
+
 class NoRedirect(urllib.request.HTTPRedirectHandler):
     def redirect_request(self, request, fp, code, msg, headers, newurl):
         return None
@@ -377,7 +401,7 @@ def cycle(fetch=None):
     items=result.get("items")
     if not isinstance(items,list) or len(items)>20:
         raise ValueError("work_intake_size_invalid")
-    created=0; unmapped=0
+    created=0; unmapped=0; rejected={}
     for item in items:
         try:
             response=receive(item)
@@ -386,7 +410,14 @@ def cycle(fetch=None):
             elif response["state"]=="CREATED_CANONICAL_TASK":
                 created+=1
         except (ValueError,TypeError) as exc:
-            print("SINA_ORG_WORK_REJECTED "+type(exc).__name__,flush=True)
+            code=rejection_code(exc)
+            rejected[code]=rejected.get(code,0)+1
+            print("SINA_ORG_WORK_REJECTED "+json.dumps({
+                "reason_code":code,"exception_type":type(exc).__name__,
+                "workstream_id":item.get("request_id","") if isinstance(item,dict)
+                  and isinstance(item.get("request_id"),str)
+                  and SHA_ID.fullmatch(item["request_id"]) else None
+            },sort_keys=True),flush=True)
     acknowledged=sync_existing(fetch)
     retry_scheduled=retry_degraded()
     import venture_decision_bridge
@@ -396,6 +427,8 @@ def cycle(fetch=None):
             "venture_mandates_blocked":directives["blocked"],
             "local_company_os_execution":True,
             "awaiting_product_registration":unmapped,
+            "work_requests_rejected":sum(rejected.values()),
+            "work_request_reject_reasons":rejected,
             "execution_states_reported":acknowledged,
             "specialist_retry_scheduled":retry_scheduled,
             "agent_feedback_delivered":agent_feedback["delivered"],
