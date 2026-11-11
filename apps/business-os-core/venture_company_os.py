@@ -452,6 +452,109 @@ def tick(clock=None,limit=1):
                 "manager_recovery":manager_recovery,"external_actions":False,
                 "reported_real_users":0,"verified_cash":0,**sync}
 
+def _manager_founder_mandate_cases(db,company,project,seat,limit=8):
+    """Read the ORIGINAL Sina→Company mandate→tasks→runs lineage.
+
+    A persisted Sina directive is not a Farid acknowledgment. An original
+    manager-tagged successful model reply is NOT a verified product release,
+    acceptance of Founder authority, or a subsequent autonomous action.
+    No generated dialogue, duplicate work queue or inferred run duration.
+    """
+    mandate_rows=db.execute("""
+        SELECT program_id,mission_id,success_metric,priority_score,
+               created_at,updated_at FROM venture_company_os_mandates
+        WHERE company_id=? AND project_id=?
+        ORDER BY updated_at DESC,program_id DESC LIMIT ?
+    """,(company,project,max(1,min(int(limit),12)))).fetchall()
+    cases=[]
+    for mandate in mandate_rows:
+        m=dict(mandate)
+        # Prefix is wholly derived from an original 32-hex program identity.
+        prefix="company_mandate:"+m["program_id"]+":"
+        sources=db.execute("""
+            SELECT id,source_event_id,recorded_at,verification
+            FROM product_observations
+            WHERE company_id=? AND project_id=? AND source_event_id LIKE ?
+            ORDER BY recorded_at DESC,id DESC LIMIT 6
+        """,(company,project,prefix+"%")).fetchall()
+        case={
+            "founder_program_id":m["program_id"],
+            "mission_id":m["mission_id"],
+            "success_metric":m["success_metric"],
+            "priority_score":m["priority_score"],
+            "original_mandate_at":m["created_at"],
+            "last_mandate_update_at":m["updated_at"],
+            "source_observation_ids":[x["id"] for x in sources],
+            "original_source_event_ids":[x["source_event_id"] for x in sources],
+            "source_evidence_state":"ORIGINAL_MANDATE_AND_OBSERVATION" if sources
+                                   else "ORIGINAL_MANDATE_OBSERVATION_NOT_CAPTURED",
+            "original_specialist_task_ids":[],
+            "original_manager_task_ids":[],
+            "manager_model_reply_refs":[],
+            "original_specialist_failure_run_ids":[],
+            "manager_ack_verified":False,
+            "manager_reviewed_team_verified":False,
+            "independent_product_delivery_verified":False,
+            "autonomous_next_action_verified":False,
+        }
+        if not sources:
+            case["state"]="MANDATE_ADOPTED_NO_SOURCE_OBSERVATION"
+            cases.append(case)
+            continue
+        tasks={}
+        manager_replies=[]
+        failed_team_runs=[]
+        for source in sources:
+            rows=db.execute("""
+                SELECT t.id AS task_id,t.role,t.status AS task_status,
+                       t.event_id,r.id AS run_id,r.provider,r.model,
+                       r.status AS run_status,r.result AS run_result
+                FROM tasks t LEFT JOIN runs r ON r.task_id=t.id
+                WHERE t.company_id=? AND t.project_id=? AND t.observation_id=?
+                ORDER BY t.created_at,r.started_at LIMIT 100
+            """,(company,project,source["id"])).fetchall()
+            for row in rows:
+                data=dict(row)
+                tasks[data["task_id"]]={"id":data["task_id"],
+                                        "role":data["role"],
+                                        "status":data["task_status"],
+                                        "event_id":data["event_id"]}
+                if data["role"]!=seat["role"] and data["provider"]=="specialist_degraded":
+                    failed_team_runs.append(data["run_id"])
+                if (data["role"]!=seat["role"] or not data["run_id"]
+                    or data["run_status"]!="completed"
+                    or not (str(data["provider"] or "").startswith("sina-")
+                            or data["provider"]=="openai-compatible")):
+                    continue
+                try:
+                    original_result=json.loads(data["run_result"] or "{}")
+                except (ValueError,TypeError):
+                    original_result={}
+                if (isinstance(original_result,dict)
+                    and original_result.get("manager_actor_id")==seat["actor_id"]):
+                    manager_replies.append({
+                        "original_manager_run_id":data["run_id"],
+                        "original_manager_task_id":data["task_id"],
+                        "model":data["model"],
+                        "provider":data["provider"],
+                        "evidence":"ACTUAL_TAGGED_MANAGER_MODEL_REPLY_NOT_ACK"
+                    })
+        case["original_specialist_task_ids"]=sorted(
+            k for k,v in tasks.items() if v["role"]!=seat["role"])
+        case["original_manager_task_ids"]=sorted(
+            k for k,v in tasks.items() if v["role"]==seat["role"])
+        case["manager_model_reply_refs"]=manager_replies[:8]
+        case["original_specialist_failure_run_ids"]=failed_team_runs[:12]
+        case["original_task_count_visible"]=len(tasks)
+        case["original_manager_model_reply_count_visible"]=len(manager_replies)
+        case["source_evidence_state"]="SOURCE_LINKED_TASKS" if tasks else "SOURCE_OBSERVED_NO_TASKS"
+        case["state"]=("MANAGER_MODEL_REPLY_OBSERVED_REVIEW_PENDING" if manager_replies
+                       else "TASKS_CREATED_NO_NAMED_MANAGER_REPLY" if tasks
+                       else "MANDATE_ADOPTED_NO_TASKS")
+        cases.append(case)
+    return cases
+
+
 def _manager_source_history(db,company,project,role="chief_of_staff"):
     """Read original task/run records: no generated conversation or work hours.
 
@@ -523,6 +626,8 @@ def _manager_source_history(db,company,project,role="chief_of_staff"):
         "one_shot_original_task_recoveries_visible":db.execute("""
            SELECT COUNT(*) FROM venture_company_os_manager_recovery
            WHERE manager_actor_id=?""",(seat["actor_id"],)).fetchone()[0],
+        "original_founder_mandate_cases":_manager_founder_mandate_cases(
+            db,company,project,seat),
         "executive_delegation_verified":False,
         "sina_to_manager_mandate_ack_verified":False,
         "independent_product_delivery_verified":False,
