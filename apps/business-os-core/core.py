@@ -561,6 +561,22 @@ def daily_tick():
  # Each venture has its OWN Company OS mission, team and cadence. Sina only
  # owns portfolio-level intent and observes outcomes; it is not the task CEO.
  local_cycles=venture_company_os.tick()
+ activation=local_cycles.get("manager_source_assignment") or {}
+ if activation.get("queued"):
+  print("COMPANY_OS_NAMED_MANAGER_ACTIVATION "+json.dumps({
+   "actor_id":activation.get("actor_id"),
+   "state":activation.get("state"),
+   "original_source_observation_id":activation.get("original_source_observation_id"),
+   "original_queue_event_id":activation.get("original_queue_event_id"),
+   "external_actions":False},sort_keys=True),flush=True)
+ recovery=local_cycles.get("manager_recovery") or {}
+ if recovery.get("requeued_count"):
+  print("COMPANY_OS_NAMED_MANAGER_RECOVERY "+json.dumps({
+   "actor_id":recovery["actor_id"],
+   "original_task_ids":recovery["original_task_ids"],
+   "state":recovery["state"],
+   "external_actions":False,
+   "verified_delivery":False},sort_keys=True),flush=True)
  if local_cycles.get("events_created",0):
   print("VENTURE_COMPANY_OS_LOCAL_CYCLES "+json.dumps({
    "projects":local_cycles["local_companies_advanced"],
