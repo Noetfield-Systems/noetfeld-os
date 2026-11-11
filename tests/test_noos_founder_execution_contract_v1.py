@@ -54,9 +54,10 @@ def test_plan_intake_carries_founder_goal_contract_even_offline(tmp_path, monkey
                 "op_key": intake["idempotency_key"],
                 "body": {"job_id": "rj_" + "c"*32}}
     monkeypatch.setattr(plan, "dry_run_ack", capture_ack, raising=False)
-    monkeypatch.setattr(plan, "dry_run_preview",
-                        lambda intake: capture.setdefault("intake", intake) or {"intake": intake},
-                        raising=False)
+    def capture_preview(intake):
+        capture["intake"] = intake
+        return {"intake": intake, "dry_run": True}
+    monkeypatch.setattr(plan, "dry_run_preview", capture_preview, raising=False)
     plan.dispatch_once(write=False, allow_dry_run=True)
     fc = capture["intake"]["input"]["goal"]["founder_execution_contract"]
     assert fc["drift_signal"] == "FOUNDER INTENT DRIFT"
