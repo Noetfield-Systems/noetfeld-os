@@ -90,6 +90,38 @@ def test_role_dispatch_produces_artifact(monkeypatch):
     assert Path(ROOT / row["receipt_path"]).is_file()
 
 
+def test_every_dispatch_template_carries_founder_execution_contract():
+    template_dir = ROOT / ".agent-policy/dispatch-templates"
+    templates = sorted(template_dir.glob("*.json"))
+    assert len(templates) >= 4
+    for path in templates:
+        row = json.loads(path.read_text(encoding="utf-8"))
+        fc = row["founder_execution_contract"]
+        assert fc["schema"] == "sina.founder-execution-contract.v1"
+        assert fc["risk"] == "HIGH_COMMERCIAL_MARKET_PRODUCT_SPECULATIVE_RISK_ACCEPTED"
+        assert fc["permit_granted"] is False
+        assert "FOUNDER INTENT DRIFT" in fc["directive"]
+
+
+def test_runway_role_intake_receives_founder_execution_contract(monkeypatch):
+    import noos_role_runway_dispatch_v1 as role_dispatch
+
+    capture = {}
+    monkeypatch.setattr(role_dispatch.runway, "preflight", lambda: {"ok": False})
+    def fake_dry_run(intake):
+        capture["input"] = intake
+        return {"ok": True, "status": "DRY_RUN", "dry_run": True, "body": {}}
+    monkeypatch.setattr(role_dispatch.dispatch, "dry_run_ack", fake_dry_run)
+    monkeypatch.delenv("NOOS_PLAN_COMPLETION_LIVE_INTAKE", raising=False)
+    monkeypatch.setattr(role_dispatch, "PROOF", ROOT / ".noos-runtime" / "founder-intent-tests")
+    row = role_dispatch.dispatch_role("research", subject="founder-intent-contract")
+    assert row["ok"]
+    policy = capture["input"]["input"]["goal"]["founder_execution_contract"]
+    assert policy["risk_appetite"] == "HIGH_COMMERCIAL_MARKET_PRODUCT_SPECULATIVE_RISK_ACCEPTED"
+    assert "FOUNDER INTENT DRIFT" in policy["directive"]
+    assert policy["not_an_external_action_permit"] is True
+
+
 def test_route_map_wired():
     doc = json.loads((ROOT / "motor/registry/bindings/noos-route-map-v1.json").read_text())
     statuses = {b["noos_route"]: b["status"] for b in doc["bindings"]}
