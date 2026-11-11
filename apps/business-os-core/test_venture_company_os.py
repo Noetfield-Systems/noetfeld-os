@@ -376,7 +376,8 @@ class LocalCompanyOSRuntimeTests(unittest.TestCase):
                 db.commit()
         manager=venture.portfolio(project_id="buildrelay-bridge-economy")["instances"][0]["manager"]
         self.assertEqual(manager["one_shot_original_task_recoveries_visible"],1)
-        self.assertGreaterEqual(manager["degraded_original_model_runs_visible"],1)
+        self.assertEqual(manager["degraded_original_model_runs_visible"],0)
+        self.assertGreaterEqual(manager["team_degraded_model_runs_recorded"],1)
         self.assertFalse(manager["independent_product_delivery_verified"])
 
     def test_actual_failed_specialist_model_run_is_not_completed(self):
