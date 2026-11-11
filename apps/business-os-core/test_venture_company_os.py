@@ -374,7 +374,39 @@ class LocalCompanyOSRuntimeTests(unittest.TestCase):
                 self.assertEqual(db.execute("SELECT status FROM tasks WHERE id=?",
                                             (task_id,)).fetchone()["status"],"drafted")
                 db.commit()
+        # A later HTTP 429 must wait until the real provider cap is revised.
+        with core.connect() as db:
+            db.execute("""INSERT INTO runs(id,task_id,role,provider,model,status,
+                input_tokens,output_tokens,started_at,finished_at,result)
+                VALUES(?,?,?,?,?,?,?,?,?,strftime('%Y-%m-%dT%H:%M:%SZ','now'),?)""",
+                ("run_quota_429",task_id,"engineering_operator",
+                 "specialist_degraded","none","degraded",0,0,
+                 "2026-11-11T23:40:00Z",
+                 '{"model_issue_code":"MODEL_HTTP_429"}'))
+            db.execute("UPDATE tasks SET status='drafted',updated_at=datetime('now','-4 minutes') WHERE id=?",
+                       (task_id,))
+            db.commit()
+        with patch.object(sina_work_bridge,"specialist_configured",return_value=True):
+            with patch.dict(os.environ,{"COMPANY_OS_FARID_CAPACITY_REVISION":""}):
+                with core.connect() as db:
+                    self.assertEqual(venture._recover_named_manager_capacity(db)["requeued_count"],0)
+                    self.assertEqual(venture._recover_named_manager_tasks(db)["requeued_count"],0)
+            with patch.dict(os.environ,{"COMPANY_OS_FARID_CAPACITY_REVISION":"cap96-20261111"}):
+                with core.connect() as db:
+                    capacity=venture._recover_named_manager_capacity(db)
+                    self.assertEqual(capacity["state"],"CAPACITY_REOPENED_ORIGINAL_TASKS")
+                    self.assertEqual(capacity["original_task_ids"],[task_id])
+                    self.assertEqual(capacity["policy_revision"],"cap96-20261111")
+                    db.commit()
+                with core.connect() as db:
+                    self.assertEqual(db.execute("SELECT status FROM tasks WHERE id=?",
+                                                (task_id,)).fetchone()["status"],"queued")
+                    db.execute("UPDATE tasks SET status='drafted',updated_at=datetime('now','-4 minutes') WHERE id=?",
+                               (task_id,))
+                    self.assertEqual(venture._recover_named_manager_capacity(db)["requeued_count"],0)
+                    db.commit()
         manager=venture.portfolio(project_id="buildrelay-bridge-economy")["instances"][0]["manager"]
+        self.assertEqual(manager["capacity_recovery_count_visible"],1)
         self.assertEqual(manager["one_shot_original_task_recoveries_visible"],1)
         self.assertEqual(manager["degraded_original_model_runs_visible"],0)
         self.assertGreaterEqual(manager["team_degraded_model_runs_recorded"],1)
