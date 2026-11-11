@@ -43,7 +43,13 @@ class LocalCompanyOSRuntimeTests(unittest.TestCase):
         docker=(Path(__file__).with_name("Dockerfile")).read_text()
         copy_line=next(x for x in docker.splitlines() if x.startswith("COPY app.py "))
         self.assertIn("venture_company_os.py",copy_line)
-        self.assertIn("python -m py_compile app.py core.py venture_company_os.py",docker)
+        # The deployed image may add source files before app.py; assert the
+        # actual compile contract, not a brittle ordering of arguments.
+        compile_line=next(x for x in docker.splitlines()
+                          if "python -m py_compile" in x)
+        self.assertIn("app.py",compile_line)
+        self.assertIn("core.py",compile_line)
+        self.assertIn("venture_company_os.py",compile_line)
 
     def test_founder_sends_one_goal_and_cairn_company_os_creates_own_tasks(self):
         goal={
