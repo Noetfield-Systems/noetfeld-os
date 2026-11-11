@@ -215,6 +215,26 @@ _PLATFORM_SIGNAL_SKUS={"trust_brief","copilot","bank_pilot","general"}
 _PLATFORM_SIGNAL_VECTORS={
     "ai-value-governance-os","enterprise","copilot-governance","copilot",
     "bank-pilot","partner-msb","work-with-us","web-intake","general","trust-brief",
+    "work-with-us-contributor",
+}
+_CONTRIBUTOR_KINDS={"human","agent","organization"}
+_CONTRIBUTOR_ROLES={
+    "engineering","qa","design","growth","research",
+    "operations","community","partner",
+}
+_CONTRIBUTOR_PROJECTS={
+    "noetfield","venture-formation-lab","buildworkflow","misenorth",
+    "outboundos","earnloop","signalforge","buildrelay","localgift","other",
+}
+_CONTRIBUTOR_WORKFORCE={
+    "engineering":"engineering_operator",
+    "qa":"engineering_operator",
+    "design":"product_strategy",
+    "growth":"sales_qualification",
+    "research":"market_intelligence",
+    "operations":"customer_success",
+    "community":"partnerships",
+    "partner":"partnerships",
 }
 _PLATFORM_SIGNAL_TIERS={"A","B","C","defer"}
 _PLATFORM_SIGNAL_URGENCY={"immediate","standard","low"}
@@ -271,7 +291,9 @@ def sina_seed_revenue_items(limit=50):
 
 def validate_platform_intake_projection(item):
     """Accept only the deliberately PII-free projection emitted by Platform API."""
-    if not isinstance(item,dict) or set(item)!={"intake_id","request_id","created_at","sku","vector","qualification"}:
+    allowed={"intake_id","request_id","created_at","sku","vector","qualification"}
+    if (not isinstance(item,dict) or not allowed.issubset(item.keys()) or
+        (set(item)-allowed) not in (set(),{"contributor"})):
         raise ValueError("platform_intake_projection_shape_invalid")
     intake_id=str(item.get("intake_id") or "")
     if not re.fullmatch(r"INT-[A-Z0-9]{12}",intake_id):
@@ -319,6 +341,21 @@ def validate_platform_intake_projection(item):
             "blockers":list(dict.fromkeys(blockers)),
             "qualifier_version":"enterprise-intake-qualifier-v1",
         }
+    contributor=item.get("contributor")
+    if contributor is not None:
+        if (vector!="work-with-us-contributor" or
+            not isinstance(contributor,dict) or
+            set(contributor)!={"application_kind","project_id","role"}):
+            raise ValueError("contributor_shape_invalid")
+        kind=contributor["application_kind"]
+        project=contributor["project_id"]
+        role=contributor["role"]
+        if (not isinstance(kind,str) or kind not in _CONTRIBUTOR_KINDS or
+            not isinstance(project,str) or project not in _CONTRIBUTOR_PROJECTS or
+            not isinstance(role,str) or role not in _CONTRIBUTOR_ROLES):
+            raise ValueError("contributor_allowlist_invalid")
+    elif vector=="work-with-us-contributor":
+        raise ValueError("contributor_metadata_required")
     return {
         "intake_id":intake_id,
         "request_id":rid,
@@ -326,6 +363,7 @@ def validate_platform_intake_projection(item):
         "sku":sku,
         "vector":vector,
         "qualification":safe_qualification,
+        **({"contributor":dict(contributor)} if contributor is not None else {}),
     }
 
 
@@ -367,9 +405,75 @@ def queue_platform_intake_projection(item):
     return {"created":True,"event_id":event_id}
 
 
+def process_contributor_intake_signal(e, p):
+    """Re-use existing Company OS department queue for real stored applications.
+
+    Applicant-proposed type/role/project are not assignment authority; queue
+    only internal reviewer tasks. No PII, credentials or source message is copied.
+    """
+    data=p["contributor"]
+    intake_id=p["intake_id"]
+    kind=data["application_kind"]
+    project=data["project_id"]
+    proposed_role=data["role"]
+    specialist=_CONTRIBUTOR_WORKFORCE[proposed_role]
+    priority=20 if proposed_role in ("engineering","qa","operations","growth") else 35
+    with connect() as db:
+        db.execute("BEGIN IMMEDIATE")
+        receipt=db.execute(
+            "SELECT status FROM platform_intake_signals WHERE intake_id=?",
+            (intake_id,)
+        ).fetchone()
+        if receipt is None:
+            raise ValueError("platform_intake_signal_receipt_missing")
+        if receipt["status"] in {"tasks_created","processed"}:
+            db.execute("UPDATE events SET status='processed',processed_at=? WHERE id=?",
+                       (now(),e["id"]))
+            db.execute("COMMIT")
+            return
+        match_task=add_task(
+            db,e["id"],None,"noetfield",specialist,
+            f"Contributor match · {intake_id}",
+            f"Review real persisted contributor application {intake_id} in the existing "
+            f"Operations intake registry. Self-declared type: {kind}; target project: "
+            f"{project}; requested capability: {proposed_role}. Match to a real project "
+            "owner and a bounded, reviewable contribution. Inspect actual work evidence "
+            "in the canonical intake record; do not infer capability or grant tool access.",
+            "Produce one proposed scoped trial: owner role, deliverable, acceptance checks "
+            "and required evidence. Keep application status APPLIED until an authorized "
+            "owner explicitly assigns a trial. No external contact or system access."
+        )
+        db.execute("UPDATE tasks SET priority_rank=? WHERE id=?",(priority,match_task))
+        reviewer=add_task(
+            db,e["id"],None,"noetfield","chief_of_staff",
+            f"Contributor owner review · {intake_id}",
+            f"Review the proposed contributor match for intake {intake_id}, project "
+            f"{project}, role {proposed_role}. The upstream task is advisory. "
+            "Choose responsible company owner and scoped trial based on source evidence; "
+            "do not claim assignment, acceptance or work performed.",
+            "Return a documented owner-review recommendation with explicit acceptance "
+            "criteria. Never authorize an external effect or mark delivered without proof."
+        )
+        db.execute("UPDATE tasks SET priority_rank=? WHERE id=?",(priority,reviewer))
+        add_task_dependency(db,reviewer,match_task)
+        db.execute(
+            "UPDATE platform_intake_signals SET status='tasks_created',processed_at=? WHERE intake_id=?",
+            (now(),intake_id))
+        db.execute(
+            "UPDATE events SET status='processed',processed_at=? WHERE id=?",
+            (now(),e["id"]))
+        db.execute("COMMIT")
+    add_memory("noetfield","contributor_intake_signal",intake_id,
+               f"Stored contributor application {intake_id}; type {kind}; project "
+               f"{project}; proposed role {proposed_role}; matching review requested. "
+               "Not yet assigned, activated, or delivered.")
+
+
 def process_platform_intake_signal(e):
     """Create internal-only N-05/N-04/N-01 work; never create a customer/contact record."""
     p=validate_platform_intake_projection(json.loads(e["payload"]))
+    if p.get("contributor") is not None:
+        return process_contributor_intake_signal(e,p)
     qualification=p["qualification"] or {}
     tier=qualification.get("tier") or "unclassified"
     fit=qualification.get("fit_score")
