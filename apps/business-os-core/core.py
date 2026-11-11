@@ -292,7 +292,8 @@ def sina_seed_revenue_items(limit=50):
 def validate_platform_intake_projection(item):
     """Accept only the deliberately PII-free projection emitted by Platform API."""
     allowed={"intake_id","request_id","created_at","sku","vector","qualification"}
-    if not isinstance(item,dict) or (set(item)-allowed) not in (set(),{"contributor"}):
+    if (not isinstance(item,dict) or not allowed.issubset(item.keys()) or
+        (set(item)-allowed) not in (set(),{"contributor"})):
         raise ValueError("platform_intake_projection_shape_invalid")
     intake_id=str(item.get("intake_id") or "")
     if not re.fullmatch(r"INT-[A-Z0-9]{12}",intake_id):
