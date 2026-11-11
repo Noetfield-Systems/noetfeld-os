@@ -276,6 +276,14 @@ def _queue_first_named_manager_source_assignment(db):
         WHERE company_id=? AND project_id=?""",(company,project)).fetchone()
     if not local or local["operating_state"]!="ACTIVE_LOCAL_EXECUTIVE":
         return {"state":"LOCAL_MANAGER_NOT_ACTIVE","queued":False}
+    event_key="manager-first-source:"+seat["actor_id"]+":v1"
+    existing=db.execute("""SELECT id FROM product_observations
+        WHERE company_id=? AND project_id=? AND source_event_id=?""",
+        (company,project,event_key)).fetchone()
+    if existing:
+        return {"state":"ALREADY_QUEUED","queued":False,
+                "new_observation_id":existing["id"],"actor_id":seat["actor_id"],
+                "external_actions":False,"independently_verified":False}
     original=db.execute("""
         SELECT id,source_event_id,metric_name,verification
         FROM product_observations
@@ -288,7 +296,6 @@ def _queue_first_named_manager_source_assignment(db):
         return {"state":"NO_BUILDRELAY_SOURCE_OBSERVATION","queued":False}
     # Reserve only one original source-derived event for this stable seat;
     # process_signal decides which existing specialist tasks to create.
-    event_key="manager-first-source:"+seat["actor_id"]+":v1"
     import product_loops
     result=product_loops._insert_observation(db,company,project,{
         "source_event_id":event_key,
