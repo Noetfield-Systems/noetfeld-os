@@ -88,6 +88,25 @@ class CompanyBrainTests(unittest.TestCase):
         self.assertFalse(b["recorded"])
         self.assertTrue(c["recorded"])
         self.assertEqual(report["summary"]["recorded_management_cycles"],2)
+    def test_not_due_alternating_with_fabric_owner_is_one_idle_beat(self):
+        with db() as d:
+            arguments={"portfolio":{"state":"OBSERVED"},
+                       "local":{"state":"NOT_DUE"},
+                       "market":{"state":"NOT_DUE"}}
+            a=brain_pulse.capture_cycle(d,**arguments,
+                 mandate={"state":"MANDATES_ONLY_AGENT_FABRIC_OWNS_WORKPACKETS"},
+                 clock="2026-11-11T14:00:00Z")
+            b=brain_pulse.capture_cycle(d,**arguments,
+                 mandate={"state":"NOT_DUE"},
+                 clock="2026-11-11T14:00:05Z")
+            c=brain_pulse.capture_cycle(d,**arguments,
+                 mandate={"state":"MANDATES_ONLY_AGENT_FABRIC_OWNS_WORKPACKETS"},
+                 clock="2026-11-11T14:00:10Z")
+            result=brain_pulse.read(d,clock=datetime(2026,11,11,14,1,tzinfo=timezone.utc))
+        self.assertTrue(a["recorded"])
+        self.assertFalse(b["recorded"])
+        self.assertFalse(c["recorded"])
+        self.assertEqual(result["summary"]["recorded_management_cycles"],1)
     def test_no_fake_backfill(self):
         with db() as d:
             report=brain_pulse.read(d,clock=NOW)
