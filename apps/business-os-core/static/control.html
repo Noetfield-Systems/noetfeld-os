@@ -150,6 +150,34 @@
       </section>
       <section class="view" data-view="workflows" hidden>
         <div class="card"><div class="card-head"><div><h2>Recent work execution</h2><p>These are actual model runs recorded in Business OS. Workflow catalogs in other apps are not included until connected.</p></div><button class="btn alt" data-go="actions">Review assigned work →</button></div><div id="workflows-snapshot">Loading recent model runs…</div></div>
+        <section class="card">
+          <div class="card-head"><div><h2>Assign new internal work</h2><p>Create one actual task for an existing specialist. This requests an internal recommendation, not external messages or spending.</p></div></div>
+          <form id="new-work-form">
+            <div class="row" style="margin-bottom:15px">
+              <label>Responsible specialist<br><select class="input" name="role" required>
+                <option value="">Choose a team member</option>
+                <option value="chief_of_staff">Operations lead</option>
+                <option value="sales_qualification">Revenue qualification</option>
+                <option value="market_intelligence">Market research</option>
+                <option value="partnerships">Partnerships</option>
+                <option value="product_strategy">Product strategy</option>
+                <option value="engineering_operator">Engineering</option>
+                <option value="customer_success">Customer success</option>
+                <option value="marketing_editorial">Marketing & content</option>
+                <option value="roi_analyst">Business results</option>
+                <option value="risk_governance">Quality & permissions</option>
+                <option value="audience_router">Opportunity routing</option>
+              </select></label>
+              <label>Workspace<br><select class="input" name="brand">
+                <option value="noetfield">Noetfield</option><option value="portfolio">Portfolio</option>
+                <option value="buildworkflow">BuildWorkflow</option><option value="signalforge">SignalForge</option>
+              </select></label>
+            </div>
+            <label style="display:block;margin-bottom:14px;font-weight:650">What needs to be done?<br><input class="input" name="title" minlength="3" maxlength="160" style="width:100%;margin-top:5px" required placeholder="e.g. Evaluate three potential distribution partners"></label>
+            <label style="display:block;margin-bottom:14px;font-weight:650">Context and expected result<br><textarea class="input" name="objective" minlength="10" maxlength="1200" required style="width:100%;margin-top:5px" placeholder="Describe the goal, relevant context, and what a useful finished recommendation should contain."></textarea></label>
+            <div class="row"><button class="btn" id="create-work-button" type="submit">Create internal task</button><span id="create-work-feedback" role="status" aria-live="polite" class="muted"></span></div>
+          </form>
+        </section>
       </section>
       <section class="view" data-view="activity" hidden>
         <div class="cols"><section class="card"><div class="card-head"><div><h2>Recorded activity</h2><p>Source-backed company events, including processing and failures.</p></div></div><div id="events">Loading activity…</div></section>
