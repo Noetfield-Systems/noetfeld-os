@@ -539,6 +539,17 @@ class LocalCompanyOSRuntimeTests(unittest.TestCase):
         dossier=venture.portfolio(project_id="buildrelay-bridge-economy")["instances"][0]["manager"]
         self.assertEqual(dossier["source_linked_autonomous_followup"]["state"],"NOT_OBSERVED")
 
+    def test_provider_route_recovery_is_considered_on_existing_worker_tick_even_not_due(self):
+        now=1794400000.0
+        sample={"state":"NO_SOURCE_BOUND_503_TASKS","requeued_count":0}
+        with patch.object(venture,"_recover_source_bound_503_after_route_repair",
+                          return_value=sample) as recovery:
+            venture.tick(clock=lambda:now,limit=1)
+            followup=venture.tick(clock=lambda:now+20,limit=1)
+            self.assertEqual(followup["state"],"NOT_DUE")
+            self.assertEqual(followup["manager_provider_route_recovery"],sample)
+            self.assertEqual(recovery.call_count,2)
+
     def test_first_manager_original_trace_exposes_pending_dependencies_not_fake_work(self):
         product_loops.register({
             "company_id":"founder-portfolio",
