@@ -365,6 +365,86 @@ def _queue_first_named_manager_source_assignment(db):
     }
 
 
+def _queue_manager_source_followup(db):
+    """One source-backed INTERNAL follow-up from a real BuildRelay GM model run.
+
+    No independent verification is inferred. This consumes only a first-GM
+    source case and never recursively generates more follow-up events.
+    The ORIGINAL product observations/events/tasks pipeline owns all work.
+    """
+    company,project="founder-portfolio","buildrelay-bridge-economy"
+    seat=named_manager(company,project,"chief_of_staff")
+    if not seat:
+        return {"state":"GM_IDENTITY_UNMAPPED","queued":False}
+    followup_id="manager-followup:"+seat["actor_id"]+":v1"
+    existing=db.execute("""SELECT id FROM product_observations
+        WHERE company_id=? AND project_id=? AND source_event_id=?""",
+        (company,project,followup_id)).fetchone()
+    if existing:
+        return {"state":"FOLLOWUP_ALREADY_QUEUED","queued":False,
+                "source_observation_id":existing["id"],
+                "independent_verification":False}
+    source_id="manager-first-source:"+seat["actor_id"]+":v1"
+    rows=db.execute("""
+        SELECT r.id AS run_id,r.result AS run_result,r.provider,
+               t.id AS task_id,t.status AS task_status
+        FROM runs r JOIN tasks t ON t.id=r.task_id
+        JOIN product_observations o ON o.id=t.observation_id
+        WHERE t.company_id=? AND t.project_id=? AND t.role='chief_of_staff'
+          AND o.company_id=? AND o.project_id=?
+          AND o.source_event_id=? AND r.role='chief_of_staff'
+          AND r.status='completed' AND t.status IN ('drafted','approved')
+        ORDER BY r.finished_at ASC,r.id ASC LIMIT 8
+    """,(company,project,company,project,source_id)).fetchall()
+    for row in rows:
+        if not (str(row["provider"] or "").startswith("sina-")
+                or row["provider"]=="openai-compatible"):
+            continue
+        try:
+            output=json.loads(row["run_result"] or "{}")
+        except (TypeError,ValueError):
+            continue
+        if (not isinstance(output,dict)
+                or output.get("manager_actor_id")!=seat["actor_id"]
+                or output.get("external_execution_verified") is not False
+                or output.get("independent_business_outcome_verified") is not False):
+            continue
+        proposal=output.get("next_best_action")
+        if (not isinstance(proposal,str) or not 24<=len(proposal.strip())<=500
+                or "@" in proposal
+                or re.search(r"(?i)(bearer\\s|password|api[_-]?key|secret\\s*[:=])",proposal)):
+            continue
+        # Model output is an untrusted proposal, never execution authority.
+        # Preserve original run references without relaying raw instructions.
+        import product_loops
+        receipt=product_loops._insert_observation(db,company,project,{
+            "source_event_id":followup_id,
+            "source_kind":"REPORTED_OPERATIONAL",
+            "source_ref":"company-os:run:"+row["run_id"],
+            "signal":"feature_request",
+            "summary":(
+                "Following original BuildRelay GM model run "+row["run_id"]+
+                ", inspect its recorded next_best_action, first manager task "+
+                row["task_id"]+", and actual user or code evidence. Choose one "
+                "bounded internal improvement. No outreach, payment, deployment, "
+                "token issuance or independent success is authorized."
+            )[:500],
+            "severity":2,
+        },verified=False)
+        return {
+            "state":"SOURCE_BACKED_MANAGER_FOLLOWUP_QUEUED" if not receipt.get("idempotent")
+                    else "FOLLOWUP_ALREADY_QUEUED",
+            "queued":not receipt.get("idempotent",False),
+            "original_manager_run_id":row["run_id"],
+            "original_manager_task_id":row["task_id"],
+            "actor_id":seat["actor_id"],
+            "source_observation_id":receipt["observation_id"],
+            "original_queue_event_id":receipt.get("event_id"),
+            "independent_verification":False,"external_actions":False,
+        }
+    return {"state":"WAITING_FOR_REAL_MANAGER_MODEL_REPLY","queued":False}
+
+
 def _recover_named_manager_tasks(db,limit=3):
     """Retry a failed named BuildRelay management-chain task ONCE in the original queue.
 
@@ -511,6 +591,7 @@ def tick(clock=None,limit=1):
             db.commit()
             return {"state":"BACKPRESSURE","queued":running,**sync}
         manager_activation=_queue_first_named_manager_source_assignment(db)
+        manager_followup=_queue_manager_source_followup(db)
         manager_recovery=_recover_named_manager_tasks(db)
         capacity_recovery=_recover_named_manager_capacity(db)
         candidates=db.execute("""SELECT i.*,p.name FROM venture_company_os i
@@ -552,6 +633,7 @@ def tick(clock=None,limit=1):
         return {"state":"COMPANY_LOOPS_ADVANCED","local_companies_advanced":started,
                 "events_created":queued,"manager_source_assignment":manager_activation,
                 "manager_recovery":manager_recovery,
+                "manager_source_followup":manager_followup,
                 "manager_capacity_recovery":capacity_recovery,"external_actions":False,
                 "reported_real_users":0,"verified_cash":0,**sync}
 
