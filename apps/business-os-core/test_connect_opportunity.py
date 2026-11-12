@@ -119,6 +119,71 @@ class ConnectOpportunityRoutingTests(unittest.TestCase):
         self.assertIn("consent", " ".join(t["objective"] for t in tasks))
         self.assertIn("No external outreach"," ".join(t["next_action"] for t in tasks))
 
+    def test_durable_case_stages_owner_next_action_and_version_conflict(self):
+        case=sample_signal(category="capital")
+        core.queue_platform_intake_projection(case)
+        before=core.connect_opportunity_inbox()[0]
+        self.assertEqual(before["case_stage"],"NEW")
+        self.assertEqual(before["case_version"],1)
+        updated=core.update_connect_case(case["intake_id"],{
+            "expected_version":1,
+            "stage":"QUALIFYING",
+            "review_owner_role":"partnerships",
+            "next_action":"Check investor stage and actual introduction terms",
+            "due_at":"2026-11-13T18:30:00+00:00",
+            "notes":"Assess fit against product evidence.",
+        })
+        self.assertEqual(updated["version"],2)
+        readback=core.connect_opportunity_inbox()[0]
+        self.assertEqual(readback["case_stage"],"QUALIFYING")
+        self.assertEqual(readback["review_owner_role"],"partnerships")
+        self.assertEqual(readback["next_action"],"Check investor stage and actual introduction terms")
+        self.assertEqual(readback["due_at"],"2026-11-13T18:30:00+00:00")
+        self.assertFalse(readback["actual_owner_assigned"])
+        self.assertIsNone(readback["verified_conversion"])
+        with self.assertRaisesRegex(ValueError,"connect_case_version_conflict"):
+            core.update_connect_case(case["intake_id"],{
+                "expected_version":1,"stage":"QUALIFIED"
+            })
+        self.assertEqual(core.connect_opportunity_inbox()[0]["case_stage"],"QUALIFYING")
+
+    def test_close_won_requires_evidence_without_claiming_cash(self):
+        case=sample_signal(category="growth")
+        core.queue_platform_intake_projection(case)
+        with self.assertRaisesRegex(ValueError,"connect_case_closed_won_requires_evidence"):
+            core.update_connect_case(case["intake_id"],{
+                "expected_version":1,"stage":"CLOSED_WON"
+            })
+        updated=core.update_connect_case(case["intake_id"],{
+            "expected_version":1,"stage":"CLOSED_WON",
+            "evidence_ref":"https://www.noetfield.com/proof/"
+        })
+        self.assertEqual(updated["stage"],"CLOSED_WON")
+        self.assertIsNone(core.connect_opportunity_inbox()[0]["verified_conversion"])
+
+    def test_case_backfill_from_existing_canonical_event(self):
+        case=sample_signal(category="people")
+        core.queue_platform_intake_projection(case)
+        with core.connect() as db:
+            db.execute("DELETE FROM connect_cases WHERE intake_id=?",(case["intake_id"],))
+        cases=core.connect_opportunity_inbox()
+        self.assertEqual(len(cases),1)
+        self.assertEqual(cases[0]["case_stage"],"NEW")
+
+    def test_update_rejects_unknown_owner_pii_and_unverified_date(self):
+        case=sample_signal(category="events")
+        core.queue_platform_intake_projection(case)
+        for bad in (
+            {"expected_version":1,"review_owner_role":"external-suspicious-agent"},
+            {"expected_version":1,"due_at":"2026-11-14T12:00:00"},
+            {"expected_version":1,"evidence_ref":"javascript:alert(1)"},
+            {"expected_version":1,"secret":"private"}
+        ):
+            with self.subTest(bad=bad):
+                with self.assertRaises(ValueError):
+                    core.update_connect_case(case["intake_id"],bad)
+        self.assertEqual(core.connect_opportunity_inbox()[0]["case_version"],1)
+
     def test_untrusted_fields_rejected_before_any_queue_write(self):
         bad_values=[
             {"category":"shell"},
