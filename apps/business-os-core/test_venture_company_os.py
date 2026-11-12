@@ -583,6 +583,59 @@ class LocalCompanyOSRuntimeTests(unittest.TestCase):
             self.assertFalse(trace["independently_verified"])
             db.commit()
 
+    def test_real_source_503_is_readmitted_once_after_explicit_route_repair(self):
+        product_loops.register({
+            "company_id":"founder-portfolio","project_id":"buildrelay-bridge-economy",
+            "name":"BuildRelay","vertical":"founder-network",
+            "objective":"Resume source-bound real matching with manager orchestration",
+            "priority":4,"max_tasks_per_cycle":5})
+        product_loops.observe("founder-portfolio","buildrelay-bridge-economy",{
+            "source_event_id":"br-provider-repair-unit-fixture",
+            "source_kind":"REPORTED_OPERATIONAL",
+            "source_ref":"company-os:source-test-route",
+            "signal":"activation",
+            "summary":"Synthetic unit-test transport only, not real users",
+            "severity":1})
+        with core.connect() as db:
+            venture.reconcile(db)
+            first=venture._queue_first_named_manager_source_assignment(db)
+            event=dict(db.execute("SELECT * FROM events WHERE id=?",
+                                  (first["original_queue_event_id"],)).fetchone())
+            db.commit()
+        product_loops.process_signal(event)
+        with core.connect() as db:
+            original=db.execute("""SELECT id FROM tasks
+                WHERE event_id=? AND role='chief_of_staff'""",
+                (event["id"],)).fetchone()
+            manager_id=original["id"]
+            db.execute("""UPDATE tasks SET status='drafted',
+                updated_at=datetime('now','-5 minutes') WHERE id=?""",(manager_id,))
+            db.execute("""INSERT INTO runs
+                (id,task_id,role,provider,model,status,input_tokens,output_tokens,
+                 started_at,finished_at,result)
+                VALUES (?,?,?,?,?,?,?,?,?,?,?)""",(
+                "run_real_source_503",manager_id,"chief_of_staff",
+                "specialist_degraded","none","degraded",0,0,
+                "2026-11-11T16:00:00Z","2026-11-11T16:00:01Z",
+                json.dumps({"model_issue_code":"MODEL_HTTP_503"})))
+            previous=db.execute("SELECT COUNT(*) FROM tasks").fetchone()[0]
+            db.commit()
+        with patch.dict(os.environ,{
+            "COMPANY_OS_FARID_PROVIDER_ROUTE_REVISION":"cf-route-20261111"}):
+            with patch.object(sina_work_bridge,"specialist_configured",return_value=True):
+                with core.connect() as db:
+                    first=venture._recover_source_bound_503_after_route_repair(db)
+                    self.assertEqual(first["state"],"ORIGINAL_503_TASKS_READMITTED")
+                    self.assertEqual(first["requeued_count"],1)
+                    self.assertEqual(first["original_tasks"][0]["task_id"],manager_id)
+                    self.assertEqual(db.execute("SELECT status FROM tasks WHERE id=?",
+                             (manager_id,)).fetchone()[0],"queued")
+                    self.assertEqual(db.execute("SELECT COUNT(*) FROM tasks").fetchone()[0],
+                                     previous)
+                    again=venture._recover_source_bound_503_after_route_repair(db)
+                    self.assertEqual(again["requeued_count"],0)
+                    db.commit()
+
     def test_first_named_manager_mission_requires_original_buildrelay_source_and_is_once_only(self):
         product_loops.register({
             "company_id":"founder-portfolio","project_id":"buildrelay-bridge-economy",

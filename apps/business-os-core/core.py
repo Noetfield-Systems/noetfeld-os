@@ -644,6 +644,14 @@ def daily_tick():
    "projects":local_cycles["local_companies_advanced"],
    "canonical_events":local_cycles["events_created"],
    "external_actions":False},sort_keys=True),flush=True)
+ route_recovery=local_cycles.get("manager_provider_route_recovery") or {}
+ if route_recovery.get("requeued_count"):
+  print("COMPANY_OS_ORIGINAL_503_ROUTE_RECOVERY "+json.dumps({
+   "state":route_recovery.get("state"),
+   "original_tasks":route_recovery.get("original_tasks"),
+   "provider_route_revision":route_recovery.get("provider_route_revision"),
+   "external_actions":False,"independently_verified":False
+  },sort_keys=True),flush=True)
  sina_work=sina_work_bridge.tick()
  if sina_work.get("state") in ("OBSERVED","DEGRADED","MANDATES_ONLY_AGENT_FABRIC_OWNS_WORKPACKETS"):
   print("COMPANY_OS_SINA_WORK_HANDOFF "+json.dumps({
