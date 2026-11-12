@@ -1,7 +1,9 @@
+import asyncio
 import json
 import os
 import tempfile
 import unittest
+from unittest.mock import patch
 from pathlib import Path
 
 from fastapi.testclient import TestClient
@@ -207,6 +209,38 @@ class CompanyOSPublicIntakeTests(unittest.TestCase):
         )
         self.assertEqual(response.status_code, 202)
         self.assertFalse(response.json()["idempotent"])
+
+
+class CompanyOSWorkerFairnessTests(unittest.IsolatedAsyncioTestCase):
+    async def test_continuous_event_intake_does_not_starve_real_tasks(self):
+        # A perpetually ready event must not block a runnable specialist task.
+        # The prior worker loop continued immediately after each event.
+        app.STOP.clear()
+        seen = {"events": 0, "tasks": 0}
+
+        def claim(queue):
+            if queue == "events":
+                seen["events"] += 1
+                return {"id": "evt_always_ready"}
+            if seen["tasks"] == 0:
+                return {"id": "task_ready"}
+            return None
+
+        def process_task(task):
+            self.assertEqual(task["id"], "task_ready")
+            seen["tasks"] += 1
+            app.STOP.set()
+
+        try:
+            with patch.object(core, "daily_tick"), \
+                 patch.object(core, "claim", side_effect=claim), \
+                 patch.object(core, "process_event"), \
+                 patch.object(core, "process_task", side_effect=process_task):
+                await asyncio.wait_for(app.worker(), timeout=5)
+            self.assertEqual(seen["tasks"], 1)
+            self.assertEqual(seen["events"], 1)
+        finally:
+            app.STOP.clear()
 
 
 if __name__ == "__main__":
