@@ -331,6 +331,33 @@ class LocalCompanyOSRuntimeTests(unittest.TestCase):
                                  count_before)
                 self.assertEqual(venture._recover_named_manager_tasks(db)["requeued_count"],0)
                 db.commit()
+        # A subsequent 429 is a DISTINCT capacity incident. The original
+        # same task must be recovered from the source-bound capacity lane,
+        # not from the one-shot transient 502 lane or a cloned task.
+        with core.connect() as db:
+            db.execute("""UPDATE tasks SET status='drafted',
+                updated_at=datetime('now','-5 minutes') WHERE id=?""",(task["id"],))
+            db.execute("""INSERT INTO runs(id,task_id,role,provider,model,status,
+                input_tokens,output_tokens,started_at,finished_at,result)
+                VALUES(?,?,?,?,?,?,?,?,?,?,?)""",(
+                "run_review_provider_429",task["id"],"chief_of_staff",
+                "specialist_degraded","none","degraded",0,0,
+                "2026-11-12T09:00:00Z","2026-11-12T09:00:01Z",
+                json.dumps({"model_issue_code":"MODEL_HTTP_429"})))
+            db.commit()
+        with patch.dict(os.environ,{"COMPANY_OS_FARID_CAPACITY_REVISION":
+                                   "cf-specialist-cap96-20261112"}):
+            with patch.object(sina_work_bridge,"specialist_configured",return_value=True):
+                with core.connect() as db:
+                    before=db.execute("SELECT COUNT(*) FROM tasks").fetchone()[0]
+                    cap=venture._recover_named_manager_capacity(db)
+                    self.assertEqual(cap["state"],"CAPACITY_REOPENED_ORIGINAL_TASKS")
+                    self.assertEqual(cap["original_task_ids"],[task["id"]])
+                    self.assertEqual(db.execute("SELECT status FROM tasks WHERE id=?",
+                                    (task["id"],)).fetchone()[0],"queued")
+                    self.assertEqual(db.execute("SELECT COUNT(*) FROM tasks").fetchone()[0],before)
+                    self.assertEqual(venture._recover_named_manager_capacity(db)["requeued_count"],0)
+                    db.commit()
 
     def test_manager_review_observation_cannot_be_spoofed_without_original_source(self):
         product_loops.register({
