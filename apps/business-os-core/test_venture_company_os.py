@@ -215,6 +215,120 @@ class LocalCompanyOSRuntimeTests(unittest.TestCase):
         self.assertFalse(after["independent_product_delivery_verified"])
         self.assertFalse(after["sina_to_manager_mandate_ack_verified"])
 
+    def test_real_gm_and_specialists_generate_one_autonomous_review_task(self):
+        product_loops.register({
+            "company_id":"founder-portfolio","project_id":"buildrelay-bridge-economy",
+            "name":"BuildRelay","vertical":"founder-network",
+            "objective":"Ship authentic first founder match and useful bilateral collaboration",
+            "priority":4,"max_tasks_per_cycle":5})
+        product_loops.observe("founder-portfolio","buildrelay-bridge-economy",{
+            "source_event_id":"br-manager-full-review-fixture",
+            "source_kind":"REPORTED_OPERATIONAL",
+            "source_ref":"company-os:test-original-source",
+            "signal":"activation",
+            "summary":"Source transport fixture only, not real users or revenue",
+            "severity":1})
+        with core.connect() as db:
+            venture.reconcile(db)
+            first=venture._queue_first_named_manager_source_assignment(db)
+            event=dict(db.execute("SELECT * FROM events WHERE id=?",
+                                  (first["original_queue_event_id"],)).fetchone())
+            db.commit()
+        original=product_loops.process_signal(event)
+        with core.connect() as db:
+            first_gm=original["executive_task"]
+            db.execute("UPDATE tasks SET status='drafted' WHERE id=?",(first_gm,))
+            db.execute("""INSERT INTO runs
+                (id,task_id,role,provider,model,status,input_tokens,output_tokens,
+                 started_at,finished_at,result)
+                VALUES(?,?,?,?,?,?,?,?,?,?,?)""",(
+                 "run_review_gm_original",first_gm,"chief_of_staff",
+                 "sina-cloudflare","glm-4.7-flash","completed",100,120,
+                 "2026-11-12T08:00:00Z","2026-11-12T08:00:06Z",
+                 json.dumps({
+                    "manager_actor_id":"gm-buildrelay-farid",
+                    "next_best_action":"Audit real onboarding to first useful match and delegate a bounded improvement",
+                    "external_execution_verified":False,
+                    "independent_business_outcome_verified":False,
+                 })))
+            followup=venture._queue_manager_source_followup(db)
+            self.assertEqual(followup["state"],"SOURCE_BACKED_MANAGER_FOLLOWUP_QUEUED")
+            self.assertEqual(venture._queue_source_backed_manager_team_review(db)["state"],
+                             "WAITING_FOR_TWO_REAL_SPECIALIST_REPLIES")
+            follow_event=dict(db.execute("SELECT * FROM events WHERE id=?",
+                                      (followup["original_queue_event_id"],)).fetchone())
+            db.commit()
+        subsequent=product_loops.process_signal(follow_event)
+        with core.connect() as db:
+            specialists=db.execute("""
+                SELECT id,role FROM tasks WHERE event_id=? AND role!='chief_of_staff'
+                ORDER BY role LIMIT 2""",(follow_event["id"],)).fetchall()
+            self.assertEqual(len(specialists),2)
+            for i,sp in enumerate(specialists):
+                db.execute("UPDATE tasks SET status='drafted' WHERE id=?",(sp["id"],))
+                db.execute("""INSERT INTO runs
+                    (id,task_id,role,provider,model,status,input_tokens,output_tokens,
+                     started_at,finished_at,result)
+                    VALUES(?,?,?,?,?,?,?,?,?,?,?)""",(
+                     "run_review_child_"+str(i),sp["id"],sp["role"],
+                     "sina-cloudflare","glm-4.7-flash","completed",140,180,
+                     "2026-11-12T08:01:00Z","2026-11-12T08:01:09Z",
+                     json.dumps({
+                        "assessment":"A genuine profile matching experiment is still needed",
+                        "next_best_action":"Propose a measurable next product change in the existing BuildRelay code"
+                     })))
+            review=venture._queue_source_backed_manager_team_review(db)
+            self.assertEqual(review["state"],"SOURCE_BACKED_MANAGER_REVIEW_QUEUED")
+            self.assertEqual(len(review["specialist_run_ids"]),2)
+            self.assertTrue(review["review_event_id"])
+            self.assertEqual(venture._queue_source_backed_manager_team_review(db)["state"],
+                             "MANAGER_TEAM_REVIEW_ALREADY_QUEUED")
+            new_event=dict(db.execute("SELECT * FROM events WHERE id=?",
+                                      (review["review_event_id"],)).fetchone())
+            db.commit()
+        created=product_loops.process_signal(new_event)
+        self.assertTrue(created["source_linked_team_review"])
+        self.assertEqual(created["task_count"],1)
+        self.assertEqual(set(created["original_specialist_run_ids"]),
+                         set(review["specialist_run_ids"]))
+        with core.connect() as db:
+            task=dict(db.execute("SELECT * FROM tasks WHERE id=?",
+                        (created["executive_task"],)).fetchone())
+            self.assertEqual(task["role"],"chief_of_staff")
+            self.assertEqual(task["company_id"],"founder-portfolio")
+            self.assertEqual(task["project_id"],"buildrelay-bridge-economy")
+            self.assertTrue(sina_work_bridge.is_company_os_task(task["id"]))
+            self.assertEqual(db.execute("SELECT COUNT(*) FROM tasks WHERE event_id=?",
+                                       (new_event["id"],)).fetchone()[0],1)
+            db.commit()
+        review_text,source_refs=sina_work_bridge._manager_dependency_context(task)
+        self.assertEqual(len(source_refs),2)
+        self.assertIn("run_review_child_0",review_text)
+        self.assertIn("run_review_child_1",review_text)
+        self.assertEqual(product_loops.process_signal(new_event)["tasks"],1)
+
+    def test_manager_review_observation_cannot_be_spoofed_without_original_source(self):
+        product_loops.register({
+            "company_id":"founder-portfolio","project_id":"buildrelay-bridge-economy",
+            "name":"BuildRelay","vertical":"founder-network",
+            "objective":"Protect authentic manager task admission from fake internal evidence",
+            "priority":4,"max_tasks_per_cycle":5})
+        obs=product_loops.observe("founder-portfolio","buildrelay-bridge-economy",{
+            "source_event_id":"manager-team-review:gm-buildrelay-farid:v1",
+            "source_kind":"REPORTED_OPERATIONAL",
+            "source_ref":"company-os:observation:obs_"+"a"*32,
+            "signal":"feature_request",
+            "summary":"This is a deliberately unbacked test manager review source",
+            "severity":2})
+        with core.connect() as db:
+            e=dict(db.execute("SELECT * FROM events WHERE id=?",
+                             (obs["event_id"],)).fetchone())
+        with self.assertRaises(ValueError):
+            product_loops.process_signal(e)
+        with core.connect() as db:
+            self.assertEqual(db.execute("SELECT COUNT(*) FROM tasks WHERE event_id=?",
+                                        (e["id"],)).fetchone()[0],0)
+
     def test_gm_reads_original_dependency_results_and_dossier_preserves_source_ids(self):
         product_loops.register({
             "company_id":"founder-portfolio","project_id":"buildrelay-bridge-economy",
