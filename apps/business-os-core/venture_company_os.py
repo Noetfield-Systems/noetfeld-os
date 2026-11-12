@@ -397,8 +397,7 @@ def _queue_manager_source_followup(db):
         ORDER BY r.finished_at ASC,r.id ASC LIMIT 8
     """,(company,project,company,project,source_id)).fetchall()
     for row in rows:
-        if not (str(row["provider"] or "").startswith("sina-")
-                or row["provider"]=="openai-compatible"):
+        if not str(row["provider"] or "").startswith("sina-"):
             continue
         try:
             output=json.loads(row["run_result"] or "{}")
@@ -708,8 +707,7 @@ def _manager_founder_mandate_cases(db,company,project,seat,limit=8):
                     failed_team_runs.append(data["run_id"])
                 if (data["role"]!=seat["role"] or not data["run_id"]
                     or data["run_status"]!="completed"
-                    or not (str(data["provider"] or "").startswith("sina-")
-                            or data["provider"]=="openai-compatible")):
+                    or not str(data["provider"] or "").startswith("sina-")):
                     continue
                 try:
                     original_result=json.loads(data["run_result"] or "{}")
@@ -777,8 +775,7 @@ def _manager_source_history(db,company,project,role="chief_of_staff"):
         # executive personality responding. Deterministic/degraded drafts
         # are correctly retained as role activities but not person inference.
         provider=str(x.get("provider") or "")
-        model_reply=tagged and x.get("run_status")=="completed" and (
-            provider.startswith("sina-") or provider=="openai-compatible")
+        model_reply=tagged and x.get("run_status")=="completed" and provider.startswith("sina-")
         mapped_run_count+=int(tagged and bool(x.get("run_id")))
         confirmed_invocations+=int(model_reply)
         x["named_identity_in_original_run"]=tagged
