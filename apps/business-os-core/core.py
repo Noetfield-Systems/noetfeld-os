@@ -411,6 +411,11 @@ def process_task(t):
   try:
    generated=sina_work_bridge.specialist_proposal(t)
    result=generated["result"]
+   if role=="chief_of_staff" and isinstance(generated.get("manager_team_context_refs"),list):
+    # Input provenance actually passed to this successful model request.
+    # It is NOT a manager-approved independent delivery or a business result.
+    result["manager_team_context_refs"]=generated["manager_team_context_refs"][:5]
+    result["manager_team_context_state"]="SOURCE_DRAFTS_PRESENTED_FOR_MODEL_REVIEW"
    result["company_role_id"]=company_seat["role_id"]
    result["company_role_title"]=company_seat["title"]
    result["reviewer_role"]=manager_role
