@@ -743,6 +743,69 @@ def _manager_founder_mandate_cases(db,company,project,seat,limit=8):
     return cases
 
 
+def _original_manager_followup_history(db,company,project,seat):
+    """Project one already-created autonomous event into the ORIGINAL dossier.
+
+    Joins exact company/project, first-manager model run and original task IDs.
+    A source reported internal follow-up can be observed; it cannot claim
+    independent verification, successful engineering or customer outcomes.
+    """
+    fid="manager-followup:"+seat["actor_id"]+":v1"
+    event=db.execute("""
+        SELECT id,source_ref,verification,recorded_at
+        FROM product_observations
+        WHERE company_id=? AND project_id=? AND source_event_id=?
+    """,(company,project,fid)).fetchone()
+    if not event:
+        return {"state":"NOT_OBSERVED","source_event_id":fid,
+                "original_manager_run_id":None,"original_task_ids":[],
+                "source_backed_next_action_observed":False,
+                "independently_verified":False}
+    source=str(event["source_ref"] or "")
+    prefix="company-os:run:"
+    run_id=source[len(prefix):] if source.startswith(prefix) else ""
+    original=db.execute("""
+        SELECT r.id,r.provider,r.status,r.result
+        FROM runs r JOIN tasks t ON t.id=r.task_id
+        WHERE r.id=? AND r.role='chief_of_staff'
+          AND t.company_id=? AND t.project_id=? AND t.role='chief_of_staff'
+    """,(run_id,company,project)).fetchone() if run_id else None
+    verified_source=False
+    if original and original["status"]=="completed" and str(original["provider"]).startswith("sina-"):
+        try:
+            reply=json.loads(original["result"] or "{}")
+            verified_source=isinstance(reply,dict) and reply.get("manager_actor_id")==seat["actor_id"]
+        except (ValueError,TypeError):
+            pass
+    if not verified_source:
+        return {"state":"CONFLICTED_SOURCE_REF","source_event_id":fid,
+                "original_manager_run_id":run_id or None,"original_task_ids":[],
+                "source_backed_next_action_observed":False,
+                "independently_verified":False}
+    rows=db.execute("""
+        SELECT id,status FROM tasks
+        WHERE company_id=? AND project_id=? AND observation_id=?
+        ORDER BY created_at,id LIMIT 30
+    """,(company,project,event["id"])).fetchall()
+    tasks=[{"task_id":row["id"],"status":row["status"]} for row in rows]
+    observed_run_ids=[row["id"] for row in db.execute("""
+        SELECT r.id FROM runs r JOIN tasks t ON t.id=r.task_id
+        WHERE t.company_id=? AND t.project_id=? AND t.observation_id=?
+        ORDER BY r.started_at,r.id LIMIT 30
+    """,(company,project,event["id"])).fetchall()]
+    return {
+        "state":"FOLLOWUP_RUN_OBSERVED" if observed_run_ids else
+                "FOLLOWUP_TASKS_CREATED" if tasks else "FOLLOWUP_EVENT_CREATED",
+        "source_event_id":fid,"source_observation_id":event["id"],
+        "original_manager_run_id":run_id,
+        "source_verification":event["verification"],
+        "original_task_ids":tasks,"subsequent_run_ids":observed_run_ids,
+        "source_backed_next_action_observed":bool(tasks or observed_run_ids),
+        "independently_verified":False,
+        "customer_or_commercial_outcome_verified":False,
+    }
+
+
 def _manager_source_history(db,company,project,role="chief_of_staff"):
     """Read original task/run records: no generated conversation or work hours.
 
@@ -814,6 +877,8 @@ def _manager_source_history(db,company,project,role="chief_of_staff"):
            SELECT COUNT(*) FROM venture_company_os_manager_recovery
            WHERE manager_actor_id=?""",(seat["actor_id"],)).fetchone()[0],
         "original_founder_mandate_cases":_manager_founder_mandate_cases(
+            db,company,project,seat),
+        "source_linked_autonomous_followup":_original_manager_followup_history(
             db,company,project,seat),
         "capacity_recovery_count_visible":db.execute("""
            SELECT COUNT(*) FROM venture_company_os_manager_capacity_recovery
