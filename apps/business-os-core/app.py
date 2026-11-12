@@ -134,6 +134,14 @@ class Feedback(BaseModel):
 def home(): return FileResponse(STATIC/"index.html")
 @app.get("/control")
 def control(): return FileResponse(STATIC/"control.html")
+@app.get("/control/premium.css", include_in_schema=False)
+def control_premium_styles():
+    return FileResponse(STATIC/"control-premium.css",media_type="text/css",headers={"Cache-Control":"public,max-age=300"})
+
+@app.get("/control/premium.js", include_in_schema=False)
+def control_premium_script():
+    return FileResponse(STATIC/"control-premium.js",media_type="text/javascript",headers={"Cache-Control":"public,max-age=300"})
+
 @app.get("/privacy")
 def privacy(): return FileResponse(STATIC/"privacy.html")
 @app.get("/health")
