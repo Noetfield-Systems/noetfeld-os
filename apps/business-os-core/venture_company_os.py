@@ -579,18 +579,23 @@ def tick(clock=None,limit=1):
         init(db)
         db.execute("BEGIN IMMEDIATE")
         sync=reconcile(db)
-        last=db.execute("SELECT value FROM state WHERE key='venture_os_cycle_at'").fetchone()
-        if last and epoch-float(last["value"])<INTERVAL_SECONDS:
-            db.commit()
-            return {"state":"NOT_DUE",**sync}
-        db.execute("""INSERT INTO state(key,value) VALUES('venture_os_cycle_at',?)
-           ON CONFLICT(key) DO UPDATE SET value=excluded.value""",(str(epoch),))
         running=db.execute("SELECT COUNT(*) FROM tasks WHERE status IN ('queued','running')").fetchone()[0]
         if running>=GLOBAL_BACKPRESSURE:
             db.commit()
             return {"state":"BACKPRESSURE","queued":running,**sync}
+        # Event-triggered manager assignment and genuine reply continuation
+        # must not wait for the unrelated 5-minute portfolio cadence. The
+        # existing task/event identities are idempotent. No new scheduler.
         manager_activation=_queue_first_named_manager_source_assignment(db)
         manager_followup=_queue_manager_source_followup(db)
+        last=db.execute("SELECT value FROM state WHERE key='venture_os_cycle_at'").fetchone()
+        if last and epoch-float(last["value"])<INTERVAL_SECONDS:
+            db.commit()
+            return {"state":"NOT_DUE",**sync,
+                    "manager_source_assignment":manager_activation,
+                    "manager_source_followup":manager_followup}
+        db.execute("""INSERT INTO state(key,value) VALUES('venture_os_cycle_at',?)
+           ON CONFLICT(key) DO UPDATE SET value=excluded.value""",(str(epoch),))
         manager_recovery=_recover_named_manager_tasks(db)
         capacity_recovery=_recover_named_manager_capacity(db)
         candidates=db.execute("""SELECT i.*,p.name FROM venture_company_os i
