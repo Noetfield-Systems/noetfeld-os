@@ -583,6 +583,16 @@ def daily_tick():
    "original_source_observation_id":activation.get("original_source_observation_id"),
    "original_queue_event_id":activation.get("original_queue_event_id"),
    "external_actions":False},sort_keys=True),flush=True)
+ followup=local_cycles.get("manager_source_followup") or {}
+ if followup.get("queued"):
+  print("COMPANY_OS_NAMED_MANAGER_FOLLOWUP "+json.dumps({
+   "actor_id":followup.get("actor_id"),
+   "state":followup.get("state"),
+   "original_manager_run_id":followup.get("original_manager_run_id"),
+   "original_manager_task_id":followup.get("original_manager_task_id"),
+   "original_queue_event_id":followup.get("original_queue_event_id"),
+   "independent_verification":False,
+   "external_actions":False},sort_keys=True),flush=True)
  recovery=local_cycles.get("manager_recovery") or {}
  if recovery.get("requeued_count"):
   print("COMPANY_OS_NAMED_MANAGER_RECOVERY "+json.dumps({
