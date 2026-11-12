@@ -659,17 +659,20 @@ def tick(clock=None,limit=1):
         # existing task/event identities are idempotent. No new scheduler.
         manager_activation=_queue_first_named_manager_source_assignment(db)
         manager_followup=_queue_manager_source_followup(db)
+        # A one-shot explicitly commissioned repair is source-triggered, not
+        # the periodic portfolio pulse. Handle it on the existing worker tick.
+        provider_route_recovery=_recover_source_bound_503_after_route_repair(db)
         last=db.execute("SELECT value FROM state WHERE key='venture_os_cycle_at'").fetchone()
         if last and epoch-float(last["value"])<INTERVAL_SECONDS:
             db.commit()
             return {"state":"NOT_DUE",**sync,
                     "manager_source_assignment":manager_activation,
-                    "manager_source_followup":manager_followup}
+                    "manager_source_followup":manager_followup,
+                    "manager_provider_route_recovery":provider_route_recovery}
         db.execute("""INSERT INTO state(key,value) VALUES('venture_os_cycle_at',?)
            ON CONFLICT(key) DO UPDATE SET value=excluded.value""",(str(epoch),))
         manager_recovery=_recover_named_manager_tasks(db)
         capacity_recovery=_recover_named_manager_capacity(db)
-        provider_route_recovery=_recover_source_bound_503_after_route_repair(db)
         candidates=db.execute("""SELECT i.*,p.name FROM venture_company_os i
           JOIN product_programs p ON p.company_id=i.company_id AND p.project_id=i.project_id
           WHERE i.operating_state='ACTIVE_LOCAL_EXECUTIVE'
