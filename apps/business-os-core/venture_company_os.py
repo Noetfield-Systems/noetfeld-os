@@ -806,6 +806,79 @@ def _original_manager_followup_history(db,company,project,seat):
     }
 
 
+def original_first_manager_runtime_trace(db):
+    """Bounded read-back of original first-GM event, tasks, dependencies and runs.
+
+    A manager-first observation is only queue acceptance. Join its canonical
+    event/task/run rows before claiming that the manager or team did work.
+    This trace contains only opaque IDs, role/state and allowlisted error codes.
+    """
+    company,project="founder-portfolio","buildrelay-bridge-economy"
+    event_key="manager-first-source:gm-buildrelay-farid:v1"
+    source=db.execute("""
+        SELECT id FROM product_observations
+        WHERE company_id=? AND project_id=? AND source_event_id=?
+    """,(company,project,event_key)).fetchone()
+    if not source:
+        return {"state":"NO_ORIGINAL_SOURCE","source_present":False,
+                "event_id":None,"tasks":[],"manager_model_reply_observed":False}
+    observation_id=source["id"]
+    event_id="evt_"+hashlib.sha256(("product:"+observation_id).encode()).hexdigest()[:32]
+    event=db.execute("SELECT id,status,attempts,priority_score FROM events WHERE id=?",
+                     (event_id,)).fetchone()
+    tasks=db.execute("""
+        SELECT id,role,status FROM tasks
+        WHERE company_id=? AND project_id=? AND observation_id=?
+        ORDER BY created_at,id LIMIT 12
+    """,(company,project,observation_id)).fetchall()
+    details=[]
+    model_reply=False
+    for task in tasks:
+        dependency=db.execute("""
+            SELECT dep.status
+            FROM task_dependencies d LEFT JOIN tasks dep ON dep.id=d.depends_on_task_id
+            WHERE d.task_id=?
+        """,(task["id"],)).fetchall()
+        outstanding=sum(1 for x in dependency if x["status"] not in ("drafted","approved"))
+        blocked=sum(1 for x in dependency if x["status"] in ("failed","blocked") or x["status"] is None)
+        latest=db.execute("""SELECT id,status,provider,result FROM runs
+              WHERE task_id=? ORDER BY finished_at DESC,id DESC LIMIT 1""",
+              (task["id"],)).fetchone()
+        error_code=None
+        named=False
+        if latest:
+            try:
+                result=json.loads(latest["result"] or "{}")
+                if isinstance(result,dict):
+                    value=result.get("model_issue_code")
+                    if isinstance(value,str) and re.fullmatch(r"MODEL_[A-Z0-9_]{3,50}",value):
+                        error_code=value
+                    named=(task["role"]=="chief_of_staff" and
+                           latest["status"]=="completed" and
+                           str(latest["provider"] or "").startswith("sina-") and
+                           result.get("manager_actor_id")=="gm-buildrelay-farid")
+            except (TypeError,ValueError):
+                pass
+        model_reply=model_reply or named
+        details.append({"task_id":task["id"],"role":task["role"],"status":task["status"],
+                        "waiting_dependencies":outstanding,"blocked_dependencies":blocked,
+                        "latest_run_id":latest["id"] if latest else None,
+                        "latest_run_status":latest["status"] if latest else None,
+                        "latest_provider":latest["provider"] if latest else None,
+                        "model_issue_code":error_code,"named_model_reply":named})
+    event_status=event["status"] if event else "MISSING"
+    state=("ORIGINAL_EVENT_NOT_PROCESSED" if not tasks else
+           "ORIGINAL_MANAGER_REPLY_OBSERVED" if model_reply else
+           "ORIGINAL_TASKS_PRESENT_MANAGER_PENDING")
+    return {"state":state,"source_present":True,
+            "event_id":event_id,"event_status":event_status,
+            "event_attempts":event["attempts"] if event else None,
+            "event_priority":event["priority_score"] if event else None,
+            "task_count":len(details),"tasks":details,
+            "manager_model_reply_observed":model_reply,
+            "independently_verified":False,"external_actions":False}
+
+
 def _manager_source_history(db,company,project,role="chief_of_staff"):
     """Read original task/run records: no generated conversation or work hours.
 

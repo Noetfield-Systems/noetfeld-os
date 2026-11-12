@@ -615,6 +615,13 @@ def daily_tick():
    "original_queue_event_id":followup.get("original_queue_event_id"),
    "independent_verification":False,
    "external_actions":False},sort_keys=True),flush=True)
+ if activation.get("state") in ("ALREADY_QUEUED","QUEUED_IN_ORIGINAL_COMPANY_OS"):
+  # Read-only original Company OS DB lineage. This is diagnostic evidence,
+  # not a replacement task queue or a fictitious named-manager reply.
+  with connect() as source_db:
+   original_trace=venture_company_os.original_first_manager_runtime_trace(source_db)
+  print("COMPANY_OS_FIRST_MANAGER_ORIGINAL_TRACE "+json.dumps(
+   original_trace,sort_keys=True),flush=True)
  recovery=local_cycles.get("manager_recovery") or {}
  if recovery.get("requeued_count"):
   print("COMPANY_OS_NAMED_MANAGER_RECOVERY "+json.dumps({
