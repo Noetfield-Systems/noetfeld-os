@@ -240,10 +240,28 @@ function init(){
     if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==="k"){e.preventDefault();$("search-input").focus();}
     if(e.key==="Escape"){document.body.classList.remove("nav-open");$("search-results").hidden=true;}
   });
+  $("new-work-form").addEventListener("submit",async event=>{
+    event.preventDefault();
+    const form=event.currentTarget,fields=new FormData(form);
+    const body={role:String(fields.get("role")||""),brand:String(fields.get("brand")||"noetfield"),title:String(fields.get("title")||"").trim(),objective:String(fields.get("objective")||"").trim()};
+    const button=$("create-work-button"),feedback=$("create-work-feedback");
+    if(!form.reportValidity())return;
+    button.disabled=true;feedback.textContent="Creating real work in Company OS…";
+    try{
+      const response=await api("/api/control/tasks",{method:"POST",body:JSON.stringify(body)});
+      if(!response.created||!response.task_id)throw Error("No task receipt was returned");
+      feedback.textContent="Task created: "+response.task_id+". No external action has been sent.";
+      form.reset();
+      await refresh();
+      showView("actions");
+    }catch(e){feedback.textContent="Could not create task: "+e.message;}
+    finally{button.disabled=false;}
+  });
   $("action-filter").addEventListener("change",()=>last&&renderActionCenter(last.t,last.o));
   window.addEventListener("hashchange",()=>showView(location.hash.slice(1),{noHash:true}));
-  $("copy-link-main").addEventListener("click",copyConnect);
+
   $("token").addEventListener("keydown",e=>{if(e.key==="Enter")$("connect").click()});
+  setAuth(false,"Founder access required");
   showView(location.hash.slice(1)||"overview",{noHash:true,noScroll:true});
 }
 window.noosPremium={render,paintConnect,setAuth,loadHealth,showView};
