@@ -215,8 +215,22 @@ _PLATFORM_SIGNAL_SKUS={"trust_brief","copilot","bank_pilot","general"}
 _PLATFORM_SIGNAL_VECTORS={
     "ai-value-governance-os","enterprise","copilot-governance","copilot",
     "bank-pilot","partner-msb","work-with-us","web-intake","general","trust-brief",
-    "work-with-us-contributor",
+    "work-with-us-contributor","external-opportunities",
 }
+_CONNECT_CATEGORIES={"partnership","growth","capital","people","events","business","other"}
+_CONNECT_INITIATIVES={"portfolio","noetfield","workforce","buildrelay","sourcea","trustfield","other"}
+_CONNECT_NEXT_STEPS={"async","meeting","intro","collaborate"}
+_CONNECT_SOURCES={"linkedin","email","referral","website","event","direct","other"}
+_CONNECT_ROLES={
+    "partnership":("partnerships","market_intelligence"),
+    "growth":("sales_qualification","partnerships"),
+    "capital":("partnerships","roi_analyst"),
+    "people":("partnerships","product_strategy"),
+    "events":("partnerships","roi_analyst"),
+    "business":("sales_qualification","engineering_operator"),
+    "other":("market_intelligence","partnerships"),
+}
+_CONNECT_PRIORITIES={"business":12,"growth":15,"capital":17,"partnership":20,"people":25,"events":36,"other":50}
 _CONTRIBUTOR_KINDS={"human","agent","organization"}
 _CONTRIBUTOR_ROLES={
     "engineering","qa","design","growth","research",
@@ -293,7 +307,7 @@ def validate_platform_intake_projection(item):
     """Accept only the deliberately PII-free projection emitted by Platform API."""
     allowed={"intake_id","request_id","created_at","sku","vector","qualification"}
     if (not isinstance(item,dict) or not allowed.issubset(item.keys()) or
-        (set(item)-allowed) not in (set(),{"contributor"})):
+        (set(item)-allowed) not in (set(),{"contributor"},{"opportunity"})):
         raise ValueError("platform_intake_projection_shape_invalid")
     intake_id=str(item.get("intake_id") or "")
     if not re.fullmatch(r"INT-[A-Z0-9]{12}",intake_id):
@@ -356,6 +370,23 @@ def validate_platform_intake_projection(item):
             raise ValueError("contributor_allowlist_invalid")
     elif vector=="work-with-us-contributor":
         raise ValueError("contributor_metadata_required")
+    opportunity=item.get("opportunity")
+    if opportunity is not None:
+        if (vector!="external-opportunities" or
+            not isinstance(opportunity,dict) or
+            set(opportunity)!={"category","initiative","requested_next_step","source_channel"}):
+            raise ValueError("connect_opportunity_shape_invalid")
+        for key,values in (
+            ("category",_CONNECT_CATEGORIES),
+            ("initiative",_CONNECT_INITIATIVES),
+            ("requested_next_step",_CONNECT_NEXT_STEPS),
+            ("source_channel",_CONNECT_SOURCES),
+        ):
+            value=opportunity[key]
+            if not isinstance(value,str) or value not in values:
+                raise ValueError("connect_opportunity_enum_invalid:"+key)
+    elif vector=="external-opportunities":
+        raise ValueError("connect_opportunity_metadata_required")
     return {
         "intake_id":intake_id,
         "request_id":rid,
@@ -364,6 +395,7 @@ def validate_platform_intake_projection(item):
         "vector":vector,
         "qualification":safe_qualification,
         **({"contributor":dict(contributor)} if contributor is not None else {}),
+        **({"opportunity":dict(opportunity)} if opportunity is not None else {}),
     }
 
 
@@ -469,11 +501,97 @@ def process_contributor_intake_signal(e, p):
                "Not yet assigned, activated, or delivered.")
 
 
+
+def process_connect_opportunity_signal(e,p):
+    """Route a real persisted relationship proposal to the existing AI/human task hierarchy.
+
+    The public visitor is *not* assigned a role, booked for a meeting, or
+    automatically added to another company's CRM. All work is internal until
+    a responsible authorized owner follows up using the canonical intake.
+    """
+    intake_id=p["intake_id"]
+    data=p["opportunity"]
+    category=data["category"]
+    initiative=data["initiative"]
+    requested_next=data["requested_next_step"]
+    source=data["source_channel"]
+    specialist_role,support_role=_CONNECT_ROLES[category]
+    priority=_CONNECT_PRIORITIES[category]
+    independent=initiative in {"trustfield","buildrelay"}
+    boundary=(
+        "Separate venture: do not share contact data or assign work outside "
+        "Noetfield without documented appropriate consent and venture authority. "
+        if independent else ""
+    )
+    with connect() as d:
+        d.execute("BEGIN IMMEDIATE")
+        row=d.execute(
+            "SELECT status FROM platform_intake_signals WHERE intake_id=?",
+            (intake_id,)
+        ).fetchone()
+        if row is None:
+            raise ValueError("platform_intake_signal_receipt_missing")
+        if row["status"] in {"tasks_created","processed"}:
+            d.execute("UPDATE events SET status='processed',processed_at=? WHERE id=?",(now(),e["id"]))
+            d.execute("COMMIT")
+            return
+        specialist_id=add_task(
+            d,e["id"],None,"noetfield",specialist_role,
+            f"Connect opportunity triage · {category} · {intake_id}",
+            f"Review persisted Noetfield Connect proposal {intake_id} through "
+            f"the authorized operations record. Source channel (self-declared): {source}; "
+            f"intent: {category}; suggested venture: {initiative}; "
+            f"requested step: {requested_next}. {boundary}"
+            "Determine actual mutual value, relationship context, evidence and "
+            "next useful action. Distinguish an advisory recommendation from "
+            "a real customer, investor, contributor or paid commercial commitment.",
+            "Produce a source-backed fit/priority brief, match to an actual existing "
+            "human or AI specialist, and draft one practical next step. "
+            "No external outreach, calendar booking, cross-venture data transfer "
+            "or unverified claim of completed work."
+        )
+        d.execute("UPDATE tasks SET priority_rank=? WHERE id=?",(priority,specialist_id))
+        support_id=add_task(
+            d,e["id"],None,"noetfield",support_role,
+            f"Connect specialist review · {category} · {intake_id}",
+            f"Assess the commercial, operational and relationship potential of "
+            f"Noetfield Connect intake {intake_id}, category {category} and "
+            f"self-declared initiative {initiative}. {boundary}"
+            "No unsupported market size, funding, reach or revenue claims.",
+            "Provide one concise second-opinion recommendation, evidence gaps, "
+            "and an actionable verification or matching test. No external action."
+        )
+        d.execute("UPDATE tasks SET priority_rank=? WHERE id=?",(priority+1,support_id))
+        founder_id=add_task(
+            d,e["id"],None,"noetfield","chief_of_staff",
+            f"Connect owner & next action · {category} · {intake_id}",
+            f"Synthesize the independent specialist recommendations for "
+            f"opportunity intake {intake_id}. {boundary}"
+            "Recommend the real human owner, potential workforce match, "
+            "specific follow-up action and date. Keep requested meeting "
+            "distinct from confirmed booking and exploratory interest from a deal.",
+            "Issue an evidence-linked recommendation and one owner-assignable next step. "
+            "Do not claim assignment, introduction, meeting, sale, or verified "
+            "outcome without independent source receipts."
+        )
+        d.execute("UPDATE tasks SET priority_rank=? WHERE id=?",(priority,founder_id))
+        add_task_dependency(d,founder_id,specialist_id)
+        add_task_dependency(d,founder_id,support_id)
+        d.execute(
+            "UPDATE platform_intake_signals SET status='tasks_created',processed_at=? WHERE intake_id=?",
+            (now(),intake_id))
+        d.execute("UPDATE events SET status='processed',processed_at=? WHERE id=?",(now(),e["id"]))
+        d.execute("COMMIT")
+
+
+
 def process_platform_intake_signal(e):
     """Create internal-only N-05/N-04/N-01 work; never create a customer/contact record."""
     p=validate_platform_intake_projection(json.loads(e["payload"]))
     if p.get("contributor") is not None:
         return process_contributor_intake_signal(e,p)
+    if p.get("opportunity") is not None:
+        return process_connect_opportunity_signal(e,p)
     qualification=p["qualification"] or {}
     tier=qualification.get("tier") or "unclassified"
     fit=qualification.get("fit_score")
