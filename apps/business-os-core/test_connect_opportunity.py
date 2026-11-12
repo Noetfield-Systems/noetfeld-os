@@ -201,6 +201,17 @@ class ConnectOpportunityRoutingTests(unittest.TestCase):
         with core.connect() as db:
             self.assertEqual(db.execute("SELECT COUNT(*) FROM events").fetchone()[0],0)
 
+    def test_all_public_portfolio_initiatives_keep_precise_scope(self):
+        portfolio={"portfolio","noetfield","workforce","buildrelay","sourcea",
+                   "trustfield","other","buildworkflow","outboundos","signalforge",
+                   "earnloop","misenorth","interiormatch"}
+        for venture in portfolio:
+            item=sample_signal(category="partnership",initiative=venture)
+            accepted=core.validate_platform_intake_projection(item)
+            self.assertEqual(accepted["opportunity"]["initiative"],venture)
+        independent={"trustfield","buildrelay"}
+        self.assertTrue(independent.issubset(portfolio))
+
     def test_existing_normal_and_contributor_contract_unchanged(self):
         generic={
             "intake_id":"INT-CAFEBABE1234",
