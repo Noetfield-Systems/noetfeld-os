@@ -230,7 +230,7 @@ _PLATFORM_SIGNAL_VECTORS={
     "work-with-us-contributor","external-opportunities",
 }
 _CONNECT_CATEGORIES={"partnership","growth","capital","people","events","business","other"}
-_CONNECT_INITIATIVES={"portfolio","noetfield","workforce","buildrelay","sourcea","trustfield","other"}
+_CONNECT_INITIATIVES={"portfolio","noetfield","workforce","buildrelay","sourcea","trustfield","other","buildworkflow","outboundos","signalforge","earnloop","misenorth","interiormatch"}
 _CONNECT_NEXT_STEPS={"async","meeting","intro","collaborate"}
 _CONNECT_SOURCES={"linkedin","email","referral","website","event","direct","other"}
 _CONNECT_ROLES={
