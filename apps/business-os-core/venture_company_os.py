@@ -978,6 +978,7 @@ def _manager_source_history(db,company,project,role="chief_of_staff"):
     latest=[]
     confirmed_invocations=0
     mapped_run_count=0
+    team_source_context_count=0
     for raw in rows:
         x=dict(raw)
         payload={}
@@ -995,8 +996,36 @@ def _manager_source_history(db,company,project,role="chief_of_staff"):
         model_reply=tagged and x.get("run_status")=="completed" and provider.startswith("sina-")
         mapped_run_count+=int(tagged and bool(x.get("run_id")))
         confirmed_invocations+=int(model_reply)
+        # Read back each source pointer against the ORIGINAL dependency edges.
+        # A model cannot self-credit a team review by inventing task/run IDs.
+        supplied=payload.get("manager_team_context_refs")
+        checked=[]
+        if model_reply and isinstance(supplied,list):
+            for item in supplied[:5]:
+                if not isinstance(item,dict) or set(item)!={"role","task_id","run_id","evidence_class"}:
+                    continue
+                if item.get("evidence_class")!="UNVERIFIED_INTERNAL_SPECIALIST_DRAFT":
+                    continue
+                ref=db.execute("""
+                   SELECT dep.id AS task_id, r.id AS run_id, dep.role
+                   FROM task_dependencies d JOIN tasks dep ON dep.id=d.depends_on_task_id
+                   JOIN tasks lead ON lead.id=d.task_id
+                   JOIN runs r ON r.task_id=dep.id
+                   WHERE lead.id=? AND lead.company_id=? AND lead.project_id=?
+                     AND dep.company_id=lead.company_id AND dep.project_id=lead.project_id
+                     AND dep.event_id=lead.event_id
+                     AND dep.id=? AND dep.role=? AND r.id=?
+                     AND r.status='completed' AND r.provider LIKE 'sina-%'
+                   LIMIT 1
+                """,(x["task_id"],company,project,item["task_id"],item["role"],item["run_id"])).fetchone()
+                if ref:
+                    checked.append({"task_id":ref["task_id"],"run_id":ref["run_id"],
+                                    "role":ref["role"],"evidence_class":"UNVERIFIED_INTERNAL_SPECIALIST_DRAFT"})
+        team_source_context_count+=int(bool(checked))
         x["named_identity_in_original_run"]=tagged
         x["named_manager_model_reply_observed"]=model_reply
+        x["team_source_context_delivered_to_model"]=bool(checked)
+        x["team_source_refs_verified_in_original_dependencies"]=checked
         x["external_action_verified"]=False
         x["verified_delivery"]=False
         x["actual_active_minutes"]=None
@@ -1010,6 +1039,8 @@ def _manager_source_history(db,company,project,role="chief_of_staff"):
         "status":("MODEL_RESPONSE_OBSERVED" if confirmed_invocations else
                    "ROLE_MAPPED_AWAITING_NAMED_RUNTIME_RESPONSE"),
         "named_model_reply_count_visible":confirmed_invocations,
+        "source_linked_team_context_model_calls_visible":team_source_context_count,
+        "team_review_product_delivery_verified":False,
         "original_runtime_records_with_identity_visible":mapped_run_count,
         "historical_role_runs_not_attributed_to_named_person":True,
         "original_role_task_and_run_history_latest":latest,
