@@ -584,6 +584,15 @@ def daily_tick():
    "original_source_observation_id":activation.get("original_source_observation_id"),
    "original_queue_event_id":activation.get("original_queue_event_id"),
    "external_actions":False},sort_keys=True),flush=True)
+ # Log the source reason on the ordinary cadence when no GM assignment
+ # can start. No customer content, credentials, or invented manager actions.
+ if (not activation.get("queued") and
+     local_cycles.get("state")=="COMPANY_LOOPS_ADVANCED" and activation):
+  print("COMPANY_OS_NAMED_MANAGER_STATUS "+json.dumps({
+   "actor_id":"gm-buildrelay-farid",
+   "state":activation.get("state"),
+   "queued":False,"verification":False,
+   "external_actions":False},sort_keys=True),flush=True)
  followup=local_cycles.get("manager_source_followup") or {}
  if followup.get("queued"):
   print("COMPANY_OS_NAMED_MANAGER_FOLLOWUP "+json.dumps({
