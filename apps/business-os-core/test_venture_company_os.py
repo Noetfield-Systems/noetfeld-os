@@ -344,6 +344,82 @@ class LocalCompanyOSRuntimeTests(unittest.TestCase):
                              "NO_AUTHENTIC_MANAGER_SOURCE_OR_FOUNDER_MANDATE")
             db.commit()
 
+    def test_just_arrived_buildrelay_source_wakes_gm_without_five_minute_delay(self):
+        product_loops.register({
+            "company_id":"founder-portfolio",
+            "project_id":"buildrelay-bridge-economy",
+            "name":"BuildRelay","vertical":"founder-network",
+            "objective":"Activate real founder team formation and verified contribution",
+            "priority":4,"max_tasks_per_cycle":5})
+        start=1794400000.0
+        initial=venture.tick(clock=lambda:start,limit=1)
+        self.assertEqual(initial["state"],"COMPANY_LOOPS_ADVANCED")
+        # The real source arrives AFTER the portfolio cadence was recorded.
+        # Authentic transport is replaced with test-only data here.
+        product_loops.observe("founder-portfolio","buildrelay-bridge-economy",{
+            "source_event_id":"br-new-after-tick-fixture",
+            "source_kind":"REPORTED_OPERATIONAL",
+            "source_ref":"company-os:test-buildrelay-intake",
+            "signal":"activation",
+            "summary":"Test-only operational record of initial creator path",
+            "severity":1})
+        second=venture.tick(clock=lambda:start+20,limit=1)
+        self.assertEqual(second["state"],"NOT_DUE")
+        first=second["manager_source_assignment"]
+        self.assertTrue(first["queued"])
+        self.assertEqual(first["actor_id"],"gm-buildrelay-farid")
+        self.assertTrue(first["original_queue_event_id"])
+        again=venture.tick(clock=lambda:start+21,limit=1)
+        self.assertEqual(again["manager_source_assignment"]["state"],"ALREADY_QUEUED")
+        with core.connect() as db:
+            self.assertEqual(db.execute(
+                "SELECT COUNT(*) FROM product_observations "
+                "WHERE source_event_id='manager-first-source:gm-buildrelay-farid:v1'"
+                ).fetchone()[0],1)
+
+    def test_legacy_untargeted_model_cannot_impersonate_farid(self):
+        product_loops.register({
+            "company_id":"founder-portfolio",
+            "project_id":"buildrelay-bridge-economy",
+            "name":"BuildRelay","vertical":"founder-network",
+            "objective":"Use only person-bound original model invocation for a GM identity",
+            "priority":4,"max_tasks_per_cycle":5})
+        product_loops.observe("founder-portfolio","buildrelay-bridge-economy",{
+            "source_event_id":"br-source-for-legacy-run",
+            "source_kind":"REPORTED_OPERATIONAL",
+            "source_ref":"company-os:legacy-test-source",
+            "signal":"activation",
+            "summary":"Test-only first BuildRelay source observation",
+            "severity":1})
+        with core.connect() as db:
+            venture.reconcile(db)
+            activation=venture._queue_first_named_manager_source_assignment(db)
+            event=dict(db.execute("SELECT * FROM events WHERE id=?",
+                                  (activation["original_queue_event_id"],)).fetchone())
+            db.commit()
+        product_loops.process_signal(event)
+        with core.connect() as db:
+            task=db.execute("SELECT id FROM tasks WHERE event_id=? AND role='chief_of_staff'",
+                            (event["id"],)).fetchone()
+            db.execute("UPDATE tasks SET status='drafted' WHERE id=?",(task["id"],))
+            db.execute("""INSERT INTO runs
+              (id,task_id,role,provider,model,status,input_tokens,output_tokens,
+               started_at,finished_at,result)
+              VALUES (?,?,?,?,?,?,?,?,?,?,?)""",(
+              "run_legacy_not_person_bound",task["id"],"chief_of_staff",
+              "openai-compatible","legacy-model","completed",100,100,
+              "2026-11-11T16:07:00Z","2026-11-11T16:07:06Z",
+              json.dumps({"manager_actor_id":"gm-buildrelay-farid",
+                "next_best_action":"Investigate the next real founder activation experiment",
+                "external_execution_verified":False,
+                "independent_business_outcome_verified":False})))
+            candidate=venture._queue_manager_source_followup(db)
+            self.assertEqual(candidate["state"],"WAITING_FOR_REAL_MANAGER_MODEL_REPLY")
+            db.commit()
+        history=venture.portfolio(project_id="buildrelay-bridge-economy")["instances"][0]["manager"]
+        self.assertEqual(history["named_model_reply_count_visible"],0)
+        self.assertFalse(history["executive_delegation_verified"])
+
     def test_real_tagged_farid_run_starts_one_original_source_bound_followup(self):
         product_loops.register({
             "company_id":"founder-portfolio",
