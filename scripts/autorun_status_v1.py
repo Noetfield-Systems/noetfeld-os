@@ -486,7 +486,18 @@ def probe_supabase_sourcea_receipt(wf: dict[str, Any], wf_doc: dict[str, Any], s
     return stale_wrap(result, observed_at=observed_at, stale_minutes=stale_minutes, source=wf["id"])
 
 
-def github_latest_run(workflow_file: str, *, event: str | None = None) -> dict[str, Any]:
+def github_token() -> str | None:
+    """Resolve a GitHub API token: CI env first, then the local credential helper.
+
+    GitHub Actions has no github.com credential-helper entry (actions/checkout
+    installs an http.extraheader instead), so ``git credential fill`` silently
+    returns no password there and every schedule probe degrades to
+    ``no_github_runs``. Prefer the workflow-exported token when present.
+    """
+    for var in ("GH_TOKEN", "GITHUB_TOKEN"):
+        value = os.environ.get(var)
+        if value:
+            return value
     proc = subprocess.run(
         ["git", "credential", "fill"],
         input="protocol=https\nhost=github.com\n\n",
@@ -495,8 +506,12 @@ def github_latest_run(workflow_file: str, *, event: str | None = None) -> dict[s
         check=False,
     )
     if proc.returncode != 0:
-        return {"ok": False, "error": "github_credential_unavailable"}
-    token = dict(line.split("=", 1) for line in proc.stdout.splitlines() if "=" in line).get("password")
+        return None
+    return dict(line.split("=", 1) for line in proc.stdout.splitlines() if "=" in line).get("password")
+
+
+def github_latest_run(workflow_file: str, *, event: str | None = None) -> dict[str, Any]:
+    token = github_token()
     if not token:
         return {"ok": False, "error": "github_token_missing"}
     repo = "Noetfield-Systems/noetfeld-os"
