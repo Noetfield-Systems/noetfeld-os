@@ -264,6 +264,86 @@ class LocalCompanyOSRuntimeTests(unittest.TestCase):
         self.assertEqual(captured["body"]["company_id"],"founder-portfolio")
         self.assertEqual(captured["body"]["max_cost_usd"],0.015)
 
+    def test_farid_receives_real_founder_mandate_before_first_member_metric(self):
+        # No real users, no analytics, no paid transaction and no fabricated
+        # BuildRelay observation. Source is the ORIGINAL adopted Founder goal.
+        product_loops.register({
+            "company_id":"founder-portfolio",
+            "project_id":"buildrelay-bridge-economy",
+            "name":"BuildRelay","vertical":"founder-network",
+            "objective":"Activate authentic founder collaborations and bilateral receipts",
+            "priority":4,"max_tasks_per_cycle":6})
+        with core.connect() as db:
+            venture.reconcile(db)
+            absent=venture._queue_first_named_manager_source_assignment(db)
+            self.assertEqual(absent["state"],
+                             "NO_AUTHENTIC_MANAGER_SOURCE_OR_FOUNDER_MANDATE")
+            db.commit()
+        goal={
+            "schema":"sina.company-os.venture-mandate.v1",
+            "program_id":"f"*32,
+            "mission_id":"M07-VENTURE-NETWORK",
+            "project_id":"buildrelay-bridge-economy",
+            "company_id":None,"tenant_scope":"founder-portfolio",
+            "objective":"Launch actual BuildRelay founder matching and verified bilateral collaboration through useful onboarding and seven-day sprint execution",
+            "priority_score":94,
+            "success_metric":"verified_activated_members_and_bilateral_collaboration",
+            "authority":"PORTFOLIO_DIRECTIVE_ONLY_NO_PERMIT",
+            "execution_owner":"PROJECT_LOCAL_COMPANY_OS",
+            "source_ref":"strategic:M07-VENTURE-NETWORK:v1",
+        }
+        adopted=venture.adopt_founder_mandate(goal)
+        self.assertEqual(adopted["state"],"ADOPTED_LOCAL_COMPANY_OS")
+        with core.connect() as db:
+            first=venture._queue_first_named_manager_source_assignment(db)
+            self.assertEqual(first["state"],"QUEUED_IN_ORIGINAL_COMPANY_OS")
+            self.assertEqual(first["original_source_kind"],"ORIGINAL_FOUNDER_MANDATE")
+            self.assertTrue(first["original_event_id"].startswith(
+                "company_mandate:"+goal["program_id"]+":"))
+            self.assertEqual(first["actor_id"],"gm-buildrelay-farid")
+            self.assertEqual(first["external_actions"],False)
+            repeated=venture._queue_first_named_manager_source_assignment(db)
+            self.assertEqual(repeated["state"],"ALREADY_QUEUED")
+            event=db.execute("SELECT * FROM events WHERE id=?",
+                             (first["original_queue_event_id"],)).fetchone()
+            db.commit()
+        produced=product_loops.process_signal(dict(event))
+        self.assertTrue(produced["executive_task"])
+        with core.connect() as db:
+            tasks=db.execute(
+                "SELECT role,company_id,project_id FROM tasks WHERE event_id=?",
+                (event["id"],)).fetchall()
+            self.assertTrue(any(x["role"]=="chief_of_staff" for x in tasks))
+            self.assertTrue(all(x["company_id"]=="founder-portfolio"
+                and x["project_id"]=="buildrelay-bridge-economy" for x in tasks))
+            self.assertEqual(db.execute(
+                "SELECT COUNT(*) FROM product_observations WHERE company_id=? "
+                "AND project_id=? AND source_event_id LIKE 'manager-first-source:%'",
+                ("founder-portfolio","buildrelay-bridge-economy")).fetchone()[0],1)
+        self.assertFalse(first["independently_verified"])
+
+    def test_unbacked_fake_mandate_observation_cannot_commission_farid(self):
+        product_loops.register({
+            "company_id":"founder-portfolio",
+            "project_id":"buildrelay-bridge-economy",
+            "name":"BuildRelay","vertical":"founder-network",
+            "objective":"Authentic founder team matching from original evidence",
+            "priority":3,"max_tasks_per_cycle":5})
+        with core.connect() as db:
+            venture.reconcile(db)
+            product_loops._insert_observation(db,
+                "founder-portfolio","buildrelay-bridge-economy",{
+                    "source_event_id":"company_mandate:"+"e"*32+":deadbeefabcd",
+                    "source_kind":"REPORTED_OPERATIONAL",
+                    "source_ref":"company-os:portfolio-directive",
+                    "signal":"feature_request",
+                    "summary":"An unbacked observation cannot mint Founder authority",
+                    "severity":2},verified=False)
+            attempt=venture._queue_first_named_manager_source_assignment(db)
+            self.assertEqual(attempt["state"],
+                             "NO_AUTHENTIC_MANAGER_SOURCE_OR_FOUNDER_MANDATE")
+            db.commit()
+
     def test_first_named_manager_mission_requires_original_buildrelay_source_and_is_once_only(self):
         product_loops.register({
             "company_id":"founder-portfolio","project_id":"buildrelay-bridge-economy",
@@ -274,7 +354,7 @@ class LocalCompanyOSRuntimeTests(unittest.TestCase):
             venture.reconcile(db)
             self.assertEqual(
                 venture._queue_first_named_manager_source_assignment(db)["state"],
-                "NO_BUILDRELAY_SOURCE_OBSERVATION")
+                "NO_AUTHENTIC_MANAGER_SOURCE_OR_FOUNDER_MANDATE")
             db.commit()
         # A reported aggregate is authentic source transport, not a
         # qualified-human metric. This is synthetic UNIT-TEST input only.
