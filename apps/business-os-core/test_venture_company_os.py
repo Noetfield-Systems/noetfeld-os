@@ -539,6 +539,50 @@ class LocalCompanyOSRuntimeTests(unittest.TestCase):
         dossier=venture.portfolio(project_id="buildrelay-bridge-economy")["instances"][0]["manager"]
         self.assertEqual(dossier["source_linked_autonomous_followup"]["state"],"NOT_OBSERVED")
 
+    def test_first_manager_original_trace_exposes_pending_dependencies_not_fake_work(self):
+        product_loops.register({
+            "company_id":"founder-portfolio",
+            "project_id":"buildrelay-bridge-economy",
+            "name":"BuildRelay","vertical":"founder-network",
+            "objective":"Ship authentic qualified matching and contribution receipts",
+            "priority":4,"max_tasks_per_cycle":5})
+        with core.connect() as db:
+            venture.reconcile(db)
+            absent=venture.original_first_manager_runtime_trace(db)
+            self.assertEqual(absent["state"],"NO_ORIGINAL_SOURCE")
+            db.commit()
+        product_loops.observe("founder-portfolio","buildrelay-bridge-economy",{
+            "source_event_id":"br-real-source-transport-test",
+            "source_kind":"REPORTED_OPERATIONAL",
+            "source_ref":"company-os:buildrelay-test-source",
+            "signal":"activation",
+            "summary":"Unit test of source transport; not actual member growth",
+            "severity":1})
+        with core.connect() as db:
+            first=venture._queue_first_named_manager_source_assignment(db)
+            self.assertTrue(first["queued"])
+            trace=venture.original_first_manager_runtime_trace(db)
+            self.assertEqual(trace["state"],"ORIGINAL_EVENT_NOT_PROCESSED")
+            self.assertEqual(trace["event_status"],"queued")
+            self.assertEqual(trace["task_count"],0)
+            event=dict(db.execute("SELECT * FROM events WHERE id=?",
+                         (trace["event_id"],)).fetchone())
+            db.commit()
+        created=product_loops.process_signal(event)
+        self.assertTrue(created["executive_task"])
+        with core.connect() as db:
+            trace=venture.original_first_manager_runtime_trace(db)
+            self.assertEqual(trace["state"],"ORIGINAL_TASKS_PRESENT_MANAGER_PENDING")
+            self.assertEqual(trace["event_status"],"processed")
+            self.assertEqual(trace["task_count"],created["task_count"])
+            self.assertTrue(all(t["latest_run_id"] is None for t in trace["tasks"]))
+            manager=next(t for t in trace["tasks"] if t["role"]=="chief_of_staff")
+            self.assertGreater(manager["waiting_dependencies"],0)
+            self.assertEqual(manager["blocked_dependencies"],0)
+            self.assertFalse(trace["manager_model_reply_observed"])
+            self.assertFalse(trace["independently_verified"])
+            db.commit()
+
     def test_first_named_manager_mission_requires_original_buildrelay_source_and_is_once_only(self):
         product_loops.register({
             "company_id":"founder-portfolio","project_id":"buildrelay-bridge-economy",
