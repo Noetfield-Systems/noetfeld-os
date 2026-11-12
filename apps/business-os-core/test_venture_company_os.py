@@ -306,6 +306,31 @@ class LocalCompanyOSRuntimeTests(unittest.TestCase):
         self.assertIn("run_review_child_0",review_text)
         self.assertIn("run_review_child_1",review_text)
         self.assertEqual(product_loops.process_signal(new_event)["tasks"],1)
+        # Simulate an actual transient proxy HTTP 502 for that ORIGINAL review
+        # task; the bounded recovery must reopen it once, never duplicate it.
+        with core.connect() as db:
+            db.execute("""UPDATE tasks SET status='drafted',
+                updated_at=datetime('now','-5 minutes') WHERE id=?""",(task["id"],))
+            db.execute("""INSERT INTO runs(id,task_id,role,provider,model,status,
+              input_tokens,output_tokens,started_at,finished_at,result)
+              VALUES(?,?,?,?,?,?,?,?,?,?,?)""",(
+               "run_review_proxy_502",task["id"],"chief_of_staff",
+               "specialist_degraded","none","degraded",0,0,
+               "2026-11-12T08:02:00Z","2026-11-12T08:02:01Z",
+               json.dumps({"model_issue_code":"MODEL_HTTP_502"})))
+            db.commit()
+        with patch.object(sina_work_bridge,"specialist_configured",return_value=True):
+            with core.connect() as db:
+                count_before=db.execute("SELECT COUNT(*) FROM tasks").fetchone()[0]
+                rec=venture._recover_named_manager_tasks(db)
+                self.assertEqual(rec["state"],"ONE_SHOT_ORIGINAL_TASK_RECOVERY")
+                self.assertEqual(rec["original_task_ids"],[task["id"]])
+                self.assertEqual(db.execute("SELECT status FROM tasks WHERE id=?",
+                                (task["id"],)).fetchone()[0],"queued")
+                self.assertEqual(db.execute("SELECT COUNT(*) FROM tasks").fetchone()[0],
+                                 count_before)
+                self.assertEqual(venture._recover_named_manager_tasks(db)["requeued_count"],0)
+                db.commit()
 
     def test_manager_review_observation_cannot_be_spoofed_without_original_source(self):
         product_loops.register({
