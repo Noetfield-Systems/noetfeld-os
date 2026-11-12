@@ -128,6 +128,18 @@ def init():
   );
   CREATE INDEX IF NOT EXISTS platform_intake_signal_status_idx
     ON platform_intake_signals(status, source_created_at);
+  CREATE TABLE IF NOT EXISTS connect_cases(
+    intake_id TEXT PRIMARY KEY REFERENCES platform_intake_signals(intake_id) ON DELETE CASCADE,
+    stage TEXT NOT NULL DEFAULT 'NEW',
+    review_owner_role TEXT,
+    next_action TEXT NOT NULL DEFAULT '',
+    due_at TEXT,
+    evidence_ref TEXT,
+    notes TEXT NOT NULL DEFAULT '',
+    version INTEGER NOT NULL DEFAULT 1,
+    updated_at TEXT NOT NULL
+  );
+  CREATE INDEX IF NOT EXISTS connect_cases_stage_due_idx ON connect_cases(stage,due_at);
   CREATE TABLE IF NOT EXISTS task_dependencies(
     task_id TEXT NOT NULL REFERENCES tasks(id) ON DELETE CASCADE,
     depends_on_task_id TEXT NOT NULL REFERENCES tasks(id) ON DELETE CASCADE,
@@ -304,6 +316,100 @@ def sina_seed_revenue_items(limit=50):
 
 
 
+
+_CONNECT_CASE_STAGES={
+    "NEW","QUALIFYING","QUALIFIED","ENGAGED","WAITING_FOUNDER",
+    "WAITING_EXTERNAL","DECLINED","CLOSED_WON","CLOSED_LOST","ARCHIVED",
+}
+_CONNECT_REVIEW_ROLES={"founder"} | {role for role,_,_,_ in AGENTS}
+
+
+def reconcile_connect_cases():
+    """Idempotently project previously persisted Connect signals into the *same* Business OS DB."""
+    with connect() as db:
+        rows=db.execute(
+            """SELECT s.intake_id,s.received_at,e.payload
+               FROM platform_intake_signals s
+               JOIN events e ON e.id=s.event_id
+               LEFT JOIN connect_cases c ON c.intake_id=s.intake_id
+               WHERE s.vector='external-opportunities' AND c.intake_id IS NULL
+               ORDER BY s.received_at ASC"""
+        ).fetchall()
+        for row in rows:
+            try:
+                p=validate_platform_intake_projection(json.loads(row["payload"]))
+            except (ValueError,TypeError,KeyError):
+                continue
+            if not isinstance(p.get("opportunity"),dict):
+                continue
+            db.execute(
+                "INSERT OR IGNORE INTO connect_cases(intake_id,updated_at) VALUES(?,?)",
+                (row["intake_id"],now())
+            )
+
+
+def update_connect_case(intake_id,patch):
+    """Authorized controller calls this helper. No external effects or unverified revenue."""
+    if not isinstance(patch,dict):
+        raise ValueError("connect_case_patch_invalid")
+    allowed={"stage","review_owner_role","next_action","due_at","evidence_ref","notes","expected_version"}
+    if not patch or set(patch)-allowed or set(patch)=={"expected_version"}:
+        raise ValueError("connect_case_patch_fields_invalid")
+    version=patch.get("expected_version")
+    if not isinstance(version,int) or isinstance(version,bool) or version<1:
+        raise ValueError("connect_case_version_required")
+    if not re.fullmatch(r"INT-[A-Z0-9]{12}",str(intake_id)):
+        raise ValueError("connect_case_intake_id_invalid")
+    if "stage" in patch and patch["stage"] not in _CONNECT_CASE_STAGES:
+        raise ValueError("connect_case_stage_invalid")
+    if "review_owner_role" in patch and patch["review_owner_role"] is not None:
+        if not isinstance(patch["review_owner_role"],str) or patch["review_owner_role"] not in _CONNECT_REVIEW_ROLES:
+            raise ValueError("connect_case_owner_role_invalid")
+    for key,limit in [("next_action",900),("notes",1800)]:
+        if key in patch and (not isinstance(patch[key],str) or len(patch[key])>limit):
+            raise ValueError("connect_case_"+key+"_invalid")
+    if "due_at" in patch and patch["due_at"] is not None:
+        date=patch["due_at"]
+        if not isinstance(date,str) or len(date)>40:
+            raise ValueError("connect_case_due_at_invalid")
+        try:
+            t=datetime.fromisoformat(date.replace("Z","+00:00"))
+        except ValueError as exc:
+            raise ValueError("connect_case_due_at_invalid") from exc
+        if t.tzinfo is None:
+            raise ValueError("connect_case_due_at_timezone_required")
+    if "evidence_ref" in patch and patch["evidence_ref"] is not None:
+        v=patch["evidence_ref"]
+        if (not isinstance(v,str) or len(v)>700 or not re.fullmatch(r"https://[^\s]+",v)):
+            raise ValueError("connect_case_evidence_ref_invalid")
+    reconcile_connect_cases()
+    with connect() as db:
+        db.execute("BEGIN IMMEDIATE")
+        row=db.execute("SELECT * FROM connect_cases WHERE intake_id=?",(intake_id,)).fetchone()
+        if row is None:
+            raise ValueError("connect_case_not_found")
+        if row["version"]!=version:
+            raise ValueError("connect_case_version_conflict")
+        stage=patch.get("stage",row["stage"])
+        evidence_ref=patch.get("evidence_ref",row["evidence_ref"])
+        if stage=="CLOSED_WON" and not evidence_ref:
+            raise ValueError("connect_case_closed_won_requires_evidence")
+        updates={k:patch[k] for k in allowed-{"expected_version"} if k in patch}
+        if not updates:
+            raise ValueError("connect_case_patch_fields_invalid")
+        updates["version"]=version+1
+        updates["updated_at"]=now()
+        sql=", ".join(f"{k}=?" for k in updates)
+        db.execute(
+            "UPDATE connect_cases SET "+sql+" WHERE intake_id=? AND version=?",
+            (*updates.values(),intake_id,version)
+        )
+        changed=db.execute("SELECT * FROM connect_cases WHERE intake_id=?",(intake_id,)).fetchone()
+        db.execute("COMMIT")
+    return dict(changed)
+
+
+
 def connect_opportunity_inbox(limit=50):
     """Read the actual PII-free source-linked Connect work, never invent CRM conversions.
 
@@ -311,13 +417,17 @@ def connect_opportunity_inbox(limit=50):
     assignment. 'actual_outcome' stays null until an independently supported
     human or commercial action is recorded by its owning system.
     """
+    reconcile_connect_cases()
     cap=max(1,min(int(limit),100))
     with connect() as db:
         rows=db.execute(
             """SELECT s.intake_id,s.request_id,s.source_created_at,s.received_at,
-                      s.status,s.processed_at,s.event_id,e.payload
+                      s.status,s.processed_at,s.event_id,e.payload,
+                      c.stage AS case_stage,c.review_owner_role,c.next_action AS case_next_action,
+                      c.due_at,c.evidence_ref,c.notes,c.version,c.updated_at AS case_updated_at
                FROM platform_intake_signals s
                JOIN events e ON e.id=s.event_id
+               LEFT JOIN connect_cases c ON c.intake_id=s.intake_id
                WHERE s.vector='external-opportunities'
                ORDER BY s.source_created_at DESC,s.intake_id DESC LIMIT ?""",
             (cap,)
@@ -346,6 +456,14 @@ def connect_opportunity_inbox(limit=50):
                 "source_channel":opportunity["source_channel"],
                 "requested_next_step":opportunity["requested_next_step"],
                 "review_state":r["status"],
+                "case_stage":r["case_stage"] or "NEW",
+                "review_owner_role":r["review_owner_role"],
+                "next_action":r["case_next_action"] or "",
+                "due_at":r["due_at"],
+                "evidence_ref":r["evidence_ref"],
+                "notes":r["notes"] or "",
+                "case_version":r["version"] or 1,
+                "case_updated_at":r["case_updated_at"],
                 "specialist_roles":[x["role"] for x in tasks if x["role"]!="chief_of_staff"],
                 "advisory_tasks":tasks,
                 "actual_owner_assigned":False,
@@ -486,6 +604,11 @@ def queue_platform_intake_projection(item):
                VALUES(?,?,?,?,?,'queued',0,?)""",
             (event_id,"platform.intake.signal.received","platform_public_intake","noetfield",event_payload,received)
         )
+        if projection.get("opportunity") is not None:
+            d.execute(
+                "INSERT OR IGNORE INTO connect_cases(intake_id,updated_at) VALUES(?,?)",
+                (intake_id,received)
+            )
         d.execute("COMMIT")
     return {"created":True,"event_id":event_id}
 

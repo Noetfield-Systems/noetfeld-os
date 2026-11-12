@@ -341,6 +341,27 @@ def connect_opportunities(authorization:str|None=Header(default=None),limit:int=
     }
 
 
+@app.patch("/api/control/connect-cases/{intake_id}")
+def update_connect_case(intake_id:str,body:dict[str,Any],authorization:str|None=Header(default=None)):
+    """Founder-authorized review decision with version conflict protection.
+
+    This changes the internal case ledger only; it never sends outreach,
+    books meetings, or marks cash collected.
+    """
+    authorize(authorization)
+    try:
+        case=core.update_connect_case(intake_id,body)
+    except ValueError as exc:
+        code=str(exc)
+        if code=="connect_case_not_found":
+            raise HTTPException(404,code) from exc
+        if code=="connect_case_version_conflict":
+            raise HTTPException(409,code) from exc
+        raise HTTPException(400,code) from exc
+    return {"updated":True,"case":case,"verified_cash_collected":None,
+            "external_actions":0}
+
+
 @app.get("/api/control/tasks")
 def tasks(authorization:str|None=Header(default=None)):
     authorize(authorization)
