@@ -303,6 +303,59 @@ def sina_seed_revenue_items(limit=50):
     return items
 
 
+
+def connect_opportunity_inbox(limit=50):
+    """Read the actual PII-free source-linked Connect work, never invent CRM conversions.
+
+    'owner_role' is the specialist role being consulted, NOT a real human
+    assignment. 'actual_outcome' stays null until an independently supported
+    human or commercial action is recorded by its owning system.
+    """
+    cap=max(1,min(int(limit),100))
+    with connect() as db:
+        rows=db.execute(
+            """SELECT s.intake_id,s.request_id,s.source_created_at,s.received_at,
+                      s.status,s.processed_at,s.event_id,e.payload
+               FROM platform_intake_signals s
+               JOIN events e ON e.id=s.event_id
+               WHERE s.vector='external-opportunities'
+               ORDER BY s.source_created_at DESC,s.intake_id DESC LIMIT ?""",
+            (cap,)
+        ).fetchall()
+        result=[]
+        for r in rows:
+            try:
+                payload=json.loads(r["payload"])
+                opportunity=payload.get("opportunity")
+            except (TypeError,ValueError):
+                opportunity=None
+            if not isinstance(opportunity,dict):
+                continue
+            tasks=[dict(t) for t in db.execute(
+                """SELECT id,role,title,status,next_action,updated_at
+                   FROM tasks WHERE event_id=?
+                   ORDER BY priority_rank ASC,created_at ASC""",
+                (r["event_id"],)
+            ).fetchall()]
+            result.append({
+                "intake_id":r["intake_id"],
+                "request_id":r["request_id"],
+                "source_created_at":r["source_created_at"],
+                "category":opportunity["category"],
+                "initiative":opportunity["initiative"],
+                "source_channel":opportunity["source_channel"],
+                "requested_next_step":opportunity["requested_next_step"],
+                "review_state":r["status"],
+                "specialist_roles":[x["role"] for x in tasks if x["role"]!="chief_of_staff"],
+                "advisory_tasks":tasks,
+                "actual_owner_assigned":False,
+                "confirmed_meeting":False,
+                "verified_conversion":None,
+                "source_of_truth":"Noetfield Platform public_intakes",
+            })
+    return result
+
+
 def validate_platform_intake_projection(item):
     """Accept only the deliberately PII-free projection emitted by Platform API."""
     allowed={"intake_id","request_id","created_at","sku","vector","qualification"}
