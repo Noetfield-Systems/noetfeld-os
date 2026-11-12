@@ -1096,10 +1096,16 @@ def _manager_source_history(db,company,project,role="chief_of_staff"):
                    SELECT dep.id AS task_id, r.id AS run_id, dep.role
                    FROM task_dependencies d JOIN tasks dep ON dep.id=d.depends_on_task_id
                    JOIN tasks lead ON lead.id=d.task_id
+                   LEFT JOIN product_observations lead_obs ON lead_obs.id=lead.observation_id
+                   LEFT JOIN product_observations child_obs ON child_obs.id=dep.observation_id
                    JOIN runs r ON r.task_id=dep.id
                    WHERE lead.id=? AND lead.company_id=? AND lead.project_id=?
                      AND dep.company_id=lead.company_id AND dep.project_id=lead.project_id
-                     AND dep.event_id=lead.event_id
+                     AND (dep.event_id=lead.event_id OR
+                          (lead_obs.source_event_id='manager-team-review:gm-buildrelay-farid:v1'
+                           AND lead_obs.source_ref='company-os:observation:'||child_obs.id
+                           AND child_obs.company_id=lead.company_id
+                           AND child_obs.project_id=lead.project_id))
                      AND dep.id=? AND dep.role=? AND r.id=?
                      AND r.status='completed' AND r.provider LIKE 'sina-%'
                    LIMIT 1
