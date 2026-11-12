@@ -216,13 +216,16 @@ class CompanyOSWorkerFairnessTests(unittest.IsolatedAsyncioTestCase):
         # A perpetually ready event must not block a runnable specialist task.
         # The prior worker loop continued immediately after each event.
         app.STOP.clear()
-        seen = {"events": 0, "tasks": 0}
+        seen = {"events": 0, "tasks": 0, "claims": 0}
 
         def claim(queue):
             if queue == "events":
                 seen["events"] += 1
                 return {"id": "evt_always_ready"}
-            if seen["tasks"] == 0:
+            # Emulate the real atomic claim: after the first lease, this
+            # task is no longer eligible for the same parallel batch.
+            if seen["claims"] == 0:
+                seen["claims"] += 1
                 return {"id": "task_ready"}
             return None
 
