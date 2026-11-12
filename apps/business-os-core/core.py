@@ -452,9 +452,10 @@ def process_task(t):
  if scoped_product:
   result["founder_goalkeeper"]=decision_context
  # Claim a named manager run ONLY if this real Company OS source task
- # was sent through its existing model route with the stable name in the
- # request. Prior role runs are deliberately NOT credited to the person.
- if scoped_product and role=="chief_of_staff" and (provider.startswith("sina-") or provider=="openai-compatible"):
+ # was sent through the scoped Sina specialist route with stable identity
+ # in that exact request. The generic openai-compatible legacy lane does NOT
+ # inject this name and must not impersonate the named manager.
+ if scoped_product and role=="chief_of_staff" and provider.startswith("sina-"):
   named=venture_company_os.named_manager(t["company_id"],t["project_id"],role)
   if named:
    result["manager_actor_id"]=named["actor_id"]
