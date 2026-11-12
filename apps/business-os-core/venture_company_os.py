@@ -452,6 +452,89 @@ def _queue_manager_source_followup(db):
     return {"state":"WAITING_FOR_REAL_MANAGER_MODEL_REPLY","queued":False}
 
 
+def _queue_source_backed_manager_team_review(db):
+    """Wake ONE original Company OS GM review after real specialist model runs.
+
+    A first GM recommendation and specialist drafts are not verification.
+    They are, however, legitimate internal source inputs for a manager to
+    inspect and choose next work without a fresh Founder prompt.
+    """
+    company,project="founder-portfolio","buildrelay-bridge-economy"
+    seat=named_manager(company,project,"chief_of_staff")
+    if not seat:
+        return {"state":"GM_IDENTITY_UNMAPPED","queued":False}
+    source_key="manager-followup:"+seat["actor_id"]+":v1"
+    review_key="manager-team-review:"+seat["actor_id"]+":v1"
+    prior=db.execute("""SELECT id FROM product_observations
+       WHERE company_id=? AND project_id=? AND source_event_id=?""",
+       (company,project,review_key)).fetchone()
+    if prior:
+        return {"state":"MANAGER_TEAM_REVIEW_ALREADY_QUEUED","queued":False,
+                "source_observation_id":prior["id"]}
+    source=db.execute("""SELECT id,source_ref FROM product_observations
+       WHERE company_id=? AND project_id=? AND source_event_id=?""",
+       (company,project,source_key)).fetchone()
+    if not source or not str(source["source_ref"]).startswith("company-os:run:"):
+        return {"state":"WAITING_FOR_ACTUAL_MANAGER_FOLLOWUP","queued":False}
+    # Recheck the actual original named GM model response; a caller-inserted
+    # arbitrary observation cannot mint a managerial delegation.
+    run_id=source["source_ref"][len("company-os:run:"):]
+    gm=db.execute("""
+        SELECT r.result FROM runs r JOIN tasks t ON t.id=r.task_id
+        JOIN product_observations o ON o.id=t.observation_id
+        WHERE r.id=? AND r.provider LIKE 'sina-%'
+          AND r.role='chief_of_staff' AND r.status='completed'
+          AND t.company_id=? AND t.project_id=?
+          AND o.source_event_id='manager-first-source:gm-buildrelay-farid:v1'
+    """,(run_id,company,project)).fetchone()
+    try:
+        values=json.loads(gm["result"] or "{}") if gm else {}
+    except (ValueError,TypeError):
+        values={}
+    if not isinstance(values,dict) or values.get("manager_actor_id")!=seat["actor_id"]:
+        return {"state":"UNBACKED_MANAGER_SOURCE","queued":False}
+    team=db.execute("""
+        SELECT t.id AS task_id,t.role,r.id AS run_id
+        FROM tasks t JOIN runs r ON r.task_id=t.id
+        WHERE t.company_id=? AND t.project_id=?
+          AND t.observation_id=? AND t.role IN
+              ('engineering_operator','product_strategy','customer_success',
+               'market_intelligence','marketing_content')
+          AND t.status IN ('drafted','approved')
+          AND r.id=(SELECT rr.id FROM runs rr WHERE rr.task_id=t.id
+                    ORDER BY rr.finished_at DESC,rr.id DESC LIMIT 1)
+          AND r.status='completed' AND r.provider LIKE 'sina-%'
+        ORDER BY CASE t.role WHEN 'engineering_operator' THEN 0
+                             WHEN 'product_strategy' THEN 1 ELSE 2 END,t.id LIMIT 5
+    """,(company,project,source["id"])).fetchall()
+    if len(team)<2:
+        return {"state":"WAITING_FOR_TWO_REAL_SPECIALIST_REPLIES","queued":False,
+                "observed_specialist_runs":len(team)}
+    import product_loops
+    receipt=product_loops._insert_observation(db,company,project,{
+        "source_event_id":review_key,
+        "source_kind":"REPORTED_OPERATIONAL",
+        "source_ref":"company-os:observation:"+source["id"],
+        "signal":"feature_request",
+        "summary":(
+            "Actual manager follow-up "+source["id"]+" now has "+
+            str(len(team))+" completed specialist model drafts. The named GM "+
+            "must compare these ORIGINAL internal results, challenge weak "+
+            "assumptions, and commission the next bounded build. These are "+
+            "unverified drafts, not shipped code or real customer outcomes."
+        )[:500],
+        "severity":2,
+    },verified=False)
+    return {"state":"SOURCE_BACKED_MANAGER_REVIEW_QUEUED",
+            "queued":not receipt.get("idempotent",False),
+            "actor_id":seat["actor_id"],
+            "source_observation_id":source["id"],
+            "review_observation_id":receipt["observation_id"],
+            "review_event_id":receipt.get("event_id"),
+            "specialist_run_ids":[x["run_id"] for x in team],
+            "independently_verified":False,"external_actions":False}
+
+
 def _recover_named_manager_tasks(db,limit=3):
     """Retry a failed named BuildRelay management-chain task ONCE in the original queue.
 
@@ -659,6 +742,7 @@ def tick(clock=None,limit=1):
         # existing task/event identities are idempotent. No new scheduler.
         manager_activation=_queue_first_named_manager_source_assignment(db)
         manager_followup=_queue_manager_source_followup(db)
+        manager_team_review=_queue_source_backed_manager_team_review(db)
         # A one-shot explicitly commissioned repair is source-triggered, not
         # the periodic portfolio pulse. Handle it on the existing worker tick.
         provider_route_recovery=_recover_source_bound_503_after_route_repair(db)
@@ -668,6 +752,7 @@ def tick(clock=None,limit=1):
             return {"state":"NOT_DUE",**sync,
                     "manager_source_assignment":manager_activation,
                     "manager_source_followup":manager_followup,
+                    "manager_source_team_review":manager_team_review,
                     "manager_provider_route_recovery":provider_route_recovery}
         db.execute("""INSERT INTO state(key,value) VALUES('venture_os_cycle_at',?)
            ON CONFLICT(key) DO UPDATE SET value=excluded.value""",(str(epoch),))
@@ -713,6 +798,7 @@ def tick(clock=None,limit=1):
                 "events_created":queued,"manager_source_assignment":manager_activation,
                 "manager_recovery":manager_recovery,
                 "manager_source_followup":manager_followup,
+                "manager_source_team_review":manager_team_review,
                 "manager_capacity_recovery":capacity_recovery,
                 "manager_provider_route_recovery":provider_route_recovery,"external_actions":False,
                 "reported_real_users":0,"verified_cash":0,**sync}
