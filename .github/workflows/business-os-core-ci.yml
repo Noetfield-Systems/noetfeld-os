@@ -21,6 +21,8 @@ jobs:
         with:
           python-version: "3.12"
       - run: python -m py_compile apps/business-os-core/app.py apps/business-os-core/core.py
+      - name: Verify premium Founder workspace interactions and source-backed states
+        run: node apps/business-os-core/test_control_premium.cjs
       - run: python -m unittest discover -s apps/business-os-core -p "test_*.py"
       - name: Verify production Docker context contains every imported application module
         run: docker build --progress=plain -f apps/business-os-core/Dockerfile apps/business-os-core
