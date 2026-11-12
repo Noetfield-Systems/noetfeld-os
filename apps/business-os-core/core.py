@@ -380,7 +380,7 @@ def update_connect_case(intake_id,patch):
             raise ValueError("connect_case_due_at_timezone_required")
     if "evidence_ref" in patch and patch["evidence_ref"] is not None:
         v=patch["evidence_ref"]
-        if (not isinstance(v,str) or len(v)>700 or not re.fullmatch(r"https://[^\\s]+",v)):
+        if (not isinstance(v,str) or len(v)>700 or not re.fullmatch(r"https://[^\s]+",v)):
             raise ValueError("connect_case_evidence_ref_invalid")
     reconcile_connect_cases()
     with connect() as db:
