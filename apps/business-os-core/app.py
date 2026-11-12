@@ -64,7 +64,9 @@ async def worker():
             event=await asyncio.to_thread(core.claim,"events")
             if event:
                 await asyncio.to_thread(core.process_event,event)
-                continue
+            # Serve a bounded batch of runnable tasks after each source event.
+            # A constantly replenished event queue must not starve admitted
+            # specialists or the first genuine named-manager mission.
             # Distinct eligible Company OS tasks execute concurrently while
             # atomic SQLite claims and dependency checks remain canonical.
             batch=[]
@@ -80,6 +82,8 @@ async def worker():
                     if isinstance(error,Exception):
                         import logging
                         logging.error("company_os_specialist_failed error_type=%s",type(error).__name__)
+                continue
+            if event:
                 continue
             await asyncio.sleep(INTERVAL)
         except asyncio.CancelledError: raise

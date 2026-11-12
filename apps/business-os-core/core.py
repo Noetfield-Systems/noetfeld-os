@@ -296,6 +296,11 @@ def claim(table):
    r=d.execute("""
     SELECT t.*,o.intent,o.problem,o.estimated_value,o.ai_consent,o.route,o.score,o.urgency
     FROM tasks t LEFT JOIN opportunities o ON o.id=t.opportunity_id
+    LEFT JOIN events source_event ON source_event.id=t.event_id
+    LEFT JOIN product_observations manager_source
+      ON manager_source.id=t.observation_id
+     AND manager_source.company_id=t.company_id
+     AND manager_source.project_id=t.project_id
     WHERE t.status='queued'
       AND NOT EXISTS(
         SELECT 1 FROM task_dependencies td
@@ -304,6 +309,13 @@ def claim(table):
           AND (dep.id IS NULL OR dep.status NOT IN ('drafted','approved'))
       )
     ORDER BY
+      -- An authentic first-manager activation already accepted into the
+      -- original observations/events/tasks graph should not wait behind an
+      -- unrelated historical task backlog. This changes scheduling only;
+      -- it does not grant authority, forge a run, or bypass dependencies.
+      CASE WHEN manager_source.source_event_id =
+           'manager-first-source:gm-buildrelay-farid:v1' THEN 0 ELSE 1 END ASC,
+      COALESCE(source_event.priority_score,0) DESC,
       (SELECT COUNT(*) FROM tasks active
        WHERE active.company_id=t.company_id AND active.project_id=t.project_id
          AND active.status='running') ASC,
