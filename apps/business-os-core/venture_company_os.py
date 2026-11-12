@@ -129,7 +129,8 @@ def init(db:sqlite3.Connection):
       task_id TEXT PRIMARY KEY,
       policy_revision TEXT NOT NULL,
       original_failure_run_id TEXT NOT NULL,
-      retried_at TEXT NOT NULL
+      retried_at TEXT NOT NULL,
+      recovery_attempts INTEGER NOT NULL DEFAULT 1
     );
     -- Exactly-once readmission of original source-scoped tasks after
     -- an operator explicitly repairs the inference route. No new queue.
@@ -149,6 +150,14 @@ def init(db:sqlite3.Connection):
       FOREIGN KEY(company_id,project_id) REFERENCES venture_company_os(company_id,project_id)
     );
     """)
+    # Existing staging has one original task-keyed capacity recovery record.
+    # Preserve it and allow exactly ONE final explicitly revised-cap attempt
+    # for the original GM team-review task; older source tasks stay one-shot.
+    cols={r["name"] for r in db.execute(
+        "PRAGMA table_info(venture_company_os_manager_capacity_recovery)")}
+    if "recovery_attempts" not in cols:
+        db.execute("""ALTER TABLE venture_company_os_manager_capacity_recovery
+                   ADD COLUMN recovery_attempts INTEGER NOT NULL DEFAULT 1""")
 
 def reconcile(db:sqlite3.Connection):
     """Materialize actual product-specific management/team scope, not new agents."""
@@ -692,6 +701,8 @@ def _recover_named_manager_capacity(db,limit=3):
           ON o.id=t.observation_id AND o.company_id=t.company_id
          AND o.project_id=t.project_id
         JOIN runs r ON r.task_id=t.id
+        LEFT JOIN venture_company_os_manager_capacity_recovery c
+          ON c.task_id=t.id
         WHERE t.company_id=? AND t.project_id=? AND t.status='drafted'
           AND (o.source_event_id='manager-first-source:gm-buildrelay-farid:v1'
                OR o.source_event_id LIKE 'company_mandate:%'
@@ -706,11 +717,13 @@ def _recover_named_manager_capacity(db,limit=3):
                     ORDER BY r2.finished_at DESC,r2.id DESC LIMIT 1)
           AND r.provider='specialist_degraded'
           AND datetime(t.updated_at)<datetime('now','-2 minutes')
-          AND NOT EXISTS(
-            SELECT 1 FROM venture_company_os_manager_capacity_recovery c
-            WHERE c.task_id=t.id)
+          AND (c.task_id IS NULL OR
+              (o.source_event_id='manager-team-review:gm-buildrelay-farid:v1'
+               AND c.recovery_attempts<2
+               AND c.policy_revision<>?
+               AND c.original_failure_run_id<>r.id))
         ORDER BY t.updated_at,t.id LIMIT 30
-    """,(company,project)).fetchall()
+    """,(company,project,revision)).fetchall()
     queued=[]
     for row in candidates:
         if len(queued)>=max(1,min(int(limit),3)):
@@ -721,9 +734,21 @@ def _recover_named_manager_capacity(db,limit=3):
             issue={}
         if not isinstance(issue,dict) or issue.get("model_issue_code")!="MODEL_HTTP_429":
             continue
-        db.execute("""INSERT OR IGNORE INTO venture_company_os_manager_capacity_recovery
-           (task_id,policy_revision,original_failure_run_id,retried_at)
-           VALUES (?,?,?,?)""",(row["task_id"],revision,row["failure_run_id"],utc()))
+        recorded=db.execute("""
+            INSERT INTO venture_company_os_manager_capacity_recovery
+              (task_id,policy_revision,original_failure_run_id,retried_at,recovery_attempts)
+            VALUES (?,?,?,?,1)
+            ON CONFLICT(task_id) DO UPDATE SET
+              policy_revision=excluded.policy_revision,
+              original_failure_run_id=excluded.original_failure_run_id,
+              retried_at=excluded.retried_at,
+              recovery_attempts=recovery_attempts+1
+            WHERE recovery_attempts<2
+              AND policy_revision<>excluded.policy_revision
+              AND original_failure_run_id<>excluded.original_failure_run_id
+        """,(row["task_id"],revision,row["failure_run_id"],utc()))
+        if recorded.rowcount!=1:
+            continue
         changed=db.execute("""UPDATE tasks SET status='queued',updated_at=?
            WHERE id=? AND status='drafted'""",(utc(),row["task_id"]))
         if changed.rowcount==1:
