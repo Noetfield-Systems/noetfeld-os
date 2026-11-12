@@ -490,6 +490,13 @@ class LocalCompanyOSRuntimeTests(unittest.TestCase):
             self.assertEqual(db.execute(
                 "SELECT COUNT(*) FROM product_observations WHERE source_event_id=?",
                 ("manager-followup:gm-buildrelay-farid:v1",)).fetchone()[0],1)
+        dossier=venture.portfolio(project_id="buildrelay-bridge-economy")["instances"][0]["manager"]
+        followup=dossier["source_linked_autonomous_followup"]
+        self.assertEqual(followup["state"],"FOLLOWUP_TASKS_CREATED")
+        self.assertTrue(followup["source_backed_next_action_observed"])
+        self.assertEqual(followup["original_manager_run_id"],run_id)
+        self.assertTrue(followup["original_task_ids"])
+        self.assertFalse(followup["independently_verified"])
 
     def test_manager_followup_does_not_accept_unattributed_model_result(self):
         product_loops.register({
@@ -529,6 +536,8 @@ class LocalCompanyOSRuntimeTests(unittest.TestCase):
             self.assertEqual(result["state"],"WAITING_FOR_REAL_MANAGER_MODEL_REPLY")
             self.assertFalse(result["queued"])
             db.commit()
+        dossier=venture.portfolio(project_id="buildrelay-bridge-economy")["instances"][0]["manager"]
+        self.assertEqual(dossier["source_linked_autonomous_followup"]["state"],"NOT_OBSERVED")
 
     def test_first_named_manager_mission_requires_original_buildrelay_source_and_is_once_only(self):
         product_loops.register({
