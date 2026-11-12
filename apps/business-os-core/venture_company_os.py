@@ -131,6 +131,14 @@ def init(db:sqlite3.Connection):
       original_failure_run_id TEXT NOT NULL,
       retried_at TEXT NOT NULL
     );
+    -- Exactly-once readmission of original source-scoped tasks after
+    -- an operator explicitly repairs the inference route. No new queue.
+    CREATE TABLE IF NOT EXISTS venture_company_os_provider_route_recovery(
+      task_id TEXT PRIMARY KEY,
+      provider_route_revision TEXT NOT NULL,
+      failure_run_id TEXT NOT NULL,
+      retried_at TEXT NOT NULL
+    );
     CREATE TABLE IF NOT EXISTS venture_company_os_mandates(
       company_id TEXT NOT NULL,project_id TEXT NOT NULL,
       founder_project_id TEXT NOT NULL,program_id TEXT NOT NULL,
@@ -504,6 +512,69 @@ def _recover_named_manager_tasks(db,limit=3):
             "verified_delivery":False}
 
 
+def _recover_source_bound_503_after_route_repair(db,limit=3):
+    """Readmit ONLY original BuildRelay tasks that hit an actual model-route 503.
+
+    A transient pre-model route error is neither a task failure that should
+    permanently cancel the Founder mandate nor a reason to mint new work.
+    An explicit operator revision after fixing Agent Fabric allows ONE more
+    attempt of the original task on the EXISTING queue. No blind reattempts,
+    new task ids, provider spending override, or external execution.
+    """
+    revision=os.getenv("COMPANY_OS_FARID_PROVIDER_ROUTE_REVISION","").strip()
+    if not re.fullmatch(r"[a-z0-9_-]{8,40}",revision):
+        return {"state":"AWAITING_PROVIDER_ROUTE_REVISION","requeued_count":0}
+    import sina_work_bridge
+    if not sina_work_bridge.specialist_configured():
+        return {"state":"SPECIALIST_PROVIDER_NOT_CONFIGURED","requeued_count":0}
+    company,project="founder-portfolio","buildrelay-bridge-economy"
+    if named_manager(company,project,"chief_of_staff") is None:
+        return {"state":"UNMAPPED_MANAGER","requeued_count":0}
+    local=db.execute("""SELECT operating_state FROM venture_company_os
+       WHERE company_id=? AND project_id=?""",(company,project)).fetchone()
+    if not local or local["operating_state"]!="ACTIVE_LOCAL_EXECUTIVE":
+        return {"state":"LOCAL_SCOPE_NOT_ACTIVE","requeued_count":0}
+    rows=db.execute("""
+        SELECT t.id AS task_id,t.role,r.id AS failure_run_id,r.result AS outcome
+        FROM tasks t JOIN product_observations o
+          ON o.id=t.observation_id AND o.company_id=t.company_id
+         AND o.project_id=t.project_id
+        JOIN runs r ON r.task_id=t.id
+        WHERE t.company_id=? AND t.project_id=? AND t.status='drafted'
+          AND o.source_event_id='manager-first-source:gm-buildrelay-farid:v1'
+          AND t.role IN ('chief_of_staff','customer_success','engineering_operator','product_strategy')
+          AND r.id=(SELECT r2.id FROM runs r2 WHERE r2.task_id=t.id
+                    ORDER BY r2.finished_at DESC,r2.id DESC LIMIT 1)
+          AND r.provider='specialist_degraded' AND r.status='degraded'
+          AND datetime(t.updated_at)<datetime('now','-2 minutes')
+          AND NOT EXISTS(SELECT 1 FROM venture_company_os_provider_route_recovery x
+                         WHERE x.task_id=t.id)
+        ORDER BY CASE WHEN t.role='chief_of_staff' THEN 0 ELSE 1 END,t.id LIMIT 12
+    """,(company,project)).fetchall()
+    reopened=[]
+    for row in rows:
+        if len(reopened)>=max(1,min(int(limit),3)):
+            break
+        try:
+            result=json.loads(row["outcome"] or "{}")
+        except (ValueError,TypeError):
+            continue
+        if not isinstance(result,dict) or result.get("model_issue_code")!="MODEL_HTTP_503":
+            continue
+        db.execute("""INSERT OR IGNORE INTO venture_company_os_provider_route_recovery
+             (task_id,provider_route_revision,failure_run_id,retried_at)
+             VALUES (?,?,?,?)""",(row["task_id"],revision,row["failure_run_id"],utc()))
+        changed=db.execute("""UPDATE tasks SET status='queued',updated_at=?
+             WHERE id=? AND status='drafted'""",(utc(),row["task_id"]))
+        if changed.rowcount==1:
+            reopened.append({"task_id":row["task_id"],"role":row["role"],
+                             "prior_failure_run_id":row["failure_run_id"]})
+    return {"state":"ORIGINAL_503_TASKS_READMITTED" if reopened else "NO_SOURCE_BOUND_503_TASKS",
+            "requeued_count":len(reopened),"original_tasks":reopened,
+            "provider_route_revision":revision,"external_actions":False,
+            "independently_verified":False}
+
+
 def _recover_named_manager_capacity(db,limit=3):
     """Reopen exact ORIGINAL BuildRelay tasks once after an explicit cap revision.
 
@@ -598,6 +669,7 @@ def tick(clock=None,limit=1):
            ON CONFLICT(key) DO UPDATE SET value=excluded.value""",(str(epoch),))
         manager_recovery=_recover_named_manager_tasks(db)
         capacity_recovery=_recover_named_manager_capacity(db)
+        provider_route_recovery=_recover_source_bound_503_after_route_repair(db)
         candidates=db.execute("""SELECT i.*,p.name FROM venture_company_os i
           JOIN product_programs p ON p.company_id=i.company_id AND p.project_id=i.project_id
           WHERE i.operating_state='ACTIVE_LOCAL_EXECUTIVE'
@@ -638,7 +710,8 @@ def tick(clock=None,limit=1):
                 "events_created":queued,"manager_source_assignment":manager_activation,
                 "manager_recovery":manager_recovery,
                 "manager_source_followup":manager_followup,
-                "manager_capacity_recovery":capacity_recovery,"external_actions":False,
+                "manager_capacity_recovery":capacity_recovery,
+                "manager_provider_route_recovery":provider_route_recovery,"external_actions":False,
                 "reported_real_users":0,"verified_cash":0,**sync}
 
 def _manager_founder_mandate_cases(db,company,project,seat,limit=8):
