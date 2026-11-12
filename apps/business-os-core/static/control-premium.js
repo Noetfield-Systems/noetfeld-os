@@ -3,7 +3,7 @@
 "use strict";
 const $=id=>document.getElementById(id);
 const esc=x=>String(x??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-const safeNumber=x=>(Number.isFinite(Number(x))?Number(x).toLocaleString("en-CA"):"—");
+const safeNumber=x=>(x===null||x===undefined||x===""||!Number.isFinite(Number(x))?"—":Number(x).toLocaleString("en-CA"));
 const date=x=>{if(!x)return "Not scheduled";const d=new Date(x);return Number.isNaN(d.getTime())?String(x):d.toLocaleString("en-CA",{dateStyle:"medium",timeStyle:"short"});};
 const category={
   partnership:"Strategic partnership",growth:"Sales & distribution",capital:"Investment & capital",people:"Talent & advisors",events:"Events & awards",business:"Customer or pilot",other:"Other opportunity"
@@ -58,6 +58,7 @@ function showView(name,opts={}){
   if(name==="health")loadHealth();
 }
 function setAuth(isConnected,message){
+  document.body.classList.toggle("locked",!isConnected);
   $("auth-gate").classList.toggle("hide",isConnected);
   $("app").classList.toggle("hide",!isConnected);
   $("sidebar").classList.toggle("hide",!isConnected);
@@ -112,7 +113,7 @@ function renderTeam(org){
   $("capability-total").textContent=org?.organization?safeNumber(org.organization.runtime_executor_count):"—";
 }
 function renderBusiness(roi){
-  const available=Boolean(roi);
+  const available=Boolean(roi&&!roi.__source_unavailable);
   $("revenue-state").innerHTML='<div class="empty"><div class="empty-icon">◈</div><h3>Collected revenue not connected</h3><p>Financial records have not been linked to this workspace. Estimated pipeline and recorded wins are not cash received.</p><span class="muted">Connect an authorized financial source to display verified receipts.</span></div>';
   $("roi").innerHTML=available?'<div class="stack-list">'+(roi.brands||[]).map(x=>
     '<div class="status-line"><span><b>'+esc(x.brand)+'</b><br><span class="muted">'+safeNumber(x.leads)+' recorded leads · '+safeNumber(x.qualified)+' fit-qualified</span></span>'+
@@ -150,7 +151,9 @@ function renderPeople(op){
   $("relationship-count").textContent=op?safeNumber(people.length):"—";
 }
 function paintConnect(items){
+  const unavailable=!Array.isArray(items);
   connectRecords=Array.isArray(items)?items:[];
+  if(unavailable){$("connect-summary").innerHTML='<div class="empty"><h3>Incoming requests unavailable</h3><p>We could not read the Connect feed. Your saved submissions remain in the source system.</p><button class="btn alt" data-go="connect">Review connection</button></div>';$("connect-count").textContent="—";$("connect-open").textContent="—";$("connect-scope").textContent="Feed temporarily unavailable";return;}
   const n=connectRecords.length, open=connectRecords.filter(x=>!["ARCHIVED","DECLINED","CLOSED_LOST"].includes(x.case_stage)).length;
   const newest=connectRecords.slice(0,4);
   $("connect-summary").innerHTML=n?newest.map(x=>
@@ -168,7 +171,7 @@ function render(data){
   $("metrics").innerHTML=[
     metric("Recorded opportunities",counts.opportunities===undefined?"—":safeNumber(counts.opportunities),"Business OS records · includes all stages","◎","opportunities"),
     metric("Open work",counts.pending_tasks===undefined?"—":safeNumber(counts.pending_tasks),"Queued, running or awaiting review","▣","actions","attention"),
-    metric("Activity · last 7 days",roi?safeNumber(roi.events_last_7d):"—","Recorded events, not revenue","⌁","activity"),
+    metric("Activity · last 7 days",roi&&!roi.__source_unavailable?safeNumber(roi.events_last_7d):"—","Recorded events, not revenue","⌁","activity"),
     metric("Collected revenue","Not connected","No verified payment source","◈","revenue")
   ].join("");
   $("last-updated").textContent="Updated "+new Date().toLocaleTimeString("en-CA",{hour:"numeric",minute:"2-digit"});
@@ -181,7 +184,7 @@ function render(data){
   if(op&&Array.isArray(op.opportunities)){
     $("pipeline-records").textContent=safeNumber(op.opportunities.length);
   }else $("pipeline-records").textContent="—";
-  if(!connectRecords.length)paintConnect([]);
+  if(!connectRecords.length && $("connect-count").textContent==="—"){$("connect-summary").innerHTML='<div class="empty"><p>Loading incoming requests…</p></div>';}
 }
 async function loadHealth(){
   $("system-health").textContent="Checking service readiness…";
