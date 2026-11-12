@@ -8,6 +8,12 @@ from pydantic import BaseModel, ConfigDict, Field
 import core
 import paperclip_bridge as paperclip
 import product_loops
+import founder_signal_transport
+import sina_work_bridge
+import venture_company_os
+import venture_decision_bridge
+import brain_pulse
+import buildrelay_intake
 
 TOKEN=os.getenv("FOUNDER_API_TOKEN","")
 INTERVAL=max(2,int(os.getenv("WORKER_INTERVAL_SECONDS","5")))
@@ -58,7 +64,9 @@ async def worker():
             event=await asyncio.to_thread(core.claim,"events")
             if event:
                 await asyncio.to_thread(core.process_event,event)
-                continue
+            # Serve a bounded batch of runnable tasks after each source event.
+            # A constantly replenished event queue must not starve admitted
+            # specialists or the first genuine named-manager mission.
             # Distinct eligible Company OS tasks execute concurrently while
             # atomic SQLite claims and dependency checks remain canonical.
             batch=[]
@@ -74,6 +82,8 @@ async def worker():
                     if isinstance(error,Exception):
                         import logging
                         logging.error("company_os_specialist_failed error_type=%s",type(error).__name__)
+                continue
+            if event:
                 continue
             await asyncio.sleep(INTERVAL)
         except asyncio.CancelledError: raise
@@ -252,6 +262,11 @@ async def feedback(data:Feedback,request:Request):
       {"brand":brand,"rating":data.rating,"comment":core.clean(data.comment,2000)})
     return JSONResponse({"accepted":True,"reference":event_id},status_code=202)
 
+@app.get("/api/control/sina-federation")
+def sina_federation_status(authorization:str|None=Header(default=None)):
+    authorize(authorization)
+    return founder_signal_transport.snapshot()
+
 @app.get("/api/control/product-programs")
 def product_programs(authorization:str|None=Header(default=None),company_id:str|None=None):
     authorize(authorization)
@@ -267,6 +282,23 @@ def create_product_program(payload:ProductProgram,authorization:str|None=Header(
         return product_loops.register(payload.model_dump())
     except ValueError as exc:
         raise HTTPException(409 if "existing_product" in str(exc) else 400,str(exc)) from None
+
+@app.post("/api/integrations/buildrelay/observations")
+def buildrelay_scoped_intake(payload:dict[str,Any],authorization:str|None=Header(default=None)):
+    if not buildrelay_intake.authorized(authorization):
+        raise HTTPException(401,"BuildRelay source authorization required.")
+    try:
+        result=buildrelay_intake.accept(payload)
+    except ValueError as exc:
+        raise HTTPException(409 if "conflicts" in str(exc) or "not_operational" in str(exc)
+                            else 400,str(exc)) from None
+    return JSONResponse(result,status_code=200 if result["idempotent"] else 202)
+
+@app.get("/api/integrations/buildrelay/status")
+def buildrelay_scoped_status(authorization:str|None=Header(default=None)):
+    if not buildrelay_intake.authorized(authorization):
+        raise HTTPException(401,"BuildRelay source authorization required.")
+    return buildrelay_intake.status()
 
 @app.post("/api/control/product-observations")
 def submit_product_observation(payload:ProductObservation,authorization:str|None=Header(default=None)):
@@ -313,6 +345,47 @@ def paperclip_backlog(body:PaperclipBacklog,authorization:str|None=Header(defaul
     except paperclip.PaperclipError as exc:
         raise HTTPException(exc.http_status,exc.code) from None
 
+@app.post("/api/internal/sina/work-results")
+def sina_mission_work_results(body:dict[str,Any],authorization:str|None=Header(default=None)):
+    """Scoped service-only projection of our existing Sina-origin task results.
+
+    Does not accept project/user names, arbitrary SQL, customer files or any
+    task outside the canonical Sina-bound Company OS task IDs.
+    """
+    key=os.getenv("SINA_COMPANY_RESULTS_TOKEN","")
+    token=(authorization or "").removeprefix("Bearer ").strip()
+    if len(key)<40 or not token or not hmac.compare_digest(token,key):
+        raise HTTPException(401,"sina_company_results_service_identity_required")
+    if not isinstance(body,dict) or set(body)!={"task_ids"}:
+        raise HTTPException(400,"only task_ids may be requested")
+    task_ids=body["task_ids"]
+    if not isinstance(task_ids,list) or len(task_ids)>20 or len(str(body))>3500:
+        raise HTTPException(400,"invalid or oversized task lookup")
+    try:
+        return sina_work_bridge.results_for_founder(task_ids)
+    except (TypeError,ValueError):
+        raise HTTPException(400,"non-canonical organization task ID") from None
+
+@app.get("/api/internal/company-floor/brain-pulse", include_in_schema=False)
+def company_brain_source_read(
+    x_company_floor_token:str|None=Header(default=None),
+    hours:int=48, limit:int=120,
+):
+    """Only the local Company OS management/team actions, not product internals."""
+    expected=(os.getenv("COMPANY_BRAIN_READ_TOKEN") or "").strip()
+    if len(expected)<40:
+        raise HTTPException(503,"company_brain_identity_not_configured")
+    if not x_company_floor_token or not hmac.compare_digest(
+          x_company_floor_token,expected):
+        raise HTTPException(401,"company_brain_service_identity_required")
+    if hours not in brain_pulse.WINDOWS or not 1<=limit<=240:
+        raise HTTPException(400,"invalid_brain_window")
+    try:
+        with core.connect() as db:
+            return brain_pulse.read(db,hours=hours,limit=limit)
+    except (ValueError,OSError):
+        raise HTTPException(503,"company_brain_history_unavailable") from None
+
 @app.get("/api/control/overview")
 def overview(authorization:str|None=Header(default=None)):
     authorize(authorization)
@@ -343,6 +416,55 @@ def organization(authorization:str|None=Header(default=None)):
         "seats":seats,
         "runtime_agents":agents
     }
+@app.post("/api/control/venture-company-os/decisions")
+async def local_company_agent_answer_and_continue(
+    request:Request,authorization:str|None=Header(default=None)
+):
+    """Authorized agents ask Sina, then queue in their OWN Company OS."""
+    authorize(authorization)
+    raw=await request.body()
+    if len(raw)>8192: raise HTTPException(413,"Agent question too large")
+    try:
+        import json
+        data=json.loads(raw)
+        if not isinstance(data,dict):
+            raise ValueError("Expected a typed agent question")
+        result=venture_decision_bridge.submit_question(data)
+        return result
+    except ValueError as exc:
+        raise HTTPException(400,str(exc)[:160])
+    except RuntimeError:
+        raise HTTPException(503,"Authenticated Sina Goalkeeper not configured")
+    except Exception:
+        raise HTTPException(503,"Trusted Goalkeeper or Company OS queue unavailable")
+
+@app.get("/api/control/venture-company-os/decisions")
+def local_company_decision_history(
+    company_id:str,project_id:str,authorization:str|None=Header(default=None)
+):
+    authorize(authorization)
+    try:
+        return venture_decision_bridge.history(company_id,project_id)
+    except ValueError as exc:
+        raise HTTPException(400,str(exc)[:160])
+
+@app.get("/api/control/venture-company-os")
+def venture_company_os_instances(
+    authorization:str|None=Header(default=None),
+    company_id:str|None=None,
+    project_id:str|None=None,
+):
+    """Per-project Company OS executive, specialist team and own work state.
+
+    This is an operational instance, not a separate incorporated company or
+    physical Railway deployment. All data is read under Founder auth.
+    """
+    authorize(authorization)
+    for identifier in (company_id,project_id):
+        if identifier is not None and not re.fullmatch(r"[a-z0-9][a-z0-9-]{2,90}",identifier):
+            raise HTTPException(400,"Invalid company/project selector")
+    return venture_company_os.portfolio(company_id=company_id,project_id=project_id)
+
 @app.get("/api/control/opportunities")
 def opportunities(authorization:str|None=Header(default=None),brand:str|None=None):
     authorize(authorization)
@@ -468,3 +590,73 @@ def approve_task(tid:str,authorization:str|None=Header(default=None)):
         db.execute("INSERT INTO events(id,event_type,source,brand,payload,status,created_at,processed_at) VALUES(?,?,?,?,?,'processed',?,?)",
          (core.idof("evt"),"founder.approval.recorded","founder_control","portfolio",'{"task_id":"'+tid+'"}',core.now(),core.now()))
     return {"approved":True,"execution":"Approval recorded only; no external action was performed."}
+
+# NEXUS commercial bridge: narrowly scoped, PII-free input to the CANONICAL Company OS queue.
+# No founder token delegation, payment authority, new scheduler, CRM, or autonomous outbound action.
+class NexusGrowthObservation(BaseModel):
+    model_config=ConfigDict(extra="forbid")
+    source_event_id:str=Field(pattern=r"^nexus\.(lead\.nxlead_[0-9a-f]{32}|order\.nx_[0-9a-f]{32}\.(created|paid)|intent\.nxi_[0-9a-f]{32})$",min_length=32,max_length=128)
+    source_kind:str
+    source_ref:str=Field(min_length=20,max_length=220)
+    signal:str
+    summary:str=Field(min_length=12,max_length=500)
+    severity:int=Field(default=2,ge=0,le=4)
+    observed_at:str
+    metric_name:str
+    metric_value:float=Field(ge=0,le=1)
+    sample_count:int=Field(ge=0,le=1)
+
+@app.post("/api/integrations/nexus/observations")
+def nexus_growth_observation(payload:NexusGrowthObservation,x_nexus_bridge_token:str|None=Header(default=None)):
+    expected=os.environ.get("COMPANY_OS_NEXUS_OBSERVATION_TOKEN","")
+    if len(expected)<32:
+        raise HTTPException(503,"NEXUS growth bridge not configured")
+    if not x_nexus_bridge_token or not hmac.compare_digest(x_nexus_bridge_token,expected):
+        raise HTTPException(401,"NEXUS bridge authentication required")
+    data=payload.model_dump()
+    eid=data["source_event_id"]
+    if eid.startswith("nexus.lead."):
+        expected_signal=("acquisition","inbound_inquiries",
+                         "nexus:growth-lead:"+eid.removeprefix("nexus.lead."))
+    elif eid.endswith(".created"):
+        expected_signal=("conversion","orders_created",
+                         "nexus:economic-order:"+eid.removeprefix("nexus.order.").removesuffix(".created"))
+    elif eid.endswith(".paid"):
+        expected_signal=("revenue","stripe_paid_reported",
+                         "nexus:economic-order:"+eid.removeprefix("nexus.order.").removesuffix(".paid"))
+    elif eid.startswith("nexus.intent."):
+        expected_signal=("activation","intent_drafts_generated",
+                         "nexus:economic-intent:"+eid.removeprefix("nexus.intent."))
+    else:
+        raise HTTPException(422,"Unknown NEXUS event kind")
+    if (data["source_kind"]!="REPORTED_OPERATIONAL" or
+        data["signal"]!=expected_signal[0] or
+        data["metric_name"]!=expected_signal[1] or
+        data["metric_value"]!=1 or data["sample_count"]!=1 or
+        data["source_ref"]!=expected_signal[2]):
+        raise HTTPException(422,"NEXUS source event mismatch")
+    try:
+        outcome=product_loops.observe("noetfield-systems-inc","nexus-economic-rail",data)
+    except ValueError as exc:
+        raise HTTPException(409 if "not_operational" in str(exc) else 422,str(exc)) from None
+    return JSONResponse({"accepted":True,**outcome,
+                         "company_id":"noetfield-systems-inc","project_id":"nexus-economic-rail",
+                         "canonical_queue":True,"external_actions":"FOUNDER_RESERVED",
+                         "real_user_traction_verified":False},
+                        status_code=200 if outcome["idempotent"] else 202)
+
+@app.get("/api/integrations/nexus/status")
+def nexus_bridge_status(x_nexus_bridge_token:str|None=Header(default=None)):
+    expected=os.environ.get("COMPANY_OS_NEXUS_OBSERVATION_TOKEN","")
+    if len(expected)<32:
+        raise HTTPException(503,"NEXUS growth bridge not configured")
+    if not x_nexus_bridge_token or not hmac.compare_digest(x_nexus_bridge_token,expected):
+        raise HTTPException(401,"NEXUS bridge authentication required")
+    with core.connect() as db:
+        row=db.execute("SELECT status FROM product_programs WHERE company_id=? AND project_id=?",
+                       ("noetfield-systems-inc","nexus-economic-rail")).fetchone()
+    return {"ready":bool(row and row["status"]=="INTERNAL_ACTIVE"),
+            "program":"nexus-economic-rail",
+            "canonical_queue":"existing_company_os_events_tasks",
+            "outbound_marketing":"FOUNDER_APPROVAL_REQUIRED",
+            "verified_customer_revenue":None}

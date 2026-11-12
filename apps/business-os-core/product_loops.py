@@ -385,6 +385,15 @@ def _insert_observation(db, company: str, project: str, payload: dict, verified:
         "portfolio", canonical({"company_id": company, "project_id": project,
                                 "observation_id": obs_id, "priority_score": score}),
         utc(), "product-signal:" + obs_id, score))
+    # One real observation may also wake Sina's EXISTING organizational loops.
+    # Insert into the SAME Company events transaction; never direct network
+    # delivery from this writer and never duplicate Company job ownership.
+    import founder_signal_transport
+    founder_signal_transport.enqueue_in_existing_events(db, {
+        "id": obs_id, "company_id": company, "project_id": project,
+        "source_kind": source_kind, "signal": signal, "severity": severity,
+        "observed_at": observed_at,
+    })
     return {"observation_id": obs_id, "event_id": eid, "idempotent": False,
             "priority_score": score, "verification": verification}
 
@@ -430,6 +439,55 @@ def process_signal(event: dict) -> dict:
             db.execute("UPDATE events SET status='processed',processed_at=? WHERE id=?",
                        (utc(), event["id"]))
             return {"existing": True, "tasks": existing}
+        # A real named-GM review is ONE task over the ORIGINAL specialist
+        # outputs, not another generic 4-agent planning round. This signal
+        # was created only after completed source-bound team model runs.
+        if o["source_event_id"]=="manager-team-review:gm-buildrelay-farid:v1":
+            if (p["company_id"]!="founder-portfolio" or
+                    p["project_id"]!="buildrelay-bridge-economy"):
+                raise ValueError("cross_company_manager_review_denied")
+            original=db.execute("""
+                SELECT id FROM product_observations
+                WHERE company_id=? AND project_id=?
+                  AND source_event_id='manager-followup:gm-buildrelay-farid:v1'
+            """,(p["company_id"],p["project_id"])).fetchone()
+            if not original or o["source_ref"]!="company-os:observation:"+original["id"]:
+                raise ValueError("manager_review_original_source_missing")
+            team=db.execute("""
+                SELECT t.id AS task_id,r.id AS run_id
+                FROM tasks t JOIN runs r ON r.task_id=t.id
+                WHERE t.company_id=? AND t.project_id=? AND t.observation_id=?
+                  AND t.role IN ('engineering_operator','product_strategy',
+                    'customer_success','market_intelligence','marketing_content')
+                  AND t.status IN ('drafted','approved')
+                  AND r.id=(SELECT rr.id FROM runs rr WHERE rr.task_id=t.id
+                            ORDER BY rr.finished_at DESC,rr.id DESC LIMIT 1)
+                  AND r.status='completed' AND r.provider LIKE 'sina-%'
+                ORDER BY t.role,t.id LIMIT 5
+            """,(p["company_id"],p["project_id"],original["id"])).fetchall()
+            if len(team)<2:
+                raise ValueError("manager_review_requires_actual_specialist_runs")
+            lead=core.add_task(db,event["id"],None,"portfolio","chief_of_staff",
+                "BuildRelay · first authentic team outcome review",
+                "Actual prior manager follow-up has "+str(len(team))+
+                " completed specialist model replies. Inspect their original "+
+                "dependency run IDs, challenge assumptions and select one "+
+                "concrete BuildRelay first-match or onboarding implementation "+
+                "work packet. This is internal model-draft review, not code "+
+                "shipping, independent QA, customer adoption or cash proof.",
+                "Return one engineering deliverable, owner, evidence requirement "+
+                "and next follow-up; no external money, token, user or deployment "+
+                "effect authorized.")
+            db.execute("UPDATE tasks SET company_id=?,project_id=?,observation_id=? WHERE id=?",
+                (p["company_id"],p["project_id"],o["id"],lead))
+            for child in team:
+                core.add_task_dependency(db,lead,child["task_id"])
+            db.execute("UPDATE events SET status='processed',processed_at=? WHERE id=?",
+                       (utc(),event["id"]))
+            return {"existing":False,"source_linked_team_review":True,
+                    "task_count":1,"executive_task":lead,
+                    "original_specialist_run_ids":[x["run_id"] for x in team],
+                    "independent_verification":False}
         signal = o["signal"]
         roles = list(ROLES[signal])[:p["max_tasks_per_cycle"]]
         # Synthetic users are never inputs to paid acquisition / demand claims.

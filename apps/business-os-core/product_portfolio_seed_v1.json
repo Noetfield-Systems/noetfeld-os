@@ -61,6 +61,24 @@
       ]
     },
     {
+      "company_id": "noetfield-systems-inc",
+      "project_id": "nexus-economic-rail",
+      "name": "NEXUS Economic Rail",
+      "vertical": "agentic-economic-infrastructure",
+      "priority": 5,
+      "health_url": "https://nexus-economic-rail-production.up.railway.app/health",
+      "objective": "Operate NEXUS as a premium programmable economic execution product: optimize the authenticated inquiry funnel, buyer qualification, paid workflow fulfillment, technical reliability, developer integrations and partner-led growth using only recorded real events. Produce bounded specialist work and executive growth priorities in existing Company OS; no synthetic customer or revenue claims and no unauthorized outbound or capital actions.",
+      "max_tasks_per_cycle": 7,
+      "market_keywords": [
+        "agent commerce",
+        "economic execution",
+        "payments",
+        "developer platform",
+        "tokenization",
+        "business automation"
+      ]
+    },
+    {
       "company_id": "founder-portfolio",
       "project_id": "atelier",
       "name": "Atelier Social",

@@ -2,6 +2,12 @@ import json, os, re, sqlite3, time, uuid, hashlib, hmac
 from pathlib import Path
 from datetime import datetime, timezone
 import product_loops
+import founder_portfolio_bridge
+import sina_work_bridge
+import founder_signal_transport
+import venture_company_os
+import venture_decision_bridge
+import brain_pulse
 
 DB=Path(os.getenv("DATABASE_PATH","/data/business-os.sqlite"))
 BRANDS={"noetfield":"Noetfield Systems","buildworkflow":"BuildWorkflow","trustfield":"TrustField","signalforge":"SignalForge","buildrelay":"BuildRelay","portfolio":"Portfolio"}
@@ -127,6 +133,10 @@ def init():
   try:d.execute("CREATE VIRTUAL TABLE IF NOT EXISTS memory_fts USING fts5(memory_id UNINDEXED,brand UNINDEXED,content)")
   except sqlite3.OperationalError:pass
   product_loops.init(d)
+  sina_work_bridge.init(d)
+  venture_company_os.init(d)
+  venture_decision_bridge.init(d)
+  brain_pulse.init(d)
  # Default off for tests and uncommissioned customer deployments. Staging can
  # activate an idempotent source-provenance portfolio after a scoped rollout.
  if os.getenv("COMPANY_OS_PORTFOLIO_AUTOSTART","").lower() in {"1","true"}:
@@ -208,8 +218,12 @@ def retrieve(brand,q,limit=4):
   try:
    expr=" OR ".join('"'+x+'"' for x in terms)
    rows=d.execute("SELECT m.content FROM memory_fts f JOIN memories m ON m.id=f.memory_id WHERE f.brand=? AND memory_fts MATCH ? LIMIT ?",(brand,expr,limit)).fetchall()
-   return [x["content"] for x in rows]
-  except sqlite3.OperationalError: rows=d.execute("SELECT content FROM memories WHERE brand=? ORDER BY created_at DESC LIMIT 100",(brand,)).fetchall()
+   if rows:return [x["content"] for x in rows]
+  except sqlite3.OperationalError:
+   pass
+  # FTS may return no hits on hashed IDs or tokenization edge cases.
+  # Fall back ONLY within the exact venture memory scope, never across teams.
+  rows=d.execute("SELECT content FROM memories WHERE brand=? ORDER BY created_at DESC LIMIT 100",(brand,)).fetchall()
  return [x["content"] for x in sorted(rows,key=lambda r:sum(t in r["content"].lower() for t in terms),reverse=True)[:limit]]
 def process_intake(e):
  p=json.loads(e["payload"]);brand=p["brand"];aud=p["audience"];intent=p["intent"];urg=p["urgency"];value=float(p.get("estimated_value") or 0);route,primary,support=route_for(brand,aud,intent);fit=score(aud,intent,urg,value,p["problem"])
@@ -282,6 +296,11 @@ def claim(table):
    r=d.execute("""
     SELECT t.*,o.intent,o.problem,o.estimated_value,o.ai_consent,o.route,o.score,o.urgency
     FROM tasks t LEFT JOIN opportunities o ON o.id=t.opportunity_id
+    LEFT JOIN events source_event ON source_event.id=t.event_id
+    LEFT JOIN product_observations manager_source
+      ON manager_source.id=t.observation_id
+     AND manager_source.company_id=t.company_id
+     AND manager_source.project_id=t.project_id
     WHERE t.status='queued'
       AND NOT EXISTS(
         SELECT 1 FROM task_dependencies td
@@ -290,6 +309,13 @@ def claim(table):
           AND (dep.id IS NULL OR dep.status NOT IN ('drafted','approved'))
       )
     ORDER BY
+      -- An authentic first-manager activation already accepted into the
+      -- original observations/events/tasks graph should not wait behind an
+      -- unrelated historical task backlog. This changes scheduling only;
+      -- it does not grant authority, forge a run, or bypass dependencies.
+      CASE WHEN manager_source.source_event_id =
+           'manager-first-source:gm-buildrelay-farid:v1' THEN 0 ELSE 1 END ASC,
+      COALESCE(source_event.priority_score,0) DESC,
       (SELECT COUNT(*) FROM tasks active
        WHERE active.company_id=t.company_id AND active.project_id=t.project_id
          AND active.status='running') ASC,
@@ -312,6 +338,13 @@ def process_task(t):
  profile=next((a for a in AGENTS if a[0]==role),None)
  agent_name=profile[1] if profile else role
  agent_mission=profile[2] if profile else "Complete the assigned specialist task."
+ if scoped_product:
+  with connect() as d:
+   venture_specialist=venture_company_os.specialist(d,t["company_id"],t["project_id"],role)
+  if venture_specialist:
+   agent_mission=venture_specialist["remit"]
+   ctx["venture_company_os_instance"]=venture_specialist["instance_id"]
+   ctx["venture_source_asset"]=venture_specialist["source_asset"]
  company_seat=company_role_for_runtime(role)
  manager_role=company_seat["reports_to"]
  result={"assessment":"Deterministic processing. Third-party AI is used only when the user opted in and provider is configured.",
@@ -347,7 +380,68 @@ def process_task(t):
    "cta":"Request a scoped workflow review",
    "success_metric":"Qualified consented inbound requests, excluding tests",
    "approval_required_before_publishing":True,"no_outbound_action":True}
- if t.get("ai_consent") and os.getenv("LLM_BASE_URL") and os.getenv("LLM_API_KEY") and os.getenv("LLM_MODEL"):
+ # Before acting on a normal specialist task, consult Sina's ONE
+ # Founder Goalkeeper using this local Company's actual canonical task.
+ # No new task is minted here. Model advice cannot create an external permit.
+ decision_context={"state":"NOT_CONSULTED"}
+ decision_allows_internal=True
+ if (scoped_product and role in (
+       "chief_of_staff","engineering_operator","product_strategy",
+       "market_intelligence","marketing_content","customer_success",
+       "risk_governance","roi_analyst") and sina_work_bridge.configured()):
+  try:
+   decision_context=venture_decision_bridge.consult_existing_task(t)
+   decision_allows_internal=decision_context.get("disposition") in (
+       "PROCEED_IN_LOCAL_COMPANY_OS","CHECK_EVIDENCE_AND_CONTINUE",
+       "CLARIFY_FROM_EVIDENCE_NOT_FOUNDER","RESEARCH_IN_LOCAL_COMPANY_OS")
+  except Exception as decision_error:
+   decision_context={"state":"DEGRADED_NO_TRUSTED_GOALKEEPER_RESPONSE",
+                     "error_class":type(decision_error).__name__}
+   # Safe internal deterministic drafts may continue, but no trusted
+   # Founder decision can be asserted when the source is unavailable.
+   decision_allows_internal=False
+ result["founder_goalkeeper"] = decision_context
+ if not decision_allows_internal:
+  result["risk_flags"].append("awaiting_canonical_founder_goalkeeper")
+  result["assessment"]="Company OS will keep local evidence only until the authenticated Goalkeeper decision is available."
+ # The existing Company OS task engine may invoke the Agent Fabric model
+ # only for authenticated Founder-originated, scoped, internal WorkPackets.
+ # Do not forward raw customer messages, contacts or memory to this inference.
+ if scoped_product and decision_allows_internal and sina_work_bridge.specialist_configured() and sina_work_bridge.is_company_os_task(t["id"]):
+  try:
+   generated=sina_work_bridge.specialist_proposal(t)
+   result=generated["result"]
+   if role=="chief_of_staff" and isinstance(generated.get("manager_team_context_refs"),list):
+    # Input provenance actually passed to this successful model request.
+    # It is NOT a manager-approved independent delivery or a business result.
+    result["manager_team_context_refs"]=generated["manager_team_context_refs"][:5]
+    result["manager_team_context_state"]="SOURCE_DRAFTS_PRESENTED_FOR_MODEL_REVIEW"
+   result["company_role_id"]=company_seat["role_id"]
+   result["company_role_title"]=company_seat["title"]
+   result["reviewer_role"]=manager_role
+   provider="sina-"+generated["provider"]
+   model=generated["model"]
+   it=int(generated.get("tokens_in") or 0)
+   ot=int(generated.get("tokens_out") or 0)
+  except Exception as specialist_error:
+   provider="specialist_degraded"
+   result["risk_flags"]=["specialist_model_unavailable"]
+   # Only allowlisted classes / numeric HTTP status. Never log provider
+   # response bodies, task text, API tokens or arbitrary exception messages.
+   klass=type(specialist_error).__name__
+   status=getattr(specialist_error,"code",None)
+   if type(status) is int and 400<=status<=599:
+    result["model_issue_code"]="MODEL_HTTP_"+str(status)
+   else:
+    result["model_issue_code"]={
+     "TimeoutError":"MODEL_TIMEOUT","HTTPError":"MODEL_HTTP_UNKNOWN",
+     "URLError":"MODEL_TRANSPORT","ValueError":"MODEL_INVALID_RESPONSE",
+     "RuntimeError":"MODEL_RUNTIME_ERROR"}.get(klass,"MODEL_OTHER_FAILURE")
+   result["model_issue_class"]=klass if klass in (
+    "TimeoutError","HTTPError","URLError","ValueError","RuntimeError") else "OTHER"
+ # Legacy user-consented model lane remains separate; never allow two model
+ # requests or use customer data in the new Company internal specialist path.
+ if decision_allows_internal and provider=="deterministic" and t.get("ai_consent") and os.getenv("LLM_BASE_URL") and os.getenv("LLM_API_KEY") and os.getenv("LLM_MODEL"):
   try:
    from urllib.request import Request,urlopen
    base=os.getenv("LLM_BASE_URL").rstrip("/");model=os.getenv("LLM_MODEL")
@@ -370,10 +464,35 @@ def process_task(t):
    except Exception:result={"assessment":clean(out,1500),"next_best_action":t["next_action"],"risk_flags":[],"priority":"normal"}
    use=data.get("usage") or {};it=int(use.get("prompt_tokens") or 0);ot=int(use.get("completion_tokens") or 0);provider="openai-compatible"
   except Exception as ex:provider="provider_error";result["assessment"]="Model unavailable: "+clean(ex,120);result["risk_flags"]=["model_unavailable"]
- with connect() as d:
-  d.execute("INSERT INTO runs VALUES(?,?,?,?,?,?,?,?,?,?,?)",(idof("run"),t["id"],role,provider,model,"degraded" if provider=="provider_error" else "completed",it,ot,now(),now(),json.dumps(result,ensure_ascii=False)))
-  d.execute("UPDATE tasks SET status='drafted',result=?,updated_at=? WHERE id=?",(json.dumps({"provider":provider,"recommendation":result,"memory_hits":len(mem),"external_action":"not_executed"}),now(),t["id"]))
+ # Always retain the real Goalkeeper result after a model artifact overwrites
+ # the specialist result object; model-generated text is never the authority.
  if scoped_product:
+  result["founder_goalkeeper"]=decision_context
+ # Claim a named manager run ONLY if this real Company OS source task
+ # was sent through the scoped Sina specialist route with stable identity
+ # in that exact request. The generic openai-compatible legacy lane does NOT
+ # inject this name and must not impersonate the named manager.
+ if scoped_product and role=="chief_of_staff" and provider.startswith("sina-"):
+  named=venture_company_os.named_manager(t["company_id"],t["project_id"],role)
+  if named:
+   result["manager_actor_id"]=named["actor_id"]
+   result["manager_display_name"]=named["display_name"]
+   result["manager_identity_evidence"]="NAMED_ROLE_CONTEXT_IN_ACTUAL_MODEL_INVOCATION"
+   result["external_execution_verified"]=False
+   result["independent_business_outcome_verified"]=False
+ with connect() as d:
+  d.execute("INSERT INTO runs VALUES(?,?,?,?,?,?,?,?,?,?,?)",(idof("run"),t["id"],role,provider,model,"degraded" if provider in ("provider_error","specialist_degraded") else "completed",it,ot,now(),now(),json.dumps(result,ensure_ascii=False)))
+  d.execute("UPDATE tasks SET status='drafted',result=?,updated_at=? WHERE id=?",(json.dumps({"provider":provider,"recommendation":result,"memory_hits":len(mem),"external_action":"not_executed"}),now(),t["id"]))
+  if scoped_product:
+   brain_pulse.record_specialist(d,task=t,goalkeeper=decision_context,
+     provider=provider,input_tokens=it,output_tokens=ot)
+ if scoped_product:
+  try:
+   # The actual Company OS run is committed above. Only a source-reported
+   # result is queued; no model can manufacture independent verification.
+   venture_decision_bridge.record_task_feedback(t["id"],provider)
+  except Exception as feedback_error:
+   print("COMPANY_OS_DECISION_FEEDBACK_DEGRADED "+type(feedback_error).__name__,flush=True)
   add_memory(memory_scope,"bounded_internal_draft",t["id"],
     json.dumps({"role":role,"source_task":t["id"],
        "next_best_action":str(result.get("next_best_action",""))[:500],
@@ -381,13 +500,69 @@ def process_task(t):
   print("COMPANY_OS_SPECIALIST_DRAFT "+json.dumps({
    "company_id":t["company_id"],"project_id":t["project_id"],
    "role":role,"provider":provider,"state":"DRAFTED_NOT_DISPATCHED",
-   "model_tokens":it+ot,"external_action":False},sort_keys=True),flush=True)
+   "model_tokens":it+ot,
+   "model_issue_code":result.get("model_issue_code"),
+   "external_action":False},sort_keys=True),flush=True)
+def process_founder_portfolio_event(e):
+ # The Founder owns the canonical registry. Company OS owns ONLY the task
+ # and receipt lifecycle, never a second portfolio/company tenant registry.
+ payload=json.loads(e["payload"])
+ required={
+  "schema","source_owner","source_schema","source_version","source_sha256",
+  "project_count","matched_program_count","unmapped_project_count",
+  "unmapped_project_ids","authority","external_execution_authorized",
+  "legal_entity_creation_authorized","paid_customer_claimed",
+ }
+ if (e["source"]!="sina_founder_os_pinned_portfolio"
+     or not isinstance(payload,dict) or set(payload)!=required
+     or payload["schema"]!="noetfield.company-os.founder-ssot-observation.v1"
+     or payload["source_owner"]!="sina_founder_os"
+     or payload["source_schema"]!="sina.company-os.portfolio-projection.v1"
+     or payload["authority"]!="READ_ONLY_PROJECTION"
+     or any(payload[x] is not False for x in (
+       "external_execution_authorized","legal_entity_creation_authorized","paid_customer_claimed"))
+     or not re.fullmatch("[0-9a-f]{64}",str(payload["source_sha256"]))
+     or not 1<=payload["project_count"]<=100
+     or not 0<=payload["matched_program_count"]<=payload["project_count"]
+     or payload["unmapped_project_count"]!=payload["project_count"]-payload["matched_program_count"]
+     or not isinstance(payload["unmapped_project_ids"],list)
+     or len(payload["unmapped_project_ids"])>12
+     or any(not isinstance(x,str) or not re.fullmatch("[a-z0-9][a-z0-9-]{2,90}",x)
+            for x in payload["unmapped_project_ids"])):
+  raise ValueError("untrusted_founder_portfolio_projection")
+ with connect() as d:
+  d.execute("BEGIN IMMEDIATE")
+  count=d.execute("SELECT count(*) n FROM tasks WHERE event_id=?",(e["id"],)).fetchone()["n"]
+  if count:
+   d.execute("UPDATE events SET status='processed',processed_at=? WHERE id=?",(now(),e["id"]))
+   return
+  summary=("Founder canonical portfolio revision "+payload["source_sha256"][:16]+
+   " · projects="+str(payload["project_count"])+
+   ", matched Company programs="+str(payload["matched_program_count"])+
+   ", unmapped="+str(payload["unmapped_project_count"])+
+   ". Source is a versioned catalog, not live deployment, customer or payment evidence.")
+  risk=add_task(
+   d,e["id"],None,"portfolio","risk_governance",
+   "Sina SSOT · cross-company ownership and tenant scope",
+   summary+" Independently flag project/company ownership drift and missing source evidence.",
+   "Draft bounded ownership and connector validation; do not create tenants or edit canonical registry.")
+  lead=add_task(
+   d,e["id"],None,"portfolio","chief_of_staff",
+   "Sina SSOT · reconcile operating priorities",
+   summary+" Compare this with actual Company OS program ownership and current operational outcomes.",
+   "Propose ONE highest-leverage next observation or Founder decision, citing actual source boundaries.")
+  add_task_dependency(d,lead,risk)
+  d.execute("UPDATE events SET status='processed',processed_at=? WHERE id=?",(now(),e["id"]))
+
+
 def process_event(e):
  try:
   if e["event_type"]=="intake.received":process_intake(e)
   elif e["event_type"]=="feedback.received":process_feedback(e)
   elif e["event_type"]=="system.learning_tick":process_learning(e)
   elif e["event_type"]=="product.signal_observed":product_loops.process_signal(e)
+  elif e["event_type"]==founder_portfolio_bridge.EVENT:process_founder_portfolio_event(e)
+  elif e["event_type"]==founder_signal_transport.EVENT:founder_signal_transport.process(e)
   else:
    with connect() as d:d.execute("UPDATE events SET status='ignored',processed_at=? WHERE id=?",(now(),e["id"]))
  except Exception as ex:
@@ -398,8 +573,118 @@ def daily_tick():
  if time.time()-last>=86400:
   add_event("system.learning_tick","system","portfolio",{"trigger":"daily"})
   with connect() as d:d.execute("INSERT INTO state VALUES('last_learning',?) ON CONFLICT(key) DO UPDATE SET value=excluded.value",(str(time.time()),))
+ # Resume deferred Sina federation signals on the SAME canonical events queue.
+ # Persistent attempts/backoff survive restarts; one failing destination cannot
+ # stop product, engineering, growth, market or portfolio loops.
+ founder_signal_transport.resume_deferred()
+ # Read the Founder canonical source on the SAME existing Company worker tick.
+ # A version change becomes one idempotent existing-queue event; never a
+ # duplicate product registry, new scheduler or autonomous write permit.
+ founder_bridge=founder_portfolio_bridge.tick()
+ if founder_bridge.get("state") in ("OBSERVED","DEGRADED"):
+  print("COMPANY_OS_SINA_PORTFOLIO_FEDERATION "+json.dumps({
+   "state":founder_bridge["state"],
+   "source_sha256":founder_bridge.get("source_sha256"),
+   "canonical_queue":founder_bridge.get("canonical_queue"),
+   "error_type":founder_bridge.get("error_type"),
+   "external_execution_authorized":False},sort_keys=True),flush=True)
  # Same durable Company OS cycle, not a new polling service.
  product_loops.tick_due()
+ # Each venture has its OWN Company OS mission, team and cadence. Sina only
+ # owns portfolio-level intent and observes outcomes; it is not the task CEO.
+ local_cycles=venture_company_os.tick()
+ activation=local_cycles.get("manager_source_assignment") or {}
+ if activation.get("queued"):
+  print("COMPANY_OS_NAMED_MANAGER_ACTIVATION "+json.dumps({
+   "actor_id":activation.get("actor_id"),
+   "state":activation.get("state"),
+   "original_source_observation_id":activation.get("original_source_observation_id"),
+   "original_queue_event_id":activation.get("original_queue_event_id"),
+   "external_actions":False},sort_keys=True),flush=True)
+ # Log the source reason on the ordinary cadence when no GM assignment
+ # can start. No customer content, credentials, or invented manager actions.
+ if (not activation.get("queued") and
+     local_cycles.get("state")=="COMPANY_LOOPS_ADVANCED" and activation):
+  print("COMPANY_OS_NAMED_MANAGER_STATUS "+json.dumps({
+   "actor_id":"gm-buildrelay-farid",
+   "state":activation.get("state"),
+   "queued":False,"verification":False,
+   "external_actions":False},sort_keys=True),flush=True)
+ followup=local_cycles.get("manager_source_followup") or {}
+ if followup.get("queued"):
+  print("COMPANY_OS_NAMED_MANAGER_FOLLOWUP "+json.dumps({
+   "actor_id":followup.get("actor_id"),
+   "state":followup.get("state"),
+   "original_manager_run_id":followup.get("original_manager_run_id"),
+   "original_manager_task_id":followup.get("original_manager_task_id"),
+   "original_queue_event_id":followup.get("original_queue_event_id"),
+   "independent_verification":False,
+   "external_actions":False},sort_keys=True),flush=True)
+ if (activation.get("state") in ("ALREADY_QUEUED","QUEUED_IN_ORIGINAL_COMPANY_OS")
+     and (local_cycles.get("state")=="COMPANY_LOOPS_ADVANCED"
+          or (local_cycles.get("manager_provider_route_recovery") or {}).get("requeued_count"))):
+  # Read-only original Company OS DB lineage. This is diagnostic evidence,
+  # not a replacement task queue or a fictitious named-manager reply.
+  with connect() as source_db:
+   original_trace=venture_company_os.original_first_manager_runtime_trace(source_db)
+  print("COMPANY_OS_FIRST_MANAGER_ORIGINAL_TRACE "+json.dumps(
+   original_trace,sort_keys=True),flush=True)
+ review=local_cycles.get("manager_source_team_review") or {}
+ if review.get("queued"):
+  print("COMPANY_OS_SOURCE_BACKED_GM_TEAM_REVIEW "+json.dumps({
+   "state":review.get("state"),
+   "actor_id":review.get("actor_id"),
+   "review_event_id":review.get("review_event_id"),
+   "source_observation_id":review.get("source_observation_id"),
+   "specialist_run_ids":review.get("specialist_run_ids"),
+   "independently_verified":False,"external_actions":False
+  },sort_keys=True),flush=True)
+ recovery=local_cycles.get("manager_recovery") or {}
+ if recovery.get("requeued_count"):
+  print("COMPANY_OS_NAMED_MANAGER_RECOVERY "+json.dumps({
+   "actor_id":recovery["actor_id"],
+   "original_task_ids":recovery["original_task_ids"],
+   "state":recovery["state"],
+   "external_actions":False,
+   "verified_delivery":False},sort_keys=True),flush=True)
+ cap_recovery=local_cycles.get("manager_capacity_recovery") or {}
+ if cap_recovery.get("requeued_count"):
+  print("COMPANY_OS_NAMED_MANAGER_CAPACITY_RECOVERY "+json.dumps({
+   "actor_id":cap_recovery["actor_id"],
+   "original_task_ids":cap_recovery["original_task_ids"],
+   "state":cap_recovery["state"],
+   "policy_revision":cap_recovery["policy_revision"],
+   "external_actions":False,
+   "verified_delivery":False},sort_keys=True),flush=True)
+ if local_cycles.get("events_created",0):
+  print("VENTURE_COMPANY_OS_LOCAL_CYCLES "+json.dumps({
+   "projects":local_cycles["local_companies_advanced"],
+   "canonical_events":local_cycles["events_created"],
+   "external_actions":False},sort_keys=True),flush=True)
+ route_recovery=local_cycles.get("manager_provider_route_recovery") or {}
+ if route_recovery.get("requeued_count"):
+  print("COMPANY_OS_ORIGINAL_503_ROUTE_RECOVERY "+json.dumps({
+   "state":route_recovery.get("state"),
+   "original_tasks":route_recovery.get("original_tasks"),
+   "provider_route_revision":route_recovery.get("provider_route_revision"),
+   "external_actions":False,"independently_verified":False
+  },sort_keys=True),flush=True)
+ sina_work=sina_work_bridge.tick()
+ if sina_work.get("state") in ("OBSERVED","DEGRADED","MANDATES_ONLY_AGENT_FABRIC_OWNS_WORKPACKETS"):
+  print("COMPANY_OS_SINA_WORK_HANDOFF "+json.dumps({
+   "state":sina_work["state"],
+   "canonical_tasks_created":sina_work.get("canonical_tasks_created",0),
+   "venture_mandates_adopted":sina_work.get("venture_mandates_adopted",0),
+   "venture_mandates_blocked":sina_work.get("venture_mandates_blocked",0),
+   "execution_owned_by":sina_work.get("canonical_workpacket_owner","VENTURE_LOCAL_COMPANY_OS"),
+   "awaiting_product_registration":sina_work.get("awaiting_product_registration",0),
+   "execution_states_reported":sina_work.get("execution_states_reported",0),
+   "agent_feedback_delivered":sina_work.get("agent_feedback_delivered",0),
+   "agent_feedback_pending_retry":sina_work.get("agent_feedback_pending_retry",0),
+   "agent_feedback_contract_rejected":sina_work.get("agent_feedback_contract_rejected",0),
+   "legacy_ack_rejected":sina_work.get("legacy_ack_rejected",0),
+   "error_type":sina_work.get("error_type"),
+   "external_actions_performed":False},sort_keys=True),flush=True)
  market=product_loops.scan_public_market()
  if market.get("state") not in ("DISABLED","NOT_DUE"):
   print("COMPANY_OS_PUBLIC_MARKET_OBSERVATION "+json.dumps({
@@ -409,6 +694,16 @@ def daily_tick():
    "source":market.get("source","not_fetched"),
    "failure_type":market.get("failure_type"),
    "independent_demand_verified":False},sort_keys=True),flush=True)
+ # One compact management beat from the EXISTING worker. No new agent
+ # scheduler, no trace of every product action or every source event.
+ try:
+  with connect() as d:
+   beat=brain_pulse.capture_cycle(d,portfolio=founder_bridge,
+     mandate=sina_work,local=local_cycles,market=market)
+  if beat.get("recorded"):
+   print("COMPANY_OS_BRAIN_PULSE "+json.dumps(beat,sort_keys=True),flush=True)
+ except Exception as brain_error:
+  print("COMPANY_OS_BRAIN_PULSE_FAILED "+type(brain_error).__name__,flush=True)
 def overview():
  with connect() as d:
   q={"contacts":"SELECT COUNT(*) n FROM contacts","opportunities":"SELECT COUNT(*) n FROM opportunities","qualified":"SELECT COUNT(*) n FROM opportunities WHERE score>=65","won":"SELECT COUNT(*) n FROM opportunities WHERE stage='won'","queued_events":"SELECT COUNT(*) n FROM events WHERE status IN ('queued','processing')","pending_tasks":"SELECT COUNT(*) n FROM tasks WHERE status IN ('queued','running','drafted')","feedback":"SELECT COUNT(*) n FROM feedback"}
