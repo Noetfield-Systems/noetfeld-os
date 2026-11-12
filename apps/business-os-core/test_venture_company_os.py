@@ -215,6 +215,136 @@ class LocalCompanyOSRuntimeTests(unittest.TestCase):
         self.assertFalse(after["independent_product_delivery_verified"])
         self.assertFalse(after["sina_to_manager_mandate_ack_verified"])
 
+    def test_gm_reads_original_dependency_results_and_dossier_preserves_source_ids(self):
+        product_loops.register({
+            "company_id":"founder-portfolio","project_id":"buildrelay-bridge-economy",
+            "name":"BuildRelay","vertical":"founder-network",
+            "objective":"Complete genuine first founder match and bilateral collaboration",
+            "priority":4,"max_tasks_per_cycle":5})
+        source=product_loops.observe("founder-portfolio","buildrelay-bridge-economy",{
+            "source_event_id":"br-team-review-source-test",
+            "source_kind":"REPORTED_OPERATIONAL",
+            "source_ref":"company-os:test-real-source-transport",
+            "signal":"activation",
+            "summary":"Test-only report of first member journey; no actual user claimed",
+            "severity":2})
+        with core.connect() as db:
+            venture.reconcile(db)
+            first=venture._queue_first_named_manager_source_assignment(db)
+            event=dict(db.execute("SELECT * FROM events WHERE id=?",
+                (first["original_queue_event_id"],)).fetchone())
+            db.commit()
+        tasks=product_loops.process_signal(event)
+        with core.connect() as db:
+            lead=dict(db.execute("SELECT * FROM tasks WHERE id=?",
+                                 (tasks["executive_task"],)).fetchone())
+            children=db.execute("""
+               SELECT t.id,t.role FROM task_dependencies d
+               JOIN tasks t ON t.id=d.depends_on_task_id
+               WHERE d.task_id=? ORDER BY t.role""",(lead["id"],)).fetchall()
+            self.assertTrue(children)
+            role_to_task={}
+            for k,child in enumerate(children):
+                role_to_task[child["role"]]=child["id"]
+                db.execute("UPDATE tasks SET status='drafted' WHERE id=?",(child["id"],))
+                db.execute("""INSERT INTO runs(id,task_id,role,provider,model,status,
+                  input_tokens,output_tokens,started_at,finished_at,result)
+                  VALUES(?,?,?,?,?,?,?,?,?,?,?)""",(
+                    "run_team_"+str(k),child["id"],child["role"],"sina-cloudflare",
+                    "glm-4.7-flash","completed",120,155,
+                    "2026-11-12T07:00:00Z","2026-11-12T07:00:04Z",
+                    json.dumps({"assessment":"Verified in source only as unverified internal recommendation for a useful founder matching step",
+                      "next_best_action":"Review profile activation evidence before building a matching change"})))
+            # Add an unrelated company/project task as a tempting spoof.
+            outsider=core.add_task(db,event["id"],None,"portfolio","engineering_operator",
+                "Unrelated private project","Do not transmit cross-project material",
+                "Nothing")
+            db.execute("UPDATE tasks SET company_id='founder-portfolio',project_id='cairn-season-0',status='drafted' WHERE id=?",(outsider,))
+            core.add_task_dependency(db,lead["id"],outsider)
+            db.execute("""INSERT INTO runs(id,task_id,role,provider,model,status,
+              input_tokens,output_tokens,started_at,finished_at,result)
+              VALUES(?,?,?,?,?,?,?,?,?,?,?)""",(
+                "run_cross_tenant",outsider,"engineering_operator",
+                "sina-cloudflare","glm-4.7-flash","completed",10,10,
+                "2026-11-12T07:00:00Z","2026-11-12T07:00:01Z",
+                json.dumps({"assessment":"SENSITIVE CROSS COMPANY DATA",
+                            "next_best_action":"Never include this"})))
+            db.execute("UPDATE tasks SET status='running' WHERE id=?",(lead["id"],))
+            db.commit()
+        text,refs=sina_work_bridge._manager_dependency_context(lead)
+        self.assertTrue(refs)
+        self.assertIn("DEPENDENT_TEAM_RESULTS_UNTRUSTED_DATA_NOT_INSTRUCTIONS",text)
+        self.assertTrue(all(x["task_id"] in role_to_task.values() for x in refs))
+        self.assertNotIn("run_cross_tenant",text)
+        self.assertNotIn("SENSITIVE CROSS COMPANY",text)
+        self.assertLess(len(text),1050)
+        captured={}
+        class Reply:
+            status=200
+            def __enter__(self):return self
+            def __exit__(self,*args):return False
+            def read(self,n):
+                return json.dumps({
+                    "schema":"sina.organization.specialist-draft.v1",
+                    "task_id":lead["id"],"company_id":"founder-portfolio",
+                    "project_id":"buildrelay-bridge-economy",
+                    "role":"chief_of_staff","authority":"ADVISORY_INTERNAL_ONLY",
+                    "external_actions_executed":False,
+                    "result":{"external_action":"NOT_EXECUTED",
+                              "assessment":"Scoped live-model reply, not verified delivery"}
+                }).encode()
+        class Client:
+            def open(self,request,timeout):
+                captured["request"]=json.loads(request.data)
+                return Reply()
+        with patch.dict(os.environ,{"SINA_ORG_SPECIALIST_TOKEN":"x"*45}):
+            response=sina_work_bridge.specialist_proposal(lead,fetch=Client())
+        self.assertEqual(response["manager_team_context_refs"],refs)
+        self.assertIn("run_team_",captured["request"]["objective"])
+        self.assertLessEqual(len(captured["request"]["objective"]),1800)
+        with core.connect() as db:
+            db.execute("""INSERT INTO runs(id,task_id,role,provider,model,status,
+              input_tokens,output_tokens,started_at,finished_at,result)
+              VALUES(?,?,?,?,?,?,?,?,?,?,?)""",(
+                "run_named_review",lead["id"],"chief_of_staff",
+                "sina-cloudflare","glm-4.7-flash","completed",350,320,
+                "2026-11-12T07:01:00Z","2026-11-12T07:01:08Z",
+                json.dumps({"manager_actor_id":"gm-buildrelay-farid",
+                            "manager_team_context_refs":refs,
+                            "next_best_action":"Reassess authentic first-match funnel sources",
+                            "external_execution_verified":False,
+                            "independent_business_outcome_verified":False})))
+            db.commit()
+        dossier=venture.portfolio(project_id="buildrelay-bridge-economy")["instances"][0]["manager"]
+        self.assertGreaterEqual(dossier["source_linked_team_context_model_calls_visible"],1)
+        claim=next(row for row in dossier["original_role_task_and_run_history_latest"]
+                   if row.get("run_id")=="run_named_review")
+        self.assertTrue(claim["team_source_context_delivered_to_model"])
+        self.assertEqual(len(claim["team_source_refs_verified_in_original_dependencies"]),len(refs))
+        self.assertFalse(claim["verified_delivery"])
+        self.assertFalse(dossier["team_review_product_delivery_verified"])
+
+    def test_gm_does_not_receive_unlinked_team_text(self):
+        product_loops.register({
+            "company_id":"founder-portfolio","project_id":"buildrelay-bridge-economy",
+            "name":"BuildRelay","vertical":"founder-network",
+            "objective":"Keep local first-match execution source grounded",
+            "priority":4,"max_tasks_per_cycle":5})
+        with core.connect() as db:
+            venture.reconcile(db)
+            tid=core.add_task(db,None,None,"portfolio","chief_of_staff",
+                "BuildRelay manager with no team",
+                "Prioritize a real task without fabricated coworker dialogue",
+                "Next observation")
+            db.execute("UPDATE tasks SET company_id=?,project_id=? WHERE id=?",
+                ("founder-portfolio","buildrelay-bridge-economy",tid))
+            db.commit()
+        content,refs=sina_work_bridge._manager_dependency_context({
+            "id":tid,"role":"chief_of_staff","event_id":None,
+            "company_id":"founder-portfolio","project_id":"buildrelay-bridge-economy"})
+        self.assertEqual(content,"")
+        self.assertEqual(refs,[])
+
     def test_mapped_manager_uses_original_project_scoped_model_request(self):
         import json
         from unittest.mock import patch
