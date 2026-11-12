@@ -358,6 +358,49 @@ class LocalCompanyOSRuntimeTests(unittest.TestCase):
                     self.assertEqual(db.execute("SELECT COUNT(*) FROM tasks").fetchone()[0],before)
                     self.assertEqual(venture._recover_named_manager_capacity(db)["requeued_count"],0)
                     db.commit()
+        # The original task's second actual 429 must be newer than the first
+        # failure; one genuinely different operator cap revision may reopen it
+        # ONE final time. A third 429 must not loop, even if revision changes.
+        with core.connect() as db:
+            db.execute("""UPDATE tasks SET status='drafted',
+                updated_at=datetime('now','-5 minutes') WHERE id=?""",(task["id"],))
+            db.execute("""INSERT INTO runs(id,task_id,role,provider,model,status,
+                input_tokens,output_tokens,started_at,finished_at,result)
+                VALUES(?,?,?,?,?,?,?,?,?,?,?)""",(
+                "run_review_429_after_cap96",task["id"],"chief_of_staff",
+                "specialist_degraded","none","degraded",0,0,
+                "2026-11-12T09:10:00Z","2026-11-12T09:10:01Z",
+                json.dumps({"model_issue_code":"MODEL_HTTP_429"})))
+            db.commit()
+        with patch.dict(os.environ,{"COMPANY_OS_FARID_CAPACITY_REVISION":
+                                   "cf-specialist-cap144-20261112"}):
+            with patch.object(sina_work_bridge,"specialist_configured",return_value=True):
+                with core.connect() as db:
+                    final=venture._recover_named_manager_capacity(db)
+                    self.assertEqual(final["original_task_ids"],[task["id"]])
+                    count=db.execute("""SELECT recovery_attempts
+                        FROM venture_company_os_manager_capacity_recovery
+                        WHERE task_id=?""",(task["id"],)).fetchone()[0]
+                    self.assertEqual(count,2)
+                    self.assertEqual(venture._recover_named_manager_capacity(db)["requeued_count"],0)
+                    # A further valid-looking 429 still cannot escape max two.
+                    db.execute("""UPDATE tasks SET status='drafted',
+                        updated_at=datetime('now','-5 minutes') WHERE id=?""",(task["id"],))
+                    db.execute("""INSERT INTO runs(id,task_id,role,provider,model,status,
+                       input_tokens,output_tokens,started_at,finished_at,result)
+                       VALUES(?,?,?,?,?,?,?,?,?,?,?)""",(
+                       "run_review_third_429",task["id"],"chief_of_staff",
+                       "specialist_degraded","none","degraded",0,0,
+                       "2026-11-12T09:20:00Z","2026-11-12T09:20:01Z",
+                       json.dumps({"model_issue_code":"MODEL_HTTP_429"})))
+                    db.commit()
+        with patch.dict(os.environ,{"COMPANY_OS_FARID_CAPACITY_REVISION":"cap-new-but-no-more"}):
+            with patch.object(sina_work_bridge,"specialist_configured",return_value=True):
+                with core.connect() as db:
+                    self.assertEqual(venture._recover_named_manager_capacity(db)["requeued_count"],0)
+                    self.assertEqual(db.execute("SELECT status FROM tasks WHERE id=?",
+                                     (task["id"],)).fetchone()[0],"drafted")
+                    db.commit()
 
     def test_manager_review_observation_cannot_be_spoofed_without_original_source(self):
         product_loops.register({
