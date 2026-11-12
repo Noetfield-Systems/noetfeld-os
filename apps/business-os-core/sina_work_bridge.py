@@ -511,6 +511,8 @@ def _manager_dependency_context(task: dict, *, max_chars=800):
                    r.id AS run_id,r.provider,r.status AS run_status,r.result
             FROM task_dependencies d JOIN tasks dep ON dep.id=d.depends_on_task_id
             JOIN tasks manager ON manager.id=d.task_id
+            LEFT JOIN product_observations manager_obs ON manager_obs.id=manager.observation_id
+            LEFT JOIN product_observations dep_obs ON dep_obs.id=dep.observation_id
             JOIN runs r ON r.id=(SELECT rr.id FROM runs rr WHERE rr.task_id=dep.id
                                  ORDER BY rr.finished_at DESC,rr.id DESC LIMIT 1)
             WHERE d.task_id=?
@@ -518,7 +520,11 @@ def _manager_dependency_context(task: dict, *, max_chars=800):
               AND manager.event_id=? AND manager.role='chief_of_staff'
               AND dep.company_id=manager.company_id
               AND dep.project_id=manager.project_id
-              AND dep.event_id=manager.event_id
+              AND (dep.event_id=manager.event_id OR
+                   (manager_obs.source_event_id='manager-team-review:gm-buildrelay-farid:v1'
+                    AND manager_obs.source_ref='company-os:observation:'||dep_obs.id
+                    AND dep_obs.company_id=manager.company_id
+                    AND dep_obs.project_id=manager.project_id))
               AND dep.status IN ('drafted','approved')
               AND r.status='completed' AND r.provider LIKE 'sina-%'
             ORDER BY CASE dep.role

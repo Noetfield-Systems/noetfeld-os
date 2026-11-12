@@ -629,6 +629,16 @@ def daily_tick():
    original_trace=venture_company_os.original_first_manager_runtime_trace(source_db)
   print("COMPANY_OS_FIRST_MANAGER_ORIGINAL_TRACE "+json.dumps(
    original_trace,sort_keys=True),flush=True)
+ review=local_cycles.get("manager_source_team_review") or {}
+ if review.get("queued"):
+  print("COMPANY_OS_SOURCE_BACKED_GM_TEAM_REVIEW "+json.dumps({
+   "state":review.get("state"),
+   "actor_id":review.get("actor_id"),
+   "review_event_id":review.get("review_event_id"),
+   "source_observation_id":review.get("source_observation_id"),
+   "specialist_run_ids":review.get("specialist_run_ids"),
+   "independently_verified":False,"external_actions":False
+  },sort_keys=True),flush=True)
  recovery=local_cycles.get("manager_recovery") or {}
  if recovery.get("requeued_count"):
   print("COMPANY_OS_NAMED_MANAGER_RECOVERY "+json.dumps({
