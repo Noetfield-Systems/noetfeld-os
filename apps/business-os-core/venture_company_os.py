@@ -694,7 +694,14 @@ def _recover_named_manager_capacity(db,limit=3):
         JOIN runs r ON r.task_id=t.id
         WHERE t.company_id=? AND t.project_id=? AND t.status='drafted'
           AND (o.source_event_id='manager-first-source:gm-buildrelay-farid:v1'
-               OR o.source_event_id LIKE 'company_mandate:%')
+               OR o.source_event_id LIKE 'company_mandate:%'
+               OR (t.role='chief_of_staff'
+                   AND o.source_event_id='manager-team-review:gm-buildrelay-farid:v1'
+                   AND o.source_ref=('company-os:observation:'||
+                        (SELECT source.id FROM product_observations source
+                         WHERE source.company_id=t.company_id
+                           AND source.project_id=t.project_id
+                           AND source.source_event_id='manager-followup:gm-buildrelay-farid:v1'))))
           AND r.id=(SELECT r2.id FROM runs r2 WHERE r2.task_id=t.id
                     ORDER BY r2.finished_at DESC,r2.id DESC LIMIT 1)
           AND r.provider='specialist_degraded'
@@ -754,6 +761,10 @@ def tick(clock=None,limit=1):
         # its original one-shot ledger. Do not wait for the 5-minute strategy
         # clock to retry one genuinely failed GM review.
         manager_recovery=_recover_named_manager_tasks(db)
+        # A model-cap revision is separate from transport failure recovery.
+        # Reopen only source-backed 429s once on the EXISTING worker tick,
+        # not on an unrelated five-minute portfolio strategy cadence.
+        capacity_recovery=_recover_named_manager_capacity(db)
         # A one-shot explicitly commissioned repair is source-triggered, not
         # the periodic portfolio pulse. Handle it on the existing worker tick.
         provider_route_recovery=_recover_source_bound_503_after_route_repair(db)
@@ -765,10 +776,10 @@ def tick(clock=None,limit=1):
                     "manager_source_followup":manager_followup,
                     "manager_source_team_review":manager_team_review,
                     "manager_recovery":manager_recovery,
+                    "manager_capacity_recovery":capacity_recovery,
                     "manager_provider_route_recovery":provider_route_recovery}
         db.execute("""INSERT INTO state(key,value) VALUES('venture_os_cycle_at',?)
            ON CONFLICT(key) DO UPDATE SET value=excluded.value""",(str(epoch),))
-        capacity_recovery=_recover_named_manager_capacity(db)
         candidates=db.execute("""SELECT i.*,p.name FROM venture_company_os i
           JOIN product_programs p ON p.company_id=i.company_id AND p.project_id=i.project_id
           WHERE i.operating_state='ACTIVE_LOCAL_EXECUTIVE'
