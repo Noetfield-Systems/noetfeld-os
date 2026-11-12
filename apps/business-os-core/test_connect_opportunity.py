@@ -62,6 +62,28 @@ class ConnectOpportunityRoutingTests(unittest.TestCase):
                              (created["event_id"],)).fetchone()[0]
         self.assertEqual(count,3)
 
+    def test_founder_opportunity_desk_readback_is_real_and_pii_free(self):
+        item=sample_signal(category="events")
+        receipt=core.queue_platform_intake_projection(item)
+        before=core.connect_opportunity_inbox(10)
+        self.assertEqual(len(before),1)
+        self.assertEqual(before[0]["review_state"],"queued")
+        self.assertEqual(before[0]["advisory_tasks"],[])
+        self.assertFalse(before[0]["actual_owner_assigned"])
+        with core.connect() as db:
+            event=dict(db.execute("SELECT * FROM events WHERE id=?",
+                                  (receipt["event_id"],)).fetchone())
+        core.process_platform_intake_signal(event)
+        after=core.connect_opportunity_inbox(10)
+        self.assertEqual(after[0]["review_state"],"tasks_created")
+        self.assertEqual(after[0]["source_channel"],"linkedin")
+        self.assertEqual(after[0]["category"],"events")
+        self.assertEqual(len(after[0]["advisory_tasks"]),3)
+        self.assertFalse(after[0]["confirmed_meeting"])
+        self.assertIsNone(after[0]["verified_conversion"])
+        self.assertNotIn("contact_email",json.dumps(after))
+        self.assertNotIn("Sensitive Human",json.dumps(after))
+
     def test_category_picks_correct_existing_workforce_roles(self):
         cases={
             "business":{"sales_qualification","engineering_operator","chief_of_staff"},
