@@ -279,8 +279,9 @@ def _queue_first_named_manager_source_assignment(db):
     """One true source-backed BuildRelay manager assignment through the ORIGINAL
     Company OS observations/events/tasks queue. Never a fabricated member signal.
 
-    Requires a pre-existing accepted BuildRelay-to-CompanyOS source observation.
-    When that source is absent, return no work rather than inventing evidence.
+    Requires an accepted BuildRelay source observation OR a genuinely adopted
+    Founder mandate with an exact source-bound digest. No existing members,
+    analytics or partner records are required to start authorized internal work.
     This is an internal source triage task; it is NOT CEO mandate ACK, a
     Paperclip commissioning event, external delivery or manager success.
     """
@@ -308,8 +309,29 @@ def _queue_first_named_manager_source_assignment(db):
           AND source_kind='REPORTED_OPERATIONAL'
         ORDER BY recorded_at DESC,id DESC LIMIT 1
     """,(company,project)).fetchone()
+    source_kind="BUILDRELAY_OPERATIONAL_OBSERVATION"
+    if original is None:
+        # First use must not require a pre-existing member/analytics cohort.
+        # A genuinely adopted, source-bound Founder mandate is enough to
+        # request an INTERNAL investigation by the named Company OS manager.
+        # Require the canonical mandate digest so an arbitrary observation
+        # or a model-supplied "company_mandate:" label cannot commission work.
+        original=db.execute("""
+            SELECT o.id,o.source_event_id,o.metric_name,o.verification
+            FROM venture_company_os_mandates m
+            JOIN product_observations o
+              ON o.company_id=m.company_id AND o.project_id=m.project_id
+             AND o.source_event_id=(
+                 'company_mandate:' || m.program_id || ':' ||
+                 substr(m.payload_sha256,1,12))
+            WHERE m.company_id=? AND m.project_id=?
+              AND o.source_kind='REPORTED_OPERATIONAL'
+            ORDER BY m.updated_at DESC,o.recorded_at DESC,o.id DESC LIMIT 1
+        """,(company,project)).fetchone()
+        source_kind="ORIGINAL_FOUNDER_MANDATE"
     if not original:
-        return {"state":"NO_BUILDRELAY_SOURCE_OBSERVATION","queued":False}
+        return {"state":"NO_AUTHENTIC_MANAGER_SOURCE_OR_FOUNDER_MANDATE",
+                "queued":False}
     # Reserve only one original source-derived event for this stable seat;
     # process_signal decides which existing specialist tasks to create.
     import product_loops
@@ -320,8 +342,8 @@ def _queue_first_named_manager_source_assignment(db):
         "signal":"feature_request",
         "summary":(
             "BuildRelay local manager "+seat["actor_id"]+
-            " must investigate original source observation "+
-            original["source_event_id"]+
+            " must acknowledge and investigate authenticated "+source_kind+
+            " source "+original["source_event_id"]+
             " and choose a useful first member activation or collaboration "+
             "task with measurable evidence and proper specialist owner. "+
             "This is operational triage, not verified member growth, "+
@@ -334,6 +356,7 @@ def _queue_first_named_manager_source_assignment(db):
         "queued":not result.get("idempotent",False),
         "original_source_observation_id":original["id"],
         "original_event_id":original["source_event_id"],
+        "original_source_kind":source_kind,
         "new_observation_id":result.get("observation_id"),
         "original_queue_event_id":result.get("event_id"),
         "actor_id":seat["actor_id"],
