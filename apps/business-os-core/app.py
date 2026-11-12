@@ -325,6 +325,22 @@ def intake_signals(authorization:str|None=Header(default=None),limit:int=50):
             output.append(item)
     return {"signals":output,"source_of_truth":"Noetfield Platform API public_intakes","pii_included":False}
 
+@app.get("/api/control/connect-opportunities")
+def connect_opportunities(authorization:str|None=Header(default=None),limit:int=50):
+    """Founder-authenticated read-only relationship and opportunity desk.
+
+    Displays only actual persisted Company OS source/task records. This is
+    not a calendar, contact directory, or independently verified CRM outcome.
+    """
+    authorize(authorization)
+    return {
+        "schema":"noetfield.connect-opportunity-inbox.v1",
+        "items":core.connect_opportunity_inbox(limit),
+        "pii_included":False,
+        "source":"Noetfield Platform Intake -> Company OS task queue",
+    }
+
+
 @app.get("/api/control/tasks")
 def tasks(authorization:str|None=Header(default=None)):
     authorize(authorization)
