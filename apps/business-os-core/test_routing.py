@@ -238,7 +238,7 @@ class BusinessOSGovernanceTests(unittest.TestCase):
                     "company_id": "founder-portfolio",
                     "project_id": "buildrelay-bridge-economy",
                     "name": "BuildRelay",
-                    "vertical": "founder_network",
+                    "vertical": "founder-network",
                     "objective": "Operate genuine founder matches and verified collaboration",
                     "priority": 4,
                 })
