@@ -452,9 +452,10 @@ def process_task(t):
  if scoped_product:
   result["founder_goalkeeper"]=decision_context
  # Claim a named manager run ONLY if this real Company OS source task
- # was sent through its existing model route with the stable name in the
- # request. Prior role runs are deliberately NOT credited to the person.
- if scoped_product and role=="chief_of_staff" and (provider.startswith("sina-") or provider=="openai-compatible"):
+ # was sent through the scoped Sina specialist route with stable identity
+ # in that exact request. The generic openai-compatible legacy lane does NOT
+ # inject this name and must not impersonate the named manager.
+ if scoped_product and role=="chief_of_staff" and provider.startswith("sina-"):
   named=venture_company_os.named_manager(t["company_id"],t["project_id"],role)
   if named:
    result["manager_actor_id"]=named["actor_id"]
@@ -582,6 +583,15 @@ def daily_tick():
    "state":activation.get("state"),
    "original_source_observation_id":activation.get("original_source_observation_id"),
    "original_queue_event_id":activation.get("original_queue_event_id"),
+   "external_actions":False},sort_keys=True),flush=True)
+ # Log the source reason on the ordinary cadence when no GM assignment
+ # can start. No customer content, credentials, or invented manager actions.
+ if (not activation.get("queued") and
+     local_cycles.get("state")=="COMPANY_LOOPS_ADVANCED" and activation):
+  print("COMPANY_OS_NAMED_MANAGER_STATUS "+json.dumps({
+   "actor_id":"gm-buildrelay-farid",
+   "state":activation.get("state"),
+   "queued":False,"verification":False,
    "external_actions":False},sort_keys=True),flush=True)
  followup=local_cycles.get("manager_source_followup") or {}
  if followup.get("queued"):

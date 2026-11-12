@@ -397,8 +397,7 @@ def _queue_manager_source_followup(db):
         ORDER BY r.finished_at ASC,r.id ASC LIMIT 8
     """,(company,project,company,project,source_id)).fetchall()
     for row in rows:
-        if not (str(row["provider"] or "").startswith("sina-")
-                or row["provider"]=="openai-compatible"):
+        if not str(row["provider"] or "").startswith("sina-"):
             continue
         try:
             output=json.loads(row["run_result"] or "{}")
@@ -580,18 +579,23 @@ def tick(clock=None,limit=1):
         init(db)
         db.execute("BEGIN IMMEDIATE")
         sync=reconcile(db)
-        last=db.execute("SELECT value FROM state WHERE key='venture_os_cycle_at'").fetchone()
-        if last and epoch-float(last["value"])<INTERVAL_SECONDS:
-            db.commit()
-            return {"state":"NOT_DUE",**sync}
-        db.execute("""INSERT INTO state(key,value) VALUES('venture_os_cycle_at',?)
-           ON CONFLICT(key) DO UPDATE SET value=excluded.value""",(str(epoch),))
         running=db.execute("SELECT COUNT(*) FROM tasks WHERE status IN ('queued','running')").fetchone()[0]
         if running>=GLOBAL_BACKPRESSURE:
             db.commit()
             return {"state":"BACKPRESSURE","queued":running,**sync}
+        # Event-triggered manager assignment and genuine reply continuation
+        # must not wait for the unrelated 5-minute portfolio cadence. The
+        # existing task/event identities are idempotent. No new scheduler.
         manager_activation=_queue_first_named_manager_source_assignment(db)
         manager_followup=_queue_manager_source_followup(db)
+        last=db.execute("SELECT value FROM state WHERE key='venture_os_cycle_at'").fetchone()
+        if last and epoch-float(last["value"])<INTERVAL_SECONDS:
+            db.commit()
+            return {"state":"NOT_DUE",**sync,
+                    "manager_source_assignment":manager_activation,
+                    "manager_source_followup":manager_followup}
+        db.execute("""INSERT INTO state(key,value) VALUES('venture_os_cycle_at',?)
+           ON CONFLICT(key) DO UPDATE SET value=excluded.value""",(str(epoch),))
         manager_recovery=_recover_named_manager_tasks(db)
         capacity_recovery=_recover_named_manager_capacity(db)
         candidates=db.execute("""SELECT i.*,p.name FROM venture_company_os i
@@ -708,8 +712,7 @@ def _manager_founder_mandate_cases(db,company,project,seat,limit=8):
                     failed_team_runs.append(data["run_id"])
                 if (data["role"]!=seat["role"] or not data["run_id"]
                     or data["run_status"]!="completed"
-                    or not (str(data["provider"] or "").startswith("sina-")
-                            or data["provider"]=="openai-compatible")):
+                    or not str(data["provider"] or "").startswith("sina-")):
                     continue
                 try:
                     original_result=json.loads(data["run_result"] or "{}")
@@ -777,8 +780,7 @@ def _manager_source_history(db,company,project,role="chief_of_staff"):
         # executive personality responding. Deterministic/degraded drafts
         # are correctly retained as role activities but not person inference.
         provider=str(x.get("provider") or "")
-        model_reply=tagged and x.get("run_status")=="completed" and (
-            provider.startswith("sina-") or provider=="openai-compatible")
+        model_reply=tagged and x.get("run_status")=="completed" and provider.startswith("sina-")
         mapped_run_count+=int(tagged and bool(x.get("run_id")))
         confirmed_invocations+=int(model_reply)
         x["named_identity_in_original_run"]=tagged
