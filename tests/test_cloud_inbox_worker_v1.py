@@ -138,7 +138,7 @@ def test_process_cycle_includes_founder_blocked_summary():
         raise AssertionError(f"unexpected request: {method} {path}")
 
     worker._request_fn = fake_request
-    with patch.object(worker, "_exec_upg_0152", return_value={"ok": True, "exit_code": 0}):
+    with patch.dict(worker.HANDLERS, {"UPG-0152": lambda: {"ok": True, "exit_code": 0}}):
         result = process_cycle()
 
     worker._request_fn = None
