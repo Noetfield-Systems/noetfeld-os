@@ -42,7 +42,7 @@ OUT=Path("qa-artifacts")
 OUT.mkdir(exist_ok=True)
 fixture={
     "overview":{
-        "counts":{"contacts":1,"opportunities":2,"qualified":1,"won":0,"queued_events":0,
+        "counts":{"contacts":1,"opportunities":0,"qualified":0,"won":0,"queued_events":0,
                   "pending_tasks":1055,"feedback":0,"platform_intake_signals":1,
                   "platform_intake_pending":0,"platform_intake_tasks_created":1},
         "weighted_pipeline_cad":1250,"pipeline_note":"Estimated value only",
@@ -79,7 +79,10 @@ fixture={
     ]},
     "roi":{"brands":[],"events_last_7d":107,"actual_revenue":"Not connected",
            "cost_tracking":"Token usage tracked. Infrastructure costs not connected."},
-    "connect-opportunities":{"items":[{
+    "connect-opportunities":{"items":[]},
+    "commercial-team":{"state":"INTERNAL_ONLY","roles":[]},
+}
+CASE_FIXTURE={
         "intake_id":"INT-ABCDEF246801","request_id":"RID-CNX-FIXTURE",
         "source_created_at":"2026-11-12T20:30:00Z","category":"partnership",
         "initiative":"noetfield","source_channel":"linkedin","case_stage":"QUALIFYING",
@@ -87,9 +90,7 @@ fixture={
         "next_action":"Verify actual partner reach","due_at":"2026-11-15T10:00:00Z",
         "evidence_ref":None,"notes":"","case_version":1,"specialist_roles":["partnerships"],
         "advisory_tasks":[],"actual_owner_assigned":False,"confirmed_meeting":False,"verified_conversion":None
-    }]},
-    "commercial-team":{"state":"INTERNAL_ONLY","roles":[]},
-}
+    }
 mock_calls=[]
 def make_handler(route):
     req=route.request
@@ -110,6 +111,25 @@ def make_handler(route):
                              body='{"already_commissioned":false,"external_actions":0}')
     if resource=="overview" and "BAD_ACCESS_KEY" in req.headers.get("authorization",""):
         return route.fulfill(status=401,content_type="application/json",body='{"detail":"Founder authentication required."}')
+    if resource=="dashboard":
+        from datetime import datetime,timedelta,timezone
+        from urllib.parse import parse_qs
+        params=parse_qs(u.query)
+        days=int(params.get("days",["7"])[0])
+        brand=params.get("brand",[""])[0]
+        today=datetime.now(timezone.utc).date()
+        labels=[(today-timedelta(days=x)).isoformat() for x in range(days-1,-1,-1)]
+        last=[2,7,13,20,12,22,31]
+        counts=([0]*(days-7))+last
+        value={"source":"Company OS durable tables","brand":brand or "all","days":days,
+               "as_of":datetime.now(timezone.utc).isoformat(),
+               "counts":{"contacts":0,"opportunities":0,"active_opportunities":0,
+                         "pending_tasks":103 if brand else 1055,"activity_events":sum(counts)},
+               "activity_daily":[{"date":day,"count":n} for day,n in zip(labels,counts)],
+               "collected_revenue":{"state":"not_connected","amount":None},
+               "scope":"Fixture records filtered by venture"}
+        mock_calls.append("GET dashboard "+(brand or "all")+" "+str(days))
+        return route.fulfill(status=200,content_type="application/json",body=json.dumps(value))
     if resource=="task-inbox":
         from urllib.parse import parse_qs
         params=parse_qs(u.query)
@@ -140,7 +160,7 @@ def make_handler(route):
 
 with sync_playwright() as p:
     browser=p.chromium.launch(headless=True,args=["--disable-dev-shm-usage"])
-    page=browser.new_page(viewport={"width":1440,"height":900},device_scale_factor=1)
+    page=browser.new_page(viewport={"width":1536,"height":1024},device_scale_factor=1)
     errors=[]
     page.on("pageerror",lambda err:errors.append(str(err)))
     page.add_init_script("""(function(){
@@ -176,10 +196,12 @@ with sync_playwright() as p:
     assert page.evaluate("window.__storedCredential.password")=="FIXTURE_TOKEN_NOT_A_REAL_SECRET"
     assert page.locator("#token").input_value()=="", "Access key should be cleared from the field"
     assert page.evaluate("localStorage.getItem('noos-founder-token')") is None, "Access key must not be persisted in localStorage"
+    page.wait_for_function("document.querySelector('#activity-bars .activity-bar')?.getAttribute('title')",timeout=20000)
+    assert "0" in page.locator("#metrics .metric").first.inner_text(), "Active opportunity count should be source-backed"
     assert "1,055" in page.locator("#metrics").inner_text(), "Overview did not display actual-bound fixture field"
     assert "Not connected" in page.locator("#metrics").inner_text(), "Revenue must never show fabricated zero"
     assert page.locator(".sidebar").is_visible()
-    page.screenshot(path=str(OUT/"founder-desktop-fixture.png"),full_page=True)
+    page.screenshot(path=str(OUT/"founder-desktop-fixture.png"),full_page=False)
     views=["actions","connect","opportunities","relationships","team","workflows","activity","revenue","health","settings"]
     for view in views:
         page.locator('.side-link[data-go="'+view+'"]').click()
@@ -194,6 +216,13 @@ with sync_playwright() as p:
     page.locator("#task-inbox-controls button[type=submit]").click()
     page.wait_for_function("document.querySelector('#task-list-scope').textContent.includes('of 1')")
     assert page.locator("#tasks tr[data-task-row]").count()==1, "Task search did not filter actual source"
+    page.locator("#dashboard-venture").select_option("noetfield")
+    page.wait_for_function("document.querySelector('#metrics')?.textContent?.includes('103')")
+    assert "GET dashboard noetfield 7" in mock_calls
+    page.locator("#dashboard-period").select_option("30")
+    page.wait_for_function("document.querySelector('#activity-unit')?.textContent?.includes('last 30 days')")
+    page.locator("#dashboard-venture").select_option("")
+    page.locator("#dashboard-period").select_option("7")
     page.locator('.side-link[data-go="workflows"]').click()
     form=page.locator("#new-work-form")
     form.locator('select[name="role"]').select_option("partnerships")
@@ -203,7 +232,10 @@ with sync_playwright() as p:
     page.wait_for_timeout(900)
     assert "POST /api/control/tasks" in mock_calls, "New work button did not call backend"
     assert page.locator('.view[data-view="actions"]').is_visible(), "New task did not navigate back to Action Center"
-    page.locator('.side-link[data-go="connect"]').click()
+    fixture["connect-opportunities"]["items"]=[CASE_FIXTURE]
+    page.locator('.side-link[data-go="opportunities"]').click()
+    page.locator('[data-go="connect"]').filter(has_text="Open partnership").first.click()
+    page.locator("#refresh-connect").click()
     page.locator("#connectrows [data-edit-connect]").first.click()
     assert page.locator("#connect-case-editor").is_visible(), "Connect editor missing"
     page.locator("#connect-next").fill("Verify partner's actual sales reach")
