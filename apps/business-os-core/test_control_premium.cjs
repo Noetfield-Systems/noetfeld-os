@@ -12,7 +12,7 @@ assert.equal(inline.length,1,"Expected one existing application controller");
 new vm.Script(inline[0],{filename:"control-inline.js"});
 new vm.Script(ui,{filename:"control-premium.js"});
 assert.match(html,/\/control\/premium\.css\?v=6/);
-assert.match(html,/\/control\/premium\.js\?v=8/);
+assert.match(html,/\/control\/premium\.js\?v=9/);
 assert.match(html,/type="password" id="token"/);
 assert.match(html,/<form id="auth-form" method="post" action="\/control" autocomplete="on">/);
 assert.match(html,/name="username" autocomplete="username"/);
@@ -50,6 +50,8 @@ assert.match(html,/id="operations-relay-detail"/);
 assert.match(ui,/function loadOperationsRelay/);
 assert.match(ui,/\/api\/control\/operations-relay/);
 assert.match(ui,/actual_model_call_observed/);
+assert.match(ui,/Inspect assigned prompt & recorded response/);
+assert.match(ui,/response_kind/);
 assert.match(ui,/counts\.actionable_tasks/);
 assert.match(ui,/runway_e2e_commissioned|Runway remains the canonical execution engine/);
 class FakeClassList{
