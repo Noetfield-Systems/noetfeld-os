@@ -13,6 +13,8 @@ const role={
   marketing_editorial:"Marketing & content",market_intelligence:"Market research",product_strategy:"Product strategy",
   roi_analyst:"Business results",engineering_operator:"Product & engineering",risk_governance:"Quality & permissions",partnerships:"Partnerships"
 };
+const pictograms={"target":"<circle cx=\"12\" cy=\"12\" r=\"9\"/><circle cx=\"12\" cy=\"12\" r=\"5\"/><circle cx=\"12\" cy=\"12\" r=\"1\"/>","check":"<rect x=\"4\" y=\"3\" width=\"16\" height=\"18\" rx=\"3\"/><path d=\"m8 12 3 3 5-6\"/>","activity":"<path d=\"M2 12h5l3-8 4 16 3-8h5\"/>","revenue":"<ellipse cx=\"12\" cy=\"5\" rx=\"8\" ry=\"3\"/><path d=\"M4 5v13c0 4 16 4 16 0V5M4 12c0 4 16 4 16 0\"/>","inbox":"<path d=\"M4 4h16l2 12v4H2v-4L4 4Z\"/><path d=\"M2 15h6l2 3h4l2-3h6\"/>","person":"<circle cx=\"12\" cy=\"8\" r=\"4\"/><path d=\"M5 21v-2a7 7 0 0 1 14 0v2\"/>","code":"<path d=\"m8 8-4 4 4 4m8-8 4 4-4 4m-6 3 4-12\"/>","link":"<path d=\"m10 13 4-4M8 16H6a4 4 0 0 1 0-8h4m4 0h4a4 4 0 0 1 0 8h-4\"/>","arrow":"<path d=\"M4 12h16m-6-6 6 6-6 6\"/>","grid":"<path d=\"M4 3h7v8H4zM13 3h7v8h-7zM4 13h7v8H4zM13 13h7v8h-7z\"/>"};
+const pictogram=name=>'<svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">'+(pictograms[name]||pictograms.grid)+'</svg>';
 const statuses={
   mapped_existing:"Configured",partial_existing:"Partially available",
   drafted:"Prepared for review",queued:"Waiting to run",processing:"In progress",running:"In progress",
@@ -23,8 +25,12 @@ const statuses={
 };
 function humanStatus(s){const v=String(s||"unknown");return statuses[v]||v.replaceAll("_"," ").toLowerCase().replace(/^./,x=>x.toUpperCase());}
 function labelTag(s){const v=String(s||"");const cls=/fail|dead|unavail|blocked/.test(v)?"bad":/partial|wait|queue|draft|running|processing/.test(v)?"warn":/approved|completed|mapped|qualif|engaged/.test(v)?"":"neutral";return '<span class="tag '+cls+'">'+esc(humanStatus(v))+'</span>';}
-function metric(label,value,note,icon,view,kind){
-  return '<article class="metric '+(kind||"")+'"><div class="metric-ico" aria-hidden="true">'+icon+'</div><span>'+esc(label)+'</span><strong>'+esc(value)+'</strong><small>'+esc(note)+'</small><div><a href="#'+view+'" data-go="'+view+'">View details →</a></div></article>';
+function metric(label,value,note,icon,view,kind,linkText){
+  const word=String(value).length>8;
+  return '<article class="metric '+(kind||"")+'"><div class="metric-ico">'+pictogram(icon)+'</div>'+
+    '<span>'+esc(label)+'</span><strong class="'+(word?'is-word':'')+'">'+esc(value)+'</strong>'+
+    (note?'<small>'+esc(note)+'</small>':'')+
+    '<div><a href="#'+view+'" data-go="'+view+'">'+esc(linkText||"View details")+' →</a></div></article>';
 }
 let last=null,connectRecords=[],currentView="";
 const pages={
@@ -121,32 +127,58 @@ async function loadTaskInbox(reset=false){
   }
 }
 
+function referenceActionRow(icon,title,badge,desc,destination,cta,tone){
+  return '<div class="reference-action-row"><span class="ref-action-icon">'+pictogram(icon)+'</span>'+
+    '<div class="ref-action-copy"><strong>'+esc(title)+'</strong><span class="tag '+(tone||'neutral')+'">'+esc(badge)+'</span>'+
+    '<p>'+esc(desc)+'</p></div><button class="ref-link" type="button" data-go="'+destination+'">'+esc(cta)+' '+pictogram('arrow')+'</button></div>';
+}
 function renderActionCenter(t,overview){
-  const all=(t?.tasks||[]), items=all.filter(x=>["drafted","queued","running","blocked","failed"].includes(x.status));
-  const priority={failed:0,blocked:1,drafted:2,running:3,queued:4};
-  items.sort((a,b)=>(priority[a.status]??9)-(priority[b.status]??9));
-  const sample=items.slice(0,4);
-  $("action-preview").innerHTML=sample.length?sample.map(formatTask).join(""):'<div class="empty"><div class="empty-icon">✓</div><h3>No recent work requiring review</h3><p>The latest task records contain no open items. This is not a guarantee that the full queue is empty.</p><button class="btn alt" data-go="actions">View work queue</button></div>';
   const count=overview?.counts?.pending_tasks;
-  $("action-count").textContent=count===undefined?"—":safeNumber(count);
-  $("action-count-hint").textContent=count===undefined?"Source unavailable":"Open company tasks across the existing queue";
-  $("nav-action-count").textContent=count===undefined?"—":count>999?"999+":String(count);
-  if(!taskInboxState.loaded)$("task-list-scope").textContent="Open Action Center to load work from the complete Company OS task queue.";
+  $('action-count').textContent=count===undefined?'—':safeNumber(count);
+  $('action-count-hint').textContent=count===undefined?'Unable to read pending work':'Company OS durable task queue';
+  $('nav-action-count').textContent=count===undefined?'—':count>999?(count/1000).toFixed(1)+'K':String(count);
+  const label=count===undefined?'Unavailable':safeNumber(count)+' pending';
+  const sourceLoaded=$('connect-count').textContent!=='—';
+  const connectCount=sourceLoaded?Number($('connect-count').textContent.replace(/,/g,'')):null;
+  const fresh=connectCount===null?'Checking…':safeNumber(connectCount)+' recent';
+  $('action-preview').innerHTML=
+    referenceActionRow('check','Task backlog',label,'Review and prioritize the existing queue.','actions','Open queue','warn')+
+    referenceActionRow('target','Incoming opportunities',fresh,'Review submitted proposals and partnership requests.','connect','Open Connect','neutral')+
+    referenceActionRow('revenue','Revenue visibility','Not connected','Link verified financial data to track collected cash.','revenue','View revenue','neutral');
+  if(!taskInboxState.loaded)$('task-list-scope').textContent='Open Action Center to load the complete Company OS work queue.';
 }
 function renderTeam(org){
   const seats=org?.seats||[];
-  $("team-summary").innerHTML=seats.length?seats.slice(0,4).map(x=>'<div class="status-line"><span><b>'+esc(x.title||x.role_id)+'</b><br><span class="muted">'+esc((x.runtime_role_names||[]).join(", ")||"No connected specialists listed")+'</span></span>'+labelTag(x.activation_status)+'</div>').join(""):'<div class="empty">Team registry is currently unavailable.</div>';
-  $("agents").innerHTML=seats.length?'<div class="stack-list">'+seats.map(x=>{
-    const activation=String(x.activation_status||"").toLowerCase();
-    const readable=activation.includes("mapped")?"Configured":activation.includes("partial")?"Partially available":humanStatus(x.activation_status);
-    const cls=activation.includes("partial")?"warn":"neutral";
-    return '<details class="agent-item"><summary><span><b>'+esc(x.title||x.role_id)+'</b><span class="muted">'+esc((x.runtime_role_names||[]).join(" · ")||"No runtime specialist mapped")+'</span></span><span class="tag '+cls+'">'+esc(readable)+'</span></summary>'+
-      '<div class="agent-item__body"><p class="helper">'+esc(x.activation_meaning||"Registry entry only. Live execution must be checked separately.")+'</p>'+
-      '<p class="muted">Reporting to: '+esc(x.manager_name||"Founder")+'</p>'+
-      '<details><summary class="muted">Technical details</summary><p class="helper">Seat '+esc(x.role_id)+' · Layer '+esc(x.layer)+' · Authority '+esc(x.max_authority||"not specified")+'</p></details></div></details>';
-  }).join("")+'</div>':'<div class="empty">Team data has not been loaded.</div>';
-  $("team-total").textContent=org?.organization?safeNumber(org.organization.company_role_count):"—";
-  $("capability-total").textContent=org?.organization?safeNumber(org.organization.runtime_executor_count):"—";
+  const pick=(id)=>seats.find(x=>x.role_id===id);
+  const selected=[pick('N-01'),pick('N-02'),pick('N-03')].filter(Boolean);
+  if(!selected.length)selected.push(...seats.slice(0,3));
+  const compactLabel=(x)=>{
+    if(x.role_id==='N-01')return 'Chief of Staff';
+    if(x.role_id==='N-02')return 'Opportunity Intelligence';
+    if(x.role_id==='N-03')return 'Engineering Delivery';
+    return String(x.title||'Company specialist').replace(/Officer|& Operations/gi,'').trim();
+  };
+  $('team-summary').innerHTML=selected.length?selected.map(x=>{
+    const isPartial=String(x.activation_status||'').includes('partial');
+    const status=isPartial?'Partial':String(x.activation_status||'').includes('mapped')?'Configured':'Not verified';
+    const glyph=x.role_id==='N-03'?'code':x.role_id==='N-02'?'target':'person';
+    return '<div class="team-compact-row"><span class="ref-action-icon">'+pictogram(glyph)+'</span>'+
+      '<strong>'+esc(compactLabel(x))+'</strong><span class="tag '+(isPartial?'warn':'')+'">'+esc(status)+'</span></div>';
+  }).join(''):'<div class="empty"><h3>Team registry unavailable</h3><p>Connect the Company OS roster to see configured roles.</p></div>';
+  $('agents').innerHTML=seats.length?'<div class="stack-list">'+seats.map(x=>{
+    const activation=String(x.activation_status||'').toLowerCase();
+    const readable=activation.includes('mapped')?'Configured':activation.includes('partial')?'Partially available':humanStatus(x.activation_status);
+    return '<details class="agent-item"><summary><span><b>'+esc(x.title||x.role_id)+'</b>'+
+      '<span class="muted">'+esc((x.runtime_role_names||[]).join(' · ')||'No runtime specialist mapped')+'</span></span>'+
+      '<span class="tag '+(activation.includes('partial')?'warn':'neutral')+'">'+esc(readable)+'</span></summary>'+
+      '<div class="agent-item__body"><p class="helper">'+esc(x.activation_meaning||'Registry entry only. Live execution must be checked separately.')+'</p>'+
+      '<p class="muted">Reporting to: '+esc(x.manager_name||'Founder')+'</p>'+
+      '<details><summary class="muted">Technical details</summary><p class="helper">Seat '+esc(x.role_id)+' · Layer '+esc(x.layer)+' · Authority '+esc(x.max_authority||'not specified')+'</p></details></div></details>';
+  }).join('')+'</div>':'<div class="empty">Team data is not loaded.</div>';
+  const a=org?.organization?.company_role_count,b=org?.organization?.runtime_executor_count;
+  $('team-total').textContent=safeNumber(a);
+  $('capability-total').textContent=safeNumber(b);
+  $('capacity-inline').textContent=a===undefined||b===undefined?'Not available':safeNumber(a)+' company roles · '+safeNumber(b)+' capabilities';
 }
 function renderBusiness(roi){
   const available=Boolean(roi&&!roi.__source_unavailable);
