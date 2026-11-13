@@ -97,6 +97,10 @@
       </div>
       <section class="view reference-overview" data-view="overview">
         <div class="metrics" id="metrics" aria-label="Company summary"><div class="metric"><span>Loading live company data…</span></div></div>
+        <section class="card" style="margin-bottom:18px" aria-label="Live autonomous execution relay">
+          <div class="card-head"><div><h2>AI execution relay · who is doing what</h2><p>Real task handoffs, model calls, blocker ownership and automatic recovery; not a simulated agent chat.</p></div><button type="button" class="btn alt" data-go="workflows">View execution chain</button></div>
+          <div id="operations-relay-preview" aria-live="polite"><p class="muted">Unlock to inspect real Agent activity.</p></div>
+        </section>
         <div class="overview-grid">
           <div class="col-stack reference-left-stack">
             <section class="card reference-action-card">
@@ -200,6 +204,7 @@
       </section>
       <section class="view" data-view="workflows" hidden>
         <div class="card"><div class="card-head"><div><h2>Recent work execution</h2><p>These are actual model runs recorded in Business OS. Workflow catalogs in other apps are not included until connected.</p></div><button class="btn alt" data-go="actions">Review assigned work →</button></div><div id="workflows-snapshot">Loading recent model runs…</div></div>
+        <section class="card"><div class="card-head"><div><h2>Live Agent-to-Agent handoffs & blocker tracker</h2><p>Trace each recorded task, its originating coordinator, worker, model-call evidence, dependencies and automatic repairs.</p></div></div><div id="operations-relay-detail" aria-live="polite">Loading execution evidence…</div></section>
         <section class="card">
           <div class="card-head"><div><h2>Assign new internal work</h2><p>Create one actual task for an existing specialist. This requests an internal recommendation, not external messages or spending.</p></div></div>
           <form id="new-work-form">
@@ -250,7 +255,7 @@
   </main>
 </div>
 </div>
-<script src="/control/premium.js?v=6"></script>
+<script src="/control/premium.js?v=7"></script>
 <script>
 const $=id=>document.getElementById(id);let token=sessionStorage.getItem('noos-founder-token')||'';$('token').value=token;
 function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
