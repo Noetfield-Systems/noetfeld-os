@@ -82,6 +82,24 @@ fixture={
     "roi":{"brands":[],"events_last_7d":107,"actual_revenue":"Not connected",
            "cost_tracking":"Token usage tracked. Infrastructure costs not connected."},
     "connect-opportunities":{"items":[]},
+    "operations-relay":{
+        "schema":"noetfield.company-os.operations-relay.v1",
+        "source":"Fixture Company OS stored data, not production",
+        "last_supervisor_tick":"2026-11-12T22:00:00+00:00",
+        "counts":{"queued":2,"running":1,"blocked":1,"failed":0,"drafted":48,
+                  "approved":0,"tasks_needing_execution":3,"needs_attention":1},
+        "handoffs":[{"task_id":"task-agent-fixture","title":"Investigate retry",
+             "from":"market_intelligence","to":"engineering_operator",
+             "owner_role":"engineering_operator","provider":"deterministic-evidence",
+             "actual_model_call_observed":False,"input_tokens":0,
+             "status":"drafted","created_at":"2026-11-12T22:00:00+00:00"}],
+        "actions":[{"action":"BLOCKER_OWNER_ASSIGNED","owner":"Engineering Delivery",
+           "result":"DIAGNOSIS_QUEUED_NOT_REPAIRED","at":"2026-11-12T22:00:00+00:00"}],
+        "blockers":[{"reason_code":"project_not_allowed","state":"FOUNDER_HANDOFF_REJECTED",
+            "owner":"Company OS / owning Company OS tenant",
+            "next_action":"Fix canonical project routing"}],
+        "end_to_end_motor_execution_proven":False
+    },
     "runtime-mesh":{
         "schema":"noetfield.company-os.runtime-mesh-observation.v1",
         "nodes":[

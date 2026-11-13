@@ -12,7 +12,7 @@ assert.equal(inline.length,1,"Expected one existing application controller");
 new vm.Script(inline[0],{filename:"control-inline.js"});
 new vm.Script(ui,{filename:"control-premium.js"});
 assert.match(html,/\/control\/premium\.css\?v=6/);
-assert.match(html,/\/control\/premium\.js\?v=6/);
+assert.match(html,/\/control\/premium\.js\?v=7/);
 assert.match(html,/type="password" id="token"/);
 assert.match(html,/<form id="auth-form" method="post" action="\/control" autocomplete="on">/);
 assert.match(html,/name="username" autocomplete="username"/);
@@ -45,6 +45,12 @@ assert.match(ui,/\/api\/control\/tasks/);
 assert.match(ui,/\/api\/control\/runtime-mesh/);
 assert.match(html,/id="runtime-mesh"/);
 assert.match(ui,/function loadRuntimeMesh/);
+assert.match(html,/id="operations-relay-preview"/);
+assert.match(html,/id="operations-relay-detail"/);
+assert.match(ui,/function loadOperationsRelay/);
+assert.match(ui,/\/api\/control\/operations-relay/);
+assert.match(ui,/actual_model_call_observed/);
+assert.match(ui,/counts\.actionable_tasks/);
 assert.match(ui,/runway_e2e_commissioned|Runway remains the canonical execution engine/);
 class FakeClassList{
   constructor(){this.items=new Set()}
@@ -81,7 +87,7 @@ const fixture={
 window.noosPremium.render(fixture);
 assert.match(elements.get("metrics").innerHTML,/1,055/);
 assert.match(elements.get("metrics").innerHTML,/Not connected/);
-assert.match(elements.get("action-preview").innerHTML,/Task backlog/);
+assert.match(elements.get("action-preview").innerHTML,/Work requiring action/);
 assert.match(elements.get("action-preview").innerHTML,/Incoming opportunities/);
 assert.match(elements.get("action-preview").innerHTML,/Revenue visibility/);
 assert.match(html,/id="dashboard-venture"/);
