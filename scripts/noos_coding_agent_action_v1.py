@@ -21,7 +21,7 @@ import urllib.request
 
 ROOT = Path(os.environ.get("NOOS_CODER_ROOT") or Path(__file__).resolve().parents[1])
 API = "https://noos-loop-runner-production.up.railway.app"
-MODEL_API = "https://models.github.ai/inference/chat/completions"
+MODEL_API = "https://noetfield-agent-fabric-staging-staging.up.railway.app/api/internal/v1/noos-coder/generate"
 BASE = "deploy/noos-loop-runner-entrypoint"
 REPO = "Noetfield-Systems/noetfeld-os"
 TOKEN = os.environ.get("GITHUB_TOKEN", "")
@@ -148,43 +148,14 @@ def shell(*argv, timeout=120, secretless=False):
     return proc.stdout.strip()
 
 
-def model_generate(goal, name):
-    if not TOKEN:
-        raise RuntimeError("GITHUB_MODELS_TOKEN_MISSING")
+def model_generate(goal, name, oidc_token):
     context = (ROOT / "AGENTS.md").read_text(encoding="utf-8")[:3400]
-    system = (
-        "You are a senior software engineer writing a focused, useful Python "
-        "capability for a real production repository. Return ONLY JSON of "
-        "the shape {\\\"module\\\":\\\"...Python source...\\\","
-        "\\\"tests\\\":\\\"...Pytest source...\\\"}. No Markdown. "
-        "Both files must be meaningful and testable, not mock examples. "
-        "No network access, no secrets, no subprocess, no eval, no file-system "
-        "writes in generated code. Keep dependencies to Python stdlib and pytest. "
-        "Tests must import the module from scripts." 
-    )
-    user = (
-        "Authorized engineering objective:\n" + goal[:8000] +
-        "\n\nTarget Python module: scripts/" + name + ".py" +
-        "\nTarget pytest file: tests/test_" + name + ".py" +
-        "\nThe module import path is scripts." + name +
-        "\nRepository constraints:\n" + context
-    )
-    body = {"model": "openai/gpt-4.1",
-            "messages":[{"role":"system","content":system},
-                        {"role":"user","content":user}],
-            "max_tokens": 3500, "temperature": 0.1}
-    answer = request(MODEL_API, method="POST", data=body, token=TOKEN, timeout=80)
-    raw = (((answer.get("choices") or [{}])[0].get("message") or {}).get("content") or "")
-    raw = str(raw).strip()
-    if raw.startswith("```"):
-        raw = re.sub(r"^\x60{3}(?:json)?\s*", "", raw).removesuffix("```").strip()
-    try:
-        parsed = json.loads(raw)
-    except json.JSONDecodeError as exc:
-        raise RuntimeError("MODEL_NON_JSON_OUTPUT") from exc
-    if set(parsed) != {"module","tests"}:
-        raise RuntimeError("MODEL_OUTPUT_SCHEMA_INVALID")
-    result = (parsed["module"],parsed["tests"])
+    body = {"goal":goal[:8000], "name":name, "context":context}
+    answer = request(MODEL_API, method="POST", data=body,
+                     token=oidc_token, timeout=60)
+    if answer.get("origin") != "NOETFIELD_COMPANY_AGENT_FABRIC":
+        raise RuntimeError("COMPANY_FABRIC_INFERENCE_ORIGIN_INVALID")
+    result = (answer.get("module"), answer.get("tests"))
     if any(not isinstance(x,str) or len(x)<80 or len(x)>MAX_CONTENT for x in result):
         raise RuntimeError("MODEL_CODE_SIZE_INVALID")
     return result
@@ -202,13 +173,13 @@ def check_ast(contents):
     return True
 
 
-def write_and_test(goal, suffix):
+def write_and_test(goal, suffix, oidc_token):
     name = "noos_agent_feature_" + suffix
     module_path = "scripts/" + name + ".py"
     test_path = "tests/test_" + name + ".py"
     if (ROOT/module_path).exists() or (ROOT/test_path).exists():
         raise RuntimeError("REPOSITORY_TARGET_ALREADY_EXISTS")
-    source,tests = model_generate(goal,name)
+    source,tests = model_generate(goal,name,oidc_token)
     check_ast(source)
     check_ast(tests)
     (ROOT/module_path).write_text(source,encoding="utf-8")
@@ -267,7 +238,7 @@ def main():
     suffix=hashlib.sha256(workpacket.encode()).hexdigest()[:12]
     print("NOOS_CODING_CLAIMED " + workpacket)
     try:
-        paths=write_and_test(job["prompt"],suffix)
+        paths=write_and_test(job["prompt"],suffix,token)
         head,branch,pr=commit_and_open_pr(workpacket,paths)
         evidence={"github_run_id":os.environ.get("GITHUB_RUN_ID"),
                   "commit_sha":head,"branch":branch,"pr_url":pr,

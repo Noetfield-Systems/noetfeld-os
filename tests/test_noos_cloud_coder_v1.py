@@ -33,6 +33,6 @@ def test_oidc_verification_needs_signed_token():
     assert identity.WORKFLOW.endswith("/noos-cloud-coder.yml@refs/heads/main")
 
 
-def test_no_default_inference_credentials():
+def test_model_route_uses_existing_company_fabric_instead_of_new_api_credentials():
     assert worker.API.startswith("https://")
-    assert worker.MODEL_API == "https://models.github.ai/inference/chat/completions"
+    assert worker.MODEL_API == "https://noetfield-agent-fabric-staging-staging.up.railway.app/api/internal/v1/noos-coder/generate"
