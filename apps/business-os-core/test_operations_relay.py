@@ -125,6 +125,70 @@ class OperationsRelayTests(unittest.TestCase):
             self.assertEqual(db.execute("SELECT COUNT(*) FROM runs WHERE provider='openai-compatible'").fetchone()[0],2)
         self.assertFalse(operations_relay.snapshot()["end_to_end_motor_execution_proven"])
 
+    def test_real_401_blocker_released_once_after_existing_fallback_is_connected(self):
+        from unittest.mock import patch
+        from urllib.error import HTTPError
+        with core.connect() as db:
+            db.execute("INSERT INTO state(key,value) VALUES(?,?)",
+                ("founder_bridge_last_rejected_projects",json.dumps([{
+                    "reason_code":"project_not_allowed","project_id":"noetfield-earnloop",
+                    "company_id":"noetfield-systems-inc"}])))
+        operations_relay.tick()
+        os.environ.update({"LLM_BASE_URL":"https://primary.invalid/v1",
+                           "LLM_API_KEY":"invalid-test","LLM_MODEL":"old"})
+        with patch("urllib.request.urlopen",side_effect=HTTPError(
+            "https://primary.invalid/v1/chat/completions",401,"bad token",{},None)):
+            first=core.claim("tasks")
+            core.process_task(first)
+        with core.connect() as db:
+            self.assertEqual(db.execute("SELECT status FROM tasks WHERE id=?",(first["id"],)).fetchone()[0],"blocked")
+            db.execute("INSERT INTO runs VALUES(?,?,?,?,?,?,?,?,?,?,?)",
+                ("run_old_auth_error",first["id"],"engineering_operator","provider_error","old",
+                 "degraded",0,0,core.now(),core.now(),
+                 '{"model_error_code":"HTTP_401"}'))
+            db.execute("UPDATE tasks SET updated_at=? WHERE id=?",(
+                (datetime.now(timezone.utc)-timedelta(minutes=8)).isoformat(),first["id"]))
+        # A 401 is permanent until a genuinely different configured
+        # authorized provider is available.
+        without=operations_relay.tick(timestamp=time.time()+120)
+        self.assertNotIn("SUPERVISED_AUTH_FALLBACK",without["action_types"])
+        os.environ["LLM_FALLBACK_API_KEY"]="existing-noetfield-reference-fixture"
+        os.environ["LLM_FALLBACK_MODEL"]="existing-platform-model"
+        with core.connect() as db:
+            db.execute("UPDATE tasks SET updated_at=? WHERE id=?",(
+                (datetime.now(timezone.utc)-timedelta(minutes=8)).isoformat(),first["id"]))
+        with_fallback=operations_relay.tick(timestamp=time.time()+240)
+        self.assertIn("SUPERVISED_AUTH_FALLBACK",with_fallback["action_types"])
+        with core.connect() as db:
+            self.assertEqual(db.execute("SELECT status FROM tasks WHERE id=?",(first["id"],)).fetchone()[0],"queued")
+        calls=[]
+        class FakeResponse:
+            def __enter__(self):return self
+            def __exit__(self,*_):return False
+            def read(self):
+                return json.dumps({"choices":[{"message":{"content":json.dumps({
+                    "assessment":"Recovered via existing platform provider",
+                    "next_best_action":"Validate accepted WorkPacket",
+                    "risk_flags":[],"evidence":[]})}}],
+                    "usage":{"prompt_tokens":9,"completion_tokens":7}}).encode()
+        def call(req,timeout=20):
+            calls.append(req.full_url)
+            if len(calls)==1:
+                raise HTTPError(req.full_url,401,"auth rejected",{},None)
+            return FakeResponse()
+        with patch("urllib.request.urlopen",side_effect=call):
+            task=core.claim("tasks")
+            self.assertEqual(task["id"],first["id"])
+            core.process_task(task)
+        self.assertEqual(calls,["https://primary.invalid/v1/chat/completions",
+                                "https://openrouter.ai/api/v1/chat/completions"])
+        with core.connect() as db:
+            task=db.execute("SELECT status,result FROM tasks WHERE id=?",(first["id"],)).fetchone()
+            self.assertEqual(task["status"],"drafted")
+            self.assertEqual(json.loads(task["result"])["recommendation"]["model_route"],
+                             "noetfield_openrouter_fallback")
+        self.assertFalse(operations_relay.snapshot()["end_to_end_motor_execution_proven"])
+
     def test_customer_llm_401_never_leaks_to_other_provider(self):
         from unittest.mock import patch
         from urllib.error import HTTPError
