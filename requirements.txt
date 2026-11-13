@@ -12,3 +12,6 @@ asyncpg==0.31.0
 fpdf2==2.8.7
 PyYAML>=6.0.3
 jsonschema>=4.20.0,<5
+
+# Signed GitHub Actions OIDC for agent job claims (keyless runtime auth)
+PyJWT[crypto]>=2.10.1,<3
