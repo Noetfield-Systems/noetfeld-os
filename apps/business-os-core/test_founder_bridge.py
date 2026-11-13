@@ -53,6 +53,8 @@ class CompanyFounderContinuousBridgeTests(unittest.TestCase):
         os.environ["SINA_ORG_BRIDGE_PROJECT_IDS"] = "noetfield-company-os-commercial-product,venture-formation-lab"
         os.environ["SINA_ORG_BRIDGE_ENABLED"] = "true"
         os.environ["SINA_ORG_CONTINUOUS_TOKEN"] = "test_" + "x" * 48
+        for key in ("LLM_BASE_URL","LLM_API_KEY","LLM_MODEL"):
+            os.environ.pop(key,None)
 
     def tearDown(self):
         os.environ.clear()
@@ -207,7 +209,7 @@ class CompanyFounderContinuousBridgeTests(unittest.TestCase):
         core.process_task(claimed)
         with core.connect() as db:
             self.assertEqual(db.execute("SELECT status FROM tasks WHERE id=?",
-                        (accepted,)).fetchone()[0],"drafted")
+                        (accepted,)).fetchone()[0],"blocked")
         with core.connect() as db:
             self.assertEqual(json.loads(db.execute("SELECT result FROM tasks WHERE id=?",
                 (accepted,)).fetchone()["result"])["external_action"],"not_executed")
@@ -241,7 +243,7 @@ class CompanyFounderContinuousBridgeTests(unittest.TestCase):
             rows = db.execute("SELECT * FROM tasks").fetchall()
             self.assertEqual(len(rows), 1)
             self.assertEqual(rows[0]["role"], "product_strategy")
-            self.assertEqual(rows[0]["autonomy"], "draft")
+            self.assertEqual(rows[0]["autonomy"], "founder_verified_workpacket")
             self.assertEqual(rows[0]["opportunity_id"], None)
             self.assertEqual(rows[0]["status"], "queued")
         with self.assertRaises(founder_bridge.UnsafeRequest):
@@ -252,8 +254,53 @@ class CompanyFounderContinuousBridgeTests(unittest.TestCase):
         core.process_task(claimed)
         with core.connect() as db:
             t = db.execute("SELECT status,result FROM tasks WHERE id=?", (tid,)).fetchone()
-            self.assertEqual(t["status"], "drafted")
+            self.assertEqual(t["status"], "blocked")
             self.assertEqual(json.loads(t["result"])["external_action"], "not_executed")
+
+
+    def test_model_authorization_cannot_be_spoofed_by_unauthenticated_task(self):
+        item=request()
+        tid,_=founder_bridge.admit(item,founder_bridge._allowed_projects())
+        with core.connect() as db:
+            task=dict(db.execute("SELECT * FROM tasks WHERE id=?",(tid,)).fetchone())
+        self.assertEqual(founder_bridge.model_authorization(task),"noetfield-systems-inc")
+        self.assertIsNone(founder_bridge.model_authorization({**task,"brand":"founder-independent"}))
+        self.assertIsNone(founder_bridge.model_authorization({**task,"id":"task_fake"}))
+        self.assertIsNone(founder_bridge.model_authorization({**task,"event_id":"external_event"}))
+
+    def test_valid_workpacket_uses_existing_scoped_fallback_and_records_only_a_draft(self):
+        from urllib.error import HTTPError
+        from unittest.mock import patch
+        item=request()
+        tid,_=founder_bridge.admit(item,founder_bridge._allowed_projects())
+        os.environ.update({"LLM_BASE_URL":"https://primary.invalid/v1",
+            "LLM_API_KEY":"primary-fixture","LLM_MODEL":"model-a",
+            "LLM_FALLBACK_API_KEY":"fallback-fixture","LLM_FALLBACK_MODEL":"model-b"})
+        calls=[]
+        class Response:
+            def __enter__(self): return self
+            def __exit__(self,*_): return False
+            def read(self):
+                return json.dumps({"choices":[{"message":{"content":json.dumps({
+                    "assessment":"Investigate onboarding route","next_best_action":"Open a scoped code PR",
+                    "risk_flags":[],"priority":"high","evidence":[]})}}],
+                    "usage":{"prompt_tokens":22,"completion_tokens":15}}).encode()
+        def callback(req,timeout=None):
+            calls.append(req.full_url)
+            if len(calls)==1:
+                raise HTTPError(req.full_url,401,"invalid primary credential",{},None)
+            self.assertEqual(req.full_url,"https://openrouter.ai/api/v1/chat/completions")
+            self.assertEqual(json.loads(req.data)["model"],"model-b")
+            return Response()
+        with patch("urllib.request.urlopen",side_effect=callback):
+            core.process_task(core.claim("tasks"))
+        with core.connect() as db:
+            row=db.execute("SELECT status,result FROM tasks WHERE id=?",(tid,)).fetchone()
+        self.assertEqual(row["status"],"drafted")
+        self.assertEqual(json.loads(row["result"])["recommendation"]["model_route"],
+                         "noetfield_openrouter_fallback")
+        self.assertEqual(json.loads(row["result"])["external_action"],"not_executed")
+        self.assertEqual(len(calls),2)
 
     def test_acknowledgement_progress_and_retry_are_independent_of_external_execution(self):
         tid, _ = founder_bridge.admit(request(), founder_bridge._allowed_projects())
@@ -270,10 +317,10 @@ class CompanyFounderContinuousBridgeTests(unittest.TestCase):
             self.assertEqual(founder_bridge.reconcile(), 0)
             core.process_task(core.claim("tasks"))
             self.assertEqual(founder_bridge.reconcile(), 1)
-            self.assertEqual(replies[-1]["status"], "DRAFTED")
+            self.assertEqual(replies[-1]["status"], "BLOCKED")
             self.assertEqual(founder_bridge.reconcile(), 0)
         with core.connect() as db:
-            self.assertEqual(db.execute("SELECT last_acked FROM founder_org_bindings").fetchone()[0], "DRAFTED")
+            self.assertEqual(db.execute("SELECT last_acked FROM founder_org_bindings").fetchone()[0], "BLOCKED")
 
     def test_rejected_http_ack_retains_pending_and_retries_after_restart(self):
         tid, _ = founder_bridge.admit(request(), founder_bridge._allowed_projects())
