@@ -270,6 +270,8 @@ with sync_playwright() as p:
     width=page.evaluate("document.documentElement.scrollWidth")
     assert width <= 390+3, "Unexpected horizontal page overflow at mobile width: "+str(width)
     assert not errors, "Browser runtime errors: "+"; ".join(errors[:4])
+    page.locator("#menu-open").click()
+    page.locator('.side-link[data-go="settings"]').click()
     page.locator("#logout").click()
     assert page.locator("#auth-form").is_visible(), "Lock must return user to sign-in"
     assert page.evaluate("sessionStorage.getItem('noos-founder-token')") is None, "Lock must clear session token"
