@@ -119,8 +119,15 @@
         </div>
       </section>
       <section class="view" data-view="actions" hidden>
-        <div class="card"><div class="card-head"><div><h2>Assigned work</h2><p>Review the latest queued, prepared and completed records. Approving a draft records your review only.</p></div><label class="row" for="action-filter">Status <select class="input" id="action-filter"><option value="">All</option><option value="drafted">Prepared for review</option><option value="queued">Waiting to run</option><option value="running">In progress</option><option value="approved">Reviewed</option><option value="failed">Failed</option><option value="blocked">Waiting on another task</option></select></label></div>
-          <div class="scroll"><table><thead><tr><th>Work</th><th>Responsible team</th><th>Status</th><th>Next step</th><th>Action</th></tr></thead><tbody id="tasks"><tr><td colspan="5">Loading…</td></tr></tbody></table></div><p class="footnote" id="task-list-scope">Recent records only.</p>
+        <div class="card"><div class="card-head"><div><h2>Assigned work</h2><p>Search and review the complete Company OS work queue. Approving a prepared draft records your review only.</p></div></div>
+          <form id="task-inbox-controls" class="inbox-controls" role="search">
+            <label>Find work<input class="input" type="search" id="task-search" maxlength="120" placeholder="Search title, details or task ID"></label>
+            <label>Stage<select class="input" id="action-filter"><option value="">All stages</option><option value="drafted">Prepared for review</option><option value="queued">Waiting to run</option><option value="running">In progress</option><option value="approved">Reviewed</option><option value="failed">Failed</option><option value="blocked">Waiting on another task</option></select></label>
+            <label>Venture<select class="input" id="task-brand"><option value="">All ventures</option><option value="noetfield">Noetfield</option><option value="portfolio">Portfolio</option><option value="buildworkflow">BuildWorkflow</option><option value="signalforge">SignalForge</option><option value="trustfield">TrustField (independent)</option><option value="buildrelay">BuildRelay (independent)</option></select></label>
+            <button class="btn alt" type="submit">Search work</button>
+          </form>
+          <div class="scroll"><table><thead><tr><th>Work</th><th>Responsible team</th><th>Status</th><th>Next step</th><th>Action</th></tr></thead><tbody id="tasks"><tr><td colspan="5">Open this view to load the complete task inbox.</td></tr></tbody></table></div>
+          <div class="inbox-footer"><p class="footnote" id="task-list-scope" role="status" aria-live="polite">Task inbox not loaded.</p><div class="row"><button id="task-prev" class="btn alt" type="button" disabled>Previous</button><button id="task-next" class="btn alt" type="button" disabled>Next</button></div></div>
         </div>
       </section>
       <section class="view" data-view="connect" hidden>
