@@ -42,6 +42,10 @@ assert.match(inline[0],/\/api\/control\/connect-cases\//);
 assert.match(inline[0],/\/api\/control\/tasks\/'\+id\+'\/approve/);
 assert.match(inline[0],/\/api\/control\/commercial-team\/commission/);
 assert.match(ui,/\/api\/control\/tasks/);
+assert.match(ui,/\/api\/control\/runtime-mesh/);
+assert.match(html,/id="runtime-mesh"/);
+assert.match(ui,/function loadRuntimeMesh/);
+assert.match(ui,/runway_e2e_commissioned|Runway remains the canonical execution engine/);
 class FakeClassList{
   constructor(){this.items=new Set()}
   toggle(name,force){const on=force===undefined?!this.items.has(name):Boolean(force);if(on)this.items.add(name);else this.items.delete(name);return on}
