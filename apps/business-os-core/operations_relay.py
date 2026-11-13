@@ -201,7 +201,17 @@ def tick(*, timestamp=None):
                     )
                     can_retry=(task["retryable"]==1 or task["retryable"] is None
                                or fallback_recovery)
-                    if task["attempts"]>=MAX_PROVIDER_ATTEMPTS or not can_retry:
+                    # One explicit, versioned recovery after canonical provider
+                    # credentials are rotated; never reset the normal attempt cap.
+                    # The revision is a non-secret deploy marker, not a credential.
+                    revision=(os.getenv("LLM_CREDENTIAL_REVISION") or "").strip()
+                    marker_key="operations_relay_provider_rotation:"+task["id"]
+                    rotation_retry=(
+                        fallback_recovery and bool(re.fullmatch(r"[a-zA-Z0-9_.-]{1,80}",revision))
+                        and task["attempts"]>=MAX_PROVIDER_ATTEMPTS
+                        and _get(db,marker_key)!=revision
+                    )
+                    if (task["attempts"]>=MAX_PROVIDER_ATTEMPTS and not rotation_retry) or not can_retry:
                         marker="operations_relay_model_blocker:"+task["id"]
                         if not _get(db,marker):
                             _put(db,marker,code)
@@ -220,9 +230,12 @@ def tick(*, timestamp=None):
                         (stamp,task["id"])).rowcount
                     if not changed:
                         continue
+                    if rotation_retry:
+                        _put(db,marker_key,revision)
                     budget-=1
                     actions.append({"at":stamp,
-                       "action":"SUPERVISED_AUTH_FALLBACK" if fallback_recovery
+                       "action":"PROVIDER_ROTATION_ONE_SHOT_RETRY" if rotation_retry
+                                else "SUPERVISED_AUTH_FALLBACK" if fallback_recovery
                                 else "VERIFIED_FOUNDER_MODEL_RETRY" if founder_tenant
                                 else "SUPERVISED_MODEL_RETRY" if scoped_internal
                                 else "CONSENTED_MODEL_RETRY",
