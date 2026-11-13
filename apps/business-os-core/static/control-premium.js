@@ -66,6 +66,7 @@ function showView(name,opts={}){
   if(!opts.noScroll)window.scrollTo({top:0,behavior:"instant"});
   if(name==="health"){loadHealth();if(!document.body.classList.contains("locked"))void loadRuntimeMesh();}
   if(name==="actions"&&!document.body.classList.contains("locked"))loadTaskInbox();
+  if((name==="overview"||name==="workflows")&&!document.body.classList.contains("locked")&&typeof api==="function")void loadOperationsRelay();
 }
 function setAuth(isConnected,message){
   document.body.classList.toggle("locked",!isConnected);
@@ -134,16 +135,19 @@ function referenceActionRow(icon,title,badge,desc,destination,cta,tone){
     '<p>'+esc(desc)+'</p></div><button class="ref-link" type="button" data-go="'+destination+'">'+esc(cta)+' '+pictogram('arrow')+'</button></div>';
 }
 function renderActionCenter(t,overview){
-  const count=overview?.counts?.pending_tasks;
+  const count=overview?.counts?.actionable_tasks??overview?.counts?.pending_tasks;
   $('action-count').textContent=count===undefined?'—':safeNumber(count);
   $('action-count-hint').textContent=count===undefined?'Unable to read pending work':'Company OS durable task queue';
   $('nav-action-count').textContent=count===undefined?'—':count>999?(count/1000).toFixed(1)+'K':String(count);
-  const label=count===undefined?'Unavailable':safeNumber(count)+' pending';
+  const drafts=overview?.counts?.drafts_awaiting_review;
+  const label=count===undefined?'Unavailable':safeNumber(count)+' needing action';
+  const backlogNote=drafts==null?'Review and prioritize the existing queue.':
+    safeNumber(drafts)+' separate drafts exist; drafts are not verified work.';
   const sourceLoaded=$('connect-count').textContent!=='—';
   const connectCount=sourceLoaded?Number($('connect-count').textContent.replace(/,/g,'')):null;
   const fresh=connectCount===null?'Checking…':safeNumber(connectCount)+' recent';
   $('action-preview').innerHTML=
-    referenceActionRow('check','Task backlog',label,'Review and prioritize the existing queue.','actions','Open queue','warn')+
+    referenceActionRow('check','Work requiring action',label,backlogNote,'actions','Open queue','warn')+
     referenceActionRow('target','Incoming opportunities',fresh,'Review submitted proposals and partnership requests.','connect','Open Connect','neutral')+
     referenceActionRow('revenue','Revenue visibility','Not connected','Link verified financial data to track collected cash.','revenue','View revenue','neutral');
   if(!taskInboxState.loaded)$('task-list-scope').textContent='Open Action Center to load the complete Company OS work queue.';
@@ -282,11 +286,11 @@ function renderSummaryMetrics(d){
   const counts=d?.counts||fallback;
   const activity=d?.counts?.activity_events;
   const days=d?.days||Number($('dashboard-period').value)||7;
-  const pending=counts.pending_tasks;
+  const pending=counts.actionable_tasks??counts.pending_tasks;
   const opportunities=counts.active_opportunities??counts.opportunities;
   $('metrics').innerHTML=[
     metric('Active opportunities',safeNumber(opportunities),'','target','opportunities','','View opportunities'),
-    metric('Pending tasks',safeNumber(pending),'','check','actions','attention','Review workload'),
+    metric('Tasks needing action',safeNumber(pending),counts.drafts_awaiting_review!=null?(safeNumber(counts.drafts_awaiting_review)+' separate internal drafts'):'Queue status','check','actions','attention','Review workload'),
     metric('Activity · last '+days+' days',safeNumber(activity??null),'','activity','activity','','View activity'),
     metric('Collected revenue','Not connected','Financial source not linked','revenue','revenue','','View revenue')
   ].join('');
@@ -391,6 +395,52 @@ async function loadRuntimeMesh(){
     output.innerHTML=header+rejected+rows+'<p class="helper">Source health and a WorkPacket ACK do not prove authorized Motor execution, a deployed change, independent verification or collected revenue. Runway remains the canonical execution engine.</p>';
   }catch(e){output.textContent="Cannot read execution chain: "+e.message;}
 }
+async function loadOperationsRelay(){
+  if(document.body.classList.contains("locked"))return;
+  const preview=$("operations-relay-preview"),detail=$("operations-relay-detail");
+  if(preview)preview.textContent="Reading real Company OS execution evidence…";
+  if(detail)detail.textContent="Loading recorded handoffs and recovery actions…";
+  try{
+    const d=await api("/api/control/operations-relay");
+    if(d.schema!=="noetfield.company-os.operations-relay.v1"||!Array.isArray(d.handoffs)||!d.counts)throw Error("Unsupported operations relay response");
+    const c=d.counts;
+    const summary='<div class="status-line"><span><b>Existing Company OS worker</b><br><span class="muted">'+
+      safeNumber(c.queued)+' queued · '+safeNumber(c.running)+' running · '+
+      safeNumber(c.blocked+c.failed)+' blocked or failed · '+safeNumber(c.drafted)+' internal drafts</span></span>'+
+      '<span class="tag '+(d.last_supervisor_tick?'':'warn')+'">'+(d.last_supervisor_tick?'Supervisor tick recorded':'Supervisor not proven active')+'</span></div>';
+    const transition=item=>{
+      const model=item.actual_model_call_observed
+        ?'Actual model call · '+esc(item.provider)+' · '+safeNumber(item.input_tokens)+' input tokens'
+        :esc(item.provider||"not_invoked")+' · no model-to-model prompt confirmed';
+      const link=esc(item.from||"Company OS queue")+' → '+esc(item.to||"Unknown specialist");
+      const owner=esc(item.owner_role||"Unknown owner");
+      return '<div class="status-line"><span><b>'+link+'</b><br><span class="muted">'+
+        esc(item.title||"Recorded task")+' · '+owner+' · '+model+
+        ' · '+esc(item.task_id||"")+'</span></span>'+labelTag(item.status)+'</div>';
+    };
+    const blocks=(d.blockers||[]).slice(0,6).map(b=>
+      '<div class="status-line"><span><b>'+esc(b.reason_code||b.state||"Unknown blocker")+'</b><br><span class="muted">'+
+      esc(b.owner||"Unassigned")+' · '+esc(b.next_action||"Diagnosis required")+'</span></span>'+
+      '<span class="tag warn">'+esc(b.state||"Open")+'</span></div>').join("");
+    const repairs=(d.actions||[]).slice(0,5).map(a=>
+      '<div class="status-line"><span><b>'+esc(a.action||"Recovery action")+'</b><br><span class="muted">'+
+      esc(a.owner||"Company OS")+' · '+esc(a.result||"Outcome not verified")+
+      ' · '+esc(date(a.at))+'</span></span><span class="tag">Recorded</span></div>').join("");
+    const recent=d.handoffs.slice(0,4).map(transition).join("");
+    if(preview)preview.innerHTML=summary+
+      (recent||'<p class="muted">No task handoffs with source receipts in this source.</p>')+
+      '<p class="helper">Only a provider-tagged model run proves an actual LLM request here. Internal drafts, queued jobs and configured roles do not prove deployment.</p>';
+    if(detail)detail.innerHTML=summary+
+      '<h3>Who assigned work to whom</h3>'+
+      (d.handoffs.slice(0,18).map(transition).join("")||'<p class="muted">No recorded handoffs yet.</p>')+
+      '<h3>Tracked blockers and owners</h3>'+(blocks||'<p class="muted">No failed source events or handoff rejection reported.</p>')+
+      '<h3>Automatic recovery receipts</h3>'+(repairs||'<p class="muted">No recovery action recorded; this does not imply complete autonomy.</p>')+
+      '<p class="helper">The existing worker can retry consented model failures and resume dependency-unblocked tasks. Source mutations, PR merging, production deployment and independent verifier completion require their own real receipts.</p>';
+  }catch(error){
+    if(preview)preview.textContent="Execution relay unavailable: "+error.message;
+    if(detail)detail.textContent="Execution relay unavailable: "+error.message;
+  }
+}
 function setSearchResults(q){
   const target=$("search-results"),v=q.toLowerCase().trim();
   if(!v){target.hidden=true;target.innerHTML="";return}
@@ -421,6 +471,7 @@ function init(){
     if(b && !b.classList.contains("side-link")){e.preventDefault();showView(b.dataset.go);}
     if(e.target.closest("#copy-connect")||e.target.closest("#copy-link-main"))copyConnect();
   });
+  $("refresh").addEventListener("click",()=>void loadOperationsRelay());
   $("menu-open").addEventListener("click",()=>{document.body.classList.add("nav-open");$("menu-open").setAttribute("aria-expanded","true")});
   $("menu-close").addEventListener("click",()=>{document.body.classList.remove("nav-open");$("menu-open").setAttribute("aria-expanded","false")});
   $("search-input").addEventListener("input",e=>setSearchResults(e.target.value));
