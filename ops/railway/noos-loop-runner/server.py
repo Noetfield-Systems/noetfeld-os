@@ -526,7 +526,13 @@ def main() -> None:
                 os.environ.setdefault(key, val)
     except Exception as exc:  # noqa: BLE001 — boot must not die on vault miss
         print(f"WARN: vault env load failed: {exc}", file=sys.stderr)
-    _ready = True
+    if pg_store_enabled():
+        status = pg_probe()  # migrate before any parallel cron ticks reach the runner
+        _ready = status.get("ok") is True
+        print("NOOS_POSTGRES_BOOTSTRAP=" + ("READY" if _ready else "FAILED"),
+              flush=True)
+    else:
+        _ready = True
     HTTPServer(("0.0.0.0", PORT), Handler).serve_forever()
 
 
