@@ -334,12 +334,26 @@ def snapshot():
         latest_tick=_get(db,"operations_relay_last_success")
         history=_history(db)
         raw_rejections=_get(db,"founder_bridge_last_rejections","{}")
+        raw_rejected_projects=_get(db,"founder_bridge_last_rejected_projects","[]")
     try:
         rejections=json.loads(raw_rejections)
         if not isinstance(rejections,dict):
             rejections={}
     except (ValueError,TypeError):
         rejections={}
+    try:
+        scoped_projects=json.loads(raw_rejected_projects)
+        if not isinstance(scoped_projects,list):
+            scoped_projects=[]
+    except (ValueError,TypeError):
+        scoped_projects=[]
+    scoped_projects=[
+        p for p in scoped_projects[:12]
+        if isinstance(p,dict) and p.get("reason_code")=="project_not_allowed"
+        and p.get("company_id")=="noetfield-systems-inc"
+        and isinstance(p.get("project_id"),str)
+        and re.fullmatch(r"[a-z0-9][a-z0-9-]{2,89}",p["project_id"])
+    ]
     handoffs=[]
     for row in nodes:
         d=dict(row)
@@ -393,6 +407,12 @@ def snapshot():
              "state":r["status"],"owner":"Engineering Delivery",
              "next_action":"Inspect persisted event and perform bounded repair"}
             for r in issues
+        ] + [
+            {"reason_code":"project_not_allowed","project_id":p["project_id"],
+             "state":"FOUNDER_HANDOFF_REJECTED",
+             "owner":"Engineering Delivery → Chief of Staff",
+             "next_action":"Resolve scoped project ownership then prove a later accepted WorkPacket"}
+            for p in scoped_projects
         ] + [
             {"reason_code":str(k),"count":v,"state":"FOUNDER_HANDOFF_REJECTED",
              "owner":"Company OS / owning Company OS tenant",
