@@ -58,6 +58,7 @@ function showView(name,opts={}){
   if(!opts.noHash && location.hash!=="#"+name)history.replaceState(null,"","#"+name);
   if(!opts.noScroll)window.scrollTo({top:0,behavior:"instant"});
   if(name==="health")loadHealth();
+  if(name==="actions"&&!document.body.classList.contains("locked"))loadTaskInbox();
 }
 function setAuth(isConnected,message){
   document.body.classList.toggle("locked",!isConnected);
@@ -79,6 +80,47 @@ function setAuth(isConnected,message){
 function formatTask(x){
   return "<div class='action-item'><span class='action-mark' aria-hidden='true'>☷</span><div><b>"+esc(x.title||"Review work")+"</b><p>"+esc(role[x.role]||x.company_role_title||"Company operations")+" · "+esc(humanStatus(x.status))+" · "+esc(x.brand||"Portfolio")+"</p></div><button class='btn alt' type='button' data-go='actions'>Review →</button></div>";
 }
+
+const taskInboxState={offset:0,limit:40,loaded:false,requestId:0};
+function taskRow(x){
+  let details={};try{details=JSON.parse(x.result||"{}")}catch{}
+  const recommendation=details.recommendation||{};
+  return '<tr data-task-row="'+esc(x.id)+'"><td><b>'+esc(x.title||"Untitled work")+'</b>'+
+    '<span class="muted">'+esc(x.brand||"Portfolio")+' · '+esc(x.id)+'</span>'+
+    '<details class="task-detail"><summary>Context</summary><p>'+esc(x.objective||"No further context recorded")+'</p></details></td>'+
+    '<td>'+esc(role[x.role]||x.role)+'<span class="muted">'+esc(x.company_role_title||"")+'</span></td>'+
+    '<td>'+labelTag(x.status)+'<span class="muted">'+safeNumber(x.pending_dependencies||0)+' waiting dependencies</span></td>'+
+    '<td>'+esc(recommendation.next_best_action||x.next_action||"No next step recorded")+'</td>'+
+    '<td>'+(x.status==="drafted"?'<button class="btn alt" data-approve="'+esc(x.id)+'">Record approval</button>':'<span class="muted">No action available</span>')+'</td></tr>';
+}
+async function loadTaskInbox(reset=false){
+  if(reset)taskInboxState.offset=0;
+  if(document.body.classList.contains("locked"))return;
+  const id=++taskInboxState.requestId;
+  const params=new URLSearchParams({limit:String(taskInboxState.limit),offset:String(taskInboxState.offset)});
+  const status=$("action-filter").value,brand=$("task-brand").value,q=$("task-search").value.trim();
+  if(status)params.set("status",status);
+  if(brand)params.set("brand",brand);
+  if(q)params.set("q",q);
+  $("task-list-scope").textContent="Loading tasks from the full Company OS queue…";
+  $("task-prev").disabled=true;$("task-next").disabled=true;
+  try{
+    const d=await api("/api/control/task-inbox?"+params.toString());
+    if(id!==taskInboxState.requestId)return;
+    if(d.schema!=="noetfield.business-os.task-inbox.v1"||!Array.isArray(d.tasks))throw Error("Unsupported task inbox response");
+    taskInboxState.loaded=true;
+    const start=d.total?d.offset+1:0,end=d.offset+d.tasks.length;
+    $("tasks").innerHTML=d.tasks.length?d.tasks.map(taskRow).join(""):'<tr><td colspan="5"><div class="empty"><h3>No matching work</h3><p>Adjust your filters or try another search.</p></div></td></tr>';
+    $("task-list-scope").textContent="Showing "+start+"–"+end+" of "+safeNumber(d.total)+" matching tasks from Company OS.";
+    $("task-prev").disabled=taskInboxState.offset===0;
+    $("task-next").disabled=!d.has_more;
+  }catch(err){
+    if(id!==taskInboxState.requestId)return;
+    $("tasks").innerHTML='<tr><td colspan="5"><div class="empty"><h3>Could not load your work</h3><p>Task data has not been changed.</p><button class="btn alt" type="button" data-retry-inbox>Try again</button></div></td></tr>';
+    $("task-list-scope").textContent="Work inbox unavailable: "+err.message;
+  }
+}
+
 function renderActionCenter(t,overview){
   const all=(t?.tasks||[]), items=all.filter(x=>["drafted","queued","running","blocked","failed"].includes(x.status));
   const priority={failed:0,blocked:1,drafted:2,running:3,queued:4};
@@ -89,18 +131,7 @@ function renderActionCenter(t,overview){
   $("action-count").textContent=count===undefined?"—":safeNumber(count);
   $("action-count-hint").textContent=count===undefined?"Source unavailable":"Open company tasks across the existing queue";
   $("nav-action-count").textContent=count===undefined?"—":count>999?"999+":String(count);
-  const filter=$("action-filter")?.value||"";
-  const shown=all.filter(x=>!filter||x.status===filter);
-  $("tasks").innerHTML=shown.map(x=>{
-    let r={};try{r=JSON.parse(x.result||"{}")}catch{}
-    const rec=r.recommendation||{};
-    return '<tr><td><b>'+esc(x.title)+'</b><span class="muted">'+esc(x.brand||"Portfolio")+' · '+esc(x.id)+'</span></td>'+
-      '<td>'+esc(role[x.role]||x.role)+'<span class="muted">'+esc(x.company_role_title||"")+'</span></td>'+
-      '<td>'+labelTag(x.status)+'<span class="muted">'+safeNumber(x.pending_dependencies||0)+' waiting dependencies</span></td>'+
-      '<td>'+esc(rec.next_best_action||x.next_action||"No action recorded")+'</td>'+
-      '<td>'+(x.status==="drafted"?'<button class="btn alt" data-approve="'+esc(x.id)+'">Record approval</button>':'<span class="muted">—</span>')+'</td></tr>';
-  }).join("")||'<tr><td colspan="5"><div class="empty">No task records match this filter.</div></td></tr>';
-  $("task-list-scope").textContent="Displaying "+shown.length+" recent records from the task API (up to 150), not the entire queue.";
+  if(!taskInboxState.loaded)$("task-list-scope").textContent="Open Action Center to load work from the complete Company OS task queue.";
 }
 function renderTeam(org){
   const seats=org?.seats||[];
@@ -262,13 +293,22 @@ function init(){
     }catch(e){feedback.textContent="Could not create task: "+e.message;}
     finally{button.disabled=false;}
   });
-  $("action-filter").addEventListener("change",()=>last&&renderActionCenter(last.t,last.o));
+  $("action-filter").addEventListener("change",()=>loadTaskInbox(true));
+  $("task-brand").addEventListener("change",()=>loadTaskInbox(true));
+  $("task-inbox-controls").addEventListener("submit",e=>{e.preventDefault();loadTaskInbox(true)});
+  $("task-next").addEventListener("click",()=>{taskInboxState.offset+=taskInboxState.limit;loadTaskInbox()});
+  $("task-prev").addEventListener("click",()=>{taskInboxState.offset=Math.max(0,taskInboxState.offset-taskInboxState.limit);loadTaskInbox()});
+  document.body.addEventListener("click",e=>{
+    if(e.target.closest("[data-retry-inbox]"))loadTaskInbox();
+    const focus=e.target.closest("[data-task-focus]");
+    if(focus){$("task-search").value=focus.dataset.taskFocus;showView("actions");loadTaskInbox(true);}
+  });
   window.addEventListener("hashchange",()=>showView(location.hash.slice(1),{noHash:true}));
 
   // Native form submit handles Enter and password-manager heuristics.
   setAuth(false,"Founder access required");
   showView(location.hash.slice(1)||"overview",{noHash:true,noScroll:true});
 }
-window.noosPremium={render,paintConnect,setAuth,loadHealth,showView};
+window.noosPremium={render,paintConnect,setAuth,loadHealth,showView,loadTaskInbox};
 init();
 })();
