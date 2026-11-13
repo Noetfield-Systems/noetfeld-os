@@ -1235,7 +1235,10 @@ def process_task(t):
    result["model_error_code"]=error_meta["code"]
  with connect() as d:
   d.execute("INSERT INTO runs VALUES(?,?,?,?,?,?,?,?,?,?,?)",(idof("run"),t["id"],role,provider,model,"degraded" if provider=="provider_error" else "completed",it,ot,now(),now(),json.dumps(result,ensure_ascii=False)))
-  d.execute("UPDATE tasks SET status='drafted',result=?,updated_at=? WHERE id=?",(json.dumps({
+  # An upstream Agent's failed model request is not a usable draft.
+  # Keep its dependent manager blocked until an actual successful retry.
+  terminal_status="blocked" if internal_handoff and provider=="provider_error" else "drafted"
+  d.execute("UPDATE tasks SET status=?,result=?,updated_at=? WHERE id=?",(terminal_status,json.dumps({
    "provider":provider,"recommendation":result,"memory_hits":len(mem),
    "model_error_code":error_meta["code"] if error_meta else None,
    "model_retryable":error_meta["retryable"] if error_meta else None,
@@ -1246,7 +1249,8 @@ def process_task(t):
    "model_error_code":error_meta["code"] if error_meta else None,
    "model_retryable":error_meta["retryable"] if error_meta else None,
    "input_tokens":it,"output_tokens":ot,
-   "state":"INTERNAL_DIAGNOSIS_DRAFT","external_effects":0,
+   "state":"MODEL_FAILED_BLOCKED" if terminal_status=="blocked" else "INTERNAL_DIAGNOSIS_DRAFT",
+   "external_effects":0,
    "independent_verification":False},sort_keys=True),flush=True)
 def process_event(e):
  try:
