@@ -3,11 +3,19 @@ on:
   pull_request:
     paths:
       - "apps/business-os-core/verify_control_live.py"
+      - "apps/business-os-core/verify_control_browser.py"
+      - "apps/business-os-core/static/control-premium.js"
+      - "apps/business-os-core/static/control-premium.css"
+      - "apps/business-os-core/static/control.html"
       - ".github/workflows/business-os-premium-live-smoke.yml"
   push:
     branches: [platform/business-os-core-v1]
     paths:
       - "apps/business-os-core/verify_control_live.py"
+      - "apps/business-os-core/verify_control_browser.py"
+      - "apps/business-os-core/static/control-premium.js"
+      - "apps/business-os-core/static/control-premium.css"
+      - "apps/business-os-core/static/control.html"
       - ".github/workflows/business-os-premium-live-smoke.yml"
   workflow_dispatch:
 permissions:

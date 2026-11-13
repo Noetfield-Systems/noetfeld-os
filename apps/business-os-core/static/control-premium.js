@@ -14,6 +14,7 @@ const role={
   roi_analyst:"Business results",engineering_operator:"Product & engineering",risk_governance:"Quality & permissions",partnerships:"Partnerships"
 };
 const statuses={
+  mapped_existing:"Configured",partial_existing:"Partially available",
   drafted:"Prepared for review",queued:"Waiting to run",processing:"In progress",running:"In progress",
   approved:"Reviewed",completed:"Completed",failed:"Needs attention",blocked:"Waiting on dependency",dead_letter:"Needs investigation",
   NEW:"New",QUALIFYING:"Under review",QUALIFIED:"Qualified",ENGAGED:"In conversation",
@@ -52,6 +53,7 @@ function showView(name,opts={}){
   $("page-description").textContent=pages[name][1];
   $("crumb-current").textContent=pages[name][0];
   document.body.classList.remove("nav-open");
+  $("menu-open").setAttribute("aria-expanded","false");
   $("sidebar").setAttribute("aria-hidden", "false");
   if(!opts.noHash && location.hash!=="#"+name)history.replaceState(null,"","#"+name);
   if(!opts.noScroll)window.scrollTo({top:0,behavior:"instant"});
@@ -67,7 +69,8 @@ function setAuth(isConnected,message){
   $("refresh").classList.toggle("hide",!isConnected);
   $("auth-state").textContent=isConnected?"Connected":"Locked";
   $("auth-state").classList.toggle("good",isConnected);
-  $("status").textContent=message||(isConnected?"Connected to production":"Founder access required");
+  $("status").textContent=isConnected?"Connected":(message||"Founder access required");
+  $("status").title=message||"Company OS session status";
   $("status").setAttribute("role","status");
   if(isConnected)showView((location.hash||"#overview").slice(1),{noHash:true,noScroll:true});
 }
