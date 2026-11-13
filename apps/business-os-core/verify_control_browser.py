@@ -1,0 +1,138 @@
+#!/usr/bin/env python3
+"""Playwright browser acceptance of the *live UI* with clearly mocked protected API data.
+No Founder token, no production mutations. Screenshots are visual QA fixtures, NOT real customer evidence.
+"""
+import json
+import os
+from pathlib import Path
+from urllib.parse import urlparse
+from playwright.sync_api import sync_playwright
+
+BASE=os.getenv("BUSINESS_OS_URL","https://business-os-core-production.up.railway.app").rstrip("/")
+OUT=Path("qa-artifacts")
+OUT.mkdir(exist_ok=True)
+fixture={
+    "overview":{
+        "counts":{"contacts":1,"opportunities":2,"qualified":1,"won":0,"queued_events":0,
+                  "pending_tasks":1055,"feedback":0,"platform_intake_signals":1,
+                  "platform_intake_pending":0,"platform_intake_tasks_created":1},
+        "weighted_pipeline_cad":1250,"pipeline_note":"Estimated value only",
+        "llm_configured":True,"worker_interval_seconds":5,
+        "brands":[]
+    },
+    "org":{
+        "organization":{"company_role_count":8,"runtime_executor_count":11,"founder":{"role_id":"H-001"}},
+        "seats":[
+            {"role_id":"N-01","title":"Chief of Staff & Operations Officer","runtime_role_names":["Chief of Staff"],
+             "activation_status":"mapped_existing","activation_meaning":"Role is configured. Live execution status comes from task runs.","manager_name":"Founder","layer":1,"max_authority":"A3"},
+            {"role_id":"N-02","title":"Opportunity Intelligence Officer","runtime_role_names":["Market Intelligence"],
+             "activation_status":"partial_existing","activation_meaning":"Some capabilities are configured.","manager_name":"Chief of Staff","layer":2,"max_authority":"A2"}
+        ]
+    },
+    "opportunities":{"opportunities":[
+        {"id":"opp-fixture","name":"Example Contact","email":"fixture@example.invalid","company":"Example Company",
+         "brand":"noetfield","audience":"founder","intent":"partner","score":73,"estimated_value":1250,"stage":"new","role":"founder"}
+    ]},
+    "tasks":{"tasks":[
+        {"id":"task-fixture","company_role_id":"N-02","company_role_title":"Opportunity Intelligence Officer",
+         "role":"partnerships","brand":"noetfield","title":"Assess potential GTM partner",
+         "objective":"Assess mutual distribution value using verifiable information.",
+         "status":"drafted","result":None,"next_action":"Review evidence and prepare founder decision",
+         "pending_dependencies":0,"dependency_count":0}
+    ]},
+    "events":{"events":[
+        {"id":"event-fixture","event_type":"platform.intake.signal.received","status":"processed",
+         "brand":"noetfield","created_at":"2026-11-12T20:30:00+00:00"}
+    ]},
+    "runs":{"runs":[
+        {"id":"run-fixture","role":"market_intelligence","provider":"fixture-provider","status":"completed",
+         "input_tokens":150,"output_tokens":320,"started_at":"2026-11-12T20:32:00+00:00"}
+    ]},
+    "roi":{"brands":[],"events_last_7d":107,"actual_revenue":"Not connected",
+           "cost_tracking":"Token usage tracked. Infrastructure costs not connected."},
+    "connect-opportunities":{"items":[{
+        "intake_id":"INT-ABCDEF246801","request_id":"RID-CNX-FIXTURE",
+        "source_created_at":"2026-11-12T20:30:00Z","category":"partnership",
+        "initiative":"noetfield","source_channel":"linkedin","case_stage":"QUALIFYING",
+        "review_state":"tasks_created","review_owner_role":"partnerships",
+        "next_action":"Verify actual partner reach","due_at":"2026-11-15T10:00:00Z",
+        "evidence_ref":None,"notes":"","case_version":1,"specialist_roles":["partnerships"],
+        "advisory_tasks":[],"actual_owner_assigned":False,"confirmed_meeting":False,"verified_conversion":None
+    }]},
+    "commercial-team":{"state":"INTERNAL_ONLY","roles":[]},
+}
+mock_calls=[]
+def make_handler(route):
+    req=route.request
+    u=urlparse(req.url)
+    resource=u.path.rsplit("/",1)[-1]
+    if req.method=="POST" and u.path=="/api/control/tasks":
+        mock_calls.append("POST /api/control/tasks")
+        return route.fulfill(status=200,content_type="application/json",
+                             body=json.dumps({"created":True,"task_id":"task-fixture-new"}))
+    if req.method=="PATCH" and u.path.startswith("/api/control/connect-cases/"):
+        mock_calls.append("PATCH Connect case")
+        return route.fulfill(status=200,content_type="application/json",
+                             body=json.dumps({"updated":True,"case":{"version":2}}))
+    if req.method=="POST" and "/approve" in u.path:
+        return route.fulfill(status=200,content_type="application/json",body='{"approved":true}')
+    if req.method=="POST" and "/commission" in u.path:
+        return route.fulfill(status=200,content_type="application/json",
+                             body='{"already_commissioned":false,"external_actions":0}')
+    if resource in fixture:
+        mock_calls.append(req.method+" "+resource)
+        return route.fulfill(status=200,content_type="application/json",body=json.dumps(fixture[resource]))
+    raise RuntimeError("Unexpected API route: "+req.method+" "+u.path)
+
+with sync_playwright() as p:
+    browser=p.chromium.launch(headless=True,args=["--disable-dev-shm-usage"])
+    page=browser.new_page(viewport={"width":1440,"height":900},device_scale_factor=1)
+    errors=[]
+    page.on("pageerror",lambda err:errors.append(str(err)))
+    page.route("**/api/control/**",make_handler)
+    page.goto(BASE+"/control",wait_until="domcontentloaded",timeout=40000)
+    page.locator("#token").fill("FIXTURE_TOKEN_NOT_A_REAL_SECRET")
+    page.locator("#connect").click()
+    page.locator("#metrics .metric").first.wait_for(timeout=30000)
+    assert "1,055" in page.locator("#metrics").inner_text(), "Overview did not display actual-bound fixture field"
+    assert "Not connected" in page.locator("#metrics").inner_text(), "Revenue must never show fabricated zero"
+    assert page.locator(".sidebar").is_visible()
+    page.screenshot(path=str(OUT/"founder-desktop-fixture.png"),full_page=True)
+    views=["actions","connect","opportunities","relationships","team","workflows","activity","revenue","health","settings"]
+    for view in views:
+        page.locator('.side-link[data-go="'+view+'"]').click()
+        assert page.locator('.view[data-view="'+view+'"]').is_visible(), "Navigation failed: "+view
+    page.locator('.side-link[data-go="workflows"]').click()
+    form=page.locator("#new-work-form")
+    form.locator('select[name="role"]').select_option("partnerships")
+    form.locator('input[name="title"]').fill("Assess a qualified partner")
+    form.locator('textarea[name="objective"]').fill("Produce an evidence-ranked partnership recommendation and specific next action.")
+    form.locator('button[type="submit"]').click()
+    page.wait_for_timeout(900)
+    assert "POST /api/control/tasks" in mock_calls, "New work button did not call backend"
+    assert page.locator('.view[data-view="actions"]').is_visible(), "New task did not navigate back to Action Center"
+    page.locator('.side-link[data-go="connect"]').click()
+    page.locator("#connectrows [data-edit-connect]").first.click()
+    assert page.locator("#connect-case-editor").is_visible(), "Connect editor missing"
+    page.locator("#connect-next").fill("Verify partner's actual sales reach")
+    page.locator("#connect-save").click()
+    page.wait_for_timeout(400)
+    assert "PATCH Connect case" in mock_calls, "Connect case edit did not call backend"
+    page.locator(".side-link[data-go='overview']").click()
+    page.set_viewport_size({"width":390,"height":844})
+    page.wait_for_timeout(300)
+    assert page.locator("#menu-open").is_visible(), "Mobile menu control unavailable"
+    page.locator("#menu-open").click()
+    assert page.locator(".sidebar").is_visible(), "Mobile drawer did not open"
+    page.locator('.side-link[data-go="connect"]').click()
+    assert page.locator('.view[data-view="connect"]').is_visible(), "Mobile navigation did not switch views"
+    page.locator(".side-link[data-go='overview']").click(force=True)  # Drawer is closed after route; state still changes
+    page.screenshot(path=str(OUT/"founder-mobile-fixture.png"),full_page=True)
+    width=page.evaluate("document.documentElement.scrollWidth")
+    assert width <= 390+3, "Unexpected horizontal page overflow at mobile width: "+str(width)
+    assert not errors, "Browser runtime errors: "+"; ".join(errors[:4])
+    browser.close()
+print(json.dumps({"status":"PASS","ui":"production-hosted","protected_api_data":"mocked fixtures",
+                  "views_tested":11,"mobile_width":390,"actual_external_mutations":0,
+                  "mocked_api_calls":len(mock_calls),
+                  "screenshots":[str(x) for x in OUT.glob("*.png")]}))
