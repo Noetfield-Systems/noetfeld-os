@@ -385,7 +385,10 @@ async function loadRuntimeMesh(){
       const label=href?'<a href="'+esc(href)+'" target="_blank" rel="noopener noreferrer">'+esc(node.label)+'</a>':esc(node.label);
       return '<div class="status-line"><span><b>'+label+'</b><br><span class="muted">'+esc(humanStatus(status))+'</span></span><span class="tag '+(good?"":"warn")+'">'+(good?"Endpoint only":"Unproven")+'</span></div>';
     }).join("");
-    output.innerHTML=header+rows+'<p class="helper">Source health and a WorkPacket ACK do not prove authorized Motor execution, a deployed change, independent verification or collected revenue. Runway remains the canonical execution engine.</p>';
+    const rejections=Object.entries(handoff.last_cycle_rejection_reasons||{})
+      .filter(([code,count])=>/^[a-z_]{3,64}$/.test(code)&&Number.isSafeInteger(count)&&count>0);
+    const rejected=rejections.length?'<div class="status-line"><span><b>Founder WorkPackets awaiting correction</b><br><span class="muted">'+rejections.map(([code,count])=>esc(code)+': '+safeNumber(count)).join(' · ')+'</span></span><span class="tag warn">Not admitted</span></div>':'';
+    output.innerHTML=header+rejected+rows+'<p class="helper">Source health and a WorkPacket ACK do not prove authorized Motor execution, a deployed change, independent verification or collected revenue. Runway remains the canonical execution engine.</p>';
   }catch(e){output.textContent="Cannot read execution chain: "+e.message;}
 }
 function setSearchResults(q){
