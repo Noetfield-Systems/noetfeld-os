@@ -1243,9 +1243,16 @@ def process_event(e):
     d.execute("UPDATE events SET status='failed',error=?,processed_at=? WHERE id=?",(clean(ex,400),now(),e["id"]))
 def daily_tick():
  import portfolio_studio
+ import operations_relay
  portfolio_studio.tick()
  sync_platform_intake_feed()
  requeue_legacy_platform_drafts()
+ # Use the existing resident worker; never start a parallel scheduler.
+ try:
+  operations_relay.tick()
+ except Exception:
+  import logging
+  logging.exception("operations_relay_tick_failed")
  with connect() as d:r=d.execute("SELECT value FROM state WHERE key='last_learning'").fetchone()
  last=float(r["value"]) if r else 0
  if time.time()-last>=86400:
