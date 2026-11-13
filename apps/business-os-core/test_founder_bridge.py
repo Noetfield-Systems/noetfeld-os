@@ -292,6 +292,29 @@ class CompanyFounderContinuousBridgeTests(unittest.TestCase):
             self.assertEqual(db.execute("SELECT COUNT(*) FROM tasks").fetchone()[0], 1)
 
 
+    def test_rejected_workpacket_records_typed_reason_without_leaking_request(self):
+        item=request(request_id="d"*32,project_id="unapproved-private-tenant")
+        item["task"]="CONTACT secret.customer@example.invalid should stay private"
+        def wire(method,path,payload=None):
+            self.assertEqual(method,"GET")
+            return {"schema":"sina.company-os.work-intake.v1","items":[item]}
+        with patch.object(founder_bridge,"_request",side_effect=wire), \
+             patch.object(founder_bridge,"reconcile",return_value=0), \
+             patch.object(founder_bridge,"publish_commercial_signals",return_value=0), \
+             patch.object(founder_bridge,"publish_contributor_signals",return_value=0):
+            result=founder_bridge.tick()
+        self.assertEqual(result["state"],"LIVE")
+        self.assertEqual(result["rejected"],1)
+        self.assertEqual(result["rejection_reasons"],{"project_not_allowed":1})
+        reported=founder_bridge.health()
+        self.assertEqual(reported["last_cycle_rejection_reasons"],{"project_not_allowed":1})
+        self.assertNotIn("secret.customer",str(result)+str(reported))
+        self.assertNotIn(item["request_id"],str(result)+str(reported))
+        with core.connect() as db:
+            saved=db.execute("SELECT value FROM state WHERE key='founder_bridge_last_rejections'").fetchone()[0]
+        self.assertEqual(json.loads(saved),{"project_not_allowed":1})
+        self.assertNotIn("secret.customer",saved)
+
     def test_live_observability_uses_stored_success_and_never_exposes_credentials(self):
         before=founder_bridge.health()
         self.assertTrue(before["configured"])

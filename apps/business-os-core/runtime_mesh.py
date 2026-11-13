@@ -120,6 +120,7 @@ def snapshot(*, opener=None, founder_bridge_status=None):
             "state": bridge.get("connection", "NOT_OBSERVED"),
             "work_packets_claimed": bridge.get("work_packets_claimed", 0),
             "pending_ack": bridge.get("pending_ack", 0),
+            "last_cycle_rejection_reasons": bridge.get("last_cycle_rejection_reasons", {}),
             "verified_outcomes": bridge.get("verified_outcomes", 0),
             "external_effects": bridge.get("external_effects", 0),
         },
