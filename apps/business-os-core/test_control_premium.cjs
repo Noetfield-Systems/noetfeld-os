@@ -12,7 +12,7 @@ assert.equal(inline.length,1,"Expected one existing application controller");
 new vm.Script(inline[0],{filename:"control-inline.js"});
 new vm.Script(ui,{filename:"control-premium.js"});
 assert.match(html,/\/control\/premium\.css\?v=6/);
-assert.match(html,/\/control\/premium\.js\?v=7/);
+assert.match(html,/\/control\/premium\.js\?v=8/);
 assert.match(html,/type="password" id="token"/);
 assert.match(html,/<form id="auth-form" method="post" action="\/control" autocomplete="on">/);
 assert.match(html,/name="username" autocomplete="username"/);
