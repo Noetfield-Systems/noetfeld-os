@@ -302,7 +302,8 @@ def snapshot():
           SELECT provider,COUNT(*) AS n FROM runs GROUP BY provider ORDER BY n DESC
         """).fetchall()
         nodes=db.execute("""
-          SELECT t.id,t.title,t.objective,t.role,t.status,t.brand,t.created_at,t.updated_at,
+          SELECT t.id,t.title,t.objective,t.result AS task_result,
+                 t.role,t.status,t.brand,t.created_at,t.updated_at,
                  t.next_action,t.event_id,r.provider,r.status AS run_status,r.model,
                  r.input_tokens,r.output_tokens,r.started_at,r.finished_at,
                  e.event_type,
@@ -367,9 +368,23 @@ def snapshot():
             else "Company OS portfolio coordinator" if d["event_type"]=="portfolio.studio.cycle"
             else "Company OS task queue")
         actual_model=d["provider"]=="openai-compatible" and d["run_status"]=="completed"
+        try:
+            saved=json.loads(d["task_result"] or "{}")
+            recommendation=saved.get("recommendation",{}) if isinstance(saved,dict) else {}
+            if not isinstance(recommendation,dict):
+                recommendation={}
+            answer=recommendation.get("assessment") or recommendation.get("next_best_action") or ""
+        except (TypeError,ValueError):
+            answer=""
+        response_kind=("MODEL_RESPONSE" if actual_model else
+                       "PROVIDER_FAILED" if d["provider"]=="provider_error" else
+                       "DETERMINISTIC_INTERNAL_DRAFT" if d["provider"] in ("deterministic","deterministic-evidence")
+                       else "NO_RECORDED_RESPONSE")
         handoffs.append({
             "task_id":d["id"],"title":_safe_text(d["title"],120),
             "prompt_excerpt":_safe_text(d["objective"],280),
+            "answer_excerpt":_safe_text(answer,420),
+            "response_kind":response_kind,
             "owner_role":d["role"],"brand":d["brand"],"status":d["status"],
             "created_at":d["created_at"],"updated_at":d["updated_at"],
             "next_action":_safe_text(d["next_action"],180),
