@@ -29,7 +29,35 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+      - name: Wait for current published asset version on production
+        if: github.event_name != 'pull_request'
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re,time,urllib.request
+          source=Path("apps/business-os-core/static/control.html").read_text()
+          css=re.search(r'/control/premium\.css\?v=\d+',source).group()
+          js=re.search(r'/control/premium\.js\?v=\d+',source).group()
+          url="https://business-os-core-production.up.railway.app/control"
+          end=time.monotonic()+150
+          last_error=""
+          while time.monotonic()<end:
+              try:
+                  req=urllib.request.Request(url,headers={"Cache-Control":"no-cache"})
+                  with urllib.request.urlopen(req,timeout=15) as resp:
+                      html=resp.read().decode("utf-8","replace")
+                  if css in html and js in html:
+                      print("Production asset version verified:",css,js)
+                      break
+                  last_error="Production still serving previous asset version"
+              except Exception as error:
+                  last_error=str(error)
+              time.sleep(4)
+          else:
+              raise SystemExit("Production asset rollout not verified: "+last_error)
+          PY
       - name: Verify production page, assets, readiness and auth walls
+        if: github.event_name != 'pull_request'
         run: python apps/business-os-core/verify_control_live.py
       - name: Install browser QA dependency
         run: |
