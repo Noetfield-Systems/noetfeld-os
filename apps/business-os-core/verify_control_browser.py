@@ -126,7 +126,8 @@ with sync_playwright() as p:
     assert page.locator(".sidebar").is_visible(), "Mobile drawer did not open"
     page.locator('.side-link[data-go="connect"]').click()
     assert page.locator('.view[data-view="connect"]').is_visible(), "Mobile navigation did not switch views"
-    page.locator(".side-link[data-go='overview']").click(force=True)  # Drawer is closed after route; state still changes
+    page.locator("#menu-open").click()
+    page.locator(".side-link[data-go='overview']").click()
     page.screenshot(path=str(OUT/"founder-mobile-fixture.png"),full_page=True)
     width=page.evaluate("document.documentElement.scrollWidth")
     assert width <= 390+3, "Unexpected horizontal page overflow at mobile width: "+str(width)
