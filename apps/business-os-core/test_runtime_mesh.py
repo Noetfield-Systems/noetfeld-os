@@ -53,12 +53,15 @@ class RuntimeMeshTests(unittest.TestCase):
             "connection": "LIVE", "work_packets_claimed": 7, "pending_ack": 1,
             "verified_outcomes": 0, "external_effects": 0,
             "last_cycle_rejection_reasons": {"project_not_allowed": 1},
+            "last_cycle_rejected_projects":[{"reason_code":"project_not_allowed",
+                "project_id":"noetfield-earnloop","company_id":"noetfield-systems-inc"}],
         })
         self.assertEqual(result["schema"], runtime_mesh.SCHEMA)
         self.assertEqual(len(client.seen), len(runtime_mesh.PROBES))
         self.assertEqual(result["summary"]["healthy_reports"], len(runtime_mesh.PROBES))
         self.assertEqual(result["founder_handoff"]["work_packets_claimed"], 7)
         self.assertEqual(result["founder_handoff"]["last_cycle_rejection_reasons"], {"project_not_allowed": 1})
+        self.assertEqual(result["founder_handoff"]["last_cycle_rejected_projects"][0]["project_id"],"noetfield-earnloop")
         self.assertFalse(result["summary"]["runway_e2e_commissioned"])
         self.assertEqual(result["summary"]["verified_edges"], 0)
         self.assertTrue(all(not e["e2e_verified"] for e in result["edges"]))
