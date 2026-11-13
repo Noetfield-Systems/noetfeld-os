@@ -50,6 +50,20 @@ def _history(db):
         return []
 
 
+def classify_provider_error(exc):
+    """Return safe machine-only failure evidence; never persist raw URL or token."""
+    from urllib.error import HTTPError, URLError
+    if isinstance(exc, HTTPError):
+        code=int(exc.code)
+        return {"code":"HTTP_"+str(code),"retryable":code in (408,409,425,429,500,502,503,504)}
+    if isinstance(exc, (TimeoutError, ConnectionResetError, ConnectionAbortedError,
+                        ConnectionRefusedError, URLError)):
+        return {"code":"NETWORK_TRANSIENT","retryable":True}
+    if isinstance(exc, (KeyError, IndexError, TypeError, ValueError)):
+        return {"code":"PROVIDER_RESPONSE_INVALID","retryable":False}
+    return {"code":"PROVIDER_UNCLASSIFIED","retryable":False}
+
+
 def supervised_model_authorized(task):
     """Only our own persisted no-customer-data diagnostic handoff may call the LLM.
 
@@ -149,28 +163,59 @@ def tick(*, timestamp=None):
                                 "evidence": "all recorded dependencies drafted or approved",
                                 "result": "REQUEUED_NOT_COMPLETED"})
 
-            # Real bounded retry, not a second agent: only provider errors from
-            # consented opportunities. No AI invocation without configured model.
+            # Provider failures from the CURRENT queue, including our own
+            # authenticated Engineering → Manager handoffs. No separate
+            # scheduler and no raw response secrets. 3 total attempts cap.
             budget = max(0, MAX_RECOVERY_PER_TICK - len(actions))
-            if budget and all(os.getenv(k) for k in ("LLM_BASE_URL","LLM_API_KEY","LLM_MODEL")):
+            if budget:
                 failures = db.execute("""
-                  SELECT t.id,t.updated_at,COUNT(r.id) AS attempts
-                  FROM tasks t JOIN opportunities o ON o.id=t.opportunity_id AND o.ai_consent=1
-                  JOIN runs r ON r.task_id=t.id AND r.provider='provider_error'
+                  SELECT t.*,o.ai_consent,
+                    (SELECT COUNT(*) FROM runs r WHERE r.task_id=t.id
+                     AND r.provider='provider_error') AS attempts,
+                    json_extract(t.result,'$.model_error_code') AS error_code,
+                    json_extract(t.result,'$.model_retryable') AS retryable
+                  FROM tasks t LEFT JOIN opportunities o ON o.id=t.opportunity_id
                   WHERE t.status='drafted'
                     AND json_extract(t.result,'$.provider')='provider_error'
                     AND julianday(t.updated_at)<=julianday(?,'-300 seconds')
-                  GROUP BY t.id
-                  HAVING COUNT(r.id) < ?
-                  ORDER BY t.updated_at ASC LIMIT ?
-                """, (stamp, MAX_PROVIDER_ATTEMPTS, budget)).fetchall()
-                for row in failures:
-                    db.execute("UPDATE tasks SET status='queued',updated_at=? WHERE id=? AND status='drafted'",
-                               (stamp, row["id"]))
-                    actions.append({"at": stamp, "action": "CONSENTED_MODEL_RETRY",
-                                    "task_id": row["id"], "owner": "Existing specialist worker",
-                                    "evidence": str(row["attempts"])+" previous provider errors, consent verified",
-                                    "result": "REQUEUED_NOT_COMPLETED"})
+                  ORDER BY t.updated_at ASC LIMIT 60
+                """,(stamp,)).fetchall()
+                for raw in failures:
+                    task=dict(raw)
+                    legit=task.get("ai_consent")==1 or supervised_model_authorized(task)
+                    if not legit:
+                        continue
+                    code=str(task.get("error_code") or "LEGACY_PROVIDER_ERROR")
+                    # HTTP 401/403/404 and invalid payloads need an owner to
+                    # fix configuration; retrying would burn money indefinitely.
+                    can_retry=(task["retryable"]==1 or task["retryable"] is None)
+                    if task["attempts"]>=MAX_PROVIDER_ATTEMPTS or not can_retry:
+                        marker="operations_relay_model_blocker:"+task["id"]
+                        if not _get(db,marker):
+                            _put(db,marker,code)
+                            actions.append({"at":stamp,"action":"MODEL_PROVIDER_BLOCKER_IDENTIFIED",
+                                "task_id":task["id"],"owner":"Company OS engineering/operator",
+                                "reason_code":code,
+                                "evidence":str(task["attempts"])+" persisted failed attempts",
+                                "result":"CONFIG_OR_PROVIDER_REPAIR_REQUIRED_NOT_COMPLETED"})
+                        continue
+                    if not all(os.getenv(k) for k in ("LLM_BASE_URL","LLM_API_KEY","LLM_MODEL")):
+                        continue
+                    if budget<=0:
+                        continue
+                    changed=db.execute(
+                        "UPDATE tasks SET status='queued',updated_at=? WHERE id=? AND status='drafted'",
+                        (stamp,task["id"])).rowcount
+                    if not changed:
+                        continue
+                    budget-=1
+                    actions.append({"at":stamp,
+                       "action":"SUPERVISED_MODEL_RETRY" if supervised_model_authorized(task)
+                                else "CONSENTED_MODEL_RETRY",
+                       "task_id":task["id"],"owner":"Existing specialist worker",
+                       "reason_code":code,
+                       "evidence":str(task["attempts"])+" recorded provider errors; authorization rechecked",
+                       "result":"REQUEUED_NOT_COMPLETED"})
 
             # An actual terminal event error gets a bounded, idempotent
             # engineering diagnosis in the existing specialist queue.
