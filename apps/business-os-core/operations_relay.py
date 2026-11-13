@@ -130,6 +130,7 @@ def tick(*, timestamp=None):
     diagnosis tasks, reauthorize a blocked WorkPacket, or claim a product fix.
     """
     import core
+    import founder_bridge
     current = float(time.time() if timestamp is None else timestamp)
     stamp = datetime.fromtimestamp(current, timezone.utc).isoformat(timespec="seconds")
     actions = []
@@ -184,15 +185,17 @@ def tick(*, timestamp=None):
                 """,(stamp,)).fetchall()
                 for raw in failures:
                     task=dict(raw)
-                    legit=task.get("ai_consent")==1 or supervised_model_authorized(task)
+                    founder_tenant=founder_bridge.model_authorization(task)
+                    scoped_internal=supervised_model_authorized(task)
+                    legit=task.get("ai_consent")==1 or scoped_internal or bool(founder_tenant)
                     if not legit:
                         continue
                     code=str(task.get("error_code") or "LEGACY_PROVIDER_ERROR")
                     # HTTP 401/403/404 and invalid payloads need an owner to
                     # fix configuration; retrying would burn money indefinitely.
-                    scoped_internal=supervised_model_authorized(task)
                     fallback_recovery=(
-                        scoped_internal and code in ("HTTP_401","HTTP_403")
+                        (scoped_internal or founder_tenant=="noetfield-systems-inc")
+                        and code in ("HTTP_401","HTTP_403")
                         and bool(os.getenv("LLM_FALLBACK_API_KEY"))
                         and bool(os.getenv("LLM_FALLBACK_MODEL"))
                     )
@@ -220,6 +223,7 @@ def tick(*, timestamp=None):
                     budget-=1
                     actions.append({"at":stamp,
                        "action":"SUPERVISED_AUTH_FALLBACK" if fallback_recovery
+                                else "VERIFIED_FOUNDER_MODEL_RETRY" if founder_tenant
                                 else "SUPERVISED_MODEL_RETRY" if scoped_internal
                                 else "CONSENTED_MODEL_RETRY",
                        "task_id":task["id"],"owner":"Existing specialist worker",

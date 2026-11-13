@@ -302,6 +302,33 @@ class CompanyFounderContinuousBridgeTests(unittest.TestCase):
         self.assertEqual(json.loads(row["result"])["external_action"],"not_executed")
         self.assertEqual(len(calls),2)
 
+
+    def test_verified_founder_401_retries_under_existing_lease_and_attempt_cap(self):
+        import time
+        from datetime import datetime, timedelta, timezone
+        import operations_relay
+        item=request()
+        tid,_=founder_bridge.admit(item,founder_bridge._allowed_projects())
+        os.environ.update({"LLM_BASE_URL":"https://primary.invalid/v1",
+            "LLM_API_KEY":"fixture","LLM_MODEL":"primary",
+            "LLM_FALLBACK_API_KEY":"existing-reference-fixture",
+            "LLM_FALLBACK_MODEL":"fallback"})
+        old=(datetime.now(timezone.utc)-timedelta(minutes=7)).isoformat()
+        with core.connect() as db:
+            db.execute("UPDATE tasks SET status='blocked', updated_at=?, result=? WHERE id=?",
+                (old,json.dumps({"provider":"provider_error",
+                  "model_error_code":"HTTP_401","model_retryable":False}),tid))
+            db.execute("INSERT INTO runs VALUES(?,?,?,?,?,?,?,?,?,?,?)",
+                ("run_founder_retry",tid,"product_strategy","provider_error","primary",
+                 "degraded",0,0,old,old,json.dumps({"model_error_code":"HTTP_401"})))
+        report=operations_relay.tick(timestamp=time.time()+30)
+        self.assertIn("SUPERVISED_AUTH_FALLBACK", report["action_types"])
+        with core.connect() as db:
+            self.assertEqual(db.execute("SELECT status FROM tasks WHERE id=?",
+                             (tid,)).fetchone()[0],"queued")
+        self.assertEqual(founder_bridge.model_authorization(core.claim("tasks")),
+                         "noetfield-systems-inc")
+
     def test_acknowledgement_progress_and_retry_are_independent_of_external_execution(self):
         tid, _ = founder_bridge.admit(request(), founder_bridge._allowed_projects())
         replies = []
