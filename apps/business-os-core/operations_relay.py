@@ -357,7 +357,7 @@ def snapshot():
                  b.request_id AS founder_workpacket
           FROM tasks t
           LEFT JOIN runs r ON r.id=(
-             SELECT id FROM runs rr WHERE rr.task_id=t.id ORDER BY started_at DESC,id DESC LIMIT 1
+             SELECT id FROM runs rr WHERE rr.task_id=t.id ORDER BY finished_at DESC,rr.rowid DESC LIMIT 1
           )
           LEFT JOIN events e ON e.id=t.event_id
           LEFT JOIN founder_org_bindings b ON b.canonical_task_id=t.id
