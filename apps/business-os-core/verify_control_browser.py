@@ -215,6 +215,8 @@ with sync_playwright() as p:
         elif view=="health":
             page.locator('.sidebar-secondary .side-link[data-go="settings"]').click()
             page.locator('.view[data-view="settings"] button[data-go="health"]').first.click()
+        elif view=="settings":
+            page.locator('.sidebar-secondary .side-link[data-go="settings"]').click()
         else:
             page.locator('.side-link[data-go="'+view+'"]').click()
         assert page.locator('.view[data-view="'+view+'"]').is_visible(), "Navigation failed: "+view
