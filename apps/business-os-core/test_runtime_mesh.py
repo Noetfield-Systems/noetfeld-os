@@ -52,11 +52,13 @@ class RuntimeMeshTests(unittest.TestCase):
         result = runtime_mesh.snapshot(opener=client, founder_bridge_status={
             "connection": "LIVE", "work_packets_claimed": 7, "pending_ack": 1,
             "verified_outcomes": 0, "external_effects": 0,
+            "last_cycle_rejection_reasons": {"project_not_allowed": 1},
         })
         self.assertEqual(result["schema"], runtime_mesh.SCHEMA)
         self.assertEqual(len(client.seen), len(runtime_mesh.PROBES))
         self.assertEqual(result["summary"]["healthy_reports"], len(runtime_mesh.PROBES))
         self.assertEqual(result["founder_handoff"]["work_packets_claimed"], 7)
+        self.assertEqual(result["founder_handoff"]["last_cycle_rejection_reasons"], {"project_not_allowed": 1})
         self.assertFalse(result["summary"]["runway_e2e_commissioned"])
         self.assertEqual(result["summary"]["verified_edges"], 0)
         self.assertTrue(all(not e["e2e_verified"] for e in result["edges"]))
