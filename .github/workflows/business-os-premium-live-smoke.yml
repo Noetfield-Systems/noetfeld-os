@@ -23,3 +23,17 @@ jobs:
           python-version: "3.12"
       - name: Verify production page, assets, readiness and auth walls
         run: python apps/business-os-core/verify_control_live.py
+      - name: Install browser QA dependency
+        run: |
+          python -m pip install --quiet playwright
+          python -m playwright install chromium
+      - name: Exercise live-hosted UI with fixture-only protected API responses
+        run: python apps/business-os-core/verify_control_browser.py
+      - name: Save visual QA fixtures
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: premium-founder-control-visual-qa
+          path: qa-artifacts/*.png
+          if-no-files-found: ignore
+          retention-days: 7
