@@ -204,7 +204,17 @@ with sync_playwright() as p:
     page.screenshot(path=str(OUT/"founder-desktop-fixture.png"),full_page=False)
     views=["actions","connect","opportunities","relationships","team","workflows","activity","revenue","health","settings"]
     for view in views:
-        page.locator('.side-link[data-go="'+view+'"]').click()
+        if view=="connect":
+            page.locator('.side-link[data-go="opportunities"]').click()
+            page.locator('.view[data-view="opportunities"] button[data-go="connect"]').first.click()
+        elif view=="workflows":
+            page.locator('.side-link[data-go="team"]').click()
+            page.locator('.view[data-view="team"] button[data-go="workflows"]').first.click()
+        elif view=="health":
+            page.locator('.side-link[data-go="settings"]').click()
+            page.locator('.view[data-view="settings"] button[data-go="health"]').first.click()
+        else:
+            page.locator('.side-link[data-go="'+view+'"]').click()
         assert page.locator('.view[data-view="'+view+'"]').is_visible(), "Navigation failed: "+view
     page.locator('.side-link[data-go="actions"]').click()
     page.wait_for_function("document.querySelector('#task-list-scope').textContent.includes('of 85')")
@@ -223,7 +233,8 @@ with sync_playwright() as p:
     page.wait_for_function("document.querySelector('#activity-unit')?.textContent?.includes('last 30 days')")
     page.locator("#dashboard-venture").select_option("")
     page.locator("#dashboard-period").select_option("7")
-    page.locator('.side-link[data-go="workflows"]').click()
+    page.locator('.side-link[data-go="team"]').click()
+    page.locator('.view[data-view="team"] button[data-go="workflows"]').first.click()
     form=page.locator("#new-work-form")
     form.locator('select[name="role"]').select_option("partnerships")
     form.locator('input[name="title"]').fill("Assess a qualified partner")
@@ -248,7 +259,8 @@ with sync_playwright() as p:
     assert page.locator("#menu-open").is_visible(), "Mobile menu control unavailable"
     page.locator("#menu-open").click()
     assert page.locator(".sidebar").is_visible(), "Mobile drawer did not open"
-    page.locator('.side-link[data-go="connect"]').click()
+    page.locator('.side-link[data-go="opportunities"]').click()
+    page.locator('.view[data-view="opportunities"] button[data-go="connect"]').first.click()
     assert page.locator('.view[data-view="connect"]').is_visible(), "Mobile navigation did not switch views"
     page.locator("#menu-open").click()
     page.locator(".side-link[data-go='overview']").click()
