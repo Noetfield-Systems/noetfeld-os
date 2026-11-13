@@ -329,6 +329,40 @@ class CompanyFounderContinuousBridgeTests(unittest.TestCase):
         self.assertEqual(founder_bridge.model_authorization(core.claim("tasks")),
                          "noetfield-systems-inc")
 
+
+    def test_one_shot_credential_rotation_requeues_exhausted_401_once(self):
+        import operations_relay
+        import time
+        from datetime import datetime, timedelta, timezone
+        tid,_=founder_bridge.admit(request(),founder_bridge._allowed_projects())
+        os.environ.update({"LLM_BASE_URL":"https://primary.invalid/v1",
+            "LLM_API_KEY":"fixture","LLM_MODEL":"primary",
+            "LLM_FALLBACK_API_KEY":"canonical-platform-reference",
+            "LLM_FALLBACK_MODEL":"fallback",
+            "LLM_CREDENTIAL_REVISION":"platform-openrouter-20261113"})
+        stamp=(datetime.now(timezone.utc)-timedelta(minutes=15)).isoformat()
+        with core.connect() as db:
+            db.execute("UPDATE tasks SET status='blocked',updated_at=?,result=? WHERE id=?",
+                (stamp,json.dumps({"provider":"provider_error",
+                 "model_error_code":"HTTP_401","model_retryable":False}),tid))
+            for i in range(3):
+                db.execute("INSERT INTO runs VALUES(?,?,?,?,?,?,?,?,?,?,?)",
+                    ("run_rot_"+str(i),tid,"product_strategy","provider_error","primary",
+                     "degraded",0,0,stamp,stamp,"{}"))
+        first=operations_relay.tick(timestamp=time.time()+5)
+        self.assertIn("PROVIDER_ROTATION_ONE_SHOT_RETRY",first["action_types"])
+        with core.connect() as db:
+            self.assertEqual(db.execute("SELECT status FROM tasks WHERE id=?",
+                                        (tid,)).fetchone()[0],"queued")
+            db.execute("UPDATE tasks SET status='blocked',updated_at=?,result=? WHERE id=?",
+                (stamp,json.dumps({"provider":"provider_error",
+                 "model_error_code":"HTTP_401","model_retryable":False}),tid))
+        second=operations_relay.tick(timestamp=time.time()+800)
+        self.assertNotIn("PROVIDER_ROTATION_ONE_SHOT_RETRY",second["action_types"])
+        with core.connect() as db:
+            self.assertEqual(db.execute("SELECT status FROM tasks WHERE id=?",
+                                        (tid,)).fetchone()[0],"blocked")
+
     def test_acknowledgement_progress_and_retry_are_independent_of_external_execution(self):
         tid, _ = founder_bridge.admit(request(), founder_bridge._allowed_projects())
         replies = []
