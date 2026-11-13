@@ -50,6 +50,57 @@ def _history(db):
         return []
 
 
+def supervised_model_authorized(task):
+    """Only our own persisted no-customer-data diagnostic handoff may call the LLM.
+
+    A browser-created task, a raw prompt or arbitrary autonomy string alone
+    cannot activate agent inference on internal jobs.
+    """
+    import core
+    if (not isinstance(task, dict)
+            or task.get("autonomy")!="internal_diagnostic_model"
+            or task.get("event_id") is not None
+            or task.get("opportunity_id") is not None
+            or task.get("brand")!="noetfield"):
+        return False
+    role=task.get("role")
+    prefix=({"engineering_operator":"Repair event processing ",
+             "chief_of_staff":"Follow up event processing "}).get(role)
+    if not prefix or not str(task.get("title") or "").startswith(prefix):
+        return False
+    event_id=task["title"][len(prefix):]
+    if not re.fullmatch(r"[a-z0-9_]{8,72}",event_id):
+        return False
+    key=("operations_relay_event:" if role=="engineering_operator"
+         else "operations_relay_manager:")+event_id
+    with core.connect() as db:
+        return _get(db,key)==task.get("id")
+
+
+def upstream_evidence(task):
+    """Minimum internal specialist result for the dependent manager's prompt."""
+    import core
+    if not supervised_model_authorized(task):
+        return []
+    with core.connect() as db:
+        rows=db.execute("""
+          SELECT p.role,p.status,p.result FROM task_dependencies d
+          JOIN tasks p ON p.id=d.depends_on_task_id
+          WHERE d.task_id=? ORDER BY p.updated_at DESC LIMIT 3
+        """,(task["id"],)).fetchall()
+    evidence=[]
+    for row in rows:
+        try:
+            result=json.loads(row["result"])
+            recommendation=result.get("recommendation",{}) if isinstance(result,dict) else {}
+            note=(recommendation.get("assessment","") if isinstance(recommendation,dict) else "")
+        except (ValueError,TypeError):
+            note=""
+        evidence.append({"role":row["role"],"state":row["status"],
+                         "assessment":_safe_text(note,450)})
+    return evidence
+
+
 def tick(*, timestamp=None):
     """One lease-protected pulse within the *existing* Company OS worker.
 
@@ -140,17 +191,36 @@ def tick(*, timestamp=None):
                               "; status "+_safe_text(row["status"],30)+
                               ". Classify the logged exception, identify root cause and select an exact bounded repair. "
                               "Do not claim that code was changed or deployment succeeded without source receipts.")
+                    # The existing Worker claims the engineer's task, and only
+                    # after its recorded draft does it release the manager
+                    # dependency. These are real inter-agent work handoffs.
+                    if not re.fullmatch(r"[a-z0-9_]{8,72}",row["id"]):
+                        continue
                     tid = core.add_task(db,None,None,"noetfield","engineering_operator",
                                         "Repair event processing "+row["id"],action,
                                         "Diagnose source event; return evidence and next repair step.")
-                    db.execute("UPDATE tasks SET priority_rank=15 WHERE id=?", (tid,))
+                    manager=core.add_task(db,None,None,"noetfield","chief_of_staff",
+                                        "Follow up event processing "+row["id"],
+                                        "Review the assigned engineering specialist's actual result for "+row["id"]+
+                                        ". Choose the next bounded corrective action and evidence requirement. "
+                                        "A drafted diagnosis is not repaired code, a passed test or completed deployment.",
+                                        "Review specialist evidence; route next authorized repair without self-certification.")
+                    core.add_task_dependency(db,manager,tid)
+                    db.execute("UPDATE tasks SET autonomy='internal_diagnostic_model',priority_rank=15 WHERE id=?",(tid,))
+                    db.execute("UPDATE tasks SET autonomy='internal_diagnostic_model',priority_rank=16 WHERE id=?",(manager,))
                     _put(db, marker, tid)
+                    _put(db,"operations_relay_manager:"+row["id"],manager)
                     new_count += 1
                     actions.append({"at":stamp,"action":"BLOCKER_OWNER_ASSIGNED",
                                     "task_id":tid,"source_event_id":row["id"],
                                     "owner":"Engineering Delivery",
                                     "evidence":"persisted "+row["status"]+" event",
                                     "result":"DIAGNOSIS_QUEUED_NOT_REPAIRED"})
+                    actions.append({"at":stamp,"action":"MANAGER_FOLLOWUP_SCHEDULED",
+                                    "task_id":manager,"source_event_id":row["id"],
+                                    "owner":"Chief of Staff",
+                                    "evidence":"recorded dependency on engineering diagnosis",
+                                    "result":"WAITS_FOR_ENGINEERING_DRAFT"})
                 _put(db,day_key,used+new_count)
             previous = _history(db)
             _put(db, LEDGER_KEY, json.dumps((actions+previous)[:30],separators=(",",":")))
@@ -218,9 +288,11 @@ def snapshot():
         # A dependency edge is a real recorded work handoff. It is NOT a
         # model-to-model prompt unless the provider records a model call.
         source="Founder OS" if d["founder_workpacket"] else (
-            "Company OS portfolio coordinator" if d["event_type"]=="portfolio.studio.cycle"
+            "Company OS operations supervisor" if str(d["title"]).startswith(
+                ("Repair event processing ","Follow up event processing "))
+            else "Company OS portfolio coordinator" if d["event_type"]=="portfolio.studio.cycle"
             else "Company OS task queue")
-        actual_model=d["provider"]=="openai-compatible" and (d["input_tokens"] or 0)>0
+        actual_model=d["provider"]=="openai-compatible" and d["run_status"]=="completed"
         handoffs.append({
             "task_id":d["id"],"title":_safe_text(d["title"],120),
             "prompt_excerpt":_safe_text(d["objective"],280),
