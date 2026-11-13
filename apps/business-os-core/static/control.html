@@ -95,39 +95,58 @@
           <span class="screen-reader-only" id="last-updated">No data loaded</span>
         </div>
       </div>
-      <section class="view" data-view="overview">
-        <div class="metrics" id="metrics" aria-label="Company summary">
-          <div class="metric"><span>Loading live data</span><strong>—</strong></div>
-        </div>
-        <p class="footnote" id="data-note">Showing current verified source availability, not a financial prediction.</p>
-        <div class="overview-grid" style="margin-top:20px">
-          <div class="col-stack">
-            <section class="card">
-              <div class="card-head"><div><h2>Action center</h2><p>Work that is ready to review or needs attention.</p></div><button class="btn alt" data-go="actions">View work →</button></div>
-              <div class="sticky-summary"><div><span class="kpi-small" id="action-count">—</span><span class="kpi-caption" style="display:block" id="action-count-hint">Checking pending work</span></div><span class="tag neutral">Actual queue</span></div>
-              <div id="action-preview" aria-live="polite"><div class="empty">Loading recent work…</div></div>
+      <section class="view reference-overview" data-view="overview">
+        <div class="metrics" id="metrics" aria-label="Company summary"><div class="metric"><span>Loading live company data…</span></div></div>
+        <div class="overview-grid">
+          <div class="col-stack reference-left-stack">
+            <section class="card reference-action-card">
+              <div class="ref-section-heading"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m13 2-9 11h7l-1 9 10-12h-7V2Z"/></svg>
+                <div><h2>Action center</h2><p>Decisions and work that need attention.</p></div>
+              </div>
+              <div class="reference-action-rows" id="action-preview" aria-live="polite"><div class="empty">Loading real work and decisions…</div></div>
+              <span class="screen-reader-only" id="action-count">—</span>
+              <span class="screen-reader-only" id="action-count-hint">Loading task backlog</span>
             </section>
-            <section class="card">
-              <div class="card-head"><div><h2>Connect · Opportunity inbox</h2><p>People and partnerships reaching out through your link.</p></div><button class="btn alt" data-go="connect">View all →</button></div>
-              <div id="connect-summary" aria-live="polite"><div class="empty">Checking incoming requests…</div></div>
+            <section class="card reference-connect-card">
+              <div class="card-head ref-connect-heading">
+                <div class="ref-section-heading"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="7" r="4"/><path d="M2 21v-3a6 6 0 0 1 12 0v3M17 3a4 4 0 0 1 0 8m-1 4a5 5 0 0 1 5 5v1"/></svg><h2>Connect · Opportunity inbox</h2></div>
+                <button class="ref-link" type="button" data-go="connect">View all <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h16m-6-6 6 6-6 6"/></svg></button>
+              </div>
+              <div id="connect-summary" aria-live="polite"><div class="empty">Checking incoming opportunities…</div></div>
+              <span class="screen-reader-only" id="nav-connect-count">0</span>
             </section>
           </div>
-          <div class="col-stack">
-            <section class="card">
-              <div class="card-head"><div><h2>Operations at a glance</h2><p>Availability and capacity, not automated success claims.</p></div><button class="btn alt" data-go="health">Health →</button></div>
-              <div class="status-line"><b>Company roles</b><span class="kpi-small" id="team-total">—</span></div>
-              <div class="status-line"><b>Specialist capabilities</b><span class="kpi-small" id="capability-total">—</span></div>
-              <div class="status-line"><b>Activity this week</b><span class="kpi-small" id="activity-week">—</span></div>
+          <div class="col-stack reference-right-stack">
+            <section class="card reference-health-card">
+              <div class="ref-section-heading"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12h5l3-8 4 16 3-8h5"/></svg><h2>Operations health</h2></div>
+              <div class="health-lines">
+                <div class="health-line"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2"/></svg><span>Worker cycle</span><strong id="worker-cycle-value">Checking…</strong></div>
+                <div class="health-line"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5a4 4 0 0 0-7 2 4 4 0 0 0-1 7 4 4 0 0 0 6 5l2 1V5Zm0 0a4 4 0 0 1 7 2 4 4 0 0 1 1 7 4 4 0 0 1-6 5l-2 1"/></svg><span>LLM configuration</span><span class="tag neutral" id="llm-config-value">Checking…</span></div>
+                <div class="health-line"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m12 2 9 5-9 5-9-5 9-5ZM3 12l9 5 9-5M3 17l9 5 9-5"/></svg><span>Agent capacity</span><strong id="capacity-inline">—</strong></div>
+              </div>
+              <span class="screen-reader-only" id="team-total">—</span><span class="screen-reader-only" id="capability-total">—</span>
             </section>
-            <section class="card"><div class="card-head"><div><h2>Team & specialists</h2><p>Who is configured to support company work.</p></div><button class="btn alt" data-go="team">View team →</button></div><div id="team-summary">Loading team information…</div></section>
-            <section class="card"><div class="card-head"><h2>Share one opportunity link</h2></div><p class="helper">Send external partners, investors, event organizers and contributors through Noetfield Connect. Their submitted proposals stay traceable.</p><button class="btn" id="copy-link-main" type="button">Copy Connect link</button></section>
+            <section class="card reference-team-card">
+              <div class="ref-section-heading"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="7" r="4"/><path d="M2 21v-3a6 6 0 0 1 12 0v3M17 3a4 4 0 0 1 0 8m-1 4a5 5 0 0 1 5 5v1"/></svg><h2>Team & agents</h2></div>
+              <div id="team-summary" aria-live="polite">Loading current team status…</div>
+              <button class="ref-link team-all-link" data-go="team" type="button">View all agents <svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h16m-6-6 6 6-6 6"/></svg></button>
+            </section>
+            <section class="card reference-activity-card">
+              <div class="ref-section-heading"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m12 2 9 5-9 5-9-5 9-5ZM3 12l9 5 9-5M3 17l9 5 9-5"/></svg><h2>Recent activity</h2></div>
+              <div class="activity-visual">
+                <div><strong class="activity-total" id="activity-week">—</strong><strong class="activity-unit" id="activity-unit">events / last 7 days</strong><p>Activity is not revenue.</p></div>
+                <div class="activity-bars" id="activity-bars" role="img" aria-label="Source-backed daily activity counts"><span class="activity-loading">Loading…</span></div>
+              </div>
+            </section>
           </div>
         </div>
-        <section class="card" id="business-pulse">
-          <div class="card-head"><div><h2>Detailed business pulse</h2><p>A clearer view of the records behind the company summary, with distinct sources and meanings.</p></div><span class="tag neutral">Live Company OS data</span></div>
+        <details class="card reference-details" id="business-pulse">
+          <summary>Explore detailed business metrics</summary>
           <div class="compact-metrics" id="pulse-metrics" aria-label="Detailed company metrics"><div class="empty">Loading detailed records…</div></div>
-          <p class="footnote">Potential value is not collected revenue. A recorded contact or completed task is not necessarily an acquired customer.</p>
-        </section>
+          <p class="footnote">Estimates are not collected revenue. Internal events and tasks do not imply completed commercial outcomes.</p>
+        </details>
+        <div id="data-note" class="screen-reader-only">All metrics use source-backed Company OS data.</div>
+        <button type="button" id="copy-link-main" class="screen-reader-only">Copy Connect link</button>
       </section>
       <section class="view" data-view="actions" hidden>
         <div class="card"><div class="card-head"><div><h2>Assigned work</h2><p>Search and review the complete Company OS work queue. Approving a prepared draft records your review only.</p></div></div>
@@ -222,7 +241,7 @@
         <section class="card"><div class="card-head"><div><h2>Services & processing</h2><p>Live endpoint checks, worker readiness and database availability.</p></div><button class="btn alt" type="button" data-go="health">Check again ↻</button></div><div id="system-health">Checking health…</div><details><summary class="muted">Technical context</summary><p class="helper" id="note">Not loaded.</p></details></section>
         <section class="card"><h2>What a green indicator means</h2><p class="helper">A service reporting healthy confirms that endpoint and its stated checks passed. It does not mean every downstream workflow, external integration, or commercial outcome was independently verified.</p></section>
       </section>
-      <section class="view" data-view="settings" hidden>
+      <section class="view" data-view="settings" hidden><section class="card"><h2>Founder session</h2><p class="helper">Lock the workspace to clear this tab's authorization.</p><button class="btn alt" type="button" id="logout">Lock workspace</button></section>
         <section class="card"><h2>Founder workspace</h2><p class="helper">Your existing Founder access key protects management APIs. This version retains the current authentication backend. Use Lock when finished and do not share your access key.</p><button class="btn" data-go="health">Check company health →</button></section>
         <section class="card"><h2>Public opportunity entry</h2><p class="helper">Use the same Noetfield Connect URL for customers, collaborators, investors, event organizers and potential partners.</p><a class="btn alt" href="https://www.noetfield.com/connect/" target="_blank" rel="noopener noreferrer">Open Connect ↗</a></section>
       </section>
