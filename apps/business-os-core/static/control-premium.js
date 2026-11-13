@@ -13,6 +13,8 @@ const role={
   marketing_editorial:"Marketing & content",market_intelligence:"Market research",product_strategy:"Product strategy",
   roi_analyst:"Business results",engineering_operator:"Product & engineering",risk_governance:"Quality & permissions",partnerships:"Partnerships"
 };
+const pictograms={"target":"<circle cx=\"12\" cy=\"12\" r=\"9\"/><circle cx=\"12\" cy=\"12\" r=\"5\"/><circle cx=\"12\" cy=\"12\" r=\"1\"/>","check":"<rect x=\"4\" y=\"3\" width=\"16\" height=\"18\" rx=\"3\"/><path d=\"m8 12 3 3 5-6\"/>","activity":"<path d=\"M2 12h5l3-8 4 16 3-8h5\"/>","revenue":"<ellipse cx=\"12\" cy=\"5\" rx=\"8\" ry=\"3\"/><path d=\"M4 5v13c0 4 16 4 16 0V5M4 12c0 4 16 4 16 0\"/>","inbox":"<path d=\"M4 4h16l2 12v4H2v-4L4 4Z\"/><path d=\"M2 15h6l2 3h4l2-3h6\"/>","person":"<circle cx=\"12\" cy=\"8\" r=\"4\"/><path d=\"M5 21v-2a7 7 0 0 1 14 0v2\"/>","code":"<path d=\"m8 8-4 4 4 4m8-8 4 4-4 4m-6 3 4-12\"/>","link":"<path d=\"m10 13 4-4M8 16H6a4 4 0 0 1 0-8h4m4 0h4a4 4 0 0 1 0 8h-4\"/>","arrow":"<path d=\"M4 12h16m-6-6 6 6-6 6\"/>","grid":"<path d=\"M4 3h7v8H4zM13 3h7v8h-7zM4 13h7v8H4zM13 13h7v8h-7z\"/>"};
+const pictogram=name=>'<svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">'+(pictograms[name]||pictograms.grid)+'</svg>';
 const statuses={
   mapped_existing:"Configured",partial_existing:"Partially available",
   drafted:"Prepared for review",queued:"Waiting to run",processing:"In progress",running:"In progress",
@@ -23,10 +25,15 @@ const statuses={
 };
 function humanStatus(s){const v=String(s||"unknown");return statuses[v]||v.replaceAll("_"," ").toLowerCase().replace(/^./,x=>x.toUpperCase());}
 function labelTag(s){const v=String(s||"");const cls=/fail|dead|unavail|blocked/.test(v)?"bad":/partial|wait|queue|draft|running|processing/.test(v)?"warn":/approved|completed|mapped|qualif|engaged/.test(v)?"":"neutral";return '<span class="tag '+cls+'">'+esc(humanStatus(v))+'</span>';}
-function metric(label,value,note,icon,view,kind){
-  return '<article class="metric '+(kind||"")+'"><div class="metric-ico" aria-hidden="true">'+icon+'</div><span>'+esc(label)+'</span><strong>'+esc(value)+'</strong><small>'+esc(note)+'</small><div><a href="#'+view+'" data-go="'+view+'">View details →</a></div></article>';
+function metric(label,value,note,icon,view,kind,linkText){
+  const word=String(value).length>8;
+  return '<article class="metric '+(kind||"")+'"><div class="metric-ico">'+pictogram(icon)+'</div>'+
+    '<span>'+esc(label)+'</span><strong class="'+(word?'is-word':'')+'">'+esc(value)+'</strong>'+
+    (note?'<small>'+esc(note)+'</small>':'')+
+    '<div><a href="#'+view+'" data-go="'+view+'">'+esc(linkText||"View details")+' →</a></div></article>';
 }
 let last=null,connectRecords=[],currentView="";
+let dashboardSnapshot=null,dashboardReq=0;
 const pages={
  overview:["Company overview","What needs attention, what's moving, and what's producing results."],
  actions:["Action center","Review decisions and work that needs a clear next step."],
@@ -75,7 +82,7 @@ function setAuth(isConnected,message){
   $("status").textContent=isConnected?"Connected":(message||"Founder access required");
   $("status").title=message||"Company OS session status";
   $("status").setAttribute("role","status");
-  if(isConnected)showView((location.hash||"#overview").slice(1),{noHash:true,noScroll:true});
+  if(isConnected){showView((location.hash||"#overview").slice(1),{noHash:true,noScroll:true});if(last&&typeof api==="function")void loadDashboard();}
 }
 function formatTask(x){
   return "<div class='action-item'><span class='action-mark' aria-hidden='true'>☷</span><div><b>"+esc(x.title||"Review work")+"</b><p>"+esc(role[x.role]||x.company_role_title||"Company operations")+" · "+esc(humanStatus(x.status))+" · "+esc(x.brand||"Portfolio")+"</p></div><button class='btn alt' type='button' data-task-focus='"+esc(x.id)+"'>Review →</button></div>";
@@ -121,32 +128,58 @@ async function loadTaskInbox(reset=false){
   }
 }
 
+function referenceActionRow(icon,title,badge,desc,destination,cta,tone){
+  return '<div class="reference-action-row"><span class="ref-action-icon">'+pictogram(icon)+'</span>'+
+    '<div class="ref-action-copy"><strong>'+esc(title)+'</strong><span class="tag '+(tone||'neutral')+'">'+esc(badge)+'</span>'+
+    '<p>'+esc(desc)+'</p></div><button class="ref-link" type="button" data-go="'+destination+'">'+esc(cta)+' '+pictogram('arrow')+'</button></div>';
+}
 function renderActionCenter(t,overview){
-  const all=(t?.tasks||[]), items=all.filter(x=>["drafted","queued","running","blocked","failed"].includes(x.status));
-  const priority={failed:0,blocked:1,drafted:2,running:3,queued:4};
-  items.sort((a,b)=>(priority[a.status]??9)-(priority[b.status]??9));
-  const sample=items.slice(0,4);
-  $("action-preview").innerHTML=sample.length?sample.map(formatTask).join(""):'<div class="empty"><div class="empty-icon">✓</div><h3>No recent work requiring review</h3><p>The latest task records contain no open items. This is not a guarantee that the full queue is empty.</p><button class="btn alt" data-go="actions">View work queue</button></div>';
   const count=overview?.counts?.pending_tasks;
-  $("action-count").textContent=count===undefined?"—":safeNumber(count);
-  $("action-count-hint").textContent=count===undefined?"Source unavailable":"Open company tasks across the existing queue";
-  $("nav-action-count").textContent=count===undefined?"—":count>999?"999+":String(count);
-  if(!taskInboxState.loaded)$("task-list-scope").textContent="Open Action Center to load work from the complete Company OS task queue.";
+  $('action-count').textContent=count===undefined?'—':safeNumber(count);
+  $('action-count-hint').textContent=count===undefined?'Unable to read pending work':'Company OS durable task queue';
+  $('nav-action-count').textContent=count===undefined?'—':count>999?(count/1000).toFixed(1)+'K':String(count);
+  const label=count===undefined?'Unavailable':safeNumber(count)+' pending';
+  const sourceLoaded=$('connect-count').textContent!=='—';
+  const connectCount=sourceLoaded?Number($('connect-count').textContent.replace(/,/g,'')):null;
+  const fresh=connectCount===null?'Checking…':safeNumber(connectCount)+' recent';
+  $('action-preview').innerHTML=
+    referenceActionRow('check','Task backlog',label,'Review and prioritize the existing queue.','actions','Open queue','warn')+
+    referenceActionRow('target','Incoming opportunities',fresh,'Review submitted proposals and partnership requests.','connect','Open Connect','neutral')+
+    referenceActionRow('revenue','Revenue visibility','Not connected','Link verified financial data to track collected cash.','revenue','View revenue','neutral');
+  if(!taskInboxState.loaded)$('task-list-scope').textContent='Open Action Center to load the complete Company OS work queue.';
 }
 function renderTeam(org){
   const seats=org?.seats||[];
-  $("team-summary").innerHTML=seats.length?seats.slice(0,4).map(x=>'<div class="status-line"><span><b>'+esc(x.title||x.role_id)+'</b><br><span class="muted">'+esc((x.runtime_role_names||[]).join(", ")||"No connected specialists listed")+'</span></span>'+labelTag(x.activation_status)+'</div>').join(""):'<div class="empty">Team registry is currently unavailable.</div>';
-  $("agents").innerHTML=seats.length?'<div class="stack-list">'+seats.map(x=>{
-    const activation=String(x.activation_status||"").toLowerCase();
-    const readable=activation.includes("mapped")?"Configured":activation.includes("partial")?"Partially available":humanStatus(x.activation_status);
-    const cls=activation.includes("partial")?"warn":"neutral";
-    return '<details class="agent-item"><summary><span><b>'+esc(x.title||x.role_id)+'</b><span class="muted">'+esc((x.runtime_role_names||[]).join(" · ")||"No runtime specialist mapped")+'</span></span><span class="tag '+cls+'">'+esc(readable)+'</span></summary>'+
-      '<div class="agent-item__body"><p class="helper">'+esc(x.activation_meaning||"Registry entry only. Live execution must be checked separately.")+'</p>'+
-      '<p class="muted">Reporting to: '+esc(x.manager_name||"Founder")+'</p>'+
-      '<details><summary class="muted">Technical details</summary><p class="helper">Seat '+esc(x.role_id)+' · Layer '+esc(x.layer)+' · Authority '+esc(x.max_authority||"not specified")+'</p></details></div></details>';
-  }).join("")+'</div>':'<div class="empty">Team data has not been loaded.</div>';
-  $("team-total").textContent=org?.organization?safeNumber(org.organization.company_role_count):"—";
-  $("capability-total").textContent=org?.organization?safeNumber(org.organization.runtime_executor_count):"—";
+  const pick=(id)=>seats.find(x=>x.role_id===id);
+  const selected=[pick('N-01'),pick('N-02'),pick('N-03')].filter(Boolean);
+  if(!selected.length)selected.push(...seats.slice(0,3));
+  const compactLabel=(x)=>{
+    if(x.role_id==='N-01')return 'Chief of Staff';
+    if(x.role_id==='N-02')return 'Opportunity Intelligence';
+    if(x.role_id==='N-03')return 'Engineering Delivery';
+    return String(x.title||'Company specialist').replace(/Officer|& Operations/gi,'').trim();
+  };
+  $('team-summary').innerHTML=selected.length?selected.map(x=>{
+    const isPartial=String(x.activation_status||'').includes('partial');
+    const status=isPartial?'Partial':String(x.activation_status||'').includes('mapped')?'Configured':'Not verified';
+    const glyph=x.role_id==='N-03'?'code':x.role_id==='N-02'?'target':'person';
+    return '<div class="team-compact-row"><span class="ref-action-icon">'+pictogram(glyph)+'</span>'+
+      '<strong>'+esc(compactLabel(x))+'</strong><span class="tag '+(isPartial?'warn':'')+'">'+esc(status)+'</span></div>';
+  }).join(''):'<div class="empty"><h3>Team registry unavailable</h3><p>Connect the Company OS roster to see configured roles.</p></div>';
+  $('agents').innerHTML=seats.length?'<div class="stack-list">'+seats.map(x=>{
+    const activation=String(x.activation_status||'').toLowerCase();
+    const readable=activation.includes('mapped')?'Configured':activation.includes('partial')?'Partially available':humanStatus(x.activation_status);
+    return '<details class="agent-item"><summary><span><b>'+esc(x.title||x.role_id)+'</b>'+
+      '<span class="muted">'+esc((x.runtime_role_names||[]).join(' · ')||'No runtime specialist mapped')+'</span></span>'+
+      '<span class="tag '+(activation.includes('partial')?'warn':'neutral')+'">'+esc(readable)+'</span></summary>'+
+      '<div class="agent-item__body"><p class="helper">'+esc(x.activation_meaning||'Registry entry only. Live execution must be checked separately.')+'</p>'+
+      '<p class="muted">Reporting to: '+esc(x.manager_name||'Founder')+'</p>'+
+      '<details><summary class="muted">Technical details</summary><p class="helper">Seat '+esc(x.role_id)+' · Layer '+esc(x.layer)+' · Authority '+esc(x.max_authority||'not specified')+'</p></details></div></details>';
+  }).join('')+'</div>':'<div class="empty">Team data is not loaded.</div>';
+  const a=org?.organization?.company_role_count,b=org?.organization?.runtime_executor_count;
+  $('team-total').textContent=safeNumber(a);
+  $('capability-total').textContent=safeNumber(b);
+  $('capacity-inline').textContent=a===undefined||b===undefined?'Not available':safeNumber(a)+' company roles · '+safeNumber(b)+' capabilities';
 }
 function renderBusiness(roi){
   const available=Boolean(roi&&!roi.__source_unavailable);
@@ -186,19 +219,102 @@ function renderPeople(op){
     '<div class="empty"><div class="empty-icon">♧</div><h3>No linked contacts in this source</h3><p>People attached to Business OS opportunities will appear here. A full portfolio relationship graph is not connected to this screen yet.</p><a class="btn" href="https://www.noetfield.com/connect/" target="_blank" rel="noopener noreferrer">Share Connect link ↗</a></div>';
   $("relationship-count").textContent=op?safeNumber(people.length):"—";
 }
+
 function paintConnect(items){
   const unavailable=!Array.isArray(items);
-  connectRecords=Array.isArray(items)?items:[];
-  if(unavailable){$("connect-summary").innerHTML='<div class="empty"><h3>Incoming requests unavailable</h3><p>We could not read the Connect feed. Your saved submissions remain in the source system.</p><button class="btn alt" data-go="connect">Review connection</button></div>';$("connect-count").textContent="—";$("connect-open").textContent="—";$("connect-scope").textContent="Feed temporarily unavailable";return;}
-  const n=connectRecords.length, open=connectRecords.filter(x=>!["ARCHIVED","DECLINED","CLOSED_LOST"].includes(x.case_stage)).length;
-  const newest=connectRecords.slice(0,4);
-  $("connect-summary").innerHTML=n?newest.map(x=>
-    '<div class="action-item"><span class="action-mark">↗</span><div><b>'+esc(category[x.category]||x.category)+'</b><p>'+esc(x.initiative)+' · '+esc(humanStatus(x.case_stage))+' · '+esc(x.source_channel)+'</p></div><button class="btn alt" data-go="connect">Review</button></div>'
-  ).join(""):'<div class="empty"><div class="empty-icon">◇</div><h3>No relationship requests in this feed</h3><p>Share one link for partnerships, advisors, customers, investors and events.</p><button id="copy-connect" class="btn">Copy Connect link</button></div>';
-  $("connect-count").textContent=safeNumber(n);
-  $("connect-open").textContent=safeNumber(open);
-  $("connect-scope").textContent=n+" recent, source-backed Connect cases in the authorized Business OS feed (maximum 100).";
-  $("nav-connect-count").textContent=n>99?"99+":String(n);
+  connectRecords=unavailable?[]:items;
+  const venture=$('dashboard-venture').value;
+  const matching=connectRecords.filter(x=>!venture||x.initiative===venture);
+  const active=matching.filter(x=>!['ARCHIVED','DECLINED','CLOSED_LOST'].includes(x.case_stage));
+  if(unavailable){
+    $('connect-summary').innerHTML='<div class="ref-empty"><span class="ref-connection-error">Incoming opportunities could not be loaded.</span>'+
+      '<p>Your source records have not been deleted. Check the Connect inbox for details.</p>'+
+      '<button class="ref-link" data-go="connect" type="button">Open Connect '+pictogram('arrow')+'</button></div>';
+    $('connect-count').textContent='—';$('connect-open').textContent='—';$('connect-scope').textContent='Connect feed unavailable';
+  }else{
+    $('connect-count').textContent=safeNumber(matching.length);
+    $('connect-open').textContent=safeNumber(active.length);
+    $('connect-scope').textContent=matching.length+' recent linked requests in the source feed (maximum 100).';
+    const records=active.slice(0,3);
+    $('connect-summary').innerHTML=records.length?'<div class="ref-connect-list">'+records.map(x=>
+      '<div class="reference-action-row"><span class="ref-action-icon">'+pictogram('target')+'</span>'+
+      '<div class="ref-action-copy"><strong>'+esc(category[x.category]||x.category)+'</strong>'+
+      '<span class="tag neutral">'+esc(humanStatus(x.case_stage))+'</span>'+
+      '<p>'+esc(x.initiative)+' · '+esc(x.source_channel)+'</p></div>'+
+      '<button type="button" class="ref-link" data-go="connect">Review '+pictogram('arrow')+'</button></div>'
+    ).join('')+'</div>':
+    '<div class="ref-empty"><span class="ref-empty-icon">'+pictogram('inbox')+'</span>'+
+      '<h3>No relationship opportunities yet</h3>'+
+      '<p>Share the Connect link to invite proposals, partnerships, investment, talent, or other collaboration opportunities.</p>'+
+      '<div class="ref-empty-actions"><button id="copy-connect" class="btn" type="button">'+pictogram('link')+' Copy public link</button>'+
+      '<a class="ref-link" href="https://www.noetfield.com/connect/" target="_blank" rel="noopener noreferrer">Open intake '+pictogram('arrow')+'</a></div></div>';
+  }
+  if(last){
+    const counts=dashboardSnapshot?.counts||last.o?.counts||{};
+    renderActionCenter(last.t,{counts:{...last.o?.counts,...counts}});
+  }
+}
+
+
+function renderActivityTrend(d){
+  if(!d||!Array.isArray(d.activity_daily)){
+    $('activity-bars').innerHTML='<span class="activity-loading">Activity source unavailable</span>';
+    $('activity-bars').setAttribute('aria-label','Activity source unavailable');
+    return;
+  }
+  const daily=d.days===30?d.activity_daily.slice(-15):d.activity_daily;
+  const max=Math.max(0,...daily.map(x=>Number(x.count)||0));
+  if(!max){
+    $('activity-bars').innerHTML='<span class="activity-loading">No events recorded</span>';
+    $('activity-bars').setAttribute('aria-label','No events recorded in the selected period');
+  }else{
+    $('activity-bars').innerHTML=daily.map(x=>{
+      const height=(Math.max(0,Number(x.count)||0)/max*65);
+      return '<span class="activity-bar" title="'+esc(x.date)+': '+safeNumber(x.count)+' recorded events" style="height:'+height.toFixed(1)+'px"></span>';
+    }).join('');
+    $('activity-bars').setAttribute('aria-label',daily.map(x=>x.date+': '+x.count+' events').join(', '));
+  }
+  $('activity-week').textContent=safeNumber(d.counts?.activity_events);
+  $('activity-unit').textContent='events / last '+d.days+' days';
+}
+function renderSummaryMetrics(d){
+  const fallback=last?.o?.counts||{};
+  const counts=d?.counts||fallback;
+  const activity=d?.counts?.activity_events;
+  const days=d?.days||Number($('dashboard-period').value)||7;
+  const pending=counts.pending_tasks;
+  const opportunities=counts.active_opportunities??counts.opportunities;
+  $('metrics').innerHTML=[
+    metric('Active opportunities',safeNumber(opportunities),'','target','opportunities','','View opportunities'),
+    metric('Pending tasks',safeNumber(pending),'','check','actions','attention','Review workload'),
+    metric('Activity · last '+days+' days',safeNumber(activity??null),'','activity','activity','','View activity'),
+    metric('Collected revenue','Not connected','Financial source not linked','revenue','revenue','','View revenue')
+  ].join('');
+}
+async function loadDashboard(){
+  if(document.body.classList.contains('locked'))return;
+  const id=++dashboardReq,brand=$('dashboard-venture').value,days=$('dashboard-period').value;
+  const params=new URLSearchParams({days});
+  if(brand)params.set('brand',brand);
+  try{
+    const d=await api('/api/control/dashboard?'+params);
+    if(id!==dashboardReq)return;
+    if(d.source!=='Company OS durable tables'||!d.counts)throw Error('Unsupported summary data');
+    dashboardSnapshot=d;
+    renderSummaryMetrics(d);
+    renderActivityTrend(d);
+    $('last-updated').textContent='Updated '+new Date(d.as_of).toLocaleString('en-CA');
+    $('data-note').textContent=d.scope||'Live Company OS data; unverified activity is not collected revenue.';
+    if(last)renderActionCenter(last.t,{counts:{...last.o?.counts,...d.counts}});
+    if(connectRecords)paintConnect(connectRecords);
+  }catch(err){
+    if(id!==dashboardReq)return;
+    dashboardSnapshot=null;
+    $('activity-bars').innerHTML='<span class="activity-loading">Trend unavailable</span>';
+    $('activity-week').textContent='—';
+    $('metrics').innerHTML='<div class="empty">Dashboard totals are temporarily unavailable. Existing records remain accessible in their individual sections.</div>';
+    $('data-note').textContent='Dashboard summary unavailable: '+err.message;
+  }
 }
 function render(data){
   last=data;
@@ -218,12 +334,13 @@ function render(data){
   $("pulse-metrics").innerHTML=detail.map(([label,value,description])=>
     '<div class="compact-metric"><span>'+esc(label)+'</span><strong>'+esc(value)+'</strong><small>'+esc(description)+'</small></div>'
   ).join("");
-  $("metrics").innerHTML=[
-    metric("Recorded opportunities",counts.opportunities===undefined?"—":safeNumber(counts.opportunities),"Business OS records · includes all stages","◎","opportunities"),
-    metric("Open work",counts.pending_tasks===undefined?"—":safeNumber(counts.pending_tasks),"Queued, running or awaiting review","▣","actions","attention"),
-    metric("Activity · last 7 days",roi&&!roi.__source_unavailable?safeNumber(roi.events_last_7d):"—","Recorded events, not revenue","⌁","activity"),
-    metric("Collected revenue","Not connected","No verified payment source","◈","revenue")
-  ].join("");
+  renderSummaryMetrics(null);
+  $('worker-cycle-value').textContent=o?.worker_interval_seconds?('Every '+o.worker_interval_seconds+' seconds'):'Unknown';
+  $('llm-config-value').textContent=o?.llm_configured===true?'✓ Configured':o?.llm_configured===false?'Needs setup':'Not verified';
+  $('llm-config-value').className='tag '+(o?.llm_configured===true?'good':'warn');
+  if(!dashboardSnapshot)renderActivityTrend(null);
+  // The dashboard endpoint supplies brand-scoped counts and real daily activity history.
+  // Summary request begins after authenticated workspace unlocks.
   $("last-updated").textContent="Updated "+new Date().toLocaleTimeString("en-CA",{hour:"numeric",minute:"2-digit"});
   $("data-note").textContent="Company-wide totals from connected services. Counts and activity are not verified commercial outcomes.";
   renderActionCenter(t,o);
@@ -307,6 +424,12 @@ function init(){
     }catch(e){feedback.textContent="Could not create task: "+e.message;}
     finally{button.disabled=false;}
   });
+  $('dashboard-venture').addEventListener('change',()=>{
+    if(document.body.classList.contains('locked'))return;
+    $('task-brand').value=$('dashboard-venture').value;
+    void loadDashboard();
+  });
+  $('dashboard-period').addEventListener('change',()=>void loadDashboard());
   $("action-filter").addEventListener("change",()=>loadTaskInbox(true));
   $("task-brand").addEventListener("change",()=>loadTaskInbox(true));
   $("task-inbox-controls").addEventListener("submit",e=>{e.preventDefault();loadTaskInbox(true)});

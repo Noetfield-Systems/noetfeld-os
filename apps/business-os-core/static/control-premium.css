@@ -188,3 +188,215 @@ body.locked .auth-gate{min-height:calc(100vh - 70px)}
 .compact-metric small{display:block;color:#61768e;font-size:11px;line-height:1.4}
 @media(max-width:1250px){.compact-metrics{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:520px){.compact-metrics{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.compact-metric{padding:12px}.compact-metric strong{font-size:19px}.compact-metric small{font-size:10px}}
+
+
+/* Design reference parity v5: 1536×1024 approved Founder screenshot.
+   Overrides only the overview/application shell; all existing operational views remain intact. */
+.ui-icon{width:22px;height:22px;flex:0 0 22px;display:inline-block;vertical-align:middle}
+.screen-reader-only{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
+:root{--navy:#101e32;--ink:#0f1c30;--muted:#536176;--bg:#f8fafd;--line:#dbe1e8;--radius:12px;--accent:#1556c7}
+body{font-size:14px;background:var(--bg);color:var(--ink)}
+.layout{grid-template-columns:252px minmax(0,1fr)}
+.sidebar{padding:20px 12px 16px;background:linear-gradient(180deg,#101e33 0%,#101c2d 100%);border-right:1px solid #22354c}
+.sidebar .brand{padding:0 16px 24px;gap:12px;min-height:64px}
+.brand-mark{width:41px;height:41px;font-size:30px;line-height:1;border-radius:9px;background:linear-gradient(145deg,#76a4ff 0%,#2562db 65%,#9cc1ff 100%);color:#e2ecff;box-shadow:none;font-weight:900;font-style:italic;text-shadow:1px 1px 0 #183f95}
+.sidebar .brand strong{font-size:17px;letter-spacing:.015em;line-height:1.18}
+.sidebar .brand small{font-size:14px;color:#eef2f8;margin-top:2px;letter-spacing:0}
+.sidebar-primary{display:grid;gap:7px;margin-top:23px}
+.sidebar-secondary{margin:25px 10px 0;padding:18px 0 0;border-top:1px solid #35435a}
+.sidebar-secondary .side-link{margin-left:-10px;width:calc(100% + 20px)}
+.sidebar .side-link{min-height:47px;font-size:15px;font-weight:520;padding:11px 17px;gap:15px;line-height:1.2;border:0;border-radius:8px;color:#f2f5fb}
+.sidebar .side-link .ui-icon{width:22px;height:22px;flex:0 0 22px;stroke-width:1.7}
+.sidebar .side-link:hover{background:#1c3556}
+.sidebar .side-link.active{background:#28549d;color:#fff;box-shadow:inset 0 1px 0 rgba(255,255,255,.08)}
+.sidebar .nav-badge{margin-left:auto;background:#ffdf9f;color:#694012;padding:4px 9px;font-size:12px;border-radius:22px;letter-spacing:0}
+.sidebar .sidebar-bottom{border:0;padding:0;display:flex;flex-direction:column;gap:7px}
+.sidebar .sidebar-help{margin-bottom:12px}
+.founder-profile{display:flex;align-items:center;gap:12px;width:100%;padding:12px 5px 6px;text-align:left;border:0;border-top:1px solid #35435a;background:transparent;color:#fff}
+.founder-profile:hover{background:#172944}
+.founder-avatar{width:42px;height:42px;display:grid;place-items:center;flex:0 0 42px;border-radius:50%;font-size:22px;font-weight:800;background:#29405b}
+.founder-identity{display:flex;flex-direction:column;flex:1;min-width:0}
+.founder-identity strong{font-size:13px;line-height:1.1}
+.founder-identity small{font-size:12px;color:#e0e7ef;white-space:nowrap}
+.profile-live-dot{display:inline-block;height:8px;width:8px;border-radius:50%;background:#16c77d;margin:0 5px 0 0}
+.founder-profile>.ui-icon{width:17px;height:17px;transform:rotate(-90deg)}
+.topbar{height:62px;padding:0 22px 0 24px;background:#fbfcfe;border-color:#dce1e8}
+.breadcrumb{font-size:15px;color:#5f6c7d;gap:12px}
+.breadcrumb strong{font-size:15px;color:#101b2c;font-weight:750}
+.top-actions{gap:22px}
+.global-search{width:392px;max-width:392px;min-width:260px;padding:7px 11px;border-radius:10px;background:#f7f8fb;border-color:#cdd6e3;height:40px}
+.global-search .ui-icon{width:19px;height:19px;flex-basis:19px;color:#2d4059}
+.global-search input{font-size:13px}
+.key-hint{color:#3b4d65;border:1px solid #cdd7e5;font-size:12px;padding:1px 5px}
+.connection{font-size:14px;color:#17253a;font-weight:550}
+.state-dot{width:13px;height:13px;margin-right:7px}
+.production-label{color:#192537}
+.topbar .icon-btn{border-color:#cad2de;border-radius:9px;height:41px;width:43px}
+.topbar .icon-btn .ui-icon{width:20px;height:20px}
+.topbar .search-results{top:58px;right:275px}
+.main{padding:22px 24px 44px;max-width:1600px}
+.page-head{margin-bottom:27px;align-items:center;min-height:68px;gap:20px}
+.page-head h1{font-size:31px;font-weight:800;line-height:1.2;letter-spacing:-.035em;margin:0 0 4px}
+.page-head p{font-size:15px;color:#4b586c}
+.heading-copy{min-width:0}
+.head-actions{gap:12px;justify-content:flex-end}
+.scope-picker{height:43px;display:inline-flex;align-items:center;gap:9px;background:#fff;border:1px solid #cad2dc;border-radius:9px;padding:0 12px;max-width:235px}
+.scope-picker select{appearance:none;cursor:pointer;min-width:0;width:100%;height:40px;border:0;outline:none;background:transparent;font-size:14px;color:#18283d;font-weight:600;padding:0}
+.scope-picker>.ui-icon{height:19px;width:19px;flex:0 0 19px}
+.scope-picker>.ui-icon:last-child{height:16px;width:16px;flex:0 0 16px}
+.scope-picker:focus-within{outline:2px solid #8eafec;outline-offset:2px}
+.reference-overview .metrics{grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:24px}
+.reference-overview .metric{min-height:138px;padding:18px 19px 16px;position:relative;border-radius:12px;border-color:#d4dce6;background:linear-gradient(145deg,#fff 0%,#fbfcff 100%);box-shadow:0 2px 10px rgba(24,49,87,.02)}
+.reference-overview .metric.attention{background:#fffaec;border-color:#f1daa2}
+.reference-overview .metric-ico{position:absolute;left:19px;top:20px;background:transparent;border-radius:0;width:31px;height:32px;margin:0;color:#121e31}
+.reference-overview .metric.attention .metric-ico{background:transparent;color:#93621f}
+.reference-overview .metric .ui-icon{width:29px;height:29px;stroke-width:2}
+.reference-overview .metric span{display:block;margin:1px 0 7px 52px;color:#1c293a;font-size:14px;line-height:1.35;font-weight:650}
+.reference-overview .metric strong{font-size:31px;line-height:1.16;letter-spacing:-.035em;font-weight:800;margin:0 0 7px 52px;color:#0f1c30;min-height:36px}
+.reference-overview .metric strong.is-word{font-size:22px;line-height:1.35;letter-spacing:-.02em}
+.reference-overview .metric small{font-size:12px;display:block;margin:-3px 0 7px 52px;color:#5c6879}
+.reference-overview .metric a{color:#1654b8;font-size:13px;font-weight:650;margin:0 0 0 52px;white-space:nowrap}
+.reference-overview .overview-grid{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(340px,1fr);gap:22px;align-items:start}
+.reference-overview .col-stack{gap:20px}
+.reference-overview .card{margin:0;border-color:#d6dee8;border-radius:12px;background:linear-gradient(135deg,#fff,#fbfcfe);box-shadow:0 2px 10px rgba(12,36,70,.02)}
+.reference-overview .reference-left-stack .card{padding:19px 20px}
+.reference-overview .reference-right-stack .card{padding:17px 21px}
+.ref-section-heading{display:flex;align-items:center;gap:16px;min-width:0}
+.ref-section-heading>.ui-icon{height:27px;width:27px;flex:0 0 27px;stroke-width:2;color:#101b2c}
+.ref-section-heading h2{margin:0;font-size:19px;font-weight:800;letter-spacing:-.025em;line-height:1.3}
+.ref-section-heading p{margin:0;color:#455469;font-size:14px}
+.ref-link{background:none;border:0;padding:5px;color:#1554b8;text-align:left;font-size:14px;font-weight:650;white-space:nowrap;text-decoration:none}
+.ref-link .ui-icon{width:19px;height:19px;vertical-align:middle;stroke-width:2}
+.ref-link:hover{color:#093a82;text-decoration:underline}
+.reference-action-card{min-height:299px}
+.reference-action-card .ref-section-heading{padding:1px 0 14px}
+.reference-action-rows{border-top:1px solid #dbe2e9}
+.reference-action-row{display:grid;grid-template-columns:42px minmax(0,1fr) auto;gap:13px;align-items:center;padding:14px 0;border-bottom:1px solid #dbe2e9;min-height:72px}
+.reference-action-row:last-child{border-bottom:0}
+.ref-action-icon{height:39px;width:39px;border-radius:9px;background:#f0f4f9;display:grid;place-items:center;color:#182539}
+.ref-action-icon .ui-icon{width:24px;height:24px}
+.ref-action-copy{min-width:0}
+.ref-action-copy strong{display:inline;font-size:14px;font-weight:780;line-height:1.5}
+.ref-action-copy .tag{margin-left:11px;font-size:12px;color:#45566c;background:#ebeff4;border-radius:19px;padding:3px 12px}
+.ref-action-copy .tag.warn{background:#ffebc8;color:#76501d}
+.ref-action-copy p{margin:2px 0 0;color:#536176;font-size:13px}
+.reference-connect-card{min-height:326px}
+.ref-connect-heading{padding:0 0 14px;margin-bottom:0;border-bottom:1px solid #dbe2e9}
+.ref-connect-heading .ref-section-heading{gap:15px}
+.ref-connect-heading .ref-section-heading h2{font-size:19px}
+.reference-connect-card .ref-empty{min-height:250px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:12px 24px 0}
+.reference-connect-card .ref-empty>.ui-icon{width:60px;height:60px;color:#33455e;stroke-width:1.4;margin-bottom:11px}
+.reference-connect-card .ref-empty h3{font-size:19px;letter-spacing:-.02em;font-weight:800;margin:0 0 6px}
+.reference-connect-card .ref-empty p{font-size:14px;color:#4d5c70;margin:0 auto 17px;max-width:490px}
+.reference-connect-card .ref-empty-actions{display:flex;align-items:center;justify-content:center;gap:22px;flex-wrap:wrap}
+.reference-connect-card .ref-empty-actions .btn{min-height:43px;background:#14326e;border-color:#14326e;padding:10px 17px;font-size:14px}
+.reference-connect-card .ref-empty-actions .btn .ui-icon{height:20px;width:20px}
+.reference-right-stack{gap:12px!important}
+.reference-health-card .ref-section-heading,.reference-team-card .ref-section-heading,.reference-activity-card .ref-section-heading{padding-bottom:12px;border-bottom:1px solid #dce3ec}
+.reference-health-card .health-lines{display:grid}
+.reference-health-card .health-line{display:grid;grid-template-columns:27px minmax(0,1fr) auto;gap:13px;align-items:center;min-height:42px;border-bottom:1px solid #e2e7ed;font-size:13px}
+.reference-health-card .health-line:last-child{border-bottom:0}
+.reference-health-card .health-line>.ui-icon{height:23px;width:23px}
+.reference-health-card .health-line strong{font-size:12px;font-weight:500;color:#47566a;max-width:260px;text-align:right}
+.reference-health-card .tag{border-radius:20px;padding:4px 11px}
+.reference-health-card .tag.good{background:#e4f6eb;color:#136e45}
+.reference-health-card .tag.warn{background:#fff0d6;color:#915a15}
+.reference-team-card .status-line{padding:9px 0;min-height:43px;border-color:#e1e7ef;gap:14px}
+.reference-team-card .status-line b{font-size:13px;font-weight:700}
+.reference-team-card .tag{font-size:12px;border-radius:20px;padding:4px 11px}
+.reference-team-card .team-all-link{padding:12px 0 2px}
+.reference-team-card .team-compact-row{display:grid;grid-template-columns:30px minmax(0,1fr) auto;gap:10px;align-items:center;min-height:43px;border-bottom:1px solid #e0e6ed}
+.reference-team-card .team-compact-row .ref-action-icon{height:29px;width:29px;border-radius:7px;background:#eef2f7}
+.reference-team-card .team-compact-row .ref-action-icon .ui-icon{height:18px;width:18px}
+.reference-team-card .team-compact-row strong{font-size:13px;font-weight:700;line-height:1.25}
+.reference-activity-card{min-height:205px}
+.reference-activity-card .activity-visual{display:flex;gap:15px;align-items:end;justify-content:space-between;padding:19px 2px 10px}
+.reference-activity-card .activity-total{font-size:29px;font-weight:800;letter-spacing:-.03em;line-height:1.1}
+.reference-activity-card .activity-unit{font-size:16px;line-height:1.2;margin-left:6px}
+.reference-activity-card .activity-visual p{margin:6px 0 0;font-size:13px;color:#536275}
+.activity-bars{height:72px;display:flex;align-items:flex-end;gap:8px;max-width:150px;min-width:104px}
+.activity-bar{background:#6da0f4;width:13px;min-height:1px;flex:1;max-width:15px;border-radius:1px 1px 0 0}
+.activity-bars .activity-loading{font-size:11px;color:#69798a}
+.reference-details{margin-top:25px!important;max-width:100%}
+.reference-details>summary{font-size:13px;font-weight:700;cursor:pointer}
+.reference-details .compact-metrics{margin-top:17px}
+body.locked .top-actions{display:none!important}
+@media(max-width:1310px){
+  .global-search{width:300px;min-width:190px}
+  .reference-overview .metric{padding:17px 12px}
+  .reference-overview .metric-ico{left:12px}
+  .reference-overview .metric span,.reference-overview .metric strong,.reference-overview .metric small,.reference-overview .metric a{margin-left:45px}
+}
+@media(max-width:1120px){
+  .layout{grid-template-columns:76px minmax(0,1fr)}
+  .sidebar{padding:17px 9px}
+  .sidebar .brand{padding:0 6px 22px}
+  .sidebar .brand strong,.sidebar .brand small,.sidebar .side-link>span,.sidebar .nav-badge,.founder-identity,.founder-profile>.ui-icon{display:none}
+  .sidebar .side-link{justify-content:center;padding:11px 9px}
+  .sidebar-secondary{margin:25px 4px 0;padding-top:15px}
+  .sidebar-secondary .side-link{margin-left:-4px;width:calc(100% + 8px)}
+  .founder-profile{justify-content:center}
+  .reference-overview .overview-grid{grid-template-columns:minmax(0,1.3fr) minmax(300px,1fr)}
+  .top-actions{gap:11px}
+  .head-actions .scope-picker{max-width:190px}
+}
+@media(max-width:900px){
+  .reference-overview .overview-grid{grid-template-columns:1fr}
+  .reference-right-stack{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));align-items:start}
+  .reference-activity-card{grid-column:1/-1}
+  .reference-overview .metrics{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .page-head{align-items:flex-start;flex-wrap:wrap}
+}
+@media(max-width:780px){
+  .layout{display:block}
+  .sidebar{position:fixed;width:265px;padding:20px 12px}
+  .sidebar .brand strong,.sidebar .brand small,.sidebar .side-link>span,.sidebar .nav-badge,.founder-identity,.founder-profile>.ui-icon{display:block}
+  .sidebar .side-link{justify-content:flex-start;padding:11px 17px}
+  .sidebar-primary{margin-top:15px}
+  .sidebar-secondary{margin:18px 10px 0}
+  .main{padding:20px 16px 36px}
+  .topbar{padding:0 16px}
+  .top-actions{flex:1}
+  .global-search{max-width:100%;min-width:0;width:100%}
+  .head-actions{width:100%;justify-content:flex-start}
+}
+@media(max-width:570px){
+  .page-head h1{font-size:27px}
+  .reference-overview .metrics{gap:10px}
+  .reference-overview .metric{min-height:135px;padding:13px 10px}
+  .reference-overview .metric-ico{position:static;margin:0 0 6px 0;height:25px;width:25px}
+  .reference-overview .metric .ui-icon{height:23px;width:23px}
+  .reference-overview .metric span,.reference-overview .metric strong,.reference-overview .metric small,.reference-overview .metric a{margin-left:0}
+  .reference-overview .metric span{font-size:12px}
+  .reference-overview .metric strong{font-size:23px;min-height:26px}
+  .reference-overview .metric strong.is-word{font-size:17px}
+  .reference-overview .metric a{font-size:11px;white-space:normal}
+  .scope-picker{flex:1;min-width:140px}
+  .scope-picker select{font-size:12px}
+  .reference-right-stack{display:grid;grid-template-columns:1fr}
+  .reference-activity-card{grid-column:auto}
+  .ref-section-heading h2{font-size:17px!important}
+  .reference-action-row{grid-template-columns:34px minmax(0,1fr);gap:9px}
+  .reference-action-row .ref-link{grid-column:2;justify-self:start;margin-top:-2px;padding:0}
+  .reference-connect-card .ref-empty-actions{gap:12px}
+  .reference-connect-card .ref-empty{padding:18px 4px}
+}
+
+/* Screenshot parity correction after actual 1536x1024 Playwright visual review. */
+@media(min-width:901px){
+  .reference-overview .metric{height:138px;min-height:138px;padding-top:14px;padding-bottom:10px}
+  .reference-overview .metric span{margin-bottom:3px}
+  .reference-overview .metric strong{min-height:32px;margin-bottom:4px}
+  .reference-overview .metric small{margin:-2px 0 4px 52px}
+  .reference-action-card .ref-section-heading{padding-bottom:9px}
+  .reference-action-row{min-height:68px;padding:9px 0}
+  .reference-health-card .health-line{min-height:39px}
+  .reference-team-card .team-compact-row{min-height:39px}
+  .reference-right-stack{gap:13px!important}
+}
+.reference-connect-card .ref-empty>svg.ui-icon{width:62px!important;height:62px!important;margin-bottom:12px}
+.reference-connect-card .ref-empty{min-height:250px}
+
+/* Deliberately large reference-style inbox mark, not a generic 20px inline icon. */
+.reference-connect-card .ref-empty-icon{width:70px;height:66px;flex:0 0 66px;display:grid;place-items:center;margin-bottom:11px}
+.reference-connect-card .ref-empty-icon>svg.ui-icon{width:60px!important;height:60px!important;min-width:60px!important;min-height:60px!important;stroke-width:1.55;color:#43546f}
