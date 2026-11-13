@@ -82,6 +82,17 @@ fixture={
     "roi":{"brands":[],"events_last_7d":107,"actual_revenue":"Not connected",
            "cost_tracking":"Token usage tracked. Infrastructure costs not connected."},
     "connect-opportunities":{"items":[]},
+    "runtime-mesh":{
+        "schema":"noetfield.company-os.runtime-mesh-observation.v1",
+        "nodes":[
+            {"id":"sina_founder","label":"Sina Founder OS","url":"https://sina-founder-os-staging-staging.up.railway.app/","state":"SERVICE_HEALTH_REPORTED"},
+            {"id":"business_os","label":"Company OS / NOOS","url":"https://business-os-core-production.up.railway.app/control","state":"LOCAL_CONTROL_SURFACE"},
+            {"id":"runway_motor","label":"Runway Motor","url":"https://github.com/Noetfield-Systems/NOETFIELD-RUNWAY","state":"EXECUTION_NOT_OBSERVED"},
+            {"id":"independent_verifier","label":"Independent Verifier","url":"https://github.com/Noetfield-Systems/Verification_Layer","state":"RECEIPT_NOT_OBSERVED"}
+        ],
+        "founder_handoff":{"state":"LIVE","work_packets_claimed":3,"pending_ack":1,"verified_outcomes":0,"external_effects":0},
+        "summary":{"verified_edges":0,"runway_e2e_commissioned":False}
+    },
     "commercial-team":{"state":"INTERNAL_ONLY","roles":[]},
 }
 CASE_FIXTURE={
