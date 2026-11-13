@@ -12,41 +12,115 @@
     "governance_verify": "scripts/verify_living_system_governance_v1.py"
   },
   "gha_workflow_coverage": {
-    "gel-ci": ["gha-gel-ci"],
-    "deploy-noos-cloud-workers-v1": ["gha-deploy-noos-cloud-workers"],
-    "noos-post-deploy-verify-v1": ["gha-post-deploy-verify"],
-    "noos-factory-autorun": ["gha-noos-factory-autorun"],
-    "noos-inbox-loop": ["gha-loop-fleet"],
-    "noos-runtime-loop": ["gha-loop-fleet"],
-    "noos-chain-loop": ["gha-loop-fleet"],
-    "noos-surface-loop": ["gha-noos-surface-loop"],
-    "noos-self-heal-loop": ["gha-noos-self-heal-loop"],
-    "noos-sourcea-observe-loop": ["gha-loop-fleet"],
-    "noos-agent-nerve-loop": ["gha-loop-fleet"],
-    "noos-workflow-audit": ["gha-noos-workflow-audit"],
-    "noos-self-heal": ["gha-noos-self-heal"],
-    "noos-researcher": ["gha-noos-researcher"],
-    "noos-specialist": ["gha-noos-specialist"],
-    "noos-cross-repo-orchestrator": ["gha-noos-orchestrator"],
-    "publish-pypi": ["gha-publish-pypi"],
-    "release-noetfield-gate": ["gha-release-noetfield-gate"],
-    "noos-agent-vault": ["gha-noos-agent-vault"],
-    "noos-schedule-canary": ["gha-noos-schedule-canary"],
-    "noos-machine-loops": ["noos-machine-auditor", "noos-machine-reconciler"],
-    "noos-improve-kaizen-daily": ["gha-loop-fleet"],
-    "cost-policy-scan": ["gha-cost-policy-scan"],
-    "noos-discovery": ["gha-noos-discovery"],
-    "noos-integrator-daily-witness": ["gha-secondary-witness"],
-    "noos-autorun-witness": ["gha-secondary-witness"],
-    "noos-motor-sustain-witness": ["gha-secondary-witness"],
-    "noos-gha-health-witness": ["gha-secondary-witness"],
-    "noos-stack-health-receipt": ["gha-stack-health-rollup"],
-    "noos-trustfield-observe-witness": ["gha-ecosystem-observe"],
-    "noos-sourcea-spine-witness": ["gha-ecosystem-observe"],
-    "noos-machine-audit-witness": ["gha-sustain-audit"],
-    "noos-liveness-registry-witness": ["gha-sustain-audit"],
-    "noos-sandbox-url-sweep-witness": ["gha-sustain-audit"],
-    "noetfield-open-pr-v1": ["gha-ecosystem-observe"]
+    "gel-ci": [
+      "gha-gel-ci"
+    ],
+    "deploy-noos-cloud-workers-v1": [
+      "gha-deploy-noos-cloud-workers"
+    ],
+    "noos-post-deploy-verify-v1": [
+      "gha-post-deploy-verify"
+    ],
+    "noos-factory-autorun": [
+      "gha-noos-factory-autorun"
+    ],
+    "noos-inbox-loop": [
+      "gha-loop-fleet"
+    ],
+    "noos-runtime-loop": [
+      "gha-loop-fleet"
+    ],
+    "noos-chain-loop": [
+      "gha-loop-fleet"
+    ],
+    "noos-surface-loop": [
+      "gha-noos-surface-loop"
+    ],
+    "noos-self-heal-loop": [
+      "gha-noos-self-heal-loop"
+    ],
+    "noos-sourcea-observe-loop": [
+      "gha-loop-fleet"
+    ],
+    "noos-agent-nerve-loop": [
+      "gha-loop-fleet"
+    ],
+    "noos-workflow-audit": [
+      "gha-noos-workflow-audit"
+    ],
+    "noos-self-heal": [
+      "gha-noos-self-heal"
+    ],
+    "noos-researcher": [
+      "gha-noos-researcher"
+    ],
+    "noos-specialist": [
+      "gha-noos-specialist"
+    ],
+    "noos-cross-repo-orchestrator": [
+      "gha-noos-orchestrator"
+    ],
+    "publish-pypi": [
+      "gha-publish-pypi"
+    ],
+    "release-noetfield-gate": [
+      "gha-release-noetfield-gate"
+    ],
+    "noos-agent-vault": [
+      "gha-noos-agent-vault"
+    ],
+    "noos-schedule-canary": [
+      "gha-noos-schedule-canary"
+    ],
+    "noos-machine-loops": [
+      "noos-machine-auditor",
+      "noos-machine-reconciler"
+    ],
+    "noos-improve-kaizen-daily": [
+      "gha-loop-fleet"
+    ],
+    "cost-policy-scan": [
+      "gha-cost-policy-scan"
+    ],
+    "noos-discovery": [
+      "gha-noos-discovery"
+    ],
+    "noos-integrator-daily-witness": [
+      "gha-secondary-witness"
+    ],
+    "noos-autorun-witness": [
+      "gha-secondary-witness"
+    ],
+    "noos-motor-sustain-witness": [
+      "gha-secondary-witness"
+    ],
+    "noos-gha-health-witness": [
+      "gha-secondary-witness"
+    ],
+    "noos-stack-health-receipt": [
+      "gha-stack-health-rollup"
+    ],
+    "noos-trustfield-observe-witness": [
+      "gha-ecosystem-observe"
+    ],
+    "noos-sourcea-spine-witness": [
+      "gha-ecosystem-observe"
+    ],
+    "noos-machine-audit-witness": [
+      "gha-sustain-audit"
+    ],
+    "noos-liveness-registry-witness": [
+      "gha-sustain-audit"
+    ],
+    "noos-sandbox-url-sweep-witness": [
+      "gha-sustain-audit"
+    ],
+    "noetfield-open-pr-v1": [
+      "gha-ecosystem-observe"
+    ],
+    "noos-cloud-coder": [
+      "gha-noos-cloud-coder"
+    ]
   },
   "surfaces": {
     "T0_machine": "GitHub Actions schedules, repository_dispatch, CF cron, worker-kernel T0",
@@ -58,32 +132,53 @@
     {
       "id": "integrator-coordination",
       "rule": "one writer to integrator state; audits read-only",
-      "owners": ["cursor-integrator-arbitration", "gha-integrator-sync-audit", "cursor-local-mac", "copilot-cli-mac"]
+      "owners": [
+        "cursor-integrator-arbitration",
+        "gha-integrator-sync-audit",
+        "cursor-local-mac",
+        "copilot-cli-mac"
+      ]
     },
     {
       "id": "public-health-nerve",
       "rule": "GHA surface loop owns curl smoke; Cursor daily health owns narrative escalation only",
-      "owners": ["gha-noos-surface-loop", "cursor-daily-production-surfaces"]
+      "owners": [
+        "gha-noos-surface-loop",
+        "cursor-daily-production-surfaces"
+      ]
     },
     {
       "id": "autorun-observability",
       "rule": "self-heal loop step owns machine autorun_status; Cursor daily autorun owns human digest",
-      "owners": ["gha-self-heal-autorun-step", "cursor-daily-autorun-status"]
+      "owners": [
+        "gha-self-heal-autorun-step",
+        "cursor-daily-autorun-status"
+      ]
     },
     {
       "id": "drift-proof",
       "rule": "trigger sweep + determinism gate own machine drift; Cursor proof drift owns cross-lane narrative",
-      "owners": ["gha-determinism-gate", "gha-trigger-sweep-heartbeat", "cursor-daily-proof-drift"]
+      "owners": [
+        "gha-determinism-gate",
+        "gha-trigger-sweep-heartbeat",
+        "cursor-daily-proof-drift"
+      ]
     },
     {
       "id": "deploy-boundary",
       "rule": "deploy workflows own mutation; deployment boundary automation is read-only audit",
-      "owners": ["gha-deploy-noos-cloud-workers", "cursor-manual-deployment-boundary"]
+      "owners": [
+        "gha-deploy-noos-cloud-workers",
+        "cursor-manual-deployment-boundary"
+      ]
     },
     {
       "id": "pr-merge",
       "rule": "Copilot Kaizen opens PRs; PR readiness automation reviews only — no merge without founder",
-      "owners": ["copilot-kaizen-agent", "cursor-manual-pr-readiness"]
+      "owners": [
+        "copilot-kaizen-agent",
+        "cursor-manual-pr-readiness"
+      ]
     },
     {
       "id": "self-heal-pipeline",
@@ -105,11 +200,18 @@
       "cadence": "daily",
       "mission_id": "M1",
       "territory": "sourcea-github-issues",
-      "write_scope": ["labels", "comments"],
+      "write_scope": [
+        "labels",
+        "comments"
+      ],
       "read_only": false,
       "mutex_groups": [],
-      "conflicts_if": ["claims scope in noetfeld-os product paths"],
-      "primary_task_kinds": ["issue_triage"]
+      "conflicts_if": [
+        "claims scope in noetfeld-os product paths"
+      ],
+      "primary_task_kinds": [
+        "issue_triage"
+      ]
     },
     {
       "worker_id": "cursor-integrator-arbitration",
@@ -118,9 +220,16 @@
       "cadence": "manual",
       "mission_id": "M4",
       "territory": "integrator-state",
-      "write_scope": [".noos-runtime/integrator/"],
-      "mutex_groups": ["integrator-coordination"],
-      "primary_task_kinds": ["integrator_arbitration", "claim_release"]
+      "write_scope": [
+        ".noos-runtime/integrator/"
+      ],
+      "mutex_groups": [
+        "integrator-coordination"
+      ],
+      "primary_task_kinds": [
+        "integrator_arbitration",
+        "claim_release"
+      ]
     },
     {
       "worker_id": "gha-integrator-sync-audit",
@@ -131,8 +240,12 @@
       "territory": "integrator-state",
       "write_scope": [],
       "read_only": true,
-      "mutex_groups": ["integrator-coordination"],
-      "primary_task_kinds": ["integrator_audit"]
+      "mutex_groups": [
+        "integrator-coordination"
+      ],
+      "primary_task_kinds": [
+        "integrator_audit"
+      ]
     },
     {
       "worker_id": "cursor-manual-bug-triage",
@@ -143,7 +256,10 @@
       "territory": "noetfeld-os-repo",
       "write_scope": [],
       "read_only": true,
-      "primary_task_kinds": ["bug_triage", "root_cause"]
+      "primary_task_kinds": [
+        "bug_triage",
+        "root_cause"
+      ]
     },
     {
       "worker_id": "cursor-implementation-planner",
@@ -152,10 +268,16 @@
       "cadence": "manual",
       "mission_id": "M4",
       "territory": "noetfeld-os-repo",
-      "write_scope": ["docs/_NOOS_AGENT/"],
+      "write_scope": [
+        "docs/_NOOS_AGENT/"
+      ],
       "read_only": false,
-      "primary_task_kinds": ["implementation_plan"],
-      "conflicts_if": ["overlaps active integrator claim on same scope_files"]
+      "primary_task_kinds": [
+        "implementation_plan"
+      ],
+      "conflicts_if": [
+        "overlaps active integrator claim on same scope_files"
+      ]
     },
     {
       "worker_id": "cursor-weekly-workflow-effectiveness",
@@ -166,7 +288,9 @@
       "territory": "github-workflows-portfolio",
       "write_scope": [],
       "read_only": true,
-      "primary_task_kinds": ["workflow_portfolio_audit"]
+      "primary_task_kinds": [
+        "workflow_portfolio_audit"
+      ]
     },
     {
       "worker_id": "cursor-evidence-pack-audit",
@@ -177,7 +301,9 @@
       "territory": "receipts-proof",
       "write_scope": [],
       "read_only": true,
-      "primary_task_kinds": ["evidence_pack_audit"]
+      "primary_task_kinds": [
+        "evidence_pack_audit"
+      ]
     },
     {
       "worker_id": "cursor-manual-pr-readiness",
@@ -186,9 +312,15 @@
       "cadence": "manual",
       "mission_id": "M3",
       "territory": "open-pull-requests",
-      "write_scope": ["pr_comments"],
-      "mutex_groups": ["pr-merge"],
-      "primary_task_kinds": ["pr_readiness_review"]
+      "write_scope": [
+        "pr_comments"
+      ],
+      "mutex_groups": [
+        "pr-merge"
+      ],
+      "primary_task_kinds": [
+        "pr_readiness_review"
+      ]
     },
     {
       "worker_id": "cursor-manual-deployment-boundary",
@@ -199,8 +331,12 @@
       "territory": "deploy-surfaces",
       "write_scope": [],
       "read_only": true,
-      "mutex_groups": ["deploy-boundary"],
-      "primary_task_kinds": ["deployment_boundary_audit"]
+      "mutex_groups": [
+        "deploy-boundary"
+      ],
+      "primary_task_kinds": [
+        "deployment_boundary_audit"
+      ]
     },
     {
       "worker_id": "cursor-weekly-security-dependency",
@@ -211,7 +347,9 @@
       "territory": "dependencies",
       "write_scope": [],
       "read_only": true,
-      "primary_task_kinds": ["security_dependency_review"]
+      "primary_task_kinds": [
+        "security_dependency_review"
+      ]
     },
     {
       "worker_id": "cursor-daily-production-surfaces",
@@ -222,8 +360,12 @@
       "territory": "public-urls",
       "write_scope": [],
       "read_only": true,
-      "mutex_groups": ["public-health-nerve"],
-      "primary_task_kinds": ["production_surface_narrative"],
+      "mutex_groups": [
+        "public-health-nerve"
+      ],
+      "primary_task_kinds": [
+        "production_surface_narrative"
+      ],
       "delegates_machine_to": "gha-noos-surface-loop"
     },
     {
@@ -235,7 +377,9 @@
       "territory": "upgrade-backlog-planes",
       "write_scope": [],
       "read_only": true,
-      "primary_task_kinds": ["roadmap_reconciliation"]
+      "primary_task_kinds": [
+        "roadmap_reconciliation"
+      ]
     },
     {
       "worker_id": "cursor-daily-proof-drift",
@@ -246,8 +390,12 @@
       "territory": "cross-lane-proof",
       "write_scope": [],
       "read_only": true,
-      "mutex_groups": ["drift-proof"],
-      "primary_task_kinds": ["proof_drift_narrative"],
+      "mutex_groups": [
+        "drift-proof"
+      ],
+      "primary_task_kinds": [
+        "proof_drift_narrative"
+      ],
       "delegates_machine_to": "gha-trigger-sweep-heartbeat"
     },
     {
@@ -259,7 +407,9 @@
       "territory": "runtime-contracts",
       "write_scope": [],
       "read_only": true,
-      "primary_task_kinds": ["runtime_contract_review"]
+      "primary_task_kinds": [
+        "runtime_contract_review"
+      ]
     },
     {
       "worker_id": "cursor-daily-autorun-status",
@@ -270,8 +420,12 @@
       "territory": "autorun-dashboard",
       "write_scope": [],
       "read_only": true,
-      "mutex_groups": ["autorun-observability"],
-      "primary_task_kinds": ["autorun_human_digest"],
+      "mutex_groups": [
+        "autorun-observability"
+      ],
+      "primary_task_kinds": [
+        "autorun_human_digest"
+      ],
       "delegates_machine_to": "gha-self-heal-autorun-step"
     },
     {
@@ -281,9 +435,16 @@
       "cadence": "*/20 * * * *",
       "mission_id": "M3",
       "territory": "public-urls",
-      "write_scope": [".noos-runtime/loops/surface/"],
-      "mutex_groups": ["public-health-nerve"],
-      "primary_task_kinds": ["curl_smoke", "check"]
+      "write_scope": [
+        ".noos-runtime/loops/surface/"
+      ],
+      "mutex_groups": [
+        "public-health-nerve"
+      ],
+      "primary_task_kinds": [
+        "curl_smoke",
+        "check"
+      ]
     },
     {
       "worker_id": "gha-self-heal-autorun-step",
@@ -292,9 +453,16 @@
       "cadence": "*/10 * * * *",
       "mission_id": "M4",
       "territory": "autorun-dashboard",
-      "write_scope": [".noos-runtime/heartbeat/"],
-      "mutex_groups": ["autorun-observability"],
-      "primary_task_kinds": ["heartbeat", "autorun_status"]
+      "write_scope": [
+        ".noos-runtime/heartbeat/"
+      ],
+      "mutex_groups": [
+        "autorun-observability"
+      ],
+      "primary_task_kinds": [
+        "heartbeat",
+        "autorun_status"
+      ]
     },
     {
       "worker_id": "gha-trigger-sweep-heartbeat",
@@ -303,9 +471,15 @@
       "cadence": "daily",
       "mission_id": "M3",
       "territory": "trigger-registry",
-      "write_scope": [".noos-runtime/heartbeat/"],
-      "mutex_groups": ["drift-proof"],
-      "primary_task_kinds": ["trigger_sweep"]
+      "write_scope": [
+        ".noos-runtime/heartbeat/"
+      ],
+      "mutex_groups": [
+        "drift-proof"
+      ],
+      "primary_task_kinds": [
+        "trigger_sweep"
+      ]
     },
     {
       "worker_id": "gha-noos-workflow-audit",
@@ -314,10 +488,16 @@
       "cadence": "*/15 * * * *",
       "mission_id": "M4",
       "territory": "workflow-audit-findings",
-      "write_scope": ["data/noos-audit-findings-v1.json"],
-      "mutex_groups": ["self-heal-pipeline"],
+      "write_scope": [
+        "data/noos-audit-findings-v1.json"
+      ],
+      "mutex_groups": [
+        "self-heal-pipeline"
+      ],
       "pipeline_stage": 1,
-      "primary_task_kinds": ["workflow_audit"]
+      "primary_task_kinds": [
+        "workflow_audit"
+      ]
     },
     {
       "worker_id": "gha-noos-self-heal",
@@ -326,10 +506,16 @@
       "cadence": "15,45 * * * *",
       "mission_id": "M4",
       "territory": "safe-auto-fix",
-      "write_scope": ["data/noos-healing-handoff-v1.json"],
-      "mutex_groups": ["self-heal-pipeline"],
+      "write_scope": [
+        "data/noos-healing-handoff-v1.json"
+      ],
+      "mutex_groups": [
+        "self-heal-pipeline"
+      ],
       "pipeline_stage": 2,
-      "primary_task_kinds": ["machine_safe_heal"]
+      "primary_task_kinds": [
+        "machine_safe_heal"
+      ]
     },
     {
       "worker_id": "gha-noos-researcher",
@@ -338,10 +524,16 @@
       "cadence": "0 * * * *",
       "mission_id": "M4",
       "territory": "escalated-findings",
-      "write_scope": ["data/noos-research-findings-v1.json"],
-      "mutex_groups": ["self-heal-pipeline"],
+      "write_scope": [
+        "data/noos-research-findings-v1.json"
+      ],
+      "mutex_groups": [
+        "self-heal-pipeline"
+      ],
       "pipeline_stage": 3,
-      "primary_task_kinds": ["research"]
+      "primary_task_kinds": [
+        "research"
+      ]
     },
     {
       "worker_id": "gha-noos-specialist",
@@ -350,10 +542,16 @@
       "cadence": "0 */2 * * *",
       "mission_id": "M4",
       "territory": "fix-proposals",
-      "write_scope": ["data/noos-specialist-proposals-v1.json"],
-      "mutex_groups": ["self-heal-pipeline"],
+      "write_scope": [
+        "data/noos-specialist-proposals-v1.json"
+      ],
+      "mutex_groups": [
+        "self-heal-pipeline"
+      ],
       "pipeline_stage": 4,
-      "primary_task_kinds": ["patch_proposal"]
+      "primary_task_kinds": [
+        "patch_proposal"
+      ]
     },
     {
       "worker_id": "gha-stack-health-rollup",
@@ -362,10 +560,16 @@
       "cadence": "40 */2 * * *",
       "mission_id": "M3",
       "territory": "integrator-observe",
-      "write_scope": ["receipts/proof/noos-stack-automation-health-v1.json"],
+      "write_scope": [
+        "receipts/proof/noos-stack-automation-health-v1.json"
+      ],
       "read_only": true,
-      "mutex_groups": ["integrator-coordination"],
-      "primary_task_kinds": ["stack_automation_health_rollup"],
+      "mutex_groups": [
+        "integrator-coordination"
+      ],
+      "primary_task_kinds": [
+        "stack_automation_health_rollup"
+      ],
       "gha_workflow": "noos-stack-health-receipt.yml",
       "replaces": "gha-noos-orchestrator",
       "note": "Org rollup — integrator-status + autorun + GHA health; replaces cross-repo orchestrator stub"
@@ -382,9 +586,13 @@
       "retired": true,
       "retired_at": "2026-07-08",
       "replaced_by": "gha-stack-health-rollup",
-      "mutex_groups": ["self-heal-pipeline"],
+      "mutex_groups": [
+        "self-heal-pipeline"
+      ],
       "pipeline_stage": 5,
-      "primary_task_kinds": ["orchestrate"]
+      "primary_task_kinds": [
+        "orchestrate"
+      ]
     },
     {
       "worker_id": "copilot-kaizen-agent",
@@ -393,10 +601,24 @@
       "cadence": "on_issue",
       "mission_id": "M4",
       "territory": "kaizen-machine-safe",
-      "write_scope": ["scripts/", "docs/_NOOS_AGENT/", "tests/", "config/"],
-      "forbidden_paths": ["scripts/verify_*", "noetfield_gate/", "docs/GOVERNED_AUTORUN_LAWS_v3.md"],
-      "mutex_groups": ["pr-merge"],
-      "primary_task_kinds": ["kaizen_proposal", "patch_proposal"]
+      "write_scope": [
+        "scripts/",
+        "docs/_NOOS_AGENT/",
+        "tests/",
+        "config/"
+      ],
+      "forbidden_paths": [
+        "scripts/verify_*",
+        "noetfield_gate/",
+        "docs/GOVERNED_AUTORUN_LAWS_v3.md"
+      ],
+      "mutex_groups": [
+        "pr-merge"
+      ],
+      "primary_task_kinds": [
+        "kaizen_proposal",
+        "patch_proposal"
+      ]
     },
     {
       "worker_id": "cursor-local-mac",
@@ -405,9 +627,16 @@
       "cadence": "on_session",
       "mission_id": "M4",
       "territory": "noetfeld-os-repo",
-      "write_scope": ["repo-local branch/worktree"],
-      "mutex_groups": ["integrator-coordination"],
-      "primary_task_kinds": ["local_edit", "lane_closeout"],
+      "write_scope": [
+        "repo-local branch/worktree"
+      ],
+      "mutex_groups": [
+        "integrator-coordination"
+      ],
+      "primary_task_kinds": [
+        "local_edit",
+        "lane_closeout"
+      ],
       "requires_integrator_claim": true
     },
     {
@@ -417,9 +646,16 @@
       "cadence": "on_session",
       "mission_id": "M4",
       "territory": "noetfeld-os-repo",
-      "write_scope": ["repo-local branch/worktree"],
-      "mutex_groups": ["integrator-coordination"],
-      "primary_task_kinds": ["local_edit", "lane_closeout"],
+      "write_scope": [
+        "repo-local branch/worktree"
+      ],
+      "mutex_groups": [
+        "integrator-coordination"
+      ],
+      "primary_task_kinds": [
+        "local_edit",
+        "lane_closeout"
+      ],
       "requires_integrator_claim": true
     },
     {
@@ -429,8 +665,17 @@
       "cadence": "on_demand",
       "mission_id": "M4",
       "territory": "bounded-task-routing",
-      "write_scope": [".noos-runtime/worker-kernel/", "receipts/proof/"],
-      "primary_task_kinds": ["grep", "check", "summarize", "classify", "patch_proposal"],
+      "write_scope": [
+        ".noos-runtime/worker-kernel/",
+        "receipts/proof/"
+      ],
+      "primary_task_kinds": [
+        "grep",
+        "check",
+        "summarize",
+        "classify",
+        "patch_proposal"
+      ],
       "note": "Does not replace GHA loops or Cursor automations — routes one-shot tasks only"
     },
     {
@@ -440,8 +685,14 @@
       "cadence": "on_demand",
       "mission_id": "M4",
       "territory": "machine-loops",
-      "write_scope": [".noos-runtime/machine-loops/", "receipts/proof/"],
-      "primary_task_kinds": ["reconcile", "repair_dispatch"],
+      "write_scope": [
+        ".noos-runtime/machine-loops/",
+        "receipts/proof/"
+      ],
+      "primary_task_kinds": [
+        "reconcile",
+        "repair_dispatch"
+      ],
       "note": "Instantiates dispatch templates from failure receipts (R2)"
     },
     {
@@ -451,8 +702,13 @@
       "cadence": "on_push",
       "mission_id": "M4",
       "territory": "machine-loops",
-      "write_scope": ["receipts/proof/"],
-      "primary_task_kinds": ["critic_pass", "merge_validation"],
+      "write_scope": [
+        "receipts/proof/"
+      ],
+      "primary_task_kinds": [
+        "critic_pass",
+        "merge_validation"
+      ],
       "note": "Read-only adversarial checklist — different model family than worker"
     },
     {
@@ -462,8 +718,13 @@
       "cadence": "weekly",
       "mission_id": "M4",
       "territory": "machine-loops",
-      "write_scope": ["receipts/proof/"],
-      "primary_task_kinds": ["outside_audit", "receipt_chain_verify"],
+      "write_scope": [
+        "receipts/proof/"
+      ],
+      "primary_task_kinds": [
+        "outside_audit",
+        "receipt_chain_verify"
+      ],
       "note": "Independent verifier-plane audit over trailing receipts"
     },
     {
@@ -473,8 +734,15 @@
       "cadence": "*/5 * * * *",
       "mission_id": "M2",
       "territory": "domain-loops",
-      "write_scope": [".noos-runtime/loops/"],
-      "primary_task_kinds": ["inbox_drain", "runtime_gate", "chain_verify", "sourcea_observe"],
+      "write_scope": [
+        ".noos-runtime/loops/"
+      ],
+      "primary_task_kinds": [
+        "inbox_drain",
+        "runtime_gate",
+        "chain_verify",
+        "sourcea_observe"
+      ],
       "gha_workflows": [
         "noos-inbox-loop",
         "noos-runtime-loop",
@@ -492,8 +760,14 @@
       "territory": "ci-gate",
       "write_scope": [],
       "read_only": true,
-      "mutex_groups": ["drift-proof"],
-      "primary_task_kinds": ["pytest", "gate", "governance_verify"],
+      "mutex_groups": [
+        "drift-proof"
+      ],
+      "primary_task_kinds": [
+        "pytest",
+        "gate",
+        "governance_verify"
+      ],
       "gha_workflow": "gel-ci"
     },
     {
@@ -505,8 +779,13 @@
       "territory": "cost-policy-gate",
       "write_scope": [],
       "read_only": true,
-      "mutex_groups": ["drift-proof"],
-      "primary_task_kinds": ["cost_policy_scan", "governance_verify"],
+      "mutex_groups": [
+        "drift-proof"
+      ],
+      "primary_task_kinds": [
+        "cost_policy_scan",
+        "governance_verify"
+      ],
       "gha_workflow": "cost-policy-scan"
     },
     {
@@ -518,8 +797,12 @@
       "territory": "dispatcher-discovery",
       "write_scope": [],
       "read_only": true,
-      "mutex_groups": ["drift-proof"],
-      "primary_task_kinds": ["dispatcher_discovery"],
+      "mutex_groups": [
+        "drift-proof"
+      ],
+      "primary_task_kinds": [
+        "dispatcher_discovery"
+      ],
       "gha_workflow": "noos-discovery",
       "notes": "Non-enforcing until ops promotes to blocking gate"
     },
@@ -530,9 +813,15 @@
       "cadence": "on_push",
       "mission_id": "M2",
       "territory": "deploy-surfaces",
-      "write_scope": ["cloud/workers/"],
-      "mutex_groups": ["deploy-boundary"],
-      "primary_task_kinds": ["deploy"],
+      "write_scope": [
+        "cloud/workers/"
+      ],
+      "mutex_groups": [
+        "deploy-boundary"
+      ],
+      "primary_task_kinds": [
+        "deploy"
+      ],
       "gha_workflow": "deploy-noos-cloud-workers-v1"
     },
     {
@@ -544,8 +833,12 @@
       "territory": "deploy-surfaces",
       "write_scope": [],
       "read_only": true,
-      "mutex_groups": ["deploy-boundary"],
-      "primary_task_kinds": ["post_deploy_verify"],
+      "mutex_groups": [
+        "deploy-boundary"
+      ],
+      "primary_task_kinds": [
+        "post_deploy_verify"
+      ],
       "gha_workflow": "noos-post-deploy-verify-v1"
     },
     {
@@ -555,11 +848,21 @@
       "cadence": "witness_schedules",
       "mission_id": "M3",
       "territory": "integrator-observe",
-      "write_scope": ["receipts/proof/"],
+      "write_scope": [
+        "receipts/proof/"
+      ],
       "read_only": true,
-      "mutex_groups": ["integrator-coordination"],
-      "primary_task_kinds": ["integrator_daily_witness", "autorun_witness", "motor_sustain_witness"],
-      "delegates_machine_to": ["cloudflare_cron"],
+      "mutex_groups": [
+        "integrator-coordination"
+      ],
+      "primary_task_kinds": [
+        "integrator_daily_witness",
+        "autorun_witness",
+        "motor_sustain_witness"
+      ],
+      "delegates_machine_to": [
+        "cloudflare_cron"
+      ],
       "note": "ICL-P2-06 Phase-1 secondary witnesses — read-only receipts, no loop dispatch"
     },
     {
@@ -569,11 +872,21 @@
       "cadence": "ecosystem_witness_schedules",
       "mission_id": "M3",
       "territory": "ecosystem-handoff",
-      "write_scope": ["receipts/proof/"],
+      "write_scope": [
+        "receipts/proof/"
+      ],
       "read_only": true,
-      "mutex_groups": ["integrator-coordination"],
-      "primary_task_kinds": ["trustfield_observe_witness", "sourcea_spine_witness"],
-      "delegates_machine_to": ["trustfield_worker", "sourcea_portfolio_spine_worker"],
+      "mutex_groups": [
+        "integrator-coordination"
+      ],
+      "primary_task_kinds": [
+        "trustfield_observe_witness",
+        "sourcea_spine_witness"
+      ],
+      "delegates_machine_to": [
+        "trustfield_worker",
+        "sourcea_portfolio_spine_worker"
+      ],
       "note": "ICL-P2-08 Phase-3 — observe + receipt only, never TrustField/SourceA product edits"
     },
     {
@@ -583,15 +896,22 @@
       "cadence": "sustain_audit_schedules",
       "mission_id": "M3",
       "territory": "sustain-audit-observe",
-      "write_scope": ["receipts/proof/"],
+      "write_scope": [
+        "receipts/proof/"
+      ],
       "read_only": true,
-      "mutex_groups": ["integrator-coordination"],
+      "mutex_groups": [
+        "integrator-coordination"
+      ],
       "primary_task_kinds": [
         "machine_audit_witness",
         "liveness_registry_witness",
         "sandbox_url_sweep_witness"
       ],
-      "delegates_machine_to": ["cloudflare_cron", "noos-machine-auditor"],
+      "delegates_machine_to": [
+        "cloudflare_cron",
+        "noos-machine-auditor"
+      ],
       "note": "ICL-P2-09 Phase-4 — weekly audit + registry/URL observe; never /tick or product edits"
     },
     {
@@ -601,8 +921,12 @@
       "cadence": "*/10 * * * *",
       "mission_id": "M2",
       "territory": "factory-loop",
-      "write_scope": [".noos-runtime/factory/"],
-      "primary_task_kinds": ["factory_autorun"]
+      "write_scope": [
+        ".noos-runtime/factory/"
+      ],
+      "primary_task_kinds": [
+        "factory_autorun"
+      ]
     },
     {
       "worker_id": "gha-noos-self-heal-loop",
@@ -611,8 +935,12 @@
       "cadence": "*/10 * * * *",
       "mission_id": "M4",
       "territory": "legacy-self-heal-loop",
-      "write_scope": [".noos-runtime/loops/self-heal/"],
-      "primary_task_kinds": ["legacy_heal_loop"]
+      "write_scope": [
+        ".noos-runtime/loops/self-heal/"
+      ],
+      "primary_task_kinds": [
+        "legacy_heal_loop"
+      ]
     },
     {
       "worker_id": "gha-publish-pypi",
@@ -623,7 +951,9 @@
       "territory": "pypi-release",
       "write_scope": [],
       "read_only": true,
-      "primary_task_kinds": ["publish"]
+      "primary_task_kinds": [
+        "publish"
+      ]
     },
     {
       "worker_id": "gha-release-noetfield-gate",
@@ -634,7 +964,9 @@
       "territory": "gate-release",
       "write_scope": [],
       "read_only": true,
-      "primary_task_kinds": ["release"]
+      "primary_task_kinds": [
+        "release"
+      ]
     },
     {
       "worker_id": "gha-noos-agent-vault",
@@ -645,7 +977,9 @@
       "territory": "agent-doc-vault",
       "write_scope": [],
       "read_only": true,
-      "primary_task_kinds": ["agent_vault_check"]
+      "primary_task_kinds": [
+        "agent_vault_check"
+      ]
     },
     {
       "worker_id": "gha-noos-schedule-canary",
@@ -656,7 +990,32 @@
       "territory": "schedule-canary",
       "write_scope": [],
       "read_only": true,
-      "primary_task_kinds": ["schedule_canary"]
+      "primary_task_kinds": [
+        "schedule_canary"
+      ]
+    },
+    {
+      "worker_id": "gha-noos-cloud-coder",
+      "surface": "github_actions",
+      "tier": "T1_implement",
+      "cadence": "*/5 * * * * + founder issue",
+      "mission_id": "M4",
+      "territory": "bounded-noos-coding",
+      "write_scope": [
+        "scripts/noos_agent_feature_*.py",
+        "tests/test_noos_agent_feature_*.py"
+      ],
+      "mutex_groups": [
+        "pr-merge"
+      ],
+      "pipeline_stage": 5,
+      "primary_task_kinds": [
+        "authorized_code_change",
+        "patch_proposal"
+      ],
+      "source_of_authority": "signed_github_oidc_and_postgres_workpacket",
+      "receipt_path": "noos_runtime_coding_jobs",
+      "can_merge": true
     }
   ],
   "laws": [
