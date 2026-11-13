@@ -138,12 +138,11 @@ def compute_retry_decision(
         )
 
     delay = min(base * (2 ** retries), cap)
-    next_at = current + timedelta(seconds=delay)
-    reason = (
-        "lease expired" if lease is not None else "no active lease"
-    )
+    anchor = lease if lease is not None else created
+    next_at = anchor + timedelta(seconds=delay)
+    reason = "lease expired" if lease is not None else "no active lease"
     return RetryDecision(
-        action=ACTION_RETRY_NOW,
+        action=ACTION_RETRY_NOW if current >= next_at else ACTION_WAIT,
         reason=reason,
         next_attempt_at=next_at,
         attempts_remaining=attempts_remaining,
