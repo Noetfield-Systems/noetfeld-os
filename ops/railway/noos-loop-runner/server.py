@@ -35,6 +35,7 @@ sys.path.insert(0, str(ROOT / "scripts"))
 from noos_loop_liveness_v1 import upsert_loop_liveness  # noqa: E402
 from noos_incident_log_v1 import log_incident  # noqa: E402
 from noos_postgres_store_v1 import (configured as pg_store_enabled, probe as pg_probe, enqueue_job, claim_job, report_job, queue_status)  # noqa: E402
+from noos_github_oidc_v1 import authorize as authorize_github_oidc  # noqa: E402
 
 RECEIPT_DIR = ROOT / ".noos-runtime/railway-loop-runner/receipts"
 PORT = int(os.environ.get("PORT", "8080"))
@@ -328,9 +329,19 @@ class Handler(BaseHTTPRequestHandler):
             return False, 403, "invalid_loop_secret"
         return True, 0, ""
 
+    def _check_coding_access(self, operation: str) -> tuple[bool,int,str]:
+        # Existing NOOS secret is reserved for its authorized control plane.
+        if self.headers.get("X-NOOS-Loop-Secret"):
+            return self._check_secret()
+        try:
+            authorize_github_oidc(self.headers.get("Authorization") or "", operation)
+            return True,0,""
+        except ValueError as exc:
+            return False,401,str(exc)[:90]
+
     def do_GET(self) -> None:  # noqa: N802
         if self.path == "/v1/coding/status":
-            ok,code,reason=self._check_secret()
+            ok,code,reason=self._check_coding_access("status")
             if not ok:
                 self._json(code,{"ok":False,"error":reason})
                 return
@@ -377,7 +388,7 @@ class Handler(BaseHTTPRequestHandler):
 
     def do_POST(self) -> None:  # noqa: N802
         if self.path in ("/v1/coding/queue","/v1/coding/claim","/v1/coding/report"):
-            ok,code,reason=self._check_secret()
+            ok,code,reason=self._check_coding_access(self.path.rsplit("/",1)[-1] if not self.path.endswith("/queue") else "queue")
             if not ok:
                 self._json(code,{"ok":False,"error":reason})
                 return
