@@ -76,7 +76,8 @@ class TaskInboxTests(unittest.TestCase):
 
     def test_literal_search_does_not_match_wildcards(self):
         self.assertEqual(self.inbox(q="%")["total"],0)
-        self.assertEqual(self.inbox(q="_")["total"],0)
+        self.assertEqual(self.inbox(q="fixture_027")["total"],1)
+        self.assertEqual(self.inbox(q="fixture%027")["total"],0)
 
 
 if __name__=="__main__":
