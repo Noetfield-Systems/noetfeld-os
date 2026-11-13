@@ -55,7 +55,9 @@ fixture={
             {"role_id":"N-01","title":"Chief of Staff & Operations Officer","runtime_role_names":["Chief of Staff"],
              "activation_status":"mapped_existing","activation_meaning":"Role is configured. Live execution status comes from task runs.","manager_name":"Founder","layer":1,"max_authority":"A3"},
             {"role_id":"N-02","title":"Opportunity Intelligence Officer","runtime_role_names":["Market Intelligence"],
-             "activation_status":"partial_existing","activation_meaning":"Some capabilities are configured.","manager_name":"Chief of Staff","layer":2,"max_authority":"A2"}
+             "activation_status":"partial_existing","activation_meaning":"Some capabilities are configured.","manager_name":"Chief of Staff","layer":2,"max_authority":"A2"},
+            {"role_id":"N-03","title":"Product & Engineering Delivery Officer","runtime_role_names":["Engineering"],
+             "activation_status":"mapped_existing","activation_meaning":"Engineering tasks are configured.","manager_name":"Chief of Staff","layer":2,"max_authority":"A3"}
         ]
     },
     "opportunities":{"opportunities":[
@@ -211,7 +213,7 @@ with sync_playwright() as p:
             page.locator('.side-link[data-go="team"]').click()
             page.locator('.view[data-view="team"] button[data-go="workflows"]').first.click()
         elif view=="health":
-            page.locator('.side-link[data-go="settings"]').click()
+            page.locator('.sidebar-secondary .side-link[data-go="settings"]').click()
             page.locator('.view[data-view="settings"] button[data-go="health"]').first.click()
         else:
             page.locator('.side-link[data-go="'+view+'"]').click()
@@ -271,7 +273,7 @@ with sync_playwright() as p:
     assert width <= 390+3, "Unexpected horizontal page overflow at mobile width: "+str(width)
     assert not errors, "Browser runtime errors: "+"; ".join(errors[:4])
     page.locator("#menu-open").click()
-    page.locator('.side-link[data-go="settings"]').click()
+    page.locator('.sidebar-secondary .side-link[data-go="settings"]').click()
     page.locator("#logout").click()
     assert page.locator("#auth-form").is_visible(), "Lock must return user to sign-in"
     assert page.evaluate("sessionStorage.getItem('noos-founder-token')") is None, "Lock must clear session token"
