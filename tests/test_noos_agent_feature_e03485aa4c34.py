@@ -44,10 +44,10 @@ def test_expired_lease_schedules_backoff_retry():
         backoff_base_seconds=30,
         backoff_cap_seconds=3600,
     )
-    assert decision.action == ACTION_RETRY_NOW
+    assert decision.action == ACTION_WAIT
     assert decision.reason == "lease expired"
-    # 30 * 2**2 = 120 seconds
-    assert decision.next_attempt_at == _dt(120) + timedelta(seconds=120)
+    # Original lease expiry at t=60 + 30 * 2**2 = t=180.
+    assert decision.next_attempt_at == _dt(180)
     assert decision.attempts_remaining == 3
 
 
@@ -169,3 +169,27 @@ def test_timezone_normalization_to_utc():
     )
     assert decision.next_attempt_at == _dt(0)
     assert decision.next_attempt_at.tzinfo == UTC
+
+
+def test_expired_lease_becomes_eligible_after_fixed_backoff():
+    decision = compute_retry_decision(
+        created_at=_dt(0),
+        now=_dt(200),
+        lease_expires_at=_dt(60),
+        retry_count=2,
+        max_attempts=5,
+        status="failed",
+    )
+    assert decision.action == ACTION_RETRY_NOW
+    assert decision.next_attempt_at == _dt(180)
+
+
+def test_repeat_observation_never_moves_retry_deadline():
+    first = compute_retry_decision(
+        created_at=_dt(0), now=_dt(121), lease_expires_at=_dt(60),
+        retry_count=2, max_attempts=5, status="failed")
+    second = compute_retry_decision(
+        created_at=_dt(0), now=_dt(145), lease_expires_at=_dt(60),
+        retry_count=2, max_attempts=5, status="failed")
+    assert first.next_attempt_at == second.next_attempt_at == _dt(180)
+    assert first.action == second.action == ACTION_WAIT
