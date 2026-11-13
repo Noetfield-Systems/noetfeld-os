@@ -126,6 +126,9 @@ def upsert_liveness(*, loop_id: str, event_type: str | None,
                     interval_minutes: int, last_cycle_status: str,
                     host: str, last_fired_at: str) -> dict[str, Any]:
     try:
+        fired = datetime.fromisoformat(last_fired_at.replace("Z", "+00:00"))
+        if fired.tzinfo is None:
+            fired = fired.replace(tzinfo=timezone.utc)
         async def op(db):
             await db.execute("""
                 INSERT INTO noos_runtime_liveness
@@ -138,7 +141,7 @@ def upsert_liveness(*, loop_id: str, event_type: str | None,
                  last_fired_at=EXCLUDED.last_fired_at,
                  last_cycle_status=EXCLUDED.last_cycle_status,
                  host=EXCLUDED.host,updated_at=now()
-            """,loop_id,event_type,interval_minutes,last_fired_at,
+            """,loop_id,event_type,interval_minutes,fired,
                  last_cycle_status,host)
         _run(op)
         return {"ok": True, "backend": BACKEND, "loop_id": loop_id,
