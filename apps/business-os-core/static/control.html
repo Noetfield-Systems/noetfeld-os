@@ -66,21 +66,21 @@
       <form id="auth-form" method="post" action="/control" autocomplete="on">
         <label for="founder-login-id">Workspace account</label>
         <input class="input auth-identity" id="founder-login-id" type="text" name="username" autocomplete="username" value="founder" readonly aria-describedby="account-help">
-        <p class="helper" id="account-help">This identifies the sign-in to your password manager. It is not a separate user account.</p>
+        <p class="helper" id="account-help">This label helps your browser recognize the saved sign-in.</p>
         <label for="token">Founder access key</label>
         <div class="password-field">
           <input class="input" type="password" id="token" name="password" autocomplete="current-password" required placeholder="Enter your access key" aria-describedby="auth-help auth-feedback">
           <button class="show-password" type="button" id="show-token" aria-label="Show access key" aria-pressed="false">Show</button>
         </div>
         <label class="remember-row" for="save-password">
-          <input id="save-password" type="checkbox">
-          <span>Offer to save with my browser's password manager</span>
+          <input id="save-password" type="checkbox" checked>
+          <span>Ask Chrome to save my sign-in</span>
         </label>
         <button class="btn" type="submit" id="connect">Unlock workspace</button>
         <p class="auth-feedback" id="auth-feedback" role="status" aria-live="polite"></p>
       </form>
-      <p id="auth-help" class="helper">Use the existing <code>FOUNDER_API_TOKEN</code> in Railway. Your access key never appears in a URL, and the site does not create a permanent copy in local storage.</p>
-      <p class="helper">Chrome may ask to save this sign-in to Google Password Manager after successful authentication. The choice and any syncing are controlled by your browser, not by Noetfield.</p>
+      <p id="auth-help" class="helper">Find your key in Railway → <strong>business-os-core</strong> → <strong>Variables</strong> → <code>FOUNDER_API_TOKEN</code>. Noetfield does not save it permanently in site storage.</p>
+      <p class="helper">After a successful sign-in, Chrome can offer to save the key in Google Password Manager. Uncheck on shared devices. Google account syncing depends on Chrome settings.</p>
     </div>
   </section>
   <main id="workspace-main" class="main">
