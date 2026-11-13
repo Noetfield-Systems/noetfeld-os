@@ -419,8 +419,16 @@ def snapshot():
             if not isinstance(recommendation,dict):
                 recommendation={}
             answer=recommendation.get("assessment") or recommendation.get("next_best_action") or ""
+            failure_code=saved.get("model_error_code") if isinstance(saved,dict) else None
+            if not isinstance(failure_code,str) or not re.fullmatch(r"[A-Z0-9_]{4,44}",failure_code):
+                failure_code="LEGACY_PROVIDER_ERROR"
+            if d["provider"]=="provider_error":
+                # Pre-fix exception strings may contain upstream URLs; never
+                # expose their raw content to the Founder UI or agent prompts.
+                answer="Provider failed: "+failure_code
         except (TypeError,ValueError):
             answer=""
+            failure_code="LEGACY_PROVIDER_ERROR"
         response_kind=("MODEL_RESPONSE" if actual_model else
                        "PROVIDER_FAILED" if d["provider"]=="provider_error" else
                        "DETERMINISTIC_INTERNAL_DRAFT" if d["provider"] in ("deterministic","deterministic-evidence")
@@ -429,6 +437,7 @@ def snapshot():
             "task_id":d["id"],"title":_safe_text(d["title"],120),
             "prompt_excerpt":_safe_text(d["objective"],280),
             "answer_excerpt":_safe_text(answer,420),
+            "model_error_code":failure_code if d["provider"]=="provider_error" else None,
             "response_kind":response_kind,
             "owner_role":d["role"],"brand":d["brand"],"status":d["status"],
             "created_at":d["created_at"],"updated_at":d["updated_at"],
