@@ -247,7 +247,7 @@ function paintConnect(items){
       '<h3>No relationship opportunities yet</h3>'+
       '<p>Share the Connect link to invite proposals, partnerships, investment, talent, or other collaboration opportunities.</p>'+
       '<div class="ref-empty-actions"><button id="copy-connect" class="btn" type="button">'+pictogram('link')+' Copy public link</button>'+
-      '<button class="ref-link" type="button" data-go="connect">Open intake '+pictogram('arrow')+'</button></div></div>';
+      '<a class="ref-link" href="https://www.noetfield.com/connect/" target="_blank" rel="noopener noreferrer">Open intake '+pictogram('arrow')+'</a></div></div>';
   }
   if(last){
     const counts=dashboardSnapshot?.counts||last.o?.counts||{};
