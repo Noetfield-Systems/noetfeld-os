@@ -391,6 +391,59 @@ def tasks(authorization:str|None=Header(default=None)):
         item["company_role_title"]=seat["title"]
         tasks_out.append(item)
     return {"tasks":tasks_out}
+@app.get("/api/control/task-inbox")
+def task_inbox(authorization:str|None=Header(default=None),limit:int=50,offset:int=0,
+               status:str|None=None,brand:str|None=None,q:str=""):
+    """Paged source-backed task inbox; no separate queue or implied completion."""
+    authorize(authorization)
+    if limit<1 or limit>100 or offset<0 or offset>100000:
+        raise HTTPException(422,"Invalid page size or offset.")
+    if status and status not in {"queued","running","drafted","approved","failed","blocked","completed","processing"}:
+        raise HTTPException(422,"Unsupported work status.")
+    if brand and brand not in core.BRANDS:
+        raise HTTPException(422,"Unsupported venture.")
+    query=q.strip()
+    if len(query)>120:
+        raise HTTPException(422,"Search text is too long.")
+    conditions=[]
+    params=[]
+    if status:
+        conditions.append("t.status=?");params.append(status)
+    if brand:
+        conditions.append("t.brand=?");params.append(brand)
+    if query:
+        conditions.append("(t.title LIKE ? ESCAPE '\\' OR t.objective LIKE ? ESCAPE '\\' OR t.id LIKE ? ESCAPE '\\')")
+        escaped=query.replace("\\","\\\\").replace("%","\\%").replace("_","\\_")
+        params.extend(["%"+escaped+"%"]*3)
+    where=(" WHERE "+" AND ".join(conditions)) if conditions else ""
+    with core.connect() as db:
+        total=db.execute("SELECT COUNT(*) n FROM tasks t"+where,tuple(params)).fetchone()["n"]
+        rows=db.execute("""
+            SELECT t.*,o.title AS opportunity_title,
+                (SELECT COUNT(*) FROM task_dependencies td WHERE td.task_id=t.id) dependency_count,
+                (SELECT COUNT(*) FROM task_dependencies td JOIN tasks dep ON dep.id=td.depends_on_task_id
+                 WHERE td.task_id=t.id AND dep.status NOT IN ('drafted','approved')) pending_dependencies
+            FROM tasks t LEFT JOIN opportunities o ON o.id=t.opportunity_id
+        """+where+"""
+            ORDER BY CASE t.status
+              WHEN 'failed' THEN 0 WHEN 'blocked' THEN 1 WHEN 'drafted' THEN 2
+              WHEN 'queued' THEN 3 WHEN 'running' THEN 4 ELSE 5 END,
+              t.created_at DESC,t.id DESC LIMIT ? OFFSET ?
+        """,(*params,limit,offset)).fetchall()
+        grouped=db.execute("SELECT status,COUNT(*) n FROM tasks GROUP BY status").fetchall()
+    items=[]
+    for row in rows:
+        item=dict(row)
+        seat=core.company_role_for_runtime(item["role"])
+        item["company_role_id"]=seat["role_id"]
+        item["company_role_title"]=seat["title"]
+        items.append(item)
+    return {"schema":"noetfield.business-os.task-inbox.v1","tasks":items,
+            "offset":offset,"limit":limit,"total":total,
+            "has_more":offset+len(items)<total,
+            "status_counts":{r["status"]:r["n"] for r in grouped},
+            "source":"Company OS durable tasks","verified_outcomes_inferred":False}
+
 @app.get("/api/control/events")
 def events(authorization:str|None=Header(default=None)):
     authorize(authorization)
