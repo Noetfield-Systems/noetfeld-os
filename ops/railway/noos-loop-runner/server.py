@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import json
+import hmac
 import os
 import subprocess
 import sys
@@ -33,6 +34,7 @@ if not (ROOT / "scripts" / "noos_loop_runner_v1.py").is_file():
 sys.path.insert(0, str(ROOT / "scripts"))
 from noos_loop_liveness_v1 import upsert_loop_liveness  # noqa: E402
 from noos_incident_log_v1 import log_incident  # noqa: E402
+from noos_postgres_store_v1 import (configured as pg_store_enabled, probe as pg_probe, enqueue_job, claim_job, report_job, queue_status)  # noqa: E402
 
 RECEIPT_DIR = ROOT / ".noos-runtime/railway-loop-runner/receipts"
 PORT = int(os.environ.get("PORT", "8080"))
@@ -322,20 +324,32 @@ class Handler(BaseHTTPRequestHandler):
         header = (self.headers.get("X-NOOS-Loop-Secret") or "").strip()
         if not header:
             return False, 401, "missing_loop_secret"
-        if header != SECRET:
+        if not hmac.compare_digest(header, SECRET):
             return False, 403, "invalid_loop_secret"
         return True, 0, ""
 
     def do_GET(self) -> None:  # noqa: N802
+        if self.path == "/v1/coding/status":
+            ok,code,reason=self._check_secret()
+            if not ok:
+                self._json(code,{"ok":False,"error":reason})
+                return
+            if not pg_store_enabled():
+                self._json(503,{"ok":False,"error":"POSTGRES_BACKEND_NOT_ENABLED"})
+                return
+            stats=queue_status()
+            self._json(200 if stats.get("ok") else 503,stats)
+            return
         if self.path == "/health/deep":
-            probe = probe_supabase()
+            probe = pg_probe() if pg_store_enabled() else probe_supabase()
             self._json(
                 200 if probe.get("ok") else 503,
                 {
                     "ok": bool(probe.get("ok")),
                     "schema": "noos-railway-loop-runner-health-deep-v1",
                     "service": "noos-loop-runner",
-                    "supabase_probe": probe,
+                    "supabase_probe": probe if not pg_store_enabled() else {"ok": False, "reason": "replaced_by_pg_epoch"},
+                    "storage_probe": probe,
                     "last_successful_liveness_write_at": _last_liveness_ok_at,
                     "last_liveness_error": _last_liveness_error,
                 },
@@ -362,6 +376,32 @@ class Handler(BaseHTTPRequestHandler):
         )
 
     def do_POST(self) -> None:  # noqa: N802
+        if self.path in ("/v1/coding/queue","/v1/coding/claim","/v1/coding/report"):
+            ok,code,reason=self._check_secret()
+            if not ok:
+                self._json(code,{"ok":False,"error":reason})
+                return
+            if not pg_store_enabled():
+                self._json(503,{"ok":False,"error":"POSTGRES_BACKEND_NOT_ENABLED"})
+                return
+            try:
+                length=int(self.headers.get("Content-Length") or 0)
+                if length < 2 or length>12000:
+                    raise ValueError("INVALID_PAYLOAD_SIZE")
+                payload=json.loads(self.rfile.read(length))
+                if not isinstance(payload,dict):
+                    raise ValueError("JSON_OBJECT_REQUIRED")
+                if self.path.endswith("/queue"):
+                    result=enqueue_job(payload)
+                elif self.path.endswith("/claim"):
+                    result=claim_job(str(payload.get("repo") or ""),lease_minutes=int(payload.get("lease_minutes") or 15))
+                else:
+                    result=report_job(payload)
+            except (ValueError, TypeError, json.JSONDecodeError) as exc:
+                self._json(400,{"ok":False,"error":str(exc)[:100]})
+                return
+            self._json(200 if result.get("ok") else 503,result)
+            return
         if self.path == "/motor-restart":
             ok_auth, code, reason = self._check_secret()
             if not ok_auth:
