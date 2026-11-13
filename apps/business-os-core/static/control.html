@@ -63,11 +63,24 @@
       <p class="eyebrow">Private company workspace</p>
       <h1>Welcome to Company OS</h1>
       <p>Access opportunities, business decisions, teams and work in one clear workspace.</p>
-      <label for="token">Founder access key</label>
-      <input class="input" type="password" id="token" autocomplete="off" placeholder="Enter your access key" aria-describedby="auth-help">
-      <button class="btn" type="button" id="connect">Unlock workspace</button>
-      <p id="auth-help" class="helper">Use the configured Founder access key from the existing Railway service. It is not included in this page or in any URL.</p>
-      <p class="helper">Your key is used only for authenticated requests and remains in this browser tab's session until locked.</p>
+      <form id="auth-form" method="post" action="/control" autocomplete="on">
+        <label for="founder-login-id">Workspace account</label>
+        <input class="input auth-identity" id="founder-login-id" type="text" name="username" autocomplete="username" value="founder" readonly aria-describedby="account-help">
+        <p class="helper" id="account-help">This identifies the sign-in to your password manager. It is not a separate user account.</p>
+        <label for="token">Founder access key</label>
+        <div class="password-field">
+          <input class="input" type="password" id="token" name="password" autocomplete="current-password" required placeholder="Enter your access key" aria-describedby="auth-help auth-feedback">
+          <button class="show-password" type="button" id="show-token" aria-label="Show access key" aria-pressed="false">Show</button>
+        </div>
+        <label class="remember-row" for="save-password">
+          <input id="save-password" type="checkbox">
+          <span>Offer to save with my browser's password manager</span>
+        </label>
+        <button class="btn" type="submit" id="connect">Unlock workspace</button>
+        <p class="auth-feedback" id="auth-feedback" role="status" aria-live="polite"></p>
+      </form>
+      <p id="auth-help" class="helper">Use the existing <code>FOUNDER_API_TOKEN</code> in Railway. Your access key never appears in a URL, and the site does not create a permanent copy in local storage.</p>
+      <p class="helper">Chrome may ask to save this sign-in to Google Password Manager after successful authentication. The choice and any syncing are controlled by your browser, not by Noetfield.</p>
     </div>
   </section>
   <main id="workspace-main" class="main">
@@ -104,10 +117,22 @@
             <section class="card"><div class="card-head"><h2>Share one opportunity link</h2></div><p class="helper">Send external partners, investors, event organizers and contributors through Noetfield Connect. Their submitted proposals stay traceable.</p><button class="btn" id="copy-link-main" type="button">Copy Connect link</button></section>
           </div>
         </div>
+        <section class="card" id="business-pulse">
+          <div class="card-head"><div><h2>Detailed business pulse</h2><p>A clearer view of the records behind the company summary, with distinct sources and meanings.</p></div><span class="tag neutral">Live Company OS data</span></div>
+          <div class="compact-metrics" id="pulse-metrics" aria-label="Detailed company metrics"><div class="empty">Loading detailed records…</div></div>
+          <p class="footnote">Potential value is not collected revenue. A recorded contact or completed task is not necessarily an acquired customer.</p>
+        </section>
       </section>
       <section class="view" data-view="actions" hidden>
-        <div class="card"><div class="card-head"><div><h2>Assigned work</h2><p>Review the latest queued, prepared and completed records. Approving a draft records your review only.</p></div><label class="row" for="action-filter">Status <select class="input" id="action-filter"><option value="">All</option><option value="drafted">Prepared for review</option><option value="queued">Waiting to run</option><option value="running">In progress</option><option value="approved">Reviewed</option><option value="failed">Failed</option><option value="blocked">Waiting on another task</option></select></label></div>
-          <div class="scroll"><table><thead><tr><th>Work</th><th>Responsible team</th><th>Status</th><th>Next step</th><th>Action</th></tr></thead><tbody id="tasks"><tr><td colspan="5">Loading…</td></tr></tbody></table></div><p class="footnote" id="task-list-scope">Recent records only.</p>
+        <div class="card"><div class="card-head"><div><h2>Assigned work</h2><p>Search and review the complete Company OS work queue. Approving a prepared draft records your review only.</p></div></div>
+          <form id="task-inbox-controls" class="inbox-controls" role="search">
+            <label>Find work<input class="input" type="search" id="task-search" maxlength="120" placeholder="Search title, details or task ID"></label>
+            <label>Stage<select class="input" id="action-filter"><option value="">All stages</option><option value="drafted">Prepared for review</option><option value="queued">Waiting to run</option><option value="running">In progress</option><option value="approved">Reviewed</option><option value="failed">Failed</option><option value="blocked">Waiting on another task</option></select></label>
+            <label>Venture<select class="input" id="task-brand"><option value="">All ventures</option><option value="noetfield">Noetfield</option><option value="portfolio">Portfolio</option><option value="buildworkflow">BuildWorkflow</option><option value="signalforge">SignalForge</option><option value="trustfield">TrustField (independent)</option><option value="buildrelay">BuildRelay (independent)</option></select></label>
+            <button class="btn alt" type="submit">Search work</button>
+          </form>
+          <div class="scroll"><table><thead><tr><th>Work</th><th>Responsible team</th><th>Status</th><th>Next step</th><th>Action</th></tr></thead><tbody id="tasks"><tr><td colspan="5">Open this view to load the complete task inbox.</td></tr></tbody></table></div>
+          <div class="inbox-footer"><p class="footnote" id="task-list-scope" role="status" aria-live="polite">Task inbox not loaded.</p><div class="row"><button id="task-prev" class="btn alt" type="button" disabled>Previous</button><button id="task-next" class="btn alt" type="button" disabled>Next</button></div></div>
         </div>
       </section>
       <section class="view" data-view="connect" hidden>
@@ -299,7 +324,50 @@ async function refreshCommercial(){try{const b=$('commercial-brand').value;const
 $('commercial-brand').addEventListener('change',()=>{if(token)refreshCommercial();});
 $('refresh-commercial').onclick=refreshCommercial;
 $('commission-commercial').onclick=async()=>{if(!token){$('commercial-feedback').textContent='Founder authentication required.';return;}const brand=$('commercial-brand').value;if(!confirm('Create exactly three internal draft tasks for '+brand+'? No messages or social posts will be sent.'))return;try{const out=await api('/api/control/commercial-team/commission',{method:'POST',body:JSON.stringify({brand})});$('commercial-feedback').textContent=out.already_commissioned?'Already commissioned; existing task IDs reused.':'Internal tasks queued; no external actions.';await refreshCommercial();await refresh();}catch(e){$('commercial-feedback').textContent=e.message;}};
-$('connect').onclick=async()=>{const supplied=$('token').value.trim();if(!supplied){$('status').textContent='Enter your Founder access key.';return;}token=supplied;$('connect').disabled=true;$('status').textContent='Checking access…';try{await api('/api/control/overview');sessionStorage.setItem('noos-founder-token',token);$('token').value='';await Promise.all([refresh(),refreshConnect(),refreshCommercial()]);}catch(e){sessionStorage.removeItem('noos-founder-token');token='';$('status').textContent='Access could not be verified: '+e.message;window.noosPremium.setAuth(false,'Access not verified. Check the key or connection.');}finally{$('connect').disabled=false;}};$('refresh').onclick=refresh;$('logout').onclick=()=>{sessionStorage.removeItem('noos-founder-token');token='';$('token').value='';$('app').classList.add('hide');window.noosPremium.setAuth(false,'Workspace locked.');};
+async function offerBrowserSave(supplied){
+  const feedback=$('auth-feedback');
+  if(!('credentials' in navigator) || typeof window.PasswordCredential!=='function' || typeof navigator.credentials.store!=='function'){
+    feedback.textContent='Your browser may offer to save automatically. If not, use Chrome Password Manager to add this website manually.';
+    return;
+  }
+  try {
+    const credential=new window.PasswordCredential({id:'founder',name:'Noetfield Founder workspace',password:supplied});
+    await navigator.credentials.store(credential);
+    feedback.textContent='Save request handled by your browser. Check Password Manager to confirm it was saved.';
+  }catch(e){
+    feedback.textContent='Your browser did not save the key. You can use Chrome Password Manager to add it manually.';
+  }
+}
+$('auth-form').addEventListener('submit',async event=>{
+  event.preventDefault();
+  const supplied=$('token').value.trim();
+  if(!supplied){$('auth-feedback').textContent='Enter your Founder access key.';return;}
+  token=supplied;$('connect').disabled=true;$('auth-feedback').textContent='Checking your access…';
+  try {
+    await api('/api/control/overview');
+    sessionStorage.setItem('noos-founder-token',token);
+    if($('save-password').checked){
+      // The browser, not the website, decides whether to store or sync this credential.
+      void offerBrowserSave(supplied);
+    }
+    $('token').value='';
+    $('auth-feedback').textContent=$('save-password').checked?
+      'Access confirmed. Review your browser password-save prompt if one appears.':'Access confirmed.';
+    await Promise.all([refresh(),refreshConnect(),refreshCommercial()]);
+  }catch(e){
+    sessionStorage.removeItem('noos-founder-token');token='';
+    $('auth-feedback').textContent='Access was not verified. Check the key and try again.';
+    window.noosPremium.setAuth(false,'Access not verified.');
+  }finally{$('connect').disabled=false;}
+});
+$('show-token').addEventListener('click',()=>{
+  const input=$('token'),show=input.type==='password';
+  input.type=show?'text':'password';
+  $('show-token').textContent=show?'Hide':'Show';
+  $('show-token').setAttribute('aria-pressed',String(show));
+  $('show-token').setAttribute('aria-label',show?'Hide access key':'Show access key');
+});
+$('refresh').onclick=()=>{refresh();refreshConnect();refreshCommercial();};$('logout').onclick=()=>{sessionStorage.removeItem('noos-founder-token');token='';$('token').value='';$('app').classList.add('hide');window.noosPremium.setAuth(false,'Workspace locked.');};
 $('load').onclick=async()=>{try{const b=$('brand').value;const d=await api('/api/control/opportunities'+(b?'?brand='+b:''));$('opps').innerHTML=d.opportunities.map(oppRow).join('')||'<tr><td colspan="6">No opportunities.</td></tr>';}catch(e){$('status').textContent=e.message;}};
 $('opps').addEventListener('change',async e=>{const id=e.target.dataset.stage;if(!id)return;try{await api('/api/control/opportunities/'+id,{method:'PATCH',body:JSON.stringify({stage:e.target.value})});refresh();}catch(x){$('status').textContent=x.message;}});$('opps').addEventListener('click',async e=>{const id=e.target.dataset.delete;if(!id)return;if(!confirm('Delete this contact and every linked opportunity, workflow task, event payload and memory in this brand lane?'))return;try{await api('/api/control/opportunities/'+id,{method:'DELETE'});refresh();}catch(x){$('status').textContent=x.message;}});
 $('tasks').addEventListener('click',async e=>{const id=e.target.dataset.approve;if(!id)return;try{await api('/api/control/tasks/'+id+'/approve',{method:'POST'});refresh();}catch(x){$('status').textContent=x.message;}});

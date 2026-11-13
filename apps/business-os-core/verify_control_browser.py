@@ -6,9 +6,38 @@ import json
 import os
 from pathlib import Path
 from urllib.parse import urlparse
+from http.server import ThreadingHTTPServer,BaseHTTPRequestHandler
+from threading import Thread
 from playwright.sync_api import sync_playwright
 
 BASE=os.getenv("BUSINESS_OS_URL","https://business-os-core-production.up.railway.app").rstrip("/")
+PREVIEW=os.getenv("CONTROL_UI_PREVIEW")=="1"
+SERVER=None
+if PREVIEW:
+    static_dir=Path(__file__).parent/"static"
+    class PreviewHandler(BaseHTTPRequestHandler):
+        def log_message(self,*_args):pass
+        def do_GET(self):
+            path=urlparse(self.path).path
+            routes={"/control":("control.html","text/html; charset=utf-8"),
+                    "/control/premium.css":("control-premium.css","text/css; charset=utf-8"),
+                    "/control/premium.js":("control-premium.js","text/javascript; charset=utf-8")}
+            if path in routes:
+                filename,content_type=routes[path]
+                body=(static_dir/filename).read_bytes()
+                self.send_response(200);self.send_header("Content-Type",content_type)
+                self.send_header("Content-Length",str(len(body)));self.end_headers()
+                self.wfile.write(body)
+                return
+            if path in {"/health","/ready","/health/deep"}:
+                body=json.dumps({"ok":True,"ready":True,"worker":"running","storage":"ready"}).encode()
+                self.send_response(200);self.send_header("Content-Type","application/json")
+                self.end_headers();self.wfile.write(body)
+                return
+            self.send_error(404)
+    SERVER=ThreadingHTTPServer(("127.0.0.1",0),PreviewHandler)
+    Thread(target=SERVER.serve_forever,daemon=True).start()
+    BASE="http://127.0.0.1:"+str(SERVER.server_port)
 OUT=Path("qa-artifacts")
 OUT.mkdir(exist_ok=True)
 fixture={
@@ -79,6 +108,31 @@ def make_handler(route):
     if req.method=="POST" and "/commission" in u.path:
         return route.fulfill(status=200,content_type="application/json",
                              body='{"already_commissioned":false,"external_actions":0}')
+    if resource=="overview" and "BAD_ACCESS_KEY" in req.headers.get("authorization",""):
+        return route.fulfill(status=401,content_type="application/json",body='{"detail":"Founder authentication required."}')
+    if resource=="task-inbox":
+        from urllib.parse import parse_qs
+        params=parse_qs(u.query)
+        offset=int(params.get("offset",["0"])[0])
+        limit=int(params.get("limit",["40"])[0])
+        status=params.get("status",[""])[0]
+        brand=params.get("brand",[""])[0]
+        q=params.get("q",[""])[0].lower()
+        items=[{
+            "id":f"task-fixture-{i:03d}","title":f"Review opportunity {i:03d}",
+            "objective":"Review real scope and evidence",
+            "status":"drafted" if i%2==0 else "queued",
+            "role":"partnerships","company_role_title":"Partnerships","brand":"noetfield",
+            "next_action":"Recommend next step","result":None,"pending_dependencies":0,
+        } for i in range(85)]
+        if status:items=[x for x in items if x["status"]==status]
+        if brand:items=[x for x in items if x["brand"]==brand]
+        if q:items=[x for x in items if q in x["title"].lower() or q in x["id"].lower()]
+        result={"schema":"noetfield.business-os.task-inbox.v1",
+                "tasks":items[offset:offset+limit],"total":len(items),"offset":offset,
+                "limit":limit,"has_more":offset+limit<len(items),"status_counts":{"drafted":43,"queued":42}}
+        mock_calls.append("GET task-inbox "+str(offset))
+        return route.fulfill(status=200,content_type="application/json",body=json.dumps(result))
     if resource in fixture:
         mock_calls.append(req.method+" "+resource)
         return route.fulfill(status=200,content_type="application/json",body=json.dumps(fixture[resource]))
@@ -89,11 +143,39 @@ with sync_playwright() as p:
     page=browser.new_page(viewport={"width":1440,"height":900},device_scale_factor=1)
     errors=[]
     page.on("pageerror",lambda err:errors.append(str(err)))
+    page.add_init_script("""(function(){
+      window.__storedCredential = null;
+      window.__credentialStores = 0;
+      Object.defineProperty(window, 'PasswordCredential', {
+        configurable:true,
+        value:class PasswordCredential {
+          constructor(options){ this.id=options.id;this.name=options.name;this.password=options.password; }
+        }
+      });
+      Object.defineProperty(navigator, 'credentials', {
+        configurable:true,
+        value:{store:async function(credential){
+          window.__storedCredential={id:credential.id,password:credential.password};
+          window.__credentialStores++;
+        }}
+      });
+    })();""")
     page.route("**/api/control/**",make_handler)
-    page.goto(BASE+"/control",wait_until="domcontentloaded",timeout=40000)
+    page.goto(BASE+"/control",wait_until="load",timeout=40000)
+    assert page.locator("#auth-form").is_visible(), "Founder login must be a real form"
+    assert page.locator("#token").get_attribute("autocomplete")=="current-password"
+    assert page.locator("#founder-login-id").get_attribute("autocomplete")=="username"
+    assert page.locator("#token").get_attribute("name")=="password"
+    page.screenshot(path=str(OUT/"founder-login-fixture.png"),full_page=True)
     page.locator("#token").fill("FIXTURE_TOKEN_NOT_A_REAL_SECRET")
-    page.locator("#connect").click()
+    page.locator("#save-password").check()
+    page.locator("#auth-form").evaluate("(form) => form.requestSubmit()")
     page.locator("#metrics .metric").first.wait_for(timeout=30000)
+    page.wait_for_function("window.__credentialStores===1")
+    assert page.evaluate("window.__storedCredential.id")=="founder", "Password manager identity is wrong"
+    assert page.evaluate("window.__storedCredential.password")=="FIXTURE_TOKEN_NOT_A_REAL_SECRET"
+    assert page.locator("#token").input_value()=="", "Access key should be cleared from the field"
+    assert page.evaluate("localStorage.getItem('noos-founder-token')") is None, "Access key must not be persisted in localStorage"
     assert "1,055" in page.locator("#metrics").inner_text(), "Overview did not display actual-bound fixture field"
     assert "Not connected" in page.locator("#metrics").inner_text(), "Revenue must never show fabricated zero"
     assert page.locator(".sidebar").is_visible()
@@ -102,6 +184,16 @@ with sync_playwright() as p:
     for view in views:
         page.locator('.side-link[data-go="'+view+'"]').click()
         assert page.locator('.view[data-view="'+view+'"]').is_visible(), "Navigation failed: "+view
+    page.locator('.side-link[data-go="actions"]').click()
+    page.wait_for_function("document.querySelector('#task-list-scope').textContent.includes('of 85')")
+    assert page.locator("#tasks tr[data-task-row]").count()==40, "Task inbox did not paginate at 40"
+    page.locator("#task-next").click()
+    page.wait_for_function("document.querySelector('#task-list-scope').textContent.includes('41–80 of 85')")
+    assert page.locator("#tasks tr[data-task-row]").count()==40, "Second task page did not load"
+    page.locator("#task-search").fill("opportunity 013")
+    page.locator("#task-inbox-controls button[type=submit]").click()
+    page.wait_for_function("document.querySelector('#task-list-scope').textContent.includes('of 1')")
+    assert page.locator("#tasks tr[data-task-row]").count()==1, "Task search did not filter actual source"
     page.locator('.side-link[data-go="workflows"]').click()
     form=page.locator("#new-work-form")
     form.locator('select[name="role"]').select_option("partnerships")
@@ -134,8 +226,18 @@ with sync_playwright() as p:
     width=page.evaluate("document.documentElement.scrollWidth")
     assert width <= 390+3, "Unexpected horizontal page overflow at mobile width: "+str(width)
     assert not errors, "Browser runtime errors: "+"; ".join(errors[:4])
+    page.locator("#logout").click()
+    assert page.locator("#auth-form").is_visible(), "Lock must return user to sign-in"
+    assert page.evaluate("sessionStorage.getItem('noos-founder-token')") is None, "Lock must clear session token"
+    page.locator("#token").fill("BAD_ACCESS_KEY")
+    page.locator("#auth-form").evaluate("(form) => form.requestSubmit()")
+    page.wait_for_function("document.querySelector('#auth-feedback')?.textContent?.includes('Access was not verified')",timeout=10000)
+    assert page.evaluate("window.__credentialStores") == 1, "Invalid password must not be saved"
+    assert page.locator("#auth-form").is_visible(), "Failed authentication must not unlock workspace"
+    assert not errors, "Browser runtime errors after failed authentication: "+"; ".join(errors[:4])
     browser.close()
-print(json.dumps({"status":"PASS","ui":"production-hosted","protected_api_data":"mocked fixtures",
-                  "views_tested":11,"mobile_width":390,"actual_external_mutations":0,
+if SERVER is not None:SERVER.shutdown()
+print(json.dumps({"status":"PASS","ui":"branch-preview" if PREVIEW else "production-hosted","protected_api_data":"mocked fixtures",
+                  "views_tested":11,"mobile_width":390,"auth_and_password_store":"mocked browser API verified","actual_external_mutations":0,
                   "mocked_api_calls":len(mock_calls),
                   "screenshots":[str(x) for x in OUT.glob("*.png")]}))
