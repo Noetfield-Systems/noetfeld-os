@@ -1,5 +1,6 @@
 """Noetfield PostgreSQL backend: authorization and idempotency contract."""
 import os
+import inspect
 
 import pytest
 
@@ -43,6 +44,6 @@ def test_invalid_reporting_cannot_finalize_job(monkeypatch):
 
 
 def test_queue_schema_prevents_duplicate_claims_and_lease_free_completion():
-    assert "FOR UPDATE SKIP LOCKED" in store.claim_job.__code__.co_consts.__str__()
-    assert "lease_until>now()" in store.report_job.__code__.co_consts.__str__()
-    assert "ON CONFLICT(workpacket_id)" in store.enqueue_job.__code__.co_consts.__str__()
+    assert "FOR UPDATE SKIP LOCKED" in inspect.getsource(store.claim_job)
+    assert "lease_until>now()" in inspect.getsource(store.report_job)
+    assert "ON CONFLICT(workpacket_id)" in inspect.getsource(store.enqueue_job)
