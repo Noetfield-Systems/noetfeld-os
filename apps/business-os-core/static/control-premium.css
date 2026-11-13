@@ -396,3 +396,7 @@ body.locked .top-actions{display:none!important}
 }
 .reference-connect-card .ref-empty>svg.ui-icon{width:62px!important;height:62px!important;margin-bottom:12px}
 .reference-connect-card .ref-empty{min-height:250px}
+
+/* Deliberately large reference-style inbox mark, not a generic 20px inline icon. */
+.reference-connect-card .ref-empty-icon{width:70px;height:66px;flex:0 0 66px;display:grid;place-items:center;margin-bottom:11px}
+.reference-connect-card .ref-empty-icon>svg.ui-icon{width:60px!important;height:60px!important;min-width:60px!important;min-height:60px!important;stroke-width:1.55;color:#43546f}
