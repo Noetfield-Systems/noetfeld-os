@@ -9,6 +9,7 @@ import io
 import socket
 import sys
 import urllib.error
+import urllib.request
 from pathlib import Path
 
 import pytest
@@ -38,7 +39,7 @@ def _mock_dns_then_recovered(monkeypatch):
         if req.full_url.startswith(BAD):
             raise urllib.error.URLError(socket.gaierror(-2, "Name or service not known"))
         return io.BytesIO(b'[{"cycle_number": 42}]')
-    monkeypatch.setattr(runner.urllib.request, "urlopen", response)
+    monkeypatch.setattr(urllib.request, "urlopen", response)
     return urls
 
 
@@ -69,7 +70,7 @@ def test_non_dns_failure_never_switches_database(monkeypatch):
     def fail(req, timeout):
         urls.append(req.full_url)
         raise urllib.error.URLError("connection refused")
-    monkeypatch.setattr(runner.urllib.request, "urlopen", fail)
+    monkeypatch.setattr(urllib.request, "urlopen", fail)
     number, proof = runner.supabase_max_cycle_number("loop-runtime")
     assert number is None
     assert proof["reason"] == "request_failed"
