@@ -1,0 +1,83 @@
+name: NOOS Autonomous Cloud Coder
+
+on:
+  issues:
+    types: [opened]
+  schedule:
+    - cron: '*/5 * * * *'
+  workflow_dispatch:
+
+permissions:
+  actions: write
+  contents: write
+  issues: read
+  pull-requests: write
+  id-token: write
+  models: read
+
+concurrency:
+  group: noos-autonomous-cloud-coder
+  cancel-in-progress: false
+
+jobs:
+  coding:
+    if: github.event_name != 'issues' || (github.event.issue.user.login == 'kazemnezhadsina144-dot' && startsWith(github.event.issue.title, '[NOOS-CODE] '))
+    runs-on: ubuntu-latest
+    timeout-minutes: 14
+    outputs:
+      state: ${{ steps.run.outputs.state }}
+      branch: ${{ steps.run.outputs.branch }}
+      pr_url: ${{ steps.run.outputs.pr_url }}
+      test_path: ${{ steps.run.outputs.test_path }}
+      job_id: ${{ steps.run.outputs.job_id }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: deploy/noos-loop-runner-entrypoint
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install -r requirements.txt
+      - name: Execute leased Company OS coding work
+        id: run
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ github.token }}
+          NOOS_CODER_ROOT: ${{ github.workspace }}
+        run: python scripts/noos_coding_agent_action_v1.py
+
+  independent-verification-and-release:
+    needs: coding
+    if: needs.coding.outputs.state == 'PR_OPENED'
+    runs-on: ubuntu-latest
+    timeout-minutes: 14
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.coding.outputs.branch }}
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install -r requirements.txt
+      - name: Independent test and readback
+        env:
+          EXPECTED_PR: ${{ needs.coding.outputs.pr_url }}
+          EXPECTED_TEST: ${{ needs.coding.outputs.test_path }}
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          case "$EXPECTED_TEST" in
+            tests/test_noos_agent_feature_*.py) ;;
+            *) echo "Unsafe test path"; exit 1 ;;
+          esac
+          python -m compileall -q scripts
+          python -m pytest -q "$EXPECTED_TEST"
+          git diff --check
+          gh pr view "$EXPECTED_PR" --json state,baseRefName,headRefName | python -c 'import json,sys; x=json.load(sys.stdin); assert x["state"]=="OPEN" and x["baseRefName"]=="deploy/noos-loop-runner-entrypoint" and x["headRefName"].startswith("sina/noos-coder-")'
+      - name: Merge verified, Founder-authorized scope
+        env:
+          GH_TOKEN: ${{ github.token }}
+          EXPECTED_PR: ${{ needs.coding.outputs.pr_url }}
+        run: gh pr merge "$EXPECTED_PR" --squash --delete-branch
