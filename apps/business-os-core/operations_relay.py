@@ -190,7 +190,14 @@ def tick(*, timestamp=None):
                     code=str(task.get("error_code") or "LEGACY_PROVIDER_ERROR")
                     # HTTP 401/403/404 and invalid payloads need an owner to
                     # fix configuration; retrying would burn money indefinitely.
-                    can_retry=(task["retryable"]==1 or task["retryable"] is None)
+                    scoped_internal=supervised_model_authorized(task)
+                    fallback_recovery=(
+                        scoped_internal and code in ("HTTP_401","HTTP_403")
+                        and bool(os.getenv("LLM_FALLBACK_API_KEY"))
+                        and bool(os.getenv("LLM_FALLBACK_MODEL"))
+                    )
+                    can_retry=(task["retryable"]==1 or task["retryable"] is None
+                               or fallback_recovery)
                     if task["attempts"]>=MAX_PROVIDER_ATTEMPTS or not can_retry:
                         marker="operations_relay_model_blocker:"+task["id"]
                         if not _get(db,marker):
@@ -212,7 +219,8 @@ def tick(*, timestamp=None):
                         continue
                     budget-=1
                     actions.append({"at":stamp,
-                       "action":"SUPERVISED_MODEL_RETRY" if supervised_model_authorized(task)
+                       "action":"SUPERVISED_AUTH_FALLBACK" if fallback_recovery
+                                else "SUPERVISED_MODEL_RETRY" if scoped_internal
                                 else "CONSENTED_MODEL_RETRY",
                        "task_id":task["id"],"owner":"Existing specialist worker",
                        "reason_code":code,
