@@ -391,7 +391,13 @@ async function loadRuntimeMesh(){
     }).join("");
     const rejections=Object.entries(handoff.last_cycle_rejection_reasons||{})
       .filter(([code,count])=>/^[a-z_]{3,64}$/.test(code)&&Number.isSafeInteger(count)&&count>0);
-    const rejected=rejections.length?'<div class="status-line"><span><b>Founder WorkPackets awaiting correction</b><br><span class="muted">'+rejections.map(([code,count])=>esc(code)+': '+safeNumber(count)).join(' · ')+'</span></span><span class="tag warn">Not admitted</span></div>':'';
+    const rejectedProjects=Array.isArray(handoff.last_cycle_rejected_projects)
+      ?handoff.last_cycle_rejected_projects.slice(0,8).filter(p=>p&&typeof p.project_id==="string")
+      :[];
+    const rejected=rejections.length?'<div class="status-line"><span><b>Founder WorkPackets awaiting correction</b><br><span class="muted">'+
+      rejections.map(([code,count])=>esc(code)+': '+safeNumber(count)).join(' · ')+
+      (rejectedProjects.length?' · Projects: '+rejectedProjects.map(p=>esc(p.project_id)).join(', '):'')+
+      '</span></span><span class="tag warn">Not admitted</span></div>':'';
     output.innerHTML=header+rejected+rows+'<p class="helper">Source health and a WorkPacket ACK do not prove authorized Motor execution, a deployed change, independent verification or collected revenue. Runway remains the canonical execution engine.</p>';
   }catch(e){output.textContent="Cannot read execution chain: "+e.message;}
 }
@@ -419,12 +425,14 @@ async function loadOperationsRelay(){
         ' · '+esc(item.task_id||"")+'</span></span>'+labelTag(item.status)+'</div>';
     };
     const blocks=(d.blockers||[]).slice(0,6).map(b=>
-      '<div class="status-line"><span><b>'+esc(b.reason_code||b.state||"Unknown blocker")+'</b><br><span class="muted">'+
+      '<div class="status-line"><span><b>'+esc(b.reason_code||b.state||"Unknown blocker")+
+      (b.project_id?' · '+esc(b.project_id):'')+'</b><br><span class="muted">'+
       esc(b.owner||"Unassigned")+' · '+esc(b.next_action||"Diagnosis required")+'</span></span>'+
       '<span class="tag warn">'+esc(b.state||"Open")+'</span></div>').join("");
     const repairs=(d.actions||[]).slice(0,5).map(a=>
       '<div class="status-line"><span><b>'+esc(a.action||"Recovery action")+'</b><br><span class="muted">'+
-      esc(a.owner||"Company OS")+' · '+esc(a.result||"Outcome not verified")+
+      esc(a.owner||"Company OS")+(a.project_id?' · '+esc(a.project_id):'')+
+      ' · '+esc(a.result||"Outcome not verified")+
       ' · '+esc(date(a.at))+'</span></span><span class="tag">Recorded</span></div>').join("");
     const recent=d.handoffs.slice(0,4).map(transition).join("");
     if(preview)preview.innerHTML=summary+
