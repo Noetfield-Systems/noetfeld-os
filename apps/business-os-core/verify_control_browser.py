@@ -81,6 +81,29 @@ def make_handler(route):
                              body='{"already_commissioned":false,"external_actions":0}')
     if resource=="overview" and "BAD_ACCESS_KEY" in req.headers.get("authorization",""):
         return route.fulfill(status=401,content_type="application/json",body='{"detail":"Founder authentication required."}')
+    if resource=="task-inbox":
+        from urllib.parse import parse_qs
+        params=parse_qs(u.query)
+        offset=int(params.get("offset",["0"])[0])
+        limit=int(params.get("limit",["40"])[0])
+        status=params.get("status",[""])[0]
+        brand=params.get("brand",[""])[0]
+        q=params.get("q",[""])[0].lower()
+        items=[{
+            "id":f"task-fixture-{i:03d}","title":f"Review opportunity {i:03d}",
+            "objective":"Review real scope and evidence",
+            "status":"drafted" if i%2==0 else "queued",
+            "role":"partnerships","company_role_title":"Partnerships","brand":"noetfield",
+            "next_action":"Recommend next step","result":None,"pending_dependencies":0,
+        } for i in range(85)]
+        if status:items=[x for x in items if x["status"]==status]
+        if brand:items=[x for x in items if x["brand"]==brand]
+        if q:items=[x for x in items if q in x["title"].lower() or q in x["id"].lower()]
+        result={"schema":"noetfield.business-os.task-inbox.v1",
+                "tasks":items[offset:offset+limit],"total":len(items),"offset":offset,
+                "limit":limit,"has_more":offset+limit<len(items),"status_counts":{"drafted":43,"queued":42}}
+        mock_calls.append("GET task-inbox "+str(offset))
+        return route.fulfill(status=200,content_type="application/json",body=json.dumps(result))
     if resource in fixture:
         mock_calls.append(req.method+" "+resource)
         return route.fulfill(status=200,content_type="application/json",body=json.dumps(fixture[resource]))
@@ -132,6 +155,16 @@ with sync_playwright() as p:
     for view in views:
         page.locator('.side-link[data-go="'+view+'"]').click()
         assert page.locator('.view[data-view="'+view+'"]').is_visible(), "Navigation failed: "+view
+    page.locator('.side-link[data-go="actions"]').click()
+    page.wait_for_function("document.querySelector('#task-list-scope').textContent.includes('of 85')")
+    assert page.locator("#tasks tr[data-task-row]").count()==40, "Task inbox did not paginate at 40"
+    page.locator("#task-next").click()
+    page.wait_for_function("document.querySelector('#task-list-scope').textContent.includes('41–80 of 85')")
+    assert page.locator("#tasks tr[data-task-row]").count()==40, "Second task page did not load"
+    page.locator("#task-search").fill("opportunity 013")
+    page.locator("#task-inbox-controls button[type=submit]").click()
+    page.wait_for_function("document.querySelector('#task-list-scope').textContent.includes('of 1')")
+    assert page.locator("#tasks tr[data-task-row]").count()==1, "Task search did not filter actual source"
     page.locator('.side-link[data-go="workflows"]').click()
     form=page.locator("#new-work-form")
     form.locator('select[name="role"]').select_option("partnerships")
@@ -169,7 +202,7 @@ with sync_playwright() as p:
     assert page.evaluate("sessionStorage.getItem('noos-founder-token')") is None, "Lock must clear session token"
     page.locator("#token").fill("BAD_ACCESS_KEY")
     page.locator("#auth-form").evaluate("(form) => form.requestSubmit()")
-    page.locator("#auth-feedback").get_by_text("Access was not verified",exact=False).wait_for(timeout=10000)
+    page.wait_for_function("document.querySelector('#auth-feedback')?.textContent?.includes('Access was not verified')",timeout=10000)
     assert page.evaluate("window.__credentialStores") == 1, "Invalid password must not be saved"
     assert page.locator("#auth-form").is_visible(), "Failed authentication must not unlock workspace"
     assert not errors, "Browser runtime errors after failed authentication: "+"; ".join(errors[:4])
