@@ -19,6 +19,7 @@ RUNTIME = ROOT / ".noos-runtime/loops"
 SINK_TIMEOUT_SEC = int(os.environ.get("NOOS_SINK_TIMEOUT_SEC", "60"))
 
 sys.path.insert(0, str(ROOT / "scripts"))
+from noos_postgres_store_v1 import configured as pg_store_enabled, allocate_cycle as pg_allocate_cycle, store_cycle as pg_store_cycle
 from noos_loop_determinism_v1 import advance_state, cas_advance, op_key, transition_allowed  # noqa: E402
 from noos_loop_liveness_v1 import detect_execution_host, sync_meta_liveness_rows, upsert_loop_liveness  # noqa: E402
 from noos_incident_log_v1 import log_incident  # noqa: E402
@@ -201,6 +202,11 @@ def acquire_cycle_number(loop_id: str, *, factory_id: str | None = None) -> tupl
     """D2 — CAS on cycle_number before side effects."""
     path = loop_state_path(loop_id)
     fid = factory_id or factory_id_for_loop(loop_id)
+    if pg_store_enabled():
+        number, meta = pg_allocate_cycle(fid)
+        if number is None:
+            return None, {"reason": "postgres_cycle_allocation_failed", "factory_id": fid, "floor": meta}
+        return number, {"cas": meta["cas"], "floor": meta, "factory_id": fid, "storage_epoch": "pgv1"}
     expected = 0
     if path.is_file():
         try:
@@ -272,6 +278,8 @@ def run_cmd(cmd: list[str], *, continue_on_error: bool = False, timeout: int = 6
 
 
 def sink_cycle(cycle: dict[str, Any], *, factory_id: str) -> dict[str, Any]:
+    if pg_store_enabled():
+        return pg_store_cycle(factory_id, cycle)
     if not SINK.is_file():
         return {"ok": False, "skipped": True, "reason": "sink_missing"}
     import tempfile
@@ -352,6 +360,8 @@ def meter_cost(step_results: list[dict[str, Any]]) -> dict[str, Any]:
 
 
 def founder_blocked_probe() -> dict[str, Any]:
+    if pg_store_enabled():
+        return {"status": "LEGACY_SUPABASE_QUEUE_UNAVAILABLE", "backend": "railway_postgres", "count_known": False}
     """L7 — surface founder_blocked count/oldest/age in every cycle receipt."""
     url = os.environ.get("NOETFIELD_SUPABASE_URL") or os.environ.get("SUPABASE_URL")
     key = os.environ.get("NOETFIELD_SUPABASE_SERVICE_ROLE_KEY") or os.environ.get(
@@ -415,7 +425,9 @@ def execute_loop(loop: dict[str, Any], *, self_heal: bool = True) -> dict[str, A
     loop_id = str(loop["id"])
     event_type = str(loop["event_type"])
     factory_id = str(loop.get("factory_id") or factory_id_for_loop(loop_id))
-    env_meta = ensure_supabase_env() if is_cloud_execution() else {"ok": True, "skipped": True}
+    env_meta = ({"ok": True, "backend": "railway_postgres", "epoch": "pgv1"}
+                if pg_store_enabled() else ensure_supabase_env() if is_cloud_execution()
+                else {"ok": True, "skipped": True})
     cycle_number, cas_meta = acquire_cycle_number(loop_id, factory_id=factory_id)
     started_at = utc_now()
     if cycle_number is None:
