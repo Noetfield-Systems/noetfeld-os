@@ -64,7 +64,7 @@ function showView(name,opts={}){
   $("sidebar").setAttribute("aria-hidden", "false");
   if(!opts.noHash && location.hash!=="#"+name)history.replaceState(null,"","#"+name);
   if(!opts.noScroll)window.scrollTo({top:0,behavior:"instant"});
-  if(name==="health")loadHealth();
+  if(name==="health"){loadHealth();if(!document.body.classList.contains("locked"))void loadRuntimeMesh();}
   if(name==="actions"&&!document.body.classList.contains("locked"))loadTaskInbox();
 }
 function setAuth(isConnected,message){
@@ -368,6 +368,25 @@ async function loadHealth(){
     const detail=settled.status==="fulfilled"?(settled.value.body.worker_interval_seconds?"Worker interval: "+settled.value.body.worker_interval_seconds+" seconds":"Service returned HTTP "+settled.value.status):"Could not reach service";
     return '<div class="status-line"><span><b>'+esc(x.label)+'</b><br><span class="muted">'+esc(detail)+'</span></span><span class="tag '+(healthy?"":"bad")+'">'+esc(state)+'</span></div>';
   }).join("")+'<p class="helper">A successful health response does not independently verify the accuracy of every downstream integration.</p>';
+}
+async function loadRuntimeMesh(){
+  const output=$("runtime-mesh");
+  if(document.body.classList.contains("locked")){output.textContent="Founder access required.";return;}
+  output.textContent="Checking existing execution services…";
+  try{
+    const data=await api("/api/control/runtime-mesh");
+    if(data.schema!=="noetfield.company-os.runtime-mesh-observation.v1"||!Array.isArray(data.nodes))throw Error("Invalid source response");
+    const handoff=data.founder_handoff||{};
+    const header='<div class="status-line"><span><b>Founder → Company handoff</b><br><span class="muted">Received WorkPackets: '+safeNumber(handoff.work_packets_claimed)+' · Pending ACK: '+safeNumber(handoff.pending_ack)+' · Independently verified outcomes: '+safeNumber(handoff.verified_outcomes)+'</span></span>'+labelTag(handoff.state||"NOT_OBSERVED")+'</div>';
+    const rows=data.nodes.map(node=>{
+      const status=node.state||"NOT_OBSERVED";
+      const good=["SERVICE_HEALTH_REPORTED","GOAL_KERNEL_HEALTH_REPORTED","HTTP_REACHABLE_ONLY","LOCAL_CONTROL_SURFACE"].includes(status);
+      const href=typeof node.url==="string"&&node.url.startsWith("https://")?node.url:null;
+      const label=href?'<a href="'+esc(href)+'" target="_blank" rel="noopener noreferrer">'+esc(node.label)+'</a>':esc(node.label);
+      return '<div class="status-line"><span><b>'+label+'</b><br><span class="muted">'+esc(humanStatus(status))+'</span></span><span class="tag '+(good?"":"warn")+'">'+(good?"Endpoint only":"Unproven")+'</span></div>';
+    }).join("");
+    output.innerHTML=header+rows+'<p class="helper">Source health and a WorkPacket ACK do not prove authorized Motor execution, a deployed change, independent verification or collected revenue. Runway remains the canonical execution engine.</p>';
+  }catch(e){output.textContent="Cannot read execution chain: "+e.message;}
 }
 function setSearchResults(q){
   const target=$("search-results"),v=q.toLowerCase().trim();
