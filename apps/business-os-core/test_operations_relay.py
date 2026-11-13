@@ -260,7 +260,7 @@ class OperationsRelayTests(unittest.TestCase):
         self.assertNotIn("SUPERVISED_MODEL_RETRY",next_tick["action_types"])
         with core.connect() as db:
             t=db.execute("SELECT * FROM tasks WHERE id=?",(first["id"],)).fetchone()
-            self.assertEqual(t["status"],"drafted")
+            self.assertEqual(t["status"],"blocked")
         again=operations_relay.tick(timestamp=time.time()+240)
         self.assertNotIn("MODEL_PROVIDER_BLOCKER_IDENTIFIED",again["action_types"])
         page=operations_relay.snapshot()
@@ -296,6 +296,63 @@ class OperationsRelayTests(unittest.TestCase):
             row=db.execute("SELECT * FROM tasks WHERE id=?",(engineer["id"],)).fetchone()
             self.assertEqual(row["status"],"queued")
         self.assertFalse(operations_relay.snapshot()["end_to_end_motor_execution_proven"])
+
+    def test_failed_engineer_blocks_manager_until_scoped_retry_succeeds(self):
+        from unittest.mock import patch
+        from urllib.error import HTTPError
+        with core.connect() as db:
+            db.execute("INSERT INTO state(key,value) VALUES(?,?)",
+                ("founder_bridge_last_rejected_projects",json.dumps([{
+                    "reason_code":"project_not_allowed","project_id":"noetfield-earnloop",
+                    "company_id":"noetfield-systems-inc"}])))
+        operations_relay.tick()
+        os.environ.update({"LLM_BASE_URL":"https://provider.invalid/v1",
+                           "LLM_API_KEY":"fixture-only","LLM_MODEL":"fixture"})
+        with patch("urllib.request.urlopen",side_effect=HTTPError(
+            "https://provider.invalid/v1/chat/completions",429,"rate limit",{},None)):
+            first=core.claim("tasks")
+            self.assertEqual(first["role"],"engineering_operator")
+            core.process_task(first)
+        with core.connect() as db:
+            self.assertEqual(db.execute("SELECT status FROM tasks WHERE id=?",
+                                         (first["id"],)).fetchone()[0],"blocked")
+        # A manager MUST NOT claim a model error as an engineer's completed draft.
+        self.assertIsNone(core.claim("tasks"))
+        with core.connect() as db:
+            manager=db.execute("SELECT * FROM tasks WHERE role='chief_of_staff'").fetchone()
+            self.assertEqual(manager["status"],"blocked")
+            db.execute("UPDATE tasks SET updated_at=? WHERE id=?",(
+                (datetime.now(timezone.utc)-timedelta(minutes=8)).isoformat(),first["id"]))
+        self.assertIn("SUPERVISED_MODEL_RETRY",
+                      operations_relay.tick(timestamp=time.time()+120)["action_types"])
+        class FakeResponse:
+            def __enter__(self): return self
+            def __exit__(self,*_): return False
+            def read(self):
+                return json.dumps({
+                    "choices":[{"message":{"content":json.dumps({
+                        "assessment":"Diagnosed scoped model outage; retry succeeded.",
+                        "next_best_action":"Validate published receipt",
+                        "risk_flags":[],"evidence":[]})}}],
+                    "usage":{"prompt_tokens":17,"completion_tokens":9}
+                }).encode()
+        with patch("urllib.request.urlopen",return_value=FakeResponse()):
+            repaired=core.claim("tasks")
+            self.assertEqual(repaired["id"],first["id"])
+            core.process_task(repaired)
+            with core.connect() as db:
+                self.assertEqual(db.execute("SELECT status FROM tasks WHERE id=?",
+                                             (repaired["id"],)).fetchone()[0],"drafted")
+                self.assertEqual(db.execute("SELECT status FROM tasks WHERE id=?",
+                                             (manager["id"],)).fetchone()[0],"blocked")
+            self.assertIn("DEPENDENCY_RECOVERED",
+                          operations_relay.tick(timestamp=time.time()+240)["action_types"])
+            resumed=core.claim("tasks")
+            self.assertEqual(resumed["role"],"chief_of_staff")
+            core.process_task(resumed)
+        view=operations_relay.snapshot()
+        self.assertEqual(sum(1 for i in view["handoffs"] if i["actual_model_call_observed"]),2)
+        self.assertFalse(view["end_to_end_motor_execution_proven"])
 
     def test_readonly_projection_never_confuses_drafts_with_execution(self):
         with core.connect() as db:
