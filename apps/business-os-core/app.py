@@ -7,6 +7,7 @@ from fastapi.responses import FileResponse, JSONResponse
 from pydantic import BaseModel, ConfigDict, Field
 import core
 import founder_bridge
+import runtime_mesh
 import client_status
 import floor_projection
 import commercial_team
@@ -245,6 +246,12 @@ def portfolio_studio_overview(authorization:str|None=Header(default=None)):
     authorize(authorization)
     return portfolio_studio.overview()
 
+
+@app.get("/api/control/runtime-mesh")
+def runtime_mesh_observation(authorization:str|None=Header(default=None)):
+    """Founder-authenticated, bounded observation. Never dispatches the Motor."""
+    authorize(authorization)
+    return runtime_mesh.snapshot(founder_bridge_status=founder_bridge.health())
 
 @app.get("/api/control/overview")
 def overview(authorization:str|None=Header(default=None)):
