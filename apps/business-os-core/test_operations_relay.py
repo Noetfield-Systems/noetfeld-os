@@ -122,6 +122,10 @@ class OperationsRelayTests(unittest.TestCase):
             self.assertEqual(providers,["openai-compatible","openai-compatible"])
         view=operations_relay.snapshot()
         self.assertEqual(sum(1 for x in view["handoffs"] if x["actual_model_call_observed"]),2)
+        engineer=next(x for x in view["handoffs"] if x["owner_role"]=="engineering_operator")
+        self.assertIn("Investigate timeout",engineer["answer_excerpt"])
+        self.assertEqual(engineer["response_kind"],"MODEL_RESPONSE")
+        self.assertTrue(engineer["prompt_excerpt"].startswith("The") or engineer["prompt_excerpt"].startswith("Investigate"))
         self.assertFalse(view["end_to_end_motor_execution_proven"])
 
     def test_no_arbitrary_task_can_claim_internal_agent_authority(self):
@@ -223,6 +227,7 @@ class OperationsRelayTests(unittest.TestCase):
         self.assertEqual(view["counts"]["drafted"],1)
         self.assertEqual(view["counts"]["tasks_needing_execution"],0)
         self.assertFalse(view["handoffs"][0]["actual_model_call_observed"])
+        self.assertEqual(view["handoffs"][0]["response_kind"],"DETERMINISTIC_INTERNAL_DRAFT")
         self.assertEqual(view["handoffs"][0]["result_kind"],"INTERNAL_DRAFT")
         self.assertFalse(view["end_to_end_motor_execution_proven"])
 

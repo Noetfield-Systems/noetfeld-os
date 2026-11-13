@@ -91,6 +91,9 @@ fixture={
         "handoffs":[{"task_id":"task-agent-fixture","title":"Investigate retry",
              "from":"market_intelligence","to":"engineering_operator",
              "owner_role":"engineering_operator","provider":"deterministic-evidence",
+             "prompt_excerpt":"Inspect fixture failure and report a safe next action.",
+             "answer_excerpt":"Prepared an internal diagnosis only; no code deployed.",
+             "response_kind":"DETERMINISTIC_INTERNAL_DRAFT",
              "actual_model_call_observed":False,"input_tokens":0,
              "status":"drafted","created_at":"2026-11-12T22:00:00+00:00"}],
         "actions":[{"action":"BLOCKER_OWNER_ASSIGNED","owner":"Engineering Delivery",
@@ -249,6 +252,13 @@ with sync_playwright() as p:
         else:
             page.locator('.side-link[data-go="'+view+'"]').click()
         assert page.locator('.view[data-view="'+view+'"]').is_visible(), "Navigation failed: "+view
+        if view=="workflows":
+            page.wait_for_function("document.querySelector('#operations-relay-detail')?.textContent?.includes('Inspect assigned prompt')")
+            transcript=page.locator("#operations-relay-detail details.task-detail").first
+            transcript.locator("summary").click()
+            assert "Inspect fixture failure" in transcript.inner_text()
+            assert "Prepared an internal diagnosis only" in transcript.inner_text()
+            assert "DETERMINISTIC_INTERNAL_DRAFT" in transcript.inner_text()
     page.locator('.side-link[data-go="actions"]').click()
     page.wait_for_function("document.querySelector('#task-list-scope').textContent.includes('of 85')")
     assert page.locator("#tasks tr[data-task-row]").count()==40, "Task inbox did not paginate at 40"
