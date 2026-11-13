@@ -87,7 +87,7 @@ const fixture={
 window.noosPremium.render(fixture);
 assert.match(elements.get("metrics").innerHTML,/1,055/);
 assert.match(elements.get("metrics").innerHTML,/Not connected/);
-assert.match(elements.get("action-preview").innerHTML,/Task backlog/);
+assert.match(elements.get("action-preview").innerHTML,/Work requiring action/);
 assert.match(elements.get("action-preview").innerHTML,/Incoming opportunities/);
 assert.match(elements.get("action-preview").innerHTML,/Revenue visibility/);
 assert.match(html,/id="dashboard-venture"/);
