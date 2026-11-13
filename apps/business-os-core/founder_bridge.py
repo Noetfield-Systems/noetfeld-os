@@ -382,6 +382,7 @@ def tick():
     accepted=0
     rejected=0
     rejection_reasons={}
+    rejected_projects=[]
     for item in result["items"][:12]:
         try:
             _,created=admit(item,allowed)
@@ -393,6 +394,18 @@ def tick():
             if not re.fullmatch(r"[a-z_]{3,64}",code):
                 code="unsafe_request"
             rejection_reasons[code]=rejection_reasons.get(code,0)+1
+            # This is an authenticated Founder WorkPacket with a typed project
+            # ID and legal Company OS owner, not a raw prompt. Record only
+            # non-personal routing fields, and only for Noetfield's company.
+            if code=="project_not_allowed" and isinstance(item,dict):
+                project=item.get("project_id")
+                if (isinstance(project,str) and PROJECT_PATTERN.fullmatch(project)
+                    and item.get("company_id")=="noetfield-systems-inc"
+                    and item.get("tenant_scope")=="noetfield-systems-inc"):
+                    rejected_projects.append({
+                        "reason_code":code,"project_id":project,
+                        "company_id":"noetfield-systems-inc",
+                    })
     acknowledgements+=reconcile()
     signals=publish_commercial_signals()
     contributor_signals=publish_contributor_signals()
@@ -403,6 +416,8 @@ def tick():
           ON CONFLICT(key) DO UPDATE SET value=excluded.value""")
         db.execute("""INSERT INTO state(key,value) VALUES('founder_bridge_last_rejections',?)
           ON CONFLICT(key) DO UPDATE SET value=excluded.value""",(_json(rejection_reasons),))
+        db.execute("""INSERT INTO state(key,value) VALUES('founder_bridge_last_rejected_projects',?)
+          ON CONFLICT(key) DO UPDATE SET value=excluded.value""",(_json(rejected_projects[:12]),))
     return {"state":"LIVE","accepted":accepted,"rejected":rejected,
             "rejection_reasons":rejection_reasons,
             "acknowledged":acknowledgements,
@@ -453,6 +468,12 @@ def health():
             last_rejections={}
     except (TypeError,ValueError):
         last_rejections={}
+    try:
+        rejected_projects=json.loads(rows.get("founder_bridge_last_rejected_projects","[]"))
+        if not isinstance(rejected_projects,list):
+            rejected_projects=[]
+    except (TypeError,ValueError):
+        rejected_projects=[]
     connection=("LIVE" if freshness is not None and freshness<=180 and not error_type
                 else "DEGRADED" if error_type or freshness is not None else "AWAITING_FIRST_CYCLE")
     if freshness is not None and freshness>180:
@@ -467,6 +488,7 @@ def health():
         "pending_ack":int(stats["pending_ack"]),
         "ack_conflicts_quarantined":int(stats["ack_conflicts"]),
         "last_cycle_rejection_reasons":last_rejections,
+        "last_cycle_rejected_projects":rejected_projects[:12],
         "commercial_signals_sent":source_count,
         "verified_outcomes":0,"external_effects":0,
     }

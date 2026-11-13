@@ -133,6 +133,42 @@ class OperationsRelayTests(unittest.TestCase):
             item=dict(db.execute("SELECT * FROM tasks WHERE id=?",(tid,)).fetchone())
         self.assertFalse(operations_relay.supervised_model_authorized(item))
 
+    def test_real_founder_rejection_autoroutes_engineer_to_manager_once(self):
+        with core.connect() as db:
+            db.execute("INSERT INTO state(key,value) VALUES(?,?)",
+                ("founder_bridge_last_rejected_projects",json.dumps([{
+                    "reason_code":"project_not_allowed","project_id":"noetfield-earnloop",
+                    "company_id":"noetfield-systems-inc",
+                    "objective":"never forward this secret@example.test"
+                }])))
+        result=operations_relay.tick()
+        self.assertEqual(result["state"],"EXECUTED")
+        self.assertIn("FOUNDER_HANDOFF_OWNER_ASSIGNED",result["action_types"])
+        self.assertIn("FOUNDER_HANDOFF_MANAGER_SCHEDULED",result["action_types"])
+        with core.connect() as db:
+            rows=db.execute("SELECT * FROM tasks ORDER BY priority_rank").fetchall()
+            self.assertEqual(len(rows),2)
+            self.assertEqual([r["role"] for r in rows],["engineering_operator","chief_of_staff"])
+            self.assertTrue(all("secret@example" not in r["objective"] for r in rows))
+            self.assertEqual(db.execute("SELECT COUNT(*) FROM task_dependencies").fetchone()[0],1)
+            self.assertTrue(all(operations_relay.supervised_model_authorized(dict(r)) for r in rows))
+        self.assertEqual(operations_relay.tick(timestamp=time.time()+120)["actions"],0)
+        with core.connect() as db:
+            self.assertEqual(db.execute("SELECT COUNT(*) FROM tasks").fetchone()[0],2)
+        self.assertTrue(any(x.get("project_id")=="noetfield-earnloop"
+                            for x in operations_relay.snapshot()["actions"]))
+        self.assertFalse(operations_relay.snapshot()["end_to_end_motor_execution_proven"])
+
+    def test_foreign_company_rejection_does_not_dispatch_noetfield_workers(self):
+        with core.connect() as db:
+            db.execute("INSERT INTO state(key,value) VALUES(?,?)",
+                ("founder_bridge_last_rejected_projects",json.dumps([{
+                    "reason_code":"project_not_allowed","project_id":"independent-venture",
+                    "company_id":"independent-company"}])))
+        self.assertEqual(operations_relay.tick()["actions"],0)
+        with core.connect() as db:
+            self.assertEqual(db.execute("SELECT COUNT(*) FROM tasks").fetchone()[0],0)
+
     def test_dependency_recovery_requeues_real_blocked_task(self):
         with core.connect() as db:
             dep=core.add_task(db,None,None,"noetfield","market_intelligence",
