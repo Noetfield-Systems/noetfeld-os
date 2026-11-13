@@ -1,26 +1,221 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>NOETFIELD | Founder Control Plane</title><style>
-:root{--navy:#0e1c2b;--ink:#182b40;--muted:#68798b;--line:#e0e7ed;--bg:#f3f6f8}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:13px/1.5 Inter,system-ui,sans-serif}.top{background:var(--navy);color:white;padding:17px 3vw;display:flex;justify-content:space-between}.top a{color:#a6ddd0;text-decoration:none}.wrap{max-width:1400px;margin:25px auto;padding:0 18px}.row{display:flex;gap:12px;align-items:center;flex-wrap:wrap}.card{background:white;border:1px solid var(--line);border-radius:12px;padding:17px;margin-bottom:13px}.card h2{font-size:15px;margin:0 0 9px}.muted{color:var(--muted);font-size:10px}.input{padding:10px;border:1px solid #dbe3e9;border-radius:7px;min-width:260px}.btn{background:var(--navy);color:white;border:0;border-radius:7px;padding:9px 12px;font-size:10px;font-weight:800;cursor:pointer}.btn.alt{background:#eaf3f1;color:#205b54}.metrics{display:grid;grid-template-columns:repeat(6,1fr);gap:9px}.metric{padding:12px;background:#f7f9fa;border:1px solid var(--line);border-radius:8px}.metric strong{display:block;font-size:23px}.metric span{font-size:9px;color:var(--muted);text-transform:uppercase;font-weight:800}.cols{display:grid;grid-template-columns:1fr 1fr;gap:13px}.scroll{overflow:auto}table{width:100%;border-collapse:collapse;min-width:650px}td,th{text-align:left;padding:8px;border-bottom:1px solid #edf1f4;vertical-align:top;font-size:10px}th{font-size:9px;color:var(--muted);text-transform:uppercase}.tag{display:inline-block;background:#eaf4f2;color:#28685f;padding:4px 7px;border-radius:5px;font-size:9px;font-weight:800}.hide{display:none}@media(max-width:850px){.metrics{grid-template-columns:repeat(3,1fr)}.cols{grid-template-columns:1fr}}@media(max-width:480px){.metrics{grid-template-columns:repeat(2,1fr)}}
-</style></head><body><header class="top"><b>NOETFIELD / FOUNDER CONTROL PLANE</b><a href="/">Public entry ↗</a></header><main class="wrap"><section class="card"><h2>Founder authentication</h2><div class="row"><input class="input" id="token" type="password" placeholder="Founder API token"><button class="btn" id="connect">Connect</button><button class="btn alt" id="refresh">Refresh</button><button class="btn alt" id="logout">Lock</button><span id="status" class="muted">Locked</span></div></section><section id="app" class="hide"><div class="card"><h2>Live business pulse</h2><div class="metrics" id="metrics"></div><p class="muted" id="note"></p></div><div class="cols"><section class="card"><h2>Agent organization</h2><div id="agents"></div></section><section class="card"><h2>ROI intelligence</h2><div id="roi"></div></section></div><section class="card" id="commercial-team"><h2>Commercial workforce / Company OS</h2><p class="muted">Reuses canonical seats N-05 Revenue, N-07 Customer Success, and N-06 Marketing. Commissioning creates three internal draft tasks on the existing durable Company OS queue; it does not connect inboxes, send messages, publish content or activate autonomous external execution.</p><div class="row"><label for="commercial-brand">Product lane</label><select id="commercial-brand" class="input"><option value="noetfield">Noetfield</option><option value="trustfield">TrustField</option><option value="signalforge">SignalForge</option></select><button class="btn" id="commission-commercial" type="button">Commission internal roles</button><button class="btn alt" id="refresh-commercial" type="button">Check real task states</button><span id="commercial-feedback" class="muted" aria-live="polite"></span></div><div id="commercial-roles" class="row" style="margin-top:15px" aria-live="polite"><p class="muted">Connect with Founder authentication to read actual status.</p></div></section><section class="card" id="connect-desk"><h2>Noetfield Connect · relationship opportunities</h2><p class="muted">Source-linked proposals from LinkedIn, partners, investors, collaborators and the wider ecosystem. Specialist tasks are advisory work; they are not confirmed meetings, assignments, revenue or completed introductions. Private contact details remain in the authorized Platform Intake registry.</p><div class="row"><label for="connect-filter">Opportunity type</label><select id="connect-filter" class="input"><option value="">All types</option><option value="partnership">Partnership</option><option value="growth">GTM & distribution</option><option value="capital">Investor / capital</option><option value="people">Team / advisor</option><option value="events">Event / award</option><option value="business">Customer / pilot</option><option value="other">Other</option></select><button class="btn alt" id="refresh-connect" type="button">Refresh Connect</button><span class="muted" id="connect-status" role="status" aria-live="polite">No records loaded</span></div><div class="scroll"><table><thead><tr><th>Source ID</th><th>Type / initiative</th><th>Source</th><th>Review state</th><th>Suggested specialists</th><th>Recorded next actions</th></tr></thead><tbody id="connectrows"><tr><td colspan="6">Authenticate to view source-backed opportunities.</td></tr></tbody></table></div>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0e1d32">
+<meta name="robots" content="noindex,nofollow">
+<title>Company overview | Noetfield Company OS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;650;700;750;800&display=swap">
+<link rel="stylesheet" href="/control/premium.css?v=4">
+</head>
+<body>
+<a class="skip" href="#workspace-main">Skip to content</a>
+<div class="layout">
+<aside id="sidebar" class="sidebar hide" aria-label="Company navigation">
+  <a class="brand" href="#overview" data-go="overview"><span class="brand-mark">N</span><span><strong>NOETFIELD</strong><small>Company OS</small></span></a>
+  <button class="icon-btn sidebar-close" id="menu-close" type="button" aria-label="Close navigation" style="margin:0 12px 18px">×</button>
+  <div class="nav-label">Workspace</div>
+  <nav aria-label="Workspace sections">
+    <button class="side-link active" data-go="overview" type="button"><span class="glyph">⌂</span><span>Overview</span></button>
+    <button class="side-link" data-go="actions" type="button"><span class="glyph">☑</span><span>Action center</span><small class="nav-badge" id="nav-action-count">—</small></button>
+    <button class="side-link" data-go="connect" type="button"><span class="glyph">◇</span><span>Connect inbox</span><small class="nav-badge" id="nav-connect-count">0</small></button>
+    <button class="side-link" data-go="opportunities" type="button"><span class="glyph">◎</span><span>Opportunities</span></button>
+    <button class="side-link" data-go="relationships" type="button"><span class="glyph">♧</span><span>Relationships</span></button>
+    <button class="side-link" data-go="team" type="button"><span class="glyph">♙</span><span>Team & specialists</span></button>
+    <button class="side-link" data-go="workflows" type="button"><span class="glyph">▤</span><span>Work & workflows</span></button>
+    <button class="side-link" data-go="activity" type="button"><span class="glyph">⌁</span><span>Activity & runs</span></button>
+    <button class="side-link" data-go="revenue" type="button"><span class="glyph">◈</span><span>Revenue & results</span></button>
+  </nav>
+  <div class="nav-label">Management</div>
+  <nav aria-label="Management sections">
+    <button class="side-link" data-go="health" type="button"><span class="glyph">⚙</span><span>System health</span></button>
+    <button class="side-link" data-go="settings" type="button"><span class="glyph">≡</span><span>Workspace settings</span></button>
+  </nav>
+  <div class="sidebar-bottom">
+    <a class="side-link" href="https://www.noetfield.com/connect/" target="_blank" rel="noopener noreferrer"><span class="glyph">↗</span><span>Public Connect link</span></a>
+    <div class="brand" style="padding:14px 12px 0"><span class="brand-mark" style="width:31px;height:31px;font-size:18px;background:#2b405d">N</span><span class="workspace-name"><strong style="font-size:12px">Founder workspace</strong><small>Private operations</small></span></div>
+  </div>
+</aside>
+<div class="workspace">
+  <header class="topbar">
+    <div class="row">
+      <button class="icon-btn mobile-nav-open" id="menu-open" type="button" aria-expanded="false" aria-controls="sidebar" aria-label="Open navigation">☰</button>
+      <div class="breadcrumb"><span>Workspace</span><span>/</span><strong id="crumb-current">Overview</strong></div>
+    </div>
+    <div class="top-actions">
+      <div class="global-search hide" id="top-search">
+        <span aria-hidden="true">⌕</span>
+        <input id="search-input" type="search" placeholder="Search people, opportunities, work…" aria-label="Search loaded company records">
+        <span class="key-hint">⌘ K</span>
+      </div>
+      <span class="connection"><i class="state-dot" id="auth-state"></i><span id="status">Founder access required</span></span>
+      <button class="icon-btn hide" id="refresh" type="button" title="Refresh live data" aria-label="Refresh live data">↻</button>
+      <button class="btn alt hide" id="logout" type="button">Lock</button>
+    </div>
+    <div class="search-results" id="search-results" hidden role="region" aria-label="Search results"></div>
+  </header>
+  <section class="auth-gate" id="auth-gate">
+    <div class="auth-card">
+      <div class="auth-symbol" aria-hidden="true">◇</div>
+      <p class="eyebrow">Private company workspace</p>
+      <h1>Welcome to Company OS</h1>
+      <p>Access opportunities, business decisions, teams and work in one clear workspace.</p>
+      <label for="token">Founder access key</label>
+      <input class="input" type="password" id="token" autocomplete="off" placeholder="Enter your access key" aria-describedby="auth-help">
+      <button class="btn" type="button" id="connect">Unlock workspace</button>
+      <p id="auth-help" class="helper">Use the configured Founder access key from the existing Railway service. It is not included in this page or in any URL.</p>
+      <p class="helper">Your key is used only for authenticated requests and remains in this browser tab's session until locked.</p>
+    </div>
+  </section>
+  <main id="workspace-main" class="main">
+    <section id="app" class="hide">
+      <div class="page-head">
+        <div><div class="eyebrow">Noetfield / Founder workspace</div><h1 id="page-title">Company overview</h1><p id="page-description">What needs attention, what's moving, and what's producing results.</p></div>
+        <div class="head-actions"><span class="muted" id="last-updated">No data loaded</span><a class="btn alt" href="https://www.noetfield.com/connect/" target="_blank" rel="noopener noreferrer">Open public intake ↗</a></div>
+      </div>
+      <section class="view" data-view="overview">
+        <div class="metrics" id="metrics" aria-label="Company summary">
+          <div class="metric"><span>Loading live data</span><strong>—</strong></div>
+        </div>
+        <p class="footnote" id="data-note">Showing current verified source availability, not a financial prediction.</p>
+        <div class="overview-grid" style="margin-top:20px">
+          <div class="col-stack">
+            <section class="card">
+              <div class="card-head"><div><h2>Action center</h2><p>Work that is ready to review or needs attention.</p></div><button class="btn alt" data-go="actions">View work →</button></div>
+              <div class="sticky-summary"><div><span class="kpi-small" id="action-count">—</span><span class="kpi-caption" style="display:block" id="action-count-hint">Checking pending work</span></div><span class="tag neutral">Actual queue</span></div>
+              <div id="action-preview" aria-live="polite"><div class="empty">Loading recent work…</div></div>
+            </section>
+            <section class="card">
+              <div class="card-head"><div><h2>Connect · Opportunity inbox</h2><p>People and partnerships reaching out through your link.</p></div><button class="btn alt" data-go="connect">View all →</button></div>
+              <div id="connect-summary" aria-live="polite"><div class="empty">Checking incoming requests…</div></div>
+            </section>
+          </div>
+          <div class="col-stack">
+            <section class="card">
+              <div class="card-head"><div><h2>Operations at a glance</h2><p>Availability and capacity, not automated success claims.</p></div><button class="btn alt" data-go="health">Health →</button></div>
+              <div class="status-line"><b>Company roles</b><span class="kpi-small" id="team-total">—</span></div>
+              <div class="status-line"><b>Specialist capabilities</b><span class="kpi-small" id="capability-total">—</span></div>
+              <div class="status-line"><b>Activity this week</b><span class="kpi-small" id="activity-week">—</span></div>
+            </section>
+            <section class="card"><div class="card-head"><div><h2>Team & specialists</h2><p>Who is configured to support company work.</p></div><button class="btn alt" data-go="team">View team →</button></div><div id="team-summary">Loading team information…</div></section>
+            <section class="card"><div class="card-head"><h2>Share one opportunity link</h2></div><p class="helper">Send external partners, investors, event organizers and contributors through Noetfield Connect. Their submitted proposals stay traceable.</p><button class="btn" id="copy-link-main" type="button">Copy Connect link</button></section>
+          </div>
+        </div>
+      </section>
+      <section class="view" data-view="actions" hidden>
+        <div class="card"><div class="card-head"><div><h2>Assigned work</h2><p>Review the latest queued, prepared and completed records. Approving a draft records your review only.</p></div><label class="row" for="action-filter">Status <select class="input" id="action-filter"><option value="">All</option><option value="drafted">Prepared for review</option><option value="queued">Waiting to run</option><option value="running">In progress</option><option value="approved">Reviewed</option><option value="failed">Failed</option><option value="blocked">Waiting on another task</option></select></label></div>
+          <div class="scroll"><table><thead><tr><th>Work</th><th>Responsible team</th><th>Status</th><th>Next step</th><th>Action</th></tr></thead><tbody id="tasks"><tr><td colspan="5">Loading…</td></tr></tbody></table></div><p class="footnote" id="task-list-scope">Recent records only.</p>
+        </div>
+      </section>
+      <section class="view" data-view="connect" hidden>
+        <div class="metrics" style="grid-template-columns:repeat(2,minmax(0,1fr));max-width:620px">
+          <div class="metric"><span>Recent Connect requests</span><strong id="connect-count">—</strong><small>From linked intake feed</small></div>
+          <div class="metric"><span>Cases not archived or declined</span><strong id="connect-open">—</strong><small>Within recent returned records</small></div>
+        </div>
+        <p class="footnote" id="connect-scope">Source-linked records from the existing intake system.</p>
+        <section class="card" id="connect-desk"><h2>Incoming proposals & partnerships</h2><p class="muted">Review real requests from LinkedIn, partners, events, potential customers, investors and collaborators. You can record the review stage, owner, next action and date. A requested conversation is not a booked meeting; proposed work is not a completed agreement.</p><div class="row"><label for="connect-filter">Opportunity type</label><select id="connect-filter" class="input"><option value="">All types</option><option value="partnership">Partnership</option><option value="growth">GTM & distribution</option><option value="capital">Investor / capital</option><option value="people">Team / advisor</option><option value="events">Event / award</option><option value="business">Customer / pilot</option><option value="other">Other</option></select><button class="btn alt" id="refresh-connect" type="button">Refresh requests</button><span class="muted" id="connect-status" role="status" aria-live="polite">No records loaded</span></div><div class="scroll"><table><thead><tr><th>Reference</th><th>Opportunity / venture</th><th>Source</th><th>Review state</th><th>Review team</th><th>Next action / work</th></tr></thead><tbody id="connectrows"><tr><td colspan="6">Authenticate to view source-backed opportunities.</td></tr></tbody></table></div>
 <form id="connect-case-editor" class="hide" style="padding:19px;margin-top:18px;border:1px solid var(--line);border-radius:11px;background:#f8faf8">
-<h3 style="margin:0 0 4px">Review and assign next action</h3><p class="muted" id="connect-selected-id">Select a recorded case above.</p>
+<h3 style="margin:0 0 4px">Review opportunity and plan next step</h3><p class="muted" id="connect-selected-id">Select a recorded case above.</p>
 <div class="row" style="margin:14px 0"><label for="connect-stage">Stage</label>
 <select class="input" id="connect-stage"><option>NEW</option><option>QUALIFYING</option><option>QUALIFIED</option><option>ENGAGED</option><option>WAITING_FOUNDER</option><option>WAITING_EXTERNAL</option><option>DECLINED</option><option>CLOSED_WON</option><option>CLOSED_LOST</option><option>ARCHIVED</option></select>
-<label for="connect-owner">Review owner role</label><select class="input" id="connect-owner">
+<label for="connect-owner">Responsible review team</label><select class="input" id="connect-owner">
 <option value="">Not assigned</option><option value="founder">Founder</option><option value="partnerships">Partnerships</option><option value="sales_qualification">Revenue</option><option value="market_intelligence">Market Intelligence</option><option value="chief_of_staff">Chief of Staff</option><option value="roi_analyst">ROI Analyst</option><option value="product_strategy">Product Strategy</option><option value="engineering_operator">Engineering</option><option value="customer_success">Customer Success</option><option value="risk_governance">Trust &amp; Governance</option><option value="audience_router">Routing</option><option value="marketing_editorial">Marketing</option></select></div>
 <div class="row" style="align-items:flex-start;margin:14px 0">
-<label>Next concrete action <input id="connect-next" class="input" style="min-width:min(430px,90vw)" maxlength="900" placeholder="e.g. verify organizer and fee structure"></label>
-<label>Next action due <input id="connect-due" type="datetime-local" class="input"></label></div>
+<label>Next action <input id="connect-next" class="input" style="min-width:min(430px,90vw)" maxlength="900" placeholder="e.g. verify organizer and fee structure"></label>
+<label>Due date <input id="connect-due" type="datetime-local" class="input"></label></div>
 <div class="row" style="align-items:flex-start;margin:14px 0">
 <label>Evidence URL <input id="connect-evidence" class="input" style="min-width:min(420px,90vw)" maxlength="700" type="url" placeholder="https://..."></label>
 <label>Internal review notes <textarea id="connect-notes" class="input" style="min-width:min(420px,90vw);min-height:68px" maxlength="1800" placeholder="Evidence and context; no sensitive credentials"></textarea></label>
 </div><p class="muted">Updates are saved to the existing Company OS database. CLOSED_WON requires an evidence link and represents an operator-reported outcome—not verified cash collected. Review-owner role is not a confirmed human collaborator or external meeting.</p>
 <div class="row"><button type="submit" id="connect-save" class="btn">Save review &amp; next action</button><button type="button" id="connect-cancel" class="btn alt">Cancel</button><span id="connect-edit-status" class="muted" aria-live="polite"></span></div>
-</form></section><section class="card"><h2>Opportunity pipeline</h2><div class="row"><select id="brand" class="input"><option value="">All brand lanes</option><option value="noetfield">Noetfield</option><option value="buildworkflow">BuildWorkflow</option><option value="trustfield">TrustField</option><option value="signalforge">SignalForge</option><option value="buildrelay">BuildRelay</option><option value="portfolio">Portfolio</option></select><button class="btn" id="load">Load pipeline</button></div><div class="scroll"><table><thead><tr><th>Company / contact</th><th>Brand</th><th>Audience / intent</th><th>Fit</th><th>Est. value</th><th>Stage</th></tr></thead><tbody id="opps"></tbody></table></div></section><section class="card"><h2>Agent work queue & recommendations</h2><div class="scroll"><table><thead><tr><th>Agent</th><th>Task</th><th>Status</th><th>Recommendation</th><th>Control</th></tr></thead><tbody id="tasks"></tbody></table></div></section><div class="cols"><section class="card"><h2>Event stream</h2><div id="events"></div></section><section class="card"><h2>Run ledger</h2><div id="runs"></div></section></div></section></main><script>
+</form></section>
+      </section>
+      <section class="view" data-view="opportunities" hidden>
+        <div class="card"><div class="card-head"><div><h2>Recorded business opportunities</h2><p>Customers and deals entered in the Business OS pipeline. Connect proposals are tracked in the separate Connect inbox above.</p></div><span class="tag neutral"><span id="pipeline-records">—</span> recent records</span></div></div>
+        <section class="card"><h2>Business pipeline</h2><div class="row"><select id="brand" class="input"><option value="">All ventures</option><option value="noetfield">Noetfield</option><option value="buildworkflow">BuildWorkflow</option><option value="trustfield">TrustField</option><option value="signalforge">SignalForge</option><option value="buildrelay">BuildRelay</option><option value="portfolio">Portfolio</option></select><button class="btn" id="load">Load opportunities</button></div><div class="scroll"><table><thead><tr><th>Company / contact</th><th>Brand</th><th>Audience / intent</th><th>Fit</th><th>Est. value</th><th>Stage</th></tr></thead><tbody id="opps"></tbody></table></div></section>
+      </section>
+      <section class="view" data-view="relationships" hidden>
+        <div class="card"><div class="card-head"><div><h2>People from recorded opportunities</h2><p>Limited to contacts linked with Business OS opportunities; a complete cross-platform relationship graph is not yet connected here.</p></div><span class="tag neutral"><span id="relationship-count">—</span> people</span></div>
+          <div id="relationship-list" aria-live="polite"><div class="empty">Loading linked people…</div></div>
+        </div>
+      </section>
+      <section class="view" data-view="team" hidden>
+        <div class="card"><div class="card-head"><div><h2>Company team & specialist roles</h2><p>Roles and capabilities connected in the existing company registry. Expand a role to see technical details.</p></div></div>
+          <div id="agents"><div class="empty">Loading team roles…</div></div>
+        </div>
+        <section class="card" id="commercial-team"><h2>Revenue & customer team</h2><p class="muted">Create three internal work assignments for the existing revenue, customer success and marketing specialists. This prepares drafts and recommendations; it does not contact people or publish messages.</p><div class="row"><label for="commercial-brand">Venture</label><select id="commercial-brand" class="input"><option value="noetfield">Noetfield</option><option value="trustfield">TrustField</option><option value="signalforge">SignalForge</option></select><button class="btn" id="commission-commercial" type="button">Prepare team assignments</button><button class="btn alt" id="refresh-commercial" type="button">Refresh assignment status</button><span id="commercial-feedback" class="muted" aria-live="polite"></span></div><div id="commercial-roles" class="row" style="margin-top:15px" aria-live="polite"><p class="muted">Connect with Founder authentication to read actual status.</p></div></section>
+      </section>
+      <section class="view" data-view="workflows" hidden>
+        <div class="card"><div class="card-head"><div><h2>Recent work execution</h2><p>These are actual model runs recorded in Business OS. Workflow catalogs in other apps are not included until connected.</p></div><button class="btn alt" data-go="actions">Review assigned work →</button></div><div id="workflows-snapshot">Loading recent model runs…</div></div>
+        <section class="card">
+          <div class="card-head"><div><h2>Assign new internal work</h2><p>Create one actual task for an existing specialist. This requests an internal recommendation, not external messages or spending.</p></div></div>
+          <form id="new-work-form">
+            <div class="row" style="margin-bottom:15px">
+              <label>Responsible specialist<br><select class="input" name="role" required>
+                <option value="">Choose a team member</option>
+                <option value="chief_of_staff">Operations lead</option>
+                <option value="sales_qualification">Revenue qualification</option>
+                <option value="market_intelligence">Market research</option>
+                <option value="partnerships">Partnerships</option>
+                <option value="product_strategy">Product strategy</option>
+                <option value="engineering_operator">Engineering</option>
+                <option value="customer_success">Customer success</option>
+                <option value="marketing_editorial">Marketing & content</option>
+                <option value="roi_analyst">Business results</option>
+                <option value="risk_governance">Quality & permissions</option>
+                <option value="audience_router">Opportunity routing</option>
+              </select></label>
+              <label>Workspace<br><select class="input" name="brand">
+                <option value="noetfield">Noetfield</option><option value="portfolio">Portfolio</option>
+                <option value="buildworkflow">BuildWorkflow</option><option value="signalforge">SignalForge</option>
+              </select></label>
+            </div>
+            <label style="display:block;margin-bottom:14px;font-weight:650">What needs to be done?<br><input class="input" name="title" minlength="3" maxlength="160" style="width:100%;margin-top:5px" required placeholder="e.g. Evaluate three potential distribution partners"></label>
+            <label style="display:block;margin-bottom:14px;font-weight:650">Context and expected result<br><textarea class="input" name="objective" minlength="10" maxlength="1200" required style="width:100%;margin-top:5px" placeholder="Describe the goal, relevant context, and what a useful finished recommendation should contain."></textarea></label>
+            <div class="row"><button class="btn" id="create-work-button" type="submit">Create internal task</button><span id="create-work-feedback" role="status" aria-live="polite" class="muted"></span></div>
+          </form>
+        </section>
+      </section>
+      <section class="view" data-view="activity" hidden>
+        <div class="cols"><section class="card"><div class="card-head"><div><h2>Recorded activity</h2><p>Source-backed company events, including processing and failures.</p></div></div><div id="events">Loading activity…</div></section>
+        <section class="card"><div class="card-head"><div><h2>AI execution runs</h2><p>Model-backed work attempts and recorded completion states.</p></div></div><div id="runs">Loading runs…</div></section></div>
+      </section>
+      <section class="view" data-view="revenue" hidden>
+        <section class="card"><div class="card-head"><div><h2>What has been collected?</h2><p>Only real confirmed money belongs in collected revenue.</p></div></div><div id="revenue-state">Checking finance source…</div></section>
+        <section class="card"><div class="card-head"><div><h2>Estimated opportunity pipeline</h2><p>Unverified potential value. This is not booked or collected revenue.</p></div></div><div id="roi">Loading commercial estimates…</div></section>
+      </section>
+      <section class="view" data-view="health" hidden>
+        <section class="card"><div class="card-head"><div><h2>Services & processing</h2><p>Live endpoint checks, worker readiness and database availability.</p></div><button class="btn alt" type="button" data-go="health">Check again ↻</button></div><div id="system-health">Checking health…</div><details><summary class="muted">Technical context</summary><p class="helper" id="note">Not loaded.</p></details></section>
+        <section class="card"><h2>What a green indicator means</h2><p class="helper">A service reporting healthy confirms that endpoint and its stated checks passed. It does not mean every downstream workflow, external integration, or commercial outcome was independently verified.</p></section>
+      </section>
+      <section class="view" data-view="settings" hidden>
+        <section class="card"><h2>Founder workspace</h2><p class="helper">Your existing Founder access key protects management APIs. This version retains the current authentication backend. Use Lock when finished and do not share your access key.</p><button class="btn" data-go="health">Check company health →</button></section>
+        <section class="card"><h2>Public opportunity entry</h2><p class="helper">Use the same Noetfield Connect URL for customers, collaborators, investors, event organizers and potential partners.</p><a class="btn alt" href="https://www.noetfield.com/connect/" target="_blank" rel="noopener noreferrer">Open Connect ↗</a></section>
+      </section>
+    </section>
+  </main>
+</div>
+</div>
+<script src="/control/premium.js?v=4"></script>
+<script>
 const $=id=>document.getElementById(id);let token=sessionStorage.getItem('noos-founder-token')||'';$('token').value=token;
 function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 async function api(path,opts={}){const r=await fetch(path,{...opts,headers:{...(opts.headers||{}),Authorization:'Bearer '+token,'Content-Type':'application/json'}});const d=await r.json();if(!r.ok)throw new Error(d.detail||d.error||'Request failed');return d;}
 function oppRow(x){return '<tr><td><b>'+esc(x.company||x.name)+'</b><br>'+esc(x.name)+' · '+esc(x.email)+'</td><td>'+esc(x.brand)+'</td><td>'+esc(x.audience)+'<br>'+esc(x.intent)+'</td><td><span class="tag">'+x.score+'/100</span></td><td>'+Number(x.estimated_value).toLocaleString('en-CA',{style:'currency',currency:'CAD',maximumFractionDigits:0})+'</td><td><select data-stage="'+esc(x.id)+'">'+['new','qualified','proposal','negotiation','won','lost','nurture'].map(s=>'<option '+(s===x.stage?'selected':'')+'>'+s+'</option>').join('')+'</select> <button class="btn alt" data-delete="'+esc(x.id)+'">Delete</button></td></tr>'}
-async function refresh(){try{const [o,a,op,t,e,r,roi]=await Promise.all([api('/api/control/overview'),api('/api/control/org'),api('/api/control/opportunities'),api('/api/control/tasks'),api('/api/control/events'),api('/api/control/runs'),api('/api/control/roi')]);$('app').classList.remove('hide');$('status').textContent='Connected · '+new Date().toLocaleTimeString();$('metrics').innerHTML=Object.entries({...o.counts,weighted_pipeline_CAD:o.weighted_pipeline_cad}).map(([k,v])=>'<div class="metric"><strong>'+esc(k.includes('pipeline')?Number(v).toLocaleString('en-CA',{maximumFractionDigits:0}):v)+'</strong><span>'+esc(k.replaceAll('_',' '))+'</span></div>').join('');$('note').textContent=o.pipeline_note+' · LLM configured: '+(o.llm_configured?'yes':'no')+' · Worker: '+o.worker_interval_seconds+'s';$('agents').innerHTML='<p class="muted">Canonical company seats: '+esc(a.organization.company_role_count)+' · Runtime capabilities: '+esc(a.organization.runtime_executor_count)+' · Founder: '+esc(a.organization.founder.role_id)+'</p>'+a.seats.map(x=>'<p><b>'+esc(x.role_id)+' · '+esc(x.title)+'</b> <span class="tag">'+esc(x.activation_status)+'</span><br><span class="muted">Reports to: '+esc(x.manager_name)+' · Authority ceiling '+esc(x.max_authority)+' · Layer '+esc(x.layer)+'</span><br><span class="muted">Runtime capabilities: '+esc((x.runtime_role_names||[]).join(', ')||'Not yet wired')+'</span><br><span class="muted">'+esc(x.activation_meaning)+'</span></p>').join('');$('roi').innerHTML='<p><b>Events last 7d:</b> '+roi.events_last_7d+'</p>'+roi.brands.map(x=>'<p><b>'+esc(x.brand)+'</b> · '+x.leads+' leads · '+x.qualified+' qualified · '+Number(x.weighted_pipeline||0).toLocaleString('en-CA',{style:'currency',currency:'CAD',maximumFractionDigits:0})+' weighted</p>').join('')+'<p class="muted">'+esc(roi.actual_revenue)+' '+esc(roi.cost_tracking)+'</p>';$('opps').innerHTML=op.opportunities.map(oppRow).join('')||'<tr><td colspan="6">No opportunities yet.</td></tr>';$('tasks').innerHTML=t.tasks.map(x=>{let z={};try{z=JSON.parse(x.result||'{}')}catch{};const rec=z.recommendation||{};return '<tr><td>'+esc(x.company_role_id||'—')+' · '+esc(x.role)+'</td><td><b>'+esc(x.title)+'</b><br>'+esc(x.objective)+'<br><span class="muted">'+Number(x.pending_dependencies||0)+' / '+Number(x.dependency_count||0)+' dependencies pending</span></td><td>'+esc(x.status)+'</td><td>'+esc(rec.next_best_action||x.next_action)+'</td><td>'+(x.status==='drafted'?'<button class="btn alt" data-approve="'+esc(x.id)+'">Ratify record</button>':'—')+'</td></tr>'}).join('')||'<tr><td colspan="5">No tasks.</td></tr>';$('events').innerHTML=e.events.slice(0,12).map(x=>'<p><span class="tag">'+esc(x.status)+'</span> '+esc(x.event_type)+'<br><span class="muted">'+esc(x.brand)+' · '+esc(x.created_at)+'</span></p>').join('')||'<p class="muted">No events.</p>';$('runs').innerHTML=r.runs.slice(0,12).map(x=>'<p><b>'+esc(x.role)+'</b> · '+esc(x.provider)+' · '+esc(x.status)+'<br><span class="muted">'+x.input_tokens+' in / '+x.output_tokens+' out · '+esc(x.started_at)+'</span></p>').join('')||'<p class="muted">No model runs.</p>';}catch(err){$('status').textContent=err.message;}}
+async function refresh(){try{
+const requests=['/api/control/overview','/api/control/org','/api/control/opportunities','/api/control/tasks','/api/control/events','/api/control/runs','/api/control/roi'];
+const fetched=await Promise.allSettled(requests.map(x=>api(x)));
+if(fetched[0].status==='rejected')throw fetched[0].reason;
+const result=(i,fallback)=>fetched[i].status==='fulfilled'?fetched[i].value:fallback;
+const o=result(0,{counts:{},brands:[],pipeline_note:'Data unavailable',llm_configured:false,worker_interval_seconds:null});
+const a=result(1,{organization:{company_role_count:null,runtime_executor_count:null,founder:{role_id:'—'}},seats:[]});
+const op=result(2,{opportunities:[]}),t=result(3,{tasks:[]}),e=result(4,{events:[]}),r=result(5,{runs:[]});
+const roi=result(6,{brands:[],events_last_7d:null,actual_revenue:'Data currently unavailable',cost_tracking:'Unavailable',__source_unavailable:true});
+const missing=fetched.map((x,i)=>x.status==='rejected'?requests[i]:null).filter(Boolean);
+$('app').classList.remove('hide');$('status').textContent=missing.length?'Connected · '+missing.length+' data sources unavailable':'Connected · '+new Date().toLocaleTimeString();$('metrics').innerHTML=Object.entries({...o.counts,weighted_pipeline_CAD:o.weighted_pipeline_cad}).map(([k,v])=>'<div class="metric"><strong>'+esc(k.includes('pipeline')?Number(v).toLocaleString('en-CA',{maximumFractionDigits:0}):v)+'</strong><span>'+esc(k.replaceAll('_',' '))+'</span></div>').join('');$('note').textContent=o.pipeline_note+' · LLM configured: '+(o.llm_configured?'yes':'no')+' · Worker: '+o.worker_interval_seconds+'s';$('agents').innerHTML='<p class="muted">Canonical company seats: '+esc(a.organization.company_role_count)+' · Runtime capabilities: '+esc(a.organization.runtime_executor_count)+' · Founder: '+esc(a.organization.founder.role_id)+'</p>'+a.seats.map(x=>'<p><b>'+esc(x.role_id)+' · '+esc(x.title)+'</b> <span class="tag">'+esc(x.activation_status)+'</span><br><span class="muted">Reports to: '+esc(x.manager_name)+' · Authority ceiling '+esc(x.max_authority)+' · Layer '+esc(x.layer)+'</span><br><span class="muted">Runtime capabilities: '+esc((x.runtime_role_names||[]).join(', ')||'Not yet wired')+'</span><br><span class="muted">'+esc(x.activation_meaning)+'</span></p>').join('');$('roi').innerHTML='<p><b>Events last 7d:</b> '+roi.events_last_7d+'</p>'+roi.brands.map(x=>'<p><b>'+esc(x.brand)+'</b> · '+x.leads+' leads · '+x.qualified+' qualified · '+Number(x.weighted_pipeline||0).toLocaleString('en-CA',{style:'currency',currency:'CAD',maximumFractionDigits:0})+' weighted</p>').join('')+'<p class="muted">'+esc(roi.actual_revenue)+' '+esc(roi.cost_tracking)+'</p>';$('opps').innerHTML=op.opportunities.map(oppRow).join('')||'<tr><td colspan="6">No opportunities yet.</td></tr>';$('tasks').innerHTML=t.tasks.map(x=>{let z={};try{z=JSON.parse(x.result||'{}')}catch{};const rec=z.recommendation||{};return '<tr><td>'+esc(x.company_role_id||'—')+' · '+esc(x.role)+'</td><td><b>'+esc(x.title)+'</b><br>'+esc(x.objective)+'<br><span class="muted">'+Number(x.pending_dependencies||0)+' / '+Number(x.dependency_count||0)+' dependencies pending</span></td><td>'+esc(x.status)+'</td><td>'+esc(rec.next_best_action||x.next_action)+'</td><td>'+(x.status==='drafted'?'<button class="btn alt" data-approve="'+esc(x.id)+'">Ratify record</button>':'—')+'</td></tr>'}).join('')||'<tr><td colspan="5">No tasks.</td></tr>';$('events').innerHTML=e.events.slice(0,12).map(x=>'<p><span class="tag">'+esc(x.status)+'</span> '+esc(x.event_type)+'<br><span class="muted">'+esc(x.brand)+' · '+esc(x.created_at)+'</span></p>').join('')||'<p class="muted">No events.</p>';$('runs').innerHTML=r.runs.slice(0,12).map(x=>'<p><b>'+esc(x.role)+'</b> · '+esc(x.provider)+' · '+esc(x.status)+'<br><span class="muted">'+x.input_tokens+' in / '+x.output_tokens+' out · '+esc(x.started_at)+'</span></p>').join('')||'<p class="muted">No model runs.</p>';window.noosPremium.render({o,org:a,op,t,e,r,roi});window.noosPremium.setAuth(true,missing.length?'Some sections are temporarily unavailable':'Connected to production');}catch(err){$('status').textContent='Connection failed: '+err.message;window.noosPremium.setAuth(false,'Could not verify your access. Check the key or connection.');}}
 let connectCaseRecords=[],connectSelectedCase=null;
 function connectLocalDate(value){if(!value)return '';const d=new Date(value);if(Number.isNaN(d.valueOf()))return '';return new Date(d.getTime()-d.getTimezoneOffset()*60000).toISOString().slice(0,16);}
 function editConnectCase(id){
@@ -41,7 +236,7 @@ function editConnectCase(id){
 async function refreshConnect(){
   try{
     const d=await api('/api/control/connect-opportunities?limit=100');
-    connectCaseRecords=d.items||[];
+    connectCaseRecords=d.items||[];window.noosPremium.paintConnect(connectCaseRecords);
     const filter=$('connect-filter').value;
     const items=connectCaseRecords.filter(x=>!filter||x.category===filter);
     $('connectrows').innerHTML=items.map(x=>
@@ -58,7 +253,7 @@ async function refreshConnect(){
       const selected=connectCaseRecords.find(x=>x.intake_id===connectSelectedCase.intake_id);
       if(selected)connectSelectedCase=selected;
     }
-  }catch(e){$('connect-status').textContent='Not loaded: '+e.message;}
+  }catch(e){window.noosPremium.paintConnect(null);$('connect-status').textContent='Not loaded: '+e.message;}
 }
 $('connectrows').addEventListener('click',e=>{
   const button=e.target.closest('[data-edit-connect]');
@@ -104,9 +299,11 @@ async function refreshCommercial(){try{const b=$('commercial-brand').value;const
 $('commercial-brand').addEventListener('change',()=>{if(token)refreshCommercial();});
 $('refresh-commercial').onclick=refreshCommercial;
 $('commission-commercial').onclick=async()=>{if(!token){$('commercial-feedback').textContent='Founder authentication required.';return;}const brand=$('commercial-brand').value;if(!confirm('Create exactly three internal draft tasks for '+brand+'? No messages or social posts will be sent.'))return;try{const out=await api('/api/control/commercial-team/commission',{method:'POST',body:JSON.stringify({brand})});$('commercial-feedback').textContent=out.already_commissioned?'Already commissioned; existing task IDs reused.':'Internal tasks queued; no external actions.';await refreshCommercial();await refresh();}catch(e){$('commercial-feedback').textContent=e.message;}};
-$('connect').onclick=()=>{token=$('token').value.trim();sessionStorage.setItem('noos-founder-token',token);refresh();refreshConnect();};$('refresh').onclick=refresh;$('logout').onclick=()=>{sessionStorage.removeItem('noos-founder-token');token='';$('token').value='';$('app').classList.add('hide');$('status').textContent='Locked';};
+$('connect').onclick=async()=>{const supplied=$('token').value.trim();if(!supplied){$('status').textContent='Enter your Founder access key.';return;}token=supplied;$('connect').disabled=true;$('status').textContent='Checking access…';try{await api('/api/control/overview');sessionStorage.setItem('noos-founder-token',token);$('token').value='';await Promise.all([refresh(),refreshConnect(),refreshCommercial()]);}catch(e){sessionStorage.removeItem('noos-founder-token');token='';$('status').textContent='Access could not be verified: '+e.message;window.noosPremium.setAuth(false,'Access not verified. Check the key or connection.');}finally{$('connect').disabled=false;}};$('refresh').onclick=refresh;$('logout').onclick=()=>{sessionStorage.removeItem('noos-founder-token');token='';$('token').value='';$('app').classList.add('hide');window.noosPremium.setAuth(false,'Workspace locked.');};
 $('load').onclick=async()=>{try{const b=$('brand').value;const d=await api('/api/control/opportunities'+(b?'?brand='+b:''));$('opps').innerHTML=d.opportunities.map(oppRow).join('')||'<tr><td colspan="6">No opportunities.</td></tr>';}catch(e){$('status').textContent=e.message;}};
 $('opps').addEventListener('change',async e=>{const id=e.target.dataset.stage;if(!id)return;try{await api('/api/control/opportunities/'+id,{method:'PATCH',body:JSON.stringify({stage:e.target.value})});refresh();}catch(x){$('status').textContent=x.message;}});$('opps').addEventListener('click',async e=>{const id=e.target.dataset.delete;if(!id)return;if(!confirm('Delete this contact and every linked opportunity, workflow task, event payload and memory in this brand lane?'))return;try{await api('/api/control/opportunities/'+id,{method:'DELETE'});refresh();}catch(x){$('status').textContent=x.message;}});
 $('tasks').addEventListener('click',async e=>{const id=e.target.dataset.approve;if(!id)return;try{await api('/api/control/tasks/'+id+'/approve',{method:'POST'});refresh();}catch(x){$('status').textContent=x.message;}});
 if(token){refresh();refreshCommercial();refreshConnect();}
-</script></body></html>
+</script>
+</body>
+</html>
