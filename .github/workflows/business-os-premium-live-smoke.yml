@@ -1,0 +1,39 @@
+name: Founder Control Plane live smoke
+on:
+  pull_request:
+    paths:
+      - "apps/business-os-core/verify_control_live.py"
+      - ".github/workflows/business-os-premium-live-smoke.yml"
+  push:
+    branches: [platform/business-os-core-v1]
+    paths:
+      - "apps/business-os-core/verify_control_live.py"
+      - ".github/workflows/business-os-premium-live-smoke.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify-live-readonly:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Verify production page, assets, readiness and auth walls
+        run: python apps/business-os-core/verify_control_live.py
+      - name: Install browser QA dependency
+        run: |
+          python -m pip install --quiet playwright
+          python -m playwright install chromium
+      - name: Exercise live-hosted UI with fixture-only protected API responses
+        run: python apps/business-os-core/verify_control_browser.py
+      - name: Save visual QA fixtures
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: premium-founder-control-visual-qa
+          path: qa-artifacts/*.png
+          if-no-files-found: ignore
+          retention-days: 7
