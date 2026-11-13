@@ -20,6 +20,8 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+      - name: Install FastAPI for route-level inbox tests
+        run: python -m pip install --quiet "fastapi==0.115.12"
       - run: python -m py_compile apps/business-os-core/app.py apps/business-os-core/core.py
       - name: Verify premium Founder workspace interactions and source-backed states
         run: node apps/business-os-core/test_control_premium.cjs
