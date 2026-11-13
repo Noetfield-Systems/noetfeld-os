@@ -162,6 +162,15 @@ class CompanyFounderContinuousBridgeTests(unittest.TestCase):
         other,created=founder_bridge.admit(portfolio,projects)
         self.assertTrue(created)
         self.assertNotEqual(other,tid)
+        with core.connect() as db:
+            scopes={row["id"]:row["brand"] for row in db.execute(
+                "SELECT id,brand FROM tasks WHERE id IN (?,?)",(tid,other)).fetchall()}
+        self.assertEqual(scopes[tid],"noetfield-earnloop")
+        self.assertEqual(scopes[other],"founder-independent-venture")
+        self.assertNotEqual(scopes[tid],scopes[other])
+        # No generic 'noetfield' task branding which would read shared
+        # unrelated customer or venture memories at specialist runtime.
+        self.assertNotIn("noetfield",scopes.values())
         # A Founder-portfolio independent venture must never be silently
         # reclassified as a Noetfield Systems Inc. subsidiary.
         with self.assertRaises(founder_bridge.UnsafeRequest):
@@ -194,6 +203,7 @@ class CompanyFounderContinuousBridgeTests(unittest.TestCase):
         # End-to-end local queue owns the exact original work after admission.
         claimed=core.claim("tasks")
         self.assertEqual(claimed["id"],accepted)
+        self.assertEqual(claimed["brand"],"noetfield-earnloop")
         core.process_task(claimed)
         with core.connect() as db:
             self.assertEqual(db.execute("SELECT status FROM tasks WHERE id=?",

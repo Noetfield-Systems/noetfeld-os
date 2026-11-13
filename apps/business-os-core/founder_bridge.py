@@ -191,7 +191,13 @@ def admit(item,project_allowlist):
         action=("Prepare an internal evidence-linked specialist recommendation only. "
                 "No outreach, external effect, spend, deploy or verification claim. "
                 "Escalate any required Governor permit to Founder.")
-        tid=core.add_task(db,None,None,"noetfield",role,title,core.clean(task,1800),action)
+        # The original project is the canonical memory/work context. A
+        # portfolio-independent venture must never retrieve Noetfield Inc.
+        # memories, and two sibling products must not silently share a brand
+        # context merely because one parent owns their contracts.
+        # PROJECT_PATTERN and the verified project registry have both already
+        # been enforced by validate_request().
+        tid=core.add_task(db,None,None,project,role,title,core.clean(task,1800),action)
         db.execute("UPDATE tasks SET priority_rank=? WHERE id=?", (max(10,100-priority),tid))
         db.execute("""INSERT INTO founder_org_bindings
           (request_id,payload_digest,tenant_scope,project_id,canonical_task_id,created_at)
