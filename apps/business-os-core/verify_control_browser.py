@@ -6,9 +6,38 @@ import json
 import os
 from pathlib import Path
 from urllib.parse import urlparse
+from http.server import ThreadingHTTPServer,BaseHTTPRequestHandler
+from threading import Thread
 from playwright.sync_api import sync_playwright
 
 BASE=os.getenv("BUSINESS_OS_URL","https://business-os-core-production.up.railway.app").rstrip("/")
+PREVIEW=os.getenv("CONTROL_UI_PREVIEW")=="1"
+SERVER=None
+if PREVIEW:
+    static_dir=Path(__file__).parent/"static"
+    class PreviewHandler(BaseHTTPRequestHandler):
+        def log_message(self,*_args):pass
+        def do_GET(self):
+            path=urlparse(self.path).path
+            routes={"/control":("control.html","text/html; charset=utf-8"),
+                    "/control/premium.css":("control-premium.css","text/css; charset=utf-8"),
+                    "/control/premium.js":("control-premium.js","text/javascript; charset=utf-8")}
+            if path in routes:
+                filename,content_type=routes[path]
+                body=(static_dir/filename).read_bytes()
+                self.send_response(200);self.send_header("Content-Type",content_type)
+                self.send_header("Content-Length",str(len(body)));self.end_headers()
+                self.wfile.write(body)
+                return
+            if path in {"/health","/ready","/health/deep"}:
+                body=json.dumps({"ok":True,"ready":True,"worker":"running","storage":"ready"}).encode()
+                self.send_response(200);self.send_header("Content-Type","application/json")
+                self.end_headers();self.wfile.write(body)
+                return
+            self.send_error(404)
+    SERVER=ThreadingHTTPServer(("127.0.0.1",0),PreviewHandler)
+    Thread(target=SERVER.serve_forever,daemon=True).start()
+    BASE="http://127.0.0.1:"+str(SERVER.server_port)
 OUT=Path("qa-artifacts")
 OUT.mkdir(exist_ok=True)
 fixture={
@@ -207,7 +236,8 @@ with sync_playwright() as p:
     assert page.locator("#auth-form").is_visible(), "Failed authentication must not unlock workspace"
     assert not errors, "Browser runtime errors after failed authentication: "+"; ".join(errors[:4])
     browser.close()
-print(json.dumps({"status":"PASS","ui":"production-hosted","protected_api_data":"mocked fixtures",
+if SERVER is not None:SERVER.shutdown()
+print(json.dumps({"status":"PASS","ui":"branch-preview" if PREVIEW else "production-hosted","protected_api_data":"mocked fixtures",
                   "views_tested":11,"mobile_width":390,"auth_and_password_store":"mocked browser API verified","actual_external_mutations":0,
                   "mocked_api_calls":len(mock_calls),
                   "screenshots":[str(x) for x in OUT.glob("*.png")]}))
