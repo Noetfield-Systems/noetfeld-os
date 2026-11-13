@@ -12,7 +12,7 @@ assert.equal(inline.length,1,"Expected one existing application controller");
 new vm.Script(inline[0],{filename:"control-inline.js"});
 new vm.Script(ui,{filename:"control-premium.js"});
 assert.match(html,/\/control\/premium\.css\?v=6/);
-assert.match(html,/\/control\/premium\.js\?v=9/);
+assert.match(html,/\/control\/premium\.js\?v=10/);
 assert.match(html,/type="password" id="token"/);
 assert.match(html,/<form id="auth-form" method="post" action="\/control" autocomplete="on">/);
 assert.match(html,/name="username" autocomplete="username"/);
@@ -78,7 +78,7 @@ const context=vm.createContext({document,window,location,history,navigator:{},co
 vm.runInContext(ui,context,{timeout:1000});
 assert.ok(window.noosPremium?.render,"Premium workspace did not register");
 const fixture={
- o:{counts:{opportunities:2,pending_tasks:1055},llm_configured:true},
+ o:{counts:{opportunities:2,pending_tasks:1055},llm_configured:true,model_connection:{state:"AUTH_REJECTED",last_error_code:"HTTP_401",observed_at:"2026-11-13T06:15:00Z"}},
  org:{organization:{company_role_count:8,runtime_executor_count:11},seats:[{title:"Chief of Staff",role_id:"N-01",activation_status:"mapped_existing",runtime_role_names:["Operations"],manager_name:"Founder"}]},
  op:{opportunities:[{id:"opp-test",name:"Example Founder",company:"Example Org",email:"someone@example.invalid",stage:"new",brand:"noetfield"}]},
  t:{tasks:[{id:"task-test",title:"Review potential partner",status:"drafted",role:"partnerships",company_role_title:"Partnerships",brand:"noetfield",next_action:"Verify audience",result:null}]},
@@ -88,6 +88,9 @@ const fixture={
 };
 window.noosPremium.render(fixture);
 assert.match(elements.get("metrics").innerHTML,/1,055/);
+assert.match(elements.get("llm-config-value").textContent,/Auth rejected.*HTTP_401/);
+assert.ok(elements.get("llm-config-value").className.includes("bad"));
+assert.match(html,/Model connection/);
 assert.match(elements.get("metrics").innerHTML,/Not connected/);
 assert.match(elements.get("action-preview").innerHTML,/Work requiring action/);
 assert.match(elements.get("action-preview").innerHTML,/Incoming opportunities/);

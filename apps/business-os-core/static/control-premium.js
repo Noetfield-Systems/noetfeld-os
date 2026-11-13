@@ -340,8 +340,21 @@ function render(data){
   ).join("");
   renderSummaryMetrics(null);
   $('worker-cycle-value').textContent=o?.worker_interval_seconds?('Every '+o.worker_interval_seconds+' seconds'):'Unknown';
-  $('llm-config-value').textContent=o?.llm_configured===true?'✓ Configured':o?.llm_configured===false?'Needs setup':'Not verified';
-  $('llm-config-value').className='tag '+(o?.llm_configured===true?'good':'warn');
+  const modelHealth=o?.model_connection||{state:o?.llm_configured?"CONFIGURED_UNTESTED":"NOT_CONFIGURED"};
+  const modelState=modelHealth.state||"CONFIGURED_UNTESTED";
+  const modelLabels={
+    MODEL_RESPONSE_RECORDED:"Model answered",
+    AUTH_REJECTED:"Auth rejected"+(modelHealth.last_error_code?" · "+modelHealth.last_error_code:""),
+    PROVIDER_ERROR:"Provider error"+(modelHealth.last_error_code?" · "+modelHealth.last_error_code:""),
+    CONFIGURED_UNTESTED:"Configured · unverified",
+    NOT_CONFIGURED:"Not connected"
+  };
+  $('llm-config-value').textContent=modelLabels[modelState]||"Not verified";
+  $('llm-config-value').className='tag '+(modelState==="MODEL_RESPONSE_RECORDED"?"good":
+     (modelState==="AUTH_REJECTED"||modelState==="PROVIDER_ERROR"?"bad":"warn"));
+  $('llm-config-value').title=modelHealth.observed_at?
+    "Last persisted model call: "+date(modelHealth.observed_at):
+    "No successful model call observed from this Company OS source";
   if(!dashboardSnapshot)renderActivityTrend(null);
   // The dashboard endpoint supplies brand-scoped counts and real daily activity history.
   // Summary request begins after authenticated workspace unlocks.

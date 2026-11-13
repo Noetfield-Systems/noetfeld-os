@@ -215,6 +215,31 @@ class OperationsRelayTests(unittest.TestCase):
                 "SELECT title,status FROM tasks WHERE title LIKE 'Model retry %'")}
         self.assertEqual(states,{"yes":"queued","no":"drafted","limit":"drafted"})
 
+    def test_latest_provider_truth_not_set_configuration_badge(self):
+        self.assertEqual(operations_relay.provider_connection_status()["state"],"NOT_CONFIGURED")
+        os.environ.update({"LLM_BASE_URL":"https://provider.invalid/v1",
+                           "LLM_API_KEY":"fixture-not-live","LLM_MODEL":"fixture"})
+        self.assertEqual(operations_relay.provider_connection_status()["state"],"CONFIGURED_UNTESTED")
+        with core.connect() as db:
+            db.execute("INSERT INTO runs VALUES(?,?,?,?,?,?,?,?,?,?,?)",
+                ("run_failed","task-diagnosis","engineering_operator","provider_error","fixture",
+                 "degraded",0,0,core.now(),core.now(),
+                 '{"model_error_code":"HTTP_401","assessment":"auth failed"}'))
+        health=operations_relay.provider_connection_status()
+        self.assertEqual(health["state"],"AUTH_REJECTED")
+        self.assertEqual(health["last_error_code"],"HTTP_401")
+        self.assertFalse(health["provider_authenticated"])
+        self.assertNotIn("fixture-not-live",str(health))
+        with core.connect() as db:
+            db.execute("INSERT INTO runs VALUES(?,?,?,?,?,?,?,?,?,?,?)",
+                ("run_success","task-followup","chief_of_staff","openai-compatible","fixture",
+                 "completed",14,22,core.now(),core.now(),
+                 '{"assessment":"real model response"}'))
+        recovered=operations_relay.provider_connection_status()
+        self.assertEqual(recovered["state"],"MODEL_RESPONSE_RECORDED")
+        self.assertTrue(recovered["provider_authenticated"])
+        self.assertIsNone(recovered["last_error_code"])
+
     def test_provider_errors_classify_without_raw_url_or_secret(self):
         from urllib.error import HTTPError, URLError
         cases=[(HTTPError("https://provider.invalid/?token=SECRET",401,

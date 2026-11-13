@@ -265,6 +265,7 @@ def overview(authorization:str|None=Header(default=None)):
     authorize(authorization)
     result=core.overview()
     result.update({"worker_interval_seconds":INTERVAL,
+      "model_connection":operations_relay.provider_connection_status(),
       "llm_configured":bool(os.getenv("LLM_BASE_URL") and os.getenv("LLM_API_KEY") and os.getenv("LLM_MODEL")),
       "policy":"Analysis and internal reversible tasks are autonomous. External messaging, payments, deployments, legal/investment commitments require Founder approval."})
     return result

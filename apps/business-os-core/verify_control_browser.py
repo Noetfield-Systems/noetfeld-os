@@ -47,6 +47,8 @@ fixture={
                   "platform_intake_pending":0,"platform_intake_tasks_created":1},
         "weighted_pipeline_cad":1250,"pipeline_note":"Estimated value only",
         "llm_configured":True,"worker_interval_seconds":5,
+        "model_connection":{"state":"AUTH_REJECTED","last_error_code":"HTTP_401",
+                            "provider_authenticated":False,"observed_at":"2026-11-13T06:15:00Z"},
         "brands":[]
     },
     "org":{
@@ -225,6 +227,8 @@ with sync_playwright() as p:
     page.locator("#save-password").check()
     page.locator("#auth-form").evaluate("(form) => form.requestSubmit()")
     page.locator("#metrics .metric").first.wait_for(timeout=30000)
+    page.wait_for_function("document.querySelector('#llm-config-value')?.textContent?.includes('HTTP_401')")
+    assert "bad" in (page.locator("#llm-config-value").get_attribute("class") or "")
     page.wait_for_function("window.__credentialStores===1")
     assert page.evaluate("window.__storedCredential.id")=="founder", "Password manager identity is wrong"
     assert page.evaluate("window.__storedCredential.password")=="FIXTURE_TOKEN_NOT_A_REAL_SECRET"
