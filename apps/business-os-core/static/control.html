@@ -125,7 +125,7 @@
               <div class="ref-section-heading"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12h5l3-8 4 16 3-8h5"/></svg><h2>Operations health</h2></div>
               <div class="health-lines">
                 <div class="health-line"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2"/></svg><span>Worker cycle</span><strong id="worker-cycle-value">Checking…</strong></div>
-                <div class="health-line"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5a4 4 0 0 0-7 2 4 4 0 0 0-1 7 4 4 0 0 0 6 5l2 1V5Zm0 0a4 4 0 0 1 7 2 4 4 0 0 1 1 7 4 4 0 0 1-6 5l-2 1"/></svg><span>LLM configuration</span><span class="tag neutral" id="llm-config-value">Checking…</span></div>
+                <div class="health-line"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5a4 4 0 0 0-7 2 4 4 0 0 0-1 7 4 4 0 0 0 6 5l2 1V5Zm0 0a4 4 0 0 1 7 2 4 4 0 0 1 1 7 4 4 0 0 1-6 5l-2 1"/></svg><span>Model connection</span><span class="tag neutral" id="llm-config-value">Checking…</span></div>
                 <div class="health-line"><svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m12 2 9 5-9 5-9-5 9-5ZM3 12l9 5 9-5M3 17l9 5 9-5"/></svg><span>Agent capacity</span><strong id="capacity-inline">—</strong></div>
               </div>
               <span class="screen-reader-only" id="team-total">—</span><span class="screen-reader-only" id="capability-total">—</span>
@@ -255,7 +255,7 @@
   </main>
 </div>
 </div>
-<script src="/control/premium.js?v=9"></script>
+<script src="/control/premium.js?v=10"></script>
 <script>
 const $=id=>document.getElementById(id);let token=sessionStorage.getItem('noos-founder-token')||'';$('token').value=token;
 function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
