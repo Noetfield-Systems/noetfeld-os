@@ -1209,7 +1209,9 @@ def process_task(t):
  elif (t.get("ai_consent") or internal_handoff) and os.getenv("LLM_BASE_URL") and os.getenv("LLM_API_KEY") and os.getenv("LLM_MODEL"):
   try:
    from urllib.request import Request,urlopen
+   from urllib.error import HTTPError
    base=os.getenv("LLM_BASE_URL").rstrip("/");model=os.getenv("LLM_MODEL")
+   model_route="primary"
    manager_name=FOUNDER_SEAT["title"] if manager_role==FOUNDER_SEAT["role_id"] else COMPANY_ROLE_BY_ID[manager_role]["title"]
    sysmsg=(f"You are {agent_name}, an internal execution capability assigned to company seat "
     f"{company_seat['role_id']} — {company_seat['title']}. "
@@ -1227,11 +1229,32 @@ def process_task(t):
        "Do not claim you ran code, passed tests or applied a fix." if internal_handoff else ""))
    body={"model":model,"temperature":0.2,"max_tokens":600,"messages":[{"role":"system","content":sysmsg},{"role":"user","content":json.dumps({"role":role,"context":ctx,"task":t["objective"],"memory":mem})}]}
    req=Request(base+"/chat/completions",data=json.dumps(body).encode(),headers={"Authorization":"Bearer "+os.getenv("LLM_API_KEY"),"Content-Type":"application/json"})
-   with urlopen(req,timeout=20) as resp:data=json.loads(resp.read().decode())
+   try:
+    with urlopen(req,timeout=20) as resp:data=json.loads(resp.read().decode())
+   except HTTPError as primary_error:
+    # Reuse existing Noetfield platform provider only for Company OS's own
+    # authenticated/scope-bound diagnostic work. No customer/tenant data
+    # crosses to a second model provider through this failover.
+    if (not internal_handoff or primary_error.code not in (401,403)
+        or not os.getenv("LLM_FALLBACK_API_KEY")
+        or not os.getenv("LLM_FALLBACK_MODEL")):
+     raise
+    model=os.getenv("LLM_FALLBACK_MODEL")
+    body["model"]=model
+    fallback=Request("https://openrouter.ai/api/v1/chat/completions",
+                     data=json.dumps(body).encode(),
+                     headers={"Authorization":"Bearer "+os.getenv("LLM_FALLBACK_API_KEY"),
+                              "Content-Type":"application/json",
+                              "HTTP-Referer":"https://www.noetfield.com",
+                              "X-Title":"Noetfield Company OS"})
+    with urlopen(fallback,timeout=20) as resp:data=json.loads(resp.read().decode())
+    model_route="noetfield_openrouter_fallback"
    out=data["choices"][0]["message"]["content"]
    try:result=json.loads(out)
    except Exception:result={"assessment":clean(out,1500),"next_best_action":t["next_action"],"risk_flags":[],"priority":"normal"}
    use=data.get("usage") or {};it=int(use.get("prompt_tokens") or 0);ot=int(use.get("completion_tokens") or 0);provider="openai-compatible"
+   if internal_handoff:
+    result["model_route"]=model_route
   except Exception as ex:
    provider="provider_error"
    error_meta=operations_relay.classify_provider_error(ex)
@@ -1251,6 +1274,7 @@ def process_task(t):
  if internal_handoff:
   print("company_agent_handoff="+json.dumps({
    "task_id":t["id"],"role":role,"provider":provider,
+   "model_route":result.get("model_route","primary") if provider=="openai-compatible" else None,
    "model_error_code":error_meta["code"] if error_meta else None,
    "model_retryable":error_meta["retryable"] if error_meta else None,
    "input_tokens":it,"output_tokens":ot,
