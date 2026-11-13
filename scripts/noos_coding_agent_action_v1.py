@@ -95,6 +95,10 @@ def queue_issue(oidc_token):
     if not isinstance(payload, dict):
         raise RuntimeError("FOUNDER_WORKPACKET_NOT_OBJECT")
     expected_id = "noos-issue-" + str(issue["number"])
+    # Founder creates the issue before GitHub allocates its number; replace the
+    # unambiguous placeholder with the actual authenticated event identifier.
+    if payload.get("workpacket_id") == "noos-issue-auto":
+        payload["workpacket_id"] = expected_id
     if (payload.get("workpacket_id") != expected_id
             or payload.get("repo") != REPO or payload.get("founder_authorized") is not True):
         raise RuntimeError("FOUNDER_WORKPACKET_SCOPE_MISMATCH")
@@ -106,6 +110,8 @@ def queue_issue(oidc_token):
     if not isinstance(followups,list) or len(followups)>2:
         raise RuntimeError("WORKPACKET_FOLLOWUPS_OUT_OF_SCOPE")
     for index, next_job in enumerate(followups,1):
+        if isinstance(next_job,dict) and next_job.get("workpacket_id")=="noos-issue-auto-next-"+str(index):
+            next_job["workpacket_id"]=expected_id+"-next-"+str(index)
         if (not isinstance(next_job,dict)
             or next_job.get("workpacket_id")!=expected_id+"-next-"+str(index)
             or next_job.get("repo")!=REPO
