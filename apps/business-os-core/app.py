@@ -411,6 +411,57 @@ def intake_signals(authorization:str|None=Header(default=None),limit:int=50):
             output.append(item)
     return {"signals":output,"source_of_truth":"Noetfield Platform API public_intakes","pii_included":False}
 
+@app.get("/api/internal/connect/cases/{intake_id}",include_in_schema=False)
+def source_backed_connect_case(intake_id:str,
+                               x_noetfield_connect_read_token:str|None=Header(default=None)):
+    """Scoped, PII-free readback of actual source feed, tasks and model runs.
+
+    Uses a dedicated read-only credential; never accepts a Founder API token
+    as a substitute, never creates tasks, and never claims external effects.
+    """
+    import hmac
+    expected=os.getenv("CONNECT_BUSINESS_OS_READ_TOKEN","")
+    if len(expected)<32:
+        raise HTTPException(503,"Connect integration not configured")
+    if not x_noetfield_connect_read_token or not hmac.compare_digest(
+            expected,x_noetfield_connect_read_token):
+        raise HTTPException(401,"Connect integration authentication required")
+    if not re.fullmatch(r"INT-[A-Z0-9]{12}",intake_id):
+        raise HTTPException(422,"INVALID_SOURCE_INTAKE_ID")
+    with core.connect() as db:
+        row=db.execute("""SELECT s.intake_id,s.status AS signal_state,
+               s.event_id,c.stage AS case_stage,c.review_owner_role,c.version
+               FROM platform_intake_signals s LEFT JOIN connect_cases c
+                 ON c.intake_id=s.intake_id
+               WHERE s.intake_id=? AND s.vector='external-opportunities'""",
+               (intake_id,)).fetchone()
+        if row is None:
+            raise HTTPException(404,"SOURCE_NOT_IN_COMPANY_OS")
+        tasks=[dict(x) for x in db.execute("""SELECT id AS task_id,role,status,updated_at
+             FROM tasks WHERE event_id=? ORDER BY created_at ASC LIMIT 40""",
+             (row["event_id"],)).fetchall()]
+        runs=[dict(x) for x in db.execute("""SELECT r.id AS run_id,r.status,r.role,
+                   r.started_at,r.finished_at
+              FROM runs r JOIN tasks t ON t.id=r.task_id
+              WHERE t.event_id=? ORDER BY r.started_at DESC LIMIT 40""",
+              (row["event_id"],)).fetchall()]
+    return JSONResponse({
+        "found":True,"source_intake_id":intake_id,
+        "source":"existing_company_os_core",
+        "signal_state":row["signal_state"],
+        "case_stage":row["case_stage"] or "NEW",
+        "review_owner_role":row["review_owner_role"],
+        "case_version":row["version"] or 1,
+        "task_count":len(tasks),"tasks":tasks,
+        "run_count":len(runs),"runs":runs,
+        "external_effects_verified":False,
+        "independent_receipts_verified":False,
+        "payment_collected_verified":False,
+        "notes":"Existing stored tasks and runtime runs only. Task queued, drafted "
+                "or approved is not external execution or verified outcome.",
+    },headers={"Cache-Control":"no-store"})
+
+
 @app.get("/api/control/connect-opportunities")
 def connect_opportunities(authorization:str|None=Header(default=None),limit:int=50):
     """Founder-authenticated read-only relationship and opportunity desk.
