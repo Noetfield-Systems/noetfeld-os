@@ -72,6 +72,35 @@ class OperationsRelayTests(unittest.TestCase):
         core.process_task(manager)
         self.assertEqual(len(operations_relay.snapshot()["handoffs"]),2)
 
+
+    def test_dual_401_preserves_stage_without_credentials(self):
+        from unittest.mock import patch
+        from urllib.error import HTTPError
+        with core.connect() as db:
+            db.execute("INSERT INTO state(key,value) VALUES(?,?)",
+                ("founder_bridge_last_rejected_projects",json.dumps([{
+                "reason_code":"project_not_allowed","project_id":"noetfield-earnloop",
+                "company_id":"noetfield-systems-inc"}])))
+        operations_relay.tick()
+        os.environ.update({"LLM_BASE_URL":"https://primary.invalid/v1",
+            "LLM_API_KEY":"primary-secret-fixture","LLM_MODEL":"model-a",
+            "LLM_FALLBACK_API_KEY":"fallback-secret-fixture",
+            "LLM_FALLBACK_MODEL":"model-b"})
+        seen=[]
+        def deny(req,timeout=None):
+            seen.append(req.full_url)
+            raise HTTPError(req.full_url,401,"invalid token",{},None)
+        with patch("urllib.request.urlopen",side_effect=deny):
+            task=core.claim("tasks")
+            core.process_task(task)
+        self.assertEqual(len(seen),2)
+        with core.connect() as db:
+            row=db.execute("SELECT result FROM tasks WHERE id=?",(task["id"],)).fetchone()
+        payload=json.loads(row["result"])
+        self.assertEqual(payload["model_error_code"],"HTTP_401")
+        self.assertEqual(payload["model_route_failed"],"noetfield_openrouter_fallback")
+        self.assertNotIn("secret",str(payload))
+
     def test_existing_platform_openrouter_fallback_is_internal_only(self):
         from unittest.mock import patch
         from urllib.error import HTTPError
