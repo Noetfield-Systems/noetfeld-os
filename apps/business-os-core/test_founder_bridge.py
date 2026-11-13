@@ -308,12 +308,19 @@ class CompanyFounderContinuousBridgeTests(unittest.TestCase):
         self.assertEqual(result["rejection_reasons"],{"project_not_allowed":1})
         reported=founder_bridge.health()
         self.assertEqual(reported["last_cycle_rejection_reasons"],{"project_not_allowed":1})
+        self.assertEqual(reported["last_cycle_rejected_projects"],[{
+            "reason_code":"project_not_allowed",
+            "project_id":"unapproved-private-tenant","company_id":"noetfield-systems-inc"}])
         self.assertNotIn("secret.customer",str(result)+str(reported))
         self.assertNotIn(item["request_id"],str(result)+str(reported))
         with core.connect() as db:
             saved=db.execute("SELECT value FROM state WHERE key='founder_bridge_last_rejections'").fetchone()[0]
         self.assertEqual(json.loads(saved),{"project_not_allowed":1})
         self.assertNotIn("secret.customer",saved)
+        with core.connect() as db:
+            scoped=db.execute("SELECT value FROM state WHERE key='founder_bridge_last_rejected_projects'").fetchone()[0]
+        self.assertEqual(len(json.loads(scoped)),1)
+        self.assertNotIn("secret.customer",scoped)
 
     def test_live_observability_uses_stored_success_and_never_exposes_credentials(self):
         before=founder_bridge.health()
