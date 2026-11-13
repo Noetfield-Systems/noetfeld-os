@@ -381,3 +381,18 @@ body.locked .top-actions{display:none!important}
   .reference-connect-card .ref-empty-actions{gap:12px}
   .reference-connect-card .ref-empty{padding:18px 4px}
 }
+
+/* Screenshot parity correction after actual 1536x1024 Playwright visual review. */
+@media(min-width:901px){
+  .reference-overview .metric{height:138px;min-height:138px;padding-top:14px;padding-bottom:10px}
+  .reference-overview .metric span{margin-bottom:3px}
+  .reference-overview .metric strong{min-height:32px;margin-bottom:4px}
+  .reference-overview .metric small{margin:-2px 0 4px 52px}
+  .reference-action-card .ref-section-heading{padding-bottom:9px}
+  .reference-action-row{min-height:68px;padding:9px 0}
+  .reference-health-card .health-line{min-height:39px}
+  .reference-team-card .team-compact-row{min-height:39px}
+  .reference-right-stack{gap:13px!important}
+}
+.reference-connect-card .ref-empty>svg.ui-icon{width:62px!important;height:62px!important;margin-bottom:12px}
+.reference-connect-card .ref-empty{min-height:250px}
