@@ -339,6 +339,38 @@ def tick(*, timestamp=None):
             "action_types":[a["action"] for a in actions]}
 
 
+def provider_connection_status():
+    """Distinguish configured names from an actual successful LLM response.
+
+    This reads the existing run ledger only, never provider credentials.
+    """
+    import core
+    configured=all(os.getenv(k) for k in ("LLM_BASE_URL","LLM_API_KEY","LLM_MODEL"))
+    with core.connect() as db:
+        row=db.execute("""
+          SELECT provider,status,started_at,input_tokens,output_tokens,
+                 json_extract(result,'$.model_error_code') AS error_code
+          FROM runs
+          WHERE provider IN ('provider_error','openai-compatible')
+          ORDER BY rowid DESC LIMIT 1
+        """).fetchone()
+    if not configured:
+        return {"state":"NOT_CONFIGURED","provider_authenticated":False,
+                "last_error_code":None,"observed_at":None}
+    if row is None:
+        return {"state":"CONFIGURED_UNTESTED","provider_authenticated":False,
+                "last_error_code":None,"observed_at":None}
+    error=row["error_code"]
+    if row["provider"]=="openai-compatible" and row["status"]=="completed":
+        return {"state":"MODEL_RESPONSE_RECORDED","provider_authenticated":True,
+                "last_error_code":None,"observed_at":row["started_at"]}
+    if not isinstance(error,str) or not re.fullmatch(r"[A-Z0-9_]{4,44}",error):
+        error="LEGACY_PROVIDER_ERROR"
+    return {"state":"AUTH_REJECTED" if error in ("HTTP_401","HTTP_403") else "PROVIDER_ERROR",
+            "provider_authenticated":False,"last_error_code":error,
+            "observed_at":row["started_at"]}
+
+
 def snapshot():
     """Founder-only projection of actual task handoffs, model calls and blockers."""
     import core
