@@ -183,7 +183,7 @@
 <div class="row"><button type="submit" id="connect-save" class="btn">Save review &amp; next action</button><button type="button" id="connect-cancel" class="btn alt">Cancel</button><span id="connect-edit-status" class="muted" aria-live="polite"></span></div>
 </form></section>
       </section>
-      <section class="view" data-view="opportunities" hidden>
+      <section class="view" data-view="opportunities" hidden><div class="subnav"><button type="button" class="btn alt" data-go="connect">Open partnership & Connect inbox →</button></div>
         <div class="card"><div class="card-head"><div><h2>Recorded business opportunities</h2><p>Customers and deals entered in the Business OS pipeline. Connect proposals are tracked in the separate Connect inbox above.</p></div><span class="tag neutral"><span id="pipeline-records">—</span> recent records</span></div></div>
         <section class="card"><h2>Business pipeline</h2><div class="row"><select id="brand" class="input"><option value="">All ventures</option><option value="noetfield">Noetfield</option><option value="buildworkflow">BuildWorkflow</option><option value="trustfield">TrustField</option><option value="signalforge">SignalForge</option><option value="buildrelay">BuildRelay</option><option value="portfolio">Portfolio</option></select><button class="btn" id="load">Load opportunities</button></div><div class="scroll"><table><thead><tr><th>Company / contact</th><th>Brand</th><th>Audience / intent</th><th>Fit</th><th>Est. value</th><th>Stage</th></tr></thead><tbody id="opps"></tbody></table></div></section>
       </section>
@@ -192,7 +192,7 @@
           <div id="relationship-list" aria-live="polite"><div class="empty">Loading linked people…</div></div>
         </div>
       </section>
-      <section class="view" data-view="team" hidden>
+      <section class="view" data-view="team" hidden><div class="subnav"><button type="button" class="btn alt" data-go="workflows">Workflows and assignments →</button><button type="button" class="btn alt" data-go="actions">Review task queue →</button></div>
         <div class="card"><div class="card-head"><div><h2>Company team & specialist roles</h2><p>Roles and capabilities connected in the existing company registry. Expand a role to see technical details.</p></div></div>
           <div id="agents"><div class="empty">Loading team roles…</div></div>
         </div>
@@ -241,7 +241,7 @@
         <section class="card"><div class="card-head"><div><h2>Services & processing</h2><p>Live endpoint checks, worker readiness and database availability.</p></div><button class="btn alt" type="button" data-go="health">Check again ↻</button></div><div id="system-health">Checking health…</div><details><summary class="muted">Technical context</summary><p class="helper" id="note">Not loaded.</p></details></section>
         <section class="card"><h2>What a green indicator means</h2><p class="helper">A service reporting healthy confirms that endpoint and its stated checks passed. It does not mean every downstream workflow, external integration, or commercial outcome was independently verified.</p></section>
       </section>
-      <section class="view" data-view="settings" hidden><section class="card"><h2>Founder session</h2><p class="helper">Lock the workspace to clear this tab's authorization.</p><button class="btn alt" type="button" id="logout">Lock workspace</button></section>
+      <section class="view" data-view="settings" hidden><div class="subnav"><button type="button" class="btn alt" data-go="health">System health →</button><button type="button" class="btn alt" data-go="workflows">Workflows →</button></div><section class="card"><h2>Founder session</h2><p class="helper">Lock the workspace to clear this tab's authorization.</p><button class="btn alt" type="button" id="logout">Lock workspace</button></section>
         <section class="card"><h2>Founder workspace</h2><p class="helper">Your existing Founder access key protects management APIs. This version retains the current authentication backend. Use Lock when finished and do not share your access key.</p><button class="btn" data-go="health">Check company health →</button></section>
         <section class="card"><h2>Public opportunity entry</h2><p class="helper">Use the same Noetfield Connect URL for customers, collaborators, investors, event organizers and potential partners.</p><a class="btn alt" href="https://www.noetfield.com/connect/" target="_blank" rel="noopener noreferrer">Open Connect ↗</a></section>
       </section>
