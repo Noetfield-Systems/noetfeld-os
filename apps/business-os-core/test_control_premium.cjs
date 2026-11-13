@@ -62,7 +62,7 @@ const document={body,getElementById:id=>elements.get(id)||null,querySelectorAll:
 const window={addEventListener(){},scrollTo(){},navigator:{}};
 const location={hash:""};
 const history={replaceState(){}};
-const context=vm.createContext({document,window,location,history,navigator:{},console,Date,Number,Map,Set,Boolean,String,Array,Promise});
+const context=vm.createContext({document,window,location,history,navigator:{},console,Date,Number,Map,Set,Boolean,String,Array,Promise,URLSearchParams});
 vm.runInContext(ui,context,{timeout:1000});
 assert.ok(window.noosPremium?.render,"Premium workspace did not register");
 const fixture={
@@ -77,7 +77,13 @@ const fixture={
 window.noosPremium.render(fixture);
 assert.match(elements.get("metrics").innerHTML,/1,055/);
 assert.match(elements.get("metrics").innerHTML,/Not connected/);
-assert.match(elements.get("action-preview").innerHTML,/Review potential partner/);
+assert.match(elements.get("action-preview").innerHTML,/Task backlog/);
+assert.match(elements.get("action-preview").innerHTML,/Incoming opportunities/);
+assert.match(elements.get("action-preview").innerHTML,/Revenue visibility/);
+assert.match(html,/id="dashboard-venture"/);
+assert.match(html,/id="dashboard-period"/);
+assert.match(html,/id="activity-bars"/);
+assert.match(html,/id="worker-cycle-value"/);
 assert.match(elements.get("team-summary").innerHTML,/Chief of Staff/);
 assert.match(elements.get("revenue-state").innerHTML,/Collected revenue not connected/);
 assert.match(elements.get("relationship-list").innerHTML,/Example Founder/);
