@@ -79,6 +79,8 @@ def make_handler(route):
     if req.method=="POST" and "/commission" in u.path:
         return route.fulfill(status=200,content_type="application/json",
                              body='{"already_commissioned":false,"external_actions":0}')
+    if resource=="overview" and "BAD_ACCESS_KEY" in req.headers.get("authorization",""):
+        return route.fulfill(status=401,content_type="application/json",body='{"detail":"Founder authentication required."}')
     if resource in fixture:
         mock_calls.append(req.method+" "+resource)
         return route.fulfill(status=200,content_type="application/json",body=json.dumps(fixture[resource]))
@@ -89,11 +91,39 @@ with sync_playwright() as p:
     page=browser.new_page(viewport={"width":1440,"height":900},device_scale_factor=1)
     errors=[]
     page.on("pageerror",lambda err:errors.append(str(err)))
+    page.add_init_script("""(function(){
+      window.__storedCredential = null;
+      window.__credentialStores = 0;
+      Object.defineProperty(window, 'PasswordCredential', {
+        configurable:true,
+        value:class PasswordCredential {
+          constructor(options){ this.id=options.id;this.name=options.name;this.password=options.password; }
+        }
+      });
+      Object.defineProperty(navigator, 'credentials', {
+        configurable:true,
+        value:{store:async function(credential){
+          window.__storedCredential={id:credential.id,password:credential.password};
+          window.__credentialStores++;
+        }}
+      });
+    })();""")
     page.route("**/api/control/**",make_handler)
-    page.goto(BASE+"/control",wait_until="domcontentloaded",timeout=40000)
+    page.goto(BASE+"/control",wait_until="load",timeout=40000)
+    assert page.locator("#auth-form").is_visible(), "Founder login must be a real form"
+    assert page.locator("#token").get_attribute("autocomplete")=="current-password"
+    assert page.locator("#founder-login-id").get_attribute("autocomplete")=="username"
+    assert page.locator("#token").get_attribute("name")=="password"
+    page.screenshot(path=str(OUT/"founder-login-fixture.png"),full_page=True)
     page.locator("#token").fill("FIXTURE_TOKEN_NOT_A_REAL_SECRET")
-    page.locator("#connect").click()
+    page.locator("#save-password").check()
+    page.locator("#auth-form").evaluate("(form) => form.requestSubmit()")
     page.locator("#metrics .metric").first.wait_for(timeout=30000)
+    page.wait_for_function("window.__credentialStores===1")
+    assert page.evaluate("window.__storedCredential.id")=="founder", "Password manager identity is wrong"
+    assert page.evaluate("window.__storedCredential.password")=="FIXTURE_TOKEN_NOT_A_REAL_SECRET"
+    assert page.locator("#token").input_value()=="", "Access key should be cleared from the field"
+    assert page.evaluate("localStorage.getItem('noos-founder-token')") is None, "Access key must not be persisted in localStorage"
     assert "1,055" in page.locator("#metrics").inner_text(), "Overview did not display actual-bound fixture field"
     assert "Not connected" in page.locator("#metrics").inner_text(), "Revenue must never show fabricated zero"
     assert page.locator(".sidebar").is_visible()
@@ -134,8 +164,17 @@ with sync_playwright() as p:
     width=page.evaluate("document.documentElement.scrollWidth")
     assert width <= 390+3, "Unexpected horizontal page overflow at mobile width: "+str(width)
     assert not errors, "Browser runtime errors: "+"; ".join(errors[:4])
+    page.locator("#logout").click()
+    assert page.locator("#auth-form").is_visible(), "Lock must return user to sign-in"
+    assert page.evaluate("sessionStorage.getItem('noos-founder-token')") is None, "Lock must clear session token"
+    page.locator("#token").fill("BAD_ACCESS_KEY")
+    page.locator("#auth-form").evaluate("(form) => form.requestSubmit()")
+    page.locator("#auth-feedback").get_by_text("Access was not verified",exact=False).wait_for(timeout=10000)
+    assert page.evaluate("window.__credentialStores") == 1, "Invalid password must not be saved"
+    assert page.locator("#auth-form").is_visible(), "Failed authentication must not unlock workspace"
+    assert not errors, "Browser runtime errors after failed authentication: "+"; ".join(errors[:4])
     browser.close()
 print(json.dumps({"status":"PASS","ui":"production-hosted","protected_api_data":"mocked fixtures",
-                  "views_tested":11,"mobile_width":390,"actual_external_mutations":0,
+                  "views_tested":11,"mobile_width":390,"auth_and_password_store":"mocked browser API verified","actual_external_mutations":0,
                   "mocked_api_calls":len(mock_calls),
                   "screenshots":[str(x) for x in OUT.glob("*.png")]}))
