@@ -985,7 +985,11 @@ def claim(table):
     WHERE status='queued' AND EXISTS(
       SELECT 1 FROM task_dependencies td
       JOIN tasks dep ON dep.id=td.depends_on_task_id
-      WHERE td.task_id=tasks.id AND dep.status IN ('failed','blocked')
+      WHERE td.task_id=tasks.id AND (
+        dep.status IN ('failed','blocked')
+        OR (dep.status IN ('drafted','approved')
+            AND json_extract(dep.result,'$.provider')='provider_error')
+      )
     )
    """,(json.dumps({"blocked_reason":"specialist_dependency_failed"}),now()))
    r=d.execute("""
@@ -996,7 +1000,8 @@ def claim(table):
         SELECT 1 FROM task_dependencies td
         LEFT JOIN tasks dep ON dep.id=td.depends_on_task_id
         WHERE td.task_id=t.id
-          AND (dep.id IS NULL OR dep.status NOT IN ('drafted','approved'))
+          AND (dep.id IS NULL OR dep.status NOT IN ('drafted','approved')
+               OR json_extract(dep.result,'$.provider')='provider_error')
       )
     ORDER BY COALESCE(t.priority_rank,100) ASC,t.created_at ASC LIMIT 1
    """).fetchone()
