@@ -61,13 +61,15 @@ function showView(name,opts={}){
 }
 function setAuth(isConnected,message){
   document.body.classList.toggle("locked",!isConnected);
+  if(isConnected)document.body.classList.remove("nav-open");
   $("auth-gate").classList.toggle("hide",isConnected);
   $("app").classList.toggle("hide",!isConnected);
   $("sidebar").classList.toggle("hide",!isConnected);
   $("top-search").classList.toggle("hide",!isConnected);
   $("logout").classList.toggle("hide",!isConnected);
   $("refresh").classList.toggle("hide",!isConnected);
-  $("auth-state").textContent=isConnected?"Connected":"Locked";
+  $("auth-state").textContent="";
+  $("auth-state").setAttribute("aria-hidden","true");
   $("auth-state").classList.toggle("good",isConnected);
   $("status").textContent=isConnected?"Connected":(message||"Founder access required");
   $("status").title=message||"Company OS session status";
@@ -263,7 +265,7 @@ function init(){
   $("action-filter").addEventListener("change",()=>last&&renderActionCenter(last.t,last.o));
   window.addEventListener("hashchange",()=>showView(location.hash.slice(1),{noHash:true}));
 
-  $("token").addEventListener("keydown",e=>{if(e.key==="Enter")$("connect").click()});
+  // Native form submit handles Enter and password-manager heuristics.
   setAuth(false,"Founder access required");
   showView(location.hash.slice(1)||"overview",{noHash:true,noScroll:true});
 }
