@@ -53,7 +53,17 @@ def request(url, *, method="GET", data=None, token=None, timeout=35):
     req = urllib.request.Request(url, method=method, headers=headers, data=data)
     try:
         with urllib.request.urlopen(req, timeout=timeout) as response:
-            return json.load(response)
+            raw = response.read(2_000_000)
+            try:
+                return json.loads(raw)
+            except json.JSONDecodeError as exc:
+                content_type = response.headers.get("Content-Type", "unspecified")
+                # Keep the diagnostic bounded; never echo tokens or full model output.
+                prefix = raw[:80].decode("utf-8", errors="replace")
+                prefix = re.sub(r"[^ -~]", ".", prefix)
+                raise RuntimeError("NON_JSON_UPSTREAM_RESPONSE:status=" +
+                    str(response.status) + ":type=" + content_type[:75] +
+                    ":bytes=" + str(len(raw)) + ":prefix=" + prefix[:80]) from exc
     except urllib.error.HTTPError as exc:
         detail = exc.read(350).decode("utf-8", errors="replace")
         raise RuntimeError("HTTP_" + str(exc.code) + ":" + detail[:180]) from exc
