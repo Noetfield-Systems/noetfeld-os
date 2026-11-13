@@ -198,12 +198,35 @@ def admit(item,project_allowlist):
         # PROJECT_PATTERN and the verified project registry have both already
         # been enforced by validate_request().
         tid=core.add_task(db,None,None,project,role,title,core.clean(task,1800),action)
-        db.execute("UPDATE tasks SET priority_rank=? WHERE id=?", (max(10,100-priority),tid))
+        db.execute("UPDATE tasks SET priority_rank=?,autonomy=? WHERE id=?", (max(10,100-priority),"founder_verified_workpacket",tid))
         db.execute("""INSERT INTO founder_org_bindings
           (request_id,payload_digest,tenant_scope,project_id,canonical_task_id,created_at)
           VALUES (?,?,?,?,?,?)""",(wid,digest,tenant,project,tid,core.now()))
         db.commit()
         return tid,True
+
+
+def model_authorization(task):
+    """Only persisted, validated Founder workpackets may request specialist inference.
+
+    A guessed brand, autonomy string, user prompt or browser task cannot confer
+    this capability. The original immutable binding is the authority.
+    Returns the bound tenant scope, or None when untrusted.
+    """
+    if (not isinstance(task,dict) or task.get("autonomy")!="founder_verified_workpacket"
+            or task.get("event_id") is not None or task.get("opportunity_id") is not None):
+        return None
+    task_id=task.get("id")
+    if not isinstance(task_id,str):
+        return None
+    with core.connect() as db:
+        row=db.execute("""SELECT tenant_scope,project_id FROM founder_org_bindings
+            WHERE canonical_task_id=?""",(task_id,)).fetchone()
+    if row is None or row["project_id"]!=task.get("brand"):
+        return None
+    if row["tenant_scope"] not in ALLOWED_COMPANIES:
+        return None
+    return row["tenant_scope"]
 
 def _verified_portfolio_project_scopes():
     """Reuse already-authenticated Founder portfolio records, never raw WorkPacket claims.
