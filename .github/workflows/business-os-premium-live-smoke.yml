@@ -35,7 +35,9 @@ jobs:
         run: |
           python -m pip install --quiet playwright
           python -m playwright install chromium
-      - name: Exercise live-hosted UI with fixture-only protected API responses
+      - name: Browser test branch UI with fixture-only protected API responses
+        env:
+          CONTROL_UI_PREVIEW: ${{ github.event_name == 'pull_request' && '1' || '0' }}
         run: python apps/business-os-core/verify_control_browser.py
       - name: Save visual QA fixtures
         if: always()
