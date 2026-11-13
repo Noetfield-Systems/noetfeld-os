@@ -381,12 +381,18 @@ def tick():
         raise ValueError("founder_intake_contract_invalid")
     accepted=0
     rejected=0
+    rejection_reasons={}
     for item in result["items"][:12]:
         try:
             _,created=admit(item,allowed)
             accepted+=int(created)
-        except UnsafeRequest:
+        except UnsafeRequest as exc:
             rejected+=1
+            # Validator machine codes only: never persist request body, IDs or tokens.
+            code=str(exc)
+            if not re.fullmatch(r"[a-z_]{3,64}",code):
+                code="unsafe_request"
+            rejection_reasons[code]=rejection_reasons.get(code,0)+1
     acknowledgements+=reconcile()
     signals=publish_commercial_signals()
     contributor_signals=publish_contributor_signals()
@@ -395,7 +401,10 @@ def tick():
           ON CONFLICT(key) DO UPDATE SET value=excluded.value""",(core.now(),))
         db.execute("""INSERT INTO state(key,value) VALUES('founder_bridge_last_error_type','')
           ON CONFLICT(key) DO UPDATE SET value=excluded.value""")
+        db.execute("""INSERT INTO state(key,value) VALUES('founder_bridge_last_rejections',?)
+          ON CONFLICT(key) DO UPDATE SET value=excluded.value""",(_json(rejection_reasons),))
     return {"state":"LIVE","accepted":accepted,"rejected":rejected,
+            "rejection_reasons":rejection_reasons,
             "acknowledged":acknowledgements,
             "source_signals":signals+contributor_signals,
             "contributor_signals":contributor_signals,
@@ -438,6 +447,12 @@ def health():
         except ValueError:
             freshness=None
     error_type=rows.get("founder_bridge_last_error_type") or None
+    try:
+        last_rejections=json.loads(rows.get("founder_bridge_last_rejections","{}"))
+        if not isinstance(last_rejections,dict):
+            last_rejections={}
+    except (TypeError,ValueError):
+        last_rejections={}
     connection=("LIVE" if freshness is not None and freshness<=180 and not error_type
                 else "DEGRADED" if error_type or freshness is not None else "AWAITING_FIRST_CYCLE")
     if freshness is not None and freshness>180:
@@ -451,6 +466,7 @@ def health():
         "blocked_tasks":int(stats["blocked"]),
         "pending_ack":int(stats["pending_ack"]),
         "ack_conflicts_quarantined":int(stats["ack_conflicts"]),
+        "last_cycle_rejection_reasons":last_rejections,
         "commercial_signals_sent":source_count,
         "verified_outcomes":0,"external_effects":0,
     }
