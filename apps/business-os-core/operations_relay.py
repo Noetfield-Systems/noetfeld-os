@@ -64,17 +64,25 @@ def supervised_model_authorized(task):
             or task.get("brand")!="noetfield"):
         return False
     role=task.get("role")
-    prefix=({"engineering_operator":"Repair event processing ",
-             "chief_of_staff":"Follow up event processing "}).get(role)
-    if not prefix or not str(task.get("title") or "").startswith(prefix):
-        return False
-    event_id=task["title"][len(prefix):]
-    if not re.fullmatch(r"[a-z0-9_]{8,72}",event_id):
-        return False
-    key=("operations_relay_event:" if role=="engineering_operator"
-         else "operations_relay_manager:")+event_id
-    with core.connect() as db:
-        return _get(db,key)==task.get("id")
+    title=str(task.get("title") or "")
+    patterns={
+        "engineering_operator": (
+            ("Repair event processing ",r"[a-z0-9_]{8,72}","operations_relay_event:"),
+            ("Diagnose Founder handoff ",r"[a-z0-9-]{3,90}","operations_relay_bridge_eng:"),
+        ),
+        "chief_of_staff": (
+            ("Follow up event processing ",r"[a-z0-9_]{8,72}","operations_relay_manager:"),
+            ("Review Founder handoff ",r"[a-z0-9-]{3,90}","operations_relay_bridge_manager:"),
+        ),
+    }
+    for prefix,pattern,key_prefix in patterns.get(role,()):
+        if title.startswith(prefix):
+            item_id=title[len(prefix):]
+            if not re.fullmatch(pattern,item_id):
+                return False
+            with core.connect() as db:
+                return _get(db,key_prefix+item_id)==task.get("id")
+    return False
 
 
 def upstream_evidence(task):
@@ -222,6 +230,57 @@ def tick(*, timestamp=None):
                                     "evidence":"recorded dependency on engineering diagnosis",
                                     "result":"WAITS_FOR_ENGINEERING_DRAFT"})
                 _put(db,day_key,used+new_count)
+
+            # Real Founder handoff rejections are themselves actionable
+            # operational incidents. Route scoped Noetfield cases into the
+            # SAME specialist queue, not another agent platform or scheduler.
+            try:
+                denied=json.loads(_get(db,"founder_bridge_last_rejected_projects","[]"))
+            except (TypeError,ValueError):
+                denied=[]
+            if isinstance(denied,list):
+                for rejected in denied[:2]:
+                    if (not isinstance(rejected,dict)
+                        or rejected.get("reason_code")!="project_not_allowed"
+                        or rejected.get("company_id")!="noetfield-systems-inc"):
+                        continue
+                    project=rejected.get("project_id")
+                    if not isinstance(project,str) or not re.fullmatch(r"[a-z0-9][a-z0-9-]{2,89}",project):
+                        continue
+                    marker="operations_relay_bridge_eng:"+project
+                    if _get(db,marker):
+                        continue
+                    engineer=core.add_task(
+                        db,None,None,"noetfield","engineering_operator",
+                        "Diagnose Founder handoff "+project,
+                        "The authenticated Sina Founder OS submitted an advisory-only WorkPacket for project "+
+                        project+" which Company OS rejected as project_not_allowed. "
+                        "Inspect the existing project registry, company tenant, allowlist and Governor scope. "
+                        "Identify the exact mismatch and propose the minimal correction in the owning system. "
+                        "Do not expand permissions blindly or claim that code was changed.",
+                        "Find the exact owner and routing fix, with source evidence.")
+                    manager=core.add_task(
+                        db,None,None,"noetfield","chief_of_staff",
+                        "Review Founder handoff "+project,
+                        "Review Engineering's recorded diagnosis of the project_not_allowed WorkPacket "+
+                        "for "+project+". Select the existing authorized Company OS or scoped integration "+
+                        "that must act next. Require a later accepted WorkPacket receipt before claiming resolution.",
+                        "Follow the engineering evidence and route the next eligible bounded action.")
+                    core.add_task_dependency(db,manager,engineer)
+                    db.execute("UPDATE tasks SET autonomy='internal_diagnostic_model',priority_rank=12 WHERE id=?",(engineer,))
+                    db.execute("UPDATE tasks SET autonomy='internal_diagnostic_model',priority_rank=13 WHERE id=?",(manager,))
+                    _put(db,marker,engineer)
+                    _put(db,"operations_relay_bridge_manager:"+project,manager)
+                    actions.append({"at":stamp,"action":"FOUNDER_HANDOFF_OWNER_ASSIGNED",
+                                    "task_id":engineer,"project_id":project,
+                                    "owner":"Engineering Delivery",
+                                    "evidence":"persisted rejected Founder WorkPacket: project_not_allowed",
+                                    "result":"ROUTING_DIAGNOSIS_QUEUED"})
+                    actions.append({"at":stamp,"action":"FOUNDER_HANDOFF_MANAGER_SCHEDULED",
+                                    "task_id":manager,"project_id":project,
+                                    "owner":"Chief of Staff",
+                                    "evidence":"dependency on engineering diagnosis",
+                                    "result":"WAITS_FOR_ENGINEERING_DRAFT"})
             previous = _history(db)
             _put(db, LEDGER_KEY, json.dumps((actions+previous)[:30],separators=(",",":")))
             _put(db,"operations_relay_last_success",stamp)
@@ -289,7 +348,8 @@ def snapshot():
         # model-to-model prompt unless the provider records a model call.
         source="Founder OS" if d["founder_workpacket"] else (
             "Company OS operations supervisor" if str(d["title"]).startswith(
-                ("Repair event processing ","Follow up event processing "))
+                ("Repair event processing ","Follow up event processing ",
+                 "Diagnose Founder handoff ","Review Founder handoff "))
             else "Company OS portfolio coordinator" if d["event_type"]=="portfolio.studio.cycle"
             else "Company OS task queue")
         actual_model=d["provider"]=="openai-compatible" and d["run_status"]=="completed"
