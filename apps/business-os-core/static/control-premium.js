@@ -82,7 +82,7 @@ function setAuth(isConnected,message){
   $("status").textContent=isConnected?"Connected":(message||"Founder access required");
   $("status").title=message||"Company OS session status";
   $("status").setAttribute("role","status");
-  if(isConnected)showView((location.hash||"#overview").slice(1),{noHash:true,noScroll:true});
+  if(isConnected){showView((location.hash||"#overview").slice(1),{noHash:true,noScroll:true});if(last&&typeof api==="function")void loadDashboard();}
 }
 function formatTask(x){
   return "<div class='action-item'><span class='action-mark' aria-hidden='true'>☷</span><div><b>"+esc(x.title||"Review work")+"</b><p>"+esc(role[x.role]||x.company_role_title||"Company operations")+" · "+esc(humanStatus(x.status))+" · "+esc(x.brand||"Portfolio")+"</p></div><button class='btn alt' type='button' data-task-focus='"+esc(x.id)+"'>Review →</button></div>";
@@ -340,7 +340,7 @@ function render(data){
   $('llm-config-value').className='tag '+(o?.llm_configured===true?'good':'warn');
   if(!dashboardSnapshot)renderActivityTrend(null);
   // The dashboard endpoint supplies brand-scoped counts and real daily activity history.
-  if(typeof api==='function')void loadDashboard();
+  // Summary request begins after authenticated workspace unlocks.
   $("last-updated").textContent="Updated "+new Date().toLocaleTimeString("en-CA",{hour:"numeric",minute:"2-digit"});
   $("data-note").textContent="Company-wide totals from connected services. Counts and activity are not verified commercial outcomes.";
   renderActionCenter(t,o);
