@@ -10,6 +10,8 @@ import urllib.request
 from datetime import datetime, timezone
 from typing import Any
 
+from noos_postgres_store_v1 import configured as pg_store_enabled, upsert_liveness as pg_upsert_liveness
+
 
 def utc_now() -> str:
     return datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.%f")[:-3] + "Z"
@@ -51,6 +53,14 @@ def upsert_loop_liveness(
     host: str | None = None,
     last_fired_at: str | None = None,
 ) -> dict[str, Any]:
+    if pg_store_enabled():
+        return pg_upsert_liveness(
+            loop_id=loop_id, event_type=event_type,
+            interval_minutes=interval_minutes,
+            last_cycle_status=last_cycle_status,
+            host=host or detect_execution_host(),
+            last_fired_at=last_fired_at or utc_now(),
+        )
     creds = _supabase_creds()
     if not creds:
         return {"ok": False, "skipped": True, "reason": "supabase_not_configured"}
