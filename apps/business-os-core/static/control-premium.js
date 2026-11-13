@@ -33,6 +33,7 @@ function metric(label,value,note,icon,view,kind,linkText){
     '<div><a href="#'+view+'" data-go="'+view+'">'+esc(linkText||"View details")+' →</a></div></article>';
 }
 let last=null,connectRecords=[],currentView="";
+let dashboardSnapshot=null,dashboardReq=0;
 const pages={
  overview:["Company overview","What needs attention, what's moving, and what's producing results."],
  actions:["Action center","Review decisions and work that needs a clear next step."],
@@ -218,19 +219,102 @@ function renderPeople(op){
     '<div class="empty"><div class="empty-icon">♧</div><h3>No linked contacts in this source</h3><p>People attached to Business OS opportunities will appear here. A full portfolio relationship graph is not connected to this screen yet.</p><a class="btn" href="https://www.noetfield.com/connect/" target="_blank" rel="noopener noreferrer">Share Connect link ↗</a></div>';
   $("relationship-count").textContent=op?safeNumber(people.length):"—";
 }
+
 function paintConnect(items){
   const unavailable=!Array.isArray(items);
-  connectRecords=Array.isArray(items)?items:[];
-  if(unavailable){$("connect-summary").innerHTML='<div class="empty"><h3>Incoming requests unavailable</h3><p>We could not read the Connect feed. Your saved submissions remain in the source system.</p><button class="btn alt" data-go="connect">Review connection</button></div>';$("connect-count").textContent="—";$("connect-open").textContent="—";$("connect-scope").textContent="Feed temporarily unavailable";return;}
-  const n=connectRecords.length, open=connectRecords.filter(x=>!["ARCHIVED","DECLINED","CLOSED_LOST"].includes(x.case_stage)).length;
-  const newest=connectRecords.slice(0,4);
-  $("connect-summary").innerHTML=n?newest.map(x=>
-    '<div class="action-item"><span class="action-mark">↗</span><div><b>'+esc(category[x.category]||x.category)+'</b><p>'+esc(x.initiative)+' · '+esc(humanStatus(x.case_stage))+' · '+esc(x.source_channel)+'</p></div><button class="btn alt" data-go="connect">Review</button></div>'
-  ).join(""):'<div class="empty"><div class="empty-icon">◇</div><h3>No relationship requests in this feed</h3><p>Share one link for partnerships, advisors, customers, investors and events.</p><button id="copy-connect" class="btn">Copy Connect link</button></div>';
-  $("connect-count").textContent=safeNumber(n);
-  $("connect-open").textContent=safeNumber(open);
-  $("connect-scope").textContent=n+" recent, source-backed Connect cases in the authorized Business OS feed (maximum 100).";
-  $("nav-connect-count").textContent=n>99?"99+":String(n);
+  connectRecords=unavailable?[]:items;
+  const venture=$('dashboard-venture').value;
+  const matching=connectRecords.filter(x=>!venture||x.initiative===venture);
+  const active=matching.filter(x=>!['ARCHIVED','DECLINED','CLOSED_LOST'].includes(x.case_stage));
+  if(unavailable){
+    $('connect-summary').innerHTML='<div class="ref-empty"><span class="ref-connection-error">Incoming opportunities could not be loaded.</span>'+
+      '<p>Your source records have not been deleted. Check the Connect inbox for details.</p>'+
+      '<button class="ref-link" data-go="connect" type="button">Open Connect '+pictogram('arrow')+'</button></div>';
+    $('connect-count').textContent='—';$('connect-open').textContent='—';$('connect-scope').textContent='Connect feed unavailable';
+  }else{
+    $('connect-count').textContent=safeNumber(matching.length);
+    $('connect-open').textContent=safeNumber(active.length);
+    $('connect-scope').textContent=matching.length+' recent linked requests in the source feed (maximum 100).';
+    const records=active.slice(0,3);
+    $('connect-summary').innerHTML=records.length?'<div class="ref-connect-list">'+records.map(x=>
+      '<div class="reference-action-row"><span class="ref-action-icon">'+pictogram('target')+'</span>'+
+      '<div class="ref-action-copy"><strong>'+esc(category[x.category]||x.category)+'</strong>'+
+      '<span class="tag neutral">'+esc(humanStatus(x.case_stage))+'</span>'+
+      '<p>'+esc(x.initiative)+' · '+esc(x.source_channel)+'</p></div>'+
+      '<button type="button" class="ref-link" data-go="connect">Review '+pictogram('arrow')+'</button></div>'
+    ).join('')+'</div>':
+    '<div class="ref-empty">'+pictogram('inbox')+
+      '<h3>No relationship opportunities yet</h3>'+
+      '<p>Share the Connect link to invite proposals, partnerships, investment, talent, or other collaboration opportunities.</p>'+
+      '<div class="ref-empty-actions"><button id="copy-connect" class="btn" type="button">'+pictogram('link')+' Copy public link</button>'+
+      '<button class="ref-link" type="button" data-go="connect">Open intake '+pictogram('arrow')+'</button></div></div>';
+  }
+  if(last){
+    const counts=dashboardSnapshot?.counts||last.o?.counts||{};
+    renderActionCenter(last.t,{counts:{...last.o?.counts,...counts}});
+  }
+}
+
+
+function renderActivityTrend(d){
+  if(!d||!Array.isArray(d.activity_daily)){
+    $('activity-bars').innerHTML='<span class="activity-loading">Activity source unavailable</span>';
+    $('activity-bars').setAttribute('aria-label','Activity source unavailable');
+    return;
+  }
+  const daily=d.days===30?d.activity_daily.slice(-15):d.activity_daily;
+  const max=Math.max(0,...daily.map(x=>Number(x.count)||0));
+  if(!max){
+    $('activity-bars').innerHTML='<span class="activity-loading">No events recorded</span>';
+    $('activity-bars').setAttribute('aria-label','No events recorded in the selected period');
+  }else{
+    $('activity-bars').innerHTML=daily.map(x=>{
+      const height=(Math.max(0,Number(x.count)||0)/max*65);
+      return '<span class="activity-bar" title="'+esc(x.date)+': '+safeNumber(x.count)+' recorded events" style="height:'+height.toFixed(1)+'px"></span>';
+    }).join('');
+    $('activity-bars').setAttribute('aria-label',daily.map(x=>x.date+': '+x.count+' events').join(', '));
+  }
+  $('activity-week').textContent=safeNumber(d.counts?.activity_events);
+  $('activity-unit').textContent='events / last '+d.days+' days';
+}
+function renderSummaryMetrics(d){
+  const fallback=last?.o?.counts||{};
+  const counts=d?.counts||fallback;
+  const activity=d?.counts?.activity_events;
+  const days=d?.days||Number($('dashboard-period').value)||7;
+  const pending=counts.pending_tasks;
+  const opportunities=counts.active_opportunities??counts.opportunities;
+  $('metrics').innerHTML=[
+    metric('Active opportunities',safeNumber(opportunities),'','target','opportunities','','View opportunities'),
+    metric('Pending tasks',safeNumber(pending),'','check','actions','attention','Review workload'),
+    metric('Activity · last '+days+' days',safeNumber(activity??null),'','activity','activity','','View activity'),
+    metric('Collected revenue','Not connected','Financial source not linked','revenue','revenue','','View revenue')
+  ].join('');
+}
+async function loadDashboard(){
+  if(document.body.classList.contains('locked'))return;
+  const id=++dashboardReq,brand=$('dashboard-venture').value,days=$('dashboard-period').value;
+  const params=new URLSearchParams({days});
+  if(brand)params.set('brand',brand);
+  try{
+    const d=await api('/api/control/dashboard?'+params);
+    if(id!==dashboardReq)return;
+    if(d.source!=='Company OS durable tables'||!d.counts)throw Error('Unsupported summary data');
+    dashboardSnapshot=d;
+    renderSummaryMetrics(d);
+    renderActivityTrend(d);
+    $('last-updated').textContent='Updated '+new Date(d.as_of).toLocaleString('en-CA');
+    $('data-note').textContent=d.scope||'Live Company OS data; unverified activity is not collected revenue.';
+    if(last)renderActionCenter(last.t,{counts:{...last.o?.counts,...d.counts}});
+    if(connectRecords)paintConnect(connectRecords);
+  }catch(err){
+    if(id!==dashboardReq)return;
+    dashboardSnapshot=null;
+    $('activity-bars').innerHTML='<span class="activity-loading">Trend unavailable</span>';
+    $('activity-week').textContent='—';
+    $('metrics').innerHTML='<div class="empty">Dashboard totals are temporarily unavailable. Existing records remain accessible in their individual sections.</div>';
+    $('data-note').textContent='Dashboard summary unavailable: '+err.message;
+  }
 }
 function render(data){
   last=data;
@@ -250,12 +334,13 @@ function render(data){
   $("pulse-metrics").innerHTML=detail.map(([label,value,description])=>
     '<div class="compact-metric"><span>'+esc(label)+'</span><strong>'+esc(value)+'</strong><small>'+esc(description)+'</small></div>'
   ).join("");
-  $("metrics").innerHTML=[
-    metric("Recorded opportunities",counts.opportunities===undefined?"—":safeNumber(counts.opportunities),"Business OS records · includes all stages","◎","opportunities"),
-    metric("Open work",counts.pending_tasks===undefined?"—":safeNumber(counts.pending_tasks),"Queued, running or awaiting review","▣","actions","attention"),
-    metric("Activity · last 7 days",roi&&!roi.__source_unavailable?safeNumber(roi.events_last_7d):"—","Recorded events, not revenue","⌁","activity"),
-    metric("Collected revenue","Not connected","No verified payment source","◈","revenue")
-  ].join("");
+  renderSummaryMetrics(null);
+  $('worker-cycle-value').textContent=o?.worker_interval_seconds?('Every '+o.worker_interval_seconds+' seconds'):'Unknown';
+  $('llm-config-value').textContent=o?.llm_configured===true?'✓ Configured':o?.llm_configured===false?'Needs setup':'Not verified';
+  $('llm-config-value').className='tag '+(o?.llm_configured===true?'good':'warn');
+  if(!dashboardSnapshot)renderActivityTrend(null);
+  // The dashboard endpoint supplies brand-scoped counts and real daily activity history.
+  void loadDashboard();
   $("last-updated").textContent="Updated "+new Date().toLocaleTimeString("en-CA",{hour:"numeric",minute:"2-digit"});
   $("data-note").textContent="Company-wide totals from connected services. Counts and activity are not verified commercial outcomes.";
   renderActionCenter(t,o);
@@ -339,6 +424,12 @@ function init(){
     }catch(e){feedback.textContent="Could not create task: "+e.message;}
     finally{button.disabled=false;}
   });
+  $('dashboard-venture').addEventListener('change',()=>{
+    if(document.body.classList.contains('locked'))return;
+    $('task-brand').value=$('dashboard-venture').value;
+    void loadDashboard();
+  });
+  $('dashboard-period').addEventListener('change',()=>void loadDashboard());
   $("action-filter").addEventListener("change",()=>loadTaskInbox(true));
   $("task-brand").addEventListener("change",()=>loadTaskInbox(true));
   $("task-inbox-controls").addEventListener("submit",e=>{e.preventDefault();loadTaskInbox(true)});
