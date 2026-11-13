@@ -340,7 +340,7 @@ function render(data){
   $('llm-config-value').className='tag '+(o?.llm_configured===true?'good':'warn');
   if(!dashboardSnapshot)renderActivityTrend(null);
   // The dashboard endpoint supplies brand-scoped counts and real daily activity history.
-  void loadDashboard();
+  if(typeof api==='function')void loadDashboard();
   $("last-updated").textContent="Updated "+new Date().toLocaleTimeString("en-CA",{hour:"numeric",minute:"2-digit"});
   $("data-note").textContent="Company-wide totals from connected services. Counts and activity are not verified commercial outcomes.";
   renderActionCenter(t,o);
