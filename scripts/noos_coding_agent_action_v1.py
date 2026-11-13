@@ -102,6 +102,19 @@ def queue_issue(oidc_token):
     if not answer.get("ok"):
         raise RuntimeError("WORKPACKET_PERSISTENCE_FAILED")
     print("NOOS_WORKPACKET_ENQUEUED " + expected_id)
+    followups = payload.get("followups") or []
+    if not isinstance(followups,list) or len(followups)>2:
+        raise RuntimeError("WORKPACKET_FOLLOWUPS_OUT_OF_SCOPE")
+    for index, next_job in enumerate(followups,1):
+        if (not isinstance(next_job,dict)
+            or next_job.get("workpacket_id")!=expected_id+"-next-"+str(index)
+            or next_job.get("repo")!=REPO
+            or next_job.get("founder_authorized") is not True):
+            raise RuntimeError("WORKPACKET_FOLLOWUP_IDENTITY_DENIED")
+        answer=api("/v1/coding/queue",next_job,oidc_token)
+        if not answer.get("ok"):
+            raise RuntimeError("WORKPACKET_FOLLOWUP_PERSISTENCE_FAILED")
+        print("NOOS_FOLLOWUP_ENQUEUED "+next_job["workpacket_id"])
 
 
 def shell(*argv, timeout=120, secretless=False):
@@ -253,6 +266,17 @@ def main():
         output(state=state,branch=branch,pr_url=pr or "",
                job_id=job["job_id"],test_path=paths[1])
         print("NOOS_CODE_RESULT "+state+" "+workpacket)
+        if state == "PR_OPENED":
+            # Restart on the next queued job without another Founder prompt.
+            # GitHub cron remains the durable recovery path when dispatch is denied.
+            try:
+                stats=request(API+"/v1/coding/status",token=token)
+                if int((stats.get("counts") or {}).get("QUEUED",0)) > 0:
+                    shell("gh","workflow","run","noos-cloud-coder.yml","--ref","main",
+                          timeout=25)
+                    print("NOOS_CONTINUATION_DISPATCHED")
+            except Exception:
+                print("NOOS_CONTINUATION_SCHEDULE_FALLBACK")
     except Exception as exc:
         try:
             api("/v1/coding/report",{"job_id":job["job_id"],
