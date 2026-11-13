@@ -6,7 +6,9 @@ on:
       - deploy/noos-loop-runner-entrypoint
     paths:
       - scripts/cloud_inbox_worker_v1.py
+      - scripts/noos_loop_runner_v1.py
       - tests/test_cloud_inbox_worker_v1.py
+      - tests/test_noos_loop_safe_failure_diagnostics_v1.py
       - .github/workflows/noos-inbox-worker-acceptance.yml
   workflow_dispatch:
 
@@ -26,5 +28,5 @@ jobs:
         run: python -m pip install -r requirements.txt
       - name: Compile and test live inbox priority / authority behavior
         run: |
-          python -m compileall -q scripts/cloud_inbox_worker_v1.py
-          python -m pytest -q tests/test_cloud_inbox_worker_v1.py
+          python -m compileall -q scripts/cloud_inbox_worker_v1.py scripts/noos_loop_runner_v1.py
+          python -m pytest -q tests/test_cloud_inbox_worker_v1.py tests/test_noos_loop_safe_failure_diagnostics_v1.py
