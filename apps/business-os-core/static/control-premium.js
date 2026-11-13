@@ -243,7 +243,7 @@ function paintConnect(items){
       '<p>'+esc(x.initiative)+' · '+esc(x.source_channel)+'</p></div>'+
       '<button type="button" class="ref-link" data-go="connect">Review '+pictogram('arrow')+'</button></div>'
     ).join('')+'</div>':
-    '<div class="ref-empty">'+pictogram('inbox')+
+    '<div class="ref-empty"><span class="ref-empty-icon">'+pictogram('inbox')+'</span>'+
       '<h3>No relationship opportunities yet</h3>'+
       '<p>Share the Connect link to invite proposals, partnerships, investment, talent, or other collaboration opportunities.</p>'+
       '<div class="ref-empty-actions"><button id="copy-connect" class="btn" type="button">'+pictogram('link')+' Copy public link</button>'+
