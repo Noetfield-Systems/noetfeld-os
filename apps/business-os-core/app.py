@@ -254,6 +254,61 @@ def overview(authorization:str|None=Header(default=None)):
       "llm_configured":bool(os.getenv("LLM_BASE_URL") and os.getenv("LLM_API_KEY") and os.getenv("LLM_MODEL")),
       "policy":"Analysis and internal reversible tasks are autonomous. External messaging, payments, deployments, legal/investment commitments require Founder approval."})
     return result
+
+@app.get("/api/control/dashboard")
+def dashboard(authorization:str|None=Header(default=None),
+              brand:str|None=None,days:int=7):
+    """Trusted live founder dashboard summary + truthful daily activity trend.
+
+    Brand filter is explicit; company-team totals remain cross-portfolio.
+    This endpoint neither infers revenue nor invents a customer conversion.
+    """
+    authorize(authorization)
+    if brand and brand not in core.BRANDS:
+        raise HTTPException(422,"Unsupported venture.")
+    if days not in (7,30):
+        raise HTTPException(422,"Choose 7 or 30 days.")
+    from datetime import datetime,timezone,timedelta
+    labels=[(datetime.now(timezone.utc).date()-timedelta(days=offset)).isoformat()
+            for offset in range(days-1,-1,-1)]
+    where=" WHERE brand=?" if brand else ""
+    values=(brand,) if brand else ()
+    with core.connect() as db:
+        def count(table,suffix="",params=()):
+            return db.execute(f"SELECT COUNT(*) AS n FROM {table}"+suffix,params).fetchone()["n"]
+        open_states=("queued","running","drafted")
+        twhere=" WHERE status IN (?,?,?)"+(" AND brand=?" if brand else "")
+        pending=count("tasks",twhere,(*open_states,*values))
+        opportunities=count("opportunities",where,values)
+        contacts=count("contacts",where,values)
+        requested=count("opportunities",
+            (" WHERE "+" AND ".join(["stage NOT IN ('lost','won')"]+(["brand=?"] if brand else []))),
+            values)
+        event_filter="created_at>=?"+(" AND brand=?" if brand else "")
+        grouped=db.execute(
+            f"SELECT substr(created_at,1,10) AS day,COUNT(*) n FROM events WHERE {event_filter} "
+            "GROUP BY substr(created_at,1,10)",
+            (labels[0],*values)).fetchall()
+        daily={row["day"]:row["n"] for row in grouped}
+        events=[{"date":day,"count":daily.get(day,0)} for day in labels]
+        recent=sum(row["count"] for row in events)
+        return {
+            "source":"Company OS durable tables",
+            "brand":brand or "all",
+            "days":days,
+            "as_of":datetime.now(timezone.utc).isoformat(),
+            "counts":{
+              "contacts":contacts,
+              "opportunities":opportunities,
+              "active_opportunities":requested,
+              "pending_tasks":pending,
+              "activity_events":recent,
+            },
+            "activity_daily":events,
+            "collected_revenue":{"state":"not_connected","amount":None},
+            "scope":"Brand filter applies to contacts, opportunities, tasks and activity; workforce capacity is company-wide",
+        }
+
 @app.get("/api/control/agents")
 def agents(authorization:str|None=Header(default=None)):
     authorize(authorization)
