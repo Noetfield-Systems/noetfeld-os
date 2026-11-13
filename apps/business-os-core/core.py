@@ -985,7 +985,11 @@ def claim(table):
     WHERE status='queued' AND EXISTS(
       SELECT 1 FROM task_dependencies td
       JOIN tasks dep ON dep.id=td.depends_on_task_id
-      WHERE td.task_id=tasks.id AND dep.status IN ('failed','blocked')
+      WHERE td.task_id=tasks.id AND (
+        dep.status IN ('failed','blocked')
+        OR (dep.status IN ('drafted','approved')
+            AND json_extract(dep.result,'$.provider')='provider_error')
+      )
     )
    """,(json.dumps({"blocked_reason":"specialist_dependency_failed"}),now()))
    r=d.execute("""
@@ -996,7 +1000,8 @@ def claim(table):
         SELECT 1 FROM task_dependencies td
         LEFT JOIN tasks dep ON dep.id=td.depends_on_task_id
         WHERE td.task_id=t.id
-          AND (dep.id IS NULL OR dep.status NOT IN ('drafted','approved'))
+          AND (dep.id IS NULL OR dep.status NOT IN ('drafted','approved')
+               OR json_extract(dep.result,'$.provider')='provider_error')
       )
     ORDER BY COALESCE(t.priority_rank,100) ASC,t.created_at ASC LIMIT 1
    """).fetchone()
@@ -1235,7 +1240,10 @@ def process_task(t):
    result["model_error_code"]=error_meta["code"]
  with connect() as d:
   d.execute("INSERT INTO runs VALUES(?,?,?,?,?,?,?,?,?,?,?)",(idof("run"),t["id"],role,provider,model,"degraded" if provider=="provider_error" else "completed",it,ot,now(),now(),json.dumps(result,ensure_ascii=False)))
-  d.execute("UPDATE tasks SET status='drafted',result=?,updated_at=? WHERE id=?",(json.dumps({
+  # An upstream Agent's failed model request is not a usable draft.
+  # Keep its dependent manager blocked until an actual successful retry.
+  terminal_status="blocked" if internal_handoff and provider=="provider_error" else "drafted"
+  d.execute("UPDATE tasks SET status=?,result=?,updated_at=? WHERE id=?",(terminal_status,json.dumps({
    "provider":provider,"recommendation":result,"memory_hits":len(mem),
    "model_error_code":error_meta["code"] if error_meta else None,
    "model_retryable":error_meta["retryable"] if error_meta else None,
@@ -1246,7 +1254,8 @@ def process_task(t):
    "model_error_code":error_meta["code"] if error_meta else None,
    "model_retryable":error_meta["retryable"] if error_meta else None,
    "input_tokens":it,"output_tokens":ot,
-   "state":"INTERNAL_DIAGNOSIS_DRAFT","external_effects":0,
+   "state":"MODEL_FAILED_BLOCKED" if terminal_status=="blocked" else "INTERNAL_DIAGNOSIS_DRAFT",
+   "external_effects":0,
    "independent_verification":False},sort_keys=True),flush=True)
 def process_event(e):
  try:

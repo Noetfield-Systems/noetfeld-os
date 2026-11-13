@@ -147,11 +147,13 @@ def tick(*, timestamp=None):
             blocked = db.execute("""
               SELECT t.id FROM tasks t
               WHERE t.status='blocked'
+                AND COALESCE(json_extract(t.result,'$.provider'),'')!='provider_error'
                 AND EXISTS(SELECT 1 FROM task_dependencies td WHERE td.task_id=t.id)
                 AND NOT EXISTS(
                   SELECT 1 FROM task_dependencies td
                   LEFT JOIN tasks dep ON dep.id=td.depends_on_task_id
-                  WHERE td.task_id=t.id AND (dep.id IS NULL OR dep.status NOT IN ('drafted','approved'))
+                  WHERE td.task_id=t.id AND (dep.id IS NULL OR dep.status NOT IN ('drafted','approved')
+                        OR json_extract(dep.result,'$.provider')='provider_error')
                 )
               ORDER BY t.updated_at LIMIT ?
             """, (MAX_RECOVERY_PER_TICK,)).fetchall()
@@ -175,7 +177,7 @@ def tick(*, timestamp=None):
                     json_extract(t.result,'$.model_error_code') AS error_code,
                     json_extract(t.result,'$.model_retryable') AS retryable
                   FROM tasks t LEFT JOIN opportunities o ON o.id=t.opportunity_id
-                  WHERE t.status='drafted'
+                  WHERE t.status IN ('drafted','blocked')
                     AND json_extract(t.result,'$.provider')='provider_error'
                     AND julianday(t.updated_at)<=julianday(?,'-300 seconds')
                   ORDER BY t.updated_at ASC LIMIT 60
@@ -204,7 +206,7 @@ def tick(*, timestamp=None):
                     if budget<=0:
                         continue
                     changed=db.execute(
-                        "UPDATE tasks SET status='queued',updated_at=? WHERE id=? AND status='drafted'",
+                        "UPDATE tasks SET status='queued',updated_at=? WHERE id=? AND status IN ('drafted','blocked')",
                         (stamp,task["id"])).rowcount
                     if not changed:
                         continue
@@ -355,7 +357,7 @@ def snapshot():
                  b.request_id AS founder_workpacket
           FROM tasks t
           LEFT JOIN runs r ON r.id=(
-             SELECT id FROM runs rr WHERE rr.task_id=t.id ORDER BY started_at DESC,id DESC LIMIT 1
+             SELECT id FROM runs rr WHERE rr.task_id=t.id ORDER BY finished_at DESC,rr.rowid DESC LIMIT 1
           )
           LEFT JOIN events e ON e.id=t.event_id
           LEFT JOIN founder_org_bindings b ON b.canonical_task_id=t.id
