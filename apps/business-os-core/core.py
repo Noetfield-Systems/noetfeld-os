@@ -1215,6 +1215,7 @@ def process_task(t):
    from urllib.error import HTTPError
    base=os.getenv("LLM_BASE_URL").rstrip("/");model=os.getenv("LLM_MODEL")
    model_route="primary"
+   attempted_model_route="primary"
    manager_name=FOUNDER_SEAT["title"] if manager_role==FOUNDER_SEAT["role_id"] else COMPANY_ROLE_BY_ID[manager_role]["title"]
    sysmsg=(f"You are {agent_name}, an internal execution capability assigned to company seat "
     f"{company_seat['role_id']} — {company_seat['title']}. "
@@ -1249,6 +1250,7 @@ def process_task(t):
      raise
     model=os.getenv("LLM_FALLBACK_MODEL")
     body["model"]=model
+    attempted_model_route="noetfield_openrouter_fallback"
     fallback=Request("https://openrouter.ai/api/v1/chat/completions",
                      data=json.dumps(body).encode(),
                      headers={"Authorization":"Bearer "+os.getenv("LLM_FALLBACK_API_KEY"),
@@ -1269,6 +1271,7 @@ def process_task(t):
    result["assessment"]="Model unavailable ("+error_meta["code"]+")."
    result["risk_flags"]=["model_unavailable"]
    result["model_error_code"]=error_meta["code"]
+   result["model_route_failed"]=locals().get("attempted_model_route","provider_setup")
  if verified_workpacket and provider=="deterministic":
   provider="provider_error"
   error_meta={"code":"MODEL_NOT_CONFIGURED","retryable":True}
@@ -1283,6 +1286,7 @@ def process_task(t):
   d.execute("UPDATE tasks SET status=?,result=?,updated_at=? WHERE id=?",(terminal_status,json.dumps({
    "provider":provider,"recommendation":result,"memory_hits":len(mem),
    "model_error_code":error_meta["code"] if error_meta else None,
+   "model_route_failed":result.get("model_route_failed") if provider=="provider_error" else None,
    "model_retryable":error_meta["retryable"] if error_meta else None,
    "external_action":"not_executed"}),now(),t["id"]))
  if internal_handoff or verified_workpacket:
@@ -1291,6 +1295,7 @@ def process_task(t):
    "source":"verified_founder_workpacket" if verified_workpacket else "operations_relay",
    "model_route":result.get("model_route","primary") if provider=="openai-compatible" else None,
    "model_error_code":error_meta["code"] if error_meta else None,
+   "model_route_failed":result.get("model_route_failed") if provider=="provider_error" else None,
    "model_retryable":error_meta["retryable"] if error_meta else None,
    "input_tokens":it,"output_tokens":ot,
    "state":"MODEL_FAILED_BLOCKED" if terminal_status=="blocked" else "INTERNAL_DIAGNOSIS_DRAFT",
