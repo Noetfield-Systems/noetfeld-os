@@ -72,6 +72,88 @@ class OperationsRelayTests(unittest.TestCase):
         core.process_task(manager)
         self.assertEqual(len(operations_relay.snapshot()["handoffs"]),2)
 
+    def test_existing_platform_openrouter_fallback_is_internal_only(self):
+        from unittest.mock import patch
+        from urllib.error import HTTPError
+        with core.connect() as db:
+            db.execute("INSERT INTO state(key,value) VALUES(?,?)",
+                ("founder_bridge_last_rejected_projects",json.dumps([{
+                    "reason_code":"project_not_allowed","project_id":"noetfield-earnloop",
+                    "company_id":"noetfield-systems-inc"}])))
+        operations_relay.tick()
+        os.environ.update({"LLM_BASE_URL":"https://primary.invalid/v1",
+                           "LLM_API_KEY":"primary-invalid-fixture",
+                           "LLM_MODEL":"original-model-fixture",
+                           "LLM_FALLBACK_API_KEY":"existing-platform-reference-fixture",
+                           "LLM_FALLBACK_MODEL":"platform-pinned-model-fixture"})
+        class FakeResponse:
+            def __enter__(self): return self
+            def __exit__(self,*_): return False
+            def read(self):
+                return json.dumps({
+                    "choices":[{"message":{"content":json.dumps({
+                        "assessment":"Scoped engineering diagnosis completed using existing model provider",
+                        "next_best_action":"Check canonical project allowlist against registry",
+                        "risk_flags":[],"evidence":[]})}}],
+                    "usage":{"prompt_tokens":31,"completion_tokens":19}
+                }).encode()
+        calls=[]
+        def responder(request,timeout=None):
+            self.assertEqual(timeout,20)
+            calls.append(request)
+            if len(calls)%2==1:
+                self.assertEqual(request.full_url,"https://primary.invalid/v1/chat/completions")
+                raise HTTPError(request.full_url,401,"auth failed",{},None)
+            self.assertEqual(request.full_url,"https://openrouter.ai/api/v1/chat/completions")
+            self.assertEqual(json.loads(request.data)["model"],"platform-pinned-model-fixture")
+            self.assertTrue(request.headers["Authorization"].endswith("existing-platform-reference-fixture"))
+            return FakeResponse()
+        with patch("urllib.request.urlopen",side_effect=responder):
+            first=core.claim("tasks")
+            self.assertEqual(first["role"],"engineering_operator")
+            core.process_task(first)
+            second=core.claim("tasks")
+            self.assertEqual(second["role"],"chief_of_staff")
+            core.process_task(second)
+        self.assertEqual(len(calls),4)
+        with core.connect() as db:
+            rows=db.execute("SELECT result,status FROM tasks ORDER BY priority_rank").fetchall()
+            self.assertEqual(len(rows),2)
+            self.assertTrue(all(row["status"]=="drafted" for row in rows))
+            self.assertTrue(all(json.loads(row["result"])["recommendation"]["model_route"]==
+                                "noetfield_openrouter_fallback" for row in rows))
+            self.assertEqual(db.execute("SELECT COUNT(*) FROM runs WHERE provider='openai-compatible'").fetchone()[0],2)
+        self.assertFalse(operations_relay.snapshot()["end_to_end_motor_execution_proven"])
+
+    def test_customer_llm_401_never_leaks_to_other_provider(self):
+        from unittest.mock import patch
+        from urllib.error import HTTPError
+        old=core.now()
+        with core.connect() as db:
+            db.execute("""INSERT INTO opportunities
+                (id,contact_id,brand,title,intent,problem,estimated_value,urgency,
+                 ai_consent,route,score,stage,source,created_at,updated_at)
+                VALUES(?,NULL,'noetfield','Test','testing','Customer provided data',0,'now',1,
+                       'internal',1,'new','unit',?,?)""",("opp_consent_fixture",old,old))
+            tid=core.add_task(db,None,"opp_consent_fixture","noetfield","product_strategy",
+                              "Customer scenario","Inspect provided evidence","Draft next step")
+        os.environ.update({"LLM_BASE_URL":"https://primary.invalid/v1",
+                           "LLM_API_KEY":"primary-invalid-fixture","LLM_MODEL":"original-model-fixture",
+                           "LLM_FALLBACK_API_KEY":"existing-platform-reference-fixture",
+                           "LLM_FALLBACK_MODEL":"platform-pinned-model-fixture"})
+        seen=[]
+        def only_primary(request,timeout=None):
+            seen.append(request.full_url)
+            raise HTTPError(request.full_url,401,"auth failure",{},None)
+        with patch("urllib.request.urlopen",side_effect=only_primary):
+            task=core.claim("tasks")
+            core.process_task(task)
+        self.assertEqual(seen,["https://primary.invalid/v1/chat/completions"])
+        with core.connect() as db:
+            result=json.loads(db.execute("SELECT result FROM tasks WHERE id=?",(tid,)).fetchone()[0])
+        self.assertEqual(result["model_error_code"],"HTTP_401")
+        self.assertNotIn("existing-platform-reference-fixture",str(result))
+
     def test_real_internal_engineer_then_manager_llm_handoff(self):
         from unittest.mock import patch
         stamp=core.now()
