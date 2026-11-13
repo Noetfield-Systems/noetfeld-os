@@ -129,6 +129,19 @@ def validate_request(item, project_allowlist):
         raise UnsafeRequest("tenant_not_allowed")
     if not isinstance(project,str) or not PROJECT_PATTERN.fullmatch(project) or project not in project_allowlist:
         raise UnsafeRequest("project_not_allowed")
+    explicit={x.strip() for x in os.environ.get("SINA_ORG_BRIDGE_PROJECT_IDS","").split(",") if x.strip()}
+    if project not in explicit:
+        # A dynamic admission can only act for the company in the canonical
+        # Founder project record; a portfolio project is NOT an Inc. subsidiary.
+        canonical=_verified_portfolio_project_scopes()
+        if project not in canonical:
+            raise UnsafeRequest("project_not_allowed")
+        expected=canonical[project]
+        if (expected=="noetfield-systems-inc"
+            and (tenant!=expected or item.get("company_id")!=expected)) or (
+            expected is None
+            and (tenant!="founder-portfolio" or item.get("company_id") is not None)):
+            raise UnsafeRequest("company_tenant_mismatch")
     if (tenant=="founder-portfolio" and item.get("company_id") is not None) or (
         tenant=="noetfield-systems-inc" and item.get("company_id")!=tenant
     ):
@@ -186,10 +199,53 @@ def admit(item,project_allowlist):
         db.commit()
         return tid,True
 
+def _verified_portfolio_project_scopes():
+    """Reuse already-authenticated Founder portfolio records, never raw WorkPacket claims.
+
+    Portfolio Studio validates the origin, project schema and SHA256 digest
+    before adding these canonical daily cycles to the existing durable queue.
+    Company ownership is carried into the admission boundary unchanged.
+    """
+    cutoff=(datetime.now(timezone.utc)-timedelta(days=35)).isoformat()
+    projects={}
+    with core.connect() as db:
+        rows=db.execute("""
+          SELECT payload FROM events
+          WHERE event_type='portfolio.studio.cycle'
+            AND source='sina_founder_os_verified_projection'
+            AND created_at>=?
+          ORDER BY created_at DESC LIMIT 300
+        """,(cutoff,)).fetchall()
+    for row in rows:
+        try:
+            record=json.loads(row["payload"])
+        except (ValueError,TypeError):
+            continue
+        if (not isinstance(record,dict)
+            or record.get("schema")!="noos.portfolio-operations-cycle.v1"
+            or record.get("external_action_executed") is not False):
+            continue
+        project=record.get("project")
+        if not isinstance(project,dict):
+            continue
+        pid,company=project.get("project_id"),project.get("company_id")
+        if (not isinstance(pid,str) or not PROJECT_PATTERN.fullmatch(pid)
+            or company not in (None,"noetfield-systems-inc")
+            or project.get("status") in ("archived","retired","closed")):
+            continue
+        projects.setdefault(pid,company)
+        if len(projects)>=100:
+            break
+    return projects
+
+
 def _allowed_projects():
     raw=os.environ.get("SINA_ORG_BRIDGE_PROJECT_IDS","")
-    projects={x.strip() for x in raw.split(",") if x.strip()}
-    if not projects or len(projects)>100 or any(not PROJECT_PATTERN.fullmatch(x) for x in projects):
+    configured={x.strip() for x in raw.split(",") if x.strip()}
+    if len(configured)>100 or any(not PROJECT_PATTERN.fullmatch(x) for x in configured):
+        raise ValueError("invalid_project_allowlist")
+    projects=configured | set(_verified_portfolio_project_scopes())
+    if not projects or len(projects)>100:
         raise ValueError("invalid_project_allowlist")
     return projects
 
