@@ -132,6 +132,7 @@ def supabase_max_cycle_number(factory_id: str) -> tuple[int | None, dict[str, An
         f"{url.rstrip('/')}/rest/v1/noetfield_factory_cycle_runs?{params}",
         headers={"apikey": key, "Authorization": f"Bearer {key}"},
     )
+    recovered_alias = False
     try:
         with urllib.request.urlopen(req, timeout=20) as resp:
             rows = json.loads(resp.read().decode("utf-8"))
@@ -139,14 +140,61 @@ def supabase_max_cycle_number(factory_id: str) -> tuple[int | None, dict[str, An
         detail = exc.read().decode("utf-8", errors="replace")[:300]
         return None, {"ok": False, "reason": "http_error", "status": exc.code, "detail": detail}
     except (urllib.error.URLError, TimeoutError, OSError, json.JSONDecodeError) as exc:
-        return None, {"ok": False, "reason": "request_failed", "error": str(exc)[:300]}
+        # Cloud deployments may have a stale NOETFIELD_SUPABASE_URL and a
+        # working SUPABASE_URL alias for the SAME project. Recover only on
+        # DNS resolution failure and only when both explicit service-role
+        # keys are identical. Never fail over to a different database:
+        # cycle_number is a single-writer/CAS namespace.
+        import hmac
+        import socket
+        from urllib.parse import urlparse
+        dns_error = isinstance(exc, urllib.error.URLError) and (
+            isinstance(getattr(exc, "reason", None), socket.gaierror)
+            or any(marker in str(exc).lower() for marker in (
+                "name or service not known", "nodename nor servname",
+                "temporary failure in name resolution", "getaddrinfo failed"
+            ))
+        )
+        alias = (os.environ.get("SUPABASE_URL") or "").strip().rstrip("/")
+        main_key = (os.environ.get("NOETFIELD_SUPABASE_SERVICE_ROLE_KEY") or "").strip()
+        alias_key = (os.environ.get("SUPABASE_SERVICE_ROLE_KEY") or "").strip()
+        target = urlparse(alias)
+        safe_alias = (target.scheme == "https" and bool(target.hostname)
+                      and not target.username and not target.password
+                      and not target.query and not target.fragment
+                      and target.path in ("", "/") and target.port in (None, 443))
+        if not (dns_error and safe_alias and alias != url.rstrip("/")
+                and main_key and alias_key
+                and hmac.compare_digest(main_key, alias_key)):
+            return None, {"ok": False, "reason": "request_failed",
+                          "error": str(exc)[:300],
+                          "same_key_dns_alias_recovery": "NOT_ELIGIBLE"}
+        alternate = urllib.request.Request(
+            f"{alias}/rest/v1/noetfield_factory_cycle_runs?{params}",
+            headers={"apikey": key, "Authorization": f"Bearer {key}"}
+        )
+        try:
+            with urllib.request.urlopen(alternate, timeout=20) as resp:
+                rows = json.loads(resp.read().decode("utf-8"))
+        except (urllib.error.HTTPError, urllib.error.URLError, TimeoutError,
+                OSError, json.JSONDecodeError) as secondary:
+            return None, {"ok": False, "reason": "same_key_dns_alias_failed",
+                          "error_type": type(secondary).__name__}
+        if not isinstance(rows, list):
+            return None, {"ok": False, "reason": "same_key_dns_alias_invalid_response"}
+        # Keep the successful read and all subsequent sink/liveness writes on
+        # the same confirmed alias within this process. No invented CAS value.
+        os.environ["NOETFIELD_SUPABASE_URL"] = alias
+        recovered_alias = True
+    if not isinstance(rows, list):
+        return None, {"ok": False, "reason": "invalid_floor_response"}
     if not rows:
-        return 0, {"ok": True, "empty": True, "factory_id": factory_id}
+        return 0, {"ok": True, "empty": True, "factory_id": factory_id, "same_key_dns_alias_recovered": recovered_alias}
     try:
         floor = int(rows[0].get("cycle_number") or 0)
     except (TypeError, ValueError):
         return None, {"ok": False, "reason": "invalid_cycle_number", "row": rows[0]}
-    return floor, {"ok": True, "factory_id": factory_id, "floor": floor}
+    return floor, {"ok": True, "factory_id": factory_id, "floor": floor, "same_key_dns_alias_recovered": recovered_alias}
 
 
 def acquire_cycle_number(loop_id: str, *, factory_id: str | None = None) -> tuple[int | None, dict[str, Any]]:
