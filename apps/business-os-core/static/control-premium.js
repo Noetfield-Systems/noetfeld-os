@@ -204,6 +204,20 @@ function render(data){
   last=data;
   const {o,org,op,t,e,r,roi}=data;
   const counts=o?.counts||{};
+  const asStat=(key)=>counts[key]===undefined?"—":safeNumber(counts[key]);
+  const detail=[
+    ["Contacts",asStat("contacts"),"Business OS contact records"],
+    ["Qualified",asStat("qualified"),"Score of 65 or higher; not a sale"],
+    ["Reported wins",asStat("won"),"Recorded won stage, not verified cash"],
+    ["Queued events",asStat("queued_events"),"System events awaiting processing"],
+    ["Imported requests",asStat("platform_intake_signals"),"Linked intake source records"],
+    ["Requests to process",asStat("platform_intake_pending"),"Received, not yet routed"],
+    ["Routed requests",asStat("platform_intake_tasks_created"),"Internal review tasks created"],
+    ["Weighted pipeline",o?.weighted_pipeline_cad===undefined?"—":Number(o.weighted_pipeline_cad).toLocaleString("en-CA",{style:"currency",currency:"CAD",maximumFractionDigits:0}),"Estimate only — not revenue"]
+  ];
+  $("pulse-metrics").innerHTML=detail.map(([label,value,description])=>
+    '<div class="compact-metric"><span>'+esc(label)+'</span><strong>'+esc(value)+'</strong><small>'+esc(description)+'</small></div>'
+  ).join("");
   $("metrics").innerHTML=[
     metric("Recorded opportunities",counts.opportunities===undefined?"—":safeNumber(counts.opportunities),"Business OS records · includes all stages","◎","opportunities"),
     metric("Open work",counts.pending_tasks===undefined?"—":safeNumber(counts.pending_tasks),"Queued, running or awaiting review","▣","actions","attention"),
