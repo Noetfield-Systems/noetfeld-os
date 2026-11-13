@@ -167,3 +167,15 @@ body.locked .topbar{background:transparent;border:0;box-shadow:none}
 body.locked .top-actions{display:none}
 body.locked .auth-gate{min-height:calc(100vh - 70px)}
 @media(max-width:520px){.auth-card .auth-symbol{width:41px;height:41px}.auth-card{padding:23px 20px}}
+
+/* Work inbox is functional for the entire queue, not a 150-row sample. */
+.inbox-controls{display:grid;grid-template-columns:minmax(240px,2fr) minmax(155px,1fr) minmax(155px,1fr) auto;gap:12px;align-items:end;margin-bottom:20px}
+.inbox-controls label{font-size:12px;font-weight:650;color:#3f536a;display:flex;flex-direction:column;gap:6px}
+.inbox-controls .input{width:100%}
+.inbox-footer{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:13px;padding-top:16px}
+.inbox-footer .footnote{margin:0}
+.task-detail{margin-top:8px;max-width:430px}
+.task-detail summary{cursor:pointer;font-size:11px;color:#295c9c}
+.task-detail p{margin:6px 0 0;color:#52657e;font-size:12px;white-space:normal}
+@media(max-width:1150px){.inbox-controls{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:600px){.inbox-controls{grid-template-columns:1fr}.inbox-controls button{width:100%}.inbox-footer{align-items:flex-start}}
