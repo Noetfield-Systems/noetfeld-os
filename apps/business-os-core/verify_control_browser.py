@@ -128,6 +128,8 @@ with sync_playwright() as p:
     assert page.locator('.view[data-view="connect"]').is_visible(), "Mobile navigation did not switch views"
     page.locator("#menu-open").click()
     page.locator(".side-link[data-go='overview']").click()
+    page.wait_for_timeout(380)
+    assert not page.evaluate("document.body.classList.contains('nav-open')"), "Mobile drawer failed to close after navigation"
     page.screenshot(path=str(OUT/"founder-mobile-fixture.png"),full_page=True)
     width=page.evaluate("document.documentElement.scrollWidth")
     assert width <= 390+3, "Unexpected horizontal page overflow at mobile width: "+str(width)
