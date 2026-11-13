@@ -27,14 +27,14 @@ def check(path, expected=200):
 
 html_type, page = check("/control")
 assert "text/html" in html_type, "Control route did not return HTML"
-for needle in ["Founder access key", "Company overview", "data-view=\"connect\"", "data-view=\"revenue\"", "data-view=\"workflows\"", "/control/premium.css?v=4", "/control/premium.js?v=4"]:
+for needle in ["Founder access key", "Company overview", "data-view=\"connect\"", "data-view=\"revenue\"", "data-view=\"workflows\"", "/control/premium.css?v=5", "/control/premium.js?v=5"]:
     assert needle in page, f"Live control document lacks {needle}"
 assert re.search(r'<meta name="robots" content="noindex,nofollow"', page)
-css_type, css = check("/control/premium.css?v=4")
+css_type, css = check("/control/premium.css?v=5")
 assert "text/css" in css_type, f"Incorrect CSS content type: {css_type}"
 assert "@media(max-width:780px)" in css, "Mobile responsive rules missing"
 assert "body.locked .layout" in css, "Locked layout not covered"
-js_type, js = check("/control/premium.js?v=4")
+js_type, js = check("/control/premium.js?v=5")
 assert any(t in js_type for t in ["javascript", "text/plain"]), f"Incorrect JS content type: {js_type}"
 assert "window.noosPremium=" in js and '"/api/control/tasks"' in js, "Real UI controller missing"
 _, health_txt = check("/health")
