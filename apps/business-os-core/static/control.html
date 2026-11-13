@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;650;700;750;800&display=swap">
-<link rel="stylesheet" href="/control/premium.css?v=5">
+<link rel="stylesheet" href="/control/premium.css?v=6">
 </head>
 <body>
 <a class="skip" href="#workspace-main">Skip to content</a>
@@ -239,6 +239,7 @@
       </section>
       <section class="view" data-view="health" hidden>
         <section class="card"><div class="card-head"><div><h2>Services & processing</h2><p>Live endpoint checks, worker readiness and database availability.</p></div><button class="btn alt" type="button" data-go="health">Check again ↻</button></div><div id="system-health">Checking health…</div><details><summary class="muted">Technical context</summary><p class="helper" id="note">Not loaded.</p></details></section>
+        <section class="card"><div class="card-head"><div><h2>Connected execution systems</h2><p>Live source-reported health, the existing Sina handoff and the Runway Motor boundary. No separate OS or execution queue.</p></div></div><div id="runtime-mesh" aria-live="polite">Unlock the workspace to inspect the execution chain.</div></section>
         <section class="card"><h2>What a green indicator means</h2><p class="helper">A service reporting healthy confirms that endpoint and its stated checks passed. It does not mean every downstream workflow, external integration, or commercial outcome was independently verified.</p></section>
       </section>
       <section class="view" data-view="settings" hidden><div class="subnav"><button type="button" class="btn alt" data-go="health">System health →</button><button type="button" class="btn alt" data-go="workflows">Workflows →</button></div><section class="card"><h2>Founder session</h2><p class="helper">Lock the workspace to clear this tab's authorization.</p><button class="btn alt" type="button" id="logout">Lock workspace</button></section>
@@ -249,7 +250,7 @@
   </main>
 </div>
 </div>
-<script src="/control/premium.js?v=5"></script>
+<script src="/control/premium.js?v=6"></script>
 <script>
 const $=id=>document.getElementById(id);let token=sessionStorage.getItem('noos-founder-token')||'';$('token').value=token;
 function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}

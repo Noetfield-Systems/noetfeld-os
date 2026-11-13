@@ -11,8 +11,8 @@ const inline=[...html.matchAll(/<script>([\s\S]*?)<\/script>/g)].map(m=>m[1]);
 assert.equal(inline.length,1,"Expected one existing application controller");
 new vm.Script(inline[0],{filename:"control-inline.js"});
 new vm.Script(ui,{filename:"control-premium.js"});
-assert.match(html,/\/control\/premium\.css\?v=5/);
-assert.match(html,/\/control\/premium\.js\?v=5/);
+assert.match(html,/\/control\/premium\.css\?v=6/);
+assert.match(html,/\/control\/premium\.js\?v=6/);
 assert.match(html,/type="password" id="token"/);
 assert.match(html,/<form id="auth-form" method="post" action="\/control" autocomplete="on">/);
 assert.match(html,/name="username" autocomplete="username"/);
@@ -42,6 +42,10 @@ assert.match(inline[0],/\/api\/control\/connect-cases\//);
 assert.match(inline[0],/\/api\/control\/tasks\/'\+id\+'\/approve/);
 assert.match(inline[0],/\/api\/control\/commercial-team\/commission/);
 assert.match(ui,/\/api\/control\/tasks/);
+assert.match(ui,/\/api\/control\/runtime-mesh/);
+assert.match(html,/id="runtime-mesh"/);
+assert.match(ui,/function loadRuntimeMesh/);
+assert.match(ui,/runway_e2e_commissioned|Runway remains the canonical execution engine/);
 class FakeClassList{
   constructor(){this.items=new Set()}
   toggle(name,force){const on=force===undefined?!this.items.has(name):Boolean(force);if(on)this.items.add(name);else this.items.delete(name);return on}
