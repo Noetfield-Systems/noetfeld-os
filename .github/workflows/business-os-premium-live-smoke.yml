@@ -1,0 +1,25 @@
+name: Founder Control Plane live smoke
+on:
+  pull_request:
+    paths:
+      - "apps/business-os-core/verify_control_live.py"
+      - ".github/workflows/business-os-premium-live-smoke.yml"
+  push:
+    branches: [platform/business-os-core-v1]
+    paths:
+      - "apps/business-os-core/verify_control_live.py"
+      - ".github/workflows/business-os-premium-live-smoke.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify-live-readonly:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Verify production page, assets, readiness and auth walls
+        run: python apps/business-os-core/verify_control_live.py
