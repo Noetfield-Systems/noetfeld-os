@@ -20,6 +20,8 @@ class OperationsRelayTests(unittest.TestCase):
         core.DB=Path(self.tmp.name)/"core.sqlite"
         core.init()
         founder_bridge.init()
+        for key in ("LLM_BASE_URL","LLM_API_KEY","LLM_MODEL"):
+            os.environ.pop(key,None)
 
     def tearDown(self):
         core.DB=self.saved
@@ -36,20 +38,22 @@ class OperationsRelayTests(unittest.TestCase):
                         '{"private":"sensitive.user@example.test"}',stamp,stamp,"RuntimeError"))
         a=operations_relay.tick()
         self.assertEqual(a["state"],"EXECUTED")
-        self.assertEqual(a["actions"],1)
+        self.assertEqual(a["actions"],2)
         with core.connect() as db:
-            rows=db.execute("SELECT id,role,objective,status FROM tasks").fetchall()
-            self.assertEqual(len(rows),1)
-            self.assertEqual(rows[0]["role"],"engineering_operator")
-            self.assertEqual(rows[0]["status"],"queued")
-            self.assertNotIn("sensitive.user",rows[0]["objective"])
+            rows=db.execute("SELECT id,role,objective,status,autonomy FROM tasks ORDER BY priority_rank").fetchall()
+            self.assertEqual(len(rows),2)
+            self.assertEqual([r["role"] for r in rows],["engineering_operator","chief_of_staff"])
+            self.assertEqual([r["status"] for r in rows],["queued","queued"])
+            self.assertTrue(all(r["autonomy"]=="internal_diagnostic_model" for r in rows))
+            self.assertTrue(all("sensitive.user" not in r["objective"] for r in rows))
+            self.assertEqual(db.execute("SELECT COUNT(*) FROM task_dependencies").fetchone()[0],1)
             marker=db.execute("SELECT value FROM state WHERE key=?",
                               ("operations_relay_event:evt_failed_case_1",)).fetchone()
             self.assertEqual(marker["value"],rows[0]["id"])
         self.assertEqual(operations_relay.tick()["state"],"NOT_DUE")
         self.assertEqual(operations_relay.tick(timestamp=time.time()+120)["actions"],0)
         with core.connect() as db:
-            self.assertEqual(db.execute("SELECT COUNT(*) FROM tasks").fetchone()[0],1)
+            self.assertEqual(db.execute("SELECT COUNT(*) FROM tasks").fetchone()[0],2)
         # Existing specialist worker actually claims, processes and records a run.
         task=core.claim("tasks")
         self.assertEqual(task["id"],rows[0]["id"])
@@ -60,6 +64,73 @@ class OperationsRelayTests(unittest.TestCase):
         self.assertEqual(view["handoffs"][0]["provider"],"deterministic")
         self.assertFalse(view["handoffs"][0]["actual_model_call_observed"])
         self.assertFalse(view["end_to_end_motor_execution_proven"])
+        manager=core.claim("tasks")
+        self.assertEqual(manager["role"],"chief_of_staff")
+        self.assertTrue(operations_relay.supervised_model_authorized(manager))
+        self.assertEqual(operations_relay.upstream_evidence(manager)[0]["role"],"engineering_operator")
+        core.process_task(manager)
+        self.assertEqual(len(operations_relay.snapshot()["handoffs"]),2)
+
+    def test_real_internal_engineer_then_manager_llm_handoff(self):
+        from unittest.mock import patch
+        stamp=core.now()
+        with core.connect() as db:
+            db.execute("INSERT INTO events(id,event_type,source,brand,payload,status,attempts,created_at,error) "
+                       "VALUES(?,?,?,?,?,'dead_letter',4,?,?)",
+                       ("evt_failed_case_2","platform.intake.signal.received","unit","noetfield",
+                        '{"redacted":"never_forward"}',stamp,"TimeoutError"))
+        operations_relay.tick()
+        calls=[]
+        class FakeResponse:
+            def __enter__(self):
+                return self
+            def __exit__(self,*_):
+                return False
+            def read(self):
+                return json.dumps({
+                    "choices":[{"message":{"content":json.dumps({
+                        "assessment":"Investigate timeout and add bounded retry to intake worker",
+                        "next_best_action":"Add regression test for failed webhook",
+                        "risk_flags":[],"evidence":[]})}}],
+                    "usage":{"prompt_tokens":42,"completion_tokens":24}
+                }).encode()
+        def provider_call(req,timeout=None):
+            self.assertEqual(timeout,20)
+            payload=json.loads(req.data)
+            self.assertEqual(payload["max_tokens"],600)
+            user=json.loads(payload["messages"][1]["content"])
+            calls.append(user)
+            self.assertNotIn("never_forward",json.dumps(user))
+            return FakeResponse()
+        os.environ.update({"LLM_BASE_URL":"https://example.invalid",
+                           "LLM_API_KEY":"fixture-only","LLM_MODEL":"fixture-model"})
+        with patch("urllib.request.urlopen",side_effect=provider_call):
+            first=core.claim("tasks")
+            self.assertEqual(first["role"],"engineering_operator")
+            self.assertTrue(operations_relay.supervised_model_authorized(first))
+            core.process_task(first)
+            second=core.claim("tasks")
+            self.assertEqual(second["role"],"chief_of_staff")
+            self.assertTrue(operations_relay.supervised_model_authorized(second))
+            core.process_task(second)
+        self.assertEqual(len(calls),2)
+        self.assertEqual(calls[1]["context"]["prior_specialist_result"][0]["role"],"engineering_operator")
+        self.assertIn("Investigate timeout",calls[1]["context"]["prior_specialist_result"][0]["assessment"])
+        with core.connect() as db:
+            providers=[r[0] for r in db.execute("SELECT provider FROM runs ORDER BY started_at")]
+            self.assertEqual(providers,["openai-compatible","openai-compatible"])
+        view=operations_relay.snapshot()
+        self.assertEqual(sum(1 for x in view["handoffs"] if x["actual_model_call_observed"]),2)
+        self.assertFalse(view["end_to_end_motor_execution_proven"])
+
+    def test_no_arbitrary_task_can_claim_internal_agent_authority(self):
+        with core.connect() as db:
+            tid=core.add_task(db,None,None,"noetfield","engineering_operator",
+                              "Repair event processing evt_fake1234",
+                              "Untrusted browser-controlled text","Do not run")
+            db.execute("UPDATE tasks SET autonomy='internal_diagnostic_model' WHERE id=?",(tid,))
+            item=dict(db.execute("SELECT * FROM tasks WHERE id=?",(tid,)).fetchone())
+        self.assertFalse(operations_relay.supervised_model_authorized(item))
 
     def test_dependency_recovery_requeues_real_blocked_task(self):
         with core.connect() as db:
