@@ -8,6 +8,7 @@ from pydantic import BaseModel, ConfigDict, Field
 import core
 import founder_bridge
 import runtime_mesh
+import operations_relay
 import client_status
 import floor_projection
 import commercial_team
@@ -253,6 +254,12 @@ def runtime_mesh_observation(authorization:str|None=Header(default=None)):
     authorize(authorization)
     return runtime_mesh.snapshot(founder_bridge_status=founder_bridge.health())
 
+@app.get("/api/control/operations-relay")
+def operations_relay_snapshot(authorization:str|None=Header(default=None)):
+    """Actual persisted queue, causal handoffs, remediation and model-call evidence."""
+    authorize(authorization)
+    return operations_relay.snapshot()
+
 @app.get("/api/control/overview")
 def overview(authorization:str|None=Header(default=None)):
     authorize(authorization)
@@ -286,6 +293,11 @@ def dashboard(authorization:str|None=Header(default=None),
         open_states=("queued","running","drafted")
         twhere=" WHERE status IN (?,?,?)"+(" AND brand=?" if brand else "")
         pending=count("tasks",twhere,(*open_states,*values))
+        status_rows=db.execute("SELECT status,COUNT(*) AS n FROM tasks"+
+            (" WHERE brand=?" if brand else "")+" GROUP BY status",values).fetchall()
+        status_counts={row["status"]:row["n"] for row in status_rows}
+        actionable=sum(status_counts.get(k,0) for k in ("queued","running","blocked","failed"))
+        review_drafts=status_counts.get("drafted",0)
         opportunities=count("opportunities",where,values)
         contacts=count("contacts",where,values)
         requested=count("opportunities",
@@ -309,6 +321,9 @@ def dashboard(authorization:str|None=Header(default=None),
               "opportunities":opportunities,
               "active_opportunities":requested,
               "pending_tasks":pending,
+              "actionable_tasks":actionable,
+              "drafts_awaiting_review":review_drafts,
+              "task_status_breakdown":status_counts,
               "activity_events":recent,
             },
             "activity_daily":events,
