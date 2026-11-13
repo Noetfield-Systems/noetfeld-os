@@ -215,6 +215,88 @@ class OperationsRelayTests(unittest.TestCase):
                 "SELECT title,status FROM tasks WHERE title LIKE 'Model retry %'")}
         self.assertEqual(states,{"yes":"queued","no":"drafted","limit":"drafted"})
 
+    def test_provider_errors_classify_without_raw_url_or_secret(self):
+        from urllib.error import HTTPError, URLError
+        cases=[(HTTPError("https://provider.invalid/?token=SECRET",401,
+                          "SECRET unauthorized",{},None),"HTTP_401",False),
+               (HTTPError("https://provider.invalid/?token=SECRET",429,
+                          "rate-limited",{},None),"HTTP_429",True),
+               (TimeoutError("SECRET input timed out"),"NETWORK_TRANSIENT",True),
+               (URLError("SECRET getaddrinfo failed"),"NETWORK_TRANSIENT",True),
+               (ValueError("SECRET broken reply"),"PROVIDER_RESPONSE_INVALID",False)]
+        for error,code,again in cases:
+            result=operations_relay.classify_provider_error(error)
+            self.assertEqual(result,{"code":code,"retryable":again})
+            self.assertNotIn("SECRET",str(result))
+
+    def test_supervised_model_http401_is_a_real_blocker_not_a_retry_storm(self):
+        from unittest.mock import patch
+        from urllib.error import HTTPError
+        stamp=core.now()
+        with core.connect() as db:
+            db.execute("INSERT INTO state(key,value) VALUES(?,?)",
+                ("founder_bridge_last_rejected_projects",json.dumps([{
+                    "reason_code":"project_not_allowed","project_id":"noetfield-earnloop",
+                    "company_id":"noetfield-systems-inc"}])))
+        operations_relay.tick()
+        os.environ.update({"LLM_BASE_URL":"https://provider.invalid/v1",
+                           "LLM_API_KEY":"DO_NOT_PUBLISH_SECRET","LLM_MODEL":"fixture"})
+        with patch("urllib.request.urlopen",side_effect=HTTPError(
+                "https://provider.invalid/v1/chat/completions?key=DO_NOT_PUBLISH_SECRET",
+                401,"DO_NOT_PUBLISH_SECRET",{},None)):
+            first=core.claim("tasks")
+            self.assertEqual(first["role"],"engineering_operator")
+            core.process_task(first)
+        with core.connect() as db:
+            t=db.execute("SELECT * FROM tasks WHERE id=?",(first["id"],)).fetchone()
+            result=json.loads(t["result"])
+            self.assertEqual(result["model_error_code"],"HTTP_401")
+            self.assertFalse(result["model_retryable"])
+            self.assertNotIn("DO_NOT_PUBLISH_SECRET",t["result"])
+            db.execute("UPDATE tasks SET updated_at=? WHERE id=?",(
+                (datetime.now(timezone.utc)-timedelta(minutes=8)).isoformat(),first["id"]))
+        next_tick=operations_relay.tick(timestamp=time.time()+120)
+        self.assertIn("MODEL_PROVIDER_BLOCKER_IDENTIFIED",next_tick["action_types"])
+        self.assertNotIn("SUPERVISED_MODEL_RETRY",next_tick["action_types"])
+        with core.connect() as db:
+            t=db.execute("SELECT * FROM tasks WHERE id=?",(first["id"],)).fetchone()
+            self.assertEqual(t["status"],"drafted")
+        again=operations_relay.tick(timestamp=time.time()+240)
+        self.assertNotIn("MODEL_PROVIDER_BLOCKER_IDENTIFIED",again["action_types"])
+        page=operations_relay.snapshot()
+        task=next(x for x in page["handoffs"] if x["task_id"]==first["id"])
+        self.assertEqual(task["response_kind"],"PROVIDER_FAILED")
+        self.assertEqual(task["model_error_code"],"HTTP_401")
+        self.assertEqual(task["answer_excerpt"],"Provider failed: HTTP_401")
+        self.assertNotIn("DO_NOT_PUBLISH_SECRET",str(page))
+
+    def test_supervised_model_http429_is_retried_after_cooldown(self):
+        from unittest.mock import patch
+        from urllib.error import HTTPError
+        with core.connect() as db:
+            db.execute("INSERT INTO state(key,value) VALUES(?,?)",
+                ("founder_bridge_last_rejected_projects",json.dumps([{
+                    "reason_code":"project_not_allowed","project_id":"noetfield-earnloop",
+                    "company_id":"noetfield-systems-inc"}])))
+        operations_relay.tick()
+        os.environ.update({"LLM_BASE_URL":"https://provider.invalid/v1",
+                           "LLM_API_KEY":"fixture-secret","LLM_MODEL":"fixture"})
+        with patch("urllib.request.urlopen",side_effect=HTTPError(
+                "https://provider.invalid/v1/chat/completions",429,"rate-limited",{},None)):
+            engineer=core.claim("tasks")
+            core.process_task(engineer)
+        with core.connect() as db:
+            row=db.execute("SELECT * FROM tasks WHERE id=?",(engineer["id"],)).fetchone()
+            self.assertEqual(json.loads(row["result"])["model_error_code"],"HTTP_429")
+            db.execute("UPDATE tasks SET updated_at=? WHERE id=?",(
+                (datetime.now(timezone.utc)-timedelta(minutes=8)).isoformat(),engineer["id"]))
+        result=operations_relay.tick(timestamp=time.time()+120)
+        self.assertIn("SUPERVISED_MODEL_RETRY",result["action_types"])
+        with core.connect() as db:
+            row=db.execute("SELECT * FROM tasks WHERE id=?",(engineer["id"],)).fetchone()
+            self.assertEqual(row["status"],"queued")
+        self.assertFalse(operations_relay.snapshot()["end_to_end_motor_execution_proven"])
+
     def test_readonly_projection_never_confuses_drafts_with_execution(self):
         with core.connect() as db:
             tid=core.add_task(db,None,None,"noetfield","engineering_operator",
