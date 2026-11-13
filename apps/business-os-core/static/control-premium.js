@@ -420,9 +420,16 @@ async function loadOperationsRelay(){
         :esc(item.provider||"not_invoked")+' · no model-to-model prompt confirmed';
       const link=esc(item.from||"Company OS queue")+' → '+esc(item.to||"Unknown specialist");
       const owner=esc(item.owner_role||"Unknown owner");
-      return '<div class="status-line"><span><b>'+link+'</b><br><span class="muted">'+
+      const prompt=esc(item.prompt_excerpt||"No task instruction recorded");
+      const response=esc(item.answer_excerpt||"No response body recorded");
+      const proof=esc(item.response_kind||"NO_RECORDED_RESPONSE");
+      const transcript='<details class="task-detail"><summary>Inspect assigned prompt & recorded response</summary>'+
+        '<p><b>Assigned instruction:</b> '+prompt+'</p>'+
+        '<p><b>Recorded outcome ('+proof+'):</b> '+response+'</p>'+
+        '<p class="muted">Source: persisted Company OS task and run, not a reconstructed private model conversation.</p></details>';
+      return '<div class="status-line"><div><b>'+link+'</b><div class="muted">'+
         esc(item.title||"Recorded task")+' · '+owner+' · '+model+
-        ' · '+esc(item.task_id||"")+'</span></span>'+labelTag(item.status)+'</div>';
+        ' · '+esc(item.task_id||"")+'</div>'+transcript+'</div>'+labelTag(item.status)+'</div>';
     };
     const blocks=(d.blockers||[]).slice(0,6).map(b=>
       '<div class="status-line"><span><b>'+esc(b.reason_code||b.state||"Unknown blocker")+
