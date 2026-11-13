@@ -250,6 +250,30 @@ def next_cycle_number(loop_id: str) -> int:
     return number if number is not None else 1
 
 
+def classify_step_failure(stdout: str, stderr: str) -> str:
+    """Safe fixed-category failure signal. Never copy upstream error text into public diagnostics."""
+    detail = (str(stderr or "") + "\n" + str(stdout or "")).lower()[-4000:]
+    checks = (
+        ("tenant or user not found", "DATABASE_POOLER_TENANT_INVALID"),
+        ("supabase not configured", "SUPABASE_CONFIGURATION_MISSING"),
+        ("invalid api key", "UPSTREAM_CREDENTIAL_REJECTED"),
+        ("401 unauthorized", "UPSTREAM_AUTH_401"),
+        ("http error 401", "UPSTREAM_AUTH_401"),
+        ("http error 403", "UPSTREAM_PERMISSION_403"),
+        ("permission denied", "PERMISSION_DENIED"),
+        ("http error 404", "UPSTREAM_NOT_FOUND"),
+        ("connection refused", "DEPENDENCY_CONNECTION_REFUSED"),
+        ("timed out", "DEPENDENCY_TIMEOUT"),
+        ("timeout", "DEPENDENCY_TIMEOUT"),
+        ("no module named", "PYTHON_DEPENDENCY_MISSING"),
+        ("traceback (most recent call last)", "WORKER_EXCEPTION"),
+    )
+    for marker, category in checks:
+        if marker in detail:
+            return category
+    return "UNCLASSIFIED_NONZERO_EXIT"
+
+
 def run_cmd(cmd: list[str], *, continue_on_error: bool = False, timeout: int = 600) -> dict[str, Any]:
     if cmd and cmd[0] == "python3":
         cmd = [sys.executable, *cmd[1:]]
@@ -269,6 +293,7 @@ def run_cmd(cmd: list[str], *, continue_on_error: bool = False, timeout: int = 6
             "exit_code": proc.returncode,
             "stdout_tail": (proc.stdout or "").strip()[-1200:],
             "stderr_tail": (proc.stderr or "").strip()[-800:],
+            "error": classify_step_failure(proc.stdout, proc.stderr) if proc.returncode != 0 else None,
             "continued_on_error": continue_on_error and proc.returncode != 0,
         }
     except subprocess.TimeoutExpired:
