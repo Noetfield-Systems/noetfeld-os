@@ -14,7 +14,7 @@ from pathlib import Path
 from typing import Any, Callable
 
 ROOT = Path(__file__).resolve().parents[1]
-PRIORITY_RANK = {"P1": 0, "P2": 1, "P0": 2}
+PRIORITY_RANK = {"P0": 0, "P1": 1, "P2": 2}
 
 sys.path.insert(0, str(ROOT / "scripts"))
 from cloud_inbox_constants_v1 import FOUNDER_BLOCKED_REASON, FOUNDER_BLOCKED_STATUS
@@ -62,7 +62,7 @@ def _request(method: str, path: str, *, body: dict[str, Any] | None = None) -> A
 
 def is_founder_only(item: dict[str, Any]) -> bool:
     payload = item.get("payload") or {}
-    return payload.get("owner") == "founder" or payload.get("lane") == "commercial"
+    return payload.get("owner") == "founder" or payload.get("requires_founder") is True
 
 
 def item_age_seconds(item: dict[str, Any], *, now: datetime | None = None) -> int | None:
@@ -107,7 +107,9 @@ def build_founder_blocked_patch(item: dict[str, Any]) -> dict[str, Any]:
 
 
 def select_executable(pending: list[dict[str, Any]]) -> dict[str, Any] | None:
-    candidates = [item for item in pending if not is_founder_only(item)]
+    candidates = [item for item in pending
+                  if not is_founder_only(item)
+                  and str((item.get("payload") or {}).get("upg") or item.get("item_id")) in HANDLERS]
     if not candidates:
         return None
     candidates.sort(
@@ -303,7 +305,12 @@ HANDLERS: dict[str, Callable[[], dict[str, Any]]] = {
 def _execute_item(item: dict[str, Any]) -> dict[str, Any]:
     upg = (item.get("payload") or {}).get("upg") or item["item_id"]
     handler = HANDLERS.get(upg)
-    execution = handler() if handler else _exec_baseline(item)
+    if handler is None:
+        # An unrelated governance test cannot prove completion of an
+        # unimplemented commercial/engineering assignment. Leave it pending.
+        return {"ok": False, "status": "NO_REGISTERED_EXECUTOR",
+                "item_id": item["item_id"], "upg": upg}
+    execution = handler()
     now = utc_now()
     payload = dict(item.get("payload") or {})
     payload["cloud_execution_receipt"] = {

@@ -29,7 +29,8 @@ from cloud_inbox_worker_v1 import (
 
 def test_founder_only_detection():
     assert is_founder_only({"payload": {"owner": "founder"}})
-    assert is_founder_only({"payload": {"lane": "commercial"}})
+    assert not is_founder_only({"payload": {"lane": "commercial"}})
+    assert is_founder_only({"payload": {"requires_founder": True, "lane": "commercial"}})
     assert not is_founder_only({"payload": {"upg": "UPG-0152"}})
 
 
@@ -137,7 +138,7 @@ def test_process_cycle_includes_founder_blocked_summary():
         raise AssertionError(f"unexpected request: {method} {path}")
 
     worker._request_fn = fake_request
-    with patch.object(worker, "_exec_upg_0152", return_value={"ok": True, "exit_code": 0}):
+    with patch.dict(worker.HANDLERS, {"UPG-0152": lambda: {"ok": True, "exit_code": 0}}):
         result = process_cycle()
 
     worker._request_fn = None
@@ -163,3 +164,42 @@ def test_empty_inbox_idle_no_work():
     worker._request_fn = None
     assert result["status"] == "IDLE_NO_WORK"
     assert result["idle_reason"] == "empty_inbox"
+
+def test_p0_beats_p1_and_p2_for_supported_work():
+    pending = [
+        {"item_id": "UPG-0153", "priority": "P2", "payload": {"upg": "UPG-0153"}},
+        {"item_id": "UPG-0152", "priority": "P0", "payload": {"upg": "UPG-0152"}},
+        {"item_id": "UPG-0154", "priority": "P1", "payload": {"upg": "UPG-0154"}},
+    ]
+    assert select_executable(pending)["item_id"] == "UPG-0152"
+
+
+def test_unimplemented_commercial_work_must_not_be_fake_completed():
+    pending = [
+        {"item_id": "COMMERCIAL-REAL-01", "priority": "P0",
+         "payload": {"lane": "commercial", "goal": "send real outreach"}},
+        {"item_id": "UPG-0154", "priority": "P1", "payload": {"upg": "UPG-0154"}},
+    ]
+    assert select_executable(pending)["item_id"] == "UPG-0154"
+    assert worker._execute_item(pending[0]) == {
+        "ok": False,
+        "status": "NO_REGISTERED_EXECUTOR",
+        "item_id": "COMMERCIAL-REAL-01",
+        "upg": "COMMERCIAL-REAL-01",
+    }
+
+
+def test_reserved_founder_effect_is_not_dispatched():
+    pending = [
+        {"item_id": "UPG-0152", "priority": "P0",
+         "payload": {"upg": "UPG-0152", "requires_founder": True}},
+        {"item_id": "UPG-0153", "priority": "P1",
+         "payload": {"upg": "UPG-0153"}},
+    ]
+    assert select_executable(pending)["item_id"] == "UPG-0153"
+
+
+def test_commercial_lane_safe_registered_handler_can_execute():
+    item = {"item_id": "UPG-0152", "priority": "P0",
+            "payload": {"upg": "UPG-0152", "lane": "commercial"}}
+    assert select_executable([item])["item_id"] == "UPG-0152"
