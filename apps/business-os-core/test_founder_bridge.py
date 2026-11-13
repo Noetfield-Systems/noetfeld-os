@@ -126,6 +126,82 @@ class CompanyFounderContinuousBridgeTests(unittest.TestCase):
             self.assertEqual(founder_bridge.publish_contributor_signals(),1)
             self.assertEqual(founder_bridge.publish_contributor_signals(),0)
 
+    def test_canonical_portfolio_automatically_unblocks_new_company_workpacket(self):
+        """Source-backed project feeds replace stale manually maintained CSVs."""
+        from datetime import datetime, timezone
+        now=datetime.now(timezone.utc).isoformat()
+        for project,company,source,schema in [
+            ("noetfield-earnloop","noetfield-systems-inc","sina_founder_os_verified_projection",
+             "noos.portfolio-operations-cycle.v1"),
+            ("founder-independent-venture",None,"sina_founder_os_verified_projection",
+             "noos.portfolio-operations-cycle.v1"),
+            ("untrusted-other","noetfield-systems-inc","public_web",
+             "noos.portfolio-operations-cycle.v1"),
+            ("untrusted-schema","noetfield-systems-inc","sina_founder_os_verified_projection",
+             "untrusted.schema"),
+        ]:
+            eid="evt_reg_"+project
+            payload={"schema":schema,"external_action_executed":False,
+                     "project":{"project_id":project,"company_id":company,"status":"building"}}
+            with core.connect() as db:
+                db.execute("""INSERT INTO events(
+                    id,event_type,source,brand,payload,status,created_at)
+                    VALUES(?,'portfolio.studio.cycle',?,?,?,'processed',?)""",
+                    (eid,source,"project:"+project,json.dumps(payload),now))
+        projects=founder_bridge._allowed_projects()
+        self.assertIn("noetfield-earnloop",projects)
+        self.assertIn("founder-independent-venture",projects)
+        self.assertNotIn("untrusted-other",projects)
+        self.assertNotIn("untrusted-schema",projects)
+        company=request(request_id="c"*32,project_id="noetfield-earnloop")
+        tid,created=founder_bridge.admit(company,projects)
+        self.assertTrue(created)
+        self.assertTrue(tid.startswith("task_"))
+        portfolio={**request(request_id="d"*32,project_id="founder-independent-venture"),
+                   "company_id":None,"tenant_scope":"founder-portfolio"}
+        other,created=founder_bridge.admit(portfolio,projects)
+        self.assertTrue(created)
+        self.assertNotEqual(other,tid)
+        # A Founder-portfolio independent venture must never be silently
+        # reclassified as a Noetfield Systems Inc. subsidiary.
+        with self.assertRaises(founder_bridge.UnsafeRequest):
+            founder_bridge.admit(request(request_id="e"*32,project_id="founder-independent-venture"),projects)
+        with self.assertRaises(founder_bridge.UnsafeRequest):
+            founder_bridge.admit({**company,"request_id":"f"*32,
+                                  "tenant_scope":"founder-portfolio","company_id":None},projects)
+        with core.connect() as db:
+            self.assertEqual(db.execute("SELECT COUNT(*) FROM founder_org_bindings").fetchone()[0],2)
+
+    def test_rejected_founder_packet_is_accepted_after_verified_project_feed_arrives(self):
+        from datetime import datetime, timezone
+        item=request(request_id="2"*32,project_id="noetfield-earnloop")
+        with self.assertRaises(founder_bridge.UnsafeRequest):
+            founder_bridge.admit(item,founder_bridge._allowed_projects())
+        project={"project_id":"noetfield-earnloop",
+                 "company_id":"noetfield-systems-inc","status":"active"}
+        with core.connect() as db:
+            db.execute("""INSERT INTO events(
+                id,event_type,source,brand,payload,status,created_at)
+                VALUES('evt_canonical_test','portfolio.studio.cycle',
+                'sina_founder_os_verified_projection','project:noetfield-earnloop',
+                ?,'processed',?)""",
+                (json.dumps({"schema":"noos.portfolio-operations-cycle.v1",
+                             "project":project,"external_action_executed":False}),
+                 datetime.now(timezone.utc).isoformat()))
+        accepted,created=founder_bridge.admit(item,founder_bridge._allowed_projects())
+        self.assertTrue(created)
+        self.assertTrue(accepted.startswith("task_"))
+        # End-to-end local queue owns the exact original work after admission.
+        claimed=core.claim("tasks")
+        self.assertEqual(claimed["id"],accepted)
+        core.process_task(claimed)
+        with core.connect() as db:
+            self.assertEqual(db.execute("SELECT status FROM tasks WHERE id=?",
+                        (accepted,)).fetchone()[0],"drafted")
+        with core.connect() as db:
+            self.assertEqual(json.loads(db.execute("SELECT result FROM tasks WHERE id=?",
+                (accepted,)).fetchone()["result"])["external_action"],"not_executed")
+
     def test_exact_scope_advisory_only_no_unlicensed_effect(self):
         item = request()
         for bad in [
