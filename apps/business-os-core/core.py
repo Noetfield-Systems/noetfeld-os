@@ -1186,7 +1186,7 @@ def process_task(t):
  if internal_handoff:
   ctx["prior_specialist_result"]=operations_relay.upstream_evidence(t)
   ctx["task_class"]="INTERNAL_COMPANY_OS_DIAGNOSTIC_ONLY"
- provider="deterministic";model="none";it=ot=0
+ provider="deterministic";model="none";it=ot=0;error_meta=None
  profile=next((a for a in AGENTS if a[0]==role),None)
  agent_name=profile[1] if profile else role
  agent_mission=profile[2] if profile else "Complete the assigned specialist task."
@@ -1227,13 +1227,24 @@ def process_task(t):
    try:result=json.loads(out)
    except Exception:result={"assessment":clean(out,1500),"next_best_action":t["next_action"],"risk_flags":[],"priority":"normal"}
    use=data.get("usage") or {};it=int(use.get("prompt_tokens") or 0);ot=int(use.get("completion_tokens") or 0);provider="openai-compatible"
-  except Exception as ex:provider="provider_error";result["assessment"]="Model unavailable: "+clean(ex,120);result["risk_flags"]=["model_unavailable"]
+  except Exception as ex:
+   provider="provider_error"
+   error_meta=operations_relay.classify_provider_error(ex)
+   result["assessment"]="Model unavailable ("+error_meta["code"]+")."
+   result["risk_flags"]=["model_unavailable"]
+   result["model_error_code"]=error_meta["code"]
  with connect() as d:
   d.execute("INSERT INTO runs VALUES(?,?,?,?,?,?,?,?,?,?,?)",(idof("run"),t["id"],role,provider,model,"degraded" if provider=="provider_error" else "completed",it,ot,now(),now(),json.dumps(result,ensure_ascii=False)))
-  d.execute("UPDATE tasks SET status='drafted',result=?,updated_at=? WHERE id=?",(json.dumps({"provider":provider,"recommendation":result,"memory_hits":len(mem),"external_action":"not_executed"}),now(),t["id"]))
+  d.execute("UPDATE tasks SET status='drafted',result=?,updated_at=? WHERE id=?",(json.dumps({
+   "provider":provider,"recommendation":result,"memory_hits":len(mem),
+   "model_error_code":error_meta["code"] if error_meta else None,
+   "model_retryable":error_meta["retryable"] if error_meta else None,
+   "external_action":"not_executed"}),now(),t["id"]))
  if internal_handoff:
   print("company_agent_handoff="+json.dumps({
    "task_id":t["id"],"role":role,"provider":provider,
+   "model_error_code":error_meta["code"] if error_meta else None,
+   "model_retryable":error_meta["retryable"] if error_meta else None,
    "input_tokens":it,"output_tokens":ot,
    "state":"INTERNAL_DIAGNOSIS_DRAFT","external_effects":0,
    "independent_verification":False},sort_keys=True),flush=True)
