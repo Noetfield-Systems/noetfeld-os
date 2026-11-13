@@ -78,7 +78,7 @@ function setAuth(isConnected,message){
   if(isConnected)showView((location.hash||"#overview").slice(1),{noHash:true,noScroll:true});
 }
 function formatTask(x){
-  return "<div class='action-item'><span class='action-mark' aria-hidden='true'>☷</span><div><b>"+esc(x.title||"Review work")+"</b><p>"+esc(role[x.role]||x.company_role_title||"Company operations")+" · "+esc(humanStatus(x.status))+" · "+esc(x.brand||"Portfolio")+"</p></div><button class='btn alt' type='button' data-go='actions'>Review →</button></div>";
+  return "<div class='action-item'><span class='action-mark' aria-hidden='true'>☷</span><div><b>"+esc(x.title||"Review work")+"</b><p>"+esc(role[x.role]||x.company_role_title||"Company operations")+" · "+esc(humanStatus(x.status))+" · "+esc(x.brand||"Portfolio")+"</p></div><button class='btn alt' type='button' data-task-focus='"+esc(x.id)+"'>Review →</button></div>";
 }
 
 const taskInboxState={offset:0,limit:40,loaded:false,requestId:0};
