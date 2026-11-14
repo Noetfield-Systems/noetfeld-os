@@ -102,3 +102,9 @@ def test_deploy_failed_rejected():
     )
     assert decision.decision == REJECTED
     assert "deploy_not_successful" in decision.reasons
+
+
+def test_missing_provenance_source_rejected():
+    decision = verify_release_receipt(_receipt(source=""), SHA, "production")
+    assert decision.decision == REJECTED
+    assert "missing_source" in decision.reasons
