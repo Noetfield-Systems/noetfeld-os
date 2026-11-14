@@ -35,6 +35,7 @@ jobs:
         with:
           ref: deploy/noos-loop-runner-entrypoint
           persist-credentials: false
+          fetch-depth: 0
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
@@ -49,7 +50,7 @@ jobs:
 
   independent-verification-and-release:
     needs: coding
-    if: needs.coding.outputs.state == 'PR_OPENED'
+    if: needs.coding.outputs.state == 'PR_OPENED' || needs.coding.outputs.state == 'BRANCH_READY'
     runs-on: ubuntu-latest
     timeout-minutes: 14
     steps:
@@ -61,23 +62,64 @@ jobs:
         with:
           python-version: '3.12'
       - run: python -m pip install -r requirements.txt
-      - name: Independent test and readback
+      - name: Independent test in credential-free workspace
+        id: verify
         env:
-          EXPECTED_PR: ${{ needs.coding.outputs.pr_url }}
+          EXPECTED_BRANCH: ${{ needs.coding.outputs.branch }}
           EXPECTED_TEST: ${{ needs.coding.outputs.test_path }}
-          GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
+          case "$EXPECTED_BRANCH" in
+            sina/noos-coder-*) ;;
+            *) echo "Untrusted candidate branch"; exit 1 ;;
+          esac
           case "$EXPECTED_TEST" in
             tests/test_noos_agent_feature_*.py) ;;
             *) echo "Unsafe test path"; exit 1 ;;
           esac
-          python -m compileall -q scripts
+
+          BASE_SHA="$(git rev-parse refs/remotes/origin/deploy/noos-loop-runner-entrypoint)"
+          MERGE_BASE="$(git merge-base HEAD "$BASE_SHA")"
+          test "$BASE_SHA" = "$MERGE_BASE" || {
+            echo "Candidate is stale; refusing unverified rebase"; exit 1;
+          }
+          mapfile -t CHANGED < <(git diff --name-only "$BASE_SHA" HEAD)
+          test "${#CHANGED[@]}" -eq 2 || {
+            echo "Unexpected number of changed files"; exit 1;
+          }
+          test -f "$EXPECTED_TEST" || exit 1
+          for file in "${CHANGED[@]}"; do
+            case "$file" in
+              scripts/noos_agent_feature_*.py | tests/test_noos_agent_feature_*.py) ;;
+              *) echo "Unauthorized path: $file"; exit 1 ;;
+            esac
+          done
+          if git diff --name-status "$BASE_SHA" HEAD | grep -Ev '^A[[:space:]]'; then
+            echo "Only additive candidate files are authorized"; exit 1
+          fi
+
+          python -m compileall -q scripts tests
           python -m pytest -q "$EXPECTED_TEST"
-          git diff --check
-          gh pr view "$EXPECTED_PR" --json state,baseRefName,headRefName | python -c 'import json,sys; x=json.load(sys.stdin); assert x["state"]=="OPEN" and x["baseRefName"]=="deploy/noos-loop-runner-entrypoint" and x["headRefName"].startswith("sina/noos-coder-")'
-      - name: Merge verified, Founder-authorized scope
+          git diff --check "$BASE_SHA" HEAD
+          echo "candidate_sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+          echo "base_sha=$BASE_SHA" >> "$GITHUB_OUTPUT"
+
+      - name: Release verified fast-forward
         env:
           GH_TOKEN: ${{ github.token }}
-          EXPECTED_PR: ${{ needs.coding.outputs.pr_url }}
-        run: gh pr merge "$EXPECTED_PR" --squash --delete-branch
+          CANDIDATE_SHA: ${{ steps.verify.outputs.candidate_sha }}
+          BASE_SHA: ${{ steps.verify.outputs.base_sha }}
+          EXPECTED_BRANCH: ${{ needs.coding.outputs.branch }}
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$CANDIDATE_SHA"
+          gh auth setup-git
+          REMOTE_SHA="$(git ls-remote origin "refs/heads/$EXPECTED_BRANCH" | cut -f1)"
+          TARGET_SHA="$(git ls-remote origin refs/heads/deploy/noos-loop-runner-entrypoint | cut -f1)"
+          test "$REMOTE_SHA" = "$CANDIDATE_SHA"
+          test "$TARGET_SHA" = "$BASE_SHA"
+          git push origin "HEAD:refs/heads/deploy/noos-loop-runner-entrypoint"
+          NEW_SHA="$(git ls-remote origin refs/heads/deploy/noos-loop-runner-entrypoint | cut -f1)"
+          test "$NEW_SHA" = "$CANDIDATE_SHA"
+          echo "NOOS_VERIFIED_CODE_FAST_FORWARD=$NEW_SHA"
+          echo "NOOS_RAILWAY_DEPLOY_PENDING_READBACK"
