@@ -1,0 +1,26 @@
+name: NOOS Autonomous Candidate Verification
+on:
+  pull_request:
+    branches: [deploy/noos-loop-runner-entrypoint]
+    paths:
+      - 'scripts/noos_agent_feature_*.py'
+      - 'tests/test_noos_agent_feature_*.py'
+      - '.github/workflows/noos-candidate-verification.yml'
+permissions:
+  contents: read
+jobs:
+  independently-test-generated-code:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install -r requirements.txt
+      - name: Run all autonomous code candidate tests
+        run: |
+          set -euo pipefail
+          python -m compileall -q scripts tests
+          python -m pytest -q tests/test_noos_agent_feature_*.py
+          git diff --check
