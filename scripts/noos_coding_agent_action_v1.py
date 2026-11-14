@@ -250,10 +250,11 @@ def main():
                    "evidence":evidence},token)
         if not result.get("ok"):
             raise RuntimeError("QUEUE_RESULT_REPORT_FAILED")
-        output(state=state,branch=branch,pr_url=pr or "",
+        workflow_state = "PR_OPENED" if pr else "BRANCH_READY"
+        output(state=workflow_state,branch=branch,pr_url=pr or "",
                job_id=job["job_id"],test_path=paths[1])
-        print("NOOS_CODE_RESULT "+state+" "+workpacket)
-        if state == "PR_OPENED":
+        print("NOOS_CODE_RESULT "+workflow_state+" "+workpacket)
+        if workflow_state in ("PR_OPENED","BRANCH_READY"):
             # Restart on the next queued job without another Founder prompt.
             # GitHub cron remains the durable recovery path when dispatch is denied.
             try:
