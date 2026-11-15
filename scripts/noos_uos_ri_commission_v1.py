@@ -19,7 +19,7 @@ from typing import Any, Callable
 import noos_runway_supervision_adapter_v1 as runway
 
 SCHEMA = "uos-ri.commissioning-observation.v1"
-TERMINAL = {"COMPLETE", "DONE", "FAILED", "FAILED_WITH_RECEIPT", "BLOCKED", "BLOCKED_WITH_REASON", "CANCELLED"}
+TERMINAL = {"SUCCEEDED", "COMPLETE", "DONE", "FAILED", "FAILED_WITH_RECEIPT", "BLOCKED", "BLOCKED_WITH_REASON", "CANCELLED"}
 SHA256 = re.compile(r"^[a-f0-9]{64}$")
 JOB_ID = re.compile(r"^[A-Za-z0-9._:-]{3,128}$")
 
@@ -166,6 +166,15 @@ def commission(
 
     proof.update(_verified_result(result_resp))
     result_body = _body(result_resp)
+    artifacts = result_body.get("artifacts")
+    if isinstance(artifacts, list):
+        proof["runtime_artifact_digests"] = [
+            {"artifact_id": item.get("artifact_id"), "sha256": item.get("content_sha256")}
+            for item in artifacts
+            if isinstance(item, dict) and isinstance(item.get("artifact_id"), str)
+            and isinstance(item.get("content_sha256"), str) and SHA256.fullmatch(item["content_sha256"])
+        ]
+    proof["runtime_result_readback"] = True
     usage = result_body.get("usage")
     if isinstance(usage, dict):
         # The provider request ID is essential for correlation with HDIR Attempt/Evidence.
@@ -189,7 +198,7 @@ def commission(
         and reported.get("output_tokens") is not None
         and reported.get("usage_source") in {"DEEPSEEK_API_USAGE", "CLOUDFLARE_API_USAGE", "PROVIDER_API_USAGE"}
     )
-    terminal_ok = proof["runtime_terminal_state"] in {"COMPLETE", "DONE"}
+    terminal_ok = proof["runtime_terminal_state"] in {"SUCCEEDED", "COMPLETE", "DONE"}
     verifier_ok = proof["independent_verdict"] == "PASS"
     proof["status"] = (
         "VERIFIED_TECHNICAL_SUCCESS" if terminal_ok and verifier_ok and proof["provider_execution_verified"]
