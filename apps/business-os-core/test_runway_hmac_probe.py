@@ -35,6 +35,7 @@ class TestRunwayHmacProbe(unittest.TestCase):
         secret = "SUPER-PRIVATE-SECRET-DO-NOT-LOG"
         def respond(req, timeout):
             self.assertIn("NOETFIELD-HMAC staging-proof:", req.headers.get("Authorization", ""))
+            self.assertEqual(req.headers.get("User-agent"), "noos-runway-supervision-adapter-v2")
             raise HTTPError(req.full_url, 401, "invalid", {}, io.BytesIO(
                 json.dumps({"error": "AUTH_SIGNATURE_INVALID", "detail": secret}).encode()))
         with patch.dict(os.environ, {

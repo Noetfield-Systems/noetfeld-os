@@ -74,6 +74,7 @@ def probe() -> dict:
             "x-noetfield-timestamp": timestamp,
             "x-noetfield-nonce": nonce,
             "content-type": "application/json",
+            "User-Agent": "noos-runway-supervision-adapter-v2",
         },
     )
     try:
@@ -82,6 +83,8 @@ def probe() -> dict:
             out["verdict"] = classify(response.status, None, "")
     except urllib.error.HTTPError as exc:
         out["http_status"] = exc.code
+        content_type = exc.headers.get("content-type", "") if exc.headers else ""
+        out["response_kind"] = "json" if "json" in content_type.lower() else "non_json"
         try:
             payload = json.loads(exc.read(1024))
         except (ValueError, OSError):
@@ -91,6 +94,8 @@ def probe() -> dict:
         detail = payload.get("detail") if isinstance(payload, dict) else None
         out["auth_error_code"] = code
         out["verdict"] = classify(exc.code, code, detail if isinstance(detail, str) else "")
+        if exc.code == 403 and code is None:
+            out["verdict"] = "NON_GATEWAY_FORBIDDEN_OR_UNRECOGNIZED"
     except (OSError, TimeoutError):
         out["verdict"] = "GATEWAY_UNREACHABLE"
     return out
