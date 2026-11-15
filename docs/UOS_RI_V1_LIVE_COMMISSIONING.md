@@ -35,7 +35,7 @@ The output is a **sanitized local observation**, not a new canonical job ledger.
 | Runtime dispatch | An actual returned Runtime job ID |
 | Repeated intake | Same idempotency key returns the same job ID, not another job |
 | Job terminal | Authenticated Runtime readback shows a terminal state |
-| Model used | Actual model identity and token usage reported in result (not billing proof) |
+| Model used | Actual model identity, **provider request ID**, nonnegative input/output tokens and provider API usage provenance reported in result; model text alone is insufficient |
 | Independent acceptance | Separate verifier identity, distinct builder, PASS verdict and SHA-256 artifact digest |
 | Billed cost | Explicit reconciled billing record; otherwise `null`, **never zero** |
 | Realized ROI | Only attributed realized economic benefits and measured costs; currently `null` |
