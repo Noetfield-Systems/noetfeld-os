@@ -168,19 +168,32 @@ def commission(
     result_body = _body(result_resp)
     usage = result_body.get("usage")
     if isinstance(usage, dict):
+        # The provider request ID is essential for correlation with HDIR Attempt/Evidence.
+        # A model name or token counter alone is NOT evidence of a real API call.
+        request_id = usage.get("provider_request_id") or usage.get("request_id")
+        input_tokens = usage.get("input_tokens")
+        output_tokens = usage.get("output_tokens")
         proof["observed_usage"] = {
             "model": usage.get("model") if isinstance(usage.get("model"), str) else None,
-            "input_tokens": usage.get("input_tokens") if isinstance(usage.get("input_tokens"), int) else None,
-            "output_tokens": usage.get("output_tokens") if isinstance(usage.get("output_tokens"), int) else None,
+            "provider_request_id": request_id if isinstance(request_id, str) and request_id.strip() else None,
+            "input_tokens": input_tokens if type(input_tokens) is int and input_tokens >= 0 else None,
+            "output_tokens": output_tokens if type(output_tokens) is int and output_tokens >= 0 else None,
+            "usage_source": usage.get("usage_source") if isinstance(usage.get("usage_source"), str) else None,
         }
+    reported = proof.get("observed_usage")
     proof["provider_execution_verified"] = (
-        isinstance(proof.get("observed_usage"), dict)
-        and bool(proof["observed_usage"].get("model"))
-        and proof["observed_usage"].get("input_tokens") is not None
+        isinstance(reported, dict)
+        and bool(reported.get("model"))
+        and bool(reported.get("provider_request_id"))
+        and reported.get("input_tokens") is not None
+        and reported.get("output_tokens") is not None
+        and reported.get("usage_source") in {"DEEPSEEK_API_USAGE", "CLOUDFLARE_API_USAGE", "PROVIDER_API_USAGE"}
     )
+    terminal_ok = proof["runtime_terminal_state"] in {"COMPLETE", "DONE"}
+    verifier_ok = proof["independent_verdict"] == "PASS"
     proof["status"] = (
-        "VERIFIED_TECHNICAL_SUCCESS"
-        if proof["runtime_terminal_state"] in {"COMPLETE", "DONE"} and proof["independent_verdict"] == "PASS"
+        "VERIFIED_TECHNICAL_SUCCESS" if terminal_ok and verifier_ok and proof["provider_execution_verified"]
+        else "MODEL_EXECUTION_EVIDENCE_MISSING" if terminal_ok and verifier_ok
         else "TERMINAL_UNVERIFIED_OR_FAILED"
     )
     return proof
