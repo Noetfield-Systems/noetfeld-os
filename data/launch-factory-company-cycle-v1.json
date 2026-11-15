@@ -49,5 +49,9 @@
     "no_parallel_crm",
     "no_unscoped_shared_wallet"
   ],
-  "next_commissioning": "Bind verified candidate WorkPackets to existing Company OS permit/lease/dispatch contract and prove first real full project cycle."
+  "next_commissioning": "Bind verified candidate WorkPackets to existing Company OS permit/lease/dispatch contract and prove first real full project cycle.",
+  "canonical_factory_repo": "Noetfield-Systems/Launch-Factory-Engine",
+  "canonical_contract": "config/FACTORY_OPERATING_CONTRACT_v1.json",
+  "is_adapter_only": true,
+  "duplicate_launch_program_forbidden": true
 }
