@@ -132,7 +132,17 @@ def commission(
     first = runway.submit_intake(packet)
     job_id = _job_id(first) if first.get("ok") else None
     if not job_id:
-        return {**proof, "status": "INTAKE_UNCONFIRMED", "error_code": "NO_RUNTIME_JOB_ID"}
+        body = _body(first)
+        raw_code = body.get("error") or first.get("error") or "NO_JOB_ID"
+        code = str(raw_code)
+        # Only machine-shaped codes and HTTP status are logged. Never raw
+        # response bodies, credentials, host secrets or model output.
+        safe_code = code if re.fullmatch(r"[A-Za-z0-9_:-]{1,90}", code) else "NONSTANDARD_ERROR"
+        status = first.get("status")
+        http_status = status if type(status) is int and 100 <= status <= 599 else None
+        return {**proof, "status": "INTAKE_UNCONFIRMED",
+                "error_code": "NO_RUNTIME_JOB_ID", "intake_http_status": http_status,
+                "intake_error_code": safe_code}
     proof["runtime_job_id"] = job_id
     proof["status"] = "DISPATCHED"
 
