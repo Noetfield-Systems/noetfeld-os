@@ -68,9 +68,11 @@ def _validate_request(data):
     expected={"task_id","role_id","goal_id","decision_ref","expires_at","prompt","max_cost_usd","max_tokens"}
     if not isinstance(data,dict) or set(data)-expected:
         raise StationError("INVALID_COMPUTE_REQUEST")
-    for k in ("task_id","role_id","goal_id","decision_ref"):
+    for k in ("task_id","role_id","decision_ref"):
         if not isinstance(data.get(k),str) or not ID.fullmatch(data[k]):
             raise StationError("INVALID_"+k.upper())
+    if data.get("goal_id") is not None and (not isinstance(data["goal_id"],str) or not ID.fullmatch(data["goal_id"])):
+        raise StationError("INVALID_GOAL_ID")
     if not isinstance(data.get("prompt"),str) or not data["prompt"].strip() or len(data["prompt"])>MAX_INPUT:
         raise StationError("INVALID_SANITIZED_PROMPT")
     if "@" in data["prompt"] or "Bearer " in data["prompt"] or "api_key" in data["prompt"].lower():
@@ -122,7 +124,7 @@ def dispatch(data):
         workpacket_id=data["task_id"]+"-hf-"+data["role_id"]
         if len(workpacket_id)>128:raise StationError("WORKPACKET_ID_TOO_LONG")
         packet={"workpacket_id":workpacket_id,"tenant_id":row["company_id"],
-          "project_id":row["project_id"],"goal_id":data["goal_id"],
+          "project_id":row["project_id"],"goal_id":data.get("goal_id"),
           "decision_ref":row["decision_ref"],"nac_workpacket_ref":None,
           "authorization_mode":"SINA_GOALKEEPER_A0_ANALYSIS",
           "role_id":data["role_id"],"expires_at":data["expires_at"],
