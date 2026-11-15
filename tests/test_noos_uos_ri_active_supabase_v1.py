@@ -50,3 +50,14 @@ def test_no_key_blocks_network():
     r = m.probe(url="https://ldfruywifqnfpwsfgmdl.supabase.co", key="",
                 opener=lambda *a, **kw: (_ for _ in ()).throw(AssertionError()))
     assert r["credential_present"] is False and not r["ready_for_cutover"]
+
+
+def test_active_alias_consistency_without_secret_disclosure(monkeypatch):
+    monkeypatch.setenv("PORTFOLIO_SPINE_SUPABASE_URL", "https://ldfruywifqnfpwsfgmdl.supabase.co")
+    monkeypatch.setenv("PORTFOLIO_SPINE_SERVICE_ROLE_KEY", "SENSITIVE_KEY_TEST")
+    monkeypatch.setenv("NOETFIELD_ACTIVE_SUPABASE_URL", "https://ldfruywifqnfpwsfgmdl.supabase.co")
+    monkeypatch.setenv("NOETFIELD_ACTIVE_SUPABASE_SERVICE_ROLE_KEY", "SENSITIVE_KEY_TEST")
+    r = m.probe(opener=lambda request, timeout: Reply({"paths": {}}))
+    assert r["alias_configured"] is True
+    assert r["alias_matches_existing_source"] is True
+    assert "SENSITIVE_KEY_TEST" not in json.dumps(r)
