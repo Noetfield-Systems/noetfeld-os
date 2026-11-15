@@ -176,3 +176,17 @@ def test_nonce_rpc_missing_categorized_without_sensitive_sql(monkeypatch):
     assert result["intake_error_code"] == "AUTH_FAILED"
     assert result["auth_backend_category"] == "NONCE_RPC_MISSING"
     assert "internal-sensitive-identifier" not in str(result)
+
+
+def test_nonce_rpc_http_code_sanitized_and_readable(monkeypatch):
+    monkeypatch.setattr(uos.runway, "preflight", lambda: {"ok": True})
+    monkeypatch.setattr(uos.runway, "submit_intake", lambda _packet: {
+        "ok": False, "status": 401,
+        "body": {"error": "AUTH_FAILED",
+                 "detail": "supabase rpc consume_runway_runtime_nonce_v1 HTTP 404: "
+                           'PGRST202 could not find this function secret-value-should-not-appear'},
+    })
+    result = uos.commission(packet())
+    assert result["nonce_rpc_http_status"] == 404
+    assert result["nonce_rpc_error_code"] == "PGRST202"
+    assert "secret-value-should-not-appear" not in str(result)

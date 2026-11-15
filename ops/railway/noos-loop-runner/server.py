@@ -553,7 +553,7 @@ def _run_uos_ri_one_shot() -> None:
             }},
         }
         result = commission(packet, max_observations=90, poll_seconds=2)
-        fields = ("schema", "status", "error_code", "intake_http_status", "intake_error_code", "auth_backend_category", "runtime_job_id",
+        fields = ("schema", "status", "error_code", "intake_http_status", "intake_error_code", "auth_backend_category", "nonce_rpc_http_status", "nonce_rpc_error_code", "runtime_job_id",
                   "runtime_terminal_state", "replay_idempotent",
                   "provider_execution_verified", "independent_verdict",
                   "events_readback", "result_readback", "cost_source",
