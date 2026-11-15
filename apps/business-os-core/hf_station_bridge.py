@@ -65,10 +65,10 @@ def _http(path,method="GET",body=None):
         raise StationError("STATION_TRANSPORT_OR_SCHEMA_ERROR") from None
 
 def _validate_request(data):
-    expected={"task_id","role_id","goal_id","decision_ref","nac_workpacket_ref","expires_at","prompt","max_cost_usd","max_tokens"}
+    expected={"task_id","role_id","goal_id","decision_ref","expires_at","prompt","max_cost_usd","max_tokens"}
     if not isinstance(data,dict) or set(data)-expected:
         raise StationError("INVALID_COMPUTE_REQUEST")
-    for k in ("task_id","role_id","goal_id","decision_ref","nac_workpacket_ref"):
+    for k in ("task_id","role_id","goal_id","decision_ref"):
         if not isinstance(data.get(k),str) or not ID.fullmatch(data[k]):
             raise StationError("INVALID_"+k.upper())
     if not isinstance(data.get("prompt"),str) or not data["prompt"].strip() or len(data["prompt"])>MAX_INPUT:
@@ -89,10 +89,19 @@ def _validate_request(data):
 
 def _owning_task(db, task_id):
     init(db)
-    row=db.execute("""SELECT t.id,t.company_id,t.project_id,t.status,b.workstream_id
-        FROM tasks t JOIN sina_workstream_bindings b ON b.task_id=t.id
-        WHERE t.id=?""",(task_id,)).fetchone()
-    if not row:raise StationError("CANONICAL_TASK_BINDING_NOT_FOUND")
+    # Use the REAL authenticated Goalkeeper decision bound to the real
+    # Company OS task. The legacy sina_workstream_bindings table is not the
+    # active Agent Fabric work queue and is not an execution permit.
+    row=db.execute("""SELECT t.id,t.company_id,t.project_id,t.status,
+          d.decision_ref,d.disposition
+        FROM tasks t JOIN venture_company_os_decisions d
+          ON d.task_id=t.id AND d.company_id=t.company_id
+          AND d.project_id=t.project_id
+        WHERE t.id=? AND d.disposition IN (
+          'PROCEED_IN_LOCAL_COMPANY_OS','CHECK_EVIDENCE_AND_CONTINUE',
+          'CLARIFY_FROM_EVIDENCE_NOT_FOUNDER','RESEARCH_IN_LOCAL_COMPANY_OS')
+        ORDER BY d.updated_at DESC LIMIT 1""",(task_id,)).fetchone()
+    if not row:raise StationError("AUTHENTICATED_GOALKEEPER_TASK_NOT_FOUND")
     if row["company_id"] not in ("noetfield-systems-inc","founder-portfolio"):
         raise StationError("CROSS_COMPANY_TASK_DENIED")
     program=db.execute("""SELECT status FROM product_programs
@@ -108,11 +117,14 @@ def dispatch(data):
     if not configured():raise StationError("STATION_INGRESS_NOT_CONFIGURED")
     with core.connect() as db:
         row=_owning_task(db,data["task_id"])
+        if row["decision_ref"]!=data["decision_ref"]:
+            raise StationError("GOALKEEPER_DECISION_REF_MISMATCH")
         workpacket_id=data["task_id"]+"-hf-"+data["role_id"]
         if len(workpacket_id)>128:raise StationError("WORKPACKET_ID_TOO_LONG")
         packet={"workpacket_id":workpacket_id,"tenant_id":row["company_id"],
           "project_id":row["project_id"],"goal_id":data["goal_id"],
-          "decision_ref":data["decision_ref"],"nac_workpacket_ref":data["nac_workpacket_ref"],
+          "decision_ref":row["decision_ref"],"nac_workpacket_ref":None,
+          "authorization_mode":"SINA_GOALKEEPER_A0_ANALYSIS",
           "role_id":data["role_id"],"expires_at":data["expires_at"],
           "data_classification":"approved_sanitized","max_cost_usd":data["max_cost_usd"],
           "authorized":True,"input":{"prompt":data["prompt"]},"max_tokens":data.get("max_tokens",256)}
