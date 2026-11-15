@@ -1,3 +1,8 @@
+# LAUNCH FACTORY REPOSITORY ROUTING — ACTIVE 2026-11-15
+The one canonical venture Launch Factory program, inventory, shared distribution strategy, manifest and operator CLI is **`Noetfield-Systems/Launch-Factory-Engine`**, not this NOOS repository. Route new startup creation/portfolio launch/growth factory changes to the Factory AGENTS and centralized source. Keep only NOOS company-owned existing role dispatch compatibility here; no Factory scheduler, independent venture wallet or shared CRM. See `noetfield-org/LAUNCH_FACTORY_COMPANY_CYCLE_v1.md`.
+
+---
+
 # AGENTS.md — noetfeld-os repo
 
 <!--
