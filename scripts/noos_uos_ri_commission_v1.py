@@ -170,8 +170,8 @@ def commission(
         backend_http_status = int(nonce_status.group(1)) if nonce_status else None
         # PostgreSQL / PostgREST numeric codes are safe diagnostics, unlike
         # raw database messages that can include tenant IDs or URL fragments.
-        code_match = re.search(r'["\\\\s]code["\\\\s:]+["\\\\]?([A-Z0-9]{5,8})', detail)
-        sqlstate = code_match.group(1) if code_match else None
+        code_match = re.search(r"(?i)PGRST[0-9]{3}|42P01|42501|42703", detail)
+        sqlstate = code_match.group(0).upper() if code_match else None
         return {**proof, "status": "INTAKE_UNCONFIRMED",
                 "error_code": "NO_RUNTIME_JOB_ID", "intake_http_status": http_status,
                 "intake_error_code": safe_code,
