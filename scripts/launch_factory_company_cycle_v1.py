@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Compile scoped Launch Factory plan candidates into existing NOOS role assignments.
+"""NOOS-ONLY COMPATIBILITY ADAPTER. Launch Factory Engine is canonical.\n\nCompile scoped Launch Factory plan candidates into existing NOOS role assignments.
 
 Pure translation, not actual governor approval, dispatch, production deploy or token mint.
 Independent ventures are rejected at this NOETFIELD COMPANY boundary. Their own
