@@ -159,3 +159,20 @@ def test_failed_live_intake_records_only_safe_status_not_secret(monkeypatch):
     assert result["intake_http_status"] == 401
     assert result["intake_error_code"] == "AUTH_FAILED"
     assert "SECRET_DO_NOT_LOG" not in str(result)
+
+
+def test_nonce_rpc_missing_categorized_without_sensitive_sql(monkeypatch):
+    monkeypatch.setattr(uos.runway, "preflight", lambda: {"ok": True})
+    monkeypatch.setattr(uos.runway, "submit_intake", lambda _packet: {
+        "ok": False, "status": 401,
+        "body": {"error": "AUTH_FAILED", "detail": (
+            "supabase rpc consume_runway_runtime_nonce_v1 HTTP 404: "
+            "PGRST202 Could not find the function public.consume_runway_runtime_nonce_v1 "
+            "internal-sensitive-identifier-SHOULD-NOT-PRINT"
+        )},
+    })
+    result = uos.commission(packet())
+    assert result["intake_http_status"] == 401
+    assert result["intake_error_code"] == "AUTH_FAILED"
+    assert result["auth_backend_category"] == "NONCE_RPC_MISSING"
+    assert "internal-sensitive-identifier" not in str(result)
