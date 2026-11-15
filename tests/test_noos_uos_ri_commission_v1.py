@@ -146,3 +146,16 @@ def test_real_runway_terminal_SUCCEEDED_produces_artifact_metadata(monkeypatch):
     assert row["runtime_artifact_digests"] == [{"artifact_id": "pdf-1", "sha256": "b" * 64}]
     assert row["status"] == "TERMINAL_UNVERIFIED_OR_FAILED"
     assert row["provider_execution_verified"] is False
+
+
+def test_failed_live_intake_records_only_safe_status_not_secret(monkeypatch):
+    monkeypatch.setattr(uos.runway, "preflight", lambda: {"ok": True})
+    monkeypatch.setattr(uos.runway, "submit_intake", lambda _packet: {
+        "ok": False, "status": 401,
+        "body": {"error": "AUTH_FAILED", "detail": "SECRET_DO_NOT_LOG"},
+    })
+    result = uos.commission(packet())
+    assert result["status"] == "INTAKE_UNCONFIRMED"
+    assert result["intake_http_status"] == 401
+    assert result["intake_error_code"] == "AUTH_FAILED"
+    assert "SECRET_DO_NOT_LOG" not in str(result)
