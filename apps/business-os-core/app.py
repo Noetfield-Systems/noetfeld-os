@@ -693,6 +693,15 @@ async def hf_station_dispatch(payload:dict[str,Any], authorization:str|None=Head
         raise HTTPException(409 if "CONFLICT" in str(exc) else 400,str(exc)) from None
     return {"source_reported":True,**result}
 
+@app.post("/api/control/hf-station/next-action")
+async def hf_station_next_action(payload:dict[str,Any],authorization:str|None=Header(default=None)):
+    """Rank actual canonical tasks, no new work, model calls or owner changes."""
+    authorize(authorization)
+    try:
+        return await asyncio.to_thread(hf_station_bridge.recommend,payload)
+    except hf_station_bridge.StationError as exc:
+        raise HTTPException(400,str(exc)) from None
+
 @app.post("/api/internal/hf-station/receipt")
 async def hf_station_source_report(payload:dict[str,Any],authorization:str|None=Header(default=None)):
     """Dedicated source-report projection; never self-certify a work outcome."""
