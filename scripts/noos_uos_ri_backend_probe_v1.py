@@ -22,7 +22,7 @@ SCHEMA = "uos-ri.origin-diagnostic.v1"
 def _target(name: str, url: str, *, expected_host: str = EXPECTED_HOST) -> dict[str, Any]:
     value: dict[str, Any] = {
         "target": name, "configured": bool(url), "expected_project_match": None,
-        "dns_resolved": False, "dns_error": None, "http_status": None,
+        "dns_resolved": False, "dns_error": None, "dns_errno": None, "http_status": None,
         "http_error": None,
     }
     if not url:
@@ -38,6 +38,8 @@ def _target(name: str, url: str, *, expected_host: str = EXPECTED_HOST) -> dict[
         value["dns_resolved"] = True
     except (socket.gaierror, OSError) as exc:
         value["dns_error"] = type(exc).__name__
+        if isinstance(exc, socket.gaierror) and isinstance(exc.errno, int):
+            value["dns_errno"] = exc.errno
         return value
     try:
         # No credentials, body, or tenant data. 401/403 = origin responded.
@@ -58,6 +60,8 @@ def _target(name: str, url: str, *, expected_host: str = EXPECTED_HOST) -> dict[
 def probe() -> dict[str, Any]:
     targets = [
         _target("motor_staging_expected", "https://" + EXPECTED_HOST),
+        _target("supabase_root_control", "https://supabase.co"),
+        _target("supabase_api_control", "https://api.supabase.com"),
         _target("noos_supabase_primary", os.environ.get("NOETFIELD_SUPABASE_URL", "")),
         _target("noos_supabase_fallback", os.environ.get("SUPABASE_URL", "")),
         _target("runway_gateway", os.environ.get("NOETFIELD_RUNWAY_API_URL", "")),
