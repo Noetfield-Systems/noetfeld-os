@@ -140,9 +140,33 @@ def commission(
         safe_code = code if re.fullmatch(r"[A-Za-z0-9_:-]{1,90}", code) else "NONSTANDARD_ERROR"
         status = first.get("status")
         http_status = status if type(status) is int and 100 <= status <= 599 else None
+        detail = str(body.get("detail") or "")
+        # Database and provider error text may contain URLs, SQL, headers or
+        # identifiers. Classify locally; never emit arbitrary upstream text.
+        lowered = detail.lower()
+        if "consume_runway_runtime_nonce_v1" in lowered and (
+            "pgrst202" in lowered or "could not find" in lowered
+            or "does not exist" in lowered or "not found" in lowered
+        ):
+            backend_category = "NONCE_RPC_MISSING"
+        elif "consume_runway_runtime_nonce_v1" in lowered and "permission denied" in lowered:
+            backend_category = "NONCE_RPC_PERMISSION_DENIED"
+        elif "consume_runway_runtime_nonce_v1" in lowered:
+            backend_category = "NONCE_RPC_FAILED"
+        elif "supabase" in lowered and ("401" in lowered or "403" in lowered or "jwt" in lowered):
+            backend_category = "SUPABASE_AUTH_ERROR"
+        elif "supabase" in lowered and "timeout" in lowered:
+            backend_category = "SUPABASE_TIMEOUT"
+        elif "supabase" in lowered:
+            backend_category = "SUPABASE_OTHER_ERROR"
+        elif detail:
+            backend_category = "UNCLASSIFIED_GATEWAY_EXCEPTION"
+        else:
+            backend_category = "DETAIL_UNAVAILABLE"
         return {**proof, "status": "INTAKE_UNCONFIRMED",
                 "error_code": "NO_RUNTIME_JOB_ID", "intake_http_status": http_status,
-                "intake_error_code": safe_code}
+                "intake_error_code": safe_code,
+                "auth_backend_category": backend_category}
     proof["runtime_job_id"] = job_id
     proof["status"] = "DISPATCHED"
 
