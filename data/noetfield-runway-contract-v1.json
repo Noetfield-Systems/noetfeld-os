@@ -31,7 +31,7 @@
     "provider_id": "deepseek",
     "base_url": "https://api.deepseek.com",
     "api_key_env": "DEEPSEEK_API_KEY",
-    "cheap_primary": "deepseek-v4-flash",
+    "cheap_primary": "deepseek-flash",
     "standard_fallback": "deepseek-v4-pro",
     "fail_closed_if_unavailable": true,
     "forbidden": [

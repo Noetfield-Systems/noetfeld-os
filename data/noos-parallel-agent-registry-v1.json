@@ -15,6 +15,9 @@
     "gel-ci": [
       "gha-gel-ci"
     ],
+    "uos-ri-commissioning": [
+      "gha-gel-ci"
+    ],
     "deploy-noos-cloud-workers-v1": [
       "gha-deploy-noos-cloud-workers"
     ],
