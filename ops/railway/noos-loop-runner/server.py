@@ -513,6 +513,59 @@ class Handler(BaseHTTPRequestHandler):
             lock.release()
 
 
+
+def _run_uos_ri_one_shot() -> None:
+    """One bounded staging proof from the EXISTING credentialed NOOS runner.
+
+    This is a background boot hook, not another queue or runtime. A stable
+    idempotency key makes safe replay possible after a Railway restart.
+    """
+    run_id = (os.environ.get("NOOS_UOS_RI_ONE_SHOT_RUN_ID") or "").strip()
+    if not run_id:
+        return
+    if not all(ch.isalnum() or ch in "._:-" for ch in run_id) or len(run_id) > 96:
+        print('UOS_RI_RAILWAY_COMMISSION={"status":"INVALID_RUN_ID"}', flush=True)
+        return
+    try:
+        from noos_uos_ri_commission_v1 import commission
+
+        packet = {
+            "tenant_id": "tenant-staging-proof",
+            "entitlement_id": "ent-staging-proof",
+            "runway_id": "research",
+            "recipe_id": "vendor-decision-brief",
+            "recipe_version": "0.1.0",
+            "idempotency_key": "uos-ri-noos-" + run_id,
+            "budget_usd": 0.25,
+            "caller_site": "internal",
+            "input": {"goal": {
+                "question": "Which existing platform suits a bounded staging workflow proof?",
+                "scope": "UOS-RI technical commissioning; illustrative input only",
+                "criteria": ["documentation", "integration_fit"],
+                "options": [
+                    {"vendor_id": "cloudflare", "name": "Cloudflare Workflows",
+                     "scores": {"documentation": 0.5, "integration_fit": 0.5},
+                     "evidence_urls": ["https://developers.cloudflare.com/workflows/"]},
+                    {"vendor_id": "railway", "name": "Railway",
+                     "scores": {"documentation": 0.5, "integration_fit": 0.5},
+                     "evidence_urls": ["https://docs.railway.com/"]},
+                ],
+            }},
+        }
+        result = commission(packet, max_observations=90, poll_seconds=2)
+        fields = ("schema", "status", "error_code", "runtime_job_id",
+                  "runtime_terminal_state", "replay_idempotent",
+                  "provider_execution_verified", "independent_verdict",
+                  "events_readback", "result_readback", "cost_source",
+                  "billed_cost_usd", "worker_restart_recovery_verified")
+        proof = {key: result.get(key) for key in fields}
+        print("UOS_RI_RAILWAY_COMMISSION=" + json.dumps(proof, separators=(",", ":")), flush=True)
+    except Exception as exc:  # noqa: BLE001
+        print("UOS_RI_RAILWAY_COMMISSION=" + json.dumps({
+            "status": "COMMISSIONING_EXCEPTION", "error_code": type(exc).__name__
+        }), flush=True)
+
+
 def main() -> None:
     global _ready
     if not SECRET:
@@ -533,6 +586,8 @@ def main() -> None:
               flush=True)
     else:
         _ready = True
+    if (os.environ.get("NOOS_UOS_RI_ONE_SHOT_RUN_ID") or "").strip():
+        threading.Thread(target=_run_uos_ri_one_shot, name="uos-ri-commissioning", daemon=True).start()
     HTTPServer(("0.0.0.0", PORT), Handler).serve_forever()
 
 
