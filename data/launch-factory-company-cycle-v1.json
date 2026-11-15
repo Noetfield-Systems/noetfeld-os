@@ -1,0 +1,53 @@
+{
+  "schema": "noos.launch-factory.company-cycle.v1",
+  "version": "2026-11-15.1",
+  "status": "SOURCE_ADAPTER_NOT_DEPLOYED",
+  "founder_intent_owner": "Noetfield-Systems/sina_founder_os",
+  "company_execution_owner": "Noetfield-Systems/noetfeld-os",
+  "relationship_owner": "Noetfield-Systems/Fieldwork",
+  "project_policy": "ONLY_COMPANY_OWNED_PROJECTS",
+  "roles": {
+    "Product": "N-03",
+    "Engineering": "N-03",
+    "Community": "N-07",
+    "Fieldwork": "N-05",
+    "Distribution": "N-06",
+    "Revenue": "N-05",
+    "Verifier": "N-04",
+    "Onchain": "N-03"
+  },
+  "routing": {
+    "role_registry": "noetfield-org/COMPANY_WORKFORCE_REGISTRY_v1.json",
+    "tool_authority": "noetfield-org/ROUTING_MATRIX.md",
+    "existing_dispatch": "scripts/noos_role_runway_dispatch_v1.py",
+    "external_finance": "PROJECT_OWNED_SIGNER_AND_EXISTING_GOVERNOR_ONLY"
+  },
+  "cycle": [
+    "INTAKE",
+    "PROJECT_IDENTITY",
+    "PRODUCT_LOOP",
+    "CODE_AND_SITE",
+    "COMMUNITY",
+    "DISTRIBUTION",
+    "MONETIZATION",
+    "PROOF",
+    "ITERATE_OR_SCALE"
+  ],
+  "proof_states": [
+    "PLANNED",
+    "CODED",
+    "TESTED",
+    "DEPLOYED_VERIFIED",
+    "ACTIVATED_REAL_USERS",
+    "SETTLED_CASH_VERIFIED",
+    "ONCHAIN_EXECUTED_VERIFIED"
+  ],
+  "anti_duplicate": [
+    "no_new_company_tenant_for_each_token",
+    "no_second_dispatcher",
+    "no_new_scheduler",
+    "no_parallel_crm",
+    "no_unscoped_shared_wallet"
+  ],
+  "next_commissioning": "Bind verified candidate WorkPackets to existing Company OS permit/lease/dispatch contract and prove first real full project cycle."
+}
