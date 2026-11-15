@@ -14,6 +14,7 @@ import venture_company_os
 import venture_decision_bridge
 import brain_pulse
 import buildrelay_intake
+import hf_station_bridge
 
 TOKEN=os.getenv("FOUNDER_API_TOKEN","")
 INTERVAL=max(2,int(os.getenv("WORKER_INTERVAL_SECONDS","5")))
@@ -22,6 +23,7 @@ STATIC=Path(__file__).parent/"static"
 RATE:dict[str,list[float]]={}
 STOP=asyncio.Event()
 WORKER_JOB:asyncio.Task|None=None
+HF_STATION_LAST_FLUSH=0.0
 
 def authorize(value:str|None):
     import hmac
@@ -58,8 +60,18 @@ def authorize_public_intake_proxy(request:Request)->str|None:
     return None
 
 async def worker():
+    global HF_STATION_LAST_FLUSH
     while not STOP.is_set():
         try:
+            now=time.monotonic()
+            if (now-HF_STATION_LAST_FLUSH>=60 and hf_station_bridge.configured()
+                    and os.getenv('HF_STATION_CALLBACK_TOKEN')):
+                HF_STATION_LAST_FLUSH=now
+                try:
+                    await asyncio.to_thread(hf_station_bridge.flush)
+                except Exception as exc:
+                    import logging
+                    logging.warning('hf_station_feedback_retry_failed type=%s',type(exc).__name__)
             await asyncio.to_thread(core.daily_tick)
             event=await asyncio.to_thread(core.claim,"events")
             if event:
@@ -98,6 +110,7 @@ async def lifespan(app):
     core.init();STOP.clear()
     with core.connect() as db:
         paperclip.create_binding_table(db)
+        hf_station_bridge.init(db)
     WORKER_JOB=asyncio.create_task(worker())
     if os.environ.get("COMPANY_OS_RUNWAY_HMAC_PROBE_ONCE") == "1":
         import runway_hmac_probe
@@ -663,3 +676,30 @@ def nexus_bridge_status(x_nexus_bridge_token:str|None=Header(default=None)):
             "canonical_queue":"existing_company_os_events_tasks",
             "outbound_marketing":"FOUNDER_APPROVAL_REQUIRED",
             "verified_customer_revenue":None}
+
+
+@app.get("/api/control/hf-station/status")
+def hf_station_status(authorization:str|None=Header(default=None)):
+    authorize(authorization)
+    return hf_station_bridge.status()
+
+@app.post("/api/control/hf-station/dispatch")
+async def hf_station_dispatch(payload:dict[str,Any], authorization:str|None=Header(default=None)):
+    """Founder-authenticated, task-bound model subtask. Not an execution permit."""
+    authorize(authorization)
+    try:
+        result=await asyncio.to_thread(hf_station_bridge.dispatch,payload)
+    except hf_station_bridge.StationError as exc:
+        raise HTTPException(409 if "CONFLICT" in str(exc) else 400,str(exc)) from None
+    return {"source_reported":True,**result}
+
+@app.post("/api/internal/hf-station/receipt")
+async def hf_station_source_report(payload:dict[str,Any],authorization:str|None=Header(default=None)):
+    """Dedicated source-report projection; never self-certify a work outcome."""
+    if not hf_station_bridge.callback_authorized(authorization):
+        raise HTTPException(401,"hf_station_service_identity_required")
+    try:
+        result=await asyncio.to_thread(hf_station_bridge.receive_projection,payload)
+    except hf_station_bridge.StationError as exc:
+        raise HTTPException(409 if "CONFLICT" in str(exc) else 400,str(exc)) from None
+    return result
