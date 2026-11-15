@@ -62,6 +62,8 @@ def probe() -> dict[str, Any]:
         _target("motor_staging_expected", "https://" + EXPECTED_HOST),
         _target("supabase_root_control", "https://supabase.co"),
         _target("supabase_api_control", "https://api.supabase.com"),
+        _target("portfolio_spine_historical", "https://ldfruywifqnfpwsfgmdl.supabase.co"),
+        _target("portfolio_spine_configured", os.environ.get("PORTFOLIO_SPINE_SUPABASE_URL", "")),
         _target("noos_supabase_primary", os.environ.get("NOETFIELD_SUPABASE_URL", "")),
         _target("noos_supabase_fallback", os.environ.get("SUPABASE_URL", "")),
         _target("runway_gateway", os.environ.get("NOETFIELD_RUNWAY_API_URL", "")),
