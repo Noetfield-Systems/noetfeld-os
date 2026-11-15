@@ -44,7 +44,7 @@ def _sign(secret,ts,raw):
 
 def _http(path,method="GET",body=None):
     if not configured():raise StationError("STATION_INGRESS_NOT_CONFIGURED")
-    if path not in ("/health","/v1/status","/v1/roles","/v1/jobs","/v1/outbox/flush"):
+    if path not in ("/health","/v1/status","/v1/roles","/v1/plan","/v1/jobs","/v1/outbox/flush"):
         raise StationError("UNKNOWN_STATION_ROUTE")
     raw=None if body is None else json.dumps(body,sort_keys=True,separators=(",",":")).encode()
     headers={"Accept":"application/json","Authorization":"Bearer "+os.environ["HF_STATION_INGRESS_KEY"]}
@@ -187,3 +187,28 @@ def status():
 def flush():
     # Only retries preexisting station outbox; never creates new work.
     return _http("/v1/outbox/flush","POST",{} )
+
+
+def recommend(data):
+    """Only rank real existing owner tasks with evidence; never create or spend."""
+    import core
+    if not isinstance(data,dict) or set(data)-{"task_id","signal_kind","evidence_refs","severity"}:
+        raise StationError("INVALID_SIGNAL_REQUEST")
+    task=data.get("task_id")
+    if not isinstance(task,str) or not ID.fullmatch(task):
+        raise StationError("INVALID_TASK_ID")
+    if not isinstance(data.get("signal_kind"),str) or len(data["signal_kind"])>50:
+        raise StationError("INVALID_SIGNAL_KIND")
+    refs=data.get("evidence_refs")
+    if not isinstance(refs,list) or len(refs)>6 or any(
+        not isinstance(x,str) or not ID.fullmatch(x) for x in refs):
+        raise StationError("INVALID_EVIDENCE_REFS")
+    severity=data.get("severity",2)
+    if type(severity) is not int or not 0<=severity<=4:
+        raise StationError("INVALID_SEVERITY")
+    with core.connect() as db:
+        row=_owning_task(db,task)
+    return _http("/v1/plan","POST",{
+        "tenant_id":row["company_id"],"project_id":row["project_id"],
+        "owner_task_ref":task,"signal_kind":data["signal_kind"],
+        "evidence_refs":refs,"severity":severity})
