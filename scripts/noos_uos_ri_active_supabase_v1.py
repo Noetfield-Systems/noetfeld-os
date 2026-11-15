@@ -28,8 +28,14 @@ SCHEMA = "uos-ri.active-supabase-readiness.v1"
 
 
 def probe(*, url: str | None = None, key: str | None = None, opener=None) -> dict:
-    url = (url if url is not None else os.getenv("PORTFOLIO_SPINE_SUPABASE_URL", "")).rstrip("/")
-    key = key if key is not None else os.getenv("PORTFOLIO_SPINE_SERVICE_ROLE_KEY", "")
+    alias_url = os.getenv("NOETFIELD_ACTIVE_SUPABASE_URL", "")
+    alias_key = os.getenv("NOETFIELD_ACTIVE_SUPABASE_SERVICE_ROLE_KEY", "")
+    source_url = os.getenv("PORTFOLIO_SPINE_SUPABASE_URL", "")
+    source_key = os.getenv("PORTFOLIO_SPINE_SERVICE_ROLE_KEY", "")
+    alias_configured = bool(alias_url and alias_key)
+    source_alias_consistent = alias_configured and alias_url.rstrip("/") == source_url.rstrip("/") and alias_key == source_key
+    url = (url if url is not None else alias_url or source_url).rstrip("/")
+    key = key if key is not None else alias_key or source_key
     opener = opener or urllib.request.urlopen
     host = urlsplit(url).hostname if url else None
     result = {
@@ -37,6 +43,8 @@ def probe(*, url: str | None = None, key: str | None = None, opener=None) -> dic
         "mode": "READ_ONLY_NO_SQL",
         "active_project_match": host == ACTIVE_PROJECT_REF + ".supabase.co",
         "credential_present": bool(key),
+        "alias_configured": alias_configured,
+        "alias_matches_existing_source": source_alias_consistent,
         "http_status": None,
         "authenticated_openapi": False,
         "tables": {name: None for name in REQUIRED_TABLES},
@@ -79,7 +87,7 @@ def probe(*, url: str | None = None, key: str | None = None, opener=None) -> dic
     for name in REQUIRED_RPC:
         result["rpcs"][name] = "/rpc/" + name in paths
     result["ready_for_cutover"] = (
-        all(result["tables"].values()) and all(result["rpcs"].values())
+        all(result["tables"].values()) and all(result["rpcs"].values()) and (not alias_configured or source_alias_consistent)
     )
     result["reason"] = "READY" if result["ready_for_cutover"] else "MIGRATIONS_REQUIRED"
     return result
