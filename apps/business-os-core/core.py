@@ -8,6 +8,7 @@ import founder_signal_transport
 import venture_company_os
 import venture_decision_bridge
 import brain_pulse
+import hf_station_bridge
 
 DB=Path(os.getenv("DATABASE_PATH","/data/business-os.sqlite"))
 BRANDS={"noetfield":"Noetfield Systems","buildworkflow":"BuildWorkflow","trustfield":"TrustField","signalforge":"SignalForge","buildrelay":"BuildRelay","portfolio":"Portfolio"}
@@ -439,6 +440,48 @@ def process_task(t):
      "RuntimeError":"MODEL_RUNTIME_ERROR"}.get(klass,"MODEL_OTHER_FAILURE")
    result["model_issue_class"]=klass if klass in (
     "TimeoutError","HTTPError","URLError","ValueError","RuntimeError") else "OTHER"
+ # A genuine specialist-provider failure may use ONE bounded fallback on
+ # the ORIGINAL canonical Company OS task. Founder Goalkeeper has already
+ # been consulted above and stored as the task's authenticated decision.
+ # No invented NAC/goal ref, no duplicate queue, no external action.
+ if (scoped_product and decision_allows_internal
+     and decision_context.get("state")=="CONSULTED"
+     and provider=="specialist_degraded"
+     and hf_station_bridge.configured()
+     and role in ("engineering_operator","market_intelligence","product_strategy")):
+  import datetime as _dt
+  skill={"engineering_operator":"coding-diagnostician",
+         "market_intelligence":"market-researcher",
+         "product_strategy":"reasoning-planner"}[role]
+  prompt=scrub_for_model(str(t.get("objective") or "")[:1900])
+  try:
+   station_answer=hf_station_bridge.dispatch({
+     "task_id":t["id"],"role_id":skill,
+     "decision_ref":decision_context["decision_ref"],
+     "expires_at":(_dt.datetime.now(_dt.timezone.utc)+
+       _dt.timedelta(minutes=12)).isoformat(),
+     "prompt":prompt,"max_cost_usd":0.015,"max_tokens":256})
+   source_result=station_answer.get("response") or {}
+   if station_answer.get("status")=="INFERENCE_RETURNED" and source_result.get("output"):
+    provider_id=source_result.get("provider_id") or "unknown"
+    provider="hf-station-"+provider_id
+    model=source_result.get("model_requested") or "unknown"
+    usage=(source_result.get("provider_receipt") or {}).get("usage_reported") or {}
+    it=int(usage.get("prompt_tokens") or 0)
+    ot=int(usage.get("completion_tokens") or 0)
+    result.update({
+      "assessment":str(source_result["output"])[:1600],
+      "next_best_action":t["next_action"],
+      "risk_flags":["hf_station_source_report_not_independent_proof"],
+      "model_issue_code":None,
+      "source_workpacket_id":station_answer["workpacket_id"],
+      "source_output_sha256":source_result.get("output_sha256"),
+      "verification":"SOURCE_REPORTED_UNVERIFIED",
+      "external_action_verified":False})
+  except hf_station_bridge.StationError as exc:
+   result["hf_station_fallback_error"]=str(exc)[:100]
+  except Exception as exc:
+   result["hf_station_fallback_error"]=type(exc).__name__
  # Legacy user-consented model lane remains separate; never allow two model
  # requests or use customer data in the new Company internal specialist path.
  if decision_allows_internal and provider=="deterministic" and t.get("ai_consent") and os.getenv("LLM_BASE_URL") and os.getenv("LLM_API_KEY") and os.getenv("LLM_MODEL"):
