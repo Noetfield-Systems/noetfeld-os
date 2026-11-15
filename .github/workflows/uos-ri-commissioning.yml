@@ -1,0 +1,34 @@
+name: UOS-RI commissioning contract
+on:
+  pull_request:
+    paths:
+      - "scripts/noos_uos_ri_commission_v1.py"
+      - "scripts/noos_runway_supervision_adapter_v1.py"
+      - "tests/test_noos_uos_ri_commission_v1.py"
+      - "tests/test_noos_plan_completion_v1.py"
+      - "data/noetfield-runway-contract-v1.json"
+      - ".github/workflows/uos-ri-commissioning.yml"
+  push:
+    branches: [main]
+    paths:
+      - "scripts/noos_uos_ri_commission_v1.py"
+      - "scripts/noos_runway_supervision_adapter_v1.py"
+      - "tests/test_noos_uos_ri_commission_v1.py"
+      - "data/noetfield-runway-contract-v1.json"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  commissioning-unit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: python -m pip install pytest
+      - run: python -m pytest -q tests/test_noos_uos_ri_commission_v1.py
+      - name: DeepSeek canonical model contract
+        run: python scripts/noos_runway_supervision_adapter_v1.py --json verify-deepseek-pin
