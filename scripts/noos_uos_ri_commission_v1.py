@@ -163,10 +163,21 @@ def commission(
             backend_category = "UNCLASSIFIED_GATEWAY_EXCEPTION"
         else:
             backend_category = "DETAIL_UNAVAILABLE"
+        nonce_status = re.search(
+            r"supabase rpc consume_runway_runtime_nonce_v1 HTTP ([1-5][0-9]{2})",
+            detail, flags=re.IGNORECASE,
+        )
+        backend_http_status = int(nonce_status.group(1)) if nonce_status else None
+        # PostgreSQL / PostgREST numeric codes are safe diagnostics, unlike
+        # raw database messages that can include tenant IDs or URL fragments.
+        code_match = re.search(r'["\\\\s]code["\\\\s:]+["\\\\]?([A-Z0-9]{5,8})', detail)
+        sqlstate = code_match.group(1) if code_match else None
         return {**proof, "status": "INTAKE_UNCONFIRMED",
                 "error_code": "NO_RUNTIME_JOB_ID", "intake_http_status": http_status,
                 "intake_error_code": safe_code,
-                "auth_backend_category": backend_category}
+                "auth_backend_category": backend_category,
+                "nonce_rpc_http_status": backend_http_status,
+                "nonce_rpc_error_code": sqlstate}
     proof["runtime_job_id"] = job_id
     proof["status"] = "DISPATCHED"
 
