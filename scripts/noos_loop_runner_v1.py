@@ -23,6 +23,7 @@ from noos_postgres_store_v1 import configured as pg_store_enabled, allocate_cycl
 from noos_loop_determinism_v1 import advance_state, cas_advance, op_key, transition_allowed  # noqa: E402
 from noos_loop_liveness_v1 import detect_execution_host, sync_meta_liveness_rows, upsert_loop_liveness  # noqa: E402
 from noos_incident_log_v1 import log_incident  # noqa: E402
+from noos_supabase_active_pair_v1 import canonical_env  # noqa: E402
 from unified_motor_event_client_v1 import maybe_emit_loop_cycle_event  # noqa: E402
 
 
@@ -92,6 +93,10 @@ def ensure_supabase_env() -> dict[str, Any]:
             loaded += 1
         else:
             os.environ.setdefault(key, val)
+    # The existing single-writer NOOS cycle, sink and worker all consume one
+    # active Supabase URL/key pair when Railway exposes it.
+    selected = canonical_env(os.environ)
+    os.environ.update(selected)
     url = (os.environ.get("NOETFIELD_SUPABASE_URL") or os.environ.get("SUPABASE_URL") or "").strip()
     key = (
         os.environ.get("NOETFIELD_SUPABASE_SERVICE_ROLE_KEY")
@@ -100,6 +105,7 @@ def ensure_supabase_env() -> dict[str, Any]:
     ).strip()
     return {
         "ok": bool(url and key),
+        "source":os.environ.get("NOOS_SUPABASE_SOURCE"),
         "loaded_keys": loaded,
         "has_url": bool(url),
         "has_key": bool(key),

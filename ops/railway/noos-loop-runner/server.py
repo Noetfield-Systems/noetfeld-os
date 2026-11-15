@@ -33,6 +33,7 @@ if not (ROOT / "scripts" / "noos_loop_runner_v1.py").is_file():
     )
 sys.path.insert(0, str(ROOT / "scripts"))
 from noos_loop_liveness_v1 import upsert_loop_liveness  # noqa: E402
+from noos_supabase_active_pair_v1 import canonical_env  # noqa: E402
 from noos_incident_log_v1 import log_incident  # noqa: E402
 from noos_postgres_store_v1 import (configured as pg_store_enabled, probe as pg_probe, enqueue_job, claim_job, report_job, queue_status)  # noqa: E402
 from noos_github_oidc_v1 import authorize as authorize_github_oidc  # noqa: E402
@@ -92,7 +93,7 @@ def _lock_for(event_type: str) -> threading.Lock:
 
 
 def _base_env(*, event_type: str, source: str, run_id: str) -> dict[str, str]:
-    env = os.environ.copy()
+    env = canonical_env(os.environ.copy())
     env.setdefault("GITHUB_EVENT_NAME", "http_loop")
     env.setdefault("DISPATCH_SOURCE", source)
     env.setdefault("GITHUB_RUN_ID", run_id)
@@ -264,12 +265,13 @@ def probe_supabase() -> dict[str, Any]:
     noetfield_factory_cycle_runs; loop heartbeat reads noos_loop_registry.
     The incident table is optional because migration 0019 may still be pending.
     """
-    url = (os.environ.get("NOETFIELD_SUPABASE_URL") or os.environ.get("SUPABASE_URL") or "").strip()
-    key = (
-        os.environ.get("NOETFIELD_SUPABASE_SERVICE_ROLE_KEY")
-        or os.environ.get("SUPABASE_SERVICE_ROLE_KEY")
-        or ""
-    ).strip()
+    # Diagnostics use the SAME active URL/key pair as actual child workers.
+    try:
+        effective = canonical_env(os.environ)
+    except RuntimeError as exc:
+        return {"ok":False,"reason":str(exc)}
+    url = (effective.get("NOETFIELD_SUPABASE_URL") or "").strip()
+    key = (effective.get("NOETFIELD_SUPABASE_SERVICE_ROLE_KEY") or "").strip()
     if not url or not key:
         return {"ok": False, "reason": "supabase_not_configured"}
 

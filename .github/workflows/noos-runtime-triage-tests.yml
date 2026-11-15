@@ -4,13 +4,19 @@ on:
     branches: ["deploy/noos-loop-runner-entrypoint"]
     paths:
       - "scripts/noos_loop_runner_v1.py"
+      - "scripts/noos_supabase_active_pair_v1.py"
+      - "ops/railway/noos-loop-runner/server.py"
       - "tests/test_noos_runtime_failure_triage_v1.py"
+      - "tests/test_noos_supabase_active_pair_v1.py"
       - ".github/workflows/noos-runtime-triage-tests.yml"
   push:
     branches: ["deploy/noos-loop-runner-entrypoint"]
     paths:
       - "scripts/noos_loop_runner_v1.py"
+      - "scripts/noos_supabase_active_pair_v1.py"
+      - "ops/railway/noos-loop-runner/server.py"
       - "tests/test_noos_runtime_failure_triage_v1.py"
+      - "tests/test_noos_supabase_active_pair_v1.py"
       - ".github/workflows/noos-runtime-triage-tests.yml"
   workflow_dispatch:
 permissions:
@@ -25,5 +31,6 @@ jobs:
           python-version: "3.12"
       - name: Python compilation and fixed-category, secret-safe failure detection
         run: |
-          python3 -m py_compile scripts/noos_loop_runner_v1.py
+          python3 -m py_compile scripts/noos_loop_runner_v1.py scripts/noos_supabase_active_pair_v1.py ops/railway/noos-loop-runner/server.py
           python3 -m unittest discover -s tests -p 'test_noos_runtime_failure_triage_v1.py' -v
+          python3 -m unittest discover -s tests -p 'test_noos_supabase_active_pair_v1.py' -v
