@@ -3,13 +3,19 @@
 No real Supabase network, credentials, or test-only completion claims.
 """
 from __future__ import annotations
+import ast
 import json
-import sys
 import unittest
 from pathlib import Path
 
-sys.path.insert(0,str(Path(__file__).resolve().parents[1]/"scripts"))
-from noos_loop_runner_v1 import classify_step_failure
+# Load the exact production pure classifier from source without importing the
+# cloud Postgres drivers; CI is offline and should not require real secrets.
+module=ast.parse((Path(__file__).resolve().parents[1]/"scripts/noos_loop_runner_v1.py").read_text())
+node=next(x for x in module.body
+          if isinstance(x,ast.FunctionDef) and x.name=="classify_step_failure")
+namespace={"json":json}
+exec(compile(ast.Module(body=[node],type_ignores=[]),"<NOOS original classifier>","exec"),namespace)
+classify_step_failure=namespace["classify_step_failure"]
 
 
 class ClassifiedLoopFailureTests(unittest.TestCase):
