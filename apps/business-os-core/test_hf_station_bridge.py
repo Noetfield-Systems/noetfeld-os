@@ -8,7 +8,7 @@ class HFStationBoundaryTests(unittest.TestCase):
         with self.assertRaises(hf.StationError):
             hf._validate_request({"task_id":"task-1"})
         p={"task_id":"task-123","role_id":"coding-diagnostician","goal_id":"goal-123",
-           "decision_ref":"decision-123","nac_workpacket_ref":"nac-123",
+           "decision_ref":"decision-123",
            "expires_at":"2099-01-01T00:00:00Z",
            "prompt":"Inspect a sanitized build failure","max_cost_usd":0.02,"max_tokens":256}
         self.assertEqual(hf._validate_request(p),p)
@@ -20,6 +20,13 @@ class HFStationBoundaryTests(unittest.TestCase):
            "expires_at":"2020-01-01T00:00:00Z","prompt":"Diagnose sanitized logs",
            "max_cost_usd":0.02}
         with self.assertRaises(hf.StationError): hf._validate_request(p)
+    def test_nac_reference_is_not_supplied_by_untrusted_dispatch(self):
+        p={"task_id":"task-123","role_id":"coding-diagnostician","goal_id":"goal-123",
+           "decision_ref":"decision-123","nac_workpacket_ref":"fake-nac",
+           "expires_at":"2099-01-01T00:00:00Z",
+           "prompt":"Analyze a synthetic CI failure","max_cost_usd":0.02}
+        with self.assertRaises(hf.StationError):hf._validate_request(p)
+
     def test_request_signature(self):
         a=hf._sign("secret","123",b"body")
         self.assertEqual(a,hf._sign("secret","123",b"body"))
