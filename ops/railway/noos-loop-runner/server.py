@@ -598,6 +598,19 @@ def main() -> None:
                     "error_code": type(exc).__name__,
                 }), flush=True)
         threading.Thread(target=_backend_probe_one_shot, name="uos-ri-origin-diagnostic", daemon=True).start()
+    if os.environ.get("NOOS_UOS_RI_ACTIVE_SUPABASE_PROBE_ONCE") == "1":
+        def _active_supabase_readiness():
+            try:
+                from noos_uos_ri_active_supabase_v1 import probe
+                print("UOS_RI_ACTIVE_SUPABASE=" + json.dumps(probe(), separators=(",", ":")), flush=True)
+            except Exception as exc:  # noqa: BLE001
+                print("UOS_RI_ACTIVE_SUPABASE=" + json.dumps({
+                    "schema": "uos-ri.active-supabase-readiness.v1",
+                    "reason": "PROBE_EXCEPTION",
+                    "error_code": type(exc).__name__,
+                    "ready_for_cutover": False,
+                }), flush=True)
+        threading.Thread(target=_active_supabase_readiness, name="uos-ri-active-db-probe", daemon=True).start()
     if (os.environ.get("NOOS_UOS_RI_ONE_SHOT_RUN_ID") or "").strip():
         threading.Thread(target=_run_uos_ri_one_shot, name="uos-ri-commissioning", daemon=True).start()
     HTTPServer(("0.0.0.0", PORT), Handler).serve_forever()
