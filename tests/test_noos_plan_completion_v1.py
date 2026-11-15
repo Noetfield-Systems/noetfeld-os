@@ -19,7 +19,7 @@ import noos_unified_backlog_compiler_v1 as compiler  # noqa: E402
 def test_deepseek_pin_locked():
     row = runway.verify_deepseek_pin()
     assert row["ok"] is True
-    assert row["cheap_primary"] == "deepseek-v4-flash"
+    assert row["cheap_primary"] == "deepseek-flash"
     assert row["standard_fallback"] == "deepseek-v4-pro"
 
 
