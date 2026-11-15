@@ -47,7 +47,7 @@ def test_live_replay_readback_and_independent_receipt(monkeypatch):
             "intake": {**inbound, "requested_at": inbound.get("requested_at", "2026-11-15T06:00:00Z")},
         }
     monkeypatch.setattr(uos.runway, "submit_intake", submit)
-    states = iter(["RUNNING", "COMPLETE"])
+    states = iter(["RUNNING", "SUCCEEDED"])
     monkeypatch.setattr(uos.runway, "get_job", lambda _id: {"ok": True, "body": {"state": next(states)}})
     calls = []
     def hmac(method, path):
@@ -84,7 +84,7 @@ def test_unverified_model_self_report_never_claims_outcome_or_money(monkeypatch)
     def submit(inbound):
         return {"ok": True, "body": {"job_id": "job_001"}, "intake": {**inbound, "requested_at": "2026-11-15T06:00:00Z"}}
     monkeypatch.setattr(uos.runway, "submit_intake", submit)
-    monkeypatch.setattr(uos.runway, "get_job", lambda _id: {"ok": True, "body": {"status": "COMPLETE"}})
+    monkeypatch.setattr(uos.runway, "get_job", lambda _id: {"ok": True, "body": {"status": "SUCCEEDED"}})
     monkeypatch.setattr(uos.runway, "hmac_request", lambda method, path: {"ok": True, "body": {
         "receipt": {"verdict": "PASS", "verifier_id": "builder", "builder_id": "builder", "artifact_sha256": "a" * 64},
         "billing": {"billing_reconciled": False, "billed_usd": 4.0},
@@ -114,7 +114,7 @@ def test_independent_receipt_without_real_provider_lineage_is_not_e2e(monkeypatc
     monkeypatch.setattr(uos.runway, "submit_intake", lambda x: {
         "ok": True, "body": {"job_id": "job_001"}, "intake": {**x, "requested_at": "2026-11-15T06:00:00Z"}
     })
-    monkeypatch.setattr(uos.runway, "get_job", lambda _: {"ok": True, "body": {"state": "COMPLETE"}})
+    monkeypatch.setattr(uos.runway, "get_job", lambda _: {"ok": True, "body": {"state": "SUCCEEDED"}})
     monkeypatch.setattr(uos.runway, "hmac_request", lambda method, path: {"ok": True, "body": {
         "receipt": {
             "independent": True, "verdict": "PASS",
@@ -127,3 +127,22 @@ def test_independent_receipt_without_real_provider_lineage_is_not_e2e(monkeypatc
     assert row["independent_verdict"] == "PASS"
     assert row["provider_execution_verified"] is False
     assert row["status"] == "MODEL_EXECUTION_EVIDENCE_MISSING"
+
+
+def test_real_runway_terminal_SUCCEEDED_produces_artifact_metadata(monkeypatch):
+    monkeypatch.setattr(uos.runway, "preflight", lambda: {"ok": True})
+    monkeypatch.setattr(uos.runway, "submit_intake", lambda x: {
+        "ok": True, "body": {"job_id": "rj_" + "a" * 32},
+        "intake": {**x, "requested_at": "2026-11-15T06:00:00Z"}
+    })
+    monkeypatch.setattr(uos.runway, "get_job", lambda _: {"ok": True, "body": {"status": "SUCCEEDED"}})
+    monkeypatch.setattr(uos.runway, "hmac_request", lambda method, path: {"ok": True, "body": {
+        "status": "succeeded",
+        "artifacts": [{"artifact_id": "pdf-1", "content_sha256": "b" * 64}],
+    }})
+    row = uos.commission(packet(), max_observations=1)
+    assert row["runtime_terminal_state"] == "SUCCEEDED"
+    assert row["runtime_result_readback"] is True
+    assert row["runtime_artifact_digests"] == [{"artifact_id": "pdf-1", "sha256": "b" * 64}]
+    assert row["status"] == "TERMINAL_UNVERIFIED_OR_FAILED"
+    assert row["provider_execution_verified"] is False
