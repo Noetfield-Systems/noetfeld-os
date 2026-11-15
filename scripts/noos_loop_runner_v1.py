@@ -251,27 +251,84 @@ def next_cycle_number(loop_id: str) -> int:
 
 
 def classify_step_failure(stdout: str, stderr: str) -> str:
-    """Safe fixed-category failure signal. Never copy upstream error text into public diagnostics."""
-    detail = (str(stderr or "") + "\n" + str(stdout or "")).lower()[-4000:]
-    checks = (
-        ("tenant or user not found", "DATABASE_POOLER_TENANT_INVALID"),
-        ("supabase not configured", "SUPABASE_CONFIGURATION_MISSING"),
-        ("invalid api key", "UPSTREAM_CREDENTIAL_REJECTED"),
-        ("401 unauthorized", "UPSTREAM_AUTH_401"),
-        ("http error 401", "UPSTREAM_AUTH_401"),
-        ("http error 403", "UPSTREAM_PERMISSION_403"),
-        ("permission denied", "PERMISSION_DENIED"),
-        ("http error 404", "UPSTREAM_NOT_FOUND"),
-        ("connection refused", "DEPENDENCY_CONNECTION_REFUSED"),
-        ("timed out", "DEPENDENCY_TIMEOUT"),
-        ("timeout", "DEPENDENCY_TIMEOUT"),
-        ("no module named", "PYTHON_DEPENDENCY_MISSING"),
-        ("traceback (most recent call last)", "WORKER_EXCEPTION"),
-    )
-    for marker, category in checks:
-        if marker in detail:
-            return category
-    return "UNCLASSIFIED_NONZERO_EXIT"
+    """Machine-actionable, allowlisted root cause; no raw secrets in logs.
+
+    Inspect structured child output before generic text. Railway diagnostics
+    receive only these fixed category strings, never upstream response bodies.
+    """
+    def classify_text(raw: str) -> str | None:
+        detail = str(raw or "").lower()[-8000:]
+        checks = (
+            ("pgrst205", "SUPABASE_TABLE_NOT_FOUND"),
+            ("could not find the table", "SUPABASE_TABLE_NOT_FOUND"),
+            ("relation", "SUPABASE_SCHEMA_OR_RELATION_ERROR"),
+            ("nxdomain", "SUPABASE_ENDPOINT_DNS_UNRESOLVED"),
+            ("name or service not known", "SUPABASE_ENDPOINT_DNS_UNRESOLVED"),
+            ("nodename nor servname", "SUPABASE_ENDPOINT_DNS_UNRESOLVED"),
+            ("getaddrinfo failed", "SUPABASE_ENDPOINT_DNS_UNRESOLVED"),
+            ("temporary failure in name resolution", "SUPABASE_ENDPOINT_DNS_UNRESOLVED"),
+            ("tenant or user not found", "DATABASE_POOLER_TENANT_INVALID"),
+            ("supabase not configured", "SUPABASE_CONFIGURATION_MISSING"),
+            ("invalid api key", "UPSTREAM_CREDENTIAL_REJECTED"),
+            ("invalid jwt", "UPSTREAM_CREDENTIAL_REJECTED"),
+            ("pgrst301", "UPSTREAM_CREDENTIAL_REJECTED"),
+            ("http error 401", "UPSTREAM_AUTH_401"),
+            ("401 unauthorized", "UPSTREAM_AUTH_401"),
+            ("http error 403", "UPSTREAM_PERMISSION_403"),
+            ("permission denied", "PERMISSION_DENIED"),
+            ("http error 404", "UPSTREAM_NOT_FOUND"),
+            ("http error 429", "UPSTREAM_RATE_LIMIT_429"),
+            ("connection refused", "DEPENDENCY_CONNECTION_REFUSED"),
+            ("timed out", "DEPENDENCY_TIMEOUT"),
+            ("timeout", "DEPENDENCY_TIMEOUT"),
+            ("no module named", "PYTHON_DEPENDENCY_MISSING"),
+            ("traceback (most recent call last)", "WORKER_EXCEPTION"),
+        )
+        for marker, category in checks:
+            if marker in detail:
+                return category
+        return None
+
+    for raw in (stdout, stderr):
+        try:
+            data = json.loads(str(raw or "").strip())
+        except (TypeError, ValueError):
+            continue
+        if not isinstance(data, dict):
+            continue
+        for section in (data.get("dispatch"), data.get("observe"),
+                        data.get("compile"), data.get("supabase_sink")):
+            if not isinstance(section, dict) or section.get("ok") is not False:
+                continue
+            verdict = str(section.get("verdict") or "")
+            if verdict == "BLOCKED_DEEPSEEK_PIN_DRIFT":
+                return "RUNWAY_MODEL_PIN_DRIFT"
+            if verdict in ("BLOCKED_RUNWAY_API_NOT_LIVE", "RUNWAY_NOT_CONFIGURED"):
+                return "RUNWAY_INTAKE_NOT_CONFIGURED"
+            reason = str(section.get("reason") or "")
+            if reason in ("supabase_not_configured", "missing_supabase_url_or_key"):
+                return "SUPABASE_CONFIGURATION_MISSING"
+            result = classify_text(
+                str(section.get("report_line") or "")+" "+reason+" "+
+                str(section.get("error") or ""))
+            if result:
+                return result
+        # A plan reconcile can fail because the Supabase sink failed, even
+        # if the outer compile result does not mark itself failed.
+        comp = data.get("compile")
+        if isinstance(comp, dict):
+            sink = comp.get("supabase_sink")
+            if isinstance(sink, dict) and sink.get("ok") is False:
+                detail = json.dumps(sink, default=str)
+                return classify_text(detail) or "SUPABASE_PLAN_SINK_FAILED"
+        result = classify_text(str(data.get("error") or ""))
+        if result:
+            return result
+        if data.get("ok") is False:
+            return "STRUCTURED_WORKER_FAILURE"
+
+    return (classify_text(str(stderr or "")+"\n"+str(stdout or ""))
+            or "UNCLASSIFIED_NONZERO_EXIT")
 
 
 def run_cmd(cmd: list[str], *, continue_on_error: bool = False, timeout: int = 600) -> dict[str, Any]:

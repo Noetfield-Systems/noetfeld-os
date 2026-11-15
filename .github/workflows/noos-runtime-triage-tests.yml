@@ -1,0 +1,29 @@
+name: NOOS runtime failure triage verification
+on:
+  pull_request:
+    branches: ["deploy/noos-loop-runner-entrypoint"]
+    paths:
+      - "scripts/noos_loop_runner_v1.py"
+      - "tests/test_noos_runtime_failure_triage_v1.py"
+      - ".github/workflows/noos-runtime-triage-tests.yml"
+  push:
+    branches: ["deploy/noos-loop-runner-entrypoint"]
+    paths:
+      - "scripts/noos_loop_runner_v1.py"
+      - "tests/test_noos_runtime_failure_triage_v1.py"
+      - ".github/workflows/noos-runtime-triage-tests.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Python compilation and fixed-category, secret-safe failure detection
+        run: |
+          python3 -m py_compile scripts/noos_loop_runner_v1.py
+          python3 -m unittest discover -s tests -p 'test_noos_runtime_failure_triage_v1.py' -v
