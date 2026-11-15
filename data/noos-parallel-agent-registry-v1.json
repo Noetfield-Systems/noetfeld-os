@@ -13,6 +13,7 @@
   },
   "gha_workflow_coverage": {
     "gel-ci": ["gha-gel-ci"],
+    "uos-ri-commissioning": ["gha-gel-ci"],
     "deploy-noos-cloud-workers-v1": ["gha-deploy-noos-cloud-workers"],
     "noos-post-deploy-verify-v1": ["gha-post-deploy-verify"],
     "noos-factory-autorun": ["gha-noos-factory-autorun"],
