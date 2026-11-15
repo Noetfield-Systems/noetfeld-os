@@ -99,6 +99,9 @@ async def lifespan(app):
     with core.connect() as db:
         paperclip.create_binding_table(db)
     WORKER_JOB=asyncio.create_task(worker())
+    if os.environ.get("COMPANY_OS_RUNWAY_HMAC_PROBE_ONCE") == "1":
+        import runway_hmac_probe
+        asyncio.create_task(asyncio.to_thread(runway_hmac_probe.run_and_log))
     yield
     STOP.set();WORKER_JOB.cancel()
     try: await WORKER_JOB
