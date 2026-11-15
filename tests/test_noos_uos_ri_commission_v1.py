@@ -62,7 +62,7 @@ def test_live_replay_readback_and_independent_receipt(monkeypatch):
                 "builder_id": "builder-original",
                 "artifact_sha256": "a" * 64,
             },
-            "usage": {"model": "deepseek-flash", "input_tokens": 92, "output_tokens": 24},
+            "usage": {"model": "deepseek-flash", "provider_request_id": "ds-prod-123", "usage_source": "DEEPSEEK_API_USAGE", "input_tokens": 92, "output_tokens": 24},
             "billing": {"billing_reconciled": True, "billed_usd": 0.0032},
         }}
     monkeypatch.setattr(uos.runway, "hmac_request", hmac)
@@ -107,3 +107,23 @@ def test_duplicate_ack_mismatch_stops_without_polling(monkeypatch):
     row = uos.commission(packet())
     assert row["status"] == "IDEMPOTENCY_RECONCILIATION_FAILED"
     assert row["replay_idempotent"] is None
+
+
+def test_independent_receipt_without_real_provider_lineage_is_not_e2e(monkeypatch):
+    monkeypatch.setattr(uos.runway, "preflight", lambda: {"ok": True})
+    monkeypatch.setattr(uos.runway, "submit_intake", lambda x: {
+        "ok": True, "body": {"job_id": "job_001"}, "intake": {**x, "requested_at": "2026-11-15T06:00:00Z"}
+    })
+    monkeypatch.setattr(uos.runway, "get_job", lambda _: {"ok": True, "body": {"state": "COMPLETE"}})
+    monkeypatch.setattr(uos.runway, "hmac_request", lambda method, path: {"ok": True, "body": {
+        "receipt": {
+            "independent": True, "verdict": "PASS",
+            "verifier_id": "separate-verifier", "builder_id": "builder",
+            "artifact_sha256": "b" * 64
+        },
+        "usage": {"model": "deepseek-flash", "input_tokens": 22, "output_tokens": 15}
+    }})
+    row = uos.commission(packet(), max_observations=1)
+    assert row["independent_verdict"] == "PASS"
+    assert row["provider_execution_verified"] is False
+    assert row["status"] == "MODEL_EXECUTION_EVIDENCE_MISSING"
