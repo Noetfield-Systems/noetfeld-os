@@ -47,3 +47,10 @@ def test_queue_schema_prevents_duplicate_claims_and_lease_free_completion():
     assert "FOR UPDATE SKIP LOCKED" in inspect.getsource(store.claim_job)
     assert "lease_until>now()" in inspect.getsource(store.report_job)
     assert "ON CONFLICT(workpacket_id)" in inspect.getsource(store.enqueue_job)
+
+
+def test_failed_coding_attempts_are_retried_only_after_backoff():
+    sql = inspect.getsource(store.claim_job)
+    assert "state='FAILED'" in sql
+    assert "updated_at<=now()-interval '2 minutes'" in sql
+    assert "attempts < max_attempts" in sql

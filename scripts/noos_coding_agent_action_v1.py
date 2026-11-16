@@ -223,6 +223,19 @@ def commit_and_open_pr(workpacket, paths):
     return head_sha,branch,pr_url
 
 
+
+def dispatch_next(token):
+    """Continue other ready coding jobs without Founder intervention."""
+    try:
+        stats=request(API+"/v1/coding/status",token=token)
+        if int((stats.get("counts") or {}).get("QUEUED",0)) > 0:
+            shell("gh","workflow","run","noos-cloud-coder.yml","--ref","main",
+                  timeout=25)
+            print("NOOS_CONTINUATION_DISPATCHED")
+    except Exception:
+        print("NOOS_CONTINUATION_SCHEDULE_FALLBACK")
+
+
 def main():
     token=oidc()
     queue_issue(token)
@@ -255,16 +268,7 @@ def main():
                job_id=job["job_id"],test_path=paths[1])
         print("NOOS_CODE_RESULT "+workflow_state+" "+workpacket)
         if workflow_state in ("PR_OPENED","BRANCH_READY"):
-            # Restart on the next queued job without another Founder prompt.
-            # GitHub cron remains the durable recovery path when dispatch is denied.
-            try:
-                stats=request(API+"/v1/coding/status",token=token)
-                if int((stats.get("counts") or {}).get("QUEUED",0)) > 0:
-                    shell("gh","workflow","run","noos-cloud-coder.yml","--ref","main",
-                          timeout=25)
-                    print("NOOS_CONTINUATION_DISPATCHED")
-            except Exception:
-                print("NOOS_CONTINUATION_SCHEDULE_FALLBACK")
+            dispatch_next(token)
     except Exception as exc:
         try:
             api("/v1/coding/report",{"job_id":job["job_id"],
@@ -273,6 +277,7 @@ def main():
                 "github_run_id":os.environ.get("GITHUB_RUN_ID")}},token)
         except Exception:
             pass
+        dispatch_next(token)
         raise
 
 

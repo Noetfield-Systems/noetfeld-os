@@ -195,7 +195,8 @@ def claim_job(repo: str, *, lease_minutes: int = 15) -> dict[str, Any]:
                 WITH chosen AS (
                   SELECT job_id FROM noos_runtime_coding_jobs
                   WHERE repo=$1 AND attempts < max_attempts AND
-                    (state='QUEUED' OR (state='LEASED' AND lease_until<now()))
+                    (state='QUEUED' OR (state='LEASED' AND lease_until<now())
+                     OR (state='FAILED' AND updated_at<=now()-interval '2 minutes'))
                   ORDER BY created_at, job_id
                   FOR UPDATE SKIP LOCKED LIMIT 1
                 )
