@@ -26,5 +26,25 @@ FOUNDER_EXECUTION_CONTRACT = {
         "Report coded, tested, deployed, real user, on-chain and cash facts separately."
     ),
     "drift_signal": "FOUNDER INTENT DRIFT",
+    "crypto_native_market_reality": {
+        "canonical_law": "Noetfield-Systems/sina-governance-SSOT/ssot/CRYPTO_NATIVE_MARKET_REALITY_LAW_v1.md",
+        "machine_contract": "Noetfield-Systems/sina-governance-SSOT/data/crypto_native_benchmark_contract_v1.json",
+        "source_pattern_ids": "BuildRelay P01-P20 (reference only; do not share venture tokens/ledgers)",
+        "priority": "FOLLOW_WINNING_CRYPTO_NATIVE_TRAJECTORIES",
+        "directive": (
+            "For any material crypto-native product, growth, brand, funding, token, community "
+            "or UI/UX change, inspect live relevant competitors, especially how their founders "
+            "sequence narrative, premium visual design, community, networking, capital, and "
+            "technical delivery. Copy lawful success mechanisms and proven flow patterns "
+            "without copying protected assets or fabricating market outcomes. Early traction "
+            "and brand/community are valid priorities; do not substitute lengthy backend "
+            "architecture or generic SaaS for the Founder market objective. Choose a bounded "
+            "market-facing original-venture implementation, preserve independent venture "
+            "economies, use only existing Company OS and Runway, and write honest source evidence. "
+            "Benchmarking is part of the work, not a new launch/approval gate."
+        ),
+        "spend_and_real_traction_unknown_until_source_verified": True,
+        "extra_queue_or_governor_allowed": False,
+    },
     "not_an_external_action_permit": True,
 }
