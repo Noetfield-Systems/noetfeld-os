@@ -103,12 +103,25 @@ class CommercialRuntimeAcceptance(unittest.TestCase):
                 }
                 db.execute("UPDATE tasks SET status='drafted',result=? WHERE id=?",
                            (json.dumps(actual),row["id"]))
+                db.execute("INSERT INTO runs VALUES(?,?,?,?,?,?,?,?,?,?,?)",(
+                    "run_"+uuid.uuid4().hex,row["id"],row["role"],
+                    "openai-compatible","actual-provider-model","completed",
+                    125,48,commercial.now(),commercial.now(),
+                    json.dumps(actual["recommendation"])))
         res=commercial.reconcile()
         self.assertEqual(1,res["artifact_ready"])
         a=commercial.artifact_for_verifier(receipt["workpacket_id"])
         self.assertEqual(a["artifact_sha256"],hashlib.sha256(
             commercial.canonical(a["artifact"]).encode()).hexdigest())
         self.assertEqual(2,len(a["artifact"]["agent_results"]))
+        trace=a["artifact"]["execution_trace"]
+        self.assertEqual("CANONICAL_COMPANY_OS_COMPLETED_RUNS",trace["source"])
+        self.assertEqual(2,len(trace["runs"]))
+        self.assertEqual(250,trace["total_input_tokens"])
+        self.assertEqual(96,trace["total_output_tokens"])
+        self.assertIsNone(trace["provider_cost_minor"])
+        self.assertEqual("PROVIDER_BILLING_NOT_AVAILABLE",trace["cost_accounting_state"])
+        self.assertTrue(all(x["run_id"].startswith("run_") for x in trace["runs"]))
         self.assertFalse(a["artifact"]["product_delivered"])
         self.assertFalse(a["artifact"]["customer_accepted"])
         self.assertFalse(a["artifact"]["independent_verification"])
@@ -119,6 +132,19 @@ class CommercialRuntimeAcceptance(unittest.TestCase):
         self.assertTrue(p["artifact_ready"])
         self.assertFalse(p["work_completed_and_independently_verified"])
         self.assertEqual(0,commercial.reconcile()["artifact_ready"])
+
+    def test_task_result_without_completed_run_is_not_execution_trace(self):
+        receipt=commercial.admit(self.payload)
+        with core.connect() as db:
+            for row in db.execute("SELECT id FROM tasks").fetchall():
+                db.execute("UPDATE tasks SET status='drafted',result=? WHERE id=?",(
+                    json.dumps({"provider":"openai-compatible","recommendation":{
+                      "assessment":"A detailed assertion long enough to look like an authentic model-generated assessment.",
+                      "next_best_action":"Implement tested source assignment and controlled outreach."}}),
+                    row["id"]))
+        progress=commercial.reconcile()
+        self.assertEqual(0,progress["artifact_ready"])
+        self.assertEqual("BLOCKED_MODEL",commercial.public_receipt(receipt["workpacket_id"])["status"])
 
     def test_private_receiver_token_is_not_founder_bearer_and_unauthorized_is_401(self):
         import app
