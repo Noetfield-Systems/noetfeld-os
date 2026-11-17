@@ -280,7 +280,7 @@ def verify_deepseek_pin() -> dict[str, Any]:
     standard = str(pin.get("standard_fallback") or "")
     forbidden = set(pin.get("forbidden") or [])
     ok = (
-        cheap == "deepseek-v4-flash"
+        cheap == "deepseek-flash"
         and standard == "deepseek-v4-pro"
         and "deepseek-chat_as_production_pin" in forbidden
         and pin.get("fail_closed_if_unavailable") is True

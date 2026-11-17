@@ -227,6 +227,46 @@ class BusinessOSGovernanceTests(unittest.TestCase):
             "H-001",
         )
 
+    def test_named_manager_first_source_is_not_starved_by_older_tasks(self):
+        import product_loops
+        previous = core.DB
+        with tempfile.TemporaryDirectory() as tmp:
+            try:
+                core.DB = Path(tmp) / "manager-priority.sqlite"
+                core.init()
+                product_loops.register({
+                    "company_id": "founder-portfolio",
+                    "project_id": "buildrelay-bridge-economy",
+                    "name": "BuildRelay",
+                    "vertical": "founder-network",
+                    "objective": "Operate genuine founder matches and verified collaboration",
+                    "priority": 4,
+                })
+                with core.connect() as db:
+                    older = core.add_task(db, None, None, "portfolio",
+                        "engineering_operator", "Older unrelated task",
+                        "Investigate unrelated backlog", "Report source evidence")
+                    observed = product_loops._insert_observation(db,
+                        "founder-portfolio", "buildrelay-bridge-economy", {
+                        "source_event_id": "manager-first-source:gm-buildrelay-farid:v1",
+                        "source_kind": "REPORTED_OPERATIONAL",
+                        "source_ref": "company-os:founder-mandate-test",
+                        "signal": "feature_request",
+                        "summary": "Original test fixture for named manager activation work.",
+                        "severity": 2,
+                    }, verified=False)
+                    db.commit()
+                with core.connect() as db:
+                    manager_event = db.execute(
+                        "SELECT * FROM events WHERE id=?",
+                        (observed["event_id"],)).fetchone()
+                product_loops.process_signal(dict(manager_event))
+                claimed = core.claim("tasks")
+                self.assertEqual(claimed["observation_id"], observed["observation_id"])
+                self.assertNotEqual(claimed["id"], older)
+            finally:
+                core.DB = previous
+
     def test_executive_task_waits_for_specialist_dependencies(self):
         with core.connect() as db:
             specialist_a = core.add_task(

@@ -9,6 +9,14 @@ doc_type: AGENT_ENTRYPOINT
 workspace_root: /Users/sinakazemnezhad/Desktop/Noetfield-Systems/noetfeld-OS
 -->
 
+## Sina Founder Goalkeeper — mandatory decision interface for connected agents
+
+Every product owns its own Company OS executive, engineering, growth and operations. Sina Founder OS owns ONLY portfolio goals, cross-venture priority, Goalkeeper and reserved Founder decisions. Do not send normal product engineering/marketing choices to Sina as work assignments or ask the human Founder to repeat established goals.
+
+Before a coding/review/advisory agent asks the Founder to pick a routine next step, use the authenticated Sina Founder Goalkeeper Action: POST /api/v2/agent/decision, as defined in Noetfield-Systems/sina_founder_os/integrations/agent-decision-gateway/openapi.yaml (deployed HTTPS gateway: https://sina-founder-os-staging-staging.up.railway.app). Include the canonical project ID, company scope, agent role, intent, proposed action and up to five scored alternatives. Act on next_action within the PRODUCT'S OWN Company OS when founder_question_required=false. Escalate only genuine reserved Founder questions and follow Governor/Verifier; decision advice itself is never a permit or proof of execution.
+
+Only agents with an Action/MCP tool explicitly connected and credentialed can call the API. Never paste secrets in prompts or fake a gateway response. If not connected, state GATEWAY_NOT_CONNECTED and inspect canonical project goals locally while the agent tool connection is configured.
+
 ## L0 repo graph memory — broad-read gate
 
 **Read before broad reads:** `graph-out/GRAPH_REPORT.md` · query: `python3 scripts/query_repo_graph_v1.py <term>` · design: `docs/L0_REPO_GRAPH_MEMORY_v1.md`
