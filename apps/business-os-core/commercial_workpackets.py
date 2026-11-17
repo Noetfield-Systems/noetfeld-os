@@ -77,6 +77,8 @@ def validate(payload: dict[str, Any]) -> dict[str, str]:
     work=payload["requested_work"].strip()
     if not INTAKE_RE.fullmatch(intake) or not SCOPE_RE.fullmatch(scope):
         raise CommercialWorkPacketError("REAL_INTAKE_AND_SIGNED_SCOPE_REQUIRED")
+    if scope.upper().startswith(("DEMO","MOCK","TEST")):
+        raise CommercialWorkPacketError("SIGNED_REAL_SCOPE_REQUIRED")
     if engine!="COMPANY_OS" or not EVENT_RE.fullmatch(event):
         raise CommercialWorkPacketError("COMPANY_OS_LIVE_PAYMENT_CONTRACT_REQUIRED")
     if (len(work)<20 or len(work)>400 or any(x in work.upper() for x in ("DEMO-", "MOCK-", "SIMULATED"))):
