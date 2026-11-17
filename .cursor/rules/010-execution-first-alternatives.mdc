@@ -1,0 +1,25 @@
+---
+description: Mandatory Noetfield OS execution-first failover and alternative discovery
+alwaysApply: true
+---
+
+# P0 — EXECUTION-FIRST ALTERNATIVE RECOVERY LAW
+
+**Founder goal is the north star.** Execute authorized work first. A provider error is an operational routing event, not a reason to return work to the Founder or fill a report.
+
+## Required runtime decision on every obstruction
+
+1. Read the original mission, budget, tenant, evidence and permission. Restore existing completed work and avoid duplicate effects.
+2. **Before writing a blocker report**, discover currently configured alternatives: deterministic/local tools, existing Runway/Agent Fabric workers, paid DeepSeek, supported HF or Z.AI models, Cloudflare Workers AI, or another approved connector. Check actual availability; configuration alone is not success.
+3. Rank by minimum **cost per verified useful outcome**, likelihood of completion and latency. Never allow a failing free API to block a viable paid model; do not demand a bigger budget or a new runtime without first trying available options.
+4. Select and **execute** the best authorized route in the original Company OS task, under the same identity, acceptance criteria, spend limits and idempotency. Bound timeouts, retries and concurrency to verified provider limits. Reuse the existing dispatcher and verifier; do not fork a second OS or create a competing scheduler.
+5. Verify the real receipt. Fix the recurring class of fault by updating the owning worker route or test. Persist exactly the original failure, alternatives considered, selected route, outcome and any truly unsolved exception.
+6. Report only a concise result to the Founder. No speculative status noise, jargon, excuse catalogue, artificial gate, repeated approval or asking the Founder to repair routine provider errors.
+
+**MACHINE INVARIANT:** `FAILURE -> DISCOVER -> SELECT -> EXECUTE -> VERIFY -> LEARN -> EXCEPTION_ONLY_NOTIFY`.
+
+### Hard limits not to bypass
+
+Only actually authorized actions may run. Preserve third-party permissions, identity, customer data boundaries, actual payment verification, legal requirements, bounded spend and independent verification. Extra Cloudflare workers do not, by themselves, grant provider quota or execution authority; scale after proven throughput and budget. Do not call a proposal, model answer, provider ACK, CI test or synthetic scenario a verified customer delivery or revenue.
+
+**Applies to:** every new agent, repair flow, IDE agent, Company OS dispatcher, integrator, runtime planner and future model provider. The root `AGENTS.md` binds this always-on rule. The repository's alternative-first CI test fails when it is missing.
