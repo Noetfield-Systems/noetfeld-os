@@ -168,6 +168,33 @@ def _task(db: sqlite3.Connection, tid: str) -> dict[str, Any] | None:
     return dict(row) if row else None
 
 
+def _actual_provider_trace(db: sqlite3.Connection, task_id: str, role: str) -> dict[str, Any] | None:
+    """Only a real completed entry in the canonical Company OS runs table.
+
+    Do not reconstruct execution from task status or a worker-authored draft.
+    Tokens are provider telemetry, NOT proof of the amount billed.
+    """
+    row=db.execute("""SELECT id,task_id,role,provider,model,status,
+                      input_tokens,output_tokens,started_at,finished_at
+                      FROM runs WHERE task_id=? AND role=?
+                        AND provider='openai-compatible' AND status='completed'
+                      ORDER BY finished_at DESC,id DESC LIMIT 1""",
+                   (task_id,role)).fetchone()
+    if not row:
+        return None
+    value=dict(row)
+    if (not value["id"] or not value["model"] or
+        type(value["input_tokens"]) is not int or value["input_tokens"]<0 or
+        type(value["output_tokens"]) is not int or value["output_tokens"]<0 or
+        not value["started_at"] or not value["finished_at"]):
+        return None
+    return {"run_id":value["id"],"task_id":value["task_id"],
+            "role":value["role"],"provider":value["provider"],
+            "model":value["model"],"status":value["status"],
+            "input_tokens":value["input_tokens"],"output_tokens":value["output_tokens"],
+            "started_at":value["started_at"],"finished_at":value["finished_at"]}
+
+
 def _public_status(row: sqlite3.Row) -> dict[str, Any]:
     return {"schema":"noetfield.company-os-commercial-receipt.v1",
             "external_workpacket_id":row["id"],"engine":"COMPANY_OS",
@@ -235,6 +262,7 @@ def reconcile(limit: int=20) -> dict[str, int]:
                     db.execute("UPDATE commercial_workpackets SET state='RUNNING',updated_at=? WHERE id=?",(now(),row["id"]))
                 continue
             evidence=[]
+            traces=[]
             bad=False
             for task in tasks:
                 try: result=json.loads(task["result"] or "{}")
@@ -245,8 +273,16 @@ def reconcile(limit: int=20) -> dict[str, int]:
                     len(str(recommendation.get("assessment") or ""))<25 or
                     len(str(recommendation.get("next_best_action") or ""))<15):
                     bad=True;break
+                run=_actual_provider_trace(db,task["id"],task["role"])
+                if not run:
+                    bad=True
+                    break
+                traces.append(run)
                 evidence.append({"task_id":task["id"],"role":task["role"],
-                    "provider":result["provider"],"recommendation":recommendation})
+                    "provider":result["provider"],"recommendation":recommendation,
+                    "run_id":run["run_id"],"model":run["model"],
+                    "input_tokens":run["input_tokens"],
+                    "output_tokens":run["output_tokens"]})
             if bad:
                 db.execute("UPDATE commercial_workpackets SET state='BLOCKED_MODEL',last_error_code='SUBSTANTIVE_PROVIDER_EVIDENCE_REQUIRED',updated_at=? WHERE id=?",(now(),row["id"]))
                 blocked+=1;continue
@@ -259,6 +295,14 @@ def reconcile(limit: int=20) -> dict[str, int]:
               "work_product_kind":"AI_SALES_OS_IMPLEMENTATION_BLUEPRINT_DRAFT",
               "work_product_stage":"INTERNAL_REVIEW_READY_NOT_DEPLOYED",
               "agent_results":evidence,
+              "execution_trace":{
+                "source":"CANONICAL_COMPANY_OS_COMPLETED_RUNS",
+                "runs":traces,
+                "total_input_tokens":sum(t["input_tokens"] for t in traces),
+                "total_output_tokens":sum(t["output_tokens"] for t in traces),
+                "provider_cost_minor":None,"currency":None,
+                "cost_accounting_state":"PROVIDER_BILLING_NOT_AVAILABLE"
+              },
               "acceptance_tests":[
                  {"id":"INTAKE","criterion":"Real authorized lead enters one source-bound queue","verified":False},
                  {"id":"DEDUPE","criterion":"Duplicate submission does not duplicate opportunity","verified":False},
