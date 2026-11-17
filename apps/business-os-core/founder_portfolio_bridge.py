@@ -54,7 +54,9 @@ def verify_projection(data):
                 "company_entity_provisioning_authorized", "runtime_states_verified",
                 "customer_metrics_included", "execution_permit_issued"))):
         raise ValueError("portfolio_projection_authority_invalid")
-    if type(data["source_version"]) not in (str, int) or len(str(data["source_version"])) > 50:
+    # The canonical Founder registry now uses a 53-character version label; keep it
+    # authenticated and bounded without rejecting valid original SSOT evolution.
+    if type(data["source_version"]) not in (str, int) or len(str(data["source_version"])) > 120:
         raise ValueError("portfolio_version_invalid")
     projects = data["projects"]
     if not isinstance(projects, list) or not 1 <= len(projects) <= 100:
