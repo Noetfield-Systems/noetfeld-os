@@ -89,6 +89,14 @@ def _get_decision(body, *,fetch=None):
         raise ValueError("Sina Goalkeeper decision reference invalid")
     if response.get("decision") not in LOCAL_STATES|NO_MUTATION:
         raise ValueError("unrecognized Goalkeeper disposition")
+    alignment=response.get("native_venture_mission_alignment")
+    if alignment is not None:
+        if not isinstance(alignment,dict) or alignment.get("new_permit") is not False:
+            raise ValueError("invalid Founder native venture alignment")
+        if alignment.get("proposed_action_allowed") is False and (
+            response.get("decision")!="CLARIFY_FROM_EVIDENCE_NOT_FOUNDER" or
+            "FOUNDER_INTENT_DRIFT_NON_NATIVE_PAYMENT_RAIL" not in alignment.get("reason_codes",[])):
+            raise ValueError("Founder native economic refusal must not become executable approval")
     return response
 
 def _store_answer(db,scope,project,result,*,task_id=None,event_id=None):
@@ -142,6 +150,8 @@ def submit_question(data,*,fetch=None):
     if (answer.get("project_id")!=canonical_project or
         answer.get("company_scope")!=local_scope):
         raise ValueError("Goalkeeper response crossed project scope")
+    native_alignment=answer.get("native_venture_mission_alignment") or {}
+    original_mutation_allowed=native_alignment.get("proposed_action_allowed") is not False
     proceed=answer["decision"] in LOCAL_STATES and (
         answer.get("founder_question_required") is False)
     with core.connect() as db:
@@ -156,6 +166,8 @@ def submit_question(data,*,fetch=None):
                 "source_event_id":"venture_agent_decision:"+answer["decision_ref"],
                 "source_kind":"REPORTED_OPERATIONAL",
                 "source_ref":"company-os:local-agent-decision",
+                # For a contradictory source task this is a *corrective*
+                # native-rail feature request, not acceptance of old Stripe code.
                 "signal":"feature_request" if data.get("proposed_action") in (
                     "IMPLEMENT_CODE","PREPARE_DEPLOY","INTERNAL_RESEARCH") else "feedback",
                 "summary":summary,"severity":2
@@ -180,6 +192,10 @@ def submit_question(data,*,fetch=None):
         "decision_ref":answer["decision_ref"],
         "decision":answer["decision"],
         "next_action":answer.get("next_action"),
+        "native_venture_mission_alignment":native_alignment if native_alignment else None,
+        "original_mutation_allowed":original_mutation_allowed,
+        "native_replan_queued":bool(proceed and not original_mutation_allowed and
+                                    (stored["recorded"] or stored["event_id"])),
         "founder_question_required":answer.get("founder_question_required"),
         "founder_question":answer.get("founder_question"),
         "queued_for_company_os":bool(proceed and (stored["recorded"] or stored["event_id"])),
@@ -225,8 +241,13 @@ def consult_existing_task(task,*,fetch=None):
         raise ValueError("task decision crossed venture boundary")
     with core.connect() as db:
         _store_answer(db,scope,project,response,task_id=task["id"])
+    native_alignment=response.get("native_venture_mission_alignment") or {}
+    original_mutation_allowed=native_alignment.get("proposed_action_allowed") is not False
     return {
-        "state":"CONSULTED","decision_ref":response["decision_ref"],
+        "state":"CONSULTED" if original_mutation_allowed else "FOUNDER_INTENT_DRIFT_REPLAN",
+        "original_mutation_allowed":original_mutation_allowed,
+        "native_venture_mission_alignment":native_alignment if native_alignment else None,
+        "decision_ref":response["decision_ref"],
         "disposition":response["decision"],
         "next_action":str(response.get("next_action") or "")[:1100],
         "founder_question_required":response.get("founder_question_required") is True,
