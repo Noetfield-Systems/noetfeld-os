@@ -116,6 +116,21 @@ class SinaPortfolioCompanyEventTests(unittest.TestCase):
             n = db.execute("SELECT count(*) n FROM events WHERE event_type=?", (bridge.EVENT,)).fetchone()["n"]
         self.assertEqual(n, 2)
 
+    def test_current_real_founder_ssot_version_is_accepted_by_existing_company_bridge(self):
+        # Previous 50-character cap silently degraded live federation on
+        # 2026-11-17 even though Founder OS itself returned valid projection.
+        current="2026-11-16-mirra-mission-admitted-in-founder-registry"
+        self.assertEqual(len(current),53)
+        doc=projection()
+        doc["source_version"]=current
+        checked=bridge.verify_projection(doc)
+        self.assertEqual(checked["source_version"],current)
+        self.assertEqual(bridge.reconcile_once(lambda:checked)["canonical_queue"],
+                         "EXISTING_COMPANY_OS_EVENTS")
+        doc["source_version"]="x"*121
+        with self.assertRaisesRegex(ValueError,"portfolio_version_invalid"):
+            bridge.verify_projection(doc)
+
     def test_tampered_hash_missing_flags_fake_entity_and_unknown_fields_fail_closed(self):
         valid = projection()
         for changed in (
