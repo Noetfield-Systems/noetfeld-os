@@ -1,3 +1,9 @@
+# FOUNDER STANDING LAW — CRYPTO-NATIVE MARKET REALITY (2026-11-17)
+
+For every material venture/product strategy, UI/UX, brand, growth, community, token/quest/referral or capital-market upgrade, apply the canonical [Crypto-Native Market Reality Law](https://github.com/Noetfield-Systems/sina-governance-SSOT/blob/main/ssot/CRYPTO_NATIVE_MARKET_REALITY_LAW_v1.md) and its [machine-readable agent contract](https://github.com/Noetfield-Systems/sina-governance-SSOT/blob/main/data/crypto_native_benchmark_contract_v1.json) **within the existing task and existing governance**. Compare appropriate live crypto-native competitors (normally 2 direct + 1 adjacent, 3–5 total), dated primary-source evidence, actual customer/economic outcomes, and mobile/desktop experience; choose transferable patterns and ship a verifiable source change in the ORIGINAL venture. Do not replace original projects with generic SaaS, copy protected competitor assets, confuse funding/signups/points with settled revenue or users, or create a new Founder gate, OS, scheduler, queue, shared wallet or ledger. Continue viable work in parallel with quick research. Preserve each venture's own SSOT/identity and the central law's authority precedence.
+
+---
+
 # LAUNCH FACTORY REPOSITORY ROUTING — ACTIVE 2026-11-15
 The one canonical venture Launch Factory program, inventory, shared distribution strategy, manifest and operator CLI is **`Noetfield-Systems/Launch-Factory-Engine`**, not this NOOS repository. Route new startup creation/portfolio launch/growth factory changes to the Factory AGENTS and centralized source. Keep only NOOS company-owned existing role dispatch compatibility here; no Factory scheduler, independent venture wallet or shared CRM. See `noetfield-org/LAUNCH_FACTORY_COMPANY_CYCLE_v1.md`.
 
