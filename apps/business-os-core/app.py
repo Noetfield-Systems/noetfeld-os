@@ -12,6 +12,7 @@ import operations_relay
 import client_status
 import floor_projection
 import commercial_team
+import commercial_workpackets
 import portfolio_studio
 
 TOKEN=os.getenv("FOUNDER_API_TOKEN","")
@@ -44,6 +45,7 @@ async def worker():
     while not STOP.is_set():
         try:
             await asyncio.to_thread(core.daily_tick)
+            await asyncio.to_thread(commercial_workpackets.reconcile)
             # Reuse the running Company OS event worker. An upstream outage
             # must not halt local intake, departments or the canonical queue.
             try:
@@ -86,7 +88,7 @@ async def department_worker(worker_slot:int):
 @asynccontextmanager
 async def lifespan(app):
     global WORKER_JOB,TASK_WORKERS
-    core.init();client_status.init();founder_bridge.init();STOP.clear()
+    core.init();commercial_workpackets.init();client_status.init();founder_bridge.init();STOP.clear()
     restored=portfolio_studio.overview()
     print("company_portfolio_resume="+json.dumps({
         "state":restored["state"].get("portfolio_studio_state"),
@@ -109,6 +111,60 @@ async def lifespan(app):
     TASK_WORKERS=[]
 
 app=FastAPI(title="Noetfield Business OS",version="0.1.0",lifespan=lifespan)
+
+def commercial_workpacket_authorize(value: str|None, *,read_only:bool=False) -> None:
+    import hmac
+    expected=os.getenv("COMPANY_OS_COMMERCIAL_VERIFIER_READ_TOKEN" if read_only
+                       else "COMPANY_OS_COMMERCIAL_DISPATCH_TOKEN","").strip()
+    supplied=(value or "").removeprefix("Bearer ").strip()
+    if len(expected)<32:
+        raise HTTPException(503,"COMMERCIAL_WORKPACKET_SECRET_NOT_CONFIGURED")
+    if not supplied or not hmac.compare_digest(supplied,expected):
+        raise HTTPException(401,"COMMERCIAL_WORKPACKET_AUTH_REQUIRED")
+
+
+class PaidCommercialWorkPacket(BaseModel):
+    model_config=ConfigDict(extra="forbid")
+    idempotency_key:str=Field(min_length=36,max_length=36)
+    source_intake_id:str=Field(min_length=16,max_length=16)
+    engine:str=Field(min_length=10,max_length=32)
+    scope_ref:str=Field(min_length=5,max_length=100)
+    payment_event_id:str=Field(min_length=12,max_length=108)
+    requested_work:str=Field(min_length=20,max_length=400)
+
+
+@app.post("/api/internal/commercial/workpackets",include_in_schema=False)
+def receive_paid_workpacket(body:PaidCommercialWorkPacket,
+          authorization:str|None=Header(default=None),
+          idempotency_key:str|None=Header(default=None)) -> dict[str,Any]:
+    """Accept only genuinely source-bound, previously paid Platform work."""
+    commercial_workpacket_authorize(authorization)
+    if not idempotency_key or idempotency_key!=body.idempotency_key:
+        raise HTTPException(409,"IDEMPOTENCY_HEADER_MISMATCH")
+    try:
+        return commercial_workpackets.admit(body.model_dump())
+    except commercial_workpackets.CommercialWorkPacketError as exc:
+        raise HTTPException(422,str(exc)) from exc
+
+
+@app.get("/api/internal/commercial/workpackets/{workpacket_id}",include_in_schema=False)
+def commercial_workpacket_private(workpacket_id:str,
+        authorization:str|None=Header(default=None)) -> dict[str,Any]:
+    commercial_workpacket_authorize(authorization,read_only=True)
+    try:
+        return commercial_workpackets.artifact_for_verifier(workpacket_id)
+    except commercial_workpackets.CommercialWorkPacketError as exc:
+        raise HTTPException(404,str(exc)) from exc
+
+
+@app.get("/api/commercial/receipts/{workpacket_id}",include_in_schema=False)
+def commercial_workpacket_public_receipt(workpacket_id:str) -> dict[str,Any]:
+    """PII-free provider admission/worker status, NEVER a verifier receipt."""
+    try:
+        return commercial_workpackets.public_receipt(workpacket_id)
+    except commercial_workpackets.CommercialWorkPacketError as exc:
+        raise HTTPException(404,str(exc)) from exc
+
 
 class Intake(BaseModel):
     model_config=ConfigDict(extra="ignore")
