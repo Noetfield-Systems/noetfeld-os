@@ -33,6 +33,9 @@ FOUNDER_EXECUTION_CONTRACT = {
         "case_sequence_catalog": "Noetfield-Systems/sina-governance-SSOT/data/crypto_native_case_sequences_v1.json",
         "operating_strategy_catalog": "Noetfield-Systems/sina-governance-SSOT/data/crypto_native_derived_operating_patterns_v1.json",
         "semantic_contract": "SOURCE != BENCHMARK != MECHANISM != CHRONOLOGICAL_CASE != REPLICATED_SUCCESS_PATTERN",
+        "canonical_typed_ontology": "Noetfield-Systems/sina-governance-SSOT/data/DISCOVERY_STUDIO_ONTOLOGY_v1.json",
+        "source_dictionary_precedence": "one SSOT meaning over model interpretation; 13 typed objects",
+        "research_admission_rule": "source URL and competitor names are never patterns; pattern requires ordered real actions, date, observed outcome, alternate explanations, venture experiment; unverified AI proposal may not self-promote to observed fact",
         "priority": "FOLLOW_WINNING_CRYPTO_NATIVE_TRAJECTORIES",
         "directive": (
             "For any material crypto-native product, growth, brand, funding, token, community "
