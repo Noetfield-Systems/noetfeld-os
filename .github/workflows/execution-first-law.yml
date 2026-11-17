@@ -1,0 +1,28 @@
+name: NOOS Alternative-First Agent Law
+on:
+  pull_request:
+    paths:
+      - AGENTS.md
+      - .cursor/rules/010-execution-first-alternatives.mdc
+      - scripts/verify_execution_first_law.py
+      - .github/workflows/execution-first-law.yml
+  push:
+    branches:
+      - main
+      - platform/business-os-core-v1
+    paths:
+      - AGENTS.md
+      - .cursor/rules/010-execution-first-alternatives.mdc
+      - scripts/verify_execution_first_law.py
+      - .github/workflows/execution-first-law.yml
+jobs:
+  verify-recovery-law:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python scripts/verify_execution_first_law.py
