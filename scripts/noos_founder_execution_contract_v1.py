@@ -29,7 +29,10 @@ FOUNDER_EXECUTION_CONTRACT = {
     "crypto_native_market_reality": {
         "canonical_law": "Noetfield-Systems/sina-governance-SSOT/ssot/CRYPTO_NATIVE_MARKET_REALITY_LAW_v1.md",
         "machine_contract": "Noetfield-Systems/sina-governance-SSOT/data/crypto_native_benchmark_contract_v1.json",
-        "source_pattern_ids": "BuildRelay P01-P20 (reference only; do not share venture tokens/ledgers)",
+        "source_mechanism_candidate_ids": "BuildRelay P01-P20 = mixed tactic/policy references, NEVER twenty proven success patterns",
+        "case_sequence_catalog": "Noetfield-Systems/sina-governance-SSOT/data/crypto_native_case_sequences_v1.json",
+        "operating_strategy_catalog": "Noetfield-Systems/sina-governance-SSOT/data/crypto_native_derived_operating_patterns_v1.json",
+        "semantic_contract": "SOURCE != BENCHMARK != MECHANISM != CHRONOLOGICAL_CASE != REPLICATED_SUCCESS_PATTERN",
         "priority": "FOLLOW_WINNING_CRYPTO_NATIVE_TRAJECTORIES",
         "directive": (
             "For any material crypto-native product, growth, brand, funding, token, community "
