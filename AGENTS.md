@@ -9,6 +9,10 @@ doc_type: AGENT_ENTRYPOINT
 workspace_root: /Users/sinakazemnezhad/Desktop/Noetfield-Systems/noetfeld-OS
 -->
 
+## P0 execution-first and alternative-first machine law
+
+**Always mandatory:** `.cursor/rules/010-execution-first-alternatives.mdc` is an active `alwaysApply: true` instruction for every Company OS, NOOS, Cursor and runtime agent working here. On provider failure, search available existing substitutes, choose the best authorized route, execute under the ORIGINAL task and budget, verify the actual receipt and only then give a concise Founder status. A failing free model must not block a working paid model. Do not return routine troubleshooting or a list of forms to the Founder. Preserve real high-stakes approvals and customer/tenant boundaries. CI verifies the rule is present. This augments, not replaces, the locked existing NOOS machine loops and Founder Canon.
+
 ## L0 repo graph memory — broad-read gate
 
 **Read before broad reads:** `graph-out/GRAPH_REPORT.md` · query: `python3 scripts/query_repo_graph_v1.py <term>` · design: `docs/L0_REPO_GRAPH_MEMORY_v1.md`
