@@ -197,6 +197,53 @@ class LocalDecisionContinuationTests(unittest.TestCase):
             self.assertEqual(state["delivery_state"],"REJECTED_CONTRACT")
             self.assertEqual(state["attempts"],1)
 
+    def test_founder_native_stripe_rejection_replans_real_company_task_not_original_mutation(self):
+        response=self.answer(decision="CLARIFY_FROM_EVIDENCE_NOT_FOUNDER")
+        response["next_action"]=(
+            "Replace non-native Stripe checkout with original USDC onchain settlement "
+            "through the existing RHEVO Company OS without repeated Founder questions")
+        response["native_venture_mission_alignment"]={
+            "schema":"sina.native-mission-alignment.v1","version":"2026-11-17.1",
+            "new_permit":False,"proposed_action_allowed":False,
+            "reason_codes":["FOUNDER_INTENT_DRIFT_NON_NATIVE_PAYMENT_RAIL"],
+            "native_rails":["SOL","USDC","Solana native"]}
+        body=self.ask()
+        body["question"]="Integrate Stripe checkout into the creator launch platform"
+        result=bridge.submit_question(body,fetch=FakeFetcher(response))
+        self.assertFalse(result["original_mutation_allowed"])
+        self.assertTrue(result["native_replan_queued"])
+        self.assertTrue(result["queued_for_company_os"])
+        self.assertFalse(result["founder_question_required"])
+        self.assertIn("USDC",result["next_action"])
+        with core.connect() as db:
+            row=db.execute(
+                "SELECT summary FROM product_observations WHERE source_event_id=?",
+                ("venture_agent_decision:"+response["decision_ref"],)).fetchone()
+            self.assertIsNotNone(row)
+            self.assertIn("Replace non-native Stripe",row["summary"])
+        # An original existing task is explicitly marked for replan, not
+        # granted permission to implement the contradictory source objective.
+        with core.connect() as db:
+            task_id=core.add_task(db,None,None,"portfolio","engineering_operator",
+                "Unsafe incoming checkout task","Integrate Stripe checkout on the original RHEVO mission",
+                "Change product payment rail")
+            db.execute("UPDATE tasks SET company_id=?,project_id=?,status='running' WHERE id=?",
+                       ("noetfield-systems-inc","noetfield-web3-launchpad",task_id))
+            db.commit()
+            task=dict(db.execute("SELECT * FROM tasks WHERE id=?",(task_id,)).fetchone())
+        response["decision_ref"]="c"*32
+        consulted=bridge.consult_existing_task(task,fetch=FakeFetcher(response))
+        self.assertEqual(consulted["state"],"FOUNDER_INTENT_DRIFT_REPLAN")
+        self.assertFalse(consulted["original_mutation_allowed"])
+        self.assertFalse(consulted["external_permit"])
+    def test_malicious_founder_decision_cannot_mark_native_refusal_as_proceed(self):
+        response=self.answer()
+        response["native_venture_mission_alignment"]={
+            "proposed_action_allowed":False,"new_permit":False,
+            "reason_codes":["FOUNDER_INTENT_DRIFT_NON_NATIVE_PAYMENT_RAIL"]}
+        with self.assertRaisesRegex(ValueError,"native economic refusal"):
+            bridge.submit_question(self.ask(),fetch=FakeFetcher(response))
+
     def test_permit_escalation_from_remote_response_refused(self):
         response=self.answer()
         response["governor_permit_issued"]=True
