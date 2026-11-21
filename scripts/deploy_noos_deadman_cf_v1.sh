@@ -72,7 +72,25 @@ else
   echo "SKIP: DEADMAN_TELEGRAM_* secret upload (default off — prevents wrong-bot spam)"
 fi
 
-wrangler deploy
+if [[ -n "${GITHUB_ACTIONS:-}" ]]; then
+  # CI updates code without attempting to mutate the account-wide Cron Trigger
+  # set. The Worker Free plan is already at its 5-trigger limit.
+  VERSION_TAG="noos-deadman-${GITHUB_SHA:-$(date -u +%Y%m%dT%H%M%SZ)}"
+  UPLOAD_OUTPUT="$(wrangler versions upload --tag "$VERSION_TAG" --message "NOOS deadman ${GITHUB_SHA:-manual}" 2>&1)" || {
+    printf '%s\n' "$UPLOAD_OUTPUT" >&2
+    exit 1
+  }
+  printf '%s\n' "$UPLOAD_OUTPUT"
+  VERSION_ID="$(printf '%s\n' "$UPLOAD_OUTPUT" | sed -nE 's/^Worker Version ID: ([0-9a-fA-F-]{36})$/\1/p' | tail -n 1)"
+  if [[ ! "$VERSION_ID" =~ ^[0-9a-fA-F-]{36}$ ]]; then
+    echo "FAIL: could not parse Worker Version ID from Wrangler upload output" >&2
+    exit 1
+  fi
+  wrangler versions deploy "${VERSION_ID}@100%" --yes --message "Activate NOOS deadman ${GITHUB_SHA:-manual}"
+else
+  # Local/manual deployment may deliberately reconcile Cron configuration.
+  wrangler deploy
+fi
 
 echo "OK deployed noos-deadman-v1"
 echo "Health: curl -fsS https://noos-deadman-v1.sina-kazemnezhad-ca.workers.dev/health"
